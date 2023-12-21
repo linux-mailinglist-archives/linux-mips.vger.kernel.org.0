@@ -1,103 +1,137 @@
-Return-Path: <linux-mips+bounces-799-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-800-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B034381A8B5
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Dec 2023 23:05:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0349181AC47
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 02:41:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 516521F23332
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Dec 2023 22:05:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 360501C22DC1
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 01:41:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1838F495D0;
-	Wed, 20 Dec 2023 22:05:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1469A15AE;
+	Thu, 21 Dec 2023 01:41:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="qP4ZUHgO";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VcXLEK9g"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E47B2495EA;
-	Wed, 20 Dec 2023 22:05:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1rG4Ro-0001hx-00; Wed, 20 Dec 2023 22:49:48 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 0075DC028A; Wed, 20 Dec 2023 22:49:33 +0100 (CET)
-Date: Wed, 20 Dec 2023 22:49:33 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc: Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v5 00/22] Add support for the Mobileye EyeQ5 SoC
-Message-ID: <ZYNhbQjMbAH6I0kI@alpha.franken.de>
-References: <20231212163459.1923041-1-gregory.clement@bootlin.com>
- <878r5vctdg.fsf@BL-laptop>
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30FC41115;
+	Thu, 21 Dec 2023 01:41:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.nyi.internal (Postfix) with ESMTP id 254E45C0341;
+	Wed, 20 Dec 2023 20:41:07 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Wed, 20 Dec 2023 20:41:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1703122867;
+	 x=1703209267; bh=5O5AQ0+tqOBAkYTlZ0FO8VXCTltW/nIkbjRn79BnPxk=; b=
+	qP4ZUHgOxW/4Uzclh5jlJQisbZKURwt/X3Rjg5ZF21GmwOpmmG1+7oAqu1o845lx
+	SpObjMkUbatyHnNNMTWKxP07wfvyJZNn5DQzQ2/3Fu588Vca6QnogUOnSPdzqLaI
+	3r00n8dCtT1wWDNVL6FdaY9jXFTWwUZvLBHEMvjhiBEcOkom+jDEEj7A//JgQUWF
+	aWMyGc9tSrwdSJ1e84b8KxZ2crsB0BAhBOix0oNmr8uYAy0IiHBVWJgPNVsftWP8
+	dB81XouA/kekll+E/Ayyxo3sLg7rl27Ce3XHPISk/AiVBuGijkjBuDUjUcOuggZv
+	FRCNe5FziENZTu3xp0IKCA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1703122867; x=
+	1703209267; bh=5O5AQ0+tqOBAkYTlZ0FO8VXCTltW/nIkbjRn79BnPxk=; b=V
+	cXLEK9g9Ehrm8LlFPzGhYu+lfNq3N4JwZEAxL9Q9GUEvV+QufaDDrh27LOkXBIAl
+	+zL8AGE0eR8WJHqm6pviV5Nn0ntHDFdFm1T2VgtVRFNnjzt2ca9F3QSnMSDq/Wdp
+	vsKILgcE4C9ICuUXXp72uBU5E15flfsKYzq1qZVe7evrlwAYo4EaOcSbyIq14wNI
+	+RmeX+mX5WRmWcDqfzomV4MffVvEzP25tAWRZ/w65tGebiaMG8G6/AKgMMoHVySq
+	LHa/tPahvWC3VnSQbdo/s+w0Ozdl+Cq9Xj4cSPCuMb2EB97H58UhZDAQ1kBtP6LP
+	Jh17Io7zfK4xwIY8gB8Jg==
+X-ME-Sender: <xms:speDZTUFNeh03S8F_bbAZ1gtIT9pl8UbMsEAR6GEM4JkicNHuAmMHA>
+    <xme:speDZbnxEoxphbv-dXg3yHWhw2oWmb66dwi1_7DcvaqB5DiSPXbmctl8mIXtioy6m
+    ZaySIPOklXWbG9GrwM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvddufedgfeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
+    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpeeihfdukeelvdduiedtieetieekvdegjefhteelhfdv
+    veelvddvffeflefglefhueenucffohhmrghinhepgihktggurdgtohhmnecuvehluhhsth
+    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghn
+    ghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:speDZfZ5KeV_fmVoHCO1jSR5jxVITFDXA240TX9Fc2lAkbLRc7mIoA>
+    <xmx:speDZeVd592AUFYWlnghFcYAkICBmiIcPa_4sqeTQtttpWzG5IP9Qw>
+    <xmx:speDZdl8Prv4zSwTZPO0LonhA4Qd7LV_JtVoGu0ky--spyHvsdkOAg>
+    <xmx:s5eDZcuf8994_vG9PGiECBlfQp53OPbtenC5IZcM2Qq5DxiTNkqftA>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 93C1936A0076; Wed, 20 Dec 2023 20:41:06 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1364-ga51d5fd3b7-fm-20231219.001-ga51d5fd3
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <878r5vctdg.fsf@BL-laptop>
+Message-Id: <2a2f69f9-f987-4f96-9c5b-3aaaea29bbbc@app.fastmail.com>
+In-Reply-To: <ZYNaFhFp/+q+/Z0Z@alpha.franken.de>
+References: <20231029-mips_debug_ll-v1-0-d7a491e8c278@flygoat.com>
+ <ZYNaFhFp/+q+/Z0Z@alpha.franken.de>
+Date: Thu, 21 Dec 2023 01:40:46 +0000
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/8] MIPS: Unify low-level debugging functionalities
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 15, 2023 at 05:39:39PM +0100, Gregory CLEMENT wrote:
-> Hello Thomas,
-> 
-> > Hello,
-> >
-> > The EyeQ5 SoC from Mobileye is based on the MIPS I6500 architecture
-> > and features multiple controllers such as the classic UART, I2C, SPI,
-> > as well as CAN-FD, PCIe, Octal/Quad SPI Flash interface, Gigabit
-> > Ethernet, MIPI CSI-2, and eMMC 5.1. It also includes a Hardware
-> > Security Module, Functional Safety Hardware, and MJPEG encoder.
-> >
-> > One peculiarity of this SoC is that the physical address of the DDDR
-> > exceeds 32 bits. Given that the architecture is 64 bits, this is not
-> > an issue, but it requires some changes in how the mips64 is currently
-> > managed during boot.
-> >
-> > In this fifth version, there aren't many changes, mostly just tweaking
-> > commit messages based on Sergey's feedback and fixing up the code
-> > style. But, the real reason for this series is a bit of a whoopsie on
-> > my end. It turns out, despite what I confidently claimed in the last
-> > round, some configuration tweaks were missing. All sorted now, though!
-> >
-> 
-> A few weeks ago, you were concerned about the introduction of the
-> specific kconfig CONFIG_USE_XKPHYS to support EyeQ5, and you wanted us
-> to set up a new platform instead. Since then, Jiaxun proposed a series
-> that was merged here to provide more generic support.
 
-well, there is more to improve and stuff I don't like in Jaixun series.
-For example misusing CONFIG_PHYSICAL_START to force a load address via config
-(IMHO it's already a hack for CRASH_DUMP).
 
-As there is your series and Jiaxun series, where should I comment more
-detailed ?
+=E5=9C=A82023=E5=B9=B412=E6=9C=8820=E6=97=A5=E5=8D=81=E4=BA=8C=E6=9C=88 =
+=E4=B8=8B=E5=8D=889:18=EF=BC=8CThomas Bogendoerfer=E5=86=99=E9=81=93=EF=BC=9A
+> On Sun, Oct 29, 2023 at 02:53:01AM +0000, Jiaxun Yang wrote:
+>> The plan is to elimiate platform specific early_printk and
+>> cps-vec-ns16550 by debug_ll and earlycon.
+>
+> https://xkcd.com/927/ ?
+>
+> sorry I don't think that just another new function is good approach.
+> Doing this will end up with another method for early debugging and
+> all other will stay.
+All others will go (one of two already gone).
 
-> I had other issues in the initial series, and I think that now I've
-> fixed all of them. So, I would like to know what your opinion is now
-> about this series.
-> 
-> Will you accept it, or do you still think that a new platform has to be
-> set up?
+The thing is, I tried to get cps-vec-16550 and zboot work with UHI
+semihosting, and soon find out that they are doing exactly the same
+thing. So I tried to unify them.
 
-things have improved, but I'm still in favor to use a new platform.
-And my main point stays. A "generic" kernel compiled for EyeQ5 will
-just run on that platform, which doesn't sound generic to me.
+I miss the good old day on Arm system that I can use handy debug_ll
+functions for every low level debugging purpose, thus I just copied the
+whole design.
 
-Thomas.
+There won't be any new debugging functions, zboot one already merged
+into debug_ll in this series, cps-vec-ns16550 will be merged as well,
+I've got patches prepared locally but depending on my XKPHYS changes.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+We have extra functionality to debug early exception as well, that will
+certainly make bring-up process easier.
+
+Thanks.
+>
+> Thomas.
+>
+> --=20
+> Crap can work. Given enough thrust pigs will fly, but it's not necessa=
+rily a
+> good idea.                                                [ RFC1925, 2=
+.3 ]
+
+--=20
+- Jiaxun
 
