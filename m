@@ -1,78 +1,79 @@
-Return-Path: <linux-mips+bounces-823-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-824-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B71881CA2F
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Dec 2023 13:47:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD16B81CA5C
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Dec 2023 13:59:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F3F621F22568
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Dec 2023 12:47:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D182C1C214AF
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Dec 2023 12:59:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5860182D8;
-	Fri, 22 Dec 2023 12:47:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0F101A28F;
+	Fri, 22 Dec 2023 12:58:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="El/Eu3P0";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="2PMZ1l7M"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="COm310mC";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="2Naat/YG"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3F1182BB;
-	Fri, 22 Dec 2023 12:47:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD5519443;
+	Fri, 22 Dec 2023 12:58:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailout.west.internal (Postfix) with ESMTP id F166A3200A22;
-	Fri, 22 Dec 2023 07:47:05 -0500 (EST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.west.internal (Postfix) with ESMTP id 4EE5C3200AD9;
+	Fri, 22 Dec 2023 07:58:45 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 22 Dec 2023 07:47:06 -0500
+  by compute6.internal (MEProxy); Fri, 22 Dec 2023 07:58:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1703249225;
-	 x=1703335625; bh=tIVbnmL5/XEhiKUG9sZN0NOkNUx7Xn+vtggbKdx4D0Y=; b=
-	El/Eu3P0vz/aRPJ06xGvxbWtolatYWrNTpoOVBp/+9FFiJfLkWNRJ2OcVz0yL8yu
-	hW1eTzQfat9oDV/SzM5Ks4W0TVp+l2Kadb57smJ1by07LkoGnX9vRThpi5aOJFld
-	NXxn5jA5BRdBMeBKy1vgMak09GlE/3jIJ4h0P7C5xdJL8O4t5wpTSKqE7QCe6ZRp
-	JciWMlI+8Lk2dcjvuenJaNAofbT5J67IpBvY9C5EaZ4isuGUmXvcsk+g/B9tASyc
-	sfMjU0N4V0XwODSiJdlcx5JvrRh3A1clMBgkLv/lwfR7/nWCV6Nx+hlQXcMlljBr
-	OH8a8q066sRYLPnlxaYFGQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
+	cc:content-transfer-encoding:content-type:content-type:date:date
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1703249225; x=
-	1703335625; bh=tIVbnmL5/XEhiKUG9sZN0NOkNUx7Xn+vtggbKdx4D0Y=; b=2
-	PMZ1l7MuonvF1m8nyyIWYDeRVlP7Wc7j6pYgq3pvxwr/JvsMBPupss3U13sFYmI4
-	kE0yc/jSwQuxu1qU6e3sE6igHZIVwmApKCUsKszT5A4Zv5hX1tRwHNJ6edsVE5KB
-	GdpV7rg0JNtXqOQ4IC8wtuza7swcqhg2BylJbFaCzQ7T6W5XhYLBdoPailti0/c7
-	crjjBAX3RL7Hn+fGSv07XTGMo3R8zCEVc/Xf1KzkD0wmsBmH722RXawswh6RCDml
-	9h3EIN5+as1NBzrpQuObN/Z9L/ScAs/kpBq/+I4ceYK3LrulVdyFCjEyqJ5aXXri
-	/r7WNE5NcnP6nLnxGK7cw==
-X-ME-Sender: <xms:SYWFZeLoMZLVOsY-YImjZWFtfhLRIsXsrFtO6hsw5vmDKh06UsSz2g>
-    <xme:SYWFZWJQyQpTWinbY8Snrq6WJtJrIYEnka2X8OfE0wDNxh-lrXF-PZGFl9UkSTsEe
-    jfZpSH6LPr4XFSXofg>
-X-ME-Received: <xmr:SYWFZeudp4OdrLEJXEENdm2FwQQJo8YhP-ELlXwpd_eOBro_UwM-kD-L1WVxISxSTdGGs-TT-HJW4VNNUPYa_OCokCfj13FK8kq6bkA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvddujedggeduucetufdoteggodetrfdotf
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1703249924;
+	 x=1703336324; bh=gBzr86HYVLagWtrGT5nOWo3pzHJeoT0tMLV9Ajf9peY=; b=
+	COm310mCw+Si6H3zLC5g3hwDzFToTLe/BFcls0JI1gEeFUok4HXbH0oHhwhHXOCj
+	nyG6wDnXfDYwFoAv5ddKGJ2tIB+FDN4vXdtatQuRvTbm+cL9BsyPIgsMc+nNAIMW
+	gZcnktwubrg604BJjX4PgGp3wPdLni6izP1F1E4jeotU94K0tMeVVI1jMwOrUeIb
+	yhnYsBKkXKwNJUX3RLYlD2b7ppKbpk8HoeCMvbSlYedjhFN3syiG2/2RDCoxAblo
+	Z2XfKCoEDrvyE14/56KZxvalzrg/fw7noJ+Hvk3Cju/ySlXLwOtr3tkyIdmOz6ht
+	nWMKOa4gQbyJK29Usw+euw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:content-transfer-encoding:content-type
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1703249924; x=
+	1703336324; bh=gBzr86HYVLagWtrGT5nOWo3pzHJeoT0tMLV9Ajf9peY=; b=2
+	Naat/YGX5XS7SDzQ+g1gV1vlXnjEH6v8UlwyLnrgxptQqvRaSFNH0Wxnt2ZVfkXc
+	xDaqMQ3T0XCifzbRPFHBXnQ8iL8ifxydl9MKR2tsxqyTOQX3WU4Xr8y/Q7+hxmDJ
+	yJbKTC5+fZm2+IxeNBVuayWXpiiWSToNf203kJZ0z5RGlvL8ClZv9o21jxzn+X6o
+	jKqSHk7NETl0jlILcNkT+/LDc04hFhO+RbM8C6SLQGHfNPgmrH3Pcp2F68beDMsT
+	+tlHNy5aDL85VxZfjrgN7ttTcUHTTHBMAKjVwSx6DBCeVHNzCPc3k28Wk+342S74
+	MseiLO8ZjWHd4O78CSIGA==
+X-ME-Sender: <xms:BIiFZZcYJpLrO1OK2zOh5uBE1F9sD6kHW2gLLHnKm11tTaxkc71okg>
+    <xme:BIiFZXM-elmM_lqMc2aFvkORTTBNeOfofM1DwNH2AJbhXb6cSy082vs9uKXNOfUzV
+    LQVJ19dHA-by5jmZHs>
+X-ME-Received: <xmr:BIiFZShBjDCie-DDH0CmBv-eWhgY8Hl90EvG0u6h7qkennSO3J_sJI8289Xs0_RTzaD_fDiXFlyNA_aFWzpMcgpKhLmFcRNHibqALxg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvddujedggeegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtvdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepleeuffehheegleeuvdelgffhueekjeetueevuefhffdtgfeu
-    hfeggfeukefffedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:SYWFZTbLxklLbpt9pv-UB12Cb0BmTETT-5RL-Podmc1ICn1khG8hlQ>
-    <xmx:SYWFZVbOQmpiHPyephu0bCTk2Ym7IKA3F_VcX7hBCspBvB-FSzuqtA>
-    <xmx:SYWFZfC6AZDutSYTd2VbuqW7A7_RgWDQInCIlIkzWNcr-4jmgf-_gQ>
-    <xmx:SYWFZZGOrJ1mn9VQ37tE-d5M0ZiD7yARnmwlxPqCJzoeEAP_GOD4kQ>
+    cujfgurhepkfffgggfuffvfhfhjggtgfesthekredttddvjeenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpeeiudduffdufffgffelfedujeehteffffdukeekvdfgvdeileej
+    ffekueehuddugfenucffohhmrghinhepghgvnhgvgidrshgsnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhl
+    hihgohgrthdrtghomh
+X-ME-Proxy: <xmx:BIiFZS8aBbRgzFX2oWiOcyAUwU3UNw5kheZ1vt7PghZeEqpZc_TPXQ>
+    <xmx:BIiFZVskSl3RMCc-KfIVb9gq9Tt0R2DhEmUwM-VYp6r-b5AP4BmV1w>
+    <xmx:BIiFZRHZBURW-AdraA8coe0Qg-hZkT-9bFNS-h1Hd7w6nC0QLc-nhA>
+    <xmx:BIiFZWWcDXVGh3KRc4d0YKunlMnSKQCXEDhm2oumLk0xV8IwEhDVRg>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 22 Dec 2023 07:47:04 -0500 (EST)
-Message-ID: <936a4dd1-b595-49b4-ab19-f587a9adb000@flygoat.com>
-Date: Fri, 22 Dec 2023 12:47:03 +0000
+ 22 Dec 2023 07:58:43 -0500 (EST)
+Message-ID: <7249cb98-0b63-4ef6-8f6e-e29ac6c0a73f@flygoat.com>
+Date: Fri, 22 Dec 2023 12:58:43 +0000
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -80,39 +81,109 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 07/10] MIPS: traps: Handle CPU with non standard vint
- offset
+Subject: Re: [PATCH 1/2] MIPS: Allow vectored interrupt handler to reside
+ everywhere for 64bit
 Content-Language: en-US
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
- gregory.clement@bootlin.com, vladimir.kondratiev@intel.com
-References: <20231027221106.405666-1-jiaxun.yang@flygoat.com>
- <20231027221106.405666-8-jiaxun.yang@flygoat.com>
- <ZYV+zdm4fjYgATVW@alpha.franken.de>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20231221125405.229100-1-tsbogend@alpha.franken.de>
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <ZYV+zdm4fjYgATVW@alpha.franken.de>
+In-Reply-To: <20231221125405.229100-1-tsbogend@alpha.franken.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
 
-在 2023/12/22 12:19, Thomas Bogendoerfer 写道:
-> On Fri, Oct 27, 2023 at 11:11:03PM +0100, Jiaxun Yang wrote:
->> Some BMIPS cpus has none standard start offset for vector interrupts.
->>
->> Handle those CPUs in vector size calculation and handler setup process.
-> hmm, I see no connection to what this series is fixing. How does it
-> work without this patch ?
+在 2023/12/21 12:54, Thomas Bogendoerfer 写道:
+> Setting up vector interrupts worked only with handlers, which resided
+> in CKSEG0 space. This limits the kernel placement for 64bit platforms.
+> By patching in the offset into vi_handlers[] instead of the full
+> handler address, the vectored exception handler can load the
+> address by itself and jump to it.
+>
+> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-In this series reservation of exception vector is moved to here, so it's 
-critical
-to have correct size.
+Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+
+Could you please keep me in Cc if you are going to propose a better
+solution :-)
 
 Thanks
 - Jiaxun
 
+> ---
+>   arch/mips/kernel/genex.S | 8 ++++----
+>   arch/mips/kernel/traps.c | 9 +++------
+>   2 files changed, 7 insertions(+), 10 deletions(-)
 >
-> Thomas.
->
+> diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
+> index b6de8e88c1bd..a572ce36a24f 100644
+> --- a/arch/mips/kernel/genex.S
+> +++ b/arch/mips/kernel/genex.S
+> @@ -272,18 +272,17 @@ NESTED(except_vec_vi, 0, sp)
+>   	.set	push
+>   	.set	noreorder
+>   	PTR_LA	v1, except_vec_vi_handler
+> -FEXPORT(except_vec_vi_lui)
+> -	lui	v0, 0		/* Patched */
+>   	jr	v1
+>   FEXPORT(except_vec_vi_ori)
+> -	 ori	v0, 0		/* Patched */
+> +	 ori	v0, zero, 0		/* Offset in vi_handlers[] */
+>   	.set	pop
+>   	END(except_vec_vi)
+>   EXPORT(except_vec_vi_end)
+>   
+>   /*
+>    * Common Vectored Interrupt code
+> - * Complete the register saves and invoke the handler which is passed in $v0
+> + * Complete the register saves and invoke the handler, $v0 holds
+> + * offset into vi_handlers[]
+>    */
+>   NESTED(except_vec_vi_handler, 0, sp)
+>   	SAVE_TEMP
+> @@ -331,6 +330,7 @@ NESTED(except_vec_vi_handler, 0, sp)
+>   	/* Save task's sp on IRQ stack so that unwinding can follow it */
+>   	LONG_S	s1, 0(sp)
+>   2:
+> +	PTR_L	v0, vi_handlers(v0)
+>   	jalr	v0
+>   
+>   	/* Restore sp */
+> diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
+> index 246c6a6b0261..d90b18908692 100644
+> --- a/arch/mips/kernel/traps.c
+> +++ b/arch/mips/kernel/traps.c
+> @@ -2091,16 +2091,14 @@ static void *set_vi_srs_handler(int n, vi_handler_t addr, int srs)
+>   		 * If no shadow set is selected then use the default handler
+>   		 * that does normal register saving and standard interrupt exit
+>   		 */
+> -		extern const u8 except_vec_vi[], except_vec_vi_lui[];
+> +		extern const u8 except_vec_vi[];
+>   		extern const u8 except_vec_vi_ori[], except_vec_vi_end[];
+>   		extern const u8 rollback_except_vec_vi[];
+>   		const u8 *vec_start = using_rollback_handler() ?
+>   				      rollback_except_vec_vi : except_vec_vi;
+>   #if defined(CONFIG_CPU_MICROMIPS) || defined(CONFIG_CPU_BIG_ENDIAN)
+> -		const int lui_offset = except_vec_vi_lui - vec_start + 2;
+>   		const int ori_offset = except_vec_vi_ori - vec_start + 2;
+>   #else
+> -		const int lui_offset = except_vec_vi_lui - vec_start;
+>   		const int ori_offset = except_vec_vi_ori - vec_start;
+>   #endif
+>   		const int handler_len = except_vec_vi_end - vec_start;
+> @@ -2119,10 +2117,9 @@ static void *set_vi_srs_handler(int n, vi_handler_t addr, int srs)
+>   #else
+>   				handler_len);
+>   #endif
+> -		h = (u16 *)(b + lui_offset);
+> -		*h = (handler >> 16) & 0xffff;
+> +		/* insert offset into vi_handlers[] */
+>   		h = (u16 *)(b + ori_offset);
+> -		*h = (handler & 0xffff);
+> +		*h = n * sizeof(handler);
+>   		local_flush_icache_range((unsigned long)b,
+>   					 (unsigned long)(b+handler_len));
+>   	}
 
 
