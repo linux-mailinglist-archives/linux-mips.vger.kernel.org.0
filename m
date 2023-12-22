@@ -1,162 +1,136 @@
-Return-Path: <linux-mips+bounces-818-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-819-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77F4D81C0F2
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 23:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 708B281C90A
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Dec 2023 12:25:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27A63286339
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Dec 2023 22:25:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C1222866C1
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Dec 2023 11:25:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B9D477F18;
-	Thu, 21 Dec 2023 22:25:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2EA91642B;
+	Fri, 22 Dec 2023 11:25:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="rwOmRmKv";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bFmVs5qV"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pTNTeZ3F"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03D1577F10;
-	Thu, 21 Dec 2023 22:25:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.nyi.internal (Postfix) with ESMTP id E38625C012A;
-	Thu, 21 Dec 2023 17:25:08 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 21 Dec 2023 17:25:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1703197508;
-	 x=1703283908; bh=eH8YlOHbyQF9nz7myzuZh9BOJuRmKavlURr+Ne9G3Js=; b=
-	rwOmRmKvfbDKKnZKykFLnnXxny/Pt9hSZ0mjRJNW8nGu7G9kVvB1GwD6qT7c5qdT
-	fkpz2pxofb05LgQd1nSj4CTr5tz7FkErqJdKFbxIXbyFXhOW0PW/IKP2kmVgQulP
-	m3wpPyOm/8Tj58azIC7dICkj/qUp+9c2XDWxGmAw5tyTMimdFeCkpD1WAzXKx5pc
-	Bjt7E5zIWEqjNe4yQe7U2MBOY7a8lIe/RbSxY1K2olmql/Vp21FBmEmXcZ+gNiNZ
-	5MTA7FrjvVbLMnuEpayNZxgF9sFDyL3jhTkqFmJD7LY9tew6wvCGF1ozGrQPQrIy
-	pmaMsMOcMpWfgrGwL1C97Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1703197508; x=
-	1703283908; bh=eH8YlOHbyQF9nz7myzuZh9BOJuRmKavlURr+Ne9G3Js=; b=b
-	FmVs5qVIdMVjg5r7l2zjyENguY0VWijM/7Mj25tb/Y2UQZYkFMAFL9cGishPVJ7E
-	vWuqJsSCs/KsULp1IV7QSo2PdRaDyLU3yOCut5ueHFM96GOs5SRAEGX58Tbyzzwl
-	/ybskaDf5kv8o6sN3J5FEZytg1yzxCHXi06OWjVfNJST4oAerwJZJslLz2NuQS2i
-	0XVqsoi6btNeZkg4H+nPyQmHZGE4Cwmv0lLEfKK19mFOGbDBrIg0ulkITCRBVyCk
-	PntZ5VSZmad2Ww4KbJW4nM+ov0wPHrrHga24DBiP/KL2nsN7WvPyIPpE1YqbFewV
-	shQMXK/akkn4GMEdgy2Vw==
-X-ME-Sender: <xms:RLuEZcPMRA8wlKfj3gYgh47VvopXsX-gL1eMUM693K_HFoXFCdwyjQ>
-    <xme:RLuEZS99_HUGfkOjAFnTAnUCzZCHTs-QYnWlO5OFHZgMG9Zk8VcyrHqcJbRYzysgE
-    mxW6KHJh2aLDb7u4zc>
-X-ME-Received: <xmr:RLuEZTTfrTW3qrMZrKmwZXURBEcUmZpm_iysv-5YTJywv2wqzre-7bhX6Py2U4964CRv7XxWYaTVzsDbgyGwpKCyHyH3V3SVZOvCGSk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdduhedgudefhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthekredttddvjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpeelueffheehgeeluedvlefghfeukeejteeuveeuhffftdfg
-    uefhgefgueekffeftdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:RLuEZUstZDJ-HGB4M97Waz3w3cD18pKPPEZNW5QuBm1gHL4kKI-AAw>
-    <xmx:RLuEZUdvwHyYn6uyqca-_WHPqfaD_D87lUHQVGJGZdAj75WDZXzT-Q>
-    <xmx:RLuEZY3HQ6rf5gLnDlKm_UhaECW7cvjTSYlDXNj_p_zP5lk1LF8ygw>
-    <xmx:RLuEZY3XPk1vTKNEEJfOB5m8Sas-a0-9_bm4AuGmAWzV_pPq7gx6hg>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 21 Dec 2023 17:25:06 -0500 (EST)
-Message-ID: <ea28ac87-1043-4a65-a762-a7ac8d7e02b2@flygoat.com>
-Date: Thu, 21 Dec 2023 22:25:04 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CA3B182A8;
+	Fri, 22 Dec 2023 11:25:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 93301E0009;
+	Fri, 22 Dec 2023 11:25:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1703244313;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XK/HZcj+ulUoisKiFJSL4FfIuOQN1JBlybYK7NvCE1U=;
+	b=pTNTeZ3F8iO+oHNN0CFGBJv6rwoAwkO6bzR/4fsL86vHWakDr0HsGN+CqCAaebxJUI9qh/
+	mkdST+E723X8dDwaYOjc/kchkXOk0BazEgmInUQwYiFVXPTcRy+nWGTg4yAhc5A0NvxuUR
+	c0Tp3uDrS3vfpNbsAqJz+yDYAzjlXsBJ85JnRqgqhAIeH18Ch6/1COci4Olq56yUTND80k
+	dSHfp0OnYi1NMaklVkyT5dHWMTWc/AhrhQ+aEvvpiw5ixxYvjprJbolDMTzqMnMo0vITJt
+	ylcktyWEU+uxTvYGGo8ed4d5bwvkeoUnJ3LFy2QjWqCMxirMSAs3syGWRCw//w==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 00/22] Add support for the Mobileye EyeQ5 SoC
-Content-Language: en-US
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc: Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20231212163459.1923041-1-gregory.clement@bootlin.com>
- <878r5vctdg.fsf@BL-laptop> <ZYNhbQjMbAH6I0kI@alpha.franken.de>
- <87frzwasxo.fsf@BL-laptop> <ZYRR7zIZax7yUgsZ@alpha.franken.de>
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <ZYRR7zIZax7yUgsZ@alpha.franken.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 22 Dec 2023 12:25:12 +0100
+Message-Id: <CXUTPV1ZOSID.323RSEP4BL2AT@bootlin.com>
+Subject: Re: [PATCH 3/5] clk: eyeq5: add controller
+Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
+ <linux-mips@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Thomas
+ Petazzoni" <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>
+To: "Stephen Boyd" <sboyd@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Gregory CLEMENT" <gregory.clement@bootlin.com>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Michael Turquette"
+ <mturquette@baylibre.com>, "Rob Herring" <robh+dt@kernel.org>, "Thomas
+ Bogendoerfer" <tsbogend@alpha.franken.de>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.15.2
+References: <20231218-mbly-clk-v1-0-44ce54108f06@bootlin.com>
+ <20231218-mbly-clk-v1-3-44ce54108f06@bootlin.com>
+ <a8f740c7a8c1222d4a42bad588c75e87.sboyd@kernel.org>
+In-Reply-To: <a8f740c7a8c1222d4a42bad588c75e87.sboyd@kernel.org>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
+Hello,
 
+I've seen all your comments, thanks for that. I have a follow up about
+one:
 
-在 2023/12/21 14:55, Thomas Bogendoerfer 写道:
-> On Thu, Dec 21, 2023 at 08:57:55AM +0100, Gregory CLEMENT wrote:
->> I do not oppose the addition of a new platform, even though, like
->> Jiaxun, I would prefer to avoid duplicating code. The only thing
->> preventing the use of the same kernel for EyeQ5 and other platforms is
->> the starting address.
-> there shouldn't be code duplication.
+On Wed Dec 20, 2023 at 12:09 AM CET, Stephen Boyd wrote:
+> Quoting Th=C3=A9o Lebrun (2023-12-18 09:14:18)
+> > Add the Mobileye EyeQ5 clock controller driver. See the header comment
+> > for more information on how it works.
 >
-> My rough idea would be something like
+> "See the header" is like saying "Read the code" which is pretty obvious.
+> Remove this sentence and tell us why only the PLLs are supported at the
+> moment or something like that.
 >
-> diff --git a/arch/mips/Kbuild b/arch/mips/Kbuild
-> index af2967bffb73..d683993ed331 100644
-> --- a/arch/mips/Kbuild
-> +++ b/arch/mips/Kbuild
-> @@ -17,6 +17,7 @@ obj- := $(platform-y)
->   # mips object files
->   # The object files are linked as core-y files would be linked
->   
-> +obj-y += generic/
->   obj-y += kernel/
->   obj-y += mm/
->   obj-y += net/
-> diff --git a/arch/mips/generic/Makefile b/arch/mips/generic/Makefile
-> index e37a59bae0a6..56011d738441 100644
-> --- a/arch/mips/generic/Makefile
-> +++ b/arch/mips/generic/Makefile
-> @@ -4,9 +4,9 @@
->   # Author: Paul Burton <paul.burton@mips.com>
->   #
->   
-> -obj-y += init.o
-> -obj-y += irq.o
-> -obj-y += proc.o
-> +obj-$(CONFIG_MACH_GENERIC_CORE) += init.o
-> +obj-$(CONFIG_MACH_GENERIC_CORE) += irq.o
-> +obj-$(CONFIG_MACH_GENERIC_CORE) += proc.o
->   
->   obj-$(CONFIG_YAMON_DT_SHIM)            += yamon-dt.o
->   obj-$(CONFIG_LEGACY_BOARD_SEAD3)       += board-sead3.o
->
-> so everyboady needing these parts of a generic kernel is able
-> to take it.
->
->> Therefore, if it were possible to have a relocatable kernel, this
->> issue would disappear.
-> yes. There is support for relocatable kernel, so what are we missing
-> there ?
+> > This driver is specific to this
+> > platform; it might grow to add later support of other platforms from
+> > Mobileye.
+> >=20
+> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> > ---
+> >  MAINTAINERS             |   1 +
+> >  drivers/clk/Kconfig     |  11 +++
+> >  drivers/clk/Makefile    |   1 +
+> >  drivers/clk/clk-eyeq5.c | 211 ++++++++++++++++++++++++++++++++++++++++=
+++++++++
+> >  4 files changed, 224 insertions(+)
+> >=20
 
-It does not handle 64 bit relocations currently.
-I tried to look into it and it's not a easy fix.
+[...]
 
-Thanks
-- Jiaxun
-> Thomas.
+> > diff --git a/drivers/clk/clk-eyeq5.c b/drivers/clk/clk-eyeq5.c
+> > new file mode 100644
+> > index 000000000000..74bcb8cec5c1
+> > --- /dev/null
+> > +++ b/drivers/clk/clk-eyeq5.c
+
+[...]
+
+> > +       of_clk_add_hw_provider(np, of_clk_hw_onecell_get, data);
+> > +}
+> > +
+> > +CLK_OF_DECLARE_DRIVER(eq5c, "mobileye,eyeq5-clk", eq5c_init);
 >
+> Please use a platform driver.
 
+I've been trying to do that but I had a stall at boot. I initially
+associated it with the UART driver acquiring a clock too early but
+instead it is the CPU timer clocksource driver that consumes one of our
+clock way earlier than any platform driver initialisation.
+
+The clocksource driver we are talking about is this one for reference:
+https://elixir.bootlin.com/linux/v6.6.8/source/drivers/clocksource/mips-gic=
+-timer.c
+
+Its usage of TIMER_OF_DECLARE means it gets probed by timer_probe ->
+plat_time_init -> time_init -> start_kernel. This is way before any
+initcalls. Our prior use of CLK_OF_DECLARE_DRIVER meant that we got
+probed by of_clk_init -> plat_time_init.
+
+I'm guessing we are not the first one in this situation; any advice on
+how to deal with it?
+
+Thanks,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
