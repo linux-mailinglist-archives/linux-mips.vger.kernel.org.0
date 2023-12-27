@@ -1,303 +1,153 @@
-Return-Path: <linux-mips+bounces-834-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-836-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF66581F055
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Dec 2023 17:25:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90EDD81F070
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Dec 2023 17:30:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4AEA9B226DB
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Dec 2023 16:25:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1C530B22154
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Dec 2023 16:30:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B00847A63;
-	Wed, 27 Dec 2023 16:24:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 892071DFD5;
+	Wed, 27 Dec 2023 16:30:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Kj7sUyPS"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BKKblfMm"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA2845C13;
-	Wed, 27 Dec 2023 16:24:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F011DFC9;
+	Wed, 27 Dec 2023 16:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1B8E5FF815;
-	Wed, 27 Dec 2023 16:24:08 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 126EA60002;
+	Wed, 27 Dec 2023 16:30:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1703694248;
+	t=1703694622;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=PHw8m05DOzdhKocLz6vovvFnXaDaWYDfUcSk4DXmRVM=;
-	b=Kj7sUyPSUKiUuzGhIbKJ5A3pPmxu89lfjopkVLMeOPGD2QBsopdL6YmMPUr8t5hx8pcAF0
-	+lD/9tlIKqF6ksJ7ZBCP+NYiNYciHN3F3z1QpBdJm+AqdLpPi4vhCejrIoqJWiLq4ip3Tl
-	UanQcHSN/dqgkNCdVBKTtcMnA8+cz0De5SnLMMDt2HS/8sgp2FHiO0/L7BOUxiidl0CDyG
-	cYVbUNLQ1oXC0fUBGHSu8yIEARy+iQlokbmdGxpbCdXf8hlanvSlynaaExCpt2XEwKZSm9
-	azIe4n63+VvAiTefbJV7I/ar4YO6M0o/SMyCaB32M78jNEe1IuRRF9PuN5HoIQ==
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Wed, 27 Dec 2023 17:23:56 +0100
-Subject: [PATCH v2 6/6] MIPS: mobileye: eyeq5: use OLB clocks controller
+	bh=QessdMBPnjzb5s9ZGKryHBBqE6qV0TJfrHNj00DkgTQ=;
+	b=BKKblfMmPg+v0sWG14C1m4ICUEmMvk1dxZBPc5ojdko88JICk8J3zB63p5dwB91DiFaLsr
+	F9ABXAtMFzEBYUjCYK8TqsGJUZKQX3PlLFvt0JA1ZwLR/frDs1uG+ULI4k87CXw60qHo6O
+	AP4DYO7nQJWKO2BgBH6M6hqi2GihRCrwRP4dR8NSNhRlyiuIhb5Z0MUlGgZGcpGcVlh6Ph
+	vjytMHkeY07DX+pobSOiM7Z3N7iooOh2bQZ634jXjX8nzzOEiiu7W8GCKU52rRkFNDnKL6
+	qqB83x0lI+JDeBK3rtQjCTKcVQvbuvjyJD2UIs/C/ueWdZM9Ae5ZTauBD4UGGA==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20231227-mbly-clk-v2-6-a05db63c380f@bootlin.com>
-References: <20231227-mbly-clk-v2-0-a05db63c380f@bootlin.com>
-In-Reply-To: <20231227-mbly-clk-v2-0-a05db63c380f@bootlin.com>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- linux-mips@vger.kernel.org, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: b4 0.12.4
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 27 Dec 2023 17:30:20 +0100
+Message-Id: <CXZ9C7Y8QT0D.38ZNTXUY0HWUW@bootlin.com>
+To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, "Stephen Boyd"
+ <sboyd@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>, "Gregory CLEMENT"
+ <gregory.clement@bootlin.com>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Michael Turquette"
+ <mturquette@baylibre.com>, "Rob Herring" <robh+dt@kernel.org>, "Thomas
+ Bogendoerfer" <tsbogend@alpha.franken.de>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH 3/5] clk: eyeq5: add controller
+Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
+ <linux-mips@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Thomas
+ Petazzoni" <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>
+X-Mailer: aerc 0.15.2
+References: <20231218-mbly-clk-v1-0-44ce54108f06@bootlin.com>
+ <20231218-mbly-clk-v1-3-44ce54108f06@bootlin.com>
+ <a8f740c7a8c1222d4a42bad588c75e87.sboyd@kernel.org>
+ <CXUTPV1ZOSID.323RSEP4BL2AT@bootlin.com>
+In-Reply-To: <CXUTPV1ZOSID.323RSEP4BL2AT@bootlin.com>
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-We add the clock controller inside the OLB syscon region and removed
-previous fixed devicetree nodes representing PLLs exposed by the clock
-controller.
+Hello,
 
-Two quirks are present:
+On Fri Dec 22, 2023 at 12:25 PM CET, Th=C3=A9o Lebrun wrote:
+> Hello,
+>
+> I've seen all your comments, thanks for that. I have a follow up about
+> one:
+>
+> On Wed Dec 20, 2023 at 12:09 AM CET, Stephen Boyd wrote:
+> > Quoting Th=C3=A9o Lebrun (2023-12-18 09:14:18)
+> > > Add the Mobileye EyeQ5 clock controller driver. See the header commen=
+t
+> > > for more information on how it works.
+> >
+> > "See the header" is like saying "Read the code" which is pretty obvious=
+.
+> > Remove this sentence and tell us why only the PLLs are supported at the
+> > moment or something like that.
+> >
+> > > This driver is specific to this
+> > > platform; it might grow to add later support of other platforms from
+> > > Mobileye.
+> > >=20
+> > > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> > > ---
+> > >  MAINTAINERS             |   1 +
+> > >  drivers/clk/Kconfig     |  11 +++
+> > >  drivers/clk/Makefile    |   1 +
+> > >  drivers/clk/clk-eyeq5.c | 211 ++++++++++++++++++++++++++++++++++++++=
+++++++++++
+> > >  4 files changed, 224 insertions(+)
+> > >=20
+>
+> [...]
+>
+> > > diff --git a/drivers/clk/clk-eyeq5.c b/drivers/clk/clk-eyeq5.c
+> > > new file mode 100644
+> > > index 000000000000..74bcb8cec5c1
+> > > --- /dev/null
+> > > +++ b/drivers/clk/clk-eyeq5.c
+>
+> [...]
+>
+> > > +       of_clk_add_hw_provider(np, of_clk_hw_onecell_get, data);
+> > > +}
+> > > +
+> > > +CLK_OF_DECLARE_DRIVER(eq5c, "mobileye,eyeq5-clk", eq5c_init);
+> >
+> > Please use a platform driver.
+>
+> I've been trying to do that but I had a stall at boot. I initially
+> associated it with the UART driver acquiring a clock too early but
+> instead it is the CPU timer clocksource driver that consumes one of our
+> clock way earlier than any platform driver initialisation.
+>
+> The clocksource driver we are talking about is this one for reference:
+> https://elixir.bootlin.com/linux/v6.6.8/source/drivers/clocksource/mips-g=
+ic-timer.c
+>
+> Its usage of TIMER_OF_DECLARE means it gets probed by timer_probe ->
+> plat_time_init -> time_init -> start_kernel. This is way before any
+> initcalls. Our prior use of CLK_OF_DECLARE_DRIVER meant that we got
+> probed by of_clk_init -> plat_time_init.
+>
+> I'm guessing we are not the first one in this situation; any advice on
+> how to deal with it?
 
- - The OLB node is moved prior to UARTs, as platform device probe
-   scheduling is dependent on devicetree ordering.
+I went ahead with a V2, feeling it would be more productive to come up
+with something and gather comments on concrete stuff. There were many
+other things to address anyway.
 
- - The core0-timer-clk fixed clock is created to feed the GIC timer. It
-   requires a clock earlier than platform bus type initialisation (and
-   therefore platform device init).
+I've addressed this point by declaring a dummy fixed-clock in the
+devicetree that gets fed to the GIC timer. It is pretty much the same
+thing as using `clock-frequency` which this specific clocksource uses
+if `of_clk_get(node, 0)` fails. With the sent approach we have the
+timer appear in the clock tree as a consumer.
 
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
----
- .../{eyeq5-fixed-clocks.dtsi => eyeq5-clocks.dtsi} | 54 ++++++++--------------
- arch/mips/boot/dts/mobileye/eyeq5.dtsi             | 23 +++++----
- 2 files changed, 34 insertions(+), 43 deletions(-)
+Regards,
 
-diff --git a/arch/mips/boot/dts/mobileye/eyeq5-fixed-clocks.dtsi b/arch/mips/boot/dts/mobileye/eyeq5-clocks.dtsi
-similarity index 89%
-rename from arch/mips/boot/dts/mobileye/eyeq5-fixed-clocks.dtsi
-rename to arch/mips/boot/dts/mobileye/eyeq5-clocks.dtsi
-index 78f5533a95c6..bbdaa399e408 100644
---- a/arch/mips/boot/dts/mobileye/eyeq5-fixed-clocks.dtsi
-+++ b/arch/mips/boot/dts/mobileye/eyeq5-clocks.dtsi
-@@ -3,42 +3,26 @@
-  * Copyright 2023 Mobileye Vision Technologies Ltd.
-  */
- 
--/ {
--	/* Fixed clock */
--	pll_cpu: pll-cpu {
--		compatible = "fixed-clock";
--		#clock-cells = <0>;
--		clock-frequency = <1500000000>;
--	};
-+#include <dt-bindings/clock/mobileye,eyeq5-clk.h>
- 
--	pll_vdi: pll-vdi {
--		compatible = "fixed-clock";
--		#clock-cells = <0>;
--		clock-frequency = <1280000000>;
--	};
--
--	pll_per: pll-per {
--		compatible = "fixed-clock";
--		#clock-cells = <0>;
--		clock-frequency = <2000000000>;
--	};
--
--	pll_ddr0: pll-ddr0 {
-+/ {
-+/* Fixed clock */
-+	xtal: xtal {
- 		compatible = "fixed-clock";
- 		#clock-cells = <0>;
--		clock-frequency = <1857210000>;
-+		clock-frequency = <30000000>;
- 	};
- 
--	pll_ddr1: pll-ddr1 {
-+	core0_timer_clk: core0-timer-clk {
- 		compatible = "fixed-clock";
- 		#clock-cells = <0>;
--		clock-frequency = <1857210000>;
-+		clock-frequency = <1500000000>;
- 	};
- 
- /* PLL_CPU derivatives */
- 	occ_cpu: occ-cpu {
- 		compatible = "fixed-factor-clock";
--		clocks = <&pll_cpu>;
-+		clocks = <&clocks EQ5C_PLL_CPU>;
- 		#clock-cells = <0>;
- 		clock-div = <1>;
- 		clock-mult = <1>;
-@@ -101,7 +85,7 @@ mem_clk: mem-clk {
- 	};
- 	occ_isram: occ-isram {
- 		compatible = "fixed-factor-clock";
--		clocks = <&pll_cpu>;
-+		clocks = <&clocks EQ5C_PLL_CPU>;
- 		#clock-cells = <0>;
- 		clock-div = <2>;
- 		clock-mult = <1>;
-@@ -115,7 +99,7 @@ isram_clk: isram-clk { /* gate ClkRstGen_isram */
- 	};
- 	occ_dbu: occ-dbu {
- 		compatible = "fixed-factor-clock";
--		clocks = <&pll_cpu>;
-+		clocks = <&clocks EQ5C_PLL_CPU>;
- 		#clock-cells = <0>;
- 		clock-div = <10>;
- 		clock-mult = <1>;
-@@ -130,7 +114,7 @@ si_dbu_tp_pclk: si-dbu-tp-pclk { /* gate ClkRstGen_dbu */
- /* PLL_VDI derivatives */
- 	occ_vdi: occ-vdi {
- 		compatible = "fixed-factor-clock";
--		clocks = <&pll_vdi>;
-+		clocks = <&clocks EQ5C_PLL_VDI>;
- 		#clock-cells = <0>;
- 		clock-div = <2>;
- 		clock-mult = <1>;
-@@ -144,7 +128,7 @@ vdi_clk: vdi-clk { /* gate ClkRstGen_vdi */
- 	};
- 	occ_can_ser: occ-can-ser {
- 		compatible = "fixed-factor-clock";
--		clocks = <&pll_vdi>;
-+		clocks = <&clocks EQ5C_PLL_VDI>;
- 		#clock-cells = <0>;
- 		clock-div = <16>;
- 		clock-mult = <1>;
-@@ -158,7 +142,7 @@ can_ser_clk: can-ser-clk { /* gate ClkRstGen_can_ser */
- 	};
- 	i2c_ser_clk: i2c-ser-clk {
- 		compatible = "fixed-factor-clock";
--		clocks = <&pll_vdi>;
-+		clocks = <&clocks EQ5C_PLL_VDI>;
- 		#clock-cells = <0>;
- 		clock-div = <20>;
- 		clock-mult = <1>;
-@@ -166,7 +150,7 @@ i2c_ser_clk: i2c-ser-clk {
- /* PLL_PER derivatives */
- 	occ_periph: occ-periph {
- 		compatible = "fixed-factor-clock";
--		clocks = <&pll_per>;
-+		clocks = <&clocks EQ5C_PLL_PER>;
- 		#clock-cells = <0>;
- 		clock-div = <16>;
- 		clock-mult = <1>;
-@@ -225,7 +209,7 @@ gpio_clk: gpio-clk {
- 	};
- 	emmc_sys_clk: emmc-sys-clk {
- 		compatible = "fixed-factor-clock";
--		clocks = <&pll_per>;
-+		clocks = <&clocks EQ5C_PLL_PER>;
- 		#clock-cells = <0>;
- 		clock-div = <10>;
- 		clock-mult = <1>;
-@@ -233,7 +217,7 @@ emmc_sys_clk: emmc-sys-clk {
- 	};
- 	ccf_ctrl_clk: ccf-ctrl-clk {
- 		compatible = "fixed-factor-clock";
--		clocks = <&pll_per>;
-+		clocks = <&clocks EQ5C_PLL_PER>;
- 		#clock-cells = <0>;
- 		clock-div = <4>;
- 		clock-mult = <1>;
-@@ -241,7 +225,7 @@ ccf_ctrl_clk: ccf-ctrl-clk {
- 	};
- 	occ_mjpeg_core: occ-mjpeg-core {
- 		compatible = "fixed-factor-clock";
--		clocks = <&pll_per>;
-+		clocks = <&clocks EQ5C_PLL_PER>;
- 		#clock-cells = <0>;
- 		clock-div = <2>;
- 		clock-mult = <1>;
-@@ -265,7 +249,7 @@ mjpeg_core_clk: mjpeg-core-clk { /* gate ClkRstGen_mjpeg_gen */
- 	};
- 	fcmu_a_clk: fcmu-a-clk {
- 		compatible = "fixed-factor-clock";
--		clocks = <&pll_per>;
-+		clocks = <&clocks EQ5C_PLL_PER>;
- 		#clock-cells = <0>;
- 		clock-div = <20>;
- 		clock-mult = <1>;
-@@ -273,7 +257,7 @@ fcmu_a_clk: fcmu-a-clk {
- 	};
- 	occ_pci_sys: occ-pci-sys {
- 		compatible = "fixed-factor-clock";
--		clocks = <&pll_per>;
-+		clocks = <&clocks EQ5C_PLL_PER>;
- 		#clock-cells = <0>;
- 		clock-div = <8>;
- 		clock-mult = <1>;
-diff --git a/arch/mips/boot/dts/mobileye/eyeq5.dtsi b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-index d32da8fabe5a..23c67ffbad5b 100644
---- a/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-+++ b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-@@ -7,7 +7,7 @@
- 
- /memreserve/ 0x40000000 0xc0000000; /* DDR32 */
- 
--#include "eyeq5-fixed-clocks.dtsi"
-+#include "eyeq5-clocks.dtsi"
- 
- / {
- 	#address-cells = <2>;
-@@ -42,6 +42,19 @@ soc: soc {
- 		ranges;
- 		compatible = "simple-bus";
- 
-+		olb: olb@e00000 {
-+			compatible = "mobileye,eyeq5-olb", "syscon", "simple-mfd";
-+			reg = <0 0xe00000 0x0 0x400>;
-+			reg-io-width = <4>;
-+
-+			clocks: clock-controller {
-+				compatible = "mobileye,eyeq5-clk";
-+				#clock-cells = <1>;
-+				clocks = <&xtal>;
-+				clock-names = "ref";
-+			};
-+		};
-+
- 		uart0: serial@800000 {
- 			compatible = "arm,pl011", "arm,primecell";
- 			reg = <0 0x800000 0x0 0x1000>;
-@@ -72,12 +85,6 @@ uart2: serial@a00000 {
- 			clock-names = "uartclk", "apb_pclk";
- 		};
- 
--		olb: olb@e00000 {
--			compatible = "mobileye,eyeq5-olb", "syscon", "simple-mfd";
--			reg = <0 0xe00000 0x0 0x400>;
--			reg-io-width = <4>;
--		};
--
- 		gic: interrupt-controller@140000 {
- 			compatible = "mti,gic";
- 			reg = <0x0 0x140000 0x0 0x20000>;
-@@ -95,7 +102,7 @@ gic: interrupt-controller@140000 {
- 			timer {
- 				compatible = "mti,gic-timer";
- 				interrupts = <GIC_LOCAL 1 IRQ_TYPE_NONE>;
--				clocks = <&core0_clk>;
-+				clocks = <&core0_timer_clk>;
- 			};
- 		};
- 	};
-
--- 
-2.43.0
-
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
