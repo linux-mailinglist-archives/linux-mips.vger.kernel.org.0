@@ -1,145 +1,115 @@
-Return-Path: <linux-mips+bounces-842-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-844-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 756A481F94A
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Dec 2023 16:00:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36EBE8206E6
+	for <lists+linux-mips@lfdr.de>; Sat, 30 Dec 2023 16:39:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BFDBEB23554
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Dec 2023 15:00:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7E38281EC2
+	for <lists+linux-mips@lfdr.de>; Sat, 30 Dec 2023 15:39:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73F3BCA70;
-	Thu, 28 Dec 2023 15:00:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="KRQ/NFR5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3690CBA2B;
+	Sat, 30 Dec 2023 15:39:26 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0867ADDB2;
-	Thu, 28 Dec 2023 14:59:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5156BE0007;
-	Thu, 28 Dec 2023 14:59:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1703775590;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OdwCvRsG4FixCkCZpu5yjHO2BXpFje5WX4wGXSWETNo=;
-	b=KRQ/NFR5fnv3tyC0OOxzVzia9A3F0wOtj9cdDJRfsAE7k0gWkTQlRBCdiodFisKqMQzaHY
-	QV4IYPaNekaX8jRI1OxjkkZknrVumkFacDma18Pf9tLOPicDW83RA9AoQmu5D1zBCahzkz
-	dDmk3MEgdgqECAHOExvjKTPaqBqypopcLdIgNQr3iZr8l489ij+v8A12MF9vQn+J+mQLQC
-	wiR5TpEOrmeUxBKxe1j9IbpeYgNWrO8Ij8zDiXifOj/4HUlUCibKUBoW+YzkXeW9xHjlxQ
-	To+1ztjLLzN3sphXYe+KAY40Zz/L8dTUYbE7kguALuCAkzrNaZUBqnrKlqad7Q==
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DDEEB66C;
+	Sat, 30 Dec 2023 15:39:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1rJacF-0004OV-00; Sat, 30 Dec 2023 15:47:07 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 8EE31C028A; Sat, 30 Dec 2023 15:40:51 +0100 (CET)
+Date: Sat, 30 Dec 2023 15:40:51 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] MIPS: Enable SPARSEMEM option unconditionally on
+ 64BIT
+Message-ID: <ZZAr84wveFdBZ+hm@alpha.franken.de>
+References: <20231028-mm-v1-0-45377cd158cf@flygoat.com>
+ <20231028-mm-v1-1-45377cd158cf@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 28 Dec 2023 15:59:48 +0100
-Message-Id: <CY021G48QZPW.1PAP84HUGG3AF@bootlin.com>
-Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
- <linux-mips@vger.kernel.org>, <linux-clk@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Thomas
- Petazzoni" <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Gregory
- CLEMENT" <gregory.clement@bootlin.com>, "Michael Turquette"
- <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v2 3/6] dt-bindings: soc: mobileye: add EyeQ5 OLB system
- controller
-X-Mailer: aerc 0.15.2
-References: <20231227-mbly-clk-v2-0-a05db63c380f@bootlin.com>
- <20231227-mbly-clk-v2-3-a05db63c380f@bootlin.com>
- <bf77bd32-b618-4409-ab8b-93e4439ee6bf@linaro.org>
-In-Reply-To: <bf77bd32-b618-4409-ab8b-93e4439ee6bf@linaro.org>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231028-mm-v1-1-45377cd158cf@flygoat.com>
 
-Hello,
+On Sat, Oct 28, 2023 at 02:52:16PM +0100, Jiaxun Yang wrote:
+> SPARSEMEM have been tested on Cavium and Loongson64 for a while
+> and we are confident that they are working properly on 64bit
+> systems.
+> 
+> Since it's almost certain for 64bit MIPS system to have a hole
+> in memory space, SPARSEMEM will be more efficent for them.
+> 
+> Also promote platforms marked with SPARSEMEM_ENABLE before
+> to SPARSEMEM_DEFAULT, as they tend to have huge holes in
+> address space.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  arch/mips/Kconfig             | 13 ++++++++-----
+>  arch/mips/loongson2ef/Kconfig |  4 ++--
+>  2 files changed, 10 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 76db82542519..d12e8f3c1d08 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -460,7 +460,7 @@ config MACH_LOONGSON2EF
+>  
+>  config MACH_LOONGSON64
+>  	bool "Loongson 64-bit family of machines"
+> -	select ARCH_SPARSEMEM_ENABLE
+> +	select ARCH_SPARSEMEM_DEFAULT
+>  	select ARCH_MIGHT_HAVE_PC_PARPORT
+>  	select ARCH_MIGHT_HAVE_PC_SERIO
+>  	select GENERIC_ISA_DMA_SUPPORT_BROKEN
+> @@ -656,7 +656,7 @@ config SGI_IP22
+>  config SGI_IP27
+>  	bool "SGI IP27 (Origin200/2000)"
+>  	select ARCH_HAS_PHYS_TO_DMA
+> -	select ARCH_SPARSEMEM_ENABLE
+> +	select ARCH_SPARSEMEM_DEFAULT
+>  	select FW_ARC
+>  	select FW_ARC64
+>  	select ARC_CMDLINE_ONLY
+> @@ -923,7 +923,7 @@ config CAVIUM_OCTEON_SOC
+>  	select ZONE_DMA32
+>  	select GPIOLIB
+>  	select USE_OF
+> -	select ARCH_SPARSEMEM_ENABLE
+> +	select ARCH_SPARSEMEM_DEFAULT
+>  	select SYS_SUPPORTS_SMP
+>  	select NR_CPUS_DEFAULT_64
+>  	select MIPS_NR_CPU_NR_MAP_1024
+> @@ -2573,10 +2573,13 @@ config CPU_SUPPORTS_MSA
+>  
+>  config ARCH_FLATMEM_ENABLE
+>  	def_bool y
+> -	depends on !NUMA && !CPU_LOONGSON2EF
+>  
+>  config ARCH_SPARSEMEM_ENABLE
+> -	bool
+> +	def_bool y
+> +	depends on 64BIT
+> +
+> +config ARCH_SELECT_MEMORY_MODEL
+> +	def_bool ARCH_SPARSEMEM_ENABLE
 
-On Thu Dec 28, 2023 at 8:21 AM CET, Krzysztof Kozlowski wrote:
-> On 27/12/2023 17:23, Th=C3=A9o Lebrun wrote:
-> > Add documentation to describe the "Other Logic Block" syscon.
-> >=20
-> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-> > ---
-> >  .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  | 44 ++++++++++++++=
-++++++++
-> >  MAINTAINERS                                        |  1 +
-> >  2 files changed, 45 insertions(+)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/soc/mobileye/mobileye,ey=
-eq5-olb.yaml b/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq=
-5-olb.yaml
-> > new file mode 100644
-> > index 000000000000..b148a49b08f1
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb=
-.yaml
-> > @@ -0,0 +1,44 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yam=
-l#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Mobileye EyeQ5 SoC system controller
-> > +
-> > +maintainers:
-> > +  - Gr=C3=A9gory Clement <gregory.clement@bootlin.com>
-> > +  - Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-> > +  - Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
-> > +
-> > +description:
-> > +  OLB ("Other Logic Block") is a hardware block grouping smaller block=
-s. Clocks,
-> > +  resets, pinctrl are being handled from here.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - const: mobileye,eyeq5-olb
-> > +      - const: syscon
-> > +      - const: simple-mfd
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  reg-io-width:
-> > +    const: 4
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - reg-io-width
->
-> It's still wrong order of the patches. Binding should be complete, so
-> you miss clock-controller in this patch. If you ordered them hoping
-> there is no dependency between patches, it will not work. You still have
-> dependency! Your next patch still depends on this, which should be
-> clearly expressed either in cover letter or next patch.
+maybe I'm blind, but I don't see ARCH_SPARSEMEM_DEFAULT declared in
+Kconfig for MIPS. So what I'm missing ?
 
-Ah you read me right, I did indeed expect ordering to be enough. I'll
-squash all changes to mobileye,eyeq5-olb.yaml into a single commit to
-avoid any dependency.
+Thomas.
 
-Thanks,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
