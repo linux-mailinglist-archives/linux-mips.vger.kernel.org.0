@@ -1,100 +1,107 @@
-Return-Path: <linux-mips+bounces-849-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-850-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15699821A5E
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Jan 2024 11:48:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF7E9821AD1
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Jan 2024 12:21:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 717A728306C
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Jan 2024 10:48:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5DB241F22791
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Jan 2024 11:21:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F92AD313;
-	Tue,  2 Jan 2024 10:48:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01F24E555;
+	Tue,  2 Jan 2024 11:21:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="M7imy2eY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GeDzh8jA"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from xry111.site (xry111.site [89.208.246.23])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25376D528;
-	Tue,  2 Jan 2024 10:48:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-	s=default; t=1704192519;
-	bh=f4OQ1ZNLcLTkfVKTa0KnB7uTCXzUZK0q6WupCf7F0ss=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=M7imy2eYubvLYstc4XOHXKYbzCNqXLJgUjS8XUXUbWgOvKfdWTgDVMs55JXev+E4U
-	 h490habAEDFwY/jQ2BDBytStmmUV3Ehbfz8RsdLQDJC3F7yMfp/+N2nU+2xMrqxBEE
-	 Ps7kPH0aSrl6I++ekZEHhcFxzIzNnMQyqwL7K8LM=
-Received: from [IPv6:240e:358:11a9:2200:dc73:854d:832e:3] (unknown [IPv6:240e:358:11a9:2200:dc73:854d:832e:3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id 07F2766F45;
-	Tue,  2 Jan 2024 05:48:31 -0500 (EST)
-Message-ID: <7a6aa1bbdbbe2e63ae96ff163fab0349f58f1b9e.camel@xry111.site>
-Subject: MIPS: fcsr31 may be dirty after execve when kernel preempt is
- enabled (was: Re: [PATCH v2] LoongArch: Fix and simplify fcsr
- initialization on execve)
-From: Xi Ruoyao <xry111@xry111.site>
-To: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
-	Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Eric Biederman <ebiederm@xmission.com>, Kees Cook
- <keescook@chromium.org>,  Tiezhu Yang <yangtiezhu@loongson.cn>, Jinyang He
- <hejinyang@loongson.cn>, loongarch@lists.linux.dev,  linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
- linux-mips@vger.kernel.org
-Date: Tue, 02 Jan 2024 18:48:27 +0800
-In-Reply-To: <f6e0b3a0e08a8100fa5dc9345af8582ff664321c.camel@xry111.site>
-References: <20240102101711.10872-2-xry111@xry111.site>
-	 <f6e0b3a0e08a8100fa5dc9345af8582ff664321c.camel@xry111.site>
-Autocrypt: addr=xry111@xry111.site; prefer-encrypt=mutual;
- keydata=mDMEYnkdPhYJKwYBBAHaRw8BAQdAsY+HvJs3EVKpwIu2gN89cQT/pnrbQtlvd6Yfq7egugi0HlhpIFJ1b3lhbyA8eHJ5MTExQHhyeTExMS5zaXRlPoiTBBMWCgA7FiEEkdD1djAfkk197dzorKrSDhnnEOMFAmJ5HT4CGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQrKrSDhnnEOPHFgD8D9vUToTd1MF5bng9uPJq5y3DfpcxDp+LD3joA3U2TmwA/jZtN9xLH7CGDHeClKZK/ZYELotWfJsqRcthOIGjsdAPuDgEYnkdPhIKKwYBBAGXVQEFAQEHQG+HnNiPZseiBkzYBHwq/nN638o0NPwgYwH70wlKMZhRAwEIB4h4BBgWCgAgFiEEkdD1djAfkk197dzorKrSDhnnEOMFAmJ5HT4CGwwACgkQrKrSDhnnEOPjXgD/euD64cxwqDIqckUaisT3VCst11RcnO5iRHm6meNIwj0BALLmWplyi7beKrOlqKfuZtCLbiAPywGfCNg8LOTt4iMD
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A7CE544;
+	Tue,  2 Jan 2024 11:21:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60B48C433C7;
+	Tue,  2 Jan 2024 11:21:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704194465;
+	bh=9BxRzEOBTvR+ppxG806EdQKoWFFjbUS/+GzPU/AwX9g=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=GeDzh8jA6WHp/CxKP0OUKid/aof8nCv7fI6c2Z6/esAnHXjkaYY5h9T5qBYA9bGhq
+	 F55tRn31n4Ja8nd0kjwpooY0qXEZqPg8h1XltOwsqwEkCHWla6jI1W+mpSOniWCRIO
+	 cTyHNZY3uVgxbGTuAFKDeJwSGtCFDksU0Z+GPvAzFL5FBR55w5FH6CZgbi9tFUZsPn
+	 k2ABDr0oG0AhvA7h+BD/cjpRdlJgEyEx15b8i2C4yiSrz5fsFFUjSIiLUzFggCeJGR
+	 YlQ9eFU/CVl4LE6PzYCHykNQPZyO+jrzwfwt0NvBg/RPWeZq4aZfX8orOhWYPBGycq
+	 yqEI3TKmy0F+w==
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a282cb36d37so75148066b.3;
+        Tue, 02 Jan 2024 03:21:05 -0800 (PST)
+X-Gm-Message-State: AOJu0YyWpCIG103YPc8b5oIQIClbz88SxTAoa/UhK5vyt6aEtwCLFmbc
+	z4rhouJ53e5A1cnU1v5mpHAvitB4Nn1b6StRhRQ=
+X-Google-Smtp-Source: AGHT+IFlsPq24WCd2yxgqmcSvJkW3nbzdQEW3v5ivSTAT0THQwBtZN9+rL4w0A9AFZUm25f69rf/1O7XVxbOBueUL+0=
+X-Received: by 2002:a17:906:7399:b0:a23:68ec:a863 with SMTP id
+ f25-20020a170906739900b00a2368eca863mr7697697ejl.87.1704194463900; Tue, 02
+ Jan 2024 03:21:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240102101711.10872-2-xry111@xry111.site> <f6e0b3a0e08a8100fa5dc9345af8582ff664321c.camel@xry111.site>
+ <7a6aa1bbdbbe2e63ae96ff163fab0349f58f1b9e.camel@xry111.site>
+In-Reply-To: <7a6aa1bbdbbe2e63ae96ff163fab0349f58f1b9e.camel@xry111.site>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Tue, 2 Jan 2024 19:20:57 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7oMB62mSL1O4QPdUNW5z1_12G3L5QAm81KsSwDv_GsEg@mail.gmail.com>
+Message-ID: <CAAhV-H7oMB62mSL1O4QPdUNW5z1_12G3L5QAm81KsSwDv_GsEg@mail.gmail.com>
+Subject: Re: MIPS: fcsr31 may be dirty after execve when kernel preempt is
+ enabled (was: Re: [PATCH v2] LoongArch: Fix and simplify fcsr initialization
+ on execve)
+To: Xi Ruoyao <xry111@xry111.site>
+Cc: WANG Xuerui <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <keescook@chromium.org>, 
+	Tiezhu Yang <yangtiezhu@loongson.cn>, Jinyang He <hejinyang@loongson.cn>, 
+	loongarch@lists.linux.dev, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2024-01-02 at 18:25 +0800, Xi Ruoyao wrote:
-> On Tue, 2024-01-02 at 18:17 +0800, Xi Ruoyao wrote:
-> > The only other architecture setting FCSR in SET_PERSONALITY2 is MIPS.
-> > They do this for supporting different FP flavors (NaN encodings etc).
-> > which do not exist on LoongArch.=C2=A0 I'm not sure how MIPS evades the=
- issue
-> > (or maybe it's just buggy too) but I'll investigate it later.
->=20
-> Phew.=C2=A0 I just managed to recommission my 3A4000 and I can reproduce =
-the
-> issue as well with Linux 5.18.1 (the latest kernel release when I
-> decommissioned it) and CONFIG_PREEMPT=3Dy.
->=20
-> % cat measure.c
-> #include <fenv.h>
-> int main() { return fetestexcept(FE_INEXACT); }
->=20
-> % echo $((1./3))
-> 0.33333333333333331
->=20
-> % while ./a.out; do ; done
-> (stopped in seconds)
->=20
-> I'm building the mainline kernel on the 3A4000 now, will see if the
-> issue still exists...
+On Tue, Jan 2, 2024 at 6:48=E2=80=AFPM Xi Ruoyao <xry111@xry111.site> wrote=
+:
+>
+> On Tue, 2024-01-02 at 18:25 +0800, Xi Ruoyao wrote:
+> > On Tue, 2024-01-02 at 18:17 +0800, Xi Ruoyao wrote:
+> > > The only other architecture setting FCSR in SET_PERSONALITY2 is MIPS.
+> > > They do this for supporting different FP flavors (NaN encodings etc).
+> > > which do not exist on LoongArch.  I'm not sure how MIPS evades the is=
+sue
+> > > (or maybe it's just buggy too) but I'll investigate it later.
+> >
+> > Phew.  I just managed to recommission my 3A4000 and I can reproduce the
+> > issue as well with Linux 5.18.1 (the latest kernel release when I
+> > decommissioned it) and CONFIG_PREEMPT=3Dy.
+> >
+> > % cat measure.c
+> > #include <fenv.h>
+> > int main() { return fetestexcept(FE_INEXACT); }
+> >
+> > % echo $((1./3))
+> > 0.33333333333333331
+> >
+> > % while ./a.out; do ; done
+> > (stopped in seconds)
+> >
+> > I'm building the mainline kernel on the 3A4000 now, will see if the
+> > issue still exists...
+>
+> Still happening with 6.7.0-rc8.  I'm not sure how to fix it for MIPS.
+> Maybe lose_fpu in SET_PERSONALITY2? But to me doing so will be really
+> nasty.  Anyway I'll leave this for MIPS maintainers.
+Disable preemption in SET_PERSONALITY2 and enable in START_THREAD?
 
-Still happening with 6.7.0-rc8.  I'm not sure how to fix it for MIPS.=20
-Maybe lose_fpu in SET_PERSONALITY2? But to me doing so will be really
-nasty.  Anyway I'll leave this for MIPS maintainers.
+Huacai
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+>
+> --
+> Xi Ruoyao <xry111@xry111.site>
+> School of Aerospace Science and Technology, Xidian University
 
