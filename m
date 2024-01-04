@@ -1,145 +1,154 @@
-Return-Path: <linux-mips+bounces-859-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-860-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B9B28239E7
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Jan 2024 01:56:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16C1C823D01
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Jan 2024 08:54:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E4131C24B02
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Jan 2024 00:56:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD1231F2227E
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Jan 2024 07:54:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57C8C376;
-	Thu,  4 Jan 2024 00:56:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="K9u3fPtn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0B8D1F951;
+	Thu,  4 Jan 2024 07:54:00 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67BB367;
-	Thu,  4 Jan 2024 00:56:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=PvvTbXmhAMvAx3EvwpM5Mlo58bbnIBsDOArf3j3dpaY=; b=K9u3fPtnJoKjaIQNMPo96hioTS
-	An0hLOUXAlOm8o33qWjFsmq4l6KiJwovLr9vijbN/Th6lVBc854Og3qofgwEpYmvKoblxzQfd2vEp
-	TAZivYFjNmbS8fDYbvoxOb/Fe1TG2uhM9yOuc3+lx2+wz8J7q1BS2jdAH5Y/+M9oRu+blYY3wpcV6
-	UIj0N782nJhvmlZqh15o6WXHwjSmtkvyxkmDrLkyAzdd63AOFM9zcBIWj66beTEO2VIEP2umm2QcY
-	lEuG1s+2dx5tyR2AMEZGdllFwAzyfyJqRVqGhxfsp2AJFUP/aJ8hqXFayE42xVvTk2h4ry4Cp8CTS
-	7sBVFKFA==;
-Received: from [50.53.46.231] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rLC2D-00CWjL-14;
-	Thu, 04 Jan 2024 00:56:33 +0000
-Message-ID: <6de5f186-87ec-469f-8383-5e7b1f0b0657@infradead.org>
-Date: Wed, 3 Jan 2024 16:56:32 -0800
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E57C1F94D;
+	Thu,  4 Jan 2024 07:53:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.173])
+	by gateway (Coremail) with SMTP id _____8DxeeoSZJZlU+EBAA--.3001S3;
+	Thu, 04 Jan 2024 15:53:54 +0800 (CST)
+Received: from [10.20.42.173] (unknown [10.20.42.173])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8DxvocPZJZlRTMBAA--.3040S3;
+	Thu, 04 Jan 2024 15:53:53 +0800 (CST)
+Subject: Re: [PATCH] irqchip/loongson-eiointc: Refine irq affinity setting
+ during resume
+From: maobibo <maobibo@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>, Jiaxun Yang
+ <jiaxun.yang@flygoat.com>, Thomas Gleixner <tglx@linutronix.de>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Jianmin Lv <lvjianmin@loongson.cn>
+References: <20231219095158.285408-1-maobibo@loongson.cn>
+Message-ID: <a6661b44-2fab-4c7f-5997-e01a6f64c737@loongson.cn>
+Date: Thu, 4 Jan 2024 15:53:51 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/8] MIPS: Fix typos
+In-Reply-To: <20231219095158.285408-1-maobibo@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To: Bjorn Helgaas <helgaas@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
- linux-mips@vger.kernel.org
-References: <20240103231605.1801364-1-helgaas@kernel.org>
- <20240103231605.1801364-7-helgaas@kernel.org>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20240103231605.1801364-7-helgaas@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8DxvocPZJZlRTMBAA--.3040S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxAFyrCr4xtF18WFW5ur1ruFX_yoW5Cr48pF
+	W5A3Z0yrW5JFyUXryakr4DXa4avwn5XrW7KFsxWay7ZFs8JF1DKF4FkF1jvF40k3y7JFsI
+	vF4Yqr18C3WYk3XCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
+	67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+	AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
+	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw
+	1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
+	xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+	4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jY
+	SoJUUUUU=
 
++ irqchip maintainer Thomas.
 
+Jianmin,
 
-On 1/3/24 15:16, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
+Could you give some feedback about this patch since you are author about 
+this patch? By searching code of all hw irqchip drivers, there is no 
+affinity restoring during s3/s4.
+
+Regards
+Bibo Mao
+
+On 2023/12/19 下午5:51, Bibo Mao wrote:
+> During suspend and resume, other CPUs are removed and IRQs are migrated
+> to CPU0. So it is not necessary to restore irq affinity for eiointc.
 > 
-> Fix typos, most reported by "codespell arch/mips".  Only touches comments,
-> no code changes.
+> Also there is some optimization for function eiointc_irq_dispatch,
+> in genral there are 256 IRQs supported for eiointc. When irq happens,
+> eiointc irq handler reads the bitmap and find pending irqs. There are
+> 4 times of  consecutive iocsr_read64 operations for the total 256 bits,
+> indeed in most scenario pending value is zero in 3 times, and not zero
+> in one time. Here zero checking is added to avoid some useless
+> operations sush as clearing hw ISR.
 > 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: linux-mips@vger.kernel.org
+> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
 > ---
->  arch/mips/bcm47xx/buttons.c                            | 6 +++---
->  arch/mips/bcm63xx/clk.c                                | 4 ++--
->  arch/mips/boot/compressed/dbg.c                        | 2 +-
->  arch/mips/boot/elf2ecoff.c                             | 2 +-
->  arch/mips/cavium-octeon/csrc-octeon.c                  | 2 +-
->  arch/mips/cavium-octeon/executive/cvmx-boot-vector.c   | 2 +-
->  arch/mips/cavium-octeon/executive/cvmx-bootmem.c       | 2 +-
->  arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c     | 4 ++--
->  arch/mips/cavium-octeon/executive/cvmx-helper-jtag.c   | 2 +-
->  arch/mips/cavium-octeon/executive/cvmx-pko.c           | 2 +-
->  arch/mips/cavium-octeon/octeon-platform.c              | 2 +-
->  arch/mips/fw/arc/promlib.c                             | 6 +++---
->  arch/mips/include/asm/debug.h                          | 2 +-
->  arch/mips/include/asm/io.h                             | 4 ++--
->  arch/mips/include/asm/mach-au1x00/au1000_dma.h         | 2 +-
->  arch/mips/include/asm/mach-au1x00/gpio-au1000.h        | 2 +-
->  arch/mips/include/asm/mach-lantiq/falcon/lantiq_soc.h  | 2 +-
->  arch/mips/include/asm/mach-loongson64/loongson_hwmon.h | 2 +-
->  arch/mips/include/asm/mach-loongson64/loongson_regs.h  | 2 +-
->  arch/mips/include/asm/mach-malta/spaces.h              | 4 ++--
->  arch/mips/include/asm/mips-boards/bonito64.h           | 2 +-
->  arch/mips/include/asm/mips-cpc.h                       | 2 +-
->  arch/mips/include/asm/mipsregs.h                       | 4 ++--
->  arch/mips/include/asm/octeon/cvmx-bootinfo.h           | 2 +-
->  arch/mips/include/asm/octeon/cvmx-cmd-queue.h          | 6 +++---
->  arch/mips/include/asm/octeon/cvmx-pko.h                | 2 +-
->  arch/mips/include/asm/octeon/cvmx-pow.h                | 4 ++--
->  arch/mips/include/asm/octeon/octeon-model.h            | 4 ++--
->  arch/mips/include/asm/page.h                           | 2 +-
->  arch/mips/include/asm/pci.h                            | 2 +-
->  arch/mips/include/asm/pgtable-bits.h                   | 2 +-
->  arch/mips/include/asm/sgi/mc.h                         | 2 +-
->  arch/mips/include/asm/sn/klconfig.h                    | 2 +-
->  arch/mips/include/asm/sync.h                           | 2 +-
->  arch/mips/include/asm/thread_info.h                    | 2 +-
->  arch/mips/include/asm/timex.h                          | 2 +-
->  arch/mips/include/asm/vdso/vdso.h                      | 2 +-
->  arch/mips/include/uapi/asm/mman.h                      | 2 +-
->  arch/mips/include/uapi/asm/msgbuf.h                    | 2 +-
->  arch/mips/kernel/cpu-probe.c                           | 2 +-
->  arch/mips/kernel/kprobes.c                             | 2 +-
->  arch/mips/kernel/relocate.c                            | 2 +-
->  arch/mips/kernel/relocate_kernel.S                     | 2 +-
->  arch/mips/kernel/setup.c                               | 2 +-
->  arch/mips/kernel/signal.c                              | 2 +-
->  arch/mips/kernel/traps.c                               | 2 +-
->  arch/mips/kernel/vpe.c                                 | 4 ++--
->  arch/mips/kvm/emulate.c                                | 2 +-
->  arch/mips/loongson2ef/common/platform.c                | 2 +-
->  arch/mips/loongson64/smp.c                             | 2 +-
->  arch/mips/mm/c-r4k.c                                   | 2 +-
->  arch/mips/mm/cex-gen.S                                 | 2 +-
->  arch/mips/mm/tlb-r3k.c                                 | 2 +-
->  arch/mips/mm/tlb-r4k.c                                 | 2 +-
->  arch/mips/mm/tlbex.c                                   | 4 ++--
->  arch/mips/net/bpf_jit_comp32.c                         | 2 +-
->  arch/mips/pci/ops-loongson2.c                          | 2 +-
->  arch/mips/pci/pci-alchemy.c                            | 2 +-
->  arch/mips/pci/pci-ar2315.c                             | 2 +-
->  arch/mips/pci/pci-lantiq.c                             | 2 +-
->  arch/mips/pci/pci-octeon.c                             | 2 +-
->  arch/mips/pci/pci-xtalk-bridge.c                       | 2 +-
->  arch/mips/pci/pcie-octeon.c                            | 2 +-
->  arch/mips/ralink/mt7621.c                              | 2 +-
->  arch/mips/txx9/generic/pci.c                           | 2 +-
->  65 files changed, 80 insertions(+), 80 deletions(-)
+>   drivers/irqchip/irq-loongson-eiointc.c | 29 +++++++++++---------------
+>   1 file changed, 12 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
+> index 1623cd779175..b01be85b8ebc 100644
+> --- a/drivers/irqchip/irq-loongson-eiointc.c
+> +++ b/drivers/irqchip/irq-loongson-eiointc.c
+> @@ -198,6 +198,17 @@ static void eiointc_irq_dispatch(struct irq_desc *desc)
+>   
+>   	for (i = 0; i < eiointc_priv[0]->vec_count / VEC_COUNT_PER_REG; i++) {
+>   		pending = iocsr_read64(EIOINTC_REG_ISR + (i << 3));
+> +
+> +		/*
+> +		 * Get pending eiointc irq from bitmap status, there are 4 times
+> +		 * consecutive iocsr_read64 operations for 256 IRQs.
+> +		 *
+> +		 * In most scenario value of pending is 0 if no multiple IRQs
+> +		 * happen at the same time
+> +		 */
+> +		if (!pending)
+> +			continue;
+> +
+>   		iocsr_write64(pending, EIOINTC_REG_ISR + (i << 3));
+>   		while (pending) {
+>   			int bit = __ffs(pending);
+> @@ -241,7 +252,7 @@ static int eiointc_domain_alloc(struct irq_domain *domain, unsigned int virq,
+>   	int ret;
+>   	unsigned int i, type;
+>   	unsigned long hwirq = 0;
+> -	struct eiointc *priv = domain->host_data;
+> +	struct eiointc_priv *priv = domain->host_data;
+>   
+>   	ret = irq_domain_translate_onecell(domain, arg, &hwirq, &type);
+>   	if (ret)
+> @@ -304,23 +315,7 @@ static int eiointc_suspend(void)
+>   
+>   static void eiointc_resume(void)
+>   {
+> -	int i, j;
+> -	struct irq_desc *desc;
+> -	struct irq_data *irq_data;
+> -
+>   	eiointc_router_init(0);
+> -
+> -	for (i = 0; i < nr_pics; i++) {
+> -		for (j = 0; j < eiointc_priv[0]->vec_count; j++) {
+> -			desc = irq_resolve_mapping(eiointc_priv[i]->eiointc_domain, j);
+> -			if (desc && desc->handle_irq && desc->handle_irq != handle_bad_irq) {
+> -				raw_spin_lock(&desc->lock);
+> -				irq_data = irq_domain_get_irq_data(eiointc_priv[i]->eiointc_domain, irq_desc_get_irq(desc));
+> -				eiointc_set_irq_affinity(irq_data, irq_data->common->affinity, 0);
+> -				raw_spin_unlock(&desc->lock);
+> -			}
+> -		}
+> -	}
+>   }
+>   
+>   static struct syscore_ops eiointc_syscore_ops = {
+> 
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
--- 
-#Randy
 
