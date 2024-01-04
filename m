@@ -1,154 +1,214 @@
-Return-Path: <linux-mips+bounces-860-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-861-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16C1C823D01
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Jan 2024 08:54:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64D4C823E02
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Jan 2024 09:58:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD1231F2227E
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Jan 2024 07:54:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBAE2286C77
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Jan 2024 08:58:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0B8D1F951;
-	Thu,  4 Jan 2024 07:54:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47EAF1EA8F;
+	Thu,  4 Jan 2024 08:58:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W1bXm+0o"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E57C1F94D;
-	Thu,  4 Jan 2024 07:53:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.173])
-	by gateway (Coremail) with SMTP id _____8DxeeoSZJZlU+EBAA--.3001S3;
-	Thu, 04 Jan 2024 15:53:54 +0800 (CST)
-Received: from [10.20.42.173] (unknown [10.20.42.173])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8DxvocPZJZlRTMBAA--.3040S3;
-	Thu, 04 Jan 2024 15:53:53 +0800 (CST)
-Subject: Re: [PATCH] irqchip/loongson-eiointc: Refine irq affinity setting
- during resume
-From: maobibo <maobibo@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>, Jiaxun Yang
- <jiaxun.yang@flygoat.com>, Thomas Gleixner <tglx@linutronix.de>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
- Jianmin Lv <lvjianmin@loongson.cn>
-References: <20231219095158.285408-1-maobibo@loongson.cn>
-Message-ID: <a6661b44-2fab-4c7f-5997-e01a6f64c737@loongson.cn>
-Date: Thu, 4 Jan 2024 15:53:51 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D701EA7E;
+	Thu,  4 Jan 2024 08:58:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3A75C433CD;
+	Thu,  4 Jan 2024 08:58:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704358708;
+	bh=N87omvR/1Ui7jNJRlywxLVgXDex4G3VlN98Ml/JXR90=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=W1bXm+0oPfT5rDH/gS1gYxYx9XKTMh6rp+TBMPIZ9U+PxxhI8paxDD5MCdN5UQgri
+	 FmajXDHHp6E56+SgsXq7hkOtIFxeU/w8oqVN7POD8IIcl3lTmNPUvxGDEyML0wlU1f
+	 bSb//6X0qRzGlKMMLF0tOBlVRnDMQyvCNOaZz1EeZMjoalhUMXUURShIo5NpPosK6D
+	 Cf4YlXb+WuvmMM1hJzgdD3vtdIS+LSaO2hnr22CIcb+WvZhUb+KtAFJMDbuXhpqRFi
+	 3KWYLNt3r9fLxjZU7NJ3vQXTv0ORLSiGSpf3VapXXxejjX/V4H9157N13si/TqnQgs
+	 inaj0ZFsXetKQ==
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-55590da560dso346597a12.0;
+        Thu, 04 Jan 2024 00:58:27 -0800 (PST)
+X-Gm-Message-State: AOJu0YxW+nSLxvtSPkSm8tbXwR70nyT8E3mQCYOKVLIjURc4Pg8xcIev
+	Tnz+KKbI4iIpB5PtoE7DpcGaxDX7xqofNb5eugg=
+X-Google-Smtp-Source: AGHT+IHQVPwm12+OlEILyIKcXqjXe7xvDeITRMmcqOceIIL7hs/JLrObgNNCkATamQIcelA4TEK/rAkJk+QMqBGQsfU=
+X-Received: by 2002:a17:906:bc45:b0:a28:d45:33ee with SMTP id
+ s5-20020a170906bc4500b00a280d4533eemr152937ejv.143.1704358706430; Thu, 04 Jan
+ 2024 00:58:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20231219095158.285408-1-maobibo@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8DxvocPZJZlRTMBAA--.3040S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxAFyrCr4xtF18WFW5ur1ruFX_yoW5Cr48pF
-	W5A3Z0yrW5JFyUXryakr4DXa4avwn5XrW7KFsxWay7ZFs8JF1DKF4FkF1jvF40k3y7JFsI
-	vF4Yqr18C3WYk3XCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
-	67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
-	AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw
-	1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
-	xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
-	4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jY
-	SoJUUUUU=
+References: <20240102123706.6099-2-xry111@xry111.site>
+In-Reply-To: <20240102123706.6099-2-xry111@xry111.site>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Thu, 4 Jan 2024 16:58:21 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4QM6xHNfNcnbYX4M+PMuBcp7x9do97Ak9_XksFA9mM2Q@mail.gmail.com>
+Message-ID: <CAAhV-H4QM6xHNfNcnbYX4M+PMuBcp7x9do97Ak9_XksFA9mM2Q@mail.gmail.com>
+Subject: Re: [PATCH v3] LoongArch: Fix and simplify fcsr initialization on execve
+To: Xi Ruoyao <xry111@xry111.site>
+Cc: WANG Xuerui <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <keescook@chromium.org>, 
+	Tiezhu Yang <yangtiezhu@loongson.cn>, Jinyang He <hejinyang@loongson.cn>, 
+	loongarch@lists.linux.dev, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-+ irqchip maintainer Thomas.
+Queued for loongarch-next, thanks.
 
-Jianmin,
+Huacai
 
-Could you give some feedback about this patch since you are author about 
-this patch? By searching code of all hw irqchip drivers, there is no 
-affinity restoring during s3/s4.
-
-Regards
-Bibo Mao
-
-On 2023/12/19 下午5:51, Bibo Mao wrote:
-> During suspend and resume, other CPUs are removed and IRQs are migrated
-> to CPU0. So it is not necessary to restore irq affinity for eiointc.
-> 
-> Also there is some optimization for function eiointc_irq_dispatch,
-> in genral there are 256 IRQs supported for eiointc. When irq happens,
-> eiointc irq handler reads the bitmap and find pending irqs. There are
-> 4 times of  consecutive iocsr_read64 operations for the total 256 bits,
-> indeed in most scenario pending value is zero in 3 times, and not zero
-> in one time. Here zero checking is added to avoid some useless
-> operations sush as clearing hw ISR.
-> 
-> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+On Tue, Jan 2, 2024 at 8:38=E2=80=AFPM Xi Ruoyao <xry111@xry111.site> wrote=
+:
+>
+> There has been a lingering bug in LoongArch Linux systems causing some
+> GCC tests to intermittently fail (see Closes link).  I've made a minimal
+> reproducer:
+>
+>     zsh% cat measure.s
+>     .align 4
+>     .globl _start
+>     _start:
+>         movfcsr2gr  $a0, $fcsr0
+>         bstrpick.w  $a0, $a0, 16, 16
+>         beqz        $a0, .ok
+>         break       0
+>     .ok:
+>         li.w        $a7, 93
+>         syscall     0
+>     zsh% cc mesaure.s -o measure -nostdlib
+>     zsh% echo $((1.0/3))
+>     0.33333333333333331
+>     zsh% while ./measure; do ; done
+>
+> This while loop should not stop as POSIX is clear that execve must set
+> fenv to the default, where FCSR should be zero.  But in fact it will
+> just stop after running for a while (normally less than 30 seconds).
+> Note that "$((1.0/3))" is needed to reproduce the issue because it
+> raises FE_INVALID and makes fcsr0 non-zero.
+>
+> The problem is we are relying on SET_PERSONALITY2 to reset
+> current->thread.fpu.fcsr.  But SET_PERSONALITY2 is executed before
+> start_thread which calls lose_fpu(0).  We can see if kernel preempt is
+> enabled, we may switch to another thread after SET_PERSONALITY2 but
+> before lose_fpu(0).  Then bad thing happens: during the thread switch
+> the value of the fcsr0 register is stored into current->thread.fpu.fcsr,
+> making it dirty again.
+>
+> The issue can be fixed by setting current->thread.fpu.fcsr after
+> lose_fpu(0) because lose_fpu clears TIF_USEDFPU, then the thread
+> switch won't touch current->thread.fpu.fcsr.
+>
+> The only other architecture setting FCSR in SET_PERSONALITY2 is MIPS.
+> I've ran a similar test on MIPS with mainline kernel and it turns out
+> MIPS is buggy too.  Anyway MIPS do this for supporting different FP
+> flavors (NaN encodings etc.) which do not exist on LoongArch.  So for
+> LoongArch, we can simply remove the current->thread.fpu.fcsr setting
+> from SET_PERSONALITY2 and do it in start_thread, after lose_fpu(0).
+> I'll leave the job to fix MIPS for MIPS maintainers.
+>
+> The while loop failing with the mainline kernel has survived one hour
+> after this change on LoongArch.
+>
+> Closes: https://github.com/loongson-community/discussions/issues/7
+> Fixes: 803b0fc5c3f2 ("LoongArch: Add process management")
+> Link: https://lore.kernel.org/linux-mips/7a6aa1bbdbbe2e63ae96ff163fab0349=
+f58f1b9e.camel@xry111.site/
+> Cc: stable@vger.kernel.org
+> Cc: linux-mips@vger.kernel.org
+> Signed-off-by: Xi Ruoyao <xry111@xry111.site>
 > ---
->   drivers/irqchip/irq-loongson-eiointc.c | 29 +++++++++++---------------
->   1 file changed, 12 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
-> index 1623cd779175..b01be85b8ebc 100644
-> --- a/drivers/irqchip/irq-loongson-eiointc.c
-> +++ b/drivers/irqchip/irq-loongson-eiointc.c
-> @@ -198,6 +198,17 @@ static void eiointc_irq_dispatch(struct irq_desc *desc)
->   
->   	for (i = 0; i < eiointc_priv[0]->vec_count / VEC_COUNT_PER_REG; i++) {
->   		pending = iocsr_read64(EIOINTC_REG_ISR + (i << 3));
-> +
-> +		/*
-> +		 * Get pending eiointc irq from bitmap status, there are 4 times
-> +		 * consecutive iocsr_read64 operations for 256 IRQs.
-> +		 *
-> +		 * In most scenario value of pending is 0 if no multiple IRQs
-> +		 * happen at the same time
-> +		 */
-> +		if (!pending)
-> +			continue;
-> +
->   		iocsr_write64(pending, EIOINTC_REG_ISR + (i << 3));
->   		while (pending) {
->   			int bit = __ffs(pending);
-> @@ -241,7 +252,7 @@ static int eiointc_domain_alloc(struct irq_domain *domain, unsigned int virq,
->   	int ret;
->   	unsigned int i, type;
->   	unsigned long hwirq = 0;
-> -	struct eiointc *priv = domain->host_data;
-> +	struct eiointc_priv *priv = domain->host_data;
->   
->   	ret = irq_domain_translate_onecell(domain, arg, &hwirq, &type);
->   	if (ret)
-> @@ -304,23 +315,7 @@ static int eiointc_suspend(void)
->   
->   static void eiointc_resume(void)
->   {
-> -	int i, j;
-> -	struct irq_desc *desc;
-> -	struct irq_data *irq_data;
+>
+> v2 -> v3:
+> - Update the commit message to mention MIPS is buggy too.
+> - Replace tabs in the commit message with whitespaces.
+> - No code change.
+>
+> v1 -> v2:
+> - Still set current->thread.fpu.fcsr to boot_cpu_data.fpu_csr0 instead
+>   of constant 0.
+>
+>  arch/loongarch/include/asm/elf.h | 5 -----
+>  arch/loongarch/kernel/elf.c      | 5 -----
+>  arch/loongarch/kernel/process.c  | 1 +
+>  3 files changed, 1 insertion(+), 10 deletions(-)
+>
+> diff --git a/arch/loongarch/include/asm/elf.h b/arch/loongarch/include/as=
+m/elf.h
+> index 9b16a3b8e706..f16bd42456e4 100644
+> --- a/arch/loongarch/include/asm/elf.h
+> +++ b/arch/loongarch/include/asm/elf.h
+> @@ -241,8 +241,6 @@ void loongarch_dump_regs64(u64 *uregs, const struct p=
+t_regs *regs);
+>  do {                                                                   \
+>         current->thread.vdso =3D &vdso_info;                             =
+ \
+>                                                                         \
+> -       loongarch_set_personality_fcsr(state);                          \
+> -                                                                       \
+>         if (personality(current->personality) !=3D PER_LINUX)            =
+ \
+>                 set_personality(PER_LINUX);                             \
+>  } while (0)
+> @@ -259,7 +257,6 @@ do {                                                 =
+                       \
+>         clear_thread_flag(TIF_32BIT_ADDR);                              \
+>                                                                         \
+>         current->thread.vdso =3D &vdso_info;                             =
+ \
+> -       loongarch_set_personality_fcsr(state);                          \
+>                                                                         \
+>         p =3D personality(current->personality);                         =
+ \
+>         if (p !=3D PER_LINUX32 && p !=3D PER_LINUX)                      =
+   \
+> @@ -340,6 +337,4 @@ extern int arch_elf_pt_proc(void *ehdr, void *phdr, s=
+truct file *elf,
+>  extern int arch_check_elf(void *ehdr, bool has_interpreter, void *interp=
+_ehdr,
+>                           struct arch_elf_state *state);
+>
+> -extern void loongarch_set_personality_fcsr(struct arch_elf_state *state)=
+;
 > -
->   	eiointc_router_init(0);
+>  #endif /* _ASM_ELF_H */
+> diff --git a/arch/loongarch/kernel/elf.c b/arch/loongarch/kernel/elf.c
+> index 183e94fc9c69..0fa81ced28dc 100644
+> --- a/arch/loongarch/kernel/elf.c
+> +++ b/arch/loongarch/kernel/elf.c
+> @@ -23,8 +23,3 @@ int arch_check_elf(void *_ehdr, bool has_interpreter, v=
+oid *_interp_ehdr,
+>  {
+>         return 0;
+>  }
 > -
-> -	for (i = 0; i < nr_pics; i++) {
-> -		for (j = 0; j < eiointc_priv[0]->vec_count; j++) {
-> -			desc = irq_resolve_mapping(eiointc_priv[i]->eiointc_domain, j);
-> -			if (desc && desc->handle_irq && desc->handle_irq != handle_bad_irq) {
-> -				raw_spin_lock(&desc->lock);
-> -				irq_data = irq_domain_get_irq_data(eiointc_priv[i]->eiointc_domain, irq_desc_get_irq(desc));
-> -				eiointc_set_irq_affinity(irq_data, irq_data->common->affinity, 0);
-> -				raw_spin_unlock(&desc->lock);
-> -			}
-> -		}
-> -	}
->   }
->   
->   static struct syscore_ops eiointc_syscore_ops = {
-> 
-
+> -void loongarch_set_personality_fcsr(struct arch_elf_state *state)
+> -{
+> -       current->thread.fpu.fcsr =3D boot_cpu_data.fpu_csr0;
+> -}
+> diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/proc=
+ess.c
+> index 767d94cce0de..3f9cae615f52 100644
+> --- a/arch/loongarch/kernel/process.c
+> +++ b/arch/loongarch/kernel/process.c
+> @@ -92,6 +92,7 @@ void start_thread(struct pt_regs *regs, unsigned long p=
+c, unsigned long sp)
+>         clear_used_math();
+>         regs->csr_era =3D pc;
+>         regs->regs[3] =3D sp;
+> +       current->thread.fpu.fcsr =3D boot_cpu_data.fpu_csr0;
+>  }
+>
+>  void flush_thread(void)
+> --
+> 2.43.0
+>
 
