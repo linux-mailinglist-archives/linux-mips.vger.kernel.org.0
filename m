@@ -1,214 +1,164 @@
-Return-Path: <linux-mips+bounces-861-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-862-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64D4C823E02
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Jan 2024 09:58:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FDFA824CA8
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Jan 2024 02:52:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBAE2286C77
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Jan 2024 08:58:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C0382816A5
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Jan 2024 01:52:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47EAF1EA8F;
-	Thu,  4 Jan 2024 08:58:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W1bXm+0o"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D03CA1FBE;
+	Fri,  5 Jan 2024 01:52:40 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D701EA7E;
-	Thu,  4 Jan 2024 08:58:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3A75C433CD;
-	Thu,  4 Jan 2024 08:58:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704358708;
-	bh=N87omvR/1Ui7jNJRlywxLVgXDex4G3VlN98Ml/JXR90=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=W1bXm+0oPfT5rDH/gS1gYxYx9XKTMh6rp+TBMPIZ9U+PxxhI8paxDD5MCdN5UQgri
-	 FmajXDHHp6E56+SgsXq7hkOtIFxeU/w8oqVN7POD8IIcl3lTmNPUvxGDEyML0wlU1f
-	 bSb//6X0qRzGlKMMLF0tOBlVRnDMQyvCNOaZz1EeZMjoalhUMXUURShIo5NpPosK6D
-	 Cf4YlXb+WuvmMM1hJzgdD3vtdIS+LSaO2hnr22CIcb+WvZhUb+KtAFJMDbuXhpqRFi
-	 3KWYLNt3r9fLxjZU7NJ3vQXTv0ORLSiGSpf3VapXXxejjX/V4H9157N13si/TqnQgs
-	 inaj0ZFsXetKQ==
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-55590da560dso346597a12.0;
-        Thu, 04 Jan 2024 00:58:27 -0800 (PST)
-X-Gm-Message-State: AOJu0YxW+nSLxvtSPkSm8tbXwR70nyT8E3mQCYOKVLIjURc4Pg8xcIev
-	Tnz+KKbI4iIpB5PtoE7DpcGaxDX7xqofNb5eugg=
-X-Google-Smtp-Source: AGHT+IHQVPwm12+OlEILyIKcXqjXe7xvDeITRMmcqOceIIL7hs/JLrObgNNCkATamQIcelA4TEK/rAkJk+QMqBGQsfU=
-X-Received: by 2002:a17:906:bc45:b0:a28:d45:33ee with SMTP id
- s5-20020a170906bc4500b00a280d4533eemr152937ejv.143.1704358706430; Thu, 04 Jan
- 2024 00:58:26 -0800 (PST)
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D2EC1FA3;
+	Fri,  5 Jan 2024 01:52:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.66])
+	by gateway (Coremail) with SMTP id _____8Bx3+vjYJdlVCUCAA--.8132S3;
+	Fri, 05 Jan 2024 09:52:35 +0800 (CST)
+Received: from lvjianmin$loongson.cn ( [10.20.42.66] ) by
+ ajax-webmail-localhost.localdomain (Coremail) ; Fri, 5 Jan 2024 09:52:33
+ +0800 (GMT+08:00)
+Date: Fri, 5 Jan 2024 09:52:33 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: =?UTF-8?B?5ZCV5bu65rCR?= <lvjianmin@loongson.cn>
+To: maobibo <maobibo@loongson.cn>
+Cc: "Huacai Chen" <chenhuacai@kernel.org>,
+	"Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+	"Thomas Gleixner" <tglx@linutronix.de>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH] irqchip/loongson-eiointc: Refine irq affinity
+ setting during resume
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2023.1-cmXT6 build
+ 20230523(b0518e05) Copyright (c) 2002-2024 www.mailtech.cn loongson
+In-Reply-To: <a6661b44-2fab-4c7f-5997-e01a6f64c737@loongson.cn>
+References: <20231219095158.285408-1-maobibo@loongson.cn>
+ <a6661b44-2fab-4c7f-5997-e01a6f64c737@loongson.cn>
+Content-Transfer-Encoding: base64
+X-CM-CTRLDATA: MJVw0mZvb3Rlcl90eHQ9NDEzMzo2MTI=
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240102123706.6099-2-xry111@xry111.site>
-In-Reply-To: <20240102123706.6099-2-xry111@xry111.site>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Thu, 4 Jan 2024 16:58:21 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4QM6xHNfNcnbYX4M+PMuBcp7x9do97Ak9_XksFA9mM2Q@mail.gmail.com>
-Message-ID: <CAAhV-H4QM6xHNfNcnbYX4M+PMuBcp7x9do97Ak9_XksFA9mM2Q@mail.gmail.com>
-Subject: Re: [PATCH v3] LoongArch: Fix and simplify fcsr initialization on execve
-To: Xi Ruoyao <xry111@xry111.site>
-Cc: WANG Xuerui <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <keescook@chromium.org>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>, Jinyang He <hejinyang@loongson.cn>, 
-	loongarch@lists.linux.dev, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-ID: <14825118.b0d.18cd752711a.Coremail.lvjianmin@loongson.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID:AQAAf8DxPIfhYJdl+acCAA--.293W
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/1tbiAQAHDGWXVSgBgAAcsY
+X-Coremail-Antispam: 1Uk129KBj93XoWxGFy7CryUtFWfJw4xJr15ZFc_yoWrAr15pF
+	W5t3Z0kr4UJFyUXryS9r1UZa4av393XrZrKFsxWas7ZF98Z3WDKF4rKF1jvF12krW7G3Wj
+	vF4UXr1xu3WYyacCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUQjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2vj6VCEFcxC0VAYjxAxZF0EFcxC0VAYjxAxZF0Ew4CEw7xC0VCjxxvEa2IrM2
+	AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI
+	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8Jw
+	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFcxC0VAYjxAxZF0Ew4CEw7xC
+	0wACY4xI67k04243AVC20s07MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+	4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+	67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+	x0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+	z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JwCE64xvF2IEb7IF0F
+	y7YxBIdaVFxhVjvjDU0xZFpf9x07UVWlgUUUUU=
 
-Queued for loongarch-next, thanks.
+CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiBtYW9iaWJvIDxtYW9iaWJv
+QGxvb25nc29uLmNuPgo+IFNlbmQgdGltZTpUaHVyc2RheSwgMDEvMDQvMjAyNCAxNTo1Mzo1MQo+
+IFRvOiAiSHVhY2FpIENoZW4iIDxjaGVuaHVhY2FpQGtlcm5lbC5vcmc+LCAiSmlheHVuIFlhbmci
+IDxqaWF4dW4ueWFuZ0BmbHlnb2F0LmNvbT4sICJUaG9tYXMgR2xlaXhuZXIiIDx0Z2x4QGxpbnV0
+cm9uaXguZGU+Cj4gQ2M6IGxpbnV4LW1pcHNAdmdlci5rZXJuZWwub3JnLCBsaW51eC1rZXJuZWxA
+dmdlci5rZXJuZWwub3JnLCAiSmlhbm1pbiBMdiIgPGx2amlhbm1pbkBsb29uZ3Nvbi5jbj4KPiBT
+dWJqZWN0OiBSZTogW1BBVENIXSBpcnFjaGlwL2xvb25nc29uLWVpb2ludGM6IFJlZmluZSBpcnEg
+YWZmaW5pdHkgc2V0dGluZyBkdXJpbmcgcmVzdW1lCj4gCj4gKyBpcnFjaGlwIG1haW50YWluZXIg
+VGhvbWFzLgo+IAo+IEppYW5taW4sCj4gCj4gQ291bGQgeW91IGdpdmUgc29tZSBmZWVkYmFjayBh
+Ym91dCB0aGlzIHBhdGNoIHNpbmNlIHlvdSBhcmUgYXV0aG9yIGFib3V0IAo+IHRoaXMgcGF0Y2g/
+IEJ5IHNlYXJjaGluZyBjb2RlIG9mIGFsbCBodyBpcnFjaGlwIGRyaXZlcnMsIHRoZXJlIGlzIG5v
+IAo+IGFmZmluaXR5IHJlc3RvcmluZyBkdXJpbmcgczMvczQuCj4gCj4gUmVnYXJkcwo+IEJpYm8g
+TWFvCj4gCgpIaSwgYmlibwoKSSBsb29rZWQgaW50byB0aGUgcGF0Y2gsIElNTywgdGhlIGNoYW5n
+ZSBoZXJlIGluIHlvdXIgcGF0Y2ggaXMgcmVhc29uYWJsZS4gVGhlIG9yaWdpbmFsIHJlc3Rvcmlu
+ZyBjb2RlIGhlcmUKaXMgYWltZWQgdG8gcmVzdG9yZSBpcnEgcm91dGluZyByZWdpc3RlcnMgZnJv
+bSBpdHMnIGFmZmluaXR5LCBidXQgaXQgc2VlbXMgdGhhdCB0aGUgYWZmaW5pdHkKbWF5IGJlIGNo
+YW5nZWQgZHVyaW5nIGNwdSBvZmZsaW5lLCBzbyB3ZSBzaG91bGQgbm90IHVzZSBpdCB0aGlzIHdh
+eS4gTW9yZW92ZXIsIHRoZSBhZmZpbml0eSBvZiBlYWNoIGlycSB3aWxsCmJlIHNldCB0byBib290
+IGNwdSBhZnRlciBhbGwgb2Ygbm9uLWJvb3QgY3B1cyBhcmUgb2ZmbGluZSBiZWZvcmUgc3VzcGVu
+ZCBjYWxsYmFjaywgc28gaXQgc2VlbXMgdGhhdCBhZmZpbml0eQpyZXN0b3JpbmcgaXMgbm90IG5l
+ZWRlZC4KIAo+IE9uIDIwMjMvMTIvMTkg5LiL5Y2INTo1MSwgQmlibyBNYW8gd3JvdGU6Cj4gPiBE
+dXJpbmcgc3VzcGVuZCBhbmQgcmVzdW1lLCBvdGhlciBDUFVzIGFyZSByZW1vdmVkIGFuZCBJUlFz
+IGFyZSBtaWdyYXRlZAo+ID4gdG8gQ1BVMC4gU28gaXQgaXMgbm90IG5lY2Vzc2FyeSB0byByZXN0
+b3JlIGlycSBhZmZpbml0eSBmb3IgZWlvaW50Yy4KPiA+IAo+ID4gQWxzbyB0aGVyZSBpcyBzb21l
+IG9wdGltaXphdGlvbiBmb3IgZnVuY3Rpb24gZWlvaW50Y19pcnFfZGlzcGF0Y2gsCj4gPiBpbiBn
+ZW5yYWwgdGhlcmUgYXJlIDI1NiBJUlFzIHN1cHBvcnRlZCBmb3IgZWlvaW50Yy4gV2hlbiBpcnEg
+aGFwcGVucywKPiA+IGVpb2ludGMgaXJxIGhhbmRsZXIgcmVhZHMgdGhlIGJpdG1hcCBhbmQgZmlu
+ZCBwZW5kaW5nIGlycXMuIFRoZXJlIGFyZQo+ID4gNCB0aW1lcyBvZiAgY29uc2VjdXRpdmUgaW9j
+c3JfcmVhZDY0IG9wZXJhdGlvbnMgZm9yIHRoZSB0b3RhbCAyNTYgYml0cywKPiA+IGluZGVlZCBp
+biBtb3N0IHNjZW5hcmlvIHBlbmRpbmcgdmFsdWUgaXMgemVybyBpbiAzIHRpbWVzLCBhbmQgbm90
+IHplcm8KPiA+IGluIG9uZSB0aW1lLiBIZXJlIHplcm8gY2hlY2tpbmcgaXMgYWRkZWQgdG8gYXZv
+aWQgc29tZSB1c2VsZXNzCj4gPiBvcGVyYXRpb25zIHN1c2ggYXMgY2xlYXJpbmcgaHcgSVNSLgo+
+ID4gCj4gPiBTaWduZWQtb2ZmLWJ5OiBCaWJvIE1hbyA8bWFvYmlib0Bsb29uZ3Nvbi5jbj4KPiA+
+IC0tLQo+ID4gICBkcml2ZXJzL2lycWNoaXAvaXJxLWxvb25nc29uLWVpb2ludGMuYyB8IDI5ICsr
+KysrKysrKysrLS0tLS0tLS0tLS0tLS0tCj4gPiAgIDEgZmlsZSBjaGFuZ2VkLCAxMiBpbnNlcnRp
+b25zKCspLCAxNyBkZWxldGlvbnMoLSkKPiA+IAo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaXJx
+Y2hpcC9pcnEtbG9vbmdzb24tZWlvaW50Yy5jIGIvZHJpdmVycy9pcnFjaGlwL2lycS1sb29uZ3Nv
+bi1laW9pbnRjLmMKPiA+IGluZGV4IDE2MjNjZDc3OTE3NS4uYjAxYmU4NWI4ZWJjIDEwMDY0NAo+
+ID4gLS0tIGEvZHJpdmVycy9pcnFjaGlwL2lycS1sb29uZ3Nvbi1laW9pbnRjLmMKPiA+ICsrKyBi
+L2RyaXZlcnMvaXJxY2hpcC9pcnEtbG9vbmdzb24tZWlvaW50Yy5jCj4gPiBAQCAtMTk4LDYgKzE5
+OCwxNyBAQCBzdGF0aWMgdm9pZCBlaW9pbnRjX2lycV9kaXNwYXRjaChzdHJ1Y3QgaXJxX2Rlc2Mg
+KmRlc2MpCj4gPiAgIAo+ID4gICAJZm9yIChpID0gMDsgaSA8IGVpb2ludGNfcHJpdlswXS0+dmVj
+X2NvdW50IC8gVkVDX0NPVU5UX1BFUl9SRUc7IGkrKykgewo+ID4gICAJCXBlbmRpbmcgPSBpb2Nz
+cl9yZWFkNjQoRUlPSU5UQ19SRUdfSVNSICsgKGkgPDwgMykpOwo+ID4gKwo+ID4gKwkJLyoKPiA+
+ICsJCSAqIEdldCBwZW5kaW5nIGVpb2ludGMgaXJxIGZyb20gYml0bWFwIHN0YXR1cywgdGhlcmUg
+YXJlIDQgdGltZXMKPiA+ICsJCSAqIGNvbnNlY3V0aXZlIGlvY3NyX3JlYWQ2NCBvcGVyYXRpb25z
+IGZvciAyNTYgSVJRcy4KPiA+ICsJCSAqCj4gPiArCQkgKiBJbiBtb3N0IHNjZW5hcmlvIHZhbHVl
+IG9mIHBlbmRpbmcgaXMgMCBpZiBubyBtdWx0aXBsZSBJUlFzCj4gPiArCQkgKiBoYXBwZW4gYXQg
+dGhlIHNhbWUgdGltZQo+ID4gKwkJICovCj4gPiArCQlpZiAoIXBlbmRpbmcpCj4gPiArCQkJY29u
+dGludWU7Cj4gPiArCj4gPiAgIAkJaW9jc3Jfd3JpdGU2NChwZW5kaW5nLCBFSU9JTlRDX1JFR19J
+U1IgKyAoaSA8PCAzKSk7Cj4gPiAgIAkJd2hpbGUgKHBlbmRpbmcpIHsKPiA+ICAgCQkJaW50IGJp
+dCA9IF9fZmZzKHBlbmRpbmcpOwo+ID4gQEAgLTI0MSw3ICsyNTIsNyBAQCBzdGF0aWMgaW50IGVp
+b2ludGNfZG9tYWluX2FsbG9jKHN0cnVjdCBpcnFfZG9tYWluICpkb21haW4sIHVuc2lnbmVkIGlu
+dCB2aXJxLAo+ID4gICAJaW50IHJldDsKPiA+ICAgCXVuc2lnbmVkIGludCBpLCB0eXBlOwo+ID4g
+ICAJdW5zaWduZWQgbG9uZyBod2lycSA9IDA7Cj4gPiAtCXN0cnVjdCBlaW9pbnRjICpwcml2ID0g
+ZG9tYWluLT5ob3N0X2RhdGE7Cj4gPiArCXN0cnVjdCBlaW9pbnRjX3ByaXYgKnByaXYgPSBkb21h
+aW4tPmhvc3RfZGF0YTsKPiA+ICAgCj4gPiAgIAlyZXQgPSBpcnFfZG9tYWluX3RyYW5zbGF0ZV9v
+bmVjZWxsKGRvbWFpbiwgYXJnLCAmaHdpcnEsICZ0eXBlKTsKPiA+ICAgCWlmIChyZXQpCj4gPiBA
+QCAtMzA0LDIzICszMTUsNyBAQCBzdGF0aWMgaW50IGVpb2ludGNfc3VzcGVuZCh2b2lkKQo+ID4g
+ICAKPiA+ICAgc3RhdGljIHZvaWQgZWlvaW50Y19yZXN1bWUodm9pZCkKPiA+ICAgewo+ID4gLQlp
+bnQgaSwgajsKPiA+IC0Jc3RydWN0IGlycV9kZXNjICpkZXNjOwo+ID4gLQlzdHJ1Y3QgaXJxX2Rh
+dGEgKmlycV9kYXRhOwo+ID4gLQo+ID4gICAJZWlvaW50Y19yb3V0ZXJfaW5pdCgwKTsKPiA+IC0K
+PiA+IC0JZm9yIChpID0gMDsgaSA8IG5yX3BpY3M7IGkrKykgewo+ID4gLQkJZm9yIChqID0gMDsg
+aiA8IGVpb2ludGNfcHJpdlswXS0+dmVjX2NvdW50OyBqKyspIHsKPiA+IC0JCQlkZXNjID0gaXJx
+X3Jlc29sdmVfbWFwcGluZyhlaW9pbnRjX3ByaXZbaV0tPmVpb2ludGNfZG9tYWluLCBqKTsKPiA+
+IC0JCQlpZiAoZGVzYyAmJiBkZXNjLT5oYW5kbGVfaXJxICYmIGRlc2MtPmhhbmRsZV9pcnEgIT0g
+aGFuZGxlX2JhZF9pcnEpIHsKPiA+IC0JCQkJcmF3X3NwaW5fbG9jaygmZGVzYy0+bG9jayk7Cj4g
+PiAtCQkJCWlycV9kYXRhID0gaXJxX2RvbWFpbl9nZXRfaXJxX2RhdGEoZWlvaW50Y19wcml2W2ld
+LT5laW9pbnRjX2RvbWFpbiwgaXJxX2Rlc2NfZ2V0X2lycShkZXNjKSk7Cj4gPiAtCQkJCWVpb2lu
+dGNfc2V0X2lycV9hZmZpbml0eShpcnFfZGF0YSwgaXJxX2RhdGEtPmNvbW1vbi0+YWZmaW5pdHks
+IDApOwo+ID4gLQkJCQlyYXdfc3Bpbl91bmxvY2soJmRlc2MtPmxvY2spOwo+ID4gLQkJCX0KPiA+
+IC0JCX0KPiA+IC0JfQo+ID4gICB9Cj4gPiAgIAo+ID4gICBzdGF0aWMgc3RydWN0IHN5c2NvcmVf
+b3BzIGVpb2ludGNfc3lzY29yZV9vcHMgPSB7Cj4gPiAKDQoNCuacrOmCruS7tuWPiuWFtumZhOS7
+tuWQq+aciem+meiKr+S4reenkeeahOWVhuS4muenmOWvhuS/oeaBr++8jOS7hemZkOS6juWPkemA
+gee7meS4iumdouWcsOWdgOS4reWIl+WHuueahOS4quS6uuaIlue+pOe7hOOAguemgeatouS7u+S9
+leWFtuS7luS6uuS7peS7u+S9leW9ouW8j+S9v+eUqO+8iOWMheaLrOS9huS4jemZkOS6juWFqOmD
+qOaIlumDqOWIhuWcsOazhOmcsuOAgeWkjeWItuaIluaVo+WPke+8ieacrOmCruS7tuWPiuWFtumZ
+hOS7tuS4reeahOS/oeaBr+OAguWmguaenOaCqOmUmeaUtuacrOmCruS7tu+8jOivt+aCqOeri+WN
+s+eUteivneaIlumCruS7tumAmuefpeWPkeS7tuS6uuW5tuWIoOmZpOacrOmCruS7tuOAgiANClRo
+aXMgZW1haWwgYW5kIGl0cyBhdHRhY2htZW50cyBjb250YWluIGNvbmZpZGVudGlhbCBpbmZvcm1h
+dGlvbiBmcm9tIExvb25nc29uIFRlY2hub2xvZ3kgLCB3aGljaCBpcyBpbnRlbmRlZCBvbmx5IGZv
+ciB0aGUgcGVyc29uIG9yIGVudGl0eSB3aG9zZSBhZGRyZXNzIGlzIGxpc3RlZCBhYm92ZS4gQW55
+IHVzZSBvZiB0aGUgaW5mb3JtYXRpb24gY29udGFpbmVkIGhlcmVpbiBpbiBhbnkgd2F5IChpbmNs
+dWRpbmcsIGJ1dCBub3QgbGltaXRlZCB0bywgdG90YWwgb3IgcGFydGlhbCBkaXNjbG9zdXJlLCBy
+ZXByb2R1Y3Rpb24gb3IgZGlzc2VtaW5hdGlvbikgYnkgcGVyc29ucyBvdGhlciB0aGFuIHRoZSBp
+bnRlbmRlZCByZWNpcGllbnQocykgaXMgcHJvaGliaXRlZC4gSWYgeW91IHJlY2VpdmUgdGhpcyBl
+bWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlmeSB0aGUgc2VuZGVyIGJ5IHBob25lIG9yIGVtYWls
+IGltbWVkaWF0ZWx5IGFuZCBkZWxldGUgaXQuIA==
 
-Huacai
-
-On Tue, Jan 2, 2024 at 8:38=E2=80=AFPM Xi Ruoyao <xry111@xry111.site> wrote=
-:
->
-> There has been a lingering bug in LoongArch Linux systems causing some
-> GCC tests to intermittently fail (see Closes link).  I've made a minimal
-> reproducer:
->
->     zsh% cat measure.s
->     .align 4
->     .globl _start
->     _start:
->         movfcsr2gr  $a0, $fcsr0
->         bstrpick.w  $a0, $a0, 16, 16
->         beqz        $a0, .ok
->         break       0
->     .ok:
->         li.w        $a7, 93
->         syscall     0
->     zsh% cc mesaure.s -o measure -nostdlib
->     zsh% echo $((1.0/3))
->     0.33333333333333331
->     zsh% while ./measure; do ; done
->
-> This while loop should not stop as POSIX is clear that execve must set
-> fenv to the default, where FCSR should be zero.  But in fact it will
-> just stop after running for a while (normally less than 30 seconds).
-> Note that "$((1.0/3))" is needed to reproduce the issue because it
-> raises FE_INVALID and makes fcsr0 non-zero.
->
-> The problem is we are relying on SET_PERSONALITY2 to reset
-> current->thread.fpu.fcsr.  But SET_PERSONALITY2 is executed before
-> start_thread which calls lose_fpu(0).  We can see if kernel preempt is
-> enabled, we may switch to another thread after SET_PERSONALITY2 but
-> before lose_fpu(0).  Then bad thing happens: during the thread switch
-> the value of the fcsr0 register is stored into current->thread.fpu.fcsr,
-> making it dirty again.
->
-> The issue can be fixed by setting current->thread.fpu.fcsr after
-> lose_fpu(0) because lose_fpu clears TIF_USEDFPU, then the thread
-> switch won't touch current->thread.fpu.fcsr.
->
-> The only other architecture setting FCSR in SET_PERSONALITY2 is MIPS.
-> I've ran a similar test on MIPS with mainline kernel and it turns out
-> MIPS is buggy too.  Anyway MIPS do this for supporting different FP
-> flavors (NaN encodings etc.) which do not exist on LoongArch.  So for
-> LoongArch, we can simply remove the current->thread.fpu.fcsr setting
-> from SET_PERSONALITY2 and do it in start_thread, after lose_fpu(0).
-> I'll leave the job to fix MIPS for MIPS maintainers.
->
-> The while loop failing with the mainline kernel has survived one hour
-> after this change on LoongArch.
->
-> Closes: https://github.com/loongson-community/discussions/issues/7
-> Fixes: 803b0fc5c3f2 ("LoongArch: Add process management")
-> Link: https://lore.kernel.org/linux-mips/7a6aa1bbdbbe2e63ae96ff163fab0349=
-f58f1b9e.camel@xry111.site/
-> Cc: stable@vger.kernel.org
-> Cc: linux-mips@vger.kernel.org
-> Signed-off-by: Xi Ruoyao <xry111@xry111.site>
-> ---
->
-> v2 -> v3:
-> - Update the commit message to mention MIPS is buggy too.
-> - Replace tabs in the commit message with whitespaces.
-> - No code change.
->
-> v1 -> v2:
-> - Still set current->thread.fpu.fcsr to boot_cpu_data.fpu_csr0 instead
->   of constant 0.
->
->  arch/loongarch/include/asm/elf.h | 5 -----
->  arch/loongarch/kernel/elf.c      | 5 -----
->  arch/loongarch/kernel/process.c  | 1 +
->  3 files changed, 1 insertion(+), 10 deletions(-)
->
-> diff --git a/arch/loongarch/include/asm/elf.h b/arch/loongarch/include/as=
-m/elf.h
-> index 9b16a3b8e706..f16bd42456e4 100644
-> --- a/arch/loongarch/include/asm/elf.h
-> +++ b/arch/loongarch/include/asm/elf.h
-> @@ -241,8 +241,6 @@ void loongarch_dump_regs64(u64 *uregs, const struct p=
-t_regs *regs);
->  do {                                                                   \
->         current->thread.vdso =3D &vdso_info;                             =
- \
->                                                                         \
-> -       loongarch_set_personality_fcsr(state);                          \
-> -                                                                       \
->         if (personality(current->personality) !=3D PER_LINUX)            =
- \
->                 set_personality(PER_LINUX);                             \
->  } while (0)
-> @@ -259,7 +257,6 @@ do {                                                 =
-                       \
->         clear_thread_flag(TIF_32BIT_ADDR);                              \
->                                                                         \
->         current->thread.vdso =3D &vdso_info;                             =
- \
-> -       loongarch_set_personality_fcsr(state);                          \
->                                                                         \
->         p =3D personality(current->personality);                         =
- \
->         if (p !=3D PER_LINUX32 && p !=3D PER_LINUX)                      =
-   \
-> @@ -340,6 +337,4 @@ extern int arch_elf_pt_proc(void *ehdr, void *phdr, s=
-truct file *elf,
->  extern int arch_check_elf(void *ehdr, bool has_interpreter, void *interp=
-_ehdr,
->                           struct arch_elf_state *state);
->
-> -extern void loongarch_set_personality_fcsr(struct arch_elf_state *state)=
-;
-> -
->  #endif /* _ASM_ELF_H */
-> diff --git a/arch/loongarch/kernel/elf.c b/arch/loongarch/kernel/elf.c
-> index 183e94fc9c69..0fa81ced28dc 100644
-> --- a/arch/loongarch/kernel/elf.c
-> +++ b/arch/loongarch/kernel/elf.c
-> @@ -23,8 +23,3 @@ int arch_check_elf(void *_ehdr, bool has_interpreter, v=
-oid *_interp_ehdr,
->  {
->         return 0;
->  }
-> -
-> -void loongarch_set_personality_fcsr(struct arch_elf_state *state)
-> -{
-> -       current->thread.fpu.fcsr =3D boot_cpu_data.fpu_csr0;
-> -}
-> diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/proc=
-ess.c
-> index 767d94cce0de..3f9cae615f52 100644
-> --- a/arch/loongarch/kernel/process.c
-> +++ b/arch/loongarch/kernel/process.c
-> @@ -92,6 +92,7 @@ void start_thread(struct pt_regs *regs, unsigned long p=
-c, unsigned long sp)
->         clear_used_math();
->         regs->csr_era =3D pc;
->         regs->regs[3] =3D sp;
-> +       current->thread.fpu.fcsr =3D boot_cpu_data.fpu_csr0;
->  }
->
->  void flush_thread(void)
-> --
-> 2.43.0
->
 
