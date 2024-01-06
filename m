@@ -1,100 +1,135 @@
-Return-Path: <linux-mips+bounces-864-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-865-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1BF3825FCB
-	for <lists+linux-mips@lfdr.de>; Sat,  6 Jan 2024 15:13:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0661C826036
+	for <lists+linux-mips@lfdr.de>; Sat,  6 Jan 2024 16:36:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B109283B23
-	for <lists+linux-mips@lfdr.de>; Sat,  6 Jan 2024 14:13:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A1E7C1F21DF3
+	for <lists+linux-mips@lfdr.de>; Sat,  6 Jan 2024 15:36:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6497579C6;
-	Sat,  6 Jan 2024 14:13:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38A56847B;
+	Sat,  6 Jan 2024 15:36:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="OF5Sk03L";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ziUuOqdS"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36E579C0
-	for <linux-mips@vger.kernel.org>; Sat,  6 Jan 2024 14:13:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rM7QJ-0004AZ-0Q; Sat, 06 Jan 2024 15:13:15 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rM7QI-000ovl-6d; Sat, 06 Jan 2024 15:13:14 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rM7QI-0040z0-0O;
-	Sat, 06 Jan 2024 15:13:14 +0100
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Paul Cercueil <paul@crapouillou.net>,
-	Thierry Reding <thierry.reding@gmail.com>
-Cc: linux-mips@vger.kernel.org,
-	linux-pwm@vger.kernel.org,
-	kernel@pengutronix.de,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH] pwm: jz4740: Don't use dev_err_probe() in .request()
-Date: Sat,  6 Jan 2024 15:13:03 +0100
-Message-ID: <20240106141302.1253365-2-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D06B8479;
+	Sat,  6 Jan 2024 15:36:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailnew.nyi.internal (Postfix) with ESMTP id 213F4580ABB;
+	Sat,  6 Jan 2024 10:36:20 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Sat, 06 Jan 2024 10:36:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:content-transfer-encoding:content-type:content-type:date:date
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1704555380;
+	 x=1704562580; bh=KkXeuPbJwMAsHOWM0v+O7BUhvIvgDRLJLuBsAb1FKvk=; b=
+	OF5Sk03LoacWo2GABZMZccrHz3EnfFzCXz4PUMZs7XRQTRuVE2ay2FDU9OPs1n7T
+	26leMFNPBZ5oVhEb/Vpk5n0HGQIudNueILlH+Xsjcvz59CSLRD4py/JiUwfDFsve
+	EBZUCX5G6fdoJXqqGR3PN7E3oudTKxcDx/p2fy1Zza8jyQ7NNC84ogDKLFF1P9w+
+	4GfJZBmlBX2i/qEReKss2ifoB6qvOQUFuwaCTgo+4OOYH28BAY4YJUGibQm+85aB
+	oo432TPAzzL/p6r0xMtWN6/9Oj6194dvRedlw/uVHC4uvgJiKhLjKw3dmj9vFP+0
+	l+bEWxSlthAr3qBzQ0F7Uw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:content-transfer-encoding:content-type
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1704555380; x=
+	1704562580; bh=KkXeuPbJwMAsHOWM0v+O7BUhvIvgDRLJLuBsAb1FKvk=; b=z
+	iUuOqdSrc/n9Y5Q7K5pp8Yqxv01SPmD2/nPeKADzhwL+oAkEcaSUJL00VHDYf7mm
+	K0N9AykbPOkLLq6+hhfM4vhf09qBBCet/SxxiHvWwZNgqRi2KCY+p6eT2r+bsAt2
+	dwhiiE0jwbbNhPe8iXiGwWDGHf+4FVEj7bElAPqnzzW+zk1n5oYLYAiTIHQwqYl2
+	d40IHxWPFKPS4mSBWyZFrvsaTUTYa2+4RKXtGlY2sUbna9/ydOKW6kmvxs0Y5i58
+	ZYbyAd4rTOC3cQ4Cwnd3Q8qj/tiYIj/zZLmXOExFTE+FymrXwnEz5osGhauc7nLh
+	BBo75HiGAZ3CBQrEWodXw==
+X-ME-Sender: <xms:cnOZZZdP0ETqiRoGbXCeIu932mr-b5ypwMxcWD1VOLukQVkYBeo9ww>
+    <xme:cnOZZXOpXQ1hEZvUv743_IPXUt6HcIkeKzZim4SGxZfCEbANU8DNYwEN8OwNTPfiO
+    FYDpobj7GbRTYYRcRg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdehuddgjeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
+    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+    eqnecuggftrfgrthhtvghrnhepfeetgeekveeftefhgfduheegvdeuuddvieefvddvlefh
+    feehkeetfeeukedtfeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:cnOZZSjQgr7PnCvN9mJjHMC-qT2d9DyQ7aD74qcwCc2UnZOiVAGzpg>
+    <xmx:cnOZZS_9eX6PrJRrq-w-HyujUtBW9hkhS9XG7kn04O4it5NPrtDRqw>
+    <xmx:cnOZZVvLANms9UdJEoSx479_H7AbCpEUQpAeLPXAwf4BmVSJ7b32jw>
+    <xmx:dHOZZe7IWR3TGa4cnOUf0Fh03dBe9rXORrs0673QEUmmuGzJkLautA>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id D162636A0076; Sat,  6 Jan 2024 10:36:18 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1364-ga51d5fd3b7-fm-20231219.001-ga51d5fd3
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1266; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=i+FKGzfBwfmMxhSMObPAUwmu/trLDofAD/x+QHgSRC4=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlmV/uJ5pV1q3SVWuDfz7HlRR4H47YCXa6lFyJe tCSH0fJRW2JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZZlf7gAKCRCPgPtYfRL+ TnC1B/4+tojo9TvriQjnvI9vMtR7IQeywhaaQ4b4ae/+rpagdaBBFlpn+xEsE8tden6YUHwxE+I mQdnntnBM4NFMDQtAgXcViUUsmBrja2Rqwk7L+qSsGuf/7z/DKgTu1TQwOIBLz47PdVzu8LrnVy rtzmWZ8sGUI5TQ1Yg12WIrla6p4X3Fg7Yy0mNs15bXQUNtd6jNzucYzmZ2QOOKO4TRlP4sT7Xt8 Xarv+UQsjLK8+Q+5wOKAdq3CndbqKe2ZDAsfXUOtvruhni9LQRKiRMQQ8ij6QhW26DYk4fD7XmI QUeeSmDfESMsCBOkPtd9cDTY6E3ZbSnAKoJi1HnUkcbANfxP
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+Message-Id: <4c8c0eb3-d7d4-4443-ac5f-e0d330a57a8c@app.fastmail.com>
+In-Reply-To: <20240105134244.13003-1-maoxiaochuan@loongson.cn>
+References: <20240105134244.13003-1-maoxiaochuan@loongson.cn>
+Date: Sat, 06 Jan 2024 15:35:58 +0000
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "xiaochuan mao" <maoxiaochuan@loongson.cn>,
+ "Huacai Chen" <chenhuacai@kernel.org>,
+ "Thomas Gleixner" <tglx@linutronix.de>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] irqchip:Correct the offset value of interrupt status register
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-dev_err_probe() is only supposed to be used in probe functions. While it
-probably doesn't hurt, both the EPROBE_DEFER handling and calling
-device_set_deferred_probe_reason() are conceptually wrong in the request
-callback. So replace the call by dev_err() and a separate return
-statement.
 
-This effectively reverts commit c0bfe9606e03 ("pwm: jz4740: Simplify
-with dev_err_probe()").
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/pwm/pwm-jz4740.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+=E5=9C=A82024=E5=B9=B41=E6=9C=885=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=8B=E5=
+=8D=881:42=EF=BC=8CXiaochuan Mao=E5=86=99=E9=81=93=EF=BC=9A
+> from 2k500/2k1000 mannual known that the offset value between
+> the interrupt status register and the interrupt entry register
+> is 0x20.
 
-diff --git a/drivers/pwm/pwm-jz4740.c b/drivers/pwm/pwm-jz4740.c
-index 80dcff237a15..3933418e551b 100644
---- a/drivers/pwm/pwm-jz4740.c
-+++ b/drivers/pwm/pwm-jz4740.c
-@@ -61,9 +61,10 @@ static int jz4740_pwm_request(struct pwm_chip *chip, struct pwm_device *pwm)
- 	snprintf(name, sizeof(name), "timer%u", pwm->hwpwm);
- 
- 	clk = clk_get(chip->dev, name);
--	if (IS_ERR(clk))
--		return dev_err_probe(chip->dev, PTR_ERR(clk),
--				     "Failed to get clock\n");
-+	if (IS_ERR(clk)) {
-+		dev_err(chip->dev, "error %pe: Failed to get clock\n", clk);
-+		return PTR_ERR(clk);
-+	}
- 
- 	err = clk_prepare_enable(clk);
- 	if (err < 0) {
+I recall this offset is a workaround offered by Loongson staff.
+INTISR0 register offered by manual is not really functional on
+2K1000 MIPS
 
-base-commit: d73f444d06fb8a42a5c0623453f3ea1fe9880229
--- 
-2.43.0
+Could you please investigate with hardware folks?
 
+Thanks
+>
+> Signed-off-by: Xiaochuan Mao <maoxiaochuan@loongson.cn>
+> ---
+>  drivers/irqchip/irq-loongson-liointc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/irqchip/irq-loongson-liointc.c=20
+> b/drivers/irqchip/irq-loongson-liointc.c
+> index e4b33aed1c97..417b4c91ca67 100644
+> --- a/drivers/irqchip/irq-loongson-liointc.c
+> +++ b/drivers/irqchip/irq-loongson-liointc.c
+> @@ -28,7 +28,7 @@
+>=20
+>  #define LIOINTC_INTC_CHIP_START	0x20
+>=20
+> -#define LIOINTC_REG_INTC_STATUS	(LIOINTC_INTC_CHIP_START + 0x20)
+> +#define LIOINTC_REG_INTC_STATUS	(LIOINTC_INTC_CHIP_START)
+>  #define LIOINTC_REG_INTC_EN_STATUS	(LIOINTC_INTC_CHIP_START + 0x04)
+>  #define LIOINTC_REG_INTC_ENABLE	(LIOINTC_INTC_CHIP_START + 0x08)
+>  #define LIOINTC_REG_INTC_DISABLE	(LIOINTC_INTC_CHIP_START + 0x0c)
+> --=20
+> 2.17.1
+
+--=20
+- Jiaxun
 
