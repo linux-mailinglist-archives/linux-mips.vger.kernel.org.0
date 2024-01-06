@@ -1,88 +1,100 @@
-Return-Path: <linux-mips+bounces-863-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-864-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DA50825496
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Jan 2024 14:43:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1BF3825FCB
+	for <lists+linux-mips@lfdr.de>; Sat,  6 Jan 2024 15:13:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF71028264E
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Jan 2024 13:43:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B109283B23
+	for <lists+linux-mips@lfdr.de>; Sat,  6 Jan 2024 14:13:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE14E2D78D;
-	Fri,  5 Jan 2024 13:43:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6497579C6;
+	Sat,  6 Jan 2024 14:13:21 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 424912D787;
-	Fri,  5 Jan 2024 13:42:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [120.235.8.87])
-	by gateway (Coremail) with SMTP id _____8Dx_7thB5hlzFUCAA--.281S3;
-	Fri, 05 Jan 2024 21:42:57 +0800 (CST)
-Received: from localhost.localdomain (unknown [120.235.8.87])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8CxC95WB5hlx4cDAA--.9475S2;
-	Fri, 05 Jan 2024 21:42:56 +0800 (CST)
-From: Xiaochuan Mao <maoxiaochuan@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	maoxiaochuan@loongson.cn
-Subject: [PATCH] irqchip:Correct the offset value of interrupt status register
-Date: Fri,  5 Jan 2024 21:42:44 +0800
-Message-Id: <20240105134244.13003-1-maoxiaochuan@loongson.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID:AQAAf8CxC95WB5hlx4cDAA--.9475S2
-X-CM-SenderInfo: xpdr5xxdrfx3ldqnw6o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj9xXoW7Wry8uryDtw4rAFyxXFyDXFc_yoWDXwbEgr
-	WI9ws7Wr9Ykrn3KrW0yrWDZa4qkFyUW3WI9F1Svry5A347tw4ayw15u3WUGa1YyF4rZFn7
-	XryDKFyfZw17WosvyTuYvTs0mTUanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUbS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
-	6r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-	vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-	Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0
-	cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
-	14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j5o7tUUUUU=
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36E579C0
+	for <linux-mips@vger.kernel.org>; Sat,  6 Jan 2024 14:13:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rM7QJ-0004AZ-0Q; Sat, 06 Jan 2024 15:13:15 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rM7QI-000ovl-6d; Sat, 06 Jan 2024 15:13:14 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rM7QI-0040z0-0O;
+	Sat, 06 Jan 2024 15:13:14 +0100
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Paul Cercueil <paul@crapouillou.net>,
+	Thierry Reding <thierry.reding@gmail.com>
+Cc: linux-mips@vger.kernel.org,
+	linux-pwm@vger.kernel.org,
+	kernel@pengutronix.de,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH] pwm: jz4740: Don't use dev_err_probe() in .request()
+Date: Sat,  6 Jan 2024 15:13:03 +0100
+Message-ID: <20240106141302.1253365-2-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1266; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=i+FKGzfBwfmMxhSMObPAUwmu/trLDofAD/x+QHgSRC4=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlmV/uJ5pV1q3SVWuDfz7HlRR4H47YCXa6lFyJe tCSH0fJRW2JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZZlf7gAKCRCPgPtYfRL+ TnC1B/4+tojo9TvriQjnvI9vMtR7IQeywhaaQ4b4ae/+rpagdaBBFlpn+xEsE8tden6YUHwxE+I mQdnntnBM4NFMDQtAgXcViUUsmBrja2Rqwk7L+qSsGuf/7z/DKgTu1TQwOIBLz47PdVzu8LrnVy rtzmWZ8sGUI5TQ1Yg12WIrla6p4X3Fg7Yy0mNs15bXQUNtd6jNzucYzmZ2QOOKO4TRlP4sT7Xt8 Xarv+UQsjLK8+Q+5wOKAdq3CndbqKe2ZDAsfXUOtvruhni9LQRKiRMQQ8ij6QhW26DYk4fD7XmI QUeeSmDfESMsCBOkPtd9cDTY6E3ZbSnAKoJi1HnUkcbANfxP
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 
-from 2k500/2k1000 mannual known that the offset value between
-the interrupt status register and the interrupt entry register
-is 0x20.
+dev_err_probe() is only supposed to be used in probe functions. While it
+probably doesn't hurt, both the EPROBE_DEFER handling and calling
+device_set_deferred_probe_reason() are conceptually wrong in the request
+callback. So replace the call by dev_err() and a separate return
+statement.
 
-Signed-off-by: Xiaochuan Mao <maoxiaochuan@loongson.cn>
+This effectively reverts commit c0bfe9606e03 ("pwm: jz4740: Simplify
+with dev_err_probe()").
+
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/irqchip/irq-loongson-liointc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pwm/pwm-jz4740.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
-index e4b33aed1c97..417b4c91ca67 100644
---- a/drivers/irqchip/irq-loongson-liointc.c
-+++ b/drivers/irqchip/irq-loongson-liointc.c
-@@ -28,7 +28,7 @@
+diff --git a/drivers/pwm/pwm-jz4740.c b/drivers/pwm/pwm-jz4740.c
+index 80dcff237a15..3933418e551b 100644
+--- a/drivers/pwm/pwm-jz4740.c
++++ b/drivers/pwm/pwm-jz4740.c
+@@ -61,9 +61,10 @@ static int jz4740_pwm_request(struct pwm_chip *chip, struct pwm_device *pwm)
+ 	snprintf(name, sizeof(name), "timer%u", pwm->hwpwm);
  
- #define LIOINTC_INTC_CHIP_START	0x20
+ 	clk = clk_get(chip->dev, name);
+-	if (IS_ERR(clk))
+-		return dev_err_probe(chip->dev, PTR_ERR(clk),
+-				     "Failed to get clock\n");
++	if (IS_ERR(clk)) {
++		dev_err(chip->dev, "error %pe: Failed to get clock\n", clk);
++		return PTR_ERR(clk);
++	}
  
--#define LIOINTC_REG_INTC_STATUS	(LIOINTC_INTC_CHIP_START + 0x20)
-+#define LIOINTC_REG_INTC_STATUS	(LIOINTC_INTC_CHIP_START)
- #define LIOINTC_REG_INTC_EN_STATUS	(LIOINTC_INTC_CHIP_START + 0x04)
- #define LIOINTC_REG_INTC_ENABLE	(LIOINTC_INTC_CHIP_START + 0x08)
- #define LIOINTC_REG_INTC_DISABLE	(LIOINTC_INTC_CHIP_START + 0x0c)
+ 	err = clk_prepare_enable(clk);
+ 	if (err < 0) {
+
+base-commit: d73f444d06fb8a42a5c0623453f3ea1fe9880229
 -- 
-2.17.1
+2.43.0
 
 
