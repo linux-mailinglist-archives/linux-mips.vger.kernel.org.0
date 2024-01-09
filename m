@@ -1,64 +1,64 @@
-Return-Path: <linux-mips+bounces-906-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-907-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E9FD828CF5
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jan 2024 19:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BAE2828D05
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jan 2024 20:00:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDC161F21EEA
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jan 2024 18:58:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AAD891F264EF
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jan 2024 19:00:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E5623D0A6;
-	Tue,  9 Jan 2024 18:58:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 307823D0B5;
+	Tue,  9 Jan 2024 18:59:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AJXi84o/"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="U537s6IO"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BC903B790
-	for <linux-mips@vger.kernel.org>; Tue,  9 Jan 2024 18:58:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF3AD3C482
+	for <linux-mips@vger.kernel.org>; Tue,  9 Jan 2024 18:59:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-50e7dd8bce8so3764250e87.1
-        for <linux-mips@vger.kernel.org>; Tue, 09 Jan 2024 10:58:27 -0800 (PST)
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-50eabbc3dccso3452037e87.2
+        for <linux-mips@vger.kernel.org>; Tue, 09 Jan 2024 10:59:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704826706; x=1705431506; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1704826790; x=1705431590; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=rgmCh2ekmuUXnKy6j0CsM91c8YxZihReaCB8lSs25HA=;
-        b=AJXi84o/biERDxIjjbCqRBrB2okscsjCWomC8s4bL6cZWjwtl7rVpk8lr0Skre4zMd
-         K7rAJ85fzHmK6SS7UTpbMIQVYPE4DBtkmaiL1zVUR5yruVVsBfQSNPZ1Omw1knOxgyTC
-         hrUnuQ0CA223RgcIKB9zInze21RrhjPYqszf8l4fF5GBjCXcTmCLG07kXrYkh3Y1OXHn
-         Dv7lX3Rzhv3C0BKiTBrxc5wfcE8tAs3qS3jduQSK2QBPAgQFCwv227ENKds7VDn7stlC
-         PU5Gs8sAAH9X+7m+M5IftDZYFDKXOBx+ocJh1QKgNJ3lF1KwjIm6trpCYhkun0NHpexa
-         jZig==
+        bh=3cg7bfYhyspy6WFGhXna5OfAsnnXnCbnqNvgebjcXak=;
+        b=U537s6IOgGFTW7nXdIpMq/Xf3ne5gd7TISbKz9u5FbV6LXpKJjXD07BGV4JCkR+Y6y
+         fTAj+AYR1lPyAPd7OPfXvkgR8ufZGY4BIkXIzZ0IQ28TWXyd9a+C8mbg19appBye8Unc
+         tyzL4jkyNmscsS3sMhfzL+uZiS7xNZA5NNBWDXhVaV8m0aq7YYCb+9/47jPdqWYTtkpc
+         UKn0ly08rFtZiXu92Z1gJQfWPfRlZZ1g+51bxnsxWdFez61iXnXdvdv9NunAg/t6HU9a
+         L3WHsL5Q3q4+ivsmkderN5H/sd3oNM2QMHHE3yl3+E7K8Ka/pSrtsvTHdh4ues8hm+IN
+         EKJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704826706; x=1705431506;
+        d=1e100.net; s=20230601; t=1704826790; x=1705431590;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rgmCh2ekmuUXnKy6j0CsM91c8YxZihReaCB8lSs25HA=;
-        b=fOa3mrdoVEgbzMOvrR6hbnJuIWQZg+NhDJxxk+6XRfFMo4vO5l1wqKfwF2GtZ1xswq
-         P+LOtpwyeg9F52WEOf2IxWLmnYWEk8ayu+/1NnCqk69qzEtvqkDst1BH2DN/VsRXCb3j
-         gS4rHNJptAOiqw0Ohl5kBNtBgqfKveP5OQ4iUEaI5cMFia31aIRdyoUvo0LIU+a1HNx3
-         jFI91cF9p3M3WPo8zZAw0ePgqTqZ9O38V5ZnlR2hIH+4RSvYzhcbjPC+9LxNcChX3ebp
-         WQPqj0bhYoi0w2uxr9kfQEmZRS+tQgAMqI4Bny9PhVOWiLWFfY9IaRffMzKdw8qbmzNn
-         DeBQ==
-X-Gm-Message-State: AOJu0Yz878c3QjXU/m2rFbJPQJbYeyJIZX2gw438I2wVLulG3UEzbL1+
-	u/66rS0f4maECBkehhlSPKiOcjxmdrzSbA==
-X-Google-Smtp-Source: AGHT+IGlkHOAQE2+lOWLgxjKX7k8xSgdaVWFv4UBzhVDTaJKwfJdDqqIstqcDJYTgIYb0fSRcDnnrg==
-X-Received: by 2002:a19:5e5d:0:b0:50e:b46f:4383 with SMTP id z29-20020a195e5d000000b0050eb46f4383mr2149227lfi.133.1704826705600;
-        Tue, 09 Jan 2024 10:58:25 -0800 (PST)
+        bh=3cg7bfYhyspy6WFGhXna5OfAsnnXnCbnqNvgebjcXak=;
+        b=kIUSc0UCu6WSHVQHrk/ce2EV+696JSgQMV6s6JHbDgV/TYdO0olCHhsxLstgK6SYAz
+         rnH+7G2v/rxJG0x9oqk7mqIO5MXVowzrmQGfv57mpyL1cfQhx+R4guU5jDL+5gU71kzl
+         QOpqjjWBe/+UfC2glqSYgoYGHhUfpTIERBmPESNoYOishhBydFQNa3KoeBaeo1/9lNEz
+         P9vLNgUcEnxAxeNULHo8KO4XQ8UPWXgqRFlzOlMT0Hfk/y1xtEToYQuxKn2ueYZRQWG8
+         G30wOwF/QOe80styC4Gr3r6H+9kF5cVsL+fkVDfy5N1CeRO5+i0dXkgZhc3g/M0Gp/8/
+         SWCw==
+X-Gm-Message-State: AOJu0Yx5AvcwmIVooeYV3K9HYG9NWlXJ41vJNsU0dUmllNaXq/fnNMh0
+	qhQ2y36c+jJ2L4p0nXFjpNmowMHJJ2M5Eg==
+X-Google-Smtp-Source: AGHT+IH9MgVxxMCaePOCD8oaGTiSXK9oZuFm2IisA1AzO/V0BtawxoWUCz2zfJ8ZCn0O0asxgEMLCA==
+X-Received: by 2002:a05:6512:159d:b0:50e:8e8e:89c1 with SMTP id bp29-20020a056512159d00b0050e8e8e89c1mr1627213lfb.230.1704826789806;
+        Tue, 09 Jan 2024 10:59:49 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.223.112])
-        by smtp.gmail.com with ESMTPSA id z14-20020a19650e000000b0050e7d22a9b8sm435713lfb.89.2024.01.09.10.58.21
+        by smtp.gmail.com with ESMTPSA id z14-20020a19650e000000b0050e7d22a9b8sm435713lfb.89.2024.01.09.10.59.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jan 2024 10:58:24 -0800 (PST)
-Message-ID: <980a51fc-c410-46c3-bcb1-b82c33a88ef3@linaro.org>
-Date: Tue, 9 Jan 2024 19:58:20 +0100
+        Tue, 09 Jan 2024 10:59:48 -0800 (PST)
+Message-ID: <11e3afae-76a7-4ebb-82ac-3dca040710dc@linaro.org>
+Date: Tue, 9 Jan 2024 19:59:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -66,8 +66,8 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v2 02/11] dt-bindings: gpu: Add PowerVR Series5 SGX
- GPUs
+Subject: Re: [PATCH 01/11] dt-bindings: gpu: Rename img,powervr to
+ img,powervr-rogue
 Content-Language: en-US
 To: Andrew Davis <afd@ti.com>, Frank Binns <frank.binns@imgtec.com>,
  Matt Coster <matt.coster@imgtec.com>,
@@ -87,10 +87,8 @@ Cc: dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-sunxi@lists.linux.dev, linux-omap@vger.kernel.org,
  linux-mips@vger.kernel.org
-References: <20240108183302.255055-1-afd@ti.com>
- <20240108183302.255055-3-afd@ti.com>
- <e68b3b0c-7a03-4771-b6e8-c1a263e31425@linaro.org>
- <c3664f43-431a-421f-8d2a-a3d2cc6f8777@ti.com>
+References: <20240109171950.31010-1-afd@ti.com>
+ <20240109171950.31010-2-afd@ti.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -136,97 +134,26 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <c3664f43-431a-421f-8d2a-a3d2cc6f8777@ti.com>
+In-Reply-To: <20240109171950.31010-2-afd@ti.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 09/01/2024 17:53, Andrew Davis wrote:
-> On 1/9/24 5:32 AM, Krzysztof Kozlowski wrote:
->> On 08/01/2024 19:32, Andrew Davis wrote:
->>> The Imagination PowerVR Series5 "SGX" GPU is part of several SoCs from
->>> multiple vendors. Describe how the SGX GPU is integrated in these SoC,
->>> including register space and interrupts. Clocks, reset, and power domain
->>> information is SoC specific.
->>>
->>> Signed-off-by: Andrew Davis <afd@ti.com>
->>> ---
->>>   .../bindings/gpu/img,powervr-sgx.yaml         | 124 ++++++++++++++++++
->>>   MAINTAINERS                                   |   1 +
->>>   2 files changed, 125 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/gpu/img,powervr-sgx.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/gpu/img,powervr-sgx.yaml b/Documentation/devicetree/bindings/gpu/img,powervr-sgx.yaml
->>> new file mode 100644
->>> index 0000000000000..bb821e1184de9
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/gpu/img,powervr-sgx.yaml
->>> @@ -0,0 +1,124 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +# Copyright (c) 2023 Imagination Technologies Ltd.
->>
->> Your email has @TI domain, are you sure you attribute your copyrights to
->> Imagination?
->>
+On 09/01/2024 18:19, Andrew Davis wrote:
+> This binding will be used for GPUs starting from Series6 (Rogue)
+> and later. A different binding document will describe Series5.
+> With that the name "img,powervr" is too generic, rename to
+> "img,powervr-rogue" to avoid confusion.
 > 
-> The file started as a copy/paste from a IMG copyrighted file, even
-> though it is now almost completely re-written I've left their (c)
-> for good measure. I'll add an additional TI (c).
-> 
->> ...
->>
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  interrupts:
->>> +    maxItems: 1
->>> +
->>> +  clocks: true
->>
->> Missing min/maxItems
->>
-> 
-> These are set in the allOf/if/then blocks below, seems
+> Suggested-by: Maxime Ripard <mripard@kernel.org>
+> Signed-off-by: Andrew Davis <afd@ti.com>
+> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> Reviewed-by: Frank Binns <frank.binns@imgtec.com>
+> ---
 
-I know, but we expect them here.
+Why do you send new version while we still talk about previous?
 
-https://elixir.bootlin.com/linux/v5.19-rc6/source/Documentation/devicetree/bindings/clock/samsung,exynos7-clock.yaml#L57
-
-> if I don't set them to at least something here then I get
-> a warning:
-> 
->     'clock-names', 'clocks' do not match any of the regexes: 'pinctrl-[0-9]+'
-> 
-> even if I define them in the allOf block below. I don't
-> know what the min/max should be until I check the compatible
-> in the allOf block.
-
-As always: the widest constraints.
-
-
-...
-
-> Logic in YAML always seems messy to me, here it is in pseudo C:
-> 
-> if (compatible == allwinner,sun6i-a31-gpu ||
->      compatible == ingenic,jz4780-gpu) {
-> 	if (compatible == allwinner,sun6i-a31-gpu)
-> 		clocks: ...
-> 	if (compatible == ingenic,jz4780-gpu)
-> 		clocks: ...
-> 	required:
-> 		- clocks
-> 		- clock-names
-> } else { /* disallow for all others */
-> 	properties:
-> 		clocks: false
-> 		clock-names: false
-> }
-
-OK, I see, that's the limitation of YAML. The point is that this code is
-not readable, so just list all fallbacks or variants.
-
-
+Please implement feedback from v1 (and this is v2, so next is v3) or
+keep discussing.
 
 Best regards,
 Krzysztof
