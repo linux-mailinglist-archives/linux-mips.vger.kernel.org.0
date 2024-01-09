@@ -1,136 +1,121 @@
-Return-Path: <linux-mips+bounces-880-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-881-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE0C3827D72
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jan 2024 04:44:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4366F82803B
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jan 2024 09:15:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC1741C2321C
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jan 2024 03:44:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D9DB4B2167E
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jan 2024 08:15:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BC084430;
-	Tue,  9 Jan 2024 03:44:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2558125A7;
+	Tue,  9 Jan 2024 08:14:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o8X/WAVE"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IiyRRneE"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 714954418;
-	Tue,  9 Jan 2024 03:44:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56FEEC433C7;
-	Tue,  9 Jan 2024 03:44:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704771852;
-	bh=7dVhBfoj72xsHQ2yfVCr8QOzBAyZHEiGfUpeWkbrrjM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=o8X/WAVERCS50ITivwMC8tmQjNyQizua4YXT04dohjGZCuDqmMMIGo3ST5mH0n4nS
-	 wdtI4SaJaNfKJYTTydj5JW0Te1ZJTebnIxr0aQfJVQ19RYdYZh6cmwGA48GGJ5GBU0
-	 sgb/Ap/hwIs6NClER3bjPiL/JdNifxgvZmigjq4Ez3S2HaBjmFb4f2w5/gOag2/CpZ
-	 Ud72sum5Ms+QT9NJtUX073pp7nWFVzVw8UYQX5X4HDy0c/YlQS0N4okMftf3tjuomX
-	 N/n2ohUyG86mH2p/sZeT0bQy4VHGZAydhDVodzUt/TNlApBg8329KKF+G476+7R72G
-	 LsipTg1Y8nEHw==
-Received: (nullmailer pid 2601202 invoked by uid 1000);
-	Tue, 09 Jan 2024 03:44:10 -0000
-Date: Mon, 8 Jan 2024 20:44:10 -0700
-From: Rob Herring <robh@kernel.org>
-To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, linux-mips@vger.kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: [PATCH v2 3/6] dt-bindings: soc: mobileye: add EyeQ5 OLB system
- controller
-Message-ID: <20240109034410.GA2585123-robh@kernel.org>
-References: <20231227-mbly-clk-v2-0-a05db63c380f@bootlin.com>
- <20231227-mbly-clk-v2-3-a05db63c380f@bootlin.com>
- <CAL_JsqJD4ZeR+n09gC2fXnk1MFuqO0c0zADSg_-MiY65pck1Yw@mail.gmail.com>
- <CY02002PZ08V.368NYASI51S@bootlin.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7465AC2DA
+	for <linux-mips@vger.kernel.org>; Tue,  9 Jan 2024 08:14:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1704788096;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XjjwhVNGSNqCSg1vyGrdOD6jXBKYkFrF+Jag2J5d6o4=;
+	b=IiyRRneEU2nXBJYlSYnS8aKDHNAdAXFxkwOBRo1/iOT4qWjOupW0UWizE0ybEZ9NSiS5oc
+	rvM2Fy/rkFFGkvKXtRY/kvjGAD9SrSQ8qCk0T+VTJS3XwX3s108eb6CjVABFGejT1jltFN
+	CGQr3N9sgYF4yvEOX31cfLXFVBY8u6Q=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-389-kRaGT-rQN_e4kKsRgP5IhA-1; Tue, 09 Jan 2024 03:14:55 -0500
+X-MC-Unique: kRaGT-rQN_e4kKsRgP5IhA-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-40e4803e891so11205705e9.3
+        for <linux-mips@vger.kernel.org>; Tue, 09 Jan 2024 00:14:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704788094; x=1705392894;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XjjwhVNGSNqCSg1vyGrdOD6jXBKYkFrF+Jag2J5d6o4=;
+        b=t0Gy003z2uF/zcTmmDv6L/tEaCruFYiUAgDTWEJ7W+EvcABtmVO3D7lqNXZsnKfOgs
+         jOaMUO4EEEiB2LfBYxdkUi1gfScMVdq8z5A4xi7eFm5LpqcYoLH2wZklUfWrFAC7z/GL
+         s8+XzOy/lD5shr1/+jMz7S6FlUTGS5YxbE/2UYmtYU5YJvvv/+sJwTLGzM2Z8NLo/mDu
+         +b6MTphIRC8KHSDXnwOnPB0E0KyfjL/qPHPse3/bsLF6w2iJxZoFOw0Vz85JyDh976qi
+         01iHQMW1SUnCaEr7JDPnkvb7blWRtDLNX71NVLr0qrJFHIxuNFsMPOX/DA+AlH/fKW3j
+         OphQ==
+X-Gm-Message-State: AOJu0YwHCUE6+8TyuWKZkKriuR4+EHcy/bi2zZZwJslOPCaUynQp7y4+
+	wsVlfEnqcuWy7QnMxeOj9UNXgaum64SHxpChJNZc7ozt+a7hrG+U5GgFyjM8B/IDicsO78pArXQ
+	Bc/I8tuh8d8h/5+zIIzY1gkIHVWdzhg==
+X-Received: by 2002:a05:600c:138d:b0:40d:5aaa:a2d5 with SMTP id u13-20020a05600c138d00b0040d5aaaa2d5mr1256154wmf.201.1704788094059;
+        Tue, 09 Jan 2024 00:14:54 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGM/zyCyvEk68nBtBHpa8i1HjkLCmgaZkHeoZuSH4LDKPVKXrc1TZ23aOpoe2Y4Ruh2MVABOg==
+X-Received: by 2002:a05:600c:138d:b0:40d:5aaa:a2d5 with SMTP id u13-20020a05600c138d00b0040d5aaaa2d5mr1256135wmf.201.1704788093729;
+        Tue, 09 Jan 2024 00:14:53 -0800 (PST)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id i5-20020a5d55c5000000b00336e15fbc85sm1696619wrw.82.2024.01.09.00.14.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jan 2024 00:14:53 -0800 (PST)
+From: Javier Martinez Canillas <javierm@redhat.com>
+To: Andrew Davis <afd@ti.com>, Frank Binns <frank.binns@imgtec.com>, Donald
+ Robson <donald.robson@imgtec.com>, Matt Coster <matt.coster@imgtec.com>,
+ "H .
+ Nikolaus Schaller" <hns@goldelico.com>, Adam Ford <aford173@gmail.com>,
+ Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>, Maarten Lankhorst
+ <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
+ <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec
+ <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>,
+ =?utf-8?Q?Beno=C3=AEt?=
+ Cousson <bcousson@baylibre.com>, Tony Lindgren <tony@atomide.com>,
+ Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, Tero
+ Kristo <kristo@kernel.org>, Paul Cercueil <paul@crapouillou.net>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org, Andrew Davis
+ <afd@ti.com>, linux-omap@vger.kernel.org, linux-sunxi@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH RFC v2 01/11] dt-bindings: gpu: Rename img, powervr to
+ img, powervr-rogue
+In-Reply-To: <20240108183302.255055-2-afd@ti.com>
+References: <20240108183302.255055-1-afd@ti.com>
+ <20240108183302.255055-2-afd@ti.com>
+Date: Tue, 09 Jan 2024 09:14:52 +0100
+Message-ID: <87zfxerkhv.fsf@minerva.mail-host-address-is-not-set>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CY02002PZ08V.368NYASI51S@bootlin.com>
+Content-Type: text/plain
 
-On Thu, Dec 28, 2023 at 03:57:55PM +0100, Théo Lebrun wrote:
-> Hello,
-> 
-> On Wed Dec 27, 2023 at 7:27 PM CET, Rob Herring wrote:
-> > On Wed, Dec 27, 2023 at 10:24 AM Théo Lebrun <theo.lebrun@bootlin.com> wrote:
-> > >
-> > > Add documentation to describe the "Other Logic Block" syscon.
-> > >
-> > > Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-> > > ---
-> > >  .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  | 44 ++++++++++++++++++++++
-> > >  MAINTAINERS                                        |  1 +
-> > >  2 files changed, 45 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml b/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml
-> > > new file mode 100644
-> > > index 000000000000..b148a49b08f1
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml
-> > > @@ -0,0 +1,44 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Mobileye EyeQ5 SoC system controller
-> > > +
-> > > +maintainers:
-> > > +  - Grégory Clement <gregory.clement@bootlin.com>
-> > > +  - Théo Lebrun <theo.lebrun@bootlin.com>
-> > > +  - Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
-> > > +
-> > > +description:
-> > > +  OLB ("Other Logic Block") is a hardware block grouping smaller blocks. Clocks,
-> > > +  resets, pinctrl are being handled from here.
-> >
-> > I don't see resets or pinctrl in the binding. Please make it complete
-> > whether you have the driver or not.
-> >
-> > As-is, you don't need clocks to be a child node.
-> 
-> Will do. Would it make sense to have the three drivers be a single
-> series? 
+Andrew Davis <afd@ti.com> writes:
 
-You could, but doesn't have to be. Just make the binding complete. 
-Whether you have the drivers done is up to you.
+Hello Andrew,
 
-> Else we could have the dt-bindings be part of the base platform
-> support series[1].
-> 
-> [1]: https://lore.kernel.org/lkml/20231212163459.1923041-1-gregory.clement@bootlin.com/
-> 
-> > > +properties:
-> > > +  compatible:
-> > > +    items:
-> > > +      - const: mobileye,eyeq5-olb
-> > > +      - const: syscon
-> > > +      - const: simple-mfd
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  reg-io-width:
-> > > +    const: 4
-> >
-> > Why do you need this? It is not a generic block and can only ever be 1
-> > value.
-> 
-> This block is still a syscon in the end. I wanted to explicit that
-> access width must be 4 bytes and nothing else.
-> 
-> Does you question mean you think I should be removing it?
+> Signed-off-by: Andrew Davis <afd@ti.com>
+> ---
 
-Yes. It can be implied by compatible.
+I think this deserves a commit message with the rationale for the rename.
 
-Rob
+Because kept an eye to the previous version, I know the reason and agree
+with the change. Also, if remember correctly this was suggested by Maxime?
+
+After a adding a commit message and Suggested-by tag:
+
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
 
