@@ -1,129 +1,136 @@
-Return-Path: <linux-mips+bounces-876-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-880-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C89988277AA
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Jan 2024 19:35:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE0C3827D72
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jan 2024 04:44:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 674A51F23C36
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Jan 2024 18:35:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC1741C2321C
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jan 2024 03:44:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35D8F55E4E;
-	Mon,  8 Jan 2024 18:33:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BC084430;
+	Tue,  9 Jan 2024 03:44:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="lbQcTlLh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o8X/WAVE"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A529455C09;
-	Mon,  8 Jan 2024 18:33:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 408IXEMq010030;
-	Mon, 8 Jan 2024 12:33:14 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1704738794;
-	bh=PWj0D2WMvRJ11gnfwf0SZ44vgMNZaHz/OZM54jmoFVs=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=lbQcTlLhFLWFWfmynTQ/fLKR5FgIXclptYPQDZ4h6j0pXsN23aLT3bKn3EpSGT1Eh
-	 Jy9RaM4+e4Iu3nU9Ph6+pRhRmjuvcL72wjNo7fHO6mq3m09p5cboGlbYWH3QUd5XrV
-	 /mOGPr4d+1qObwgPtZ3iRdVNRkimiTeKpXE7KTww=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 408IXEak124040
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 8 Jan 2024 12:33:14 -0600
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 8
- Jan 2024 12:33:14 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 8 Jan 2024 12:33:14 -0600
-Received: from lelvsmtp5.itg.ti.com ([10.249.40.136])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 408IX3hK051691;
-	Mon, 8 Jan 2024 12:33:13 -0600
-From: Andrew Davis <afd@ti.com>
-To: Frank Binns <frank.binns@imgtec.com>,
-        Donald Robson
-	<donald.robson@imgtec.com>,
-        Matt Coster <matt.coster@imgtec.com>,
-        "H .
- Nikolaus Schaller" <hns@goldelico.com>,
-        Adam Ford <aford173@gmail.com>,
-        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-        Maarten Lankhorst
-	<maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec
-	<jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren
-	<tony@atomide.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra
-	<vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>, Paul Cercueil
-	<paul@crapouillou.net>
-CC: <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-sunxi@lists.linux.dev>, <linux-omap@vger.kernel.org>,
-        <linux-mips@vger.kernel.org>, Andrew Davis <afd@ti.com>
-Subject: [PATCH RFC v2 11/11] MIPS: DTS: jz4780: Add device tree entry for SGX GPU
-Date: Mon, 8 Jan 2024 12:33:02 -0600
-Message-ID: <20240108183302.255055-12-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240108183302.255055-1-afd@ti.com>
-References: <20240108183302.255055-1-afd@ti.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 714954418;
+	Tue,  9 Jan 2024 03:44:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56FEEC433C7;
+	Tue,  9 Jan 2024 03:44:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704771852;
+	bh=7dVhBfoj72xsHQ2yfVCr8QOzBAyZHEiGfUpeWkbrrjM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=o8X/WAVERCS50ITivwMC8tmQjNyQizua4YXT04dohjGZCuDqmMMIGo3ST5mH0n4nS
+	 wdtI4SaJaNfKJYTTydj5JW0Te1ZJTebnIxr0aQfJVQ19RYdYZh6cmwGA48GGJ5GBU0
+	 sgb/Ap/hwIs6NClER3bjPiL/JdNifxgvZmigjq4Ez3S2HaBjmFb4f2w5/gOag2/CpZ
+	 Ud72sum5Ms+QT9NJtUX073pp7nWFVzVw8UYQX5X4HDy0c/YlQS0N4okMftf3tjuomX
+	 N/n2ohUyG86mH2p/sZeT0bQy4VHGZAydhDVodzUt/TNlApBg8329KKF+G476+7R72G
+	 LsipTg1Y8nEHw==
+Received: (nullmailer pid 2601202 invoked by uid 1000);
+	Tue, 09 Jan 2024 03:44:10 -0000
+Date: Mon, 8 Jan 2024 20:44:10 -0700
+From: Rob Herring <robh@kernel.org>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, linux-mips@vger.kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH v2 3/6] dt-bindings: soc: mobileye: add EyeQ5 OLB system
+ controller
+Message-ID: <20240109034410.GA2585123-robh@kernel.org>
+References: <20231227-mbly-clk-v2-0-a05db63c380f@bootlin.com>
+ <20231227-mbly-clk-v2-3-a05db63c380f@bootlin.com>
+ <CAL_JsqJD4ZeR+n09gC2fXnk1MFuqO0c0zADSg_-MiY65pck1Yw@mail.gmail.com>
+ <CY02002PZ08V.368NYASI51S@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <CY02002PZ08V.368NYASI51S@bootlin.com>
 
-Add SGX GPU device entry to base jz4780 dtsi file.
+On Thu, Dec 28, 2023 at 03:57:55PM +0100, Théo Lebrun wrote:
+> Hello,
+> 
+> On Wed Dec 27, 2023 at 7:27 PM CET, Rob Herring wrote:
+> > On Wed, Dec 27, 2023 at 10:24 AM Théo Lebrun <theo.lebrun@bootlin.com> wrote:
+> > >
+> > > Add documentation to describe the "Other Logic Block" syscon.
+> > >
+> > > Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> > > ---
+> > >  .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  | 44 ++++++++++++++++++++++
+> > >  MAINTAINERS                                        |  1 +
+> > >  2 files changed, 45 insertions(+)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml b/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml
+> > > new file mode 100644
+> > > index 000000000000..b148a49b08f1
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml
+> > > @@ -0,0 +1,44 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Mobileye EyeQ5 SoC system controller
+> > > +
+> > > +maintainers:
+> > > +  - Grégory Clement <gregory.clement@bootlin.com>
+> > > +  - Théo Lebrun <theo.lebrun@bootlin.com>
+> > > +  - Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+> > > +
+> > > +description:
+> > > +  OLB ("Other Logic Block") is a hardware block grouping smaller blocks. Clocks,
+> > > +  resets, pinctrl are being handled from here.
+> >
+> > I don't see resets or pinctrl in the binding. Please make it complete
+> > whether you have the driver or not.
+> >
+> > As-is, you don't need clocks to be a child node.
+> 
+> Will do. Would it make sense to have the three drivers be a single
+> series? 
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- arch/mips/boot/dts/ingenic/jz4780.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+You could, but doesn't have to be. Just make the binding complete. 
+Whether you have the drivers done is up to you.
 
-diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-index 18affff85ce38..5ea6833f5e872 100644
---- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-@@ -460,6 +460,17 @@ hdmi: hdmi@10180000 {
- 		status = "disabled";
- 	};
- 
-+	gpu: gpu@13040000 {
-+		compatible = "ingenic,jz4780-gpu", "img,powervr-sgx540";
-+		reg = <0x13040000 0x4000>;
-+
-+		clocks = <&cgu JZ4780_CLK_GPU>;
-+		clock-names = "core";
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <63>;
-+	};
-+
- 	lcdc0: lcdc0@13050000 {
- 		compatible = "ingenic,jz4780-lcd";
- 		reg = <0x13050000 0x1800>;
--- 
-2.39.2
+> Else we could have the dt-bindings be part of the base platform
+> support series[1].
+> 
+> [1]: https://lore.kernel.org/lkml/20231212163459.1923041-1-gregory.clement@bootlin.com/
+> 
+> > > +properties:
+> > > +  compatible:
+> > > +    items:
+> > > +      - const: mobileye,eyeq5-olb
+> > > +      - const: syscon
+> > > +      - const: simple-mfd
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  reg-io-width:
+> > > +    const: 4
+> >
+> > Why do you need this? It is not a generic block and can only ever be 1
+> > value.
+> 
+> This block is still a syscon in the end. I wanted to explicit that
+> access width must be 4 bytes and nothing else.
+> 
+> Does you question mean you think I should be removing it?
 
+Yes. It can be implied by compatible.
+
+Rob
 
