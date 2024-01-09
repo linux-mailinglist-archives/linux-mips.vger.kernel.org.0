@@ -1,64 +1,64 @@
-Return-Path: <linux-mips+bounces-911-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-912-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBC23828E2D
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jan 2024 20:52:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAE33828E33
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jan 2024 20:53:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93DC62889CA
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jan 2024 19:52:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A99C81C248E1
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jan 2024 19:53:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08BF33D546;
-	Tue,  9 Jan 2024 19:52:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D6143D97A;
+	Tue,  9 Jan 2024 19:52:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WsJ3PovH"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="W+8tE/mN"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC0E3D541
-	for <linux-mips@vger.kernel.org>; Tue,  9 Jan 2024 19:52:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F5A3D979
+	for <linux-mips@vger.kernel.org>; Tue,  9 Jan 2024 19:52:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-40d6b4e2945so40040265e9.0
-        for <linux-mips@vger.kernel.org>; Tue, 09 Jan 2024 11:52:33 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-40e549adb7dso2540655e9.2
+        for <linux-mips@vger.kernel.org>; Tue, 09 Jan 2024 11:52:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704829951; x=1705434751; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1704829971; x=1705434771; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=H8e7BIQ+0Uh9OOAYCo0/STP+HvJzJz6KC9y4zPITais=;
-        b=WsJ3PovHf06yDnZxNKUP5I/ypQAW5xjsfXaPhKMMxWM5vOkgub4RLziGk4pH/0xtPw
-         aQdse6fCn/GSXfn98murkkatkYNFhdO9JdUrYAdp/34ExfA0fz+GPtq9ER7E77MxFYMe
-         CHP6fcSWgdvv6No2qaUnCAGil5hdLXxMTAK1a4BxvrbkMX8Z3KScafpF0I5wjAv8r+PZ
-         XCupSStpIYrRBoCojFL/X714dp7l70gP+f9VztuMiMC90Rz5Z9I+jFbmysGGMkB3AZAR
-         KALNOj7k15QeVUwWVNhc3D0y77tKPrB4aB0F7epliCu2uYlqSZmialFNlqR8kb+l6Qvj
-         nPoQ==
+        bh=BI/48/E7Md2QE++iHyjNqxZ4Ipvc83BNLpeu7Fm4++A=;
+        b=W+8tE/mNB3hYt4I6aeVIQeTQZP3AA0dF+atDZHHwEpvsnpgtMvHWaGEzeDzAXPHna4
+         ztpxnSYrDhyamk6dwAwYnKT6OvKKZv4SWhCmL2u2V1LyR8QCFqi6DIOt6mKOUUl+mKe8
+         DbQOP7yet5/oLXFsk+zx/1O3EbKFW8m0TYybgHW/o4ZyYrvJTOHP0vkebOaJ0wt9/jeQ
+         2G+Th5XmEMb3CCdS4WdF2fpEt8dvhzcIk1IhR4AfTSMavNnR7+BKrXO+B1S86EsWLKlP
+         kZEoTDWFbevSFmPsdxZxHpwy1nVwwpQqsky1dJ548Iz8QbEEoUWJ3aKjk+lx4Su/27Zp
+         Y+zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704829951; x=1705434751;
+        d=1e100.net; s=20230601; t=1704829971; x=1705434771;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H8e7BIQ+0Uh9OOAYCo0/STP+HvJzJz6KC9y4zPITais=;
-        b=OswoOm7SvEOll6lTpuZiAHK5wAkoVLCJPXRuL3sJ2bAsDxBalEXj8Y6qLhtfnHmkvx
-         KJ57zJ8ylYru5+mq4uAgKufxSIJ/H4h8NZZe+ecxgvkEL9/ad+fQPuSbWMs8pcJRBixb
-         8Y2LesmkhI8h7ElCvmprISWtmXMeIgKUAoVX4mdS3+x3bviSOUa2INO7V4pA45qd1JhN
-         tAW9ySkkTWUd+8c14Y198S0m3VQxupW+bkv9nDDWLuaC4hjc0pmyI6EdlCUejNOo+rgu
-         59AC78+s4qcZElWr6TgaPWZYwSI84+DD1QKXepZEtub6Y0lIHNaWXNwTLwfF1mBYcqCZ
-         gPtA==
-X-Gm-Message-State: AOJu0YyN6kwj3MH76kc/BHBPnJ5HRdnKlGVm4LxDbE35/yj5uiM+grmb
-	lQd+Ba8Z/vwi0dy76JOiQ6tA3QASJox/Tg==
-X-Google-Smtp-Source: AGHT+IHmaMSsPHOeRys+SN1gCkDvhPPnnU4xw5om3zeZ1uZJmbZ6bUKv8I/7qxajZHyxo4zm+o/bmQ==
-X-Received: by 2002:a05:600c:511e:b0:40e:5320:2582 with SMTP id o30-20020a05600c511e00b0040e53202582mr212877wms.107.1704829951588;
-        Tue, 09 Jan 2024 11:52:31 -0800 (PST)
+        bh=BI/48/E7Md2QE++iHyjNqxZ4Ipvc83BNLpeu7Fm4++A=;
+        b=Sqp6Yj0AIHLQd9s3EzSXVI1s0CSCXcVjpcE/xR2r2Svgjoser1cfqA422HSi5htlvS
+         krTF1EH5TdPE1Ryeg8Y1q2G+TbmEt8mgwI6gESaZpdV8KcmUCVooMaRWxKLzEnRCQjoW
+         tIi3Ln3xlJ2kdAQ+Jrcn4HKUos7oSvB69LI0//5WXb7ajkk79r+lQlL4P1hCy816r4w3
+         mU6lceopvYtaiJxJWt3Fg3b+XeXUOSJkWrv6Jg7Dr/5bmCI/0OnYDCnLM+A4irPoeoP/
+         b5yQPXhickPE6SN7o+RYWRmU6iAYkBXxQhy4IG4+MtP4dRMnkFVvgWwH/WbHrgG87+SA
+         b/qg==
+X-Gm-Message-State: AOJu0YzdZPL5/bM3s9Te7x89NyVORtKBzHhrdNmU1+4TYq3wJ1VRenq+
+	wGSCaQKFXFvJJMoxJ5Hs0U++53A9f6scSA==
+X-Google-Smtp-Source: AGHT+IE6HSL59hPqBUMbNpE6skT8szvU3eRO5hKrvBl3DRfpljPdLWzn6Ca47i5HcCIyTcytaHSX3w==
+X-Received: by 2002:a05:600c:4504:b0:40d:9255:4aca with SMTP id t4-20020a05600c450400b0040d92554acamr2804029wmo.119.1704829971274;
+        Tue, 09 Jan 2024 11:52:51 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.223.112])
-        by smtp.gmail.com with ESMTPSA id w1-20020a5d6801000000b00336be33649csm3193258wru.9.2024.01.09.11.52.29
+        by smtp.gmail.com with ESMTPSA id w1-20020a5d6801000000b00336be33649csm3193258wru.9.2024.01.09.11.52.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jan 2024 11:52:30 -0800 (PST)
-Message-ID: <f1710a31-6729-4a97-afcb-518cb99b9346@linaro.org>
-Date: Tue, 9 Jan 2024 20:52:28 +0100
+        Tue, 09 Jan 2024 11:52:50 -0800 (PST)
+Message-ID: <2815d43d-d016-4656-9ad9-33d4af04f479@linaro.org>
+Date: Tue, 9 Jan 2024 20:52:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -83,16 +83,12 @@ To: Andrew Davis <afd@ti.com>, Frank Binns <frank.binns@imgtec.com>,
  <bcousson@baylibre.com>, Tony Lindgren <tony@atomide.com>,
  Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
  Tero Kristo <kristo@kernel.org>, Paul Cercueil <paul@crapouillou.net>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
- linux-omap@vger.kernel.org, linux-sunxi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org
+Cc: dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, linux-omap@vger.kernel.org,
+ linux-mips@vger.kernel.org
 References: <20240109171950.31010-1-afd@ti.com>
  <20240109171950.31010-2-afd@ti.com>
- <11e3afae-76a7-4ebb-82ac-3dca040710dc@linaro.org>
- <d0c242ef-bb8f-49d9-bbb0-7922db2c322a@ti.com>
- <d584255f-87ee-48a7-869d-e2a0b40a52b4@linaro.org>
- <61b0c6c7-e5ad-4cbf-a020-230d96d43d3e@ti.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -138,53 +134,22 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <61b0c6c7-e5ad-4cbf-a020-230d96d43d3e@ti.com>
+In-Reply-To: <20240109171950.31010-2-afd@ti.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 09/01/2024 20:33, Andrew Davis wrote:
-> On 1/9/24 1:17 PM, Krzysztof Kozlowski wrote:
->> On 09/01/2024 20:04, Andrew Davis wrote:
->>> On 1/9/24 12:59 PM, Krzysztof Kozlowski wrote:
->>>> On 09/01/2024 18:19, Andrew Davis wrote:
->>>>> This binding will be used for GPUs starting from Series6 (Rogue)
->>>>> and later. A different binding document will describe Series5.
->>>>> With that the name "img,powervr" is too generic, rename to
->>>>> "img,powervr-rogue" to avoid confusion.
->>>>>
->>>>> Suggested-by: Maxime Ripard <mripard@kernel.org>
->>>>> Signed-off-by: Andrew Davis <afd@ti.com>
->>>>> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
->>>>> Reviewed-by: Frank Binns <frank.binns@imgtec.com>
->>>>> ---
->>>>
->>>> Why do you send new version while we still talk about previous?
->>>>
->>>> Please implement feedback from v1 (and this is v2, so next is v3) or
->>>> keep discussing.
->>>>
->>>
->>> I agreed with everything you said in the last round (RFC v2) and
->>> made all requested changes. Did I miss something in this version?
->>
->> The recommendation is that naming of the file matches generic compatible
->> and your file has only one generic compatible. Therefore I don't
->> understand why you claimed there are multiple compatibles.
->>
+On 09/01/2024 18:19, Andrew Davis wrote:
+> This binding will be used for GPUs starting from Series6 (Rogue)
+> and later. A different binding document will describe Series5.
+> With that the name "img,powervr" is too generic, rename to
+> "img,powervr-rogue" to avoid confusion.
 > 
-> I said "There are (or will be) multiple compatible strings", the rest
+> Suggested-by: Maxime Ripard <mripard@kernel.org>
+> Signed-off-by: Andrew Davis <afd@ti.com>
+> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> Reviewed-by: Frank Binns <frank.binns@imgtec.com>
 
-OK.
-
-> are on the way. So I didn't want to make this file less generic when
-> other bindings are almost ready.
-> 
-> Frank, can you help here, I'm assuming you have "img,img-bxs" and
-> "img,img-8xe" bindings staged for upstreaming somewhere; you'll be
-> putting those in this same file, right?
-> 
-
-That's fine then.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
