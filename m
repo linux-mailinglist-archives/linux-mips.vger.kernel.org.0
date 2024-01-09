@@ -1,54 +1,54 @@
-Return-Path: <linux-mips+bounces-891-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-892-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F8668289D2
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jan 2024 17:15:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CA62828A7E
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jan 2024 17:53:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C50B0B23770
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jan 2024 16:15:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6CC228624A
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jan 2024 16:53:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1035E3A1B9;
-	Tue,  9 Jan 2024 16:15:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC1563A8C5;
+	Tue,  9 Jan 2024 16:53:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="DCu/0Xjk"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Yy3bMx4/"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7677A38DC1;
-	Tue,  9 Jan 2024 16:15:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5202438DFE;
+	Tue,  9 Jan 2024 16:53:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 409GEqUp101353;
-	Tue, 9 Jan 2024 10:14:52 -0600
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 409Gr5Xm016878;
+	Tue, 9 Jan 2024 10:53:05 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1704816892;
-	bh=+s45SriCMFg4wyEvqkMYU7sO4P+s/YfoTTH1GytTXY0=;
+	s=ti-com-17Q1; t=1704819185;
+	bh=iHiTjx8NHZJnPof+njozBL2G+dd0BsVHIjNWCy6rIek=;
 	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=DCu/0XjkGzbx4AhW4Q1Bb3nB8rlACZEnZAY0Bpm2ojwjiUTg/cetEuTlDffhw56Yi
-	 JHfZdc5IIQ5KXToNOXeS7i84Lh9OyN5sM8buQlmsnnC/JfTQnTg0SIHnUVI8RMvNlW
-	 o8UI9tzB5evh4h7HsKJ+3yV2TT+cZ+pbdjn9SWKs=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 409GEqtO030730
+	b=Yy3bMx4/Yzf97w86aOfBS4akux9QB2Kuo5MatkVOI+0K9M8kchw4Oqto7TtkbrtMr
+	 2tL48v1DNa2NdNWNJhQccC9k8qy3/pfg9p32n89F6nuLNtgezOFNwohAzj0oVfL94Z
+	 NuMDjG5qfsIWUm0HKnL/gbstXMeEoeb6OaUgdHkA=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 409Gr57x031093
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 9 Jan 2024 10:14:52 -0600
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+	Tue, 9 Jan 2024 10:53:05 -0600
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 9
- Jan 2024 10:14:52 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ Jan 2024 10:53:05 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 9 Jan 2024 10:14:52 -0600
+ Frontend Transport; Tue, 9 Jan 2024 10:53:05 -0600
 Received: from [10.249.40.136] ([10.249.40.136])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 409GEoPJ008319;
-	Tue, 9 Jan 2024 10:14:50 -0600
-Message-ID: <4cdd5c4a-f940-4635-837b-872ab776f5c4@ti.com>
-Date: Tue, 9 Jan 2024 10:14:50 -0600
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 409Gr3gb015005;
+	Tue, 9 Jan 2024 10:53:03 -0600
+Message-ID: <c3664f43-431a-421f-8d2a-a3d2cc6f8777@ti.com>
+Date: Tue, 9 Jan 2024 10:53:03 -0600
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -56,18 +56,18 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v2 01/11] dt-bindings: gpu: Rename img,powervr to
- img,powervr-rogue
+Subject: Re: [PATCH RFC v2 02/11] dt-bindings: gpu: Add PowerVR Series5 SGX
+ GPUs
+Content-Language: en-US
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Frank Binns
 	<frank.binns@imgtec.com>,
-        Donald Robson <donald.robson@imgtec.com>,
-        Matt
- Coster <matt.coster@imgtec.com>,
-        "H . Nikolaus Schaller" <hns@goldelico.com>,
+        Matt Coster <matt.coster@imgtec.com>,
+        "H . Nikolaus
+ Schaller" <hns@goldelico.com>,
         Adam Ford <aford173@gmail.com>,
-        Ivaylo Dimitrov
-	<ivo.g.dimitrov.75@gmail.com>,
+        Ivaylo
+ Dimitrov <ivo.g.dimitrov.75@gmail.com>,
         Maarten Lankhorst
 	<maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -91,34 +91,162 @@ CC: <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
         <linux-sunxi@lists.linux.dev>, <linux-omap@vger.kernel.org>,
         <linux-mips@vger.kernel.org>
 References: <20240108183302.255055-1-afd@ti.com>
- <20240108183302.255055-2-afd@ti.com>
- <c99b898f-61d2-46a3-b639-b4de828dcab1@linaro.org>
-Content-Language: en-US
+ <20240108183302.255055-3-afd@ti.com>
+ <e68b3b0c-7a03-4771-b6e8-c1a263e31425@linaro.org>
 From: Andrew Davis <afd@ti.com>
-In-Reply-To: <c99b898f-61d2-46a3-b639-b4de828dcab1@linaro.org>
+In-Reply-To: <e68b3b0c-7a03-4771-b6e8-c1a263e31425@linaro.org>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On 1/9/24 5:28 AM, Krzysztof Kozlowski wrote:
+On 1/9/24 5:32 AM, Krzysztof Kozlowski wrote:
 > On 08/01/2024 19:32, Andrew Davis wrote:
+>> The Imagination PowerVR Series5 "SGX" GPU is part of several SoCs from
+>> multiple vendors. Describe how the SGX GPU is integrated in these SoC,
+>> including register space and interrupts. Clocks, reset, and power domain
+>> information is SoC specific.
+>>
 >> Signed-off-by: Andrew Davis <afd@ti.com>
 >> ---
->>   .../bindings/gpu/{img,powervr.yaml => img,powervr-rogue.yaml} | 4 ++--
->>   MAINTAINERS                                                   | 2 +-
->>   2 files changed, 3 insertions(+), 3 deletions(-)
+>>   .../bindings/gpu/img,powervr-sgx.yaml         | 124 ++++++++++++++++++
+>>   MAINTAINERS                                   |   1 +
+>>   2 files changed, 125 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/gpu/img,powervr-sgx.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/gpu/img,powervr-sgx.yaml b/Documentation/devicetree/bindings/gpu/img,powervr-sgx.yaml
+>> new file mode 100644
+>> index 0000000000000..bb821e1184de9
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/gpu/img,powervr-sgx.yaml
+>> @@ -0,0 +1,124 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +# Copyright (c) 2023 Imagination Technologies Ltd.
 > 
-> If you are renaming it, why not renaming to match compatible as we
-> usually expect?
+> Your email has @TI domain, are you sure you attribute your copyrights to
+> Imagination?
 > 
 
-There are (or will be) multiple compatible strings described in this
-file, naming the file after just one would not fully convey the content
-of the file. This generic style naming seems common already for bindings
-with multiple compatibles.
+The file started as a copy/paste from a IMG copyrighted file, even
+though it is now almost completely re-written I've left their (c)
+for good measure. I'll add an additional TI (c).
+
+> ...
+> 
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  clocks: true
+> 
+> Missing min/maxItems
+> 
+
+These are set in the allOf/if/then blocks below, seems
+if I don't set them to at least something here then I get
+a warning:
+
+    'clock-names', 'clocks' do not match any of the regexes: 'pinctrl-[0-9]+'
+
+even if I define them in the allOf block below. I don't
+know what the min/max should be until I check the compatible
+in the allOf block.
+
+>> +
+>> +  clock-names:
+>> +    minItems: 1
+>> +    items:
+>> +      - const: core
+>> +      - const: mem
+>> +      - const: sys
+>> +
+>> +  power-domains:
+>> +    maxItems: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +
+>> +additionalProperties: false
+> 
+> This goes after allOf: block.
+> 
+
+ACK
+
+>> +
+>> +allOf:
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            const: ti,am6548-gpu
+>> +    then:
+>> +      required:
+>> +        - power-domains
+>> +    else:
+>> +      properties:
+>> +        power-domains: false
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            enum:
+>> +              - allwinner,sun6i-a31-gpu
+>> +              - ingenic,jz4780-gpu
+>> +    then:
+>> +      allOf:
+>> +        - if:
+> 
+> I don't understand why do you need to embed allOf inside another allOf.
+> The upper (outer) if:then: looks entirely useless.
+> 
+
+It is so that both compatibles falls through to having
+clock being required.
+
+Logic in YAML always seems messy to me, here it is in pseudo C:
+
+if (compatible == allwinner,sun6i-a31-gpu ||
+     compatible == ingenic,jz4780-gpu) {
+	if (compatible == allwinner,sun6i-a31-gpu)
+		clocks: ...
+	if (compatible == ingenic,jz4780-gpu)
+		clocks: ...
+	required:
+		- clocks
+		- clock-names
+} else { /* disallow for all others */
+	properties:
+		clocks: false
+		clock-names: false
+}
+
+Now if I had an "else if" that didn't force the indention to keep
+growing I would have used that. (does one exist?) I also cannot
+simply add the clock properties only for the two compats need
+them for the reasons above and so must add them unconditionally
+before then explicitly disable them in a catch-all else path.
 
 Andrew
 
+>> +            properties:
+>> +              compatible:
+>> +                contains:
+>> +                  const: allwinner,sun6i-a31-gpu
+>> +          then:
+>> +            properties:
+>> +              clocks:
+>> +                minItems: 2
+>> +                maxItems: 2
+>> +              clock-names:
+>> +                minItems: 2
+>> +                maxItems: 2
+> 
+> 
 > Best regards,
 > Krzysztof
 > 
