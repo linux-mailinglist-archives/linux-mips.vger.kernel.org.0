@@ -1,177 +1,140 @@
-Return-Path: <linux-mips+bounces-919-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-920-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE1A6829738
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jan 2024 11:20:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9311D82A12A
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jan 2024 20:45:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1FBE3B26241
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jan 2024 10:20:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27DC72857AF
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jan 2024 19:45:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 567EF3FB1A;
-	Wed, 10 Jan 2024 10:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41BD64E1CA;
+	Wed, 10 Jan 2024 19:45:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="myiiLqUC";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="3aLv+tsR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QmyIgXFH"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38B613FB08;
-	Wed, 10 Jan 2024 10:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailnew.west.internal (Postfix) with ESMTP id 1CEA32B005B1;
-	Wed, 10 Jan 2024 05:20:33 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Wed, 10 Jan 2024 05:20:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1704882032;
-	 x=1704889232; bh=syE5UlqFQxkc/rlq6eSMNsD1Ft+dm/4kEwr9kygNnZw=; b=
-	myiiLqUCaOFNyy0KGz1/79d3HRMOpqenCIcjtVp8MIMXNuuxs7r3pdnpfmWhoqoR
-	IQ7N3YbmF9nJffZH4HS8LkIh22Vv3wG2sjpK27f9XTmmoCr2Kc68Xrl4dw5To32W
-	7oTNxvKqrQNHtDvW+wa87N9N90pn8A9G+LrTYmcdO105B4Zsmftj7IvnAIh1E8zz
-	Q2WU5G/3jk+uFyxgwtiyCxFAwp4RGMAhxKlU9P6WBbVa8LUUGhnX9TdNNUh1DUbx
-	zmCG1MYbF7h4hfd2TJzbdJ+Q1Rify5IxLv96YznkO8r5UDdnw/B35FP/X80ijL7V
-	BaGn8hEWLg1dYwSkCYndvA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1704882032; x=
-	1704889232; bh=syE5UlqFQxkc/rlq6eSMNsD1Ft+dm/4kEwr9kygNnZw=; b=3
-	aLv+tsROFR55+fPEzkAuUR1EYdQ2HX99dqCRlz/JfV2MsJtp0CGFqmB6tAMDy72A
-	ZrX+AdDDWBNTrrW7sMzvvfEP8gUJIpMLLtVrp/teui+cU+9KRRCxKXkanMetlfcj
-	FBkFKDgNOVxh6ZGz33H1r+Dke653H3inbaS1l5dzm3/T9LKzj/zhFl3mBIhvpN+a
-	i/+bZg97tvEz1ahcWMOXb7cxJW8wSehQ2OGnZNijfKOPiOkazb67CX7p6n/QsClV
-	xFUVOUH+ktgc0Wsof32P0kt85rwvOomYqUIMGJg3KdbRUBngGNzPJwoAUnUqfuOk
-	0otxMsg6CfS2J4mWRF6QA==
-X-ME-Sender: <xms:b2-eZfbb8jU7eUbhVM8ptUPbFBsqxwkHmtQmk9r-V5K41TRFTBKjlA>
-    <xme:b2-eZebHxIw1Fjp3BqSzuovwQbyqtk2C5hrRG6PAfO8XS-kw0MYGTAjpPxl57hAYq
-    -Augo6FuvTHj0uSGNU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdeiuddgudegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:b2-eZR8Zym7T_ixwwEfoUeE2EDbxpF4y1T6da7RnK6yyA1qx7ynaAQ>
-    <xmx:b2-eZVr4FQ5uhgAwkslmh14i6fuaYanuuxC2M5Z2QAp-pF9q7WvfTw>
-    <xmx:b2-eZapet_e5NSzPInuoxvdn0YzOepAI8Xf2d7B8XgPzF98nJjvgIg>
-    <xmx:cG-eZeqOJGWBxdm_kxnLomgMKhRJk3BAFc59xS0XCWHMebF1Iw26jJaiRpM>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 64819B6008D; Wed, 10 Jan 2024 05:20:31 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1364-ga51d5fd3b7-fm-20231219.001-ga51d5fd3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 712194EB22;
+	Wed, 10 Jan 2024 19:45:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-dbedb1ee3e4so3791761276.3;
+        Wed, 10 Jan 2024 11:45:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704915919; x=1705520719; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8zRr9k3M5lt1NLGiBm4LGGbEU76LPHiRlYHf6Ykn1Ys=;
+        b=QmyIgXFHRA92s3vFtTVyO5j+k1gQkY68yBDL64620m6Qwqb9HZcY7isSAZYh9d5/tm
+         9UuVfIyz8zVX1N/QD6Rw0cedIcVI2rcQW2CKDd/ZDzpeLDT3NWlddg3asTxBvog7x4i7
+         OBJh0CbNwmvsjK8k6FgjMQp2TUoYeov7thXqGAfDQ7A6UUwb/waOVddFVryszWrIKJsR
+         SnwDvpUHja4SNAiUhWyAiVAyXoxeFfShZ/jw/ut2Nz+c/IDHC1HZiydnW9JDa+oRd6aF
+         nEeMDFbluTOu13sLop5hGJU1hJN9ov2dMNlkaDStCgmZLyX2RBHBQNHobsHlWB74SBU6
+         Ae4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704915919; x=1705520719;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8zRr9k3M5lt1NLGiBm4LGGbEU76LPHiRlYHf6Ykn1Ys=;
+        b=BKT2qwxmJ3wcOM0prF4WQo18C+H0ocKL+7dC3Ca7Y3ymf2CoC0HC+xy7HZ2fOSzVVe
+         VgEqWi7suHfQ0JpWoM8OQ8djygt+agzfYOc1U4DSykAMIEOae2fWDLPTDihWirS0c5PI
+         ZmIju8BKk11+ObmOxxciZ70zRkkL/M9Oy3v1/uNv2kx8MJtehFa+gN4J/5mH4vadHrs6
+         igiMpVzED5tG969zLjwi0FxfTfeSRx2ytc3q89Xfcq8ak/dGb0JA39+wv5lv6960tzO0
+         /zlvG6BQKxtB8Clg3WVyT1Zm5YYUPnYKyhi/cWOpukivOLSKT5jBp8aUwmA9PbObDDav
+         5lVw==
+X-Gm-Message-State: AOJu0YzrEFPgO5WkZ5wwUpvjvyfu7sblOh8X/+6BK0PFF20zeOlLHBp6
+	7GBZ0F2ID/dOhzRSGdvRc3FSPgd22+VN3Q==
+X-Google-Smtp-Source: AGHT+IHIC4STcmIVvHNojmmb+kWLZtF32D5cncsDs8Rdjedin7IsN3qjxeZAoMn26pYsOd81Vi25VQ==
+X-Received: by 2002:a25:9f85:0:b0:dbd:5be1:1768 with SMTP id u5-20020a259f85000000b00dbd5be11768mr133994ybq.73.1704915919301;
+        Wed, 10 Jan 2024 11:45:19 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i29-20020a25b21d000000b00dbccc57e9c8sm1615656ybj.56.2024.01.10.11.45.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jan 2024 11:45:18 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 10 Jan 2024 11:45:16 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Matt Turner <mattst88@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Rich Felker <dalias@libc.org>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Richard Weinberger <richard@nod.at>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	linux-arch@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-mtd@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-usb@vger.kernel.org,
+	sparclinux@vger.kernel.org, x86@kernel.org,
+	Kees Cook <keescook@chromium.org>,
+	Palmer Dabbelt <palmer@rivosinc.com>
+Subject: Re: [PATCH v3 6/6] Makefile.extrawarn: turn on missing-prototypes
+ globally
+Message-ID: <ab94f844-a4ec-4b4f-b67b-2b67347596d9@roeck-us.net>
+References: <20231123110506.707903-1-arnd@kernel.org>
+ <20231123110506.707903-7-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <fdf707b9-f39d-4f5a-a8bf-1bcb8cc6594f@app.fastmail.com>
-In-Reply-To: 
- <CAMuHMdV8uFKntiMfwwmnFpd4Dcx8vJDwS6r1iBLtkh40N71dbw@mail.gmail.com>
-References: <20231108125843.3806765-1-arnd@kernel.org>
- <20231108125843.3806765-9-arnd@kernel.org>
- <CAMuHMdV8uFKntiMfwwmnFpd4Dcx8vJDwS6r1iBLtkh40N71dbw@mail.gmail.com>
-Date: Wed, 10 Jan 2024 11:20:10 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Geert Uytterhoeven" <geert@linux-m68k.org>,
- "Arnd Bergmann" <arnd@kernel.org>
-Cc: "Andrew Morton" <akpm@linux-foundation.org>,
- linux-kernel@vger.kernel.org, "Masahiro Yamada" <masahiroy@kernel.org>,
- linux-kbuild@vger.kernel.org, "Matt Turner" <mattst88@gmail.com>,
- "Vineet Gupta" <vgupta@kernel.org>,
- "Russell King" <linux@armlinux.org.uk>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Will Deacon" <will@kernel.org>, "Steven Rostedt" <rostedt@goodmis.org>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>, guoren <guoren@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Ard Biesheuvel" <ardb@kernel.org>,
- "Huacai Chen" <chenhuacai@kernel.org>,
- "Greg Ungerer" <gerg@linux-m68k.org>, "Michal Simek" <monstr@monstr.eu>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Dinh Nguyen" <dinguyen@kernel.org>,
- "Michael Ellerman" <mpe@ellerman.id.au>,
- "Nicholas Piggin" <npiggin@gmail.com>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Geoff Levand" <geoff@infradead.org>,
- "Palmer Dabbelt" <palmer@dabbelt.com>,
- "Heiko Carstens" <hca@linux.ibm.com>,
- "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
- "David S . Miller" <davem@davemloft.net>,
- "Andy Lutomirski" <luto@kernel.org>,
- "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
- x86@kernel.org, "Helge Deller" <deller@gmx.de>,
- "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Timur Tabi" <timur@kernel.org>,
- "Kent Overstreet" <kent.overstreet@linux.dev>,
- "David Woodhouse" <dwmw2@infradead.org>,
- "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
- "Anil S Keshavamurthy" <anil.s.keshavamurthy@intel.com>,
- "Kees Cook" <keescook@chromium.org>,
- "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
- "Juri Lelli" <juri.lelli@redhat.com>,
- "Vincent Guittot" <vincent.guittot@linaro.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Nicolas Schier" <nicolas@fjasle.eu>,
- "Alexander Viro" <viro@zeniv.linux.org.uk>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
- "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
- loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
- Netdev <netdev@vger.kernel.org>, linux-parisc@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
- dri-devel@lists.freedesktop.org,
- "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
- linux-mtd@lists.infradead.org, "Palmer Dabbelt" <palmer@rivosinc.com>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>
-Subject: Re: [PATCH 08/22] [v2] arch: consolidate arch_irq_work_raise prototypes
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231123110506.707903-7-arnd@kernel.org>
 
-On Wed, Jan 10, 2024, at 10:03, Geert Uytterhoeven wrote:
-> On Wed, Nov 8, 2023 at 2:01=E2=80=AFPM Arnd Bergmann <arnd@kernel.org>=
- wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->>
->> The prototype was hidden in an #ifdef on x86, which causes a warning:
->>
->> kernel/irq_work.c:72:13: error: no previous prototype for 'arch_irq_w=
-ork_raise' [-Werror=3Dmissing-prototypes]
->
-> This issue is now present upstream.
->
->> Some architectures have a working prototype, while others don't.
->> Fix this by providing it in only one place that is always visible.
->>
->> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
->> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
->> Acked-by: Guo Ren <guoren@kernel.org>
->> Reviewed-by: Alexander Gordeev <agordeev@linux.ibm.com>
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->
-> Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+On Thu, Nov 23, 2023 at 12:05:06PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Over the years we went from > 1000 of warnings to under 100 earlier
+> this year, and I sent patches to address all the ones that I saw with
+> compile testing randcom configs on arm64, arm and x86 kernels. This is a
+> really useful warning, as it catches real bugs when there are mismatched
+> prototypes. In particular with kernel control flow integrity enabled,
+> those are no longer allowed.
+> 
+> I have done extensive testing to ensure that there are no new build
+> errors or warnings on any configuration of x86, arm and arm64 builds.
+> I also made sure that at least the both the normal defconfig and an
+> allmodconfig build is clean for arc, csky, loongarch, m68k, microblaze,
+> openrisc, parisc, powerpc, riscv, s390, and xtensa, with the respective
+> maintainers doing most of the patches.
+> 
+> At this point, there are five architectures with a number of known
+> regressions: alpha, nios2, mips, sh and sparc. In the previous version
+> of this patch, I had turned off the missing prototype warnings for the 15
+> architectures that still had issues, but since there are only five left,
+> I think we can leave the rest to the maintainers (Cc'd here) as well.
+> 
 
-I've sent out the asm-generic pull request now,
-that contains the fix. Thanks for the reminder.
+Not sure I understand why this was so important that it warrants the
+resulting buildtest failures.
 
-      Arnd
+FWIW, I'll disable WERROR in my build tests for the affected architectures.
+That is kind of counter-productive, but the only real alternative would be
+to stop build (and sometimes, such as for ppc, runtime) tests entirely,
+which would be even worse.
+
+Guenter
 
