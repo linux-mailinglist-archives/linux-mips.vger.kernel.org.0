@@ -1,141 +1,192 @@
-Return-Path: <linux-mips+bounces-921-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-922-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C573782A2C4
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jan 2024 21:50:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 939A182C4D5
+	for <lists+linux-mips@lfdr.de>; Fri, 12 Jan 2024 18:40:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75A85282505
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jan 2024 20:50:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE4C8B226C2
+	for <lists+linux-mips@lfdr.de>; Fri, 12 Jan 2024 17:40:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED57C4F610;
-	Wed, 10 Jan 2024 20:44:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB53517540;
+	Fri, 12 Jan 2024 17:40:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="KWnMut0t";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EXwWXkvv"
+	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="jL32j5Fw";
+	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="pHXvjyM6"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256B74F602;
-	Wed, 10 Jan 2024 20:44:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 1864C580ACA;
-	Wed, 10 Jan 2024 15:44:04 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Wed, 10 Jan 2024 15:44:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1704919444; x=1704926644; bh=swCJD9Fvop
-	hNa/YkfcNjNrylvPuJdTYmLEobiCsz9KQ=; b=KWnMut0tt2cIG/amb4AXGI5g8w
-	YoCQshQyMCD7PX1QHoaWnhx8BmDenZ13YFz0Q4oWEGwQziz58V/PuWWsRKpr4az6
-	3TPX50+gs88afAypjeSE13kGIrQ3OEttOSWf/K+g0PAKgJaLHlTeCu85jjYjsc+e
-	om4sYKVwBB2Gxa49uQdH+Z4KKOzSbPrH3A8CbfrIMu93271HA5XmO534EJAN7tel
-	8kkoTj8BtG4yF3FmVqPUuu3UzTaIK0qstUExFmGa7RPFtUn7SLqq2/C6pQxbmNs0
-	sqgwZEcIR2vHgCFG0D9hf8QEICU2tZM43LubweRGEI33P6NHNtD8ZxoLwxgA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1704919444; x=1704926644; bh=swCJD9FvophNa/YkfcNjNrylvPuJ
-	dTYmLEobiCsz9KQ=; b=EXwWXkvvpnzWDZJ8zWZ4YSDRAy1pijyf4PqvHWBwyITV
-	7b0Q6JQ9rJKeGQM5QP0wePvrCc9tJT3sGtmQ86bKTrPGCy8FFcudtpbOcMrDORKF
-	MV0jI3A39lpJ/WqA2PWNIgOuYaCtOOWx+bJ3PdRnpOzZoPgsrCLn4Ym673cQNmil
-	/Heoj6JgIeuCrtAUjR8I31wnDEwbw1MJ27N0BVslb3vL5NoeIgyfQ1aQG+w+XT8m
-	UQRaDfMD+9rdyAgHJJzO3pGRtIa4eMpdwE7Dm9Ye1WWXYwZHvR1weYmeZFSkNCyX
-	e3hOvm01aKeaxwTQ2mO0Rq76NNyPDPa/FzKHOP81qw==
-X-ME-Sender: <xms:kQGfZU8PlM7CA0aYK4V6brNP6R0d-zxdQJ1P3IxWYzfnex5J1NLJ3Q>
-    <xme:kQGfZcualeFJQYSYSx3XzEPC3UMwFQk3uY8lZJt040GkYS2RxvSbljuRnElArHrJg
-    7psyMHAF2iDoupcp3c>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdeiuddgudefkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:kQGfZaCiSSrv3HJIjW5lrIlpJBs13VbbS-aW4LFRoMspyJTWIsB6Pg>
-    <xmx:kQGfZUdq2Rm9UmEj06v-BC3916J0934HbGLgr2_jP14x35GiAeAsbA>
-    <xmx:kQGfZZPOxR7MLcGy09RbjxNxZZ2XJR_bdXbzXGquNFT9yhSOF-CyXg>
-    <xmx:lAGfZZKrTcf0Bt-eKNY4pGrAfMPlN32u2wpFiIhGjkd3ET5RsOprnw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id C88EEB6008D; Wed, 10 Jan 2024 15:44:01 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1374-gc37f3abe3d-fm-20240102.001-gc37f3abe
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DB6822637;
+	Fri, 12 Jan 2024 17:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goldelico.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
+ARC-Seal: i=1; a=rsa-sha256; t=1705080852; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=W3GWy0FmIaj8bnyQOLBzXX83ySwtjGcplbG/RlF6oXx9qygnBd9EMgXtiadN4VCuYL
+    Vzb9K/1Q4zEh0B7XcKv8F2Sx4FijwnMPXysHfKJDCuQG0VCoTY5bqyISD5X10Sklu//B
+    6VkzB1eAyWBDr/bYsxdCjCk7edGU3pgaP2hEzvpyZbAxOha7gyG3pLDtiV5WNhRfEYbL
+    TDD/pLVM6nJvYv+XcCrZwcaohlv+M2+F2XzRIFeiekgqkBmiLXVXMh3jQ6/CCRVmglED
+    VgmepBQlqLq+ZF6ebJlWo7K1uGUcBpy8sQQyJjroV+U5685/yWLccmDVI8r77ioDgMW0
+    JoMw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1705080852;
+    s=strato-dkim-0002; d=strato.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=x1r68xA9wRZ4ANIBi9hA9+/f2i2/5reMcctFU/rKIWM=;
+    b=VDcJUmHB6n+dNWMqrBgIeSm07uZuiZ3Lo4YHM+4lHTEf/fShWCuTsnhOvGLLQPDnuX
+    DVAPLYAUhm05iR1fke6fvyGt2yjAOY9M0JpWsM0G7ZDb7NOVtKdS5okSvg27EKDAjxe4
+    EZA65KUjsuxqrlxq3A4GvhvmCzWHoRqtwrIEFgzCZ+5/k2+oHOIrVt8PoLSJaD5ZuoIt
+    SkIGnPo+f/Kh0VfwAACyGqpv0UWlsRVd0cuYtQVx3MTV8cVZA1NPKmpaCAhndTK188ip
+    jcc0l/OXnhCOTjIjugpKHKxL3l3jO3UA4Ps7c/ux8panbv6FBehkIg3hmwU9B0kTY7rX
+    EJQQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1705080852;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=x1r68xA9wRZ4ANIBi9hA9+/f2i2/5reMcctFU/rKIWM=;
+    b=jL32j5FwaeApRttmOhW1Gu7gSfqOtYGFDHV/dfmiVwk6lv/rGq6WkiuBz82beG8UnO
+    swrsv0PhvQYaN21JZmxO2+xU2OKEIDHGCNxj9juFGzg+Ldkd0mhSBo97APtDJ6U+LRqu
+    7blY6TeqlvdGLoENvx22BbsH/dahwDdBTiZ9BLCKDH+ergN8Y0RIkiA25I65IuRw4QpB
+    qzlOiNthWw+WTgSS1LzxBVQAwVwPewl9NQf1D7CfvSzknu8aEGQJDyWjtSAjV3d/ogkE
+    eT3drVtVQwHCoz/BHuQVEe8SLaX+rax4SpDu49ZC3/DEwQeCoUx/w0zBh8zzKKg1e7bO
+    eWKg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1705080852;
+    s=strato-dkim-0003; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=x1r68xA9wRZ4ANIBi9hA9+/f2i2/5reMcctFU/rKIWM=;
+    b=pHXvjyM6SXoq2JN88aS5Df7FeZdKXhVFedn7SwZ4nyqUqIMi1EYmq65gduamPGp39D
+    E3e2r+2FnzciMSGM/LCQ==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGZjDY="
+Received: from smtpclient.apple
+    by smtp.strato.de (RZmta 49.10.2 DYNA|AUTH)
+    with ESMTPSA id dbe64400CHY9PpN
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+	(Client did not present a certificate);
+    Fri, 12 Jan 2024 18:34:09 +0100 (CET)
+Content-Type: text/plain;
+	charset=us-ascii
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <7a79c037-ac91-448a-b6e0-b38cacccd971@app.fastmail.com>
-In-Reply-To: <ab94f844-a4ec-4b4f-b67b-2b67347596d9@roeck-us.net>
-References: <20231123110506.707903-1-arnd@kernel.org>
- <20231123110506.707903-7-arnd@kernel.org>
- <ab94f844-a4ec-4b4f-b67b-2b67347596d9@roeck-us.net>
-Date: Wed, 10 Jan 2024 21:43:40 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Guenter Roeck" <linux@roeck-us.net>, "Arnd Bergmann" <arnd@kernel.org>
-Cc: "Andrew Morton" <akpm@linux-foundation.org>,
- "David S . Miller" <davem@davemloft.net>,
- "David Woodhouse" <dwmw2@infradead.org>,
- "Dinh Nguyen" <dinguyen@kernel.org>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
- "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
- "Michael Ellerman" <mpe@ellerman.id.au>,
- "Masahiro Yamada" <masahiroy@kernel.org>,
- "Matt Turner" <mattst88@gmail.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nicolas Schier" <nicolas@fjasle.eu>,
- "Peter Zijlstra" <peterz@infradead.org>, "Rich Felker" <dalias@libc.org>,
- "Richard Henderson" <richard.henderson@linaro.org>,
- "Richard Weinberger" <richard@nod.at>,
- "Stephen Rothwell" <sfr@canb.auug.org.au>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Tudor Ambarus" <tudor.ambarus@linaro.org>,
- "Yoshinori Sato" <ysato@users.sourceforge.jp>,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-alpha@vger.kernel.org,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-mtd@lists.infradead.org,
- linux-sh@vger.kernel.org, linux-usb@vger.kernel.org,
- sparclinux@vger.kernel.org, x86@kernel.org,
- "Kees Cook" <keescook@chromium.org>,
- "Palmer Dabbelt" <palmer@rivosinc.com>
-Subject: Re: [PATCH v3 6/6] Makefile.extrawarn: turn on missing-prototypes globally
-Content-Type: text/plain
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.300.61.1.2\))
+Subject: Re: [PATCH RFC v2 04/11] ARM: dts: omap4: Add device tree entry for
+ SGX GPU
+From: H. Nikolaus Schaller <hns@goldelico.com>
+In-Reply-To: <20240108183302.255055-5-afd@ti.com>
+Date: Fri, 12 Jan 2024 18:33:58 +0100
+Cc: Frank Binns <frank.binns@imgtec.com>,
+ Donald Robson <donald.robson@imgtec.com>,
+ Matt Coster <matt.coster@imgtec.com>,
+ Adam Ford <aford173@gmail.com>,
+ Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Chen-Yu Tsai <wens@csie.org>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Samuel Holland <samuel@sholland.org>,
+ =?utf-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
+ Tony Lindgren <tony@atomide.com>,
+ Nishanth Menon <nm@ti.com>,
+ Vignesh Raghavendra <vigneshr@ti.com>,
+ Tero Kristo <kristo@kernel.org>,
+ Paul Cercueil <paul@crapouillou.net>,
+ dri-devel@lists.freedesktop.org,
+ devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev,
+ linux-omap@vger.kernel.org,
+ linux-mips@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <122DC5ED-2AA7-46A0-845F-083922458385@goldelico.com>
+References: <20240108183302.255055-1-afd@ti.com>
+ <20240108183302.255055-5-afd@ti.com>
+To: Andrew Davis <afd@ti.com>
+X-Mailer: Apple Mail (2.3774.300.61.1.2)
 
-On Wed, Jan 10, 2024, at 20:45, Guenter Roeck wrote:
-> On Thu, Nov 23, 2023 at 12:05:06PM +0100, Arnd Bergmann wrote:
->> At this point, there are five architectures with a number of known
->> regressions: alpha, nios2, mips, sh and sparc. In the previous version
->> of this patch, I had turned off the missing prototype warnings for the 15
->> architectures that still had issues, but since there are only five left,
->> I think we can leave the rest to the maintainers (Cc'd here) as well.
->> 
->
-> Not sure I understand why this was so important that it warrants the
-> resulting buildtest failures.
->
-> FWIW, I'll disable WERROR in my build tests for the affected architectures.
-> That is kind of counter-productive, but the only real alternative would be
-> to stop build (and sometimes, such as for ppc, runtime) tests entirely,
-> which would be even worse.
+Hi,
+I just comment on this example, but it applies almost the same for all =
+other .dtsi changes.
 
-If you prefer, I can go back to the older version and just disable
-the warning for the architectures with defconfig build failures. I did
-a lot of fixes for mips, so at least defconfig and allmodconfig
-should be fine now, leaving only alpha, nios2, sh and sparc as
-far as I can tell, at least once Linus merges the asm-generic
-pull request hat has a bunch of the currently missing fixes.
+> Am 08.01.2024 um 19:32 schrieb Andrew Davis <afd@ti.com>:
+>=20
+> Add SGX GPU device entry to base OMAP4 dtsi file.
+>=20
+> Signed-off-by: Andrew Davis <afd@ti.com>
+> ---
+> arch/arm/boot/dts/ti/omap/omap4.dtsi | 9 +++++----
+> 1 file changed, 5 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/arch/arm/boot/dts/ti/omap/omap4.dtsi =
+b/arch/arm/boot/dts/ti/omap/omap4.dtsi
+> index 2bbff9032be3e..559b2bfe4ca7c 100644
+> --- a/arch/arm/boot/dts/ti/omap/omap4.dtsi
+> +++ b/arch/arm/boot/dts/ti/omap/omap4.dtsi
+> @@ -501,10 +501,11 @@ sgx_module: target-module@56000000 {
+> #size-cells =3D <1>;
+> ranges =3D <0 0x56000000 0x2000000>;
+>=20
+> - /*
+> - * Closed source PowerVR driver, no child device
+> - * binding or driver in mainline
+> - */
+> + gpu@0 {
 
-   Arnd
+I wonder why we don't add a "gpu:" label here.
+
+Almost all other subsystem nodes have one (e.g. emif:, aes:, dss:, dsi:, =
+hdmi:, etc.),
+obviously for convenience when using a .dtsi file.
+
+It would allow a board-specific DTS to easily add status =3D "disabled" =
+to avoid driver
+probing or disabling the GPU (e.g. if there is no display).
+
+> + compatible =3D "ti,omap4430-gpu", "img,powervr-sgx540";
+
+It still appears to me that the "img,powervr-sgx540" (or similar) entry =
+is redundant
+information.
+
+I have experimentally updated our openpvrsgx driver and we do not have =
+any use for
+this information (at least in the kernel driver):
+
+=
+https://github.com/goldelico/letux-kernel/commit/f2f7cb3b858ef255f52f2b82a=
+8bb34c047337afe
+
+It shows how easy it is to derive the sgx version and revision number if =
+we ever
+need it inside the driver.
+
+So if you want to keep a reference to powervr, it would suffice to have
+
+> + compatible =3D "ti,omap4430-gpu", "img,powervr-sgx";
+
+Otherwise your device tree entries compile fine and seem to work (at =
+least in
+a cursory test on PandaBoard ES).
+
+> + reg =3D <0x0 0x2000000>; /* 32MB */
+> + interrupts =3D <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
+> + };
+> };
+
+BR and thanks,
+Nikolaus=
 
