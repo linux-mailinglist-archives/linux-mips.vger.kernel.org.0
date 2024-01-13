@@ -1,192 +1,114 @@
-Return-Path: <linux-mips+bounces-922-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-923-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 939A182C4D5
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Jan 2024 18:40:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5188182CA7C
+	for <lists+linux-mips@lfdr.de>; Sat, 13 Jan 2024 09:27:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE4C8B226C2
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Jan 2024 17:40:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE46C284AF9
+	for <lists+linux-mips@lfdr.de>; Sat, 13 Jan 2024 08:27:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB53517540;
-	Fri, 12 Jan 2024 17:40:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="jL32j5Fw";
-	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="pHXvjyM6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 377FE168C2;
+	Sat, 13 Jan 2024 08:27:05 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DB6822637;
-	Fri, 12 Jan 2024 17:40:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goldelico.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
-ARC-Seal: i=1; a=rsa-sha256; t=1705080852; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=W3GWy0FmIaj8bnyQOLBzXX83ySwtjGcplbG/RlF6oXx9qygnBd9EMgXtiadN4VCuYL
-    Vzb9K/1Q4zEh0B7XcKv8F2Sx4FijwnMPXysHfKJDCuQG0VCoTY5bqyISD5X10Sklu//B
-    6VkzB1eAyWBDr/bYsxdCjCk7edGU3pgaP2hEzvpyZbAxOha7gyG3pLDtiV5WNhRfEYbL
-    TDD/pLVM6nJvYv+XcCrZwcaohlv+M2+F2XzRIFeiekgqkBmiLXVXMh3jQ6/CCRVmglED
-    VgmepBQlqLq+ZF6ebJlWo7K1uGUcBpy8sQQyJjroV+U5685/yWLccmDVI8r77ioDgMW0
-    JoMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1705080852;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=x1r68xA9wRZ4ANIBi9hA9+/f2i2/5reMcctFU/rKIWM=;
-    b=VDcJUmHB6n+dNWMqrBgIeSm07uZuiZ3Lo4YHM+4lHTEf/fShWCuTsnhOvGLLQPDnuX
-    DVAPLYAUhm05iR1fke6fvyGt2yjAOY9M0JpWsM0G7ZDb7NOVtKdS5okSvg27EKDAjxe4
-    EZA65KUjsuxqrlxq3A4GvhvmCzWHoRqtwrIEFgzCZ+5/k2+oHOIrVt8PoLSJaD5ZuoIt
-    SkIGnPo+f/Kh0VfwAACyGqpv0UWlsRVd0cuYtQVx3MTV8cVZA1NPKmpaCAhndTK188ip
-    jcc0l/OXnhCOTjIjugpKHKxL3l3jO3UA4Ps7c/ux8panbv6FBehkIg3hmwU9B0kTY7rX
-    EJQQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1705080852;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=x1r68xA9wRZ4ANIBi9hA9+/f2i2/5reMcctFU/rKIWM=;
-    b=jL32j5FwaeApRttmOhW1Gu7gSfqOtYGFDHV/dfmiVwk6lv/rGq6WkiuBz82beG8UnO
-    swrsv0PhvQYaN21JZmxO2+xU2OKEIDHGCNxj9juFGzg+Ldkd0mhSBo97APtDJ6U+LRqu
-    7blY6TeqlvdGLoENvx22BbsH/dahwDdBTiZ9BLCKDH+ergN8Y0RIkiA25I65IuRw4QpB
-    qzlOiNthWw+WTgSS1LzxBVQAwVwPewl9NQf1D7CfvSzknu8aEGQJDyWjtSAjV3d/ogkE
-    eT3drVtVQwHCoz/BHuQVEe8SLaX+rax4SpDu49ZC3/DEwQeCoUx/w0zBh8zzKKg1e7bO
-    eWKg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1705080852;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=x1r68xA9wRZ4ANIBi9hA9+/f2i2/5reMcctFU/rKIWM=;
-    b=pHXvjyM6SXoq2JN88aS5Df7FeZdKXhVFedn7SwZ4nyqUqIMi1EYmq65gduamPGp39D
-    E3e2r+2FnzciMSGM/LCQ==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGZjDY="
-Received: from smtpclient.apple
-    by smtp.strato.de (RZmta 49.10.2 DYNA|AUTH)
-    with ESMTPSA id dbe64400CHY9PpN
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-	(Client did not present a certificate);
-    Fri, 12 Jan 2024 18:34:09 +0100 (CET)
-Content-Type: text/plain;
-	charset=us-ascii
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B8418647
+	for <linux-mips@vger.kernel.org>; Sat, 13 Jan 2024 08:27:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rOZM0-0000a3-FZ; Sat, 13 Jan 2024 09:26:56 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rOZLz-002KQ5-Mc; Sat, 13 Jan 2024 09:26:55 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rOZLz-008lyp-1y;
+	Sat, 13 Jan 2024 09:26:55 +0100
+Date: Sat, 13 Jan 2024 09:26:52 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Paul Cercueil <paul@crapouillou.net>, 
+	Thierry Reding <thierry.reding@gmail.com>, linux-pwm@vger.kernel.org, linux-mips@vger.kernel.org, 
+	kernel@pengutronix.de
+Subject: Re: [PATCH] pwm: jz4740: Don't use dev_err_probe() in .request()
+Message-ID: <pwjhf6humll7vgpny5bwstbmgkqqm5rgxcj7xvfi6xcz74o32l@l2iktgudl6ow>
+References: <20240106141302.1253365-2-u.kleine-koenig@pengutronix.de>
+ <8e18487f-7190-425d-b2c9-4877c1db8535@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.300.61.1.2\))
-Subject: Re: [PATCH RFC v2 04/11] ARM: dts: omap4: Add device tree entry for
- SGX GPU
-From: H. Nikolaus Schaller <hns@goldelico.com>
-In-Reply-To: <20240108183302.255055-5-afd@ti.com>
-Date: Fri, 12 Jan 2024 18:33:58 +0100
-Cc: Frank Binns <frank.binns@imgtec.com>,
- Donald Robson <donald.robson@imgtec.com>,
- Matt Coster <matt.coster@imgtec.com>,
- Adam Ford <aford173@gmail.com>,
- Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>,
- Thomas Zimmermann <tzimmermann@suse.de>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Chen-Yu Tsai <wens@csie.org>,
- Jernej Skrabec <jernej.skrabec@gmail.com>,
- Samuel Holland <samuel@sholland.org>,
- =?utf-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
- Tony Lindgren <tony@atomide.com>,
- Nishanth Menon <nm@ti.com>,
- Vignesh Raghavendra <vigneshr@ti.com>,
- Tero Kristo <kristo@kernel.org>,
- Paul Cercueil <paul@crapouillou.net>,
- dri-devel@lists.freedesktop.org,
- devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-sunxi@lists.linux.dev,
- linux-omap@vger.kernel.org,
- linux-mips@vger.kernel.org
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="aw7d7ueqwina3lqx"
+Content-Disposition: inline
+In-Reply-To: <8e18487f-7190-425d-b2c9-4877c1db8535@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+
+
+--aw7d7ueqwina3lqx
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <122DC5ED-2AA7-46A0-845F-083922458385@goldelico.com>
-References: <20240108183302.255055-1-afd@ti.com>
- <20240108183302.255055-5-afd@ti.com>
-To: Andrew Davis <afd@ti.com>
-X-Mailer: Apple Mail (2.3774.300.61.1.2)
 
-Hi,
-I just comment on this example, but it applies almost the same for all =
-other .dtsi changes.
+Hello,
 
-> Am 08.01.2024 um 19:32 schrieb Andrew Davis <afd@ti.com>:
+On Sat, Jan 06, 2024 at 06:20:44PM +0100, Krzysztof Kozlowski wrote:
+> On 06/01/2024 15:13, Uwe Kleine-K=F6nig wrote:
+> > dev_err_probe() is only supposed to be used in probe functions. While it
+> > probably doesn't hurt, both the EPROBE_DEFER handling and calling
+> > device_set_deferred_probe_reason() are conceptually wrong in the request
+> > callback. So replace the call by dev_err() and a separate return
+> > statement.
+> >=20
+> > This effectively reverts commit c0bfe9606e03 ("pwm: jz4740: Simplify
+> > with dev_err_probe()").
 >=20
-> Add SGX GPU device entry to base OMAP4 dtsi file.
+> Too much automation :(
 >=20
-> Signed-off-by: Andrew Davis <afd@ti.com>
-> ---
-> arch/arm/boot/dts/ti/omap/omap4.dtsi | 9 +++++----
-> 1 file changed, 5 insertions(+), 4 deletions(-)
->=20
-> diff --git a/arch/arm/boot/dts/ti/omap/omap4.dtsi =
-b/arch/arm/boot/dts/ti/omap/omap4.dtsi
-> index 2bbff9032be3e..559b2bfe4ca7c 100644
-> --- a/arch/arm/boot/dts/ti/omap/omap4.dtsi
-> +++ b/arch/arm/boot/dts/ti/omap/omap4.dtsi
-> @@ -501,10 +501,11 @@ sgx_module: target-module@56000000 {
-> #size-cells =3D <1>;
-> ranges =3D <0 0x56000000 0x2000000>;
->=20
-> - /*
-> - * Closed source PowerVR driver, no child device
-> - * binding or driver in mainline
-> - */
-> + gpu@0 {
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I wonder why we don't add a "gpu:" label here.
+I added that patch to my for-next branch at
+https://git.kernel.org/pub/scm/linux/kernel/git/ukleinek/linux.git pwm/for-=
+next
+with the intention to send it for inclusion in 6.8-rc after being in
+next for a few days.
 
-Almost all other subsystem nodes have one (e.g. emif:, aes:, dss:, dsi:, =
-hdmi:, etc.),
-obviously for convenience when using a .dtsi file.
+Best regards
+Uwe
 
-It would allow a board-specific DTS to easily add status =3D "disabled" =
-to avoid driver
-probing or disabling the GPU (e.g. if there is no display).
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-> + compatible =3D "ti,omap4430-gpu", "img,powervr-sgx540";
+--aw7d7ueqwina3lqx
+Content-Type: application/pgp-signature; name="signature.asc"
 
-It still appears to me that the "img,powervr-sgx540" (or similar) entry =
-is redundant
-information.
+-----BEGIN PGP SIGNATURE-----
 
-I have experimentally updated our openpvrsgx driver and we do not have =
-any use for
-this information (at least in the kernel driver):
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmWiSUsACgkQj4D7WH0S
+/k6oowf9FQSjMKMTKZk20J7Auejec3JaRw4nlkfu0ZRMJ9cKJFMecW7WC8vau8dd
+BaravwM07CG0O4vWHfdHt0tI40Nq5aVPvOnir4G4F8Fk4RHen1q14nnxTU8yRHpZ
+ZSiivUa4MghfqlMtrRcpt/NWk9Jt6CprVP7DoDrEwblgfMTEIsHZL+OHP7cAald5
+GJB0r8HXYFKe5er1n3s5ChOymDoU7atFmtJj+6xbnVpWN9y3vsF2aQUcHT/oIlsz
+D4cVqmmhUWQH03xdqW2NsryM4mZ3fCo3EOU7yPBcylm1fbcI8p8CP+23x5FcAR1i
+cPNGtEq4u3vwS6iQ2gY5J0Vzw3D7DQ==
+=FMYR
+-----END PGP SIGNATURE-----
 
-=
-https://github.com/goldelico/letux-kernel/commit/f2f7cb3b858ef255f52f2b82a=
-8bb34c047337afe
-
-It shows how easy it is to derive the sgx version and revision number if =
-we ever
-need it inside the driver.
-
-So if you want to keep a reference to powervr, it would suffice to have
-
-> + compatible =3D "ti,omap4430-gpu", "img,powervr-sgx";
-
-Otherwise your device tree entries compile fine and seem to work (at =
-least in
-a cursory test on PandaBoard ES).
-
-> + reg =3D <0x0 0x2000000>; /* 32MB */
-> + interrupts =3D <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
-> + };
-> };
-
-BR and thanks,
-Nikolaus=
+--aw7d7ueqwina3lqx--
 
