@@ -1,114 +1,79 @@
-Return-Path: <linux-mips+bounces-923-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-925-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5188182CA7C
-	for <lists+linux-mips@lfdr.de>; Sat, 13 Jan 2024 09:27:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E51B82CB22
+	for <lists+linux-mips@lfdr.de>; Sat, 13 Jan 2024 10:56:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE46C284AF9
-	for <lists+linux-mips@lfdr.de>; Sat, 13 Jan 2024 08:27:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30D911F235DE
+	for <lists+linux-mips@lfdr.de>; Sat, 13 Jan 2024 09:56:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 377FE168C2;
-	Sat, 13 Jan 2024 08:27:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC77612E6C;
+	Sat, 13 Jan 2024 09:55:59 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B8418647
-	for <linux-mips@vger.kernel.org>; Sat, 13 Jan 2024 08:27:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rOZM0-0000a3-FZ; Sat, 13 Jan 2024 09:26:56 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rOZLz-002KQ5-Mc; Sat, 13 Jan 2024 09:26:55 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rOZLz-008lyp-1y;
-	Sat, 13 Jan 2024 09:26:55 +0100
-Date: Sat, 13 Jan 2024 09:26:52 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Paul Cercueil <paul@crapouillou.net>, 
-	Thierry Reding <thierry.reding@gmail.com>, linux-pwm@vger.kernel.org, linux-mips@vger.kernel.org, 
-	kernel@pengutronix.de
-Subject: Re: [PATCH] pwm: jz4740: Don't use dev_err_probe() in .request()
-Message-ID: <pwjhf6humll7vgpny5bwstbmgkqqm5rgxcj7xvfi6xcz74o32l@l2iktgudl6ow>
-References: <20240106141302.1253365-2-u.kleine-koenig@pengutronix.de>
- <8e18487f-7190-425d-b2c9-4877c1db8535@kernel.org>
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61DF563C3
+	for <linux-mips@vger.kernel.org>; Sat, 13 Jan 2024 09:55:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [111.9.175.10])
+	by gateway (Coremail) with SMTP id _____8AxT+klXqJlF8cEAA--.5446S3;
+	Sat, 13 Jan 2024 17:55:49 +0800 (CST)
+Received: from localhost.localdomain (unknown [111.9.175.10])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx+4YOXqJlpoQYAA--.930S2;
+	Sat, 13 Jan 2024 17:55:49 +0800 (CST)
+From: Huang Pei <huangpei@loongson.cn>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Bibo Mao <maobibo@loongson.cn>,
+	linux-mips@vger.kernel.org,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Paul Burton <paulburton@kernel.org>,
+	Li Xuefeng <lixuefeng@loongson.cn>,
+	Yang Tiezhu <yangtiezhu@loongson.cn>,
+	Gao Juxin <gaojuxin@loongson.cn>,
+	Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH V2]: MIPS: loongson64: fix boot failure 
+Date: Sat, 13 Jan 2024 17:55:06 +0800
+Message-Id: <20240113095509.178697-1-huangpei@loongson.cn>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <ZZ29Wr9yfAcqGxrN@alpha.franken.de>
+References: <ZZ29Wr9yfAcqGxrN@alpha.franken.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="aw7d7ueqwina3lqx"
-Content-Disposition: inline
-In-Reply-To: <8e18487f-7190-425d-b2c9-4877c1db8535@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8Dx+4YOXqJlpoQYAA--.930S2
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+	BjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+	xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxV
+	AFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
+	wI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
+	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
+	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
+	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
+	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+	kF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j1WlkUUUUU=
+
+There are two issues here:
+
++ one is that misuse of memblock_reserve, memblock_reserve is allocating
+memory (owned by kernel) for kernel use, but the misuse is reserving 
+memory (not owned by kernel). Actually, not memblock_add{,_note}ing
+memory is right use of reserving memory not owned by kernel.
+
++ the other one is the using memblock_reserve without knowing whether the
+memory is owned by kernel, but this is an issue for MIPS R2+, so just
+bypass it;
 
 
---aw7d7ueqwina3lqx
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-On Sat, Jan 06, 2024 at 06:20:44PM +0100, Krzysztof Kozlowski wrote:
-> On 06/01/2024 15:13, Uwe Kleine-K=F6nig wrote:
-> > dev_err_probe() is only supposed to be used in probe functions. While it
-> > probably doesn't hurt, both the EPROBE_DEFER handling and calling
-> > device_set_deferred_probe_reason() are conceptually wrong in the request
-> > callback. So replace the call by dev_err() and a separate return
-> > statement.
-> >=20
-> > This effectively reverts commit c0bfe9606e03 ("pwm: jz4740: Simplify
-> > with dev_err_probe()").
->=20
-> Too much automation :(
->=20
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-I added that patch to my for-next branch at
-https://git.kernel.org/pub/scm/linux/kernel/git/ukleinek/linux.git pwm/for-=
-next
-with the intention to send it for inclusion in 6.8-rc after being in
-next for a few days.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---aw7d7ueqwina3lqx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmWiSUsACgkQj4D7WH0S
-/k6oowf9FQSjMKMTKZk20J7Auejec3JaRw4nlkfu0ZRMJ9cKJFMecW7WC8vau8dd
-BaravwM07CG0O4vWHfdHt0tI40Nq5aVPvOnir4G4F8Fk4RHen1q14nnxTU8yRHpZ
-ZSiivUa4MghfqlMtrRcpt/NWk9Jt6CprVP7DoDrEwblgfMTEIsHZL+OHP7cAald5
-GJB0r8HXYFKe5er1n3s5ChOymDoU7atFmtJj+6xbnVpWN9y3vsF2aQUcHT/oIlsz
-D4cVqmmhUWQH03xdqW2NsryM4mZ3fCo3EOU7yPBcylm1fbcI8p8CP+23x5FcAR1i
-cPNGtEq4u3vwS6iQ2gY5J0Vzw3D7DQ==
-=FMYR
------END PGP SIGNATURE-----
-
---aw7d7ueqwina3lqx--
 
