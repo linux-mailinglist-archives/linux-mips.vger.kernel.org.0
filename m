@@ -1,78 +1,79 @@
-Return-Path: <linux-mips+bounces-934-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-935-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F68482DAFD
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jan 2024 15:08:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B13F82DB17
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jan 2024 15:14:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DBB1AB21511
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jan 2024 14:08:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB6FEB207C9
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jan 2024 14:14:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0046917585;
-	Mon, 15 Jan 2024 14:08:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D52EC17586;
+	Mon, 15 Jan 2024 14:14:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="vq/HV1pr";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="xMFlJ6Gt"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="cFPboNwf";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="G2HqDgmz"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E451757A;
-	Mon, 15 Jan 2024 14:08:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 677821757E
+	for <linux-mips@vger.kernel.org>; Mon, 15 Jan 2024 14:14:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.west.internal (Postfix) with ESMTP id 0A22B3200AA6;
-	Mon, 15 Jan 2024 09:08:25 -0500 (EST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+	by mailout.west.internal (Postfix) with ESMTP id D6E803200B11;
+	Mon, 15 Jan 2024 09:14:17 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Mon, 15 Jan 2024 09:08:27 -0500
+  by compute2.internal (MEProxy); Mon, 15 Jan 2024 09:14:18 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1705327705;
-	 x=1705414105; bh=0d0cNX45c0k/Z7r10RBxHdCHQsWb9L2TKadpx8b3xsg=; b=
-	vq/HV1prHpPllBsgQngOpmV3rgtPm+E4zlCjcV4IDwRRd4H9oo1BjUMXKURqd5VP
-	kcTyH+kVpI7X4/83pZ9O26kNwWnUip7gQwNzqFAvPM026HHJYcZC0NNKYY8MjD9Z
-	ZRRwz+8yarBIDortly+fhSTKstPBnp35hxo7ECbDX8mE69kMJ/tQRusSFciMRoWF
-	ToxWH+h5sgXhzXBacFWFlNHDywAI4L1LcqMHbgtzmmQWhRD5CafanO9SVneA3pnX
-	X0+Y3WapzT9pGnGJ6DF36Tcm+1jhaCd3+m7fo4JXVVypP3wUh75WEqm3bsFO7MIV
-	hu0sRXRCT1xheFkUzYIn2Q==
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1705328057;
+	 x=1705414457; bh=4/MQH8cFDtD1KPvHP0Fb+2ocHi3F1oU4xlzfSoIxMC0=; b=
+	cFPboNwfoGjSlHTHjrgmX5E7GttRlM5cPoCvzNBrjKbJPi5F2C6O5vfJkTkdwa9I
+	us+zfy+kdsrgskeUIHpf3pXOQ942DSbax94qGH1A8cjY8ybYGZYT4RxCEfFIF7xP
+	6QNXSwMleKmUn8GnOBk6c91xGap6uVc86k3zDAcqt2DOwevDTDV9l/FwlPmGfvSm
+	qG5IV83s1Pd7Mv/p4YRiTnTs3Kg3Yzu4wGRRcmk8XknAHPlbm2jP9KHAHI0+RBCx
+	3JRHhUCcipHdAKeRka2HZQyjivhjfGZk8qfo0QzREzjXRFEPC+DYlrtqG0bAk5Fz
+	gDCX7pEFRLDptqCbij4pyg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1705327705; x=
-	1705414105; bh=0d0cNX45c0k/Z7r10RBxHdCHQsWb9L2TKadpx8b3xsg=; b=x
-	MFlJ6GtNN7VBk+AkLk8gDCsc05SHTMXZ1JXe45VX6xHfAK77JsL1/di4KjxibkQx
-	BtL62ISyA9PKvxbvuk/6Efhym+VoHEk5lO37E5xmDkkSi1M4EkX7k8g3onGXW3mX
-	prPFoFGv/1bqSUBhzf1wKVXJhzZ/0kPA9dMfYFPtPKpRtNkrznx0lpto0gNXkxhu
-	s21+IXnrhcxMYiV2YgInlCChBJLQ6ksjlTzG+4C6EnUIUaIgzkdKe77T87vUDzh2
-	EaLtcESTv7kWh+3FVKxJ+bqDdUuKqwLl+RE8eym4/ghOG5Km+mLvGAtINzvUJ92U
-	0KFFMhTh9pE8wZGwqTMyg==
-X-ME-Sender: <xms:WDylZarNWP-1cMZPFMEpkma_umZHmnLYqLjAliKw-xqIoBQJq-dXnQ>
-    <xme:WDylZYppRM7eQ1UhQPS73HAIlrtYALSW6n66LtEwkJMoVTSelZ3sZeRaHS1t_OFlh
-    Wf_CV9_6UMYK3nPL0E>
-X-ME-Received: <xmr:WDylZfNDiziiORlqBcSLnrqdlHcI7wbFwqdTROFxMD1wncSh6P4YoXuvSQP2OR1dmCi_Bhyzlxw5TVrFgHhmvo8bLxMwxkPwaA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdejuddgieduucetufdoteggodetrfdotf
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1705328057; x=
+	1705414457; bh=4/MQH8cFDtD1KPvHP0Fb+2ocHi3F1oU4xlzfSoIxMC0=; b=G
+	2HqDgmzv7hfi2kY87yf/+1iXxCsu9lPyAC5iaevEg/4Am1uHsvB9nMkmY9FSL44z
+	KLwKn/aSfVUhZNgCaNgyEo3RquHhuXXBRcfIxWLeSAaZXH+VvwJXJgxEApRLJwi5
+	XuN3YkJwSjyuxhzqS47OL1EY2at7XSccsyba+KfHGZi4VMS61opCi9OKio6PvidS
+	Ilc3zDXLEF5BF/4sMzehnDnOVSxWVgJ4dmAqZhTPjF60qOuDwQyqEBtljCslKyO9
+	T2v0BwcEl4RySoBI8F+4VDWBz1hVXlHFFjU1GniTQ4+GiAS3RnpOOz5NGP07f9Ph
+	OPD4fZYc3o8PJMZyNCF0A==
+X-ME-Sender: <xms:uD2lZeJI798u4MyOqlYPZghn8-Bhy9itLIKQFszZkZ6qj2z4Xd3IrQ>
+    <xme:uD2lZWIwq8iKjrTDnrXmWqdUcJCD2QDy5JmPIq6YdOWWBxHPuVlnuP4Mbj2KauTye
+    NcMDuydbV-p__9H7SE>
+X-ME-Received: <xmr:uD2lZev9E8w04RM6_rJNjLJu-UzUKVzl5tMKg3VpOZ9s1x7v6Y2lPADxbHLZ7zReo_tRnoJb277Sx2h39gZW9OYUGEuOzECG0w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdejuddgieefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtvdejnecuhfhrohhmpeflihgr
     gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepleeuffehheegleeuvdelgffhueekjeetueevuefhffdtgfeu
-    hfeggfeukefffedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:WDylZZ6sP9W7lvfkyQYQ2tGCB9qSEA4Y4a1F64dF0xFoD-Jm6uZcqw>
-    <xmx:WDylZZ43HmPdFMOa_lDMuTeCLlUcbAOcm-8Uqg82R19qPDb5anc1XA>
-    <xmx:WDylZZg-ZCRgHeSGXVPnRxGpjSFhKg56fHMmTGWObCM05seYaGhg7w>
-    <xmx:WTylZWztGWtOcDyG-OKBf3kXdtmB7tA4JzePqm6vjSSsrdGXY--_xw>
+    cuggftrfgrthhtvghrnhepudehjefgtedvkeevvdevieekleekhfevkeevleehieekfedu
+    teeuffduhfehtdehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvg
+    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhg
+    sehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:uD2lZTarK_4vZhkgk5K_mXpS8-UW_Jk01Fq5c5rArIVocUCL4Ln_vA>
+    <xmx:uD2lZVYudlqV7ItyjbezqvHxK9IrO5DwiwqbNdGGfeOXpdG3lC7-0Q>
+    <xmx:uD2lZfCaIX5q2DL7BMcY94i25DJQciSTDUOeF8itLTd_jFZ40jUiKw>
+    <xmx:uT2lZR6XqehK3CPyRAOXX3AvBBF4NWNJi6JmPIIX1yfsxRSNJ15raA>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 Jan 2024 09:08:23 -0500 (EST)
-Message-ID: <731134fd-4b3d-418c-84ee-80646bffcc01@flygoat.com>
-Date: Mon, 15 Jan 2024 14:08:21 +0000
+ 15 Jan 2024 09:14:15 -0500 (EST)
+Message-ID: <92cc976f-cd24-48c0-9ac6-b9374fba158a@flygoat.com>
+Date: Mon, 15 Jan 2024 14:14:14 +0000
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -80,16 +81,22 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: memblock_reserve for unadded region (was: [PATCH] MIPS: loongson64:
- fix boot failure)
-To: rppt@kernel.org, linux-mm@kvack.org
-Cc: Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
+Subject: Re: [PATCH 3/3] Revert "MIPS: Loongson64: Handle more memory types
+ passed from firmware"
+Content-Language: en-US
+To: Huang Pei <huangpei@loongson.cn>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
  Paul Burton <paulburton@kernel.org>, Li Xuefeng <lixuefeng@loongson.cn>,
  Yang Tiezhu <yangtiezhu@loongson.cn>, Gao Juxin <gaojuxin@loongson.cn>,
- Huacai Chen <chenhuacai@loongson.cn>, Huang Pei <huangpei@loongson.cn>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-kernel@vger.kernel.org
-References: <20231225093025.23215-1-huangpei@loongson.cn>
-Content-Language: en-US
+ Huacai Chen <chenhuacai@loongson.cn>
+References: <ZZ29Wr9yfAcqGxrN@alpha.franken.de>
+ <20240113095509.178697-1-huangpei@loongson.cn>
+ <20240113095509.178697-4-huangpei@loongson.cn>
+ <2ce1affb-b39f-4de3-a57f-29f9580fc083@flygoat.com>
+ <20240114085316.prb7ynh4gfytv2rb@Board-3A3000>
+ <7d4fe00c-259d-4e19-90a1-272bc2adcc7e@flygoat.com>
+ <20240115012512.y2ujt3xmks3regel@Board-3A3000>
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Autocrypt: addr=jiaxun.yang@flygoat.com;
  keydata= xsFNBFnp/kwBEADEHKlSYJNLpFE1HPHfvsxjggAIK3ZtHTj5iLuRkEHDPiyyiLtmIgimmD3+
@@ -126,114 +133,45 @@ Autocrypt: addr=jiaxun.yang@flygoat.com;
  7Mg2PDpoOwdpKLKlmIpyDexGVH0Lj/ycBL8ujDYZ2tA9HhEaO4dW6zsQyt1v6mZffpWK+ZXb
  Cs8oFeACbrtNFF0nhNI6LUPH3oaVOkUoRQUYDuX6mIc4VTwMA8EoZlueKEHfZIKrRf2QYbOZ
  HVO98ZmbMeg=
-In-Reply-To: <20231225093025.23215-1-huangpei@loongson.cn>
+In-Reply-To: <20240115012512.y2ujt3xmks3regel@Board-3A3000>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hi mm folks,
 
-Just a quick question, what is the expected behavior of memblock_reserve
-a region that is not added to memblock with memblock_add?
 
-I'm unable to find any documentation about memblock_reserve in comments and
-boot-time-mm, but as per my understanding to the code, this should be a 
-legit usage?
+在 2024/1/15 01:25, Huang Pei 写道:
+> On Sun, Jan 14, 2024 at 11:58:25AM +0000, Jiaxun Yang wrote:
+>>
+>> 在 2024/1/14 08:53, Huang Pei 写道:
+>>> On Sat, Jan 13, 2024 at 11:59:11AM +0000, Jiaxun Yang wrote:
+>> [...]
+>>> In my test system with kunlun firmware they are actually covered by SYSRAM
+>>> type.
+>>> IMO, better to add those memory to memblock as well in your case.
+>>>
+>>> My test machine is PMON-based 3B1500, the SMBIOS_TABLE located in
+>>> 0xfffe000-0xfffe7ff, which is not included in SYSTEM_RAM_LOW(0x200000-
+>>> 0xeffffff), I think we need a check like,
+>>> ----------------------------------------------------------------------
+>>> 	if(memblock_is_region_memory(addr, size))
+>>> 		memblock_reserve(addr, size);
+>>> ----------------------------------------------------------------------
+>>> to support both cases;
+>> Then we are running into ordering issue. memblock_add of SYSRAM may later
+>> then reservation.
+>> What about unconditionally add those ranges to memblock? As it's certain
+>> that those regions will
+>> be RAM.
+>>
+> I think we can do szmem twice, one for memblock.memory, the other for
+> memblock_reserve.
+IMO this is a little bit insane.
+LoongArch made a workaround to set all reserved memory to node zero [1].
 
-In practical we run into uninitialized nid of reserved block problem, 
-should we fix it
-in our usage, or on memblock side?
+[1]: 
+https://lore.kernel.org/all/20230911092810.3108092-1-chenhuacai@loongson.cn/
 
 Thanks
-
-在 2023/12/25 09:30, Huang Pei 写道:
-> Since commit 61167ad5fecd("mm: pass nid to reserve_bootmem_region()),
-> loongson64 booting failed with CONFIG_DEFERRED_STRUCT_PAGE_INIT like
-> this:
-> ----------------------------------------------------------------------
->   Call Trace:
->   [<ffffffff8235d088>] reserve_bootmem_region+0xa8/0x184
->   [<ffffffff82333940>] memblock_free_all+0x104/0x2a8
->   [<ffffffff8231d8e4>] mem_init+0x84/0x94
->   [<ffffffff82330958>] mm_core_init+0xf8/0x308
->   [<ffffffff82318c38>] start_kernel+0x43c/0x86c
->
->   Code: 10400028  2402fff0  de420000 <dc432880> 0203182b 14600022
->   64420070  00003025  24040003
->
->   ---[ end trace 0000000000000000 ]---
->   Kernel panic - not syncing: Attempted to kill the idle task!
->   ---[ end Kernel panic - not syncing: Attempted to kill the idle task! ]---
-> ----------------------------------------------------------------------
->
-> The root cause is no memory region "0x0-0x1fffff" paired with
-> memory-reserved region "0x0-0x1fffff" and "0x0-0xfff", with "memblock
-> =debug":
->
-> ----------------------------------------------------------------------
->    memory[0x0]     [0x0000000000200000-0x000000000effffff],
->    0x000000000ee00000 bytes on node 0 flags: 0x0 !!!!here
->    memory[0x1]     [0x0000000090000000-0x00000000fdffffff],
->    0x000000006e000000 bytes on node 0 flags: 0x0
->    memory[0x2]     [0x0000000100000000-0x000000027fffffff],
->    0x0000000180000000 bytes on node 0 flags: 0x0
->    memory[0x3]     [0x0000100000000000-0x000010000fffffff],
->    0x0000000010000000 bytes on node 1 flags: 0x0
->    memory[0x4]     [0x0000100090000000-0x000010027fffffff],
->    0x00000001f0000000 bytes on node 1 flags: 0x0
->    reserved.cnt  = 0x1f
->    reserved[0x0]   [0x0000000000000000-0x000000000190c80a],
->    0x000000000190c80b bytes flags: 0x0 !!!!oops 0x0-0x1fffff not in memory[0]
->    reserved[0x1]   [0x000000000190c810-0x000000000190eea3],
->    0x0000000000002694 bytes flags: 0x0
-> ----------------------------------------------------------------------
->
-> It caused memory-reserved region "0x0-0x1fffff" without valid node id
-> in "memblock_get_region_node" from "memmap_init_reserved_pages", lead to
-> "reserve_bootmem_region-> init_reserved_page -> early_pfn_to_nid()"
-> accessing "node_data" out of bound.
->
-> To fix this bug, we should remove unnecessary memory block reservation.
->
-> +. no need to reserve 0x0-0x1fffff below kernel loading address, since
-> it is not registered by "memblock_add_node"
->
-> +. no need to reserve 0x0-0xfff for exception handling if it is not
-> registered by "memblock_add" either.
->
-> Fixes: commit 61167ad5fecd("mm: pass nid to reserve_bootmem_region())
-> Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> ---
->   arch/mips/kernel/traps.c    | 3 ++-
->   arch/mips/loongson64/numa.c | 2 --
->   2 files changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-> index 246c6a6b0261..9b632b4c10c3 100644
-> --- a/arch/mips/kernel/traps.c
-> +++ b/arch/mips/kernel/traps.c
-> @@ -2007,7 +2007,8 @@ unsigned long vi_handlers[64];
->   
->   void reserve_exception_space(phys_addr_t addr, unsigned long size)
->   {
-> -	memblock_reserve(addr, size);
-> +	if(memblock_is_region_memory(addr, size))
-> +		memblock_reserve(addr, size);
->   }
->   
->   void __init *set_except_vector(int n, void *addr)
-> diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
-> index 8f61e93c0c5b..0f516dde81da 100644
-> --- a/arch/mips/loongson64/numa.c
-> +++ b/arch/mips/loongson64/numa.c
-> @@ -130,8 +130,6 @@ static void __init node_mem_init(unsigned int node)
->   			memblock_reserve((node_addrspace_offset | 0xfe000000),
->   					 32 << 20);
->   
-> -		/* Reserve pfn range 0~node[0]->node_start_pfn */
-> -		memblock_reserve(0, PAGE_SIZE * start_pfn);
->   	}
->   }
->   
 
 -- 
 ---
