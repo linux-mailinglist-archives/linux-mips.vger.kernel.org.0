@@ -1,108 +1,181 @@
-Return-Path: <linux-mips+bounces-943-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-944-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 120F782EAD8
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Jan 2024 09:26:46 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16C1782EAF6
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Jan 2024 09:40:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A506A285129
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Jan 2024 08:26:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9BBACB233B0
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Jan 2024 08:40:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A11BA11720;
-	Tue, 16 Jan 2024 08:26:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E737125D8;
+	Tue, 16 Jan 2024 08:39:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="akc4r1LU"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 226FE11713;
-	Tue, 16 Jan 2024 08:26:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.173])
-	by gateway (Coremail) with SMTP id _____8Dxfeu9PaZlw6AAAA--.2862S3;
-	Tue, 16 Jan 2024 16:26:37 +0800 (CST)
-Received: from [10.20.42.173] (unknown [10.20.42.173])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8AxHs+6PaZlNKQDAA--.19022S3;
-	Tue, 16 Jan 2024 16:26:36 +0800 (CST)
-Subject: Re: [PATCH v2] irqchip/loongson-eiointc: Refine irq affinity setting
- during resume
-To: Sergey Shtylyov <s.shtylyov@omp.ru>, Huacai Chen <chenhuacai@kernel.org>,
- Jiaxun Yang <jiaxun.yang@flygoat.com>, Thomas Gleixner <tglx@linutronix.de>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
- lvjianmin@loongson.cn
-References: <20240116080555.409215-1-maobibo@loongson.cn>
- <58b05897-8d06-52fa-8cde-ca7caa591200@omp.ru>
-From: maobibo <maobibo@loongson.cn>
-Message-ID: <236c62f1-29b9-bbd2-1391-bb713d9cd3c8@loongson.cn>
-Date: Tue, 16 Jan 2024 16:26:34 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30748125A3;
+	Tue, 16 Jan 2024 08:39:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFED1C433F1;
+	Tue, 16 Jan 2024 08:39:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705394386;
+	bh=zMBkNvcbW1+IjSGQQV5Zw6ssVa4un4ZiyvEjDOZ0/UQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=akc4r1LUSBobkRaqvTAjbmScrg3YVE9bgsGUF/R4Deev/WicJd81uP8RUtACPi+1Y
+	 ijs7qcDxLzOAa+xAz7a6M747uoIxAQo5W1buqO6IbRYpNLARGM1LZlKLpCzpaPanoJ
+	 HtCh/TOB3AMTxe/irtQDm0KrDJXZGhVCf9X6hsMyQiNY6/4nMdfzHmAGTM9to2Z7Fx
+	 tN28jAtzPrfmeKqGxcxuV+Rqc/NBoc4Yb262+SXGE0k7qlzQxm5ZY15dboItZUG56h
+	 o9+hrfGKOlQwMVMafr2ueLWjfs1fsjjVFRKsFgLCJKj8lC1tFdXaOcXSzeLm+7qHff
+	 o+GRrPnB19CCA==
+Date: Tue, 16 Jan 2024 10:39:04 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: linux-mm@kvack.org, Bibo Mao <maobibo@loongson.cn>,
+	linux-mips@vger.kernel.org, Paul Burton <paulburton@kernel.org>,
+	Li Xuefeng <lixuefeng@loongson.cn>,
+	Yang Tiezhu <yangtiezhu@loongson.cn>,
+	Gao Juxin <gaojuxin@loongson.cn>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	Huang Pei <huangpei@loongson.cn>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-kernel@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>
+Subject: Re: memblock_reserve for unadded region (was: [PATCH] MIPS:
+ loongson64: fix boot failure)
+Message-ID: <ZaZAqMwuql9Y5Gra@kernel.org>
+References: <20231225093025.23215-1-huangpei@loongson.cn>
+ <731134fd-4b3d-418c-84ee-80646bffcc01@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <58b05897-8d06-52fa-8cde-ca7caa591200@omp.ru>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8AxHs+6PaZlNKQDAA--.19022S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj9xXoW7Gw1UKw47Ar48Zw1xGF47WrX_yoWkGrb_WF
-	Z2k34xuw1UXF13tFWktw4UtFZIg3yru348W34UXF1jq345Z34kWrZYkrnrK3Wxta47CFn8
-	ury3Ar4Sk347uosvyTuYvTs0mTUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUbS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y
-	6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
-	1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
-	JVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
-	vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IY
-	x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
-	xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAF
-	wI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jepB-UUUUU=
+In-Reply-To: <731134fd-4b3d-418c-84ee-80646bffcc01@flygoat.com>
 
-Sergey,
+On Mon, Jan 15, 2024 at 02:08:21PM +0000, Jiaxun Yang wrote:
+> Hi mm folks,
+> 
+> Just a quick question, what is the expected behavior of memblock_reserve
+> a region that is not added to memblock with memblock_add?
+> 
+> I'm unable to find any documentation about memblock_reserve in comments and
+> boot-time-mm, but as per my understanding to the code, this should be a
+> legit usage?
 
-Thanks for reviewing my patch.
-I reply inline.
+Yes, memblock allows reserving memory that was not added to memblock with
+memblock_add().
+ 
+> In practical we run into uninitialized nid of reserved block problem, should
+> we fix it
+> in our usage, or on memblock side?
 
-On 2024/1/16 下午4:17, Sergey Shtylyov wrote:
-> On 1/16/24 11:05 AM, Bibo Mao wrote:
-> 
->> During suspend and resume, other CPUs are hot-unpluged and IRQs are
->> migrated to CPU0. So it is not necessary to restore irq affinity for
->> eiointc irq controller.
->>
->> Also there is some optimization for the interrupt dispatch function
->> eiointc_irq_dispatch. There are 256 IRQs supported for eiointc, eiointc
->> irq handler reads the bitmap and find pending irqs when irq happens.
->> So there are four times of consecutive iocsr_read64 operations for the
->> total 256 bits to find all pending irqs. If the pending bitmap is zero,
->> it means that there is no pending irq for the this irq bitmap range,
->> we can skip handling to avoid some useless operations sush as clearing
-> 
->      s/sush/such/?
-will fix.
+Apparently it's a bug in memblock :(
 
+If you revert 61167ad5fecd ("mm: pass nid to reserve_bootmem_region()")
+does the issue disappear?
+ 
+> Thanks
 > 
->> hw ISR.
+> 在 2023/12/25 09:30, Huang Pei 写道:
+> > Since commit 61167ad5fecd("mm: pass nid to reserve_bootmem_region()),
+> > loongson64 booting failed with CONFIG_DEFERRED_STRUCT_PAGE_INIT like
+> > this:
+> > ----------------------------------------------------------------------
+> >   Call Trace:
+> >   [<ffffffff8235d088>] reserve_bootmem_region+0xa8/0x184
+> >   [<ffffffff82333940>] memblock_free_all+0x104/0x2a8
+> >   [<ffffffff8231d8e4>] mem_init+0x84/0x94
+> >   [<ffffffff82330958>] mm_core_init+0xf8/0x308
+> >   [<ffffffff82318c38>] start_kernel+0x43c/0x86c
+> > 
+> >   Code: 10400028  2402fff0  de420000 <dc432880> 0203182b 14600022
+> >   64420070  00003025  24040003
+> > 
+> >   ---[ end trace 0000000000000000 ]---
+> >   Kernel panic - not syncing: Attempted to kill the idle task!
+> >   ---[ end Kernel panic - not syncing: Attempted to kill the idle task! ]---
+> > ----------------------------------------------------------------------
+> > 
+> > The root cause is no memory region "0x0-0x1fffff" paired with
+> > memory-reserved region "0x0-0x1fffff" and "0x0-0xfff", with "memblock
+> > =debug":
+> > 
+> > ----------------------------------------------------------------------
+> >    memory[0x0]     [0x0000000000200000-0x000000000effffff],
+> >    0x000000000ee00000 bytes on node 0 flags: 0x0 !!!!here
+> >    memory[0x1]     [0x0000000090000000-0x00000000fdffffff],
+> >    0x000000006e000000 bytes on node 0 flags: 0x0
+> >    memory[0x2]     [0x0000000100000000-0x000000027fffffff],
+> >    0x0000000180000000 bytes on node 0 flags: 0x0
+> >    memory[0x3]     [0x0000100000000000-0x000010000fffffff],
+> >    0x0000000010000000 bytes on node 1 flags: 0x0
+> >    memory[0x4]     [0x0000100090000000-0x000010027fffffff],
+> >    0x00000001f0000000 bytes on node 1 flags: 0x0
+> >    reserved.cnt  = 0x1f
+> >    reserved[0x0]   [0x0000000000000000-0x000000000190c80a],
+> >    0x000000000190c80b bytes flags: 0x0 !!!!oops 0x0-0x1fffff not in memory[0]
+> >    reserved[0x1]   [0x000000000190c810-0x000000000190eea3],
+> >    0x0000000000002694 bytes flags: 0x0
+> > ----------------------------------------------------------------------
+> > 
+> > It caused memory-reserved region "0x0-0x1fffff" without valid node id
+> > in "memblock_get_region_node" from "memmap_init_reserved_pages", lead to
+> > "reserve_bootmem_region-> init_reserved_page -> early_pfn_to_nid()"
+> > accessing "node_data" out of bound.
+> > 
+> > To fix this bug, we should remove unnecessary memory block reservation.
+> > 
+> > +. no need to reserve 0x0-0x1fffff below kernel loading address, since
+> > it is not registered by "memblock_add_node"
+> > 
+> > +. no need to reserve 0x0-0xfff for exception handling if it is not
+> > registered by "memblock_add" either.
+> > 
+> > Fixes: commit 61167ad5fecd("mm: pass nid to reserve_bootmem_region())
+> > Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> > ---
+> >   arch/mips/kernel/traps.c    | 3 ++-
+> >   arch/mips/loongson64/numa.c | 2 --
+> >   2 files changed, 2 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
+> > index 246c6a6b0261..9b632b4c10c3 100644
+> > --- a/arch/mips/kernel/traps.c
+> > +++ b/arch/mips/kernel/traps.c
+> > @@ -2007,7 +2007,8 @@ unsigned long vi_handlers[64];
+> >   void reserve_exception_space(phys_addr_t addr, unsigned long size)
+> >   {
+> > -	memblock_reserve(addr, size);
+> > +	if(memblock_is_region_memory(addr, size))
+> > +		memblock_reserve(addr, size);
+> >   }
+> >   void __init *set_except_vector(int n, void *addr)
+> > diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
+> > index 8f61e93c0c5b..0f516dde81da 100644
+> > --- a/arch/mips/loongson64/numa.c
+> > +++ b/arch/mips/loongson64/numa.c
+> > @@ -130,8 +130,6 @@ static void __init node_mem_init(unsigned int node)
+> >   			memblock_reserve((node_addrspace_offset | 0xfe000000),
+> >   					 32 << 20);
+> > -		/* Reserve pfn range 0~node[0]->node_start_pfn */
+> > -		memblock_reserve(0, PAGE_SIZE * start_pfn);
+> >   	}
+> >   }
 > 
->     This sounds like you need 2 patches to deal with 2 separate issues...
-Sure, I will separate it into 2 patches in next version.
+> -- 
+> ---
+> Jiaxun Yang
+> 
 
-Regards
-Bibo Mao
-> 
->> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
-> [...]
-> 
-> MBR, Sergey
-> 
-
+-- 
+Sincerely yours,
+Mike.
 
