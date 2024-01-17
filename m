@@ -1,309 +1,142 @@
-Return-Path: <linux-mips+bounces-950-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-951-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65BED830433
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Jan 2024 12:09:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 253FB830A0C
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Jan 2024 16:53:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C48AF2822D8
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Jan 2024 11:09:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B643E1F24BF5
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Jan 2024 15:53:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC6201DDC8;
-	Wed, 17 Jan 2024 11:09:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF71621A12;
+	Wed, 17 Jan 2024 15:53:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BP6qwkWO"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="PcSv0otR"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B24161DA50;
-	Wed, 17 Jan 2024 11:09:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E8321A0A;
+	Wed, 17 Jan 2024 15:53:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705489745; cv=none; b=FuEvQc5JnMLnqRwYSTDVZlx9TyeVBbCkU1PuGWNJrqL+fcraEYWRYOWmdgsiGDXVEFYD+UR19rz1Y4PjP3xM02I5eR1z7Pn3mFS+9V+LPm0Dn+gBSzz1WFrzb36ZnWTNs9DL9kyQP3H2QcMPNjE5rzX7QUXM1bweS0Z6DPclVEI=
+	t=1705506813; cv=none; b=A9/0tpIF1apruAm0b8ZTb2HW413hXBkJE6zwRy1QeicqZF89u4ShDFzVc4WpI6eII7nKZYTzeYRGgZUlbsEtHpsXzQhlZYjQnHAzvYxTmJbjdhhG1lUoZjjbdK1GVDGmnL0H61OZ4ZW0oHc1tOcs+6E9jWMdOGCXlpLB5K+SHEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705489745; c=relaxed/simple;
-	bh=DVs+8TWkzjSa8sInH6a3F3rk/7LY7bsc2i6lcd7ePr4=;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To; b=c/4kW9wf/QgnKokGl3LiZlRsRRRHgPrBCwCLpdeQRIa9K77V3dnwPsNoUC7BqnMcPYFWWACc5D2pDp/eQ4BSXquUDnviTnpX2khROlBydfim3gfD3rii2GwtI3HBcTwb6bUs51cOV9yL75RRJKyFfYiEwfnmAeYmjFwtNAz7ax8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BP6qwkWO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC99AC433F1;
-	Wed, 17 Jan 2024 11:09:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705489745;
-	bh=DVs+8TWkzjSa8sInH6a3F3rk/7LY7bsc2i6lcd7ePr4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BP6qwkWOH8izU4S6BytVawWi4PGGYmisP+pFb9NnoHlxkU1TDu6V09ebWPRrMC3B8
-	 gdl+D1DCQt+S1S/zrEFJ6vWNNcejQJMokQjmgstkwoJQuFX1XRPjuvYTDkM2781ruv
-	 ZQ5TSJETg9oqO2hmesyGQ5f1iqYJxsGbzWEGEHaae57/pFBP1w9JwxcqI9upxsIoq2
-	 rK70BOsBOnk2ghXeKGZin3nOARTrv7zb4Lfl/sOOA5TgbMuw5lZM3n3SUntI6PcyOh
-	 vIflZmB5ImcrufJiPN/zw1fTHAp44dH8a3CS/Dfpathb+hSiTkkCpqcVBbIi+6ipKO
-	 hfI3prt1fhoTA==
-Date: Wed, 17 Jan 2024 13:08:48 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Huang Pei <huangpei@loongson.cn>
-Cc: Yajun Deng <yajun.deng@linux.dev>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mm@kvack.org,
-	Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
-	Paul Burton <paulburton@kernel.org>,
-	Li Xuefeng <lixuefeng@loongson.cn>,
-	Yang Tiezhu <yangtiezhu@loongson.cn>,
-	Gao Juxin <gaojuxin@loongson.cn>,
-	Huacai Chen <chenhuacai@loongson.cn>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-kernel@vger.kernel.org
-Subject: Re: memblock_reserve for unadded region (was: [PATCH] MIPS:
- loongson64: fix boot failure)
-Message-ID: <Zae1QDqgr6jJsLTQ@kernel.org>
-References: <20231225093025.23215-1-huangpei@loongson.cn>
- <731134fd-4b3d-418c-84ee-80646bffcc01@flygoat.com>
- <ZaZAqMwuql9Y5Gra@kernel.org>
- <20240116122304.qwzy7san2vgspt2x@Board-3A3000>
- <3fc2f75e-d163-1ad1-009a-0e4538011885@linux.dev>
- <20240117030113.gs2fjs6vydthsc6l@Board-3A3000>
- <234ddaeb-5988-858d-6ba1-0fef90fb7a87@linux.dev>
- <20240117035910.453ofvotbvkzje6k@Board-3A3000>
- <Zad3ynuuu8S-51eI@kernel.org>
- <20240117074546.gm7lejjt7whjtwgr@Board-3A3000>
+	s=arc-20240116; t=1705506813; c=relaxed/simple;
+	bh=RN/TRAV+0bm5AnELjwjgmIYkKjf1u9x2nlP5hpU2ebs=;
+	h=Received:DKIM-Signature:Received:Received:Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:CC:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-EXCLAIMER-MD-CONFIG; b=EVhH3G5SEckwbCHojO0hWFvEcw70CjI/MmwPZm1O9v9AMvYfrazyYxfEYmAXvHQO5zBNNfNxM2sVNsAT9mGQmxYYfWuws1xSx6TGVMFQedWEHuQ2exEkWQiJpqCHVjPrRcvX51pEWC2c0zG/7zibxg82CrGfCokYeUh1zDFNhME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=PcSv0otR; arc=none smtp.client-ip=198.47.19.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 40HFqhek107121;
+	Wed, 17 Jan 2024 09:52:44 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1705506764;
+	bh=UqoXHpuOsyXayN31wfG4/f1gx1ZHV/XtpeqO3uEEUxI=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=PcSv0otRf22cpnWL4ex8dgpTo4kYPE2YfM2FC7uA12j/9tyFYkEgZ2AhY9W2/eqIL
+	 UCcCKSNc2rAQMq34hF8aMVsEK2gtD8n3zgq1B2X+uumQ7rbozLTXHpMAbIth4PU623
+	 ZP/avpnMlwdRxFKiL0uRf9F+iQpxHCSIF8/AviO8=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 40HFqh7o004410
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Wed, 17 Jan 2024 09:52:43 -0600
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 17
+ Jan 2024 09:52:43 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 17 Jan 2024 09:52:43 -0600
+Received: from [10.249.42.149] ([10.249.42.149])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 40HFqgSs087030;
+	Wed, 17 Jan 2024 09:52:42 -0600
+Message-ID: <55efd488-c6a0-4dca-baea-1fa93d13dd17@ti.com>
+Date: Wed, 17 Jan 2024 09:52:41 -0600
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240117074546.gm7lejjt7whjtwgr@Board-3A3000>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 08/11] ARM: dts: DRA7xx: Add device tree entry for SGX GPU
+To: Tony Lindgren <tony@atomide.com>
+CC: Frank Binns <frank.binns@imgtec.com>,
+        Matt Coster
+	<matt.coster@imgtec.com>,
+        "H . Nikolaus Schaller" <hns@goldelico.com>,
+        Adam
+ Ford <aford173@gmail.com>,
+        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard
+	<mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Herring
+	<robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        =?UTF-8?Q?Beno=C3=AEt_Cousson?=
+	<bcousson@baylibre.com>,
+        Nishanth Menon <nm@ti.com>, Vignesh Raghavendra
+	<vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>, Paul Cercueil
+	<paul@crapouillou.net>,
+        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-sunxi@lists.linux.dev>, <linux-omap@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>
+References: <20240109171950.31010-1-afd@ti.com>
+ <20240109171950.31010-9-afd@ti.com> <20240110082924.GA5185@atomide.com>
+Content-Language: en-US
+From: Andrew Davis <afd@ti.com>
+In-Reply-To: <20240110082924.GA5185@atomide.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On Wed, Jan 17, 2024 at 03:45:46PM +0800, Huang Pei wrote:
-> On Wed, Jan 17, 2024 at 08:46:34AM +0200, Mike Rapoport wrote:
-> > On Wed, Jan 17, 2024 at 11:59:10AM +0800, Huang Pei wrote:
-> > > On Wed, Jan 17, 2024 at 11:17:18AM +0800, Yajun Deng wrote:
-> > > > 
-> > > > On 2024/1/17 11:01, Huang Pei wrote:
-> > > > > On Wed, Jan 17, 2024 at 10:20:00AM +0800, Yajun Deng wrote:
-> > > > > > On 2024/1/16 20:23, Huang Pei wrote:
-> > > > > > > On Tue, Jan 16, 2024 at 10:39:04AM +0200, Mike Rapoport wrote:
-> > > > > > > > On Mon, Jan 15, 2024 at 02:08:21PM +0000, Jiaxun Yang wrote:
-> > > > > > > > > Hi mm folks,
-> > > > > > > > > 
-> > > > > > > > > Just a quick question, what is the expected behavior of memblock_reserve
-> > > > > > > > > a region that is not added to memblock with memblock_add?
-> > > > > > > > > 
-> > > > > > > > > I'm unable to find any documentation about memblock_reserve in comments and
-> > > > > > > > > boot-time-mm, but as per my understanding to the code, this should be a
-> > > > > > > > > legit usage?
-> > > > > > > > Yes, memblock allows reserving memory that was not added to memblock with
-> > > > > > > > memblock_add().
-> > > > > > > I think arch/platform specific code should fix this bug, like,
-> > > > > > > --------------------------------------------------------------------------
-> > > > > > > //for loongson64
-> > > > > > > memblock_set_node(0, 1ULL << 44, &memblock.reserved, 0);
-> > > > > > > 
-> > > > > > > --------------------------------------------------------------------------
-> > > > > > > 
-> > > > > > > or maybe memblock provide something like memblock_reserve_node
-> > > > > > Hi pei,
-> > > > > > 
-> > > > > > Can you test the following patch to see if it fixes this bug?
-> > > > > > 
-> > > > > > diff --git a/mm/mm_init.c b/mm/mm_init.c
-> > > > > > index 2c19f5515e36..97721d99fdce 100644
-> > > > > > --- a/mm/mm_init.c
-> > > > > > +++ b/mm/mm_init.c
-> > > > > > @@ -708,6 +708,9 @@ static void __meminit init_reserved_page(unsigned long
-> > > > > > pfn, int nid)
-> > > > > >          pg_data_t *pgdat;
-> > > > > >          int zid;
-> > > > > > 
-> > > > > > +       if (unlikely(nid == NUMA_NO_NODE || nid >= MAX_NUMNODES))
-> > > > > > +               nid = early_pfn_to_nid(pfn);
-> > > > > > +
-> > > > > >          if (early_page_initialised(pfn, nid))
-> > > > > >                  return;
-> > 
-> > IMO this will fix the bug. Before 61167ad5fecd we had nid = first_online_node
-> > for reserved pages that didn't have nid set in memblock.reserved. After
-> > 61167ad5fecd we try to initialize these pages with MAX_NUMNODES and
-> > obviously crash when accessing node structure.
-> > 
-> > I think that the check for a valid nid should be moved to
-> > memmap_init_reserved_pages() though. An entire reserved region will have
-> > nid set to MAX_NUMNODES, so there is no point to check every page in it.
-> > 
-> > > > > I do not think this fix set the right nid, ONLY arch/platform know that
-> > > > > nid
-> > 
-> > Why does it matter to have the right nid in a reserved page that is not
-> > part of usable memory?
-> > 
-> IMO, if a reserved page DO have a valid nid, and archs knows that, archs
-> should set it right, and this is just the case of loongson64(and
-> loongarch).
-
-An arch may choose to set nids for reserved regions that are never added to
-memblock.memory, but mm shouldn't crash if it didn't.
- 
-> > That's true that only arch knows on which node those reserved pages are,
-> > but core mm does not care about reserved pages that are not in memory.
-> >  
-> > > > >   int __meminit early_pfn_to_nid(unsigned long pfn)
-> > > > > {
-> > > > > 	static DEFINE_SPINLOCK(early_pfn_lock);
-> > > > > 	int nid;
-> > > > > 
-> > > > > 	spin_lock(&early_pfn_lock);
-> > > > > 	nid = __early_pfn_to_nid(pfn,
-> > > > > 			&early_pfnnid_cache);
-> > > > > 	if (nid < 0)
-> > > > > 	//!!!first_online_node MAY NOT be the node the pfn belong to!!!
-> > > > > 		nid = first_online_node;
-> > > > > 
-> > > > > 	spin_unlock(&early_pfn_lock);
-> > > > > 
-> > > > > 	return
-> > > > > 		nid;
-> > > > > }
-> > > > 
-> > > > 
-> > > > Okay, I don't think this bug is caused by commit 61167ad5fecd ("mm: pass nid
-> > > > to reserve_bootmem_region()"),
-> > > > 
-> > > > because even if you revert this commit, it will still get nid by
-> > > > early_pfn_to_nid(). Did I get that right?
-> > > 
-> > > Yes, more accurately, this bug is exposed by commit 61167ad5fecd. My
-> > > previous fix is based on presumptions that memory_reserve should reserve memory 
-> > > added by memblock_add{,_node}, if going across this limitation, there need
-> > > to set the valid nid for reserved memory region.
-> > > > 
-> > > > > > 
-> > > > > > > > > In practical we run into uninitialized nid of reserved block problem, should
-> > > > > > > > > we fix it
-> > > > > > > > > in our usage, or on memblock side?
-> > > > > > > > Apparently it's a bug in memblock :(
-> > > > > > > > 
-> > > > > > > > If you revert 61167ad5fecd ("mm: pass nid to reserve_bootmem_region()")
-> > > > > > > > does the issue disappear?
-> > > > > > > Yes, I git bisect this commit.
-> > > > > > > 
-> > > > > > > But I don't think it is a bug in memblock. IMO, memblock_reserve under
-> > > > > > > NUMA set nid of reserved region to MAX_NUMNODES, which is the point
-> > > > > > > that cause the "memblock_get_region_node from memmap_init_reserved_pages "
-> > > > > > > passing a invalid node id(aka MAX_NUMNODES) to "reserver_bootmem_region
-> > > > > > > -> init_reserved_page -> early_pfn_to_nid". If arch-specific code DOES NOT
-> > > > > > > initialize the nid of reserved region(only it know that), or the reserved
-> > > > > > > region NOT within a memblock added by memblock_add, memblock can not
-> > > > > > > give a valid node id to the reserved region. Commit 61167ad5fecd ("mm: pass nid to
-> > > > > > > reserve_bootmem_region()") just reveals the embarrassment case by an
-> > > > > > > out of bound memory access.
-> > > > > > > 
-> > > > > > > > > Thanks
-> > > > > > > > > 
-> > > > > > > > > 在 2023/12/25 09:30, Huang Pei 写道:
-> > > > > > > > > > Since commit 61167ad5fecd("mm: pass nid to reserve_bootmem_region()),
-> > > > > > > > > > loongson64 booting failed with CONFIG_DEFERRED_STRUCT_PAGE_INIT like
-> > > > > > > > > > this:
-> > > > > > > > > > ----------------------------------------------------------------------
-> > > > > > > > > >     Call Trace:
-> > > > > > > > > >     [<ffffffff8235d088>] reserve_bootmem_region+0xa8/0x184
-> > > > > > > > > >     [<ffffffff82333940>] memblock_free_all+0x104/0x2a8
-> > > > > > > > > >     [<ffffffff8231d8e4>] mem_init+0x84/0x94
-> > > > > > > > > >     [<ffffffff82330958>] mm_core_init+0xf8/0x308
-> > > > > > > > > >     [<ffffffff82318c38>] start_kernel+0x43c/0x86c
-> > > > > > > > > > 
-> > > > > > > > > >     Code: 10400028  2402fff0  de420000 <dc432880> 0203182b 14600022
-> > > > > > > > > >     64420070  00003025  24040003
-> > > > > > > > > > 
-> > > > > > > > > >     ---[ end trace 0000000000000000 ]---
-> > > > > > > > > >     Kernel panic - not syncing: Attempted to kill the idle task!
-> > > > > > > > > >     ---[ end Kernel panic - not syncing: Attempted to kill the idle task! ]---
-> > > > > > > > > > ----------------------------------------------------------------------
-> > > > > > > > > > 
-> > > > > > > > > > The root cause is no memory region "0x0-0x1fffff" paired with
-> > > > > > > > > > memory-reserved region "0x0-0x1fffff" and "0x0-0xfff", with "memblock
-> > > > > > > > > > =debug":
-> > > > > > > > > > 
-> > > > > > > > > > ----------------------------------------------------------------------
-> > > > > > > > > >      memory[0x0]     [0x0000000000200000-0x000000000effffff],
-> > > > > > > > > >      0x000000000ee00000 bytes on node 0 flags: 0x0 !!!!here
-> > > > > > > > > >      memory[0x1]     [0x0000000090000000-0x00000000fdffffff],
-> > > > > > > > > >      0x000000006e000000 bytes on node 0 flags: 0x0
-> > > > > > > > > >      memory[0x2]     [0x0000000100000000-0x000000027fffffff],
-> > > > > > > > > >      0x0000000180000000 bytes on node 0 flags: 0x0
-> > > > > > > > > >      memory[0x3]     [0x0000100000000000-0x000010000fffffff],
-> > > > > > > > > >      0x0000000010000000 bytes on node 1 flags: 0x0
-> > > > > > > > > >      memory[0x4]     [0x0000100090000000-0x000010027fffffff],
-> > > > > > > > > >      0x00000001f0000000 bytes on node 1 flags: 0x0
-> > > > > > > > > >      reserved.cnt  = 0x1f
-> > > > > > > > > >      reserved[0x0]   [0x0000000000000000-0x000000000190c80a],
-> > > > > > > > > >      0x000000000190c80b bytes flags: 0x0 !!!!oops 0x0-0x1fffff not in memory[0]
-> > > > > > > > > >      reserved[0x1]   [0x000000000190c810-0x000000000190eea3],
-> > > > > > > > > >      0x0000000000002694 bytes flags: 0x0
-> > > > > > > > > > ----------------------------------------------------------------------
-> > > > > > > > > > 
-> > > > > > > > > > It caused memory-reserved region "0x0-0x1fffff" without valid node id
-> > > > > > > > > > in "memblock_get_region_node" from "memmap_init_reserved_pages", lead to
-> > > > > > > > > > "reserve_bootmem_region-> init_reserved_page -> early_pfn_to_nid()"
-> > > > > > > > > > accessing "node_data" out of bound.
-> > > > > > > > > > 
-> > > > > > > > > > To fix this bug, we should remove unnecessary memory block reservation.
-> > > > > > > > > > 
-> > > > > > > > > > +. no need to reserve 0x0-0x1fffff below kernel loading address, since
-> > > > > > > > > > it is not registered by "memblock_add_node"
-> > > > > > > > > > 
-> > > > > > > > > > +. no need to reserve 0x0-0xfff for exception handling if it is not
-> > > > > > > > > > registered by "memblock_add" either.
-> > > > > > > > > > 
-> > > > > > > > > > Fixes: commit 61167ad5fecd("mm: pass nid to reserve_bootmem_region())
-> > > > > > > > > > Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> > > > > > > > > > ---
-> > > > > > > > > >     arch/mips/kernel/traps.c    | 3 ++-
-> > > > > > > > > >     arch/mips/loongson64/numa.c | 2 --
-> > > > > > > > > >     2 files changed, 2 insertions(+), 3 deletions(-)
-> > > > > > > > > > 
-> > > > > > > > > > diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-> > > > > > > > > > index 246c6a6b0261..9b632b4c10c3 100644
-> > > > > > > > > > --- a/arch/mips/kernel/traps.c
-> > > > > > > > > > +++ b/arch/mips/kernel/traps.c
-> > > > > > > > > > @@ -2007,7 +2007,8 @@ unsigned long vi_handlers[64];
-> > > > > > > > > >     void reserve_exception_space(phys_addr_t addr, unsigned long size)
-> > > > > > > > > >     {
-> > > > > > > > > > -	memblock_reserve(addr, size);
-> > > > > > > > > > +	if(memblock_is_region_memory(addr, size))
-> > > > > > > > > > +		memblock_reserve(addr, size);
-> > > > > > > > > >     }
-> > > > > > > > > >     void __init *set_except_vector(int n, void *addr)
-> > > > > > > > > > diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
-> > > > > > > > > > index 8f61e93c0c5b..0f516dde81da 100644
-> > > > > > > > > > --- a/arch/mips/loongson64/numa.c
-> > > > > > > > > > +++ b/arch/mips/loongson64/numa.c
-> > > > > > > > > > @@ -130,8 +130,6 @@ static void __init node_mem_init(unsigned int node)
-> > > > > > > > > >     			memblock_reserve((node_addrspace_offset | 0xfe000000),
-> > > > > > > > > >     					 32 << 20);
-> > > > > > > > > > -		/* Reserve pfn range 0~node[0]->node_start_pfn */
-> > > > > > > > > > -		memblock_reserve(0, PAGE_SIZE * start_pfn);
-> > > > > > > > > >     	}
-> > > > > > > > > >     }
-> > > > > > > > > -- 
-> > > > > > > > > ---
-> > > > > > > > > Jiaxun Yang
-> > > > > > > > > 
-> > > > > > > > -- 
-> > > > > > > > Sincerely yours,
-> > > > > > > > Mike.
-> > > 
-> > 
-> > -- 
-> > Sincerely yours,
-> > Mike.
+On 1/10/24 2:29 AM, Tony Lindgren wrote:
+> * Andrew Davis <afd@ti.com> [240109 17:20]:
+>> --- a/arch/arm/boot/dts/ti/omap/dra7.dtsi
+>> +++ b/arch/arm/boot/dts/ti/omap/dra7.dtsi
+>> @@ -850,12 +850,19 @@ target-module@56000000 {
+>>   					<SYSC_IDLE_SMART>;
+>>   			ti,sysc-sidle = <SYSC_IDLE_FORCE>,
+>>   					<SYSC_IDLE_NO>,
+>> -					<SYSC_IDLE_SMART>;
+>> +					<SYSC_IDLE_SMART>,
+>> +					<SYSC_IDLE_SMART_WKUP>;
+> 
+> You probably checked this already.. But just in case, can you please
+> confirm this is intentional. The documentation lists the smart wakeup
+> capability bit as reserved for dra7, maybe the documentation is wrong.
 > 
 
--- 
-Sincerely yours,
-Mike.
+It was an intentional change, although I'm not sure it is correct :)
+
+This is how we had it in our "evil vendor tree" for years (back when it
+was hwmod based), so when converting these nodes to use "ti,sysc" I noticed
+this bit was set, but as you point out the documentation disagrees.
+
+I'd rather go with what has worked before, but it doesn't seem to
+break anything either way, so we could also break this change out into
+its own patch if you would prefer.
+
+Andrew
+
+> Regards,
+> 
+> Tony
+> 
 
