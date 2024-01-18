@@ -1,203 +1,109 @@
-Return-Path: <linux-mips+bounces-956-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-957-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E393831610
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jan 2024 10:44:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D7228318F8
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jan 2024 13:15:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7233D1C2425E
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jan 2024 09:44:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FE851C2510F
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jan 2024 12:15:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 192C81F610;
-	Thu, 18 Jan 2024 09:43:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b="lGGCFvdd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 019B1249E2;
+	Thu, 18 Jan 2024 12:15:47 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2090.outbound.protection.outlook.com [40.107.237.90])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE42A1BC2E;
-	Thu, 18 Jan 2024 09:43:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.90
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705571038; cv=fail; b=rSIui46rhP50szd7ta0C8xpe2L5llxXzgLJrX51sHBCpA9jnLL61BwoBbRgDxzl3oSYHYVLrgHn2trVMM9GHYmYGpuYbMbzRWpFzuxos9eo5WC4s6p2BCZ/B39qFJ6QQbwP+Sq3psMXoCgRPOWevNlCYW+tLHdpiCmNPa4JnwWk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705571038; c=relaxed/simple;
-	bh=ZpgSKvZ84pjrTzhJpjvDpT3GUyqXdjPEL9W1Zrl45VI=;
-	h=ARC-Message-Signature:ARC-Authentication-Results:DKIM-Signature:
-	 Received:Received:Message-ID:Date:User-Agent:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:
-	 X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped; b=GxDd0YMN/rVSUDqC4P5zoY0HpPv7QhSbj3flhjdZ/XLW1cykZbjvBZtU35sAeSu2hN1+UVQDa99j20/SRLpxyJmttvZyYjmMhrlN9VzJ9zqZVFaHDdfMGmAdlhenff+W6BT70AfOjuADGDau8/GlEPNAUVDy8d/bp+i5Oj93LFs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=fail (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b=lGGCFvdd reason="key not found in DNS"; arc=fail smtp.client-ip=40.107.237.90
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OQIGEtWootoUXey9ZzcMd+launavz0klPqSWIYNE3l6Q06VgjkKcFZhVZ7T9SB2Bj0TxEoq5iooJgKrf7CKh9TvX2iQBZ9UWwDwwLfYy+u+uarII15VN2rbeeMbzi84u0dc6UeWEn0r/JvFelQp1SSPatb1S3ireSyJx0IgGnOax4qPrN51oz5MZRxqF6Yhr9AmDTXtF1Umgor47POCNs7SiC2xhYdDNqs/s/Wob6DQJlUnXLP2IcZ/Wc9La7r1OgkV9GFVdULy6OZLbOFBxaRi/UDXJOY2160dCgtYqftBAdDNs6/ZLt9tq751RwaC1axjT4r3564ia0Z5q4fE7FQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ge6lr17kU3oUFaV/jyv+EtN3EYLB8BzBl/9CAG63juA=;
- b=KRK0kiIRvrCeXiinoTIalbdXgFY4uvxVHMKt1DCAqK9CMZqVuZSYjDhWUowVhLqq8i2DOUmuVrYRB4i8RuetW3wJuOfAgWjYRvzkL3IqiFU55+mS0Yt4FsoTFZJJfT3qwFJjUJk75b8Hq5/T4V/xEeOEtley4KtQL1zK8iSVAe3mB1IZbTZPH8woazhauLcTcsKMbEksc3CXL++Q4qHkqWji4QJNXSKr/GyTsYkp4flB96kY+rFfDUz5Jwss3w/vY6PXbuwuCAEPh4e0r5Oj2fgmWmZ/FVlF+zAJ5wcF9heL0//sYpA7Lyd7aCibKAgIqI8Ytubi0auh5SwCt/P4eQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=amperemail.onmicrosoft.com; dkim=pass
- header.d=amperemail.onmicrosoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ge6lr17kU3oUFaV/jyv+EtN3EYLB8BzBl/9CAG63juA=;
- b=lGGCFvddQL5/UNUdunC+S1VfH55GIsOiqTaju5/b6j1isVr7QkYUymKHO8MUaY4A/NPKzEYRs3+TvCUBryKRIO/DAK30mLyvc4ubkubtDgOlgKU/5R+CuhhG5nGA6vGY8IdpJ8Jl78BOwATT21QFfkBG3+yyg7IAq3X8yFETye0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amperemail.onmicrosoft.com;
-Received: from PH0PR01MB7975.prod.exchangelabs.com (2603:10b6:510:26d::15) by
- BY3PR01MB6690.prod.exchangelabs.com (2603:10b6:a03:363::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7202.24; Thu, 18 Jan 2024 09:43:45 +0000
-Received: from PH0PR01MB7975.prod.exchangelabs.com ([fe80::91c:92f:45a5:e68a])
- by PH0PR01MB7975.prod.exchangelabs.com ([fe80::91c:92f:45a5:e68a%6]) with
- mapi id 15.20.7159.020; Thu, 18 Jan 2024 09:43:45 +0000
-Message-ID: <b5d793c6-2951-474c-8439-8f541e65a538@amperemail.onmicrosoft.com>
-Date: Thu, 18 Jan 2024 17:43:14 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] init: refactor the generic cpu_to_node for NUMA
-To: Greg KH <gregkh@linuxfoundation.org>,
- Huang Shijie <shijie@os.amperecomputing.com>
-Cc: patches@amperecomputing.com, rafael@kernel.org, paul.walmsley@sifive.com,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, yury.norov@gmail.com,
- kuba@kernel.org, vschneid@redhat.com, mingo@kernel.org,
- akpm@linux-foundation.org, vbabka@suse.cz, rppt@kernel.org,
- tglx@linutronix.de, jpoimboe@kernel.org, ndesaulniers@google.com,
- mikelley@microsoft.com, mhiramat@kernel.org, arnd@arndb.de,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
- will@kernel.org, mark.rutland@arm.com, mpe@ellerman.id.au,
- linuxppc-dev@lists.ozlabs.org, chenhuacai@kernel.org,
- jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org,
- cl@os.amperecomputing.com
-References: <20240118031412.3300-1-shijie@os.amperecomputing.com>
- <2024011820-path-throat-b7c8@gregkh>
-From: Shijie Huang <shijie@amperemail.onmicrosoft.com>
-In-Reply-To: <2024011820-path-throat-b7c8@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CH5P221CA0014.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:610:1f2::7) To PH0PR01MB7975.prod.exchangelabs.com
- (2603:10b6:510:26d::15)
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E09124214;
+	Thu, 18 Jan 2024 12:15:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705580146; cv=none; b=pPM1WJVE4AChm29P+i+pAv6MQmNO4SRx4rqKNbtaMb2hr11qyzqhR1ycBp31VN4XpvMhQKqsm68SEtgcg99mxGSpP1qpMB14ox6+C00JrUZ+fAVItdupGz7mEtmT3D0k6lWEvVq4tQ/VcUkWv1zCUlfQbVJSy2K4plPuG2+ATkM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705580146; c=relaxed/simple;
+	bh=lJonT7GG/6TvNPs8K6JrEe+ywpeClThCGZjjQOYiQ/Y=;
+	h=Received:Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding:X-CM-TRANSID:
+	 X-CM-SenderInfo:X-Coremail-Antispam; b=V1k3tn1zgWdoShLkNwGDiAqp0U9+JLGT/+ho2Bx9oBpwbs7D/47toEktwyA5+44OrY6J06icWO8M2i4TkFDKomdCk0KQmJ1epzEEktWT186YFGbK3xtnIjK6QZ7+xDDoeXJT6PilQrCTuJ+ul9ntQoOXXdk5LMhHpnjJdesMQ6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.2.5.213])
+	by gateway (Coremail) with SMTP id _____8BxXetvFqllcqEBAA--.7671S3;
+	Thu, 18 Jan 2024 20:15:43 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.2.5.213])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8DxDc9vFqllhX0IAA--.43256S2;
+	Thu, 18 Jan 2024 20:15:43 +0800 (CST)
+From: Bibo Mao <maobibo@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Thomas Gleixner <tglx@linutronix.de>
+Cc: linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sergey Shtylyov <s.shtylyov@omp.ru>,
+	lvjianmin@loongson.cn
+Subject: [PATCH v3 0/3] irqchip/loongson-eiointc: Refine irq affinity setting during resume
+Date: Thu, 18 Jan 2024 20:15:39 +0800
+Message-Id: <20240118121542.748351-1-maobibo@loongson.cn>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR01MB7975:EE_|BY3PR01MB6690:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7e947797-4c3c-4723-03d4-08dc1809f6c5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	JdZniYWrIC5GGNy6Y5Nx+uFe/EeEFGaJMxT4FLkpYoq9jFk/Zh78+NlUrvmCOyamvFXClpqF8wiUp2GeWQfT9sFYwNUO43VkLG6+EG8rMms5+q7CpAA3eOCBnYgAItmvJb+B6A3Ot+E11WqHbOcpa1eYMciBpX5QGyj650S1kq6dVxn7r9D6KNj44S2rmifNqM0I1dTMSV50kSW4qTDxjIjymbUFwVLlXXGUg2KWvGEoI9NTC7MjFeKe4X2CsmmDcZ1m8PQBBXaM1AHMuOmAQGKBbr71EyytL59AShmiAnnWXeX0HKd/LHjatSm8IuQPH8uGQdN/jPa8sfF0eVwg+Ur2x5Aa190l//SZEMkv335Q/KZXpHJbxrPVRRPKladiZ+42A6KW2IzUf65W2T/6Yv8uoqwgPFg3e92btpZwcFIhGxMGV/qnFAJr7z24d9anN+UgFCCNWnzVgJgay21RNluVqNa4c87K1UIeTfMwMMWjV30kfI7OYEthIjDhMTcqlmMGmo/ElDj57UeCWqvYPdJl3910TkViJdZJllC8HNKwHP4Xkd+3WAFmINdUD905GkKomxIetrDlR/7Tmqadm1EhcJtu+RIfNvcZjV68iYCLaCx11zsWIHMkkOkOWiQvSgyCfuskESIt96i49xEjwQ==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR01MB7975.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(376002)(396003)(346002)(39850400004)(136003)(230922051799003)(64100799003)(186009)(451199024)(1800799012)(26005)(6506007)(38100700002)(6666004)(42882007)(2616005)(6512007)(107886003)(7416002)(5660300002)(4326008)(8936002)(2906002)(41300700001)(6486002)(4744005)(8676002)(478600001)(66946007)(66476007)(110136005)(66556008)(316002)(83170400001)(31696002)(31686004)(41533002)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?L2ZTb2w3Rmx1SFNCTEs2RkR6WUludUtrNkkrUFRDVFBoMlM4UUI2blpNRU9i?=
- =?utf-8?B?Sk8wVHdMYVN4M1VEc1dZeDRGam1BY1M4VGRwV2N0MW1tSmhybjRFTVJHa0Fx?=
- =?utf-8?B?NGE4d01jUDVITmlwUTUyYjUwTkNJWUZsNnNzOUxxTkVyRXczWWVHOTg4cS9r?=
- =?utf-8?B?UTNVcHFMMjBBbCt6Wkl3NHFCcENOVEIvb1RBcnlmSjVuRWRZNkZxWkl3NnpC?=
- =?utf-8?B?TnNTemR5NXVFd0dya1VTNmVrUUxLMFovbHpGYVhpZHlKdnlDL2o1dFlZeTNX?=
- =?utf-8?B?ZFBSVjZTanBvQ0xRS2RlYURrc0V6aCt6UDhqMXZ5OU5TTW9RQmVsL2hkQytV?=
- =?utf-8?B?RUFIcWxJNE9qeTlGbTNKWHRpME1RekorUnRxT3RQOEJiaHFwWVFtVExkWVYx?=
- =?utf-8?B?NG1hZFhRTURqc2xWTHdMdnhubkRFOEZua0o3bmliOEVsNjUwT1JrUjhISHc3?=
- =?utf-8?B?SFF2NVViMnYvSkNaZGNmYW1qWVQxSXVnOE4rVXdqOWpIZ0hPY2xURFNqWlZm?=
- =?utf-8?B?c1dvdHhnT2U1dnFpT3d3eUVkOXd3TGFiUnNHaVhBY1lrVnZqVm9NQWNBOXdU?=
- =?utf-8?B?U0RCZlNzOFJVaWJRVGNhbGVDb2hWeFdWQlpGc3hlTkZXeGhiWU5ZQkt6ZW42?=
- =?utf-8?B?MDFiMitKWElJYjNCWThxUWhDT1JPM0JSZVlpT3ZvUGZPMXE1bUJuTVZKeHNl?=
- =?utf-8?B?c0pKRzZUak9pbEhMNkNZQVdTalNXZnJxa3k0R0Jxb1NRK3IzMnBseVhqRWRJ?=
- =?utf-8?B?UnJDYUZqUzFqUlFrZjhGKzRYNXVTVlRvMzVRNmZQWVN5NXBRMnJhbUJNNy9a?=
- =?utf-8?B?aXVQZHBDbjBydllCM1hoR0JIaldUQTB5VWtzNkY0bENLWkNSOVUyeEdxbi9i?=
- =?utf-8?B?VEJZb3BHMWZybEQ4S2FuTU9LWHhEWTV5V3VSbjRGUlpkTlp0Nlg5VCtvNFBG?=
- =?utf-8?B?aGtrQkNCN0RMQ1lDY1lldWpTeDE3a1o2UGpGcjhYNEovSUVVaXRHQmpLMWhn?=
- =?utf-8?B?c3l3RXBHZWxSSmk4R2d0TzdPREsxS3cwQlJwZUVSVjJyQmhEeS9wTUx0b0pl?=
- =?utf-8?B?d1Vtc29wSGVIOEVjY2JCT3VuZmV1MFdoc2hidjNxRkNSOVJWblJYS3lKNFF2?=
- =?utf-8?B?d2piTWduQXRxRUUyTEYwRUgxcWl0UjhPb3hXMFFqVWFvZ2E1ZDJCb1ZTbksw?=
- =?utf-8?B?NFNFdHRHN3RUVldnZlRHOERDSlV4MVVvdVp6ajRhdVpFdUh5MWRRMm1tazBZ?=
- =?utf-8?B?UUpqYkxHc2RRaGdMejI2OVdWODJaS3ZzTEh3MW82bGVhWW4zRTdoTlVHYWRI?=
- =?utf-8?B?cHlmdUZ0SXR6bnBwZUxMQWFJN29hOGxYYnNybm5DVmtJWlpSTFkzM1ZqODBH?=
- =?utf-8?B?eEx0c2dvamROeXZGV3YxSndad2tnaUJkVmhTaWVSWnVzcDlPMERXaHVvcnlk?=
- =?utf-8?B?ZlIyNUs3amd5UDQ0WXR6OHhacWR3UHRpcmc0a0ZSc2dGbndrdDU3UVBDS0hu?=
- =?utf-8?B?Z2hPK2NUNGNoNDAvcmF6cERxUjBmWGNyVmZoeDFYNWg4dkxZL2FzWGdUc2hs?=
- =?utf-8?B?VXBHZHdvRnpOMHhwamM1ZFZBd25JTVMyeUVJcG1XQ1lhcjMyZktSZFlCS05C?=
- =?utf-8?B?NStEc0hiaDVqSjNhNlNEaFJuUnpKampnclc4Rlc4RlRFOHVrUGhnYkJJVlpt?=
- =?utf-8?B?OHBUSjU2RlVaM2pyUHBTWWxxam8vbkVVZnltMElvUm56QVlxMVNrVjZTeFFS?=
- =?utf-8?B?WUY4QlgySEtBZXFJa1JwRGxSQi9GV3l1UWNyWVJJaytGUVVJNWQ2dUc5a3Fj?=
- =?utf-8?B?UUp2bDY1RFM5ZVk5bHU1dVBUTzJ6SXEvR3pCcUFDc2J3Y0FhZEdEMUpFallB?=
- =?utf-8?B?cmhiOEdqU2x0REtYbXlSSmEvVzVKRkorUk9aajhDL0JBREtjQWViZ0FLNVA2?=
- =?utf-8?B?UC9HM002YXROZUtBV1lFeEpSOEtPb0RjblN4SkZraTBPaHJETURpczFRY0tq?=
- =?utf-8?B?T250d21nU1A1ekZucjFrSTRZdjU3ajBwTlIvSHA1VlhaeTg5VEErT20xZXNm?=
- =?utf-8?B?MmpZSjBaRG8rdkJnNlRlYUVXMXBnUmUrcVNsV2luRExGd2F3Sk0zZVJVL0Qy?=
- =?utf-8?B?OG1BelBxZHJIYUg1eUpFTDhuNXIxM1ozQVdGVlN2c3VYSzllaXFQY0tJNzls?=
- =?utf-8?Q?bf/LcA/Ft4kE5Pe0rCf1Md4=3D?=
-X-OriginatorOrg: amperemail.onmicrosoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7e947797-4c3c-4723-03d4-08dc1809f6c5
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR01MB7975.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2024 09:43:45.5287
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0Q3TpdTXa7ZTHeqzxbkBIx32wdM03n3dQGMoyZ6K6JvjU77V364stTIgahzhdrnk+G1IdSlnDaEXONK6XuS8UpLoHZAans7qDBI9sWMh/AOgONjkTxrX+r/Jpm34urEI
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR01MB6690
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8DxDc9vFqllhX0IAA--.43256S2
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoWrKFWxJFy8AFyfXFyfXw4rXrc_yoW8Jr48p3
+	ySkasI9r4DAry7Za4Sqr48K3WSvwsYvrZrJa97K3yxAwn8CryUKr4rtF1YvrWUC3y7JF42
+	qF45WF4Uuan8C3XCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUU9Yb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r126r13M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVWxJr0_GcWln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q
+	6rW5McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+	vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_
+	Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+	AY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAI
+	cVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
+	IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIev
+	Ja73UjIFyTuYvjxU2puWDUUUU
 
-Hi Greg,
+During suspend and resume, other CPUs are hot-unpluged and IRQs are
+migrated to CPU0. So it is not necessary to restore irq affinity for
+eiointc irq controller.
 
-在 2024/1/18 17:27, Greg KH 写道:
-> On Thu, Jan 18, 2024 at 11:14:12AM +0800, Huang Shijie wrote:
->> (0) We list the ARCHs which support the NUMA:
->>         arm64, loongarch, powerpc, riscv,
->>         sparc, mips, s390, x86,
-> I do not understand this format, what are you saying here?
+Also there is some optimization for the interrupt dispatch function
+eiointc_irq_dispatch. There are 256 IRQs supported for eiointc, eiointc
+irq handler reads the bitmap and find pending irqs when irq happens.
+So there are four times of consecutive iocsr_read64 operations for the
+total 256 bits to find all pending irqs. If the pending bitmap is zero,
+it means that there is no pending irq for the this irq bitmap range,
+we can skip handling to avoid some useless operations such as clearing
+hw ISR.
 
-Sorry for the confusing.
+---
+ Changes in v3:
+   Split the patch into three small patches
+
+ Changes in v2:
+   Modify changelog and comments
+---
+Bibo Mao (3):
+  irqchip/loongson-eiointc: Skip handling if there is no pending irq
+  irqchip/loongson-eiointc: Refine irq affinity setting during resume
+  irqchip/loongson-eiointc: Typo fix in function eiointc_domain_alloc
+
+ drivers/irqchip/irq-loongson-eiointc.c | 29 +++++++++++---------------
+ 1 file changed, 12 insertions(+), 17 deletions(-)
 
 
-I should put the conclusion at the beginning:
-
-   The generic cpu_to_node() has bug in some situations.
-
-   The generic cpu_to_node()  does not work in arm64, powerpc, riscv 
-when the CONFIG_NUMA is enabled:
-
-      The cpu_to_node() is called before it is initialized.
-
-  So all the four places are set with the wrong node id (get by 
-cpu_to_node()):
-
-            a.) early_trace_init()         in kernel/trace/trace.c
-	   b.) sched_init()               in kernel/sched/core.c
-	   c.) init_sched_fair_class()    in kernel/sched/fair.c
-	   d.) workqueue_init_early()     in kernel/workqueue.c
-
-
-Thanks
-
-Huang Shijie
+base-commit: 052d534373b7ed33712a63d5e17b2b6cdbce84fd
+-- 
+2.39.3
 
 
