@@ -1,53 +1,55 @@
-Return-Path: <linux-mips+bounces-958-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-962-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B24B8318F9
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jan 2024 13:15:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4293B831949
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jan 2024 13:41:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D30E7B24EC6
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jan 2024 12:15:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F26A1C21001
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jan 2024 12:41:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ACE924A0C;
-	Thu, 18 Jan 2024 12:15:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3803024B3F;
+	Thu, 18 Jan 2024 12:40:36 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B13E2421B;
-	Thu, 18 Jan 2024 12:15:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4651E241FB
+	for <linux-mips@vger.kernel.org>; Thu, 18 Jan 2024 12:40:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705580147; cv=none; b=GbZRwxzrlCdkZo7zMo15lVNoyGxdBADTZQ5SlsAivLRVUJj8TFtL+c6j2YcRgE4fuTE6My6m/MJ0exICCJoTAtmjPDPsXebEe3iIETvHqtbBjXTwc2U/DaeIDGxmeuaBzLDlYRGl0V28jUAJKRyhOS8kUf+ZDTaMGN84PUhGYWE=
+	t=1705581636; cv=none; b=RqPHrvnoBRDgwRr+YuYn1P1jHlV+OlH62fhXszvrH8JrPlUV4+2rqv1npzLjLGd6fqtEbElqbU39oqlLD5P6ATm+Siz/mEFhHJ4ArNkr4CBlAKBkXPo6aI5fI2t/f5ZOsSAlk3KzUi+HnXjZ47Mk5+oOjLfAyU2OJf/DiegVDW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705580147; c=relaxed/simple;
-	bh=xz7VFVSXmHsJL25MZP1wXpZaPyCu/LG5PboNLXh64Uw=;
+	s=arc-20240116; t=1705581636; c=relaxed/simple;
+	bh=+/+URCOF2iyUI0GX8pN1YjjNZlmvVJPDmWrXSqpqiRA=;
 	h=Received:Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:
-	 X-CM-TRANSID:X-CM-SenderInfo:X-Coremail-Antispam; b=TbZKhNcwE11QNFodEmVdWQnRAaqawJWobILIEMPVN2Wc6LRduOWfFRVyM8Us0omUYeUA7CIeEqDJ18o8Qhn6t5P3f6Vlj9XMI2wPDOVSRCIzU5OCzWD/WiK8MDpbQEGW2f3algJCcJGSROsmYGllsBRvzjpoyaavOgAJsHnyIsg=
+	 X-CM-TRANSID:X-CM-SenderInfo:X-Coremail-Antispam; b=UAA8KgitQEHr78gUiTMcvKMej25BfnTN3vYulA7HnVqzcsMCy2KQz2rHw9o0MGBLdffBNW+7xOCu/1sE5oSmaRpW7SBHdEBbgxWx9x5Mwz+FsX/8gU4M3mNNG9ff/QQe2gQEi+kA7m1nSRn1z8szyM516ruZIbVSbe1X3Og5KVw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.2.5.213])
-	by gateway (Coremail) with SMTP id _____8DxdfFwFqllfKEBAA--.8164S3;
-	Thu, 18 Jan 2024 20:15:44 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.2.5.213])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8DxDc9vFqllhX0IAA--.43256S5;
-	Thu, 18 Jan 2024 20:15:43 +0800 (CST)
-From: Bibo Mao <maobibo@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>,
+Received: from loongson.cn (unknown [111.9.175.10])
+	by gateway (Coremail) with SMTP id _____8BxuvA_HKllZ6QBAA--.8121S3;
+	Thu, 18 Jan 2024 20:40:31 +0800 (CST)
+Received: from localhost.localdomain (unknown [111.9.175.10])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxF80nHKll3YgIAA--.1524S2;
+	Thu, 18 Jan 2024 20:40:29 +0800 (CST)
+From: Huang Pei <huangpei@loongson.cn>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Bibo Mao <maobibo@loongson.cn>,
+	linux-mips@vger.kernel.org,
 	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Thomas Gleixner <tglx@linutronix.de>
-Cc: linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sergey Shtylyov <s.shtylyov@omp.ru>,
-	lvjianmin@loongson.cn
-Subject: [PATCH v3 3/3] irqchip/loongson-eiointc: Typo fix in function eiointc_domain_alloc
-Date: Thu, 18 Jan 2024 20:15:42 +0800
-Message-Id: <20240118121542.748351-4-maobibo@loongson.cn>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20240118121542.748351-1-maobibo@loongson.cn>
-References: <20240118121542.748351-1-maobibo@loongson.cn>
+	Paul Burton <paulburton@kernel.org>,
+	Li Xuefeng <lixuefeng@loongson.cn>,
+	Yang Tiezhu <yangtiezhu@loongson.cn>,
+	Gao Juxin <gaojuxin@loongson.cn>,
+	Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH V3]: MIPS: loongson64: fix booting failure
+Date: Thu, 18 Jan 2024 20:39:27 +0800
+Message-Id: <20240118123929.369939-1-huangpei@loongson.cn>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <ZZ29Wr9yfAcqGxrN@alpha.franken.de>
+References: <ZZ29Wr9yfAcqGxrN@alpha.franken.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -55,50 +57,31 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8DxDc9vFqllhX0IAA--.43256S5
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj9xXoWrKF47tr1DWFWfGFWUurW5CFX_yoWDWrb_ur
-	y2ywnxGryYvr1IqFn7Gr1avF9Fg3s8WFnY9F4q9F9xC34Utw18CrW2vwnrJFs7KF4rAFn3
-	CrZ8JrySyryIvosvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUb3kYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_JF0_JFyl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6F4UJVW0owAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
-	Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_
-	WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
-	xGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWU
-	XVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67
-	kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY
-	6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0x
-	vEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVj
-	vjDU0xZFpf9x07jrPEfUUUUU=
+X-CM-TRANSID:AQAAf8BxF80nHKll3YgIAA--.1524S2
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+	BjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+	xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxV
+	AFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x02
+	67AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+	I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2
+	jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20x
+	vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
+	3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIx
+	AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
+	cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
+	IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jYSoJUUUUU=
 
-There is small typo in function eiointc_domain_alloc, and there is no
-definition about struct eiointc, instead it should be struct eiointc_priv.
-It is strange that there is no warning with gcc compiler. This patch
-fixes the typo issue.
+Patch 1:
 
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
- drivers/irqchip/irq-loongson-eiointc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Just reserve exception vector ONLY ONCE.
 
-diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
-index 86f4faad0695..1a25e0613d50 100644
---- a/drivers/irqchip/irq-loongson-eiointc.c
-+++ b/drivers/irqchip/irq-loongson-eiointc.c
-@@ -252,7 +252,7 @@ static int eiointc_domain_alloc(struct irq_domain *domain, unsigned int virq,
- 	int ret;
- 	unsigned int i, type;
- 	unsigned long hwirq = 0;
--	struct eiointc *priv = domain->host_data;
-+	struct eiointc_priv *priv = domain->host_data;
- 
- 	ret = irq_domain_translate_onecell(domain, arg, &hwirq, &type);
- 	if (ret)
--- 
-2.39.3
+Patch 2:
+
+workaround the boot failure. See [1] for the real fix 
+
+[1]: https://lore.kernel.org/all/Zad3ynuuu8S-51eI@kernel.org
 
 
