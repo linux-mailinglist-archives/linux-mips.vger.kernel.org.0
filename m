@@ -1,122 +1,99 @@
-Return-Path: <linux-mips+bounces-1017-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1018-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 785F9832E56
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 18:48:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DFF9832E65
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 18:54:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 305931F24A27
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 17:48:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5C01EB20EB3
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 17:54:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FDF155E7A;
-	Fri, 19 Jan 2024 17:48:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A2895577D;
+	Fri, 19 Jan 2024 17:54:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A8l2whsR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lk6c3C3n"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEE4B55E4A;
-	Fri, 19 Jan 2024 17:48:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 088BF1E87C;
+	Fri, 19 Jan 2024 17:54:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705686498; cv=none; b=nwQenYjfTuISUbYufS2NhW5m2X/bf4wkGl1iUbV9CD2M0678MjszLtVLuc7As4918OJJLuXzVqKCC5EcrcbRe2at9k8HvDhcpFLg07zTZ5Lh5chgsxPUBNG+S+Zk2ubGTmPuGUIO5pcjVlTY9ARQ1PuXoa+XM6hhZBrj+a5Paj4=
+	t=1705686859; cv=none; b=g8WbwaP0O1EmYA+5/+dA7DJV8NI3TXbive00l/VtXqC2vKMIIofvi8owoExkEhwPVbTRABnqCSA1vDvsxhRuMybLfBtTa8ubrO0w0me0OUJ99j2oqzpacTX0yAsyQjPYTdPFt3UDMRiT8+wa+9KKuFu+uQDPu6D4Hz9wtH9aaEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705686498; c=relaxed/simple;
-	bh=P0KUF6vFTlftYyWUFDT96WHN8XRiIFXd1b2/AovY2hw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X8WapgewyzxhgcLamfu0BJqFHlH8Y/PQZy0bGtfGVLsZUSCcKV2L7zRHW47/ngXA7zJIxUHS7izINbcGOXccVZBQlXtJnIQ9hnoTOYrT1Qz8l82v9lxZHRmckfPVSA0xPZUZtONXjJEma0WA1xBWlBO0R3yV9/shct2goMvhzfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A8l2whsR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B518C433F1;
-	Fri, 19 Jan 2024 17:48:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705686497;
-	bh=P0KUF6vFTlftYyWUFDT96WHN8XRiIFXd1b2/AovY2hw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=A8l2whsRDimVA5MSS/fooSc43HMZGOw3e+psIFF/j1oxW2EmsXHFG1D4YvSgvIuH6
-	 iG1Zb2PwoSl6ZCX8Yrh+isB4kZCErgwIM9kDmhEmcfr9eAKlm6saKW9g6DDl7GpV4i
-	 ZSOGZi2k3LxyfhVWg1LZ8nrNbjSqYxzEg9DkRArtIfeqXDUUIUxgZSiGMUFYpvSUyt
-	 N4KAM+OLfp8736eK6ZLkE540xGh+g5jLNVZRPLQ45c7pXkZ6rO3c8ldkssh2898lih
-	 lMcILIdXvdVRY/4/QMFv6Ci7SgV+SpbvUku4VYZWpuX0TaZa2zaWXia+eRyjbV0bVr
-	 8Zo+PZg/w6ueg==
-Date: Fri, 19 Jan 2024 11:48:15 -0600
-From: Rob Herring <robh@kernel.org>
-To: Tony Lindgren <tony@atomide.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Andrew Davis <afd@ti.com>, Frank Binns <frank.binns@imgtec.com>,
-	Matt Coster <matt.coster@imgtec.com>,
-	"H . Nikolaus Schaller" <hns@goldelico.com>,
-	Adam Ford <aford173@gmail.com>,
-	Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	=?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
-	Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>,
-	Paul Cercueil <paul@crapouillou.net>,
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev, linux-omap@vger.kernel.org,
-	linux-mips@vger.kernel.org
-Subject: Re: [PATCH 02/11] dt-bindings: gpu: Add PowerVR Series5 SGX GPUs
-Message-ID: <20240119174815.GA633343-robh@kernel.org>
-References: <20240109171950.31010-1-afd@ti.com>
- <20240109171950.31010-3-afd@ti.com>
- <e2fce141-4966-4e70-9a5c-865a2737174c@linaro.org>
- <20240110083857.GB5185@atomide.com>
+	s=arc-20240116; t=1705686859; c=relaxed/simple;
+	bh=E98o89P8+R8YAOCQwVZNOu3BKNa62BrRxKH6/6qwefY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=LKIc2e+/DQ5k4s+YW3tbHALV2d1edLXbBWLXXudTrk/c0VjhlxOsf/qk/Q/CW0g7UYFs/sjvI4K5WxLtQUKWJe8P1zm0x/1gjP7uP7kMjyS5SC8a3/Kpv+SZF9yShPK4oNwW6JVjwajZLy0AdILRkfsgDukqgA3AuEpKN5tZpwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lk6c3C3n; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-5cec32dedf3so753409a12.0;
+        Fri, 19 Jan 2024 09:54:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1705686857; x=1706291657; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/FKtHrE1aXZwBWr0DhHzM7pDrpBjBv62gCYMzeiuv8I=;
+        b=Lk6c3C3nMxaNidTHOP3amABgUxCQolWDf5WY2PYH/gRhXPwRW11WFU6DdHXOIf/2QQ
+         +dpi7BGKTXfenPcLN1BDeZCtm2CDugiJccyHfiUahf10zzieGVJc49BA3CmTyIMMPc4W
+         RPJs5qNEFT4K0ydw0UWQnkX7SIKA+XtZJIaZpWCp/jKP/sHrlellSSlumNIwpeTkGRk8
+         jJIlfsnMuYgwIH++DXDisVZX5K/QoZqsQ+ZNe//bH69gtzZ4FI5blIhGNPV0zXKlkCnS
+         UOp35Sk1qV8DyOgz5IIhuYQ6IfuCSY0bb5PEX3mfzu/ItDL2g50ZStCWI5leOsulG39I
+         o+Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705686857; x=1706291657;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/FKtHrE1aXZwBWr0DhHzM7pDrpBjBv62gCYMzeiuv8I=;
+        b=ksHpnWEVZbRgWb7Ok99tuU2Kafk1JomktB/vju49kXcpLt7DA+NsnRD8LmOvkIggjj
+         Pbbb/M3Qi7TG7p3qjRM8NfkhxkIdyw+PQqukCL+UhKugrcGKNVm5C+vLBb7Zu5bXkqFJ
+         Df6HYPltrkQ57RhzMiSKDH+CpVPAdai+vDBAjDdpkLZuJatiJ5THOFnh6P1W3V8SQzFu
+         Tj14JoKUfychnk7+E4+MkBUYdnATR5XllXkFPo77NHoMej5blFiM2WL/RMMk/QUJEyrk
+         CZjwAAPlZkZjkXczIUhoZ3eqHY2VdEr6utuYRv1l4x9c1kbj1LRX9YxgrFkYCFYmt9c9
+         W7LQ==
+X-Gm-Message-State: AOJu0YxBnN1/yL61LPCdLCwT0Cij185cTSRPpAYvcwz2cTe2WkwE4guW
+	PR3ISzVt+1rj/WQDof7Jysfz6yAIVOzefe3A05AoEsGFc9mEGgfK+dPi7Ki5
+X-Google-Smtp-Source: AGHT+IEt4VmqIUe/VhRjbnK3usqLmrNWQ2R6dIVG6HfwlqryiDMyULoar3g15PVmOTWKMLHhe0EJmw==
+X-Received: by 2002:a17:90a:1344:b0:28e:6f44:46d5 with SMTP id y4-20020a17090a134400b0028e6f4446d5mr135498pjf.52.1705686857245;
+        Fri, 19 Jan 2024 09:54:17 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id nb17-20020a17090b35d100b00290394b25d5sm2953663pjb.22.2024.01.19.09.54.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Jan 2024 09:54:15 -0800 (PST)
+Message-ID: <ea0e69ab-744b-4e75-8a17-6c0b59b16db3@gmail.com>
+Date: Fri, 19 Jan 2024 09:54:13 -0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240110083857.GB5185@atomide.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] MIPS: sgi-ip27: Fix missing prototypes
+Content-Language: en-US
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240119133216.83220-1-tsbogend@alpha.franken.de>
+From: Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20240119133216.83220-1-tsbogend@alpha.franken.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jan 10, 2024 at 10:38:57AM +0200, Tony Lindgren wrote:
-> * Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> [240109 19:53]:
-> > On 09/01/2024 18:19, Andrew Davis wrote:
-> > > The Imagination PowerVR Series5 "SGX" GPU is part of several SoCs from
-> > > multiple vendors. Describe how the SGX GPU is integrated in these SoC,
-> > > including register space and interrupts. Clocks, reset, and power domain
-> > > information is SoC specific.
-> > > 
-> > > Signed-off-by: Andrew Davis <afd@ti.com>
-> > > Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-> > 
-> > 
-> > > +  clock-names:
-> > > +    minItems: 1
-> > > +    items:
-> > > +      - const: core
-> > > +      - const: mem
-> > > +      - const: sys
-> > 
-> > There are no devices currently using third clock, but I assume it is
-> > expected or possible.
+On 1/19/24 05:32, Thomas Bogendoerfer wrote:
+> Fix missing prototypes by making not shared functions static and
+> adding others to ip27-common.h. Also drop ip27-hubio.c as it's
+> not used for a long time.
 > 
-> I think the third clock is typically merged with one of the two clocks but
-> yeah possibly it's a separate clocke in some cases.
-> 
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Looks good to me too.
-> 
-> So for merging these, as many of the changes touch the omap variants, I
-> could set up an immutable branch with all the changes after -rc1. Or I can
-> ack the patches too if somebody has better ideas.
+> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-Just take all but patches 10 and 11. I don't think it matters if the 
-binding is there for them as long as it is all there in next. No one is 
-paying that close attention to the warnings I think.
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-Rob
 
