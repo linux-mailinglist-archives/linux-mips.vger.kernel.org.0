@@ -1,147 +1,236 @@
-Return-Path: <linux-mips+bounces-989-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-990-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FA5A8325DE
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 09:42:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 947248325F9
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 09:51:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB7F8284608
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 08:42:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 098F71F233E8
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 08:51:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A209E208CB;
-	Fri, 19 Jan 2024 08:42:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D40041DDC3;
+	Fri, 19 Jan 2024 08:51:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RUoTSPkL"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b="zXID8gJx"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2125.outbound.protection.outlook.com [40.107.237.125])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7915D20300;
-	Fri, 19 Jan 2024 08:42:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705653746; cv=none; b=TFPaIAp0+NGp65Qjbzd9TmnwWqWabo9xSSSuBrNqYIXzWxSNbwbamtjfs6ZNIt0ZvtvWIPO7QeHhLiFdMZjnSSqZBvt3KoG/HFb0x0sovRGt8zHHzYpWoxKgHUqN9tUuhOOvInhDnVmxxF0LWrpad83cgUYIIXsUiYmS4PsEAQA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705653746; c=relaxed/simple;
-	bh=g5BoGuy/aNMWgkh7HES0ckmxP53aa40fqWFfKkEi5ao=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QB1K6SUMUM1l5STdyUXAz59oEKP9hl94rIv8memLXTxKbfzK/wy+/VOAy9gKtB05iCwzWAHF101DN5WsBb6IYxVQlpNv3y9/L22wfRH0qxzxXnHpIp4XwDCnv2jX2g63uNkSC6mCw7KP4Y71166nx/ocBCV0dXdoTz+xqcaQsUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RUoTSPkL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D732C433F1;
-	Fri, 19 Jan 2024 08:42:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705653745;
-	bh=g5BoGuy/aNMWgkh7HES0ckmxP53aa40fqWFfKkEi5ao=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RUoTSPkLvPmGnMVOMJ1HuVQU6XfFhUmlMpbTrKyG6U8fqip+jV7+oHYufClRc2Byz
-	 I3fuHmD32xA9G5aC/qgCk0gYD2vI2MQEFi09W0zbpuY8l7bMAjiVnFVTxzbC5teWMK
-	 2ts22XzYj3hQvM/l0YmrlVjXLWu1vB29XDBEUj8NHEI4CKzhcPgj4wkLqJgR+twtIi
-	 1e1W7S0aNeD7srev8SEKpVES97FlgnMqaSwICysppCZPOJOdR/q6MZgPu4DkdBn1e1
-	 eGJEwySey3GhtxwqiPhQicHsJSJpxONbZ8rdyTC8j8SjIWuLoAXc0bc1dmrqTx86DO
-	 cHge1k3R0OABQ==
-Date: Fri, 19 Jan 2024 10:42:04 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Shijie Huang <shijie@amperemail.onmicrosoft.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0CD8F4E;
+	Fri, 19 Jan 2024 08:51:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.125
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705654274; cv=fail; b=koWKEk76qggQrdWBHyZMtkcdQqvFnU5TRSW3hKQ8wjKrt4bNOM/F0kifUpt3I121JAw/Bea3jqmb7VRx16eZ8yWF3lvbyGtOvwgFWmCCTM6l1VXLvCAkMxAuLazXb9jxm8tCrHoLbVhUQTX43vdu28WXcOgTTGEL+kd/FblytIg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705654274; c=relaxed/simple;
+	bh=mc0jO1dM9ozd6zKL+M5z8/2/9Oj6+2Rz4tV6X+sDAWo=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=LQtlbtO8uwKWklcK+idHt+A+aB6foUGdHaQf/cUBjmauGTQU3CqHkxG59EhJ6Gjyqewxtf86rWa1CyO2p68uIvsjzQ0PNv528jaM1jn0TAmxJZ5spb4xQSsXx1+WnaLOUyFVDKKFmWjQQ0BIYjiU89nwX6lrS9jTIPhbwtI2f6g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=fail (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b=zXID8gJx reason="key not found in DNS"; arc=fail smtp.client-ip=40.107.237.125
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g8pk2QU1FzDr8062uRLLFJpsggKrIoB+Xy6I7pEXHsl26OYCxtT5FqFJCxu3C0hLcAIfM82Zxmb8rrMs/WpG0QeaaPFuSfV7vJPrxZy0F4Z/O5IxNHB1av/esREU23WXL/EEoerRsIGzFYDJZw/E+4XW41bvs+TSU3o7BTf96Ztbesa5YUjN/iqeH5SGjUoYBgw8AdNuIEVdrwPGXiqv1gPv5/Kd9TnMet48iPbkQ618ClVABpWHthgsnbKtCZriHFEip+oM8L1AJxto7pCkemjHAgxxPUf3xkf8lcab/WkEnw9U7FXndLX+Uk3dlsuZRassKp0EIzgCD9cWfimVbA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=w3iiGy0ADGM92s0ECxkPq4rJLSIGVElnc9D6RypFUaw=;
+ b=a6Bd7BWGkoQW0JUXDSFUTXE3SnpJSVmJuYygr6Bvscmmvor+9fgU1/PKNJEzC1JwZEaKfo8N7fyn87W3GzEklQ8Xh9BXAQFuRXl7WBkY7mjyAj23FFILLThVPmfZCu314P8WvyDTvCyWCOLXZ3IWyNi0shioftZ7Bv2Ci5iBAu6KuwGBbubNX+IBPnbwNDqXg+E3zV91kReNItwSoycpO2iEJ7TJilrPeFAi2HXmcxDn9gaewsaMVfgHpWFMBQkL8hxJsrrg8BvPy2UOgaW8hBgfPnC6w5bQI9L0l7HpAhZYdiKaQDLtblEgQJPSR9/9X5mmvrPG7wv+9wjQIyrkUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=amperemail.onmicrosoft.com; dkim=pass
+ header.d=amperemail.onmicrosoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=w3iiGy0ADGM92s0ECxkPq4rJLSIGVElnc9D6RypFUaw=;
+ b=zXID8gJxcVBcFK+w9E0GCEMrsYEQudH3NvjVimUWnJAtzoztmdKf724zjDxhqNEiTJhQOA74XB91pwnXC8TJgxXqINuuVGR3L21F4IoC72eutmQf8O1/WdK4h0TL9iYXim1K40KWO2nNSwOxJqhcGduKZhrthiux3t65tWWYqV8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amperemail.onmicrosoft.com;
+Received: from PH0PR01MB7975.prod.exchangelabs.com (2603:10b6:510:26d::15) by
+ DS7PR01MB7567.prod.exchangelabs.com (2603:10b6:8:72::15) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7202.23; Fri, 19 Jan 2024 08:51:08 +0000
+Received: from PH0PR01MB7975.prod.exchangelabs.com ([fe80::91c:92f:45a5:e68a])
+ by PH0PR01MB7975.prod.exchangelabs.com ([fe80::91c:92f:45a5:e68a%6]) with
+ mapi id 15.20.7202.026; Fri, 19 Jan 2024 08:51:08 +0000
+Message-ID: <b8786c38-d6c4-4fea-a918-ac6a45682dba@amperemail.onmicrosoft.com>
+Date: Fri, 19 Jan 2024 16:50:53 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] NUMA: Early use of cpu_to_node() returns 0 instead of the
+ correct node id
+To: Mike Rapoport <rppt@kernel.org>
 Cc: Yury Norov <yury.norov@gmail.com>,
-	Huang Shijie <shijie@os.amperecomputing.com>,
-	gregkh@linuxfoundation.org, patches@amperecomputing.com,
-	rafael@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, kuba@kernel.org, vschneid@redhat.com,
-	mingo@kernel.org, akpm@linux-foundation.org, vbabka@suse.cz,
-	tglx@linutronix.de, jpoimboe@kernel.org, ndesaulniers@google.com,
-	mikelley@microsoft.com, mhiramat@kernel.org, arnd@arndb.de,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-	will@kernel.org, mark.rutland@arm.com, mpe@ellerman.id.au,
-	linuxppc-dev@lists.ozlabs.org, chenhuacai@kernel.org,
-	jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org,
-	cl@os.amperecomputing.com
-Subject: Re: [PATCH] NUMA: Early use of cpu_to_node() returns 0 instead of
- the correct node id
-Message-ID: <Zao13I4Bb0tur0fZ@kernel.org>
+ Huang Shijie <shijie@os.amperecomputing.com>, gregkh@linuxfoundation.org,
+ patches@amperecomputing.com, rafael@kernel.org, paul.walmsley@sifive.com,
+ palmer@dabbelt.com, aou@eecs.berkeley.edu, kuba@kernel.org,
+ vschneid@redhat.com, mingo@kernel.org, akpm@linux-foundation.org,
+ vbabka@suse.cz, tglx@linutronix.de, jpoimboe@kernel.org,
+ ndesaulniers@google.com, mikelley@microsoft.com, mhiramat@kernel.org,
+ arnd@arndb.de, linux-kernel@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
+ mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org, chenhuacai@kernel.org,
+ jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org,
+ cl@os.amperecomputing.com
 References: <20240119033227.14113-1-shijie@os.amperecomputing.com>
  <Zan9sb0vtSvVvQeA@yury-ThinkPad>
  <1cd078fd-c345-4d85-a92f-04c806c20efa@amperemail.onmicrosoft.com>
+ <Zao13I4Bb0tur0fZ@kernel.org>
+From: Shijie Huang <shijie@amperemail.onmicrosoft.com>
+In-Reply-To: <Zao13I4Bb0tur0fZ@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH0P220CA0025.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:610:ef::20) To PH0PR01MB7975.prod.exchangelabs.com
+ (2603:10b6:510:26d::15)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1cd078fd-c345-4d85-a92f-04c806c20efa@amperemail.onmicrosoft.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR01MB7975:EE_|DS7PR01MB7567:EE_
+X-MS-Office365-Filtering-Correlation-Id: 43278f3c-1f53-4962-2382-08dc18cbc760
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	0iwyAJVQD3Od9QS419cmU0MoRt+Mjm2gw66INIrJ5uQVAmupcDRo0/CDE+mm2S0aNFp+Ms/eNc6AxKW6/Ar9oRILRROB3GGzaCGV/venrE67WBuq3UUQnlq1UvfuJOLMj9FyBRPeM9Jlh3UU1xKTVSS4pd1m27lWge8MbaP/QuGPTIXt1nmYEp2rAjlMdMo9aJRda2BwmTwo64spZtC2GJ9p5VIyq3cHMarZj3mMtMZifDWFODWR8YEYGyJM8punqfSKkf4GkKZCTPH+M+BB64uXZMaJqoWCFHIPc1fMYqJPAkAqZVhRvcTbMxhN2WIWMqbPZDGsT5acT5CW5kyLinucLUziJ4NgxxxXtdVamFT31bi3zigpa1TSFmHzYHgFpLpJtlZyyTUkHKJWnuKuiTFLAf3SaY0Gyaa+92AE7vSBrxJMV9IZc528bVNZjDStrjTl41uqAGRj1TGXN+bc+of3lwvtNeMCICQH+4ZPJ6uT6tKnNQUKT9K2aCUSCGztTnixV7sDSgamh0ZuoLLxypqupasLaN5U/ClzA9vmfFue/JGuto7YkHUIGydIT1vwxOC8XLg+d+M072gouSuZI/MyiSWOAD6yxwi9DZPvxdhO/F88HcwnkkLAvVkD77Aa
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR01MB7975.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(39850400004)(346002)(366004)(136003)(376002)(396003)(230922051799003)(451199024)(64100799003)(186009)(1800799012)(4326008)(26005)(7416002)(5660300002)(6512007)(2906002)(6506007)(6666004)(107886003)(42882007)(2616005)(66556008)(66946007)(316002)(8936002)(8676002)(6916009)(41300700001)(66476007)(6486002)(31696002)(478600001)(38100700002)(83170400001)(83380400001)(54906003)(31686004)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?WWFzRU13N202REFWU1RMTkRMNHRpSEtzRVdMVVFFcVkyMUlVNDFOamdqUzdh?=
+ =?utf-8?B?U3lTVFRMRE96ekFaQzVzaXQ0c2FHcGdkRkRTYld5UHFZQ3hZbVc2eFREeCty?=
+ =?utf-8?B?SVNvcktKZjM4WU1XbzlJS2VpOGYvalcyT0tGdXVpYU1NdXdGSHZDaklJMGVz?=
+ =?utf-8?B?THovdk5ZcDdwUGJqYUxCV01ITTFETU1jQTNTYTlsRldBekhHNjgzeHNQMUli?=
+ =?utf-8?B?Mm5RdE5BUXdxYmZ6eEZ6eVVkUUFLR1lIdjZySW9VWHhlT2Y0dnFXUzNvNlVQ?=
+ =?utf-8?B?ZFVDSU9neDA0eC9neXQwdEF1aEdZTUc1Um5vaVYraCtCckFoKzc1c2hXOTU1?=
+ =?utf-8?B?SXFZMGdwUGtDR29pOXJ3TEEwTWhOOGJJcitFT2hkZGI1cnJtU1VEaXhMTWND?=
+ =?utf-8?B?QmpLSlpKNXhxT2lSTVhCUjd3NnB1QVdVbjVXSDJrSlpMb2JkK0o1d2s1ZXFl?=
+ =?utf-8?B?dkI4dmVDN2QyQWZ1dTNneXUxWU9jOUZLWGpEaUttZUJxZ2xheldsVmdSdU1N?=
+ =?utf-8?B?VXZkTklRSDcrUmQycnVXVUhxTlNSUVc1T2hjeHp5REo3cmFuSGZQajZ0VzNt?=
+ =?utf-8?B?N01hTzd3N0JZZ3VGbUl0WE1aQ1RMbDA1VktHUXdJSmFUZzc1QkxvTUhsVEVS?=
+ =?utf-8?B?VFNleW9aZlJjemVlVElDVHJrdGVSaU1UeTU0ejRnM3dJQjhzSHg2eWtMb1pV?=
+ =?utf-8?B?bXcrU1NYUmNQZU9nLzZXRm9kd0ZpVzBwRTRvMXVodUVma24zaG0xRjc3blhQ?=
+ =?utf-8?B?Q0xOUnhLcXphTjhaRCtVNVdXWVRHeUZnZWlVQ1o4aHV5elg3QTdiZ0QrempH?=
+ =?utf-8?B?STZKWGZjM0tqMTdGUUM2LzY1QXM4Y09oREZISlo5RkF3aXFMUy9taXBRb1Vi?=
+ =?utf-8?B?TWc3TnFLQXF3WmVPemdVb1VKdlJFOU9oVEpEMysvTzJ1Q1ludWRXZGxkRzR6?=
+ =?utf-8?B?dmY4L1hQTWJRcURXdEZNQTZDclNEMmRCVHBUVFh1Vjk3bzJTVjV2Z2ZKKy9D?=
+ =?utf-8?B?eDNtVmhKa1BjT1o3WWJUZzIxZy84d3dRMGJhalFKREFWNmlKdWw2dmVkdDVD?=
+ =?utf-8?B?YmF6VjJoYmU5clduaTdmK09nTHIrSTRNdCt1d0lvOFZnQXdXVkwvYW9TanU0?=
+ =?utf-8?B?eDZCYUw2SG9SbFM1K2lNTkRtKzNiaVpORk5NNm5wM0FXUVdSMUlFMlhQSzBI?=
+ =?utf-8?B?b2lZcTlXdkFQV1NjUE1QRzFuWWxuck1WMFl6UHB6YzRNblhvWVIza2JxeHRz?=
+ =?utf-8?B?OXA4L2E1dCt6eTdhZHBGaUhKcERteXpuMlo2VG9uQmFieTNvNTJFZStVUDdI?=
+ =?utf-8?B?SWx3OVBXZ2FMb2VXZ0hPL2gvV0p5S0hoMVAxajBPTXV2cmRjLzYvaUs3Y3ZY?=
+ =?utf-8?B?ZmRIUEZBU0xDa0ZzeHBCZzZkYS8xaFd1YStnU2c5NUU0c0ZpWXNWdG01SlQv?=
+ =?utf-8?B?RlMzOG44eFNQbkVkTDBxekkrL3lRcVVpYUJSYVlNN0xPK0ZBakJzWVVRbXNS?=
+ =?utf-8?B?UGp6dXN6YmcxK3RmZ3R0ZlRVOS9OekluVDBTN2hIa282bjRnbEk0aGMwb0dx?=
+ =?utf-8?B?U3ZQVDNTZFBWTjVXNVg5WDhIdlFSUVBsTUlaYnlVNk9LYjkwbEFacG1aQXMy?=
+ =?utf-8?B?UU4vZFZKMDJ6WDRIZmkwOGY5V0VWOGc5aEJHMHZIMGtmaWpYcjNMbkcrdnQ5?=
+ =?utf-8?B?aUJYcll2U3VYZXFNV1ZTTnd6Z2FiZ2xNMXFZYUtVbERZUy9aRGhVNHFaMS81?=
+ =?utf-8?B?V1NYaUdKWllDQ2VGZnZnWGNQVElhbml6VHJTTmJxVFVid1NvUzM0cXVXa3Yw?=
+ =?utf-8?B?UUhlcVFtRWNGSy9NNUd1Y2JlQnRZcG1vSnBLWHViVExrWkkvVkJzRTlBZFhq?=
+ =?utf-8?B?bDZxSVBVUHNPbE4rVEtFU3hRWXNrMjJ5Z2UxKzlaSE1SckREM3BNYzh3QnRG?=
+ =?utf-8?B?K1ZhSmdoZ1FMbmppeThwRE8zRm9od0NMb0l6WG9DUkVVRlp5b2hnYS9QNGpm?=
+ =?utf-8?B?VWJBRzc0MDJMclRzTjVlZnBhSnFrNElJNTNVeGc1N2I1a3VBRHZHVFRob05M?=
+ =?utf-8?B?bDNKcmJZY2Vqa2lDUVk2a29mT21BM0k1V3FodnNiMU0vdi9pQ2owMEFseUph?=
+ =?utf-8?B?dnJJVlNRd3l3VFVrT3pJTGsrZmttaVBhemE5WjNrK1dzaXUvWUg4Z3ppWStK?=
+ =?utf-8?Q?eO7bIPr6cgVldQDrJWm/mA0=3D?=
+X-OriginatorOrg: amperemail.onmicrosoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 43278f3c-1f53-4962-2382-08dc18cbc760
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR01MB7975.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2024 08:51:08.3731
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1oSkGiYmlqXlfiQazflNhxShN1MZpL3lSG9oeuX8F0LigO0LkyeKwCUxRAJzZPGsKAAQGTKHcmUGglVxzjpAPcwdysF2MncRR7KbIWYT09Ys9hCJtDaOXQkF8sox5ifU
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR01MB7567
 
-On Fri, Jan 19, 2024 at 02:46:16PM +0800, Shijie Huang wrote:
-> 
-> 在 2024/1/19 12:42, Yury Norov 写道:
-> > This adds another level of indirection, I think. Currently cpu_to_node
-> > is a simple inliner. After the patch it would be a real function with
-> > all the associate overhead. Can you share a bloat-o-meter output here?
-> #./scripts/bloat-o-meter vmlinux vmlinux.new
-> add/remove: 6/1 grow/shrink: 61/51 up/down: 1168/-588 (580)
-> Function                                     old     new   delta
-> numa_update_cpu                              148     244     +96
-> 
->  ...................................................................................................................................(to many to skip)
-> 
-> Total: Before=32990130, After=32990710, chg +0.00%
- 
-It's not only about text size, the indirect call also hurts performance
- 
-> > 
-> > Regardless, I don't think that the approach is correct. As per your
-> > description, some initialization functions erroneously call
-> > cpu_to_node() instead of early_cpu_to_node() which exists specifically
-> > for that case.
-> > 
-> > If the above correct, it's clearly a caller problem, and the fix is to
-> > simply switch all those callers to use early version.
-> 
-> It is easy to change to early_cpu_to_node() for sched_init(),
-> init_sched_fair_class()
-> 
-> and workqueue_init_early(). These three places call the cpu_to_node() in the
-> __init function.
-> 
-> 
-> But it is a little hard to change the early_trace_init(), since it calls
-> cpu_to_node in the deep
-> 
-> function stack:
-> 
->   early_trace_init() --> ring_buffer_alloc() -->rb_allocate_cpu_buffer()
-> 
-> 
-> For early_trace_init(), we need to change more code.
-> 
-> 
-> Anyway, If we think it is not a good idea to change the common code, I am
-> oaky too.
- 
-Is there a fundamental reason to have early_cpu_to_node() at all?
-It seems that all the mappings are known by the end of setup_arch() and the
-initialization of numa_node can be moved earlier. 
- 
-> > I would also initialize the numa_node with NUMA_NO_NODE at declaration,
-> > so that if someone calls cpu_to_node() before the variable is properly
-> > initialized at runtime, he'll get NO_NODE, which is obviously an error.
-> 
-> Even we set the numa_node with NUMA_NO_NODE, it does not always produce
-> error.
-> 
-> Please see the alloc_pages_node().
-> 
-> 
-> Thanks
-> 
-> Huang Shijie
-> 
 
--- 
-Sincerely yours,
-Mike.
+在 2024/1/19 16:42, Mike Rapoport 写道:
+> On Fri, Jan 19, 2024 at 02:46:16PM +0800, Shijie Huang wrote:
+>> 在 2024/1/19 12:42, Yury Norov 写道:
+>>> This adds another level of indirection, I think. Currently cpu_to_node
+>>> is a simple inliner. After the patch it would be a real function with
+>>> all the associate overhead. Can you share a bloat-o-meter output here?
+>> #./scripts/bloat-o-meter vmlinux vmlinux.new
+>> add/remove: 6/1 grow/shrink: 61/51 up/down: 1168/-588 (580)
+>> Function                                     old     new   delta
+>> numa_update_cpu                              148     244     +96
+>>
+>>   ...................................................................................................................................(to many to skip)
+>>
+>> Total: Before=32990130, After=32990710, chg +0.00%
+>   
+> It's not only about text size, the indirect call also hurts performance
+>   
+
+The cpu_to_node() is called at very low frequency, most of the times is 
+in the kernel booting time.
+
+
+
+>>> Regardless, I don't think that the approach is correct. As per your
+>>> description, some initialization functions erroneously call
+>>> cpu_to_node() instead of early_cpu_to_node() which exists specifically
+>>> for that case.
+>>>
+>>> If the above correct, it's clearly a caller problem, and the fix is to
+>>> simply switch all those callers to use early version.
+>> It is easy to change to early_cpu_to_node() for sched_init(),
+>> init_sched_fair_class()
+>>
+>> and workqueue_init_early(). These three places call the cpu_to_node() in the
+>> __init function.
+>>
+>>
+>> But it is a little hard to change the early_trace_init(), since it calls
+>> cpu_to_node in the deep
+>>
+>> function stack:
+>>
+>>    early_trace_init() --> ring_buffer_alloc() -->rb_allocate_cpu_buffer()
+>>
+>>
+>> For early_trace_init(), we need to change more code.
+>>
+>>
+>> Anyway, If we think it is not a good idea to change the common code, I am
+>> oaky too.
+>   
+> Is there a fundamental reason to have early_cpu_to_node() at all?
+
+The early_cpu_to_node does not work on some ARCHs (which support the 
+NUMA), such
+
+as  SPARC, MIPS and S390.
+
+
+Thanks
+
+Huang Shijie
+
+> It seems that all the mappings are known by the end of setup_arch() and the
+> initialization of numa_node can be moved earlier.
+>   
+>>> I would also initialize the numa_node with NUMA_NO_NODE at declaration,
+>>> so that if someone calls cpu_to_node() before the variable is properly
+>>> initialized at runtime, he'll get NO_NODE, which is obviously an error.
+>> Even we set the numa_node with NUMA_NO_NODE, it does not always produce
+>> error.
+>>
+>> Please see the alloc_pages_node().
+>>
+>>
+>> Thanks
+>>
+>> Huang Shijie
+>>
 
