@@ -1,216 +1,323 @@
-Return-Path: <linux-mips+bounces-998-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-999-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF3AA832AC9
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 14:53:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B1392832BB0
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 15:53:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A51BB21B92
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 13:53:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8EA60B2306C
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 14:53:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0740752F79;
-	Fri, 19 Jan 2024 13:52:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E40A54659;
+	Fri, 19 Jan 2024 14:53:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ge88Fbvp"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E07A252F6E;
-	Fri, 19 Jan 2024 13:52:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CF23524C8
+	for <linux-mips@vger.kernel.org>; Fri, 19 Jan 2024 14:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705672378; cv=none; b=LoGYaYnekrhmlOJqdH72ldjbJuIcJ/YKC2kKEiihbsff3GMr/0N501eu52gHKqwG0DIC3nwU9kL+74jJugRhpJL+eEW/SiUVb9xnD0kJwgoYk0N7ED0MwHHSgB91e+mLECPE92OvhdJUGIGzYlkVL+ygmCUHpJywnyt0XXmSh4Q=
+	t=1705675981; cv=none; b=qrHQ/vjgcIhIOGRWJR9XuL2pFLEFQKwiUbcECpIWFj/Iwr26zr84OLMpuhRwcrAPjuad9XBvjq+qxHQXGIJnsCfO+xHvxiN4auBTguqGJQz1e1yDr9QpT8edbMuCJK9z4yHCgoGUW6KEPOu0XhkTCeSbo/VRJu8eU21KfDXwhRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705672378; c=relaxed/simple;
-	bh=8Nn6GCGORp9/RHlSu4rLSYch3flHwv2TA+p1drrK3T8=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version; b=sCqNcWAyOsn/xecDmzdaZZD1PjS9qYE3MD4mSkCnNJg7i2JqQUnhEBsptOnSUeIyWEnwE4YPaCElshYT3/+bJBfP/gye82VjegLzkmU6Gjf+pku2MOJpevWT45zaxKZa8hO9suXZiPGId/0bpn8p3ZZZzR5ER4ne5O9Jn8O1FUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=fail smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=alpha.franken.de
-Received: from hutton.arch.nue2.suse.org (unknown [10.168.144.140])
-	by smtp-out1.suse.de (Postfix) with ESMTP id 13D7421E98;
-	Fri, 19 Jan 2024 13:52:54 +0000 (UTC)
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: sgi-ip32: Fix missing prototypes
-Date: Fri, 19 Jan 2024 14:52:51 +0100
-Message-Id: <20240119135252.112460-1-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.35.3
+	s=arc-20240116; t=1705675981; c=relaxed/simple;
+	bh=wUT0GblWyaSCMG72ho7DyANlHY+TnVrL4D5EcwG8bRk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=KbdDGEDoFdQI9Sja5ysk2jWB9ySPKzirs3Sm9lImrlLZKroMfWhV+v7/lfOr6PWk5vlF/ib5d3D0wO4fasFV/A/rMK67sZtOjVGBCkL1Yc2tsxI8uLD/qTKpXFA9WYCnQXLoskHtUADSR+arSaTHBSBTzdgSMnucMZ33dYALw7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ge88Fbvp; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1705675977;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=a7b5wka3jZpJDrQA4DTDzEctwPm/eZO0QdaDBfGD0Sk=;
+	b=ge88FbvpbKwuxXPX7aegNouVPnGzDM+33csKcWsGUAVObVDbYeddYw5LVRRuWFrRfckeiE
+	B/1M83TKwAmpo12iplP3a6gvNrlkV4kulYJFTmLSPECwJbhSBLkOllMVTWbJ5d1dZXU4cm
+	6uo9IA37H2Kzr5LrKT3o9tEg/IRr9yY=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-553-y_u4cXE2P_WuQzhDc2Y6SA-1; Fri,
+ 19 Jan 2024 09:52:53 -0500
+X-MC-Unique: y_u4cXE2P_WuQzhDc2Y6SA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CF48C3C2A1DC;
+	Fri, 19 Jan 2024 14:52:52 +0000 (UTC)
+Received: from MiWiFi-R3L-srv.redhat.com (unknown [10.72.116.4])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 528F451D5;
+	Fri, 19 Jan 2024 14:52:44 +0000 (UTC)
+From: Baoquan He <bhe@redhat.com>
+To: linux-kernel@vger.kernel.org
+Cc: kexec@lists.infradead.org,
+	x86@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	loongarch@lists.linux.dev,
+	akpm@linux-foundation.org,
+	ebiederm@xmission.com,
+	hbathini@linux.ibm.com,
+	piliu@redhat.com,
+	viro@zeniv.linux.org.uk,
+	Baoquan He <bhe@redhat.com>
+Subject: [PATCH v2 00/14] Split crash out from kexec and clean up related config items
+Date: Fri, 19 Jan 2024 22:52:27 +0800
+Message-ID: <20240119145241.769622-1-bhe@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-Authentication-Results: smtp-out1.suse.de;
-	none
-X-Spamd-Result: default: False [10.00 / 50.00];
-	 ARC_NA(0.00)[];
-	 BAYES_SPAM(5.10)[100.00%];
-	 FROM_HAS_DN(0.00)[];
-	 R_MISSING_CHARSET(2.50)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 TO_DN_NONE(0.00)[];
-	 BROKEN_CONTENT_TYPE(1.50)[];
-	 RCPT_COUNT_TWO(0.00)[2];
-	 MID_CONTAINS_FROM(1.00)[];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[franken.de:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 RCVD_COUNT_ZERO(0.00)[0];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+]
-X-Spam-Level: **********
-X-Spam-Score: 10.00
-X-Spam-Flag: NO
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
 
-Fix interrupt function prototypes, move all prototypes into a new
-file ip32-common.h and include it where needed.
+Motivation:
+=============
+Previously, LKP reported a building error. When investigating, it can't
+be resolved reasonablly with the present messy kdump config items.
 
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+ https://lore.kernel.org/oe-kbuild-all/202312182200.Ka7MzifQ-lkp@intel.com/
+
+The kdump (crash dumping) related config items could causes confusions:
+
+Firstly,
 ---
- arch/mips/sgi-ip32/crime.c       |  6 ++++--
- arch/mips/sgi-ip32/ip32-berr.c   |  2 ++
- arch/mips/sgi-ip32/ip32-common.h | 15 +++++++++++++++
- arch/mips/sgi-ip32/ip32-irq.c    |  6 ++----
- arch/mips/sgi-ip32/ip32-memory.c |  1 +
- arch/mips/sgi-ip32/ip32-reset.c  |  2 ++
- arch/mips/sgi-ip32/ip32-setup.c  |  3 +--
- 7 files changed, 27 insertions(+), 8 deletions(-)
- create mode 100644 arch/mips/sgi-ip32/ip32-common.h
+CRASH_CORE enables codes including
+ - crashkernel reservation;
+ - elfcorehdr updating;
+ - vmcoreinfo exporting;
+ - crash hotplug handling;
 
-diff --git a/arch/mips/sgi-ip32/crime.c b/arch/mips/sgi-ip32/crime.c
-index a8e0c776ca6c..b8a0e4cfa9ce 100644
---- a/arch/mips/sgi-ip32/crime.c
-+++ b/arch/mips/sgi-ip32/crime.c
-@@ -18,6 +18,8 @@
- #include <asm/ip32/crime.h>
- #include <asm/ip32/mace.h>
- 
-+#include "ip32-common.h"
-+
- struct sgi_crime __iomem *crime;
- struct sgi_mace __iomem *mace;
- 
-@@ -39,7 +41,7 @@ void __init crime_init(void)
- 	       id, rev, field, (unsigned long) CRIME_BASE);
- }
- 
--irqreturn_t crime_memerr_intr(unsigned int irq, void *dev_id)
-+irqreturn_t crime_memerr_intr(int irq, void *dev_id)
- {
- 	unsigned long stat, addr;
- 	int fatal = 0;
-@@ -90,7 +92,7 @@ irqreturn_t crime_memerr_intr(unsigned int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
--irqreturn_t crime_cpuerr_intr(unsigned int irq, void *dev_id)
-+irqreturn_t crime_cpuerr_intr(int irq, void *dev_id)
- {
- 	unsigned long stat = crime->cpu_error_stat & CRIME_CPU_ERROR_MASK;
- 	unsigned long addr = crime->cpu_error_addr & CRIME_CPU_ERROR_ADDR_MASK;
-diff --git a/arch/mips/sgi-ip32/ip32-berr.c b/arch/mips/sgi-ip32/ip32-berr.c
-index 478b63b4c808..7cbc27941f92 100644
---- a/arch/mips/sgi-ip32/ip32-berr.c
-+++ b/arch/mips/sgi-ip32/ip32-berr.c
-@@ -18,6 +18,8 @@
- #include <asm/ptrace.h>
- #include <asm/tlbdebug.h>
- 
-+#include "ip32-common.h"
-+
- static int ip32_be_handler(struct pt_regs *regs, int is_fixup)
- {
- 	int data = regs->cp0_cause & 4;
-diff --git a/arch/mips/sgi-ip32/ip32-common.h b/arch/mips/sgi-ip32/ip32-common.h
-new file mode 100644
-index 000000000000..cfc0225b1419
---- /dev/null
-+++ b/arch/mips/sgi-ip32/ip32-common.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef __IP32_COMMON_H
-+#define __IP32_COMMON_H
-+
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+
-+void __init crime_init(void);
-+irqreturn_t crime_memerr_intr(int irq, void *dev_id);
-+irqreturn_t crime_cpuerr_intr(int irq, void *dev_id);
-+void __init ip32_be_init(void);
-+void ip32_prepare_poweroff(void);
-+
-+#endif /* __IP32_COMMON_H */
-diff --git a/arch/mips/sgi-ip32/ip32-irq.c b/arch/mips/sgi-ip32/ip32-irq.c
-index e21ea1de05e3..29d04468a06b 100644
---- a/arch/mips/sgi-ip32/ip32-irq.c
-+++ b/arch/mips/sgi-ip32/ip32-irq.c
-@@ -28,6 +28,8 @@
- #include <asm/ip32/mace.h>
- #include <asm/ip32/ip32_ints.h>
- 
-+#include "ip32-common.h"
-+
- /* issue a PIO read to make sure no PIO writes are pending */
- static inline void flush_crime_bus(void)
- {
-@@ -107,10 +109,6 @@ static inline void flush_mace_bus(void)
-  * is quite different anyway.
-  */
- 
--/* Some initial interrupts to set up */
--extern irqreturn_t crime_memerr_intr(int irq, void *dev_id);
--extern irqreturn_t crime_cpuerr_intr(int irq, void *dev_id);
--
- /*
-  * This is for pure CRIME interrupts - ie not MACE.  The advantage?
-  * We get to split the register in half and do faster lookups.
-diff --git a/arch/mips/sgi-ip32/ip32-memory.c b/arch/mips/sgi-ip32/ip32-memory.c
-index 3fc8d0a0bdfa..5fee33744f67 100644
---- a/arch/mips/sgi-ip32/ip32-memory.c
-+++ b/arch/mips/sgi-ip32/ip32-memory.c
-@@ -15,6 +15,7 @@
- #include <asm/ip32/crime.h>
- #include <asm/bootinfo.h>
- #include <asm/page.h>
-+#include <asm/sgialib.h>
- 
- extern void crime_init(void);
- 
-diff --git a/arch/mips/sgi-ip32/ip32-reset.c b/arch/mips/sgi-ip32/ip32-reset.c
-index 18d1c115cd53..6bdc1421cda4 100644
---- a/arch/mips/sgi-ip32/ip32-reset.c
-+++ b/arch/mips/sgi-ip32/ip32-reset.c
-@@ -29,6 +29,8 @@
- #include <asm/ip32/crime.h>
- #include <asm/ip32/ip32_ints.h>
- 
-+#include "ip32-common.h"
-+
- #define POWERDOWN_TIMEOUT	120
- /*
-  * Blink frequency during reboot grace period and when panicked.
-diff --git a/arch/mips/sgi-ip32/ip32-setup.c b/arch/mips/sgi-ip32/ip32-setup.c
-index 8019dae1721a..aeb0805aae57 100644
---- a/arch/mips/sgi-ip32/ip32-setup.c
-+++ b/arch/mips/sgi-ip32/ip32-setup.c
-@@ -26,8 +26,7 @@
- #include <asm/ip32/mace.h>
- #include <asm/ip32/ip32_ints.h>
- 
--extern void ip32_be_init(void);
--extern void crime_init(void);
-+#include "ip32-common.h"
- 
- #ifdef CONFIG_SGI_O2MACE_ETH
- /*
+Now fadump of powerpc, kcore dynamic debugging and kdump all selects
+CRASH_CORE, while fadump
+ - fadump needs crashkernel parsing, vmcoreinfo exporting, and accessing
+   global variable 'elfcorehdr_addr';
+ - kcore only needs vmcoreinfo exporting;
+ - kdump needs all of the current kernel/crash_core.c.
+
+So only enabling PROC_CORE or FA_DUMP will enable CRASH_CORE, this
+mislead people that we enable crash dumping, actual it's not.
+
+Secondly,
+---
+It's not reasonable to allow KEXEC_CORE select CRASH_CORE.
+
+Because KEXEC_CORE enables codes which allocate control pages, copy
+kexec/kdump segments, and prepare for switching. These codes are
+shared by both kexec reboot and kdump. We could want kexec reboot,
+but disable kdump. In that case, CRASH_CORE should not be selected.
+
+ --------------------
+ CONFIG_CRASH_CORE=y
+ CONFIG_KEXEC_CORE=y
+ CONFIG_KEXEC=y
+ CONFIG_KEXEC_FILE=y
+    ---------------------
+
+Thirdly,
+---
+It's not reasonable to allow CRASH_DUMP select KEXEC_CORE.
+
+That could make KEXEC_CORE, CRASH_DUMP are enabled independently from
+KEXEC or KEXEC_FILE. However, w/o KEXEC or KEXEC_FILE, the KEXEC_CORE
+code built in doesn't make any sense because no kernel loading or
+switching will happen to utilize the KEXEC_CORE code.
+ ---------------------
+ CONFIG_CRASH_CORE=y 
+ CONFIG_KEXEC_CORE=y 
+ CONFIG_CRASH_DUMP=y
+ ---------------------
+
+In this case, what is worse, on arch sh and arm, KEXEC relies on MMU,
+while CRASH_DUMP can still be enabled when !MMU, then compiling error is
+seen as the lkp test robot reported in above link.
+
+ ------arch/sh/Kconfig------
+ config ARCH_SUPPORTS_KEXEC
+         def_bool MMU
+
+ config ARCH_SUPPORTS_CRASH_DUMP
+         def_bool BROKEN_ON_SMP
+ ---------------------------
+
+Changes:
+===========
+1, split out crash_reserve.c from crash_core.c;
+2, split out vmcore_infoc. from crash_core.c;
+3, move crash related codes in kexec_core.c into crash_core.c;
+4, remove dependency of FA_DUMP on CRASH_DUMP;
+5, clean up kdump related config items;
+6, wrap up crash codes in crash related ifdefs on all 9 arch-es
+   which support crash dumping;
+
+Achievement:
+===========
+With above changes, I can rearrange the config item logic as below (the right
+item depends on or is selected by the left item):
+
+    PROC_KCORE -----------> VMCORE_INFO
+
+               |----------> VMCORE_INFO
+    FA_DUMP----|
+               |----------> CRASH_RESERVE
+
+                                                    ---->VMCORE_INFO
+                                                   /
+                                                   |---->CRASH_RESERVE
+    KEXEC      --|                                /|
+                 |--> KEXEC_CORE--> CRASH_DUMP-->/-|---->PROC_VMCORE
+    KEXEC_FILE --|                               \ |
+                                                   \---->CRASH_HOTPLUG
+
+
+    KEXEC      --|
+                 |--> KEXEC_CORE (for kexec reboot only)
+    KEXEC_FILE --|
+
+Test
+========
+On all 8 architectures, including x86_64, arm64, s390x, sh, arm, mips,
+riscv, loongarch, I did below three cases of config item setting and
+building all passed. Let me take configs on x86_64 as exampmle here:
+
+(1) Both CONFIG_KEXEC and KEXEC_FILE is unset, then all kexec/kdump
+items are unset automatically:
+# Kexec and crash features
+# CONFIG_KEXEC is not set
+# CONFIG_KEXEC_FILE is not set
+# end of Kexec and crash features
+
+(2) set CONFIG_KEXEC_FILE and 'make olddefconfig':
+---------------
+# Kexec and crash features
+CONFIG_CRASH_RESERVE=y
+CONFIG_VMCORE_INFO=y
+CONFIG_KEXEC_CORE=y
+CONFIG_KEXEC_FILE=y
+CONFIG_CRASH_DUMP=y
+CONFIG_CRASH_HOTPLUG=y
+CONFIG_CRASH_MAX_MEMORY_RANGES=8192
+# end of Kexec and crash features
+---------------
+
+(3) unset CONFIG_CRASH_DUMP in case 2 and execute 'make olddefconfig':
+------------------------
+# Kexec and crash features
+CONFIG_KEXEC_CORE=y
+CONFIG_KEXEC_FILE=y
+# end of Kexec and crash features
+------------------------
+
+Note:
+For ppc, it needs investigation to make clear how to split out crash
+code in arch folder. Hope Hari and Pingfan can help have a look, see if
+it's doable. Now, I make it either have both kexec and crash enabled, or
+disable both of them altogether.
+
+Baoquan He (14):
+  kexec: split crashkernel reservation code out from crash_core.c
+  crash: split vmcoreinfo exporting code out from crash_core.c
+  crash: remove dependency of FA_DUMP on CRASH_DUMP
+  crash: split crash dumping code out from kexec_core.c
+  crash: clean up kdump related config items
+  x86, crash: wrap crash dumping code into crash related ifdefs
+  arm64, crash: wrap crash dumping code into crash related ifdefs
+  ppc, crash: enforce KEXEC and KEXEC_FILE to select CRASH_DUMP
+  s390, crash: wrap crash dumping code into crash related ifdefs
+  sh, crash: wrap crash dumping code into crash related ifdefs
+  arm, crash: wrap crash dumping code into crash related ifdefs
+  mips, crash: wrap crash dumping code into crash related ifdefs
+  riscv, crash: wrap crash dumping code into crash related ifdefs
+  loongarch, crash: wrap crash dumping code into crash related ifdefs
+
+ arch/arm/kernel/setup.c                       |   7 +-
+ arch/arm64/Kconfig                            |   2 +-
+ .../asm/{crash_core.h => crash_reserve.h}     |   4 +-
+ arch/arm64/include/asm/kexec.h                |   2 +-
+ arch/arm64/kernel/Makefile                    |   2 +-
+ arch/arm64/kernel/machine_kexec.c             |   2 +-
+ arch/arm64/kernel/machine_kexec_file.c        |  10 +-
+ .../kernel/{crash_core.c => vmcore_info.c}    |   2 +-
+ arch/loongarch/kernel/setup.c                 |   7 +-
+ arch/mips/kernel/setup.c                      |  17 +-
+ arch/powerpc/Kconfig                          |   9 +-
+ arch/powerpc/kernel/setup-common.c            |   2 +-
+ arch/powerpc/mm/nohash/kaslr_booke.c          |   4 +-
+ arch/powerpc/platforms/powernv/opal-core.c    |   2 +-
+ arch/riscv/Kconfig                            |   2 +-
+ .../asm/{crash_core.h => crash_reserve.h}     |   4 +-
+ arch/riscv/kernel/Makefile                    |   2 +-
+ arch/riscv/kernel/elf_kexec.c                 |   9 +-
+ .../kernel/{crash_core.c => vmcore_info.c}    |   2 +-
+ arch/riscv/mm/init.c                          |   2 +-
+ arch/s390/kernel/kexec_elf.c                  |   2 +
+ arch/s390/kernel/kexec_image.c                |   2 +
+ arch/s390/kernel/machine_kexec_file.c         |  10 +
+ arch/sh/kernel/machine_kexec.c                |   3 +
+ arch/sh/kernel/setup.c                        |   2 +-
+ arch/x86/Kconfig                              |   2 +-
+ .../asm/{crash_core.h => crash_reserve.h}     |   6 +-
+ arch/x86/kernel/Makefile                      |   6 +-
+ arch/x86/kernel/cpu/mshyperv.c                |   4 +
+ arch/x86/kernel/kexec-bzimage64.c             |   4 +
+ arch/x86/kernel/kvm.c                         |   4 +-
+ arch/x86/kernel/machine_kexec_64.c            |   3 +
+ arch/x86/kernel/reboot.c                      |   2 +-
+ arch/x86/kernel/setup.c                       |   2 +-
+ arch/x86/kernel/smp.c                         |   2 +-
+ .../{crash_core_32.c => vmcore_info_32.c}     |   2 +-
+ .../{crash_core_64.c => vmcore_info_64.c}     |   2 +-
+ arch/x86/xen/enlighten_hvm.c                  |   4 +
+ drivers/base/cpu.c                            |   6 +-
+ drivers/firmware/qemu_fw_cfg.c                |  14 +-
+ fs/proc/Kconfig                               |   2 +-
+ fs/proc/kcore.c                               |   2 +-
+ include/linux/buildid.h                       |   2 +-
+ include/linux/crash_core.h                    | 152 ++--
+ include/linux/crash_reserve.h                 |  48 ++
+ include/linux/kexec.h                         |  47 +-
+ include/linux/vmcore_info.h                   |  81 ++
+ init/initramfs.c                              |   2 +-
+ kernel/Kconfig.kexec                          |  12 +-
+ kernel/Makefile                               |   5 +-
+ kernel/crash_core.c                           | 764 +++++-------------
+ kernel/crash_reserve.c                        | 464 +++++++++++
+ kernel/{crash_dump.c => elfcorehdr.c}         |   0
+ kernel/kexec.c                                |  11 +-
+ kernel/kexec_core.c                           | 250 +-----
+ kernel/kexec_file.c                           |  13 +-
+ kernel/kexec_internal.h                       |   2 +
+ kernel/ksysfs.c                               |  10 +-
+ kernel/printk/printk.c                        |   4 +-
+ kernel/vmcore_info.c                          | 233 ++++++
+ lib/buildid.c                                 |   2 +-
+ 61 files changed, 1233 insertions(+), 1048 deletions(-)
+ rename arch/arm64/include/asm/{crash_core.h => crash_reserve.h} (81%)
+ rename arch/arm64/kernel/{crash_core.c => vmcore_info.c} (97%)
+ rename arch/riscv/include/asm/{crash_core.h => crash_reserve.h} (78%)
+ rename arch/riscv/kernel/{crash_core.c => vmcore_info.c} (96%)
+ rename arch/x86/include/asm/{crash_core.h => crash_reserve.h} (92%)
+ rename arch/x86/kernel/{crash_core_32.c => vmcore_info_32.c} (90%)
+ rename arch/x86/kernel/{crash_core_64.c => vmcore_info_64.c} (94%)
+ create mode 100644 include/linux/crash_reserve.h
+ create mode 100644 include/linux/vmcore_info.h
+ create mode 100644 kernel/crash_reserve.c
+ rename kernel/{crash_dump.c => elfcorehdr.c} (100%)
+ create mode 100644 kernel/vmcore_info.c
+
 -- 
-2.35.3
+2.41.0
 
 
