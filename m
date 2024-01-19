@@ -1,98 +1,196 @@
-Return-Path: <linux-mips+bounces-1021-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1022-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 680D4832E72
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 18:55:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FD89832E92
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 19:02:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E35B6B250F4
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 17:55:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5A8C1F2421C
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 18:02:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5048455E59;
-	Fri, 19 Jan 2024 17:55:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34EC855E68;
+	Fri, 19 Jan 2024 18:02:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VHVJ0WtH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cjEt9H6n"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E904C54BE2;
-	Fri, 19 Jan 2024 17:55:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B917555C34;
+	Fri, 19 Jan 2024 18:02:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705686942; cv=none; b=Mcg8XPNjSaIpJEK3AUOPQ2NESuG6+T/EseIgkCsCeaRFOD1+7xiOX8rGzHvYUkBpP6H2e3XfwAvX4eZydH3ydRPH13MDnagOT60ntAKYVDEnmxQ7AkHTAGsLKg3tNLwXBbskEMVmuJcmU7wEBF3j1c4WOwBAWELVRoigzdHvwvw=
+	t=1705687337; cv=none; b=WKDtrZr3ZEmm0SYDnLiDNvJbMz19pK8IyWs23CpeGIdIOTB4wpFxSzdgAdMOzDmuiO2eZHydGSMQtJ0AzlqRYnAxsDjB/SykINUB6OKoOTH7Xwxvcv4SehqncXoUGfWBpzw0I8EShqwKtVAzFMUx7001MJZMcbReB05D3C9IDIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705686942; c=relaxed/simple;
-	bh=8p1zwhjPgha6d+fPABkjKL0JHmh3zcwooFif/S91g4c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=dRwzgwKlIDeuDe916DYGmbPr1DGer0Z3DO22AFOrGb1UHkzCK9/tu9TefYzLjG3sRNkV3KMPYk+yRVudPckz4Qy956POlRRAlQ03lu2S5+pgK7ulRTmDn+vp1Us7SK8Zd3p43YEKqL9Q4aJ1RqiQLJN62rl4kgb2N1hMUiD1nAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VHVJ0WtH; arc=none smtp.client-ip=209.85.215.180
+	s=arc-20240116; t=1705687337; c=relaxed/simple;
+	bh=Vpvm4KefXKpJuW7kEf49W4+4n5jkxACkg0N5JK3WnqM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N6DhFe+UzmipYzHhXBaRfid5KRL3vYpq9gFRxNVmuhzht1vbR/CFzMdi1nBaePoUTYidM+vG7z+iKCEANlToFnI/kQHtE+2Stk6NuVmMub74fCNFmJxuO97lZSzydoxYvqjsnKnMeF2Qx0/onl3QsKwiHsA5cbGdbh4O+Paxxjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cjEt9H6n; arc=none smtp.client-ip=209.85.128.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-5cf765355ecso756180a12.0;
-        Fri, 19 Jan 2024 09:55:40 -0800 (PST)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-5e54d40cca2so8504477b3.3;
+        Fri, 19 Jan 2024 10:02:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705686940; x=1706291740; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=//85YOI+SorJ5Qrj2oSRN/MglMKMgpBC2qBxv9agt8U=;
-        b=VHVJ0WtHZm8qxrBeueAAwbHvHzlhlBqFvtyMB8szmNB2VEWNQ+3F04krkyM+2W0JDy
-         tWe4JBhhn+YsViEIAzU1GYsEnCivNTOe8hBUxn0joynBtMjl+koX/cjj6z0WWR6MkYTD
-         5GOg0uus6pQ2TiBIlrH55ReRJduNimTWZRVHmGtXSB83UKrbRh2RfAVeiJRisizWKHVN
-         wNnbzVAtX4lv6zrFQyLx2OXECtHRHARY79yQjI0/n3EXAHsYYbd7eSvhKwkPaFkKhNvE
-         kJNtcUrnixoHTbW6FZ+Q0SKmC5DjWZJz7w6aG2Eg3vEHYcMkz8X6ZVd/61Tp0Hb9QlnK
-         II2w==
+        d=gmail.com; s=20230601; t=1705687335; x=1706292135; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5b/i454jUf4ojxYvY+VxBq+cGu5zdwzrcVsmFXePrUc=;
+        b=cjEt9H6nQ3rscFQE99JWn/WbaxZNRZVLVGOwcnl3R6kZeELFAKpZYrbnQQU9icrDHl
+         Xfz7CYSQr9bJsTehUcj66eCKtWkEm+MrZgngnAe0f8uuoclg3pFmpdW11jlwQtGsViqI
+         /NO52s74ekv49dIafEgDTUrhnS3grveRU2O+WIaarPVnpTtaR8kuDUaA1e0PNj/UEQ2a
+         qS0ddmTKJy4V3iBN11EmxBHi2F/rqaWK/Ez22bajvPeTBsK1Z9QAqJ+8MgFjOYNgB240
+         bX2YpJxBdZYrcQa7PSsqdFIqu8F+fbxXWZ5xvVCFqA/OMvycIBegHtHHEah291mjGvAh
+         nAJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705686940; x=1706291740;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1705687335; x=1706292135;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=//85YOI+SorJ5Qrj2oSRN/MglMKMgpBC2qBxv9agt8U=;
-        b=SIbhvuCCdzH7/eD4XoCIyzT3xYDjoOaUi3GD6TI7qK1ZgPJMOTGYflnSKcCQOAMc4C
-         Mb/TGApikhLUAj+kVAVaZp041LzOx81w5lWyY5JfkQoGGp9Y1iiaa1BwsC7X56CxKRpp
-         BHP0tCGjA6/2Y5DFh4lef8k8Z+Q2KpwEjWn8n6sFtgvMxRKsKuGhseiLxnEiUObG7/8B
-         7XO63AqoTVrcIfYyAuvv71FCA/1uW/qdi5+vRDryLmz459o6uJKXrXMSIbCjclY4qPyq
-         gJ6OMlK0AvJ7RcKCFUvrj8nqHZYo0oJY/6+vRs1ey0RF3OSVJHp2A4qbphFa+zll/RU1
-         UEhg==
-X-Gm-Message-State: AOJu0Yx8OliD7Zjtkiy6WsULwlbi5m4G8yWcC/3c2INy3kZuVoDyoPgB
-	y0HSixUea6TMftWu+cghqRsDyXoedCkO8kvhniwczKPplCrjHj7zbv2Qgcjm
-X-Google-Smtp-Source: AGHT+IH1ZcX4Btw5vBaWDkbKXdGI5vGR7vY6EOMFyL5SERzT9iBozzbktbAzNEIQruIvK4hASeV+LA==
-X-Received: by 2002:a17:90a:fc88:b0:28e:7b91:5792 with SMTP id ci8-20020a17090afc8800b0028e7b915792mr129357pjb.3.1705686940202;
-        Fri, 19 Jan 2024 09:55:40 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id nb17-20020a17090b35d100b00290394b25d5sm2953663pjb.22.2024.01.19.09.55.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Jan 2024 09:55:39 -0800 (PST)
-Message-ID: <29a88f07-b1f6-45ea-b950-7c25c4872775@gmail.com>
-Date: Fri, 19 Jan 2024 09:55:38 -0800
+        bh=5b/i454jUf4ojxYvY+VxBq+cGu5zdwzrcVsmFXePrUc=;
+        b=iJ9L1jHeb4KvuiOEK+DnlBDJbOcOuUE/dU64qBe/FROgNY1Mgm7Tm3aLl0o6QAViQj
+         EghqOT6eVC/sVR8EWO5WZZHqJHyvYS4CjtNE5TZ73711Fk13tmh6A6ZHiZ2+FxcGVJoB
+         iNrhQysOLN48rqcgzM17rQwmz3pn/VzFiPde+AwezF296cNegcDpS+CoKvYk6KCZu3kw
+         z5uMW1NQIMSnp0l5kQ0jveAkClNPmETvQCnY+ItZllUf3xfC5xPOFaCq9E2IQ5eYXJ4s
+         Dy7HMF/JBB/sTtGzP3uSOZB+1OAcJbQHEorewv5kBMGWeDJGLIv/Kcx7e2AyKfuZauXp
+         +66A==
+X-Gm-Message-State: AOJu0Ywlkn3q0iTfLeD+8pcK3G5jRYGuR2jimevfJgUqxngMTndIFehO
+	Ctvspv0rug2Z3eybvSn0vmo/A0PNpTXjuH3kRiYglnADnuZ/JJag
+X-Google-Smtp-Source: AGHT+IH9gcZrsox+4pkG+XVC3K2DCkhX2jg2gbQvfcMMKA5AWgDkyl6PTnKywYab9xjZ/eqMztcaSA==
+X-Received: by 2002:a0d:e003:0:b0:5ff:9567:c81 with SMTP id j3-20020a0de003000000b005ff95670c81mr286738ywe.22.1705687334593;
+        Fri, 19 Jan 2024 10:02:14 -0800 (PST)
+Received: from localhost ([2601:344:8301:57f0:2288:782e:a717:678d])
+        by smtp.gmail.com with ESMTPSA id n68-20020a0dcb47000000b005ff877093easm1389519ywd.143.2024.01.19.10.02.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Jan 2024 10:02:14 -0800 (PST)
+Date: Fri, 19 Jan 2024 10:02:13 -0800
+From: Yury Norov <yury.norov@gmail.com>
+To: Shijie Huang <shijie@amperemail.onmicrosoft.com>
+Cc: Mike Rapoport <rppt@kernel.org>,
+	Huang Shijie <shijie@os.amperecomputing.com>,
+	gregkh@linuxfoundation.org, patches@amperecomputing.com,
+	rafael@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+	aou@eecs.berkeley.edu, kuba@kernel.org, vschneid@redhat.com,
+	mingo@kernel.org, akpm@linux-foundation.org, vbabka@suse.cz,
+	tglx@linutronix.de, jpoimboe@kernel.org, ndesaulniers@google.com,
+	mikelley@microsoft.com, mhiramat@kernel.org, arnd@arndb.de,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+	will@kernel.org, mark.rutland@arm.com, mpe@ellerman.id.au,
+	linuxppc-dev@lists.ozlabs.org, chenhuacai@kernel.org,
+	jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org,
+	cl@os.amperecomputing.com
+Subject: Re: [PATCH] NUMA: Early use of cpu_to_node() returns 0 instead of
+ the correct node id
+Message-ID: <Zaq5JT6SaiogCEkT@yury-ThinkPad>
+References: <20240119033227.14113-1-shijie@os.amperecomputing.com>
+ <Zan9sb0vtSvVvQeA@yury-ThinkPad>
+ <1cd078fd-c345-4d85-a92f-04c806c20efa@amperemail.onmicrosoft.com>
+ <Zao13I4Bb0tur0fZ@kernel.org>
+ <b8786c38-d6c4-4fea-a918-ac6a45682dba@amperemail.onmicrosoft.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] MIPS: sgi-ip32: Fix missing prototypes
-Content-Language: en-US
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240119135252.112460-1-tsbogend@alpha.franken.de>
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20240119135252.112460-1-tsbogend@alpha.franken.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b8786c38-d6c4-4fea-a918-ac6a45682dba@amperemail.onmicrosoft.com>
 
-On 1/19/24 05:52, Thomas Bogendoerfer wrote:
-> Fix interrupt function prototypes, move all prototypes into a new
-> file ip32-common.h and include it where needed.
+On Fri, Jan 19, 2024 at 04:50:53PM +0800, Shijie Huang wrote:
 > 
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> 在 2024/1/19 16:42, Mike Rapoport 写道:
+> > On Fri, Jan 19, 2024 at 02:46:16PM +0800, Shijie Huang wrote:
+> > > 在 2024/1/19 12:42, Yury Norov 写道:
+> > > > This adds another level of indirection, I think. Currently cpu_to_node
+> > > > is a simple inliner. After the patch it would be a real function with
+> > > > all the associate overhead. Can you share a bloat-o-meter output here?
+> > > #./scripts/bloat-o-meter vmlinux vmlinux.new
+> > > add/remove: 6/1 grow/shrink: 61/51 up/down: 1168/-588 (580)
+> > > Function                                     old     new   delta
+> > > numa_update_cpu                              148     244     +96
+> > > 
+> > >   ...................................................................................................................................(to many to skip)
+> > > 
+> > > Total: Before=32990130, After=32990710, chg +0.00%
+> > It's not only about text size, the indirect call also hurts performance
+> 
+> The cpu_to_node() is called at very low frequency, most of the times is in
+> the kernel booting time.
+ 
+That doesn't matter. This function is a simple inliner that dereferences
+a pointer, and I believe all of us want to keep it simple. 
+ 
+> > > > Regardless, I don't think that the approach is correct. As per your
+> > > > description, some initialization functions erroneously call
+> > > > cpu_to_node() instead of early_cpu_to_node() which exists specifically
+> > > > for that case.
+> > > > 
+> > > > If the above correct, it's clearly a caller problem, and the fix is to
+> > > > simply switch all those callers to use early version.
+> > > It is easy to change to early_cpu_to_node() for sched_init(),
+> > > init_sched_fair_class()
+> > > 
+> > > and workqueue_init_early(). These three places call the cpu_to_node() in the
+> > > __init function.
+> > > 
+> > > 
+> > > But it is a little hard to change the early_trace_init(), since it calls
+> > > cpu_to_node in the deep
+> > > 
+> > > function stack:
+> > > 
+> > >    early_trace_init() --> ring_buffer_alloc() -->rb_allocate_cpu_buffer()
+> > > 
+> > > 
+> > > For early_trace_init(), we need to change more code.
+> > > 
+> > > 
+> > > Anyway, If we think it is not a good idea to change the common code, I am
+> > > oaky too.
+> > Is there a fundamental reason to have early_cpu_to_node() at all?
+> 
+> The early_cpu_to_node does not work on some ARCHs (which support the NUMA),
+> such
+> 
+> as  SPARC, MIPS and S390.
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+So, your approach wouldn't work either, right? I think you've got a
+testing bot report on it already...
+
+You can make it like this:
+
+  #ifdef CONFIG_ARCH_NO_EARLY_CPU_TO_NODE
+  #define early_cpu_to_node cpu_to_node
+  #endif
+ 
+> > It seems that all the mappings are known by the end of setup_arch() and the
+> > initialization of numa_node can be moved earlier.
+> > > > I would also initialize the numa_node with NUMA_NO_NODE at declaration,
+> > > > so that if someone calls cpu_to_node() before the variable is properly
+> > > > initialized at runtime, he'll get NO_NODE, which is obviously an error.
+> > > Even we set the numa_node with NUMA_NO_NODE, it does not always produce
+> > > error.
+
+You can print this error yourself:
+
+  #ifndef cpu_to_node
+  static inline int cpu_to_node(int cpu)
+  {
+        int node = per_cpu(numa_node, cpu);
+
+  #ifdef CONFIG_DEBUG_PER_CPU_MAPS
+        if (node == NUMA_NO_NODE)
+                pr_err(...);
+  #endif
+
+          return node;
+  }
+  #endif
 
 
