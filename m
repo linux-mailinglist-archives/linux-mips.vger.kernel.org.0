@@ -1,51 +1,83 @@
-Return-Path: <linux-mips+bounces-1015-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1016-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AC66832CFD
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 17:15:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 758C7832D30
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 17:33:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33C83281CDA
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 16:15:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C56D4B2134D
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 16:33:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C3C554BFD;
-	Fri, 19 Jan 2024 16:15:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0FEB433BE;
+	Fri, 19 Jan 2024 16:33:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M36cCNoO"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 358A652F61
-	for <linux-mips@vger.kernel.org>; Fri, 19 Jan 2024 16:15:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C529A1F60B;
+	Fri, 19 Jan 2024 16:33:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705680944; cv=none; b=WL8QPXlJbvNm9k75L+3aDKboNW0X6NOyOepOB2vmUM8ZuimB+WJm4KByD8qg7hb7/WeOpnDTwIphzwmsivHN1W1a89sPygU/0srfr/L2UCILwG93QfRsuDQNTt50rTEK4jUdHdsOf0EHgQ92k/XLIQ2Fji/WKzyr2/ohWJ6MzD8=
+	t=1705682007; cv=none; b=YlH+9I2JoEoojkDe1Ngvp/6bHG7YHF2MWeLIc60PMPKap9lq71ySkG11r2JfkrWXVbEFUa3IfP4eIcCzR1SNSHH6oJO4l5nGX5S4OLwbcHGBt/gfAscynkIqM3LJDp/ihkW7bqBLNRkQ8SZA2cR46qcE3K+QPx22H1CdxrVePaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705680944; c=relaxed/simple;
-	bh=JwAzxbDsFJuDvPz4h3i1sXjzrIsdceZVJeTpvojZ5jw=;
+	s=arc-20240116; t=1705682007; c=relaxed/simple;
+	bh=4MTHcTMRo8vaC78u9KaJGas7GabALp0/v9oyhzhuUno=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pz3mOTKjhPGXzKluaA1iVUO3K5lMSLYp1CL1jGTvMsp7OVdcdufRKnfeflJPt3GrfqwwFjvbT9WzpJOoAowrfVmKc65qhJ/LQbDMx+WT0g4Bau0o9EYpy6O16I3R5n46ZxiFuRIfZzLiHhIwgxp6XqctXRyUOa9FIcmJf9xAfeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1rQrWk-00039x-00; Fri, 19 Jan 2024 17:15:30 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 2D0B1C0135; Fri, 19 Jan 2024 17:15:02 +0100 (CET)
-Date: Fri, 19 Jan 2024 17:15:02 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Huang Pei <huangpei@loongson.cn>
-Cc: Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Paul Burton <paulburton@kernel.org>,
-	Li Xuefeng <lixuefeng@loongson.cn>,
-	Yang Tiezhu <yangtiezhu@loongson.cn>,
-	Gao Juxin <gaojuxin@loongson.cn>,
-	Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH 1/2] MIPS: reserve exception vector space ONLY ONCE
-Message-ID: <ZaqgBugqaPLZTofT@alpha.franken.de>
-References: <ZZ29Wr9yfAcqGxrN@alpha.franken.de>
- <20240119040240.392442-1-huangpei@loongson.cn>
- <20240119040240.392442-2-huangpei@loongson.cn>
+	 Content-Type:Content-Disposition:In-Reply-To; b=maJZwOPNMCz4aHgZwF2GJ2b44Fvv7hv84lJjTpn+NAIFxir3oIDfwr1HoY70mKMbDAGPSiFmoOX1D1DlT6WQqtMYSQFv1xtrPfUj+Q7l1kC+wvIvR2C7K1uqRttm06YYJWCAOI1AVrF44LqnEox6oCeF2Uj0F5ujDF2+h0Yu/Dc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M36cCNoO; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705682004; x=1737218004;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4MTHcTMRo8vaC78u9KaJGas7GabALp0/v9oyhzhuUno=;
+  b=M36cCNoOtzFdGySNm9/zqm8BA5I3Iq7TT1HH49HDR9PqGPoq3mVUJdCN
+   Q7ucOIxS184Xxgve+2V1H1hewwXKTC2oU/tH6ATvDGok8wI99LO91jvFK
+   g3H9bGKdWE19ydJeHbjVoVTjxUCptG/OWn3e4IXjjqJb0w3yR4olKOq8S
+   KQ7eNt+W8v5X9WhfGLltGvtOxyWNvqHdEtTxM03ntMY++NEBPnsmco1Zg
+   XPOemhnmIKm+0COUqPVMoMeDKYlvMBhlmyB9BIyvziGxGb58RM5rahmv1
+   BRW1F8HglzViCrigcGEztm9yf9/vkLPRApCNxriuqQfoU8YqRsS7LQdUg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10957"; a="676878"
+X-IronPort-AV: E=Sophos;i="6.05,204,1701158400"; 
+   d="scan'208";a="676878"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2024 08:33:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,204,1701158400"; 
+   d="scan'208";a="27082145"
+Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 19 Jan 2024 08:33:09 -0800
+Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rQrnm-0004Fy-2T;
+	Fri, 19 Jan 2024 16:33:06 +0000
+Date: Sat, 20 Jan 2024 00:32:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Huang Shijie <shijie@os.amperecomputing.com>,
+	gregkh@linuxfoundation.org
+Cc: oe-kbuild-all@lists.linux.dev, patches@amperecomputing.com,
+	rafael@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+	aou@eecs.berkeley.edu, yury.norov@gmail.com, kuba@kernel.org,
+	vschneid@redhat.com, mingo@kernel.org, akpm@linux-foundation.org,
+	vbabka@suse.cz, rppt@kernel.org, tglx@linutronix.de,
+	jpoimboe@kernel.org, ndesaulniers@google.com,
+	mikelley@microsoft.com, mhiramat@kernel.org, arnd@arndb.de,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+	will@kernel.org, mark.rutland@arm.com, mpe@ellerman.id.au,
+	linuxppc-dev@lists.ozlabs.org, chenhuacai@kernel.org,
+	jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org
+Subject: Re: [PATCH] NUMA: Early use of cpu_to_node() returns 0 instead of
+ the correct node id
+Message-ID: <202401200006.wOMN1YgH-lkp@intel.com>
+References: <20240119033227.14113-1-shijie@os.amperecomputing.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -54,43 +86,57 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240119040240.392442-2-huangpei@loongson.cn>
+In-Reply-To: <20240119033227.14113-1-shijie@os.amperecomputing.com>
 
-On Fri, Jan 19, 2024 at 12:02:39PM +0800, Huang Pei wrote:
-> "cpu_probe" is called both by BP and APs, but reserving exception vector
-> (like 0x0-0x1000) called by "cpu_probe" need once and calling on BPs is
-> too late since memblock is unavailable at that time.
-> 
-> So, reserve exception vector ONLY by BP.
-> 
-> Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> ---
->  arch/mips/kernel/cpu-probe.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-> index b406d8bfb15a..6939d0de2a03 100644
-> --- a/arch/mips/kernel/cpu-probe.c
-> +++ b/arch/mips/kernel/cpu-probe.c
-> @@ -1581,7 +1581,9 @@ static inline void cpu_probe_broadcom(struct cpuinfo_mips *c, unsigned int cpu)
->  			__cpu_name[cpu] = "Broadcom BMIPS4380";
->  			set_elf_platform(cpu, "bmips4380");
->  			c->options |= MIPS_CPU_RIXI;
-> -			reserve_exception_space(0x400, VECTORSPACING * 64);
-> +			if (cpu == 0) {
-> +				reserve_exception_space(0x400, VECTORSPACING * 64);
-> +			}
+Hi Huang,
 
-why not do a 
+kernel test robot noticed the following build errors:
 
-if (smp_processor_id() == 0)
-	memblock_reserve(...)
-		
-in reserve_exception_space() ?
+[auto build test ERROR on driver-core/driver-core-testing]
+[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus akpm-mm/mm-everything linus/master v6.7 next-20240119]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thomas.
+url:    https://github.com/intel-lab-lkp/linux/commits/Huang-Shijie/NUMA-Early-use-of-cpu_to_node-returns-0-instead-of-the-correct-node-id/20240119-113623
+base:   driver-core/driver-core-testing
+patch link:    https://lore.kernel.org/r/20240119033227.14113-1-shijie%40os.amperecomputing.com
+patch subject: [PATCH] NUMA: Early use of cpu_to_node() returns 0 instead of the correct node id
+config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20240120/202401200006.wOMN1YgH-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240120/202401200006.wOMN1YgH-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401200006.wOMN1YgH-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   ld: vmlinux.o: in function `rapl_cpu_online':
+>> rapl.c:(.text+0x75ec): undefined reference to `cpu_to_node'
+   ld: vmlinux.o: in function `amd_pmu_cpu_prepare':
+>> core.c:(.text+0x8580): undefined reference to `cpu_to_node'
+>> ld: core.c:(.text+0x85d6): undefined reference to `cpu_to_node'
+   ld: vmlinux.o: in function `amd_uncore_ctx_init.part.0':
+>> uncore.c:(.text+0xc3bd): undefined reference to `cpu_to_node'
+   ld: vmlinux.o: in function `intel_cpuc_prepare':
+>> (.text+0x129ee): undefined reference to `cpu_to_node'
+   ld: vmlinux.o:(.text+0x12a71): more undefined references to `cpu_to_node' follow
+   ld: vmlinux.o: in function `kernel_init_freeable':
+>> main.c:(.init.text+0x1240): undefined reference to `_cpu_to_node'
+   ld: vmlinux.o: in function `check_timer':
+>> io_apic.c:(.init.text+0x1ec1d): undefined reference to `cpu_to_node'
+   ld: vmlinux.o: in function `kvm_alloc_cpumask':
+>> kvm.c:(.init.text+0x21678): undefined reference to `cpu_to_node'
+   ld: vmlinux.o: in function `fork_idle':
+>> (.init.text+0x28fe2): undefined reference to `cpu_to_node'
+   ld: vmlinux.o: in function `cpus_share_numa':
+>> workqueue.c:(.init.text+0x2a4c8): undefined reference to `cpu_to_node'
+>> ld: workqueue.c:(.init.text+0x2a4d8): undefined reference to `cpu_to_node'
+   ld: vmlinux.o:workqueue.c:(.init.text+0x2a7bc): more undefined references to `cpu_to_node' follow
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
