@@ -1,73 +1,73 @@
-Return-Path: <linux-mips+bounces-1018-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1019-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DFF9832E65
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 18:54:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65CA6832E68
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 18:54:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5C01EB20EB3
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 17:54:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 075141F24CC8
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 17:54:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A2895577D;
-	Fri, 19 Jan 2024 17:54:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F70A56475;
+	Fri, 19 Jan 2024 17:54:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lk6c3C3n"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kxNMatrF"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 088BF1E87C;
-	Fri, 19 Jan 2024 17:54:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2413D56456;
+	Fri, 19 Jan 2024 17:54:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705686859; cv=none; b=g8WbwaP0O1EmYA+5/+dA7DJV8NI3TXbive00l/VtXqC2vKMIIofvi8owoExkEhwPVbTRABnqCSA1vDvsxhRuMybLfBtTa8ubrO0w0me0OUJ99j2oqzpacTX0yAsyQjPYTdPFt3UDMRiT8+wa+9KKuFu+uQDPu6D4Hz9wtH9aaEw=
+	t=1705686867; cv=none; b=jtDR2h6xTPqWwGQ7hpGu2U2fH3leUO8z5g9w8HcpROL+za4Abr+YOn+aH9JYNkp9tNs9DKfE6eEveP03Agj1wvD6AfSnjJ1CDgP3WtyGp+pfLhaz9wIjRvxE2aFqLRLRu8MgFgPOzGUv84s1OKS/SAsYx0jpCwVo+LjKt/a4svQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705686859; c=relaxed/simple;
-	bh=E98o89P8+R8YAOCQwVZNOu3BKNa62BrRxKH6/6qwefY=;
+	s=arc-20240116; t=1705686867; c=relaxed/simple;
+	bh=E0z97uQ6yQPm/3szsLRhIGYBlbGjnL4leaNypuoRZ4s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=LKIc2e+/DQ5k4s+YW3tbHALV2d1edLXbBWLXXudTrk/c0VjhlxOsf/qk/Q/CW0g7UYFs/sjvI4K5WxLtQUKWJe8P1zm0x/1gjP7uP7kMjyS5SC8a3/Kpv+SZF9yShPK4oNwW6JVjwajZLy0AdILRkfsgDukqgA3AuEpKN5tZpwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lk6c3C3n; arc=none smtp.client-ip=209.85.215.177
+	 In-Reply-To:Content-Type; b=J4/mlXSapKFzloNbLzIWFijWCDjmEcrF7XRxT6sQkSY78c3ZrpWiEVbJU6J+AjGvO4uHDZK2bsaXtlm3fThE1aHcauHLnf28gJsGBKTjmG5EkQ9LA9z6+F+9ObtX3cnUtqfwlaS37ycDBNgIL9TQ4850UBWX3ff/uUwzbzCv1ps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kxNMatrF; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-5cec32dedf3so753409a12.0;
-        Fri, 19 Jan 2024 09:54:17 -0800 (PST)
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-28e84e3767cso831865a91.0;
+        Fri, 19 Jan 2024 09:54:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705686857; x=1706291657; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1705686865; x=1706291665; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/FKtHrE1aXZwBWr0DhHzM7pDrpBjBv62gCYMzeiuv8I=;
-        b=Lk6c3C3nMxaNidTHOP3amABgUxCQolWDf5WY2PYH/gRhXPwRW11WFU6DdHXOIf/2QQ
-         +dpi7BGKTXfenPcLN1BDeZCtm2CDugiJccyHfiUahf10zzieGVJc49BA3CmTyIMMPc4W
-         RPJs5qNEFT4K0ydw0UWQnkX7SIKA+XtZJIaZpWCp/jKP/sHrlellSSlumNIwpeTkGRk8
-         jJIlfsnMuYgwIH++DXDisVZX5K/QoZqsQ+ZNe//bH69gtzZ4FI5blIhGNPV0zXKlkCnS
-         UOp35Sk1qV8DyOgz5IIhuYQ6IfuCSY0bb5PEX3mfzu/ItDL2g50ZStCWI5leOsulG39I
-         o+Cw==
+        bh=2Zv3sJhlHlawedPmG8t62+Jm0am+4Wi3ALNw69cqMe4=;
+        b=kxNMatrFTdvCzvtLLX75Dv4GhrjAKqGVM0CBRWRfNjNg6pW16lv3mjHPcC/BwFqN4t
+         5iv+Z2mjtHBMyeo76Ini7BTFXy7DSRrfmicke+qXsYsziKvSjgaQRB/cLBFsv6gMcQVs
+         hsjeBDUgN5V8sStOai3eF1EtcnaF2NBaYYf5lTY6Qo7DnRlod7ukQXCa0KSPcGFIlggF
+         fWoBxzAJS7FLJK5gHTKuFbe5ful8jf0+r/K71SdQYzEGaNoE5SqRrDlQIINJPHdafmKk
+         jvvQ8ZLhGZYv4/3sB6+uJb95DaGh1uphXrAqvW+KT8CFMfT54puMab0QOrJcXMx9w/ZN
+         EriA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705686857; x=1706291657;
+        d=1e100.net; s=20230601; t=1705686865; x=1706291665;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/FKtHrE1aXZwBWr0DhHzM7pDrpBjBv62gCYMzeiuv8I=;
-        b=ksHpnWEVZbRgWb7Ok99tuU2Kafk1JomktB/vju49kXcpLt7DA+NsnRD8LmOvkIggjj
-         Pbbb/M3Qi7TG7p3qjRM8NfkhxkIdyw+PQqukCL+UhKugrcGKNVm5C+vLBb7Zu5bXkqFJ
-         Df6HYPltrkQ57RhzMiSKDH+CpVPAdai+vDBAjDdpkLZuJatiJ5THOFnh6P1W3V8SQzFu
-         Tj14JoKUfychnk7+E4+MkBUYdnATR5XllXkFPo77NHoMej5blFiM2WL/RMMk/QUJEyrk
-         CZjwAAPlZkZjkXczIUhoZ3eqHY2VdEr6utuYRv1l4x9c1kbj1LRX9YxgrFkYCFYmt9c9
-         W7LQ==
-X-Gm-Message-State: AOJu0YxBnN1/yL61LPCdLCwT0Cij185cTSRPpAYvcwz2cTe2WkwE4guW
-	PR3ISzVt+1rj/WQDof7Jysfz6yAIVOzefe3A05AoEsGFc9mEGgfK+dPi7Ki5
-X-Google-Smtp-Source: AGHT+IEt4VmqIUe/VhRjbnK3usqLmrNWQ2R6dIVG6HfwlqryiDMyULoar3g15PVmOTWKMLHhe0EJmw==
-X-Received: by 2002:a17:90a:1344:b0:28e:6f44:46d5 with SMTP id y4-20020a17090a134400b0028e6f4446d5mr135498pjf.52.1705686857245;
-        Fri, 19 Jan 2024 09:54:17 -0800 (PST)
+        bh=2Zv3sJhlHlawedPmG8t62+Jm0am+4Wi3ALNw69cqMe4=;
+        b=nVmbb1acruuwpLSv2Jhwdh4GiQ/Lk22ctbCgKHP2110slr7Q04vMlzbHyx43zceWby
+         YO9s1eceo9BWUVdvpSioRQgztJKCkVuLsrDBIDOO/PCh9JkMH/79g2CLJPPAwssvBwXh
+         x8g2nqdl5txS7BE6ERTulGeBEg7N2ECT/8xyVdz62fz7RtXx9Bqz1CMhX1OJrYKTLYo5
+         ut7kdcX+otHezNyunCJost6vaYP1b9dmTnvA5I9ujuubSZk/McgPewqmhADy2o48sbCs
+         BPTj2Au5d6+WTDuE6+/RR1w24upwS1VDHMUlbDQTx94i4GEMeG3nueJnPp5+O6W7PIFf
+         sgZQ==
+X-Gm-Message-State: AOJu0YzisieZ4ydAqz6sZRgQlt2V899+LqKnOJREVZR+SRcmh94KCeOZ
+	2wpPubFUKgyc1/d7Fi4Ro5/jegwJRR1axieUGS9Qs7PH7If11UjxIcIYANXa
+X-Google-Smtp-Source: AGHT+IH3yc+KsmyVzIA817/J0FFbh+6fxvetf5lw7ZFjFiSvUiMZXLpmZpPSERhyKxjhP/6goWrCuQ==
+X-Received: by 2002:a17:90a:b391:b0:290:56f0:800b with SMTP id e17-20020a17090ab39100b0029056f0800bmr1097695pjr.44.1705686865369;
+        Fri, 19 Jan 2024 09:54:25 -0800 (PST)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id nb17-20020a17090b35d100b00290394b25d5sm2953663pjb.22.2024.01.19.09.54.15
+        by smtp.googlemail.com with ESMTPSA id nb17-20020a17090b35d100b00290394b25d5sm2953663pjb.22.2024.01.19.09.54.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Jan 2024 09:54:15 -0800 (PST)
-Message-ID: <ea0e69ab-744b-4e75-8a17-6c0b59b16db3@gmail.com>
-Date: Fri, 19 Jan 2024 09:54:13 -0800
+        Fri, 19 Jan 2024 09:54:24 -0800 (PST)
+Message-ID: <dd69de97-155f-441b-a640-b35c5a7d40ab@gmail.com>
+Date: Fri, 19 Jan 2024 09:54:24 -0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -75,20 +75,18 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] MIPS: sgi-ip27: Fix missing prototypes
+Subject: Re: [PATCH] MIPS: fw arc: Fix missing prototypes
 Content-Language: en-US
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
  linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240119133216.83220-1-tsbogend@alpha.franken.de>
+References: <20240119133634.96420-1-tsbogend@alpha.franken.de>
 From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20240119133216.83220-1-tsbogend@alpha.franken.de>
+In-Reply-To: <20240119133634.96420-1-tsbogend@alpha.franken.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/19/24 05:32, Thomas Bogendoerfer wrote:
-> Fix missing prototypes by making not shared functions static and
-> adding others to ip27-common.h. Also drop ip27-hubio.c as it's
-> not used for a long time.
+On 1/19/24 05:36, Thomas Bogendoerfer wrote:
+> Make ArcGetMemoryDescriptor() static since it's only needed internally.
 > 
 > Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
