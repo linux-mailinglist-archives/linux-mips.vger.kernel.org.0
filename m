@@ -1,236 +1,505 @@
-Return-Path: <linux-mips+bounces-990-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-991-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 947248325F9
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 09:51:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB38F832717
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 10:56:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 098F71F233E8
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 08:51:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B61728525D
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jan 2024 09:56:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D40041DDC3;
-	Fri, 19 Jan 2024 08:51:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D48E3C466;
+	Fri, 19 Jan 2024 09:56:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b="zXID8gJx"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="IdJnNEEp";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qc1+2loE"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2125.outbound.protection.outlook.com [40.107.237.125])
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0CD8F4E;
-	Fri, 19 Jan 2024 08:51:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.125
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705654274; cv=fail; b=koWKEk76qggQrdWBHyZMtkcdQqvFnU5TRSW3hKQ8wjKrt4bNOM/F0kifUpt3I121JAw/Bea3jqmb7VRx16eZ8yWF3lvbyGtOvwgFWmCCTM6l1VXLvCAkMxAuLazXb9jxm8tCrHoLbVhUQTX43vdu28WXcOgTTGEL+kd/FblytIg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705654274; c=relaxed/simple;
-	bh=mc0jO1dM9ozd6zKL+M5z8/2/9Oj6+2Rz4tV6X+sDAWo=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=LQtlbtO8uwKWklcK+idHt+A+aB6foUGdHaQf/cUBjmauGTQU3CqHkxG59EhJ6Gjyqewxtf86rWa1CyO2p68uIvsjzQ0PNv528jaM1jn0TAmxJZ5spb4xQSsXx1+WnaLOUyFVDKKFmWjQQ0BIYjiU89nwX6lrS9jTIPhbwtI2f6g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com; spf=pass smtp.mailfrom=os.amperecomputing.com; dkim=fail (0-bit key) header.d=amperemail.onmicrosoft.com header.i=@amperemail.onmicrosoft.com header.b=zXID8gJx reason="key not found in DNS"; arc=fail smtp.client-ip=40.107.237.125
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amperemail.onmicrosoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=os.amperecomputing.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g8pk2QU1FzDr8062uRLLFJpsggKrIoB+Xy6I7pEXHsl26OYCxtT5FqFJCxu3C0hLcAIfM82Zxmb8rrMs/WpG0QeaaPFuSfV7vJPrxZy0F4Z/O5IxNHB1av/esREU23WXL/EEoerRsIGzFYDJZw/E+4XW41bvs+TSU3o7BTf96Ztbesa5YUjN/iqeH5SGjUoYBgw8AdNuIEVdrwPGXiqv1gPv5/Kd9TnMet48iPbkQ618ClVABpWHthgsnbKtCZriHFEip+oM8L1AJxto7pCkemjHAgxxPUf3xkf8lcab/WkEnw9U7FXndLX+Uk3dlsuZRassKp0EIzgCD9cWfimVbA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=w3iiGy0ADGM92s0ECxkPq4rJLSIGVElnc9D6RypFUaw=;
- b=a6Bd7BWGkoQW0JUXDSFUTXE3SnpJSVmJuYygr6Bvscmmvor+9fgU1/PKNJEzC1JwZEaKfo8N7fyn87W3GzEklQ8Xh9BXAQFuRXl7WBkY7mjyAj23FFILLThVPmfZCu314P8WvyDTvCyWCOLXZ3IWyNi0shioftZ7Bv2Ci5iBAu6KuwGBbubNX+IBPnbwNDqXg+E3zV91kReNItwSoycpO2iEJ7TJilrPeFAi2HXmcxDn9gaewsaMVfgHpWFMBQkL8hxJsrrg8BvPy2UOgaW8hBgfPnC6w5bQI9L0l7HpAhZYdiKaQDLtblEgQJPSR9/9X5mmvrPG7wv+9wjQIyrkUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=amperemail.onmicrosoft.com; dkim=pass
- header.d=amperemail.onmicrosoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amperemail.onmicrosoft.com; s=selector1-amperemail-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w3iiGy0ADGM92s0ECxkPq4rJLSIGVElnc9D6RypFUaw=;
- b=zXID8gJxcVBcFK+w9E0GCEMrsYEQudH3NvjVimUWnJAtzoztmdKf724zjDxhqNEiTJhQOA74XB91pwnXC8TJgxXqINuuVGR3L21F4IoC72eutmQf8O1/WdK4h0TL9iYXim1K40KWO2nNSwOxJqhcGduKZhrthiux3t65tWWYqV8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amperemail.onmicrosoft.com;
-Received: from PH0PR01MB7975.prod.exchangelabs.com (2603:10b6:510:26d::15) by
- DS7PR01MB7567.prod.exchangelabs.com (2603:10b6:8:72::15) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7202.23; Fri, 19 Jan 2024 08:51:08 +0000
-Received: from PH0PR01MB7975.prod.exchangelabs.com ([fe80::91c:92f:45a5:e68a])
- by PH0PR01MB7975.prod.exchangelabs.com ([fe80::91c:92f:45a5:e68a%6]) with
- mapi id 15.20.7202.026; Fri, 19 Jan 2024 08:51:08 +0000
-Message-ID: <b8786c38-d6c4-4fea-a918-ac6a45682dba@amperemail.onmicrosoft.com>
-Date: Fri, 19 Jan 2024 16:50:53 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] NUMA: Early use of cpu_to_node() returns 0 instead of the
- correct node id
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Yury Norov <yury.norov@gmail.com>,
- Huang Shijie <shijie@os.amperecomputing.com>, gregkh@linuxfoundation.org,
- patches@amperecomputing.com, rafael@kernel.org, paul.walmsley@sifive.com,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, kuba@kernel.org,
- vschneid@redhat.com, mingo@kernel.org, akpm@linux-foundation.org,
- vbabka@suse.cz, tglx@linutronix.de, jpoimboe@kernel.org,
- ndesaulniers@google.com, mikelley@microsoft.com, mhiramat@kernel.org,
- arnd@arndb.de, linux-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
- mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org, chenhuacai@kernel.org,
- jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org,
- cl@os.amperecomputing.com
-References: <20240119033227.14113-1-shijie@os.amperecomputing.com>
- <Zan9sb0vtSvVvQeA@yury-ThinkPad>
- <1cd078fd-c345-4d85-a92f-04c806c20efa@amperemail.onmicrosoft.com>
- <Zao13I4Bb0tur0fZ@kernel.org>
-From: Shijie Huang <shijie@amperemail.onmicrosoft.com>
-In-Reply-To: <Zao13I4Bb0tur0fZ@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CH0P220CA0025.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:610:ef::20) To PH0PR01MB7975.prod.exchangelabs.com
- (2603:10b6:510:26d::15)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6031F3C063;
+	Fri, 19 Jan 2024 09:56:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.111.4.29
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705658197; cv=none; b=QGt2b63YTWsJyvsmS9Jro16BWWnEOAJkBhtUFoEH1pIivAqJRulbNRrc7RzuAXS3b7JDmeRh7vzOeauwJbGoR1PjprmhyFFM+NDWQxmA107fBr8wcuQauG3MWQDQY0MR2HXpuo1s5DZHkN56rQ0MyjECTk9WOQ0ie6SgIkXHlBU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705658197; c=relaxed/simple;
+	bh=YpgWL0g58553EApQrrSgdKF5e0FnD3RArSLD6nWClCE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=st38bE3wD8hFN2b67zHbGQl6T4ObLazBfUpwXDsypDnyuI8jx6zSpU2kISA6jKnzXJ8etgzPzN1H1+lC8l+F/9RrM2mwb7GQ5YOsjlFm92WpwJHRtEzOnK8S4xGYd6kZQl3PEEWqb4tw5iznZPJN2szmBZhaSSx4KVRzCVuC5Ks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=IdJnNEEp; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qc1+2loE; arc=none smtp.client-ip=66.111.4.29
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailout.nyi.internal (Postfix) with ESMTP id 4FCC85C01BB;
+	Fri, 19 Jan 2024 04:56:34 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Fri, 19 Jan 2024 04:56:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1705658194;
+	 x=1705744594; bh=00gLrxJ8+js/sxezIi/9rpR+lF95biOp44/Jx7OnTYw=; b=
+	IdJnNEEpzH53I7lFSSW5Vy3XD8AwK6umI4wWlhMnyZEYE/5mgQO8R3pwgpIwYnZn
+	I/1n9xTlB3XTILNmU9c16DcG7Z/uuCg5+4xd1f3UMXs7E0G4UEFIpJAo+rGH7/KZ
+	KW4xB75wkCTp7VReUQruhdMaj9C7teuWmymsbm6RLIiyGqlr+gt+vTwUr7L/QXM8
+	G7IxP1T/p2xs/INFSq7+Fg7sLoB90ylbjXrQtuFMLaGljQ0BlL7YmQ/iyztlEJ4t
+	57+0qsc6jiXncjOKXyc52VMrDCWGOuvsl9VIDtpVz1P/9oD9XdSKV/2zvRRETLxF
+	MXOzgJZtAFHptWVouRtAtA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1705658194; x=
+	1705744594; bh=00gLrxJ8+js/sxezIi/9rpR+lF95biOp44/Jx7OnTYw=; b=q
+	c1+2loEk1Kpj1T2hpZc2IzchsUfUn/Tv2W3nIg6EG1cDlBNnoVazC8z4xFJkCIzg
+	DbGkdGEOupvBjwlZB5HztIhEETjzuoxSJXHaQtuVtZeokXV8NMpXsFu5Qo+GwQHC
+	egZQDb/hFC8tJ6M5JrhwzwbvM3utCGdIbCxNHranB1VSiEPdgLgF8fHFHVYW5/Tu
+	n45yS7NTRGuKxwnmPlLZPl3P/nntWr7e6cx6v7XjmdDS/8tjIs8OYvP0GZ+F4T6u
+	SRYS88aKPnVzjqHEMqxOnwizpycx2rgFpKRCqJWhGLlsw8Fx9tcfJBhSMrcI8l4C
+	roREnD6QCAl5cn2LCRRrw==
+X-ME-Sender: <xms:UUeqZfqlV2w-QEqYc-DeX8ZVX3gQt8s-hEv3y0DaH9-Q7Jh-28P1EA>
+    <xme:UUeqZZpj3vZaOaKzl_GoN_En2vBh9E7r68Omej8gkXe7C2q11gOmwR35RK_ToFVcH
+    GSo6v5WiesKC5fLdqk>
+X-ME-Received: <xmr:UUeqZcMchT_Ez6eXp74oL9L7NLwYZtbyvu3GaZq6JXKNktuw76CsRFSfpXB_REOOE50jabDIoXRkt5ApducDb6A42sZLZAQs11AVOUo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdektddgtdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtvdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepteetueetfeffkeefgefhleevkeeggeefveettdehveelheel
+    ueelteelteevfeefnecuffhomhgrihhnpehithhsrdhssgenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhih
+    ghhorghtrdgtohhm
+X-ME-Proxy: <xmx:UUeqZS7dK4avwanRGc96gkv-2TWwflpuPfaidIgCabeca12q7nHIbg>
+    <xmx:UUeqZe5EEJBQff75-9vjjd1UaTa9kQtCBMW27BzAPXfn_CeClHAMZg>
+    <xmx:UUeqZajJKWWbSu5IGRVvlmF_hfYWHQK-SsXnX24cWBMoZs-3CyFRUA>
+    <xmx:UkeqZWiW5aEIaEWosJlT47SA6LkNgMPxf-dud6T9OTvaSBuPRizcgw>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 19 Jan 2024 04:56:32 -0500 (EST)
+Message-ID: <08c15a99-b158-4a69-af63-0bbbb0961da7@flygoat.com>
+Date: Fri, 19 Jan 2024 09:56:31 +0000
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR01MB7975:EE_|DS7PR01MB7567:EE_
-X-MS-Office365-Filtering-Correlation-Id: 43278f3c-1f53-4962-2382-08dc18cbc760
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	0iwyAJVQD3Od9QS419cmU0MoRt+Mjm2gw66INIrJ5uQVAmupcDRo0/CDE+mm2S0aNFp+Ms/eNc6AxKW6/Ar9oRILRROB3GGzaCGV/venrE67WBuq3UUQnlq1UvfuJOLMj9FyBRPeM9Jlh3UU1xKTVSS4pd1m27lWge8MbaP/QuGPTIXt1nmYEp2rAjlMdMo9aJRda2BwmTwo64spZtC2GJ9p5VIyq3cHMarZj3mMtMZifDWFODWR8YEYGyJM8punqfSKkf4GkKZCTPH+M+BB64uXZMaJqoWCFHIPc1fMYqJPAkAqZVhRvcTbMxhN2WIWMqbPZDGsT5acT5CW5kyLinucLUziJ4NgxxxXtdVamFT31bi3zigpa1TSFmHzYHgFpLpJtlZyyTUkHKJWnuKuiTFLAf3SaY0Gyaa+92AE7vSBrxJMV9IZc528bVNZjDStrjTl41uqAGRj1TGXN+bc+of3lwvtNeMCICQH+4ZPJ6uT6tKnNQUKT9K2aCUSCGztTnixV7sDSgamh0ZuoLLxypqupasLaN5U/ClzA9vmfFue/JGuto7YkHUIGydIT1vwxOC8XLg+d+M072gouSuZI/MyiSWOAD6yxwi9DZPvxdhO/F88HcwnkkLAvVkD77Aa
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR01MB7975.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(39850400004)(346002)(366004)(136003)(376002)(396003)(230922051799003)(451199024)(64100799003)(186009)(1800799012)(4326008)(26005)(7416002)(5660300002)(6512007)(2906002)(6506007)(6666004)(107886003)(42882007)(2616005)(66556008)(66946007)(316002)(8936002)(8676002)(6916009)(41300700001)(66476007)(6486002)(31696002)(478600001)(38100700002)(83170400001)(83380400001)(54906003)(31686004)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WWFzRU13N202REFWU1RMTkRMNHRpSEtzRVdMVVFFcVkyMUlVNDFOamdqUzdh?=
- =?utf-8?B?U3lTVFRMRE96ekFaQzVzaXQ0c2FHcGdkRkRTYld5UHFZQ3hZbVc2eFREeCty?=
- =?utf-8?B?SVNvcktKZjM4WU1XbzlJS2VpOGYvalcyT0tGdXVpYU1NdXdGSHZDaklJMGVz?=
- =?utf-8?B?THovdk5ZcDdwUGJqYUxCV01ITTFETU1jQTNTYTlsRldBekhHNjgzeHNQMUli?=
- =?utf-8?B?Mm5RdE5BUXdxYmZ6eEZ6eVVkUUFLR1lIdjZySW9VWHhlT2Y0dnFXUzNvNlVQ?=
- =?utf-8?B?ZFVDSU9neDA0eC9neXQwdEF1aEdZTUc1Um5vaVYraCtCckFoKzc1c2hXOTU1?=
- =?utf-8?B?SXFZMGdwUGtDR29pOXJ3TEEwTWhOOGJJcitFT2hkZGI1cnJtU1VEaXhMTWND?=
- =?utf-8?B?QmpLSlpKNXhxT2lSTVhCUjd3NnB1QVdVbjVXSDJrSlpMb2JkK0o1d2s1ZXFl?=
- =?utf-8?B?dkI4dmVDN2QyQWZ1dTNneXUxWU9jOUZLWGpEaUttZUJxZ2xheldsVmdSdU1N?=
- =?utf-8?B?VXZkTklRSDcrUmQycnVXVUhxTlNSUVc1T2hjeHp5REo3cmFuSGZQajZ0VzNt?=
- =?utf-8?B?N01hTzd3N0JZZ3VGbUl0WE1aQ1RMbDA1VktHUXdJSmFUZzc1QkxvTUhsVEVS?=
- =?utf-8?B?VFNleW9aZlJjemVlVElDVHJrdGVSaU1UeTU0ejRnM3dJQjhzSHg2eWtMb1pV?=
- =?utf-8?B?bXcrU1NYUmNQZU9nLzZXRm9kd0ZpVzBwRTRvMXVodUVma24zaG0xRjc3blhQ?=
- =?utf-8?B?Q0xOUnhLcXphTjhaRCtVNVdXWVRHeUZnZWlVQ1o4aHV5elg3QTdiZ0QrempH?=
- =?utf-8?B?STZKWGZjM0tqMTdGUUM2LzY1QXM4Y09oREZISlo5RkF3aXFMUy9taXBRb1Vi?=
- =?utf-8?B?TWc3TnFLQXF3WmVPemdVb1VKdlJFOU9oVEpEMysvTzJ1Q1ludWRXZGxkRzR6?=
- =?utf-8?B?dmY4L1hQTWJRcURXdEZNQTZDclNEMmRCVHBUVFh1Vjk3bzJTVjV2Z2ZKKy9D?=
- =?utf-8?B?eDNtVmhKa1BjT1o3WWJUZzIxZy84d3dRMGJhalFKREFWNmlKdWw2dmVkdDVD?=
- =?utf-8?B?YmF6VjJoYmU5clduaTdmK09nTHIrSTRNdCt1d0lvOFZnQXdXVkwvYW9TanU0?=
- =?utf-8?B?eDZCYUw2SG9SbFM1K2lNTkRtKzNiaVpORk5NNm5wM0FXUVdSMUlFMlhQSzBI?=
- =?utf-8?B?b2lZcTlXdkFQV1NjUE1QRzFuWWxuck1WMFl6UHB6YzRNblhvWVIza2JxeHRz?=
- =?utf-8?B?OXA4L2E1dCt6eTdhZHBGaUhKcERteXpuMlo2VG9uQmFieTNvNTJFZStVUDdI?=
- =?utf-8?B?SWx3OVBXZ2FMb2VXZ0hPL2gvV0p5S0hoMVAxajBPTXV2cmRjLzYvaUs3Y3ZY?=
- =?utf-8?B?ZmRIUEZBU0xDa0ZzeHBCZzZkYS8xaFd1YStnU2c5NUU0c0ZpWXNWdG01SlQv?=
- =?utf-8?B?RlMzOG44eFNQbkVkTDBxekkrL3lRcVVpYUJSYVlNN0xPK0ZBakJzWVVRbXNS?=
- =?utf-8?B?UGp6dXN6YmcxK3RmZ3R0ZlRVOS9OekluVDBTN2hIa282bjRnbEk0aGMwb0dx?=
- =?utf-8?B?U3ZQVDNTZFBWTjVXNVg5WDhIdlFSUVBsTUlaYnlVNk9LYjkwbEFacG1aQXMy?=
- =?utf-8?B?UU4vZFZKMDJ6WDRIZmkwOGY5V0VWOGc5aEJHMHZIMGtmaWpYcjNMbkcrdnQ5?=
- =?utf-8?B?aUJYcll2U3VYZXFNV1ZTTnd6Z2FiZ2xNMXFZYUtVbERZUy9aRGhVNHFaMS81?=
- =?utf-8?B?V1NYaUdKWllDQ2VGZnZnWGNQVElhbml6VHJTTmJxVFVid1NvUzM0cXVXa3Yw?=
- =?utf-8?B?UUhlcVFtRWNGSy9NNUd1Y2JlQnRZcG1vSnBLWHViVExrWkkvVkJzRTlBZFhq?=
- =?utf-8?B?bDZxSVBVUHNPbE4rVEtFU3hRWXNrMjJ5Z2UxKzlaSE1SckREM3BNYzh3QnRG?=
- =?utf-8?B?K1ZhSmdoZ1FMbmppeThwRE8zRm9od0NMb0l6WG9DUkVVRlp5b2hnYS9QNGpm?=
- =?utf-8?B?VWJBRzc0MDJMclRzTjVlZnBhSnFrNElJNTNVeGc1N2I1a3VBRHZHVFRob05M?=
- =?utf-8?B?bDNKcmJZY2Vqa2lDUVk2a29mT21BM0k1V3FodnNiMU0vdi9pQ2owMEFseUph?=
- =?utf-8?B?dnJJVlNRd3l3VFVrT3pJTGsrZmttaVBhemE5WjNrK1dzaXUvWUg4Z3ppWStK?=
- =?utf-8?Q?eO7bIPr6cgVldQDrJWm/mA0=3D?=
-X-OriginatorOrg: amperemail.onmicrosoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43278f3c-1f53-4962-2382-08dc18cbc760
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR01MB7975.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2024 08:51:08.3731
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1oSkGiYmlqXlfiQazflNhxShN1MZpL3lSG9oeuX8F0LigO0LkyeKwCUxRAJzZPGsKAAQGTKHcmUGglVxzjpAPcwdysF2MncRR7KbIWYT09Ys9hCJtDaOXQkF8sox5ifU
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR01MB7567
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 14/15] MIPS: Add support for Mobileye EyeQ5
+To: Gregory CLEMENT <gregory.clement@bootlin.com>,
+ Paul Burton <paulburton@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20240118155252.397947-1-gregory.clement@bootlin.com>
+ <20240118155252.397947-15-gregory.clement@bootlin.com>
+Content-Language: en-US
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Autocrypt: addr=jiaxun.yang@flygoat.com;
+ keydata= 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
+ HVO98ZmbMeg=
+In-Reply-To: <20240118155252.397947-15-gregory.clement@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-在 2024/1/19 16:42, Mike Rapoport 写道:
-> On Fri, Jan 19, 2024 at 02:46:16PM +0800, Shijie Huang wrote:
->> 在 2024/1/19 12:42, Yury Norov 写道:
->>> This adds another level of indirection, I think. Currently cpu_to_node
->>> is a simple inliner. After the patch it would be a real function with
->>> all the associate overhead. Can you share a bloat-o-meter output here?
->> #./scripts/bloat-o-meter vmlinux vmlinux.new
->> add/remove: 6/1 grow/shrink: 61/51 up/down: 1168/-588 (580)
->> Function                                     old     new   delta
->> numa_update_cpu                              148     244     +96
->>
->>   ...................................................................................................................................(to many to skip)
->>
->> Total: Before=32990130, After=32990710, chg +0.00%
+
+在 2024/1/18 15:52, Gregory CLEMENT 写道:
+> Introduce support for the MIPS based Mobileye EyeQ5 SoCs.
+>
+> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+
+Hi Gregory,
+
+Thanks for your reversion!
+See my comments below.
+> ---
+>   arch/mips/Kbuild.platforms          |   1 +
+>   arch/mips/Kconfig                   |  62 ++++++++++++++++
+>   arch/mips/configs/eyeq5_defconfig   | 109 ++++++++++++++++++++++++++++
+>   arch/mips/mobileye/Kconfig          |  12 +++
+>   arch/mips/mobileye/Platform         |  16 ++++
+>   arch/mips/mobileye/board-epm5.its.S |  24 ++++++
+>   arch/mips/mobileye/vmlinux.its.S    |  32 ++++++++
+>   7 files changed, 256 insertions(+)
+>   create mode 100644 arch/mips/configs/eyeq5_defconfig
+>   create mode 100644 arch/mips/mobileye/Kconfig
+>   create mode 100644 arch/mips/mobileye/Platform
+>   create mode 100644 arch/mips/mobileye/board-epm5.its.S
+>   create mode 100644 arch/mips/mobileye/vmlinux.its.S
+>
+> diff --git a/arch/mips/Kbuild.platforms b/arch/mips/Kbuild.platforms
+> index a2311c4bce6a6..5c145b67d3bf4 100644
+> --- a/arch/mips/Kbuild.platforms
+> +++ b/arch/mips/Kbuild.platforms
+> @@ -17,6 +17,7 @@ platform-$(CONFIG_MACH_LOONGSON2EF)	+= loongson2ef/
+>   platform-$(CONFIG_MACH_LOONGSON32)	+= loongson32/
+>   platform-$(CONFIG_MACH_LOONGSON64)	+= loongson64/
+>   platform-$(CONFIG_MIPS_MALTA)		+= mti-malta/
+> +platform-$(CONFIG_MACH_EYEQ5)		+= mobileye/
+>   platform-$(CONFIG_MACH_NINTENDO64)	+= n64/
+>   platform-$(CONFIG_PIC32MZDA)		+= pic32/
+>   platform-$(CONFIG_RALINK)		+= ralink/
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 5549d26448941..e4f624adffee8 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -569,6 +569,68 @@ config MACH_PIC32
+>   	  Microchip PIC32 is a family of general-purpose 32 bit MIPS core
+>   	  microcontrollers.
 >   
-> It's not only about text size, the indirect call also hurts performance
->   
+> +config MACH_EYEQ5
+> +	bool "Mobileye EyeQ5 SoC"
+> +	select MACH_GENERIC_CORE
+> +	select ARM_AMBA
+> +	select WEAK_ORDERING
+> +	select WEAK_REORDERING_BEYOND_LLSC
+^ Those should be selected for MIPS_CPS, as I mentioned before.
+> +	select PHYSICAL_START_BOOL
+> +	select ARCH_SPARSEMEM_DEFAULT if 64BIT
+> +	select BOOT_RAW
+> +	select BUILTIN_DTB
+> +	select CEVT_R4K
+> +	select CLKSRC_MIPS_GIC
+> +	select COMMON_CLK
+> +	select CPU_MIPSR2_IRQ_EI
+> +	select CPU_MIPSR2_IRQ_VI
+> +	select CSRC_R4K
+> +	select DMA_NONCOHERENT
+> +	select HAVE_PCI
+> +	select IRQ_MIPS_CPU
+> +	select MIPS_AUTO_PFN_OFFSET
+> +	select MIPS_CPU_SCACHE
+> +	select MIPS_GIC
+> +	select MIPS_L1_CACHE_SHIFT_7
+> +	select PCI_DRIVERS_GENERIC
+> +	select SMP_UP if SMP
+> +	select SWAP_IO_SPACE
+> +	select SYS_HAS_CPU_MIPS64_R6
+> +	select SYS_SUPPORTS_32BIT_KERNEL
+^ I don't think you can build 32bit kernel due to your address space 
+limitation.
+> +	select SYS_SUPPORTS_64BIT_KERNEL
+> +	select SYS_SUPPORTS_BIG_ENDIAN
+^ Does it support big endian mode?
+For I6500 endian pin is driven by external circuit. You shouldn't select 
+it unless you have
+physical endian pin or reset and set register at SoC level.
+> +	select SYS_SUPPORTS_HIGHMEM
+> +	select SYS_SUPPORTS_LITTLE_ENDIAN
+> +	select SYS_SUPPORTS_MICROMIPS
+> +	select SYS_SUPPORTS_MIPS16
+^ Both MICROMIPS and MIPS16 are not available on MIPS R6.
+> +	select SYS_SUPPORTS_MIPS_CPS
+> +	select SYS_SUPPORTS_MULTITHREADING
+^ MT is not possible on R6, we do have VP on R6.
+> +	select SYS_SUPPORTS_RELOCATABLE
+> +	select SYS_SUPPORTS_SMARTMIPS
+^ SMARTMIPS is deprecated on R6.
+> +	select SYS_SUPPORTS_ZBOOT
+> +	select UHI_BOOT
+> +	select USB_EHCI_BIG_ENDIAN_DESC if CPU_BIG_ENDIAN
+> +	select USB_EHCI_BIG_ENDIAN_MMIO if CPU_BIG_ENDIAN
+> +	select USB_OHCI_BIG_ENDIAN_DESC if CPU_BIG_ENDIAN
+> +	select USB_OHCI_BIG_ENDIAN_MMIO if CPU_BIG_ENDIAN
+> +	select USB_UHCI_BIG_ENDIAN_DESC if CPU_BIG_ENDIAN
+> +	select USB_UHCI_BIG_ENDIAN_MMIO if CPU_BIG_ENDIAN
+> +	select USE_OF
+> +	help
+> +	  Select this to build a kernel supporting EyeQ5 SoC from Mobileye.
+> +
+> +	bool
+> +
+> +config FIT_IMAGE_FDT_EPM5
+> +	bool "Include FDT for Mobileye EyeQ5 development platforms"
+> +	depends on MACH_EYEQ5
+> +	default n
+> +	help
+> +	  Enable this to include the FDT for the EyeQ5 development platforms
+> +	  from Mobileye in the FIT kernel image.
+> +	  This requires u-boot on the platform.
+> +
+> +
+>   config MACH_NINTENDO64
+>   	bool "Nintendo 64 console"
+>   	select CEVT_R4K
+> diff --git a/arch/mips/configs/eyeq5_defconfig b/arch/mips/configs/eyeq5_defconfig
+> new file mode 100644
+> index 0000000000000..653fb11b1580d
+> --- /dev/null
+> +++ b/arch/mips/configs/eyeq5_defconfig
+> @@ -0,0 +1,109 @@
+> +CONFIG_SYSVIPC=y
+> +CONFIG_NO_HZ_IDLE=y
+> +CONFIG_HIGH_RES_TIMERS=y
+> +CONFIG_BPF_SYSCALL=y
+> +CONFIG_TASKSTATS=y
+> +CONFIG_IKCONFIG=y
+> +CONFIG_IKCONFIG_PROC=y
+> +CONFIG_MEMCG=y
+> +CONFIG_BLK_CGROUP=y
+> +CONFIG_CFS_BANDWIDTH=y
+> +CONFIG_RT_GROUP_SCHED=y
+> +CONFIG_CGROUP_PIDS=y
+> +CONFIG_CGROUP_FREEZER=y
+> +CONFIG_CPUSETS=y
+> +CONFIG_CGROUP_DEVICE=y
+> +CONFIG_CGROUP_CPUACCT=y
+> +CONFIG_NAMESPACES=y
+> +CONFIG_USER_NS=y
+> +CONFIG_SCHED_AUTOGROUP=y
+> +CONFIG_BLK_DEV_INITRD=y
+> +CONFIG_EXPERT=y
+> +CONFIG_MACH_EYEQ5=y
+> +CONFIG_FIT_IMAGE_FDT_EPM5=y
+> +CONFIG_CPU_LITTLE_ENDIAN=y
+> +CONFIG_64BIT=y
+> +CONFIG_PAGE_SIZE_16KB=y
+> +CONFIG_MIPS_CPS=y
+> +CONFIG_CPU_HAS_MSA=y
+> +CONFIG_NR_CPUS=16
+> +CONFIG_JUMP_LABEL=y
+> +CONFIG_COMPAT_32BIT_TIME=y
+> +CONFIG_MODULES=y
+> +CONFIG_MODULE_UNLOAD=y
+> +CONFIG_TRIM_UNUSED_KSYMS=y
+> +# CONFIG_COMPAT_BRK is not set
+> +CONFIG_SPARSEMEM_MANUAL=y
+> +CONFIG_USERFAULTFD=y
+> +CONFIG_NET=y
+> +CONFIG_PACKET=y
+> +CONFIG_UNIX=y
+> +CONFIG_NET_KEY=y
+> +CONFIG_INET=y
+> +CONFIG_IP_PNP=y
+> +CONFIG_IP_PNP_DHCP=y
+> +CONFIG_NETFILTER=y
+> +CONFIG_CAN=y
+> +CONFIG_PCI=y
+> +CONFIG_PCI_MSI=y
+> +CONFIG_PCI_DEBUG=y
+> +CONFIG_PCI_ENDPOINT=y
+> +CONFIG_DEVTMPFS=y
+> +CONFIG_DEVTMPFS_MOUNT=y
+> +CONFIG_CONNECTOR=y
+> +CONFIG_MTD=y
+> +CONFIG_MTD_UBI=y
+> +CONFIG_MTD_UBI_BLOCK=y
+> +CONFIG_SCSI=y
+> +CONFIG_NETDEVICES=y
+> +CONFIG_MACVLAN=y
+> +CONFIG_IPVLAN=y
+> +CONFIG_MACB=y
+> +CONFIG_MARVELL_PHY=y
+> +CONFIG_MICREL_PHY=y
+> +CONFIG_CAN_M_CAN=y
+> +CONFIG_SERIAL_AMBA_PL011=y
+> +CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+> +CONFIG_HW_RANDOM=y
+> +# CONFIG_PTP_1588_CLOCK is not set
+> +CONFIG_PINCTRL=y
+> +CONFIG_MFD_SYSCON=y
+> +CONFIG_HID_A4TECH=y
+> +CONFIG_HID_BELKIN=y
+> +CONFIG_HID_CHERRY=y
+> +CONFIG_HID_CYPRESS=y
+> +CONFIG_HID_EZKEY=y
+> +CONFIG_HID_ITE=y
+> +CONFIG_HID_KENSINGTON=y
+> +CONFIG_HID_REDRAGON=y
+> +CONFIG_HID_MICROSOFT=y
+> +CONFIG_HID_MONTEREY=y
+> +CONFIG_MMC=y
+> +CONFIG_MMC_SDHCI=y
+> +# CONFIG_IOMMU_SUPPORT is not set
+> +CONFIG_RESET_CONTROLLER=y
+> +# CONFIG_NVMEM is not set
+> +CONFIG_EXT4_FS=y
+> +CONFIG_EXT4_FS_POSIX_ACL=y
+> +CONFIG_EXT4_FS_SECURITY=y
+> +CONFIG_FS_ENCRYPTION=y
+> +CONFIG_FUSE_FS=y
+> +CONFIG_CUSE=y
+> +CONFIG_MSDOS_FS=y
+> +CONFIG_VFAT_FS=y
+> +CONFIG_TMPFS=y
+> +CONFIG_TMPFS_POSIX_ACL=y
+> +CONFIG_UBIFS_FS=y
+> +CONFIG_NFS_FS=y
+> +CONFIG_NFS_V3_ACL=y
+> +CONFIG_NFS_V4=y
+> +CONFIG_NFS_V4_1=y
+> +CONFIG_NFS_V4_2=y
+> +CONFIG_ROOT_NFS=y
+> +CONFIG_CRYPTO_CRC32_MIPS=y
+> +CONFIG_FRAME_WARN=1024
+> +CONFIG_DEBUG_FS=y
+> +# CONFIG_RCU_TRACE is not set
+> +# CONFIG_FTRACE is not set
+> +CONFIG_CMDLINE_BOOL=y
+> +CONFIG_CMDLINE="earlycon"
+^ Better not overriding cmdline here, you can leave it in chosen node.
 
-The cpu_to_node() is called at very low frequency, most of the times is 
-in the kernel booting time.
-
-
-
->>> Regardless, I don't think that the approach is correct. As per your
->>> description, some initialization functions erroneously call
->>> cpu_to_node() instead of early_cpu_to_node() which exists specifically
->>> for that case.
->>>
->>> If the above correct, it's clearly a caller problem, and the fix is to
->>> simply switch all those callers to use early version.
->> It is easy to change to early_cpu_to_node() for sched_init(),
->> init_sched_fair_class()
->>
->> and workqueue_init_early(). These three places call the cpu_to_node() in the
->> __init function.
->>
->>
->> But it is a little hard to change the early_trace_init(), since it calls
->> cpu_to_node in the deep
->>
->> function stack:
->>
->>    early_trace_init() --> ring_buffer_alloc() -->rb_allocate_cpu_buffer()
->>
->>
->> For early_trace_init(), we need to change more code.
->>
->>
->> Anyway, If we think it is not a good idea to change the common code, I am
->> oaky too.
->   
-> Is there a fundamental reason to have early_cpu_to_node() at all?
-
-The early_cpu_to_node does not work on some ARCHs (which support the 
-NUMA), such
-
-as  SPARC, MIPS and S390.
-
+> diff --git a/arch/mips/mobileye/Kconfig b/arch/mips/mobileye/Kconfig
+> new file mode 100644
+> index 0000000000000..781007542422d
+> --- /dev/null
+> +++ b/arch/mips/mobileye/Kconfig
+> @@ -0,0 +1,12 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +if MACH_EYEQ5
+> +
+> +config BOARD_EYEQ5
+> +	bool "Support EyeQ5 platform"
+> +	select WEAK_ORDERING
+> +	select WEAK_REORDERING_BEYOND_LLSC
+> +	default n
+> +	help
+> +	  This enables support for EyeQ5 platform.
+^ Do you need this board option, given that you can build a generic 
+kernel for all
+EyeQ5 systems?
 
 Thanks
+- Jiaxun
+> +
+> +endif
+> diff --git a/arch/mips/mobileye/Platform b/arch/mips/mobileye/Platform
+> new file mode 100644
+> index 0000000000000..43b6f4644592f
+> --- /dev/null
+> +++ b/arch/mips/mobileye/Platform
+> @@ -0,0 +1,16 @@
+> +#
+> +# Copyright (C) 2016 Imagination Technologies
+> +# Author: Paul Burton <paul.burton@mips.com>
+> +#
+> +# This program is free software; you can redistribute it and/or modify it
+> +# under the terms of the GNU General Public License as published by the
+> +# Free Software Foundation;  either version 2 of the  License, or (at your
+> +# option) any later version.
+> +#
+> +
+> +load-$(CONFIG_MACH_EYEQ5)	= 0xa800000808000000
+> +all-$(CONFIG_MACH_EYEQ5)	+= vmlinux.gz.itb
+> +
+> +its-y					:= vmlinux.its.S
+> +its-$(CONFIG_FIT_IMAGE_FDT_EPM5)	+= board-epm5.its.S
+> +
+> diff --git a/arch/mips/mobileye/board-epm5.its.S b/arch/mips/mobileye/board-epm5.its.S
+> new file mode 100644
+> index 0000000000000..08e8c4f183d63
+> --- /dev/null
+> +++ b/arch/mips/mobileye/board-epm5.its.S
+> @@ -0,0 +1,24 @@
+> +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
+> +/ {
+> +	images {
+> +		fdt-mobileye-epm5 {
+> +			description = "Mobileeye MP5 Device Tree";
+> +			data = /incbin/("boot/dts/mobileye/eyeq5-epm5.dtb");
+> +			type = "flat_dt";
+> +			arch = "mips";
+> +			compression = "none";
+> +			hash {
+> +				algo = "sha1";
+> +			};
+> +		};
+> +	};
+> +
+> +    configurations {
+> +		default = "conf-1";
+> +		conf-1 {
+> +			description = "Mobileye EPM5 Linux kernel";
+> +			kernel = "kernel";
+> +			fdt = "fdt-mobileye-epm5";
+> +		};
+> +	};
+> +};
+> diff --git a/arch/mips/mobileye/vmlinux.its.S b/arch/mips/mobileye/vmlinux.its.S
+> new file mode 100644
+> index 0000000000000..3e254676540f4
+> --- /dev/null
+> +++ b/arch/mips/mobileye/vmlinux.its.S
+> @@ -0,0 +1,32 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/dts-v1/;
+> +
+> +/ {
+> +	description = KERNEL_NAME;
+> +	#address-cells = <ADDR_CELLS>;
+> +
+> +	images {
+> +		kernel {
+> +			description = KERNEL_NAME;
+> +			data = /incbin/(VMLINUX_BINARY);
+> +			type = "kernel";
+> +			arch = "mips";
+> +			os = "linux";
+> +			compression = VMLINUX_COMPRESSION;
+> +			load = /bits/ ADDR_BITS <VMLINUX_LOAD_ADDRESS>;
+> +			entry = /bits/ ADDR_BITS <VMLINUX_ENTRY_ADDRESS>;
+> +			hash {
+> +				algo = "sha1";
+> +			};
+> +		};
+> +	};
+> +
+> +	configurations {
+> +		default = "conf-default";
+> +
+> +		conf-default {
+> +			description = "Generic Linux kernel";
+> +			kernel = "kernel";
+> +		};
+> +	};
+> +};
 
-Huang Shijie
+-- 
+---
+Jiaxun Yang
 
-> It seems that all the mappings are known by the end of setup_arch() and the
-> initialization of numa_node can be moved earlier.
->   
->>> I would also initialize the numa_node with NUMA_NO_NODE at declaration,
->>> so that if someone calls cpu_to_node() before the variable is properly
->>> initialized at runtime, he'll get NO_NODE, which is obviously an error.
->> Even we set the numa_node with NUMA_NO_NODE, it does not always produce
->> error.
->>
->> Please see the alloc_pages_node().
->>
->>
->> Thanks
->>
->> Huang Shijie
->>
 
