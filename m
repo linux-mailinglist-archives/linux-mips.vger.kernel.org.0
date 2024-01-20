@@ -1,122 +1,206 @@
-Return-Path: <linux-mips+bounces-1024-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1025-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C9308334D5
-	for <lists+linux-mips@lfdr.de>; Sat, 20 Jan 2024 14:35:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60FB78334EF
+	for <lists+linux-mips@lfdr.de>; Sat, 20 Jan 2024 14:58:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A02081C21A19
-	for <lists+linux-mips@lfdr.de>; Sat, 20 Jan 2024 13:35:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB5051F218D6
+	for <lists+linux-mips@lfdr.de>; Sat, 20 Jan 2024 13:58:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71D2AEEDE;
-	Sat, 20 Jan 2024 13:35:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7004DFBEB;
+	Sat, 20 Jan 2024 13:58:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.com header.i=erick.archer@gmx.com header.b="p6QpFoD3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A4EsLcXF"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC869F4E2;
-	Sat, 20 Jan 2024 13:35:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66905F9F2;
+	Sat, 20 Jan 2024 13:58:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705757705; cv=none; b=YUtZAHOGdGEFhuZRRF4Gv+gyhJzwpcH50D+zcJxxNJaCTFVHeomuJ3LbMXFV5Y+Is+H+sLXigpARTzGdeQOrC9OPBfvxnzGbVMT1FW72pqd5wsYrNXSm5NbqXjZU80edSfrC2rkcT6ZZ8CRrH9Oh99QI7U5JnrPBRzEfv96g2Pc=
+	t=1705759128; cv=none; b=mp3XwtrotRhyAZKDfGQU1YzLNFkVBKb4F3AtyIGW34fuJtPLTtn8sYuGW1ayZJxvht0nYh4tpwDN6oxVcAaRGJSaHLUyl1AJlKBuCoNx/dd8My+xPMIL6Ap2OHPGFX2sCv2Y2j6hlrhdj/C6CQgHQ3UYAhzNg2ujKqxLjc0G/uA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705757705; c=relaxed/simple;
-	bh=HSEmP7fhfhYJi7q8y21JZnQX6pvDCIMAR2srytoMCDk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oj68e26KD9eSFwSZG2ip5fuZAJmMxr+u1rLoMmUNRcpJ3bot35dUEWeg3NKJyKshgDDCbhehswAx/6ChkIuq/lx1nqBfUJNE9tEpVIdZINJFhdxmwajoRYn0zZKoQLqqyoLr3lqeS7tq0VvmD8ws1p4xEMt6MCwdwEZX/8ylZBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.com; spf=pass smtp.mailfrom=gmx.com; dkim=pass (2048-bit key) header.d=gmx.com header.i=erick.archer@gmx.com header.b=p6QpFoD3; arc=none smtp.client-ip=212.227.15.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.com;
-	s=s31663417; t=1705757695; x=1706362495; i=erick.archer@gmx.com;
-	bh=HSEmP7fhfhYJi7q8y21JZnQX6pvDCIMAR2srytoMCDk=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-	b=p6QpFoD3XTH9wTkgyZW04NKN4CfYTn1T0impi1JHePIDWbFxOXykMy68D88EKdy0
-	 4apZu40PRCbiVUqKib1t93/uMiLXpRev4xP/vVe61X5dx1YJZFQNC9pTOnPuVL6yM
-	 j3XAMjw1KneXxsyVtDrYPHxvJzszAaWY12EPx+VuyVoZoO38EvQNf/msY4SIMx9WY
-	 RQ1+zFDvl+0/GTAY7QMh18IF3Eff74SqfClv+DY+qsi29+BvETPUumehEvVgqZhEL
-	 Csi5GoL85OeOvwRhKLt2m4LlLPtROzFnVV81E+B+B8lpcgosGFnU5F+1s4Z2Orko0
-	 6UUFV1CwbGXcD1AUqw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.localdomain ([79.157.194.183]) by mail.gmx.net
- (mrgmx004 [212.227.17.184]) with ESMTPSA (Nemesis) id
- 1M1poA-1rOyZT21jk-002KVY; Sat, 20 Jan 2024 14:34:55 +0100
-From: Erick Archer <erick.archer@gmx.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Erick Archer <erick.archer@gmx.com>,
-	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] MIPS: Alchemy: Use kcalloc() instead of kzalloc()
-Date: Sat, 20 Jan 2024 14:34:43 +0100
-Message-Id: <20240120133443.4237-1-erick.archer@gmx.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1705759128; c=relaxed/simple;
+	bh=D7c3vMf9ccSBFZdgQbSr1dRX1CxiKZpITQQp7zG1YTU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ftds1or4uS800/snygX52dEeb0sv/3aV8U1iWDvv5P+bEwHMd/SSCaIe33LhsxmvLOv9I4mrXlkawOSDSQU8m8BqE8gFupLGJsSrtMWwoFQxJS40N0HbHxOFLMBfUr9O7vc9gSJYsHu/mrdDFA+bGMDasADI5jhgEY6a7xT+0DY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A4EsLcXF; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705759126; x=1737295126;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=D7c3vMf9ccSBFZdgQbSr1dRX1CxiKZpITQQp7zG1YTU=;
+  b=A4EsLcXFptu9zt9cMF8vIbGgPveudmdkyPUvuLx3o/5b6NUIzc+jWzYR
+   x7IAbs8mSt9GHXouObLiXJfqQaE5kIHiIQbdrS+C4hnbZ9j0+h04A2liq
+   za5s2k9MmzI6jueH6NJqpFPoPFc3WbThl5oME0Emv1ix6MNJLZynQj3eU
+   D2Q8C/vMH5Kc8TV1yZ2nnctWOKgz3Eo4ug8cPC5l3hFz9xoMB3ojRzQtg
+   qmOrNFhFdn0pfPLhtGX10zZdcWxJ6SzWRRdWAp3lXxI9Bgubq9E7aJxN3
+   q7YVpReXa4Xchnpqc8GAGsbxpo/1j07mUzHYAzw9ftagfB47uMDjwQZNR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10959"; a="8314740"
+X-IronPort-AV: E=Sophos;i="6.05,208,1701158400"; 
+   d="scan'208";a="8314740"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2024 05:58:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,208,1701158400"; 
+   d="scan'208";a="834696"
+Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 20 Jan 2024 05:58:40 -0800
+Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rRBrq-00058A-04;
+	Sat, 20 Jan 2024 13:58:38 +0000
+Date: Sat, 20 Jan 2024 21:58:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, kexec@lists.infradead.org,
+	x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
+	akpm@linux-foundation.org, ebiederm@xmission.com,
+	hbathini@linux.ibm.com, piliu@redhat.com, viro@zeniv.linux.org.uk,
+	Baoquan He <bhe@redhat.com>
+Subject: Re: [PATCH v2 11/14] arm, crash: wrap crash dumping code into crash
+ related ifdefs
+Message-ID: <202401202159.9a6W0aOH-lkp@intel.com>
+References: <20240119145241.769622-12-bhe@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:tm9Qv2O3XG7Yqd03ObckUezAjDfTzhMZozLxrK9eN9xuO+dt47v
- Dlj/WxcudwlJl1xltGcGwgzN+4aHKobJIz+NvN35PAmtmsnarzho/SbVbyNSdJyqga5rYtx
- CAs4p744xhtZSgMqE++zW1JtrIOWzd4+9cATvJz2QxxqrZkThjvUh4dNNfBMWqhEWJLAjeP
- GbQRfZfUguXx9gO7GPcRQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:6b44vTJOeLM=;JvN2Rw273bbIRhm2Uk3eIZxdb8n
- kUE7UGfv93bkax0i3bgkE6qDE/m81UtFf4FlMmylIM9+TgUDZmWyi26dfih4qZOAOvIeLQpIf
- z4dguJohy0x/cj7HRS5OUgkUaUmLgzvcUxoorjli+Lk3MPlwgptriFr+BNQSKsYtTX6VSE8F3
- vOsHhHMwFJGeoskm0SZtaOYoap4AyxE56nh8nYbsiM77M5QswEVtZRLf/pbo+ZpZ8bkGYt4UG
- UCY0MOBTVQ4BXB1CdrXKD49BB3kxEVRoEmqqCIg62FHqC9BVFu5xBGl9SqfEHNARW6+v7Ad7D
- pWnK6Lc0Cbwpv4C5e3+PMt3/dOhIVufrbB1JySq1v9ooxPw04HhXYiLtg9GrVcaqhGUVOZqaD
- IHRX3iV3TOgojbtjmjuQuJYMAHp0Ymwga93b+5IvQp48wPr+rOq2LtQjnP48Rmk5bQcjBaOWz
- BMdRSg179ht2ImG/W881Lvbziq+XdyF1JJeo7J3dixuTiPuSMXa08fNBRb34Dp2UxmNcJCqy9
- 6S6hg285naBtPKY2o1/8iX6pDKr4NgZbPQQVXCybQwDx0SFGNosQ4Lavbn1ua68UolZgiojVt
- 2L+5RCPE64+yEdmWDNwctM72KmcRI/tpDZCC+SspJqvZHldagoRvBcIjRDpZjhYE3TfyYxjge
- DKB03mtq0VOS5BEqPHfBMCvQEfuhqsE9AuNuHAqNSK/fVvZf/yGtQCN5ZqjzO2WlO7GzdS13g
- 7yD/eCEjSBw50ExJsuTEZnFERatJLxGNd+oT3HR5Rh8Z3jiq5QILs0EikGZ1A+sZ0ijoduhh/
- He4fSPgBGmrv2fCIjfWKOlBwo1nMMUHr1gOyLaNarYIR/YGapnVNtKpFcigiAw/Lpq4WgfIuc
- 4aK3bdsI0UwvzawrodOnLHwBxSRaFF0k3YIK4r4Fn3KbJ0uh675g09Dxc05+0pBaXa2rdvWnf
- 1H+hbiwj36cpW7z+ZWwf8DNKuyQ=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240119145241.769622-12-bhe@redhat.com>
 
-As noted in the "Deprecated Interfaces, Language Features, Attributes,
-and Conventions" documentation [1], size calculations (especially
-multiplication) should not be performed in memory allocator (or similar)
-function arguments due to the risk of them overflowing. This could lead
-to values wrapping around and a smaller allocation being made than the
-caller was expecting. Using those allocations could lead to linear
-overflows of heap memory and other misbehaviors.
+Hi Baoquan,
 
-So, use the purpose specific kcalloc() function instead of the argument
-size * count in the kzalloc() function.
+kernel test robot noticed the following build errors:
 
-Link: https://www.kernel.org/doc/html/next/process/deprecated.html#open-co=
-ded-arithmetic-in-allocator-arguments [1]
-Link: https://github.com/KSPP/linux/issues/162
-Signed-off-by: Erick Archer <erick.archer@gmx.com>
-=2D--
- arch/mips/alchemy/common/clock.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[auto build test ERROR on linus/master]
+[cannot apply to tip/x86/core arm64/for-next/core powerpc/next powerpc/fixes v6.7 next-20240119]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/arch/mips/alchemy/common/clock.c b/arch/mips/alchemy/common/c=
-lock.c
-index c01be8c45271..6c8996e20a7d 100644
-=2D-- a/arch/mips/alchemy/common/clock.c
-+++ b/arch/mips/alchemy/common/clock.c
-@@ -771,7 +771,7 @@ static int __init alchemy_clk_init_fgens(int ctype)
- 	}
- 	id.flags =3D CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE;
+url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/kexec-split-crashkernel-reservation-code-out-from-crash_core-c/20240119-225820
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240119145241.769622-12-bhe%40redhat.com
+patch subject: [PATCH v2 11/14] arm, crash: wrap crash dumping code into crash related ifdefs
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240120/202401202159.9a6W0aOH-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240120/202401202159.9a6W0aOH-lkp@intel.com/reproduce)
 
--	a =3D kzalloc((sizeof(*a)) * 6, GFP_KERNEL);
-+	a =3D kcalloc(6, sizeof(*a), GFP_KERNEL);
- 	if (!a)
- 		return -ENOMEM;
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401202159.9a6W0aOH-lkp@intel.com/
 
-=2D-
-2.25.1
+All errors (new ones prefixed by >>):
 
+   arch/arm/kernel/setup.c: In function 'reserve_crashkernel':
+>> arch/arm/kernel/setup.c:1036:63: error: 'SECTION_SIZE' undeclared (first use in this function); did you mean 'SECTIONS_SHIFT'?
+    1036 |                 start = memblock_phys_alloc_range(crash_size, SECTION_SIZE,
+         |                                                               ^~~~~~~~~~~~
+         |                                                               SECTIONS_SHIFT
+   arch/arm/kernel/setup.c:1036:63: note: each undeclared identifier is reported only once for each function it appears in
+   In file included from arch/arm/include/asm/efi.h:12,
+                    from arch/arm/kernel/setup.c:37:
+   arch/arm/include/asm/fixmap.h: At top level:
+   arch/arm/include/asm/fixmap.h:39:35: warning: '__end_of_fixed_addresses' defined but not used [-Wunused-const-variable=]
+      39 | static const enum fixed_addresses __end_of_fixed_addresses =
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +1036 arch/arm/kernel/setup.c
+
+3c57fb43c8fcbe Mika Westerberg 2010-05-10   995  
+3c57fb43c8fcbe Mika Westerberg 2010-05-10   996  /**
+3c57fb43c8fcbe Mika Westerberg 2010-05-10   997   * reserve_crashkernel() - reserves memory are for crash kernel
+3c57fb43c8fcbe Mika Westerberg 2010-05-10   998   *
+3c57fb43c8fcbe Mika Westerberg 2010-05-10   999   * This function reserves memory area given in "crashkernel=" kernel command
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1000   * line parameter. The memory reserved is used by a dump capture kernel when
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1001   * primary kernel is crashing.
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1002   */
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1003  static void __init reserve_crashkernel(void)
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1004  {
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1005  	unsigned long long crash_size, crash_base;
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1006  	unsigned long long total_mem;
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1007  	int ret;
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1008  
+8f460484669cba Baoquan He      2024-01-19  1009  	if (!IS_ENABLED(CONFIG_CRASH_RESERVE))
+8f460484669cba Baoquan He      2024-01-19  1010  		return;
+8f460484669cba Baoquan He      2024-01-19  1011  
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1012  	total_mem = get_total_mem();
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1013  	ret = parse_crashkernel(boot_command_line, total_mem,
+a9e1a3d84e4a0e Baoquan He      2023-09-14  1014  				&crash_size, &crash_base,
+a9e1a3d84e4a0e Baoquan He      2023-09-14  1015  				NULL, NULL);
+9d17f337230642 Austin Kim      2022-04-01  1016  	/* invalid value specified or crashkernel=0 */
+9d17f337230642 Austin Kim      2022-04-01  1017  	if (ret || !crash_size)
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1018  		return;
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1019  
+61603016e2122b Russell King    2016-03-14  1020  	if (crash_base <= 0) {
+d0506a2395eb07 Russell King    2016-04-01  1021  		unsigned long long crash_max = idmap_to_phys((u32)~0);
+67556d7a851c20 Russell King    2017-07-19  1022  		unsigned long long lowmem_max = __pa(high_memory - 1) + 1;
+67556d7a851c20 Russell King    2017-07-19  1023  		if (crash_max > lowmem_max)
+67556d7a851c20 Russell King    2017-07-19  1024  			crash_max = lowmem_max;
+a7259df7670240 Mike Rapoport   2021-09-02  1025  
+a7259df7670240 Mike Rapoport   2021-09-02  1026  		crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+a7259df7670240 Mike Rapoport   2021-09-02  1027  						       CRASH_ALIGN, crash_max);
+61603016e2122b Russell King    2016-03-14  1028  		if (!crash_base) {
+61603016e2122b Russell King    2016-03-14  1029  			pr_err("crashkernel reservation failed - No suitable area found.\n");
+61603016e2122b Russell King    2016-03-14  1030  			return;
+61603016e2122b Russell King    2016-03-14  1031  		}
+61603016e2122b Russell King    2016-03-14  1032  	} else {
+a7259df7670240 Mike Rapoport   2021-09-02  1033  		unsigned long long crash_max = crash_base + crash_size;
+61603016e2122b Russell King    2016-03-14  1034  		unsigned long long start;
+61603016e2122b Russell King    2016-03-14  1035  
+a7259df7670240 Mike Rapoport   2021-09-02 @1036  		start = memblock_phys_alloc_range(crash_size, SECTION_SIZE,
+a7259df7670240 Mike Rapoport   2021-09-02  1037  						  crash_base, crash_max);
+a7259df7670240 Mike Rapoport   2021-09-02  1038  		if (!start) {
+61603016e2122b Russell King    2016-03-14  1039  			pr_err("crashkernel reservation failed - memory is in use.\n");
+61603016e2122b Russell King    2016-03-14  1040  			return;
+61603016e2122b Russell King    2016-03-14  1041  		}
+61603016e2122b Russell King    2016-03-14  1042  	}
+61603016e2122b Russell King    2016-03-14  1043  
+1b0f6681fcbc0e Olof Johansson  2013-12-05  1044  	pr_info("Reserving %ldMB of memory at %ldMB for crashkernel (System RAM: %ldMB)\n",
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1045  		(unsigned long)(crash_size >> 20),
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1046  		(unsigned long)(crash_base >> 20),
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1047  		(unsigned long)(total_mem >> 20));
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1048  
+f7f0b7dc720f81 Russell King    2016-08-02  1049  	/* The crashk resource must always be located in normal mem */
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1050  	crashk_res.start = crash_base;
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1051  	crashk_res.end = crash_base + crash_size - 1;
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1052  	insert_resource(&iomem_resource, &crashk_res);
+f7f0b7dc720f81 Russell King    2016-08-02  1053  
+f7f0b7dc720f81 Russell King    2016-08-02  1054  	if (arm_has_idmap_alias()) {
+f7f0b7dc720f81 Russell King    2016-08-02  1055  		/*
+f7f0b7dc720f81 Russell King    2016-08-02  1056  		 * If we have a special RAM alias for use at boot, we
+f7f0b7dc720f81 Russell King    2016-08-02  1057  		 * need to advertise to kexec tools where the alias is.
+f7f0b7dc720f81 Russell King    2016-08-02  1058  		 */
+f7f0b7dc720f81 Russell King    2016-08-02  1059  		static struct resource crashk_boot_res = {
+f7f0b7dc720f81 Russell King    2016-08-02  1060  			.name = "Crash kernel (boot alias)",
+f7f0b7dc720f81 Russell King    2016-08-02  1061  			.flags = IORESOURCE_BUSY | IORESOURCE_MEM,
+f7f0b7dc720f81 Russell King    2016-08-02  1062  		};
+f7f0b7dc720f81 Russell King    2016-08-02  1063  
+f7f0b7dc720f81 Russell King    2016-08-02  1064  		crashk_boot_res.start = phys_to_idmap(crash_base);
+f7f0b7dc720f81 Russell King    2016-08-02  1065  		crashk_boot_res.end = crashk_boot_res.start + crash_size - 1;
+f7f0b7dc720f81 Russell King    2016-08-02  1066  		insert_resource(&iomem_resource, &crashk_boot_res);
+f7f0b7dc720f81 Russell King    2016-08-02  1067  	}
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1068  }
+3c57fb43c8fcbe Mika Westerberg 2010-05-10  1069  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
