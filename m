@@ -1,163 +1,148 @@
-Return-Path: <linux-mips+bounces-1026-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1027-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43A00835424
-	for <lists+linux-mips@lfdr.de>; Sun, 21 Jan 2024 02:55:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5204F83542D
+	for <lists+linux-mips@lfdr.de>; Sun, 21 Jan 2024 03:14:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D96BDB21A14
-	for <lists+linux-mips@lfdr.de>; Sun, 21 Jan 2024 01:55:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E763A1F21632
+	for <lists+linux-mips@lfdr.de>; Sun, 21 Jan 2024 02:14:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4312536108;
-	Sun, 21 Jan 2024 01:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="d07LVNOn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 014443610A;
+	Sun, 21 Jan 2024 02:14:26 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B72F136100
-	for <linux-mips@vger.kernel.org>; Sun, 21 Jan 2024 01:55:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E33A12E5F
+	for <linux-mips@vger.kernel.org>; Sun, 21 Jan 2024 02:14:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705802144; cv=none; b=b6kySWK8KFIucbpZpgkc33edaaKJVQSkLNCPySI9bj/Mpc6F64pNNeMyzD9PtMzTelPZv/lLP+w9bAjhOQAWLSUBTCZJYh3jOCqyczYCmcryDJHp15fhGwvcOiXNBKwkQcqNnpc+HvTACXfxAOYX8OMhdUyOVehGMYn9lRvOPcU=
+	t=1705803265; cv=none; b=Y+eMlmbfkH1vI/c6LoGCdETdU39Ev5BWp9J8euorZ+DYJ7WillncwUZqVYqCH91UgBNeqQJVaGYR7c5y5n7COON4AHBaX9iwWWGvIyamHcujLsk7XSawaqdqLpWD++JgZxDMppcVyzWa2LyS+Zj+ZbB+nm54JyZMhTZNLbvxzGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705802144; c=relaxed/simple;
-	bh=F07fcMUCVAhZ2po5qnBsuN6WuYRNvBEurPJ6lfARstY=;
+	s=arc-20240116; t=1705803265; c=relaxed/simple;
+	bh=NmKhwVjXDdzHC7DadE1KIF1v9x4HacmQH4mENxispeU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Em/kUX2NEXO/6OWVNFDpIfDIOnzsLjwIf3AlStTeORHomFDfVGEnibk3YTLgFkdElnWPdXZxjydo8MM9JV2ph7Zk7gswxr3DZ4Achht+x1iM9sGoPRp3NEmE0pwNhu95mAMv1TDgpF6zDAajN+Hdy7AAovtZAOCNLUUnZYu4IWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=d07LVNOn; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1705802141;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Bn2lkxxGrsi3E9Vcx5NFx8RtBRe4v7W5psgsNCHmDng=;
-	b=d07LVNOn7WUDixCOfE29g2Ra3e7B/3lI0av/u94OEiZXbhcjZIScgVsaLpMp7JYnzRhBmq
-	GbEJbwZodTiRH24elrwDcF7NJ1QJnegywMgWANsuVJpj03PhxOqiJck8VsdYrgEsTmDH6X
-	OkewgkWWyxNa6zClF4yF+8r7NufiA5s=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-471-1HnnZH15OaydAjxT0WE9tA-1; Sat, 20 Jan 2024 20:55:35 -0500
-X-MC-Unique: 1HnnZH15OaydAjxT0WE9tA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0A53885A588;
-	Sun, 21 Jan 2024 01:55:35 +0000 (UTC)
-Received: from localhost (unknown [10.72.116.12])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id B83D651D5;
-	Sun, 21 Jan 2024 01:55:33 +0000 (UTC)
-Date: Sun, 21 Jan 2024 09:55:29 +0800
-From: Baoquan He <bhe@redhat.com>
-To: kernel test robot <lkp@intel.com>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, kexec@lists.infradead.org,
-	x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
-	akpm@linux-foundation.org, ebiederm@xmission.com,
-	hbathini@linux.ibm.com, piliu@redhat.com, viro@zeniv.linux.org.uk
-Subject: Re: [PATCH v2 11/14] arm, crash: wrap crash dumping code into crash
- related ifdefs
-Message-ID: <Zax5kXfiREk2bDbu@MiWiFi-R3L-srv>
-References: <20240119145241.769622-12-bhe@redhat.com>
- <202401202057.aPg08Eh8-lkp@intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bg2wSiY0SGp3eRKrUEEEMJvVSgeGT8e+5DIyIPT03T3JQrzuteYchoE8mPNvFXHeYMSagezKVGQk2tA5OsWIpHu0E+bza7EWY79FJ+lmKJLrwWGjvKR6FwpZnaCiVRHSh9P6NdOrsjYovso6xkFpWZptgvpv3YQY7WRl49VyqNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [111.9.175.10])
+	by gateway (Coremail) with SMTP id _____8Axz+v3faxlvr4CAA--.11965S3;
+	Sun, 21 Jan 2024 10:14:15 +0800 (CST)
+Received: from Board-3A3000 (unknown [111.9.175.10])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8Axhcz0faxliQkOAA--.2683S2;
+	Sun, 21 Jan 2024 10:14:14 +0800 (CST)
+Date: Sun, 21 Jan 2024 10:14:12 +0800
+From: Huang Pei <huangpei@loongson.cn>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
+	Paul Burton <paulburton@kernel.org>,
+	Li Xuefeng <lixuefeng@loongson.cn>,
+	Yang Tiezhu <yangtiezhu@loongson.cn>,
+	Gao Juxin <gaojuxin@loongson.cn>,
+	Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH 2/2] MIPS: loongson64: set nid for reserved memblock
+ region
+Message-ID: <20240121021412.obdprwuqcqnc4qfq@Board-3A3000>
+References: <ZZ29Wr9yfAcqGxrN@alpha.franken.de>
+ <20240119040240.392442-1-huangpei@loongson.cn>
+ <20240119040240.392442-3-huangpei@loongson.cn>
+ <4f1fc736-6e44-4313-acdc-d1c88cda15f6@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202401202057.aPg08Eh8-lkp@intel.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4f1fc736-6e44-4313-acdc-d1c88cda15f6@flygoat.com>
+X-CM-TRANSID:AQAAf8Axhcz0faxliQkOAA--.2683S2
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7uFy8JrWDtF4UXw4fJr1kZwc_yoW8Kw4kpr
+	WxA3WDCaykWr4Iga93t345uryxZasxtrsavr47ZryUua9xu34aqr4xJrs0gFWjvr48W3W0
+	qrnYgw1UZFn7Z3XCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUyGb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Jr0_Gr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
+	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v2
+	6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrw
+	CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
+	14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
+	IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxK
+	x2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI
+	0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1EksDUUUUU==
 
-On 01/20/24 at 08:13pm, kernel test robot wrote:
-> Hi Baoquan,
+On Fri, Jan 19, 2024 at 10:05:39AM +0000, Jiaxun Yang wrote:
 > 
-> kernel test robot noticed the following build errors:
 > 
-> [auto build test ERROR on linus/master]
-> [cannot apply to tip/x86/core arm64/for-next/core powerpc/next powerpc/fixes v6.7 next-20240119]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 在 2024/1/19 04:02, Huang Pei 写道:
+> > Commit 61167ad5fecd("mm: pass nid to reserve_bootmem_region()) reveals
+> > that reserved memblock regions have no valid node id set, just set it
+> > right since loongson64 firmware makes it clear in memory layout info.
+> > 
+> > This works around booting failure on 3A1000+ since commit 61167ad5fecd
+> > ("mm: pass nid to reserve_bootmem_region()) under
+> > CONFIG_DEFERRED_STRUCT_PAGE_INIT.
 > 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/kexec-split-crashkernel-reservation-code-out-from-crash_core-c/20240119-225820
-> base:   linus/master
-> patch link:    https://lore.kernel.org/r/20240119145241.769622-12-bhe%40redhat.com
-> patch subject: [PATCH v2 11/14] arm, crash: wrap crash dumping code into crash related ifdefs
-> config: arm-randconfig-001-20240120 (https://download.01.org/0day-ci/archive/20240120/202401202057.aPg08Eh8-lkp@intel.com/config)
-> compiler: clang version 18.0.0git (https://github.com/llvm/llvm-project d92ce344bf641e6bb025b41b3f1a77dd25e2b3e9)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240120/202401202057.aPg08Eh8-lkp@intel.com/reproduce)
+> This should be done at MIPS arch level I guess.
+You mean the real fix or the set nid for the reserved memblock region?
+
++ the real fix is [1](see old mail).
+
+I do not think MIPS arch needs it:
+
++ This ONLY matters on NUMA, most of MIPS platforms is UMA.
+
++ MM does not care about the nid of reserved memblock region provided by 
+arch/platform, nor it provide "memblock_reserved_node" like
+"memblock_add_node". Loongson64 knows about nid of reserved region and the
+regular distribution of physical memory bewtween nodes, that is why it can
+be done by simple "memblock_set_node" and I add it.
+
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202401202057.aPg08Eh8-lkp@intel.com/
-
-Thanks for reporting this, I can reproduce it.
-
-In the provided config, it has:
-
-# CONFIG_MMU is not set
-and all kexec/kdump related config items are unset. 
-
-The if (!IS_ENABLED(CONFIG_CRASH_RESERVE)) checking will cause funciton
-reserve_crashkernel() is compiled, but not built in. With CONFIG_MMU=no,
-SECTION_SIZE is undefined on arm. So fix it by wrapping up
-reserve_crashkernel() inside CONFIG_CRASH_RESERVE ifdeffery scope.
-
-
-From d580b65f6aa042233e228aab45609c3de88ab29e Mon Sep 17 00:00:00 2001
-From: Baoquan He <bhe@redhat.com>
-Date: Mon, 15 Jan 2024 22:32:19 -0500
-Subject: [PATCH] arm, crash: wrap crash dumping code into crash related ifdefs
-Content-type: text/plain
-
-Now crash codes under kernel/ folder has been split out from kexec
-code, crash dumping can be separated from kexec reboot in config
-items on arm with some adjustments.
-
-Here use CONFIG_CRASH_RESERVE ifdef to replace CONFIG_KEXEC ifdef.
-
-Signed-off-by: Baoquan He <bhe@redhat.com>
----
- arch/arm/kernel/setup.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm/kernel/setup.c b/arch/arm/kernel/setup.c
-index ff2299ce1ad7..7b33b157fca0 100644
---- a/arch/arm/kernel/setup.c
-+++ b/arch/arm/kernel/setup.c
-@@ -979,7 +979,7 @@ static int __init init_machine_late(void)
- }
- late_initcall(init_machine_late);
- 
--#ifdef CONFIG_KEXEC
-+#ifdef CONFIG_CRASH_RESERVE
- /*
-  * The crash region must be aligned to 128MB to avoid
-  * zImage relocating below the reserved region.
-@@ -1066,7 +1066,7 @@ static void __init reserve_crashkernel(void)
- }
- #else
- static inline void reserve_crashkernel(void) {}
--#endif /* CONFIG_KEXEC */
-+#endif /* CONFIG_CRASH_RESERVE*/
- 
- void __init hyp_mode_check(void)
- {
--- 
-2.41.0
+> Thanks
+> - Jiaxun
+> 
+> > 
+> > Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> > ---
+> >   arch/mips/loongson64/init.c | 2 ++
+> >   arch/mips/loongson64/numa.c | 2 ++
+> >   2 files changed, 4 insertions(+)
+> > 
+> > diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
+> > index f25caa6aa9d3..000ba91c0886 100644
+> > --- a/arch/mips/loongson64/init.c
+> > +++ b/arch/mips/loongson64/init.c
+> > @@ -103,6 +103,8 @@ void __init szmem(unsigned int node)
+> >   	if (loongson_sysconf.vgabios_addr)
+> >   		memblock_reserve(virt_to_phys((void *)loongson_sysconf.vgabios_addr),
+> >   				SZ_256K);
+> > +	/* set nid for reserved memory */
+> > +	memblock_set_node((u64)node << 44, (u64)(node+1) << 44, &memblock.reserved, node);
+> >   }
+> >   #ifndef CONFIG_NUMA
+> > diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
+> > index 8f61e93c0c5b..6345e096c532 100644
+> > --- a/arch/mips/loongson64/numa.c
+> > +++ b/arch/mips/loongson64/numa.c
+> > @@ -132,6 +132,8 @@ static void __init node_mem_init(unsigned int node)
+> >   		/* Reserve pfn range 0~node[0]->node_start_pfn */
+> >   		memblock_reserve(0, PAGE_SIZE * start_pfn);
+> > +		/* set nid for reserved memory on node 0 */
+> > +		memblock_set_node(0, (u64)1 << 44, &memblock.reserved, 1);
+> >   	}
+> >   }
+> 
+> -- 
+> ---
+> Jiaxun Yang
 
 
