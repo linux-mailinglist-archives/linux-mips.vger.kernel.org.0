@@ -1,114 +1,81 @@
-Return-Path: <linux-mips+bounces-1031-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1032-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA2A9835BD5
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Jan 2024 08:42:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2434A835C53
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Jan 2024 09:09:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2D0D282FDE
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Jan 2024 07:42:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9D09B26CCB
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Jan 2024 08:09:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71D9115485;
-	Mon, 22 Jan 2024 07:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jOnqDMRd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABD4B1A5BA;
+	Mon, 22 Jan 2024 08:08:57 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 496DB14F6C;
-	Mon, 22 Jan 2024 07:42:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FE5F18C38
+	for <linux-mips@vger.kernel.org>; Mon, 22 Jan 2024 08:08:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705909327; cv=none; b=t5Sfz5HNorVcrktsf8AlMjo0QV76sae2q72AvDQY+2LWEPkH6XcOzAR4lvPiGHMxF5ciJUasLer3bsYa/Y1UfpKEj456seFhhaVlj6ZN/SkXcrZLR2w43oiv3BK/c/LLpS1QxaXnOs2xVSe6JjhyQ70mcoFhnbE14Ya3LCUYQW8=
+	t=1705910937; cv=none; b=exaxhDJNqBsbxnMCN5UnBVYDdmCNv6LKymOu0aDVuDqhb0nuhf1/ud1AbOAhMVy93FdAzoRT/gwANypjivAOxudHBs92//X43Ib02bTZu8sJBGNbAYE35ll2mgMCN+jtyWWKI7S9BRhC2z8qic/CYVfzepyZ1e04ffiy4nLAzgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705909327; c=relaxed/simple;
-	bh=6q+Ae298LK6Fwx9w1Hxqg+/TcqF4+MMHBmWb7Tw8+hU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uQ1aSF46tk2aWy4OvE+gENAnpX36Khxre6ANhFgF3WpMnv5uKJSZ47FGArOukW+tj67uEYW0EXe+8fLu6W5OyCbdkmDJOn2fEO+cFlBc53a0sRUOZ//MKboctanu6k7iHoyCWR5lCgKo4Orm+cjwVGy3y2/E2vKVotdSGqSzwcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jOnqDMRd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B284C43394;
-	Mon, 22 Jan 2024 07:41:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705909326;
-	bh=6q+Ae298LK6Fwx9w1Hxqg+/TcqF4+MMHBmWb7Tw8+hU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jOnqDMRdvXuWTje7hxQN2dCLE7PzYUq8rAYWennGmg2eWAJlF8wYxF7WITOD93XyX
-	 kOi7HC3t/JBdyraClA4q5IQ6eCe0QP9DQEOOLu5rJzGGtUakerutvskNDSebyStAJZ
-	 z+mnBJqfh9Fcq+5rh+Kc2KPiYn9xLCRpmCpxOFhvwp4xLOdS0I9/a1r1ZusQ+JEtay
-	 eerJbS9dnoFfr2YnDqeIifjrZ8RFwgs3XLP/I8Wfw7PBHR0aHCQTC5FxayDUKgCqE/
-	 I+Nux9qFYloyZL8LPJSk6tchB/m6C22f9IUgs1mhO9obbBZ8/pniLuN0IIT85I3k0j
-	 4+4RMm18KCn0Q==
-Date: Mon, 22 Jan 2024 09:41:40 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Shijie Huang <shijie@amperemail.onmicrosoft.com>
-Cc: Yury Norov <yury.norov@gmail.com>,
-	Huang Shijie <shijie@os.amperecomputing.com>,
-	gregkh@linuxfoundation.org, patches@amperecomputing.com,
-	rafael@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, kuba@kernel.org, vschneid@redhat.com,
-	mingo@kernel.org, akpm@linux-foundation.org, vbabka@suse.cz,
-	tglx@linutronix.de, jpoimboe@kernel.org, ndesaulniers@google.com,
-	mikelley@microsoft.com, mhiramat@kernel.org, arnd@arndb.de,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-	will@kernel.org, mark.rutland@arm.com, mpe@ellerman.id.au,
-	linuxppc-dev@lists.ozlabs.org, chenhuacai@kernel.org,
-	jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org,
-	cl@os.amperecomputing.com
-Subject: Re: [PATCH] NUMA: Early use of cpu_to_node() returns 0 instead of
- the correct node id
-Message-ID: <Za4cNBQBLZujlAlP@kernel.org>
-References: <20240119033227.14113-1-shijie@os.amperecomputing.com>
- <Zan9sb0vtSvVvQeA@yury-ThinkPad>
- <1cd078fd-c345-4d85-a92f-04c806c20efa@amperemail.onmicrosoft.com>
- <Zao13I4Bb0tur0fZ@kernel.org>
- <b8786c38-d6c4-4fea-a918-ac6a45682dba@amperemail.onmicrosoft.com>
+	s=arc-20240116; t=1705910937; c=relaxed/simple;
+	bh=ejBHDHPHMm6tpfO/5PB/rTyrkyHOITK6GpGyn1KTvxk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=k9nY3UJSu9fw87XsFhZ8BGrncngYO5J1V9NtEhAY3HaiyQfb7hvJPY8Lb8uv+6gtUzcuOd+gnyjIWyYxThZ6wqhBQouLkqJUYCQSfP6Q9wRsWYL1Aw5AMx4Jx2GGocuSEn79igqTSNtS4m3psTmp2h6qaES7GyHBSsxOTE31/Kc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [111.9.175.10])
+	by gateway (Coremail) with SMTP id _____8BxTOmVIq5lJHIDAA--.4032S3;
+	Mon, 22 Jan 2024 16:08:53 +0800 (CST)
+Received: from localhost.localdomain (unknown [111.9.175.10])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8DxEOWKIq5llCsRAA--.5616S2;
+	Mon, 22 Jan 2024 16:08:51 +0800 (CST)
+From: Huang Pei <huangpei@loongson.cn>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Bibo Mao <maobibo@loongson.cn>,
+	linux-mips@vger.kernel.org,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Paul Burton <paulburton@kernel.org>,
+	Li Xuefeng <lixuefeng@loongson.cn>,
+	Yang Tiezhu <yangtiezhu@loongson.cn>,
+	Gao Juxin <gaojuxin@loongson.cn>,
+	Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH V6]: MIPS: loongson64: fix boot failure
+Date: Mon, 22 Jan 2024 16:08:32 +0800
+Message-Id: <20240122080834.8251-1-huangpei@loongson.cn>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <ZZ29Wr9yfAcqGxrN@alpha.franken.de>
+References: <ZZ29Wr9yfAcqGxrN@alpha.franken.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b8786c38-d6c4-4fea-a918-ac6a45682dba@amperemail.onmicrosoft.com>
+X-CM-TRANSID:AQAAf8DxEOWKIq5llCsRAA--.5616S2
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+	BjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+	xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxV
+	AFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7Cj
+	xVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zV
+	CFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2
+	z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw2
+	8IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
+	x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
+	CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
+	42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
+	80aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7_MaUUUUU
 
-On Fri, Jan 19, 2024 at 04:50:53PM +0800, Shijie Huang wrote:
-> 
-> 在 2024/1/19 16:42, Mike Rapoport 写道:
-> > Is there a fundamental reason to have early_cpu_to_node() at all?
-> 
-> The early_cpu_to_node does not work on some ARCHs (which support the NUMA),
-> such as  SPARC, MIPS and S390.
+Patch 1: simplify the code, thanks Thomas.
 
-My question was why we need early_cpu_to_node() at all and why can't we use
-cpu_to_node() early on arches that do have it.
- 
-> Thanks
-> 
-> Huang Shijie
-> 
-> > It seems that all the mappings are known by the end of setup_arch() and the
-> > initialization of numa_node can be moved earlier.
-> > > > I would also initialize the numa_node with NUMA_NO_NODE at declaration,
-> > > > so that if someone calls cpu_to_node() before the variable is properly
-> > > > initialized at runtime, he'll get NO_NODE, which is obviously an error.
-> > > Even we set the numa_node with NUMA_NO_NODE, it does not always produce
-> > > error.
-> > > 
-> > > Please see the alloc_pages_node().
-> > > 
-> > > 
-> > > Thanks
-> > > 
-> > > Huang Shijie
-> > > 
+Patch 2: correct comment and commit message.
 
--- 
-Sincerely yours,
-Mike.
+
 
