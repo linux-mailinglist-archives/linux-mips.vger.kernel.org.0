@@ -1,177 +1,193 @@
-Return-Path: <linux-mips+bounces-1054-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1055-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5380C839199
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Jan 2024 15:42:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 798C18396DD
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Jan 2024 18:50:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D82541F21E3D
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Jan 2024 14:42:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30935294650
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Jan 2024 17:50:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 519DB5FBAB;
-	Tue, 23 Jan 2024 14:42:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A5B18120E;
+	Tue, 23 Jan 2024 17:49:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fy9RxXA2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RoQdUdd6"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA5145FBAA;
-	Tue, 23 Jan 2024 14:41:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA9A81208;
+	Tue, 23 Jan 2024 17:49:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706020921; cv=none; b=pdmiTf/fl2iC+4/Sc/CHk9cnvT7f1gXQPQgRyB4/5tWfEVSpnGtojUC3ww2uaxCIIR1G3YYKVLKgYkLqVCjkTjGmtn3Vp4usMcS5IX5m7Kl9XxiqAuAGrZMuFdGhVDCNv9gEmomTiJUAD8JVgMCvBv2yCCtDLNdLDp+dnozKNBk=
+	t=1706032159; cv=none; b=AcecirUAylxE1pb8CXjKIwsm7xUj/KgJJsV1lNXGE/jyy0mnnogQOJHjOWO87h15nicWlBxC1YZ8Ivnu5E5/ig8vm9LW0IiT10lcAXAVhagzvYw1fvwV17nAdn8LEwnSMxTywCmsBo03/HyZAroHxvF5GNHrO9YSnA77cozkxoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706020921; c=relaxed/simple;
-	bh=/G/0DNSlCdvQHDjA0E5XMdtuoUCzLwstX3BIGOhPQl8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JVo28lTS25BzN42Obtv51tBfq2QkGEAQMrst0GQe419JcGenF4YuvRk0p9oGKXLvTmczf+7S44yvQZ193lyVuCyktF0WMvNILn9fIzlVZ0vRbteLAS2Y1Ia1P3IWssWyXBrs/mSMSAZpU4OntjFH/4bTY4VlK3px/95TRxAlgJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fy9RxXA2; arc=none smtp.client-ip=209.85.214.181
+	s=arc-20240116; t=1706032159; c=relaxed/simple;
+	bh=x1ciq3Ect+XnKhvC9H5DKv0iPFUte+VpAip+Ss55L9Q=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XB8E18UouhCKGFgURPVLGx5PHpbCP4l//ygs3YkV5VU822dC8NEGDH6VcLsShbqEqg8XEsAXPkssXC8tSoSyzjC1y00hCDXZwEpvDVosPy+hCdVbNyEt54CsRmvwmbt26cHl8DnkX+/0SUdj3IxxKH/pPvoeDAVjOy+IKX+mHlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RoQdUdd6; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1d427518d52so31287115ad.0;
-        Tue, 23 Jan 2024 06:41:59 -0800 (PST)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1d720c7fc04so25424165ad.2;
+        Tue, 23 Jan 2024 09:49:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706020919; x=1706625719; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kiH7/X/jWCZvnjGCpz1ct/EafnIRL4KUlTVwPeC5kXc=;
-        b=Fy9RxXA29YWp7YcmFjzWm/yrp+g8Hkp0fMeqUHyLw+6AJFqVy9Q93lXSsmeTiDYUtO
-         6FdEk9UU0cGnSBQlSEMeq+LaTPlxjMptvJADYgHX7G6i81B3prraEXtu2s+WCKT5KX3X
-         mp0zYvUYCgy+ebSEFOdhqNx4+8SAxWmPvT06cHFKytCe0O36ZJPKazw/1tqBGqYR61az
-         oT75yAsvLIBZ/4kHGvBfXt/w/EW/7G2UZvpevE7Uh1esRwH0C0s4yIthoUkqM9HnCOjB
-         SqOKbAEBRhjpvybWXmRTRvoAqgj94Onv34rTrG0FeWSgA0oEiuPPTjl7rF+hP5o/DBWQ
-         OgtQ==
+        d=gmail.com; s=20230601; t=1706032157; x=1706636957; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QDS294tSCgcvUh/yn3ryUeNvBf4lRbYL7mm8287k4Lg=;
+        b=RoQdUdd6Qs7Psa2pLkRzNSNOIaI/Yg/kOsQvIyGHW/b6yvtH6Aps07Q8KgdLABtVt1
+         VzRM6LQ4/IeDOyaIblmHkq1YtPMVcLSRSYvPS0bJ0xQ+YZ+FZXb0rIBUfXQ2VuqIkJ0P
+         5aE17LcRcf3a5MqaPK7xAWWmE/JvU5GlOANuD6CYG9Xx1yVHGTNzDaQH3qHEfQMoeSLj
+         Rs5YuW8mXH2n/CStRAyc+F0pQuoqQP2EM8Sp5RCOm15+2iIV/fS11CMG+rebdkcAqT7Q
+         tQprhy5Zcn8z3FISedswd39W6hXIJtTOtH8thHsI389bJjDQPTXox5J+wtiMuWeBluHc
+         g2wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706020919; x=1706625719;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1706032157; x=1706636957;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kiH7/X/jWCZvnjGCpz1ct/EafnIRL4KUlTVwPeC5kXc=;
-        b=BxfileRAIsj8tNLedCsdqJuU/Ho5VsawYf3m4J4zaJdUVYlPURoTijsNe1KDOtA5zb
-         biXmXy3FlnWUIIWJ4It/HSrXWmb9nrR9OMTgL5dnlrM2U67cVoG8oHoP/MmBCVaWrkUf
-         Qs8Z/MN9JCgmX0FFyBSHtAI8eJ/ZzcpoFgmNtTp9QMbSisYk/B0z0vsWHanhmgiBggc8
-         7GmkFPugBGAOAuJMsAjn0x1XDXtICZ+IXJVsf9l1tg/1YAY9pvLRjuhEOh+v7wjQlatr
-         OmCvzRpsOMe1pQOK4K9hE8NmbIZZhYxeHucdcYcIvEOPdpFJELLLpB9w+aFc4WkJvrxa
-         WzYw==
-X-Gm-Message-State: AOJu0Yx44Mp6Ao25YAxh++sFJoil5GOPJ8IAHjKgP9e+PdvJHATeBpSb
-	0QNYi5fz0s7WGgYfTLouR3u66f5moFsSd59RKLVrK8Pq40+6rNYZx/irjgAqmwF55/TFot5F9+B
-	bqRIAfUvY0hQA8u29DRLGWfVMuekNJD2pBKXzYQ==
-X-Google-Smtp-Source: AGHT+IFqcQVVXIOGxEde9nKQOVJLFr0nsF4kQA4MI03XIpNWrNav+3WLZsBWHt24yINft6CkgPzrT3ljF42PTbD/aAQ=
-X-Received: by 2002:a17:902:b18a:b0:1d7:323a:ecd6 with SMTP id
- s10-20020a170902b18a00b001d7323aecd6mr5333712plr.42.1706020919094; Tue, 23
- Jan 2024 06:41:59 -0800 (PST)
+        bh=QDS294tSCgcvUh/yn3ryUeNvBf4lRbYL7mm8287k4Lg=;
+        b=ZKVmfZpz2IHPVRD90972hPzBwTXaCbgISGerhqnYlIfXBurRJ3mWSM4tRSV/83Mlmq
+         +lC7BfpvgMEC0ZAJ24fFfpU+ygVH32+5w6PHmCdw239Ub96Q3zdMs0HcXwbRw5MSxf00
+         wbZxqg2Va7LkmIhGCk06YHZQQtfufdi1jBoL0K88ebYa5U5GtGvTH+TOBkRLoVYrUN1Z
+         FYvDa23LptPWyK7dfcXGhuN5Zay7UpQhNZp096+b/pkCE6qcQDuzuVqbaA4Lmu09yQ/V
+         oELa/ho5rYPRsMhoHCitEz2ZBAGQ3RJ7Tlohw68SK5jmQvISO6TKFdRwbo+u1ND8VU+b
+         DggA==
+X-Gm-Message-State: AOJu0YzdUOeHxKqO6QDV98WqBa6kXuFlPsUPQSUIzQMI1N3jBO8tVwwb
+	WxhEQl4+YOonHZoEHtE31Qn8UREGT58+3zwYnXAUl9UTVzD09TJDigI2KMeC
+X-Google-Smtp-Source: AGHT+IF5BDObdHwJFaV3mcAncY4llNAIARhElT5nS80U8qdnFsrWJL3ZXXt4SggollmDTITqqhmu0A==
+X-Received: by 2002:a17:902:e547:b0:1d7:620e:d2d8 with SMTP id n7-20020a170902e54700b001d7620ed2d8mr2366339plf.41.1706032156595;
+        Tue, 23 Jan 2024 09:49:16 -0800 (PST)
+Received: from eldorado.. (ip68-4-215-93.oc.oc.cox.net. [68.4.215.93])
+        by smtp.gmail.com with ESMTPSA id a1-20020a170902900100b001d5e7221082sm9104100plp.238.2024.01.23.09.49.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Jan 2024 09:49:16 -0800 (PST)
+From: Florian Fainelli <f.fainelli@gmail.com>
+To: linux-mips@vger.kernel.org
+Cc: jonas.gorski@gmail.com,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2] MIPS: BCM63XX: Fix missing prototypes
+Date: Tue, 23 Jan 2024 09:46:54 -0800
+Message-Id: <20240123174701.210922-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240123040817.200542-1-f.fainelli@gmail.com>
-In-Reply-To: <20240123040817.200542-1-f.fainelli@gmail.com>
-From: Jonas Gorski <jonas.gorski@gmail.com>
-Date: Tue, 23 Jan 2024 15:41:47 +0100
-Message-ID: <CAOiHx=mgNB5V178vNQM0oePd9uhDsz7bnqKRCcbfc22WxZm1jQ@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: BCM63XX: Fix missing prototypes
-To: Florian Fainelli <f.fainelli@gmail.com>
-Cc: linux-mips@vger.kernel.org, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi,
+Most of the symbols for which we do not have a prototype can actually be
+made static and for the few that cannot, there is already a declaration
+in a header for it.
 
-On Tue, 23 Jan 2024 at 05:08, Florian Fainelli <f.fainelli@gmail.com> wrote:
->
-> We have a number of missing prototypes warnings for the BCM63XX machine,
-> fix those by providing adequate function prototypes.
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ arch/mips/bcm63xx/boards/board_bcm963xx.c | 2 +-
+ arch/mips/bcm63xx/dev-rng.c               | 2 +-
+ arch/mips/bcm63xx/dev-uart.c              | 1 +
+ arch/mips/bcm63xx/dev-wdt.c               | 2 +-
+ arch/mips/bcm63xx/irq.c                   | 2 +-
+ arch/mips/bcm63xx/setup.c                 | 2 +-
+ arch/mips/bcm63xx/timer.c                 | 2 +-
+ 7 files changed, 7 insertions(+), 6 deletions(-)
 
-None of these prototypes should be needed, most functions are never
-called outside of their units and are just missing a static
-annotation, and one already has a prototype in a different header.
+diff --git a/arch/mips/bcm63xx/boards/board_bcm963xx.c b/arch/mips/bcm63xx/boards/board_bcm963xx.c
+index 01aff80a5967..99f321b6e417 100644
+--- a/arch/mips/bcm63xx/boards/board_bcm963xx.c
++++ b/arch/mips/bcm63xx/boards/board_bcm963xx.c
+@@ -702,7 +702,7 @@ static struct ssb_sprom bcm63xx_sprom = {
+ 	.boardflags_hi		= 0x0000,
+ };
+ 
+-int bcm63xx_get_fallback_sprom(struct ssb_bus *bus, struct ssb_sprom *out)
++static int bcm63xx_get_fallback_sprom(struct ssb_bus *bus, struct ssb_sprom *out)
+ {
+ 	if (bus->bustype == SSB_BUSTYPE_PCI) {
+ 		memcpy(out, &bcm63xx_sprom, sizeof(struct ssb_sprom));
+diff --git a/arch/mips/bcm63xx/dev-rng.c b/arch/mips/bcm63xx/dev-rng.c
+index d277b4dc6c68..f94151f7c96f 100644
+--- a/arch/mips/bcm63xx/dev-rng.c
++++ b/arch/mips/bcm63xx/dev-rng.c
+@@ -26,7 +26,7 @@ static struct platform_device bcm63xx_rng_device = {
+ 	.resource	= rng_resources,
+ };
+ 
+-int __init bcm63xx_rng_register(void)
++static int __init bcm63xx_rng_register(void)
+ {
+ 	if (!BCMCPU_IS_6368())
+ 		return -ENODEV;
+diff --git a/arch/mips/bcm63xx/dev-uart.c b/arch/mips/bcm63xx/dev-uart.c
+index 3bc7f3bfc9ad..5d6bf0445b29 100644
+--- a/arch/mips/bcm63xx/dev-uart.c
++++ b/arch/mips/bcm63xx/dev-uart.c
+@@ -10,6 +10,7 @@
+ #include <linux/kernel.h>
+ #include <linux/platform_device.h>
+ #include <bcm63xx_cpu.h>
++#include <bcm63xx_dev_uart.h>
+ 
+ static struct resource uart0_resources[] = {
+ 	{
+diff --git a/arch/mips/bcm63xx/dev-wdt.c b/arch/mips/bcm63xx/dev-wdt.c
+index 42130914a3c2..302bf7ed5ad5 100644
+--- a/arch/mips/bcm63xx/dev-wdt.c
++++ b/arch/mips/bcm63xx/dev-wdt.c
+@@ -34,7 +34,7 @@ static struct platform_device bcm63xx_wdt_device = {
+ 	},
+ };
+ 
+-int __init bcm63xx_wdt_register(void)
++static int __init bcm63xx_wdt_register(void)
+ {
+ 	wdt_resources[0].start = bcm63xx_regset_address(RSET_WDT);
+ 	wdt_resources[0].end = wdt_resources[0].start;
+diff --git a/arch/mips/bcm63xx/irq.c b/arch/mips/bcm63xx/irq.c
+index 2548013442f6..6240a8f88ea3 100644
+--- a/arch/mips/bcm63xx/irq.c
++++ b/arch/mips/bcm63xx/irq.c
+@@ -72,7 +72,7 @@ static inline int enable_irq_for_cpu(int cpu, struct irq_data *d,
+  */
+ 
+ #define BUILD_IPIC_INTERNAL(width)					\
+-void __dispatch_internal_##width(int cpu)				\
++static void __dispatch_internal_##width(int cpu)			\
+ {									\
+ 	u32 pending[width / 32];					\
+ 	unsigned int src, tgt;						\
+diff --git a/arch/mips/bcm63xx/setup.c b/arch/mips/bcm63xx/setup.c
+index d811e3e03f81..c13ddb544a23 100644
+--- a/arch/mips/bcm63xx/setup.c
++++ b/arch/mips/bcm63xx/setup.c
+@@ -159,7 +159,7 @@ void __init plat_mem_setup(void)
+ 	board_setup();
+ }
+ 
+-int __init bcm63xx_register_devices(void)
++static int __init bcm63xx_register_devices(void)
+ {
+ 	/* register gpiochip */
+ 	bcm63xx_gpio_init();
+diff --git a/arch/mips/bcm63xx/timer.c b/arch/mips/bcm63xx/timer.c
+index a86065854c0c..74b83807df30 100644
+--- a/arch/mips/bcm63xx/timer.c
++++ b/arch/mips/bcm63xx/timer.c
+@@ -178,7 +178,7 @@ int bcm63xx_timer_set(int id, int monotonic, unsigned int countdown_us)
+ 
+ EXPORT_SYMBOL(bcm63xx_timer_set);
+ 
+-int bcm63xx_timer_init(void)
++static int bcm63xx_timer_init(void)
+ {
+ 	int ret, irq;
+ 	u32 reg;
+-- 
+2.34.1
 
->
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  arch/mips/include/asm/mach-bcm63xx/bcm63xx_cpu.h    | 8 ++++++++
->  arch/mips/include/asm/mach-bcm63xx/bcm63xx_timer.h  | 1 +
->  arch/mips/include/asm/mach-bcm63xx/board_bcm963xx.h | 2 ++
->  arch/mips/include/asm/mach-bcm63xx/irq.h            | 3 +++
->  4 files changed, 14 insertions(+)
->
-> diff --git a/arch/mips/include/asm/mach-bcm63xx/bcm63xx_cpu.h b/arch/mips/include/asm/mach-bcm63xx/bcm63xx_cpu.h
-> index 1cad18e6681d..b9ab5ee1c7b2 100644
-> --- a/arch/mips/include/asm/mach-bcm63xx/bcm63xx_cpu.h
-> +++ b/arch/mips/include/asm/mach-bcm63xx/bcm63xx_cpu.h
-> @@ -1065,4 +1065,12 @@ void bcm63xx_machine_halt(void);
->
->  void bcm63xx_machine_reboot(void);
->
-> +int bcm63xx_register_devices(void);
-
-defined and used only in arch/mips/bcm63xx/setup.c
-
-> +
-> +int bcm63xx_rng_register(void);
-
-defined and used only in arch/mips/bcm63xx/dev-rng.c
-
-> +
-> +int bcm63xx_uart_register(unsigned int id);
-
-This one already has a prototype in bcm63xx_dev_uart.h,
-arch/mips/bcm63xx/dev-uart.c just needs to include that header file.
-
-> +
-> +int bcm63xx_wdt_register(void);
-
-defined and used only in arch/mips/bcm63xx/dev-wdt.c
-
-> +
->  #endif /* !BCM63XX_CPU_H_ */
-> diff --git a/arch/mips/include/asm/mach-bcm63xx/bcm63xx_timer.h b/arch/mips/include/asm/mach-bcm63xx/bcm63xx_timer.h
-> index bcbece793fd8..f920c7274f5e 100644
-> --- a/arch/mips/include/asm/mach-bcm63xx/bcm63xx_timer.h
-> +++ b/arch/mips/include/asm/mach-bcm63xx/bcm63xx_timer.h
-> @@ -8,5 +8,6 @@ int bcm63xx_timer_set(int id, int monotonic, unsigned int countdown_us);
->  int bcm63xx_timer_enable(int id);
->  int bcm63xx_timer_disable(int id);
->  unsigned int bcm63xx_timer_countdown(unsigned int countdown_us);
-> +int bcm63xx_timer_init(void);
-
-defined and used only in arch/mips/bcm63xx/timer.c
-
->
->  #endif /* !BCM63XX_TIMER_H_ */
-> diff --git a/arch/mips/include/asm/mach-bcm63xx/board_bcm963xx.h b/arch/mips/include/asm/mach-bcm63xx/board_bcm963xx.h
-> index 830f53f28e3f..7b905c8a424d 100644
-> --- a/arch/mips/include/asm/mach-bcm63xx/board_bcm963xx.h
-> +++ b/arch/mips/include/asm/mach-bcm63xx/board_bcm963xx.h
-> @@ -51,4 +51,6 @@ struct board_info {
->         unsigned long ephy_reset_gpio_flags;
->  };
->
-> +int bcm63xx_get_fallback_sprom(struct ssb_bus *bus, struct ssb_sprom *out);
-
-defined and used only in arch/mips/bcm63xx/boards/board_bcm963xx.c
-
-> +
->  #endif /* ! BOARD_BCM963XX_H_ */
-> diff --git a/arch/mips/include/asm/mach-bcm63xx/irq.h b/arch/mips/include/asm/mach-bcm63xx/irq.h
-> index b016f0615d5f..cbb92a609835 100644
-> --- a/arch/mips/include/asm/mach-bcm63xx/irq.h
-> +++ b/arch/mips/include/asm/mach-bcm63xx/irq.h
-> @@ -5,4 +5,7 @@
->  #define NR_IRQS 128
->  #define MIPS_CPU_IRQ_BASE 0
->
-> +void __dispatch_internal_32(int cpu);
-> +void __dispatch_internal_64(int cpu);
-
-dispatch __dispatch_internal_32()/__dispatch_internal_64() are defined
-and used only in arch/mips/bcm63xx/irq.c
-
-Best Regards,
-Jonas
 
