@@ -1,193 +1,252 @@
-Return-Path: <linux-mips+bounces-1055-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1057-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 798C18396DD
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Jan 2024 18:50:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CFBB83985C
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Jan 2024 19:50:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30935294650
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Jan 2024 17:50:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 523CF1C27504
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Jan 2024 18:49:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A5B18120E;
-	Tue, 23 Jan 2024 17:49:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7284085C59;
+	Tue, 23 Jan 2024 18:47:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RoQdUdd6"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OUKLTV+o"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA9A81208;
-	Tue, 23 Jan 2024 17:49:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87DAF1292C5;
+	Tue, 23 Jan 2024 18:47:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706032159; cv=none; b=AcecirUAylxE1pb8CXjKIwsm7xUj/KgJJsV1lNXGE/jyy0mnnogQOJHjOWO87h15nicWlBxC1YZ8Ivnu5E5/ig8vm9LW0IiT10lcAXAVhagzvYw1fvwV17nAdn8LEwnSMxTywCmsBo03/HyZAroHxvF5GNHrO9YSnA77cozkxoE=
+	t=1706035632; cv=none; b=CHpw76+VUdrj7Lgh1o/NcqDvvDEBDNIV8SD6aJUd65MHTWrS37ZUBIrrl/dxnF0mbZDNlIyIaXVGtdWVGm75DxH14w3RYijdFTa3rvPY5vHyizPKci9rkQaY91enr96lQV5jdOPGPaum8hjiduBQSJIjPhc+MUAjrlBepL/KSOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706032159; c=relaxed/simple;
-	bh=x1ciq3Ect+XnKhvC9H5DKv0iPFUte+VpAip+Ss55L9Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XB8E18UouhCKGFgURPVLGx5PHpbCP4l//ygs3YkV5VU822dC8NEGDH6VcLsShbqEqg8XEsAXPkssXC8tSoSyzjC1y00hCDXZwEpvDVosPy+hCdVbNyEt54CsRmvwmbt26cHl8DnkX+/0SUdj3IxxKH/pPvoeDAVjOy+IKX+mHlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RoQdUdd6; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1d720c7fc04so25424165ad.2;
-        Tue, 23 Jan 2024 09:49:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706032157; x=1706636957; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QDS294tSCgcvUh/yn3ryUeNvBf4lRbYL7mm8287k4Lg=;
-        b=RoQdUdd6Qs7Psa2pLkRzNSNOIaI/Yg/kOsQvIyGHW/b6yvtH6Aps07Q8KgdLABtVt1
-         VzRM6LQ4/IeDOyaIblmHkq1YtPMVcLSRSYvPS0bJ0xQ+YZ+FZXb0rIBUfXQ2VuqIkJ0P
-         5aE17LcRcf3a5MqaPK7xAWWmE/JvU5GlOANuD6CYG9Xx1yVHGTNzDaQH3qHEfQMoeSLj
-         Rs5YuW8mXH2n/CStRAyc+F0pQuoqQP2EM8Sp5RCOm15+2iIV/fS11CMG+rebdkcAqT7Q
-         tQprhy5Zcn8z3FISedswd39W6hXIJtTOtH8thHsI389bJjDQPTXox5J+wtiMuWeBluHc
-         g2wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706032157; x=1706636957;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QDS294tSCgcvUh/yn3ryUeNvBf4lRbYL7mm8287k4Lg=;
-        b=ZKVmfZpz2IHPVRD90972hPzBwTXaCbgISGerhqnYlIfXBurRJ3mWSM4tRSV/83Mlmq
-         +lC7BfpvgMEC0ZAJ24fFfpU+ygVH32+5w6PHmCdw239Ub96Q3zdMs0HcXwbRw5MSxf00
-         wbZxqg2Va7LkmIhGCk06YHZQQtfufdi1jBoL0K88ebYa5U5GtGvTH+TOBkRLoVYrUN1Z
-         FYvDa23LptPWyK7dfcXGhuN5Zay7UpQhNZp096+b/pkCE6qcQDuzuVqbaA4Lmu09yQ/V
-         oELa/ho5rYPRsMhoHCitEz2ZBAGQ3RJ7Tlohw68SK5jmQvISO6TKFdRwbo+u1ND8VU+b
-         DggA==
-X-Gm-Message-State: AOJu0YzdUOeHxKqO6QDV98WqBa6kXuFlPsUPQSUIzQMI1N3jBO8tVwwb
-	WxhEQl4+YOonHZoEHtE31Qn8UREGT58+3zwYnXAUl9UTVzD09TJDigI2KMeC
-X-Google-Smtp-Source: AGHT+IF5BDObdHwJFaV3mcAncY4llNAIARhElT5nS80U8qdnFsrWJL3ZXXt4SggollmDTITqqhmu0A==
-X-Received: by 2002:a17:902:e547:b0:1d7:620e:d2d8 with SMTP id n7-20020a170902e54700b001d7620ed2d8mr2366339plf.41.1706032156595;
-        Tue, 23 Jan 2024 09:49:16 -0800 (PST)
-Received: from eldorado.. (ip68-4-215-93.oc.oc.cox.net. [68.4.215.93])
-        by smtp.gmail.com with ESMTPSA id a1-20020a170902900100b001d5e7221082sm9104100plp.238.2024.01.23.09.49.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jan 2024 09:49:16 -0800 (PST)
-From: Florian Fainelli <f.fainelli@gmail.com>
-To: linux-mips@vger.kernel.org
-Cc: jonas.gorski@gmail.com,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2] MIPS: BCM63XX: Fix missing prototypes
-Date: Tue, 23 Jan 2024 09:46:54 -0800
-Message-Id: <20240123174701.210922-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1706035632; c=relaxed/simple;
+	bh=OBy0Gs0hGY7eoskCvIqEi7s0T8oE2LNmrnYjmoqoCL0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=nxOEI0KNPjHz4b8jTENvdgai+hhuTI3bHDdOvON7gkmPaTX4xJCxRA6s9sh2Nd0ooj+mNfPhBC0Q+EpTefXB56VnLkxtEo7X+xJ4Ty9SGuM+z3sqY/3H2XkbsCqmXr2ufoYh0scpzM+AHMmht5xg+bCqazme3klcOjZqW9Gvnl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OUKLTV+o; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C3289C0005;
+	Tue, 23 Jan 2024 18:47:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1706035621;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZZTN+4WOEwC2zxeNXM5kkaE+QAyM6nWS3mfKqvd7ec4=;
+	b=OUKLTV+ot9z9SHvcDA2SRrM5cXYUz7L7O8f2Zx3fdY9/FySIQkIJ/pEWaa5W+TfbKdVxvj
+	VPaHVcKp7oJeHVA/eLA1+YMUBOyS9v93HV+ug1pSk6DeUce/hWcOnsMQ/Cd0toOVyavWjn
+	tujVqa13gb6OTtIP/uJgUKvvqFn1ATBCEvjYK0PGZv1pXuBCdyIfJswIg5PmJ+Q6fG3FU5
+	S/j1EUSzGKggMDjkWay92dPtBIvpOkXzB1eZ0f0tm8Rr/ZF3cwEj5ty8DuxYd10cqm/NBI
+	vRbLIytuMJwIjdVf3LDH9b87qVaJ7nJdsmUGya+ze4+0a5RGzbXQDNS7X+Weyg==
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: [PATCH v3 00/17] Add support for Mobileye EyeQ5 system controller
+Date: Tue, 23 Jan 2024 19:46:45 +0100
+Message-Id: <20240123-mbly-clk-v3-0-392b010b8281@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAJYJsGUC/3WOyw6CMBBFf4V0bU2n5VFc+R/GBS1TaQRqCiESw
+ r9bcIEYXcziTuacuRPp0FvsyCmaiMfBdta1IYhDRHRVtDektgyZcMYFhKGNqkeq6zuVmcZE8xg
+ MkyScPzwa+1xVl2vIle1658fVPMCyfUtAsE0yAGVUpsoA5FkJAs/Kub627VG7ZrH+QZRAlpSpy
+ hUWPxEO8guJ49A3BiYNS3fIUnbgW0HOsw+UB7QIv1QqtJDM7NF5nl+mAg1TQwEAAA==
+To: Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>, 
+ Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ linux-mips@vger.kernel.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-gpio@vger.kernel.org, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: b4 0.12.4
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-Most of the symbols for which we do not have a prototype can actually be
-made static and for the few that cannot, there is already a declaration
-in a header for it.
+Hi,
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+The goal of this series is to add clk, reset and pinctrl support for the
+Mobileye EyeQ5 platform [0]. Control of those is grouped inside a
+system controller block called "OLB".
+
+About clocks, we replaced the 10 fixed clocks from the initial platform
+support series [0] by 10 read-only fixed-factor PLLs provided by our
+clock driver. We also provide one table-based divider clock for OSPI.
+Two PLLs (for GIC timer & UARTs) are required at of_clk_init() so those
+are registered first, the rest comes at platform device probe.
+
+Resets are split in three domains, all dealt with by the same device.
+They have some behavior differences:
+ - We busy-wait on the first two for hardware LBIST reasons (logic
+   built-in self-test).
+ - Domains 0 & 2 work in a bit-per-reset fashion while domain 1 works in
+   a register-per-reset fashion.
+
+Pin control is about controlling bias, drive strength and muxing. The
+latter allows two functions per pin; the first function is always GPIO
+while the second one is pin-dependent. There exists two banks, each
+handled in a separate driver instance. Each pin maps to one pin group.
+That makes pin & group indexes the same, simplifying logic.
+
+This series inherits from the clk V2 [1], reset V1 [2] and pinctrl V1
+[3]. Those were unified to simplify handling of dt-bindings. It is
+based on the series "[PATCH v6 00/15] Add support for the Mobileye
+EyeQ5 SoC" [0] rebased onto v6.8-rc1.
+
+Here is the patch list, split by subsystems:
+
+ - clk:
+    - [PATCH V3 01/17] clk: fixed-factor: add optional accuracy support
+    - [PATCH V3 02/17] clk: fixed-factor: add fwname-based constructor functions
+    - [PATCH V3 05/17] dt-bindings: clock: mobileye,eyeq5-clk: add bindings
+    - [PATCH V3 08/17] clk: eyeq5: add platform driver
+
+ - pinctrl:
+    - [PATCH V3 03/17] dt-bindings: pinctrl: allow pin controller device without unit address
+    - [PATCH V3 07/17] dt-bindings: pinctrl: mobileye,eyeq5-pinctrl: add bindings
+    - [PATCH V3 10/17] pinctrl: eyeq5: add platform driver
+
+ - MIPS: (note: dependent on the [0] series)
+    - [PATCH V3 04/17] dt-bindings: soc: mobileye: add EyeQ5 OLB system controller
+    - [PATCH V3 11/17] MIPS: mobileye: eyeq5: rename olb@e00000 to system-controller@e00000
+    - [PATCH V3 12/17] MIPS: mobileye: eyeq5: remove reg-io-width property from OLB syscon
+    - [PATCH V3 13/17] MIPS: mobileye: eyeq5: use OLB clocks controller
+    - [PATCH V3 14/17] MIPS: mobileye: eyeq5: add OLB reset controller node
+    - [PATCH V3 15/17] MIPS: mobileye: eyeq5: add reset properties to uarts
+    - [PATCH V3 16/17] MIPS: mobileye: eyeq5: add pinctrl nodes & pinmux function nodes
+    - [PATCH V3 17/17] MIPS: mobileye: eyeq5: add pinctrl properties to UART nodes
+
+ - reset:
+    - [PATCH V3 06/17] dt-bindings: reset: mobileye,eyeq5-reset: add bindings
+    - [PATCH V3 09/17] reset: eyeq5: add platform driver
+
+Thanks to Krzysztof, Rob & Stephen for the previous feedback!
+
+Have a nice day,
+Théo Lebrun
+
+[0]: https://lore.kernel.org/lkml/20240118155252.397947-1-gregory.clement@bootlin.com/
+[1]: https://lore.kernel.org/lkml/20231227-mbly-clk-v2-0-a05db63c380f@bootlin.com/
+[2]: https://lore.kernel.org/lkml/20231218-mbly-reset-v1-0-b4688b916213@bootlin.com/
+[3]: https://lore.kernel.org/lkml/20231218-mbly-pinctrl-v1-0-2f7d366c2051@bootlin.com/
+
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- arch/mips/bcm63xx/boards/board_bcm963xx.c | 2 +-
- arch/mips/bcm63xx/dev-rng.c               | 2 +-
- arch/mips/bcm63xx/dev-uart.c              | 1 +
- arch/mips/bcm63xx/dev-wdt.c               | 2 +-
- arch/mips/bcm63xx/irq.c                   | 2 +-
- arch/mips/bcm63xx/setup.c                 | 2 +-
- arch/mips/bcm63xx/timer.c                 | 2 +-
- 7 files changed, 7 insertions(+), 6 deletions(-)
+Changes in v3:
+- Unified the three series into one.
+- clk: split driver into two for clocks registered at of_clk_init() and
+  clocks registered at platform device probe.
+- reset/bindings: drop reset dt-bindings header & add comment in driver
+  to document known valid resets in each domain.
+- pinctrl/bindings: fix pinctrl.yaml to allow non unit addresses for pin
+  controller devices.
+- all/bindings: remove possibility to use `mobileye,olb` phandle to get
+  syscon. All three drivers use their parent node as syscon/regmap.
+- MIPS/bindings: fix bindings for OLB. Have single example in parent,
+  removing all examples in child.
+- all: drop the "probed" logs.
+- Link to v2: https://lore.kernel.org/r/20231227-mbly-clk-v2-0-a05db63c380f@bootlin.com
 
-diff --git a/arch/mips/bcm63xx/boards/board_bcm963xx.c b/arch/mips/bcm63xx/boards/board_bcm963xx.c
-index 01aff80a5967..99f321b6e417 100644
---- a/arch/mips/bcm63xx/boards/board_bcm963xx.c
-+++ b/arch/mips/bcm63xx/boards/board_bcm963xx.c
-@@ -702,7 +702,7 @@ static struct ssb_sprom bcm63xx_sprom = {
- 	.boardflags_hi		= 0x0000,
- };
- 
--int bcm63xx_get_fallback_sprom(struct ssb_bus *bus, struct ssb_sprom *out)
-+static int bcm63xx_get_fallback_sprom(struct ssb_bus *bus, struct ssb_sprom *out)
- {
- 	if (bus->bustype == SSB_BUSTYPE_PCI) {
- 		memcpy(out, &bcm63xx_sprom, sizeof(struct ssb_sprom));
-diff --git a/arch/mips/bcm63xx/dev-rng.c b/arch/mips/bcm63xx/dev-rng.c
-index d277b4dc6c68..f94151f7c96f 100644
---- a/arch/mips/bcm63xx/dev-rng.c
-+++ b/arch/mips/bcm63xx/dev-rng.c
-@@ -26,7 +26,7 @@ static struct platform_device bcm63xx_rng_device = {
- 	.resource	= rng_resources,
- };
- 
--int __init bcm63xx_rng_register(void)
-+static int __init bcm63xx_rng_register(void)
- {
- 	if (!BCMCPU_IS_6368())
- 		return -ENODEV;
-diff --git a/arch/mips/bcm63xx/dev-uart.c b/arch/mips/bcm63xx/dev-uart.c
-index 3bc7f3bfc9ad..5d6bf0445b29 100644
---- a/arch/mips/bcm63xx/dev-uart.c
-+++ b/arch/mips/bcm63xx/dev-uart.c
-@@ -10,6 +10,7 @@
- #include <linux/kernel.h>
- #include <linux/platform_device.h>
- #include <bcm63xx_cpu.h>
-+#include <bcm63xx_dev_uart.h>
- 
- static struct resource uart0_resources[] = {
- 	{
-diff --git a/arch/mips/bcm63xx/dev-wdt.c b/arch/mips/bcm63xx/dev-wdt.c
-index 42130914a3c2..302bf7ed5ad5 100644
---- a/arch/mips/bcm63xx/dev-wdt.c
-+++ b/arch/mips/bcm63xx/dev-wdt.c
-@@ -34,7 +34,7 @@ static struct platform_device bcm63xx_wdt_device = {
- 	},
- };
- 
--int __init bcm63xx_wdt_register(void)
-+static int __init bcm63xx_wdt_register(void)
- {
- 	wdt_resources[0].start = bcm63xx_regset_address(RSET_WDT);
- 	wdt_resources[0].end = wdt_resources[0].start;
-diff --git a/arch/mips/bcm63xx/irq.c b/arch/mips/bcm63xx/irq.c
-index 2548013442f6..6240a8f88ea3 100644
---- a/arch/mips/bcm63xx/irq.c
-+++ b/arch/mips/bcm63xx/irq.c
-@@ -72,7 +72,7 @@ static inline int enable_irq_for_cpu(int cpu, struct irq_data *d,
-  */
- 
- #define BUILD_IPIC_INTERNAL(width)					\
--void __dispatch_internal_##width(int cpu)				\
-+static void __dispatch_internal_##width(int cpu)			\
- {									\
- 	u32 pending[width / 32];					\
- 	unsigned int src, tgt;						\
-diff --git a/arch/mips/bcm63xx/setup.c b/arch/mips/bcm63xx/setup.c
-index d811e3e03f81..c13ddb544a23 100644
---- a/arch/mips/bcm63xx/setup.c
-+++ b/arch/mips/bcm63xx/setup.c
-@@ -159,7 +159,7 @@ void __init plat_mem_setup(void)
- 	board_setup();
- }
- 
--int __init bcm63xx_register_devices(void)
-+static int __init bcm63xx_register_devices(void)
- {
- 	/* register gpiochip */
- 	bcm63xx_gpio_init();
-diff --git a/arch/mips/bcm63xx/timer.c b/arch/mips/bcm63xx/timer.c
-index a86065854c0c..74b83807df30 100644
---- a/arch/mips/bcm63xx/timer.c
-+++ b/arch/mips/bcm63xx/timer.c
-@@ -178,7 +178,7 @@ int bcm63xx_timer_set(int id, int monotonic, unsigned int countdown_us)
- 
- EXPORT_SYMBOL(bcm63xx_timer_set);
- 
--int bcm63xx_timer_init(void)
-+static int bcm63xx_timer_init(void)
- {
- 	int ret, irq;
- 	u32 reg;
+Changes in v2:
+- Drop [PATCH 1/5] that was taken by Stephen for clk-next.
+- Add accuracy support to fixed-factor that is enabled with a flag.
+  Register prototypes were added to exploit this feature.
+- Add fw_name support to fixed-factor. This allows pointing to parent
+  clocks using the value in `clock-names` in the DT. Register
+  prototypes were added for that.
+- Bindings were modified to be less dumb: a binding was added for OLB
+  and the clock-controller is a child property of it. Removed the
+  possibility of pointing to OLB using a phandle. $nodename is the
+  generic `clock-controller` and not custom `clocks`. Fix dt-bindings
+  examples.
+- Fix commit message for the driver patch. Add details, remove useless
+  fluff.
+- Squash both driver commits together.
+- Declare a platform_driver instead of using CLK_OF_DECLARE_DRIVER. This
+  also means using `dev_*` for logging, removing `pr_fmt`. We add a
+  pointer to device in the private structure.
+- Use fixed-factor instead of fixed-rate for PLLs. We don't grab a
+  reference to the parent clk, instead using newly added fixed-factor
+  register prototypes and fwname.
+- NULL is not an error when registering PLLs anymore.
+- Now checking the return value of of_clk_add_hw_provider for errors.
+- Fix includes.
+- Remove defensive conditional at start of eq5c_pll_parse_registers.
+- Rename clk_hw_to_ospi_priv to clk_to_priv to avoid confusion: it is
+  not part of the clk_hw_* family of symbols.
+- Fix negative returns in eq5c_ospi_div_set_rate. It was a typo
+  highlighted by Stephen Boyd.
+- Declare eq5c_ospi_div_ops as static.
+- In devicetree, move the OLB node prior to the UARTs, as platform
+  device probe scheduling is dependent on devicetree ordering. This is
+  required to declare the driver as a platform driver, else it
+  CLK_OF_DECLARE_DRIVER is required.
+- In device, create a core0-timer-clk fixed clock to feed to the GIC
+  timer. It requires a clock earlier than platform bus type init.
+- Link to v1: https://lore.kernel.org/r/20231218-mbly-clk-v1-0-44ce54108f06@bootlin.com
+
+---
+Théo Lebrun (17):
+      clk: fixed-factor: add optional accuracy support
+      clk: fixed-factor: add fwname-based constructor functions
+      dt-bindings: pinctrl: allow pin controller device without unit address
+      dt-bindings: soc: mobileye: add EyeQ5 OLB system controller
+      dt-bindings: clock: mobileye,eyeq5-clk: add bindings
+      dt-bindings: reset: mobileye,eyeq5-reset: add bindings
+      dt-bindings: pinctrl: mobileye,eyeq5-pinctrl: add bindings
+      clk: eyeq5: add platform driver
+      reset: eyeq5: add platform driver
+      pinctrl: eyeq5: add platform driver
+      MIPS: mobileye: eyeq5: rename olb@e00000 to system-controller@e00000
+      MIPS: mobileye: eyeq5: remove reg-io-width property from OLB syscon
+      MIPS: mobileye: eyeq5: use OLB clocks controller
+      MIPS: mobileye: eyeq5: add OLB reset controller node
+      MIPS: mobileye: eyeq5: add reset properties to uarts
+      MIPS: mobileye: eyeq5: add pinctrl nodes & pinmux function nodes
+      MIPS: mobileye: eyeq5: add pinctrl properties to UART nodes
+
+ .../bindings/clock/mobileye,eyeq5-clk.yaml         |  41 ++
+ .../bindings/pinctrl/mobileye,eyeq5-pinctrl.yaml   |  77 +++
+ .../devicetree/bindings/pinctrl/pinctrl.yaml       |  18 +-
+ .../bindings/reset/mobileye,eyeq5-reset.yaml       |  32 ++
+ .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  |  77 +++
+ MAINTAINERS                                        |   8 +
+ .../{eyeq5-fixed-clocks.dtsi => eyeq5-clocks.dtsi} |  54 +-
+ arch/mips/boot/dts/mobileye/eyeq5-pins.dtsi        | 128 +++++
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi             |  37 +-
+ drivers/clk/Kconfig                                |  11 +
+ drivers/clk/Makefile                               |   1 +
+ drivers/clk/clk-eyeq5.c                            | 414 ++++++++++++++
+ drivers/clk/clk-fixed-factor.c                     | 103 +++-
+ drivers/pinctrl/Kconfig                            |  15 +
+ drivers/pinctrl/Makefile                           |   1 +
+ drivers/pinctrl/pinctrl-eyeq5.c                    | 595 +++++++++++++++++++++
+ drivers/reset/Kconfig                              |  12 +
+ drivers/reset/Makefile                             |   1 +
+ drivers/reset/reset-eyeq5.c                        | 383 +++++++++++++
+ include/dt-bindings/clock/mobileye,eyeq5-clk.h     |  22 +
+ include/linux/clk-provider.h                       |  26 +-
+ 21 files changed, 1995 insertions(+), 61 deletions(-)
+---
+base-commit: 84f23245916391a55be31e37e48cea4da085b100
+change-id: 20231023-mbly-clk-87ce5c241f08
+
+Best regards,
 -- 
-2.34.1
+Théo Lebrun <theo.lebrun@bootlin.com>
 
 
