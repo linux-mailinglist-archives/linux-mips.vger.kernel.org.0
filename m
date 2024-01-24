@@ -1,73 +1,73 @@
-Return-Path: <linux-mips+bounces-1095-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1096-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D517A83A274
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 08:00:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D63C183A296
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 08:04:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 069131C21E71
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 07:00:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A318B243EA
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 07:04:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B319D12E63;
-	Wed, 24 Jan 2024 07:00:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71498154B1;
+	Wed, 24 Jan 2024 07:03:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NSbSse7r"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="C3vMEx8L"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66006134CD
-	for <linux-mips@vger.kernel.org>; Wed, 24 Jan 2024 07:00:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C15168A4
+	for <linux-mips@vger.kernel.org>; Wed, 24 Jan 2024 07:03:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706079641; cv=none; b=cjWY8toC5SHCj2I+ELYy16h2aaRHZAqlnVij1O1zMH2g8bxz2a32RFNQbF3jDbqLaLTSpMfd+9CiC0XqlWertlZGyy/4jODZrxfe0G2gbqqkHreGg1ZmM6WtHNNkguz9vEt3S7PVFHS2NeHxqSWPYJUHTHxFwgo0geV1Qee3Mcg=
+	t=1706079838; cv=none; b=ahQ9hju+W6Ntil2hhyNqy9QMc9YWCezxcU0hUStJ/7wDaHP08Q1de/grjgI/iPfsN3fcG6CRf9uvBDgJB376WGPPNU2H9VzXSLVvDKkm0/De4+vJBhKr5gkC22s6RgadSe74wobAbqbZqKuQvBhfpfn6okMz7zBLeLWL8m1N0Xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706079641; c=relaxed/simple;
-	bh=nEvn0/4hOrbydyuJcYje0Aae9UV5RIs9X829QxYjZDo=;
+	s=arc-20240116; t=1706079838; c=relaxed/simple;
+	bh=Zhhtq7uBrRvjDGHhyHyS7VXvNPW7N5QPlOY9IDvbyz4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QozYTDtL4rLn/mgmxmntdDsEjX/Wj+0WPEnAmKQOUT1sFze7tSVeAND8lZNFFUlIdDhdvnMO7L1X1rVImfKYhEDSqkuwdHkKb0Pm/5aHsqgy9HSj44k053wqU4G+dOQ/tRYHNd3I1rEv5w6fsRLbI7+2ZlZLoFJ2i2cY10QmLe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NSbSse7r; arc=none smtp.client-ip=209.85.208.53
+	 In-Reply-To:Content-Type; b=geqFwRCdPdkJ8E+/f/2eoj8j6OHpxdAj9ZBmHmPa3Wjc3lGy6rcB2VUIa6pur1u5OO9UAP5qF3BqTCgiVCLkb3YEEz2diiR7+i0/mFxH31L0kuilvrXTxC8vI2F8XnetXd/hTTz9C8cZtr4cTKc+VoXrK3kx1MTzD/dUa5ek8fs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=C3vMEx8L; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-55a6833c21eso3811392a12.2
-        for <linux-mips@vger.kernel.org>; Tue, 23 Jan 2024 23:00:39 -0800 (PST)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-55a86795a3bso5023779a12.1
+        for <linux-mips@vger.kernel.org>; Tue, 23 Jan 2024 23:03:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706079637; x=1706684437; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706079834; x=1706684634; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=d69rfvGmLzzk4jFemO+qScxqDFLXMqBxzotcHMdu4KQ=;
-        b=NSbSse7rTRa5EQ0xLhiIIWhoe2YIyflsS4qx2WSevfPJmCevgt+UnZCAMC0oTNUKix
-         syW4YYbh3tlP9cwghjRbq57Ex8fYeWO7cTqzifo5lYY+eHWVgqNyvNjofDYpKgsURtvF
-         O+a4g10tzEU1NGQcf4KTjYEvh7oaMkod2vv95GqgMv8ogFlh5fCN9W8gx/fjJ4N/mk/s
-         QLYUx7badkeIOW8jDDMPXPzRodec8MQZfK7ncsApWvbdP9lfnDqzBbV6x5yxpvusfs82
-         5w+mJN/NZMj4kpf47my3oQz+VFrFjouxUDd04jHlYgiFci2xH4e2e5XBVBT4m+3huR1b
-         kSiA==
+        bh=haXTBEQvGaOsM7nV6ezZAlDYCdcGMV2LvzCRWvLOdJU=;
+        b=C3vMEx8LMu6dEu0nIfohQ4NDrWP1dFgdIJSgjxztTXDkF/EXI4JnfDcQMVwMRLNyhl
+         vS+3tKTZpID6SOqJnboSZbOOAx+J+fFFmDawcBJeGHEBxqcajlzuiQoSv4ZymvaWqVzn
+         zwfuYCwOJjOtfgIKJTDnqLX3dhAbjS9++iB1q00j9IycZznOqPH8TLAPUo039LGOPC8p
+         TiTIv3yjwCqN4anxthRDVAbYk3EXXJMliUqgvzvTL2cvNzlrWfMV4mi3tXv7N8QpqcmB
+         FhEf3mvGOVhpAa3CbJpn/yGj2WUgykHZ+zsz/VSyCeLPGOVq+Tgmn5o3AD0W9zeOUgc2
+         e+sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706079637; x=1706684437;
+        d=1e100.net; s=20230601; t=1706079834; x=1706684634;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d69rfvGmLzzk4jFemO+qScxqDFLXMqBxzotcHMdu4KQ=;
-        b=icd4mNIr4e3d1AzaLDPHfk3wZCONs+nteak2w+fhBY8VpxSRr1kl4LR0fNP+rEV1it
-         kJ0+drdt2OjVaOSkIkA9hKC0r9j4YWFXx60HbReYQXjuFU8fezYhrLTA5iVM90KO1yee
-         AvfRiINvf5eJj9BbV2MITfaRXFRlXQk/xtUEM+XxY2J+ARBQ19SVKrWqEv/BwdMN6J8T
-         HLAhYUpqEIKAEAf5pBAfml15wp4weTGxQZnSuCw6gjBa4L8Ti+jZrGm0ScCMxlylMgK6
-         yhKau5I/SWX67+QwUYdk5hWbH6Sv6mWL1eA15o/W/MvDqNFT1MQGc+6Tjry7CJ2qh0vS
-         C5XQ==
-X-Gm-Message-State: AOJu0Yx4sID7P3tY5h9kSnfCGbm2DJyUOQUMrvdV6vMF5hgiQdY7Itlm
-	SMQpmwa0DkNEU+2bSJ97H+zHKAvragStdKJ4UAnUjIP3AbtgIxg0OVukRqt7txs=
-X-Google-Smtp-Source: AGHT+IFiMpe8pJr8jg4RmX820Qjf6XBstYcxT4EIJ1x9bw8CLsB0NlILy65sG/cotpF2Ok1aAySFtA==
-X-Received: by 2002:a50:fe8d:0:b0:55a:3efe:5113 with SMTP id d13-20020a50fe8d000000b0055a3efe5113mr1537750edt.81.1706079637436;
-        Tue, 23 Jan 2024 23:00:37 -0800 (PST)
+        bh=haXTBEQvGaOsM7nV6ezZAlDYCdcGMV2LvzCRWvLOdJU=;
+        b=esx+pgCl9jInvaqvS+p1pI4TMIm2CUJI60JTwdhghmlImesiDOZ/cZVR2x2TGBwISH
+         NZ2aFZ4LRDCbliUveWmN8qnCelUuDZf+oTB2P3Et4l+e6FTtHcW4wJBR9CwP77PsVi6X
+         GsuwPjVTfEm2SUURfynxBO09ofQOMfVV5eq0V5nBVyKB1u3NKmwz5re23EVgwoF+c+6W
+         Y0Dz3lUCBxyMvRMEc+zk6e130oGEM95d8qmSa0AMyQEX+G/tEyaW5Apjto3i6HHsBhRt
+         zyx9NMW/70uNv0BGHqWce71s/HEoBKb0/hBn9w2xLkFRzAvuRySZYqGGZL+za5SBE8Ex
+         /OVA==
+X-Gm-Message-State: AOJu0YxJQ/eE92z+7DkSlTKtjHIT9Tu2Tjo/Q11uneW2tkTF4zts9E63
+	IcZrTGmaoHVymOOsHTyWf/jKZmUazMocc5sE4yRgzRrm6SXBydgS2G5TV1Ngcdc=
+X-Google-Smtp-Source: AGHT+IHc1VS0ppd5vyZESV0GAkIaQ8E7thG/8vrwPpz9MUb+uoqfBuwRFUYnWCx5FlSkc/UIvwT2Vw==
+X-Received: by 2002:a05:6402:28b1:b0:55c:2132:36dd with SMTP id eg49-20020a05640228b100b0055c213236ddmr916832edb.84.1706079834571;
+        Tue, 23 Jan 2024 23:03:54 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.215.66])
-        by smtp.gmail.com with ESMTPSA id dj17-20020a05640231b100b00559bb146ecbsm9804691edb.6.2024.01.23.23.00.35
+        by smtp.gmail.com with ESMTPSA id f16-20020a056402151000b0055c0167eb9fsm4353779edw.51.2024.01.23.23.03.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jan 2024 23:00:37 -0800 (PST)
-Message-ID: <b9b8aa19-aa08-42ff-8b2f-dedb1e64700c@linaro.org>
-Date: Wed, 24 Jan 2024 08:00:35 +0100
+        Tue, 23 Jan 2024 23:03:54 -0800 (PST)
+Message-ID: <5e06d14a-baa7-4e18-a731-6621e623565f@linaro.org>
+Date: Wed, 24 Jan 2024 08:03:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -75,7 +75,7 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 09/17] reset: eyeq5: add platform driver
+Subject: Re: [PATCH v3 10/17] pinctrl: eyeq5: add platform driver
 Content-Language: en-US
 To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
  Gregory CLEMENT <gregory.clement@bootlin.com>,
@@ -92,7 +92,7 @@ Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-gpio@vger.kernel.org
 References: <20240123-mbly-clk-v3-0-392b010b8281@bootlin.com>
- <20240123-mbly-clk-v3-9-392b010b8281@bootlin.com>
+ <20240123-mbly-clk-v3-10-392b010b8281@bootlin.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -138,484 +138,133 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240123-mbly-clk-v3-9-392b010b8281@bootlin.com>
+In-Reply-To: <20240123-mbly-clk-v3-10-392b010b8281@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 23/01/2024 19:46, Théo Lebrun wrote:
-> Add the Mobileye EyeQ5 reset controller driver. It belongs to a syscon
-> region called OLB. It might grow to add later support of other
-> platforms from Mobileye.
+> Add the Mobileye EyeQ5 pin controller driver. It might grow to add later
+> support of other platforms from Mobileye. It belongs to a syscon region
+> called OLB.
 > 
-> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-> ---
->  MAINTAINERS                 |   1 +
->  drivers/reset/Kconfig       |  12 ++
->  drivers/reset/Makefile      |   1 +
->  drivers/reset/reset-eyeq5.c | 383 ++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 397 insertions(+)
+> Existing pins and their function live statically in the driver code
+> rather than in the devicetree, see compatible match data.
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 3ea96ab7d2b8..dd3b5834386f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14794,6 +14794,7 @@ F:	arch/mips/boot/dts/mobileye/
->  F:	arch/mips/configs/eyeq5_defconfig
->  F:	arch/mips/mobileye/board-epm5.its.S
->  F:	drivers/clk/clk-eyeq5.c
-> +F:	drivers/reset/reset-eyeq5.c
->  F:	include/dt-bindings/clock/mobileye,eyeq5-clk.h
->  F:	include/dt-bindings/soc/mobileye,eyeq5.h
->  
-> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-> index ccd59ddd7610..80bfde54c076 100644
-> --- a/drivers/reset/Kconfig
-> +++ b/drivers/reset/Kconfig
-> @@ -66,6 +66,18 @@ config RESET_BRCMSTB_RESCAL
->  	  This enables the RESCAL reset controller for SATA, PCIe0, or PCIe1 on
->  	  BCM7216.
->  
-> +config RESET_EYEQ5
-> +	bool "Mobileye EyeQ5 reset controller"
-> +	depends on MFD_SYSCON
-> +	depends on MACH_EYEQ5 || COMPILE_TEST
-> +	default MACH_EYEQ5
-> +	help
-> +	  This enables the Mobileye EyeQ5 reset controller.
-> +
-> +	  It has three domains, with a varying number of resets in each of them.
-> +	  Registers are located in a shared register region called OLB accessed
-> +	  through a syscon & regmap.
-> +
->  config RESET_HSDK
->  	bool "Synopsys HSDK Reset Driver"
->  	depends on HAS_IOMEM
-> diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
-> index 8270da8a4baa..4fabe0070390 100644
-> --- a/drivers/reset/Makefile
-> +++ b/drivers/reset/Makefile
-> @@ -11,6 +11,7 @@ obj-$(CONFIG_RESET_BCM6345) += reset-bcm6345.o
->  obj-$(CONFIG_RESET_BERLIN) += reset-berlin.o
->  obj-$(CONFIG_RESET_BRCMSTB) += reset-brcmstb.o
->  obj-$(CONFIG_RESET_BRCMSTB_RESCAL) += reset-brcmstb-rescal.o
-> +obj-$(CONFIG_RESET_EYEQ5) += reset-eyeq5.o
->  obj-$(CONFIG_RESET_HSDK) += reset-hsdk.o
->  obj-$(CONFIG_RESET_IMX7) += reset-imx7.o
->  obj-$(CONFIG_RESET_INTEL_GW) += reset-intel-gw.o
-> diff --git a/drivers/reset/reset-eyeq5.c b/drivers/reset/reset-eyeq5.c
-> new file mode 100644
-> index 000000000000..2217e42e140b
-> --- /dev/null
-> +++ b/drivers/reset/reset-eyeq5.c
-> @@ -0,0 +1,383 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Reset driver for the Mobileye EyeQ5 platform.
-> + *
-> + * The registers are located in a syscon region called OLB. We handle three
-> + * reset domains. Domains 0 and 2 look similar in that they both use one bit
-> + * per reset line. Domain 1 has a register per reset.
-> + *
-> + * We busy-wait after updating a reset in domains 0 or 1. The reason is hardware
-> + * logic built-in self-test (LBIST) that might be enabled.
-> + *
-> + * We use eq5r_ as prefix, as-in "EyeQ5 Reset", but way shorter.
-> + *
-> + * Known resets in domain 0:
-> + *  3. CAN0
-> + *  4. CAN1
-> + *  5. CAN2
-> + *  6. SPI0
-> + *  7. SPI1
-> + *  8. SPI2
-> + *  9. SPI3
-> + * 10. UART0
-> + * 11. UART1
-> + * 12. UART2
-> + * 13. I2C0
-> + * 14. I2C1
-> + * 15. I2C2
-> + * 16. I2C3
-> + * 17. I2C4
-> + * 18. TIMER0
-> + * 19. TIMER1
-> + * 20. TIMER2
-> + * 21. TIMER3
-> + * 22. TIMER4
-> + * 23. WD0
-> + * 24. EXT0
-> + * 25. EXT1
-> + * 26. GPIO
-> + * 27. WD1
-> + *
-> + * Known resets in domain 1:
-> + * 0. VMP0	(Vector Microcode Processors)
-> + * 1. VMP1
-> + * 2. VMP2
-> + * 3. VMP3
-> + * 4. PMA0	(Programmable Macro Array)
-> + * 5. PMA1
-> + * 6. PMAC0
-> + * 7. PMAC1
-> + * 8. MPC0	(Multi-threaded Processing Clusters)
-> + * 9. MPC1
-> + *
-> + * Known resets in domain 2:
-> + *  0. PCIE0_CORE
-> + *  1. PCIE0_APB
-> + *  2. PCIE0_LINK_AXI
-> + *  3. PCIE0_LINK_MGMT
-> + *  4. PCIE0_LINK_HOT
-> + *  5. PCIE0_LINK_PIPE
-> + *  6. PCIE1_CORE
-> + *  7. PCIE1_APB
-> + *  8. PCIE1_LINK_AXI
-> + *  9. PCIE1_LINK_MGMT
-> + * 10. PCIE1_LINK_HOT
-> + * 11. PCIE1_LINK_PIPE
-> + * 12. MULTIPHY
-> + * 13. MULTIPHY_APB
-> + * 15. PCIE0_LINK_MGMT
-> + * 16. PCIE1_LINK_MGMT
-> + * 17. PCIE0_LINK_PM
-> + * 18. PCIE1_LINK_PM
-> + *
-> + * Copyright (C) 2024 Mobileye Vision Technologies Ltd.
-> + */
-> +
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/mutex.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/reset-controller.h>
-> +
-> +/* Offsets into the OLB region as well as masks for domain 1 registers. */
-> +#define EQ5R_OLB_SARCR0			(0x004)
-> +#define EQ5R_OLB_SARCR1			(0x008)
-> +#define EQ5R_OLB_PCIE_GP		(0x120)
-> +#define EQ5R_OLB_ACRP_REG(n)		(0x200 + 4 * (n)) // n=0..12
-> +#define EQ5R_OLB_ACRP_PD_REQ		BIT(0)
-> +#define EQ5R_OLB_ACRP_ST_POWER_DOWN	BIT(27)
-> +#define EQ5R_OLB_ACRP_ST_ACTIVE		BIT(29)
-> +
-> +/* Vendor-provided values. D1 has a long timeout because of LBIST. */
-> +#define D0_TIMEOUT_POLL			10
-> +#define D1_TIMEOUT_POLL			40000
-> +
-> +/*
-> + * Masks for valid reset lines in each domain. This array is also used to get
-> + * the domain and reset counts.
-> + */
-> +static const u32 eq5r_valid_masks[] = { 0x0FFFFFF8, 0x00001FFF, 0x0007BFFF };
-> +
-> +#define EQ5R_DOMAIN_COUNT ARRAY_SIZE(eq5r_valid_masks)
-> +
-> +struct eq5r_private {
-> +	struct mutex mutexes[EQ5R_DOMAIN_COUNT]; /* We serialize all reset operations. */
-> +	struct regmap *olb;			 /* Writes go to a syscon regmap. */
-> +	struct reset_controller_dev rcdev;
-> +};
-> +
-> +static int _eq5r_busy_wait(struct eq5r_private *priv, struct device *dev,
-> +			   u32 domain, u32 offset, bool assert)
-> +{
-> +	unsigned int val, mask;
-> +	int i;
-> +
-> +	lockdep_assert_held(&priv->mutexes[domain]);
-> +
-> +	switch (domain) {
-> +	case 0:
-> +		for (i = 0; i < D0_TIMEOUT_POLL; i++) {
-> +			regmap_read(priv->olb, EQ5R_OLB_SARCR1, &val);
-> +			val = !(val & BIT(offset));
-> +			if (val == assert)
-> +				return 0;
-> +			__udelay(1);
 
-What is even "__udelay"? It is the first use in drivers. Please use
-common methods, like fsleep or udelay... but actually you should rather
-use regmap_read_poll_timeout() or some variants instead of open-coding it.
+...
 
-
-> +		}
-> +		break;
-> +	case 1:
-> +		mask = assert ? EQ5R_OLB_ACRP_ST_POWER_DOWN : EQ5R_OLB_ACRP_ST_ACTIVE;
-> +		for (i = 0; i < D1_TIMEOUT_POLL; i++) {
-> +			regmap_read(priv->olb, EQ5R_OLB_ACRP_REG(offset), &val);
-> +			if (val & mask)
-> +				return 0;
-> +			__udelay(1);
-> +		}
-> +		break;
-> +	case 2:
-> +		return 0; /* No busy waiting for domain 2. */
-> +	default:
-> +		WARN_ON(1);
-> +		return -EINVAL;
-> +	}
-> +
-> +	dev_dbg(dev, "%u-%u: timeout\n", domain, offset);
-> +	return -ETIMEDOUT;
-> +}
-> +
-> +static void _eq5r_assert(struct eq5r_private *priv, u32 domain, u32 offset)
-
-Drop leading _ and name the function in some informative way.
-
-> +{
-> +	lockdep_assert_held(&priv->mutexes[domain]);
-> +
-> +	switch (domain) {
-> +	case 0:
-> +		regmap_clear_bits(priv->olb, EQ5R_OLB_SARCR0, BIT(offset));
-> +		break;
-> +	case 1:
-> +		regmap_set_bits(priv->olb, EQ5R_OLB_ACRP_REG(offset),
-> +				EQ5R_OLB_ACRP_PD_REQ);
-> +		break;
-> +	case 2:
-> +		regmap_clear_bits(priv->olb, EQ5R_OLB_PCIE_GP, BIT(offset));
-> +		break;
-> +	default:
-> +		WARN_ON(1);
-> +	}
-> +}
-> +
-> +static int eq5r_assert(struct reset_controller_dev *rcdev, unsigned long id)
-> +{
-> +	struct eq5r_private *priv = dev_get_drvdata(rcdev->dev);
-> +	u32 offset = id & GENMASK(7, 0);
-> +	u32 domain = id >> 8;
-> +	int ret;
-> +
-> +	if (WARN_ON(domain >= EQ5R_DOMAIN_COUNT))
-> +		return -EINVAL;
-> +
-> +	dev_dbg(rcdev->dev, "%u-%u: assert request\n", domain, offset);
-> +
-> +	mutex_lock(&priv->mutexes[domain]);
-> +	_eq5r_assert(priv, domain, offset);
-> +	ret = _eq5r_busy_wait(priv, rcdev->dev, domain, offset, true);
-> +	mutex_unlock(&priv->mutexes[domain]);
-> +
-> +	return ret;
-> +}
-> +
-> +static void _eq5r_deassert(struct eq5r_private *priv, u32 domain, u32 offset)
-> +{
-> +	lockdep_assert_held(&priv->mutexes[domain]);
-> +
-> +	switch (domain) {
-> +	case 0:
-> +		regmap_set_bits(priv->olb, EQ5R_OLB_SARCR0, BIT(offset));
-> +		break;
-> +	case 1:
-> +		regmap_clear_bits(priv->olb, EQ5R_OLB_ACRP_REG(offset),
-> +				  EQ5R_OLB_ACRP_PD_REQ);
-> +		break;
-> +	case 2:
-> +		regmap_set_bits(priv->olb, EQ5R_OLB_PCIE_GP, BIT(offset));
-> +		break;
-> +	default:
-> +		WARN_ON(1);
-> +	}
-> +}
-> +
-> +static int eq5r_deassert(struct reset_controller_dev *rcdev, unsigned long id)
-> +{
-> +	struct eq5r_private *priv = dev_get_drvdata(rcdev->dev);
-> +	u32 offset = id & GENMASK(7, 0);
-> +	u32 domain = id >> 8;
-> +	int ret;
-> +
-> +	if (WARN_ON(domain >= EQ5R_DOMAIN_COUNT))
-> +		return -EINVAL;
-> +
-> +	dev_dbg(rcdev->dev, "%u-%u: deassert request\n", domain, offset);
-> +
-> +	mutex_lock(&priv->mutexes[domain]);
-> +	_eq5r_deassert(priv, domain, offset);
-> +	ret = _eq5r_busy_wait(priv, rcdev->dev, domain, offset, false);
-> +	mutex_unlock(&priv->mutexes[domain]);
-> +
-> +	return ret;
-> +}
-> +
-> +static int eq5r_reset(struct reset_controller_dev *rcdev, unsigned long id)
-> +{
-> +	struct device *dev = rcdev->dev;
-> +	struct eq5r_private *priv = dev_get_drvdata(dev);
-> +	u32 offset = id & GENMASK(7, 0);
-> +	u32 domain = id >> 8;
-> +	int ret;
-> +
-> +	if (WARN_ON(domain >= EQ5R_DOMAIN_COUNT))
-> +		return -EINVAL;
-> +
-> +	dev_dbg(dev, "%u-%u: reset request\n", domain, offset);
-> +
-> +	mutex_lock(&priv->mutexes[domain]);
-> +
-> +	_eq5r_assert(priv, domain, offset);
-> +	ret = _eq5r_busy_wait(priv, dev, domain, offset, true);
-> +	if (ret) /* don't let an error disappear silently */
-> +		dev_warn(dev, "%u-%u: reset assert failed: %d\n",
-> +			 domain, offset, ret);
-> +
-> +	_eq5r_deassert(priv, domain, offset);
-> +	ret = _eq5r_busy_wait(priv, dev, domain, offset, false);
-> +
-> +	mutex_unlock(&priv->mutexes[domain]);
-> +
-> +	return ret;
-> +}
-> +
-> +static int eq5r_status(struct reset_controller_dev *rcdev, unsigned long id)
-> +{
-> +	struct eq5r_private *priv = dev_get_drvdata(rcdev->dev);
-> +	u32 offset = id & GENMASK(7, 0);
-> +	u32 domain = id >> 8;
-> +	unsigned int val;
-> +	int ret;
-> +
-> +	if (WARN_ON(domain >= EQ5R_DOMAIN_COUNT))
-> +		return -EINVAL;
-> +
-> +	dev_dbg(rcdev->dev, "%u-%u: status request\n", domain, offset);
-> +
-> +	mutex_lock(&priv->mutexes[domain]);
-> +
-> +	switch (domain) {
-> +	case 0:
-> +		regmap_read(priv->olb, EQ5R_OLB_SARCR1, &val);
-> +		ret = !(val & BIT(offset));
-> +		break;
-> +	case 1:
-> +		regmap_read(priv->olb, EQ5R_OLB_ACRP_REG(offset), &val);
-> +		ret = !(val & EQ5R_OLB_ACRP_ST_ACTIVE);
-> +		break;
-> +	case 2:
-> +		regmap_read(priv->olb, EQ5R_OLB_PCIE_GP, &val);
-> +		ret = !(val & BIT(offset));
-> +		break;
-> +	}
-> +
-> +	mutex_unlock(&priv->mutexes[domain]);
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct reset_control_ops eq5r_ops = {
-> +	.reset	  = eq5r_reset,
-> +	.assert	  = eq5r_assert,
-> +	.deassert = eq5r_deassert,
-> +	.status	  = eq5r_status,
-> +};
-> +
-> +static int eq5r_of_xlate(struct reset_controller_dev *rcdev,
-> +			 const struct of_phandle_args *reset_spec)
-> +{
-> +	u32 domain, offset;
-> +
-> +	if (WARN_ON(reset_spec->args_count != 2))
-> +		return -EINVAL;
-> +
-> +	domain = reset_spec->args[0];
-> +	offset = reset_spec->args[1];
-> +
-> +	if (domain >= EQ5R_DOMAIN_COUNT || offset > 31 ||
-> +	    !(eq5r_valid_masks[domain] & BIT(offset))) {
-> +		dev_err(rcdev->dev, "%u-%u: invalid reset\n", domain, offset);
-> +		return -EINVAL;
-> +	}
-> +
-> +	return (domain << 8) | offset;
-> +}
-> +
-> +static int eq5r_probe(struct platform_device *pdev)
+> +static int eq5p_probe(struct platform_device *pdev)
 > +{
 > +	struct device *dev = &pdev->dev;
 > +	struct device_node *np = dev->of_node;
 > +	struct device_node *parent_np = of_get_parent(np);
-> +	struct eq5r_private *priv;
-> +	int ret, i;
+> +	const struct eq5p_match *match = of_device_get_match_data(dev);
+> +	struct pinctrl_dev *pctldev;
+> +	struct eq5p_pinctrl *pctrl;
+> +	int ret;
 > +
-> +	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
+> +	pctrl = devm_kzalloc(dev, sizeof(*pctrl), GFP_KERNEL);
+> +	if (!pctrl)
 > +		return -ENOMEM;
+> +
+> +	pctrl->olb = ERR_PTR(-ENODEV);
+> +	if (parent_np)
+> +		pctrl->olb = syscon_node_to_regmap(parent_np);
+> +	if (IS_ERR(pctrl->olb))
+> +		pctrl->olb = syscon_regmap_lookup_by_phandle(np, "mobileye,olb");
+> +	if (IS_ERR(pctrl->olb))
+> +		return PTR_ERR(pctrl->olb);
 
-You leak parent.
+No, we talked about this, you got comments on this. There is no
+mobileye,olb. You cannot have undocumented properties.
 
 > +
-> +	dev_set_drvdata(dev, priv);
+> +	pctrl->regs = match->regs;
+> +	pctrl->funcs = match->funcs;
+> +	pctrl->nfuncs = match->nfuncs;
 > +
-> +	priv->olb = ERR_PTR(-ENODEV);
-> +	if (parent_np) {
-> +		priv->olb = syscon_node_to_regmap(parent_np);
-> +		of_node_put(parent_np);
-> +	}
-> +	if (IS_ERR(priv->olb))
-
-Also here
-
-> +		return PTR_ERR(priv->olb);
-
-This looks over-complicated. First, you cannot just
-dev_get_regmap(pdev->dev.parent)?
-
-
-
+> +	pctrl->desc.name = dev_name(dev);
+> +	pctrl->desc.pins = match->pins;
+> +	pctrl->desc.npins = match->npins;
+> +	pctrl->desc.pctlops = &eq5p_pinctrl_ops;
+> +	pctrl->desc.pmxops = &eq5p_pinmux_ops;
+> +	pctrl->desc.confops = &eq5p_pinconf_ops;
+> +	pctrl->desc.owner = THIS_MODULE;
 > +
-> +	for (i = 0; i < EQ5R_DOMAIN_COUNT; i++)
-> +		mutex_init(&priv->mutexes[i]);
-> +
-> +	priv->rcdev.ops = &eq5r_ops;
-> +	priv->rcdev.owner = THIS_MODULE;
-> +	priv->rcdev.dev = dev;
-> +	priv->rcdev.of_node = np;
-> +	priv->rcdev.of_reset_n_cells = 2;
-> +	priv->rcdev.of_xlate = eq5r_of_xlate;
-> +
-> +	priv->rcdev.nr_resets = 0;
-> +	for (i = 0; i < EQ5R_DOMAIN_COUNT; i++)
-> +		priv->rcdev.nr_resets += __builtin_popcount(eq5r_valid_masks[i]);
-> +
-> +	ret = reset_controller_register(&priv->rcdev);
+> +	ret = devm_pinctrl_register_and_init(dev, &pctrl->desc, pctrl, &pctldev);
 > +	if (ret) {
-> +		dev_err(dev, "Failed registering reset controller: %d\n", ret);
+> +		dev_err(dev, "Failed registering pinctrl device: %d\n", ret);
 > +		return ret;
 > +	}
+> +
+> +	ret = pinctrl_enable(pctldev);
+> +	if (ret) {
+> +		dev_err(dev, "Failed enabling pinctrl device: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	dev_info(dev, "probed\n");
+
+I am pretty sure you got comments for these. Drop such debugs from all
+of your code. Current and future.
+
 > +
 > +	return 0;
 > +}
 > +
-> +static const struct of_device_id eq5r_match_table[] = {
-> +	{ .compatible = "mobileye,eyeq5-reset" },
-> +	{}
-> +};
-> +
-> +static struct platform_driver eq5r_driver = {
-> +	.probe = eq5r_probe,
-> +	.driver = {
-> +		.name = "eyeq5-reset",
-> +		.of_match_table = eq5r_match_table,
+> +static const struct eq5p_match eq5p_match_a = {
+> +	.regs = {
+> +		[EQ5P_PD] = 0x0C0,
+> +		[EQ5P_PU] = 0x0C4,
+> +		[EQ5P_DS_LOW] = 0x0D0,
+> +		[EQ5P_DS_HIGH] = 0x0D4,
+> +		[EQ5P_IOCR] = 0x0B0,
 > +	},
+> +	.pins = eq5p_pins_a,
+> +	.npins = ARRAY_SIZE(eq5p_pins_a),
+> +	.funcs = eq5p_functions_a,
+> +	.nfuncs = ARRAY_SIZE(eq5p_functions_a),
 > +};
 > +
-> +static int __init eq5r_init(void)
-> +{
-> +	return platform_driver_register(&eq5r_driver);
-> +}
+> +static const struct eq5p_match eq5p_match_b = {
+> +	.regs = {
+> +		[EQ5P_PD] = 0x0C8,
+> +		[EQ5P_PU] = 0x0CC,
+> +		[EQ5P_DS_LOW] = 0x0D8,
+> +		[EQ5P_DS_HIGH] = 0x0DC,
+> +		[EQ5P_IOCR] = 0x0B4,
+> +	},
+> +	.pins = eq5p_pins_b,
+> +	.npins = ARRAY_SIZE(eq5p_pins_b),
+> +	.funcs = eq5p_functions_b,
+> +	.nfuncs = ARRAY_SIZE(eq5p_functions_b),
+> +};
 > +
-> +arch_initcall(eq5r_init);
+> +static const struct of_device_id eq5p_match[] = {
+> +	{ .compatible = "mobileye,eyeq5-a-pinctrl", .data = &eq5p_match_a },
+> +	{ .compatible = "mobileye,eyeq5-b-pinctrl", .data = &eq5p_match_b },
+> +	{},
+> +};
+> +
+> +static struct platform_driver eq5p_driver = {
+> +	.driver = {
+> +		.name = "eyeq5-pinctrl",
+> +		.of_match_table = eq5p_match,
+> +	},
+> +	.probe = eq5p_probe,
+> +};
+> +
+> +static int __init eq5p_init(void)
+> +{
+> +	return platform_driver_register(&eq5p_driver);
+> +}
+> +core_initcall(eq5p_init);
 
-This is does not look like arch code, but driver or subsys. Use regular
-module_driver. I see there is such pattern in reset but I doubt this is
-something good.
+No, pins are not a core_initcall. This could be arch_initcall, but
+considering you depend on the parent this must be module driver.
+
+Even from this dependency point of view your initcalls are totally wrong
+and will lead to issues.
 
 Best regards,
 Krzysztof
