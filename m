@@ -1,74 +1,74 @@
-Return-Path: <linux-mips+bounces-1127-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1128-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1179583B44C
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 22:55:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 526FB83B47F
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 23:11:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A104F286BA6
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 21:54:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C582283424
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 22:11:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58C431353F6;
-	Wed, 24 Jan 2024 21:54:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57D3E135A41;
+	Wed, 24 Jan 2024 22:11:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Rhgvatcv"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="QHcgDBCk"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1010D131757
-	for <linux-mips@vger.kernel.org>; Wed, 24 Jan 2024 21:54:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2867A135411
+	for <linux-mips@vger.kernel.org>; Wed, 24 Jan 2024 22:11:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706133296; cv=none; b=pk/IQuYRT1lhJ7aMa6ofEdwnDaAMO4mnKU87V5ZS5txmxyyd17ONnclBCGfjsbCFp7Gp03hXj6gPjmpAgYMVAvRTBJiiEybq4B1W9C7aAm+r8jQEeMB6QMGNSRBG2odGIJZyxkF7Bb7XsOW0J59MdEGP3ci+FuumbbqAe8SVxAI=
+	t=1706134277; cv=none; b=AwaGiOV4VfZYheQnq6nKnEbsTgZ/PUyD4cxJZAkd/zUyxqHk1ckxFZ0lYLwoAtdiAhr+8H9u2+qoE6ifXSSDCZ3Qmua7TUIl4YpBqvvrHSc16LniPaJWEsA9Iw4ZE9/bmh5lOuSkuHK3bLxrNpD1OBQB38fOjm1MPDsZh4wWgCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706133296; c=relaxed/simple;
-	bh=oc1lZj/Tvpz8f0+Va0OB/RbD+89WY+TKLfsWPUxPCf0=;
+	s=arc-20240116; t=1706134277; c=relaxed/simple;
+	bh=vXTfMlgh7kH671ORMb4QoEyy8NAM0PglagPwr/wSiJI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qrCAripbHsIPhoLIVPKtJBbIT+gnfmFmVPL476Q7OMFyLrsfQCw2iHa4kt2r5K0ka3IGSImXXOsnzgtAq7rFQp9dPsBPwUO4e2E3A1eWXIwbiY3ebJcLUbesydtV8Yr/7nPHR8AhPjcDIFynepwcePrSoyKnC2YjTlcoIPWeQG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Rhgvatcv; arc=none smtp.client-ip=209.85.218.50
+	 To:Cc:Content-Type; b=dt33/bqjy7OLF/LR+ertqscEhnB0ujy+qjrWLpzzkHMy5J1kfmS/Oln6UQW/HsmKIUHFJneJO0Ke8CDGQcLAOU+tIt+W+zONW7miDHaSAcKcFWZyW/Know/6PvwMQog11JAFL0gM+gHm35b2QVzcic/ruZ6tXfZ+aeuJqlZq/wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=QHcgDBCk; arc=none smtp.client-ip=209.85.208.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a26f73732c5so675785366b.3
-        for <linux-mips@vger.kernel.org>; Wed, 24 Jan 2024 13:54:53 -0800 (PST)
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2cf13c259f3so23763801fa.2
+        for <linux-mips@vger.kernel.org>; Wed, 24 Jan 2024 14:11:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1706133292; x=1706738092; darn=vger.kernel.org;
+        d=linux-foundation.org; s=google; t=1706134273; x=1706739073; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uzk/NXIbOmouCEogp9S9WiRLOAXkHbEQwd7DHqsoqDY=;
-        b=Rhgvatcv8M9UY4CK+IBjAahK0+xaj8YPjh+qNhKpsgt3PQ6O3hHTvUrpvtOqD3DZKc
-         6qmfKWJTA2DPLk52BoY05p7qzXacgyNNHU8Bnx3HWjIn2nEi9asx+e1hc0ZlUqM7AQxY
-         tbT8z/WqnJOLROFkoJsoKpsgOZuxbvyCac4Ns=
+        bh=24nC7FWGIti38IzxnMvpNU7GROBNbes/8B7YDtU6FyY=;
+        b=QHcgDBCk3imF0ZJpTG3gmFOsxuXq1aTDHiSgTJUFVhBGTvQFt4weQnbWwOncDJYjBJ
+         pHYfV4r6QPaO0anLtUGRByLqs3mpU46lLXzTEDOGpG8IrGJ2zDOt34uc1ObHTsE89GlV
+         gbO3WKiMMZTVQ6WwgNAHLPhyG6J+w5G3NE/N8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706133292; x=1706738092;
+        d=1e100.net; s=20230601; t=1706134273; x=1706739073;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=uzk/NXIbOmouCEogp9S9WiRLOAXkHbEQwd7DHqsoqDY=;
-        b=I3m0kLoUz/aKq5LznNXTUJDcLluycu2bce3Yrs6ilII53/8QEkL2TC+PplljsGYCR9
-         HFUwNyPdtwUpUO7TxmbU+FwS+PzkRx+1YjUaBIkoE1zLVSLGc7tJG11vPgEoqyOhhLLz
-         DnbErz9L5m0CurRcmzRMhll8bLUDMkXq5m3cMk9+WRA5xHPUY11xCqAtjK9nfI/Ypqpc
-         POb0bSRfmkKbOh4sYf8Fw9s2kvDGFXxfrE/JEOwid0lcl0VODzN6W9byvVisS8taf836
-         yi4hBXnm4V6hLGy1vAJy/XTRoaAv00XBuw5b9NZE1uFjPDdy4eMblgHn3kFWjO0BlMoG
-         +iDg==
-X-Gm-Message-State: AOJu0Ywj/IwDWBjtoGDWOAynJqLD9k0EEfWJdmje5jlSoq4Eoap77JFk
-	BSGT9mNyrfYf6dBTz1r09LrDp3u/F4vpcWITmsuVL4QaiAyr9lKw93QMvW+Akf9BrotJO+/+QAe
-	VOM7SCQ==
-X-Google-Smtp-Source: AGHT+IHNgGgQW72UCip4W4I+9Jw0FYToR0o785/jjNuHFyzFVc51E9aDGgP0dlKwXG+uCYkUHGON4A==
-X-Received: by 2002:a17:907:a80e:b0:a31:2993:9b68 with SMTP id vo14-20020a170907a80e00b00a3129939b68mr909050ejc.100.1706133291756;
-        Wed, 24 Jan 2024 13:54:51 -0800 (PST)
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com. [209.85.128.45])
-        by smtp.gmail.com with ESMTPSA id rf22-20020a1709076a1600b00a2fb9c0337esm291041ejc.112.2024.01.24.13.54.51
+        bh=24nC7FWGIti38IzxnMvpNU7GROBNbes/8B7YDtU6FyY=;
+        b=D6MKIAc6VlcWOG5STnefq1qu4x1nfVBT9lz1Rjlr4jAEgpJqY7eU7Enmk/QrhKI6IS
+         rBdENUNfXH/11A7k14rikGtLNTd82buGWBx/iu960ZlK9ghYbHBDsgiSVYirQ6UFucHz
+         Ki8TskM6ps+A8kA14/Cw9ewA/Vk39CyLtS2Co8UfaxW1vvNDVPPxFWASfV3QdCsQj56k
+         ewxLro4OKFDZgI4BObYp0a3803DMfMkizBqzPIATyP+R6Zq1w6LJ1xCFcSBHmxNU7jU3
+         JqcjGtR3QTbX4YRtmCeWJ9LbljMjeE0y5vJn3RdLV34noGQ766iAKO3usqEQUfKtYVIp
+         lqfg==
+X-Gm-Message-State: AOJu0YwxUiBHHlD4KLP2VQB40dr9TDmqBgyb0/X/hqSDuIj86fqbJn0x
+	geRaxAVF9cI6dyd2SQ902T9eR58OSA3sxwPZtID5zLwHuewOl4+bqgxNweXm84AVrv96+vlOcEb
+	U4Q9mQg==
+X-Google-Smtp-Source: AGHT+IG0JzL0jbo5Dqz2q85mGaxHQDQc2lLlv+Epvn9ovWwLJCR9Z71ST58LupbUfT1k6n4I7IFeGg==
+X-Received: by 2002:a05:6512:2c0b:b0:510:973:2e24 with SMTP id dx11-20020a0565122c0b00b0051009732e24mr1452387lfb.92.1706134272807;
+        Wed, 24 Jan 2024 14:11:12 -0800 (PST)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
+        by smtp.gmail.com with ESMTPSA id t16-20020a1709064f1000b00a3100210020sm313185eju.79.2024.01.24.14.11.12
         for <linux-mips@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Jan 2024 13:54:51 -0800 (PST)
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-40e5afc18f5so64714865e9.3
-        for <linux-mips@vger.kernel.org>; Wed, 24 Jan 2024 13:54:51 -0800 (PST)
-X-Received: by 2002:a05:600c:8607:b0:40e:5451:be1a with SMTP id
- ha7-20020a05600c860700b0040e5451be1amr1409393wmb.82.1706133290734; Wed, 24
- Jan 2024 13:54:50 -0800 (PST)
+        Wed, 24 Jan 2024 14:11:12 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-40e8d3b29f2so71010065e9.1
+        for <linux-mips@vger.kernel.org>; Wed, 24 Jan 2024 14:11:12 -0800 (PST)
+X-Received: by 2002:a05:600c:138c:b0:40e:3a07:41e with SMTP id
+ u12-20020a05600c138c00b0040e3a07041emr1033857wmf.162.1706134271813; Wed, 24
+ Jan 2024 14:11:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -77,12 +77,13 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <75e9fd7b08562ad9b456a5bdaacb7cc220311cc9.camel@xry111.site>
  <mvmplxraqmd.fsf@suse.de> <9481b6d9d015aea25d8f2563bf7bd6f6462f758f.camel@xry111.site>
- <0be1203c9df55432548c92281c8392dfa2f7d6bf.camel@xry111.site> <e8583a3ab0522b4e75ba0ada47b6f093b186fa81.camel@xry111.site>
-In-Reply-To: <e8583a3ab0522b4e75ba0ada47b6f093b186fa81.camel@xry111.site>
+ <0be1203c9df55432548c92281c8392dfa2f7d6bf.camel@xry111.site>
+ <e8583a3ab0522b4e75ba0ada47b6f093b186fa81.camel@xry111.site> <CAHk-=wgVrw+8P68Sy2krcc3QFbm_eu_DRs0-i7mct_0BDORZuA@mail.gmail.com>
+In-Reply-To: <CAHk-=wgVrw+8P68Sy2krcc3QFbm_eu_DRs0-i7mct_0BDORZuA@mail.gmail.com>
 From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 24 Jan 2024 13:54:34 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgVrw+8P68Sy2krcc3QFbm_eu_DRs0-i7mct_0BDORZuA@mail.gmail.com>
-Message-ID: <CAHk-=wgVrw+8P68Sy2krcc3QFbm_eu_DRs0-i7mct_0BDORZuA@mail.gmail.com>
+Date: Wed, 24 Jan 2024 14:10:54 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whkEXGOCEZFO2vAZ9rDd8uW8MJwFNYg9KXaC_vZVso6iA@mail.gmail.com>
+Message-ID: <CAHk-=whkEXGOCEZFO2vAZ9rDd8uW8MJwFNYg9KXaC_vZVso6iA@mail.gmail.com>
 Subject: Re: Strange EFAULT on mips64el returned by syscall when another
  thread is forking
 To: Xi Ruoyao <xry111@xry111.site>
@@ -91,75 +92,43 @@ Cc: Andreas Schwab <schwab@suse.de>, Ben Hutchings <ben@decadent.org.uk>, linux-
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, libc-alpha@sourceware.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 24 Jan 2024 at 13:33, Xi Ruoyao <xry111@xry111.site> wrote:
+On Wed, 24 Jan 2024 at 13:54, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> Re-posting the broken test case for Ben (I also added a waitpid call to
-> prevent PID exhaustion):
-
-Funky, funky.
-
->       ssize_t ret = read (fd, buf, 7);
->       if (ret == -1 && errno == EFAULT)
->         abort ();
-
-So I think I have a clue:
-
-> and the "interesting" aspects:
 >
-> 1. If I change the third parameter of "read" to any value >= 8, it no
-> longer fails.  But it fails with any integer in [1, 8).
+> And I think the "fails with any integer in [1, 8)" is because the MIPS
+> "copy_from_user()" code is likely doing something special for those
+> small copies.
 
-One change (the only one, really), is that now that MIPS uses
-lock_mm_and_find_vma(), it also has this code:
+.Lcopy_bytes_checklen\@: does COPY_BYTE(0) for the first access, which is
 
-        if (regs && !user_mode(regs)) {
-                unsigned long ip = instruction_pointer(regs);
-                if (!search_exception_tables(ip))
-                        return false;
-        }
+#define COPY_BYTE(N)                    \
+        LOADB(t0, N(src), .Ll_exc\@);   \
+        SUB     len, len, 1;            \
+        beqz    len, .Ldone\@;          \
+        STOREB(t0, N(dst), .Ls_exc_p1\@)
 
-in case the mmap trylock fails.
+so yeah, for 'copy_to_user()" (which is what that "read (fd, buf, 7)"
+will do, we have that user space write ("STOREB()") in the branch
+delay slot of the length test.
 
-That code protects against the deadlock case of "we hold the mmap
-lock, and take a kernel page fault due to a bug, and that page fault
-happens to be to user space, and the page fault code then deadlocks on
-the mmap lock".
+So that matches.
 
-It's a rare bug, but it's so nasty to debug that x86 has had that code
-pretty much forever, and the lock_mm_and_find_vma() helper got it that
-way. MIPS was clearly expecting kernel debugging to happen on other
-platforms ;)
+And it only fails when
 
-And I think the "fails with any integer in [1, 8)" is because the MIPS
-"copy_from_user()" code is likely doing something special for those
-small copies.
+ (a) you're unlucky, and that stack buffer
 
-And I note that the MIPS extable.c code uses
+          char buf[16] = {};
 
-        fixup = search_exception_tables(exception_epc(regs));
+     happens to be just under the last page that has been accessed, so
+you get a page fault
 
-Note the difference: lock_mm_and_find_vma() uses
-instruction_pointer(regs), extable.c uses exception_epc(regs).
+ (b) you hit a mmap_sem already being locked, presumably because
+another thread is doing that fork().
 
-The former is just "((regs)->cp0_epc)", while the latter is some
-complex mess due to MIPS delay slots and isa16.
+Anyway, I'm pretty sure this is the bug, now some MIPS person just
+needs to fix the MIPS version of "instruction_pointer()" to do what
+"exception_epc()" already does.
 
-My *suspicion* is that instruction_pointer() needs to be fixed to do
-the same full exception_epc() thing.
-
-But honestly, I absolutely detest delay slots and refuse to touch
-anything MIPS for that reason,.
-
-And there could certainly be something else going on too. But that odd
-size limitation, and the fact that it only happens on MIPS, does make
-me think the above analysis is right.
-
-I guess you could test it by changing the two cases of
-'instruction_pointer(regs)' in mm/memory.c to use exception_epc(regs)
-instead. It will only build on MIPS, but for *testing* that theory
-out, it's fine.
-
-Over to MIPS people..
-
-                        Linus
+              Linus
 
