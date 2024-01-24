@@ -1,118 +1,191 @@
-Return-Path: <linux-mips+bounces-1109-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1110-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23A0E83AC73
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 15:52:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2254E83ACF3
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 16:15:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B62A11F21978
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 14:52:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C52E328B6A5
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 15:15:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D83771272AD;
-	Wed, 24 Jan 2024 14:38:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F8147C08B;
+	Wed, 24 Jan 2024 15:14:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a9o0e4Y2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BSbIBw3k"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D25D5384
-	for <linux-mips@vger.kernel.org>; Wed, 24 Jan 2024 14:38:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B537C084;
+	Wed, 24 Jan 2024 15:14:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706107139; cv=none; b=k/h7PUnCykdgpKoPb9NX4flyC8aCCNflUo9NxMwMr79+MlPaGtXqbDqmI0Hqd0SXrTOOrfUb/btsNoFrDQNdI4wtZbfSyCFmnY65Jb+uL2kN7i/K3y2jj2wLw4eikfpVDIjrORDNa5uAxJIEEDoNDCBoHezywGsCuiZMdQEJ7aQ=
+	t=1706109248; cv=none; b=k8a0RjLgtmxsSPp8dA1v/wBfHVQYsuHSMbptWXYtuuTybstNCoJ3of09BjGu7kqcyC+58KHTSGQDDsNJojE8sATHEMT3btMsNHgT1D6TxzDY8WE+RByZKIwDY+CRmgqcaDSwqu0h+O39JhwUTpPtWYOHe15yeMCbzCTSJZ7e2nI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706107139; c=relaxed/simple;
-	bh=pok9Rb9/rau/3FIlKw2abb93LnnTtE0ZjzrxlzDpf9A=;
+	s=arc-20240116; t=1706109248; c=relaxed/simple;
+	bh=lvaCYClRxgNlHDnQz/s2U/iDr+6UL1dxY0a0fQAXT9Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E9/JYTk3XYgihhPvdaeuasutfHLe3j+2RHQPeTPQ9otiUOj+fvjWPxcEEPiIXgZU2DJ+ac5KjFynTBKpISSU75Mk4tBooY5E6ojX04G1X/SKxGReFEODy5+iH0Av4gaEXouTukV2CfDJ6gR43YdQsCq83YSWhExOqLEtkHvkoN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=a9o0e4Y2; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706107137;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ls80tWWITZqF3iJAPsDuzCkVtKDTZBr/hmM0JE5RG5g=;
-	b=a9o0e4Y2/Nx+5Sirj35CLJ7eA6BEQOVfkJrkX77SlO43mLIoLqjl5Lnr2R2O0qlwutKpYT
-	ZIubIU2ElrFeeohGOctIDfK4eK8YKMCQ2dVIL2wEL1066i3fsUQG8yJ71XchNpR+5Avw/s
-	/tBkbUbyGdZo1R7kNm7BKOWzLzdEv2g=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-695-hw5KzothNAWkK-1bR3SVuw-1; Wed,
- 24 Jan 2024 09:38:53 -0500
-X-MC-Unique: hw5KzothNAWkK-1bR3SVuw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 254953806622;
-	Wed, 24 Jan 2024 14:38:53 +0000 (UTC)
-Received: from localhost (unknown [10.72.116.117])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id 49B49AC03;
-	Wed, 24 Jan 2024 14:38:51 +0000 (UTC)
-Date: Wed, 24 Jan 2024 22:38:49 +0800
-From: Baoquan He <bhe@redhat.com>
-To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc: linux-kernel@vger.kernel.org, kexec@lists.infradead.org, x86@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
-	loongarch@lists.linux.dev, akpm@linux-foundation.org,
-	ebiederm@xmission.com, hbathini@linux.ibm.com, piliu@redhat.com,
-	viro@zeniv.linux.org.uk
-Subject: Re: [PATCH linux-next v3 10/14] sh, crash: wrap crash dumping code
- into crash related ifdefs
-Message-ID: <ZbEg+aoWKPww71gW@MiWiFi-R3L-srv>
-References: <20240124051254.67105-1-bhe@redhat.com>
- <20240124051254.67105-11-bhe@redhat.com>
- <27d8aa3a9e604a7e45c87b7fbc5b1ec2a63f03e3.camel@physik.fu-berlin.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ruty46cPGCqtzm7E1J+mfaAsJSjLUdVIDr0HF5ICcQUfrhSmcjR9JBeN/DATREaeKRK7tAQkaK7zh7Bd8wdFaui4YzlLEDswNFvohM4bbVsbkDsTGgzGEAq2WgixK12G3XGBiDh+MMrFKvrC/y1N32d0LqJyhj3RPO0d5VIGIvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BSbIBw3k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA801C433F1;
+	Wed, 24 Jan 2024 15:14:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706109247;
+	bh=lvaCYClRxgNlHDnQz/s2U/iDr+6UL1dxY0a0fQAXT9Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BSbIBw3kzo6Z8y3CldCjPlFmJVXs4DfMbWMk3BxWhtiC21cqBvVecnukro17HgBrs
+	 e36bl6Zfrb4/KDy2qO2+Jx66ggkv3gYrOPH41fzQy3mI6pB1wPvoUby1N8qtQ2R8p0
+	 vnVIITD7LaLjGqEB0vYBBWgYM/yWh8SlBpNemWv0R5FgMtEZVyJy02ZlkVbCz3OciX
+	 nXiNbMAOchaWY3hZa2GKgHqhJ9cki/IAjjSHiZ3ikM5Z4DFDp/7Gi7X+wJQKx2r4iX
+	 COSSi8LHQIxBiP6s+3ug52+TnzlabTiuj7oArgdMpgKWgRtINniqN8+5UvzZhFKvA9
+	 StXpbBIN+R/9Q==
+Date: Wed, 24 Jan 2024 09:14:05 -0600
+From: Rob Herring <robh@kernel.org>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v3 04/17] dt-bindings: soc: mobileye: add EyeQ5 OLB
+ system controller
+Message-ID: <20240124151405.GA930997-robh@kernel.org>
+References: <20240123-mbly-clk-v3-0-392b010b8281@bootlin.com>
+ <20240123-mbly-clk-v3-4-392b010b8281@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <27d8aa3a9e604a7e45c87b7fbc5b1ec2a63f03e3.camel@physik.fu-berlin.de>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240123-mbly-clk-v3-4-392b010b8281@bootlin.com>
 
-On 01/24/24 at 09:13am, John Paul Adrian Glaubitz wrote:
-> Hello Baoquan,
+On Tue, Jan 23, 2024 at 07:46:49PM +0100, Théo Lebrun wrote:
+> Add documentation to describe the "Other Logic Block" syscon.
 > 
-> On Wed, 2024-01-24 at 13:12 +0800, Baoquan He wrote:
-> > Now crash codes under kernel/ folder has been split out from kexec
-> > code, crash dumping can be separated from kexec reboot in config
-> > items on SuperH with some adjustments.
-> > 
-> > wrap up crash dumping codes with CONFIG_CRASH_DUMP ifdeffery, and
-> > use IS_ENABLED(CONFIG_CRASH_RESERVE) check to decide if compiling
-> > in the crashkernel reservation code.
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  | 77 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  1 +
+>  2 files changed, 78 insertions(+)
 > 
-> Comparing this to the patches, it seems you missed the first word
-> "Here". Either amend that or write the word "wrap" capitalized.
-> 
-> I would omit "Here" as it's not necessary and just start the
-> sentence with "Wrap".
+> diff --git a/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml b/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml
+> new file mode 100644
+> index 000000000000..031ef6a532c1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml
+> @@ -0,0 +1,77 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mobileye EyeQ5 SoC system controller
+> +
+> +maintainers:
+> +  - Grégory Clement <gregory.clement@bootlin.com>
+> +  - Théo Lebrun <theo.lebrun@bootlin.com>
+> +  - Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+> +
+> +description:
+> +  OLB ("Other Logic Block") is a hardware block grouping smaller blocks. Clocks,
+> +  resets, pinctrl are being handled from here.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: mobileye,eyeq5-olb
+> +      - const: syscon
+> +      - const: simple-mfd
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clock-controller:
+> +    $ref: /schemas/clock/mobileye,eyeq5-clk.yaml#
+> +    type: object
+> +
+> +  reset-controller:
+> +    $ref: /schemas/reset/mobileye,eyeq5-reset.yaml#
+> +    type: object
+> +
+> +  pinctrl-a:
+> +    $ref: /schemas/pinctrl/mobileye,eyeq5-pinctrl.yaml#
+> +    type: object
+> +
+> +  pinctrl-b:
+> +    $ref: /schemas/pinctrl/mobileye,eyeq5-pinctrl.yaml#
+> +    type: object
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    system-controller@e00000 {
+> +      compatible = "mobileye,eyeq5-olb", "syscon", "simple-mfd";
+> +      reg = <0xe00000 0x400>;
+> +
+> +      clock-controller {
+> +        compatible = "mobileye,eyeq5-clk";
+> +        #clock-cells = <1>;
+> +        clocks = <&xtal>;
+> +        clock-names = "ref";
+> +      };
+> +
+> +      reset-controller {
+> +        compatible = "mobileye,eyeq5-reset";
+> +        #reset-cells = <2>;
+> +      };
+> +
+> +      pinctrl-a {
+> +        compatible = "mobileye,eyeq5-a-pinctrl";
+> +        #pinctrl-cells = <1>;
 
-You are right, thanks for careful checking. I will see if I need repost
-to include this update.
+Sure you need this? Generally only pinctrl-single uses this.
 
-> 
-> -- 
->  .''`.  John Paul Adrian Glaubitz
-> : :' :  Debian Developer
-> `. `'   Physicist
->   `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
-> 
-> _______________________________________________
-> kexec mailing list
-> kexec@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/kexec
-> 
+> +      };
+> +
+> +      pinctrl-b {
+> +        compatible = "mobileye,eyeq5-b-pinctrl";
+> +        #pinctrl-cells = <1>;
+> +      };
+> +    };
 
+This can all be simplified to:
+
+system-controller@e00000 {
+    compatible = "mobileye,eyeq5-olb", "syscon";
+    reg = <0xe00000 0x400>;
+    #reset-cells = <2>;
+    #clock-cells = <1>;
+    clocks = <&xtal>;
+    clock-names = "ref";
+
+    pins { ... };
+};
+
+There is no need for sub nodes unless you have reusable blocks or each 
+block has its own resources in DT.
+
+Rob
 
