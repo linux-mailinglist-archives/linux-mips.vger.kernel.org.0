@@ -1,90 +1,118 @@
-Return-Path: <linux-mips+bounces-1108-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1109-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C25C283AA47
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 13:49:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23A0E83AC73
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 15:52:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 020B51C212E9
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 12:49:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B62A11F21978
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 14:52:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 551B57763A;
-	Wed, 24 Jan 2024 12:49:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D83771272AD;
+	Wed, 24 Jan 2024 14:38:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="N7OsNMUa"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a9o0e4Y2"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from xry111.site (xry111.site [89.208.246.23])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CF9577639;
-	Wed, 24 Jan 2024 12:49:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D25D5384
+	for <linux-mips@vger.kernel.org>; Wed, 24 Jan 2024 14:38:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706100555; cv=none; b=GWFckQ9Vv7F9zfWTx5XlzvULfzDY5ZcQa3irFUfuTgoCU2v2aQeeTAv/kisCSzg4//5n13iAnEu4XHsYlOAwGwaKP/9KqUOFsWESZQjzO9zFVerO30FgJpv/ZGkoCejPHxiyM7kg+mKUo4ou6vaVPwNVCz3yhUxLI3jPCopS0/0=
+	t=1706107139; cv=none; b=k/h7PUnCykdgpKoPb9NX4flyC8aCCNflUo9NxMwMr79+MlPaGtXqbDqmI0Hqd0SXrTOOrfUb/btsNoFrDQNdI4wtZbfSyCFmnY65Jb+uL2kN7i/K3y2jj2wLw4eikfpVDIjrORDNa5uAxJIEEDoNDCBoHezywGsCuiZMdQEJ7aQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706100555; c=relaxed/simple;
-	bh=s6U31JdDDdI9PWpaMCc4XRAEGMxkDJjCGZP0a8Ic/GM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=H+3hXTQrXwoVZrii7ij4Bm9SYjDdLBnFHux2qabE5BRBbXQKpd9N0B3GstVwagRJy6NiUrUPRiBeiv2hxxI/ZddgfDqBvx2FLJyOcNw+QkK5KMv4Cbfb1bUa4Rj2Kdu0kWhB+IVNuCctoNYxH0NondTZ2hgXwHQfYJDY6qbD8us=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=N7OsNMUa; arc=none smtp.client-ip=89.208.246.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-	s=default; t=1706100550;
-	bh=s6U31JdDDdI9PWpaMCc4XRAEGMxkDJjCGZP0a8Ic/GM=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=N7OsNMUarIxezT0AZ8LR73o0hZeU0gjeNTC7lHLePEsFDIZpPbZsPxj+wTeG1oGp/
-	 URkMpC7Z8AXkToWwpNQVLagc0cLqo2+K4zZ/AprHRmWW/ldF0FFFm/8DfqPm1k6ate
-	 qdPqYWaHAGWTdlCiPmKZmvBrMODC4l33VGSTYrWs=
-Received: from [127.0.0.1] (unknown [IPv6:2001:470:683e::1])
+	s=arc-20240116; t=1706107139; c=relaxed/simple;
+	bh=pok9Rb9/rau/3FIlKw2abb93LnnTtE0ZjzrxlzDpf9A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E9/JYTk3XYgihhPvdaeuasutfHLe3j+2RHQPeTPQ9otiUOj+fvjWPxcEEPiIXgZU2DJ+ac5KjFynTBKpISSU75Mk4tBooY5E6ojX04G1X/SKxGReFEODy5+iH0Av4gaEXouTukV2CfDJ6gR43YdQsCq83YSWhExOqLEtkHvkoN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=a9o0e4Y2; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706107137;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ls80tWWITZqF3iJAPsDuzCkVtKDTZBr/hmM0JE5RG5g=;
+	b=a9o0e4Y2/Nx+5Sirj35CLJ7eA6BEQOVfkJrkX77SlO43mLIoLqjl5Lnr2R2O0qlwutKpYT
+	ZIubIU2ElrFeeohGOctIDfK4eK8YKMCQ2dVIL2wEL1066i3fsUQG8yJ71XchNpR+5Avw/s
+	/tBkbUbyGdZo1R7kNm7BKOWzLzdEv2g=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-695-hw5KzothNAWkK-1bR3SVuw-1; Wed,
+ 24 Jan 2024 09:38:53 -0500
+X-MC-Unique: hw5KzothNAWkK-1bR3SVuw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id 9E47966DFC;
-	Wed, 24 Jan 2024 07:49:08 -0500 (EST)
-Message-ID: <9481b6d9d015aea25d8f2563bf7bd6f6462f758f.camel@xry111.site>
-Subject: Re: Strange EFAULT on mips64el returned by syscall when another
- thread is forking
-From: Xi Ruoyao <xry111@xry111.site>
-To: Andreas Schwab <schwab@suse.de>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, Jiaxun Yang
- <jiaxun.yang@flygoat.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-  libc-alpha@sourceware.org
-Date: Wed, 24 Jan 2024 20:49:06 +0800
-In-Reply-To: <mvmplxraqmd.fsf@suse.de>
-References: <75e9fd7b08562ad9b456a5bdaacb7cc220311cc9.camel@xry111.site>
-	 <mvmplxraqmd.fsf@suse.de>
-Autocrypt: addr=xry111@xry111.site; prefer-encrypt=mutual;
- keydata=mDMEYnkdPhYJKwYBBAHaRw8BAQdAsY+HvJs3EVKpwIu2gN89cQT/pnrbQtlvd6Yfq7egugi0HlhpIFJ1b3lhbyA8eHJ5MTExQHhyeTExMS5zaXRlPoiTBBMWCgA7FiEEkdD1djAfkk197dzorKrSDhnnEOMFAmJ5HT4CGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQrKrSDhnnEOPHFgD8D9vUToTd1MF5bng9uPJq5y3DfpcxDp+LD3joA3U2TmwA/jZtN9xLH7CGDHeClKZK/ZYELotWfJsqRcthOIGjsdAPuDgEYnkdPhIKKwYBBAGXVQEFAQEHQG+HnNiPZseiBkzYBHwq/nN638o0NPwgYwH70wlKMZhRAwEIB4h4BBgWCgAgFiEEkdD1djAfkk197dzorKrSDhnnEOMFAmJ5HT4CGwwACgkQrKrSDhnnEOPjXgD/euD64cxwqDIqckUaisT3VCst11RcnO5iRHm6meNIwj0BALLmWplyi7beKrOlqKfuZtCLbiAPywGfCNg8LOTt4iMD
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 254953806622;
+	Wed, 24 Jan 2024 14:38:53 +0000 (UTC)
+Received: from localhost (unknown [10.72.116.117])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 49B49AC03;
+	Wed, 24 Jan 2024 14:38:51 +0000 (UTC)
+Date: Wed, 24 Jan 2024 22:38:49 +0800
+From: Baoquan He <bhe@redhat.com>
+To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: linux-kernel@vger.kernel.org, kexec@lists.infradead.org, x86@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+	loongarch@lists.linux.dev, akpm@linux-foundation.org,
+	ebiederm@xmission.com, hbathini@linux.ibm.com, piliu@redhat.com,
+	viro@zeniv.linux.org.uk
+Subject: Re: [PATCH linux-next v3 10/14] sh, crash: wrap crash dumping code
+ into crash related ifdefs
+Message-ID: <ZbEg+aoWKPww71gW@MiWiFi-R3L-srv>
+References: <20240124051254.67105-1-bhe@redhat.com>
+ <20240124051254.67105-11-bhe@redhat.com>
+ <27d8aa3a9e604a7e45c87b7fbc5b1ec2a63f03e3.camel@physik.fu-berlin.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <27d8aa3a9e604a7e45c87b7fbc5b1ec2a63f03e3.camel@physik.fu-berlin.de>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
 
-On Wed, 2024-01-24 at 12:59 +0100, Andreas Schwab wrote:
-> On Jan 24 2024, Xi Ruoyao wrote:
->=20
-> > Now I'm suspecting this might be a kernel bug.=C2=A0 Any pointer to fur=
-ther
-> > triage?
->=20
-> Is this a regression?
+On 01/24/24 at 09:13am, John Paul Adrian Glaubitz wrote:
+> Hello Baoquan,
+> 
+> On Wed, 2024-01-24 at 13:12 +0800, Baoquan He wrote:
+> > Now crash codes under kernel/ folder has been split out from kexec
+> > code, crash dumping can be separated from kexec reboot in config
+> > items on SuperH with some adjustments.
+> > 
+> > wrap up crash dumping codes with CONFIG_CRASH_DUMP ifdeffery, and
+> > use IS_ENABLED(CONFIG_CRASH_RESERVE) check to decide if compiling
+> > in the crashkernel reservation code.
+> 
+> Comparing this to the patches, it seems you missed the first word
+> "Here". Either amend that or write the word "wrap" capitalized.
+> 
+> I would omit "Here" as it's not necessary and just start the
+> sentence with "Wrap".
 
-Initially I guessed it was perhaps a Glibc regression related to the
-newly introduced clone3 usage on MIPS, but it fails with Glibc-2.35 too.
+You are right, thanks for careful checking. I will see if I need repost
+to include this update.
 
-Not sure if this is a kernel regression, I'll try different kernels in
-several hours (once I can physically access the system).
+> 
+> -- 
+>  .''`.  John Paul Adrian Glaubitz
+> : :' :  Debian Developer
+> `. `'   Physicist
+>   `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+> 
+> _______________________________________________
+> kexec mailing list
+> kexec@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kexec
+> 
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
 
