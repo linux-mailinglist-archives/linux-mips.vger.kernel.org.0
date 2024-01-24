@@ -1,138 +1,259 @@
-Return-Path: <linux-mips+bounces-1123-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1124-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE09483B036
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 18:41:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8478183B238
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 20:22:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D27B1C25241
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 17:41:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 12AD4B23673
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 19:22:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5166981208;
-	Wed, 24 Jan 2024 17:41:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57636132C03;
+	Wed, 24 Jan 2024 19:22:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G5EdBFOr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fy35ADhL"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE067F7F2;
-	Wed, 24 Jan 2024 17:41:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BAD612DDA3;
+	Wed, 24 Jan 2024 19:22:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706118082; cv=none; b=Uk7OIwcgdGmO6fcVgsHAPrEFoAjCmkQioAqvH+93o7Fh6JsWrkeeOrZOIMbS5Pe/5dwf4PgOnobB7r/kO5anncA4FjL0ODIGRczFEHrY7C9imejCrW7MihtZKHYm2QA9wEszYT7RRC6KKZBBhZfdDeL9mM5IUlxN/WeBrwZ/03k=
+	t=1706124136; cv=none; b=N+ypgQhNUku38D4ETIk7aidlJMVuqktNWDsSNGZiCd3nzLqEk/OHz1iVFV2Wgwp5ba7kXHXztgBRI8SyxNh3nC24UvQptQ3oz07c9dnR9NcizTdGyl8MZdtIapy5a6hxYcTNChz9ZsrsEOBGqvanFaOXSJb9UMlQ09u3W2RCImU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706118082; c=relaxed/simple;
-	bh=tw/ivyCBJnZU8g06Ui6BqgkgwG6NCYQYJWdwrEbM3kk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cSjtuzbZNbogPLgKRE0GjDpMZXi+bVag+INxfIeLFayqGzsE15FV5xX9LgonPjhxKBvHg24z9n9e1HNIj8PLfep8QUnT9ABJL3+NNYQkg3eoZQDvV7OrSAey113JwLzMFwhVm6jtEjb7DOTWWHhasgpuKjTyGYTc5OeFI8XEAWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G5EdBFOr; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-5ff84214fc7so56504587b3.0;
-        Wed, 24 Jan 2024 09:41:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706118080; x=1706722880; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HrKSWjAPLury0l0O07YwABLahdqYSfqu/vkyFWYooQ8=;
-        b=G5EdBFOrAMr19wXn2q14X3LktuaZwjb1JaH9G+/9xLGwXHmGz3H/Bg/o9H/g+d5zTd
-         MB7isfnGoAtjLDqpLhEPl48t1p0VST3rziSB78N+5rZfq915mUvuC3e2Z0cHLw8EkLe6
-         7CmdbkRX9Ximcvf6CuJZLPPjugNw5kzYzMV1VUNRFXR7euEYBl9dIojpDZVjijgPXXer
-         b2peL5QCepqqnrHucuRUg9L8FTjSx03nSx3g8WQjBpHFosE9urZenIJ2MXfU/LvijYvQ
-         fFp+LtHhW0/Mn8aVc+YlF+exhgK2fQCH0NIh+lOJgSaP4ZP1aN3DqsexWp9RDkyAGgY5
-         /0LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706118080; x=1706722880;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HrKSWjAPLury0l0O07YwABLahdqYSfqu/vkyFWYooQ8=;
-        b=MDhAxeb3LoGADwktNboej6gHeMACe96qXGog3FeumAwMpNzKxNEQpV2i4D4SuXerNW
-         As6CYk484OsGwejYoQVcU99DPlxhkSGoLAi99WiNGyQr1fuKE9KcS6mPNRfhxlkiohph
-         eV9Priu+YLfX39cRcaguUaXKT0G7kIFA2NM1v+UG32LebNIMSjAWqZG86dQoOxVW0Bzq
-         SdCS5PgY7BONS01CpME/hq5XuHHvjW3HUvNoNuZJf6rDp2fF7xul7ZA+2VHojw+oG9Kk
-         +kcYksoXY5WHHnjaZYtdq67wtDRvK5hgew/M1wckILDiupu8DH5dinQ7tkvIoj9BrGCx
-         AQMg==
-X-Gm-Message-State: AOJu0YyHdTSImhU/F5BF606d1InoH42aedxQTHfmFSJC3q+Sf/oYyrTB
-	YfsAmX6VbBTgkIWCNjW7azF3Nm7jCuAaJIwDMwEJ3BuuIajmUg7t
-X-Google-Smtp-Source: AGHT+IG8FJ68JYgvol2vsYmkZB9x7Cw6vyk82+V1soudJ0xN7Bq1azDGVFF6zVhVo1ZMyf65R6wE/A==
-X-Received: by 2002:a0d:d70b:0:b0:5ff:9f2c:1299 with SMTP id z11-20020a0dd70b000000b005ff9f2c1299mr1077412ywd.65.1706118079707;
-        Wed, 24 Jan 2024 09:41:19 -0800 (PST)
-Received: from localhost ([2601:344:8301:57f0:abdb:7236:6977:9ab5])
-        by smtp.gmail.com with ESMTPSA id t140-20020a0dea92000000b005ffb2815960sm77564ywe.45.2024.01.24.09.41.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jan 2024 09:41:19 -0800 (PST)
-Date: Wed, 24 Jan 2024 09:41:18 -0800
-From: Yury Norov <yury.norov@gmail.com>
-To: "Lameter, Christopher" <cl@os.amperecomputing.com>
-Cc: Huang Shijie <shijie@os.amperecomputing.com>,
-	gregkh@linuxfoundation.org, patches@amperecomputing.com,
-	rafael@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, kuba@kernel.org, vschneid@redhat.com,
-	mingo@kernel.org, akpm@linux-foundation.org, vbabka@suse.cz,
-	rppt@kernel.org, tglx@linutronix.de, jpoimboe@kernel.org,
-	ndesaulniers@google.com, mikelley@microsoft.com,
-	mhiramat@kernel.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-	will@kernel.org, mark.rutland@arm.com, mpe@ellerman.id.au,
-	linuxppc-dev@lists.ozlabs.org, chenhuacai@kernel.org,
-	jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2] NUMA: Early use of cpu_to_node() returns 0 instead of
- the correct node id
-Message-ID: <ZbFLvnMQ3wsQ0pIF@yury-ThinkPad>
-References: <20240123045843.75969-1-shijie@os.amperecomputing.com>
- <4a13353c-cf4b-a388-5776-389c61c63ec0@os.amperecomputing.com>
+	s=arc-20240116; t=1706124136; c=relaxed/simple;
+	bh=uH+CUA/u3AiE/fk+eEUo0I3JlkRu1EljnKxjL+zf/0g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lVJgt0BsarN+jf0pjy/VMPVNJrheqtl7WiCgCkizjvF7gnB7/NhPXH4B8ZVs/nIX7Dy1vpbro0A/PIfMxfRhdLPBYUor4LyRZHxMlgOzG++rkJuSyR9ZFbJfTDPertBK9szXpNNlaWxgo5NLVxiGPtGrU3zv5mqUpnyzxaBwR5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fy35ADhL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82172C433F1;
+	Wed, 24 Jan 2024 19:22:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706124135;
+	bh=uH+CUA/u3AiE/fk+eEUo0I3JlkRu1EljnKxjL+zf/0g=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=fy35ADhLnBzLwKoxfCU12gYtO9Tys2fMGphCl7k31W3VozdzgRWh0sy9n1+JkvlGP
+	 MSs5GssIsPUJvM6AQy+SKld24GkD+eOfg1/E6z9Z1jgDjsEKxmH29QljL2Eq/L0t97
+	 ByAL9SsrilIqg/tSc/6FRoEpmP7+LiGjcF5L6SbiEW5Xf63d/7CMMjJkKG6xId4+NB
+	 X26wE5hthok9JYLr/tb4dfI+GnU2Fm/kz1rfGMW+8gAH8J5CX+OpMHNrcMX00mtaDE
+	 iR+z2KzHpYPDZCNL4lizVOllEqtZOuKTgAZkduWpr2xc/w3wphigPJa/3K6Ek2CvSh
+	 us1Qm2vzBMg7Q==
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5101055a16fso1397381e87.2;
+        Wed, 24 Jan 2024 11:22:15 -0800 (PST)
+X-Gm-Message-State: AOJu0YyMwUwnxuvY2lUt8/zDrZDhjKMCHhQP+QpxsEx5nr7Q+tlZNOMY
+	xpB1Mw/X+rsIfMbCB7AGaE4tTSNqJcW3I06LQw0F+h0gKm6hphok9phuPvIPhKQtouBZNaAfJF7
+	tfyhG3cWTHvPq2wb2w7NAeyx8ww==
+X-Google-Smtp-Source: AGHT+IGISGd0GQ2utGwepbZzCZhxVRdvSqdyfgwaWIf1k4UFEOeSMyMK+4bettb6sRfMDYkloV5B4K94Fc0vs4zl3D0=
+X-Received: by 2002:a05:6512:3a8a:b0:50e:6beb:7b15 with SMTP id
+ q10-20020a0565123a8a00b0050e6beb7b15mr4359787lfu.1.1706124133659; Wed, 24 Jan
+ 2024 11:22:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4a13353c-cf4b-a388-5776-389c61c63ec0@os.amperecomputing.com>
+References: <20240123-mbly-clk-v3-0-392b010b8281@bootlin.com>
+ <20240123-mbly-clk-v3-4-392b010b8281@bootlin.com> <20240124151405.GA930997-robh@kernel.org>
+ <CYN43TSPPPZ5.1VUA1CH95D8KJ@bootlin.com> <CYN4D0Z6600X.20W9VWX4BGNXX@bootlin.com>
+In-Reply-To: <CYN4D0Z6600X.20W9VWX4BGNXX@bootlin.com>
+From: Rob Herring <robh@kernel.org>
+Date: Wed, 24 Jan 2024 13:22:01 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKHPdmafDvKCHZTNNzRAzq2Y34b2dqUXQD6WpE7z2k-jA@mail.gmail.com>
+Message-ID: <CAL_JsqKHPdmafDvKCHZTNNzRAzq2Y34b2dqUXQD6WpE7z2k-jA@mail.gmail.com>
+Subject: Re: [PATCH v3 04/17] dt-bindings: soc: mobileye: add EyeQ5 OLB system controller
+To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Linus Walleij <linus.walleij@linaro.org>, 
+	=?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, 
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, linux-mips@vger.kernel.org, 
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 24, 2024 at 09:19:00AM -0800, Lameter, Christopher wrote:
-> On Tue, 23 Jan 2024, Huang Shijie wrote:
-> 
-> > During the kernel booting, the generic cpu_to_node() is called too early in
-> > arm64, powerpc and riscv when CONFIG_NUMA is enabled.
-> > 
-> > For arm64/powerpc/riscv, there are at least four places in the common code
-> > where the generic cpu_to_node() is called before it is initialized:
-> > 	   1.) early_trace_init()         in kernel/trace/trace.c
-> > 	   2.) sched_init()               in kernel/sched/core.c
-> > 	   3.) init_sched_fair_class()    in kernel/sched/fair.c
-> > 	   4.) workqueue_init_early()     in kernel/workqueue.c
-> > 
-> > In order to fix the bug, the patch changes generic cpu_to_node to
-> > function pointer, and export it for kernel modules.
-> > Introduce smp_prepare_boot_cpu_start() to wrap the original
-> > smp_prepare_boot_cpu(), and set cpu_to_node with early_cpu_to_node.
-> > Introduce smp_prepare_cpus_done() to wrap the original smp_prepare_cpus(),
-> > and set the cpu_to_node to formal _cpu_to_node().
-> 
-> Would  you please fix this cleanly without a function pointer?
-> 
-> What I think needs to be done is a patch series.
-> 
-> 1. Instrument cpu_to_node so that some warning is issued if it is used too
-> early. Preloading the array with NUMA_NO_NODE would allow us to do that.
+On Wed, Jan 24, 2024 at 11:40=E2=80=AFAM Th=C3=A9o Lebrun <theo.lebrun@boot=
+lin.com> wrote:
+>
+> Hello,
+>
+> On Wed Jan 24, 2024 at 6:28 PM CET, Th=C3=A9o Lebrun wrote:
+> > Hello,
+> >
+> > On Wed Jan 24, 2024 at 4:14 PM CET, Rob Herring wrote:
+> > > On Tue, Jan 23, 2024 at 07:46:49PM +0100, Th=C3=A9o Lebrun wrote:
+> > > > Add documentation to describe the "Other Logic Block" syscon.
+> > > >
+> > > > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> > > > ---
+> > > >  .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  | 77 ++++++++++=
+++++++++++++
+> > > >  MAINTAINERS                                        |  1 +
+> > > >  2 files changed, 78 insertions(+)
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/soc/mobileye/mobiley=
+e,eyeq5-olb.yaml b/Documentation/devicetree/bindings/soc/mobileye/mobileye,=
+eyeq5-olb.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..031ef6a532c1
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5=
+-olb.yaml
+> > > > @@ -0,0 +1,77 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb=
+.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: Mobileye EyeQ5 SoC system controller
+> > > > +
+> > > > +maintainers:
+> > > > +  - Gr=C3=A9gory Clement <gregory.clement@bootlin.com>
+> > > > +  - Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> > > > +  - Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+> > > > +
+> > > > +description:
+> > > > +  OLB ("Other Logic Block") is a hardware block grouping smaller b=
+locks. Clocks,
+> > > > +  resets, pinctrl are being handled from here.
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    items:
+> > > > +      - const: mobileye,eyeq5-olb
+> > > > +      - const: syscon
+> > > > +      - const: simple-mfd
+> > > > +
+> > > > +  reg:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  clock-controller:
+> > > > +    $ref: /schemas/clock/mobileye,eyeq5-clk.yaml#
+> > > > +    type: object
+> > > > +
+> > > > +  reset-controller:
+> > > > +    $ref: /schemas/reset/mobileye,eyeq5-reset.yaml#
+> > > > +    type: object
+> > > > +
+> > > > +  pinctrl-a:
+> > > > +    $ref: /schemas/pinctrl/mobileye,eyeq5-pinctrl.yaml#
+> > > > +    type: object
+> > > > +
+> > > > +  pinctrl-b:
+> > > > +    $ref: /schemas/pinctrl/mobileye,eyeq5-pinctrl.yaml#
+> > > > +    type: object
+> > > > +
+> > > > +required:
+> > > > +  - compatible
+> > > > +  - reg
+> > > > +
+> > > > +additionalProperties: false
+> > > > +
+> > > > +examples:
+> > > > +  - |
+> > > > +    system-controller@e00000 {
+> > > > +      compatible =3D "mobileye,eyeq5-olb", "syscon", "simple-mfd";
+> > > > +      reg =3D <0xe00000 0x400>;
+> > > > +
+> > > > +      clock-controller {
+> > > > +        compatible =3D "mobileye,eyeq5-clk";
+> > > > +        #clock-cells =3D <1>;
+> > > > +        clocks =3D <&xtal>;
+> > > > +        clock-names =3D "ref";
+> > > > +      };
+> > > > +
+> > > > +      reset-controller {
+> > > > +        compatible =3D "mobileye,eyeq5-reset";
+> > > > +        #reset-cells =3D <2>;
+> > > > +      };
+> > > > +
+> > > > +      pinctrl-a {
+> > > > +        compatible =3D "mobileye,eyeq5-a-pinctrl";
+> > > > +        #pinctrl-cells =3D <1>;
+> > >
+> > > Sure you need this? Generally only pinctrl-single uses this.
+> >
+> > You are completely right, it is useless. I naively expected it in the
+> > same vein as other subsystems.
+> >
+> > >
+> > > > +      };
+> > > > +
+> > > > +      pinctrl-b {
+> > > > +        compatible =3D "mobileye,eyeq5-b-pinctrl";
+> > > > +        #pinctrl-cells =3D <1>;
+> > > > +      };
+> > > > +    };
+> > >
+> > > This can all be simplified to:
+> > >
+> > > system-controller@e00000 {
+> > >     compatible =3D "mobileye,eyeq5-olb", "syscon";
+> > >     reg =3D <0xe00000 0x400>;
+> > >     #reset-cells =3D <2>;
+> > >     #clock-cells =3D <1>;
+> > >     clocks =3D <&xtal>;
+> > >     clock-names =3D "ref";
+> > >
+> > >     pins { ... };
+> > > };
+> > >
+> > > There is no need for sub nodes unless you have reusable blocks or eac=
+h
+> > > block has its own resources in DT.
+> >
+> > That is right, and it does simplify the devicetree as you have shown.
+> > However, the split nodes gives the following advantages:
+> >
+> >  - Devicetree-wise, it allows for one alias per function.
+> >    `clocks =3D <&clocks EQ5C_PLL_CPU>` is surely more intuitive
+> >    than `clocks =3D <&olb EQ5C_PLL_CPU>;`. Same for reset.
 
-By preloading do you mean compile-time initialization?
- 
-> 2. Implement early_cpu_to_node on platforms that currently do not have it.
-> 
-> 3. A series of patches that fix each place where cpu_to_node is used too
-> early.
+clocks: resets: pinctrl: system-controller@e00000 {
 
-Agree. This is the right way to go. And pretty well all of it was discussed
-in v1, isn't?
+> >
+> >  - It means an MFD driver must be implemented, adding between 100 to 20=
+0
+> >    lines of boilerplate code to the kernel.
 
-Thanks,
-Yury
+From a binding perspective, not my problem... That's Linux details
+defining the binding. What about u-boot, BSD, future versions of Linux
+with different structure?
+
+I don't think an MFD is required here. A driver should be able to be
+both clock and reset provider. That's pretty common. pinctrl less so.
+
+> >  - It means one pinctrl device for the two banks. That addresses your
+> >    comment on [PATCH v3 10/17]. This is often done and would be doable
+> >    on this platform. However it means added logic to each individual
+> >    function of pinctrl-eyeq5.
+
+If it makes things easier, 2 'pins' sub-nodes is fine. That's just
+container nodes.
+
+> >    Overall it makes for less readable code, for code that already looks
+> >    more complex than it really is.
+> >
+> >    My initial non-public version of pinctrl-eyeq5 was using this method
+> >    (a device handling both banks) and I've leaned away from it.
+>
+> I had forgotten one other reason:
+>
+>  - Reusability does count for something. Other Mobileye platforms exist,
+>    and the system controller stuff is more complex on those. Multiple
+>    different OLB blocks, etc. But my understanding is that
+>    per-peripheral logic is reused across versions.
+
+IME, this stuff never stays exactly the same from chip to chip.
+
+Rob
 
