@@ -1,128 +1,138 @@
-Return-Path: <linux-mips+bounces-1102-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1103-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4BA583A614
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 10:57:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5440D83A646
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 11:02:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2B23FB228F2
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 09:56:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 879591C22B7F
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 10:02:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A76E18048;
-	Wed, 24 Jan 2024 09:56:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qT+xUCo8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22A82182C5;
+	Wed, 24 Jan 2024 10:02:18 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3371718045;
-	Wed, 24 Jan 2024 09:56:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0A15182A1;
+	Wed, 24 Jan 2024 10:02:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706090192; cv=none; b=Ha6ji6hL2K3zt71GsD6WHdnYRMON7uma8Sr3L8LwJ0r/BAh/wyNxoX2IYF7krxnx8wqYHEOJxcH2Nhx/biOquEsUihFBYJgsTqXP0Hf3b5dMCpLkQe/Bv3Vkgv243J5bkyJtmBceR8VODp0Wk24y9bToTXfGKj/kqmGevomZ9gs=
+	t=1706090538; cv=none; b=gqoAF7sZngN+Z+CusWvK/9mtZHLgCwBGQMTzyJtCXa8jvIWHDPIaJoV5ionWTtW24PKLLzz7R8k0hSrq1kZscoDm5bmLKJ+q+TA3bbwo7LtRSnJ7v7O5d/54199oW/PipBjxVxd3RZTcSuRL74iF82UINNxK+8kER1yBkcmUaZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706090192; c=relaxed/simple;
-	bh=vQ+I9Ge+8bH1NA9WH7CqoqMtBiQEOSibipcnd/i3Qso=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=e57gkUQuflVtHQWgUcEsgXtezwQ6O2pxGFRnXtGtB/KLZ7soRBzwK95gh8musC8Z5NqtITVUi3wX7UTk3J/g/oZtEK9cobjdIPl2K0ZR2fRyJ+sPTdejyWuXgU7mA251YDbkpbRRARxU4JWo3APjDoEo+PC9isuYtdH4k1fWuuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qT+xUCo8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8244C433B1;
-	Wed, 24 Jan 2024 09:56:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706090191;
-	bh=vQ+I9Ge+8bH1NA9WH7CqoqMtBiQEOSibipcnd/i3Qso=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=qT+xUCo8olWgqunC2fwyMUCPxe71wcF6swjsgLnths5AtynaNSt3Q7VPVIfo9Ra6d
-	 gq7TwCNm5UF54c4Tw7Ub8jZG5zfrunm9o5YMOwqtp3VP2MJQfNWGXnAL9u0/ooelN/
-	 d18topr4lldBvI9B2wji0KkF8wg1y1SLQOVq9gnr0it4Ef8bbDoW3JnUMNpmmyYUfY
-	 M5SvglWKSpjO/tvPLOUrrCRGH/komGq7p93CDurqd/r2osBLaMpNPPojQPg0ZoNEce
-	 e7btvPfKlmErrm6soS8BYAL8vRw8g4esrskw+sYb1mp159siTv74pLObiR24OsJ9aY
-	 83BZa90fM48cg==
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5100893015fso1880330e87.1;
-        Wed, 24 Jan 2024 01:56:31 -0800 (PST)
-X-Gm-Message-State: AOJu0YwGNGM53ihFyQhDCHdc/GjC8vxhpe95j4Y7uWGje9w20uxZY3uP
-	1RsR3qu5dcxmUK1v37HWK3OJcL9YR4hQhgvOilMxkfwGt8mYh/Zv3Q+OlA1JA5HQav0dZ1cxDUD
-	7Oh5OJi1P/S5uC8pjNiQ7YAfluzc=
-X-Google-Smtp-Source: AGHT+IE3rPZK17ixDxsL+YcPJ/Q2xlEvwkcSUy8VmnbYNcPTU5xivtsjD2pYBrLIsytxrVaBRIobhJSEJqchFBAWaX0=
-X-Received: by 2002:ac2:5a06:0:b0:510:ca2:6b69 with SMTP id
- q6-20020ac25a06000000b005100ca26b69mr491573lfn.99.1706090189885; Wed, 24 Jan
- 2024 01:56:29 -0800 (PST)
+	s=arc-20240116; t=1706090538; c=relaxed/simple;
+	bh=fPZu8fVVW4LkeJMKBPP8DK2GyWfVf/kOWZvHoRKVv94=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=muH0KX5yvFvb5hn6PAgVD/lfH0Nffiez5OypYaDO7mNGrJuOdePc5feeusy0DuvfEr6MP5+lfHON/tSFm7zEq1/dsGiPVSQA7V2FLV67ZSIVnBxni7b+eOE7z2vHocjJ2j+WyJtIpSiH6DqiI6epodPUaX10gLHuPz+9S6HO75g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.173])
+	by gateway (Coremail) with SMTP id _____8Cxrusl4LBlrrAEAA--.18410S3;
+	Wed, 24 Jan 2024 18:02:13 +0800 (CST)
+Received: from [10.20.42.173] (unknown [10.20.42.173])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8AxRMwi4LBllqQWAA--.25642S3;
+	Wed, 24 Jan 2024 18:02:12 +0800 (CST)
+Subject: Re: [PATCH v3 1/3] irqchip/loongson-eiointc: Skip handling if there
+ is no pending irq
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ Thomas Gleixner <tglx@linutronix.de>, linux-mips@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+ lvjianmin@loongson.cn
+References: <20240118121542.748351-1-maobibo@loongson.cn>
+ <20240118121542.748351-2-maobibo@loongson.cn>
+ <CAAhV-H5-da4AvtgHu1Hv0sbXddab6Mqg6eCkwJzr32Xi4A97yQ@mail.gmail.com>
+From: maobibo <maobibo@loongson.cn>
+Message-ID: <8c133026-3c70-2e2a-7f79-2f3c4327b7b4@loongson.cn>
+Date: Wed, 24 Jan 2024 18:02:10 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240118121542.748351-1-maobibo@loongson.cn> <20240118121542.748351-3-maobibo@loongson.cn>
-In-Reply-To: <20240118121542.748351-3-maobibo@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Wed, 24 Jan 2024 17:56:18 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H45A4m-imDh8UZqXJ3WXduMyubbd1ze-EgZtqqbfjHt1g@mail.gmail.com>
-Message-ID: <CAAhV-H45A4m-imDh8UZqXJ3WXduMyubbd1ze-EgZtqqbfjHt1g@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] irqchip/loongson-eiointc: Refine irq affinity
- setting during resume
-To: Bibo Mao <maobibo@loongson.cn>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Sergey Shtylyov <s.shtylyov@omp.ru>, lvjianmin@loongson.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAAhV-H5-da4AvtgHu1Hv0sbXddab6Mqg6eCkwJzr32Xi4A97yQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8AxRMwi4LBllqQWAA--.25642S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7tFyrXw4UJrWDZrykKr17Arc_yoW8Zry3p3
+	y5CFn0kFW5JryUAw1agF4UJF1Yvwn5KFZrA393Gay3Jr98J3s8KF4rCF1q9rs7Cry3Ga12
+	vF4Ygr4UCa15CFgCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
+	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+	AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
+	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw
+	1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
+	xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+	1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8r9
+	N3UUUUU==
 
-I can give an Acked-by if these lines are also removed in our internal repo=
-.
 
-Huacai
 
-On Thu, Jan 18, 2024 at 8:15=E2=80=AFPM Bibo Mao <maobibo@loongson.cn> wrot=
-e:
->
-> During suspend and resume, CPUs except CPU0 are hot-unpluged and IRQs
-> are migrated to CPU0. So it is not necessary to restore irq affinity for
-> eiointc irq controller when system resumes. This patch removes the piece
-> of code about irq affinity restoring in function eiointc_resume.
->
-> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
-> ---
->  drivers/irqchip/irq-loongson-eiointc.c | 16 ----------------
->  1 file changed, 16 deletions(-)
->
-> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq=
--loongson-eiointc.c
-> index 6143adb1b73b..86f4faad0695 100644
-> --- a/drivers/irqchip/irq-loongson-eiointc.c
-> +++ b/drivers/irqchip/irq-loongson-eiointc.c
-> @@ -315,23 +315,7 @@ static int eiointc_suspend(void)
->
->  static void eiointc_resume(void)
->  {
-> -       int i, j;
-> -       struct irq_desc *desc;
-> -       struct irq_data *irq_data;
-> -
->         eiointc_router_init(0);
-> -
-> -       for (i =3D 0; i < nr_pics; i++) {
-> -               for (j =3D 0; j < eiointc_priv[0]->vec_count; j++) {
-> -                       desc =3D irq_resolve_mapping(eiointc_priv[i]->eio=
-intc_domain, j);
-> -                       if (desc && desc->handle_irq && desc->handle_irq =
-!=3D handle_bad_irq) {
-> -                               raw_spin_lock(&desc->lock);
-> -                               irq_data =3D irq_domain_get_irq_data(eioi=
-ntc_priv[i]->eiointc_domain, irq_desc_get_irq(desc));
-> -                               eiointc_set_irq_affinity(irq_data, irq_da=
-ta->common->affinity, 0);
-> -                               raw_spin_unlock(&desc->lock);
-> -                       }
-> -               }
-> -       }
->  }
->
->  static struct syscore_ops eiointc_syscore_ops =3D {
-> --
-> 2.39.3
->
+On 2024/1/24 下午5:51, Huacai Chen wrote:
+> Hi, Bibo,
+> 
+> On Thu, Jan 18, 2024 at 8:15 PM Bibo Mao <maobibo@loongson.cn> wrote:
+>>
+>> There is one simple optimization in the interrupt dispatch function
+>> eiointc_irq_dispatch. There are 256 IRQs supported for eiointc, eiointc
+>> irq handler reads the bitmap and find pending irqs when irq happens.
+>> So there are four times of consecutive iocsr_read64 operations for the
+>> total 256 bits to find all pending irqs. If the pending bitmap is zero,
+>> it means that there is no pending irq for the this irq bitmap range,
+>> we can skip handling to avoid some useless operations such as clearing
+>> hw ISR.
+>>
+>> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+>> ---
+>>   drivers/irqchip/irq-loongson-eiointc.c | 11 +++++++++++
+>>   1 file changed, 11 insertions(+)
+>>
+>> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
+>> index 1623cd779175..6143adb1b73b 100644
+>> --- a/drivers/irqchip/irq-loongson-eiointc.c
+>> +++ b/drivers/irqchip/irq-loongson-eiointc.c
+>> @@ -198,6 +198,17 @@ static void eiointc_irq_dispatch(struct irq_desc *desc)
+>>
+>>          for (i = 0; i < eiointc_priv[0]->vec_count / VEC_COUNT_PER_REG; i++) {
+>>                  pending = iocsr_read64(EIOINTC_REG_ISR + (i << 3));
+>> +
+>> +               /*
+>> +                * Get pending eiointc irq from bitmap status, there are 4 times
+>> +                * consecutive iocsr_read64 operations for 256 IRQs.
+>> +                *
+>> +                * Skip handling if pending bitmap is zero
+> This driver is shared by Loongson-2 and Loongson-3 series, for
+> Loongson-2K0500 there is only 128 IRQs, so I suggest only keep the
+> last line "Skip handling if current pending bitmap is zero" is enough.
+Sure, will refine the patch in this way.
+
+Regards
+Bibo Mao
+> 
+> Huacai
+> 
+>> +                */
+>> +               if (!pending)
+>> +                       continue;
+>> +
+>> +               /* Clear the IRQs */
+>>                  iocsr_write64(pending, EIOINTC_REG_ISR + (i << 3));
+>>                  while (pending) {
+>>                          int bit = __ffs(pending);
+>> --
+>> 2.39.3
+>>
+
 
