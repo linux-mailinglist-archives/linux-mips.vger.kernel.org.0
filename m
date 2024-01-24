@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-1120-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1121-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 135BD83AFE7
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 18:30:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C03683B012
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 18:33:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B841828275B
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 17:30:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32CD01F2BCE2
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 17:33:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E863C85C56;
-	Wed, 24 Jan 2024 17:28:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC5611292C7;
+	Wed, 24 Jan 2024 17:31:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="kVwzzACi"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Uhh3Cyxd"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A2A582D7B;
-	Wed, 24 Jan 2024 17:28:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12AA128395;
+	Wed, 24 Jan 2024 17:31:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706117301; cv=none; b=F9C2JWDFtLeJtWRoyZVSNhbF4jocqaCuR4ZSJ2l5C2TW52CBTlZQoPGolaAS8UeuPuhKwCSTxglVIdc7xzjiLRcMXUN9ck69bqJbLnbzswL81YGQR6qKmdwPMn3PaTkGSE7tILeJGNQjRZtRWpNBDwMfvk97RWnYfKvs5zMeMlM=
+	t=1706117505; cv=none; b=amH58QwokYuoIOcvHZnbH6jVb3NRFGKsDr0jDdrKQ3IdNSLHuE0szdh947d02h43Zr6+cywK3+FjNHd47KYCah3jWMG+7Za5VhbU+026DT2s/VEq4nEoUhFioxgndflG8G3CdkLPJcDwctPovXc6/QGjq+gsNeuJ93PI131vUd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706117301; c=relaxed/simple;
-	bh=zlrlZGL1ccljq0wZTffstwt62GdsF9GBruDVt6c6i6I=;
+	s=arc-20240116; t=1706117505; c=relaxed/simple;
+	bh=LyF+uGG8rthtsLAGU6JwLDXQ2xY38jRfZIJ/nE/+i4U=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=CeFnks5eqve0og2ZSQCycctjwqsw4XBWsppjVpba9aGU7QWef8X57gSviI0sSMVimKwxHKxyK5brh/BTc6nGPUXx2z+6A2js5Vrb2uikHws6s3hPro14YmzZOAhDqciugYkuS63GUCgjYIVK7aWiau6b/QhEGWMfwlpRBDDvDnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=kVwzzACi; arc=none smtp.client-ip=217.70.183.198
+	 References:In-Reply-To; b=TLuypNU1rl9PKEDR2UPCVFSvic62fUgJcfk0aDwH1+Hdfvvm6WEq/cLCiUV0DQsJbDQbHw/tjN0YE1xiMy/WQjca2bVpInQsjOYyp7aON+Ebgh1GYwXzzSfkoQgnqpj2FhUuh/XBsNpYmRXvvTpK6HQcRxoTBXZvXxkqvKqjbhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Uhh3Cyxd; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A364AC0009;
-	Wed, 24 Jan 2024 17:28:16 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AC82B240005;
+	Wed, 24 Jan 2024 17:31:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1706117297;
+	t=1706117500;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=10uyfb5Z5S8wcEdv0qJfDFN4rfE+zh8ufIUekB4Kl1Q=;
-	b=kVwzzACiYdI8SyjZoYNuT94j9maKxAyBDWuR3GtmW5vmJfgrkUXOLTJfprs6j6yOk6txCa
-	64nOuR1KkPX+4QU/jUZgagrqXHxJwnS2mwenTzAOYQo9xhQivhT+WtPOGzghSNmC9ABXpS
-	S/rraFO9ruaoul2Lw/JQtI8CoV2GhGmFPoLx3ndCa9jMJgzOlgs3GlAomoa+l6LuBwmceh
-	0PD7RFvYowqglTrKh80RTHXAU/RAJN8o/jWOSwpgxQ7xJtYwfqJyyd1G0SjsL3g9e73KUg
-	1MNze1ZPceir6+iFRQPZ/FIHo1f6V0uP57T2rTfKcE19erLiMVOXGdT1vZxNWQ==
+	bh=FAy7AHDWICCoITFYxoF5yUyISVpdkZcGB4MmMxueyRw=;
+	b=Uhh3CyxddNadp3bKW19Bu/aCIlFIQepSAUY9rIKbk4eMy3+Hsd6tC2BF0Ckv+XHavn6JXm
+	fRDgh7zMogbFUGlEnTsJaCM1frdY/nxfTYmpI88kf8dAvxgG8qmJkn294h+KYxlHXcpYzG
+	9bYIDnIzycyT/FUtIJkoXPFXXJgk5KuPSXKJOybcNST3/sp5MOkX3S8LFqpkKIbfRTeuoP
+	P5NkAOHxlPlC+d2kMsmmx6Bm+HRdQzaojyr4FGCEXjre6A77llIpsjUO8DnbeXnsd5damr
+	VkrM0a0f+mzrn2F1tzM/bX95x99sl13FNSWD3aSaHsmy0PHd4yC5orLxj9ES6w==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,8 +53,8 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 24 Jan 2024 18:28:16 +0100
-Message-Id: <CYN43TSPPPZ5.1VUA1CH95D8KJ@bootlin.com>
+Date: Wed, 24 Jan 2024 18:31:39 +0100
+Message-Id: <CYN46F005M23.1Z11SN0VZF777@bootlin.com>
 Cc: "Gregory CLEMENT" <gregory.clement@bootlin.com>, "Michael Turquette"
  <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Krzysztof
  Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
@@ -69,163 +69,72 @@ Cc: "Gregory CLEMENT" <gregory.clement@bootlin.com>, "Michael Turquette"
  <tawfik.bayouk@mobileye.com>, <linux-gpio@vger.kernel.org>
 To: "Rob Herring" <robh@kernel.org>
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v3 04/17] dt-bindings: soc: mobileye: add EyeQ5 OLB
- system controller
+Subject: Re: [PATCH v3 10/17] pinctrl: eyeq5: add platform driver
 X-Mailer: aerc 0.15.2
 References: <20240123-mbly-clk-v3-0-392b010b8281@bootlin.com>
- <20240123-mbly-clk-v3-4-392b010b8281@bootlin.com>
- <20240124151405.GA930997-robh@kernel.org>
-In-Reply-To: <20240124151405.GA930997-robh@kernel.org>
+ <20240123-mbly-clk-v3-10-392b010b8281@bootlin.com>
+ <20240124151949.GB930997-robh@kernel.org>
+In-Reply-To: <20240124151949.GB930997-robh@kernel.org>
 X-GND-Sasl: theo.lebrun@bootlin.com
 
 Hello,
 
-On Wed Jan 24, 2024 at 4:14 PM CET, Rob Herring wrote:
-> On Tue, Jan 23, 2024 at 07:46:49PM +0100, Th=C3=A9o Lebrun wrote:
-> > Add documentation to describe the "Other Logic Block" syscon.
+On Wed Jan 24, 2024 at 4:19 PM CET, Rob Herring wrote:
+> On Tue, Jan 23, 2024 at 07:46:55PM +0100, Th=C3=A9o Lebrun wrote:
+> > Add the Mobileye EyeQ5 pin controller driver. It might grow to add late=
+r
+> > support of other platforms from Mobileye. It belongs to a syscon region
+> > called OLB.
 > >=20
+> > Existing pins and their function live statically in the driver code
+> > rather than in the devicetree, see compatible match data.
+> >
 > > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 > > ---
-> >  .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  | 77 ++++++++++++++=
-++++++++
-> >  MAINTAINERS                                        |  1 +
-> >  2 files changed, 78 insertions(+)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/soc/mobileye/mobileye,ey=
-eq5-olb.yaml b/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq=
-5-olb.yaml
-> > new file mode 100644
-> > index 000000000000..031ef6a532c1
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb=
-.yaml
-> > @@ -0,0 +1,77 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yam=
-l#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+[...]
+
+> > diff --git a/drivers/pinctrl/pinctrl-eyeq5.c b/drivers/pinctrl/pinctrl-=
+eyeq5.c
+
+[...]
+
+> > +static const struct eq5p_match eq5p_match_a =3D {
+> > +	.regs =3D {
+> > +		[EQ5P_PD] =3D 0x0C0,
+> > +		[EQ5P_PU] =3D 0x0C4,
+> > +		[EQ5P_DS_LOW] =3D 0x0D0,
+> > +		[EQ5P_DS_HIGH] =3D 0x0D4,
+> > +		[EQ5P_IOCR] =3D 0x0B0,
+> > +	},
+> > +	.pins =3D eq5p_pins_a,
+> > +	.npins =3D ARRAY_SIZE(eq5p_pins_a),
+> > +	.funcs =3D eq5p_functions_a,
+> > +	.nfuncs =3D ARRAY_SIZE(eq5p_functions_a),
+> > +};
 > > +
-> > +title: Mobileye EyeQ5 SoC system controller
-> > +
-> > +maintainers:
-> > +  - Gr=C3=A9gory Clement <gregory.clement@bootlin.com>
-> > +  - Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-> > +  - Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
-> > +
-> > +description:
-> > +  OLB ("Other Logic Block") is a hardware block grouping smaller block=
-s. Clocks,
-> > +  resets, pinctrl are being handled from here.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - const: mobileye,eyeq5-olb
-> > +      - const: syscon
-> > +      - const: simple-mfd
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clock-controller:
-> > +    $ref: /schemas/clock/mobileye,eyeq5-clk.yaml#
-> > +    type: object
-> > +
-> > +  reset-controller:
-> > +    $ref: /schemas/reset/mobileye,eyeq5-reset.yaml#
-> > +    type: object
-> > +
-> > +  pinctrl-a:
-> > +    $ref: /schemas/pinctrl/mobileye,eyeq5-pinctrl.yaml#
-> > +    type: object
-> > +
-> > +  pinctrl-b:
-> > +    $ref: /schemas/pinctrl/mobileye,eyeq5-pinctrl.yaml#
-> > +    type: object
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    system-controller@e00000 {
-> > +      compatible =3D "mobileye,eyeq5-olb", "syscon", "simple-mfd";
-> > +      reg =3D <0xe00000 0x400>;
-> > +
-> > +      clock-controller {
-> > +        compatible =3D "mobileye,eyeq5-clk";
-> > +        #clock-cells =3D <1>;
-> > +        clocks =3D <&xtal>;
-> > +        clock-names =3D "ref";
-> > +      };
-> > +
-> > +      reset-controller {
-> > +        compatible =3D "mobileye,eyeq5-reset";
-> > +        #reset-cells =3D <2>;
-> > +      };
-> > +
-> > +      pinctrl-a {
-> > +        compatible =3D "mobileye,eyeq5-a-pinctrl";
-> > +        #pinctrl-cells =3D <1>;
+> > +static const struct eq5p_match eq5p_match_b =3D {
+> > +	.regs =3D {
+> > +		[EQ5P_PD] =3D 0x0C8,
+> > +		[EQ5P_PU] =3D 0x0CC,
+> > +		[EQ5P_DS_LOW] =3D 0x0D8,
+> > +		[EQ5P_DS_HIGH] =3D 0x0DC,
+> > +		[EQ5P_IOCR] =3D 0x0B4,
+> > +	},
 >
-> Sure you need this? Generally only pinctrl-single uses this.
+> These are all the same relative offsets, so you really only need to=20
+> store the base offset.
 
-You are completely right, it is useless. I naively expected it in the
-same vein as other subsystems.
+Indeed, and I don't think I had even noticed. Thanks.
 
->
-> > +      };
-> > +
-> > +      pinctrl-b {
-> > +        compatible =3D "mobileye,eyeq5-b-pinctrl";
-> > +        #pinctrl-cells =3D <1>;
-> > +      };
-> > +    };
->
-> This can all be simplified to:
->
-> system-controller@e00000 {
->     compatible =3D "mobileye,eyeq5-olb", "syscon";
->     reg =3D <0xe00000 0x400>;
->     #reset-cells =3D <2>;
->     #clock-cells =3D <1>;
->     clocks =3D <&xtal>;
->     clock-names =3D "ref";
->
->     pins { ... };
-> };
->
-> There is no need for sub nodes unless you have reusable blocks or each=20
-> block has its own resources in DT.
+> The use of 2 compatibles is a bit questionable as the programming model=
+=20
+> appears to be the same and only which pins differ. Surely there are=20
+> some other pinctrl drivers handling mutiple instances.
 
-That is right, and it does simplify the devicetree as you have shown.
-However, the split nodes gives the following advantages:
+I can confirm the programming model is the same across both banks. I've
+addressed your comment in my answer to yours on [PATCH v3 04/17].
 
- - Devicetree-wise, it allows for one alias per function.
-   `clocks =3D <&clocks EQ5C_PLL_CPU>` is surely more intuitive
-   than `clocks =3D <&olb EQ5C_PLL_CPU>;`. Same for reset.
-
- - It means an MFD driver must be implemented, adding between 100 to 200
-   lines of boilerplate code to the kernel.
-
- - It means one pinctrl device for the two banks. That addresses your
-   comment on [PATCH v3 10/17]. This is often done and would be doable
-   on this platform. However it means added logic to each individual
-   function of pinctrl-eyeq5.
-
-   Overall it makes for less readable code, for code that already looks
-   more complex than it really is.
-
-   My initial non-public version of pinctrl-eyeq5 was using this method
-   (a device handling both banks) and I've leaned away from it.
-
-Those are all minor, but I don't have the feeling a few lines and nodes
-less in devicetree compensate for those.
 
 Thanks,
 
