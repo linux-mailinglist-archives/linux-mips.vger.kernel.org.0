@@ -1,131 +1,90 @@
-Return-Path: <linux-mips+bounces-1107-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1108-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B71D83A8A1
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 13:00:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C25C283AA47
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 13:49:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C5E3FB2923E
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 12:00:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 020B51C212E9
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 12:49:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAF1D60DCB;
-	Wed, 24 Jan 2024 11:59:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 551B57763A;
+	Wed, 24 Jan 2024 12:49:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="rABzFyZf";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="eDXqHNek";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="rABzFyZf";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="eDXqHNek"
+	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="N7OsNMUa"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from xry111.site (xry111.site [89.208.246.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C6560DE6;
-	Wed, 24 Jan 2024 11:59:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CF9577639;
+	Wed, 24 Jan 2024 12:49:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706097598; cv=none; b=PwrEk+Cvoo0h8zfgpx1R97m014CLJ/CvXM6t4zSPGJbd9KXKJX/6Cu21pHPGl6cDmJitvaAVTw+BXn5bnTJXgVmJnqsp8bGWSBC7qtLvoZl0n2SVJUICjF3Xi6xAEiYMKzrQQYZgjniLp2LqJvhR1YGbS5wWbbeW/fAztjGoHMk=
+	t=1706100555; cv=none; b=GWFckQ9Vv7F9zfWTx5XlzvULfzDY5ZcQa3irFUfuTgoCU2v2aQeeTAv/kisCSzg4//5n13iAnEu4XHsYlOAwGwaKP/9KqUOFsWESZQjzO9zFVerO30FgJpv/ZGkoCejPHxiyM7kg+mKUo4ou6vaVPwNVCz3yhUxLI3jPCopS0/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706097598; c=relaxed/simple;
-	bh=JvuIjypDvkkdN9ibt0BBKV8d8snZJ5FLk81yKrdEgSI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=dUofORVlBQVK3t8pJ+tbzNguJhowbq9wDrg3hyE943he3LJ7obZ8vEGhtB4Ct8FpWofvSmQDBCf5IqXu7Ab4/KUV6eusr0RrjpPiPnVBDMHnZXetKDljxJuUWqf5QWE4ihnwearsd0qAAUiQ92cLaH84ouK7LDsXfwQHI3IJ7VI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=rABzFyZf; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=eDXqHNek; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=rABzFyZf; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=eDXqHNek; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from hawking.nue2.suse.org (unknown [10.168.4.11])
-	by smtp-out1.suse.de (Postfix) with ESMTP id 0F7CC222F1;
-	Wed, 24 Jan 2024 11:59:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1706097595; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZZVqt4zJTdAbKIcvjcw57N6juLTvcK2zWsqCYdTEkzE=;
-	b=rABzFyZfdgfGTIN6EqHqjzCwkFbrZGeYaR23huV2qj1Y1POshzhbj2fcHtpQiUOa3eEzwK
-	DFb1i4OKJBR2vBJeiGOBztSPd+CpmsP9Duf8DCYe2acUDT89VCLKzA2odd8Cm0eGjYOwf3
-	8etjhPdCq56aTIeWCJmvV0pnAsGV5g8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1706097595;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZZVqt4zJTdAbKIcvjcw57N6juLTvcK2zWsqCYdTEkzE=;
-	b=eDXqHNek1XSv/H1vmu8SrDWDhmtIaJ4kuylg7jvmq0lh8t75j3VboHCzSfgG6yC2Kg8/TF
-	6CgGhucIQjkbrICQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1706097595; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZZVqt4zJTdAbKIcvjcw57N6juLTvcK2zWsqCYdTEkzE=;
-	b=rABzFyZfdgfGTIN6EqHqjzCwkFbrZGeYaR23huV2qj1Y1POshzhbj2fcHtpQiUOa3eEzwK
-	DFb1i4OKJBR2vBJeiGOBztSPd+CpmsP9Duf8DCYe2acUDT89VCLKzA2odd8Cm0eGjYOwf3
-	8etjhPdCq56aTIeWCJmvV0pnAsGV5g8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1706097595;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZZVqt4zJTdAbKIcvjcw57N6juLTvcK2zWsqCYdTEkzE=;
-	b=eDXqHNek1XSv/H1vmu8SrDWDhmtIaJ4kuylg7jvmq0lh8t75j3VboHCzSfgG6yC2Kg8/TF
-	6CgGhucIQjkbrICQ==
-Received: by hawking.nue2.suse.org (Postfix, from userid 17005)
-	id E7C9E4A04B3; Wed, 24 Jan 2024 12:59:54 +0100 (CET)
-From: Andreas Schwab <schwab@suse.de>
-To: Xi Ruoyao <xry111@xry111.site>
-Cc: linux-mips@vger.kernel.org,  linux-kernel@vger.kernel.org,  Jiaxun Yang
- <jiaxun.yang@flygoat.com>,  Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>,  libc-alpha@sourceware.org
+	s=arc-20240116; t=1706100555; c=relaxed/simple;
+	bh=s6U31JdDDdI9PWpaMCc4XRAEGMxkDJjCGZP0a8Ic/GM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=H+3hXTQrXwoVZrii7ij4Bm9SYjDdLBnFHux2qabE5BRBbXQKpd9N0B3GstVwagRJy6NiUrUPRiBeiv2hxxI/ZddgfDqBvx2FLJyOcNw+QkK5KMv4Cbfb1bUa4Rj2Kdu0kWhB+IVNuCctoNYxH0NondTZ2hgXwHQfYJDY6qbD8us=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=N7OsNMUa; arc=none smtp.client-ip=89.208.246.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+	s=default; t=1706100550;
+	bh=s6U31JdDDdI9PWpaMCc4XRAEGMxkDJjCGZP0a8Ic/GM=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=N7OsNMUarIxezT0AZ8LR73o0hZeU0gjeNTC7lHLePEsFDIZpPbZsPxj+wTeG1oGp/
+	 URkMpC7Z8AXkToWwpNQVLagc0cLqo2+K4zZ/AprHRmWW/ldF0FFFm/8DfqPm1k6ate
+	 qdPqYWaHAGWTdlCiPmKZmvBrMODC4l33VGSTYrWs=
+Received: from [127.0.0.1] (unknown [IPv6:2001:470:683e::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+	(Client did not present a certificate)
+	(Authenticated sender: xry111@xry111.site)
+	by xry111.site (Postfix) with ESMTPSA id 9E47966DFC;
+	Wed, 24 Jan 2024 07:49:08 -0500 (EST)
+Message-ID: <9481b6d9d015aea25d8f2563bf7bd6f6462f758f.camel@xry111.site>
 Subject: Re: Strange EFAULT on mips64el returned by syscall when another
  thread is forking
-In-Reply-To: <75e9fd7b08562ad9b456a5bdaacb7cc220311cc9.camel@xry111.site> (Xi
-	Ruoyao's message of "Wed, 24 Jan 2024 18:42:30 +0800")
+From: Xi Ruoyao <xry111@xry111.site>
+To: Andreas Schwab <schwab@suse.de>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, Jiaxun Yang
+ <jiaxun.yang@flygoat.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+  libc-alpha@sourceware.org
+Date: Wed, 24 Jan 2024 20:49:06 +0800
+In-Reply-To: <mvmplxraqmd.fsf@suse.de>
 References: <75e9fd7b08562ad9b456a5bdaacb7cc220311cc9.camel@xry111.site>
-X-Yow: ...It's REAL ROUND..  And it's got a POINTY PART right in the MIDDLE!!
- The shape is SMOOTH..  ..And COLD.. It feels very COMFORTABLE on my
- CHEEK..  I'm getting EMOTIONAL..
-Date: Wed, 24 Jan 2024 12:59:54 +0100
-Message-ID: <mvmplxraqmd.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	 <mvmplxraqmd.fsf@suse.de>
+Autocrypt: addr=xry111@xry111.site; prefer-encrypt=mutual;
+ keydata=mDMEYnkdPhYJKwYBBAHaRw8BAQdAsY+HvJs3EVKpwIu2gN89cQT/pnrbQtlvd6Yfq7egugi0HlhpIFJ1b3lhbyA8eHJ5MTExQHhyeTExMS5zaXRlPoiTBBMWCgA7FiEEkdD1djAfkk197dzorKrSDhnnEOMFAmJ5HT4CGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQrKrSDhnnEOPHFgD8D9vUToTd1MF5bng9uPJq5y3DfpcxDp+LD3joA3U2TmwA/jZtN9xLH7CGDHeClKZK/ZYELotWfJsqRcthOIGjsdAPuDgEYnkdPhIKKwYBBAGXVQEFAQEHQG+HnNiPZseiBkzYBHwq/nN638o0NPwgYwH70wlKMZhRAwEIB4h4BBgWCgAgFiEEkdD1djAfkk197dzorKrSDhnnEOMFAmJ5HT4CGwwACgkQrKrSDhnnEOPjXgD/euD64cxwqDIqckUaisT3VCst11RcnO5iRHm6meNIwj0BALLmWplyi7beKrOlqKfuZtCLbiAPywGfCNg8LOTt4iMD
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-Authentication-Results: smtp-out1.suse.de;
-	none
-X-Spam-Level: 
-X-Spam-Score: -1.42
-X-Spamd-Result: default: False [-1.42 / 50.00];
-	 ARC_NA(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 MIME_GOOD(-0.10)[text/plain];
-	 RCPT_COUNT_FIVE(0.00)[6];
-	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 NEURAL_HAM_SHORT(-0.01)[-0.038];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 RCVD_COUNT_ZERO(0.00)[0];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 MID_RHS_MATCH_FROM(0.00)[];
-	 BAYES_HAM(-0.31)[75.41%]
-X-Spam-Flag: NO
 
-On Jan 24 2024, Xi Ruoyao wrote:
+On Wed, 2024-01-24 at 12:59 +0100, Andreas Schwab wrote:
+> On Jan 24 2024, Xi Ruoyao wrote:
+>=20
+> > Now I'm suspecting this might be a kernel bug.=C2=A0 Any pointer to fur=
+ther
+> > triage?
+>=20
+> Is this a regression?
 
-> Now I'm suspecting this might be a kernel bug.  Any pointer to further
-> triage?
+Initially I guessed it was perhaps a Glibc regression related to the
+newly introduced clone3 usage on MIPS, but it fails with Glibc-2.35 too.
 
-Is this a regression?
+Not sure if this is a kernel regression, I'll try different kernels in
+several hours (once I can physically access the system).
 
--- 
-Andreas Schwab, SUSE Labs, schwab@suse.de
-GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
-"And now for something completely different."
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
 
