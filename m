@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-1115-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1116-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7298183AEBC
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 17:52:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 245AF83AECB
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 17:55:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 010151F244EF
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 16:52:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A4381C2231E
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 16:55:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E082D7E56E;
-	Wed, 24 Jan 2024 16:52:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C0157E57D;
+	Wed, 24 Jan 2024 16:55:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="FFci4IkW"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="hSIIgUbs"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC1A47E563;
-	Wed, 24 Jan 2024 16:52:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C95957C091;
+	Wed, 24 Jan 2024 16:55:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706115138; cv=none; b=okWI32p4hTmHrqas0Z5C5gPFyrQNMtFQTS6wWn8ESI1GEu7kD+B8Yfb6ZENpMQeopLaQuke0nrhPhsnJLwjWY3KfTUrJ3EXlhkiUiibbXODymCw4dUwYEeWMxSI9NoHh1IKGgOITtRWSyjJddwqF2TU2+lx+MmRnCJhI8UHN/As=
+	t=1706115348; cv=none; b=Mb8gvMW6eNT5XJ2WHLL8srwxtq/NBHkelzaZP2e2HA+SqAxDia529Yr+PAPB6r/ZJoXTajdEsmHnRQxvk5ZmKviurhm7hvEfafrv2x5Uww7vXL6+iQmxgfgEU3KXsbU/tFqkg6BTyPT+bd2/YVkvewMbyY7IkpX32wcoHzR04fM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706115138; c=relaxed/simple;
-	bh=xBjanQxj+WlA2NEtJC2FADqKcRyEwqeWXOxBQB5ubLg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=OS0B8MjIPBDDvU9OG9Adaz4oLT2S/cxr9vkC24kFOBAe/6B+vrwF//Vh5FSFBG27sMIeg4SzJAqUC7RCpaFugqFTlzlLaK7AM+pctI5NhzxYA/3SqKJ0jHbc3BYB3tpjShihrElh1rNYsqsQJSXI5qj8tpDgyCJPQXl60D/gyL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=FFci4IkW; arc=none smtp.client-ip=217.70.183.200
+	s=arc-20240116; t=1706115348; c=relaxed/simple;
+	bh=sdFTfFKW8h0DBCShL4Wg258lalzBpt8xcI9a2WlYGjQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=VyKpxvHE6i7hgkd+Rv72Nt1nBF8tQ6GPkg2XqX+JCB70mNNKnSJI/Qb48UK46/LDlWmmPJ1EmdbBKGWEolY1we2S+v2NYasGrLtxVknmITLTntl/ms5qHqoUXZMo6SAUZsOYwaMKyPRdMub28h0ImPuDCgMuz5u0b5UMMIWy3pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=hSIIgUbs; arc=none smtp.client-ip=217.70.183.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3CBCD20009;
-	Wed, 24 Jan 2024 16:52:13 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A6BBBFF802;
+	Wed, 24 Jan 2024 16:55:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1706115134;
+	t=1706115343;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=DKEfFNRNSTBwprTYctFaKjH1lgQHFqsNz6V6pYZfuuQ=;
-	b=FFci4IkWY6kMPJKkanGCfgkRbyjlHw6Ms54sdmtakBcCG17BCzfL6K9bhUZ9ddZk8SDB7J
-	ETzXhgijv9qe9m2IVC8afgT5ZVktK1DKmK7ieALpFyHql+CC/SoZUASqIkNtfbvSakC94K
-	U5YFRJ66QTyHv9I4yFYJQAG3MI2myW/0jrRK86FuY8nk6Qf7j608KkpsEb+it4RKjbquzM
-	Nv5te6kEqk3nSGPAhaFMbPnjacrsevOX/ameNS9TM7crB9FlemWxuXV7xuoBS99EfPx6aH
-	oTasBy7AkWiCKAi5As4318ukIYkTgNCKczXQxsSSMSYO5HcBEsjJavIcztuPjQ==
+	bh=6orTMhqnjIBCLiMK6R3AGy6f2k6WP4HmdhdKcEwlqFY=;
+	b=hSIIgUbs5S7sJrCPc8xS7eH4YoDi50qZY5nJYyJZDWWJcGX1JMOIqT2T3vJwt4TPsx88/b
+	GqlnpU+DydfKfoyRTedUO4fdOp5gEaLxeJrUaCNBeMe8ZM00aE6dO1Z21mBNLRp3knexg1
+	ETm8rgRTrZCAgFtgh5yAbCD6u9fy/r9KgB9pK5LIzr8UwLCWZXJ5mrCqGPNgxobgzCSUnb
+	r8dE3EUwdjhU7UIXZm/MBZE/HpseB+y3bQdcFcBBmrQ/q+rnJPIY+wN7b9fO+QlbJk/zSn
+	Oy3h84uDHK4/PgAFBzDd8az5FPL2Irx27N+BWayeL0vN8c8l4tyzcdZH+hE16g==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,13 +53,8 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 24 Jan 2024 17:52:13 +0100
-Message-Id: <CYN3C7XGTG1T.2U3RS9E2ENWGJ@bootlin.com>
-Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
- <linux-mips@vger.kernel.org>, <linux-clk@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Thomas
- Petazzoni" <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>, <linux-gpio@vger.kernel.org>
+Date: Wed, 24 Jan 2024 17:55:42 +0100
+Message-Id: <CYN3EW3ROWDF.2EXS5GSV1K8PH@bootlin.com>
 To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Gregory
  CLEMENT" <gregory.clement@bootlin.com>, "Michael Turquette"
  <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Rob Herring"
@@ -69,141 +64,121 @@ To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Gregory
  <linus.walleij@linaro.org>, =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?=
  <rafal@milecki.pl>, "Philipp Zabel" <p.zabel@pengutronix.de>
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v3 09/17] reset: eyeq5: add platform driver
+Subject: Re: [PATCH v3 10/17] pinctrl: eyeq5: add platform driver
+Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
+ <linux-mips@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Thomas
+ Petazzoni" <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>, <linux-gpio@vger.kernel.org>
 X-Mailer: aerc 0.15.2
 References: <20240123-mbly-clk-v3-0-392b010b8281@bootlin.com>
- <20240123-mbly-clk-v3-9-392b010b8281@bootlin.com>
- <b9b8aa19-aa08-42ff-8b2f-dedb1e64700c@linaro.org>
-In-Reply-To: <b9b8aa19-aa08-42ff-8b2f-dedb1e64700c@linaro.org>
+ <20240123-mbly-clk-v3-10-392b010b8281@bootlin.com>
+ <5e06d14a-baa7-4e18-a731-6621e623565f@linaro.org>
+In-Reply-To: <5e06d14a-baa7-4e18-a731-6621e623565f@linaro.org>
 X-GND-Sasl: theo.lebrun@bootlin.com
 
 Hello,
 
-On Wed Jan 24, 2024 at 8:00 AM CET, Krzysztof Kozlowski wrote:
+On Wed Jan 24, 2024 at 8:03 AM CET, Krzysztof Kozlowski wrote:
 > On 23/01/2024 19:46, Th=C3=A9o Lebrun wrote:
-> > Add the Mobileye EyeQ5 reset controller driver. It belongs to a syscon
-> > region called OLB. It might grow to add later support of other
-> > platforms from Mobileye.
-
-[...]
-
-> > +static int _eq5r_busy_wait(struct eq5r_private *priv, struct device *d=
-ev,
-> > +			   u32 domain, u32 offset, bool assert)
-> > +{
-> > +	unsigned int val, mask;
-> > +	int i;
-> > +
-> > +	lockdep_assert_held(&priv->mutexes[domain]);
-> > +
-> > +	switch (domain) {
-> > +	case 0:
-> > +		for (i =3D 0; i < D0_TIMEOUT_POLL; i++) {
-> > +			regmap_read(priv->olb, EQ5R_OLB_SARCR1, &val);
-> > +			val =3D !(val & BIT(offset));
-> > +			if (val =3D=3D assert)
-> > +				return 0;
-> > +			__udelay(1);
+> > Add the Mobileye EyeQ5 pin controller driver. It might grow to add late=
+r
+> > support of other platforms from Mobileye. It belongs to a syscon region
+> > called OLB.
+> >=20
+> > Existing pins and their function live statically in the driver code
+> > rather than in the devicetree, see compatible match data.
+> >=20
 >
-> What is even "__udelay"? It is the first use in drivers. Please use
-> common methods, like fsleep or udelay... but actually you should rather
-> use regmap_read_poll_timeout() or some variants instead of open-coding it=
-.
-
-udelay is an alias to __udelay on MIPS, which is why this didn't look
-odd to me. Fixed.
-
-[...]
-
-> > +static void _eq5r_assert(struct eq5r_private *priv, u32 domain, u32 of=
-fset)
+> ...
 >
-> Drop leading _ and name the function in some informative way.
-
-Fixed by turning `_eq5r_assert` into `eq5r_assert_withlock`, and co.
-
-[...]
-
-> > +
-> > +static int eq5r_probe(struct platform_device *pdev)
+> > +static int eq5p_probe(struct platform_device *pdev)
 > > +{
 > > +	struct device *dev =3D &pdev->dev;
 > > +	struct device_node *np =3D dev->of_node;
 > > +	struct device_node *parent_np =3D of_get_parent(np);
-> > +	struct eq5r_private *priv;
-> > +	int ret, i;
+> > +	const struct eq5p_match *match =3D of_device_get_match_data(dev);
+> > +	struct pinctrl_dev *pctldev;
+> > +	struct eq5p_pinctrl *pctrl;
+> > +	int ret;
 > > +
-> > +	priv =3D kzalloc(sizeof(*priv), GFP_KERNEL);
-> > +	if (!priv)
+> > +	pctrl =3D devm_kzalloc(dev, sizeof(*pctrl), GFP_KERNEL);
+> > +	if (!pctrl)
 > > +		return -ENOMEM;
+> > +
+> > +	pctrl->olb =3D ERR_PTR(-ENODEV);
+> > +	if (parent_np)
+> > +		pctrl->olb =3D syscon_node_to_regmap(parent_np);
+> > +	if (IS_ERR(pctrl->olb))
+> > +		pctrl->olb =3D syscon_regmap_lookup_by_phandle(np, "mobileye,olb");
+> > +	if (IS_ERR(pctrl->olb))
+> > +		return PTR_ERR(pctrl->olb);
 >
-> You leak parent.
+> No, we talked about this, you got comments on this. There is no
+> mobileye,olb. You cannot have undocumented properties.
 
-Fixed in all three clk+reset+pinctrl drivers. They all had this issue.
+Clearly and I fully agree. It's a versioning issue on my side. It's
+been fixed (again, oops).
 
 >
 > > +
-> > +	dev_set_drvdata(dev, priv);
+> > +	pctrl->regs =3D match->regs;
+> > +	pctrl->funcs =3D match->funcs;
+> > +	pctrl->nfuncs =3D match->nfuncs;
 > > +
-> > +	priv->olb =3D ERR_PTR(-ENODEV);
-> > +	if (parent_np) {
-> > +		priv->olb =3D syscon_node_to_regmap(parent_np);
-> > +		of_node_put(parent_np);
+> > +	pctrl->desc.name =3D dev_name(dev);
+> > +	pctrl->desc.pins =3D match->pins;
+> > +	pctrl->desc.npins =3D match->npins;
+> > +	pctrl->desc.pctlops =3D &eq5p_pinctrl_ops;
+> > +	pctrl->desc.pmxops =3D &eq5p_pinmux_ops;
+> > +	pctrl->desc.confops =3D &eq5p_pinconf_ops;
+> > +	pctrl->desc.owner =3D THIS_MODULE;
+> > +
+> > +	ret =3D devm_pinctrl_register_and_init(dev, &pctrl->desc, pctrl, &pct=
+ldev);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed registering pinctrl device: %d\n", ret);
+> > +		return ret;
 > > +	}
-> > +	if (IS_ERR(priv->olb))
+> > +
+> > +	ret =3D pinctrl_enable(pctldev);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed enabling pinctrl device: %d\n", ret);
+> > +		return ret;
+> > +	}
+> > +
+> > +	dev_info(dev, "probed\n");
 >
-> Also here
->
-> > +		return PTR_ERR(priv->olb);
->
-> This looks over-complicated. First, you cannot just
-> dev_get_regmap(pdev->dev.parent)?
+> I am pretty sure you got comments for these. Drop such debugs from all
+> of your code. Current and future.
 
-No dev_get_regmap() cannot be used as it doesn't pick up syscon regmaps.
-I've just tried it.
-
-However I've simplified the logic, it looks better now.
-
-	static int eq5r_probe(struct platform_device *pdev)
-	{
-		struct device_node *parent_np;
-
-		/* ... */
-
-		parent_np =3D of_get_parent(np);
-		if (!parent_np)
-			return -ENODEV;
-
-		priv->olb =3D syscon_node_to_regmap(parent_np);
-		of_node_put(parent_np);
-		if (IS_ERR(priv->olb))
-			return PTR_ERR(priv->olb);
-
-		/* ... */
-	}
+Same thing, it must have been lost in the same fixup patch as the
+previous mistake.
 
 [...]
 
-> > +static struct platform_driver eq5r_driver =3D {
-> > +	.probe =3D eq5r_probe,
+> > +static struct platform_driver eq5p_driver =3D {
 > > +	.driver =3D {
-> > +		.name =3D "eyeq5-reset",
-> > +		.of_match_table =3D eq5r_match_table,
+> > +		.name =3D "eyeq5-pinctrl",
+> > +		.of_match_table =3D eq5p_match,
 > > +	},
+> > +	.probe =3D eq5p_probe,
 > > +};
 > > +
-> > +static int __init eq5r_init(void)
+> > +static int __init eq5p_init(void)
 > > +{
-> > +	return platform_driver_register(&eq5r_driver);
+> > +	return platform_driver_register(&eq5p_driver);
 > > +}
-> > +
-> > +arch_initcall(eq5r_init);
+> > +core_initcall(eq5p_init);
 >
-> This is does not look like arch code, but driver or subsys. Use regular
-> module_driver. I see there is such pattern in reset but I doubt this is
-> something good.
+> No, pins are not a core_initcall. This could be arch_initcall, but
+> considering you depend on the parent this must be module driver.
+>
+> Even from this dependency point of view your initcalls are totally wrong
+> and will lead to issues.
 
-Indeed I've moved things to using the builtin_platform_driver() macro.
+Same as reset: moved to using the builtin_platform_driver() macro. No
+need for it to be module as it cannot be one.
 
 Thanks,
 
