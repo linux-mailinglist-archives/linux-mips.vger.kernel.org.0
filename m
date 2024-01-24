@@ -1,68 +1,69 @@
-Return-Path: <linux-mips+bounces-1101-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1102-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35FA383A60D
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 10:56:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E4BA583A614
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 10:57:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E927FB28B14
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 09:53:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2B23FB228F2
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jan 2024 09:56:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97E1A18638;
-	Wed, 24 Jan 2024 09:52:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A76E18048;
+	Wed, 24 Jan 2024 09:56:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LohNP/1W"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qT+xUCo8"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F10A1862B;
-	Wed, 24 Jan 2024 09:52:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3371718045;
+	Wed, 24 Jan 2024 09:56:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706089969; cv=none; b=TG/nqmHRCoscbNRg76wBybJwpKgK68NtCq591AtNB3DpRSfsicyQ3FCHynjJOJK+SBXt54583iSSfNSlNIGk85d3oY6j4M+NdBr1qVt9uNWzbx6kW/msuF4hNynVzA7PKJdYbV8AoFXH90DNUvmuzQp+rYi6rMjDx4ZEB2p+3fs=
+	t=1706090192; cv=none; b=Ha6ji6hL2K3zt71GsD6WHdnYRMON7uma8Sr3L8LwJ0r/BAh/wyNxoX2IYF7krxnx8wqYHEOJxcH2Nhx/biOquEsUihFBYJgsTqXP0Hf3b5dMCpLkQe/Bv3Vkgv243J5bkyJtmBceR8VODp0Wk24y9bToTXfGKj/kqmGevomZ9gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706089969; c=relaxed/simple;
-	bh=25EbN1mzjVCHuiUk7bybepZ+ZKPqcs9G8ruiHFzlSOc=;
+	s=arc-20240116; t=1706090192; c=relaxed/simple;
+	bh=vQ+I9Ge+8bH1NA9WH7CqoqMtBiQEOSibipcnd/i3Qso=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BtkVI5VPGNiASSxaIyUb+IpWaKHdYxdu2iz0L0rxg7b+tTgZHaH6YQsoD+n7dCoBznX/a+Zh9tGglYER95k2zSHByRClca4TObDDFP+DU6GgftEdST/HNyUyOGVEv2H4/aA97Ghkr5Ah5WtvQWxzmgQNE7t7F2EC0ku35F3moNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LohNP/1W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5626C433A6;
-	Wed, 24 Jan 2024 09:52:48 +0000 (UTC)
+	 To:Cc:Content-Type; b=e57gkUQuflVtHQWgUcEsgXtezwQ6O2pxGFRnXtGtB/KLZ7soRBzwK95gh8musC8Z5NqtITVUi3wX7UTk3J/g/oZtEK9cobjdIPl2K0ZR2fRyJ+sPTdejyWuXgU7mA251YDbkpbRRARxU4JWo3APjDoEo+PC9isuYtdH4k1fWuuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qT+xUCo8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8244C433B1;
+	Wed, 24 Jan 2024 09:56:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706089968;
-	bh=25EbN1mzjVCHuiUk7bybepZ+ZKPqcs9G8ruiHFzlSOc=;
+	s=k20201202; t=1706090191;
+	bh=vQ+I9Ge+8bH1NA9WH7CqoqMtBiQEOSibipcnd/i3Qso=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=LohNP/1WsXyvDwB6ZKygdTeX5gGsJGwHTcP8DUMUVNJIoqWWxaeTKWO2rwQ7pGdMe
-	 Wi7PuJYn7Ait0IUYTY5YSrOPtKNVt02Zq7kaK1vrqZstPs/Clz6XXvfeL8R1AlZH0e
-	 ZWqtTpvJLsNgdxFagjroCPf4qvnbST0SA/l51bYa0mkm/OoAj5/dVQgE3orY7WPmai
-	 cdxgMzQQNckRX6EN2Zn66xnLdYOe+AHCNlWaJ8Ts4vGg2iwMShmvg81npuALXESq6n
-	 TmghtQH34bN4NDRWiWNwoVDBo2KO1Db05a01hWwMzreegJ3WO+K9sLU6EfFSHuvilG
-	 TCgTD2r6ZDQXg==
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-55a9008c185so6607323a12.1;
-        Wed, 24 Jan 2024 01:52:48 -0800 (PST)
-X-Gm-Message-State: AOJu0YzDuOrONT+IVSwaSGep+2nAzGgcKYOodnpTPdYuxSjjja9KPzCh
-	Ia4F9v2BNf6UT9XON585KDdRQ4QWd/mNpYVdK72kC8U2iKV6g+cmNPy7KSEu9iIclpi1oqLwJGz
-	+C8/CpN21NEerOWlbwbcYnDXQIyU=
-X-Google-Smtp-Source: AGHT+IFSvORXsCyI9FFQ4azhLnmjHti6TOi5ATesVQ/VgI+SXE2UF1JjHJkkjjXZa7Cg/PLX3C+VGzO/U1ajcX3RRxc=
-X-Received: by 2002:a05:6402:1bc5:b0:55a:8431:ba7c with SMTP id
- ch5-20020a0564021bc500b0055a8431ba7cmr934471edb.37.1706089967348; Wed, 24 Jan
- 2024 01:52:47 -0800 (PST)
+	b=qT+xUCo8olWgqunC2fwyMUCPxe71wcF6swjsgLnths5AtynaNSt3Q7VPVIfo9Ra6d
+	 gq7TwCNm5UF54c4Tw7Ub8jZG5zfrunm9o5YMOwqtp3VP2MJQfNWGXnAL9u0/ooelN/
+	 d18topr4lldBvI9B2wji0KkF8wg1y1SLQOVq9gnr0it4Ef8bbDoW3JnUMNpmmyYUfY
+	 M5SvglWKSpjO/tvPLOUrrCRGH/komGq7p93CDurqd/r2osBLaMpNPPojQPg0ZoNEce
+	 e7btvPfKlmErrm6soS8BYAL8vRw8g4esrskw+sYb1mp159siTv74pLObiR24OsJ9aY
+	 83BZa90fM48cg==
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5100893015fso1880330e87.1;
+        Wed, 24 Jan 2024 01:56:31 -0800 (PST)
+X-Gm-Message-State: AOJu0YwGNGM53ihFyQhDCHdc/GjC8vxhpe95j4Y7uWGje9w20uxZY3uP
+	1RsR3qu5dcxmUK1v37HWK3OJcL9YR4hQhgvOilMxkfwGt8mYh/Zv3Q+OlA1JA5HQav0dZ1cxDUD
+	7Oh5OJi1P/S5uC8pjNiQ7YAfluzc=
+X-Google-Smtp-Source: AGHT+IE3rPZK17ixDxsL+YcPJ/Q2xlEvwkcSUy8VmnbYNcPTU5xivtsjD2pYBrLIsytxrVaBRIobhJSEJqchFBAWaX0=
+X-Received: by 2002:ac2:5a06:0:b0:510:ca2:6b69 with SMTP id
+ q6-20020ac25a06000000b005100ca26b69mr491573lfn.99.1706090189885; Wed, 24 Jan
+ 2024 01:56:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240118121542.748351-1-maobibo@loongson.cn> <20240118121542.748351-4-maobibo@loongson.cn>
-In-Reply-To: <20240118121542.748351-4-maobibo@loongson.cn>
+References: <20240118121542.748351-1-maobibo@loongson.cn> <20240118121542.748351-3-maobibo@loongson.cn>
+In-Reply-To: <20240118121542.748351-3-maobibo@loongson.cn>
 From: Huacai Chen <chenhuacai@kernel.org>
-Date: Wed, 24 Jan 2024 17:52:36 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4q0B3fXjkwtEQaCLk789UkLbWe8Zd8L7bMLWea1yq70w@mail.gmail.com>
-Message-ID: <CAAhV-H4q0B3fXjkwtEQaCLk789UkLbWe8Zd8L7bMLWea1yq70w@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] irqchip/loongson-eiointc: Typo fix in function eiointc_domain_alloc
+Date: Wed, 24 Jan 2024 17:56:18 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H45A4m-imDh8UZqXJ3WXduMyubbd1ze-EgZtqqbfjHt1g@mail.gmail.com>
+Message-ID: <CAAhV-H45A4m-imDh8UZqXJ3WXduMyubbd1ze-EgZtqqbfjHt1g@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] irqchip/loongson-eiointc: Refine irq affinity
+ setting during resume
 To: Bibo Mao <maobibo@loongson.cn>
 Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, Thomas Gleixner <tglx@linutronix.de>, 
 	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
@@ -70,41 +71,57 @@ Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, Thomas Gleixner <tglx@linutronix.de>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Huacai Chen <chenhuacai@loongson.cn>
-
-But I think moving this simplest patch to the first one is better.
+I can give an Acked-by if these lines are also removed in our internal repo=
+.
 
 Huacai
 
 On Thu, Jan 18, 2024 at 8:15=E2=80=AFPM Bibo Mao <maobibo@loongson.cn> wrot=
 e:
 >
-> There is small typo in function eiointc_domain_alloc, and there is no
-> definition about struct eiointc, instead it should be struct eiointc_priv=
-.
-> It is strange that there is no warning with gcc compiler. This patch
-> fixes the typo issue.
+> During suspend and resume, CPUs except CPU0 are hot-unpluged and IRQs
+> are migrated to CPU0. So it is not necessary to restore irq affinity for
+> eiointc irq controller when system resumes. This patch removes the piece
+> of code about irq affinity restoring in function eiointc_resume.
 >
 > Signed-off-by: Bibo Mao <maobibo@loongson.cn>
 > ---
->  drivers/irqchip/irq-loongson-eiointc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/irqchip/irq-loongson-eiointc.c | 16 ----------------
+>  1 file changed, 16 deletions(-)
 >
 > diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq=
 -loongson-eiointc.c
-> index 86f4faad0695..1a25e0613d50 100644
+> index 6143adb1b73b..86f4faad0695 100644
 > --- a/drivers/irqchip/irq-loongson-eiointc.c
 > +++ b/drivers/irqchip/irq-loongson-eiointc.c
-> @@ -252,7 +252,7 @@ static int eiointc_domain_alloc(struct irq_domain *do=
-main, unsigned int virq,
->         int ret;
->         unsigned int i, type;
->         unsigned long hwirq =3D 0;
-> -       struct eiointc *priv =3D domain->host_data;
-> +       struct eiointc_priv *priv =3D domain->host_data;
+> @@ -315,23 +315,7 @@ static int eiointc_suspend(void)
 >
->         ret =3D irq_domain_translate_onecell(domain, arg, &hwirq, &type);
->         if (ret)
+>  static void eiointc_resume(void)
+>  {
+> -       int i, j;
+> -       struct irq_desc *desc;
+> -       struct irq_data *irq_data;
+> -
+>         eiointc_router_init(0);
+> -
+> -       for (i =3D 0; i < nr_pics; i++) {
+> -               for (j =3D 0; j < eiointc_priv[0]->vec_count; j++) {
+> -                       desc =3D irq_resolve_mapping(eiointc_priv[i]->eio=
+intc_domain, j);
+> -                       if (desc && desc->handle_irq && desc->handle_irq =
+!=3D handle_bad_irq) {
+> -                               raw_spin_lock(&desc->lock);
+> -                               irq_data =3D irq_domain_get_irq_data(eioi=
+ntc_priv[i]->eiointc_domain, irq_desc_get_irq(desc));
+> -                               eiointc_set_irq_affinity(irq_data, irq_da=
+ta->common->affinity, 0);
+> -                               raw_spin_unlock(&desc->lock);
+> -                       }
+> -               }
+> -       }
+>  }
+>
+>  static struct syscore_ops eiointc_syscore_ops =3D {
 > --
 > 2.39.3
 >
