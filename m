@@ -1,171 +1,163 @@
-Return-Path: <linux-mips+bounces-1156-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1157-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0127183C4C5
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 15:34:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DB1483C53D
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 15:50:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33ECB1C24693
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 14:34:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07437295214
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 14:50:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F17EB6E2B7;
-	Thu, 25 Jan 2024 14:34:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 216C36E2D3;
+	Thu, 25 Jan 2024 14:50:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="S3i9JLAF"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="U5Hu1h05"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E7E06340E;
-	Thu, 25 Jan 2024 14:34:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4361B6E2C9;
+	Thu, 25 Jan 2024 14:50:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706193263; cv=none; b=WxAK+zfgQ9/7kUfb1UAiPxLR4L110H7X9Fyr6bB7cykK7DDYKFit4l5T4EpGS5HdIKldePBNfM7pG9nxrgo5d8xIjKeAqAGV/60Q2A+Yo0DAXBLJMHVpGw+gXPV7/3n80/UOW0tbuy7DA2e/o3kOtXnEd9XWjyvtUq7a3qbF8yM=
+	t=1706194209; cv=none; b=MuC8fZn+9BSKARWZSFeJOLYN3hTD6+It8CzOWOBEThoiPe4Cl7dKSrCrqRAFH9GOgyIszeMtyIP+xFBHVPKYKlSqDfkWKmwlEw8/l5U7KM6HXUkN1HMKH1+b0Ue13J0IBGaAMbgl4sOqWoasy0mIGW2OKZvUFHBHT33jMxfzo88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706193263; c=relaxed/simple;
-	bh=sjdoDcDKRSkLx4UDwlfMTbTX9nBFU/s/iUda1EdkDKI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=qJIJSZZUEJHZTY8VFpnEjAk5ckf87uk87Gjro66U01/dzO+ooA6SJuEE8F+sRaef1WiAf1SJBViT+n0SBygWbQ8tdEI1m9eee1u2PUaR4MCQ30kyPEFvHGO4uDpOsXuwy0UCTOywWfVlsLZt4D+AeZoxqN1c7cy54C7sGMkKgiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=S3i9JLAF; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 40PEXsZn003349;
-	Thu, 25 Jan 2024 08:33:54 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1706193234;
-	bh=D3et9L4RHHyPosS3VDVQzoYncrvITyHk1dVQbc6iud8=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=S3i9JLAFv/yOUIvqQltF0KZwma/RCvGqNExNYIpZXMRkFerkygu+XtgdcXNRAe/E+
-	 wMDR0ducWngXiGpABRGbxXH4nLQRLmbwhH60TRobQknis7fiOEVs5mHMh84B029fzV
-	 47V1e2KNcoFTOsmivniaScYuG/FFSc8Dt+hDFr9k=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 40PEXsPY129184
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 25 Jan 2024 08:33:54 -0600
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 25
- Jan 2024 08:33:54 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 25 Jan 2024 08:33:54 -0600
-Received: from [10.249.42.149] ([10.249.42.149])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 40PEXr4k008480;
-	Thu, 25 Jan 2024 08:33:53 -0600
-Message-ID: <9a5f017c-530c-482b-9cbf-a07281e92589@ti.com>
-Date: Thu, 25 Jan 2024 08:33:53 -0600
+	s=arc-20240116; t=1706194209; c=relaxed/simple;
+	bh=ACVtmX3llcZ3tfvcSAXupWV1km9UBIPngejcwrfKSZw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
+	 References:In-Reply-To; b=F38cE/aH6we6VGVzyxxuIgTb01MDsSBM+kp1Nvsw5LudtNDwBRsopV4WBWv+Fu5RgRoF6z5CyXgGIrHRlqIvotOXgt/44sdkFs+jLrQQOfBnu5tIQCY/NvvXAm35b8s6O8M2ctXlGwDEyRWwuKckUw2gICCXQlQelEGXhIsmMxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=U5Hu1h05; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2AD8FC0012;
+	Thu, 25 Jan 2024 14:49:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1706194197;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ogOpwZQkYRG5dXU2wj0R+7adxXD9kVYWvL6LdD2YosI=;
+	b=U5Hu1h05YgVVy1e9XMnsulE1q6eJD310wXJhpRMNMwlLSol4EJtmHk20pcaA/6GXAy+cns
+	Ih+ju0KTLmRTBmbN/+GLZTEOThbUoBnz8FPEou7lEZWxSQ2WOBWO0ZN9hW6o9HwvxQ/S+H
+	lQ2hmT7xQRD+EyLadkeDKfs7XTlxpyRNFu+wdoez24nABWRm2QJxwjXncD64DBssybAfog
+	pDfudljBPu+vedfEYfsVkf1lvLfDWOIx+IVdPh6CunfyLZ57xp7wkOrvufRaEMCCg1FGjt
+	x/+tCF7sWN3l7+y6c0kQBANgFaVwAEPGat1sWGjelxiC5snpNzZ/+EhbM4IS3g==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 04/17] dt-bindings: soc: mobileye: add EyeQ5 OLB system
- controller
-To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
-        Krzysztof
- Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-CC: Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Michael Turquette
-	<mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Linus
- Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
-	<rafal@milecki.pl>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Vladimir
- Kondratiev <vladimir.kondratiev@mobileye.com>,
-        <linux-mips@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Thomas Petazzoni
-	<thomas.petazzoni@bootlin.com>,
-        Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-        <linux-gpio@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 25 Jan 2024 15:49:55 +0100
+Message-Id: <CYNVD4U0M5OS.LQ2MAKOL0LAP@bootlin.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v3 04/17] dt-bindings: soc: mobileye: add EyeQ5 OLB
+ system controller
+Cc: "Gregory CLEMENT" <gregory.clement@bootlin.com>, "Michael Turquette"
+ <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Krzysztof
+ Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
+ <conor+dt@kernel.org>, "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Linus Walleij" <linus.walleij@linaro.org>,
+ =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>, "Philipp Zabel"
+ <p.zabel@pengutronix.de>, "Vladimir Kondratiev"
+ <vladimir.kondratiev@mobileye.com>, <linux-mips@vger.kernel.org>,
+ <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>, <linux-gpio@vger.kernel.org>
+To: "Andrew Davis" <afd@ti.com>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski@linaro.org>, "Rob Herring" <robh@kernel.org>
+X-Mailer: aerc 0.15.2
 References: <20240123-mbly-clk-v3-0-392b010b8281@bootlin.com>
  <20240123-mbly-clk-v3-4-392b010b8281@bootlin.com>
  <20240124151405.GA930997-robh@kernel.org>
  <dd7e723d-3c4c-4edf-afc2-51db9a074efa@linaro.org>
  <CYNQHXOZ73YR.3QODFI2X08KC6@bootlin.com>
-Content-Language: en-US
-From: Andrew Davis <afd@ti.com>
-In-Reply-To: <CYNQHXOZ73YR.3QODFI2X08KC6@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+ <9a5f017c-530c-482b-9cbf-a07281e92589@ti.com>
+In-Reply-To: <9a5f017c-530c-482b-9cbf-a07281e92589@ti.com>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On 1/25/24 5:01 AM, Théo Lebrun wrote:
-> Hello,
-> 
-> On Thu Jan 25, 2024 at 8:51 AM CET, Krzysztof Kozlowski wrote:
->> On 24/01/2024 16:14, Rob Herring wrote:
->>>> +
->>>> +      pinctrl-b {
->>>> +        compatible = "mobileye,eyeq5-b-pinctrl";
->>>> +        #pinctrl-cells = <1>;
->>>> +      };
->>>> +    };
->>>
->>> This can all be simplified to:
->>>
->>> system-controller@e00000 {
->>>      compatible = "mobileye,eyeq5-olb", "syscon";
->>>      reg = <0xe00000 0x400>;
->>>      #reset-cells = <2>;
->>>      #clock-cells = <1>;
->>>      clocks = <&xtal>;
->>>      clock-names = "ref";
->>>
->>>      pins { ... };
->>> };
->>>
->>> There is no need for sub nodes unless you have reusable blocks or each
->>> block has its own resources in DT.
->>
->> Yes, however I believe there should be resources here: each subnode
->> should get its address space. This is a bit tied to implementation,
->> which currently assumes "everyone can fiddle with everything" in this block.
->>
->> Theo, can you draw memory map?
-> 
-> It would be a mess. I've counted things up. The first 147 registers are
-> used in this 0x400 block. There are 31 individual blocks, with 7
-> registers unused (holes to align next block).
-> 
-> Functions are reset, clocks, LBIST, MBIST, DDR control, GPIO,
-> accelerator control, CPU entrypoint, PDTrace, IRQs, chip info & ID
-> stuff, control registers for PCIe / eMMC / Eth / SGMII / DMA / etc.
-> 
-> Some will never get used from Linux, others might. Maybe a moderate
-> approach would be to create ressources for major blocks and make it
-> evolve organically, without imposing that all uses lead to a new
-> ressource creation.
-> 
+Hello,
 
-That is usually how nodes are added to DT. If you modeled this
-system-controller space as a "simple-bus" instead of a "syscon"
-device, you could add nodes as you implement them. Rather than
-all at once as you have to by treating this space as one large
-blob device.
+On Thu Jan 25, 2024 at 3:33 PM CET, Andrew Davis wrote:
+> On 1/25/24 5:01 AM, Th=C3=A9o Lebrun wrote:
+> > Hello,
+> >=20
+> > On Thu Jan 25, 2024 at 8:51 AM CET, Krzysztof Kozlowski wrote:
+> >> On 24/01/2024 16:14, Rob Herring wrote:
+> >>>> +
+> >>>> +      pinctrl-b {
+> >>>> +        compatible =3D "mobileye,eyeq5-b-pinctrl";
+> >>>> +        #pinctrl-cells =3D <1>;
+> >>>> +      };
+> >>>> +    };
+> >>>
+> >>> This can all be simplified to:
+> >>>
+> >>> system-controller@e00000 {
+> >>>      compatible =3D "mobileye,eyeq5-olb", "syscon";
+> >>>      reg =3D <0xe00000 0x400>;
+> >>>      #reset-cells =3D <2>;
+> >>>      #clock-cells =3D <1>;
+> >>>      clocks =3D <&xtal>;
+> >>>      clock-names =3D "ref";
+> >>>
+> >>>      pins { ... };
+> >>> };
+> >>>
+> >>> There is no need for sub nodes unless you have reusable blocks or eac=
+h
+> >>> block has its own resources in DT.
+> >>
+> >> Yes, however I believe there should be resources here: each subnode
+> >> should get its address space. This is a bit tied to implementation,
+> >> which currently assumes "everyone can fiddle with everything" in this =
+block.
+> >>
+> >> Theo, can you draw memory map?
+> >=20
+> > It would be a mess. I've counted things up. The first 147 registers are
+> > used in this 0x400 block. There are 31 individual blocks, with 7
+> > registers unused (holes to align next block).
+> >=20
+> > Functions are reset, clocks, LBIST, MBIST, DDR control, GPIO,
+> > accelerator control, CPU entrypoint, PDTrace, IRQs, chip info & ID
+> > stuff, control registers for PCIe / eMMC / Eth / SGMII / DMA / etc.
+> >=20
+> > Some will never get used from Linux, others might. Maybe a moderate
+> > approach would be to create ressources for major blocks and make it
+> > evolve organically, without imposing that all uses lead to a new
+> > ressource creation.
+> >=20
+>
+> That is usually how nodes are added to DT. If you modeled this
+> system-controller space as a "simple-bus" instead of a "syscon"
+> device, you could add nodes as you implement them. Rather than
+> all at once as you have to by treating this space as one large
+> blob device.
 
-Andrew
+I see where you are coming from, but in our case modeling our DT node as
+a simple-bus would be lying about the hardware behind. There is no such
+underlying bus. Let's try to keep the devicetree an abstraction
+describing the hardware.
 
-> Thanks,
-> 
-> --
-> Théo Lebrun, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> 
+Also, we are having conflicts because multiple such child nodes are
+being added at the same time as the base node. Once this initial series
+is out (meaning dt-bindings for the OLB will exist) we'll be able to
+add new nodes or ressources on a whim.
+
+Have you got an opinion on the approach described in this email?
+https://lore.kernel.org/lkml/CYNRCGYA1PJ2.FYENLB4SRJWH@bootlin.com/
+
+Thanks,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
