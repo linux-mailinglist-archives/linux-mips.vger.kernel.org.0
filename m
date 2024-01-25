@@ -1,216 +1,408 @@
-Return-Path: <linux-mips+bounces-1147-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1153-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 285BB83C158
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 12:53:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FA2883C256
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 13:14:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C6AD1C2305C
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 11:53:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94E9F1C23003
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 12:14:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA72D36122;
-	Thu, 25 Jan 2024 11:53:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="l+pMp/Zc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BC923EA95;
+	Thu, 25 Jan 2024 12:14:33 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B40CE33CDB;
-	Thu, 25 Jan 2024 11:53:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A5B245025
+	for <linux-mips@vger.kernel.org>; Thu, 25 Jan 2024 12:14:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706183609; cv=none; b=XGdjenFL3lHG/aB62SrTofcanv7ay2PsXlCRIXLtHykIYQTywqjktD7HfMSkgjr905ldAP+O2MKhPYQeWp0tBpUaXrnyQWTlbH7Ioj5kk9NysZhdA4RFeNkA6LScvePOHHqsXZLZ1vONBlgyiMxxKMOaDTzPF2r3j/CtD/Rdclw=
+	t=1706184872; cv=none; b=DP42GxV/8Ky/kVPmF048BJrHvEt4d2iHTJEFWxvt7ZQlU6faZcPky2nivgHj0naY+DLZsKDErQ665fDE28Di4R0/Ol1/LpaOYuG2945tD9elbnexTVo0fkgdqgbNXEYRV24w7prwxcHqPqgZwdhIU/F4nE4laS6ZB5D2MowfpL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706183609; c=relaxed/simple;
-	bh=k9VgRYeNrPHdfOrpwqwrz/D5of6TTpkE5y+OALsVfuw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=hwoqII6Byzyqq0gPvr1IqmIEpCkZbrmXWtCA+AhgQQDFE2008TJaVtXkaGNiLVAemTtlVtEgVN29w85etjy19B0wunFoUF6psawCJ9thGIsV+Mk8v7Jm2jn5/0PeqzWd/21oXfsu+RzsMDXiudI+Rd8UvoX8EJlzIC5l9hPlPhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=l+pMp/Zc; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 44BE81C0005;
-	Thu, 25 Jan 2024 11:53:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1706183605;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=abQCJSKdwJXP9+/KbyZE7cBdmY2HQ+LTAyHc/830rpk=;
-	b=l+pMp/ZcEhB5G6Y86pGNxFWhkEksfB4aM2fqWyzqe8NEFX3qNkqSCsRe867m4DYlWmLb+Q
-	gz6Lz11UZmVNxhaFXhk0Ia+SLDi6ZdMzuetZ+QeZ7Vlp9YnWOUvv0E+k2ksOUQaZte2ITY
-	G7aUsDmDos4LPodEUXlSHd7/ttBgLZD24W2Hu3NPtOy6kDU1tI7+USe4hjLN1obejuUyvT
-	RHf0lb/N2prh8ELgiZdtqo5v05cpyunqXW/2eYaML8nY5Vs5l9REklaP7zOFJYaAnt6If+
-	S6NXTOj/Xkk33WMpYHGGqZplLX+a7pSTpvJT2sh75hwMy2Lt5SxM9ADokCGqkQ==
+	s=arc-20240116; t=1706184872; c=relaxed/simple;
+	bh=R3cZoF50NJKzunlOh4gQSXA6UZ8jBNEYYPQF8OY0BsA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AFUy1sVUgbNFTGlpbg9RYggPHNYuOW36RC4a59YsBc3t47osyzQbtslRrycCdvr2SmDSiNlVYcSJ3UdGczfHR8P+o+TqaaV7rfScSf/JSFmuKlUWgRpNbRYlkfeCluynBTpPn4N2Yp51yWRQ1eoqYfSVvCjQV9qfj8lXFBO4/EY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rSyZH-0003ZH-Nv; Thu, 25 Jan 2024 13:10:51 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rSyZ5-002HOg-Vz; Thu, 25 Jan 2024 13:10:40 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rSyZ5-007my3-2V;
+	Thu, 25 Jan 2024 13:10:39 +0100
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: linux-pwm@vger.kernel.org,
+	Benson Leung <bleung@chromium.org>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Robert Foss <rfoss@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Johan Hovold <johan@kernel.org>,
+	Alex Elder <elder@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	James Clark <james.clark@arm.com>,
+	Hector Martin <marcan@marcan.st>,
+	Sven Peter <sven@svenpeter.dev>,
+	Alexander Shiyan <shc_work@mail.ru>,
+	Hans de Goede <hdegoede@redhat.com>,
+	=?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	=?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Michael Walle <mwalle@kernel.org>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Hammer Hsieh <hammerh0314@gmail.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+	Sean Anderson <sean.anderson@seco.com>,
+	Michal Simek <michal.simek@amd.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Pavel Machek <pavel@ucw.cz>,
+	Lee Jones <lee@kernel.org>,
+	Anjelique Melendez <quic_amelende@quicinc.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Lu Hongfei <luhongfei@vivo.com>,
+	Bjorn Andersson <quic_bjorande@quicinc.com>,
+	Luca Weiss <luca@z3ntu.xyz>,
+	Kees Cook <keescook@chromium.org>
+Cc: kernel@pengutronix.de,
+	Guenter Roeck <groeck@chromium.org>,
+	chrome-platform@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	linux-mips@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	linux-amlogic@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	linux-samsung-soc@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-sunxi@lists.linux.dev,
+	Douglas Anderson <dianders@chromium.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	dri-devel@lists.freedesktop.org,
+	greybus-dev@lists.linaro.org,
+	linux-staging@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	asahi@lists.linux.dev,
+	platform-driver-x86@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-tegra@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-leds@vger.kernel.org,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH v5 000/111] pwm: Improve lifetime tracking for pwm_chips
+Date: Thu, 25 Jan 2024 13:08:22 +0100
+Message-ID: <cover.1706182805.git.u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 25 Jan 2024 12:53:24 +0100
-Message-Id: <CYNRLZ2XTOGY.3ANWB33IDCN2W@bootlin.com>
-Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
- <linux-mips@vger.kernel.org>, <linux-clk@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Thomas
- Petazzoni" <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>, <linux-gpio@vger.kernel.org>
-To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Gregory
- CLEMENT" <gregory.clement@bootlin.com>, "Michael Turquette"
- <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>, "Linus Walleij"
- <linus.walleij@linaro.org>, =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?=
- <rafal@milecki.pl>, "Philipp Zabel" <p.zabel@pengutronix.de>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v3 08/17] clk: eyeq5: add platform driver
-X-Mailer: aerc 0.15.2
-References: <20240123-mbly-clk-v3-0-392b010b8281@bootlin.com>
- <20240123-mbly-clk-v3-8-392b010b8281@bootlin.com>
- <127fd51b-cd64-4e00-99d6-7be9b79f2dcc@linaro.org>
- <CYN33YJ10HYS.2YDXB158LFZPL@bootlin.com>
- <001993b9-ea0c-49c3-a4e5-4cea10c54082@linaro.org>
-In-Reply-To: <001993b9-ea0c-49c3-a4e5-4cea10c54082@linaro.org>
-X-GND-Sasl: theo.lebrun@bootlin.com
+X-Developer-Signature: v=1; a=openpgp-sha256; l=13051; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=R3cZoF50NJKzunlOh4gQSXA6UZ8jBNEYYPQF8OY0BsA=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlsk85qB6LpEI62WIAaa+6p9gziaDsmdPYpQgkm hsSsBAnweWJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZbJPOQAKCRCPgPtYfRL+ Tg8iB/4lh8/Fbqosy2c6X4HqeeB+gTB8nHPoDL1gUw5DcXAGnV8Y4e1JPJIVqKfpA9IhoyerN4f mzg2OHpXtLKeRBXbv87htzgh4TDR0lxIiG3YkL5KFUO+edkqjeTcnWQv771OVbog4Y4xf6l/5Tm crUpgyqXdAXGoFiGqHslhndjIG9HSpPF6/yP+26JSi+foHm9PjxIDU3X6j14NFrj7HSGhUtLRWj cRTU7KlBcMR8Te8vh0SYO2Tnp6VaKJLWfh/FzFUaA7V3FFkTjSJH6JcXUiF0dr46mX7G57VAlTw 4KeDjqr02WNjAUpp+4Vujda11AEkLWsL/dJcldbADNCsyFR7
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 
-Hi,
+Hello,
 
-On Thu Jan 25, 2024 at 8:46 AM CET, Krzysztof Kozlowski wrote:
-> On 24/01/2024 17:41, Th=C3=A9o Lebrun wrote:
-> > Hello,
-> >=20
-> > On Wed Jan 24, 2024 at 8:05 AM CET, Krzysztof Kozlowski wrote:
-> >> On 23/01/2024 19:46, Th=C3=A9o Lebrun wrote:
-> >>> Add the Mobileye EyeQ5 clock controller driver. It might grow to add
-> >>> support for other platforms from Mobileye.
-> >>>
-> >>> It handles 10 read-only PLLs derived from the main crystal on board. =
-It
-> >>> exposes a table-based divider clock used for OSPI. Other platform
-> >>> clocks are not configurable and therefore kept as fixed-factor
-> >>> devicetree nodes.
-> >>>
-> >>> Two PLLs are required early on and are therefore registered at
-> >>> of_clk_init(). Those are pll-cpu for the GIC timer and pll-per for th=
-e
-> >>> UARTs.
-> >>>
-> >>
-> >>
-> >>> +#define OLB_PCSR1_RESET				BIT(0)
-> >>> +#define OLB_PCSR1_SSGC_DIV			GENMASK(4, 1)
-> >>> +/* Spread amplitude (% =3D 0.1 * SPREAD[4:0]) */
-> >>> +#define OLB_PCSR1_SPREAD			GENMASK(9, 5)
-> >>> +#define OLB_PCSR1_DIS_SSCG			BIT(10)
-> >>> +/* Down-spread or center-spread */
-> >>> +#define OLB_PCSR1_DOWN_SPREAD			BIT(11)
-> >>> +#define OLB_PCSR1_FRAC_IN			GENMASK(31, 12)
-> >>> +
-> >>> +static struct clk_hw_onecell_data *eq5c_clk_data;
-> >>> +static struct regmap *eq5c_olb;
-> >>
-> >> Drop these two. No file-scope regmaps for drivers. Use private contain=
-er
-> >> structures.
-> >=20
-> > I wouldn't know how to handle the two steps then. Two clocks and the cl=
-k
-> > provider are registered at of_clk_init() using CLK_OF_DECLARE_DRIVER().
->
-> Right, if some clocks have to be early, CLK_OF_DECLARE_DRIVER needs
-> static ones. But your commit subject says it is a platform driver and
-> all other pieces of this code is rather incompatible with this approach.
+this is v5 of this series. The relevant changes since v4
+(https://lore.kernel.org/linux-pwm/cover.1701860672.git.u.kleine-koenig@pengutronix.de):
 
-That is my bad on the commit subject. What do you refer to by "all other
-pieces of this code is rather incompatible with this approach"?
+ - New first patch to reshuffle functions in core.c. This is a
+   preparation for the later changes which brings functions in a better
+   order to not need declarations.
+ - Fix kernel docs in several drivers
+ - Added a few ack and review tags received for v4
+ - non-trivially rebased to current pwm/for-next
+   (the changes to drivers/gpu/drm/bridge/ti-sn65dsi86.c were intrusive
+   enough to not add the ack tag by Robert Foss I got).
 
-I've tried to minimise the use of static variables. Therefore as soon as
-the probe is started, we switch to the usual way of using a private
-struct that contains our info.
+Handling got a bit more complicated with the recent addition of
+pwm_apply_atomic/pwm_apply_might_sleep the locking got more complicated.
+I didn't work out all the necessary details. So this series won't work
+as is. However as there is probably some more coordination needed to get
+the patches in that touch files outside of drivers/pwm and I'm confident
+they can stay as is, I want to get the biggest part of this series in
+(up to patch #106) during the next merge window and get them into next
+soon. After that I can spend the time necessary to fix the locking maybe
+to get the remaining bits in during the following merge window.
 
->
-> Do not use CLK_OF_DECLARE_DRIVER for cases where you have dependencies
-> because it forces you to manually order initcalls, which is exactly what
-> we do not want.
+There are patches touching drivers/gpu/drm/bridge/ti-sn65dsi86.c (#37
+and #104), drivers/staging/greybus/pwm.c (#38 and #106),
+drivers/gpio/gpio-mvebu.c (#103) and drivers/leds/rgb/leds-qcom-lpg.c
+(#105). These depend on earlier patches in this series (#3, #39 and #40)
+The patches touching staging/greybus and leds-qcom-lpg already have a
+maintainer ack, so I'd merge them via my tree. For the other two it
+would be nice to get an ack to merge via my tree, too. But if you want
+to merge via your own tree, please tell, so we can coordinate
+accordingly.
 
-What should I be using? I got confirmation from Stephen that this
-mixture of CLK_OF_DECLARE_DRIVER() + platform driver is what I should
-be using as review in my V1.
+Best regards
+Uwe
 
-https://lore.kernel.org/lkml/fa32e6fae168e10d42051b89197855e9.sboyd@kernel.=
-org/
+Uwe Kleine-König (111):
+  pwm: Reorder symbols in core.c
+  pwm: cros-ec: Change prototype of helpers to prepare further changes
+  pwm: Provide a macro to get the parent device of a given chip
+  pwm: ab8500: Make use of pwmchip_parent() macro
+  pwm: atmel: Make use of pwmchip_parent() macro
+  pwm: atmel-tcb: Make use of pwmchip_parent() macro
+  pwm: bcm-kona: Make use of pwmchip_parent() macro
+  pwm: crc: Make use of pwmchip_parent() macro
+  pwm: cros-ec: Make use of pwmchip_parent() macro
+  pwm: dwc: Make use of pwmchip_parent() macro
+  pwm: ep93xx: Make use of pwmchip_parent() macro
+  pwm: fsl-ftm: Make use of pwmchip_parent() macro
+  pwm: img: Make use of parent device pointer in driver data
+  pwm: imx27: Make use of pwmchip_parent() macro
+  pwm: jz4740: Make use of pwmchip_parent() macro
+  pwm: lpc18xx-sct: Make use of parent device pointer in driver data
+  pwm: lpss: Make use of pwmchip_parent() macro
+  pwm: mediatek: Make use of pwmchip_parent() macro
+  pwm: meson: Make use of pwmchip_parent() macro
+  pwm: mtk-disp: Make use of pwmchip_parent() macro
+  pwm: omap: Make use of pwmchip_parent() macro
+  pwm: pca9685: Store parent device in driver data
+  pwm: raspberrypi-poe: Make use of pwmchip_parent() macro
+  pwm: rcar: Make use of pwmchip_parent() macro
+  pwm: rz-mtu3: Make use of pwmchip_parent() macro
+  pwm: samsung: Make use of pwmchip_parent() macro
+  pwm: sifive: Make use of pwmchip_parent() macro
+  pwm: stm32-lp: Make use of pwmchip_parent() macro
+  pwm: stm32: Make use of pwmchip_parent() macro
+  pwm: stmpe: Make use of pwmchip_parent() macro
+  pwm: sun4i: Make use of pwmchip_parent() macro
+  pwm: tiecap: Make use of pwmchip_parent() macro
+  pwm: tiehrpwm: Make use of pwmchip_parent() macro
+  pwm: twl-led: Make use of pwmchip_parent() macro
+  pwm: twl: Make use of pwmchip_parent() macro
+  pwm: vt8500: Make use of pwmchip_parent() macro
+  drm/bridge: ti-sn65dsi86: Make use of pwmchip_parent() macro
+  staging: greybus: pwm: Make use of pwmchip_parent() macro
+  pwm: Provide wrappers for storing and getting driver private data
+  pwm: Provide devm_pwmchip_alloc() function
+  pwm: ab8500: Make use of devm_pwmchip_alloc() function
+  pwm: apple: Make use of devm_pwmchip_alloc() function
+  pwm: atmel-hlcdc: Make use of devm_pwmchip_alloc() function
+  pwm: atmel: Make use of devm_pwmchip_alloc() function
+  pwm: atmel-tcb: Make use of devm_pwmchip_alloc() function
+  pwm: bcm2835: Make use of devm_pwmchip_alloc() function
+  pwm: bcm-iproc: Make use of devm_pwmchip_alloc() function
+  pwm: bcm-kona: Make use of devm_pwmchip_alloc() function
+  pwm: berlin: Make use of devm_pwmchip_alloc() function
+  pwm: brcmstb: Make use of devm_pwmchip_alloc() function
+  pwm: clk: Make use of devm_pwmchip_alloc() function
+  pwm: clps711x: Make use of devm_pwmchip_alloc() function
+  pwm: crc: Make use of devm_pwmchip_alloc() function
+  pwm: cros-ec: Make use of devm_pwmchip_alloc() function
+  pwm: dwc: Make use of devm_pwmchip_alloc() function
+  pwm: ep93xx: Make use of devm_pwmchip_alloc() function
+  pwm: fsl-ftm: Make use of devm_pwmchip_alloc() function
+  pwm: hibvt: Make use of devm_pwmchip_alloc() function
+  pwm: img: Make use of devm_pwmchip_alloc() function
+  pwm: imx1: Make use of devm_pwmchip_alloc() function
+  pwm: imx27: Make use of devm_pwmchip_alloc() function
+  pwm: imx-tpm: Make use of devm_pwmchip_alloc() function
+  pwm: intel-lgm: Make use of devm_pwmchip_alloc() function
+  pwm: iqs620a: Make use of devm_pwmchip_alloc() function
+  pwm: jz4740: Make use of devm_pwmchip_alloc() function
+  pwm: keembay: Make use of devm_pwmchip_alloc() function
+  pwm: lp3943: Make use of devm_pwmchip_alloc() function
+  pwm: lpc18xx-sct: Make use of devm_pwmchip_alloc() function
+  pwm: lpc32xx: Make use of devm_pwmchip_alloc() function
+  pwm: lpss-*: Make use of devm_pwmchip_alloc() function
+  pwm: mediatek: Make use of devm_pwmchip_alloc() function
+  pwm: meson: Make use of devm_pwmchip_alloc() function
+  pwm: microchip-core: Make use of devm_pwmchip_alloc() function
+  pwm: mtk-disp: Make use of devm_pwmchip_alloc() function
+  pwm: mxs: Make use of devm_pwmchip_alloc() function
+  pwm: ntxec: Make use of devm_pwmchip_alloc() function
+  pwm: omap-dmtimer: Make use of devm_pwmchip_alloc() function
+  pwm: pca9685: Make use of devm_pwmchip_alloc() function
+  pwm: pxa: Make use of devm_pwmchip_alloc() function
+  pwm: raspberrypi-poe: Make use of devm_pwmchip_alloc() function
+  pwm: rcar: Make use of devm_pwmchip_alloc() function
+  pwm: renesas-tpu: Make use of devm_pwmchip_alloc() function
+  pwm: rockchip: Make use of devm_pwmchip_alloc() function
+  pwm: rz-mtu3: Make use of devm_pwmchip_alloc() function
+  pwm: samsung: Make use of devm_pwmchip_alloc() function
+  pwm: sifive: Make use of devm_pwmchip_alloc() function
+  pwm: sl28cpld: Make use of devm_pwmchip_alloc() function
+  pwm: spear: Make use of devm_pwmchip_alloc() function
+  pwm: sprd: Make use of devm_pwmchip_alloc() function
+  pwm: sti: Make use of devm_pwmchip_alloc() function
+  pwm: stm32-lp: Make use of devm_pwmchip_alloc() function
+  pwm: stm32: Make use of devm_pwmchip_alloc() function
+  pwm: stmpe: Make use of devm_pwmchip_alloc() function
+  pwm: sun4i: Make use of devm_pwmchip_alloc() function
+  pwm: sunplus: Make use of devm_pwmchip_alloc() function
+  pwm: tegra: Make use of devm_pwmchip_alloc() function
+  pwm: tiecap: Make use of devm_pwmchip_alloc() function
+  pwm: twl-led: Make use of devm_pwmchip_alloc() function
+  pwm: twl: Make use of devm_pwmchip_alloc() function
+  pwm: visconti: Make use of devm_pwmchip_alloc() function
+  pwm: vt8500: Make use of devm_pwmchip_alloc() function
+  pwm: xilinx: Make use of devm_pwmchip_alloc() function
+  gpio: mvebu: Make use of devm_pwmchip_alloc() function
+  drm/bridge: ti-sn65dsi86: Make use of devm_pwmchip_alloc() function
+  leds: qcom-lpg: Make use of devm_pwmchip_alloc() function
+  staging: greybus: pwm: Make use of devm_pwmchip_alloc() function
+  pwm: Ensure that pwm_chips are allocated using pwmchip_alloc()
+  pwm: Ensure a struct pwm has the same lifetime as its pwm_chip
+  pwm: Ensure the memory backing a PWM chip isn't freed while used
+  pwm: Make pwmchip_[sg]et_drvdata() a wrapper around dev_set_drvdata()
+  WIP: pwm: Add support for pwmchip devices for faster and easier
+    userspace access
 
->
->
-> > The rest is at platform device probe. Without a static, there are no
-> > way to pass the struct clk_hw_onecell_data from one to the other.
-> >=20
-> > I've looked at all clock drivers that do CLK_OF_DECLARE_DRIVER() and
-> > register a platform driver.
->
-> Even though the code is correct, using arguments "other did it" will not
-> work. You want to say that you implement legacy, poor code because you
-> saw legacy, poor code?
+ .../driver-api/driver-model/devres.rst        |   1 +
+ Documentation/driver-api/pwm.rst              |  10 +-
+ drivers/gpio/gpio-mvebu.c                     |  18 +-
+ drivers/gpu/drm/bridge/ti-sn65dsi86.c         |  31 +-
+ drivers/leds/rgb/leds-qcom-lpg.c              |  16 +-
+ drivers/pwm/Kconfig                           |   4 -
+ drivers/pwm/Makefile                          |   3 +-
+ drivers/pwm/core.c                            | 958 ++++++++++++------
+ drivers/pwm/pwm-ab8500.c                      |  36 +-
+ drivers/pwm/pwm-apple.c                       |  18 +-
+ drivers/pwm/pwm-atmel-hlcdc.c                 |  35 +-
+ drivers/pwm/pwm-atmel-tcb.c                   |  26 +-
+ drivers/pwm/pwm-atmel.c                       |  37 +-
+ drivers/pwm/pwm-bcm-iproc.c                   |  19 +-
+ drivers/pwm/pwm-bcm-kona.c                    |  21 +-
+ drivers/pwm/pwm-bcm2835.c                     |  19 +-
+ drivers/pwm/pwm-berlin.c                      |  29 +-
+ drivers/pwm/pwm-brcmstb.c                     |  17 +-
+ drivers/pwm/pwm-clk.c                         |  27 +-
+ drivers/pwm/pwm-clps711x.c                    |  17 +-
+ drivers/pwm/pwm-crc.c                         |  22 +-
+ drivers/pwm/pwm-cros-ec.c                     |  58 +-
+ drivers/pwm/pwm-dwc-core.c                    |  25 +-
+ drivers/pwm/pwm-dwc.c                         |  18 +-
+ drivers/pwm/pwm-dwc.h                         |   9 +-
+ drivers/pwm/pwm-ep93xx.c                      |  21 +-
+ drivers/pwm/pwm-fsl-ftm.c                     |  48 +-
+ drivers/pwm/pwm-hibvt.c                       |  25 +-
+ drivers/pwm/pwm-img.c                         |  51 +-
+ drivers/pwm/pwm-imx-tpm.c                     |  34 +-
+ drivers/pwm/pwm-imx1.c                        |  20 +-
+ drivers/pwm/pwm-imx27.c                       |  26 +-
+ drivers/pwm/pwm-intel-lgm.c                   |  17 +-
+ drivers/pwm/pwm-iqs620a.c                     |  37 +-
+ drivers/pwm/pwm-jz4740.c                      |  36 +-
+ drivers/pwm/pwm-keembay.c                     |  17 +-
+ drivers/pwm/pwm-lp3943.c                      |  17 +-
+ drivers/pwm/pwm-lpc18xx-sct.c                 |  35 +-
+ drivers/pwm/pwm-lpc32xx.c                     |  21 +-
+ drivers/pwm/pwm-lpss-pci.c                    |  10 +-
+ drivers/pwm/pwm-lpss-platform.c               |  10 +-
+ drivers/pwm/pwm-lpss.c                        |  34 +-
+ drivers/pwm/pwm-lpss.h                        |   1 -
+ drivers/pwm/pwm-mediatek.c                    |  29 +-
+ drivers/pwm/pwm-meson.c                       |  57 +-
+ drivers/pwm/pwm-microchip-core.c              |  17 +-
+ drivers/pwm/pwm-mtk-disp.c                    |  25 +-
+ drivers/pwm/pwm-mxs.c                         |  32 +-
+ drivers/pwm/pwm-ntxec.c                       |  30 +-
+ drivers/pwm/pwm-omap-dmtimer.c                |  47 +-
+ drivers/pwm/pwm-pca9685.c                     |  98 +-
+ drivers/pwm/pwm-pxa.c                         |  19 +-
+ drivers/pwm/pwm-raspberrypi-poe.c             |  20 +-
+ drivers/pwm/pwm-rcar.c                        |  25 +-
+ drivers/pwm/pwm-renesas-tpu.c                 |  18 +-
+ drivers/pwm/pwm-rockchip.c                    |  24 +-
+ drivers/pwm/pwm-rz-mtu3.c                     |  39 +-
+ drivers/pwm/pwm-samsung.c                     |  57 +-
+ drivers/pwm/pwm-sifive.c                      |  30 +-
+ drivers/pwm/pwm-sl28cpld.c                    |  13 +-
+ drivers/pwm/pwm-spear.c                       |  18 +-
+ drivers/pwm/pwm-sprd.c                        |  50 +-
+ drivers/pwm/pwm-sti.c                         |  34 +-
+ drivers/pwm/pwm-stm32-lp.c                    |  29 +-
+ drivers/pwm/pwm-stm32.c                       |  53 +-
+ drivers/pwm/pwm-stmpe.c                       |  58 +-
+ drivers/pwm/pwm-sun4i.c                       |  38 +-
+ drivers/pwm/pwm-sunplus.c                     |  17 +-
+ drivers/pwm/pwm-tegra.c                       |  27 +-
+ drivers/pwm/pwm-tiecap.c                      |  55 +-
+ drivers/pwm/pwm-tiehrpwm.c                    |  72 +-
+ drivers/pwm/pwm-twl-led.c                     |  58 +-
+ drivers/pwm/pwm-twl.c                         |  50 +-
+ drivers/pwm/pwm-visconti.c                    |  17 +-
+ drivers/pwm/pwm-vt8500.c                      |  41 +-
+ drivers/pwm/pwm-xilinx.c                      |  34 +-
+ drivers/pwm/sysfs.c                           |  64 +-
+ drivers/staging/greybus/pwm.c                 | 130 +--
+ include/linux/platform_data/x86/pwm-lpss.h    |   4 +-
+ include/linux/pwm.h                           |  39 +-
+ include/uapi/linux/pwm.h                      |  23 +
+ 81 files changed, 1870 insertions(+), 1555 deletions(-)
+ create mode 100644 include/uapi/linux/pwm.h
 
-Yes I see what you mean. It's just that this is not the sort of things
-that are documented. And learning The Right Way(TM) when you don't know
-it can only be done by looking at existing stuff. I'm being exhaustive
-to avoid basing my approach on one old-school driver that is using the
-wrong approach.
 
-> >> ...
-> >>
-> >>> +static void __init eq5c_init(struct device_node *np)
-> >>> +{
-> >>> +	struct device_node *parent_np =3D of_get_parent(np);
-> >>> +	int i, ret;
-> >>> +
-> >>> +	eq5c_clk_data =3D kzalloc(struct_size(eq5c_clk_data, hws, EQ5C_NB_C=
-LKS),
-> >>> +				GFP_KERNEL);
-> >>> +	if (!eq5c_clk_data) {
-> >>> +		ret =3D -ENOMEM;
-> >>> +		goto err;
-> >>> +	}
-> >>> +
-> >>> +	eq5c_clk_data->num =3D EQ5C_NB_CLKS;
-> >>> +
-> >>> +	/*
-> >>> +	 * Mark all clocks as deferred. We register some now and others at
-> >>> +	 * platform device probe.
-> >>> +	 */
-> >>> +	for (i =3D 0; i < EQ5C_NB_CLKS; i++)
-> >>> +		eq5c_clk_data->hws[i] =3D ERR_PTR(-EPROBE_DEFER);
-> >>> +
-> >>> +	/*
-> >>> +	 * Currently, if OLB is not available, we log an error, fail init t=
-hen
-> >>
-> >> How it could be not available? Only with broken initcall ordering. Fix
-> >> your initcall ordering and then simplify all this weird code.
-> >=20
-> > of_syscon_register() and regmap_init_mmio() lists many reasons for
-> > it to not be available. Am I missing something?
->
-> Yes, initcall ordering.
+base-commit: 6530623212338fc0902e211ea624e790aacb00ef
+-- 
+2.43.0
 
-You said the regmap can only not be available with broken initcall
-ordering. I say that is not the only reason.
-
-About initcall, I've removed those that used initcall in the three
-drivers I'm using except this clk one that requires two clocks at
-of_clk_init().
-
-Thanks,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
 
