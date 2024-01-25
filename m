@@ -1,55 +1,63 @@
-Return-Path: <linux-mips+bounces-1155-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1156-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A831A83C47F
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 15:14:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0127183C4C5
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 15:34:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B6521F23A45
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 14:14:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33ECB1C24693
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 14:34:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 716F663404;
-	Thu, 25 Jan 2024 14:14:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F17EB6E2B7;
+	Thu, 25 Jan 2024 14:34:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="nSMrqxBc"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="S3i9JLAF"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E01AC5B5D3;
-	Thu, 25 Jan 2024 14:14:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E7E06340E;
+	Thu, 25 Jan 2024 14:34:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706192081; cv=none; b=lGVWNjeLYCZo+dH4/FUaF3uNtu7SKGH49ejT2b6JdL9fnWR5qwGmBvuUPMqtJtRM+hhHWZp9hHsuucqifrhDhglDixzEWlFXMBJpg6AzMZOG8hVBXcph6OqK3RGwrtvsSaTva6Bm707z/DytK31ohaeSjCcqqZSwb+czhwcSlrc=
+	t=1706193263; cv=none; b=WxAK+zfgQ9/7kUfb1UAiPxLR4L110H7X9Fyr6bB7cykK7DDYKFit4l5T4EpGS5HdIKldePBNfM7pG9nxrgo5d8xIjKeAqAGV/60Q2A+Yo0DAXBLJMHVpGw+gXPV7/3n80/UOW0tbuy7DA2e/o3kOtXnEd9XWjyvtUq7a3qbF8yM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706192081; c=relaxed/simple;
-	bh=xuWotEzSelSVBqWujYKbIOXX960an6aLcCPwqSUkjtM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tuhY37Y1Q0s291OOZVZY8I/LCr+s92HoPZ28EIeFJOnG1jhSuxVj+7fqAP8vHMs3NPPUevdXBUD93k2KfSsmakanmLptsjTD1sXkYeu8RpRc8pRT0j24HuOQoWlkxBZ2LghapMWAJDhNixpQ2yhH+22GGbdmftEQIue9rWIQtvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=nSMrqxBc; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1706192078;
-	bh=xuWotEzSelSVBqWujYKbIOXX960an6aLcCPwqSUkjtM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=nSMrqxBc5B0zoxSh7oM+5Fjyr3Ev/UxHPkW05LIh9tqvVs8PD+gCaNAqlz5QsrhBH
-	 HbSRK9bawmsg86dsQH2IjMpDCUePRyRF5oM8aEVzAti4uMMz1HRIpPYLi32u2KBQJ+
-	 AliVBErnUM3jUPU81ZHJPCNYmhPMgUeAyPCVcAL4Hih1LBsQ2CGmIALnpwgLpButSL
-	 rbFGcAbYC6BY3TnD/ujgbQgo1zc9++xbkTUK6KOdcjliB5wx4T3j9bIncv2DioZft3
-	 9ALNYJlMlexd763yE/DkmWdIt93ZLBCvhepEUEmz9UsnHPTMiD95fyECCAAuyLjyhN
-	 8xG5LCL5+b38A==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 3B7E43782057;
-	Thu, 25 Jan 2024 14:14:35 +0000 (UTC)
-Message-ID: <4079a650-74a6-49bc-87a9-c5729fb6e8d1@collabora.com>
-Date: Thu, 25 Jan 2024 15:14:35 +0100
+	s=arc-20240116; t=1706193263; c=relaxed/simple;
+	bh=sjdoDcDKRSkLx4UDwlfMTbTX9nBFU/s/iUda1EdkDKI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=qJIJSZZUEJHZTY8VFpnEjAk5ckf87uk87Gjro66U01/dzO+ooA6SJuEE8F+sRaef1WiAf1SJBViT+n0SBygWbQ8tdEI1m9eee1u2PUaR4MCQ30kyPEFvHGO4uDpOsXuwy0UCTOywWfVlsLZt4D+AeZoxqN1c7cy54C7sGMkKgiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=S3i9JLAF; arc=none smtp.client-ip=198.47.19.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 40PEXsZn003349;
+	Thu, 25 Jan 2024 08:33:54 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1706193234;
+	bh=D3et9L4RHHyPosS3VDVQzoYncrvITyHk1dVQbc6iud8=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=S3i9JLAFv/yOUIvqQltF0KZwma/RCvGqNExNYIpZXMRkFerkygu+XtgdcXNRAe/E+
+	 wMDR0ducWngXiGpABRGbxXH4nLQRLmbwhH60TRobQknis7fiOEVs5mHMh84B029fzV
+	 47V1e2KNcoFTOsmivniaScYuG/FFSc8Dt+hDFr9k=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 40PEXsPY129184
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 25 Jan 2024 08:33:54 -0600
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 25
+ Jan 2024 08:33:54 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 25 Jan 2024 08:33:54 -0600
+Received: from [10.249.42.149] ([10.249.42.149])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 40PEXr4k008480;
+	Thu, 25 Jan 2024 08:33:53 -0600
+Message-ID: <9a5f017c-530c-482b-9cbf-a07281e92589@ti.com>
+Date: Thu, 25 Jan 2024 08:33:53 -0600
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -57,88 +65,107 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 003/111] pwm: Provide a macro to get the parent device
- of a given chip
+Subject: Re: [PATCH v3 04/17] dt-bindings: soc: mobileye: add EyeQ5 OLB system
+ controller
+To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+        Krzysztof
+ Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+CC: Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Michael Turquette
+	<mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Linus
+ Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
+	<rafal@milecki.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Vladimir
+ Kondratiev <vladimir.kondratiev@mobileye.com>,
+        <linux-mips@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Thomas Petazzoni
+	<thomas.petazzoni@bootlin.com>,
+        Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+        <linux-gpio@vger.kernel.org>
+References: <20240123-mbly-clk-v3-0-392b010b8281@bootlin.com>
+ <20240123-mbly-clk-v3-4-392b010b8281@bootlin.com>
+ <20240124151405.GA930997-robh@kernel.org>
+ <dd7e723d-3c4c-4edf-afc2-51db9a074efa@linaro.org>
+ <CYNQHXOZ73YR.3QODFI2X08KC6@bootlin.com>
 Content-Language: en-US
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- linux-pwm@vger.kernel.org, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- Benson Leung <bleung@chromium.org>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>, Paul Cercueil <paul@crapouillou.net>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Kevin Hilman <khilman@baylibre.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley
- <paul.walmsley@sifive.com>, Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>, Chen-Yu Tsai
- <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Samuel Holland <samuel@sholland.org>, Andrzej Hajda
- <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Guenter Roeck
- <groeck@chromium.org>, chrome-platform@lists.linux.dev,
- Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>,
- linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
- Jerome Brunet <jbrunet@baylibre.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- linux-amlogic@lists.infradead.org, linux-rpi-kernel@lists.infradead.org,
- Alim Akhtar <alim.akhtar@samsung.com>, linux-samsung-soc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-sunxi@lists.linux.dev, Douglas Anderson <dianders@chromium.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, dri-devel@lists.freedesktop.org,
- greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev
-References: <cover.1706182805.git.u.kleine-koenig@pengutronix.de>
- <1cae6f73264ab313205eaa9483251f7aaf259cb4.1706182805.git.u.kleine-koenig@pengutronix.de>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <1cae6f73264ab313205eaa9483251f7aaf259cb4.1706182805.git.u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Andrew Davis <afd@ti.com>
+In-Reply-To: <CYNQHXOZ73YR.3QODFI2X08KC6@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Il 25/01/24 13:08, Uwe Kleine-König ha scritto:
-> Currently a pwm_chip stores in its struct device *dev member a pointer
-> to the parent device. Preparing a change that embeds a full struct
-> device in struct pwm_chip, this accessor macro should be used in all
-> drivers directly accessing chip->dev now. This way struct pwm_chip and
-> this macro can be changed without having to touch all drivers in the
-> same change set.
+On 1/25/24 5:01 AM, Théo Lebrun wrote:
+> Hello,
 > 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-> ---
->   include/linux/pwm.h | 5 +++++
->   1 file changed, 5 insertions(+)
+> On Thu Jan 25, 2024 at 8:51 AM CET, Krzysztof Kozlowski wrote:
+>> On 24/01/2024 16:14, Rob Herring wrote:
+>>>> +
+>>>> +      pinctrl-b {
+>>>> +        compatible = "mobileye,eyeq5-b-pinctrl";
+>>>> +        #pinctrl-cells = <1>;
+>>>> +      };
+>>>> +    };
+>>>
+>>> This can all be simplified to:
+>>>
+>>> system-controller@e00000 {
+>>>      compatible = "mobileye,eyeq5-olb", "syscon";
+>>>      reg = <0xe00000 0x400>;
+>>>      #reset-cells = <2>;
+>>>      #clock-cells = <1>;
+>>>      clocks = <&xtal>;
+>>>      clock-names = "ref";
+>>>
+>>>      pins { ... };
+>>> };
+>>>
+>>> There is no need for sub nodes unless you have reusable blocks or each
+>>> block has its own resources in DT.
+>>
+>> Yes, however I believe there should be resources here: each subnode
+>> should get its address space. This is a bit tied to implementation,
+>> which currently assumes "everyone can fiddle with everything" in this block.
+>>
+>> Theo, can you draw memory map?
 > 
-> diff --git a/include/linux/pwm.h b/include/linux/pwm.h
-> index 8ffe9ae7a23a..d7966918f301 100644
-> --- a/include/linux/pwm.h
-> +++ b/include/linux/pwm.h
-> @@ -289,6 +289,11 @@ struct pwm_chip {
->   	struct pwm_device *pwms;
->   };
->   
-> +static inline struct device *pwmchip_parent(struct pwm_chip *chip)
-> +{
-> +	return chip->dev;
-> +}
-> +
->   #if IS_ENABLED(CONFIG_PWM)
->   /* PWM user APIs */
->   int pwm_apply_might_sleep(struct pwm_device *pwm, const struct pwm_state *state);
+> It would be a mess. I've counted things up. The first 147 registers are
+> used in this 0x400 block. There are 31 individual blocks, with 7
+> registers unused (holes to align next block).
+> 
+> Functions are reset, clocks, LBIST, MBIST, DDR control, GPIO,
+> accelerator control, CPU entrypoint, PDTrace, IRQs, chip info & ID
+> stuff, control registers for PCIe / eMMC / Eth / SGMII / DMA / etc.
+> 
+> Some will never get used from Linux, others might. Maybe a moderate
+> approach would be to create ressources for major blocks and make it
+> evolve organically, without imposing that all uses lead to a new
+> ressource creation.
+> 
 
+That is usually how nodes are added to DT. If you modeled this
+system-controller space as a "simple-bus" instead of a "syscon"
+device, you could add nodes as you implement them. Rather than
+all at once as you have to by treating this space as one large
+blob device.
 
+Andrew
 
+> Thanks,
+> 
+> --
+> Théo Lebrun, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> 
 
