@@ -1,137 +1,112 @@
-Return-Path: <linux-mips+bounces-1141-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1142-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FCC983C056
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 12:10:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D21CA83C10F
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 12:39:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 428461C23A6F
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 11:10:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D42D1C2434A
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 11:39:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3423D45020;
-	Thu, 25 Jan 2024 11:01:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="MfjLijkO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CA6E50A6C;
+	Thu, 25 Jan 2024 11:36:36 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A061BDCA;
-	Thu, 25 Jan 2024 11:01:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F1CC5024C;
+	Thu, 25 Jan 2024 11:36:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706180473; cv=none; b=ufP5h4zqxySHxmc/3uYd6G2nGuwhem1oF4OixzXzSp9viYyvSdPVHLRzplRzWw9Kc/LUOOhIY7RK6spDFk5YEC0bKfJE3JCmzRWSMevxjxKBtQjZiP//4a6p0Vqr9vgLout+kD5aRJaXy8EXCwFYpyYWiGw3HRjftuYVhkYUchM=
+	t=1706182596; cv=none; b=VX9/Ipdr2oErbG9vn0s2osSaVUHxChMoGSwGj7aF0sZYM6jqr2JVEW1sgJQRymezWAjhaxYv3YWfDdfUViMMFMT8UJenTJvjVKq/I7LjxFWJjSuyR1GDYkUcqBNxVrKTEJ53BZFumOhobt94uwxfilBAf4CmiEs6V0GDipwRA1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706180473; c=relaxed/simple;
-	bh=YSxa/mMSgqpJQW+2kobPEHT7Vxr7BU0VRT1lEHw89/8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=o6UdvLhBpA6I7ZHZt5F7piMDaQ0k6wnYyLNup8JndyrTqlPqj+8lrrsrOmuwcP/tqs/qYdiX86d2bDNFx6c+dkVOVxzs3yngGrsfHm+BxzIg+M5/I4TtWo2C54sPefYFOEeoem48N8O0e04UPuQElGwOwYjF99jDNGspWksCbzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=MfjLijkO; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C16C3E0007;
-	Thu, 25 Jan 2024 11:01:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1706180467;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0WPcj9jp5TczMii0r01DGB7rL3rO4+5GSU7rJ/lR9/s=;
-	b=MfjLijkO2Rs/IJY59mGODNP/JT6HojMlLEygWWr5DF4P1y0IIez1TW8cVbD6TDFRHWVTKi
-	PR3KcjQR2MWWU75NdypK99FP5jLTmpxeUFGB/PboMU9DRs8TT12e/NG3cxNsZlYZJrxemH
-	4D6PuAiSzlf8BwD9Xlu1994KMwwrs4Gy2NidmNbl4HZ6zzjdGAFii2WJAG4MH4ilF+6G+W
-	H73hkH12M/633aKMyZynCItrWYvFM7JbX3251ecZAZvm6GSgwYKauN4igXpCn9hiTqKaFf
-	V8ynQBqZaDO+R+kFRJQdbUzuQlHTOMFGwxJ/fpG2i+HjY7D/nYuPNbuVoKWV4A==
+	s=arc-20240116; t=1706182596; c=relaxed/simple;
+	bh=4HZ6LMP37IcwPkXqZh1K7dcLuHsGoI/e2qFkxyf+aCg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=th/JcoqWd3CzLMLCURYzHAOf+1SrX2I3TUIh2L59qVFnB+EGh44ZzLd+XIeeRLLJmK1aHxOIIMFiNfzYfGR5vQINZ/7NcgtU/hce0OV/4JNq0xj95QnM0LYwgqvT16PwYDFMTuehq6wPQjwqFCj9qmC8hYNi06tHZKbl0Ykalqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.2.5.213])
+	by gateway (Coremail) with SMTP id _____8CxF+i4R7Jl3ZcFAA--.1237S3;
+	Thu, 25 Jan 2024 19:36:24 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.2.5.213])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxXs23R7Jl9W0ZAA--.41879S2;
+	Thu, 25 Jan 2024 19:36:23 +0800 (CST)
+From: Bibo Mao <maobibo@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Thomas Gleixner <tglx@linutronix.de>
+Cc: linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sergey Shtylyov <s.shtylyov@omp.ru>,
+	lvjianmin@loongson.cn
+Subject: [PATCH v4 0/3] irqchip/loongson-eiointc: Refine irq affinity setting during resume
+Date: Thu, 25 Jan 2024 19:36:20 +0800
+Message-Id: <20240125113623.2043061-1-maobibo@loongson.cn>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 25 Jan 2024 12:01:06 +0100
-Message-Id: <CYNQHXOZ73YR.3QODFI2X08KC6@bootlin.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v3 04/17] dt-bindings: soc: mobileye: add EyeQ5 OLB
- system controller
-Cc: "Gregory CLEMENT" <gregory.clement@bootlin.com>, "Michael Turquette"
- <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
- <conor+dt@kernel.org>, "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>, "Philipp Zabel"
- <p.zabel@pengutronix.de>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, <linux-mips@vger.kernel.org>,
- <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>, <linux-gpio@vger.kernel.org>
-To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Rob Herring"
- <robh@kernel.org>
-X-Mailer: aerc 0.15.2
-References: <20240123-mbly-clk-v3-0-392b010b8281@bootlin.com>
- <20240123-mbly-clk-v3-4-392b010b8281@bootlin.com>
- <20240124151405.GA930997-robh@kernel.org>
- <dd7e723d-3c4c-4edf-afc2-51db9a074efa@linaro.org>
-In-Reply-To: <dd7e723d-3c4c-4edf-afc2-51db9a074efa@linaro.org>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8BxXs23R7Jl9W0ZAA--.41879S2
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7tFWUAFWxCFy8trWrWF1xJFc_yoW8Xr1fpr
+	WfCasIkr4DAry29a4fGw18K3WSvrsYvrZrJa95G3yxAwn8u34DKr4rtF10vrW7CrW7Ja12
+	qF45Wr48uFn8C3XCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUU9Fb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+	XVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
+	AKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v2
+	6r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
+	CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
+	0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
+	AIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2
+	KfnxnUUI43ZEXa7IU8CksDUUUUU==
 
-Hello,
+During suspend and resume, other CPUs are hot-unpluged and IRQs are
+migrated to CPU0. So it is not necessary to restore irq affinity for
+eiointc irq controller.
 
-On Thu Jan 25, 2024 at 8:51 AM CET, Krzysztof Kozlowski wrote:
-> On 24/01/2024 16:14, Rob Herring wrote:
-> >> +
-> >> +      pinctrl-b {
-> >> +        compatible =3D "mobileye,eyeq5-b-pinctrl";
-> >> +        #pinctrl-cells =3D <1>;
-> >> +      };
-> >> +    };
-> >=20
-> > This can all be simplified to:
-> >=20
-> > system-controller@e00000 {
-> >     compatible =3D "mobileye,eyeq5-olb", "syscon";
-> >     reg =3D <0xe00000 0x400>;
-> >     #reset-cells =3D <2>;
-> >     #clock-cells =3D <1>;
-> >     clocks =3D <&xtal>;
-> >     clock-names =3D "ref";
-> >=20
-> >     pins { ... };
-> > };
-> >=20
-> > There is no need for sub nodes unless you have reusable blocks or each=
-=20
-> > block has its own resources in DT.
->
-> Yes, however I believe there should be resources here: each subnode
-> should get its address space. This is a bit tied to implementation,
-> which currently assumes "everyone can fiddle with everything" in this blo=
-ck.
->
-> Theo, can you draw memory map?
+Also there is small optimization for the interrupt dispatch function
+eiointc_irq_dispatch. For example there are 256 IRQs supported for
+eiointc on Loongson 3A5000 and 2K2000 system, 128 IRQs on 2K0500 platform,
+eiointc irq handler reads the bitmap and find pending irqs when irq
+happens. So there are four times of consecutive iocsr_read64 operations
+for all the bits to find all pending irqs. If the pending bitmap is zero,
+it means that there is no pending irq for the this irq bitmap range, we
+can skip handling to avoid some useless operations such as clearing hw ISR.
 
-It would be a mess. I've counted things up. The first 147 registers are
-used in this 0x400 block. There are 31 individual blocks, with 7
-registers unused (holes to align next block).
+---
+ Changes in v4:
+  1. Adjust order of the patch and put the simple patch as first one.
+  2. Modify comments in function eiointc_irq_dispatch suitable for all
+hw platforms.
+   
+ Changes in v3:
+   Split the patch into three small patches
 
-Functions are reset, clocks, LBIST, MBIST, DDR control, GPIO,
-accelerator control, CPU entrypoint, PDTrace, IRQs, chip info & ID
-stuff, control registers for PCIe / eMMC / Eth / SGMII / DMA / etc.
+ Changes in v2:
+   Modify changelog and comments
+---
+Bibo Mao (3):
+  irqchip/loongson-eiointc: Typo fix in function eiointc_domain_alloc
+  irqchip/loongson-eiointc: Skip handling if there is no pending irq
+  irqchip/loongson-eiointc: Refine irq affinity setting during resume
 
-Some will never get used from Linux, others might. Maybe a moderate
-approach would be to create ressources for major blocks and make it
-evolve organically, without imposing that all uses lead to a new
-ressource creation.
+ drivers/irqchip/irq-loongson-eiointc.c | 24 +++++++-----------------
+ 1 file changed, 7 insertions(+), 17 deletions(-)
 
-Thanks,
 
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+base-commit: 615d300648869c774bd1fe54b4627bb0c20faed4
+-- 
+2.39.3
+
 
