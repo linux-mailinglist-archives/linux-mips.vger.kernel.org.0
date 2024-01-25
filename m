@@ -1,31 +1,31 @@
-Return-Path: <linux-mips+bounces-1152-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1149-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20A5A83C24F
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 13:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E393D83C1EB
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 13:11:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 453FC1C223D3
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 12:14:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 233001C224AC
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 12:11:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B19B83F8CA;
-	Thu, 25 Jan 2024 12:14:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AC263D99E;
+	Thu, 25 Jan 2024 12:10:59 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5061CF96
-	for <linux-mips@vger.kernel.org>; Thu, 25 Jan 2024 12:14:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6549247F50
+	for <linux-mips@vger.kernel.org>; Thu, 25 Jan 2024 12:10:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706184866; cv=none; b=rXMXVkWfz0Yh7TpMjiYR6jmf5xs28nxibpYOEynRvwUggKp2UoQpQ6d70pCyPM65VHbiDJUO60hNX7agfHn0tTzvQZCHHFnQu5+gTcASxCVQ6lUovPamwyw7WQ1IWhAaN1BJ5M/9XQX3a+OLrh1ibD5wO5hu8IsH7ZLZNAOVWzc=
+	t=1706184659; cv=none; b=BVf8bgUmIsbUvirb6SODfuB6O4DesnLHdnZL5Ez8ppywTkzrx/Pu6MPcVQI9RbfUBpsuwrs6dthDpfu3ehmueLrjIH2x94pwmv83dD9+B5c43o6gFyevws0a3GgqwbrMiDyUD+GHrMt1YbG4E9F6RTbhp98zyRda/krRA9mGwfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706184866; c=relaxed/simple;
-	bh=Y70kt1S+wDMGZ2Y6dT7JBGkOh38DPB/mz0c9lW1w+go=;
+	s=arc-20240116; t=1706184659; c=relaxed/simple;
+	bh=XNZvdNvoFWfhcTgC23QnqOOAiS5t8GlSW4OiyL8hcOA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AAumDYXOunXlcD2O0nnIGAeeIoOHRbOvlUaAKPVsE16+kZcfUVc4YBt2YErn+7i81eS3ljO41V0Q8Urrm6fTITFSGecJnslL90K84s+wC7NxfAfhFhoE+RdaiBb7XceS/gDCblIvwsNSul6VwdP66ivCRlUgDHN4QTU4SrxNxVE=
+	 MIME-Version:Content-Type; b=Cu8/jcdVMXAGlGq86E2OPXOmgQQh9YxB5YzdrdWbYNMoJbRj04e7bW9Ofn9xDKrTicZ3KJUHTx57Tu0SgSn5sOG1EBAN3rD5HfUZfQkWP/k/crGYYmsKfZf7X89KLWa/Zfuz97Qf+9iDebwS+ZBGqLa0AzNcS4vw4e9L+VsCOck=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,120 +33,24 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rSyZH-00049s-NK; Thu, 25 Jan 2024 13:10:51 +0100
+	id 1rSyZJ-0004O7-U8; Thu, 25 Jan 2024 13:10:53 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rSyZE-002HRD-5b; Thu, 25 Jan 2024 13:10:48 +0100
+	id 1rSyZI-002HSv-Qs; Thu, 25 Jan 2024 13:10:52 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rSyZD-007n0n-33;
-	Thu, 25 Jan 2024 13:10:47 +0100
+	id 1rSyZI-007n2W-2Q;
+	Thu, 25 Jan 2024 13:10:52 +0100
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Jonathan Corbet <corbet@lwn.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	James Clark <james.clark@arm.com>,
-	linux-pwm@vger.kernel.org,
-	Hector Martin <marcan@marcan.st>,
-	Sven Peter <sven@svenpeter.dev>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Alexander Shiyan <shc_work@mail.ru>,
-	Benson Leung <bleung@chromium.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	=?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	=?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Michael Walle <mwalle@kernel.org>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Hammer Hsieh <hammerh0314@gmail.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-	Sean Anderson <sean.anderson@seco.com>,
-	Michal Simek <michal.simek@amd.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Robert Foss <rfoss@kernel.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Pavel Machek <pavel@ucw.cz>,
-	Lee Jones <lee@kernel.org>,
-	Anjelique Melendez <quic_amelende@quicinc.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Lu Hongfei <luhongfei@vivo.com>,
-	Bjorn Andersson <quic_bjorande@quicinc.com>,
-	Luca Weiss <luca@z3ntu.xyz>,
-	Johan Hovold <johan@kernel.org>,
-	Alex Elder <elder@kernel.org>
-Cc: linux-doc@vger.kernel.org,
-	kernel@pengutronix.de,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	asahi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	linux-rpi-kernel@lists.infradead.org,
-	Guenter Roeck <groeck@chromium.org>,
-	chrome-platform@lists.linux.dev,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	linux-mips@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	linux-amlogic@lists.infradead.org,
-	linux-riscv@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	linux-samsung-soc@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-sunxi@lists.linux.dev,
-	linux-tegra@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	Douglas Anderson <dianders@chromium.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	dri-devel@lists.freedesktop.org,
-	linux-leds@vger.kernel.org,
-	greybus-dev@lists.linaro.org,
-	linux-staging@lists.linux.dev
-Subject: [PATCH v5 040/111] pwm: Provide devm_pwmchip_alloc() function
-Date: Thu, 25 Jan 2024 13:09:02 +0100
-Message-ID:  <f59b1a4a8d6fba65e4d3e8698310c9cb1d4c43ce.1706182805.git.u.kleine-koenig@pengutronix.de>
+To: Paul Cercueil <paul@crapouillou.net>,
+	linux-pwm@vger.kernel.org
+Cc: linux-mips@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: [PATCH v5 065/111] pwm: jz4740: Make use of devm_pwmchip_alloc() function
+Date: Thu, 25 Jan 2024 13:09:27 +0100
+Message-ID:  <2aff52f98cf953318cc533156bd0a51e77cac911.1706182805.git.u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1706182805.git.u.kleine-koenig@pengutronix.de>
 References: <cover.1706182805.git.u.kleine-koenig@pengutronix.de>
@@ -157,7 +61,7 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4472; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=Y70kt1S+wDMGZ2Y6dT7JBGkOh38DPB/mz0c9lW1w+go=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlsk9o1J7Qn6pSUgc2O5FQOVH47M2tNWcGfyzpg KqN39khZuCJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZbJPaAAKCRCPgPtYfRL+ Tl7sCACDg65PvULF2T57x8s2GOVh8qHAOM4G2fEdFZQeFhZiTply5wW+kG5bIM1JAdU3cAiM96g uzfqnkdy2Mt6/lWu6ZhjqOk/xYUO80eOZ5e8cyRhQLGb4VsogRhDSOKSAf4k0fkzTYCdCM3jfwP QGXt5GRUeYGJVhDmUC7m1wai9vWlfWG8IXkVbSYnX3LqEAl0A40uaffDMUtp2bFtgHNqtqbGhx6 bM/vJXjzuqiGa8jiFMTuJ50PRpeh9o/6cre0EhT+nv5GQHpRaGSKnNf/E7Q0CK0tiRGYs7M9t6g 2w/lsv8+vxgUQ7yjIC7YwrqDMXW1+x7YTS/xwh76REfV7L9/
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2167; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=XNZvdNvoFWfhcTgC23QnqOOAiS5t8GlSW4OiyL8hcOA=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlsk+GpS6FqJD/kVJ6RjHF1G60u0kC10BRZn8Y1 8fuf08766SJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZbJPhgAKCRCPgPtYfRL+ Tu4WB/wPKpcxPgvPwcoYrdYRp1aa0U459vyt1zLyIEfUXdOU+m1IspQsS+2+NNh/SODry0JUK0f xghpBUNJ4LnJmwCYETsSS9HaCwRM+hCCzCfSHK0i+/LhbxsSrKJBw4S/DsMg/t/IfwJrnlR71eY CBOobv5Dihi8Yomj4bb9SepqgmdmZKHB9msaDz8+6Q2u0i5ugq2BxGCZogKTqjf+N8zGV0v5jMd NTq3qfX4GoAnHvUB/KxoF7c3BF9q7amL8YunluMA0tDDW0NRy4cHp2NiTt1CN1/CAy2EJlApOw4 eqPmG3LtqVM+pwAsS8S1k9o14cEZEpP1/Jcbm16dZJTuyIHj
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -165,111 +69,73 @@ X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 
-This function allocates a struct pwm_chip and driver data. Compared to
-the status quo the split into pwm_chip and driver data is new, otherwise
-it doesn't change anything relevant (yet).
+This prepares the pwm-jz4740 driver to further changes of the pwm core
+outlined in the commit introducing devm_pwmchip_alloc(). There is no
+intended semantical change and the driver should behave as before.
 
-The intention is that after all drivers are switched to use this
-allocation function, its possible to add a struct device to struct
-pwm_chip to properly track the latter's lifetime without touching all
-drivers again. Proper lifetime tracking is a necessary precondition to
-introduce character device support for PWMs (that implements atomic
-setting and doesn't suffer from the sysfs overhead of the /sys/class/pwm
-userspace support).
-
-The new function pwmchip_priv() (obviously?) only works for chips
-allocated with devm_pwmchip_alloc().
-
+Acked-by: Paul Cercueil <paul@crapouillou.net>
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- .../driver-api/driver-model/devres.rst        |  1 +
- Documentation/driver-api/pwm.rst              | 10 ++++----
- drivers/pwm/core.c                            | 25 +++++++++++++++++++
- include/linux/pwm.h                           |  2 ++
- 4 files changed, 33 insertions(+), 5 deletions(-)
+ drivers/pwm/pwm-jz4740.c | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
-index c5f99d834ec5..e4df72c408d2 100644
---- a/Documentation/driver-api/driver-model/devres.rst
-+++ b/Documentation/driver-api/driver-model/devres.rst
-@@ -420,6 +420,7 @@ POWER
-   devm_reboot_mode_unregister()
+diff --git a/drivers/pwm/pwm-jz4740.c b/drivers/pwm/pwm-jz4740.c
+index 4d39f61b86ff..da4bf543d357 100644
+--- a/drivers/pwm/pwm-jz4740.c
++++ b/drivers/pwm/pwm-jz4740.c
+@@ -25,14 +25,13 @@ struct soc_info {
+ };
  
- PWM
-+  devm_pwmchip_alloc()
-   devm_pwmchip_add()
-   devm_pwm_get()
-   devm_fwnode_pwm_get()
-diff --git a/Documentation/driver-api/pwm.rst b/Documentation/driver-api/pwm.rst
-index 3c28ccc4b611..cee66c7f0335 100644
---- a/Documentation/driver-api/pwm.rst
-+++ b/Documentation/driver-api/pwm.rst
-@@ -143,11 +143,11 @@ to implement the pwm_*() functions itself. This means that it's impossible
- to have multiple PWM drivers in the system. For this reason it's mandatory
- for new drivers to use the generic PWM framework.
+ struct jz4740_pwm_chip {
+-	struct pwm_chip chip;
+ 	struct regmap *map;
+ 	struct clk *clk[];
+ };
  
--A new PWM controller/chip can be added using pwmchip_add() and removed
--again with pwmchip_remove(). pwmchip_add() takes a filled in struct
--pwm_chip as argument which provides a description of the PWM chip, the
--number of PWM devices provided by the chip and the chip-specific
--implementation of the supported PWM operations to the framework.
-+A new PWM controller/chip can be allocated using devm_pwmchip_alloc, then added
-+using pwmchip_add() and removed again with pwmchip_remove(). pwmchip_add()
-+takes a filled in struct pwm_chip as argument which provides a description of
-+the PWM chip, the number of PWM devices provided by the chip and the
-+chip-specific implementation of the supported PWM operations to the framework.
- 
- When implementing polarity support in a PWM driver, make sure to respect the
- signal conventions in the PWM framework. By definition, normal polarity
-diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
-index 1b4c3d0caa82..b821a2b0b172 100644
---- a/drivers/pwm/core.c
-+++ b/drivers/pwm/core.c
-@@ -454,6 +454,31 @@ of_pwm_single_xlate(struct pwm_chip *chip, const struct of_phandle_args *args)
- }
- EXPORT_SYMBOL_GPL(of_pwm_single_xlate);
- 
-+static void *pwmchip_priv(struct pwm_chip *chip)
-+{
-+	return (void *)chip + sizeof(*chip);
-+}
-+
-+struct pwm_chip *devm_pwmchip_alloc(struct device *parent, unsigned int npwm, size_t sizeof_priv)
-+{
-+	struct pwm_chip *chip;
-+	size_t alloc_size;
-+
-+	alloc_size = size_add(sizeof(*chip), sizeof_priv);
-+
-+	chip = devm_kzalloc(parent, alloc_size, GFP_KERNEL);
-+	if (!chip)
-+		return ERR_PTR(-ENOMEM);
-+
-+	chip->dev = parent;
-+	chip->npwm = npwm;
-+
-+	pwmchip_set_drvdata(chip, pwmchip_priv(chip));
-+
-+	return chip;
-+}
-+EXPORT_SYMBOL_GPL(devm_pwmchip_alloc);
-+
- static void of_pwmchip_add(struct pwm_chip *chip)
+ static inline struct jz4740_pwm_chip *to_jz4740(struct pwm_chip *chip)
  {
- 	if (!chip->dev || !chip->dev->of_node)
-diff --git a/include/linux/pwm.h b/include/linux/pwm.h
-index 2c49d2fe2fe7..8bc7504aa7d4 100644
---- a/include/linux/pwm.h
-+++ b/include/linux/pwm.h
-@@ -403,6 +403,8 @@ static inline bool pwm_might_sleep(struct pwm_device *pwm)
- int pwm_capture(struct pwm_device *pwm, struct pwm_capture *result,
- 		unsigned long timeout);
+-	return container_of(chip, struct jz4740_pwm_chip, chip);
++	return pwmchip_get_drvdata(chip);
+ }
  
-+struct pwm_chip *devm_pwmchip_alloc(struct device *parent, unsigned int npwm, size_t sizeof_priv);
-+
- int __pwmchip_add(struct pwm_chip *chip, struct module *owner);
- #define pwmchip_add(chip) __pwmchip_add(chip, THIS_MODULE)
- void pwmchip_remove(struct pwm_chip *chip);
+ static bool jz4740_pwm_can_use_chn(struct pwm_chip *chip, unsigned int channel)
+@@ -224,6 +223,7 @@ static const struct pwm_ops jz4740_pwm_ops = {
+ static int jz4740_pwm_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
++	struct pwm_chip *chip;
+ 	struct jz4740_pwm_chip *jz;
+ 	const struct soc_info *info;
+ 
+@@ -231,10 +231,10 @@ static int jz4740_pwm_probe(struct platform_device *pdev)
+ 	if (!info)
+ 		return -EINVAL;
+ 
+-	jz = devm_kzalloc(dev, struct_size(jz, clk, info->num_pwms),
+-			      GFP_KERNEL);
+-	if (!jz)
+-		return -ENOMEM;
++	chip = devm_pwmchip_alloc(dev, info->num_pwms, struct_size(jz, clk, info->num_pwms));
++	if (IS_ERR(chip))
++		return PTR_ERR(chip);
++	jz = to_jz4740(chip);
+ 
+ 	jz->map = device_node_to_regmap(dev->parent->of_node);
+ 	if (IS_ERR(jz->map)) {
+@@ -242,11 +242,9 @@ static int jz4740_pwm_probe(struct platform_device *pdev)
+ 		return PTR_ERR(jz->map);
+ 	}
+ 
+-	jz->chip.dev = dev;
+-	jz->chip.ops = &jz4740_pwm_ops;
+-	jz->chip.npwm = info->num_pwms;
++	chip->ops = &jz4740_pwm_ops;
+ 
+-	return devm_pwmchip_add(dev, &jz->chip);
++	return devm_pwmchip_add(dev, chip);
+ }
+ 
+ static const struct soc_info jz4740_soc_info = {
 -- 
 2.43.0
 
