@@ -1,227 +1,148 @@
-Return-Path: <linux-mips+bounces-1139-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1140-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CFEC83BD09
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 10:17:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E32C83BD64
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 10:33:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D10B281BCC
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 09:17:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CF4E4B2E055
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 09:31:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6B061BC3C;
-	Thu, 25 Jan 2024 09:17:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A2A21F947;
+	Thu, 25 Jan 2024 09:29:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c9wXslDO"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="H6pVcBwO";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="TYyNxe/g"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E7451BC2F
-	for <linux-mips@vger.kernel.org>; Thu, 25 Jan 2024 09:17:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85BE71D559;
+	Thu, 25 Jan 2024 09:29:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706174255; cv=none; b=FwRimOoxKvOk7IG7KZ8PFYCjz2C4h+dVve2Y2bwlJBBWQho/N+qHPokTFjtVV9VeNuDgTMhdYwTZan7geCJa69OkR4y+IMfxBEnXmobs290rQyOFJHoQFtsJABPxoIBdGGFlJfLOb9hfWevtnkeY9NjzUTA/zPs0JAzxsESnzuI=
+	t=1706174949; cv=none; b=TNaBxKyKHY4oTkR4wuSF9JLc3I3gF8sx2pKigPheSco5S91kdXAzqzYiw2euuTE/BVu2cZgyqTSE0f2aRX2eQ52PBHuTnjpCSC3Bsy98xzv5ueTfF/Qhd0F6yKfLA7aUDddAgkhdUyKW0Jy5kXDkCx24ZIY/uBvmngthcgy9VbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706174255; c=relaxed/simple;
-	bh=xBev3JryyN47Pl/Pc20cbKv5U3bSF+BrsMyO8ggWTp4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V5PlB5bk+l+3HpxLiAQL5jymdAWZB4rAaIZ68+K6p77riaawSEEvVI/2khri5TPNjhVaYrKbGMO+vrEut74lCcxWWnjtykpNBBF4GtGh5rUE35zcymC3d75XYaSJaoaoLm+mR8Zqzl34tWkAo+x/VeS+rtw1gbjO5SbO3THqoRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c9wXslDO; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706174253;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SDoUkylaVEDmZz6nqfW3ZjNKRZGYGdls3feFdR//5ps=;
-	b=c9wXslDOttJw5a+fKccL/n292lvxbpv0piv192GMUvRctDZKRJpUGDQrPL1wmejVc8H4nO
-	OgjZDfI+md6NL8rU5gvKrpf1FW2Ibz3NNoXyUorlCRN6zfgMrPz+Os+tGp+80Ux9ZEqf8Z
-	104S/rpGzzMOMHKgs5qc1o4T8isj/UA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-636-iCprDXE0NJaMkShWq3Qs8Q-1; Thu, 25 Jan 2024 04:17:26 -0500
-X-MC-Unique: iCprDXE0NJaMkShWq3Qs8Q-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 701931013682;
-	Thu, 25 Jan 2024 09:17:25 +0000 (UTC)
-Received: from localhost (unknown [10.72.116.117])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id 8814F1C060AF;
-	Thu, 25 Jan 2024 09:17:24 +0000 (UTC)
-Date: Thu, 25 Jan 2024 17:17:21 +0800
-From: Baoquan He <bhe@redhat.com>
-To: Michael Kelley <mhklinux@outlook.com>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-	"linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"ebiederm@xmission.com" <ebiederm@xmission.com>,
-	"hbathini@linux.ibm.com" <hbathini@linux.ibm.com>,
-	"piliu@redhat.com" <piliu@redhat.com>,
-	"viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH linux-next v3 06/14] x86, crash: wrap crash dumping code
- into crash related ifdefs
-Message-ID: <ZbInIQeIoPj6R0kY@MiWiFi-R3L-srv>
-References: <20240124051254.67105-1-bhe@redhat.com>
- <20240124051254.67105-7-bhe@redhat.com>
- <SN6PR02MB4157931105FA68D72E3D3DB8D47B2@SN6PR02MB4157.namprd02.prod.outlook.com>
- <ZbHfACpwqi2U9vmK@MiWiFi-R3L-srv>
- <SN6PR02MB4157E138C7EE4A281AB49C10D47A2@SN6PR02MB4157.namprd02.prod.outlook.com>
+	s=arc-20240116; t=1706174949; c=relaxed/simple;
+	bh=K/9JKflS9axsLrR15vQW/TMGMDqOa6Hya/B30Dusweg=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=ae5zcey6CG0xYH7+Kt3IZlb3cSqyJ1IefF+98+0sLn/rzVsnhepzQvsqfku+JoBdihrZsbTm0WTT5N2gNH9SpF4cwYQcdHX7FvNaRZdL9MbKHDRQqwIEiiXfEEl/T1HBrlyxLOwP2w/X88y6K8Jv2+SuPNjwgXo52GSJfii1B5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=H6pVcBwO; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=TYyNxe/g; arc=none smtp.client-ip=64.147.123.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.west.internal (Postfix) with ESMTP id 9DB603200BB7;
+	Thu, 25 Jan 2024 04:29:04 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Thu, 25 Jan 2024 04:29:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1706174944;
+	 x=1706261344; bh=i0i8PWJmZEIkk+qKWWCdcOgFw5jqjthhyPV0wFojKbQ=; b=
+	H6pVcBwO4ZLaGUzpBTECLQ40+Mm+pEnyKTDjgZdFJ8Y1TsT1ON1s2ELdQrlEH6BU
+	cgUO71RyLbCfAj5g86T3buVZnH0ROTXRAIicxrC3LqI6yaaWOOmNtaSd/kr1gwHL
+	OodId6jl3iSqNdPnTHT+Ax6vbN6ESIypN/+WEUQHvyo9C+Z9WHw6rUp88bJyiGXY
+	aoUdZP83FOfUvWsiAXLJtSKxljh6Pg0/5jEr1ub9yiw4R5uAmCIEu1WADbBCO0CJ
+	07q7VK5e9bPb9jgcT//yAEYR901RBjEgPYKFSYpJ4j+lkGkghysG/y89kodK9Wk7
+	rZ/kWLSH9OCP3D8gLZeDCg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1706174944; x=
+	1706261344; bh=i0i8PWJmZEIkk+qKWWCdcOgFw5jqjthhyPV0wFojKbQ=; b=T
+	YyNxe/gap3a1Ds7o35cEU4eoD2hL/lLjyRrQ8FcKoji7qh+TjeUeWJ5lGVgFLE1x
+	ZJCGjkVygP49mRc81E2QmexP2bxGbXrOctbw+Vy/bKGq8wTydaIJC1MmaFlBJXuk
+	DFcFYSqWMHu2yvIQri/nA32t0eTD79ru2Qzo8NZ/fKXPKXy7/BKSjiRC8bGOnmOU
+	DUI5rndTjp48GgQIPOHa3/3AyfaMX0i39eBEFkB3FrTC9fHwkljpBZ7Z8EBtmCEn
+	Lba2+kPJRAB8anHmy2Fv6AhaLPEOD7mA4B7UluGFJx4XvteVFIF6aProT+t7pzZX
+	Yz1F1vP7//Qhqq1kYfLaA==
+X-ME-Sender: <xms:3ymyZVs21U8ZqnsOuXOaazdG7GlnzqP9TsgXip3xB7VzwWRfAKiHIw>
+    <xme:3ymyZecCeNqV4wXeVIvmIxFUA_rUxbWDOwhCUFCXucHHy-KSkdahQ-VWTVFimWZAm
+    G2D9bonnlbDNb3RQ6s>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdelfedgtdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
+    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
+    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:3ymyZYweCc5AvRnJAGpEFU4N4LYF2pZai5DeZhNKmGt1aU5g8_OhIQ>
+    <xmx:3ymyZcM1R8HPm5mcwokD8eY6L7t3vbn8VRUoZh3SbpbCZerQqxwcKw>
+    <xmx:3ymyZV_apitg7LRwV1kIf6usBWUhq5LZLX6KR7Tg-iRwVoScGwunYA>
+    <xmx:4CmyZYkrjz7lcycg6O5LWtTHhKz6m4i46xXuqhYIEYJEXO1sjrZGvA>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 46B4136A0076; Thu, 25 Jan 2024 04:29:03 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-119-ga8b98d1bd8-fm-20240108.001-ga8b98d1b
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SN6PR02MB4157E138C7EE4A281AB49C10D47A2@SN6PR02MB4157.namprd02.prod.outlook.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+Message-Id: <00d1b813-c55f-4365-8d81-d70258e10b16@app.fastmail.com>
+In-Reply-To: 
+ <CAHk-=whkEXGOCEZFO2vAZ9rDd8uW8MJwFNYg9KXaC_vZVso6iA@mail.gmail.com>
+References: <75e9fd7b08562ad9b456a5bdaacb7cc220311cc9.camel@xry111.site>
+ <mvmplxraqmd.fsf@suse.de>
+ <9481b6d9d015aea25d8f2563bf7bd6f6462f758f.camel@xry111.site>
+ <0be1203c9df55432548c92281c8392dfa2f7d6bf.camel@xry111.site>
+ <e8583a3ab0522b4e75ba0ada47b6f093b186fa81.camel@xry111.site>
+ <CAHk-=wgVrw+8P68Sy2krcc3QFbm_eu_DRs0-i7mct_0BDORZuA@mail.gmail.com>
+ <CAHk-=whkEXGOCEZFO2vAZ9rDd8uW8MJwFNYg9KXaC_vZVso6iA@mail.gmail.com>
+Date: Thu, 25 Jan 2024 09:28:41 +0000
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>,
+ "Xi Ruoyao" <xry111@xry111.site>, tsbogend@alpha.franken.de
+Cc: "Andreas Schwab" <schwab@suse.de>, "Ben Hutchings" <ben@decadent.org.uk>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org, libc-alpha@sourceware.org
+Subject: Re: Strange EFAULT on mips64el returned by syscall when another thread is
+ forking
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 01/25/24 at 05:12am, Michael Kelley wrote:
-> From: Baoquan He <bhe@redhat.com> Sent: Wednesday, January 24, 2024 8:10 PM
-> > 
-> > On 01/24/24 at 11:02pm, Michael Kelley wrote:
-> > > > diff --git a/arch/x86/kernel/cpu/mshyperv.c
-> > > > b/arch/x86/kernel/cpu/mshyperv.c
-> > > > index 01fa06dd06b6..f8163a59026b 100644
-> > > > --- a/arch/x86/kernel/cpu/mshyperv.c
-> > > > +++ b/arch/x86/kernel/cpu/mshyperv.c
-> > > > @@ -210,6 +210,7 @@ static void hv_machine_shutdown(void)
-> > > >  		hyperv_cleanup();
-> > > >  }
-> > > >
-> > > > +#ifdef CONFIG_CRASH_DUMP
-> > > >  static void hv_machine_crash_shutdown(struct pt_regs *regs)
-> > > >  {
-> > > >  	if (hv_crash_handler)
-> > > > @@ -221,6 +222,7 @@ static void hv_machine_crash_shutdown(struct pt_regs *regs)
-> > > >  	/* Disable the hypercall page when there is only 1 active CPU. */
-> > > >  	hyperv_cleanup();
-> > > >  }
-> > > > +#endif
-> > > >  #endif /* CONFIG_KEXEC_CORE */
-> > >
-> > > Note that the #ifdef CONFIG_CRASH_DUMP is nested inside
-> > > #ifdef CONFIG_KEXEC_CODE here, and in the other Hyper-V code
-> > > just below.   It's also nested in xen_hvm_guest_init() at the bottom
-> > > of this patch.  But the KVM case of setting crash_shutdown is
-> > > not nested -- you changed #ifdef CONFIG_KEXEC_CORE to #ifdef
-> > > CONFIG_CRASH_DUMP.
-> > >
-> > > I think both approaches work because CONFIG_CRASH_DUMP implies
-> > > CONFIG_KEXEC_CORE, but I wonder if it would be better to *not* nest
-> > > in all cases.  I'd like to see the cases be consistent so in the future
-> > > someone doesn't wonder why there's a difference (unless there's
-> > > a reason for the difference that I missed).
-> > 
-> > I agree with you, it's a great suggestion. Thanks.
-> > 
-> > Do you think below draft patch includes all changes you are concerned
-> > about?
-> 
-> Yes, these changes look good as a delta to your original patch.
-> 
-> But also look at xen_hvm_guest_init().  It looks like your original patch
-> does nesting there as well, and it could probably be "un-nested".
 
-Right. I checked them all in arch/x86 this time, hope nothing is missed
-again. I can post a v4 to update this x86 patch later if no other
-concern. Thanks.
 
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index f8163a59026b..2e8cd5a4ae85 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -209,6 +209,7 @@ static void hv_machine_shutdown(void)
- 	if (kexec_in_progress)
- 		hyperv_cleanup();
- }
-+#endif /* CONFIG_KEXEC_CORE */
- 
- #ifdef CONFIG_CRASH_DUMP
- static void hv_machine_crash_shutdown(struct pt_regs *regs)
-@@ -222,8 +223,7 @@ static void hv_machine_crash_shutdown(struct pt_regs *regs)
- 	/* Disable the hypercall page when there is only 1 active CPU. */
- 	hyperv_cleanup();
- }
--#endif
--#endif /* CONFIG_KEXEC_CORE */
-+#endif /* CONFIG_CRASH_DUMP */
- #endif /* CONFIG_HYPERV */
- 
- static uint32_t  __init ms_hyperv_platform(void)
-@@ -497,9 +497,11 @@ static void __init ms_hyperv_init_platform(void)
- 	no_timer_check = 1;
- #endif
- 
--#if IS_ENABLED(CONFIG_HYPERV) && defined(CONFIG_KEXEC_CORE)
-+#if IS_ENABLED(CONFIG_HYPERV)
-+#if defined(CONFIG_KEXEC_CORE)
- 	machine_ops.shutdown = hv_machine_shutdown;
--#ifdef CONFIG_CRASH_DUMP
-+#endif
-+#if defined(CONFIG_CRASH_DUMP)
- 	machine_ops.crash_shutdown = hv_machine_crash_shutdown;
- #endif
- #endif
-diff --git a/arch/x86/kernel/reboot.c b/arch/x86/kernel/reboot.c
-index 1287b0d5962f..f3130f762784 100644
---- a/arch/x86/kernel/reboot.c
-+++ b/arch/x86/kernel/reboot.c
-@@ -826,7 +826,7 @@ void machine_halt(void)
- 	machine_ops.halt();
- }
- 
--#ifdef CONFIG_KEXEC_CORE
-+#ifdef CONFIG_CRASH_DUMP
- void machine_crash_shutdown(struct pt_regs *regs)
- {
- 	machine_ops.crash_shutdown(regs);
-diff --git a/arch/x86/xen/enlighten_hvm.c b/arch/x86/xen/enlighten_hvm.c
-index 09e3db7ff990..0b367c1e086d 100644
---- a/arch/x86/xen/enlighten_hvm.c
-+++ b/arch/x86/xen/enlighten_hvm.c
-@@ -148,6 +148,7 @@ static void xen_hvm_shutdown(void)
- 	if (kexec_in_progress)
- 		xen_reboot(SHUTDOWN_soft_reset);
- }
-+#endif
- 
- #ifdef CONFIG_CRASH_DUMP
- static void xen_hvm_crash_shutdown(struct pt_regs *regs)
-@@ -156,7 +157,6 @@ static void xen_hvm_crash_shutdown(struct pt_regs *regs)
- 	xen_reboot(SHUTDOWN_soft_reset);
- }
- #endif
--#endif
- 
- static int xen_cpu_up_prepare_hvm(unsigned int cpu)
- {
-@@ -238,10 +238,10 @@ static void __init xen_hvm_guest_init(void)
- 
- #ifdef CONFIG_KEXEC_CORE
- 	machine_ops.shutdown = xen_hvm_shutdown;
-+#endif
- #ifdef CONFIG_CRASH_DUMP
- 	machine_ops.crash_shutdown = xen_hvm_crash_shutdown;
- #endif
--#endif
- }
- 
- static __init int xen_parse_nopv(char *arg)
+=E5=9C=A82024=E5=B9=B41=E6=9C=8824=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=8B=E5=
+=8D=8810:10=EF=BC=8CLinus Torvalds=E5=86=99=E9=81=93=EF=BC=9A
+[...]
+>
+> Anyway, I'm pretty sure this is the bug, now some MIPS person just
+> needs to fix the MIPS version of "instruction_pointer()" to do what
+> "exception_epc()" already does.
 
+Hi folks,
+
+Kinda MIPS person here, I looked into the problem, and it's not that
+easy to fix.
+
+I inspected some existing usage of "instruction_pointer()", and some
+of them do want exception return address (which is always CP0_EPC).
+Others like this case they want the precise exception instruction
+pointer ("exception_epc()" for MIPS).
+
+I'm planning to make "instruction_pointer()" always point to exception
+instructions, and implemented a new function called "return_pc()"or
+whatever for "exception_epc()". Do you have a better name in mind?
+
+Besides isa16 stuff do require kernel to read user space fault
+instruction to determine delay slot size... I don't think it's always
+possible when "instruction_pointer()" is called. MIPS16/microMIPS
+is rarely used today though.
+
+Thanks
+
+>
+>               Linus
+
+--=20
+- Jiaxun
 
