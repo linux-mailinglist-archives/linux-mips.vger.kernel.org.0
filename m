@@ -1,73 +1,73 @@
-Return-Path: <linux-mips+bounces-1136-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1137-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D59183BAED
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 08:46:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5008A83BAFD
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 08:52:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A8F42840A3
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 07:46:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C58CB26562
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 07:52:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 361A9134B7;
-	Thu, 25 Jan 2024 07:46:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86C8213AE8;
+	Thu, 25 Jan 2024 07:52:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PB6zL286"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zO8O4VXK"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7938812E46
-	for <linux-mips@vger.kernel.org>; Thu, 25 Jan 2024 07:46:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3F613AC8
+	for <linux-mips@vger.kernel.org>; Thu, 25 Jan 2024 07:51:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706168778; cv=none; b=suMnCiVUDzlp1WSeSPpXgEwD50Uk/fsEaQK2SFrEQzK9dtv2mFVz22uNE6NJygAfxbvSXRxid/HygSkWoxlm2ILkRIeAX8dVv7UcvAgd4tHnBRIAfGjWa/sIwYVTrBHg2IV89erhW/zZRWgrg8dNFzMGAbXBsOff1xy1UnPm070=
+	t=1706169121; cv=none; b=twzoRbUa0ed8MVdF+hZhrVNSJNBhJqVdbEWN5HNCSn63FIk5uFQfmt1tWQtv5eiAHdmMFehhufxdY5rBtiuRnqlsLWypWihbriBwrPgteQ6PyTQq4aaFzo/tJgH99MQSkkNn2GsDwiV9IEwagjtISuX24YPxmnrqVf3NWXVkkA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706168778; c=relaxed/simple;
-	bh=lq3Qw18a0IYvMyc7eMwCvEMPKYqJuwapZWYaFsLvWEw=;
+	s=arc-20240116; t=1706169121; c=relaxed/simple;
+	bh=l9hU/QKK2PtHrlBfySC/vkpZwslcuIUNq8yPn8eBBow=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=G0NmtJ1dO9lNuU6RZ1Dh89IP7uyhceMYI2RyxZH4bqSaJMkhnCoVPTp7Oz1aZflVL89SYAzNSvWK7ucUMPbsQTyhrOKgif1d9YECAEWrXpfsHWdNfmRTdHBOwf8F4fYJ9jUbTWr31BW9G73OFH2zN6ZD3q2lciieW7cVJe4WtWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PB6zL286; arc=none smtp.client-ip=209.85.167.50
+	 In-Reply-To:Content-Type; b=I4upcQa+Bbll++3a+Cd0GW0+UUXHKhOdhwdyUgc8oObXcwtRpzqXR4ybA8rQU4NO361DiZj92BFa5J9VnepDbWcNb+FuNZIzwOu98AewhXf5t2y6tlexTwDvyV82UMlL3x8rdh8WPMJEo/ar5a79KOv/SBSjwDwyU0+TOQPoSCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zO8O4VXK; arc=none smtp.client-ip=209.85.208.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5100893015fso3326348e87.1
-        for <linux-mips@vger.kernel.org>; Wed, 24 Jan 2024 23:46:16 -0800 (PST)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-55cec718c30so727084a12.1
+        for <linux-mips@vger.kernel.org>; Wed, 24 Jan 2024 23:51:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706168774; x=1706773574; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706169118; x=1706773918; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=tLJ9hqRNdMmwKJi2pdcZAjFZNSmuS+g91IU0KUQzJ4k=;
-        b=PB6zL286iBiUhYeRv81OB78ldIRDuEB8X6HSjo9DpDpMDCaE53Ep5IJ+2ARzhilDY+
-         fYTb4sSFLxRkCudaA7M9I53dczs0YoAwOzsiRTyGJ7MUoHGBdO9XZPbQVymE+PUAlTeK
-         7wJhZoGy2sZ0I2XfKPdAYr/2NKw9z3suL7PsVg0zaOG133m1DdROHoq/0xUVqt4SWuok
-         xiid4vM/6n9E8smkUjm6bCO5wtR3zKJY1QqXfa4Ly8GWvsfsWGKjQVEcCedE5DIm+aOp
-         gq3Of1EBmdiu+I1aYsewGST+a6FZqKXJAIzhgRdvvbJPNZbRKzVOtp0tasI1cjizBQn8
-         H2qw==
+        bh=nxsDUEfK9tANQSKnsl+k6AMIFKQpzSLvqrgC9O6EHUs=;
+        b=zO8O4VXKqsS5jWzqLyodB/tonR5unBUTUxVBatCBwSlryM8WFIcVuzy8dVTzQCB8YB
+         iuwD4+2zlACSMgCd9q7Q0FLlZ2tr42/oSRFrxafBvD/7zS6BUFg1hpOpgzYZIt9wm79U
+         jcqljuTPELI4ZlgpKaUO0dVNKswady6vKYg/US4ev8dX2+ohv24gC7kZvdRFP9Xrxp/7
+         Kv2D6pxUO+uDs5fL9nxgvd4iZED3giMerNbmHoupJJsW9Z+ZSj/DxuGFg5VV503LEKfA
+         9nL3X3NUe4Cl684wnXxo5pe8lfPRS6G1nDmCO5roRzI2STdBfpoKZARUZg3uVBkcp4C4
+         ++fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706168774; x=1706773574;
+        d=1e100.net; s=20230601; t=1706169118; x=1706773918;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tLJ9hqRNdMmwKJi2pdcZAjFZNSmuS+g91IU0KUQzJ4k=;
-        b=esqi/327xA7jVOso90cIa6L8p8WD0q7eYfypoA3h6Hm3uKyVAVcVk6uIP0FoeZvzzj
-         PkRvjJMi4kHiVr1AQcM296Df/UBt9nx7+brUPo05XP7LQVeGM6c42shNJmUCaW5vyzJK
-         oUjR7VqrL8h9Z5FLOVdw7F4pUdZu5+/2qcUx4e5h2qNDgRp8yXUGx0u2cGUb+5p+QNWP
-         pl7h6mPWTPgbo0IYW7k1IVL7a1uAmiLhnlcRze//MtGPFRNk0ulVjeA+DFrE3FLVYC0M
-         2rZ8xoqvu+JdB6s9AOP+7GssZq+tpgh8VfbyWhWzPET6T6XK+6jUGs1ZFLNoG5YTmtL7
-         YpsQ==
-X-Gm-Message-State: AOJu0YyCHHbGkxVgzGVR5JyMASH2ipvzY4F05QE1qqV4o9kGW+BkoAfA
-	AVhAE8rya4WadnWPl6pjXa/8mBpOk89TWOYF42i8rsE8trIQjz1SX+PI2vv43R4=
-X-Google-Smtp-Source: AGHT+IElj6u1gYVFw2VudyXs/G3iQmkA0PqkWOzKELx42H3hiRqiA5lm303AXC7IlvG0UNt7FxRz+w==
-X-Received: by 2002:a19:f816:0:b0:50e:b19d:c992 with SMTP id a22-20020a19f816000000b0050eb19dc992mr145487lff.197.1706168774376;
-        Wed, 24 Jan 2024 23:46:14 -0800 (PST)
+        bh=nxsDUEfK9tANQSKnsl+k6AMIFKQpzSLvqrgC9O6EHUs=;
+        b=YORKDFxDTmEz01JoMY9Qd+OJ2Oa5yYabloYEgenjloDcGaDeL4hG1FJ4MUNdCn7O0i
+         toiK/oJ99bK9gwD88Brn8urH79rsK31LrDFmpXX1iVnkroZ+700YorjOVxgxxBjR0Gas
+         d8KlrQOzv18hhr6rILMZ0X/RPrKL7KuwtpUc66cnrEc+qpVpx9Ee1yfVE1ewAYPIcmFh
+         +UR9zNlVXyZJR19opEQB5eDl/KDudaqlwDv+Bdw2C4zvclCILVWXxyi++mQJhx7OzSYw
+         402Kq44GKw49Qb7xaTNSRESw0zFDTkSvFodz8yqnzuAaCAkKMb6FL1EiF8hCiNPJfyjD
+         rY6Q==
+X-Gm-Message-State: AOJu0YxTGnliYikDXBTHFo2Q3Ez8hCn/JMRSjxy2Ul8f8iGeqbcX9oS4
+	mZ6TBsQV1lmA6JYKEn7xvANSpJznaB8nZZqblfnFHXIaf1SlqO8FmkfuhwQLJrU=
+X-Google-Smtp-Source: AGHT+IFBKe7scLDRr6uP13ptInBh6NVwFkI/u6B/ANKQDXM2oGaVYvzbiYWVFDto6r17WEwD4EzQpQ==
+X-Received: by 2002:a17:907:1591:b0:a2e:d32b:6fc7 with SMTP id cf17-20020a170907159100b00a2ed32b6fc7mr216045ejc.119.1706169118001;
+        Wed, 24 Jan 2024 23:51:58 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.215.66])
-        by smtp.gmail.com with ESMTPSA id k8-20020a056402048800b0055d0a05b1bbsm114114edv.5.2024.01.24.23.46.12
+        by smtp.gmail.com with ESMTPSA id f26-20020a17090624da00b00a26ac037ff3sm727960ejb.132.2024.01.24.23.51.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Jan 2024 23:46:13 -0800 (PST)
-Message-ID: <001993b9-ea0c-49c3-a4e5-4cea10c54082@linaro.org>
-Date: Thu, 25 Jan 2024 08:46:11 +0100
+        Wed, 24 Jan 2024 23:51:57 -0800 (PST)
+Message-ID: <dd7e723d-3c4c-4edf-afc2-51db9a074efa@linaro.org>
+Date: Thu, 25 Jan 2024 08:51:55 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -75,26 +75,26 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 08/17] clk: eyeq5: add platform driver
+Subject: Re: [PATCH v3 04/17] dt-bindings: soc: mobileye: add EyeQ5 OLB system
+ controller
 Content-Language: en-US
-To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Gregory CLEMENT <gregory.clement@bootlin.com>,
+To: Rob Herring <robh@kernel.org>, =?UTF-8?Q?Th=C3=A9o_Lebrun?=
+ <theo.lebrun@bootlin.com>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
  Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ <sboyd@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
  Conor Dooley <conor+dt@kernel.org>,
  Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
  Linus Walleij <linus.walleij@linaro.org>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
- <rafal@milecki.pl>, Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+ <rafal@milecki.pl>, Philipp Zabel <p.zabel@pengutronix.de>,
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
  linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-gpio@vger.kernel.org
 References: <20240123-mbly-clk-v3-0-392b010b8281@bootlin.com>
- <20240123-mbly-clk-v3-8-392b010b8281@bootlin.com>
- <127fd51b-cd64-4e00-99d6-7be9b79f2dcc@linaro.org>
- <CYN33YJ10HYS.2YDXB158LFZPL@bootlin.com>
+ <20240123-mbly-clk-v3-4-392b010b8281@bootlin.com>
+ <20240124151405.GA930997-robh@kernel.org>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -140,125 +140,39 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <CYN33YJ10HYS.2YDXB158LFZPL@bootlin.com>
+In-Reply-To: <20240124151405.GA930997-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 24/01/2024 17:41, Théo Lebrun wrote:
-> Hello,
+On 24/01/2024 16:14, Rob Herring wrote:
+>> +
+>> +      pinctrl-b {
+>> +        compatible = "mobileye,eyeq5-b-pinctrl";
+>> +        #pinctrl-cells = <1>;
+>> +      };
+>> +    };
 > 
-> On Wed Jan 24, 2024 at 8:05 AM CET, Krzysztof Kozlowski wrote:
->> On 23/01/2024 19:46, Théo Lebrun wrote:
->>> Add the Mobileye EyeQ5 clock controller driver. It might grow to add
->>> support for other platforms from Mobileye.
->>>
->>> It handles 10 read-only PLLs derived from the main crystal on board. It
->>> exposes a table-based divider clock used for OSPI. Other platform
->>> clocks are not configurable and therefore kept as fixed-factor
->>> devicetree nodes.
->>>
->>> Two PLLs are required early on and are therefore registered at
->>> of_clk_init(). Those are pll-cpu for the GIC timer and pll-per for the
->>> UARTs.
->>>
->>
->>
->>> +#define OLB_PCSR1_RESET				BIT(0)
->>> +#define OLB_PCSR1_SSGC_DIV			GENMASK(4, 1)
->>> +/* Spread amplitude (% = 0.1 * SPREAD[4:0]) */
->>> +#define OLB_PCSR1_SPREAD			GENMASK(9, 5)
->>> +#define OLB_PCSR1_DIS_SSCG			BIT(10)
->>> +/* Down-spread or center-spread */
->>> +#define OLB_PCSR1_DOWN_SPREAD			BIT(11)
->>> +#define OLB_PCSR1_FRAC_IN			GENMASK(31, 12)
->>> +
->>> +static struct clk_hw_onecell_data *eq5c_clk_data;
->>> +static struct regmap *eq5c_olb;
->>
->> Drop these two. No file-scope regmaps for drivers. Use private container
->> structures.
+> This can all be simplified to:
 > 
-> I wouldn't know how to handle the two steps then. Two clocks and the clk
-> provider are registered at of_clk_init() using CLK_OF_DECLARE_DRIVER().
+> system-controller@e00000 {
+>     compatible = "mobileye,eyeq5-olb", "syscon";
+>     reg = <0xe00000 0x400>;
+>     #reset-cells = <2>;
+>     #clock-cells = <1>;
+>     clocks = <&xtal>;
+>     clock-names = "ref";
+> 
+>     pins { ... };
+> };
+> 
+> There is no need for sub nodes unless you have reusable blocks or each 
+> block has its own resources in DT.
 
-Right, if some clocks have to be early, CLK_OF_DECLARE_DRIVER needs
-static ones. But your commit subject says it is a platform driver and
-all other pieces of this code is rather incompatible with this approach.
+Yes, however I believe there should be resources here: each subnode
+should get its address space. This is a bit tied to implementation,
+which currently assumes "everyone can fiddle with everything" in this block.
 
-Do not use CLK_OF_DECLARE_DRIVER for cases where you have dependencies
-because it forces you to manually order initcalls, which is exactly what
-we do not want.
-
-
-> The rest is at platform device probe. Without a static, there are no
-> way to pass the struct clk_hw_onecell_data from one to the other.
-> 
-> I've looked at all clock drivers that do CLK_OF_DECLARE_DRIVER() and
-> register a platform driver.
-
-Even though the code is correct, using arguments "other did it" will not
-work. You want to say that you implement legacy, poor code because you
-saw legacy, poor code?
-
-> 
->  - The following use a static variable:
->    drivers/clk/axis/clk-artpec6.c
->    drivers/clk/clk-aspeed.c
->    drivers/clk/clk-ast2600.c
->    drivers/clk/clk-eyeq5.c
->    drivers/clk/clk-gemini.c
->    drivers/clk/clk-milbeaut.c
->    drivers/clk/mediatek/clk-mt2701.c
->    drivers/clk/mediatek/clk-mt6797.c
->    drivers/clk/mediatek/clk-mt8173-infracfg.c
->    drivers/clk/nxp/clk-lpc18xx-creg.c
->    drivers/clk/ralink/clk-mt7621.c
->    drivers/clk/ralink/clk-mtmips.c
->    drivers/clk/sunxi/clk-mod0.c
->    drivers/clk/axis/clk-artpec6.c
-> 
->  - Those two declare different clock providers at init and probe:
->    drivers/clk/ralink/clk-mt7621.c
->    drivers/clk/sunxi/clk-mod0.c
-> 
->  - It doesn't register new clocks at probe (only resets) so no need to
->    share variables.
->    drivers/clk/ralink/clk-mtmips.c
-> 
->>
->> ...
->>
->>> +static void __init eq5c_init(struct device_node *np)
->>> +{
->>> +	struct device_node *parent_np = of_get_parent(np);
->>> +	int i, ret;
->>> +
->>> +	eq5c_clk_data = kzalloc(struct_size(eq5c_clk_data, hws, EQ5C_NB_CLKS),
->>> +				GFP_KERNEL);
->>> +	if (!eq5c_clk_data) {
->>> +		ret = -ENOMEM;
->>> +		goto err;
->>> +	}
->>> +
->>> +	eq5c_clk_data->num = EQ5C_NB_CLKS;
->>> +
->>> +	/*
->>> +	 * Mark all clocks as deferred. We register some now and others at
->>> +	 * platform device probe.
->>> +	 */
->>> +	for (i = 0; i < EQ5C_NB_CLKS; i++)
->>> +		eq5c_clk_data->hws[i] = ERR_PTR(-EPROBE_DEFER);
->>> +
->>> +	/*
->>> +	 * Currently, if OLB is not available, we log an error, fail init then
->>
->> How it could be not available? Only with broken initcall ordering. Fix
->> your initcall ordering and then simplify all this weird code.
-> 
-> of_syscon_register() and regmap_init_mmio() lists many reasons for
-> it to not be available. Am I missing something?
-
-Yes, initcall ordering.
+Theo, can you draw memory map?
 
 Best regards,
 Krzysztof
