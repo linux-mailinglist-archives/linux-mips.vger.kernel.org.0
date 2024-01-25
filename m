@@ -1,114 +1,266 @@
-Return-Path: <linux-mips+bounces-1135-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1136-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 850BB83BAAB
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 08:32:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D59183BAED
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 08:46:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 805D31C22219
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 07:32:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A8F42840A3
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jan 2024 07:46:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F9BF11C8B;
-	Thu, 25 Jan 2024 07:32:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 361A9134B7;
+	Thu, 25 Jan 2024 07:46:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o/qlP90b"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PB6zL286"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361A411C83;
-	Thu, 25 Jan 2024 07:32:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7938812E46
+	for <linux-mips@vger.kernel.org>; Thu, 25 Jan 2024 07:46:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706167950; cv=none; b=Jv3RpysOtcM81OkdG0Xig8zVDEnUWSRtQZz56VzPCjxTFStnnor9By0GM8BF/JUNuzmqzQyZEfPAzJPSwGQ2Cot6Gi4E97V1Lzd17PoS1kMfeP9W5LQmFbeNIMLO3djfOicTYVUks+Hc7O3XUUb+132wTGxishWq5P6+c0zoBqE=
+	t=1706168778; cv=none; b=suMnCiVUDzlp1WSeSPpXgEwD50Uk/fsEaQK2SFrEQzK9dtv2mFVz22uNE6NJygAfxbvSXRxid/HygSkWoxlm2ILkRIeAX8dVv7UcvAgd4tHnBRIAfGjWa/sIwYVTrBHg2IV89erhW/zZRWgrg8dNFzMGAbXBsOff1xy1UnPm070=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706167950; c=relaxed/simple;
-	bh=4YJZl/HB/FeUJBFx4g+Hq4GWbhTEDrW8F8ywC05k2CU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=enUMFnzbTxV/xe4wEAiMc6WplDq2GGstG4j1c9DT4X8ucdRf8WcYfYaOnFF7WdKmsqiSMoXV7yhSGESmNRY7egsLr8mrC0V47gyZP0LtGudFlIy0UCpUjChmhgIH1fmk/LVvsm6Po6B1RzeqPUk8N9n9xTPhKFsgmFoFbzYGL4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o/qlP90b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D9E8C433C7;
-	Thu, 25 Jan 2024 07:32:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706167949;
-	bh=4YJZl/HB/FeUJBFx4g+Hq4GWbhTEDrW8F8ywC05k2CU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=o/qlP90bWA8vs1DoAh96IyHbdPjr4YyuZvDq0onY5ZuuTV08XQml8GYs0ScKoZDdk
-	 kRNaiyxLgYIpzg1fYukUi9EtRFIRc727kYqe3wtWXR5gtzs35c/p1Y0J1fwyQZK1Ap
-	 6AYBkhNKcCN91vd4Pq89IdOJXzTo/DfX9ptcP+9MEhnDjZshaFfmldWDYiRB/53swx
-	 +1IA6GzmPSyirfoR+LyXczKV2zT5RxfrhLZ1jFEvHaBZKOwVLKW3QWPCviK1bmr2b8
-	 GoXu6/VAAQ3DwKjghCy5ELrIOAk+v3Yh5RTjDRV/vZkGVh46K5kitkUo/oNKs++SiR
-	 aXnmU6ZKh3AJg==
-Date: Thu, 25 Jan 2024 09:31:57 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: "Lameter, Christopher" <cl@os.amperecomputing.com>
-Cc: Huang Shijie <shijie@os.amperecomputing.com>,
-	gregkh@linuxfoundation.org, patches@amperecomputing.com,
-	rafael@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, yury.norov@gmail.com, kuba@kernel.org,
-	vschneid@redhat.com, mingo@kernel.org, akpm@linux-foundation.org,
-	vbabka@suse.cz, tglx@linutronix.de, jpoimboe@kernel.org,
-	ndesaulniers@google.com, mikelley@microsoft.com,
-	mhiramat@kernel.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-	will@kernel.org, mark.rutland@arm.com, mpe@ellerman.id.au,
-	linuxppc-dev@lists.ozlabs.org, chenhuacai@kernel.org,
-	jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2] NUMA: Early use of cpu_to_node() returns 0 instead of
- the correct node id
-Message-ID: <ZbIObaA6t9WbRw9y@kernel.org>
-References: <20240123045843.75969-1-shijie@os.amperecomputing.com>
- <4a13353c-cf4b-a388-5776-389c61c63ec0@os.amperecomputing.com>
+	s=arc-20240116; t=1706168778; c=relaxed/simple;
+	bh=lq3Qw18a0IYvMyc7eMwCvEMPKYqJuwapZWYaFsLvWEw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=G0NmtJ1dO9lNuU6RZ1Dh89IP7uyhceMYI2RyxZH4bqSaJMkhnCoVPTp7Oz1aZflVL89SYAzNSvWK7ucUMPbsQTyhrOKgif1d9YECAEWrXpfsHWdNfmRTdHBOwf8F4fYJ9jUbTWr31BW9G73OFH2zN6ZD3q2lciieW7cVJe4WtWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PB6zL286; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5100893015fso3326348e87.1
+        for <linux-mips@vger.kernel.org>; Wed, 24 Jan 2024 23:46:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706168774; x=1706773574; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tLJ9hqRNdMmwKJi2pdcZAjFZNSmuS+g91IU0KUQzJ4k=;
+        b=PB6zL286iBiUhYeRv81OB78ldIRDuEB8X6HSjo9DpDpMDCaE53Ep5IJ+2ARzhilDY+
+         fYTb4sSFLxRkCudaA7M9I53dczs0YoAwOzsiRTyGJ7MUoHGBdO9XZPbQVymE+PUAlTeK
+         7wJhZoGy2sZ0I2XfKPdAYr/2NKw9z3suL7PsVg0zaOG133m1DdROHoq/0xUVqt4SWuok
+         xiid4vM/6n9E8smkUjm6bCO5wtR3zKJY1QqXfa4Ly8GWvsfsWGKjQVEcCedE5DIm+aOp
+         gq3Of1EBmdiu+I1aYsewGST+a6FZqKXJAIzhgRdvvbJPNZbRKzVOtp0tasI1cjizBQn8
+         H2qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706168774; x=1706773574;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tLJ9hqRNdMmwKJi2pdcZAjFZNSmuS+g91IU0KUQzJ4k=;
+        b=esqi/327xA7jVOso90cIa6L8p8WD0q7eYfypoA3h6Hm3uKyVAVcVk6uIP0FoeZvzzj
+         PkRvjJMi4kHiVr1AQcM296Df/UBt9nx7+brUPo05XP7LQVeGM6c42shNJmUCaW5vyzJK
+         oUjR7VqrL8h9Z5FLOVdw7F4pUdZu5+/2qcUx4e5h2qNDgRp8yXUGx0u2cGUb+5p+QNWP
+         pl7h6mPWTPgbo0IYW7k1IVL7a1uAmiLhnlcRze//MtGPFRNk0ulVjeA+DFrE3FLVYC0M
+         2rZ8xoqvu+JdB6s9AOP+7GssZq+tpgh8VfbyWhWzPET6T6XK+6jUGs1ZFLNoG5YTmtL7
+         YpsQ==
+X-Gm-Message-State: AOJu0YyCHHbGkxVgzGVR5JyMASH2ipvzY4F05QE1qqV4o9kGW+BkoAfA
+	AVhAE8rya4WadnWPl6pjXa/8mBpOk89TWOYF42i8rsE8trIQjz1SX+PI2vv43R4=
+X-Google-Smtp-Source: AGHT+IElj6u1gYVFw2VudyXs/G3iQmkA0PqkWOzKELx42H3hiRqiA5lm303AXC7IlvG0UNt7FxRz+w==
+X-Received: by 2002:a19:f816:0:b0:50e:b19d:c992 with SMTP id a22-20020a19f816000000b0050eb19dc992mr145487lff.197.1706168774376;
+        Wed, 24 Jan 2024 23:46:14 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.215.66])
+        by smtp.gmail.com with ESMTPSA id k8-20020a056402048800b0055d0a05b1bbsm114114edv.5.2024.01.24.23.46.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Jan 2024 23:46:13 -0800 (PST)
+Message-ID: <001993b9-ea0c-49c3-a4e5-4cea10c54082@linaro.org>
+Date: Thu, 25 Jan 2024 08:46:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4a13353c-cf4b-a388-5776-389c61c63ec0@os.amperecomputing.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 08/17] clk: eyeq5: add platform driver
+Content-Language: en-US
+To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Gregory CLEMENT <gregory.clement@bootlin.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Linus Walleij <linus.walleij@linaro.org>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
+ <rafal@milecki.pl>, Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+ linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-gpio@vger.kernel.org
+References: <20240123-mbly-clk-v3-0-392b010b8281@bootlin.com>
+ <20240123-mbly-clk-v3-8-392b010b8281@bootlin.com>
+ <127fd51b-cd64-4e00-99d6-7be9b79f2dcc@linaro.org>
+ <CYN33YJ10HYS.2YDXB158LFZPL@bootlin.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <CYN33YJ10HYS.2YDXB158LFZPL@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jan 24, 2024 at 09:19:00AM -0800, Lameter, Christopher wrote:
-> On Tue, 23 Jan 2024, Huang Shijie wrote:
+On 24/01/2024 17:41, Théo Lebrun wrote:
+> Hello,
 > 
-> > During the kernel booting, the generic cpu_to_node() is called too early in
-> > arm64, powerpc and riscv when CONFIG_NUMA is enabled.
-> > 
-> > For arm64/powerpc/riscv, there are at least four places in the common code
-> > where the generic cpu_to_node() is called before it is initialized:
-> > 	   1.) early_trace_init()         in kernel/trace/trace.c
-> > 	   2.) sched_init()               in kernel/sched/core.c
-> > 	   3.) init_sched_fair_class()    in kernel/sched/fair.c
-> > 	   4.) workqueue_init_early()     in kernel/workqueue.c
-> > 
-> > In order to fix the bug, the patch changes generic cpu_to_node to
-> > function pointer, and export it for kernel modules.
-> > Introduce smp_prepare_boot_cpu_start() to wrap the original
-> > smp_prepare_boot_cpu(), and set cpu_to_node with early_cpu_to_node.
-> > Introduce smp_prepare_cpus_done() to wrap the original smp_prepare_cpus(),
-> > and set the cpu_to_node to formal _cpu_to_node().
+> On Wed Jan 24, 2024 at 8:05 AM CET, Krzysztof Kozlowski wrote:
+>> On 23/01/2024 19:46, Théo Lebrun wrote:
+>>> Add the Mobileye EyeQ5 clock controller driver. It might grow to add
+>>> support for other platforms from Mobileye.
+>>>
+>>> It handles 10 read-only PLLs derived from the main crystal on board. It
+>>> exposes a table-based divider clock used for OSPI. Other platform
+>>> clocks are not configurable and therefore kept as fixed-factor
+>>> devicetree nodes.
+>>>
+>>> Two PLLs are required early on and are therefore registered at
+>>> of_clk_init(). Those are pll-cpu for the GIC timer and pll-per for the
+>>> UARTs.
+>>>
+>>
+>>
+>>> +#define OLB_PCSR1_RESET				BIT(0)
+>>> +#define OLB_PCSR1_SSGC_DIV			GENMASK(4, 1)
+>>> +/* Spread amplitude (% = 0.1 * SPREAD[4:0]) */
+>>> +#define OLB_PCSR1_SPREAD			GENMASK(9, 5)
+>>> +#define OLB_PCSR1_DIS_SSCG			BIT(10)
+>>> +/* Down-spread or center-spread */
+>>> +#define OLB_PCSR1_DOWN_SPREAD			BIT(11)
+>>> +#define OLB_PCSR1_FRAC_IN			GENMASK(31, 12)
+>>> +
+>>> +static struct clk_hw_onecell_data *eq5c_clk_data;
+>>> +static struct regmap *eq5c_olb;
+>>
+>> Drop these two. No file-scope regmaps for drivers. Use private container
+>> structures.
 > 
-> Would  you please fix this cleanly without a function pointer?
-> 
-> What I think needs to be done is a patch series.
-> 
-> 1. Instrument cpu_to_node so that some warning is issued if it is used too
-> early. Preloading the array with NUMA_NO_NODE would allow us to do that.
-> 
-> 2. Implement early_cpu_to_node on platforms that currently do not have it.
-> 
-> 3. A series of patches that fix each place where cpu_to_node is used too
-> early.
+> I wouldn't know how to handle the two steps then. Two clocks and the clk
+> provider are registered at of_clk_init() using CLK_OF_DECLARE_DRIVER().
 
-I think step 3 can be simplified with a generic function that sets
-per_cpu(numa_node) using early_cpu_to_node(). It can be called right after
-setup_per_cpu_areas().
+Right, if some clocks have to be early, CLK_OF_DECLARE_DRIVER needs
+static ones. But your commit subject says it is a platform driver and
+all other pieces of this code is rather incompatible with this approach.
 
--- 
-Sincerely yours,
-Mike.
+Do not use CLK_OF_DECLARE_DRIVER for cases where you have dependencies
+because it forces you to manually order initcalls, which is exactly what
+we do not want.
+
+
+> The rest is at platform device probe. Without a static, there are no
+> way to pass the struct clk_hw_onecell_data from one to the other.
+> 
+> I've looked at all clock drivers that do CLK_OF_DECLARE_DRIVER() and
+> register a platform driver.
+
+Even though the code is correct, using arguments "other did it" will not
+work. You want to say that you implement legacy, poor code because you
+saw legacy, poor code?
+
+> 
+>  - The following use a static variable:
+>    drivers/clk/axis/clk-artpec6.c
+>    drivers/clk/clk-aspeed.c
+>    drivers/clk/clk-ast2600.c
+>    drivers/clk/clk-eyeq5.c
+>    drivers/clk/clk-gemini.c
+>    drivers/clk/clk-milbeaut.c
+>    drivers/clk/mediatek/clk-mt2701.c
+>    drivers/clk/mediatek/clk-mt6797.c
+>    drivers/clk/mediatek/clk-mt8173-infracfg.c
+>    drivers/clk/nxp/clk-lpc18xx-creg.c
+>    drivers/clk/ralink/clk-mt7621.c
+>    drivers/clk/ralink/clk-mtmips.c
+>    drivers/clk/sunxi/clk-mod0.c
+>    drivers/clk/axis/clk-artpec6.c
+> 
+>  - Those two declare different clock providers at init and probe:
+>    drivers/clk/ralink/clk-mt7621.c
+>    drivers/clk/sunxi/clk-mod0.c
+> 
+>  - It doesn't register new clocks at probe (only resets) so no need to
+>    share variables.
+>    drivers/clk/ralink/clk-mtmips.c
+> 
+>>
+>> ...
+>>
+>>> +static void __init eq5c_init(struct device_node *np)
+>>> +{
+>>> +	struct device_node *parent_np = of_get_parent(np);
+>>> +	int i, ret;
+>>> +
+>>> +	eq5c_clk_data = kzalloc(struct_size(eq5c_clk_data, hws, EQ5C_NB_CLKS),
+>>> +				GFP_KERNEL);
+>>> +	if (!eq5c_clk_data) {
+>>> +		ret = -ENOMEM;
+>>> +		goto err;
+>>> +	}
+>>> +
+>>> +	eq5c_clk_data->num = EQ5C_NB_CLKS;
+>>> +
+>>> +	/*
+>>> +	 * Mark all clocks as deferred. We register some now and others at
+>>> +	 * platform device probe.
+>>> +	 */
+>>> +	for (i = 0; i < EQ5C_NB_CLKS; i++)
+>>> +		eq5c_clk_data->hws[i] = ERR_PTR(-EPROBE_DEFER);
+>>> +
+>>> +	/*
+>>> +	 * Currently, if OLB is not available, we log an error, fail init then
+>>
+>> How it could be not available? Only with broken initcall ordering. Fix
+>> your initcall ordering and then simplify all this weird code.
+> 
+> of_syscon_register() and regmap_init_mmio() lists many reasons for
+> it to not be available. Am I missing something?
+
+Yes, initcall ordering.
+
+Best regards,
+Krzysztof
+
 
