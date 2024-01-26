@@ -1,125 +1,98 @@
-Return-Path: <linux-mips+bounces-1166-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1167-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C66F83D563
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jan 2024 10:06:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 26ACC83D574
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jan 2024 10:07:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE4792818CA
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jan 2024 09:06:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC1372817C2
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jan 2024 09:07:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FD44612FD;
-	Fri, 26 Jan 2024 07:55:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=atomide.com header.i=@atomide.com header.b="JtJ7/piH"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7B586312D;
+	Fri, 26 Jan 2024 07:56:18 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail5.25mail.st (mail5.25mail.st [74.50.62.9])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB06612FA;
-	Fri, 26 Jan 2024 07:55:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.50.62.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70F5ED310;
+	Fri, 26 Jan 2024 07:56:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706255706; cv=none; b=pFP4LKTllEEl9xf3uKOphEy7O9nnD5Z132Xs4vyXPqeRKez9DApPnHpKDwTvhaYoaL9tK6zTIzdeLymywzPGwvMTc1wwROg2qbsbGV3YRFMWHD7ONbNtU5MHKSme+xmY3MdJ3Hw2t4wcaMM0wF3JSqICgG3V4yv00q5FVlrqQFI=
+	t=1706255778; cv=none; b=pR+OAQisXCZAYI8CBP55HtH3NDJZHpPn9gclVOKj+Q4IQFFfKGMO/BJ0OTQ+yNSpXmF+x3mEnPKSU5Y/0IZp+UOrAFQvlZLGTDf01m/YlTLTKefZBSGwR7dM3X4P7BCd0CgjRpwMUAIdcljz+SC14nQR4GemvWp2JAyB4Y3ieJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706255706; c=relaxed/simple;
-	bh=8um7kgRcb4+h5B+usK409ZVcM+9iTowtfffiEtyuFbU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D4uKWVkIAbm/9wNBCjs0EDDq2Fx3ooEUdSF89dMJpBHCm6WtvUVhv7apWkfqE1KKlxpphZIEhtEMwpFqL/PhO8ZoRRcEsjnUNwJhfxYzQo67JUcBAoOnvYUGf+2myVu2HJ2mFlf9/BHpZOJF+y9I6+k6ScecDxtZK3ocFMQP7hI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com; spf=fail smtp.mailfrom=atomide.com; dkim=pass (2048-bit key) header.d=atomide.com header.i=@atomide.com header.b=JtJ7/piH; arc=none smtp.client-ip=74.50.62.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=atomide.com
-Received: from localhost (91-158-86-216.elisa-laajakaista.fi [91.158.86.216])
-	by mail5.25mail.st (Postfix) with ESMTPSA id B0F1D603CF;
-	Fri, 26 Jan 2024 07:45:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=atomide.com;
-	s=25mailst; t=1706255202;
-	bh=8um7kgRcb4+h5B+usK409ZVcM+9iTowtfffiEtyuFbU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JtJ7/piHUW7w/OVJCn29e2d2rEtLeVaOlov0zjBd4GqjORjulnAzkfm81/oQzmZk1
-	 j6xBHePTSisRqweNOX99GF13HoBrDKZt3M3FEm+pqWIYwc79de+//TyrHnJ9U9EOqe
-	 tg4spfaNgHPO2SrEKND9EDfqrJeRITH4r90Dsd0YaLFoWXNsu44vFqxtM6bmDCF8xZ
-	 q8AbETzoLNZBW4g0gaa1xpveZk8WqCVR32N7uAqUyzV/DHuDLLdflpLjkse2IS/IKh
-	 kf7sQAEwt18oj3FLSAOArYc8w/JeDK204z24tczY7J+Y3Xxk3bJIUv198MVWlnb8bt
-	 c0jmXOYqHSWqw==
-Date: Fri, 26 Jan 2024 09:45:43 +0200
-From: Tony Lindgren <tony@atomide.com>
-To: Andrew Davis <afd@ti.com>
-Cc: Frank Binns <frank.binns@imgtec.com>,
-	Matt Coster <matt.coster@imgtec.com>,
-	"H . Nikolaus Schaller" <hns@goldelico.com>,
-	Adam Ford <aford173@gmail.com>,
-	Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	=?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-	Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>,
-	Paul Cercueil <paul@crapouillou.net>,
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev, linux-omap@vger.kernel.org,
-	linux-mips@vger.kernel.org
-Subject: Re: [PATCH 08/11] ARM: dts: DRA7xx: Add device tree entry for SGX GPU
-Message-ID: <20240126074543.GS5185@atomide.com>
-References: <20240109171950.31010-1-afd@ti.com>
- <20240109171950.31010-9-afd@ti.com>
- <20240110082924.GA5185@atomide.com>
- <55efd488-c6a0-4dca-baea-1fa93d13dd17@ti.com>
- <20240118085551.GQ5185@atomide.com>
+	s=arc-20240116; t=1706255778; c=relaxed/simple;
+	bh=x40KTGVdO4caFI9vAMxA+4UUWiZpktSPCnUOvDhAMK8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=hdd9UplVzp0KZj+uMhG+O6WX7mNt/+bSCRjH8fiV0mPfMQPSN3r2rTSPO3tcT8skQX/aVaeZDrV8Ewl2BqY6XHsyHoj1vjrD990ezGbsVzKPyhpGO2vo5nY45lArARo9nmdbhlkj3cGEMA6avg0L512Y8eRUU+VYMR5FhoiPg4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 1fc204bb3df547b99960ebe6b27bc77e-20240126
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.35,REQID:49738768-b6d3-4cf5-9efa-c39c590ff1bf,IP:20,
+	URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:6
+X-CID-INFO: VERSION:1.1.35,REQID:49738768-b6d3-4cf5-9efa-c39c590ff1bf,IP:20,UR
+	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:6
+X-CID-META: VersionHash:5d391d7,CLOUDID:dc7baf8e-e2c0-40b0-a8fe-7c7e47299109,B
+	ulkID:240126155607M9ZGF07O,BulkQuantity:0,Recheck:0,SF:38|24|17|19|43|74|6
+	6|102,TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil
+	,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
+X-UUID: 1fc204bb3df547b99960ebe6b27bc77e-20240126
+X-User: mengfanhui@kylinos.cn
+Received: from localhost.localdomain [(39.156.73.13)] by mailgw
+	(envelope-from <mengfanhui@kylinos.cn>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256 128/128)
+	with ESMTP id 832743153; Fri, 26 Jan 2024 15:56:05 +0800
+From: mengfanhui <mengfanhui@kylinos.cn>
+To: tsbogend@alpha.franken.de,
+	geert+renesas@glider.be,
+	mengfanhui@kylinos.cn
+Cc: linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] config/mips: support zswap function
+Date: Fri, 26 Jan 2024 15:55:47 +0800
+Message-Id: <20240126075547.1521556-1-mengfanhui@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240118085551.GQ5185@atomide.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-* Tony Lindgren <tony@atomide.com> [240118 08:57]:
-> * Andrew Davis <afd@ti.com> [240117 15:52]:
-> > On 1/10/24 2:29 AM, Tony Lindgren wrote:
-> > > * Andrew Davis <afd@ti.com> [240109 17:20]:
-> > > > --- a/arch/arm/boot/dts/ti/omap/dra7.dtsi
-> > > > +++ b/arch/arm/boot/dts/ti/omap/dra7.dtsi
-> > > > @@ -850,12 +850,19 @@ target-module@56000000 {
-> > > >   					<SYSC_IDLE_SMART>;
-> > > >   			ti,sysc-sidle = <SYSC_IDLE_FORCE>,
-> > > >   					<SYSC_IDLE_NO>,
-> > > > -					<SYSC_IDLE_SMART>;
-> > > > +					<SYSC_IDLE_SMART>,
-> > > > +					<SYSC_IDLE_SMART_WKUP>;
-> > > 
-> > > You probably checked this already.. But just in case, can you please
-> > > confirm this is intentional. The documentation lists the smart wakeup
-> > > capability bit as reserved for dra7, maybe the documentation is wrong.
-> > > 
-> > 
-> > It was an intentional change, although I'm not sure it is correct :)
-> > 
-> > This is how we had it in our "evil vendor tree" for years (back when it
-> > was hwmod based), so when converting these nodes to use "ti,sysc" I noticed
-> > this bit was set, but as you point out the documentation disagrees.
-> > 
-> > I'd rather go with what has worked before, but it doesn't seem to
-> > break anything either way, so we could also break this change out into
-> > its own patch if you would prefer.
-> 
-> I agree it's best to stick what is known to work. How about let's add
-> the related information to the patch description?
+Solution /sys/module/zswap/parameters/enabled attribute node
+does not exist issue，handle zpool zbud initialization failed,
+open CONFIG_ZSWAP CONFIG_ZPOOL CONFIG_ZBUD configuration,manual
+zswap function by /sys/module/zswap/parameters/enabled file
 
-I'll update the commit message for it and apply these, no need to repost.
+Signed-off-by: mengfanhui <mengfanhui@kylinos.cn>
+---
+ arch/mips/configs/generic_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Regards,
+diff --git a/arch/mips/configs/generic_defconfig b/arch/mips/configs/generic_defconfig
+index 071e2205c7ed..14884df392f4 100644
+--- a/arch/mips/configs/generic_defconfig
++++ b/arch/mips/configs/generic_defconfig
+@@ -13,6 +13,9 @@ CONFIG_CGROUP_DEVICE=y
+ CONFIG_CGROUP_CPUACCT=y
+ CONFIG_NAMESPACES=y
+ CONFIG_USER_NS=y
++CONFIG_ZSWAP=y
++CONFIG_ZPOOL=y
++CONFIG_ZBUD=y
+ CONFIG_SCHED_AUTOGROUP=y
+ CONFIG_BLK_DEV_INITRD=y
+ CONFIG_BPF_SYSCALL=y
+-- 
+2.25.1
 
-Tony
 
