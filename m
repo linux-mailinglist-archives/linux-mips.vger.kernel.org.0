@@ -1,44 +1,44 @@
-Return-Path: <linux-mips+bounces-1169-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1171-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F27283D827
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jan 2024 11:30:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C75183D82A
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jan 2024 11:30:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2BE81F32C7F
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jan 2024 10:30:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F4012A1656
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jan 2024 10:30:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 820E31CD1F;
-	Fri, 26 Jan 2024 10:16:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EADC1CD3D;
+	Fri, 26 Jan 2024 10:16:05 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBD3B1CD16;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBD621CD1A;
 	Fri, 26 Jan 2024 10:16:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706264164; cv=none; b=PiHay5YutfrrnAmEjtHNYSyUab5hHWmvIGNLouRo/FCV5p2quXyc2Eh2RSB/b6+Uei2CNi0JvsB42Tf704jfW6jnxcU0wHRFcmFiERuEVp+7QfjKdwzAUoJ9Kbey1WyoQwIOFZzNBb1wwyPm8iAsx4K3s1q+8HxypM41hvwVkgA=
+	t=1706264165; cv=none; b=AEQOUIiq8uCAJGvBQtR3thauc9UCMgg7D7f13cxno3NdTuiaeglHu2wqBU7LiBBgdJXxFDobNC3f39VDDVZzqvWK1W73FyXpgqtrgQ59jErhnqR5496XaC4JDyGd8cmZqznZrJ0jYo8pYSE9qkNW+vDv+qHFRQiaoFnrcUIXz/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706264164; c=relaxed/simple;
-	bh=ngM/3k/+1ku0C5kXqBcpID4zlTiXaRD3W3n801qRemY=;
+	s=arc-20240116; t=1706264165; c=relaxed/simple;
+	bh=JzsJ1hi/HTW0sIn7Hj+aVlk0JmlpkAgZaLCD04xMdtA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KfyUt0txTVU3lnQyqCAA+9uhMgRIqoWN2SXTw8hzrJFJ2OIXrJlH3ok2l01nQMNyNlKJ8ZOxiUDyjhcR+4NfHO/FtEMod94g9K5lZoDJKGW0Jt/htYo69ja5R9ba8a3bCWiIndQ2fy/kvdiCbDdp2oXd8dLoNmMDP2uVEtQ2XwM=
+	 Content-Type:Content-Disposition:In-Reply-To; b=l32eXsR73L32zXhiKvc6KUPbKO2TnqGeU4nUfmp+n/jDeymWz0FyCBaYBixqwTcsZF7zPrXFMgrhrkQ8A05OLJceqa/05FFyPb7oKV0MDJ4dN+QDwcx+bRY6VcUx6mx8YOoICv3VJk4XeTp8ghdJKTtTzU0vBDy8ES5SCSSF7C4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1rTJFY-0003wm-00; Fri, 26 Jan 2024 11:15:52 +0100
+	id 1rTJFY-0003wk-00; Fri, 26 Jan 2024 11:15:52 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 85708C04B4; Fri, 26 Jan 2024 11:13:23 +0100 (CET)
-Date: Fri, 26 Jan 2024 11:13:23 +0100
+	id 83452C0661; Fri, 26 Jan 2024 11:13:43 +0100 (CET)
+Date: Fri, 26 Jan 2024 11:13:43 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Florian Fainelli <f.fainelli@gmail.com>
-Cc: linux-mips@vger.kernel.org, jonas.gorski@gmail.com,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] MIPS: BCM63XX: Fix missing prototypes
-Message-ID: <ZbOFw7m7CX8SHy4F@alpha.franken.de>
-References: <20240123174701.210922-1-f.fainelli@gmail.com>
+To: Aleksander Jan Bajkowski <olek2@wp.pl>
+Cc: john@phrozen.org, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: lantiq: register smp_ops on non-smp platforms
+Message-ID: <ZbOF1wPz2Xa3AyU/@alpha.franken.de>
+References: <20240122184709.9625-1-olek2@wp.pl>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -47,23 +47,41 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240123174701.210922-1-f.fainelli@gmail.com>
+In-Reply-To: <20240122184709.9625-1-olek2@wp.pl>
 
-On Tue, Jan 23, 2024 at 09:46:54AM -0800, Florian Fainelli wrote:
-> Most of the symbols for which we do not have a prototype can actually be
-> made static and for the few that cannot, there is already a declaration
-> in a header for it.
+On Mon, Jan 22, 2024 at 07:47:09PM +0100, Aleksander Jan Bajkowski wrote:
+> Lantiq uses a common kernel config for devices with 24Kc and 34Kc cores.
+> The changes made previously to add support for interrupts on all cores
+> work on 24Kc platforms with SMP disabled and 34Kc platforms with SMP
+> enabled. This patch fixes boot issues on Danube (single core 24Kc) with
+> SMP enabled.
 > 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> Fixes: 730320fd770d ("MIPS: lantiq: enable all hardware interrupts on second VPE")
+> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
 > ---
->  arch/mips/bcm63xx/boards/board_bcm963xx.c | 2 +-
->  arch/mips/bcm63xx/dev-rng.c               | 2 +-
->  arch/mips/bcm63xx/dev-uart.c              | 1 +
->  arch/mips/bcm63xx/dev-wdt.c               | 2 +-
->  arch/mips/bcm63xx/irq.c                   | 2 +-
->  arch/mips/bcm63xx/setup.c                 | 2 +-
->  arch/mips/bcm63xx/timer.c                 | 2 +-
->  7 files changed, 7 insertions(+), 6 deletions(-)
+>  arch/mips/lantiq/prom.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/mips/lantiq/prom.c b/arch/mips/lantiq/prom.c
+> index a3cf29365858..0c45767eacf6 100644
+> --- a/arch/mips/lantiq/prom.c
+> +++ b/arch/mips/lantiq/prom.c
+> @@ -108,10 +108,9 @@ void __init prom_init(void)
+>  	prom_init_cmdline();
+>  
+>  #if defined(CONFIG_MIPS_MT_SMP)
+> -	if (cpu_has_mipsmt) {
+> -		lantiq_smp_ops = vsmp_smp_ops;
+> +	lantiq_smp_ops = vsmp_smp_ops;
+> +	if (cpu_has_mipsmt)
+>  		lantiq_smp_ops.init_secondary = lantiq_init_secondary;
+> -		register_smp_ops(&lantiq_smp_ops);
+> -	}
+> +	register_smp_ops(&lantiq_smp_ops);
+>  #endif
+>  }
+> -- 
+> 2.39.2
 
 applied to mips-fixes.
 
