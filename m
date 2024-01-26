@@ -1,215 +1,191 @@
-Return-Path: <linux-mips+bounces-1176-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1177-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37CD383DA2B
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jan 2024 13:28:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03E4283DA3A
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jan 2024 13:34:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A4A0B1F26BAD
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jan 2024 12:28:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8108E289A76
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jan 2024 12:34:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B31618EB2;
-	Fri, 26 Jan 2024 12:28:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BC861B592;
+	Fri, 26 Jan 2024 12:34:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="h8HtAbQy"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="bQ41PCyR";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Vg+MLw/n"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 307B119470;
-	Fri, 26 Jan 2024 12:28:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 461271A726;
+	Fri, 26 Jan 2024 12:34:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706272123; cv=none; b=b6Ru7UBa+pmmw1E2rJV7bGyxnW80fr2+mIQG/pIVQ0FImSPQ+Sfjj6emfV42M4vshS6WLyjd6/bk7mKlby+cQ7+8ecOBuEPeOu4o2uCuPneAgbVjCw/2ypfaEc8swtgAvs6S3BN0/yIXZwrbHADTBVQKWN0b3KnznnZfIEJ0NwI=
+	t=1706272443; cv=none; b=heJMWgx4kWAk+tGTFcbeWPOcCWFSqsV/0TFaOpncMoQ4/XMPFvD44vcEHRMxMMh2YuGoGaq8BH7VJNiBB18dbfBLR6VRYUEaRZ4W3ytRNm8sOfrsYnuofwZxf50y40KtTv6EimvXrpy7FGxkJva/Js2HNtFBVdDPlwpyH/kK36Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706272123; c=relaxed/simple;
-	bh=Vj6ORDePH3R/SCmy1j34iKAMXNxYlW+3uZo0XKEH6zw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
-	 References:In-Reply-To; b=X4HeJIntarT5VGT8sVcH0QPtHNEc5OUWwdb73mhbVv7XezHaauAXrIyn7VwO/R5I0OsYG2stUFWylttCdBdqygT73IiD80KeihGXveyrJ1ztlKuR5fVmGvFZ02fWkznuriwrLCxpbICcfUGk7En0q/EymviaMmB50oIzYxRBbPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=h8HtAbQy; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5BA21240005;
-	Fri, 26 Jan 2024 12:28:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1706272111;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1sT5spjLeLixo4sBJ2a2pVOX888Y+rV9WQeRdJoVXTc=;
-	b=h8HtAbQyNTlxFbbz/RYzo39FybIHEds28Y39Hr7ZKTDH9cwjRUA9zG5aVdjXzFOek7LtUj
-	J3PRKO/21ruNpjj3y8SJGloMCY89cQcVd8qYYh6j6NWeXiC9kQa4gq4KjYzXDsepXLBPR4
-	D2xpjRYw1HEmIVCXD21F4azYovgAMa28k3grOxIKHeLj+QIDqZ9IZy1mZ56yz6JHNcTxI8
-	fx0xlaWMXwRB94ZxfFVX0oZBdkOwiwP5QOwqR1Bz7ENobrRpzxBYXo4otuRWjoo7acks1a
-	nmPvAHTU7XQM1l2Kwa1HgEkEkg7iX0RDwHIoaUdoOGF+rSMcmeJ0PwxYwf1hGw==
+	s=arc-20240116; t=1706272443; c=relaxed/simple;
+	bh=eFCWO1k8iWqR03mo4ZOrZ2bxtb9pRwS+IvtSVw+zg4o=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=nzhOA+zPHQNiOVoXFf6pFpGoqy07tQ9qxnRM6I3E5Yu3f+0JZcj3xoIHliZi8A9BtQgqLXv6bkSovIDnTfE8E/JSU6klPW8KuLNgeC+yrONeEaYsEC47Ob8HViFLqh9gBmWlMiPyr9T2Tka90CDQf3mtDBMhB4Ko6N+aANFLypA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=bQ41PCyR; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Vg+MLw/n; arc=none smtp.client-ip=64.147.123.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.west.internal (Postfix) with ESMTP id D91663200B35;
+	Fri, 26 Jan 2024 07:33:59 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Fri, 26 Jan 2024 07:34:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1706272439;
+	 x=1706358839; bh=tBqGlsEjn/kPiobf5SqqLqz5w2BRrTChAdCUzax6B/E=; b=
+	bQ41PCyRqkTGfAY3EcGz/E4+tr5J5nJYZVOYbWZvdqVmy2vPyGrY02Q9K3pLeLUW
+	T4vI6n9ZC5ZZH2182wRzHoGH1DeZnWkmODohOMjnub5KDWfXiB4hv18qm+timODL
+	7xYN2FJtsJL9sc/Y6B2b8G8rLqBvQsY1aRWvgpsP6aMcHw2tIWC1rpVPa26QZ4qR
+	GGISiUJlUEltf1mGiL7RjvvHpSFSLGadQKjHaxSMLzTsOkGXqrgVVjcPyr3FGmST
+	xLRGZGRF/gbXcfJUdY4D6tN0RehqT9ZYtlX3L9kpUpDKnisFutWSw2ykcyeZVpQX
+	GIpQXOxIi7jrClXsb2S03A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1706272439; x=
+	1706358839; bh=tBqGlsEjn/kPiobf5SqqLqz5w2BRrTChAdCUzax6B/E=; b=V
+	g+MLw/nPlLUnBcqi1A/jOsI9bXUZptHc+C3yWTx4RJ9N0ueSTvvQrgiM52AUuNIf
+	Rb6q/sSg5bcfpSCxFN2KlEEM0FRcnzUOtoDnLfKjdQbvf7WpusKKwLsiF00aBenC
+	hftxxF8Up878nl8Abw2JizzSb3GGeTrtUpDkEchklIwf/CJ9o1E0WENdpLbZux8D
+	paVzl956Hq4EC5uidnJlH0H5ERI4xTnYGqi+uGwCTCVSi0MPnMLOlkj0OGKELnNf
+	Hq2xM9KlMOyrvg3419cwaRSEICs9kgTnS7LSAPQB5HSqkUpS+3ufsAbRXb4+JdLh
+	ZVTaKXGabwSax0Py+GmCQ==
+X-ME-Sender: <xms:tqazZawoqJ7sd46qCMdPCiQUsBiA_0v77gNev0WoAs-5EcuN6fgXJw>
+    <xme:tqazZWT1qZB0l2q5vIacrCH_-mkWoAH5ot6Hbh4m54IpkzJsR-uoZz_WmQTGDDDnd
+    enQ-q0HNr8iJzzn4Zo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdeljedggedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
+    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpeelteevjeekfedvgedvleeuueeukeegleelledujeek
+    ffekvefhueffffefkedvueenucffohhmrghinhepshhouhhrtggvfigrrhgvrdhorhhgne
+    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgig
+    uhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:t6azZcWrZTKaV6JYHorN_hIoNFbjKo24-7BBP_81rmLLcQgu4-NSoQ>
+    <xmx:t6azZQiNHEJHMZTX1r0RXLAIm0AqTTY-gFGErRM43MbONIy5gU5FYQ>
+    <xmx:t6azZcAAgfwaZ0DDwk5-iTtgfpdsc5r9Q-ExBFSA1YVRDW_l9RG3MQ>
+    <xmx:t6azZfPDLUyG_7IMAMviv3FibMCgX46cBlD7Sw6CKof5uJ3Go1sCCg>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id DA8D536A0076; Fri, 26 Jan 2024 07:33:58 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-119-ga8b98d1bd8-fm-20240108.001-ga8b98d1b
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Message-Id: <4b715c9f-6a9e-4496-8810-670080cb715a@app.fastmail.com>
+In-Reply-To: <75e9fd7b08562ad9b456a5bdaacb7cc220311cc9.camel@xry111.site>
+References: <75e9fd7b08562ad9b456a5bdaacb7cc220311cc9.camel@xry111.site>
+Date: Fri, 26 Jan 2024 12:33:38 +0000
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Xi Ruoyao" <xry111@xry111.site>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>, libc-alpha@sourceware.org,
+ regressions@lists.linux.dev
+Subject: Re: Strange EFAULT on mips64el returned by syscall when another thread is
+ forking
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 26 Jan 2024 13:28:29 +0100
-Message-Id: <CYOMZE0XIEIR.7Q1BDZCKX1E@bootlin.com>
-To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Rob Herring"
- <robh@kernel.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v3 04/17] dt-bindings: soc: mobileye: add EyeQ5 OLB
- system controller
-Cc: "Gregory CLEMENT" <gregory.clement@bootlin.com>, "Michael Turquette"
- <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
- <conor+dt@kernel.org>, "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>, "Philipp Zabel"
- <p.zabel@pengutronix.de>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, <linux-mips@vger.kernel.org>,
- <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>, <linux-gpio@vger.kernel.org>
-X-Mailer: aerc 0.15.2
-References: <20240123-mbly-clk-v3-0-392b010b8281@bootlin.com>
- <20240123-mbly-clk-v3-4-392b010b8281@bootlin.com>
- <20240124151405.GA930997-robh@kernel.org>
- <CYN43TSPPPZ5.1VUA1CH95D8KJ@bootlin.com>
- <CYN4D0Z6600X.20W9VWX4BGNXX@bootlin.com>
- <CAL_JsqKHPdmafDvKCHZTNNzRAzq2Y34b2dqUXQD6WpE7z2k-jA@mail.gmail.com>
- <CYNRCGYA1PJ2.FYENLB4SRJWH@bootlin.com>
- <8054e01d-0a1e-45b6-b62a-25303e8f4593@linaro.org>
-In-Reply-To: <8054e01d-0a1e-45b6-b62a-25303e8f4593@linaro.org>
-X-GND-Sasl: theo.lebrun@bootlin.com
 
-Hello,
 
-On Fri Jan 26, 2024 at 12:52 PM CET, Krzysztof Kozlowski wrote:
-> On 25/01/2024 12:40, Th=C3=A9o Lebrun wrote:
-> > Hello,
-> >=20
-> > On Wed Jan 24, 2024 at 8:22 PM CET, Rob Herring wrote:
-> >> On Wed, Jan 24, 2024 at 11:40=E2=80=AFAM Th=C3=A9o Lebrun <theo.lebrun=
-@bootlin.com> wrote:
-> >>> On Wed Jan 24, 2024 at 6:28 PM CET, Th=C3=A9o Lebrun wrote:
-> >>>> On Wed Jan 24, 2024 at 4:14 PM CET, Rob Herring wrote:
-> >>>>> On Tue, Jan 23, 2024 at 07:46:49PM +0100, Th=C3=A9o Lebrun wrote:
-> >=20
-> > [...]
-> >=20
-> >>>>>> +      };
-> >>>>>> +
-> >>>>>> +      pinctrl-b {
-> >>>>>> +        compatible =3D "mobileye,eyeq5-b-pinctrl";
-> >>>>>> +        #pinctrl-cells =3D <1>;
-> >>>>>> +      };
-> >>>>>> +    };
-> >>>>>
-> >>>>> This can all be simplified to:
-> >>>>>
-> >>>>> system-controller@e00000 {
-> >>>>>     compatible =3D "mobileye,eyeq5-olb", "syscon";
-> >>>>>     reg =3D <0xe00000 0x400>;
-> >>>>>     #reset-cells =3D <2>;
-> >>>>>     #clock-cells =3D <1>;
-> >>>>>     clocks =3D <&xtal>;
-> >>>>>     clock-names =3D "ref";
-> >>>>>
-> >>>>>     pins { ... };
-> >>>>> };
-> >>>>>
-> >>>>> There is no need for sub nodes unless you have reusable blocks or e=
-ach
-> >>>>> block has its own resources in DT.
-> >>>>
-> >>>> That is right, and it does simplify the devicetree as you have shown=
-.
-> >>>> However, the split nodes gives the following advantages:
-> >>>>
-> >>>>  - Devicetree-wise, it allows for one alias per function.
-> >>>>    `clocks =3D <&clocks EQ5C_PLL_CPU>` is surely more intuitive
-> >>>>    than `clocks =3D <&olb EQ5C_PLL_CPU>;`. Same for reset.
-> >>
-> >> clocks: resets: pinctrl: system-controller@e00000 {
-> >>
-> >>>>
-> >>>>  - It means an MFD driver must be implemented, adding between 100 to=
- 200
-> >>>>    lines of boilerplate code to the kernel.
-> >>
-> >> From a binding perspective, not my problem... That's Linux details
-> >> defining the binding. What about u-boot, BSD, future versions of Linux
-> >> with different structure?
-> >>
-> >> I don't think an MFD is required here. A driver should be able to be
-> >> both clock and reset provider. That's pretty common. pinctrl less so.
-> >=20
-> > @Rob & @Krzysztof: following Krzysztof's question about the memory map
-> > and adding ressources to the system-controller, I was wondering if the
-> > following approach would be more suitable:
+
+=E5=9C=A82024=E5=B9=B41=E6=9C=8824=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=8A=E5=
+=8D=8810:42=EF=BC=8CXi Ruoyao=E5=86=99=E9=81=93=EF=BC=9A
+> Hi,
 >
-> More or less (missing ranges, unit addresses, lower-case hex etc).
+> When I'm testing Glibc master branch for upcoming 2.39 release, I
+> noticed an alarming test failure on mips64el:
 
-Yeah the details are not really on point, it was only a proposal
-highlighting a different way of dealing with the current situation.
-Looks like it is suitable to you.
+So apparently it should be tracked as a regression.
 
-> > 	olb: system-controller@e00000 {
-> > 		compatible =3D "mobileye,eyeq5-olb", "syscon", "simple-mfd";
-> > 		reg =3D <0 0xe00000 0x0 0x400>;
-> > 		#address-cells =3D <1>;
-> > 		#size-cells =3D <1>;
-> >=20
-> > 		clocks: clock-controller {
-> > 			compatible =3D "mobileye,eyeq5-clk";
-> > 			reg =3D <0x02c 0x7C>;
-> > 			#clock-cells =3D <1>;
-> > 			clocks =3D <&xtal>;
-> > 			clock-names =3D "ref";
-> > 		};
-> >=20
-> > 		reset: reset-controller {
-> > 			compatible =3D "mobileye,eyeq5-reset";
-> > 			reg =3D <0x004 0x08>, <0x120 0x04>, <0x200 0x34>;
-> > 			reg-names =3D "d0", "d2", "d1";
-> > 			#reset-cells =3D <2>;
-> > 		};
-> >=20
-> > 		pinctrl0: pinctrl-a {
-> > 			compatible =3D "mobileye,eyeq5-a-pinctrl";
-> > 			reg =3D <0x0B0 0x30>;
-> > 		};
-> >=20
-> > 		pinctrl1: pinctrl-b {
-> > 			compatible =3D "mobileye,eyeq5-b-pinctrl";
-> > 			reg =3D <0x0B0 0x30>;
+#regzbot ^introduced 4bce37a68ff884e821a02a731897a8119e0c37b7
+
+Should we revert it for now?
+
+Thanks
+- Jiaxun
+
 >
-> Duplicate reg?
+> FAIL: stdlib/tst-arc4random-thread
+>
+> I've gathered some info about it and pasted my findings into
+> https://sourceware.org/glibc/wiki/Testing/Tests/stdlib/tst-arc4random-=
+thread.
+>
+> Finally I was able to reduce the test case into:
+>
+> #include <stdlib.h>
+> #include <errno.h>
+> #include <pthread.h>
+> #include <unistd.h>
+> #include <fcntl.h>
+>
+> void *
+> test_thread (void *)
+> {
+>   char buf[16] =3D {};
+>   int fd =3D open("/dev/zero", O_RDONLY);
+>   while (1)
+>     {
+>       ssize_t ret =3D read (fd, buf, 7);
+>       if (ret =3D=3D -1 && errno =3D=3D EFAULT)
+> 	abort ();
+>     }
+> }
+>
+> void *
+> fork_thread (void *)
+> {
+>   while (1)
+>     {
+>       if (!fork ())
+> 	_exit (0);
+>     }
+> }
+>
+> int
+> main (void)
+> {
+>   pthread_t test_th;
+>   pthread_t fork_th;
+>
+>   pthread_create (&test_th, NULL, test_thread, NULL);
+>   pthread_create (&fork_th, NULL, fork_thread, NULL);
+>   pthread_join (test_th, NULL);
+>   pthread_join (fork_th, NULL);
+> }
+>
+> When running this on the mainline kernel (revision 6.8.0-rc1+-
+> g7ed2632ec7d72e926b9e8bcc9ad1bb0cd37274bf) it fails in milliseconds.=20
+> Some "interesting" aspects:
+>
+> 1. This is related to the size parameter passed to read ().  When it's
+> less than 8 it fails, but when it's 8 or greater there is no failure.
+> 2. This is not related to if "buf" is initialized or not.
+>
+> Now I'm suspecting this might be a kernel bug.  Any pointer to further
+> triage?
+>
+> --=20
+> Xi Ruoyao <xry111@xry111.site>
+> School of Aerospace Science and Technology, Xidian University
 
-Yes, the mapping is intertwined. Else it could be three ressources per
-pinctrl. Just really small ones.
-
- - 0xB0 mapping   A
- - 0xB4 mapping   B
- - 0xB8
- - 0xBC
- - 0xC0 pull-down A
- - 0xC4 pull-up   A
- - 0xC8 pull-down B
- - 0xCC pull-up   B
- - 0xD0 drive-strength lo A
- - 0xD4 drive-strength hi A
- - 0xD8 drive-strength lo B
- - 0xDC drive-strength hi B
-
-0xB8 is unrelated (I2C speed & SPI CS). 0xBC is a hole.
-
-Thanks,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--=20
+- Jiaxun
 
