@@ -1,84 +1,118 @@
-Return-Path: <linux-mips+bounces-1190-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1191-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11E0E83ECA5
-	for <lists+linux-mips@lfdr.de>; Sat, 27 Jan 2024 11:10:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44B1C83EE95
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Jan 2024 17:27:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4476E1C21E29
-	for <lists+linux-mips@lfdr.de>; Sat, 27 Jan 2024 10:10:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A6304B24577
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Jan 2024 16:27:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00767200D6;
-	Sat, 27 Jan 2024 10:09:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A72C625760;
+	Sat, 27 Jan 2024 16:23:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kWp/lLxp"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C666200CB
-	for <linux-mips@vger.kernel.org>; Sat, 27 Jan 2024 10:09:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C661E493;
+	Sat, 27 Jan 2024 16:23:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706350166; cv=none; b=NaPsyRiDgmfzVKWv/mwE8+xoyKhBvkm8Y4uajEFxEdyCtj1p07P85pFDKJKmVee6sPWN8RtExZnX8aTDTlETIvrsshEBURNtPj3zwamkCysAHSX0qLuL5qKzYe+G78rS8MJ6hHVX3o+CNJRfflVFuOKwXhYI1yNh3uoaxbtpTYI=
+	t=1706372594; cv=none; b=mPMnjRmDTWW0JdRiH0uc9dPgUaUqmjxCq6l7bRxz9t4IoM64JCZv7GOMZ8tH+RwzQ3fca+GDbYA2IwtPTZma0F4KdGchZdkwJYIn4nny7nk6xsUWTr+JxPnkT8o0oTq1IgYPoEzBGMeKwD5igIwbRHmdgZYOupxMfI9DpEH2EB4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706350166; c=relaxed/simple;
-	bh=pusQHn9Lbn/7BO+VF1uVbESlfALcfwJA1m7T4qxLaW0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nUEHRDfYLBK7k7rKhz4B4wN+QLureeCBp0LZHuvLYV8dzORJuzAGrZ/W79GNRgpPb1YoFPvCSJsPlVaY5ssUHGecV1tF5U7vMmpt7NDRxQzuxlp4vFqFR9UJYansyaAc252EVgIE4Xh9jgI/QizCM+HzCZ9rSICXSCSzjJ2ih90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1rTfcj-000137-00; Sat, 27 Jan 2024 11:09:17 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 8C571C0135; Sat, 27 Jan 2024 11:04:04 +0100 (CET)
-Date: Sat, 27 Jan 2024 11:04:04 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Huang Pei <huangpei@loongson.cn>
-Cc: Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Paul Burton <paulburton@kernel.org>,
-	Li Xuefeng <lixuefeng@loongson.cn>,
-	Yang Tiezhu <yangtiezhu@loongson.cn>,
-	Gao Juxin <gaojuxin@loongson.cn>,
-	Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH] MIPS: loongson64: set nid for reserved memblock region
-Message-ID: <ZbTVFEHxGp/azvPM@alpha.franken.de>
-References: <ZbPq0yF20Qyo1rKb@alpha.franken.de>
- <20240127091221.2884-1-huangpei@loongson.cn>
- <20240127091221.2884-2-huangpei@loongson.cn>
+	s=arc-20240116; t=1706372594; c=relaxed/simple;
+	bh=7O7bM9DbGm+dHFdHjSz8m31D3316fr8BOWGszZGmnP0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pDZi4Pr+7H3azFEvcvwBeZwLNgbnY7jBXGMeK8bAZJ3EPJN0pIME9Wd7kF3hVRi6SXv5+oqqxG7RIycHs8w9P/9FKlTdMseJbKeKsS45p49ZgnnAHooS1Cs531C2bvhqwhQZFWTffF/zq6rOJg+fK8yQQaj+r1yDQ5hhAtgQFBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kWp/lLxp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07B11C433F1;
+	Sat, 27 Jan 2024 16:23:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706372594;
+	bh=7O7bM9DbGm+dHFdHjSz8m31D3316fr8BOWGszZGmnP0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=kWp/lLxppL1Wmt0PYLrNpRtNqtBo/WX9lGCN3fsRTmerNnoJJrOLbeP52MC44Aon/
+	 PyZrsBY7MiVsKapmAjDZKsX1Fd3iyU9mYrONcVYq7LXbfe3TIsURek5GbNWbL0KDHV
+	 xLvpsCCjxE50YATkpQgjTQdrhOL8iI7PuRlvJhECDIApyfcLxK5QpxF3PwS9YS3XIf
+	 pJgpScWJMXxnkKoYsp3dvkdJF7losCwVsadbGx0OHfA4XtZc6JoenQTtTv5QKQBNbW
+	 AO2dK33CWfIbyEQLBu0ojQMceIHb3B6yFzCGaIH0ADezfV89C0uDIFVyP4fGkUTyON
+	 Uq/0oH7voAZzQ==
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org
+Cc: linux-kbuild@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/1] MIPS: fix the "CPU type" choice structure
+Date: Sun, 28 Jan 2024 01:23:08 +0900
+Message-Id: <20240127162309.1026549-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240127091221.2884-2-huangpei@loongson.cn>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Jan 27, 2024 at 05:12:21PM +0800, Huang Pei wrote:
-> Commit 61167ad5fecd("mm: pass nid to reserve_bootmem_region()") reveals
-> that reserved memblock regions have no valid node id set, just set it
-> right since loongson64 firmware makes it clear in memory layout info.
-> 
-> This works around booting failure on 3A1000+ since commit 61167ad5fecd
-> ("mm: pass nid to reserve_bootmem_region()") under
-> CONFIG_DEFERRED_STRUCT_PAGE_INIT.
-> 
-> Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> ---
->  arch/mips/loongson64/init.c | 3 +++
->  arch/mips/loongson64/numa.c | 2 ++
->  2 files changed, 5 insertions(+)
 
-I would've needed a patch just fixing the one line since the broken commit
-is already in mips-fixes, which is a public tree so no rebasing.
-I'm going to revert the old commit instead and add the new one, 
-BTW. please send new patches as it's own thread and not as a reply.
+The bool type "choice" is meant to list exclusively selected config
+options.
 
-Thomas.
+Unless you are familiar with the Kconfig internals, you will not
+understand how CONFIG_B can be enabled in the following code:
+
+  choice
+         prompt "Choose one of them, but how to choose B?"
+
+  config A
+          bool "A"
+
+  config B
+          bool "B"
+          depends on A
+
+  config C
+          bool "C"
+
+  endchoice
+
+B is not a choice value because it becomes a child of A, as a side-effect
+of re-paranting in menu_finalize().
+It is unreadable, and I even consider it as a bug.
+My plan is to forbid such a silly choice structure.
+
+Just write as follows:
+
+  choice
+          prompt "Choose one of them"
+
+  config A
+          bool "A"
+
+  config C
+          bool "C"
+
+  endchoice
+
+  config B
+          bool "B"
+          depends on A
+
+Fortunately, arch/mips/Kconfig seems to be the only file I need to fix.
+
+
+
+Masahiro Yamada (1):
+  MIPS: move unselectable entries out of the "CPU type" choice
+
+ arch/mips/Kconfig | 76 +++++++++++++++++++++++------------------------
+ 1 file changed, 38 insertions(+), 38 deletions(-)
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.40.1
+
 
