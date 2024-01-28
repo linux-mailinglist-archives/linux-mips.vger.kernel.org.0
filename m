@@ -1,108 +1,132 @@
-Return-Path: <linux-mips+bounces-1195-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1196-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85E1683F3C7
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Jan 2024 05:42:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C629383F596
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Jan 2024 14:28:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 301421F21F58
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Jan 2024 04:42:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78A7F282B04
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Jan 2024 13:28:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E6D4611B;
-	Sun, 28 Jan 2024 04:42:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E623223746;
+	Sun, 28 Jan 2024 13:28:50 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADD626117
-	for <linux-mips@vger.kernel.org>; Sun, 28 Jan 2024 04:42:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB64522EE8;
+	Sun, 28 Jan 2024 13:28:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706416952; cv=none; b=dl/F/sGuMqLF9/sc7cyWclPPuSkOd9WjaJDU4NfdXku4Zs45OEDg+tIX4LCeqyDAiEkH8rEFdZVt5YK1nzL03WRh4XJo+6IEBip8x7CfLZYtV+VqxxH6dsvRZE9aq8CGTrsAl6/h7vGHKnI90xeaQVfbyZNNq4xS+FMO4dJM7uU=
+	t=1706448530; cv=none; b=dbg0ARYmaorXmyJieOnmiC0Ptt7YHIhQvUn3ISjbQt11O2RndQrgZZyljDlaQ00QYd+E+JIob+wi2LPP4PGTuBGoaQeREWtUQGFPp4/11jsJKKuhyUjUNsw6gxFjPBuLnGGFxTFhtGF9QvyUa8zRAJCqsI5OAFCxwpxo28CRnNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706416952; c=relaxed/simple;
-	bh=KKg6a1Mr4aaVqqzD51u1ixUQLxlh8Awbxy5gMlR2WeU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=blSr+O9IT/OOoShs7w+/RKWX6dBcXMlTIHg7jPH6unCvQCyXm7AXhKhCUELRRqyqlapHVv6kl0jH+nEvML8ZrboOEXFjBLMx94tb9RA0nj1tKVwJPh+4tdWZsUjT6oXzMPpv94718GW3aEZP0KGQMsEzCGe9DB7mYQEdXVWbN3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [111.9.175.10])
-	by gateway (Coremail) with SMTP id _____8Axeegz27Vl8FIHAA--.3999S3;
-	Sun, 28 Jan 2024 12:42:27 +0800 (CST)
-Received: from Board-3A3000 (unknown [111.9.175.10])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxF80w27Vlly8hAA--.9197S2;
-	Sun, 28 Jan 2024 12:42:26 +0800 (CST)
-Date: Sun, 28 Jan 2024 12:42:24 +0800
-From: Huang Pei <huangpei@loongson.cn>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Paul Burton <paulburton@kernel.org>,
-	Li Xuefeng <lixuefeng@loongson.cn>,
-	Yang Tiezhu <yangtiezhu@loongson.cn>,
-	Gao Juxin <gaojuxin@loongson.cn>,
-	Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH] MIPS: loongson64: set nid for reserved memblock region
-Message-ID: <20240128044224.3aqdtimmuhhqpek6@Board-3A3000>
-References: <ZbPq0yF20Qyo1rKb@alpha.franken.de>
- <20240127091221.2884-1-huangpei@loongson.cn>
- <20240127091221.2884-2-huangpei@loongson.cn>
- <ZbTVFEHxGp/azvPM@alpha.franken.de>
+	s=arc-20240116; t=1706448530; c=relaxed/simple;
+	bh=xOmYMZ5MtseVU76edISPYkHc5kt/+yu5YKMYOBQHCJ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=NXg/vZbfkmSvW8bvUiMJOkuuEBuIPiCMftii1alJLzio5aEBbRTctoxJYo8HpGNoT2mZ9gsT68s8WKkQa6Gm+3itlBmyP2/Hc390lTGb+sHYypChDlzIkSw5tHj68ZHnEdZPgKtG8ijUrD7QaLWlnaM+smLBZzg6n2pZ5c0LgBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1rU5DA-0001qH-00; Sun, 28 Jan 2024 14:28:36 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id A5CCCC0135; Sun, 28 Jan 2024 14:28:29 +0100 (CET)
+Date: Sun, 28 Jan 2024 14:28:29 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: torvalds@linux-foundation.org
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] MIPS fixes for v6.8
+Message-ID: <ZbZWfaAxU0MyPU9i@alpha.franken.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZbTVFEHxGp/azvPM@alpha.franken.de>
-X-CM-TRANSID:AQAAf8BxF80w27Vlly8hAA--.9197S2
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj9xXoWrury7tr1UJFWkWF45uw45Jwc_yoWkuFg_Xr
-	42krn7Cw15Jr4xWa17tF13u3y29ayUuay5XrnrG34FqF1YvFW5GF4Yg39Iyw17KrWxtF15
-	Cw4Yy34Svw129osvyTuYvTs0mTUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUbzxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
-	JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
-	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v2
-	6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrw
-	CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
-	14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
-	IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxK
-	x2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI
-	0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8zwZ7UUUUU==
 
-On Sat, Jan 27, 2024 at 11:04:04AM +0100, Thomas Bogendoerfer wrote:
-> On Sat, Jan 27, 2024 at 05:12:21PM +0800, Huang Pei wrote:
-> > Commit 61167ad5fecd("mm: pass nid to reserve_bootmem_region()") reveals
-> > that reserved memblock regions have no valid node id set, just set it
-> > right since loongson64 firmware makes it clear in memory layout info.
-> > 
-> > This works around booting failure on 3A1000+ since commit 61167ad5fecd
-> > ("mm: pass nid to reserve_bootmem_region()") under
-> > CONFIG_DEFERRED_STRUCT_PAGE_INIT.
-> > 
-> > Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> > ---
-> >  arch/mips/loongson64/init.c | 3 +++
-> >  arch/mips/loongson64/numa.c | 2 ++
-> >  2 files changed, 5 insertions(+)
-> 
-> I would've needed a patch just fixing the one line since the broken commit
-> is already in mips-fixes, which is a public tree so no rebasing.
-> I'm going to revert the old commit instead and add the new one, 
-> BTW. please send new patches as it's own thread and not as a reply.
-> 
-Ok, new patches always as its own thread not as a reply, I got it.
-> Thomas.
-> 
-> -- 
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
 
+  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.8_1
+
+for you to fetch changes up to 59be5c35850171e307ca5d3d703ee9ff4096b948:
+
+  mips: Call lose_fpu(0) before initializing fcr31 in mips_set_personality_nan (2024-01-27 11:08:04 +0100)
+
+----------------------------------------------------------------
+- fix for boot issue on single core Lantiq Danube devices
+- fix for boot issue on Loongson64 platforms
+- fix for improper FPU setup
+- fix missing prototypes issues
+
+----------------------------------------------------------------
+Aleksander Jan Bajkowski (1):
+      MIPS: lantiq: register smp_ops on non-smp platforms
+
+Florian Fainelli (3):
+      MIPS: Cobalt: Fix missing prototypes
+      MIPS: Alchemy: Fix missing prototypes
+      MIPS: BCM63XX: Fix missing prototypes
+
+Huang Pei (3):
+      MIPS: reserve exception vector space ONLY ONCE
+      MIPS: loongson64: set nid for reserved memblock region
+      MIPS: loongson64: set nid for reserved memblock region
+
+Thomas Bogendoerfer (5):
+      MIPS: sgi-ip27: Fix missing prototypes
+      MIPS: fw arc: Fix missing prototypes
+      MIPS: sgi-ip30: Fix missing prototypes
+      MIPS: sgi-ip32: Fix missing prototypes
+      Revert "MIPS: loongson64: set nid for reserved memblock region"
+
+Xi Ruoyao (1):
+      mips: Call lose_fpu(0) before initializing fcr31 in mips_set_personality_nan
+
+ arch/mips/alchemy/common/prom.c            |   1 +
+ arch/mips/alchemy/common/setup.c           |   4 +-
+ arch/mips/bcm63xx/boards/board_bcm963xx.c  |   2 +-
+ arch/mips/bcm63xx/dev-rng.c                |   2 +-
+ arch/mips/bcm63xx/dev-uart.c               |   1 +
+ arch/mips/bcm63xx/dev-wdt.c                |   2 +-
+ arch/mips/bcm63xx/irq.c                    |   2 +-
+ arch/mips/bcm63xx/setup.c                  |   2 +-
+ arch/mips/bcm63xx/timer.c                  |   2 +-
+ arch/mips/cobalt/setup.c                   |   3 -
+ arch/mips/fw/arc/memory.c                  |   2 +-
+ arch/mips/include/asm/mach-au1x00/au1000.h |   3 +
+ arch/mips/include/asm/mach-cobalt/cobalt.h |   3 +
+ arch/mips/kernel/elf.c                     |   6 +
+ arch/mips/kernel/traps.c                   |   8 +-
+ arch/mips/lantiq/prom.c                    |   7 +-
+ arch/mips/loongson64/init.c                |   3 +
+ arch/mips/loongson64/numa.c                |   2 +
+ arch/mips/sgi-ip27/Makefile                |   2 +-
+ arch/mips/sgi-ip27/ip27-berr.c             |   4 +-
+ arch/mips/sgi-ip27/ip27-common.h           |   2 +
+ arch/mips/sgi-ip27/ip27-hubio.c            | 185 -----------------------------
+ arch/mips/sgi-ip27/ip27-irq.c              |   2 +
+ arch/mips/sgi-ip27/ip27-memory.c           |   1 +
+ arch/mips/sgi-ip27/ip27-nmi.c              |  25 ++--
+ arch/mips/sgi-ip30/ip30-console.c          |   1 +
+ arch/mips/sgi-ip30/ip30-setup.c            |   1 +
+ arch/mips/sgi-ip32/crime.c                 |   6 +-
+ arch/mips/sgi-ip32/ip32-berr.c             |   2 +
+ arch/mips/sgi-ip32/ip32-common.h           |  15 +++
+ arch/mips/sgi-ip32/ip32-irq.c              |   6 +-
+ arch/mips/sgi-ip32/ip32-memory.c           |   1 +
+ arch/mips/sgi-ip32/ip32-reset.c            |   2 +
+ arch/mips/sgi-ip32/ip32-setup.c            |   3 +-
+ 34 files changed, 83 insertions(+), 230 deletions(-)
+ delete mode 100644 arch/mips/sgi-ip27/ip27-hubio.c
+ create mode 100644 arch/mips/sgi-ip32/ip32-common.h
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
