@@ -1,133 +1,105 @@
-Return-Path: <linux-mips+bounces-1197-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1198-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C247A83F8EE
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Jan 2024 18:58:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2311A83F931
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Jan 2024 19:46:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A61C283984
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Jan 2024 17:58:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C22011F21C94
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Jan 2024 18:46:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6BBA2D044;
-	Sun, 28 Jan 2024 17:58:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D3E02E65B;
+	Sun, 28 Jan 2024 18:46:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BEb9qVMU"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="FTY4TId7"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF7932D05E;
-	Sun, 28 Jan 2024 17:58:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618B12561A
+	for <linux-mips@vger.kernel.org>; Sun, 28 Jan 2024 18:46:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706464726; cv=none; b=pPPsJetkvjC0Qznb7e3zHLEuZsTOjK1D2si9nyXClayJ3riKDI9Ah2CgfBmlxz3um+T+n26RFu/zwkHW1u5YJYMIAWMzsvT9izz3Bz3Jsbjw6UxlXA/HfszmHW2gYG/6Y3Nvzp0Z3e6HTjO96IlhbEpQ7SOndvUJD1R9fGCs1UI=
+	t=1706467598; cv=none; b=MyVYbYfh4Fj+25zTHFj5s543yGiMJCEBC4uxRXflemux7UTcbuR0qs1aTwFWz/2M522ILdS7xlmOFzwHSsPeJ1WDx3vy/mKyVo/b+xsLJyP0hxtC1nY5Ep5qo1ay7BqwLzSWmf49vBsBOKQg+5crbcG52cfIwa3o9UAOxhxr3UE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706464726; c=relaxed/simple;
-	bh=5cEP+zWFr/nlAcAv00WyKAUSHk9AI618LLTjG1LtvxI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M2inkDcAc/ai1DezCaAJbXk218TnMR+YoTbcRvKwuV3WHcX6cBuze9OIL74tRqOr4xpCUviIZhkMo1BamSbA9qxDgwudRGQpUelIBkpp1UrGV6m7JJL1y7YES2fkNo7Fjz3NuaFt0OcHzEqHzG0bD/byppUQB/AeO7ZxngIX5Io=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BEb9qVMU; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706464725; x=1738000725;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5cEP+zWFr/nlAcAv00WyKAUSHk9AI618LLTjG1LtvxI=;
-  b=BEb9qVMUL2wTPdn0Ini3p++w2SS/mD7iBpID5EXzULckXsOBfDasMPir
-   +1gqwgrIgFMWK4asep7mOLXlkVn4ld8nRxTl1OIWC2SN7JkRSiN7KNq+j
-   8ABTCOcspHLPjds+mJ5Ch1TVpM4CNaw6k8K5OerTRH7VMEUfmgCvsIjpp
-   hdmJQkkywE0BpfB/NTI5PjtHacSMBKiioNUj39BgpHGoGv01uFFfDA+FK
-   KbGKE24kTF/ReSgZ5LaJEBgO/iGWHUnpVLsmQlKumYfVfwF5UaqsfiPqm
-   kf+VyYU2iZv1B17EoAXU82URpc1Q13rLx5OncYv/PRwZGunveJIZYOqCC
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="2683755"
-X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
-   d="scan'208";a="2683755"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 09:58:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="737165941"
-X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
-   d="scan'208";a="737165941"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 28 Jan 2024 09:58:35 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rU9QP-0003cs-1f;
-	Sun, 28 Jan 2024 17:58:33 +0000
-Date: Mon, 29 Jan 2024 01:58:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Huang Shijie <shijie@os.amperecomputing.com>,
-	gregkh@linuxfoundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	patches@amperecomputing.com, rafael@kernel.org,
-	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	yury.norov@gmail.com, kuba@kernel.org, vschneid@redhat.com,
-	mingo@kernel.org, akpm@linux-foundation.org, vbabka@suse.cz,
-	rppt@kernel.org, tglx@linutronix.de, jpoimboe@kernel.org,
-	ndesaulniers@google.com, mikelley@microsoft.com,
-	mhiramat@kernel.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-	will@kernel.org, mark.rutland@arm.com, mpe@ellerman.id.au,
-	linuxppc-dev@lists.ozlabs.org, chenhuacai@kernel.org,
-	jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org
-Subject: Re: [PATCH] init: refactor the generic cpu_to_node for NUMA
-Message-ID: <202401290116.GpUOCzGd-lkp@intel.com>
-References: <20240118031412.3300-1-shijie@os.amperecomputing.com>
+	s=arc-20240116; t=1706467598; c=relaxed/simple;
+	bh=GNEn6DsFmA9yQRnivIGZcDahF1C8Q20kKbDBiKYeojY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Yx1dewB8GnYxQYiBhsF+pIunVs1rYP/5+WI4ZhUTrt/YY1fD4zw30z6OwuR9FVz8JPhk6Fq/7eWVXMW7fkF8kaWx4HeXMkicXj1cb6rGB0Hh/ZK+VNz1h1lA+ybmVLP4vJCsttn5HuYrjVKOU24a6LbmlTPMIM/YcTI30ez7CBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=FTY4TId7; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-50e5a9bcec9so2122763e87.3
+        for <linux-mips@vger.kernel.org>; Sun, 28 Jan 2024 10:46:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1706467594; x=1707072394; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=k+QqLJ/uh3osnonCwTOn62hFQ+mw5FZR0sqAuG3yuiQ=;
+        b=FTY4TId79uHee0wizFb5ozWUM7XRI8EAdrdBApLmGjgImq1cwMv351o1jxyq2YMCLg
+         mWAeVQO9/uKvtND+bglJZOU1jWuy658A+lK/sHrqbYVHoW5RJQCgMhF6uiwHHOKdT8Ko
+         v9Mvn40VULJ/U02K7xnk/DMNfTshU7dGb16iU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706467594; x=1707072394;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k+QqLJ/uh3osnonCwTOn62hFQ+mw5FZR0sqAuG3yuiQ=;
+        b=nUttSTpk1rpVgK15LCje50lnHbmuz2MQRHOsi/+z+JupZAnFZxaTM3MeX8jZvaseD6
+         E23Ct80nm2JCCRBCH/XrxwGgh1SOrZiZy1DBF5HAgsRG//c2H/myfPkRLPW/b7OO8cu1
+         0USQHYKvEs/ztDhCMAua9AmFr23Co/ziSEuQDWUili4QKOC0H3OKTaWKDX87SWbe5aZI
+         vBpRs8NTIh8YdtIbTQq7T92UhfErM0DDgjub6JDxRZMZ8HFm2ZTe+ejGvMQ0jjwZtU56
+         xRjKXIiioOnxYF6FtiyvsJ2/aOBTWmXaOfGeqsas+XwfgbrxtExRtB6U/00LGUd/sdxL
+         O4hg==
+X-Gm-Message-State: AOJu0Yx2bAgAN0w1gkJ+m5ZobFnZ2JOss4spTC2VAqhmGWoycEfgMS2d
+	dbyB6zAZtjYXIDWHgl3K2N/IHFeCjST9SdW146oQDtn++F8aPshg1+7mefYzW7PoVM772T0e74F
+	PXT8=
+X-Google-Smtp-Source: AGHT+IFIs82D7TIUuAWuqG1b/gml8K40vCzprpkvKpH48pGRQKn0Gme4kFuh1Lerb4JfPSXt/6gRhA==
+X-Received: by 2002:a05:6512:e8a:b0:511:f16:2642 with SMTP id bi10-20020a0565120e8a00b005110f162642mr965550lfb.3.1706467594021;
+        Sun, 28 Jan 2024 10:46:34 -0800 (PST)
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
+        by smtp.gmail.com with ESMTPSA id h5-20020a0565123c8500b005110b20e0cfsm268776lfv.40.2024.01.28.10.46.33
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 28 Jan 2024 10:46:33 -0800 (PST)
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2d04c0b1cacso1696991fa.0
+        for <linux-mips@vger.kernel.org>; Sun, 28 Jan 2024 10:46:33 -0800 (PST)
+X-Received: by 2002:a2e:be21:0:b0:2cc:65dd:3320 with SMTP id
+ z33-20020a2ebe21000000b002cc65dd3320mr3029609ljq.27.1706467592944; Sun, 28
+ Jan 2024 10:46:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240118031412.3300-1-shijie@os.amperecomputing.com>
+References: <ZbZWfaAxU0MyPU9i@alpha.franken.de>
+In-Reply-To: <ZbZWfaAxU0MyPU9i@alpha.franken.de>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sun, 28 Jan 2024 10:46:16 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgYLgJMUJ4ZkWY7hsLVmABRCEMycv5RiZ0vV44UPc2OoA@mail.gmail.com>
+Message-ID: <CAHk-=wgYLgJMUJ4ZkWY7hsLVmABRCEMycv5RiZ0vV44UPc2OoA@mail.gmail.com>
+Subject: Re: [GIT PULL] MIPS fixes for v6.8
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Huang,
+On Sun, 28 Jan 2024 at 05:28, Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> - fix missing prototypes issues
 
-kernel test robot noticed the following build errors:
+This pull request could definitely have mentioned this part of the commit:
 
-[auto build test ERROR on driver-core/driver-core-testing]
-[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.8-rc1 next-20240125]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+ "Also drop ip27-hubio.c as it's not used for a long time"
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Huang-Shijie/init-refactor-the-generic-cpu_to_node-for-NUMA/20240118-111802
-base:   driver-core/driver-core-testing
-patch link:    https://lore.kernel.org/r/20240118031412.3300-1-shijie%40os.amperecomputing.com
-patch subject: [PATCH] init: refactor the generic cpu_to_node for NUMA
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240129/202401290116.GpUOCzGd-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240129/202401290116.GpUOCzGd-lkp@intel.com/reproduce)
+because I saw this in the diffstat:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401290116.GpUOCzGd-lkp@intel.com/
+>  arch/mips/sgi-ip27/ip27-hubio.c            | 185 -----------------------------
 
-All errors (new ones prefixed by >>):
+and had to go look at what was going on.
 
->> ld.lld: error: undefined symbol: cpu_to_node
-   >>> referenced by main.c:880 (init/main.c:880)
-   >>>               init/main.o:(start_kernel) in archive vmlinux.a
-   >>> referenced by main.c:1542 (init/main.c:1542)
-   >>>               init/main.o:(kernel_init_freeable) in archive vmlinux.a
-   >>> referenced by core.c:550 (arch/x86/events/amd/core.c:550)
-   >>>               arch/x86/events/amd/core.o:(amd_pmu_cpu_prepare) in archive vmlinux.a
-   >>> referenced 179 more times
---
->> ld.lld: error: undefined symbol: _cpu_to_node
-   >>> referenced by main.c:1542 (init/main.c:1542)
-   >>>               init/main.o:(kernel_init_freeable) in archive vmlinux.a
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+            Linus
 
