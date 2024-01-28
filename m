@@ -1,42 +1,84 @@
-Return-Path: <linux-mips+bounces-1196-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1197-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C629383F596
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Jan 2024 14:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C247A83F8EE
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Jan 2024 18:58:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78A7F282B04
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Jan 2024 13:28:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A61C283984
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Jan 2024 17:58:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E623223746;
-	Sun, 28 Jan 2024 13:28:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6BBA2D044;
+	Sun, 28 Jan 2024 17:58:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BEb9qVMU"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB64522EE8;
-	Sun, 28 Jan 2024 13:28:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF7932D05E;
+	Sun, 28 Jan 2024 17:58:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706448530; cv=none; b=dbg0ARYmaorXmyJieOnmiC0Ptt7YHIhQvUn3ISjbQt11O2RndQrgZZyljDlaQ00QYd+E+JIob+wi2LPP4PGTuBGoaQeREWtUQGFPp4/11jsJKKuhyUjUNsw6gxFjPBuLnGGFxTFhtGF9QvyUa8zRAJCqsI5OAFCxwpxo28CRnNM=
+	t=1706464726; cv=none; b=pPPsJetkvjC0Qznb7e3zHLEuZsTOjK1D2si9nyXClayJ3riKDI9Ah2CgfBmlxz3um+T+n26RFu/zwkHW1u5YJYMIAWMzsvT9izz3Bz3Jsbjw6UxlXA/HfszmHW2gYG/6Y3Nvzp0Z3e6HTjO96IlhbEpQ7SOndvUJD1R9fGCs1UI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706448530; c=relaxed/simple;
-	bh=xOmYMZ5MtseVU76edISPYkHc5kt/+yu5YKMYOBQHCJ8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=NXg/vZbfkmSvW8bvUiMJOkuuEBuIPiCMftii1alJLzio5aEBbRTctoxJYo8HpGNoT2mZ9gsT68s8WKkQa6Gm+3itlBmyP2/Hc390lTGb+sHYypChDlzIkSw5tHj68ZHnEdZPgKtG8ijUrD7QaLWlnaM+smLBZzg6n2pZ5c0LgBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1rU5DA-0001qH-00; Sun, 28 Jan 2024 14:28:36 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id A5CCCC0135; Sun, 28 Jan 2024 14:28:29 +0100 (CET)
-Date: Sun, 28 Jan 2024 14:28:29 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: torvalds@linux-foundation.org
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS fixes for v6.8
-Message-ID: <ZbZWfaAxU0MyPU9i@alpha.franken.de>
+	s=arc-20240116; t=1706464726; c=relaxed/simple;
+	bh=5cEP+zWFr/nlAcAv00WyKAUSHk9AI618LLTjG1LtvxI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M2inkDcAc/ai1DezCaAJbXk218TnMR+YoTbcRvKwuV3WHcX6cBuze9OIL74tRqOr4xpCUviIZhkMo1BamSbA9qxDgwudRGQpUelIBkpp1UrGV6m7JJL1y7YES2fkNo7Fjz3NuaFt0OcHzEqHzG0bD/byppUQB/AeO7ZxngIX5Io=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BEb9qVMU; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706464725; x=1738000725;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5cEP+zWFr/nlAcAv00WyKAUSHk9AI618LLTjG1LtvxI=;
+  b=BEb9qVMUL2wTPdn0Ini3p++w2SS/mD7iBpID5EXzULckXsOBfDasMPir
+   +1gqwgrIgFMWK4asep7mOLXlkVn4ld8nRxTl1OIWC2SN7JkRSiN7KNq+j
+   8ABTCOcspHLPjds+mJ5Ch1TVpM4CNaw6k8K5OerTRH7VMEUfmgCvsIjpp
+   hdmJQkkywE0BpfB/NTI5PjtHacSMBKiioNUj39BgpHGoGv01uFFfDA+FK
+   KbGKE24kTF/ReSgZ5LaJEBgO/iGWHUnpVLsmQlKumYfVfwF5UaqsfiPqm
+   kf+VyYU2iZv1B17EoAXU82URpc1Q13rLx5OncYv/PRwZGunveJIZYOqCC
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="2683755"
+X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
+   d="scan'208";a="2683755"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 09:58:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="737165941"
+X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
+   d="scan'208";a="737165941"
+Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 28 Jan 2024 09:58:35 -0800
+Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rU9QP-0003cs-1f;
+	Sun, 28 Jan 2024 17:58:33 +0000
+Date: Mon, 29 Jan 2024 01:58:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Huang Shijie <shijie@os.amperecomputing.com>,
+	gregkh@linuxfoundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	patches@amperecomputing.com, rafael@kernel.org,
+	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	yury.norov@gmail.com, kuba@kernel.org, vschneid@redhat.com,
+	mingo@kernel.org, akpm@linux-foundation.org, vbabka@suse.cz,
+	rppt@kernel.org, tglx@linutronix.de, jpoimboe@kernel.org,
+	ndesaulniers@google.com, mikelley@microsoft.com,
+	mhiramat@kernel.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+	will@kernel.org, mark.rutland@arm.com, mpe@ellerman.id.au,
+	linuxppc-dev@lists.ozlabs.org, chenhuacai@kernel.org,
+	jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org
+Subject: Re: [PATCH] init: refactor the generic cpu_to_node for NUMA
+Message-ID: <202401290116.GpUOCzGd-lkp@intel.com>
+References: <20240118031412.3300-1-shijie@os.amperecomputing.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -45,88 +87,47 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240118031412.3300-1-shijie@os.amperecomputing.com>
 
-The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
+Hi Huang,
 
-  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
+kernel test robot noticed the following build errors:
 
-are available in the Git repository at:
+[auto build test ERROR on driver-core/driver-core-testing]
+[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.8-rc1 next-20240125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.8_1
+url:    https://github.com/intel-lab-lkp/linux/commits/Huang-Shijie/init-refactor-the-generic-cpu_to_node-for-NUMA/20240118-111802
+base:   driver-core/driver-core-testing
+patch link:    https://lore.kernel.org/r/20240118031412.3300-1-shijie%40os.amperecomputing.com
+patch subject: [PATCH] init: refactor the generic cpu_to_node for NUMA
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240129/202401290116.GpUOCzGd-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240129/202401290116.GpUOCzGd-lkp@intel.com/reproduce)
 
-for you to fetch changes up to 59be5c35850171e307ca5d3d703ee9ff4096b948:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401290116.GpUOCzGd-lkp@intel.com/
 
-  mips: Call lose_fpu(0) before initializing fcr31 in mips_set_personality_nan (2024-01-27 11:08:04 +0100)
+All errors (new ones prefixed by >>):
 
-----------------------------------------------------------------
-- fix for boot issue on single core Lantiq Danube devices
-- fix for boot issue on Loongson64 platforms
-- fix for improper FPU setup
-- fix missing prototypes issues
-
-----------------------------------------------------------------
-Aleksander Jan Bajkowski (1):
-      MIPS: lantiq: register smp_ops on non-smp platforms
-
-Florian Fainelli (3):
-      MIPS: Cobalt: Fix missing prototypes
-      MIPS: Alchemy: Fix missing prototypes
-      MIPS: BCM63XX: Fix missing prototypes
-
-Huang Pei (3):
-      MIPS: reserve exception vector space ONLY ONCE
-      MIPS: loongson64: set nid for reserved memblock region
-      MIPS: loongson64: set nid for reserved memblock region
-
-Thomas Bogendoerfer (5):
-      MIPS: sgi-ip27: Fix missing prototypes
-      MIPS: fw arc: Fix missing prototypes
-      MIPS: sgi-ip30: Fix missing prototypes
-      MIPS: sgi-ip32: Fix missing prototypes
-      Revert "MIPS: loongson64: set nid for reserved memblock region"
-
-Xi Ruoyao (1):
-      mips: Call lose_fpu(0) before initializing fcr31 in mips_set_personality_nan
-
- arch/mips/alchemy/common/prom.c            |   1 +
- arch/mips/alchemy/common/setup.c           |   4 +-
- arch/mips/bcm63xx/boards/board_bcm963xx.c  |   2 +-
- arch/mips/bcm63xx/dev-rng.c                |   2 +-
- arch/mips/bcm63xx/dev-uart.c               |   1 +
- arch/mips/bcm63xx/dev-wdt.c                |   2 +-
- arch/mips/bcm63xx/irq.c                    |   2 +-
- arch/mips/bcm63xx/setup.c                  |   2 +-
- arch/mips/bcm63xx/timer.c                  |   2 +-
- arch/mips/cobalt/setup.c                   |   3 -
- arch/mips/fw/arc/memory.c                  |   2 +-
- arch/mips/include/asm/mach-au1x00/au1000.h |   3 +
- arch/mips/include/asm/mach-cobalt/cobalt.h |   3 +
- arch/mips/kernel/elf.c                     |   6 +
- arch/mips/kernel/traps.c                   |   8 +-
- arch/mips/lantiq/prom.c                    |   7 +-
- arch/mips/loongson64/init.c                |   3 +
- arch/mips/loongson64/numa.c                |   2 +
- arch/mips/sgi-ip27/Makefile                |   2 +-
- arch/mips/sgi-ip27/ip27-berr.c             |   4 +-
- arch/mips/sgi-ip27/ip27-common.h           |   2 +
- arch/mips/sgi-ip27/ip27-hubio.c            | 185 -----------------------------
- arch/mips/sgi-ip27/ip27-irq.c              |   2 +
- arch/mips/sgi-ip27/ip27-memory.c           |   1 +
- arch/mips/sgi-ip27/ip27-nmi.c              |  25 ++--
- arch/mips/sgi-ip30/ip30-console.c          |   1 +
- arch/mips/sgi-ip30/ip30-setup.c            |   1 +
- arch/mips/sgi-ip32/crime.c                 |   6 +-
- arch/mips/sgi-ip32/ip32-berr.c             |   2 +
- arch/mips/sgi-ip32/ip32-common.h           |  15 +++
- arch/mips/sgi-ip32/ip32-irq.c              |   6 +-
- arch/mips/sgi-ip32/ip32-memory.c           |   1 +
- arch/mips/sgi-ip32/ip32-reset.c            |   2 +
- arch/mips/sgi-ip32/ip32-setup.c            |   3 +-
- 34 files changed, 83 insertions(+), 230 deletions(-)
- delete mode 100644 arch/mips/sgi-ip27/ip27-hubio.c
- create mode 100644 arch/mips/sgi-ip32/ip32-common.h
+>> ld.lld: error: undefined symbol: cpu_to_node
+   >>> referenced by main.c:880 (init/main.c:880)
+   >>>               init/main.o:(start_kernel) in archive vmlinux.a
+   >>> referenced by main.c:1542 (init/main.c:1542)
+   >>>               init/main.o:(kernel_init_freeable) in archive vmlinux.a
+   >>> referenced by core.c:550 (arch/x86/events/amd/core.c:550)
+   >>>               arch/x86/events/amd/core.o:(amd_pmu_cpu_prepare) in archive vmlinux.a
+   >>> referenced 179 more times
+--
+>> ld.lld: error: undefined symbol: _cpu_to_node
+   >>> referenced by main.c:1542 (init/main.c:1542)
+   >>>               init/main.o:(kernel_init_freeable) in archive vmlinux.a
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
