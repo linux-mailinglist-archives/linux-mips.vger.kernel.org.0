@@ -1,114 +1,125 @@
-Return-Path: <linux-mips+bounces-1203-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1204-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3EAB8404E1
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jan 2024 13:23:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2E84840500
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jan 2024 13:28:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78C611F227D3
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jan 2024 12:23:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DF47B21F82
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jan 2024 12:28:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 613D0604B7;
-	Mon, 29 Jan 2024 12:23:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 040996086C;
+	Mon, 29 Jan 2024 12:28:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aZ5Q3Xdv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AWVExexi"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0FA5F565;
-	Mon, 29 Jan 2024 12:23:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC14060869;
+	Mon, 29 Jan 2024 12:28:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706531009; cv=none; b=PZbiPNeIah4ZbPCKfgDoi9BIhbMsn8/eMLRbGvtmBdEEw064ZtLogdmtbE0eKugbXmB5Kz1CzI/JjHih5KKasqovMEwjjpzd0oHWuWSpWx1CPRk2uPEHrdpp1E+lA4J4XvtJjg/G22N/NLW0oUR04AosVRk/v2ycU0HsvrImhKs=
+	t=1706531288; cv=none; b=Q2M2vQdUbKKBOEjubxBhaSS13oWEntG7tG/CxNdiq7e07G8vNsHNWSNM6nNDfDHNMDZ/13S2MR3R1ui6ibmkMyzRakr45iRL2XkUFTeVsjN8upPouxGprNnw1gMOEZfqvx4HuPo0ZAqaDqs7F1ax+phZOCCsyWcElQiJQ6tfsN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706531009; c=relaxed/simple;
-	bh=cfyTA0f7yX/vB8d5Cuti9FF050a8C9p/xz3ob/RUpSA=;
+	s=arc-20240116; t=1706531288; c=relaxed/simple;
+	bh=MpQ1lW4yakQfV+Kx9OI2bXUFeKAATtST58XhOAvkQ9s=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sWsOs5vA8pn2ZBTtNCwr+J/eQ+3Yu7kk75ylAEe6Gqxf85Fe+uqwDW5OeM8yXx601U2JDL4Wina3kr6kUeLJVIFSRK609RG2DRxrF/RDrEJ7dmGBFQFp0vda9PAZj6my90P1oAzQoq/ASCD8eSSBq83+kZUVPJoOQm76b4lANm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aZ5Q3Xdv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD717C433C7;
-	Mon, 29 Jan 2024 12:23:28 +0000 (UTC)
+	 To:Cc:Content-Type; b=JPDhhYMULonGtusFuMc5bc8SV86icAPhkRmQ1d8oW65k8LHUa3dym3tlJtLjJe7vpZVsgt7xe7FtsILsRbXXl8ohsqEfBrtHFB3iCG+OU4qeAvKNcBD7aWnLgyC3erjLxCoxs8eZMNwimoElUKwoEF8PUK/oYw54wRTw9KH6+PM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AWVExexi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59849C433C7;
+	Mon, 29 Jan 2024 12:28:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706531008;
-	bh=cfyTA0f7yX/vB8d5Cuti9FF050a8C9p/xz3ob/RUpSA=;
+	s=k20201202; t=1706531288;
+	bh=MpQ1lW4yakQfV+Kx9OI2bXUFeKAATtST58XhOAvkQ9s=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=aZ5Q3XdvDctQAUKkj4OwwI37rtGVYocee4CnzJmabz+Sin9GHxxCQqImsMJFBAV5H
-	 tvrRoxht1MvYAi8iY/is85tePxEsL+hZx0n/maInrVIjYsK4QF0wouOGol/wGP7Boz
-	 xTJAIRSqIZzHRppUff4lhs761ZIJGg9Le6eNZVFYxM65+TWZ+I2Jzimd9Hrsw19qUd
-	 NI0DJ7a9Dmaro693iOV5zbiLSchKBMfvQ26PMmBnk1HyFH84AyXkH/fih4MYYqePgo
-	 zs9ai2dN3PZUvQ9Zo5Ea52hWDBytFpDf+8yQ2orX+Yf4JCEKYtvqSP8aEwTg7EN+Gi
-	 Kwp+l+3VumWMw==
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-55c2cf644f3so2414441a12.1;
-        Mon, 29 Jan 2024 04:23:28 -0800 (PST)
-X-Gm-Message-State: AOJu0Ywe6RyOubKlFOkyOC+F7YPaL8c7m83753JZlh5+wg0VKVnFsdDf
-	Tk4/yiYJpShCRVPVObOEKldcQFTKcA6MXcuNItDGaeQxHkOOE/5QRCvRMHBg8oEh2DBABsPP9QI
-	cxzVjfcHkMhswrC4QltQ8kOD+Q3E=
-X-Google-Smtp-Source: AGHT+IGJIV50uQiqG0CulZDIWwEaLa6WKwT+PnZ09p/gnLDuRVgx2nf8dBmnCep3bkhzb2PAyb1GFOXrSx0XVaDyiwI=
-X-Received: by 2002:aa7:c1ca:0:b0:559:cf9b:c3f9 with SMTP id
- d10-20020aa7c1ca000000b00559cf9bc3f9mr3940636edp.34.1706531007204; Mon, 29
- Jan 2024 04:23:27 -0800 (PST)
+	b=AWVExexigNVbmJDVoow/JF1nxxjEDRcZtmteL1DmwEWe1zdNIc+ZaFh4+9A/38BY5
+	 wAmC3NRz3e9WTTO2dpOKVCxusYnn/9Pu0zovoPwDzP6x6EGoySUU2ndYRBw9nqdSoG
+	 mYkGFHtbCCVTLUAWDcbVvEqqfmystTO+SMsvkyBzc6YdKzRE20J6dkP0wgcEoDeuFA
+	 pneuk7HWfhsOlDYQ1NB5r3WuW3InCDrZb/DUDcGa/nVXC8g7CLH137TKymUSjNb1lk
+	 hXyg4kxDFuwoQSj6A9Ahcg+mIDHX3c8rWjYB/QJp3nt0acst4jnxqrt8ej6owtu1vJ
+	 zD4vpdGLw84sA==
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-55a8fd60af0so2502193a12.1;
+        Mon, 29 Jan 2024 04:28:08 -0800 (PST)
+X-Gm-Message-State: AOJu0Yxev5jG4i7kUGqi1P+yhDgqaJRAam3hX0MbjPWpKAK9jok7QK9Q
+	y5Qp3vwmvv2Kql444hBr2Nzy4dkqt80ikB7x9LG5EZEbkwPAVur5Pg1A3+J8QhEdUPr+b2cUjdf
+	UjWpkHaP1Id0CoLimxw63Ci/8hkk=
+X-Google-Smtp-Source: AGHT+IH2Ut9DECLjhp2VufMBUkzdiIibV5WT+fSEKMnQ70kRxlTuU/kEg9bgSd7CeLa7ZHJZ6f7AmoqqH5AssTGd3Dk=
+X-Received: by 2002:aa7:cfc1:0:b0:55e:ea24:8fbe with SMTP id
+ r1-20020aa7cfc1000000b0055eea248fbemr2620334edy.26.1706531286683; Mon, 29 Jan
+ 2024 04:28:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240125113623.2043061-1-maobibo@loongson.cn> <20240125113623.2043061-2-maobibo@loongson.cn>
-In-Reply-To: <20240125113623.2043061-2-maobibo@loongson.cn>
+References: <20240125113623.2043061-1-maobibo@loongson.cn> <20240125113623.2043061-3-maobibo@loongson.cn>
+In-Reply-To: <20240125113623.2043061-3-maobibo@loongson.cn>
 From: Huacai Chen <chenhuacai@kernel.org>
-Date: Mon, 29 Jan 2024 20:23:18 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4w7BYpoBbudpu3TiR5COHoBRFHHra9URdK1kczpeZbGA@mail.gmail.com>
-Message-ID: <CAAhV-H4w7BYpoBbudpu3TiR5COHoBRFHHra9URdK1kczpeZbGA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] irqchip/loongson-eiointc: Typo fix in function eiointc_domain_alloc
+Date: Mon, 29 Jan 2024 20:27:58 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7wBBx-8fVfRoujMUJuLbQWW2oKDbW6A52G2S_pqmTK6A@mail.gmail.com>
+Message-ID: <CAAhV-H7wBBx-8fVfRoujMUJuLbQWW2oKDbW6A52G2S_pqmTK6A@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] irqchip/loongson-eiointc: Skip handling if there
+ is no pending irq
 To: Bibo Mao <maobibo@loongson.cn>
 Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, Thomas Gleixner <tglx@linutronix.de>, 
 	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Sergey Shtylyov <s.shtylyov@omp.ru>, lvjianmin@loongson.cn, 
-	Huacai Chen <chenhuacai@loongson.cn>
+	Sergey Shtylyov <s.shtylyov@omp.ru>, lvjianmin@loongson.cn
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 Hi, Bibo,
 
-We usually use eiointc_domain_alloc() rather than eiointc_domain_alloc
-to describe a function, but it is not a big issue. If you will update
-a new version you can modify this.
+As commented in another patch, you can use eiointc_irq_dispatch(),
+iocsr_read64() to describe functions, and it is better to use
+Loongson-3A5000, Loongson-2K2000, Loongson-2K0500 rather than 3A5000,
+2K2000, 2K0500. Besides, please always use IRQs rather than IRQS.
 
-Huacai
+With these modifications,
+
+Acked-by: Huacai Chen <chenhuacai@loongson.cn>
 
 On Thu, Jan 25, 2024 at 7:36=E2=80=AFPM Bibo Mao <maobibo@loongson.cn> wrot=
 e:
 >
-> There is small typo in function eiointc_domain_alloc, and there is no
-> definition about struct eiointc, instead it should be struct eiointc_priv=
-.
-> It is strange that there is no warning with gcc compiler. This patch
-> fixes the typo issue.
+> It is one simple optimization in the interrupt dispatch function
+> eiointc_irq_dispatch. There are 256 IRQs supported for eiointc on
+> 3A5000 and 2K2000 platform, 128 IRQS on 2K0500 platform, eiointc irq
+> handler reads the bitmap and find pending irqs when irq happens. So
+> there are several consecutive iocsr_read64 operations for the all
+> bits to find all pending irqs. If the pending bitmap is zero, it
+> means that there is no pending irq for the this irq bitmap range,
+> we can skip handling to avoid some useless operations such as
+> clearing hw ISR.
 >
 > Signed-off-by: Bibo Mao <maobibo@loongson.cn>
-> Acked-by: Huacai Chen <chenhuacai@loongson.cn>
 > ---
->  drivers/irqchip/irq-loongson-eiointc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/irqchip/irq-loongson-eiointc.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 >
 > diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq=
 -loongson-eiointc.c
-> index 1623cd779175..b3736bdd4b9f 100644
+> index b3736bdd4b9f..6a71a8c29ac7 100644
 > --- a/drivers/irqchip/irq-loongson-eiointc.c
 > +++ b/drivers/irqchip/irq-loongson-eiointc.c
-> @@ -241,7 +241,7 @@ static int eiointc_domain_alloc(struct irq_domain *do=
-main, unsigned int virq,
->         int ret;
->         unsigned int i, type;
->         unsigned long hwirq =3D 0;
-> -       struct eiointc *priv =3D domain->host_data;
-> +       struct eiointc_priv *priv =3D domain->host_data;
+> @@ -198,6 +198,12 @@ static void eiointc_irq_dispatch(struct irq_desc *de=
+sc)
 >
->         ret =3D irq_domain_translate_onecell(domain, arg, &hwirq, &type);
->         if (ret)
+>         for (i =3D 0; i < eiointc_priv[0]->vec_count / VEC_COUNT_PER_REG;=
+ i++) {
+>                 pending =3D iocsr_read64(EIOINTC_REG_ISR + (i << 3));
+> +
+> +               /* Skip handling if pending bitmap is zero */
+> +               if (!pending)
+> +                       continue;
+> +
+> +               /* Clear the IRQs */
+>                 iocsr_write64(pending, EIOINTC_REG_ISR + (i << 3));
+>                 while (pending) {
+>                         int bit =3D __ffs(pending);
 > --
 > 2.39.3
 >
