@@ -1,50 +1,75 @@
-Return-Path: <linux-mips+bounces-1201-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1202-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E93B83FA47
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Jan 2024 23:15:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1EFF83FBF5
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jan 2024 02:58:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D542B2839FA
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Jan 2024 22:15:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9435E282F93
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jan 2024 01:58:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E62543C46D;
-	Sun, 28 Jan 2024 22:15:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70440DF58;
+	Mon, 29 Jan 2024 01:58:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HldyJnld"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 042E23C46B;
-	Sun, 28 Jan 2024 22:15:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A215CDDD7
+	for <linux-mips@vger.kernel.org>; Mon, 29 Jan 2024 01:58:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706480143; cv=none; b=L1vdBk2IRMrW/ARQeFveLzCwMjYbn8JrhDwfVhcMG80f8vi4C+OFfpJO9+PY+T07YYNz9JuQ86FmDRxhIX1nuhMd0sGxcJK0lJbo4Su/mlW3zoigBOHoANVTeh6N3t/BkwaXcxRtqFouLGYwHIC2JzTnvMsdLo7EvvtYeGT4Vnw=
+	t=1706493485; cv=none; b=Jj5CV423wG7VzfhXs1/RTA9dcrh0vOtUdwmaZ4nZa12yRSRSVcFEdXYCWdEAeIYdAFZMthTeA5Zu4faOclvQkxrZ2597LGQW0vgjwCnK1H9V/DV1wNAA8WJpBie2ukVUlw+Uk1ZjVE2pZEt4x0HEeF+hhR+DUeyDDPyt9xNHewE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706480143; c=relaxed/simple;
-	bh=vNYgDf0RboUzfGtK3sr9l72mJp9VU/gn//gCBuw27QM=;
+	s=arc-20240116; t=1706493485; c=relaxed/simple;
+	bh=0mhzEdT5ZWQobZjqIOBxffQqKPXOl3ltg0R2BB5HqAA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AFBm4xDMhc7X6dBvYpJoj00q2RCq2zSJUKgJ7R7b1rsztNOIXCgP0uE0c2g9TlA3Dwk6qPgyMlM2X2McLUEvTaE9/m+3NXJA0oaW9qKjeXL09bhrbYB5IR/lCyXA243xXqfjhAbXIS+iS1H38tVimWHaTqa03Wi3jLEMKwvMmF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1rUDR3-0005sj-00; Sun, 28 Jan 2024 23:15:29 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 8EF83C0489; Sun, 28 Jan 2024 22:54:08 +0100 (CET)
-Date: Sun, 28 Jan 2024 22:54:08 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Xi Ruoyao <xry111@xry111.site>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org,
-	Ralf Baechle <ralf@linux-mips.org>,
-	"Maciej W. Rozycki" <macro@orcam.me.uk>,
-	YunQiang Su <wzssyqa@gmail.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2] mips: Call lose_fpu(0) before initializing fcr31 in
- mips_set_personality_nan
-Message-ID: <ZbbNAESbgzwJN5qc@alpha.franken.de>
-References: <20240126210557.12442-1-xry111@xry111.site>
+	 Content-Type:Content-Disposition:In-Reply-To; b=eBgwvd6kHHkdbJFLv2xEuyJ63jTA0Z+wRrJeWf60d+HzvlyYayIPubKAtCZu6SKYslClg6M2yaz4i6D/APoWdYq1bxyl2RaqSrCAkumudDxlek/mSvFtli1kccJehRnSZqi8x06Dy9UxZF86CHQVEZ00DOhvwGD86AkFRlfJDpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HldyJnld; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706493482;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=t5X+7+XPWD/yMamo09E+vqa8mLL0GiWmMXKBvuKtVnc=;
+	b=HldyJnldYktsGJXzXsYhHlfh+jKE7A/OqYtPNfMAp4HyrdlrMtBnR0u/n8Cj3j2xj0W/Ar
+	ZjLtKTOTVIQ6MFP5yMRxtznFQVS0pRPXIrZIGaOSL8sv5xPdIUtAGN/VpT3RmlzRsU4lHM
+	NlHxmYUiWgnz1jYdFxGVhQIXx/Jnldw=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-320-9WvTuAhnPa6eorfNUQwX4g-1; Sun,
+ 28 Jan 2024 20:57:58 -0500
+X-MC-Unique: 9WvTuAhnPa6eorfNUQwX4g-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 255BC1C05AF0;
+	Mon, 29 Jan 2024 01:57:57 +0000 (UTC)
+Received: from localhost (unknown [10.72.116.15])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 085BB492BE2;
+	Mon, 29 Jan 2024 01:57:55 +0000 (UTC)
+Date: Mon, 29 Jan 2024 09:57:50 +0800
+From: Baoquan He <bhe@redhat.com>
+To: Klara Modin <klarasmodin@gmail.com>
+Cc: linux-kernel@vger.kernel.org, kexec@lists.infradead.org, x86@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+	loongarch@lists.linux.dev, akpm@linux-foundation.org,
+	ebiederm@xmission.com, hbathini@linux.ibm.com, piliu@redhat.com,
+	viro@zeniv.linux.org.uk
+Subject: Re: [PATCH linux-next v3 01/14] kexec: split crashkernel reservation
+ code out from crash_core.c
+Message-ID: <ZbcGHoLZfqro7i8g@MiWiFi-R3L-srv>
+References: <20240124051254.67105-1-bhe@redhat.com>
+ <20240124051254.67105-2-bhe@redhat.com>
+ <0b14826b-9373-4458-919d-1da2a62d4226@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,41 +78,36 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240126210557.12442-1-xry111@xry111.site>
+In-Reply-To: <0b14826b-9373-4458-919d-1da2a62d4226@gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
 
-On Sat, Jan 27, 2024 at 05:05:57AM +0800, Xi Ruoyao wrote:
-> If we still own the FPU after initializing fcr31, when we are preempted
-> the dirty value in the FPU will be read out and stored into fcr31,
-> clobbering our setting.  This can cause an improper floating-point
-> environment after execve().  For example:
+On 01/28/24 at 02:28am, Klara Modin wrote:
+> Hi,
 > 
->     zsh% cat measure.c
->     #include <fenv.h>
->     int main() { return fetestexcept(FE_INEXACT); }
->     zsh% cc measure.c -o measure -lm
->     zsh% echo $((1.0/3)) # raising FE_INEXACT
->     0.33333333333333331
->     zsh% while ./measure; do ; done
->     (stopped in seconds)
+> On 2024-01-24 06:12, Baoquan He wrote:
+> > And also add config item CRASH_RESERVE to control its enabling of the
+> > codes. And update config items which has relationship with crashkernel
+> > reservation.
+> > 
+> > And also change ifdeffery from CONFIG_CRASH_CORE to CONFIG_CRASH_RESERVE
+> > when those scopes are only crashkernel reservation related.
 > 
-> Call lose_fpu(0) before setting fcr31 to prevent this.
+> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> > index 502986237cb6..a9243e0948a3 100644
+> > --- a/arch/x86/Kconfig
+> > +++ b/arch/x86/Kconfig
+> > @@ -2106,7 +2106,7 @@ config ARCH_SUPPORTS_CRASH_HOTPLUG
+> >   	def_bool y
+> >   config ARCH_HAS_GENERIC_CRASHKERNEL_RESERVATION
+> > -	def_bool CRASH_CORE
+> > +	def_bool CRASH_RESEERVE
+> >   config PHYSICAL_START
+> >   	hex "Physical address where the kernel is loaded" if (EXPERT || CRASH_DUMP)
 > 
-> Closes: https://lore.kernel.org/linux-mips/7a6aa1bbdbbe2e63ae96ff163fab0349f58f1b9e.camel@xry111.site/
-> Fixes: 9b26616c8d9d ("MIPS: Respect the ISA level in FCSR handling")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Xi Ruoyao <xry111@xry111.site>
-> ---
-> 
-> v1 -> v2: Fix stable list address in Cc line.
-> 
->  arch/mips/kernel/elf.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+> CRASH_RESEERVE is probably a typo and should be CRASH_RESERVE (with the
+> former ARCH_HAS_GENERIC_CRASHKERNEL_RESERVATION isn't defined in my .config
+> and `crashkernel=...` parameter has no effect).
 
-applied to mips-fixes.
+You are right, thanks a lot. Will fix that.
 
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
 
