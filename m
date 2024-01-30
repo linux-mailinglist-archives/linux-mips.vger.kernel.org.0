@@ -1,126 +1,126 @@
-Return-Path: <linux-mips+bounces-1204-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1205-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2E84840500
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jan 2024 13:28:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81332841A77
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jan 2024 04:23:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DF47B21F82
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jan 2024 12:28:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0BD05B25E60
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jan 2024 03:23:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 040996086C;
-	Mon, 29 Jan 2024 12:28:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AWVExexi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1652838399;
+	Tue, 30 Jan 2024 03:22:16 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC14060869;
-	Mon, 29 Jan 2024 12:28:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96D3C381D9;
+	Tue, 30 Jan 2024 03:22:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706531288; cv=none; b=Q2M2vQdUbKKBOEjubxBhaSS13oWEntG7tG/CxNdiq7e07G8vNsHNWSNM6nNDfDHNMDZ/13S2MR3R1ui6ibmkMyzRakr45iRL2XkUFTeVsjN8upPouxGprNnw1gMOEZfqvx4HuPo0ZAqaDqs7F1ax+phZOCCsyWcElQiJQ6tfsN4=
+	t=1706584936; cv=none; b=TkKuF8mJKQB1GWi70uCH44zzDaVs1OyS9muX0NwVKvm12dhgyx8qAM2K9drpvVD5E3RsywGhJFDh1vb7ssXiKVhUsqJYDcBIVkBXcNzmHWKYWS1FBTCFR2A8ejX8biEupoxx4KIqT5LDBDpH4JOQbs53F8jxqWjRvs7xJymr8Ac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706531288; c=relaxed/simple;
-	bh=MpQ1lW4yakQfV+Kx9OI2bXUFeKAATtST58XhOAvkQ9s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JPDhhYMULonGtusFuMc5bc8SV86icAPhkRmQ1d8oW65k8LHUa3dym3tlJtLjJe7vpZVsgt7xe7FtsILsRbXXl8ohsqEfBrtHFB3iCG+OU4qeAvKNcBD7aWnLgyC3erjLxCoxs8eZMNwimoElUKwoEF8PUK/oYw54wRTw9KH6+PM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AWVExexi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59849C433C7;
-	Mon, 29 Jan 2024 12:28:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706531288;
-	bh=MpQ1lW4yakQfV+Kx9OI2bXUFeKAATtST58XhOAvkQ9s=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=AWVExexigNVbmJDVoow/JF1nxxjEDRcZtmteL1DmwEWe1zdNIc+ZaFh4+9A/38BY5
-	 wAmC3NRz3e9WTTO2dpOKVCxusYnn/9Pu0zovoPwDzP6x6EGoySUU2ndYRBw9nqdSoG
-	 mYkGFHtbCCVTLUAWDcbVvEqqfmystTO+SMsvkyBzc6YdKzRE20J6dkP0wgcEoDeuFA
-	 pneuk7HWfhsOlDYQ1NB5r3WuW3InCDrZb/DUDcGa/nVXC8g7CLH137TKymUSjNb1lk
-	 hXyg4kxDFuwoQSj6A9Ahcg+mIDHX3c8rWjYB/QJp3nt0acst4jnxqrt8ej6owtu1vJ
-	 zD4vpdGLw84sA==
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-55a8fd60af0so2502193a12.1;
-        Mon, 29 Jan 2024 04:28:08 -0800 (PST)
-X-Gm-Message-State: AOJu0Yxev5jG4i7kUGqi1P+yhDgqaJRAam3hX0MbjPWpKAK9jok7QK9Q
-	y5Qp3vwmvv2Kql444hBr2Nzy4dkqt80ikB7x9LG5EZEbkwPAVur5Pg1A3+J8QhEdUPr+b2cUjdf
-	UjWpkHaP1Id0CoLimxw63Ci/8hkk=
-X-Google-Smtp-Source: AGHT+IH2Ut9DECLjhp2VufMBUkzdiIibV5WT+fSEKMnQ70kRxlTuU/kEg9bgSd7CeLa7ZHJZ6f7AmoqqH5AssTGd3Dk=
-X-Received: by 2002:aa7:cfc1:0:b0:55e:ea24:8fbe with SMTP id
- r1-20020aa7cfc1000000b0055eea248fbemr2620334edy.26.1706531286683; Mon, 29 Jan
- 2024 04:28:06 -0800 (PST)
+	s=arc-20240116; t=1706584936; c=relaxed/simple;
+	bh=2IXwML/OhIF3bCdnqcufjvigJt0sgb+gpzdgSWQKPMg=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=TCkKVCZoycGVCt8sXJi748hftxns5ZbILf3IZMNvPoQQajxC/XYAqe0h7uYQirvSXUkaWx+ZkJKBdyxERlTM9+L0qeMelWhjERJZL+Mmi0aXpKaAxwLain48CmF+STLpUwPAZXfwGpMj69o/m29VBndxv50ut+duIjzy0Pc//OE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.173])
+	by gateway (Coremail) with SMTP id _____8Cxbetka7hlDSoIAA--.25279S3;
+	Tue, 30 Jan 2024 11:22:12 +0800 (CST)
+Received: from [10.20.42.173] (unknown [10.20.42.173])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx7c5ga7hl2jonAA--.22829S3;
+	Tue, 30 Jan 2024 11:22:10 +0800 (CST)
+Subject: Re: [PATCH v4 1/3] irqchip/loongson-eiointc: Typo fix in function
+ eiointc_domain_alloc
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ Thomas Gleixner <tglx@linutronix.de>, linux-mips@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+ lvjianmin@loongson.cn, Huacai Chen <chenhuacai@loongson.cn>
+References: <20240125113623.2043061-1-maobibo@loongson.cn>
+ <20240125113623.2043061-2-maobibo@loongson.cn>
+ <CAAhV-H4w7BYpoBbudpu3TiR5COHoBRFHHra9URdK1kczpeZbGA@mail.gmail.com>
+From: maobibo <maobibo@loongson.cn>
+Message-ID: <42844534-9b08-1aed-9067-6d4525a0d2ef@loongson.cn>
+Date: Tue, 30 Jan 2024 11:22:08 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240125113623.2043061-1-maobibo@loongson.cn> <20240125113623.2043061-3-maobibo@loongson.cn>
-In-Reply-To: <20240125113623.2043061-3-maobibo@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Mon, 29 Jan 2024 20:27:58 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7wBBx-8fVfRoujMUJuLbQWW2oKDbW6A52G2S_pqmTK6A@mail.gmail.com>
-Message-ID: <CAAhV-H7wBBx-8fVfRoujMUJuLbQWW2oKDbW6A52G2S_pqmTK6A@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] irqchip/loongson-eiointc: Skip handling if there
- is no pending irq
-To: Bibo Mao <maobibo@loongson.cn>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Sergey Shtylyov <s.shtylyov@omp.ru>, lvjianmin@loongson.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAAhV-H4w7BYpoBbudpu3TiR5COHoBRFHHra9URdK1kczpeZbGA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8Bx7c5ga7hl2jonAA--.22829S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7ZF1fAr48Aw43JF1rur4DGFX_yoW8Xry7pF
+	WUA3Wqkr45XryUA34agr4DZFyak390qrZ7Kayxtayavr98Jw1DGF1ruayqkr1vyw48GF12
+	9F40qr1Uu3W5CacCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUB2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+	XVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+	8JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+	Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+	cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
+	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E
+	14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4s2-UUUUU
 
-Hi, Bibo,
 
-As commented in another patch, you can use eiointc_irq_dispatch(),
-iocsr_read64() to describe functions, and it is better to use
-Loongson-3A5000, Loongson-2K2000, Loongson-2K0500 rather than 3A5000,
-2K2000, 2K0500. Besides, please always use IRQs rather than IRQS.
 
-With these modifications,
+On 2024/1/29 下午8:23, Huacai Chen wrote:
+> Hi, Bibo,
+> 
+> We usually use eiointc_domain_alloc() rather than eiointc_domain_alloc
+> to describe a function, but it is not a big issue. If you will update
+> a new version you can modify this.
+sure, will do.
 
-Acked-by: Huacai Chen <chenhuacai@loongson.cn>
+Regards
+Bibo Mao
+> 
+> Huacai
+> 
+> On Thu, Jan 25, 2024 at 7:36 PM Bibo Mao <maobibo@loongson.cn> wrote:
+>>
+>> There is small typo in function eiointc_domain_alloc, and there is no
+>> definition about struct eiointc, instead it should be struct eiointc_priv.
+>> It is strange that there is no warning with gcc compiler. This patch
+>> fixes the typo issue.
+>>
+>> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+>> Acked-by: Huacai Chen <chenhuacai@loongson.cn>
+>> ---
+>>   drivers/irqchip/irq-loongson-eiointc.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
+>> index 1623cd779175..b3736bdd4b9f 100644
+>> --- a/drivers/irqchip/irq-loongson-eiointc.c
+>> +++ b/drivers/irqchip/irq-loongson-eiointc.c
+>> @@ -241,7 +241,7 @@ static int eiointc_domain_alloc(struct irq_domain *domain, unsigned int virq,
+>>          int ret;
+>>          unsigned int i, type;
+>>          unsigned long hwirq = 0;
+>> -       struct eiointc *priv = domain->host_data;
+>> +       struct eiointc_priv *priv = domain->host_data;
+>>
+>>          ret = irq_domain_translate_onecell(domain, arg, &hwirq, &type);
+>>          if (ret)
+>> --
+>> 2.39.3
+>>
 
-On Thu, Jan 25, 2024 at 7:36=E2=80=AFPM Bibo Mao <maobibo@loongson.cn> wrot=
-e:
->
-> It is one simple optimization in the interrupt dispatch function
-> eiointc_irq_dispatch. There are 256 IRQs supported for eiointc on
-> 3A5000 and 2K2000 platform, 128 IRQS on 2K0500 platform, eiointc irq
-> handler reads the bitmap and find pending irqs when irq happens. So
-> there are several consecutive iocsr_read64 operations for the all
-> bits to find all pending irqs. If the pending bitmap is zero, it
-> means that there is no pending irq for the this irq bitmap range,
-> we can skip handling to avoid some useless operations such as
-> clearing hw ISR.
->
-> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
-> ---
->  drivers/irqchip/irq-loongson-eiointc.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq=
--loongson-eiointc.c
-> index b3736bdd4b9f..6a71a8c29ac7 100644
-> --- a/drivers/irqchip/irq-loongson-eiointc.c
-> +++ b/drivers/irqchip/irq-loongson-eiointc.c
-> @@ -198,6 +198,12 @@ static void eiointc_irq_dispatch(struct irq_desc *de=
-sc)
->
->         for (i =3D 0; i < eiointc_priv[0]->vec_count / VEC_COUNT_PER_REG;=
- i++) {
->                 pending =3D iocsr_read64(EIOINTC_REG_ISR + (i << 3));
-> +
-> +               /* Skip handling if pending bitmap is zero */
-> +               if (!pending)
-> +                       continue;
-> +
-> +               /* Clear the IRQs */
->                 iocsr_write64(pending, EIOINTC_REG_ISR + (i << 3));
->                 while (pending) {
->                         int bit =3D __ffs(pending);
-> --
-> 2.39.3
->
 
