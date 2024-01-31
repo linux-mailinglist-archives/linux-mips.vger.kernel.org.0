@@ -1,124 +1,116 @@
-Return-Path: <linux-mips+bounces-1234-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1235-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BE37844483
-	for <lists+linux-mips@lfdr.de>; Wed, 31 Jan 2024 17:31:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25A6884491C
+	for <lists+linux-mips@lfdr.de>; Wed, 31 Jan 2024 21:44:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 293421F2C115
-	for <lists+linux-mips@lfdr.de>; Wed, 31 Jan 2024 16:31:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C55EE1F251AC
+	for <lists+linux-mips@lfdr.de>; Wed, 31 Jan 2024 20:44:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD86C12FF6A;
-	Wed, 31 Jan 2024 16:27:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00D28383AA;
+	Wed, 31 Jan 2024 20:44:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="F2vykkux"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VO2ox0YB"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C29A013BE80;
-	Wed, 31 Jan 2024 16:27:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FD69374DA
+	for <linux-mips@vger.kernel.org>; Wed, 31 Jan 2024 20:44:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706718449; cv=none; b=elPAkh0tfj5JgEQ4wVgMLYuD/KwIIjyVmK3Sn20mTrOVx7DxlBva1J8MVCtvZVRl+GQIYQUkis3CBCACfHSx4pppRbIPZVde4x9RctSIYjd9NfwuEWbGBIOCCMtN/pBpP2H15eZlh3REJxUCvu+AEtin0rwuIiwRRfHNzpyKWb4=
+	t=1706733895; cv=none; b=THzTDMJdTiQytijObH04r5F3K4rFpQuHl5eE6hxJodpHGMDPlqEmBSxpFlR+Q2r1/JWo+HLLJfstpNfqV5nAMbmQ6blvurpinq10oGyvaubp0LSN3eTu7yhLr7o+Llu8TYLXzP7UIhxo6XndTu0F3JvFgsCV+b0X+fG1ekU79DY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706718449; c=relaxed/simple;
-	bh=XnW4AYy3Nc97tfx3b9rBN9XG71YZGgJFnnvWMkeQV3U=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Brt13EpCq7UrRCf/Sx/As7Wf6gk/p3q8CAokzmBzA5OOdypUWgWW70Sy4uKRM8NW2px7cwYmq7BGu0/5bkXBhf4Q2WElkr0yvI890PzImb/oHlbsNbpxUTNBXlxUKighkcu9mvQ/r1xArYt3lkI78ZoLsbG2zkWAt8hLdS4v0mc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=F2vykkux; arc=none smtp.client-ip=217.70.183.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4DFBF4000C;
-	Wed, 31 Jan 2024 16:27:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1706718444;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=E0E4D1zz8fIXJ+KURAPowU82qI2dGBP74YLhcrLKxeE=;
-	b=F2vykkuxPmOPCEqFpG66Hjw4H+nvbRvwiORFpqCghiwDy6wgvYnqTB7tCu1698xlP+9yi3
-	mK8Fa1OnckzQr5yn5ufgb67Nl48UPBwBL7ChdGEgPFq3Z6lk6PKnCIlblQbQZmXDL1RllZ
-	BYBN3lu8uy7uPLnHkOYsDCD5IlU2H82f4RMMI30fG0OH60gkF8+lJ8YS2EQubUuckh1cYr
-	IMKfY2kyS+lDfN5yiUsN7E8vmah2Y9BZCHbV86go1Y6R2kiwczY+XBOnCs1XU1XL+DBcJ8
-	/sfVlQ9ZNkdbnWV/BfmNnuk+BuiflxfwggsiLuu5JucQDIO7aa/+OSynLpafMA==
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Wed, 31 Jan 2024 17:26:31 +0100
-Subject: [PATCH v4 18/18] MIPS: mobileye: eyeq5: add pinctrl properties to
- UART nodes
+	s=arc-20240116; t=1706733895; c=relaxed/simple;
+	bh=+Aepf8sdCd8G//RlCha5XYDrJRIchvN1hEFdOszOu6g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=R1Tms+g6pi3bLPNcMTn26JY8UcrD6Vz2aMXSAG+T25gjaF6AHSwgkipIAasY1TGsKZCXNHCQ0PjST7z3GJEh2LykaQOQaGJlRwzgtEZ7VqW0hUsWfWUkR8PxDiQgHRiuS4/XPFikvZRa6TR8zwLqRM0teNyQljdjIT9Wxzb28lo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VO2ox0YB; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-5ff7a098ab8so1811347b3.3
+        for <linux-mips@vger.kernel.org>; Wed, 31 Jan 2024 12:44:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706733893; x=1707338693; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+Aepf8sdCd8G//RlCha5XYDrJRIchvN1hEFdOszOu6g=;
+        b=VO2ox0YBjiSG31RTVbeDI2z1IFZxNfm318i+xgL9o0l6lV1eQuIHpPdz7DgUERgFkq
+         JesaQHiT+pdJ00vk7VIA9ZYSn7Ddetwo5NCyYLT4Oc3dTpAM4wnBHW2CnR4lBQmbeqc/
+         Pp7G4hh1vNQSdUpAT0CpGcW09XxpiyqDwWZHkWXXh9mNCqkjfpOybDmPGqaLIv8qggiD
+         k8g22wwpuCPKkqgA61s9zFOzazpMAIUG5JImyfkl34cfbt0foudlH+sOLcS74K9hTgau
+         riDWmSyla8hspJQr6jB6S/rSpfvN/CxX7f0exXsHdlD4PcttPowt4MwhZOZ9Gz0Av2Rj
+         xk0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706733893; x=1707338693;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+Aepf8sdCd8G//RlCha5XYDrJRIchvN1hEFdOszOu6g=;
+        b=CtHzXdmqoECeKtpPsw/saMiSbzAGlkGcvMCQtChwaGptlvfn8gerywF2SDT/C6Amq6
+         gHV3IkUrpNcYMnKk4LiJzOiKAznrXNtRvLvjny2Spmcny8HiU/g0QSL+2oLBloZro5/T
+         fN8P4bpxqzQLpEgHUuhOeHK1ibTK+No+/Urny+i33hnYJEB7FhaIQe2p1WMjuUf51H92
+         MYFdOJrowldfSv9mj64yKEH23bO1cFOY2oar/+D3Xlmrwp1kSTbrJHrfEG8v7QSFd0x8
+         ALuUg98SxyPsccmguhteHLaNeMQrl+hxVCxXbh4Iku35jEHvun44dK0plxb9rgWazWEc
+         JmhQ==
+X-Gm-Message-State: AOJu0Yz8Ry2bg0UNldDe8GA5tEl/CX6wTO2tpUilYVEAUfyl3NudvuvU
+	GjjEOBF3OWuN6zgiO60oJlI7aNDeRzBU3cP2IQW7IqePMv8tyL2O6yHzJO9IUuD6Pck1oYAes30
+	JS4F9UFrsr+u0ZV5NBgdOgeSOa6vPsoIjYSVH5g==
+X-Google-Smtp-Source: AGHT+IHS/WgJih0pA4PCi6jtXXi0NvvqNNRcB0nvYJUMQTqgkNEy0vEgAEVs0YIeJ1unhWTazFjP4rw+Sm0vCsAVTlU=
+X-Received: by 2002:a81:4950:0:b0:603:fd67:a5aa with SMTP id
+ w77-20020a814950000000b00603fd67a5aamr1871650ywa.19.1706733893289; Wed, 31
+ Jan 2024 12:44:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240131-mbly-clk-v4-18-bcd00510d6a0@bootlin.com>
 References: <20240131-mbly-clk-v4-0-bcd00510d6a0@bootlin.com>
 In-Reply-To: <20240131-mbly-clk-v4-0-bcd00510d6a0@bootlin.com>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>, 
- Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- linux-mips@vger.kernel.org, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-gpio@vger.kernel.org, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: b4 0.12.4
-X-GND-Sasl: theo.lebrun@bootlin.com
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Wed, 31 Jan 2024 21:44:42 +0100
+Message-ID: <CACRpkdb+aWL-NU36dF6urL3T9gUROQX=9-L7aUC=+GM8x+bArA@mail.gmail.com>
+Subject: Re: [PATCH v4 00/18] Add support for Mobileye EyeQ5 system controller
+To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, 
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, linux-mips@vger.kernel.org, 
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-UART nodes are present in the platform devicetree. Add pinctrl to them
-now that the pin controller is supported.
+Hi Theo,
 
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
----
- arch/mips/boot/dts/mobileye/eyeq5.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+thanks for your patches!
 
-diff --git a/arch/mips/boot/dts/mobileye/eyeq5.dtsi b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-index ae13e8299994..643bbc55e2b5 100644
---- a/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-+++ b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-@@ -79,6 +79,8 @@ uart0: serial@800000 {
- 			clocks  = <&uart_clk>, <&occ_periph>;
- 			clock-names = "uartclk", "apb_pclk";
- 			resets = <&reset 0 10>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&uart0_pins>;
- 		};
- 
- 		uart1: serial@900000 {
-@@ -90,6 +92,8 @@ uart1: serial@900000 {
- 			clocks  = <&uart_clk>, <&occ_periph>;
- 			clock-names = "uartclk", "apb_pclk";
- 			resets = <&reset 0 11>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&uart1_pins>;
- 		};
- 
- 		uart2: serial@a00000 {
-@@ -101,6 +105,8 @@ uart2: serial@a00000 {
- 			clocks  = <&uart_clk>, <&occ_periph>;
- 			clock-names = "uartclk", "apb_pclk";
- 			resets = <&reset 0 12>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&uart2_pins>;
- 		};
- 
- 		olb: system-controller@e00000 {
+A *new* MIPS platform, not every day I see this!
 
--- 
-2.43.0
+On Wed, Jan 31, 2024 at 5:27=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@bootl=
+in.com> wrote:
 
+> Pin control is about controlling bias, drive strength and muxing. The
+> latter allows two functions per pin; the first function is always GPIO
+> while the second one is pin-dependent. There exists two banks, each
+> handled in a separate driver instance. Each pin maps to one pin group.
+> That makes pin & group indexes the same, simplifying logic.
+
+Can the three pin control patches be merged separately? (It looks like.)
+
+That would make my job easier when we ge there.
+
+I will try to look closer at each patch!
+
+Yours,
+Linus Walleij
 
