@@ -1,52 +1,95 @@
-Return-Path: <linux-mips+bounces-1209-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1211-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4144B841DBC
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jan 2024 09:28:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F19E844388
+	for <lists+linux-mips@lfdr.de>; Wed, 31 Jan 2024 16:59:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F15722888C0
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jan 2024 08:28:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47E062894D2
+	for <lists+linux-mips@lfdr.de>; Wed, 31 Jan 2024 15:59:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 698D158AAD;
-	Tue, 30 Jan 2024 08:27:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ACAD12A143;
+	Wed, 31 Jan 2024 15:59:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="maakPQV0"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 666F457888;
-	Tue, 30 Jan 2024 08:27:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27A4433CB
+	for <linux-mips@vger.kernel.org>; Wed, 31 Jan 2024 15:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706603251; cv=none; b=c9jyHQi+FO6okyNzfjnjcmPMaH2Twf7ZUM2pHfj18DsqRaNqMjxm86Vz8lDfc5sn98o9DC2xzaXy65/ZfVsiL4y+yEScjisZd8nDq3bR/3iKWmNZVYo2mRVimNkU4hEkJRWctRjci2vId2A3NJx0tC+jyjceXZCQUmhCwB4iwt8=
+	t=1706716777; cv=none; b=VbXowyjP75cz3UVEeij5xm9hg8IGLD6K+86gBJ1OubUIbbkBvTc1fvy/Cu8BlQyym6alDs+Q3c3edSoY5ccuY1zsAGn/inTy5g55WmPFmWc68fWm2aSm4gAtjlr/M9c9v7tn3h1/5NDnNR6bmrhm0Sv2MIde4eN/i3Y6cOvC4zI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706603251; c=relaxed/simple;
-	bh=OgP6r3a1KKrgPdfFzExpHkDCOOW2lLyqkMn9g951K7g=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=LB9FyRMKNVFIjX1pL6ilQK1HzdskmRam3yRxZFboN9eRsCNHesndFWWya5YxUG0sio26K+CgtMPKv7VPA5YbJYxT5bDeH5AcxbDRMa5CMDwHVvwGRRjuMs0juKNZNSd4ZVQC8c2Xoozl6J+DJIl53WnsFNoZKyJ10SNLQWkzUG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.2.5.213])
-	by gateway (Coremail) with SMTP id _____8AxjuvwsrhlckEIAA--.25147S3;
-	Tue, 30 Jan 2024 16:27:28 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.2.5.213])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8AxHs_qsrhl4KcnAA--.23872S5;
-	Tue, 30 Jan 2024 16:27:26 +0800 (CST)
-From: Bibo Mao <maobibo@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Thomas Gleixner <tglx@linutronix.de>
-Cc: linux-mips@vger.kernel.org,
+	s=arc-20240116; t=1706716777; c=relaxed/simple;
+	bh=KxTha3Sw2me4wQD2ZIVM7exaX0/yMCyxiR7mnGOFOLY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Y6ZolBe4IvT8VEuEpZOuVavnNqknqF54KaKmklCkxg3xN6MROEmtHL0Curgt9cf3T1Yij3fz22DXw9XINx5WVl1NE6/ytJ+bEJgRUP4nKvj0o/z8BX+9UjV92ghaT6z2uu5WgjrlvGkfCb/0SCvoaItd7HPCktVYnLstD19PWbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=maakPQV0; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-40faff092a2so12922655e9.2
+        for <linux-mips@vger.kernel.org>; Wed, 31 Jan 2024 07:59:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1706716773; x=1707321573; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SJEZ1qPaiDldAW8C05rM2rqR0hTzPI1igVobAmalZsY=;
+        b=maakPQV07x86hzoHNYT3i9Df3t0aUIyYaJz0NKQqd9fS0Op0GFcCCI5uP3CgSg6jsm
+         UxQtDlKyWO6cPk/Es8dgXS/SM5OuymQnsKwJcGfjieeD76Tn125URTvOnGNdIljlsVF6
+         jVM9tvzWL/fxuBlji8zYEcOFj63FT/rGYYSJJTexxSfMACZbojeXiw7aW5kwNix3mW/5
+         7Fn9N8lD5yj7G3PLDw0CrdlSg0ft7FjyhMF7IyFmIC6LtfaQewAy8TaQmAGxZzcYS1Xx
+         Vfnka022pNgNs67dfc7PgkAq7u1FM6nBZJqQJsvvFL7wVJRm3rAeYljaTwf/v7EWxhw6
+         zggg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706716773; x=1707321573;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SJEZ1qPaiDldAW8C05rM2rqR0hTzPI1igVobAmalZsY=;
+        b=bH3kAvdR4FSeNzcoGz78vPPFW5pZu5Dcn2Z+k6RsSXhw6fD52cAp+yv6G8mgIrM2Y/
+         lDeMD6f9WDejcsMthyRo1QR0QO1nknu54PimrsUky3NUcK8ses6MdirT28ikLv98SdeL
+         PNrXn7v4cJP5z7R3EqmOSjETaYZT+obivNjd8Qui+bf65AJG3fruyRhYX856+IWiE8oD
+         UqET/33vwMb0J8y4rmU0EsnLDfvcdjZUOWlubW1TtNSObT/fzdOaidKQffGtgmj1x92P
+         EOGOYZQLB+MGXJxYp75js1eQKJE5gGQLLYITYE6tMEZcnLVjn4xAbpvJ0dZh2NAiyRmT
+         LGbw==
+X-Gm-Message-State: AOJu0Yy+DrFMUFv71e6s9A9Wm1I4X6o9muTjOacFdOuHL8IE81Fp3yEV
+	ab9cWhoz9NT3haTyW0ruJc3hA3OQTqfNV3xKYSV1UCE0HDu3PhwdfPtrutnfrP0=
+X-Google-Smtp-Source: AGHT+IE0y4HMNlJGrQQF1/vBmusVf+vGvj5kGeOQLs8zgDMsoQ9mThbIK2SfMvCJNZS4ESF4P8sD+g==
+X-Received: by 2002:a05:600c:468b:b0:40e:e834:3d86 with SMTP id p11-20020a05600c468b00b0040ee8343d86mr1590072wmo.37.1706716772821;
+        Wed, 31 Jan 2024 07:59:32 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCU5toVRodwweHTcQIyYJFP2Sf3z6pJe8uOj3kJL8Bf9n+o3G8oH7qCtVvtBB6ZzANPh3d2Znisr/JVcpjb5tj+mnQOtD0bGrsmT4CRsS6KdtKyxWKOCl38Giy/mwdkpg1+QQxv40odbMZlnkY5SYdo2XLk0XdYDTp7WRoTnVpNlAlYCWWsQHxNfcLCDVAWDcXk3GvVdHhPFZ62Gx3ql6nSu6/WKzbRDqzGUIYgkgqpdB1vq50EO2ieKr+XUNsum2CV+pMMxiPj9TkdU06yVd81ZbG9I+ff7kAkhj9IowwAQm+N5BwHjhUoaeye58UCta73W6pRJRoGC3DvGN4oHjbsgUSKWyszDmS4NdxPTBbwp2RdU2Ks6e9clrZ+UECY6zRr/NAd2cDDBxGCLVOmgvb+jVeV5smy1Xly69fTl7+hY8866CxoOjFO1I48MgVF0UdOI5C1yuLuymZyybFPw6nm1nAcMitNsxXW/PlXLReWUH5BFV6Jriyq2AKNFsNYuHKk6srdfiXlJ0B77YIP+V0E/i01m7OxC/pDhPX+9RSpIvCQkc7ZVpcu7PMqJqsCDBi7cS4PdMDvYQwktSWOvXekDuYCwO0eKbSeWmguapyXy15tDZbbtoRH2ScNNIwiU21PKEtXagxXWu+FGng==
+Received: from alex-rivos.ba.rivosinc.com (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
+        by smtp.gmail.com with ESMTPSA id t24-20020a1c7718000000b0040f0219c371sm1926678wmi.19.2024.01.31.07.59.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Jan 2024 07:59:32 -0800 (PST)
+From: Alexandre Ghiti <alexghiti@rivosinc.com>
+To: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ved Shanbhogue <ved@rivosinc.com>,
+	Matt Evans <mev@rivosinc.com>,
+	Dylan Jhong <dylan@andestech.com>,
+	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	Sergey Shtylyov <s.shtylyov@omp.ru>,
-	lvjianmin@loongson.cn
-Subject: [PATCH v5 3/3] irqchip/loongson-eiointc: Refine irq affinity setting during resume
-Date: Tue, 30 Jan 2024 16:27:22 +0800
-Message-Id: <20240130082722.2912576-4-maobibo@loongson.cn>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20240130082722.2912576-1-maobibo@loongson.cn>
-References: <20240130082722.2912576-1-maobibo@loongson.cn>
+	linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org,
+	linux-mm@kvack.org
+Cc: Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: [PATCH RFC v2 0/4] Svvptc extension to remove preventive sfence.vma
+Date: Wed, 31 Jan 2024 16:59:25 +0100
+Message-Id: <20240131155929.169961-1-alexghiti@rivosinc.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -54,65 +97,83 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8AxHs_qsrhl4KcnAA--.23872S5
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7tFW8Ar1rZr4DWry3Ar1rZrc_yoW8Xr4rpF
-	W3A3ZFvr15GFyUXr9Yk3Wjq34ay39Y93y2qay3Wa93ZFs8Wa1DKF4FyFykZFW0k342yF1q
-	9F4Yq34ru3W5C3XCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU92b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-	tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
-	AKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v2
-	6r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
-	CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF
-	0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
-	AIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVF
-	xhVjvjDU0xZFpf9x07jz2NtUUUUU=
 
-During suspend and resume, CPUs except CPU0 can be hot-unpluged and IRQs
-will be migrated to CPU0. So it is not necessary to restore irq affinity
-for eiointc irq controller when system resumes. This patch removes this
-piece of code about irq affinity restoring in function eiointc_resume().
+In RISC-V, after a new mapping is established, a sfence.vma needs to be
+emitted for different reasons:
 
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
- drivers/irqchip/irq-loongson-eiointc.c | 16 ----------------
- 1 file changed, 16 deletions(-)
+- if the uarch caches invalid entries, we need to invalidate it otherwise
+  we would trap on this invalid entry,
+- if the uarch does not cache invalid entries, a reordered access could fail
+  to see the new mapping and then trap (sfence.vma acts as a fence).
 
-diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
-index 6a71a8c29ac7..b64cbe3052e8 100644
---- a/drivers/irqchip/irq-loongson-eiointc.c
-+++ b/drivers/irqchip/irq-loongson-eiointc.c
-@@ -310,23 +310,7 @@ static int eiointc_suspend(void)
- 
- static void eiointc_resume(void)
- {
--	int i, j;
--	struct irq_desc *desc;
--	struct irq_data *irq_data;
--
- 	eiointc_router_init(0);
--
--	for (i = 0; i < nr_pics; i++) {
--		for (j = 0; j < eiointc_priv[0]->vec_count; j++) {
--			desc = irq_resolve_mapping(eiointc_priv[i]->eiointc_domain, j);
--			if (desc && desc->handle_irq && desc->handle_irq != handle_bad_irq) {
--				raw_spin_lock(&desc->lock);
--				irq_data = irq_domain_get_irq_data(eiointc_priv[i]->eiointc_domain, irq_desc_get_irq(desc));
--				eiointc_set_irq_affinity(irq_data, irq_data->common->affinity, 0);
--				raw_spin_unlock(&desc->lock);
--			}
--		}
--	}
- }
- 
- static struct syscore_ops eiointc_syscore_ops = {
+We can actually avoid emitting those (mostly) useless and costly sfence.vma
+by handling the traps instead:
+
+- for new kernel mappings: only vmalloc mappings need to be taken care of,
+  other new mapping are rare and already emit the required sfence.vma if
+  needed.
+  That must be achieved very early in the exception path as explained in
+  patch 3, and this also fixes our fragile way of dealing with vmalloc faults.
+
+- for new user mappings: Svvptc makes update_mmu_cache() a no-op and no
+  traps can happen since xRET instructions now act as fences.
+
+Patch 1 and 2 introduce Svvptc extension probing.
+
+It's still an RFC because Svvptc is not ratified yet.
+
+On our uarch that does not cache invalid entries and a 6.5 kernel, the
+gains are measurable:
+
+* Kernel boot:                  6%
+* ltp - mmapstress01:           8%
+* lmbench - lat_pagefault:      20%
+* lmbench - lat_mmap:           5%
+
+Thanks to Ved and Matt Evans for triggering the discussion that led to
+this patchset!
+
+Any feedback, test or relevant benchmark are welcome :)
+
+Changes in v2:
+- Rebase on top of 6.8-rc1
+- Remove patch with runtime detection of tlb caching and debugfs patch
+- Add patch that probes Svvptc
+- Add patch that defines the new Svvptc dt-binding
+- Leave the behaviour as-is for uarchs that cache invalid TLB entries since
+  I don't have any good perf numbers
+- Address comments from Christoph on v1
+- Fix a race condition in new_vmalloc update:
+
+       ld      a2, 0(a0) <= this could load something which is != -1
+       not     a1, a1    <= here or in the instruction after, flush_cache_vmap()
+                            could make the whole bitmap to 1
+       and     a1, a2, a1
+       sd      a1, 0(a0) <= here we would clear bits that should not be cleared!
+
+   Instead, replace the whole sequence with:
+       amoxor.w        a0, a1, (a0)
+
+Alexandre Ghiti (4):
+  riscv: Add ISA extension parsing for Svvptc
+  dt-bindings: riscv: Add Svvptc ISA extension description
+  riscv: Stop emitting preventive sfence.vma for new vmalloc mappings
+  riscv: Stop emitting preventive sfence.vma for new userspace mappings
+    with Svvptc
+
+ .../devicetree/bindings/riscv/extensions.yaml |  7 ++
+ arch/riscv/include/asm/cacheflush.h           | 18 +++-
+ arch/riscv/include/asm/hwcap.h                |  1 +
+ arch/riscv/include/asm/pgtable.h              | 16 +++-
+ arch/riscv/include/asm/thread_info.h          |  5 ++
+ arch/riscv/kernel/asm-offsets.c               |  5 ++
+ arch/riscv/kernel/cpufeature.c                |  1 +
+ arch/riscv/kernel/entry.S                     | 84 +++++++++++++++++++
+ arch/riscv/mm/init.c                          |  2 +
+ arch/riscv/mm/pgtable.c                       | 13 +++
+ 10 files changed, 150 insertions(+), 2 deletions(-)
+
 -- 
-2.39.3
+2.39.2
 
 
