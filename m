@@ -1,74 +1,74 @@
-Return-Path: <linux-mips+bounces-1242-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1243-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8ED9C84538A
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 10:15:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F0BC84539D
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 10:17:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B38F41C258D7
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 09:15:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 300FBB28C05
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 09:17:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAD6715B97E;
-	Thu,  1 Feb 2024 09:14:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2E2015B0FB;
+	Thu,  1 Feb 2024 09:17:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ykq2K1Ix"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CCjBhpjU"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA48315B976
-	for <linux-mips@vger.kernel.org>; Thu,  1 Feb 2024 09:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B5615B0E3
+	for <linux-mips@vger.kernel.org>; Thu,  1 Feb 2024 09:17:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706778865; cv=none; b=K92WJzlmZ6qBPkIO+7OVFUzrFrMzAJPF4zx/WCDV2A5BDDq5y14JYvhzEdetA8R6cTynSRKZWDkWLYshIdVIQmQMbocuF14z0Hh6TitB1fJ8mkzH0y8T2sNb9uNeitqOxCCki7Vr6/3JL7ZDoAsQG3Q9DxtIUujWtfNw1Jxzjj8=
+	t=1706779044; cv=none; b=c4M1X/WxPA6VoqT4Z2FmB2W0lXMHBE6Jk4RO/P/F5BrvKZed5CNcu6p22WRb+EZpBS9ZFMgWK1sLovDocVwybgBTwxg3BvVBD9nqO5hKJEglCknBtHWnjok1WDVp52J4kxju2G15QTc4N049aM7RTV4RJigkLS1+veQpr3s9hdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706778865; c=relaxed/simple;
-	bh=ZzZFC8pCFWDVU7JyslqsXXC7ChqqenGWk7j8CMB9YZM=;
+	s=arc-20240116; t=1706779044; c=relaxed/simple;
+	bh=45isAhMd6LLtdHd+BAk/CV6skOw9K0fbKtLkRQ7WK/U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j34J2X2CXpMtgL7Aky3a9IZMXjkq2lDVI5RVgh9ysAKvfFnJPeTpPsoyAk0z1FyMmuJRpqJ946U0Cl70h7QUMOlGTtZCSgR9XypSMn9eECduDn5E03tY0irrudce7bTewrnQ3w/4PJ8i8Ju3IX9c9maXjySxUnOwNxxTgstckCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ykq2K1Ix; arc=none smtp.client-ip=209.85.218.45
+	 In-Reply-To:Content-Type; b=CEYCyTWYPla1V+/HJF1ffZ3eJGh3+4kGJKcoNGouhmf0Y+cp5KSNS3y0a3+mXC/ScIMLSWTgyqzGPUZvAlDLClYsQg/C9famvlfwjv2F7c2h+cmDWkguXfJNqOJ2VpzyZaPh66c4kYLNdLEmq+nXhcXkcosMv/3nvhBoq5KOBtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CCjBhpjU; arc=none smtp.client-ip=209.85.208.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a358ec50b7cso119957466b.0
-        for <linux-mips@vger.kernel.org>; Thu, 01 Feb 2024 01:14:23 -0800 (PST)
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-55a90a0a1a1so937723a12.0
+        for <linux-mips@vger.kernel.org>; Thu, 01 Feb 2024 01:17:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706778862; x=1707383662; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706779040; x=1707383840; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=M/8tPV5f9TkHhEsp1Q8SF5XrFa/+sW2kJLUAlbmmFaM=;
-        b=ykq2K1Ix+7w7JHy1Wwqt+aO3b0NHMpZrA7mSQvvRM2QXFuGZt5G1xhE9Grqe0Hynso
-         BNv8x6kbkExbpsAme8o1T00naIVim927dthHAfLvdCs0uLMeigNtmTQm8uP7KCR4+9ru
-         h2gKfBAd83mpeeLKAeCNbZ/LHQbU1E1IoBiGx020pwl0EOXa5pveks0UqKUYsmide3pV
-         sIiX+dTTzma9YL4+EuWvG/t9i+EKOsOmHz3TD+tJeC3NsyDgOdmGCsoNQ2sKJAcwZzDe
-         HdRphsmZxtx2m3Wq90cu28ZoIi8BYc8/VrZ+ZpASDhX0ANkH0/NafzB7DDOJdepEd5yw
-         0xOQ==
+        bh=ovtqlZzW1K6QjRjoiFhCbDbH7IJm7gi9GodRSIczQu8=;
+        b=CCjBhpjUzN9sZr2UXXItbCDxiR+xlBi0y3i59fiBbbS4Vz+7pZf+4MahHAgheAk2E0
+         ldihy+io75iLksgs5y16HRdvwKwQooqiONyWfiKwTeEPpqFuackP1yYoOjXFywHfPMLM
+         FcHeFiaRjFHFYnJletwzNCNdvDpHS8YwZN3iMycHWWz+UeLgiXzylOhW+J/sNB6xAVqO
+         gOxkpv3E37uKEv27q/CNMygD3SL2LmSCZvQu0Vm9OflMC5G47xyn09QJcjVnpIeqL3Q1
+         aHWQzkWYUNOR539GgloQwfk3sQfNJkutClwF5SQBJ97SgGQkKLOHs0V4BRGxO284ELJZ
+         7Vzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706778862; x=1707383662;
+        d=1e100.net; s=20230601; t=1706779040; x=1707383840;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M/8tPV5f9TkHhEsp1Q8SF5XrFa/+sW2kJLUAlbmmFaM=;
-        b=YdYoj4udnfdOMP3hw0yCQr4dkWTy6FSVGNjOacZ8Nw9Juq00ltGVX3xCebBfqgdp+/
-         8ek6Of9fL/TtxAbNm5h6IwDNBPJ5Thcc033qv0eOKYIZCGY6ERnMuWC81jcPLOI0KyNO
-         58fHAxpA1430TLc4hu0kx2wPQid6HmCZslbDiw9YKGMKlYMrQ06WcBo6LcA/P6XAKOuV
-         reCpXPXTk9CDd/CYMzmqzRlVQV0GVr10jQkN4Y5F5kYo981c/BTf9ebwfO7+8gNjEz0S
-         9lTOEWaDeRqxHRN5Am9rTf5xzurThwbFpg0Y7C/Gz1JwmepSvheHRKLsg2YASWuW41hq
-         Uwig==
-X-Gm-Message-State: AOJu0Yz9er1sznT/hOwFCxq33H8+ytZ9jN1+Ns/Xeg2TBmey8aTl4vtA
-	o6HhmZ/6/yBdFsanN69qnZoTbUgtSnOJHt4AD5ic2snyH4CDPepXmbtiDqPtXK4=
-X-Google-Smtp-Source: AGHT+IH58gkd1fs10vyT7eEcqXGDJwqAYIKiVC+I+A8OP3YgTKftOtUxlewXAhONh6DTSb80sUji2w==
-X-Received: by 2002:a17:906:cb2:b0:a27:5fd1:791f with SMTP id k18-20020a1709060cb200b00a275fd1791fmr4794552ejh.0.1706778862246;
-        Thu, 01 Feb 2024 01:14:22 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCWvUprgPBYD2U5tuVsSbAuU20y3L1EkaOCfB/E7XauuVlm207EHxazpSCwE0AJntKuON6cu9pJDhPyOaELebk2/+1Ct0BVPnM3Alw2QMYyumYfV3i9o0uuu9/MULr0wLtkuYEjpzLoKDAEdfPjmb6PElg+ccXl8s6S4cT+Uj094vd0ArqSxLiLobBOjub+irO7E+OFarD/3RvhCdmc5WgDIMlrSrrBPQuqKKNf4EoPHup/HeGbV/CH0+z5RzTJyTPvzJBKy6b2FR+fjE6V7KIGKe1HHNwqhBQ74jOHQ2bRweqcNMWlknT321vBnF6rgjzGCtcjCsmWSdwcKskInUtiWkSE7VJsapNHo5c5TPxLPGZjiFBn6lPCG10K4gk5OIgShD8eksHIGpXT+Phb/xCHTjiyIqTD1zT812omj+vQ2xD3Aw7WhGqU/sANK8U7d/7FAvV2WfvFgC1fCy58+Lw5gIHYWxUtxq57wnUzy684TqbSMoVV0RAPR
+        bh=ovtqlZzW1K6QjRjoiFhCbDbH7IJm7gi9GodRSIczQu8=;
+        b=IHpsOYp5dDKZVMs/GEK5VzAi6/mgzCVTAq+mtirmpdxKEe/Q84sFD6OuCTGtPMBE9x
+         YlAUP+mfwyIq3hSzfX0nDxvAOuUazCjR8P+FZ1lzzWL+iM5A1TRUVacYQvWx5XAsqFJ0
+         SXeaKhx79mW53ADflYRO8cpWzpOGsxyStzfrA5d/8kIOWj3tuJpaekuA1idZhtflo0J2
+         yk1yVNVhXdjlpH0wnopVImeKempiLhIbsXWxt1aswlVt9SmpsxrfTh7whzho3pAtUH0q
+         NMyJLdXYsVsv4ZB1eWvnbXMMk/on91zkqBfQ9XAUvsYeeZ41Lt1h0KwxJ4Ho0Iy08qUk
+         sF0A==
+X-Gm-Message-State: AOJu0YwLMgsNQCrUyn6QsAy47cJqjc8ovcAqCAwpOpRwuZqUMZCmRDl8
+	XlzSNKdOUbB3p99fWossIrILx/GvtHSvOzAM9V4YfPqlKVS+j8EAOs+b6aIBHoY=
+X-Google-Smtp-Source: AGHT+IFC6569HGBWzP2B/TwqCI5rloTd6lRmSg2vLEMmdbFMbGczsyCQb1eiCmQHKLRD+gvTFL7sgQ==
+X-Received: by 2002:a50:8ad8:0:b0:55d:1eae:1e9f with SMTP id k24-20020a508ad8000000b0055d1eae1e9fmr3213477edk.15.1706779039954;
+        Thu, 01 Feb 2024 01:17:19 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCVO7HD/NtVkpUQUZar+ejLYECBb+ZqRvIivRHQN62ZRvi1TFwQMJtBtKDhjlLlZOUx3n8kFUdgp+xahFGQlk7DBZqbOvYFnTFhWYcgOilnE1ss0Ek1fmnPuiy21if6ULy9ruapFvn6Rh/y1/WsWFjRXMwHOQqsaKWReMvhnRcKOV/xRn0F1lebvfc6xtfsklMjX31gMJg1oYqh5OeEXxThveUBGKCf0QYIF5g65SJPbx4LX1BPRL6olGnI99M7r+fcET4k284NQMWnaL/IGfglHRFR2zHOsptVronrE9Y6Ac8GLsZyCR2ke6kpuYgp60/vCWic/6pwcuZg99FNTWWaqQuuLCqDwm4CdwjlYEAWtZiz3TVv176MPLtBwJ1AmIH1KkY1zbWve/GSoHYrbz5mdj+jEKtDAsN6hcvl4c7p1v98NvRNWM24vHH9XaGBZ7bMipwlktE+tVUc4ItHjWcrHfXg+UBQZdleWXUZ0i2GvqOvVPSQAE3Ja
 Received: from [192.168.1.20] ([178.197.222.62])
-        by smtp.gmail.com with ESMTPSA id cu3-20020a170906ba8300b00a368903fc98sm1165092ejd.136.2024.02.01.01.14.20
+        by smtp.gmail.com with ESMTPSA id c17-20020a056402101100b0055ef8318e97sm4152325edu.46.2024.02.01.01.17.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Feb 2024 01:14:21 -0800 (PST)
-Message-ID: <32ac8056-1820-4871-8526-8b467162d78e@linaro.org>
-Date: Thu, 1 Feb 2024 10:14:19 +0100
+        Thu, 01 Feb 2024 01:17:19 -0800 (PST)
+Message-ID: <4d50b0a1-4dbf-4a6f-bec9-07b8b3f92829@linaro.org>
+Date: Thu, 1 Feb 2024 10:17:17 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -76,7 +76,7 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 11/15] MIPS: mobileye: Add EyeQ5 dtsi
+Subject: Re: [PATCH v6 10/15] dt-bindings: mfd: syscon: Document EyeQ5 OLB
 Content-Language: en-US
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
  Paul Burton <paulburton@kernel.org>,
@@ -90,7 +90,7 @@ Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
  =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 References: <20240118155252.397947-1-gregory.clement@bootlin.com>
- <20240118155252.397947-12-gregory.clement@bootlin.com>
+ <20240118155252.397947-11-gregory.clement@bootlin.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -136,94 +136,41 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240118155252.397947-12-gregory.clement@bootlin.com>
+In-Reply-To: <20240118155252.397947-11-gregory.clement@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 18/01/2024 16:52, Gregory CLEMENT wrote:
-> Add a device tree include file for the Mobileye EyeQ5 SoC.
+> Document Mobileye EyeQ5 compatibles for OLB registers that are
+> miscellaneous SoC related registers.
 > 
-> Based on the work of Slava Samsonov <stanislav.samsonov@intel.com>
+> It is used to expose SoC specific configuration such as for example
+> reset, clock or pinctrl.
 > 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+No, please drop.
+
 > Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 > ---
+>  Documentation/devicetree/bindings/mfd/syscon.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> index 084b5c2a2a3c2..c90633460eeca 100644
+> --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> @@ -55,6 +55,7 @@ properties:
+>                - mediatek,mt8135-pctl-a-syscfg
+>                - mediatek,mt8135-pctl-b-syscfg
+>                - mediatek,mt8365-syscfg
+> +              - mobileye,eyeq5-olb
 
-...
+Please work with your colleague to avoid posting contradictory patches.
 
-> +
-> +	soc: soc {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +		compatible = "simple-bus";
-> +
-> +		uart0: serial@800000 {
-> +			compatible = "arm,pl011", "arm,primecell";
-> +			reg = <0 0x800000 0x0 0x1000>;
-> +			reg-io-width = <4>;
-> +			interrupt-parent = <&gic>;
-> +			interrupts = <GIC_SHARED 6 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks  = <&uart_clk>, <&occ_periph>;
-> +			clock-names = "uartclk", "apb_pclk";
-> +		};
-> +
-> +		uart1: serial@900000 {
-> +			compatible = "arm,pl011", "arm,primecell";
-> +			reg = <0 0x900000 0x0 0x1000>;
-> +			reg-io-width = <4>;
-> +			interrupt-parent = <&gic>;
-> +			interrupts = <GIC_SHARED 6 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks  = <&uart_clk>, <&occ_periph>;
-> +			clock-names = "uartclk", "apb_pclk";
-> +		};
-> +
-> +		uart2: serial@a00000 {
-> +			compatible = "arm,pl011", "arm,primecell";
-> +			reg = <0 0xa00000 0x0 0x1000>;
-> +			reg-io-width = <4>;
-> +			interrupt-parent = <&gic>;
-> +			interrupts = <GIC_SHARED 6 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks  = <&uart_clk>, <&occ_periph>;
-> +			clock-names = "uartclk", "apb_pclk";
-> +		};
-> +
-> +		olb: olb@e00000 {
+This is something else.
 
-That's not a correct name. Please do not send knowingly incorrect DTS.
-
-> +			compatible = "mobileye,eyeq5-olb", "syscon", "simple-mfd";
-> +			reg = <0 0xe00000 0x0 0x400>;
-> +			reg-io-width = <4>;
-
-That's not needed property here.
-
-> +		};
-> +
-> +		gic: interrupt-controller@140000 {
-> +			compatible = "mti,gic";
-> +			reg = <0x0 0x140000 0x0 0x20000>;
-> +			interrupt-controller;
-> +			#interrupt-cells = <3>;
-> +
-> +			/*
-> +			* Declare the interrupt-parent even though the mti,gic
-> +			* binding doesn't require it, such that the kernel can
-> +			* figure out that cpu_intc is the root interrupt
-> +			* controller & should be probed first.
-> +			*/
-> +			interrupt-parent = <&cpu_intc>;
-> +
-> +			timer {
-> +				compatible = "mti,gic-timer";
-> +				interrupts = <GIC_LOCAL 1 IRQ_TYPE_NONE>;
-> +				clocks = <&core0_clk>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-
-Stray blank line.
+NAK
 
 Best regards,
 Krzysztof
