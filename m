@@ -1,74 +1,74 @@
-Return-Path: <linux-mips+bounces-1243-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1244-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F0BC84539D
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 10:17:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9851F84539E
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 10:18:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 300FBB28C05
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 09:17:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9D04289EA9
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 09:18:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2E2015B0FB;
-	Thu,  1 Feb 2024 09:17:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E18241586FB;
+	Thu,  1 Feb 2024 09:18:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CCjBhpjU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XRmBe3eI"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B5615B0E3
-	for <linux-mips@vger.kernel.org>; Thu,  1 Feb 2024 09:17:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 236B115A4B1
+	for <linux-mips@vger.kernel.org>; Thu,  1 Feb 2024 09:18:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706779044; cv=none; b=c4M1X/WxPA6VoqT4Z2FmB2W0lXMHBE6Jk4RO/P/F5BrvKZed5CNcu6p22WRb+EZpBS9ZFMgWK1sLovDocVwybgBTwxg3BvVBD9nqO5hKJEglCknBtHWnjok1WDVp52J4kxju2G15QTc4N049aM7RTV4RJigkLS1+veQpr3s9hdY=
+	t=1706779101; cv=none; b=XL16F+u9pxHaalPzFVjjasu0NtonsL9xHPm+Di5PdoY/IJULOAonmN4uzZ/TJdRq58tdIh1yNXcF/rb+vFb4c9nG9GoR//4+/DiOUzPCO921EIejLH5bJfuc+/yUHI/IUJk3V42dzupcAfVD0uINEYKv/PdrrLD+PRl4iy63LFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706779044; c=relaxed/simple;
-	bh=45isAhMd6LLtdHd+BAk/CV6skOw9K0fbKtLkRQ7WK/U=;
+	s=arc-20240116; t=1706779101; c=relaxed/simple;
+	bh=iUlMnOrSV9wRy3crTeEV5w2RllYG4P8KL9D3za1zCtY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CEYCyTWYPla1V+/HJF1ffZ3eJGh3+4kGJKcoNGouhmf0Y+cp5KSNS3y0a3+mXC/ScIMLSWTgyqzGPUZvAlDLClYsQg/C9famvlfwjv2F7c2h+cmDWkguXfJNqOJ2VpzyZaPh66c4kYLNdLEmq+nXhcXkcosMv/3nvhBoq5KOBtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CCjBhpjU; arc=none smtp.client-ip=209.85.208.53
+	 In-Reply-To:Content-Type; b=o2hCGZuyqm/lPyZdPxWpWHusIvJfjczLM6ixfmnUhPhzvvWE+uSiQRiLGPEYJA7npiFR3vqfrgQAEHShyXVUWgmgrlXhsfZbkd4Kz0mBRsMaAXjaUlAW9gTk8B1VVlvOV1UyBYFmAGQYfew1a37aYWICnZvMi62A+0yhmInfVbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XRmBe3eI; arc=none smtp.client-ip=209.85.208.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-55a90a0a1a1so937723a12.0
-        for <linux-mips@vger.kernel.org>; Thu, 01 Feb 2024 01:17:21 -0800 (PST)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-55817a12ad8so812698a12.2
+        for <linux-mips@vger.kernel.org>; Thu, 01 Feb 2024 01:18:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706779040; x=1707383840; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706779098; x=1707383898; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ovtqlZzW1K6QjRjoiFhCbDbH7IJm7gi9GodRSIczQu8=;
-        b=CCjBhpjUzN9sZr2UXXItbCDxiR+xlBi0y3i59fiBbbS4Vz+7pZf+4MahHAgheAk2E0
-         ldihy+io75iLksgs5y16HRdvwKwQooqiONyWfiKwTeEPpqFuackP1yYoOjXFywHfPMLM
-         FcHeFiaRjFHFYnJletwzNCNdvDpHS8YwZN3iMycHWWz+UeLgiXzylOhW+J/sNB6xAVqO
-         gOxkpv3E37uKEv27q/CNMygD3SL2LmSCZvQu0Vm9OflMC5G47xyn09QJcjVnpIeqL3Q1
-         aHWQzkWYUNOR539GgloQwfk3sQfNJkutClwF5SQBJ97SgGQkKLOHs0V4BRGxO284ELJZ
-         7Vzw==
+        bh=IgYBWe/wqJ85IEZGtzGOJQZyi0IeIxpqLQiSec7DYZA=;
+        b=XRmBe3eIkGXr2rE395PEnBPWsI/dc/19ksSIaRFXTLNZbglCv0hvyiWOQ2yv0ED5fh
+         qqYzo/tJw9ZCrTj2GkYyMfaIA8eNqyq1vp0nbNohnEaQeGsubRkYpCCdRRRkh54OMGG7
+         5FVCusA7RfNKZv67DfaOMZzFHsPzqB+Z2YzAvQ2DmGIl2TJ4QlNoAHmsScjZ6LAdEZF0
+         dUh6PiDYwTOvYO1lqF7Zcb8f5CrwI4el4cnoNxWsvz0yMPdZmky6OrnPHyN+8nqGrWIq
+         aETDHUfaGQXBwuM0VBzCPdGRTJPXNPQ4dCpla0iVCkzo7Y6GWFqCmQBR7YFU/iOv8Mb/
+         8+1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706779040; x=1707383840;
+        d=1e100.net; s=20230601; t=1706779098; x=1707383898;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ovtqlZzW1K6QjRjoiFhCbDbH7IJm7gi9GodRSIczQu8=;
-        b=IHpsOYp5dDKZVMs/GEK5VzAi6/mgzCVTAq+mtirmpdxKEe/Q84sFD6OuCTGtPMBE9x
-         YlAUP+mfwyIq3hSzfX0nDxvAOuUazCjR8P+FZ1lzzWL+iM5A1TRUVacYQvWx5XAsqFJ0
-         SXeaKhx79mW53ADflYRO8cpWzpOGsxyStzfrA5d/8kIOWj3tuJpaekuA1idZhtflo0J2
-         yk1yVNVhXdjlpH0wnopVImeKempiLhIbsXWxt1aswlVt9SmpsxrfTh7whzho3pAtUH0q
-         NMyJLdXYsVsv4ZB1eWvnbXMMk/on91zkqBfQ9XAUvsYeeZ41Lt1h0KwxJ4Ho0Iy08qUk
-         sF0A==
-X-Gm-Message-State: AOJu0YwLMgsNQCrUyn6QsAy47cJqjc8ovcAqCAwpOpRwuZqUMZCmRDl8
-	XlzSNKdOUbB3p99fWossIrILx/GvtHSvOzAM9V4YfPqlKVS+j8EAOs+b6aIBHoY=
-X-Google-Smtp-Source: AGHT+IFC6569HGBWzP2B/TwqCI5rloTd6lRmSg2vLEMmdbFMbGczsyCQb1eiCmQHKLRD+gvTFL7sgQ==
-X-Received: by 2002:a50:8ad8:0:b0:55d:1eae:1e9f with SMTP id k24-20020a508ad8000000b0055d1eae1e9fmr3213477edk.15.1706779039954;
-        Thu, 01 Feb 2024 01:17:19 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCVO7HD/NtVkpUQUZar+ejLYECBb+ZqRvIivRHQN62ZRvi1TFwQMJtBtKDhjlLlZOUx3n8kFUdgp+xahFGQlk7DBZqbOvYFnTFhWYcgOilnE1ss0Ek1fmnPuiy21if6ULy9ruapFvn6Rh/y1/WsWFjRXMwHOQqsaKWReMvhnRcKOV/xRn0F1lebvfc6xtfsklMjX31gMJg1oYqh5OeEXxThveUBGKCf0QYIF5g65SJPbx4LX1BPRL6olGnI99M7r+fcET4k284NQMWnaL/IGfglHRFR2zHOsptVronrE9Y6Ac8GLsZyCR2ke6kpuYgp60/vCWic/6pwcuZg99FNTWWaqQuuLCqDwm4CdwjlYEAWtZiz3TVv176MPLtBwJ1AmIH1KkY1zbWve/GSoHYrbz5mdj+jEKtDAsN6hcvl4c7p1v98NvRNWM24vHH9XaGBZ7bMipwlktE+tVUc4ItHjWcrHfXg+UBQZdleWXUZ0i2GvqOvVPSQAE3Ja
+        bh=IgYBWe/wqJ85IEZGtzGOJQZyi0IeIxpqLQiSec7DYZA=;
+        b=L04q74LmSkC9bM866i2K5omKf5Fpg0i7ycdWpI39vgn8Vdn+NDBHpZEjTH9OU45duX
+         6Xdmg5VyJPzjklx7ZWchMf0oscUvwR6TO+j5bopHrwm+cYTmSyyfnhn9zRFns1sT4gDu
+         b2D9J+yc1qSnDYXpBLpKP3GEgH/hgl0OpselJK35p9mz3ZkvW3T3aZOS9cFM7gmemLZJ
+         Pe+K8/ayaHKplyWrnRCTOrH14q6aazx0GraMoFL9DoFNoANuISVttZlzqvneJ7V/nB+e
+         2t/DmKzmnH0PRmBxEarvnDPRpcdAbODn6YGs97JwVTCE1q37ooTij2eKr+4mB/Gf60Hs
+         yuVQ==
+X-Gm-Message-State: AOJu0YwSLIRQNB/dOq9lmqsFyEQv88bUoOxomskGMOjeKvRrim3xao69
+	38HFQIAGe5VCJw+Iqb2uFDl4YNs9FjXw2rAFXb482h1znNjO1llkYG8vSX7RswM=
+X-Google-Smtp-Source: AGHT+IHhRollnS0CkAdN4NE0JJ480kYB7z1iZCKK34tOvOmCZPRMbPmrJPAxWlkI2bgZWkVLEnX4Iw==
+X-Received: by 2002:aa7:ca52:0:b0:55f:c704:56c9 with SMTP id j18-20020aa7ca52000000b0055fc70456c9mr387677edt.38.1706779098303;
+        Thu, 01 Feb 2024 01:18:18 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCXLxC4E564rLyFjTOq3hsqyCXFpo00V+DYJhQLlYibnZxAupjf//VhgwvTak96DQROrKxuIutJ0l1aJXUZfAxqCiW5CnS9Qva+KsR6BUV6tfepgQKm5OX8AURgDea4Ji2lQEI1iYzR8yYHvkvoIIBAn5IBYmNaGFx/yePvMQXZEunixnbFrUjI/pM2oZ0yMAObAOXUlrRP7j+81TQtSse7A0Pfs+EyiTPM4SKv8FZOnnA9izaE5lcNJ3IMTTxW5KT85S7FCwbCMR2Ur5aQ5JyTDrUR+N1xcBm0Se5115KKqX0e2by/9eHimuC/0Df5znArrUz+XzMyX2/ECJT7Wc3vobqz25HBu+1hKECY//dEKVVlwQUmQfq/HtQR+y7PooH1KLYBvON1fBIzkfLw4PzkGd1uA5hHod91aLSdoWIoKFV824n6o23IFcnMDarA1DTHZH6wUVgC2Otgssqo7RcPNNRNfugtuLYLQCv/ZDwdVrLj7LmKb5c44
 Received: from [192.168.1.20] ([178.197.222.62])
-        by smtp.gmail.com with ESMTPSA id c17-20020a056402101100b0055ef8318e97sm4152325edu.46.2024.02.01.01.17.18
+        by smtp.gmail.com with ESMTPSA id c17-20020a056402101100b0055ef8318e97sm4152325edu.46.2024.02.01.01.18.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Feb 2024 01:17:19 -0800 (PST)
-Message-ID: <4d50b0a1-4dbf-4a6f-bec9-07b8b3f92829@linaro.org>
-Date: Thu, 1 Feb 2024 10:17:17 +0100
+        Thu, 01 Feb 2024 01:18:17 -0800 (PST)
+Message-ID: <48805585-aee6-46dc-b85a-d222a7420e5d@linaro.org>
+Date: Thu, 1 Feb 2024 10:18:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -76,7 +76,7 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 10/15] dt-bindings: mfd: syscon: Document EyeQ5 OLB
+Subject: Re: [PATCH v6 12/15] MIPS: mobileye: Add EPM5 device tree
 Content-Language: en-US
 To: Gregory CLEMENT <gregory.clement@bootlin.com>,
  Paul Burton <paulburton@kernel.org>,
@@ -90,7 +90,7 @@ Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
  =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 References: <20240118155252.397947-1-gregory.clement@bootlin.com>
- <20240118155252.397947-11-gregory.clement@bootlin.com>
+ <20240118155252.397947-13-gregory.clement@bootlin.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -136,41 +136,54 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240118155252.397947-11-gregory.clement@bootlin.com>
+In-Reply-To: <20240118155252.397947-13-gregory.clement@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 18/01/2024 16:52, Gregory CLEMENT wrote:
-> Document Mobileye EyeQ5 compatibles for OLB registers that are
-> miscellaneous SoC related registers.
+> Add a device tree for the Mobileye EPM5 evaluation board.
 > 
-> It is used to expose SoC specific configuration such as for example
-> reset, clock or pinctrl.
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-No, please drop.
-
 > Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 > ---
->  Documentation/devicetree/bindings/mfd/syscon.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  arch/mips/boot/dts/mobileye/Makefile       |  4 ++++
+>  arch/mips/boot/dts/mobileye/eyeq5-epm5.dts | 24 ++++++++++++++++++++++
+>  2 files changed, 28 insertions(+)
+>  create mode 100644 arch/mips/boot/dts/mobileye/Makefile
+>  create mode 100644 arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
-> index 084b5c2a2a3c2..c90633460eeca 100644
-> --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
-> @@ -55,6 +55,7 @@ properties:
->                - mediatek,mt8135-pctl-a-syscfg
->                - mediatek,mt8135-pctl-b-syscfg
->                - mediatek,mt8365-syscfg
-> +              - mobileye,eyeq5-olb
+> diff --git a/arch/mips/boot/dts/mobileye/Makefile b/arch/mips/boot/dts/mobileye/Makefile
+> new file mode 100644
+> index 0000000000000..01c01c3aad81d
+> --- /dev/null
+> +++ b/arch/mips/boot/dts/mobileye/Makefile
+> @@ -0,0 +1,4 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +# Copyright 2023 Mobileye Vision Technologies Ltd.
+> +
+> +dtb-$(CONFIG_MACH_EYEQ5)		+= eyeq5-epm5.dtb
+> diff --git a/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts b/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
+> new file mode 100644
+> index 0000000000000..ff16c3c760a19
+> --- /dev/null
+> +++ b/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
+> @@ -0,0 +1,24 @@
+> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +/*
+> + * Copyright 2023 Mobileye Vision Technologies Ltd.
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "eyeq5.dtsi"
+> +
+> +/ {
+> +	compatible = "mobileye,eyeq5-epm5", "mobileye,eyeq5";
+> +	model = "Mobile EyeQ5 MP5 Evaluation board";
+> +
+> +	chosen {
+> +		bootargs = "earlycon";
 
-Please work with your colleague to avoid posting contradictory patches.
-
-This is something else.
-
-NAK
+Still not suitable for mainline. Drop.
 
 Best regards,
 Krzysztof
