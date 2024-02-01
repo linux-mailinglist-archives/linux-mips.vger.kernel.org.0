@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-1248-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1249-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45C3084555E
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 11:31:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D24FA845567
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 11:32:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B4BE11F21523
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 10:31:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 197A21C22760
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 10:32:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8413715B973;
-	Thu,  1 Feb 2024 10:30:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A5491F17B;
+	Thu,  1 Feb 2024 10:32:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Y04rIy7D"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="djNXr9rO"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D11812BF1A;
-	Thu,  1 Feb 2024 10:30:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0CB3A1BB;
+	Thu,  1 Feb 2024 10:32:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706783452; cv=none; b=p6eniXXhGZfcGajMcIOWeX8x2k1TZF7OQkjDN0IliodL0RWATA981B77wBliuyVN2KltYZP/+WENGwz32gZez9VzCc1rvE6ULJK86xjOO+jxWqlFgF19lproJxnuGZkPV+boMGywHIcARGm2YBgvX6F9zE9TqHOF98+ulcOPXLY=
+	t=1706783573; cv=none; b=TdEkZHwhZAqR8ohXue1O36CxceMd2Wd6hrzEHxcPgZBleZuLdWqhrXEIOqlpOJvJYE0yCFMJMGJ0LvVXpNnvVpdhbcu5lBKwhRF4o9RBBNjWUkCyfXnrkZdwzl2YOQMtmjW2+TreEWndP1r5UGRs8aYBSdLs5DwcxtPeM0kWvEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706783452; c=relaxed/simple;
-	bh=V10jiNp+1d5/OUeFU4agGQsdLFrCHaLqzXvUjwN4SSE=;
+	s=arc-20240116; t=1706783573; c=relaxed/simple;
+	bh=TgTbXs3zXQgsCRHs+2nScZSazTQCoWxdSLvuVQys3Ng=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=HuzMHph4VXcFmAeFnizxa1SgbUdeLlPv1gILrhLqWDhHzpAhL2Ta2e/ZQRbRANgJ/1eDMciXykNpLt2Jgys730vlP6Q8a4unA4RMlMtjyadAgPEeLveWJUEQSGqPjQ1jeqYLdoxhN1K7C38RbsZD2J+uPmcwEqxyPakMbXX4oAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Y04rIy7D; arc=none smtp.client-ip=217.70.183.193
+	 References:In-Reply-To; b=mMlfcIA4qzQ72PG9RI9gWicr2YfiJZDpEGZ9XomGQyHMkUdlWMK7zF4ciJY0xIZHWTERgP5MfWdcUwrovjx5QTY/MHj7G+J/0FcUoaknotwSzMz24ksCjG8prxATIPrOwr/WTj3L34GWluhXrcmRWB6U/mT4XQyliwgAclJfgac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=djNXr9rO; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A9C1D240012;
-	Thu,  1 Feb 2024 10:30:46 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6E4D440011;
+	Thu,  1 Feb 2024 10:32:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1706783447;
+	t=1706783563;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=EhGmoUORnBrHRJ896fcdbMRX4b2dejpoihgpDBpkoTY=;
-	b=Y04rIy7DcVNW0stxCTvOK+tB5COaKPfsUWNuzUG0oTYtC5dbrhEcl19nyUR3LLAQJtQvcH
-	oPgY11o9zUaU7qqgs6Bm1eXHpg6UpXV5xWVCORvX47+6gylG6li6gfvBj9pfp1HIr/z3Ei
-	ZI4SyJbEhIJUMnweJcTzhT5HYgdHnjhSybCrrGIeZRBUGeal/zqFuJ3evuSos9NT0h8iP3
-	ocp0r+Z/9n8O7jRGR84tiQzvkeWJhxPqTY/FWuk70GCjtFuuBcQuRSMWDVmGxIY50pk8jm
-	WRBFsVclrVHRQbgXZeeevm7HSN/BAu3gzFzHcbVpbc4ZIAhQj6AA4fwydmi2ig==
+	bh=nh2ckVW/G7bltpuqgL5G8D+2iH7aZ1ZzEef5xypez5Y=;
+	b=djNXr9rOS+iz4zWcJKOooX3ArAh1Rc93KwVsDjNxv3sKkQDcndt6LUnZ7hM5bzcly9XEea
+	FJxqt5zgSII3cvpcmmENRHucZ3KcZ3ObIDTpvH5nuQtsmwl8nIF4hB2SFM6Ho1Yi4a6kKH
+	DQt5/JCQnCeVi073a/XoH7icXHvRIeM6Xm7qHJqJ2xuh28b+s7WkNufJ1foi0xFzgVSMCl
+	aSI0eG0/yjF0gndiFrz6I4dqvPiddyQ5IL3ARs8MdeckXSGy1vEVxGQ+qMQsHK/70pJvqu
+	9UVyY7u3AS2KkNVbQniCVMjcMpZuqaObBexdP9JkKVDGmwq+dQv2tILTBVuUAg==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,62 +53,60 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 01 Feb 2024 11:30:46 +0100
-Message-Id: <CYTO8IR2MO02.GX591A9T57DZ@bootlin.com>
-Subject: Re: [PATCH v4 00/18] Add support for Mobileye EyeQ5 system
- controller
-Cc: "Gregory CLEMENT" <gregory.clement@bootlin.com>, "Michael Turquette"
+Date: Thu, 01 Feb 2024 11:32:42 +0100
+Message-Id: <CYTO9ZZ41LYD.170JY5PLQE7JE@bootlin.com>
+Subject: Re: [PATCH v4 16/18] MIPS: mobileye: eyeq5: add reset properties to
+ UARTs
+Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
+ <linux-mips@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Thomas
+ Petazzoni" <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>, <linux-gpio@vger.kernel.org>
+To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Gregory
+ CLEMENT" <gregory.clement@bootlin.com>, "Michael Turquette"
  <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Rob Herring"
  <robh+dt@kernel.org>, "Krzysztof Kozlowski"
  <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>, "Philipp Zabel"
- <p.zabel@pengutronix.de>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, <linux-mips@vger.kernel.org>,
- <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>, <linux-gpio@vger.kernel.org>
-To: "Linus Walleij" <linus.walleij@linaro.org>
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>, "Linus Walleij"
+ <linus.walleij@linaro.org>, =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?=
+ <rafal@milecki.pl>, "Philipp Zabel" <p.zabel@pengutronix.de>
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
 X-Mailer: aerc 0.15.2
 References: <20240131-mbly-clk-v4-0-bcd00510d6a0@bootlin.com>
- <CACRpkdb+aWL-NU36dF6urL3T9gUROQX=9-L7aUC=+GM8x+bArA@mail.gmail.com>
-In-Reply-To: <CACRpkdb+aWL-NU36dF6urL3T9gUROQX=9-L7aUC=+GM8x+bArA@mail.gmail.com>
+ <20240131-mbly-clk-v4-16-bcd00510d6a0@bootlin.com>
+ <3f3b1665-30d4-4581-84a8-7894a4a03b93@linaro.org>
+In-Reply-To: <3f3b1665-30d4-4581-84a8-7894a4a03b93@linaro.org>
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-Hello Linus,
+Hello,
 
-On Wed Jan 31, 2024 at 9:44 PM CET, Linus Walleij wrote:
-> thanks for your patches!
+On Thu Feb 1, 2024 at 10:13 AM CET, Krzysztof Kozlowski wrote:
+> On 31/01/2024 17:26, Th=C3=A9o Lebrun wrote:
+> > UART nodes have been added to the devicetree by the initial platform
+> > support patch series. Add reset properties now that the reset node is
+> > declared.
+> >=20
+> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> > ---
+> >  arch/mips/boot/dts/mobileye/eyeq5.dtsi | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >=20
+> > diff --git a/arch/mips/boot/dts/mobileye/eyeq5.dtsi b/arch/mips/boot/dt=
+s/mobileye/eyeq5.dtsi
+> > index 06e941b0ce10..ece71cafb6ee 100644
+> > --- a/arch/mips/boot/dts/mobileye/eyeq5.dtsi
+> > +++ b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
+> > @@ -78,6 +78,7 @@ uart0: serial@800000 {
+> >  			interrupts =3D <GIC_SHARED 6 IRQ_TYPE_LEVEL_HIGH>;
+> >  			clocks  =3D <&uart_clk>, <&occ_periph>;
+> >  			clock-names =3D "uartclk", "apb_pclk";
+> > +			resets =3D <&reset 0 10>;
 >
-> A *new* MIPS platform, not every day I see this!
+> You touch the same file. Squash the patch with previous one. It's the
+> same logical change to add reset to entire SoC. You don't add half of
+> reset, right?
 
-Indeed! According the Wikipedia it got released to market on 2021, which
-does sound recent from a MIPS standpoint. (The same year MIPS announced
-the architecture would stop being developed in favor of RISC-V.)
-
-> On Wed, Jan 31, 2024 at 5:27=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@boo=
-tlin.com> wrote:
->
-> > Pin control is about controlling bias, drive strength and muxing. The
-> > latter allows two functions per pin; the first function is always GPIO
-> > while the second one is pin-dependent. There exists two banks, each
-> > handled in a separate driver instance. Each pin maps to one pin group.
-> > That makes pin & group indexes the same, simplifying logic.
->
-> Can the three pin control patches be merged separately? (It looks like.)
-
-That is the goal. There are two dependencies in this series:
-
- - MIPS stuff depends on the base platform support series by Gr=C3=A9gory,
-   for devicetree stuff & MAINTAINERS mostly.
- - "dt-bindings: soc: mobileye: add EyeQ5 OLB system controller" depends
-   on the three dt-bindings for the controllers (clk+reset+pinctrl) as
-   it references them.
-
-That means clk+reset+pinctrl can go in separately. At least that is the
-goal, hoping I have not messed up along the way.
+Makes sense. I'll update the commit message with that change.
 
 Thanks,
 
