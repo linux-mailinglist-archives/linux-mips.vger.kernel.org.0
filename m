@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-1249-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1250-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D24FA845567
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 11:32:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5443484559C
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 11:38:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 197A21C22760
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 10:32:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E71C51F218D5
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 10:38:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A5491F17B;
-	Thu,  1 Feb 2024 10:32:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A01A41C87;
+	Thu,  1 Feb 2024 10:38:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="djNXr9rO"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="L1M7ktTa"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0CB3A1BB;
-	Thu,  1 Feb 2024 10:32:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4152E2747F;
+	Thu,  1 Feb 2024 10:38:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706783573; cv=none; b=TdEkZHwhZAqR8ohXue1O36CxceMd2Wd6hrzEHxcPgZBleZuLdWqhrXEIOqlpOJvJYE0yCFMJMGJ0LvVXpNnvVpdhbcu5lBKwhRF4o9RBBNjWUkCyfXnrkZdwzl2YOQMtmjW2+TreEWndP1r5UGRs8aYBSdLs5DwcxtPeM0kWvEQ=
+	t=1706783923; cv=none; b=bV51MDD1AC720ru+U+jw3w4EZh9KIox0NQdLl9UHCVwdvigFAs6Z22Y9sIcSdWj4xiOX6dEU48uzdlbsosgifMOC4zBtv+RQMCna5aNGBUXyymUtJnVKFowRYOCX4tnNq0tvbopEQbRlCdYyUrkGTpEfwIbOlyAsJntoZo+q+Lc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706783573; c=relaxed/simple;
-	bh=TgTbXs3zXQgsCRHs+2nScZSazTQCoWxdSLvuVQys3Ng=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=mMlfcIA4qzQ72PG9RI9gWicr2YfiJZDpEGZ9XomGQyHMkUdlWMK7zF4ciJY0xIZHWTERgP5MfWdcUwrovjx5QTY/MHj7G+J/0FcUoaknotwSzMz24ksCjG8prxATIPrOwr/WTj3L34GWluhXrcmRWB6U/mT4XQyliwgAclJfgac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=djNXr9rO; arc=none smtp.client-ip=217.70.183.194
+	s=arc-20240116; t=1706783923; c=relaxed/simple;
+	bh=9dO6Oej2KgYjkvAzqv58BDV8rSpNHuXwrckSqS3XlMc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
+	 References:In-Reply-To; b=TYR9tHMyTS++wyIP2GWT1g8Yex0fw3QRXHknu2DoiZbk5KOa8V8S7os7ddyLw92QYugkb/GjSHv6utRboCCA218nZg+5B+NBVw5amo/k3CmBSCp4vlqg+00xloAnU3KD0tLZl/ROUINGlEObm8MlC4FRutGip+lwxvDBUl6a0jw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=L1M7ktTa; arc=none smtp.client-ip=217.70.183.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6E4D440011;
-	Thu,  1 Feb 2024 10:32:42 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7E07EFF812;
+	Thu,  1 Feb 2024 10:38:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1706783563;
+	t=1706783912;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=nh2ckVW/G7bltpuqgL5G8D+2iH7aZ1ZzEef5xypez5Y=;
-	b=djNXr9rOS+iz4zWcJKOooX3ArAh1Rc93KwVsDjNxv3sKkQDcndt6LUnZ7hM5bzcly9XEea
-	FJxqt5zgSII3cvpcmmENRHucZ3KcZ3ObIDTpvH5nuQtsmwl8nIF4hB2SFM6Ho1Yi4a6kKH
-	DQt5/JCQnCeVi073a/XoH7icXHvRIeM6Xm7qHJqJ2xuh28b+s7WkNufJ1foi0xFzgVSMCl
-	aSI0eG0/yjF0gndiFrz6I4dqvPiddyQ5IL3ARs8MdeckXSGy1vEVxGQ+qMQsHK/70pJvqu
-	9UVyY7u3AS2KkNVbQniCVMjcMpZuqaObBexdP9JkKVDGmwq+dQv2tILTBVuUAg==
+	bh=ZCjekKQATy7QigT3ZYZ4Fxvzy/254wA5JrrgSgewDR0=;
+	b=L1M7ktTaycn0uGbfShyQ/9qgi0r7KX5YamwJgP1jwQjtBt1hlJq06OX61GV98LbMO7C3tw
+	B9SFMGFDBTwdVP/6jpcSHdTGQhLK+gupoPbFX3i04QWTY/+N8Er1dxb0vnwzU9fGGLtltx
+	ST5sH8vHqUZY53ntk8FKCnTeASX1qL9UilrNS9u5Oxk0WpP7aE4OKd/QRBEANeoPR+1RWM
+	qkqcb0PhBhSbCC1+hac4xIlIGxFqf4T2BrmYOAZbD/Y4qlypBlyLkfGfr1OJiEgbBF56aX
+	Aoh2JaqHuyviMFWthg4sH2cbNCGHiYFzAn3Eu+6bBwx42UDeoHaGTuot9H2h/w==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,10 +53,8 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 01 Feb 2024 11:32:42 +0100
-Message-Id: <CYTO9ZZ41LYD.170JY5PLQE7JE@bootlin.com>
-Subject: Re: [PATCH v4 16/18] MIPS: mobileye: eyeq5: add reset properties to
- UARTs
+Date: Thu, 01 Feb 2024 11:38:31 +0100
+Message-Id: <CYTOEGEI34JQ.36CF09LNJFQHS@bootlin.com>
 Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
  <linux-mips@vger.kernel.org>, <linux-clk@vger.kernel.org>,
  <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Thomas
@@ -71,42 +69,62 @@ To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Gregory
  <linus.walleij@linaro.org>, =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?=
  <rafal@milecki.pl>, "Philipp Zabel" <p.zabel@pengutronix.de>
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v4 04/18] dt-bindings: clock: mobileye,eyeq5-clk: add
+ bindings
 X-Mailer: aerc 0.15.2
 References: <20240131-mbly-clk-v4-0-bcd00510d6a0@bootlin.com>
- <20240131-mbly-clk-v4-16-bcd00510d6a0@bootlin.com>
- <3f3b1665-30d4-4581-84a8-7894a4a03b93@linaro.org>
-In-Reply-To: <3f3b1665-30d4-4581-84a8-7894a4a03b93@linaro.org>
+ <20240131-mbly-clk-v4-4-bcd00510d6a0@bootlin.com>
+ <f6e5b748-17c4-4de1-be42-f79155be21cb@linaro.org>
+In-Reply-To: <f6e5b748-17c4-4de1-be42-f79155be21cb@linaro.org>
 X-GND-Sasl: theo.lebrun@bootlin.com
 
 Hello,
 
-On Thu Feb 1, 2024 at 10:13 AM CET, Krzysztof Kozlowski wrote:
+On Thu Feb 1, 2024 at 9:58 AM CET, Krzysztof Kozlowski wrote:
 > On 31/01/2024 17:26, Th=C3=A9o Lebrun wrote:
-> > UART nodes have been added to the devicetree by the initial platform
-> > support patch series. Add reset properties now that the reset node is
-> > declared.
+> > Add DT schema bindings for the EyeQ5 clock controller driver.
 > >=20
 > > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 > > ---
-> >  arch/mips/boot/dts/mobileye/eyeq5.dtsi | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >=20
-> > diff --git a/arch/mips/boot/dts/mobileye/eyeq5.dtsi b/arch/mips/boot/dt=
-s/mobileye/eyeq5.dtsi
-> > index 06e941b0ce10..ece71cafb6ee 100644
-> > --- a/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-> > +++ b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-> > @@ -78,6 +78,7 @@ uart0: serial@800000 {
-> >  			interrupts =3D <GIC_SHARED 6 IRQ_TYPE_LEVEL_HIGH>;
-> >  			clocks  =3D <&uart_clk>, <&occ_periph>;
-> >  			clock-names =3D "uartclk", "apb_pclk";
-> > +			resets =3D <&reset 0 10>;
 >
-> You touch the same file. Squash the patch with previous one. It's the
-> same logical change to add reset to entire SoC. You don't add half of
-> reset, right?
+> No changelog, tags ignored, I scrolled through first two pages of cover
+> letter and also no changelog.
 
-Makes sense. I'll update the commit message with that change.
+In this case we fit into the "If a tag was not added on purpose". Sorry
+the changelog was not explicit enough. In my mind it fits into the
+first bullet point of the cover letter changelog:
+
+> - Have the three drivers access MMIO directly rather than through the
+>   syscon & regmap.
+
+That change means important changes to the dt-bindings to adapt to this
+new behavior. In particular we now have reg and reg-names properties
+that got added and made required.
+
+I wanted to have your review on that and did not want to tag the patch
+as already reviewed.
+
+>
+> This is a friendly reminder during the review process.
+>
+> It looks like you received a tag and forgot to add it.
+>
+> If you do not know the process, here is a short explanation:
+> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+> versions, under or above your Signed-off-by tag. Tag is "received", when
+> provided in a message replied to you on the mailing list. Tools like b4
+> can help here. However, there's no need to repost patches *only* to add
+> the tags. The upstream maintainer will do that for tags received on the
+> version they apply.
+>
+> https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/su=
+bmitting-patches.rst#L577
+>
+> If a tag was not added on purpose, please state why and what changed.
+
+As an aside, what's your preference on location for this information?
+Cover letter changelog? Following '---' in the specific commit message?
+Somewhere else?
 
 Thanks,
 
