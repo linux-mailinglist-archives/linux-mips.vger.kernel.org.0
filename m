@@ -1,134 +1,176 @@
-Return-Path: <linux-mips+bounces-1253-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1254-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B3C3845ACF
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 16:04:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0D8F845BFF
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 16:46:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB1F11F2237B
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 15:04:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CAB9298C6C
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 15:46:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 881C25F493;
-	Thu,  1 Feb 2024 15:03:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DF2062179;
+	Thu,  1 Feb 2024 15:46:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RkWqBAYE"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="QJcbaxYI";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="vRaxLOy6"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D64335D473;
-	Thu,  1 Feb 2024 15:03:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A85626DF;
+	Thu,  1 Feb 2024 15:46:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.111.4.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706799837; cv=none; b=M4zLIerm33WmRFI//hciseXcAml+Z2dqInGQVdciEBMr8gmg+6KHcvcSBN+lST3aUDtza7zk6Oj7OQ01qLePB7uy0rBQHABVR793MvnbgXytF1XYGk0FnB5QhgSSYbxYH2H9x5lxna9Ad5vl8GfsMDWbIvH8u+TRUoBcoYgtW1I=
+	t=1706802394; cv=none; b=qBUxSVVoaieF+7YAYgPJFIFptRRITMQFjWhHJLa2uWtXore6ULBZTO+0trZTYXPH3DOPYe2pW1MDvcd6N0DJYUL1jqIb3fP947cyFisHbX5QI/v/4U7EcQaUcuoha41FycK9CLPRCCvtiuPQcJc5h1Ca8Wt6uIGxlsI3FdA9wSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706799837; c=relaxed/simple;
-	bh=V/ONzrff4iKHb3CCc2p1U9n5EASoNMBZGX8D6oRCtP4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tWXOIfbxCIPks1PcdJoYHWJNE85jDggg6xy5a/bU0sLWRsxx6atjrfnS3mnMWbPmZa+AsjO4N3alkt0e8BEuwK0EvVWJlcbWW4t3SG4aFYXQao1lj2QyS9yLnZ2U15wJ0OG6hpcYz6zBqkvVkhAe+/jJCdOv3VSbO8V/E5MIxz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RkWqBAYE; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-40e80046264so9256535e9.0;
-        Thu, 01 Feb 2024 07:03:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706799834; x=1707404634; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TQI82xkebwfzT3j+NbzdVCePUJoKXQTTgiIMRHd9tA0=;
-        b=RkWqBAYEYynbQiNMX7OXhIfiRCcceHKoO+Dma1ggp+vvBEw3TrAGgKCLxzeA3O9A5y
-         7E9Idun/cSuEVALjvV3qOYZIPOUnnbV3GPxDhFeN/Hj20adGAPpxPM+WCnhG+qtab/HZ
-         pY3aksbXYi7R6Wxm0czV4kTRVbD2+Y6fe5r5jgBlmM1ocXbn0i1jpFUAfRpBmCNvxrBE
-         iJzttPtRYRaNMR2igX0hs6y+SGhT61p9mhS4HbHvY1tvQzntqkNTO65d7k98X+gFqV6K
-         gsck/jWZoRJL4Kc1LjwIdTtzYtNROGenRoW2ED/bjcVbth47YgRsSgN/DE1W7z3mttfZ
-         6HFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706799834; x=1707404634;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TQI82xkebwfzT3j+NbzdVCePUJoKXQTTgiIMRHd9tA0=;
-        b=PojqinmA7IqGGp+Ff7aQkIBN+BR3aEBkt1fGxJe1NMkfq6V9x66SwKDOX387dHIno7
-         mCDnge4XQtYTLBGyoK7wQh3Fv0MJ1nzWSceJNBUzCSe9rsgBJsqxYwgfDhdb/QAroi4Z
-         UayalZdZS5AZNit3KGwa0j1ea4B4t/4UqM76rERHrwkt1ziHC/tXP8TUtTRb4vq1nslB
-         ThZO/aQg/y2RvXhU/SzV7Sl+NWkdnykp4REqejn8PwC7sZ0SrJEPIq6s86lpf7VchJFY
-         xAdcdM2JUp2J/ohaDxSHNBB23UUZMtVc+CL/u6T7PeVNuZZSYnXWySlk4GfAtepcIENN
-         XjHg==
-X-Gm-Message-State: AOJu0YzxvTRxkexdtU497WZEtxF71ZJR3TFr9af/fES4Qy9IK0Ejo0J6
-	5OMe3edGTfMj8r1h5ict94jJT4JerRv968W3MGM+N0bOdUuAWIhO
-X-Google-Smtp-Source: AGHT+IHgq8VDz2gMVFec1rt9xa8alnLqg6m1IYYBrYWka6TlPpdIpPCK3IdQ6EOAmX4jWd4gg88q+A==
-X-Received: by 2002:a05:600c:1c9b:b0:40e:f702:a304 with SMTP id k27-20020a05600c1c9b00b0040ef702a304mr3558063wms.32.1706799833416;
-        Thu, 01 Feb 2024 07:03:53 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCUDpgq0/uHUFP6DOMM/DOOgv6iaPTfvvlORJEtejjXG7NB3wNC7NPVgdP/a80SSBXcJjbaEEIyh+mqStaWE9ShiuHnhGiu0Ude3P4CSFQ3d+CGq9+DAjgcm1aQxefjN0mJjaRHu+d+pEnI81EDPulpbkTCKWAzVI1NQ2CjyFnruwvjT3XSCNT2xi8Rz/Pm9l+yrTYDvmZzT8WwkDZ4TJRCZL7qKJ7JE0w208ZTXS3EdwtHkyMVxRJFjaC6vmbIEV3KJHxW+9E8y6RugEGGGc+RAgrRS2/mcChzL72DvHvv09MdkNJ3SyGTtS/aWraB/umbXkoKBO3eu0iaPDyYl45cI7AIDf4cvnmpMVE36WXwBNDuS5C+dFi6826+JbRT5aVrMB/812NuBe36eW2blfMeKt3OBcyvpvyCF+9r1L742OlcdPyGlBCXjfCg1ZVYrnPqeTySi49U/aQRdxiXSjmMzo/VA+l2tLlv2iNnZdz/5YM0P8SL4ZrgKVPAT0fLShXJOKH7m6PpeKfu+0fpLDF8QTj1FESwPMhuWww/x2V1Ed9CIW4dUvtVF5d9pzMZaqIdpMFOCe6tTae1G15CtxUebt68+gSBiml4shJT3SMHsg1px/hmq3Vr8DBHs63fugiLnN0pAWPPBo3jKqA==
-Received: from andrea ([31.189.34.185])
-        by smtp.gmail.com with ESMTPSA id bk7-20020a0560001d8700b0033addbf2d2csm16043387wrb.9.2024.02.01.07.03.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Feb 2024 07:03:52 -0800 (PST)
-Date: Thu, 1 Feb 2024 16:03:48 +0100
-From: Andrea Parri <parri.andrea@gmail.com>
-To: Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Ved Shanbhogue <ved@rivosinc.com>, Matt Evans <mev@rivosinc.com>,
-	Dylan Jhong <dylan@andestech.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-mm@kvack.org
-Subject: Re: [PATCH RFC/RFT v2 4/4] riscv: Stop emitting preventive
- sfence.vma for new userspace mappings with Svvptc
-Message-ID: <Zbuy1E7mz9Oui1Dl@andrea>
-References: <20240131155929.169961-1-alexghiti@rivosinc.com>
- <20240131155929.169961-5-alexghiti@rivosinc.com>
+	s=arc-20240116; t=1706802394; c=relaxed/simple;
+	bh=8B90B4rDuiui0E6UinfX3ZgtenzPM9teCiqi4K4psi4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=omH9SD3CRslPir4Wifprc8cPA1WXOqAiqN18BYJoYHhfudYaGvGoWAVUlXDxRi0EmLFB3wrKFLkTV+WqKMAS6qPenuF80eYhzXMguooQrOWDBm6kvRc8QhR1KpXjTiaTjueBJpK9gv7KzGryUPicfmnbhmGGxiihrpc2gcDPsC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=QJcbaxYI; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=vRaxLOy6; arc=none smtp.client-ip=66.111.4.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+	by mailout.nyi.internal (Postfix) with ESMTP id BA7165C0195;
+	Thu,  1 Feb 2024 10:46:31 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 01 Feb 2024 10:46:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm1; t=1706802391; x=1706888791; bh=hJ
+	rBUU7pkBW3DKm9qlUbvAWbauW3jW5E3faoXg0oEwU=; b=QJcbaxYI3QPsZ2CVnt
+	cbB0rhi5RyG8LrtaN1th9lJ3zUkk34jrHZXWEl7PBa2RSSeswnJ+darRjq5+W0xZ
+	kzsEuHIZsInDWaxWZAPLtiUP4dT6EnvMJp68qzJc5hVRpMnhOG3gp/oe0Vc5QwEK
+	gsqZmrdmqvmRVXWL7wK0mdZnEr5XbFvNyuHRcumVAZoS+FoYwhtH092YJsZQXt2c
+	hfejBHa7CT2l5ozL391ztsR0C3Vp6aAxMxY9denmh4lX56M2YdQAm6BgtOBRNbY3
+	DccLcuFi4vJ33rQp8jDf/kam+9Nhvmnw27X4VnekvYZohyyPNcx6taxZdgni658h
+	WbgQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1706802391; x=1706888791; bh=hJrBUU7pkBW3D
+	Km9qlUbvAWbauW3jW5E3faoXg0oEwU=; b=vRaxLOy6RLcHIj5Wn080Pi8nMo5Av
+	y6iFYu7UmppjBd+K9yrYWZsC3g/sq5e2CntgvP/FWmnRV/W3zosZ628ZUCUFJju4
+	Fpam2jzbzvuWr4qDJeHoSImvzA4FLq4xDKK/pRkpWSn99xzWmBOTVDSDO+dit8Wh
+	N2afrHCEunwUtUMdzgWmaBfpzF8aulfcDv8SrmvF49WT1Hf4GSGdpTLTRhCvV/Tv
+	hSFtjlKNO2k1x0yn7EiV5WAyXxdPDH8XynH2HcR6pBxBW9RY6SyGInku9ml6gxAg
+	VovmnUu4iflNtrbUTV6ORqohZbyM7PnOdhYTTTYJJADjaRzFH1Lvrn2IA==
+X-ME-Sender: <xms:17y7ZcHZfCX1KAiKGB-ctsMVRfuzSdqwstRs68x-Pfh81f3QoNvGCg>
+    <xme:17y7ZVU5roU_X-4wMZuaMQ5HcTokgnr5ilyb9oIO0h6y6RHeQuUIVEvONYS833_UJ
+    3yi2mBqhd2Cqa_in70>
+X-ME-Received: <xmr:17y7ZWIfbfoEgBtvDw2KEGpzqM_c9WpsDSoQM2PTbOt_tWN9bnggDYlQWvu2DnTxMUFSqRFBQUYFHKyof6kTifqQew>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrfeduuddgjeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecuhfhrohhmpeflihgrgihu
+    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
+    ftrfgrthhtvghrnhepgfevffejteegjeeflefgkeetleekhfeugfegvdeuueejkeejteek
+    kedvfffffedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehf
+    lhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:17y7ZeHU49ll_6kkFQUAk9_h62oTDCxPt5AqqijfkNXSFjz4ZupCYQ>
+    <xmx:17y7ZSWO8xAWfy0tEtGINB-co002jLBR4s2BoLWmeW4-mRz_nbZ3rg>
+    <xmx:17y7ZRNga6qerSc4WElUyKjSfXWyMsvXOPPPFfJCwjC83HFyw44jiA>
+    <xmx:17y7ZeTviw0gA5wkUZCCYnv34A2ZwmT_fb-UwirlQEJfP2ZBY-eCqg>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 1 Feb 2024 10:46:29 -0500 (EST)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH 0/3] Handle delay slot for extable lookup
+Date: Thu, 01 Feb 2024 15:46:26 +0000
+Message-Id: <20240201-exception_ip-v1-0-aa26ab3ee0b5@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240131155929.169961-5-alexghiti@rivosinc.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANK8u2UC/x2MUQqAIBAFrxL7naAlQV0lIkRftT8lGhGId2/pc
+ 2BmCmUkRqapKZTwcObrFDBtQ/5w5w7FQZg63VlteqPwesRbrJWjMqOFdUFj8I4kiQkbv/9uXmr
+ 9AHlP29teAAAA
+To: Oleg Nesterov <oleg@redhat.com>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Ben Hutchings <ben@decadent.org.uk>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>, Xi Ruoyao <xry111@xry111.site>, 
+ Linus Torvalds <torvalds@linux-foundation.org>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1962;
+ i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
+ bh=8B90B4rDuiui0E6UinfX3ZgtenzPM9teCiqi4K4psi4=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhtTde66eLuV5d7XK5sbbAinu/1bGLReadl7iOl618vwGk
+ W2Fc5bqdZSyMIhxMciKKbKECCj1bWi8uOD6g6w/MHNYmUCGMHBxCsBEgjcy/FPN5rJkzftgsers
+ 0eo1VjJHLjsu/lRkuiX0gML8inM8jjKMDFtEZ97qiz4n1bXolZXwmUtsVguOqK33VjhZvyEmvOP
+ PLGYA
+X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
+ fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-On Wed, Jan 31, 2024 at 04:59:29PM +0100, Alexandre Ghiti wrote:
-> The preventive sfence.vma were emitted because new mappings must be made
-> visible to the page table walker but Svvptc guarantees that xRET act as
-> a fence, so no need to sfence.vma for the uarchs that implement this
-> extension.
+Hi all,
 
-AFAIU, your first submission shows that you don't need that xRET property.
-Similarly for other archs.  What was rationale behind this Svvptc change?
+This series fixed extable handling for architecture delay slot (MIPS).
 
+Please see previous discussions at [1].
 
-> This allows to drastically reduce the number of sfence.vma emitted:
-> 
-> * Ubuntu boot to login:
-> Before: ~630k sfence.vma
-> After:  ~200k sfence.vma
-> 
-> * ltp - mmapstress01
-> Before: ~45k
-> After:  ~6.3k
-> 
-> * lmbench - lat_pagefault
-> Before: ~665k
-> After:   832 (!)
-> 
-> * lmbench - lat_mmap
-> Before: ~546k
-> After:   718 (!)
+There are some other places in kernel not handling delay slots properly,
+such as uprobe and kgdb, I'll sort them later.
 
-This Svvptc seems to move/add the "burden" of the synchronization to xRET:
-Perhaps integrate the above counts w/ the perf gains in the cover letter?
+Thanks!
 
-  Andrea
+[1]: https://lore.kernel.org/lkml/75e9fd7b08562ad9b456a5bdaacb7cc220311cc9.camel@xry111.site
+
+To: Oleg Nesterov <oleg@redhat.com>
+
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+
+To: Andrew Morton <akpm@linux-foundation.org>
+To: Ben Hutchings <ben@decadent.org.uk>
+
+Cc:  <linux-arch@vger.kernel.org>
+Cc:  <linux-kernel@vger.kernel.org>
+
+Cc:  <linux-mips@vger.kernel.org>
+
+Cc:  <linux-mm@kvack.org>
+
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+Jiaxun Yang (3):
+      ptrace: Introduce exception_ip arch hook
+      MIPS: Clear Cause.BD in instruction_pointer_set
+      mm/memory: Use exception ip to search exception tables
+
+ arch/alpha/include/asm/ptrace.h        | 1 +
+ arch/arc/include/asm/ptrace.h          | 1 +
+ arch/arm/include/asm/ptrace.h          | 1 +
+ arch/csky/include/asm/ptrace.h         | 1 +
+ arch/hexagon/include/uapi/asm/ptrace.h | 1 +
+ arch/loongarch/include/asm/ptrace.h    | 1 +
+ arch/m68k/include/asm/ptrace.h         | 1 +
+ arch/microblaze/include/asm/ptrace.h   | 3 ++-
+ arch/mips/include/asm/ptrace.h         | 2 ++
+ arch/mips/kernel/ptrace.c              | 7 +++++++
+ arch/nios2/include/asm/ptrace.h        | 3 ++-
+ arch/openrisc/include/asm/ptrace.h     | 1 +
+ arch/parisc/include/asm/ptrace.h       | 1 +
+ arch/s390/include/asm/ptrace.h         | 1 +
+ arch/sparc/include/asm/ptrace.h        | 2 ++
+ arch/um/include/asm/ptrace-generic.h   | 1 +
+ mm/memory.c                            | 4 ++--
+ 17 files changed, 28 insertions(+), 4 deletions(-)
+---
+base-commit: 06f658aadff0e483ee4f807b0b46c9e5cba62bfa
+change-id: 20240131-exception_ip-194e4ad0e6ca
+
+Best regards,
+-- 
+Jiaxun Yang <jiaxun.yang@flygoat.com>
+
 
