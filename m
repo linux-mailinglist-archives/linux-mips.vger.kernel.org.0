@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-1247-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1248-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0828D845538
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 11:24:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45C3084555E
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 11:31:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 359B41C22E59
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 10:24:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B4BE11F21523
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 10:31:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D52DF15CD52;
-	Thu,  1 Feb 2024 10:24:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8413715B973;
+	Thu,  1 Feb 2024 10:30:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dNc3bIKO"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Y04rIy7D"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB0A15B989;
-	Thu,  1 Feb 2024 10:24:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D11812BF1A;
+	Thu,  1 Feb 2024 10:30:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706783046; cv=none; b=qa2b3zTochAmLGD8ENXCvrZAVqdK9FtRJv+90aQOCNNwQkcaAoHJWbjde6FmocZsC365rHwS2lBVgxgnZq9gRiS9GROPx8WUz7S24zObDsmGXbiEvhZG/ApRzWUBsiLcFFAP1AVuVJysubCLdUOgcwvUS3BXt9frZC4Wcp9X42s=
+	t=1706783452; cv=none; b=p6eniXXhGZfcGajMcIOWeX8x2k1TZF7OQkjDN0IliodL0RWATA981B77wBliuyVN2KltYZP/+WENGwz32gZez9VzCc1rvE6ULJK86xjOO+jxWqlFgF19lproJxnuGZkPV+boMGywHIcARGm2YBgvX6F9zE9TqHOF98+ulcOPXLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706783046; c=relaxed/simple;
-	bh=0Q6Xto1WiMvLE/VQuYpSOMFy+OwWNRLXtUxjsUiPS20=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=fXdctvp0eP9jMiFwBSDoEMzj4ru0UvslnxxULaUArCn+tnUg6RvCYOYncKPB9vVvnkXkkLME2abCize56BHxnbo2nI0LajNJlShKL9zJ50JLgJ9z91QVRCwc8Cc6e7lwQPnSLBVwT3G519rJveHRH7zieUC9PLtsfxbkLn+Tyts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dNc3bIKO; arc=none smtp.client-ip=217.70.183.200
+	s=arc-20240116; t=1706783452; c=relaxed/simple;
+	bh=V10jiNp+1d5/OUeFU4agGQsdLFrCHaLqzXvUjwN4SSE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=HuzMHph4VXcFmAeFnizxa1SgbUdeLlPv1gILrhLqWDhHzpAhL2Ta2e/ZQRbRANgJ/1eDMciXykNpLt2Jgys730vlP6Q8a4unA4RMlMtjyadAgPEeLveWJUEQSGqPjQ1jeqYLdoxhN1K7C38RbsZD2J+uPmcwEqxyPakMbXX4oAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Y04rIy7D; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0DE9520002;
-	Thu,  1 Feb 2024 10:23:59 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A9C1D240012;
+	Thu,  1 Feb 2024 10:30:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1706783041;
+	t=1706783447;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FewLjWlZG58wHVzMJTz9qAeznTJTLigBtSdDwMBeolo=;
-	b=dNc3bIKOu/9LYn5OEE+Y+Wlb/Ixwon+TlSy1c2m5HjDJDOe79K5kDFwpT1L9LZ2gsVTD70
-	24u5pWgkrBfhBSyzColLqs7a+rRdsp9L9+LOGrU25akeoEidWLY9WKd7xtHAuMrvmF7jzw
-	ion6JiBfPo7T5IBb7uN9sEsGzQqY0p8LA/bU/A56V++CkRzUa0wNn+3WJe3IO3uDtRA4z5
-	3TGpQZNhRuJazkrQkouTGaedoc2UXKD3Bk11EYh8DDdlZUYTJs8YCWfbPjDwDOEuSoyBCu
-	BMgM2OxPWame5nmmJKzr+veHIWcBIkc4eLLBHODbAvQo/PIqsBPwM/vSHzeP5g==
+	bh=EhGmoUORnBrHRJ896fcdbMRX4b2dejpoihgpDBpkoTY=;
+	b=Y04rIy7DcVNW0stxCTvOK+tB5COaKPfsUWNuzUG0oTYtC5dbrhEcl19nyUR3LLAQJtQvcH
+	oPgY11o9zUaU7qqgs6Bm1eXHpg6UpXV5xWVCORvX47+6gylG6li6gfvBj9pfp1HIr/z3Ei
+	ZI4SyJbEhIJUMnweJcTzhT5HYgdHnjhSybCrrGIeZRBUGeal/zqFuJ3evuSos9NT0h8iP3
+	ocp0r+Z/9n8O7jRGR84tiQzvkeWJhxPqTY/FWuk70GCjtFuuBcQuRSMWDVmGxIY50pk8jm
+	WRBFsVclrVHRQbgXZeeevm7HSN/BAu3gzFzHcbVpbc4ZIAhQj6AA4fwydmi2ig==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,8 +53,10 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 01 Feb 2024 11:23:59 +0100
-Message-Id: <CYTO3C0G7083.1TVFK6PN35G1B@bootlin.com>
+Date: Thu, 01 Feb 2024 11:30:46 +0100
+Message-Id: <CYTO8IR2MO02.GX591A9T57DZ@bootlin.com>
+Subject: Re: [PATCH v4 00/18] Add support for Mobileye EyeQ5 system
+ controller
 Cc: "Gregory CLEMENT" <gregory.clement@bootlin.com>, "Michael Turquette"
  <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Rob Herring"
  <robh+dt@kernel.org>, "Krzysztof Kozlowski"
@@ -69,110 +71,46 @@ Cc: "Gregory CLEMENT" <gregory.clement@bootlin.com>, "Michael Turquette"
  <tawfik.bayouk@mobileye.com>, <linux-gpio@vger.kernel.org>
 To: "Linus Walleij" <linus.walleij@linaro.org>
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v4 10/18] pinctrl: eyeq5: add platform driver
 X-Mailer: aerc 0.15.2
 References: <20240131-mbly-clk-v4-0-bcd00510d6a0@bootlin.com>
- <20240131-mbly-clk-v4-10-bcd00510d6a0@bootlin.com>
- <CACRpkdZvj2E1zfSU1RGY2+_6sCCYxu=pbQ0yv+-bmTLGzEyFwg@mail.gmail.com>
-In-Reply-To: <CACRpkdZvj2E1zfSU1RGY2+_6sCCYxu=pbQ0yv+-bmTLGzEyFwg@mail.gmail.com>
+ <CACRpkdb+aWL-NU36dF6urL3T9gUROQX=9-L7aUC=+GM8x+bArA@mail.gmail.com>
+In-Reply-To: <CACRpkdb+aWL-NU36dF6urL3T9gUROQX=9-L7aUC=+GM8x+bArA@mail.gmail.com>
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-Hi Linus,
+Hello Linus,
 
-On Wed Jan 31, 2024 at 9:55 PM CET, Linus Walleij wrote:
-> Hi Theo,
+On Wed Jan 31, 2024 at 9:44 PM CET, Linus Walleij wrote:
+> thanks for your patches!
 >
-> thanks for your patch!
->
+> A *new* MIPS platform, not every day I see this!
+
+Indeed! According the Wikipedia it got released to market on 2021, which
+does sound recent from a MIPS standpoint. (The same year MIPS announced
+the architecture would stop being developed in favor of RISC-V.)
+
 > On Wed, Jan 31, 2024 at 5:27=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@boo=
 tlin.com> wrote:
 >
-> > Add the Mobileye EyeQ5 pin controller driver. It might grow to add late=
-r
-> > support of other platforms from Mobileye. It belongs to a syscon region
-> > called OLB.
-> >
-> > Existing pins and their function live statically in the driver code
-> > rather than in the devicetree, see compatible match data.
-> >
-> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> > Pin control is about controlling bias, drive strength and muxing. The
+> > latter allows two functions per pin; the first function is always GPIO
+> > while the second one is pin-dependent. There exists two banks, each
+> > handled in a separate driver instance. Each pin maps to one pin group.
+> > That makes pin & group indexes the same, simplifying logic.
 >
-> The driver looks very nice and is using all standard features, I'm pretty=
- sure
-> we can merge this soon.
+> Can the three pin control patches be merged separately? (It looks like.)
 
-It is useful to get some feedback that tells me your state of mind as
-one involved maintainer. Thanks.
+That is the goal. There are two dependencies in this series:
 
->
-> > +static void eq5p_update_bits(const struct eq5p_pinctrl *pctrl,
-> > +                            enum eq5p_bank bank, enum eq5p_regs reg,
-> > +                            u32 mask, u32 val)
-> > +{
-> > +       void __iomem *ptr =3D pctrl->base + eq5p_regs[bank][reg];
-> > +
-> > +       writel((readl(ptr) & ~mask) | (val & mask), ptr);
-> > +}
->
-> This is in practice a reimplementation of regmap MMIO.
->
-> Can't you just use regmap MMIO to access the banks then...?
->
-> Maybe it doesn't add much here. I'm not sure.
+ - MIPS stuff depends on the base platform support series by Gr=C3=A9gory,
+   for devicetree stuff & MAINTAINERS mostly.
+ - "dt-bindings: soc: mobileye: add EyeQ5 OLB system controller" depends
+   on the three dt-bindings for the controllers (clk+reset+pinctrl) as
+   it references them.
 
-Indeed, I went the minimalist route. You tell me if you'd prefer an MMIO
-regmap.
+That means clk+reset+pinctrl can go in separately. At least that is the
+goal, hoping I have not messed up along the way.
 
-I've not seen any helper to get a regmap based on a resource, targeting
-by name. Is the expected procedure to acquire the resource then create
-a regmap config then call devm_regmap_init_mmio()?
-
->
-> > +static bool eq5p_readl_bit(const struct eq5p_pinctrl *pctrl,
->
-> eq5p_test_bit() maybe? that describes better what the
-> function does.
-
-Good idea, thanks.
-
->
-> > +                          enum eq5p_bank bank, enum eq5p_regs reg, int=
- bit)
-> > +{
-> > +       u32 val =3D readl(pctrl->base + eq5p_regs[bank][reg]);
-> > +
-> > +       return (val & BIT(bit)) !=3D 0;
-> > +}
->
-> Maybe add a check for bit > 31?
-
-Will do. I like that sort of defensive programming. What behavior would
-you expect?
- - WARN_ON(bit > 31) and return false?
- - Just return false?
- - Something else?
-
-Actually looking at uses of eq5p_readl_bit() I'm thinking about a bug
-that might be occuring wrt the second bank and that offset. I'll make
-sure to fix it for next revision.
-
-> > +static int eq5p_pinctrl_get_group_pins(struct pinctrl_dev *pctldev,
-> > +                                      unsigned int selector,
-> > +                                      const unsigned int **pins,
-> > +                                      unsigned int *num_pins)
-> > +{
-> > +       *pins =3D &pctldev->desc->pins[selector].number;
-> > +       *num_pins =3D 1;
-> > +       return 0;
-> > +}
->
-> One pin per group, also known as the "qualcomm trick".
->
-> (It's fine.)
-
-:-)
-
-Thanks!
+Thanks,
 
 --
 Th=C3=A9o Lebrun, Bootlin
