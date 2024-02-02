@@ -1,62 +1,64 @@
-Return-Path: <linux-mips+bounces-1278-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1279-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFE79847813
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Feb 2024 19:45:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 60CF2847857
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Feb 2024 19:51:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7312C28C2D3
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Feb 2024 18:45:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C7D1290767
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Feb 2024 18:51:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00F1212C7E1;
-	Fri,  2 Feb 2024 18:40:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A1EC138497;
+	Fri,  2 Feb 2024 18:40:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V2RADGBA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TnA7PRVu"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAD59129665;
-	Fri,  2 Feb 2024 18:40:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE141369AB;
+	Fri,  2 Feb 2024 18:40:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706899206; cv=none; b=uiaQjk/kk0DWd7NidMsocHvlNbwyNaV2P98XiQuV5CY+8m84augHUK4LX+J/XjUfGyVddFBkG9UylTTLy2Wh70jtNx/x+8Ec7MVKOk/mTGKieINWZvyGwhwQsmO56fo+i/Y5L5/VhlfipVlflDnkXMwBbnfr8keBDhT8NoaZdWc=
+	t=1706899251; cv=none; b=Rufmcgj05S8c/K7PFRszTu4m1IuBVDE6Ifu2pImStPVwx78nMZFkq+W2ltAiCTj2EwapGcdfFqM97DogkaxJfbR+1fLvVG5mI4AXHal0CGt3A1gkTEUXO4P57HcEMw/Z5DNguLscFsMUt8KGuOhRakaIo1Wt/dVvNkAXx6RHO/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706899206; c=relaxed/simple;
+	s=arc-20240116; t=1706899251; c=relaxed/simple;
 	bh=YBoPwJM6qtI/5Knk07kvYlOrcnQuA9SJRJCav45K3Ow=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kcjgx8/Z9YOPDo0VCpjPSUG41sY4ceSr7fwvn8P7W908tu3uOyGjXTgUsGCBlncITF13kR2Iej+nQ5dY+fNV5y++aU2toGGcpDgMogafCARdrwjlVKqlBGI6Z2mLsoqJXvAGGKPC6anOgjyG/Ca5yWdWO5DLy3wRRI4kSLikXWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V2RADGBA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60487C433C7;
-	Fri,  2 Feb 2024 18:40:05 +0000 (UTC)
+	 MIME-Version; b=gJSXRYe77DCWgPrmgVN39dHrSlRAfZULU0ARKpOCzvnAQT+/TbD7yeOTvdlTXDR+drAZ94xfkUWunvTQx4WnEhtLd3FEKEVzMvL0AF1Vfvu282es4gpWHsmtax4aApyKFnT/LAU5T2XsNl5kzXWYPoZAGZ5Z5v+RCLDnlDOWz5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TnA7PRVu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60786C433F1;
+	Fri,  2 Feb 2024 18:40:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706899206;
+	s=k20201202; t=1706899250;
 	bh=YBoPwJM6qtI/5Knk07kvYlOrcnQuA9SJRJCav45K3Ow=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=V2RADGBA1CTwbflqSaKY4e0BsVaJfgw/yVR5iyfjB4mA+m+xjb6hGFktFNJbzbQpb
-	 rSTHcvUV2vtkh4G18AH1ueR/Yyac1DlFoTsba0j0HCCoanC/mf25cLeo6G48euOinQ
-	 8FI46YAIXgDXWYUTPkneoURZvN5j3xZa+W+lUhlG8B6af748ps31H2Ez+LGujXKrfS
-	 P7Jp0oJXodaEKTA3F3+K/ErY6qSlrCehtbS9rLwKZXGDF9d6tg256TwmVxDASTL6UB
-	 HuFMs9LPF1BEDL9BAK5l7I3tojY9RGUSEuXoq4C0E+GCKxEWKJJ4jMAbwmxM4C/Pqm
-	 JZ3hxCVWgL0qw==
+	b=TnA7PRVuc4gVfJricn9huwZtPMEDhDKAafRaY+y9XYwSXMzNQnizzl9SGy4zcrt6q
+	 kOnNN/qS7U9x6+txiovUcWXAOdzu6zEXC67zhc0Z39rr82mQqDOV8ds6DiNKjLzTyX
+	 6C+XdGAYnjBYnuB0OuoFtlCWH8h6bAwAUA1bwuzE3XhcsxUxEegdtJsxpWw2bXgP41
+	 en+Iudi4OTNOfML8Zm75OEj2QF4MloyH/J3xqotfr/r8QLbrzh165n79aLmMlOir/z
+	 I+bN/oC/MM7HGvk0LecG3EzAvh88O+x/SBMlPlVe4UespZ5sJer+qj8GRYVr5BGKcp
+	 XciVAWwQDQWJQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Huang Pei <huangpei@loongson.cn>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 	Sasha Levin <sashal@kernel.org>,
-	akpm@linux-foundation.org,
+	rdunlap@infradead.org,
 	arnd@arndb.de,
+	akpm@linux-foundation.org,
+	jiaxun.yang@flygoat.com,
 	bhelgaas@google.com,
 	linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.7 22/23] MIPS: reserve exception vector space ONLY ONCE
-Date: Fri,  2 Feb 2024 13:39:18 -0500
-Message-ID: <20240202183926.540467-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 20/21] MIPS: reserve exception vector space ONLY ONCE
+Date: Fri,  2 Feb 2024 13:40:07 -0500
+Message-ID: <20240202184015.540966-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240202183926.540467-1-sashal@kernel.org>
-References: <20240202183926.540467-1-sashal@kernel.org>
+In-Reply-To: <20240202184015.540966-1-sashal@kernel.org>
+References: <20240202184015.540966-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -65,7 +67,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.7.3
+X-stable-base: Linux 6.6.15
 Content-Transfer-Encoding: 8bit
 
 From: Huang Pei <huangpei@loongson.cn>
