@@ -1,135 +1,274 @@
-Return-Path: <linux-mips+bounces-1261-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1262-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2D7B845EDB
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 18:49:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0102284677D
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Feb 2024 06:24:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6EA028AA25
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Feb 2024 17:48:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 127CC1C23899
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Feb 2024 05:24:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B91247C6D3;
-	Thu,  1 Feb 2024 17:48:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C5C517547;
+	Fri,  2 Feb 2024 05:24:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="PJ+teQ/7"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="nPh+kCvN"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D857C6E2
-	for <linux-mips@vger.kernel.org>; Thu,  1 Feb 2024 17:48:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B3217546;
+	Fri,  2 Feb 2024 05:24:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706809736; cv=none; b=Q5U7S5/Pz9nBhb/jzAsVgDuZu9Rwslo6CYSUxtytPRU4TCveTrKvIGHjpo+lYIWMPl0qW4vz0vyTod5gft6mt8LMyED/FiSYYhs/+TjR+csm8lUd9y/OUYDhA+X75fgjthR54bqlOGud7IYPZVqMsXYP+qqv0Orw9Sw+qSK793Q=
+	t=1706851487; cv=none; b=GS6QplMmT3sMYGQrCJSj+Q6OSCI1d+q30aE1aEP88fDIMNQXWvdfH/YhEN03fx+r8lvVaabXmPlHn1ee3SuF4dDYh2kfEe85lwvR86TtToapV2uZ1HAlFwBAY+rl00O6DCFGfWcEoIYkiQ+wLVeOglNSlWQZkk+t/cwQSXkQo+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706809736; c=relaxed/simple;
-	bh=Grgjp5eNCkIOqriHl4Vdp4WOeqDo3ixIM5+oKQyWaZo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iBi33fupgjEUUZJRdvj5/HI4e1ezkpALmCqSgLvmBcr5cOOLgBGwh1Xyb44c5S7fWLWVyQzWCYbNUEAVz2n6zbCR1KMwqk76k+zbW9EIcku/pia8oAKYhxg41nw0ZWBOEJ2oMyazRO5+c/0bve5Wj7kp241meBRMlCTDoFq7Zz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=PJ+teQ/7; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-55f0b2c79cdso1586673a12.3
-        for <linux-mips@vger.kernel.org>; Thu, 01 Feb 2024 09:48:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1706809732; x=1707414532; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=p1AVzZb0NYW5XZP6aUzDR5tG81geNwdMzzdRW+0+Img=;
-        b=PJ+teQ/7o8eRX2hdhyG2FyPpKaTaaTrzhYClR0jlXTgzwhBxrJT9yFjzS3nsheOm3B
-         /deChve6FW8eoPkYJquJg8QpUmJX0AgxWTPwY0J9HxFf3Spf4ofSXwT1sczs/2SwnWUB
-         noumZTKpSqh5Qy+jr2eg4w1oPGi5l/hV8Wh8c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706809732; x=1707414532;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p1AVzZb0NYW5XZP6aUzDR5tG81geNwdMzzdRW+0+Img=;
-        b=LAG9nkN9wEIcELiM77uWe7PBOXkg6C9zZA5MR8a1eNvqxT4JHPgX1FjmjFRznsFErw
-         6zcKQRrBfjsZCCkOC09VgGTDCZuc2Awv2UZWGzDqzrPCTSVGwzD5UOFSGZsaxqWRmK4w
-         Q3tRoMUgmxvqU7ly1iHEX/+HPSETzSRkZjCHZ8+nSUklCY0SEsScZZLCQnAR/SAyvrdO
-         G0uCoxUqEdrwlC9DIDbzk1mUxPWLzCBzipqJSUzh7dyBf1qXlBsOoFSTolOS2Cx72pSL
-         /Symr37ftE1lpDkuAMQlYvbAdq5Fuw2YwZh8t3yBmi31cKfXAfLfOOikkqMTay8rRQRy
-         DXRg==
-X-Gm-Message-State: AOJu0YxMNoxkKDfC9ct9PqSj5Yh6JcvR9StZ0KBU3UOAyR3JglSnHif1
-	9rDfWA1GC55PyArAjcvMZDyFgdDJe9EMcoYHMpkvs6QBwA/7XqLBWShxvcmr8OSxIJS350huF3A
-	rccZwuQ==
-X-Google-Smtp-Source: AGHT+IF6RX//0s95Uc1wOmrSQRd4U0s7HbwLV9CWBYn74eJF4omTY7pLjKO4coqIz97Ogpg6btpWdw==
-X-Received: by 2002:a05:6402:68e:b0:55f:4062:addd with SMTP id f14-20020a056402068e00b0055f4062adddmr3677955edy.38.1706809732172;
-        Thu, 01 Feb 2024 09:48:52 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCVtgd7MU1ruCJHZT+kFFBIHiVNNmrtexW3cy+weHJepPBPPQZyUFYWwreXvQTotBREXXaS7JxbO9Z/TVmtUOCUIMXTeJYY0tnVASw==
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com. [209.85.208.54])
-        by smtp.gmail.com with ESMTPSA id f6-20020a056402194600b0055cffd3fd32sm24093edz.68.2024.02.01.09.48.51
-        for <linux-mips@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Feb 2024 09:48:51 -0800 (PST)
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-55faa1e3822so1673899a12.1
-        for <linux-mips@vger.kernel.org>; Thu, 01 Feb 2024 09:48:51 -0800 (PST)
-X-Received: by 2002:aa7:d6d1:0:b0:55f:1a79:8b8d with SMTP id
- x17-20020aa7d6d1000000b0055f1a798b8dmr3775037edr.3.1706809731384; Thu, 01 Feb
- 2024 09:48:51 -0800 (PST)
+	s=arc-20240116; t=1706851487; c=relaxed/simple;
+	bh=dEPogJuBhjmuXNNnEJ1m37rCCFO37/TJ46+MI5/wWN8=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=iKxjWcOoeUBS6gljuW7uBfuKc43CiplmdXknXeA4eFqfVktNWODoCnkytDzimmvbsEbtSCZyIXU+42pZgBnI8hIJP7Nd4U8JchggJA9HkWsg/79z35DsTmhZpocqRGXDJJfwhq2XdZyREh25kVezVKzsZypmTRJQn7wL54uVeN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=nPh+kCvN; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 4124f8L7017387;
+	Fri, 2 Feb 2024 05:24:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=PDV06LOquyZ2c07ivE0vzxZrSRl419YEOX13JRF/udo=;
+ b=nPh+kCvNsnHIYDXWB0+2FRPhHygYiddpgBYz2W2SHiiN1BkFek2qQw4ycvxxYI/qpDU6
+ yTcyNuf7kUwLL+dKocLOKD9Ekbesc3adySbvz8eZZZo2Z5ceyoprZbKlKsbp/pRs/L+u
+ LoKmlG+vz37L6dQuBT680kuK7Hzw1dKKzpiIQ6ikpbCbLP8uFBLpJtSeBEj0PCvygnUT
+ 4NR2nL56TsuRsPlaZ56kvvRxLE4E+QskziTz+cZzPuCgZxD21oHVw4P/IY05CitLKyF1
+ eg9L8IxFl1XG9YTFEBQGzk6a4uzOmaa08XYF8RC/ZKiXNITRfrHPMBQBXQuNWjRLHcyu Mw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w0sev0xb0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 02 Feb 2024 05:24:26 +0000
+Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4124w2OJ002776;
+	Fri, 2 Feb 2024 05:23:50 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w0sev0wt4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 02 Feb 2024 05:23:50 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41240aMF011292;
+	Fri, 2 Feb 2024 05:23:31 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3vwecm0xbv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 02 Feb 2024 05:23:31 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4125NTcC43254138
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 2 Feb 2024 05:23:29 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 755912004B;
+	Fri,  2 Feb 2024 05:23:29 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A5C9420040;
+	Fri,  2 Feb 2024 05:23:25 +0000 (GMT)
+Received: from [9.43.64.13] (unknown [9.43.64.13])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  2 Feb 2024 05:23:25 +0000 (GMT)
+Message-ID: <9101bb07-70f1-476c-bec9-ec67e9899744@linux.ibm.com>
+Date: Fri, 2 Feb 2024 10:53:23 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 00/14] Split crash out from kexec and clean up related
+ config items
+To: Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
+Cc: kexec@lists.infradead.org, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        loongarch@lists.linux.dev, akpm@linux-foundation.org,
+        ebiederm@xmission.com, piliu@redhat.com, viro@zeniv.linux.org.uk
+References: <20240119145241.769622-1-bhe@redhat.com>
+Content-Language: en-US
+From: Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <20240119145241.769622-1-bhe@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: RAVJ1hGQlGX9e6U_JEK40a_2LBSb9TD_
+X-Proofpoint-ORIG-GUID: tOhKLrcRaLdeupwFUmZ3kDNGA-MwGyC-
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240201-exception_ip-v1-0-aa26ab3ee0b5@flygoat.com>
-In-Reply-To: <20240201-exception_ip-v1-0-aa26ab3ee0b5@flygoat.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 1 Feb 2024 09:48:34 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whUp8cDxLr3EKZ1e-83+MJcazjtmpjmXGG-Y+7xvRqoRg@mail.gmail.com>
-Message-ID: <CAHk-=whUp8cDxLr3EKZ1e-83+MJcazjtmpjmXGG-Y+7xvRqoRg@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Handle delay slot for extable lookup
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Oleg Nesterov <oleg@redhat.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Andrew Morton <akpm@linux-foundation.org>, Ben Hutchings <ben@decadent.org.uk>, 
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-mm@kvack.org, 
-	Xi Ruoyao <xry111@xry111.site>
-Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-01_10,2024-01-31_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ spamscore=0 clxscore=1011 malwarescore=0 suspectscore=0 priorityscore=1501
+ mlxscore=0 mlxlogscore=999 phishscore=0 lowpriorityscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2402020037
 
-On Thu, 1 Feb 2024 at 07:46, Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->
->  arch/alpha/include/asm/ptrace.h        | 1 +
->  arch/arc/include/asm/ptrace.h          | 1 +
->  arch/arm/include/asm/ptrace.h          | 1 +
->  arch/csky/include/asm/ptrace.h         | 1 +
->  arch/hexagon/include/uapi/asm/ptrace.h | 1 +
->  arch/loongarch/include/asm/ptrace.h    | 1 +
->  arch/m68k/include/asm/ptrace.h         | 1 +
->  arch/microblaze/include/asm/ptrace.h   | 3 ++-
->  arch/mips/include/asm/ptrace.h         | 2 ++
->  arch/mips/kernel/ptrace.c              | 7 +++++++
->  arch/nios2/include/asm/ptrace.h        | 3 ++-
->  arch/openrisc/include/asm/ptrace.h     | 1 +
->  arch/parisc/include/asm/ptrace.h       | 1 +
->  arch/s390/include/asm/ptrace.h         | 1 +
->  arch/sparc/include/asm/ptrace.h        | 2 ++
->  arch/um/include/asm/ptrace-generic.h   | 1 +
->  mm/memory.c                            | 4 ++--
->  17 files changed, 28 insertions(+), 4 deletions(-)
+Hi Baoquan,
 
-The only user right now is mm/memory.c, and it doesn't even include
-<asm/ptrace.h>, but instead does the proper thing and includes
-<linux/ptrace.h>
+On 19/01/24 8:22 pm, Baoquan He wrote:
+> Motivation:
+> =============
+> Previously, LKP reported a building error. When investigating, it can't
+> be resolved reasonablly with the present messy kdump config items.
+> 
+>   https://lore.kernel.org/oe-kbuild-all/202312182200.Ka7MzifQ-lkp@intel.com/
+> 
+> The kdump (crash dumping) related config items could causes confusions:
+> 
+> Firstly,
+> ---
+> CRASH_CORE enables codes including
+>   - crashkernel reservation;
+>   - elfcorehdr updating;
+>   - vmcoreinfo exporting;
+>   - crash hotplug handling;
+> 
+> Now fadump of powerpc, kcore dynamic debugging and kdump all selects
+> CRASH_CORE, while fadump
+>   - fadump needs crashkernel parsing, vmcoreinfo exporting, and accessing
+>     global variable 'elfcorehdr_addr';
+>   - kcore only needs vmcoreinfo exporting;
+>   - kdump needs all of the current kernel/crash_core.c.
+> 
+> So only enabling PROC_CORE or FA_DUMP will enable CRASH_CORE, this
+> mislead people that we enable crash dumping, actual it's not.
+> 
+> Secondly,
+> ---
+> It's not reasonable to allow KEXEC_CORE select CRASH_CORE.
+> 
+> Because KEXEC_CORE enables codes which allocate control pages, copy
+> kexec/kdump segments, and prepare for switching. These codes are
+> shared by both kexec reboot and kdump. We could want kexec reboot,
+> but disable kdump. In that case, CRASH_CORE should not be selected.
+> 
+>   --------------------
+>   CONFIG_CRASH_CORE=y
+>   CONFIG_KEXEC_CORE=y
+>   CONFIG_KEXEC=y
+>   CONFIG_KEXEC_FILE=y
+>      ---------------------
+> 
+> Thirdly,
+> ---
+> It's not reasonable to allow CRASH_DUMP select KEXEC_CORE.
+> 
+> That could make KEXEC_CORE, CRASH_DUMP are enabled independently from
+> KEXEC or KEXEC_FILE. However, w/o KEXEC or KEXEC_FILE, the KEXEC_CORE
+> code built in doesn't make any sense because no kernel loading or
+> switching will happen to utilize the KEXEC_CORE code.
+>   ---------------------
+>   CONFIG_CRASH_CORE=y
+>   CONFIG_KEXEC_CORE=y
+>   CONFIG_CRASH_DUMP=y
+>   ---------------------
+> 
+> In this case, what is worse, on arch sh and arm, KEXEC relies on MMU,
+> while CRASH_DUMP can still be enabled when !MMU, then compiling error is
+> seen as the lkp test robot reported in above link.
+> 
+>   ------arch/sh/Kconfig------
+>   config ARCH_SUPPORTS_KEXEC
+>           def_bool MMU
+> 
+>   config ARCH_SUPPORTS_CRASH_DUMP
+>           def_bool BROKEN_ON_SMP
+>   ---------------------------
+> 
+> Changes:
+> ===========
+> 1, split out crash_reserve.c from crash_core.c;
+> 2, split out vmcore_infoc. from crash_core.c;
+> 3, move crash related codes in kexec_core.c into crash_core.c;
+> 4, remove dependency of FA_DUMP on CRASH_DUMP;
+> 5, clean up kdump related config items;
+> 6, wrap up crash codes in crash related ifdefs on all 9 arch-es
+>     which support crash dumping;
+> 
+> Achievement:
+> ===========
+> With above changes, I can rearrange the config item logic as below (the right
+> item depends on or is selected by the left item):
+> 
+>      PROC_KCORE -----------> VMCORE_INFO
+> 
+>                 |----------> VMCORE_INFO
+>      FA_DUMP----|
+>                 |----------> CRASH_RESERVE
 
-So please make <linux/ptrace.h> just do
+FA_DUMP also needs PROC_VMCORE (CRASH_DUMP by dependency, I guess).
+So, the FA_DUMP related changes here will need a relook..
 
-     #ifndef exception_ip
-        #define exception_ip(x) instruction_pointer(x)
-    #endif
 
-and all those non-MIPS architecture updates should just go away, and
-the diffstat should look something like
+>                                                      ---->VMCORE_INFO
+>                                                     /
+>                                                     |---->CRASH_RESERVE
+>      KEXEC      --|                                /|
+>                   |--> KEXEC_CORE--> CRASH_DUMP-->/-|---->PROC_VMCORE
+>      KEXEC_FILE --|                               \ |
+>                                                     \---->CRASH_HOTPLUG
+> 
+> 
+>      KEXEC      --|
+>                   |--> KEXEC_CORE (for kexec reboot only)
+>      KEXEC_FILE --|
+> 
+> Test
+> ========
+> On all 8 architectures, including x86_64, arm64, s390x, sh, arm, mips,
+> riscv, loongarch, I did below three cases of config item setting and
+> building all passed. Let me take configs on x86_64 as exampmle here:
+> 
+> (1) Both CONFIG_KEXEC and KEXEC_FILE is unset, then all kexec/kdump
+> items are unset automatically:
+> # Kexec and crash features
+> # CONFIG_KEXEC is not set
+> # CONFIG_KEXEC_FILE is not set
+> # end of Kexec and crash features
+> 
+> (2) set CONFIG_KEXEC_FILE and 'make olddefconfig':
+> ---------------
+> # Kexec and crash features
+> CONFIG_CRASH_RESERVE=y
+> CONFIG_VMCORE_INFO=y
+> CONFIG_KEXEC_CORE=y
+> CONFIG_KEXEC_FILE=y
+> CONFIG_CRASH_DUMP=y
+> CONFIG_CRASH_HOTPLUG=y
+> CONFIG_CRASH_MAX_MEMORY_RANGES=8192
+> # end of Kexec and crash features
+> ---------------
+> 
+> (3) unset CONFIG_CRASH_DUMP in case 2 and execute 'make olddefconfig':
+> ------------------------
+> # Kexec and crash features
+> CONFIG_KEXEC_CORE=y
+> CONFIG_KEXEC_FILE=y
+> # end of Kexec and crash features
+> ------------------------
+> 
+> Note:
+> For ppc, it needs investigation to make clear how to split out crash
+> code in arch folder.
 
-  arch/mips/kernel/ptrace.c          | 7 +++++++
-  include/linux/ptrace.h             | 4 ++++
-  mm/memory.c                        | 4 ++--
+On powerpc, both kdump and fadump need PROC_VMCORE & CRASH_DUMP.
+Hope that clears things. So, patch 3/14 breaks things for FA_DUMP..
 
-instead.
+> Hope Hari and Pingfan can help have a look, see if
+> it's doable. Now, I make it either have both kexec and crash enabled, or
+> disable both of them altogether.
 
-                  Linus
+
+Sure. I will take a closer look...
+
+Thanks
+Hari
 
