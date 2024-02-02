@@ -1,185 +1,158 @@
-Return-Path: <linux-mips+bounces-1283-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1284-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC983847B85
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Feb 2024 22:31:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A82F7847C11
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Feb 2024 23:09:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A79862907A0
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Feb 2024 21:31:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC03E1C23C5B
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Feb 2024 22:09:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B3D0839E5;
-	Fri,  2 Feb 2024 21:31:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A7B085957;
+	Fri,  2 Feb 2024 22:05:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="kJYzCHo6";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KsqblSve"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="HqcJnJXt"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472DD7CF3F;
-	Fri,  2 Feb 2024 21:31:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A50DD83A09
+	for <linux-mips@vger.kernel.org>; Fri,  2 Feb 2024 22:05:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706909490; cv=none; b=s6QGXtodnyuUIO+jZF/rDaMAXN1osLgR2lDfoTqYdav5rxLhLo3FK4G9ILFz73u2wPTLtQGMMI2UsBipG7fTslCO8NHPNn6LLQS6x9671bIRaeCnWrI2k1/JXOrm5kIkEfEF/zNct1j9k1jdDM/akgOI0bYIiFOAoO/yjc4Kwgk=
+	t=1706911559; cv=none; b=pu2aYPcB7M5VM15x4xH3ehyBcxjlXgeRuorQQ53t/+wrYmpULgUpA38i9mhP0afy8QzqgKXfhd+TiNSrCdf0YT+zgywzyXXkhTrsi8YSFbsrRXFtyOVt3qyNsI9pVqeKXWnx9WRk7AA4muNV//PGLJTxfQUmQ60zZeP2oasDQtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706909490; c=relaxed/simple;
-	bh=GZn2RPQk6SbEn/s/Sbfuic93/awRSAyfMfvV1+Vrw1w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LSoMHAPq/i83gj1bVtANQnVnXHt0wjg2TrcZ8XB2bV1DuA+n2BEV6rp+r0gYMir4Humaqu7WNRuWeUkovwR2IILm558b5dO1qZTOeyGC7WyeAUa/5G/o5fwoUOYV9wpSSXw2FNBIOcDCQQG75IUMH8dhPK6WUNlJwr2p4VZ6MZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=kJYzCHo6; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=KsqblSve; arc=none smtp.client-ip=64.147.123.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-	by mailout.west.internal (Postfix) with ESMTP id 3DC403200A48;
-	Fri,  2 Feb 2024 16:31:26 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute7.internal (MEProxy); Fri, 02 Feb 2024 16:31:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1706909485;
-	 x=1706995885; bh=DYDb62ASAO+7468yzkEHNBIMHhgVPwqNfMHXZN7z5uY=; b=
-	kJYzCHo67NJQ+tGmByKa44EmqkmF2dI+rInMf7dUKlALkvfBwObk5SJ8JimFrvA3
-	aryt9i0hqElHcNR9A2RVfqU+H9VYSGbEJgcQyq+gzVSGAtX/x/OwEBXkUHHwSkWP
-	lXeZvBYZUo49eURQ5ZSDTJ81MpE55L/N+fJgYWErxyfMSaKnydVYqzeRk1X9lFYF
-	EXAdQ5l0Qkm4/qVVs6qu1DFGcM2vF6fQxgX8kbbwKbrvoqHg4OQ27V0TqlkR/9/+
-	KXvNSZmfgLpCja0wxebxTh9lQv1USNEiO1xVdSyecr3T24pnp2xxSa7oUMWaST8p
-	v0IzkXIvBCzKQmEdMPuf2g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1706909485; x=
-	1706995885; bh=DYDb62ASAO+7468yzkEHNBIMHhgVPwqNfMHXZN7z5uY=; b=K
-	sqblSve46eltPJrilQStnN11oNRppN3TF9Taba6gsmyPCf2t3Ojlo8qA8Gy7jVDJ
-	RFNmdhN/Lr70NAL0KZMROL0EGugO0A5h39guVya5JYU2WUDYY1AllwQIPg7i2ek9
-	IuZ9fZJh45t6LEJWhNWMPPlVCXoIl3JTEAEblqpqCDqlZNxDm2RTzUup82rxIsxa
-	xLAXxXTrE7a1SL8GbKQVZPAvG5n843MUrAC7R0CaoE+hD3mQDFjrV+EJBceq2aMO
-	tW6iRHX0nKJT1be3EFEk2xKQnCCIUKVm7EXakV+dH5zxT9vhX4efGoAAGoiFdxlR
-	5Ck6Oe0AyUlUt++C2ulQw==
-X-ME-Sender: <xms:LV-9ZVx48v-V-bwZB-wqFFpqrY6Ny-Mg4RoCswEqwytVJofBZWoTdw>
-    <xme:LV-9ZVQDJtfcF3FJav-8dOT4SX7Cf4k-HIirPYrOU4RKb30LjFlBSutKVqKPjy1-g
-    xB_X4DSy-PlM0rjMQ8>
-X-ME-Received: <xmr:LV-9ZfU6_aIZTRY3uhYQlrci08XJNR_VYarpk-kQz_2-1syiLWgNtoL_xVItA11STS_f_FKRZC_1HN5-UPjrKZAtsiP-H-Mhv9ySPJs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrfedugedgudegjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthekredttddvjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpeelueffheehgeeluedvlefghfeukeejteeuveeuhffftdfg
-    uefhgefgueekffeftdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:LV-9ZXikif2PPF1vsmVBQ84PS5-rwOLZ--KwPBsSWDDEb3wZ8wHd2g>
-    <xmx:LV-9ZXCbQog9GHS81eQOYt3k07P96ecJ_6Z9TnELCXbMBeYTn1y7Mg>
-    <xmx:LV-9ZQJrKcjlsNDaEsPY6qYi4j6QeLlAP9TMOwPMlIdmHcURX2xH4g>
-    <xmx:LV-9Zb3KdCuyAXjjmzigjrPisMcR-k3h27zTUZBKTf6UeeK7UCw1gA>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 2 Feb 2024 16:31:23 -0500 (EST)
-Message-ID: <21ed604c-8607-43b7-853a-9bd1623bd918@flygoat.com>
-Date: Fri, 2 Feb 2024 21:31:22 +0000
+	s=arc-20240116; t=1706911559; c=relaxed/simple;
+	bh=vzxGVJZTyLyW5M5KJyCurL3KBonx/0+YslgCT13JXjA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=q4PLUMyeFG7fLkXBRTT8BKzAShtAF8pcSWeXWjHJFDR2gnJhI367ICbl5JB+j7ve7ZTMBNe1xUQb9tNTGpeW7wPGWZNbDrygIcQ/9DGgYx5cIl1hwPGDo0rOgitJgbW4MkE5m5q+eFQwsnhf7m0XJ2Sh2Df1ri4rGGrBU5B6A5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=HqcJnJXt; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-55fc7f63639so2999125a12.1
+        for <linux-mips@vger.kernel.org>; Fri, 02 Feb 2024 14:05:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1706911555; x=1707516355; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=88hcq8XgkrpsBeyZheiHmTOtZGbbdlYCkf6URsqgIp4=;
+        b=HqcJnJXtG2m2Ius+OiWv5UL5wvnQRKc2wKtyGBscvipEv/S1GPAYMoOC3zzcwu7suq
+         49eHVzS+58Y5d5OteUJ811C9buJqT+Je7tO0b1HNGzKubnu2S2XWem7rMXXSdTvA2hy/
+         sRkoP33pMGZqoQ09wJRmMNX24D8SCzvuz87xzBbI5gOfJq2bd/FOBsnTTwJREEIP/xWn
+         xp/8YMamQpoWS39JAt8NSIxE83l0DkBX1l1GtDyA/vknMQ0i9JLzshGDBFhwNMYp9Jus
+         gm5hByu87TQpLjXs+HcjSVwYCAEN/+UT9VvJDX6cTd6QFrOSNokTp2QMMejoeWNYQ6zi
+         YQxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706911555; x=1707516355;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=88hcq8XgkrpsBeyZheiHmTOtZGbbdlYCkf6URsqgIp4=;
+        b=QMb/tPsr5fTsXHAIC1dmcZDjXWSvHsq0mZz55Xq41t/T9h8NAMGOe9zASCGgpt/wif
+         wYhsF6BpOdHu6KpJYryHz6AzXoncpZBa/LVlXBAt/qganGm8pAkhkqlBhgCgWvbsEpDR
+         YHOExC62oq/gj6adStIrKoZvpwChzMx9ezKSgFXd+Fhbe8mHcC3GeQKg0owpz595mhLe
+         IuUVwWq2+HvCuTlZf6Ikxit4g/SbvspiYw/ve4ZVRvasXXx9rhf3y3VuKhWpjdvewJvB
+         NeWDWfC2FUQgU6KS8MV2ckYJcG922i2jwxCGUA6HPNt1oabGKL4D+dm1wb7z+scvoxph
+         yZqA==
+X-Gm-Message-State: AOJu0YyxJYmEGD7Bk8duvQPoO8DHxPI3A7bEZO1U4FlnbWHhNT7GsQzG
+	gBe98Csv5/aTVkAJ5AKUUomXdilADTNCLuP0fPwh80gdZGcYA9/eJn73XJ8UDyd/T1B9oRLzwoc
+	q9HJ7qf0aRxl0FqR8BbJMX/VDGgRqxIcXszcIAQ==
+X-Google-Smtp-Source: AGHT+IEdra/txPxsHeiEZSIqeLcoax0q8b5/TdMlKdrQpsLC9Bhy0DO41JjMt0QszL6IyZw4hoGkwwrYDp1u0lZqAvA=
+X-Received: by 2002:a17:906:2455:b0:a2e:94a0:93b4 with SMTP id
+ a21-20020a170906245500b00a2e94a093b4mr4841883ejb.61.1706911555736; Fri, 02
+ Feb 2024 14:05:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/3] Handle delay slot for extable lookup
-To: Linus Torvalds <torvalds@linux-foundation.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Oleg Nesterov <oleg@redhat.com>, Andrew Morton
- <akpm@linux-foundation.org>, Ben Hutchings <ben@decadent.org.uk>,
- linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-mm@kvack.org,
- Xi Ruoyao <xry111@xry111.site>
-References: <20240202-exception_ip-v2-0-e6894d5ce705@flygoat.com>
- <CAHk-=wiaSjYApqmUYCdCyYfr_bRsfVKDkwU6r6FMmoZzrxHrKQ@mail.gmail.com>
-Content-Language: en-US
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Autocrypt: addr=jiaxun.yang@flygoat.com;
- keydata= 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
- HVO98ZmbMeg=
-In-Reply-To: <CAHk-=wiaSjYApqmUYCdCyYfr_bRsfVKDkwU6r6FMmoZzrxHrKQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240131155929.169961-1-alexghiti@rivosinc.com>
+ <20240131155929.169961-5-alexghiti@rivosinc.com> <Zbuy1E7mz9Oui1Dl@andrea> <CAHVXubgw0PEZMhFmjA0cAFQ2+_JOYjVfk41qRC9TFdSJtej++w@mail.gmail.com>
+In-Reply-To: <CAHVXubgw0PEZMhFmjA0cAFQ2+_JOYjVfk41qRC9TFdSJtej++w@mail.gmail.com>
+From: Alexandre Ghiti <alexghiti@rivosinc.com>
+Date: Fri, 2 Feb 2024 23:05:44 +0100
+Message-ID: <CAHVXubjzpTru3Tn+nmv=GwG0YWxnkeYYT1KOJW5a27H2EDAZ0Q@mail.gmail.com>
+Subject: Re: [PATCH RFC/RFT v2 4/4] riscv: Stop emitting preventive sfence.vma
+ for new userspace mappings with Svvptc
+To: Andrea Parri <parri.andrea@gmail.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Andrew Morton <akpm@linux-foundation.org>, 
+	Ved Shanbhogue <ved@rivosinc.com>, Matt Evans <mev@rivosinc.com>, Dylan Jhong <dylan@andestech.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-riscv@lists.infradead.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-
-在 2024/2/2 18:39, Linus Torvalds 写道:
-> On Fri, 2 Feb 2024 at 04:30, Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->>        ptrace: Introduce exception_ip arch hook
->>        MIPS: Clear Cause.BD in instruction_pointer_set
->>        mm/memory: Use exception ip to search exception tables
-> Just to clarify: does that second patch fix the problem that
-> __isa_exception_epc() does a __get_user()?
-
-No it only covers an obvious case when I was playing around exception_ip 
-with kgdb.
-There are still potential cases __isa_exception_epc may touch user space.
-
-> Because that mm/memory.c use of "exception_ip()" most definitely
-> cannot take a page fault.
+On Fri, Feb 2, 2024 at 4:42=E2=80=AFPM Alexandre Ghiti <alexghiti@rivosinc.=
+com> wrote:
 >
-> So if MIPS cannot do that whole exception IP thing without potentially
-> touching user space, I do worry that we might just have to add a
+> Hi Andrea,
 >
->     #ifndef __MIPS__
+> On Thu, Feb 1, 2024 at 4:03=E2=80=AFPM Andrea Parri <parri.andrea@gmail.c=
+om> wrote:
+> >
+> > On Wed, Jan 31, 2024 at 04:59:29PM +0100, Alexandre Ghiti wrote:
+> > > The preventive sfence.vma were emitted because new mappings must be m=
+ade
+> > > visible to the page table walker but Svvptc guarantees that xRET act =
+as
+> > > a fence, so no need to sfence.vma for the uarchs that implement this
+> > > extension.
+> >
+> > AFAIU, your first submission shows that you don't need that xRET proper=
+ty.
+> > Similarly for other archs.  What was rationale behind this Svvptc chang=
+e?
 >
-> around this all.
+> Actually, the ARC has just changed its mind and removed this new
 
-It is possible to perform exception_ip() without touching user space by 
-saving "BadInstr" in pt_regs
-at exception entries. For newer hardware it's as simple as saving an 
-extra CP0 register, on older hardware
-we may have to read it from user space.
+The wording was incorrect here, the ARC did not state anything, the
+author of Svvptc proposed an amended version of the spec that removes
+this behaviour and that's under discussion.
 
-+ Thomas (MIPS maintainer), what's your opinion?
-
-Thanks
+> behaviour from the Svvptc extension, so we will take some gratuitous
+> page faults (but that should be outliners), which makes riscv similar
+> to x86 and arm64.
 >
-> Possibly somehow limited to just the microMIPS/MIPS16e case in Kconfig instead?
+> >
+> >
+> > > This allows to drastically reduce the number of sfence.vma emitted:
+> > >
+> > > * Ubuntu boot to login:
+> > > Before: ~630k sfence.vma
+> > > After:  ~200k sfence.vma
+> > >
+> > > * ltp - mmapstress01
+> > > Before: ~45k
+> > > After:  ~6.3k
+> > >
+> > > * lmbench - lat_pagefault
+> > > Before: ~665k
+> > > After:   832 (!)
+> > >
+> > > * lmbench - lat_mmap
+> > > Before: ~546k
+> > > After:   718 (!)
+> >
+> > This Svvptc seems to move/add the "burden" of the synchronization to xR=
+ET:
+> > Perhaps integrate the above counts w/ the perf gains in the cover lette=
+r?
 >
->              Linus
-
--- 
----
-Jiaxun Yang
-
+> Yes, I'll copy that to the cover letter.
+>
+> Thanks for your interest!
+>
+> Alex
+>
+> >
+> >   Andrea
 
