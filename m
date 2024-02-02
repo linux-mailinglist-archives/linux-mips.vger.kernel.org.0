@@ -1,185 +1,116 @@
-Return-Path: <linux-mips+bounces-1276-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1277-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB36A84774E
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Feb 2024 19:24:17 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDA8F8477F3
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Feb 2024 19:43:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 364231F24B87
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Feb 2024 18:24:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F3E9B29A7F
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Feb 2024 18:40:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02DA1151CDF;
-	Fri,  2 Feb 2024 18:22:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83CAB153BF2;
+	Fri,  2 Feb 2024 18:39:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="cm7td9MG";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="iYYrscqS"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="IHeB54CF"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B6A8151CD3;
-	Fri,  2 Feb 2024 18:22:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69EA5152E0A
+	for <linux-mips@vger.kernel.org>; Fri,  2 Feb 2024 18:39:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706898141; cv=none; b=d4wgiQTn7TPTS5meaU9f1/gOiIEexE08rhLgV7Q+jZHGdvJCtktpZxocXC2BlWMD6c/QyPbujFBk8VwW82t03NH0YnMZiTZQWg9w9sHcduTWckT3HJ0WJo7JQ6nqIejobNQamTTq0qtW7jiOZvy7QvDdvkrXWndY/9kw2dX0yZ4=
+	t=1706899175; cv=none; b=rBI/BipVaLviU+Bv8o3VtgddmzqALDz1iaYv2yJKPT0qUZZBd9Rgaj/EHvSr5F3g363N+E4t0ffUX+zbsq8gdJ4M31vjvSidpaQEpU+jwhcAgaQZmyEPChBRS1AJsLwLeOjakoZJbIcpSDAfbX4V/of72X0mnBZyV4LzzRNcA/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706898141; c=relaxed/simple;
-	bh=K9jVRbvoC4pJRRadOkCl26uHM4IaJfzZZjnpU9UIQlI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=E00locpeGTXvbJKuk1bld3utHsB20Z23Y+k7CQ7xaWpyBJkH3p/Nt5e0lB7JtoX13z0iLj7fGjWZR/tttUS3x2AFJh1BjHamc1QkHIUjHN/aluesUnQktIdqG0NRRvybukQXadegbumhKpe6UsUHP2zOCIYLV1GysFjfCLLC6TQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=cm7td9MG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=iYYrscqS; arc=none smtp.client-ip=64.147.123.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-	by mailout.west.internal (Postfix) with ESMTP id E4FD83200B13;
-	Fri,  2 Feb 2024 13:22:18 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute7.internal (MEProxy); Fri, 02 Feb 2024 13:22:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1706898138;
-	 x=1706984538; bh=uKviyZxmRZlj3pVPOpppzhplKj0Xg++k94Zg3QVf1wI=; b=
-	cm7td9MG9Y0Ih5bS8N1IdVzpxEnNuBFXWN4k4kQMXLTOt3kn2TDPR2w83+A2SwJs
-	i/Bu3IQJN8V1sFnygjrWDc0V1qcwDG7Eq2yWDyG5KH9MMRgXLHuWtzHK0O3OXMJ2
-	AJIPJ2j9nt67+PL42GA2R9YZAlF4jpD/AYJUMV1BTnkZlK3bLT6Ziq0+h9BwCmyy
-	fHL4Wr4yROgmXsqJyUAlAfKfqThocYySejOwmx/nGRq0tUAICFOz1BMsyX4v53oL
-	McRiYKXO7bz8aPeCqopQ8llkIOSnm5z4ZKsQBukbxQQ3N8zAWqYTBgvEl3PNZ0RC
-	DJ+88OmYQIa0bTnszXPxmg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1706898138; x=
-	1706984538; bh=uKviyZxmRZlj3pVPOpppzhplKj0Xg++k94Zg3QVf1wI=; b=i
-	YYrscqSSFgaGXnSReDw9COKFJ2bE0PA6VgUdnYCSqj8jO61kv9APmJxILqP1kJ/P
-	mxoegijWoBnoZMWdTG8v+Xbuv4qbhTDYdYCJvOoF9Uz3dNktBKNGLPkQEVVtsJqy
-	NIxF9V1S244Xv7kLUROOXVzSxfgmU3ymvFQ05GdVHwp5sT+3QQm2p/A2oNE2bwV7
-	vR/Q0VNsIIjh37DusIs5aS83o6fct3iWhOrodXPkQQnB3oWyce4H7qeuvDw8k5ui
-	D0HF0yc/HEeP1Hf4lBMNHRdl+W40KpCw5bQLGDUAZxTfTYEUtbdHCx+tL44vShiF
-	9jXiqEPeUDrIi9NAJpHRA==
-X-ME-Sender: <xms:2jK9ZQgaHN5ntsm-dtXQELbUV2fDId--7V3Tqr2uKFYR3Whw3gzuMw>
-    <xme:2jK9ZZBhsAhaw1OIme1UsDbQld4-ifwUDjRxRflRXSkdevfdoremH-J5HHbeVsHcg
-    VKEp5Nb642MqmG0yjg>
-X-ME-Received: <xmr:2jK9ZYFC4fKnYka8JsRVbsFiLxPq5dUYstXzSAlyh69pes4vn2tvTv9-E7Bqd1zjoQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrfedugedguddtlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpedvkeeihfefveekueevteefleffkeegudeghfdtuddugefh
-    ueevgeffgedukeejleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:2jK9ZRSjeD2lEOUWs2Uy-nwOquRqt-WrywiX4UoixXxeXVFPvFUhZw>
-    <xmx:2jK9ZdwrlXkJ6PnKx-gPopX4rr-WkFyjLPRiWgakEm7uWI8MGkB9UA>
-    <xmx:2jK9Zf7woYHyHVUd0NTlkAkbiZv53Krwf7H71xPgkgvt4puF7zTMDQ>
-    <xmx:2jK9ZcxvNb2eO-kSu3ddobH0FpLr77wm7h8uw7EWRDmLlqM9pIAK2Q>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 2 Feb 2024 13:22:16 -0500 (EST)
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Fri, 02 Feb 2024 18:21:47 +0000
-Subject: [PATCH 8/8] MIPS: mipsregs: Set proper ISA level for virt
- extensions
+	s=arc-20240116; t=1706899175; c=relaxed/simple;
+	bh=6vtu3x2Y1jccAeEZW/cOuVCyNA6GUN7mxte5g1lUOrk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MLKrwcO7RXxdyQ6nl+Ao7jQIAb54EIaFtuDiNLirkAu1kK8j2DcnTK7uUloz2lPNMAfHh1E6c9zulODxke/yWaxv1lIHi/mchunFj4BZIONeK0g2fc8Vb5fBj1dfQNhS4zpTrg8CtIri0n4yJVxoiDt6i472FaZy+OSNu77HXa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=IHeB54CF; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2d04c0b1cacso29963701fa.0
+        for <linux-mips@vger.kernel.org>; Fri, 02 Feb 2024 10:39:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1706899171; x=1707503971; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EK/oD0i1K4QS8LEPg1LGpWmJwJIYuOve/SpbccIVK8M=;
+        b=IHeB54CFUk2Pu6lD2GAj8loMeIw5OHB3CUVpXRt/zRmhwMpktRKIlzjd0TGGAQWQCQ
+         Lys1/NvYHNrxHr/aZc2m9O3yaQERM66FEpZEHbGHLGv08Q+OTc1a3JnBUak8NXPz8o2O
+         EhC2n2Bt+Kf0bkekEtuOGGOMSb0/k+M0stkGc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706899171; x=1707503971;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EK/oD0i1K4QS8LEPg1LGpWmJwJIYuOve/SpbccIVK8M=;
+        b=pvkEaLPwWE32y0P6iOjITYdnVcTTgz9ym2HgfKmv2xSdmHZtbwzJlsvzIKxU3t7U9K
+         xd8mYcytVR1WkKYFvZH4jMHcNWxTUZ4Qb12FoFlQ2aagzGqNuE75glr9FLYHHnJ4eJWl
+         AjDE1zAW9crD5ziLB/Dfis3NeerUUcuGsd7+D2rg9IUzT1tDG3zY5/OHatMf8AsDZTJa
+         iYqEY34Sm0w3sc6apOPRm3hTCQtdwwJyn9nB7tJ6NWTbb5rTu39jcq5ru/vGOv1NlsIQ
+         e9GZQCm/2Wt3c/b8+lWK5bLXG00FrsDW2Hbd5jNhS7SuA5dOVXkX5Z6RkcVAZ/zYXyAx
+         gGXg==
+X-Gm-Message-State: AOJu0YxJsTm8aQQi2cyImrH4YqCPeM1IPd3UXvQYfRaOGJfrnU/VtRDF
+	VPa3Qijns6+nk2OIJJyJZoPojfWQLF3jJrL/MmH637ZKQ/RKgVViRV0DqqEeb8fwi3DovPnpjd7
+	Cn/DZxw==
+X-Google-Smtp-Source: AGHT+IFM41I5ljctA3ZoXAPShMugW/nz3vrdIGdLpL4bvrituIkjvxyBAWyvMZG9wVJyhX9HyowvyA==
+X-Received: by 2002:a2e:9b46:0:b0:2cc:ea5b:ba6b with SMTP id o6-20020a2e9b46000000b002ccea5bba6bmr1633163ljj.26.1706899171126;
+        Fri, 02 Feb 2024 10:39:31 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCW+o/2/ddph8TBlnx/u+dTRLQF+ZHTYPWawoC1n4/RR8J9bnr9W0cM5s/jwY7Ahl1gpJrVSFThe5aht/yrsv7FPpLeRv1d8mG+Yaw==
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
+        by smtp.gmail.com with ESMTPSA id s30-20020a05651c201e00b002cc7f36bed0sm342706ljo.84.2024.02.02.10.39.30
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Feb 2024 10:39:30 -0800 (PST)
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2d043160cd1so27726441fa.1
+        for <linux-mips@vger.kernel.org>; Fri, 02 Feb 2024 10:39:30 -0800 (PST)
+X-Received: by 2002:a2e:8882:0:b0:2d0:8225:919d with SMTP id
+ k2-20020a2e8882000000b002d08225919dmr1794857lji.21.1706899169784; Fri, 02 Feb
+ 2024 10:39:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240202-llvm-msym32-v1-8-52f0631057d6@flygoat.com>
-References: <20240202-llvm-msym32-v1-0-52f0631057d6@flygoat.com>
-In-Reply-To: <20240202-llvm-msym32-v1-0-52f0631057d6@flygoat.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Jiaxun Yang <jiaxun.yang@flygoat.com>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2256;
- i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=K9jVRbvoC4pJRRadOkCl26uHM4IaJfzZZjnpU9UIQlI=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhtS9Rnu2nixsmCM6O+rPS4duvg/WzatLZL9zHnsst0Ne4
- 87kaUW7O0pZGMS4GGTFFFlCBJT6NjReXHD9QdYfmDmsTCBDGLg4BWAiH2IYGW4+uxO2UihTf96V
- q4adJ4scPk6f23Z618q+KHvBQ2eKNasZGe6IH1jJb1rA7McmvyxwUcykieyV8squk3UdpL7sXB+
- pzAAA
-X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
- fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
+References: <20240202-exception_ip-v2-0-e6894d5ce705@flygoat.com>
+In-Reply-To: <20240202-exception_ip-v2-0-e6894d5ce705@flygoat.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Fri, 2 Feb 2024 10:39:13 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiaSjYApqmUYCdCyYfr_bRsfVKDkwU6r6FMmoZzrxHrKQ@mail.gmail.com>
+Message-ID: <CAHk-=wiaSjYApqmUYCdCyYfr_bRsfVKDkwU6r6FMmoZzrxHrKQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Handle delay slot for extable lookup
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Oleg Nesterov <oleg@redhat.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Andrew Morton <akpm@linux-foundation.org>, Ben Hutchings <ben@decadent.org.uk>, 
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+	Xi Ruoyao <xry111@xry111.site>
+Content-Type: text/plain; charset="UTF-8"
 
-c994a3ec7ecc ("MIPS: set mips32r5 for virt extensions") setted
-some instructions in virt extensions to ISA level mips32r5.
+On Fri, 2 Feb 2024 at 04:30, Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>
+>       ptrace: Introduce exception_ip arch hook
+>       MIPS: Clear Cause.BD in instruction_pointer_set
+>       mm/memory: Use exception ip to search exception tables
 
-However TLB related vz instructions was leftover, also this
-shouldn't be done to a R5 or R6 kernel buid.
+Just to clarify: does that second patch fix the problem that
+__isa_exception_epc() does a __get_user()?
 
-Reorg macros to set ISA level as needed when _ASM_SET_VIRT
-is called.
+Because that mm/memory.c use of "exception_ip()" most definitely
+cannot take a page fault.
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/include/asm/mipsregs.h | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+So if MIPS cannot do that whole exception IP thing without potentially
+touching user space, I do worry that we might just have to add a
 
-diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
-index dfb268f8aef8..6e97811fa936 100644
---- a/arch/mips/include/asm/mipsregs.h
-+++ b/arch/mips/include/asm/mipsregs.h
-@@ -2087,7 +2087,14 @@ do {									\
- 		_ASM_INSN_IF_MIPS(0x4200000c)				\
- 		_ASM_INSN32_IF_MM(0x0000517c)
- #else	/* !TOOLCHAIN_SUPPORTS_VIRT */
--#define _ASM_SET_VIRT ".set\tvirt\n\t"
-+#if MIPS_ISA_REV >= 5
-+#define _ASM_SET_VIRT_ISA
-+#elif defined(CONFIG_64BIT)
-+#define _ASM_SET_VIRT_ISA ".set\tmips64r5\n\t"
-+#else
-+#define _ASM_SET_VIRT_ISA ".set\tmips32r5\n\t"
-+#endif
-+#define _ASM_SET_VIRT _ASM_SET_VIRT_ISA ".set\tvirt\n\t"
- #define _ASM_SET_MFGC0	_ASM_SET_VIRT
- #define _ASM_SET_DMFGC0	_ASM_SET_VIRT
- #define _ASM_SET_MTGC0	_ASM_SET_VIRT
-@@ -2108,7 +2115,6 @@ do {									\
- ({ int __res;								\
- 	__asm__ __volatile__(						\
- 		".set\tpush\n\t"					\
--		".set\tmips32r5\n\t"					\
- 		_ASM_SET_MFGC0						\
- 		"mfgc0\t%0, " #source ", %1\n\t"			\
- 		_ASM_UNSET_MFGC0					\
-@@ -2122,7 +2128,6 @@ do {									\
- ({ unsigned long long __res;						\
- 	__asm__ __volatile__(						\
- 		".set\tpush\n\t"					\
--		".set\tmips64r5\n\t"					\
- 		_ASM_SET_DMFGC0						\
- 		"dmfgc0\t%0, " #source ", %1\n\t"			\
- 		_ASM_UNSET_DMFGC0					\
-@@ -2136,7 +2141,6 @@ do {									\
- do {									\
- 	__asm__ __volatile__(						\
- 		".set\tpush\n\t"					\
--		".set\tmips32r5\n\t"					\
- 		_ASM_SET_MTGC0						\
- 		"mtgc0\t%z0, " #register ", %1\n\t"			\
- 		_ASM_UNSET_MTGC0					\
-@@ -2149,7 +2153,6 @@ do {									\
- do {									\
- 	__asm__ __volatile__(						\
- 		".set\tpush\n\t"					\
--		".set\tmips64r5\n\t"					\
- 		_ASM_SET_DMTGC0						\
- 		"dmtgc0\t%z0, " #register ", %1\n\t"			\
- 		_ASM_UNSET_DMTGC0					\
+   #ifndef __MIPS__
 
--- 
-2.43.0
+around this all.
 
+Possibly somehow limited to just the microMIPS/MIPS16e case in Kconfig instead?
+
+            Linus
 
