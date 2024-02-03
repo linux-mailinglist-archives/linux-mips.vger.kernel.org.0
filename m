@@ -1,158 +1,135 @@
-Return-Path: <linux-mips+bounces-1284-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1285-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A82F7847C11
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Feb 2024 23:09:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5070684867B
+	for <lists+linux-mips@lfdr.de>; Sat,  3 Feb 2024 14:17:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC03E1C23C5B
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Feb 2024 22:09:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D4E7EB24D71
+	for <lists+linux-mips@lfdr.de>; Sat,  3 Feb 2024 13:16:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A7B085957;
-	Fri,  2 Feb 2024 22:05:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59AE758139;
+	Sat,  3 Feb 2024 13:16:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="HqcJnJXt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g9D1rO/x"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A50DD83A09
-	for <linux-mips@vger.kernel.org>; Fri,  2 Feb 2024 22:05:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED8F61AACF;
+	Sat,  3 Feb 2024 13:16:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706911559; cv=none; b=pu2aYPcB7M5VM15x4xH3ehyBcxjlXgeRuorQQ53t/+wrYmpULgUpA38i9mhP0afy8QzqgKXfhd+TiNSrCdf0YT+zgywzyXXkhTrsi8YSFbsrRXFtyOVt3qyNsI9pVqeKXWnx9WRk7AA4muNV//PGLJTxfQUmQ60zZeP2oasDQtc=
+	t=1706966212; cv=none; b=tVMrlTBni3xouQhUY5KZzTogp8xllXy4nMySbguU/kS4d5SsMjS5iOE15XBg1jpBtFevzMwzP0dzU148asGc3KCKTkBkpRNjUpMzWc1CbwalTTQ+a47qRhG4tvSafmMn3w1IMdyoxrLw4TxdB20xRY32zgiLD7TUOsAHgrlHgO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706911559; c=relaxed/simple;
-	bh=vzxGVJZTyLyW5M5KJyCurL3KBonx/0+YslgCT13JXjA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=q4PLUMyeFG7fLkXBRTT8BKzAShtAF8pcSWeXWjHJFDR2gnJhI367ICbl5JB+j7ve7ZTMBNe1xUQb9tNTGpeW7wPGWZNbDrygIcQ/9DGgYx5cIl1hwPGDo0rOgitJgbW4MkE5m5q+eFQwsnhf7m0XJ2Sh2Df1ri4rGGrBU5B6A5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=HqcJnJXt; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-55fc7f63639so2999125a12.1
-        for <linux-mips@vger.kernel.org>; Fri, 02 Feb 2024 14:05:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1706911555; x=1707516355; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=88hcq8XgkrpsBeyZheiHmTOtZGbbdlYCkf6URsqgIp4=;
-        b=HqcJnJXtG2m2Ius+OiWv5UL5wvnQRKc2wKtyGBscvipEv/S1GPAYMoOC3zzcwu7suq
-         49eHVzS+58Y5d5OteUJ811C9buJqT+Je7tO0b1HNGzKubnu2S2XWem7rMXXSdTvA2hy/
-         sRkoP33pMGZqoQ09wJRmMNX24D8SCzvuz87xzBbI5gOfJq2bd/FOBsnTTwJREEIP/xWn
-         xp/8YMamQpoWS39JAt8NSIxE83l0DkBX1l1GtDyA/vknMQ0i9JLzshGDBFhwNMYp9Jus
-         gm5hByu87TQpLjXs+HcjSVwYCAEN/+UT9VvJDX6cTd6QFrOSNokTp2QMMejoeWNYQ6zi
-         YQxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706911555; x=1707516355;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=88hcq8XgkrpsBeyZheiHmTOtZGbbdlYCkf6URsqgIp4=;
-        b=QMb/tPsr5fTsXHAIC1dmcZDjXWSvHsq0mZz55Xq41t/T9h8NAMGOe9zASCGgpt/wif
-         wYhsF6BpOdHu6KpJYryHz6AzXoncpZBa/LVlXBAt/qganGm8pAkhkqlBhgCgWvbsEpDR
-         YHOExC62oq/gj6adStIrKoZvpwChzMx9ezKSgFXd+Fhbe8mHcC3GeQKg0owpz595mhLe
-         IuUVwWq2+HvCuTlZf6Ikxit4g/SbvspiYw/ve4ZVRvasXXx9rhf3y3VuKhWpjdvewJvB
-         NeWDWfC2FUQgU6KS8MV2ckYJcG922i2jwxCGUA6HPNt1oabGKL4D+dm1wb7z+scvoxph
-         yZqA==
-X-Gm-Message-State: AOJu0YyxJYmEGD7Bk8duvQPoO8DHxPI3A7bEZO1U4FlnbWHhNT7GsQzG
-	gBe98Csv5/aTVkAJ5AKUUomXdilADTNCLuP0fPwh80gdZGcYA9/eJn73XJ8UDyd/T1B9oRLzwoc
-	q9HJ7qf0aRxl0FqR8BbJMX/VDGgRqxIcXszcIAQ==
-X-Google-Smtp-Source: AGHT+IEdra/txPxsHeiEZSIqeLcoax0q8b5/TdMlKdrQpsLC9Bhy0DO41JjMt0QszL6IyZw4hoGkwwrYDp1u0lZqAvA=
-X-Received: by 2002:a17:906:2455:b0:a2e:94a0:93b4 with SMTP id
- a21-20020a170906245500b00a2e94a093b4mr4841883ejb.61.1706911555736; Fri, 02
- Feb 2024 14:05:55 -0800 (PST)
+	s=arc-20240116; t=1706966212; c=relaxed/simple;
+	bh=4+zMKxvYaiaxOW0B3LJoq39gR4Zfnm5GTXLb8V0K1bQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r3utJP1OgfoUyK2PQugbahhQCMIe8Abw132pGldLqk/xhQEJAnTnJE0ct4BE2DN3cNTiIWON7oV/2YKBC9b5hkrArmX3CI1+77FWePEOqfJec/54FxvaLD5NSq9hjp4rbzNhCJZJUP4rY38neieqXinJ+vk1qts/kFlKEgXTrB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g9D1rO/x; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706966211; x=1738502211;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4+zMKxvYaiaxOW0B3LJoq39gR4Zfnm5GTXLb8V0K1bQ=;
+  b=g9D1rO/xS5dUssIG7E6/SnUQACvsY7zOhSOSO4R4VXeyN7qmsuQEJe6L
+   Qrungcp8Wf7n4TB4Kp8OrRVCpiH9OQiv47dnxxU0yZtaJPfPCMBfVtr2M
+   r3Sch70QD2uKgLSLHA+eD1FOBqSrEMAUFo9Q2TopF74tC6w4GjITyJlEI
+   DTniGrnt7KXK8dKvJFpOEI4aiZW0cwucNSjzehTcCJRKT0/oKtPTdLk9J
+   F7pzHhEUoWEWHvNXqy0t4fDWygrhfPsL+CywhRfn2yx+46KEyc4Xs0YH0
+   lM+cLz7waJafKtZhkFwD1b8dCD9A3rqKv9w1bPRH8nzh8Dcl1vw/qVkc3
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="17728810"
+X-IronPort-AV: E=Sophos;i="6.05,240,1701158400"; 
+   d="scan'208";a="17728810"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2024 05:16:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,240,1701158400"; 
+   d="scan'208";a="4932024"
+Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 03 Feb 2024 05:16:46 -0800
+Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rWFsx-00055a-0l;
+	Sat, 03 Feb 2024 13:16:43 +0000
+Date: Sat, 3 Feb 2024 21:15:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>, Oleg Nesterov <oleg@redhat.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ben Hutchings <bwh@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Xi Ruoyao <xry111@xry111.site>
+Subject: Re: [PATCH 3/3] mm/memory: Use exception ip to search exception
+ tables
+Message-ID: <202402032150.DmM8VjRz-lkp@intel.com>
+References: <20240201-exception_ip-v1-3-aa26ab3ee0b5@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240131155929.169961-1-alexghiti@rivosinc.com>
- <20240131155929.169961-5-alexghiti@rivosinc.com> <Zbuy1E7mz9Oui1Dl@andrea> <CAHVXubgw0PEZMhFmjA0cAFQ2+_JOYjVfk41qRC9TFdSJtej++w@mail.gmail.com>
-In-Reply-To: <CAHVXubgw0PEZMhFmjA0cAFQ2+_JOYjVfk41qRC9TFdSJtej++w@mail.gmail.com>
-From: Alexandre Ghiti <alexghiti@rivosinc.com>
-Date: Fri, 2 Feb 2024 23:05:44 +0100
-Message-ID: <CAHVXubjzpTru3Tn+nmv=GwG0YWxnkeYYT1KOJW5a27H2EDAZ0Q@mail.gmail.com>
-Subject: Re: [PATCH RFC/RFT v2 4/4] riscv: Stop emitting preventive sfence.vma
- for new userspace mappings with Svvptc
-To: Andrea Parri <parri.andrea@gmail.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Andrew Morton <akpm@linux-foundation.org>, 
-	Ved Shanbhogue <ved@rivosinc.com>, Matt Evans <mev@rivosinc.com>, Dylan Jhong <dylan@andestech.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240201-exception_ip-v1-3-aa26ab3ee0b5@flygoat.com>
 
-On Fri, Feb 2, 2024 at 4:42=E2=80=AFPM Alexandre Ghiti <alexghiti@rivosinc.=
-com> wrote:
->
-> Hi Andrea,
->
-> On Thu, Feb 1, 2024 at 4:03=E2=80=AFPM Andrea Parri <parri.andrea@gmail.c=
-om> wrote:
-> >
-> > On Wed, Jan 31, 2024 at 04:59:29PM +0100, Alexandre Ghiti wrote:
-> > > The preventive sfence.vma were emitted because new mappings must be m=
-ade
-> > > visible to the page table walker but Svvptc guarantees that xRET act =
-as
-> > > a fence, so no need to sfence.vma for the uarchs that implement this
-> > > extension.
-> >
-> > AFAIU, your first submission shows that you don't need that xRET proper=
-ty.
-> > Similarly for other archs.  What was rationale behind this Svvptc chang=
-e?
->
-> Actually, the ARC has just changed its mind and removed this new
+Hi Jiaxun,
 
-The wording was incorrect here, the ARC did not state anything, the
-author of Svvptc proposed an amended version of the spec that removes
-this behaviour and that's under discussion.
+kernel test robot noticed the following build errors:
 
-> behaviour from the Svvptc extension, so we will take some gratuitous
-> page faults (but that should be outliners), which makes riscv similar
-> to x86 and arm64.
->
-> >
-> >
-> > > This allows to drastically reduce the number of sfence.vma emitted:
-> > >
-> > > * Ubuntu boot to login:
-> > > Before: ~630k sfence.vma
-> > > After:  ~200k sfence.vma
-> > >
-> > > * ltp - mmapstress01
-> > > Before: ~45k
-> > > After:  ~6.3k
-> > >
-> > > * lmbench - lat_pagefault
-> > > Before: ~665k
-> > > After:   832 (!)
-> > >
-> > > * lmbench - lat_mmap
-> > > Before: ~546k
-> > > After:   718 (!)
-> >
-> > This Svvptc seems to move/add the "burden" of the synchronization to xR=
-ET:
-> > Perhaps integrate the above counts w/ the perf gains in the cover lette=
-r?
->
-> Yes, I'll copy that to the cover letter.
->
-> Thanks for your interest!
->
-> Alex
->
-> >
-> >   Andrea
+[auto build test ERROR on 06f658aadff0e483ee4f807b0b46c9e5cba62bfa]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiaxun-Yang/ptrace-Introduce-exception_ip-arch-hook/20240201-234906
+base:   06f658aadff0e483ee4f807b0b46c9e5cba62bfa
+patch link:    https://lore.kernel.org/r/20240201-exception_ip-v1-3-aa26ab3ee0b5%40flygoat.com
+patch subject: [PATCH 3/3] mm/memory: Use exception ip to search exception tables
+config: i386-buildonly-randconfig-002-20240203 (https://download.01.org/0day-ci/archive/20240203/202402032150.DmM8VjRz-lkp@intel.com/config)
+compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240203/202402032150.DmM8VjRz-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402032150.DmM8VjRz-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   mm/memory.c: In function 'get_mmap_lock_carefully':
+>> mm/memory.c:5484:22: error: implicit declaration of function 'exception_ip' [-Werror=implicit-function-declaration]
+      unsigned long ip = exception_ip(regs);
+                         ^~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/exception_ip +5484 mm/memory.c
+
+  5477	
+  5478	static inline bool get_mmap_lock_carefully(struct mm_struct *mm, struct pt_regs *regs)
+  5479	{
+  5480		if (likely(mmap_read_trylock(mm)))
+  5481			return true;
+  5482	
+  5483		if (regs && !user_mode(regs)) {
+> 5484			unsigned long ip = exception_ip(regs);
+  5485			if (!search_exception_tables(ip))
+  5486				return false;
+  5487		}
+  5488	
+  5489		return !mmap_read_lock_killable(mm);
+  5490	}
+  5491	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
