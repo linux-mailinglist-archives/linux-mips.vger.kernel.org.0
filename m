@@ -1,163 +1,264 @@
-Return-Path: <linux-mips+bounces-1302-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1303-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4F97849D69
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Feb 2024 15:53:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0472849E62
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Feb 2024 16:35:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FFEC288967
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Feb 2024 14:53:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 494521F2217E
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Feb 2024 15:35:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 510E72C1B4;
-	Mon,  5 Feb 2024 14:53:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F45D2D052;
+	Mon,  5 Feb 2024 15:35:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a9M/b/YL"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="D84BQlaZ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4BF2C1A7;
-	Mon,  5 Feb 2024 14:53:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE5D2E641;
+	Mon,  5 Feb 2024 15:35:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707144789; cv=none; b=piGaQUWa7DbhG1W1cP0rNKutNbU9GZimpwDsdKsILawOR75glrnM8Uybb+6EoxZPi3CbPpTfM9tIfCNZ9iG9E0LLWPyej0YR4fTXxS3aP3fdZjUIGgDY7K9uyOwWwerQKy5x1QS/h69mZ9cM35MGwEHXhIcKf2PAr5v92Btd9mQ=
+	t=1707147312; cv=none; b=KhaJ+SDCcrnaf9Ddxeoy6YULZHllWvGUAgImVekCccb97s7Keublln8z0O81ZvmY3kIwMC8dVpFlAmFKyRKqbCRi2rM7Zvluvy6MZ7IWLaRbzixlys8AxOARmVgA15HMs0teBJeNp87JguluoG7tr7Ro44SiDxSOz3fXCFDqBWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707144789; c=relaxed/simple;
-	bh=B32fFpSglPmh6EsegcSjTE9A2vs7Th/PastyE8w3mTc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZrOzo5aeZa+KVSJdVsScn0L6y7t627LKuWhlkFHzNwm6q0DFVk03C+0Flc+JRqw1rTxLa1+IFMTw1ZRB4+OAPIHbY7kv+eHG8EfobPp2TYXWRgjrmxAwEdRz5Ztd3KLFDBc+VZa2Zat6QqgsEMVDDXgNfnPquwFVBPzC68pwmYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a9M/b/YL; arc=none smtp.client-ip=209.85.160.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-2191dc7079aso1636462fac.0;
-        Mon, 05 Feb 2024 06:53:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707144787; x=1707749587; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qLHPk+aymp1ecm0O7KZKJBd8OHOUWRsl0TLFYxwyOGQ=;
-        b=a9M/b/YLL0syzhXyP7cN36F7bxaZZhtYOZZx+lB7fEzMhD0OUUlO3T7uR/lJaU5aWM
-         eFNVbwTqlNRIAr/shtjCLGVD4Tpp6unijlLRJrpWhduDqV38HhDjBKWJ+2nvCq1jorRC
-         XfSIJDE80Mahj8HTZU7mDqRg4PMHCfXSvUMTFIoTF9i7J0ulExiWamdjnsKfssemhHfk
-         6cObD6pTWZvdricJGWBOEoT0rOoLyTHEDYXuaGiJiBMX3+e2AUijcSQEs73TWnuVajn0
-         VjAi2vUMm8s1qAaHIqV7h+cpD9a3ktUWUiwe/voW75Z1lftBJYU48Xbi/ydTxFf91SsA
-         c4ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707144787; x=1707749587;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qLHPk+aymp1ecm0O7KZKJBd8OHOUWRsl0TLFYxwyOGQ=;
-        b=LuEtqXQQ1klASyJeNGlh087JMnpZgBx+RqLJhWPg5rq0ykNJrigPzA1y7kdxjY2aEs
-         NCMifbd2FPDjMjrbdPcvVOcJXS7cGpbXvWIDrUn06ii9qM1G2CIOslkSoV+2C/TvpP05
-         8+PwmRO9rmaz/18no0MSOMfz8fnBAWwXCtJ9jIHE0uxNfIku1KD2+DAooW2aYi9UPqvU
-         8FgYMOWs4pfh2kutUWyWNq20vvsKYPBQyzXn9w5n8y/mt2D+kHuINxZgi9SMn54PT7wF
-         GT3ZmSoDWiKsY53+KZJePCAVgOJzHFCeimdZiYoSDEUhp0zllhwt3wUIe7Om36KmDm2F
-         cy0g==
-X-Gm-Message-State: AOJu0Yw2+WVA70UBej0++ueuxI+4VKLTAeAlcqwmwYSfw/i+QHMso4Cv
-	4gCjiTYWQNFJ54O24eCOU1uo2fFDT+u/m5Mkk66IKtxnWCmvK4B2kkQ21tk16A2ZRa72OOIFZkW
-	rvQFY76i2jj0qJXRe+lCR/b6xA40=
-X-Google-Smtp-Source: AGHT+IFwuMmjulFcBFt/EQ5igsfyYhU2jRYXgkdSsjAuGeGkusyGrlUrW1JsuUSmLN+2s4EbaOWjBZ7aP9bKqbiME1Y=
-X-Received: by 2002:a05:6870:1cd:b0:219:97e7:a99a with SMTP id
- n13-20020a05687001cd00b0021997e7a99amr1501792oad.12.1707144786728; Mon, 05
- Feb 2024 06:53:06 -0800 (PST)
+	s=arc-20240116; t=1707147312; c=relaxed/simple;
+	bh=dd9mDqYdVYkNoCFCeBGsNVSw5yG/dGVzdboxQqAfnxk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jzBdTTH8kAzHEsleEdDxOvC98v//DAwfTIWDwj9rmxGGadbV7EDseqLvLnH4HvMQdUqnJi6YhLgD9i1goSkT3XwoHZouPuAISSlVmWmg/JE0PMEy0wqsA8QPyyPUhaxyzpcAZkgnwqI9OlGMBzEZLPqrOMoaWXUm4Rk0ILvMLu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=D84BQlaZ; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 52CFC1C0003;
+	Mon,  5 Feb 2024 15:35:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1707147307;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=E8uq9xiakI8r5DSAEMiVTdHGIi8/1Hol1k4YnCkMi94=;
+	b=D84BQlaZEYkXSv6GhU2OenFN1VHvJx7vtW5hQCPdi34qF1yMwqziEiI6MxctKukcukhS51
+	rnbZHwk315agNhRBwz52z+nCXnMN3C8X2JCwmku/qMH0nq58xwtHGu7RFVFIyCN6cvKoSe
+	SkkWQYVBEmODvykAbFZutpVzLT4BNSDvKJ6nNpY/92I4bXzKe5WkLuzdM22NFANDOlwUHx
+	75w0CcmVeujGxSohP7DYr5oJGuOHGkXdiHdnJ1bMHDqYukdT2pllVO1qoeZxgWOZUSzr1z
+	s1uksY/5YcJqGGZAZS7poydmCafl9pezTU1KGcS0AHN1uj6Z5/Rvva14UVwNbA==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Paul Burton <paulburton@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Vladimir  Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	=?UTF-8?q?Th=C3=A9o=20Lebrun?= <theo.lebrun@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>
+Subject: [PATCH v7 00/14] Add support for the Mobileye EyeQ5 SoC
+Date: Mon,  5 Feb 2024 16:34:46 +0100
+Message-ID: <20240205153503.574468-1-gregory.clement@bootlin.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240205133450.5222-1-ilpo.jarvinen@linux.intel.com> <20240205133450.5222-4-ilpo.jarvinen@linux.intel.com>
-In-Reply-To: <20240205133450.5222-4-ilpo.jarvinen@linux.intel.com>
-From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date: Mon, 5 Feb 2024 15:52:55 +0100
-Message-ID: <CAMhs-H9QaQCz70dmBfMWJ4xoSagrYCJLqejA72fqb50uDwZY9A@mail.gmail.com>
-Subject: Re: [PATCH 3/4] MIPS: PCI: Return PCIBIOS_* from tx4927_pci_config_read/write()
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: gregory.clement@bootlin.com
 
-Hi,
+Hello,
 
-On Mon, Feb 5, 2024 at 3:35=E2=80=AFPM Ilpo J=C3=A4rvinen
-<ilpo.jarvinen@linux.intel.com> wrote:
->
-> pci_ops .read/.write must return PCIBIOS_* codes but
-> tx4927_pci_config_read/write() return -1 when mkaddr() cannot find
-> devfn from the root bus. Return PCIBIOS_DEVICE_NOT_FOUND instead and
-> pass that onward in the call chain instead of overwriting the return
-> value.
->
-> Signed-off-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
-> ---
->  arch/mips/pci/ops-tx4927.c | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/mips/pci/ops-tx4927.c b/arch/mips/pci/ops-tx4927.c
-> index f7802f100401..4dd8b93985fb 100644
-> --- a/arch/mips/pci/ops-tx4927.c
-> +++ b/arch/mips/pci/ops-tx4927.c
-> @@ -60,7 +60,7 @@ static int mkaddr(struct pci_bus *bus, unsigned int dev=
-fn, int where,
->  {
->         if (bus->parent =3D=3D NULL &&
->             devfn >=3D PCI_DEVFN(TX4927_PCIC_MAX_DEVNU, 0))
-> -               return -1;
-> +               return PCIBIOS_DEVICE_NOT_FOUND;
->         __raw_writel(((bus->number & 0xff) << 0x10)
->                      | ((devfn & 0xff) << 0x08) | (where & 0xfc)
->                      | (bus->parent ? 1 : 0),
+The EyeQ5 SoC from Mobileye is based on the MIPS I6500 architecture
+and features multiple controllers such as the classic UART, I2C, SPI,
+as well as CAN-FD, PCIe, Octal/Quad SPI Flash interface, Gigabit
+Ethernet, MIPI CSI-2, and eMMC 5.1. It also includes a Hardware
+Security Module, Functional Safety Hardware, and MJPEG encoder.
 
-Should we also return PCIBIOS_SUCCESSFUL instead of 'return 0' in
-'mkaddr' for coherency?
+One peculiarity of this SoC is that the physical address of the DDDR
+exceeds 32 bits. Given that the architecture is 64 bits, this is not
+an issue, but it requires some changes in how the mips64 is currently
+managed during boot.
 
-Other than that, changes look good to me.
+In this seventh version, I removed the OLB related part as it is not
+used yet. I have left it to Théo to handle in his series. Another
+notable change is the Kconfig modification to remove the selection of
+unused configurations.
 
-Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To build and test the kernel, we need to run the following commands:
 
-Thanks,
-    Sergio Paracuellos
+make eyeq5_defconfig
+make vmlinuz.itb
 
-> @@ -140,10 +140,12 @@ static int tx4927_pci_config_read(struct pci_bus *b=
-us, unsigned int devfn,
->                                   int where, int size, u32 *val)
->  {
->         struct tx4927_pcic_reg __iomem *pcicptr =3D pci_bus_to_pcicptr(bu=
-s);
-> +       int ret;
->
-> -       if (mkaddr(bus, devfn, where, pcicptr)) {
-> +       ret =3D mkaddr(bus, devfn, where, pcicptr);
-> +       if (ret !=3D PCIBIOS_SUCCESSFUL) {
->                 *val =3D 0xffffffff;
-> -               return -1;
-> +               return ret;
->         }
->         switch (size) {
->         case 1:
-> @@ -162,9 +164,11 @@ static int tx4927_pci_config_write(struct pci_bus *b=
-us, unsigned int devfn,
->                                    int where, int size, u32 val)
->  {
->         struct tx4927_pcic_reg __iomem *pcicptr =3D pci_bus_to_pcicptr(bu=
-s);
-> +       int ret;
->
-> -       if (mkaddr(bus, devfn, where, pcicptr))
-> -               return -1;
-> +       ret =3D mkaddr(bus, devfn, where, pcicptr);
-> +       if (ret !=3D PCIBIOS_SUCCESSFUL)
-> +               return ret;
->         switch (size) {
->         case 1:
->                 icd_writeb(val, where & 3, pcicptr);
-> --
-> 2.39.2
->
->
+Changelog:
+
+ v6 -> v7
+
+    - Added reviewed tags from Jiaxun Yang on patches 4 and 11.
+
+    - Removed patch "dt-bindings: mfd: syscon: Document EyeQ5 OLB" as
+      it is not used in this series.
+
+    - Removed OLB node as it was not needed yet.
+
+    - Fixed memory node and removed bootargs in dts on patch 11.
+
+    - Modified the configuration selection as suggested by Jiaxun in
+      patch 13.
+
+ v5 -> v6:
+
+    - From series v5, patches 1 ("MIPS: Export higher/highest
+    relocation functions in uasm") and 3 ("MIPS: genex: Fix
+    except_vec_vi for kernel in XKPHYS)" have been removed as "MIPS:
+    Allow vectored interrupt handler to reside everywhere for 64bit"
+    and "MIPS: Remove unused shadow GPR support from vector irq setup"
+    address the same requirement.
+
+    - From series v5, patches 8 to 12 have been removed as they are
+    not mandatory to support EyeQ5 SoCs.
+
+    - The 1st patch of series v6 ("MIPS: spaces: Define a couple of
+    handy macros") has been modified to add the extra macros
+    CKSEG[01]ADDR_OR_64BIT.
+
+    - Patch 3 ("MIPS: Allows relocation exception vectors everywhere")
+    is a merge of patches 6 ("MIPS: Refactor mips_cps_core_entry
+    implementation) and 7 ("MIPS: Fix cache issue with
+    mips_cps_core_entry") from series v5. It has been rewritten to
+    reduce the diff stat; the 64-bit fixes have been moved to patch 5
+    ("MIPS: cps-vec: Use macros for 64-bit access").
+
+    - Patch 13 ("MIPS: Share generic kernel code with other
+    architecture)" is a new one allowing separate platform support in
+    the patch ("MIPS: Add support for Mobileye EyeQ5").
+
+ v4 -> v5:
+
+   - Improve commit messages for patch 3, 5, 12 and 13.
+
+   - Fix style in patch 9
+
+   - Really enable SPARSMEM and use correct address in
+     board-eyeq5.config in patch 21
+
+ v3 -> v4:
+
+ - Fix build warning in "MIPS: Get rid of CONFIG_NO_EXCEPT_FILL":
+   check that we are in 64bit mode before using KSEG0 that exist only
+   in this mode.
+
+ - Modify "MIPS: spaces: Define a couple of handy macros" to be
+   buildable in 32bit mode.
+
+ - Use correct format specifier to print address in "MIPS: traps: Give
+   more explanations if ebase doesn't belong to KSEG0"
+
+ - In "MIPS: generic: Add support for Mobileye EyeQ5",remove
+   CONFIG_ZBOOT_LOAD_ADDRESS from board-eyeq5.config, (as well as
+   CONFIG_USE_XKPHYS that does not exist anymore) and add
+   CONFIG_SPARSEMEM_MANUAL to enable SPARSMEM.
+
+v2 -> v3
+
+ - Added more reviewed-by and acked-by tags
+
+ - Fix sorting for cpus entries in
+
+ - Fix indentation issue in Documentation/devicetree/bindings/mips/mobileye.yaml
+
+ v1 -> v2
+
+ - Added reviewed-by and acked-by tags
+
+ - Fix typos reported
+
+ - In patch 15 use 'img' vendor string instead of mti
+
+ - In patch 16 modify licence
+
+ - In patch 17 give more explanations about the block usage.
+
+ - In patch 18, remove _ in node names, don't use anymore
+   CONFIG_BUILTIN_DTB in Makefile, remove macro, modify licence.
+
+ - In patch 19 remove most of the bootargs and only keeps earlycon. I
+   also split the memory in 2 part in the device tree.
+
+ - Integrate the series from Jiaxun Yang
+   https://lore.kernel.org/linux-mips/20231027221106.405666-1-jiaxun.yang@flygoat.com/
+
+  They are patches 2 to 6 and 8 to 12
+
+  Then I added patch 7 to fix the cache issue visible on the Mobileye
+  platform, I also add patch 13 to improve warning message when ebase
+  doesn't belong to KSEG0
+
+Regards,
+
+Gregory
+
+Gregory CLEMENT (12):
+  MIPS: spaces: Define a couple of handy macros
+  MIPS: traps: Give more explanations if ebase doesn't belong to KSEG0
+  MIPS: cps-vec: Use macros for 64bits access
+  dt-bindings: Add vendor prefix for Mobileye Vision Technologies Ltd.
+  dt-bindings: mips: cpus: Sort the entries
+  dt-bindings: mips: cpu: Add I-Class I6500 Multiprocessor Core
+  dt-bindings: mips: Add bindings for Mobileye SoCs
+  MIPS: mobileye: Add EyeQ5 dtsi
+  MIPS: mobileye: Add EPM5 device tree
+  MIPS: Share generic kernel code with other architecture
+  MIPS: Add support for Mobileye EyeQ5
+  MAINTAINERS: Add entry for Mobileye MIPS SoCs
+
+Jiaxun Yang (2):
+  MIPS: Fix set_uncached_handler for ebase in XKPHYS
+  MIPS: Allows relocation exception vectors everywhere
+
+ .../devicetree/bindings/mips/cpus.yaml        |  13 +-
+ .../devicetree/bindings/mips/mobileye.yaml    |  32 ++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |  12 +
+ arch/mips/Kbuild                              |   1 +
+ arch/mips/Kbuild.platforms                    |   1 +
+ arch/mips/Kconfig                             |  57 ++++
+ arch/mips/boot/dts/Makefile                   |   1 +
+ arch/mips/boot/dts/mobileye/Makefile          |   4 +
+ arch/mips/boot/dts/mobileye/eyeq5-epm5.dts    |  23 ++
+ .../boot/dts/mobileye/eyeq5-fixed-clocks.dtsi | 292 ++++++++++++++++++
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi        | 124 ++++++++
+ arch/mips/configs/eyeq5_defconfig             | 108 +++++++
+ arch/mips/generic/Makefile                    |   6 +-
+ arch/mips/include/asm/addrspace.h             |   5 +
+ arch/mips/include/asm/mach-generic/spaces.h   |   4 +
+ arch/mips/include/asm/mips-cm.h               |   1 +
+ arch/mips/include/asm/smp-cps.h               |   4 +-
+ arch/mips/kernel/cps-vec.S                    |  54 +---
+ arch/mips/kernel/smp-cps.c                    | 171 ++++++++--
+ arch/mips/kernel/traps.c                      |   7 +-
+ arch/mips/mobileye/Makefile                   |   1 +
+ arch/mips/mobileye/Platform                   |  16 +
+ arch/mips/mobileye/board-epm5.its.S           |  24 ++
+ arch/mips/mobileye/vmlinux.its.S              |  32 ++
+ 25 files changed, 914 insertions(+), 81 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mips/mobileye.yaml
+ create mode 100644 arch/mips/boot/dts/mobileye/Makefile
+ create mode 100644 arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
+ create mode 100644 arch/mips/boot/dts/mobileye/eyeq5-fixed-clocks.dtsi
+ create mode 100644 arch/mips/boot/dts/mobileye/eyeq5.dtsi
+ create mode 100644 arch/mips/configs/eyeq5_defconfig
+ create mode 100644 arch/mips/mobileye/Makefile
+ create mode 100644 arch/mips/mobileye/Platform
+ create mode 100644 arch/mips/mobileye/board-epm5.its.S
+ create mode 100644 arch/mips/mobileye/vmlinux.its.S
+
+-- 
+2.43.0
+
 
