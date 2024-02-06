@@ -1,78 +1,134 @@
-Return-Path: <linux-mips+bounces-1320-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1344-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FE3784A59D
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Feb 2024 21:21:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 023C284B232
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Feb 2024 11:13:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB0D22890FC
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Feb 2024 20:21:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89D33B235F3
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Feb 2024 10:13:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCD5517CE9D;
-	Mon,  5 Feb 2024 19:04:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05F4A12E1C5;
+	Tue,  6 Feb 2024 10:13:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ro2jZQjI"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BI/CKhos"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CC7217CE83;
-	Mon,  5 Feb 2024 19:04:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCBE012EBF3;
+	Tue,  6 Feb 2024 10:13:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707159857; cv=none; b=caA3ALboc7/p4PpztJhjR/xfxapyJtSAEZqcRL/Fq3NvfrsQAWKSPbM7pho9EkQVIwSgL1uBcEDK8PMTBXah+KsCSv+xon5DnbNHQJmOFfQ9It9MYVX5hX54ZacwZAi24GcNroMEwp7+VTLbUrITwVB+mxWC7/USKsvfEDudObE=
+	t=1707214389; cv=none; b=Al/mBOcCrFtcRO2Yn7ankCcVyKa2M2cnA3TFRcTxgRn462QAJLEFKEefUylzoPopF85WLe59wpo3MQRYSer72UIMvh8amDZ89dq3cJ7ksVPqHnF4QRz1Ao3YJOoKonRHWsrhsIeU4yZtKCUiGBQGJ2H+j8/SR3EYYaBOQEdjFNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707159857; c=relaxed/simple;
-	bh=GWC/R9KnvqMqsuGJbyvLUE5rq9tD0443OWb0hB5RjH0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AHN8F1Pk+VgjvIdk66g4C0e3D1vpx2V3RlswhZGeBs4DBsfNZutu0pSafLMfdEXh3yiD4cPnLi1RuYWRMfuzvRiBGb+wyvGcQIyuTszpAj2ZVN/k+1u67wNufbnmAs4V9zaV8v4mXA4farq5zjnjBZrI9jEOQsPLe9/v9kj56KI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ro2jZQjI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31241C43143;
-	Mon,  5 Feb 2024 19:04:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1707159857;
-	bh=GWC/R9KnvqMqsuGJbyvLUE5rq9tD0443OWb0hB5RjH0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ro2jZQjI3U/cwZ2pnMgqNNoA00k5AzWG69901vgqg3IW7qeKeGC447ywZXjKFc/nJ
-	 g7d1pz5SVg1CIdEnt7uJ16Y+tQAuPKS/LAtxz39RW8FTq4p2TS5HnVurx5g608cYwC
-	 UXCw41oKsf4+2bxFcK8kxUWHX5/ygEhmvxci5gck=
-Date: Mon, 5 Feb 2024 04:51:56 -0800
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: "Ricardo B. Marliere" <ricardo@marliere.net>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] mips: struct bus_type cleanup
-Message-ID: <2024020550-mountable-grandkid-a4a9@gregkh>
-References: <20240204-bus_cleanup-mips-v1-0-05af5e9a7ead@marliere.net>
+	s=arc-20240116; t=1707214389; c=relaxed/simple;
+	bh=kqMo2mkEaV1uSbwgI1g5KgAxopmIWmq8uQN0eHbaI8w=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
+	 References:In-Reply-To; b=omxOCiFTQqLL+VCokffkhp7Bpjt4JK15xVtflO4y2NOh27xOMYWYAyIkV0gHX1OHexoP3B2UofriRAWVvFwxF0MtBbcAzPW7o8efE0fnHinEsH9T1+4rscg92C4Gob2+HstwALKZ9lHXkIbwFV06nQcVtXQ/u6B3x9y0aRAWGWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BI/CKhos; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A5B5D40013;
+	Tue,  6 Feb 2024 10:13:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1707214384;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wYHYy9wM/XJWCBvUKP+eSh79QSZHlIijB5K8Zu/UezQ=;
+	b=BI/CKhosTgEXVhWpl9iV4qjDtB08F2u86pXekaGVKk/DX5TY/qjmViVpsZYKTnUacdHRFs
+	V0b227hFwI1b/xXybq7zJnTda5BsN83Rg6VZHfj8VyQn4rNaxTsih/FclM6YwQlSjQsXuJ
+	3Jcwn8nQiqonmxlq3sDevEAxVf9g9Zh32F0DK4XSB13EyXJWLL0KmC+/G4LoQswtO6DWeS
+	PReLv+IivCNS0ImjtBh2p0rK6N1p4ifPfpNLmFuTIMaT/T+JzACQa03UrMcp+R271jlBc5
+	wSXx2Vt+8kDG2YeULq2yKE6jO+pMeRPIBUfBOefZWFYTbOEvJIHBESvKeREZ4g==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240204-bus_cleanup-mips-v1-0-05af5e9a7ead@marliere.net>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 06 Feb 2024 11:13:03 +0100
+Message-Id: <CYXWZOJ7KLIC.27XVZMBQASH9O@bootlin.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v4 04/18] dt-bindings: clock: mobileye,eyeq5-clk: add
+ bindings
+Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
+ <linux-mips@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Thomas
+ Petazzoni" <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>, <linux-gpio@vger.kernel.org>
+To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Gregory
+ CLEMENT" <gregory.clement@bootlin.com>, "Michael Turquette"
+ <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Rob Herring"
+ <robh+dt@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>, "Linus Walleij"
+ <linus.walleij@linaro.org>, =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?=
+ <rafal@milecki.pl>, "Philipp Zabel" <p.zabel@pengutronix.de>
+X-Mailer: aerc 0.15.2
+References: <20240131-mbly-clk-v4-0-bcd00510d6a0@bootlin.com>
+ <20240131-mbly-clk-v4-4-bcd00510d6a0@bootlin.com>
+ <f6e5b748-17c4-4de1-be42-f79155be21cb@linaro.org>
+ <CYTOEGEI34JQ.36CF09LNJFQHS@bootlin.com>
+ <4e9ce766-602f-4b75-8c25-48da4d22051e@linaro.org>
+In-Reply-To: <4e9ce766-602f-4b75-8c25-48da4d22051e@linaro.org>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Sun, Feb 04, 2024 at 12:06:56PM -0300, Ricardo B. Marliere wrote:
-> This series is part of an effort to cleanup the users of the driver
-> core, as can be seen in many recent patches authored by Greg across the
-> tree (e.g. [1]). Specifically, this series is part of the task of
-> splitting one of his TODOs [2].
-> 
-> ---
-> [1]: https://lore.kernel.org/lkml/?q=f%3Agregkh%40linuxfoundation.org+s%3A%22make%22+and+s%3A%22const%22
-> [2]: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/commit/?h=bus_cleanup&id=26105f537f0c60eacfeb430abd2e05d7ddcdd8aa
-> 
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
-> 
-> ---
-> Ricardo B. Marliere (2):
->       mips: sgi-ip22: make gio_bus_type const
->       mips: txx9: make txx9_sramc_subsys const
+Hello,
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Thu Feb 1, 2024 at 12:00 PM CET, Krzysztof Kozlowski wrote:
+> On 01/02/2024 11:38, Th=C3=A9o Lebrun wrote:
+> > Hello,
+> >=20
+> > On Thu Feb 1, 2024 at 9:58 AM CET, Krzysztof Kozlowski wrote:
+> >> On 31/01/2024 17:26, Th=C3=A9o Lebrun wrote:
+> >>> Add DT schema bindings for the EyeQ5 clock controller driver.
+> >>>
+> >>> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> >>> ---
+> >>
+> >> No changelog, tags ignored, I scrolled through first two pages of cove=
+r
+> >> letter and also no changelog.
+> >=20
+> > In this case we fit into the "If a tag was not added on purpose". Sorry
+> > the changelog was not explicit enough. In my mind it fits into the
+> > first bullet point of the cover letter changelog:
+> >=20
+> >> - Have the three drivers access MMIO directly rather than through the
+> >>   syscon & regmap.
+>
+> ... which I might not even connect to binding patches. I see only one
+> entry regarding bindings in your changelog, so I find it not much
+> informative.
+>
+> For the future, please state that you ignore tags for given reason.
+>
+> >=20
+> > That change means important changes to the dt-bindings to adapt to this
+> > new behavior. In particular we now have reg and reg-names properties
+> > that got added and made required.
+> >=20
+> > I wanted to have your review on that and did not want to tag the patch
+> > as already reviewed.
+>
+> Makes sense, but how can I know it? Other people often ignore the tags,
+> so safe assumption is that it happened here as well.
+
+I'm prepping a new revision. Should I be taking your previous
+Reviewed-By tags in? You sent them for the previous revision, do the
+changes in this V4 look good to you?
+
+Thanks Krzysztof,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
