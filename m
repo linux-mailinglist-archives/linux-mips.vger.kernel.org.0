@@ -1,143 +1,209 @@
-Return-Path: <linux-mips+bounces-1345-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1346-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D045484B7CD
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Feb 2024 15:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3898984DCAB
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Feb 2024 10:21:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 84CD61F2739B
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Feb 2024 14:25:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCC7B1F25E47
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Feb 2024 09:21:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD595132C37;
-	Tue,  6 Feb 2024 14:25:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FDAB6BFBF;
+	Thu,  8 Feb 2024 09:20:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UkdI95DM"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="BIq10Xut";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kkVFonMY"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from fhigh1-smtp.messagingengine.com (fhigh1-smtp.messagingengine.com [103.168.172.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0992132464;
-	Tue,  6 Feb 2024 14:25:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 688246BB55;
+	Thu,  8 Feb 2024 09:20:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707229515; cv=none; b=l4BMkL25NAw7zz7+IY1SLqEjgsDh/rLn+HvbLjI4ySyh0b7YPE1N10hg0uB7nFFAfo7keK/jd6rJ4qBbGhGUb6HzF0SlowG6qMaN0xVGsWcZNVhaYxE/45QsWFNxCrs6HmfPTzPVsExzizs8OCyVWGMjDrzrAXyO2B39Al1Ft5k=
+	t=1707384054; cv=none; b=aCt/SftxJVUqiEuD3QpNVBa0oEh83mrMlWcUbdey9jQxv/k6k+z6HsczGbKWH0dXMG5w8hzrQvE1rMNIzJJQGskSaNDA6Kea2O/PBQKGjVBJf7oK8hJyt2TGAd2yJtHShuN5YHWu2xjMvWSUCtvi3dRR65D4F3EGodoM/RCKHRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707229515; c=relaxed/simple;
-	bh=0VGhK+HezmmVvyHrl6zdHaTbhG2VV9gWiHy3q9uuyQc=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=bpykOKiO16Qh4h7UygeN0XO/zoisPZ7vyWQrgxzX6HPjOjS0gh2vgS3jj/3NvC84NsgidFifeciiUNZie6sQIVhZhdCSqqGEsCpwUCwflRz/Zi0GmiZZ8NJNYBd/eTwJowLnXa+IHZ7lBCJYOY4TanTIkOkqfQAMVp0zA2Aq7fY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UkdI95DM; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707229514; x=1738765514;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=0VGhK+HezmmVvyHrl6zdHaTbhG2VV9gWiHy3q9uuyQc=;
-  b=UkdI95DMz3HRFW5974FB1wglCW30dtjh8odgQCHdpwAsyZ2St6kDdW+T
-   MB5E7TCB2t9H66Lo5jVvUeN7KOXy15X4rRuRAGREEM9+Oemo6uCTiezCe
-   lvc9AW1Xal9mj5M4pS4Gtgprh+SCWBJyJ9ja71fyKq3F5RBCRf8c5Lycf
-   Hnd1F6aaygbjPGrQEhU+bcH8yWMlDHRAAq6tyW0bLKgsUpIf6knGkQD5V
-   W8UZdbgnQ/1AQAB1o9DzsWq7IctBWQil0OcTeA+uxu57fJPGbQLcuQSeq
-   U5S3/KqeuVP5jdbrYG6AVT/2c4VRvvJzZDGa91+Ey41ep2UwmYOL4pVjF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="918545"
-X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="918545"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 06:25:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="933474688"
-X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="933474688"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.246.36.139])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 06:25:11 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Tue, 6 Feb 2024 16:25:06 +0200 (EET)
-To: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    linux-mips@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/4] MIPS: PCI: Return PCIBIOS_* from
- tx4927_pci_config_read/write()
-In-Reply-To: <CAMhs-H9QaQCz70dmBfMWJ4xoSagrYCJLqejA72fqb50uDwZY9A@mail.gmail.com>
-Message-ID: <a0db7b09-75e0-2e31-5287-60f6be180d60@linux.intel.com>
-References: <20240205133450.5222-1-ilpo.jarvinen@linux.intel.com> <20240205133450.5222-4-ilpo.jarvinen@linux.intel.com> <CAMhs-H9QaQCz70dmBfMWJ4xoSagrYCJLqejA72fqb50uDwZY9A@mail.gmail.com>
+	s=arc-20240116; t=1707384054; c=relaxed/simple;
+	bh=UmsQQy0GxSUlPjTMxhqBJwATE/FEB2iKU59BoDw0V7c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=utiH12Ff/7BQcD2ds06mdsZbvWBC1kU5S7kvugKjYSGmpyFUUGWx+5Ph6hcGykk998vC9DUwYONMqWgstSD43LienNfymqQAeO8i8xO3tHPAUP9lVFRG1OblD40Rj4BaMCq0IGdeNLOrjuqB4541HEYOPUpN35b3B9o/fzr+jL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=BIq10Xut; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kkVFonMY; arc=none smtp.client-ip=103.168.172.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id 2FAD911400B0;
+	Thu,  8 Feb 2024 04:20:51 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 08 Feb 2024 04:20:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1707384051;
+	 x=1707470451; bh=uj690mHzuaDMd47zJhc5iPw+H6HEefWEcHIBsad9VjU=; b=
+	BIq10Xut73VD6H6regi/+2wPfSkPy33QTMhOMs081bX2aSkLfge28ftOpCpNcVI2
+	ioH86AUrNsJ9REbkbiCoc49gWt7zOLHld7xp3GGPe6TaKoclkdVOZU4zPn94coOt
+	JO/wH6Hg06UYXeo9YGe5AiKAPZnx3XKi5wUILe5l9JImxi7Z1Yeiabg4e47ox3Jj
+	71mxi3a2GEm1GeJZSj512dHK+E7cAjBrr4nZBNk06RMF9hVaZy6VgnXd2NFoUG3Q
+	FiH8zTKOkMVDgZk1RFLDYPoJU1GrafCi8pCYo+ly/AlZgctW3kDslPWRCiuhjqX2
+	rsqiLxPxpBLwRQ7h+VJ7GQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1707384051; x=
+	1707470451; bh=uj690mHzuaDMd47zJhc5iPw+H6HEefWEcHIBsad9VjU=; b=k
+	kVFonMYqFfhH5K+T2CBvJRzN6ZPX0ewEW3DIIlx7YfKeJCTw13ZBdN/APNyo5pQE
+	t+LPjd9mVFmr33xqdmrsjhI3IkBYBG3XZkl08Vhu/1+6XffMjklgzxG5SC2sXVPg
+	I3LGMML+Lauf52ZeXZyc16/PuK+s2dGx/3nEY68y0tDCjyZ5iJAf6ncvP2YLV9Nw
+	KLaSdr4OO+lmGIDXN/Jxc8gJ6vg/EnpcHdwDTKG0wgammD/+EoilBNd6jSNLChsk
+	wFzIbLNcYL8km6ExbO/rDorefjYKjICktt8uIz2U5WO8xK5wZfsWpChoxW21VApn
+	bp/+2W2flP9BSX+jmBdFQ==
+X-ME-Sender: <xms:8pzEZVkGgZ-MoLxVaht4XIv4j6w1hm57B3fq4ugNjg4LUh6Fw1pcCA>
+    <xme:8pzEZQ3GpSXmw4TKLwizOVFU7PmYNeJLN1ehhkdu9tt6_IlrKcJXsoip2xp-couGw
+    bFSFXPZfBQjWJkXeM8>
+X-ME-Received: <xmr:8pzEZbpZ4chCQfKlby_RlrcmBBpJIgF_4fIAYFkyEiSWqwsz5X6XJpYV5BvyPywjYOXsmwiN1qydEh6PyE_uBQf-wQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrtdeggddtudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfevfhfhjggtgfesthekredttddvjeenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpeduheejgfetvdekvedvveeikeelkefhveekveelheeikeefudet
+    ueffudfhhedtheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:8pzEZVm860aT6mMJSJVgqE2cTq1Bjw4_kfXQdas5mc5jMWFBM-vmQQ>
+    <xmx:8pzEZT3s5gmfppZZSAGFVhHfpj2oacryALtPFZRBiz5mosesSubb3A>
+    <xmx:8pzEZUsAtN7fzXnAfeoEEvspZw_ZexqTrnv311CAG7fdEq3Lj0qCHw>
+    <xmx:85zEZcsHhc1dBbznnJqztiirRSmeltrJyv4kFaomgWnMaiRwH5rpCw>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 8 Feb 2024 04:20:49 -0500 (EST)
+Message-ID: <63a1738c-5755-4c2e-a4d4-f5047cdb3660@flygoat.com>
+Date: Thu, 8 Feb 2024 09:20:47 +0000
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-1474976237-1707152415=:1027"
-Content-ID: <a6079b97-9e10-d27a-72a2-25462cc0603c@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/3] Handle delay slot for extable lookup
+To: Oleg Nesterov <oleg@redhat.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Ben Hutchings <ben@decadent.org.uk>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org,
+ Xi Ruoyao <xry111@xry111.site>,
+ Linus Torvalds <torvalds@linux-foundation.org>
+References: <20240202-exception_ip-v2-0-e6894d5ce705@flygoat.com>
+Content-Language: en-US
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Autocrypt: addr=jiaxun.yang@flygoat.com;
+ keydata= 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
+ HVO98ZmbMeg=
+In-Reply-To: <20240202-exception_ip-v2-0-e6894d5ce705@flygoat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323328-1474976237-1707152415=:1027
-Content-Type: text/plain; CHARSET=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <76afa036-4192-9aa8-2f0d-bde05d65a403@linux.intel.com>
 
-On Mon, 5 Feb 2024, Sergio Paracuellos wrote:
-> On Mon, Feb 5, 2024 at 3:35=E2=80=AFPM Ilpo J=C3=A4rvinen
-> <ilpo.jarvinen@linux.intel.com> wrote:
-> >
-> > pci_ops .read/.write must return PCIBIOS_* codes but
-> > tx4927_pci_config_read/write() return -1 when mkaddr() cannot find
-> > devfn from the root bus. Return PCIBIOS_DEVICE_NOT_FOUND instead and
-> > pass that onward in the call chain instead of overwriting the return
-> > value.
-> >
-> > Signed-off-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
-> > ---
-> >  arch/mips/pci/ops-tx4927.c | 14 +++++++++-----
-> >  1 file changed, 9 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/arch/mips/pci/ops-tx4927.c b/arch/mips/pci/ops-tx4927.c
-> > index f7802f100401..4dd8b93985fb 100644
-> > --- a/arch/mips/pci/ops-tx4927.c
-> > +++ b/arch/mips/pci/ops-tx4927.c
-> > @@ -60,7 +60,7 @@ static int mkaddr(struct pci_bus *bus, unsigned int d=
-evfn, int where,
-> >  {
-> >         if (bus->parent =3D=3D NULL &&
-> >             devfn >=3D PCI_DEVFN(TX4927_PCIC_MAX_DEVNU, 0))
-> > -               return -1;
-> > +               return PCIBIOS_DEVICE_NOT_FOUND;
-> >         __raw_writel(((bus->number & 0xff) << 0x10)
-> >                      | ((devfn & 0xff) << 0x08) | (where & 0xfc)
-> >                      | (bus->parent ? 1 : 0),
->=20
-> Should we also return PCIBIOS_SUCCESSFUL instead of 'return 0' in
-> 'mkaddr' for coherency?
+在 2024/2/2 12:30, Jiaxun Yang 写道:
+> Hi all,
+>
+> This series fixed extable handling for architecture delay slot (MIPS).
+>
+> Please see previous discussions at [1].
+>
+> There are some other places in kernel not handling delay slots properly,
+> such as uprobe and kgdb, I'll sort them later.
 
-Yeah right, I'll change it too.
+A gentle ping :-)
 
-I didn't take notice of that because the reason for all this is that I=20
-intend to convert these functions to return generic errno and push the=20
-PCIBIOS error code -> errno conversion into where it's really needed (real=
-=20
-PCIBIOS access functions in arch/x86/pci/pcbios.c). Returning 0 as literal=
-=20
-is very common cosmetic "error" in these functions. While calculating the=
-=20
-error rate in return values of these functions (I'm able to do that=20
-because of the audit), those were not even included to 15% returning=20
--Esomething instead of PCIBIOS_*. It would be way above that if I'd count=
-=20
-return 0 also as an error.
+This series fixes a regression, perhaps it should go through fixes tree.
 
-> Other than that, changes look good to me.
->=20
-> Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Thanks
+- Jiaxun
 
-Thanks for the review.
+>
+> Thanks!
+>
+> [1]: https://lore.kernel.org/lkml/75e9fd7b08562ad9b456a5bdaacb7cc220311cc9.camel@xry111.site
+>
+> To: Oleg Nesterov <oleg@redhat.com>
+>
+> To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+>
+> To: Andrew Morton <akpm@linux-foundation.org>
+> To: Ben Hutchings <ben@decadent.org.uk>
+>
+> Cc:  <linux-arch@vger.kernel.org>
+> Cc:  <linux-kernel@vger.kernel.org>
+>
+> Cc:  <linux-mips@vger.kernel.org>
+>
+> Cc:  <linux-mm@kvack.org>
+>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+> Changes in v2:
+> - Reduce diffstat by implemente fallback macro in linux/ptrace.h (linus)
+> - Link to v1: https://lore.kernel.org/r/20240201-exception_ip-v1-0-aa26ab3ee0b5@flygoat.com
+>
+> ---
+> Jiaxun Yang (3):
+>        ptrace: Introduce exception_ip arch hook
+>        MIPS: Clear Cause.BD in instruction_pointer_set
+>        mm/memory: Use exception ip to search exception tables
+>
+>   arch/mips/include/asm/ptrace.h | 3 +++
+>   arch/mips/kernel/ptrace.c      | 7 +++++++
+>   include/linux/ptrace.h         | 4 ++++
+>   mm/memory.c                    | 4 ++--
+>   4 files changed, 16 insertions(+), 2 deletions(-)
+> ---
+> base-commit: 06f658aadff0e483ee4f807b0b46c9e5cba62bfa
+> change-id: 20240131-exception_ip-194e4ad0e6ca
+>
+> Best regards,
 
---=20
- i.
---8323328-1474976237-1707152415=:1027--
+-- 
+---
+Jiaxun Yang
+
 
