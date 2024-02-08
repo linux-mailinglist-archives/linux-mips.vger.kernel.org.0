@@ -1,102 +1,152 @@
-Return-Path: <linux-mips+bounces-1355-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1359-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E8EB84E06B
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Feb 2024 13:11:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10E6C84E12E
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Feb 2024 13:50:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A20AE1C281E5
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Feb 2024 12:11:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 445881C21D15
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Feb 2024 12:50:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C2EF71B45;
-	Thu,  8 Feb 2024 12:10:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dbg6R4PW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0D8A763F0;
+	Thu,  8 Feb 2024 12:49:56 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F0B71B37;
-	Thu,  8 Feb 2024 12:10:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2736F763E4;
+	Thu,  8 Feb 2024 12:49:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707394238; cv=none; b=Ykqbj8ROuxTOBXtMyhU3z0ptpHZ0CbOTkQWFL3U34S+Uff2AImjj9iodagL+bwIOHSLE+fFpZCHp7Y6MVodY804pORYXO/3jEFpRxEidlluDdmh0JjKmBfOVyiK4Z6UOd599MmnoeRVv793uWv7DlBV/WUj/l9G69P3zB55ttBI=
+	t=1707396596; cv=none; b=d0Nr/f+7ma081radKxGGQCHdVceTUse6PkxPQQhCU0n5BCdms3KnbBZCv6l4k2tzwLdw40tseht9PoccG3//b2j9KYE3DaY/boWrus0U2EwrS9bxYxfItbc/fxtXbnvfjcIwH1+FGpQdyZQT3pcpiQ4yQ/C3hmLvhDC0ZAtOPIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707394238; c=relaxed/simple;
-	bh=gp0Jc6yWvRgb0ZO7bBbrnkeUPabEgmu355DVGo33jtM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hAvtw3pcZjNt2+SGLa/+G6AFvXlhcohMZlRtViNpZwnUsN1Q0TqXP7hjS0C4xFjjvcA2lH4kLKfwzvGSaMzsuClAPUQWhlnGxibxs2IX1btoZTY82ByUXjvndBSfajZkf4obaOlOtemtPK6idmSKkk6rzIge7WAH6W2qqqbLktY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dbg6R4PW; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707394237; x=1738930237;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=gp0Jc6yWvRgb0ZO7bBbrnkeUPabEgmu355DVGo33jtM=;
-  b=Dbg6R4PWkO1rd+HkAynLWhW/UbG7OYlF571/VBCkjZd9hnDFxHDP7Ts/
-   tiAdZw7Kx5b/ysNkBzpHz5/RG+Te7B3vJ23LAXyQY+aMgOBeUIJfgykDh
-   3DcfItG7wi9nwQzUnx4u8ViMNt9IInt3ia7ubsABVAqtAxSBfJOf2UyAF
-   c7tRxkpEAGoyPBvND2dwl0tF5zpLXYkIVxpypvmr9CyzFvWSrqd7t0hEi
-   rXhXwyiRGbR56IMEoQf4PSKFLoepyHZMdwcFMe+CKHUTdq9mEhzCoTYl3
-   zeRvON9VaSvev4MdRWVGkPSqJNkvreQRvZN6FlmptBCvW9sjYbGlztjie
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="1341362"
-X-IronPort-AV: E=Sophos;i="6.05,253,1701158400"; 
-   d="scan'208";a="1341362"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 04:10:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,253,1701158400"; 
-   d="scan'208";a="1625964"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.246.52.95])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 04:10:33 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v2 4/4] MIPS: TXx9: Use PCI_SET_ERROR_RESPONSE()
-Date: Thu,  8 Feb 2024 14:09:59 +0200
-Message-Id: <20240208120959.2513-5-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240208120959.2513-1-ilpo.jarvinen@linux.intel.com>
-References: <20240208120959.2513-1-ilpo.jarvinen@linux.intel.com>
+	s=arc-20240116; t=1707396596; c=relaxed/simple;
+	bh=/raue+ELhkH2hPh2pJ5EPvccB2rMfZ0AyREnP0RN1h4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PuBEsCiJOflRC6iThJPN6gDHJcbZCEyOvBc54MZc0KVzffFSlGX/EGyEUX91lN6FP1X3B1XsLXsS1hYei0sS8oEiXAFk9XlYfKNy1AL4EtmZKEPlxIMAq5rrTYFl7JTAQBgl8+AnillPd+GTvP+eu3Sbjhp22GDbMueGchjlEK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1rY3Mr-000327-00; Thu, 08 Feb 2024 13:19:01 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 71A38C0267; Thu,  8 Feb 2024 13:11:30 +0100 (CET)
+Date: Thu, 8 Feb 2024 13:11:30 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>
+Cc: Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v7 03/14] MIPS: Allows relocation exception vectors
+ everywhere
+Message-ID: <ZcTE8nKCaKuaUvAe@alpha.franken.de>
+References: <20240205153503.574468-1-gregory.clement@bootlin.com>
+ <20240205153503.574468-4-gregory.clement@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240205153503.574468-4-gregory.clement@bootlin.com>
 
-Instead of literal, PCI error value should be set with
-PCI_SET_ERROR_RESPONSE(). Use it in tx4927_pci_config_read().
+On Mon, Feb 05, 2024 at 04:34:49PM +0100, Gregory CLEMENT wrote:
+> From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> 
+> Now the exception vector for CPS systems are allocated on-fly
+> with memblock as well.
+> 
+> It will try to allocate from KSEG1 first, and then try to allocate
+> in low 4G if possible.
+> 
+> The main reset vector is now generated by uasm, to avoid tons
+> of patches to the code. Other vectors are copied to the location
+> later.
+> 
+> gc: use the new macro CKSEG[0A1]DDR_OR_64BIT()
+>     move 64bits fix in an other patch
+>     fix cache issue with mips_cps_core_entry
+>     rewrite the patch to reduce the diff stat
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> ---
+>  arch/mips/include/asm/mips-cm.h |   1 +
+>  arch/mips/include/asm/smp-cps.h |   4 +-
+>  arch/mips/kernel/cps-vec.S      |  48 ++-------
+>  arch/mips/kernel/smp-cps.c      | 171 +++++++++++++++++++++++++++-----
+>  4 files changed, 157 insertions(+), 67 deletions(-)
+> [..]
+> diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
+> index dd55d59b88db3..f4cdd50177e0b 100644
+> --- a/arch/mips/kernel/smp-cps.c
+> +++ b/arch/mips/kernel/smp-cps.c
+> @@ -7,6 +7,7 @@
+>  #include <linux/cpu.h>
+>  #include <linux/delay.h>
+>  #include <linux/io.h>
+> +#include <linux/memblock.h>
+>  #include <linux/sched/task_stack.h>
+>  #include <linux/sched/hotplug.h>
+>  #include <linux/slab.h>
+> @@ -25,7 +26,34 @@
+>  #include <asm/time.h>
+>  #include <asm/uasm.h>
+>  
+> +#define BEV_VEC_SIZE	0x500
+> +#define BEV_VEC_ALIGN	0x1000
+> +
+> +#define A0		4
+> +#define A1		5
+> +#define T9		25
+> +#define K0		26
+> +#define K1		27
+> +
+> +#define C0_STATUS	12, 0
+> +#define C0_CAUSE	13, 0
+> +
+> +#define ST0_NMI_BIT	19
+> +#ifdef CONFIG_64BIT
+> +#define ST0_KX_IF_64	ST0_KX
+> +#else
+> +#define ST0_KX_IF_64	0
+> +#endif
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- arch/mips/pci/ops-tx4927.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+please move this together with the other defines in arch/mips/kvm/entry.c
+to a header file (arch/mips/include/asm/uasm.h sounds like a good fit).
 
-diff --git a/arch/mips/pci/ops-tx4927.c b/arch/mips/pci/ops-tx4927.c
-index 670efbc5c585..37087f4137ee 100644
---- a/arch/mips/pci/ops-tx4927.c
-+++ b/arch/mips/pci/ops-tx4927.c
-@@ -144,7 +144,7 @@ static int tx4927_pci_config_read(struct pci_bus *bus, unsigned int devfn,
- 
- 	ret = mkaddr(bus, devfn, where, pcicptr);
- 	if (ret != PCIBIOS_SUCCESSFUL) {
--		*val = 0xffffffff;
-+		PCI_SET_ERROR_RESPONSE(val);
- 		return ret;
- 	}
- 	switch (size) {
+> +static void __init setup_cps_vecs(void)
+> +{
+> +	extern void excep_tlbfill(void);
+> +	extern void excep_xtlbfill(void);
+> +	extern void excep_cache(void);
+> +	extern void excep_genex(void);
+> +	extern void excep_intex(void);
+> +	extern void excep_ejtag(void);
+
+I know this used a lot in arch/mips, but don't add another one and
+put this to a header file. IMHO checkpatch should have warned you about
+that.
+
+> +	/* We want to ensure cache is clean before writing uncached mem */
+> +	blast_dcache_range(CKSEG0ADDR_OR_64BIT(cps_vec_pa), CKSEG0ADDR_OR_64BIT(cps_vec_pa) + BEV_VEC_SIZE);
+> +	bc_wback_inv(CKSEG0ADDR_OR_64BIT(cps_vec_pa), BEV_VEC_SIZE);
+> +	__sync();
+
+how about doint the generation with cached memory and flush caches
+after that ?
+
+Thomas.
+
 -- 
-2.39.2
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
