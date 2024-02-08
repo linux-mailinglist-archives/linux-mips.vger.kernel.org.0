@@ -1,71 +1,71 @@
-Return-Path: <linux-mips+bounces-1348-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1349-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7887684DCF9
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Feb 2024 10:31:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E902884DD1B
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Feb 2024 10:38:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D3CA1C231BC
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Feb 2024 09:31:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1A0A286D89
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Feb 2024 09:38:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 443876BFAA;
-	Thu,  8 Feb 2024 09:31:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A7846BB47;
+	Thu,  8 Feb 2024 09:38:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="Y12m14dD";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="v5eGdUQ3"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="qhH84FVz";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="pvB/VrnQ"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35AC26BB42;
-	Thu,  8 Feb 2024 09:31:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8FE6A03A;
+	Thu,  8 Feb 2024 09:38:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.111.4.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707384691; cv=none; b=ncJBrqXxD74bNiYmSp6TPHT4AH10Jd5rLzQMjGxpOOPUdFyKMSSsqnqB5jH8re4Va+DNee5iSw7J3NZnpDV0sgbyB/ReOkVqwu+Oiar38bBcwFHPHAiQPL442LT29E9PVY9RV2dguvE3wxyN2lOjkh7vtS4RiAMtera3cWQ7UQw=
+	t=1707385087; cv=none; b=AVbnSpjY8xHl+c9kCv0VmMkJwPN4kLEHCqxO2tMX1LlgwVG9WupxmFBrABEKf7ykJzLHknyKXe3S+xEtDkvAJ21oLj4054/MSN0Ilr1kb4Pb9X1jBo1bVXPWicsMtKSoXhWrBSa3QTNQUEoM84ZLw6GMOJ1d6Dtkdc+FqkHOnt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707384691; c=relaxed/simple;
-	bh=IlQBt5ebpX3rwAe1JJmrdRp8ZYh3Sd+NBJTigxQ+X0w=;
+	s=arc-20240116; t=1707385087; c=relaxed/simple;
+	bh=KenGFnO8V0sQCx2w3bRvDG2ZWIiPIufLamD4iu2CQCQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nbZPOerdAxMClA7BXTjmqArS1mVCvlMSCXuYbW8si0mRKxCPiQ/zvJ2tWVcpJcGdCX6W+wShV2YGfSxZry7Tvy9xrOtqs2RhfGfbWmNowhNDIbIhwfgjufE661tHlsxYvcoDbbibBn/0qH7cJs57bt+87abGObwqQcZVEEgHVDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=Y12m14dD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=v5eGdUQ3; arc=none smtp.client-ip=66.111.4.28
+	 In-Reply-To:Content-Type; b=ii3bpD2PktdNJs1DFAZrA/ENCHtbEbjZwa68MnaVAGiQkT8w8Fr1KMKe0NnRi2kkFQulJ8Ny/gwvES8eH3IaSYG0otT21YJL0d1S6//lZZ463KjyMRBe5cYPURXsDhJi3rbtzk0c3NVOfKiBNoeG5jEt/eZyrmg0BR++1yIthQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=qhH84FVz; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=pvB/VrnQ; arc=none smtp.client-ip=66.111.4.28
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-	by mailout.nyi.internal (Postfix) with ESMTP id 0683D5C006A;
-	Thu,  8 Feb 2024 04:31:28 -0500 (EST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 2A7C45C014B;
+	Thu,  8 Feb 2024 04:38:05 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute7.internal (MEProxy); Thu, 08 Feb 2024 04:31:28 -0500
+  by compute6.internal (MEProxy); Thu, 08 Feb 2024 04:38:05 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1707384688;
-	 x=1707471088; bh=kuEW1rpMwiKWoxW/OF1OAVriE1FGgfZTm7jP2rc40xY=; b=
-	Y12m14dDvFHfLMvP1O/DQi12gUuaXtTtTjZF4YNHWHUeJ9iFFW5z70JytBnlvKiY
-	xczZVlGb4zkSYOcVSlBDzLMEzA/CYejnKBIRmusZr2qvqDvknMPLtcu8Y1bTWjaa
-	EbM7sdpULu7graK6STBa8MbYhuAkiC06BO90KhZYmjrHcb8/DTlX9sj82x9K/bkF
-	tUwL7z5TryIeZnd9D/wxks6BNzJbT8eOSATeSP5H+kOEWGZwz3n1rYNkMvclGf8F
-	Wl3QudHXbdWeWuxhZTU2vxTYFJRPn2boZSO+Bw/cLGk9e9nONmu3d2Yfl/iwmw1W
-	jxiGK+LPQUUTW0AicvKYqg==
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1707385085;
+	 x=1707471485; bh=CtbWDd3+TzkoLPwwunkgdRlj99pZzuVSHHCYDHMn/68=; b=
+	qhH84FVzUTJh9XebWTQFbO6NX77+WhPzit5IDV2+MRnsh81Q29yoE/Kl5AOjDkJe
+	a3/PWVlkQYP8Vaxl5PEd+II19BneLoABpRELqEKGs5+F4iAESqAdrbehBsCIRCIu
+	SESRvGww0SkTD8q19qS+nq7fpS/OMoLe4NCmtHN7Umvszz8Pcu/+zpR/rWhCXkuZ
+	lpK9ChYv6PRlKsajiTvN5BPDYtqqQa/IKmMP6fEzj16gDBgsIfgcmLRBkiyYFfUY
+	8a2R1HzIF+LgxKSfBLpNLvzr+eiTmNIE7uZjB9gzjsI3/ecHNeafnzkGZJRn/DPR
+	pN3JtJQ03Dgc8zTs+1q1vA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1707384688; x=
-	1707471088; bh=kuEW1rpMwiKWoxW/OF1OAVriE1FGgfZTm7jP2rc40xY=; b=v
-	5eGdUQ3SuJni2CDQQwGCnY1FKoBHDE2CwIpxJJdszS9U4/QsUatR/ZP+uvPficTn
-	jPorgjXX6DCWSiaHDpWirVA49k27Rqkjwtzo2nJzN70+RUhLcjlnjGKD2FdwZMT9
-	SC74FY7ufZgZ6BsgT8nKRVrNtu1nlk7PqZhwQzBugvnGQ1K1sEYASfkWhcUs0/+k
-	YChxskxHrFZ4nacTXeNI4UeKT8Oua8a2fuHodRNmJoXRYvYKmGHni45LU84cweId
-	LTE4dVU8fnM8YnMl3qwDAhj56csh6GPasf6+aeEk/W1HHBynptTfvrSiQGJqJHFY
-	Lkr7Pog1uNlQXO80+PK1g==
-X-ME-Sender: <xms:b5_EZTDZEZlteRCk8oHFU2EAHxVfvIfSL_xa3URH20daLiJZW6nH8g>
-    <xme:b5_EZZi18FVY508JkUUQb-KFbRXC0pZfgN1MEc2ltvv_wL8pZ-SgEgHrZh5dsh5nL
-    DxkwIfikRhPqPbGlPc>
-X-ME-Received: <xmr:b5_EZek5JApq5xTrqHdIeWMPSyiavXFa8aEKh28fWSxwPfFlLHAek2d8kJub5wyIYcXndsLovnDIgQT8xcz_W5Gkqw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrtdeggddtfecutefuodetggdotefrodftvf
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1707385085; x=
+	1707471485; bh=CtbWDd3+TzkoLPwwunkgdRlj99pZzuVSHHCYDHMn/68=; b=p
+	vB/VrnQkypUQ39IhkDvl7Y2tRQjEJTG74bNIapjp5SMTajzYA7hed0Yi/k7q4MDD
+	uA8XzzlH+AKju8RzSnivTtDH4y/XM8i5CTj89Tj71Bhcl+BaVELs01qGKJiwC0AW
+	jQNLIVw4f2+4s61DQvaXLGgSW8KB5gInE8sHr3DHeAiMprACSQ8yNLZR56clgSxh
+	dcbVIPkpcPu/80JdW1pN3MN/g4KIGXM4HMeoSlRGp65Bj3uBzhcCd+p70lwIN2TY
+	JdxodqGsKx/7Y/hD/KJC2wHxcQF9tY62RAW5CFmw7C4C3FH6QNmBNkd/TATy3XNc
+	tg7ZEZb/9EUxIwlMGNAVA==
+X-ME-Sender: <xms:_KDEZZJ9ewiyLPl3BX0hk-M6P7u0TGRKIAcv6VHlU3aK_rd6UOUiXw>
+    <xme:_KDEZVK_8zUiLFWDTwGDjR2A1ko7fIK5tfEKA8PAChjxhb5viU2R7HgFCPshGFnM9
+    gg4vsy9E5_qO8K1X8E>
+X-ME-Received: <xmr:_KDEZRt6pGl8ZxIl7DCY_NA395dnNllyqcScM4Mudti213CApfaQoLiCmqWdWKezOqLLa9GGM-Q_tWnIntDF0GC8jw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrtdeggddtgecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpefkffggfgfuvfevfhfhjggtgfesthekredttddvjeenucfhrhhomheplfhirgig
@@ -73,15 +73,15 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrtdeggddtfecutefuodetggdote
     ggtffrrghtthgvrhhnpeelueffheehgeeluedvlefghfeukeejteeuveeuhffftdfguefh
     gefgueekffeftdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
     hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:b5_EZVxqI5OxaC4dkeendZ17SLEkT7BidT65ig34mtLFspWIQiDJbA>
-    <xmx:b5_EZYS1togzAX8jtB0ptlbcdFkm8qjSe6tfJ5Ib6JsuzSPcGOhMbA>
-    <xmx:b5_EZYZ9dqtJfHI6KwCtpGnb-gDM15ULwJZ-yCb8Cq4l4R1wL6qKFw>
-    <xmx:cJ_EZR_al3FMdHvPEtGvJUggOeFxU0qIqG-MHf-khclEAN-Cw1Ko7g>
+X-ME-Proxy: <xmx:_KDEZaargwB1zfQlnERK6yHbjjOYhDYaG3TLFuOt_2UQqcwTWFNg4A>
+    <xmx:_KDEZQb-kvGrjSTXUXwdUPJc4S-LV-5GPnNmFPEkt-GW2sdXU-h0JA>
+    <xmx:_KDEZeAoPs5ASihJxCZb1Rb7DFfsjN_drgHi1WK9B_CJ9nhduf78_w>
+    <xmx:_aDEZcQ-Mun3Z4TW8nrGLPs1bCHRdHwrhobB7ETFZ40Ho8YuzIWeCA>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 8 Feb 2024 04:31:26 -0500 (EST)
-Message-ID: <1e9e4b8c-4e80-4126-9204-fa66049c084e@flygoat.com>
-Date: Thu, 8 Feb 2024 09:31:25 +0000
+ 8 Feb 2024 04:38:03 -0500 (EST)
+Message-ID: <ce16e86b-59d0-4aac-8e62-b0c89a852e26@flygoat.com>
+Date: Thu, 8 Feb 2024 09:38:02 +0000
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -89,18 +89,22 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/3] Handle delay slot for extable lookup
+Subject: Re: [PATCH v7 12/14] MIPS: Share generic kernel code with other
+ architecture
 Content-Language: en-US
-To: Xi Ruoyao <xry111@xry111.site>, Oleg Nesterov <oleg@redhat.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Andrew Morton <akpm@linux-foundation.org>,
- Ben Hutchings <ben@decadent.org.uk>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-mm@kvack.org,
- Linus Torvalds <torvalds@linux-foundation.org>
-References: <20240202-exception_ip-v2-0-e6894d5ce705@flygoat.com>
- <63a1738c-5755-4c2e-a4d4-f5047cdb3660@flygoat.com>
- <7636b9072f2b72f6079a65d456c561716c5d90a3.camel@xry111.site>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>,
+ Paul Burton <paulburton@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20240205153503.574468-1-gregory.clement@bootlin.com>
+ <20240205153503.574468-13-gregory.clement@bootlin.com>
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Autocrypt: addr=jiaxun.yang@flygoat.com;
  keydata= xsFNBFnp/kwBEADEHKlSYJNLpFE1HPHfvsxjggAIK3ZtHTj5iLuRkEHDPiyyiLtmIgimmD3+
@@ -137,37 +141,75 @@ Autocrypt: addr=jiaxun.yang@flygoat.com;
  7Mg2PDpoOwdpKLKlmIpyDexGVH0Lj/ycBL8ujDYZ2tA9HhEaO4dW6zsQyt1v6mZffpWK+ZXb
  Cs8oFeACbrtNFF0nhNI6LUPH3oaVOkUoRQUYDuX6mIc4VTwMA8EoZlueKEHfZIKrRf2QYbOZ
  HVO98ZmbMeg=
-In-Reply-To: <7636b9072f2b72f6079a65d456c561716c5d90a3.camel@xry111.site>
+In-Reply-To: <20240205153503.574468-13-gregory.clement@bootlin.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
 
-在 2024/2/8 09:23, Xi Ruoyao 写道:
-> On Thu, 2024-02-08 at 09:20 +0000, Jiaxun Yang wrote:
->>
->> 在 2024/2/2 12:30, Jiaxun Yang 写道:
->>> Hi all,
->>>
->>> This series fixed extable handling for architecture delay slot (MIPS).
->>>
->>> Please see previous discussions at [1].
->>>
->>> There are some other places in kernel not handling delay slots properly,
->>> such as uprobe and kgdb, I'll sort them later.
->> A gentle ping :-)
->>
->> This series fixes a regression, perhaps it should go through fixes tree.
-> If you have Fixes: {sha} and Cc: stable@vger.kernel.org Greg will pick
-> it up once it's in Linus tree.
-
-In this case I'd like to backport it manually, as there is only one 
-patch in this series
-actually fixing the problem.
-
-Thanks
-- Jiaxun
+在 2024/2/5 15:34, Gregory CLEMENT 写道:
+> Some architectures might seek to utilize a significant portion of the
+> generic kernel code while maintaining independence from the generic
+> kernel due to specific peculiarities.
 >
+> This patch allows for the reuse of core code, preventing unnecessary
+> duplication.
+>
+> Suggested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+
+Thanks!
+- Jiaxun
+> ---
+>   arch/mips/Kbuild           | 1 +
+>   arch/mips/Kconfig          | 3 +++
+>   arch/mips/generic/Makefile | 6 +++---
+>   3 files changed, 7 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/mips/Kbuild b/arch/mips/Kbuild
+> index af2967bffb73d..d683993ed331c 100644
+> --- a/arch/mips/Kbuild
+> +++ b/arch/mips/Kbuild
+> @@ -17,6 +17,7 @@ obj- := $(platform-y)
+>   # mips object files
+>   # The object files are linked as core-y files would be linked
+>   
+> +obj-y += generic/
+>   obj-y += kernel/
+>   obj-y += mm/
+>   obj-y += net/
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 797ae590ebdba..5549d26448941 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -109,6 +109,9 @@ config MIPS_FIXUP_BIGPHYS_ADDR
+>   config MIPS_GENERIC
+>   	bool
+>   
+> +config MACH_GENERIC_CORE
+> +	bool
+> +
+>   config MACH_INGENIC
+>   	bool
+>   	select SYS_SUPPORTS_32BIT_KERNEL
+> diff --git a/arch/mips/generic/Makefile b/arch/mips/generic/Makefile
+> index e37a59bae0a62..56011d738441f 100644
+> --- a/arch/mips/generic/Makefile
+> +++ b/arch/mips/generic/Makefile
+> @@ -4,9 +4,9 @@
+>   # Author: Paul Burton <paul.burton@mips.com>
+>   #
+>   
+> -obj-y += init.o
+> -obj-y += irq.o
+> -obj-y += proc.o
+> +obj-$(CONFIG_MACH_GENERIC_CORE) += init.o
+> +obj-$(CONFIG_MACH_GENERIC_CORE) += irq.o
+> +obj-$(CONFIG_MACH_GENERIC_CORE) += proc.o
+>   
+>   obj-$(CONFIG_YAMON_DT_SHIM)		+= yamon-dt.o
+>   obj-$(CONFIG_LEGACY_BOARD_SEAD3)	+= board-sead3.o
 
 -- 
 ---
