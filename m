@@ -1,37 +1,37 @@
-Return-Path: <linux-mips+bounces-1359-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1358-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10E6C84E12E
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Feb 2024 13:50:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6403E84E12B
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Feb 2024 13:49:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 445881C21D15
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Feb 2024 12:50:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 16EE81F2B304
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Feb 2024 12:49:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0D8A763F0;
-	Thu,  8 Feb 2024 12:49:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1629271B30;
+	Thu,  8 Feb 2024 12:49:52 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2736F763E4;
-	Thu,  8 Feb 2024 12:49:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 363242EB1A;
+	Thu,  8 Feb 2024 12:49:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707396596; cv=none; b=d0Nr/f+7ma081radKxGGQCHdVceTUse6PkxPQQhCU0n5BCdms3KnbBZCv6l4k2tzwLdw40tseht9PoccG3//b2j9KYE3DaY/boWrus0U2EwrS9bxYxfItbc/fxtXbnvfjcIwH1+FGpQdyZQT3pcpiQ4yQ/C3hmLvhDC0ZAtOPIQ=
+	t=1707396592; cv=none; b=VK+Jl4dZL3Wb2OVurMHDOP+5ROoJApImEaE6MuGG4pRPQ/IvsXc+MRS1EQqeuVQv7roMQmG5eaMtL9ozg9etxAyh5+hg95/e99DCIWcCR4LNoxsi/IyNlJRAVkBpkacX1HGMgT1rYK0e6FeLh+/owbMMY41loTO3+z78o2gVVjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707396596; c=relaxed/simple;
-	bh=/raue+ELhkH2hPh2pJ5EPvccB2rMfZ0AyREnP0RN1h4=;
+	s=arc-20240116; t=1707396592; c=relaxed/simple;
+	bh=UYSlbZmLjurXnUNDON8vfhJ+CuykhF4aVAA+Uan4bzw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PuBEsCiJOflRC6iThJPN6gDHJcbZCEyOvBc54MZc0KVzffFSlGX/EGyEUX91lN6FP1X3B1XsLXsS1hYei0sS8oEiXAFk9XlYfKNy1AL4EtmZKEPlxIMAq5rrTYFl7JTAQBgl8+AnillPd+GTvP+eu3Sbjhp22GDbMueGchjlEK0=
+	 Content-Type:Content-Disposition:In-Reply-To; b=eBI1eSoXgVupoaaOFMA+MOQREfe0UcOtDGqnbU/CJJ3jCCHI02uBgDldFcxh7BDshypd+DWhqlqsevuO78j/Ewz78InuDW3/F5xhMiswFA3NyZrxab5DhzmCB1n59q1Grd1I7ZZZytTNQLtNbtG3AKrZRQmN1F6Jsothyjra9RE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1rY3Mr-000327-00; Thu, 08 Feb 2024 13:19:01 +0100
+	id 1rY3Mr-000329-00; Thu, 08 Feb 2024 13:19:01 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 71A38C0267; Thu,  8 Feb 2024 13:11:30 +0100 (CET)
-Date: Thu, 8 Feb 2024 13:11:30 +0100
+	id A3824C0267; Thu,  8 Feb 2024 13:14:17 +0100 (CET)
+Date: Thu, 8 Feb 2024 13:14:17 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>
 Cc: Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
@@ -44,11 +44,10 @@ Cc: Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v7 03/14] MIPS: Allows relocation exception vectors
- everywhere
-Message-ID: <ZcTE8nKCaKuaUvAe@alpha.franken.de>
+Subject: Re: [PATCH v7 01/14] MIPS: spaces: Define a couple of handy macros
+Message-ID: <ZcTFmUtV/mzeIBTx@alpha.franken.de>
 References: <20240205153503.574468-1-gregory.clement@bootlin.com>
- <20240205153503.574468-4-gregory.clement@bootlin.com>
+ <20240205153503.574468-2-gregory.clement@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -57,92 +56,36 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240205153503.574468-4-gregory.clement@bootlin.com>
+In-Reply-To: <20240205153503.574468-2-gregory.clement@bootlin.com>
 
-On Mon, Feb 05, 2024 at 04:34:49PM +0100, Gregory CLEMENT wrote:
-> From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+On Mon, Feb 05, 2024 at 04:34:47PM +0100, Gregory CLEMENT wrote:
+> Define KSEGX_SIZE to represent the size of each KSEG segment.
 > 
-> Now the exception vector for CPS systems are allocated on-fly
-> with memblock as well.
+> Introduce CKSEG0ADDR_OR_64BIT and CKSEG1ADDR_OR_64BIT to get an XPHYS
+> address in 64bits and CKSEG[01]ADDR() in 32 bits mode.
 > 
-> It will try to allocate from KSEG1 first, and then try to allocate
-> in low 4G if possible.
-> 
-> The main reset vector is now generated by uasm, to avoid tons
-> of patches to the code. Other vectors are copied to the location
-> later.
-> 
-> gc: use the new macro CKSEG[0A1]DDR_OR_64BIT()
->     move 64bits fix in an other patch
->     fix cache issue with mips_cps_core_entry
->     rewrite the patch to reduce the diff stat
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Co-developed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 > ---
->  arch/mips/include/asm/mips-cm.h |   1 +
->  arch/mips/include/asm/smp-cps.h |   4 +-
->  arch/mips/kernel/cps-vec.S      |  48 ++-------
->  arch/mips/kernel/smp-cps.c      | 171 +++++++++++++++++++++++++++-----
->  4 files changed, 157 insertions(+), 67 deletions(-)
-> [..]
-> diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-> index dd55d59b88db3..f4cdd50177e0b 100644
-> --- a/arch/mips/kernel/smp-cps.c
-> +++ b/arch/mips/kernel/smp-cps.c
-> @@ -7,6 +7,7 @@
->  #include <linux/cpu.h>
->  #include <linux/delay.h>
->  #include <linux/io.h>
-> +#include <linux/memblock.h>
->  #include <linux/sched/task_stack.h>
->  #include <linux/sched/hotplug.h>
->  #include <linux/slab.h>
-> @@ -25,7 +26,34 @@
->  #include <asm/time.h>
->  #include <asm/uasm.h>
+>  arch/mips/include/asm/addrspace.h           | 5 +++++
+>  arch/mips/include/asm/mach-generic/spaces.h | 4 ++++
+>  2 files changed, 9 insertions(+)
+> 
+> diff --git a/arch/mips/include/asm/addrspace.h b/arch/mips/include/asm/addrspace.h
+> index 59a48c60a065c..03a5e2c8b5dc9 100644
+> --- a/arch/mips/include/asm/addrspace.h
+> +++ b/arch/mips/include/asm/addrspace.h
+> @@ -47,6 +47,11 @@
+>   */
+>  #define KSEGX(a)		((_ACAST32_(a)) & _ACAST32_(0xe0000000))
 >  
-> +#define BEV_VEC_SIZE	0x500
-> +#define BEV_VEC_ALIGN	0x1000
-> +
-> +#define A0		4
-> +#define A1		5
-> +#define T9		25
-> +#define K0		26
-> +#define K1		27
-> +
-> +#define C0_STATUS	12, 0
-> +#define C0_CAUSE	13, 0
-> +
-> +#define ST0_NMI_BIT	19
-> +#ifdef CONFIG_64BIT
-> +#define ST0_KX_IF_64	ST0_KX
-> +#else
-> +#define ST0_KX_IF_64	0
-> +#endif
+> +/*
+> + * Gives the size of each kernel segment
+> + */
+> +#define KSEGX_SIZE		0x20000000
 
-please move this together with the other defines in arch/mips/kvm/entry.c
-to a header file (arch/mips/include/asm/uasm.h sounds like a good fit).
-
-> +static void __init setup_cps_vecs(void)
-> +{
-> +	extern void excep_tlbfill(void);
-> +	extern void excep_xtlbfill(void);
-> +	extern void excep_cache(void);
-> +	extern void excep_genex(void);
-> +	extern void excep_intex(void);
-> +	extern void excep_ejtag(void);
-
-I know this used a lot in arch/mips, but don't add another one and
-put this to a header file. IMHO checkpatch should have warned you about
-that.
-
-> +	/* We want to ensure cache is clean before writing uncached mem */
-> +	blast_dcache_range(CKSEG0ADDR_OR_64BIT(cps_vec_pa), CKSEG0ADDR_OR_64BIT(cps_vec_pa) + BEV_VEC_SIZE);
-> +	bc_wback_inv(CKSEG0ADDR_OR_64BIT(cps_vec_pa), BEV_VEC_SIZE);
-> +	__sync();
-
-how about doint the generation with cached memory and flush caches
-after that ?
+well this is the KSEG size for 32bit and defined in a common section,
+so better use CSEGX_SIZE
 
 Thomas.
 
