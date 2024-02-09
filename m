@@ -1,54 +1,87 @@
-Return-Path: <linux-mips+bounces-1373-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1374-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E8E084F7A2
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Feb 2024 15:37:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94C8184FB8B
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Feb 2024 19:08:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6EC27B294C7
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Feb 2024 14:37:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C718C1C25179
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Feb 2024 18:08:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D53FC1272AB;
-	Fri,  9 Feb 2024 14:32:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99F067F491;
+	Fri,  9 Feb 2024 18:08:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BVyi5cQM"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="bl6udEzk";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EUOTo/CJ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from fout3-smtp.messagingengine.com (fout3-smtp.messagingengine.com [103.168.172.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8BE84A46;
-	Fri,  9 Feb 2024 14:32:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A578180BF8;
+	Fri,  9 Feb 2024 18:08:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707489131; cv=none; b=sitbYbjxqRgNupI+9huY3zZvA9gC+hnfIEYuKk2HrpHcicS1sNvvlJ0fBsFXOipWUcML+VgjsQROyni4ntfFYM8LNIyoHVeZi3OqTlGUmIHfbSj1q+12kFODVIJHIaVVcpD611obtN+ztu/A4sq6VgWLpTfgcUM3lZ2x6bkwX60=
+	t=1707502082; cv=none; b=qgZGjAIOGwa/vdhsvusITS0a/Sai2OUmnK3dK+RhMFtCKGyifKKjBwOuR86PYoSK+vXIrp7zTqe6too5ASDuho8LiGAdKTc54m43xQ3WwvyHn+teV/3n5tGmybfHvhVi1SHDw0cigW+voACJXvTtd/HmQmShmS9FZdICmKHQOuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707489131; c=relaxed/simple;
-	bh=AOujWblAL/Eb3SoFX/DXZmLu4by42Gj1/JOw1DWfuS8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZOMhxNH1QFXC7WuAnmjHAbA0Ex/hwYk/BRwKPvEByLy6uV3hI5p6gqe8uNKKE3nSpbxpYeGtAxPLG1c9j+EMo7vies8thNfbd5eOYDuBHcyCZPsc3KE8pXiYdrfLa54L53O/JOb7VhLdZth2zkmhlqhfNJGyEn9htIqkGqwIEVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BVyi5cQM; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D6A31240002;
-	Fri,  9 Feb 2024 14:32:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1707489127;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ntwnUlVjSIXSSPhME4Hzl2L0UVU1UFUtEinrPzePqbc=;
-	b=BVyi5cQM8O0TM2kfxyarxGfF0hrHr6KZltGw3eEBwcrKXU9/WqYJ09Tl+CqUu58GFJbtD2
-	GGsU6trI6kfl2hGk9RcwvgBrchBrog737NFOyYMnx0Ah5WKX5iz+TBi79yA00VqhCY57OV
-	OQn/86ESSyoTB2YUJHPL8jHSUALpghn29a6irbPpaKlkY8V6yKfrsV/H2RrQ4D6jOOmZeB
-	9pygDXUEiGtaXxzbzVNV30aLbUSBYJM1oKSMM+Q61e4OuLcIKzEyOBDnMKYSXD1EM/Gyb/
-	rMSdyZefllO9bm3UuKF6NfSnN1WLTfggrmnnZ0kXS1XLGY0ZeFQ8onSwDerTrA==
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Fri, 09 Feb 2024 15:31:49 +0100
-Subject: [PATCH v5 13/13] MIPS: mobileye: eyeq5: add pinctrl node & pinmux
- function nodes
+	s=arc-20240116; t=1707502082; c=relaxed/simple;
+	bh=+62asRFl0S1fz6APzJkHn+qsEgHXRlxqLyx3HTejsuA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=VTKQocumdCvqhwLKLI1Bz7E96bFblYEiB6AsFGLn+s74NF1BdVghC636FhEaoh+aKj7Xe54MhCIh+Zup3hQ2BMx6hEGAYQYPiMxXI/ukZIAlvuaP3DlsClPxnfu4fmT7uYYIpb9WOUnHrSuFwMJnJylavEEvCUlWcsgQlGs1iS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=bl6udEzk; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=EUOTo/CJ; arc=none smtp.client-ip=103.168.172.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 66AA613800BD;
+	Fri,  9 Feb 2024 13:07:59 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Fri, 09 Feb 2024 13:07:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm1; t=1707502079; x=1707588479; bh=2A
+	O4bjcUp6bVYUkMaYAR4RdvPKhD/l+vcIQLPfHFuDE=; b=bl6udEzk2yTyHJT8L8
+	SEQUh/JswxpyyvGZNTMHGQ/0llz9DGRN/bf7QEQlMT81C3otLFXgCFej7OlJjvXW
+	nSOlIP+hZR+zZe1xETCT3n1HgKniUazvUdGopfgdI6/z4l9ZV2No2BV5VAIGeMWS
+	ujjqOufueCIa7maz/UwtkYUq3cbCM8Uzz6leWI0anUckJnhlVScFzWS4jPS9TYgl
+	qclpBh4Z7p4pPtMSApXMiQsU36S84AIo2qNLBXwRx83ABZy+Kv0iQXQoRDPmIdZR
+	xtmT90bBHuS9/64PnV/uGOpGHQuzo+UG2DeZ6F9lRG3L3gDM3aeuRNMDnt94mdbo
+	5tPA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1707502079; x=1707588479; bh=2AO4bjcUp6bVY
+	UkMaYAR4RdvPKhD/l+vcIQLPfHFuDE=; b=EUOTo/CJfzOrPOngxdFRONwtxh9ju
+	gif82uejdcNJyr6HETqbQNmjBuLjgzg9QCO4azhTfvhDiZXkiGFSGeJaepoKpd0n
+	7PMMzpC6SxSzcXO/DXHaZbtZ8fn0nwwJIgO4nUvsmIVTL5cnEJO+UQo7qs/GpIoi
+	iw4naqijcVfeK3wnFCDZC5t71Z2QyKL7aOShuCa2PIsWabDeKYkf3JVChSB/QgmC
+	j4EIkW1zigVEEpH2hrwcaWhLUNg1rup7OH+5lyO2UXVuAsEgQPmQDBU0eqIP1QD1
+	N7FnHHiELWvi4McqiNJtPWUGsExYaBzHK+9kB2MteFU1T69QyU9Q0XgPA==
+X-ME-Sender: <xms:_mnGZfPCeqXa9TLUI0IGfTDnA_mPQRiB70-3O9q_PJpGTt7LQlV5lQ>
+    <xme:_mnGZZ9vZXqVom-ntpBjyCJnHzJW7DxEhmF-lNMYs409GBz2PP4D-A7pVfaO4nYuT
+    a-LSp8vIZELyBwVbDE>
+X-ME-Received: <xmr:_mnGZeS4bf-oi3BqnSUConLXyq4UABMiiNsgCxdLd-X7nDFV5taaMU57bdjCS9NxQw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrtdeigddutdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecuhfhrohhmpeflihgrgihu
+    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
+    ftrfgrthhtvghrnhepudffffffhfeuheevhffgleevkeeugeetfeegieeijeehfeekheek
+    veduveeigeeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:_mnGZTv958R2krqhI3egCQgnG7PhAlaebZGX1RGCwyViwocl-ULmqw>
+    <xmx:_mnGZXeY8RwwL463htW1oQnyL0Y8KfjiYtXayi9CzJvnxO_qyqRWrA>
+    <xmx:_mnGZf1wc6IQWFclIs7lZhxC35VrsglEGy21ig2KWjviIPD8Az7SdA>
+    <xmx:_2nGZYHZpnRP4_2qWfSjPJsgN_Kg1xMQx_O1BHbIWqWpSAQOtwCQhg>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 9 Feb 2024 13:07:57 -0500 (EST)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH 0/8] MIPS: Unify register numbering macros for uasm
+Date: Fri, 09 Feb 2024 18:07:46 +0000
+Message-Id: <20240209-regname-v1-0-2125efa016ef@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -56,222 +89,62 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240209-mbly-clk-v5-13-f094ee5e918a@bootlin.com>
-References: <20240209-mbly-clk-v5-0-f094ee5e918a@bootlin.com>
-In-Reply-To: <20240209-mbly-clk-v5-0-f094ee5e918a@bootlin.com>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>, 
- Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- linux-mips@vger.kernel.org, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-gpio@vger.kernel.org, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPJpxmUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDIwNL3aLU9LzE3FRdk2RDkzRDQxPzVCNTJaDqgqLUtMwKsEnRsbW1AG3
+ Qz89ZAAAA
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>
 X-Mailer: b4 0.12.4
-X-GND-Sasl: theo.lebrun@bootlin.com
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1325;
+ i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
+ bh=+62asRFl0S1fz6APzJkHn+qsEgHXRlxqLyx3HTejsuA=;
+ b=kA0DAAoWQ3EMfdd3KcMByyZiAGXGafzIu2KMdEbiNyppV45/ISVQ1snIT6OKVp5Ak3naaBsjm
+ 4h1BAAWCgAdFiEEVBAijrCB0aDX4Gr8Q3EMfdd3KcMFAmXGafwACgkQQ3EMfdd3KcN9XQEA/lsM
+ TSvyhGkAf06a3pH1IF/gB/golXzk2km1eDLr7u4A/iYEWr2MuhscR+EFvGDOqMLwcncV1k+uwg8
+ fC37gqMkA
+X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
+ fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-Pins on this platform have two functions: GPIO or something-else. We
-create function nodes for each something-else based on functions.
+Hi all,
 
-UART nodes are present in the platform devicetree. Add pinctrl to them
-now that the pin controller is supported.
+This is a attempt to unify register numbering macros for uasm,
+in response to review comment [1].
 
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+This is a rather large cosmetic change so I decided to send
+it as a sepreate set.
+
+Please review.
+Thanks
+
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/boot/dts/mobileye/eyeq5-pins.dtsi | 125 ++++++++++++++++++++++++++++
- arch/mips/boot/dts/mobileye/eyeq5.dtsi      |  13 +++
- 2 files changed, 138 insertions(+)
+Jiaxun Yang (8):
+      MIPS: Unify define of CP0 registers for uasm code
+      MIPS: regdefs.h: Guard all defines with __ASSEMBLY__
+      MIPS: regdefs.h: Define a set of register numbers
+      MIPS: traps: Use GPR number macros
+      MIPS: page: Use GPR number macros
+      MIPS: tlbex: Use GPR number macros
+      MIPS: kvm/entry: Use GPR number macros
+      MIPS: pm-cps: Use GPR number macros
 
-diff --git a/arch/mips/boot/dts/mobileye/eyeq5-pins.dtsi b/arch/mips/boot/dts/mobileye/eyeq5-pins.dtsi
-new file mode 100644
-index 000000000000..42acda13e57a
---- /dev/null
-+++ b/arch/mips/boot/dts/mobileye/eyeq5-pins.dtsi
-@@ -0,0 +1,125 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+
-+/*
-+ * Default pin configuration for Mobileye EyeQ5 boards. We mostly create one
-+ * pin configuration node per function.
-+ */
-+
-+&pinctrl {
-+	timer0_pins: timer0-pins {
-+		function = "timer0";
-+		pins = "PA0", "PA1";
-+	};
-+	timer1_pins: timer1-pins {
-+		function = "timer1";
-+		pins = "PA2", "PA3";
-+	};
-+	timer2_pins: timer2-pins {
-+		function = "timer2";
-+		pins = "PA4", "PA5";
-+	};
-+	pps0_pins: pps0-pin {
-+		function = "timer2";
-+		pins = "PA4";
-+	};
-+	pps1_pins: pps1-pin {
-+		function = "timer2";
-+		pins = "PA5";
-+	};
-+	timer5_ext_pins: timer5-ext-pins {
-+		function = "timer5";
-+		pins = "PA6", "PA7", "PA8", "PA9";
-+	};
-+	timer5_ext_input_pins: timer5-ext-input-pins {
-+		function = "timer5";
-+		pins = "PA6", "PA7";
-+	};
-+	timer5_ext_incap_a_pins: timer5-ext-incap-a-pin {
-+		function = "timer5";
-+		pins = "PA6";
-+	};
-+	timer5_ext_incap_b_pins: timer5-ext-incap-b-pin {
-+		function = "timer5";
-+		pins = "PA7";
-+	};
-+	can0_pins: can0-pins {
-+		function = "can0";
-+		pins = "PA14", "PA15";
-+	};
-+	can1_pins: can1-pins {
-+		function = "can1";
-+		pins = "PA16", "PA17";
-+	};
-+	uart0_pins: uart0-pins {
-+		function = "uart0";
-+		pins = "PA10", "PA11";
-+	};
-+	uart1_pins: uart1-pins {
-+		function = "uart1";
-+		pins = "PA12", "PA13";
-+	};
-+	spi0_pins: spi0-pins {
-+		function = "spi0";
-+		pins = "PA18", "PA19", "PA20", "PA21", "PA22";
-+	};
-+	spi1_pins: spi1-pins {
-+		function = "spi1";
-+		pins = "PA23", "PA24", "PA25", "PA26", "PA27";
-+	};
-+	spi1_slave_pins: spi1-slave-pins {
-+		function = "spi1";
-+		pins = "PA24", "PA25", "PA26";
-+	};
-+	refclk0_pins: refclk0-pin {
-+		function = "refclk0";
-+		pins = "PA28";
-+	};
-+	timer3_pins: timer3-pins {
-+		function = "timer3";
-+		pins = "PB0", "PB1";
-+	};
-+	timer4_pins: timer4-pins {
-+		function = "timer4";
-+		pins = "PB2", "PB3";
-+	};
-+	timer6_ext_pins: timer6-ext-pins {
-+		function = "timer6";
-+		pins = "PB4", "PB5", "PB6", "PB7";
-+	};
-+	timer6_ext_input_pins: timer6-ext-input-pins {
-+		function = "timer6";
-+		pins = "PB4", "PB5";
-+	};
-+	timer6_ext_incap_a_pins: timer6-ext-incap-a-pin {
-+		function = "timer6";
-+		pins = "PB4";
-+	};
-+	timer6_ext_incap_b_pins: timer6-ext-incap-b-pin {
-+		function = "timer6";
-+		pins = "PB5";
-+	};
-+	can2_pins: can2-pins {
-+		function = "can2";
-+		pins = "PB10", "PB11";
-+	};
-+	uart2_pins: uart2-pins {
-+		function = "uart2";
-+		pins = "PB8", "PB9";
-+	};
-+	spi2_pins: spi2-pins {
-+		function = "spi2";
-+		pins = "PB12", "PB13", "PB14", "PB15", "PB16";
-+	};
-+	spi3_pins: spi3-pins {
-+		function = "spi3";
-+		pins = "PB17", "PB18", "PB19", "PB20", "PB21";
-+	};
-+	spi3_slave_pins: spi3-slave-pins {
-+		function = "spi3";
-+		pins = "PB18", "PB19", "PB20";
-+	};
-+	mclk0_pins: mclk0-pin {
-+		function = "mclk0";
-+		pins = "PB22";
-+	};
-+};
-diff --git a/arch/mips/boot/dts/mobileye/eyeq5.dtsi b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-index 76935f237ab5..8d4f65ec912d 100644
---- a/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-+++ b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-@@ -79,6 +79,8 @@ uart0: serial@800000 {
- 			clocks  = <&uart_clk>, <&occ_periph>;
- 			clock-names = "uartclk", "apb_pclk";
- 			resets = <&reset 0 10>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&uart0_pins>;
- 		};
- 
- 		uart1: serial@900000 {
-@@ -90,6 +92,8 @@ uart1: serial@900000 {
- 			clocks  = <&uart_clk>, <&occ_periph>;
- 			clock-names = "uartclk", "apb_pclk";
- 			resets = <&reset 0 11>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&uart1_pins>;
- 		};
- 
- 		uart2: serial@a00000 {
-@@ -101,6 +105,8 @@ uart2: serial@a00000 {
- 			clocks  = <&uart_clk>, <&occ_periph>;
- 			clock-names = "uartclk", "apb_pclk";
- 			resets = <&reset 0 12>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&uart2_pins>;
- 		};
- 
- 		olb: system-controller@e00000 {
-@@ -125,6 +131,11 @@ clocks: clock-controller@e0002c {
- 				clocks = <&xtal>;
- 				clock-names = "ref";
- 			};
-+
-+			pinctrl: pinctrl@e000b0 {
-+				compatible = "mobileye,eyeq5-pinctrl";
-+				reg = <0x0b0 0x30>;
-+			};
- 		};
- 
- 		gic: interrupt-controller@140000 {
-@@ -149,3 +160,5 @@ timer {
- 		};
- 	};
- };
-+
-+#include "eyeq5-pins.dtsi"
+ arch/mips/include/asm/mipsregs.h | 249 +++++++++++++++++-----
+ arch/mips/include/asm/regdef.h   |  91 +++++++++
+ arch/mips/kernel/pm-cps.c        | 134 ++++++------
+ arch/mips/kernel/traps.c         |   6 +-
+ arch/mips/kvm/entry.c            | 431 +++++++++++++++++----------------------
+ arch/mips/mm/page.c              | 202 +++++++++---------
+ arch/mips/mm/tlbex.c             | 214 +++++++++----------
+ 7 files changed, 737 insertions(+), 590 deletions(-)
+---
+base-commit: 445a555e0623387fa9b94e68e61681717e70200a
+change-id: 20240209-regname-4c14f1147e25
 
+Best regards,
 -- 
-2.43.0
+Jiaxun Yang <jiaxun.yang@flygoat.com>
 
 
