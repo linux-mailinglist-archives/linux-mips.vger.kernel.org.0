@@ -1,133 +1,162 @@
-Return-Path: <linux-mips+bounces-1384-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1385-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7488484FBE4
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Feb 2024 19:32:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 236DF84FC1D
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Feb 2024 19:42:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BE371F2B5EE
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Feb 2024 18:32:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55C921C20F85
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Feb 2024 18:42:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CF2682861;
-	Fri,  9 Feb 2024 18:32:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B799254F85;
+	Fri,  9 Feb 2024 18:38:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.com header.i=erick.archer@gmx.com header.b="IjUxgM1K"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="G5aYQz3d"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1842D5478B;
-	Fri,  9 Feb 2024 18:32:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E72679DC0
+	for <linux-mips@vger.kernel.org>; Fri,  9 Feb 2024 18:38:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.89.44.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707503524; cv=none; b=VpCFGtC4oYGfnYGBQyH2ZOpQooci5z8CORgE5UoETg3kSdv8nubLZzTm25OGCOgJPR4oAVp6kS8ecOWyq9oKBc54nhO+fTVFnimnGyW5WT9Unnestpjs3yQei1JMzS1toL+9EuVEjSfDY9dKeuN6GW5Lan5qUvrsFlUu6pu0sO0=
+	t=1707503908; cv=none; b=aGCuaxvV5h4m/EhPNN9jzjz7PdfsrVFlypHiJapLf2QqlLR5qijRo2f/L0hU57RwtesfvRZoyT2G8RFShtnCXRvowiOsn6srlMOK4uEjPdrNsqkrPEbsJ6ee1bu/NJbrk9qi1l0L4mhgJDvaVeeOHGNhHku323VBOjftHzWkNno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707503524; c=relaxed/simple;
-	bh=Lm6QEmxYFtHMAzQ013WgLkguXgBWkgyz8h5irU3s7uk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bIV34MBImjLgXQ0ggiSfoWqJ5Oi2h8BIwZKkVnFHBdp3WOsDBlUAbnGc7BYFOIcKdKHuVPCPSuWcR1pnF36eVrFD20byUJnz2WKXxnGU5qt5gYmmBW7ygqKy8bY4DxYneRQjvEUkFLBpWCf0uI2Y/de7wAkATJwbQkqlHCCG9t0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.com; spf=pass smtp.mailfrom=gmx.com; dkim=pass (2048-bit key) header.d=gmx.com header.i=erick.archer@gmx.com header.b=IjUxgM1K; arc=none smtp.client-ip=212.227.17.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.com;
-	s=s31663417; t=1707503503; x=1708108303; i=erick.archer@gmx.com;
-	bh=Lm6QEmxYFtHMAzQ013WgLkguXgBWkgyz8h5irU3s7uk=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-	b=IjUxgM1KUEA4+SU/oU9vYEvsUSF5P1uUmsqB/zO1mJUdY/RDcF7J9EZKrO/SMsXV
-	 X6G8iPpPThxtYswAbSlMmyVhn8/sMxxcfRPHi+8xVls2ZuR6HtygWdkNgdE1gbxqa
-	 W/zhKX53UV7mulnMLeNP/Qh6YT+nvHyunaCkzwddL3jXeezPaF0xICRRveQfuRhIk
-	 36KB43DxddnP10FmErLekxV12FixzvJS19FwQmjJXO/oVCpCuO0fSzxzo0dFRN02t
-	 UBp1wfqFGN25PU6ceNcdHjpOmZBEThXOHafTOvH0CEYE48Uq75gZlcL+SWHwAwYIq
-	 idEEbLGbe4Uu3pD2Ww==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.localdomain ([79.157.194.183]) by mail.gmx.net
- (mrgmx105 [212.227.17.174]) with ESMTPSA (Nemesis) id
- 1Mof57-1rF61e0PM1-00p27r; Fri, 09 Feb 2024 19:31:43 +0100
-From: Erick Archer <erick.archer@gmx.com>
-To: Florian Fainelli <florian.fainelli@broadcom.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Erick Archer <erick.archer@gmx.com>,
-	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] irqchip/irq-bcm7038-l1: Prefer struct_size over open coded arithmetic
-Date: Fri,  9 Feb 2024 19:31:28 +0100
-Message-Id: <20240209183128.10273-1-erick.archer@gmx.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1707503908; c=relaxed/simple;
+	bh=c+rwiItIstRSnL0bCsBeIfiiFeNHQerOKUZIMk9xT0E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=e1y0OAWHFZZv2i2D0Tyw7xfrwiGYyQUfchcVNJ+YB4UdtP0GOQSSCK2CGxVp3K430SKKxZeWheVNkUBYpWt53PeoBvLz0aWqCU7Vccnh74gyKJRn7mdImojnOEVV/u6xyMVZM+KXGVt4oi+89LBBDDY1VfQjSvvvVr+oEzd1CUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=G5aYQz3d; arc=none smtp.client-ip=35.89.44.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
+Received: from eig-obgw-5002a.ext.cloudfilter.net ([10.0.29.215])
+	by cmsmtp with ESMTPS
+	id YQA4r7FIECF6GYVlZrG8Ne; Fri, 09 Feb 2024 18:38:25 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id YVlYr8xNeoFgVYVlYrly6o; Fri, 09 Feb 2024 18:38:24 +0000
+X-Authority-Analysis: v=2.4 cv=e7ylSrp/ c=1 sm=1 tr=0 ts=65c67120
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=VhncohosazJxI00KdYJ/5A==:17
+ a=IkcTkHD0fZMA:10 a=k7vzHIieQBIA:10 a=wYkD_t78qR0A:10 a=VwQbUJbxAAAA:8
+ a=NEAV23lmAAAA:8 a=7YfXLusrAAAA:8 a=2-LqU1-JSYPvSRI2HFEA:9 a=QEXdDO2ut3YA:10
+ a=1F1461vogZIA:10 a=5kKzt1m56AEA:10 a=AjGcO6oz07-iQ99wixmX:22
+ a=SLz71HocmBbuEhFRYD3r:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=ubhs5TTJlmjrNVcQ8/d8FvdbYjky0tqln9Hz+0mS83c=; b=G5aYQz3dT7H6nvvIE7oHOiEsj5
+	/NWS2+D1C2tHb+hSTOo1Up1YHqlQE4Wt/XzChjeBGvGZdZLXlBrgqYmG2uTmAs8EVX67FCbAUJCST
+	FpCEHoHQg1GipLjC3EmProNpo09ShJDCkV8o7ZMbhsSNkE+hJYhIoSHV62yhp+MNWS7n4SchyWzqR
+	uuYSfGJkyFEGuJPErIBj8Ksq/lyUqys/fHWcmX+fsexcgLVJngIml623AeNrBtGSRGDYuzzrdtNwA
+	5EEAFbrXH9RUvgo4R+FjdZM/W3qDKb22chTmFN3vB++ljI5GxxPK6d5nUcMSSoxn7sWfsanU4qTib
+	tTlZhVJQ==;
+Received: from [201.172.172.225] (port=33262 helo=[192.168.15.10])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96.2)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1rYVlX-004CdG-2a;
+	Fri, 09 Feb 2024 12:38:23 -0600
+Message-ID: <3ef9dfc9-3d0f-434d-9836-066265975728@embeddedor.com>
+Date: Fri, 9 Feb 2024 12:38:18 -0600
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:HHE2RklMAgct5mWgoo5roJAE0JNG1ajQPkAW3/w0TU9s7QMGYgc
- lJppmFsPQYybduHX/bzeNYbj5G4Jt1opcVxoboa+zy5EijRyvzU2sNMr6g8OnyasblpGe0/
- NGfu19G/ZifHfDH7yN5YgoW2GJP13JUug+Toed+qXU3eOpPRQ7Udu+DGUDZIIviO+LpRlI8
- CurrQGSZ3Uz135e/IeOwQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:aiXGABC/NJE=;4XdU1nSuxoQ18FFKIQEs4U+lHlc
- hnrMxh53rZP5AGJs/zAZa4gPYCJJ6CZAO1PNSQO6fWONDxbmN4sMcnUAmeeK7mxs0riAVEb6N
- +L3qsDbnW3rpyXtcPGXT6VOJv6bie+CyfGmPHYeR15B7g5siFCDLCuFcSXq28Qcil2vEz9uv/
- y9xsLOFDrxfhtP6UuJhXum9NLbuTjVbE2U7juaIMj7rSKNL01m7c/uFdqO1UJlRVj21FZbZm+
- wQYIj3TnTyRSkZwFdXDYKYvTdtoDd9GSgdt23Aft+z8mMwdaYS09wLqHe6ITSZbbZiJ7kKKF+
- Hrhk5TwalPX1bQA1mLOmJLRsL4pzRipkBOUVNuqqRYzN2cpHT6X8yWtlhfQZQpAmvHkd0LOKj
- QK7iuiIrJ1UjUdH4wNwMXSaM6908KrPR24S3uK+Yc5Fz07JwyENal/qJ3GXGYpBiQpnDKNstY
- yENOkSpspL8S3fcXdxW/VT2YIZhPjhtXz+/yYIIAp7+e6Yxxn70glGZCJIqr9qORbsV+hYMpG
- Yi6qC2ljuDrr45DUNVSFjjftmGl8JxVLsL6azqLeF3SydEAhrQbxa1oYCpXiLcdDgdIdZV+RC
- ud86Xow3FZSyL/SwMpZy0a+zu4RuLKjKNtz7CMwSKw8Dgl702quBQQmvCiCJk9SxowOjLHEZV
- PcrTNjEP/8vc0YMsSXD5CwcbI481OdAmt6nlkL54O0K0+N8Oxx7B0+8L1YeQdE7qeP0YbxPrk
- 1at286ZydYRlE1FBe18hqvblFXsRQrL2V35i9HggNLoz3CGRsPLBjfPtZTK/sB4113VMCB9JP
- Nan18YywG4/5JieXd8VJG1jpKerA5Xy11E1pmMrnadea0=
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] irqchip/bcm-6345-l1: Prefer struct_size over open coded
+ arithmetic
+To: Erick Archer <erick.archer@gmx.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, linux-hardening@vger.kernel.org
+References: <20240209181600.9472-1-erick.archer@gmx.com>
+Content-Language: en-US
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20240209181600.9472-1-erick.archer@gmx.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 201.172.172.225
+X-Source-L: No
+X-Exim-ID: 1rYVlX-004CdG-2a
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.15.10]) [201.172.172.225]:33262
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 4
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfJIqZaImIO+czRkKB6/8fY3llcVCS107G9udnxp8hBDm2B4kmiPBhimjmv49Ud99TfFaC2v5VJywCSWJH9yoiBuDqRbzU/sexj37TXsskbabg6OXsWmt
+ 8/ipT814oALOXtAR5wXckC1djoPrdAGaEl/IOARsh7MTbA7MNDc57EgrOglCtFerFWn9h29g8oWRdQCRrloj3tVbbHlbQLrny5TPWhtaI2XmLOg/PQ2nXBad
 
-This is an effort to get rid of all multiplications from allocation
-functions in order to prevent integer overflows [1].
 
-As the cpu variable is a pointer to "struct bcm7038_l1_cpu" and this
-structure ends in a flexible array:
 
-struct bcm7038_l1_cpu {
-	void __iomem	*map_base;
-	u32		mask_cache[];
-};
+On 2/9/24 12:16, Erick Archer wrote:
+> This is an effort to get rid of all multiplications from allocation
+> functions in order to prevent integer overflows [1].
+> 
+> As the cpu variable is a pointer to "struct bcm6345_l1_cpu" and this
+> structure ends in a flexible array:
+> 
+> struct bcm6345_l1_cpu {
+> 	[...]
+> 	u32	enable_cache[];
+> };
+> 
+> the preferred way in the kernel is to use the struct_size() helper to
+> do the arithmetic instead of the argument "size + count * size" in the
+> kzalloc() function.
+> 
+> This way, the code is more readable and more safer.
+> 
+> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments [1]
+> Link: https://github.com/KSPP/linux/issues/162 [2]
+> Signed-off-by: Erick Archer <erick.archer@gmx.com>
 
-the preferred way in the kernel is to use the struct_size() helper to
-do the arithmetic instead of the argument "size + count * size" in the
-kzalloc() function.
+LGTM:
 
-This way, the code is more readable and more safer.
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#open-=
-coded-arithmetic-in-allocator-arguments [1]
-Link: https://github.com/KSPP/linux/issues/162 [2]
+Thanks
+-- 
+Gustavo
 
-Signed-off-by: Erick Archer <erick.archer@gmx.com>
-=2D--
- drivers/irqchip/irq-bcm7038-l1.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/irqchip/irq-bcm7038-l1.c b/drivers/irqchip/irq-bcm703=
-8-l1.c
-index 24ca1d656adc..36e71af054e9 100644
-=2D-- a/drivers/irqchip/irq-bcm7038-l1.c
-+++ b/drivers/irqchip/irq-bcm7038-l1.c
-@@ -249,7 +249,7 @@ static int __init bcm7038_l1_init_one(struct device_no=
-de *dn,
- 		return -EINVAL;
- 	}
-
--	cpu =3D intc->cpus[idx] =3D kzalloc(sizeof(*cpu) + n_words * sizeof(u32)=
-,
-+	cpu =3D intc->cpus[idx] =3D kzalloc(struct_size(cpu, mask_cache, n_words=
-),
- 					GFP_KERNEL);
- 	if (!cpu)
- 		return -ENOMEM;
-=2D-
-2.25.1
-
+> ---
+>   drivers/irqchip/irq-bcm6345-l1.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/irqchip/irq-bcm6345-l1.c b/drivers/irqchip/irq-bcm6345-l1.c
+> index 9745a119d0e6..eb02d203c963 100644
+> --- a/drivers/irqchip/irq-bcm6345-l1.c
+> +++ b/drivers/irqchip/irq-bcm6345-l1.c
+> @@ -242,7 +242,7 @@ static int __init bcm6345_l1_init_one(struct device_node *dn,
+>   	else if (intc->n_words != n_words)
+>   		return -EINVAL;
+> 
+> -	cpu = intc->cpus[idx] = kzalloc(sizeof(*cpu) + n_words * sizeof(u32),
+> +	cpu = intc->cpus[idx] = kzalloc(struct_size(cpu, enable_cache, n_words),
+>   					GFP_KERNEL);
+>   	if (!cpu)
+>   		return -ENOMEM;
+> --
+> 2.25.1
+> 
+> 
 
