@@ -1,131 +1,114 @@
-Return-Path: <linux-mips+bounces-1391-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1392-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DAC28501B5
-	for <lists+linux-mips@lfdr.de>; Sat, 10 Feb 2024 02:26:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 795488503A8
+	for <lists+linux-mips@lfdr.de>; Sat, 10 Feb 2024 10:32:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0EFCC1F2934E
-	for <lists+linux-mips@lfdr.de>; Sat, 10 Feb 2024 01:26:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC2F91C22700
+	for <lists+linux-mips@lfdr.de>; Sat, 10 Feb 2024 09:32:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74B9216439;
-	Sat, 10 Feb 2024 01:25:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BB4F36AED;
+	Sat, 10 Feb 2024 09:32:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="ZEkE3+Eo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HvSGhUUy"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.205])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5B4928371;
-	Sat, 10 Feb 2024 01:24:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E45ED36AE9;
+	Sat, 10 Feb 2024 09:32:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707528301; cv=none; b=dPE21uU6EguussxQZT8WcyATSslQ5N1J4vJKsPb3GR4zGh4V+I3ZvKFZexzf4SQK5lvKQiBzkH4kY7Kp7uuCDqe/wluKW9o32XlTtMB392A8FompX59xDtdWBc9HUrJvJususGomNgRwxrl9Aa0pqt8L/2buIHI3MZoAEk+n/30=
+	t=1707557545; cv=none; b=g2VQ/NUfgBzeQcvxABXCeF4BRE6vGQIv6wnNAVmA4pLAyzBnTszar4AE+etyNZ9gq9H4bSdzLJ1HSAVLMPUTEiPYeV2h2ZfTzMeJgudyirAIoE89K/5jtU59XmMcV9rxKoqFf5mdQlryDfhkXkexz5NTodfKgkQNzL5Id/j5NGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707528301; c=relaxed/simple;
-	bh=xxXAvFJcsZzZwiPknF3QF04PRu/JojlyXTHWeEtALdU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DM+Qb5Z2RGPbdiAKqCQVMtm0naIfI4xgNrfvx5BQboivsaf4nW0Lw5bkTtU2SXIs93no0xpC7tyfuZ5SaadPvbZeoU0NH2dEWO3YhSTk0bxVcvD2kLn5a3Vg7sKWA00tdkD40sK+9yrU20ytTho74/D41E5bFMi9whb3rzRN9Kc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=ZEkE3+Eo; arc=none smtp.client-ip=192.19.144.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id E3480C0000E8;
-	Fri,  9 Feb 2024 17:24:52 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com E3480C0000E8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1707528293;
-	bh=xxXAvFJcsZzZwiPknF3QF04PRu/JojlyXTHWeEtALdU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ZEkE3+EoCdjX3b21BnhGHFsVlZ4nRVj4bXX0scg0IQDki3QtARbi9uIE+mb+te4mY
-	 VthG9C4Qn84KV+bCTTvOg3FdoT0TQiH/5cRTkVcIJ4IJpnyNewUlZQJSa1EoI95VaT
-	 EfbpYaPeeZttX+41nC7TlWr5dDCNChw1QvfZi3zM=
-Received: from stbirv-lnx-1.igp.broadcom.net (stbirv-lnx-1.igp.broadcom.net [10.67.48.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id 2C94C18041CAC4;
-	Fri,  9 Feb 2024 17:24:51 -0800 (PST)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: linux-kernel@vger.kernel.org
-Cc: maz@kernel.org,
+	s=arc-20240116; t=1707557545; c=relaxed/simple;
+	bh=zmgXIy+KvUSnQwp4jEHGf3DonxJlpcSWYSJAEKZmDWI=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Oe3UKsR7iQSceWlUbB0Wb/+16fdvgvx0FdDLt30fGZ01h4+mmkiDwanHkq45KXGlHBRJsunLm+KhQQ95lQriSM12yuIHajws2mG3iozBayKrAns0N/FBeI8BvCFZNXobil/7XRO23Uh886+OJJxVC92Rs/3wut40HyPOP6OdBF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HvSGhUUy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41DCBC433C7;
+	Sat, 10 Feb 2024 09:32:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707557544;
+	bh=zmgXIy+KvUSnQwp4jEHGf3DonxJlpcSWYSJAEKZmDWI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=HvSGhUUyyOuBRuCXxIoQiRxNoGp+6rDitXgJrQG81NV4mn7ggzBfJLY2TPj4JWiVz
+	 nvSqSJD2FqqRMgzNSLs14Xo7ylk0x6MC/TGgnSMzs23XqzFJQZfsBBQDaIyUsWMcJ3
+	 4iEFQRh6wddLUtKVY3uul1yS10B3pmLa/A1p439r390qSdN4235FEhIT4S0wPluzYk
+	 FtbAjyMef07KwZi5fNe9n3H3LzXdysuH2O7pIZ1V35MbnnWEsENrXozdmF8CGdXykr
+	 SZRLk6dmfkfT5itX4jJCoRRbJAifTRRh04ffoRR0Xg/ntr3UjkzcbRGGY+Oe2CnWWa
+	 BNrfMfLT2rwrQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1rYjif-001yPz-Gb;
+	Sat, 10 Feb 2024 09:32:21 +0000
+Date: Sat, 10 Feb 2024 09:32:21 +0000
+Message-ID: <87jzncwtp6.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: linux-kernel@vger.kernel.org,
 	Doug Berger <opendmb@gmail.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
 	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Brian Norris <computersforpeace@gmail.com>,
 	Jason Cooper <jason@lakedaemon.net>,
 	linux-mips@vger.kernel.org (open list:BROADCOM BMIPS MIPS ARCHITECTURE),
 	linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE)
-Subject: [PATCH v2] irqchip/irq-brcmstb-l2: add write memory barrier before exit
-Date: Fri,  9 Feb 2024 17:24:49 -0800
-Message-Id: <20240210012449.3009125-1-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.34.1
+Subject: Re: [PATCH v2] irqchip/irq-brcmstb-l2: add write memory barrier before exit
+In-Reply-To: <20240210012449.3009125-1-florian.fainelli@broadcom.com>
+References: <20240210012449.3009125-1-florian.fainelli@broadcom.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: florian.fainelli@broadcom.com, linux-kernel@vger.kernel.org, opendmb@gmail.com, bcm-kernel-feedback-list@broadcom.com, tglx@linutronix.de, computersforpeace@gmail.com, jason@lakedaemon.net, linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-From: Doug Berger <opendmb@gmail.com>
+On Sat, 10 Feb 2024 01:24:49 +0000,
+Florian Fainelli <florian.fainelli@broadcom.com> wrote:
+> 
+> From: Doug Berger <opendmb@gmail.com>
+> 
+> It was observed on Broadcom devices that use GIC v3 architecture
+> L1 interrupt controllers as the parent of brcmstb-l2 interrupt
+> controllers that the deactivation of the parent irq could happen
+> before the brcmstb-l2 deasserted its output. This would lead the
+> GIC to reactivate the irq only to find that no L2 interrupt was
+> pending. The result was a spurious interrupt invoking the
+> handle_bad_irq() with its associated messaging. While this did
+> not create a functional problem it is a waste of cycles.
+> 
+> The hazard exists because the memory mapped bus writes to the
+> brcmstb-l2 registers are buffered and the GIC v3 architecture
+> uses a very efficient system register write to deactivate the
+> interrupt. This commit adds a write memory barrier prior to
+> invoking chained_irq_exit() to introduce a dsb(st) on those
+> systems to ensure the system register write cannot be executed
+> until the memory mapped writes are visible to the system.
+> 
+> Signed-off-by: Doug Berger <opendmb@gmail.com>
+> Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> Fixes: 7f646e92766e ("irqchip: brcmstb-l2: Add Broadcom Set Top Box  Level-2 interrupt controller")
+> [florian: Added Fixes tag]
+> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
 
-It was observed on Broadcom devices that use GIC v3 architecture
-L1 interrupt controllers as the parent of brcmstb-l2 interrupt
-controllers that the deactivation of the parent irq could happen
-before the brcmstb-l2 deasserted its output. This would lead the
-GIC to reactivate the irq only to find that no L2 interrupt was
-pending. The result was a spurious interrupt invoking the
-handle_bad_irq() with its associated messaging. While this did
-not create a functional problem it is a waste of cycles.
+Acked-by: Marc Zyngier <maz@kernel.org>
 
-The hazard exists because the memory mapped bus writes to the
-brcmstb-l2 registers are buffered and the GIC v3 architecture
-uses a very efficient system register write to deactivate the
-interrupt. This commit adds a write memory barrier prior to
-invoking chained_irq_exit() to introduce a dsb(st) on those
-systems to ensure the system register write cannot be executed
-until the memory mapped writes are visible to the system.
+	M.
 
-Signed-off-by: Doug Berger <opendmb@gmail.com>
-Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
-Fixes: 7f646e92766e ("irqchip: brcmstb-l2: Add Broadcom Set Top Box  Level-2 interrupt controller")
-[florian: Added Fixes tag]
-Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
----
-Changes in v2:
-
-- add Fixes tag
-- bump copyright
-
- drivers/irqchip/irq-brcmstb-l2.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/irqchip/irq-brcmstb-l2.c b/drivers/irqchip/irq-brcmstb-l2.c
-index 5559c943f03f..63aed60dd3f1 100644
---- a/drivers/irqchip/irq-brcmstb-l2.c
-+++ b/drivers/irqchip/irq-brcmstb-l2.c
-@@ -2,7 +2,7 @@
- /*
-  * Generic Broadcom Set Top Box Level 2 Interrupt controller driver
-  *
-- * Copyright (C) 2014-2017 Broadcom
-+ * Copyright (C) 2014-2024 Broadcom
-  */
- 
- #define pr_fmt(fmt)	KBUILD_MODNAME	": " fmt
-@@ -112,6 +112,9 @@ static void brcmstb_l2_intc_irq_handle(struct irq_desc *desc)
- 		generic_handle_domain_irq(b->domain, irq);
- 	} while (status);
- out:
-+	/* Don't ack parent before all device writes are done */
-+	wmb();
-+
- 	chained_irq_exit(chip, desc);
- }
- 
 -- 
-2.34.1
-
+Without deviation from the norm, progress is not possible.
 
