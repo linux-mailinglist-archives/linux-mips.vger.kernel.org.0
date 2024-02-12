@@ -1,130 +1,138 @@
-Return-Path: <linux-mips+bounces-1394-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1395-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF824850A3A
-	for <lists+linux-mips@lfdr.de>; Sun, 11 Feb 2024 17:08:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1155D850D11
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Feb 2024 04:53:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90EF8B2237C
-	for <lists+linux-mips@lfdr.de>; Sun, 11 Feb 2024 16:08:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C6D9BB211BF
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Feb 2024 03:53:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 227E45B66F;
-	Sun, 11 Feb 2024 16:08:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E779F4428;
+	Mon, 12 Feb 2024 03:53:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="chvvX/L0"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="FUpJaGEq"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57D121E488;
-	Sun, 11 Feb 2024 16:08:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB0A4411
+	for <linux-mips@vger.kernel.org>; Mon, 12 Feb 2024 03:53:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707667723; cv=none; b=bIBCqmCNIlHIKLhepkB1+4PA8BpVr0RIY7Au7t7CUn/BE7dYK+vP/l0LYMhAVnEUEgmAV/yLm9penob2GyMukinoyI4BCVHrskpsRoVilW5T7whZXXPOG9Tr7t7YIM6YvKDfVneQOnjZfzRdYtlOIKD1CmnOPkk8QAfkNEMCDBE=
+	t=1707709991; cv=none; b=LEdlrNmhzM+lwWF7UVxqp968OoMovCtAtOkroX5uJqKNL8rkXoiUP952yCZkxBdaUyTE8lsRc2x1ys4mTaqDUcVNcMeLg7RLqwyUGUNhNs4H77/bQv2dWAwFjc/LS6ZKznlx9UVUi0nGEU5pIuZ/ayKmLaViQvFbH/Tt/usbWik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707667723; c=relaxed/simple;
-	bh=N55mi/y8ytD51GnohFmYC1C7IWXhLQVa5jGRqoxECmY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=q78ZNv2gJAdhG8HhkyrmGV4+xGlZQcI6hlZ/h5Riu3GVnPOp2UzGe4UPc+EOpY/s+EYQolarVP0HnV4CmvJtHQWB2//l5BnFtZileMRNIJwuJwsTJc1Luvp3d46UfMbpBfS/6R/bnAMjrkcIvzjlf0Li6UbwK76seRf5/79NOko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=chvvX/L0; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1d74045c463so19501245ad.3;
-        Sun, 11 Feb 2024 08:08:41 -0800 (PST)
+	s=arc-20240116; t=1707709991; c=relaxed/simple;
+	bh=HkMCBw0DGHALj+SwJeNyQL3YJIfK1uCy0Bfa6T+jdJM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sWnmYn9lO0viII69gr7CFaZ45vnkacLMhhLZOz4HKlzmd2KJq92oLZhCuJEt1ZdzwDFY7Vmnr1Ht42qMt08JRQ13K8wQmzxzd8uoEEFz0ArC1i+XJeEN0GhJoYcmj1jSxBxAp6XQbZmoMd0kXcybg0/ywhkqG0uNK3KQ4ENjI+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=FUpJaGEq; arc=none smtp.client-ip=209.85.219.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dc236729a2bso2623926276.0
+        for <linux-mips@vger.kernel.org>; Sun, 11 Feb 2024 19:53:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707667721; x=1708272521; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=lotKNDu5K1rKJW60VS8sQo+NyQpFqzMMO/FPKjpoA2w=;
-        b=chvvX/L0H4FHkSzWdUv1L6H1YwjEPwAWgO4II7+wSM/sSzi1jJ4kJviUGLDymZP/sr
-         bNGyg4FAZnE+4I2ALzsc1pzUMN75Ttmu+OAYLZNcWgxm8MtME9hlcoYM7GZp8HmspVCj
-         2ceY0pfmCAFA0rcw10P56vJnBHIhTmehYQOx9Y/TvhL5UkkAfujLF7o/uMM3Rjex3cCb
-         gCO9y7w+jDCkeDktvcswVtSTK6yOA7T0VaJTng93xe3y14twDxQWUDwUbo/6l2zYGjRz
-         uBJcYYFJzSdFn2ZRXSA8wsAWlMGst46Mo9pV20zCM5Fx5nI52+2HLh6PDdoSpHcDy3oB
-         2GgQ==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1707709988; x=1708314788; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=inoYkFy02Usw5aZpIo0v9tkTLH+MA6a15+xw5EX4KZg=;
+        b=FUpJaGEqWbPSkjcbaUW6SWnad7qOWndHNN/I8bBiodMsMY/j2eToFu0CSs9HohhDAO
+         JLt/Yd7ci1YhDalR7YHAKh/fEkbGsN/TDqYnQEtSAd5x9SowRfMzFZFYK5E5bVUuZd0w
+         2yPkpsdFC2xFQsQXHqpiAkuGO4S4uRf5uJRUOnBvuRQ9XnWGAAfT4mA49EVbCZaPjuAo
+         Nv8cixW4fbY5p7Mg4nB8tiOvuXL8hWrKqeiY8vD5iw3eSXXZdZZHcfx9OVujAFX7+JSj
+         bIldEr0DZeIEuCMmcKdC9uTAHOVKp/qTq1QQa7jjm1EAB0RYRz/4eckM9flzmPpmZL0L
+         xVeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707667721; x=1708272521;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1707709988; x=1708314788;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lotKNDu5K1rKJW60VS8sQo+NyQpFqzMMO/FPKjpoA2w=;
-        b=WOykkH1P/g6fY5EeAkVM8sM5e9xh2cpRbGVe5OCy5eHGhhmz5NsDt0XJN0Epb0Mxbp
-         MkX5VgLFR3/NphtLD8z8FRvCBL/0nJl/querA0l1urUB+QDCxR9k6Gi5hJUHsdnQ6zWZ
-         u35TpXEDgbMfxKSRY6IGffyRg0bRi7PbvjNsjgbsQyapbJQBaORFehA9RP3z1JXSEQ1e
-         866ocDjNGSfgsu4Lz/9a7aAskXwy8/7pyGdIit46nn57HVG4pIFeTFN4/8617a92D5wB
-         2JWpWYXMNbNwifBtqE2RNydRk5/35vLS6BpvbTwv8Eu2ZjTJ/92v/cXPxUdNj8tBAnCh
-         Z6+g==
-X-Gm-Message-State: AOJu0YwhQm0LA38gSiDLC9qRRxMabPn0szhBGgp39uUwfAhofHIAF+Gs
-	ppnRx9w3A1+I8e7astal5ArY9R938Qt0VNfIXRrgHsPDLDxyby7chWDvfuEU
-X-Google-Smtp-Source: AGHT+IFYTvsPa1mClu6Wnu9S0N/VPJWgBITVulZ3VBS6AeHV90HEmG+t6Hs7GOd/N/517nAOypCOAA==
-X-Received: by 2002:a17:902:f80f:b0:1d4:4df7:22ab with SMTP id ix15-20020a170902f80f00b001d44df722abmr3718138plb.55.1707667720573;
-        Sun, 11 Feb 2024 08:08:40 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWv3UwthIijA0gLXk2GNfKrxVQMENxp7ruxwbs0m7VQKdhCL01TFfyeqgsgnvmHRNkIXdakMHlT/BOQzck7Yb1lZm5nF2H1tBEV0bw7rCgQME2D7WZLJJESjkF2xUwhaPVFOB5yzvisQWBd08e5T3PvkVS5hIZwDjbMYF0PoLvnEdDobsC6DocziUqG
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e16-20020a170902cf5000b001d9b092bcd9sm4495980plg.148.2024.02.11.08.08.39
+        bh=inoYkFy02Usw5aZpIo0v9tkTLH+MA6a15+xw5EX4KZg=;
+        b=ALIeDO1dMtoEWj7QpAOgW2Vqa8Vm4WmSy/COabkoMdDJiDa1o4sZJpIsGtzcVKNprX
+         izN3mPwNuXmu5z/VipcMqZpiJwpc2UIG5cMsDu6UXaGGmjehFtEh0Gu1HsxWN/qm6AVl
+         eFJ2U+qhXPg5YuLthIhAampWkDnQ0jOhW3GLmGx4JdTgEAe1MGTtB+BElVJZtuVx2f7E
+         phHvsKoyGD/zgnEJTn2p4uoip9IMVrVa32dKP2yI5Yrb7B5znUfMuW1Z2fuNG02sMKGV
+         IailrruVnWiE4unQ0Xaez/XOk+4xyOwivk2NXz8BWLEBba503CMkk0INp0PcdYXP+fh1
+         sHVw==
+X-Gm-Message-State: AOJu0YzJK3yhG4oWBroMYI7Nrz5BTtQcL7Fx2IhgYoz3yJo9b/YV34bt
+	ZeOGR+bipByb8x/RH6D7mEMSB94z7C6GWqJGkYU6UBIYQYp6E/ZeI074nYdLHno=
+X-Google-Smtp-Source: AGHT+IHL5MMYEd6Tdu2zhzq3q3mUC0DiI3Id8m1CcO2LYxT5rJcWGiFEws38+qzB6pZwj2tc2hfMHw==
+X-Received: by 2002:a05:6902:1b90:b0:dc7:443d:d9da with SMTP id ei16-20020a0569021b9000b00dc7443dd9damr5276409ybb.4.1707709988724;
+        Sun, 11 Feb 2024 19:53:08 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWxRCBA6JSrWoNOmSBHvQf6ESrYKH1hwruGLxZRxzTpi22WVw8Zh02svYy6czO+Oebs6yEURoeqiGjs2EbvjVYTaJJ7SYXcjUatOekFnR3JBPHY2vrgP8nVOcY7R74nPTohxElbXP0sRsqSbCHso925i9S5LbST0C601VGvLw==
+Received: from ghost ([50.146.0.2])
+        by smtp.gmail.com with ESMTPSA id t5-20020a25aa85000000b00dc254858399sm1117808ybi.2.2024.02.11.19.53.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Feb 2024 08:08:39 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>,
-	Charlie Jenkins <charlie@rivosinc.com>,
+        Sun, 11 Feb 2024 19:53:07 -0800 (PST)
+Date: Sun, 11 Feb 2024 19:53:06 -0800
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH] MIPS: Add 'memory' clobber to csum_ipv6_magic() inline assembler
-Date: Sun, 11 Feb 2024 08:08:37 -0800
-Message-Id: <20240211160837.2436375-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
+Subject: Re: [PATCH] MIPS: Add 'memory' clobber to csum_ipv6_magic() inline
+ assembler
+Message-ID: <ZcmWIhn8/G2QK+jP@ghost>
+References: <20240211160837.2436375-1-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240211160837.2436375-1-linux@roeck-us.net>
 
-After 'lib: checksum: Use aligned accesses for ip_fast_csum and
-csum_ipv6_magic tests' was applied, the test_csum_ipv6_magic unit test
-started failing for all mips platforms, both little and bit endian.
-Oddly enough, adding debug code into test_csum_ipv6_magic() made the
-problem disappear.
+On Sun, Feb 11, 2024 at 08:08:37AM -0800, Guenter Roeck wrote:
+> After 'lib: checksum: Use aligned accesses for ip_fast_csum and
+> csum_ipv6_magic tests' was applied, the test_csum_ipv6_magic unit test
+> started failing for all mips platforms, both little and bit endian.
+> Oddly enough, adding debug code into test_csum_ipv6_magic() made the
+> problem disappear.
+> 
+> The gcc manual says:
+> 
+> "The "memory" clobber tells the compiler that the assembly code performs
+>  memory reads or writes to items other than those listed in the input
+>  and output operands (for example, accessing the memory pointed to by one
+>  of the input parameters)
+> "
+> 
+> This is definitely the case for csum_ipv6_magic(). Indeed, adding the
+> 'memory' clobber fixes the problem.
+> 
+> Cc: Charlie Jenkins <charlie@rivosinc.com>
+> Cc: Palmer Dabbelt <palmer@rivosinc.com>
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>  arch/mips/include/asm/checksum.h | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/mips/include/asm/checksum.h b/arch/mips/include/asm/checksum.h
+> index 4044eaf989ac..0921ddda11a4 100644
+> --- a/arch/mips/include/asm/checksum.h
+> +++ b/arch/mips/include/asm/checksum.h
+> @@ -241,7 +241,8 @@ static __inline__ __sum16 csum_ipv6_magic(const struct in6_addr *saddr,
+>  	"	.set	pop"
+>  	: "=&r" (sum), "=&r" (tmp)
+>  	: "r" (saddr), "r" (daddr),
+> -	  "0" (htonl(len)), "r" (htonl(proto)), "r" (sum));
+> +	  "0" (htonl(len)), "r" (htonl(proto)), "r" (sum)
+> +	: "memory");
+>  
+>  	return csum_fold(sum);
+>  }
+> -- 
+> 2.39.2
+> 
 
-The gcc manual says:
+Thank you for looking into this. It fixed the failure on my mips64el
+qemu setup.
 
-"The "memory" clobber tells the compiler that the assembly code performs
- memory reads or writes to items other than those listed in the input
- and output operands (for example, accessing the memory pointed to by one
- of the input parameters)
-"
-
-This is definitely the case for csum_ipv6_magic(). Indeed, adding the
-'memory' clobber fixes the problem.
-
-Cc: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Palmer Dabbelt <palmer@rivosinc.com>
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- arch/mips/include/asm/checksum.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/mips/include/asm/checksum.h b/arch/mips/include/asm/checksum.h
-index 4044eaf989ac..0921ddda11a4 100644
---- a/arch/mips/include/asm/checksum.h
-+++ b/arch/mips/include/asm/checksum.h
-@@ -241,7 +241,8 @@ static __inline__ __sum16 csum_ipv6_magic(const struct in6_addr *saddr,
- 	"	.set	pop"
- 	: "=&r" (sum), "=&r" (tmp)
- 	: "r" (saddr), "r" (daddr),
--	  "0" (htonl(len)), "r" (htonl(proto)), "r" (sum));
-+	  "0" (htonl(len)), "r" (htonl(proto)), "r" (sum)
-+	: "memory");
- 
- 	return csum_fold(sum);
- }
--- 
-2.39.2
+Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
 
 
