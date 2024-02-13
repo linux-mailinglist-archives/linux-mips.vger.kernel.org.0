@@ -1,74 +1,71 @@
-Return-Path: <linux-mips+bounces-1427-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1428-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C87AE853472
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Feb 2024 16:21:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE327853908
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Feb 2024 18:54:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 57FBAB20F3B
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Feb 2024 15:21:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A48DF1C22CEE
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Feb 2024 17:54:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44B2A58AB4;
-	Tue, 13 Feb 2024 15:21:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27480604DC;
+	Tue, 13 Feb 2024 17:54:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DYCK8NA+"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFE195A7B7;
-	Tue, 13 Feb 2024 15:20:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7CE4604D3;
+	Tue, 13 Feb 2024 17:54:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707837660; cv=none; b=dTR/SkXgh6ZOZHlNwomTWj4tq2voKBKj6AcDS5umXKWoZYQzjm+46bMgh0G2FlovNCplYeXVOlU5RiomUhc/0zRvFbZ6HZp3vpbUMMzH57onlpTJ1mBz1mcHlxJaaWAnKFKT9oxSyrD51Oz/zvTWnrdr7yvJyOu2tZrKFvGrczo=
+	t=1707846858; cv=none; b=KEgYV9flCY1yel8ukURZyoiAp33m1zv+/YwS0vmlTR6UHaNmTwvyvnuDsm5niF4aLAkgZszBCaudt/Y3/majnuIlXR+PX25d1a1q05QonEWpAm+zTQu2bgDZXFhoMxm559sXvJ6tKObmPOppaxJAgsAVbAV3/yx6ecvJ8CQ1Qew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707837660; c=relaxed/simple;
-	bh=mLLi2YG82DuMTVToqNT+HyWTPw09yqklzX/sT8xj/Ns=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=sy5Wtdf6sZS3LByir1H0ZE+C9KfbE7OtS+f9ULt6MemD3nictFJpSOjkrRgouiTrAuvdy+9H8gaIom3w70RkajXuGQEYwQrgWjc2pE+Ge3V769Kn21eaoIIQP9X8Wq3oL706VqSMnwBILheJtS2OEhjbHgK60/mLE9pX+l/BObM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id B0F3592009C; Tue, 13 Feb 2024 16:20:54 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id AA08E92009B;
-	Tue, 13 Feb 2024 15:20:54 +0000 (GMT)
-Date: Tue, 13 Feb 2024 15:20:54 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+	s=arc-20240116; t=1707846858; c=relaxed/simple;
+	bh=MUIZvlFHTGzkRMldmTzlSziHPH3x+7VcZO6X5P3yY88=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lHVjAAUcBq3SI04PKBl2MEyxm1GuISOm/NcEIhLFmt1XjQr7GcyTedWBkTeAW7nehVULVijcn1jSN8Micmw/1BUXAUO58Bm8fjY9FTdcR8w4EnrMVB2BGUAPcaPtSH8KKNjY2h2I7HkFmT2758H90AB2f3Fzu8/IOD6HbMnDAj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DYCK8NA+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC4C9C433C7;
+	Tue, 13 Feb 2024 17:54:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1707846857;
+	bh=MUIZvlFHTGzkRMldmTzlSziHPH3x+7VcZO6X5P3yY88=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DYCK8NA+QYQEbaTAvdCQeYjgOB/G6sNQCAWR5d5CLocyoZDiYAx3DcH/jtgzGH1x/
+	 fONWFXnFKbCYE+p65AWgm6hIDk1SJh2veAtMTN3hmAD1jymdhR1eHOT1l0UoaRQ47b
+	 j14VpSLC+R+GIsV3PH3yXNRWo7fOBe0tpKr0LCvs=
+Date: Tue, 13 Feb 2024 18:27:37 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: "Ricardo B. Marliere" <ricardo@marliere.net>
-cc: Ralf Baechle <ralf@linux-mips.org>, linux-mips@vger.kernel.org, 
-    linux-kernel@vger.kernel.org, 
-    Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] tc: make tc_bus_type const
-In-Reply-To: <20240213-bus_cleanup-tc-v1-1-5ed32393a73a@marliere.net>
-Message-ID: <alpine.DEB.2.21.2402131507130.2376@angie.orcam.me.uk>
-References: <20240213-bus_cleanup-tc-v1-1-5ed32393a73a@marliere.net>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Serge Semin <fancer.lancer@gmail.com>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mips: bus: make mips_cdmm_bustype const
+Message-ID: <2024021325-albatross-mule-d8bc@gregkh>
+References: <20240213-bus_cleanup-mips2-v1-1-9c0e3d4a1852@marliere.net>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240213-bus_cleanup-mips2-v1-1-9c0e3d4a1852@marliere.net>
 
-On Tue, 13 Feb 2024, Ricardo B. Marliere wrote:
-
-> Since commit d492cc2573a0 ("driver core: device.h: make struct
-> bus_type a const *"), the driver core can properly handle constant
-> struct bus_type, move the tc_bus_type variable to be a constant
-> structure as well, placing it into read-only memory which can not be
-> modified at runtime.
+On Tue, Feb 13, 2024 at 11:49:24AM -0300, Ricardo B. Marliere wrote:
+> Now that the driver core can properly handle constant struct bus_type,
+> move the mips_cdmm_bustype variable to be a constant structure as well,
+> placing it into read-only memory which can not be modified at runtime.
 > 
 > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
 > ---
 
- It builds, therefore it works, so:
-
-Acked-by: Maciej W. Rozycki <macro@orcam.me.uk>
-
-Thank you for your contribution!
-
-  Maciej
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
