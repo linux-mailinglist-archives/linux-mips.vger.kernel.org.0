@@ -1,52 +1,52 @@
-Return-Path: <linux-mips+bounces-1428-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1429-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE327853908
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Feb 2024 18:54:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B355853911
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Feb 2024 18:55:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A48DF1C22CEE
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Feb 2024 17:54:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57BCF28C500
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Feb 2024 17:55:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27480604DC;
-	Tue, 13 Feb 2024 17:54:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C59960B99;
+	Tue, 13 Feb 2024 17:54:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DYCK8NA+"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ixVwc+ww"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7CE4604D3;
-	Tue, 13 Feb 2024 17:54:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D23F60B90;
+	Tue, 13 Feb 2024 17:54:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707846858; cv=none; b=KEgYV9flCY1yel8ukURZyoiAp33m1zv+/YwS0vmlTR6UHaNmTwvyvnuDsm5niF4aLAkgZszBCaudt/Y3/majnuIlXR+PX25d1a1q05QonEWpAm+zTQu2bgDZXFhoMxm559sXvJ6tKObmPOppaxJAgsAVbAV3/yx6ecvJ8CQ1Qew=
+	t=1707846877; cv=none; b=Fsf+vBKtaFUwq5ADiZDNqonEIu30teRuhKrgSiqANHi5offjZGWwcNlJahKCEZtoc6qJqt0C9jjpofjOrdCFI7UzOi5Hng5ZJVf4yjrv8RX+1j05nPx044/NslLyA2+HBop5mUS4pZIfs8GNtechyiDL2qJptTTL7qeygABojGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707846858; c=relaxed/simple;
-	bh=MUIZvlFHTGzkRMldmTzlSziHPH3x+7VcZO6X5P3yY88=;
+	s=arc-20240116; t=1707846877; c=relaxed/simple;
+	bh=TyYR1wFHM9t1f7ZKSarVpyG8GlNWTfY2NT0WiOxCXX8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lHVjAAUcBq3SI04PKBl2MEyxm1GuISOm/NcEIhLFmt1XjQr7GcyTedWBkTeAW7nehVULVijcn1jSN8Micmw/1BUXAUO58Bm8fjY9FTdcR8w4EnrMVB2BGUAPcaPtSH8KKNjY2h2I7HkFmT2758H90AB2f3Fzu8/IOD6HbMnDAj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DYCK8NA+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC4C9C433C7;
-	Tue, 13 Feb 2024 17:54:16 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=vE0MxrKQYMyvzCS0BZO8hUPZz+IdaQKRlVZMJbcj7Lpy3WOirekZW4lgv236kMTf240VQTKChB6sLTB9MVBTsKfyBu68PPC8vJbY8gaGQBht6+eM9a/KDIKMqLqJaLNWKZW22ISbxJCt8RQazvCj9gV0p4f3nUBGMo9sG6WRtjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ixVwc+ww; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A0F7C433C7;
+	Tue, 13 Feb 2024 17:54:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1707846857;
-	bh=MUIZvlFHTGzkRMldmTzlSziHPH3x+7VcZO6X5P3yY88=;
+	s=korg; t=1707846877;
+	bh=TyYR1wFHM9t1f7ZKSarVpyG8GlNWTfY2NT0WiOxCXX8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DYCK8NA+QYQEbaTAvdCQeYjgOB/G6sNQCAWR5d5CLocyoZDiYAx3DcH/jtgzGH1x/
-	 fONWFXnFKbCYE+p65AWgm6hIDk1SJh2veAtMTN3hmAD1jymdhR1eHOT1l0UoaRQ47b
-	 j14VpSLC+R+GIsV3PH3yXNRWo7fOBe0tpKr0LCvs=
-Date: Tue, 13 Feb 2024 18:27:37 +0100
+	b=ixVwc+wwH2L0A+4AzVwfY9x2y3PVLZQtQvi1tqyA7VYSRzOnB6b9tH6lSD3RP1qNC
+	 4l6rBoD0iNfVxLT2DrCNr/RA/OQX91Fq610ZGzI4tLc2CmWU+w2oXAbJxZXxmcf2eP
+	 yeL3hP5FJ5YK9trD4Gga63SFW6KptUuKhWKaWZ4s=
+Date: Tue, 13 Feb 2024 18:28:28 +0100
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: "Ricardo B. Marliere" <ricardo@marliere.net>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Serge Semin <fancer.lancer@gmail.com>, linux-mips@vger.kernel.org,
+Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>,
+	Ralf Baechle <ralf@linux-mips.org>, linux-mips@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mips: bus: make mips_cdmm_bustype const
-Message-ID: <2024021325-albatross-mule-d8bc@gregkh>
-References: <20240213-bus_cleanup-mips2-v1-1-9c0e3d4a1852@marliere.net>
+Subject: Re: [PATCH] tc: make tc_bus_type const
+Message-ID: <2024021322-proofs-arrange-578f@gregkh>
+References: <20240213-bus_cleanup-tc-v1-1-5ed32393a73a@marliere.net>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -55,17 +55,18 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240213-bus_cleanup-mips2-v1-1-9c0e3d4a1852@marliere.net>
+In-Reply-To: <20240213-bus_cleanup-tc-v1-1-5ed32393a73a@marliere.net>
 
-On Tue, Feb 13, 2024 at 11:49:24AM -0300, Ricardo B. Marliere wrote:
-> Now that the driver core can properly handle constant struct bus_type,
-> move the mips_cdmm_bustype variable to be a constant structure as well,
-> placing it into read-only memory which can not be modified at runtime.
+On Tue, Feb 13, 2024 at 11:45:25AM -0300, Ricardo B. Marliere wrote:
+> Since commit d492cc2573a0 ("driver core: device.h: make struct
+> bus_type a const *"), the driver core can properly handle constant
+> struct bus_type, move the tc_bus_type variable to be a constant
+> structure as well, placing it into read-only memory which can not be
+> modified at runtime.
 > 
 > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
-> ---
 
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
