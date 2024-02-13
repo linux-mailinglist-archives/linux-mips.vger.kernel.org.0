@@ -1,76 +1,76 @@
-Return-Path: <linux-mips+bounces-1417-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1418-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C10398529EF
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Feb 2024 08:32:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C06D8529F3
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Feb 2024 08:33:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 739012833BF
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Feb 2024 07:32:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33217282EE2
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Feb 2024 07:33:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A9D517590;
-	Tue, 13 Feb 2024 07:32:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2852613AE8;
+	Tue, 13 Feb 2024 07:33:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AbL8Xi7l"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BRPvLJvH"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67AB614291;
-	Tue, 13 Feb 2024 07:32:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D6441757B;
+	Tue, 13 Feb 2024 07:33:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707809553; cv=none; b=QrJXFy/Fza9CaKwURwfq9pOCgmT99+0PUr4lTl4PgFe9xg17Nujbptc9sLbELmvLPfyjoKjJsXcgR9fGPLDOyzGsC30t/UrAsPTuzuW0FApRKSAlX86lzB/lie3MZu4HGK5OxmItIFeGFsCMbQYmZFFt0mh36boHNw6QkFmwQ6A=
+	t=1707809607; cv=none; b=pZ5LguAQddWmHEF+xoHW/+xpPO0uNKHdXX65MZpFk6Y51l51QBz9s1xExaT+FFOWM4PPv85RcNBClycB/Y1EOQLiirhcMFbZa8W9bfqhb3Wdp46nboLJKqFvEYgAreLBeFewkT6ZhqddLGQ09fO1Z7zIyXyCVww/Kio0zmSKtrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707809553; c=relaxed/simple;
-	bh=NajG3i6+q3PjrLOiV0Moz2Vg8qd5eN29XdfIyf14FXc=;
+	s=arc-20240116; t=1707809607; c=relaxed/simple;
+	bh=SEML+0TPkSCmWBIBFvxbSaih2xERndEmc1I8Koj7DxI=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=dJAFI+gvDKyhZ+hco/2HOzh0uX3SsCADmJkzy3jTsYG8QYihCCj6ouzLOEoF4x1VsGX1NOJEEeXqrSHEorR/MODR5xWSOivJRcq27wm4KyVJqb7ZzoIEUaold2C6NES6bziDRKgQWS8XX8FG7TO2bVXPXl50kt2O2fNfeNcd+z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AbL8Xi7l; arc=none smtp.client-ip=209.85.218.42
+	 In-Reply-To:Content-Type; b=SnNGCf/waKIgYMKaf+3a4w99AwxGZquXr1tfMvx4oKKMHDUCHyPG9SJGhEIn3aANZriplVY88UUxCoC1Fm/zus7Cu360GNzZ6ul0/Tc2MIRVJK+ZDEpjjQzf+F1jVSEBA8j/HoK7EZJPfnNokGSf57QYq4Q0u6jXmHm0/HM7ZNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BRPvLJvH; arc=none smtp.client-ip=209.85.218.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a38271c0bd5so497136866b.0;
-        Mon, 12 Feb 2024 23:32:30 -0800 (PST)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a30f7c9574eso69071466b.0;
+        Mon, 12 Feb 2024 23:33:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707809549; x=1708414349; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1707809603; x=1708414403; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Obr7s4SU8ucDOWXyyEnl/wXENLxRIoz08KK3pAwpxf4=;
-        b=AbL8Xi7lRigy97JGBXK5nn4z1gohdrFhyQduqNYvQzzMKXFxwN9cY6eGlB+Bf0597W
-         gPY2zPiDc20TT7I7fD0YlfEj7gtGVak7yJ+GHc0NjBTdamALEODPgknED82QWKAhDhSW
-         lI4hOADlBeMHLIpGWGhLU/I55vr4XnImwVvrksP0nOltR/DKKvCo0tHoMEthdm/FsN/3
-         /Vjwmh/eWnSEurhqTLkTYrHIA/M2xCAPTnlD5F23D+vVKVinfd80ctdWgl4h6tbnIrOv
-         +SKJ/M49vP65SVAUd6xmt3Hhrw23PWy0M3qEqprtcWq1XwT19tKR1wpN6at6cRhz4FJu
-         xp1w==
+        bh=eA4K5JikTKOOhX+zkD3OEmddfXb7zVrNQEOiJut+G2o=;
+        b=BRPvLJvH0L7RbO1pZSKNAdGnhR3u+ZKAR1VOx03qj6iG8sx3Z9doylM9hzQ97n8Ugo
+         hj5uwq/CfyHqKlhHlvvAW88vDdjQwNS7w22Lsiss8/sFQoE7vwV4pfCwpNlzHhUfrt31
+         8p//mOXWRucTL70nG2LR6q0oYab54npsYR+NcuVLBSW8V4sDiu8vRl3YsqlmZOmevebe
+         7Gja9bLjtyufYo3nksixvcMGfoavCArre7aYmZkfIGqU3PhwMlV6G7NoaZ87KklkwD1e
+         PDiTyoWXUN3qK3Mzbil4kY/B+uyr7BQa7+EWGhtM+0qGpAAuj9HTnxGtf0yv7y9UvQFN
+         G1Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707809549; x=1708414349;
+        d=1e100.net; s=20230601; t=1707809603; x=1708414403;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Obr7s4SU8ucDOWXyyEnl/wXENLxRIoz08KK3pAwpxf4=;
-        b=GheSvIzTiMoRrAUkPYKbnSmpWI6P2gdBtXByohUVG+C/93pyI7/Wlhq251tU5FVfTO
-         hXolQcHf2/1NUfK3yfPYqxkctmherWFp7FW+x0cdBtprAzK9IMbh4yYfqotsDOkISqqb
-         3zmot+vRhsaGOaOexirK6yQjbmt/KpxwKOpFYkRUex7vUOQ5RRTC8osnYu5AJ9XXOfZo
-         pDI0p/GKz2TsoCkd+rEu3o5OUjac/LO4iyKgXpNJdgI439RpCEanVLoxgDHFZRLENh2/
-         i2MSH8lyvKzC7dINgwt1qZiC2Plf/rdz0CDc5gWKGF2wf0nrTrXJB/UGtx0s+W288MhU
-         xXlA==
-X-Forwarded-Encrypted: i=1; AJvYcCVPdFEdrthA42ijmandW6bbPDeBoUniub1CaMg8wa/ASemUk1swvKomZ2UvfkC5aCayq91juSrcMJYIJzAC5YL64mE5rJNhXv8QHqhpf6gFY0QOKGqqo6vwWCTfZpVYh3K/DP2hbehzXphUN4Fzy06jTQxNAj8IBvpgNJL9pwtg6Un3gA0=
-X-Gm-Message-State: AOJu0YzCdpiSGNLSE6pDyi2dJ6V0A7YEGyIvgvZjrzfWwJL7VI4vlZTB
-	dgjIKckigHre1cBuENTnMcPfXDgr22ZlLHquwHJZeNfgOUSdMs9b
-X-Google-Smtp-Source: AGHT+IEltaiHsMtSZennMcjIkW+E5kBbU1CFi+QWneGyD05yJ8UhbSGoo36/aRJTrplqSyXAa57izA==
-X-Received: by 2002:a17:906:c57:b0:a3d:57f:5b91 with SMTP id t23-20020a1709060c5700b00a3d057f5b91mr464217ejf.74.1707809549230;
-        Mon, 12 Feb 2024 23:32:29 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXpjA9HaAeQ94rYYPvufxgYEHK0joPd0rqN0ndcsS6VeQ0fAP1JDErxQJ1/vNy/Oy6qNi3MT8v2NcHZh7EHakXgtAZ65kw5U2hcVbzIxIB8f/hmfpuchQii9akmiNznruUpbT2CnquU/1vbCVWBZaJ99S1OKX1j1jB4XlvZMb4t4C86HXRPsx1Ii/yx9Po9p7ni7K/UN4ocAl1yw+v0FIa4MWUYPXDy0AsW8TvXR6AfuKSgrjqoseIXqBAplJBp8rKsUKIP1ZleQEzAXPazqiAg0WvGEbhbhLYdWbqD30XUhjvWQuPCS2Dhj4k=
+        bh=eA4K5JikTKOOhX+zkD3OEmddfXb7zVrNQEOiJut+G2o=;
+        b=uAVFPTON1rJxXg9hl6f/YcGWi2YEmrzgHWXbk7Q1gVtFv2jIhQXh36iBE6q9DyW2RV
+         UnjA4nkJDRda/McgpB35B9MvHs9TI8ggDjvCzscS0msMAe//HPEV4+KfQCNa8Ja3CvWQ
+         H4PwvnF32myChcAABhteItnc+zehw3Y7HLSUq3ZLju/dRdJ/W8rdZlmPylwChi90HK/4
+         AT2pbQtJH3W9Hhd2cgMMuadEh0Z8+QeMUXQrSt/VLwLF6odZgikwCrc+yFR9DVh4GBtK
+         TWQGgaf3VeCKNKDhachE3i5muWRndDGEZ8ZLJPmUOA1g7WWiLuWWaqk+MPYrnOIK+Api
+         XJLA==
+X-Forwarded-Encrypted: i=1; AJvYcCXgnR0M4AND/84kezmdvPJ5v52JcOPp/lW73FbKP22UhUbDY+a/k+R7eBKtXOxLudlt6phWoYgxL0IGPcsxc1sypYQvWJ2gjCq58W7BwED5tm3A1/gmGT4L1f3SCBNWd8zludMbaMTemeq7wA1myaU4UDEM5ZeI2RN9vOy207pWsfZG+sU=
+X-Gm-Message-State: AOJu0Yy4YBkT7gS+VbA5DsZ2W0qWHr7x2l2dN9VBBG+i65NlB0Wgyumj
+	K6CnTDFeCLTWnJDiA2zcWVr9KvD1ni7idznIBfY+/mKOYOpOImuc
+X-Google-Smtp-Source: AGHT+IG9qhurMCbNaYom5yQcrUj8srNmhS+wiT0qd7jNFQwq9Uwz572+Mnee3XUurgTA+4fZ9r2LJw==
+X-Received: by 2002:a17:906:e0d1:b0:a3c:ceff:e83 with SMTP id gl17-20020a170906e0d100b00a3cceff0e83mr2295219ejb.74.1707809603330;
+        Mon, 12 Feb 2024 23:33:23 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXFcdTjOhzgIlC8PyQ4I4+WnW7eFksdn5gTDmKJ8FjB6MUs6nHWMQdhPfHZDV75p+tw9hpE5UMCRMG+VUq/CsteKvRreh2kti8/mImn1vRIxFBc2LFPSIy8Yhh8L1aR2dzGTK/Gl9oRYXJe2o5hzi2a24+2dnbVaniItoTyVqWmRKDD4oRt+u6Ab6V1NqwgRhAY8cJnA+ui6GZh/qe7U8TrNDYMbNNGl0q3kCvUOEHwir67gl+p4XC1LPSY8TcFuOmqPxfBoA1C+BjSnwMeSCxkcqDZRB5YTRyvGG70iNrCBQUMA2C8dtkjLFg=
 Received: from ?IPV6:2a01:c23:bdaf:b200:457b:b235:98c6:f76b? (dynamic-2a01-0c23-bdaf-b200-457b-b235-98c6-f76b.c23.pool.telefonica.de. [2a01:c23:bdaf:b200:457b:b235:98c6:f76b])
-        by smtp.googlemail.com with ESMTPSA id vh2-20020a170907d38200b00a3d08f3283fsm251555ejc.104.2024.02.12.23.32.28
+        by smtp.googlemail.com with ESMTPSA id vh2-20020a170907d38200b00a3d08f3283fsm251555ejc.104.2024.02.12.23.33.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Feb 2024 23:32:28 -0800 (PST)
-Message-ID: <1e1dfb3a-f808-43a4-8df9-6f861f56eec9@gmail.com>
-Date: Tue, 13 Feb 2024 08:32:30 +0100
+        Mon, 12 Feb 2024 23:33:23 -0800 (PST)
+Message-ID: <e5ef576b-70ee-4781-88e3-e728c1e7cb9c@gmail.com>
+Date: Tue, 13 Feb 2024 08:33:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -78,7 +78,8 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 2/4] ALSA: control-led: Integrate mute led trigger
+Subject: [PATCH 3/4] Input: leds: Prepare for removal of config option
+ LEDS_AUDIO_TRIGGER
 Content-Language: en-US
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
@@ -137,80 +138,42 @@ In-Reply-To: <30d49088-283c-40f3-b97b-fd5f5174a467@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-This driver is the only one calling ledtrig_audio_set(), therefore
-the LED audio trigger isn't usable standalone. So it makes sense
-to fully integrate LED audio triger handling here.
-
-The module aliases ensure that the driver is auto-loaded (if built
-as module) if a LED device has one of the two audio triggers as
-default trigger.
+In a follow-up patch handling of the LED audio trigger will be changed,
+including removal of config symbol LEDS_AUDIO_TRIGGER. Therefore set
+the default trigger unconditionally to "audio-mute". It does no harm
+if a default trigger doesn't exist.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- sound/core/control_led.c | 20 +++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
+ drivers/input/input-leds.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/sound/core/control_led.c b/sound/core/control_led.c
-index a78eb4892..b9d650380 100644
---- a/sound/core/control_led.c
-+++ b/sound/core/control_led.c
-@@ -53,6 +53,7 @@ struct snd_ctl_led_ctl {
+diff --git a/drivers/input/input-leds.c b/drivers/input/input-leds.c
+index b16fc8194..176f1da7f 100644
+--- a/drivers/input/input-leds.c
++++ b/drivers/input/input-leds.c
+@@ -18,12 +18,6 @@
+ #define VT_TRIGGER(_name)	.trigger = NULL
+ #endif
  
- static DEFINE_MUTEX(snd_ctl_led_mutex);
- static bool snd_ctl_led_card_valid[SNDRV_CARDS];
-+static struct led_trigger *snd_ctl_ledtrig_audio[NUM_AUDIO_LEDS];
- static struct snd_ctl_led snd_ctl_leds[MAX_LED] = {
- 	{
- 		.name = "speaker",
-@@ -176,8 +177,11 @@ static void snd_ctl_led_set_state(struct snd_card *card, unsigned int access,
- 	case MODE_FOLLOW_ROUTE:	if (route >= 0) route ^= 1; break;
- 	case MODE_FOLLOW_MUTE:	/* noop */ break;
- 	}
--	if (route >= 0)
--		ledtrig_audio_set(led->trigger_type, route ? LED_OFF : LED_ON);
-+	if (route >= 0) {
-+		struct led_trigger *trig = snd_ctl_ledtrig_audio[led->trigger_type];
-+
-+		led_trigger_event(trig, route ? LED_OFF : LED_ON);
-+	}
- }
- 
- static struct snd_ctl_led_ctl *snd_ctl_led_find(struct snd_kcontrol *kctl, unsigned int ioff)
-@@ -442,8 +446,9 @@ static ssize_t brightness_show(struct device *dev,
- 			       struct device_attribute *attr, char *buf)
- {
- 	struct snd_ctl_led *led = container_of(dev, struct snd_ctl_led, dev);
-+	struct led_trigger *trig = snd_ctl_ledtrig_audio[led->trigger_type];
- 
--	return sysfs_emit(buf, "%u\n", ledtrig_audio_get(led->trigger_type));
-+	return sysfs_emit(buf, "%u\n", led_trigger_get_brightness(trig));
- }
- 
- static DEVICE_ATTR_RW(mode);
-@@ -736,6 +741,9 @@ static int __init snd_ctl_led_init(void)
- 	struct snd_ctl_led *led;
- 	unsigned int group;
- 
-+	led_trigger_register_simple("audio-mute", &snd_ctl_ledtrig_audio[LED_AUDIO_MUTE]);
-+	led_trigger_register_simple("audio-micmute", &snd_ctl_ledtrig_audio[LED_AUDIO_MICMUTE]);
-+
- 	device_initialize(&snd_ctl_led_dev);
- 	snd_ctl_led_dev.class = &sound_class;
- 	snd_ctl_led_dev.release = snd_ctl_led_dev_release;
-@@ -788,7 +796,13 @@ static void __exit snd_ctl_led_exit(void)
- 	}
- 	device_unregister(&snd_ctl_led_dev);
- 	snd_ctl_led_clean(NULL);
-+
-+	led_trigger_unregister_simple(snd_ctl_ledtrig_audio[LED_AUDIO_MUTE]);
-+	led_trigger_unregister_simple(snd_ctl_ledtrig_audio[LED_AUDIO_MICMUTE]);
- }
- 
- module_init(snd_ctl_led_init)
- module_exit(snd_ctl_led_exit)
-+
-+MODULE_ALIAS("ledtrig:audio-mute");
-+MODULE_ALIAS("ledtrig:audio-micmute");
+-#if IS_ENABLED(CONFIG_LEDS_TRIGGER_AUDIO)
+-#define AUDIO_TRIGGER(_name)	.trigger = _name
+-#else
+-#define AUDIO_TRIGGER(_name)	.trigger = NULL
+-#endif
+-
+ static const struct {
+ 	const char *name;
+ 	const char *trigger;
+@@ -35,7 +29,7 @@ static const struct {
+ 	[LED_KANA]	= { "kana", VT_TRIGGER("kbd-kanalock") },
+ 	[LED_SLEEP]	= { "sleep" } ,
+ 	[LED_SUSPEND]	= { "suspend" },
+-	[LED_MUTE]	= { "mute", AUDIO_TRIGGER("audio-mute") },
++	[LED_MUTE]	= { "mute", "audio-mute" },
+ 	[LED_MISC]	= { "misc" },
+ 	[LED_MAIL]	= { "mail" },
+ 	[LED_CHARGING]	= { "charging" },
 -- 
 2.43.1
 
