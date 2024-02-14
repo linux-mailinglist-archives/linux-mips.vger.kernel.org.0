@@ -1,158 +1,84 @@
-Return-Path: <linux-mips+bounces-1467-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1468-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA617854F11
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Feb 2024 17:49:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8050E854F2E
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Feb 2024 17:55:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 681262813D5
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Feb 2024 16:49:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B2F041C21D26
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Feb 2024 16:55:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96B35604AB;
-	Wed, 14 Feb 2024 16:48:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="UJwLC3Nl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDACD604C3;
+	Wed, 14 Feb 2024 16:55:11 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7FC560273;
-	Wed, 14 Feb 2024 16:48:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8A35604AA;
+	Wed, 14 Feb 2024 16:55:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707929336; cv=none; b=Kt+ld7GXWAeENkM0nv3jX31er3vI7cIxjdKdzBeakl6cqInvpL/rmv230BToh2gLKmCuaIXGldvY1YVIMYIkLv44uRPrMHejHCn8yNjno4dslxW+siW3AA44I3MoTUQWan4TRBuAX1mxIrHu91vV5ka70mgaqNV8UxCWd+bcCJA=
+	t=1707929711; cv=none; b=lvph3mecjFFV30bXpXtyGaAgbipCxtV4U0BT7H5y1Mo2zb4CXwCVaYVfGpT/GcAsk1Ip/ULhGtDy0MENLnNlc5s+jrBvt53JaXa2IzZgHD7DE/it6TLpeC4ED+TyZY8fcj+0QPl27h18S5/bXOWMjw+6ZFyw1V7iiT6ffvW4ric=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707929336; c=relaxed/simple;
-	bh=NmM56gqPvUymNtGZLWDbLYuIQw40e9xCEmB6pNwzYbE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=PxlbPnpqBRetKYd01DcRpcxgnoY2rbYxXEAfSTuzS6eC+9E4+xbeZZo/UYo97/geeueSenqxObhEI1GltTWUPjvUpDCTLKKq1ggn5eezGNBsNCm5nqOFU8OrhhJ5XmGbkEFoeqfIN/To1v5c+QxhSDD8c2GrbfdShANq96h1HXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=UJwLC3Nl; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6F952C0005;
-	Wed, 14 Feb 2024 16:48:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1707929331;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=D1Xkso4/luCnCKmls1XObu6mUiNp8i4jcJTznrQv8Nw=;
-	b=UJwLC3Nlmt0bX5sP8DqteDyKkHocT208N6iY6iwCQjGZvM/w/raRC6Z6u0GZvDlLlB7WiT
-	e6Iq6q5lkA3NDDxu3e6VTZ3SuYafkYnaYvhT69fos5yQ/kpsFQSsH99X4Gxkpk9PwXspnE
-	Eosba5GhY3zH8D8L4Y0dUSedb4ST5pvWvOF/L5nLG264pvtCXoInMXh3ES8NuMvVWL2iSZ
-	BarDtR7VJzn2T/88ytOWk0o/O2zF0BA4FiCnU0dybZLGUqLtm3j2pwsbTFwHlX3ep4+d9e
-	ceGEeiTNv0Zo3SJth1fPqh9WWDB1KUzAwMMoBgDv2gRpcPuh10MWWs6iEq0MOw==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org, Jiaxun
- Yang <jiaxun.yang@flygoat.com>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, Vladimir
- Kondratiev <vladimir.kondratiev@mobileye.com>, Tawfik Bayouk
- <tawfik.bayouk@mobileye.com>, Alexandre Belloni
- <alexandre.belloni@bootlin.com>, =?utf-8?Q?Th=C3=A9o?= Lebrun
- <theo.lebrun@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v7 03/14] MIPS: Allows relocation exception vectors
- everywhere
-In-Reply-To: <ZcTE8nKCaKuaUvAe@alpha.franken.de>
-References: <20240205153503.574468-1-gregory.clement@bootlin.com>
- <20240205153503.574468-4-gregory.clement@bootlin.com>
- <ZcTE8nKCaKuaUvAe@alpha.franken.de>
-Date: Wed, 14 Feb 2024 17:48:51 +0100
-Message-ID: <87plwzj8jw.fsf@BL-laptop>
+	s=arc-20240116; t=1707929711; c=relaxed/simple;
+	bh=aCDaDgGAbmEmeg+Z73KX3bsqPXtllUMMNrK3B4sfrsg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jD2rfGnirPnP3K+pgh5pRcXoV4KFfHw28bwfJoyOyFbVAHVO9Hg51m1Dc0NJ5onrBqMjY6EFLSHf5JpWNYvQFHQ9wqPkSriL04qoUJYMNzziEpjq+qoiMsOgrn8LmY5EMykjEr1pnW+uORTzwvHU1nsp/HGRRTqVjLRtKxx1EQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1raIXE-0005JW-00; Wed, 14 Feb 2024 17:55:00 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 24D6CC0267; Wed, 14 Feb 2024 17:54:46 +0100 (CET)
+Date: Wed, 14 Feb 2024 17:54:46 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: torvalds@linux-foundation.org
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] MIPS fixes for v6.8
+Message-ID: <ZczwVtJLAl+aeunp@alpha.franken.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-GND-Sasl: gregory.clement@bootlin.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thomas Bogendoerfer <tsbogend@alpha.franken.de> writes:
+The following changes since commit 841c35169323cd833294798e58b9bf63fa4fa1de:
 
-> On Mon, Feb 05, 2024 at 04:34:49PM +0100, Gregory CLEMENT wrote:
->> From: Jiaxun Yang <jiaxun.yang@flygoat.com>
->> 
->> Now the exception vector for CPS systems are allocated on-fly
->> with memblock as well.
->> 
->> It will try to allocate from KSEG1 first, and then try to allocate
->> in low 4G if possible.
->> 
->> The main reset vector is now generated by uasm, to avoid tons
->> of patches to the code. Other vectors are copied to the location
->> later.
->> 
->> gc: use the new macro CKSEG[0A1]DDR_OR_64BIT()
->>     move 64bits fix in an other patch
->>     fix cache issue with mips_cps_core_entry
->>     rewrite the patch to reduce the diff stat
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
->> ---
->>  arch/mips/include/asm/mips-cm.h |   1 +
->>  arch/mips/include/asm/smp-cps.h |   4 +-
->>  arch/mips/kernel/cps-vec.S      |  48 ++-------
->>  arch/mips/kernel/smp-cps.c      | 171 +++++++++++++++++++++++++++-----
->>  4 files changed, 157 insertions(+), 67 deletions(-)
->> [..]
->> diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
->> index dd55d59b88db3..f4cdd50177e0b 100644
->> --- a/arch/mips/kernel/smp-cps.c
->> +++ b/arch/mips/kernel/smp-cps.c
->> @@ -7,6 +7,7 @@
->>  #include <linux/cpu.h>
->>  #include <linux/delay.h>
->>  #include <linux/io.h>
->> +#include <linux/memblock.h>
->>  #include <linux/sched/task_stack.h>
->>  #include <linux/sched/hotplug.h>
->>  #include <linux/slab.h>
->> @@ -25,7 +26,34 @@
->>  #include <asm/time.h>
->>  #include <asm/uasm.h>
->>  
->> +#define BEV_VEC_SIZE	0x500
->> +#define BEV_VEC_ALIGN	0x1000
->> +
->> +#define A0		4
->> +#define A1		5
->> +#define T9		25
->> +#define K0		26
->> +#define K1		27
->> +
->> +#define C0_STATUS	12, 0
->> +#define C0_CAUSE	13, 0
->> +
->> +#define ST0_NMI_BIT	19
->> +#ifdef CONFIG_64BIT
->> +#define ST0_KX_IF_64	ST0_KX
->> +#else
->> +#define ST0_KX_IF_64	0
->> +#endif
->
-> please move this together with the other defines in arch/mips/kvm/entry.c
-> to a header file (arch/mips/include/asm/uasm.h sounds like a good fit).
+  Linux 6.8-rc4 (2024-02-11 12:18:13 -0800)
 
+are available in the Git repository at:
 
-Jiaxun Yang sent a series to address it [1]. I managed to rebase my
-series on top of this one.
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.8_2
 
-Do you agree with these 8 patches?
+for you to fetch changes up to 8fa5070833886268e4fb646daaca99f725b378e9:
 
-Can I send my next series with the assumption that it will be merged?
+  mm/memory: Use exception ip to search exception tables (2024-02-12 23:04:42 +0100)
 
-Gregory
+----------------------------------------------------------------
+- Fix for broken ipv6 checksums
+- Fix handling of exceptions in delay slots
 
-1: https://lore.kernel.org/linux-mips/20240209-regname-v1-0-2125efa016ef@flygoat.com/
+----------------------------------------------------------------
+Guenter Roeck (1):
+      MIPS: Add 'memory' clobber to csum_ipv6_magic() inline assembler
 
+Jiaxun Yang (3):
+      ptrace: Introduce exception_ip arch hook
+      MIPS: Clear Cause.BD in instruction_pointer_set
+      mm/memory: Use exception ip to search exception tables
+
+ arch/mips/include/asm/checksum.h | 3 ++-
+ arch/mips/include/asm/ptrace.h   | 3 +++
+ arch/mips/kernel/ptrace.c        | 7 +++++++
+ include/linux/ptrace.h           | 4 ++++
+ mm/memory.c                      | 4 ++--
+ 5 files changed, 18 insertions(+), 3 deletions(-)
 
 -- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
