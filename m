@@ -1,142 +1,111 @@
-Return-Path: <linux-mips+bounces-1435-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1439-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5E608545CA
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Feb 2024 10:35:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C52DE85474C
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Feb 2024 11:39:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 46B9DB226F5
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Feb 2024 09:35:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81687281ADE
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Feb 2024 10:39:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CA1B18B02;
-	Wed, 14 Feb 2024 09:34:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2BBF16415;
+	Wed, 14 Feb 2024 10:39:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="mMG2JxTY"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AA56179BD
-	for <linux-mips@vger.kernel.org>; Wed, 14 Feb 2024 09:34:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A072CC2C6;
+	Wed, 14 Feb 2024 10:39:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707903276; cv=none; b=WyORBdWtSeaA0NvPKWxBUhIx+4htG0IcEN/kgYKHQWNA9AsUc0Y1dOCTERmxheY4jxRBMacYZq9keakWejpDw0xNn3MMONRTgq2RbDwz4sn9P2p1sdX2BMtbJl12zjlO58b2eO+XCiBHrq91o9jqmGelbdMrXrYk/TTuTWddZ3E=
+	t=1707907171; cv=none; b=FJzoA3Ypi++EpL+TD3sT822akhVb33w450151Oe4iZHl6wBvzQoVXkGUzbY/mWncn454htSAuGBrNfEN2uHtAuGVn678YcGArMF5W3XhZrzkyjOty82/9x/9JIADWd0IXvpd8ZFZ+O2usv+mZQDsczoRrQcK/WVowfVbj7UnC/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707903276; c=relaxed/simple;
-	bh=XNZvdNvoFWfhcTgC23QnqOOAiS5t8GlSW4OiyL8hcOA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UaJf4W24/B89MqlEdvXDZ6FdhqySBGo82YqDojYMx4YD1g+3jX6oMswH7ewTdJzk+qP2TrOyWuLrUixcdNLnqGWd6Scc8L765Qfqyn1vEB4FHVWYU8CQnkbAWK8tP2QS1VD22MxzNTRgWM8xZ7/Q3S4C/2zD/DVUZACmd5p6+Ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1raBeu-0004tS-HS; Wed, 14 Feb 2024 10:34:28 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1raBes-000fCM-NR; Wed, 14 Feb 2024 10:34:26 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1raBes-004Y3V-25;
-	Wed, 14 Feb 2024 10:34:26 +0100
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Paul Cercueil <paul@crapouillou.net>,
-	linux-pwm@vger.kernel.org
-Cc: linux-mips@vger.kernel.org,
-	kernel@pengutronix.de
-Subject: [PATCH v6 057/164] pwm: jz4740: Make use of devm_pwmchip_alloc() function
-Date: Wed, 14 Feb 2024 10:31:44 +0100
-Message-ID:  <14a081c097b4e7c7f346ca6557ece8d16ad5749d.1707900770.git.u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1707900770.git.u.kleine-koenig@pengutronix.de>
+	s=arc-20240116; t=1707907171; c=relaxed/simple;
+	bh=ve+usHpPiLeGFo9qGaUdJEB8rWWmsI433I+8nLrtPWA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cwgDrO7mEgZcYTkhevuBOIU9qYcHTA949ICFlhD+zw/IcI9mkBrteUJrE0DjgPsi3rie2Vy2rDmxI0puEyXNYcqMQSdhrg7pCtQMICs7IsZfZeGIOOA0sUqFd2fdfi6zIgcH5e5bD6mVIg0/5TxJIl5T6xD5ZbtNZNAourHFMro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=mMG2JxTY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD63EC433C7;
+	Wed, 14 Feb 2024 10:39:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1707907171;
+	bh=ve+usHpPiLeGFo9qGaUdJEB8rWWmsI433I+8nLrtPWA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mMG2JxTY5r0JtemuhnLGxIkBv2vs9oCD8JbPETLCQD3yg2qQ4VKFDBUVSU7yIge4J
+	 4MrcD29ANaG2BIMVo3oS8op8fUmcTulSdxbxdcVYhZbgkqyOak9zrqsfNKhV+krgza
+	 xLBeJ68UbUTpFQO+ditMDCSTVbcpZujlhg7+2k6g=
+Date: Wed, 14 Feb 2024 11:39:25 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: linux-pwm@vger.kernel.org, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Benson Leung <bleung@chromium.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+	kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Guenter Roeck <groeck@chromium.org>,
+	chrome-platform@lists.linux.dev, Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>, linux-mips@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	linux-amlogic@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-sunxi@lists.linux.dev, greybus-dev@lists.linaro.org,
+	linux-staging@lists.linux.dev
+Subject: Re: [PATCH v6 001/164] pwm: Provide an inline function to get the
+ parent device of a given chip
+Message-ID: <2024021414-sedan-banking-f6b5@gregkh>
 References: <cover.1707900770.git.u.kleine-koenig@pengutronix.de>
+ <cc30090d2f9762bed9854a55612144bccc910781.1707900770.git.u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2167; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=XNZvdNvoFWfhcTgC23QnqOOAiS5t8GlSW4OiyL8hcOA=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlzIiMvb2gubr14AxRlY4WROnhR9+pwh990PEu3 j17nKIMT7qJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZcyIjAAKCRCPgPtYfRL+ ToSOCAC7NUJNUT8ejYQZtxeQRvmzeO27EqQ772FN7t4Ew0NRxCDpttq0taJ2uydpXAosXzyl4bx djV99gQrwo/ibSe/HqJPktG2Lxw4mLBvKYiKCzRKizscVW23Ho8ix3OEPwPJdIEcNexYGYNecHR eSzHv0a/o0UqeAnOWEjmAZc5ItN0r9Ggtlv+60a5PCwpqe5CWKVJjsAeAglOW9+e1hxu+XRMjg1 xVS24Icos8oGf3ITavMSPdP8BtWrzSqhxi8fFLWs3iEdKD48dVCdHQXYehmNP7trCZrmMd5MJDE b/JROeBK950/ghe20JDtzLnjq+m2kCAEpoW6kPqgQUbNjCPf
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+In-Reply-To: <cc30090d2f9762bed9854a55612144bccc910781.1707900770.git.u.kleine-koenig@pengutronix.de>
 
-This prepares the pwm-jz4740 driver to further changes of the pwm core
-outlined in the commit introducing devm_pwmchip_alloc(). There is no
-intended semantical change and the driver should behave as before.
+On Wed, Feb 14, 2024 at 10:30:48AM +0100, Uwe Kleine-König wrote:
+> Currently a pwm_chip stores in its struct device *dev member a pointer
+> to the parent device. Preparing a change that embeds a full struct
+> device in struct pwm_chip, this accessor function should be used in all
+> drivers directly accessing chip->dev now. This way struct pwm_chip and
+> this new function can be changed without having to touch all drivers in
+> the same change set.
+> 
+> Make use of this function in the framework's core sources.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Acked-by: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de>
----
- drivers/pwm/pwm-jz4740.c | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/pwm/pwm-jz4740.c b/drivers/pwm/pwm-jz4740.c
-index 4d39f61b86ff..da4bf543d357 100644
---- a/drivers/pwm/pwm-jz4740.c
-+++ b/drivers/pwm/pwm-jz4740.c
-@@ -25,14 +25,13 @@ struct soc_info {
- };
- 
- struct jz4740_pwm_chip {
--	struct pwm_chip chip;
- 	struct regmap *map;
- 	struct clk *clk[];
- };
- 
- static inline struct jz4740_pwm_chip *to_jz4740(struct pwm_chip *chip)
- {
--	return container_of(chip, struct jz4740_pwm_chip, chip);
-+	return pwmchip_get_drvdata(chip);
- }
- 
- static bool jz4740_pwm_can_use_chn(struct pwm_chip *chip, unsigned int channel)
-@@ -224,6 +223,7 @@ static const struct pwm_ops jz4740_pwm_ops = {
- static int jz4740_pwm_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-+	struct pwm_chip *chip;
- 	struct jz4740_pwm_chip *jz;
- 	const struct soc_info *info;
- 
-@@ -231,10 +231,10 @@ static int jz4740_pwm_probe(struct platform_device *pdev)
- 	if (!info)
- 		return -EINVAL;
- 
--	jz = devm_kzalloc(dev, struct_size(jz, clk, info->num_pwms),
--			      GFP_KERNEL);
--	if (!jz)
--		return -ENOMEM;
-+	chip = devm_pwmchip_alloc(dev, info->num_pwms, struct_size(jz, clk, info->num_pwms));
-+	if (IS_ERR(chip))
-+		return PTR_ERR(chip);
-+	jz = to_jz4740(chip);
- 
- 	jz->map = device_node_to_regmap(dev->parent->of_node);
- 	if (IS_ERR(jz->map)) {
-@@ -242,11 +242,9 @@ static int jz4740_pwm_probe(struct platform_device *pdev)
- 		return PTR_ERR(jz->map);
- 	}
- 
--	jz->chip.dev = dev;
--	jz->chip.ops = &jz4740_pwm_ops;
--	jz->chip.npwm = info->num_pwms;
-+	chip->ops = &jz4740_pwm_ops;
- 
--	return devm_pwmchip_add(dev, &jz->chip);
-+	return devm_pwmchip_add(dev, chip);
- }
- 
- static const struct soc_info jz4740_soc_info = {
--- 
-2.43.0
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
