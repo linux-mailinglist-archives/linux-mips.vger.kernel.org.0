@@ -1,31 +1,31 @@
-Return-Path: <linux-mips+bounces-1436-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1438-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7F61854627
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Feb 2024 10:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A4FBD854696
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Feb 2024 10:53:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42CF61F2E09E
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Feb 2024 09:35:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FB6F1F232D6
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Feb 2024 09:53:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A1A4171AE;
-	Wed, 14 Feb 2024 09:34:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A34FF168C4;
+	Wed, 14 Feb 2024 09:53:53 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B5B413AED
-	for <linux-mips@vger.kernel.org>; Wed, 14 Feb 2024 09:34:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D7BD168B9
+	for <linux-mips@vger.kernel.org>; Wed, 14 Feb 2024 09:53:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707903293; cv=none; b=TkboTJkNqpLnUbVMdOp4kTKkuVRCzRr8RPHkzkkLewT84ko0o8MuEUT/kNGkFx1v9F2nOvbAK8zSzKx1k4rA7xGBYkEGQIo4oDhptH48AjzMW7TMF2pDfNjY4euiqQLeJhyT+GM+r92PNTrzig2d/kJ66hM3vgMAP7utjMP1lsg=
+	t=1707904433; cv=none; b=Z7eDr1z4luI6G/UZG1mqJAFRok/VKwRD0qKJAPbg95UboSmzAhkXwdU90u8Ni3senga7mn5ZIqK0KS7cJarpLO//sW1ZXQtJpESTDgNb9kqWRek26Jhvk25mqjA6y4ZoDCpYfr4NwAheHjSeiBjv7k1Zf9NvTB0RvKP2k/GTwfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707903293; c=relaxed/simple;
-	bh=VysffgosBaokCEzVr9CapJ6wP73fslCZ+jQWLzJTRHQ=;
+	s=arc-20240116; t=1707904433; c=relaxed/simple;
+	bh=koAN/+/23sPZAVIjNYgBDfSOCZNuNAYktJbEIstyjSk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KwrFS4xTfmq0GKhBC6pgAaRfZxc/OnDIitd+BNsBL9pBU460cBQZCsAmKNXj73hlt+e/7Fhr3LS0yPPMLty7v7PFNPdfQ+WM6/9vHX1a9jUa/9ZtkW7D40x9blfft0oTRnyorkipXf1dfN0WJ/RJxlIRtqNbJMrNOk4iz0M0VZs=
+	 MIME-Version:Content-Type; b=sdt8h04dlYpWJRzyK7Cy38d/VqNfLPwslkLPsR0bG4Sj6cRQjG6CyPeH4Vw1e/Do1PEAvXB0H1e+TgI4toBNxWNCtChqDfW2GEiM99ZFIPQ9wcNdeTpkHpZa2eVMgp6rAeu65LezL5zmbT28mKndQE87AU2FRqXvcAjmT2KYDGM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,68 +33,105 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1raBeo-0004N3-Cv; Wed, 14 Feb 2024 10:34:22 +0100
+	id 1raBeq-0004OA-3m; Wed, 14 Feb 2024 10:34:24 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1raBej-000f6R-Uf; Wed, 14 Feb 2024 10:34:17 +0100
+	id 1raBek-000f6Z-By; Wed, 14 Feb 2024 10:34:18 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1raBej-004XzY-2d;
-	Wed, 14 Feb 2024 10:34:17 +0100
+	id 1raBek-004Xzr-0a;
+	Wed, 14 Feb 2024 10:34:18 +0100
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: linux-pwm@vger.kernel.org,
+To: Jonathan Corbet <corbet@lwn.net>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	James Clark <james.clark@arm.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Mark Brown <broonie@kernel.org>,
+	linux-pwm@vger.kernel.org,
+	Hector Martin <marcan@marcan.st>,
+	Sven Peter <sven@svenpeter.dev>,
 	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
 	Nicolas Ferre <nicolas.ferre@microchip.com>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	Florian Fainelli <florian.fainelli@broadcom.com>,
 	Ray Jui <rjui@broadcom.com>,
 	Scott Branden <sbranden@broadcom.com>,
+	Alexander Shiyan <shc_work@mail.ru>,
 	Benson Leung <bleung@chromium.org>,
 	Shawn Guo <shawnguo@kernel.org>,
 	Sascha Hauer <s.hauer@pengutronix.de>,
 	Paul Cercueil <paul@crapouillou.net>,
 	Vladimir Zapolskiy <vz@mleia.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	=?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
 	Matthias Brugger <matthias.bgg@gmail.com>,
 	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
 	Neil Armstrong <neil.armstrong@linaro.org>,
 	Kevin Hilman <khilman@baylibre.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	=?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+	Heiko Stuebner <heiko@sntech.de>,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
 	Paul Walmsley <paul.walmsley@sifive.com>,
+	Michael Walle <mwalle@kernel.org>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
 	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
 	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
 	Alexandre Torgue <alexandre.torgue@foss.st.com>,
 	Chen-Yu Tsai <wens@csie.org>,
 	Jernej Skrabec <jernej.skrabec@gmail.com>,
 	Samuel Holland <samuel@sholland.org>,
-	Johan Hovold <johan@kernel.org>,
-	Alex Elder <elder@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: kernel@pengutronix.de,
+	Hammer Hsieh <hammerh0314@gmail.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+	Sean Anderson <sean.anderson@seco.com>,
+	Michal Simek <michal.simek@amd.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Pavel Machek <pavel@ucw.cz>,
+	Lee Jones <lee@kernel.org>,
+	Anjelique Melendez <quic_amelende@quicinc.com>,
+	Bjorn Andersson <quic_bjorande@quicinc.com>,
+	Kees Cook <keescook@chromium.org>,
+	Rob Herring <robh@kernel.org>
+Cc: linux-doc@vger.kernel.org,
+	kernel@pengutronix.de,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	asahi@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org,
 	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	linux-rpi-kernel@lists.infradead.org,
 	Guenter Roeck <groeck@chromium.org>,
 	chrome-platform@lists.linux.dev,
 	Fabio Estevam <festevam@gmail.com>,
 	NXP Linux Team <linux-imx@nxp.com>,
 	linux-mips@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
 	linux-mediatek@lists.infradead.org,
 	Jerome Brunet <jbrunet@baylibre.com>,
 	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
 	linux-amlogic@lists.infradead.org,
-	linux-rpi-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
 	Alim Akhtar <alim.akhtar@samsung.com>,
 	linux-samsung-soc@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
 	linux-stm32@st-md-mailman.stormreply.com,
 	linux-sunxi@lists.linux.dev,
-	greybus-dev@lists.linaro.org,
-	linux-staging@lists.linux.dev
-Subject: [PATCH v6 001/164] pwm: Provide an inline function to get the parent device of a given chip
-Date: Wed, 14 Feb 2024 10:30:48 +0100
-Message-ID:  <cc30090d2f9762bed9854a55612144bccc910781.1707900770.git.u.kleine-koenig@pengutronix.de>
+	linux-tegra@vger.kernel.org,
+	linux-leds@vger.kernel.org
+Subject: [PATCH v6 003/164] pwm: Provide pwmchip_alloc() function and a devm variant of it
+Date: Wed, 14 Feb 2024 10:30:50 +0100
+Message-ID:  <9577d6053a5a52536057dc8654ff567181c2da82.1707900770.git.u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1707900770.git.u.kleine-koenig@pengutronix.de>
 References: <cover.1707900770.git.u.kleine-koenig@pengutronix.de>
@@ -105,7 +142,7 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7837; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=VysffgosBaokCEzVr9CapJ6wP73fslCZ+jQWLzJTRHQ=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlzIhM7NlIMX1uF2GQrQA4FrQMoPchi57Yvz/JC blz73iQwb+JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZcyITAAKCRCPgPtYfRL+ TuB0B/9P6zT5YFj/8ggZu30wuJh2FhhmcK5IFWEAn3eCqQlBR1+3r98RrH73NV8ruZe1t4nFx0t c6OsWCmmaXgE6NDq1aepB6xNx+u8uuL4EVlihT9QJVyAeyufdWSSbztRhUXrDwn+FS86xswU0hQ OCGoK2SmNoffSL++99SaLb6zwKJeLP/OE7OHvKNMeD++iM8d5m969WslaGj106z8byRgfAb+gh6 HV3n2oUDQFI0N4yfDlHO1Kbc0wLdEc4o1zQa3Kh4g0DpRCV9Wh8qYU/HDpDq4cIQi3DHD9CNJns wVoX4dBy6zyY+YlCipT3YD5PfL124GflRsA1quEFk0pOzKp4
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6032; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=koAN/+/23sPZAVIjNYgBDfSOCZNuNAYktJbEIstyjSk=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlzIhOy3rMjR1GdjpQaPyoW0nJ56JzUO/rQmlQs ZBM0ZtEf82JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZcyITgAKCRCPgPtYfRL+ TicEB/0dPx8EojmTD1h+4X2160QdFmhEtr9DkNcgvD4MXbJwi2AR0WTiisK1rsmV+6tCkIK7tJ3 ia8xMZ3BnvofoSfLSnXkboz+RdVSIEA7BqEblHXS94KRpF0kJSfkChuZTlsOibS5ccdLl9keCDp Ln92glGKIspJhlUYHC5XJS/5WgVuJIs2zBZ0mj9ssy1fRc7GPSOATaja3kUzueYK4sFeE9sRycR zgSfTLZglcFmMVV6/V8gfK4IdkOlO88EBryyP7oNNXf0XhDmqRiBNvGBpkzOgQFt0cSSObTgx1d uKdMfoMhlp4iXIRqjo0TrOM/JN49b64qgWPy7mfDaS9UVtMr
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -113,213 +150,172 @@ X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 
-Currently a pwm_chip stores in its struct device *dev member a pointer
-to the parent device. Preparing a change that embeds a full struct
-device in struct pwm_chip, this accessor function should be used in all
-drivers directly accessing chip->dev now. This way struct pwm_chip and
-this new function can be changed without having to touch all drivers in
-the same change set.
+This function allocates a struct pwm_chip and driver data. Compared to
+the status quo the split into pwm_chip and driver data is new, otherwise
+it doesn't change anything relevant (yet).
 
-Make use of this function in the framework's core sources.
+The intention is that after all drivers are switched to use this
+allocation function, its possible to add a struct device to struct
+pwm_chip to properly track the latter's lifetime without touching all
+drivers again. Proper lifetime tracking is a necessary precondition to
+introduce character device support for PWMs (that implements atomic
+setting and doesn't suffer from the sysfs overhead of the /sys/class/pwm
+userspace support).
+
+The new function pwmchip_priv() (obviously?) only works for chips
+allocated with pwmchip_alloc().
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/pwm/core.c  | 42 +++++++++++++++++++++---------------------
- drivers/pwm/sysfs.c |  4 ++--
- include/linux/pwm.h |  5 +++++
- 3 files changed, 28 insertions(+), 23 deletions(-)
+ .../driver-api/driver-model/devres.rst        |  1 +
+ Documentation/driver-api/pwm.rst              | 11 ++--
+ drivers/pwm/core.c                            | 58 +++++++++++++++++++
+ include/linux/pwm.h                           | 22 +++++++
+ 4 files changed, 87 insertions(+), 5 deletions(-)
 
+diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
+index c5f99d834ec5..e4df72c408d2 100644
+--- a/Documentation/driver-api/driver-model/devres.rst
++++ b/Documentation/driver-api/driver-model/devres.rst
+@@ -420,6 +420,7 @@ POWER
+   devm_reboot_mode_unregister()
+ 
+ PWM
++  devm_pwmchip_alloc()
+   devm_pwmchip_add()
+   devm_pwm_get()
+   devm_fwnode_pwm_get()
+diff --git a/Documentation/driver-api/pwm.rst b/Documentation/driver-api/pwm.rst
+index 3c28ccc4b611..b41b1c56477f 100644
+--- a/Documentation/driver-api/pwm.rst
++++ b/Documentation/driver-api/pwm.rst
+@@ -143,11 +143,12 @@ to implement the pwm_*() functions itself. This means that it's impossible
+ to have multiple PWM drivers in the system. For this reason it's mandatory
+ for new drivers to use the generic PWM framework.
+ 
+-A new PWM controller/chip can be added using pwmchip_add() and removed
+-again with pwmchip_remove(). pwmchip_add() takes a filled in struct
+-pwm_chip as argument which provides a description of the PWM chip, the
+-number of PWM devices provided by the chip and the chip-specific
+-implementation of the supported PWM operations to the framework.
++A new PWM controller/chip can be allocated using pwmchip_alloc(), then
++registered using pwmchip_add() and removed again with pwmchip_remove(). To undo
++pwmchip_alloc() use pwmchip_put(). pwmchip_add() takes a filled in struct
++pwm_chip as argument which provides a description of the PWM chip, the number
++of PWM devices provided by the chip and the chip-specific implementation of the
++supported PWM operations to the framework.
+ 
+ When implementing polarity support in a PWM driver, make sure to respect the
+ signal conventions in the PWM framework. By definition, normal polarity
 diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
-index 1b4c3d0caa82..830a697826af 100644
+index 830a697826af..9fc6f4fa71d6 100644
 --- a/drivers/pwm/core.c
 +++ b/drivers/pwm/core.c
-@@ -71,18 +71,18 @@ static void pwm_apply_debug(struct pwm_device *pwm,
- 
- 	if (s2.polarity != state->polarity &&
- 	    state->duty_cycle < state->period)
--		dev_warn(chip->dev, ".apply ignored .polarity\n");
-+		dev_warn(pwmchip_parent(chip), ".apply ignored .polarity\n");
- 
- 	if (state->enabled &&
- 	    last->polarity == state->polarity &&
- 	    last->period > s2.period &&
- 	    last->period <= state->period)
--		dev_warn(chip->dev,
-+		dev_warn(pwmchip_parent(chip),
- 			 ".apply didn't pick the best available period (requested: %llu, applied: %llu, possible: %llu)\n",
- 			 state->period, s2.period, last->period);
- 
- 	if (state->enabled && state->period < s2.period)
--		dev_warn(chip->dev,
-+		dev_warn(pwmchip_parent(chip),
- 			 ".apply is supposed to round down period (requested: %llu, applied: %llu)\n",
- 			 state->period, s2.period);
- 
-@@ -91,20 +91,20 @@ static void pwm_apply_debug(struct pwm_device *pwm,
- 	    last->period == s2.period &&
- 	    last->duty_cycle > s2.duty_cycle &&
- 	    last->duty_cycle <= state->duty_cycle)
--		dev_warn(chip->dev,
-+		dev_warn(pwmchip_parent(chip),
- 			 ".apply didn't pick the best available duty cycle (requested: %llu/%llu, applied: %llu/%llu, possible: %llu/%llu)\n",
- 			 state->duty_cycle, state->period,
- 			 s2.duty_cycle, s2.period,
- 			 last->duty_cycle, last->period);
- 
- 	if (state->enabled && state->duty_cycle < s2.duty_cycle)
--		dev_warn(chip->dev,
-+		dev_warn(pwmchip_parent(chip),
- 			 ".apply is supposed to round down duty_cycle (requested: %llu/%llu, applied: %llu/%llu)\n",
- 			 state->duty_cycle, state->period,
- 			 s2.duty_cycle, s2.period);
- 
- 	if (!state->enabled && s2.enabled && s2.duty_cycle > 0)
--		dev_warn(chip->dev,
-+		dev_warn(pwmchip_parent(chip),
- 			 "requested disabled, but yielded enabled with duty > 0\n");
- 
- 	/* reapply the state that the driver reported being configured. */
-@@ -112,7 +112,7 @@ static void pwm_apply_debug(struct pwm_device *pwm,
- 	trace_pwm_apply(pwm, &s1, err);
- 	if (err) {
- 		*last = s1;
--		dev_err(chip->dev, "failed to reapply current setting\n");
-+		dev_err(pwmchip_parent(chip), "failed to reapply current setting\n");
- 		return;
- 	}
- 
-@@ -127,7 +127,7 @@ static void pwm_apply_debug(struct pwm_device *pwm,
- 	    s1.polarity != last->polarity ||
- 	    (s1.enabled && s1.period != last->period) ||
- 	    (s1.enabled && s1.duty_cycle != last->duty_cycle)) {
--		dev_err(chip->dev,
-+		dev_err(pwmchip_parent(chip),
- 			".apply is not idempotent (ena=%d pol=%d %llu/%llu) -> (ena=%d pol=%d %llu/%llu)\n",
- 			s1.enabled, s1.polarity, s1.duty_cycle, s1.period,
- 			last->enabled, last->polarity, last->duty_cycle,
-@@ -318,7 +318,7 @@ static struct pwm_chip *pwmchip_find_by_name(const char *name)
- 	mutex_lock(&pwm_lock);
- 
- 	idr_for_each_entry_ul(&pwm_chips, chip, tmp, id) {
--		const char *chip_name = dev_name(chip->dev);
-+		const char *chip_name = dev_name(pwmchip_parent(chip));
- 
- 		if (chip_name && strcmp(chip_name, name) == 0) {
- 			mutex_unlock(&pwm_lock);
-@@ -456,19 +456,19 @@ EXPORT_SYMBOL_GPL(of_pwm_single_xlate);
- 
- static void of_pwmchip_add(struct pwm_chip *chip)
- {
--	if (!chip->dev || !chip->dev->of_node)
-+	if (!pwmchip_parent(chip) || !pwmchip_parent(chip)->of_node)
- 		return;
- 
- 	if (!chip->of_xlate)
- 		chip->of_xlate = of_pwm_xlate_with_flags;
- 
--	of_node_get(chip->dev->of_node);
-+	of_node_get(pwmchip_parent(chip)->of_node);
+@@ -454,6 +454,64 @@ of_pwm_single_xlate(struct pwm_chip *chip, const struct of_phandle_args *args)
  }
+ EXPORT_SYMBOL_GPL(of_pwm_single_xlate);
  
- static void of_pwmchip_remove(struct pwm_chip *chip)
- {
--	if (chip->dev)
--		of_node_put(chip->dev->of_node);
-+	if (pwmchip_parent(chip))
-+		of_node_put(pwmchip_parent(chip)->of_node);
- }
- 
- static bool pwm_ops_check(const struct pwm_chip *chip)
-@@ -479,7 +479,7 @@ static bool pwm_ops_check(const struct pwm_chip *chip)
- 		return false;
- 
- 	if (IS_ENABLED(CONFIG_PWM_DEBUG) && !ops->get_state)
--		dev_warn(chip->dev,
-+		dev_warn(pwmchip_parent(chip),
- 			 "Please implement the .get_state() callback\n");
- 
- 	return true;
-@@ -500,7 +500,7 @@ int __pwmchip_add(struct pwm_chip *chip, struct module *owner)
- 	unsigned int i;
- 	int ret;
- 
--	if (!chip || !chip->dev || !chip->ops || !chip->npwm)
-+	if (!chip || !pwmchip_parent(chip) || !chip->ops || !chip->npwm)
- 		return -EINVAL;
- 
- 	if (!pwm_ops_check(chip))
-@@ -594,15 +594,15 @@ static struct device_link *pwm_device_link_add(struct device *dev,
- 		 * impact the PM sequence ordering: the PWM supplier may get
- 		 * suspended before the consumer.
- 		 */
--		dev_warn(pwm->chip->dev,
-+		dev_warn(pwmchip_parent(pwm->chip),
- 			 "No consumer device specified to create a link to\n");
- 		return NULL;
- 	}
- 
--	dl = device_link_add(dev, pwm->chip->dev, DL_FLAG_AUTOREMOVE_CONSUMER);
-+	dl = device_link_add(dev, pwmchip_parent(pwm->chip), DL_FLAG_AUTOREMOVE_CONSUMER);
- 	if (!dl) {
- 		dev_err(dev, "failed to create device link to %s\n",
--			dev_name(pwm->chip->dev));
-+			dev_name(pwmchip_parent(pwm->chip)));
- 		return ERR_PTR(-EINVAL);
- 	}
- 
-@@ -617,7 +617,7 @@ static struct pwm_chip *fwnode_to_pwmchip(struct fwnode_handle *fwnode)
- 	mutex_lock(&pwm_lock);
- 
- 	idr_for_each_entry_ul(&pwm_chips, chip, tmp, id)
--		if (chip->dev && device_match_fwnode(chip->dev, fwnode)) {
-+		if (pwmchip_parent(chip) && device_match_fwnode(pwmchip_parent(chip), fwnode)) {
- 			mutex_unlock(&pwm_lock);
- 			return chip;
- 		}
-@@ -1085,8 +1085,8 @@ static int pwm_seq_show(struct seq_file *s, void *v)
- 
- 	seq_printf(s, "%s%d: %s/%s, %d PWM device%s\n",
- 		   (char *)s->private, chip->id,
--		   chip->dev->bus ? chip->dev->bus->name : "no-bus",
--		   dev_name(chip->dev), chip->npwm,
-+		   pwmchip_parent(chip)->bus ? pwmchip_parent(chip)->bus->name : "no-bus",
-+		   dev_name(pwmchip_parent(chip)), chip->npwm,
- 		   (chip->npwm != 1) ? "s" : "");
- 
- 	pwm_dbg_show(chip, s);
-diff --git a/drivers/pwm/sysfs.c b/drivers/pwm/sysfs.c
-index 1698609d91c8..3f434a771fb5 100644
---- a/drivers/pwm/sysfs.c
-+++ b/drivers/pwm/sysfs.c
-@@ -509,10 +509,10 @@ void pwmchip_sysfs_export(struct pwm_chip *chip)
- 	 * If device_create() fails the pwm_chip is still usable by
- 	 * the kernel it's just not exported.
- 	 */
--	parent = device_create(&pwm_class, chip->dev, MKDEV(0, 0), chip,
-+	parent = device_create(&pwm_class, pwmchip_parent(chip), MKDEV(0, 0), chip,
- 			       "pwmchip%d", chip->id);
- 	if (IS_ERR(parent)) {
--		dev_warn(chip->dev,
-+		dev_warn(pwmchip_parent(chip),
- 			 "device_create failed for pwm_chip sysfs export\n");
- 	}
- }
-diff --git a/include/linux/pwm.h b/include/linux/pwm.h
-index 8ffe9ae7a23a..07af6910bdce 100644
---- a/include/linux/pwm.h
-+++ b/include/linux/pwm.h
-@@ -289,6 +289,11 @@ struct pwm_chip {
- 	struct pwm_device *pwms;
- };
- 
-+static inline struct device *pwmchip_parent(const struct pwm_chip *chip)
++#define PWMCHIP_ALIGN ARCH_DMA_MINALIGN
++
++static void *pwmchip_priv(struct pwm_chip *chip)
 +{
-+	return chip->dev;
++	return (void *)chip + ALIGN(sizeof(*chip), PWMCHIP_ALIGN);
 +}
 +
- #if IS_ENABLED(CONFIG_PWM)
- /* PWM user APIs */
- int pwm_apply_might_sleep(struct pwm_device *pwm, const struct pwm_state *state);
++/* This is the counterpart to pwmchip_alloc */
++void pwmchip_put(struct pwm_chip *chip)
++{
++	kfree(chip);
++}
++EXPORT_SYMBOL_GPL(pwmchip_put);
++
++struct pwm_chip *pwmchip_alloc(struct device *parent, unsigned int npwm, size_t sizeof_priv)
++{
++	struct pwm_chip *chip;
++	size_t alloc_size;
++
++	alloc_size = size_add(ALIGN(sizeof(*chip), PWMCHIP_ALIGN), sizeof_priv);
++
++	chip = kzalloc(alloc_size, GFP_KERNEL);
++	if (!chip)
++		return ERR_PTR(-ENOMEM);
++
++	chip->dev = parent;
++	chip->npwm = npwm;
++
++	pwmchip_set_drvdata(chip, pwmchip_priv(chip));
++
++	return chip;
++}
++EXPORT_SYMBOL_GPL(pwmchip_alloc);
++
++static void devm_pwmchip_put(void *data)
++{
++	struct pwm_chip *chip = data;
++
++	pwmchip_put(chip);
++}
++
++struct pwm_chip *devm_pwmchip_alloc(struct device *parent, unsigned int npwm, size_t sizeof_priv)
++{
++	struct pwm_chip *chip;
++	int ret;
++
++	chip = pwmchip_alloc(parent, npwm, sizeof_priv);
++	if (IS_ERR(chip))
++		return chip;
++
++	ret = devm_add_action_or_reset(parent, devm_pwmchip_put, chip);
++	if (ret)
++		return ERR_PTR(ret);
++
++	return chip;
++}
++EXPORT_SYMBOL_GPL(devm_pwmchip_alloc);
++
+ static void of_pwmchip_add(struct pwm_chip *chip)
+ {
+ 	if (!pwmchip_parent(chip) || !pwmchip_parent(chip)->of_node)
+diff --git a/include/linux/pwm.h b/include/linux/pwm.h
+index 29a7d9140f77..4a6568dfdf3f 100644
+--- a/include/linux/pwm.h
++++ b/include/linux/pwm.h
+@@ -403,6 +403,10 @@ static inline bool pwm_might_sleep(struct pwm_device *pwm)
+ int pwm_capture(struct pwm_device *pwm, struct pwm_capture *result,
+ 		unsigned long timeout);
+ 
++void pwmchip_put(struct pwm_chip *chip);
++struct pwm_chip *pwmchip_alloc(struct device *parent, unsigned int npwm, size_t sizeof_priv);
++struct pwm_chip *devm_pwmchip_alloc(struct device *parent, unsigned int npwm, size_t sizeof_priv);
++
+ int __pwmchip_add(struct pwm_chip *chip, struct module *owner);
+ #define pwmchip_add(chip) __pwmchip_add(chip, THIS_MODULE)
+ void pwmchip_remove(struct pwm_chip *chip);
+@@ -475,6 +479,24 @@ static inline int pwm_capture(struct pwm_device *pwm,
+ 	return -EINVAL;
+ }
+ 
++static inline void pwmchip_put(struct pwm_chip *chip)
++{
++}
++
++static inline struct pwm_chip *pwmchip_alloc(struct device *parent,
++					     unsigned int npwm,
++					     size_t sizeof_priv)
++{
++	return ERR_PTR(-EINVAL);
++}
++
++static inline struct pwm_chip *devm_pwmchip_alloc(struct device *parent,
++						  unsigned int npwm,
++						  size_t sizeof_priv)
++{
++	return pwmchip_alloc(parent, npwm, sizeof_priv);
++}
++
+ static inline int pwmchip_add(struct pwm_chip *chip)
+ {
+ 	return -EINVAL;
 -- 
 2.43.0
 
