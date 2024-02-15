@@ -1,193 +1,173 @@
-Return-Path: <linux-mips+bounces-1480-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1481-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74FAB856276
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Feb 2024 13:02:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 766A185632E
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Feb 2024 13:30:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0678B287BFB
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Feb 2024 12:02:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF2D41F2381B
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Feb 2024 12:29:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C53A912B175;
-	Thu, 15 Feb 2024 12:02:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 973B712C54E;
+	Thu, 15 Feb 2024 12:29:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="LklKqVpM";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="p1DQAUh/";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="LklKqVpM";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="p1DQAUh/"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A3612AAD6
-	for <linux-mips@vger.kernel.org>; Thu, 15 Feb 2024 12:02:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D544A12C52A;
+	Thu, 15 Feb 2024 12:29:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707998572; cv=none; b=A7cL6uaJVJcNMWX0s6kq39MrNCz3YQh/khhOYp11D0JiiBblafTpIjfRflMq4sgiNhW2eR7wCUJ5o6F91nokti6NRrYuqPgyw2jJB509jzt4AAGTGpSG9q3FZ6V+62ox7HIVSBjN8trZt4evyFPGa6nTYQq+VZ6Be4Q/t0ljjuY=
+	t=1708000170; cv=none; b=kemAninjwR7LY1q+4qKGHJ4FHdkz84LtxqcSlEG5epCpYJPF5S1DGp6pj+SHDFGASvtgrUA7HC1zpBFB0UBt6Ma4bIaFiE6pr7C19WoQqfqwJj9spQakum0e5+AvdqooWH63WTtpgNLkdkk+FsFhN8B/b6QgSUHulnYU20o8k1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707998572; c=relaxed/simple;
-	bh=3jlg6YeJDDhpum/HJwBRurEn6l6PGW78sxf4+poXyDw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VzpRf5FfczEf4OWsEt2ShmlwR74zC0+BjYBIPLn388qr5es1fk5VVJVzNrzQC8lM/10NFVqTUmIMZA3DVxAl9tNtXs1VLw1AsL55vu/iSgVozPeFoQasoTlRHzooA0GQu9Wn4+AMS0GJMxpN0E2qPgFeoURz0zAG0LYYBU07YBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1raaRB-0000Gm-6C; Thu, 15 Feb 2024 13:01:57 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1raaR5-000sKN-Ds; Thu, 15 Feb 2024 13:01:51 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1raaR5-005KpH-0o;
-	Thu, 15 Feb 2024 13:01:51 +0100
-Date: Thu, 15 Feb 2024 13:01:51 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Michael Walle <mwalle@kernel.org>, Heiko Stuebner <heiko@sntech.de>, linux-doc@vger.kernel.org, 
-	Linus Walleij <linus.walleij@linaro.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Paul Cercueil <paul@crapouillou.net>, linux-tegra@vger.kernel.org, 
-	Conor Dooley <conor.dooley@microchip.com>, Thierry Reding <thierry.reding@gmail.com>, 
-	James Clark <james.clark@arm.com>, Pavel Machek <pavel@ucw.cz>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Guenter Roeck <groeck@chromium.org>, 
-	chrome-platform@lists.linux.dev, Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, 
-	Fabio Estevam <festevam@gmail.com>, linux-riscv@lists.infradead.org, 
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>, Jerome Brunet <jbrunet@baylibre.com>, 
-	Rob Herring <robh@kernel.org>, Samuel Holland <samuel@sholland.org>, 
-	linux-samsung-soc@vger.kernel.org, Bjorn Andersson <quic_bjorande@quicinc.com>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Sean Anderson <sean.anderson@seco.com>, Benson Leung <bleung@chromium.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Lee Jones <lee@kernel.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Hammer Hsieh <hammerh0314@gmail.com>, linux-rockchip@lists.infradead.org, Chen-Yu Tsai <wens@csie.org>, 
-	Michal Simek <michal.simek@amd.com>, NXP Linux Team <linux-imx@nxp.com>, linux-leds@vger.kernel.org, 
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	linux-mips@vger.kernel.org, linux-sunxi@lists.linux.dev, platform-driver-x86@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, Kees Cook <keescook@chromium.org>, 
-	Sven Peter <sven@svenpeter.dev>, Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
-	Ray Jui <rjui@broadcom.com>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, Vladimir Zapolskiy <vz@mleia.com>, 
-	Hans de Goede <hdegoede@redhat.com>, Mark Brown <broonie@kernel.org>, 
-	linux-mediatek@lists.infradead.org, linux-rpi-kernel@lists.infradead.org, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, linux-amlogic@lists.infradead.org, 
-	Orson Zhai <orsonzhai@gmail.com>, Mika Westerberg <mika.westerberg@linux.intel.com>, 
-	kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Alexander Shiyan <shc_work@mail.ru>, Scott Branden <sbranden@broadcom.com>, 
-	linux-gpio@vger.kernel.org, Daire McNamara <daire.mcnamara@microchip.com>, 
-	Chunyan Zhang <zhang.lyra@gmail.com>, Hector Martin <marcan@marcan.st>, 
-	linux-stm32@st-md-mailman.stormreply.com, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Fabrice Gasnier <fabrice.gasnier@foss.st.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, asahi@lists.linux.dev, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Kevin Hilman <khilman@baylibre.com>, 
-	Shawn Guo <shawnguo@kernel.org>, Anjelique Melendez <quic_amelende@quicinc.com>
-Subject: Re: [PATCH v6 003/164] pwm: Provide pwmchip_alloc() function and a
- devm variant of it
-Message-ID: <ws4ybgtvfxqz53vk3i67suipzyqpy5y5fqeee5uf3ua6ow222n@i4ktjuorq3nl>
-References: <cover.1707900770.git.u.kleine-koenig@pengutronix.de>
- <9577d6053a5a52536057dc8654ff567181c2da82.1707900770.git.u.kleine-koenig@pengutronix.de>
- <Zcy21tsntcK80hef@smile.fi.intel.com>
+	s=arc-20240116; t=1708000170; c=relaxed/simple;
+	bh=pr05/woSUV6TNjaB6fjye3Wd7P0srA1HwHBQB4N5oZE=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Uv44RJaFqPEz4Mt/YcM3nd02PhMhqMfLsnMz2yE0WSPgi1HVCUHogdAi9PiQ3j+pqlP0YqdlBNRAle7G5Ia48e+h2ItTo/y2Z01hiiK4gcOjTmJb0BeVd4P52uJhQxvDglpRz7ckeY8o9xbgsAOjpMKf1qt3RSJI6PWlndUqJ4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=LklKqVpM; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=p1DQAUh/; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=LklKqVpM; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=p1DQAUh/; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 1ADC822031;
+	Thu, 15 Feb 2024 12:29:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1708000167; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=j5ffrxL5/U5QWmiM5A695uqHTsmp7YVlzVLTiNzpy38=;
+	b=LklKqVpMGF5+QPgxbPaKYyrShpRaoeo9KaUC2qBtK9+BVDLZX+UWHK8K77m3NkMbxbmkac
+	GKWM4f6diUNjnOxqKSwCU3aGeVjy8QDSJLEz+YPx9Xnf366bM7yrDIEEKcjqDbLgCz5yzd
+	WwnkzOMJl5wx/BaQrOzb+QrftxITYMY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1708000167;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=j5ffrxL5/U5QWmiM5A695uqHTsmp7YVlzVLTiNzpy38=;
+	b=p1DQAUh/ZdJ+Fr0O8/kq/lYmI7BC3YT+MoVamXbu2jdhQlgR5MbpLL+i9o/d4FU4EieQwj
+	nyinAQzKNNLASBAQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1708000167; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=j5ffrxL5/U5QWmiM5A695uqHTsmp7YVlzVLTiNzpy38=;
+	b=LklKqVpMGF5+QPgxbPaKYyrShpRaoeo9KaUC2qBtK9+BVDLZX+UWHK8K77m3NkMbxbmkac
+	GKWM4f6diUNjnOxqKSwCU3aGeVjy8QDSJLEz+YPx9Xnf366bM7yrDIEEKcjqDbLgCz5yzd
+	WwnkzOMJl5wx/BaQrOzb+QrftxITYMY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1708000167;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=j5ffrxL5/U5QWmiM5A695uqHTsmp7YVlzVLTiNzpy38=;
+	b=p1DQAUh/ZdJ+Fr0O8/kq/lYmI7BC3YT+MoVamXbu2jdhQlgR5MbpLL+i9o/d4FU4EieQwj
+	nyinAQzKNNLASBAQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B5D2413A82;
+	Thu, 15 Feb 2024 12:29:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id +uSdKqYDzmXwRwAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Thu, 15 Feb 2024 12:29:26 +0000
+Date: Thu, 15 Feb 2024 13:29:26 +0100
+Message-ID: <87zfw1ewrd.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Pavel Machek <pavel@ucw.cz>,
+	Lee Jones <lee@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+	linux-sound@vger.kernel.org,
+	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+	linux-mips@vger.kernel.org
+Subject: Re: [PATCH 0/4] leds: trigger: Improve handling of led_trigger_event() and simplify mute audio trigger
+In-Reply-To: <30d49088-283c-40f3-b97b-fd5f5174a467@gmail.com>
+References: <30d49088-283c-40f3-b97b-fd5f5174a467@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="eo4pepuhkmuwjzg5"
-Content-Disposition: inline
-In-Reply-To: <Zcy21tsntcK80hef@smile.fi.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+Authentication-Results: smtp-out1.suse.de;
+	none
+X-Spamd-Result: default: False [2.38 / 50.00];
+	 ARC_NA(0.00)[];
+	 TO_DN_EQ_ADDR_SOME(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 TAGGED_RCPT(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 BAYES_HAM(-0.02)[52.40%];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 RCPT_COUNT_SEVEN(0.00)[11];
+	 MID_CONTAINS_FROM(1.00)[];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email];
+	 FREEMAIL_TO(0.00)[gmail.com];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 FREEMAIL_CC(0.00)[ucw.cz,kernel.org,perex.cz,suse.com,gmail.com,alpha.franken.de,vger.kernel.org];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[]
+X-Spam-Level: **
+X-Spam-Score: 2.38
+X-Spam-Flag: NO
+
+On Tue, 13 Feb 2024 08:30:30 +0100,
+Heiner Kallweit wrote:
+> 
+> If a simple trigger is assigned to a LED, then the LED may be off until
+> the next led_trigger_event() call. This may be an issue for simple
+> triggers with rare led_trigger_event() calls, e.g. power supply
+> charging indicators (drivers/power/supply/power_supply_leds.c).
+> Therefore persist the brightness value of the last led_trigger_event()
+> call and use this value if the trigger is assigned to a LED.
+> This change allows to use simple triggers in more cases.
+> As a first use case simplify handling of the mute audio trigger.
+> 
+> This series touches few subsystems. I'd propose to handle it via
+> the LED subsystem.
+> 
+> Heiner Kallweit (4):
+>   leds: trigger: Store brightness set by led_trigger_event()
+>   ALSA: control-led: Integrate mute led trigger
+>   Input: leds: Prepare for removal of config option LEDS_AUDIO_TRIGGER
+>   leds: trigger: audio: Remove this trigger
+
+LGTM.
+
+Reviewed-by: Takashi Iwai <tiwai@suse.de>
+
+One thing I'm not 100% sure is the movement from ledtrig:audio-mute
+and ledtrig:audio-micmute alias into snd-ctl-led module.  Who would
+use/process those aliases?  I don't think this would be a problem, but
+it might change the loading order.
 
 
---eo4pepuhkmuwjzg5
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks!
 
-On Wed, Feb 14, 2024 at 02:49:26PM +0200, Andy Shevchenko wrote:
-> On Wed, Feb 14, 2024 at 10:30:50AM +0100, Uwe Kleine-K=F6nig wrote:
-> > This function allocates a struct pwm_chip and driver data. Compared to
-> > the status quo the split into pwm_chip and driver data is new, otherwise
-> > it doesn't change anything relevant (yet).
-> >=20
-> > The intention is that after all drivers are switched to use this
-> > allocation function, its possible to add a struct device to struct
-> > pwm_chip to properly track the latter's lifetime without touching all
-> > drivers again. Proper lifetime tracking is a necessary precondition to
-> > introduce character device support for PWMs (that implements atomic
-> > setting and doesn't suffer from the sysfs overhead of the /sys/class/pwm
-> > userspace support).
-> >=20
-> > The new function pwmchip_priv() (obviously?) only works for chips
-> > allocated with pwmchip_alloc().
->=20
-> ...
->=20
-> > +#define PWMCHIP_ALIGN ARCH_DMA_MINALIGN
-> > +
-> > +static void *pwmchip_priv(struct pwm_chip *chip)
-> > +{
-> > +	return (void *)chip + ALIGN(sizeof(*chip), PWMCHIP_ALIGN);
-> > +}
->=20
-> Why not use dma_get_cache_alignment() ?
-
-Hmm, that function returns 1 if ARCH_HAS_DMA_MINALIGN isn't defined. The
-idea of using ARCH_DMA_MINALIGN was to ensure that the priv data has the
-same minimal alignment as kmalloc(). Took my inspriration from
-https://lore.kernel.org/r/20240209-counter-align-fix-v2-1-5777ea0a2722@anal=
-og.com
-=2E The implementation of dma_get_cache_alignment suggests that not all
-archs provide ARCH_DMA_MINALIGN? Also there is ARCH_KMALLOC_MINALIGN.
-Hmm, don't know yet what to do here.
-
-> > +/* This is the counterpart to pwmchip_alloc */
->=20
-> pwmchip_alloc()
-
-Ack.
-=20
-> > +EXPORT_SYMBOL_GPL(pwmchip_put);
->=20
-> > +EXPORT_SYMBOL_GPL(pwmchip_alloc);
->=20
-> > +EXPORT_SYMBOL_GPL(devm_pwmchip_alloc);
->=20
-> Are these exported via namespace? If no, can they be from day 1?
-
-I added that to my todo list for all pwm functions. Will address that
-separately.
-
-Thanks for your feedback
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---eo4pepuhkmuwjzg5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmXN/SUACgkQj4D7WH0S
-/k7Wcgf+PH/0QpqNNV4Y2/FkmhtRuwoboRFbLUmPSdsZXmpktX2oCcZmzsdo7ECA
-hWfFTUYhOspa5kHVcw+nxqCLWdGrQfQ4C0LtsPicyPjTXPVpP8W09vwdeatCiqVr
-GxgvULwRl/HxZXMUXZhJ5ToJRT/yuN1CLjpyjnINyIczC+jZFclxgx43quAbXMIf
-SCUAlxTR/Jm/mjCmH2N7Fftk64+hCNWB2gsjkaQsDUwtAelt3/J9u4h2He4NPzPi
-GaEZ3tfrkKkBWoolaCIhY1LqXtT3nU+qiP5t/bPD00DRDM2XtKsjvAk526Lx/OAu
-y+6AtGBx3n9HzXzyJ+bdew1oAMND9g==
-=44B0
------END PGP SIGNATURE-----
-
---eo4pepuhkmuwjzg5--
+Takashi
 
