@@ -1,81 +1,79 @@
-Return-Path: <linux-mips+bounces-1469-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1470-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 294BD855372
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Feb 2024 20:48:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29596855836
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Feb 2024 01:12:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C55C1C21638
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Feb 2024 19:48:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B94F51F226EE
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Feb 2024 00:12:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 801CC13B7B5;
-	Wed, 14 Feb 2024 19:48:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E86D803;
+	Thu, 15 Feb 2024 00:12:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oI+WYsth"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E03017E767;
-	Wed, 14 Feb 2024 19:48:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2725E391;
+	Thu, 15 Feb 2024 00:12:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707940108; cv=none; b=Lsuwk5MQEoP3TUZBtIhlL2f2bhQjJu5mXkPipFPbSaXilqsDHGW0uZYxF3wnGoSJLDuyFW57BZcdnNdMg5pxJa2WgRw5WxQd5PrVFlKa814BoSyqb4ubFsEFSIvKwEaqa5pxtXDVTcp3Mg17/OXVP6QXuyAjRbISAp6vyLfeh3U=
+	t=1707955958; cv=none; b=mAjJCt/eyPOVM/dGkDhEHgPgQme00seza1Z89HDRy6UJyWO4WOjuSEgFkZ4GK154dDLzPm3KrmXh4ZvVksCrRpxvJMOEjhjTdEi05PUvDNy71fOVwl9p1WhC8I+6RmqVdNYusNlUVHvGRBrbXbdN2ickOlaCUB5xHlqrNxms81U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707940108; c=relaxed/simple;
-	bh=NC8mTAJ2+Ru4a70SXpBDjYkA5AKa1yGpczglRB9UknU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WV8XEkPPhfNsYWiCF/KO1/HmhbQfrcFwb8/gR3bYlsW7wK71ptrBnOMZQgH7vZMQOlojms7tdpn1bf00B7JbYDmZgAsW+UX0vdu536feQC7MtnEfSQQkAcFd22xj9T7G4DllPy9z+swiKJZSCqVVlHqMG9KG+rpWJwi4ngxaer4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1raLEy-0000vd-00; Wed, 14 Feb 2024 20:48:20 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id EC942C0267; Wed, 14 Feb 2024 20:14:27 +0100 (CET)
-Date: Wed, 14 Feb 2024 20:14:27 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc: Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v7 03/14] MIPS: Allows relocation exception vectors
- everywhere
-Message-ID: <Zc0RE8NE0sfYYmZN@alpha.franken.de>
-References: <20240205153503.574468-1-gregory.clement@bootlin.com>
- <20240205153503.574468-4-gregory.clement@bootlin.com>
- <ZcTE8nKCaKuaUvAe@alpha.franken.de>
- <87plwzj8jw.fsf@BL-laptop>
+	s=arc-20240116; t=1707955958; c=relaxed/simple;
+	bh=s0umEap71PE2hcDvF2RMK2MaQsG5WH0Ik7roZhh78EA=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=XgXDVOYF4QViSxd/scqEB/d9gSthTL7QdqzFP0dhjmlnXcUe2hhkhf1mX/Hx7mq7zqJQMZsGQtF9ZXKyaLZUk9fbashg6D4Pv4qiCzGpf+aiBAT8ZHcsCjG8oI5dczVTdxTP83lXExtSCToZXNyiBT6KHPwdl71PDr1xjnCv2Ps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oI+WYsth; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F3539C43394;
+	Thu, 15 Feb 2024 00:12:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707955958;
+	bh=s0umEap71PE2hcDvF2RMK2MaQsG5WH0Ik7roZhh78EA=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=oI+WYsthi6DWVeCZErP7XTecGq4Egt9aYyjdwl/yQVNbx6tB4bjuvCsvP/hT594SQ
+	 bXU4ZVofZMbtz6W+hOlODh7gNZpxNxNRMj62VbFzn7l5uGovR1qDgIxH7uF7ogxxg+
+	 MArpewwSduPGaBm1UhCGdHprF1nuWLKcfQRKkgdvG/oyUVDyDOSYjb2xhawPw2CT4G
+	 G6V9AFtYAMYL6DVfB/82M4YYH7TGtZmDU15wfWBxjsIDsC8nJ8s2gFsjDOx/OAaBvq
+	 hEP9KGAZQpGsN7XWJm0Q3xVCtVAtSO251khkBVE2m2fM/X5QsrPKJ2ksICr2folAPe
+	 xHOtoIYwfXufQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E168DD84BCE;
+	Thu, 15 Feb 2024 00:12:37 +0000 (UTC)
+Subject: Re: [GIT PULL] MIPS fixes for v6.8
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <ZczwVtJLAl+aeunp@alpha.franken.de>
+References: <ZczwVtJLAl+aeunp@alpha.franken.de>
+X-PR-Tracked-List-Id: <linux-mips.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZczwVtJLAl+aeunp@alpha.franken.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.8_2
+X-PR-Tracked-Commit-Id: 8fa5070833886268e4fb646daaca99f725b378e9
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 8d3dea210042f54b952b481838c1e7dfc4ec751d
+Message-Id: <170795595791.14173.5943301368638961241.pr-tracker-bot@kernel.org>
+Date: Thu, 15 Feb 2024 00:12:37 +0000
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: torvalds@linux-foundation.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87plwzj8jw.fsf@BL-laptop>
 
-On Wed, Feb 14, 2024 at 05:48:51PM +0100, Gregory CLEMENT wrote:
-> Jiaxun Yang sent a series to address it [1]. I managed to rebase my
-> series on top of this one.
-> 
-> Do you agree with these 8 patches?
+The pull request you sent on Wed, 14 Feb 2024 17:54:46 +0100:
 
-first glance looked good ;-)
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.8_2
 
-> Can I send my next series with the assumption that it will be merged?
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/8d3dea210042f54b952b481838c1e7dfc4ec751d
 
-yes, I'll start applying next week.
-
-Thomas.
+Thank you!
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
