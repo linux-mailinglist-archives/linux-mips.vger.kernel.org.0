@@ -1,145 +1,98 @@
-Return-Path: <linux-mips+bounces-1476-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1477-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72258855E86
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Feb 2024 10:53:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 969CA855EB3
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Feb 2024 11:04:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AEE011C21981
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Feb 2024 09:53:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35C371F227E3
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Feb 2024 10:04:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F356634E3;
-	Thu, 15 Feb 2024 09:52:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="QaEsskPh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83A5A664AC;
+	Thu, 15 Feb 2024 10:03:40 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 542256340F;
-	Thu, 15 Feb 2024 09:52:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E464169D09
+	for <linux-mips@vger.kernel.org>; Thu, 15 Feb 2024 10:03:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707990777; cv=none; b=qMUFWQaj+HUIKTdFl4p/aQS1R276LSK8JrUOORdoA+A7QY/ym1fw2SBdCJmFr35YM6JbSwOOBdQupoM2056EFprcy3xKowebM0p2LhqO0ZZ5u3Jt6wd+Axt5GEbRdqWsqdfdd4i4v9vtzL0KcTI6m6NnrTuCgX16eUDbqf0Hd3c=
+	t=1707991420; cv=none; b=ul4SPfHTF4hgW2qQE2ZdhQjuYz5RYsI/qqq/QspYwxigNS8B285zsnDqqoBOYRnI1PMCtYctqTO41B8ZP+vlz4HxhXNaiBck25lwXeqqt58s0IJDRNs5s42smjRhj/9TnQvK3NP7d37+GQwpv6V5vlczHP+3p3A6bahMQs80DVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707990777; c=relaxed/simple;
-	bh=NpT4MujOWA1QAn/s06YLRsKfLQx4zRuyUaPcyLqGa/0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=FgdVHbMGuUaF7AMlDGNWCjjccljNFM0FstI8Y1LjFjh/j+CWbqYBrLYD1J0AUJfrY1yA1l14w8YmvvC9ePS1K3wBsl5BFllyQjHZ+RClgHoOr12UqXpm4phbjSHCUhXk/Qzs5G2Xw1t+TbG/oeXMbYsAd8/UNT45HG/ddLt51gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=QaEsskPh; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DF44C24000F;
-	Thu, 15 Feb 2024 09:52:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1707990766;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z0R7cedwXz8r4syjj8vVk7jrDrE/C0nhuEPgHT7CMLE=;
-	b=QaEsskPhSgsZB/TB+dXWgSCBO9KxJbwVruQNhObt7j1OrUXjORU/qfqNIXzMAMj8AnnTlK
-	9d5+4RthCg2tpHT3ZQnf+c1snCdi9Ed0gGNUTOhQkpGngf3JqzZsIquzsKiUUvDljL3mnL
-	NHaTW1TCUBjkJW8r3X08dgVaH1WKrAvyBOqNIeqIAyEDZmZvoccQNkv34r+79VfaYtwCoX
-	cg2V7he5PLcGWhYouj0A9lEMNCevjORUX/3k4lKgvy81bfqG69Hzv8fsr9dPdq7a7zn/Ea
-	nmKOpCJZ3YzdQRCxEj8k5LIMPwBMN6U7dX1gFzW6Sfaln7YW6Ocu/bevQQsesQ==
+	s=arc-20240116; t=1707991420; c=relaxed/simple;
+	bh=Ve+pubFl36SuRCGH2rkW001StUMBkU3PFQCpivTVbiQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=X6hdDJm9jsAKEnriob7ygu2KidKe/pdPd2KesT2BHk9d/mqHmooxssI+gARxFqXbfVthonU5ecIBZHRekSkSujjFzX7MB3JZXA83PLrOG2WvHHmaw1qyWg3PFl/JRy0Aoy1UpynmilrhXj/jxNPqqBdruhAUUZrcAkr49gFoSpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1raYaU-0004lH-B5; Thu, 15 Feb 2024 11:03:26 +0100
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1raYaS-000rZp-U9; Thu, 15 Feb 2024 11:03:24 +0100
+Received: from pza by lupine with local (Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1raYaS-0003HJ-2l;
+	Thu, 15 Feb 2024 11:03:24 +0100
+Message-ID: <e031566a85ae0da0ee71dffba5d87c6414ef83e1.camel@pengutronix.de>
+Subject: Re: [PATCH 05/23] gpio: nomadik: extract GPIO platform driver from
+ drivers/pinctrl/nomadik/
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: =?ISO-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>, Linus Walleij
+ <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Rob
+ Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>,  Conor Dooley <conor+dt@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-mips@vger.kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Date: Thu, 15 Feb 2024 11:03:24 +0100
+In-Reply-To: <20240214-mbly-gpio-v1-5-f88c0ccf372b@bootlin.com>
+References: <20240214-mbly-gpio-v1-0-f88c0ccf372b@bootlin.com>
+	 <20240214-mbly-gpio-v1-5-f88c0ccf372b@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 15 Feb 2024 10:52:44 +0100
-Message-Id: <CZ5K713P9WDB.FN0HZ3ANLTNC@bootlin.com>
-Subject: Re: [PATCH 03/23] dt-bindings: gpio: nomadik: add
- mobileye,eyeq5-gpio compatible
-Cc: <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <linux-mips@vger.kernel.org>, "Gregory CLEMENT"
- <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Linus Walleij"
- <linus.walleij@linaro.org>, "Bartosz Golaszewski" <brgl@bgdev.pl>, "Rob
- Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Philipp Zabel" <p.zabel@pengutronix.de>, "Thomas Bogendoerfer"
- <tsbogend@alpha.franken.de>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: aerc 0.15.2
-References: <20240214-mbly-gpio-v1-0-f88c0ccf372b@bootlin.com>
- <20240214-mbly-gpio-v1-3-f88c0ccf372b@bootlin.com>
- <9e19c820-c9aa-4eef-a594-f7305b03eea4@linaro.org>
-In-Reply-To: <9e19c820-c9aa-4eef-a594-f7305b03eea4@linaro.org>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 
-Hello,
+On Mi, 2024-02-14 at 17:23 +0100, Th=C3=A9o Lebrun wrote:
+[...]
+> diff --git a/drivers/gpio/gpio-nomadik.c b/drivers/gpio/gpio-nomadik.c
+> new file mode 100644
+> index 000000000000..e39477e1a58f
+> --- /dev/null
+> +++ b/drivers/gpio/gpio-nomadik.c
+> @@ -0,0 +1,660 @@
+[...]
+> +static int nmk_gpio_probe(struct platform_device *dev)
+> +{
+[...]
+> +	ret =3D gpiochip_add_data(chip, nmk_chip);
 
-On Thu Feb 15, 2024 at 10:13 AM CET, Krzysztof Kozlowski wrote:
-> On 14/02/2024 17:23, Th=C3=A9o Lebrun wrote:
-> > This GPIO controller is used on the Mobileye EyeQ5 SoC. Add its
-> > compatible to the dt-bindings. One difference is that the block as
-> > integrated on EyeQ5 does not support sleep-mode.
-> >=20
-> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-> > ---
-> >  .../devicetree/bindings/gpio/st,nomadik-gpio.yaml        | 16 ++++++++=
-+++++++-
-> >  1 file changed, 15 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/gpio/st,nomadik-gpio.yam=
-l b/Documentation/devicetree/bindings/gpio/st,nomadik-gpio.yaml
-> > index bbd23daed229..e44cf292bc6d 100644
-> > --- a/Documentation/devicetree/bindings/gpio/st,nomadik-gpio.yaml
-> > +++ b/Documentation/devicetree/bindings/gpio/st,nomadik-gpio.yaml
-> > @@ -19,7 +19,9 @@ properties:
-> >      pattern: "^gpio@[0-9a-f]+$"
-> > =20
-> >    compatible:
-> > -    const: st,nomadik-gpio
-> > +    enum:
-> > +      - st,nomadik-gpio
-> > +      - mobileye,eyeq5-gpio
-> > =20
-> >    reg:
-> >      maxItems: 1
-> > @@ -65,6 +67,18 @@ required:
-> > =20
-> >  unevaluatedProperties: false
-> > =20
-> > +allOf:
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            const: st,nomadik-gpio
-> > +    then:
-> > +      properties:
-> > +        st,supports-sleepmode:
-> > +          description: Whether the controller can sleep or not.
-> > +          $ref: /schemas/types.yaml#/definitions/flag
->
-> You already have such property, so you are defining it second time. You
-> want instead if: for eyeq5-gpio making it:
-> then:
->   properties:
->     st,supports-sleepmode: false
+Use devm_gpiochip_add_data() to cleanup on unbind, before nmk_chip goes
+away. Or make the driver un-unbindable via suppress_bind_attrs. In that
+case you could drop devm_ prefixes everywhere for consistency.
 
-Good catch. I hesitated between declaring the property inside an
-if-statement or disabling it inside an if-statement as you show here. I
-ended-up mixing those two approaches.
-
-Wil pick the if-eyeq5-then-disable-prop solution.
-
-Thanks for the review Krzysztof!
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+regards
+Philipp
 
