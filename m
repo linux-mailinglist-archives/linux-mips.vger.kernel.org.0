@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-1520-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1521-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3BDA857A81
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Feb 2024 11:41:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 870E3857A87
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Feb 2024 11:43:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 83D8A1F23B27
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Feb 2024 10:41:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 285791F2495C
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Feb 2024 10:43:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E00C3524CF;
-	Fri, 16 Feb 2024 10:40:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2D3D535D1;
+	Fri, 16 Feb 2024 10:43:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="lz2U9uLV"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Doj1wFhy"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E297B1BDE6;
-	Fri, 16 Feb 2024 10:40:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF4A535BE;
+	Fri, 16 Feb 2024 10:43:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708080055; cv=none; b=QCcwYZgoDi+rS0Dbw27yn71v4ZlzzvbK7AYVvmbXOvIanDcRwbSz8XG0sdmucFHCjf6gqxGHyRQyP7ceg80uEJGUpKst9wkBCQP+qauatd7/BHxB2j7LVC/kDO4KVD5uZOwlFh3ax8spckPHcwHSoMk8c82NCFp1G7suY6fEXZU=
+	t=1708080192; cv=none; b=o6DoIXdIBKugqLeMLBTapIJZzNDA21477NQJYQvdO5f2QIxX9dOmHyCWlt8ZpulSsub0mHNAtQ/FHwmdHq5Ej7uElLds9yg6iYor/jFNUS36TjwRY/Xs7Ar1dTH/XsBUjM2mn/g0Fmd7KS+qzdGhoMw7auGY3jwZzFuyu0Jw2MM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708080055; c=relaxed/simple;
-	bh=4vCY6JZJluyOURcmliUjf8D4UGdWpWhqShAztx1q4U0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=l3fmVSntOxxdol43dk/rqUaCUxNuq8kAG57GVqsJn+mEHbbZ0Qga4jkNqbvQq2ONkYXjdqa7fR6SID31+j2tJCwf+2j5IpdS8POjx0LUe79PlKvaPdzXoKsC4OxM7DgQsVKTLNKaISgSofd3EksW65DHPLSVLTSVzNY6dJenE/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=lz2U9uLV; arc=none smtp.client-ip=217.70.183.198
+	s=arc-20240116; t=1708080192; c=relaxed/simple;
+	bh=NDGRynr8itqPzytqBynygn6jKjpyhOuuhynu6UE3ZMA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=MYDuu4q7g9YGfKhSeQYlYyn20v/3C4WllPoj648gICr9+HvW5vvodHMRDG2ub+pBBxXxDBpJCUgTVDflNdWSX6QGBn7D0HvrDYq2NtWAlTd3lZllK+OSV1WAYYmRWf6cV5QCEtfpKzntUcz1YGgRRTRH0yyiq9LQUGvGbsoNN/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Doj1wFhy; arc=none smtp.client-ip=217.70.183.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3A5F7C000A;
-	Fri, 16 Feb 2024 10:40:50 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 39E471BF203;
+	Fri, 16 Feb 2024 10:43:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1708080050;
+	t=1708080182;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=pW+H2/+M3nwxvUrdeb949EaUZPq3QzVW/JZ2LL5ih34=;
-	b=lz2U9uLVS3/HdJM1KiMEiUYoPgnBtLLrRboc8aNuca5J5CJu0LxWUJqVuayCZz+nR9Ueem
-	GJV80VRxBtCaNXb+RaZQzFs9VnINWRo7LxEGKea1LN+T5iiTAWeYwM1yVHh4eMOcWhzONe
-	I2fhfxZYlkk+hNNSIbQoJM5bSsSv/VEurY7+Z2pOjHGACRR2Jgv4naaUQuz9SGgpxBbJ5t
-	J27ZBToyYYAC2DSRAZowyPiTmeNOhTg73wSd4xiCwSTtH5AsOiSur6xqzkssVjeJs2Rcb9
-	VG5VdMHV6ulPW1rl2IMIj2P7PThpBSQ5Ct9nhZ0wDGw0WjvznvT9upEFnGxmXg==
+	bh=hB/XHwobNHN18Xz1hYNZwwfr1UUQv4BZ9ABlvaG/lLY=;
+	b=Doj1wFhyFBqmQV6VY50wGFAmDMdOhlEgNW7YwVrTfkUkB/ojt2RPOLJQoIMSaKGUR+1/Xa
+	SIkHMZsP+S8Nz033lwoSrILNsK94pjdrlI07PVpbrJr45fcr7bLGlXOFEeW3LmnlBqCsms
+	bFjjzpf4NN3YqVv1zRJklEU5I0U9/EedlFOs5FFHerMCFMKYh3edjLeZ0hBp1RBdChk66a
+	t9PeKza2wyGyIFruGiO4lsXC41KrR0E0bX8HlclSzm3UiwAryDEKSugiOnyLioLluZVq+9
+	cOkCTybu6D6IAlH6hhGLxPlF+Bcdl7C6U2iKVpD9NdND5cZyKwGN3Fij38gc8g==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,62 +53,54 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 16 Feb 2024 11:40:50 +0100
-Message-Id: <CZ6FUECKEX2B.36QWZZA5EYPI@bootlin.com>
-Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Andi Shyti"
- <andi.shyti@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-mips@vger.kernel.org>, "Gregory Clement"
+Date: Fri, 16 Feb 2024 11:43:00 +0100
+Message-Id: <CZ6FW2H4BPEL.D5W7U5H7THDH@bootlin.com>
+Subject: Re: [PATCH 05/23] gpio: nomadik: extract GPIO platform driver from
+ drivers/pinctrl/nomadik/
+Cc: <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ <linux-mips@vger.kernel.org>, "Gregory CLEMENT"
  <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
  <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
  <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
  <tawfik.bayouk@mobileye.com>
-To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Rob Herring"
- <robh@kernel.org>
+To: "Philipp Zabel" <p.zabel@pengutronix.de>, "Linus Walleij"
+ <linus.walleij@linaro.org>, "Bartosz Golaszewski" <brgl@bgdev.pl>, "Rob
+ Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH 02/13] dt-bindings: i2c: nomadik: add mobileye,eyeq5-i2c
- bindings and example
 X-Mailer: aerc 0.15.2
-References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
- <20240215-mbly-i2c-v1-2-19a336e91dca@bootlin.com>
- <20240216022227.GA850600-robh@kernel.org>
- <CZ6FD7EHIJDT.32IEDVT9FG2GP@bootlin.com>
- <6effca50-29a4-43b9-86eb-310bd4e08e5c@linaro.org>
-In-Reply-To: <6effca50-29a4-43b9-86eb-310bd4e08e5c@linaro.org>
+References: <20240214-mbly-gpio-v1-0-f88c0ccf372b@bootlin.com>
+ <20240214-mbly-gpio-v1-5-f88c0ccf372b@bootlin.com>
+ <e031566a85ae0da0ee71dffba5d87c6414ef83e1.camel@pengutronix.de>
+In-Reply-To: <e031566a85ae0da0ee71dffba5d87c6414ef83e1.camel@pengutronix.de>
 X-GND-Sasl: theo.lebrun@bootlin.com
 
 Hello,
 
-On Fri Feb 16, 2024 at 11:33 AM CET, Krzysztof Kozlowski wrote:
-> On 16/02/2024 11:18, Th=C3=A9o Lebrun wrote:
-> >=20
-> >>> +        mobileye,id:
-> >>> +          $ref: /schemas/types.yaml#/definitions/uint32
-> >>> +          description: Platform-wide controller ID (integer starting=
- from zero).
-> >>
-> >> instance indexes are a NAK. You can use i2cN aliases if you must.
-> >>
-> >> Why do you need it? To access OLB? If so, add cell args to the OLB=20
-> >> phandle instead.
-> >=20
-> > Why we do what we do: I2C controller must write a 2 bit value depending
-> > on the bus speed. All I2C controllers write into the same register.
+On Thu Feb 15, 2024 at 11:03 AM CET, Philipp Zabel wrote:
+> On Mi, 2024-02-14 at 17:23 +0100, Th=C3=A9o Lebrun wrote:
+> [...]
+> > diff --git a/drivers/gpio/gpio-nomadik.c b/drivers/gpio/gpio-nomadik.c
+> > new file mode 100644
+> > index 000000000000..e39477e1a58f
+> > --- /dev/null
+> > +++ b/drivers/gpio/gpio-nomadik.c
+> > @@ -0,0 +1,660 @@
+> [...]
+> > +static int nmk_gpio_probe(struct platform_device *dev)
+> > +{
+> [...]
+> > +	ret =3D gpiochip_add_data(chip, nmk_chip);
 >
-> Which register?  Your devices do not share IO address space.
+> Use devm_gpiochip_add_data() to cleanup on unbind, before nmk_chip goes
+> away. Or make the driver un-unbindable via suppress_bind_attrs. In that
+> case you could drop devm_ prefixes everywhere for consistency.
 
-mobileye,olb is a prop with a phandle to a syscon. That syscon contains
-the register we are interested in.
-
-The Linux code side of things is in the following patch. We use
-syscon_regmap_lookup_by_phandle().
-
-   [PATCH 10/13] i2c: nomadik: support Mobileye EyeQ5 I2C controller
-   https://lore.kernel.org/lkml/20240215-mbly-i2c-v1-10-19a336e91dca@bootli=
-n.com/
+Disabling unbind sounds like the best option. Will do so in next
+revision, in a separate patch to keep this one as close of a copy-paste
+as possible.
 
 Thanks,
 
