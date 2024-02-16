@@ -1,115 +1,157 @@
-Return-Path: <linux-mips+bounces-1504-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1505-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3F94856EAC
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Feb 2024 21:40:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6ED7E8573C7
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Feb 2024 03:22:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 451AE1F27075
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Feb 2024 20:40:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E8CE1F234DD
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Feb 2024 02:22:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 888E613AA43;
-	Thu, 15 Feb 2024 20:39:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B31C8DF6B;
+	Fri, 16 Feb 2024 02:22:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="VxgP7QgG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uiTloFP9"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D97AE132469;
-	Thu, 15 Feb 2024 20:39:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80313EADD;
+	Fri, 16 Feb 2024 02:22:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708029597; cv=none; b=TVjprB2ptQ87ehtrZnpJ/rZiENDQwg155y+rHLlPTuEr1t5/IhW+6G148fzqEczgrZToi4th6u9lOUHAYPN06Lm7cgGqpblqq0LhbH+oJ/8NPBSt1SysIdT/fw2DhLvEoxBiz/NL5G8jD1oGKT9svsxXyOfmETBP0qOrlB97iig=
+	t=1708050150; cv=none; b=AJt4l4FkzIRe2bqaBrPwP85j47Bk1rCUufNz2SKkBLgQRy2wcH5dt8KsOxiI8kU4Ae93+NNAo0Y8juA1IUvSnqcRUHz9PY0bUEbbqHjJVnIhN7neGRNP+K/ikQN23BzlfusLvwUlTp8BBQ4oeyzvVo3UxvAhcQTntFj86OdWd7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708029597; c=relaxed/simple;
-	bh=biYF8TzBmTBfUehzYOJvS+68v778LfcH2oFqG0FepeQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IC4eg4FhMSeriOJ09LvnhOUyZ6L8Kh9tpYVSB0ljKCeVoEgj1w4aAsk0wO5EpUWtUryukkugaNMyEbp8yZX4OhB/wRL+GnJD700T3YqD4ayg+d9x40m5qpLbpyE1BdKRRM7l3kBLQ5CqAJZ26LVA/fYXQU5eKznaLEJOTwLdFrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=VxgP7QgG; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41FFSxL3031050;
-	Thu, 15 Feb 2024 20:39:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2023-11-20;
- bh=dZqIRhOjiKqSt7dvw8csIF1s9y8sRAbgBVziurwX4LM=;
- b=VxgP7QgG2FkmX/tsRB/ecCvmacRm/aPTCuPrkF6MwxMbrF2Wvn4eLZXkhHNKtREBx7O1
- 4nDmxzMdHE9WBnA8VTmAnS89KrFEHxS8zmbyL53mL8oU0mvqZiEO6Vr8Oj502sEvS85c
- C4daiTgKsnNI7ifYVaZ34iQj+plXsJxTEdQ3715apjWjrRud8rX/4OQp+snG0qRlO5/j
- OZpJyrJ28slecTC60huO7wD4jhKgDbEnR0cKz8J7kKwDsXMELyRZ813Dki9A076Db2f7
- ZM7IqeCdgEoEBTMOPs2g4V2eaqywHphtby3PtEx1acP27x8QZs0YyeBqD20XDujnvOBe lg== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3w9301k7rt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 15 Feb 2024 20:39:35 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 41FJ8Y38015017;
-	Thu, 15 Feb 2024 20:39:34 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3w5ykats5k-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 15 Feb 2024 20:39:34 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41FKdVPP012444;
-	Thu, 15 Feb 2024 20:39:34 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3w5ykats32-3;
-	Thu, 15 Feb 2024 20:39:34 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        kernel test robot <lkp@intel.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH] scsi: jazz_esp: only build if SCSI core is builtin
-Date: Thu, 15 Feb 2024 15:39:24 -0500
-Message-ID: <170802930866.3317154.3155585946655239383.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.42.1
-In-Reply-To: <20240214055953.9612-1-rdunlap@infradead.org>
-References: <20240214055953.9612-1-rdunlap@infradead.org>
+	s=arc-20240116; t=1708050150; c=relaxed/simple;
+	bh=zg+Z3Wah5eTVPItwO6FJ2RVvEQEJ1NRiUkZF3MelZyk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CRXLvnamIvCjInnqoMRTLxgqAtyaOtW0xSj1p4OLssp/mX0Im7WjrjqDdjLN4PECPszYBC4vkVMT19VLGYJqwlId4luECkS6FGMIfdpzrjh6EAdHfKV5p2bhYHYzjnvwBTI/K7C2aIFjCw3ijqfFJItRebVeEzYXdgadigHwAVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uiTloFP9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1DA0C433C7;
+	Fri, 16 Feb 2024 02:22:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708050150;
+	bh=zg+Z3Wah5eTVPItwO6FJ2RVvEQEJ1NRiUkZF3MelZyk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uiTloFP9XrJcN+hTsBncpqBBToqTcyRkpfQGYFEb7jX0T6QhJLr7dhhforheQ1OnY
+	 hOKsoQYD15EtK1JanYTgt3QHZ66GXGMFVjaodGoA+hVZTDB8i3cDm50tn4rDrRDbuq
+	 bsbTV5XbS0NnZDxIeXvN8ozdK2TvKfgaVor2pNNmJ9ccHVKtkxKhdz5D0/3mgLs3cA
+	 +wWfH/4Vhm6XSxA6YKT5gqvXUsDBc1JsWvAZOA7PxsYYUZrvPIe908+NGC8JCQ3dDj
+	 H2dBs4ws3mEIEtEN4VLkciePiNEhwKKHP7zmoADBNVWac1UEnNZjWtCwfyzP7O7D3q
+	 tx3uV9IaevnjA==
+Date: Thu, 15 Feb 2024 20:22:27 -0600
+From: Rob Herring <robh@kernel.org>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH 02/13] dt-bindings: i2c: nomadik: add mobileye,eyeq5-i2c
+ bindings and example
+Message-ID: <20240216022227.GA850600-robh@kernel.org>
+References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
+ <20240215-mbly-i2c-v1-2-19a336e91dca@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-15_19,2024-02-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0
- mlxlogscore=999 bulkscore=0 phishscore=0 mlxscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402150166
-X-Proofpoint-GUID: SXDJDdr1S211bZff-c_hDDqI3aYVnPb1
-X-Proofpoint-ORIG-GUID: SXDJDdr1S211bZff-c_hDDqI3aYVnPb1
+In-Reply-To: <20240215-mbly-i2c-v1-2-19a336e91dca@bootlin.com>
 
-On Tue, 13 Feb 2024 21:59:53 -0800, Randy Dunlap wrote:
-
-> JAZZ_ESP is a bool kconfig symbol that selects SCSI_SPI_ATTRS.
-> When CONFIG_SCSI=m, this results in SCSI_SPI_ATTRS=m while
-> JAZZ_ESP=y, which causes many undefined symbol linker errors.
+On Thu, Feb 15, 2024 at 05:52:09PM +0100, Théo Lebrun wrote:
+> Add EyeQ5 bindings to the existing Nomadik I2C dt-bindings. Add the two
+> EyeQ5-specific properties behind a conditional. Add an example for this
+> compatible.
 > 
-> Fix this by only offering to build this driver when CONFIG_SCSI=y.
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  .../devicetree/bindings/i2c/st,nomadik-i2c.yaml    | 44 ++++++++++++++++++++--
+>  1 file changed, 40 insertions(+), 4 deletions(-)
 > 
-> 
-> [...]
+> diff --git a/Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml b/Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml
+> index e6b95e3765ac..eaade14b6d4c 100644
+> --- a/Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml
+> @@ -14,9 +14,6 @@ description: The Nomadik I2C host controller began its life in the ST
+>  maintainers:
+>    - Linus Walleij <linus.walleij@linaro.org>
+>  
+> -allOf:
+> -  - $ref: /schemas/i2c/i2c-controller.yaml#
+> -
+>  # Need a custom select here or 'arm,primecell' will match on lots of nodes
+>  select:
+>    properties:
+> @@ -24,6 +21,7 @@ select:
+>        contains:
+>          enum:
+>            - st,nomadik-i2c
+> +          - mobileye,eyeq5-i2c
+>    required:
+>      - compatible
+>  
+> @@ -39,6 +37,10 @@ properties:
+>            - const: stericsson,db8500-i2c
+>            - const: st,nomadik-i2c
+>            - const: arm,primecell
+> +      # The variant found on Mobileye EyeQ5
+> +      - items:
+> +          - const: mobileye,eyeq5-i2c
+> +          - const: arm,primecell
+>  
+>    reg:
+>      maxItems: 1
+> @@ -55,7 +57,7 @@ properties:
+>        - items:
+>            - const: mclk
+>            - const: apb_pclk
+> -      # Clock name in DB8500
+> +      # Clock name in DB8500 or EyeQ5
+>        - items:
+>            - const: i2cclk
+>            - const: apb_pclk
+> @@ -83,6 +85,25 @@ required:
+>  
+>  unevaluatedProperties: false
+>  
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: mobileye,eyeq5-i2c
+> +    then:
+> +      properties:
+> +        mobileye,olb:
+> +          $ref: /schemas/types.yaml#/definitions/phandle
+> +          description: A phandle to the OLB syscon.
 
-Applied to 6.8/scsi-fixes, thanks!
+Define properties at the top-level and then restrict them in if/then 
+schemas.
 
-[1/1] scsi: jazz_esp: only build if SCSI core is builtin
-      https://git.kernel.org/mkp/scsi/c/9ddf190a7df7
+> +        mobileye,id:
+> +          $ref: /schemas/types.yaml#/definitions/uint32
+> +          description: Platform-wide controller ID (integer starting from zero).
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+instance indexes are a NAK. You can use i2cN aliases if you must.
+
+Why do you need it? To access OLB? If so, add cell args to the OLB 
+phandle instead.
+
+Rob
 
