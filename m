@@ -1,185 +1,240 @@
-Return-Path: <linux-mips+bounces-1523-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1524-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B501857C6E
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Feb 2024 13:19:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00A86857F06
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Feb 2024 15:13:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E01E31F22AE6
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Feb 2024 12:19:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B0551F27158
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Feb 2024 14:13:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EAA97868B;
-	Fri, 16 Feb 2024 12:19:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB46A12D754;
+	Fri, 16 Feb 2024 14:12:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FG2wadRw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jWCTUrJR"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD64B54F92;
-	Fri, 16 Feb 2024 12:19:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D1312C804;
+	Fri, 16 Feb 2024 14:12:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708085944; cv=none; b=Wiw2y9TtI0SMl8+asedt9mp8JPiC/srR0MeEGWuf5NQMfrsAeAn0vu2C56sFYsM3K2Ou8QfyuiBc1CD5T+/ENUn1JVPPUwsj6YQw2RudLzJUhwhMCwz5C8lML7SrQwn+Rc9tbaN393ChYKW212t2KCTELnX4A1ahnXV54OI+WpE=
+	t=1708092758; cv=none; b=sPTBWEzYbqrhs+hJI+NvcgQmE46KQhSq4oxf2U/RXzhLSJKBDzT0030qbdoWmkXrMlqp31dOeAVAZO78rzvU8Koyv9Ddr2a8M+MV+XnG0227F7ZB8QcGA4GzZBHAZczF4FtB4JSe2Do7yQw3TK+WpZwkNHfOgU/VtvsL348O5wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708085944; c=relaxed/simple;
-	bh=nRtBoipuC2lN/FfO4vJ6VZ3ZiVkzzR++4vGwTeteKRM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XAFtYNaZzyiokTIyRgPZFGSupx8AdhHHBIqeAdL5oCQXrPc3gRHLi75/+wasekmewUa/UgWN20wNUunpOZhuCZkqT3SkHR4D9MjfpEZNGonDTQfHke9pEJnqGqf0VH5O8Y9nJx78VsPOWgPSZEDmfKkVossChT3LU0KjAres5SE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FG2wadRw; arc=none smtp.client-ip=209.85.208.41
+	s=arc-20240116; t=1708092758; c=relaxed/simple;
+	bh=cWKkcyG5ZwXc0YFOg/Yb0Q1JqcwSJX1rIPLlJbsCIG0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BJvR12NaYHJ1v0n3f4OMZ732PxTh2do5bl4wOG/QmPern3QRRj6wYCmx9jtl5ZIpoMAx/VQILQW78iywY2lrb1s/TgL+BJE6j8nuekeHBLYLq2HXxeLjvMJET2Oi3X3CIrop9VZLI7cOlB+9vOBibtOrbBMKVpIdKGqDWTCL7MQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jWCTUrJR; arc=none smtp.client-ip=209.85.167.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-563cc707c7cso2293274a12.1;
-        Fri, 16 Feb 2024 04:19:02 -0800 (PST)
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-511ac701428so2471517e87.2;
+        Fri, 16 Feb 2024 06:12:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708085941; x=1708690741; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=CK1ttpHB+fvv9h0WCx+2J9EaroMX79kz3Ca/aXzuVyk=;
-        b=FG2wadRwVSt+h+B7iGfDCclKrlDHrBtSuEaUkkZCFM4YPqgiiRKvAG+v0a11auG1TR
-         0/ayQmFffDZxv5gbabGD1M94TFnFqD4OUepPKHG0MeEDVwQTJGwpP2EqFNJQUwCM6Ryv
-         tlPhUTS1b+8HavgIguECHzN50+0q07+xot+l5PJ6uTD+b14sEfQUrQ1H/1aL1ff4y1Kq
-         Hn0IBw9fLbWoYbzoyzqvAD4VJwEHFsViqGKNnHZdx036FU67YvhI+DQC8SmoQp+sYEvW
-         nsOuO1nG3ErFKD7435AU6T3KWTWLbBjhhqqSplsdmVgi7GeFcmrQvdmZiUUQXc3fTO5Z
-         bNzg==
+        d=gmail.com; s=20230601; t=1708092755; x=1708697555; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=a+lu+p9rqt3Ou+KwAMQ7uRO2icdU4O11skffs0WESHQ=;
+        b=jWCTUrJRosKxeC2EfX34Wbc+GyNcAd1bWuJOaPeLyp1P9PHDpylgO5NDGYpB933FLj
+         1rytFfyEN9WWe/gl4CYJxvc2dEJLheOolsBLiY2DboCAbErg9yZAQZdjbm8qhP/71/w2
+         XAsAoiVc7kxOmZCSajp/7EbDHjn7emR0Te+mpRjkAaiMEtlTTyPKyeqR9oBzC1+7sQ0l
+         RLJNumeTs8Dgsn9GvoJeUJbKEu/DtjtdeSgxcW6zlnoPt6OnynGxabk4fpxwbVtZBtRt
+         dJHGoIx/AZPt9lcMaa1hi4b3cW122r/KFZ+NISygDHrIFZpXVIHUxOdK+WBsn3RnWgIN
+         e4sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708085941; x=1708690741;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CK1ttpHB+fvv9h0WCx+2J9EaroMX79kz3Ca/aXzuVyk=;
-        b=QX+w8RrRu39Ps4vDR/XnzKBgSXrzC3DCv0sOCUOEVEvojVLbZUjY2QZL9eJmcKgkO0
-         +Uq7vABY0aCdLesAFG9kEUBV1YmXq8INjQB899pf9EcDXjDyLc26PAEgUvtOBvq4cQ0V
-         0vjCp9lUir/0UkbcFy636f+ekUJg4hIw7IjooBIibTnBZlcMD6I/KW5b0pNYxFLzkhHu
-         M2DRIxfy1/G5v1LMqQhfHtBh3Pb/8yJqwcUfQjbLSdgHEcMeuKNaWlv3iFzAJMEVakbA
-         eky/WKlijYtgZgrlwbnWuScurq/42nnRpCC4Tfok4GNptEtZR71kIUkGwojUjPDrGixy
-         O6pA==
-X-Forwarded-Encrypted: i=1; AJvYcCUlQg1dfx+Kyl5NExM+8r6/LXnHqI2wtKyP0unS+xJAk8Zvm/QKqIQbuKEqJuQQoutasfE8AbMk++Tyh1krI8giuDIVEWUuCKJX42SzGJo0DhDPJoEdvSsygS8WH/TM1jtLmLMdU4EORmIXzahR9Zp7RgpKWMoQJpiBrJnXMBw5E3cLo59zZPKPsp4bb7Bwuw30px6Ox/G9cZm10V7RY3mF
-X-Gm-Message-State: AOJu0YwDbMHtu4OcIGIryQpVdiq9ax54/fZFobRFjY0Si3W9q2R3lvo4
-	98TAjpFMtfLiWWmT51iD38lg/eQd/mwDhB6Qae/QhvLwKu5t03rF
-X-Google-Smtp-Source: AGHT+IGoj1qUAyyNrxxXOGBu2/LtRcMVvE9Sa7HjD6iHbil381l457DQVnhG48DBiCF0VygBxcshbA==
-X-Received: by 2002:a05:6402:5384:b0:55f:cc6d:29b5 with SMTP id ew4-20020a056402538400b0055fcc6d29b5mr6281407edb.21.1708085940864;
-        Fri, 16 Feb 2024 04:19:00 -0800 (PST)
-Received: from ?IPV6:2a01:c22:73a8:7a00:dc5a:d3b4:cb75:f027? (dynamic-2a01-0c22-73a8-7a00-dc5a-d3b4-cb75-f027.c22.pool.telefonica.de. [2a01:c22:73a8:7a00:dc5a:d3b4:cb75:f027])
-        by smtp.googlemail.com with ESMTPSA id n21-20020a05640205d500b0056104738371sm1435095edx.65.2024.02.16.04.19.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Feb 2024 04:19:00 -0800 (PST)
-Message-ID: <2f8bc745-bbae-4c3d-b618-2b6a38f21e63@gmail.com>
-Date: Fri, 16 Feb 2024 13:18:59 +0100
+        d=1e100.net; s=20230601; t=1708092755; x=1708697555;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a+lu+p9rqt3Ou+KwAMQ7uRO2icdU4O11skffs0WESHQ=;
+        b=lf7yX2AaPg5+FcLRyljar6Ua+2p5vdJ25Ys/wDt3xS1x8TM54l5i9T0dX2lDavt8nU
+         o8jRsadiU15xalHaU8dE2fXukGuVHqgzsW8ZeibtI5K9OR7Js/TCGPZoVUQJbWNwzYC7
+         HeR498qo/OTkG3D9PlVEIDDLYRcaM1nfnEIV93M78UxC4yGGoYZPLXTNJXF3nh1kipVg
+         t2gnrWekz8YJlpm8HJP4KGtPsJcOQN5hJcXbNrHkM18ihRiRnLixy6QTfcSr7jTIaLyD
+         DWzvF8TwGuBiw0rNCVqrSBe1EOmz5ZnqruR1e640YxeDortQTLjBlwunE7e1uyfxhKh2
+         IzDg==
+X-Forwarded-Encrypted: i=1; AJvYcCVEWE9dDDCt/Rz0Dw0+NJIG7ZobZ7qb46Mbs0SYFdTta+A8/4X3T1FLi7LJzjCMGREvRVuoXfg2UVVr69XbLCPa4/iKXKg9l6PPe0dE3s7+/OQtuKaqJCUcQO1UUQn+C5BsZNTE2WTh1Cjlwt8RO2pxMV2IgGWLxHIyQBnMj+3RyRkxJJTF/A==
+X-Gm-Message-State: AOJu0YwNodmIwyhgMimhw2UAVUE1kxmXti/xujFjDim6TPf1L0fZ5/Py
+	+dBQc8fT3Bhq+wxzLE94Npo5ESJWdPMAOFn5FlUwf6BQB4U92pUC7BELFqJWptI=
+X-Google-Smtp-Source: AGHT+IGnEhPHkQbv6q58TjYgQkHuoUjhnktjBYfl4VBf2/WgHnugeR/LPuqnjtkP7RGP7cV6EDRyJg==
+X-Received: by 2002:a19:2d57:0:b0:512:9d10:53cd with SMTP id t23-20020a192d57000000b005129d1053cdmr188286lft.50.1708092754500;
+        Fri, 16 Feb 2024 06:12:34 -0800 (PST)
+Received: from mobilestation ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id q7-20020ac25287000000b0051176a6a88esm616530lfm.5.2024.02.16.06.12.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Feb 2024 06:12:34 -0800 (PST)
+Date: Fri, 16 Feb 2024 17:12:31 +0300
+From: Serge Semin <fancer.lancer@gmail.com>
+To: Jiri Slaby <jirislaby@kernel.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Jiaxun Yang <jiaxun.yang@flygoat.com>, Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>, 
+	Stephen Rothwell <sfr@rothwell.id.au>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-mips@vger.kernel.org, linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] tty: mips_ejtag_fdc: Fix passing incompatible
+ pointer type warning
+Message-ID: <qefx2cny4g3v6gvafw2gqx6bqncoxbo37vtbutvgofezvof3uh@zu7vthspxs3u>
+References: <20240215171740.14550-1-fancer.lancer@gmail.com>
+ <20240215171740.14550-5-fancer.lancer@gmail.com>
+ <4971bda5-e337-4c40-b7bd-5da4b7dae5d7@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/4] leds: trigger: Improve handling of
- led_trigger_event() and simplify mute audio trigger
-To: Takashi Iwai <tiwai@suse.de>
-Cc: Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
- linux-sound@vger.kernel.org,
- "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
- linux-mips@vger.kernel.org
-References: <30d49088-283c-40f3-b97b-fd5f5174a467@gmail.com>
- <87zfw1ewrd.wl-tiwai@suse.de>
-Content-Language: en-US
-From: Heiner Kallweit <hkallweit1@gmail.com>
-Autocrypt: addr=hkallweit1@gmail.com; keydata=
- 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
-In-Reply-To: <87zfw1ewrd.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4971bda5-e337-4c40-b7bd-5da4b7dae5d7@kernel.org>
 
-On 15.02.2024 13:29, Takashi Iwai wrote:
-> On Tue, 13 Feb 2024 08:30:30 +0100,
-> Heiner Kallweit wrote:
->>
->> If a simple trigger is assigned to a LED, then the LED may be off until
->> the next led_trigger_event() call. This may be an issue for simple
->> triggers with rare led_trigger_event() calls, e.g. power supply
->> charging indicators (drivers/power/supply/power_supply_leds.c).
->> Therefore persist the brightness value of the last led_trigger_event()
->> call and use this value if the trigger is assigned to a LED.
->> This change allows to use simple triggers in more cases.
->> As a first use case simplify handling of the mute audio trigger.
->>
->> This series touches few subsystems. I'd propose to handle it via
->> the LED subsystem.
->>
->> Heiner Kallweit (4):
->>   leds: trigger: Store brightness set by led_trigger_event()
->>   ALSA: control-led: Integrate mute led trigger
->>   Input: leds: Prepare for removal of config option LEDS_AUDIO_TRIGGER
->>   leds: trigger: audio: Remove this trigger
+On Fri, Feb 16, 2024 at 06:51:01AM +0100, Jiri Slaby wrote:
+> On 15. 02. 24, 18:17, Serge Semin wrote:
+> > mips_ejtag_fdc_encode() method expects having a first argument passed of
+> > the "u8 **" type, meanwhile the driver passes the "const char **" type.
+> > That causes the next build-warning:
+> > 
+> > drivers/tty/mips_ejtag_fdc.c: In function ‘mips_ejtag_fdc_console_write’:
+> > drivers/tty/mips_ejtag_fdc.c:343:32: error: passing argument 1 of ‘mips_ejtag_fdc_encode’ from incompatible pointer type [-Werror=incompatible-pointer-types]
+> >     word = mips_ejtag_fdc_encode(&buf_ptr, &buf_len, 1);
+> >                                  ^
+> > drivers/tty/mips_ejtag_fdc.c:216:24: note: expected ‘const u8 ** {aka const unsigned char **}’ but argument is of type ‘const char **’
+> >   static struct fdc_word mips_ejtag_fdc_encode(const u8 **ptrs,
+> >                          ^~~~~~~~~~~~~~~~~~~~~
 > 
-> LGTM.
-> 
-> Reviewed-by: Takashi Iwai <tiwai@suse.de>
-> 
-> One thing I'm not 100% sure is the movement from ledtrig:audio-mute
-> and ledtrig:audio-micmute alias into snd-ctl-led module.  Who would
-> use/process those aliases?  I don't think this would be a problem, but
-> it might change the loading order.
-> 
-The ledtrig:% aliases are used when a LED device is registered that has
-a default trigger. Like in the case here with the input leds (patch 3).
-There might also be DT-defined LEDs with a audio mute default trigger.
-snd-ctl-led has a dependency on snd, so at least wrt snd the load order
-doesn't change.
+> It's a correct change. But why the compiler complains, given
+> KBUILD_CFLAGS += -funsigned-char
+> ?
+
+What a tricky question you asked.) It cost me some new gray hairs, but
+I guess I figured the correct answer out.
+
+First of all it turns out that "char", "signed char" and "unsigned
+char" are three _distant_ types. The "-funsigned-char/-fsigned-char"
+flag changes the signedness of the plain "char", but it doesn't make
+it matching to any of "signed char" or "unsigned char". Thus the flag
+you mentioned couldn't suppress the warning I discovered (a bit later
+you'll see that it is unrelated to that flag, but to the fact that the
+types are different). Here is a simple test-code illustrating what I
+said above:
+
+1: int main(int argc, char *argv[], char *env[])
+2: {
+3:         char c;
+4:         char *cp = &c;
+5:         signed char sc;
+6:         signed char *scp1 = &c;
+7:         signed char *scp2 = &sc;
+8:         unsigned char uc;
+9:         unsigned char *ucp1 = &c;
+10:        unsigned char *ucp2 = &uc;
+11:        return 0;
+12: }
+
+$ gcc -Wall -Wno-unused-variable -funsigned-char tmp_char.c -o tmp_char
+tmp_char.c: In function ‘main’:
+tmp_char.c:6:29: warning: pointer targets in initialization of ‘signed char *’ from ‘char *’ differ in signedness [-Wpointer-sign]
+    6 |         signed char *scp1 = &c;
+      |                             ^
+tmp_char.c:9:31: warning: pointer targets in initialization of ‘unsigned char *’ from ‘char *’ differ in signedness [-Wpointer-sign]
+    9 |         unsigned char *ucp1 = &c;
+      |                               ^
+$
+
+See, a new warning (not as the one in the patch log) is printed
+despite of having the "-funsigned-char" flag specified. A more
+detailed discussion around that you can find here:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=28912
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=23087
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71202
+
+The next question would be: "Why don't we see such warning printed all
+over the kernel then?" That's because the "-Wno-pointer-sign" warning
+suppressor is enabled in the kernel. It shuts up the sign-mismatching
+pointers cast warnings. So no warning will be printed if the test-code
+above is compiled as:
+
+$ gcc -Wall -Wno-unused-variable -funsigned-char -Wno-pointer-sign tmp_char.c -o tmp_char
+$
+
+But why do we still see a warning as mentioned in the patch log? It
+turns out that the "-Wno-pointer-sign" flag only works for the
+_simple_ pointer signedness mismatch, but not for the multi-level
+pointers. So as long as there is a pointer-to-pointer or
+pointer-to-pointer-to-pointer, etc involved, another warning will be
+printed. Here is the test-code modified to re-produce the compile
+warning cited in the patch log:
+
+1: int main(int argc, char *argv[], char *env[])
+2: {
+3:         char c;
+4:         char *cp = &c;
+5:         signed char sc;
+6:         signed char *scp1 = &c;
+7:         signed char *scp2 = &sc;
+8:         signed char **scpp = &cp;
+9:         unsigned char uc;
+10:        unsigned char *ucp1 = &c;
+11:        unsigned char *ucp2 = &uc;
+12:        unsigned char **ucpp = &cp;
+13:        return 0;
+14: }
+
+$ gcc -Wall -Wno-unused-variable -funsigned-char -Wno-pointer-sign tmp_char.c -o tmp_char
+tmp_char.c: In function ‘main’:
+tmp_char.c:8:30: warning: initialization of ‘signed char **’ from incompatible pointer type ‘char **’ [-Wincompatible-pointer-types]
+    8 |         signed char **scpp = &cp;
+      |                              ^
+tmp_char.c:12:32: warning: initialization of ‘unsigned char **’ from incompatible pointer type ‘char **’ [-Wincompatible-pointer-types]
+   12 |         unsigned char **ucpp = &cp;
+      |                                ^
+$
+
+See, the lines 6 and 10 don't cause any warning printed (due to the
+"-Wno-pointer-sign" flag), but the new lines 8 and 12 do. This is the
+case that simulates what was discovered in the
+drivers/tty/mips_ejtag_fdc.c driver and what was fixed in this patch.
+I don't know for sure but I guess the compiler considers the
+high-level pointers a bit differently than the single-level ones. So
+the pointers to different pointer types are considered as
+incompatible, which is also relevant for the char-family types since
+these are three distant types. Thus that's what the warning about.
 
 > 
-> Thanks!
+> > Fix it by altering the type of the pointer which is passed to the
+> > mips_ejtag_fdc_encode() method.
+> > 
+> > Fixes: ce7cbd9a6c81 ("tty: mips_ejtag_fdc: use u8 for character pointers")
+> > Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
+> > ---
+> >   drivers/tty/mips_ejtag_fdc.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/tty/mips_ejtag_fdc.c b/drivers/tty/mips_ejtag_fdc.c
+> > index aac80b69a069..afbf7738c7c4 100644
+> > --- a/drivers/tty/mips_ejtag_fdc.c
+> > +++ b/drivers/tty/mips_ejtag_fdc.c
+> > @@ -309,7 +309,7 @@ static void mips_ejtag_fdc_console_write(struct console *c, const char *s,
+> >   	unsigned int i, buf_len, cpu;
+> >   	bool done_cr = false;
+> >   	char buf[4];
+> > -	const char *buf_ptr = buf;
+> > +	const u8 *buf_ptr = buf;
+> >   	/* Number of bytes of input data encoded up to each byte in buf */
+> >   	u8 inc[4];
 > 
-> Takashi
+> thanks,
 
-Heiner
+Please explicitly add your tag if you are ok with the fix.
+
+-Serge(y)
+
+> -- 
+> js
+> suse labs
+> 
 
