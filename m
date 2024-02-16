@@ -1,240 +1,276 @@
-Return-Path: <linux-mips+bounces-1524-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1526-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00A86857F06
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Feb 2024 15:13:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E529E85844B
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Feb 2024 18:42:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B0551F27158
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Feb 2024 14:13:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 138451C214E8
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Feb 2024 17:42:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB46A12D754;
-	Fri, 16 Feb 2024 14:12:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 062F7132C1C;
+	Fri, 16 Feb 2024 17:42:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jWCTUrJR"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jeusuca6"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D1312C804;
-	Fri, 16 Feb 2024 14:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD02132469;
+	Fri, 16 Feb 2024 17:42:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708092758; cv=none; b=sPTBWEzYbqrhs+hJI+NvcgQmE46KQhSq4oxf2U/RXzhLSJKBDzT0030qbdoWmkXrMlqp31dOeAVAZO78rzvU8Koyv9Ddr2a8M+MV+XnG0227F7ZB8QcGA4GzZBHAZczF4FtB4JSe2Do7yQw3TK+WpZwkNHfOgU/VtvsL348O5wg=
+	t=1708105356; cv=none; b=Q8ar3FoToSEGf/wsMswnOx6rb2OXdo5Et1C9qq1pRSBxj3KbN84ZczsuI6iqusTTAEKnA8WsZodNyiRoy2xpuIbH3biGsrNA5NTk/f+L7lODjJR9KJCeRYNSrfGisUN49bkN4iDEXQd1st49uYyN0hv+zdW/GxnblCiY0grpc/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708092758; c=relaxed/simple;
-	bh=cWKkcyG5ZwXc0YFOg/Yb0Q1JqcwSJX1rIPLlJbsCIG0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BJvR12NaYHJ1v0n3f4OMZ732PxTh2do5bl4wOG/QmPern3QRRj6wYCmx9jtl5ZIpoMAx/VQILQW78iywY2lrb1s/TgL+BJE6j8nuekeHBLYLq2HXxeLjvMJET2Oi3X3CIrop9VZLI7cOlB+9vOBibtOrbBMKVpIdKGqDWTCL7MQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jWCTUrJR; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-511ac701428so2471517e87.2;
-        Fri, 16 Feb 2024 06:12:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708092755; x=1708697555; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=a+lu+p9rqt3Ou+KwAMQ7uRO2icdU4O11skffs0WESHQ=;
-        b=jWCTUrJRosKxeC2EfX34Wbc+GyNcAd1bWuJOaPeLyp1P9PHDpylgO5NDGYpB933FLj
-         1rytFfyEN9WWe/gl4CYJxvc2dEJLheOolsBLiY2DboCAbErg9yZAQZdjbm8qhP/71/w2
-         XAsAoiVc7kxOmZCSajp/7EbDHjn7emR0Te+mpRjkAaiMEtlTTyPKyeqR9oBzC1+7sQ0l
-         RLJNumeTs8Dgsn9GvoJeUJbKEu/DtjtdeSgxcW6zlnoPt6OnynGxabk4fpxwbVtZBtRt
-         dJHGoIx/AZPt9lcMaa1hi4b3cW122r/KFZ+NISygDHrIFZpXVIHUxOdK+WBsn3RnWgIN
-         e4sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708092755; x=1708697555;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a+lu+p9rqt3Ou+KwAMQ7uRO2icdU4O11skffs0WESHQ=;
-        b=lf7yX2AaPg5+FcLRyljar6Ua+2p5vdJ25Ys/wDt3xS1x8TM54l5i9T0dX2lDavt8nU
-         o8jRsadiU15xalHaU8dE2fXukGuVHqgzsW8ZeibtI5K9OR7Js/TCGPZoVUQJbWNwzYC7
-         HeR498qo/OTkG3D9PlVEIDDLYRcaM1nfnEIV93M78UxC4yGGoYZPLXTNJXF3nh1kipVg
-         t2gnrWekz8YJlpm8HJP4KGtPsJcOQN5hJcXbNrHkM18ihRiRnLixy6QTfcSr7jTIaLyD
-         DWzvF8TwGuBiw0rNCVqrSBe1EOmz5ZnqruR1e640YxeDortQTLjBlwunE7e1uyfxhKh2
-         IzDg==
-X-Forwarded-Encrypted: i=1; AJvYcCVEWE9dDDCt/Rz0Dw0+NJIG7ZobZ7qb46Mbs0SYFdTta+A8/4X3T1FLi7LJzjCMGREvRVuoXfg2UVVr69XbLCPa4/iKXKg9l6PPe0dE3s7+/OQtuKaqJCUcQO1UUQn+C5BsZNTE2WTh1Cjlwt8RO2pxMV2IgGWLxHIyQBnMj+3RyRkxJJTF/A==
-X-Gm-Message-State: AOJu0YwNodmIwyhgMimhw2UAVUE1kxmXti/xujFjDim6TPf1L0fZ5/Py
-	+dBQc8fT3Bhq+wxzLE94Npo5ESJWdPMAOFn5FlUwf6BQB4U92pUC7BELFqJWptI=
-X-Google-Smtp-Source: AGHT+IGnEhPHkQbv6q58TjYgQkHuoUjhnktjBYfl4VBf2/WgHnugeR/LPuqnjtkP7RGP7cV6EDRyJg==
-X-Received: by 2002:a19:2d57:0:b0:512:9d10:53cd with SMTP id t23-20020a192d57000000b005129d1053cdmr188286lft.50.1708092754500;
-        Fri, 16 Feb 2024 06:12:34 -0800 (PST)
-Received: from mobilestation ([178.176.56.174])
-        by smtp.gmail.com with ESMTPSA id q7-20020ac25287000000b0051176a6a88esm616530lfm.5.2024.02.16.06.12.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Feb 2024 06:12:34 -0800 (PST)
-Date: Fri, 16 Feb 2024 17:12:31 +0300
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Jiri Slaby <jirislaby@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Jiaxun Yang <jiaxun.yang@flygoat.com>, Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>, 
-	Stephen Rothwell <sfr@rothwell.id.au>, Andrew Morton <akpm@linux-foundation.org>, 
-	linux-mips@vger.kernel.org, linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] tty: mips_ejtag_fdc: Fix passing incompatible
- pointer type warning
-Message-ID: <qefx2cny4g3v6gvafw2gqx6bqncoxbo37vtbutvgofezvof3uh@zu7vthspxs3u>
-References: <20240215171740.14550-1-fancer.lancer@gmail.com>
- <20240215171740.14550-5-fancer.lancer@gmail.com>
- <4971bda5-e337-4c40-b7bd-5da4b7dae5d7@kernel.org>
+	s=arc-20240116; t=1708105356; c=relaxed/simple;
+	bh=pj3n+66nyrqpJxlt/wz6otP2MrHyOwNl0PF7mOPzDKo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=io+PHQ+NH40CXDmAsxw2g2mWLYm+nBy4dxQl7uQJCO6R5NZpD++FAzWHmT/Vx51aAzj/xCR5dq5zbdH0YZw940roptoKZrvXa6EE+uq3pxCm7BzbgTy7Cd1EVnwAWAO3NA6Az7O716KOT4mnjTQL755+pO076k4iatqJGmJv24M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jeusuca6; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EAF591C0008;
+	Fri, 16 Feb 2024 17:42:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1708105350;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=XbedJ76ICw0mlQWUBA8c408ZHkpOJ+fQpl8uRMxk2gQ=;
+	b=jeusuca6HzhLmnEEUcHVjy4gH7gOzWOtBwuEciIQ9zrXGq8XsKFHqI2dOjhJqpfYFTHY9h
+	Vte9xFs9qYBKDXJ5XINXxDfN4s00g6qvg3daicaY4SRYzqFr69FWcNyGvTLS3Y/LqsDuVV
+	HX0zvLTqNQ3uD1kXKIhFCBw0zfGdJskC9WvFk4N5L5t06HEweGpoHNo0cCCpPGF7MC7h6Q
+	K07ngM9TVuEn6VQwMwY80Z2FwIEANGrs33muYAEQI10RWGO0GW2YEh7lETHOffZIMdYqmz
+	eMxDB0xuaFIljymdnZYvT0rlptVG/9fVxnZBsrDLlwv5NQEPhnxicHljs3pvjA==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Paul Burton <paulburton@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Vladimir  Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	=?UTF-8?q?Th=C3=A9o=20Lebrun?= <theo.lebrun@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>
+Subject: [PATCH v8 00/14] Add support for the Mobileye EyeQ5 SoC
+Date: Fri, 16 Feb 2024 18:42:09 +0100
+Message-ID: <20240216174227.409400-1-gregory.clement@bootlin.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <4971bda5-e337-4c40-b7bd-5da4b7dae5d7@kernel.org>
+X-GND-Sasl: gregory.clement@bootlin.com
 
-On Fri, Feb 16, 2024 at 06:51:01AM +0100, Jiri Slaby wrote:
-> On 15. 02. 24, 18:17, Serge Semin wrote:
-> > mips_ejtag_fdc_encode() method expects having a first argument passed of
-> > the "u8 **" type, meanwhile the driver passes the "const char **" type.
-> > That causes the next build-warning:
-> > 
-> > drivers/tty/mips_ejtag_fdc.c: In function ‘mips_ejtag_fdc_console_write’:
-> > drivers/tty/mips_ejtag_fdc.c:343:32: error: passing argument 1 of ‘mips_ejtag_fdc_encode’ from incompatible pointer type [-Werror=incompatible-pointer-types]
-> >     word = mips_ejtag_fdc_encode(&buf_ptr, &buf_len, 1);
-> >                                  ^
-> > drivers/tty/mips_ejtag_fdc.c:216:24: note: expected ‘const u8 ** {aka const unsigned char **}’ but argument is of type ‘const char **’
-> >   static struct fdc_word mips_ejtag_fdc_encode(const u8 **ptrs,
-> >                          ^~~~~~~~~~~~~~~~~~~~~
-> 
-> It's a correct change. But why the compiler complains, given
-> KBUILD_CFLAGS += -funsigned-char
-> ?
+Hello,
 
-What a tricky question you asked.) It cost me some new gray hairs, but
-I guess I figured the correct answer out.
+The EyeQ5 SoC from Mobileye is based on the MIPS I6500 architecture
+and features multiple controllers such as the classic UART, I2C, SPI,
+as well as CAN-FD, PCIe, Octal/Quad SPI Flash interface, Gigabit
+Ethernet, MIPI CSI-2, and eMMC 5.1. It also includes a Hardware
+Security Module, Functional Safety Hardware, and MJPEG encoder.
 
-First of all it turns out that "char", "signed char" and "unsigned
-char" are three _distant_ types. The "-funsigned-char/-fsigned-char"
-flag changes the signedness of the plain "char", but it doesn't make
-it matching to any of "signed char" or "unsigned char". Thus the flag
-you mentioned couldn't suppress the warning I discovered (a bit later
-you'll see that it is unrelated to that flag, but to the fact that the
-types are different). Here is a simple test-code illustrating what I
-said above:
+One peculiarity of this SoC is that the physical address of the DDDR
+exceeds 32 bits. Given that the architecture is 64 bits, this is not
+an issue, but it requires some changes in how the mips64 is currently
+managed during boot.
 
-1: int main(int argc, char *argv[], char *env[])
-2: {
-3:         char c;
-4:         char *cp = &c;
-5:         signed char sc;
-6:         signed char *scp1 = &c;
-7:         signed char *scp2 = &sc;
-8:         unsigned char uc;
-9:         unsigned char *ucp1 = &c;
-10:        unsigned char *ucp2 = &uc;
-11:        return 0;
-12: }
+In this eighth version, I rebased the series onto the one sent by
+Jixuan to unify register numbering macros for uasm. I also addressed
+the comments from Thomas Bogendoerfer, especially regarding the use of
+cache memory to copy the vectors.
 
-$ gcc -Wall -Wno-unused-variable -funsigned-char tmp_char.c -o tmp_char
-tmp_char.c: In function ‘main’:
-tmp_char.c:6:29: warning: pointer targets in initialization of ‘signed char *’ from ‘char *’ differ in signedness [-Wpointer-sign]
-    6 |         signed char *scp1 = &c;
-      |                             ^
-tmp_char.c:9:31: warning: pointer targets in initialization of ‘unsigned char *’ from ‘char *’ differ in signedness [-Wpointer-sign]
-    9 |         unsigned char *ucp1 = &c;
-      |                               ^
-$
+To build and test the kernel, we need to run the following commands:
 
-See, a new warning (not as the one in the patch log) is printed
-despite of having the "-funsigned-char" flag specified. A more
-detailed discussion around that you can find here:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=28912
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=23087
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71202
+make eyeq5_defconfig
+make vmlinuz.itb
 
-The next question would be: "Why don't we see such warning printed all
-over the kernel then?" That's because the "-Wno-pointer-sign" warning
-suppressor is enabled in the kernel. It shuts up the sign-mismatching
-pointers cast warnings. So no warning will be printed if the test-code
-above is compiled as:
+Changelog:
 
-$ gcc -Wall -Wno-unused-variable -funsigned-char -Wno-pointer-sign tmp_char.c -o tmp_char
-$
+ v7 -> v8
 
-But why do we still see a warning as mentioned in the patch log? It
-turns out that the "-Wno-pointer-sign" flag only works for the
-_simple_ pointer signedness mismatch, but not for the multi-level
-pointers. So as long as there is a pointer-to-pointer or
-pointer-to-pointer-to-pointer, etc involved, another warning will be
-printed. Here is the test-code modified to re-produce the compile
-warning cited in the patch log:
+    - Based on https://lore.kernel.org/linux-mips/20240209-regname-v1-0-2125efa016ef@flygoat.com/
 
-1: int main(int argc, char *argv[], char *env[])
-2: {
-3:         char c;
-4:         char *cp = &c;
-5:         signed char sc;
-6:         signed char *scp1 = &c;
-7:         signed char *scp2 = &sc;
-8:         signed char **scpp = &cp;
-9:         unsigned char uc;
-10:        unsigned char *ucp1 = &c;
-11:        unsigned char *ucp2 = &uc;
-12:        unsigned char **ucpp = &cp;
-13:        return 0;
-14: }
+    - In patch 1 rename KSEGX_SIZE into CSEGX_SIZE.
 
-$ gcc -Wall -Wno-unused-variable -funsigned-char -Wno-pointer-sign tmp_char.c -o tmp_char
-tmp_char.c: In function ‘main’:
-tmp_char.c:8:30: warning: initialization of ‘signed char **’ from incompatible pointer type ‘char **’ [-Wincompatible-pointer-types]
-    8 |         signed char **scpp = &cp;
-      |                              ^
-tmp_char.c:12:32: warning: initialization of ‘unsigned char **’ from incompatible pointer type ‘char **’ [-Wincompatible-pointer-types]
-   12 |         unsigned char **ucpp = &cp;
-      |                                ^
-$
+    - In patch 3, move extern declaration into smp-cps.h, use register
+      definition from Jixuan series and use cache address for copying
+      vector.
 
-See, the lines 6 and 10 don't cause any warning printed (due to the
-"-Wno-pointer-sign" flag), but the new lines 8 and 12 do. This is the
-case that simulates what was discovered in the
-drivers/tty/mips_ejtag_fdc.c driver and what was fixed in this patch.
-I don't know for sure but I guess the compiler considers the
-high-level pointers a bit differently than the single-level ones. So
-the pointers to different pointer types are considered as
-incompatible, which is also relevant for the char-family types since
-these are three distant types. Thus that's what the warning about.
+   - Add Reviewed-by tag from Jiaxun Yang to patch 12 and 13.
 
-> 
-> > Fix it by altering the type of the pointer which is passed to the
-> > mips_ejtag_fdc_encode() method.
-> > 
-> > Fixes: ce7cbd9a6c81 ("tty: mips_ejtag_fdc: use u8 for character pointers")
-> > Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
-> > ---
-> >   drivers/tty/mips_ejtag_fdc.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/tty/mips_ejtag_fdc.c b/drivers/tty/mips_ejtag_fdc.c
-> > index aac80b69a069..afbf7738c7c4 100644
-> > --- a/drivers/tty/mips_ejtag_fdc.c
-> > +++ b/drivers/tty/mips_ejtag_fdc.c
-> > @@ -309,7 +309,7 @@ static void mips_ejtag_fdc_console_write(struct console *c, const char *s,
-> >   	unsigned int i, buf_len, cpu;
-> >   	bool done_cr = false;
-> >   	char buf[4];
-> > -	const char *buf_ptr = buf;
-> > +	const u8 *buf_ptr = buf;
-> >   	/* Number of bytes of input data encoded up to each byte in buf */
-> >   	u8 inc[4];
-> 
-> thanks,
+ v6 -> v7
 
-Please explicitly add your tag if you are ok with the fix.
+    - Added reviewed tags from Jiaxun Yang on patches 4 and 11.
 
--Serge(y)
+    - Removed patch "dt-bindings: mfd: syscon: Document EyeQ5 OLB" as
+      it is not used in this series.
 
-> -- 
-> js
-> suse labs
-> 
+    - Removed OLB node as it was not needed yet.
+
+    - Fixed memory node and removed bootargs in dts on patch 11.
+
+    - Modified the configuration selection as suggested by Jiaxun in
+      patch 13.
+
+ v5 -> v6:
+
+    - From series v5, patches 1 ("MIPS: Export higher/highest
+    relocation functions in uasm") and 3 ("MIPS: genex: Fix
+    except_vec_vi for kernel in XKPHYS)" have been removed as "MIPS:
+    Allow vectored interrupt handler to reside everywhere for 64bit"
+    and "MIPS: Remove unused shadow GPR support from vector irq setup"
+    address the same requirement.
+
+    - From series v5, patches 8 to 12 have been removed as they are
+    not mandatory to support EyeQ5 SoCs.
+
+    - The 1st patch of series v6 ("MIPS: spaces: Define a couple of
+    handy macros") has been modified to add the extra macros
+    CKSEG[01]ADDR_OR_64BIT.
+
+    - Patch 3 ("MIPS: Allows relocation exception vectors everywhere")
+    is a merge of patches 6 ("MIPS: Refactor mips_cps_core_entry
+    implementation) and 7 ("MIPS: Fix cache issue with
+    mips_cps_core_entry") from series v5. It has been rewritten to
+    reduce the diff stat; the 64-bit fixes have been moved to patch 5
+    ("MIPS: cps-vec: Use macros for 64-bit access").
+
+    - Patch 13 ("MIPS: Share generic kernel code with other
+    architecture)" is a new one allowing separate platform support in
+    the patch ("MIPS: Add support for Mobileye EyeQ5").
+
+ v4 -> v5:
+
+   - Improve commit messages for patch 3, 5, 12 and 13.
+
+   - Fix style in patch 9
+
+   - Really enable SPARSMEM and use correct address in
+     board-eyeq5.config in patch 21
+
+ v3 -> v4:
+
+ - Fix build warning in "MIPS: Get rid of CONFIG_NO_EXCEPT_FILL":
+   check that we are in 64bit mode before using KSEG0 that exist only
+   in this mode.
+
+ - Modify "MIPS: spaces: Define a couple of handy macros" to be
+   buildable in 32bit mode.
+
+ - Use correct format specifier to print address in "MIPS: traps: Give
+   more explanations if ebase doesn't belong to KSEG0"
+
+ - In "MIPS: generic: Add support for Mobileye EyeQ5",remove
+   CONFIG_ZBOOT_LOAD_ADDRESS from board-eyeq5.config, (as well as
+   CONFIG_USE_XKPHYS that does not exist anymore) and add
+   CONFIG_SPARSEMEM_MANUAL to enable SPARSMEM.
+
+v2 -> v3
+
+ - Added more reviewed-by and acked-by tags
+
+ - Fix sorting for cpus entries in
+
+ - Fix indentation issue in Documentation/devicetree/bindings/mips/mobileye.yaml
+
+ v1 -> v2
+
+ - Added reviewed-by and acked-by tags
+
+ - Fix typos reported
+
+ - In patch 15 use 'img' vendor string instead of mti
+
+ - In patch 16 modify licence
+
+ - In patch 17 give more explanations about the block usage.
+
+ - In patch 18, remove _ in node names, don't use anymore
+   CONFIG_BUILTIN_DTB in Makefile, remove macro, modify licence.
+
+ - In patch 19 remove most of the bootargs and only keeps earlycon. I
+   also split the memory in 2 part in the device tree.
+
+ - Integrate the series from Jiaxun Yang
+   https://lore.kernel.org/linux-mips/20231027221106.405666-1-jiaxun.yang@flygoat.com/
+
+  They are patches 2 to 6 and 8 to 12
+
+  Then I added patch 7 to fix the cache issue visible on the Mobileye
+  platform, I also add patch 13 to improve warning message when ebase
+  doesn't belong to KSEG0
+
+Regards,
+
+Gregory
+
+Gregory CLEMENT (12):
+  MIPS: spaces: Define a couple of handy macros
+  MIPS: traps: Give more explanations if ebase doesn't belong to KSEG0
+  MIPS: cps-vec: Use macros for 64bits access
+  dt-bindings: Add vendor prefix for Mobileye Vision Technologies Ltd.
+  dt-bindings: mips: cpus: Sort the entries
+  dt-bindings: mips: cpu: Add I-Class I6500 Multiprocessor Core
+  dt-bindings: mips: Add bindings for Mobileye SoCs
+  MIPS: mobileye: Add EyeQ5 dtsi
+  MIPS: mobileye: Add EPM5 device tree
+  MIPS: Share generic kernel code with other architecture
+  MIPS: Add support for Mobileye EyeQ5
+  MAINTAINERS: Add entry for Mobileye MIPS SoCs
+
+Jiaxun Yang (2):
+  MIPS: Fix set_uncached_handler for ebase in XKPHYS
+  MIPS: Allows relocation exception vectors everywhere
+
+ .../devicetree/bindings/mips/cpus.yaml        |  13 +-
+ .../devicetree/bindings/mips/mobileye.yaml    |  32 ++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |  12 +
+ arch/mips/Kbuild                              |   1 +
+ arch/mips/Kbuild.platforms                    |   1 +
+ arch/mips/Kconfig                             |  57 ++++
+ arch/mips/boot/dts/Makefile                   |   1 +
+ arch/mips/boot/dts/mobileye/Makefile          |   4 +
+ arch/mips/boot/dts/mobileye/eyeq5-epm5.dts    |  23 ++
+ .../boot/dts/mobileye/eyeq5-fixed-clocks.dtsi | 292 ++++++++++++++++++
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi        | 124 ++++++++
+ arch/mips/configs/eyeq5_defconfig             | 108 +++++++
+ arch/mips/generic/Makefile                    |   6 +-
+ arch/mips/include/asm/addrspace.h             |   5 +
+ arch/mips/include/asm/mach-generic/spaces.h   |   4 +
+ arch/mips/include/asm/mips-cm.h               |   1 +
+ arch/mips/include/asm/smp-cps.h               |   9 +-
+ arch/mips/kernel/cps-vec.S                    |  54 +---
+ arch/mips/kernel/smp-cps.c                    | 141 +++++++--
+ arch/mips/kernel/traps.c                      |   7 +-
+ arch/mips/mobileye/Makefile                   |   1 +
+ arch/mips/mobileye/Platform                   |  16 +
+ arch/mips/mobileye/board-epm5.its.S           |  24 ++
+ arch/mips/mobileye/vmlinux.its.S              |  32 ++
+ 25 files changed, 890 insertions(+), 80 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mips/mobileye.yaml
+ create mode 100644 arch/mips/boot/dts/mobileye/Makefile
+ create mode 100644 arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
+ create mode 100644 arch/mips/boot/dts/mobileye/eyeq5-fixed-clocks.dtsi
+ create mode 100644 arch/mips/boot/dts/mobileye/eyeq5.dtsi
+ create mode 100644 arch/mips/configs/eyeq5_defconfig
+ create mode 100644 arch/mips/mobileye/Makefile
+ create mode 100644 arch/mips/mobileye/Platform
+ create mode 100644 arch/mips/mobileye/board-epm5.its.S
+ create mode 100644 arch/mips/mobileye/vmlinux.its.S
+
+-- 
+2.43.0
+
 
