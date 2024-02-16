@@ -1,74 +1,74 @@
-Return-Path: <linux-mips+bounces-1508-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1509-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A41578576E9
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Feb 2024 08:42:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBFE2857727
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Feb 2024 08:59:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F545284D25
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Feb 2024 07:42:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E75E81C21E85
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Feb 2024 07:59:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CBD6171D2;
-	Fri, 16 Feb 2024 07:41:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69D30179B1;
+	Fri, 16 Feb 2024 07:59:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Mq+/59Xf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZtmnxGDz"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE8A171B6
-	for <linux-mips@vger.kernel.org>; Fri, 16 Feb 2024 07:41:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2C21759F
+	for <linux-mips@vger.kernel.org>; Fri, 16 Feb 2024 07:59:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708069317; cv=none; b=h5jtj/hHL5juMzABywk1HVyLwpZIauDFCRsl7CqZdqZWWHA1v/6CIv0v4kv3hgA8rAlHZBaclGErV5n6QNMEArY+5pr11OVSZaBtFjBa5eAYyITr/dMljAou9Gh/Do4UZF3l9RTCdrQxnZqjcARmIt6uCQTwIwLKhsx+hxIK8BM=
+	t=1708070358; cv=none; b=kIZR36K1EzA/vvXlrUyD3xlBbyrcMsSV9aNb98ncvUjUIq8livtq2GAJ7Oq6iXCuBDH4E7YJr94O81Snslm/TjhnFTuZan29zfPwB6QchQfrDaUVLA1Dg51Tibl60A5LFVeoW16eGuYF2L7Zjfq+PekONMdGSKrc5lS0CDWXWVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708069317; c=relaxed/simple;
-	bh=coHS0KQZgdFz7hDpHTtKnxnmK+xm6AMP6IfzrFsPklI=;
+	s=arc-20240116; t=1708070358; c=relaxed/simple;
+	bh=hhId4jM1GUqxb0jYWWEctZlFKyWiYOU7olPisxXp8lg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DqyjdQWXw6w79LSJOjwnJo98f+YSAZHkgPHSUywpbA+qItaJlJ/t0/aQUT9+VZ+8KECFC7qDde+lYyyEu99PoctFli9RP5kczvyVz2EU78pX42n7yCSxPAAvZr1FM29fm6quXwkl6ybWVLtjtdK2tf1x8RAkjKgqBuU5Dlm2r4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Mq+/59Xf; arc=none smtp.client-ip=209.85.208.43
+	 In-Reply-To:Content-Type; b=i7/ZnSqyhPoPYT7TD+12YGKSnNpoJl30yOCKtWYcl5NMQakGDU9BaSTv9w1xfQyp3F1SdSLWbjMxHQYJ0OtkCUmvoDgGlqF4ufIkYsMUVljbwq0X9OCe0EUwyP/HoMboEKzsaSljEERex7psC6VmkMCDJNYDwQUU4wy/GNlSSDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZtmnxGDz; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-563c403719cso1333876a12.2
-        for <linux-mips@vger.kernel.org>; Thu, 15 Feb 2024 23:41:53 -0800 (PST)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a36126ee41eso228011366b.2
+        for <linux-mips@vger.kernel.org>; Thu, 15 Feb 2024 23:59:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708069312; x=1708674112; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1708070353; x=1708675153; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ty9PpDZ3HzGoNAJvGX5ceIjeIjqEC/maZEixnNhWlFs=;
-        b=Mq+/59XfEUtNu+4ezd91DAg+zXe1Yv6VgQ2KTGx5oY5wkIqgliL7c30Ot3Rtbu4JHa
-         bCX757ziBbIseLOIRCTxrMTmaME+WbB1Il+XCwv+aV5iMOQkKdkMvfKHJ5UwSWKeOZpX
-         TkK6aaUb9dXuMqCEyevSW7qPgBqf4O8sgC9lARI7yi1itVQFj29oAyCGVqqLd+GwWa0K
-         V8b/nffrnhBEtcM5Rvz8JerDBVxZS/7WgPOvc1rGzNFp3Nb0fyp6AtVLgMsKS9HlHu8c
-         typyGWHxgt2f8Xo/W2UUyrtDVtWnj+iVtmpbgpS3iPlNlwmEWA2PiCb76loLt7i/rWRh
-         w8kg==
+        bh=usLl1SC7mqZ4nRORR9VF1N5sgvT4/fyPtc3ZzGoJbJY=;
+        b=ZtmnxGDzBCzM5Or4qPy7SKAdOdJXnHN3WFyRA7BQ6xANtkDfoT9xYPRGlyrDCL0gbN
+         YHARAuJonynocHgoMyZSWcL0576YUa+eIpqtxv3tsrVTArO1gq6dtKZ/fpMk21FmTP/2
+         HyC3lI4Q0tU7m8noROTwPC3LyMlDir8ouqTHPEwHWk01piO7kC6l7WmZ9djU7KqcMf7/
+         4/Q+UV9KfBjMJL04Gwncxp2zeqFfhw2PPasLgSMVV/qs1O/y02fGraqH616ycHgL+SE0
+         SO4XS1ykc4OOasK0mTrwphR7j8EZhwiRTHhr7T0qAcWtgFrz3+RA+nAqn1Zlisw85GPF
+         A6FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708069312; x=1708674112;
+        d=1e100.net; s=20230601; t=1708070353; x=1708675153;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ty9PpDZ3HzGoNAJvGX5ceIjeIjqEC/maZEixnNhWlFs=;
-        b=qf3ZqmPXAE4w097SpoRT/NUzABu42heWK5VLTaKtZAV0x0D+0Y+hq2HWMVZI65l0dy
-         vCQ1Cc8AFYVUw13Q17/IltHvlxvX+3vvpQgAjjE1XwmiWLvnP4bF+3+g3+FyIB/EP7jf
-         D9mggArsxWrF60UrtWt1p8UQqWEwjAlfXO6LF10dRcOwKyFa6FIY6jBt5D2sL4/KsKDt
-         Rk3yvCHAbP+Tb3zqKlMCGyk8HqZ3mXbnsTgRvvq9no0HK/3V3DMQ2TH638YL3LA5YA3t
-         bQjOnQNBPY3Yx683V6WPSIHsOjJklh5Vqa89stSZYJyEW7lzcEXS4UPE6FI1Bs985We+
-         5V/w==
-X-Forwarded-Encrypted: i=1; AJvYcCUxr8b9v6ZnDSOk/sN9NR6R86I3VX1oQZDxo2VXjUS+6obTitXqgxAHh2Ntw0rmA58q+wu7J7VLg2urJYrr4D/jJZNCGLMFA9gUMQ==
-X-Gm-Message-State: AOJu0YxamUdKQKmlWoTRdfaTT3iaegldvmesTRr9EJnENO5kKykHgF96
-	U5oBUEeysIHDtPvQcBbWI533de4FmHJfYJ7dkyAwbJBgCzCCIiornXcd29UN/uc=
-X-Google-Smtp-Source: AGHT+IHMQUy5OJUMLNvTl+OdSa/fP8DdAFb91k6s7uj5fwAlxGewCLqt4NX+qM1XZVEaE1/N4htCcw==
-X-Received: by 2002:aa7:d6cb:0:b0:564:4bc:492e with SMTP id x11-20020aa7d6cb000000b0056404bc492emr12207edr.22.1708069312284;
-        Thu, 15 Feb 2024 23:41:52 -0800 (PST)
+        bh=usLl1SC7mqZ4nRORR9VF1N5sgvT4/fyPtc3ZzGoJbJY=;
+        b=blmVfqZ3YqZXr9gQqVwBvfTx1RV2G6fzxjdjo1hCUv33fLrc2R62EmrEpUrlAQ8nU7
+         vEmE26IkShU9nAc0ilffdi3dG7K/SmoIJnS272yjm01eEa5vNNiCrW9dNJ2Bt2r64Yki
+         hhYW/lJdYpJRAfFfvjEvxnYuTPKj1XT5Jw8MQiSpvQf2eEAIcqQ8VTZLqgWnkinJxka/
+         xLe6Uw103eUXOtZzURNu+J3o62guTB9fCxDiNvGkXi2tScV4qwFRVVMc7ufzw05dmLZs
+         l0z+RVKiBfDvNfkjoUWEj+pDqJ7nr4OCNy7tYYatbDu3Ypjr4PzWv7KcE1Rm1fTFocfb
+         8EGw==
+X-Forwarded-Encrypted: i=1; AJvYcCUHT9Yr04b7YHuNDRdLOE9oZXa0p9oX6kmFTc8iumrzyO7uGVdI/YxgdUWOAMwg9c8PaEwTdewWORGSj03eeSgNql1m8X81f4kfbg==
+X-Gm-Message-State: AOJu0Yw6FUHO1cgL5Q7b9JsV3HP2jzMfkWjaMWaofs+V3pqSceIVmXid
+	goheNNY+kapu0CXjdMdmeQDtinVfo0Ou2uRpDoDyCchvVximCVEwCIbsF68NvIQ=
+X-Google-Smtp-Source: AGHT+IFKHhGo76S0hx7a0bcY1oJwxjoA5BJY7EqlErTpU/hlLwU0IoSjORalLVe5hY3xri0E7cGrlQ==
+X-Received: by 2002:a17:906:bc5a:b0:a3c:875b:f378 with SMTP id s26-20020a170906bc5a00b00a3c875bf378mr2312843ejv.36.1708070353445;
+        Thu, 15 Feb 2024 23:59:13 -0800 (PST)
 Received: from [192.168.0.22] ([78.10.207.130])
-        by smtp.gmail.com with ESMTPSA id z10-20020aa7cf8a000000b0056399fa69absm1232423edx.26.2024.02.15.23.41.50
+        by smtp.gmail.com with ESMTPSA id r5-20020a1709062cc500b00a3d1580d702sm1296186ejr.185.2024.02.15.23.59.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Feb 2024 23:41:51 -0800 (PST)
-Message-ID: <3e541dd7-90d8-43d1-a5b5-260828ac2a86@linaro.org>
-Date: Fri, 16 Feb 2024 08:41:50 +0100
+        Thu, 15 Feb 2024 23:59:12 -0800 (PST)
+Message-ID: <42b16256-0dcb-4065-bdd1-a27b33f169e2@linaro.org>
+Date: Fri, 16 Feb 2024 08:59:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -76,7 +76,8 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/13] dt-bindings: hwmon: lm75: add label property
+Subject: Re: [PATCH 12/13] MIPS: mobileye: eyeq5: add evaluation board I2C
+ temp sensor
 Content-Language: en-US
 To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
  Linus Walleij <linus.walleij@linaro.org>, Andi Shyti
@@ -89,11 +90,9 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
  linux-mips@vger.kernel.org, Gregory Clement <gregory.clement@bootlin.com>,
  Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, Jean Delvare
- <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- linux-hwmon@vger.kernel.org
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>
 References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
- <20240215-mbly-i2c-v1-3-19a336e91dca@bootlin.com>
+ <20240215-mbly-i2c-v1-12-19a336e91dca@bootlin.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -139,22 +138,37 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240215-mbly-i2c-v1-3-19a336e91dca@bootlin.com>
+In-Reply-To: <20240215-mbly-i2c-v1-12-19a336e91dca@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 15/02/2024 17:52, Théo Lebrun wrote:
-> Declare optional label devicetree property. Show usage in one example
-> with dummy name.
+> Declare the temperature sensor on I2C bus 2. Its label is the schematics
+> identifier.
 > 
-> To: Jean Delvare <jdelvare@suse.com>
-> To: Guenter Roeck <linux@roeck-us.net>
-> Cc: <linux-hwmon@vger.kernel.org>
 > Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 > ---
+>  arch/mips/boot/dts/mobileye/eyeq5-epm5.dts | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts b/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
+> index 6898b2d8267d..1f8549acd40d 100644
+> --- a/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
+> +++ b/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
+> @@ -21,3 +21,11 @@ memory@0 {
+>  		      <0x8 0x02000000 0x0 0x7E000000>;
+>  	};
+>  };
+> +
+> +&i2c2 {
+> +	tmp112@48 {
+
+Node names should be generic. See also an explanation and list of
+examples (not exhaustive) in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+temperature-sensor, power-sensor etc.
 
 Best regards,
 Krzysztof
