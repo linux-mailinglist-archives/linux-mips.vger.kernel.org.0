@@ -1,103 +1,142 @@
-Return-Path: <linux-mips+bounces-1563-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1564-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1D2C85A69C
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 15:56:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB44E85A6EE
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 16:08:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1066A1C213A7
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 14:56:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67EE6285CF4
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 15:08:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70580383A6;
-	Mon, 19 Feb 2024 14:55:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2AEE381DE;
+	Mon, 19 Feb 2024 15:06:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="inQcANvX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LUODdbyZ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417CE3839D
-	for <linux-mips@vger.kernel.org>; Mon, 19 Feb 2024 14:55:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36CC3F9FB;
+	Mon, 19 Feb 2024 15:06:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708354522; cv=none; b=WkfwhKXR1z7mnUfTB8924PX/PA3IBMBPO/VgHfD+D87HVEjlgHRsh+SHyaigXAqC3p0nUy9PNuurM4DibAkIlrPeHCmZ9XoGmRCRyijKdpWQw6thjcEFl+Au7DjN8fdA/eYL9k6nczDLvl5Uz37mQFgNap6l7EIMvAU+nPRDXok=
+	t=1708355203; cv=none; b=dMe8rxzB5nQaTY6CD5JqMW/C0RnqTHydzWcjpXMnkyGZ0QT91GAoE+vBqz+TIoJvhwROm0YBsQ1R/E3D/pRP4+MdeOCNY7OQEIfvukKqmpwMkIZVkW3Wmf+yOraPDPuaruM1LFjsCNol94nkjQWTW5tCDdKa3unJuYsJY9l7xMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708354522; c=relaxed/simple;
-	bh=qH5wXiM3i78ypS1cE2GuObYzdJP6nTn9QLDwtM+E/gc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aecpyeBYMQv3a9EbkJCSVxpUZQ1LNxEiPJMedV2ZyASgy2mfbblRv00/Nn7Fe3c98485i/8UsKB3MTxfecvXLoglBr0RJQEBqmXxqJ5yauaw5v7Q+RVeLraw2XIwImoGT7pOzuv51A/6nPOP7jQzX1ULInFvFtMgj5mGJdnt4SU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=inQcANvX; arc=none smtp.client-ip=209.85.128.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-60823dd1703so12001437b3.3
-        for <linux-mips@vger.kernel.org>; Mon, 19 Feb 2024 06:55:20 -0800 (PST)
+	s=arc-20240116; t=1708355203; c=relaxed/simple;
+	bh=nJGhWNzAdmlA3lSqk7zXCDQYN188FpjuKH/iLDfwq2c=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ad1jEjYAc9WuiVrQvJ4qnHh9A0BtkEI8bZ+py8eHuP5mzKY8DNu3WXLG3+RLeRfTEQyBKVg2G81JMFxytYNQNI3MRtwL8LotOx633l9uBzItpgr6W4HJKuSUG4l6CXLp2tp9+7/Uyr/UX/tTRVAZzMUSIHUZAbrbozJDh/gmiJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LUODdbyZ; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-33d61e39912so167090f8f.3;
+        Mon, 19 Feb 2024 07:06:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708354519; x=1708959319; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qH5wXiM3i78ypS1cE2GuObYzdJP6nTn9QLDwtM+E/gc=;
-        b=inQcANvXPuCuqHnryjl/iYJk9U8YX74QKTNoRgcSh/w3cNzWxiLg/phOgd7Tfz8l+M
-         VSOksR+Auug9hFDV0A0XSvsSlwoMB/9AftArn1ydHjsET4v8TKc90WV1CGo3lRbuO2CM
-         8zPFN2Atu7tW6mPt7Pn0W4PK9UYx+j8hQG4N424F79htcSecCIoTnBle/mWx/TvWB68F
-         KN6ilw43mTQ+X9kulN3QOdJwdMVKjcf2w8PbOhRiN1gjez0fcrku3gpTKuQUOKyAJJYL
-         V12Wzw3rmoOuVbBwGpZRAdu7wRE9znCPzDM+JSFW6NaUqySFNJp51p+S0Rjr5Z7iVruP
-         KLNw==
+        d=gmail.com; s=20230601; t=1708355200; x=1708960000; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+yOTnLimYUvPNkTFJn38nSneD1s53IeoM0jyre9BMIA=;
+        b=LUODdbyZc0pEfVSAgx2VGvR6lMov2ggBmoSF/ZjJzEbE7w9PvfkONZmmFTgtMuPWGG
+         7Z1tTJSL/YOBww6XBbHeAFv3eRcbN1g9us2cc6aL/RmPw3rz25xB6tzwUSiMGTb5ZpER
+         GXfrXVfCdOhKCmZO19VTQOmotMVjHdyema14bct92dqfz9tA+G6Br2YaHCYMuOHrII+9
+         kb6lXzZ2WOg0viqBwDzqJdmeq7GoZOHFF2o06zKziifQ0pURjF8o51PpM9m+rbJqPAG3
+         VCj6frLih4Q9SoYWpRARBRfFOVn/+U+BiHqz91rETT89QVUFJC9SVRBmlpEOCjWeKfQA
+         hRGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708354519; x=1708959319;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qH5wXiM3i78ypS1cE2GuObYzdJP6nTn9QLDwtM+E/gc=;
-        b=CyCjkcWDrq5bUGnsv8XiAWR6YbtGOwehCPdnI4NRo7U1FmVT30nExL+/Y4WGTY9SIa
-         ccG4ohbUOygpu9oL6115Pc18FRPOc5Goh4WsFiNfNkBQz4eS4Sp4Gul3e7wq/dxnOPdm
-         Ix6ybhlRuvF1m26sRC4SVhRLkSIQeoF15+mwCWM3XFTI47w9rbVRZ+uIb7D9UI54q85B
-         roDLYkcM4xyVor3REtF43Z/JX6RLULlLwTBxj1tFxFc3ClFYLq0ZKbNydsF2Fv1c0wCG
-         55x9KZXSI8bngZ+2iTMPi+MnKpmxkomC/omCjHIDrhi5csRUPeHEoQD6mqNxHm+yVp2e
-         BIqg==
-X-Forwarded-Encrypted: i=1; AJvYcCWziobxvTIYK6liG/GvhsqOQ0eLuvAW3ZO4AWbFFybKEYLw9ju8tUuNp7QJk2emybMcEnF1FArf9DGGLcLT0ck1ap/qARiGIwZfww==
-X-Gm-Message-State: AOJu0Yx/yiJFKWtjcGeBuIjkoudhUofFmB7PWvzPTH6DnRT9ankcwelP
-	3hGRmCW+TKmj7KS7yJ45ph4Wh8cOG1ZvtYUOxDRNTozvHf6r/GGkY00J41jMrMA2FeBVvgeBbCD
-	ypx6K6owPOc+XkQLHdmTdD1rPWWOUxeksMURlbA==
-X-Google-Smtp-Source: AGHT+IFltO6KkjBY25OUgoFC/Kmxadk8ahvUfaezI8PdV+xriL2Xe4U881DZubLOYqtDNDNARjLCAVm5NBCSj2rOXnE=
-X-Received: by 2002:a05:690c:a8c:b0:607:a8d9:c29e with SMTP id
- ci12-20020a05690c0a8c00b00607a8d9c29emr13974595ywb.33.1708354519351; Mon, 19
- Feb 2024 06:55:19 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708355200; x=1708960000;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+yOTnLimYUvPNkTFJn38nSneD1s53IeoM0jyre9BMIA=;
+        b=nT2AO3m2wby4cpEl+tqNEswQD7tvI8gTTXssxm9vUxwHdH2k4Y/xorVsgMd8PsQ0iU
+         2ZzX6EahM9AvGUtoMdZUJBWsxPBzoF2ePt/knU7gg+k39kPvGa6xvdmKTlQ7kSrhR5su
+         usDCWsBPr5ZQa1HMyAIBytGMd0t7TPc5ntpaHeqNtASbwaLOBnwOcgaPmc0ZTTi8p4yw
+         FTEh75gDAse6/8RdccjrISs0mKmUGf+lGpeCcnj1dnEc4OcD/8jyjdbCUXoFo4B+oR5t
+         MJzZH3kNc1vHHbMUGcnORajLVc1qPDOc7JgqUGQon/6rVIoeQGgvREtNdS5EdojcL6nO
+         bxfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWjIc0bkSUAVxTM7kS4zv2ehKxVf64s6kEQb/e9WsEZ2a+TES/NZFW03XRElYl75QZtH8tmrpvJfAulSCc4bl27VkTpJ5VJAW6mxilKqM62PdCx1D8N9mxCQeAhND27zpoYsAi8A68C8K4Eu96dpUmxBvVEz91rS66YVYd6V1ltw6I9XCmGm7KfO++Qq6kYFKJXhPCb9A34IlxPyeJa1wne1c8+R8zSuGN3khJZs9Y7nAI8jc31dOR9ltrGcTDnzYGThg24lqg5yfnLw0fL4F26E4N/qu5pJfNvzfuirjKTAyhyfm2WSSt1Gu6NnJ2welS7j360K79JQElItPZIOSv7nhVJvBil99JN7IpF
+X-Gm-Message-State: AOJu0YxT+/4jXhCEFolXtkUYErPaO9ky+HjkLU9oiKC9Jy/p0tHw1x22
+	YgYyAvmsVQj53ik3IyFTH/qiDX2A2qE6Ac5QZ7sUakvuOW9b6Aam
+X-Google-Smtp-Source: AGHT+IGV3Dv8X5d9m0XBa0wcUYD14lxx+K6CWQDd1wmnBIzjONKraLrRCWecBGSIPRcOqs5nu0aqbw==
+X-Received: by 2002:a5d:64ea:0:b0:33d:46b6:396a with SMTP id g10-20020a5d64ea000000b0033d46b6396amr3316172wri.4.1708355199934;
+        Mon, 19 Feb 2024 07:06:39 -0800 (PST)
+Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
+        by smtp.gmail.com with ESMTPSA id i13-20020a5d55cd000000b0033b198efbedsm10518754wrw.15.2024.02.19.07.06.38
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 19 Feb 2024 07:06:39 -0800 (PST)
+From: Puranjay Mohan <puranjay12@gmail.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
+ Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Russell King
+ <linux@armlinux.org.uk>, Zi Shen Lim <zlim.lnx@gmail.com>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Tiezhu Yang
+ <yangtiezhu@loongson.cn>, Hengqi Chen <hengqi.chen@gmail.com>, Huacai Chen
+ <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Johan Almbladh
+ <johan.almbladh@anyfinetworks.com>, Paul Burton <paulburton@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
+ Ilya Leoshkevich <iii@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>,
+ Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
+ <agordeev@linux.ibm.com>, Christian Borntraeger
+ <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, "David
+ S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>,
+ Wang YanQing <udknight@gmail.com>, David Ahern <dsahern@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>, bpf@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+ sparclinux@vger.kernel.org, netdev@vger.kernel.org, Kees Cook
+ <keescook@chromium.org>, "linux-hardening @ vger . kernel . org"
+ <linux-hardening@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 2/2] bpf: Take return from set_memory_rox()
+ into account with bpf_jit_binary_lock_ro()
+In-Reply-To: <ec35e06dbe8672a36415ebe2b9273277c2921977.1708253445.git.christophe.leroy@csgroup.eu>
+References: <135feeafe6fe8d412e90865622e9601403c42be5.1708253445.git.christophe.leroy@csgroup.eu>
+ <ec35e06dbe8672a36415ebe2b9273277c2921977.1708253445.git.christophe.leroy@csgroup.eu>
+Date: Mon, 19 Feb 2024 15:06:36 +0000
+Message-ID: <mb61p5xykpk77.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240214-mbly-gpio-v1-0-f88c0ccf372b@bootlin.com> <20240214-mbly-gpio-v1-4-f88c0ccf372b@bootlin.com>
-In-Reply-To: <20240214-mbly-gpio-v1-4-f88c0ccf372b@bootlin.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Mon, 19 Feb 2024 15:55:08 +0100
-Message-ID: <CACRpkdZ5v4GUJtrOV4U4bhvKC+RZFXk8LZdyN1cbxmm5mxcLuQ@mail.gmail.com>
-Subject: Re: [PATCH 04/23] dt-bindings: gpio: nomadik: add optional reset property
-To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mips@vger.kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>, 
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Wed, Feb 14, 2024 at 5:24=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@bootl=
-in.com> wrote:
+Christophe Leroy <christophe.leroy@csgroup.eu> writes:
 
-> Add optional reset device-tree property to the Nomadik GPIO controller.
+> set_memory_rox() can fail, leaving memory unprotected.
 >
-> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> Check return and bail out when bpf_jit_binary_lock_ro() returns
+> and error.
+>
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+> Previous patch introduces a dependency on this patch because it modifies bpf_prog_lock_ro(), but they are independant.
+> It is possible to apply this patch as standalone by handling trivial conflict with unmodified bpf_prog_lock_ro().
+> ---
+>  arch/arm/net/bpf_jit_32.c        | 25 ++++++++++++-------------
+>  arch/arm64/net/bpf_jit_comp.c    | 21 +++++++++++++++------
+>  arch/loongarch/net/bpf_jit.c     | 21 +++++++++++++++------
+>  arch/mips/net/bpf_jit_comp.c     |  3 ++-
+>  arch/parisc/net/bpf_jit_core.c   |  8 +++++++-
+>  arch/s390/net/bpf_jit_comp.c     |  6 +++++-
+>  arch/sparc/net/bpf_jit_comp_64.c |  6 +++++-
+>  arch/x86/net/bpf_jit_comp32.c    |  3 +--
+>  include/linux/filter.h           |  4 ++--
+>  9 files changed, 64 insertions(+), 33 deletions(-)
+>
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Puranjay Mohan <puranjay12@gmail.com>
 
-Yours,
-Linus Walleij
+Thanks,
+Puranjay Mohan
 
