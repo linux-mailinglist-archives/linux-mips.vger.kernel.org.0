@@ -1,123 +1,120 @@
-Return-Path: <linux-mips+bounces-1565-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1567-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6233E85A76E
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 16:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A297B85A7A1
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 16:41:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 165601F2190F
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 15:34:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 569471F22585
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 15:41:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51279383AB;
-	Mon, 19 Feb 2024 15:34:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0021B3FE22;
+	Mon, 19 Feb 2024 15:40:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="m7vj9A4f"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="RJ3a/vYz";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="H2nFv2f5"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F293B19C
-	for <linux-mips@vger.kernel.org>; Mon, 19 Feb 2024 15:34:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427623D3A6;
+	Mon, 19 Feb 2024 15:40:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708356857; cv=none; b=qT8HAaIng5j+0XOdiF5ybCnSfBfPYUDQxl0D/llfjyW3EORJQ67zc32UL2KcMFBl6NCSD6MBSd6zLgGcb/98NbdprHiHaLAhbESK8nJNALMetKLeI3/s4LKJb7572ZNBJScsj0Gl5JboOgD/XWREwWRKtQgFigyesge8adeyRtU=
+	t=1708357210; cv=none; b=n9Oig5dSyZLndSHXTjNIe5viFWMCN07Oo4C3JrBKbJT8wk/cVxa4NYZOszg0rw0UdAo6gGncrgp+47MKG6Y/4NXcKJr5q1duq4nAfDv/JaIo8aGcUiYMp+km/0yUK/0gzXAsKx+Jvq7g/ahjfk/wAeLjVMNtE+LE61F9xKc3ZPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708356857; c=relaxed/simple;
-	bh=OFg9oqTwcZyyxLA+PL9UVn1Rcz+N4HoQ9s8zDEcli2A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u2R9PxuQE6iiJK9mqIJnX0RAzfHZOAdFYqfj0WZV8dK3LEJPShox+d+3cD6zpbDYAIOqLv9A6FolaXWIve+cPs8mH6wsd9+88PeMk5rh2Gxq2N1MR9L5SamPPdnA5jLJRw3ZZhLNi+rnAzdJAzOkCh2Mw0BMDxaP1c3Ud6CcLS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=m7vj9A4f; arc=none smtp.client-ip=209.85.160.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-21e63b586fcso1852101fac.3
-        for <linux-mips@vger.kernel.org>; Mon, 19 Feb 2024 07:34:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1708356846; x=1708961646; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IvVPolj8oeG4AKFrK8d+pLPilaj1PpVh47xpBNRxg+w=;
-        b=m7vj9A4f5LEzjmiSmDA/WYeQCusxwYIQiuPFw5YyE7Zsjs1qW5UoGBphfd/0GbHN7x
-         beNs5yZ9h2EVHeAfxQLvUn7cqQvZuMWq9aEjZe4a0ojsXnvjxVzdn4XwPKUxatoR25bo
-         CRqnlACzqTcmZANl0jr/CnK0S0gI7EflsuCP6LindZOlboJHu/cHTvMH6FlCHqT3qNTG
-         2DEdDC7VY1mN7rXlrTIZgvdWUEnXTzx5Rj31bjNyiPSzpIh+9jxmumangJTvPwWAyBsY
-         NZuiruElBb13g0vl4AM6T3nHDGhrTSxwWT+rSiQPImMOe44BUU+EIXhFPUg1k4R7D6vp
-         spFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708356846; x=1708961646;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IvVPolj8oeG4AKFrK8d+pLPilaj1PpVh47xpBNRxg+w=;
-        b=fVPUFnuuM442WGMDTyVqvuxjHxiRm5l6+hPlxZ8ENZW1qjNXyIKH2UzXrE0PoNRPCI
-         NOwbw/f2weR9gRGZjL/UfHPzt5ePFOqmOivRsKTf6XN1HDfrknX0vzkY/3JL0bUqYEJx
-         UoTGRsQIzf5lLaPaQc1UvmQWfUCoePmd23pG879NMdK71Bo5Hw+KifQFI3Mu2fqUs1SE
-         fRAXv6Ql9bfwC2xn8RlIsmkrKckJhW8uRXjC8opSGYMFuhFTVEMvuGNwbQfs8VXBeGEL
-         NmpeyEuZIaJ1YQ0ivqOhqvsCAa+BGUZGwVLty8HUnv5fhBfTvCdivIMKSfk2xzMrO5/n
-         E9YQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXJWnXBBEyTN2ntdfSBKrCEsBBxBh+cxlicNx8yiK2fTuKQtSEVHOGHSYfn53pJVBHoktCtCeAPFsHEBPBEgZs9/5wy8pHLB6MhbQ==
-X-Gm-Message-State: AOJu0YxXupCNEH1sYDaV1umDhYAeFkdQCUp2IlqDL3s73EeoJx0s1KrE
-	pXHiCgWH2h3izHVTgAS5rnauZjN2D0Qkdlq2UpoqBJ3ykiZ1SlOZck4huOXrgwFXVfJipZJDIBc
-	hPJMae6L9Ek33QXZxHugxr1ddskxz8kVpOqdNHA==
-X-Google-Smtp-Source: AGHT+IH6wgFWgrzdMctoV3icDI335MC/CdaUuFj+nGvrkX8vJ7pjFLlj1xEDLlkiBRM39lL8enM+OZmAUPyDNuGbujs=
-X-Received: by 2002:a05:6870:d24b:b0:21f:a33:e48f with SMTP id
- h11-20020a056870d24b00b0021f0a33e48fmr444912oac.11.1708356846558; Mon, 19 Feb
- 2024 07:34:06 -0800 (PST)
+	s=arc-20240116; t=1708357210; c=relaxed/simple;
+	bh=Egt3w6vKpDeIpAiXo8C6D0ps5U8rKblI/NKKhpwZTB8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=k4s6GfogSiuYgEuEhIuRzZgtZm2QMvieFqMGxOrikUDrokoMez2vTRTV1li6hWP2vpcEkV79jag9K5ZVOicxBi4+Q6PYiG4iyo+4Gxf+PYaepAZSiyIijz14WvJuemfcy7FnNi/JzTTH7ZWWBzSsCOR+FbT8UTKYKkUtDQUCw0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=RJ3a/vYz; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=H2nFv2f5; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Anna-Maria Behnsen <anna-maria@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1708357206;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=p9YNrD7tVQTrXaMc0HLx7Bog9I9Y+lcWW3PT+KiRz7g=;
+	b=RJ3a/vYzw3wkv0lfjHWOSa3CQH7dtEAd1TsC2GWp6zruN6abfp84kgYTK1tOfgdD1DwORD
+	Rodida/DODREXt5n6/TNYKea1SQifVc/5cLMdEQRveMD2Nw8H/M7SAVIdhvupthNgbkFxP
+	9kSMPEiLmverJWsp7bMt/cfJDAO6kMt+I5wIm4WZkr8lNHDcIGgRUEFDsFNDpzqjjvfpuG
+	HjZDrKqAJJaqlZJ8DfzuObIdrdPV3WxO04sG50UFPvM2VHIMRYjFw39DyKUpxQQKOxy2SA
+	77fMzo1a1QxMcAXAFvNWlZa6fGwQRjQUf9STwBcs1im13Q9FRgc/J04tfWqCNw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1708357206;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=p9YNrD7tVQTrXaMc0HLx7Bog9I9Y+lcWW3PT+KiRz7g=;
+	b=H2nFv2f5VzCxp5vwhmWZv4sSB+CxOkUflxB3/09HSK9yyjsJkr2/6UMNUpeu5OPNOcFu/p
+	G48PpkvxupQND0BQ==
+To: linux-kernel@vger.kernel.org
+Cc: Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org
+Subject: [PATCH 09/10] mips/vdso: Use generic union vdso_data_store
+Date: Mon, 19 Feb 2024 16:39:38 +0100
+Message-Id: <20240219153939.75719-10-anna-maria@linutronix.de>
+In-Reply-To: <20240219153939.75719-1-anna-maria@linutronix.de>
+References: <20240219153939.75719-1-anna-maria@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240214-mbly-gpio-v1-0-f88c0ccf372b@bootlin.com>
- <20240214-mbly-gpio-v1-5-f88c0ccf372b@bootlin.com> <e031566a85ae0da0ee71dffba5d87c6414ef83e1.camel@pengutronix.de>
-In-Reply-To: <e031566a85ae0da0ee71dffba5d87c6414ef83e1.camel@pengutronix.de>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 19 Feb 2024 16:33:55 +0100
-Message-ID: <CAMRc=Me-oEx9S0w=XhwC4MzV9uzV0o0HnWBfNSstcqg5jpXyZg@mail.gmail.com>
-Subject: Re: [PATCH 05/23] gpio: nomadik: extract GPIO platform driver from drivers/pinctrl/nomadik/
-To: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-gpio@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
-	Gregory CLEMENT <gregory.clement@bootlin.com>, 
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 15, 2024 at 11:03=E2=80=AFAM Philipp Zabel <p.zabel@pengutronix=
-.de> wrote:
->
-> On Mi, 2024-02-14 at 17:23 +0100, Th=C3=A9o Lebrun wrote:
-> [...]
-> > diff --git a/drivers/gpio/gpio-nomadik.c b/drivers/gpio/gpio-nomadik.c
-> > new file mode 100644
-> > index 000000000000..e39477e1a58f
-> > --- /dev/null
-> > +++ b/drivers/gpio/gpio-nomadik.c
-> > @@ -0,0 +1,660 @@
-> [...]
-> > +static int nmk_gpio_probe(struct platform_device *dev)
-> > +{
-> [...]
-> > +     ret =3D gpiochip_add_data(chip, nmk_chip);
->
-> Use devm_gpiochip_add_data() to cleanup on unbind, before nmk_chip goes
-> away. Or make the driver un-unbindable via suppress_bind_attrs. In that
-> case you could drop devm_ prefixes everywhere for consistency.
->
+There is already a generic union definition for vdso_data_store in vdso
+datapage header.
 
-No! Why? What about error paths in probe() where you want to undo everythin=
-g?
+Use this definition to prevent code duplication.
 
-Bart
+Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+---
+ arch/mips/include/asm/vdso.h | 5 -----
+ arch/mips/kernel/vdso.c      | 2 +-
+ 2 files changed, 1 insertion(+), 6 deletions(-)
 
-> regards
-> Philipp
+diff --git a/arch/mips/include/asm/vdso.h b/arch/mips/include/asm/vdso.h
+index cc7b516129a8..afb03d45bcd0 100644
+--- a/arch/mips/include/asm/vdso.h
++++ b/arch/mips/include/asm/vdso.h
+@@ -50,9 +50,4 @@ extern struct mips_vdso_image vdso_image_o32;
+ extern struct mips_vdso_image vdso_image_n32;
+ #endif
+ 
+-union mips_vdso_data {
+-	struct vdso_data data[CS_BASES];
+-	u8 page[PAGE_SIZE];
+-};
+-
+ #endif /* __ASM_VDSO_H */
+diff --git a/arch/mips/kernel/vdso.c b/arch/mips/kernel/vdso.c
+index f6d40e43f108..dda36fa26307 100644
+--- a/arch/mips/kernel/vdso.c
++++ b/arch/mips/kernel/vdso.c
+@@ -24,7 +24,7 @@
+ #include <vdso/vsyscall.h>
+ 
+ /* Kernel-provided data used by the VDSO. */
+-static union mips_vdso_data mips_vdso_data __page_aligned_data;
++static union vdso_data_store mips_vdso_data __page_aligned_data;
+ struct vdso_data *vdso_data = mips_vdso_data.data;
+ 
+ /*
+-- 
+2.39.2
+
 
