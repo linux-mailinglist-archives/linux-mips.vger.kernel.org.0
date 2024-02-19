@@ -1,86 +1,83 @@
-Return-Path: <linux-mips+bounces-1573-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1574-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2543285A88A
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 17:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B3DFD85A891
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 17:18:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E5BD1F24513
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 16:17:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 267BD1F24E86
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 16:18:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CC993D543;
-	Mon, 19 Feb 2024 16:17:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA4173B786;
+	Mon, 19 Feb 2024 16:18:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="D7n86fEA"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="dcpdvjf1"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECFC53C697
-	for <linux-mips@vger.kernel.org>; Mon, 19 Feb 2024 16:17:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63F1F3B79D
+	for <linux-mips@vger.kernel.org>; Mon, 19 Feb 2024 16:18:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708359456; cv=none; b=ryVjxp50OxAc3n5l7AGmD8179XpW37yBDXW21q5mdArq+Kzr1m5HmRjmPx61X5PTBqkpvWtHFF7Ypnltf7aHBrf7zUyDJbToLitoY2Qnl7M5hC6u837SxFGda6z94rn1uW9qoqo351gKO9rWC70/f4CljM8f6dD5wBtGyROz+wg=
+	t=1708359485; cv=none; b=j5aOWQzzPkOmVUa+KhzdnQF4m45IJuLhNygJMxGU7mDn9LUjsJanq/B57+dj8/bhdyS+0ceSflZtUUaXV9DiKliSp4nvmbKUo6H7v0xiMOfoPBRmgfdimwktjSZlY/6/rtDadbm/hDevGIf8enlHVSQjrtwPLkXIef0mSkPJpVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708359456; c=relaxed/simple;
-	bh=134bTW4U/2yBPsvBKV9Njbp4VULnpfYtNg0d/8VXWnk=;
+	s=arc-20240116; t=1708359485; c=relaxed/simple;
+	bh=qjzcx+ky+m9LqUCnQsunFaXlJI8F3Ray2e8gmZDQnsY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OlS7xMeDGa/bxmkViDH9dKtP557cwOJ7jFTcaf6vZm5l5MSzOlXsOAFYdeUR600FnH6SEyOMSw9ita4VkC2WgLhDMXssfVuhf6EOu3R1eG7ce8nHlVC2jfi/MCCTzYvwFKIb0Q1J5hyJ+ESgiKUXPPF0fmXZPrv4f5yfSAun7Hw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=D7n86fEA; arc=none smtp.client-ip=209.85.210.41
+	 To:Cc:Content-Type; b=tuCWaHSmFVxPKZhJhI1Ii+m4h5wuCHgtW84jOux4MTDgKtqzjosNuNghXiXT1dFnuT9X6bg/T9BRbYGaISYJSWeAXR4JNxcoNRKWYvelJdJJK+bVuneSIn9AnOxUvjM9i+MNHmKSJsbAC181KmFtQ6yCTzEl9Eax8q8xPccbYSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=dcpdvjf1; arc=none smtp.client-ip=209.85.160.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-6e2e452c852so2180730a34.3
-        for <linux-mips@vger.kernel.org>; Mon, 19 Feb 2024 08:17:34 -0800 (PST)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-21e7c3e3cf3so2416029fac.0
+        for <linux-mips@vger.kernel.org>; Mon, 19 Feb 2024 08:18:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1708359451; x=1708964251; darn=vger.kernel.org;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1708359483; x=1708964283; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kx7otSCPMC2vGVuskOYxTO3G/UHr78DMGo93ZWkapNk=;
-        b=D7n86fEABi7eir2Agli7r+8kVHPl9MdUS4U3cgA3zAxLq59Oy7tVK4yHOiWQaZvJrH
-         VF3XodRiztJSbsbOYitfu7UMh7G2GKGsHRE3a2xfnfLrmpnxuh9mN2sRgvMIBAW2D6O9
-         xZI5F73/yusts6KL5KcmOrxUfXQtCqF1GPUB+hfOALvH2Qccm66Jopt5mKeJKi1pxa/0
-         gSIxODp+RfnR2+eHKBRgvXjodW4rrQDSNhdiGxPhMHUuasWvKR7ETfCocgMORLB7gV4N
-         Z3hm1Lzh+yLxivxMeiYt9MUry/YVcVqzk4j0lkm2wvqiinSVLq+BWYKZaQnGgLfcIuQR
-         mcmA==
+        bh=dkkKZJCCytTGAljspGkyIipfcm+Bvc2X5TtIBHDj2O0=;
+        b=dcpdvjf1TK+Ev/Mj+ftRw+S4+JCtcDmwlMU8lw+zETf52zeuO0VJI6AVprwjcLhY9Y
+         TvobkL7WVjHzERUl91TIu/CS5I2BpQ9XuCvDdquE+G5UrNj+EaISCqJJ7dynzXL3lSRn
+         zpPaoOFzaSl76JhxqP5eCpQViiWYAaV3hkWD+tCrploWTbzkgPsx9IKEsILoJhkuQKLf
+         aJThTzdVr6cPs+Yl1IGLn/1lzbUBb9HY9UEMMi/5+mvKnWnUmpYVFMC8ccRWNDrlofm5
+         Roe+VhvVlpBva0iokGAhkiMUlPAv2xl5r+RBWIa7xzeNg1AaFVz9Yufnfs/X1kBKwWrw
+         eZjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708359451; x=1708964251;
+        d=1e100.net; s=20230601; t=1708359483; x=1708964283;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kx7otSCPMC2vGVuskOYxTO3G/UHr78DMGo93ZWkapNk=;
-        b=LezqJNAHzo8n8d/RLUTlYQklXPVkrEsWY1lc7IdhKj2QlgKasLJSq9Sq3yGCEX+w+g
-         XId8d1/so4vm7RAlKWpbzhYyx/QrWCCLInr37HhJuGfv7B3JnEcmLJGzUpH8yHPqgQHv
-         7vHI7vtILjrR/mgiL2bthVs2Fd2aCpr9ylMCtJwIXXzLEEqzszBfaE2tKhU1vLQOUT5x
-         7qybjMEw6t+ZzTL9zK2WkFgSCy04lONNxEywJEyn3fdKva3cOZl8Mm3XlKbPJ4XlNoPA
-         UDvOy1g0c4mPMKsVFtlGCKWAoatGWe2wmvLnvFxbGCLwK2+ugV9+wWHTVYhrJiKO1CaZ
-         PJyw==
-X-Forwarded-Encrypted: i=1; AJvYcCU6dKLFfi1xgp51uodbhNNiXRUCNJEiSevdCbNvmqMnaGgWnBAb1Hlc5IFWHJdkbxg2yV/dIBd+CSm9AqxtiFqCU0Viwj2XGraTzA==
-X-Gm-Message-State: AOJu0Yw8LDRn2G2p75T3G0/GajZzXspiOlToJSsuuGy/NoU7hf+1STI+
-	1NIqi9IFALlVaC96Ybjzlns66l035dfksu6tWI/ay/SVo7vr5Y4Ee0a0bmgef0LwbGMge/8o5yv
-	NZ4/sO6pyEQCUvtYq2CnC0/FzBtNhe71j9jzzZw==
-X-Google-Smtp-Source: AGHT+IHLc5XDQogejfKFq5lHHEBUSI8TRIOeJ3TyooCJAymEvtY43bPRYPfmxEE9KAkgeTSwA8/zKkIr9WkBBX3Fwrg=
-X-Received: by 2002:a05:6870:4706:b0:21e:b50c:3e90 with SMTP id
- b6-20020a056870470600b0021eb50c3e90mr5881476oaq.37.1708359451275; Mon, 19 Feb
- 2024 08:17:31 -0800 (PST)
+        bh=dkkKZJCCytTGAljspGkyIipfcm+Bvc2X5TtIBHDj2O0=;
+        b=pDD6CdLHK+SITCenCcoxydfW44GMTrNlnhMFy1fseCgZkRPw8YF6+VSxJTx5pvr/iO
+         b/2v57WIli5dRkEkdqRP5mf7KhjEL6yw74LMt4l3AghYhz76YnIYg3duGP4BL8Y/OP60
+         Ki2jl/NcSil2YS08qSU8ZmibtTj+0kOooMJOvKGm431gfOzTfPFN/r1lZGd1s6ego1ZG
+         a2VD1mImh+jso8NJes6W7TdN6C8D6UchotSf17D4lyrBLZKHxsNxLaafx7C0HFXap+6i
+         jBzHw9DpXakmKJn47hrYeXvkv6iLWdcGFvudMkp3JHETtBXQeyZWNtAfstnJJ4ncelFC
+         71Vg==
+X-Forwarded-Encrypted: i=1; AJvYcCWhyTGaYuRVuC8qQTEqklyNXA0rKGZ1GNj1ofHxHuUp7rGzGWAB/gh+YpVAJv/Wl4Ttr4tpUrjiPqNflzxarBMngoLcf/lDywOm1Q==
+X-Gm-Message-State: AOJu0Yxp6HX/z/X+ujV0Y2nOFT9lEJaqG11RgHMsQwZJo1DR3znRxyFF
+	BzlhCIDIXcNZeF2AG0LtKKqiIz/L6kX5OnGHhQB8QMCQYFQBzxPuGGp6T1XvMUJKiO3+igIFiwd
+	FW6eWBOT1IWJylADppIcO/uldEDt5Oz5As2SPdw==
+X-Google-Smtp-Source: AGHT+IG5pyvJ8VZ6IeRCjDQVoO+8UramCL2g0nrYiEFGzvjye6ON6eV4Qtkb+srU6g6Hef9hGKjITtSXzU2gX9D/suw=
+X-Received: by 2002:a05:6871:79a:b0:219:3054:3ea5 with SMTP id
+ o26-20020a056871079a00b0021930543ea5mr12969383oap.45.1708359483560; Mon, 19
+ Feb 2024 08:18:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240214-mbly-gpio-v1-0-f88c0ccf372b@bootlin.com>
- <20240214-mbly-gpio-v1-16-f88c0ccf372b@bootlin.com> <CAMRc=MdFBFFTYKHgDfOieNZJ+-x7ZZMiYty6buOp2J=eFUjt0Q@mail.gmail.com>
- <CZ96EIJ22CYS.1AMRRY388V466@bootlin.com>
-In-Reply-To: <CZ96EIJ22CYS.1AMRRY388V466@bootlin.com>
+References: <20240214-mbly-gpio-v1-0-f88c0ccf372b@bootlin.com> <20240214-mbly-gpio-v1-17-f88c0ccf372b@bootlin.com>
+In-Reply-To: <20240214-mbly-gpio-v1-17-f88c0ccf372b@bootlin.com>
 From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 19 Feb 2024 17:17:20 +0100
-Message-ID: <CAMRc=MeKOJLMCxr2iMSYSK0A0O2L=Mw96B1opYiPdLsqQrB0_w@mail.gmail.com>
-Subject: Re: [PATCH 16/23] gpio: nomadik: support shared GPIO IRQs
-To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>, 
-	Grygorii Strashko <grygorii.strashko@ti.com>
+Date: Mon, 19 Feb 2024 17:17:52 +0100
+Message-ID: <CAMRc=Me=SiS5oScmm8jMNsed_2smN4p6s+xPnkTzjHM_hPPULQ@mail.gmail.com>
+Subject: Re: [PATCH 17/23] gpio: nomadik: handle variadic GPIO count
+To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>, Rob Herring <robh+dt@kernel.org>, 
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
 	Philipp Zabel <p.zabel@pengutronix.de>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
@@ -92,71 +89,62 @@ Cc: Linus Walleij <linus.walleij@linaro.org>, Rob Herring <robh+dt@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 19, 2024 at 4:54=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@bootl=
+On Wed, Feb 14, 2024 at 5:24=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@bootl=
 in.com> wrote:
 >
-> Hello,
+> Read the "ngpios" device-tree property to determine the number of GPIOs
+> for a bank. If not available, fallback to NMK_GPIO_PER_CHIP ie 32 ie
+> the current behavior.
 >
-> On Mon Feb 19, 2024 at 4:48 PM CET, Bartosz Golaszewski wrote:
-> > On Wed, Feb 14, 2024 at 5:24=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@b=
-ootlin.com> wrote:
-> > >
-> > > Support a single IRQs used by multiple GPIO banks. Change the IRQ
-> > > handler type from a chained handler (as used by gpiolib
-> > > for ->parent_handler) to a threaded IRQ.
-> > >
-> > > Use a fake raw spinlock to ensure generic_handle_irq() is called in a
-> > > no-irq context. See Documentation/driver-api/gpio/driver.rst, "CHAINE=
-D
-> > > CASCADED GPIO IRQCHIPS" for additional information.
-> > >
-> >
-> > Any reason for not using preempt_disable()?
+> The IP block always supports 32 GPIOs, but platforms can expose a lesser
+> amount. The Mobileye EyeQ5 is in this case; one bank is 29 GPIOs and
+> the other is 23.
 >
-> I did what the doc recommended:
+> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  drivers/gpio/gpio-nomadik.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
 >
-> > The generic_handle_irq() is expected to be called with IRQ disabled,
-> > so the IRQ core will complain if it is called from an IRQ handler which=
- is
-> > forced to a thread. The "fake?" raw lock can be used to work around thi=
-s
-> > problem::
-> >
-> >   raw_spinlock_t wa_lock;
-> >   static irqreturn_t omap_gpio_irq_handler(int irq, void *gpiobank)
-> >       unsigned long wa_lock_flags;
-> >       raw_spin_lock_irqsave(&bank->wa_lock, wa_lock_flags);
-> >       generic_handle_irq(irq_find_mapping(bank->chip.irq.domain, bit));
-> >       raw_spin_unlock_irqrestore(&bank->wa_lock, wa_lock_flags);
+> diff --git a/drivers/gpio/gpio-nomadik.c b/drivers/gpio/gpio-nomadik.c
+> index 5b1e3b3efcff..02b53c58adf7 100644
+> --- a/drivers/gpio/gpio-nomadik.c
+> +++ b/drivers/gpio/gpio-nomadik.c
+> @@ -490,7 +490,7 @@ struct nmk_gpio_chip *nmk_gpio_populate_chip(struct d=
+evice_node *np,
+>         struct resource *res;
+>         struct clk *clk;
+>         void __iomem *base;
+> -       u32 id;
+> +       u32 id, ngpio;
 >
-> If you confirm I should be using preempt_disable() that's what I'll do
-> in the next revision. I could even throw in a documentation patch if
-> the advice is outdated.
+>         gpio_pdev =3D of_find_device_by_node(np);
+>         if (!gpio_pdev) {
+> @@ -518,10 +518,15 @@ struct nmk_gpio_chip *nmk_gpio_populate_chip(struct=
+ device_node *np,
+>                 return ERR_PTR(-ENOMEM);
+>         }
 >
-> Thanks Bartosz,
+> +       if (of_property_read_u32(np, "ngpios", &ngpio)) {
 
-This was added 9 years ago:
-
-commit c307b002548590c5d8c32b964831de671ad4affe
-Author: Grygorii Strashko <grygorii.strashko@ti.com>
-Date:   Tue Oct 20 17:22:15 2015 +0300
-
-    gpio: add a real time compliance notes
-
-    Put in a compliance checklist.
-
-    Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
-    Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-
-I'm Cc'ing Grygorii - maybe he can remember if there was any reason
-for using a spinlock over preempt_disable(). But for now I'd go with
-the latter.
+As commented elsewhere - please try to use device_property_read_u32().
 
 Bart
 
+> +               ngpio =3D NMK_GPIO_PER_CHIP;
+> +               dev_dbg(&pdev->dev, "populate: using default ngpio (%d)\n=
+", ngpio);
+> +       }
+> +
+>         nmk_chip->bank =3D id;
+>         chip =3D &nmk_chip->chip;
+>         chip->base =3D -1;
+> -       chip->ngpio =3D NMK_GPIO_PER_CHIP;
+> +       chip->ngpio =3D ngpio;
+>         chip->label =3D dev_name(&gpio_pdev->dev);
+>         chip->parent =3D &gpio_pdev->dev;
+>
 >
 > --
-> Th=C3=A9o Lebrun, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> 2.43.1
+>
 
