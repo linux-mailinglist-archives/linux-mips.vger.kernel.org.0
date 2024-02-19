@@ -1,123 +1,150 @@
-Return-Path: <linux-mips+bounces-1555-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1556-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 890A385A5F3
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 15:32:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3637285A617
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 15:36:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1938FB209B3
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 14:31:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0B9B1F21712
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 14:36:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C50F41E526;
-	Mon, 19 Feb 2024 14:31:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2450C1EA91;
+	Mon, 19 Feb 2024 14:35:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="kC7uVdmQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GGh6izYw"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F151DDD5;
-	Mon, 19 Feb 2024 14:31:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26163383A2
+	for <linux-mips@vger.kernel.org>; Mon, 19 Feb 2024 14:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708353110; cv=none; b=V3EGEvzHoOdySDZeqousIvQ55ZF8yz0JAsE4B7EPl2wrFxIug6TYDVsTXItGeX59ty8I4VHnxSkq8AGsH6c6jfa4GrntW9WvOWiqMHpwrtNHzV+zmDTlQG7CeU7G/5Ye92nG+6Vlqkr99Zs7ZXdryyLQyMmxkw5SDCNoPsHwmoo=
+	t=1708353356; cv=none; b=oVUlpxnW328tUufLaVZG2du+3ZWHoZoRu4JLBSYek7FcGeMYb5cR4uY3QOaMHChazA39A4qoJby/yROpPsxymU/pAnhY/31mLVjhjPTGC17uGirzlMmcGwttTBQylAr/Wu/wihR9+wDMVegFFbYHeqxckuGSMoS5tQe0adpTRBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708353110; c=relaxed/simple;
-	bh=hKfqt+6AH9WiehjZH1IaTO+O21L0m+AX+DTUgObkBAY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=TXtWzg/yICbzsBN49fh6U8KD0zvgyQhbOw9OSVOtPuwyQ42indSK83PcpB0dD2VzKcDkBlxTlCQdf8e7f4vQU7Jvi1M8667WB+EBfXeI6ovrr5yF0N9DAW/+PdMyZUy1kGLH72TTBA/qy1x+e3VEKvm0i7nbboZklhW/jyAnCWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=kC7uVdmQ; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9F9441C0012;
-	Mon, 19 Feb 2024 14:31:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1708353106;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hKfqt+6AH9WiehjZH1IaTO+O21L0m+AX+DTUgObkBAY=;
-	b=kC7uVdmQuKOY2GZO7/+U8nGkDmIS2gUMSAn6I3uoBiu8m1t7O7ruLaNdalx34aTxFThyby
-	4xEjQzka7TB8XMIdmRxWxQw3OWpVgOT5vk695IlP4IdxkXuFPU4ApdZhDB5Kl+CVQpr+RC
-	ZVvauYyA3BM0jtZ8FruNvEisL5LZS9HTI5K9Sa6dgtv2w/u3zzhXJBYg9iPSh+l2eXSZJn
-	3GvZd2GHfFANPZX8zWkS4LXroL2RmFjaem7TJvuJaX7ZRN/WCZfspHigpm5MWOb8kbXvhz
-	jo71SgSyaCFgtWRj/NFHARZzLGnwwSOQ8EVbfHSHGPu9KBuRop9FCd/wV0uXpA==
+	s=arc-20240116; t=1708353356; c=relaxed/simple;
+	bh=1RkS6CvafEx+T4LVSMCS6FBn6mLD7Rqrzm5hwLpeVkY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TeZmFriYqn20M9EXPlVD7PnaBzn5Nm040UsbqMM9yQiwJFSQD87u5R/ZNzdrmOM9SHaLXmXvqUvWXMgFQr50Kbf4/3CZrQeQgvuDxXR5UMzu8N5w39FmDPiIVYLrR2TbfLF+WQmLROPZJZy1XZKv0bVuu0YJQOKRa+VH4FksySI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GGh6izYw; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-607cd210962so36422517b3.2
+        for <linux-mips@vger.kernel.org>; Mon, 19 Feb 2024 06:35:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708353352; x=1708958152; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CEbqbxunOK1j7HlndGF87g5ivfAom1/PXvbiALIF138=;
+        b=GGh6izYwiyn0/JNsol6uc7v2uVUZgYTerVNlzw0aG7duOty0wRLsDcc18MHQOw1AxD
+         vjSUKeO4kPeDphY/IPJcxXjnou8vF3YhZ3jtociqWxoChE1xJQY96tneVdbMPIM8icsN
+         qVEudVi90OCVL+IOK1y/PFW7D7frJeoz1bISvLkpuAhyr5jjoj3KkobJ+ozfH47sq8XI
+         VCAaDyB4YXRu2TJBX4uA7z1ZxQlpDtQPPSLyDkKo3eZD/oLGPdruWkFhMhw9tynSHIJM
+         1e2hjpq5ajN42q8E8xENxA7t+kzZmeOaMEWthnG70ptklQE7NBehuHKpEG0JN4aNYAT3
+         SwAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708353352; x=1708958152;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CEbqbxunOK1j7HlndGF87g5ivfAom1/PXvbiALIF138=;
+        b=axhlNvX2pI8XWeTCq4EYmpqFSP95VoDZBUrMHdid/Ylj7pRtFl9Zu16cblV+lVgY5p
+         VR4Hw/fpQUBYAgIXnKGX3hHW1rLPIU9sHW/npCoVcIxl8YJ83HLhteCZYG11hEy+ouxl
+         aR4XPsb0WYUUUnVEn5SS8oIMzEWRIeX+dKmMCjUjr0M7YfWlAMoYL0kfNnfj3MibRA0k
+         CqVhas5SZMlR90T3YSptnLffablYC0CyvjFUTpQ3/5qw9z/f0pmTlm3ebaCfe8shAxgu
+         ggSUnVLVfzw8dpBXkilDnGzTwjnphNQq07UAPHKEfH9LydT4hVBJ6xtCgXHkOYkHMG8V
+         Cu9A==
+X-Forwarded-Encrypted: i=1; AJvYcCWpRUsyHZeUe0w894JwrEpf+qmzPs66J9awcNtbUl5Sdec/KWf74qy3CW625VpiDfBbHXrK2vP+d/FHaYao21FPcaDmNfJlHgNIGQ==
+X-Gm-Message-State: AOJu0YxDVI+yyiPyXKhg6g79UGFfeCXQW6mD6jBPOzN/5F+8DflZemUh
+	Nv0o/8JuAfGbroT2FXFz5kP2wS2dOE8qApnDOhO87kEtVofxM4XGYI1lBPRWUsy33agtnf8vpMe
+	3LJvU5QUXO+Gos/NJxg4CMp3Cuj7uYSDfkjbBVg==
+X-Google-Smtp-Source: AGHT+IGXXWQTNqG8Av8Wi3KkHvfVce/Gy7zDUqiCf6vvsiE9KC1FnT/C640OvVmyfKMnPiIRcy8xDE5EYbmrcdB8w+g=
+X-Received: by 2002:a81:4885:0:b0:608:1cf8:bfb2 with SMTP id
+ v127-20020a814885000000b006081cf8bfb2mr5252664ywa.1.1708353352208; Mon, 19
+ Feb 2024 06:35:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com> <20240215-mbly-i2c-v1-10-19a336e91dca@bootlin.com>
+In-Reply-To: <20240215-mbly-i2c-v1-10-19a336e91dca@bootlin.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Mon, 19 Feb 2024 15:35:41 +0100
+Message-ID: <CACRpkdY4PtnWkAEa=8sHdx7zYXLVAsrqKEVJY9m7VqeG5h6ChQ@mail.gmail.com>
+Subject: Re: [PATCH 10/13] i2c: nomadik: support Mobileye EyeQ5 I2C controller
+To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-arm-kernel@lists.infradead.org, 
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+	Gregory Clement <gregory.clement@bootlin.com>, 
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 19 Feb 2024 15:31:45 +0100
-Message-Id: <CZ94MU7BQIOE.2KYB4TWVOJISN@bootlin.com>
-Subject: Re: [PATCH 07/13] i2c: nomadik: support short xfer timeouts using
- waitqueue & hrtimer
-Cc: "Andi Shyti" <andi.shyti@kernel.org>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-mips@vger.kernel.org>, "Gregory Clement"
- <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-To: "Linus Walleij" <linus.walleij@linaro.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: aerc 0.15.2
-References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
- <20240215-mbly-i2c-v1-7-19a336e91dca@bootlin.com>
- <CACRpkdYC=vVBA-s6GmsaED=NdXfsr0JDzzF+x8q8C3tqQ0F8YQ@mail.gmail.com>
-In-Reply-To: <CACRpkdYC=vVBA-s6GmsaED=NdXfsr0JDzzF+x8q8C3tqQ0F8YQ@mail.gmail.com>
-X-GND-Sasl: theo.lebrun@bootlin.com
 
-Hello,
+On Thu, Feb 15, 2024 at 5:52=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@bootl=
+in.com> wrote:
 
-On Mon Feb 19, 2024 at 3:19 PM CET, Linus Walleij wrote:
-> On Thu, Feb 15, 2024 at 5:52=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@boo=
-tlin.com> wrote:
+> Add compatible for the integration of the same DB8500 IP block into the
+> Mobileye EyeQ5 platform. Two quirks are present:
 >
-> > Replace the completion by a waitqueue for synchronization from IRQ
-> > handler to task. For short timeouts, use hrtimers, else use timers.
-> > Usecase: avoid blocking the I2C bus for too long when an issue occurs.
-> >
-> > The threshold picked is one jiffy: if timeout is below that, use
-> > hrtimers. This threshold is NOT configurable.
-> >
-> > Implement behavior but do NOT change fetching of timeout. This means th=
-e
-> > timeout is unchanged (200ms) and the hrtimer case will never trigger.
-> >
-> > A waitqueue is used because it supports both desired timeout approaches=
-.
-> > See wait_event_timeout() and wait_event_hrtimeout(). An atomic boolean
-> > serves as synchronization condition.
-> >
-> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+>  - The memory bus only supports 32-bit accesses. One writeb() is done to
+>    fill the Tx FIFO which we replace with a writel().
 >
-> Part of me want to go and fix completions to handle hrtimer timeouts
-> for submicrosecond timeouts, BUT I realized that this is a bit thick
-> request for a simple driver, so just a suggestion for something we could
-> do one day. This is fine with me.
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>  - A register must be configured for the I2C speed mode; it is located
+>    in a shared register region called OLB. We access that memory region
+>    using a syscon & regmap that gets passed as a phandle (mobileye,olb).
+>
+>    A two-bit enum per controller is written into the register; that
+>    requires us to know the global index of the I2C
+>    controller (mobileye,id).
+>
+> We add #include <linux/mfd/syscon.h> and <linux/regmap.h> and sort
+> headers.
+>
+> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 
-Indeed having to switch to another abstraction because we desire another
-timeout method is nonsensical. Completion supporting hrtimeouts would
-make sense. As you said though, this is too much for a simple driver.
+(...)
 
-Thanks,
+> -               writeb(*priv->cli.buffer, priv->virtbase + I2C_TFR);
+> +               if (priv->has_32b_bus)
+> +                       writel(*priv->cli.buffer, priv->virtbase + I2C_TF=
+R);
+> +               else
+> +                       writeb(*priv->cli.buffer, priv->virtbase + I2C_TF=
+R);
 
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Are the other byte accessors working flawlessly? I get the shivers.
+If it's needed in one place I bet the others prefer 32bit access too.
 
-------------------------------------------------------------------------
+Further the MIPS is big-endian is it not? It feels that this just happens
+to work because of byte order access? writel() is little-endian by
+definition.
 
+What happens if you replace all writeb():s with something like
+
+static void nmk_write_reg(struct nmk_i2c_dev *priv, u32 reg, u8 val)
+{
+    if (IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
+        writeb(val, priv->virtbase + reg + 3);
+        // if this doesn't work then use writeb((u32)val,
+priv->virtbase + reg) I guess
+   else
+        writeb(val, priv->virtbase + reg);
+}
+
+and conversely for readb()?
+
+Other accessors such as iowrite* are perhaps viable in this case, I'm not s=
+ure.
+
+Yours,
+Linus Walleij
 
