@@ -1,222 +1,169 @@
-Return-Path: <linux-mips+bounces-1543-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1544-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB5E285979A
-	for <lists+linux-mips@lfdr.de>; Sun, 18 Feb 2024 16:19:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E28D185A501
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 14:41:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7287F280D1B
-	for <lists+linux-mips@lfdr.de>; Sun, 18 Feb 2024 15:19:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C3331C21A4E
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 13:41:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 739AD6D1AA;
-	Sun, 18 Feb 2024 15:19:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8940A364A4;
+	Mon, 19 Feb 2024 13:41:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Z0XxTgjq"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="KKX55vGX"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD1F6BFBE
-	for <linux-mips@vger.kernel.org>; Sun, 18 Feb 2024 15:19:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930683612E;
+	Mon, 19 Feb 2024 13:41:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708269588; cv=none; b=F8802sGFXjdd3MXP4S9GcAsOkesC4qylxDwC/32uPUvCRRsCWiFoNO6vlu0PgArENicGw4PRMbZebjtHj9oAaRIiC+lQyoE+RqvuOWR1rek6gP13Ui3KePSRT+3IBG9AAX/hZFUAyVT9RlRH8xGBvt2wsifjS7v7Lxd+qWaUTqg=
+	t=1708350090; cv=none; b=pxz4X8VsQIngGHB7WlAf2p28WRt8vnQ6HVGEarqgGaeoQQ3CnkQRfhK8XhZdCJa9evcRjtEGAJ9tkSDfK+OhTKUbsOjtGaelAEQhHLTQmi+/xNKICnEwuwjd0QNClPEO4C88rCXVYRvWIMIBeiRG9qlArMEZTWJSj66WqLwz60Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708269588; c=relaxed/simple;
-	bh=lYFHSwKGcbZg0KftqGMF5GiOnvyk1uaue8OvErSz/MI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AwJXLted7GPU07EzaqeT98GaRJHuByy7frj9TydWRjjaeHneUsAKOyqCTz8s6buOgh27NiWuZKqT1b3rh7VqISSDzO5+4zwo0N8vrBIaqLp/ZCmmaf4DtkQTtIlk85QKzP8plBSC10+CrCGspsWFLAoRtC9BXc5eluxvAhzGy60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Z0XxTgjq; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6e34d12404eso686281b3a.2
-        for <linux-mips@vger.kernel.org>; Sun, 18 Feb 2024 07:19:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1708269586; x=1708874386; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eiWOUozWnezeYn8cXQvtDvCvh6gTYyUB/9KcoNgO2S8=;
-        b=Z0XxTgjqWyazp15zaW/ZnhQPP/vQUJ16DOZ1Hq0r+BT7AlgmbJ9FONeOG3yHNtb9PL
-         NY72Vj0zKPqaAgRpopK2+aqqkrQfRItybiUPkatXi9wwD13ZxQHcl8NYYoFU5Jp6RHdm
-         c0o9K96cAg54FH5HIBpabLJjAOkt0mQ2F2mQg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708269586; x=1708874386;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eiWOUozWnezeYn8cXQvtDvCvh6gTYyUB/9KcoNgO2S8=;
-        b=Hx2NvNlE2a7uTTbaGn3E2tEU6qO0h6h7k6MY2tevD7NQx+Ie8qwI+ad8jzeax4GYVD
-         zaSPr13fa+5L19c/dICMTH/WXAADZ8of/OhLTYxspFPSyBbHLejJTXDWwbthDU4oZRj/
-         qFBpQ5DH6L/apJTTEzPVCUEcx8pNtIZHlRnNnuph+Xjg9jbU2raBTR5yFEq69w/KjnNW
-         KVBHhF2YZbNBh4VM3sZtNKdJJF9MjFI0BRUTcUtgvVtn//V3PxdO44dN2WEkRWtYuV0y
-         W8gVF7D144KLq57QU7JqyeMz3UZXMPSe78Pgfhds1bF6/J+dmRm2eIHT4JjL3/BfVTiO
-         B5BQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWgTuPRAb2oTpXrnpBDWEHyM6MbwjkESiaoZFuUvkNvnT7r1MFhdUB4quW8HA953VuoBmaZtWTeqx8zhlzb4FMoE+fVG8kMMinuKA==
-X-Gm-Message-State: AOJu0YysITRRH7tiZWQUFKDlK8jtiKy8rUHcMg5/bfPJie8trrvg4lc2
-	OGMqQU/cx55Q2Ayl7z8qodxKxsBOhOCcczc9GvEYDGHjDa9M10BXBbDY1MgGqA==
-X-Google-Smtp-Source: AGHT+IHQkmCTEZjB8VrcrwmYPHm1xqN+oDo5E9U8MtwdiC0lI+BGRPycjpyIHGY52kr+uXWivxarDw==
-X-Received: by 2002:aa7:8202:0:b0:6e1:dbd:e800 with SMTP id k2-20020aa78202000000b006e10dbde800mr9961775pfi.17.1708269585774;
-        Sun, 18 Feb 2024 07:19:45 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id r22-20020aa78456000000b006e24991dd5bsm2894532pfn.98.2024.02.18.07.19.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Feb 2024 07:19:45 -0800 (PST)
-Date: Sun, 18 Feb 2024 07:19:44 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Zi Shen Lim <zlim.lnx@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Hengqi Chen <hengqi.chen@gmail.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-	Paul Burton <paulburton@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Ilya Leoshkevich <iii@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Wang YanQing <udknight@gmail.com>, David Ahern <dsahern@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
-	sparclinux@vger.kernel.org, netdev@vger.kernel.org,
-	"linux-hardening @ vger . kernel . org" <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 2/2] bpf: Take return from set_memory_rox() into
- account with bpf_jit_binary_lock_ro()
-Message-ID: <202402180711.22F5C511E5@keescook>
-References: <135feeafe6fe8d412e90865622e9601403c42be5.1708253445.git.christophe.leroy@csgroup.eu>
- <ec35e06dbe8672a36415ebe2b9273277c2921977.1708253445.git.christophe.leroy@csgroup.eu>
+	s=arc-20240116; t=1708350090; c=relaxed/simple;
+	bh=fGpvwIGy2LQRXThEEta3A8xVTtWdS4NNyyyJxz4ZWoE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
+	 References:In-Reply-To; b=fZXVuQE6HelgQvZEoQj7x94ucU5+XcVMNR7lHM9D6W4ksirGhRL+UV4JSLTxA2DTIYbkRncOBu3nNJN+gespSYkQOLYjdHapRzVxu8sdv97bWs68OzuvrFARxivpyZkPWkJyb+/ptnBBLHBUKNYLVE2nQ9lCI0FZtEvb2h85MC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=KKX55vGX; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6892B40007;
+	Mon, 19 Feb 2024 13:41:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1708350085;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=npYRmHh0n3z51AZdDa3QZzAz5BYIy4ErQyiNWsy/7k8=;
+	b=KKX55vGXkgAsul0jJVBBh0WsHdH8Ty2o0BPwgXrX+pRSA/sZsj+tCny78oV9IMd9+Ypv8W
+	yZOLwdTULOXg6jjFRTUj6/M/B46V7Ub/8tc7aJHs2pPxMCGhUPYGUfPiDcVpgvsDkzMpgi
+	5xBswwSooElotlLj4fWUbsWevhqaY58Mws6Tur2cwC3A0wDMfqWg/b01Xpxrd1aLDQATo0
+	LJPXMx8Qw45HmDL1SUVlB8rPrDo5GRkU6oMayDC5RkmgYarbfNpaZ4logH21A3pmOChH6W
+	VyspoZjQqPJoVXA35x/79EEd5M/Ik5ProNlLxlZ21A5P6WVZVJKqaOp3tn1O0g==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ec35e06dbe8672a36415ebe2b9273277c2921977.1708253445.git.christophe.leroy@csgroup.eu>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 19 Feb 2024 14:41:24 +0100
+Message-Id: <CZ93KAA53F8G.38AUM6RZGUYY7@bootlin.com>
+Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Andi Shyti"
+ <andi.shyti@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-mips@vger.kernel.org>, "Gregory Clement"
+ <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
+ <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>
+To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Rob Herring"
+ <robh@kernel.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH 02/13] dt-bindings: i2c: nomadik: add mobileye,eyeq5-i2c
+ bindings and example
+X-Mailer: aerc 0.15.2
+References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
+ <20240215-mbly-i2c-v1-2-19a336e91dca@bootlin.com>
+ <20240216022227.GA850600-robh@kernel.org>
+ <CZ6FD7EHIJDT.32IEDVT9FG2GP@bootlin.com>
+ <6effca50-29a4-43b9-86eb-310bd4e08e5c@linaro.org>
+ <CZ6FUECKEX2B.36QWZZA5EYPI@bootlin.com>
+ <cf360cbf-7414-4024-8bdd-d2aba7f048b3@linaro.org>
+In-Reply-To: <cf360cbf-7414-4024-8bdd-d2aba7f048b3@linaro.org>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Sun, Feb 18, 2024 at 11:55:02AM +0100, Christophe Leroy wrote:
-> set_memory_rox() can fail, leaving memory unprotected.
-> 
-> Check return and bail out when bpf_jit_binary_lock_ro() returns
-> and error.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
-> Previous patch introduces a dependency on this patch because it modifies bpf_prog_lock_ro(), but they are independant.
-> It is possible to apply this patch as standalone by handling trivial conflict with unmodified bpf_prog_lock_ro().
-> ---
->  arch/arm/net/bpf_jit_32.c        | 25 ++++++++++++-------------
->  arch/arm64/net/bpf_jit_comp.c    | 21 +++++++++++++++------
->  arch/loongarch/net/bpf_jit.c     | 21 +++++++++++++++------
->  arch/mips/net/bpf_jit_comp.c     |  3 ++-
->  arch/parisc/net/bpf_jit_core.c   |  8 +++++++-
->  arch/s390/net/bpf_jit_comp.c     |  6 +++++-
->  arch/sparc/net/bpf_jit_comp_64.c |  6 +++++-
->  arch/x86/net/bpf_jit_comp32.c    |  3 +--
->  include/linux/filter.h           |  4 ++--
->  9 files changed, 64 insertions(+), 33 deletions(-)
-> 
-> diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
-> index 1d672457d02f..01516f83a95a 100644
-> --- a/arch/arm/net/bpf_jit_32.c
-> +++ b/arch/arm/net/bpf_jit_32.c
-> @@ -2222,28 +2222,21 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
->  	/* If building the body of the JITed code fails somehow,
->  	 * we fall back to the interpretation.
->  	 */
-> -	if (build_body(&ctx) < 0) {
-> -		image_ptr = NULL;
-> -		bpf_jit_binary_free(header);
-> -		prog = orig_prog;
-> -		goto out_imms;
-> -	}
-> +	if (build_body(&ctx) < 0)
-> +		goto out_free;
->  	build_epilogue(&ctx);
->  
->  	/* 3.) Extra pass to validate JITed Code */
-> -	if (validate_code(&ctx)) {
-> -		image_ptr = NULL;
-> -		bpf_jit_binary_free(header);
-> -		prog = orig_prog;
-> -		goto out_imms;
-> -	}
-> +	if (validate_code(&ctx))
-> +		goto out_free;
->  	flush_icache_range((u32)header, (u32)(ctx.target + ctx.idx));
->  
->  	if (bpf_jit_enable > 1)
->  		/* there are 2 passes here */
->  		bpf_jit_dump(prog->len, image_size, 2, ctx.target);
->  
-> -	bpf_jit_binary_lock_ro(header);
-> +	if (bpf_jit_binary_lock_ro(header))
-> +		goto out_free;
->  	prog->bpf_func = (void *)ctx.target;
->  	prog->jited = 1;
->  	prog->jited_len = image_size;
-> @@ -2260,5 +2253,11 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
->  		bpf_jit_prog_release_other(prog, prog == orig_prog ?
->  					   tmp : orig_prog);
->  	return prog;
-> +
-> +out_free:
-> +	image_ptr = NULL;
-> +	bpf_jit_binary_free(header);
-> +	prog = orig_prog;
-> +	goto out_imms;
+Hello,
 
-These gotos give me the creeps, but yes, it does appear to be in the
-style of the existing error handling.
+On Sat Feb 17, 2024 at 9:25 AM CET, Krzysztof Kozlowski wrote:
+> On 16/02/2024 11:40, Th=C3=A9o Lebrun wrote:
+> > On Fri Feb 16, 2024 at 11:33 AM CET, Krzysztof Kozlowski wrote:
+> >> On 16/02/2024 11:18, Th=C3=A9o Lebrun wrote:
+> >>>
+> >>>>> +        mobileye,id:
+> >>>>> +          $ref: /schemas/types.yaml#/definitions/uint32
+> >>>>> +          description: Platform-wide controller ID (integer starti=
+ng from zero).
+> >>>>
+> >>>> instance indexes are a NAK. You can use i2cN aliases if you must.
+> >>>>
+> >>>> Why do you need it? To access OLB? If so, add cell args to the OLB=
+=20
+> >>>> phandle instead.
+> >>>
+> >>> Why we do what we do: I2C controller must write a 2 bit value dependi=
+ng
+> >>> on the bus speed. All I2C controllers write into the same register.
+> >>
+> >> Which register?  Your devices do not share IO address space.
+> >=20
+> > mobileye,olb is a prop with a phandle to a syscon. That syscon contains
+> > the register we are interested in.
+>
+> So exactly what Rob said... I don't understand why you have chosen to go
+> with alias.
 
-> [...]
-> diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
-> index b18ce19981ec..f2be1dcf3b24 100644
-> --- a/arch/x86/net/bpf_jit_comp32.c
-> +++ b/arch/x86/net/bpf_jit_comp32.c
-> @@ -2600,8 +2600,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
->  	if (bpf_jit_enable > 1)
->  		bpf_jit_dump(prog->len, proglen, pass + 1, image);
->  
-> -	if (image) {
-> -		bpf_jit_binary_lock_ro(header);
-> +	if (image && !bpf_jit_binary_lock_ro(header)) {
+I had misunderstood Rob's original message. Now that I've done some
+tests to use cells I get what was meant. I'd have a follow-up question.
+What should the cells contain? I see two options:
 
-I find the "!" kind of hard to read the "inverted" logic (0 is success),
-so if this gets a revision, maybe do "== 0"?:
+ - phandle + I2C controller global index (from 0 thru 4). Then Linux
+   (or other) driver know how to map that index to register + mask
+   combo. ie:
 
-	if (image && bpf_jit_binary_lock_ro(header) == 0) {
+      i2c2: i2c@500000 {
+         compatible =3D "mobileye,eyeq5-i2c", "arm,primecell";
+         reg =3D <0 0x500000 0x0 0x1000>;
+         /* ... */
+         mobileye,olb =3D <&olb 2>;
+      };
 
-But that's just me. So, regardless:
+ - phandle + register offset + mask. ie:
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+      i2c2: i2c@500000 {
+         compatible =3D "mobileye,eyeq5-i2c", "arm,primecell";
+         reg =3D <0 0x500000 0x0 0x1000>;
+         /* ... */
+         mobileye,olb =3D <&olb 0xB8 0x300>; /* phandle + offset + mask */
+      };
 
--- 
-Kees Cook
+I would have guessed the second approach was frown upon as DT aren't
+meant to contain iomem offsets. However I'm seeing quite a few drivers
+using this approach, and no driver doing the first approach. Maybe my
+instinct isn't leading me the right way.
+
+See those bindings that use the second approach. They were found because
+their drivers use the syscon_regmap_lookup_by_phandle_args() function
+call. I've added the file creation date to highlight recent bindings
+(that hopefully are closer to the right way).
+ - phy/starfive,jh7110-pcie-phy.yaml    2023-06-29T15:51:12+08:00
+ - usb/starfive,jh7110-usb.yaml         2023-05-18T19:27:48+08:00
+ - net/starfive,jh7110-dwmac.yaml       2023-04-17T18:02:49+08:00
+ - phy/qcom,sc8280xp-qmp-pcie-phy.yaml  2022-11-05T15:59:34+01:00
+ - sound/snps,designware-i2s.yaml       2022-07-01T20:22:49+01:00
+ - pinctrl/canaan,k210-fpioa.yaml       2020-12-13T22:50:44+09:00
+ - media/ti,cal.yaml                    2019-11-12T15:53:47+01:00
+
+I know looking at existing drivers/bindings isn't the right way, but I
+have no other frame of reference. That's why I'm asking for guidance on
+this one.
+
+Thanks,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+------------------------------------------------------------------------
+
 
