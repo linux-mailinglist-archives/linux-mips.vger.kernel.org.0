@@ -1,178 +1,120 @@
-Return-Path: <linux-mips+bounces-1578-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1579-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDBDF85A8EE
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 17:28:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54B0985AE18
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 22:56:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 944E2281445
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 16:28:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 063B31F21921
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 21:56:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4E763D0CB;
-	Mon, 19 Feb 2024 16:28:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B267A54FA9;
+	Mon, 19 Feb 2024 21:56:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="c4YDXXkS"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yaKQvI2I"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F27E43CF53;
-	Mon, 19 Feb 2024 16:27:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14D354FA7
+	for <linux-mips@vger.kernel.org>; Mon, 19 Feb 2024 21:56:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708360082; cv=none; b=lf1L+E1xTVE6NPpbXCK81K6wyO+zN5HRos7DIMZmx7DaA7m80ZySbXl0tKt8w+Llp6K7ZzDFxKVIgOiLiNnix1mivsymGzrwK/f7fKrG/6mhyZlGlBcVVkgbOOpMLnlE2CK8VY2wreuoQTcEJX4vdV+4rCunEoxQu7mSOBho0AA=
+	t=1708379806; cv=none; b=rxSqaJU/xPAE5XQ9Vcper5yyz5RKeECPZDp5Qe2dea+s7CkTjOB+7zaLT2Xv0d9MS4d/yZIcV56z3d68D6+7bIjY59uMygpPQTB3cMWaeG3Q/xpdlyuYgH8W9xaa/M3IkQu70rHzQ2JCUA0YXh08ITRinLb1L8u0iLD6Z5WCsRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708360082; c=relaxed/simple;
-	bh=9JU8MTOHh8Epoa0sQCXObDtkwAXHJu26UejiP9YuhEk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
-	 References:In-Reply-To; b=Vx8bu1uXy6i2xn1OLQCFsMZK8hroZrotarwL1cwkB/e6ebVAyKIvCsqSz36GNFMR1MoD/Zy4pYKo7Oz1ZQk1ib/V6yAVdftxfBem5Fzb55c7gKs8+KTaIsQGqliinK59dfB0pcr7bNzPkm6/NxIr4OhSDrncRFJ1BvSiZhXwbEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=c4YDXXkS; arc=none smtp.client-ip=217.70.183.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A9C7340002;
-	Mon, 19 Feb 2024 16:27:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1708360078;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0QSZ4uv/p4jrEtAF8IYICmdIzO8A6oWIZZjz46OQJxA=;
-	b=c4YDXXkSeglvXQRkC8C9eSW8vjieW62azbJ98JOq6+hpqUqn8y6CzjzJJpEJ6OpIjEZPgC
-	Uhkm9TNo59+SKB0GzB39RQnpCL50WsxTpjv12GFQGrjvd1g7gRoD8RCngl/W46fep77eyy
-	P7xvtdjEYUpjRYZcsyE4hP9ipXeTfPOuIUf9vA42KKRjUrP/0Gmdxl+etilbgCR2PWp5Sk
-	SHvQNactB6Nseu0E0hCx/HdxGE+9RMC7HDGSDb4iySDjWPkU9T/QE2LTvamfnZ/dNF/Bwp
-	bxNmNIfO/u1x2ojLgVuNocNUgVgfIFdw63KzTpNVNB9Uv8bXjfXPEVxYQi/q6A==
+	s=arc-20240116; t=1708379806; c=relaxed/simple;
+	bh=jnwZE4S2VTxOOE1MLufKwv7MLtdIeQ/H3SGA6T3ceVw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KF2t+vgN4AiEzXAnuAT/kwQHi7nnAucpmygv+W8H6E1HGeq7L8/IkJLEfj5Xsx7GHVjeHi1c+Hwq8ZF6TQ33nYJr5WGEbCWQ1U26hV2mtiago4DABV/EMpZ4QZozjuLuz56x6ExxzoI+PPiOrzy5XwajJdLkDp4TRUM5sSLBj7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yaKQvI2I; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-608170eb5efso20603427b3.3
+        for <linux-mips@vger.kernel.org>; Mon, 19 Feb 2024 13:56:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708379804; x=1708984604; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0/z7Oth3uWYAoZv2gVpy6Dr4nj1eg780SKedkbWLNvY=;
+        b=yaKQvI2IzjqJefvDuWLsiN7ih+t6Ar2DuN96gdel9Da/lXfAe0CyXVGlmNudhJragY
+         SAxpmWT2IVinRNrzaJaze/UJLrcjIRBH8gjrEnF9nZ7xUMQ5Pz3qeezT/EXGY2GVF1kG
+         /RhvKWGnszItfi9V84Pn4iLNaaupRH9Jh0hhSQxQ3BKz2ozGC04VFtpP4wDrXDup3BUC
+         GnQE1aEOmZFViAvgWMKX92tXQuzI7AzuTftCAMqsZGoVRH5X/Fpwz6l1ssAPm2UKJCqw
+         js0vmBGHx2zMjkUn6Y6KwefSnUaOBQNEjChV3pz0PVUurPGG3A7qcpAVjAuxKlwJvzmI
+         3PdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708379804; x=1708984604;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0/z7Oth3uWYAoZv2gVpy6Dr4nj1eg780SKedkbWLNvY=;
+        b=WDCPZDeWXpA4Ez/Vd3udA0pwH7+LuvDQ6+SL8lV0S5kAdlX9l2/TluaEE3AoFEUGVd
+         LCbI/tqpv56Kbqcb6WmqzFe16B7a2VJJ1ziNwIK8MHQRuWXBQCnbfdnbga1Y9IpemSLj
+         0LWVGYKfjS8I1oiAdaBiHBxCTohnxb/wiCtChKQEjQKrOgc779KzdMOYV9wG2sAn10WC
+         hh+lgkAp2dMwFTBm0uHE9ZXs9U1n6zVJmrcZ9Cvdvmu5LXY+KjBs1cj7iqZVQJUZtIvk
+         +pISNGHZgx5xwc2qUBr4TzAyjwnM8zYTU77xNPgysRVCgJierNKvSNR0JsdOSdBGU64U
+         LpIw==
+X-Forwarded-Encrypted: i=1; AJvYcCU3JNCS1LknwFehf8OkY6g0hEM5TMKagNHofDUWvr+O3HEcezngu1ClsM93h1LD6V6DrTYDe6JmvZDkZ0cvusPoRE5mCDYYazbIBg==
+X-Gm-Message-State: AOJu0YyqT21ESytKLwFDjacNE/hlEe9FgmqoKAqLJY7wFAib9tqv3cwt
+	agvF9j5BSGYp1MeikjDlQEsR9QEyC8OteNNQrNcXR5j6e4qdcU0zyX+ZBUlk7ENUpl93V6UmnUi
+	MYjKS8Q9NVuPWe+wIy96/fEmUJoU+e88lTh3dzg==
+X-Google-Smtp-Source: AGHT+IGcz7rDFrB3H96NwCEBK79eVL4dxmtjY7EUMR+E2Y+tyM0OKpEUleavbf8K7T1I+Q8afEbrz38cYzH/dDLZwL8=
+X-Received: by 2002:a81:ae41:0:b0:607:e8c7:f9c9 with SMTP id
+ g1-20020a81ae41000000b00607e8c7f9c9mr12782963ywk.1.1708379803904; Mon, 19 Feb
+ 2024 13:56:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20240214-mbly-gpio-v1-0-f88c0ccf372b@bootlin.com> <20240214-mbly-gpio-v1-13-f88c0ccf372b@bootlin.com>
+In-Reply-To: <20240214-mbly-gpio-v1-13-f88c0ccf372b@bootlin.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Mon, 19 Feb 2024 22:56:32 +0100
+Message-ID: <CACRpkdbq_QxdftNGOv3+-SpfrV_qPTB-m-atdY0hCE_s8DK64A@mail.gmail.com>
+Subject: Re: [PATCH 13/23] gpio: nomadik: fix offset bug in nmk_pmx_set()
+To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mips@vger.kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>, 
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 19 Feb 2024 17:27:56 +0100
-Message-Id: <CZ973SP3M9PS.3GG13IHI2DNR4@bootlin.com>
-To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, "Linus Walleij"
- <linus.walleij@linaro.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH 10/13] i2c: nomadik: support Mobileye EyeQ5 I2C
- controller
-Cc: "Andi Shyti" <andi.shyti@kernel.org>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-mips@vger.kernel.org>, "Gregory Clement"
- <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-X-Mailer: aerc 0.15.2
-References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
- <20240215-mbly-i2c-v1-10-19a336e91dca@bootlin.com>
- <CACRpkdY4PtnWkAEa=8sHdx7zYXLVAsrqKEVJY9m7VqeG5h6ChQ@mail.gmail.com>
- <CZ952TBZGEVD.JYSAQGNL1ZAQ@bootlin.com>
-In-Reply-To: <CZ952TBZGEVD.JYSAQGNL1ZAQ@bootlin.com>
-X-GND-Sasl: theo.lebrun@bootlin.com
 
-Hello,
+On Wed, Feb 14, 2024 at 5:24=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@bootl=
+in.com> wrote:
 
-On Mon Feb 19, 2024 at 3:52 PM CET, Th=C3=A9o Lebrun wrote:
-> On Mon Feb 19, 2024 at 3:35 PM CET, Linus Walleij wrote:
-> > On Thu, Feb 15, 2024 at 5:52=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@b=
-ootlin.com> wrote:
-> >
-> > > Add compatible for the integration of the same DB8500 IP block into t=
-he
-> > > Mobileye EyeQ5 platform. Two quirks are present:
-> > >
-> > >  - The memory bus only supports 32-bit accesses. One writeb() is done=
- to
-> > >    fill the Tx FIFO which we replace with a writel().
-> > >
-> > >  - A register must be configured for the I2C speed mode; it is locate=
-d
-> > >    in a shared register region called OLB. We access that memory regi=
-on
-> > >    using a syscon & regmap that gets passed as a phandle (mobileye,ol=
-b).
-> > >
-> > >    A two-bit enum per controller is written into the register; that
-> > >    requires us to know the global index of the I2C
-> > >    controller (mobileye,id).
-> > >
-> > > We add #include <linux/mfd/syscon.h> and <linux/regmap.h> and sort
-> > > headers.
-> > >
-> > > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-> >
-> > (...)
-> >
-> > > -               writeb(*priv->cli.buffer, priv->virtbase + I2C_TFR);
-> > > +               if (priv->has_32b_bus)
-> > > +                       writel(*priv->cli.buffer, priv->virtbase + I2=
-C_TFR);
-> > > +               else
-> > > +                       writeb(*priv->cli.buffer, priv->virtbase + I2=
-C_TFR);
-> >
-> > Are the other byte accessors working flawlessly? I get the shivers.
-> > If it's needed in one place I bet the others prefer 32bit access too.
+> Previously, the statement looked like:
 >
-> I see where your shivers come from; I'll investigate as I don't remember
-> my conclusion from the time when I worked on this driver (a few months
-> ago).
+>     slpm[x] &=3D ~BIT(g->pins[i]);
 >
-> > Further the MIPS is big-endian is it not? It feels that this just happe=
-ns
-> > to work because of byte order access? writel() is little-endian by
-> > definition.
+> Where:
+>  - slpm is a unsigned int pointer;
+>  - g->pins[i] is a pin number which can grow to more than 32.
 >
-> Actually, no. Our platform is little-endian.
+> The expected shift amount is a pin bank offset.
 >
-> The full story, summarised: the endianness of our cores in kernel and
-> hypervisor mode is defined by a pin read at reset. User mode can toggle
-> the endianness at runtime I believe, but that is not of our concern.
-> Our endianness in kernel mode is little-endian because the pin in
-> question is hardwired to the value meaning little-endian.
+> This bug does not occur on every group or pin: the altsetting must be
+> NMK_GPIO_ALT_C and the pin must be 32 or above. It is possible that it
+> occurred. For example, in pinctrl-nomadik-db8500.c, pin group i2c3_c_2
+> has the right altsetting and has pins 229 and 230.
 >
-> > What happens if you replace all writeb():s with something like
-> >
-> > static void nmk_write_reg(struct nmk_i2c_dev *priv, u32 reg, u8 val)
-> > {
-> >     if (IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
-> >         writeb(val, priv->virtbase + reg + 3);
-> >         // if this doesn't work then use writeb((u32)val,
-> > priv->virtbase + reg) I guess
-> >    else
-> >         writeb(val, priv->virtbase + reg);
-> > }
-> >
-> > and conversely for readb()?
->
-> As mentionned above, big endian isn't the worry for us. I'll be checking
-> the readb() calls found in i2c_irq_handler() though.
+> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 
-Follow up on this. It was working by luck.
+Ah good catch!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
- - writeb() are generating Store Byte (sb) instructions which are
-   unsupported on the memory bus.
+I this something I could just apply as a fix or are there
+dependencies on other patches?
 
- - readb() are generating Load Doubleword (ld) instructions and not the
-   expected Load Byte (lb). It explains why readb() are working.
-
-To be safe I'll make sure to use readl() and writel() everywhere for our
-compatible. There is one writeb() and three readb(). Only the writeb()
-was covered by this V1.
-
-Thanks,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Yours,
+Linus Walleij
 
