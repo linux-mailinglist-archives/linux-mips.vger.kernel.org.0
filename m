@@ -1,82 +1,82 @@
-Return-Path: <linux-mips+bounces-1548-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1549-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D0E785A594
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 15:15:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 794BD85A5A5
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 15:17:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59D1D281123
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 14:15:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC8081C21F5D
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Feb 2024 14:17:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94A7337165;
-	Mon, 19 Feb 2024 14:15:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B6B0376F1;
+	Mon, 19 Feb 2024 14:16:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oYQ7QyPK"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MTv2Tzzd"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C9EC37162
-	for <linux-mips@vger.kernel.org>; Mon, 19 Feb 2024 14:15:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67ED5374F0
+	for <linux-mips@vger.kernel.org>; Mon, 19 Feb 2024 14:16:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708352149; cv=none; b=l4QlHhtvWxBKJeIWrTVF1RZo7hvshtEOD4XICr89x5cejrs6mFpgka1Q0NH10r1YKcDF5sNr0B02D/HN0fv3v1AeDfi77x1S3tqIVE+PUnn/k8YMKjRexvsaXHatlEFsOKoq/Akf40osO1GpbFCDfWmBaXiFaHohbIN4WGmHniQ=
+	t=1708352216; cv=none; b=g9mf1+fZQDpzbvkIFUMvrPX2tAGQN0f6LzkWatxJl0nRmdLDselBRdFPM/rR8wtUlV7yqED3A/m2Y6u2ziE0vQOeIlGq4qwzkyrYQABHEvWVx/fCQhTNRIpEILifIHVByWhmzhV6QCTPGZvKPnMXB/fGGe3vUDA3ihX9oSPFi1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708352149; c=relaxed/simple;
-	bh=4DPLBwTn1xD36bWpSPaGvzOXf4/1hjvap+dI7URkrQM=;
+	s=arc-20240116; t=1708352216; c=relaxed/simple;
+	bh=8NtoIAADVPgZfZLTu67UGU+6DVV3ajBVgGPX09bdDig=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U68qeddc7WlLeblN09UjSpsPJdSZmAdT/9ovlnZlJnZ5rxwN/3uYdR4KJawNxCR8RxxgyIEa6h1hJ02B4p8bIeikVHbbxDW+dI4b0KUPNC1dJ+DgOaF+W6B116KG1LonwyTE/9tDw/leuVVESO25ndcyB4zXzNOJRUekNvDid6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oYQ7QyPK; arc=none smtp.client-ip=209.85.128.180
+	 To:Cc:Content-Type; b=qQOEqFVAF+uv27szfwQNaEt5UEmGyj1a2Iip410EQAQMGwaZ7IBcF1Ls/2hoBzrOYvYfGei6TzsC9ED/qgbX9Yp3/e7yYuHe7jdGZuUefihGYXprnbiJvRFVxzTzmHcdX5e+az+tMqfyoyQypgUPTTkICuymvvMQ5YgsJCal9Mk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MTv2Tzzd; arc=none smtp.client-ip=209.85.219.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-607dec82853so37823147b3.3
-        for <linux-mips@vger.kernel.org>; Mon, 19 Feb 2024 06:15:47 -0800 (PST)
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-db4364ecd6aso3022940276.2
+        for <linux-mips@vger.kernel.org>; Mon, 19 Feb 2024 06:16:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708352147; x=1708956947; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1708352212; x=1708957012; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4DPLBwTn1xD36bWpSPaGvzOXf4/1hjvap+dI7URkrQM=;
-        b=oYQ7QyPKwZrJxc/1vWnh+IdWeVJWVKMLO9KhD2PtbYvEiDGEIvVKCSoTEFI3hvTEBe
-         XTcAWQ6x1AiaQRpo0wzhihVhYAYYv30KhR0oVYuozJS83n64XybRQskSrzLwqt1VVKRW
-         +DTACQ1MdDP1xuTKa7BTfLjOkdNK+4eSGpp4eRYMgu26XiX/LCTnj6sKbhg27n2IgCHP
-         4I5hnn7Eicz6fbMRKixnOh1Df9c2TeVPNKaXxGv04RRCb3pMZfAJ4NUElButyrt87k8Y
-         c8QNjroMSLFESAkVJX4LMWAvnjyB7gVChuPMANpGgkfzEG0nkcQmhU4gw774K0gMtIrC
-         hZkQ==
+        bh=8NtoIAADVPgZfZLTu67UGU+6DVV3ajBVgGPX09bdDig=;
+        b=MTv2Tzzd2/VA7oqnWwbz7W2mSvD1P0Xm2hX6E33qmD4jsA4JVl9TLcvElzZDnxGpJ1
+         KMbzO+SyjetWDcFovc2LMOG3bO4KqygaXRmpuyX4MCbNNEjSEGEbr67tsOiDctvnKBSs
+         cka6Q8vAoh48DbRQFiOzYzyxX9PTQzGlQcuTSZw22/64TPzm6CVIAqfIDLnR63acoQVT
+         NYjpVUw3nFq3mcgbwpH8Uwp6LQy1YJS2edqC3SApJuEtqu8kusqH8VbGyui1o0AIhBkt
+         rw+WfqKQ0R7sHoqxyziSmMf4hhKmLVlui4cpqCgzk4JzMnvbKZ0aODGjI7ZHithOYPz9
+         RP2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708352147; x=1708956947;
+        d=1e100.net; s=20230601; t=1708352212; x=1708957012;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4DPLBwTn1xD36bWpSPaGvzOXf4/1hjvap+dI7URkrQM=;
-        b=kku9sywC5e8gvYBw+GZtPpbQr/jI3euHMjeB4AtsLy2jZbXo8RQnmwD+9hi3usTXD5
-         Rc5Ah7CaJJZJpmHkS88kmXaz9Mfr5CPD4Vn7zrr0rfSo+gFI3TvFVxjApJdLIc0CPPj6
-         rDw8Ekvbr//PPw84BymLFDRxo39Yad0H2K35aokBpj1eM0OHRIN83wCeCFPZ2xFIXLYj
-         +XN5mhK8tYM4iEGbt3UaWvrzYhMYMq66QQfiHXWe4y1sw+8EkKPU2CLLLFAFuBpMUOzi
-         onij3hEjkAOg4V34dxuvwlAUJF59DRkTfSFwauOyRfAMLq/7bSQXUd2rybzzf4jHHwQy
-         5NAw==
-X-Forwarded-Encrypted: i=1; AJvYcCWo06YDP2wYVOBjjbdTUAi0Y/FSahV4wLOTjDHt021SlS33U1c3Yu08JCYnjXHOOvYH0+M0VhxUIA+01dKAG8LCx9PwXZxA/8Arqg==
-X-Gm-Message-State: AOJu0YxGYvV9m7LDrE4Gxepb4////vgjJLsB/LlvqrRX22hRnEj5QIIV
-	Y1dlQ+V5b7CGJqqM5K8Rk1tDP1RYnlAqpcxhBPth/AAeLYuCLWW+DjhtdLKQ8x5dEYWZ2OYdelT
-	xRStX/iiX+ufOT7YbEV2xtdRX1aL5vYpq7klEng==
-X-Google-Smtp-Source: AGHT+IEGRelqWe2dTiOY9iPHsVWt5SGUzoFQvr/GztPD4++Mw1yGR+nXAuOs79zdC55kYgkbpeTBWZqjsyVHDwYA5+0=
-X-Received: by 2002:a05:690c:a81:b0:607:b85e:2d21 with SMTP id
- ci1-20020a05690c0a8100b00607b85e2d21mr13022466ywb.24.1708352147092; Mon, 19
- Feb 2024 06:15:47 -0800 (PST)
+        bh=8NtoIAADVPgZfZLTu67UGU+6DVV3ajBVgGPX09bdDig=;
+        b=OT06lJkt58Y6xMDyKqiZ4ke4mvFwBFWd3Mvuy02MsHCVZUfOlRSD1vg4R+Lw0gj94Z
+         2Ik/2vG+wFM3UzRwhH3Wudv3CuvyogWI4fR3/HZ2DLSdP3nQN4Zoak8UmpoR8EROlttU
+         WT82pK8luIqBXbu0RpIzI8GZd7SyWehLdBxHikYeIABqXdyh1anDuTMs+bILJxqU1o+Z
+         Q3tLttxrCwDBIS0ecOcAFKQRcJ1W3RxrJJDcA/1VYmOtn3CGcEH9zdRKP7jFjxXxRrco
+         jgwULFCJv1F3Rnm+YZ6iJVG4TxGWF4V0OOvqzFF7AEL/nvZfEZafyFFooJDhOfHLhrSn
+         uUZw==
+X-Forwarded-Encrypted: i=1; AJvYcCX/gaQVsv2dqcT5sG+b8740v2ZloKwng+alwaZWNPejgO2n9rVCJOYAHWAbluNMmHm+f9tTsbflOOFuIGe5pcCNeMWs+4sebErRtg==
+X-Gm-Message-State: AOJu0YwEApvYwDY6Zm2HmRVD5J9hDzk1lXj/zQsUffE5JCFSdSc3ISiy
+	sdrUA2Z1J2JIEChHjFrmMFUEMsw8SZLA8HAZrNtmizNRKBCqCDPU4j0HD3ct7jAs3yFCBxLJncE
+	IZ4/CfNRXLUi1x2IxjvKeADj6zYIQEvTMkJjTMw==
+X-Google-Smtp-Source: AGHT+IH8zoIF6nwlmjqS5YKC62u1494qWLmxwhbcebn26N7GSaVYv8uV1vUneZZY53AiRhaVHNae5A7n3HAWkkeHKYM=
+X-Received: by 2002:a25:d64a:0:b0:dc6:af04:2e05 with SMTP id
+ n71-20020a25d64a000000b00dc6af042e05mr8299772ybg.7.1708352212135; Mon, 19 Feb
+ 2024 06:16:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com> <20240215-mbly-i2c-v1-5-19a336e91dca@bootlin.com>
-In-Reply-To: <20240215-mbly-i2c-v1-5-19a336e91dca@bootlin.com>
+References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com> <20240215-mbly-i2c-v1-6-19a336e91dca@bootlin.com>
+In-Reply-To: <20240215-mbly-i2c-v1-6-19a336e91dca@bootlin.com>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Mon, 19 Feb 2024 15:15:36 +0100
-Message-ID: <CACRpkdYZTrEKdGfN-EiOTWtQhhMHVqk5zCjmcAuUZq9aWesqFQ@mail.gmail.com>
-Subject: Re: [PATCH 05/13] i2c: nomadik: simplify IRQ masking logic
+Date: Mon, 19 Feb 2024 15:16:41 +0100
+Message-ID: <CACRpkdaUJ6tM51o5tDSMURFS3u8J=dfMN+p4j04QNXdGUPzCXg@mail.gmail.com>
+Subject: Re: [PATCH 06/13] i2c: nomadik: use bitops helpers
 To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
 Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
@@ -92,13 +92,14 @@ Content-Transfer-Encoding: quoted-printable
 On Thu, Feb 15, 2024 at 5:52=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@bootl=
 in.com> wrote:
 
-> IRQ_MASK and I2C_CLEAR_ALL_INTS are redundant. One masks the top three
-> bits off as reserved, the other one masks the reserved IRQs inside the
-> u32. Get rid of IRQ_MASK and only use the most restrictive mask.
+> Constant register bit fields are declared using hardcoded hex values;
+> replace them by calls to BIT() and GENMASK(). Replace custom GEN_MASK()
+> macro by the generic FIELD_PREP(). Replace manual bit manipulations by
+> the generic FIELD_GET() macro.
 >
 > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 
-Yeah, more readable like this definitely.
+I'm a fan of this style.
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
