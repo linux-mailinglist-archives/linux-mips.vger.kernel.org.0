@@ -1,46 +1,44 @@
-Return-Path: <linux-mips+bounces-1592-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1589-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF74F85BD90
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Feb 2024 14:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C00C85BD89
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Feb 2024 14:49:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C24C285F86
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Feb 2024 13:49:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38A36286048
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Feb 2024 13:49:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8E196BB40;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B93E6A8C9;
 	Tue, 20 Feb 2024 13:48:54 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 912C569DFF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0A716A34E;
 	Tue, 20 Feb 2024 13:48:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708436934; cv=none; b=d9mD8hBPtQagykPxKbJnl48t9HvOzL8fcNy5x+KCQzjynYwrjMmmHWIrUDRGhd8KJ5cxC75hq4kJD2xIKKaNRza49CyNPQP6DAqsKEg0M0kzZ1cuGBcw+g7AT3dgvMBh4TfPmRqderxXqr1TAdRZxAC2BksbhukZidVt6RzGboE=
+	t=1708436934; cv=none; b=g4kV4FIz/kw3Tb7+ywwIZrfcvbyTjblVJCmlVeme6wY2eDmpx6Tyzuck4we2ZmpvzqNZCbMrIofoWCwfnZgDle5KdzPLKZGNecIR0FmVRJWybF7vZIE2RbiCdpNwqkSgQvuPCdwli0f5NVDCfKn7RQbFLHUAWWkpMmvyTZzJjOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1708436934; c=relaxed/simple;
-	bh=FXC6OCaMo6PBra09rv0mQ7fmtDHn40tyIY5riwAomwY=;
+	bh=dnHyi2krLy55hbWApPwySj7GAp6hhfw9uc+3Pp2XTQQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LrujmuqsVy2d3VSWVnaKDHC+6/Z1QpTfMQpo/eq67d2a2/riCvtYD7XhqB9Wb+/CRunukMLljWUXA9eev+jEIYMf372prRGGDoOMe7SA6mTu3FD5mceAvGma/ucX0xrybsLzbvwuap8yuukiTgWKzxfQt2FrikJjbBHwrfLW9OY=
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gc+xGkWMb7XoeqzbJgdBNgTa8i7LyD/Ay11+SCg0CCuK+dMDrjx80ndTyHUyIHYPHXX90fFh332yEEaMDU9cl9EkQw/5/HEGpCJwoUvtJIw7w+7QDn9KuF3X0SIfSnlKgyFf4x46Hp36q5880ILWrklc7aq2gBIs5+gkqzABO2A=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1rcQUF-0007OQ-00; Tue, 20 Feb 2024 14:48:43 +0100
+	id 1rcQUF-0007OU-00; Tue, 20 Feb 2024 14:48:43 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 99382C0694; Tue, 20 Feb 2024 14:38:24 +0100 (CET)
-Date: Tue, 20 Feb 2024 14:38:24 +0100
+	id 6BFA0C069B; Tue, 20 Feb 2024 14:38:58 +0100 (CET)
+Date: Tue, 20 Feb 2024 14:38:58 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-mips@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] MIPS: move unselectable entries out of the "CPU
- type" choice
-Message-ID: <ZdSrUKlV+Q37S3B7@alpha.franken.de>
-References: <20240127162309.1026549-1-masahiroy@kernel.org>
- <20240127162309.1026549-2-masahiroy@kernel.org>
+To: "Ricardo B. Marliere" <ricardo@marliere.net>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 0/2] mips: struct bus_type cleanup
+Message-ID: <ZdSrclzKXvC9W/c4@alpha.franken.de>
+References: <20240204-bus_cleanup-mips-v1-0-05af5e9a7ead@marliere.net>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -49,34 +47,34 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240127162309.1026549-2-masahiroy@kernel.org>
+In-Reply-To: <20240204-bus_cleanup-mips-v1-0-05af5e9a7ead@marliere.net>
 
-On Sun, Jan 28, 2024 at 01:23:09AM +0900, Masahiro Yamada wrote:
-> Move the following entries out of the "CPU type" choice:
+On Sun, Feb 04, 2024 at 12:06:56PM -0300, Ricardo B. Marliere wrote:
+> This series is part of an effort to cleanup the users of the driver
+> core, as can be seen in many recent patches authored by Greg across the
+> tree (e.g. [1]). Specifically, this series is part of the task of
+> splitting one of his TODOs [2].
 > 
->  - LOONGSON3_ENHANCEMENT
->  - CPU_LOONGSON3_WORKAROUNDS
->  - CPU_LOONGSON3_CPUCFG_EMULATION
-> 
-> These entries cannot be selected from the choice because they depend on
-> CPU_LOONGSON64, which is also located in the same choice.
-> 
-> In fact, Kconfig does not consider them as choice values because they
-> become children of CPU_LOOONGSON64 due to the automatic submenu creation
-> in menu_finalize().
-> 
-> However, it is hard to understand this behavior unless you are familiar
-> with the Kconfig internals.
-> 
-> "choice" should contain only selectable entries.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
+> [1]: https://lore.kernel.org/lkml/?q=f%3Agregkh%40linuxfoundation.org+s%3A%22make%22+and+s%3A%22const%22
+> [2]: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/commit/?h=bus_cleanup&id=26105f537f0c60eacfeb430abd2e05d7ddcdd8aa
 > 
->  arch/mips/Kconfig | 76 +++++++++++++++++++++++------------------------
->  1 file changed, 38 insertions(+), 38 deletions(-)
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
+> 
+> ---
+> Ricardo B. Marliere (2):
+>       mips: sgi-ip22: make gio_bus_type const
+>       mips: txx9: make txx9_sramc_subsys const
+> 
+>  arch/mips/sgi-ip22/ip22-gio.c  | 4 ++--
+>  arch/mips/txx9/generic/setup.c | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> ---
+> base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
+> change-id: 20240204-bus_cleanup-mips-be3d52c96e32
 
-applied to mips-next.
+series applied to mips-next.
 
 Thomas.
 
