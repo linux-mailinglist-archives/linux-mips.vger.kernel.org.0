@@ -1,50 +1,45 @@
-Return-Path: <linux-mips+bounces-1591-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1593-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF8D085BD93
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6977385BD91
 	for <lists+linux-mips@lfdr.de>; Tue, 20 Feb 2024 14:49:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 802CBB20F6A
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Feb 2024 13:49:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 203CE286103
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Feb 2024 13:49:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1BB76BB3A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA17C6BB44;
 	Tue, 20 Feb 2024 13:48:54 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0AEF6A351;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 912F96A345;
 	Tue, 20 Feb 2024 13:48:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708436934; cv=none; b=XwkFbYIhUCOWPndzRB+FMvJuViLwxCOT8Tcy1BIv9CPAZ6XxdZn48WqISqtBjqNrc63WfTusVxd09YEq0QJYtiBzk2uKN1H+qPO6jYKC5ckPmSNWO2C5kswUcZ3ROMBT3VWU+XuCKXS9Ew4GHofZE0IfbFJln7zSIdyJ+zmwNdA=
+	t=1708436934; cv=none; b=fhFEi/OWzaNQ6P7D1RHcczGJL5y2sbzqGmOhes4I7FVZK0aUexif7qQlA3LTS5xzHGP7i9FKCzX7NJwyKOg840zuLtGmYsQQ/Ev3ImuBaCfwPAq3SS9BS8Limgt0D+9cdn5E9kDyFSYNCZGWfBmunUtReiE9aFG6mQJwacrmJjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1708436934; c=relaxed/simple;
-	bh=Yl/icjLDZM808VaGxQ+Hf9C0/O8MQvl2Zfavr53DyuQ=;
+	bh=dN9MbC0dNk5OxWYWmvs4wMDcGflhy2eneDFOeyPwUIw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XzQXVNsRcuxCY7WcWE5Z9chBjtWs3nQu21b1H+FzudFdgoPaVe2L/H88yscFST948KXgimiwQ+G2MpPmAY/C/gQS913h1TarMUpLXH9CtarfupwBk3KrXylJegwXhS9IU1rG2U32GsJM6DR9VBlDL/o2yAMzNcGMzPkZq8DShdc=
+	 Content-Type:Content-Disposition:In-Reply-To; b=IZU3CdoMtnbNGHtyDL3E5Uu8/HdmpR1Ic+cUq5Qun+bkr96Zs3WrvWNEjhO8F4x1+nEQ7VM3vr8I2GliAW6h5wy+PHJsZXFAhzdKtKDXC1McU6HNbPKyoB2Cq5I3Dgag7LrgKFqYwNVB+7bIG80J50jL+4gwtWFUd0h0GSNpTLM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1rcQUF-0007OM-00; Tue, 20 Feb 2024 14:48:43 +0100
+	id 1rcQUF-0007OO-00; Tue, 20 Feb 2024 14:48:43 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id DDBEAC04A2; Tue, 20 Feb 2024 14:36:43 +0100 (CET)
-Date: Tue, 20 Feb 2024 14:36:43 +0100
+	id B2CADC066F; Tue, 20 Feb 2024 14:37:47 +0100 (CET)
+Date: Tue, 20 Feb 2024 14:37:47 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Serge Semin <Sergey.Semin@BAIKALELECTRONICS.ru>
-Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-	Serge Semin <fancer.lancer@gmail.com>,
-	Alexey Malahov <Alexey.Malahov@BAIKALELECTRONICS.ru>,
-	Arnd Bergmann <arnd@arndb.de>, linux-mips@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] MAINTAINERS: Add maintainer for MIPS Baikal-T1
- platform code
-Message-ID: <ZdSq66XhxrqgyNBy@alpha.franken.de>
-References: <20231122170506.27267-1-Sergey.Semin@baikalelectronics.ru>
- <20231122170506.27267-4-Sergey.Semin@baikalelectronics.ru>
+To: Erick Archer <erick.archer@gmx.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Alchemy: Use kcalloc() instead of kzalloc()
+Message-ID: <ZdSrK6QeToAl2K2h@alpha.franken.de>
+References: <20240120133443.4237-1-erick.archer@gmx.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,43 +48,42 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231122170506.27267-4-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20240120133443.4237-1-erick.archer@gmx.com>
 
-On Wed, Nov 22, 2023 at 08:04:52PM +0300, Serge Semin wrote:
-> Add myself as a maintainer of the MIPS Baikal-T1 platform-specific
-> drivers. The arch-code hasn't been submitted yet, but will be soon enough.
-> Until then it's better to have the already available drivers marked as
-> maintained.
+On Sat, Jan 20, 2024 at 02:34:43PM +0100, Erick Archer wrote:
+> As noted in the "Deprecated Interfaces, Language Features, Attributes,
+> and Conventions" documentation [1], size calculations (especially
+> multiplication) should not be performed in memory allocator (or similar)
+> function arguments due to the risk of them overflowing. This could lead
+> to values wrapping around and a smaller allocation being made than the
+> caller was expecting. Using those allocations could lead to linear
+> overflows of heap memory and other misbehaviors.
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> So, use the purpose specific kcalloc() function instead of the argument
+> size * count in the kzalloc() function.
+> 
+> Link: https://www.kernel.org/doc/html/next/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments [1]
+> Link: https://github.com/KSPP/linux/issues/162
+> Signed-off-by: Erick Archer <erick.archer@gmx.com>
 > ---
->  MAINTAINERS | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+>  arch/mips/alchemy/common/clock.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 52ee905c50f4..a56e241608ae 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14491,6 +14491,17 @@ F:	arch/mips/
->  F:	drivers/platform/mips/
->  F:	include/dt-bindings/mips/
->  
-> +MIPS BAIKAL-T1 PLATFORM
-> +M:	Serge Semin <fancer.lancer@gmail.com>
-> +L:	linux-mips@vger.kernel.org
-> +S:	Supported
-> +F:	Documentation/devicetree/bindings/bus/baikal,bt1-*.yaml
-> +F:	Documentation/devicetree/bindings/clock/baikal,bt1-*.yaml
-> +F:	drivers/bus/bt1-*.c
-> +F:	drivers/clk/baikal-t1/
-> +F:	drivers/memory/bt1-l2-ctl.c
-> +F:	drivers/mtd/maps/physmap-bt1-rom.[ch]
-> +
->  MIPS BOSTON DEVELOPMENT BOARD
->  M:	Paul Burton <paulburton@kernel.org>
->  L:	linux-mips@vger.kernel.org
-> -- 
-> 2.42.1
+> diff --git a/arch/mips/alchemy/common/clock.c b/arch/mips/alchemy/common/clock.c
+> index c01be8c45271..6c8996e20a7d 100644
+> --- a/arch/mips/alchemy/common/clock.c
+> +++ b/arch/mips/alchemy/common/clock.c
+> @@ -771,7 +771,7 @@ static int __init alchemy_clk_init_fgens(int ctype)
+>  	}
+>  	id.flags = CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE;
+> 
+> -	a = kzalloc((sizeof(*a)) * 6, GFP_KERNEL);
+> +	a = kcalloc(6, sizeof(*a), GFP_KERNEL);
+>  	if (!a)
+>  		return -ENOMEM;
+> 
+> --
+> 2.25.1
 
 applied to mips-next.
 
