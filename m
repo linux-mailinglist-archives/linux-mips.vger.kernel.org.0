@@ -1,44 +1,45 @@
-Return-Path: <linux-mips+bounces-1595-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1588-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 534C085BD98
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Feb 2024 14:49:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B3B585BD88
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Feb 2024 14:49:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85E701C22F05
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Feb 2024 13:49:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECAB12863DF
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Feb 2024 13:49:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D66D76D1A6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A19B6A8C8;
 	Tue, 20 Feb 2024 13:48:54 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F09A96A346;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F09FF6A348;
 	Tue, 20 Feb 2024 13:48:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708436934; cv=none; b=Eh1hgIu8FOawRLMqGZ13/1ssJX8l4+8410GYNFCqowe09ZTmUDZtkl9KkW6b876jkptrI/ODg6ozdGpgc6DnLSVgGJGNN6xD2UEFzn8bIiYKrHkKWoBlINUzSMNAQ+3wwkM8lz36s3dE2CPUlmNG26FdOCMrSkTjUu//IfGybuo=
+	t=1708436934; cv=none; b=I2MWgxHTZuy6rgT9Z0wX/6FK06xQWRibTa2KSa9kEZhXOEskjR0suve3uMVpQx8M4IrcD+gWLhkbTDFSKA3mJw0NFWog6e8pxzLxEiiuTj2vWQp+UcCpXp2qF6ybG/nwO/mg7J2j1aD3whBKeSa39dvdiBZ2OX3D0XA6cO+E9xY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1708436934; c=relaxed/simple;
-	bh=SynaioFw+yQpRvdCOCb1Co5Ewh+f1Mqe+AUZhxJedIo=;
+	bh=8GvFNVF9duq/2bUVAkBo5DWH41frpnACDn9XWjN8Zj4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eiloiwJMgQord0zf3T2ag9K2+24IwQ9XTwC0gRG5Q2Wu/ZWq4LOn5xIomPTjNZ6wtnrwAvwkRrlkGNS9CRQw3VWXGIX+LoF6jysrWXPh3HvMOOIa60n6A2vkuZe4Bnfzjsx8mQq8RhMksSf+ub4ixw6bZ2xlritjjWBLwdLC65A=
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZcHCww2t04Lo7oD33q1djZ38xZ78ygIQV4P5lEZfUR8gUp9eKkeyDutpns3FINC5YLkJl96D47x4Uy8so5/egDnDfZIN36Ntwk5mnGNITv/H697DtLdb+m9Kj6QY8JNyxzJ6TivMxeHl6zqNkPVSJ+y1fhwELnUogzYtczI/4fc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1rcQUF-0007Od-00; Tue, 20 Feb 2024 14:48:43 +0100
+	id 1rcQUF-0007Of-00; Tue, 20 Feb 2024 14:48:43 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 06587C0A1E; Tue, 20 Feb 2024 14:39:40 +0100 (CET)
-Date: Tue, 20 Feb 2024 14:39:40 +0100
+	id 4C9E7C0AFC; Tue, 20 Feb 2024 14:40:10 +0100 (CET)
+Date: Tue, 20 Feb 2024 14:40:10 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/8] MIPS: Unify register numbering macros for uasm
-Message-ID: <ZdSrnG493wn2U+5s@alpha.franken.de>
-References: <20240209-regname-v1-0-2125efa016ef@flygoat.com>
+To: "Ricardo B. Marliere" <ricardo@marliere.net>
+Cc: Serge Semin <fancer.lancer@gmail.com>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] mips: bus: make mips_cdmm_bustype const
+Message-ID: <ZdSruvrpmTydq+M7@alpha.franken.de>
+References: <20240213-bus_cleanup-mips2-v1-1-9c0e3d4a1852@marliere.net>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -47,45 +48,22 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240209-regname-v1-0-2125efa016ef@flygoat.com>
+In-Reply-To: <20240213-bus_cleanup-mips2-v1-1-9c0e3d4a1852@marliere.net>
 
-On Fri, Feb 09, 2024 at 06:07:46PM +0000, Jiaxun Yang wrote:
-> Hi all,
+On Tue, Feb 13, 2024 at 11:49:24AM -0300, Ricardo B. Marliere wrote:
+> Now that the driver core can properly handle constant struct bus_type,
+> move the mips_cdmm_bustype variable to be a constant structure as well,
+> placing it into read-only memory which can not be modified at runtime.
 > 
-> This is a attempt to unify register numbering macros for uasm,
-> in response to review comment [1].
-> 
-> This is a rather large cosmetic change so I decided to send
-> it as a sepreate set.
-> 
-> Please review.
-> Thanks
-> 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
 > ---
-> Jiaxun Yang (8):
->       MIPS: Unify define of CP0 registers for uasm code
->       MIPS: regdefs.h: Guard all defines with __ASSEMBLY__
->       MIPS: regdefs.h: Define a set of register numbers
->       MIPS: traps: Use GPR number macros
->       MIPS: page: Use GPR number macros
->       MIPS: tlbex: Use GPR number macros
->       MIPS: kvm/entry: Use GPR number macros
->       MIPS: pm-cps: Use GPR number macros
-> 
->  arch/mips/include/asm/mipsregs.h | 249 +++++++++++++++++-----
->  arch/mips/include/asm/regdef.h   |  91 +++++++++
->  arch/mips/kernel/pm-cps.c        | 134 ++++++------
->  arch/mips/kernel/traps.c         |   6 +-
->  arch/mips/kvm/entry.c            | 431 +++++++++++++++++----------------------
->  arch/mips/mm/page.c              | 202 +++++++++---------
->  arch/mips/mm/tlbex.c             | 214 +++++++++----------
->  7 files changed, 737 insertions(+), 590 deletions(-)
-> ---
-> base-commit: 445a555e0623387fa9b94e68e61681717e70200a
-> change-id: 20240209-regname-4c14f1147e25
+>  arch/mips/include/asm/cdmm.h | 2 +-
+>  drivers/bus/mips_cdmm.c      | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-series applied to mips-next.
+applied to mips-next.
 
 Thomas.
 
