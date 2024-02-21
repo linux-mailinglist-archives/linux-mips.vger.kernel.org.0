@@ -1,159 +1,151 @@
-Return-Path: <linux-mips+bounces-1652-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1653-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BA1C85E66C
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 19:37:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DBE485E67D
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 19:40:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A09F7B25870
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 18:37:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05B52285563
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 18:40:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46BA11272AF;
-	Wed, 21 Feb 2024 18:35:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC58183CDC;
+	Wed, 21 Feb 2024 18:40:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WJYlbGZL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hEssLoV1"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F58D8564D;
-	Wed, 21 Feb 2024 18:35:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF51882D97;
+	Wed, 21 Feb 2024 18:40:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708540514; cv=none; b=Ons6F8ncnLW0pPMpWBxsyMqVe1VXY+XKhdnSwtte2wPs1+HU+QnnnwE9dJXpXVN9Nfe2A4CvIBI50aSyMomKiwQf6JDU0hLEKCD6E7NDGcKJdxE9vS/Otb0/r/lMKTOqxDPVfWeXmNUYXDMGmDN/c/aWNG6eUxcEl0b6c3pchCE=
+	t=1708540806; cv=none; b=HnRDqiubAOxeCSjZ6uaxptdpJx8WHo+nR7wzuytceR2imRJMoTYebA/Ho2nj2fSgNRHSfY5wJbpeGQFwpMem4//HAEeDYVDzCHkyVv7FCnkHiZVXmwhy/MFWqedipPd120HccM8/rvwR8z8c1FqIW8nH0phRkspnY9/T8I6BnW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708540514; c=relaxed/simple;
-	bh=lTV4RH4qiS21e5gSPVWYHbVcBJWdPYtUVhU20SXaAR4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cQqyT+yWBZoLBdkT3/tEWb2B+ZwiuPZ6NV57prNl8uCKteIsHqvIU1VlD3XwRwzVtGGDw0G9fNBD14wV1aFAEkYxwstufutON/EO9CiNAVBS3DSgN/e1wzla0v441iu6aliRI25NzyA2b1R/q4E8VJmFjs5BCGkkpUN96srFIoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WJYlbGZL; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708540511; x=1740076511;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lTV4RH4qiS21e5gSPVWYHbVcBJWdPYtUVhU20SXaAR4=;
-  b=WJYlbGZLAc4nSX1rS+pirmLVyf04yXiyEaR5VsaVbbSLtrWUzaaGKn35
-   gLlUsy6D1Te+rSYSXZeq9bwYhRzNKfP1SHGZzPRpO138IUfY+QVjDmYjM
-   p/lKtKp0vtIf+Rbda1SFvKXJ+hayxBTkNlVJgx6yhcKmIM63cgtPJVlE1
-   qW68rxrAY45t/hVCD+VaeVGbbmJBstz/cTTxqR7wDhkOfalv3ZVQoqGNa
-   JROlODygFKZUNdZrmUhTXVF8tQWZxG5i+hZsVzglK1mhDD4ujioVaiD8G
-   c7B/HlhffxtPjbUOLgBl3h9y75wa4pnDzWcYdqGsCZ+vIxKQNcErWm/8+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10991"; a="28164888"
-X-IronPort-AV: E=Sophos;i="6.06,176,1705392000"; 
-   d="scan'208";a="28164888"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2024 10:35:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10991"; a="936684759"
-X-IronPort-AV: E=Sophos;i="6.06,176,1705392000"; 
-   d="scan'208";a="936684759"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Feb 2024 10:34:55 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 8318E2A0; Wed, 21 Feb 2024 20:34:47 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org,
-	linux-rpi-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org,
-	linux-tegra@vger.kernel.org
-Cc: Jiri Slaby <jirislaby@kernel.org>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Al Cooper <alcooperx@gmail.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v1 14/14] serial: 8250_uniphier: Switch to use uart_read_port_properties()
-Date: Wed, 21 Feb 2024 20:31:30 +0200
-Message-ID: <20240221183442.4124354-15-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
-In-Reply-To: <20240221183442.4124354-1-andriy.shevchenko@linux.intel.com>
-References: <20240221183442.4124354-1-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1708540806; c=relaxed/simple;
+	bh=77+yJArpD4qpYuTJYgfzGu+AM0EsB8mycpVWQGHji2w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HDFn61QIDzwf+5td99ZTkJ2iKilDXLXg/+aU0weLK66iVEZ++UIKXjlCBL5hzn7p9hZQYRelpp19ygSFY7ZXJ8kAWK8/Omv+XmzZ8TKIsKSq3vJuFe8906uPXtE3j6vh0tKutvx9OHD9TbxOTvpyER27eXo5ImOPBRuWnXwni9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hEssLoV1; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-512cba0f953so2093291e87.2;
+        Wed, 21 Feb 2024 10:40:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1708540802; x=1709145602; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LoHmCjovbaBBFrzsFwzqZ152wtgCp5m6C9inbTCfJo4=;
+        b=hEssLoV1bgpUK3ShoUNWmVMi/qY8tmdsf5PsnZoZUBJDFgV5V/Y9VizelnSV7pVrKl
+         YuoHfgc2AIW1KqkSOyQgtmIJx/GezRxTwxq2j9GhbOTTaaSRd6MvAKaNfCWe+N3BhZcK
+         +9XzIE0sYxhViG2s20GVVRzcBNILTRNCUb70/oanxqaBOKJIvVO7BVE0eCcb5G/hvK1e
+         ZOT5NT8zsY/3BOO3an1Fnsd/vVwwTcOtQx+4sg5xW3xSGUIndBwz/espbrd0UIDUhvQx
+         PIp8woOC6LQw+/Gn8U0PbbWhaUWmfNEQIgu/mj+V4gTa/h8gSz0DWrOrBJOCa5Ce5CsU
+         w/vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708540802; x=1709145602;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LoHmCjovbaBBFrzsFwzqZ152wtgCp5m6C9inbTCfJo4=;
+        b=mpGg25LbhA6HJ+OY2d8NdYWiWdS0VhHuEWEj4TVUcSwi1vuqqNsOb3xqnvjKSVRsY2
+         RgBUvzdSaMYKalcqXkQgdhAScUlTiv4zpqIhuuKz8IYboRJWJ+OBTJ4tPJs6twK8mEHt
+         pnLRea58ZppyT9al2a9VCr5cagOgO9o5IWz8DJYqXp+bS8+CdBgyW5nzGhmq7L05Lk4+
+         LbJwrgFtaYX0SxEU7+KBsf6gJFD+6H2XqNXodqh19cpsspRsmTn2mLImyW9GrsoiQb18
+         GKY4mm71EM7qBKAFHMLg4McD8f4EQCtpNfNBGXUiN8X3eH44JG4q9KgklkRheyqJQUHt
+         Eu4A==
+X-Forwarded-Encrypted: i=1; AJvYcCX5/FZNpRE2RP6t3omNnCSXJNM6HAEWlNr5AMP76eaINszPdWpEoAgqhEyt4pES9p+JOntdQPmn0521OUwVr2zdm0uW0m02XhY/TB4H6nrCSuqa/k9KSDEeIYnBxo0q74jObqQK0o8Pq5bKO6yusCDuv/HANpTuAGx1XTkCdiU14bcv1iw8vg==
+X-Gm-Message-State: AOJu0YzTzsKrjEsUS02awx6n96ZNWcqJ36fk0sUn8AC/nkqg4lBxd5OB
+	fzeyPYSdZxqqT49kCy8VmfgcZcOnNWdYkEEkOv8pDIO7im9/x/jd
+X-Google-Smtp-Source: AGHT+IFQdg0rPzpbCTxt7YY/k8nhp9mR1Q4dWOetKUCqjjty0eyBkdC1Ae+mLcUg7lr00zV65Mchcw==
+X-Received: by 2002:ac2:4c41:0:b0:512:b4cf:ae3 with SMTP id o1-20020ac24c41000000b00512b4cf0ae3mr8077237lfk.19.1708540802133;
+        Wed, 21 Feb 2024 10:40:02 -0800 (PST)
+Received: from mobilestation ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id h24-20020a19ca58000000b00512d495ef0bsm310184lfj.113.2024.02.21.10.40.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Feb 2024 10:40:01 -0800 (PST)
+Date: Wed, 21 Feb 2024 21:39:58 +0300
+From: Serge Semin <fancer.lancer@gmail.com>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Jiaxun Yang <jiaxun.yang@flygoat.com>, Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>, 
+	Stephen Rothwell <sfr@rothwell.id.au>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-mips@vger.kernel.org, linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] mips: cm: Add CM GCR and L2-sync base address
+ getters declarations
+Message-ID: <difioxc7b7e2ic2p4om36l6vu4vkud6qa6t3aeikxzkhlqhgqb@zsx3dmjcofw4>
+References: <20240215171740.14550-1-fancer.lancer@gmail.com>
+ <20240215171740.14550-3-fancer.lancer@gmail.com>
+ <ZdTgSZRTDkakekkd@alpha.franken.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZdTgSZRTDkakekkd@alpha.franken.de>
 
-Since we have now a common helper to read port properties
-use it instead of sparse home grown solution.
+On Tue, Feb 20, 2024 at 06:24:25PM +0100, Thomas Bogendoerfer wrote:
+> On Thu, Feb 15, 2024 at 08:17:27PM +0300, Serge Semin wrote:
+> > Based on the design pattern utilized in the CM GCR and L2-sync base
+> > address getters implementation the platform-specific code is capable to
+> > re-define the getters and re-use the weakly defined initial versions. But
+> > since the re-definition is supposed to be done in another source file the
+> > interface methods have been globally defined which in its turn causes the
+> > "no previous prototype" warning printed should the re-definition is
+> > finally introduced. Since without the global declarations the pattern can
+> > be considered as incomplete and causing the warning printed, fix it by
+> > providing the respective methods prototype declarations in
+> > "arch/mips/include/asm/mips-cm.h".
+> > 
+> > Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
+> > 
+> > ---
+> > 
+> > Note as I mentioned in the previous patch, since the weak implementation
+> > of the getters isn't utilized other than as a default implementation of
+> > the original methods, we can convert the denoted pattern to a simple
+> > __weak attributed methods. Let me know if that would be more preferable.
+> 
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/tty/serial/8250/8250_uniphier.c | 17 ++++-------------
- 1 file changed, 4 insertions(+), 13 deletions(-)
+> how about simply remove __mips_cm_l2sync_phys_base() and do everything
+> via mips_cm_phys_base(). And at the moment without anyone overriding
+> mips_cm_phys_base I tend to keep static without __weak. If someone
+> needs, we can change it. Does this make sense ?
 
-diff --git a/drivers/tty/serial/8250/8250_uniphier.c b/drivers/tty/serial/8250/8250_uniphier.c
-index 6399a38ecce2..d3f270a191ee 100644
---- a/drivers/tty/serial/8250/8250_uniphier.c
-+++ b/drivers/tty/serial/8250/8250_uniphier.c
-@@ -162,7 +162,6 @@ static int uniphier_uart_probe(struct platform_device *pdev)
- 	struct uniphier8250_priv *priv;
- 	struct resource *regs;
- 	void __iomem *membase;
--	int irq;
- 	int ret;
- 
- 	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-@@ -175,23 +174,12 @@ static int uniphier_uart_probe(struct platform_device *pdev)
- 	if (!membase)
- 		return -ENOMEM;
- 
--	irq = platform_get_irq(pdev, 0);
--	if (irq < 0)
--		return irq;
--
- 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
- 		return -ENOMEM;
- 
- 	memset(&up, 0, sizeof(up));
- 
--	ret = of_alias_get_id(dev->of_node, "serial");
--	if (ret < 0) {
--		dev_err(dev, "failed to get alias id\n");
--		return ret;
--	}
--	up.port.line = ret;
--
- 	priv->clk = devm_clk_get(dev, NULL);
- 	if (IS_ERR(priv->clk)) {
- 		dev_err(dev, "failed to get clock\n");
-@@ -211,7 +199,10 @@ static int uniphier_uart_probe(struct platform_device *pdev)
- 	up.port.mapbase = regs->start;
- 	up.port.mapsize = resource_size(regs);
- 	up.port.membase = membase;
--	up.port.irq = irq;
-+
-+	ret = uart_read_port_properties(&up.port, true);
-+	if (ret)
-+		return ret;
- 
- 	up.port.type = PORT_16550A;
- 	up.port.iotype = UPIO_MEM32;
--- 
-2.43.0.rc1.1.gbec44491f096
+To be honest my arch code (not submitted yet) do override the
+mips_cm_l2sync_phys_base() method. The memory just behind the CM2
+region is hardwired for the EEPROM mapping. So the default
+__mips_cm_l2sync_phys_base() implementation selecting the L2-sync with
+(mips_cm_phys_base() + MIPS_CM_GCR_SIZE) isn't suitable for my
+platform.
 
+Note what you suggest will require the CM and CM L2-sync probe code
+logic redevelopment. The mips_cm_phys_base() method is currently
+dedicated for a single purpose: return the CM GCR physical base address.
+So is the mips_cm_l2sync_phys_base() method. Merging the later method
+into the former one will cause the mips_cm_phys_base() function
+looking less neat. We will also require to have the mips_cm_probe()
+method keeping the CM L2-sync physical base addresses around and then
+passing it to mips_cm_probe_l2sync() or having the later method
+embedded into mips_cm_probe(). All of that won't look as good as the
+current implementation.
+
+What about instead of that I'll just convert both mips_cm_phys_base()
+and mips_cm_l2sync_phys_base() to being defined with the underscored
+methods body and assign the __weak attribute to them?
+
+-Serge(y)
+
+> 
+> Thomas.
+> 
+> -- 
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
 
