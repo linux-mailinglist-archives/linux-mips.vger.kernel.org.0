@@ -1,119 +1,116 @@
-Return-Path: <linux-mips+bounces-1599-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1600-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 897EC85D74D
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 12:42:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA91285DB3C
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 14:38:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA30C1C2289A
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 11:42:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5A00284851
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 13:38:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C122747A6B;
-	Wed, 21 Feb 2024 11:41:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F64E77A03;
+	Wed, 21 Feb 2024 13:38:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mN4Anb93"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4632C4654D
-	for <linux-mips@vger.kernel.org>; Wed, 21 Feb 2024 11:41:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA2064D5BA
+	for <linux-mips@vger.kernel.org>; Wed, 21 Feb 2024 13:38:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708515680; cv=none; b=PVmzbxvjtiRfnY4+0jjkeMUoS0h5jTrh+MsLTyddb2aNwElCLfiqSddEhK11+cAaiEs66PN8g0sVy8/Uhqxtthm1TB/mCYPG8luqdfQr/+fVAYwZ6KMs45Bei4ebgkWTf1iCI5e6kuWPGvtYCWYXcjjC4bkAyKwobrBs83FWjx0=
+	t=1708522719; cv=none; b=YezXml5ONmPigEW+nwD4vlXy4a2cINUcO9VEjHgmNiInHLu5MdfIzF0Qa/2yVYTJLWoQacy+r4GeDNSYvw+TfzkoYdwRkpVZbJXmSEdS0RF1Wrdmzo0JVsij2+uIU26EVhPaW/evM97Bc63KCFIiFjwKVTefgKp7dFxXkLroI9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708515680; c=relaxed/simple;
-	bh=N88ZAVmfemoKev6jlYmIQMcDug/YAdpNBEedT/wfwl8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=G+v9folwElM7Yg7yhZwq00rCCfy9iUWgq9e0tp5cUfV7PCneYPTShLaoGuI6rYbFauYHiC9r1X/tjirhPkPePmF4zZROTFmrtjcD7D0AOQXcYcbEi05jyANfgg0OXbzWjOAZfy3+HfGs0NDEuXxZZeLJwdUsxnBTTmP67FsQuTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rckyI-0002lV-Sp; Wed, 21 Feb 2024 12:41:06 +0100
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rckyE-0021v1-Of; Wed, 21 Feb 2024 12:41:02 +0100
-Received: from pza by lupine with local (Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rckyE-00061g-2E;
-	Wed, 21 Feb 2024 12:41:02 +0100
-Message-ID: <f2e3d662e92b76e43b89a3c99669c3dadb2176b5.camel@pengutronix.de>
-Subject: Re: [PATCH 05/23] gpio: nomadik: extract GPIO platform driver from
- drivers/pinctrl/nomadik/
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: =?ISO-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>, Linus Walleij
- <linus.walleij@linaro.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
- <conor+dt@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-mips@vger.kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Date: Wed, 21 Feb 2024 12:41:02 +0100
-In-Reply-To: <CAMRc=Me-oEx9S0w=XhwC4MzV9uzV0o0HnWBfNSstcqg5jpXyZg@mail.gmail.com>
-References: <20240214-mbly-gpio-v1-0-f88c0ccf372b@bootlin.com>
-	 <20240214-mbly-gpio-v1-5-f88c0ccf372b@bootlin.com>
-	 <e031566a85ae0da0ee71dffba5d87c6414ef83e1.camel@pengutronix.de>
-	 <CAMRc=Me-oEx9S0w=XhwC4MzV9uzV0o0HnWBfNSstcqg5jpXyZg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1708522719; c=relaxed/simple;
+	bh=ph2UbQgsrbuCfnh/AmINSm2tHoGX/U8LJgWyPisUXjU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=M4DE1Paa0nX4lTy52+s/rvu6BPtGdngHTttkXcgveTDkV+xHjEDKinsfpi3xbc7WvdCKdStus+W2AwPiErGU5MLjBBc+R6G4vY/9MrHeTLI5oPrcGyEFsVSgolp5pwQiLrwrPS7k2UAvePTRz4Q0v/i3LDlqvjWnZ+3UheOlV4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mN4Anb93; arc=none smtp.client-ip=209.85.219.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-dcc84ae94c1so6218091276.1
+        for <linux-mips@vger.kernel.org>; Wed, 21 Feb 2024 05:38:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708522717; x=1709127517; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ph2UbQgsrbuCfnh/AmINSm2tHoGX/U8LJgWyPisUXjU=;
+        b=mN4Anb93TyOuMCHkH2B+0+jOratxIs0faqE6FYvN2AK5/qA5eyJ8A6bVX7hLpyztas
+         KjwwFNlqUA1CILCqeQ2CmYGSbvod0HAccRXn6sWolw9/m1uXyvaSoz/m60xzep9zFmeu
+         Jub4BYZvfiYqjcD1/6YRWOph5pW2T3T9Id0DdtmZx+QC1MW9r6bo+ov/veqB6PMLIWmB
+         mP+LhIHiWKLuRaee6rXky7yYrQuMvR+RKOV8X2x4h3FQ+PjNGsfRKhkRpaPEtoZPaIIN
+         caH1RmeYoXp2DMICeE1O6C/2fQM85uhJt6gtj2A+LPdCHhOMsGT6RTFRK7bny04CohjX
+         CAEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708522717; x=1709127517;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ph2UbQgsrbuCfnh/AmINSm2tHoGX/U8LJgWyPisUXjU=;
+        b=UXtth87xCbNzeNIikMOg42/NYWD3booE0vNXqLC5QdF1MAP52wgdUV4CAPVqgvEyn8
+         vOqm+tCOa1baxsWbFR5LUfsEoF8TCz3y9AxpRzSaPUj0kr4e40K72pYESm0WZa4MA0qz
+         xfSGUcua/hbZ3msi8+Iad+yG+VCyAHHQzolP9u+4RpYB5IwNcD5ArH2qiWK5A+y3ejDm
+         QITDfZQUZqRYHl8N/Ooccefpw4HxM+lbYIU8KD2700Z4Q1RDPMzWwc8misyTgTgPORCS
+         3TOsjslB9ywwvstdV/9WbPgrUIAhHeJistUPLjg+z5gEdjfgxAkpr6P8/91ZlmBQdPnq
+         f/XA==
+X-Forwarded-Encrypted: i=1; AJvYcCVDhYl8uGie9J37wzw3GIpNPtwKH8UK9tbJPb+K0/yGGaja9RiNAOU8ukbCZ1ztcehnOa2cTKuH1MzKYA8c0Vr32NaqLrzpyiL2vg==
+X-Gm-Message-State: AOJu0YzL+V3Mhs/VwFagkjVC3X/rHzLGB6j1njQLFMOyGzkxpbQJ7Qsp
+	lScvU/8K6UHqQe0nYU15wvuPoqZXoHkpcHIGjTitZQAZ2RO5QSCg3ZDwvjKMC2FLbmBssBEjS+C
+	X1ddnCRN3qC9teeLYcM9zHEqpx+B4Wo+4BtITYQ==
+X-Google-Smtp-Source: AGHT+IF2OkLRDdLse8vRcitJs8gTndLo8D9Y6JeTVVYt2QhVtGqFzHLke4WYR6iZMGxv/F5qvwz1XhINpDDxRT+71EA=
+X-Received: by 2002:a25:ab06:0:b0:dc2:2e01:4ff0 with SMTP id
+ u6-20020a25ab06000000b00dc22e014ff0mr15988542ybi.45.1708522716910; Wed, 21
+ Feb 2024 05:38:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+References: <20240212-mbly-clk-v6-0-c46fa1f93839@bootlin.com> <20240212-mbly-clk-v6-5-c46fa1f93839@bootlin.com>
+In-Reply-To: <20240212-mbly-clk-v6-5-c46fa1f93839@bootlin.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Wed, 21 Feb 2024 14:38:25 +0100
+Message-ID: <CACRpkdYNe=2w10uB1mUgs2Lgg1TRiSF=bOa45OH5Lcz6+G6FEg@mail.gmail.com>
+Subject: Re: [PATCH v6 05/13] dt-bindings: pinctrl: mobileye,eyeq5-pinctrl:
+ add bindings
+To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, 
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, linux-mips@vger.kernel.org, 
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-gpio@vger.kernel.org, 
+	Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Bartosz,
+On Mon, Feb 12, 2024 at 2:44=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@bootl=
+in.com> wrote:
 
-On Mo, 2024-02-19 at 16:33 +0100, Bartosz Golaszewski wrote:
-> On Thu, Feb 15, 2024 at 11:03=E2=80=AFAM Philipp Zabel <p.zabel@pengutron=
-ix.de> wrote:
-> >=20
-> > On Mi, 2024-02-14 at 17:23 +0100, Th=C3=A9o Lebrun wrote:
-> > [...]
-> > > diff --git a/drivers/gpio/gpio-nomadik.c b/drivers/gpio/gpio-nomadik.=
-c
-> > > new file mode 100644
-> > > index 000000000000..e39477e1a58f
-> > > --- /dev/null
-> > > +++ b/drivers/gpio/gpio-nomadik.c
-> > > @@ -0,0 +1,660 @@
-> > [...]
-> > > +static int nmk_gpio_probe(struct platform_device *dev)
-> > > +{
-> > [...]
-> > > +     ret =3D gpiochip_add_data(chip, nmk_chip);
-> >=20
-> > Use devm_gpiochip_add_data() to cleanup on unbind, before nmk_chip goes
-> > away. Or make the driver un-unbindable via suppress_bind_attrs. In that
-> > case you could drop devm_ prefixes everywhere for consistency.
-> >=20
->=20
-> No! Why? What about error paths in probe() where you want to undo everyth=
-ing?
+> Add dt-schema type bindings for the Mobileye EyeQ5 pin controller.
+>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 
-Brain fog moment. I was triggered by the mixture of devm_ and non-devm_
-calls and jumped to the wrong conclusion.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Yes, keeping devm_ for error cleanup is of course correct, and with
-suppress_bind_attrs it'd even be ok to use non-devm_
-gpiochip_add_data(), as long as there can be no error return
-afterwards.
+I tried to just apply the pin control patches to the pin control tree, but =
+I
+can't because of all collisions in MAINTAINERS.
 
-regards
-Philipp
+If you move all MAINTAINERS business to the SoC-wide patch I can
+apply the pin control stuff directly, but maybe you wanna keep the
+series together and merge on an all-or-nothing basis?
+
+Yours,
+Linus Walleij
 
