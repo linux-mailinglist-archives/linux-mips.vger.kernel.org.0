@@ -1,189 +1,138 @@
-Return-Path: <linux-mips+bounces-1597-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1598-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0CED85C393
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Feb 2024 19:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 426CC85D013
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 06:47:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF441B20E30
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Feb 2024 18:26:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9055AB23F13
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 05:47:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5235077A04;
-	Tue, 20 Feb 2024 18:26:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF38D3A1B8;
+	Wed, 21 Feb 2024 05:45:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="LEJqjYNq";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KDGogIFL"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="pDzL0pw8"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh1-smtp.messagingengine.com (fhigh1-smtp.messagingengine.com [103.168.172.152])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2D0177655;
-	Tue, 20 Feb 2024 18:26:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EB1539AF1;
+	Wed, 21 Feb 2024 05:45:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708453572; cv=none; b=t3dIUlwNgQa5WnsKhxskFho5JSZl0c0gwfPpYEsr/wWmTSXKcSyz7QJtuyuoWanVQ8OgZkUwv/VpmwI6y7/79OWYvjJYqQahiiciltCitvDXRO+MoAnNJ4JKDW2LS7cLn1u8QLfdkzJnP4ze/lwFIQ8Wt5J1GwDc3CSZYNysFoY=
+	t=1708494325; cv=none; b=Pi+d8wFtAoyBI0lQASROEmVXkmXkUuZ4NCwT+9Ls3/Z3DgtkfTG37aAfuKMv4Vq7ropvsKQKFWtXhWeNxVzTlkmMscvZ6Y/+JRj+nBBJg4ly2Sn8xly/L0UB92bzSQwqXDwENVmcH70tnPBrFvbnC2PjPWw2taE0C4qs6bi2a60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708453572; c=relaxed/simple;
-	bh=Yu6Ek05D3XzEDulx15fqOxq47ljcIO0qY4zVYkB+TuA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Hh2PTAx3lyeYTwzayoEYoV0bffF1OxADQFyQFv+ktYq5j57kNnty8jZiAFage79Oflzw+n+WyDC9RUIumdkxXANEpQ4OP3Lijho3tB9blzhgetp0f5BHAH3Cmhr+NLowKQ7tb5/VJCeFLDWot7wCDsDsYIqbhP5M/ZlE/PLnlDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=LEJqjYNq; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=KDGogIFL; arc=none smtp.client-ip=103.168.172.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id D72D811400A2;
-	Tue, 20 Feb 2024 13:26:07 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 20 Feb 2024 13:26:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1708453567;
-	 x=1708539967; bh=NPcyX8ulrhJ0Mc5gTBoXB3xhQTF03OhSShONl72kdLc=; b=
-	LEJqjYNqNDTSM6cSSwwJMevo8m2reOKPCryJEKhgqG47I5U1w17kaU9RZaw1bMB9
-	q3EYciGDg7QgkzEG09gRKj5AlbatK8QrXpSlvgl2rYNxxYJHYC0Df05x0a6vDJDb
-	kO2MXzAwmwvutcAKfvzyY7mre8uop8VrnRTAAgYZ6GpSrkgJPwVta3x6/p9CYkz6
-	W2B78ORNvRQffbETToNoODJg4fLYIAgtcCURgsAu7xiypubMa4nPRN5QA8C6K8H6
-	4zahwuqy4Z66jHOXHQZPAJn8a1fOjjumieeor8O9EZi4mdsyppiv5yzA8RlP7XBT
-	Hdyha7OtFq45Aqdgvscsxw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1708453567; x=
-	1708539967; bh=NPcyX8ulrhJ0Mc5gTBoXB3xhQTF03OhSShONl72kdLc=; b=K
-	DGogIFLfPkqkIlar005cdaMKUMM/IhWvjQpsA+WD3DGBk27Oihj0xWUqvmR3yGqK
-	WCpF3A/kYj6P8huvzj+km8KljYfyvwWku9IfkYD6AZ+Y1NvojGurtpN6lYPO0B/+
-	SbCC9YjC6gdYwadXGWtb7/pLbGvZsVxrcK+lmdK9xxkCL58QghnDQg2frCjvcfoT
-	umsVxuBBKSKjHxwS5noVvmwUXlEDi8TxN4m/P7SrdeMzbf7nmH2sR1MYt5X1T+xM
-	Qh05Ul8S+WhiPKz2WN/qV+aS8ixlx/YDXuXnwS0Uisn4U3YQ2R3mNQyfjjF97int
-	tfuQ2XhXR9v7qCU7ieISA==
-X-ME-Sender: <xms:v-7UZYKWrba4NqRKD0JQsUASdIM3wh__fXvFFfc8fdv2xHsufknlaQ>
-    <xme:v-7UZYL974AsrkO3MAdgbj-NP52Sw1IxiiGxsaZtwhy2mn5ONvG7wVEy6ygae3LGl
-    DyYkYfDD7KY9lsBL-Q>
-X-ME-Received: <xmr:v-7UZYsUKutwD3PNTyzVR0Wu5RP0KYQIPVhkWWse_z8zA04GTins3TqLVlBsr9oqvsRQeMkVPV_6p-4yAycw3oYLvuXhdseIyqPu8l4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedtgdduudegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtvdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepleeuffehheegleeuvdelgffhueekjeetueevuefhffdtgfeu
-    hfeggfeukefffedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:v-7UZVYNZ66XnHkHJv3oIs-ihoRSllAHUd-3zmBbSeN8ZFkOPfgmcA>
-    <xmx:v-7UZfa1Z_PUi9IrHvxiIy86Nhf4CF8-_FyQ9DCldUr6kd5iz4TOCA>
-    <xmx:v-7UZRAaUmT5_fWCBJyyuTu6WufDYaKAPf_nTDX7OmtikFBVPbYmpQ>
-    <xmx:v-7UZZkvUn4q6Ga5bnydde5B4wfleNj59gwUoVO2IQTIs3FbbnAr8g>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 20 Feb 2024 13:26:05 -0500 (EST)
-Message-ID: <8b46e25b-fd3c-4fbc-9f41-c8ac7f4d89e6@flygoat.com>
-Date: Tue, 20 Feb 2024 18:26:04 +0000
+	s=arc-20240116; t=1708494325; c=relaxed/simple;
+	bh=h5mKyikvtkjtjJX/pqzgBTSQZDslyVcAw/thIdZQv4o=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=H/NhXR/Fvf5UWzZ54fvgHaXwobx6Lw0vpotcWv2T+RmjQI3mFP4owr62QdCP1Ht3FJ75b/u169aGcjPNO61S99Y8GO0I2wILGHNTJKgIxgst2e+PpCTLSL7m5fkbwk7BWjjO39Mc8GMnnVesA3MHIWCYjqYNj9aNA8uqWkIdPvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=pDzL0pw8; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41L4lBp6000697;
+	Wed, 21 Feb 2024 05:45:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=b4Rc+JJTl0oXXyFyUimmcRSwrR8o6jLizaEBqMxTzFc=;
+ b=pDzL0pw8rbCUMPoiRdCVZyKEnV6ScCiw5RtLJbOPPWJVM6LAN11L5R2EJlD6Ooa0AKiN
+ O9CtaJwifSVi/sC7iQPdknvm9UZk1hCvsPSH8fj7dW5JqMplw+pjSA9EtPmLnycFvlxX
+ gamkIBeZ3eEbqvuuXKYiGxP3G9aVB66z6dHx8d2+7/E9Jh6pCLKcQgOCHPW09zgm/i05
+ w6gkswvr7m5EfyQmrAgs8HIKMuavQoQVaI/IKAQQRoMA97aTek/5NI/VZzvleGpP14Oe
+ 59YYOXf9/0P94kEfukBAbpOmrS74g6CwFp3B/ufyVvu7q2gp4hZ2r0jVQwCVh67lvO9u Kw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wdaeuh2gg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 21 Feb 2024 05:45:10 +0000
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41L5L576027185;
+	Wed, 21 Feb 2024 05:45:10 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wdaeuh2fu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 21 Feb 2024 05:45:10 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41L4ZADY003620;
+	Wed, 21 Feb 2024 05:45:08 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wb74tndg5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 21 Feb 2024 05:45:08 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41L5j5wm20054726
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 21 Feb 2024 05:45:07 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1EE7220043;
+	Wed, 21 Feb 2024 05:45:05 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DEE3820040;
+	Wed, 21 Feb 2024 05:45:01 +0000 (GMT)
+Received: from [9.203.115.195] (unknown [9.203.115.195])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 21 Feb 2024 05:45:01 +0000 (GMT)
+Message-ID: <559f2595-1477-4ef0-80e4-85ae8b426de7@linux.ibm.com>
+Date: Wed, 21 Feb 2024 11:15:00 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 00/14] Split crash out from kexec and clean up related
+ config items
+Content-Language: en-US
+To: Baoquan He <bhe@redhat.com>
+Cc: linux-s390@vger.kernel.org, piliu@redhat.com, linux-sh@vger.kernel.org,
+        x86@kernel.org, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        ebiederm@xmission.com, loongarch@lists.linux.dev,
+        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        akpm@linux-foundation.org, linux-arm-kernel@lists.infradead.org,
+        viro@zeniv.linux.org.uk
+References: <20240119145241.769622-1-bhe@redhat.com>
+ <9101bb07-70f1-476c-bec9-ec67e9899744@linux.ibm.com>
+ <Zb8D1ASrgX0qVm9z@MiWiFi-R3L-srv>
+From: Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <Zb8D1ASrgX0qVm9z@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: o0K0_e5Ni1T52UBm7wfmF8Us0d4xjhAq
+X-Proofpoint-ORIG-GUID: JVqEJMNWA1ME-iLPtPQHASXdnQfDLkYD
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/8] MIPS: Aggregate build fixes
-Content-Language: en-US
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Guenter Roeck <linux@roeck-us.net>
-References: <20240202-llvm-msym32-v1-0-52f0631057d6@flygoat.com>
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Autocrypt: addr=jiaxun.yang@flygoat.com;
- keydata= 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
- HVO98ZmbMeg=
-In-Reply-To: <20240202-llvm-msym32-v1-0-52f0631057d6@flygoat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-20_06,2024-02-20_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ lowpriorityscore=0 clxscore=1011 phishscore=0 mlxlogscore=999
+ suspectscore=0 impostorscore=0 spamscore=0 bulkscore=0 malwarescore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402210041
 
+Hi Baoquan,
 
+On 04/02/24 8:56 am, Baoquan He wrote:
+>>> Hope Hari and Pingfan can help have a look, see if
+>>> it's doable. Now, I make it either have both kexec and crash enabled, or
+>>> disable both of them altogether.
+>>
+>> Sure. I will take a closer look...
+> Thanks a lot. Please feel free to post patches to make that, or I can do
+> it with your support or suggestion.
 
-在 2024/2/2 18:21, Jiaxun Yang 写道:
-> Hi all,
->
-> This series is a collection of build fixes that have been lying
-> at my local trees for a while, some of them are for Clang built
-> linux and others are for some wiredo configurations.
+Tested your changes and on top of these changes, came up with the below
+changes to get it working for powerpc:
 
-A gentle ping on this series :-)
+ 
+https://lore.kernel.org/all/20240213113150.1148276-1-hbathini@linux.ibm.com/
+
+Please take a look.
 
 Thanks
-- Jiaxun
-
->
-> Please review.
->
-> Thanks
->
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
-> Jiaxun Yang (8):
->        MIPS: Probe toolchain support of -msym32
->        MIPS: Remove cc-option checks for -march=octeon
->        MIPS: Fallback CPU -march flag to ISA level if unsupported
->        MIPS: BMIPS: Drop unnecessary assembler flag
->        MIPS: Loongson64: test for -march=loongson3a cflag
->        MIPS: Limit MIPS_MT_SMP support by ISA reversion
->        MIPS: Implement microMIPS MT ASE helpers
->        MIPS: mipsregs: Set proper ISA level for virt extensions
->
->   arch/mips/Kconfig                  |   3 +-
->   arch/mips/Makefile                 |  46 ++++---
->   arch/mips/include/asm/asmmacro.h   |  22 ++--
->   arch/mips/include/asm/mipsmtregs.h | 256 ++++++++++++++++++++++---------------
->   arch/mips/include/asm/mipsregs.h   |  22 +++-
->   arch/mips/kernel/vpe-mt.c          |   4 +-
->   6 files changed, 211 insertions(+), 142 deletions(-)
-> ---
-> base-commit: 076d56d74f17e625b3d63cf4743b3d7d02180379
-> change-id: 20240202-llvm-msym32-6392d410f650
->
-> Best regards,
-
--- 
----
-Jiaxun Yang
-
+Hari
 
