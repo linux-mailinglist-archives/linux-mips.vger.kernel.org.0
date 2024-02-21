@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-1636-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1637-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04EC885E5DD
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 19:27:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A492C85E5F1
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 19:28:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4EC7285733
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 18:27:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FBAF285D5E
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 18:28:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E896586659;
-	Wed, 21 Feb 2024 18:24:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01F6A8594C;
+	Wed, 21 Feb 2024 18:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YCGN+mur"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="l8P/izgb"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 937E586646;
-	Wed, 21 Feb 2024 18:24:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1168F85276;
+	Wed, 21 Feb 2024 18:26:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708539848; cv=none; b=KvQ4BUqL6BxL2DtIaB00NIHclMpwRh5183A15BOWT7W++OIndQKY7tXRClSs4CZoZ6teh++zmRGcEHIX4B4k4NhdAWG88Y8JlvaOi1H2Zvhpf1U8mI8epag3e/FM8phNVQTsNXAdQe2k4J3is6p0xRRQOYf1pOoMxamqonbG020=
+	t=1708539990; cv=none; b=lV84an5gWAbMOL/14845S+pgHqwIezzWyEn9deOr/BK47rX+yLKXwYjFJ0mNcrvp2uf+TrPHFxwyFxpSVZJziP2fBM06sWsFIjpm0QYYApr/WMu9QjxlJ8qn1KgJiKUd2v/ReNT2NChrO9N/zmV1G4Md3lKudibQE2VNPi24ah4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708539848; c=relaxed/simple;
-	bh=yjb4Owa0Esi7QyGu8TKTmbHLEH85uNcdfz6jVPWgP+o=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=ToQQ0jt47aenWCKFPOp2ITlquAnXu93U8GtFdrqnDpQPSJzZN9qzjwk329msa56gf3rURmsKjePLE2/ZCF6gI6SOfIq5dJElrAvTSy0yLz9zyluzvUhdcmO70+c4dtmmOjxEl0Twmsu2sEVrajDejpMBsEeAshwPbk4Sfuokdl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YCGN+mur; arc=none smtp.client-ip=217.70.183.197
+	s=arc-20240116; t=1708539990; c=relaxed/simple;
+	bh=E7HIVIYw9PMi5QMBxw2IJg5p8jMgQRCuXUWltV6pQ0Q=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
+	 References:In-Reply-To; b=oXjppstHWYpHSlb6j9GY5343TKr2lHm31QB8IflzYVhAFMaNZ1blYePOLYcSFcjoF9pWFFVYdY9khXtrYkWtLizmolEhkpFd2gpAy10J/UDGj6RnFEsoDIf/w4YwRqEw7/ZLMYDUYTHG4aqQruDtNjGBSxfFNgeFHdmJgbHMQ94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=l8P/izgb; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 70F511C0007;
-	Wed, 21 Feb 2024 18:24:04 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 18ED6240004;
+	Wed, 21 Feb 2024 18:26:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1708539845;
+	t=1708539986;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=5/dwbAwEBir0o+55RLXnFG44DT+GaykMzVR3AlyYmPs=;
-	b=YCGN+murJd2C/ZBC6FdQnUQfJGiX0tNlkAb/yTsbPzSiyXYuJoxW36bTP+41DH5ePZ5q4X
-	cboFCHzlC1BWTRafCkI7gAudhlHK8kcfCyDTcFIbdAy0yWWLejrAIkV79latcoSX8i7FdQ
-	/2z4Gh+3erwUoob2uN8urE5EYsVXiwdl8Yn1wDn+JybzH5IFZRb1CsmS+QAwKntTyejluy
-	Wm+9WSmXDuJreX8JWIf8QPcl7YucCwDSo2WxbdNiuuppPiJ52nJIsPjba4mvIMu+6n9MbH
-	KDqZmjJ3xmIIpWYQwadVPJouSmeKNOVEmrdamsN67Hrn6cRbdJwPcRV1JIt4Tw==
+	bh=E7HIVIYw9PMi5QMBxw2IJg5p8jMgQRCuXUWltV6pQ0Q=;
+	b=l8P/izgb8ygf5ZaGOoHf0/UazlH9Gp0XRLBBIyfkeGYbShSxOdMHU8JkmxkCAjSqJdRfiP
+	nJ1HYErtWHkQAGVX7DpnvU6i1vs1UUUX3GlP7JyR8dCYoysmJ1iE4lT1VtoIOsfelMerYU
+	WhwtJtq8WKKk6OGpaUSF2TSAIHsnXUbqNdc2J68Yg5Cd5KtzJ+ony1rBTTgdwdQvKfhaAT
+	prfq5ilQgLQ4ngoaqjGrjG8jBKJ8dl2Tqt6amCbJ4KKPwdjaQPECSSRhDJ0f3H1ixbDXF8
+	yb9vBauxfMPbbNA26OuTJYnbhN4+JfCbhBKkTEHEq2p267rv4ormy6szldQuFQ==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,10 +53,8 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 21 Feb 2024 19:24:04 +0100
-Message-Id: <CZAYTSVONT90.2FE905FRDMZBV@bootlin.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v6 09/13] pinctrl: eyeq5: add platform driver
+Date: Wed, 21 Feb 2024 19:26:24 +0100
+Message-Id: <CZAYVLDVTRM8.2JLY1V2J7U7PB@bootlin.com>
 Cc: "Gregory CLEMENT" <gregory.clement@bootlin.com>, "Michael Turquette"
  <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Rob Herring"
  <robh+dt@kernel.org>, "Krzysztof Kozlowski"
@@ -68,55 +66,54 @@ Cc: "Gregory CLEMENT" <gregory.clement@bootlin.com>, "Michael Turquette"
  <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
  <linux-kernel@vger.kernel.org>, "Thomas Petazzoni"
  <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>, <linux-gpio@vger.kernel.org>
-To: "Linus Walleij" <linus.walleij@linaro.org>
+ <tawfik.bayouk@mobileye.com>, <linux-gpio@vger.kernel.org>, "Rob Herring"
+ <robh@kernel.org>
+To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, "Linus Walleij"
+ <linus.walleij@linaro.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v6 05/13] dt-bindings: pinctrl: mobileye,eyeq5-pinctrl:
+ add bindings
 X-Mailer: aerc 0.15.2
 References: <20240212-mbly-clk-v6-0-c46fa1f93839@bootlin.com>
- <20240212-mbly-clk-v6-9-c46fa1f93839@bootlin.com>
- <CACRpkdY5QgdtsHLs9QsVQ_zYRZBqdkCiWdkfTvNcw8WgyAfTbw@mail.gmail.com>
-In-Reply-To: <CACRpkdY5QgdtsHLs9QsVQ_zYRZBqdkCiWdkfTvNcw8WgyAfTbw@mail.gmail.com>
+ <20240212-mbly-clk-v6-5-c46fa1f93839@bootlin.com>
+ <CACRpkdYNe=2w10uB1mUgs2Lgg1TRiSF=bOa45OH5Lcz6+G6FEg@mail.gmail.com>
+ <CZAVY4NPY4H6.1KJI4UPRUM21C@bootlin.com>
+In-Reply-To: <CZAVY4NPY4H6.1KJI4UPRUM21C@bootlin.com>
 X-GND-Sasl: theo.lebrun@bootlin.com
 
 Hello,
 
-On Wed Feb 21, 2024 at 2:41 PM CET, Linus Walleij wrote:
-> On Mon, Feb 12, 2024 at 2:44=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@boo=
-tlin.com> wrote:
->
-> > Add the Mobileye EyeQ5 pin controller driver. It might grow to add late=
-r
-> > support of other platforms from Mobileye. It belongs to a syscon region
-> > called OLB.
+On Wed Feb 21, 2024 at 5:08 PM CET, Th=C3=A9o Lebrun wrote:
+> On Wed Feb 21, 2024 at 2:38 PM CET, Linus Walleij wrote:
+> > On Mon, Feb 12, 2024 at 2:44=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@b=
+ootlin.com> wrote:
+> > > Add dt-schema type bindings for the Mobileye EyeQ5 pin controller.
+> > >
+> > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 > >
-> > Existing pins and their function live statically in the driver code
-> > rather than in the devicetree, see compatible match data.
+> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 > >
-> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> > I tried to just apply the pin control patches to the pin control tree, =
+but I
+> > can't because of all collisions in MAINTAINERS.
+> >
+> > If you move all MAINTAINERS business to the SoC-wide patch I can
+> > apply the pin control stuff directly, but maybe you wanna keep the
+> > series together and merge on an all-or-nothing basis?
 >
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->
-> > +       ret =3D devm_pinctrl_register_and_init(dev, &pctrl->desc, pctrl=
-, &pctldev);
-> > +       if (ret) {
-> > +               dev_err(dev, "Failed registering pinctrl device: %d\n",=
- ret);
-> > +               return ret;
-> > +       }
-> > +
-> > +       ret =3D pinctrl_enable(pctldev);
-> > +       if (ret) {
-> > +               dev_err(dev, "Failed enabling pinctrl device: %d\n", re=
-t);
-> > +               return ret;
-> > +       }
->
-> You could use dev_err_probe() here which suppresses -EPROBE_DEFER
-> messages, but I'm not picky, just mentioning it.
+> I'm all in for making the series slimmer over time. MAINTAINERS changes
+> will be moved.
 
-Well, I've followed your suggestion in the v7 revision. Thanks!
+I did not have any existing patch to which to move the MAINTAINERS
+changes, so they were all put in a new patch. Hope this fits! Please
+tell me if something more appropriate could be done. See the patch in
+question:
 
-https://lore.kernel.org/lkml/20240221-mbly-clk-v7-0-31d4ce3630c3@bootlin.co=
-m/
+https://lore.kernel.org/lkml/20240221-mbly-clk-v7-10-31d4ce3630c3@bootlin.c=
+om/
+
+Thanks,
 
 --
 Th=C3=A9o Lebrun, Bootlin
