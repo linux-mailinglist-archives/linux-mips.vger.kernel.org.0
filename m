@@ -1,138 +1,119 @@
-Return-Path: <linux-mips+bounces-1598-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1599-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 426CC85D013
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 06:47:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 897EC85D74D
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 12:42:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9055AB23F13
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 05:47:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA30C1C2289A
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 11:42:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF38D3A1B8;
-	Wed, 21 Feb 2024 05:45:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="pDzL0pw8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C122747A6B;
+	Wed, 21 Feb 2024 11:41:20 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EB1539AF1;
-	Wed, 21 Feb 2024 05:45:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4632C4654D
+	for <linux-mips@vger.kernel.org>; Wed, 21 Feb 2024 11:41:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708494325; cv=none; b=Pi+d8wFtAoyBI0lQASROEmVXkmXkUuZ4NCwT+9Ls3/Z3DgtkfTG37aAfuKMv4Vq7ropvsKQKFWtXhWeNxVzTlkmMscvZ6Y/+JRj+nBBJg4ly2Sn8xly/L0UB92bzSQwqXDwENVmcH70tnPBrFvbnC2PjPWw2taE0C4qs6bi2a60=
+	t=1708515680; cv=none; b=PVmzbxvjtiRfnY4+0jjkeMUoS0h5jTrh+MsLTyddb2aNwElCLfiqSddEhK11+cAaiEs66PN8g0sVy8/Uhqxtthm1TB/mCYPG8luqdfQr/+fVAYwZ6KMs45Bei4ebgkWTf1iCI5e6kuWPGvtYCWYXcjjC4bkAyKwobrBs83FWjx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708494325; c=relaxed/simple;
-	bh=h5mKyikvtkjtjJX/pqzgBTSQZDslyVcAw/thIdZQv4o=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=H/NhXR/Fvf5UWzZ54fvgHaXwobx6Lw0vpotcWv2T+RmjQI3mFP4owr62QdCP1Ht3FJ75b/u169aGcjPNO61S99Y8GO0I2wILGHNTJKgIxgst2e+PpCTLSL7m5fkbwk7BWjjO39Mc8GMnnVesA3MHIWCYjqYNj9aNA8uqWkIdPvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=pDzL0pw8; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41L4lBp6000697;
-	Wed, 21 Feb 2024 05:45:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=b4Rc+JJTl0oXXyFyUimmcRSwrR8o6jLizaEBqMxTzFc=;
- b=pDzL0pw8rbCUMPoiRdCVZyKEnV6ScCiw5RtLJbOPPWJVM6LAN11L5R2EJlD6Ooa0AKiN
- O9CtaJwifSVi/sC7iQPdknvm9UZk1hCvsPSH8fj7dW5JqMplw+pjSA9EtPmLnycFvlxX
- gamkIBeZ3eEbqvuuXKYiGxP3G9aVB66z6dHx8d2+7/E9Jh6pCLKcQgOCHPW09zgm/i05
- w6gkswvr7m5EfyQmrAgs8HIKMuavQoQVaI/IKAQQRoMA97aTek/5NI/VZzvleGpP14Oe
- 59YYOXf9/0P94kEfukBAbpOmrS74g6CwFp3B/ufyVvu7q2gp4hZ2r0jVQwCVh67lvO9u Kw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wdaeuh2gg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Feb 2024 05:45:10 +0000
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41L5L576027185;
-	Wed, 21 Feb 2024 05:45:10 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wdaeuh2fu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Feb 2024 05:45:10 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41L4ZADY003620;
-	Wed, 21 Feb 2024 05:45:08 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wb74tndg5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Feb 2024 05:45:08 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41L5j5wm20054726
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 21 Feb 2024 05:45:07 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1EE7220043;
-	Wed, 21 Feb 2024 05:45:05 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DEE3820040;
-	Wed, 21 Feb 2024 05:45:01 +0000 (GMT)
-Received: from [9.203.115.195] (unknown [9.203.115.195])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 21 Feb 2024 05:45:01 +0000 (GMT)
-Message-ID: <559f2595-1477-4ef0-80e4-85ae8b426de7@linux.ibm.com>
-Date: Wed, 21 Feb 2024 11:15:00 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/14] Split crash out from kexec and clean up related
- config items
-Content-Language: en-US
-To: Baoquan He <bhe@redhat.com>
-Cc: linux-s390@vger.kernel.org, piliu@redhat.com, linux-sh@vger.kernel.org,
-        x86@kernel.org, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        ebiederm@xmission.com, loongarch@lists.linux.dev,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        akpm@linux-foundation.org, linux-arm-kernel@lists.infradead.org,
-        viro@zeniv.linux.org.uk
-References: <20240119145241.769622-1-bhe@redhat.com>
- <9101bb07-70f1-476c-bec9-ec67e9899744@linux.ibm.com>
- <Zb8D1ASrgX0qVm9z@MiWiFi-R3L-srv>
-From: Hari Bathini <hbathini@linux.ibm.com>
-In-Reply-To: <Zb8D1ASrgX0qVm9z@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: o0K0_e5Ni1T52UBm7wfmF8Us0d4xjhAq
-X-Proofpoint-ORIG-GUID: JVqEJMNWA1ME-iLPtPQHASXdnQfDLkYD
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1708515680; c=relaxed/simple;
+	bh=N88ZAVmfemoKev6jlYmIQMcDug/YAdpNBEedT/wfwl8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=G+v9folwElM7Yg7yhZwq00rCCfy9iUWgq9e0tp5cUfV7PCneYPTShLaoGuI6rYbFauYHiC9r1X/tjirhPkPePmF4zZROTFmrtjcD7D0AOQXcYcbEi05jyANfgg0OXbzWjOAZfy3+HfGs0NDEuXxZZeLJwdUsxnBTTmP67FsQuTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1rckyI-0002lV-Sp; Wed, 21 Feb 2024 12:41:06 +0100
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1rckyE-0021v1-Of; Wed, 21 Feb 2024 12:41:02 +0100
+Received: from pza by lupine with local (Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1rckyE-00061g-2E;
+	Wed, 21 Feb 2024 12:41:02 +0100
+Message-ID: <f2e3d662e92b76e43b89a3c99669c3dadb2176b5.camel@pengutronix.de>
+Subject: Re: [PATCH 05/23] gpio: nomadik: extract GPIO platform driver from
+ drivers/pinctrl/nomadik/
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: =?ISO-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>, Linus Walleij
+ <linus.walleij@linaro.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
+ <conor+dt@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-mips@vger.kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Date: Wed, 21 Feb 2024 12:41:02 +0100
+In-Reply-To: <CAMRc=Me-oEx9S0w=XhwC4MzV9uzV0o0HnWBfNSstcqg5jpXyZg@mail.gmail.com>
+References: <20240214-mbly-gpio-v1-0-f88c0ccf372b@bootlin.com>
+	 <20240214-mbly-gpio-v1-5-f88c0ccf372b@bootlin.com>
+	 <e031566a85ae0da0ee71dffba5d87c6414ef83e1.camel@pengutronix.de>
+	 <CAMRc=Me-oEx9S0w=XhwC4MzV9uzV0o0HnWBfNSstcqg5jpXyZg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-20_06,2024-02-20_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 clxscore=1011 phishscore=0 mlxlogscore=999
- suspectscore=0 impostorscore=0 spamscore=0 bulkscore=0 malwarescore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402210041
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 
-Hi Baoquan,
+Hi Bartosz,
 
-On 04/02/24 8:56 am, Baoquan He wrote:
->>> Hope Hari and Pingfan can help have a look, see if
->>> it's doable. Now, I make it either have both kexec and crash enabled, or
->>> disable both of them altogether.
->>
->> Sure. I will take a closer look...
-> Thanks a lot. Please feel free to post patches to make that, or I can do
-> it with your support or suggestion.
+On Mo, 2024-02-19 at 16:33 +0100, Bartosz Golaszewski wrote:
+> On Thu, Feb 15, 2024 at 11:03=E2=80=AFAM Philipp Zabel <p.zabel@pengutron=
+ix.de> wrote:
+> >=20
+> > On Mi, 2024-02-14 at 17:23 +0100, Th=C3=A9o Lebrun wrote:
+> > [...]
+> > > diff --git a/drivers/gpio/gpio-nomadik.c b/drivers/gpio/gpio-nomadik.=
+c
+> > > new file mode 100644
+> > > index 000000000000..e39477e1a58f
+> > > --- /dev/null
+> > > +++ b/drivers/gpio/gpio-nomadik.c
+> > > @@ -0,0 +1,660 @@
+> > [...]
+> > > +static int nmk_gpio_probe(struct platform_device *dev)
+> > > +{
+> > [...]
+> > > +     ret =3D gpiochip_add_data(chip, nmk_chip);
+> >=20
+> > Use devm_gpiochip_add_data() to cleanup on unbind, before nmk_chip goes
+> > away. Or make the driver un-unbindable via suppress_bind_attrs. In that
+> > case you could drop devm_ prefixes everywhere for consistency.
+> >=20
+>=20
+> No! Why? What about error paths in probe() where you want to undo everyth=
+ing?
 
-Tested your changes and on top of these changes, came up with the below
-changes to get it working for powerpc:
+Brain fog moment. I was triggered by the mixture of devm_ and non-devm_
+calls and jumped to the wrong conclusion.
 
- 
-https://lore.kernel.org/all/20240213113150.1148276-1-hbathini@linux.ibm.com/
+Yes, keeping devm_ for error cleanup is of course correct, and with
+suppress_bind_attrs it'd even be ok to use non-devm_
+gpiochip_add_data(), as long as there can be no error return
+afterwards.
 
-Please take a look.
-
-Thanks
-Hari
+regards
+Philipp
 
