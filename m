@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-1615-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1616-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A778F85E2EA
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 17:20:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49AF885E2F7
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 17:22:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6152C284109
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 16:20:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AAE16B21FE7
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 16:22:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 482518172F;
-	Wed, 21 Feb 2024 16:20:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5593F81740;
+	Wed, 21 Feb 2024 16:22:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ov4Qzcww"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ojElP1EM"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CB8F3A1A2;
-	Wed, 21 Feb 2024 16:20:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC8313A1A2;
+	Wed, 21 Feb 2024 16:22:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708532413; cv=none; b=oe51hKbJNcmUHyNtYTdBHRyVJ2AJz07cFAEBTkTkYGKfAnky4o2pM6wFUSpZ2VnJW46GxRo3TKLo5sFVEKi5PHCGZvnRQscuYqsQepNCFE3z9RVPMRH8hGNctxvUu3eTc1Wa+wLN5AhvX9PKM/Lg3M4yoBaIl0cc46dj0wMaN44=
+	t=1708532550; cv=none; b=X/l1Pv2VT92p+21zkp92TYZ01Jy93ScoeFUuCWhOVAqKFM+gFBa/XJ60NgSXEW9P+xEHWVs2LFCjkKKQSrU7T9b1Cp1tZcegZaaQ2mRoY9bGCTxca0YdtzFpdUuX4Jrmfb3L3OBY+c/2coiISIYcsx+uCvyLEfAn5iGDChEyqJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708532413; c=relaxed/simple;
-	bh=Jv77BKBMeiG/2ccQEV5Y0hNVCO0qasm00dKSVctkfdE=;
+	s=arc-20240116; t=1708532550; c=relaxed/simple;
+	bh=kiiMrG6mntXHh6iDBqWOevebD5aCEfw6RRIXVCezYaY=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=g8t9ZYMgQWwRaPgY33kGFInukqiSZ04tNeBQsQuYEUIF8hgaqJ5VXAchYaxpC81fhNRKSf8p/FhzllzLe4b2izCIEK54J8yH7o+YmD6LxXAE5DIXCHIJ2XUEFP+YqzTe8PytH8kyOIyMEt1aeYX5fMSc8Brub5zicE67B3Fwqas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ov4Qzcww; arc=none smtp.client-ip=217.70.183.199
+	 References:In-Reply-To; b=iLTXi/35hNx4AMb/4oc5HJrwNd2xFtC5WS2971tbS4L0CZPuT7dWZiJ668NyZFOikkIV/nVtpVpAfAFGWFG9pIPg3CAKgeC01oLTxNiwrIRKYYWZEFcY+Zk/QNZdRHUR7s3i3A0gY2iURosDy4Q2Au4hqK9k+nBeB4rUQVJAxuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ojElP1EM; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8CEECFF80B;
-	Wed, 21 Feb 2024 16:20:07 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3F42F20009;
+	Wed, 21 Feb 2024 16:22:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1708532408;
+	t=1708532546;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=/iZaP2iqfKmtJsxgwYrLbSeh4l2Ui6y1YNvqMc6YgDU=;
-	b=Ov4QzcwwK74DcmYrB3MfqOZ4uASvFg6MD+s8zyECgBZLyYUP9f2G/+dpfIe1WEggyXFgL0
-	71rl6N7MPYeBf2tGwxmVgSbLQUFCWBZotLI7/7DsWGgUyRCqJ6VLgvBFXKXOnphqXI+3Rj
-	oFQh77q/QB0NozZA6BsOXBsfWAIcWLg0NGjPuleJOcuYr9JB0d9w+QvZGEjXpKns+CXK1G
-	4Lpo3FEOAHE9kpnb5xit/9HYCZdb2kco/HJGX+Y5sM7J6dGbAkoo/kXmaZeety1iS5p8hn
-	PtW/GtuQi96SeBzKqJUN1OVUGkaKA6fS38pmPEbn2udjs5yeAMPZZEWif7BXfw==
+	bh=oYNF6aBAFXnBwLIFV8DYWQPUG0yyBkNdFICAoB9FzHE=;
+	b=ojElP1EMF86PODLDP9T4uBAGLfHZ1XkMqIJ3TaYZ+/sPvFdYH/gFLxXGAxPKV8NptsQnTm
+	ne9p4VweZ0loVzt0Zxn9ZiI6AoEWxplApr8d3wULM3fpKnDLDrVwznE0qzkPi+DL97wyqp
+	SDdPRyCGzk78gi88IJEK4ihGSwIVbuwsnSGU3Y/6bpNZIA9vxndaJXfUHFGVMvVSR2cKcU
+	R7WBtOEJywKiZMahVoID7HQWx4ScEF838i1TO9vi3B2+kRwsFRNIMdgbFNrlGU2JJER12O
+	kE4NnVSnabdhLkqzuN/FD7goeVkrZnRuu5J6waTx33AtumU8mre+3lTeJCobcQ==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,10 +53,9 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 21 Feb 2024 17:20:03 +0100
-Message-Id: <CZAW6UTMON6K.34LW7FDGNO1XC@bootlin.com>
-Subject: Re: [PATCH 05/23] gpio: nomadik: extract GPIO platform driver from
- drivers/pinctrl/nomadik/
+Date: Wed, 21 Feb 2024 17:22:25 +0100
+Message-Id: <CZAW8NNS98TB.18RASC15YIRNB@bootlin.com>
+Subject: Re: [PATCH 18/23] gpio: nomadik: support mobileye,eyeq5-gpio
 Cc: "Bartosz Golaszewski" <brgl@bgdev.pl>, "Rob Herring"
  <robh+dt@kernel.org>, "Krzysztof Kozlowski"
  <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
@@ -72,42 +71,44 @@ To: "Linus Walleij" <linus.walleij@linaro.org>
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
 X-Mailer: aerc 0.15.2
 References: <20240214-mbly-gpio-v1-0-f88c0ccf372b@bootlin.com>
- <20240214-mbly-gpio-v1-5-f88c0ccf372b@bootlin.com>
- <CACRpkdaSMJBFrmbTu+C1Ls8HkLH4FZsAQ6t7dC76+sVTXXHEyw@mail.gmail.com>
-In-Reply-To: <CACRpkdaSMJBFrmbTu+C1Ls8HkLH4FZsAQ6t7dC76+sVTXXHEyw@mail.gmail.com>
+ <20240214-mbly-gpio-v1-18-f88c0ccf372b@bootlin.com>
+ <CACRpkdYb4V5EouMBYRRrZvLT1v6zKEtjHGPAs5orDKoo6dz6nA@mail.gmail.com>
+In-Reply-To: <CACRpkdYb4V5EouMBYRRrZvLT1v6zKEtjHGPAs5orDKoo6dz6nA@mail.gmail.com>
 X-GND-Sasl: theo.lebrun@bootlin.com
 
 Hello,
 
-On Wed Feb 21, 2024 at 3:37 PM CET, Linus Walleij wrote:
-> just a quick note here:
->
+On Wed Feb 21, 2024 at 2:45 PM CET, Linus Walleij wrote:
 > On Wed, Feb 14, 2024 at 5:24=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@boo=
 tlin.com> wrote:
+> > We create a custom compatible for the STA2X11 IP block as integrated
+> > into the Mobileye EyeQ5 platform. Its wake and alternate functions have
+> > been disabled, we want to avoid touching those registers.
+> >
+> > We both do: (1) early return in functions that do not support the
+> > platform, but with warnings, and (2) avoid calling those functions in
+> > the first place.
+> >
+> > We ensure that pinctrl-nomadik is not used with this STA2X11 variant.
+> >
+> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> (...)
+> >+       bool quirk_mbly;
 >
-> > +config GPIO_NOMADIK
-> > +       bool "Nomadik GPIO driver"
-> > +       depends on ARCH_U8500 || ARCH_NOMADIK || COMPILE_TEST
-> > +       select OF_GPIO
-> > +       select GPIOLIB_IRQCHIP
+> Compulsive abbreviation? I would just rename it:
 >
-> Could you add:
+> bool is_mobileye_soc;
 >
-> default PINCTRL_NOMADIK
+> Nevermind the long name, it makes it crystal clear for readers
+> what is going on. (Rusty Russell's API naming guidelines.)
 >
-> so it is turned on by default when we have that, since they are jitted to=
-gether
-> so closely.
+> With that changed:
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Would that bring something more than what is currently present? I've set
-PINCTRL_NOMADIK to select GPIO_NOMADIK. This means that if
-PINCTRL_NOMADIK=3Dy then GPIO_NOMADIK=3Dy. If PINCTRL_NOMADIK=3Dn then
-GPIO_NOMADIK is free to be whatever.
+Makes complete sense. This is old heritage from my initial prototype
+that should have long gone disappeared.
 
-This behavior sounds similar to what would happen if adding "default
-PINCTRL_NOMADIK".
-
-Thanks,
+Thanks for your feedback & reviews!
 
 --
 Th=C3=A9o Lebrun, Bootlin
