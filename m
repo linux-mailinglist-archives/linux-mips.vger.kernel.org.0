@@ -1,59 +1,61 @@
-Return-Path: <linux-mips+bounces-1660-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1661-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E3A885E8D4
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 21:12:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 957A185E94F
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 21:58:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 068F928343E
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 20:12:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9DBFEB22EFE
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Feb 2024 20:57:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 490748662E;
-	Wed, 21 Feb 2024 20:12:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EF5886636;
+	Wed, 21 Feb 2024 20:57:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="MuEJuTRk"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Bbd9ALrc"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA58F83CB2;
-	Wed, 21 Feb 2024 20:12:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C42613A1AF;
+	Wed, 21 Feb 2024 20:57:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708546327; cv=none; b=HEiWtio1ZWJFPDS+jl/djilot5SPrZseLh/yibo60+apjxgPsE6kK452UwzEZh3AOkMEUBfQpwG0LOpz3stPXkmloM69emHFcrgCze9Y7YxZN/AE9Za0uimPZFgQ+2GAtjA37lz0OE9/4Ztuogz9fxClcQp4VUEJiKMnCLbCeXI=
+	t=1708549074; cv=none; b=nybWr0hiArKPTSQEgvxRv9Aq9En7hrW/2T+3kJ3ukReE26g8WFJfgcYZsCpcGRn77kxx5gSoZiHTGUIFplksjNBLFZLBQjvULoEeeS9mk7Nm1A2KXdar/2P8IRcrAChfb4fBvIs0UuEYuiedVKrbUyBX0uC4vvmIaBBMAefaFX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708546327; c=relaxed/simple;
-	bh=KKWjsYrhxbzP+pEV3+kQm3VuOC8L+ibneC+FX980NRc=;
+	s=arc-20240116; t=1708549074; c=relaxed/simple;
+	bh=cQNUlLy8aiGRIYPC4jZV2h79/t7uLaYDp/ZsuaE++9Y=;
 	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=ngagm93nxqAK4bNBqShcroak6aJkuB4DHRfMi+TGBw3zPflmgo7sjy9C9ZoqBr6yQNMUas89W9KXapM8cE78QXQ0LRRBRC6JK3ZxejyD9DCm4D0kn2fME7Dr7ttEsTIqwszUPIH1lYKEtsvtnjHEEZDg6v4A7fp+EBBxJgH/Td0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=MuEJuTRk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD0F2C433F1;
-	Wed, 21 Feb 2024 20:12:05 +0000 (UTC)
+	 Mime-Version:Content-Type; b=RD/0mynJsdJweaXVw9sZCxyvQ+bYrGzNlfX59Pro2+M7eFu2GpCOBAx8VjIHWeAQIPjmdWjWF/0EF2qacx4SET4Ya2z4k5TNhHcEPrljDt0FKd7AdcchbAOeqobVaDYVNLA8p2zg7ofVng0jNURX81YLOMktV8Lw0Wki6gbmHsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Bbd9ALrc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92CEFC433F1;
+	Wed, 21 Feb 2024 20:57:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1708546326;
-	bh=KKWjsYrhxbzP+pEV3+kQm3VuOC8L+ibneC+FX980NRc=;
+	s=korg; t=1708549073;
+	bh=cQNUlLy8aiGRIYPC4jZV2h79/t7uLaYDp/ZsuaE++9Y=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=MuEJuTRkJMRKFh3mqp6fOZFvfpTamLVq2EoDhR5mfha94P8FQDRrLDaKnE+k3kAQZ
-	 D+GTp72il9gGReGfi9Ecu5EvwmjwjIQjWeb5Sl3WDVdyp0MgKQCiHumttOefNnW4dZ
-	 V8FEBJZwbop8/DmgOiy+uG0GbLTy+1K4MhvY4Dg8=
-Date: Wed, 21 Feb 2024 12:12:05 -0800
+	b=Bbd9ALrcftdB4hiAFAbv+r3I0ERbgznFbhuh6MxPmx8jG8xGLzeq23eo9RRwwfYK+
+	 iZCi2iMyB0NelsBsnf7/OypvyrQWmMazP7HA7Jbw0rZNQMouPMIBGFEDM881CMWNgk
+	 2e1ZuX9I7suwwEUiqPo2BxD0oszsroHPkKn6qHbQ=
+Date: Wed, 21 Feb 2024 12:57:52 -0800
 From: Andrew Morton <akpm@linux-foundation.org>
-To: Sourabh Jain <sourabhjain@linux.ibm.com>
-Cc: Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org,
- linux-s390@vger.kernel.org, piliu@redhat.com, linux-sh@vger.kernel.org,
- x86@kernel.org, kexec@lists.infradead.org, linux-mips@vger.kernel.org,
- ebiederm@xmission.com, loongarch@lists.linux.dev, hbathini@linux.ibm.com,
- linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
- linux-arm-kernel@lists.infradead.org, viro@zeniv.linux.org.uk
-Subject: Re: [PATCH v2 01/14] kexec: split crashkernel reservation code out
- from crash_core.c
-Message-Id: <20240221121205.00202fab8c1732bc433a845f@linux-foundation.org>
-In-Reply-To: <e1bd53c6-ad9a-46d5-9f49-ecdd64d98f61@linux.ibm.com>
+To: Hari Bathini <hbathini@linux.ibm.com>
+Cc: Baoquan He <bhe@redhat.com>, linux-s390@vger.kernel.org,
+ piliu@redhat.com, linux-sh@vger.kernel.org, x86@kernel.org,
+ kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, ebiederm@xmission.com,
+ loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+ viro@zeniv.linux.org.uk
+Subject: Re: [PATCH v2 00/14] Split crash out from kexec and clean up
+ related config items
+Message-Id: <20240221125752.36fbfe9c307496313198b60f@linux-foundation.org>
+In-Reply-To: <559f2595-1477-4ef0-80e4-85ae8b426de7@linux.ibm.com>
 References: <20240119145241.769622-1-bhe@redhat.com>
-	<20240119145241.769622-2-bhe@redhat.com>
-	<e1bd53c6-ad9a-46d5-9f49-ecdd64d98f61@linux.ibm.com>
+	<9101bb07-70f1-476c-bec9-ec67e9899744@linux.ibm.com>
+	<Zb8D1ASrgX0qVm9z@MiWiFi-R3L-srv>
+	<559f2595-1477-4ef0-80e4-85ae8b426de7@linux.ibm.com>
 X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -64,14 +66,28 @@ Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Wed, 21 Feb 2024 22:59:47 +0530 Sourabh Jain <sourabhjain@linux.ibm.com> wrote:
+On Wed, 21 Feb 2024 11:15:00 +0530 Hari Bathini <hbathini@linux.ibm.com> wrote:
 
-> >   config ARCH_HAS_GENERIC_CRASHKERNEL_RESERVATION
-> > -	def_bool CRASH_CORE
-> > +	def_bool CRASH_RESEERVE
+> On 04/02/24 8:56 am, Baoquan He wrote:
+> >>> Hope Hari and Pingfan can help have a look, see if
+> >>> it's doable. Now, I make it either have both kexec and crash enabled, or
+> >>> disable both of them altogether.
+> >>
+> >> Sure. I will take a closer look...
+> > Thanks a lot. Please feel free to post patches to make that, or I can do
+> > it with your support or suggestion.
 > 
-> %s/CRASH_RESEERVE/CRASH_RESERVE? 
+> Tested your changes and on top of these changes, came up with the below
+> changes to get it working for powerpc:
+> 
+>  
+> https://lore.kernel.org/all/20240213113150.1148276-1-hbathini@linux.ibm.com/
 
-Yes, thanks, this has been addressed in a followon fixup patch
-in the mm.git tree.
+So can we take it that you're OK with Baoquan's series as-is?
+
+Baoquan, do you believe the patches in mm-unstable are ready for moving
+into mm-stable in preparation for an upstream merge?
+
+
+
 
