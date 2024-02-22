@@ -1,246 +1,310 @@
-Return-Path: <linux-mips+bounces-1662-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1663-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5881C85EE1D
-	for <lists+linux-mips@lfdr.de>; Thu, 22 Feb 2024 01:37:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0AF485F0AF
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Feb 2024 06:06:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C1101C214AD
-	for <lists+linux-mips@lfdr.de>; Thu, 22 Feb 2024 00:37:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 20504284EE7
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Feb 2024 05:06:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9C7010A23;
-	Thu, 22 Feb 2024 00:37:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="CmmEc1xT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC0097462;
+	Thu, 22 Feb 2024 05:06:18 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+Received: from fgw23-7.mail.saunalahti.fi (fgw23-7.mail.saunalahti.fi [62.142.5.84])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DBC32919;
-	Thu, 22 Feb 2024 00:37:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1849763CB
+	for <linux-mips@vger.kernel.org>; Thu, 22 Feb 2024 05:06:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708562238; cv=none; b=S3Jl15s4L4uajISXtCyNOYCwA/6rAnWW7ulWhvr9HOMklX2utFRIc7qm1s4YfCSkAkyscuzI8w7lAT3Kb6Jfx52dUN4Db9JgyoAn4h4Y+uc2HssG0Eh/qnUQMXQpDgxjxfbhpzE3glILWb9BpVSpDV/ho/npazzuxTgu9sUrwzY=
+	t=1708578378; cv=none; b=qoBaVJFN/04w4ZxtddSPd/1rdCZx+PhZWs/qMTK9bERKdNca+vQmiOU0jYOVHr3waOmWUnTwcQKM55zrF9MU2pEDTYAk2+rrGeEfA/2lqe/nLKmZy+1HnTzl23UpVDYfSSYcBtkgz9MZVVI5odQLaJH7wdvmRDNO3IQ4bzffOKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708562238; c=relaxed/simple;
-	bh=72568EdCiYr/Ee53OvndWrLqSBEKVDxonZRvv5ly7cw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VMxA0w681aOYKKawmrIcJ87DOVmh/QVBp5QRpWHGZ1u3KbXEr/DmNO+Ui3D3OnEdPRSzBgh/eBqort9M1m+4q84412SsddxO1NgvX/0JyKbkmkpSlQL5EWJt/LBrNVIlogzVRrocv6DoP0l7AQYXh51Gts6apRZThmRDzbOx+HQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=CmmEc1xT; arc=none smtp.client-ip=203.29.241.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
-Received: from [192.168.68.112] (ppp118-210-142-230.adl-adc-lon-bras33.tpg.internode.on.net [118.210.142.230])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 6CD8920075;
-	Thu, 22 Feb 2024 08:37:08 +0800 (AWST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1708562233;
-	bh=Tp6DArOflTs0IxRQ/vtC4XqHHWEiEpMTXjecUx41ktE=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=CmmEc1xTLF/47r0FbvgXVMfG/s0UF5gFIXu0OQi+0aGHqpxv9o4fLPpjZt7unPgk9
-	 QjjYzFS9F9NpwaiyRJkfTCCRy0r3ebcPw2NdJ8midm71ShT/oFgQSugG5pHldiZrSs
-	 448/E0cB5PG1P5uUYW1Pwnbi4NNBPIIb1675kLOttyiSU0tqQX9EUX8xLksNBpvRhH
-	 5qzDXeTHTKEMj8zyLbfIqqCqFcp3m/NPW8611Gz89SxaUgJ88DWfSENa00b6U+CJg0
-	 FUP3rEezZXwhY+mbtulKfbHhMULDahRTmP623sTfJ2br6vHr/7djx5soQ3xxdeAR+b
-	 NVDF2j7A4rCsw==
-Message-ID: <0a828f2c50de712940fb9a881702ac1678a35b7c.camel@codeconstruct.com.au>
-Subject: Re: [PATCH v1 10/14] serial: 8250_of: Switch to use
- uart_read_port_properties()
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Greg Kroah-Hartman
-	 <gregkh@linuxfoundation.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
-	linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
-	linux-tegra@vger.kernel.org
-Cc: Jiri Slaby <jirislaby@kernel.org>, Joel Stanley <joel@jms.id.au>, 
- Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,  Broadcom
- internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Al
- Cooper <alcooperx@gmail.com>,  Ilpo =?ISO-8859-1?Q?J=E4rvinen?=
- <ilpo.jarvinen@linux.intel.com>, Paul Cercueil <paul@crapouillou.net>, 
- Vladimir Zapolskiy <vz@mleia.com>, Thierry Reding
- <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>,
- Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,  Masami Hiramatsu
- <mhiramat@kernel.org>, Andi Shyti <andi.shyti@linux.intel.com>
-Date: Thu, 22 Feb 2024 11:07:05 +1030
-In-Reply-To: <20240221183442.4124354-11-andriy.shevchenko@linux.intel.com>
-References: <20240221183442.4124354-1-andriy.shevchenko@linux.intel.com>
-	 <20240221183442.4124354-11-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1708578378; c=relaxed/simple;
+	bh=alxK2KaxgdWsvowDAx8OiT6EkAp1UFnFvDiyNjnUzPQ=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KAknyy8fN5kta6oxJplfW4Ty4+JeiuWkpDUk5D5HjY4U5Uqsxl+fKWPZ0a8UIqauWAYr5U3eRr3htGG7qmS5Nv1zs+5cojO0mlmKMeG+L3TUXA2vG/dUcQq4P3gXLjAPThOThQU3zwRgSzs4eKt1Boa+86Umz0VqI6PGRXVxQrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
+Received: from localhost (88-113-26-217.elisa-laajakaista.fi [88.113.26.217])
+	by fgw23.mail.saunalahti.fi (Halon) with ESMTP
+	id 195bf9dd-d140-11ee-b972-005056bdfda7;
+	Thu, 22 Feb 2024 07:06:13 +0200 (EET)
+From: andy.shevchenko@gmail.com
+Date: Thu, 22 Feb 2024 07:06:12 +0200
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v7 07/14] clk: eyeq5: add platform driver, and init
+ routine at of_clk_init()
+Message-ID: <ZdbWRFyq42XFdp9E@surfacebook.localdomain>
+References: <20240221-mbly-clk-v7-0-31d4ce3630c3@bootlin.com>
+ <20240221-mbly-clk-v7-7-31d4ce3630c3@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240221-mbly-clk-v7-7-31d4ce3630c3@bootlin.com>
 
-On Wed, 2024-02-21 at 20:31 +0200, Andy Shevchenko wrote:
-> Since we have now a common helper to read port properties
-> use it instead of sparse home grown solution.
+Wed, Feb 21, 2024 at 07:22:15PM +0100, Théo Lebrun kirjoitti:
+> Add the Mobileye EyeQ5 clock controller driver. It might grow to add
+> support for other platforms from Mobileye.
+> 
+> It handles 10 read-only PLLs derived from the main crystal on board. It
+> exposes a table-based divider clock used for OSPI. Other platform
+> clocks are not configurable and therefore kept as fixed-factor
+> devicetree nodes.
+> 
+> Two PLLs are required early on and are therefore registered at
+> of_clk_init(). Those are pll-cpu for the GIC timer and pll-per for the
+> UARTs.
 
-I did some brief testing of the series for the Aspeed machines under
-qemu, building them on top of v6.8-rc5:
+...
 
-export ARCH=3Darm
-export CROSS_COMPILE=3Darm-linux-gnueabihf-
-make aspeed_g5_defconfig
-make -j$(nproc)
-qemu-system-arm -M rainier-bmc -nographic -no-reboot -kernel arch/arm/boot/=
-zImage -dtb arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-rainier.dtb -initrd ...
+> +config COMMON_CLK_EYEQ5
+> +	bool "Clock driver for the Mobileye EyeQ5 platform"
 
-I got an oops during boot, which bisected to this change:
+> +	depends on OF
 
-[    0.314946] 8<--- cut here ---
-[    0.315051] Unable to handle kernel paging request at virtual address fe=
-e00000 when write
-[    0.315201] [fee00000] *pgd=3D00000000
-[    0.315593] Internal error: Oops: 805 [#1] SMP ARM
-[    0.315847] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.8.0-rc5-00010-g8=
-a2c8fe174cf #13
-[    0.316071] Hardware name: Generic DT based system
-[    0.316216] PC is at io_serial_out+0x18/0x20
-[    0.316677] LR is at serial8250_do_set_mctrl+0x54/0x90
-[    0.316781] pc : [<8060eea8>]    lr : [<806108b0>]    psr: 40000093
-[    0.316891] sp : bf815b08  ip : 00000000  fp : 00000026
-[    0.316987] r10: 81698240  r9 : 40000013  r8 : 81cae600
-[    0.317087] r7 : 81d7d1a8  r6 : 81d7d110  r5 : 81008158  r4 : 00000000
-[    0.317197] r3 : fee00000  r2 : 00000000  r1 : 00000004  r0 : 81008158
-[    0.317350] Flags: nZcv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segmen=
-t none
-[    0.317471] Control: 10c5387d  Table: 8000406a  DAC: 00000051
-[    0.317593] Register r0 information: non-slab/vmalloc memory
-[    0.317892] Register r1 information: non-paged memory
-[    0.317996] Register r2 information: NULL pointer
-[    0.318080] Register r3 information: vmalloc memory
-[    0.318176] Register r4 information: NULL pointer
-[    0.318264] Register r5 information: non-slab/vmalloc memory
-[    0.318362] Register r6 information: slab kmalloc-2k start 81d7d000 poin=
-ter offset 272 size 2048
-[    0.318701] Register r7 information: slab kmalloc-2k start 81d7d000 poin=
-ter offset 424 size 2048
-[    0.318860] Register r8 information: slab kmalloc-512 start 81cae600 poi=
-nter offset 0 size 512
-[    0.319095] Register r9 information: non-paged memory
-[    0.319194] Register r10 information: slab kmalloc-64 start 81698240 poi=
-nter offset 0 size 64
-[    0.319266] Freeing initrd memory: 13684K
-[    0.319384] Register r11 information: non-paged memory
-[    0.319593] Register r12 information: NULL pointer
-[    0.319703] Process swapper/0 (pid: 1, stack limit =3D 0x(ptrval))
-[    0.320006] Stack: (0xbf815b08 to 0xbf816000)
-[    0.320157] 5b00:                   81008158 80f85a88 81d7d110 8060cb78 =
-bf815b34 00000026
-[    0.320313] 5b20: 0016e360 80cba110 81e65e80 80cfcdf4 00000003 204f2f49 =
-00307830 00000000
-[    0.320457] 5b40: 00000000 00000000 00000000 00000000 00000000 00000000 =
-00000000 00000000
-[    0.320600] 5b60: 00000000 00000000 00000000 00000000 00000000 ed1677db =
-81008158 81008158
-[    0.320744] 5b80: bf815c00 81e5c5c0 81008304 81007f58 bf815d2c bf815dac =
-00000000 8060e1f4
-[    0.320890] 5ba0: 80cba4ec 8081e2c4 bf815dfc 00000001 00000000 81cf5400 =
-81cf5410 81e65e00
-[    0.321030] 5bc0: 00000004 00000000 00000001 80616538 00000000 00000000 =
-00000000 00000000
-[    0.321176] 5be0: 1e784000 1e784fff bd7c1a94 00000200 00000000 00000000 =
-00000000 00000000
-[    0.321325] 5c00: 00000000 00000000 00000000 00000000 00000000 00000000 =
-00000000 00000000
-[    0.321469] 5c20: 00000000 00000000 00000000 00000000 00000000 00000000 =
-00000000 00000000
-[    0.321624] 5c40: 00000000 00000000 8060fb34 00000000 00000000 00000000 =
-00000026 00000000
-[    0.321777] 5c60: 016e3600 00000000 00000200 00000000 00000000 00000000 =
-00000000 00000000
-[    0.321920] 5c80: 00000000 00000000 00000000 00000000 00000000 00000000 =
-00000000 00000000
-[    0.322063] 5ca0: 00000000 00000000 b9000040 00000000 00000000 00000000 =
-00000000 00000000
-[    0.322204] 5cc0: 00000004 00000000 00000000 00000004 00000000 1e784000 =
-00001000 81cf5410
-[    0.322347] 5ce0: 00000000 00000000 00000000 00000000 00000000 00000000 =
-00000000 00000000
-[    0.322492] 5d00: 00000000 00000000 00000000 00000000 00000000 00000000 =
-00000000 00000037
-[    0.322640] 5d20: 00000001 00000001 00000000 00000000 00000000 00000000 =
-00000000 00000000
-[    0.322800] 5d40: 00000000 00000000 00000000 00000000 00000000 00000000 =
-00000000 00000000
-[    0.322957] 5d60: 00000000 00000000 00000000 00000000 00000000 00000000 =
-00000000 00000000
-[    0.323114] 5d80: 00000000 00000000 00000000 00000000 00000000 00000000 =
-00000000 00000000
-[    0.323271] 5da0: 00000000 00000000 00000000 00000000 00000000 00000000 =
-00000000 00000000
-[    0.323422] 5dc0: 00000000 00000000 806111c8 80610eb4 00000000 00000000 =
-00000000 00000000
-[    0.323573] 5de0: 00000000 00000000 00000000 00000000 00000000 00000000 =
-00000000 00000000
-[    0.323723] 5e00: 00000000 ed1677db 00000000 81cf5410 80f85cf8 00000000 =
-00000000 81e5c638
-[    0.323878] 5e20: 80e66f48 8067f888 81cf5410 00000000 80f85cf8 00000000 =
-00000000 8067ca08
-[    0.324029] 5e40: 81cf5410 00000000 81cf5410 81cf5410 80f85cf8 81cf5454 =
-81cf5410 8067cda8
-[    0.324181] 5e60: 60000013 81e5c638 81008d4c 81008d54 81cf5454 81cf5410 =
-00000000 8067cf3c
-[    0.324337] 5e80: 81cf5410 80f85cf8 81cf5454 814cec00 00000000 8067d21c =
-00000000 80f85cf8
-[    0.324494] 5ea0: 8067d11c 8067aa04 814cec00 814cec58 816a4bb4 ed1677db =
-814cec00 81e5c600
-[    0.324646] 5ec0: 00000000 80f85cf8 814cec00 8067bc6c 80cba524 00000000 =
-00000006 80f85cf8
-[    0.324795] 5ee0: 8158b480 00000006 bf815f14 00000000 80d19438 8067e284 =
-80e221c4 8158b480
-[    0.324945] 5f00: 00000006 80e01414 80d2d3b0 000000db 8173ad17 00000000 =
-00000000 00000000
-[    0.325096] 5f20: 00000000 00000000 00000000 00000000 00000000 00000000 =
-00000000 00000000
-[    0.325247] 5f40: 00000000 00000000 00000000 00000000 00000000 ed1677db =
-8173ad00 00000020
-[    0.325403] 5f60: 00000006 80e3b83c 80e3b860 80e01750 00000006 00000006 =
-00000000 80e004f8
-[    0.325553] 5f80: 80f05cc0 80a50e18 00000000 00000000 00000000 00000000 =
-00000000 80a50e34
-[    0.325699] 5fa0: 00000000 80a50e18 00000000 8010016c 00000000 00000000 =
-00000000 00000000
-[    0.325848] 5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 =
-00000000 00000000
-[    0.325995] 5fe0: 00000000 00000000 00000000 00000000 00000013 00000000 =
-00000000 00000000
-[    0.326531]  io_serial_out from serial8250_do_set_mctrl+0x54/0x90
-[    0.326761]  serial8250_do_set_mctrl from serial_core_register_port+0x4c=
-4/0x694
-[    0.326917]  serial_core_register_port from serial8250_register_8250_por=
-t+0x310/0x4bc
-[    0.327063]  serial8250_register_8250_port from of_platform_serial_probe=
-+0x300/0x45c
-[    0.327242]  of_platform_serial_probe from platform_probe+0x60/0xb8
-[    0.327367]  platform_probe from really_probe+0xd4/0x3e4
-[    0.327471]  really_probe from __driver_probe_device+0x90/0x1ec
-[    0.327568]  __driver_probe_device from driver_probe_device+0x38/0xd0
-[    0.327674]  driver_probe_device from __driver_attach+0x100/0x1dc
-[    0.327793]  __driver_attach from bus_for_each_dev+0x84/0xd4
-[    0.327906]  bus_for_each_dev from bus_add_driver+0xec/0x1f0
-[    0.328015]  bus_add_driver from driver_register+0x84/0x11c
-[    0.328126]  driver_register from do_one_initcall+0x84/0x1c8
-[    0.328297]  do_one_initcall from kernel_init_freeable+0x19c/0x22c
-[    0.328419]  kernel_init_freeable from kernel_init+0x1c/0x138
-[    0.328534]  kernel_init from ret_from_fork+0x14/0x28
-[    0.328656] Exception stack(0xbf815fb0 to 0xbf815ff8)
-[    0.328755] 5fa0:                                     00000000 00000000 =
-00000000 00000000
-[    0.328901] 5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 =
-00000000 00000000
-[    0.329112] 5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[    0.329413] Code: e3a03000 ee073f9a e2433612 e6ef2072 (e5c32000)
-[    0.329824] ---[ end trace 0000000000000000 ]---
-[    0.336692] Kernel panic - not syncing: Fatal exception
+Is this functional dependency? For compilation it seems you don't need it, also see below.
 
-Andrew
+> +	depends on MACH_EYEQ5 || COMPILE_TEST
+> +	default MACH_EYEQ5
+> +	help
+> +		This driver provides the clocks found on the Mobileye EyeQ5 SoC. Its
+> +		registers live in a shared register region called OLB. It provides 10
+> +		read-only PLLs derived from the main crystal clock which must be constant
+> +		and one divider clock based on one PLL.
+
+Wrong indentation, have you run checkpatch?
+
+...
+
+> +#include <linux/bitfield.h>
+> +#include <linux/bits.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/mod_devicetable.h>
+
+> +#include <linux/of_address.h>
+
+Misused header. Also see below.
+
+> +#include <linux/platform_device.h>
+
+You have semi-random list of inclusions. Please, follow the IWUY principle.
+
+Here I see _at least_ missing
+array_size.h
+err.h
+io.h
+slab.h
+types.h
+
+ 
+...
+
+> +static int eq5c_pll_parse_registers(u32 r0, u32 r1, unsigned long *mult,
+> +				    unsigned long *div, unsigned long *acc)
+> +{
+> +	if (r0 & PCSR0_BYPASS) {
+> +		*mult = 1;
+> +		*div = 1;
+> +		*acc = 0;
+> +		return 0;
+> +	}
+> +
+> +	if (!(r0 & PCSR0_PLL_LOCKED))
+> +		return -EINVAL;
+> +
+> +	*mult = FIELD_GET(PCSR0_INTIN, r0);
+> +	*div = FIELD_GET(PCSR0_REF_DIV, r0);
+> +	if (r0 & PCSR0_FOUTPOSTDIV_EN)
+
+> +		*div *= FIELD_GET(PCSR0_POST_DIV1, r0) *
+> +			FIELD_GET(PCSR0_POST_DIV2, r0);
+
+One line?
+
+> +	/* Fractional mode, in 2^20 (0x100000) parts. */
+> +	if (r0 & PCSR0_DSM_EN) {
+> +		*div *= 0x100000;
+> +		*mult = *mult * 0x100000 + FIELD_GET(PCSR1_FRAC_IN, r1);
+> +	}
+> +
+> +	if (!*mult || !*div)
+> +		return -EINVAL;
+> +
+> +	/* Spread spectrum. */
+> +	if (!(r1 & (PCSR1_RESET | PCSR1_DIS_SSCG))) {
+> +		/*
+> +		 * Spread is 1/1000 parts of frequency, accuracy is half of
+> +		 * that. To get accuracy, convert to ppb (parts per billion).
+> +		 */
+> +		u32 spread = FIELD_GET(PCSR1_SPREAD, r1);
+
+Missing blank line.
+
+> +		*acc = spread * 500000;
+> +		if (r1 & PCSR1_DOWN_SPREAD) {
+> +			/*
+> +			 * Downspreading: the central frequency is half a
+> +			 * spread lower.
+> +			 */
+> +			*mult *= 2000 - spread;
+> +			*div *= 2000;
+> +		}
+> +	} else {
+> +		*acc = 0;
+> +	}
+> +
+> +	return 0;
+> +}
+
+Looking at this function what I would do is to replace mul/div pair by
+respective struct uXX_fract, add something like
+
+#define mult_fract(fract, ...)		\
+	...
+
+and replace those
+
+	*mult/*div *= ...
+
+with
+
+	mult_fract(fract, 2000);
+
+etc.
+
+...
+
+> +static int eq5c_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct device_node *np = dev->of_node;
+> +	void __iomem *base_plls, *base_ospi;
+> +	struct clk_hw *hw;
+> +	int i;
+
+> +	if (IS_ERR(eq5c_clk_data))
+> +		return PTR_ERR(eq5c_clk_data);
+> +	else if (!eq5c_clk_data)
+> +		return -EINVAL;
+
+Besides unneeded 'else', why so complicated? Can't you choose one: either NULL
+or error pointer for the invalid state?
+
+> +	base_plls = devm_platform_ioremap_resource_byname(pdev, "plls");
+> +	base_ospi = devm_platform_ioremap_resource_byname(pdev, "ospi");
+
+> +	if (!base_plls || !base_ospi)
+> +		return -ENODEV;
+
+Huh?! Are they not an error pointers and never be NULL?
+
+> +	for (i = 0; i < ARRAY_SIZE(eq5c_plls); i++) {
+> +		const struct eq5c_pll *pll = &eq5c_plls[i];
+> +		unsigned long mult, div, acc;
+> +		u32 r0, r1;
+> +		int ret;
+> +
+> +		r0 = readl(base_plls + pll->reg);
+> +		r1 = readl(base_plls + pll->reg + sizeof(r0));
+> +
+> +		ret = eq5c_pll_parse_registers(r0, r1, &mult, &div, &acc);
+> +		if (ret) {
+> +			dev_warn(dev, "failed parsing state of %s\n", pll->name);
+> +			continue;
+> +		}
+> +
+> +		hw = clk_hw_register_fixed_factor_with_accuracy_fwname(dev, np,
+> +				pll->name, "ref", 0, mult, div, acc);
+> +		eq5c_clk_data->hws[pll->index] = hw;
+
+Why do you feel the data with errorneous one (in some cases)? It's quite
+unusual pattern.
+
+> +		if (IS_ERR(hw)) {
+> +			dev_err(dev, "failed registering %s: %ld\n",
+> +				pll->name, PTR_ERR(hw));
+> +		}
+
+Besides unnecessity of {} can't you unify the output format by using
+dev_err_probe() in all error messages in ->probe()?
+
+> +	}
+> +
+> +	hw = clk_hw_register_divider_table_parent_hw(dev, EQ5C_OSPI_DIV_CLK_NAME,
+> +			eq5c_clk_data->hws[EQ5C_PLL_PER], 0,
+> +			base_ospi, 0, EQ5C_OSPI_DIV_WIDTH, 0,
+> +			eq5c_ospi_div_table, NULL);
+
+> +	eq5c_clk_data->hws[EQ5C_DIV_OSPI] = hw;
+
+Same as above.
+
+> +	if (IS_ERR(hw)) {
+> +		dev_err(dev, "failed registering %s: %ld\n",
+> +			EQ5C_OSPI_DIV_CLK_NAME, PTR_ERR(hw));
+> +	}
+
+Same as above.
+
+> +	return 0;
+> +}
+
+...
+
+> +static struct platform_driver eq5c_driver = {
+> +	.probe = eq5c_probe,
+> +	.driver = {
+> +		.name = "clk-eyeq5",
+> +		.of_match_table = eq5c_match_table,
+> +	},
+> +};
+
+> +
+
+Redundant blank line.
+
+> +builtin_platform_driver(eq5c_driver);
+
+...
+
+> +	index_plls = of_property_match_string(np, "reg-names", "plls");
+> +	index_ospi = of_property_match_string(np, "reg-names", "ospi");
+> +	if (index_plls < 0 || index_ospi < 0) {
+> +		ret = -ENODEV;
+
+Why error codes are shadowed?
+
+> +		goto err;
+> +	}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
 
