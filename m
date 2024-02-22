@@ -1,119 +1,118 @@
-Return-Path: <linux-mips+bounces-1676-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1677-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 449BB85F494
-	for <lists+linux-mips@lfdr.de>; Thu, 22 Feb 2024 10:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C46CD85F991
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Feb 2024 14:22:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D385D1F2200D
-	for <lists+linux-mips@lfdr.de>; Thu, 22 Feb 2024 09:37:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61CD31F21657
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Feb 2024 13:22:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C824381A1;
-	Thu, 22 Feb 2024 09:37:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C1D113473B;
+	Thu, 22 Feb 2024 13:21:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HoxynaFw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VRmSJ3m1"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7895017F3;
-	Thu, 22 Feb 2024 09:37:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A29133983;
+	Thu, 22 Feb 2024 13:21:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708594647; cv=none; b=Ki/RVzI8k6k5jLqDjq1mr/8PgFkTxRlfq6w/6yZt83bEi3Z4Ra/jr27Ykt9llczfFGqemlRgBQUdekobPK4K+nE5qvu5aqlM63JA1cQ5DxH2ZFc81nbK2KukJpgg7sD66PmPWIAFOq37FWU3+rAVhr/tyW+/IJ4pprPYv8dcBaw=
+	t=1708608117; cv=none; b=mcn8sDrs/1Da2iVwVqp7HwWpImpt55E9b8wKq9VjufuL/9/VI5An4F/NgyscHyNcWPwTFl3eElJKyJ7IXBvs+afwqEF2dUn1pwLXKLUU2c+GEUOzyHZXvz9BV07jD/tQZQbjREOUdas7AUcPLLtPYsBtcMoAFcg4Kr91pA33Ujs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708594647; c=relaxed/simple;
-	bh=RtpS10nroKrcjNGLR+XIwHm6KuoDQ2zN2AhYjSQtQ/0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=fJnMjaYAu/UnUbWclLb6It2ZL8F+g9odZ5rea2Mb+p0aS6aA2+s/82VX4pDTHlGHAwJ4B1+z4jKsyK4hR83oF5djzoGrnI+ecCUsCn/iGJHcgZax12fqvTivBHcrgMLKFfIyPNN1dXYqob3H3ME/abaRic6gUFkPe2+3GOFdc1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HoxynaFw; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 38A54FF809;
-	Thu, 22 Feb 2024 09:37:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1708594642;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RtpS10nroKrcjNGLR+XIwHm6KuoDQ2zN2AhYjSQtQ/0=;
-	b=HoxynaFwGBjgKqM3kaCHwq/Y4pT/rSyw1Hz7J/pn8wj94own9puofpBHibT2bUW9syI43e
-	9xij4loTsECllDsOAotsurK3oTO4xwc0g7o/mf2RdWT1OOxhnesgytZW11JZb0FOyXszQ+
-	QUk6vkkF9F4XJu+XQ7Sb3YH7/aKy8MvP8tQNIBXXhIK+7QRX1UTGr15r6OZQXGFrK7KRX0
-	2CO8q88AiaPVrnz01yceCpouuymaTkhShbCQGNK7ACt9mWa/39o7nz5Plamn65gwrOcv4g
-	p3579NftsvVpsWGVsdHfaezX5GV8MKBjpHLCT5SJb1ZE03o2ejOsJjJEGvo0pw==
+	s=arc-20240116; t=1708608117; c=relaxed/simple;
+	bh=LUP/1Bq8oCXj+CsYBpJOUqAEbKSgM+4ilo2mGVOjFxQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EHzSsy3SsND5p7rPsvHhypkz0HsOhLvp2DKKutnqngCM5++Qo0rhJ3NHzUCXoBW1aDONj+kM3qopGYauduQz6M6St4bOzDXTUaPW+mKu57oRJlq6XaTefH/vCeduppe3aBTYJkzRDz5//wlp5F74B/PlFPrF6FSpaS2Qw2jWLkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VRmSJ3m1; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708608115; x=1740144115;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LUP/1Bq8oCXj+CsYBpJOUqAEbKSgM+4ilo2mGVOjFxQ=;
+  b=VRmSJ3m1CPbF8brZL8s+uSfURQSgB4g3OBwSSCIAFElJPfz5SnuOA6gM
+   XDexW3TAnmdyeX4KcVccD4uTKcMJqp0p5LoXM+axxHC5+D7Wvz0OLXWzQ
+   rg/ad0g9ECRoONwuD/D3p1r3nczFOHmYIzJvs40G039Bxumi91dqVDFha
+   2Lo0mjOW0yn+/uHXnqd9XIzkdh2uOk+hGBCFjIVO8gJG/pRMC4yKoEJ/f
+   RUMXJo6CktXKzRO8NmhNp8hsaktk7i60kwDFa0rNovYo4/+KGNGxH6XJO
+   7BvKNt8bfH7onOb0+t+BKt8ZQEOgYGufujGQdVarW72F+yshUyDL8v/FG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10991"; a="25291944"
+X-IronPort-AV: E=Sophos;i="6.06,177,1705392000"; 
+   d="scan'208";a="25291944"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 05:21:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10991"; a="913523354"
+X-IronPort-AV: E=Sophos;i="6.06,177,1705392000"; 
+   d="scan'208";a="913523354"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 05:21:49 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rd91F-00000006dVC-3OPd;
+	Thu, 22 Feb 2024 15:21:45 +0200
+Date: Thu, 22 Feb 2024 15:21:45 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Jiri Slaby <jirislaby@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org, linux-tegra@vger.kernel.org,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Al Cooper <alcooperx@gmail.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH v1 02/14] serial: core: Add UPIO_UNSET constant for unset
+ port type
+Message-ID: <ZddKaaB7HO0CyldD@smile.fi.intel.com>
+References: <20240221183442.4124354-1-andriy.shevchenko@linux.intel.com>
+ <20240221183442.4124354-3-andriy.shevchenko@linux.intel.com>
+ <5aeee02f-45a6-48e5-a6f4-e55b76d4b959@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 22 Feb 2024 10:37:18 +0100
-Message-Id: <CZBI90SFODAR.TZ3L2XO2F8IF@bootlin.com>
-Subject: Re: [PATCH 18/23] gpio: nomadik: support mobileye,eyeq5-gpio
-Cc: "Bartosz Golaszewski" <brgl@bgdev.pl>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Philipp Zabel" <p.zabel@pengutronix.de>, "Thomas Bogendoerfer"
- <tsbogend@alpha.franken.de>, <linux-gpio@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linux-mips@vger.kernel.org>,
- "Gregory CLEMENT" <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-To: "Linus Walleij" <linus.walleij@linaro.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: aerc 0.15.2
-References: <20240214-mbly-gpio-v1-0-f88c0ccf372b@bootlin.com>
- <20240214-mbly-gpio-v1-18-f88c0ccf372b@bootlin.com>
- <CACRpkdYLBGsphNkmWyPXQZvFaO2hHGHGTMt1eqz-HAa2k5F3bg@mail.gmail.com>
- <CZAW47LJHQVD.1Z9GFT8UENYXT@bootlin.com>
- <CACRpkdZQ9LEqKvugDCMEXPPLMCUJ-f9rYQOpmsSEJhtW0zjNsg@mail.gmail.com>
-In-Reply-To: <CACRpkdZQ9LEqKvugDCMEXPPLMCUJ-f9rYQOpmsSEJhtW0zjNsg@mail.gmail.com>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5aeee02f-45a6-48e5-a6f4-e55b76d4b959@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hello,
+On Thu, Feb 22, 2024 at 07:58:32AM +0100, Jiri Slaby wrote:
+> On 21. 02. 24, 19:31, Andy Shevchenko wrote:
 
-On Wed Feb 21, 2024 at 8:36 PM CET, Linus Walleij wrote:
-> On Wed, Feb 21, 2024 at 5:16=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@boo=
-tlin.com> wrote:
->
-> > > Trying to figure it out...
-> >
-> > Can I help in the debugging process?
->
-> Nah, I found it :)
->
-> > Reading the code once again I'd guess
-> > of_device_get_match_data(&gpio_pdev->dev) could be the root cause. We
-> > are accessing match data for the GPIO device while probing the pinctrl
-> > device. Maybe something isn't initialised properly yet? The rest looks
-> > rather harmless, I've checked all conditional expressions.
->
-> Yep spot on. The nmk_gpio_populate_chip() is sometimes called from
-> the pinctrl driver before the gpio probe() has been called, so the match
-> data is NULL and we crash.
->
-> This looks like it does for historical reasons and there could be better
-> ways to fix it now that Saravana Kannan has fixed up the probe ordering
-> code.
->
-> The following is one way to fix it for now using device_is_compatible()
-> (illustrating some other changes I did as well):
+...
 
-Thanks for the debugging and the proposed fix. Indeed matching on
-compatible to avoid match data for a bool makes sense.
+> >   	unsigned char		iotype;			/* io access style */
+> > +#define UPIO_UNSET		((unsigned char)~0U)	/* UCHAR_MAX */
+> 
+> Perhaps making the var u8 and this U8_MAX then? It would make more sense to
+> me.
 
-Thanks,
+WFM, should it be a separate change? Btw, how can I justify it?
 
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
