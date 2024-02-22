@@ -1,108 +1,167 @@
-Return-Path: <linux-mips+bounces-1688-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1689-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 571348604D1
-	for <lists+linux-mips@lfdr.de>; Thu, 22 Feb 2024 22:29:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A1EE860723
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Feb 2024 00:55:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC2701F28634
-	for <lists+linux-mips@lfdr.de>; Thu, 22 Feb 2024 21:29:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 609361C21171
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Feb 2024 23:55:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B9EA12D1E0;
-	Thu, 22 Feb 2024 21:29:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D883213BAEA;
+	Thu, 22 Feb 2024 23:55:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Hh5Zm4Yv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aIXUSj9r"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 376D673F29;
-	Thu, 22 Feb 2024 21:29:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04224433DF;
+	Thu, 22 Feb 2024 23:55:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708637378; cv=none; b=koT+/WChDGstGblUUNImmVwXYwBYw8NqLLPDrv7kEOSEj2cCbJiKS2Pb1fFa1AHLQgUwMi8OlWIufkh2yiICsgGY9n0Xyr/4Ua+VQz8rLKnRt3pr3RkN7hxK7zFgbIQuOoLt4dBy/cMDjpT7zVwoq6LmP/Bu+5HScD8PmubTp84=
+	t=1708646104; cv=none; b=MviTEfhqNDGC/cVqcjs7VRabNAeON6lAoSKqaSr8Lf5BOZuUTfBYuf/a+N0r4gC22/+N9+eXeHW5Ebs+48y6OSYH5vbnxmh9UtiZASugZOjYBxedYmKqNw59+WR3D/e8UMkSLBYoLzZlmMEYdOR2zxFUCbvixCjXrSdxpgnBXps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708637378; c=relaxed/simple;
-	bh=t85/vLINNj4QjqTdLkHVSWfMx17aHlL+u2dxKq3yYy8=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=o6rxLrkZCH/egxIbYV77YfeP6vZPrpd7g0Ql+k4Z34NNyKop35BOtdgu1aW7vllwvPd3FWMAOUWyj5zNV3zxdx1Is+SpDePqeoZiymfyHSN/Ctmw2dIO85TtQeAgAMjGCATCz5nFbU1Dq9X/ftoPSVnEQqe68xrq/lE8OJTiNl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Hh5Zm4Yv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18839C433C7;
-	Thu, 22 Feb 2024 21:29:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1708637377;
-	bh=t85/vLINNj4QjqTdLkHVSWfMx17aHlL+u2dxKq3yYy8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Hh5Zm4YvDfOKF5br8tkmh9sJvT791U5KssSAIS8LfOqGSzl3slitWdXs3E1Em8lxo
-	 eW/hjzCE3XTpXQTswpeuaep38I7mm0zb4+bnWgNGgZIUZ8CEoNf8Y2On7Vgpn2ddNO
-	 Q3Fn70VpnIcWdCXFtJ96SSNkluqeWjcO+vqu/Qw4=
-Date: Thu, 22 Feb 2024 13:29:36 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Hari Bathini <hbathini@linux.ibm.com>
-Cc: linux-s390@vger.kernel.org, Baoquan He <bhe@redhat.com>,
- piliu@redhat.com, linux-sh@vger.kernel.org, x86@kernel.org,
- kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org, ebiederm@xmission.com,
- loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
- viro@zeniv.linux.org.uk
-Subject: Re: [PATCH v2 00/14] Split crash out from kexec and clean up
- related config items
-Message-Id: <20240222132936.e7dc50acbf5d1b653cb2e02c@linux-foundation.org>
-In-Reply-To: <3393a42f-d9b3-4031-bdef-78bb2ce758f1@linux.ibm.com>
-References: <20240119145241.769622-1-bhe@redhat.com>
-	<9101bb07-70f1-476c-bec9-ec67e9899744@linux.ibm.com>
-	<Zb8D1ASrgX0qVm9z@MiWiFi-R3L-srv>
-	<559f2595-1477-4ef0-80e4-85ae8b426de7@linux.ibm.com>
-	<20240221125752.36fbfe9c307496313198b60f@linux-foundation.org>
-	<3393a42f-d9b3-4031-bdef-78bb2ce758f1@linux.ibm.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1708646104; c=relaxed/simple;
+	bh=JAWPRH05PCaJ/qhm7l++x2p8cgx/eVbDSM0nYdWb/ZY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HaanTRzLP8uDs+1++NVu0CxFXkFY42ZvIXZuiN47w+B9fv+Xpv+QPAG174rFCK+GSRqTT33BWfwZqmUKvE4izAVLzPjcXBnXTVGWA+jB70FLxsoBPnATEyqDpH/sd8z6by8KlV95Ctv+++GZISf5aviJI2rrRgv6XsG20AdV4ZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aIXUSj9r; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708646102; x=1740182102;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JAWPRH05PCaJ/qhm7l++x2p8cgx/eVbDSM0nYdWb/ZY=;
+  b=aIXUSj9rLu8236qaPreso3z2uIcoT/btnevBJDcnxXzuPzPxhiw3Dinw
+   mb8Io15UdaUTCBVFvqgR0YE76byDuzB/cHLAvsQyXTcJo68L33PEbe1jj
+   pgYjeCABccKhDFZ5hGn5qfHTWnMnUkasaRZgv8eGbpx1WT+WqNYHMpd9e
+   P5FQoDdPwoX3YUJt72tNvYRN4Ov3NAMEdjAfuytDx4GMTZclfPlaMYM9F
+   8G4rUsuRf5otYE9R4jQiphvcMujd4Rxztbtt07xY4GmuXhVUBiwNptxVt
+   bYELbBa4G6hFdfbU7L3/unVi1XUhzQaXUwuVmyIze1r77kowqZ3l9M4Ud
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="25387136"
+X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
+   d="scan'208";a="25387136"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 15:53:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
+   d="scan'208";a="28809352"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 22 Feb 2024 15:52:39 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rdIrl-0006o6-0y;
+	Thu, 22 Feb 2024 23:52:37 +0000
+Date: Fri, 23 Feb 2024 07:52:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Zimmermann <tzimmermann@suse.de>, arnd@arndb.de,
+	javierm@redhat.com, deller@gmx.de, suijingfeng@loongson.cn
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arch@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-fbdev@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-sh@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Vineet Gupta <vgupta@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>
+Subject: Re: [PATCH 3/3] arch: Rename fbdev header and source files
+Message-ID: <202402230737.e7gWpGUp-lkp@intel.com>
+References: <20240221161431.8245-4-tzimmermann@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240221161431.8245-4-tzimmermann@suse.de>
 
-On Thu, 22 Feb 2024 10:47:29 +0530 Hari Bathini <hbathini@linux.ibm.com> wrote:
+Hi Thomas,
 
-> 
-> 
-> On 22/02/24 2:27 am, Andrew Morton wrote:
-> > On Wed, 21 Feb 2024 11:15:00 +0530 Hari Bathini <hbathini@linux.ibm.com> wrote:
-> > 
-> >> On 04/02/24 8:56 am, Baoquan He wrote:
-> >>>>> Hope Hari and Pingfan can help have a look, see if
-> >>>>> it's doable. Now, I make it either have both kexec and crash enabled, or
-> >>>>> disable both of them altogether.
-> >>>>
-> >>>> Sure. I will take a closer look...
-> >>> Thanks a lot. Please feel free to post patches to make that, or I can do
-> >>> it with your support or suggestion.
-> >>
-> >> Tested your changes and on top of these changes, came up with the below
-> >> changes to get it working for powerpc:
-> >>
-> >>   
-> >> https://lore.kernel.org/all/20240213113150.1148276-1-hbathini@linux.ibm.com/
-> > 
-> > So can we take it that you're OK with Baoquan's series as-is?
-> 
-> Hi Andrew,
-> 
-> If you mean
-> 
-> v3 (https://lore.kernel.org/all/20240124051254.67105-1-bhe@redhat.com/)
-> +
-> follow-up from Baoquan 
-> (https://lore.kernel.org/all/Zb8D1ASrgX0qVm9z@MiWiFi-R3L-srv/)
-> 
-> Yes.
-> 
+kernel test robot noticed the following build errors:
 
-Can I add your Acked-by: and/or Tested-by: to the patches in this series?
+[auto build test ERROR on tip/x86/core]
+[also build test ERROR on deller-parisc/for-next arnd-asm-generic/master linus/master v6.8-rc5]
+[cannot apply to next-20240222]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/arch-Select-fbdev-helpers-with-CONFIG_VIDEO/20240222-001622
+base:   tip/x86/core
+patch link:    https://lore.kernel.org/r/20240221161431.8245-4-tzimmermann%40suse.de
+patch subject: [PATCH 3/3] arch: Rename fbdev header and source files
+config: um-randconfig-002-20240222 (https://download.01.org/0day-ci/archive/20240223/202402230737.e7gWpGUp-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project edd4aee4dd9b5b98b2576a6f783e4086173d902a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240223/202402230737.e7gWpGUp-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402230737.e7gWpGUp-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   /usr/bin/ld: warning: .tmp_vmlinux.kallsyms1 has a LOAD segment with RWX permissions
+   /usr/bin/ld: drivers/video/fbdev/core/fb_io_fops.o: in function `fb_io_mmap':
+>> drivers/video/fbdev/core/fb_io_fops.c:164: undefined reference to `pgprot_framebuffer'
+   clang: error: linker command failed with exit code 1 (use -v to see invocation)
+
+
+vim +164 drivers/video/fbdev/core/fb_io_fops.c
+
+6b180f66c0dd62 Thomas Zimmermann 2023-09-27  140  
+33253d9e01d405 Thomas Zimmermann 2023-11-27  141  int fb_io_mmap(struct fb_info *info, struct vm_area_struct *vma)
+33253d9e01d405 Thomas Zimmermann 2023-11-27  142  {
+33253d9e01d405 Thomas Zimmermann 2023-11-27  143  	unsigned long start = info->fix.smem_start;
+33253d9e01d405 Thomas Zimmermann 2023-11-27  144  	u32 len = info->fix.smem_len;
+33253d9e01d405 Thomas Zimmermann 2023-11-27  145  	unsigned long mmio_pgoff = PAGE_ALIGN((start & ~PAGE_MASK) + len) >> PAGE_SHIFT;
+33253d9e01d405 Thomas Zimmermann 2023-11-27  146  
+b3e8813773c568 Thomas Zimmermann 2023-11-27  147  	if (info->flags & FBINFO_VIRTFB)
+b3e8813773c568 Thomas Zimmermann 2023-11-27  148  		fb_warn_once(info, "Framebuffer is not in I/O address space.");
+b3e8813773c568 Thomas Zimmermann 2023-11-27  149  
+33253d9e01d405 Thomas Zimmermann 2023-11-27  150  	/*
+33253d9e01d405 Thomas Zimmermann 2023-11-27  151  	 * This can be either the framebuffer mapping, or if pgoff points
+33253d9e01d405 Thomas Zimmermann 2023-11-27  152  	 * past it, the mmio mapping.
+33253d9e01d405 Thomas Zimmermann 2023-11-27  153  	 */
+33253d9e01d405 Thomas Zimmermann 2023-11-27  154  	if (vma->vm_pgoff >= mmio_pgoff) {
+33253d9e01d405 Thomas Zimmermann 2023-11-27  155  		if (info->var.accel_flags)
+33253d9e01d405 Thomas Zimmermann 2023-11-27  156  			return -EINVAL;
+33253d9e01d405 Thomas Zimmermann 2023-11-27  157  
+33253d9e01d405 Thomas Zimmermann 2023-11-27  158  		vma->vm_pgoff -= mmio_pgoff;
+33253d9e01d405 Thomas Zimmermann 2023-11-27  159  		start = info->fix.mmio_start;
+33253d9e01d405 Thomas Zimmermann 2023-11-27  160  		len = info->fix.mmio_len;
+33253d9e01d405 Thomas Zimmermann 2023-11-27  161  	}
+33253d9e01d405 Thomas Zimmermann 2023-11-27  162  
+33253d9e01d405 Thomas Zimmermann 2023-11-27  163  	vma->vm_page_prot = vm_get_page_prot(vma->vm_flags);
+33253d9e01d405 Thomas Zimmermann 2023-11-27 @164  	vma->vm_page_prot = pgprot_framebuffer(vma->vm_page_prot, vma->vm_start,
+33253d9e01d405 Thomas Zimmermann 2023-11-27  165  					       vma->vm_end, start);
+33253d9e01d405 Thomas Zimmermann 2023-11-27  166  
+33253d9e01d405 Thomas Zimmermann 2023-11-27  167  	return vm_iomap_memory(vma, start, len);
+33253d9e01d405 Thomas Zimmermann 2023-11-27  168  }
+33253d9e01d405 Thomas Zimmermann 2023-11-27  169  EXPORT_SYMBOL(fb_io_mmap);
+33253d9e01d405 Thomas Zimmermann 2023-11-27  170  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
