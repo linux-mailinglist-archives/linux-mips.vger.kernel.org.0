@@ -1,169 +1,116 @@
-Return-Path: <linux-mips+bounces-1669-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1670-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66AB185F1AB
-	for <lists+linux-mips@lfdr.de>; Thu, 22 Feb 2024 07:58:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BEC385F1BF
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Feb 2024 08:07:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 938061C219B2
-	for <lists+linux-mips@lfdr.de>; Thu, 22 Feb 2024 06:58:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A86911F2140D
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Feb 2024 07:07:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D71751642B;
-	Thu, 22 Feb 2024 06:58:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79506175B5;
+	Thu, 22 Feb 2024 07:07:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fQWpuxce"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AAA3101C2;
-	Thu, 22 Feb 2024 06:58:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953081755B
+	for <linux-mips@vger.kernel.org>; Thu, 22 Feb 2024 07:07:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708585118; cv=none; b=T7TILLORkVgVD1Rz3HxNJA1vkGZ93J1Q158ucR/RFr49m11LTGtPvCgXQpad4z2qzctjQw//KIMd1+XBImnq+CXo82dDrNXFPPflQrGb3eqYuSfy3Uh3bnOK0Fg6tMLndVRmQ5Smyzz1F1UPuGOYKrzNiDFECvMmZ/LgK5dWWMc=
+	t=1708585638; cv=none; b=PN9D0hS7iQCI7/oUyZfSVbFrva6iDTZwnn8AyD2xG+qTS171iim0rzjH4u4UZsLgUfk2JexuahJFOr7rf9d+l8x5AU1DngISFyMvc6tRlJG4RFpKlhcTNSLX+3a7Bvg1vc/7HBr9Qgj5u3o8FJaXqWP5TxdwvMD+p1ZJ+hSHhPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708585118; c=relaxed/simple;
-	bh=8jNUR1QUpSx19cQNGXxmdSHKqS3IlVyUM8XQh6VBHWw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R9rgrKiGu3f2q5j2pGyeb3fHtfNrBFAODrpI4zFuIc4vtKAR/MI309bu/NlzVbK/ofOnBBNmxJwqjWcfwvcz50x2yYnHIdoR3oVF9nJXRB+qqo8EhyYYyvCGTKAzBLQHpsRAg09fSiBwRtbflHHtU3cI1yUB/j+1aWZGBDezQdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-33d2b354c72so3577552f8f.1;
-        Wed, 21 Feb 2024 22:58:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708585115; x=1709189915;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7ZncrEUsUC9sjkZ2Qw0MyfZjlW0xqX3HQAFV3fa9mKE=;
-        b=URP23pg35BhTFTY6LLWarqZzqmObH0jmVmIXfqs1IENusdpYVvcWxDKDl+jCgMP1jz
-         tKlVMN6lrDxCWcCDPjwL3Rg+QeLSV2O4UF0/5BxVmu0ixdf9PAyzVlW4soOpEgRD1Rjv
-         G8Ozxn61NiAnJ8xT9Neuud92k0ITn3eDZV0+kkgQOvslJ9M3WWBt/m0xVAv+8wuBz9HL
-         j6hVx9d7TRV9ZpNJcE1Ovo15bB3ZN9Pmi3bqw0OFZReVp8oo/olWJE6JxX1bKBedT/JX
-         BV4TFIp0HjoaUIS8hUrBxscxJJ71IuTfe7mil/qfY8QE0rAGZykO/Gz6/Z9RaOW4s5RI
-         ujlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX8ruGmRAUSLhCyL4PG7naRzcTvA8igPz7XNdBj1SNkWOZlyZkDekX7Xqm68mxEF6ehGAksQd+iHunmm5ar+En2EPZe9bibMGhrsGJRxKrKRMFvdz2OIsyUlbgn7mMkC4WR9aBBi+CMJcqh36q6uDgByvGfgTIdW4TfYBUJelWjSEpBC6whT3yAhj6Wfgbl3qtarMSc+wnFp9gVGeQeVKCuJDvu
-X-Gm-Message-State: AOJu0Yza0VoVqrc3Ywe2eR0YcJmsx47OSpNi1foYdjYaP+39S1FS9XNT
-	CWo2aa5CdSDbEzYj2GjyEC8+Fd/dfejk4kEhbSVgvDC+ea+neGMN
-X-Google-Smtp-Source: AGHT+IElwd1EMDO5q3nyarlzMgj0iaTDvX/TQ9BRCGYwPuplfypb6Dkh109SxeNySGYBP+MKoYNmJw==
-X-Received: by 2002:a5d:68cc:0:b0:33d:209a:ecf3 with SMTP id p12-20020a5d68cc000000b0033d209aecf3mr11854918wrw.20.1708585115176;
-        Wed, 21 Feb 2024 22:58:35 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:59? ([2a0b:e7c0:0:107::aaaa:59])
-        by smtp.gmail.com with ESMTPSA id ay3-20020a5d6f03000000b0033d1b760125sm19954711wrb.92.2024.02.21.22.58.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Feb 2024 22:58:34 -0800 (PST)
-Message-ID: <5aeee02f-45a6-48e5-a6f4-e55b76d4b959@kernel.org>
-Date: Thu, 22 Feb 2024 07:58:32 +0100
+	s=arc-20240116; t=1708585638; c=relaxed/simple;
+	bh=XPKVLBy6UQC9Sn82UWX+PNOQ0fEBJPFiiwTcFZ/REG4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tHJaoiUjOYsroj8ekKv47wKZ8WQnEKxbZvE/LuqZsf1L992ImaaTXcrOk+uERYSgwhKoF4l4jcLjH8yI6J8fpAPYqJBdN49KiXhFopVKmjk0KwU0U45wq5IDkxOpDG7+ERyjqna3wMpsosa3hJDKVojg5lgAnrAcbKNejQ1eZy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fQWpuxce; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1708585635;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=j88KzvyAQZThT6aCL8ZS+o2FWYKBFq83FjUT4vcsoNg=;
+	b=fQWpuxce//4uZGr5U1PE3xBVtJWJN9xvv81sG9m70FLGad0Y12Fgio5BCkuxDgjVoEnxq2
+	ToSfroJJdzBWiu52cHddImf1qf206Jihjy+c2Nwrn0N3RuNKyiYHQKfI1I7P3B4caw2MFw
+	In7mU9mVI2otn5GmPDsPo2NxztTWMN4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-374-MaV-uow3NFqRm-_MOPABCw-1; Thu, 22 Feb 2024 02:07:12 -0500
+X-MC-Unique: MaV-uow3NFqRm-_MOPABCw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7B19A185A787;
+	Thu, 22 Feb 2024 07:07:11 +0000 (UTC)
+Received: from localhost (unknown [10.72.116.2])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id A8B5A492BC8;
+	Thu, 22 Feb 2024 07:07:08 +0000 (UTC)
+Date: Thu, 22 Feb 2024 15:07:05 +0800
+From: Baoquan He <bhe@redhat.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Hari Bathini <hbathini@linux.ibm.com>, linux-s390@vger.kernel.org,
+	piliu@redhat.com, linux-sh@vger.kernel.org, x86@kernel.org,
+	kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org, ebiederm@xmission.com,
+	loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+	viro@zeniv.linux.org.uk
+Subject: Re: [PATCH v2 00/14] Split crash out from kexec and clean up related
+ config items
+Message-ID: <Zdbymex3ABImSwI3@MiWiFi-R3L-srv>
+References: <20240119145241.769622-1-bhe@redhat.com>
+ <9101bb07-70f1-476c-bec9-ec67e9899744@linux.ibm.com>
+ <Zb8D1ASrgX0qVm9z@MiWiFi-R3L-srv>
+ <559f2595-1477-4ef0-80e4-85ae8b426de7@linux.ibm.com>
+ <20240221125752.36fbfe9c307496313198b60f@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 02/14] serial: core: Add UPIO_UNSET constant for unset
- port type
-Content-Language: en-US
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-aspeed@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org,
- linux-mips@vger.kernel.org, linux-tegra@vger.kernel.org
-Cc: Joel Stanley <joel@jms.id.au>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Al Cooper <alcooperx@gmail.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Paul Cercueil <paul@crapouillou.net>, Vladimir Zapolskiy <vz@mleia.com>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
- Masami Hiramatsu <mhiramat@kernel.org>
-References: <20240221183442.4124354-1-andriy.shevchenko@linux.intel.com>
- <20240221183442.4124354-3-andriy.shevchenko@linux.intel.com>
-From: Jiri Slaby <jirislaby@kernel.org>
-Autocrypt: addr=jirislaby@kernel.org; keydata=
- xsFNBE6S54YBEACzzjLwDUbU5elY4GTg/NdotjA0jyyJtYI86wdKraekbNE0bC4zV+ryvH4j
- rrcDwGs6tFVrAHvdHeIdI07s1iIx5R/ndcHwt4fvI8CL5PzPmn5J+h0WERR5rFprRh6axhOk
- rSD5CwQl19fm4AJCS6A9GJtOoiLpWn2/IbogPc71jQVrupZYYx51rAaHZ0D2KYK/uhfc6neJ
- i0WqPlbtIlIrpvWxckucNu6ZwXjFY0f3qIRg3Vqh5QxPkojGsq9tXVFVLEkSVz6FoqCHrUTx
- wr+aw6qqQVgvT/McQtsI0S66uIkQjzPUrgAEtWUv76rM4ekqL9stHyvTGw0Fjsualwb0Gwdx
- ReTZzMgheAyoy/umIOKrSEpWouVoBt5FFSZUyjuDdlPPYyPav+hpI6ggmCTld3u2hyiHji2H
- cDpcLM2LMhlHBipu80s9anNeZhCANDhbC5E+NZmuwgzHBcan8WC7xsPXPaiZSIm7TKaVoOcL
- 9tE5aN3jQmIlrT7ZUX52Ff/hSdx/JKDP3YMNtt4B0cH6ejIjtqTd+Ge8sSttsnNM0CQUkXps
- w98jwz+Lxw/bKMr3NSnnFpUZaxwji3BC9vYyxKMAwNelBCHEgS/OAa3EJoTfuYOK6wT6nadm
- YqYjwYbZE5V/SwzMbpWu7Jwlvuwyfo5mh7w5iMfnZE+vHFwp/wARAQABzSFKaXJpIFNsYWJ5
- IDxqaXJpc2xhYnlAa2VybmVsLm9yZz7CwXcEEwEIACEFAlW3RUwCGwMFCwkIBwIGFQgJCgsC
- BBYCAwECHgECF4AACgkQvSWxBAa0cEnVTg//TQpdIAr8Tn0VAeUjdVIH9XCFw+cPSU+zMSCH
- eCZoA/N6gitEcnvHoFVVM7b3hK2HgoFUNbmYC0RdcSc80pOF5gCnACSP9XWHGWzeKCARRcQR
- 4s5YD8I4VV5hqXcKo2DFAtIOVbHDW+0okOzcecdasCakUTr7s2fXz97uuoc2gIBB7bmHUGAH
- XQXHvdnCLjDjR+eJN+zrtbqZKYSfj89s/ZHn5Slug6w8qOPT1sVNGG+eWPlc5s7XYhT9z66E
- l5C0rG35JE4PhC+tl7BaE5IwjJlBMHf/cMJxNHAYoQ1hWQCKOfMDQ6bsEr++kGUCbHkrEFwD
- UVA72iLnnnlZCMevwE4hc0zVhseWhPc/KMYObU1sDGqaCesRLkE3tiE7X2cikmj/qH0CoMWe
- gjnwnQ2qVJcaPSzJ4QITvchEQ+tbuVAyvn9H+9MkdT7b7b2OaqYsUP8rn/2k1Td5zknUz7iF
- oJ0Z9wPTl6tDfF8phaMIPISYrhceVOIoL+rWfaikhBulZTIT5ihieY9nQOw6vhOfWkYvv0Dl
- o4GRnb2ybPQpfEs7WtetOsUgiUbfljTgILFw3CsPW8JESOGQc0Pv8ieznIighqPPFz9g+zSu
- Ss/rpcsqag5n9rQp/H3WW5zKUpeYcKGaPDp/vSUovMcjp8USIhzBBrmI7UWAtuedG9prjqfO
- wU0ETpLnhgEQAM+cDWLL+Wvc9cLhA2OXZ/gMmu7NbYKjfth1UyOuBd5emIO+d4RfFM02XFTI
- t4MxwhAryhsKQQcA4iQNldkbyeviYrPKWjLTjRXT5cD2lpWzr+Jx7mX7InV5JOz1Qq+P+nJW
- YIBjUKhI03ux89p58CYil24Zpyn2F5cX7U+inY8lJIBwLPBnc9Z0An/DVnUOD+0wIcYVnZAK
- DiIXODkGqTg3fhZwbbi+KAhtHPFM2fGw2VTUf62IHzV+eBSnamzPOBc1XsJYKRo3FHNeLuS8
- f4wUe7bWb9O66PPFK/RkeqNX6akkFBf9VfrZ1rTEKAyJ2uqf1EI1olYnENk4+00IBa+BavGQ
- 8UW9dGW3nbPrfuOV5UUvbnsSQwj67pSdrBQqilr5N/5H9z7VCDQ0dhuJNtvDSlTf2iUFBqgk
- 3smln31PUYiVPrMP0V4ja0i9qtO/TB01rTfTyXTRtqz53qO5dGsYiliJO5aUmh8swVpotgK4
- /57h3zGsaXO9PGgnnAdqeKVITaFTLY1ISg+Ptb4KoliiOjrBMmQUSJVtkUXMrCMCeuPDGHo7
- 39Xc75lcHlGuM3yEB//htKjyprbLeLf1y4xPyTeeF5zg/0ztRZNKZicgEmxyUNBHHnBKHQxz
- 1j+mzH0HjZZtXjGu2KLJ18G07q0fpz2ZPk2D53Ww39VNI/J9ABEBAAHCwV8EGAECAAkFAk6S
- 54YCGwwACgkQvSWxBAa0cEk3tRAAgO+DFpbyIa4RlnfpcW17AfnpZi9VR5+zr496n2jH/1ld
- wRO/S+QNSA8qdABqMb9WI4BNaoANgcg0AS429Mq0taaWKkAjkkGAT7mD1Q5PiLr06Y/+Kzdr
- 90eUVneqM2TUQQbK+Kh7JwmGVrRGNqQrDk+gRNvKnGwFNeTkTKtJ0P8jYd7P1gZb9Fwj9YLx
- jhn/sVIhNmEBLBoI7PL+9fbILqJPHgAwW35rpnq4f/EYTykbk1sa13Tav6btJ+4QOgbcezWI
- wZ5w/JVfEJW9JXp3BFAVzRQ5nVrrLDAJZ8Y5ioWcm99JtSIIxXxt9FJaGc1Bgsi5K/+dyTKL
- wLMJgiBzbVx8G+fCJJ9YtlNOPWhbKPlrQ8+AY52Aagi9WNhe6XfJdh5g6ptiOILm330mkR4g
- W6nEgZVyIyTq3ekOuruftWL99qpP5zi+eNrMmLRQx9iecDNgFr342R9bTDlb1TLuRb+/tJ98
- f/bIWIr0cqQmqQ33FgRhrG1+Xml6UXyJ2jExmlO8JljuOGeXYh6ZkIEyzqzffzBLXZCujlYQ
- DFXpyMNVJ2ZwPmX2mWEoYuaBU0JN7wM+/zWgOf2zRwhEuD3A2cO2PxoiIfyUEfB9SSmffaK/
- S4xXoB6wvGENZ85Hg37C7WDNdaAt6Xh2uQIly5grkgvWppkNy4ZHxE+jeNsU7tg=
-In-Reply-To: <20240221183442.4124354-3-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240221125752.36fbfe9c307496313198b60f@linux-foundation.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
 
-On 21. 02. 24, 19:31, Andy Shevchenko wrote:
-> In some APIs we would like to assign the special value to iotype
-> and compare against it in another places. Introduce UPIO_UNSET
-> for this purpose.
+On 02/21/24 at 12:57pm, Andrew Morton wrote:
+> On Wed, 21 Feb 2024 11:15:00 +0530 Hari Bathini <hbathini@linux.ibm.com> wrote:
 > 
-> Note, we can't use 0, because it's a valid value for IO port access.
+> > On 04/02/24 8:56 am, Baoquan He wrote:
+> > >>> Hope Hari and Pingfan can help have a look, see if
+> > >>> it's doable. Now, I make it either have both kexec and crash enabled, or
+> > >>> disable both of them altogether.
+> > >>
+> > >> Sure. I will take a closer look...
+> > > Thanks a lot. Please feel free to post patches to make that, or I can do
+> > > it with your support or suggestion.
+> > 
+> > Tested your changes and on top of these changes, came up with the below
+> > changes to get it working for powerpc:
+> > 
+> >  
+> > https://lore.kernel.org/all/20240213113150.1148276-1-hbathini@linux.ibm.com/
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->   include/linux/serial_core.h | 1 +
->   1 file changed, 1 insertion(+)
+> So can we take it that you're OK with Baoquan's series as-is?
 > 
-> diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
-> index 2d2ec99eca93..2b0526ae1fac 100644
-> --- a/include/linux/serial_core.h
-> +++ b/include/linux/serial_core.h
-> @@ -470,6 +470,7 @@ struct uart_port {
->   
->   	unsigned char		iotype;			/* io access style */
->   
-> +#define UPIO_UNSET		((unsigned char)~0U)	/* UCHAR_MAX */
+> Baoquan, do you believe the patches in mm-unstable are ready for moving
+> into mm-stable in preparation for an upstream merge?
 
-Perhaps making the var u8 and this U8_MAX then? It would make more sense 
-to me.
+Yeah, I think they are ready to go for merging.
 
->   #define UPIO_PORT		(SERIAL_IO_PORT)	/* 8b I/O port access */
->   #define UPIO_HUB6		(SERIAL_IO_HUB6)	/* Hub6 ISA card */
->   #define UPIO_MEM		(SERIAL_IO_MEM)		/* driver-specific */
-
-thanks,
--- 
-js
-suse labs
+For Hari's patchset, the main part was planned before. And I am not
+familiar with fadump in powerpc, the Kconfig fix from Hari is a good
+guarantee with the expertise. Surely, I will await Hari's comment on
+that.
 
 
