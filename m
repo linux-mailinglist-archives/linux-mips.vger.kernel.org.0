@@ -1,61 +1,47 @@
-Return-Path: <linux-mips+bounces-1693-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1694-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01240860A5C
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Feb 2024 06:42:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D59A8860B40
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Feb 2024 08:19:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93F582885F3
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Feb 2024 05:42:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 049071C2329C
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Feb 2024 07:19:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7686125D1;
-	Fri, 23 Feb 2024 05:42:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC491134BE;
+	Fri, 23 Feb 2024 07:19:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="A+Pah8dO"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D974F12E54;
-	Fri, 23 Feb 2024 05:42:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B56AC12B98;
+	Fri, 23 Feb 2024 07:19:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708666941; cv=none; b=JztDm0pfo/laP0qbVI7Gx32EGhCNoF8c5StjzuRI9rYk22W+IWZiXS3ZPJh1imIN4youkyjBW2jv6B7digfg7Zg7B7PX0GzfdDPiSSNzydt85EiBNxsmj2m5HYfkr7hmKo8swD0R31MLCeg3MCetpaZIPxHcYZfL34ytyaQ25uA=
+	t=1708672743; cv=none; b=awBkO0H+by/0vIFkMt7FOXBt3SRoE2xp+7z7hgTYvkaKqDOLl88Y8xKoeF0I7JWx6p7GuBAG44msxW+ukDRqVj8wAOlG/16EbLBNCvqtzC1ySu51sLGvj70kVyfq0jUrst8m+UdmR9/uu7A7RtUW+ac1I1C4RYEozQManEapXzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708666941; c=relaxed/simple;
-	bh=b/iRBuxfuwlp3wxx3egxrn06Tj+jjVs9XIQQVj34xwY=;
+	s=arc-20240116; t=1708672743; c=relaxed/simple;
+	bh=QW2Jy1OctnU/UI4pLF3wh2qArPJD2CkQk7fnI3qttQY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WaZenATkYRYpIeZrOvDdh8kBH/xsz+3RHvGlCQeFWpRJP4RO82R/p5rl4PYKvVwEBrwEAT0ZstnemiZJLJeeLan8rsgVhAel1hOKnH88lPdIPSSMgymwim/mzxkg5FdHLn7aNypmqBJEMMGpK+OGQl28s5ATTK9mKiRvTHQNh90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2d2509c66daso6733551fa.3;
-        Thu, 22 Feb 2024 21:42:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708666938; x=1709271738;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u3fMKCP86/cH49U6myXWg26shsQVwMm09R/fDfj0GGo=;
-        b=bZM2Jwor1tojMCNE+ZCzdo64/+S2OMru1vxSHtLWxKzmkwsWmKrZ0UwgYL7q1rkudJ
-         nSmmFcbX0VjzO3e7lghYG2gbj86SlauMNo7gyOdsiwS2qh7W2Z5XbaCQj5srtEfPn4kk
-         2dOQ0CVdm+qRIqoyxAnkJj2WYlwhwJP/kr3PZ/hTod9g8NMUgv3dCkqI8GthERlcELXZ
-         CQCRKUxyWlycReEGKSnExgcD2jEN1Lr8JxyKCFwy+6wQX8tH4S4/5jjv+7ryEzdhf+H0
-         CFELRFZyqzRlRyohA81CZOoc8W8wlHSjnfYfjPLsBbnJj4jPV8xq4Urtl9xjdd/AP0+1
-         NxCA==
-X-Forwarded-Encrypted: i=1; AJvYcCVDGuWavo2XUFnJSe+X+LRMZe3fi1fA95uTuIBcVCMcpLv4+OBtE9dtJixwiW7Vv/LKQ3VHPQum5/tkQVkXkG0KkpKiPADZ2My9fuK2BTPkVDUa1jYd3cgXEY2JubQ6NRjUy7rcEVdB5dousuoyzr/aCt8I/WG10edkpudMDsfdHsUSAEjLUX8ypFO71MkD8kKJDUro6B1yhNIw5wQxQ9M7lWVK
-X-Gm-Message-State: AOJu0YxIuuFIk0QmflkE8jiPCX57AEaZKmJyGtTtriaQs4xLQkZPMqEt
-	JGNoHq6upPIlFRX9Ev5HCllHDgLrcJziTwNaTfNWVsOvzqSvSlJU
-X-Google-Smtp-Source: AGHT+IETlrn8TJ5SYjloPENIXUnr1fPoKNiIlFBBZSBBWFFiGUGWWURtCbo86j5heYLxSS0fn4I6pQ==
-X-Received: by 2002:a05:651c:1a12:b0:2d2:734f:f387 with SMTP id by18-20020a05651c1a1200b002d2734ff387mr165929ljb.0.1708666937801;
-        Thu, 22 Feb 2024 21:42:17 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:59? ([2a0b:e7c0:0:107::aaaa:59])
-        by smtp.gmail.com with ESMTPSA id e3-20020adfe383000000b0033cf637eea2sm1393902wrm.29.2024.02.22.21.42.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Feb 2024 21:42:17 -0800 (PST)
-Message-ID: <fa46f220-a1c4-43f4-91e1-5929ff335be0@kernel.org>
-Date: Fri, 23 Feb 2024 06:42:15 +0100
+	 In-Reply-To:Content-Type; b=Wa/2j5Afz3fTp4ahOWth+WWz4OeNK+RwsIA87yj9SXIyLunyE2uwqMg+GBlmgXCiSnIzlgCfJTwEJP1b3MKXZHJ2d2r0bzkX8uIuQ1fTvwwyQsZDuroBSjFQBhpJH/ryJfmXXMFIiEsBuoQzoLrNOBigLcCSaZSHIMNIfNrkST8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=A+Pah8dO; arc=none smtp.client-ip=115.124.30.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1708672733; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=4R2wwRGv9r0ABt36T9MYvpDosxNOFhHAa6Gib5GsXfA=;
+	b=A+Pah8dOONowtv+jy55rnPZghER9WvTEo74iQ229R4YEa7EAEXZrHwZfiNPHg0dQjKJP+UBnE8tSUi11zV+rvbMk7Z8FnrtHajbYV23fU1gX89eOsVKEnPaYo7vs2lCR/lJ3T/nY83SElIll9H5my+At98WX5HeWYQ7b61e2kO8=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R801e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=yaoma@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0W13KKaF_1708672729;
+Received: from 30.178.67.167(mailfrom:yaoma@linux.alibaba.com fp:SMTPD_---0W13KKaF_1708672729)
+          by smtp.aliyun-inc.com;
+          Fri, 23 Feb 2024 15:18:51 +0800
+Message-ID: <3f4b7dbe-93c1-4cb0-8233-18e8432409f8@linux.alibaba.com>
+Date: Fri, 23 Feb 2024 15:18:48 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -63,103 +49,132 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 02/14] serial: core: Add UPIO_UNSET constant for unset
- port type
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-aspeed@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org,
- linux-mips@vger.kernel.org, linux-tegra@vger.kernel.org,
- Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>,
- Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Al Cooper <alcooperx@gmail.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Paul Cercueil <paul@crapouillou.net>, Vladimir Zapolskiy <vz@mleia.com>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
- Masami Hiramatsu <mhiramat@kernel.org>
-References: <20240221183442.4124354-1-andriy.shevchenko@linux.intel.com>
- <20240221183442.4124354-3-andriy.shevchenko@linux.intel.com>
- <5aeee02f-45a6-48e5-a6f4-e55b76d4b959@kernel.org>
- <ZddKaaB7HO0CyldD@smile.fi.intel.com>
+Subject: Re: [PATCHv9 2/3] irq: use a struct for the kstat_irqs in the
+ interrupt descriptor
 Content-Language: en-US
-From: Jiri Slaby <jirislaby@kernel.org>
-Autocrypt: addr=jirislaby@kernel.org; keydata=
- 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
-In-Reply-To: <ZddKaaB7HO0CyldD@smile.fi.intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>, dianders@chromium.org,
+ akpm@linux-foundation.org, liusong@linux.alibaba.com, pmladek@suse.com,
+ kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com,
+ tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+ jan.kiszka@siemens.com
+Cc: linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ yaoma@linux.alibaba.com
+References: <20240222093420.13956-1-yaoma@linux.alibaba.com>
+ <20240222093420.13956-3-yaoma@linux.alibaba.com> <87jzmwfxak.ffs@tglx>
+From: Bitao Hu <yaoma@linux.alibaba.com>
+In-Reply-To: <87jzmwfxak.ffs@tglx>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 22. 02. 24, 14:21, Andy Shevchenko wrote:
-> On Thu, Feb 22, 2024 at 07:58:32AM +0100, Jiri Slaby wrote:
->> On 21. 02. 24, 19:31, Andy Shevchenko wrote:
+Hi,
+
+On 2024/2/22 21:22, Thomas Gleixner wrote:
+> On Thu, Feb 22 2024 at 17:34, Bitao Hu wrote:
 > 
-> ...
+> First of all the subsystem prefix is 'genirq:'. 'git log kernel/irq/'
+> gives you a pretty good hint. It's documented....
 > 
->>>    	unsigned char		iotype;			/* io access style */
->>> +#define UPIO_UNSET		((unsigned char)~0U)	/* UCHAR_MAX */
+> Secondly the subject line does not match what this patch is about. It's
+> not about using a struct, it's about providing a snapshot mechanism, no?
+> 
+>> The current implementation uses an int for the kstat_irqs in the
+>> interrupt descriptor.
 >>
->> Perhaps making the var u8 and this U8_MAX then? It would make more sense to
->> me.
+>> However, we need to know the number of interrupts which happened
+>> since softlockup detection took a snapshot in order to analyze
+>> the problem caused by an interrupt storm.
+>>
+>> Replacing an int with a struct and providing sensible interfaces
+>> for the watchdog code can keep it self contained to the interrupt
+>> core code.
 > 
-> WFM, should it be a separate change?
+> So something like this makes a useful change log for this:
+> 
+>   Subject: genirq: Provide a snapshot mechanism for interrupt statistics
+> 
+>   The soft lockup detector lacks a mechanism to identify interrupt storms
+>   as root cause of a lockup. To enable this the detector needs a
+>   mechanism to snapshot the interrupt count statistics on a CPU when the
+>   detector observes a potential lockup scenario and compare that against
+>   the interrupt count when it warns about the lockup later on. The number
+>   of interrupts in that period give a hint whether the lockup might be
+>   caused by an interrupt storm.
+> 
+>   Instead of having extra storage in the lockup detector and accessing
+>   the internals of the interrupt descriptor directly, convert the per CPU
+>   irq_desc::kstat_irq member to a data structure which contains the
+>   counter plus a snapshot member and provide interfaces to take a
+>   snapshot of all interrupts on the current CPU and to retrieve the delta
+>   of a specific interrupt later on.
+> 
+Thanks, the changelog you wrote very clearly articulates the purpose of
+this patch.
 
-Likely.
+> Hmm?
+> 
+>> Signed-off-by: Bitao Hu <yaoma@linux.alibaba.com>
+> 
+> Interesting. You fully authored the patch?
+> 
+> That's not how it works. You cannot take work from others and claim that
+> it is yours. The minimal courtesy is to add a 'Originally-by:' tag.
+> 
+I'm very sorry, the majority of this patch is your work, I will add an
+'Originally-by:' tag.
 
-> Btw, how can I justify it?
+>> diff --git a/kernel/irq/proc.c b/kernel/irq/proc.c
+>> index 623b8136e9af..3ad40cf30c66 100644
+>> --- a/kernel/irq/proc.c
+>> +++ b/kernel/irq/proc.c
+>> @@ -488,18 +488,15 @@ int show_interrupts(struct seq_file *p, void *v)
+>>   	if (!desc || irq_settings_is_hidden(desc))
+>>   		goto outsparse;
+>>   
+>> -	if (desc->kstat_irqs) {
+>> -		for_each_online_cpu(j)
+>> -			any_count |= data_race(*per_cpu_ptr(desc->kstat_irqs, j));
+>> -	}
+>> +	if (desc->kstat_irqs)
+>> +		any_count = data_race(desc->tot_count);
+> 
+> This is an unrelated change and needs to be split out into a separate
+> patch with a proper changelog which explains why this is equivalent.
+> 
 
-Hmm, thinking about it, why is it not an enum?
+Alright, I will remove this change witch is not related to the purpose
+of this patch.
 
-But it could be also an u8 because you want it be exactly 8 bits as you 
-want to be sure values up to 255 fit.
+I guess that the purpose of suggesting this change in your V1 response
+was to speedup the 'show_interrupts'. However, after reviewing the
+usage of 'desc->tot_count' in 'unsigned int kstat_irqs(unsigned int 
+irq)', I think the change might be as follows:
 
-thanks,
--- 
-js
-suse labs
+diff --git a/kernel/irq/proc.c b/kernel/irq/proc.c
+index 623b8136e9af..53b8d6edd7ac 100644
+--- a/kernel/irq/proc.c
++++ b/kernel/irq/proc.c
+@@ -489,8 +489,13 @@ int show_interrupts(struct seq_file *p, void *v)
+                 goto outsparse;
 
+         if (desc->kstat_irqs) {
+-               for_each_online_cpu(j)
+-                       any_count |= 
+data_race(per_cpu(desc->kstat_irqs->cnt, j));
++               if (!irq_settings_is_per_cpu_devid(desc) &&
++                   !irq_settings_is_per_cpu(desc) &&
++                   !irq_is_nmi(desc))
++                       any_count = data_race(desc->tot_count);
++               else
++                       for_each_online_cpu(j)
++                               any_count |= 
+data_race(per_cpu(desc->kstat_irqs->cnt, j));
+         }
+
+         if ((!desc->action || irq_desc_is_chained(desc)) && !any_count)
+
+Is my idea correct?
+
+Best Regards,
+	Bitao
 
