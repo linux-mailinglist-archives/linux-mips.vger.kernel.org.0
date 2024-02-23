@@ -1,129 +1,106 @@
-Return-Path: <linux-mips+bounces-1704-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1705-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EEF2861513
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Feb 2024 16:03:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A2C986162C
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Feb 2024 16:46:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDA0828445C
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Feb 2024 15:03:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B9A21C242BB
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Feb 2024 15:46:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3174B6AF81;
-	Fri, 23 Feb 2024 15:03:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B48382D76;
+	Fri, 23 Feb 2024 15:46:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F9pHssy9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HxBRfAoy"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F05429AF;
-	Fri, 23 Feb 2024 15:03:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B5DD82D66;
+	Fri, 23 Feb 2024 15:46:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708700620; cv=none; b=aadnKTJzLnYY25d9DHqiwY7YfYtPpKmc4sqvcr5gV8sIbuGDwD5cKOlJRcit/uaKeeFYmwhxLEeAr6Xj55mEVwz41x5WWDzPZTGraJ+Ms4YKACr7ngS6IJsNwOXRCdXN4qUPfPq64bMnfeJvur2d6y3E/3Cpnm45UEmbeymNK60=
+	t=1708703165; cv=none; b=VBdOMBaPcqM7TC2NyfhlO6SbtYV/A/WxT14JyMJtqp/YXQ/vxmd+9El/ZgkyLk4/PU/XV1r8WLtEEYIJdsDjUZEFvX9yOcxTLRGi5/Vw9l5NThHqyDQ9+SOTnq/h+orJkpbsMjhxy9BdqTTA8aBeFs9d2CfCtZPZXx2BV3DtHfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708700620; c=relaxed/simple;
-	bh=XJ4uK049YbYNUUHoL7aPqziogI3mOCKCzfvXZt0+OhQ=;
+	s=arc-20240116; t=1708703165; c=relaxed/simple;
+	bh=lbsgBK2Ozez/f96f+DKOLPPFisW/G9PWWa6YYGbHsMc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MrVDZlbFJGkolMUaIBcNd6ietRAiMoWl3xhICiyr3VbGuhHL7FJbi5sARWpYIuZVYqhVDB0Pb46JZnTf1MLzoIV6fV/wECB4QxWuv89kONYIkCMfK4/P+qJuvSJlDBYX9cusGagozlc0XmcXCcqirs7jX7OfvKcKUtlMxR3ceQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F9pHssy9; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708700619; x=1740236619;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XJ4uK049YbYNUUHoL7aPqziogI3mOCKCzfvXZt0+OhQ=;
-  b=F9pHssy9YJIaILwjvrSej5aVFCT9XhR0Br2TpsLhjlo+FoAlIDtey8B8
-   m4x1YohYv3zbD9BKWrpBOTjAAmg2l1cCtZM1sTWZ0k8rUvISUk9pdV8Yq
-   cAGseRWLVh55t3yWOcSRUsfjEmQtX9jyJQgBh67RRHZ69FtLsKHvCKEoP
-   Z9V2R5jDsFd33ihk2jJG+2FcyRyr5P5vcpZ23maEKMIVDuCxPfvonokRl
-   Do+ijkRUoo8kIuj0PYF888Lm8pJfuXTE4kkQHhcIyb2WaGNvyQp8KMe/M
-   FfNIquHdIQopare3kwMB43VqK6m66JfuPdTuvUCK1br/q0RFAuS2KFGE3
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10993"; a="6833945"
-X-IronPort-AV: E=Sophos;i="6.06,180,1705392000"; 
-   d="scan'208";a="6833945"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 07:02:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10993"; a="913748390"
-X-IronPort-AV: E=Sophos;i="6.06,180,1705392000"; 
-   d="scan'208";a="913748390"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 07:02:33 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rdX4H-00000006vhH-3v03;
-	Fri, 23 Feb 2024 17:02:29 +0200
-Date: Fri, 23 Feb 2024 17:02:29 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org, linux-tegra@vger.kernel.org,
-	Jiri Slaby <jirislaby@kernel.org>, Joel Stanley <joel@jms.id.au>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Al Cooper <alcooperx@gmail.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andi Shyti <andi.shyti@linux.intel.com>
-Subject: Re: [PATCH v1 10/14] serial: 8250_of: Switch to use
- uart_read_port_properties()
-Message-ID: <ZdizhVPfwFp72ioI@smile.fi.intel.com>
-References: <20240221183442.4124354-1-andriy.shevchenko@linux.intel.com>
- <20240221183442.4124354-11-andriy.shevchenko@linux.intel.com>
- <0a828f2c50de712940fb9a881702ac1678a35b7c.camel@codeconstruct.com.au>
- <ZddKzHplwOX7naLv@smile.fi.intel.com>
- <Zdd5m2xIPlGI0_Qv@smile.fi.intel.com>
- <Zdd6lnXwvpPPUhRR@smile.fi.intel.com>
- <e5fd9d8b-84eb-4ef9-82ab-ff4ecc41c0d5@broadcom.com>
- <ad91eec0-39da-4b9c-8da7-f1e98bb4565b@broadcom.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=g3B7cr+iYj2LfEg6P/wxkHrotx5JJPTveH2qlAie8GIB0dxchQmq8Th+ht0LrTiuWcCMwNgS6VXrTJzTbNe8PLyod7VBakx1v/Q1+c0Usa6nyH1ZMAx9a5p4qXhbdQG1Duo+lHhFhD/Zj8GRUitWpE3l70g123t0qjYQ7MV0/cA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HxBRfAoy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0C74C43394;
+	Fri, 23 Feb 2024 15:46:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708703164;
+	bh=lbsgBK2Ozez/f96f+DKOLPPFisW/G9PWWa6YYGbHsMc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HxBRfAoyr0HdM1/QBR+TLrT3+FZnlv66BuT2jyUJARdCuvd7fE/hWONLe5TSJKP4v
+	 hPnkOYPrVeVW8Itxo8HmUGs61G8Mffuxg7pTT1DQOxe8YwnhNJrCwgJTKIHV4nGYqm
+	 tiBx932v/1NHL1kWajIixDVamA1ESznOwsENqz57iY2/kiDWYZ4XOid9z4QFXf08FQ
+	 03K8/mUHNh5hGropWQ32NWFJlZ/dM/5bZY+BaMhOrjVpE++6RDHLGEWZtAKnvZ0G5i
+	 RVC7Y3xz43ovHw9koIQ5gqlNg67tSe0NJVoiNqWcOxPR5E5Rr0diRiRs3bjigrsnTZ
+	 ffLkGmU198h8g==
+Date: Fri, 23 Feb 2024 15:45:59 +0000
+From: Lee Jones <lee@kernel.org>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Pavel Machek <pavel@ucw.cz>, Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+	linux-sound@vger.kernel.org,
+	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+	linux-mips@vger.kernel.org
+Subject: Re: [PATCH 0/4] leds: trigger: Improve handling of
+ led_trigger_event() and simplify mute audio trigger
+Message-ID: <20240223154559.GF1666215@google.com>
+References: <30d49088-283c-40f3-b97b-fd5f5174a467@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ad91eec0-39da-4b9c-8da7-f1e98bb4565b@broadcom.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <30d49088-283c-40f3-b97b-fd5f5174a467@gmail.com>
 
-On Thu, Feb 22, 2024 at 11:54:46AM -0800, Florian Fainelli wrote:
-> On 2/22/24 09:39, Florian Fainelli wrote:
-> > On 2/22/24 08:47, Andy Shevchenko wrote:
+On Tue, 13 Feb 2024, Heiner Kallweit wrote:
 
-...
-
-> > Thanks, on 8250_bcm7271.c with the above hunk applied, I did not spot
-> > any differences between the values returned by stty or a cat
-> > /sys/class/tty/ttyS0/* before or after, the console remained fully
-> > functional. I will see if I can run an additional test where I removed
-> > the DT's "clocks" property and confirm that the fall back to
-> > "clock-frequency" works.
+> If a simple trigger is assigned to a LED, then the LED may be off until
+> the next led_trigger_event() call. This may be an issue for simple
+> triggers with rare led_trigger_event() calls, e.g. power supply
+> charging indicators (drivers/power/supply/power_supply_leds.c).
+> Therefore persist the brightness value of the last led_trigger_event()
+> call and use this value if the trigger is assigned to a LED.
+> This change allows to use simple triggers in more cases.
+> As a first use case simplify handling of the mute audio trigger.
 > 
-> Also appears to work properly on a Raspberry Pi 4 with the console using the
-> bcm2835-aux driver, will provide Tested-by tags on the next submission,
-> thanks!
+> This series touches few subsystems. I'd propose to handle it via
+> the LED subsystem.
+> 
+> Heiner Kallweit (4):
+>   leds: trigger: Store brightness set by led_trigger_event()
+>   ALSA: control-led: Integrate mute led trigger
+>   Input: leds: Prepare for removal of config option LEDS_AUDIO_TRIGGER
+>   leds: trigger: audio: Remove this trigger
+> 
+>  arch/mips/configs/ci20_defconfig     |  1 -
+>  drivers/input/input-leds.c           |  8 +---
+>  drivers/leds/led-triggers.c          |  6 ++-
+>  drivers/leds/trigger/Kconfig         |  7 ---
+>  drivers/leds/trigger/Makefile        |  1 -
+>  drivers/leds/trigger/ledtrig-audio.c | 67 ----------------------------
+>  include/linux/leds.h                 | 29 ++++++------
+>  sound/core/Kconfig                   |  1 -
+>  sound/core/control_led.c             | 20 +++++++--
+>  9 files changed, 37 insertions(+), 103 deletions(-)
+>  delete mode 100644 drivers/leds/trigger/ledtrig-audio.c
 
-Thank you for prompt testing on real HW!
+Are the sound maintainers on-board with this?
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Lee Jones [李琼斯]
 
