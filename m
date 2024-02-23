@@ -1,125 +1,143 @@
-Return-Path: <linux-mips+bounces-1710-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1711-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 950E7861803
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Feb 2024 17:34:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21682862098
+	for <lists+linux-mips@lfdr.de>; Sat, 24 Feb 2024 00:23:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C67B31C254BE
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Feb 2024 16:34:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B5B201F22949
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Feb 2024 23:23:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEC46127B51;
-	Fri, 23 Feb 2024 16:34:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E12E14CADD;
+	Fri, 23 Feb 2024 23:23:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="brRGHeTv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ql8tm/gY"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC6B58526B;
-	Fri, 23 Feb 2024 16:34:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD17C1419B3;
+	Fri, 23 Feb 2024 23:23:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708706089; cv=none; b=n7r+iIQr5endIz5ksiRZziCRhhwipYPHdqM25CwrL9Z/rY/pMdX+Fn/+PCYFCpA/pwZ3hjiOcOJY0v1gZa+EAk7j0nGtFakLL2lNr7FYbGOYw5q/xUpROE8kVE9e1m1nwXmLpok7YL7r4fpvJFEKslCPwn1cZKsfG8ZfUiAj+gw=
+	t=1708730609; cv=none; b=kNAliC4IjqI5/yqZQkLqZyOuBQ0UZHg/4QKcSofiQcY5UB0I3GQ9UC+9EUwOCE2xgz7UuM8y1GVAUxeTZQya05tL+nUPQt81ixGW3TnUaIUlxTZjPtntbdYaWgl3rHvdA/drX5DruBjZFcaEV8gD1OI+GHuJ2klHzdoxQpCqzfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708706089; c=relaxed/simple;
-	bh=ML4ablhECz74yeyKTaRvj0YCaIvVpkryRuSuGokJQxI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=Qe4yrvR8bOM4zN6x/ua6S9T+sKCLiDLRnAKeWg2ebNqpaAl8F6uSntVSQbpLF/eVTHzIgvFOF3NfyHo892WFJUmh/P2a0koq5Y9q8j0uvL6hUaBRh2ckU4HP8SBdnFOhku65lM9sHYuDOwb70FgowniQLTPRn6UR096aPDOF/3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=brRGHeTv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51E09C433A6;
-	Fri, 23 Feb 2024 16:34:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708706089;
-	bh=ML4ablhECz74yeyKTaRvj0YCaIvVpkryRuSuGokJQxI=;
-	h=References:In-Reply-To:From:Date:Subject:To:From;
-	b=brRGHeTvcOMxMeLxgsQB9su2KBP0rA/NjlNhGfQHxKx1/0HRxDekA7A4jaNnSAlWt
-	 7WfMIZBQ8LWdXZNmGQwmrGteW9rh69RSXWRYCZy8wf6ZxADgzN8hnzbLXd50eWTNMN
-	 j5x0ABhhn9i9mv+e39KfY+TsjOKuiBkBVfJpjjKW0VOOe2DUGIPHsm0Q/WK2BkQo88
-	 VEx6qRg4vg2kiFf6N5eMQokJveNj7t5vJGK6yLGXemKX9IYnTBk+1PixinifI+eXsw
-	 PWZ7aePCdWa7GyjwQB/VcKWw2llXbwpBrt2KCjQxV+YaYhg5VOu1cPcYZ8JsdQtz8R
-	 g+4jgKRyhDVLg==
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-512ea6ce06aso755459e87.2;
-        Fri, 23 Feb 2024 08:34:49 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVjjpj7QQerYrRG8i2K8goT4L+V+83OcKxjd3JlQq9blXqs1zERJlz1/HZyEB9mwRnX72cW8WF05BDcqMPAUjHvQRI1tsx+q42kuUlHtSq2x+HuJZpsrjTTQ9Y0DWePBbMpPgJZUkvn2rZk3oK2pZ7/aXiXCOWbfAwn+0W0MqbV7myHs9q9Mt6TUUeXn5j7ci5+8kL3AfXGap4lX9YKogI=
-X-Gm-Message-State: AOJu0YyKJFz/jF4bzNUjJ+r64A0quFeNfIGYjXZ1ZxPs4fyCVzmMD8G9
-	zqbwdED5OtPux/6nq+Y/46eqsv+oJZr5H+9VfpQ/vZ2lTZg3t2dkxyss5TdEF25qqKK4ehLKMJd
-	Secyn60f1567ErkKfyvk904sVwA==
-X-Google-Smtp-Source: AGHT+IE8kj3sCHnm6X+LNC4ToAKPr4y//DGpPKNeaFXMPaP7aTysr9A9jP71VheZenF8UTShPBeJkUDGcWcar8hx9Y4=
-X-Received: by 2002:ac2:5fd0:0:b0:512:c985:4890 with SMTP id
- q16-20020ac25fd0000000b00512c9854890mr178807lfg.67.1708706087418; Fri, 23 Feb
- 2024 08:34:47 -0800 (PST)
+	s=arc-20240116; t=1708730609; c=relaxed/simple;
+	bh=N6kOf4nA1kfeVKu4bUDVNAmyfanJ9PZTJlYfgdcivVk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fmVvCP8wFMlIQ22PPGJ25RikNhTOVEdl6EmqLWWpTAW2YH2grGguEx+Mt/WxQzLxmV7mNfXkSmepbwqHfvt9zDKfEssKfpLOtWEU3GAz5lprwK8timZnNoNFhE+8Rbqwdw/FANjM7g+CKBuHDpkstyR47bIoRQ1oRjxooOu4dug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ql8tm/gY; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1dc1ff58fe4so8462275ad.1;
+        Fri, 23 Feb 2024 15:23:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1708730607; x=1709335407; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FiqHwwDIFlgu953RnTsKDugOiVMOZzq+GWo/eDFLupM=;
+        b=Ql8tm/gYPjFLmsgDQXaHY+9gOmkOpsyd3Xrp8HNpKrvgAACMy33uLGcMkq1wH40tfw
+         ttDzePz1YRCtrEfB0lEbPvHXqKZ3xORqlk4nctFgDcSrej9DRuoVPWvCF8ZlBE+PhpWw
+         kEdEqn/R8BPIeSPZrc396yTWbjgUi/gExWifHynQCv1+NIlucTJ6KRolybCeQn4FV/pR
+         38//KeGty4ioKzhsp3dKukLtEsuwxQ0RhfJFcQhT7wkUJQvJ2j6dZLEgx4rLOnZIrBKn
+         wfvgj/1BN7o+1sKbkS+y175fob/Ne5dEj+Nmketg3CuoS28fAKUB9sODPRWVqwyiQd7a
+         MvoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708730607; x=1709335407;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FiqHwwDIFlgu953RnTsKDugOiVMOZzq+GWo/eDFLupM=;
+        b=Dr3L/jDmut/4GgH7SfLhcYzaCGaBnEmnrTgjxNyrTLbmLhP7hD072+zqRHxSroI2lU
+         Y2h19gsQcytEC0GQ6XUBFThxJN2U1iiMvgXSHOsBNeKoZ8XmF3Kq8QhSDkG/GFII0UEo
+         gpKtMLqhPWNzST/ox857WXsvWmW/Wm74pZL6J3Mldz1tYRWmR9sl8twdlNqXGvJg7jTm
+         JQqwZFqVJhaqw6mesowqF1cN9i8CdxYFYyPWTthO1zEr5d3UvpAFwGxmkQX+0fGeEODH
+         Lj81+zPp5MM2SyTX5GCkU3mZ0hk+EuVgSVmTJ26nKBF38Z5q8+5HObe0U2LPNrZJVTFQ
+         Rgpw==
+X-Forwarded-Encrypted: i=1; AJvYcCUHOq5kTseoTgxRP/gM/QYeciCszSmx+Bi6j6N4NUdiQiO9U1KxlHdj16dt3arHeY6Ymhf11AgUZcLTdBgW5Oqp6bNHkuFZqEr54pn45F2qwZ7hFuJuxdHqDgoL7/yywaDG8MWXQCrqsQnufxBeZxc92Ge/D+jP8ftLicZRVWwY1/EcqYWPZANzb3e1zMDj0EJUsXP9ptNU3pUQhFkuf1aa
+X-Gm-Message-State: AOJu0Yx1MeiOOzuJ/bGAit3iYOH3H1w18gacsz7ZgbRz0HpjC+1iCOmW
+	HHJKKqImBV76NAodh710PzHDlv+63uC6nkLZ0/uD2LIjZN3FfRxr
+X-Google-Smtp-Source: AGHT+IFEAfawHMf5nBlmAJcBqwc+dhP+Td4J3SQO4+9ntTDwOu1ddqXWhazOMBAKnIl7MU/frKuiLA==
+X-Received: by 2002:a17:902:ec8b:b0:1db:2ad9:9393 with SMTP id x11-20020a170902ec8b00b001db2ad99393mr1556242plg.48.1708730606848;
+        Fri, 23 Feb 2024 15:23:26 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:f0c6:1cdc:5abd:78b8])
+        by smtp.gmail.com with ESMTPSA id kr7-20020a170903080700b001d74502d261sm12194960plb.115.2024.02.23.15.23.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Feb 2024 15:23:26 -0800 (PST)
+Date: Fri, 23 Feb 2024 15:23:24 -0800
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+	linux-sound@vger.kernel.org,
+	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+	linux-mips@vger.kernel.org
+Subject: Re: [PATCH 3/4] Input: leds: Prepare for removal of config option
+ LEDS_AUDIO_TRIGGER
+Message-ID: <Zdko7JAFw_TBV-63@google.com>
+References: <30d49088-283c-40f3-b97b-fd5f5174a467@gmail.com>
+ <e5ef576b-70ee-4781-88e3-e728c1e7cb9c@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
- <20240215-mbly-i2c-v1-1-19a336e91dca@bootlin.com> <20240216022704.GB850600-robh@kernel.org>
- <CZ6E24VPJKJG.35LACFD6ZV5KE@bootlin.com> <CACRpkdZZhhzg5SY7U5dv_OfLEVejRFom4V9nCfkQXunAw1ZXSw@mail.gmail.com>
- <CZ94LGRSF9KN.15ZO1VRMIQVR8@bootlin.com> <CZAX02IL1N1J.2GQR9D73GLRZB@bootlin.com>
- <ZdY2WzKbElloXC4-@shikoro> <20240222171404.GA3334332-robh@kernel.org> <ZdegTjJpDJGEgdvo@shikoro>
-In-Reply-To: <ZdegTjJpDJGEgdvo@shikoro>
-From: Rob Herring <robh@kernel.org>
-Date: Fri, 23 Feb 2024 09:34:34 -0700
-X-Gmail-Original-Message-ID: <CAL_JsqLk3UbrXAymTvLQeeS-ACY7makTVYxa9CetO-G-v3TuqA@mail.gmail.com>
-Message-ID: <CAL_JsqLk3UbrXAymTvLQeeS-ACY7makTVYxa9CetO-G-v3TuqA@mail.gmail.com>
-Subject: Re: [PATCH 01/13] dt-bindings: i2c: nomadik: add timeout-usecs
- property bindings
-To: Wolfram Sang <wsa@kernel.org>, Rob Herring <robh@kernel.org>, 
-	=?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Andi Shyti <andi.shyti@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-arm-kernel@lists.infradead.org, 
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
-	Gregory Clement <gregory.clement@bootlin.com>, 
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e5ef576b-70ee-4781-88e3-e728c1e7cb9c@gmail.com>
 
-On Thu, Feb 22, 2024 at 12:28=E2=80=AFPM Wolfram Sang <wsa@kernel.org> wrot=
-e:
->
->
-> > > @Rob: My memory fails a little bit about these two schemas: we have t=
-he
-> > > github one for generic bindings, not strictly related to Linux, right=
-?
-> >
-> > Well, NONE of the bindings are strictly related to linux unless they sa=
-y
-> > 'linux,' prefix.
->
-> Ok, right, of course. What I meant was probably: why do we have
-> controller bindings in the kernel and schema bindings in a github tree?
+On Tue, Feb 13, 2024 at 08:33:24AM +0100, Heiner Kallweit wrote:
+> In a follow-up patch handling of the LED audio trigger will be changed,
+> including removal of config symbol LEDS_AUDIO_TRIGGER. Therefore set
+> the default trigger unconditionally to "audio-mute". It does no harm
+> if a default trigger doesn't exist.
+> 
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> ---
+>  drivers/input/input-leds.c | 8 +-------
+>  1 file changed, 1 insertion(+), 7 deletions(-)
+> 
+> diff --git a/drivers/input/input-leds.c b/drivers/input/input-leds.c
+> index b16fc8194..176f1da7f 100644
+> --- a/drivers/input/input-leds.c
+> +++ b/drivers/input/input-leds.c
+> @@ -18,12 +18,6 @@
+>  #define VT_TRIGGER(_name)	.trigger = NULL
+>  #endif
+>  
+> -#if IS_ENABLED(CONFIG_LEDS_TRIGGER_AUDIO)
 
-Generally the split is common, stable bindings go in dtschema. This is
-anything we'd consider should be in the DT spec. Though I have 0 plans
-to add anything to the spec because I'd like to generate the spec from
-schema. (Not really working on doing that either though). What's
-stable? Well, no solid definition there other than not new. So new
-things generally go into the kernel tree first.
+Should it be simply changed to CONFIG_SND_CTL_LED?
 
-For device specific bindings, they will never go into dtschema and
-will live where the dts files are.
+> -#define AUDIO_TRIGGER(_name)	.trigger = _name
+> -#else
+> -#define AUDIO_TRIGGER(_name)	.trigger = NULL
+> -#endif
+> -
+>  static const struct {
+>  	const char *name;
+>  	const char *trigger;
+> @@ -35,7 +29,7 @@ static const struct {
+>  	[LED_KANA]	= { "kana", VT_TRIGGER("kbd-kanalock") },
+>  	[LED_SLEEP]	= { "sleep" } ,
+>  	[LED_SUSPEND]	= { "suspend" },
+> -	[LED_MUTE]	= { "mute", AUDIO_TRIGGER("audio-mute") },
+> +	[LED_MUTE]	= { "mute", "audio-mute" },
+>  	[LED_MISC]	= { "misc" },
+>  	[LED_MAIL]	= { "mail" },
+>  	[LED_CHARGING]	= { "charging" },
+> -- 
+> 2.43.1
+> 
+> 
 
-> For me, this is a tad more difficult to maintain. Like
-> i2c-controller.yaml file has the "no-detect" binding which IMO is wrong
-> in many ways. I rejected the supporting code for Linux.
+Thanks.
 
-It was probably added to i2c.txt and I probably said, looks fine, but
-add it to dtschema. Then the Linux support got rejected. We can simply
-remove it if it is not being used.
-
-This is why I'm generally against moving all the DT stuff out of the
-kernel. The reviewing would dry up. I'll try to make sure you see any
-future i2c changes. I take either patches on devicetree-spec list or
-GH PR. Shockingly, I mainly get GH PR.
-
-Rob
+-- 
+Dmitry
 
