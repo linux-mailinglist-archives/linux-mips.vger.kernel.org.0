@@ -1,137 +1,138 @@
-Return-Path: <linux-mips+bounces-1735-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1736-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37E968674FA
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Feb 2024 13:31:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B53E286761C
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Feb 2024 14:11:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8ADC1F26FA2
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Feb 2024 12:31:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F7D628B00D
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Feb 2024 13:11:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 207EA60DE3;
-	Mon, 26 Feb 2024 12:30:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B08838063A;
+	Mon, 26 Feb 2024 13:11:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="W4EI36qw";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dpGuVNGy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CIcyzcOT"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh6-smtp.messagingengine.com (fhigh6-smtp.messagingengine.com [103.168.172.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BBCD2E626;
-	Mon, 26 Feb 2024 12:30:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAF7180053;
+	Mon, 26 Feb 2024 13:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708950618; cv=none; b=Q9Y2ZELsYafDVg1X6Hx4KsXKixf/wHGmPH6YZe7w0YkqWTCxyueTfdy4AS3px9jDzDBQe4cotdPi1OpvX96e9jFJqCDr39ZizoaHGG5AettgoTYBZ6t3IABXieExl6BQSGnvTpe1jHa47/gCOGj4DZTfLNEoBxx7jkha0qjcmA0=
+	t=1708953072; cv=none; b=W+XoMEPuyNkhiNr4JK1IhF5kBSWl2ejzdRaX9P3j1afYhfTDd/GUj060LkNDq10ieA8GDC/AJreiHruKOCd6KfNtAxnr9asft0JX8Zw2N30uvjLZqYpcNIXY6exNwkVo0mG3QuI+Zg38n+rzDxw8fyw2r1nfK3BrP6A4Fdp+tl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708950618; c=relaxed/simple;
-	bh=jXFu1eR9b9KcNi39etPSmQnajolOhrEIf/LugG/HQY4=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=K6TQHdZ/0BR2VXlJHGpaNG4nCsyImSb/WaFf8nXlfDmgah0Ecq9Dnx+krMVTauBgw2gE78b2jTK/em4q7jlz1Euq3HneZztVmpr4iFKZ/nBvfJ7Fk2ykApyGD+Sf2CGlO/kA7nwS5d2oRKm/LaCxzroSEgJjCapYh6juAGm9cNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=W4EI36qw; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dpGuVNGy; arc=none smtp.client-ip=103.168.172.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 332E11140073;
-	Mon, 26 Feb 2024 07:30:15 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Mon, 26 Feb 2024 07:30:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1708950615; x=1709037015; bh=kdqOYKJcLE
-	6gzPeiqYptNFwgezzfiyBuGgmOlyPpbC0=; b=W4EI36qwfvfjuQXPOo7T2wyWgM
-	p6It3fuaC+vlenQd31BWnMxCa900vWG/t5emmVmyM1IoyUARWdQhdCIgDtEv0LvR
-	b5Lv0jZcYTXrLxGCJkBIudk1Zp1Lndephw1Y/wHrKf/5oeBr49f2Q+Iw6dHhKjWT
-	H20kk1cYilaSfR7XPg0WDCZ81Vp6N8ozFpTAtuRB4PtPqxVhchBCmxOS869rgQJM
-	/RXU2wo+x2vXgGTN1HfIZE4DBw1EguLnPfwVloYSUQQ61XVScDUE8+IJllLqD1M9
-	IcwF192mr0nV0aZxnm8Q6El86dRYwsfC2eJFx+I+xPenUz0D6c4XKhiFJi/Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1708950615; x=1709037015; bh=kdqOYKJcLE6gzPeiqYptNFwgezzf
-	iyBuGgmOlyPpbC0=; b=dpGuVNGy3GXs2Sv2da0+pTzLQ+bkZeYxKzNiiwkGTiGr
-	4axYfz0kQzfkE6rgAsveKCLrD2eTAvs/mYbYIRBedMEpQY3Pt2mLd+dRSGw9eZhQ
-	kYofoN7HywdTWMvvxSGN87eBok9hhfepVGfYflY4Cg2KMasGhQ3rwnM4YJeEdgZl
-	hwWa+1RizRzK9fDDNbpAH9DCjk5OghbZfubv2PYl8zgZhW5t41854TvcqgI8gg+m
-	AdT9ydG0uHH4qf/d5XbpiCR56QibxAuD/63+uy60Io4pTNMepHDm6YZIhbe6cWnD
-	rpiwmNqhE8jj3mAPu+eIUXOSvl2koZXKyHpJ8zpbiQ==
-X-ME-Sender: <xms:VoTcZUero4o1bZNMLtt4sOzb0nIBMw00J20PyStr30S9eHQdggkAWA>
-    <xme:VoTcZWPT-9KRT-06J1SxldUgDWQqylet4qdm6tkksP-eHn_SENSPMqm6iV53OtExe
-    FbcQzq0EsXk1HRichY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrgedvgdeflecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:V4TcZVhLyMWGwXmoPQhezK37UX9STS0dR_oEPxPyDy8M8YGaLqLUlw>
-    <xmx:V4TcZZ-Q_DNTxyLQCS73jhLJZcA6Cfiq2xoAsTSAfcGn4s5Dobxnyg>
-    <xmx:V4TcZQsyUH0gtbPr1S78erM2VcRDltkHGHfKJozYbRar-jpPHoLlHw>
-    <xmx:V4TcZUhwfmKAp4Y1Z6vHjnPyjwi7oCJzDe9q2t5tgkd5lnH_Agz6xQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id DB1A6B6008D; Mon, 26 Feb 2024 07:30:14 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-153-g7e3bb84806-fm-20240215.007-g7e3bb848
-Precedence: bulk
-X-Mailing-List: linux-mips@vger.kernel.org
-List-Id: <linux-mips.vger.kernel.org>
-List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <60e60313-3cc4-452f-a222-aadd7728183d@app.fastmail.com>
-In-Reply-To: 
- <simbnmm644ouv3kc3agsxiub6fzg6advihkqsbjzgmb44nmuxv@ktgkhn3kr43z>
+	s=arc-20240116; t=1708953072; c=relaxed/simple;
+	bh=ekQWHY7BVNZCY2DXnfaIUKh9V+Xfdva+gLdxhCjW1Tk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B4aKmaHR+saIytR76prKgxDgJ2BHi88s0x1k9DQxgtxUR7k7en3DGq9chEdkiQL3FfoLsI7JRg/xv/dviGAdxyP9K9VycI0jTV/GigIMH6Rc75uPj+YKNQtNlDzXQJFCMAgBCEUibJly4zU0SJuTH6YFPIsa0/lSlbWnhZ5p27w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CIcyzcOT; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-512bb2ed1f7so3306576e87.3;
+        Mon, 26 Feb 2024 05:11:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1708953068; x=1709557868; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bKoFuhEp/bCcXvMo7xHJz8V0ER2vk9BnRQ/8URVm5m8=;
+        b=CIcyzcOTDf2uxsJz4B3bLBquI3qlfGWSydUWSBqUs5TwzkLUiCQ3SgNQBLJ1+Wyghi
+         4jt/nt2TWVaEflu0UgAPktUtNqDEH7WZe36zSkDSzpWjqhUBfDludiaycRBZOxRtM74c
+         HHRFOFwNkg7hR3cMVWDDzjrKClgFmQYkvUjFwwONeFTcl/omdbC6kh3kfOPcUPFgxmaC
+         4s8K4bXmMAPx8Dhgm/6EK0dnJgJfL/2SzeV94EWPvADEdYwGd5vxDJhgDxwhDkiEVykg
+         YUyh7N7KpYwWXld6N6WUc8cQGygBmCCx4bLcBLUTR4ontGmNv+xfAKxUyEVjcxodCTPb
+         Ggxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708953068; x=1709557868;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bKoFuhEp/bCcXvMo7xHJz8V0ER2vk9BnRQ/8URVm5m8=;
+        b=QzVj6dbw9FbFeJ+gvtqDUPg6tP1Yhyf8/4+F9V82+g12JN8MqgPfG9TOYa+mcRstdB
+         t4C8oEKv6F+hjAso8BtxWtkUfPjZDP48nbJF1HjFPM59uRLVukRZ7NQG8vhc5tXqKn9E
+         G38Obmv9Wrvpbk/N2lVSf3lz8v7hBX44BrAUQnhNmvLpgczHZ1ifz2GSVdTZlkbD9N9Z
+         zNOCtd7uuePAdqnDoN1TJbAjR1XKF5BORqemZgOCDQdoCxi3qIJef6NBjx4AnvhdZnFb
+         HDjmbeVR+l6NnvdUd009TRKEdaCSOXVfNw5V3s54Kg6waMvR0uj3UMvrOEaQTcXmZkJr
+         OVSw==
+X-Forwarded-Encrypted: i=1; AJvYcCX0jhjQupceU6U3m1AKWhiBlnqjMvmYS7CK+y2YyyWlbmi6aHCvYl6WYe10kl01XLJC2rHIVODPHAgKx4RgUve6Jo/8mxFdHi7Dvy61eL9xgyat8KBatv6nztFuGDBo4KjbDmlTQpaKxA==
+X-Gm-Message-State: AOJu0YySk4cNdTBvsJfBeHP8Tovuj5r4DhsNiAdB4M9DqGWIrs4+8JcU
+	KIYo27ReHoWj62ztIcOKAVoRu2Haleiu4rCcOOubYaD/06+J+K4t2K0pug0g
+X-Google-Smtp-Source: AGHT+IHyawTC1NS42B3HytmpdUXGmB4aUh42SaWyF6OlD1nNfApUD2V0xbyMM4gma8LH9PcWNNlk0A==
+X-Received: by 2002:ac2:4a8a:0:b0:512:fd84:66ce with SMTP id l10-20020ac24a8a000000b00512fd8466cemr1736264lfp.65.1708953067968;
+        Mon, 26 Feb 2024 05:11:07 -0800 (PST)
+Received: from mobilestation ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id d11-20020a056512368b00b00513022c0d3esm50738lfs.91.2024.02.26.05.11.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Feb 2024 05:11:07 -0800 (PST)
+Date: Mon, 26 Feb 2024 16:11:05 +0300
+From: Serge Semin <fancer.lancer@gmail.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Jiaxun Yang <jiaxun.yang@flygoat.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] mips: cm: Convert __mips_cm_l2sync_phys_base() to
+ weak function
+Message-ID: <6n2synlvazjh2gptxtioju7dciwshwqyei4xnfzorns66b3hqx@c7blt5kwnpbl>
 References: <20240226105427.7191-1-fancer.lancer@gmail.com>
  <20240226105427.7191-2-fancer.lancer@gmail.com>
  <34af21b5-a878-418e-a70b-299cab61b37e@app.fastmail.com>
  <y2lxeu5uvj7ezlv7kf6lox5e5xprmvrhqmf3gvzjsatlrrlub7@mvqzoyq5mnvd>
  <cc9e02b3-57df-4a7d-bd21-2d574bf4b878@app.fastmail.com>
  <simbnmm644ouv3kc3agsxiub6fzg6advihkqsbjzgmb44nmuxv@ktgkhn3kr43z>
-Date: Mon, 26 Feb 2024 13:29:54 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Serge Semin" <fancer.lancer@gmail.com>
-Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Alexey Malahov" <Alexey.Malahov@baikalelectronics.ru>,
- linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mips: cm: Convert __mips_cm_l2sync_phys_base() to weak
- function
-Content-Type: text/plain
+ <60e60313-3cc4-452f-a222-aadd7728183d@app.fastmail.com>
+Precedence: bulk
+X-Mailing-List: linux-mips@vger.kernel.org
+List-Id: <linux-mips.vger.kernel.org>
+List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <60e60313-3cc4-452f-a222-aadd7728183d@app.fastmail.com>
 
-On Mon, Feb 26, 2024, at 13:20, Serge Semin wrote:
-> On Mon, Feb 26, 2024 at 01:04:33PM +0100, Arnd Bergmann wrote:
->> On Mon, Feb 26, 2024, at 12:27, Serge Semin wrote:
+On Mon, Feb 26, 2024 at 01:29:54PM +0100, Arnd Bergmann wrote:
+> On Mon, Feb 26, 2024, at 13:20, Serge Semin wrote:
+> > On Mon, Feb 26, 2024 at 01:04:33PM +0100, Arnd Bergmann wrote:
+> >> On Mon, Feb 26, 2024, at 12:27, Serge Semin wrote:
+> 
+> > I see your point now. Thanks for clarification. IMO it would be less
+> > readable due to the ifdef-ery and the new config, and less
+> > maintainable due to the conditional compilation, but would provide a
+> > more performant solution since the compiler will be able to inline the
+> > singly used static method. Basically you suggest to emulate the weak
+> > implementation by an additional kernel config.
+> 
+> I mean the kernel config that you already need here, since
+> the strong version of the function is already optional.
 
-> I see your point now. Thanks for clarification. IMO it would be less
-> readable due to the ifdef-ery and the new config, and less
-> maintainable due to the conditional compilation, but would provide a
-> more performant solution since the compiler will be able to inline the
-> singly used static method. Basically you suggest to emulate the weak
-> implementation by an additional kernel config.
+Why would I need it if after this patch is applied the
+mips_cm_l2sync_phys_base() method will be converted to a global weak
+implementation?
 
-I mean the kernel config that you already need here, since
-the strong version of the function is already optional.
+> 
+> > Not sure whether it would be better than a well-known
+> > weak-attribute-based pattern. Anyway let's wait for the
+> > Thomas' opinion about your suggestion. If he thinks
+> > it would be better I'll update the patches.
+> 
+> Weak functions are not used all that much outside of a
+> couple of parts of the kernel. There is a lot of them
+> in drivers/pci/, a little bit in acpi and efi, and
+> then a bit in arch/*/, though most of that is in mips.
 
-> Not sure whether it would be better than a well-known
-> weak-attribute-based pattern. Anyway let's wait for the
-> Thomas' opinion about your suggestion. If he thinks
-> it would be better I'll update the patches.
++ a lot of them in kernel/*, some in mm/* .)
 
-Weak functions are not used all that much outside of a
-couple of parts of the kernel. There is a lot of them
-in drivers/pci/, a little bit in acpi and efi, and
-then a bit in arch/*/, though most of that is in mips.
+> 
+> Ifdef checks in .c files are not great, but at least they
+> are much more common than __weak functions and self-documenting.
 
-Ifdef checks in .c files are not great, but at least they
-are much more common than __weak functions and self-documenting.
+Ok. I don't have concretely strong opinion about what is better. Let's
+wait for what Thomas thinks about this.
 
-     Arnd
+-Serge(y)
+
+> 
+>      Arnd
 
