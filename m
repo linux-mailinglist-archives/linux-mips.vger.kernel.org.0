@@ -1,119 +1,155 @@
-Return-Path: <linux-mips+bounces-1727-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1728-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4219486713B
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Feb 2024 11:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 40227867244
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Feb 2024 11:56:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 739471C21A6E
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Feb 2024 10:35:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 634AB1C24BB9
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Feb 2024 10:56:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 534804E1C5;
-	Mon, 26 Feb 2024 10:24:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B451CD3D;
+	Mon, 26 Feb 2024 10:54:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GxRNG7f7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jgAUKIdo"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755694E1C8;
-	Mon, 26 Feb 2024 10:24:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625731BF28;
+	Mon, 26 Feb 2024 10:54:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708943075; cv=none; b=VAJ0KZHG3uJACeApaTHg/F+5h+MgDyz6wzVLbSnvjxRCEoEVuxMx346FEQpPjaXUZgGbjAdcF4wqCogoca1+thSQ80hmpoP1OWti2ABxPNjeNtBE7WoTsGnDV4JT8jDrLBCXCFvdR+XPJR6VAi6PYUW+BaSp2SNUR6ssZg+hK3E=
+	t=1708944874; cv=none; b=dOMfxemERjx4qtx+7r7b8ERXXurEFWQ0tcyxb2WTeKou+WhUFtxh3cZQmKK+8SPL5UsnWtTJm4ReuW9mf947wkqsnP9QaTHORIJIAXd9I1kTWksHdITLoQ4013gsjs9EEU3e8EvZhZPUScsi+Z8v50rOYQAxuu/lYHrZKrSXi8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708943075; c=relaxed/simple;
-	bh=pESL1qSJf5euaSX9jLXoCFrMOPcz0jvgu2n/nLLwJ7g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pY13lZiJKpvxjC5uIS+IbO6lns+LP3F4dJbYFl/1qrqbNMrJ3DODENkNLD9GFySPJktKq+jqTzjUYGrDq2UHyGbUq3oegRzrLIN+FHlhHjs9ZuZv9KA2zOPDIO+mexkUELZHc13K1OsuOkz2J4vJbIZT7l2O00qqgUmxqUB2FRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GxRNG7f7; arc=none smtp.client-ip=209.85.167.42
+	s=arc-20240116; t=1708944874; c=relaxed/simple;
+	bh=6SCmyOJPuFJZyFUt0o8qqfRRoIIzi/k6DEnO/K7o4Kg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JDIeQPvtu++HB1OiZJTlKwVoLryifeM3JFN6otyj5v9I9/HmsempR8Gx+pqTdqtauS+9IA72pbyzKAMDsPisy872HsMRUPmi7NH4jtjX0vKkn8v1cb2WbNLNZccoEtBCB3cahg2DfA4PWIM4suMncpQYYcws36M7ssq8mpC8hRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jgAUKIdo; arc=none smtp.client-ip=209.85.208.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-51197ca63f5so4357745e87.1;
-        Mon, 26 Feb 2024 02:24:33 -0800 (PST)
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2d29111272eso2518081fa.0;
+        Mon, 26 Feb 2024 02:54:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708943072; x=1709547872; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=W3YYIxyO62mYogcdCUBdDIF6VWzDuO2ZuKHtLO17Pd4=;
-        b=GxRNG7f76SDBa6o886eN0dyhdzFgz4OyzaIQXhCxj7C0uEL6IwTctRBwKRUngnLqiT
-         t8uJNKBNweKK6GFnp6cPh/nilva+E+a34yXDrDAKy/qu2UXXfSo+Wi9uJTfMjAaPWiqk
-         1lmTo+YSEky6Sw3FCjtnImsLPoYMuZZjB3Bov19pWD3OMjLDORqeD0BDnUBHluWTJoj6
-         oAU5mtNjKpraSx5GZQuDsSFs8+Mfp9DTEm3HpUQIywwVY0q+8apUnBb00UtHKC3fWS8x
-         oi/CLEywaJeRUXF97KhFoF+Qd+S6k21LSDAasNHCJ5z3TgckG+ZYfMJuTZSXmOQwWXca
-         KvFA==
+        d=gmail.com; s=20230601; t=1708944870; x=1709549670; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1W5kmNMiDZm/lE4t2XFLv0Kqr9pksGJeyoNuaP9sm74=;
+        b=jgAUKIdoeD/Vv8bDwHzUhUVUBeFUiGOCUlQD6uw8f8pR2twL5SpW98vl47dWThD97c
+         QzqE/Ng+jGAzM2k9VXx9l31M1dbSPthC672IYuVr3jON0ZUDjRLafkWiAb42ZHLJZzUq
+         NeSE54QPKfwMka1Y00R5gdlT9wQyhazMiQc1yw6NkpxiJ5qczwB8BdJvODkfINj/Zvq6
+         3866lugdH03/ufPdU9TBRjuLrLa0S6q5NAOckGhje6LrAl61ct/5+u7lNgACtIZlMs0X
+         lFd0dHp1tC8ACbPXkm7D3B+75jd90n6YHXiDdo+aLzxZqG/CC20RcCpRYIAXEg/CxTmK
+         8sLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708943072; x=1709547872;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W3YYIxyO62mYogcdCUBdDIF6VWzDuO2ZuKHtLO17Pd4=;
-        b=esOLROLI5WAV//oeCDZK6AC5w72GhWpo4KykT21GULsTFY9DK2fjuc5g/5t+R+LOn+
-         g8Mfymhh0FbdMmyy/lxkZkKRv5OfuZzbiS3TaHuaT4iuezde0irqpY44o6v3cHuI1Mcl
-         Tva6zHcrNoARM1EEZMaaW/Za+mavYijcEI9R9hhq7FfiapdriZ9EDFfevEce4i85UZbI
-         HxVZ9Stp1MM7NuIQEbJcU/UgaA0qQQGGaRX4RfglKzpsu7lztlxYNbKtpYZDNf8JvXcY
-         6NXnVlednTRdl4R/zRE3E+1ezmdgQSC7RIcwNTL4ftREr0ncJ04x8vuctrVs8UqKPkBR
-         5aHA==
-X-Forwarded-Encrypted: i=1; AJvYcCV+YrcmcpufkV6LM6bvpJOLh2LngjF8CRtbDM1YsTLCZ020WFLJ2NoQPh7jntBKiIuVD19eqU6z9ekimhLz0Wm5OeTwHo57e9BJH30Y
-X-Gm-Message-State: AOJu0Yycv6vc8gScMavUpPnYJm66utDGOoDMouLSsSmJL8zHwsLdRY0u
-	PZ17LFSxxn/y6dbTG9KKNWXnNsfO80wLGXk8jzOlo02H3/fkj0MCafO+vCJy
-X-Google-Smtp-Source: AGHT+IFO1qm6qrvV4RN1D0OPylyPVVl6gLwLdkcPJx3lGllCprzwhQXmWHSbkAKWk0/6kEbJzOl6qA==
-X-Received: by 2002:a19:7619:0:b0:512:d907:3161 with SMTP id c25-20020a197619000000b00512d9073161mr3855938lff.66.1708943071372;
-        Mon, 26 Feb 2024 02:24:31 -0800 (PST)
-Received: from mobilestation ([178.176.56.174])
-        by smtp.gmail.com with ESMTPSA id br35-20020a056512402300b0051186a82fc1sm789142lfb.171.2024.02.26.02.24.30
+        d=1e100.net; s=20230601; t=1708944870; x=1709549670;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1W5kmNMiDZm/lE4t2XFLv0Kqr9pksGJeyoNuaP9sm74=;
+        b=Z4KLuRedpkmncsLdkcbfHY6dLM9qq3tl+RIy421uLDaDpZFJTXbsFRthRUHAWqkz2o
+         kP2uUvC+CCcr2rjJZxvWAD/V60HCQ6iBfaPmDLx/Kr73aRl+XaQZIhsPZoYX5MqJYd/b
+         azekM59/DzpI/O4cGIB90myhUTRPJXAMpL82arMeU4pajlSPfEpeooEZp9+pye2b+EFF
+         inLRjINyZMPQAvmm6AYInpZFxY3A+LA81ut3C1dExPYAp5QJMyd8aEMKxiB3nib1vu2g
+         DpbGEFO1PEcQ5nRN3Vd8rChXXV9nSx3Xi+oOqEf1RZfALKHf4xzZtUBMyimoSEJowhfd
+         CyOA==
+X-Forwarded-Encrypted: i=1; AJvYcCXI/ygAbYC93Hq+pDiaLbORcLRXS8qIEZuCQYrH5pcw9HMoMM0tXYeTItG2r/LQcJu0YTo0MbB2suF93opJAZcnKHJmfH8OluaPVHTCifDctAo+kAq+KWq2D7Qir7sTpTsjO5ncssFNZQ==
+X-Gm-Message-State: AOJu0YyuCw7/QxUiVgcbzn9JNlJJ8t4CZAO8c+rUXsQrapCCFZw6fYKc
+	Yhfbu7YfrRisPDKzYS2TfrtAeeXAJshjDf4+X/KSX2KGtt/fxxhE7wq2GWs8
+X-Google-Smtp-Source: AGHT+IHbiONncUkrJn+4o3oqsBqD5qb2+Lir7SECSi4lXPECTfPVYHcaltuPX7nTs7CHyXx9GMOJsg==
+X-Received: by 2002:a05:651c:124b:b0:2d2:5126:5a51 with SMTP id h11-20020a05651c124b00b002d251265a51mr3500492ljh.19.1708944870283;
+        Mon, 26 Feb 2024 02:54:30 -0800 (PST)
+Received: from localhost ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id t12-20020a2e9c4c000000b002d21f1f1e82sm837149ljj.3.2024.02.26.02.54.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Feb 2024 02:24:31 -0800 (PST)
-Date: Mon, 26 Feb 2024 13:24:28 +0300
+        Mon, 26 Feb 2024 02:54:29 -0800 (PST)
 From: Serge Semin <fancer.lancer@gmail.com>
-To: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] bus: bt1-apb: Remove duplicate include
-Message-ID: <v5lo4g5mp2d6y7butvf7snlnbf542rpdmyacmigvdqljbrdq23@sfuludqikigx>
-References: <20240226020927.111091-1-jiapeng.chong@linux.alibaba.com>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Serge Semin <fancer.lancer@gmail.com>,
+	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] MIPS: Fix missing proto and passing arg warnings
+Date: Mon, 26 Feb 2024 13:54:20 +0300
+Message-ID: <20240226105427.7191-1-fancer.lancer@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240226020927.111091-1-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Jiapeng
+After getting my local tree rebased onto the kernel 6.8-rc3 the MIPS32
+kernel build procedure produced a couple of warnings which I suggest to
+fix in the framework of this series.
 
-On Mon, Feb 26, 2024 at 10:09:27AM +0800, Jiapeng Chong wrote:
-> ./drivers/bus/bt1-apb.c: linux/clk.h is included more than once.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=8312
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+A first warning is of the "no previous prototype for `<func>`" type. In
+particular my arch-specific code has the mips_cm_l2sync_phys_base() method
+re-defined, but even though the function is global it' prototype isn't
+declared anywhere. Fix that by moving the __mips_cm_l2sync_phys_base()
+body to a weak implementation of mips_cm_l2sync_phys_base() and adding the
+method prototype declaration to the mips/include/asm/mips-cm.h header
+file. For the sake of unification a similar solution was provided for the
+mips_cm_phys_base()/__mips_cm_phys_base() couple.
 
-Acked-by: Serge Semin <fancer.lancer@gmail.com>
+The following text describes the patches which have already merged in at
+v1 stage of the patchset (see changelog v2).
 
--Serge(y)
+One more case of the denoted earlier warning I spotted in the
+self-extracting kernel (so called zboot) with the debug printouts enabled.
+In particular there are several putc() method re-definitions available in:
+arch/mips/boot/compressed/uart-prom.c
+arch/mips/boot/compressed/uart-16550.c
+arch/mips/boot/compressed/uart-alchemy.c
+All of these files lacked the prototype declaration what caused having the
+"no previous prototype for ‘putc’" printed on my build with the next
+configs enabled:
+CONFIG_SYS_SUPPORTS_ZBOOT=y
+CONFIG_SYS_SUPPORTS_ZBOOT_UART_PROM=y
+CONFIG_ZBOOT_LOAD_ADDRESS=0x85100000
+CONFIG_DEBUG_ZBOOT=y
 
-> ---
->  drivers/bus/bt1-apb.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/bus/bt1-apb.c b/drivers/bus/bt1-apb.c
-> index e97c1d1c7578..595fb22b73e0 100644
-> --- a/drivers/bus/bt1-apb.c
-> +++ b/drivers/bus/bt1-apb.c
-> @@ -22,7 +22,6 @@
->  #include <linux/clk.h>
->  #include <linux/reset.h>
->  #include <linux/time64.h>
-> -#include <linux/clk.h>
->  #include <linux/sysfs.h>
->  
->  #define APB_EHB_ISR			0x00
-> -- 
-> 2.20.1.7.g153144c
-> 
+The second warning is of the "passing argument <x> of ‘<func>’ from
+incompatible pointer type" type which I discovered in the
+drivers/tty/mips_ejtag_fdc.c driver. The problem most likely happened due
+to the commit ce7cbd9a6c81 ("tty: mips_ejtag_fdc: use u8 for character
+pointers").
+
+That's it for today.) Thanks for review in advance. Any tests are very
+welcome.
+
+Link: https://lore.kernel.org/linux-mips/20240215171740.14550-1-fancer.lancer@gmail.com
+Changelog v2:
+- Drop aleady applied pateches:
+  [PATCH 3/4] mips: zboot: Fix "no previous prototype" build warning
+  [PATCH 4/4] tty: mips_ejtag_fdc: Fix passing incompatible pointer type warning
+- Drop Linux serial mailing list and the respective maintainers from the
+  Cc-list.
+- Covert the underscored versions of the CM2/L2-sync base address
+  getters to being the body of the weakly defined original methods.
+
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (2):
+  mips: cm: Convert __mips_cm_l2sync_phys_base() to weak function
+  mips: cm: Convert __mips_cm_phys_base() to weak function
+
+ arch/mips/include/asm/mips-cm.h | 20 ++++++++++++++++----
+ arch/mips/kernel/mips-cm.c      | 10 ++--------
+ 2 files changed, 18 insertions(+), 12 deletions(-)
+
+-- 
+2.43.0
+
 
