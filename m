@@ -1,168 +1,140 @@
-Return-Path: <linux-mips+bounces-1724-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1725-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C5FF866B39
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Feb 2024 08:43:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AA6B866E1D
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Feb 2024 10:19:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C03412813FC
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Feb 2024 07:43:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C4481C23D75
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Feb 2024 09:19:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E079B1B27D;
-	Mon, 26 Feb 2024 07:43:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E701D1CFA9;
+	Mon, 26 Feb 2024 08:42:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="j9WkX167"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bhxK74p5"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28BF31BF28
-	for <linux-mips@vger.kernel.org>; Mon, 26 Feb 2024 07:43:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA731CAB9;
+	Mon, 26 Feb 2024 08:42:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708933420; cv=none; b=pfQeVe0eyyV4P3sLHVeuJQ0twJpjGHGidMjyzc9n1V4CoLzy9jIFCLuGXQk8XpONeOEyYjVH8DfFFKU9cgLVP/hyL2bDw7oKbZD6tdnLT4jdS8W+77NJey9lsl0rwsFb3Lf0MHFV6GI/MCQr1jJa8HW1yKaTwTTka2l7vINB98E=
+	t=1708936921; cv=none; b=MtyhUdLqDDmfBTN6m/2fDWEj+5YLqVn4gxrERghmm7JvAbuuMmb3Z9qgAqyJWxfyUQE1GrdrLgWlNNRf8GmZE1JgGTckUf4FnBh5BKJHAsb00XPTjCdryg4l20K9EJTXUZrhf8RE4Helsnwm+lg7fjzXh3+vABPsoakeC5QJX2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708933420; c=relaxed/simple;
-	bh=0jHZbERHvBz8/k+vAtgKv8uNTvvfRkoN9sbJWBnosLo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AUJDtQqA+8MzK4wpletd78pf7Ks2SeGXflcXNQAT3X93lACL7wMcTpmTE4BQy2WIxe1y0ehEvZLMXxJWek3j43lIfsyNu369LeHS5O26WbsZOM1zKj4yrDm+HN8SEG/LsUe+h5EvWmM98XrvhW1pkZjW98DGeARb6PoIsrAupRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=j9WkX167; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-55a5e7fa471so3618201a12.1
-        for <linux-mips@vger.kernel.org>; Sun, 25 Feb 2024 23:43:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708933417; x=1709538217; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dLLV5MHKLPnEvbhOSWo3W24al4dWgZowpwQVTxE2dGA=;
-        b=j9WkX16709IkyzX2qcUjOTYZEvXLqN3tI+M5a6CDPkIOIsh6mSRzM2KS0yxZLL4MrE
-         s1ycLzdZSOie9AD2/bABHxqys2RsIwkA1U1Y4239vEex3HV2uLwBrCj/Q2j+WvBVw0WM
-         aO3UgKebPPUR3uaMbrDestDz6JHnbivfCEpRrukJ41/tFQYSihCDAzYzSV/WTHQn/S+T
-         7AgiohO7//Ek/4+ROyvrPUMCRysolJv3zQ1dNvPhcb6I2gCc5yJ5FabdtDP24qlae+XL
-         nXCAYAVAo/37QHt08YCUjjSiLaojeUtJJflWLY8a/mkqftVA4JRKX7EmTC/+kVR5r6Ez
-         Xc4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708933417; x=1709538217;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dLLV5MHKLPnEvbhOSWo3W24al4dWgZowpwQVTxE2dGA=;
-        b=T3otpvLeaFpqquZcE1hKkgLSu5JqOo/FJkhuRDRp5pTYI1qTtmQlW3LkdZ8OgYXP65
-         djQQTUz+S9EMOlreY4XRMesDnIVjJltj++E1nvszpJzWny/BBl5VNGsGjOvtQTBVFPcg
-         0ren8eD66G+tOi6ChQvTs6TqRROF8kf8mTdNu2INrUR51UTiVkbmYpDiP8KHiMgZsxtb
-         itF9vYs0urXSCKY34NZRVUAsDFqSALqWO2UG00qZexNbRjEZgxCfWXdsxj8X/2RwTQQC
-         fQzgI26UxoSx66vbAZq2D8Y8Ix7P/sCootEwBHAINRyjQPps7/MV9MDpp1962KNoQAnR
-         PocQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVIrfvdCQKeCJbi+BVIJ/pql2lMO/t5tNy/FyPrivDl9jCgLFUkejQlgaRcUM9jMPzFiMTUc/75TnBCSx18t/CiwSCNsXPwgA8IQw==
-X-Gm-Message-State: AOJu0YzwHJTcUeAhlD4VF1Yx2VVqBSeG84Wm5yCGJ5WSk3MBo1Yi1P3i
-	w9suQ2R1X7JdYONhvYXnOUIf+qiHA390sa0Sr8ivOZjoYdqDaiuGHU6lv9oU1+0=
-X-Google-Smtp-Source: AGHT+IHdpjXymkNeepkoicWIMCSzGhXDOUvo65ozxzq3/2UCtX50FaiKrO4j18hn/2YhbD+1hIo/iA==
-X-Received: by 2002:a17:906:381:b0:a3e:d92d:ef6a with SMTP id b1-20020a170906038100b00a3ed92def6amr4016032eja.25.1708933417407;
-        Sun, 25 Feb 2024 23:43:37 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.222.116])
-        by smtp.gmail.com with ESMTPSA id d14-20020a170906304e00b00a3f9949743dsm2138215ejd.209.2024.02.25.23.43.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Feb 2024 23:43:36 -0800 (PST)
-Message-ID: <4978a002-d726-4fcc-9435-028923a32317@linaro.org>
-Date: Mon, 26 Feb 2024 08:43:34 +0100
+	s=arc-20240116; t=1708936921; c=relaxed/simple;
+	bh=cEt/RUX0lThydTXPuAPjsQ4gTtxmbYh9mUY2ih/P5eY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lgoa2lH1HtwcJVReGyz7arvvVQtz3Fv4IzVFLBWpqN7gv5OlKiSBNKPC9wjixj8tPK6Ux889p2gdzvY6irX8emImQRViMcJpkU+ng2rM8yBQLbHljRT0ZDio/ugBzucVplSX88AWOs8hlf0M6C7Fd87vXRNYLjoiHc/8A0JbLkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bhxK74p5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EADDC433C7;
+	Mon, 26 Feb 2024 08:42:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708936921;
+	bh=cEt/RUX0lThydTXPuAPjsQ4gTtxmbYh9mUY2ih/P5eY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bhxK74p5YtnC90wX4cA1Nmh6dihZgxJSx0HfRpclARKsRDJgwhBWWCv8326q1ug2N
+	 2JFQ7+Iza+A2uMQ3SiZHUSNpWZwkBny21B3zNprSQiU0y8cngnSQHgRNevUoVWLm8m
+	 HXLud7VnN5zexuXuXfCPoFlIA8GbHAdY0rw/rrze/0M6vXE5QxcXzTHb9LFngavUve
+	 PLK32NGc72b339ZIYVDn0sK+xhBiqqtCAlpbIoMlmnaIF+Spxt5mmxxnGK9577VlVL
+	 DkSLoXgQ50EpTYa78kPAzChTIqMPYycE4fgxmJgOZrjEVhISnpnti4/NljL+vqc5gr
+	 4zCS55d1gAX3A==
+Date: Mon, 26 Feb 2024 09:41:58 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Rob Herring <robh@kernel.org>
+Cc: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH 01/13] dt-bindings: i2c: nomadik: add timeout-usecs
+ property bindings
+Message-ID: <ZdxO1l408x7kMwsB@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+References: <20240215-mbly-i2c-v1-1-19a336e91dca@bootlin.com>
+ <20240216022704.GB850600-robh@kernel.org>
+ <CZ6E24VPJKJG.35LACFD6ZV5KE@bootlin.com>
+ <CACRpkdZZhhzg5SY7U5dv_OfLEVejRFom4V9nCfkQXunAw1ZXSw@mail.gmail.com>
+ <CZ94LGRSF9KN.15ZO1VRMIQVR8@bootlin.com>
+ <CZAX02IL1N1J.2GQR9D73GLRZB@bootlin.com>
+ <ZdY2WzKbElloXC4-@shikoro>
+ <20240222171404.GA3334332-robh@kernel.org>
+ <ZdegTjJpDJGEgdvo@shikoro>
+ <CAL_JsqLk3UbrXAymTvLQeeS-ACY7makTVYxa9CetO-G-v3TuqA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/13] dt-bindings: hwmon: lm75: add label property
-Content-Language: en-US
-To: Guenter Roeck <linux@roeck-us.net>, =?UTF-8?Q?Th=C3=A9o_Lebrun?=
- <theo.lebrun@bootlin.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org, Gregory Clement <gregory.clement@bootlin.com>,
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, Jean Delvare
- <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
- <20240215-mbly-i2c-v1-3-19a336e91dca@bootlin.com>
- <dcd5794b-aca6-4f6d-8e8d-f5548fcad644@roeck-us.net>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <dcd5794b-aca6-4f6d-8e8d-f5548fcad644@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="jGozXIullJVYR1fu"
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqLk3UbrXAymTvLQeeS-ACY7makTVYxa9CetO-G-v3TuqA@mail.gmail.com>
 
-On 24/02/2024 18:30, Guenter Roeck wrote:
-> On Thu, Feb 15, 2024 at 05:52:10PM +0100, Théo Lebrun wrote:
->> Declare optional label devicetree property. Show usage in one example
->> with dummy name.
->>
->> To: Jean Delvare <jdelvare@suse.com>
->> To: Guenter Roeck <linux@roeck-us.net>
->> Cc: <linux-hwmon@vger.kernel.org>
->> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> What is the verdict here ? Should I apply it and accept another patch
-> to update it, or should it be reworked to be based on the new common
-> hwmon schema ?
 
-This should be reworked based on the new common schema (just like my
-follow up patches did for some of the bindings).
+--jGozXIullJVYR1fu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Best regards,
-Krzysztof
+Hi Rob,
 
+> I'll try to make sure you see any future i2c changes.
+
+Thanks, if you mention @wsakernel I should get notified.
+
+I looked into watching specific directories in Github and I found the
+CODEOWNERS file. But code owners need to have write permissions and I
+am not sure this is worth the hazzle.
+
+Now on to checking that remaining binding...
+
+   Wolfram
+
+
+--jGozXIullJVYR1fu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXcTtIACgkQFA3kzBSg
+KbZ0Eg/9GIPjjbNJOCUz4gJoECPA7PtwjD0jB/4iW1OQQ32akslqKMkl0nIx8HCR
+chtQDMDl8xFHw1eQCV1FWFVorUoVEslcDJDX2CCUUcJGfimb8h/W6AwcEHib7mMu
+nnC/0OYBmDCQ+AU6A9YUYQRkF+j/zclDay5U5v9VNu69IDiE/lyZfem1zdDjJjD7
+WszhKsNhxItWKdWGvURKLkGPpB3jVJqaeaidi9QMm6IHIBLSmHf+fUWGRlaavpG0
+PHLZ2BDXY3+3tZm9oocAiK8CSJeAoo1DXSuz/tGNjamV2cgkDP9SqEaG+4wMoVKI
+pb6FeoKZQrAPCeNkKstYceh8AZtZY5HpgOKib7LhwhMWvJ92nstFU8++7qzus1np
+ibixz+VrQc0Pjm/HsO755vVeyleazBetuhCMHnq1yiYTAad7kkS1KQSFysSaWJVg
+aTbdPC3khK22hZ3kdiVtUw2Gaq3b97xMbx0r0yM3cA8VW9vwUKMNBCVRLtTIF9so
+KtTH1n6ZcPUaLaW6wzYXK8+VsvduSuBVLMFUWum+pZJUL2fxkvJv4z/Tj6zaViqa
+moWgVDVciK+Mh5y6LsvedTXU2Fdtiyoi9VtQTxy+GtE6htoCPGu8DKphNuFHxNCK
+crfhE+pwPhqrtHX9XDWgvzKEzVgSHG9XQ0mCn/rpShWu/KXQ4Gw=
+=oPtZ
+-----END PGP SIGNATURE-----
+
+--jGozXIullJVYR1fu--
 
