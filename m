@@ -1,87 +1,94 @@
-Return-Path: <linux-mips+bounces-1736-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1737-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B53E286761C
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Feb 2024 14:11:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B6A586780F
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Feb 2024 15:17:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F7D628B00D
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Feb 2024 13:11:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B100A1F2E205
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Feb 2024 14:17:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B08838063A;
-	Mon, 26 Feb 2024 13:11:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD37E12A15C;
+	Mon, 26 Feb 2024 14:17:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CIcyzcOT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XLDWD9hK"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAF7180053;
-	Mon, 26 Feb 2024 13:11:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E217129A75;
+	Mon, 26 Feb 2024 14:17:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708953072; cv=none; b=W+XoMEPuyNkhiNr4JK1IhF5kBSWl2ejzdRaX9P3j1afYhfTDd/GUj060LkNDq10ieA8GDC/AJreiHruKOCd6KfNtAxnr9asft0JX8Zw2N30uvjLZqYpcNIXY6exNwkVo0mG3QuI+Zg38n+rzDxw8fyw2r1nfK3BrP6A4Fdp+tl4=
+	t=1708957035; cv=none; b=H2/igorI3HUWG9PE3CtrHo6RVhfusoOMmm4RFiIAMQjZb+Wz+TsBvib9iqYURvjwJ9PhBJohu9Lz+xrmHoF7JvJ+yddszElaSZc21lfr+VqfT37qHnS4hEkFCbGc+M7pNFTfQTmdMZ9jGc6VpB85PAOujkmqfpqhA08bj8iGZLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708953072; c=relaxed/simple;
-	bh=ekQWHY7BVNZCY2DXnfaIUKh9V+Xfdva+gLdxhCjW1Tk=;
+	s=arc-20240116; t=1708957035; c=relaxed/simple;
+	bh=HZlXZGpEZ0auGfIkoqRiKy72XZYfKXmXVmc4SJZWGJo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B4aKmaHR+saIytR76prKgxDgJ2BHi88s0x1k9DQxgtxUR7k7en3DGq9chEdkiQL3FfoLsI7JRg/xv/dviGAdxyP9K9VycI0jTV/GigIMH6Rc75uPj+YKNQtNlDzXQJFCMAgBCEUibJly4zU0SJuTH6YFPIsa0/lSlbWnhZ5p27w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CIcyzcOT; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-512bb2ed1f7so3306576e87.3;
-        Mon, 26 Feb 2024 05:11:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708953068; x=1709557868; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bKoFuhEp/bCcXvMo7xHJz8V0ER2vk9BnRQ/8URVm5m8=;
-        b=CIcyzcOTDf2uxsJz4B3bLBquI3qlfGWSydUWSBqUs5TwzkLUiCQ3SgNQBLJ1+Wyghi
-         4jt/nt2TWVaEflu0UgAPktUtNqDEH7WZe36zSkDSzpWjqhUBfDludiaycRBZOxRtM74c
-         HHRFOFwNkg7hR3cMVWDDzjrKClgFmQYkvUjFwwONeFTcl/omdbC6kh3kfOPcUPFgxmaC
-         4s8K4bXmMAPx8Dhgm/6EK0dnJgJfL/2SzeV94EWPvADEdYwGd5vxDJhgDxwhDkiEVykg
-         YUyh7N7KpYwWXld6N6WUc8cQGygBmCCx4bLcBLUTR4ontGmNv+xfAKxUyEVjcxodCTPb
-         Ggxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708953068; x=1709557868;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bKoFuhEp/bCcXvMo7xHJz8V0ER2vk9BnRQ/8URVm5m8=;
-        b=QzVj6dbw9FbFeJ+gvtqDUPg6tP1Yhyf8/4+F9V82+g12JN8MqgPfG9TOYa+mcRstdB
-         t4C8oEKv6F+hjAso8BtxWtkUfPjZDP48nbJF1HjFPM59uRLVukRZ7NQG8vhc5tXqKn9E
-         G38Obmv9Wrvpbk/N2lVSf3lz8v7hBX44BrAUQnhNmvLpgczHZ1ifz2GSVdTZlkbD9N9Z
-         zNOCtd7uuePAdqnDoN1TJbAjR1XKF5BORqemZgOCDQdoCxi3qIJef6NBjx4AnvhdZnFb
-         HDjmbeVR+l6NnvdUd009TRKEdaCSOXVfNw5V3s54Kg6waMvR0uj3UMvrOEaQTcXmZkJr
-         OVSw==
-X-Forwarded-Encrypted: i=1; AJvYcCX0jhjQupceU6U3m1AKWhiBlnqjMvmYS7CK+y2YyyWlbmi6aHCvYl6WYe10kl01XLJC2rHIVODPHAgKx4RgUve6Jo/8mxFdHi7Dvy61eL9xgyat8KBatv6nztFuGDBo4KjbDmlTQpaKxA==
-X-Gm-Message-State: AOJu0YySk4cNdTBvsJfBeHP8Tovuj5r4DhsNiAdB4M9DqGWIrs4+8JcU
-	KIYo27ReHoWj62ztIcOKAVoRu2Haleiu4rCcOOubYaD/06+J+K4t2K0pug0g
-X-Google-Smtp-Source: AGHT+IHyawTC1NS42B3HytmpdUXGmB4aUh42SaWyF6OlD1nNfApUD2V0xbyMM4gma8LH9PcWNNlk0A==
-X-Received: by 2002:ac2:4a8a:0:b0:512:fd84:66ce with SMTP id l10-20020ac24a8a000000b00512fd8466cemr1736264lfp.65.1708953067968;
-        Mon, 26 Feb 2024 05:11:07 -0800 (PST)
-Received: from mobilestation ([178.176.56.174])
-        by smtp.gmail.com with ESMTPSA id d11-20020a056512368b00b00513022c0d3esm50738lfs.91.2024.02.26.05.11.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Feb 2024 05:11:07 -0800 (PST)
-Date: Mon, 26 Feb 2024 16:11:05 +0300
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Jiaxun Yang <jiaxun.yang@flygoat.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mips: cm: Convert __mips_cm_l2sync_phys_base() to
- weak function
-Message-ID: <6n2synlvazjh2gptxtioju7dciwshwqyei4xnfzorns66b3hqx@c7blt5kwnpbl>
-References: <20240226105427.7191-1-fancer.lancer@gmail.com>
- <20240226105427.7191-2-fancer.lancer@gmail.com>
- <34af21b5-a878-418e-a70b-299cab61b37e@app.fastmail.com>
- <y2lxeu5uvj7ezlv7kf6lox5e5xprmvrhqmf3gvzjsatlrrlub7@mvqzoyq5mnvd>
- <cc9e02b3-57df-4a7d-bd21-2d574bf4b878@app.fastmail.com>
- <simbnmm644ouv3kc3agsxiub6fzg6advihkqsbjzgmb44nmuxv@ktgkhn3kr43z>
- <60e60313-3cc4-452f-a222-aadd7728183d@app.fastmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=AAl0fRMvnnTyhadnN5JzNlLyfk4ha6ANIgn2pWRxd7XTwtoYc2C5BlLuJiQstRX6FQdpTImG6WC9j0ISpJGJErLJXH6Rl8Mp/E5UnBD1f6oGqv4WSb/Ql73GlsznL+JGw8HoFxjpAKGxQJA1TsPk+gfQtMSRavv+1hQ3bAPkKHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XLDWD9hK; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708957035; x=1740493035;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HZlXZGpEZ0auGfIkoqRiKy72XZYfKXmXVmc4SJZWGJo=;
+  b=XLDWD9hKWSYS93+37BvlTXBZ6JM6TPO2yMqN8070OaF1NRVheRzy7aNh
+   C8+aBkPAeDa3JRuo//3OTkghATG1dNXAZjETuIcXLR3TP+cQdrocS38f7
+   J6xBn9Ls3gxQCKn92fLTM6foUg26500JT1tcbjMfzCKQ9giYPa99uRXL7
+   /JUOcfxPai348/cfF/y84SSZNT30zEuRGFfM8UlfdLpNHoAzBPFmvWY1R
+   ALlskxrfP3+PR4xvYS4oGQDxViRLcDoAGnyLGtx/4BaXHB4cz1KU7JNZh
+   l+25I4qtB65xEIzy+8e3uXlZ/++WDLpJuzg9TItX+fBVLotxpDDKIJfk5
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="7047436"
+X-IronPort-AV: E=Sophos;i="6.06,185,1705392000"; 
+   d="scan'208";a="7047436"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2024 06:17:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="913872291"
+X-IronPort-AV: E=Sophos;i="6.06,185,1705392000"; 
+   d="scan'208";a="913872291"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2024 06:17:07 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rebmx-00000007hRa-3oE3;
+	Mon, 26 Feb 2024 16:17:03 +0200
+Date: Mon, 26 Feb 2024 16:17:03 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Jiri Slaby <jirislaby@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org, linux-tegra@vger.kernel.org,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Al Cooper <alcooperx@gmail.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH v1 02/14] serial: core: Add UPIO_UNSET constant for unset
+ port type
+Message-ID: <ZdydX79GBaedFqku@smile.fi.intel.com>
+References: <20240221183442.4124354-1-andriy.shevchenko@linux.intel.com>
+ <20240221183442.4124354-3-andriy.shevchenko@linux.intel.com>
+ <5aeee02f-45a6-48e5-a6f4-e55b76d4b959@kernel.org>
+ <ZddKaaB7HO0CyldD@smile.fi.intel.com>
+ <fa46f220-a1c4-43f4-91e1-5929ff335be0@kernel.org>
+ <ZdiyzKMZPlkN462G@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -90,49 +97,51 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <60e60313-3cc4-452f-a222-aadd7728183d@app.fastmail.com>
+In-Reply-To: <ZdiyzKMZPlkN462G@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Feb 26, 2024 at 01:29:54PM +0100, Arnd Bergmann wrote:
-> On Mon, Feb 26, 2024, at 13:20, Serge Semin wrote:
-> > On Mon, Feb 26, 2024 at 01:04:33PM +0100, Arnd Bergmann wrote:
-> >> On Mon, Feb 26, 2024, at 12:27, Serge Semin wrote:
+On Fri, Feb 23, 2024 at 04:59:25PM +0200, Andy Shevchenko wrote:
+> On Fri, Feb 23, 2024 at 06:42:15AM +0100, Jiri Slaby wrote:
+> > On 22. 02. 24, 14:21, Andy Shevchenko wrote:
+> > > On Thu, Feb 22, 2024 at 07:58:32AM +0100, Jiri Slaby wrote:
+> > > > On 21. 02. 24, 19:31, Andy Shevchenko wrote:
+
+...
+
+> > > > >    	unsigned char		iotype;			/* io access style */
+> > > > > +#define UPIO_UNSET		((unsigned char)~0U)	/* UCHAR_MAX */
+> > > > 
+> > > > Perhaps making the var u8 and this U8_MAX then? It would make more sense to
+> > > > me.
+> > > 
+> > > WFM, should it be a separate change?
+> > 
+> > Likely.
 > 
-> > I see your point now. Thanks for clarification. IMO it would be less
-> > readable due to the ifdef-ery and the new config, and less
-> > maintainable due to the conditional compilation, but would provide a
-> > more performant solution since the compiler will be able to inline the
-> > singly used static method. Basically you suggest to emulate the weak
-> > implementation by an additional kernel config.
+> Then I need a commit message, because I'm unable to justify this change myself.
 > 
-> I mean the kernel config that you already need here, since
-> the strong version of the function is already optional.
-
-Why would I need it if after this patch is applied the
-mips_cm_l2sync_phys_base() method will be converted to a global weak
-implementation?
-
+> > > Btw, how can I justify it?
+> > 
+> > Hmm, thinking about it, why is it not an enum?
 > 
-> > Not sure whether it would be better than a well-known
-> > weak-attribute-based pattern. Anyway let's wait for the
-> > Thomas' opinion about your suggestion. If he thinks
-> > it would be better I'll update the patches.
+> Maybe, but it is a replica of UAPI definitions, do we want to see it as a enum?
+> To me it will be a bit ugly looking.
 > 
-> Weak functions are not used all that much outside of a
-> couple of parts of the kernel. There is a lot of them
-> in drivers/pci/, a little bit in acpi and efi, and
-> then a bit in arch/*/, though most of that is in mips.
-
-+ a lot of them in kernel/*, some in mm/* .)
-
+> > But it could be also an u8 because you want it be exactly 8 bits as you want
+> > to be sure values up to 255 fit.
 > 
-> Ifdef checks in .c files are not great, but at least they
-> are much more common than __weak functions and self-documenting.
-
-Ok. I don't have concretely strong opinion about what is better. Let's
-wait for what Thomas thinks about this.
-
--Serge(y)
-
+> Depends on what we assume UAPI does with those flags. It maybe even less than
+> 8 bits, or great than, currently 8 bits is enough...
 > 
->      Arnd
+> TL;DR: I would rather take a patch from you and incorporate into the series
+> than trying hard to invent a justification and proper type.
+
+Okay, I want to send a new version, for now I leave the type change for
+the next time. It looks that quirks as well will benefit from type clarifying.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
