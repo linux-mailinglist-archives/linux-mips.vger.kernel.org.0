@@ -1,497 +1,535 @@
-Return-Path: <linux-mips+bounces-1766-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1767-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4B6D8680C8
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Feb 2024 20:19:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2045C86852D
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 01:49:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B4318B2C3D9
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Feb 2024 19:13:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB594285988
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 00:49:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BAAA132489;
-	Mon, 26 Feb 2024 19:10:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB9CC1848;
+	Tue, 27 Feb 2024 00:49:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FmAmElEE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hlb2FLF+"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1828131E37;
-	Mon, 26 Feb 2024 19:10:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 903CF1FBB;
+	Tue, 27 Feb 2024 00:49:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708974605; cv=none; b=gtrJTgX2T1j3tGNIWY2WEFi7XeENlhzWoD1zb70HAQx7uqzSui/0+ois/1RrFp8wsgDjN1XVfZO62WkgLeUtdDNGLx1htf42vm8hXlYLmaGRqXhpY9gkPaWsXM+VxODiFYDjL/BQbOduLMI0QT6MxeT7U2FmU+YrSINEaAzOZL4=
+	t=1708994992; cv=none; b=DyQvT10liL2o3T/zNAyayvYrcglm7J4GM8Kmuc11DaAGRr3jfBvXPEVxfEWA0bJTLoegW28oYxxDKpIpfiNk13CkYq2zEdc3gPArFyWEtQ8I/JfjqstadwaXI6ojNCJsK6w1K636Ki1ABhF99EboDzuelRakqJVBPe56hSDN9J8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708974605; c=relaxed/simple;
-	bh=M4PemZaS0aqUDnC2dki1OuhIuHLGRlk1+X+hvrPVA+A=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=N8iE2ocEDwqTtWa1fnPfxdDzy6iO/DL91ruAVjGuQzP4/Jej9fJsZTDLH2NGcFM9KUJaA6I9yhFtYsgBIeesz2moO1/WWR/zxf0+UIPYSUkMkmZYFDysnj/AIlkdHLkdF8RzAaJ6SUSjVuSuYHDaM8WL1HMbdJnQ44KYcqnkd9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FmAmElEE; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708974603; x=1740510603;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=M4PemZaS0aqUDnC2dki1OuhIuHLGRlk1+X+hvrPVA+A=;
-  b=FmAmElEE2j0GbdsLhEOnJFMYnobg+ZH8Wb4P+Wpnui51MRaU1GNBa/o2
-   zCR2kG4rZtkdKacBLnb/hcSR7FkrMUdiIq3T0jCL/H9wUWMnaA69/uq/M
-   FiUNg8n7zHJoQvDTWg0abSvuGfjEEexUzlMFtKdtdFAjw0idVT2ErxcOJ
-   d74EHGW9ZI+FTxk1gQu6/epQBaooAucnfubjhCYI+ZU9+vpO5OQ0bazQG
-   MHYaNbG5lW6neKfPIdpSpVXFPbt6BxB6EqWplYq5MASwijPutyrY0ViaJ
-   WtUqCa92Vp9/DWHV+1RCSL/2JNOvCNCjBS8aJtHpuYGU818oqj0K1lbi8
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="14721380"
-X-IronPort-AV: E=Sophos;i="6.06,186,1705392000"; 
-   d="scan'208";a="14721380"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2024 11:10:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,186,1705392000"; 
-   d="scan'208";a="6911458"
-Received: from bdmirand-mobl.amr.corp.intel.com (HELO rpedgeco-desk4.intel.com) ([10.251.3.213])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2024 11:10:00 -0800
-From: Rick Edgecombe <rick.p.edgecombe@intel.com>
-To: Liam.Howlett@oracle.com,
-	akpm@linux-foundation.org,
-	debug@rivosinc.com,
-	broonie@kernel.org,
-	kirill.shutemov@linux.intel.com,
-	keescook@chromium.org,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	x86@kernel.org,
-	luto@kernel.org,
-	peterz@infradead.org,
-	hpa@zytor.com,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org
-Cc: rick.p.edgecombe@intel.com,
-	linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org
-Subject: [PATCH v2 5/9] mm: Initialize struct vm_unmapped_area_info
-Date: Mon, 26 Feb 2024 11:09:47 -0800
-Message-Id: <20240226190951.3240433-6-rick.p.edgecombe@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240226190951.3240433-1-rick.p.edgecombe@intel.com>
-References: <20240226190951.3240433-1-rick.p.edgecombe@intel.com>
+	s=arc-20240116; t=1708994992; c=relaxed/simple;
+	bh=rccfFAsIXXB1qR3NT1VIdPRPtfwefb4SHiEfUqybo3o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZyVe1AWUtNkX4XIzXrbZSlR3zFfADp7K2XwAgmaldN4lXLLLEIFePd3FAvUZjS1xoO0vNKm12deZnAOSBPAnpgrvxvITXI13Y1phGGu9/DmCgCbGA2ruvXwxjDfD4FLLw/KTQfOuQBmMjESnYd8xKqWfaX8i1OZew+RWNDC1oIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hlb2FLF+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 479AEC433C7;
+	Tue, 27 Feb 2024 00:49:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708994992;
+	bh=rccfFAsIXXB1qR3NT1VIdPRPtfwefb4SHiEfUqybo3o=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=hlb2FLF+7oSLe2uaiQD1GRNrdcUcZ76jkMNefv7y9z0d4avyL6FJ+ec7MgIsVWa5P
+	 wvDYvR10b8lFqBOgHmiA20/osMi1ld0TZqLNPYid52p2q5f1QA1scVPKtHhKfIDhrC
+	 q/svMK1Zm8VDLDLUYcDNUcNYAUTAdB82AhjafWTXrSI4iDZBqMRFNL534Smb8NdazI
+	 ymraKhDbxXSVTEhoYUArpoXZ2r5dqvW0+L+n8D1lFNRcYqnhaZWc3vUmQ45go8B2dM
+	 9JaWRnD/n3enlV67RX51LMpQ6+Gmgkk/xvPrcP0vyLUs5JSJ74i3u0JV/RpiWY7fzr
+	 YOZ11VkXCa1NQ==
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-512ff385589so1786960e87.1;
+        Mon, 26 Feb 2024 16:49:52 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUL2H/9qLNg9ghEsHysIi2pSBx8g110T6W4htxb07diDwGkjhgO0C5SvBamz45mlcNBYQzOIAD9mcpVP0+5JY0sa0HBFD0dhnGXuU2ZjJzGCdHnExBH1A7LkhcDEZnDEQFPd6NUFbTS4JG/27vG6SzDykbCbHW77GyuS4sG0f1WQ4trIbp81LZaUk1mjX29iIlooXb/ztRwNBXWfdvEydiBauuJgTuOioMq6/XGkx6CfFQ5WjddznMjerrCPDegmvSUyrt/8ld9bhok5Rz+OuVrC2WNiB/iFyWNIDEoQOo+PxFNLteoE7vWc0dL5VoBO7djT/ygT6+mIsA+cqDTi8dtfa7pMrpINuoMiFeDEGA4g+i4D2Qr3Q/4dK0VMl3lqwFmW7FfsqMbnOw5OO2LlvDI2mjTy54+9sB2C9BxOvCPelg/MOTu5HaanKXmtd9E+gE=
+X-Gm-Message-State: AOJu0YxvKPec0nDwMIKX+y0As+neFhtPqWmuDlUlcKTejKWmgjPkXhlG
+	9l+268ErD2WCZHqJb/kouQTzEoANIkk9Y69CfExGBG6Hqbjo3eJsM1pKK8DwuANGfWX8Yn9jgJY
+	7lwzjMDZmfQTHTpd+kLJyfswO8sE=
+X-Google-Smtp-Source: AGHT+IHMbxJ3SiFOofcXhuN9irkVPuqdMkmTsNwCqv7uyX1PBMjHMV5Lrsk8D9faur3ryNh+qAv630nq+LkptA51b9c=
+X-Received: by 2002:a05:6512:10d2:b0:512:cef7:4754 with SMTP id
+ k18-20020a05651210d200b00512cef74754mr6391328lfg.5.1708994969841; Mon, 26 Feb
+ 2024 16:49:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240226161414.2316610-1-arnd@kernel.org> <20240226161414.2316610-4-arnd@kernel.org>
+In-Reply-To: <20240226161414.2316610-4-arnd@kernel.org>
+From: Guo Ren <guoren@kernel.org>
+Date: Tue, 27 Feb 2024 08:49:18 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSCdXtCib2Wv_DQQSJ5srhDwHH6B3xgdrr1-SQECUL1VA@mail.gmail.com>
+Message-ID: <CAJF2gTSCdXtCib2Wv_DQQSJ5srhDwHH6B3xgdrr1-SQECUL1VA@mail.gmail.com>
+Subject: Re: [PATCH 3/4] arch: define CONFIG_PAGE_SIZE_*KB on all architectures
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Kees Cook <keescook@chromium.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+	Arnd Bergmann <arnd@arndb.de>, Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>, 
+	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Helge Deller <deller@gmx.de>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Andreas Larsson <andreas@gaisler.com>, 
+	Richard Weinberger <richard@nod.at>, x86@kernel.org, Max Filippov <jcmvbkbc@gmail.com>, 
+	Andy Lutomirski <luto@kernel.org>, Jan Kiszka <jan.kiszka@siemens.com>, 
+	Kieran Bingham <kbingham@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
+	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
+	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-um@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Future changes will need to add a field to struct vm_unmapped_area_info.
-This would cause trouble for any archs that don't initialize the
-struct. Currently every user sets each field, so if new fields are
-added, the core code parsing the struct will see garbage in the new
-field.
+On Tue, Feb 27, 2024 at 12:15=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wr=
+ote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> Most architectures only support a single hardcoded page size. In order
+> to ensure that each one of these sets the corresponding Kconfig symbols,
+> change over the PAGE_SHIFT definition to the common one and allow
+> only the hardware page size to be selected.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/alpha/Kconfig                 | 1 +
+>  arch/alpha/include/asm/page.h      | 2 +-
+>  arch/arm/Kconfig                   | 1 +
+>  arch/arm/include/asm/page.h        | 2 +-
+>  arch/csky/Kconfig                  | 1 +
+>  arch/csky/include/asm/page.h       | 2 +-
+>  arch/m68k/Kconfig                  | 3 +++
+>  arch/m68k/Kconfig.cpu              | 2 ++
+>  arch/m68k/include/asm/page.h       | 6 +-----
+>  arch/microblaze/Kconfig            | 1 +
+>  arch/microblaze/include/asm/page.h | 2 +-
+>  arch/nios2/Kconfig                 | 1 +
+>  arch/nios2/include/asm/page.h      | 2 +-
+>  arch/openrisc/Kconfig              | 1 +
+>  arch/openrisc/include/asm/page.h   | 2 +-
+>  arch/riscv/Kconfig                 | 1 +
+>  arch/riscv/include/asm/page.h      | 2 +-
+>  arch/s390/Kconfig                  | 1 +
+>  arch/s390/include/asm/page.h       | 2 +-
+>  arch/sparc/Kconfig                 | 2 ++
+>  arch/sparc/include/asm/page_32.h   | 2 +-
+>  arch/sparc/include/asm/page_64.h   | 3 +--
+>  arch/um/Kconfig                    | 1 +
+>  arch/um/include/asm/page.h         | 2 +-
+>  arch/x86/Kconfig                   | 1 +
+>  arch/x86/include/asm/page_types.h  | 2 +-
+>  arch/xtensa/Kconfig                | 1 +
+>  arch/xtensa/include/asm/page.h     | 2 +-
+>  28 files changed, 32 insertions(+), 19 deletions(-)
+>
+> diff --git a/arch/alpha/Kconfig b/arch/alpha/Kconfig
+> index d6968d090d49..4f490250d323 100644
+> --- a/arch/alpha/Kconfig
+> +++ b/arch/alpha/Kconfig
+> @@ -14,6 +14,7 @@ config ALPHA
+>         select PCI_DOMAINS if PCI
+>         select PCI_SYSCALL if PCI
+>         select HAVE_ASM_MODVERSIONS
+> +       select HAVE_PAGE_SIZE_8KB
+>         select HAVE_PCSPKR_PLATFORM
+>         select HAVE_PERF_EVENTS
+>         select NEED_DMA_MAP_STATE
+> diff --git a/arch/alpha/include/asm/page.h b/arch/alpha/include/asm/page.=
+h
+> index 4db1ebc0ed99..70419e6be1a3 100644
+> --- a/arch/alpha/include/asm/page.h
+> +++ b/arch/alpha/include/asm/page.h
+> @@ -6,7 +6,7 @@
+>  #include <asm/pal.h>
+>
+>  /* PAGE_SHIFT determines the page size */
+> -#define PAGE_SHIFT     13
+> +#define PAGE_SHIFT     CONFIG_PAGE_SHIFT
+>  #define PAGE_SIZE      (_AC(1,UL) << PAGE_SHIFT)
+>  #define PAGE_MASK      (~(PAGE_SIZE-1))
+>
+> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+> index 0af6709570d1..9d52ba3a8ad1 100644
+> --- a/arch/arm/Kconfig
+> +++ b/arch/arm/Kconfig
+> @@ -116,6 +116,7 @@ config ARM
+>         select HAVE_MOD_ARCH_SPECIFIC
+>         select HAVE_NMI
+>         select HAVE_OPTPROBES if !THUMB2_KERNEL
+> +       select HAVE_PAGE_SIZE_4KB
+>         select HAVE_PCI if MMU
+>         select HAVE_PERF_EVENTS
+>         select HAVE_PERF_REGS
+> diff --git a/arch/arm/include/asm/page.h b/arch/arm/include/asm/page.h
+> index 119aa85d1feb..62af9f7f9e96 100644
+> --- a/arch/arm/include/asm/page.h
+> +++ b/arch/arm/include/asm/page.h
+> @@ -8,7 +8,7 @@
+>  #define _ASMARM_PAGE_H
+>
+>  /* PAGE_SHIFT determines the page size */
+> -#define PAGE_SHIFT             12
+> +#define PAGE_SHIFT             CONFIG_PAGE_SHIFT
+>  #define PAGE_SIZE              (_AC(1,UL) << PAGE_SHIFT)
+>  #define PAGE_MASK              (~((1 << PAGE_SHIFT) - 1))
+>
+> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+> index cf2a6fd7dff8..9c2723ab1c94 100644
+> --- a/arch/csky/Kconfig
+> +++ b/arch/csky/Kconfig
+> @@ -89,6 +89,7 @@ config CSKY
+>         select HAVE_KPROBES if !CPU_CK610
+>         select HAVE_KPROBES_ON_FTRACE if !CPU_CK610
+>         select HAVE_KRETPROBES if !CPU_CK610
+> +       select HAVE_PAGE_SIZE_4KB
+>         select HAVE_PERF_EVENTS
+>         select HAVE_PERF_REGS
+>         select HAVE_PERF_USER_STACK_DUMP
+> diff --git a/arch/csky/include/asm/page.h b/arch/csky/include/asm/page.h
+> index 4a0502e324a6..f70f37402d75 100644
+> --- a/arch/csky/include/asm/page.h
+> +++ b/arch/csky/include/asm/page.h
+> @@ -10,7 +10,7 @@
+>  /*
+>   * PAGE_SHIFT determines the page size: 4KB
+>   */
+> -#define PAGE_SHIFT     12
+> +#define PAGE_SHIFT     CONFIG_PAGE_SHIFT
+LGTM, thx.
+Acked-by: Guo Ren <guoren@kernel.org>
 
-It could be possible to initialize the new field for each arch to 0, but
-instead simply inialize the field with a C99 struct inializing syntax.
+>  #define PAGE_SIZE      (_AC(1, UL) << PAGE_SHIFT)
+>  #define PAGE_MASK      (~(PAGE_SIZE - 1))
+>  #define THREAD_SIZE    (PAGE_SIZE * 2)
+> diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
+> index 4b3e93cac723..7b709453d5e7 100644
+> --- a/arch/m68k/Kconfig
+> +++ b/arch/m68k/Kconfig
+> @@ -84,12 +84,15 @@ config MMU
+>
+>  config MMU_MOTOROLA
+>         bool
+> +       select HAVE_PAGE_SIZE_4KB
+>
+>  config MMU_COLDFIRE
+> +       select HAVE_PAGE_SIZE_8KB
+>         bool
+>
+>  config MMU_SUN3
+>         bool
+> +       select HAVE_PAGE_SIZE_8KB
+>         depends on MMU && !MMU_MOTOROLA && !MMU_COLDFIRE
+>
+>  config ARCH_SUPPORTS_KEXEC
+> diff --git a/arch/m68k/Kconfig.cpu b/arch/m68k/Kconfig.cpu
+> index 9dcf245c9cbf..c777a129768a 100644
+> --- a/arch/m68k/Kconfig.cpu
+> +++ b/arch/m68k/Kconfig.cpu
+> @@ -30,6 +30,7 @@ config COLDFIRE
+>         select GENERIC_CSUM
+>         select GPIOLIB
+>         select HAVE_LEGACY_CLK
+> +       select HAVE_PAGE_SIZE_8KB if !MMU
+>
+>  endchoice
+>
+> @@ -45,6 +46,7 @@ config M68000
+>         select GENERIC_CSUM
+>         select CPU_NO_EFFICIENT_FFS
+>         select HAVE_ARCH_HASH
+> +       select HAVE_PAGE_SIZE_4KB
+>         select LEGACY_TIMER_TICK
+>         help
+>           The Freescale (was Motorola) 68000 CPU is the first generation =
+of
+> diff --git a/arch/m68k/include/asm/page.h b/arch/m68k/include/asm/page.h
+> index a5993ad83ed8..8cfb84b49975 100644
+> --- a/arch/m68k/include/asm/page.h
+> +++ b/arch/m68k/include/asm/page.h
+> @@ -7,11 +7,7 @@
+>  #include <asm/page_offset.h>
+>
+>  /* PAGE_SHIFT determines the page size */
+> -#if defined(CONFIG_SUN3) || defined(CONFIG_COLDFIRE)
+> -#define PAGE_SHIFT     13
+> -#else
+> -#define PAGE_SHIFT     12
+> -#endif
+> +#define PAGE_SHIFT     CONFIG_PAGE_SHIFT
+>  #define PAGE_SIZE      (_AC(1, UL) << PAGE_SHIFT)
+>  #define PAGE_MASK      (~(PAGE_SIZE-1))
+>  #define PAGE_OFFSET    (PAGE_OFFSET_RAW)
+> diff --git a/arch/microblaze/Kconfig b/arch/microblaze/Kconfig
+> index 211f338d6235..f18ec02ddeb2 100644
+> --- a/arch/microblaze/Kconfig
+> +++ b/arch/microblaze/Kconfig
+> @@ -31,6 +31,7 @@ config MICROBLAZE
+>         select HAVE_FTRACE_MCOUNT_RECORD
+>         select HAVE_FUNCTION_GRAPH_TRACER
+>         select HAVE_FUNCTION_TRACER
+> +       select HAVE_PAGE_SIZE_4KB
+>         select HAVE_PCI
+>         select IRQ_DOMAIN
+>         select XILINX_INTC
+> diff --git a/arch/microblaze/include/asm/page.h b/arch/microblaze/include=
+/asm/page.h
+> index 86a4ce07c192..8810f4f1c3b0 100644
+> --- a/arch/microblaze/include/asm/page.h
+> +++ b/arch/microblaze/include/asm/page.h
+> @@ -20,7 +20,7 @@
+>  #ifdef __KERNEL__
+>
+>  /* PAGE_SHIFT determines the page size */
+> -#define PAGE_SHIFT             12
+> +#define PAGE_SHIFT     CONFIG_PAGE_SHIFT
+>  #define PAGE_SIZE      (ASM_CONST(1) << PAGE_SHIFT)
+>  #define PAGE_MASK      (~(PAGE_SIZE-1))
+>
+> diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
+> index 58d9565dc2c7..79d3039b29f1 100644
+> --- a/arch/nios2/Kconfig
+> +++ b/arch/nios2/Kconfig
+> @@ -15,6 +15,7 @@ config NIOS2
+>         select GENERIC_IRQ_SHOW
+>         select HAVE_ARCH_TRACEHOOK
+>         select HAVE_ARCH_KGDB
+> +       select HAVE_PAGE_SIZE_4KB
+>         select IRQ_DOMAIN
+>         select LOCK_MM_AND_FIND_VMA
+>         select MODULES_USE_ELF_RELA
+> diff --git a/arch/nios2/include/asm/page.h b/arch/nios2/include/asm/page.=
+h
+> index 0ae7d9ce369b..0722f88e63cc 100644
+> --- a/arch/nios2/include/asm/page.h
+> +++ b/arch/nios2/include/asm/page.h
+> @@ -21,7 +21,7 @@
+>  /*
+>   * PAGE_SHIFT determines the page size
+>   */
+> -#define PAGE_SHIFT     12
+> +#define PAGE_SHIFT     CONFIG_PAGE_SHIFT
+>  #define PAGE_SIZE      (_AC(1, UL) << PAGE_SHIFT)
+>  #define PAGE_MASK      (~(PAGE_SIZE - 1))
+>
+> diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
+> index fd9bb76a610b..3586cda55bde 100644
+> --- a/arch/openrisc/Kconfig
+> +++ b/arch/openrisc/Kconfig
+> @@ -25,6 +25,7 @@ config OPENRISC
+>         select GENERIC_CPU_DEVICES
+>         select HAVE_PCI
+>         select HAVE_UID16
+> +       select HAVE_PAGE_SIZE_8KB
+>         select GENERIC_ATOMIC64
+>         select GENERIC_CLOCKEVENTS_BROADCAST
+>         select GENERIC_SMP_IDLE_THREAD
+> diff --git a/arch/openrisc/include/asm/page.h b/arch/openrisc/include/asm=
+/page.h
+> index 44fc1fd56717..7925ce09ab5a 100644
+> --- a/arch/openrisc/include/asm/page.h
+> +++ b/arch/openrisc/include/asm/page.h
+> @@ -18,7 +18,7 @@
+>
+>  /* PAGE_SHIFT determines the page size */
+>
+> -#define PAGE_SHIFT      13
+> +#define PAGE_SHIFT      CONFIG_PAGE_SHIFT
+>  #ifdef __ASSEMBLY__
+>  #define PAGE_SIZE       (1 << PAGE_SHIFT)
+>  #else
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index bffbd869a068..792a337548f6 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -136,6 +136,7 @@ config RISCV
+>         select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if !LD_IS_LLD
+>         select HAVE_MOVE_PMD
+>         select HAVE_MOVE_PUD
+> +       select HAVE_PAGE_SIZE_4KB
+>         select HAVE_PCI
+>         select HAVE_PERF_EVENTS
+>         select HAVE_PERF_REGS
+> diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.=
+h
+> index 57e887bfa34c..2947423b5082 100644
+> --- a/arch/riscv/include/asm/page.h
+> +++ b/arch/riscv/include/asm/page.h
+> @@ -12,7 +12,7 @@
+>  #include <linux/pfn.h>
+>  #include <linux/const.h>
+>
+> -#define PAGE_SHIFT     (12)
+> +#define PAGE_SHIFT     CONFIG_PAGE_SHIFT
+>  #define PAGE_SIZE      (_AC(1, UL) << PAGE_SHIFT)
+>  #define PAGE_MASK      (~(PAGE_SIZE - 1))
+>
+> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+> index fe565f3a3a91..b61c74c10050 100644
+> --- a/arch/s390/Kconfig
+> +++ b/arch/s390/Kconfig
+> @@ -199,6 +199,7 @@ config S390
+>         select HAVE_MOD_ARCH_SPECIFIC
+>         select HAVE_NMI
+>         select HAVE_NOP_MCOUNT
+> +       select HAVE_PAGE_SIZE_4KB
+>         select HAVE_PCI
+>         select HAVE_PERF_EVENTS
+>         select HAVE_PERF_REGS
+> diff --git a/arch/s390/include/asm/page.h b/arch/s390/include/asm/page.h
+> index 73b9c3bf377f..ded9548d11d9 100644
+> --- a/arch/s390/include/asm/page.h
+> +++ b/arch/s390/include/asm/page.h
+> @@ -11,7 +11,7 @@
+>  #include <linux/const.h>
+>  #include <asm/types.h>
+>
+> -#define _PAGE_SHIFT    12
+> +#define _PAGE_SHIFT    CONFIG_PAGE_SHIFT
+>  #define _PAGE_SIZE     (_AC(1, UL) << _PAGE_SHIFT)
+>  #define _PAGE_MASK     (~(_PAGE_SIZE - 1))
+>
+> diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
+> index 204c43cb3d43..7e6bc6fff76b 100644
+> --- a/arch/sparc/Kconfig
+> +++ b/arch/sparc/Kconfig
+> @@ -58,6 +58,7 @@ config SPARC32
+>         select DMA_DIRECT_REMAP
+>         select GENERIC_ATOMIC64
+>         select HAVE_UID16
+> +       select HAVE_PAGE_SIZE_4KB
+>         select LOCK_MM_AND_FIND_VMA
+>         select OLD_SIGACTION
+>         select ZONE_DMA
+> @@ -75,6 +76,7 @@ config SPARC64
+>         select HAVE_ARCH_TRANSPARENT_HUGEPAGE
+>         select HAVE_DYNAMIC_FTRACE
+>         select HAVE_FTRACE_MCOUNT_RECORD
+> +       select HAVE_PAGE_SIZE_8KB
+>         select HAVE_SYSCALL_TRACEPOINTS
+>         select HAVE_CONTEXT_TRACKING_USER
+>         select HAVE_TIF_NOHZ
+> diff --git a/arch/sparc/include/asm/page_32.h b/arch/sparc/include/asm/pa=
+ge_32.h
+> index 6be6f683f98f..9977c77374cd 100644
+> --- a/arch/sparc/include/asm/page_32.h
+> +++ b/arch/sparc/include/asm/page_32.h
+> @@ -11,7 +11,7 @@
+>
+>  #include <linux/const.h>
+>
+> -#define PAGE_SHIFT   12
+> +#define PAGE_SHIFT   CONFIG_PAGE_SHIFT
+>  #define PAGE_SIZE    (_AC(1, UL) << PAGE_SHIFT)
+>  #define PAGE_MASK    (~(PAGE_SIZE-1))
+>
+> diff --git a/arch/sparc/include/asm/page_64.h b/arch/sparc/include/asm/pa=
+ge_64.h
+> index 254dffd85fb1..e9bd24821c93 100644
+> --- a/arch/sparc/include/asm/page_64.h
+> +++ b/arch/sparc/include/asm/page_64.h
+> @@ -4,8 +4,7 @@
+>
+>  #include <linux/const.h>
+>
+> -#define PAGE_SHIFT   13
+> -
+> +#define PAGE_SHIFT   CONFIG_PAGE_SHIFT
+>  #define PAGE_SIZE    (_AC(1,UL) << PAGE_SHIFT)
+>  #define PAGE_MASK    (~(PAGE_SIZE-1))
+>
+> diff --git a/arch/um/Kconfig b/arch/um/Kconfig
+> index b5e179360534..93a5a8999b07 100644
+> --- a/arch/um/Kconfig
+> +++ b/arch/um/Kconfig
+> @@ -20,6 +20,7 @@ config UML
+>         select HAVE_UID16
+>         select HAVE_DEBUG_KMEMLEAK
+>         select HAVE_DEBUG_BUGVERBOSE
+> +       select HAVE_PAGE_SIZE_4KB
+>         select NO_DMA if !UML_DMA_EMULATION
+>         select OF_EARLY_FLATTREE if OF
+>         select GENERIC_IRQ_SHOW
+> diff --git a/arch/um/include/asm/page.h b/arch/um/include/asm/page.h
+> index 84866127d074..9ef9a8aedfa6 100644
+> --- a/arch/um/include/asm/page.h
+> +++ b/arch/um/include/asm/page.h
+> @@ -10,7 +10,7 @@
+>  #include <linux/const.h>
+>
+>  /* PAGE_SHIFT determines the page size */
+> -#define PAGE_SHIFT     12
+> +#define PAGE_SHIFT     CONFIG_PAGE_SHIFT
+>  #define PAGE_SIZE      (_AC(1, UL) << PAGE_SHIFT)
+>  #define PAGE_MASK      (~(PAGE_SIZE-1))
+>
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 5edec175b9bf..ba57eb362ec8 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -255,6 +255,7 @@ config X86
+>         select HAVE_NOINSTR_VALIDATION          if HAVE_OBJTOOL
+>         select HAVE_OBJTOOL                     if X86_64
+>         select HAVE_OPTPROBES
+> +       select HAVE_PAGE_SIZE_4KB
+>         select HAVE_PCSPKR_PLATFORM
+>         select HAVE_PERF_EVENTS
+>         select HAVE_PERF_EVENTS_NMI
+> diff --git a/arch/x86/include/asm/page_types.h b/arch/x86/include/asm/pag=
+e_types.h
+> index 86bd4311daf8..9da9c8a2f1df 100644
+> --- a/arch/x86/include/asm/page_types.h
+> +++ b/arch/x86/include/asm/page_types.h
+> @@ -7,7 +7,7 @@
+>  #include <linux/mem_encrypt.h>
+>
+>  /* PAGE_SHIFT determines the page size */
+> -#define PAGE_SHIFT             12
+> +#define PAGE_SHIFT             CONFIG_PAGE_SHIFT
+>  #define PAGE_SIZE              (_AC(1,UL) << PAGE_SHIFT)
+>  #define PAGE_MASK              (~(PAGE_SIZE-1))
+>
+> diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
+> index 6f248d87e496..87ec35b3363b 100644
+> --- a/arch/xtensa/Kconfig
+> +++ b/arch/xtensa/Kconfig
+> @@ -44,6 +44,7 @@ config XTENSA
+>         select HAVE_GCC_PLUGINS if GCC_VERSION >=3D 120000
+>         select HAVE_HW_BREAKPOINT if PERF_EVENTS
+>         select HAVE_IRQ_TIME_ACCOUNTING
+> +       select HAVE_PAGE_SIZE_4KB
+>         select HAVE_PCI
+>         select HAVE_PERF_EVENTS
+>         select HAVE_STACKPROTECTOR
+> diff --git a/arch/xtensa/include/asm/page.h b/arch/xtensa/include/asm/pag=
+e.h
+> index a77d04972eb9..4db56ef052d2 100644
+> --- a/arch/xtensa/include/asm/page.h
+> +++ b/arch/xtensa/include/asm/page.h
+> @@ -22,7 +22,7 @@
+>   * PAGE_SHIFT determines the page size
+>   */
+>
+> -#define PAGE_SHIFT     12
+> +#define PAGE_SHIFT     CONFIG_PAGE_SHIFT
+>  #define PAGE_SIZE      (__XTENSA_UL_CONST(1) << PAGE_SHIFT)
+>  #define PAGE_MASK      (~(PAGE_SIZE-1))
+>
+> --
+> 2.39.2
+>
 
-Cc: linux-mm@kvack.org
-Cc: linux-alpha@vger.kernel.org
-Cc: linux-snps-arc@lists.infradead.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-csky@vger.kernel.org
-Cc: loongarch@lists.linux.dev
-Cc: linux-mips@vger.kernel.org
-Cc: linux-parisc@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: linux-s390@vger.kernel.org
-Cc: linux-sh@vger.kernel.org
-Cc: sparclinux@vger.kernel.org
-Cc: x86@kernel.org
-Suggested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Link: https://lore.kernel.org/lkml/3ynogxcgokc6i6xojbxzzwqectg472laes24u7jmtktlxcch5e@dfytra3ia3zc/#t
----
-Hi archs,
 
-For some context, this is part of a larger series to improve shadow stack
-guard gaps. It involves plumbing a new field via
-struct vm_unmapped_area_info. The first user is x86, but arm and riscv may
-likely use it as well. The change is compile tested only for non-x86 but
-seems like a relatively safe one.
-
-Thanks,
-
-Rick
-
-v2:
- - New patch
----
- arch/alpha/kernel/osf_sys.c      | 2 +-
- arch/arc/mm/mmap.c               | 2 +-
- arch/arm/mm/mmap.c               | 4 ++--
- arch/csky/abiv1/mmap.c           | 2 +-
- arch/loongarch/mm/mmap.c         | 2 +-
- arch/mips/mm/mmap.c              | 2 +-
- arch/parisc/kernel/sys_parisc.c  | 2 +-
- arch/powerpc/mm/book3s64/slice.c | 4 ++--
- arch/s390/mm/hugetlbpage.c       | 4 ++--
- arch/s390/mm/mmap.c              | 4 ++--
- arch/sh/mm/mmap.c                | 4 ++--
- arch/sparc/kernel/sys_sparc_32.c | 2 +-
- arch/sparc/kernel/sys_sparc_64.c | 4 ++--
- arch/sparc/mm/hugetlbpage.c      | 4 ++--
- arch/x86/kernel/sys_x86_64.c     | 4 ++--
- arch/x86/mm/hugetlbpage.c        | 4 ++--
- fs/hugetlbfs/inode.c             | 4 ++--
- mm/mmap.c                        | 4 ++--
- 18 files changed, 29 insertions(+), 29 deletions(-)
-
-diff --git a/arch/alpha/kernel/osf_sys.c b/arch/alpha/kernel/osf_sys.c
-index 5db88b627439..dd6801bb9240 100644
---- a/arch/alpha/kernel/osf_sys.c
-+++ b/arch/alpha/kernel/osf_sys.c
-@@ -1218,7 +1218,7 @@ static unsigned long
- arch_get_unmapped_area_1(unsigned long addr, unsigned long len,
- 		         unsigned long limit)
- {
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	info.flags = 0;
- 	info.length = len;
-diff --git a/arch/arc/mm/mmap.c b/arch/arc/mm/mmap.c
-index 3c1c7ae73292..6549b3375f54 100644
---- a/arch/arc/mm/mmap.c
-+++ b/arch/arc/mm/mmap.c
-@@ -27,7 +27,7 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
- {
- 	struct mm_struct *mm = current->mm;
- 	struct vm_area_struct *vma;
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	/*
- 	 * We enforce the MAP_FIXED case.
-diff --git a/arch/arm/mm/mmap.c b/arch/arm/mm/mmap.c
-index a0f8a0ca0788..525795578c29 100644
---- a/arch/arm/mm/mmap.c
-+++ b/arch/arm/mm/mmap.c
-@@ -34,7 +34,7 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
- 	struct vm_area_struct *vma;
- 	int do_align = 0;
- 	int aliasing = cache_is_vipt_aliasing();
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	/*
- 	 * We only need to do colour alignment if either the I or D
-@@ -87,7 +87,7 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
- 	unsigned long addr = addr0;
- 	int do_align = 0;
- 	int aliasing = cache_is_vipt_aliasing();
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	/*
- 	 * We only need to do colour alignment if either the I or D
-diff --git a/arch/csky/abiv1/mmap.c b/arch/csky/abiv1/mmap.c
-index 6792aca49999..726659d41fa9 100644
---- a/arch/csky/abiv1/mmap.c
-+++ b/arch/csky/abiv1/mmap.c
-@@ -28,7 +28,7 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
- 	struct mm_struct *mm = current->mm;
- 	struct vm_area_struct *vma;
- 	int do_align = 0;
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	/*
- 	 * We only need to do colour alignment if either the I or D
-diff --git a/arch/loongarch/mm/mmap.c b/arch/loongarch/mm/mmap.c
-index a9630a81b38a..664bf4abfdcf 100644
---- a/arch/loongarch/mm/mmap.c
-+++ b/arch/loongarch/mm/mmap.c
-@@ -24,7 +24,7 @@ static unsigned long arch_get_unmapped_area_common(struct file *filp,
- 	struct vm_area_struct *vma;
- 	unsigned long addr = addr0;
- 	int do_color_align;
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	if (unlikely(len > TASK_SIZE))
- 		return -ENOMEM;
-diff --git a/arch/mips/mm/mmap.c b/arch/mips/mm/mmap.c
-index 00fe90c6db3e..6321b53dc995 100644
---- a/arch/mips/mm/mmap.c
-+++ b/arch/mips/mm/mmap.c
-@@ -34,7 +34,7 @@ static unsigned long arch_get_unmapped_area_common(struct file *filp,
- 	struct vm_area_struct *vma;
- 	unsigned long addr = addr0;
- 	int do_color_align;
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	if (unlikely(len > TASK_SIZE))
- 		return -ENOMEM;
-diff --git a/arch/parisc/kernel/sys_parisc.c b/arch/parisc/kernel/sys_parisc.c
-index 98af719d5f85..e87c0e325abf 100644
---- a/arch/parisc/kernel/sys_parisc.c
-+++ b/arch/parisc/kernel/sys_parisc.c
-@@ -104,7 +104,7 @@ static unsigned long arch_get_unmapped_area_common(struct file *filp,
- 	struct vm_area_struct *vma, *prev;
- 	unsigned long filp_pgoff;
- 	int do_color_align;
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	if (unlikely(len > TASK_SIZE))
- 		return -ENOMEM;
-diff --git a/arch/powerpc/mm/book3s64/slice.c b/arch/powerpc/mm/book3s64/slice.c
-index c0b58afb9a47..5884f384866f 100644
---- a/arch/powerpc/mm/book3s64/slice.c
-+++ b/arch/powerpc/mm/book3s64/slice.c
-@@ -282,7 +282,7 @@ static unsigned long slice_find_area_bottomup(struct mm_struct *mm,
- {
- 	int pshift = max_t(int, mmu_psize_defs[psize].shift, PAGE_SHIFT);
- 	unsigned long found, next_end;
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	info.flags = 0;
- 	info.length = len;
-@@ -326,7 +326,7 @@ static unsigned long slice_find_area_topdown(struct mm_struct *mm,
- {
- 	int pshift = max_t(int, mmu_psize_defs[psize].shift, PAGE_SHIFT);
- 	unsigned long found, prev;
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 	unsigned long min_addr = max(PAGE_SIZE, mmap_min_addr);
- 
- 	info.flags = VM_UNMAPPED_AREA_TOPDOWN;
-diff --git a/arch/s390/mm/hugetlbpage.c b/arch/s390/mm/hugetlbpage.c
-index c2d2850ec8d5..7f68485feea0 100644
---- a/arch/s390/mm/hugetlbpage.c
-+++ b/arch/s390/mm/hugetlbpage.c
-@@ -258,7 +258,7 @@ static unsigned long hugetlb_get_unmapped_area_bottomup(struct file *file,
- 		unsigned long pgoff, unsigned long flags)
- {
- 	struct hstate *h = hstate_file(file);
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	info.flags = 0;
- 	info.length = len;
-@@ -274,7 +274,7 @@ static unsigned long hugetlb_get_unmapped_area_topdown(struct file *file,
- 		unsigned long pgoff, unsigned long flags)
- {
- 	struct hstate *h = hstate_file(file);
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 	unsigned long addr;
- 
- 	info.flags = VM_UNMAPPED_AREA_TOPDOWN;
-diff --git a/arch/s390/mm/mmap.c b/arch/s390/mm/mmap.c
-index cd52d72b59cf..df88496e2903 100644
---- a/arch/s390/mm/mmap.c
-+++ b/arch/s390/mm/mmap.c
-@@ -77,7 +77,7 @@ unsigned long arch_get_unmapped_area(struct file *filp, unsigned long addr,
- {
- 	struct mm_struct *mm = current->mm;
- 	struct vm_area_struct *vma;
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	if (len > TASK_SIZE - mmap_min_addr)
- 		return -ENOMEM;
-@@ -116,7 +116,7 @@ unsigned long arch_get_unmapped_area_topdown(struct file *filp, unsigned long ad
- {
- 	struct vm_area_struct *vma;
- 	struct mm_struct *mm = current->mm;
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	/* requested length too big for entire address space */
- 	if (len > TASK_SIZE - mmap_min_addr)
-diff --git a/arch/sh/mm/mmap.c b/arch/sh/mm/mmap.c
-index b82199878b45..6aee5f761e08 100644
---- a/arch/sh/mm/mmap.c
-+++ b/arch/sh/mm/mmap.c
-@@ -57,7 +57,7 @@ unsigned long arch_get_unmapped_area(struct file *filp, unsigned long addr,
- 	struct mm_struct *mm = current->mm;
- 	struct vm_area_struct *vma;
- 	int do_colour_align;
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	if (flags & MAP_FIXED) {
- 		/* We do not accept a shared mapping if it would violate
-@@ -106,7 +106,7 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
- 	struct mm_struct *mm = current->mm;
- 	unsigned long addr = addr0;
- 	int do_colour_align;
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	if (flags & MAP_FIXED) {
- 		/* We do not accept a shared mapping if it would violate
-diff --git a/arch/sparc/kernel/sys_sparc_32.c b/arch/sparc/kernel/sys_sparc_32.c
-index 082a551897ed..7e781dbfd052 100644
---- a/arch/sparc/kernel/sys_sparc_32.c
-+++ b/arch/sparc/kernel/sys_sparc_32.c
-@@ -41,7 +41,7 @@ SYSCALL_DEFINE0(getpagesize)
- 
- unsigned long arch_get_unmapped_area(struct file *filp, unsigned long addr, unsigned long len, unsigned long pgoff, unsigned long flags)
- {
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	if (flags & MAP_FIXED) {
- 		/* We do not accept a shared mapping if it would violate
-diff --git a/arch/sparc/kernel/sys_sparc_64.c b/arch/sparc/kernel/sys_sparc_64.c
-index 1dbf7211666e..fc48ab3f83af 100644
---- a/arch/sparc/kernel/sys_sparc_64.c
-+++ b/arch/sparc/kernel/sys_sparc_64.c
-@@ -93,7 +93,7 @@ unsigned long arch_get_unmapped_area(struct file *filp, unsigned long addr, unsi
- 	struct vm_area_struct * vma;
- 	unsigned long task_size = TASK_SIZE;
- 	int do_color_align;
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	if (flags & MAP_FIXED) {
- 		/* We do not accept a shared mapping if it would violate
-@@ -154,7 +154,7 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
- 	unsigned long task_size = STACK_TOP32;
- 	unsigned long addr = addr0;
- 	int do_color_align;
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	/* This should only ever run for 32-bit processes.  */
- 	BUG_ON(!test_thread_flag(TIF_32BIT));
-diff --git a/arch/sparc/mm/hugetlbpage.c b/arch/sparc/mm/hugetlbpage.c
-index 38a1bef47efb..614e2c46d781 100644
---- a/arch/sparc/mm/hugetlbpage.c
-+++ b/arch/sparc/mm/hugetlbpage.c
-@@ -31,7 +31,7 @@ static unsigned long hugetlb_get_unmapped_area_bottomup(struct file *filp,
- {
- 	struct hstate *h = hstate_file(filp);
- 	unsigned long task_size = TASK_SIZE;
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	if (test_thread_flag(TIF_32BIT))
- 		task_size = STACK_TOP32;
-@@ -63,7 +63,7 @@ hugetlb_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
- 	struct hstate *h = hstate_file(filp);
- 	struct mm_struct *mm = current->mm;
- 	unsigned long addr = addr0;
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	/* This should only ever run for 32-bit processes.  */
- 	BUG_ON(!test_thread_flag(TIF_32BIT));
-diff --git a/arch/x86/kernel/sys_x86_64.c b/arch/x86/kernel/sys_x86_64.c
-index c783aeb37dce..6e5d4fa5fc42 100644
---- a/arch/x86/kernel/sys_x86_64.c
-+++ b/arch/x86/kernel/sys_x86_64.c
-@@ -125,7 +125,7 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
- {
- 	struct mm_struct *mm = current->mm;
- 	struct vm_area_struct *vma;
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 	unsigned long begin, end;
- 
- 	if (flags & MAP_FIXED)
-@@ -165,7 +165,7 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
- 	struct vm_area_struct *vma;
- 	struct mm_struct *mm = current->mm;
- 	unsigned long addr = addr0;
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	/* requested length too big for entire address space */
- 	if (len > TASK_SIZE)
-diff --git a/arch/x86/mm/hugetlbpage.c b/arch/x86/mm/hugetlbpage.c
-index 6d77c0039617..88726bd1f72d 100644
---- a/arch/x86/mm/hugetlbpage.c
-+++ b/arch/x86/mm/hugetlbpage.c
-@@ -51,7 +51,7 @@ static unsigned long hugetlb_get_unmapped_area_bottomup(struct file *file,
- 		unsigned long pgoff, unsigned long flags)
- {
- 	struct hstate *h = hstate_file(file);
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	info.flags = 0;
- 	info.length = len;
-@@ -74,7 +74,7 @@ static unsigned long hugetlb_get_unmapped_area_topdown(struct file *file,
- 		unsigned long pgoff, unsigned long flags)
- {
- 	struct hstate *h = hstate_file(file);
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	info.flags = VM_UNMAPPED_AREA_TOPDOWN;
- 	info.length = len;
-diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-index a63d2eee086f..848b2239a215 100644
---- a/fs/hugetlbfs/inode.c
-+++ b/fs/hugetlbfs/inode.c
-@@ -165,7 +165,7 @@ hugetlb_get_unmapped_area_bottomup(struct file *file, unsigned long addr,
- 		unsigned long len, unsigned long pgoff, unsigned long flags)
- {
- 	struct hstate *h = hstate_file(file);
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	info.flags = 0;
- 	info.length = len;
-@@ -181,7 +181,7 @@ hugetlb_get_unmapped_area_topdown(struct file *file, unsigned long addr,
- 		unsigned long len, unsigned long pgoff, unsigned long flags)
- {
- 	struct hstate *h = hstate_file(file);
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 
- 	info.flags = VM_UNMAPPED_AREA_TOPDOWN;
- 	info.length = len;
-diff --git a/mm/mmap.c b/mm/mmap.c
-index e02bb17fef5b..33af683a643f 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1699,7 +1699,7 @@ generic_get_unmapped_area(struct file *filp, unsigned long addr,
- {
- 	struct mm_struct *mm = current->mm;
- 	struct vm_area_struct *vma, *prev;
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 	const unsigned long mmap_end = arch_get_mmap_end(addr, len, flags);
- 
- 	if (len > mmap_end - mmap_min_addr)
-@@ -1747,7 +1747,7 @@ generic_get_unmapped_area_topdown(struct file *filp, unsigned long addr,
- {
- 	struct vm_area_struct *vma, *prev;
- 	struct mm_struct *mm = current->mm;
--	struct vm_unmapped_area_info info;
-+	struct vm_unmapped_area_info info = {};
- 	const unsigned long mmap_end = arch_get_mmap_end(addr, len, flags);
- 
- 	/* requested length too big for entire address space */
--- 
-2.34.1
-
+--=20
+Best Regards
+ Guo Ren
 
