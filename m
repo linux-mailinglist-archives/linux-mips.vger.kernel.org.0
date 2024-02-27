@@ -1,104 +1,86 @@
-Return-Path: <linux-mips+bounces-1819-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1820-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AAD1869E98
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 19:07:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6619C869EBD
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 19:15:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 153731C23AB3
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 18:07:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 481421C23170
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 18:15:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 771BA145346;
-	Tue, 27 Feb 2024 18:07:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F26851468F4;
+	Tue, 27 Feb 2024 18:15:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="d+iQnuXL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dpfRyXaU"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E30E145FE6
-	for <linux-mips@vger.kernel.org>; Tue, 27 Feb 2024 18:07:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBCCD4B5C1;
+	Tue, 27 Feb 2024 18:15:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709057250; cv=none; b=XVqIbQgGnlDLwtU0pnA1ihH16uUwd6cfvA61z0it/YANNQOO4+NVURucJgaRMiIUgo4hvmqtEM7kIBqpPGffY0hUcR+DhvGraNH+Fb8L3dZ/c3E+LiAWA2bwd4WT79DjRV1a4kSijAh8KskNUJm8jPFkAnQWMFj+X5Ft49y7WRE=
+	t=1709057709; cv=none; b=XHW9xwV5U9raIC45w3lKNzFDzExGIfHR6V5J0qQLlGKaKcqHkF4b9gt2Gh2UdSkf9DODnAut5CHFm+onmZN/7YrxQte7BejwlS/hrkHscvA+QvAAYuUHybU2WAS7q7WvR5ti9N2MBj9hIpY+iIRIsKzYAu7Fm2Fan8KHNpbz14o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709057250; c=relaxed/simple;
-	bh=hDsO9qgv2V890oQySpFfqyCZWrqkIn/rAE/+zRviBYc=;
+	s=arc-20240116; t=1709057709; c=relaxed/simple;
+	bh=oQ5lgEqM93Az2/mBkEVI2NmWaWp+Sl8k1tCKiDAjuCg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qRyPPQg2BZhHBlq9v0fwq5JpK9LidgZ2i4QjaNC1uznNbhfXGSgzycat7/HIcQdIMM5ySfwk1rSI0eqetkRKkGYQxcq8fqBp+uOI6OA/RaC+bmiqh4IAjFju/MKGnRzTgXWmmOEaCo5AnxL1lqIYMsv59FFs0WGp8ZrLSAyL7VU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=d+iQnuXL; arc=none smtp.client-ip=209.85.166.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-7bed9fb159fso225151639f.1
-        for <linux-mips@vger.kernel.org>; Tue, 27 Feb 2024 10:07:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1709057248; x=1709662048; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=mgrI9FN30eAJ2XZAfY9sJBg3TkLiivRBpbDR17SPpEo=;
-        b=d+iQnuXLgKZDLaXx97j3ZKk+HiTOuQlqJBwLJEYO9svRMD4/QqZkaA9oMup/6e+RJ8
-         tj+8l3QfTp2EGhMAEuxGkM8V8y4ixD2Msf+7eCEOi9siXYV9WxIwItMnFGqXWwtT4LAx
-         VPJFJDLg4jyshNCHJX13Ew+uPZlcUwwIXdT4I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709057248; x=1709662048;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mgrI9FN30eAJ2XZAfY9sJBg3TkLiivRBpbDR17SPpEo=;
-        b=qf6ISDt6qow3OcsaRe6PgS4L8iqUVnQHCFyP7YPodcPZ60a3VUiwvK7MqWvwOjo8Gs
-         BmgfF025y/mBDwlwq4wJvxUul1JALlrzztE2LobQnmVRn1+NOb20flu1P3sNdytq/KXx
-         hI70ngvaYnYWEPhUgSJ4JCOXaTZFw7v1nbmlYJKOclD1vFaoqvApT2yVOjHa9GJgSQYC
-         VhlusTlqPriFJPnxb1HRwWfua/B3n60UCXciDpb4hQyneQFNx8jp91nz4QcbUHeiNYBg
-         eWFZRGREqd5voS7po+jCE01Hl8ynRhat/e8sHYoeGAroP5TaT3mXfbE8Gk/VZLoom097
-         R/Kw==
-X-Forwarded-Encrypted: i=1; AJvYcCW7uKGJWCR8xLJYjitN8zQxkjjx68tcG0ju3VaP8VKi/GVWenLa9ymr8eit8dJk4WJi1CWMmgJ2JERJjRI4sgzDWRaMvCUOISlqkA==
-X-Gm-Message-State: AOJu0YxESByQGnUKTYlwQ4/hmcX5tlW2kIHnDpFbj6ZPdmGnFmJUF8pG
-	hK2PR7sUrsT0QuklxPpHhzdrFQ/DTdZP+DT+VCdZn3wbBGXc/SSKKCWendCJNg==
-X-Google-Smtp-Source: AGHT+IFpahrVJDe+RkqjDhxBgm48d+nhk6O3nvQnCIgFv/bhnbFyY12knPOFjwYUx9hP01B6x+R36g==
-X-Received: by 2002:a05:6e02:522:b0:363:bb5a:3329 with SMTP id h2-20020a056e02052200b00363bb5a3329mr11593022ils.1.1709057247927;
-        Tue, 27 Feb 2024 10:07:27 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id fa42-20020a056a002d2a00b006e55b674e66sm10411pfb.171.2024.02.27.10.07.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Feb 2024 10:07:27 -0800 (PST)
-Date: Tue, 27 Feb 2024 10:07:26 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"broonie@kernel.org" <broonie@kernel.org>,
-	"kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"luto@kernel.org" <luto@kernel.org>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"hpa@zytor.com" <hpa@zytor.com>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-	"linux-snps-arc@lists.infradead.org" <linux-snps-arc@lists.infradead.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-	"linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-	"linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-	"sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>
-Subject: Re: [PATCH v2 5/9] mm: Initialize struct vm_unmapped_area_info
-Message-ID: <202402271004.7145FDB53F@keescook>
-References: <20240226190951.3240433-1-rick.p.edgecombe@intel.com>
- <20240226190951.3240433-6-rick.p.edgecombe@intel.com>
- <94a2b919-e03b-4ade-b13e-7774849dc02b@csgroup.eu>
+	 Content-Type:Content-Disposition:In-Reply-To; b=UWK8joj2TBXrDvF1Xq8/m2ne/jCz1Ig1VEGmsFCfQlYACgc2x3dHsQi6wbmExksAWiDhttV9kqQxBO0ZzGkyKLypg0NU9QysneF42NRtDtnt0Axce3KbOIEIbVzCVWFCOEQLy18mA2UlK7HTUWjD0e0ed64J+UvmK93RkQc1K2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dpfRyXaU; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709057707; x=1740593707;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=oQ5lgEqM93Az2/mBkEVI2NmWaWp+Sl8k1tCKiDAjuCg=;
+  b=dpfRyXaUygx7JYCjSDyXrQpRxIoDErLwIfVbhqgoVCbc69TlGWNJAAIi
+   fHmGNMLX85ikuZ8VKKcMomtzTlY24THZnayavZaSDUBkVrolteB8bScq4
+   H6oyg+5MvsgmNLwZsW4k93l3ut1khIctQIXNxseUxHWyEzHl+Rl5U+LB1
+   5pn7CnrorWsAB+Oa6he/0L0CUE0SFPxNYSKbSpG9nEaC++uI00cuhIYpy
+   qHucIQE45D7yGtKhIa5U2fUCGiP8nPQdOFbwPCZqpDO75cs3eOWekPU2b
+   14zz7A6fvLL0UhMxLqRItVcwX4pbMuq/y9LfEHELzrISZehh/TrtK++tD
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="3580188"
+X-IronPort-AV: E=Sophos;i="6.06,188,1705392000"; 
+   d="scan'208";a="3580188"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2024 10:15:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="913918908"
+X-IronPort-AV: E=Sophos;i="6.06,188,1705392000"; 
+   d="scan'208";a="913918908"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2024 10:15:01 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1rf1yj-000000081Ib-3XYd;
+	Tue, 27 Feb 2024 20:14:57 +0200
+Date: Tue, 27 Feb 2024 20:14:57 +0200
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v8 05/10] pinctrl: eyeq5: add platform driver
+Message-ID: <Zd4moVd_-bY6Z_kL@smile.fi.intel.com>
+References: <20240227-mbly-clk-v8-0-c57fbda7664a@bootlin.com>
+ <20240227-mbly-clk-v8-5-c57fbda7664a@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -108,41 +90,274 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <94a2b919-e03b-4ade-b13e-7774849dc02b@csgroup.eu>
+In-Reply-To: <20240227-mbly-clk-v8-5-c57fbda7664a@bootlin.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Feb 27, 2024 at 07:02:59AM +0000, Christophe Leroy wrote:
+On Tue, Feb 27, 2024 at 03:55:26PM +0100, Théo Lebrun wrote:
+> Add the Mobileye EyeQ5 pin controller driver. It might grow to add later
+> support of other platforms from Mobileye. It belongs to a syscon region
+> called OLB.
 > 
-> 
-> Le 26/02/2024 à 20:09, Rick Edgecombe a écrit :
-> > Future changes will need to add a field to struct vm_unmapped_area_info.
-> > This would cause trouble for any archs that don't initialize the
-> > struct. Currently every user sets each field, so if new fields are
-> > added, the core code parsing the struct will see garbage in the new
-> > field.
-> > 
-> > It could be possible to initialize the new field for each arch to 0, but
-> > instead simply inialize the field with a C99 struct inializing syntax.
-> 
-> Why doing a full init of the struct when all fields are re-written a few 
-> lines after ?
+> Existing pins and their function live statically in the driver code
+> rather than in the devicetree, see compatible match data.
 
-It's a nice change for robustness and makes future changes easier. It's
-not actually wasteful since the compiler will throw away all redundant
-stores.
+...
 
-> If I take the exemple of powerpc function slice_find_area_bottomup():
-> 
-> 	struct vm_unmapped_area_info info;
-> 
-> 	info.flags = 0;
-> 	info.length = len;
-> 	info.align_mask = PAGE_MASK & ((1ul << pshift) - 1);
-> 	info.align_offset = 0;
+> +config PINCTRL_EYEQ5
+> +	bool "Mobileye EyeQ5 pinctrl driver"
 
-But one cleanup that is possible from explicitly zero-initializing the
-whole structure would be dropping all the individual "= 0" assignments.
-:)
+Can't be a module?
+
+> +	depends on OF
+
+It's even not needed for this software as far as I can tell from the code.
+
+> +	depends on MACH_EYEQ5 || COMPILE_TEST
+> +	select PINMUX
+> +	select GENERIC_PINCONF
+> +	select MFD_SYSCON
+> +	default MACH_EYEQ5
+> +	help
+> +	  Pin controller driver for the Mobileye EyeQ5 platform. It does both
+> +	  pin config & pin muxing. It does not handle GPIO.
+> +
+> +	  Pin muxing supports two functions for each pin: first is GPIO, second
+> +	  is pin-dependent. Pin config is about bias & drive strength.
+
+...
+
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/pinctrl/pinconf-generic.h>
+> +#include <linux/pinctrl/pinconf.h>
+> +#include <linux/pinctrl/pinctrl.h>
+> +#include <linux/pinctrl/pinmux.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/seq_file.h>
+
+Semi-random list of the inclusions. Please, fix it.
+While doing that, group out pinctrl/* ones as it's done in other drivers.
+
+> +#include "core.h"
+> +#include "pinctrl-utils.h"
+
+...
+
+> +struct eq5p_function {
+> +	const char		*name;
+> +	const char * const	*groups;
+> +	unsigned int		ngroups;
+> +};
+
+We have struct pinfunction, use it instead.
+
+...
+
+> +static const char * const gpio_groups[] = {
+> +	/* Bank A */
+> +	"PA0", "PA1", "PA2", "PA3", "PA4", "PA5", "PA6", "PA7", "PA8", "PA9",
+> +	"PA10", "PA11", "PA12", "PA13", "PA14", "PA15", "PA16", "PA17", "PA18",
+> +	"PA19", "PA20", "PA21", "PA22", "PA23", "PA24", "PA25", "PA26", "PA27",
+> +	"PA28",
+
+For all arrays like this, please split them on 4/8/10/16 items per line as it's
+much easier to count and refer by index when reading the code.
+
+> +	/* Bank B */
+> +	"PB0", "PB1", "PB2", "PB3", "PB4", "PB5", "PB6", "PB7", "PB8", "PB9",
+> +	"PB10", "PB11", "PB12", "PB13", "PB14", "PB15", "PB16", "PB17", "PB18",
+> +	"PB19", "PB20", "PB21", "PB22",
+> +};
+
+...
+
+> +#define FUNCTION(a, b) { .name = a, .groups = b, .ngroups = ARRAY_SIZE(b) }
+
+Use PINCTRL_PINFUNCTION() instead.
+
+...
+
+> +static bool eq5p_test_bit(const struct eq5p_pinctrl *pctrl,
+> +			  enum eq5p_bank bank, enum eq5p_regs reg, int offset)
+> +{
+> +	u32 val = readl(pctrl->base + eq5p_regs[bank][reg]);
+
+> +	if (WARN_ON(offset > 31))
+> +		return false;
+
+When this condition can be true?
+
+> +	return (val & BIT(offset)) != 0;
+> +}
+
+...
+
+> +static int eq5p_pinconf_get(struct pinctrl_dev *pctldev, unsigned int pin,
+> +			    unsigned long *config);
+
+Can't you avoid forward declarations?
+
+...
+
+> +	if (!eq5p_test_bit(pctrl, bank, EQ5P_IOCR, offset)) {
+
+What's wrong with positive conditional?
+
+
+> +	} else {
+
+> +	}
+
+...
+
+> +static const struct pinctrl_ops eq5p_pinctrl_ops = {
+> +	.get_groups_count	= eq5p_pinctrl_get_groups_count,
+> +	.get_group_name		= eq5p_pinctrl_get_group_name,
+> +	.get_group_pins		= eq5p_pinctrl_get_group_pins,
+> +	.pin_dbg_show		= eq5p_pinctrl_pin_dbg_show,
+
+> +	.dt_node_to_map		= pinconf_generic_dt_node_to_map_pin,
+> +	.dt_free_map		= pinctrl_utils_free_map,
+
+ifdef is missing for these... But the question is, isn't these a default when
+OF is in use?
+
+> +};
+
+...
+
+> +	dev_dbg(pctldev->dev, "%s: func=%s group=%s\n", __func__, func_name,
+> +		group_name);
+
+Drop __func__ from all debug messages. With Dynamic Debug enabled (which is
+often the case) we can do it at run-time).
+
+...
+
+> +	mask = BIT(offset);
+> +	val = is_gpio ? 0 : U32_MAX;
+
+I think you meant something else (semantically) than U32_MAX.
+Perhaps GENMASK(31, 0)?
+
+...
+
+> +static int eq5p_pinconf_get(struct pinctrl_dev *pctldev, unsigned int pin,
+> +			    unsigned long *config)
+> +{
+> +	enum pin_config_param param = pinconf_to_config_param(*config);
+> +	struct eq5p_pinctrl *pctrl = pinctrl_dev_get_drvdata(pctldev);
+> +	unsigned int offset = eq5p_pin_to_offset(pin);
+> +	enum eq5p_bank bank = eq5p_pin_to_bank(pin);
+> +	u32 val_ds, arg = 0;
+
+What's arg assignment for?
+
+> +	bool pd, pu;
+> +
+> +	pd = eq5p_test_bit(pctrl, bank, EQ5P_PD, offset);
+> +	pu = eq5p_test_bit(pctrl, bank, EQ5P_PU, offset);
+> +
+> +	switch (param) {
+> +	case PIN_CONFIG_BIAS_DISABLE:
+> +		arg = !(pd || pu);
+> +		break;
+> +	case PIN_CONFIG_BIAS_PULL_DOWN:
+> +		arg = pd;
+> +		break;
+> +	case PIN_CONFIG_BIAS_PULL_UP:
+> +		arg = pu;
+> +		break;
+> +	case PIN_CONFIG_DRIVE_STRENGTH:
+> +		offset *= 2; /* two bits per pin */
+> +		if (offset >= 32) {
+> +			val_ds = readl(pctrl->base + eq5p_regs[bank][EQ5P_DS_HIGH]);
+> +			offset -= 32;
+> +		} else {
+> +			val_ds = readl(pctrl->base + eq5p_regs[bank][EQ5P_DS_LOW]);
+> +		}
+
+I'm wondering why you can't use your helpers before multiplication?
+
+> +		arg = (val_ds >> offset) & 0b11;
+
+GENMASK(1, 0)
+
+> +		break;
+> +	default:
+> +		return -ENOTSUPP;
+> +	}
+> +
+> +	*config = pinconf_to_config_packed(param, arg);
+> +	return 0;
+> +}
+
+...
+
+> +static int eq5p_pinconf_set_drive_strength(struct pinctrl_dev *pctldev,
+> +					   unsigned int pin, u32 arg)
+> +{
+> +	struct eq5p_pinctrl *pctrl = pinctrl_dev_get_drvdata(pctldev);
+> +	unsigned int offset = eq5p_pin_to_offset(pin);
+> +	enum eq5p_bank bank = eq5p_pin_to_bank(pin);
+> +	unsigned int reg;
+> +	u32 mask, val;
+> +
+> +	if (arg > 3) {
+
+Magic number.
+
+> +		dev_err(pctldev->dev, "Unsupported drive strength: %u\n", arg);
+> +		return -EINVAL;
+> +	}
+> +
+> +	offset *= 2; /* two bits per pin */
+> +
+> +	if (offset >= 32) {
+> +		reg = EQ5P_DS_HIGH;
+> +		offset -= 32;
+> +	} else {
+> +		reg = EQ5P_DS_LOW;
+> +	}
+
+> +	mask = 0b11 << offset;
+> +	val = arg << offset;
+> +	eq5p_update_bits(pctrl, bank, reg, mask, val);
+
+Similar comments as per previous function.
+
+> +	return 0;
+> +}
+
+...
+
+> +static const struct of_device_id eq5p_match[] = {
+> +	{ .compatible = "mobileye,eyeq5-pinctrl" },
+> +	{},
+
+No comma in the terminator entry.
+
+> +};
+
+No MODULE_DEVICE_TABLE()?
+
+> +static struct platform_driver eq5p_driver = {
+> +	.driver = {
+> +		.name = "eyeq5-pinctrl",
+> +		.of_match_table = eq5p_match,
+> +	},
+> +	.probe = eq5p_probe,
+> +};
+
+> +
+
+Unneeded blank line.
+
+> +builtin_platform_driver(eq5p_driver);
 
 -- 
-Kees Cook
+With Best Regards,
+Andy Shevchenko
+
+
 
