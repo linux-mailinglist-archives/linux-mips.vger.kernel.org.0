@@ -1,535 +1,336 @@
-Return-Path: <linux-mips+bounces-1767-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1768-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2045C86852D
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 01:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F00386881E
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 05:10:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB594285988
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 00:49:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A1EE2848EB
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 04:10:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB9CC1848;
-	Tue, 27 Feb 2024 00:49:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 491DF4CE05;
+	Tue, 27 Feb 2024 04:10:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hlb2FLF+"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="MAo+CXTj"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 903CF1FBB;
-	Tue, 27 Feb 2024 00:49:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A1638387;
+	Tue, 27 Feb 2024 04:10:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708994992; cv=none; b=DyQvT10liL2o3T/zNAyayvYrcglm7J4GM8Kmuc11DaAGRr3jfBvXPEVxfEWA0bJTLoegW28oYxxDKpIpfiNk13CkYq2zEdc3gPArFyWEtQ8I/JfjqstadwaXI6ojNCJsK6w1K636Ki1ABhF99EboDzuelRakqJVBPe56hSDN9J8=
+	t=1709007036; cv=none; b=p88bi0YQIW80jNrCnZKw6gYFnlimsRpWEonRsZagajC0kH3h+tvHM9KWLHPtO+I8tSfQ0lYGZ2MfLNiQhqakyDtiWseSD6KKk0P6wbTjWw8xpjCnxG/uc+rEwJqXdjne2K80WQuCCogPeUSn7p8Nb0difZQpMwprgn/l35cNlAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708994992; c=relaxed/simple;
-	bh=rccfFAsIXXB1qR3NT1VIdPRPtfwefb4SHiEfUqybo3o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZyVe1AWUtNkX4XIzXrbZSlR3zFfADp7K2XwAgmaldN4lXLLLEIFePd3FAvUZjS1xoO0vNKm12deZnAOSBPAnpgrvxvITXI13Y1phGGu9/DmCgCbGA2ruvXwxjDfD4FLLw/KTQfOuQBmMjESnYd8xKqWfaX8i1OZew+RWNDC1oIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hlb2FLF+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 479AEC433C7;
-	Tue, 27 Feb 2024 00:49:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708994992;
-	bh=rccfFAsIXXB1qR3NT1VIdPRPtfwefb4SHiEfUqybo3o=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=hlb2FLF+7oSLe2uaiQD1GRNrdcUcZ76jkMNefv7y9z0d4avyL6FJ+ec7MgIsVWa5P
-	 wvDYvR10b8lFqBOgHmiA20/osMi1ld0TZqLNPYid52p2q5f1QA1scVPKtHhKfIDhrC
-	 q/svMK1Zm8VDLDLUYcDNUcNYAUTAdB82AhjafWTXrSI4iDZBqMRFNL534Smb8NdazI
-	 ymraKhDbxXSVTEhoYUArpoXZ2r5dqvW0+L+n8D1lFNRcYqnhaZWc3vUmQ45go8B2dM
-	 9JaWRnD/n3enlV67RX51LMpQ6+Gmgkk/xvPrcP0vyLUs5JSJ74i3u0JV/RpiWY7fzr
-	 YOZ11VkXCa1NQ==
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-512ff385589so1786960e87.1;
-        Mon, 26 Feb 2024 16:49:52 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUL2H/9qLNg9ghEsHysIi2pSBx8g110T6W4htxb07diDwGkjhgO0C5SvBamz45mlcNBYQzOIAD9mcpVP0+5JY0sa0HBFD0dhnGXuU2ZjJzGCdHnExBH1A7LkhcDEZnDEQFPd6NUFbTS4JG/27vG6SzDykbCbHW77GyuS4sG0f1WQ4trIbp81LZaUk1mjX29iIlooXb/ztRwNBXWfdvEydiBauuJgTuOioMq6/XGkx6CfFQ5WjddznMjerrCPDegmvSUyrt/8ld9bhok5Rz+OuVrC2WNiB/iFyWNIDEoQOo+PxFNLteoE7vWc0dL5VoBO7djT/ygT6+mIsA+cqDTi8dtfa7pMrpINuoMiFeDEGA4g+i4D2Qr3Q/4dK0VMl3lqwFmW7FfsqMbnOw5OO2LlvDI2mjTy54+9sB2C9BxOvCPelg/MOTu5HaanKXmtd9E+gE=
-X-Gm-Message-State: AOJu0YxvKPec0nDwMIKX+y0As+neFhtPqWmuDlUlcKTejKWmgjPkXhlG
-	9l+268ErD2WCZHqJb/kouQTzEoANIkk9Y69CfExGBG6Hqbjo3eJsM1pKK8DwuANGfWX8Yn9jgJY
-	7lwzjMDZmfQTHTpd+kLJyfswO8sE=
-X-Google-Smtp-Source: AGHT+IHMbxJ3SiFOofcXhuN9irkVPuqdMkmTsNwCqv7uyX1PBMjHMV5Lrsk8D9faur3ryNh+qAv630nq+LkptA51b9c=
-X-Received: by 2002:a05:6512:10d2:b0:512:cef7:4754 with SMTP id
- k18-20020a05651210d200b00512cef74754mr6391328lfg.5.1708994969841; Mon, 26 Feb
- 2024 16:49:29 -0800 (PST)
+	s=arc-20240116; t=1709007036; c=relaxed/simple;
+	bh=bd9QSV2wu+dedXDp3EE4WVF/b12K6ppAoOk7e+CLEmI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ecLRftV2BeOQTrEsFR3VCHQhV40oiLGLgwj614Rlap+Ys9jPK0qqpMU9PZ5tAgKGBpfuwgsC1g2Mqe73clgBdoIkxHGpcWhuQG7AdBjFtpOfOMl5R7zbuSDZonIi4yJpSMGuSQNCxpnH4yklwGXyJbm6f9J4YtdOLbgQwfjwnqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=MAo+CXTj; arc=none smtp.client-ip=115.124.30.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1709007024; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=zwkpXF9gJx+g/eWdNELvvxUaWV9Pu/V951Ww8oOa6pc=;
+	b=MAo+CXTjflL4SSXdTLIt7EsmL7/4tGc3axK1Hdll+NySlKBJs4Ol/aFalJRybczZFm3OI38aU09ArJmer1EiGnIOPaICMp8p3FR5pATvMxgN8MYAk8vOB3Uap/+VvNib83fiFUeP4BxUMe3JtBcRCKS4UkADpl1n1IJ8VCI33p4=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R641e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0W1LWtRr_1709007020;
+Received: from 30.178.80.107(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0W1LWtRr_1709007020)
+          by smtp.aliyun-inc.com;
+          Tue, 27 Feb 2024 12:10:22 +0800
+Message-ID: <188559cb-875e-498e-94a4-43b3a0b5e901@linux.alibaba.com>
+Date: Tue, 27 Feb 2024 12:10:20 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240226161414.2316610-1-arnd@kernel.org> <20240226161414.2316610-4-arnd@kernel.org>
-In-Reply-To: <20240226161414.2316610-4-arnd@kernel.org>
-From: Guo Ren <guoren@kernel.org>
-Date: Tue, 27 Feb 2024 08:49:18 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSCdXtCib2Wv_DQQSJ5srhDwHH6B3xgdrr1-SQECUL1VA@mail.gmail.com>
-Message-ID: <CAJF2gTSCdXtCib2Wv_DQQSJ5srhDwHH6B3xgdrr1-SQECUL1VA@mail.gmail.com>
-Subject: Re: [PATCH 3/4] arch: define CONFIG_PAGE_SIZE_*KB on all architectures
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Kees Cook <keescook@chromium.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-	Arnd Bergmann <arnd@arndb.de>, Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>, 
-	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Helge Deller <deller@gmx.de>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Andreas Larsson <andreas@gaisler.com>, 
-	Richard Weinberger <richard@nod.at>, x86@kernel.org, Max Filippov <jcmvbkbc@gmail.com>, 
-	Andy Lutomirski <luto@kernel.org>, Jan Kiszka <jan.kiszka@siemens.com>, 
-	Kieran Bingham <kbingham@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
-	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
-	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHv10 2/4] genirq: Provide a snapshot mechanism for interrupt
+ statistics
+To: Bitao Hu <yaoma@linux.alibaba.com>, dianders@chromium.org,
+ tglx@linutronix.de, akpm@linux-foundation.org, pmladek@suse.com,
+ kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com,
+ tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+ jan.kiszka@siemens.com
+Cc: linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <20240226020939.45264-1-yaoma@linux.alibaba.com>
+ <20240226020939.45264-3-yaoma@linux.alibaba.com>
+From: Liu Song <liusong@linux.alibaba.com>
+In-Reply-To: <20240226020939.45264-3-yaoma@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Feb 27, 2024 at 12:15=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wr=
-ote:
+
+在 2024/2/26 10:09, Bitao Hu 写道:
+> The soft lockup detector lacks a mechanism to identify interrupt storms
+> as root cause of a lockup. To enable this the detector needs a
+> mechanism to snapshot the interrupt count statistics on a CPU when the
+> detector observes a potential lockup scenario and compare that against
+> the interrupt count when it warns about the lockup later on. The number
+> of interrupts in that period give a hint whether the lockup might be
+> caused by an interrupt storm.
 >
-> From: Arnd Bergmann <arnd@arndb.de>
+> Instead of having extra storage in the lockup detector and accessing
+> the internals of the interrupt descriptor directly, convert the per CPU
+> irq_desc::kstat_irq member to a data structure which contains the
+> counter plus a snapshot member and provide interfaces to take a
+> snapshot of all interrupts on the current CPU and to retrieve the delta
+> of a specific interrupt later on.
 >
-> Most architectures only support a single hardcoded page size. In order
-> to ensure that each one of these sets the corresponding Kconfig symbols,
-> change over the PAGE_SHIFT definition to the common one and allow
-> only the hardware page size to be selected.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Originally-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Bitao Hu <yaoma@linux.alibaba.com>
 > ---
->  arch/alpha/Kconfig                 | 1 +
->  arch/alpha/include/asm/page.h      | 2 +-
->  arch/arm/Kconfig                   | 1 +
->  arch/arm/include/asm/page.h        | 2 +-
->  arch/csky/Kconfig                  | 1 +
->  arch/csky/include/asm/page.h       | 2 +-
->  arch/m68k/Kconfig                  | 3 +++
->  arch/m68k/Kconfig.cpu              | 2 ++
->  arch/m68k/include/asm/page.h       | 6 +-----
->  arch/microblaze/Kconfig            | 1 +
->  arch/microblaze/include/asm/page.h | 2 +-
->  arch/nios2/Kconfig                 | 1 +
->  arch/nios2/include/asm/page.h      | 2 +-
->  arch/openrisc/Kconfig              | 1 +
->  arch/openrisc/include/asm/page.h   | 2 +-
->  arch/riscv/Kconfig                 | 1 +
->  arch/riscv/include/asm/page.h      | 2 +-
->  arch/s390/Kconfig                  | 1 +
->  arch/s390/include/asm/page.h       | 2 +-
->  arch/sparc/Kconfig                 | 2 ++
->  arch/sparc/include/asm/page_32.h   | 2 +-
->  arch/sparc/include/asm/page_64.h   | 3 +--
->  arch/um/Kconfig                    | 1 +
->  arch/um/include/asm/page.h         | 2 +-
->  arch/x86/Kconfig                   | 1 +
->  arch/x86/include/asm/page_types.h  | 2 +-
->  arch/xtensa/Kconfig                | 1 +
->  arch/xtensa/include/asm/page.h     | 2 +-
->  28 files changed, 32 insertions(+), 19 deletions(-)
+>   arch/mips/dec/setup.c                |  2 +-
+>   arch/parisc/kernel/smp.c             |  2 +-
+>   arch/powerpc/kvm/book3s_hv_rm_xics.c |  2 +-
+>   include/linux/irqdesc.h              |  9 ++++++--
+>   include/linux/kernel_stat.h          |  3 +++
+>   kernel/irq/internals.h               |  2 +-
+>   kernel/irq/irqdesc.c                 | 34 ++++++++++++++++++++++------
+>   kernel/irq/proc.c                    |  5 ++--
+>   scripts/gdb/linux/interrupts.py      |  6 ++---
+>   9 files changed, 46 insertions(+), 19 deletions(-)
 >
-> diff --git a/arch/alpha/Kconfig b/arch/alpha/Kconfig
-> index d6968d090d49..4f490250d323 100644
-> --- a/arch/alpha/Kconfig
-> +++ b/arch/alpha/Kconfig
-> @@ -14,6 +14,7 @@ config ALPHA
->         select PCI_DOMAINS if PCI
->         select PCI_SYSCALL if PCI
->         select HAVE_ASM_MODVERSIONS
-> +       select HAVE_PAGE_SIZE_8KB
->         select HAVE_PCSPKR_PLATFORM
->         select HAVE_PERF_EVENTS
->         select NEED_DMA_MAP_STATE
-> diff --git a/arch/alpha/include/asm/page.h b/arch/alpha/include/asm/page.=
-h
-> index 4db1ebc0ed99..70419e6be1a3 100644
-> --- a/arch/alpha/include/asm/page.h
-> +++ b/arch/alpha/include/asm/page.h
-> @@ -6,7 +6,7 @@
->  #include <asm/pal.h>
->
->  /* PAGE_SHIFT determines the page size */
-> -#define PAGE_SHIFT     13
-> +#define PAGE_SHIFT     CONFIG_PAGE_SHIFT
->  #define PAGE_SIZE      (_AC(1,UL) << PAGE_SHIFT)
->  #define PAGE_MASK      (~(PAGE_SIZE-1))
->
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index 0af6709570d1..9d52ba3a8ad1 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -116,6 +116,7 @@ config ARM
->         select HAVE_MOD_ARCH_SPECIFIC
->         select HAVE_NMI
->         select HAVE_OPTPROBES if !THUMB2_KERNEL
-> +       select HAVE_PAGE_SIZE_4KB
->         select HAVE_PCI if MMU
->         select HAVE_PERF_EVENTS
->         select HAVE_PERF_REGS
-> diff --git a/arch/arm/include/asm/page.h b/arch/arm/include/asm/page.h
-> index 119aa85d1feb..62af9f7f9e96 100644
-> --- a/arch/arm/include/asm/page.h
-> +++ b/arch/arm/include/asm/page.h
-> @@ -8,7 +8,7 @@
->  #define _ASMARM_PAGE_H
->
->  /* PAGE_SHIFT determines the page size */
-> -#define PAGE_SHIFT             12
-> +#define PAGE_SHIFT             CONFIG_PAGE_SHIFT
->  #define PAGE_SIZE              (_AC(1,UL) << PAGE_SHIFT)
->  #define PAGE_MASK              (~((1 << PAGE_SHIFT) - 1))
->
-> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-> index cf2a6fd7dff8..9c2723ab1c94 100644
-> --- a/arch/csky/Kconfig
-> +++ b/arch/csky/Kconfig
-> @@ -89,6 +89,7 @@ config CSKY
->         select HAVE_KPROBES if !CPU_CK610
->         select HAVE_KPROBES_ON_FTRACE if !CPU_CK610
->         select HAVE_KRETPROBES if !CPU_CK610
-> +       select HAVE_PAGE_SIZE_4KB
->         select HAVE_PERF_EVENTS
->         select HAVE_PERF_REGS
->         select HAVE_PERF_USER_STACK_DUMP
-> diff --git a/arch/csky/include/asm/page.h b/arch/csky/include/asm/page.h
-> index 4a0502e324a6..f70f37402d75 100644
-> --- a/arch/csky/include/asm/page.h
-> +++ b/arch/csky/include/asm/page.h
-> @@ -10,7 +10,7 @@
->  /*
->   * PAGE_SHIFT determines the page size: 4KB
->   */
-> -#define PAGE_SHIFT     12
-> +#define PAGE_SHIFT     CONFIG_PAGE_SHIFT
-LGTM, thx.
-Acked-by: Guo Ren <guoren@kernel.org>
+> diff --git a/arch/mips/dec/setup.c b/arch/mips/dec/setup.c
+> index 6c3704f51d0d..87f0a1436bf9 100644
+> --- a/arch/mips/dec/setup.c
+> +++ b/arch/mips/dec/setup.c
+> @@ -756,7 +756,7 @@ void __init arch_init_irq(void)
+>   				NULL))
+>   			pr_err("Failed to register fpu interrupt\n");
+>   		desc_fpu = irq_to_desc(irq_fpu);
+> -		fpu_kstat_irq = this_cpu_ptr(desc_fpu->kstat_irqs);
+> +		fpu_kstat_irq = this_cpu_ptr(&desc_fpu->kstat_irqs->cnt);
+>   	}
+>   	if (dec_interrupt[DEC_IRQ_CASCADE] >= 0) {
+>   		if (request_irq(dec_interrupt[DEC_IRQ_CASCADE], no_action,
+> diff --git a/arch/parisc/kernel/smp.c b/arch/parisc/kernel/smp.c
+> index 444154271f23..800eb64e91ad 100644
+> --- a/arch/parisc/kernel/smp.c
+> +++ b/arch/parisc/kernel/smp.c
+> @@ -344,7 +344,7 @@ static int smp_boot_one_cpu(int cpuid, struct task_struct *idle)
+>   		struct irq_desc *desc = irq_to_desc(i);
+>   
+>   		if (desc && desc->kstat_irqs)
+> -			*per_cpu_ptr(desc->kstat_irqs, cpuid) = 0;
+> +			*per_cpu_ptr(desc->kstat_irqs, cpuid) = (struct irqstat) { };
+>   	}
+>   #endif
+>   
+> diff --git a/arch/powerpc/kvm/book3s_hv_rm_xics.c b/arch/powerpc/kvm/book3s_hv_rm_xics.c
+> index e42984878503..f2636414d82a 100644
+> --- a/arch/powerpc/kvm/book3s_hv_rm_xics.c
+> +++ b/arch/powerpc/kvm/book3s_hv_rm_xics.c
+> @@ -837,7 +837,7 @@ static inline void this_cpu_inc_rm(unsigned int __percpu *addr)
+>    */
+>   static void kvmppc_rm_handle_irq_desc(struct irq_desc *desc)
+>   {
+> -	this_cpu_inc_rm(desc->kstat_irqs);
+> +	this_cpu_inc_rm(&desc->kstat_irqs->cnt);
+>   	__this_cpu_inc(kstat.irqs_sum);
+>   }
+>   
+> diff --git a/include/linux/irqdesc.h b/include/linux/irqdesc.h
+> index d9451d456a73..2912b1998670 100644
+> --- a/include/linux/irqdesc.h
+> +++ b/include/linux/irqdesc.h
+> @@ -17,6 +17,11 @@ struct irq_desc;
+>   struct irq_domain;
+>   struct pt_regs;
+>   
+> +struct irqstat {
+> +	unsigned int	cnt;
+> +	unsigned int	ref;
+> +};
+> +
+>   /**
+>    * struct irq_desc - interrupt descriptor
+>    * @irq_common_data:	per irq and chip data passed down to chip functions
+> @@ -55,7 +60,7 @@ struct pt_regs;
+>   struct irq_desc {
+>   	struct irq_common_data	irq_common_data;
+>   	struct irq_data		irq_data;
+> -	unsigned int __percpu	*kstat_irqs;
+> +	struct irqstat __percpu	*kstat_irqs;
+>   	irq_flow_handler_t	handle_irq;
+>   	struct irqaction	*action;	/* IRQ action list */
+>   	unsigned int		status_use_accessors;
+> @@ -119,7 +124,7 @@ extern struct irq_desc irq_desc[NR_IRQS];
+>   static inline unsigned int irq_desc_kstat_cpu(struct irq_desc *desc,
+>   					      unsigned int cpu)
+>   {
+> -	return desc->kstat_irqs ? *per_cpu_ptr(desc->kstat_irqs, cpu) : 0;
+> +	return desc->kstat_irqs ? per_cpu(desc->kstat_irqs->cnt, cpu) : 0;
+>   }
+>   
+>   static inline struct irq_desc *irq_data_to_desc(struct irq_data *data)
+> diff --git a/include/linux/kernel_stat.h b/include/linux/kernel_stat.h
+> index 9935f7ecbfb9..98b3043ea5e6 100644
+> --- a/include/linux/kernel_stat.h
+> +++ b/include/linux/kernel_stat.h
+> @@ -79,6 +79,9 @@ static inline unsigned int kstat_cpu_softirqs_sum(int cpu)
+>   	return sum;
+>   }
+>   
+> +extern void kstat_snapshot_irqs(void);
+> +extern unsigned int kstat_get_irq_since_snapshot(unsigned int irq);
+> +
+>   /*
+>    * Number of interrupts per specific IRQ source, since bootup
+>    */
+> diff --git a/kernel/irq/internals.h b/kernel/irq/internals.h
+> index bcc7f21db9ee..1d92532c2aae 100644
+> --- a/kernel/irq/internals.h
+> +++ b/kernel/irq/internals.h
+> @@ -258,7 +258,7 @@ static inline void irq_state_set_masked(struct irq_desc *desc)
+>   
+>   static inline void __kstat_incr_irqs_this_cpu(struct irq_desc *desc)
+>   {
+> -	__this_cpu_inc(*desc->kstat_irqs);
+> +	__this_cpu_inc(desc->kstat_irqs->cnt);
+>   	__this_cpu_inc(kstat.irqs_sum);
+>   }
+>   
+> diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+> index 27ca1c866f29..9cd17080b2d8 100644
+> --- a/kernel/irq/irqdesc.c
+> +++ b/kernel/irq/irqdesc.c
+> @@ -122,7 +122,7 @@ static void desc_set_defaults(unsigned int irq, struct irq_desc *desc, int node,
+>   	desc->name = NULL;
+>   	desc->owner = owner;
+>   	for_each_possible_cpu(cpu)
+> -		*per_cpu_ptr(desc->kstat_irqs, cpu) = 0;
+> +		*per_cpu_ptr(desc->kstat_irqs, cpu) = (struct irqstat) { };
+>   	desc_smp_init(desc, node, affinity);
+>   }
+>   
+> @@ -418,8 +418,8 @@ static struct irq_desc *alloc_desc(int irq, int node, unsigned int flags,
+>   	desc = kzalloc_node(sizeof(*desc), GFP_KERNEL, node);
+>   	if (!desc)
+>   		return NULL;
+> -	/* allocate based on nr_cpu_ids */
+> -	desc->kstat_irqs = alloc_percpu(unsigned int);
+> +
+> +	desc->kstat_irqs = alloc_percpu(struct irqstat);
+>   	if (!desc->kstat_irqs)
+>   		goto err_desc;
+>   
+> @@ -593,7 +593,7 @@ int __init early_irq_init(void)
+>   	count = ARRAY_SIZE(irq_desc);
+>   
+>   	for (i = 0; i < count; i++) {
+> -		desc[i].kstat_irqs = alloc_percpu(unsigned int);
+> +		desc[i].kstat_irqs = alloc_percpu(struct irqstat);
+>   		alloc_masks(&desc[i], node);
+>   		raw_spin_lock_init(&desc[i].lock);
+>   		lockdep_set_class(&desc[i].lock, &irq_desc_lock_class);
+> @@ -952,8 +952,7 @@ unsigned int kstat_irqs_cpu(unsigned int irq, int cpu)
+>   {
+>   	struct irq_desc *desc = irq_to_desc(irq);
+>   
+> -	return desc && desc->kstat_irqs ?
+> -			*per_cpu_ptr(desc->kstat_irqs, cpu) : 0;
+> +	return desc && desc->kstat_irqs ? per_cpu(desc->kstat_irqs->cnt, cpu) : 0;
+>   }
+>   
+>   static bool irq_is_nmi(struct irq_desc *desc)
+> @@ -975,10 +974,31 @@ static unsigned int kstat_irqs(unsigned int irq)
+>   		return data_race(desc->tot_count);
+>   
+>   	for_each_possible_cpu(cpu)
+> -		sum += data_race(*per_cpu_ptr(desc->kstat_irqs, cpu));
+> +		sum += data_race(per_cpu(desc->kstat_irqs->cnt, cpu));
+>   	return sum;
+>   }
+>   
+> +void kstat_snapshot_irqs(void)
+> +{
+> +	struct irq_desc *desc;
+> +	unsigned int irq;
+> +
+> +	for_each_irq_desc(irq, desc) {
+> +		if (!desc->kstat_irqs)
+> +			continue;
+> +		this_cpu_write(desc->kstat_irqs->ref, this_cpu_read(desc->kstat_irqs->cnt));
+> +	}
+> +}
+> +
+> +unsigned int kstat_get_irq_since_snapshot(unsigned int irq)
+> +{
+> +	struct irq_desc *desc = irq_to_desc(irq);
+> +
+> +	if (!desc || !desc->kstat_irqs)
+> +		return 0;
+> +	return this_cpu_read(desc->kstat_irqs->cnt) - this_cpu_read(desc->kstat_irqs->ref);
+> +}
+> +
+>   /**
+>    * kstat_irqs_usr - Get the statistics for an interrupt from thread context
+>    * @irq:	The interrupt number
+> diff --git a/kernel/irq/proc.c b/kernel/irq/proc.c
+> index 623b8136e9af..6954e0a02047 100644
+> --- a/kernel/irq/proc.c
+> +++ b/kernel/irq/proc.c
+> @@ -490,7 +490,7 @@ int show_interrupts(struct seq_file *p, void *v)
+>   
+>   	if (desc->kstat_irqs) {
+>   		for_each_online_cpu(j)
+> -			any_count |= data_race(*per_cpu_ptr(desc->kstat_irqs, j));
+> +			any_count |= data_race(per_cpu(desc->kstat_irqs->cnt, j));
+>   	}
+>   
+>   	if ((!desc->action || irq_desc_is_chained(desc)) && !any_count)
+> @@ -498,8 +498,7 @@ int show_interrupts(struct seq_file *p, void *v)
+>   
+>   	seq_printf(p, "%*d: ", prec, i);
+>   	for_each_online_cpu(j)
+> -		seq_printf(p, "%10u ", desc->kstat_irqs ?
+> -					*per_cpu_ptr(desc->kstat_irqs, j) : 0);
+> +		seq_printf(p, "%10u ", desc->kstat_irqs ? per_cpu(desc->kstat_irqs->cnt, j) : 0);
+>   
+>   	raw_spin_lock_irqsave(&desc->lock, flags);
+>   	if (desc->irq_data.chip) {
+> diff --git a/scripts/gdb/linux/interrupts.py b/scripts/gdb/linux/interrupts.py
+> index ef478e273791..7e50f3b9dfad 100644
+> --- a/scripts/gdb/linux/interrupts.py
+> +++ b/scripts/gdb/linux/interrupts.py
+> @@ -37,7 +37,7 @@ def show_irq_desc(prec, irq):
+>       any_count = 0
+>       if desc['kstat_irqs']:
+>           for cpu in cpus.each_online_cpu():
+> -            any_count += cpus.per_cpu(desc['kstat_irqs'], cpu)
+> +            any_count += cpus.per_cpu(desc['kstat_irqs'], cpu)['cnt']
+>   
+>       if (desc['action'] == 0 or irq_desc_is_chained(desc)) and any_count == 0:
+>           return text;
+> @@ -45,7 +45,7 @@ def show_irq_desc(prec, irq):
+>       text += "%*d: " % (prec, irq)
+>       for cpu in cpus.each_online_cpu():
+>           if desc['kstat_irqs']:
+> -            count = cpus.per_cpu(desc['kstat_irqs'], cpu)
+> +            count = cpus.per_cpu(desc['kstat_irqs'], cpu)['cnt']
+>           else:
+>               count = 0
+>           text += "%10u" % (count)
+> @@ -177,7 +177,7 @@ def arm_common_show_interrupts(prec):
+>           if desc == 0:
+>               continue
+>           for cpu in cpus.each_online_cpu():
+> -            text += "%10u" % (cpus.per_cpu(desc['kstat_irqs'], cpu))
+> +            text += "%10u" % (cpus.per_cpu(desc['kstat_irqs'], cpu)['cnt'])
+>           text += "      %s" % (ipi_types[ipi].string())
+>           text += "\n"
+>       return text
+Looks good.
 
->  #define PAGE_SIZE      (_AC(1, UL) << PAGE_SHIFT)
->  #define PAGE_MASK      (~(PAGE_SIZE - 1))
->  #define THREAD_SIZE    (PAGE_SIZE * 2)
-> diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
-> index 4b3e93cac723..7b709453d5e7 100644
-> --- a/arch/m68k/Kconfig
-> +++ b/arch/m68k/Kconfig
-> @@ -84,12 +84,15 @@ config MMU
->
->  config MMU_MOTOROLA
->         bool
-> +       select HAVE_PAGE_SIZE_4KB
->
->  config MMU_COLDFIRE
-> +       select HAVE_PAGE_SIZE_8KB
->         bool
->
->  config MMU_SUN3
->         bool
-> +       select HAVE_PAGE_SIZE_8KB
->         depends on MMU && !MMU_MOTOROLA && !MMU_COLDFIRE
->
->  config ARCH_SUPPORTS_KEXEC
-> diff --git a/arch/m68k/Kconfig.cpu b/arch/m68k/Kconfig.cpu
-> index 9dcf245c9cbf..c777a129768a 100644
-> --- a/arch/m68k/Kconfig.cpu
-> +++ b/arch/m68k/Kconfig.cpu
-> @@ -30,6 +30,7 @@ config COLDFIRE
->         select GENERIC_CSUM
->         select GPIOLIB
->         select HAVE_LEGACY_CLK
-> +       select HAVE_PAGE_SIZE_8KB if !MMU
->
->  endchoice
->
-> @@ -45,6 +46,7 @@ config M68000
->         select GENERIC_CSUM
->         select CPU_NO_EFFICIENT_FFS
->         select HAVE_ARCH_HASH
-> +       select HAVE_PAGE_SIZE_4KB
->         select LEGACY_TIMER_TICK
->         help
->           The Freescale (was Motorola) 68000 CPU is the first generation =
-of
-> diff --git a/arch/m68k/include/asm/page.h b/arch/m68k/include/asm/page.h
-> index a5993ad83ed8..8cfb84b49975 100644
-> --- a/arch/m68k/include/asm/page.h
-> +++ b/arch/m68k/include/asm/page.h
-> @@ -7,11 +7,7 @@
->  #include <asm/page_offset.h>
->
->  /* PAGE_SHIFT determines the page size */
-> -#if defined(CONFIG_SUN3) || defined(CONFIG_COLDFIRE)
-> -#define PAGE_SHIFT     13
-> -#else
-> -#define PAGE_SHIFT     12
-> -#endif
-> +#define PAGE_SHIFT     CONFIG_PAGE_SHIFT
->  #define PAGE_SIZE      (_AC(1, UL) << PAGE_SHIFT)
->  #define PAGE_MASK      (~(PAGE_SIZE-1))
->  #define PAGE_OFFSET    (PAGE_OFFSET_RAW)
-> diff --git a/arch/microblaze/Kconfig b/arch/microblaze/Kconfig
-> index 211f338d6235..f18ec02ddeb2 100644
-> --- a/arch/microblaze/Kconfig
-> +++ b/arch/microblaze/Kconfig
-> @@ -31,6 +31,7 @@ config MICROBLAZE
->         select HAVE_FTRACE_MCOUNT_RECORD
->         select HAVE_FUNCTION_GRAPH_TRACER
->         select HAVE_FUNCTION_TRACER
-> +       select HAVE_PAGE_SIZE_4KB
->         select HAVE_PCI
->         select IRQ_DOMAIN
->         select XILINX_INTC
-> diff --git a/arch/microblaze/include/asm/page.h b/arch/microblaze/include=
-/asm/page.h
-> index 86a4ce07c192..8810f4f1c3b0 100644
-> --- a/arch/microblaze/include/asm/page.h
-> +++ b/arch/microblaze/include/asm/page.h
-> @@ -20,7 +20,7 @@
->  #ifdef __KERNEL__
->
->  /* PAGE_SHIFT determines the page size */
-> -#define PAGE_SHIFT             12
-> +#define PAGE_SHIFT     CONFIG_PAGE_SHIFT
->  #define PAGE_SIZE      (ASM_CONST(1) << PAGE_SHIFT)
->  #define PAGE_MASK      (~(PAGE_SIZE-1))
->
-> diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
-> index 58d9565dc2c7..79d3039b29f1 100644
-> --- a/arch/nios2/Kconfig
-> +++ b/arch/nios2/Kconfig
-> @@ -15,6 +15,7 @@ config NIOS2
->         select GENERIC_IRQ_SHOW
->         select HAVE_ARCH_TRACEHOOK
->         select HAVE_ARCH_KGDB
-> +       select HAVE_PAGE_SIZE_4KB
->         select IRQ_DOMAIN
->         select LOCK_MM_AND_FIND_VMA
->         select MODULES_USE_ELF_RELA
-> diff --git a/arch/nios2/include/asm/page.h b/arch/nios2/include/asm/page.=
-h
-> index 0ae7d9ce369b..0722f88e63cc 100644
-> --- a/arch/nios2/include/asm/page.h
-> +++ b/arch/nios2/include/asm/page.h
-> @@ -21,7 +21,7 @@
->  /*
->   * PAGE_SHIFT determines the page size
->   */
-> -#define PAGE_SHIFT     12
-> +#define PAGE_SHIFT     CONFIG_PAGE_SHIFT
->  #define PAGE_SIZE      (_AC(1, UL) << PAGE_SHIFT)
->  #define PAGE_MASK      (~(PAGE_SIZE - 1))
->
-> diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-> index fd9bb76a610b..3586cda55bde 100644
-> --- a/arch/openrisc/Kconfig
-> +++ b/arch/openrisc/Kconfig
-> @@ -25,6 +25,7 @@ config OPENRISC
->         select GENERIC_CPU_DEVICES
->         select HAVE_PCI
->         select HAVE_UID16
-> +       select HAVE_PAGE_SIZE_8KB
->         select GENERIC_ATOMIC64
->         select GENERIC_CLOCKEVENTS_BROADCAST
->         select GENERIC_SMP_IDLE_THREAD
-> diff --git a/arch/openrisc/include/asm/page.h b/arch/openrisc/include/asm=
-/page.h
-> index 44fc1fd56717..7925ce09ab5a 100644
-> --- a/arch/openrisc/include/asm/page.h
-> +++ b/arch/openrisc/include/asm/page.h
-> @@ -18,7 +18,7 @@
->
->  /* PAGE_SHIFT determines the page size */
->
-> -#define PAGE_SHIFT      13
-> +#define PAGE_SHIFT      CONFIG_PAGE_SHIFT
->  #ifdef __ASSEMBLY__
->  #define PAGE_SIZE       (1 << PAGE_SHIFT)
->  #else
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index bffbd869a068..792a337548f6 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -136,6 +136,7 @@ config RISCV
->         select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if !LD_IS_LLD
->         select HAVE_MOVE_PMD
->         select HAVE_MOVE_PUD
-> +       select HAVE_PAGE_SIZE_4KB
->         select HAVE_PCI
->         select HAVE_PERF_EVENTS
->         select HAVE_PERF_REGS
-> diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.=
-h
-> index 57e887bfa34c..2947423b5082 100644
-> --- a/arch/riscv/include/asm/page.h
-> +++ b/arch/riscv/include/asm/page.h
-> @@ -12,7 +12,7 @@
->  #include <linux/pfn.h>
->  #include <linux/const.h>
->
-> -#define PAGE_SHIFT     (12)
-> +#define PAGE_SHIFT     CONFIG_PAGE_SHIFT
->  #define PAGE_SIZE      (_AC(1, UL) << PAGE_SHIFT)
->  #define PAGE_MASK      (~(PAGE_SIZE - 1))
->
-> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-> index fe565f3a3a91..b61c74c10050 100644
-> --- a/arch/s390/Kconfig
-> +++ b/arch/s390/Kconfig
-> @@ -199,6 +199,7 @@ config S390
->         select HAVE_MOD_ARCH_SPECIFIC
->         select HAVE_NMI
->         select HAVE_NOP_MCOUNT
-> +       select HAVE_PAGE_SIZE_4KB
->         select HAVE_PCI
->         select HAVE_PERF_EVENTS
->         select HAVE_PERF_REGS
-> diff --git a/arch/s390/include/asm/page.h b/arch/s390/include/asm/page.h
-> index 73b9c3bf377f..ded9548d11d9 100644
-> --- a/arch/s390/include/asm/page.h
-> +++ b/arch/s390/include/asm/page.h
-> @@ -11,7 +11,7 @@
->  #include <linux/const.h>
->  #include <asm/types.h>
->
-> -#define _PAGE_SHIFT    12
-> +#define _PAGE_SHIFT    CONFIG_PAGE_SHIFT
->  #define _PAGE_SIZE     (_AC(1, UL) << _PAGE_SHIFT)
->  #define _PAGE_MASK     (~(_PAGE_SIZE - 1))
->
-> diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-> index 204c43cb3d43..7e6bc6fff76b 100644
-> --- a/arch/sparc/Kconfig
-> +++ b/arch/sparc/Kconfig
-> @@ -58,6 +58,7 @@ config SPARC32
->         select DMA_DIRECT_REMAP
->         select GENERIC_ATOMIC64
->         select HAVE_UID16
-> +       select HAVE_PAGE_SIZE_4KB
->         select LOCK_MM_AND_FIND_VMA
->         select OLD_SIGACTION
->         select ZONE_DMA
-> @@ -75,6 +76,7 @@ config SPARC64
->         select HAVE_ARCH_TRANSPARENT_HUGEPAGE
->         select HAVE_DYNAMIC_FTRACE
->         select HAVE_FTRACE_MCOUNT_RECORD
-> +       select HAVE_PAGE_SIZE_8KB
->         select HAVE_SYSCALL_TRACEPOINTS
->         select HAVE_CONTEXT_TRACKING_USER
->         select HAVE_TIF_NOHZ
-> diff --git a/arch/sparc/include/asm/page_32.h b/arch/sparc/include/asm/pa=
-ge_32.h
-> index 6be6f683f98f..9977c77374cd 100644
-> --- a/arch/sparc/include/asm/page_32.h
-> +++ b/arch/sparc/include/asm/page_32.h
-> @@ -11,7 +11,7 @@
->
->  #include <linux/const.h>
->
-> -#define PAGE_SHIFT   12
-> +#define PAGE_SHIFT   CONFIG_PAGE_SHIFT
->  #define PAGE_SIZE    (_AC(1, UL) << PAGE_SHIFT)
->  #define PAGE_MASK    (~(PAGE_SIZE-1))
->
-> diff --git a/arch/sparc/include/asm/page_64.h b/arch/sparc/include/asm/pa=
-ge_64.h
-> index 254dffd85fb1..e9bd24821c93 100644
-> --- a/arch/sparc/include/asm/page_64.h
-> +++ b/arch/sparc/include/asm/page_64.h
-> @@ -4,8 +4,7 @@
->
->  #include <linux/const.h>
->
-> -#define PAGE_SHIFT   13
-> -
-> +#define PAGE_SHIFT   CONFIG_PAGE_SHIFT
->  #define PAGE_SIZE    (_AC(1,UL) << PAGE_SHIFT)
->  #define PAGE_MASK    (~(PAGE_SIZE-1))
->
-> diff --git a/arch/um/Kconfig b/arch/um/Kconfig
-> index b5e179360534..93a5a8999b07 100644
-> --- a/arch/um/Kconfig
-> +++ b/arch/um/Kconfig
-> @@ -20,6 +20,7 @@ config UML
->         select HAVE_UID16
->         select HAVE_DEBUG_KMEMLEAK
->         select HAVE_DEBUG_BUGVERBOSE
-> +       select HAVE_PAGE_SIZE_4KB
->         select NO_DMA if !UML_DMA_EMULATION
->         select OF_EARLY_FLATTREE if OF
->         select GENERIC_IRQ_SHOW
-> diff --git a/arch/um/include/asm/page.h b/arch/um/include/asm/page.h
-> index 84866127d074..9ef9a8aedfa6 100644
-> --- a/arch/um/include/asm/page.h
-> +++ b/arch/um/include/asm/page.h
-> @@ -10,7 +10,7 @@
->  #include <linux/const.h>
->
->  /* PAGE_SHIFT determines the page size */
-> -#define PAGE_SHIFT     12
-> +#define PAGE_SHIFT     CONFIG_PAGE_SHIFT
->  #define PAGE_SIZE      (_AC(1, UL) << PAGE_SHIFT)
->  #define PAGE_MASK      (~(PAGE_SIZE-1))
->
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 5edec175b9bf..ba57eb362ec8 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -255,6 +255,7 @@ config X86
->         select HAVE_NOINSTR_VALIDATION          if HAVE_OBJTOOL
->         select HAVE_OBJTOOL                     if X86_64
->         select HAVE_OPTPROBES
-> +       select HAVE_PAGE_SIZE_4KB
->         select HAVE_PCSPKR_PLATFORM
->         select HAVE_PERF_EVENTS
->         select HAVE_PERF_EVENTS_NMI
-> diff --git a/arch/x86/include/asm/page_types.h b/arch/x86/include/asm/pag=
-e_types.h
-> index 86bd4311daf8..9da9c8a2f1df 100644
-> --- a/arch/x86/include/asm/page_types.h
-> +++ b/arch/x86/include/asm/page_types.h
-> @@ -7,7 +7,7 @@
->  #include <linux/mem_encrypt.h>
->
->  /* PAGE_SHIFT determines the page size */
-> -#define PAGE_SHIFT             12
-> +#define PAGE_SHIFT             CONFIG_PAGE_SHIFT
->  #define PAGE_SIZE              (_AC(1,UL) << PAGE_SHIFT)
->  #define PAGE_MASK              (~(PAGE_SIZE-1))
->
-> diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
-> index 6f248d87e496..87ec35b3363b 100644
-> --- a/arch/xtensa/Kconfig
-> +++ b/arch/xtensa/Kconfig
-> @@ -44,6 +44,7 @@ config XTENSA
->         select HAVE_GCC_PLUGINS if GCC_VERSION >=3D 120000
->         select HAVE_HW_BREAKPOINT if PERF_EVENTS
->         select HAVE_IRQ_TIME_ACCOUNTING
-> +       select HAVE_PAGE_SIZE_4KB
->         select HAVE_PCI
->         select HAVE_PERF_EVENTS
->         select HAVE_STACKPROTECTOR
-> diff --git a/arch/xtensa/include/asm/page.h b/arch/xtensa/include/asm/pag=
-e.h
-> index a77d04972eb9..4db56ef052d2 100644
-> --- a/arch/xtensa/include/asm/page.h
-> +++ b/arch/xtensa/include/asm/page.h
-> @@ -22,7 +22,7 @@
->   * PAGE_SHIFT determines the page size
->   */
->
-> -#define PAGE_SHIFT     12
-> +#define PAGE_SHIFT     CONFIG_PAGE_SHIFT
->  #define PAGE_SIZE      (__XTENSA_UL_CONST(1) << PAGE_SHIFT)
->  #define PAGE_MASK      (~(PAGE_SIZE-1))
->
-> --
-> 2.39.2
->
+For the newly added struct irqstat, adding annotated comments to explain 
+each field would be beneficial.
 
+Reviewed-by: Liu Song <liusong@linux.alibaba.com>
 
---=20
-Best Regards
- Guo Ren
 
