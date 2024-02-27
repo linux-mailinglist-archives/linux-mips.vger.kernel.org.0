@@ -1,86 +1,104 @@
-Return-Path: <linux-mips+bounces-1818-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1819-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC00E869DA8
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 18:31:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AAD1869E98
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 19:07:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 468CC1F22003
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 17:31:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 153731C23AB3
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 18:07:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56DDA14F975;
-	Tue, 27 Feb 2024 17:27:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 771BA145346;
+	Tue, 27 Feb 2024 18:07:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R+OwZAEz"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="d+iQnuXL"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD3814EFE5;
-	Tue, 27 Feb 2024 17:27:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E30E145FE6
+	for <linux-mips@vger.kernel.org>; Tue, 27 Feb 2024 18:07:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709054839; cv=none; b=Kodwnzsbb9G7R+iqBgUj09Xc+M67wuwopTCJ5WoqO6Asc3ZevjoHhp4oVUxT8Kad/i5/nNcTE8v6EZR/hEdw+SD23Cv4XIty/VEOAuPt7fdcV8EHFknHagP8utEOtSCMVyaqOpoTjALv3lnhBVZx4jZUGpK8YOxURrZPwlkt3Y4=
+	t=1709057250; cv=none; b=XVqIbQgGnlDLwtU0pnA1ihH16uUwd6cfvA61z0it/YANNQOO4+NVURucJgaRMiIUgo4hvmqtEM7kIBqpPGffY0hUcR+DhvGraNH+Fb8L3dZ/c3E+LiAWA2bwd4WT79DjRV1a4kSijAh8KskNUJm8jPFkAnQWMFj+X5Ft49y7WRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709054839; c=relaxed/simple;
-	bh=Od/aOIUhXMgq1P7yVBIO6sixyOR8bW29D/1S1PNOxd8=;
+	s=arc-20240116; t=1709057250; c=relaxed/simple;
+	bh=hDsO9qgv2V890oQySpFfqyCZWrqkIn/rAE/+zRviBYc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r2epYJGQ6JiaualC2bdzh2WdnhdExAWr+kgHHm6+fBXBaGdt8/ZXiOvjQuLIC4oO+fLsXiIkUK9RFUA4wx3SoAHcJMinFHSaKALr865r14N0G4oIHWyMhDEMx9YCmyUH1PCH+5W1Llg5wORBWOZV7Uxczv7qf2FHChRjA6XqMpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R+OwZAEz; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709054838; x=1740590838;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Od/aOIUhXMgq1P7yVBIO6sixyOR8bW29D/1S1PNOxd8=;
-  b=R+OwZAEznz09ttdkshqpYka9lPBMT4XwaEQBYfoGk1xZ/1LMihOJ1LLG
-   Ps/SMj0nodo0xt7IC0kwak4sDFvEkEp3/YErj34jwhRSeyE3ATSnD3p3x
-   o6ROfxS6EZYWI6sqflFiOIQHCCKZYKVvz/UECJ6kQFS8Up3GEGqeWhiUC
-   H8L8JHjejg2F6ffTr4L0ugMotowklMYsl3YvwVwwvkFkibyUhNAE0/tRG
-   jU7jYpYPP0I48MnE+811ZsRsu268wmt60G/7M4mDlGNtFf+/4X3j2nYly
-   FKcZm2NakzTOHSwq3Intja2hk693uCIpROgLwL8UpxmQBnFm/MFyNml6W
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="7222890"
-X-IronPort-AV: E=Sophos;i="6.06,188,1705392000"; 
-   d="scan'208";a="7222890"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2024 09:27:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="913917737"
-X-IronPort-AV: E=Sophos;i="6.06,188,1705392000"; 
-   d="scan'208";a="913917737"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2024 09:27:12 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1rf1ES-000000080WA-3mKT;
-	Tue, 27 Feb 2024 19:27:08 +0200
-Date: Tue, 27 Feb 2024 19:27:08 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-	linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v8 04/10] reset: eyeq5: add platform driver
-Message-ID: <Zd4bbCsY54XEnvJM@smile.fi.intel.com>
-References: <20240227-mbly-clk-v8-0-c57fbda7664a@bootlin.com>
- <20240227-mbly-clk-v8-4-c57fbda7664a@bootlin.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qRyPPQg2BZhHBlq9v0fwq5JpK9LidgZ2i4QjaNC1uznNbhfXGSgzycat7/HIcQdIMM5ySfwk1rSI0eqetkRKkGYQxcq8fqBp+uOI6OA/RaC+bmiqh4IAjFju/MKGnRzTgXWmmOEaCo5AnxL1lqIYMsv59FFs0WGp8ZrLSAyL7VU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=d+iQnuXL; arc=none smtp.client-ip=209.85.166.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-7bed9fb159fso225151639f.1
+        for <linux-mips@vger.kernel.org>; Tue, 27 Feb 2024 10:07:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1709057248; x=1709662048; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=mgrI9FN30eAJ2XZAfY9sJBg3TkLiivRBpbDR17SPpEo=;
+        b=d+iQnuXLgKZDLaXx97j3ZKk+HiTOuQlqJBwLJEYO9svRMD4/QqZkaA9oMup/6e+RJ8
+         tj+8l3QfTp2EGhMAEuxGkM8V8y4ixD2Msf+7eCEOi9siXYV9WxIwItMnFGqXWwtT4LAx
+         VPJFJDLg4jyshNCHJX13Ew+uPZlcUwwIXdT4I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709057248; x=1709662048;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mgrI9FN30eAJ2XZAfY9sJBg3TkLiivRBpbDR17SPpEo=;
+        b=qf6ISDt6qow3OcsaRe6PgS4L8iqUVnQHCFyP7YPodcPZ60a3VUiwvK7MqWvwOjo8Gs
+         BmgfF025y/mBDwlwq4wJvxUul1JALlrzztE2LobQnmVRn1+NOb20flu1P3sNdytq/KXx
+         hI70ngvaYnYWEPhUgSJ4JCOXaTZFw7v1nbmlYJKOclD1vFaoqvApT2yVOjHa9GJgSQYC
+         VhlusTlqPriFJPnxb1HRwWfua/B3n60UCXciDpb4hQyneQFNx8jp91nz4QcbUHeiNYBg
+         eWFZRGREqd5voS7po+jCE01Hl8ynRhat/e8sHYoeGAroP5TaT3mXfbE8Gk/VZLoom097
+         R/Kw==
+X-Forwarded-Encrypted: i=1; AJvYcCW7uKGJWCR8xLJYjitN8zQxkjjx68tcG0ju3VaP8VKi/GVWenLa9ymr8eit8dJk4WJi1CWMmgJ2JERJjRI4sgzDWRaMvCUOISlqkA==
+X-Gm-Message-State: AOJu0YxESByQGnUKTYlwQ4/hmcX5tlW2kIHnDpFbj6ZPdmGnFmJUF8pG
+	hK2PR7sUrsT0QuklxPpHhzdrFQ/DTdZP+DT+VCdZn3wbBGXc/SSKKCWendCJNg==
+X-Google-Smtp-Source: AGHT+IFpahrVJDe+RkqjDhxBgm48d+nhk6O3nvQnCIgFv/bhnbFyY12knPOFjwYUx9hP01B6x+R36g==
+X-Received: by 2002:a05:6e02:522:b0:363:bb5a:3329 with SMTP id h2-20020a056e02052200b00363bb5a3329mr11593022ils.1.1709057247927;
+        Tue, 27 Feb 2024 10:07:27 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id fa42-20020a056a002d2a00b006e55b674e66sm10411pfb.171.2024.02.27.10.07.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Feb 2024 10:07:27 -0800 (PST)
+Date: Tue, 27 Feb 2024 10:07:26 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"debug@rivosinc.com" <debug@rivosinc.com>,
+	"broonie@kernel.org" <broonie@kernel.org>,
+	"kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"bp@alien8.de" <bp@alien8.de>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"x86@kernel.org" <x86@kernel.org>,
+	"luto@kernel.org" <luto@kernel.org>,
+	"peterz@infradead.org" <peterz@infradead.org>,
+	"hpa@zytor.com" <hpa@zytor.com>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+	"linux-snps-arc@lists.infradead.org" <linux-snps-arc@lists.infradead.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+	"linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+	"linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+	"sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>
+Subject: Re: [PATCH v2 5/9] mm: Initialize struct vm_unmapped_area_info
+Message-ID: <202402271004.7145FDB53F@keescook>
+References: <20240226190951.3240433-1-rick.p.edgecombe@intel.com>
+ <20240226190951.3240433-6-rick.p.edgecombe@intel.com>
+ <94a2b919-e03b-4ade-b13e-7774849dc02b@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -90,300 +108,41 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240227-mbly-clk-v8-4-c57fbda7664a@bootlin.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <94a2b919-e03b-4ade-b13e-7774849dc02b@csgroup.eu>
 
-On Tue, Feb 27, 2024 at 03:55:25PM +0100, Théo Lebrun wrote:
-> Add the Mobileye EyeQ5 reset controller driver. It belongs to a syscon
-> region called OLB. It might grow to add later support of other
-> platforms from Mobileye.
+On Tue, Feb 27, 2024 at 07:02:59AM +0000, Christophe Leroy wrote:
+> 
+> 
+> Le 26/02/2024 à 20:09, Rick Edgecombe a écrit :
+> > Future changes will need to add a field to struct vm_unmapped_area_info.
+> > This would cause trouble for any archs that don't initialize the
+> > struct. Currently every user sets each field, so if new fields are
+> > added, the core code parsing the struct will see garbage in the new
+> > field.
+> > 
+> > It could be possible to initialize the new field for each arch to 0, but
+> > instead simply inialize the field with a C99 struct inializing syntax.
+> 
+> Why doing a full init of the struct when all fields are re-written a few 
+> lines after ?
 
-...
+It's a nice change for robustness and makes future changes easier. It's
+not actually wasteful since the compiler will throw away all redundant
+stores.
 
-The inclusion block is a semi-random. Please, follow IWYU principle.
+> If I take the exemple of powerpc function slice_find_area_bottomup():
+> 
+> 	struct vm_unmapped_area_info info;
+> 
+> 	info.flags = 0;
+> 	info.length = len;
+> 	info.align_mask = PAGE_MASK & ((1ul << pshift) - 1);
+> 	info.align_offset = 0;
 
-+ array_size.h
-+ bits.h
-+ bug.h
-+ container_of.h
-
-> +#include <linux/cleanup.h>
-> +#include <linux/delay.h>
-
-+ device.h
-+ err.h
-+ io.h
-+ lockdep.h
-
-+ mod_devicetable.h
-
-> +#include <linux/mutex.h>
-
-> +#include <linux/of.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_device.h>
-
-Are all of them in use?
-
-> +#include <linux/platform_device.h>
-> +#include <linux/reset-controller.h>
-
-+ types.h
-
-...
-
-> +/* Vendor-provided timeout values. D1 has a long timeout because of LBIST. */
-> +#define D0_TIMEOUT_POLL			10
-> +#define D1_TIMEOUT_POLL			40000
-
-We use units as suffixes. The above doesn't tell magnitude of timeouts.
-
-Also constants like USEC_PER_MSEC are useful to make code robust.
-
-...
-
-> +	unsigned int val, mask;
-> +	int i;
-> +
-> +	lockdep_assert_held(&priv->mutexes[domain]);
-> +
-> +	switch (domain) {
-> +	case 0:
-> +		for (i = 0; i < D0_TIMEOUT_POLL; i++) {
-> +			val = readl(priv->base_d0 + D0_SARCR1);
-> +			val = !(val & BIT(offset));
-> +			if (val == assert)
-> +				return 0;
-> +			udelay(1);
-> +		}
-> +		break;
-
-See what iopoll.h gives you.
-
-> +	case 1:
-> +		mask = assert ? D1_ACRP_ST_POWER_DOWN : D1_ACRP_ST_ACTIVE;
-> +		for (i = 0; i < D1_TIMEOUT_POLL; i++) {
-> +			val = readl(priv->base_d1 + 4 * offset);
-> +			if (val & mask)
-> +				return 0;
-> +			udelay(1);
-> +		}
-
-Ditto.
-
-> +		break;
-> +	case 2:
-> +		return 0; /* No busy waiting for domain 2. */
-> +	default:
-> +		WARN_ON(1);
-> +		return -EINVAL;
-> +	}
-
-> +	dev_dbg(dev, "%u-%u: timeout\n", domain, offset);
-
-> +	return -ETIMEDOUT;
-
-...
-
-> +static void eq5r_assert_withlock(struct eq5r_private *priv, u32 domain,
-> +				 u32 offset)
-> +{
-> +	void __iomem *reg;
-> +
-> +	lockdep_assert_held(&priv->mutexes[domain]);
-> +
-> +	switch (domain) {
-> +	case 0:
-> +		reg = priv->base_d0 + D0_SARCR0;
-> +		writel(readl(reg) & ~BIT(offset), reg);
-> +		break;
-> +	case 1:
-> +		reg = priv->base_d1 + 4 * offset;
-> +		writel(readl(reg) | D1_ACRP_PD_REQ, reg);
-> +		break;
-> +	case 2:
-> +		reg = priv->base_d2;
-> +		writel(readl(reg) & ~BIT(offset), reg);
-> +		break;
-> +	default:
-> +		WARN_ON(1);
-
-break;
-
-> +	}
-> +}
-> +
-> +static int eq5r_assert(struct reset_controller_dev *rcdev, unsigned long id)
-> +{
-> +	struct eq5r_private *priv = rcdev_to_priv(rcdev);
-> +	u32 offset = id & GENMASK(7, 0);
-> +	u32 domain = id >> 8;
-> +
-> +	dev_dbg(rcdev->dev, "%u-%u: assert request\n", domain, offset);
-> +
-> +	guard(mutex)(&priv->mutexes[domain]);
-> +	eq5r_assert_withlock(priv, domain, offset);
-> +	return eq5r_busy_wait_withlock(priv, rcdev->dev, domain, offset, true);
-> +}
-> +
-> +static void eq5r_deassert_withlock(struct eq5r_private *priv, u32 domain,
-> +				   u32 offset)
-> +{
-> +	void __iomem *reg;
-> +
-> +	lockdep_assert_held(&priv->mutexes[domain]);
-> +
-> +	switch (domain) {
-> +	case 0:
-> +		reg = priv->base_d0 + D0_SARCR0;
-> +		writel(readl(reg) | BIT(offset), reg);
-> +		break;
-> +	case 1:
-> +		reg = priv->base_d1 + 4 * offset;
-> +		writel(readl(reg) & ~D1_ACRP_PD_REQ, reg);
-> +		break;
-> +	case 2:
-> +		reg = priv->base_d2;
-> +		writel(readl(reg) | BIT(offset), reg);
-> +		break;
-> +	default:
-> +		WARN_ON(1);
-
-break;
-
-> +	}
-> +}
-
-...
-
-> +static int eq5r_deassert(struct reset_controller_dev *rcdev, unsigned long id)
-> +{
-> +	struct eq5r_private *priv = rcdev_to_priv(rcdev);
-> +	u32 offset = id & GENMASK(7, 0);
-> +	u32 domain = id >> 8;
-
-Perhaps
-
-	u32 offset = (id & GENMASK(7, 0)) >> 0;
-	u32 domain = (id & GENMASK(31, 8)) >> 8;
-
-for better understanding the split?
-
-> +	dev_dbg(rcdev->dev, "%u-%u: deassert request\n", domain, offset);
-> +
-> +	guard(mutex)(&priv->mutexes[domain]);
-> +	eq5r_deassert_withlock(priv, domain, offset);
-> +	return eq5r_busy_wait_withlock(priv, rcdev->dev, domain, offset, false);
-
-withlock is not usual naming pattern, "locked" is shorter and widely used.
-
-> +}
-> +
-> +static int eq5r_status(struct reset_controller_dev *rcdev, unsigned long id)
-> +{
-> +	struct eq5r_private *priv = rcdev_to_priv(rcdev);
-> +	u32 offset = id & GENMASK(7, 0);
-> +	u32 domain = id >> 8;
-
-Ditto.
-
-> +	u32 val;
-> +
-> +	dev_dbg(rcdev->dev, "%u-%u: status request\n", domain, offset);
-> +
-> +	guard(mutex)(&priv->mutexes[domain]);
-> +
-> +	switch (domain) {
-> +	case 0:
-> +		val = readl(priv->base_d0 + D0_SARCR1);
-> +		return !(val & BIT(offset));
-> +	case 1:
-> +		val = readl(priv->base_d1 + 4 * offset);
-> +		return !(val & D1_ACRP_ST_ACTIVE);
-> +	case 2:
-> +		val = readl(priv->base_d2);
-> +		return !(val & BIT(offset));
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-
-...
-
-> +	struct eq5r_private *priv;
-> +	int ret, i;
-
-Why is i signed?
-
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->base_d0 = devm_platform_ioremap_resource_byname(pdev, "d0");
-> +	if (IS_ERR(priv->base_d0))
-> +		return PTR_ERR(priv->base_d0);
-> +
-> +	priv->base_d1 = devm_platform_ioremap_resource_byname(pdev, "d1");
-> +	if (IS_ERR(priv->base_d1))
-> +		return PTR_ERR(priv->base_d1);
-> +
-> +	priv->base_d2 = devm_platform_ioremap_resource_byname(pdev, "d2");
-> +	if (IS_ERR(priv->base_d2))
-> +		return PTR_ERR(priv->base_d2);
-> +
-> +	for (i = 0; i < EQ5R_DOMAIN_COUNT; i++)
-> +		mutex_init(&priv->mutexes[i]);
-> +
-> +	priv->rcdev.ops = &eq5r_ops;
-> +	priv->rcdev.owner = THIS_MODULE;
-> +	priv->rcdev.dev = dev;
-
-> +	priv->rcdev.of_node = np;
-
-It's better to use device_set_node().
-
-> +	priv->rcdev.of_reset_n_cells = 2;
-> +	priv->rcdev.of_xlate = eq5r_of_xlate;
-> +
-> +	priv->rcdev.nr_resets = 0;
-> +	for (i = 0; i < EQ5R_DOMAIN_COUNT; i++)
-
-> +		priv->rcdev.nr_resets += __builtin_popcount(eq5r_valid_masks[i]);
-
-Please, use corresponding hweightXX() API.
-
-> +	ret = devm_reset_controller_register(dev, &priv->rcdev);
-> +	if (ret) {
-
-> +		dev_err(dev, "Failed registering reset controller: %d\n", ret);
-> +		return ret;
-
-		return dev_err_probe(...);
-
-> +	}
-> +
-> +	return 0;
-> +}
-
-...
-
-> +static struct platform_driver eq5r_driver = {
-> +	.probe = eq5r_probe,
-> +	.driver = {
-> +		.name = "eyeq5-reset",
-> +		.of_match_table = eq5r_match_table,
-> +	},
-> +};
-
-> +
-
-Unneeded blank line.
-
-> +builtin_platform_driver(eq5r_driver);
+But one cleanup that is possible from explicitly zero-initializing the
+whole structure would be dropping all the individual "= 0" assignments.
+:)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Kees Cook
 
