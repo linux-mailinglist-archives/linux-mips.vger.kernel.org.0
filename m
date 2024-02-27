@@ -1,130 +1,122 @@
-Return-Path: <linux-mips+bounces-1779-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1780-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88536869030
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 13:20:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3895869112
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 13:57:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA1D31C22EEB
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 12:20:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 56656280C21
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 12:57:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13A8213AA42;
-	Tue, 27 Feb 2024 12:14:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD59113AA20;
+	Tue, 27 Feb 2024 12:57:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jd6qTlbe"
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="lbeHOiis"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D45A813957E;
-	Tue, 27 Feb 2024 12:14:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C130013A275;
+	Tue, 27 Feb 2024 12:57:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709036072; cv=none; b=I+nSjS46lL9wB/af9FiHOr2IpW/Jy7lLyQareCPWjxlH1okuY9UE2naq3fB7uCqm2qDh9+3JRHiR8Z+GVPoRx8ZOHGXRy1uTKaSCy7y8zJ42nD435X01esCbsNB+fufS+GpU7L+mPCOYpJUiXCd3PlRGi6j4IYOU4x7nY92nqL4=
+	t=1709038659; cv=none; b=r9qh2898CcWrJ2rIITG1WqNibQpD+5aMDpUoDGS5va3XwmiBatZOhYJTuLX9Zj8qD1+KXzyuzKB6R60xwZ4fupsBduZ4evriNDvaGH+4xjvtOrxPKEyMlocuBH2KILFJZcDCXNLkklAgwkKEOLUc1ZKLaRUQlY3FGuPzVCfYFy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709036072; c=relaxed/simple;
-	bh=MNBdJ8ynd91q3yNgGWy7eWN2H5Og6NctVsNLSrm0mDg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lOKNIqdDvUjhGdZRAJME9auz2WhpMeEJTsEPfTMgeeNL1tVyKDBtqrSg4Wp9PKLU642qVaO5qHpxPd5j2lyr4Y+9vT+a2ZoJtw0n0lhnBBPRX/4XsfmOc1slBLs778neBmPMziY/25tG0dcxJh9l6+IhCPEGzppbpJ8hx3HLvT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jd6qTlbe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9E7CC433C7;
-	Tue, 27 Feb 2024 12:14:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709036071;
-	bh=MNBdJ8ynd91q3yNgGWy7eWN2H5Og6NctVsNLSrm0mDg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Jd6qTlberk/kGxBOED8pcbAmtgSvDFQzjM6u+xO5Oq//PaNH6aIBCVAreCSUhgTr7
-	 hKlpPsooyoAfhJ4p5NgipQRMYF2WSvhVw/i2hMK9IBVEG71zDvfTqtES6wI8sp+X4J
-	 4vI5vq1ZOImg0yKS83SO4LCOJpGG1UA/pCPN2en/t9JvkDJoraQG+9xIwhpg+4vJud
-	 On5Q0sJw8+BKci0a2NAsMsVFcYDfPu6Y5DplkRX1CzmCd3wfI6aFN6Xp5WuOIg4Zkv
-	 kUEfwrv6wEezf0T0AFJLUxyqThh0r7I5mzANUlpvU7tDN/AgLxXURvAx8S+yepZuIE
-	 RaKrcbJNp1tLg==
-Date: Tue, 27 Feb 2024 13:14:28 +0100
-From: Wolfram Sang <wsa@kernel.org>
-To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: [PATCH 09/13] i2c: nomadik: fetch timeout-usecs property from
- devicetree
-Message-ID: <Zd3SJMBp23ybgdsJ@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
- <20240215-mbly-i2c-v1-9-19a336e91dca@bootlin.com>
+	s=arc-20240116; t=1709038659; c=relaxed/simple;
+	bh=swDhxalnop+40QyzTwmELhQq8fYEaBd8gs0d47AC/h8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=VGpAUg0WaDN0rDgcV6agXVcfZxPv+8s8udkH3ie3+zOlOJJdpKEzWPiYtnd/etF5gwMEdvgk/x0YNgHD5qCss7ErpOwPw8/YNoJ+xMG0kbrIUP7xVZ7XVvUbRJTbFLye5wsyEc8bqxs/PvaVcTNnKB+IruFcvpAkfgege4pjcsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=lbeHOiis; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1709038654;
+	bh=swDhxalnop+40QyzTwmELhQq8fYEaBd8gs0d47AC/h8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=lbeHOiisvAviMzJQIz1moD9CMIwDWnyEkMBx5y4p+r5c4IjQoB18qgrlVCvB1x8lp
+	 iw5qgUFtP6yhK80WEdbT7VjiMz5ok3ncpSQJrzolcOlwZxH0A6OqtUbvamzsIkn3yn
+	 RBV09p6PQKg3ejTTuOeVaiqbz3dvd4in83oOIMRRq6JTZgTEUiakFeAj3srmtE6C78
+	 mi6JAHZh6pFZdAUi8XVUbjcFAS71GtwQc2qeDeH5P4Xuct27XPV7LT/rxZnWTHu126
+	 fiuYYKa4gKtFpVdOYRIR7pO1OxjT3IRFVQPGGzi+xxv3ckTfZSwTY4PM6V5s6Vt2Jl
+	 0WyDEwagYDlRA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tkcvp132Mz4wbQ;
+	Tue, 27 Feb 2024 23:57:26 +1100 (AEDT)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>, Arnd Bergmann
+ <arnd@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino
+ <vincenzo.frascino@arm.com>, Kees Cook <keescook@chromium.org>, Anna-Maria
+ Behnsen <anna-maria@linutronix.de>
+Cc: Arnd Bergmann <arnd@arndb.de>, Matt Turner <mattst88@gmail.com>, Vineet
+ Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, Catalin
+ Marinas <catalin.marinas@arm.com>, Guo Ren <guoren@kernel.org>, Brian Cain
+ <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>, Geert
+ Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Helge Deller
+ <deller@gmx.de>, Palmer Dabbelt <palmer@dabbelt.com>, John Paul Adrian
+ Glaubitz <glaubitz@physik.fu-berlin.de>, Andreas Larsson
+ <andreas@gaisler.com>, Richard Weinberger <richard@nod.at>,
+ "x86@kernel.org" <x86@kernel.org>, Max Filippov <jcmvbkbc@gmail.com>, Andy
+ Lutomirski <luto@kernel.org>, Jan Kiszka <jan.kiszka@siemens.com>, Kieran
+ Bingham <kbingham@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+ "linux-snps-arc@lists.infradead.org" <linux-snps-arc@lists.infradead.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>, "linux-csky@vger.kernel.org"
+ <linux-csky@vger.kernel.org>, "linux-hexagon@vger.kernel.org"
+ <linux-hexagon@vger.kernel.org>, "loongarch@lists.linux.dev"
+ <loongarch@lists.linux.dev>, "linux-m68k@lists.linux-m68k.org"
+ <linux-m68k@lists.linux-m68k.org>, "linux-mips@vger.kernel.org"
+ <linux-mips@vger.kernel.org>, "linux-openrisc@vger.kernel.org"
+ <linux-openrisc@vger.kernel.org>, "linux-parisc@vger.kernel.org"
+ <linux-parisc@vger.kernel.org>, "linuxppc-dev@lists.ozlabs.org"
+ <linuxppc-dev@lists.ozlabs.org>, "linux-riscv@lists.infradead.org"
+ <linux-riscv@lists.infradead.org>, "linux-s390@vger.kernel.org"
+ <linux-s390@vger.kernel.org>, "linux-sh@vger.kernel.org"
+ <linux-sh@vger.kernel.org>, "sparclinux@vger.kernel.org"
+ <sparclinux@vger.kernel.org>, "linux-um@lists.infradead.org"
+ <linux-um@lists.infradead.org>, Linux Kernel Functional Testing
+ <lkft@linaro.org>
+Subject: Re: [PATCH 4/4] vdso: avoid including asm/page.h
+In-Reply-To: <80bc4de5-a351-4ac0-93c8-80c8d80fb202@csgroup.eu>
+References: <20240226161414.2316610-1-arnd@kernel.org>
+ <20240226161414.2316610-5-arnd@kernel.org>
+ <80bc4de5-a351-4ac0-93c8-80c8d80fb202@csgroup.eu>
+Date: Tue, 27 Feb 2024 23:57:25 +1100
+Message-ID: <87h6hu5akq.fsf@mail.lhotse>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="l9/qv/BPwfFxGsXr"
-Content-Disposition: inline
-In-Reply-To: <20240215-mbly-i2c-v1-9-19a336e91dca@bootlin.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
+Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> Le 26/02/2024 =C3=A0 17:14, Arnd Bergmann a =C3=A9crit=C2=A0:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>=20
+>> The recent change to the vdso_data_store broke building compat VDSO
+>> on at least arm64 because it includes headers outside of the include/vds=
+o/
+>> namespace:
+>
+> I understand that powerpc64 also has an issue, see=20
+> https://patchwork.ozlabs.org/project/linuxppc-dev/patch/20231221120410.22=
+26678-1-mpe@ellerman.id.au/
 
---l9/qv/BPwfFxGsXr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Yeah, and that patch would silently conflict with this series, which is
+not ideal.
 
+I could delay merging my patch above until after this series goes in,
+mine only fixes a fairly obscure build warning.
 
-> +	/* Slave response timeout */
-> +	if (!of_property_read_u32(np, "timeout-usecs", &timeout_usecs))
-> +		priv->timeout_usecs = timeout_usecs;
-> +	else
-> +		priv->timeout_usecs = 200 * USEC_PER_MSEC;
-
-I could imagine to add 'transfer_timeout_us' to struct i2c_timings.
-Then, you could use 'i2c_parse_fw_timings' to obtain the value. What
-values/value range do you use here? I can't find them in the DTS
-additions.
-
-
---l9/qv/BPwfFxGsXr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXd0iAACgkQFA3kzBSg
-KbZx1A/9Hn3nig9zw0s6qvC2FrKzAOepBjzkFqAjpqgK4uUcsXVZ0Gfhk0lVkYtx
-XOjWnyYadJYToHFj97q/Ruabu2HhE/XZktuWhenAFOla7UbYMAUzxKSCrnJrT+l5
-SmmSaco3Tvje0tGv3yHbqNX12ge9EqkbO8Y+qv4ftbiKOcMGuUoIavZvyQ6GTWM+
-ZBdocOy77UwFXru/oirdRxKj99M8CKIMaQ1QsPUxr3H4hTADgjRv60GhiQVfZKUn
-vdaoEiRVe8VAxj6oTEmIm6zZSw4zls4QH2vSXTEDufU6VeAKS+Xrqh7XLC8K9T/V
-qgcYANSP+6sKVP8eWcaWwaAP1px/zE2oZ9SmTJKqkELEwpahagaWxQ6Hxgb1xCLa
-r3vukZ8+cNGKXBAQeaucmiYbSvILfuTBniJsAkuhz7ex9N6M3ervF2xUpsI3jBm0
-uvok3LtFqBxtIlxwMSV/nelJmO4R5sYHojtkuri/rxuDQ6lSCFvh40hWeb5ereE2
-r7VRqrNrRbz0Gyi/6XJqTKSXPtz8YF3efTzuI1JydYlvtaRtyK0UGCceQfL4brZJ
-DYW2s6hGM7ZKEgZ4wI3aW/Vz1QA3vxkmi2KyXZaWlzBLTQ/chlx+L2jB5N4LaTob
-kJEXKchldbVmVf43xyzr36PNySUiIC8xumknTEskp2+aetFHRD0=
-=7Ca2
------END PGP SIGNATURE-----
-
---l9/qv/BPwfFxGsXr--
+cheers
 
