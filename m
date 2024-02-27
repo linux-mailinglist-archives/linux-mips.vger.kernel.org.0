@@ -1,174 +1,149 @@
-Return-Path: <linux-mips+bounces-1777-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1778-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0D06868E80
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 12:12:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 026C6868E9E
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 12:20:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9640A2811C5
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 11:12:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0F6228152B
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 11:20:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B15DF139563;
-	Tue, 27 Feb 2024 11:12:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0C1713956A;
+	Tue, 27 Feb 2024 11:20:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="x1yqMzDr"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7602B2E3EB;
-	Tue, 27 Feb 2024 11:12:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F7452A8C1;
+	Tue, 27 Feb 2024 11:20:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709032364; cv=none; b=UvZ6ncQafE5X7ZxYTwbr4/qk3Szgpgk/S2afd5CUsYjM9xBZs+V2C9SH8wCdiX8zURVNBuFlu3ymVcGE0OFwjmItc859WTuBpmFEo3XwBTfTfB6pxUDVzz1v/ekiatRR7jUkYVu1LrfHlWQF9QQdsj9kJjzRqAuiw3P5+RrB/Zg=
+	t=1709032815; cv=none; b=ptQrWN19+0PqkwXoHAZMFrw2iFF2sYMADfCEm30GGlFsrwWAsJ3al2WfBTlqQvktppOVZx5UuQTXWVRS/Tmx0jWylrc3i0nDc6pKX5tYhxR33aTL4b6YU3+rmV5Msx+qfiyklq6pivlfzvV/A1EpaSDEUNH61TRxYIf1ZiV5aPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709032364; c=relaxed/simple;
-	bh=O6UtDTaDn834cQ2sd7oFrdw4KjK6pBp4PggykizhEd8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dAon+2Wqgs5mgEFM6HzbArhplBYgJvSg1kXDMhDsKr7chV2IGolbe9sUyAKskLr7S1Y1wu0QghEKZPIdOAEHrzqugzaZzYMhNSKDX1nwq4Iv/Wx0uCtLz6BoJx9ipTSUXyQU37758R11TqT2pjk/I7xicwR6rSvAbD7fmQ6bVDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-dc74435c428so3652655276.2;
-        Tue, 27 Feb 2024 03:12:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709032359; x=1709637159;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y4Tv6sdcFEpWvZL/hYJEF+Ju7qt4AFqMkWFUs5NrLKU=;
-        b=XlvnddtZ4johgU9/5+buUiyDpQ5Jbj8Tuf4my854g4XpXYKFN48vHp5KeekbM1ERs5
-         NiloCLwMI7JPYWGvGsb8IaHLU3zRBY6db8IfxoNCT+Zscb4TNIU8yDWOUl1Dw8+OsPEZ
-         pznXFRWYdzCYK6AaQZWcoUYoZz4gS3DGSf75WfeAdIJWbpe1ejqXRsK8YdzDQ1cvWkF6
-         VU7mZAnTFGRyRo/k6pfAVT2I6qWjx/FA6u3mz7fzMIYS86FSB0491VkpvE8tz1yvywgy
-         rqkEIQ7CDSGuMsw6ek3iMNNDE8zfAtofFt67Yj4VFxbqAzvGJt+KWWcPlNdME2x4riqT
-         89Xg==
-X-Forwarded-Encrypted: i=1; AJvYcCUj5sRr5b0C//W2SkdJfcpWnffZClWuYQ5KBjLMe4ipQVw1xqIsuwvAMuQQKUIQZsXXNSy6vu7c+e6eieTeeFPUoaZwYk90Yc4pWrut92BIbeN/whH+6piUJ2IHxSmFlZ2yYDji5WAYvdjquHTo98vhDjwHbVN+f+5eMw/XSEe+vG9QzV2cRyZJGov/2r9g8Jxb7t7ijqjab/ksNCQLilniFhJfEubRNpTN2B2sHqDADJIe4yVUpaJOBG1mMAD0wEKGkvebgzVgxlc0k/kjVS2bOnjabG22NU9pAQOxBePFA6iXft6ibNDrV9RNbvq0fSeKTea8zroiuuOMbWDVVQEWqLpgoGI+rOx0Ie2T7u/6zGxN9YnzE9D7o/E55WFUUsZ47GqTzACggzg9cNi1xLPA7zCMLStQVdfvoqLws8vp9OqcjEVibRqjPCmveVatwlY=
-X-Gm-Message-State: AOJu0Yz5jXGAXgh/loZYZu2eeJzcP6IPqUgJxp159KluuliwT1CM3WFC
-	KadHKYA3veNOfiLzzqJLK8e9a88L7/sZoOp0ZocAO3jSbb+Yll6OcZ7V+pKnvDgT4A==
-X-Google-Smtp-Source: AGHT+IETWZx9cfssblm2zEGiTblfHf+yjPph+wwZhXlTNPdioDGjYTOCezommzy9CyvZ1fs6U0ag6A==
-X-Received: by 2002:a25:bb10:0:b0:dcb:c0ea:6abc with SMTP id z16-20020a25bb10000000b00dcbc0ea6abcmr1548115ybg.64.1709032358999;
-        Tue, 27 Feb 2024 03:12:38 -0800 (PST)
-Received: from mail-yb1-f177.google.com ([209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id u9-20020a250949000000b00dc2310abe8bsm1323073ybm.38.2024.02.27.03.12.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Feb 2024 03:12:38 -0800 (PST)
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-dc74435c428so3652590276.2;
-        Tue, 27 Feb 2024 03:12:37 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXwJ7/jVOAgdcYZyQ0Vk8kCXWfNsvprfIws3P1kaOPxSJ0zj+XIQydNNGFJGusQM6fKKXLKco21/XCmtn+bPkPZ0/z9guqENNV7tGjku2PsNOPslSYQkQsdsuQRX21S+bNcXxVGYHNdAyy5Ot5MtPoeQ9bH+9fQzW0aKy7Ffkn+oHjAbxcsR1/ltfgvAQ6+VVgO4Ssvt0NpZYNMMO/KyBID3Z3d7H+lorVXbXm8zKHmPzAA1ND04hosm4ujae0LXiyylSJcdXfRPgKkIQfT5aBy5HfVnAh05Zs1ioV4NurG3t2F6EFmMeTKPN1cjJ/EKJNmEFsOW9iNsqo1TYos27sdLBEngOxlFGXqpuzvcViDF8PzCCEndZC5PlAoWeHi2nA+JE6qZqHjwXyXEuT7uiIYzlNIq08mL/GA+N6SNzl+Ka9YwLMJo9JSB66uvK9vZSg=
-X-Received: by 2002:a5b:ecc:0:b0:dc6:c32f:6126 with SMTP id
- a12-20020a5b0ecc000000b00dc6c32f6126mr1607871ybs.22.1709032357452; Tue, 27
- Feb 2024 03:12:37 -0800 (PST)
+	s=arc-20240116; t=1709032815; c=relaxed/simple;
+	bh=kdPMwJOhfJgg9gGm+J+k23KPey7iTw4bgo1JgzYNRwc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ovpzm591lP2m9ey7EgoaELQ7S4TNoPBNy6d3BErfzp8ZunK9TZLlzcchpU2FzJFxu1ERrFSkJW3AkB2y8FcuqkHikdkcryq0ufXZTNxMHboU9861FHR0vgD1k9SoLoU16/0DTevMulSnsPSmptdzAsi1YdF5U21oeMZyV3iTCcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=x1yqMzDr; arc=none smtp.client-ip=115.124.30.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1709032804; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=Ep8dMZzmk15xqlqQL7RaK3mkeF/5/DFYGYZbEAf2sXs=;
+	b=x1yqMzDr2lT01JeB/L60w3/wEY6ufBlomdmj+d59DifYCmNlub89c5m1CCjlrzRp7evZCpYfau5ZulZpsVtifU3V/uHteJSTY6aDNIGnsSqLW01GTIgGoZRV7HuDS8+/5qY3VhND0Fqbm4nsrShoKxdbr9+jS5Qce3rcLHwJXoM=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R421e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=yaoma@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0W1MauK8_1709032801;
+Received: from 30.178.67.122(mailfrom:yaoma@linux.alibaba.com fp:SMTPD_---0W1MauK8_1709032801)
+          by smtp.aliyun-inc.com;
+          Tue, 27 Feb 2024 19:20:02 +0800
+Message-ID: <e78357ae-7b00-446c-b010-3bd770892c9e@linux.alibaba.com>
+Date: Tue, 27 Feb 2024 19:20:00 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240226161414.2316610-1-arnd@kernel.org> <20240226161414.2316610-4-arnd@kernel.org>
- <CAMuHMdWRBQF95fJ+NkPUdvpu5VfRm2WyTnvdqB1Xe7d4vsvY2g@mail.gmail.com> <164616c2-94f6-40e8-86e0-850dc8da212e@app.fastmail.com>
-In-Reply-To: <164616c2-94f6-40e8-86e0-850dc8da212e@app.fastmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 27 Feb 2024 12:12:24 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXQYPtL0J4Phm81S1qWpi7no=1r4uStbLd8zbjn7fcWQw@mail.gmail.com>
-Message-ID: <CAMuHMdXQYPtL0J4Phm81S1qWpi7no=1r4uStbLd8zbjn7fcWQw@mail.gmail.com>
-Subject: Re: [PATCH 3/4] arch: define CONFIG_PAGE_SIZE_*KB on all architectures
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Arnd Bergmann <arnd@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Kees Cook <keescook@chromium.org>, 
-	Anna-Maria Gleixner <anna-maria@linutronix.de>, Matt Turner <mattst88@gmail.com>, 
-	Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, guoren <guoren@kernel.org>, 
-	Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>, 
-	Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Andreas Larsson <andreas@gaisler.com>, 
-	Richard Weinberger <richard@nod.at>, x86@kernel.org, Max Filippov <jcmvbkbc@gmail.com>, 
-	Andy Lutomirski <luto@kernel.org>, Jan Kiszka <jan.kiszka@siemens.com>, 
-	Kieran Bingham <kbingham@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>, linux-hexagon@vger.kernel.org, 
-	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
-	linux-mips@vger.kernel.org, 
-	"linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>, linux-parisc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-um@lists.infradead.org, 
-	Greg Ungerer <gerg@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHv10 3/4] genirq: Avoid summation loops for /proc/interrupts
+Content-Language: en-US
+To: Thomas Gleixner <tglx@linutronix.de>, dianders@chromium.org,
+ liusong@linux.alibaba.com, akpm@linux-foundation.org, pmladek@suse.com,
+ kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com,
+ tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+ jan.kiszka@siemens.com
+Cc: linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <20240226020939.45264-1-yaoma@linux.alibaba.com>
+ <20240226020939.45264-4-yaoma@linux.alibaba.com> <87le769s0w.ffs@tglx>
+From: Bitao Hu <yaoma@linux.alibaba.com>
+In-Reply-To: <87le769s0w.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Arnd,
+Hi,
 
-CC Greg
+On 2024/2/27 17:26, Thomas Gleixner wrote:
+> On Mon, Feb 26 2024 at 10:09, Bitao Hu wrote:
+>> We could use the irq_desc::tot_count member to avoid the summation
+>> loop for interrupts which are not marked as 'PER_CPU' interrupts in
+>> 'show_interrupts'. This could reduce the time overhead of reading
+>> /proc/interrupts.
+> 
+> "Could" is not really a technical term. Either we do or we do not. Also
+> please provide context for your change and avoid the 'We'.
+OK.
+> 
+>> --- a/include/linux/irqdesc.h
+>> +++ b/include/linux/irqdesc.h
+>> @@ -121,6 +121,8 @@ static inline void irq_unlock_sparse(void) { }
+>>   extern struct irq_desc irq_desc[NR_IRQS];
+>>   #endif
+>>
+>> +extern bool irq_is_nmi(struct irq_desc *desc);
+>> +
+> 
+> If at all this wants to be in kernel/irq/internal.h. There is zero
+> reason to expose this globally.
+> 
+>> -static bool irq_is_nmi(struct irq_desc *desc)
+>> +bool irq_is_nmi(struct irq_desc *desc)
+>>   {
+>>   	return desc->istate & IRQS_NMI;
+>>   }
+> 
+> If at all this really wants to be a static inline in internals.h, but
+> instead of blindly copying code this can be done smarter:
+> 
+> unsigned int kstat_irq_desc(struct irq_desc *desc)
+> {
+> 	unsigned int sum = 0;
+> 	int cpu;
+> 
+> 	if (!irq_settings_is_per_cpu_devid(desc) &&
+> 	    !irq_settings_is_per_cpu(desc) &&
+> 	    !irq_is_nmi(desc))
+> 		return data_race(desc->tot_count);
+> 
+> 	for_each_possible_cpu(cpu)
+> 		sum += data_race(*per_cpu_ptr(desc->kstat_irqs, cpu));
+> 	return sum;
+> }
+> 
+> and then let kstat_irqs() and show_interrupts() use it. See?
 
-On Tue, Feb 27, 2024 at 11:59=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrot=
-e:
-> On Tue, Feb 27, 2024, at 09:54, Geert Uytterhoeven wrote:
-> >> diff --git a/arch/m68k/Kconfig.cpu b/arch/m68k/Kconfig.cpu
-> >> index 9dcf245c9cbf..c777a129768a 100644
-> >> --- a/arch/m68k/Kconfig.cpu
-> >> +++ b/arch/m68k/Kconfig.cpu
-> >> @@ -30,6 +30,7 @@ config COLDFIRE
-> >>         select GENERIC_CSUM
-> >>         select GPIOLIB
-> >>         select HAVE_LEGACY_CLK
-> >> +       select HAVE_PAGE_SIZE_8KB if !MMU
-> >
-> > .... if you would drop the !MMU-dependency here.
-> >
-> >>
-> >>  endchoice
-> >>
-> >> @@ -45,6 +46,7 @@ config M68000
-> >>         select GENERIC_CSUM
-> >>         select CPU_NO_EFFICIENT_FFS
-> >>         select HAVE_ARCH_HASH
-> >> +       select HAVE_PAGE_SIZE_4KB
-> >
-> > Perhaps replace this by
-> >
-> >     config M68KCLASSIC
-> >             bool "Classic M68K CPU family support"
-> >             select HAVE_ARCH_PFN_VALID
-> >   +         select HAVE_PAGE_SIZE_4KB if !MMU
-> >
-> > so it covers all 680x0 CPUs without MMU?
->
-> I was a bit unsure about how to best do this since there
-> is not really a need for a fixed page size on nommu kernels,
-> whereas the three MMU configs clearly tie the page size to
-> the MMU rather than the platform.
->
-> There should be no reason for coldfire to have a different
-> page size from dragonball if neither of them actually uses
-> hardware pages, so one of them could be changed later.
+I have a concern. kstat_irqs() uses for_each_possible_cpu() for
+summation. However, show_interrupts() uses for_each_online_cpu(),
+which means it only outputs interrupt statistics for online cpus.
+If we use for_each_possible_cpu() in show_interrupts() to calculate
+'any_count', there could be a problem with the following scenario:
+If an interrupt has a count of zero on online cpus but a non-zero
+count on possible cpus, then 'any_count' would not be zero, and the
+statistics for that interrupt would be output, which is not the
+desired behavior for show_interrupts(). Therefore, I think it's not
+good to have kstat_irqs() and show_interrupts() both use the same
+logic. What do you think?
 
-Indeed, in theory, PAGE_SIZE doesn't matter for nommu, but the concept
-of pages is used all over the place in Linux.
+> 
+> With that a proper changelog would be:
+> 
+>     show_interrupts() unconditionally accumulates the per CPU interrupt
+>     statistics to determine whether an interrupt was ever raised.
+> 
+>     This can be avoided for all interrupts which are not strictly per CPU
+>     and not of type NMI because those interrupts provide already an
+>     accumulated counter. The required logic is already implemented in
+>     kstat_irqs().
+> 
+>     Split the inner access logic out of kstat_irqs() and use it for
+>     kstat_irqs() and show_interrupts() to avoid the accumulation loop
+>     when possible.
+> 
 
-I'm mostly worried about some Coldfire code relying on the actual value
-of PAGE_SIZE in some other context. e.g. for configuring non-cacheable
-regions.
-
-And does this impact running nommu binaries on a system with MMU?
-I.e. if nommu binaries were built with a 4 KiB PAGE_SIZE, do they
-still run on MMU systems with an 8 KiB PAGE_SIZE (coldfire and sun3),
-or are there some subtleties to take into account?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Best Regards,
+	Bitao Hu
 
