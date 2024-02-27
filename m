@@ -1,77 +1,77 @@
-Return-Path: <linux-mips+bounces-1771-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1772-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC755868B1B
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 09:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AEDD868B5C
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 09:55:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1CAE5B25815
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 08:45:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD10CB258DE
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 08:55:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 491B6130AF0;
-	Tue, 27 Feb 2024 08:45:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4A00135A6D;
+	Tue, 27 Feb 2024 08:55:04 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3890B7E761;
-	Tue, 27 Feb 2024 08:45:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F01413329C;
+	Tue, 27 Feb 2024 08:55:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709023521; cv=none; b=o4wNq5ZiPDTPXhv+0uzQ5CTC0ZFqmWJZ0i5TXNxWVGMTRM+hspM7xKVZpX4DtYCm1Nt+KldqYGE9RbfrJa3a5jcu9QeEiY2H6N2vZYeGsjknj50MnYLPo6J1LI20pLJ7rdq3BdfS1fbwv/cPJrB5Tv1kGYjRoV+EzHYTNzvWSTg=
+	t=1709024104; cv=none; b=rXEOmqdir3uTTu3+eOpc76QHyNblSp9u4M2C/q9a1KASrpYIH8/aw5RlExBrHHS2qvvxcmJ4jYTOMkC4qSVG/27iPti3vQ6TlmYYE7v1lx8JaAOCESZbu82vdEJMo7h7ToBwGpbGSLGGhRVz/EOEbz+3FRbvYeV6Bt2XPjL7zhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709023521; c=relaxed/simple;
-	bh=ZH6cCYrbNG2YOChcX3vTXEnEeEOKhVq2+yJTwt6+8Uw=;
+	s=arc-20240116; t=1709024104; c=relaxed/simple;
+	bh=w0gu9IMca9J/tT97UVi+QQlbmYRnY/qPlnzkCAmcRmM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eUqdt1uG8D/nJ50mwt7PSu3Z75Odpa6YXWExpy+2cWu28yfrTVTSIYjJTiysBtzrLfEfmAykBYDz1Ie+tCMv49NkhZqQhcEBQebB3Zk0azWMx2Mat6DujBxh3BvKxQeCYZEv6IlIadb9NXSMGZodRnF9uExsFQRyUt3KLdbuKf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.169
+	 To:Cc:Content-Type; b=uDiLqt78d1pZ2S1Tb1FkKLnx94mBZ8nwKeznG/HyqexNmR5AVq9p5ZotplVzTYu9G8EJ+Qoo+Xp0n+fgYX1SWImlyuJisl0TexJ7oJ4MkKqXIyQPz8/oGrfx7YxsNjhpQ6qD/r5q8xsjowjC9YXLaFCiM3ZyrPTtpZoPOLEbQu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-608ccac1899so35121427b3.1;
-        Tue, 27 Feb 2024 00:45:18 -0800 (PST)
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-dcd94fb9e4dso4335346276.2;
+        Tue, 27 Feb 2024 00:55:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709023516; x=1709628316;
+        d=1e100.net; s=20230601; t=1709024100; x=1709628900;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uzwNvfzqcMx0O3hVp46LgRJMNTPfRBstut9NEe744kY=;
-        b=cJSC5aM6iZiP0uXA9Yt0WnHjrS2ukJlLbB/0r4JVpgSuDb4rWbNAkf+dC0SMjRi7vH
-         bXd20MePWypWNvuCxeN2KitYYOA7jbt5L/oiaV5FlaVTojZat/x4ThHtE20uDKjstbiS
-         fzKMWrHugz1vvEtJkqIDcCQqyIf+m8xs+hENCZuj81vUNT7Bff4wariSZ/lKl//dUvEG
-         YPA691199MJn7zdiIYCaygAcElqSLft/6F98J+KRD0oc9LwOYsWjMHW1HqMJC44qjMDB
-         OpHlpDsSJWq9R/ljVmrAbfP687zCTWuBcbhRfe0oMCNbmpuqvjGFkhWCI/ymc7v0wFus
-         6v/g==
-X-Forwarded-Encrypted: i=1; AJvYcCV0vDkvkBkCUNM2wiBjHBJUs7UB36foU5i3paQlyjNoLlk20DnL0CnWdPM4naQEJEkmED4OnN5YNOBqWFGxXz8VRNRT1R5XdlEqnmdp54XrzdwjKAGsZraoPp1Dmfmj9iQ5n/9kRPsst/dg/IkolRYvWtLQSdwLV67SwWUUgXqxIYiLVapa2viGW3MNXU1xwtlVtGhFDAv+t/sMqoj2uCzcilZ2idrMxycco4WN16syv2IndQAUPC4qWHsv6FNscAJP65eQ2HIbWSjuAaHfYC3r3mxrB8dQb1cT17QilSAUO1OMHRglLd1V1Q8z9Ikwt2YOTwpwoKVel4Hxgi8xXOGfz5gCKd5AgV1K44jmfy/CQMgWei8LlzH3gaI9E71NcTRmnHdEQ3tD7Fxh5OI99d8VQbinWfhPSg4GI90JvNzk0mZw8nqzhgTgVJUBySy+VTk=
-X-Gm-Message-State: AOJu0YwIdzZSITMn8oKOy6uRD8YQP9oziD0ucpIT7uAuDtK/Fa10YKyK
-	nknmvoN+J4Hg9xCkqDASXBtbn7b6ljJSihexvFsi8IiCFCJuc4m7JxXjYnvr9Urp4g==
-X-Google-Smtp-Source: AGHT+IHl2FoPiw3CuCjEEe/3xZwOwIKpIw+W35v0nWwhkK550t4lTcJi5yO2PlZ0F1Wkx28T7xPO0g==
-X-Received: by 2002:a0d:ec02:0:b0:609:254f:86cb with SMTP id q2-20020a0dec02000000b00609254f86cbmr1195692ywn.0.1709023516275;
-        Tue, 27 Feb 2024 00:45:16 -0800 (PST)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id y132-20020a81a18a000000b0060799657d41sm1637415ywg.22.2024.02.27.00.45.13
+        bh=LF4kXg8LPe/h8pV/74EqYHGgPgOEfsUWLG6ibzoE1S0=;
+        b=f2Bg3EyEtGlCwM51M/62aDzXI4s7OGN63gXUOY79QcnhwQKmabr8C6iSut1C/PbJ5h
+         vNbj8atfcnADyY3EQOLs4Ud9k3jfv3i2Rg5YsCkR7anpEc+GfB9oxZwi6k9gTRnS2jYh
+         Y8DRycFjh6a7fmNVCw4wiktzlPWgAKSuJcoAvl8hds+S6i05+hY5qP7syy8dBfSH0i8i
+         NBtCYNYJgIEfElp9an2LXRZKWBf4ocCHevhGSXNeioJhfQGsbQSBQb03JzZ/QRAHQmhm
+         z+6UUqlYlM8WmvcJ2Pmn0wx98+JSrFDJ2yi02eRoAQUngq6XHOCz4NC/xuR9rCwRvurS
+         lYgg==
+X-Forwarded-Encrypted: i=1; AJvYcCUAGt9Dcq91INDN10ya1N6dqpPJqHuOx2L8xtJYWp/wzBEabARyS+UjF9Brm6D2hNWCG4tXKmQ2wC7Qugqr3tXznNa1E5n7kSRRq5gFf2nrodn0DZzIRv9b+eIHmKwGPNQ9PZQOVdTzO1RRQl0lvsfsI11pZTel4qKPlKk3u+0TXZcjBprfpYKXQ/DFGH6rkxK4qQWwUDDj5IB1C4SveTauUKzE9V9wjVXUzyQTrJz5GdS8dv6LS7rNpPy1FRyl8Z191gQTKPXGAQs7w965O+VS8nFMcLsndb/cqcgA34DTvsL+ftPSzrAxztqzBW1z33tpifalPFdefau3/gKbqEA+6+ROeOTm4gmm0+U5oreqV0ze9pwwTh2bZkoy6xgoWHyRv+SpmKW18a5LTK4iIoQ1VhxFitr4ZqNd1F97x3Cdad5ILhQS8zkIqbpdyRcHCWE=
+X-Gm-Message-State: AOJu0YzWmuwlu7gkPURT/33OGJKANODIOewWj/gxwWqyPjjRcFSBXulx
+	Q4ZJCA+orBZrvGFDSrUKyKiZWdaockOs7dksLtWF+PMkG3efvlwBEQT6rCUQvSs9Fg==
+X-Google-Smtp-Source: AGHT+IF6fBlPBGIbNwe5pvR/i412ulu8I80HirEh6M7o+3rMg/zmoNs20O9HToW4iddaXBJQVt0CZA==
+X-Received: by 2002:a25:9183:0:b0:dce:2e9:a637 with SMTP id w3-20020a259183000000b00dce02e9a637mr1556137ybl.20.1709024099622;
+        Tue, 27 Feb 2024 00:54:59 -0800 (PST)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id g12-20020a5b070c000000b00dcc70082018sm1291748ybq.37.2024.02.27.00.54.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Feb 2024 00:45:14 -0800 (PST)
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-db3a09e96daso2987932276.3;
-        Tue, 27 Feb 2024 00:45:13 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVQ9TDefwviEzhXr1PNDhSAcgZxRfevBYRTxvg02qHYrQ5YJgXFktP/aEjJascSsm7pLejAtrB8lx//uaeftOdQC8PXDoZ/izA030MapBzK+LVDZkM5bH3Yf+XC8BMKRkeDDVSUjG6i6Nc+dMzUGXCCjCXIJruTxMtnbgl9Hk/qh+p5gY5whHpKVew1rG+nidyyqhABpBfYgWZgSpR9HmySXjzSzgUrEN8D3vzvWwZnegKILIuQ8lxC+8GQ/dl9KwdboZfP3qMH3CnPNhqm6MSSGRs3uQGOQ3QluQLXQQzdXNS82Q+/lG7W33U+kiFicFJFF5siwocu0mAd+n2ngxxrJFuEDRoRThZJyKqfglJT6HIv5Xx6BQDU539l7ydx40ZwDEeQx71LxePM86tAR53NWOUkkvMKvgStjwg5jhccaGaBwRc0ychoRRG41jRJBc8=
-X-Received: by 2002:a25:84c7:0:b0:dc7:496e:42e1 with SMTP id
- x7-20020a2584c7000000b00dc7496e42e1mr1414712ybm.51.1709023513209; Tue, 27 Feb
- 2024 00:45:13 -0800 (PST)
+        Tue, 27 Feb 2024 00:54:58 -0800 (PST)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-607f8894550so28540027b3.1;
+        Tue, 27 Feb 2024 00:54:58 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVQZCNJPwsKHzVL3sGFO3bHYzIrdeYQOocmHIYrBsXWmqB37JGuO7UqeVv9/r24m5spmut7clWRl4Hz/3TFFOA3fkg3CFgxYxKFpSCL9eE5joi3Rumf/+dCYaYeoNOA0Z6KSdqMrWUD27RPvLyEzN/MatMAA4QwgXDmg5WP1XL2aOhdhSh4a+xpa4JIFtIo2BB7k6RXEdnjO16nZUSZy/5hrn5LqatGXRIkSOhZDbY4QmcyX3evPE5xCDhfFxSc0gVxMuzidZWcXezgd8p+psAOi8EaiizwLeZL9vmE/EZfc49rmH7kLzL07l/JomWkToy5znlAxXXa/dNm71JRNCZ1McORDfGKwdXr8kNG8zj2kYCW1N62DOBXtq5LWweLQ00waimg6FQSsJ/UdLmZYJ1omR2it5DDDcnDdSOOuNJvY9sDUNU2l/4LKGu5na6j5iI=
+X-Received: by 2002:a25:71c3:0:b0:dcf:2b44:f38d with SMTP id
+ m186-20020a2571c3000000b00dcf2b44f38dmr1589302ybc.49.1709024097788; Tue, 27
+ Feb 2024 00:54:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240226161414.2316610-1-arnd@kernel.org> <20240226161414.2316610-2-arnd@kernel.org>
-In-Reply-To: <20240226161414.2316610-2-arnd@kernel.org>
+References: <20240226161414.2316610-1-arnd@kernel.org> <20240226161414.2316610-4-arnd@kernel.org>
+In-Reply-To: <20240226161414.2316610-4-arnd@kernel.org>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 27 Feb 2024 09:45:01 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVCWF50SO1TK5F5Q8sN08THKJ+F6gt9u5pD05gJUZ+E9w@mail.gmail.com>
-Message-ID: <CAMuHMdVCWF50SO1TK5F5Q8sN08THKJ+F6gt9u5pD05gJUZ+E9w@mail.gmail.com>
-Subject: Re: [PATCH 1/4] arch: consolidate existing CONFIG_PAGE_SIZE_*KB definitions
+Date: Tue, 27 Feb 2024 09:54:46 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWRBQF95fJ+NkPUdvpu5VfRm2WyTnvdqB1Xe7d4vsvY2g@mail.gmail.com>
+Message-ID: <CAMuHMdWRBQF95fJ+NkPUdvpu5VfRm2WyTnvdqB1Xe7d4vsvY2g@mail.gmail.com>
+Subject: Re: [PATCH 3/4] arch: define CONFIG_PAGE_SIZE_*KB on all architectures
 To: Arnd Bergmann <arnd@kernel.org>
 Cc: Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
 	Kees Cook <keescook@chromium.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
@@ -100,29 +100,74 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi Arnd,
 
-On Mon, Feb 26, 2024 at 5:14=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
+On Mon, Feb 26, 2024 at 5:15=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
 te:
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> These four architectures define the same Kconfig symbols for configuring
-> the page size. Move the logic into a common place where it can be shared
-> with all other architectures.
+> Most architectures only support a single hardcoded page size. In order
+> to ensure that each one of these sets the corresponding Kconfig symbols,
+> change over the PAGE_SHIFT definition to the common one and allow
+> only the hardware page size to be selected.
 >
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
 Thanks for your patch!
 
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
+> --- a/arch/m68k/Kconfig
+> +++ b/arch/m68k/Kconfig
+> @@ -84,12 +84,15 @@ config MMU
+>
+>  config MMU_MOTOROLA
+>         bool
+> +       select HAVE_PAGE_SIZE_4KB
+>
+>  config MMU_COLDFIRE
+> +       select HAVE_PAGE_SIZE_8KB
 
-> +config PAGE_SIZE_4KB
-> +       bool "4KB pages"
+I think you can do without this...
 
-Now you got rid of the 4000-byte ("4kB") pages and friends, please
-do not replace these by Kelvin-bytes, and use the official binary
-prefixes =3D> "4 KiB".
+>         bool
+>
+>  config MMU_SUN3
+>         bool
+> +       select HAVE_PAGE_SIZE_8KB
+>         depends on MMU && !MMU_MOTOROLA && !MMU_COLDFIRE
+>
+>  config ARCH_SUPPORTS_KEXEC
+> diff --git a/arch/m68k/Kconfig.cpu b/arch/m68k/Kconfig.cpu
+> index 9dcf245c9cbf..c777a129768a 100644
+> --- a/arch/m68k/Kconfig.cpu
+> +++ b/arch/m68k/Kconfig.cpu
+> @@ -30,6 +30,7 @@ config COLDFIRE
+>         select GENERIC_CSUM
+>         select GPIOLIB
+>         select HAVE_LEGACY_CLK
+> +       select HAVE_PAGE_SIZE_8KB if !MMU
 
-> +       depends on HAVE_PAGE_SIZE_4KB
+.... if you would drop the !MMU-dependency here.
+
+>
+>  endchoice
+>
+> @@ -45,6 +46,7 @@ config M68000
+>         select GENERIC_CSUM
+>         select CPU_NO_EFFICIENT_FFS
+>         select HAVE_ARCH_HASH
+> +       select HAVE_PAGE_SIZE_4KB
+
+Perhaps replace this by
+
+    config M68KCLASSIC
+            bool "Classic M68K CPU family support"
+            select HAVE_ARCH_PFN_VALID
+  +         select HAVE_PAGE_SIZE_4KB if !MMU
+
+so it covers all 680x0 CPUs without MMU?
+
+>         select LEGACY_TIMER_TICK
+>         help
+>           The Freescale (was Motorola) 68000 CPU is the first generation =
+of
 
 Gr{oetje,eeting}s,
 
