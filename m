@@ -1,181 +1,118 @@
-Return-Path: <linux-mips+bounces-1793-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1796-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 998B0869734
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 15:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EE48869936
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 15:55:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 277E11F2883E
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 14:19:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD85E1F2891D
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 14:55:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAFFC78B61;
-	Tue, 27 Feb 2024 14:19:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C0DE145B13;
+	Tue, 27 Feb 2024 14:55:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="lPUTGKxS";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NPNMT8iD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fQtFXRPr"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9028913DBB3;
-	Tue, 27 Feb 2024 14:19:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.111.4.224
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A065114534D;
+	Tue, 27 Feb 2024 14:55:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709043543; cv=none; b=NpiEFzp5GbYrQTiDiCowNp9hdkMYody/xhmLD768WJJR2Mh/HNysg9Nr6wkyTO0jCfvYVV94TIqI0Qqz4oQjTzk/upl6HAcxzmhAv0NJoZ2qQfecYhwPDkIshK3wH7ZDN7WVwNr/ytOi5qKIGtB0X4/v6EDdN/ij7HmWh1RfWYQ=
+	t=1709045730; cv=none; b=MpdxyW6bn8gx/dRstWYBW3uf3pwRZnjSh1l+FcqoG5mdMODn6WPld/vHjNNMSbT0IYasZXsSDy3NdM0kmHudggblfmpwG98HlQKVKraZHkAOxGI5smj2O6p4hl8xB3GPyCCxzDjOipAkBDxAHQkgFCSShidtfPdqU6Se5TIuqew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709043543; c=relaxed/simple;
-	bh=A0FSY37d+vGzCQkk6DyCbgJvMDTFHRlUqhEcd+SIv+U=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=raAGq+m+fkfn7kvBxaNnDJROWdQUg4qn+vOAUqhOu6Y5oP3utHAOOo9EhhyXaah/ULbHDx5NpN8wf+WTEmFy+XG58aMFp++Y2UyoGCvyXApNbOvDhlwO3xzK90CkjS3G9AnbNzxwfO2oaBIEGYq64o2hOMyUpJb0rs190flsmyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=lPUTGKxS; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=NPNMT8iD; arc=none smtp.client-ip=66.111.4.224
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 8717758176A;
-	Tue, 27 Feb 2024 09:19:00 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 27 Feb 2024 09:19:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1709043540;
-	 x=1709050740; bh=lgwXV027qrMgBZRGGg484htOjeaxN2ck0Zcve0Dmzhs=; b=
-	lPUTGKxSZWT3KviA8nwQtQixUNSRKDoofN2NivSWKtva1+uopGcYEEr4RC46c0a4
-	vwDyryLlG3/SO1o0IgHaIAKElGDgOIftHdg/t1LowfBfp6kWJ/02DSeWOd9gO01Y
-	i2xNDAt65lcr61a9rbStiacnnPLSzVXxNfz+qirJEOwE6l4Mjsb9FPSq6beDfONs
-	IfFnZ9bxqqqY3xHHTJ0xelGfB0mkN5vK/R1PlQWSfAeazO2LUPLczof7Is+mk4YY
-	dS7xeAUB8mFbzZwvSoSrgsd+tbYj/Jm83Sm5bzumIEzMe8eZVlLb2zqJj5ACbn1Q
-	xHdhr1utw0PFFSmpN8T17A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1709043540; x=
-	1709050740; bh=lgwXV027qrMgBZRGGg484htOjeaxN2ck0Zcve0Dmzhs=; b=N
-	PNMT8iDaqBhcmripVnSD6nS3Lv42kN3UYBW99FRUWa3TpEGbwqC5etBXkzZPJQ97
-	b46+HgX1sO+sVYOqI7WWoftMMpP1d6mFgSc+COHXzownsJ7ep9c7luzipVKN/JSm
-	WvBS91t32eqhnz4okM6kGJHX7ja6nxAsDWD2f8/n1iyXi5CXN1O8cRQmzdP0MN3P
-	lXLGSaSOyRMNG2Klv5JGjNbEL+jZ99PzUXZkK0dRYXnY7Sh9tCeVVIPOdKairDq/
-	hVJllB8wVwsQCnLlNf4DWkeeaaUPJ42yyj0cK8PqRkYPiog+0wCNiowoUDAfMSZ0
-	TxOSo3YO5XIRZlykzYViQ==
-X-ME-Sender: <xms:Uu_dZWjk9CPDDtuHUq0spRBOyt_ieWSB_NQxrFGLmr24EkUFHc8YHg>
-    <xme:Uu_dZXDMUFx8ZF-9sPWppPSzjc83i6I1db9CmveKWGMIeJFPSdAeNSa88BpcqoNFB
-    jVJuLbK_PRbbcnDDkw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrgeehgdefkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudektdfg
-    jeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:Uu_dZeEDtHRL9UWe85NwoKrx0otX3SNqDfDiZ5hOf70Z6GsgUqDdIw>
-    <xmx:Uu_dZfQ4cWIo6G3rC1HFzafsQ2XymenYLV7MaNYtE0ltPhY45Lm3AA>
-    <xmx:Uu_dZTw8lPg-bwLBWej0tpp3R0mNAVRklOB_4I0L7nRbPx69459aug>
-    <xmx:VO_dZbOruGZOL_Pr3S4l_raiy6WMSNlORBuJgrWys66FFVcptlS8dQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 8FBCAB6008D; Tue, 27 Feb 2024 09:18:58 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-153-g7e3bb84806-fm-20240215.007-g7e3bb848
+	s=arc-20240116; t=1709045730; c=relaxed/simple;
+	bh=1tJ/As6WZY8z7QkR0Ar4Lvs7/0YUFMld1vGtVN0TiGc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J7UtZNdYB/VM4MY82aACEpw5RTq7Ij/tnuWDQGhvtIlPb8wuPoWNU/ruPqZDdNp5UUgwAR37rHHiMAYuv2LheagqZFsclrKcQ0V2OhW3QhroqRzf+Sjae2/TNqEEe0dwKv8T30HPvGrO6jACykoCeMqSMCELHDDW5aF5TuQyxLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fQtFXRPr; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709045729; x=1740581729;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1tJ/As6WZY8z7QkR0Ar4Lvs7/0YUFMld1vGtVN0TiGc=;
+  b=fQtFXRPrI0u2Bt0y3L46jYtojEE2B0hYV9ZQygjS03oFmCtcecu3eiq2
+   D1Vu58pj/w4XKvFyT3cD0RLZgV4efQE6Fd6V/HxNNrBXY5UJI/EuP6m84
+   RnFhScHYS6vuAYPKkPuJw4Ox09Q0pDMPZ7MbizdxGBk8bZ4Ax9bLDBVwL
+   5RVgOM+sl4d5+MsppDqXx0fqayWqbSNpp1OZ23rdNSl4OejNCR2wwEPQt
+   x0jMYBhmWKl4pOoprV86dxePMY8PpfgZ+glJLvE9ABM18b3DLIOSpOuHL
+   Zhw7eAHOfZlFPtKIMKHtXnEd3B+RGA6eG1kLz5pEwUJHpI2uKqoIjog18
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="14537570"
+X-IronPort-AV: E=Sophos;i="6.06,188,1705392000"; 
+   d="scan'208";a="14537570"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2024 06:55:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="913914289"
+X-IronPort-AV: E=Sophos;i="6.06,188,1705392000"; 
+   d="scan'208";a="913914289"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2024 06:55:22 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1reyrW-00000007yFU-0wjj;
+	Tue, 27 Feb 2024 16:55:18 +0200
+Date: Tue, 27 Feb 2024 16:55:17 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org, linux-tegra@vger.kernel.org,
+	Jiri Slaby <jirislaby@kernel.org>, Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Al Cooper <alcooperx@gmail.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andi Shyti <andi.shyti@linux.intel.com>
+Subject: Re: [PATCH v2 10/14] serial: 8250_of: Switch to use
+ uart_read_port_properties()
+Message-ID: <Zd331VOwxzU5YUCO@smile.fi.intel.com>
+References: <20240226142514.1485246-1-andriy.shevchenko@linux.intel.com>
+ <20240226142514.1485246-11-andriy.shevchenko@linux.intel.com>
+ <caa79772-6a54-48fd-ada2-5e7647b597ba@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <7b62e73d-d3fa-4432-807d-c2e667814b17@app.fastmail.com>
-In-Reply-To: 
- <CAMuHMdXQYPtL0J4Phm81S1qWpi7no=1r4uStbLd8zbjn7fcWQw@mail.gmail.com>
-References: <20240226161414.2316610-1-arnd@kernel.org>
- <20240226161414.2316610-4-arnd@kernel.org>
- <CAMuHMdWRBQF95fJ+NkPUdvpu5VfRm2WyTnvdqB1Xe7d4vsvY2g@mail.gmail.com>
- <164616c2-94f6-40e8-86e0-850dc8da212e@app.fastmail.com>
- <CAMuHMdXQYPtL0J4Phm81S1qWpi7no=1r4uStbLd8zbjn7fcWQw@mail.gmail.com>
-Date: Tue, 27 Feb 2024 15:18:38 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Geert Uytterhoeven" <geert@linux-m68k.org>
-Cc: "Arnd Bergmann" <arnd@kernel.org>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
- "Kees Cook" <keescook@chromium.org>,
- "Anna-Maria Gleixner" <anna-maria@linutronix.de>,
- "Matt Turner" <mattst88@gmail.com>, "Vineet Gupta" <vgupta@kernel.org>,
- "Russell King" <linux@armlinux.org.uk>,
- "Catalin Marinas" <catalin.marinas@arm.com>, guoren <guoren@kernel.org>,
- "Brian Cain" <bcain@quicinc.com>, "Huacai Chen" <chenhuacai@kernel.org>,
- "Michal Simek" <monstr@monstr.eu>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Helge Deller" <deller@gmx.de>, "Michael Ellerman" <mpe@ellerman.id.au>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Palmer Dabbelt" <palmer@dabbelt.com>,
- "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
- "Andreas Larsson" <andreas@gaisler.com>,
- "Richard Weinberger" <richard@nod.at>, x86@kernel.org,
- "Max Filippov" <jcmvbkbc@gmail.com>, "Andy Lutomirski" <luto@kernel.org>,
- "Jan Kiszka" <jan.kiszka@siemens.com>,
- "Kieran Bingham" <kbingham@kernel.org>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
- linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
- linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
- "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-um@lists.infradead.org, "Greg Ungerer" <gerg@linux-m68k.org>
-Subject: Re: [PATCH 3/4] arch: define CONFIG_PAGE_SIZE_*KB on all architectures
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <caa79772-6a54-48fd-ada2-5e7647b597ba@broadcom.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Feb 27, 2024, at 12:12, Geert Uytterhoeven wrote:
-> On Tue, Feb 27, 2024 at 11:59=E2=80=AFAM Arnd Bergmann <arnd@arndb.de>=
- wrote:
->> On Tue, Feb 27, 2024, at 09:54, Geert Uytterhoeven wrote:
->> I was a bit unsure about how to best do this since there
->> is not really a need for a fixed page size on nommu kernels,
->> whereas the three MMU configs clearly tie the page size to
->> the MMU rather than the platform.
->>
->> There should be no reason for coldfire to have a different
->> page size from dragonball if neither of them actually uses
->> hardware pages, so one of them could be changed later.
->
-> Indeed, in theory, PAGE_SIZE doesn't matter for nommu, but the concept
-> of pages is used all over the place in Linux.
->
-> I'm mostly worried about some Coldfire code relying on the actual value
-> of PAGE_SIZE in some other context. e.g. for configuring non-cacheable
-> regions.
+On Mon, Feb 26, 2024 at 10:24:30AM -0800, Florian Fainelli wrote:
+> On 2/26/24 06:19, Andy Shevchenko wrote:
+> > Since we have now a common helper to read port properties
+> > use it instead of sparse home grown solution.
+> > 
+> > Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
 
-Right, any change here would have to be carefully tested. I would
-expect that a 4K page size would reduce memory consumption even on
-NOMMU systems that should have the same tradeoffs for representing
-files in the page cache and in mem_map[].
+Thank you for testing!
 
-> And does this impact running nommu binaries on a system with MMU?
-> I.e. if nommu binaries were built with a 4 KiB PAGE_SIZE, do they
-> still run on MMU systems with an 8 KiB PAGE_SIZE (coldfire and sun3),
-> or are there some subtleties to take into account?
+-- 
+With Best Regards,
+Andy Shevchenko
 
-As far as I understand, binaries have to be built and linked for
-the largest page size they can run on, so running them on a kernel
-with smaller page size usually works.
 
-One notable exception is sys_mmap2(), which on most architectures
-takes units of 4KiB but on m68k is actually written to take
-PAGE_SIZE units. As Al pointed out in f8b7256096a2 ("Unify
-sys_mmap*"), it has always been wrong on sun3, presumably
-because users of that predate modern glibc. Running coldfire
-nommu binaries on coldfire mmu kernels would run into the same
-bug if either of them changes PAGE_SIZE. If you can run
-coldfire nommu binaries on classic m68k, that is already
-broken in the same way.
-
-      Arnd
 
