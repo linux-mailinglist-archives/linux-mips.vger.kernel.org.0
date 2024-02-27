@@ -1,119 +1,357 @@
-Return-Path: <linux-mips+bounces-1816-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1817-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12F05869C6F
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 17:40:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70A58869D41
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 18:12:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD4281F2435F
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 16:40:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CFE31C20BD3
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 17:12:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A412A14830D;
-	Tue, 27 Feb 2024 16:38:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06D363E480;
+	Tue, 27 Feb 2024 17:12:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zl8yB78/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nVED4zJo"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DD46145FF9;
-	Tue, 27 Feb 2024 16:38:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03AFA47A7D;
+	Tue, 27 Feb 2024 17:12:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709051915; cv=none; b=FDSnBuJGZ8pZoHE2kuQPac+L4GjPXOywdqGaRIUFLYNC+rFegRSW8Oc5dFDHhdKNRa4f+7L6WUfKoJhRPZ8MBcwwGMSXJP8b68Ri4pX1ptV5goXDSoIOoalq60ZWnWqysU506oU3SDnrGaTOPg9tm3/coSS4PQgdl/tPkq9TI6A=
+	t=1709053928; cv=none; b=rPL/ery3XZ2iSbEKOho2Fp3Zv1AKq0RuskiHqMBIer9DqzzVT3r4j1VTy040D5orJpJKoi7NaBT/i6TFa81qX0XFiqYGEK8hbQMCSIcEJ5Nn5Ds1gY991QbL36jssYAur3+PqUqVTP99cUe/VG8PDefPXjsD59Nd8QTsCu03IMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709051915; c=relaxed/simple;
-	bh=ikEKQlLSECX2b8BEADhWEQfhujAMjXxhYPJhlsmt8PI=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=T48zqJwToRF2TI1GRN+FmdLju6mEslBKHFD7ELmzG0XWJjKZuFxQgd+LLuFxwIZlS2v/VV/CCGAOxnu6sXd6KaKG44YsoOmPACNfhUYUYdbbk41xeaU4MLLueIl+K3sWO6fIwUsrhQQ8N9xjHEBHVR1Qys51P25nmDeuuBrikdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zl8yB78/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F929C433F1;
-	Tue, 27 Feb 2024 16:38:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709051914;
-	bh=ikEKQlLSECX2b8BEADhWEQfhujAMjXxhYPJhlsmt8PI=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=Zl8yB78/QGgEfBXbOE2rd4BWgjAnheF0pBdhJ1LOk6mW7YPw/rXx6fJyuhgnmBDta
-	 yi2LyvAU3PGI9FJN4gxPo10VelwIwhjiGA1hrOLr/wf8Npe/6ud9/3QqJbaEi/vJVk
-	 9vXrkmrHAAwJV63xA4UiGlzOQsUM7fy2y+83AnqrM8TjZZIfpCdC1TGW2ayacFRdc7
-	 1J8JhemTBkpHNOpnvFiozMvAF5rgRbWx3jlaNFVoO+k9a7TpmztIQGLum027h5l6qN
-	 0DBCB+4dKUmsOAOEKFPTlgYgoht6tqErsyD5VPfXo3NDLmYnf3dLDh2pEYcdz6br4Z
-	 BWly5kOEoP8Pw==
-Date: Tue, 27 Feb 2024 10:38:33 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1709053928; c=relaxed/simple;
+	bh=4o7yMAvYJyQcMeGv3WKMeln+uo+IYka9fWH0EbkQvCc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bZSmmRlYx/VOx6tPNRHqlMPXkLr+4pcrksWdSszKCfwLa178LL/NQkvekkuqefEiT+kEqeka/VYu5Ftdlxh0t2Dfh+UmJLATJMSofN0M4xUJAYR9x3lh8SxGAgLV6JY7Apy/GMEQeTVOwve5/JKKi8PR23lCUzjsTAnlxxjhSCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nVED4zJo; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709053927; x=1740589927;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=4o7yMAvYJyQcMeGv3WKMeln+uo+IYka9fWH0EbkQvCc=;
+  b=nVED4zJoL5aLyk4cuI/OvRhyOQWkggtWuES7Bac4AFxdne6UhGXk9H1Y
+   Y3rg72Ea0pnNgd6nkYEdEpbFXtzWzADXh0AT+S3cRmSA+Yy4vIDL+/vmP
+   cJRIPdPIissthWWr48DiJwx8szfd1P6XAqtvb2rGVWWdC0CIT7EX9OIa7
+   wOatHqX99ClPxVDb0BctKblWla6wBHBbI78Av/irpB8Ts6cIz3iV9bGnE
+   bYQTvEs6+nNnpZtYLe+7t5WECk2heLWmUwsoFF3HboJlrq1EaLRFTIgmw
+   ym1qvZgL16ZAfTkQ9to2lVCGqq0d35ezC/7/m9xIXYFK1NhWbmEfjm23b
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="7219492"
+X-IronPort-AV: E=Sophos;i="6.06,188,1705392000"; 
+   d="scan'208";a="7219492"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2024 09:12:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="913917380"
+X-IronPort-AV: E=Sophos;i="6.06,188,1705392000"; 
+   d="scan'208";a="913917380"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2024 09:12:00 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1rf0zl-000000080L1-1443;
+	Tue, 27 Feb 2024 19:11:57 +0200
+Date: Tue, 27 Feb 2024 19:11:56 +0200
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v8 03/10] clk: eyeq5: add platform driver, and init
+ routine at of_clk_init()
+Message-ID: <Zd4X3NnBoEl0wu2H@smile.fi.intel.com>
+References: <20240227-mbly-clk-v8-0-c57fbda7664a@bootlin.com>
+ <20240227-mbly-clk-v8-3-c57fbda7664a@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Rob Herring <robh@kernel.org>
-To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Cc: linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org, 
- linux-clk@vger.kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- Stephen Boyd <sboyd@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
- Rob Herring <robh+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
- =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Michael Turquette <mturquette@baylibre.com>
-In-Reply-To: <20240227-mbly-clk-v8-2-c57fbda7664a@bootlin.com>
-References: <20240227-mbly-clk-v8-0-c57fbda7664a@bootlin.com>
- <20240227-mbly-clk-v8-2-c57fbda7664a@bootlin.com>
-Message-Id: <170905191234.4042659.13935993184407860612.robh@kernel.org>
-Subject: Re: [PATCH v8 02/10] dt-bindings: soc: mobileye: add EyeQ5 OLB
- system controller
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240227-mbly-clk-v8-3-c57fbda7664a@bootlin.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-
-On Tue, 27 Feb 2024 15:55:23 +0100, Théo Lebrun wrote:
-> Add documentation to describe the "Other Logic Block" syscon.
+On Tue, Feb 27, 2024 at 03:55:24PM +0100, Th�o Lebrun wrote:
+> Add the Mobileye EyeQ5 clock controller driver. It might grow to add
+> support for other platforms from Mobileye.
 > 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-> ---
->  .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  | 94 ++++++++++++++++++++++
->  1 file changed, 94 insertions(+)
+> It handles 10 read-only PLLs derived from the main crystal on board. It
+
+If you wrap 'It' to the next line, overall text will look better.
+
+> exposes a table-based divider clock used for OSPI. Other platform
+> clocks are not configurable and therefore kept as fixed-factor
+> devicetree nodes.
 > 
+> Two PLLs are required early on and are therefore registered at
+> of_clk_init(). Those are pll-cpu for the GIC timer and pll-per for the
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Ditto for 'the'
 
-yamllint warnings/errors:
+> UARTs.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml:
-Error in referenced schema matching $id: http://devicetree.org/schemas/clock/mobileye,eyeq5-clk.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@e00000: clock-controller@2c: False schema does not allow {'compatible': ['mobileye,eyeq5-clk'], 'reg': [[44, 80], [284, 4]], 'reg-names': ['plls', 'ospi'], '#clock-cells': [[1]], 'clocks': [[4294967295]], 'clock-names': ['ref']}
-	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@e00000: reset-controller@0: False schema does not allow {'compatible': ['mobileye,eyeq5-reset'], 'reg': [[0, 12], [512, 52], [288, 4]], 'reg-names': ['d0', 'd1', 'd2'], '#reset-cells': [[2]]}
-	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
-Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: /example-0/soc/system-controller@e00000/reset-controller@0: failed to match any schema with compatible: ['mobileye,eyeq5-reset']
-Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: /example-0/soc/system-controller@e00000/clock-controller@2c: failed to match any schema with compatible: ['mobileye,eyeq5-clk']
+...
 
-doc reference errors (make refcheckdocs):
+> +config COMMON_CLK_EYEQ5
+> +	bool "Clock driver for the Mobileye EyeQ5 platform"
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240227-mbly-clk-v8-2-c57fbda7664a@bootlin.com
+> +	depends on OF
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+Since it's a functional dependency, why not allow compile test without OF being
+enabled?
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+> +	depends on MACH_EYEQ5 || COMPILE_TEST
+> +	default MACH_EYEQ5
+> +	help
+> +	  This driver provides the clocks found on the Mobileye EyeQ5 SoC. Its
+> +	  registers live in a shared register region called OLB. It provides 10
+> +	  read-only PLLs derived from the main crystal clock which must be constant
+> +	  and one divider clock based on one PLL.
 
-pip3 install dtschema --upgrade
+...
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+> +#include <linux/array_size.h>
+> +#include <linux/bitfield.h>
+> +#include <linux/bits.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/device.h>
+> +#include <linux/err.h>
+
++ errno.h (yes, you need both)
+
+> +#include <linux/init.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_address.h>
+
++ overflow.h
+
+> +#include <linux/platform_device.h>
+> +#include <linux/printk.h>
+> +#include <linux/slab.h>
+> +#include <linux/types.h>
+
+...
+
+> +struct eq5c_pll {
+> +	int		index;
+
+Index can be negative? Any comment about this case?
+
+> +	const char	*name;
+> +	u32		reg;	/* next 8 bytes are r0 and r1 */
+
+Not sure this comments gives any clarification to a mere reader of the code.
+Perhaps you want to name this as reg64 (at least it will show that you have
+8 bytes, but I have no clue what is the semantic relationship between r0 and
+r1, it's quite cryptic to me). Or maybe it should be reg_0_1?
+
+> +};
+
+...
+
+> +static int eq5c_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+
+> +	struct device_node *np = dev->of_node;
+
+It's used only once. Why not just use dev->of_node there?
+
+> +	void __iomem *base_plls, *base_ospi;
+> +	struct clk_hw *hw;
+> +	int i;
+> +
+> +	/* Return potential error from eq5c_init(). */
+> +	if (IS_ERR(eq5c_clk_data))
+> +		return PTR_ERR(eq5c_clk_data);
+
+> +	/* Return an error if eq5c_init() did not get called. */
+> +	else if (!eq5c_clk_data)
+
+Redundant 'else'
+
+> +		return -EINVAL;
+
+I didn't get. If eq5c_init() was finished successfully, why do you need to
+seems repeat what it already done? What did I miss?
+
+> +	base_plls = devm_platform_ioremap_resource_byname(pdev, "plls");
+> +	if (IS_ERR(base_plls))
+> +		return PTR_ERR(base_plls);
+> +
+> +	base_ospi = devm_platform_ioremap_resource_byname(pdev, "ospi");
+> +	if (IS_ERR(base_ospi))
+> +		return PTR_ERR(base_ospi);
+> +
+> +	for (i = 0; i < ARRAY_SIZE(eq5c_plls); i++) {
+> +		const struct eq5c_pll *pll = &eq5c_plls[i];
+> +		unsigned long mult, div, acc;
+> +		u32 r0, r1;
+> +		int ret;
+> +
+> +		r0 = readl(base_plls + pll->reg);
+> +		r1 = readl(base_plls + pll->reg + sizeof(r0));
+> +
+> +		ret = eq5c_pll_parse_registers(r0, r1, &mult, &div, &acc);
+> +		if (ret) {
+> +			dev_warn(dev, "failed parsing state of %s\n", pll->name);
+> +			eq5c_clk_data->hws[pll->index] = ERR_PTR(ret);
+> +			continue;
+> +		}
+> +
+> +		hw = clk_hw_register_fixed_factor_with_accuracy_fwname(dev, np,
+> +				pll->name, "ref", 0, mult, div, acc);
+> +		eq5c_clk_data->hws[pll->index] = hw;
+> +		if (IS_ERR(hw))
+
+> +			dev_err_probe(dev, PTR_ERR(hw), "failed registering %s\n",
+> +				      pll->name);
+
+Missed return statement?
+
+> +	}
+> +
+> +	hw = clk_hw_register_divider_table_parent_hw(dev, EQ5C_OSPI_DIV_CLK_NAME,
+> +			eq5c_clk_data->hws[EQ5C_PLL_PER], 0,
+> +			base_ospi, 0, EQ5C_OSPI_DIV_WIDTH, 0,
+> +			eq5c_ospi_div_table, NULL);
+> +	eq5c_clk_data->hws[EQ5C_DIV_OSPI] = hw;
+> +	if (IS_ERR(hw))
+> +		dev_err_probe(dev, PTR_ERR(hw), "failed registering %s\n",
+> +			      EQ5C_OSPI_DIV_CLK_NAME);
+
+Ditto.
+
+> +	return 0;
+> +}
+
+> +static void __init eq5c_init(struct device_node *np)
+> +{
+> +	void __iomem *base_plls, *base_ospi;
+> +	int index_plls, index_ospi;
+> +	int i, ret;
+
+Why is i signed?
+
+> +	eq5c_clk_data = kzalloc(struct_size(eq5c_clk_data, hws, EQ5C_NB_CLKS),
+> +				GFP_KERNEL);
+> +	if (!eq5c_clk_data) {
+> +		ret = -ENOMEM;
+> +		goto err;
+> +	}
+> +
+> +	eq5c_clk_data->num = EQ5C_NB_CLKS;
+> +
+> +	/*
+> +	 * Mark all clocks as deferred. We register some now and others at
+> +	 * platform device probe.
+> +	 */
+> +	for (i = 0; i < EQ5C_NB_CLKS; i++)
+> +		eq5c_clk_data->hws[i] = ERR_PTR(-EPROBE_DEFER);
+
+> +	index_plls = of_property_match_string(np, "reg-names", "plls");
+> +	if (index_plls < 0) {
+> +		ret = index_plls;
+> +		goto err;
+> +	}
+
+Better pattern is to avoid the output pollution in the error case. Hence
+
+	ret = of_property_match_string(np, "reg-names", "plls");
+	if (ret < 0)
+		goto err;
+	index_plls = ret;
+
+> +	index_ospi = of_property_match_string(np, "reg-names", "ospi");
+> +	if (index_ospi < 0) {
+> +		ret = index_ospi;
+> +		goto err;
+> +	}
+
+Ditto.
+
+> +	base_plls = of_iomap(np, index_plls);
+> +	base_ospi = of_iomap(np, index_ospi);
+> +	if (!base_plls || !base_ospi) {
+> +		ret = -ENODEV;
+> +		goto err;
+> +	}
+
+> +	for (i = 0; i < ARRAY_SIZE(eq5c_early_plls); i++) {
+> +		const struct eq5c_pll *pll = &eq5c_early_plls[i];
+> +		unsigned long mult, div, acc;
+> +		struct clk_hw *hw;
+> +		u32 r0, r1;
+> +
+> +		r0 = readl(base_plls + pll->reg);
+> +		r1 = readl(base_plls + pll->reg + sizeof(r0));
+> +
+> +		ret = eq5c_pll_parse_registers(r0, r1, &mult, &div, &acc);
+> +		if (ret) {
+> +			pr_warn("failed parsing state of %s\n", pll->name);
+> +			eq5c_clk_data->hws[pll->index] = ERR_PTR(ret);
+> +			continue;
+> +		}
+> +
+> +		hw = clk_hw_register_fixed_factor_with_accuracy_fwname(NULL,
+> +				np, pll->name, "ref", 0, mult, div, acc);
+> +		eq5c_clk_data->hws[pll->index] = hw;
+> +		if (IS_ERR(hw))
+> +			pr_err("failed registering %s: %ld\n",
+
+%pe ?
+
+> +			       pll->name, PTR_ERR(hw));
+
+Is the error not critical? Is it fine? How is it supposed to work at such
+circumstances?
+
+> +	}
+> +
+> +	ret = of_clk_add_hw_provider(np, of_clk_hw_onecell_get, eq5c_clk_data);
+> +	if (ret) {
+> +		pr_err("failed registering clk provider: %d\n", ret);
+> +		goto err;
+> +	}
+> +
+> +	return;
+> +
+> +err:
+> +	kfree(eq5c_clk_data);
+> +	/* Signal to platform driver probe that we failed init. */
+> +	eq5c_clk_data = ERR_PTR(ret);
+> +}
+> +
+> +CLK_OF_DECLARE_DRIVER(eq5c, "mobileye,eyeq5-clk", eq5c_init);
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
 
