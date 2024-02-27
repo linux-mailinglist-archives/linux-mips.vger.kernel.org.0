@@ -1,149 +1,130 @@
-Return-Path: <linux-mips+bounces-1778-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1779-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 026C6868E9E
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 12:20:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88536869030
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 13:20:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0F6228152B
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 11:20:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA1D31C22EEB
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 12:20:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0C1713956A;
-	Tue, 27 Feb 2024 11:20:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13A8213AA42;
+	Tue, 27 Feb 2024 12:14:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="x1yqMzDr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jd6qTlbe"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F7452A8C1;
-	Tue, 27 Feb 2024 11:20:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D45A813957E;
+	Tue, 27 Feb 2024 12:14:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709032815; cv=none; b=ptQrWN19+0PqkwXoHAZMFrw2iFF2sYMADfCEm30GGlFsrwWAsJ3al2WfBTlqQvktppOVZx5UuQTXWVRS/Tmx0jWylrc3i0nDc6pKX5tYhxR33aTL4b6YU3+rmV5Msx+qfiyklq6pivlfzvV/A1EpaSDEUNH61TRxYIf1ZiV5aPw=
+	t=1709036072; cv=none; b=I+nSjS46lL9wB/af9FiHOr2IpW/Jy7lLyQareCPWjxlH1okuY9UE2naq3fB7uCqm2qDh9+3JRHiR8Z+GVPoRx8ZOHGXRy1uTKaSCy7y8zJ42nD435X01esCbsNB+fufS+GpU7L+mPCOYpJUiXCd3PlRGi6j4IYOU4x7nY92nqL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709032815; c=relaxed/simple;
-	bh=kdPMwJOhfJgg9gGm+J+k23KPey7iTw4bgo1JgzYNRwc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ovpzm591lP2m9ey7EgoaELQ7S4TNoPBNy6d3BErfzp8ZunK9TZLlzcchpU2FzJFxu1ERrFSkJW3AkB2y8FcuqkHikdkcryq0ufXZTNxMHboU9861FHR0vgD1k9SoLoU16/0DTevMulSnsPSmptdzAsi1YdF5U21oeMZyV3iTCcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=x1yqMzDr; arc=none smtp.client-ip=115.124.30.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1709032804; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=Ep8dMZzmk15xqlqQL7RaK3mkeF/5/DFYGYZbEAf2sXs=;
-	b=x1yqMzDr2lT01JeB/L60w3/wEY6ufBlomdmj+d59DifYCmNlub89c5m1CCjlrzRp7evZCpYfau5ZulZpsVtifU3V/uHteJSTY6aDNIGnsSqLW01GTIgGoZRV7HuDS8+/5qY3VhND0Fqbm4nsrShoKxdbr9+jS5Qce3rcLHwJXoM=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R421e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=yaoma@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0W1MauK8_1709032801;
-Received: from 30.178.67.122(mailfrom:yaoma@linux.alibaba.com fp:SMTPD_---0W1MauK8_1709032801)
-          by smtp.aliyun-inc.com;
-          Tue, 27 Feb 2024 19:20:02 +0800
-Message-ID: <e78357ae-7b00-446c-b010-3bd770892c9e@linux.alibaba.com>
-Date: Tue, 27 Feb 2024 19:20:00 +0800
+	s=arc-20240116; t=1709036072; c=relaxed/simple;
+	bh=MNBdJ8ynd91q3yNgGWy7eWN2H5Og6NctVsNLSrm0mDg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lOKNIqdDvUjhGdZRAJME9auz2WhpMeEJTsEPfTMgeeNL1tVyKDBtqrSg4Wp9PKLU642qVaO5qHpxPd5j2lyr4Y+9vT+a2ZoJtw0n0lhnBBPRX/4XsfmOc1slBLs778neBmPMziY/25tG0dcxJh9l6+IhCPEGzppbpJ8hx3HLvT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jd6qTlbe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9E7CC433C7;
+	Tue, 27 Feb 2024 12:14:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709036071;
+	bh=MNBdJ8ynd91q3yNgGWy7eWN2H5Og6NctVsNLSrm0mDg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Jd6qTlberk/kGxBOED8pcbAmtgSvDFQzjM6u+xO5Oq//PaNH6aIBCVAreCSUhgTr7
+	 hKlpPsooyoAfhJ4p5NgipQRMYF2WSvhVw/i2hMK9IBVEG71zDvfTqtES6wI8sp+X4J
+	 4vI5vq1ZOImg0yKS83SO4LCOJpGG1UA/pCPN2en/t9JvkDJoraQG+9xIwhpg+4vJud
+	 On5Q0sJw8+BKci0a2NAsMsVFcYDfPu6Y5DplkRX1CzmCd3wfI6aFN6Xp5WuOIg4Zkv
+	 kUEfwrv6wEezf0T0AFJLUxyqThh0r7I5mzANUlpvU7tDN/AgLxXURvAx8S+yepZuIE
+	 RaKrcbJNp1tLg==
+Date: Tue, 27 Feb 2024 13:14:28 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH 09/13] i2c: nomadik: fetch timeout-usecs property from
+ devicetree
+Message-ID: <Zd3SJMBp23ybgdsJ@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
+ <20240215-mbly-i2c-v1-9-19a336e91dca@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHv10 3/4] genirq: Avoid summation loops for /proc/interrupts
-Content-Language: en-US
-To: Thomas Gleixner <tglx@linutronix.de>, dianders@chromium.org,
- liusong@linux.alibaba.com, akpm@linux-foundation.org, pmladek@suse.com,
- kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com,
- tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
- jan.kiszka@siemens.com
-Cc: linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <20240226020939.45264-1-yaoma@linux.alibaba.com>
- <20240226020939.45264-4-yaoma@linux.alibaba.com> <87le769s0w.ffs@tglx>
-From: Bitao Hu <yaoma@linux.alibaba.com>
-In-Reply-To: <87le769s0w.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="l9/qv/BPwfFxGsXr"
+Content-Disposition: inline
+In-Reply-To: <20240215-mbly-i2c-v1-9-19a336e91dca@bootlin.com>
 
-Hi,
 
-On 2024/2/27 17:26, Thomas Gleixner wrote:
-> On Mon, Feb 26 2024 at 10:09, Bitao Hu wrote:
->> We could use the irq_desc::tot_count member to avoid the summation
->> loop for interrupts which are not marked as 'PER_CPU' interrupts in
->> 'show_interrupts'. This could reduce the time overhead of reading
->> /proc/interrupts.
-> 
-> "Could" is not really a technical term. Either we do or we do not. Also
-> please provide context for your change and avoid the 'We'.
-OK.
-> 
->> --- a/include/linux/irqdesc.h
->> +++ b/include/linux/irqdesc.h
->> @@ -121,6 +121,8 @@ static inline void irq_unlock_sparse(void) { }
->>   extern struct irq_desc irq_desc[NR_IRQS];
->>   #endif
->>
->> +extern bool irq_is_nmi(struct irq_desc *desc);
->> +
-> 
-> If at all this wants to be in kernel/irq/internal.h. There is zero
-> reason to expose this globally.
-> 
->> -static bool irq_is_nmi(struct irq_desc *desc)
->> +bool irq_is_nmi(struct irq_desc *desc)
->>   {
->>   	return desc->istate & IRQS_NMI;
->>   }
-> 
-> If at all this really wants to be a static inline in internals.h, but
-> instead of blindly copying code this can be done smarter:
-> 
-> unsigned int kstat_irq_desc(struct irq_desc *desc)
-> {
-> 	unsigned int sum = 0;
-> 	int cpu;
-> 
-> 	if (!irq_settings_is_per_cpu_devid(desc) &&
-> 	    !irq_settings_is_per_cpu(desc) &&
-> 	    !irq_is_nmi(desc))
-> 		return data_race(desc->tot_count);
-> 
-> 	for_each_possible_cpu(cpu)
-> 		sum += data_race(*per_cpu_ptr(desc->kstat_irqs, cpu));
-> 	return sum;
-> }
-> 
-> and then let kstat_irqs() and show_interrupts() use it. See?
+--l9/qv/BPwfFxGsXr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I have a concern. kstat_irqs() uses for_each_possible_cpu() for
-summation. However, show_interrupts() uses for_each_online_cpu(),
-which means it only outputs interrupt statistics for online cpus.
-If we use for_each_possible_cpu() in show_interrupts() to calculate
-'any_count', there could be a problem with the following scenario:
-If an interrupt has a count of zero on online cpus but a non-zero
-count on possible cpus, then 'any_count' would not be zero, and the
-statistics for that interrupt would be output, which is not the
-desired behavior for show_interrupts(). Therefore, I think it's not
-good to have kstat_irqs() and show_interrupts() both use the same
-logic. What do you think?
 
-> 
-> With that a proper changelog would be:
-> 
->     show_interrupts() unconditionally accumulates the per CPU interrupt
->     statistics to determine whether an interrupt was ever raised.
-> 
->     This can be avoided for all interrupts which are not strictly per CPU
->     and not of type NMI because those interrupts provide already an
->     accumulated counter. The required logic is already implemented in
->     kstat_irqs().
-> 
->     Split the inner access logic out of kstat_irqs() and use it for
->     kstat_irqs() and show_interrupts() to avoid the accumulation loop
->     when possible.
-> 
+> +	/* Slave response timeout */
+> +	if (!of_property_read_u32(np, "timeout-usecs", &timeout_usecs))
+> +		priv->timeout_usecs = timeout_usecs;
+> +	else
+> +		priv->timeout_usecs = 200 * USEC_PER_MSEC;
 
-Best Regards,
-	Bitao Hu
+I could imagine to add 'transfer_timeout_us' to struct i2c_timings.
+Then, you could use 'i2c_parse_fw_timings' to obtain the value. What
+values/value range do you use here? I can't find them in the DTS
+additions.
+
+
+--l9/qv/BPwfFxGsXr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXd0iAACgkQFA3kzBSg
+KbZx1A/9Hn3nig9zw0s6qvC2FrKzAOepBjzkFqAjpqgK4uUcsXVZ0Gfhk0lVkYtx
+XOjWnyYadJYToHFj97q/Ruabu2HhE/XZktuWhenAFOla7UbYMAUzxKSCrnJrT+l5
+SmmSaco3Tvje0tGv3yHbqNX12ge9EqkbO8Y+qv4ftbiKOcMGuUoIavZvyQ6GTWM+
+ZBdocOy77UwFXru/oirdRxKj99M8CKIMaQ1QsPUxr3H4hTADgjRv60GhiQVfZKUn
+vdaoEiRVe8VAxj6oTEmIm6zZSw4zls4QH2vSXTEDufU6VeAKS+Xrqh7XLC8K9T/V
+qgcYANSP+6sKVP8eWcaWwaAP1px/zE2oZ9SmTJKqkELEwpahagaWxQ6Hxgb1xCLa
+r3vukZ8+cNGKXBAQeaucmiYbSvILfuTBniJsAkuhz7ex9N6M3ervF2xUpsI3jBm0
+uvok3LtFqBxtIlxwMSV/nelJmO4R5sYHojtkuri/rxuDQ6lSCFvh40hWeb5ereE2
+r7VRqrNrRbz0Gyi/6XJqTKSXPtz8YF3efTzuI1JydYlvtaRtyK0UGCceQfL4brZJ
+DYW2s6hGM7ZKEgZ4wI3aW/Vz1QA3vxkmi2KyXZaWlzBLTQ/chlx+L2jB5N4LaTob
+kJEXKchldbVmVf43xyzr36PNySUiIC8xumknTEskp2+aetFHRD0=
+=7Ca2
+-----END PGP SIGNATURE-----
+
+--l9/qv/BPwfFxGsXr--
 
