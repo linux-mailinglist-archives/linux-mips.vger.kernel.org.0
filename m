@@ -1,129 +1,119 @@
-Return-Path: <linux-mips+bounces-1795-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1781-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 874EF869868
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 15:32:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94D478692C7
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 14:38:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B34AF1C2172B
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 14:32:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49DEE1F2D700
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Feb 2024 13:38:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57F0E145356;
-	Tue, 27 Feb 2024 14:31:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF73413B78F;
+	Tue, 27 Feb 2024 13:38:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="vWr8qZTc"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="L3nHvMeK"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6B113B2B3;
-	Tue, 27 Feb 2024 14:31:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4523B78B61;
+	Tue, 27 Feb 2024 13:38:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709044273; cv=none; b=rgMOOI/EfyuXhG57iXYGrUd9dg3tcg1FC+7L0PpUAeqZ1BAsyOqIRsbHTOqvpANuzO96y1jIsZPahz3fvKcd2ZLp8VLzyJ3mvKRoqzEzLtryqG7aOVQFPCJYrbx9I/TNDut1t95/4wYiLC6LCSarj3ncml4iMU/fLC3RgnEkdhQ=
+	t=1709041125; cv=none; b=kHkLaD4VVHf8/b8sICjEe7j42wRsna2DOYkWL8zuKA2QUTqcF13Q7XlMuXBNKmBHOJihk5T3JI3p06lHM2QVCbpHwftpi1cPxG6XeqiZI/t2VRbUoYin2JQzVnb+41nKskKZ+2qvwsyRTvAEGbPSPZ/Nu845SQoXxzAYoz0uuBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709044273; c=relaxed/simple;
-	bh=yOjjXP4HCgGl1XepcSpUCqX/BLcyTWE1cdpJFoU1Sak=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PPM/mVNbr80V93aIVweussXi76SxzGEZo4CLRC60taE6jkB2VFY5W0/2jr2WuY1zqvtoNOyAbLN4MlxAp1PSjsOguWaBwBVU2bKdHSpp65p8Y+tYhnetJgYBTm5XAES4di7dPctwoCIphVVTscdkdB44ZGrVfSPFl3pUyo6UHUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=vWr8qZTc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22F5BC433F1;
-	Tue, 27 Feb 2024 14:31:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1709044272;
-	bh=yOjjXP4HCgGl1XepcSpUCqX/BLcyTWE1cdpJFoU1Sak=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=vWr8qZTcOwWDf68DSAxixvkFQIZDqSWn76NfLacOP11jfyRB0Frr5RIzUME/feMha
-	 j+TfEnQijaQkafM+wQJob8FMF2qKo1MDQvU8HeQ9nxOsQQa6FA34N6DkABCxIO7NUA
-	 mYQxeiA/+TIWf263hZlNglTRgk+yONELFeVVUrOQ=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: stable@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	patches@lists.linux.dev,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-mips@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	"James E.J. Bottomley" <jejb@linux.ibm.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	linux-scsi@vger.kernel.org,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	kernel test robot <lkp@intel.com>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 103/122] scsi: jazz_esp: Only build if SCSI core is builtin
-Date: Tue, 27 Feb 2024 14:27:44 +0100
-Message-ID: <20240227131602.076412471@linuxfoundation.org>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240227131558.694096204@linuxfoundation.org>
-References: <20240227131558.694096204@linuxfoundation.org>
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
+	s=arc-20240116; t=1709041125; c=relaxed/simple;
+	bh=Ad3s8txV/LRKTi3+KCXHUIgZVNfAZ9S2VAZ3ew4nrfE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=cOeh57Dc1AWTwyOMGig60WauZRu/SvzKXRAio42hrVkBkOVHHEcEC+FWKmQDrix54IRwaZgF7jquNJYuKAXHP1cGkXyAf6VFLGTsMzkv3wlNwQ3AYSheOEbE0i8sTUsMu/KuhB6uCeBPzEVmV2Sfi7c4Wzroarp51ZOVywUcFu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=L3nHvMeK; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A454D24000A;
+	Tue, 27 Feb 2024 13:38:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1709041120;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4ugB9QxiL2b1VXZ64TujSRaUb9sqfq1WG8mbx8ms1t8=;
+	b=L3nHvMeKugiy6LAMcXCUL40zZFkFyG3stQRCERhiPdxJe3E0Hmzaxmc4okAgDcBr9U4dce
+	MabFzn95ayqAVbsXsICU+hIghagnyW62tfkH76EGxaxLevNTkTGL7T6XXxpG7c70YJRida
+	FsCqgDEloarSSvHd4W++4CkZQYK7cLR9DS9kgJNX3q+JzZ5uiocuE4/suGqZXVocBmi8S2
+	gL/nime4cLazyjWSWNAtEfsIqac3zN1ZGMiosIt069itDFdoNzDLaRnxFTn69FLMXouH+X
+	PzS/pk0jhfoT+W4YHIa8JMziWyCDQXmifs9+5/3Jp5yBpS8z6kKpuNkqLvZG2A==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 27 Feb 2024 14:38:39 +0100
+Message-Id: <CZFWIJE9978P.G3TZC2YIUST9@bootlin.com>
+Subject: Re: [PATCH 09/13] i2c: nomadik: fetch timeout-usecs property from
+ devicetree
+Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Andi Shyti"
+ <andi.shyti@kernel.org>, "Rob Herring" <robh+dt@kernel.org>, "Krzysztof
+ Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
+ <conor+dt@kernel.org>, "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-mips@vger.kernel.org>, "Gregory Clement"
+ <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
+ <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>
+To: "Wolfram Sang" <wsa@kernel.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.15.2
+References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
+ <20240215-mbly-i2c-v1-9-19a336e91dca@bootlin.com>
+ <Zd3SJMBp23ybgdsJ@shikoro>
+In-Reply-To: <Zd3SJMBp23ybgdsJ@shikoro>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-5.10-stable review patch.  If anyone has any objections, please let me know.
+Hello,
 
-------------------
+On Tue Feb 27, 2024 at 1:14 PM CET, Wolfram Sang wrote:
+> > +	/* Slave response timeout */
+> > +	if (!of_property_read_u32(np, "timeout-usecs", &timeout_usecs))
+> > +		priv->timeout_usecs =3D timeout_usecs;
+> > +	else
+> > +		priv->timeout_usecs =3D 200 * USEC_PER_MSEC;
+>
+> I could imagine to add 'transfer_timeout_us' to struct i2c_timings.
+> Then, you could use 'i2c_parse_fw_timings' to obtain the value. What
+> values/value range do you use here? I can't find them in the DTS
+> additions.
 
-From: Randy Dunlap <rdunlap@infradead.org>
+That sounds good. I have not used this prop in the DTS as it does not
+make much sense for an eval board. The target is production boards.
 
-[ Upstream commit 9ddf190a7df77b77817f955fdb9c2ae9d1c9c9a3 ]
+An order of magnitude is a few transfers every 15ms. It means a timeout
+of 15ms divided by "a few". I don't have more precise values, but I
+could if you consider it useful.
 
-JAZZ_ESP is a bool kconfig symbol that selects SCSI_SPI_ATTRS.  When
-CONFIG_SCSI=m, this results in SCSI_SPI_ATTRS=m while JAZZ_ESP=y, which
-causes many undefined symbol linker errors.
+I've done some testing at 50~100=C2=B5s timeouts and it works as expected. =
+At
+those values timerslack is important to consider (default of 50=C2=B5s).
+This is at 400kHz clock frequency. Keep in mind the controllers support
+up to 3.4MHz (not yet upstreamed) so timeouts could in theory go
+lower if required by the usecase.
 
-Fix this by only offering to build this driver when CONFIG_SCSI=y.
+My upcoming question is how to move forward on this series. I can do the
+patch to i2c_parse_fw_timings() in the next revision. That way it gets
+added alongside the first user of this feature. Would it work for you?
 
-[mkp: JAZZ_ESP is unique in that it does not support being compiled as a
-module unlike the remaining SPI SCSI HBA drivers]
+Thanks,
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/20240214055953.9612-1-rdunlap@infradead.org
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nicolas Schier <nicolas@fjasle.eu>
-Cc: James E.J. Bottomley <jejb@linux.ibm.com>
-Cc: Martin K. Petersen <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202402112222.Gl0udKyU-lkp@intel.com/
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-index 6524e1fe54d2e..f59c9002468cc 100644
---- a/drivers/scsi/Kconfig
-+++ b/drivers/scsi/Kconfig
-@@ -1289,7 +1289,7 @@ source "drivers/scsi/arm/Kconfig"
- 
- config JAZZ_ESP
- 	bool "MIPS JAZZ FAS216 SCSI support"
--	depends on MACH_JAZZ && SCSI
-+	depends on MACH_JAZZ && SCSI=y
- 	select SCSI_SPI_ATTRS
- 	help
- 	  This is the driver for the onboard SCSI host adapter of MIPS Magnum
--- 
-2.43.0
-
-
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
