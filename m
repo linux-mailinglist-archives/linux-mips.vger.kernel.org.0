@@ -1,47 +1,47 @@
-Return-Path: <linux-mips+bounces-1866-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1867-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36E6486AF5E
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 13:46:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C15D486AF6A
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 13:49:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B05C5B2385D
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 12:46:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C8DA28723D
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 12:49:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15C07146908;
-	Wed, 28 Feb 2024 12:46:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2396D145FF8;
+	Wed, 28 Feb 2024 12:49:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vy0ISwLn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rh8u43GT"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D763936129;
-	Wed, 28 Feb 2024 12:46:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA38E73501;
+	Wed, 28 Feb 2024 12:49:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709124388; cv=none; b=HwtkmkUZb/hXF6iV3bofnBoeWS1tN5xKVdtIDMGC84hlCv/XUM/p9lBb8TmjOAynLTY15JC+hQvYKxQc7/M6Ihzzglx5DlEKAx4cEJSX1nVhIVaEGQr6IGK68ie0fGyw34Mn9X6pl2StG2ec4/gQDfVLGxk8PzbcGErYOi9CwuU=
+	t=1709124576; cv=none; b=Dlf1PJVmw+U6WvPXe21sAXfk2sq6pLjo39sD1LMtJ1akz4NwcfnqO1mJ8c/uiQ22Qv7z+rofR+Q73fxgPrVKXqkOyr7yiEixSjRHXFyOub/AhMsPH+35FZsckswRyuFp79N/KVp0u0lue6ZTvif+mbnBCLdbzNvNq5MjbovQ6aQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709124388; c=relaxed/simple;
-	bh=M20am1kduv663tpt9tdEQeWDmBa9M2AMDPXJdl+iQ3U=;
+	s=arc-20240116; t=1709124576; c=relaxed/simple;
+	bh=kKrhwyZWXORapt6OCBD9X9Cbq63y3UaV5srvhlpNfhI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jYjtyQhmCydlwtsF7LfqS/biY35gyUq3ZLpZgUxbs5iT10sHZX54bcRnM42Mn/GsRWRaFvbTSVDLMmX4jS/GtBAGmo3WfF/Vtc6BbpN28u5Xq14QFQ73TSDvfvjVebNJBmiCghZKjaS3WT+7e39CCo8Le5x0lqIeqiLGjqd8m6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vy0ISwLn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17C2CC433C7;
-	Wed, 28 Feb 2024 12:46:23 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mms/6hzojp2XDus2gOcWkRrwz+y8S6KxNGdmYPW9Zrb+klyFaigH9HePk+5j4tnyAqPm4OolnAgmpBWUy3/iMv3jIYSRHdTxAysblfRF2A10FG8TVkAZ/F0w19nffsHBK3ErrCLZolqthZHUHxkPUBtZ1oMPNrp0biLbslRl4o0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rh8u43GT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36569C433F1;
+	Wed, 28 Feb 2024 12:49:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709124387;
-	bh=M20am1kduv663tpt9tdEQeWDmBa9M2AMDPXJdl+iQ3U=;
+	s=k20201202; t=1709124575;
+	bh=kKrhwyZWXORapt6OCBD9X9Cbq63y3UaV5srvhlpNfhI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Vy0ISwLnlYogoSkPYwU3ed/ndkGi5MBrHuaAc8pqesZTnAXwF61c1+XXg+IiVZc9C
-	 L1h14krLyFmUfhKwL2Hmz8c/udCtH4jUWe64Vkjagw3oWrYB1++hxVC8NF0ctPMSp3
-	 wuODKANGth1c17I8prQq76lhsOyG5uF//6djRcMjgMh+2X/Qaj9cY6aLcVTHg0cndU
-	 GHDqUTTIVxgluOorVAROLQ+ywEjRdr/T3Ckfb34zPhOTgEOIXxL2Lf5G+fNHbiB9NM
-	 rSwLg6EAIAUifHTvW04TuRn7jaswTpG29nzNbSiNcNNT4ZnGae3VpgciErgixsoEcO
-	 Om8jskK5H+uwQ==
-Date: Wed, 28 Feb 2024 12:46:21 +0000
+	b=Rh8u43GTkarJTZG22uMj1OWFlUH6fx586sT5DKG/kug5pyZNtd4iZGMSZhjoBI+JA
+	 yaaTX6DNowHRbjw+8rSPFktHWJU8QzbW2+CWnzShPfWbSECHErYZVTV/eDZfALhQoF
+	 8UjhA6u4UkMwLGExkEPt3ChCRkqK6uAcNyUQO9RdA7qUSsxJ5pl3efDmtq9i3cgeR6
+	 vhu7oSBKc1rp4JfvFV3vRi9yZQkJtSoaWAQbpAo1TdnY7mlc7AlKcwKo81SFng1qS5
+	 IJjE/OKSteMKOTfzBBZGDPOPTcN0jB35+OvHuYvrVseUahg9rQxdI0MiXNkjXaKYy/
+	 EKmzjRUICA3kQ==
+Date: Wed, 28 Feb 2024 12:49:29 +0000
 From: Conor Dooley <conor@kernel.org>
 To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>,
@@ -58,11 +58,11 @@ Cc: Linus Walleij <linus.walleij@linaro.org>,
 	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: [PATCH v2 03/30] dt-bindings: gpio: nomadik: add
- mobileye,eyeq5-gpio compatible
-Message-ID: <20240228-deceit-armful-c65cf1de2d08@spud>
+Subject: Re: [PATCH v2 01/30] dt-bindings: gpio: nomadik: convert into yaml
+ format
+Message-ID: <20240228-sandbar-hastiness-ec5c1337bd3b@spud>
 References: <20240228-mbly-gpio-v2-0-3ba757474006@bootlin.com>
- <20240228-mbly-gpio-v2-3-3ba757474006@bootlin.com>
+ <20240228-mbly-gpio-v2-1-3ba757474006@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -70,38 +70,46 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="d6wolzmeLBE8o2PE"
+	protocol="application/pgp-signature"; boundary="XQPnKJoE2X/I/ya7"
 Content-Disposition: inline
-In-Reply-To: <20240228-mbly-gpio-v2-3-3ba757474006@bootlin.com>
+In-Reply-To: <20240228-mbly-gpio-v2-1-3ba757474006@bootlin.com>
 
 
---d6wolzmeLBE8o2PE
-Content-Type: text/plain; charset=iso-8859-1
+--XQPnKJoE2X/I/ya7
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 28, 2024 at 12:28:01PM +0100, Th=E9o Lebrun wrote:
-> This GPIO controller is used on the Mobileye EyeQ5 SoC. Add its
-> compatible to the dt-bindings. One difference is that the block as
-> integrated on EyeQ5 does not support sleep-mode.
->=20
-> Signed-off-by: Th=E9o Lebrun <theo.lebrun@bootlin.com>
+> +    gpio1: gpio@8012e080 {
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+The gpio1 label is not used and can be removed.
+
+Otherwise,
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
 Cheers,
 Conor.
 
---d6wolzmeLBE8o2PE
+> +        compatible = "st,nomadik-gpio";
+> +        reg =  <0x8012e080 0x80>;
+> +        interrupts = <0 120 0x4>;
+> +        #gpio-cells = <2>;
+> +        gpio-controller;
+> +        interrupt-controller;
+> +        st,supports-sleepmode;
+> +        gpio-bank = <1>;
+> +    };
+
+
+--XQPnKJoE2X/I/ya7
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZd8rHQAKCRB4tDGHoIJi
-0g+bAQCEs2L1Y2Fx8B+AwPbiqJF208UvKl0VmWyKqYjSUgFuigD+OoO7e9wTUXrV
-QRZge4tRm1CvRUTf4uSGryWT2AO6aQE=
-=tkM9
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZd8r2QAKCRB4tDGHoIJi
+0n38AQCC1ntsIjUcAEohmeSuO00TkoNmkJJqMRTh0sWa1jMmWAD/dgZeTh5cG9Bh
+z+Gc36w3M/CeHOsRflN+45NVkh9w3wc=
+=816A
 -----END PGP SIGNATURE-----
 
---d6wolzmeLBE8o2PE--
+--XQPnKJoE2X/I/ya7--
 
