@@ -1,124 +1,131 @@
-Return-Path: <linux-mips+bounces-1864-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1862-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C2B986AE8E
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 13:00:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14CC086AE67
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 12:58:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C08961F261BF
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 12:00:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 474AD1C22F0B
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 11:58:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 596F370CD9;
-	Wed, 28 Feb 2024 11:58:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BA47145B2A;
+	Wed, 28 Feb 2024 11:51:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HwbBgPwl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RDBVhHu5"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227BF73509;
-	Wed, 28 Feb 2024 11:58:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.240
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 945CD145B23;
+	Wed, 28 Feb 2024 11:51:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709121503; cv=none; b=RbJMHh+bE2n6P5Aa/vv60IuOWgeVuLTFuDfSXY0AnHLiWYLjovAT4IGRnTENN4/d8QJKENDyH3ICK1775elOn0/PBoGJHyU0dDkoYdX/u7RbwXd8QaMR3/XCjZ4HlQDhofl1bKYx5j86lMR2OdeXduMoIuJpjM6nqjhXyYrwr/c=
+	t=1709121113; cv=none; b=nS4j1L//Ugx+yd160Vj+lRd7yRzOSn4W8OpdN0Xq/LvXv7xtEOZdUUu30sfpgo6EIDUSbY+yu2AZTUTf4VkOhJUCqyRbdLnlW1rUMDxsvb1jgTIhQcRBTb2PG87hD0ooLuGnPlC4S8R+IEeFAVqlsv4t8ZWC62h0VN+sulJTzY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709121503; c=relaxed/simple;
-	bh=bmJVxea+oEzT3EtoYlqAmW+AUuUsUmFi5hATLsmQHjI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=XYOYiuj/jMVfKu/7ZjL1gJPHjb5A0cXDMgAYdBXHXk1ewGcso6iCMvBI/5rxpM5nbIx3l37MLCA3GrkxxyuiAQQ7jQZR8Cf/Dx8xMOr0RHH/XJV5i85JWxImyeSmQeVKLLZMumllijgsMIZ+YXn6gYNX5ZfftZiIS0bdGQtmnCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HwbBgPwl; arc=none smtp.client-ip=217.70.178.240
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from relay1-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::221])
-	by mslow1.mail.gandi.net (Postfix) with ESMTP id 255A0C3B08;
-	Wed, 28 Feb 2024 11:44:19 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1A1BC240010;
-	Wed, 28 Feb 2024 11:44:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709120650;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bmJVxea+oEzT3EtoYlqAmW+AUuUsUmFi5hATLsmQHjI=;
-	b=HwbBgPwlUGwdkKqhxPs0I6nUKj3VWccKez2XcK0QCJRc1E5t+YCDn6NmazS+VoH+UYgi81
-	7OWOMPQ6f+vavnK5g2BIgbR/LB0rBSZcyik1mHXAvwWnxAPJtEAKl45Ic74VkP8JHM8bD+
-	J/Qa20DdB8EK6mbrj+f6aFPqevmHv3KZHgiGoOYPyHBoyogseRFUwazKRn9nvoq87yfVWr
-	u1fo5QuK+MOiX3zstLjuf5jzJnHQgJLhwrXmpb74ingV3ccMfqVHASR/J8SyS8IzxKDd1Q
-	HYiOqUCybVVa8cFJHv7NDK4j87ys693VUgMOwKel7/h25ksp9Tnkabl2a8LlBA==
+	s=arc-20240116; t=1709121113; c=relaxed/simple;
+	bh=UOHYABj412OrOe9R32rHntZ5qCSK4fekgltl0v2LzuA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cw0mtNxdE4/5cabJ8INPrUMwwL1oTn2AvMPmzOiZpr2bi71esQVbp0JRh2u2u3TXeA5X50JW/IV6HtKHptKGsKBxBjHqGMbTaOuYlUKbQ44inaWgPteUoRXgTgVfZeTUnbysBhdd4AHJhBmKxzgZtnrhR7ifDG2GtLFub5D+Rn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RDBVhHu5; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709121112; x=1740657112;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UOHYABj412OrOe9R32rHntZ5qCSK4fekgltl0v2LzuA=;
+  b=RDBVhHu5kI9HOB61cYAalpnZ0DtwYx+LtAapZMdpmtTti1t1X1gju8nt
+   c1z44b/MnstlsBpEtN+coKHYcUxG8szJs55fjXU147XR/FnOJV/SYvtx8
+   yStpCZHQMUL+2+mNzijJUbKbYQR4frglhlbWn6aAz0h0GnpSTay4K1KiS
+   IiGNHTgknp78ZyywcGudpjPoepr7mb7nd/n70LtFkTbbMhbgfZVWvX1UA
+   lGV2Ev2plHj8OAZ9T2oYa2HMzAJbZll6mnn+lcU7iL97KTVsl4aQE99Cl
+   dUNihqUkChd2VgIlYe1JlCnAkwnkgD2olR3z51GWrqQCwPsqgsW9sn4np
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="7337755"
+X-IronPort-AV: E=Sophos;i="6.06,190,1705392000"; 
+   d="scan'208";a="7337755"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2024 03:51:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10996"; a="937034059"
+X-IronPort-AV: E=Sophos;i="6.06,190,1705392000"; 
+   d="scan'208";a="937034059"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 28 Feb 2024 03:51:44 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+	id B730928A; Wed, 28 Feb 2024 13:51:42 +0200 (EET)
+Date: Wed, 28 Feb 2024 13:51:42 +0200
+From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc: Liam.Howlett@oracle.com, akpm@linux-foundation.org, debug@rivosinc.com, 
+	broonie@kernel.org, keescook@chromium.org, tglx@linutronix.de, mingo@redhat.com, 
+	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, luto@kernel.org, 
+	peterz@infradead.org, hpa@zytor.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v2 5/9] mm: Initialize struct vm_unmapped_area_info
+Message-ID: <j7bfvig3gew3qruouxrh7z7ehjjafrgkbcmg6tcghhfh3rhmzi@wzlcoecgy5rs>
+References: <20240226190951.3240433-1-rick.p.edgecombe@intel.com>
+ <20240226190951.3240433-6-rick.p.edgecombe@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 28 Feb 2024 12:44:09 +0100
-Message-Id: <CZGOPF51JA1R.2YN65K6WUH9N4@bootlin.com>
-Cc: "Paul Burton" <paulburton@kernel.org>, <linux-mips@vger.kernel.org>,
- "Jiaxun Yang" <jiaxun.yang@flygoat.com>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>, "Alexandre Belloni"
- <alexandre.belloni@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>
-To: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>, "Gregory CLEMENT"
- <gregory.clement@bootlin.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v8 00/14] Add support for the Mobileye EyeQ5 SoC
-X-Mailer: aerc 0.15.2
-References: <20240216174227.409400-1-gregory.clement@bootlin.com>
- <ZdSst3fM3EOQGH03@alpha.franken.de>
-In-Reply-To: <ZdSst3fM3EOQGH03@alpha.franken.de>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240226190951.3240433-6-rick.p.edgecombe@intel.com>
 
-Hello Thomas,
+On Mon, Feb 26, 2024 at 11:09:47AM -0800, Rick Edgecombe wrote:
+> diff --git a/arch/alpha/kernel/osf_sys.c b/arch/alpha/kernel/osf_sys.c
+> index 5db88b627439..dd6801bb9240 100644
+> --- a/arch/alpha/kernel/osf_sys.c
+> +++ b/arch/alpha/kernel/osf_sys.c
+> @@ -1218,7 +1218,7 @@ static unsigned long
+>  arch_get_unmapped_area_1(unsigned long addr, unsigned long len,
+>  		         unsigned long limit)
+>  {
+> -	struct vm_unmapped_area_info info;
+> +	struct vm_unmapped_area_info info = {};
+>  
+>  	info.flags = 0;
+>  	info.length = len;
 
-On Tue Feb 20, 2024 at 2:44 PM CET, Thomas Bogendoerfer wrote:
-> On Fri, Feb 16, 2024 at 06:42:09PM +0100, Gregory CLEMENT wrote:
-> > Hello,
-> >=20
-> > The EyeQ5 SoC from Mobileye is based on the MIPS I6500 architecture
-> > and features multiple controllers such as the classic UART, I2C, SPI,
-> > as well as CAN-FD, PCIe, Octal/Quad SPI Flash interface, Gigabit
-> > Ethernet, MIPI CSI-2, and eMMC 5.1. It also includes a Hardware
-> > Security Module, Functional Safety Hardware, and MJPEG encoder.
+Can we make a step forward and actually move initialization inside the
+initializator? Something like below.
 
-[...]
+I understand that it is substantially more work, but I think it is useful.
 
-> series applied to mips-next.
->
-> I've fixed generic|ingenic|realtek builds by adding select MACH_GENERIC_C=
-ORE
-> in arch/mips/Kconfig.
+diff --git a/arch/alpha/kernel/osf_sys.c b/arch/alpha/kernel/osf_sys.c
+index 5db88b627439..c40ddede3b13 100644
+--- a/arch/alpha/kernel/osf_sys.c
++++ b/arch/alpha/kernel/osf_sys.c
+@@ -1218,14 +1218,12 @@ static unsigned long
+ arch_get_unmapped_area_1(unsigned long addr, unsigned long len,
+ 		         unsigned long limit)
+ {
+-	struct vm_unmapped_area_info info;
++	struct vm_unmapped_area_info info = {
++		.length = len;
++		.low_limit = addr,
++		.high_limit = limit,
++	};
 
-Would it be possible to provide an immutable branch containing the two
-series? I've got quite a few series that depend on them as they target
-EyeQ5 devicetrees and defconfig.
+-	info.flags = 0;
+-	info.length = len;
+-	info.low_limit = addr;
+-	info.high_limit = limit;
+-	info.align_mask = 0;
+-	info.align_offset = 0;
+ 	return vm_unmapped_area(&info);
+ }
 
-It's been a request from Bartosz for the GPIO series, see [0].
-
-Series are:
- - Jiaxun's "Unify register numbering macros for uasm" [1];
- - Gr=C3=A9gory's "Add support for the Mobileye EyeQ5 SoC".
-
-Have a nice day,
-
-[0]: https://lore.kernel.org/lkml/CAMRc=3DMfLXCDXBiKKuEPZRjNoNiFN+gvhu+GjZk=
-Z1SQuF1s4=3DUQ@mail.gmail.com/
-[1]: https://lore.kernel.org/linux-mips/20240209-regname-v1-0-2125efa016ef@=
-flygoat.com/
-[2]: https://lore.kernel.org/lkml/20240216174227.409400-1-gregory.clement@b=
-ootlin.com/
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
 
