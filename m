@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-1869-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1870-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BC8A86B09A
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 14:42:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A54B286B14F
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 15:10:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 65DEE1C232B3
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 13:42:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2FE56B2646F
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 14:10:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 080BE151CC5;
-	Wed, 28 Feb 2024 13:40:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDA3B153512;
+	Wed, 28 Feb 2024 14:09:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Z7Rh/B6k"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gmI4s1wk"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7158F14F988;
-	Wed, 28 Feb 2024 13:39:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A05F514DFEC;
+	Wed, 28 Feb 2024 14:09:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709127601; cv=none; b=rJcn/0er7vSc2Cp1pA1o7lD08TjwJaW9vnPV81mn1Fjxt8GuGfSyKER8fayM0mxXiDUtRnbfJvduAdHhWPqEudr00dRotsWP4v6DAjk7fmaacdN1fVToKmPGj9YK+h8nkVdPoJcj8nBx58BTeOhODkeVj0xuciySHry8THE3f4s=
+	t=1709129397; cv=none; b=VJQUzlpbFSwGyMaVEDjsUjY49uPmmSsctAYi5IM5bWI93Ro1XMcQyTjLeYKUjuLRgfIMGAXqsF03rL3IvxyJPsTatqxn2uSNYqTKohuRNdNXqBvXfc2N/pLSj2PbnV+XBIFCwFKxXlgGD5HJsoTOTzxCDKQf5LKlsEd+779iatM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709127601; c=relaxed/simple;
-	bh=wxuZ499Vy0EkhZWYdYc3hCPlt7+ctQ7VWJ6Eq8qoX9U=;
+	s=arc-20240116; t=1709129397; c=relaxed/simple;
+	bh=zi3a7WfmF7xz9jF+a+/dTYIv2tudbxNO9bYJhYApnzc=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=inN3jjBB/5Hd7C1U27v8XgYIzU51zSHKHecyyQBJpEo561d7La3UNHTJ+OkSWYbSEBmxi3NS/L9jmUrz5XaS2hDwibHIyfuDhkJCv7fkID0WR6AhMEDN07MgqjtrozYQ94YOWWwFHS60OspPx1OiwJ2VMDwtdG8n6QJElfGTBJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Z7Rh/B6k; arc=none smtp.client-ip=217.70.183.193
+	 References:In-Reply-To; b=ajEOHRkffrt/F2X/SoI1MjMkEjMaZjYuIdu1P873YJnNLhyeLagWBoSHOHEScm1mCzRmZhhQ7UNxRGuXAan9NG1vf9/QZ/zWckWOEiSZXC+MwG9FKuKASzRTTq/599j/ZrPFLxZbJciLLUSanF87oaHI7szU3najZtWxOE5wlg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gmI4s1wk; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A84E7240007;
-	Wed, 28 Feb 2024 13:39:55 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 76AFA40005;
+	Wed, 28 Feb 2024 14:09:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709127596;
+	t=1709129387;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=wxuZ499Vy0EkhZWYdYc3hCPlt7+ctQ7VWJ6Eq8qoX9U=;
-	b=Z7Rh/B6kuM6WldhJ4QS9k5R2IQ6aNTzvNHxjNZW22Odvr3/2Hz4hjy5SYRAwnBaFGqKZ4X
-	MCQJnzDwiEvjhtOSnxzZiXYSYscs3yDr6/pPAvQTlUDIaSlaVHyDDJNHNqvq4+aERWPTsv
-	/vnjp8WSCrCdRbztk5W7qbfLeE5yWOk+kVrTKUCjnWCBwJ+0HhjpnmecX0xZTkj1549cVO
-	2TrZYYa9Jc999Gqr5dRP2tFaGmfIc5Xzt/kzg0+yz1eOqIi6uVpZR1zByKHbGXgqSkQohu
-	zDutucZVLmsX5aThLnG5n0kBBQ9N81QOvotmiElbRfrE+/D6vzG452FzyiJ3qw==
+	bh=puqEcgLYqO4kSzlmDT1lfSiSE31NVMpyJtiG4ww78PM=;
+	b=gmI4s1wk+Tj5gPLF+YDaTM6UQxYm/c92oIwgbV6hRXLmPx4jzrmTbMiScHOJqapnckd/tX
+	L65N6a5jBnPnMjnBhY4qEgnTFtroYXRWBbi44BuZ0ZWTNoQeyty89WLqRhRp9nKUsHTY/e
+	s76HPhEhrbPhVkTI14tBc3L/a8yqJ62Vba+3yCJ0wsi3xD6h32OIdsOOC5TbXqWjIZHPq/
+	WCff3oNNpJp4/f9AC8U49kH2hcRgwgBtDfEiObN9pfHxGYn+Cm0NuSddNSUY1u/073HNEQ
+	rlpq4rNOOpbJNeLhpW0QyiOVqhmDLKncD93HCaZ+pDXpnprhYrrNNzJT+dPzFw==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,55 +53,88 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 28 Feb 2024 14:39:55 +0100
-Message-Id: <CZGR61YHK1DJ.SVRE78BJ9WB4@bootlin.com>
-Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Andi Shyti"
- <andi.shyti@kernel.org>, "Rob Herring" <robh+dt@kernel.org>, "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
- <conor+dt@kernel.org>, "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-mips@vger.kernel.org>, "Gregory Clement"
- <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-To: "Wolfram Sang" <wsa@kernel.org>
+Date: Wed, 28 Feb 2024 15:09:46 +0100
+Message-Id: <CZGRSWQT1FZ0.2YQ0R8UD86L2U@bootlin.com>
+Cc: <linux-gpio@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+ <linux-clk@vger.kernel.org>, "Gregory CLEMENT"
+ <gregory.clement@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>, "Vladimir Kondratiev"
+ <vladimir.kondratiev@mobileye.com>, "Linus Walleij"
+ <linus.walleij@linaro.org>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski@linaro.org>, "Stephen Boyd" <sboyd@kernel.org>, "Conor
+ Dooley" <conor+dt@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, <linux-kernel@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, "Rob Herring" <robh+dt@kernel.org>, "Philipp
+ Zabel" <p.zabel@pengutronix.de>, =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?=
+ <rafal@milecki.pl>, "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Michael Turquette" <mturquette@baylibre.com>
+To: "Rob Herring" <robh@kernel.org>
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH 09/13] i2c: nomadik: fetch timeout-usecs property from
- devicetree
+Subject: Re: [PATCH v8 02/10] dt-bindings: soc: mobileye: add EyeQ5 OLB
+ system controller
 X-Mailer: aerc 0.15.2
-References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
- <20240215-mbly-i2c-v1-9-19a336e91dca@bootlin.com>
- <Zd3SJMBp23ybgdsJ@shikoro> <CZFWIJE9978P.G3TZC2YIUST9@bootlin.com>
- <Zd8PtLsUc0G8KR97@shikoro>
-In-Reply-To: <Zd8PtLsUc0G8KR97@shikoro>
+References: <20240227-mbly-clk-v8-0-c57fbda7664a@bootlin.com>
+ <20240227-mbly-clk-v8-2-c57fbda7664a@bootlin.com>
+ <170905191234.4042659.13935993184407860612.robh@kernel.org>
+In-Reply-To: <170905191234.4042659.13935993184407860612.robh@kernel.org>
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-Hello Wolfram,
+Hello,
 
-On Wed Feb 28, 2024 at 11:49 AM CET, Wolfram Sang wrote:
-> > That sounds good. I have not used this prop in the DTS as it does not
-> > make much sense for an eval board. The target is production boards.
+On Tue Feb 27, 2024 at 5:38 PM CET, Rob Herring wrote:
+> On Tue, 27 Feb 2024 15:55:23 +0100, Th=C3=A9o Lebrun wrote:
+> > Add documentation to describe the "Other Logic Block" syscon.
+> >=20
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> > ---
+> >  .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  | 94 ++++++++++++++=
+++++++++
+> >  1 file changed, 94 insertions(+)
+> >=20
 >
-> ...
+> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
 >
-> > My upcoming question is how to move forward on this series. I can do th=
-e
-> > patch to i2c_parse_fw_timings() in the next revision. That way it gets
-> > added alongside the first user of this feature. Would it work for you?
+> yamllint warnings/errors:
 >
-> Hmmm, to be honest I have a bit of an issue with the 'no user' problem.
-> There is a driver which uses this feature, okay. But there is no
-> upstream hardware which uses this driver with this new feature. This
-> makes maintaining harder ("Who uses this feature?" - "Someone" - "How do
-> they use it? Can we modify it?" - "Dunno").
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/s=
+oc/mobileye/mobileye,eyeq5-olb.yaml:
+> Error in referenced schema matching $id: http://devicetree.org/schemas/cl=
+ock/mobileye,eyeq5-clk.yaml
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/s=
+oc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@e00000: clock=
+-controller@2c: False schema does not allow {'compatible': ['mobileye,eyeq5=
+-clk'], 'reg': [[44, 80], [284, 4]], 'reg-names': ['plls', 'ospi'], '#clock=
+-cells': [[1]], 'clocks': [[4294967295]], 'clock-names': ['ref']}
+> 	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eye=
+q5-olb.yaml#
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/s=
+oc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@e00000: reset=
+-controller@0: False schema does not allow {'compatible': ['mobileye,eyeq5-=
+reset'], 'reg': [[0, 12], [512, 52], [288, 4]], 'reg-names': ['d0', 'd1', '=
+d2'], '#reset-cells': [[2]]}
+> 	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eye=
+q5-olb.yaml#
+> Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example=
+.dtb: /example-0/soc/system-controller@e00000/reset-controller@0: failed to=
+ match any schema with compatible: ['mobileye,eyeq5-reset']
+> Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example=
+.dtb: /example-0/soc/system-controller@e00000/clock-controller@2c: failed t=
+o match any schema with compatible: ['mobileye,eyeq5-clk']
 
-The alternative is that I keep going with a new revision of i2c-nomadik
-that manually parses the prop. It'll be refactored if/when the I2C core
-provides a better way to access the value. Is that OK?
+This series depends on 4 patches from previous revisions that got taken
+into clk-next. Those are v6.8-rc1..clk-mobileye on the clk remote [0].
 
-Thanks,
+Without the 4 patches I've reproduced the above warning; it disappears
+once they are applied.
+
+Have a nice day,
+
+[0]: https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/log/?h=
+=3Dclk-mobileye
 
 --
 Th=C3=A9o Lebrun, Bootlin
