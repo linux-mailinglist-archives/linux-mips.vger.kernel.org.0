@@ -1,189 +1,152 @@
-Return-Path: <linux-mips+bounces-1877-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1880-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A93686B99B
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 22:06:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FC7C86BB03
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 23:53:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F1923B25017
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 21:06:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C58C91F25516
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 22:53:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CE9F86262;
-	Wed, 28 Feb 2024 21:06:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E60723FB98;
+	Wed, 28 Feb 2024 22:53:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OqWX1w8k"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="faR/DmgH"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C991A86248;
-	Wed, 28 Feb 2024 21:06:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FF8C4086E
+	for <linux-mips@vger.kernel.org>; Wed, 28 Feb 2024 22:53:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709154386; cv=none; b=nrepMUTPYM3lEDXJC9TszdyNpMWezTm0et0qYDxVxPK8vceaSwlGfSFzA31UAyGklN1IEREe8vPsnWA3XQ2GHmZuVsjsKBz0gEh4PJCEN3WrBzNWRjwbuvi7yowUgKChetSzyw3ZULGF9NJbBAS/HqKgQcvGzk/5a2+JOBFf92c=
+	t=1709160795; cv=none; b=PyCglXTCSzv5tnOvjfvvB34x8sTBXLTjFPiasY2yEWmzeHJknLnphzoIql382oXg0CkBHzydN303cuRSiFvneZbOco5vhXjOb4Gb2tjll5Xb/RMqdPmMjg06hUzB6RGWgv7T5KytP86AsIRGjzWQA8kbU/6aAdZh3/r+WionnrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709154386; c=relaxed/simple;
-	bh=KnopYAd5eQKEby5VAzV5cjLQUuk9vdF/QgTymLF2AQs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ck1y9kVWJkORfqXAM2BzmGZfnPhPA7Gdm2EL56FeM7BxOVjR9dBY59f0fzNwXHPcXInR6Q08RyhUHmAHG+A2BaUxgDsPthExQPCVPvQFp/skexpQLMG5Xcvj+XhpNvA7nWIJFse51s33kfv8J+lbU1EC/4mxILT0P0FMXO10svc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OqWX1w8k; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-33d6f1f17e5so122441f8f.3;
-        Wed, 28 Feb 2024 13:06:24 -0800 (PST)
+	s=arc-20240116; t=1709160795; c=relaxed/simple;
+	bh=Cbo16Kdpdj/Sou5J9lkN1s8YVlAEB7JmVmpKJ1D3TMg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZBaltYoWfqvWesnQMuJ2KDRosnEDkVBYB7ZjFUu2iqgXYs6iGx1Pl5A8jPS6oTNdI7nrLMdcO/Z0U9nxohhxxBbgyjoB8JYi7ONbUwCdjOjwsN29anWFFEnWKwJ3DQHmuzflJh75Ipc3BnSLWWeRTDrLIDljfv1JWw9EXve/AkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=faR/DmgH; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a44360a8b9dso18731566b.2
+        for <linux-mips@vger.kernel.org>; Wed, 28 Feb 2024 14:53:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709154383; x=1709759183; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0a8qBD6vozPIAISnQHJRWdPKOWiVN4p5/6pJZQ2dXnQ=;
-        b=OqWX1w8kHwCQYXdkCxNjkAQNbg4Un52uFynZh9KWAuo0Mg0yufkEJLg8+QGrR2zl+N
-         bUVNl4B36a2m5dfVxWPTQX8LSGAxZ5U/rnCq5XKgpuBCE2cX86uZuSq0O1dzQsRrFR/v
-         a6iKolcy7LoX6oK11F8J3i7dWamFYW6/uVq6HleodcXIe/8M3Hsxh+7luhUZZJEMu2x2
-         asAY7rK9p/+Tn4zAj/6f774PkyekMZAKF2NLs5RQx8EHrakYC590S9KfYC7w/I0qOQag
-         eosKGXOlF22OQ/1L9V9DI9kVxD+qQoxqf7b1J0Mmi3Y3PW5RQhzfHuF0Q5l5Lq8sfbOv
-         vLxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709154383; x=1709759183;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1709160792; x=1709765592; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0a8qBD6vozPIAISnQHJRWdPKOWiVN4p5/6pJZQ2dXnQ=;
-        b=QTKUa/AQt16od3drKCrR+9Ndt8RnArK9ta16WxcwMUyubc3LyZ3KuyZv2HdTaGKhbR
-         dIAOQ8dME51JQrU0R67dPFp83GGaRqwxHn97QUmZ3YpX8VVkIcZLv/FK7QacGrXOPUcY
-         UL55o9RUKp4S1WNq7Uu1JBjn/7kiFpaClJvDfrbiMqZrqSa/e7o2Q0a9FktIMpAUld3i
-         CUqbntMoVP4wSJBCwM8+gDQ3hop2a95BuRQ3lmEnVFfUQkrz7JN+tQTNSfKRiRp/A9fc
-         mf1/fNrhCjT9Tkff84Jnf4DJoqMiQ1oYL/xND4x1sKDLgM1AqKy6MeiW5or8hDhRR4ui
-         hPrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVwV96jXs9VLnTWCaSA9CbWYUaIQkbyRZDiLMdbQ62qYaJG7jFvJjU6zELi7sB2y0hM8MEAnhjTkgEtxcFjDVsELB+X9r4Y9luPG628XhW/OxAEw5U1kTb0yvUemwqn+AhmW6N03NoZ2uMKjWM38cRSsAXQjs+IXdApDKZ3TUELkq/VqwjkDWBrPUYDq589x5+30lgB7Mhkhpmog3niAmO4PSQoUqoIVIrCkVpIMdjKHC4Y+IW/CfZBfzudN5zrLuN2zZtnm5fqpGke/G028K+smnPptuPQCYMWr0b48aSvKCfUwu8U8Hcmf/hCb0uUWAOgm4pPo0pm0hztCAe+M8GuwggOnxKnbFelFUjLURaW72GxFGWhk3dJ8hChoNk5IE3yB7E4n6H+bTzP9hqMVDhjdCics6br6jLvyQfcQwkXYCkzo3j34oAv9Z4IwbQDtHk=
-X-Gm-Message-State: AOJu0Yyt5x/xkYD0dT17lBEvwQYDbxWaNgQceSVc+iQP4+8dFC5UCxSP
-	UntYBUYDHaaUH3I/k64+ev0yXmlVwtGWYg4cWuhTssJnrtfpZzDe
-X-Google-Smtp-Source: AGHT+IHczATb7A8ZRTaH383CIQ4ejybI9MzL/yjlqycOyBbx2+IYQRI3gE2POfqlKMAC8LKmr3GeXg==
-X-Received: by 2002:a5d:618d:0:b0:33d:f51f:2da5 with SMTP id j13-20020a5d618d000000b0033df51f2da5mr46406wru.7.1709154383088;
-        Wed, 28 Feb 2024 13:06:23 -0800 (PST)
-Received: from localhost (cpc1-brnt4-2-0-cust862.4-2.cable.virginm.net. [86.9.131.95])
-        by smtp.gmail.com with ESMTPSA id m1-20020adfa3c1000000b0033d67791dc0sm15568132wrb.43.2024.02.28.13.06.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Feb 2024 13:06:21 -0800 (PST)
-Date: Wed, 28 Feb 2024 21:06:21 +0000
-From: Stafford Horne <shorne@gmail.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Kees Cook <keescook@chromium.org>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Arnd Bergmann <arnd@arndb.de>, Matt Turner <mattst88@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Guo Ren <guoren@kernel.org>, Brian Cain <bcain@quicinc.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Michal Simek <monstr@monstr.eu>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Richard Weinberger <richard@nod.at>, x86@kernel.org,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Jan Kiszka <jan.kiszka@siemens.com>,
-	Kieran Bingham <kbingham@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-um@lists.infradead.org
-Subject: Re: [PATCH 3/4] arch: define CONFIG_PAGE_SIZE_*KB on all
- architectures
-Message-ID: <Zd-gTf6mvVdPEovO@antec>
-References: <20240226161414.2316610-1-arnd@kernel.org>
- <20240226161414.2316610-4-arnd@kernel.org>
+        bh=uaIW3mETQDzZhGMK3PRFUOCtdSx2PTiCbd1xUJLaJyo=;
+        b=faR/DmgH1TD5IO73xkUId/9gl+4afGIxieXJgdYtV24E1l2N2FRr3VMlahrH6ziC5U
+         cEn3lnulex+AXtbGKiXTyLiTX6TQuJ4xtgzhJFthd4lFpWkNBWq6vWI+GQjOuApSpmTT
+         UGu8lqXz0lav9sxl7nFFRX5/rLp4vZI/UXp3g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709160792; x=1709765592;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uaIW3mETQDzZhGMK3PRFUOCtdSx2PTiCbd1xUJLaJyo=;
+        b=IVy7hwQPC/YWO2YPN9jGOehWJh2yEJrnxmDnRGChw4+gEeS3m3Yuc/m4G1jGuS9/tx
+         19A04WDNIuF1Wb9MaXt+uizhB1fLpwuQ6THIoGZwAn46aT0uPTiQU9giKIHoa2RnLN72
+         Dkza5Ey/8zGoGZ9+R9s3FyCjGfi0KykI4Y+xjkGkcMLfAeMxAD5PqQaScKIdoVxVyUWE
+         xJUbPtz3WeugDUlmrHdNN1FvTqrQwHyydhXWRxFQpjB1RCo1nQ5oT3VdnlR03CJZja9P
+         I0i6QVBsi/2zrocFXUf8yQl+6+0UtKviv1fieaca3A+HC2XeptN3nGXq5zeUfRnC00c1
+         3khg==
+X-Forwarded-Encrypted: i=1; AJvYcCVmjHXvtnfosZSiHSOEPANzuUyeRmbfbZ/TvZ3byhGt7nnxqhjwe1tCIC1SR9A4XmuVoenBspzFqtCYnchxHonRtYYkRkXygtRL7A==
+X-Gm-Message-State: AOJu0YwJDsxGRuidSq/rJaA+ARPoSAt1HVBs/cpQWCzK8YDBAPnxmu+R
+	DBP9khi15OXqeXAUaWzL9cGrcGWhzG2EAzs2qI357FAT/8aFRkzQzzgeyrYuGx8I4EGB9EXh7qy
+	eM/LI
+X-Google-Smtp-Source: AGHT+IHbM28aAZHI/woIpbfyk3FhiV4IebIYo3txGNtor7O5+o2vWGXI9bndybCS1zdTMnF1lujXiQ==
+X-Received: by 2002:a17:906:3c14:b0:a43:e812:fbcd with SMTP id h20-20020a1709063c1400b00a43e812fbcdmr175812ejg.28.1709160792355;
+        Wed, 28 Feb 2024 14:53:12 -0800 (PST)
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
+        by smtp.gmail.com with ESMTPSA id x23-20020a170906135700b00a3e4c47bad1sm3394ejb.8.2024.02.28.14.53.12
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Feb 2024 14:53:12 -0800 (PST)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-56693f0d235so3374a12.0
+        for <linux-mips@vger.kernel.org>; Wed, 28 Feb 2024 14:53:12 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXU7t1uNNuZrrQyWEMLgE6WzzFdyP6MQHfVcf1J5fV9SUFsDBTymB1MxWbVPDdLGVAB/ylPZtQapxY++JJlmdj6c162axcx0vuFdw==
+X-Received: by 2002:a05:600c:4e16:b0:412:b66f:3d0a with SMTP id
+ b22-20020a05600c4e1600b00412b66f3d0amr20561wmq.6.1709160300349; Wed, 28 Feb
+ 2024 14:45:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240226161414.2316610-4-arnd@kernel.org>
+References: <20240228072216.95130-1-yaoma@linux.alibaba.com> <20240228072216.95130-3-yaoma@linux.alibaba.com>
+In-Reply-To: <20240228072216.95130-3-yaoma@linux.alibaba.com>
+From: Doug Anderson <dianders@chromium.org>
+Date: Wed, 28 Feb 2024 14:44:44 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=U1b+8atmju_w4eRmVKmSqjj6WCsy5EawYqj31fQ1kvrw@mail.gmail.com>
+Message-ID: <CAD=FV=U1b+8atmju_w4eRmVKmSqjj6WCsy5EawYqj31fQ1kvrw@mail.gmail.com>
+Subject: Re: [PATCHv11 2/4] genirq: Provide a snapshot mechanism for interrupt statistics
+To: Bitao Hu <yaoma@linux.alibaba.com>
+Cc: tglx@linutronix.de, liusong@linux.alibaba.com, akpm@linux-foundation.org, 
+	pmladek@suse.com, kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com, 
+	tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
+	jan.kiszka@siemens.com, linux-kernel@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 26, 2024 at 05:14:13PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Most architectures only support a single hardcoded page size. In order
-> to ensure that each one of these sets the corresponding Kconfig symbols,
-> change over the PAGE_SHIFT definition to the common one and allow
-> only the hardware page size to be selected.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Hi,
+
+On Tue, Feb 27, 2024 at 11:22=E2=80=AFPM Bitao Hu <yaoma@linux.alibaba.com>=
+ wrote:
+>
+> The soft lockup detector lacks a mechanism to identify interrupt storms
+> as root cause of a lockup. To enable this the detector needs a
+> mechanism to snapshot the interrupt count statistics on a CPU when the
+> detector observes a potential lockup scenario and compare that against
+> the interrupt count when it warns about the lockup later on. The number
+> of interrupts in that period give a hint whether the lockup might be
+> caused by an interrupt storm.
+>
+> Instead of having extra storage in the lockup detector and accessing
+> the internals of the interrupt descriptor directly, convert the per CPU
+> irq_desc::kstat_irq member to a data structure which contains the
+> counter plus a snapshot member and provide interfaces to take a
+> snapshot of all interrupts on the current CPU and to retrieve the delta
+> of a specific interrupt later on.
+>
+> Originally-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Bitao Hu <yaoma@linux.alibaba.com>
+> Reviewed-by: Liu Song <liusong@linux.alibaba.com>
 > ---
->  arch/alpha/Kconfig                 | 1 +
->  arch/alpha/include/asm/page.h      | 2 +-
->  arch/arm/Kconfig                   | 1 +
->  arch/arm/include/asm/page.h        | 2 +-
->  arch/csky/Kconfig                  | 1 +
->  arch/csky/include/asm/page.h       | 2 +-
->  arch/m68k/Kconfig                  | 3 +++
->  arch/m68k/Kconfig.cpu              | 2 ++
->  arch/m68k/include/asm/page.h       | 6 +-----
->  arch/microblaze/Kconfig            | 1 +
->  arch/microblaze/include/asm/page.h | 2 +-
->  arch/nios2/Kconfig                 | 1 +
->  arch/nios2/include/asm/page.h      | 2 +-
->  arch/openrisc/Kconfig              | 1 +
->  arch/openrisc/include/asm/page.h   | 2 +-
->  arch/riscv/Kconfig                 | 1 +
->  arch/riscv/include/asm/page.h      | 2 +-
->  arch/s390/Kconfig                  | 1 +
->  arch/s390/include/asm/page.h       | 2 +-
->  arch/sparc/Kconfig                 | 2 ++
->  arch/sparc/include/asm/page_32.h   | 2 +-
->  arch/sparc/include/asm/page_64.h   | 3 +--
->  arch/um/Kconfig                    | 1 +
->  arch/um/include/asm/page.h         | 2 +-
->  arch/x86/Kconfig                   | 1 +
->  arch/x86/include/asm/page_types.h  | 2 +-
->  arch/xtensa/Kconfig                | 1 +
->  arch/xtensa/include/asm/page.h     | 2 +-
->  28 files changed, 32 insertions(+), 19 deletions(-)
-....
-> diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-> index fd9bb76a610b..3586cda55bde 100644
-> --- a/arch/openrisc/Kconfig
-> +++ b/arch/openrisc/Kconfig
-> @@ -25,6 +25,7 @@ config OPENRISC
->  	select GENERIC_CPU_DEVICES
->  	select HAVE_PCI
->  	select HAVE_UID16
-> +	select HAVE_PAGE_SIZE_8KB
->  	select GENERIC_ATOMIC64
->  	select GENERIC_CLOCKEVENTS_BROADCAST
->  	select GENERIC_SMP_IDLE_THREAD
-> diff --git a/arch/openrisc/include/asm/page.h b/arch/openrisc/include/asm/page.h
-> index 44fc1fd56717..7925ce09ab5a 100644
-> --- a/arch/openrisc/include/asm/page.h
-> +++ b/arch/openrisc/include/asm/page.h
-> @@ -18,7 +18,7 @@
->  
->  /* PAGE_SHIFT determines the page size */
->  
-> -#define PAGE_SHIFT      13
-> +#define PAGE_SHIFT      CONFIG_PAGE_SHIFT
->  #ifdef __ASSEMBLY__
->  #define PAGE_SIZE       (1 << PAGE_SHIFT)
->  #else
+>  arch/mips/dec/setup.c                |  2 +-
+>  arch/parisc/kernel/smp.c             |  2 +-
+>  arch/powerpc/kvm/book3s_hv_rm_xics.c |  2 +-
+>  include/linux/irqdesc.h              | 14 ++++++++++--
+>  include/linux/kernel_stat.h          |  3 +++
+>  kernel/irq/internals.h               |  2 +-
+>  kernel/irq/irqdesc.c                 | 34 ++++++++++++++++++++++------
+>  kernel/irq/proc.c                    |  5 ++--
+>  scripts/gdb/linux/interrupts.py      |  6 ++---
+>  9 files changed, 51 insertions(+), 19 deletions(-)
 
-For the openrisc bits,
+I won't insist on it, but I continue to worry about memory
+implications with large numbers of CPUs. With a 4-byte int, 8192 max
+CPUs, and 100 IRQs the extra "ref" value takes up over 3MB of memory
+(8192 * 4 bytes * 100).
 
-Acked-by: Stafford Horne <shorne@gmail.com>
+Technically, you could add a new symbol like "config
+NEED_IRQ_SNAPSHOTS". This wouldn't be a symbol selectable by the end
+user but would automatically be selected by "config
+SOFTLOCKUP_DETECTOR_INTR_STORM". If the config wasn't defined then the
+struct wouldn't contain "ref" and the snapshot routines would just be
+static inline stubs.
+
+Maybe Thomas has an opinion about whether this is something to worry
+about. Worst case it wouldn't be hard to do in a follow-up patch.
+
+Everything else looks good to me. Given that I'm not insisting on
+adding the extra CONFIG, I'm OK w/:
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
