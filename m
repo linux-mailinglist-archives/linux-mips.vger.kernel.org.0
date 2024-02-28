@@ -1,275 +1,142 @@
-Return-Path: <linux-mips+bounces-1829-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1830-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D06F286A8E0
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 08:23:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 759CE86AC5F
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 11:49:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 141DAB2699A
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 07:23:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C4C91F23856
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Feb 2024 10:49:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31A2225778;
-	Wed, 28 Feb 2024 07:22:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2178B1292FF;
+	Wed, 28 Feb 2024 10:49:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="PyPZQGbl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ampoXZVW"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B00C25567;
-	Wed, 28 Feb 2024 07:22:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E4E7FBD7;
+	Wed, 28 Feb 2024 10:49:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709104962; cv=none; b=TfZrxTvijw7uAXuULGXAwuKr8R8ey7vNdfNDXhn0rW0wFfUUgUsSS9SbzKa2glQ/NyByH6fJUF51ltHsaFCIohUEycnWSQhwQ0pkTDFlg4OsUqrWco7VHr22FlOzhbkU1W/XSQM8sflZ3NHLmmYqC6lBECzkRpl8j5nudZ53Zm0=
+	t=1709117368; cv=none; b=di/Q0/F3Bepy74vbOq6qRR6t7tjaG4VIrvUr+mgMjuFNwJFNpI3viHvPg7F16IfCA5YWHBx3GfRBam77h0Yor5fV76gvt5e+pwOWcNkllmv2wthm1xQ18ztPxlQh6FjmnIuy3PkvHtwEnFK89hC7anE2mfCMHUBaNqd9W5E8kls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709104962; c=relaxed/simple;
-	bh=X/nc0B0c3vBuZXst8rWRcayKTrS2M6UMidLUfnAwMDM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=AE0WT8cM2j+UVkszHfuyaDboQvX6QxSUSyNaJ87obKBDNvc767aWL6LHLHVippNSqEZtyRXRieG6xllvkjPZyEU9/RzNXfHriINzN6HG78mJ+cu9LlRyVrMsJUkHK7Fx7dKJVrGdtF7o/rF9WVx88b9MKpv2aG1ySP5V8pPF0qE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=PyPZQGbl; arc=none smtp.client-ip=115.124.30.97
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1709104957; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=ypkMeHj6K2OB7ZjAbcREaWVLcPs4ICT4fmLAXzD0HaM=;
-	b=PyPZQGblyDRSYlbdpy5HmZGYn5noUTzb2oSm8YeOOBe+/ihXw3PFQ49PY87nqSDOlGbPnNO7B/n1CyrrlN8Of8edwYGlGCAHcdfY5xrm7DedfmxFcHMrg26rrt9ivZ9PfpX1rTJ8SXY0bnooBTD1FF9ex6iXwqQBYqMuNSvEXis=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=yaoma@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0W1P3Z6U_1709104952;
-Received: from localhost.localdomain(mailfrom:yaoma@linux.alibaba.com fp:SMTPD_---0W1P3Z6U_1709104952)
-          by smtp.aliyun-inc.com;
-          Wed, 28 Feb 2024 15:22:35 +0800
-From: Bitao Hu <yaoma@linux.alibaba.com>
-To: dianders@chromium.org,
-	tglx@linutronix.de,
-	liusong@linux.alibaba.com,
-	akpm@linux-foundation.org,
-	pmladek@suse.com,
-	kernelfans@gmail.com,
-	deller@gmx.de,
-	npiggin@gmail.com,
-	tsbogend@alpha.franken.de,
-	James.Bottomley@HansenPartnership.com,
-	jan.kiszka@siemens.com
-Cc: linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1709117368; c=relaxed/simple;
+	bh=NReh0r1OOkJ/WPAnBLnxEVaYYz6tyBjSchjL2TDVkOo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CjKF1vaC38ajXnkTzRGkngujadESZuxcQkXwAVfsxrctlZZbz7xthOC8xl177Ytb46jUCqYGIKuMFB4VH3YXueeyiXlD7iRcyhuY7YvJBGPW1C7M4sz7cWiHPtkQMEZgYRJ6sFaMK5fCwsT4rOHuFd0KbsFxtKGY0P+PHRAGlI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ampoXZVW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF263C433C7;
+	Wed, 28 Feb 2024 10:49:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709117367;
+	bh=NReh0r1OOkJ/WPAnBLnxEVaYYz6tyBjSchjL2TDVkOo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ampoXZVWcdsJDzSiPecqBZ+IfULM6TLhs+9C8H4SnTBekIvwYvHd0QBTNVwtYqOXL
+	 bn2ncUcxLhMaGPhE6+66ypcI1ExIuESsfSIE0RtfPYlVsMlatqODU6OvjEi+BvgpS0
+	 2EqhL/g/7Q0skBNyRT31JSA6EcToPgB6XISQy3EHmhqBR8g2cOGFNBybEzvVBbNyUs
+	 lZsaCp1TC1Y71rkwAUxsYPnbY1RgQ8fUamNqIqoaXsFsxZLv8oDdkxPsMYSMCsdOTw
+	 tNL7SfL50A7+7WfNCZAH+AqZyPKle1r8/h5Mpu4t0+vSeTfDXLA1pVVIDZqiyojCE8
+	 HmK67aoOrsptA==
+Date: Wed, 28 Feb 2024 11:49:24 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	yaoma@linux.alibaba.com
-Subject: [PATCHv11 4/4] watchdog/softlockup: report the most frequent interrupts
-Date: Wed, 28 Feb 2024 15:22:16 +0800
-Message-Id: <20240228072216.95130-5-yaoma@linux.alibaba.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
-In-Reply-To: <20240228072216.95130-1-yaoma@linux.alibaba.com>
-References: <20240228072216.95130-1-yaoma@linux.alibaba.com>
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH 09/13] i2c: nomadik: fetch timeout-usecs property from
+ devicetree
+Message-ID: <Zd8PtLsUc0G8KR97@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
+ <20240215-mbly-i2c-v1-9-19a336e91dca@bootlin.com>
+ <Zd3SJMBp23ybgdsJ@shikoro>
+ <CZFWIJE9978P.G3TZC2YIUST9@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="FC1UhtSW8OWBZjC4"
+Content-Disposition: inline
+In-Reply-To: <CZFWIJE9978P.G3TZC2YIUST9@bootlin.com>
 
-When the watchdog determines that the current soft lockup is due
-to an interrupt storm based on CPU utilization, reporting the
-most frequent interrupts could be good enough for further
-troubleshooting.
 
-Below is an example of interrupt storm. The call tree does not
-provide useful information, but we can analyze which interrupt
-caused the soft lockup by comparing the counts of interrupts.
+--FC1UhtSW8OWBZjC4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[  638.870231] watchdog: BUG: soft lockup - CPU#9 stuck for 26s! [swapper/9:0]
-[  638.870825] CPU#9 Utilization every 4s during lockup:
-[  638.871194]  #1:   0% system,          0% softirq,   100% hardirq,     0% idle
-[  638.871652]  #2:   0% system,          0% softirq,   100% hardirq,     0% idle
-[  638.872107]  #3:   0% system,          0% softirq,   100% hardirq,     0% idle
-[  638.872563]  #4:   0% system,          0% softirq,   100% hardirq,     0% idle
-[  638.873018]  #5:   0% system,          0% softirq,   100% hardirq,     0% idle
-[  638.873494] CPU#9 Detect HardIRQ Time exceeds 50%. Most frequent HardIRQs:
-[  638.873994]  #1: 330945      irq#7
-[  638.874236]  #2: 31          irq#82
-[  638.874493]  #3: 10          irq#10
-[  638.874744]  #4: 2           irq#89
-[  638.874992]  #5: 1           irq#102
-...
-[  638.875313] Call trace:
-[  638.875315]  __do_softirq+0xa8/0x364
+Hi Th=C3=A9o,
 
-Signed-off-by: Bitao Hu <yaoma@linux.alibaba.com>
-Reviewed-by: Liu Song <liusong@linux.alibaba.com>
----
- kernel/watchdog.c | 115 ++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 111 insertions(+), 4 deletions(-)
+> That sounds good. I have not used this prop in the DTS as it does not
+> make much sense for an eval board. The target is production boards.
 
-diff --git a/kernel/watchdog.c b/kernel/watchdog.c
-index 69e72d7e461d..c9d49ae8d045 100644
---- a/kernel/watchdog.c
-+++ b/kernel/watchdog.c
-@@ -12,22 +12,25 @@
- 
- #define pr_fmt(fmt) "watchdog: " fmt
- 
--#include <linux/mm.h>
- #include <linux/cpu.h>
--#include <linux/nmi.h>
- #include <linux/init.h>
-+#include <linux/irq.h>
-+#include <linux/irqdesc.h>
- #include <linux/kernel_stat.h>
-+#include <linux/kvm_para.h>
- #include <linux/math64.h>
-+#include <linux/mm.h>
- #include <linux/module.h>
-+#include <linux/nmi.h>
-+#include <linux/stop_machine.h>
- #include <linux/sysctl.h>
- #include <linux/tick.h>
-+
- #include <linux/sched/clock.h>
- #include <linux/sched/debug.h>
- #include <linux/sched/isolation.h>
--#include <linux/stop_machine.h>
- 
- #include <asm/irq_regs.h>
--#include <linux/kvm_para.h>
- 
- static DEFINE_MUTEX(watchdog_mutex);
- 
-@@ -417,13 +420,104 @@ static void print_cpustat(void)
- 	}
- }
- 
-+#define HARDIRQ_PERCENT_THRESH          50
-+#define NUM_HARDIRQ_REPORT              5
-+struct irq_counts {
-+	int irq;
-+	u32 counts;
-+};
-+
-+static DEFINE_PER_CPU(bool, snapshot_taken);
-+
-+/* Tabulate the most frequent interrupts. */
-+static void tabulate_irq_count(struct irq_counts *irq_counts, int irq, u32 counts, int rank)
-+{
-+	int i;
-+	struct irq_counts new_count = {irq, counts};
-+
-+	for (i = 0; i < rank; i++) {
-+		if (counts > irq_counts[i].counts)
-+			swap(new_count, irq_counts[i]);
-+	}
-+}
-+
-+/*
-+ * If the hardirq time exceeds HARDIRQ_PERCENT_THRESH% of the sample_period,
-+ * then the cause of softlockup might be interrupt storm. In this case, it
-+ * would be useful to start interrupt counting.
-+ */
-+static bool need_counting_irqs(void)
-+{
-+	u8 util;
-+	int tail = __this_cpu_read(cpustat_tail);
-+
-+	tail = (tail + NUM_HARDIRQ_REPORT - 1) % NUM_HARDIRQ_REPORT;
-+	util = __this_cpu_read(cpustat_util[tail][STATS_HARDIRQ]);
-+	return util > HARDIRQ_PERCENT_THRESH;
-+}
-+
-+static void start_counting_irqs(void)
-+{
-+	if (!__this_cpu_read(snapshot_taken)) {
-+		kstat_snapshot_irqs();
-+		__this_cpu_write(snapshot_taken, true);
-+	}
-+}
-+
-+static void stop_counting_irqs(void)
-+{
-+	__this_cpu_write(snapshot_taken, false);
-+}
-+
-+static void print_irq_counts(void)
-+{
-+	unsigned int i, count;
-+	struct irq_counts irq_counts_sorted[NUM_HARDIRQ_REPORT] = {
-+		{-1, 0}, {-1, 0}, {-1, 0}, {-1, 0}, {-1, 0}
-+	};
-+
-+	if (__this_cpu_read(snapshot_taken)) {
-+		for_each_active_irq(i) {
-+			count = kstat_get_irq_since_snapshot(i);
-+			tabulate_irq_count(irq_counts_sorted, i, count, NUM_HARDIRQ_REPORT);
-+		}
-+
-+		/*
-+		 * We do not want the "watchdog: " prefix on every line,
-+		 * hence we use "printk" instead of "pr_crit".
-+		 */
-+		printk(KERN_CRIT "CPU#%d Detect HardIRQ Time exceeds %d%%. Most frequent HardIRQs:\n",
-+		       smp_processor_id(), HARDIRQ_PERCENT_THRESH);
-+
-+		for (i = 0; i < NUM_HARDIRQ_REPORT; i++) {
-+			if (irq_counts_sorted[i].irq == -1)
-+				break;
-+
-+			printk(KERN_CRIT "\t#%u: %-10u\tirq#%d\n",
-+			       i + 1, irq_counts_sorted[i].counts,
-+			       irq_counts_sorted[i].irq);
-+		}
-+
-+		/*
-+		 * If the hardirq time is less than HARDIRQ_PERCENT_THRESH% in the last
-+		 * sample_period, then we suspect the interrupt storm might be subsiding.
-+		 */
-+		if (!need_counting_irqs())
-+			stop_counting_irqs();
-+	}
-+}
-+
- static void report_cpu_status(void)
- {
- 	print_cpustat();
-+	print_irq_counts();
- }
- #else
- static inline void update_cpustat(void) { }
- static inline void report_cpu_status(void) { }
-+static inline bool need_counting_irqs(void) { return false; }
-+static inline void start_counting_irqs(void) { }
-+static inline void stop_counting_irqs(void) { }
- #endif
- 
- /*
-@@ -527,6 +621,18 @@ static int is_softlockup(unsigned long touch_ts,
- 			 unsigned long now)
- {
- 	if ((watchdog_enabled & WATCHDOG_SOFTOCKUP_ENABLED) && watchdog_thresh) {
-+		/*
-+		 * If period_ts has not been updated during a sample_period, then
-+		 * in the subsequent few sample_periods, period_ts might also not
-+		 * be updated, which could indicate a potential softlockup. In
-+		 * this case, if we suspect the cause of the potential softlockup
-+		 * might be interrupt storm, then we need to count the interrupts
-+		 * to find which interrupt is storming.
-+		 */
-+		if (time_after_eq(now, period_ts + get_softlockup_thresh() / NUM_SAMPLE_PERIODS) &&
-+		    need_counting_irqs())
-+			start_counting_irqs();
-+
- 		/* Warn about unreasonable delays. */
- 		if (time_after(now, period_ts + get_softlockup_thresh()))
- 			return now - touch_ts;
-@@ -549,6 +655,7 @@ static DEFINE_PER_CPU(struct cpu_stop_work, softlockup_stop_work);
- static int softlockup_fn(void *data)
- {
- 	update_touch_ts();
-+	stop_counting_irqs();
- 	complete(this_cpu_ptr(&softlockup_completion));
- 
- 	return 0;
--- 
-2.37.1 (Apple Git-137.1)
+=2E..
 
+> My upcoming question is how to move forward on this series. I can do the
+> patch to i2c_parse_fw_timings() in the next revision. That way it gets
+> added alongside the first user of this feature. Would it work for you?
+
+Hmmm, to be honest I have a bit of an issue with the 'no user' problem.
+There is a driver which uses this feature, okay. But there is no
+upstream hardware which uses this driver with this new feature. This
+makes maintaining harder ("Who uses this feature?" - "Someone" - "How do
+they use it? Can we modify it?" - "Dunno").
+
+Kind regards,
+
+   Wolfram
+
+
+--FC1UhtSW8OWBZjC4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXfD7AACgkQFA3kzBSg
+KbZNpRAAplZcmoN+v+398lrwCBrPt7fW87i3u0pGvvs36OOmYI47d+qOyYjBaEdN
+M52Dr0jkq4NrpXVgxXk2ty2m3Tv7F6pnPwKU5+e7TzVeUoCQgJwq/vJV1ppgBY+O
+1iNfCKh6ZtzNrhuC6X+Rjxt0dZ/qc0zjjjQP4yUEYDCs5AHqc3gd5YopbJ1N0eGd
+YMKEPrY9FntcE5argMTXW1OZ/jlRMhrRziD9d+a3odezohS5kITrTuwg9b+Yckm0
+/3paBaWYXFFeAgwYPkg5vEIJHq39Y2ljKG5VhpKfMEdg2F2OWkWgxvOiRxEhlFua
+rvHkb3UFHoFx4kyheWXEjx79i5KwP/wiCrMv/gxu1Gz4l6HanCMZfoRSUhsOscbH
+0qiQBXust4YSa9BEpJD3CYOf5Z1SrWdACRgYwAmb7yUmIQLqlLbBPjxWfyvCKk5d
+nDfz34EdiE8Sc5RWJrzwFv1JOZLwg/L0m0i++8GnqKL5jvTgj0+dcg6ScetIINKW
+nayMd+ZqNBoA9g738JhlU/Xycy/CNxRda96mCbnFLZWXsEPX3bv4pyQRKapgkZxt
+UIxVw3xtwpifhg7/3EwmV5xKDi3m+OuOM+E8sA0VloVNxnpscANrQVC9V5G3YDr1
+GNpgoNp1XnZOTcCBGi1gdUUZDQnwybWDNMn+cdAlUZAM/N3WQe4=
+=fDeJ
+-----END PGP SIGNATURE-----
+
+--FC1UhtSW8OWBZjC4--
 
