@@ -1,46 +1,46 @@
-Return-Path: <linux-mips+bounces-1937-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1938-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5779C86CE3C
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 17:08:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98D0286CE50
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 17:10:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64F601C21768
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 16:08:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51EFD285F17
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 16:10:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA7EC1574B7;
-	Thu, 29 Feb 2024 15:51:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A83D15C7AD;
+	Thu, 29 Feb 2024 15:51:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X4xnvjp3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bOgOSQ20"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C29451574AF;
-	Thu, 29 Feb 2024 15:51:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A75915C7A9;
+	Thu, 29 Feb 2024 15:51:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709221865; cv=none; b=oE2Mb8ZvD4N5iNw5z+MTg+6SLjWxHUeS0kKNoou3lxTaNmIRFxS5LZDWTS72IPDjzS/t36H53az+cHZW02FiVXL9+QHmMsrDO+BCiGFSmxaCIlSgqVPl4fv50jhy3tnkftFJODqLuKtlB843bk+GE/C7V6n24eFcR8Hi0TcNx9g=
+	t=1709221882; cv=none; b=RBndr4tq97upw4kcawKAX0/bnocmr6SssCw3BG/euO4eqiZaXv7Z6EY2wfMlX4DMhn/C6M00WJ2zV7r7wVAOHbCJFhW0r0ba7yQl7LXV8hlzgROieSA7H+hu6swhhA9KleNmGhplEjR10zXKrIeIwIPKdfM61jUXQ7U0C+ipGnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709221865; c=relaxed/simple;
-	bh=YPRtis0IXaoNDc9pCeoWs6Weo9a+oWw+h2fuU+s0gXI=;
+	s=arc-20240116; t=1709221882; c=relaxed/simple;
+	bh=tfnOGd7pf3A5f59RWHth3GLkpWlXj5gee4oTcfvY3k4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fOIVulkgwPYnmba42f4nc3Q7JLsSiRt7Y3yy9iEJE5CGZkghf9erp6ZhJOkOEUNEl5ciCPEJerZ997ttecAI5oYGJFBoctyfvwk7M7zSOvn14MphAZCkK5IcvcGmScbstta5x/ZSUJ+8WxdRaZtchA7BX5weKYSIiGAfSd82g1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X4xnvjp3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE607C43394;
-	Thu, 29 Feb 2024 15:51:04 +0000 (UTC)
+	 MIME-Version; b=ax6w7BfcdD+KndYnXoFZrlD90R9rLxhbFVtwIYv+m/C1OijM+wK4v2R+I4rovYeCJ+aZQxS8+8Y2/SdeUlRICk4HMvo/QO58IpAncoZETj8aR6IsBCE+5v2TcwSlrTJM/ON1mqpdZmb2ekXnmw7f+5zdXQDjN9K3G2G8cJfLXR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bOgOSQ20; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 052B4C43390;
+	Thu, 29 Feb 2024 15:51:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709221865;
-	bh=YPRtis0IXaoNDc9pCeoWs6Weo9a+oWw+h2fuU+s0gXI=;
+	s=k20201202; t=1709221881;
+	bh=tfnOGd7pf3A5f59RWHth3GLkpWlXj5gee4oTcfvY3k4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=X4xnvjp3S3ctd9aQ54QdMKqdjIUACDGSY2NE4GvGVjXMsBqUj+ETPG+sFpNPv5tc7
-	 zq7RfqAdJU8kGe16kBCJIMTPMm8hdQc/2HJdWSVgorZP+sUHDLz4cvSW5+3oCMJmdn
-	 iUo+GGb3F6+q4qzPKueZfDlYs9SqCp4vjEHF+/gRTPvGCbYk/gxvr4o1ohc1AzY6Ic
-	 56mHZjJ+d+lCBFgQzGvtr7eVmZFqN1tW0Ih4rAir73k+aSfaxL5tRHUHE6Vjq+V71f
-	 4ezABHJongtYfJUMLXjbwXlmrle+/QwSKPpm3gcBL3ywS4R7v8DrXveBAn12OMQTd8
-	 vTdE1d7/6srzA==
+	b=bOgOSQ20yGDwcXZBG3YJZt+xnT8NnNSr8JUqWMyqJjmECLBHZNMmLKL5UH9B4jtkq
+	 wzb4uX1e0wUXe6CRNj/KxHI+IA/FPPSoidZmJfYA5ON6ZtVwY6KuIMkmR1HaMhmjl4
+	 bSPR+B+OY6HVJUnsKawPk4lOVjXolksZbeFB51T66d7rtTH98cqn7JdIE4UPvwmbTU
+	 HpOtlbv1g6XuuIHCiKACteRuV1bR8s1gowNGByLb9Q1FMisFQgpYEH6KXX90MKQH5G
+	 gtqUpbycdvoSqcjn08M/SZyYUnwbfJ1wuG9Unm2BVpBRzWSUX2fHtROc2n/N6Qk6Cf
+	 wcAw7AQMHX/TQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -49,12 +49,12 @@ Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>,
 	Sasha Levin <sashal@kernel.org>,
 	oleg@redhat.com,
 	linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 5/7] MIPS: Clear Cause.BD in instruction_pointer_set
-Date: Thu, 29 Feb 2024 10:50:54 -0500
-Message-ID: <20240229155057.2850873-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 5/7] MIPS: Clear Cause.BD in instruction_pointer_set
+Date: Thu, 29 Feb 2024 10:51:09 -0500
+Message-ID: <20240229155112.2851155-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240229155057.2850873-1-sashal@kernel.org>
-References: <20240229155057.2850873-1-sashal@kernel.org>
+In-Reply-To: <20240229155112.2851155-1-sashal@kernel.org>
+References: <20240229155112.2851155-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.149
+X-stable-base: Linux 5.10.210
 Content-Transfer-Encoding: 8bit
 
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
@@ -86,7 +86,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/arch/mips/include/asm/ptrace.h b/arch/mips/include/asm/ptrace.h
-index daf3cf244ea97..b3e4dd6be7e20 100644
+index 1e76774b36ddf..2849a9b65a055 100644
 --- a/arch/mips/include/asm/ptrace.h
 +++ b/arch/mips/include/asm/ptrace.h
 @@ -60,6 +60,7 @@ static inline void instruction_pointer_set(struct pt_regs *regs,
