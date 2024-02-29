@@ -1,82 +1,82 @@
-Return-Path: <linux-mips+bounces-1905-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1906-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67BC686C555
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 10:34:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78B3186C56A
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 10:35:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2218F28FB2C
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 09:34:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A631C1C23C38
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 09:35:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06F005DF08;
-	Thu, 29 Feb 2024 09:33:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3B7A5F554;
+	Thu, 29 Feb 2024 09:35:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qPpMxIOF"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EmJIgriT"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B6C5DF36
-	for <linux-mips@vger.kernel.org>; Thu, 29 Feb 2024 09:33:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9F535F548
+	for <linux-mips@vger.kernel.org>; Thu, 29 Feb 2024 09:35:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709199228; cv=none; b=tIsLMgRJzgxDVkAC2UCoI/FbXofTkhe1kbE6mLYJhMPASwDjl7561N8h9sd+3BjNJQtZnQl+xhx3Kmracl7SVbOgtH0RCLxJGNidaQmnCEKxUuN4mdlOnUIPhmm+NBhKNXVaXTKe6clLVSW54dyvY+SGxaL/AwyahLlzojSRRJk=
+	t=1709199319; cv=none; b=FuXpQ7oTXDzj/JOHDwU0m1AD4NDOULtJBFypGdQPVokgHE24RK58Qjlnta6+9D7U2oSit+H6CzH9hCcVJtBy3yiUjY31eGxO07CR3+S2z/fwdheniizFmU/518jT5eEZ7b97l3YlcOd135cGTUIPIgT8LIn6FYh8gs9QyudjnII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709199228; c=relaxed/simple;
-	bh=BTKFqTkQ/Hdxy7pKbUgkWsXlYhvwEw9bt65k1KFPuDs=;
+	s=arc-20240116; t=1709199319; c=relaxed/simple;
+	bh=E2BCwCWKr83pu1Ph0WYIAlvgDlw5ksBM/Bs5jndzFeM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KgEMb1dOMktkGBZGaDQnfjlInmREm44XYOsKrZdUIJYPCVh3NLBI4JZOLnrkz1ozCo3VbH9S9OdJJspm0D2nresG9xewnrVv+vs4kDmcAMeck4Lb0LKyEIcoHfs66TGcODQP8CDQXqGwyD7Eif/q7K2cAekswrwHXOBEp1M8d/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qPpMxIOF; arc=none smtp.client-ip=209.85.128.169
+	 To:Cc:Content-Type; b=to00i4Z2evH6IYUgq5piLX6Bj1VGNnETBwqjSqhuojm5TktKRPdWq/uOrSZ9E1KYOI1Xe8aheyPzNljAORRHrsUX+6F0LEWRyIWdWb4kp1XIudJPntQi57Pb7/Q0AZhFYOBKSiHQmp4IA313IdxemhXPHSUnG5bvzVwbTWvfFDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EmJIgriT; arc=none smtp.client-ip=209.85.219.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-608c40666e0so7058967b3.2
-        for <linux-mips@vger.kernel.org>; Thu, 29 Feb 2024 01:33:47 -0800 (PST)
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-dcc73148611so773069276.3
+        for <linux-mips@vger.kernel.org>; Thu, 29 Feb 2024 01:35:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709199226; x=1709804026; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1709199316; x=1709804116; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BTKFqTkQ/Hdxy7pKbUgkWsXlYhvwEw9bt65k1KFPuDs=;
-        b=qPpMxIOFBOREPhw9l3O7ylF7/oN7NkAvmbPK7SJgn3VjC0kayodnvodSMV/m3iMTst
-         eiO1fndMDSZtAk9Ls7c3TpYK/ub97gV5edzDCG/RKTCmm9iKRKwzYDc6hxlsVagrC0QT
-         TPQhsCH0YbAyU6/w3THRgtE5IhnpZTJLx49aB8q1nLUuRKsAggBK/gnTXs9st6Op4Y5A
-         1b3AfAiuuEIYAc8Iw9/dcXSsTjuCUijINJJ0zanFGYRkQDGBxRg6gzknIHiaJKRwlxuP
-         L5QiD2DlzdGlUySs/8iwwBgDtcZR6lJO/c73sBVr89nRYIw+b2wqp7qS1NLcjf3JZr4g
-         5N9Q==
+        bh=f50x61FNXrIWBR6f2QHRlicPFI4c+LBiZV4KjCEImyg=;
+        b=EmJIgriTLhwFa58qCl0w5+2kg9n1eUSXkpQWbhYvXRQKvuq5IMKs1050cmML5xRC2d
+         6iB7gVpoVtNKCZ6IrkJRFKkU/pF5qo9uwVAeOZelGZxS3aadCNun0CmKA+X8RklR/vCH
+         vRGcfw0bQOqWdisJUTNwlUqslQiKrDsHYncjLTWBQkVPXiZqI0RwL8+lAuE9huFI7SaC
+         TPs7A7XH80MBRVdeWTiz/edLSGlbPSaKRShB6kDLHy9JeKc9zG3wZq+nUzMQ+A6x16ls
+         UOTTacrQM2JWW2W/Txrbno7Ga6hbkrhHlGq6gFy9bIkB5O5LfcCo1nJcQD+BhhzQcDYH
+         a8mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709199226; x=1709804026;
+        d=1e100.net; s=20230601; t=1709199316; x=1709804116;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BTKFqTkQ/Hdxy7pKbUgkWsXlYhvwEw9bt65k1KFPuDs=;
-        b=dS4Wc4oJdG0kzvI5/mtccFpzZw+wpI0jKFJdShxIgQWQTTrYOyj7pSOxf0Ul/KMUv+
-         7twZXLQUqC2KCVVQ1/HpQqg731NX8NqJgYi/35oyvvDXlo701S29ZwoBVPex5ZecXdWA
-         g0vML9OuT2VOjs7eWwetvM6Lz6XONMtTdcVNywCIYIZSWysA2+ITzHosYpPJzATnUrlW
-         nL/rrDeN/CvAJ0Pco4fIiHq6filUPkKdrF4IL5eFex4uAylGnlGY9U051TGPFikZgeVM
-         hD/9aihONvKdofLS2lHZp6Dt32W6IlMS0rD9DW5oNv5imdfTpgCXV6NkTgoldwnYyLn5
-         a5Fg==
-X-Forwarded-Encrypted: i=1; AJvYcCUCHCC6WP9S/huOxXozela6zpGGBBgCoJHHLQiYsv7Ry6etvHD7B5XVgszYCqsNOyPq94Kk7w48mtLqv66fvAvMoBI5VITd0pidrA==
-X-Gm-Message-State: AOJu0Yx7K9CqR9uAGrXwfwl6U/K6+u+7hgClz8PpnJQum8ooaHESRhT7
-	129WWybah5ILYqvKgPPSoUJL6BycqAtHqEPCAJZRdBmgRvYCfX/UBmLybhc7g9idfu6fMQ/vAVl
-	eeYDtNnIIcxccm4zVqhdqHdkRmynJzV1ZnZzkLA==
-X-Google-Smtp-Source: AGHT+IHV++gfJwyt5qvCWtgkDy4qf622OP2MAl4tAK2L2iTcZeC8PuyC0CiumnxO3QX4i3ji7VGSLW7yqUh576MqE2U=
-X-Received: by 2002:a25:8548:0:b0:dc2:349d:10cf with SMTP id
- f8-20020a258548000000b00dc2349d10cfmr1676538ybn.53.1709199226350; Thu, 29 Feb
- 2024 01:33:46 -0800 (PST)
+        bh=f50x61FNXrIWBR6f2QHRlicPFI4c+LBiZV4KjCEImyg=;
+        b=D1Y648gWazzeK9woZZpz2OlAaUPrM/SYygyEpW4Zsa4lvZ8ppfBK5r6JSacW/mAYxd
+         tMYFbkkwugjNie/Bxr8OhAwzNaQtg2h8IIe7C5vvWH9IDnbR2x2K+tvhAppHvIlh80Xa
+         fsl3dYLLNJx87b3kW4wDiDc+g3BUzS5p/CaE8FSOA9nO2jBjRu6ELBnEUhrqGU+sBBPB
+         MVYMGAIuGIwatDRvCOOUhQHUKXGm0PTK/FCEARjR0wA2uy7bc1b2OZ9RXOUr6A3qgG9B
+         7+2TekU7QDSQC7CAJFBWQLCQrn4RUjFEDppCrNh4dqf0kjPbuIwCVrkHeJUNtk5DINrD
+         iB8g==
+X-Forwarded-Encrypted: i=1; AJvYcCWwkDRXuRc231aiJb230TsyDp4j7Inu7XdxX27NzzU7h6q2YOpjlkaWTrxztU+tzj9GRPKEtKz3SsGr7X/7T247mrvdmL8fAOWpwA==
+X-Gm-Message-State: AOJu0YxxSKDvoI2HXX3MVUTrGEAZu3HYB37IeEQ+teycW20j93WAaR6r
+	hsATVUU7B+GwUDTG9DE30+z29APSgvqSZErc8Zjs8/7SgdBbVj6RXapjnqfwm7WqJpzk+w3NeRo
+	7ATV1KtZnUmLdwRJVlZRy9TiThVMPq8ap9XxGZw==
+X-Google-Smtp-Source: AGHT+IFfB1CzRcwoLd5A9MKz+8jkh/89e61JZ8wEvR20tH5L9rZAg6gSACHkzLEHC6fcpjmod7PS/OVzmdDO4jPTA5M=
+X-Received: by 2002:a25:c904:0:b0:dcf:4663:ecd8 with SMTP id
+ z4-20020a25c904000000b00dcf4663ecd8mr1840712ybf.8.1709199316704; Thu, 29 Feb
+ 2024 01:35:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240228-mbly-gpio-v2-0-3ba757474006@bootlin.com> <20240228-mbly-gpio-v2-20-3ba757474006@bootlin.com>
-In-Reply-To: <20240228-mbly-gpio-v2-20-3ba757474006@bootlin.com>
+References: <20240228-mbly-gpio-v2-0-3ba757474006@bootlin.com> <20240228-mbly-gpio-v2-21-3ba757474006@bootlin.com>
+In-Reply-To: <20240228-mbly-gpio-v2-21-3ba757474006@bootlin.com>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 29 Feb 2024 10:33:35 +0100
-Message-ID: <CACRpkdaKi4qXG03fuPqCgdHmZ1RydMBxMFB3nutG6JLPGs+JkA@mail.gmail.com>
-Subject: Re: [PATCH v2 20/30] gpio: nomadik: make clock optional
+Date: Thu, 29 Feb 2024 10:35:05 +0100
+Message-ID: <CACRpkdb4egmLuudmhv5Lk23+RbKNOnxfQWmYz8S5pB2hJyV2jA@mail.gmail.com>
+Subject: Re: [PATCH v2 21/30] gpio: nomadik: change driver name from gpio to gpio-nomadik
 To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
 Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh+dt@kernel.org>, 
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
@@ -92,13 +92,17 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Feb 28, 2024 at 12:28=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@boot=
 lin.com> wrote:
 
-> Not all platforms using this platform driver expose a clock for this
-> GPIO controller. Turn devm_clk_get() into devm_clk_get_optional() to
-> avoid failing when no clocks are provided.
+> This GPIO driver is historically related to the Nomadik platform. It
+> however can be used by others as it implements the ST STA2X11 IP block.
+> Pick a less ambiguous name for it.
 >
 > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+(...)
+> -               .name =3D "gpio",
+> +               .name =3D "nomadik-gpio",
 
-Patch applied!
+Patch applied after amending $SUBJECT to be nomadik-gpio rather than
+gpio-nomadik.
 
 Yours,
 Linus Walleij
