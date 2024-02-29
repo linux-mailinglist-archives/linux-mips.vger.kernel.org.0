@@ -1,82 +1,82 @@
-Return-Path: <linux-mips+bounces-1915-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1916-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8024186C5CD
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 10:43:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C62E886C5E1
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 10:44:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CCE71F25EFB
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 09:43:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81B5F28D993
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 09:44:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BB0B60ED2;
-	Thu, 29 Feb 2024 09:43:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 520706167B;
+	Thu, 29 Feb 2024 09:44:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VwpAPcha"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="t+50Fwdf"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6A260ECA
-	for <linux-mips@vger.kernel.org>; Thu, 29 Feb 2024 09:43:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 989D1612F9
+	for <linux-mips@vger.kernel.org>; Thu, 29 Feb 2024 09:44:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709199781; cv=none; b=oB1nWVs4ZAxU9G1EtmoliMCRasrmhIsfyVNcbDegAd0O2KzU2hS0rFlG0onad2QCLMRF2mAF+gzmpFzuk+/s57LDsqR8iTWWFMK2ARk5H0x9JqOCF2yUMtPUuNRB2acRUv3xY0Rm7nIJHzH31Y83fJ4PMkmGSqE8mfyUjrPf4Eg=
+	t=1709199887; cv=none; b=AF9sy8xWDSR6w+2qevadc2bUoIuHggd700mR2dRfG2xkkNVTg1tfOIPqa4NeOsuYwDJQ45MHWHLE29TO3jWFXNjJNXJL0RQvExlRqE7sGUmA+DWwNFnKcUV0QpJ/NLGdaXxR4374jwHB/2GjWFuZ7tISeVtvKdTw50W5LUHhuDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709199781; c=relaxed/simple;
-	bh=WX6ElzN18ENGeITFFDkMWABhcHlHX3NBsTlvSRXysgY=;
+	s=arc-20240116; t=1709199887; c=relaxed/simple;
+	bh=6K0C69v8aY51x+51DR4S1y5FfPh76F89vxnIkCM64Fc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KuFhtXkZeTyBW44bpwFG8wDvu5OkSH2fXxiBaqUcpuoS0Zt63PbTuKKnvH8nJK8vzUvCcSUsubTI483TQ41r3CMZoqJRwkZw8AM6e7slfJGMSWjCDJ4hFFjt6m+b6mDcFT97Kf6URCIvDyUv6N8a9MWEIUAmMOfeFMhZXriyjjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VwpAPcha; arc=none smtp.client-ip=209.85.219.172
+	 To:Cc:Content-Type; b=QLApTl6giG+knMf3TYhvBLGIumKKkrGbj2obvWOLDhE7JMwKzlG29wrJcVzOs0cfAmp7gKkBte3qpGixeTwcwPg60Png4Sk+1pN9EZ2/qFyPDxMeUUURedEZyn3QbaVoegOaIzfXxrtriy422l3BJk2REoedewBFhF1B3un5tRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=t+50Fwdf; arc=none smtp.client-ip=209.85.219.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-dcc86086c9fso776812276.3
-        for <linux-mips@vger.kernel.org>; Thu, 29 Feb 2024 01:43:00 -0800 (PST)
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-dcbd1d4904dso792843276.3
+        for <linux-mips@vger.kernel.org>; Thu, 29 Feb 2024 01:44:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709199779; x=1709804579; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1709199885; x=1709804685; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WX6ElzN18ENGeITFFDkMWABhcHlHX3NBsTlvSRXysgY=;
-        b=VwpAPcha58IVwBhOUoRrxXcCj4urcm/iMWfWwUZjGayw9A6C87UU/jo0/YS9kaMSlz
-         RxQ8CrM4nRtLU48hYwDoMeTNFpYXJh+IUbvD9DFbwtnIEA7UHTwZr2PBNDvNifkGuMgK
-         UCVHWJ2SnfPt7jtO+Cldq2VPS94EYrNQQn6CgcdlejoJHkMOKW8pRon3uzWonq8mRo/w
-         NBL3xd2c40WKqJCz7/Oyf7auOeAgP9lyCFfbsgr7xuuYnbBMW8omDHnk3O5GB6rlgzCk
-         6fhbSouQodxb/7QoUkppeH3j6k5tWfOx7QAbVGq5Un9ZzaJjtayB2Hd2/Bqsi8CZ/UuK
-         Tkig==
+        bh=FtGe/ds1ZRlsDzPhDzq5vY2M1N8N9oZVvQoi1ym4DQk=;
+        b=t+50FwdfE+URjGigg3CltFoEYEGxSFwhYFI4KJHK1sRFAdBN/QbCAVBZtWWe/rwlfq
+         buI4lWvF/G7e+8Snre4sjNj9wzKVn0AkqWlBw5UTR8IpVeaZ2CK5CLSwE1oSYI/jIYq2
+         IxxN9pR3s/Y+1Y+HkKuIjUbz/FVlxsSp7Sh8wIa9jiyxqqubgv9H0r5c0B0sI6r3qH2h
+         UdPzI6NoWLsnBfJFvMiOqbdeG1a3UVkOy/opGP6JcuUqie9KJioRYSii/axy8/8mVqgt
+         XTMpZvIAil3vJuCYEM7BIsPNqrDtelAh/5yyCN0GzazpLijL7WjbPyLr7EkBbbYB8Abh
+         tJZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709199779; x=1709804579;
+        d=1e100.net; s=20230601; t=1709199885; x=1709804685;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WX6ElzN18ENGeITFFDkMWABhcHlHX3NBsTlvSRXysgY=;
-        b=cj2prdlfFylqV4giAANUKbFZgEi2YNu1RlTamo2lNDtdisUsYqZ5/wB0d43D+2rZy5
-         K4oo1dPLHS/djHpC7W47lQCa6h/Mcy0srKi0m4kCbvxaYbaUQBkH4TzX318iEiuJ2DHi
-         b6oiRxfTLVm6Onrzy0bJKOm37y4x1t246SPgx+RwlMg3HSXyG/9sbYm6NMiyWK7ELROd
-         QbTDMiZOO31iIX4Zu+j8GtNjEImRaNIt39EvpvjGRVKpfYrY86y/3KLKyL974wkI7gg9
-         oomKpn2dtzvWlafUScKGBtFDbNEPxFLNvsGkSm82K9+/0kruJg2c7zfTjAny2W64Oz0g
-         Uc5g==
-X-Forwarded-Encrypted: i=1; AJvYcCU8n8l3w6KCn3n6PZJmDyCZGSR8PlXc4Wu50rBByk7VH4pLPOqYSmR+M2TBcPuok99OILcx4LKpFsGv/MfyUdviIPWuZnkf572uCA==
-X-Gm-Message-State: AOJu0YwQN5oEysMRtHfKnsKYtx4ewQMqLST2H/cW5XJyyfU0E8EEzVNw
-	BXI3MIuYdJt2xH6t9eUdjarnThcyqlxSiJn4Hr0eAW55AuW6rgTmvH2BnBYUJ5RCRGAkH9S9/rk
-	v7fb3v3Yh+eb2snZxaVo/e+CWUT7O/PNnoCWqyQ==
-X-Google-Smtp-Source: AGHT+IGWB8ii4Rr1OBtluZ0lydmBWdI57cDGyFQbH9+5gpfG9FKxBEkZzmzb3kJFjrZ9rPeNA84QZSnk4Kq3aGP+H3s=
-X-Received: by 2002:a25:b209:0:b0:dc6:9b9f:d3c0 with SMTP id
- i9-20020a25b209000000b00dc69b9fd3c0mr1735381ybj.10.1709199779367; Thu, 29 Feb
- 2024 01:42:59 -0800 (PST)
+        bh=FtGe/ds1ZRlsDzPhDzq5vY2M1N8N9oZVvQoi1ym4DQk=;
+        b=BtUORU2MQheykbcK7G+V8Y3DBQnAACtzQo0u8q2YQXJkOlbzdH0l4gJ3KwUhpvQDB8
+         OrKRcbV9vZtFKV48DTr11qUup6VJXyArDdlSFxfP+Qc7pK2YC53hFk4TxReLcJ2Pql1c
+         1iBaQJss452DCU2ClFhKJaVjLQtN1hWvvOMfyZMcmiSWaOClGCqEmdXbYdL8wJ6nwTLN
+         hAWNPVMeTmFj2j/NUV/83uuVorCVBxYAv5txrEnhaFQG5rqpHTVhweS1X6NzkB2L52wa
+         5UraJv3rGuaciMZ+rf3cmHnVzW57Vus5mJYH2xtr97Y4jrkIsBL8LkrnJssr6Af+uh08
+         45EQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXSWQE2yxOFID7VGJ9feKs4bNv3XW3cHTE5qH89MR3TcQ5BasDSWR78+qpvtA72jbML06A3pbXEHA7s6NWi82G/3rr9N1nVGXuoYQ==
+X-Gm-Message-State: AOJu0Ywv8jnbK87AcWA82ABQw3ypEwmf2R4673KeRhB06P3o/1ZoxrRS
+	xwpuWQ/egVdz4RemavTMgxl/vNGTNb1BlG1h+pLSvVgOIijLZszUiEFrxa4/7alU7fNxEpRbyPM
+	DdBthZ1x8472oAHhLjTAljf8OYuvcFeJsvhYWsw==
+X-Google-Smtp-Source: AGHT+IGbChf405oU9sCbujzjSA/cHfa3590PjMRDmzrZOTzMB7BN3TjSi37+bplsHq5uUkE5RbjhcMUip8MDonqNbgI=
+X-Received: by 2002:a5b:751:0:b0:dcf:3f11:633a with SMTP id
+ s17-20020a5b0751000000b00dcf3f11633amr1588471ybq.35.1709199884731; Thu, 29
+ Feb 2024 01:44:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240228-mbly-gpio-v2-0-3ba757474006@bootlin.com> <20240228-mbly-gpio-v2-30-3ba757474006@bootlin.com>
-In-Reply-To: <20240228-mbly-gpio-v2-30-3ba757474006@bootlin.com>
+References: <20240228-mbly-gpio-v2-0-3ba757474006@bootlin.com>
+In-Reply-To: <20240228-mbly-gpio-v2-0-3ba757474006@bootlin.com>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 29 Feb 2024 10:42:48 +0100
-Message-ID: <CACRpkdbHhbxu4TX8ZnkEGA_+v2GdaYSMMgBZH6pL2a356kcS7w@mail.gmail.com>
-Subject: Re: [PATCH v2 30/30] MIPS: mobileye: eyeq5: map GPIOs to pins using gpio-ranges
+Date: Thu, 29 Feb 2024 10:44:33 +0100
+Message-ID: <CACRpkdbK2Sa_4qp3VE0ivHP8W6F-QDkuxV-XnZYviAkO5ZBMsg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/30] Rework Nomadik GPIO to add Mobileye EyeQ5 support
 To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
 Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh+dt@kernel.org>, 
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
@@ -85,23 +85,38 @@ Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh+dt@kernel.org>,
 	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
 	linux-mips@vger.kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>, 
 	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Stephen Warren <swarren@wwwdotorg.org>, 
+	Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Wed, Feb 28, 2024 at 12:28=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@boot=
 lin.com> wrote:
 
-> Create a mapping between the GPIO controllers and the pin controllers.
-> GPIO is handled in a one-instance-per-bank manner while pinctrl is done
-> with a single instance for both pin banks.
+> This patch series reworks the Nomadik GPIO driver to bring it up to date
+> to current kernel standards. We then add Mobileye EyeQ5 support that
+> uses the same IP block but with limited functionality. We also add
+> features required by our newly supported platform:
 >
-> See gpio-ranges documentation:
-> Documentation/devicetree/bindings/gpio/gpio.txt
+>  - Dynamic GPIO ID allocation;
+>  - Make clock optional;
+>  - Shared IRQ (usecase: EyeQ5 has two banks using the same IRQ);
+>  - Handle variadic GPIO counts (usecase: EyeQ5 has <32 GPIOs per bank);
+>  - Grab optional reset at probe (usecase: EyeQ5 has a shared GPIO reset).
 >
-> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> This GPIO platform driver was previously declared & registered inside
+> drivers/pinctrl/nomadik/pinctrl-nomadik.c, side-by-side with the
+> pinctrl driver. Both are tightly integrated, mostly for muxing reasons.
+> Now that gpio-nomadik is used for another platform, we loosen the
+> relationship. The behavior should not change on already supported
+> hardware but I do not have Nomadik hardware to test for that.
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+I have queued the relevant patches to an immutable branch in the
+pinctrl tree for testing and I can also pick up some ACKs if they arrive.
+
+When I'm confident in the branch, I will send an optional pull request
+to Bartosz for it!
 
 Yours,
 Linus Walleij
