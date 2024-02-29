@@ -1,46 +1,46 @@
-Return-Path: <linux-mips+bounces-1936-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1937-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E8B986CE24
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 17:05:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5779C86CE3C
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 17:08:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC209283A84
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 16:05:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64F601C21768
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 16:08:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D2D7151741;
-	Thu, 29 Feb 2024 15:50:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA7EC1574B7;
+	Thu, 29 Feb 2024 15:51:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lPeWekLZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X4xnvjp3"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35DD515173D;
-	Thu, 29 Feb 2024 15:50:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C29451574AF;
+	Thu, 29 Feb 2024 15:51:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709221849; cv=none; b=oqXf9MS4R0hTsNOZOSkWyJ/Vt8YO79wfezX50tSRiCs7qc0UY4mtTRRGpBwz8aXAUJB6elPHz5MAexOc4vISgE1hBt4i5ZlG8Z8/+S3xILrFTnQtJOfx3EpXWvu2qvQM6/+GYTzKb5hRz0K8l7mcB5egJnbIk6iQdX7zS7TDFxo=
+	t=1709221865; cv=none; b=oE2Mb8ZvD4N5iNw5z+MTg+6SLjWxHUeS0kKNoou3lxTaNmIRFxS5LZDWTS72IPDjzS/t36H53az+cHZW02FiVXL9+QHmMsrDO+BCiGFSmxaCIlSgqVPl4fv50jhy3tnkftFJODqLuKtlB843bk+GE/C7V6n24eFcR8Hi0TcNx9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709221849; c=relaxed/simple;
+	s=arc-20240116; t=1709221865; c=relaxed/simple;
 	bh=YPRtis0IXaoNDc9pCeoWs6Weo9a+oWw+h2fuU+s0gXI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FIRfSCp2bh3G9d8wV8ZV7tivvMbM+2eVkjnogTQEEryvPyy2ZlWf/HWjdt+XIbnN3/ApBYNHt0/ZJmgLkW2xhcdF7JQX4nS9sIp+DKDDUjdcz9s88qpKAIFYLU8muEoOQjZLVyd3HAQCjdSxlDe7QPzliylt1Rqu1hpDgrwsRGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lPeWekLZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34A63C433A6;
-	Thu, 29 Feb 2024 15:50:48 +0000 (UTC)
+	 MIME-Version; b=fOIVulkgwPYnmba42f4nc3Q7JLsSiRt7Y3yy9iEJE5CGZkghf9erp6ZhJOkOEUNEl5ciCPEJerZ997ttecAI5oYGJFBoctyfvwk7M7zSOvn14MphAZCkK5IcvcGmScbstta5x/ZSUJ+8WxdRaZtchA7BX5weKYSIiGAfSd82g1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X4xnvjp3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE607C43394;
+	Thu, 29 Feb 2024 15:51:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709221849;
+	s=k20201202; t=1709221865;
 	bh=YPRtis0IXaoNDc9pCeoWs6Weo9a+oWw+h2fuU+s0gXI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lPeWekLZNj4fOT3pUynOoO0EdYRb7IsXOZ3PvwweEIuJRacOFuSJaaUzgPtbncyVN
-	 E4Pptuf8HulbjJB7AoGTQN9ftmOrQc8EBR241T6nW6cthFW7a3O/o+2Db2UB7MPa3Q
-	 2KF44fhtXUFnbi3iLZUE6GdeG/Mo5L3xE4xjO1DjTfH9TGaAXMdSvUSCWTu3HA+GRM
-	 Zi5eA/vV4AIjTOTpCl8YxW3Jc4bgy9zQyFdHH2pF5+/j+qoSPJHPes97qoQqC1Sjaf
-	 bWEQH8Y+Wx/7EzdmESlHLvDYQuqihtt33bG0K5JJ7GXuaiku8tSD+oVt/wDvycEfHC
-	 5b67EsyRAIgMw==
+	b=X4xnvjp3S3ctd9aQ54QdMKqdjIUACDGSY2NE4GvGVjXMsBqUj+ETPG+sFpNPv5tc7
+	 zq7RfqAdJU8kGe16kBCJIMTPMm8hdQc/2HJdWSVgorZP+sUHDLz4cvSW5+3oCMJmdn
+	 iUo+GGb3F6+q4qzPKueZfDlYs9SqCp4vjEHF+/gRTPvGCbYk/gxvr4o1ohc1AzY6Ic
+	 56mHZjJ+d+lCBFgQzGvtr7eVmZFqN1tW0Ih4rAir73k+aSfaxL5tRHUHE6Vjq+V71f
+	 4ezABHJongtYfJUMLXjbwXlmrle+/QwSKPpm3gcBL3ywS4R7v8DrXveBAn12OMQTd8
+	 vTdE1d7/6srzA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -49,12 +49,12 @@ Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>,
 	Sasha Levin <sashal@kernel.org>,
 	oleg@redhat.com,
 	linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 09/12] MIPS: Clear Cause.BD in instruction_pointer_set
-Date: Thu, 29 Feb 2024 10:50:26 -0500
-Message-ID: <20240229155032.2850566-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 5/7] MIPS: Clear Cause.BD in instruction_pointer_set
+Date: Thu, 29 Feb 2024 10:50:54 -0500
+Message-ID: <20240229155057.2850873-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240229155032.2850566-1-sashal@kernel.org>
-References: <20240229155032.2850566-1-sashal@kernel.org>
+In-Reply-To: <20240229155057.2850873-1-sashal@kernel.org>
+References: <20240229155057.2850873-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.79
+X-stable-base: Linux 5.15.149
 Content-Transfer-Encoding: 8bit
 
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
