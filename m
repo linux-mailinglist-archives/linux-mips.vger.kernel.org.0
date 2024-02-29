@@ -1,82 +1,82 @@
-Return-Path: <linux-mips+bounces-1888-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1889-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FE5D86C4E8
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 10:22:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C4C0586C4EF
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 10:24:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D7911F20F00
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 09:22:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7CC111F23F60
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 09:24:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9979F59B62;
-	Thu, 29 Feb 2024 09:22:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A2B75A0F1;
+	Thu, 29 Feb 2024 09:24:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CvKH5Lc1"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="skO3Z3ES"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB9B58207
-	for <linux-mips@vger.kernel.org>; Thu, 29 Feb 2024 09:22:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF1103C097
+	for <linux-mips@vger.kernel.org>; Thu, 29 Feb 2024 09:24:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709198547; cv=none; b=sNp4bpAhOJAkgGH35j+FH9TRLk4FatYn9QFM7bhysYT/NQ0hUOCNeL0YuKM5qnFN2MhGb1rhBisDMRiwZ+ApKvOzJ8AulF1m2283n7n4q1aR8mcIL26lDgjSySRzQHdrqWRJU/cywV0TFhktJ1U1cNfBNiuXf+ey0mJMk+sOoyU=
+	t=1709198655; cv=none; b=Vk9PBc55D4bvzK3rEdJtdj4n+WiLzxsktciMt/RK+BcaPBs6WM1jWLPfZuXWDSrq5JdXQxhNgMipz+QXOkb0YEruTFvuz+XvZUA5+aUOPScNXTMShcSeyJSOdUJv4OQ6jw693tfRJY3hC8LfR33Z74UlIUnNC8FloVbIO5b4iME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709198547; c=relaxed/simple;
-	bh=bI1ZRftBK9BLam+u83rqGUmNXFCQs9MdpXovOd51pag=;
+	s=arc-20240116; t=1709198655; c=relaxed/simple;
+	bh=acHOjUiE9FcyTIji+FDfgzffemwW9Cnt/rCI5e+Lozw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u6ynejsRL6QLcgMy0vfqL+ZeHul+aZMjyjY0adWIAqNgH4Vxh3e5TnnTaJbdyiaTMeUvwpfRtpK3fR21iU6GWpUSc90Zb4x3ep3eCSFWEhxtBw5pCvL9sH+2jfUhUhdBa0SnjbNVBzLZY2GeFg3wPcQXay9FGQjyY//vAEr1OJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CvKH5Lc1; arc=none smtp.client-ip=209.85.128.182
+	 To:Cc:Content-Type; b=jBQE4+fB7G1SGYdF18cv6is2kyJ1hH3dL9KyxmXVqB++jEanlG9mGwnCW9xEHHpWzp4Nov08P2hC5nzbJ5q7pPQSxcchcz6sV/AlUhDuFTRbrKqRZEHtfMxFpHHL4jI2VIRbzTbel3n/vsaACg4EXagjfxCgtD/3Hs9ceHrYnVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=skO3Z3ES; arc=none smtp.client-ip=209.85.219.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-608e3530941so7175437b3.1
-        for <linux-mips@vger.kernel.org>; Thu, 29 Feb 2024 01:22:24 -0800 (PST)
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-dcc71031680so652865276.2
+        for <linux-mips@vger.kernel.org>; Thu, 29 Feb 2024 01:24:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709198544; x=1709803344; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1709198653; x=1709803453; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=emeJTyQGTBVkPHgEAJypkygeKWxGsM4PaU8Q964nc0I=;
-        b=CvKH5Lc1vX0qYDfYqSvWkyYW5DEIJlOMAsA3J2WzJvkgFAutD7ojmpJTFAOe8Vn17E
-         d5UzSOQxvpgUR224GSXFIckmtSMvJOkftr6XE0VJpnQhx78x7biSIvkBcMPLiP4tVv/J
-         hUNZb76Dx7CG1IHzzSeTJ1kpZU9fVWDIENb3qNh1sGho5F5khEl5OsOxttQRo6wVdRkQ
-         uuySgwKEY7SIFlNk3RanA0okRitO2LRFVz2On79VRAZCiQZfq0TzkD9mCBE8f06Vlr+z
-         rqEqgu+HOKC53jNdYhHeVbnXTlGC8zh9AMJMR7lIn+TmhlITRXtpkK1xW9vuq4y95HqX
-         Wl5w==
+        bh=acHOjUiE9FcyTIji+FDfgzffemwW9Cnt/rCI5e+Lozw=;
+        b=skO3Z3ESPncq3Vthb3+r5exm/XuSrp6A+qR2s5irtnvnDWUm5nE6KuFMEUclWl2Q/j
+         2CLDojI6Bk32/F6itPCKktSc7D0rAend5rD7kom9GnaWJ2JtwRNfYCAjrFY8ZCh1oBR4
+         xqO60nNKbFwmuxviTCgzJ4qGdX4A8dow0iB/o6khzT2tmG/+Nhm006+1TrPZSzLZzyo9
+         iezC1RLtV096WW7L5yp7Lg8z12E1b0o2t4MwGZdeiXHqDsUmaW7mA5hWxLluNhZLCI5h
+         I1YNSwE3AB708JSOJyROvVyOeqnaN+c7xg7CdpWYVJk9j+Tayp1Wq7bs9X6JOdJ6y5XQ
+         7W8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709198544; x=1709803344;
+        d=1e100.net; s=20230601; t=1709198653; x=1709803453;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=emeJTyQGTBVkPHgEAJypkygeKWxGsM4PaU8Q964nc0I=;
-        b=t/vNGD3OMneicIuhdN/mvkb3OCbniC25CTa1tAy/0CZHxV/Upx+dDWFkV295WDkjRl
-         ZawIie0zh5ZQ920FRrJ/5ZWudR1ID6Pp5ofYrwGzSQPKeGmA6ZP1ncm2cINpBwL+LJvN
-         y7haUkFyERWz4wEugzFvInznDQTCWL8RNPBS5PAkNea3kG3jqzrbTwGbkmyImDkpzdkj
-         H6aKt88cBJltiz+ZCxm2/O0eUAdQdohImC4+fqBvNajUj9R4C4m+mF+duW2H2iOgiMnG
-         1SqIF/jNoYeMKjwJQRuXFL+NrsG4cOhvIhYeuxLyCJGVQHRWJapGp7T0pWwf2660QmP5
-         Zo1A==
-X-Forwarded-Encrypted: i=1; AJvYcCVoFLVjgmbNzi8cw20RKtvRz6N8t52ic959A47OCF8wOzcqx9/vIVZMkgR6qDyCGGAu6XSowVgjRjx5AgyrDpMLJIck+UYsa/YVvA==
-X-Gm-Message-State: AOJu0YyvCotqgvGjpro33v6Kbi3/aFxFOEohgT49PyOB6BJRon8iA3yx
-	T+l1Eo5P8TASoWip8tfzMszkZqD1n/A2A/vet+aXPctePpBpOnXN4Ow3C+axO0GKbswiAscl7tS
-	4CgG6ulP95AAlVj5tqjXUywstFK9nYEF1iIxdMA==
-X-Google-Smtp-Source: AGHT+IF4vd4P26YPLOjWgdDMNK6TfIr88e5uQxZ9spxEvgsormiXWmhR7RjoCr0tm/IoEzQpbKjiU0VxVwAf2Slk7RM=
-X-Received: by 2002:a25:d055:0:b0:dcc:a61b:1a72 with SMTP id
- h82-20020a25d055000000b00dcca61b1a72mr1784068ybg.47.1709198543817; Thu, 29
- Feb 2024 01:22:23 -0800 (PST)
+        bh=acHOjUiE9FcyTIji+FDfgzffemwW9Cnt/rCI5e+Lozw=;
+        b=FY87vIH08Zb4Yin4TJwwkNKAX8mRJg1wOajrTZDmOsf8MgWRhGwZ0PIB27NXns+E5M
+         Jx0P8Z5kj6SFfzxXbaSa1E5qjPPtZxiVv9yCub2B/vsVmIokCuBRLm9BeU1I11rcjNcN
+         sikDxlQpY8hHtUIS3QuTWRbsNoE9RGeiaqqS5nItC/KSCiXAwgCgbOgPEDRZCf5ascFd
+         ygk0D/KTWeFQ2malH2EuQx2izQdspzX7SlPdw3UsfvLfqerR/x6DSjC0PftkexruZJ3E
+         d5WuSYHXru7ZcqLTl4MeCYBWSaax/GusiYuKl1SyAeQLx2T7jo8F0QjGuap40RgvtJID
+         aCxg==
+X-Forwarded-Encrypted: i=1; AJvYcCVWvvLcbz1tDGnoeJDHDaJQXNPHUkBfmEX/bP4KGMSj+yI95gqpQM8CWtVfFMnTqv/34zZy6v1ZnMT+aN/sQrn+M6IAb/4u3tgwQw==
+X-Gm-Message-State: AOJu0YxgTWwQ/wQduUzgGnIaNZLAzlEDsjoy1gqawxxZGwYdQYbOyQDe
+	TcPWyJ1GNxwfuw78/6b8HBi/F5GE6qEO/eJcSZ1w1lnPJwy+eoJybvJ+0ZwfoBBeaFlF22LesQ4
+	ITzVwO4pUT9LKGSXdVyXokEg/ky7nabrMYQfmrA==
+X-Google-Smtp-Source: AGHT+IHuxs+y33+QXYrS7v42PbEsIL492f7ErZQmwtJt+UzdJGQk5GkoOqe+C/FQ0kYdzZUyDoNwliFQRIcjVaMqD4c=
+X-Received: by 2002:a25:8451:0:b0:dc6:b9d6:1542 with SMTP id
+ r17-20020a258451000000b00dc6b9d61542mr1619157ybm.48.1709198652964; Thu, 29
+ Feb 2024 01:24:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240228-mbly-gpio-v2-0-3ba757474006@bootlin.com> <20240228-mbly-gpio-v2-5-3ba757474006@bootlin.com>
-In-Reply-To: <20240228-mbly-gpio-v2-5-3ba757474006@bootlin.com>
+References: <20240228-mbly-gpio-v2-0-3ba757474006@bootlin.com> <20240228-mbly-gpio-v2-6-3ba757474006@bootlin.com>
+In-Reply-To: <20240228-mbly-gpio-v2-6-3ba757474006@bootlin.com>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 29 Feb 2024 10:22:12 +0100
-Message-ID: <CACRpkdbfX=fOLgP+2b15up9Dt1=W4qFG0UrCCnOhkjUF5X+OLQ@mail.gmail.com>
-Subject: Re: [PATCH v2 05/30] gpio: nomadik: fix offset bug in nmk_pmx_set()
+Date: Thu, 29 Feb 2024 10:24:02 +0100
+Message-ID: <CACRpkdY+cjU__XSxrSnKtZjkd=jRT13OWD8RXh3JUedNk0TPWQ@mail.gmail.com>
+Subject: Re: [PATCH v2 06/30] gpio: nomadik: extract GPIO platform driver from drivers/pinctrl/nomadik/
 To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
 Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh+dt@kernel.org>, 
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
@@ -92,31 +92,34 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Feb 28, 2024 at 12:28=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@boot=
 lin.com> wrote:
 
-> Previously, the statement looked like:
+> Previously, drivers/pinctrl/nomadik/pinctrl-nomadik.c registered two
+> platform drivers: pinctrl & GPIO. Move the GPIO aspect to the
+> drivers/gpio/ folder, as would be expected.
 >
->     slpm[x] &=3D ~BIT(g->grp.pins[i]);
+> Both drivers are intertwined for a reason; pinctrl requires access to
+> GPIO registers for pinmuxing, pull-disable, disabling interrupts while
+> setting the muxing and wakeup control. Information sharing is done
+> through a shared array containing GPIO chips and a few helper
+> functions. That shared array is not touched from gpio-nomadik when
+> CONFIG_PINCTRL_NOMADIK is not defined.
 >
-> Where:
->  - slpm is a unsigned int pointer;
->  - g->grp.pins[i] is a pin number. It can grow to more than 32.
+> Make no change to the code that moved into gpio-nomadik; there should be
+> no behavior change following. A few functions are shared and header
+> comments are added. Checkpatch warnings are addressed. NUM_BANKS is
+> renamed to NMK_MAX_BANKS.
 >
-> The expected shift amount is a pin bank offset.
+> It is supported to compile gpio-nomadik without pinctrl-nomadik. The
+> opposite is not true.
 >
-> This bug does not occur on every group or pin: the altsetting must be
-> NMK_GPIO_ALT_C and the pin must be 32 or above. It might have occured.
-> For example, in pinctrl-nomadik-db8500.c, pin group i2c3_c_2 has the
-> right altsetting and pins 229 and 230.
->
-> Fixes: dbfe8ca259e1 ("pinctrl/nomadik: implement pin multiplexing")
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 
-Patch applied!
+Patch applied.
 
-Since the bug is not affecting the deployed UX500 systems I have merged
-it with the rest as non-urgent fix, but it can be backported as a standalon=
-e
-patch if the stable maintainers want it after the release of v6.9-rc1.
+It's good to get this move done, then we can iron out minor issues to
+the GPIO part in the GPIO tree as we move along.
+
+I will send the patches to Bartosz with an optional pull request for
+this immutable branch.
 
 Yours,
 Linus Walleij
