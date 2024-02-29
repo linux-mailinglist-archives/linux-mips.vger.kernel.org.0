@@ -1,82 +1,82 @@
-Return-Path: <linux-mips+bounces-1897-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1898-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E2FD86C524
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 10:29:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0FD186C52B
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 10:29:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA89D28E0D4
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 09:29:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51BEC1F233FB
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 09:29:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8CD85B5C5;
-	Thu, 29 Feb 2024 09:28:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C98975B5C5;
+	Thu, 29 Feb 2024 09:29:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TYuNkIPj"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="d5lfH0Z1"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1307C5B698
-	for <linux-mips@vger.kernel.org>; Thu, 29 Feb 2024 09:28:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45DB95B697
+	for <linux-mips@vger.kernel.org>; Thu, 29 Feb 2024 09:29:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709198938; cv=none; b=t4pRwCMVgUGrvDQ5aOvPwyTMRR0JZ1JmwegYHZ1fbdDgI/MW3RHzSHa9hczV7vw8g77IqsmWAMLsk4ftYcGJzOf4kdB4RwQtTZ3KgK2EPZ2iq9tKC+ziqFmIsV1/zAQlAFlI3rVmJBT7yDxw8AnjSnzWIKr8D4nbcEXuUggwbco=
+	t=1709198972; cv=none; b=c/4H0Rve+oJLaBWF9pqY01nV3ULRrQ4ggTSGU/M6WAaFRPGsPas6By0B31jF8xdnrssfHxxbXziVWaGcZmVux3pWcQPnhzA3JvG4KRkeflupU+QDzpiByYyXirYt5d/4nNvAd8RZE34MxADWC9nmk9wWjec8B14qL6QIyw1wmPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709198938; c=relaxed/simple;
-	bh=il/+MTSUB+hJ9/Qk/zhTY8kE7bR8Rhe3rQiBlSatDYc=;
+	s=arc-20240116; t=1709198972; c=relaxed/simple;
+	bh=9xrun28hvTbwUNlBt/r1pmmvIKLwTUek4EH0OAQeY6g=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oKUgV+tX2olTaK30uKKqwJ8y4OSqwHy8i2Vx913OpDR2yFZQ3oosdmPGLa9IclUp2m2bV1KQv6pkuERGG4WydnRyHDdii8PN9eR9WXlREnCsJRxH8J6xjX74uziXI3lx0+zFhq3WdutAwjsuDwsl89+PkAqkp+jbaMxoASq34M4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TYuNkIPj; arc=none smtp.client-ip=209.85.219.177
+	 To:Cc:Content-Type; b=VBfh6Ouifu3t115kl31712MayuhAw6SSEud7d9634qwAIBkuJI1mDxOUSr/rC1KEJNmUZad//l3ap1Rc8CT4lAzObuddssj82oV6aI8ZScbQMHk7lpzgReGKjL/OfFKuW2ssrvQ31DwDQrE0RQIVy1A6LrnXcqhnN0C2emVZM/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=d5lfH0Z1; arc=none smtp.client-ip=209.85.128.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-db4364ecd6aso813885276.2
-        for <linux-mips@vger.kernel.org>; Thu, 29 Feb 2024 01:28:56 -0800 (PST)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-607dec82853so7012277b3.3
+        for <linux-mips@vger.kernel.org>; Thu, 29 Feb 2024 01:29:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709198936; x=1709803736; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1709198970; x=1709803770; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lpnwZXvO+GxSiHd0a/DytgyertWwHVGU4iyf7Q6jgRw=;
-        b=TYuNkIPjMwzDHQdknFcZap2VRp457jPMtJDlOKTrctAkBWLQi4bK2SGCP2BZEl1Rq+
-         E0gA3YYj58ti5Duzm8HbzOG4gRNfoCtzM16hKtF+9B2WPMJVjkepl0FSh7J62ze0SOmG
-         LaLgb4IWlYioWh4MATdLMcmwEKWO9VRCoRUGooefg45aWtBJH/Y3Ny58TDlunKSijXAH
-         v5lAuOy2zJL9QdgQpaPwR3geDDFbwQWlXt5+aDJR48UrUXJDpUnB4a3dNlkJPIpHELab
-         P0WizjuSJk9yuwQ12ykZnqHygcaW2sNnQC/ojEmDgp0kdwLsR5zs9c9MUUC25j79wlIk
-         MTaw==
+        bh=9xrun28hvTbwUNlBt/r1pmmvIKLwTUek4EH0OAQeY6g=;
+        b=d5lfH0Z1sSIgs50yYIeIQKbO474hjQu/EvDmwE49iQgsPOInNaUQDOSA+AF4CXIpmy
+         Xb1yPwzdhzClmaM4/Sk0iXEUpm+yQhSsgDzdlqlLeZvTwcW3dE3W01U7sSMPo0shu7Fc
+         DvniCqD9rNmEwOafYGPLQlfQwYPz5sQoI9To5ytwb51myDjMz8imulc5asSJHGygEuRW
+         niIiT0OyykV5slPLPb3X8XhzLIz8bSeMBjuBVD+hqMi3M/ZVN6reQuYyVcKeW7hgzrHU
+         GJh75fl0fgOWApwNO5tjbiM5lwSFeovt7YtrIQmbdYcRK4gc52P62cd5kaS1C6Oqf5xj
+         tbMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709198936; x=1709803736;
+        d=1e100.net; s=20230601; t=1709198970; x=1709803770;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lpnwZXvO+GxSiHd0a/DytgyertWwHVGU4iyf7Q6jgRw=;
-        b=KBsk98n5XJkb84Op8wKcD6y8YUHLbFbQ0jUAG40FY11NKL0R85EMoHf+JV1Sdp9FSi
-         CCav81t3SMQD2lrQwKpVsADeeibwUkZjJY3FKa/2YStQfogPOaNc/V2bg2L5Wj1OasFj
-         cyWJK/zna8T1/Bni/K9XjGSj+BEnNoZryDrhJBDCHs/kHa3X+bVEe+YdVFJ9n71R/AzB
-         CXkcta+J4DU6rqrPdwaQxNpdq15d7F6K95aRzzT1AsxbnlwKyAYSY4y1zt07cnjVzcog
-         dxjF8Xfnj6mXjEJXw47q+P552h/6eoB3Hk3Ig7Gjxv8xZt3CdBsNXT9YlJ0cF4qabWOS
-         I38Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXPmPwIOFG+Ficni4qwu6VFPDgtEsBM13xZNumDUNVN9eYTygKLN5vSxs2Fo2P55dwn/Hi1SjRoentVFX6u3F13kCPtHzpuvxv5gQ==
-X-Gm-Message-State: AOJu0YyXAIFYQbOm7FxCniHhg682z+Lc//PsWUSGSPeuXxaBB0CJ6g46
-	VN3QCARk5hLL8c3dfd0E7q4WS4bcmwPUUPRpBbQbtZDgRU24Dmd4WFZNoOmtO97bzG2pocklf50
-	JGqmLmAPpOOWbNuG/iNQJabcRaAsf57SoAVk6yA==
-X-Google-Smtp-Source: AGHT+IGIbl2TgaNavrw5wNoqVGLPJWdWimW4CCp6UKDlUrz43Cqlv3DtmfGj5h6AXkXD7KdYMCvm+9wtqdkrh8HvPfQ=
-X-Received: by 2002:a5b:445:0:b0:dcb:bff0:72b with SMTP id s5-20020a5b0445000000b00dcbbff0072bmr1559369ybp.31.1709198936052;
- Thu, 29 Feb 2024 01:28:56 -0800 (PST)
+        bh=9xrun28hvTbwUNlBt/r1pmmvIKLwTUek4EH0OAQeY6g=;
+        b=Ityz5lxjrT5QqNYAP6/IpJGF0KznLL6yFMcYUpGfSZiaV5MdnblDCLBMy5zOrIoZj3
+         VxKgx6YB/WbhlxC66DrsHBXXAy725kaZwMfs0EywvuWIiodWjGq+mi9YHTy+DWv4dC6x
+         nwxl4ZUAdjXHL7MCYO/4gie38MPBcKo545DMCr1JPkGFCH1VwiQq6/fYHpWmLC5odmDA
+         9WvYOiifWo5sV4wIMAp5YDYjOg8oR2bzHoLlUGsrJ6reIcYJ9ql8TEmOkcQSWTmDEdDT
+         esvA4crVq2eOmaFMhQFQLH9l8Nz+Lf1YImH5+69/Lt/jTgXfpZMO3d978PCeidlrSiNV
+         Vqyw==
+X-Forwarded-Encrypted: i=1; AJvYcCWv/7Mg0YfymeatfEbww7KE1OXYZzQanBtLFe6r/6oBwnNjps7XfLTNUWbaV0RRhlxccVBDqDe54W7YWbNYepYG5nWzdKvvHMgjpw==
+X-Gm-Message-State: AOJu0YwLNUhMNDBYjMQvCGAXgzeRGNWNyRfqJ0RrnUMTr5/PUOFKT+Qq
+	Qdw4BCHB8Q3J3lw4l24JJ8g/VuxGjZUP+WAnog7KoCrIZJrU6CsVOYJTubL1qEUYc3Zw25muKU9
+	LKz1IcrQNUuH+s6wRGitwQPhWj8r05mfgqGpeiQ==
+X-Google-Smtp-Source: AGHT+IFcIq6rOa8YJF/37W++7S7G6OEFznJJRmbQw71XiyjH8oKuNU7jWDHU4uKxFfdpywX9lIfEjnnzQ3AuD36QOkg=
+X-Received: by 2002:a25:81cd:0:b0:dcc:8c5e:7c9b with SMTP id
+ n13-20020a2581cd000000b00dcc8c5e7c9bmr1795722ybm.57.1709198970093; Thu, 29
+ Feb 2024 01:29:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240228-mbly-gpio-v2-0-3ba757474006@bootlin.com> <20240228-mbly-gpio-v2-13-3ba757474006@bootlin.com>
-In-Reply-To: <20240228-mbly-gpio-v2-13-3ba757474006@bootlin.com>
+References: <20240228-mbly-gpio-v2-0-3ba757474006@bootlin.com> <20240228-mbly-gpio-v2-14-3ba757474006@bootlin.com>
+In-Reply-To: <20240228-mbly-gpio-v2-14-3ba757474006@bootlin.com>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 29 Feb 2024 10:28:45 +0100
-Message-ID: <CACRpkdb6cLAaAkYa=2Sz1G4t2yBRQcwPWsoQShdQ2JMcg+VaRQ@mail.gmail.com>
-Subject: Re: [PATCH v2 13/30] pinctrl: nomadik: follow conditional kernel
- coding conventions
+Date: Thu, 29 Feb 2024 10:29:19 +0100
+Message-ID: <CACRpkdYavroWGW5HXLJATF0UuffQYnyoQYnO=aV364=XA7ARsg@mail.gmail.com>
+Subject: Re: [PATCH v2 14/30] gpio: nomadik: add #include <linux/slab.h>
 To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
 Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh+dt@kernel.org>, 
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
@@ -92,18 +92,7 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Feb 28, 2024 at 12:28=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@boot=
 lin.com> wrote:
 
-> Fix strict checkpatch warnings relative to if-else blocks and bool
-> expressions. Message types addressed:
->
->    CHECK: Comparison to NULL could be written "!nmk_cfg_params[index].cho=
-ice"
->    CHECK: Unbalanced braces around else statement
->    CHECK: Using comparison to false is error prone
->    CHECK: Using comparison to true is error prone
->    CHECK: braces {} should be used on all arms of this statement
->
-> Before: 0 errors, 1 warnings, 16 checks.
-> After:  0 errors, 1 warnings,  7 checks.
+> Add linux/slab.h header include for GFP flags.
 >
 > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 
