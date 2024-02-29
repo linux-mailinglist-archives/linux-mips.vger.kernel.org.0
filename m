@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-1926-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1927-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60FF586CC90
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 16:13:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC91186CCC4
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 16:23:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2F811F2285B
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 15:13:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E666E1C21741
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Feb 2024 15:23:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D17E145B0B;
-	Thu, 29 Feb 2024 15:13:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07ABF13DB9B;
+	Thu, 29 Feb 2024 15:23:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cT3W4J8M"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="p3HPaMpT"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C56AA137777;
-	Thu, 29 Feb 2024 15:13:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5F93137747;
+	Thu, 29 Feb 2024 15:23:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709219602; cv=none; b=WiSk8R9yprj2GPffL1TfdKiiK29ByNobR4lJPaVcSmuWZyrXyvjwR4Ayd81vg+GZOdNyffsgAqj9VhgzKlHGd4ZgfSu8RBuOH5QyrzZAKLwXXVqumomG8AO2NKDr0HALQGfb2IcyMybZztNu54tYuiam9+e90IQPdYZlIUeq974=
+	t=1709220187; cv=none; b=ZoiUNUGgKhUj5PyTdQ9+cka1bHXawlPly8lYHdBwH5444wBreE1M0xs31c9Ql4zJPfmnyP/QFNlg1kmBHU0yc78Pw0Q6uvsBqIE1sDpRVPfCZJwfyG4uvDYxCLvnfJ3OQFViY0w25X+YiULtBqS8ylKw1ONbN6CrIK5AgBkOtjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709219602; c=relaxed/simple;
-	bh=yP3KNDy1IIwwOw9qTXZ4+tF0LwRs4bi1+9Aw/uR91UI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=mWECYDNIXoVkX+zPL9Cs2SztG9Dbwo8+LbzQa15FCCg+B8FlXfBRzrFlfdaNSGOiYsV3s6kjU3YN9sRuMuFuXma7IkfzxHFzIDh5G648UZNX3iMHsIl+bIH0vx6KpJoNC6bd89t8xHBUd59ccDhMSsqddV9o3nJekdfmvJLHzLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cT3W4J8M; arc=none smtp.client-ip=217.70.183.198
+	s=arc-20240116; t=1709220187; c=relaxed/simple;
+	bh=FnJ5PRLHMbbCxiWolI/D484iJjQ+6LJl7Lv2B83l2e0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
+	 References:In-Reply-To; b=uXs3c3w2zhV40ET0q+e3t5zpzWpJu/jeVHNap5J2UHZUaKxgsYdktD/LNEl1W8y10LFwD88p/qDsFdsnzoS1lzzmm5AG8gklEgy0Q/SUktX6092voopZcvTfRVx/UhoCSzWO7o3GlRFSpFxKyQ0fQSaaLsgeOR1Jp6jPQAC+Nnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=p3HPaMpT; arc=none smtp.client-ip=217.70.183.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CE619C000A;
-	Thu, 29 Feb 2024 15:13:15 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0933FE0005;
+	Thu, 29 Feb 2024 15:23:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709219597;
+	t=1709220183;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FoBURWTIPimd8MPiI97xIR1vDaJAFlKxrIgOrhBjJ5o=;
-	b=cT3W4J8MH2FTCDpQk8Jknvmkycp7Lz47lhBdQRqIR1pHI1x1vScGnxyeAmRrPCdW/R2tO1
-	sCW1d4CLbEY9RYqwR5jUDUYk7vv0uCDdPeUy3o7T217qTpv+ED12P8wj+jQCxJ+1Ta/k07
-	fnRoTfSqN2OtbqC55fOb8DigGkPRUFPzIOXtI8vAVxGVnM4rJX7IavPB8uhgFCJBmf25Qj
-	dEQx7l/mKiTwFMK56D7imKS7OxfvIXf4S0OIWsE2z6I5klm4BlzJTuq3PO/pyrKaX1VBBh
-	Kd5SjX2Hpcm3t0L9EsUCy5vUYrI69C3ruFO+SdlM6mJbDbEwIeHzIduE+wYMmA==
+	bh=g5kXwCtNU0te2FYTDQ4q2dN9S7SUT7EeSjehv7fCtCk=;
+	b=p3HPaMpTCeMnY+v+RhRzOMfYf1hJRqMHo3mDiIUesLh6hAPkP84BiA1/4vN1Np1RzhMxL8
+	BJ1uJHxtM7AqiEI1cce7u4UVp8r8LqfZvNHOW/0j4W5wzAXLW6F+JhykK4QY9t9Zz3xTdl
+	j5t56sDZpKxwbF01428OmZHp4O/tmvJKJ0i5CR2HNxmkDocrMQIwAQejdScrk0m5byvTF9
+	3VIS/Y/t49hoiyd4lu007tVtJ6g4y9Fn8feOCpQ8S4JKVl9bXptA2rWgpgV5SSxF9IA8s4
+	Cj1JmrOzfVw2vUNqgwV36ZYdpNXQ6AEMGdBx59t7Xj2S2jPkCVyDCR7zkbppIA==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,9 +53,8 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 29 Feb 2024 16:13:15 +0100
-Message-Id: <CZHNS29NK9RR.13G019Y9ZY6IO@bootlin.com>
-Subject: Re: [PATCH v8 05/10] pinctrl: eyeq5: add platform driver
+Date: Thu, 29 Feb 2024 16:23:01 +0100
+Message-Id: <CZHNZJJ600CC.1WV7Q2520ZSKU@bootlin.com>
 Cc: "Gregory CLEMENT" <gregory.clement@bootlin.com>, "Michael Turquette"
  <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Rob Herring"
  <robh+dt@kernel.org>, "Krzysztof Kozlowski"
@@ -70,193 +69,65 @@ Cc: "Gregory CLEMENT" <gregory.clement@bootlin.com>, "Michael Turquette"
  <tawfik.bayouk@mobileye.com>, <linux-gpio@vger.kernel.org>
 To: "Andy Shevchenko" <andriy.shevchenko@intel.com>
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v8 04/10] reset: eyeq5: add platform driver
 X-Mailer: aerc 0.15.2
 References: <20240227-mbly-clk-v8-0-c57fbda7664a@bootlin.com>
- <20240227-mbly-clk-v8-5-c57fbda7664a@bootlin.com>
- <Zd4moVd_-bY6Z_kL@smile.fi.intel.com>
- <CZGX0TSYLOH4.DZHG351R9KFZ@bootlin.com>
- <ZeBsAbPRr5IPkVZj@smile.fi.intel.com>
-In-Reply-To: <ZeBsAbPRr5IPkVZj@smile.fi.intel.com>
+ <20240227-mbly-clk-v8-4-c57fbda7664a@bootlin.com>
+ <Zd4bbCsY54XEnvJM@smile.fi.intel.com>
+ <CZGVIWR4H4DE.3M5H3H99X0QPT@bootlin.com>
+ <ZeBo4N204gLO0eUd@smile.fi.intel.com>
+ <CZHK1ZCSROM5.X4WYN7SAZJTH@bootlin.com>
+ <ZeCLS17PhKPuGvkm@smile.fi.intel.com>
+In-Reply-To: <ZeCLS17PhKPuGvkm@smile.fi.intel.com>
 X-GND-Sasl: theo.lebrun@bootlin.com
 
 Hello,
 
-On Thu Feb 29, 2024 at 12:35 PM CET, Andy Shevchenko wrote:
-> On Wed, Feb 28, 2024 at 07:15:12PM +0100, Th=C3=A9o Lebrun wrote:
-> > On Tue Feb 27, 2024 at 7:14 PM CET, Andy Shevchenko wrote:
-> > > On Tue, Feb 27, 2024 at 03:55:26PM +0100, Th=C3=A9o Lebrun wrote:
+On Thu Feb 29, 2024 at 2:48 PM CET, Andy Shevchenko wrote:
+> On Thu, Feb 29, 2024 at 01:18:08PM +0100, Th=C3=A9o Lebrun wrote:
+> > On Thu Feb 29, 2024 at 12:22 PM CET, Andy Shevchenko wrote:
+> > > On Wed, Feb 28, 2024 at 06:04:47PM +0100, Th=C3=A9o Lebrun wrote:
+> > > > On Tue Feb 27, 2024 at 6:27 PM CET, Andy Shevchenko wrote:
+> > > > > On Tue, Feb 27, 2024 at 03:55:25PM +0100, Th=C3=A9o Lebrun wrote:
 >
 > ...
 >
-> > > > +	bool "Mobileye EyeQ5 pinctrl driver"
+> > > > > > +	priv->rcdev.of_node =3D np;
+> > > > >
+> > > > > It's better to use device_set_node().
+> > > >=20
+> > > > I don't see how device_set_node() can help? It works on struct devi=
+ce
+> > > > pointers. Here priv->rcdev is a reset_controller_dev struct. There =
+are
+> > > > no users of device_set_node() in drivers/reset/.
 > > >
-> > > Can't be a module?
+> > > No users doesn't mean it's good. The API is relatively "new" and take=
+s
+> > > care of two things:
+> > > 1) it uses agnostic interface;
+> > > 2) it doesn't require any firmware node direct dereference.
+> > >
+> > > The 2) is most important here as allows us to refactor (firmware node=
+) code
+> > > in the future.
 > >=20
-> > It theory it could, I however do not see why that would be done. Pinctr=
-l
-> > is essential to the platform capabilities. The platform is an embedded
-> > one and performance-oriented; boot-time is important and no user will
-> > ever want to load pinctrl as a module.
+> > I think I get the point of device_set_node(). I still do not understand
+> > how it could help me fill the ->of_node field in a reset_controller_dev
+> > structure?
 >
-> I can argue. The modularization can give a better granularity in the exac=
-tly
-> embedded world when the memory resource (flash/RAM) is limited or fragmen=
+> Exactly why I put the above comment as recommendation. And then I elabora=
 ted
-> (for one or another reason). Having less weighty kernel at boot makes it =
-smaller
-> to fit, for example, faster read only memory block which is not so uncomm=
-on.
+> that entire reset framework should rather move towards fwnode.
 
-I can argue back. :-) Granularity brought from modules is useful either
-in (1) resource constrained boot context or (2) for peripherals which
-some people might want to do without. We are not in case 1 nor case 2.
+OK now I get it. One question: would using fwnode abstractions make
+sense for a driver that is devicetree-only, and will stay that way?
 
-> The rule of thumb is to make modules if, otherwise, it's not so critical =
-for
-> the boot process (and even for some cases we still may have it done as a =
-module
-> with help of deferred probe mechanism).
+However this sounds out-of-scope of such a driver addition. I also am
+not familiar enough (yet?) with the reset subsystem and/or fwnode to be
+able to bring this kind of changes upstream.
 
-I'd call SoC pin control a critical resource for the boot process.
-
-I also like the simplicity of builtin better for such a resource.
- - If we tristate pinctrl-eyeq5 and there is a bug, there is a bug (in a
-   context that we have no reason to support).
- - If we do not allow it and there is a bug, there is no bug.
-   Plus, it makes one less choice for people configuring the kernel.
-
-[...]
-
-> > > > +	if (WARN_ON(offset > 31))
-> > > > +		return false;
-> > >
-> > > When this condition can be true?
-> >=20
-> > If there is a bug in the code. Defensive programming.
-> >=20
-> > There is this subtle conversion of pin numbers =3D> offset inside of a
-> > bank. If one function forgets doing this then eq5p_test_bit() gets
-> > called with a pin number.
-> >=20
-> > In this GPIO series I fixed such a bug in a 10 year old driver:
-> > https://lore.kernel.org/lkml/20240228-mbly-gpio-v2-5-3ba757474006@bootl=
-in.com/
-> >=20
-> > The whole "if it can happen it will happen" mantra. We'll get a warning
-> > in the logs using pinctrl-eyeq5.
->
-> My point here that we have mechanisms to avoid such issues, for example i=
-n GPIO
-> we have valid_mask field and GPIO library takes care to avoid such condit=
-ions
-> from happening. Please, double check that you really need these in your d=
-river.
-> I prefer to avoid them until it's proven that they are real cases.
-
-Whatever the subsystem does to protect us (like only calling callbacks
-with valid IDs), it will not protect us from bugs inside the driver's
-callbacks.
-
-I do no see a reason to avoid such code. I do not trust myself to write
-perfect code. Its aim is to protect ourselves from our own mistakes. If
-such an issue occurs, understanding that this is what happened would be
-really hard (especially if it occurs on someone else's boards).
-
-> ...
->
-> > > > +static const struct pinctrl_ops eq5p_pinctrl_ops =3D {
-> > > > +	.get_groups_count	=3D eq5p_pinctrl_get_groups_count,
-> > > > +	.get_group_name		=3D eq5p_pinctrl_get_group_name,
-> > > > +	.get_group_pins		=3D eq5p_pinctrl_get_group_pins,
-> > > > +	.pin_dbg_show		=3D eq5p_pinctrl_pin_dbg_show,
-> > >
-> > > > +	.dt_node_to_map		=3D pinconf_generic_dt_node_to_map_pin,
-> > > > +	.dt_free_map		=3D pinctrl_utils_free_map,
-> > >
-> > > ifdef is missing for these... But the question is, isn't these a defa=
-ult when
-> > > OF is in use?
-> >=20
-> > Doesn't look like it is. In drivers/pinctrl/devicetree.c:
-> >=20
-> > 	static int dt_to_map_one_config(struct pinctrl *p,
-> > 					struct pinctrl_dev *hog_pctldev,
-> > 					const char *statename,
-> > 					struct device_node *np_config)
-> > 	{
-> > 		// ...
-> >=20
-> > 		/*
-> > 		 * Call pinctrl driver to parse device tree node, and
-> > 		 * generate mapping table entries
-> > 		 */
-> > 		ops =3D pctldev->desc->pctlops;
-> > 		if (!ops->dt_node_to_map) {
-> > 			dev_err(p->dev, "pctldev %s doesn't support DT\n",
-> > 				dev_name(pctldev->dev));
-> > 			return -ENODEV;
-> > 		}
-> >=20
-> > 		// ...
-> > 	}
-> >=20
-> > And I see nowhere that puts a value if ->dt_node_to_map is empty.
-> >=20
-> > For dt_free_map, it is an optional value. If the field is NULL nothing
-> > is done. See dt_free_map() in the same file.
->
-> If we drop OF dependency, these fields might not be present in the struct=
-ure
-> (by definition). Compilation won't succeed. Am I mistaken?
-
-struct pinctrl_ops has both ->dt_node_to_map and ->dt_free_map fields in
-any case. See include/linux/pinctrl/pinctrl.h which declares the
-struct. The function pointers we put are also under no conditional
-compilation.
-
-[...]
-
-> > > > +	case PIN_CONFIG_DRIVE_STRENGTH:
-> > > > +		offset *=3D 2; /* two bits per pin */
-> > > > +		if (offset >=3D 32) {
-> > > > +			val_ds =3D readl(pctrl->base + eq5p_regs[bank][EQ5P_DS_HIGH]);
-> > > > +			offset -=3D 32;
-> > > > +		} else {
-> > > > +			val_ds =3D readl(pctrl->base + eq5p_regs[bank][EQ5P_DS_LOW]);
-> > > > +		}
-> > >
-> > > I'm wondering why you can't use your helpers before multiplication?
-> >=20
-> > I'm unsure what helpers you are talking about?
->
-> Which give you the MMIO addresses.
-
-Again sorry, but I don't get the question. I see no helper function that
-returns an MMIO address in eq5p_pinconf_get(). Two helpers exist to
-deal with memory accesses: eq5p_test_bit() and eq5p_update_bits().
-Neither are called in this function nor could they be used.
-
-> > If the question is about why multiply before if-condition: I feel like
-> > multiplying first allows having the if condition be "offset >=3D 32".
-> > That explicits why we readl HIGH vs LOW regs.
->
-> [...]
->
-> > > > +	if (arg > 3) {
-> > >
-> > > Magic number.
-> >=20
-> > Would 0b11 explicit why? The value is two bits wide, so 0 thru 3.
->
-> No, the
->
-> #define FOO_SELF_EXPLAING	GENMASK(1, 0) // or 3 or 0b11
->
-> will.
-
-Will do!
-
-Thanks Andy,
+Thanks,
 
 --
 Th=C3=A9o Lebrun, Bootlin
