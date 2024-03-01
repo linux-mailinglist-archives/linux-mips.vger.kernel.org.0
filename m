@@ -1,183 +1,163 @@
-Return-Path: <linux-mips+bounces-1964-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1965-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFD2E86DBB4
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 07:53:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27F1886DC6B
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 08:52:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9EE64288658
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 06:53:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D88C82830E1
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 07:52:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BC62692FD;
-	Fri,  1 Mar 2024 06:53:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J9S+uVoJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28D7669976;
+	Fri,  1 Mar 2024 07:52:46 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2141969940;
-	Fri,  1 Mar 2024 06:53:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71FB224C9;
+	Fri,  1 Mar 2024 07:52:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.236.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709275994; cv=none; b=b07vbfX1y+BTYRhL/BKH7Ttz9ZF+sFua1ulwxxSzlImBnF/Ix/4IWp/IH2zCCUKeXquwqpKtN2oiMyrMfboUx7brimEE8Ho+KsMvwpOq8Zr1tvcO34jnoFVqBPyR08FpHh54y1O6LN0vc2IbjgdexDghAeFXxKnlPJ43Pgw31yw=
+	t=1709279566; cv=none; b=bJwHCuev+pQvlQrDcEwxBfa+kffHUk30mS5x509q077C2EtAC7f54ylmQgctTRrnX+tIVyLjDA1hHTsvrzEv6lbN09dli2FzoSOmpiT5ADjyWwdTvT1RV5WYBUnnxDPmcZ8LiveL5DQypMk/9cp657TaT+Bahq8f6hGW6TQUV7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709275994; c=relaxed/simple;
-	bh=yJ3qnuzsiD+vY7/3h2hLhh57k/nxh0MKDiLyXnJblD4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TtN9AaJgdiD7doexNEm7UahIIxOfm+p/CoFoVfOSsiQFVl8PRcn8SA7t3CVAgCupgJbRkEqxOpkCkwVDZJ2cuXZTeD6ziKdUTBbwzoiVS3bx42AV6M9Fj3+JKPd3LHdAWXGyVZecJf6l6t8kWgC2172AwlV+DDlQhRC3Zh7odu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J9S+uVoJ; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1dca3951ad9so16464195ad.3;
-        Thu, 29 Feb 2024 22:53:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709275991; x=1709880791; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=wXiG6D5m4V4RhFeANN6ytUCYOxlqAHIxI03T8MEdzXo=;
-        b=J9S+uVoJsX8hXydEC/sV3k2A4dJUhhcbBvaivT+khvwY8sJs5/8uyMrT8lcpQ3pNnD
-         r0f/0aGuh1c76sPIBm5oNw+ooFaSso1z+TyH1oIwfXQ3MT9/ZkpjnakT8vYSHVmtknEq
-         u62CX30cUz8EPd7+S/2QiyTxJHHaQtunKUvZep8K3DWFDCLALJB73f2PPON5yFnGtjm+
-         cvABlz/82jlD1ubp2eZ170jLdDKGDpwMFsZJAKauOv3UM+YxQaDq9SWtpyJO7fCuwW/1
-         Gz4NNscRDg7XYmgiWV8OsFVnI0jqR/T6gfadIFU0Z0FBkEZ358uYjO+JlhD65pKjZvFp
-         phgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709275991; x=1709880791;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wXiG6D5m4V4RhFeANN6ytUCYOxlqAHIxI03T8MEdzXo=;
-        b=LhP6bB1EZK7rmTO3SqcrRt/JVTIQK8ELLujuV69btzF2TAmkNu1ImWB045i6xmFcxh
-         AdpU7JgN9QNTknRsttRvj+g2VkdTqYaE5BvIwdNoJrGScHMJuiQbit1WQ8dw4m8et7D7
-         pnM2ckj9n+77WHB2j85uYxWODG2pQ5z+PTq0qO4b36bAoJsjQfxGGLEx8CCxEF+76Lm2
-         fjoCMryK88C1AQZwiv9Pg1TIcX/9UuUlftpl8fedQWrwCXSRWbT7bWDbyt4oxYCFOAl2
-         IFOsHU16tbKvoT+kB+gNkJQk/yYf97pASg1CkDa901W8Z+GGW+rbAMlqEe+Fnt2rPPBX
-         d1Cw==
-X-Forwarded-Encrypted: i=1; AJvYcCVVg2hiienzkdJX936+HEgWRkcZm8M4A/PNmIRBshX2zb0GzWHzAoYUv51uqyG79Oy/d3TVkk8Tgq5TgSjI+IF9ZLCYsV9tawfmF7S94ZpMiBsdYlSsLN56rOvLga1+idfpPCdbiL3e0k0EvpoHjSROsofBV8bSJyEvpQhm9GcrvnfXY8RGcXCEFFMAIUIC2zrlHXj1dxrhl42qSVAvGC2thzB8pHZeR52pr+mBoICFvor0uGIvoZ7y/WKxaQ==
-X-Gm-Message-State: AOJu0Yygb9CcfAoc2H2LiF89R0mzouiX2SeE99m5qbfK/dcv/zbMbUR8
-	oydoE88x7ki0MTLY7ZKTqGv+F85KA6azWnxX2Yk3jqhANMVuwKgx
-X-Google-Smtp-Source: AGHT+IFpbSIiHEKTPKogLyHISu8ut/C5tr3wmgIj/iizT3dRu4HAqzDP5jIYhOI77adwEhkLqkAdmA==
-X-Received: by 2002:a17:902:a384:b0:1d9:167b:8e6c with SMTP id x4-20020a170902a38400b001d9167b8e6cmr668758pla.46.1709275991299;
-        Thu, 29 Feb 2024 22:53:11 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u2-20020a17090341c200b001dcb560d7f0sm2646773ple.11.2024.02.29.22.53.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Feb 2024 22:53:10 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d78fd3ca-ed0b-40e5-8f8f-21db152a7402@roeck-us.net>
-Date: Thu, 29 Feb 2024 22:53:07 -0800
+	s=arc-20240116; t=1709279566; c=relaxed/simple;
+	bh=m9JyN+OfZnBfNduvWL6HlRt2Ws8qdQM+zYhc2tHrO60=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TjLu8oj5/wja4dRS73eiuFFpI+WQoMqhXJ6PheR2+C0e24fljpIfsfbhoZp9yQyqQKQGIrBKsrj+/R7SjJQaG6qHYn2YQTfeHOE8+Zyzl3276TLY2GIxxjVWDOCzm9gpnH4htaVsvGpE+J3rN5ck6+oWA41EbkUfgyheC5SOD/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.236.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
+	by localhost (Postfix) with ESMTP id 4TmL0g4qB7z9tHZ;
+	Fri,  1 Mar 2024 08:52:35 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+	by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BqoZa5JD5ZwP; Fri,  1 Mar 2024 08:52:35 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase1.c-s.fr (Postfix) with ESMTP id 4TmL0f46Qcz9tFS;
+	Fri,  1 Mar 2024 08:52:34 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 857FB8B774;
+	Fri,  1 Mar 2024 08:52:34 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id X5jlVshACLyB; Fri,  1 Mar 2024 08:52:34 +0100 (CET)
+Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.232.117])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 6FC788B766;
+	Fri,  1 Mar 2024 08:52:33 +0100 (CET)
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linux-s390@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	netdev@vger.kernel.org,
+	"linux-hardening @ vger . kernel . org" <linux-hardening@vger.kernel.org>,
+	Kees Cook <keescook@chromium.org>
+Subject: [PATCH bpf-next v2 1/2] bpf: Take return from set_memory_ro() into account with bpf_prog_lock_ro()
+Date: Fri,  1 Mar 2024 08:52:24 +0100
+Message-ID: <8f3b3823cce2177e5912ff5f2f11381a16db07db.1709279160.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 02/11] dt-bindings: hwmon: lm75: use common hwmon
- schema
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Linus Walleij <linus.walleij@linaro.org>, Andi Shyti
- <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org, Gregory Clement <gregory.clement@bootlin.com>,
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, Jean Delvare
- <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
- <20240229-mbly-i2c-v2-2-b32ed18c098c@bootlin.com>
- <6749c8df-c545-4aca-bc18-4dfe9c9f15b0@linaro.org>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <6749c8df-c545-4aca-bc18-4dfe9c9f15b0@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1709279548; l=2705; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=m9JyN+OfZnBfNduvWL6HlRt2Ws8qdQM+zYhc2tHrO60=; b=BM8D7LKNIqd4yL3OmV1oY3lqs5bdcfaokGX528YFWG10bGRYTPO7xmnY3X/YTK0+TrgdD1oe0 Jcv1743O7HSBXVnLAvfrfkWf80mkc3ESZY06KRQSThm9AifGg/N13eN
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 
-On 2/29/24 22:37, Krzysztof Kozlowski wrote:
-> On 29/02/2024 19:10, Théo Lebrun wrote:
->> Reference common hwmon schema which has the generic "label" property,
->> parsed by Linux hwmon subsystem.
->>
-> 
-> Please do not mix independent patchsets. You create unneeded
-> dependencies blocking this patch. This patch depends on hwmon work, so
-> it cannot go through different tree.
-> 
-> If you insist to combine independent patches, then at least clearly
-> express merging strategy or dependency in patch changelog --- .
-> 
+set_memory_ro() can fail, leaving memory unprotected.
 
-For my part I have to say that I don't know what to do with it.
-Rob's robot reported errors, so I won't apply it, and I don't
-feel comfortable giving it an ack either because of those errors.
+Check its return and take it into account as an error.
 
-Guenter
+Link: https://github.com/KSPP/linux/issues/7
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: linux-hardening@vger.kernel.org <linux-hardening@vger.kernel.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+---
+Note: next patch is autonomous, it is sent as a follow-up of this one to minimize risk of conflict on filter.h because the two changes are too close to each other.
 
-> 
->> To: Jean Delvare <jdelvare@suse.com>
->> To: Guenter Roeck <linux@roeck-us.net>
->> Cc: linux-hwmon@vger.kernel.org
->> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
->> ---
-> 
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Best regards,
-> Krzysztof
-> 
+v2: No modification (Just added link in patch message), patchwork discarded this series due to failed test of s390 but it seems unrelated, see https://lore.kernel.org/bpf/wvd5gzde5ejc2rzsbrtwqyof56uw5ea3rxntfrxtkdabzcuwt6@w7iczzhmay2i/T/#m2e61446f42d5dc3d78f2e0e8b7a783f15cfb109d
+---
+ include/linux/filter.h | 5 +++--
+ kernel/bpf/core.c      | 4 +++-
+ kernel/bpf/verifier.c  | 4 +++-
+ 3 files changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 36cc29a2934c..7dd59bccaeec 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -884,14 +884,15 @@ bpf_ctx_narrow_access_offset(u32 off, u32 size, u32 size_default)
+ 
+ #define bpf_classic_proglen(fprog) (fprog->len * sizeof(fprog->filter[0]))
+ 
+-static inline void bpf_prog_lock_ro(struct bpf_prog *fp)
++static inline int __must_check bpf_prog_lock_ro(struct bpf_prog *fp)
+ {
+ #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+ 	if (!fp->jited) {
+ 		set_vm_flush_reset_perms(fp);
+-		set_memory_ro((unsigned long)fp, fp->pages);
++		return set_memory_ro((unsigned long)fp, fp->pages);
+ 	}
+ #endif
++	return 0;
+ }
+ 
+ static inline void bpf_jit_binary_lock_ro(struct bpf_binary_header *hdr)
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 71c459a51d9e..c49619ef55d0 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2392,7 +2392,9 @@ struct bpf_prog *bpf_prog_select_runtime(struct bpf_prog *fp, int *err)
+ 	}
+ 
+ finalize:
+-	bpf_prog_lock_ro(fp);
++	*err = bpf_prog_lock_ro(fp);
++	if (*err)
++		return fp;
+ 
+ 	/* The tail call compatibility check can only be done at
+ 	 * this late stage as we need to determine, if we deal
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 1c34b91b9583..6ec134f76a11 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19096,7 +19096,9 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+ 	 * bpf_prog_load will add the kallsyms for the main program.
+ 	 */
+ 	for (i = 1; i < env->subprog_cnt; i++) {
+-		bpf_prog_lock_ro(func[i]);
++		err = bpf_prog_lock_ro(func[i]);
++		if (err)
++			goto out_free;
+ 		bpf_prog_kallsyms_add(func[i]);
+ 	}
+ 
+-- 
+2.43.0
 
 
