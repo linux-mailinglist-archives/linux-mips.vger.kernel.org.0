@@ -1,95 +1,123 @@
-Return-Path: <linux-mips+bounces-1971-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1969-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9B9086DF19
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 11:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 46DCF86DE76
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 10:41:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06F421C20A6D
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 10:17:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 310D71C2270B
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 09:41:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A893F6A8B9;
-	Fri,  1 Mar 2024 10:17:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A134D6A8B1;
+	Fri,  1 Mar 2024 09:41:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="V1LViLZC"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE3672EB0E;
-	Fri,  1 Mar 2024 10:17:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D82369312;
+	Fri,  1 Mar 2024 09:41:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709288225; cv=none; b=K3L6aqGnk+sHYUMY01hakWaaWMCjdZCU9ZC0PpLAmSrJkMSt3w4v2mGaX4kkYTCQv4DiwlKIJror4zrL98VgT89ESr6008BdNZrOMLcQLsSHNLlXBaO7171Do8cDWnd6UOOq0NeiA4+FZs5hda6oBCVwBoXxuAdrykNRFz7z5Xo=
+	t=1709286076; cv=none; b=EKAjEdxKt/4kiMLrQ9rcSfzx637J1x6tK4KMmBua2jkz9ywBkQe27//dJcm9hZNtt6F3dKO/PWmnrzDd+O4rEHQWh9jfnJLD451W95Mi1Q5h3NOZ6VkGLqUdNwbkuIVWu8Utu/Mk+sNvEAylu7yUDRb2zOPiEVotdU55Gwb/chM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709288225; c=relaxed/simple;
-	bh=qwVIxiufJj1mr1cm23cxINBd1eTGOKopYIHThjoyex4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iaG5YaBDQYDKdDoOQnyozHQDFvyljgi4X7nOO2IpGHaO8H0+a0BlYw/pv5ZWITphUrLIWSTYj8l+Ot7rATLSDL3jWz1ehQn8oLpvR63O0CF/zSfa5BO7+8RVEJueyQcSBxIwye+edDqVTLTvx2U4oBesR9790cpiPmJKLCu7tcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1rfzwh-0002zb-00; Fri, 01 Mar 2024 11:16:51 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id D28FDC0267; Fri,  1 Mar 2024 10:39:47 +0100 (CET)
-Date: Fri, 1 Mar 2024 10:39:47 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v8 00/14] Add support for the Mobileye EyeQ5 SoC
-Message-ID: <ZeGiYyiQQ7pwpECE@alpha.franken.de>
-References: <20240216174227.409400-1-gregory.clement@bootlin.com>
- <ZdSst3fM3EOQGH03@alpha.franken.de>
- <CZGOPF51JA1R.2YN65K6WUH9N4@bootlin.com>
+	s=arc-20240116; t=1709286076; c=relaxed/simple;
+	bh=DlbN+IlGSuSBoRTtcplLOGm6dVJxnsnj3N4h136wbCk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=CJIbvgHow/Y8rdNuFRQWCdcSdZksArRqVB0cdnluPkqlFI6WENzR07XjY4MVYpVhrAUyA1B2tjiD3rgaCOTh9lNxur/bvAuncrFMMIa1DnK1yRgH/mWrienWoPYhJHDcb3bxZVXUTihnAb8gIuGf7P/KUgWADcwah/EgJvx+qok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=V1LViLZC; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 55480C000F;
+	Fri,  1 Mar 2024 09:41:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1709286071;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DlbN+IlGSuSBoRTtcplLOGm6dVJxnsnj3N4h136wbCk=;
+	b=V1LViLZCbMkJd3hJlK1iz6yXpb8XMcGqdCRu1BKJp8BPvkkRpWcWMZ4ZUMJzm+o9OSkVuC
+	vDJxfa1Yl/JUuYQuDktcTAMGc9QFw82RijvEgEHYRAm7PwqgTwczmOc9p0AnbTzlRWlaKK
+	bG6sGLHFdpeEx1rK/jPzV1AdzrE4ILid1ukjZcihAkdaUf1joaZtm1lI9YZnE2+sdqmSFk
+	mq3Y/tqm6Q6FaK2+zUAj04GGjT2aj5E9cUx5aFVmqR4UNdGfgGu7lp50dKghbQ1miji6qk
+	jxe8aP1sD1Rd3Y4pTkf80z0VHNhwkrimOYXfRMtDVxdXlKl1riZ05FKG8CRS3A==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CZGOPF51JA1R.2YN65K6WUH9N4@bootlin.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 01 Mar 2024 10:41:08 +0100
+Message-Id: <CZIBCBQ2IB0E.2N3HAVO0P2SHT@bootlin.com>
+Subject: Re: [PATCH v2 02/11] dt-bindings: hwmon: lm75: use common hwmon
+ schema
+Cc: <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-mips@vger.kernel.org>, "Gregory Clement"
+ <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
+ <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>, "Jean Delvare" <jdelvare@suse.com>,
+ <linux-hwmon@vger.kernel.org>
+To: "Guenter Roeck" <linux@roeck-us.net>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski@linaro.org>, "Linus Walleij"
+ <linus.walleij@linaro.org>, "Andi Shyti" <andi.shyti@kernel.org>, "Rob
+ Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.15.2
+References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
+ <20240229-mbly-i2c-v2-2-b32ed18c098c@bootlin.com>
+ <6749c8df-c545-4aca-bc18-4dfe9c9f15b0@linaro.org>
+ <d78fd3ca-ed0b-40e5-8f8f-21db152a7402@roeck-us.net>
+In-Reply-To: <d78fd3ca-ed0b-40e5-8f8f-21db152a7402@roeck-us.net>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Wed, Feb 28, 2024 at 12:44:09PM +0100, Théo Lebrun wrote:
-> Hello Thomas,
-> 
-> On Tue Feb 20, 2024 at 2:44 PM CET, Thomas Bogendoerfer wrote:
-> > On Fri, Feb 16, 2024 at 06:42:09PM +0100, Gregory CLEMENT wrote:
-> > > Hello,
-> > > 
-> > > The EyeQ5 SoC from Mobileye is based on the MIPS I6500 architecture
-> > > and features multiple controllers such as the classic UART, I2C, SPI,
-> > > as well as CAN-FD, PCIe, Octal/Quad SPI Flash interface, Gigabit
-> > > Ethernet, MIPI CSI-2, and eMMC 5.1. It also includes a Hardware
-> > > Security Module, Functional Safety Hardware, and MJPEG encoder.
-> 
-> [...]
-> 
-> > series applied to mips-next.
-> >
-> > I've fixed generic|ingenic|realtek builds by adding select MACH_GENERIC_CORE
-> > in arch/mips/Kconfig.
-> 
-> Would it be possible to provide an immutable branch containing the two
-> series? I've got quite a few series that depend on them as they target
-> EyeQ5 devicetrees and defconfig.
+Hello,
 
-that's IMHO too late, as I've merged it already to mips-next. mips-linux
-itself is immutable, but contains other mips related stuff.
+On Fri Mar 1, 2024 at 7:53 AM CET, Guenter Roeck wrote:
+> On 2/29/24 22:37, Krzysztof Kozlowski wrote:
+> > On 29/02/2024 19:10, Th=C3=A9o Lebrun wrote:
+> >> Reference common hwmon schema which has the generic "label" property,
+> >> parsed by Linux hwmon subsystem.
+> >>
+> >=20
+> > Please do not mix independent patchsets. You create unneeded
+> > dependencies blocking this patch. This patch depends on hwmon work, so
+> > it cannot go through different tree.
 
-Thomas.
+I had to pick between this or dtbs_check failing on my DTS that uses a
+label on temperature-sensor@48.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+> > If you insist to combine independent patches, then at least clearly
+> > express merging strategy or dependency in patch changelog --- .
+
+I do not know how such indirect conflicts are usually resolved. Hwmon
+can take it but MIPS might want to also take it to have valid DTS.
+
+Any advice?
+
+> For my part I have to say that I don't know what to do with it.
+> Rob's robot reported errors, so I won't apply it, and I don't
+> feel comfortable giving it an ack either because of those errors.
+
+Can reproduce the error when patch "dt-bindings: hwmon: add common
+properties" is not applied. Cannot reproduce when patch is applied.
+Commit d590900b62f0 on hwmon-next. Cannot reproduce with hwmon-next as
+parent.
+
+Regards,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
