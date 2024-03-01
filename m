@@ -1,117 +1,134 @@
-Return-Path: <linux-mips+bounces-1975-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1976-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D8D686E087
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 12:38:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B91C86E305
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 15:10:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50F681F24F87
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 11:38:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0EFFD1F22DE3
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 14:10:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FA676CDB8;
-	Fri,  1 Mar 2024 11:37:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 375306F060;
+	Fri,  1 Mar 2024 14:09:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="lM8WOcga"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05996EB5B
-	for <linux-mips@vger.kernel.org>; Fri,  1 Mar 2024 11:37:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09A4D6EB79;
+	Fri,  1 Mar 2024 14:09:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709293036; cv=none; b=umFH1p8D7sAywAPhc0rLe77SGxFmJygOdAYwtbZF03k4uJAMVexPiwGm+ORm3QZW7/7jFSoT2S6RnQTE+UCwOht0waQTQgHDGg4ZUkyQvBtpfclFBN9/JmzmM+sHvklCcTpx2I96vh8CXprRc+mXqKVJlD9j+kHoKhLq4fp6ILQ=
+	t=1709302199; cv=none; b=Bnr+UEKrpR+zxXLtrTwVnvOHztgPC91VTycKlvI0Z647OM3EQE0aO85tLkok+WoSrPeY9u+CO0lhavSV1QgFy46KaValqC4gN+6MsglXfylqJA3zVXh0WaKjC+DleYkESf5uTUH8NQj4bPvBfophCVq6/wheNXWYRUJs75UwNRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709293036; c=relaxed/simple;
-	bh=Xs4ZVJB6wLE9HE7TW3IWqGWp1lPpqviFYf5aMywwQbo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Ly/f/mO91QwpsU36Sg6ymY4J+Etrv2lHiLKj6lMXewiPLHK4W6pWAsJm8PWPNFdnHtfpJuW08ZKLba3luP2f721zwerhq4f53opwLR1lZg6uSv5L+wuhwnv28jJk1nFvkvUjKtHfRgqJ67ePORYjJHAt/3DMCV2gUIr4LWEfIj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rg1C9-0007q4-67; Fri, 01 Mar 2024 12:36:53 +0100
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rg1C7-003lng-Dp; Fri, 01 Mar 2024 12:36:51 +0100
-Received: from pza by lupine with local (Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rg1C7-0005Sl-19;
-	Fri, 01 Mar 2024 12:36:51 +0100
-Message-ID: <8fc7999c37f0dab7ab5d1166bba0192ab6e102d6.camel@pengutronix.de>
-Subject: Re: [PATCH v8 04/10] reset: eyeq5: add platform driver
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: =?ISO-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>, Gregory
- CLEMENT <gregory.clement@bootlin.com>, Michael Turquette
- <mturquette@baylibre.com>,  Stephen Boyd <sboyd@kernel.org>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Linus Walleij
- <linus.walleij@linaro.org>,  =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?=
- <rafal@milecki.pl>, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-  linux-mips@vger.kernel.org, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-  linux-gpio@vger.kernel.org
-Date: Fri, 01 Mar 2024 12:36:51 +0100
-In-Reply-To: <ZeCkkoNMioo-VOC6@smile.fi.intel.com>
-References: <20240227-mbly-clk-v8-0-c57fbda7664a@bootlin.com>
-	 <20240227-mbly-clk-v8-4-c57fbda7664a@bootlin.com>
-	 <Zd4bbCsY54XEnvJM@smile.fi.intel.com>
-	 <CZGVIWR4H4DE.3M5H3H99X0QPT@bootlin.com>
-	 <ZeBo4N204gLO0eUd@smile.fi.intel.com>
-	 <CZHK1ZCSROM5.X4WYN7SAZJTH@bootlin.com>
-	 <ZeCLS17PhKPuGvkm@smile.fi.intel.com>
-	 <959414f110463d5de87c84a986c7894a03afcf4e.camel@pengutronix.de>
-	 <ZeCkkoNMioo-VOC6@smile.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1709302199; c=relaxed/simple;
+	bh=8SNJXFocJybYWAAETOVv1TEYZIaxUQ2TZ7T/99SzvUM=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
+	 References:In-Reply-To; b=srbN0GoqR3vjHiwd0qlYeYq1QyOaa+cIbnLw5DOe9lwqF788cGrnWnRMiy7neEkw/f06SqsZqfO8Yp5JCvC1h6/vLLSyY+xOnJtTz7I/SlBw/qn1qE9LfGKmJLyVDfUeKiIjXA7Tsi5mqeurSeNl8jBBjln1gd7YGZPt+mrCNlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=lM8WOcga; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D87D22000E;
+	Fri,  1 Mar 2024 14:09:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1709302192;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8SNJXFocJybYWAAETOVv1TEYZIaxUQ2TZ7T/99SzvUM=;
+	b=lM8WOcgal/GAYSfmKYiFd2PrZduh0Lidq2w93U4R1WOTMwx/ACXg69RwP2dvQzAZTxAJl6
+	Zs66mf73xi1zf52UoZjbjgVdcvDR4eoKiUP0LLqhlJ0JBTD+32HlN0d6wpTJJR/gLbBS25
+	DiKMiQYvPJdsDD4+FMQv7Lgw/GS3mGL4tqUZ9IuyKnRToydRSFcooe9I/+jLR0F9tAcDBk
+	efI9Yh3S7GoL/2YisW39jiAPrD7NLU9TO54NyC+qq2vlc7IwyGlnD32y54WAlHGyVhbobT
+	y59JAMOCS5ZkmdDuV26TmP0tuft5/+QEFB/sEQTG+se6yxzqUPv1MyaUlFtIWQ==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 01 Mar 2024 15:09:50 +0100
+Message-Id: <CZIH21XQPA24.17TEKSPWLL7KR@bootlin.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v2 02/11] dt-bindings: hwmon: lm75: use common hwmon
+ schema
+Cc: <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-mips@vger.kernel.org>, "Gregory Clement"
+ <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
+ <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>, "Jean Delvare" <jdelvare@suse.com>,
+ <linux-hwmon@vger.kernel.org>
+To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Guenter Roeck"
+ <linux@roeck-us.net>, "Linus Walleij" <linus.walleij@linaro.org>, "Andi
+ Shyti" <andi.shyti@kernel.org>, "Rob Herring" <robh+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
+ <conor+dt@kernel.org>, "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+X-Mailer: aerc 0.15.2
+References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
+ <20240229-mbly-i2c-v2-2-b32ed18c098c@bootlin.com>
+ <6749c8df-c545-4aca-bc18-4dfe9c9f15b0@linaro.org>
+ <d78fd3ca-ed0b-40e5-8f8f-21db152a7402@roeck-us.net>
+ <CZIBCBQ2IB0E.2N3HAVO0P2SHT@bootlin.com>
+ <f802a1e0-cedd-488a-a6fb-df793718d94b@linaro.org>
+ <CZICOX6DR0SA.O876YRG8P03C@bootlin.com>
+ <d0826186-ac2a-4229-abd2-1be33fc177d6@linaro.org>
+In-Reply-To: <d0826186-ac2a-4229-abd2-1be33fc177d6@linaro.org>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Do, 2024-02-29 at 17:36 +0200, Andy Shevchenko wrote:
-> On Thu, Feb 29, 2024 at 04:28:42PM +0100, Philipp Zabel wrote:
-> > On Do, 2024-02-29 at 15:48 +0200, Andy Shevchenko wrote:
-> > > [...] And then I elaborated that entire reset framework should
-> > > rather move towards fwnode.
+Hello,
+
+On Fri Mar 1, 2024 at 12:35 PM CET, Krzysztof Kozlowski wrote:
+> On 01/03/2024 11:44, Th=C3=A9o Lebrun wrote:
+> > On Fri Mar 1, 2024 at 11:13 AM CET, Krzysztof Kozlowski wrote:
+> >> On 01/03/2024 10:41, Th=C3=A9o Lebrun wrote:
+> >>> On Fri Mar 1, 2024 at 7:53 AM CET, Guenter Roeck wrote:
+> >>>> On 2/29/24 22:37, Krzysztof Kozlowski wrote:
+> >>>>> On 29/02/2024 19:10, Th=C3=A9o Lebrun wrote:
+> >>>>>> Reference common hwmon schema which has the generic "label" proper=
+ty,
+> >>>>>> parsed by Linux hwmon subsystem.
+> >>>>>
+> >>>>> Please do not mix independent patchsets. You create unneeded
+> >>>>> dependencies blocking this patch. This patch depends on hwmon work,=
+ so
+> >>>>> it cannot go through different tree.
+> >>>
+> >>> I had to pick between this or dtbs_check failing on my DTS that uses =
+a
+> >>> label on temperature-sensor@48.
+> >>
+> >> I don't see how is that relevant. You can organize your branches as yo=
+u
+> >> wish, e.g. base one b4 branch on another and you will not have any war=
+nings.
 > >=20
-> > For context, there have been initial patches for this, that turned out
-> > not to be necessary later on:
-> >=20
-> > https://lore.kernel.org/lkml/20220324141237.297207-1-clement.leger@boot=
-lin.com/
-> >=20
-> > At this point, there still is no real use case for non-DT reset
-> > controls on the horizon.
->=20
-> I can argue on that if we have something like reset-gpio (and we have a s=
-uch).
+> > That is what I do, I however do not want mips-next to have errors when
+> > running dtbs_check. Having dtbs_check return errors is not an issue?
+>
+> You should ask your maintainer, but I don't understand how this is
+> achievable anyway. Subsystem bindings *should not* go via MIPS-next, so
+> how are you going to solve this?
 
-I've just sent out the pull request containing this, thank you for the
-reminder.
+I thought it'd go in hwmon-next and be picked up by mips-next as well.
+It's clear now that the right approach is to send the lm75.yaml patch
+alone.
 
-> With this in place the ACPI can also provide descriptions for that.
+I'll wait some more before sending a new revision that drops this
+lm75.yaml patch.
 
-Yes, an ACPI based device with shared GPIO resets (it is bound to
-happen at some point...) would provide a reason to support ACPI GPIOs
-in the reset framework.
+Have a nice day,
 
-regards
-Philipp
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
