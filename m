@@ -1,122 +1,118 @@
-Return-Path: <linux-mips+bounces-1993-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1994-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9858B86E74D
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 18:32:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CE4986E968
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 20:22:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5100428CCDC
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 17:32:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE1E11F25E07
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 19:22:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 834813BBF6;
-	Fri,  1 Mar 2024 17:29:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5D973A1C2;
+	Fri,  1 Mar 2024 19:22:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uIOF4Ss5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D1Y65ek7"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F1F33BB53;
-	Fri,  1 Mar 2024 17:29:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E57818646;
+	Fri,  1 Mar 2024 19:22:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709314193; cv=none; b=ClnFL2Ifsk4CWcPYZ1M/1HkZN2hgr2ga5Gz8DLoNFFzF1cZvcgA2rnHf5sPBen8Oom2b/T39IzNLVT0dOk5rd+gB7rQkT1nrjhaxZINO7zyA3+rfKrV/hKsUtL8CtGPKoOT6jzXd+b6W8OmmPYjECidetR7l0+bqqJIAJG5Z9cw=
+	t=1709320924; cv=none; b=CnRXnqARIKCwynWfz8AuGsyCwXdH50+oiMOT4RQW/YSuZrf/G2Ltves3RhzV33JtF01GinfnzktkiktRVnQ48/nbB3ZhWqa6094CMvWO81GT/wLx2pw5RFXNtLfhVQFNWZplIhasdQQxN53yTvnG9FV1A2ovzJ2jzqCOMSjOIMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709314193; c=relaxed/simple;
-	bh=WVxywXC3sbGUricAi2EXdBOzFdQ8QwJnE94UfbYDxFs=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=JcZIcS256HF80OZRxHoTkt3sHF1atPeH4IkOzEUhJnbSF6YX5fZkHXSU72V8CnZLj6/KEGNwwIkiXku70x8coEh49JbLUoyUpD+c1W8HA8/c7USv+ZU4t25YonVeG/AyYwAwv3WjoONtiX6lrgRBS4qnoS29groH/bG2vkACy9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uIOF4Ss5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1C53C433C7;
-	Fri,  1 Mar 2024 17:29:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709314192;
-	bh=WVxywXC3sbGUricAi2EXdBOzFdQ8QwJnE94UfbYDxFs=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=uIOF4Ss549Pa5/GS1UuTqjZK59ux2hW/ydhhEXw+jc7kH1sUfbMIKf/2N9pRJlPme
-	 l+Hgb5hmGwOT9Q+ZoWc3d2/2qTn4EZE5WvymLVbMUDX15E3U+WoJSoeV+vcb+emUAK
-	 bhyceLdYgN2D1NCF4yRaCM9xpgI2kSiqraKHmQo1XdKgRi7pacPALnGAqJpUoQDwK2
-	 hZwhj/YUrBsVSpfWuXCC1jtF8vy2KaI9emP0W7//OiVZ5fH0Dwm98VwrjpRHmpPPWP
-	 PnVFAWFDlzlO4K0lfY8gyjaT0uAUN/iYae26XqCVeeSYiHA4F71o0L+AvevuXncLvP
-	 IuzYwm/Wtr9CQ==
-Date: Fri, 01 Mar 2024 11:29:51 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1709320924; c=relaxed/simple;
+	bh=9DL8X7SDQWDpgxAebkOMuEWmb2yJCbAdGd28mrufEMI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mIcjM/oIxEXatD8LTrVBZCa345a2Gi64a0miYRDu0ez0G42BAnELukUYAb9fLPG9XxgK+S/sP/w8OTTDeO/NB8tOp2X09Y4lr7WfeTVRJMAW1DWuZsNFnzoDpvhpi1ncH7WjmBEWka257qabMNAfg0A0/UDi2AOF15aGlDy/HdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D1Y65ek7; arc=none smtp.client-ip=209.85.166.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-7c7894b39edso105525339f.3;
+        Fri, 01 Mar 2024 11:22:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709320922; x=1709925722; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EQX16KGPfGhwPlywSR3eM19+bX4OPs2RwdDNGqOQ0N4=;
+        b=D1Y65ek70R96fB2T6LgBb1Q9tKwhiy8b/hXyQmTpRH34idmT3MGycGUnTWcU3AKt/k
+         fOEHll0pcFoYyH+e4+1sfLJY1wZGggx7+oyRVefBc9hmt3x2gQCTmX4UH3Niaw7hjfYo
+         GOw9eQagu0fP/0z0ZS5jOVobIEzL4EW0fGWKG+eZI9eaFTGiCnoEWv/YQulUZt6Xiouu
+         DYp1baYdV0CHFb3v4+MGLyZwtAZ/uos1OZ//OoOyH7H1PWuuhhbyhyCtNQG/0xH6Gw0q
+         8fqKcfUgjWAGYmWJ9qct/xE5SqKmuGU+NQVsXa41RIshBRlAIAd/5b0OPd49lo7ZVJbf
+         Nf4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709320922; x=1709925722;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EQX16KGPfGhwPlywSR3eM19+bX4OPs2RwdDNGqOQ0N4=;
+        b=hgUcEm9jJRN6cBC6SlT4IHAW6OGqHaBbHV4YRMpttblgRkHIdnv3a1zFO/XpUUDcll
+         UpXbTgV6eE9+b0dYWgNyEay6rx6zIL2VyqqR03Mz25rR62mQ9LiAB/ObiOVNMGZe+36V
+         AQthXjYelVCPD+mFEN0A2biAnp2PoWwJi+Yiah89loj9UybpcULL65YfiSkI407AKD81
+         AZLmc/GZUyu0HxqqS7GrK6I05qqHHHeWLKB+mEUvgvsvz6ciHgBWS31SF023jt8+bnZV
+         D1RwKPl8yYWz8/nfB74aB315WzpKrUqllQwJ+rQLnlOaP2hjrXGj+eoyQ5OCz9Qa2B2g
+         jFcw==
+X-Forwarded-Encrypted: i=1; AJvYcCVJ7sDUAOAPuOta/6r4M/v997FkjSpIIbg7QRfKnuuIa44uotepUI4VHiBLq4UlABW4TdNerhi2MLh4wyPWji/+pbo9vFdl7BXw5G7HPx2zxwJpeXTXTnb068DJ/9DDfR2cZF8SHWtfN1MjougsA4chbwlwsA+6zsi4+/SePqpjqSGNRmFK8AhRK+2vpzRtC8XEaE4UnQiHOGbGWpFBCmXv1DOCiDLRSm/zxRYmWtqiDW09+0N5dohlmcvtaA==
+X-Gm-Message-State: AOJu0YyTjaVWlmoxwwNg61wKSiyld8kF9l4vjxS+O/19l6z71gq0+7Op
+	p63qlxy/IWAggzRvOSU4zyO//1hW+DYFFZsUONK9guTQ2kegLtk/
+X-Google-Smtp-Source: AGHT+IFmOtK8L3kEWqNK9FFRWLRwrFMKl+pRQUludHj1Ip0bHkcNfXR9ByhlEMUQpzX1BqYd3Q9vCw==
+X-Received: by 2002:a6b:c301:0:b0:7c8:289b:d52b with SMTP id t1-20020a6bc301000000b007c8289bd52bmr1830254iof.8.1709320921516;
+        Fri, 01 Mar 2024 11:22:01 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w25-20020a029699000000b004745460576esm959613jai.19.2024.03.01.11.22.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Mar 2024 11:22:00 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 1 Mar 2024 11:21:59 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2 02/11] dt-bindings: hwmon: lm75: use common hwmon
+ schema
+Message-ID: <feebaddb-fc6f-407d-8430-71531da4ed0f@roeck-us.net>
+References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
+ <20240229-mbly-i2c-v2-2-b32ed18c098c@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Rob Herring <robh@kernel.org>
-To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Cc: Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- Gregory CLEMENT <gregory.clement@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- linux-clk@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, devicetree@vger.kernel.org, 
- Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org, 
- linux-gpio@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-In-Reply-To: <20240301-mbly-clk-v9-1-cbf06eb88708@bootlin.com>
-References: <20240301-mbly-clk-v9-0-cbf06eb88708@bootlin.com>
- <20240301-mbly-clk-v9-1-cbf06eb88708@bootlin.com>
-Message-Id: <170931419071.2439554.3352250315486620896.robh@kernel.org>
-Subject: Re: [PATCH v9 1/9] dt-bindings: soc: mobileye: add EyeQ5 OLB
- system controller
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240229-mbly-i2c-v2-2-b32ed18c098c@bootlin.com>
 
-
-On Fri, 01 Mar 2024 17:22:14 +0100, ThÃ©o Lebrun wrote:
-> Add documentation to describe the "Other Logic Block" syscon.
+On Thu, Feb 29, 2024 at 07:10:50PM +0100, Théo Lebrun wrote:
+> Reference common hwmon schema which has the generic "label" property,
+> parsed by Linux hwmon subsystem.
 > 
+> To: Jean Delvare <jdelvare@suse.com>
+> To: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: ThÃ©o Lebrun <theo.lebrun@bootlin.com>
-> ---
->  .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  | 94 ++++++++++++++++++++++
->  1 file changed, 94 insertions(+)
-> 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Applied to hwmon-next.
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml:
-Error in referenced schema matching $id: http://devicetree.org/schemas/clock/mobileye,eyeq5-clk.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@e00000: clock-controller@2c: False schema does not allow {'compatible': ['mobileye,eyeq5-clk'], 'reg': [[44, 80], [284, 4]], 'reg-names': ['plls', 'ospi'], '#clock-cells': [[1]], 'clocks': [[4294967295]], 'clock-names': ['ref']}
-	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@e00000: reset-controller@0: False schema does not allow {'compatible': ['mobileye,eyeq5-reset'], 'reg': [[0, 12], [512, 52], [288, 4]], 'reg-names': ['d0', 'd1', 'd2'], '#reset-cells': [[2]]}
-	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@e00000: pinctrl@b0: False schema does not allow {'compatible': ['mobileye,eyeq5-pinctrl'], 'reg': [[176, 48]], 'uart2-pins': {'function': ['uart2'], 'pins': ['PB8', 'PB9']}}
-	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
-Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: /example-0/soc/system-controller@e00000/reset-controller@0: failed to match any schema with compatible: ['mobileye,eyeq5-reset']
-Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: /example-0/soc/system-controller@e00000/clock-controller@2c: failed to match any schema with compatible: ['mobileye,eyeq5-clk']
-Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: /example-0/soc/system-controller@e00000/pinctrl@b0: failed to match any schema with compatible: ['mobileye,eyeq5-pinctrl']
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240301-mbly-clk-v9-1-cbf06eb88708@bootlin.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Thanks,
+Guenter
 
