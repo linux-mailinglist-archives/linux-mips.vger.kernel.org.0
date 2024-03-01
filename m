@@ -1,278 +1,122 @@
-Return-Path: <linux-mips+bounces-1992-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-1993-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6E3E86E55D
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 17:24:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9858B86E74D
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 18:32:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41E68B21F6E
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 16:24:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5100428CCDC
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Mar 2024 17:32:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 059A774E31;
-	Fri,  1 Mar 2024 16:22:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 834813BBF6;
+	Fri,  1 Mar 2024 17:29:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="p4Nw1dwx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uIOF4Ss5"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B32973194;
-	Fri,  1 Mar 2024 16:22:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F1F33BB53;
+	Fri,  1 Mar 2024 17:29:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709310149; cv=none; b=hcf+QBQz1Dy8pA7PwGeqiIRUWcxK1Zln3hwFjPBKhPQhZSBBrBetqMKL8LElasmOuhFJfW6oa8LhrZV+j+XsiFlIEu8xA6kjxF2TvREj7nzwKagcgK0z8CaHKfsWs9hye+IZ6KCBpjxubIxDOTXrS7LuAFwLs9HHGhiCDLczNV4=
+	t=1709314193; cv=none; b=ClnFL2Ifsk4CWcPYZ1M/1HkZN2hgr2ga5Gz8DLoNFFzF1cZvcgA2rnHf5sPBen8Oom2b/T39IzNLVT0dOk5rd+gB7rQkT1nrjhaxZINO7zyA3+rfKrV/hKsUtL8CtGPKoOT6jzXd+b6W8OmmPYjECidetR7l0+bqqJIAJG5Z9cw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709310149; c=relaxed/simple;
-	bh=AAJTdXRM0Re+DCVXVGJxubzVOx467C+c5nb+jYksNi8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ficdRmrzqANMzLvG6TiH2xQaLflsgR1JTXTO4lgJfQCNHLfkcsWzCNL/mDLOwEp4zKJ+adtM6aS40biG/dnIuKTv7l1J/BqIVlAZIsF7WI32Wk2e5Q5EhfQ15DC5ZJmwl4xLqaGoqcfibKio/XeLsWTMAt9Oac8J75u+8tNgguw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=p4Nw1dwx; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F2160C0003;
-	Fri,  1 Mar 2024 16:22:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709310145;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aqd7RNSKgF1eQYnYzns3slAE3h9undBdrUHi47AKr1g=;
-	b=p4Nw1dwx23jlXzuZVNDHLnva4yWkgtDcYdTPeU0/3rHKCFnYFPqJn58/Ds1SyDAP6TGe8c
-	jZ1lZ7YX4LIrQ2HGGkXEy90vbfOV9qE0hMv6WM/OVYkQFnyfzHYQtORxOFuUOC281mf/tW
-	UQqfPauPpxdSFb2Y8GGr2PVS921W7MV0qtVymwN8ZiJZvQidy/IuARUun2gGmpD7M3bDPy
-	8nEQq0V0WalT4xSNJBzHTNvwxnQGTjZpzC4bDL8si2wqGIsLO78po3k0NBMiqp/KkTBO00
-	oxGJsy7ZYZDjsjedCjohjn/UGolU60gaeiYBvGn7+jKwag+ieWFBhlc2ksL2qw==
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Fri, 01 Mar 2024 17:22:22 +0100
-Subject: [PATCH v9 9/9] MIPS: mobileye: eyeq5: add pinctrl node & pinmux
- function nodes
+	s=arc-20240116; t=1709314193; c=relaxed/simple;
+	bh=WVxywXC3sbGUricAi2EXdBOzFdQ8QwJnE94UfbYDxFs=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=JcZIcS256HF80OZRxHoTkt3sHF1atPeH4IkOzEUhJnbSF6YX5fZkHXSU72V8CnZLj6/KEGNwwIkiXku70x8coEh49JbLUoyUpD+c1W8HA8/c7USv+ZU4t25YonVeG/AyYwAwv3WjoONtiX6lrgRBS4qnoS29groH/bG2vkACy9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uIOF4Ss5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1C53C433C7;
+	Fri,  1 Mar 2024 17:29:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709314192;
+	bh=WVxywXC3sbGUricAi2EXdBOzFdQ8QwJnE94UfbYDxFs=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=uIOF4Ss549Pa5/GS1UuTqjZK59ux2hW/ydhhEXw+jc7kH1sUfbMIKf/2N9pRJlPme
+	 l+Hgb5hmGwOT9Q+ZoWc3d2/2qTn4EZE5WvymLVbMUDX15E3U+WoJSoeV+vcb+emUAK
+	 bhyceLdYgN2D1NCF4yRaCM9xpgI2kSiqraKHmQo1XdKgRi7pacPALnGAqJpUoQDwK2
+	 hZwhj/YUrBsVSpfWuXCC1jtF8vy2KaI9emP0W7//OiVZ5fH0Dwm98VwrjpRHmpPPWP
+	 PnVFAWFDlzlO4K0lfY8gyjaT0uAUN/iYae26XqCVeeSYiHA4F71o0L+AvevuXncLvP
+	 IuzYwm/Wtr9CQ==
+Date: Fri, 01 Mar 2024 11:29:51 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240301-mbly-clk-v9-9-cbf06eb88708@bootlin.com>
-References: <20240301-mbly-clk-v9-0-cbf06eb88708@bootlin.com>
-In-Reply-To: <20240301-mbly-clk-v9-0-cbf06eb88708@bootlin.com>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>, 
- Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- linux-mips@vger.kernel.org, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+From: Rob Herring <robh@kernel.org>
+To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Cc: Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ Gregory CLEMENT <gregory.clement@bootlin.com>, 
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-gpio@vger.kernel.org, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: b4 0.13.0
-X-GND-Sasl: theo.lebrun@bootlin.com
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ linux-clk@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, devicetree@vger.kernel.org, 
+ Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
+In-Reply-To: <20240301-mbly-clk-v9-1-cbf06eb88708@bootlin.com>
+References: <20240301-mbly-clk-v9-0-cbf06eb88708@bootlin.com>
+ <20240301-mbly-clk-v9-1-cbf06eb88708@bootlin.com>
+Message-Id: <170931419071.2439554.3352250315486620896.robh@kernel.org>
+Subject: Re: [PATCH v9 1/9] dt-bindings: soc: mobileye: add EyeQ5 OLB
+ system controller
 
-Pins on this platform have two functions: GPIO or something-else. We
-create function nodes for each something-else based on functions.
 
-UART nodes are present in the platform devicetree. Add pinctrl to them
-now that the pin controller is supported.
+On Fri, 01 Mar 2024 17:22:14 +0100, Théo Lebrun wrote:
+> Add documentation to describe the "Other Logic Block" syscon.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  | 94 ++++++++++++++++++++++
+>  1 file changed, 94 insertions(+)
+> 
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
----
- arch/mips/boot/dts/mobileye/eyeq5-pins.dtsi | 125 ++++++++++++++++++++++++++++
- arch/mips/boot/dts/mobileye/eyeq5.dtsi      |  13 +++
- 2 files changed, 138 insertions(+)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/arch/mips/boot/dts/mobileye/eyeq5-pins.dtsi b/arch/mips/boot/dts/mobileye/eyeq5-pins.dtsi
-new file mode 100644
-index 000000000000..42acda13e57a
---- /dev/null
-+++ b/arch/mips/boot/dts/mobileye/eyeq5-pins.dtsi
-@@ -0,0 +1,125 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+
-+/*
-+ * Default pin configuration for Mobileye EyeQ5 boards. We mostly create one
-+ * pin configuration node per function.
-+ */
-+
-+&pinctrl {
-+	timer0_pins: timer0-pins {
-+		function = "timer0";
-+		pins = "PA0", "PA1";
-+	};
-+	timer1_pins: timer1-pins {
-+		function = "timer1";
-+		pins = "PA2", "PA3";
-+	};
-+	timer2_pins: timer2-pins {
-+		function = "timer2";
-+		pins = "PA4", "PA5";
-+	};
-+	pps0_pins: pps0-pin {
-+		function = "timer2";
-+		pins = "PA4";
-+	};
-+	pps1_pins: pps1-pin {
-+		function = "timer2";
-+		pins = "PA5";
-+	};
-+	timer5_ext_pins: timer5-ext-pins {
-+		function = "timer5";
-+		pins = "PA6", "PA7", "PA8", "PA9";
-+	};
-+	timer5_ext_input_pins: timer5-ext-input-pins {
-+		function = "timer5";
-+		pins = "PA6", "PA7";
-+	};
-+	timer5_ext_incap_a_pins: timer5-ext-incap-a-pin {
-+		function = "timer5";
-+		pins = "PA6";
-+	};
-+	timer5_ext_incap_b_pins: timer5-ext-incap-b-pin {
-+		function = "timer5";
-+		pins = "PA7";
-+	};
-+	can0_pins: can0-pins {
-+		function = "can0";
-+		pins = "PA14", "PA15";
-+	};
-+	can1_pins: can1-pins {
-+		function = "can1";
-+		pins = "PA16", "PA17";
-+	};
-+	uart0_pins: uart0-pins {
-+		function = "uart0";
-+		pins = "PA10", "PA11";
-+	};
-+	uart1_pins: uart1-pins {
-+		function = "uart1";
-+		pins = "PA12", "PA13";
-+	};
-+	spi0_pins: spi0-pins {
-+		function = "spi0";
-+		pins = "PA18", "PA19", "PA20", "PA21", "PA22";
-+	};
-+	spi1_pins: spi1-pins {
-+		function = "spi1";
-+		pins = "PA23", "PA24", "PA25", "PA26", "PA27";
-+	};
-+	spi1_slave_pins: spi1-slave-pins {
-+		function = "spi1";
-+		pins = "PA24", "PA25", "PA26";
-+	};
-+	refclk0_pins: refclk0-pin {
-+		function = "refclk0";
-+		pins = "PA28";
-+	};
-+	timer3_pins: timer3-pins {
-+		function = "timer3";
-+		pins = "PB0", "PB1";
-+	};
-+	timer4_pins: timer4-pins {
-+		function = "timer4";
-+		pins = "PB2", "PB3";
-+	};
-+	timer6_ext_pins: timer6-ext-pins {
-+		function = "timer6";
-+		pins = "PB4", "PB5", "PB6", "PB7";
-+	};
-+	timer6_ext_input_pins: timer6-ext-input-pins {
-+		function = "timer6";
-+		pins = "PB4", "PB5";
-+	};
-+	timer6_ext_incap_a_pins: timer6-ext-incap-a-pin {
-+		function = "timer6";
-+		pins = "PB4";
-+	};
-+	timer6_ext_incap_b_pins: timer6-ext-incap-b-pin {
-+		function = "timer6";
-+		pins = "PB5";
-+	};
-+	can2_pins: can2-pins {
-+		function = "can2";
-+		pins = "PB10", "PB11";
-+	};
-+	uart2_pins: uart2-pins {
-+		function = "uart2";
-+		pins = "PB8", "PB9";
-+	};
-+	spi2_pins: spi2-pins {
-+		function = "spi2";
-+		pins = "PB12", "PB13", "PB14", "PB15", "PB16";
-+	};
-+	spi3_pins: spi3-pins {
-+		function = "spi3";
-+		pins = "PB17", "PB18", "PB19", "PB20", "PB21";
-+	};
-+	spi3_slave_pins: spi3-slave-pins {
-+		function = "spi3";
-+		pins = "PB18", "PB19", "PB20";
-+	};
-+	mclk0_pins: mclk0-pin {
-+		function = "mclk0";
-+		pins = "PB22";
-+	};
-+};
-diff --git a/arch/mips/boot/dts/mobileye/eyeq5.dtsi b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-index 76935f237ab5..8d4f65ec912d 100644
---- a/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-+++ b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-@@ -79,6 +79,8 @@ uart0: serial@800000 {
- 			clocks  = <&uart_clk>, <&occ_periph>;
- 			clock-names = "uartclk", "apb_pclk";
- 			resets = <&reset 0 10>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&uart0_pins>;
- 		};
- 
- 		uart1: serial@900000 {
-@@ -90,6 +92,8 @@ uart1: serial@900000 {
- 			clocks  = <&uart_clk>, <&occ_periph>;
- 			clock-names = "uartclk", "apb_pclk";
- 			resets = <&reset 0 11>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&uart1_pins>;
- 		};
- 
- 		uart2: serial@a00000 {
-@@ -101,6 +105,8 @@ uart2: serial@a00000 {
- 			clocks  = <&uart_clk>, <&occ_periph>;
- 			clock-names = "uartclk", "apb_pclk";
- 			resets = <&reset 0 12>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&uart2_pins>;
- 		};
- 
- 		olb: system-controller@e00000 {
-@@ -125,6 +131,11 @@ clocks: clock-controller@e0002c {
- 				clocks = <&xtal>;
- 				clock-names = "ref";
- 			};
-+
-+			pinctrl: pinctrl@e000b0 {
-+				compatible = "mobileye,eyeq5-pinctrl";
-+				reg = <0x0b0 0x30>;
-+			};
- 		};
- 
- 		gic: interrupt-controller@140000 {
-@@ -149,3 +160,5 @@ timer {
- 		};
- 	};
- };
-+
-+#include "eyeq5-pins.dtsi"
+yamllint warnings/errors:
 
--- 
-2.44.0
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml:
+Error in referenced schema matching $id: http://devicetree.org/schemas/clock/mobileye,eyeq5-clk.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@e00000: clock-controller@2c: False schema does not allow {'compatible': ['mobileye,eyeq5-clk'], 'reg': [[44, 80], [284, 4]], 'reg-names': ['plls', 'ospi'], '#clock-cells': [[1]], 'clocks': [[4294967295]], 'clock-names': ['ref']}
+	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@e00000: reset-controller@0: False schema does not allow {'compatible': ['mobileye,eyeq5-reset'], 'reg': [[0, 12], [512, 52], [288, 4]], 'reg-names': ['d0', 'd1', 'd2'], '#reset-cells': [[2]]}
+	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@e00000: pinctrl@b0: False schema does not allow {'compatible': ['mobileye,eyeq5-pinctrl'], 'reg': [[176, 48]], 'uart2-pins': {'function': ['uart2'], 'pins': ['PB8', 'PB9']}}
+	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
+Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: /example-0/soc/system-controller@e00000/reset-controller@0: failed to match any schema with compatible: ['mobileye,eyeq5-reset']
+Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: /example-0/soc/system-controller@e00000/clock-controller@2c: failed to match any schema with compatible: ['mobileye,eyeq5-clk']
+Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: /example-0/soc/system-controller@e00000/pinctrl@b0: failed to match any schema with compatible: ['mobileye,eyeq5-pinctrl']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240301-mbly-clk-v9-1-cbf06eb88708@bootlin.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
