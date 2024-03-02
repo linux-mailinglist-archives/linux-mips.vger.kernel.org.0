@@ -1,179 +1,200 @@
-Return-Path: <linux-mips+bounces-2001-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2002-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB6B486EDFB
-	for <lists+linux-mips@lfdr.de>; Sat,  2 Mar 2024 02:51:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 855E086F0CB
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Mar 2024 16:09:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A720C284DAA
-	for <lists+linux-mips@lfdr.de>; Sat,  2 Mar 2024 01:51:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EDD13B209FF
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Mar 2024 15:09:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B738410782;
-	Sat,  2 Mar 2024 01:51:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC9D717C66;
+	Sat,  2 Mar 2024 15:09:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="TIc1hC1B"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uqurx7L6"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1F3DF501
-	for <linux-mips@vger.kernel.org>; Sat,  2 Mar 2024 01:51:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 018451119A;
+	Sat,  2 Mar 2024 15:09:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709344271; cv=none; b=quu/MhUeHUJn1x82WBjucnq/WWXbRrFl7hq2vRWrC4uNWpE5wY9WAHKWIyO2cSOt7aTe2OmWywgdJGV5KmzzWZd9YPs4EkZhEgoi8oLd4DdGu7gMhxlJaTM9Ms4LNtopag0AifqZTgrFQwSNNGZhRDWS48tncMG+5VnWZZ6sgDE=
+	t=1709392152; cv=none; b=OpY+suMSsvVP5b7kFsysW3DCFfEJKS6WT6kBVJzTEckRGXeqNU8VCQzbhLut82MHW/H3RJs22AmzLhpayTQ+rRP+qW1hpH1RTp7fTpHCO4a/5OhRqIewrL+myvjJxDOhobZR3ZbOFH0avE5zO9lGlKhpITFIrG1GgT2h7pxDJAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709344271; c=relaxed/simple;
-	bh=/8oSmkPc0IaP5CM6+fKqf9jvC9DwK8RXxd3zPN60QIw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tTvt9NzdZYaqDy1HBpP0ZMUmeU3wyhb2kexzrpizgf1Q6gagNN2cnEpwCR/EbADhQjTP+NHOU+KAFZhZeXN3r7Fvn8JNMB8K4m4OWiMaurnVQGHdQGbKlS5jkDVRit0r0+ummEoCP3dszezeYtxjjKpq8dm5jODJ4r6Ddad/YxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=TIc1hC1B; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6d9f94b9186so2626424b3a.0
-        for <linux-mips@vger.kernel.org>; Fri, 01 Mar 2024 17:51:09 -0800 (PST)
+	s=arc-20240116; t=1709392152; c=relaxed/simple;
+	bh=fFlC0pPy3vfJ4/zGymDcSMHtHsLWlxsA3iKdlnI4kjU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=i10rwKIODMLu7E4hqxfk1LEh3y2a/A8BUoYrG10gUcy2isgkpPsF/a8ch+jvOBtm1oRrAZWWki2F1ExyDNvSF/G+VRcbnzWM34g+wRf9YZrUIV5CHRcKVXZdrcdd+FoM76OMKhq9PH/fJp1k79UzX4NITkilLfZuYjGGN1u/6+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uqurx7L6; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-412d501fb96so3066475e9.0;
+        Sat, 02 Mar 2024 07:09:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1709344269; x=1709949069; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1JOHRODJmattJBY3YtQ+51tfBSOEI55kux6+SckPNNk=;
-        b=TIc1hC1BaG2C6O48gHCVwqAMREqybRwL/38QZkQjs8birZpqFdZpqCIImbYMYW7Eiv
-         jRPIv6GZBhjfsVtfypwxiChRkpef7DVwQMyj5nOOLNLueAgFL8DiRBb4+OjSwCy83w58
-         nhEfdX/lBy3gXtmcU7KGWUmYplpKX5RVOBkGM=
+        d=gmail.com; s=20230601; t=1709392149; x=1709996949; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vZnmyEbp7/KapwN09X3KPNmenF0EZ+gIMNP6ui8wv+8=;
+        b=Uqurx7L6i2K+RNwgPaNQEOYpPiGSUvLOeZy/aXevAlgZJqRe2XC0jyropywj3YP8Qp
+         E/orzKJWPCPcvSu0EpgyMvqFKgTUG4zcA736BCfUeQ2+fqBVjcEbMfmh5CA7kaCKjhUV
+         v+gsNPrMNWa4rawAV7TSqa5UiddDjokJmQKKFTSalZHDtP1lrQ/AcED1Bmfthr9jUvEE
+         6lkvXcKG2ss1SQ87BYBhuLDgfHvnaOM5o7iPcS3oLysdFnLWVEowNdTPGO/BL7FvoFJj
+         +eGy2DUDC6kABrw+Abn/GrubrhuybAcHhK7arKVhPjvX3TvZgIY8aVVdoAJ1mlYkfB3v
+         ybew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709344269; x=1709949069;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1709392149; x=1709996949;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1JOHRODJmattJBY3YtQ+51tfBSOEI55kux6+SckPNNk=;
-        b=DsVQKtHLzFU9F4f8mPIo/P+Zsh4w60yflIzpEsin61dGoArMtXorvGhyvJKp97jkmW
-         6oYPE6aFqkZGwVkiuO3IRWEDCHg9H2tftjmlMBAfZTj9L/ygKuYb7SshywMQpTnVVXuY
-         k9cc6Qd5VzCKIPamPUV2UV9ka/9SD27Q2mcgMxuriIdsDCkes0k450ead5ayQA97xWjJ
-         IYPrDtA9qURkg7w52hQFklqkfzqUW551v20zLO1jWLYiIurVMqCf9+ZiLdD5FpUKTD7w
-         7+4fjDfAX1ngDH2m1ualjvSIY13gR1M6AwqkpbTDHTeH601JvWd/2qS+hbzYN04Dn3u4
-         bipw==
-X-Forwarded-Encrypted: i=1; AJvYcCU4jy6P4SGsiwiHms+MxIRuWUBiqwTaxkJjIpJHPo1FH545lWuMzTIUU4iWsnnTusN5DWpMJr4iThkMzRAFcjO32F1OSJfgmecAsQ==
-X-Gm-Message-State: AOJu0YwXaqz8ooMLl2yZj0+TIVuYnvLW9HvoTkssnPGRBv9G4+fo80KI
-	sbHad8DsnwTl/B3VUMwlBOMaqWXk40E+XN2UAyLcizZ3GAn68k6UDfnBbmF0qA==
-X-Google-Smtp-Source: AGHT+IHRDk8dRy87orC5sOO0fLYLW475IUp9U1sSARPtPvgR8uAOkuMFjfqikjpTM+PGmCnZ+zOW8Q==
-X-Received: by 2002:a05:6a20:e11f:b0:1a0:ef1e:a5a7 with SMTP id kr31-20020a056a20e11f00b001a0ef1ea5a7mr3447528pzb.4.1709344269211;
-        Fri, 01 Mar 2024 17:51:09 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id rm12-20020a17090b3ecc00b002993f72ed02sm3845854pjb.34.2024.03.01.17.51.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Mar 2024 17:51:08 -0800 (PST)
-Date: Fri, 1 Mar 2024 17:51:08 -0800
-From: Kees Cook <keescook@chromium.org>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"luto@kernel.org" <luto@kernel.org>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"linux-snps-arc@lists.infradead.org" <linux-snps-arc@lists.infradead.org>,
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-	"hpa@zytor.com" <hpa@zytor.com>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-	"linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-	"sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-	"broonie@kernel.org" <broonie@kernel.org>
-Subject: Re: [PATCH v2 5/9] mm: Initialize struct vm_unmapped_area_info
-Message-ID: <202403011747.9ECFAD060B@keescook>
-References: <20240226190951.3240433-1-rick.p.edgecombe@intel.com>
- <20240226190951.3240433-6-rick.p.edgecombe@intel.com>
- <94a2b919-e03b-4ade-b13e-7774849dc02b@csgroup.eu>
- <202402271004.7145FDB53F@keescook>
- <8265f804-4540-4858-adc3-a09c11a677eb@csgroup.eu>
- <91384b505cb78b9d9b71ad58e037c1ed8dfb10d1.camel@intel.com>
- <def71a27-2d5f-40da-867e-979648afc4cf@csgroup.eu>
- <202402280912.33AEE7A9CF@keescook>
- <ac04c9aa134807bbc00e6086e7a14a58a682f221.camel@intel.com>
+        bh=vZnmyEbp7/KapwN09X3KPNmenF0EZ+gIMNP6ui8wv+8=;
+        b=J1605mAeI9raAV2BGcBmZv4cq3Obp59tpT3Bd7YG7ImAusAqiytyLOYUINiPliDjU3
+         cWzinX7KdWm9g6ET+SB0n+hIEZvD9quy/wgvPyTAo4h0Wgqh/ZRZreR0P2xWKyw6dQbR
+         6sI+/vdCKE2P5EUn1squ6ysXHkSsaNMPI8idqZOeXztCEkKUk5Y2kZRVR7UYfch6kSsk
+         TGfPltSyR/8rwcOUBEr2KQ58Pa9zvg+NdoTKbV8i3gOhO4C2xqEp9er1yLkft/b9NWom
+         YaQ+hT1wwW+0d3yb0+sb5qVcyKf9+VcwqjwkVWRcY7JuFKnqSwUpZ6ihHVOSHMzSG6Db
+         KntQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUxfe//kOl/RE67IwJuMoP/iWHBuGXlO2WzaK+NfoxYN9j6n9dmGolQmCz0qmOqBfXrYp9Gj7ocutUQSKiPu7ggf4oK7mNP2QcglA3zgwLsaOHViCMYIkRkaKSaxCN+vux8dKARn1mYy2ZfW9sO9NfDh5pfLYRDDfKtW4yuxXJaqswbh/cPFsVvLC1BDUVKQCaOCuBFnI+NJ/AUMCyhaLhH
+X-Gm-Message-State: AOJu0YyP66msOHSC7Poqase6aGCk6jJeh+6L+MQiRzcoaOTLc/fiVN8Y
+	Xpojj/KA1rDlpVrwn6hYOsB4heZMlqMJR7cFf5yD5B/e1Hw8xNEG
+X-Google-Smtp-Source: AGHT+IFjI7EL9wmaOMs9DKRRoNoT/K+vGVVN1tRzp4FVvAb7IlMcgE0CtEM8KM4rNz0E+V7pGjBM0Q==
+X-Received: by 2002:a05:600c:4e90:b0:411:c9c0:eddf with SMTP id f16-20020a05600c4e9000b00411c9c0eddfmr4004505wmq.36.1709392149165;
+        Sat, 02 Mar 2024 07:09:09 -0800 (PST)
+Received: from ?IPV6:2a01:c23:bcce:a400:2519:2036:7f0:6005? (dynamic-2a01-0c23-bcce-a400-2519-2036-07f0-6005.c23.pool.telefonica.de. [2a01:c23:bcce:a400:2519:2036:7f0:6005])
+        by smtp.googlemail.com with ESMTPSA id k7-20020a7bc407000000b004126e26f756sm11827464wmi.43.2024.03.02.07.09.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Mar 2024 07:09:08 -0800 (PST)
+Message-ID: <208e8bcc-1f35-4095-9a70-7243fdabaf87@gmail.com>
+Date: Sat, 2 Mar 2024 16:09:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ac04c9aa134807bbc00e6086e7a14a58a682f221.camel@intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/4] leds: trigger: Improve handling of
+ led_trigger_event() and simplify mute audio trigger
+Content-Language: en-US
+To: Lee Jones <lee@kernel.org>
+Cc: Pavel Machek <pavel@ucw.cz>, Jaroslav Kysela <perex@perex.cz>,
+ Takashi Iwai <tiwai@suse.com>, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+ linux-sound@vger.kernel.org,
+ "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+ linux-mips@vger.kernel.org
+References: <30d49088-283c-40f3-b97b-fd5f5174a467@gmail.com>
+ <20240229172653.GB1209090@google.com>
+From: Heiner Kallweit <hkallweit1@gmail.com>
+Autocrypt: addr=hkallweit1@gmail.com; keydata=
+ xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
+ sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
+ MVE4yNwdS+UsPeCF/6CQQTzHc+n7DomE7fjJD5J1hOJjqz2XWe71fTvYXzxCFLwXXbBiqDC9
+ dNqOe5odPsa4TsWZ09T33g5n2nzTJs4Zw8fCy8rLqix/raVsqr8fw5qM66MVtdmEljFaJ9N8
+ /W56qGCp+H8Igk/F7CjlbWXiOlKHA25mPTmbVp7VlFsvsmMokr/imQr+0nXtmvYVaKEUwY2g
+ 86IU6RAOuA8E0J5bD/BeyZdMyVEtX1kT404UJZekFytJZrDZetwxM/cAH+1fMx4z751WJmxQ
+ J7mIXSPuDfeJhRDt9sGM6aRVfXbZt+wBogxyXepmnlv9K4A13z9DVLdKLrYUiu9/5QEl6fgI
+ kPaXlAZmJsQfoKbmPqCHVRYj1lpQtDM/2/BO6gHASflWUHzwmBVZbS/XRs64uJO8CB3+V3fa
+ cIivllReueGCMsHh6/8wgPAyopXOWOxbLsZ291fmZqIR0L5Y6b2HvdFN1Xhc+YrQ8TKK+Z4R
+ mJRDh0wNQ8Gm89g92/YkHji4jIWlp2fwzCcx5+lZCQ1XdqAiHQARAQABzSZIZWluZXIgS2Fs
+ bHdlaXQgPGhrYWxsd2VpdDFAZ21haWwuY29tPsLBjgQTAQgAOBYhBGxfqY/yOyXjyjJehXLe
+ ig9U8DoMBQJf9GRVAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHLeig9U8DoMSycQ
+ AJbfg8HZEK0ljV4M8nvdaiNixWAufrcZ+SD8zhbxl8GispK4F3Yo+20Y3UoZ7FcIidJWUUJL
+ axAOkpI/70YNhlqAPMsuudlAieeYZKjIv1WV5ucNZ3VJ7dC+dlVqQdAr1iD869FZXvy91KhJ
+ wYulyCf+s4T9YgmLC6jLMBZghKIf1uhSd0NzjyCqYWbk2ZxByZHgunEShOhHPHswu3Am0ftt
+ ePaYIHgZs+Vzwfjs8I7EuW/5/f5G9w1vibXxtGY/GXwgGGHRDjFM7RSprGOv4F5eMGh+NFUJ
+ TU9N96PQYMwXVxnQfRXl8O6ffSVmFx4H9rovxWPKobLmqQL0WKLLVvA/aOHCcMKgfyKRcLah
+ 57vGC50Ga8oT2K1g0AhKGkyJo7lGXkMu5yEs0m9O+btqAB261/E3DRxfI1P/tvDZpLJKtq35
+ dXsj6sjvhgX7VxXhY1wE54uqLLHY3UZQlmH3QF5t80MS7/KhxB1pO1Cpcmkt9hgyzH8+5org
+ +9wWxGUtJWNP7CppY+qvv3SZtKJMKsxqk5coBGwNkMms56z4qfJm2PUtJQGjA65XWdzQACib
+ 2iaDQoBqGZfXRdPT0tC1H5kUJuOX4ll1hI/HBMEFCcO8++Bl2wcrUsAxLzGvhINVJX2DAQaF
+ aNetToazkCnzubKfBOyiTqFJ0b63c5dqziAgzsFNBF/0ZFUBEADF8UEZmKDl1w/UxvjeyAeX
+ kghYkY3bkK6gcIYXdLRfJw12GbvMioSguvVzASVHG8h7NbNjk1yur6AONfbUpXKSNZ0skV8V
+ fG+ppbaY+zQofsSMoj5gP0amwbwvPzVqZCYJai81VobefTX2MZM2Mg/ThBVtGyzV3NeCpnBa
+ 8AX3s9rrX2XUoCibYotbbxx9afZYUFyflOc7kEpc9uJXIdaxS2Z6MnYLHsyVjiU6tzKCiVOU
+ KJevqvzPXJmy0xaOVf7mhFSNQyJTrZpLa+tvB1DQRS08CqYtIMxRrVtC0t0LFeQGly6bOngr
+ ircurWJiJKbSXVstLHgWYiq3/GmCSx/82ObeLO3PftklpRj8d+kFbrvrqBgjWtMH4WtK5uN5
+ 1WJ71hWJfNchKRlaJ3GWy8KolCAoGsQMovn/ZEXxrGs1ndafu47yXOpuDAozoHTBGvuSXSZo
+ ythk/0EAuz5IkwkhYBT1MGIAvNSn9ivE5aRnBazugy0rTRkVggHvt3/7flFHlGVGpBHxFUwb
+ /a4UjJBPtIwa4tWR8B1Ma36S8Jk456k2n1id7M0LQ+eqstmp6Y+UB+pt9NX6t0Slw1NCdYTW
+ gJezWTVKF7pmTdXszXGxlc9kTrVUz04PqPjnYbv5UWuDd2eyzGjrrFOsJEi8OK2d2j4FfF++
+ AzOMdW09JVqejQARAQABwsF2BBgBCAAgFiEEbF+pj/I7JePKMl6Fct6KD1TwOgwFAl/0ZFUC
+ GwwACgkQct6KD1TwOgxUfg//eAoYc0Vm4NrxymfcY30UjHVD0LgSvU8kUmXxil3qhFPS7KA+
+ y7tgcKLHOkZkXMX5MLFcS9+SmrAjSBBV8omKoHNo+kfFx/dUAtz0lot8wNGmWb+NcHeKM1eb
+ nwUMOEa1uDdfZeKef/U/2uHBceY7Gc6zPZPWgXghEyQMTH2UhLgeam8yglyO+A6RXCh+s6ak
+ Wje7Vo1wGK4eYxp6pwMPJXLMsI0ii/2k3YPEJPv+yJf90MbYyQSbkTwZhrsokjQEaIfjrIk3
+ rQRjTve/J62WIO28IbY/mENuGgWehRlTAbhC4BLTZ5uYS0YMQCR7v9UGMWdNWXFyrOB6PjSu
+ Trn9MsPoUc8qI72mVpxEXQDLlrd2ijEWm7Nrf52YMD7hL6rXXuis7R6zY8WnnBhW0uCfhajx
+ q+KuARXC0sDLztcjaS3ayXonpoCPZep2Bd5xqE4Ln8/COCslP7E92W1uf1EcdXXIrx1acg21
+ H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
+ lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
+ OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
+In-Reply-To: <20240229172653.GB1209090@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sat, Mar 02, 2024 at 12:47:08AM +0000, Edgecombe, Rick P wrote:
-> On Wed, 2024-02-28 at 09:21 -0800, Kees Cook wrote:
-> > I totally understand. If the "uninitialized" warnings were actually
-> > reliable, I would agree. I look at it this way:
-> > 
-> > - initializations can be missed either in static initializers or via
-> >   run time initializers. (So the risk of mistake here is matched --
-> >   though I'd argue it's easier to *find* static initializers when
-> > adding
-> >   new struct members.)
-> > - uninitialized warnings are inconsistent (this becomes an unknown
-> > risk)
-> > - when a run time initializer is missed, the contents are whatever
-> > was
-> >   on the stack (high risk)
-> > - what a static initializer is missed, the content is 0 (low risk)
-> > 
-> > I think unambiguous state (always 0) is significantly more important
-> > for
-> > the safety of the system as a whole. Yes, individual cases maybe bad
-> > ("what uid should this be? root?!") but from a general memory safety
-> > perspective the value doesn't become potentially influenced by order
-> > of
-> > operations, leftover stack memory, etc.
-> > 
-> > I'd agree, lifting everything into a static initializer does seem
-> > cleanest of all the choices.
+On 29.02.2024 18:26, Lee Jones wrote:
+> On Tue, 13 Feb 2024, Heiner Kallweit wrote:
 > 
-> Hi Kees,
+>> If a simple trigger is assigned to a LED, then the LED may be off until
+>> the next led_trigger_event() call. This may be an issue for simple
+>> triggers with rare led_trigger_event() calls, e.g. power supply
+>> charging indicators (drivers/power/supply/power_supply_leds.c).
+>> Therefore persist the brightness value of the last led_trigger_event()
+>> call and use this value if the trigger is assigned to a LED.
+>> This change allows to use simple triggers in more cases.
+>> As a first use case simplify handling of the mute audio trigger.
+>>
+>> This series touches few subsystems. I'd propose to handle it via
+>> the LED subsystem.
+>>
+>> Heiner Kallweit (4):
+>>   leds: trigger: Store brightness set by led_trigger_event()
+>>   ALSA: control-led: Integrate mute led trigger
+>>   Input: leds: Prepare for removal of config option LEDS_AUDIO_TRIGGER
+>>   leds: trigger: audio: Remove this trigger
+>>
+>>  arch/mips/configs/ci20_defconfig     |  1 -
 > 
-> Well, I just gave this a try. It is giving me flashbacks of when I last
-> had to do a tree wide change that I couldn't fully test and the
-> breakage was caught by Linus.
+>>  drivers/input/input-leds.c           |  8 +---
+> 
+> This does not apply.
+> 
+> Please rebase onto v6.8-rc1.
+> 
+Since v6.8-rc1 the following has been added, which is touched by
+my series:
+698b43780ba2 ("Input: leds - set default-trigger for mute")
 
-Yeah, testing isn't fun for these kinds of things. This is traditionally
-why the "obviously correct" changes tend to have an easier time landing
-(i.e. adding "= {}" to all of them).
+Rebasing onto v6.8-rc1 would mean:
+- remove the change to input-leds from the series
+- resubmit this change via input subsystem
 
-> Could you let me know if you think this is additionally worthwhile
-> cleanup outside of the guard gap improvements of this series? Because I
-> was thinking a more cowardly approach could be a new vm_unmapped_area()
-> variant that takes the new start gap member as a separate argument
-> outside of struct vm_unmapped_area_info. It would be kind of strange to
-> keep them separate, but it would be less likely to bump something.
+This would affect bisectability, because for the time being
+input-leds would reference a config symbol that doesn't exist
+any longer.
 
-I think you want a new member -- AIUI, that's what that struct is for.
+We'd be fine only if the change to input-leds is applied first.
+I think that's the best way to go, if you can't accept a series
+based on linux-next.
 
-Looking at this resulting set of patches, I do kinda think just adding
-the "= {}" in a single patch is more sensible. Having to split things
-that are know at the top of the function from the stuff known at the
-existing initialization time is rather awkward.
+>>  drivers/leds/led-triggers.c          |  6 ++-
+>>  drivers/leds/trigger/Kconfig         |  7 ---
+>>  drivers/leds/trigger/Makefile        |  1 -
+>>  drivers/leds/trigger/ledtrig-audio.c | 67 ----------------------------
+>>  include/linux/leds.h                 | 29 ++++++------
+>>  sound/core/Kconfig                   |  1 -
+>>  sound/core/control_led.c             | 20 +++++++--
+>>  9 files changed, 37 insertions(+), 103 deletions(-)
+>>  delete mode 100644 drivers/leds/trigger/ledtrig-audio.c
+>>
+>> -- 
+>> 2.43.1
+>>
+> 
 
-Personally, I think a single patch that sets "= {}" for all of them and
-drop the all the "= 0" or "= NULL" assignments would be the cleanest way
-to go.
-
--Kees
-
--- 
-Kees Cook
 
