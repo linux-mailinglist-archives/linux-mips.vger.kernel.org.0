@@ -1,200 +1,259 @@
-Return-Path: <linux-mips+bounces-2002-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2003-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 855E086F0CB
-	for <lists+linux-mips@lfdr.de>; Sat,  2 Mar 2024 16:09:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97AA686F270
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Mar 2024 21:59:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EDD13B209FF
-	for <lists+linux-mips@lfdr.de>; Sat,  2 Mar 2024 15:09:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 677FE1C20B42
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Mar 2024 20:59:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC9D717C66;
-	Sat,  2 Mar 2024 15:09:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83C0B40BE7;
+	Sat,  2 Mar 2024 20:58:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uqurx7L6"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UgMqkU+n"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 018451119A;
-	Sat,  2 Mar 2024 15:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C5BD21100;
+	Sat,  2 Mar 2024 20:58:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709392152; cv=none; b=OpY+suMSsvVP5b7kFsysW3DCFfEJKS6WT6kBVJzTEckRGXeqNU8VCQzbhLut82MHW/H3RJs22AmzLhpayTQ+rRP+qW1hpH1RTp7fTpHCO4a/5OhRqIewrL+myvjJxDOhobZR3ZbOFH0avE5zO9lGlKhpITFIrG1GgT2h7pxDJAE=
+	t=1709413136; cv=none; b=RL1W7TPOlvVdeq/i/17WErlKCUGdjYrqa7P5sYJAijEmhJH9+TOmh/pTseTTF/giw3AhOhcJ0py9e9CX17TpioPQNRImyyIG5EMRcZp8nBjXFA4yxmv6jvE97SpOe3cP6+uFGW3dLCRseH3QE/b/pQJkjIMChrGW+oluT3arx3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709392152; c=relaxed/simple;
-	bh=fFlC0pPy3vfJ4/zGymDcSMHtHsLWlxsA3iKdlnI4kjU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i10rwKIODMLu7E4hqxfk1LEh3y2a/A8BUoYrG10gUcy2isgkpPsF/a8ch+jvOBtm1oRrAZWWki2F1ExyDNvSF/G+VRcbnzWM34g+wRf9YZrUIV5CHRcKVXZdrcdd+FoM76OMKhq9PH/fJp1k79UzX4NITkilLfZuYjGGN1u/6+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uqurx7L6; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-412d501fb96so3066475e9.0;
-        Sat, 02 Mar 2024 07:09:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709392149; x=1709996949; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vZnmyEbp7/KapwN09X3KPNmenF0EZ+gIMNP6ui8wv+8=;
-        b=Uqurx7L6i2K+RNwgPaNQEOYpPiGSUvLOeZy/aXevAlgZJqRe2XC0jyropywj3YP8Qp
-         E/orzKJWPCPcvSu0EpgyMvqFKgTUG4zcA736BCfUeQ2+fqBVjcEbMfmh5CA7kaCKjhUV
-         v+gsNPrMNWa4rawAV7TSqa5UiddDjokJmQKKFTSalZHDtP1lrQ/AcED1Bmfthr9jUvEE
-         6lkvXcKG2ss1SQ87BYBhuLDgfHvnaOM5o7iPcS3oLysdFnLWVEowNdTPGO/BL7FvoFJj
-         +eGy2DUDC6kABrw+Abn/GrubrhuybAcHhK7arKVhPjvX3TvZgIY8aVVdoAJ1mlYkfB3v
-         ybew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709392149; x=1709996949;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vZnmyEbp7/KapwN09X3KPNmenF0EZ+gIMNP6ui8wv+8=;
-        b=J1605mAeI9raAV2BGcBmZv4cq3Obp59tpT3Bd7YG7ImAusAqiytyLOYUINiPliDjU3
-         cWzinX7KdWm9g6ET+SB0n+hIEZvD9quy/wgvPyTAo4h0Wgqh/ZRZreR0P2xWKyw6dQbR
-         6sI+/vdCKE2P5EUn1squ6ysXHkSsaNMPI8idqZOeXztCEkKUk5Y2kZRVR7UYfch6kSsk
-         TGfPltSyR/8rwcOUBEr2KQ58Pa9zvg+NdoTKbV8i3gOhO4C2xqEp9er1yLkft/b9NWom
-         YaQ+hT1wwW+0d3yb0+sb5qVcyKf9+VcwqjwkVWRcY7JuFKnqSwUpZ6ihHVOSHMzSG6Db
-         KntQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUxfe//kOl/RE67IwJuMoP/iWHBuGXlO2WzaK+NfoxYN9j6n9dmGolQmCz0qmOqBfXrYp9Gj7ocutUQSKiPu7ggf4oK7mNP2QcglA3zgwLsaOHViCMYIkRkaKSaxCN+vux8dKARn1mYy2ZfW9sO9NfDh5pfLYRDDfKtW4yuxXJaqswbh/cPFsVvLC1BDUVKQCaOCuBFnI+NJ/AUMCyhaLhH
-X-Gm-Message-State: AOJu0YyP66msOHSC7Poqase6aGCk6jJeh+6L+MQiRzcoaOTLc/fiVN8Y
-	Xpojj/KA1rDlpVrwn6hYOsB4heZMlqMJR7cFf5yD5B/e1Hw8xNEG
-X-Google-Smtp-Source: AGHT+IFjI7EL9wmaOMs9DKRRoNoT/K+vGVVN1tRzp4FVvAb7IlMcgE0CtEM8KM4rNz0E+V7pGjBM0Q==
-X-Received: by 2002:a05:600c:4e90:b0:411:c9c0:eddf with SMTP id f16-20020a05600c4e9000b00411c9c0eddfmr4004505wmq.36.1709392149165;
-        Sat, 02 Mar 2024 07:09:09 -0800 (PST)
-Received: from ?IPV6:2a01:c23:bcce:a400:2519:2036:7f0:6005? (dynamic-2a01-0c23-bcce-a400-2519-2036-07f0-6005.c23.pool.telefonica.de. [2a01:c23:bcce:a400:2519:2036:7f0:6005])
-        by smtp.googlemail.com with ESMTPSA id k7-20020a7bc407000000b004126e26f756sm11827464wmi.43.2024.03.02.07.09.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Mar 2024 07:09:08 -0800 (PST)
-Message-ID: <208e8bcc-1f35-4095-9a70-7243fdabaf87@gmail.com>
-Date: Sat, 2 Mar 2024 16:09:07 +0100
+	s=arc-20240116; t=1709413136; c=relaxed/simple;
+	bh=o+tr4CCbud8uzLtDh5MolTBCwG3kPTB0Bhx8jY/shKs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JbE6KLWzmiHcXOSerGOSKsJQHzyrjoW3R6CPXiEKodUUvA/lxDYe9Gw/I+j9+vGtSDe3PFNmQX0O+k7kFI3JZ68hz8/s8VQaxKBtPzF9vh3/KCpmmzaSfq266QlwWeD1TnMhM/vj6GJQpXNvwJ3S/4UOkeXs5/fP21XjQ21tHQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UgMqkU+n; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 485ABC433C7;
+	Sat,  2 Mar 2024 20:58:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1709413135;
+	bh=o+tr4CCbud8uzLtDh5MolTBCwG3kPTB0Bhx8jY/shKs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UgMqkU+niNfrrsJKR325G2D+2tAy9twT34HdNKjDPPnzNigNMvu3vA2hb62A57nq0
+	 PEMsKrj7r3EL2UOTajmaknqRQV/d2JCtFJ9pWYRVcF/57lRl/p8lzob7OmHi5mEfNC
+	 4qrR2eTAghx7wO456Nvia8+/Eo8/UCKAhz4WW+Ok=
+Date: Sat, 2 Mar 2024 21:58:53 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org, linux-tegra@vger.kernel.org,
+	Jiri Slaby <jirislaby@kernel.org>, Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Al Cooper <alcooperx@gmail.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH v2 03/14] serial: port: Introduce a common helper to read
+ properties
+Message-ID: <2024030259-playback-starlit-a472@gregkh>
+References: <20240226142514.1485246-1-andriy.shevchenko@linux.intel.com>
+ <20240226142514.1485246-4-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/4] leds: trigger: Improve handling of
- led_trigger_event() and simplify mute audio trigger
-Content-Language: en-US
-To: Lee Jones <lee@kernel.org>
-Cc: Pavel Machek <pavel@ucw.cz>, Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
- linux-sound@vger.kernel.org,
- "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
- linux-mips@vger.kernel.org
-References: <30d49088-283c-40f3-b97b-fd5f5174a467@gmail.com>
- <20240229172653.GB1209090@google.com>
-From: Heiner Kallweit <hkallweit1@gmail.com>
-Autocrypt: addr=hkallweit1@gmail.com; keydata=
- xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
- sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
- MVE4yNwdS+UsPeCF/6CQQTzHc+n7DomE7fjJD5J1hOJjqz2XWe71fTvYXzxCFLwXXbBiqDC9
- dNqOe5odPsa4TsWZ09T33g5n2nzTJs4Zw8fCy8rLqix/raVsqr8fw5qM66MVtdmEljFaJ9N8
- /W56qGCp+H8Igk/F7CjlbWXiOlKHA25mPTmbVp7VlFsvsmMokr/imQr+0nXtmvYVaKEUwY2g
- 86IU6RAOuA8E0J5bD/BeyZdMyVEtX1kT404UJZekFytJZrDZetwxM/cAH+1fMx4z751WJmxQ
- J7mIXSPuDfeJhRDt9sGM6aRVfXbZt+wBogxyXepmnlv9K4A13z9DVLdKLrYUiu9/5QEl6fgI
- kPaXlAZmJsQfoKbmPqCHVRYj1lpQtDM/2/BO6gHASflWUHzwmBVZbS/XRs64uJO8CB3+V3fa
- cIivllReueGCMsHh6/8wgPAyopXOWOxbLsZ291fmZqIR0L5Y6b2HvdFN1Xhc+YrQ8TKK+Z4R
- mJRDh0wNQ8Gm89g92/YkHji4jIWlp2fwzCcx5+lZCQ1XdqAiHQARAQABzSZIZWluZXIgS2Fs
- bHdlaXQgPGhrYWxsd2VpdDFAZ21haWwuY29tPsLBjgQTAQgAOBYhBGxfqY/yOyXjyjJehXLe
- ig9U8DoMBQJf9GRVAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHLeig9U8DoMSycQ
- AJbfg8HZEK0ljV4M8nvdaiNixWAufrcZ+SD8zhbxl8GispK4F3Yo+20Y3UoZ7FcIidJWUUJL
- axAOkpI/70YNhlqAPMsuudlAieeYZKjIv1WV5ucNZ3VJ7dC+dlVqQdAr1iD869FZXvy91KhJ
- wYulyCf+s4T9YgmLC6jLMBZghKIf1uhSd0NzjyCqYWbk2ZxByZHgunEShOhHPHswu3Am0ftt
- ePaYIHgZs+Vzwfjs8I7EuW/5/f5G9w1vibXxtGY/GXwgGGHRDjFM7RSprGOv4F5eMGh+NFUJ
- TU9N96PQYMwXVxnQfRXl8O6ffSVmFx4H9rovxWPKobLmqQL0WKLLVvA/aOHCcMKgfyKRcLah
- 57vGC50Ga8oT2K1g0AhKGkyJo7lGXkMu5yEs0m9O+btqAB261/E3DRxfI1P/tvDZpLJKtq35
- dXsj6sjvhgX7VxXhY1wE54uqLLHY3UZQlmH3QF5t80MS7/KhxB1pO1Cpcmkt9hgyzH8+5org
- +9wWxGUtJWNP7CppY+qvv3SZtKJMKsxqk5coBGwNkMms56z4qfJm2PUtJQGjA65XWdzQACib
- 2iaDQoBqGZfXRdPT0tC1H5kUJuOX4ll1hI/HBMEFCcO8++Bl2wcrUsAxLzGvhINVJX2DAQaF
- aNetToazkCnzubKfBOyiTqFJ0b63c5dqziAgzsFNBF/0ZFUBEADF8UEZmKDl1w/UxvjeyAeX
- kghYkY3bkK6gcIYXdLRfJw12GbvMioSguvVzASVHG8h7NbNjk1yur6AONfbUpXKSNZ0skV8V
- fG+ppbaY+zQofsSMoj5gP0amwbwvPzVqZCYJai81VobefTX2MZM2Mg/ThBVtGyzV3NeCpnBa
- 8AX3s9rrX2XUoCibYotbbxx9afZYUFyflOc7kEpc9uJXIdaxS2Z6MnYLHsyVjiU6tzKCiVOU
- KJevqvzPXJmy0xaOVf7mhFSNQyJTrZpLa+tvB1DQRS08CqYtIMxRrVtC0t0LFeQGly6bOngr
- ircurWJiJKbSXVstLHgWYiq3/GmCSx/82ObeLO3PftklpRj8d+kFbrvrqBgjWtMH4WtK5uN5
- 1WJ71hWJfNchKRlaJ3GWy8KolCAoGsQMovn/ZEXxrGs1ndafu47yXOpuDAozoHTBGvuSXSZo
- ythk/0EAuz5IkwkhYBT1MGIAvNSn9ivE5aRnBazugy0rTRkVggHvt3/7flFHlGVGpBHxFUwb
- /a4UjJBPtIwa4tWR8B1Ma36S8Jk456k2n1id7M0LQ+eqstmp6Y+UB+pt9NX6t0Slw1NCdYTW
- gJezWTVKF7pmTdXszXGxlc9kTrVUz04PqPjnYbv5UWuDd2eyzGjrrFOsJEi8OK2d2j4FfF++
- AzOMdW09JVqejQARAQABwsF2BBgBCAAgFiEEbF+pj/I7JePKMl6Fct6KD1TwOgwFAl/0ZFUC
- GwwACgkQct6KD1TwOgxUfg//eAoYc0Vm4NrxymfcY30UjHVD0LgSvU8kUmXxil3qhFPS7KA+
- y7tgcKLHOkZkXMX5MLFcS9+SmrAjSBBV8omKoHNo+kfFx/dUAtz0lot8wNGmWb+NcHeKM1eb
- nwUMOEa1uDdfZeKef/U/2uHBceY7Gc6zPZPWgXghEyQMTH2UhLgeam8yglyO+A6RXCh+s6ak
- Wje7Vo1wGK4eYxp6pwMPJXLMsI0ii/2k3YPEJPv+yJf90MbYyQSbkTwZhrsokjQEaIfjrIk3
- rQRjTve/J62WIO28IbY/mENuGgWehRlTAbhC4BLTZ5uYS0YMQCR7v9UGMWdNWXFyrOB6PjSu
- Trn9MsPoUc8qI72mVpxEXQDLlrd2ijEWm7Nrf52YMD7hL6rXXuis7R6zY8WnnBhW0uCfhajx
- q+KuARXC0sDLztcjaS3ayXonpoCPZep2Bd5xqE4Ln8/COCslP7E92W1uf1EcdXXIrx1acg21
- H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
- lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
- OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
-In-Reply-To: <20240229172653.GB1209090@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240226142514.1485246-4-andriy.shevchenko@linux.intel.com>
 
-On 29.02.2024 18:26, Lee Jones wrote:
-> On Tue, 13 Feb 2024, Heiner Kallweit wrote:
+On Mon, Feb 26, 2024 at 04:19:19PM +0200, Andy Shevchenko wrote:
+> Several serial drivers want to read the same or similar set of
+> the port properties. Make a common helper for them.
 > 
->> If a simple trigger is assigned to a LED, then the LED may be off until
->> the next led_trigger_event() call. This may be an issue for simple
->> triggers with rare led_trigger_event() calls, e.g. power supply
->> charging indicators (drivers/power/supply/power_supply_leds.c).
->> Therefore persist the brightness value of the last led_trigger_event()
->> call and use this value if the trigger is assigned to a LED.
->> This change allows to use simple triggers in more cases.
->> As a first use case simplify handling of the mute audio trigger.
->>
->> This series touches few subsystems. I'd propose to handle it via
->> the LED subsystem.
->>
->> Heiner Kallweit (4):
->>   leds: trigger: Store brightness set by led_trigger_event()
->>   ALSA: control-led: Integrate mute led trigger
->>   Input: leds: Prepare for removal of config option LEDS_AUDIO_TRIGGER
->>   leds: trigger: audio: Remove this trigger
->>
->>  arch/mips/configs/ci20_defconfig     |  1 -
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/tty/serial/serial_port.c | 134 +++++++++++++++++++++++++++++++
+>  include/linux/serial_core.h      |   1 +
+>  2 files changed, 135 insertions(+)
 > 
->>  drivers/input/input-leds.c           |  8 +---
-> 
-> This does not apply.
-> 
-> Please rebase onto v6.8-rc1.
-> 
-Since v6.8-rc1 the following has been added, which is touched by
-my series:
-698b43780ba2 ("Input: leds - set default-trigger for mute")
+> diff --git a/drivers/tty/serial/serial_port.c b/drivers/tty/serial/serial_port.c
+> index 88975a4df306..ecc980e9dba6 100644
+> --- a/drivers/tty/serial/serial_port.c
+> +++ b/drivers/tty/serial/serial_port.c
+> @@ -8,7 +8,10 @@
+>  
+>  #include <linux/device.h>
+>  #include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+>  #include <linux/pm_runtime.h>
+> +#include <linux/property.h>
+>  #include <linux/serial_core.h>
+>  #include <linux/spinlock.h>
+>  
+> @@ -82,6 +85,137 @@ void uart_remove_one_port(struct uart_driver *drv, struct uart_port *port)
+>  }
+>  EXPORT_SYMBOL(uart_remove_one_port);
+>  
+> +/**
+> + * uart_read_port_properties - read firmware properties of the given UART port
 
-Rebasing onto v6.8-rc1 would mean:
-- remove the change to input-leds from the series
-- resubmit this change via input subsystem
+I like, but:
 
-This would affect bisectability, because for the time being
-input-leds would reference a config symbol that doesn't exist
-any longer.
+> + * @port: corresponding port
+> + * @use_defaults: apply defaults (when %true) or validate the values (when %false)
 
-We'd be fine only if the change to input-leds is applied first.
-I think that's the best way to go, if you can't accept a series
-based on linux-next.
+Using random booleans in a function is horrid.  Every time you see the
+function call, or want to call it, you need to go and look up what the
+boolean is and means.
 
->>  drivers/leds/led-triggers.c          |  6 ++-
->>  drivers/leds/trigger/Kconfig         |  7 ---
->>  drivers/leds/trigger/Makefile        |  1 -
->>  drivers/leds/trigger/ledtrig-audio.c | 67 ----------------------------
->>  include/linux/leds.h                 | 29 ++++++------
->>  sound/core/Kconfig                   |  1 -
->>  sound/core/control_led.c             | 20 +++++++--
->>  9 files changed, 37 insertions(+), 103 deletions(-)
->>  delete mode 100644 drivers/leds/trigger/ledtrig-audio.c
->>
->> -- 
->> 2.43.1
->>
-> 
+Make 2 public functions here, one that does it with use_defaults=true
+and one =false and then have them both call this one static function,
+that way the function names themselves are easy to read and understand
+and maintain over time.
 
+thanks,
+
+greg k-h
+
+
+> + *
+> + * The following device properties are supported:
+> + *   - clock-frequency (optional)
+> + *   - fifo-size (optional)
+> + *   - no-loopback-test (optional)
+> + *   - reg-shift (defaults may apply)
+> + *   - reg-offset (value may be validated)
+> + *   - reg-io-width (defaults may apply or value may be validated)
+> + *   - interrupts (OF only)
+> + *   - serial [alias ID] (OF only)
+> + *
+> + * If the port->dev is of struct platform_device type the interrupt line
+> + * will be retrieved via platform_get_irq() call against that device.
+> + * Otherwise it will be assigned by fwnode_irq_get() call. In both cases
+> + * the index 0 of the resource is used.
+> + *
+> + * The caller is responsible to initialize the following fields of the @port
+> + *   ->dev (must be valid)
+> + *   ->flags
+> + *   ->mapbase
+> + *   ->mapsize
+> + *   ->regshift (if @use_defaults is false)
+> + * before calling this function. Alternatively the above mentioned fields
+> + * may be zeroed, in such case the only ones, that have associated properties
+> + * found, will be set to the respective values.
+> + *
+> + * If no error happened, the ->irq, ->mapbase, ->mapsize will be altered.
+> + * The ->iotype is always altered.
+> + *
+> + * When @use_defaults is true and the respective property is not found
+> + * the following values will be applied:
+> + *   ->regshift = 0
+> + * In this case IRQ must be provided, otherwise an error will be returned.
+> + *
+> + * When @use_defaults is false and the respective property is found
+> + * the following values will be validated:
+> + *   - reg-io-width (->iotype)
+> + *   - reg-offset (->mapsize against ->mapbase)
+> + *
+> + * Returns: 0 on success or negative errno on failure
+> + */
+> +int uart_read_port_properties(struct uart_port *port, bool use_defaults)
+> +{
+> +	struct device *dev = port->dev;
+> +	u32 value;
+> +	int ret;
+> +
+> +	/* Read optional UART functional clock frequency */
+> +	device_property_read_u32(dev, "clock-frequency", &port->uartclk);
+> +
+> +	/* Read the registers alignment (default: 8-bit) */
+> +	ret = device_property_read_u32(dev, "reg-shift", &value);
+> +	if (ret)
+> +		port->regshift = use_defaults ? 0 : port->regshift;
+> +	else
+> +		port->regshift = value;
+> +
+> +	/* Read the registers I/O access type (default: MMIO 8-bit) */
+> +	ret = device_property_read_u32(dev, "reg-io-width", &value);
+> +	if (ret) {
+> +		port->iotype = UPIO_MEM;
+> +	} else {
+> +		switch (value) {
+> +		case 1:
+> +			port->iotype = UPIO_MEM;
+> +			break;
+> +		case 2:
+> +			port->iotype = UPIO_MEM16;
+> +			break;
+> +		case 4:
+> +			port->iotype = device_is_big_endian(dev) ? UPIO_MEM32BE : UPIO_MEM32;
+> +			break;
+> +		default:
+> +			if (!use_defaults) {
+> +				dev_err(dev, "Unsupported reg-io-width (%u)\n", value);
+> +				return -EINVAL;
+> +			}
+> +			port->iotype = UPIO_UNKNOWN;
+> +			break;
+> +		}
+> +	}
+> +
+> +	/* Read the address mapping base offset (default: no offset) */
+> +	ret = device_property_read_u32(dev, "reg-offset", &value);
+> +	if (ret)
+> +		value = 0;
+> +
+> +	/* Check for shifted address mapping overflow */
+> +	if (!use_defaults && port->mapsize < value) {
+> +		dev_err(dev, "reg-offset %u exceeds region size %pa\n", value, &port->mapsize);
+> +		return -EINVAL;
+> +	}
+> +
+> +	port->mapbase += value;
+> +	port->mapsize -= value;
+> +
+> +	/* Read optional FIFO size */
+> +	device_property_read_u32(dev, "fifo-size", &port->fifosize);
+> +
+> +	if (device_property_read_bool(dev, "no-loopback-test"))
+> +		port->flags |= UPF_SKIP_TEST;
+> +
+> +	/* Get index of serial line, if found in DT aliases */
+> +	ret = of_alias_get_id(dev_of_node(dev), "serial");
+> +	if (ret >= 0)
+> +		port->line = ret;
+> +
+> +	if (dev_is_platform(dev))
+> +		ret = platform_get_irq(to_platform_device(dev), 0);
+> +	else
+> +		ret = fwnode_irq_get(dev_fwnode(dev), 0);
+> +	if (ret == -EPROBE_DEFER)
+> +		return ret;
+> +	if (ret > 0)
+> +		port->irq = ret;
+> +	else if (use_defaults)
+> +		/* By default IRQ support is mandatory */
+> +		return ret;
+> +	else
+> +		port->irq = 0;
+> +
+> +	port->flags |= UPF_SHARE_IRQ;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(uart_read_port_properties);
+
+EXPORT_SYMBOL_GPL()?  I have to ask :)
+
+thanks,
+
+greg k-h
 
