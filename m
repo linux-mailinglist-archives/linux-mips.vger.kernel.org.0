@@ -1,246 +1,146 @@
-Return-Path: <linux-mips+bounces-2037-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2038-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEE6387048F
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 15:54:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CFAA8704F3
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 16:11:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B7FB28940E
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 14:54:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E5841F23152
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 15:11:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C02241C72;
-	Mon,  4 Mar 2024 14:53:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6542B482CA;
+	Mon,  4 Mar 2024 15:09:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="InYb+2E1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NcJBfY3t"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44CF7168A8;
-	Mon,  4 Mar 2024 14:53:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343614653A;
+	Mon,  4 Mar 2024 15:09:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709564039; cv=none; b=NjDIZcye0jiTe6iqvf0uebzE5HtUj4VyyDlq6DzIsgdnLM3qFnXlGzS8ArmTPweVNlL3ikZgupkLhZCBFkb0knoQNbcrpgj/5QbAr9FlmA9tb0h5rIFiZixgxFsS630nkvQ/2xN5DENVzoITd3l+ZmhhDK6VkCe63F0uYAMT32Y=
+	t=1709564983; cv=none; b=iF1SA613CXY4B6o/HXSwFgvHNcD1EYdSltg2QzPF0Qf+l61fYGvP4T2wF/WZEAo4ntKmUKVkUTqWbnK1iu1WWmc/4LCO/H23d3tSdhzZHHWCbZqI9I5AMNnUeHDbOAKABXtSMbTuKM6bGkKIu2wCrcdt1dHsAHakfTQuQR/SiqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709564039; c=relaxed/simple;
-	bh=877LLuKe2NbaQT+sN5vEnqY5OtwPmsoasNubm8CyC9A=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=Mf1BzDmdUA1EfSAxtNYxLtsOciTEq3UGZTXELJRY/JzwFJw/UhC3g7D7BvThhJJcLHHgsOt/IRIrC3cuNOhCOy4tQo8yJcC2zg0ZMdSSHL1TL/hnu6+dlf51nxUNll/Ag4NBjjblFt+S8mTM9SaF+fmnjA9qSx0A/8b9ArTxuRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=InYb+2E1; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8010FE0009;
-	Mon,  4 Mar 2024 14:53:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709564034;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Y2mZgoKXYTO1ujBY2Bxuy+zGS8qyMDZgJ2hp2iONc9U=;
-	b=InYb+2E1syN3tbl5sbWUUNtuoCgNn3nrekFusBtyA5lFrKKfL8Nsc6B97SJH6WJlxYOpIT
-	2OJBK8FDkBy35AJInmol9dDEWp2doHu6ygimpZrNsMIdWCROjksOvL3jhE1EH7Nsh7quFj
-	rUqdwwz5PCzfk+BWIW1s37+JuX4xmQBla6MXBaTtbQQyDEkbFOAsV+ChmeiQKqytouP//U
-	8l/g/BCidGQzdEOBsfcwgbz+5cXyKkJXrZNxxQ+dVeyYqXg9RgcDk1Pfz1A8a5CKJd9FaF
-	gHLvkJwRyo7L3E4IAJbqF6Og5WsA6laxnq5EhVDoIPvwGmdSX1hXg5DjfKDz1g==
+	s=arc-20240116; t=1709564983; c=relaxed/simple;
+	bh=0EN/djUllp20WYcpsZJ+YqgTYOv5D/8q+MIeYGrZwYs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T6tat9dOhlSbDaN8zi07nUWJJXel39CrStkuJP78Lw13xOlZ3KvYQJLXnbaFpmcyCLGNpgKrxjHC4rF2LRlBvjjvMSqOWueo1nLbSiMOF6PK+YEiN/1ZDG62M6TRridDz+I2OlwGGA/WMKv/hJdAN0ruMcIkIQ9WmGZbz9MggVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NcJBfY3t; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 101C1C43399;
+	Mon,  4 Mar 2024 15:09:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709564983;
+	bh=0EN/djUllp20WYcpsZJ+YqgTYOv5D/8q+MIeYGrZwYs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NcJBfY3tWVDpuLt/lYCRgDIKDTl7ZAxziWE8a75pn2ypL9ZwdKNKqAK55sRqNjNDx
+	 H+0HetMxYYbBKxO/vdb8Ve8331ccpLJXo2tWedX+hxJxqTtSBxVKlsTS21Ui2Ibnd0
+	 jwR2fECfOjr1uh4gkXYbNWW1p0tVRlgDcZKqLHcZTsgYmGcyMarFY98PGSNP2XWSvh
+	 eRDOYtqTcVp2ypAhC/ZoeL2EG+jx4JrbeLVjVXnaBTRGR11z2YxbsOwVeNa10HP7UZ
+	 1k7SWDzWnHyBFtW8BFVvMO/cVpTRh/+ZODJNQc6ox52eo8CYpM9Z97kbrEGwMLPX3s
+	 wfSFdiQrjZzLA==
+Date: Mon, 4 Mar 2024 16:09:38 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>, 
+	Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+	Gregory Clement <gregory.clement@bootlin.com>, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+	Andi Shyti <andi.shyti@kernel.org>
+Subject: Re: Re: [PATCH v2 06/11] i2c: nomadik: support short xfer timeouts
+ using waitqueue & hrtimer
+Message-ID: <stofbh7be43it734k5icmjpo7oya2x4maevl2xirnf7spfkrzv@h27rc5riemao>
+References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
+ <20240229-mbly-i2c-v2-6-b32ed18c098c@bootlin.com>
+ <uq6n6s4ksuxvkonowouhr747cnu4ccwvhgpl6r7txgdtnimqnz@sl33zjshzemk>
+ <CZL1F576XCJB.2DBGD5Z7UUXIH@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 04 Mar 2024 15:53:52 +0100
-Message-Id: <CZL1VED24SZ0.7ETRO4YZ70CF@bootlin.com>
-Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-mips@vger.kernel.org>, "Gregory Clement"
- <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-To: "Andi Shyti" <andi.shyti@kernel.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v2 09/11] i2c: nomadik: support Mobileye EyeQ5 I2C
- controller
-X-Mailer: aerc 0.15.2
-References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
- <20240229-mbly-i2c-v2-9-b32ed18c098c@bootlin.com>
- <yqyhu3qsrfyj52sraeo76jnpbgq6wi4o66hfqepxwwwupaggoa@7t5bah3qqcwb>
-In-Reply-To: <yqyhu3qsrfyj52sraeo76jnpbgq6wi4o66hfqepxwwwupaggoa@7t5bah3qqcwb>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CZL1F576XCJB.2DBGD5Z7UUXIH@bootlin.com>
 
-Hello,
+Hi Theo,
 
-On Mon Mar 4, 2024 at 3:08 PM CET, Andi Shyti wrote:
-> Hi Theo,
->
-> ...
->
-> > +#include <linux/amba/bus.h>
-> >  #include <linux/bitfield.h>
-> > +#include <linux/clk.h>
-> > +#include <linux/err.h>
-> > +#include <linux/i2c.h>
-> >  #include <linux/init.h>
-> > -#include <linux/module.h>
-> > -#include <linux/amba/bus.h>
-> > -#include <linux/slab.h>
-> >  #include <linux/interrupt.h>
-> > -#include <linux/i2c.h>
-> > -#include <linux/err.h>
-> > -#include <linux/clk.h>
-> >  #include <linux/io.h>
-> > -#include <linux/pm_runtime.h>
-> > +#include <linux/mfd/syscon.h>
-> > +#include <linux/module.h>
-> >  #include <linux/of.h>
-> >  #include <linux/pinctrl/consumer.h>
-> > +#include <linux/pm_runtime.h>
-> > +#include <linux/regmap.h>
-> > +#include <linux/slab.h>
->
-> Please reorder the headers in a different patch.
+On Mon, Mar 04, 2024 at 03:32:38PM +0100, Théo Lebrun wrote:
+> On Mon Mar 4, 2024 at 2:54 PM CET, Andi Shyti wrote:
+> > > +static bool nmk_i2c_wait_xfer_done(struct nmk_i2c_dev *priv)
+> > > +{
+> > > +	if (priv->timeout_usecs < jiffies_to_usecs(1)) {
+> > > +		unsigned long timeout_usecs = priv->timeout_usecs;
+> > > +		ktime_t timeout = ktime_set(0, timeout_usecs * NSEC_PER_USEC);
+> > > +
+> > > +		wait_event_hrtimeout(priv->xfer_wq, priv->xfer_done, timeout);
+> > > +	} else {
+> > > +		unsigned long timeout = usecs_to_jiffies(priv->timeout_usecs);
+> > > +
+> > > +		wait_event_timeout(priv->xfer_wq, priv->xfer_done, timeout);
+> > > +	}
+> > > +
+> > > +	return priv->xfer_done;
+> >
+> > You could eventually write this as
+> >
+> >   static bool nmk_i2c_wait_xfer_done(struct nmk_i2c_dev *priv)
+> >   {
+> > 	if (priv->timeout_usecs < jiffies_to_usecs(1)) {
+> > 		...
+> >
+> > 		return !wait_event_hrtimeout(...);
+> > 	}
+> >
+> > 	...
+> > 	return wait_event_timeout(...);
+> >   }
+> >
+> > It looks a bit cleaner to me... your choice.
+> 
+> The full block would become:
+> 
+> static bool nmk_i2c_wait_xfer_done(struct nmk_i2c_dev *priv)
+> {
+> 	if (priv->timeout_usecs < jiffies_to_usecs(1)) {
+> 		unsigned long timeout_usecs = priv->timeout_usecs;
+> 		ktime_t timeout = ktime_set(0, timeout_usecs * NSEC_PER_USEC);
+> 
+> 		return !wait_event_hrtimeout(priv->xfer_wq, priv->xfer_done,
+> 					     timeout);
+> 	}
+> 
+> 	return wait_event_timeout(priv->xfer_wq, priv->xfer_done,
+> 				  usecs_to_jiffies(priv->timeout_usecs));
+> }
+> 
+> Three things:
+> 
+>  - Deindenting the jiffy timeout case means no variable declaration
+>    after the if-block. This is fine from my point-of-view.
+> 
+>  - It means we depend on the half-mess that are return values from
+>    wait_event_*timeout() macros. I wanted to avoid that because it
+>    looks like an error when you read the above code and see one is
+>    negated while the other is not.
+> 
+>  - Also, I'm not confident in casting either return value to bool; what
+>    happens if either macro returns an error? This is a theoretical case
+>    that shouldn't happen, but behavior might change at some point or
+>    bugs could occur. We know priv->xfer_done will give us the right
+>    answer.
+> 
+> My preference still goes to the original version, but I'm happy we are
+> having a discussion about this code block.
 
-Will do.
+sure... it's not a binding comment.
 
->
-> >  #define DRIVER_NAME "nmk-i2c"
-> > =20
->
-> ...
->
-> > +static inline u8 nmk_i2c_readb(const struct nmk_i2c_dev *priv,
-> > +			       unsigned long reg)
-> > +{
-> > +	if (priv->has_32b_bus)
-> > +		return readl(priv->virtbase + reg);
-> > +	else
-> > +		return readb(priv->virtbase + reg);
->
-> nit: no need for the else (your choice though, if you want to
-> have ti coherent with the write counterpart).
-
-Indeed, the useless else block can be removed. Will do.
-
-> > +}
-> > +
-> > +static inline void nmk_i2c_writeb(const struct nmk_i2c_dev *priv, u32 =
-val,
-> > +				unsigned long reg)
-> > +{
-> > +	if (priv->has_32b_bus)
-> > +		writel(val, priv->virtbase + reg);
-> > +	else
-> > +		writeb(val, priv->virtbase + reg);
-> > +}
->
-> ...
->
-> > +static int nmk_i2c_eyeq5_probe(struct nmk_i2c_dev *priv)
-> > +{
-> > +	struct device *dev =3D &priv->adev->dev;
-> > +	struct device_node *np =3D dev->of_node;
-> > +	unsigned int shift, speed_mode;
-> > +	struct regmap *olb;
-> > +	unsigned int id;
-> > +
-> > +	priv->has_32b_bus =3D true;
-> > +
-> > +	olb =3D syscon_regmap_lookup_by_phandle_args(np, "mobileye,olb", 1, &=
-id);
-> > +	if (IS_ERR_OR_NULL(olb)) {
-> > +		if (!olb)
-> > +			olb =3D ERR_PTR(-ENOENT);
-> > +		return dev_err_probe(dev, PTR_ERR(olb),
-> > +				     "failed OLB lookup: %lu\n", PTR_ERR(olb));
->
-> just return PTR_ERR(olb) and use dev_err_probe() in the upper
-> layer probe.
-
-Good catch. In previous revisions nmk_i2c_eyeq5_probe() had multiple
-error cases so it had to be the one doing the logging. Now that there
-is a single possible error parent can do it. It should simplify code.
-
->
-> > +	}
-> > +
-> > +	if (priv->clk_freq <=3D 400000)
-> > +		speed_mode =3D 0b00;
-> > +	else if (priv->clk_freq <=3D 1000000)
-> > +		speed_mode =3D 0b01;
-> > +	else
-> > +		speed_mode =3D 0b10;
->
-> would be nice to have these as defines.
-
-Agreed. Will be named based on I2C mode names, eg standard, fast, high
-speed, fast plus.
-
->
-> > +
-> > +	shift =3D NMK_I2C_EYEQ5_OLB_IOCR2_SHIFT(id);
-> > +	regmap_update_bits(olb, NMK_I2C_EYEQ5_OLB_IOCR2,
-> > +			   0b11 << shift, speed_mode << shift);
->
-> please define these values and for hexadecimals use 0x...
-
-0b11 is a two-bit mask. What do you mean by "these values"? Something
-like:
-
-
-
-#define NMK_I2C_EYEQ5_SPEED_MODE_FAST		0b00
-#define NMK_I2C_EYEQ5_SPEED_MODE_FAST_PLUS	0b01
-#define NMK_I2C_EYEQ5_SPEED_MODE_HIGH_SPEED	0b10
-
-static const u8 nmk_i2c_eyeq5_masks[] =3D {
-	[0] =3D 0x0030,
-	[1] =3D 0x00C0,
-	[2] =3D 0x0300,
-	[3] =3D 0x0C00,
-	[4] =3D 0x3000,
-};
-
-static int nmk_i2c_eyeq5_probe(struct nmk_i2c_dev *priv)
-{
-	// ...
-	unsigned int id, mask, speed_mode;
-
-	priv->has_32b_bus =3D true;
-
-	olb =3D syscon_regmap_lookup_by_phandle_args(np, "mobileye,olb", 1, &id);
-	// TODO: olb error checking
-	// TODO: check id is valid
-
-	if (priv->clk_freq <=3D 400000)
-		speed_mode =3D NMK_I2C_EYEQ5_SPEED_MODE_FAST;
-	else if (priv->clk_freq <=3D 1000000)
-		speed_mode =3D NMK_I2C_EYEQ5_SPEED_MODE_FAST_PLUS;
-	else
-		speed_mode =3D NMK_I2C_EYEQ5_SPEED_MODE_HIGH_SPEED;
-
-	mask =3D nmk_i2c_eyeq5_masks[id];
-	regmap_update_bits(olb, NMK_I2C_EYEQ5_OLB_IOCR2,
-			   mask, speed_mode << __fls(mask));
-	return 0;
-}
-
-Else I do not see what you are suggesting by "please define these
-values".
-
-Have a nice day,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+Andi
 
