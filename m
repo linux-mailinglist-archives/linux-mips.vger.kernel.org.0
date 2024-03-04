@@ -1,138 +1,133 @@
-Return-Path: <linux-mips+bounces-2013-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2014-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59B6C86FFDB
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 12:09:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 977F587007E
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 12:38:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41AAEB23067
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 11:09:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 319B21F23728
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 11:38:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FEDF38DF7;
-	Mon,  4 Mar 2024 11:09:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E0CD39FF5;
+	Mon,  4 Mar 2024 11:37:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OXmpRFRn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hskPch44"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A36383B9;
-	Mon,  4 Mar 2024 11:09:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D49E249F3;
+	Mon,  4 Mar 2024 11:37:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709550560; cv=none; b=SSO6KBxPv6Dpp6e0wi8ad3pknkJBkVF3aRCGnz7BDHtDNjdJaCyYlsNq8Owtvli1iktQShDFx32vfZiqhGu8fNt/55pV8mpT7OBZKnFBHjl7JiBcaVBFPm4Y2Ab7e2GaWK7RwiK4pYGfS2Fok8WaWeXkhdNJ7+FB+DeiuIn1nSg=
+	t=1709552277; cv=none; b=nkd05dgVZiS2MPvhbz+ZTLXZFLwC1MPqtrA7Xj2coLsPhQ6InBp4OyRBUVmfv3QrNah9UrBGAAGPx6WYFbyHvU/ntKb3acFAjFZ8HVMg134A18d3/YcRHuAPjHyFgtizrSGFNwps3aCCe+ADyG6CYvnRJ0pjHIAon+hLCDUtzLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709550560; c=relaxed/simple;
-	bh=KXv3Q2iupm09gepMI0TpXGJCp9MnBfLCvS53P06EY2k=;
+	s=arc-20240116; t=1709552277; c=relaxed/simple;
+	bh=5TZPumrHu7nOZMaUyKuATS4UdYvQenVHwGCAR2gaiC0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NbrY8v5Whk7jhb3FS28VdAPQyeImDOgdOUBdDTGTbW60P5ir8QPN45SBklkrRq1/yuILox/xSmMTrkCbI76mREOqpvGVD/NRyM6G+y66YflmT4HrRtsdMRogqvAG9ZvDUcKPdWX4KtFqEx500THpOnVeC1cEEPbBT7NCkahVssg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OXmpRFRn; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709550559; x=1741086559;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KXv3Q2iupm09gepMI0TpXGJCp9MnBfLCvS53P06EY2k=;
-  b=OXmpRFRnlz4JhY6eMUcydd+QD+OZiaGVneBjNu0zd5WqeO4v0k6l+URC
-   Tc3t/4AmXYkUjuXA1QgB4oDVg+oQ7OtnlzAxrZEHm6u8Vnu/4kn3zz8pv
-   WZ2D7MYE1qOTQNPxkhQuOl91AZKt4YwllBT/Yjv3wjZrN1Sfkc7sprC0V
-   PvYGT9M9X9cgNI1hSGBen8DYjG1rvPLV4PQwF8NXgqWbkFi4kvdd6mzhk
-   d6aCfEBOumht1fTbSEvEjRv7zHHfTtGGWdfkDhOk+C0WnjxjetkKjDv92
-   eBVWC2pIPjAb5n/qZ1VBSnkVaRxDDPN216VeJ3XJc03UjLMb0oVkJqT2i
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="4202222"
-X-IronPort-AV: E=Sophos;i="6.06,203,1705392000"; 
-   d="scan'208";a="4202222"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 03:09:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="914102864"
-X-IronPort-AV: E=Sophos;i="6.06,203,1705392000"; 
-   d="scan'208";a="914102864"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 03:09:12 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rh6Bw-00000009hG5-1IAi;
-	Mon, 04 Mar 2024 13:09:08 +0200
-Date: Mon, 4 Mar 2024 13:09:07 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org, linux-tegra@vger.kernel.org,
-	Jiri Slaby <jirislaby@kernel.org>, Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Al Cooper <alcooperx@gmail.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH v2 03/14] serial: port: Introduce a common helper to read
- properties
-Message-ID: <ZeWr06YWj5cDHfWL@smile.fi.intel.com>
-References: <20240226142514.1485246-1-andriy.shevchenko@linux.intel.com>
- <20240226142514.1485246-4-andriy.shevchenko@linux.intel.com>
- <2024030259-playback-starlit-a472@gregkh>
+	 Content-Type:Content-Disposition:In-Reply-To; b=RBZvc/cJNyIDT3OcwnqFruaGcFmamsTc/6ddjVxgnugQ5YOmhjXkD/EW+oR2S7rQ/qP/Vx1FnFo6OQstlLkg3I04TiHO4sftdQxjeWp8PRNe6sG9/Y0uYT+c4JteZOwo0ANuYEkqrT7MIejRMsa4K23Z1N2JgBhF/gchBSE5l08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hskPch44; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F8EEC433C7;
+	Mon,  4 Mar 2024 11:37:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709552276;
+	bh=5TZPumrHu7nOZMaUyKuATS4UdYvQenVHwGCAR2gaiC0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hskPch44nM09zbxpIg687TMJ6Q/lTPRAkyILKLkBCstGwd5agQW0C3sRjmLOZbVE7
+	 1VT/lRMMmCrTBr9HWlZSVnoLvQmu4HbAG/JVGProBIIl12Rgr0f7j24yUe3thGsAyB
+	 ymelxx9kV9eT5NK0l/cohW1K1E/JGmuRDHQG5r/1oMinaRc2zIRJF9HR+CVJbNdpf0
+	 XDs/zl8NABdL08nR+z7EIp+6K9m3Gq3ZvoMbBpOzrrgWJY2TFnuFp5D/oZBZNVh+iC
+	 zQ3mXvCCG26HrpJb76DV+sJfhckEfPlx8dtp3sH3pXHwtOAbqaZYK5cr2sGFWJeOvg
+	 bFKk3S1gZMfvg==
+Date: Mon, 4 Mar 2024 12:37:53 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH v2 06/11] i2c: nomadik: support short xfer timeouts using
+ waitqueue & hrtimer
+Message-ID: <ZeWykXrurq37dtKu@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
+ <20240229-mbly-i2c-v2-6-b32ed18c098c@bootlin.com>
+ <ZeWRyuN8v-VnraQA@ninjato>
+ <CZKVXSULAGXC.1C5PDQJ6KCHN@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="5oCfEIbf9yhEOXcl"
+Content-Disposition: inline
+In-Reply-To: <CZKVXSULAGXC.1C5PDQJ6KCHN@bootlin.com>
+
+
+--5oCfEIbf9yhEOXcl
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2024030259-playback-starlit-a472@gregkh>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-
-On Sat, Mar 02, 2024 at 09:58:53PM +0100, Greg Kroah-Hartman wrote:
-> On Mon, Feb 26, 2024 at 04:19:19PM +0200, Andy Shevchenko wrote:
-
-...
-
-> > + * uart_read_port_properties - read firmware properties of the given UART port
-> 
-> I like, but:
-> 
-> > + * @port: corresponding port
-> > + * @use_defaults: apply defaults (when %true) or validate the values (when %false)
-> 
-> Using random booleans in a function is horrid.  Every time you see the
-> function call, or want to call it, you need to go and look up what the
-> boolean is and means.
-> 
-> Make 2 public functions here, one that does it with use_defaults=true
-> and one =false and then have them both call this one static function,
-> that way the function names themselves are easy to read and understand
-> and maintain over time.
-
-Okay! I'll redo that.
-
-...
-
-> > +EXPORT_SYMBOL(uart_read_port_properties);
-> 
-> EXPORT_SYMBOL_GPL()?  I have to ask :)
-
-No clue, the rest in this file is EXPORT_SYMBOL, but I admit I followed the
-cargo cult. I'll check the modified code and see if I may use _GPL version.
-
-Thank you for review!
-
--- 
-With Best Regards,
-Andy Shevchenko
+Content-Transfer-Encoding: quoted-printable
 
 
+> > > -	int				timeout;
+> > > +	int				timeout_usecs;
+> >
+> > I think 'unsigned' makes a lot of sense here. Maybe u32 even?
+>=20
+> Yes unsigned would make sense. unsigned int or u32, I wouldn't know
+> which to pick.
+
+It gets (later) fed by of_property_read_u32(), so I tend to suggest u32.
+Sounds like least conversions then but please double check.
+
+
+--5oCfEIbf9yhEOXcl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXlso0ACgkQFA3kzBSg
+Kba7aRAAp8MwXqIV0LPiw5/f0gf9Ya9eqn734mD8kNjabJrB7OQ/XDq0cBrG0bZr
+QTGhzV0kmEPcA7Eg3ezMaIuFiooPqnhWkIJNMXQA062XXMjrNrjjk44zZz+zHcIY
+JAUW/1fNcPgeTN5DbFtfRr/4wxPd78niGclcbFtIltQewyib9ecyXS6SMhFldi9S
+OlEm2p6ahwF8Cq4DKD3GgtjrEjDr1QGPh4ct5rsJ75dLvNlLvTDPxUiIA09RqQMh
+jOhfUL9OpNdcNRsz7pSBSmgM4f03Eb+jocKB3Q54G3wQHBBAMeSPwDWj/fGYpf+L
+83eJkRl/6Zlp1XupCq5gK64qiJOeOhnMSNuvY2cKypET9wacdUKvXvJw6/Dd04xA
++MgwTTpilIJUZZKMT1r3mjTGUbcod+9odmVXOO0KvgJBxErGBPzNunSZcePC/sy1
+CYnCdC65q8P/XAgJnftDHFGFWRR+0zbUU5aJTPLfJMD2j4B/95EjR5aSJmErlaY5
+bI5m0FZLKif/w9hTVKLqaPdHWMzDZUUW3cadqRr1sINDQuVh4decxrVss/9bZXh3
+NXc10UNRPI+SYA7vMYuWFXtvMS6D49HcIH7iJSyEdFXqB8Wl+3ScGCx3UXrYUyFZ
+doh/MmTSP6huxKuyQyspeuVJsCoAZJRWqEr4+tg5YmnmIIH7kK8=
+=aOD+
+-----END PGP SIGNATURE-----
+
+--5oCfEIbf9yhEOXcl--
 
