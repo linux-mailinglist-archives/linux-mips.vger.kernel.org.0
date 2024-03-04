@@ -1,133 +1,187 @@
-Return-Path: <linux-mips+bounces-2014-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2015-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 977F587007E
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 12:38:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFB678700E1
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 13:01:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 319B21F23728
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 11:38:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBBF21C212F7
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 12:01:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E0CD39FF5;
-	Mon,  4 Mar 2024 11:37:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 137B93B193;
+	Mon,  4 Mar 2024 12:01:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hskPch44"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="wMXYIEUi"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D49E249F3;
-	Mon,  4 Mar 2024 11:37:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB9A39AF1;
+	Mon,  4 Mar 2024 12:00:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709552277; cv=none; b=nkd05dgVZiS2MPvhbz+ZTLXZFLwC1MPqtrA7Xj2coLsPhQ6InBp4OyRBUVmfv3QrNah9UrBGAAGPx6WYFbyHvU/ntKb3acFAjFZ8HVMg134A18d3/YcRHuAPjHyFgtizrSGFNwps3aCCe+ADyG6CYvnRJ0pjHIAon+hLCDUtzLA=
+	t=1709553660; cv=none; b=LsCSH3rUGBgJm4Y7H6cBYY/t9DlsK62xvc4XL3WafV2f+eaS+UP1Xe3A/hFQuuPCErbLvITTF1GZhFTpiSBLe4X4ebyG4s4qFPiLWTbCj7phfg36FJUTyYi7LtzswQjqimGVOTDL5BjOnYjAiD7GSrhk5+4zD4zPHYNbRPLpeJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709552277; c=relaxed/simple;
-	bh=5TZPumrHu7nOZMaUyKuATS4UdYvQenVHwGCAR2gaiC0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RBZvc/cJNyIDT3OcwnqFruaGcFmamsTc/6ddjVxgnugQ5YOmhjXkD/EW+oR2S7rQ/qP/Vx1FnFo6OQstlLkg3I04TiHO4sftdQxjeWp8PRNe6sG9/Y0uYT+c4JteZOwo0ANuYEkqrT7MIejRMsa4K23Z1N2JgBhF/gchBSE5l08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hskPch44; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F8EEC433C7;
-	Mon,  4 Mar 2024 11:37:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709552276;
-	bh=5TZPumrHu7nOZMaUyKuATS4UdYvQenVHwGCAR2gaiC0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hskPch44nM09zbxpIg687TMJ6Q/lTPRAkyILKLkBCstGwd5agQW0C3sRjmLOZbVE7
-	 1VT/lRMMmCrTBr9HWlZSVnoLvQmu4HbAG/JVGProBIIl12Rgr0f7j24yUe3thGsAyB
-	 ymelxx9kV9eT5NK0l/cohW1K1E/JGmuRDHQG5r/1oMinaRc2zIRJF9HR+CVJbNdpf0
-	 XDs/zl8NABdL08nR+z7EIp+6K9m3Gq3ZvoMbBpOzrrgWJY2TFnuFp5D/oZBZNVh+iC
-	 zQ3mXvCCG26HrpJb76DV+sJfhckEfPlx8dtp3sH3pXHwtOAbqaZYK5cr2sGFWJeOvg
-	 bFKk3S1gZMfvg==
-Date: Mon, 4 Mar 2024 12:37:53 +0100
-From: Wolfram Sang <wsa@kernel.org>
-To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: [PATCH v2 06/11] i2c: nomadik: support short xfer timeouts using
- waitqueue & hrtimer
-Message-ID: <ZeWykXrurq37dtKu@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
- <20240229-mbly-i2c-v2-6-b32ed18c098c@bootlin.com>
- <ZeWRyuN8v-VnraQA@ninjato>
- <CZKVXSULAGXC.1C5PDQJ6KCHN@bootlin.com>
+	s=arc-20240116; t=1709553660; c=relaxed/simple;
+	bh=SRlbTG/jH+XLr3HBMhDyMWI2WxBCgIajzCfFemzedW0=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=KzOd7jd/Wpanq1z3ByKpmEFzzx8nxeyRgQBsh5uYKZJBnSpiaULIf6z3AW4GUBepFRHPPvwywZbbcpFyM7o6j33+jVpUjQueAC3HGAERgEnAAWdCUu6SLkbw1lEZMHVlghIRLoY6JVaONAmEBpls6l0B1H8br8mhkfDjtN6G5uw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=wMXYIEUi; arc=none smtp.client-ip=115.124.30.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1709553647; h=Message-ID:Date:MIME-Version:From:Subject:To:Content-Type;
+	bh=rtN+/ylfbynl2rH4WVBwWc3AC3awpv+1WF5WI7ypLYI=;
+	b=wMXYIEUiwoVJH/xnD1RvI2dR+AACaMqlSOE/kB1fCanYeBJcd+yiA3TmmUiLeBlTbeJ3QMKsldMGq+xh3PcplByOaChpd3P/WTjzH4pDPi/mUpBC1csmwDWf3XI/0vN0O2SNCbbIo939zRN84aiPQMYkn9Resxb+Nh9u6Jdlk2I=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=yaoma@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0W1pZInn_1709553643;
+Received: from 30.178.88.130(mailfrom:yaoma@linux.alibaba.com fp:SMTPD_---0W1pZInn_1709553643)
+          by smtp.aliyun-inc.com;
+          Mon, 04 Mar 2024 20:00:45 +0800
+Message-ID: <3a89fafb-f62e-472f-b40b-8bf97954e9e3@linux.alibaba.com>
+Date: Mon, 4 Mar 2024 20:00:43 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="5oCfEIbf9yhEOXcl"
-Content-Disposition: inline
-In-Reply-To: <CZKVXSULAGXC.1C5PDQJ6KCHN@bootlin.com>
+User-Agent: Mozilla Thunderbird
+From: Bitao Hu <yaoma@linux.alibaba.com>
+Subject: Re: [PATCHv11 2/4] genirq: Provide a snapshot mechanism for interrupt
+ statistics
+To: Thomas Gleixner <tglx@linutronix.de>,
+ Doug Anderson <dianders@chromium.org>
+Cc: liusong@linux.alibaba.com, akpm@linux-foundation.org, pmladek@suse.com,
+ kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com,
+ tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com,
+ jan.kiszka@siemens.com, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, yaoma@linux.alibaba.com
+References: <20240228072216.95130-1-yaoma@linux.alibaba.com>
+ <20240228072216.95130-3-yaoma@linux.alibaba.com>
+ <CAD=FV=U1b+8atmju_w4eRmVKmSqjj6WCsy5EawYqj31fQ1kvrw@mail.gmail.com>
+ <87plwdwycx.ffs@tglx>
+Content-Language: en-US
+In-Reply-To: <87plwdwycx.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+Hi,
 
---5oCfEIbf9yhEOXcl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2024/3/2 03:22, Thomas Gleixner wrote:
+> Doug!
+> 
+> On Wed, Feb 28 2024 at 14:44, Doug Anderson wrote:
+>> I won't insist on it, but I continue to worry about memory
+>> implications with large numbers of CPUs. With a 4-byte int, 8192 max
+>> CPUs, and 100 IRQs the extra "ref" value takes up over 3MB of memory
+>> (8192 * 4 bytes * 100).
+>>
+>> Technically, you could add a new symbol like "config
+>> NEED_IRQ_SNAPSHOTS". This wouldn't be a symbol selectable by the end
+>> user but would automatically be selected by "config
+>> SOFTLOCKUP_DETECTOR_INTR_STORM". If the config wasn't defined then the
+>> struct wouldn't contain "ref" and the snapshot routines would just be
+>> static inline stubs.
+>>
+>> Maybe Thomas has an opinion about whether this is something to worry
+>> about. Worst case it wouldn't be hard to do in a follow-up patch.
+> 
+> I'd say it makes sense to give people a choice to save memory especially
+> when the softlock detector code is not enabled.
+> 
+> It's rather straight forward to do.
+> 
+> Thanks,
+> 
+>          tglx
+> ---
+> --- a/include/linux/irqdesc.h
+> +++ b/include/linux/irqdesc.h
+> @@ -24,7 +24,9 @@ struct pt_regs;
+>    */
+>   struct irqstat {
+>   	unsigned int	cnt;
+> +#ifdef CONFIG_GENIRQ_STAT_SNAPSHOT
+>   	unsigned int	ref;
+> +#endif
+>   };
+>   
+>   /**
+> --- a/kernel/irq/irqdesc.c
+> +++ b/kernel/irq/irqdesc.c
+> @@ -978,6 +978,7 @@ static unsigned int kstat_irqs(unsigned
+>   	return sum;
+>   }
+>   
+> +#ifdef CONFIG_GENIRQ_STAT_SNAPSHOT
+>   void kstat_snapshot_irqs(void)
+>   {
+>   	struct irq_desc *desc;
+> @@ -998,6 +999,7 @@ unsigned int kstat_get_irq_since_snapsho
+>   		return 0;
+>   	return this_cpu_read(desc->kstat_irqs->cnt) - this_cpu_read(desc->kstat_irqs->ref);
+>   }
+> +#endif
+>   
+>   /**
+>    * kstat_irqs_usr - Get the statistics for an interrupt from thread context
+> --- a/kernel/irq/Kconfig
+> +++ b/kernel/irq/Kconfig
+> @@ -108,6 +108,10 @@ config GENERIC_IRQ_MATRIX_ALLOCATOR
+>   config GENERIC_IRQ_RESERVATION_MODE
+>   	bool
+>   
+> +# Snapshot for interrupt statistics
+> +config GENERIC_IRQ_STAT_SNAPSHOT
+> +	bool
+> +
+>   # Support forced irq threading
+>   config IRQ_FORCED_THREADING
+>          bool
 
+I think we should follow Douglas's suggestion by making
+"config GENERIC_IRQ_STAT_SNAPSHOT" automatically selectable by
+"config SOFTLOCKUP_DETECTOR_INTR_STORM". This can prevent users
+from inadvertently disabling "config GENERIC_IRQ_STAT_SNAPSHOT"
+while enabling "config SOFTLOCKUP_DETECTOR_INTR_STORM".
 
-> > > -	int				timeout;
-> > > +	int				timeout_usecs;
-> >
-> > I think 'unsigned' makes a lot of sense here. Maybe u32 even?
->=20
-> Yes unsigned would make sense. unsigned int or u32, I wouldn't know
-> which to pick.
+Best Regards,
+	Bitao Hu
 
-It gets (later) fed by of_property_read_u32(), so I tend to suggest u32.
-Sounds like least conversions then but please double check.
+diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
+index 2531f3496ab6..9cf3b2d4c2a8 100644
+--- a/kernel/irq/Kconfig
++++ b/kernel/irq/Kconfig
+@@ -108,6 +108,15 @@ config GENERIC_IRQ_MATRIX_ALLOCATOR
+  config GENERIC_IRQ_RESERVATION_MODE
+         bool
 
-
---5oCfEIbf9yhEOXcl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXlso0ACgkQFA3kzBSg
-Kba7aRAAp8MwXqIV0LPiw5/f0gf9Ya9eqn734mD8kNjabJrB7OQ/XDq0cBrG0bZr
-QTGhzV0kmEPcA7Eg3ezMaIuFiooPqnhWkIJNMXQA062XXMjrNrjjk44zZz+zHcIY
-JAUW/1fNcPgeTN5DbFtfRr/4wxPd78niGclcbFtIltQewyib9ecyXS6SMhFldi9S
-OlEm2p6ahwF8Cq4DKD3GgtjrEjDr1QGPh4ct5rsJ75dLvNlLvTDPxUiIA09RqQMh
-jOhfUL9OpNdcNRsz7pSBSmgM4f03Eb+jocKB3Q54G3wQHBBAMeSPwDWj/fGYpf+L
-83eJkRl/6Zlp1XupCq5gK64qiJOeOhnMSNuvY2cKypET9wacdUKvXvJw6/Dd04xA
-+MgwTTpilIJUZZKMT1r3mjTGUbcod+9odmVXOO0KvgJBxErGBPzNunSZcePC/sy1
-CYnCdC65q8P/XAgJnftDHFGFWRR+0zbUU5aJTPLfJMD2j4B/95EjR5aSJmErlaY5
-bI5m0FZLKif/w9hTVKLqaPdHWMzDZUUW3cadqRr1sINDQuVh4decxrVss/9bZXh3
-NXc10UNRPI+SYA7vMYuWFXtvMS6D49HcIH7iJSyEdFXqB8Wl+3ScGCx3UXrYUyFZ
-doh/MmTSP6huxKuyQyspeuVJsCoAZJRWqEr4+tg5YmnmIIH7kK8=
-=aOD+
------END PGP SIGNATURE-----
-
---5oCfEIbf9yhEOXcl--
++# Snapshot for interrupt statistics
++config GENERIC_IRQ_STAT_SNAPSHOT
++       bool
++       help
++
++         Say Y here to enable the kernel to provide a snapshot mechanism
++         for interrupt statistics.
++
++
+  # Support forced irq threading
+  config IRQ_FORCED_THREADING
+         bool
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 49f652674bd8..899b69fcb598 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1032,6 +1032,7 @@ config SOFTLOCKUP_DETECTOR
+  config SOFTLOCKUP_DETECTOR_INTR_STORM
+         bool "Detect Interrupt Storm in Soft Lockups"
+         depends on SOFTLOCKUP_DETECTOR && IRQ_TIME_ACCOUNTING
++       select GENERIC_IRQ_STAT_SNAPSHOT
+         default y if NR_CPUS <= 128
+         help
+           Say Y here to enable the kernel to detect interrupt storm
 
