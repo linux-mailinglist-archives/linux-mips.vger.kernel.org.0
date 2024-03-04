@@ -1,75 +1,75 @@
-Return-Path: <linux-mips+bounces-2043-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2044-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1985B870BF6
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 21:57:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 911EA870BFC
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 21:58:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C20AC28290D
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 20:57:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B51F01C2231A
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 20:58:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4585F107B6;
-	Mon,  4 Mar 2024 20:57:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39EC910A3F;
+	Mon,  4 Mar 2024 20:58:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HgU74Kp+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UFE5Ta6G"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FC4379C5;
-	Mon,  4 Mar 2024 20:57:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E78510A01;
+	Mon,  4 Mar 2024 20:58:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709585850; cv=none; b=p1dvMmOk+d/BwhK+6PCzjXJuzQUH+sbwvHaE0hqOjkjsBTnAGrKUeSUNWRcF39Lv/aZBnnH/KLmJuFh0lmM03H9EaQ6wklY3brn3yrz8Up4Lov6HojS0ZKxR/AqDSRGGrZu6RzOc2vRsZdCasXghf16Ql+pNCWolToOtikFfyE0=
+	t=1709585927; cv=none; b=JfNyaT8v1h63Di7ulMUbwHBmIZPuQk/03dsJdxSlC4A2KBtnfgH53Knp7E2hzFUbIKtJeNLoPLFm6bsPKiNu9pZ/hUvZbTPU1MQlx611bxkmvo1MTVFGVDvdQvJ06lXe1OfC092+vxsYz7jnwtPY1cYgIuVPXg4q0sczyNEoNoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709585850; c=relaxed/simple;
-	bh=0C5AIARYE7ZrixcSlBzuBcnRP4eA/Z5t61W6FTyuiGY=;
+	s=arc-20240116; t=1709585927; c=relaxed/simple;
+	bh=9/E8wJqf3X7iD8KdFkbc1weS3Ag5fuPQdaDHkvlPeh4=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=KO5O9IyuwPoGiFo5AGIXhQyHia8Tfbo9aiy2Fdw/lgXX+6znq3l1pAAToIwLPSoTEgfciuJvTtfr+VeBJ+wok1uKYX2JCbI5951ZML1iS/aS1iLxoi10ANgDF5YMdCYBTd33gVGyDufIkD1rYQZBfGFlMW4wo2aSZq6sHJtXJPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HgU74Kp+; arc=none smtp.client-ip=209.85.218.42
+	 In-Reply-To:Content-Type; b=IOmHsL52bJDTp0iivdr1EbUYmwE0pDw03kNGDeGQfk74qBkEBYWru9uFwbj7kJM6QScDV8v1QOoquykbDSSDsvt68HujV3/UBYbxPX01owHbx0T5zsndEnNgiTxF25p930P5QYDxnsoFem4Ji5cc+sVWkcpU7xkMnGWc+1NOGuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UFE5Ta6G; arc=none smtp.client-ip=209.85.167.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a44cdb2d3a6so344899866b.2;
-        Mon, 04 Mar 2024 12:57:28 -0800 (PST)
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-512f892500cso3616708e87.3;
+        Mon, 04 Mar 2024 12:58:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709585847; x=1710190647; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709585923; x=1710190723; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=gFQR/AFrpovdJ4AHvgbfyhxiV8vZD2gYhps9jOOIpRQ=;
-        b=HgU74Kp+GkvDU1E2x9/dUSQCv+uBKGRheiAL9uMiDX3fchrsr+fRYcMzw8wwq+4jzD
-         HtmMigEDJXNqBeySUNkjcJ26QB2LaeicSgAwKdrodQn7JTM0u1iaiqhla2H0LFETEusC
-         S82kZzUgSi1cwol8Y6wleubwuXxcSwSc+CLCSm2K7V7HtfIUW+Jxot5NEZ3+Gx0b5/TH
-         JJUUIMms5fNqNRZmNKsH+hU95MFxzoFtfP7MgEjJxE326vUEOE8K3Up50r6eReJ8I54L
-         mOXaI41l3Ew6uIcL5Fm9G++Az7IDjYgpJVwHyqt0tK7kjKRKW7tkmdjSY1UQARXUv3T9
-         T0ww==
+        bh=hAKiJjKzkoF/u6Cqp4vIxFI8Seo7lONapPowHXJRX9Q=;
+        b=UFE5Ta6GLl7hzfGcNzgSoBKu4tx7XM2qIJYMRkhF2V7ILSlZO3GZCsNpUE/c6/uwMS
+         tzpCMe5FTwNwxGTp4WuX+HBcvtDwn6dn15J/cLo0Hhhe21uU0L0csEyzHdpqRlVBeYVW
+         jXkK7PjyegsNXLwc0T+Uy4sakZ+k+Gyy/JFReAA27brZDjJkaKR0Xy3HaWEUAi52/GIv
+         uI66EYf9/qiugQP6pgYfvPCD+nsPZxWymE/mX0+BcUdrJGmfGntMfPOUkIMnhMOQO31x
+         vzoMSc5j7Erm9F0LxdZw2rCvdSaACHxFOE+SxsqApu/qMrHlNMNaKehcsbVT9esiCOdW
+         LwEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709585847; x=1710190647;
+        d=1e100.net; s=20230601; t=1709585923; x=1710190723;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gFQR/AFrpovdJ4AHvgbfyhxiV8vZD2gYhps9jOOIpRQ=;
-        b=PLM0NhEEjkk8L7sgNaG483SCXDEONGU0KkS1JsraYBx/xe/NNp5GmiRqjJEPNsonU3
-         VznokBVbawUTlkhZKus7xPEkOzYc0iSRPUJfLtekYfrpgupCI2Kl38mSiXjPAX/2uuDZ
-         2/pWFrfpd3uA9sI6F4h1XghtSwmR0Hb9xT770Q137D1EHK+K8DRqpRktRcNfQ2O5o/q4
-         QTR5GI9brZtBtwhVVzukeDlnUbgHFW9DLc4xk76kzerf/M+EUWWTdqb7TB+KsPBdKoke
-         lXjfYBhsLcS89TENhaZgPvPVI/6BFBJKojH0sjdkjmut4AjEcsVw/mViminm6CeRsP4F
-         +idw==
-X-Forwarded-Encrypted: i=1; AJvYcCW3a1mLdwH+UOkKrrnnUZSPPDPZXk1XcBCQFLwFqXVG425+zsZbyrAiKMfTHuJlbNeH0YxIful0o6QfaTtIhIL+xb9tnhTgGzTJtZDYS44bMVarsmAuXNLI7T8zIRQBdUubz/iTA4K8
-X-Gm-Message-State: AOJu0YzcTZ8LuV73YKkcZ7838UUFNHr1mgsy6ibYzExcsSHICYu9gsk7
-	TjvmbAQbNyrb0N1EA8swpyI2gQ3CNJMrUzaVr/9A6v1arK54VA2MnEM+wcyJ
-X-Google-Smtp-Source: AGHT+IHcRgokN478DyE7VYlOnbXKw9hscMGgoMLLwZlC2zULD/22mb6Dq/SuZ67dMlLiIlNy0je2Wg==
-X-Received: by 2002:a17:906:a197:b0:a43:af0b:c1c0 with SMTP id s23-20020a170906a19700b00a43af0bc1c0mr7769070ejy.16.1709585846799;
-        Mon, 04 Mar 2024 12:57:26 -0800 (PST)
+        bh=hAKiJjKzkoF/u6Cqp4vIxFI8Seo7lONapPowHXJRX9Q=;
+        b=Y8YRBCZ8oA0+h8nXoV8+nVmIeVlX5JdVAe0WTRq2pkRzW15Req1bHJORlPEYD//7HZ
+         lDO3TfC55WNJCdeg2B2Iyw/IIVW8ggh+tSJs6d/ErCvP8HelS+iXV5IB1HJfMPg3ydw7
+         wKJ3oOOgzJiaJIH6DaEOEqs9PMH4Hj6EUyN/B3Ggs4txDnzw8+ESnJCxRr2Ixav4rAo/
+         UBTsj2S1v0a3FOSwGjCD7oJShJwZkDAkwa48cNqWmJN3Tu13l7UhCsZvt2czX3D5shmq
+         8Wh8oumVhJPwY8j5rg99cecSst6uUZcD/8zSn85Pn1gAWS7rROJrKADZB+zTp/wMav0v
+         CESg==
+X-Forwarded-Encrypted: i=1; AJvYcCWyoVJq2gkrHILZbboBed7kixcnzvweWm0eH8EmYWNwQb0DrnaFpaIO2rDEbbHEvKyYwXfX5XD1xaKfnVkc4CAN7dGPFbaQtTql+JYidc+j0EmnXSeCIbBvCmO5dvUgLdsHsXHsMadB
+X-Gm-Message-State: AOJu0YyzIvPe1F6qqfOIguasugOb0QgJOv/5jRpVtMZeIOIvuv9faf+S
+	0fyHTN7U9x6Idc9+En4pIIy2htwypsS18ROtoHhyCeH4U9YN+ZgM
+X-Google-Smtp-Source: AGHT+IERTIuCnFy6Kbt2pz7susxoL6wkvGlnwfuoi4fDKYvtI0GDRqKMMSb0yi0+8T/hEL/G58fS9g==
+X-Received: by 2002:a05:6512:3fc:b0:512:eb68:d314 with SMTP id n28-20020a05651203fc00b00512eb68d314mr5948957lfq.37.1709585923308;
+        Mon, 04 Mar 2024 12:58:43 -0800 (PST)
 Received: from ?IPV6:2a01:c23:c411:1a00:49f1:9fda:4d1e:4f64? (dynamic-2a01-0c23-c411-1a00-49f1-9fda-4d1e-4f64.c23.pool.telefonica.de. [2a01:c23:c411:1a00:49f1:9fda:4d1e:4f64])
-        by smtp.googlemail.com with ESMTPSA id tb25-20020a1709078b9900b00a4557115465sm1405531ejc.13.2024.03.04.12.57.26
+        by smtp.googlemail.com with ESMTPSA id tb25-20020a1709078b9900b00a4557115465sm1405531ejc.13.2024.03.04.12.58.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Mar 2024 12:57:26 -0800 (PST)
-Message-ID: <b1358b25-3f30-458d-8240-5705ae007a8a@gmail.com>
-Date: Mon, 4 Mar 2024 21:57:30 +0100
+        Mon, 04 Mar 2024 12:58:42 -0800 (PST)
+Message-ID: <107634e6-d9ad-4a9f-881d-1eb72ea1a5a7@gmail.com>
+Date: Mon, 4 Mar 2024 21:58:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -77,8 +77,7 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH v2 1/3] leds: trigger: Store brightness set by
- led_trigger_event()
+Subject: [PATCH v2 2/3] ALSA: control-led: Integrate mute led trigger
 Content-Language: en-US
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -134,87 +133,127 @@ In-Reply-To: <3918a80c-b885-40f6-a96e-bcd4c53ff448@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-If a simple trigger is assigned to a LED, then the LED may be off until
-the next led_trigger_event() call. This may be an issue for simple
-triggers with rare led_trigger_event() calls, e.g. power supply
-charging indicators (drivers/power/supply/power_supply_leds.c).
-Therefore persist the brightness value of the last led_trigger_event()
-call and use this value if the trigger is assigned to a LED.
-In addition add a getter for the trigger brightness value.
+This driver is the only one calling ledtrig_audio_set(), therefore
+the LED audio trigger isn't usable standalone. So it makes sense
+to fully integrate LED audio triger handling here.
+
+The module aliases ensure that the driver is auto-loaded (if built
+as module) if a LED device has one of the two audio triggers as
+default trigger.
+
+In addition disable building the old audio mute LED trigger.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/leds/led-triggers.c |  6 ++++--
- include/linux/leds.h        | 15 +++++++++++++++
- 2 files changed, 19 insertions(+), 2 deletions(-)
+v2:
+- Ensure that audio mute trigger can't be built twice.
+---
+ drivers/leds/trigger/Kconfig  |  7 -------
+ drivers/leds/trigger/Makefile |  1 -
+ sound/core/Kconfig            |  1 -
+ sound/core/control_led.c      | 20 +++++++++++++++++---
+ 4 files changed, 17 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/leds/led-triggers.c b/drivers/leds/led-triggers.c
-index 0f5ac3005..b1b323b19 100644
---- a/drivers/leds/led-triggers.c
-+++ b/drivers/leds/led-triggers.c
-@@ -194,11 +194,11 @@ int led_trigger_set(struct led_classdev *led_cdev, struct led_trigger *trig)
- 		spin_unlock(&trig->leddev_list_lock);
- 		led_cdev->trigger = trig;
+diff --git a/drivers/leds/trigger/Kconfig b/drivers/leds/trigger/Kconfig
+index d11d80176..31576952e 100644
+--- a/drivers/leds/trigger/Kconfig
++++ b/drivers/leds/trigger/Kconfig
+@@ -136,13 +136,6 @@ config LEDS_TRIGGER_PATTERN
+ 	  which is a series of tuples, of brightness and duration (ms).
+ 	  If unsure, say N
  
-+		ret = 0;
- 		if (trig->activate)
- 			ret = trig->activate(led_cdev);
- 		else
--			ret = 0;
+-config LEDS_TRIGGER_AUDIO
+-	tristate "Audio Mute LED Trigger"
+-	help
+-	  This allows LEDs to be controlled by audio drivers for following
+-	  the audio mute and mic-mute changes.
+-	  If unsure, say N
 -
-+			led_set_brightness(led_cdev, trig->brightness);
- 		if (ret)
- 			goto err_activate;
+ config LEDS_TRIGGER_TTY
+ 	tristate "LED Trigger for TTY devices"
+ 	depends on TTY
+diff --git a/drivers/leds/trigger/Makefile b/drivers/leds/trigger/Makefile
+index 25c4db97c..242f6c4e3 100644
+--- a/drivers/leds/trigger/Makefile
++++ b/drivers/leds/trigger/Makefile
+@@ -14,5 +14,4 @@ obj-$(CONFIG_LEDS_TRIGGER_CAMERA)	+= ledtrig-camera.o
+ obj-$(CONFIG_LEDS_TRIGGER_PANIC)	+= ledtrig-panic.o
+ obj-$(CONFIG_LEDS_TRIGGER_NETDEV)	+= ledtrig-netdev.o
+ obj-$(CONFIG_LEDS_TRIGGER_PATTERN)	+= ledtrig-pattern.o
+-obj-$(CONFIG_LEDS_TRIGGER_AUDIO)	+= ledtrig-audio.o
+ obj-$(CONFIG_LEDS_TRIGGER_TTY)		+= ledtrig-tty.o
+diff --git a/sound/core/Kconfig b/sound/core/Kconfig
+index 8077f481d..b970a1734 100644
+--- a/sound/core/Kconfig
++++ b/sound/core/Kconfig
+@@ -262,6 +262,5 @@ config SND_CTL_LED
+ 	tristate
+ 	select NEW_LEDS if SND_CTL_LED
+ 	select LEDS_TRIGGERS if SND_CTL_LED
+-	select LEDS_TRIGGER_AUDIO if SND_CTL_LED
  
-@@ -387,6 +387,8 @@ void led_trigger_event(struct led_trigger *trig,
- 	if (!trig)
- 		return;
+ source "sound/core/seq/Kconfig"
+diff --git a/sound/core/control_led.c b/sound/core/control_led.c
+index 3d37e9fa7..061a8ea23 100644
+--- a/sound/core/control_led.c
++++ b/sound/core/control_led.c
+@@ -53,6 +53,7 @@ struct snd_ctl_led_ctl {
  
-+	trig->brightness = brightness;
+ static DEFINE_MUTEX(snd_ctl_led_mutex);
+ static bool snd_ctl_led_card_valid[SNDRV_CARDS];
++static struct led_trigger *snd_ctl_ledtrig_audio[NUM_AUDIO_LEDS];
+ static struct snd_ctl_led snd_ctl_leds[MAX_LED] = {
+ 	{
+ 		.name = "speaker",
+@@ -174,8 +175,11 @@ static void snd_ctl_led_set_state(struct snd_card *card, unsigned int access,
+ 	case MODE_FOLLOW_ROUTE:	if (route >= 0) route ^= 1; break;
+ 	case MODE_FOLLOW_MUTE:	/* noop */ break;
+ 	}
+-	if (route >= 0)
+-		ledtrig_audio_set(led->trigger_type, route ? LED_OFF : LED_ON);
++	if (route >= 0) {
++		struct led_trigger *trig = snd_ctl_ledtrig_audio[led->trigger_type];
 +
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(led_cdev, &trig->led_cdevs, trig_list)
- 		led_set_brightness(led_cdev, brightness);
-diff --git a/include/linux/leds.h b/include/linux/leds.h
-index 7598d4729..48fff5980 100644
---- a/include/linux/leds.h
-+++ b/include/linux/leds.h
-@@ -455,6 +455,9 @@ struct led_trigger {
- 	int		(*activate)(struct led_classdev *led_cdev);
- 	void		(*deactivate)(struct led_classdev *led_cdev);
- 
-+	/* Brightness set by led_trigger_event */
-+	enum led_brightness brightness;
-+
- 	/* LED-private triggers have this set */
- 	struct led_hw_trigger_type *trigger_type;
- 
-@@ -508,6 +511,12 @@ static inline void *led_get_trigger_data(struct led_classdev *led_cdev)
- 	return led_cdev->trigger_data;
++		led_trigger_event(trig, route ? LED_OFF : LED_ON);
++	}
  }
  
-+static inline enum led_brightness
-+led_trigger_get_brightness(const struct led_trigger *trigger)
-+{
-+	return trigger ? trigger->brightness : LED_OFF;
-+}
-+
- #define module_led_trigger(__led_trigger) \
- 	module_driver(__led_trigger, led_trigger_register, \
- 		      led_trigger_unregister)
-@@ -544,6 +553,12 @@ static inline void *led_get_trigger_data(struct led_classdev *led_cdev)
- 	return NULL;
+ static struct snd_ctl_led_ctl *snd_ctl_led_find(struct snd_kcontrol *kctl, unsigned int ioff)
+@@ -425,8 +429,9 @@ static ssize_t brightness_show(struct device *dev,
+ 			       struct device_attribute *attr, char *buf)
+ {
+ 	struct snd_ctl_led *led = container_of(dev, struct snd_ctl_led, dev);
++	struct led_trigger *trig = snd_ctl_ledtrig_audio[led->trigger_type];
+ 
+-	return sysfs_emit(buf, "%u\n", ledtrig_audio_get(led->trigger_type));
++	return sysfs_emit(buf, "%u\n", led_trigger_get_brightness(trig));
  }
  
-+static inline enum led_brightness
-+led_trigger_get_brightness(const struct led_trigger *trigger)
-+{
-+	return LED_OFF;
-+}
-+
- #endif /* CONFIG_LEDS_TRIGGERS */
+ static DEVICE_ATTR_RW(mode);
+@@ -716,6 +721,9 @@ static int __init snd_ctl_led_init(void)
+ 	struct snd_ctl_led *led;
+ 	unsigned int group;
  
- /* Trigger specific enum */
++	led_trigger_register_simple("audio-mute", &snd_ctl_ledtrig_audio[LED_AUDIO_MUTE]);
++	led_trigger_register_simple("audio-micmute", &snd_ctl_ledtrig_audio[LED_AUDIO_MICMUTE]);
++
+ 	device_initialize(&snd_ctl_led_dev);
+ 	snd_ctl_led_dev.class = &sound_class;
+ 	snd_ctl_led_dev.release = snd_ctl_led_dev_release;
+@@ -768,7 +776,13 @@ static void __exit snd_ctl_led_exit(void)
+ 	}
+ 	device_unregister(&snd_ctl_led_dev);
+ 	snd_ctl_led_clean(NULL);
++
++	led_trigger_unregister_simple(snd_ctl_ledtrig_audio[LED_AUDIO_MUTE]);
++	led_trigger_unregister_simple(snd_ctl_ledtrig_audio[LED_AUDIO_MICMUTE]);
+ }
+ 
+ module_init(snd_ctl_led_init)
+ module_exit(snd_ctl_led_exit)
++
++MODULE_ALIAS("ledtrig:audio-mute");
++MODULE_ALIAS("ledtrig:audio-micmute");
 -- 
 2.44.0
 
