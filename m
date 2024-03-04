@@ -1,100 +1,138 @@
-Return-Path: <linux-mips+bounces-2012-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2013-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F420B86FEFF
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 11:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 59B6C86FFDB
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 12:09:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 846E7B21689
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 10:25:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41AAEB23067
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 11:09:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DE362261A;
-	Mon,  4 Mar 2024 10:25:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FEDF38DF7;
+	Mon,  4 Mar 2024 11:09:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RPoGrPO7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OXmpRFRn"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB8C224F9;
-	Mon,  4 Mar 2024 10:25:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A36383B9;
+	Mon,  4 Mar 2024 11:09:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709547907; cv=none; b=C8+jOb2QEcxPd22uKMBZf9iTtSJ5of0L7QxxxOJqYRr2PTdv2Ckhm1HEZb+L8P3W6Y5G0Tn8qThSfyvACNTyhDxA4Vd3rPjMn70A0Xb8zV4r+pcLxAlV+/V+PcLurM0ftWvNMaNSOwUy8zjDy5TAQiNBX3np+PYAD3N3Kh6KO8U=
+	t=1709550560; cv=none; b=SSO6KBxPv6Dpp6e0wi8ad3pknkJBkVF3aRCGnz7BDHtDNjdJaCyYlsNq8Owtvli1iktQShDFx32vfZiqhGu8fNt/55pV8mpT7OBZKnFBHjl7JiBcaVBFPm4Y2Ab7e2GaWK7RwiK4pYGfS2Fok8WaWeXkhdNJ7+FB+DeiuIn1nSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709547907; c=relaxed/simple;
-	bh=JaiQtaNF1/PgiFULD7NI+iEq6L97TrPELreOk6gTc0s=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=I68p49KY3z5cPOvf4BIUO7TxxVK1Hdlg5AY+7tRMQ+tqT36U5WtamTxKa1/1NZ8EpXyGfPj8/pfqZAlzEcATkEyLsacHeFs/uuUCGcfCWtvvN84fkm+OFQzjiMdxSSnnV6fFDaoMK9Ym4LHSptpdDrAv/FD5NMVdD4erMEBs0qM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RPoGrPO7; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7E501E000E;
-	Mon,  4 Mar 2024 10:25:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709547902;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WDbbLkFjebj8+McjyxGMYNN3BxKTit6NKZsucO65PPY=;
-	b=RPoGrPO7U8YgQEss13LXMhj1Zf1cj+cdcgzouTr22thcSST3U8FnIxIfor8Ld6HSh8+g36
-	kS35ZYtx573ne6YJBMOhACPWyORzcoVpghTkShf6EwjM2j37mKETNnt7/XSvqBQHiWIGko
-	h6QJTyDemFbvYIqEPK8EuYe3p+p68MfqBQowBsfW9eHOfmXVvF3HqU5zSkIHKPn9x+LVfK
-	0TV+aJmRoaDMZsTB+277uxRrNK0CVCdGFPO6SrcldIFyd4tKlMJE/YvqeLq9ivV+6kdY6n
-	WB6ZxXSOAlAdUxdoAwawiJI0iLaxE89/+M46GPh0al9+MA9nFAU/YYbd+ytQqQ==
+	s=arc-20240116; t=1709550560; c=relaxed/simple;
+	bh=KXv3Q2iupm09gepMI0TpXGJCp9MnBfLCvS53P06EY2k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NbrY8v5Whk7jhb3FS28VdAPQyeImDOgdOUBdDTGTbW60P5ir8QPN45SBklkrRq1/yuILox/xSmMTrkCbI76mREOqpvGVD/NRyM6G+y66YflmT4HrRtsdMRogqvAG9ZvDUcKPdWX4KtFqEx500THpOnVeC1cEEPbBT7NCkahVssg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OXmpRFRn; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709550559; x=1741086559;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KXv3Q2iupm09gepMI0TpXGJCp9MnBfLCvS53P06EY2k=;
+  b=OXmpRFRnlz4JhY6eMUcydd+QD+OZiaGVneBjNu0zd5WqeO4v0k6l+URC
+   Tc3t/4AmXYkUjuXA1QgB4oDVg+oQ7OtnlzAxrZEHm6u8Vnu/4kn3zz8pv
+   WZ2D7MYE1qOTQNPxkhQuOl91AZKt4YwllBT/Yjv3wjZrN1Sfkc7sprC0V
+   PvYGT9M9X9cgNI1hSGBen8DYjG1rvPLV4PQwF8NXgqWbkFi4kvdd6mzhk
+   d6aCfEBOumht1fTbSEvEjRv7zHHfTtGGWdfkDhOk+C0WnjxjetkKjDv92
+   eBVWC2pIPjAb5n/qZ1VBSnkVaRxDDPN216VeJ3XJc03UjLMb0oVkJqT2i
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="4202222"
+X-IronPort-AV: E=Sophos;i="6.06,203,1705392000"; 
+   d="scan'208";a="4202222"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 03:09:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="914102864"
+X-IronPort-AV: E=Sophos;i="6.06,203,1705392000"; 
+   d="scan'208";a="914102864"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 03:09:12 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rh6Bw-00000009hG5-1IAi;
+	Mon, 04 Mar 2024 13:09:08 +0200
+Date: Mon, 4 Mar 2024 13:09:07 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org, linux-rpi-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org, linux-tegra@vger.kernel.org,
+	Jiri Slaby <jirislaby@kernel.org>, Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Al Cooper <alcooperx@gmail.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH v2 03/14] serial: port: Introduce a common helper to read
+ properties
+Message-ID: <ZeWr06YWj5cDHfWL@smile.fi.intel.com>
+References: <20240226142514.1485246-1-andriy.shevchenko@linux.intel.com>
+ <20240226142514.1485246-4-andriy.shevchenko@linux.intel.com>
+ <2024030259-playback-starlit-a472@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 04 Mar 2024 11:25:01 +0100
-Message-Id: <CZKW5JVUA93W.30NZQ9289BXX1@bootlin.com>
-Subject: Re: [PATCH v2 09/11] i2c: nomadik: support Mobileye EyeQ5 I2C
- controller
-Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Andi Shyti"
- <andi.shyti@kernel.org>, "Rob Herring" <robh+dt@kernel.org>, "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
- <conor+dt@kernel.org>, "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-mips@vger.kernel.org>, "Gregory Clement"
- <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-To: "Wolfram Sang" <wsa@kernel.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: aerc 0.15.2
-References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
- <20240229-mbly-i2c-v2-9-b32ed18c098c@bootlin.com>
- <ZeWUF4P9CcovI3F5@ninjato>
-In-Reply-To: <ZeWUF4P9CcovI3F5@ninjato>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2024030259-playback-starlit-a472@gregkh>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hello,
+On Sat, Mar 02, 2024 at 09:58:53PM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Feb 26, 2024 at 04:19:19PM +0200, Andy Shevchenko wrote:
 
-On Mon Mar 4, 2024 at 10:27 AM CET, Wolfram Sang wrote:
->
-> > +	if (of_device_is_compatible(np, "mobileye,eyeq5-i2c")) {
-> > +		ret =3D nmk_i2c_eyeq5_probe(priv);
-> > +		if (ret) {
-> > +			dev_info(dev, "%s: %d: %d\n", __func__, __LINE__, ret);
->
-> This is debug code, or? Please remove it. Especially since
-> nmk_i2c_eyeq5_probe() prints something out on error.
+...
 
-It is. Nice catch, sorry about that.
+> > + * uart_read_port_properties - read firmware properties of the given UART port
+> 
+> I like, but:
+> 
+> > + * @port: corresponding port
+> > + * @use_defaults: apply defaults (when %true) or validate the values (when %false)
+> 
+> Using random booleans in a function is horrid.  Every time you see the
+> function call, or want to call it, you need to go and look up what the
+> boolean is and means.
+> 
+> Make 2 public functions here, one that does it with use_defaults=true
+> and one =false and then have them both call this one static function,
+> that way the function names themselves are easy to read and understand
+> and maintain over time.
 
-Regards,
+Okay! I'll redo that.
 
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+...
+
+> > +EXPORT_SYMBOL(uart_read_port_properties);
+> 
+> EXPORT_SYMBOL_GPL()?  I have to ask :)
+
+No clue, the rest in this file is EXPORT_SYMBOL, but I admit I followed the
+cargo cult. I'll check the modified code and see if I may use _GPL version.
+
+Thank you for review!
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
