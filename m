@@ -1,112 +1,162 @@
-Return-Path: <linux-mips+bounces-2035-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2036-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45920870405
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 15:26:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EA24870433
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 15:32:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00E7728485A
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 14:26:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B38C81F21A01
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 14:32:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC1514597F;
-	Mon,  4 Mar 2024 14:24:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21B483CF42;
+	Mon,  4 Mar 2024 14:32:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Rq4HWVZv";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="I4SzUl53"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="UlFpoy3w"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31DA83FE47;
-	Mon,  4 Mar 2024 14:24:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A29722630;
+	Mon,  4 Mar 2024 14:32:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709562287; cv=none; b=k9E750xZiULi464me+Y4vcpvBjn597G9Z7CSxcuC7ZU6AJhMG9jqQ39e/5p4t3jenDlhedPg28AwrCGdznRehzmGBZKRt3O58g72OdNekv21jWERi0zqvUsaWjxxWxpQlj9JjdU9t1b4RKx7MQq32BTsrWE/s38m9sTsh0fzGy4=
+	t=1709562768; cv=none; b=agv/mRe4+JX9OgNbxwxMjEw037h8WqF3PQz8AtFJ0YsIAXK2Kk37Hj2Ii94IGnvtl3vXEBy8ZODROPqG/g3auIWAQgnDC8f+A9lcuM2JCE1bnyE3OKdKLg9L7jvp9lHkKhMGITmeno7o4o6KIA5m4Zp62jSbllyJ4pbfa2TH9LA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709562287; c=relaxed/simple;
-	bh=mcKITX6v37iZwxRKJJBrkFjTf4ftbKe8/GBF0582cnc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=C87qesAFfNDTPiLqRbvwdgwP1X+igplvDmXNsHXPYryI4eh08PdbZ+XcBTMcsOnEvJ2XosYpDipdrjXx2j32Q3tUn8HkQf/GLlw5XimDKf7HmtncgrAHWQ/u9ESYNBFc8uxdDnNUKzzWg85G3FkFEYHOEOlBrm9/SYA4kq2xL04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Rq4HWVZv; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=I4SzUl53; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1709562280;
+	s=arc-20240116; t=1709562768; c=relaxed/simple;
+	bh=GTxNYf9/QPpJeKyDdvLNK9UeysxfJxAAQUupeLW1ux0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=SxDpmDEiZELll28xrtxgi1oTgf3nBJoquKeubktizF+Rt0ByMRJC36bBz3YHyLRMZjHZsmVjqB+vmHRELMgSPq0/ypHMUoZFq1ARutqmae+VO7xz95OdWta6ePwo3DWqZYipc+TcT98TPBNqMTzKlUV7ef6BzUGoxSPO/5S/4Cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=UlFpoy3w; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CFD5FE0016;
+	Mon,  4 Mar 2024 14:32:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1709562759;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=eHKSpmj3DHeQFSFdUlKh9foXfF7ZumMJ/fAU2N/1zwg=;
-	b=Rq4HWVZvvMHVESuVLtocY6NYdSEH/dE2Xp+N+TBjJXWY+OrV4fvA+rn/A7w0wJxyIjPIJf
-	QTa6R4Eb1wokypLG7dbaBsi5i8zhEDi9LU9bptZXEFvUbnDBg6gerU+lhPZyaHxNZkAOsS
-	mTzpDlnqKUJvNXA4L04jqwX3JzVkSU+ZGiPLJ/VCTxlTohnbPbe+z1CnQSRu+cce6LH9h0
-	Sa370W8eh0GbAfR9vmQvwZNst0eSpaxdW8ZouLeirMq3p8RKUQs7fQG3uvIt9pLE0Wq4zp
-	R3ZPirxAPzPASBf+TTa1N00LDKMiFM2cjj8a2CEL2UYtF0F7MnMFkxu8gmdXjQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1709562280;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eHKSpmj3DHeQFSFdUlKh9foXfF7ZumMJ/fAU2N/1zwg=;
-	b=I4SzUl53PxaS52fDo8iHgVdIzZ8oprWFwZxy69wJaPobECSxLSjV/QRnCr94seWE4mCgtZ
-	MoFnmWnDVT3IBKAw==
-To: Bitao Hu <yaoma@linux.alibaba.com>, Doug Anderson <dianders@chromium.org>
-Cc: liusong@linux.alibaba.com, akpm@linux-foundation.org, pmladek@suse.com,
- kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com,
- tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com,
- jan.kiszka@siemens.com, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, yaoma@linux.alibaba.com
-Subject: Re: [PATCHv11 2/4] genirq: Provide a snapshot mechanism for
- interrupt statistics
-In-Reply-To: <3a89fafb-f62e-472f-b40b-8bf97954e9e3@linux.alibaba.com>
-References: <20240228072216.95130-1-yaoma@linux.alibaba.com>
- <20240228072216.95130-3-yaoma@linux.alibaba.com>
- <CAD=FV=U1b+8atmju_w4eRmVKmSqjj6WCsy5EawYqj31fQ1kvrw@mail.gmail.com>
- <87plwdwycx.ffs@tglx>
- <3a89fafb-f62e-472f-b40b-8bf97954e9e3@linux.alibaba.com>
-Date: Mon, 04 Mar 2024 15:24:39 +0100
-Message-ID: <87wmqiulaw.ffs@tglx>
+	bh=VVcCK+YkQiSdvPAjSAPwRLt7JpKB10rUh9LOYhzJwGM=;
+	b=UlFpoy3wrHro67QQBJ0DptvXOr4Cqkfs1JFHZjHquMpwfsgqOWNanaS78AQYrF9yxr6PXj
+	9TpZZSsXQxDYVwQOyuta/S9JRhVfqZS+52iaQkzZ8LF3DByo60Fgk7BkVMVM7UBw4gk3kx
+	UgmdtzavFb9uDZmyYbSxz6M2i4CEeWe2KpmTL0qRUV8PhtiLEI9JzQS5S1ory1ZPRDs9D9
+	uDjcKKpSZ+20wWrm5gMYzwfbqm6ROWR9eFRvCdLuCTH0sNzPftgyRkwABBtcaeQkXHPuic
+	jHFsqlcnpDG3KELTx5kgf9eeRN+Xvg3h2SsDW4pjudTqcLNy+Cf3F/MesMR7zg==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 04 Mar 2024 15:32:38 +0100
+Message-Id: <CZL1F576XCJB.2DBGD5Z7UUXIH@bootlin.com>
+Subject: Re: [SPAM] [PATCH v2 06/11] i2c: nomadik: support short xfer
+ timeouts using waitqueue & hrtimer
+Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Rob Herring"
+ <robh+dt@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-mips@vger.kernel.org>, "Gregory Clement"
+ <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
+ <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>
+To: "Andi Shyti" <andi.shyti@kernel.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.15.2
+References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
+ <20240229-mbly-i2c-v2-6-b32ed18c098c@bootlin.com>
+ <uq6n6s4ksuxvkonowouhr747cnu4ccwvhgpl6r7txgdtnimqnz@sl33zjshzemk>
+In-Reply-To: <uq6n6s4ksuxvkonowouhr747cnu4ccwvhgpl6r7txgdtnimqnz@sl33zjshzemk>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Mon, Mar 04 2024 at 20:00, Bitao Hu wrote:
->> +# Snapshot for interrupt statistics
->> +config GENERIC_IRQ_STAT_SNAPSHOT
->> +	bool
->> +
->>   # Support forced irq threading
->>   config IRQ_FORCED_THREADING
->>          bool
+Hello,
+
+On Mon Mar 4, 2024 at 2:54 PM CET, Andi Shyti wrote:
+> Hi Theo,
 >
-> I think we should follow Douglas's suggestion by making
-> "config GENERIC_IRQ_STAT_SNAPSHOT" automatically selectable by
-> "config SOFTLOCKUP_DETECTOR_INTR_STORM". This can prevent users
-> from inadvertently disabling "config GENERIC_IRQ_STAT_SNAPSHOT"
-> while enabling "config SOFTLOCKUP_DETECTOR_INTR_STORM".
+> ...
+>
+> > +static bool nmk_i2c_wait_xfer_done(struct nmk_i2c_dev *priv)
+> > +{
+> > +	if (priv->timeout_usecs < jiffies_to_usecs(1)) {
+> > +		unsigned long timeout_usecs =3D priv->timeout_usecs;
+> > +		ktime_t timeout =3D ktime_set(0, timeout_usecs * NSEC_PER_USEC);
+> > +
+> > +		wait_event_hrtimeout(priv->xfer_wq, priv->xfer_done, timeout);
+> > +	} else {
+> > +		unsigned long timeout =3D usecs_to_jiffies(priv->timeout_usecs);
+> > +
+> > +		wait_event_timeout(priv->xfer_wq, priv->xfer_done, timeout);
+> > +	}
+> > +
+> > +	return priv->xfer_done;
+>
+> You could eventually write this as
+>
+>   static bool nmk_i2c_wait_xfer_done(struct nmk_i2c_dev *priv)
+>   {
+> 	if (priv->timeout_usecs < jiffies_to_usecs(1)) {
+> 		...
+>
+> 		return !wait_event_hrtimeout(...);
+> 	}
+>
+> 	...
+> 	return wait_event_timeout(...);
+>   }
+>
+> It looks a bit cleaner to me... your choice.
 
-The above is not even configurable by the user. It's only selectable by
-some other config option.
+The full block would become:
 
-> +# Snapshot for interrupt statistics
-> +config GENERIC_IRQ_STAT_SNAPSHOT
-> +       bool
-> +       help
-> +
-> +         Say Y here to enable the kernel to provide a snapshot mechanism
-> +         for interrupt statistics.
+static bool nmk_i2c_wait_xfer_done(struct nmk_i2c_dev *priv)
+{
+	if (priv->timeout_usecs < jiffies_to_usecs(1)) {
+		unsigned long timeout_usecs =3D priv->timeout_usecs;
+		ktime_t timeout =3D ktime_set(0, timeout_usecs * NSEC_PER_USEC);
 
-That makes is visible which is pointless because it's only relevant when
-there is an actual user.
+		return !wait_event_hrtimeout(priv->xfer_wq, priv->xfer_done,
+					     timeout);
+	}
 
-Thanks,
+	return wait_event_timeout(priv->xfer_wq, priv->xfer_done,
+				  usecs_to_jiffies(priv->timeout_usecs));
+}
 
-        tglx
+Three things:
+
+ - Deindenting the jiffy timeout case means no variable declaration
+   after the if-block. This is fine from my point-of-view.
+
+ - It means we depend on the half-mess that are return values from
+   wait_event_*timeout() macros. I wanted to avoid that because it
+   looks like an error when you read the above code and see one is
+   negated while the other is not.
+
+ - Also, I'm not confident in casting either return value to bool; what
+   happens if either macro returns an error? This is a theoretical case
+   that shouldn't happen, but behavior might change at some point or
+   bugs could occur. We know priv->xfer_done will give us the right
+   answer.
+
+My preference still goes to the original version, but I'm happy we are
+having a discussion about this code block.
+
+> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+
+Thanks for your review Andi!
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
