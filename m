@@ -1,123 +1,199 @@
-Return-Path: <linux-mips+bounces-2083-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2084-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08F068724F6
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 17:57:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 659B887277E
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 20:22:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4413B1C20A30
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 16:57:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C23928906A
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 19:22:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42960D28D;
-	Tue,  5 Mar 2024 16:57:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A044F5C607;
+	Tue,  5 Mar 2024 19:22:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="HKbwYqoG";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="8tNakUsg"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HB+2fcJF"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B389FD267;
-	Tue,  5 Mar 2024 16:57:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377253D0C8
+	for <linux-mips@vger.kernel.org>; Tue,  5 Mar 2024 19:22:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709657870; cv=none; b=jFRthziKkHn/53065+mcwMlqW539AIcfRuWsBh5pbOaV7q0IPymOg9s4mffcONr9URexKixYdNSq+kb9tB6aK1Bt5ljkhSXYo0X5tzNCDKs2OtmdP1VtqBABXApbG2ApWGriUWHrztRHybCUtT0VkFvuRxM/HeLfxomxQp867j4=
+	t=1709666554; cv=none; b=bpb59WeiP0DzswjF0AMF+Gsv5Xhv19DcNhX3EjAk+vGnM8H1xn80izS9d+Ax5ax6IaYtQstVcVwg2FIjDxtSPUjHHrfT/iOlw6u33ON4Vf7jyR2ZY0eNVgMtsEZsfLl+EGPnJexqoSGOa/JYn0AMNXNzenv3VoDgFNuUESuMbU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709657870; c=relaxed/simple;
-	bh=azjFOsktqiCXb357AvMEW9hKL9yqQ3FCu5yPd9IL/jo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=WRDeXsA+X9W1f/2bgtRVEf5buQZB1XboZQXxdrxGewl5w6hZTk3vsbKQ47Blm5jhqHkZoN9r6xPH8QAT5sbkQBBSO2Pfo0Yr8765H4CYAzNAsTyYOk9n1ZLVbaF/II4FFB7YepmPrOodEjIIzPk7rjsSp9mYo4YRdNWfk1vPp38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=HKbwYqoG; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=8tNakUsg; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1709657861;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HRm+TnjyJg5idEpRreLSl5etxQBLrbJ4QAyjOJxgiHU=;
-	b=HKbwYqoGgFwQ5w0c2x4gUshWZq5DHnmoTWFc3/aZZcUsyBPUvs7FtgO9sXWFeAyfxpuEi6
-	xlcIADFKW3TAaX8V6Ga3Vk3KxGSZLgdUIYbQXmyX2czdZGrJV+gT+com+2AYsi4w5tCpPe
-	P+3R/323Mr+jpB72RGyL7UAB2G4Y24a0f5aPuMXb2XzcFpBHmn6AX+fCh47ITffrAmlSjQ
-	X0sd2R+FxjQ3skVdAjuyST0jIZLH7tS9pVec6Q/PgKFl70I0IEfjpeTld2114ViFAQn5Jb
-	vMDMFcMAgaGC7ZbfrNWUXKsAS9MSi3fMQV2MyyOkR6PfJ5iMQMb9P8IPdthLhQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1709657861;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HRm+TnjyJg5idEpRreLSl5etxQBLrbJ4QAyjOJxgiHU=;
-	b=8tNakUsgVDjiTy1DgFT1yzq4jZIkpWJOqH5pgA+w3enng6vlac/FwllNiicYgryByF76pu
-	dUSgco6KK8GYs2CA==
-To: Bitao Hu <yaoma@linux.alibaba.com>, Doug Anderson <dianders@chromium.org>
-Cc: liusong@linux.alibaba.com, akpm@linux-foundation.org, pmladek@suse.com,
- kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com,
- tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com,
- jan.kiszka@siemens.com, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, yaoma@linux.alibaba.com
-Subject: Re: [PATCHv11 2/4] genirq: Provide a snapshot mechanism for
- interrupt statistics
-In-Reply-To: <28a24e4b-c322-4631-ad6d-7259ca3d084d@linux.alibaba.com>
-References: <20240228072216.95130-1-yaoma@linux.alibaba.com>
- <20240228072216.95130-3-yaoma@linux.alibaba.com>
- <CAD=FV=U1b+8atmju_w4eRmVKmSqjj6WCsy5EawYqj31fQ1kvrw@mail.gmail.com>
- <87plwdwycx.ffs@tglx>
- <3a89fafb-f62e-472f-b40b-8bf97954e9e3@linux.alibaba.com>
- <87wmqiulaw.ffs@tglx>
- <28a24e4b-c322-4631-ad6d-7259ca3d084d@linux.alibaba.com>
-Date: Tue, 05 Mar 2024 17:57:40 +0100
-Message-ID: <87h6hkvcor.ffs@tglx>
+	s=arc-20240116; t=1709666554; c=relaxed/simple;
+	bh=kV74Yj1MzqVyf6NNGDQ2CeGxlzKebgu7sxAA/z9x7pk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=di9iMuJtmr/L0BIsdBY2ZoJeLTIcJtiQAPsZuWTXgenrCFTKyVBV8FuNx6x187gB+Tls8jQB+5nRzHZk59ZkAwmH8/Ammi226wcchEqXkOkAh3ztXjpOTh81Hwf476zRpempOCn0cBnXlmVhpUq5cd55lgiC19MJlvFd1C1I0xc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HB+2fcJF; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a44cdb2d3a6so502872866b.2
+        for <linux-mips@vger.kernel.org>; Tue, 05 Mar 2024 11:22:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1709666549; x=1710271349; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Zz04MsiLPf1EieQ9O8SZKHnfGRYziipBu1MQvsGASi0=;
+        b=HB+2fcJF8i4aysA250J5V59Sykrt6RAA7OXvzat/EnHx2gkocUpUFfYcL8Laz1ldgo
+         uiq13FWYw/j0TY+/6iyX/O6AUybIRCjMfzwKCPIgKaUfkCNCLj3y0UY2V8JiX33j0wen
+         OwgHQb+0rmI4v39A53bSy1Om0beyGkFDa3QQvfHNJTTfum6Inur6L+BWAqkAGRFlS9YP
+         3xSpuMB/U6nEoVyuBlUgOtuPjXyCtuh77HZyW+u7qIRHC47PKwtOqESealfxelh235M8
+         Z7o8aAj05QR3jtuf8U2ilcjw+0l2nsg02feqIqxDTH5A3GXCM5ehYD5yLdpoqIGWrNBh
+         rl2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709666549; x=1710271349;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Zz04MsiLPf1EieQ9O8SZKHnfGRYziipBu1MQvsGASi0=;
+        b=N2UoM83QxuTG2tmQkU6kYU4/woF/FhDev83dDPHCjGdbZyZ7E9Sm9ii0t5zYhMXcik
+         3Zqg0VV6tkVj8Yns2jOoW/aU5oA5J/gAlAMZggQkGdVgx+g2NxzEV3cHysLDJm3Jraei
+         IlUvfnJwQ4ZoIBxv4nNJJ0MkGxQGva0nP/pc8g8Z0BNzh+6IAZzErFhk7rgsKtcOurP9
+         CvFThqfguzZrw/13GPO7WeVCAwmVDqL5GVzt+sqqJsbD410pJYyHNNjh/xz7QdRypuDw
+         HK1tmGiZUXHV/wpAMqPqkbJTAO0X8XLWhoUBmfCHKGqDpE1QeCutRvqpS9CObZl5+6sF
+         ElCg==
+X-Forwarded-Encrypted: i=1; AJvYcCVNhSDJKX4q/Wwp5L+Iq9HDYC3SbgdfR9u3HYBx17nJokdpGRxk2W237ZeUNEuOIzMlPFsTyWQ57yFuJOv28Vk+pieinT4uk2eMFg==
+X-Gm-Message-State: AOJu0YyjeuFASxIi83Eko8uYZCIClx/x0IRWNaFPGLTSmmBmbBCyDOgK
+	a7qgMztX7BImytiwb/5u8dTy1OSx0bidDOwnMLBTUJZcbbqDNlobCo0BaqiBlfY08ykuDiTdKe5
+	kY9FhS/YcU5jyjyKDv1OmXPxrnqNCPHNAr5Gg
+X-Google-Smtp-Source: AGHT+IGfm5Q9d1QQtEV+FHngrLRB7RaEIdB98iS7LcjxrbCUYiUnZIxAhZ7sX2WiKXZhI6ep9u27+39/LAWZPVIzVjw=
+X-Received: by 2002:a17:906:1cd5:b0:a44:15c3:c8e9 with SMTP id
+ i21-20020a1709061cd500b00a4415c3c8e9mr10269704ejh.28.1709666549065; Tue, 05
+ Mar 2024 11:22:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-13-almasrymina@google.com> <a2d926be-695a-484b-b2b5-098da47e372e@app.fastmail.com>
+In-Reply-To: <a2d926be-695a-484b-b2b5-098da47e372e@app.fastmail.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Tue, 5 Mar 2024 11:22:15 -0800
+Message-ID: <CAHS8izPbBHz=rr65ZtCy-+OGPbXXaY66_5EFSXw2bbhfGweRWg@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v6 12/15] tcp: RX path for devmem TCP
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	Linux-Arch <linux-arch@vger.kernel.org>, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, shuah <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 05 2024 at 18:57, Bitao Hu wrote:
-> On 2024/3/4 22:24, Thomas Gleixner wrote:
-> "GENERIC_IRQ_STAT_SNAPSHOT" visible to the user. However, after
-> analyzing the previous emails, it seems that what you were actually
-> proposing was to directly disable "GENERIC_IRQ_STAT_SNAPSHOT" when
-> "SOFTLOCKUP_DETECTOR_INTR_STORM" is not enabled, as a way to save
-> memory. If my current understanding is correct, then the code for that
-> part would look something like the following.
-
-Correct.
-
-> diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
-> index 2531f3496ab6..a28e5ac5fc79 100644
-> --- a/kernel/irq/Kconfig
-> +++ b/kernel/irq/Kconfig
-> @@ -108,6 +108,10 @@ config GENERIC_IRQ_MATRIX_ALLOCATOR
->   config GENERIC_IRQ_RESERVATION_MODE
->          bool
+On Tue, Mar 5, 2024 at 12:42=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote=
+:
 >
-> +# Snapshot for interrupt statistics
-> +config GENERIC_IRQ_STAT_SNAPSHOT
-> +       bool
-> +
->   # Support forced irq threading
->   config IRQ_FORCED_THREADING
->          bool
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 49f652674bd8..899b69fcb598 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -1032,6 +1032,7 @@ config SOFTLOCKUP_DETECTOR
->   config SOFTLOCKUP_DETECTOR_INTR_STORM
->          bool "Detect Interrupt Storm in Soft Lockups"
->          depends on SOFTLOCKUP_DETECTOR && IRQ_TIME_ACCOUNTING
-> +       select GENERIC_IRQ_STAT_SNAPSHOT
+> On Tue, Mar 5, 2024, at 03:01, Mina Almasry wrote:
+> > --- a/arch/alpha/include/uapi/asm/socket.h
+> > +++ b/arch/alpha/include/uapi/asm/socket.h
+> >  #define SO_PEERPIDFD         77
+> > +#define SO_DEVMEM_LINEAR     79
+> > +#define SO_DEVMEM_DMABUF     80
+> > --- a/arch/mips/include/uapi/asm/socket.h
+> > +++ b/arch/mips/include/uapi/asm/socket.h
+> >  #define SO_PEERPIDFD         77
+> > +#define SO_DEVMEM_LINEAR     79
+> > +#define SO_DEVMEM_DMABUF     80
+> > --- a/arch/parisc/include/uapi/asm/socket.h
+> > +++ b/arch/parisc/include/uapi/asm/socket.h
+> >  #define SO_PEERPIDFD         0x404B
+> > +#define SO_DEVMEM_LINEAR     98
+> > +#define SO_DEVMEM_DMABUF     99
+> > --- a/arch/sparc/include/uapi/asm/socket.h
+> > +++ b/arch/sparc/include/uapi/asm/socket.h
+> >  #define SO_PEERPIDFD             0x0056
+> > +#define SO_DEVMEM_LINEAR         0x0058
+> > +#define SO_DEVMEM_DMABUF         0x0059
+> > --- a/include/uapi/asm-generic/socket.h
+> > +++ b/include/uapi/asm-generic/socket.h
+> > @@ -135,6 +135,11 @@
+> >  #define SO_PEERPIDFD         77
+> > +#define SO_DEVMEM_LINEAR     98
+> > +#define SO_DEVMEM_DMABUF     99
+>
+> These look inconsistent. I can see how you picked the
+> alpha and mips numbers, but how did you come up with
+> the generic and parisc ones? Can you follow the existing
+> scheme instead?
+>
 
-This goes into the patch which adds the lockup detector parts.
+Sorry, yes, this is a bit weird. I'll change this to use the next
+available entry rather than leave a gap.
 
+> > diff --git a/include/uapi/linux/uio.h b/include/uapi/linux/uio.h
+> > index 059b1a9147f4..ad92e37699da 100644
+> > --- a/include/uapi/linux/uio.h
+> > +++ b/include/uapi/linux/uio.h
+> > @@ -20,6 +20,16 @@ struct iovec
+> >       __kernel_size_t iov_len; /* Must be size_t (1003.1g) */
+> >  };
+> >
+> > +struct dmabuf_cmsg {
+> > +     __u64 frag_offset;      /* offset into the dmabuf where the frag =
+starts.
+> > +                              */
+> > +     __u32 frag_size;        /* size of the frag. */
+> > +     __u32 frag_token;       /* token representing this frag for
+> > +                              * DEVMEM_DONTNEED.
+> > +                              */
+> > +     __u32  dmabuf_id;       /* dmabuf id this frag belongs to. */
+> > +};
+>
+> This structure requires a special compat handler to run
+> x86-32 binaries on x86-64 because of the different alignment
+> requirements. Any uapi-visible structures should be defined
+> to avoid this and just have no holes in them. Maybe extend
+> one of the __u32 members to __u64 or add another 32-bit padding field?
+>
+
+Honestly the 32-bit fields as-is are somewhat comically large. I don't
+think extending the __u32 -> __u64 is preferred because I don't see us
+needing that much, so maybe I can add another 32-bit padding field.
+Does this look good to you?
+
+struct dmabuf_cmsg {
+  __u64 frag_offset;
+  __u32 frag_size;
+  __u32 frag_token;
+  __u32 dmabuf_id;
+  __u32 ext; /* reserved for future flags */
+};
+
+Another option is to actually compress frag_token & dmabuf_id to be
+32-bit combined size if that addresses your concern. I prefer that
+less in case they end up being too small for future use cases.
+
+--=20
 Thanks,
-
-        tglx
+Mina
 
