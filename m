@@ -1,259 +1,532 @@
-Return-Path: <linux-mips+bounces-2045-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2046-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B6C3870BFE
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 21:59:51 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F95D871293
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 03:02:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA5462825B6
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Mar 2024 20:59:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 10080B21C63
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 02:02:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E02910A05;
-	Mon,  4 Mar 2024 20:59:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9738B1805E;
+	Tue,  5 Mar 2024 02:02:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h8Mw6XpI"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="34ZrN8xf"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69334FC1B;
-	Mon,  4 Mar 2024 20:59:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E8818026
+	for <linux-mips@vger.kernel.org>; Tue,  5 Mar 2024 02:01:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709585987; cv=none; b=KA+KnWAgDUrJJu5+13lxTlJj0/Zvm4ABnClbuUzsm0u+aCly151aF7bDMQjoUEeFaIDEGFO57D8ONOtGBM5i7PbRkieOi13Bi7l/pNnza2gTogM+wZI0gPgGm4HDZE65Du/alg0sW9gea3VatTYULD2RQoVQ4P31yipjzU8xWRE=
+	t=1709604121; cv=none; b=VPead9zZQkqWXUnpWmwL9uXvx+I+qE2ImRJMjO6g5o4mcOnjhUZGJIbObAjzJJui9/bAttVIuG730Ms08vVOLuzbaDF3CjcWIY7eo2L9bk7DWmjosPw4mBI6HEIQWeHY1Q3bmbK3HHKTY/TvjtLtq3dUvYD+BYmypH17NP+IuGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709585987; c=relaxed/simple;
-	bh=tBuwNHb9+8917mO4T5BfGcUIt/E7uEn3hHtqjypippo=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=bA9KOHHiqsG/JBDgEQ56g8aiOFafRQWnsPAyjL0rA+rkYxEKaLjy3Kh95B44B93Uy2ApFcwOy0yJ0SdRDmunCmIcK6k/zvqryO2cjCMV/FeJmr+DI+ZLGLxYj6OD9BijyQ4kH41xRLNod8L9O1qdFpIgnxbvUleAFxU6+fF6/Bs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h8Mw6XpI; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-565c6cf4819so10032167a12.1;
-        Mon, 04 Mar 2024 12:59:45 -0800 (PST)
+	s=arc-20240116; t=1709604121; c=relaxed/simple;
+	bh=5SJCpvoT4gZvZaTMx89Ghuq+/9NUs5gsmK3PbeWX42Y=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=MIzzPOu4JYe31BjlJRWcn15IyMSaNbQ5j/tLHNVRNjGkJwujZ1SsEhcCcBnejt3hCeG3+ZZqoasfcaqtyf4eJZfYzlqs8H1lsyvXkVP/7oRsl6Xh7QWWksYvJC0jpaRcePktl1F72PADQKSHai47Fen/NsY6NjjUP8SiaLBUAQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=34ZrN8xf; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dcc15b03287so7306429276.3
+        for <linux-mips@vger.kernel.org>; Mon, 04 Mar 2024 18:01:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709585984; x=1710190784; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=y0lC9epgHNagMNtVX5cTIFML+6IihHp/4HaA0X8mUiw=;
-        b=h8Mw6XpI8yBFJGjSICdrmikndiSeiJq4I169/y84WBQ5d3ezVDfuoyixGvsKdzKVRG
-         NE+G51FDP/sbZiABZ4hJjtdWM8SuFQ5j1EzD6W1iP01nQzzU+AW3gveScbYiAcFuFCcn
-         8d84gHNKJxDMeTSOtIKtMLBwHN8AU7Bw3X26filFtOhQcUBIsEV4Cn75hSvkWCiE0Gol
-         KLiWFZpiKUBYnteDSzMHzeECt5BkRUuS8hQYXv6A9Ql87fMnN0IHhWIWRFJAPWDbxRuT
-         N4r/mnOqC3rRvo39L3E2XKta4pVxG3FFr3d90y8unZKGwTJlmbIXXwlQjYS94U/YvxPE
-         NPAA==
+        d=google.com; s=20230601; t=1709604117; x=1710208917; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=55SlYXskgAbUC07Ocxvb4GPfka9yxb5WpBWQrml1mno=;
+        b=34ZrN8xfC1aNn9ebckh9Lj67fgvG6ae773KeainKXvBMwapu14aA9leQgVh5fsDy8Z
+         3KBLQFhaoin+n26WL9z5+4wIqcwug6D3+tVWEqlUWz9Nr7qeiNV4JSqEyG2BgO1MRZ5S
+         DVTK1oePmCQkEZHZDTZIWM1UdWkapyFzu0nzABJOhhThkMMQev48f1KQwpER7wesukTU
+         O/VSuU7s+RvbMyadbpQlfbsr15XmqUS1C0ivwmGU/LRlHELyYuNyJoYDxH/1gzWerToK
+         MtamZdOsHCi/4wk3c6IlL8gbVG2HwT6ky8LE2RhzGp/7HCpLVcV4d4E8sKorWbXTo1z8
+         iWmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709585984; x=1710190784;
-        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=y0lC9epgHNagMNtVX5cTIFML+6IihHp/4HaA0X8mUiw=;
-        b=ccp7/4pJqr08DzEA49PvknGzJwvepdHJa2RfLdktf8HSRWmjwZksny8BbjYSE2dXYu
-         E96IHLHj9yzf0tuBIjnbq2Zma0eNzOWJ780Da4J/R1WoB1Nie7rpz5W+YDwQ0px8BqTx
-         31C6sxbXdoKmFID3YMhDtP7ahLCaqhRz9GktC3YyOxu3sWqiNZxhAQojGb1uHjddLcl3
-         pFUm3VHMMTzv5tlldf26CUEjRyg11IrqoaFgBLlUdPpXamgJpUxgmbshpK8j6UxbFX/6
-         46TsuSsXZ1giysJ8qqn2CJYireKFjqF2ljfSGGFSrQYpnMdrjE6+FpyRrkWI3Hgxemt/
-         z91g==
-X-Forwarded-Encrypted: i=1; AJvYcCX0sGbzBaFECYYukWpga1Pl9LHRH+MIvqjNe9S5xJV/LjTBjIFbMCA7a2oZfoE2LCHiwRbWzT8ndiX6pIbN2YIOH334qckAFW+ftwe41beVK4qD/1OiLbD38L+9CVoO08MNYaVnGjRT
-X-Gm-Message-State: AOJu0Yz0SS6wjYNbxtt3op0Fj0hVfjPQqOR92PSSa2ICHVyssrp8E54m
-	Q6iTwzsmrvVi5D6QMofHgMkUbVKVqllnYCzkmafh8sWSiM+Z9PVW
-X-Google-Smtp-Source: AGHT+IHLTtruACg2s5x6W73EU3x7BtRoa3LZnyqIqdLDFk9ySA7s4N2kLw2G8Avb9nfUAdCzmzyzxQ==
-X-Received: by 2002:a17:906:fa85:b0:a3e:53d9:c7d5 with SMTP id lt5-20020a170906fa8500b00a3e53d9c7d5mr618651ejb.36.1709585983693;
-        Mon, 04 Mar 2024 12:59:43 -0800 (PST)
-Received: from ?IPV6:2a01:c23:c411:1a00:49f1:9fda:4d1e:4f64? (dynamic-2a01-0c23-c411-1a00-49f1-9fda-4d1e-4f64.c23.pool.telefonica.de. [2a01:c23:c411:1a00:49f1:9fda:4d1e:4f64])
-        by smtp.googlemail.com with ESMTPSA id tb25-20020a1709078b9900b00a4557115465sm1405531ejc.13.2024.03.04.12.59.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Mar 2024 12:59:43 -0800 (PST)
-Message-ID: <1e339779-6d04-4392-8ea2-5592c0fd1aa2@gmail.com>
-Date: Mon, 4 Mar 2024 21:59:47 +0100
+        d=1e100.net; s=20230601; t=1709604117; x=1710208917;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=55SlYXskgAbUC07Ocxvb4GPfka9yxb5WpBWQrml1mno=;
+        b=lNtwutL4QaV/JQ3NDdvetEGj+3BrAGHOgRjNP2r7x5a0ZGJj3En5I+B8kFNrdTG4j8
+         qRlMnLi2I9Zq7s7rY64KmMqOdoFus9/jPeIjpLP5sLQFgSCwCDzPQXWmgpT1IuxJIBAh
+         clFxCvFK4jWZaU9/0MQ6JzKmqXfs5MsE7kYFP16HCkOMz+EihO8sCHPsrrTACUtnqbgv
+         poxiV8J5r/xJnLQ+GfdoQPEWMpbNTOdADnc1xX5gvGiV6VqpZyHTBJYklMMA/joejtAn
+         zhAegZSTVeRYEy8JYMqB+s7rbq1NwiOs8pnzD427gfBtXhuzoDU+0gZ/JSRmBaaikaAO
+         IOhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWSGSMsT0CzVAJ5uGHkupc40NbkO+2eOJBnusNgmS7V21hMA1rb8ungkBDgR4Hf71fILVVdCE6cSL4CLqNMsnjCzAmwTJ6HmCXeJw==
+X-Gm-Message-State: AOJu0YymH4v24AtUdz5rcZbnZob8/x9FoQS5F4aelOmZAcmNetaFUsas
+	iJawiBqjkpSPcfWHdRQStZoDOUcKm6yyWuaWiN/cJyd1SgMtxmqVY9oZGVA8ehE9Gm1lMc0XTEo
+	sChZFGRhRitTC3Qo3nGpW+g==
+X-Google-Smtp-Source: AGHT+IGgP9lxCpbwb0hThtM10r7DBqXWOVEk2Uw392R6Iks3K5NMb+79+YKWvZAz/yW3nimazxZaTBRJtMLl6xuDug==
+X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2c4:200:b614:914c:63cd:3830])
+ (user=almasrymina job=sendgmr) by 2002:a25:c794:0:b0:dcb:c2c0:b319 with SMTP
+ id w142-20020a25c794000000b00dcbc2c0b319mr462976ybe.9.1709604117458; Mon, 04
+ Mar 2024 18:01:57 -0800 (PST)
+Date: Mon,  4 Mar 2024 18:01:35 -0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: [PATCH v2 3/3] leds: trigger: audio: Remove this trigger
-Content-Language: en-US
-From: Heiner Kallweit <hkallweit1@gmail.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc: "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
- linux-sound@vger.kernel.org, linux-mips@vger.kernel.org
-References: <3918a80c-b885-40f6-a96e-bcd4c53ff448@gmail.com>
-Autocrypt: addr=hkallweit1@gmail.com; keydata=
- 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
-In-Reply-To: <3918a80c-b885-40f6-a96e-bcd4c53ff448@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.rc1.240.g4c46232300-goog
+Message-ID: <20240305020153.2787423-1-almasrymina@google.com>
+Subject: [RFC PATCH net-next v6 00/15] Device Memory TCP
+From: Mina Almasry <almasrymina@google.com>
+To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org
+Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, 
+	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, 
+	David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Now that the audio trigger is fully integrated in
-sound/core/control_led.c, we can remove it here.
+RFC v6:
+=3D=3D=3D=3D=3D=3D=3D
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
- arch/mips/configs/ci20_defconfig     |  1 -
- drivers/leds/trigger/ledtrig-audio.c | 67 ----------------------------
- include/linux/leds.h                 | 14 ------
- 3 files changed, 82 deletions(-)
- delete mode 100644 drivers/leds/trigger/ledtrig-audio.c
+Major Changes:
+--------------
 
-diff --git a/arch/mips/configs/ci20_defconfig b/arch/mips/configs/ci20_defconfig
-index cdf2a782d..7827b2b39 100644
---- a/arch/mips/configs/ci20_defconfig
-+++ b/arch/mips/configs/ci20_defconfig
-@@ -152,7 +152,6 @@ CONFIG_LEDS_TRIGGER_CAMERA=m
- CONFIG_LEDS_TRIGGER_PANIC=y
- CONFIG_LEDS_TRIGGER_NETDEV=y
- CONFIG_LEDS_TRIGGER_PATTERN=y
--CONFIG_LEDS_TRIGGER_AUDIO=y
- CONFIG_RTC_CLASS=y
- CONFIG_RTC_DRV_JZ4740=y
- CONFIG_DMADEVICES=y
-diff --git a/drivers/leds/trigger/ledtrig-audio.c b/drivers/leds/trigger/ledtrig-audio.c
-deleted file mode 100644
-index 2ecd4b760..000000000
---- a/drivers/leds/trigger/ledtrig-audio.c
-+++ /dev/null
-@@ -1,67 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--//
--// Audio Mute LED trigger
--//
--
--#include <linux/kernel.h>
--#include <linux/leds.h>
--#include <linux/module.h>
--#include "../leds.h"
--
--static enum led_brightness audio_state[NUM_AUDIO_LEDS];
--
--static int ledtrig_audio_mute_activate(struct led_classdev *led_cdev)
--{
--	led_set_brightness_nosleep(led_cdev, audio_state[LED_AUDIO_MUTE]);
--	return 0;
--}
--
--static int ledtrig_audio_micmute_activate(struct led_classdev *led_cdev)
--{
--	led_set_brightness_nosleep(led_cdev, audio_state[LED_AUDIO_MICMUTE]);
--	return 0;
--}
--
--static struct led_trigger ledtrig_audio[NUM_AUDIO_LEDS] = {
--	[LED_AUDIO_MUTE] = {
--		.name     = "audio-mute",
--		.activate = ledtrig_audio_mute_activate,
--	},
--	[LED_AUDIO_MICMUTE] = {
--		.name     = "audio-micmute",
--		.activate = ledtrig_audio_micmute_activate,
--	},
--};
--
--enum led_brightness ledtrig_audio_get(enum led_audio type)
--{
--	return audio_state[type];
--}
--EXPORT_SYMBOL_GPL(ledtrig_audio_get);
--
--void ledtrig_audio_set(enum led_audio type, enum led_brightness state)
--{
--	audio_state[type] = state;
--	led_trigger_event(&ledtrig_audio[type], state);
--}
--EXPORT_SYMBOL_GPL(ledtrig_audio_set);
--
--static int __init ledtrig_audio_init(void)
--{
--	led_trigger_register(&ledtrig_audio[LED_AUDIO_MUTE]);
--	led_trigger_register(&ledtrig_audio[LED_AUDIO_MICMUTE]);
--	return 0;
--}
--module_init(ledtrig_audio_init);
--
--static void __exit ledtrig_audio_exit(void)
--{
--	led_trigger_unregister(&ledtrig_audio[LED_AUDIO_MUTE]);
--	led_trigger_unregister(&ledtrig_audio[LED_AUDIO_MICMUTE]);
--}
--module_exit(ledtrig_audio_exit);
--
--MODULE_DESCRIPTION("LED trigger for audio mute control");
--MODULE_LICENSE("GPL v2");
--MODULE_ALIAS("ledtrig:audio-mute");
--MODULE_ALIAS("ledtrig:audio-micmute");
-diff --git a/include/linux/leds.h b/include/linux/leds.h
-index 48fff5980..d2668b427 100644
---- a/include/linux/leds.h
-+++ b/include/linux/leds.h
-@@ -705,18 +705,4 @@ enum led_audio {
- 	NUM_AUDIO_LEDS
- };
- 
--#if IS_ENABLED(CONFIG_LEDS_TRIGGER_AUDIO)
--enum led_brightness ledtrig_audio_get(enum led_audio type);
--void ledtrig_audio_set(enum led_audio type, enum led_brightness state);
--#else
--static inline enum led_brightness ledtrig_audio_get(enum led_audio type)
--{
--	return LED_OFF;
--}
--static inline void ledtrig_audio_set(enum led_audio type,
--				     enum led_brightness state)
--{
--}
--#endif
--
- #endif		/* __LINUX_LEDS_H_INCLUDED */
--- 
-2.44.0
+This revision largely rebases on top of net-next and addresses the little
+feedback RFCv5 received.
 
+The series remains in RFC because the queue-API ndos defined in this
+series are not yet implemented. I have a GVE implementation I carry out
+of tree for my testing. A upstreamable GVE implementation is in the
+works. Aside from that, in my estimation all the patches are ready for
+review/merge. Please do take a look.
+
+As usual the full devmem TCP changes including the full GVE driver
+implementation is here:
+
+https://github.com/mina/linux/commits/tcpdevmem-v6/
+
+This version also comes with some performance data recorded in the cover
+letter (see below changelog).
+
+Detailed changelog:
+
+- Rebased on top of the merged netmem_ref changes.
+
+- Converted skb->dmabuf to skb->readable (Pavel). Pavel's original
+  suggestion was to remove the skb->dmabuf flag entirely, but when I
+  looked into it closely, I found the issue that if we remove the flag
+  we have to dereference the shinfo(skb) pointer to obtain the first
+  frag to tell whether an skb is readable or not. This can cause a
+  performance regression if it dirties the cache line when the
+  shinfo(skb) was not really needed. Instead, I converted the skb->dmabuf
+  flag into a generic skb->readable flag which can be re-used by io_uring
+  0-copy RX.
+
+- Squashed a few locking optimizations from Eric Dumazet in the RX path
+  and the DEVMEM_DONTNEED setsockopt.
+
+- Expanded the tests a bit. Added validation for invalid scenarios and
+  added some more coverage.
+
+Perf - page-pool benchmark:
+---------------------------
+
+bench_page_pool_simple.ko tests with and without these changes:
+https://pastebin.com/raw/ncHDwAbn
+
+AFAIK the number that really matters in the perf tests is the
+'tasklet_page_pool01_fast_path Per elem'. This one measures at about 8
+cycles without the changes but there is some 1 cycle noise in some
+results.
+
+With the patches this regresses to 9 cycles with the changes but there
+is 1 cycle noise occasionally running this test repeatedly.
+
+Lastly I tried disable the static_branch_unlikely() in
+netmem_is_net_iov() check. To my surprise disabling the
+static_branch_unlikely() check reduces the fast path back to 8 cycles,
+but the 1 cycle noise remains.
+
+Perf - Devmem TCP benchmark:
+---------------------
+
+189/200gbps bi-directional throughput with RX devmem TCP and regular TCP
+TX i.e. ~95% line rate.
+
+Major changes in RFC v5:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+1. Rebased on top of 'Abstract page from net stack' series and used the
+   new netmem type to refer to LSB set pointers instead of re-using
+   struct page.
+
+2. Downgraded this series back to RFC and called it RFC v5. This is
+   because this series is now dependent on 'Abstract page from net
+   stack'[1] and the queue API. Both are removed from the series to
+   reduce the patch # and those bits are fairly independent or
+   pre-requisite work.
+
+3. Reworked the page_pool devmem support to use netmem and for some
+   more unified handling.
+
+4. Reworked the reference counting of net_iov (renamed from
+   page_pool_iov) to use pp_ref_count for refcounting.
+
+The full changes including the dependent series and GVE page pool
+support is here:
+
+https://github.com/mina/linux/commits/tcpdevmem-rfcv5/
+
+[1] https://patchwork.kernel.org/project/netdevbpf/list/?series=3D810774
+
+Major changes in v1:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+1. Implemented MVP queue API ndos to remove the userspace-visible
+   driver reset.
+
+2. Fixed issues in the napi_pp_put_page() devmem frag unref path.
+
+3. Removed RFC tag.
+
+Many smaller addressed comments across all the patches (patches have
+individual change log).
+
+Full tree including the rest of the GVE driver changes:
+https://github.com/mina/linux/commits/tcpdevmem-v1
+
+Changes in RFC v3:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+1. Pulled in the memory-provider dependency from Jakub's RFC[1] to make the
+   series reviewable and mergeable.
+
+2. Implemented multi-rx-queue binding which was a todo in v2.
+
+3. Fix to cmsg handling.
+
+The sticking point in RFC v2[2] was the device reset required to refill
+the device rx-queues after the dmabuf bind/unbind. The solution
+suggested as I understand is a subset of the per-queue management ops
+Jakub suggested or similar:
+
+https://lore.kernel.org/netdev/20230815171638.4c057dcd@kernel.org/
+
+This is not addressed in this revision, because:
+
+1. This point was discussed at netconf & netdev and there is openness to
+   using the current approach of requiring a device reset.
+
+2. Implementing individual queue resetting seems to be difficult for my
+   test bed with GVE. My prototype to test this ran into issues with the
+   rx-queues not coming back up properly if reset individually. At the
+   moment I'm unsure if it's a mistake in the POC or a genuine issue in
+   the virtualization stack behind GVE, which currently doesn't test
+   individual rx-queue restart.
+
+3. Our usecases are not bothered by requiring a device reset to refill
+   the buffer queues, and we'd like to support NICs that run into this
+   limitation with resetting individual queues.
+
+My thought is that drivers that have trouble with per-queue configs can
+use the support in this series, while drivers that support new netdev
+ops to reset individual queues can automatically reset the queue as
+part of the dma-buf bind/unbind.
+
+The same approach with device resets is presented again for consideration
+with other sticking points addressed.
+
+This proposal includes the rx devmem path only proposed for merge. For a
+snapshot of my entire tree which includes the GVE POC page pool support &
+device memory support:
+
+https://github.com/torvalds/linux/compare/master...mina:linux:tcpdevmem-v3
+
+[1] https://lore.kernel.org/netdev/f8270765-a27b-6ccf-33ea-cda097168d79@red=
+hat.com/T/
+[2] https://lore.kernel.org/netdev/CAHS8izOVJGJH5WF68OsRWFKJid1_huzzUK+hpKb=
+LcL4pSOD1Jw@mail.gmail.com/T/
+
+Changes in RFC v2:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+The sticking point in RFC v1[1] was the dma-buf pages approach we used to
+deliver the device memory to the TCP stack. RFC v2 is a proof-of-concept
+that attempts to resolve this by implementing scatterlist support in the
+networking stack, such that we can import the dma-buf scatterlist
+directly. This is the approach proposed at a high level here[2].
+
+Detailed changes:
+1. Replaced dma-buf pages approach with importing scatterlist into the
+   page pool.
+2. Replace the dma-buf pages centric API with a netlink API.
+3. Removed the TX path implementation - there is no issue with
+   implementing the TX path with scatterlist approach, but leaving
+   out the TX path makes it easier to review.
+4. Functionality is tested with this proposal, but I have not conducted
+   perf testing yet. I'm not sure there are regressions, but I removed
+   perf claims from the cover letter until they can be re-confirmed.
+5. Added Signed-off-by: contributors to the implementation.
+6. Fixed some bugs with the RX path since RFC v1.
+
+Any feedback welcome, but specifically the biggest pending questions
+needing feedback IMO are:
+
+1. Feedback on the scatterlist-based approach in general.
+2. Netlink API (Patch 1 & 2).
+3. Approach to handle all the drivers that expect to receive pages from
+   the page pool (Patch 6).
+
+[1] https://lore.kernel.org/netdev/dfe4bae7-13a0-3c5d-d671-f61b375cb0b4@gma=
+il.com/T/
+[2] https://lore.kernel.org/netdev/CAHS8izPm6XRS54LdCDZVd0C75tA1zHSu6jLVO8n=
+zTLXCc=3DH7Nw@mail.gmail.com/
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+* TL;DR:
+
+Device memory TCP (devmem TCP) is a proposal for transferring data to and/o=
+r
+from device memory efficiently, without bouncing the data to a host memory
+buffer.
+
+* Problem:
+
+A large amount of data transfers have device memory as the source and/or
+destination. Accelerators drastically increased the volume of such transfer=
+s.
+Some examples include:
+- ML accelerators transferring large amounts of training data from storage =
+into
+  GPU/TPU memory. In some cases ML training setup time can be as long as 50=
+% of
+  TPU compute time, improving data transfer throughput & efficiency can hel=
+p
+  improving GPU/TPU utilization.
+
+- Distributed training, where ML accelerators, such as GPUs on different ho=
+sts,
+  exchange data among them.
+
+- Distributed raw block storage applications transfer large amounts of data=
+ with
+  remote SSDs, much of this data does not require host processing.
+
+Today, the majority of the Device-to-Device data transfers the network are
+implemented as the following low level operations: Device-to-Host copy,
+Host-to-Host network transfer, and Host-to-Device copy.
+
+The implementation is suboptimal, especially for bulk data transfers, and c=
+an
+put significant strains on system resources, such as host memory bandwidth,
+PCIe bandwidth, etc. One important reason behind the current state is the
+kernel=E2=80=99s lack of semantics to express device to network transfers.
+
+* Proposal:
+
+In this patch series we attempt to optimize this use case by implementing
+socket APIs that enable the user to:
+
+1. send device memory across the network directly, and
+2. receive incoming network packets directly into device memory.
+
+Packet _payloads_ go directly from the NIC to device memory for receive and=
+ from
+device memory to NIC for transmit.
+Packet _headers_ go to/from host memory and are processed by the TCP/IP sta=
+ck
+normally. The NIC _must_ support header split to achieve this.
+
+Advantages:
+
+- Alleviate host memory bandwidth pressure, compared to existing
+ network-transfer + device-copy semantics.
+
+- Alleviate PCIe BW pressure, by limiting data transfer to the lowest level
+  of the PCIe tree, compared to traditional path which sends data through t=
+he
+  root complex.
+
+* Patch overview:
+
+** Part 1: netlink API
+
+Gives user ability to bind dma-buf to an RX queue.
+
+** Part 2: scatterlist support
+
+Currently the standard for device memory sharing is DMABUF, which doesn't
+generate struct pages. On the other hand, networking stack (skbs, drivers, =
+and
+page pool) operate on pages. We have 2 options:
+
+1. Generate struct pages for dmabuf device memory, or,
+2. Modify the networking stack to process scatterlist.
+
+Approach #1 was attempted in RFC v1. RFC v2 implements approach #2.
+
+** part 3: page pool support
+
+We piggy back on page pool memory providers proposal:
+https://github.com/kuba-moo/linux/tree/pp-providers
+
+It allows the page pool to define a memory provider that provides the
+page allocation and freeing. It helps abstract most of the device memory
+TCP changes from the driver.
+
+** part 4: support for unreadable skb frags
+
+Page pool iovs are not accessible by the host; we implement changes
+throughput the networking stack to correctly handle skbs with unreadable
+frags.
+
+** Part 5: recvmsg() APIs
+
+We define user APIs for the user to send and receive device memory.
+
+Not included with this series is the GVE devmem TCP support, just to
+simplify the review. Code available here if desired:
+https://github.com/mina/linux/tree/tcpdevmem
+
+This series is built on top of net-next with Jakub's pp-providers changes
+cherry-picked.
+
+* NIC dependencies:
+
+1. (strict) Devmem TCP require the NIC to support header split, i.e. the
+   capability to split incoming packets into a header + payload and to put
+   each into a separate buffer. Devmem TCP works by using device memory
+   for the packet payload, and host memory for the packet headers.
+
+2. (optional) Devmem TCP works better with flow steering support & RSS supp=
+ort,
+   i.e. the NIC's ability to steer flows into certain rx queues. This allow=
+s the
+   sysadmin to enable devmem TCP on a subset of the rx queues, and steer
+   devmem TCP traffic onto these queues and non devmem TCP elsewhere.
+
+The NIC I have access to with these properties is the GVE with DQO support
+running in Google Cloud, but any NIC that supports these features would suf=
+fice.
+I may be able to help reviewers bring up devmem TCP on their NICs.
+
+* Testing:
+
+The series includes a udmabuf kselftest that show a simple use case of
+devmem TCP and validates the entire data path end to end without
+a dependency on a specific dmabuf provider.
+
+** Test Setup
+
+Kernel: net-next with this series and memory provider API cherry-picked
+locally.
+
+Hardware: Google Cloud A3 VMs.
+
+NIC: GVE with header split & RSS & flow steering support.
+
+Cc: Pavel Begunkov <asml.silence@gmail.com>
+Cc: David Wei <dw@davidwei.uk>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Yunsheng Lin <linyunsheng@huawei.com>
+Cc: Shailend Chand <shailend@google.com>
+Cc: Harshitha Ramamurthy <hramamurthy@google.com>
+Cc: Shakeel Butt <shakeelb@google.com>
+Cc: Jeroen de Borst <jeroendb@google.com>
+Cc: Praveen Kaligineedi <pkaligineedi@google.com>
+
+
+Jakub Kicinski (1):
+  net: page_pool: create hooks for custom page providers
+
+Mina Almasry (14):
+  queue_api: define queue api
+  net: page_pool: factor out page_pool recycle check
+  net: netdev netlink api to bind dma-buf to a net device
+  netdev: support binding dma-buf to netdevice
+  netdev: netdevice devmem allocator
+  page_pool: convert to use netmem
+  page_pool: devmem support
+  memory-provider: dmabuf devmem memory provider
+  net: support non paged skb frags
+  net: add support for skbs with unreadable frags
+  tcp: RX path for devmem TCP
+  net: add SO_DEVMEM_DONTNEED setsockopt to release RX frags
+  net: add devmem TCP documentation
+  selftests: add ncdevmem, netcat for devmem TCP
+
+ Documentation/netlink/specs/netdev.yaml |  52 +++
+ Documentation/networking/devmem.rst     | 271 ++++++++++++
+ Documentation/networking/index.rst      |   1 +
+ arch/alpha/include/uapi/asm/socket.h    |   6 +
+ arch/mips/include/uapi/asm/socket.h     |   6 +
+ arch/parisc/include/uapi/asm/socket.h   |   6 +
+ arch/sparc/include/uapi/asm/socket.h    |   6 +
+ include/linux/netdevice.h               |  24 ++
+ include/linux/skbuff.h                  |  67 ++-
+ include/linux/socket.h                  |   1 +
+ include/net/devmem.h                    | 127 ++++++
+ include/net/netdev_rx_queue.h           |   1 +
+ include/net/netmem.h                    | 234 +++++++++-
+ include/net/page_pool/helpers.h         | 154 +++++--
+ include/net/page_pool/types.h           |  28 +-
+ include/net/sock.h                      |   2 +
+ include/net/tcp.h                       |   5 +-
+ include/trace/events/page_pool.h        |  29 +-
+ include/uapi/asm-generic/socket.h       |   6 +
+ include/uapi/linux/netdev.h             |  19 +
+ include/uapi/linux/uio.h                |  14 +
+ net/bpf/test_run.c                      |   5 +-
+ net/core/Makefile                       |   2 +-
+ net/core/datagram.c                     |   6 +
+ net/core/dev.c                          |   6 +-
+ net/core/devmem.c                       | 413 ++++++++++++++++++
+ net/core/gro.c                          |   7 +-
+ net/core/netdev-genl-gen.c              |  19 +
+ net/core/netdev-genl-gen.h              |   2 +
+ net/core/netdev-genl.c                  | 123 ++++++
+ net/core/page_pool.c                    | 362 +++++++++-------
+ net/core/skbuff.c                       | 110 ++++-
+ net/core/sock.c                         |  61 +++
+ net/ipv4/tcp.c                          | 257 ++++++++++-
+ net/ipv4/tcp_input.c                    |  13 +-
+ net/ipv4/tcp_ipv4.c                     |   9 +
+ net/ipv4/tcp_output.c                   |   5 +-
+ net/packet/af_packet.c                  |   4 +-
+ tools/include/uapi/linux/netdev.h       |  19 +
+ tools/testing/selftests/net/.gitignore  |   1 +
+ tools/testing/selftests/net/Makefile    |   5 +
+ tools/testing/selftests/net/ncdevmem.c  | 546 ++++++++++++++++++++++++
+ 42 files changed, 2764 insertions(+), 270 deletions(-)
+ create mode 100644 Documentation/networking/devmem.rst
+ create mode 100644 include/net/devmem.h
+ create mode 100644 net/core/devmem.c
+ create mode 100644 tools/testing/selftests/net/ncdevmem.c
+
+--=20
+2.44.0.rc1.240.g4c46232300-goog
 
 
