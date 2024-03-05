@@ -1,162 +1,123 @@
-Return-Path: <linux-mips+bounces-2082-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2083-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E488E8723B8
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 17:09:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08F068724F6
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 17:57:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B8F4285E94
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 16:09:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4413B1C20A30
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 16:57:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B227312D1F2;
-	Tue,  5 Mar 2024 16:06:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42960D28D;
+	Tue,  5 Mar 2024 16:57:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fxPNg1Zm"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="HKbwYqoG";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="8tNakUsg"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87DC5128399;
-	Tue,  5 Mar 2024 16:06:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B389FD267;
+	Tue,  5 Mar 2024 16:57:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709654794; cv=none; b=eEoPQoV++L8WCFGbPPLPHtAJ0aOrEw1GGnclXrDzxf2EnC59TkmGZvy/csQVkbtBFxsrw6DNHboBMyA7rqW9x5k4kNf4ymbiFXle2XWiFyKHE1N6i8H7WJuel0GHDXODq3DZ3JAc15h3LqqDHMXrfGjk2N82VBMarFJz8U2uVts=
+	t=1709657870; cv=none; b=jFRthziKkHn/53065+mcwMlqW539AIcfRuWsBh5pbOaV7q0IPymOg9s4mffcONr9URexKixYdNSq+kb9tB6aK1Bt5ljkhSXYo0X5tzNCDKs2OtmdP1VtqBABXApbG2ApWGriUWHrztRHybCUtT0VkFvuRxM/HeLfxomxQp867j4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709654794; c=relaxed/simple;
-	bh=iQ4ueZCtzUAUounXFnVno6yI9heqKH0W5Dph34x4a8o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=risDjIhrDRi/YgDBLYfsrwtRt4zyG3LaMOBZPqhSYukjLign5JWFN047QMCtHaUJPYKXS2sNfZpkzIMJWZATVMYVGUNp9Lu90JFW7RHmG9pnn8el8DPD4Hx8ruTBAHHARiWCGezczQqwzxD5Ov2+J6UEcLaZCM8sYNt9LJM8lSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fxPNg1Zm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F66CC433C7;
-	Tue,  5 Mar 2024 16:06:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709654794;
-	bh=iQ4ueZCtzUAUounXFnVno6yI9heqKH0W5Dph34x4a8o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fxPNg1ZmxayBUPsjxy9RQhDpBa9lRMs+kH0JU14MS9DXyPcPVSnPo6olELCIYGkG3
-	 1apLIEGE/2hCtYeZSr7RLZ4yWLhc4xZJ2kqdnphv9CLkdX+tRiUlAJWQAN4wlOjS/d
-	 zwlNN7+HoyxkGZiqghpDTM+EaNOamLDS+we7myyMLSDIjo+JWoI4L2U6QyqXAWCGOx
-	 CDiMvZK+XG4mdIfmznnz7KKORI+oknDBV7eaPuVgTx5xQe+rtaaMqYtgOW/8xf3mY6
-	 VChg0g2MXBclanr/LcYhDP37FI1zkuVQQDOZoO+65jedFECBNfmHHegT8k0duDjpHB
-	 zlgtCl74qjUcw==
-Date: Tue, 5 Mar 2024 16:06:26 +0000
-From: Lee Jones <lee@kernel.org>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Pavel Machek <pavel@ucw.cz>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>, linux-leds@vger.kernel.org,
-	linux-sound@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] leds: trigger: Improve handling of
- led_trigger_event() and simplify mute audio trigger
-Message-ID: <20240305160626.GH86322@google.com>
-References: <3918a80c-b885-40f6-a96e-bcd4c53ff448@gmail.com>
- <170964052434.128456.128263499797916605.b4-ty@kernel.org>
- <20240305120947.GD86322@google.com>
- <20240305145454.GG86322@google.com>
- <f2e7d244-62f4-4dde-bffc-8d96e5a4bac1@gmail.com>
+	s=arc-20240116; t=1709657870; c=relaxed/simple;
+	bh=azjFOsktqiCXb357AvMEW9hKL9yqQ3FCu5yPd9IL/jo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=WRDeXsA+X9W1f/2bgtRVEf5buQZB1XboZQXxdrxGewl5w6hZTk3vsbKQ47Blm5jhqHkZoN9r6xPH8QAT5sbkQBBSO2Pfo0Yr8765H4CYAzNAsTyYOk9n1ZLVbaF/II4FFB7YepmPrOodEjIIzPk7rjsSp9mYo4YRdNWfk1vPp38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=HKbwYqoG; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=8tNakUsg; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1709657861;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HRm+TnjyJg5idEpRreLSl5etxQBLrbJ4QAyjOJxgiHU=;
+	b=HKbwYqoGgFwQ5w0c2x4gUshWZq5DHnmoTWFc3/aZZcUsyBPUvs7FtgO9sXWFeAyfxpuEi6
+	xlcIADFKW3TAaX8V6Ga3Vk3KxGSZLgdUIYbQXmyX2czdZGrJV+gT+com+2AYsi4w5tCpPe
+	P+3R/323Mr+jpB72RGyL7UAB2G4Y24a0f5aPuMXb2XzcFpBHmn6AX+fCh47ITffrAmlSjQ
+	X0sd2R+FxjQ3skVdAjuyST0jIZLH7tS9pVec6Q/PgKFl70I0IEfjpeTld2114ViFAQn5Jb
+	vMDMFcMAgaGC7ZbfrNWUXKsAS9MSi3fMQV2MyyOkR6PfJ5iMQMb9P8IPdthLhQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1709657861;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HRm+TnjyJg5idEpRreLSl5etxQBLrbJ4QAyjOJxgiHU=;
+	b=8tNakUsgVDjiTy1DgFT1yzq4jZIkpWJOqH5pgA+w3enng6vlac/FwllNiicYgryByF76pu
+	dUSgco6KK8GYs2CA==
+To: Bitao Hu <yaoma@linux.alibaba.com>, Doug Anderson <dianders@chromium.org>
+Cc: liusong@linux.alibaba.com, akpm@linux-foundation.org, pmladek@suse.com,
+ kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com,
+ tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com,
+ jan.kiszka@siemens.com, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, yaoma@linux.alibaba.com
+Subject: Re: [PATCHv11 2/4] genirq: Provide a snapshot mechanism for
+ interrupt statistics
+In-Reply-To: <28a24e4b-c322-4631-ad6d-7259ca3d084d@linux.alibaba.com>
+References: <20240228072216.95130-1-yaoma@linux.alibaba.com>
+ <20240228072216.95130-3-yaoma@linux.alibaba.com>
+ <CAD=FV=U1b+8atmju_w4eRmVKmSqjj6WCsy5EawYqj31fQ1kvrw@mail.gmail.com>
+ <87plwdwycx.ffs@tglx>
+ <3a89fafb-f62e-472f-b40b-8bf97954e9e3@linux.alibaba.com>
+ <87wmqiulaw.ffs@tglx>
+ <28a24e4b-c322-4631-ad6d-7259ca3d084d@linux.alibaba.com>
+Date: Tue, 05 Mar 2024 17:57:40 +0100
+Message-ID: <87h6hkvcor.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f2e7d244-62f4-4dde-bffc-8d96e5a4bac1@gmail.com>
+Content-Type: text/plain
 
-On Tue, 05 Mar 2024, Heiner Kallweit wrote:
+On Tue, Mar 05 2024 at 18:57, Bitao Hu wrote:
+> On 2024/3/4 22:24, Thomas Gleixner wrote:
+> "GENERIC_IRQ_STAT_SNAPSHOT" visible to the user. However, after
+> analyzing the previous emails, it seems that what you were actually
+> proposing was to directly disable "GENERIC_IRQ_STAT_SNAPSHOT" when
+> "SOFTLOCKUP_DETECTOR_INTR_STORM" is not enabled, as a way to save
+> memory. If my current understanding is correct, then the code for that
+> part would look something like the following.
 
-> On 05.03.2024 15:54, Lee Jones wrote:
-> > On Tue, 05 Mar 2024, Lee Jones wrote:
-> > 
-> >> On Tue, 05 Mar 2024, Lee Jones wrote:
-> >>
-> >>> On Mon, 04 Mar 2024 21:56:29 +0100, Heiner Kallweit wrote:
-> >>>> If a simple trigger is assigned to a LED, then the LED may be off until
-> >>>> the next led_trigger_event() call. This may be an issue for simple
-> >>>> triggers with rare led_trigger_event() calls, e.g. power supply
-> >>>> charging indicators (drivers/power/supply/power_supply_leds.c).
-> >>>> Therefore persist the brightness value of the last led_trigger_event()
-> >>>> call and use this value if the trigger is assigned to a LED.
-> >>>> This change allows to use simple triggers in more cases.
-> >>>> As a first use case simplify handling of the mute audio trigger.
-> >>>>
-> >>>> [...]
-> >>>
-> >>> Applied, thanks!
-> >>>
-> >>> [1/3] leds: trigger: Store brightness set by led_trigger_event()
-> >>>       commit: 575129855dee0e364af7df84a77ab5cca54b1442
-> >>> [2/3] ALSA: control-led: Integrate mute led trigger
-> >>>       commit: ba8adb1646ee498029ac12b20e792d9d0dd17920
-> >>> [3/3] leds: trigger: audio: Remove this trigger
-> >>>       commit: 2c61168294d0ea42a5542dbc864afb03a76bbc11
-> >>
-> >> Submitted for build testing.
-> >>
-> >> Once succeeded, a PR will follow for other maintainers to pull from.
-> > 
-> > make --silent --keep-going --jobs=8 O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu- 'CC=sccache x86_64-linux-gnu-gcc' 'HOSTCC=sccache gcc' allmodconfig
-> > make --silent --keep-going --jobs=8 O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu- 'CC=sccache x86_64-linux-gnu-gcc' 'HOSTCC=sccache gcc'
-> > x86_64-linux-gnu-ld: warning: arch/x86/entry/vdso/vclock_gettime-x32.o: corrupt GNU_PROPERTY_TYPE (5) size: 0x10
-> > x86_64-linux-gnu-ld: warning: arch/x86/entry/vdso/vgetcpu-x32.o: corrupt GNU_PROPERTY_TYPE (5) size: 0x10
-> > /builds/linux/drivers/platform/x86/dell/dell-laptop.c: In function 'dell_init':
-> > /builds/linux/drivers/platform/x86/dell/dell-laptop.c:2255:33: error: implicit declaration of function 'ledtrig_audio_get'; did you mean 'led_trigger_set'? [-Werror=implicit-function-declaration]
-> >    micmute_led_cdev.brightness = ledtrig_audio_get(LED_AUDIO_MICMUTE);
-> >                                  ^~~~~~~~~~~~~~~~~
-> >                                  led_trigger_set
-> > cc1: all warnings being treated as errors
-> > make[7]: *** [/builds/linux/scripts/Makefile.build:243: drivers/platform/x86/dell/dell-laptop.o] Error 1
-> > make[7]: Target 'drivers/platform/x86/dell/' not remade because of errors.
-> > make[6]: *** [/builds/linux/scripts/Makefile.build:481: drivers/platform/x86/dell] Error 2
-> > /builds/linux/drivers/platform/x86/huawei-wmi.c: In function 'huawei_wmi_leds_setup':
-> > /builds/linux/drivers/platform/x86/huawei-wmi.c:313:28: error: implicit declaration of function 'ledtrig_audio_get'; did you mean 'led_trigger_set'? [-Werror=implicit-function-declaration]
-> >   huawei->cdev.brightness = ledtrig_audio_get(LED_AUDIO_MICMUTE);
-> >                             ^~~~~~~~~~~~~~~~~
-> >                             led_trigger_set
-> > cc1: all warnings being treated as errors
-> > make[6]: *** [/builds/linux/scripts/Makefile.build:243: drivers/platform/x86/huawei-wmi.o] Error 1
-> > /builds/linux/drivers/platform/x86/asus-wmi.c: In function 'asus_wmi_led_init':
-> > /builds/linux/drivers/platform/x86/asus-wmi.c:1623:34: error: implicit declaration of function 'ledtrig_audio_get'; did you mean 'led_trigger_set'? [-Werror=implicit-function-declaration]
-> >    asus->micmute_led.brightness = ledtrig_audio_get(LED_AUDIO_MICMUTE);
-> >                                   ^~~~~~~~~~~~~~~~~
-> >                                   led_trigger_set
-> > cc1: all warnings being treated as errors
-> > make[6]: *** [/builds/linux/scripts/Makefile.build:243: drivers/platform/x86/asus-wmi.o] Error 1
-> > /builds/linux/drivers/platform/x86/thinkpad_acpi.c: In function 'mute_led_init':
-> > /builds/linux/drivers/platform/x86/thinkpad_acpi.c:9288:33: error: implicit declaration of function 'ledtrig_audio_get'; did you mean 'led_trigger_set'? [-Werror=implicit-function-declaration]
-> >    mute_led_cdev[i].brightness = ledtrig_audio_get(i);
-> >                                  ^~~~~~~~~~~~~~~~~
-> >                                  led_trigger_set
-> > 
-> > ############################3
-> > 
-> > Errors were caused
-> >  
-> > [v6.8-rc1] ib-leds-mips-sound-6.9 2c61168294d0e ("leds: trigger: audio: Remove this trigger")
-> > 
-> >  x86_64 allmodconfig gcc-8
-> >      https://storage.tuxsuite.com/public/google/lee.jones/builds/2dGhtQpYDimIIpMqO0Qm4AMAAPU/ 	Pass (0 errors - 2 warnings) : v6.8-rc1
-> >      https://storage.tuxsuite.com/public/google/lee.jones/builds/2dGhvxgZA6moBZmToTavyY4Eita/ 	Fail (7 errors - 2 warnings) : ib-leds-mips-sound-6.9 
-> > 
-> >  x86_64 allmodconfig gcc-9
-> >      https://storage.tuxsuite.com/public/google/lee.jones/builds/2dGhtYCYEqxnUFmoH73iKlcEIV8/ 	Pass (0 errors - 0 warnings) : v6.8-rc1
-> >      https://storage.tuxsuite.com/public/google/lee.jones/builds/2dGhw2i4B539YZXCoSN2LSRvsW8/ 	Fail (7 errors - 0 warnings) : ib-leds-mips-sound-6.9 
-> > 
-> >  x86_64 allyesconfig gcc-8
-> >      https://storage.tuxsuite.com/public/google/lee.jones/builds/2dGhtTzCsCxRpl9loRyfPrD1uhR/ 	Pass (0 errors - 2 warnings) : v6.8-rc1
-> >      https://storage.tuxsuite.com/public/google/lee.jones/builds/2dGhw1WQ2BIpJRoyK7ruVCtihSN/ 	Fail (7 errors - 2 warnings) : ib-leds-mips-sound-6.9
-> > 
-> 
-> Right, I forgot, there are patches applied via a different tree end of January,
-> that this series depends on. I assume this means that the series can be applied
-> only after the merge window.
+Correct.
 
-Yes, unless there is a succinct immutable branch I can pull from.
+> diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
+> index 2531f3496ab6..a28e5ac5fc79 100644
+> --- a/kernel/irq/Kconfig
+> +++ b/kernel/irq/Kconfig
+> @@ -108,6 +108,10 @@ config GENERIC_IRQ_MATRIX_ALLOCATOR
+>   config GENERIC_IRQ_RESERVATION_MODE
+>          bool
+>
+> +# Snapshot for interrupt statistics
+> +config GENERIC_IRQ_STAT_SNAPSHOT
+> +       bool
+> +
+>   # Support forced irq threading
+>   config IRQ_FORCED_THREADING
+>          bool
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 49f652674bd8..899b69fcb598 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -1032,6 +1032,7 @@ config SOFTLOCKUP_DETECTOR
+>   config SOFTLOCKUP_DETECTOR_INTR_STORM
+>          bool "Detect Interrupt Storm in Soft Lockups"
+>          depends on SOFTLOCKUP_DETECTOR && IRQ_TIME_ACCOUNTING
+> +       select GENERIC_IRQ_STAT_SNAPSHOT
 
--- 
-Lee Jones [李琼斯]
+This goes into the patch which adds the lockup detector parts.
+
+Thanks,
+
+        tglx
 
