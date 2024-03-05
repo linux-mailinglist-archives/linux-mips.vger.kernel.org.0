@@ -1,97 +1,121 @@
-Return-Path: <linux-mips+bounces-2073-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2074-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E2E2871E9D
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 13:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E594C871F91
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 13:55:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED313286383
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 12:09:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C5E9282A01
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 12:55:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FD645822E;
-	Tue,  5 Mar 2024 12:09:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r8y4oa+H"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E11378594A;
+	Tue,  5 Mar 2024 12:54:52 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 522677484;
-	Tue,  5 Mar 2024 12:09:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B640B58AB6;
+	Tue,  5 Mar 2024 12:54:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709640592; cv=none; b=tjuxLdRatqscjx4GUF3ac0UG99s3ULULNjEnuaKCKYkHtscYQhCh3UYGac1haue8meWMWNZuuNkibZjK50Hpx5yRkW3lj3zhwSFXF0PmtDauIxf6SSCVzWotolc+puHx4nLOWsgPMdbYAyTRl6joDgzcFnUMTIPCKJiQYbLsQyU=
+	t=1709643292; cv=none; b=WNjjBZ0cH6it0nAGwU79vaNbgOi9IgmfHVlh6af3v3aCHN4v992VQYqgf3lvK7bpTDst+vTNF3hoBAmX4ELjdcfM4XftLv6apQ7aWlvEq6JJ8TOc43yrfWiT428Yt9KDGC0NQvF66FyUu5kpp9ZX+1DGAltRANgh1kBTUkJT9w8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709640592; c=relaxed/simple;
-	bh=TPtJtVZnWukNSHq5RvVLOZ6puDBbDvzzbdZt98utfDc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BG3kDj2CWCGSJC2NeL/3J5islWBjrpf8cvx4j/9hnjZE+eZf98/kntHn/Hab4YWkkwG+o/1Sn6eYslXhHmHtt3OF/RJZ0anrtN6dB9tkRBPPT7b6MAEbuYiPkLIQ1PrPG/UelWiiU2sfkzBkVJR8o0kva5iKK2LYAAScdHSxAHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r8y4oa+H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 339CDC433C7;
-	Tue,  5 Mar 2024 12:09:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709640591;
-	bh=TPtJtVZnWukNSHq5RvVLOZ6puDBbDvzzbdZt98utfDc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=r8y4oa+HeNHfSS2aqjOOpgtrTZTf1q94RBVqgmeXN5m+zPt7XmCCd6dIb19FWkgNv
-	 gWvSVoklh6WNYRbr7g9QG2kWLWeRJRg00cHeVei/xXSSKEyp3N/6UeJp3z94wGrahp
-	 763KL00JNr3wRqHOGW6tDL070Wz0DYuoqzxNrXIuCxpHFmqZZGNnHV3xV0CXPIlCnV
-	 /ZiOYiGDrjaXoTIUaj2U3soT2RZ44sidK8bDMs3jq1uIIhxyoyvIH43XW3JETt3HKT
-	 Au52l60kv3SY6ww1v5r75KyxCzNa7rU3SVyfcCW9PeQtwbl1WPFYXGnUCa7/qLtojl
-	 ypW5zYKpAIB/Q==
-Date: Tue, 5 Mar 2024 12:09:47 +0000
-From: Lee Jones <lee@kernel.org>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Pavel Machek <pavel@ucw.cz>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>
-Cc: linux-leds@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] leds: trigger: Improve handling of
- led_trigger_event() and simplify mute audio trigger
-Message-ID: <20240305120947.GD86322@google.com>
-References: <3918a80c-b885-40f6-a96e-bcd4c53ff448@gmail.com>
- <170964052434.128456.128263499797916605.b4-ty@kernel.org>
+	s=arc-20240116; t=1709643292; c=relaxed/simple;
+	bh=dBll0MMe1cd+COq57v39zRTivh0aNAY6WcRafFYM2J8=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=RvhzBhkAw8qz3BVDSHI+CLCGlmP1Keqk6FfQCNlG+VaX2YwffXxybJfgJ/yfzPC6eOz461gcPnvGDIjnvAXuHZqnFWZVf+GVHFUZ6DTchEhJkBQrxzDrM4f/kY3k9oFJ+B+toY0dxPizz5C2AWU1r/+uDSr8I/ND2nFNOl5PtPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4TpwVc6CY4zbcjb;
+	Tue,  5 Mar 2024 20:54:00 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
+	by mail.maildlp.com (Postfix) with ESMTPS id D491214037C;
+	Tue,  5 Mar 2024 20:54:42 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Tue, 5 Mar
+ 2024 20:54:42 +0800
+Subject: Re: [RFC PATCH net-next v6 00/15] Device Memory TCP
+To: Mina Almasry <almasrymina@google.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-alpha@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+	<linux-parisc@vger.kernel.org>, <sparclinux@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
+CC: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Richard Henderson
+	<richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer
+	<tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+	<James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+	<hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+	<arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+	<martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+	<john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
+	<sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	David Ahern <dsahern@kernel.org>, Willem de Bruijn
+	<willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, Sumit
+ Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=c3=b6nig?=
+	<christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
+ Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Shailend Chand
+	<shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel
+ Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, Praveen
+ Kaligineedi <pkaligineedi@google.com>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+From: Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <6208950d-6453-e797-7fc3-1dcf15b49dbe@huawei.com>
+Date: Tue, 5 Mar 2024 20:54:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <170964052434.128456.128263499797916605.b4-ty@kernel.org>
+In-Reply-To: <20240305020153.2787423-1-almasrymina@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
 
-On Tue, 05 Mar 2024, Lee Jones wrote:
+On 2024/3/5 10:01, Mina Almasry wrote:
 
-> On Mon, 04 Mar 2024 21:56:29 +0100, Heiner Kallweit wrote:
-> > If a simple trigger is assigned to a LED, then the LED may be off until
-> > the next led_trigger_event() call. This may be an issue for simple
-> > triggers with rare led_trigger_event() calls, e.g. power supply
-> > charging indicators (drivers/power/supply/power_supply_leds.c).
-> > Therefore persist the brightness value of the last led_trigger_event()
-> > call and use this value if the trigger is assigned to a LED.
-> > This change allows to use simple triggers in more cases.
-> > As a first use case simplify handling of the mute audio trigger.
-> > 
-> > [...]
+...
+
 > 
-> Applied, thanks!
+> Perf - page-pool benchmark:
+> ---------------------------
 > 
-> [1/3] leds: trigger: Store brightness set by led_trigger_event()
->       commit: 575129855dee0e364af7df84a77ab5cca54b1442
-> [2/3] ALSA: control-led: Integrate mute led trigger
->       commit: ba8adb1646ee498029ac12b20e792d9d0dd17920
-> [3/3] leds: trigger: audio: Remove this trigger
->       commit: 2c61168294d0ea42a5542dbc864afb03a76bbc11
+> bench_page_pool_simple.ko tests with and without these changes:
+> https://pastebin.com/raw/ncHDwAbn
+> 
+> AFAIK the number that really matters in the perf tests is the
+> 'tasklet_page_pool01_fast_path Per elem'. This one measures at about 8
+> cycles without the changes but there is some 1 cycle noise in some
+> results.
+> 
+> With the patches this regresses to 9 cycles with the changes but there
+> is 1 cycle noise occasionally running this test repeatedly.
+> 
+> Lastly I tried disable the static_branch_unlikely() in
+> netmem_is_net_iov() check. To my surprise disabling the
+> static_branch_unlikely() check reduces the fast path back to 8 cycles,
+> but the 1 cycle noise remains.
+> 
 
-Submitted for build testing.
-
-Once succeeded, a PR will follow for other maintainers to pull from.
-
--- 
-Lee Jones [李琼斯]
+The last sentence seems to be suggesting the above 1 ns regresses is caused
+by the static_branch_unlikely() checking?
 
