@@ -1,68 +1,68 @@
-Return-Path: <linux-mips+bounces-2063-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2064-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D61B87186F
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 09:42:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1EAD8718F3
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 10:06:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 518981C218D5
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 08:42:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6890D284AC3
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 09:06:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C756C4E1CA;
-	Tue,  5 Mar 2024 08:42:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9A3D535BE;
+	Tue,  5 Mar 2024 09:05:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="nFCUr8mh";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MeGRT64E"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="SUA7qEcP";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dK6WqAJW"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from wfout6-smtp.messagingengine.com (wfout6-smtp.messagingengine.com [64.147.123.149])
+Received: from wfout7-smtp.messagingengine.com (wfout7-smtp.messagingengine.com [64.147.123.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C555C2E40B;
-	Tue,  5 Mar 2024 08:42:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1635025C;
+	Tue,  5 Mar 2024 09:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709628140; cv=none; b=IuDCgWE0ElNh4fAngvLvjgvKNuMF3zcxJrwP62yhKRmbcuLk1t2PN4oYWRondMDEhpcCH0TCtZcCEAFthcY4gPx5lTV4KVbaxmoCloCIWQFnK/F2qIOxovHYLm80BP6aQWne3RsubB6Fz8RzAxpUBpGmmuttloD9JR9aXARK3qk=
+	t=1709629509; cv=none; b=jLMkebHKu19+W/+rqGCDC47y3G9KZCUIQ8gd8Jbhh0yDiU9HW8go6sd9Q1rIgGwdCKre6zP/gQPoIvtNI3d6Nz6HusXlSTwOnPO5K6hM3oIUPjNHOLxdu+eKDB5QCDK8qgu8WxWrsTaM97SWtcCGMI4frwc6/QwjhdhtphAG1uk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709628140; c=relaxed/simple;
-	bh=NmJCAuRJ199Nz8coLDr4s+3BbQ9AxZ5w+P+Jx63NVw4=;
+	s=arc-20240116; t=1709629509; c=relaxed/simple;
+	bh=4vEnG02ligmP4LrcfFUAEQhjxpcNYEU0JASPzUPZp/M=;
 	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=KKQ27b7rQWyv1YzcEjRRSKF6uIk9CsJMtCEOwknbNukNVyrM1TulLEWP42KquIABrfI7Xav2nPz1uy6eG/99XGdLDJny/KzmRSVmEC+C18PkeUKPVz84vtmGPpBcBj4I9WcuXUXy8jeOv6T5CYR9Nq/BoKEOwHw8tLXOFt6JpEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=nFCUr8mh; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MeGRT64E; arc=none smtp.client-ip=64.147.123.149
+	 Subject:Content-Type; b=OI7HcGOtHaAphoatAjA+1DDgwQxAeldkrMRefKnzo3G112Jk/ivKcweRdPFIPwP/pqmDUXByzyRIWtP/ojjH/QisoFH5fsfZp3Kpm0+iUaDsYNJV+GO0iLWn033aEfSsRzjibHYGxSqqvsc7G3HvhIqr0kveYWJZJEnQdtd5KQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=SUA7qEcP; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dK6WqAJW; arc=none smtp.client-ip=64.147.123.150
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.west.internal (Postfix) with ESMTP id 1AD091C0009F;
-	Tue,  5 Mar 2024 03:42:16 -0500 (EST)
+	by mailfout.west.internal (Postfix) with ESMTP id 22F5F1C000A7;
+	Tue,  5 Mar 2024 04:05:06 -0500 (EST)
 Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 05 Mar 2024 03:42:16 -0500
+  by compute5.internal (MEProxy); Tue, 05 Mar 2024 04:05:06 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-type:content-type:date:date:from:from:in-reply-to
 	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1709628135; x=1709714535; bh=QeA3EPMJnw
-	t6NmNxY9VsOPm58VedM11auwf8kvd3l10=; b=nFCUr8mh4qirfdLiF7rJ3ln4Ee
-	ac3TZcBsBjTwt2v0sdIiovpLKYKyf84Jxe23adpiNL58TY/A6Un5jj6iESmOfBN+
-	NH3EgOLGaP2DQpO5LGujPp+1ACooTgAvYIJALYP/zB1DPOPdMHqcSl6pneGLIuSd
-	0k9KzYIWTlZUxiE5d/Z/VfhGrlYPtpIrvzzKaxh55J1YvHGR53svoOQw5rECchxc
-	E9ikW19OkQ636itot1R2TSnpEFaS+eT+JgKKFsBgMEmk8BlUWkauiXR3Ls5Vvsp5
-	YZii5Qv8k/VvvLOAqjcoX8BsdOlRwRXYH9ceE7QjJGsmut+vnb/zrjODKYag==
+	:subject:to:to; s=fm3; t=1709629505; x=1709715905; bh=ekmA5RBZ+C
+	vAhdFbvGw1i/0H90ih8Imy4vkxYH5RFbI=; b=SUA7qEcPhA1VtahsdC2df931yx
+	WPbB2j3ZYmy701buT133pPpg1BhTzr7LF+TWNzdIkaWuMpprUFOS48zOhjCA8X4L
+	QrZ0PgfUBHST7vlB23iK8TH+TnQdfOWnY8aOrjupIq/qqANsZJWFyvJpyjWg49XQ
+	kjRXOzZoQ77VNo+thJ82UMaXMQWyNFyk79VVagp2IFPTRJrbjNr8CBts1AxVPG8M
+	bjO7GLbM23jEwBjN3BWsei4NC56uzvQrCWHyScODnQymG6o+zFz4Vj3N2qCbSW81
+	wItzocagCMHv3/TV7LNM6a5j/ru4N0O9LvD+qMa63R76kXfYgkWIAudRwfUQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:content-type:date:date
 	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
 	:message-id:mime-version:references:reply-to:subject:subject:to
 	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1709628135; x=1709714535; bh=QeA3EPMJnwt6NmNxY9VsOPm58Ved
-	M11auwf8kvd3l10=; b=MeGRT64EA+QDDWf22wqOrRSkQjCcngCXPFXQcuj7sKlb
-	fsKykmy6Wo/2udr6Dj45/3j5m0Am1YNFMh5ogK0TGmfT3J3p1lUk5UkjwIxfJ/Ci
-	Pk+CIVw/J74yah5SJbYvq+QLaOyKzQH6iNNSmcFd0y5fFCKb9E+Yfzt3yz+45LdK
-	9sFUcb6Fxl0Wjzf+1CiXDA/ghzeaVvr1VBLLs58vNnkiklddooZ4bWdiOUY+GqIR
-	hy0uslWehpOhOdN1+n7zG5X3CplnE4+mdGGx1Yzro47d/GdIV8wduDcs4mOaIpqy
-	CGRzWIXTXwbBC9s0rVJ0cHgCt/kyzi8t44pW07QIUA==
-X-ME-Sender: <xms:59rmZebHuiNKE7gBn9g7Zws1CrVENXbBVlU7KpglFLP7T_XtZaHvBg>
-    <xme:59rmZRbdHQpICUlzFZ9DMOnUcwCIgRZrUGHMk8EmzSdzq9snWlaZ46aLWKLTaTvHK
-    Cg5wi_afUGNXBIHc_8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrheekgdduvddtucetufdoteggodetrfdotf
+	fm1; t=1709629505; x=1709715905; bh=ekmA5RBZ+CvAhdFbvGw1i/0H90ih
+	8Imy4vkxYH5RFbI=; b=dK6WqAJWMa4c4fjlHpghFjdIt3LMY3xxMkWUuukHuwfJ
+	Fn5R3/jVLrvPK8HPH0xCLR/+EQRpUAFUnWeAiAO+ZCuiq7mxhTwCGwC3vudSRYpt
+	MeEvo6I1Ro59HzaAWLL9L8NGtrxfmpvxyurfxdpMhbcqggJi2damWFe0e3ex8i8z
+	Eqv+wuJnxl0fXLh/9OXryAC1UYrzcyYWGCIn8Zkc5jwx6wVXoHqm9AT52SlDjrOs
+	0f100LdiAiVQXqNw0pVjgHTryUqiRWP7/Beoq04XH3IJ2YH6FjRUMC91NnB331QM
+	8LzFD0JzIrOBD8QThpScqDeqGHRDE8eYEs7KAfNUMg==
+X-ME-Sender: <xms:QeDmZYcmTl0_cUKPjzetyUgwCOJP16-giZuGRCd23Fcaod5mvwuasg>
+    <xme:QeDmZaPNTc_AthIszgRYHzvvnFvvonjkI_CtQvZRuxXxbMGIW4iUjEpDMn314RxJy
+    bedEwcNX31bqifDbbs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrheekgdduvdegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
@@ -70,13 +70,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrheekgdduvddtucetufdoteggod
     htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
     teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
     hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:59rmZY8-Af8ZUR5f35jgIeJGVWX966qCxdxdr_0n3EPth7aYYPYY2Q>
-    <xmx:59rmZQqJc6RxhGOktKKAE7ByIoMRz8lUdJERuu3D_WLY5uFdFRGIxA>
-    <xmx:59rmZZoZzA-bUCffCtvffkklND4SVShkax7NIxvDvebcxKbcpR8E8A>
-    <xmx:59rmZdfoSPIHkIwIoZkPmTYx3CVSLM8Fpjgeg_PGly9T-_ds2f3zKnQLvGs>
+X-ME-Proxy: <xmx:QeDmZZhYhQ4N-Vq4pFq8_Jb84muPkreZpR2XpPiBbPCfq5bfWtDhBA>
+    <xmx:QeDmZd-0Yr0yXb4o9AIDX5bt4MvLmUCpkIyuHvt2PZ4e6x8RKq95Ew>
+    <xmx:QeDmZUshX60bTjTnFeVR9hjLDGUNMOB81JWBVd_07wIqc9qNaUxp0g>
+    <xmx:QeDmZSCXGxdi68ql_0o-PZ2wrqACrIJGaPXzq2fBVieFxYOJvISpL5s74vQ>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 5045FB6008D; Tue,  5 Mar 2024 03:42:15 -0500 (EST)
+	id 6329AB6008F; Tue,  5 Mar 2024 04:05:05 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.11.0-alpha0-208-g3f1d79aedb-fm-20240301.002-g3f1d79ae
 Precedence: bulk
@@ -85,11 +85,11 @@ List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <a2d926be-695a-484b-b2b5-098da47e372e@app.fastmail.com>
-In-Reply-To: <20240305020153.2787423-13-almasrymina@google.com>
+Message-Id: <5e2f9342-4ee9-4b30-9dcf-393e57e0f7c6@app.fastmail.com>
+In-Reply-To: <20240305020153.2787423-6-almasrymina@google.com>
 References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-13-almasrymina@google.com>
-Date: Tue, 05 Mar 2024 09:41:55 +0100
+ <20240305020153.2787423-6-almasrymina@google.com>
+Date: Tue, 05 Mar 2024 10:04:45 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
 To: "Mina Almasry" <almasrymina@google.com>, Netdev <netdev@vger.kernel.org>,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
@@ -135,65 +135,55 @@ Cc: "David S . Miller" <davem@davemloft.net>,
  "Praveen Kaligineedi" <pkaligineedi@google.com>,
  "Willem de Bruijn" <willemb@google.com>,
  "Kaiyuan Zhang" <kaiyuanz@google.com>
-Subject: Re: [RFC PATCH net-next v6 12/15] tcp: RX path for devmem TCP
+Subject: Re: [RFC PATCH net-next v6 05/15] netdev: support binding dma-buf to netdevice
 Content-Type: text/plain
 
 On Tue, Mar 5, 2024, at 03:01, Mina Almasry wrote:
-> --- a/arch/alpha/include/uapi/asm/socket.h
-> +++ b/arch/alpha/include/uapi/asm/socket.h
->  #define SO_PEERPIDFD		77
-> +#define SO_DEVMEM_LINEAR	79
-> +#define SO_DEVMEM_DMABUF	80
-> --- a/arch/mips/include/uapi/asm/socket.h
-> +++ b/arch/mips/include/uapi/asm/socket.h
->  #define SO_PEERPIDFD		77
-> +#define SO_DEVMEM_LINEAR	79
-> +#define SO_DEVMEM_DMABUF	80
-> --- a/arch/parisc/include/uapi/asm/socket.h
-> +++ b/arch/parisc/include/uapi/asm/socket.h
->  #define SO_PEERPIDFD		0x404B
-> +#define SO_DEVMEM_LINEAR	98
-> +#define SO_DEVMEM_DMABUF	99
-> --- a/arch/sparc/include/uapi/asm/socket.h
-> +++ b/arch/sparc/include/uapi/asm/socket.h
->  #define SO_PEERPIDFD             0x0056
-> +#define SO_DEVMEM_LINEAR         0x0058
-> +#define SO_DEVMEM_DMABUF         0x0059
-> --- a/include/uapi/asm-generic/socket.h
-> +++ b/include/uapi/asm-generic/socket.h
-> @@ -135,6 +135,11 @@
->  #define SO_PEERPIDFD		77
-> +#define SO_DEVMEM_LINEAR	98
-> +#define SO_DEVMEM_DMABUF	99
 
-These look inconsistent. I can see how you picked the
-alpha and mips numbers, but how did you come up with
-the generic and parisc ones? Can you follow the existing
-scheme instead?
+> +int netdev_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+> +		       struct netdev_dmabuf_binding **out)
+> +{
+> +	struct netdev_dmabuf_binding *binding;
+> +	static u32 id_alloc_next;
+> +	struct scatterlist *sg;
+> +	struct dma_buf *dmabuf;
+> +	unsigned int sg_idx, i;
+> +	unsigned long virtual;
+> +	int err;
+> +
+> +	if (!capable(CAP_NET_ADMIN))
+> +		return -EPERM;
+> +
+> +	dmabuf = dma_buf_get(dmabuf_fd);
+> +	if (IS_ERR_OR_NULL(dmabuf))
+> +		return -EBADFD;
 
-> diff --git a/include/uapi/linux/uio.h b/include/uapi/linux/uio.h
-> index 059b1a9147f4..ad92e37699da 100644
-> --- a/include/uapi/linux/uio.h
-> +++ b/include/uapi/linux/uio.h
-> @@ -20,6 +20,16 @@ struct iovec
->  	__kernel_size_t iov_len; /* Must be size_t (1003.1g) */
->  };
-> 
-> +struct dmabuf_cmsg {
-> +	__u64 frag_offset;	/* offset into the dmabuf where the frag starts.
-> +				 */
-> +	__u32 frag_size;	/* size of the frag. */
-> +	__u32 frag_token;	/* token representing this frag for
-> +				 * DEVMEM_DONTNEED.
-> +				 */
-> +	__u32  dmabuf_id;	/* dmabuf id this frag belongs to. */
-> +};
+You should never need to use IS_ERR_OR_NULL() for a properly
+defined kernel interface. This one should always return an
+error or a valid pointer, so don't check for NULL.
 
-This structure requires a special compat handler to run
-x86-32 binaries on x86-64 because of the different alignment
-requirements. Any uapi-visible structures should be defined
-to avoid this and just have no holes in them. Maybe extend
-one of the __u32 members to __u64 or add another 32-bit padding field?
+> +	binding->attachment = dma_buf_attach(binding->dmabuf, dev->dev.parent);
+> +	if (IS_ERR(binding->attachment)) {
+> +		err = PTR_ERR(binding->attachment);
+> +		goto err_free_id;
+> +	}
+> +
+> +	binding->sgt =
+> +		dma_buf_map_attachment(binding->attachment, DMA_BIDIRECTIONAL);
+> +	if (IS_ERR(binding->sgt)) {
+> +		err = PTR_ERR(binding->sgt);
+> +		goto err_detach;
+> +	}
 
-       Arnd
+Should there be a check to verify that this buffer
+is suitable for network data?
+
+In general, dmabuf allows buffers that are uncached or reside
+in MMIO space of another device, but I think this would break
+when you get an skb with those buffers and try to parse the
+data inside of the kernel on architectures where MMIO space
+is not a normal pointer or unaligned access is disallowed on
+uncached data.
+
+        Arnd
 
