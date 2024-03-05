@@ -1,146 +1,139 @@
-Return-Path: <linux-mips+bounces-2068-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2069-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F8A9871C03
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 11:48:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB03C871C8C
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 12:00:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 505331F246F3
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 10:48:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECD021C22F4C
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Mar 2024 11:00:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DE8A5B664;
-	Tue,  5 Mar 2024 10:40:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4A7259169;
+	Tue,  5 Mar 2024 10:57:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IG0YkgI/"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="H1/qCxCj"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F50F5A78D;
-	Tue,  5 Mar 2024 10:40:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A1B958ABA;
+	Tue,  5 Mar 2024 10:57:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709635206; cv=none; b=LT2kJ895qjmEvcjuTNphXpQpTnEdGM2ASnQ5dLcVaZMdDktYe+S+dnnF8HYRwP9cOS4f0pLf5CMASnOOaMDrg5hrTLqtHOpJvh3gg7TYzln8nxvjTuyyD3c+bDjwpwtaWcCAczxVhh/hzlvazbEmUNgWRc8PXaCwwUpghO9f54E=
+	t=1709636263; cv=none; b=uJlrjDLEF+V7e0hPSSHpPE6713LqGF39hRJZb8zPmPX3LXHwUShd3ThOsTpsvRze5nSdTxgaCVuU8hD12WJxunrdCskUqEm51qt+MC9sYb1I6Lh+Vimrkh8pyl8pS+Zfgbw+Q21cnIHeyqGpfTQOtgH3veF7oTOtJMIhvlxWQkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709635206; c=relaxed/simple;
-	bh=IJDVz1uipxvQs+z2wfWz4EQe35sYMgwDkAU8oGgCkfQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AHdYYMCvXxuN1OejYybHchNgVddC8OBxm7ePvaUwiAdkgdRCuDcx4glnGwCMH5JcC2Wo/HpjJIWrwsAjCmcu2p6P+EwWBmoHcD+0I6lWINOTRIYg2Tvi5WjgfC0/BB93OHLKs25/srDXPk2VgJkEntfxENpPM0T8HVSjZY/pMPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IG0YkgI/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77779C433F1;
-	Tue,  5 Mar 2024 10:40:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709635205;
-	bh=IJDVz1uipxvQs+z2wfWz4EQe35sYMgwDkAU8oGgCkfQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IG0YkgI/VfyLOtJMVZvNwGqFJaWZF344+xm8SzYA6a4CCUjrLevkeRI34sXmryMuV
-	 tSD3ZJsRKSWE7MM0whXPbTNoNcDttLYN86EodmAY9U2ypzvjgAsz4sIriGVzJy+y4l
-	 L2kTRAfyY797LslqJZZ8S5bIuxgZx7lgk6usCoQ/pRkaimUTre28WRXZoSZEWiz8Ge
-	 Jh4a9RoZaITjjOq3jyrpAT7S3gRoy3VqcPX2zHDm/Z7jXQDwT0/M8qGRizodIEbdKT
-	 42xMIm60lKoHeSPkQHJU8a81cju2MR/EVELVRKTmEJrusJOdE2zyBTGFRzde/e88nm
-	 T6dwyk1tkzP5A==
-Date: Tue, 5 Mar 2024 10:40:00 +0000
-From: Lee Jones <lee@kernel.org>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: Heiner Kallweit <hkallweit1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-	linux-sound@vger.kernel.org,
-	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-	linux-mips@vger.kernel.org
-Subject: Re: [PATCH 0/4] leds: trigger: Improve handling of
- led_trigger_event() and simplify mute audio trigger
-Message-ID: <20240305104000.GG5206@google.com>
-References: <30d49088-283c-40f3-b97b-fd5f5174a467@gmail.com>
- <20240229172653.GB1209090@google.com>
- <208e8bcc-1f35-4095-9a70-7243fdabaf87@gmail.com>
- <20240305095539.GE5206@google.com>
- <875xy1ynya.wl-tiwai@suse.de>
+	s=arc-20240116; t=1709636263; c=relaxed/simple;
+	bh=d6wEI8+wCMnSdkIqW6YoHtvK6Oha6qUUulRHtofV6I8=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=PZ25PkYfl0ggp/hVjJIrQRrJKxYDCYjYqOYqVc30w/L3WPXbkZ794qtLOOoBFt0M8YY1nPF/hSJkCB6jmZQTVCfQ7FJLiwoQ6Vzgt74PMUkKmWSsuse5D+ZbQrzyO2xgYNTrweEyrZqyumXUc2xzRznfu2wX25+Y05mqPuNRQcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=H1/qCxCj; arc=none smtp.client-ip=115.124.30.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1709636258; h=Message-ID:Date:MIME-Version:From:Subject:To:Content-Type;
+	bh=j65dJlefD3YD0cqeyDWt8oxBp32fVKAN6EtBWBvh2Tg=;
+	b=H1/qCxCjObiT8ZRpTbxrm3JPjTc5jfZzkb9nYiues2enoNRa2LXll1Pv2rC4JxMXU19xiOGHWpmIj1UrXpWHhEyr5qFm4rH5flsBn2EzAIUd6IjVtza+Pd8v/5C3Dj7TkDPL1me+EE8fCAUztK4/44mDaqxj32RlQJa2QD6Fkhk=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=yaoma@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0W1tyYEr_1709636255;
+Received: from 30.178.67.161(mailfrom:yaoma@linux.alibaba.com fp:SMTPD_---0W1tyYEr_1709636255)
+          by smtp.aliyun-inc.com;
+          Tue, 05 Mar 2024 18:57:37 +0800
+Message-ID: <28a24e4b-c322-4631-ad6d-7259ca3d084d@linux.alibaba.com>
+Date: Tue, 5 Mar 2024 18:57:34 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <875xy1ynya.wl-tiwai@suse.de>
+User-Agent: Mozilla Thunderbird
+From: Bitao Hu <yaoma@linux.alibaba.com>
+Subject: Re: [PATCHv11 2/4] genirq: Provide a snapshot mechanism for interrupt
+ statistics
+To: Thomas Gleixner <tglx@linutronix.de>,
+ Doug Anderson <dianders@chromium.org>
+Cc: liusong@linux.alibaba.com, akpm@linux-foundation.org, pmladek@suse.com,
+ kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com,
+ tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com,
+ jan.kiszka@siemens.com, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, yaoma@linux.alibaba.com
+References: <20240228072216.95130-1-yaoma@linux.alibaba.com>
+ <20240228072216.95130-3-yaoma@linux.alibaba.com>
+ <CAD=FV=U1b+8atmju_w4eRmVKmSqjj6WCsy5EawYqj31fQ1kvrw@mail.gmail.com>
+ <87plwdwycx.ffs@tglx>
+ <3a89fafb-f62e-472f-b40b-8bf97954e9e3@linux.alibaba.com>
+ <87wmqiulaw.ffs@tglx>
+Content-Language: en-US
+In-Reply-To: <87wmqiulaw.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, 05 Mar 2024, Takashi Iwai wrote:
+Hi,
 
-> On Tue, 05 Mar 2024 10:55:39 +0100,
-> Lee Jones wrote:
-> > 
-> > On Sat, 02 Mar 2024, Heiner Kallweit wrote:
-> > 
-> > > On 29.02.2024 18:26, Lee Jones wrote:
-> > > > On Tue, 13 Feb 2024, Heiner Kallweit wrote:
-> > > > 
-> > > >> If a simple trigger is assigned to a LED, then the LED may be off until
-> > > >> the next led_trigger_event() call. This may be an issue for simple
-> > > >> triggers with rare led_trigger_event() calls, e.g. power supply
-> > > >> charging indicators (drivers/power/supply/power_supply_leds.c).
-> > > >> Therefore persist the brightness value of the last led_trigger_event()
-> > > >> call and use this value if the trigger is assigned to a LED.
-> > > >> This change allows to use simple triggers in more cases.
-> > > >> As a first use case simplify handling of the mute audio trigger.
-> > > >>
-> > > >> This series touches few subsystems. I'd propose to handle it via
-> > > >> the LED subsystem.
-> > > >>
-> > > >> Heiner Kallweit (4):
-> > > >>   leds: trigger: Store brightness set by led_trigger_event()
-> > > >>   ALSA: control-led: Integrate mute led trigger
-> > > >>   Input: leds: Prepare for removal of config option LEDS_AUDIO_TRIGGER
-> > > >>   leds: trigger: audio: Remove this trigger
-> > > >>
-> > > >>  arch/mips/configs/ci20_defconfig     |  1 -
-> > > > 
-> > > >>  drivers/input/input-leds.c           |  8 +---
-> > > > 
-> > > > This does not apply.
-> > > > 
-> > > > Please rebase onto v6.8-rc1.
-> > > > 
-> > > Since v6.8-rc1 the following has been added, which is touched by
-> > > my series:
-> > > 698b43780ba2 ("Input: leds - set default-trigger for mute")
-> > > 
-> > > Rebasing onto v6.8-rc1 would mean:
-> > > - remove the change to input-leds from the series
-> > > - resubmit this change via input subsystem
-> > > 
-> > > This would affect bisectability, because for the time being
-> > > input-leds would reference a config symbol that doesn't exist
-> > > any longer.
-> > > 
-> > > We'd be fine only if the change to input-leds is applied first.
-> > > I think that's the best way to go, if you can't accept a series
-> > > based on linux-next.
-> > 
-> > Then it's going to have to wait until v6.10.
+On 2024/3/4 22:24, Thomas Gleixner wrote:
+> The above is not even configurable by the user. It's only selectable by
+> some other config option.
 > 
-> Or merging via input tree?
-> The changes are relatively small and easy, after all.
+>> +# Snapshot for interrupt statistics
+>> +config GENERIC_IRQ_STAT_SNAPSHOT
+>> +       bool
+>> +       help
+>> +
+>> +         Say Y here to enable the kernel to provide a snapshot mechanism
+>> +         for interrupt statistics.
+> 
+> That makes is visible which is pointless because it's only relevant when
+> there is an actual user.
+I guess I may have misunderstood your intentions earlier. Initially, I
+thought you were suggesting that when "SOFTLOCKUP_DETECTOR_INTR_STORM"
+is not enabled, people should be able to choose
+"GENERIC_IRQ_STAT_SNAPSHOT" through menuconfig, so I attempted to make
+"GENERIC_IRQ_STAT_SNAPSHOT" visible to the user. However, after
+analyzing the previous emails, it seems that what you were actually
+proposing was to directly disable "GENERIC_IRQ_STAT_SNAPSHOT" when
+"SOFTLOCKUP_DETECTOR_INTR_STORM" is not enabled, as a way to save
+memory. If my current understanding is correct, then the code for that
+part would look something like the following.
 
-That's likely to culminate in similar merge-conflicts when further
-changes are made to:
+Does this align with your expectations?
 
-  drivers/leds/led-triggers.c
-  drivers/leds/trigger/Kconfig
-  drivers/leds/trigger/Makefile
-  drivers/leds/trigger/ledtrig-audio.c
-  include/linux/leds.h
+Best Regards,
+	Bitao Hu
 
-What happens if I take all but the Input change?  If this doesn't cause
-build-failures and the Input change will definitely land in v6.9, it
-could work.
+diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
+index 2531f3496ab6..a28e5ac5fc79 100644
+--- a/kernel/irq/Kconfig
++++ b/kernel/irq/Kconfig
+@@ -108,6 +108,10 @@ config GENERIC_IRQ_MATRIX_ALLOCATOR
+  config GENERIC_IRQ_RESERVATION_MODE
+         bool
 
--- 
-Lee Jones [李琼斯]
++# Snapshot for interrupt statistics
++config GENERIC_IRQ_STAT_SNAPSHOT
++       bool
++
+  # Support forced irq threading
+  config IRQ_FORCED_THREADING
+         bool
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 49f652674bd8..899b69fcb598 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1032,6 +1032,7 @@ config SOFTLOCKUP_DETECTOR
+  config SOFTLOCKUP_DETECTOR_INTR_STORM
+         bool "Detect Interrupt Storm in Soft Lockups"
+         depends on SOFTLOCKUP_DETECTOR && IRQ_TIME_ACCOUNTING
++       select GENERIC_IRQ_STAT_SNAPSHOT
+         default y if NR_CPUS <= 128
+         help
+           Say Y here to enable the kernel to detect interrupt storm
+
+
+
+
+
+
 
