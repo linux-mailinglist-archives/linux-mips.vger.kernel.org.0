@@ -1,138 +1,175 @@
-Return-Path: <linux-mips+bounces-2115-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2116-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33113873C1D
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 17:23:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C4E6873CA0
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 17:51:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B34101F22818
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 16:23:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23930281FDA
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 16:51:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1010135A4B;
-	Wed,  6 Mar 2024 16:23:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 056D413A26E;
+	Wed,  6 Mar 2024 16:51:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MgZ0KcAS"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75686135403;
-	Wed,  6 Mar 2024 16:23:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A024137931
+	for <linux-mips@vger.kernel.org>; Wed,  6 Mar 2024 16:51:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709742226; cv=none; b=SgWr/3NrARfwFxfpmIDsxzxFPg072wB9c8EnacF2aXnqvoDtem39FJppsnrP8rv8gDr6FetfFjViy6Ix7naFnHj+hUs6VDQ6uGCdpO0Bt2oh0yeNJiIpgT1IVxg3kDUXFeuOgNa9rlJhXgif+5vS+z/bVj7q1quUnP2NmA2CbeU=
+	t=1709743894; cv=none; b=kPkEBZpSTghwj5L43TlsG/QD4SPGILvtH2yZoXv64lrCGFtEa5P7mP1SflUFIC8Yby2N1l3/rVVkdwyh2aKps0hDDqQ6HYr7ottbJOPi8W2SdznTZf7Oa8/Uvk4bABm1rvXJtbnwBL3N7ntw+8GaiBUi40mmsDkM+fLRAB3IPfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709742226; c=relaxed/simple;
-	bh=n9KzasEm6N9ttGn6mpPVBfxcCLfd5JbkdxZ4Q6PxRSg=;
+	s=arc-20240116; t=1709743894; c=relaxed/simple;
+	bh=2ZhRIiVOue9t1Wad+eKIOFn2M0PF3k+uzBlQG79ns5E=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TvTXBaRseBX1RpNWF6TsdSN63h2U8hYb5Pg+sIKLjJwu5y9K49/qNdvABtZ5jBX7+aDPoAf6Oc8t/s4gjaNNmJX774x03qxswBaqmosGAB3FMQ3stymsIGGHaDDtxGeT1jlMZe4GakvWlFU6TjiStVm2xe4c6Xo+M2Araksmxdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-dcc7cdb3a98so6993103276.2;
-        Wed, 06 Mar 2024 08:23:44 -0800 (PST)
+	 To:Cc:Content-Type; b=LjnVzv/TW3nWOr7n7NrZWq5ZriTE4i9cwPpLbkHyWw6ElTdvwoNWbhkDpPc1DiZw09sdKk/Fesijb1Q0DGgVHzHSE2gNAJeyAI/vpcTXW8CMoj0byA8eAtHo9GhHdA7PA9g/XBILQEh5hAxtaMcBykck+6y/5V09VQn41/y2/0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MgZ0KcAS; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-567f7bba941so1027421a12.2
+        for <linux-mips@vger.kernel.org>; Wed, 06 Mar 2024 08:51:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1709743891; x=1710348691; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fAuNxTfS6x4OQHwyTAR2JW08hPHhuONnAVW1sMtWxI0=;
+        b=MgZ0KcAS7HSS77yVu7xyCeHAcaC/1SdsNfuOebsPKTi47ADSikIPFHFpMVlwAuM3Lq
+         ADh3B8tOCDjS8SO22bC5JH7v38MMF7sGik0mAt/5hJkVIW5AEQmXcFeW9oqhkFytK0rb
+         /Ww9ONL83z+QuBnnhMONLXuuoA7qgm3K0ZfBZvgkcOLzqswyIaukdbQhLb3YNczFfmmx
+         jgRR8h2ZQOpnYgWc7g+WCCi0m0f37F6bezegEtZlxh4cxVcQxJZp/udwbPuqUyp3aK1a
+         0D9N4f04odZmGIVAHEJ6AuB6otT/H7GV6nWXPid/olVyvuohW5SN+xe5wVd+/4rfcXAt
+         PowQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709742222; x=1710347022;
+        d=1e100.net; s=20230601; t=1709743891; x=1710348691;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=D7JdIeS9zNSJ+HV+qdpk2QYV7GDhHiD75PCrvSyuiH4=;
-        b=SZUYhYBo0nx1y7mnzJDmvgNS3wzApvxDVo3+Pah97Mg+DxhDyeIquoe4NzvR+FHzvG
-         N6XEiDnssKjwEQfGDr1jtubtcbnHns/aXmDuAg8V6X6Eag+B9LuojEM50P4Ryn9C7rUo
-         XsLqVzFpXgItgm4WJeikJ0p+/5JADxahTli/zWoNDGvnuSjVId5kqly0zIfr8JzeTcPM
-         GiBwXxgS+G7AzFmwFFtWxoobrHEsx9vInEQJCXCvDHTCDmj5OD4If5GMmrGb5gdKs+ur
-         0U5byAU2ZCChyBZxZlwlf+znS1Ef6uyvM17apcHwj5SsC2Wj8FB3hoD6vHQlfbTmrVDU
-         nsvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXZx35nkFHC4N3Uta/v1GkDKiJwR7H29jByrAxfEwKmeUpaps+bMt5KgVWFqPgIymW7XE6m2Jq2fMAcha+feNq/skJmVxssW7pz03DfLPZgBvM30zgt4GOdBnzd0JLWwtahs6Iuztf9vSDFxcf/PSjv3wfSgwOUvcIptcIG86kvn07YkXwgDh+b7DTNljeD6FnqAlyT+qrzmMOZWoCwl09xpM6F4Qb2vAxijA5UgvMbU+xtsp49p+7d+45vUB3YuiyXOoE4Rdn+pj62/HQr6ShIDqSeiFGlClhfyEU2Lz7wnTyaNFmKyxOPkLIGribVUcmAtxHDvpm/C2DEnN0emw2Q4Yae6azLam1MPgGPUenuX7Ekj+al+uZY1DKLM6Su8bOG+NJx+kqgItQ9ioCFwTq7kAEm9DM6Uom9UKR8Wtv5iTB5a/pPRcGq2cyOFSvUpfE=
-X-Gm-Message-State: AOJu0YwPmn93DDrOePP1DH7PUNHHQ5LZhnlMhY/mChFpSohDp2lG9eO3
-	Oa1fJZWcVUAhNcppbD7ujwekqy1z7b/8pVpilB20fH83rFKzvVdRppiwNDWWHJk=
-X-Google-Smtp-Source: AGHT+IGgSdhac2GHHcAzYhActpOED8YvM09CkLEZxG5iaAPw4UkWzA8BzxA7+s1R82Aaz71yF5E/qw==
-X-Received: by 2002:a25:1984:0:b0:dcd:23eb:3203 with SMTP id 126-20020a251984000000b00dcd23eb3203mr12281907ybz.38.1709742222214;
-        Wed, 06 Mar 2024 08:23:42 -0800 (PST)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id v15-20020a25848f000000b00dcdc3763d72sm3040524ybk.61.2024.03.06.08.23.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Mar 2024 08:23:40 -0800 (PST)
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-dc236729a2bso6516355276.0;
-        Wed, 06 Mar 2024 08:23:40 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVBtaP6oQSknzGk2mwEqRxaHMhMn9OU5hlFSBsJ8fElS23hTc1/ScgZvvEQsDAz9ZhnMcPRTLkDNH3TMnJOyYtSRRNkbOnUEzvI1EDL2kZlKvJ5mXDwb7rCj0xjH7UMxcwhR8oHBYrk4ZkwyuPUeFRzSXRKf01p/TlJq6SJnJ8w99VKb2QWWZr2KiQbbJrcu3RsNYZrZQEDUo3z6qEjLEHLYcP7rvB1hu4VaXEEXeuVFYrI3o2N0R5vtYknYe7uPHdSgAJ3moFnR0xBmRpFFgLLzTSFq0D+FUivs45NezzRg6xx/NVcg/8F6TIJRqK1gxzCAnEy/JYPWHgcA8FnoiiZIagHum16xKvvVjOZ4tanas7rhGX8dB2N9tMVDVF5TFuuHlceJh9+NuDFtfWhPIPbDvk9jB9tGtVeaEWoH/W9mTIKAkVWixx8SW05leiCF2g=
-X-Received: by 2002:a25:580b:0:b0:dcf:c7ef:e4e0 with SMTP id
- m11-20020a25580b000000b00dcfc7efe4e0mr11968959ybb.1.1709742220242; Wed, 06
- Mar 2024 08:23:40 -0800 (PST)
+        bh=fAuNxTfS6x4OQHwyTAR2JW08hPHhuONnAVW1sMtWxI0=;
+        b=huubYWWi9ytq65dNr/KigXlQMVxGegABSIjwfgv6V9aQsj17sj57jWFkZ2OuoWLISQ
+         nU88IJekLnvTx/jXHj/cXIHYHbnjjVLaDNXSGsImvWoKZSYiKIPkM3Gh/NCZUAtayxzf
+         rdC7SjN+PPyRREzhBUPgnbNCZ3/2X/EVPG1JykBiPDejG6tvXMKRwWL5EUX6iAhsxXtA
+         OekqkDckb5hte2U//Yd0Q2/6zpTJ3u+j8b9MJ6OPmRfX//o8e8lL3xlOgQgbPQGkCiQX
+         18pLI242jAv5Q5+eTkIVKTUPRXem/4kffRH58anlEhRqQp1NzuyCEvokEL0Yn8NCWf6n
+         vytA==
+X-Forwarded-Encrypted: i=1; AJvYcCV8/yjt+GR7fSrMP2rb7xSD4pIzcu9oYrGVu5nja5MgQuKG1qjxI69e15iJZcMOsnyuHR5zDWcmquCnNBx1c3TBJcFeHFWuo66zIw==
+X-Gm-Message-State: AOJu0Yx0OAwOxNclXt3xdiFhJ05Ldh00LE0YwKHKQIPkbfyRjfEdEoFJ
+	SR49x9E1yXorZy4eRMOItPMoH1mGpVOR15OgtgPWL4HCqALGQUdNSkx2l28QN6UX0CCWGJEzML0
+	CxWqamDJTin9s8tqRkLX3qk+R5ne3UQtSB9SC
+X-Google-Smtp-Source: AGHT+IHrH3y3Ev3rFR65oa9/ga3T2bFvGKoWYUoW9uQPlR8wceBykqCSE0zANfpwXtxsNCt9XtLxrBXjLnroDNOKeBc=
+X-Received: by 2002:a17:906:fc01:b0:a43:f267:789f with SMTP id
+ ov1-20020a170906fc0100b00a43f267789fmr10647282ejb.41.1709743890406; Wed, 06
+ Mar 2024 08:51:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240306141453.3900574-1-arnd@kernel.org> <20240306141453.3900574-4-arnd@kernel.org>
-In-Reply-To: <20240306141453.3900574-4-arnd@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 6 Mar 2024 17:23:28 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU5ut09=b+5Qti6CD17XOOmsm+VtfA7TKac7qHNOBC2-A@mail.gmail.com>
-Message-ID: <CAMuHMdU5ut09=b+5Qti6CD17XOOmsm+VtfA7TKac7qHNOBC2-A@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] arch: define CONFIG_PAGE_SIZE_*KB on all architectures
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Kees Cook <keescook@chromium.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>, 
-	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Guo Ren <guoren@kernel.org>, Brian Cain <bcain@quicinc.com>, 
-	Huacai Chen <chenhuacai@kernel.org>, Michal Simek <monstr@monstr.eu>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Helge Deller <deller@gmx.de>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Andreas Larsson <andreas@gaisler.com>, 
-	Richard Weinberger <richard@nod.at>, x86@kernel.org, Max Filippov <jcmvbkbc@gmail.com>, 
-	Andy Lutomirski <luto@kernel.org>, Jan Kiszka <jan.kiszka@siemens.com>, 
-	Kieran Bingham <kbingham@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
-	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
-	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org, Heiko Carstens <hca@linux.ibm.com>, 
-	Stafford Horne <shorne@gmail.com>, Johannes Berg <johannes@sipsolutions.net>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-10-almasrymina@google.com> <383c4870-167f-4123-bbf3-928db1463e01@davidwei.uk>
+ <CAHS8izP_PzDJVxycwZe_d_x10-SX4=Q-CWpKTjoOQ5dc2NSn3w@mail.gmail.com> <b85b36bd-7082-47a5-bf46-50cff8eb60be@gmail.com>
+In-Reply-To: <b85b36bd-7082-47a5-bf46-50cff8eb60be@gmail.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Wed, 6 Mar 2024 08:51:18 -0800
+Message-ID: <CAHS8izMEJHWAHVjaKu9ZpeWRj1TwoLkmY5tCtDYxdDReBV8=Dw@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v6 09/15] memory-provider: dmabuf devmem
+ memory provider
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: David Wei <dw@davidwei.uk>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 6, 2024 at 3:15=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wrot=
-e:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Wed, Mar 6, 2024 at 6:59=E2=80=AFAM Pavel Begunkov <asml.silence@gmail.c=
+om> wrote:
 >
-> Most architectures only support a single hardcoded page size. In order
-> to ensure that each one of these sets the corresponding Kconfig symbols,
-> change over the PAGE_SHIFT definition to the common one and allow
-> only the hardware page size to be selected.
+> On 3/6/24 02:42, Mina Almasry wrote:
+> > On Tue, Mar 5, 2024 at 6:28=E2=80=AFPM David Wei <dw@davidwei.uk> wrote=
+:
+> >>
+> >> On 2024-03-04 18:01, Mina Almasry wrote:
+> >>> +     if (pool->p.queue)
+> >>> +             binding =3D READ_ONCE(pool->p.queue->binding);
+> >>> +
+> >>> +     if (binding) {
+> >>> +             pool->mp_ops =3D &dmabuf_devmem_ops;
+> >>> +             pool->mp_priv =3D binding;
+> >>> +     }
+> >>
+> >> This is specific to TCP devmem. For ZC Rx we will need something more
+> >> generic to let us pass our own memory provider backend down to the pag=
+e
+> >> pool.
+> >>
+> >> What about storing ops and priv void ptr in struct netdev_rx_queue
+> >> instead? Then we can both use it.
+> >
+> > Yes, this is dmabuf specific, I was thinking you'd define your own
+> > member of netdev_rx_queue, and then add something like this to
+> > page_pool_init:
 >
-> Acked-by: Guo Ren <guoren@kernel.org>
-> Acked-by: Heiko Carstens <hca@linux.ibm.com>
-> Acked-by: Stafford Horne <shorne@gmail.com>
-> Acked-by: Johannes Berg <johannes@sipsolutions.net>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> No changes from v1
+> That would be quite annoying, there are 3 expected users together
+> with huge pages, each would need a field and check all others are
+> disabled as you mentioned and so on. It should be cleaner to pass
+> a generic {pp_ops,pp_private} pair instead.
+>
+> If header dependencies is a problem, you it can probably be
+>
+> struct pp_provider_param {
+>         struct pp_ops ops;
+>         void *private;
+> };
+>
+> # netdev_rx_queue.h
+>
+> // definition is not included here
+> struct pp_provider_params;
+>
+> struct netdev_rx_queue {
+>         ...
+>         struct pp_provider_params *pp_params;
+> };
+>
 
->  arch/m68k/Kconfig                  | 3 +++
->  arch/m68k/Kconfig.cpu              | 2 ++
->  arch/m68k/include/asm/page.h       | 6 +-----
+Seems very reasonable, will do! Thanks!
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> --
+> Pavel Begunkov
 
-Gr{oetje,eeting}s,
 
-                        Geert
 
 --=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Thanks,
+Mina
 
