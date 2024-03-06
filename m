@@ -1,103 +1,133 @@
-Return-Path: <linux-mips+bounces-2136-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2143-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F8AF8740D1
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 20:51:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89563874570
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 02:05:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 619A31C21579
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 19:51:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48D6D1F216DB
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 01:05:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98B85140E5E;
-	Wed,  6 Mar 2024 19:51:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E71D04689;
+	Thu,  7 Mar 2024 01:05:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xA4Xk4e3"
+	dkim=pass (2048-bit key) header.d=risingedge.co.za header.i=@risingedge.co.za header.b="kBghQjtt"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from outgoing6.flk.host-h.net (outgoing6.flk.host-h.net [188.40.0.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0051014039A
-	for <linux-mips@vger.kernel.org>; Wed,  6 Mar 2024 19:51:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF8253A7;
+	Thu,  7 Mar 2024 01:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.0.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709754684; cv=none; b=JvdG+rGt3oeqIYDxn90SKzfY7WTqlr3J0Ttk1C6T5QYNG3TQM/iqA9Sw5fnZou1jeSJM/TplmpV//C8Fit4/H4vMLwVJ0+bVDSG6cE2qbpCu2dORWLjyA3TUsNBgvoFYEaizJ2y3hQ0UKEJMMKWFTGiMnYdbke8tCZgHHyqlQyo=
+	t=1709773521; cv=none; b=rLN/K9EWtoV41VoY/n5iSlmILQ67RysjO/b9GbZ12TC3B3XpghQLadgoiuK7lRT7hQ/Ua3SMi87rFz4JOdk0dmuFfnPgJwV/rAVVj1bzHOGt2S4TKUhI1xGa21aSta4OYCdGY/fy2yivgh+CyEkC+AeX2gcTZ75LRFjVor5266s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709754684; c=relaxed/simple;
-	bh=nW9BmnqEAJHUUJ1JfNL0w4eR+vbscKyLsSPzdYPEzAQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lmwbkIfefZ58809ua6C3T68phXmwHIXW1/ou/Rty48rFqi575nQP6rVqgU66LPgIIebkHfxjlggHj6SyqK49wRMDXW6Rfef5hhNnZm0AXMnNjFWF3GJPhtiqaH6v2x6TVvyaUMBpbF5i4xt55DkeF+45iyWQ5Ml5q8qEXz+grn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xA4Xk4e3; arc=none smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-609d9ce5bdeso985307b3.2
-        for <linux-mips@vger.kernel.org>; Wed, 06 Mar 2024 11:51:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709754682; x=1710359482; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nW9BmnqEAJHUUJ1JfNL0w4eR+vbscKyLsSPzdYPEzAQ=;
-        b=xA4Xk4e3RVm4GGIuMqPRlpDCptG3tKvYI9uNRx4ukxYwsl/xKt4Mz8dShk0UjJQ391
-         4Nc4pilCuoarvt+xThDIaIfHxe4au8v93vPNBsP5ksvKHmQ2wiaRlWSBWf6Yub2q4MxY
-         QqWe9c2Aqrn5I/MymjeocSidpDl+RbplP5nuX7/uesD93S0sf5BQBeeB+JwYfqpdXN9E
-         Fx1PhD5xAM+YL6f92wM9rMXpvkV7YuyD0KcjQQOkwGFAQlJPXvz9Kc7CPFqCXAlmtXbu
-         MhuJrtZvt2amxjVYlN0WOxNAxMlxubKSaY5+P0kM0BJyIbg7+E3BH+pFiyK2nHVIdhcs
-         Ix7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709754682; x=1710359482;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nW9BmnqEAJHUUJ1JfNL0w4eR+vbscKyLsSPzdYPEzAQ=;
-        b=X+fEGKhUxDXKn3ADE/ffgP68mDH49ayMdI1Y0GM0pu7/j6XINLiBYGEWvHAUAdST4K
-         QXEotA8LnYMKuL7gH5u/rv4Tm/8+74vRhXVOk1EpMsRCswHOgjoDXe2rSNREGpsa/vSd
-         ujptxnHa8sehKNkLbkPhiS6e5aTXCcR0esmVb+vwRQqMJb5HRS0ON488sCB8+EkZD9uj
-         WjsTdMHp3T4dMbF0TdlQUXQSJ2NVCVOofrPkLNFRVMN8Tzc+NuS2hHdCu/Rmx+sTuo8z
-         TzwLnNpTeb1zvH6RUT6Q2irItRHtYQ8xFvtLJJvbQbYbzO8nRdGOHenIB9Xs0aVCjtEr
-         sTeA==
-X-Forwarded-Encrypted: i=1; AJvYcCVmQsMn5Me/T+Gvpg+0nEtVDIwhr1hz8YgqWnTwJpYBz/lxhf0jl6lpAZtIz+0DEf3mIRfbOFXqaqmfd1ApSxkqjIULh4ZCFtAOZQ==
-X-Gm-Message-State: AOJu0YwUw7CfZYq3AG+dqmsG7aw1VfpqFqxJtzIUZWZdTlRWFnCfziFI
-	F7bvxtxm5aGJ1Qj3sTOqSB0B5vPQ7hKDlTivZPOTboqIHxUUog19Tf1C7ea0cb0sd7g4jvC5ixp
-	1h9XJk0+ls0r9Kdf0yYk0/7lmGCTjG4a6ncrv7w==
-X-Google-Smtp-Source: AGHT+IF9uPQcyxZOk/shnTMiR/t1t/I0GgpRoKV3hwJiFHCA009EMyndUSs5h2ZUbJvMvccH9zCldItJvubtc7nYbb8=
-X-Received: by 2002:a0d:c0c2:0:b0:608:b543:2d3b with SMTP id
- b185-20020a0dc0c2000000b00608b5432d3bmr15502595ywd.18.1709754682089; Wed, 06
- Mar 2024 11:51:22 -0800 (PST)
+	s=arc-20240116; t=1709773521; c=relaxed/simple;
+	bh=VXMc0GyBOWjEHbjzKgOsPu3SsDerLX5JTe96N9EBrZA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=g2ZwjPn0XGhRVg2ib955k/oDZt+GY+GzbK3VFQfeLqw/67+KZYkuxCMufhQuBSVhcmzlgGGTOtBdTHeVOe2bsUUSot2S3KhndSGYl50vHlKWyk3YGRhp44SpJ6O0xkFfQQlkff7QTlHhoaAXmQVpzYtM+ilIlc+BIMB/2KOGb1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=risingedge.co.za; spf=pass smtp.mailfrom=risingedge.co.za; dkim=pass (2048-bit key) header.d=risingedge.co.za header.i=@risingedge.co.za header.b=kBghQjtt; arc=none smtp.client-ip=188.40.0.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=risingedge.co.za
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=risingedge.co.za
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=risingedge.co.za; s=xneelo; h=Content-Transfer-Encoding:MIME-Version:
+	Message-Id:Date:Subject:Cc:To:From:reply-to:sender:bcc:in-reply-to:references
+	:content-type; bh=mak2gQmK+LcOZJ7gNnWxgFo/kAW7G7Xhm701qVAMVe8=; b=kBghQjttvxm
+	dwWS3arJHDONeKeLjYw0eO/2qv5oR/KK65mkXjcHMjs1VvH5m0XAHm3zkqeE/qC+G6S+k1xlgndXO
+	dXqra7geZqcBEnAWcsraL1MR55JtAksQUVf0LpzabhdtyjS+DvVClF+YNILJ6C+r4RDzbDlip6uhI
+	HLj+2zUzE7rNbYgBxJurZRvxE/S++KcrUOFpvnujR62vA3UJFMb0GsogcYE9QGcHVMRsZP0YaIFaV
+	pny13aafe91lerZmMGm2Pdzcuuk7qttKjAWzTGunEFWTzXmt8piAjLdC8LkYm6gowFBqOvWg8Gc2X
+	OOfEyn/LU63DBMTFH7BU2OQ==;
+Received: from www31.flk1.host-h.net ([188.40.1.173])
+	by antispam2-flk1.host-h.net with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <justin.swartz@risingedge.co.za>)
+	id 1rhxbw-0088Wt-At; Wed, 06 Mar 2024 22:11:35 +0200
+Received: from [41.144.0.96] (helo=localhost.localdomain)
+	by www31.flk1.host-h.net with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <justin.swartz@risingedge.co.za>)
+	id 1rhxbt-0005PR-Mb; Wed, 06 Mar 2024 22:11:30 +0200
+From: Justin Swartz <justin.swartz@risingedge.co.za>
+To: =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+	Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Justin Swartz <justin.swartz@risingedge.co.za>,
+	linux-mips@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: [PATCH 1/2] mips: dts: ralink: mt7621: associate uart1_pins with serial0
+Date: Wed,  6 Mar 2024 22:10:43 +0200
+Message-Id: <20240306201045.1475-1-justin.swartz@risingedge.co.za>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240306-mbly-i2c-v3-0-605f866aa4ec@bootlin.com> <20240306-mbly-i2c-v3-9-605f866aa4ec@bootlin.com>
-In-Reply-To: <20240306-mbly-i2c-v3-9-605f866aa4ec@bootlin.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 6 Mar 2024 20:51:11 +0100
-Message-ID: <CACRpkdZqchWA8dKpQq0VrYWBNXL-WxfUSonwdzPYxyvjKhCXtg@mail.gmail.com>
-Subject: Re: [PATCH v3 09/11] i2c: nomadik: sort includes
-To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-arm-kernel@lists.infradead.org, 
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
-	Gregory Clement <gregory.clement@bootlin.com>, 
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: justin.swartz@risingedge.co.za
+X-Virus-Scanned: Clear
+X-SpamExperts-Domain: risingedge.co.za
+X-SpamExperts-Username: 
+Authentication-Results: host-h.net; auth=pass (login) smtp.auth=@risingedge.co.za
+X-SpamExperts-Outgoing-Class: ham
+X-SpamExperts-Outgoing-Evidence: Combined (0.02)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT+1hD2aVajAIUWnLadiDDRQPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5wCPRB8bAzJcv2cv+UqiTTc2+CpNcmBnO4XM3Sck4bwNogU
+ WCl1nkLBzZX0KuJ9bXiS85Z42w/+2OBolTNFbPomXFWCX8oNdggW7HE9XDTdSejrkEpbuUvwMvHx
+ 3T+KSG//gbuP7hnUK8NQdLwsVWKIFDZRrTGv3rxiw9tFrqFSCFNiLZt/QXQnOBRD+jq1HsKsDh/6
+ Srgk2K3gr1VBfJbChkYH6fbrypLNrde+UooQVNLReLErukdelEOHUIpaBbp5GdnsN8+UvimwMinK
+ 0+Txhz2u9qvrL2PODYgMZQApJXOjDLkqunZ9NcY2bHZn7CfFscMZZf3sCkN20I5vMh4akiObI7Kj
+ vK7X04QEin24qbfMFd8eGjnYW8aSH5qj4ujh/13psIvqSqJFa1CcANErDW/w69saM9prk3jNnHtn
+ nuEt/J9wDZeQfiNOYsLDFBdwYt2XtlLzy7G7T4kla0JNnAWQx3FS11bhwUa9HCIwKB+TroNcRY33
+ oNmH4nRQzHQazgY7lmveanvOdQzf6IMJ3345q/s6ySNrGnXycmhg3DALHzJsDGw//wob8MRQyAgM
+ LbHRR8LeQMsdlnjm8uSfLtBcNrQxKZYuPe8bdCyw79zlPbqLQkZr26Lcxdvj8cqI+CogZdOhX7v3
+ ClXzrmMECwtAGwNe0eOvXAXd2nqZdzIUka7Uq615Mik1qzcz30/jNv+A51L2swh0gYW0eVWShle6
+ F/kpBdN+oWjoATjEFDwcaiz0R34rhTN+GTbl4uS+pZovX9cex7Ac4fawcerGI7TrGXpM/B/M0BZd
+ PfIU1BX7pZc1sE3vsz58auH/srM2fgZ9JmgLbj7sqoEiwv7LCxIiAE5ODMnmwjvj2589zjbyZCiM
+ WpBpW8YvoIIqmZcWhL/r/eFjMjJnMHeiAPOVAT1rE1/vP68Bb4z3v3h3gCdXrv2+9GnNX30LKqXb
+ fwFKgm/rnYBl+Mj5KqOl6Jzub/f3QhLRbOgisvi5VU9eNBtgo6zjiatjNO/pnMCjuIvXs/AyV/Ns
+ URB/R+FlEHyAzksgfaRvdgw0WK34QWnzHHMcN6qoXPjenLhIOF1oeRYbjF1Hp647mOWoQlc3hL3c
+ AHYPcQ0eIL+UT9voGXmPy1YDPNGPsKAMCPQYracH9fp4u/m4iBmYb1/LCV4/EuVHup06w3Vwxf9C
+ F7D6LKKRTfdjzQ6YC7Heg3Xf7O1TOd6RcY/MXB8eEq3bCN2QohZvyS03iBmgsz450Kmjd3fGV3+S
+ BgtkZNA5EfNT9F7hlKYDj4Bmw4Kof/5djv4DbGkDIbtf63VNbf0lrvssY+k7AHGi1NevGWTo2+h8
+ Lhk4HCeZR7ymlGVRtthBJ2y8A5arx6JItKpFaUNPGMMlvbMX0nyK1NiAJ0y2Qvvn6ds6mor35w4f
+ SfHzQbABJfgy21HclcZkPRq7NhoxyMwqi8Q23Rgadfh5T5n5D4OHHpbEIgsllZKWnzc5M5WlNtVJ
+ qo05MS+4ayUpOtEhdxekWDmK9g==
+X-Report-Abuse-To: spam@antispamquarantine.host-h.net
 
-On Wed, Mar 6, 2024 at 6:59=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@bootli=
-n.com> wrote:
+Add pinctrl-name and pinctrl-0 properties to declare
+that the uart1_pins group is associated with serial0.
 
-> Sort #include statements in i2c-nomadik driver.
->
-> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+Signed-off-by: Justin Swartz <justin.swartz@risingedge.co.za>
+---
+ arch/mips/boot/dts/ralink/mt7621.dtsi | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
+index 35a10258f..dca415fdd 100644
+--- a/arch/mips/boot/dts/ralink/mt7621.dtsi
++++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
+@@ -123,6 +123,9 @@ serial0: serial@c00 {
+ 			reg-shift = <2>;
+ 			reg-io-width = <4>;
+ 			no-loopback-test;
++
++			pinctrl-names = "default";
++			pinctrl-0 = <&uart1_pins>;
+ 		};
+ 
+ 		spi0: spi@b00 {
+-- 
 
-Yours,
-Linus Walleij
 
