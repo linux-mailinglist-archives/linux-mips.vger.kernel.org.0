@@ -1,117 +1,112 @@
-Return-Path: <linux-mips+bounces-2100-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2101-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77CB08732AA
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 10:37:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E18287355C
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 12:09:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A17EB25ACA
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 09:34:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D27221F24E58
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 11:09:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 951A95EE8E;
-	Wed,  6 Mar 2024 09:34:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5666C757EA;
+	Wed,  6 Mar 2024 11:09:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="flWszAUC"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="E5jsxhP5"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94645EE96;
-	Wed,  6 Mar 2024 09:34:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40407745E0;
+	Wed,  6 Mar 2024 11:09:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709717654; cv=none; b=a9SGI9mZKM0b4E4KocEjcHFpMTC+6bfucJLzWcTEXFFFQm6YoMghYVb14s+SAg8JegX4fmZu6zQP5e6uTJm5WYngrAZGyfz9OMYs0ZtacjC1fRlSw490t84UA8PMyIteo2qulc7QqdN3U4M0xnoniRy6BtSlt5O/XsOp+V/bJbM=
+	t=1709723379; cv=none; b=mQKGJ7wDZytwukixb98SXrN8vWvEhllBvz82K9V5ku2Vjv9vQ+u8/5WMZVEBC9welZfA9pDhejqV7D3rxRpsZLMjWlGcJZregRBsNrNDyWYKOOjm5wvij7BydFhlOE3W857ruSOl54rXjthgDdq1u9TlJx+TW55ssEmbT0vbgFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709717654; c=relaxed/simple;
-	bh=JinEX41/j7Pb/bWxW54bGmffaAtTNcThK8gdOptLKmY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=eF882WGEhiB5jRMSmh9kej6ISIvjqXudnfN1oQJNI0OIQL6cUh27R0qkBfSrcKwhZdUHDMt95q4od46vpDjKr4mB24Jq1VQajIl9DBbRC0WZju9RSO7Ue1wJson3YScNT72vByHxbjGPN20ZGVT5vp67a6fB6oue6Kc1wz41R2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=flWszAUC; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5B95DFF80A;
-	Wed,  6 Mar 2024 09:34:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709717649;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=od4s/GMAsr52sikJcFgvSYexwtnWDcy7Z22NE3GsHO0=;
-	b=flWszAUCdRYte0IftesUvM5oIovUSfZcoWTw88vViiC3zzugdD6VABdpg/qSMIoiriNvEa
-	HwQ6CavPBKPEtMWhjiB1Jcx/h+8QmodvIi2fHXR+EHqw0knNc60bHgC9MB/4YwpsxQsc9L
-	C3Ay7A2aKHeZTAduHirmc4l7SsHzn9CiWUQXkpVsM9JP3ePCdLebbkVivyjkYGv4zw1ke8
-	+hHh9DdtCmExe4sk3tryFL2xap6DbZSDNF4cuFMZclKyl9eZQ22Nqi0Oh6HZzGGIAZmlNG
-	JH9RAXidbdI6QKlNno1AjYAmVwYjQr9rrE4mEiX+dQ682P+Hxli1IYdpqvIboA==
+	s=arc-20240116; t=1709723379; c=relaxed/simple;
+	bh=bsqrALh0inF+TFlRsJEQnmW6pnmcqBx2LnKvjJAweAs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ltNQfIpUAF0qLCUmYUxFA0e+GRSYpNUtGqdFECgZHomQrQFRO4WNjH8LFTw+MtWOCfG2OQFdetNQCYjwLr6k95to9WPvTem4weQOFpsa42HHTFsx/0ENRW42yGuOuM6iQQ5HmMuyLUhZ3n1lIrnOyqCYsqd9OzthV6y5OJ++gV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=E5jsxhP5; arc=none smtp.client-ip=115.124.30.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1709723373; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=ceV/dYyY4lcQMo0rvtqY++7MI8S81r5Jn7ui5rksdP4=;
+	b=E5jsxhP5C/OA6D8VQ9/QQVnVv3DdiyN3eQnRcxkX6GJ7r/JxUTj3RCXzwtTUmhvOGZtnbt69n/b0RGqeL93kA5sHsr9HU0CD4gZMpjU2p7ofVycDyax3kwIdTu4fTSZqohwsx2q1jhEdfNKfI9e0cYZVqRGBXHDbMW+QjUR2pPE=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=yaoma@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0W1xQ1s7_1709723370;
+Received: from 30.178.67.110(mailfrom:yaoma@linux.alibaba.com fp:SMTPD_---0W1xQ1s7_1709723370)
+          by smtp.aliyun-inc.com;
+          Wed, 06 Mar 2024 19:09:32 +0800
+Message-ID: <5ab46413-5810-475a-b8c1-3c9b142ea35c@linux.alibaba.com>
+Date: Wed, 6 Mar 2024 19:09:29 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 06 Mar 2024 10:34:08 +0100
-Message-Id: <CZMKBOH0BBTH.MZH1OTAZC7HH@bootlin.com>
-Subject: Re: [PATCH v2 00/11] Add Mobileye EyeQ5 support to the Nomadik I2C
- controller & use hrtimers for timeouts
-Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-mips@vger.kernel.org>, "Gregory Clement"
- <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>, "Jean Delvare" <jdelvare@suse.com>, "Guenter
- Roeck" <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>
-To: "Andi Shyti" <andi.shyti@kernel.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: aerc 0.15.2
-References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
- <bhiubxf3vuxfnz4rh75isgy5z5cexa6dnlw733box5ly3h7r5f@yqvzs75d3ykb>
-In-Reply-To: <bhiubxf3vuxfnz4rh75isgy5z5cexa6dnlw733box5ly3h7r5f@yqvzs75d3ykb>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHv11 2/4] genirq: Provide a snapshot mechanism for interrupt
+ statistics
+Content-Language: en-US
+To: Thomas Gleixner <tglx@linutronix.de>,
+ Doug Anderson <dianders@chromium.org>
+Cc: liusong@linux.alibaba.com, akpm@linux-foundation.org, pmladek@suse.com,
+ kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com,
+ tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com,
+ jan.kiszka@siemens.com, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, yaoma@linux.alibaba.com
+References: <20240228072216.95130-1-yaoma@linux.alibaba.com>
+ <20240228072216.95130-3-yaoma@linux.alibaba.com>
+ <CAD=FV=U1b+8atmju_w4eRmVKmSqjj6WCsy5EawYqj31fQ1kvrw@mail.gmail.com>
+ <87plwdwycx.ffs@tglx>
+ <3a89fafb-f62e-472f-b40b-8bf97954e9e3@linux.alibaba.com>
+ <87wmqiulaw.ffs@tglx>
+ <28a24e4b-c322-4631-ad6d-7259ca3d084d@linux.alibaba.com>
+ <87h6hkvcor.ffs@tglx>
+From: Bitao Hu <yaoma@linux.alibaba.com>
+In-Reply-To: <87h6hkvcor.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello Andi,
+Hi,
 
-On Wed Mar 6, 2024 at 2:49 AM CET, Andi Shyti wrote:
-> > Th=C3=A9o Lebrun (11):
-> >       dt-bindings: i2c: nomadik: add mobileye,eyeq5-i2c bindings and ex=
-ample
-> >       dt-bindings: hwmon: lm75: use common hwmon schema
-> >       i2c: nomadik: rename private struct pointers from dev to priv
-> >       i2c: nomadik: simplify IRQ masking logic
-> >       i2c: nomadik: use bitops helpers
-> >       i2c: nomadik: support short xfer timeouts using waitqueue & hrtim=
-er
-> >       i2c: nomadik: replace jiffies by ktime for FIFO flushing timeout
-> >       i2c: nomadik: fetch i2c-transfer-timeout-us property from devicet=
-ree
-> >       i2c: nomadik: support Mobileye EyeQ5 I2C controller
-> >       MIPS: mobileye: eyeq5: add 5 I2C controller nodes
-> >       MIPS: mobileye: eyeq5: add evaluation board I2C temp sensor
->
-> what's your plan for this series? If you extract into a separate
-> series the refactoring patches that are not dependent on the
-> bindings I could queue them up for the merge window.
+On 2024/3/6 00:57, Thomas Gleixner wrote:
+> 
+>> diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
+>> index 2531f3496ab6..a28e5ac5fc79 100644
+>> --- a/kernel/irq/Kconfig
+>> +++ b/kernel/irq/Kconfig
+>> @@ -108,6 +108,10 @@ config GENERIC_IRQ_MATRIX_ALLOCATOR
+>>    config GENERIC_IRQ_RESERVATION_MODE
+>>           bool
+>>
+>> +# Snapshot for interrupt statistics
+>> +config GENERIC_IRQ_STAT_SNAPSHOT
+>> +       bool
+>> +
+>>    # Support forced irq threading
+>>    config IRQ_FORCED_THREADING
+>>           bool
+>> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+>> index 49f652674bd8..899b69fcb598 100644
+>> --- a/lib/Kconfig.debug
+>> +++ b/lib/Kconfig.debug
+>> @@ -1032,6 +1032,7 @@ config SOFTLOCKUP_DETECTOR
+>>    config SOFTLOCKUP_DETECTOR_INTR_STORM
+>>           bool "Detect Interrupt Storm in Soft Lockups"
+>>           depends on SOFTLOCKUP_DETECTOR && IRQ_TIME_ACCOUNTING
+>> +       select GENERIC_IRQ_STAT_SNAPSHOT
+> 
+> This goes into the patch which adds the lockup detector parts.
+> 
 
-V3 is ready and will be sent today. I think we can get trailers from
-dt-bindings maintainers as the discussion has been caried out on this
-revision.
+OK, I will implement this in the next version.
 
-Am I being too optimistic of seeing this series queued before the merge
-window?
-
-Thanks Andi,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+Best Regards,
+	Bitao Hu
 
