@@ -1,304 +1,123 @@
-Return-Path: <linux-mips+bounces-2134-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2135-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8ACA874033
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 20:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AA22A87408A
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 20:36:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B04B1F27558
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 19:14:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 23D8E1F21339
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 19:36:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D425B13E7FE;
-	Wed,  6 Mar 2024 19:14:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5E1B14036A;
+	Wed,  6 Mar 2024 19:36:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ViWF+FBv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PhFx4PO4"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1F2413E7DB;
-	Wed,  6 Mar 2024 19:14:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB52B13F445;
+	Wed,  6 Mar 2024 19:36:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709752464; cv=none; b=loGbv408TEa9RHBx1373figaTC8c7O6QaPjoa0gSIYEpQuBCwSYVV/ge3+UFULqA5z4aWT6PKsFQMJ2C/pP7eUVt9qJ84n7/8hFeN4dD6gFrgZhJN9EWh3af7O7+H7b+3hwRlNu87xg5/pE+7kcBoMBSZBNMTbwQSHzfXe5WxXU=
+	t=1709753802; cv=none; b=HWfKF50Df+qbnPVitMHjEMXtd9CmeK69HLPtMS5Nnuqx0BicuCzZozwvTHP/aGxht5v2NmSdH2aojLb6fxqZG9xB13p7GelfddM+2L0VaP+ZJV4DGo2o26EXxm6mjS7ye+uzD0NtGBPhqddvgI6KZEEgIk0prJ6GzhbgJyxOSEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709752464; c=relaxed/simple;
-	bh=rqeHAwxjnBJfSjkh66zxDx3278+2ytmY3CRS/ZATqfE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DFLV5EyvDJy6u9emfgK0JHs+RjibcGx/66ywUmpT32aZjdKMe/exQV7QZxpktM2bZHfd4PnkoBobh5TB+AlZjE6c/ehXFXvJGz8MyYUsCac+jrsBRU4IxSkJoZ6ZIxwkfZ+Tinve8SfZsxMmdvscm6V9p+R2V3CGUW//iDRQvMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ViWF+FBv; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a450615d1c4so23425466b.0;
-        Wed, 06 Mar 2024 11:14:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709752461; x=1710357261; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=koyC+OXWaVBitynJT4B5M9yEfbXa623u0u8Rn+ueAuI=;
-        b=ViWF+FBvFlvBOiv5PWd8lqtxy62GRdL5k8hrxoy9p20taYwc758/aHJZXCv2+nBCPv
-         qdssh2R0rkZh1yG+/oHkP+uAPqhObdc7dtJAcfG/+JVo2mQqiHzt8/NRCDv2U0/0lSdb
-         Yir14GaJjWcgTdXnrBUGNn9sr+/bBxO8CD+6AEUDeKCR/W9595868P+Oz0B0M0t0mTNM
-         oXPI11DlFkqa/vfHF8NHGachH/drmTFjNI4LepEGdDRXg6juU6KcNbDadAsxpI+gasT3
-         iLaOGZq9AaX8TQw9bzQtFfFgANzG2zhorb8B2tSAeR9If0aRdWFwjgoqjpjNHV+5uiMn
-         Jl+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709752461; x=1710357261;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=koyC+OXWaVBitynJT4B5M9yEfbXa623u0u8Rn+ueAuI=;
-        b=QNsR6mXmjyD8/QQ5C5PdNEXVD/GPAYuCjpnpqvK1d/PbT9sUZtRU5WyUGBRVY3fhqc
-         lUn7CYj/DS3jwHJKzKlR5Lp7va8v/TfSiHQTQDZTXeVhmZr222Z4SoQXFTnZ5tdAU1t3
-         Vt9f8lwEPbOvNra5C9P5SWwdjCzZUdGd9FuIhwB+ky0RFpeyAXys1WRahZBYnMmkwecf
-         5EzQ92KMADYp0JmxpX+LBBRkT+aPLld7gkrTqGMpP1F6Mn5TZhuhZ4ljuzeyCrh54Imo
-         JTMgWKczAcKAXfy2tlBrzAiknPHpcYF2E/PoDItJdg2QnlOYjzvWLrb/JaLRZwaY+7Lp
-         0PYw==
-X-Forwarded-Encrypted: i=1; AJvYcCVrOja2zARvneyG562nxQHrlzimwkdzbE82PK+4BZ1RToTx3C95zCrrsFaMMvT7qtQ40RNK9wHAzTJNtjC6jImSaQFcSU8/yl2snfEyEOEOSq/qHJzi9zLK4rFtMTiduFlz4QFlmNm03L6WW00aeIwf4FUKSUB9PCiFBc1/t205fvoXFZegcpVdeW2HoSueJ0FXb3dfNGlU4xOg7it6H9Jb2zq4iR7pikdM2KVhEMPIIezbJiA/X5jZwOxK9mmfBxIM3romxZji9yBiNWN4uxggMasPoi2aWERXEjv0mydV/D85z+YEw7+Xjy3FIAe/AkT90ghwcsSv8DZUVH51TQTtXvu+gXLGCIG6Pa2TZb9bxqc6yt/eFoLo2KdFCVC9LiplpZVPOvtnR5pSvGZyjJ3zKGVRXwi9AjGvOE9FWWI8+3+fYpcSSleaUi9rB/OPg8GcJV67+LgdaqiEMpZHL6Q/xS13lFswCr7JW93EAGXnw3phls+RWx6UrVZzQuuRZWBFnujYmg==
-X-Gm-Message-State: AOJu0YxhSRB0qK/UuVoXCMmPC9+K8Mkr08GGN1h2Z57fdHjEF5zxwOtD
-	TZ4l4iw7s7YCeweEjdvfjUZnH66L+rPwHCNQo+wLXxTJMb3/nK/G
-X-Google-Smtp-Source: AGHT+IFItB8heVRezTYv3CUtiqgvQIid/hRamLnrcs20FhE6FaoKpuU57YkPC1CFMKt9DanhDiASxQ==
-X-Received: by 2002:a17:906:74d:b0:a45:8b6d:42c9 with SMTP id z13-20020a170906074d00b00a458b6d42c9mr5974291ejb.23.1709752460817;
-        Wed, 06 Mar 2024 11:14:20 -0800 (PST)
-Received: from [192.168.8.100] ([148.252.132.18])
-        by smtp.gmail.com with ESMTPSA id jw11-20020a170906e94b00b00a455d78be5bsm3479312ejb.9.2024.03.06.11.14.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Mar 2024 11:14:20 -0800 (PST)
-Message-ID: <772b9ab0-c6d7-4b13-8e05-44dd312b9879@gmail.com>
-Date: Wed, 6 Mar 2024 19:12:58 +0000
+	s=arc-20240116; t=1709753802; c=relaxed/simple;
+	bh=7V0bUBEBtXLvon9zLpXaBbW5Ag53b212Nxcy7eVESX4=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=N0X405YJnXHh1Gtl2+xwf3U4ccjQh8+1ZtNUyTSmj1KbrkGkVLf58KGh2yvrW7Z+gwAdAeaIB9c62wApIigaik1xBTbEG0gZJDISc2XMW47b41Xp9v3UCSPS6KOgNYScQyOq/r8NeIYXbDN7Xb+algKCUAdru3FihBfRkPxlJZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PhFx4PO4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDA29C43330;
+	Wed,  6 Mar 2024 19:36:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709753802;
+	bh=7V0bUBEBtXLvon9zLpXaBbW5Ag53b212Nxcy7eVESX4=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=PhFx4PO4NptU1eb4m5JtgjZSfD3dcA2qcaHJMODwN18/+ELcYH5EG8gHNnLqMenhF
+	 3NFB2QI7k7gZb5eh/NFPR+ZTzxjVoC9UQK+FfZ5fi/8uWqMaCdmVHLIvav3mYIEups
+	 rS7LxFFySlEW+KMckqIBF9LWpP0kQP9tWQ9InjGI9rTs63XIOTasjCq7kZU9jR9G/0
+	 nQXDrhCf53L5tBjV2iOP62U+oD5Iboz7YHtHZ0a6F2PLNyd7oF7DViam06gOcS25yG
+	 rmttptOvDFAFIhFtP8TknVbUoTNaL1Amjjcyw9icsUDw18LmkWJcciAuqANkaovmjr
+	 5l0DGypVSC0nA==
+Date: Wed, 06 Mar 2024 13:36:40 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
- custom page providers
-Content-Language: en-US
-To: Mina Almasry <almasrymina@google.com>
-Cc: David Wei <dw@davidwei.uk>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>,
- Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Jeroen de Borst <jeroendb@google.com>,
- Praveen Kaligineedi <pkaligineedi@google.com>, shakeel.butt@linux.dev
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-3-almasrymina@google.com>
- <1b57dac2-4b04-4bec-b2d7-d0edb4fcabbc@davidwei.uk>
- <CAHS8izM5O39mnTQ8mhcQE75amDT4G-3vcgozzjcYsAdd_-he1g@mail.gmail.com>
- <417f293a-848e-4eb2-b690-c8696079b452@gmail.com>
- <CAHS8izNPtHb2GnEMviiJTFT_dPxsxgYsNw5V9s-gSC2YnJRPRg@mail.gmail.com>
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <CAHS8izNPtHb2GnEMviiJTFT_dPxsxgYsNw5V9s-gSC2YnJRPRg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Rob Herring <robh@kernel.org>
+To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ linux-arm-kernel@lists.infradead.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Gregory Clement <gregory.clement@bootlin.com>, 
+ Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>, 
+ linux-i2c@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org
+In-Reply-To: <20240306-mbly-i2c-v3-1-605f866aa4ec@bootlin.com>
+References: <20240306-mbly-i2c-v3-0-605f866aa4ec@bootlin.com>
+ <20240306-mbly-i2c-v3-1-605f866aa4ec@bootlin.com>
+Message-Id: <170975379986.537127.9632491782916705710.robh@kernel.org>
+Subject: Re: [PATCH v3 01/11] dt-bindings: i2c: nomadik: add
+ mobileye,eyeq5-i2c bindings and example
 
-On 3/6/24 17:04, Mina Almasry wrote:
-> On Wed, Mar 6, 2024 at 6:30 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
->>
->> On 3/5/24 22:36, Mina Almasry wrote:
->>> On Tue, Mar 5, 2024 at 1:55 PM David Wei <dw@davidwei.uk> wrote:
->>>>
->>>> On 2024-03-04 18:01, Mina Almasry wrote:
->>>>> +struct memory_provider_ops {
->>>>> +     int (*init)(struct page_pool *pool);
->>>>> +     void (*destroy)(struct page_pool *pool);
->>>>> +     struct page *(*alloc_pages)(struct page_pool *pool, gfp_t gfp);
->>>>> +     bool (*release_page)(struct page_pool *pool, struct page *page);
->>>>
->>>> For ZC Rx we added a scrub() function to memory_provider_ops that is
->>>> called from page_pool_scrub(). Does TCP devmem not custom behaviour
->>>> waiting for all netmem_refs to return before destroying the page pool?
->>>> What happens if e.g. application crashes?
->>>
->>> (sorry for the long reply, but he refcounting is pretty complicated to
->>> explain and I feel like we need to agree on how things currently work)
->>>
->>> Yeah, the addition of the page_pool_scrub() function is a bit of a
->>> head scratcher for me. Here is how the (complicated) refcounting works
->>> for devmem TCP (assuming the driver is not doing its own recycling
->>> logic which complicates things further):
->>>
->>> 1. When a netmem_ref is allocated by the page_pool (from dmabuf or
->>> page), the netmem_get_pp_ref_count_ref()==1 and belongs to the page
->>> pool as long as the netmem is waiting in the pool for driver
->>> allocation.
->>>
->>> 2. When a netmem is allocated by the driver, no refcounting is
->>> changed, but the ownership of the netmem_get_pp_ref_count_ref() is
->>> implicitly transferred from the page pool to the driver. i.e. the ref
->>> now belongs to the driver until an skb is formed.
->>>
->>> 3. When the driver forms an skb using skb_rx_add_frag_netmem(), no
->>> refcounting is changed, but the ownership of the
->>> netmem_get_pp_ref_count_ref() is transferred from the driver to the
->>> TCP stack.
->>>
->>> 4. When the TCP stack hands the skb to the application, the TCP stack
->>> obtains an additional refcount, so netmem_get_pp_ref_count_ref()==2,
->>> and frees the skb using skb_frag_unref(), which drops the
->>> netmem_get_pp_ref_count_ref()==1.
->>>
->>> 5. When the user is done with the skb, the user calls the
->>> DEVMEM_DONTNEED setsockopt which calls napi_pp_put_netmem() which
->>> recycles the netmem back to the page pool. This doesn't modify any
->>> refcounting, but the refcount ownership transfers from the userspace
->>> back to the page pool, and we're back at step 1.
->>>
->>> So all in all netmem can belong either to (a) the page pool, or (b)
->>> the driver, or (c) the TCP stack, or (d) the application depending on
->>> where exactly it is in the RX path.
->>>
->>> When an application running devmem TCP crashes, the netmem that belong
->>> to the page pool or driver are not touched, because the page pool is
->>> not tied to the application in our case really. However, the TCP stack
->>> notices the devmem socket of the application close, and when it does,
->>> the TCP stack will:
->>>
->>> 1. Free all the skbs in the sockets receive queue. This is not custom
->>> behavior for devmem TCP, it's just standard for TCP to free all skbs
->>> waiting to be received by the application.
->>> 2. The TCP stack will free references that belong to the application.
->>> Since the application crashed, it will not call the DEVMEM_DONTNEED
->>> setsockopt, so we need to free those on behalf of the application.
->>> This is done in this diff:
->>>
->>> @@ -2498,6 +2498,15 @@ static void tcp_md5sig_info_free_rcu(struct
->>> rcu_head *head)
->>>    void tcp_v4_destroy_sock(struct sock *sk)
->>>    {
->>>     struct tcp_sock *tp = tcp_sk(sk);
->>> + __maybe_unused unsigned long index;
->>> + __maybe_unused void *netmem;
->>> +
->>> +#ifdef CONFIG_PAGE_POOL
->>> + xa_for_each(&sk->sk_user_frags, index, netmem)
->>> + WARN_ON_ONCE(!napi_pp_put_page((__force netmem_ref)netmem, false));
->>> +#endif
->>> +
->>> + xa_destroy(&sk->sk_user_frags);
->>>
->>>     trace_tcp_destroy_sock(sk);
->>>
->>> To be honest, I think it makes sense for the TCP stack to be
->>> responsible for putting the references that belong to it and the
->>> application. To me, it does not make much sense for the page pool to
->>> be responsible for putting the reference that belongs to the TCP stack
->>> or driver via a page_pool_scrub() function, as those references do not
->>> belong to the page pool really. I'm not sure why there is a diff
->>> between our use cases here because I'm not an io_uring expert. Why do
->>> you need to scrub all the references on page pool destruction? Don't
->>> these belong to non-page pool components like io_uring stack or TCP
->>> stack ol otherwise?
->>
->> That one is about cleaning buffers that are in b/w 4 and 5, i.e.
->> owned by the user, which devmem does at sock destruction. io_uring
->> could get by without scrub, dropping user refs while unregistering
->> ifq, but then it'd need to wait for all requests to finish so there
->> is no step 4 in the meantime. Might change, can be useful, but it
->> was much easier to hook into the pp release loop.
->>
->> Another concern is who and when can reset ifq / kill pp outside
->> of io_uring/devmem. I assume it can happen on a whim, which is
->> hard to handle gracefully.
->>
+
+On Wed, 06 Mar 2024 18:59:21 +0100, Théo Lebrun wrote:
+> Add EyeQ5 bindings to the existing Nomadik I2C dt-bindings. Add the
+> EyeQ5-specific property behind a conditional. Add an example for this
+> compatible.
 > 
-> If this is about dropping application refs in step 4 & step 5, then
-> from devmem TCP perspective it must be done on socket close & skb
-> freeing AFAIU, and not delayed until page_pool destruction. 
-
-Right, something in the kernel should take care of it. You temporarily
-attach it to the socket, which is fine. And you could've also stored
-it in the netlink socket or some other object. In case of zcrx io_uring
-impl, it's bound to io_uring, io_uring is responsible for cleaning them
-up. And we do it before __page_pool_destroy, otherwise there would be
-a ref dependency.
-
-A side note, attaching to netlink or some other global object sounds
-conceptually better, as once you return a buffer to the user, the
-socket should not have any further business with the buffer. FWIW,
-that better resembles io_uring approach. For example allows to:
-
-recv(sock);
-close(sock);
-process_rx_buffers();
-
-or to return (i.e. DEVMEM_DONTNEED) buffers from different sockets
-in one call. However, I don't think it's important for devmem and
-perhaps more implementation dictated.
-
-> Think
-> about a stupid or malicious user that does something like:
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  .../devicetree/bindings/i2c/st,nomadik-i2c.yaml    | 49 +++++++++++++++++++---
+>  1 file changed, 43 insertions(+), 6 deletions(-)
 > 
-> 1. Set up dmabuf binding using netlink api.
-> 2. While (100000):
-> 3.   create devmem TCP socket.
-> 4.   receive some devmem data on TCP socket.
-> 5.   close TCP socket without calling DEVMEM_DONTNEED.
-> 6. clean up dmabuf binding using netlink api.
-> 
-> In this case, we need to drop the references in step 5 when the socket
-> is destroyed, so the memory is freed to the page pool and available
-> for the next socket in step 3. We cannot delay the freeing until step
-> 6 when the rx queue is recreated and the page pool is destroyed,
-> otherwise the net_iovs would leak in the loop and eventually the NIC
-> would fail to find available memory. The same bug would be
 
-By "would leak" you probably mean until step 6, right? There are
-always many ways to shoot yourself in the leg. Even if you clean
-up in 5, the user can just leak the socket and get the same result
-with pp starvation. I see it not as a requirement but rather a
-uapi choice, that's assuming netlink would be cleaned as a normal
-socket when the task exits.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> reproducible with io_uring unless you're creating a new page pool for
-> each new io_uring socket equivalent.
+yamllint warnings/errors:
 
-Surely we don't, but it's still the user's responsibility to
-return buffers back. And in case of io_uring buffers returned
-to the user are not attached to a socket, so even the
-scope / lifetime is a bit different.
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/st,nomadik-i2c.example.dtb: i2c@300000: 'mobileye,olb' does not match any of the regexes: '^#.*', '^(at25|bm|devbus|dmacap|dsa|exynos|fsi[ab]|gpio-fan|gpio-key|gpio|gpmc|hdmi|i2c-gpio),.*', '^(keypad|m25p|max8952|max8997|max8998|mpmc),.*', '^(pinctrl-single|#pinctrl-single|PowerPC),.*', '^(pl022|pxa-mmc|rcar_sound|rotary-encoder|s5m8767|sdhci),.*', '^(simple-audio-card|st-plgpio|st-spics|ts),.*', '^100ask,.*', '^70mai,.*', '^8dev,.*', '^GEFanuc,.*', '^ORCL,.*', '^SUNW,.*', '^[a-zA-Z0-9#_][a-zA-Z0-9+\\-._@]{0,63}$', '^[a-zA-Z0-9+\\-._]*@[0-9a-zA-Z,]*$', '^abb,.*', '^abilis,.*', '^abracon,.*', '^abt,.*', '^acbel,.*', '^acer,.*', '^acme,.*', '^actions,.*', '^active-semi,.*', '^ad,.*', '^adafruit,.*', '^adapteva,.*', '^adaptrum,.*', '^adh,.*', '^adi,.*', '^adieng,.*', '^advantech,.*', '^aeroflexgaisler,.*', '^aesop,.*', '^airoha,.*', '^al,.*', '^alcatel,.*', '^aldec,.*', '^alfa-network,.*', '^allegro,.*', '^allie
+ dvision,.*', '^allo,.*', '^allwinner,.*', '^alphascale,.*', '^alps,.*', '^alt,.*', '^altr,.*', '^amarula,.*', '^amazon,.*', '^amcc,.*', '^amd,.*', '^amediatech,.*', '^amlogic,.*', '^ampere,.*', '^ampire,.*', '^ams,.*', '^amstaos,.*', '^analogix,.*', '^anbernic,.*', '^andestech,.*', '^anvo,.*', '^aosong,.*', '^apm,.*', '^apple,.*', '^aptina,.*', '^arasan,.*', '^archermind,.*', '^arcom,.*', '^arctic,.*', '^arcx,.*', '^aries,.*', '^arm,.*', '^armadeus,.*', '^arrow,.*', '^artesyn,.*', '^asahi-kasei,.*', '^asc,.*', '^asix,.*', '^aspeed,.*', '^asrock,.*', '^asus,.*', '^atheros,.*', '^atlas,.*', '^atmel,.*', '^auo,.*', '^auvidea,.*', '^avago,.*', '^avia,.*', '^avic,.*', '^avnet,.*', '^awinic,.*', '^axentia,.*', '^axis,.*', '^azoteq,.*', '^azw,.*', '^baikal,.*', '^bananapi,.*', '^beacon,.*', '^beagle,.*', '^belling,.*', '^bhf,.*', '^bigtreetech,.*', '^bitmain,.*', '^blutek,.*', '^boe,.*', '^bosch,.*', '^boundary,.*', '^brcm,.*', '^broadmobi,.*', '^bsh,.*', '^bticino,.*', '^buffalo,.*', '^bu
+ r,.*', '^bytedance,.*', '^calamp,.*', '^calaosystems,.*', '^calxeda,.*', '^canaan,.*', '^caninos,.*', '^capella,.*', '^cascoda,.*', '^catalyst,.*', '^cavium,.*', '^cdns,.*', '^cdtech,.*', '^cellwise,.*', '^ceva,.*', '^chargebyte,.*', '^checkpoint,.*', '^chefree,.*', '^chipidea,.*', '^chipone,.*', '^chipspark,.*', '^chongzhou,.*', '^chrontel,.*', '^chrp,.*', '^chunghwa,.*', '^chuwi,.*', '^ciaa,.*', '^cirrus,.*', '^cisco,.*', '^clockwork,.*', '^cloos,.*', '^cloudengines,.*', '^cnm,.*', '^cnxt,.*', '^colorfly,.*', '^compulab,.*', '^congatec,.*', '^coolpi,.*', '^coreriver,.*', '^corpro,.*', '^cortina,.*', '^cosmic,.*', '^crane,.*', '^creative,.*', '^crystalfontz,.*', '^csky,.*', '^csq,.*', '^ctera,.*', '^ctu,.*', '^cubietech,.*', '^cui,.*', '^cypress,.*', '^cyx,.*', '^cznic,.*', '^dallas,.*', '^dataimage,.*', '^davicom,.*', '^dell,.*', '^delta,.*', '^densitron,.*', '^denx,.*', '^devantech,.*', '^dfi,.*', '^dh,.*', '^difrnce,.*', '^digi,.*', '^digilent,.*', '^dimonoff,.*', '^diodes,.*', 
+ '^dioo,.*', '^dlc,.*', '^dlg,.*', '^dlink,.*', '^dmo,.*', '^domintech,.*', '^dongwoon,.*', '^dptechnics,.*', '^dragino,.*', '^ds,.*', '^dserve,.*', '^dynaimage,.*', '^ea,.*', '^ebang,.*', '^ebbg,.*', '^ebs-systart,.*', '^ebv,.*', '^eckelmann,.*', '^edgeble,.*', '^edimax,.*', '^edt,.*', '^ees,.*', '^eeti,.*', '^einfochips,.*', '^eink,.*', '^elan,.*', '^element14,.*', '^elgin,.*', '^elida,.*', '^elimo,.*', '^elpida,.*', '^embedfire,.*', '^embest,.*', '^emlid,.*', '^emmicro,.*', '^empire-electronix,.*', '^emtrion,.*', '^enclustra,.*', '^endless,.*', '^ene,.*', '^energymicro,.*', '^engicam,.*', '^engleder,.*', '^epcos,.*', '^epfl,.*', '^epson,.*', '^esp,.*', '^est,.*', '^ettus,.*', '^eukrea,.*', '^everest,.*', '^everspin,.*', '^evervision,.*', '^exar,.*', '^excito,.*', '^exegin,.*', '^ezchip,.*', '^facebook,.*', '^fairphone,.*', '^faraday,.*', '^fascontek,.*', '^fastrax,.*', '^fcs,.*', '^feixin,.*', '^feiyang,.*', '^fii,.*', '^firefly,.*', '^focaltech,.*', '^forlinx,.*', '^freecom,.*', 
+ '^frida,.*', '^friendlyarm,.*', '^fsl,.*', '^fujitsu,.*', '^fxtec,.*', '^galaxycore,.*', '^gardena,.*', '^gateway,.*', '^gateworks,.*', '^gcw,.*', '^ge,.*', '^geekbuying,.*', '^gef,.*', '^gemei,.*', '^gemtek,.*', '^genesys,.*', '^geniatech,.*', '^giantec,.*', '^giantplus,.*', '^globalscale,.*', '^globaltop,.*', '^gmt,.*', '^goldelico,.*', '^goodix,.*', '^google,.*', '^goramo,.*', '^gplus,.*', '^grinn,.*', '^grmn,.*', '^gumstix,.*', '^gw,.*', '^hannstar,.*', '^haochuangyi,.*', '^haoyu,.*', '^hardkernel,.*', '^hechuang,.*', '^hideep,.*', '^himax,.*', '^hirschmann,.*', '^hisi,.*', '^hisilicon,.*', '^hit,.*', '^hitex,.*', '^holt,.*', '^holtek,.*', '^honestar,.*', '^honeywell,.*', '^hoperun,.*', '^hp,.*', '^hpe,.*', '^hsg,.*', '^htc,.*', '^huawei,.*', '^hugsun,.*', '^hwacom,.*', '^hxt,.*', '^hycon,.*', '^hydis,.*', '^hynitron,.*', '^hynix,.*', '^hyundai,.*', '^i2se,.*', '^ibm,.*', '^icplus,.*', '^idt,.*', '^ifi,.*', '^ilitek,.*', '^imagis,.*', '^img,.*', '^imi,.*', '^inanbo,.*', '^incirc
+ uit,.*', '^indiedroid,.*', '^inet-tek,.*', '^infineon,.*', '^inforce,.*', '^ingenic,.*', '^ingrasys,.*', '^injoinic,.*', '^innocomm,.*', '^innolux,.*', '^inside-secure,.*', '^insignal,.*', '^inspur,.*', '^intel,.*', '^intercontrol,.*', '^invensense,.*', '^inventec,.*', '^inversepath,.*', '^iom,.*', '^irondevice,.*', '^isee,.*', '^isil,.*', '^issi,.*', '^ite,.*', '^itead,.*', '^itian,.*', '^ivo,.*', '^iwave,.*', '^jadard,.*', '^jasonic,.*', '^jdi,.*', '^jedec,.*', '^jesurun,.*', '^jethome,.*', '^jianda,.*', '^joz,.*', '^kam,.*', '^karo,.*', '^keithkoep,.*', '^keymile,.*', '^khadas,.*', '^kiebackpeter,.*', '^kinetic,.*', '^kingdisplay,.*', '^kingnovel,.*', '^kionix,.*', '^kobo,.*', '^kobol,.*', '^koe,.*', '^kontron,.*', '^kosagi,.*', '^kvg,.*', '^kyo,.*', '^lacie,.*', '^laird,.*', '^lamobo,.*', '^lantiq,.*', '^lattice,.*', '^lctech,.*', '^leadtek,.*', '^leez,.*', '^lego,.*', '^lemaker,.*', '^lenovo,.*', '^lg,.*', '^lgphilips,.*', '^libretech,.*', '^licheepi,.*', '^linaro,.*', '^linear
+ technology,.*', '^linksprite,.*', '^linksys,.*', '^linutronix,.*', '^linux,.*', '^linx,.*', '^liteon,.*', '^litex,.*', '^lltc,.*', '^logicpd,.*', '^logictechno,.*', '^longcheer,.*', '^lontium,.*', '^loongmasses,.*', '^loongson,.*', '^lsi,.*', '^lunzn,.*', '^lwn,.*', '^lxa,.*', '^m5stack,.*', '^macnica,.*', '^mantix,.*', '^mapleboard,.*', '^marantec,.*', '^marvell,.*', '^maxbotix,.*', '^maxim,.*', '^maxlinear,.*', '^mbvl,.*', '^mcube,.*', '^meas,.*', '^mecer,.*', '^mediatek,.*', '^megachips,.*', '^mele,.*', '^melexis,.*', '^melfas,.*', '^mellanox,.*', '^memsensing,.*', '^memsic,.*', '^menlo,.*', '^mentor,.*', '^meraki,.*', '^merrii,.*', '^methode,.*', '^micrel,.*', '^microchip,.*', '^microcrystal,.*', '^micron,.*', '^microsoft,.*', '^microsys,.*', '^mikroe,.*', '^mikrotik,.*', '^milkv,.*', '^miniand,.*', '^minix,.*', '^miramems,.*', '^mitsubishi,.*', '^mitsumi,.*', '^mixel,.*', '^miyoo,.*', '^mntre,.*', '^modtronix,.*', '^moortec,.*', '^mosaixtech,.*', '^motorcomm,.*', '^motorola,.*'
+ , '^moxa,.*', '^mpl,.*', '^mps,.*', '^mqmaker,.*', '^mrvl,.*', '^mscc,.*', '^msi,.*', '^mstar,.*', '^mti,.*', '^multi-inno,.*', '^mundoreader,.*', '^murata,.*', '^mxic,.*', '^mxicy,.*', '^myir,.*', '^national,.*', '^nec,.*', '^neonode,.*', '^netgear,.*', '^netlogic,.*', '^netron-dy,.*', '^netronix,.*', '^netxeon,.*', '^neweast,.*', '^newhaven,.*', '^newvision,.*', '^nexbox,.*', '^nextthing,.*', '^ni,.*', '^nintendo,.*', '^nlt,.*', '^nokia,.*', '^nordic,.*', '^novatek,.*', '^novtech,.*', '^nutsboard,.*', '^nuvoton,.*', '^nvd,.*', '^nvidia,.*', '^nxp,.*', '^oceanic,.*', '^ocs,.*', '^oct,.*', '^okaya,.*', '^oki,.*', '^olimex,.*', '^olpc,.*', '^oneplus,.*', '^onie,.*', '^onion,.*', '^onnn,.*', '^ontat,.*', '^opalkelly,.*', '^openailab,.*', '^opencores,.*', '^openembed,.*', '^openpandora,.*', '^openrisc,.*', '^option,.*', '^oranth,.*', '^orisetech,.*', '^ortustech,.*', '^osddisplays,.*', '^osmc,.*', '^ouya,.*', '^overkiz,.*', '^ovti,.*', '^oxsemi,.*', '^ozzmaker,.*', '^panasonic,.*', '^p
+ arade,.*', '^parallax,.*', '^pda,.*', '^pericom,.*', '^pervasive,.*', '^phicomm,.*', '^phytec,.*', '^picochip,.*', '^pine64,.*', '^pineriver,.*', '^pixcir,.*', '^plantower,.*', '^plathome,.*', '^plda,.*', '^plx,.*', '^ply,.*', '^pni,.*', '^pocketbook,.*', '^polaroid,.*', '^polyhex,.*', '^portwell,.*', '^poslab,.*', '^pov,.*', '^powertip,.*', '^powervr,.*', '^powkiddy,.*', '^primux,.*', '^probox2,.*', '^prt,.*', '^pulsedlight,.*', '^purism,.*', '^qca,.*', '^qcom,.*', '^qemu,.*', '^qi,.*', '^qiaodian,.*', '^qihua,.*', '^qishenglong,.*', '^qnap,.*', '^quanta,.*', '^radxa,.*', '^raidsonic,.*', '^ralink,.*', '^ramtron,.*', '^raspberrypi,.*', '^raydium,.*', '^rda,.*', '^realtek,.*', '^remarkable,.*', '^renesas,.*', '^rervision,.*', '^revotics,.*', '^rex,.*', '^richtek,.*', '^ricoh,.*', '^rikomagic,.*', '^riot,.*', '^riscv,.*', '^rockchip,.*', '^rocktech,.*', '^rohm,.*', '^ronbo,.*', '^roofull,.*', '^roseapplepi,.*', '^rve,.*', '^saef,.*', '^samsung,.*', '^samtec,.*', '^sancloud,.*', '^san
+ disk,.*', '^satoz,.*', '^sbs,.*', '^schindler,.*', '^seagate,.*', '^seeed,.*', '^seirobotics,.*', '^semtech,.*', '^senseair,.*', '^sensirion,.*', '^sensortek,.*', '^sercomm,.*', '^sff,.*', '^sgd,.*', '^sgmicro,.*', '^sgx,.*', '^sharp,.*', '^shift,.*', '^shimafuji,.*', '^shineworld,.*', '^shiratech,.*', '^si-en,.*', '^si-linux,.*', '^siemens,.*', '^sifive,.*', '^sigma,.*', '^sii,.*', '^sil,.*', '^silabs,.*', '^silan,.*', '^silead,.*', '^silergy,.*', '^silex-insight,.*', '^siliconfile,.*', '^siliconmitus,.*', '^silvaco,.*', '^simtek,.*', '^sinlinx,.*', '^sinovoip,.*', '^sinowealth,.*', '^sipeed,.*', '^sirf,.*', '^sis,.*', '^sitronix,.*', '^skov,.*', '^skyworks,.*', '^smartlabs,.*', '^smi,.*', '^smsc,.*', '^snps,.*', '^sochip,.*', '^socionext,.*', '^solidrun,.*', '^solomon,.*', '^sony,.*', '^sophgo,.*', '^sourceparts,.*', '^spansion,.*', '^sparkfun,.*', '^spinalhdl,.*', '^sprd,.*', '^square,.*', '^ssi,.*', '^sst,.*', '^sstar,.*', '^st,.*', '^st-ericsson,.*', '^starfive,.*', '^starry,.*
+ ', '^startek,.*', '^starterkit,.*', '^ste,.*', '^stericsson,.*', '^storlink,.*', '^storm,.*', '^storopack,.*', '^summit,.*', '^sunchip,.*', '^sundance,.*', '^sunplus,.*', '^supermicro,.*', '^swir,.*', '^syna,.*', '^synology,.*', '^synopsys,.*', '^tbs,.*', '^tbs-biometrics,.*', '^tcg,.*', '^tcl,.*', '^tcs,.*', '^tdo,.*', '^team-source-display,.*', '^technexion,.*', '^technologic,.*', '^techstar,.*', '^techwell,.*', '^teejet,.*', '^teltonika,.*', '^tempo,.*', '^terasic,.*', '^tesla,.*', '^tfc,.*', '^thead,.*', '^thine,.*', '^thingyjp,.*', '^thundercomm,.*', '^thwc,.*', '^ti,.*', '^tianma,.*', '^tlm,.*', '^tmt,.*', '^topeet,.*', '^topic,.*', '^toppoly,.*', '^topwise,.*', '^toradex,.*', '^toshiba,.*', '^toumaz,.*', '^tpk,.*', '^tplink,.*', '^tpo,.*', '^tq,.*', '^transpeed,.*', '^traverse,.*', '^tronfy,.*', '^tronsmart,.*', '^truly,.*', '^tsd,.*', '^turing,.*', '^tyan,.*', '^u-blox,.*', '^u-boot,.*', '^ubnt,.*', '^ucrobotics,.*', '^udoo,.*', '^ufispace,.*', '^ugoos,.*', '^uniwest,.*', '^
+ upisemi,.*', '^urt,.*', '^usi,.*', '^usr,.*', '^utoo,.*', '^v3,.*', '^vaisala,.*', '^vamrs,.*', '^variscite,.*', '^vdl,.*', '^vertexcom,.*', '^via,.*', '^vialab,.*', '^vicor,.*', '^videostrong,.*', '^virtio,.*', '^virtual,.*', '^vishay,.*', '^visionox,.*', '^vitesse,.*', '^vivante,.*', '^vivax,.*', '^vocore,.*', '^voipac,.*', '^vot,.*', '^vxt,.*', '^wanchanglong,.*', '^wand,.*', '^waveshare,.*', '^wd,.*', '^we,.*', '^welltech,.*', '^wetek,.*', '^wexler,.*', '^whwave,.*', '^wi2wi,.*', '^widora,.*', '^wiligear,.*', '^willsemi,.*', '^winbond,.*', '^wingtech,.*', '^winlink,.*', '^winstar,.*', '^wirelesstag,.*', '^wits,.*', '^wlf,.*', '^wm,.*', '^wobo,.*', '^x-powers,.*', '^xen,.*', '^xes,.*', '^xiaomi,.*', '^xillybus,.*', '^xingbangda,.*', '^xinpeng,.*', '^xiphera,.*', '^xlnx,.*', '^xnano,.*', '^xunlong,.*', '^xylon,.*', '^yadro,.*', '^yamaha,.*', '^yes-optoelectronics,.*', '^yic,.*', '^yiming,.*', '^ylm,.*', '^yna,.*', '^yones-toptech,.*', '^ys,.*', '^ysoft,.*', '^zarlink,.*', '^zealz,
+ .*', '^zeitec,.*', '^zidoo,.*', '^zii,.*', '^zinitix,.*', '^zkmagic,.*', '^zte,.*', '^zyxel,.*', 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/vendor-prefixes.yaml#
 
-> But even outside of this, I think it's a bit semantically off to ask
-> the page_pool to drop references that belong to the application IMO,
-> because those references are not the page_pool's.
+doc reference errors (make refcheckdocs):
 
-Completely agree with you, which is why it was in a callback,
-totally controlled by io_uring.
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240306-mbly-i2c-v3-1-605f866aa4ec@bootlin.com
 
--- 
-Pavel Begunkov
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
 
