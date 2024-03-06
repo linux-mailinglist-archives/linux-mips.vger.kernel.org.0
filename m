@@ -1,171 +1,89 @@
-Return-Path: <linux-mips+bounces-2139-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2137-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74A6887422E
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 22:50:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F15C874145
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 21:17:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 632A41C224B4
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 21:50:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B56DFB20C77
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 20:17:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D3C01B800;
-	Wed,  6 Mar 2024 21:50:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C892140E47;
+	Wed,  6 Mar 2024 20:17:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=risingedge.co.za header.i=@risingedge.co.za header.b="UsPsRiTv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EptFzMaC"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from outgoing6.flk.host-h.net (outgoing6.flk.host-h.net [188.40.0.77])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 591FF2FB2;
-	Wed,  6 Mar 2024 21:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.0.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDCF514036B;
+	Wed,  6 Mar 2024 20:17:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709761832; cv=none; b=BKZmGSkZSms1DFzCMk064FFmOfukHL7cNAyxnnnslhZI9ZzO1X0pHo8H5QxxQIHowHsGmXaqutUGLco0CSpXLWPqonke0+SRK9b8RdaJ/uwf05i7SBN5nRMq3QDfbfVV0FYCxJDJMlHNAZkixjJ5+4BvDLWlOwQ/Mrt4wmknhGo=
+	t=1709756228; cv=none; b=Oy/j/k7gkXMiwb/rsWvn2RhQEgoSa82CUUg3J/CsTyQAQpK2sSHHwwdwVFCArY9A9tN9vxaoUMXDOQXkhpnHAHa7vBB78VCNgn16fFvZ48YSgqqkfRHm6DE7ITteQo4FfMbTu87gEQdOASVP6Hz4iPAjEYlNzjb9vCaaSCqpnN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709761832; c=relaxed/simple;
-	bh=jTLu/CskI1DpNPy9Pf4ohMoqztsAevuZ1PuhJaJV/t4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YjlAnWcR4YDvE7DtHMlvkLwFWZ254TtKMng0ZQ1cLr80xOs4FZDdMq+u04vkeA6HjjFHDuaiZgWHFD5IdhI6Mum6B/Htx/2cD1e+MkumXpbLL0RhXnWmywfXIHQo7kOyWUrz86udT9vq6WFBTTeinBQYNk8CHGIyGySQs0sTNKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=risingedge.co.za; spf=pass smtp.mailfrom=risingedge.co.za; dkim=pass (2048-bit key) header.d=risingedge.co.za header.i=@risingedge.co.za header.b=UsPsRiTv; arc=none smtp.client-ip=188.40.0.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=risingedge.co.za
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=risingedge.co.za
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=risingedge.co.za; s=xneelo; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:reply-to:sender:bcc
-	:content-type; bh=VpSsgGhBR4FyYxEHKoURzmKgm4LkFv8WoyeKAG8oCW8=; b=UsPsRiTvYIn
-	ONbx1DqucGDf7Chz692IAbQp8V9Bl519eP2W4rVQVL0a7P2kiYUdeaC29BCW3kCxo+y/AFMp72mMq
-	K+LlWXSJziXzZg1hFqVNtSep8PQAeYNg+vAyvqU1LTbA8AXtRmPd/+jgEmGVmuVthbXCN5+/l8nYo
-	w87JnPyZOMXid3mB71NXsD6awQZKkNOwdL6JzFhyemSW6u4P2/Sye88T1eYD/Y8yOeBbyKxH79RIf
-	q9jhvFddz0waPbWqHr4ynUn+6BPApoV5ztTpUdH320fTntyURH8QCp1jw1sonrE15sEBBuR2pq/h9
-	BceqntpkkD6+EUXNInookCA==;
-Received: from www31.flk1.host-h.net ([188.40.1.173])
-	by antispam2-flk1.host-h.net with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <justin.swartz@risingedge.co.za>)
-	id 1rhxc4-0088az-M9; Wed, 06 Mar 2024 22:11:41 +0200
-Received: from [41.144.0.96] (helo=localhost.localdomain)
-	by www31.flk1.host-h.net with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <justin.swartz@risingedge.co.za>)
-	id 1rhxc3-0005PR-QU; Wed, 06 Mar 2024 22:11:40 +0200
-From: Justin Swartz <justin.swartz@risingedge.co.za>
-To: =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-	Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+	s=arc-20240116; t=1709756228; c=relaxed/simple;
+	bh=hFozG4fN9WYd6UAq6nV/mir0bNuPwOW+MEPZsdbO1w8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=npSaNC+sO1ysa3svLlivE+NlFuAibpVUbfjEuBKB+Ou9o/f+olS7ILr7vZgzeUNYuQMbQiS+Vz8g6UTkJFLgj8b9lRdSifeytdWbDofYpgIK+D9orTIYEjIvAWiHAlqXSS1f7k5Gu+rB+uH1jsxKwTSVNMJfE+toEj9crgSfWv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EptFzMaC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34917C433F1;
+	Wed,  6 Mar 2024 20:17:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709756227;
+	bh=hFozG4fN9WYd6UAq6nV/mir0bNuPwOW+MEPZsdbO1w8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EptFzMaCRsRKcLJ0IxclDn7BxasTbKGc3cfy3tYEdyg7nCujmodoZxisIyznyZZj8
+	 R3RnsPO0675JLqf8jnaWo0mFTXcD7OdRKnePU5nRylDy9Ho2XkArI//n074mcDLFvK
+	 l4TqP2zATyYHWEBkekRxptnCKYZfnrWDReqsHnmVgGvLq8P6Qlr2qmdyjVq/OELLzv
+	 YZS8ZTtWH+DuFvzwNNzmICEaJ80/p8WJfmzStbodNSr1pTo1FiFbRWvp4y07qEetSn
+	 GwSNfwjnO8lvtJQXtvnPiFwRvtM7rPuvcfLpDbIDaPkdwp9pkzepkjGmt34K7nygfv
+	 W1U2iuBR5lx5g==
+Date: Wed, 6 Mar 2024 14:17:05 -0600
+From: Rob Herring <robh@kernel.org>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
 	Rob Herring <robh+dt@kernel.org>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Justin Swartz <justin.swartz@risingedge.co.za>,
-	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: [PATCH 2/2] mips: dts: ralink: mt7621: add serial1 and serial2 nodes
-Date: Wed,  6 Mar 2024 22:10:44 +0200
-Message-Id: <20240306201045.1475-2-justin.swartz@risingedge.co.za>
-In-Reply-To: <20240306201045.1475-1-justin.swartz@risingedge.co.za>
-References: <20240306201045.1475-1-justin.swartz@risingedge.co.za>
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Andi Shyti <andi.shyti@kernel.org>, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v3 01/11] dt-bindings: i2c: nomadik: add
+ mobileye,eyeq5-i2c bindings and example
+Message-ID: <170975622448.581932.10085481250061070322.robh@kernel.org>
+References: <20240306-mbly-i2c-v3-0-605f866aa4ec@bootlin.com>
+ <20240306-mbly-i2c-v3-1-605f866aa4ec@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: justin.swartz@risingedge.co.za
-X-Virus-Scanned: Clear
-X-SpamExperts-Domain: risingedge.co.za
-X-SpamExperts-Username: 
-Authentication-Results: host-h.net; auth=pass (login) smtp.auth=@risingedge.co.za
-X-SpamExperts-Outgoing-Class: ham
-X-SpamExperts-Outgoing-Evidence: SB/global_tokens (0.00758473274125)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT8C6SK0vybqcYHmQCnhqJHcPUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5wCPRB8bAzJcv2cv+UqiTTc2+CpNcmBnO4XM3Sck4bwNogU
- WCl1nkLBzZX0KuJ9bXiS85Z42w/+2OBolTNFbPomXFWCX8oNdggW7HE9XDTdSejrkEpbuUvwMvHx
- 3T+KSG//gbuP7hnUK8NQdLwsVWKIFDZRrTGv3rxiw9tFrqFSCFNiLZt/QXQnOBRD+jq1HsKsDh/6
- Srgk2K3gr1VBfJbChkYH6fbrypLNrde+UooQVNLReLErukdelEOHUIpaBbp5GdnsN8+UvimwMinK
- 0+Txhz2u9qvrL2PODYgMZQApJXOjDLkqunZ9NcY2bHZn7CfFscMZZf3sCkN20I5vMh4akiObI7Kj
- vK7X04QEin24qbfMFd8eGjnYW8aSH5qj4ujh/13psIvqSqJFa1CcANErDW/w69saM9prk3jNnHtn
- nuEt/J9wDZeQfiNOYsLDFBdwYt2XtlLzy7G7T4kla0JNnAWQx3FS11bhwUa9HCIwKB+TroNcRY33
- oNmH4nRQzHQazgY7lmveanvOdQzf6IMJ3345q/s6ySNrGnXycmhg3BNVdpEcm8g/6PJN7TvsruKC
- n3oZFShGuGVczvnnMQuyLtBcNrQxKZYuPe8bdCyw79zlPbqLQkZr26Lcxdvj8cqI+CogZdOhX7v3
- ClXzrmMECwtAGwNe0eOvXAXd2nqZdzIUka7Uq615Mik1qzcz30/jNv+A51L2swh0gYW0eVWShle6
- F/kpBdN+oWjoATjEFDwcaiz0R34rhTN+GTbl4uS+pZovX9cex7Ac4fawcerGI7TrGXpM/B/M0BZd
- PfIU1BX7pZc1sE3vsz58auH/srM2fgZ9JmgLbj7sqoEiwv7LCxIiAE5ODMnmwjvj2589zjbyZCiM
- WpBpW8YvoIIqmZcWhL/r/eFjMjJnMHeiAPOVK0T+c9pM0FteOLwuqFxkZtxbXpCgbiKBsA+Ddi6m
- awd1jemntr2PrMOTF1fDnHo5A9JQxMw0XtBqT5kbx7zuprmKeJENT1oiQUtfU17WEZPRHu1+r6ov
- Q/IKaojN7gdb+Glhdb8DP7Iz3Z0Qa+VGiF/lfNRtaK1t4SnssY938wKgOC3c9GkW+OmRHU05XGuW
- g+VcQ3bZb7F7k2CvWvw8dbdRONqsj33t0is+SdoOwsk2luZvMBiCgALm/XUigxDlb5qgpERsDkCX
- BgcGBwKlYailDNhe7w2QIanZ/NegoJ79AXUnIiEEoyCaZXMG8LAkbJoO2tY/Mg5ClXd30oBm8U++
- JlmpaolH3tK93iPfP9/LMV7rNH+khni30uZSXlsmCOj6IY0UX9+ySU70SxRmHXLYM3A6BXfvel8O
- EFDbU51Q2S43vcWL3lM20b9wQESc+PquLiZOpxiedGbqX4nzL9MgCv99rrli2UQdOGeuQqV2IVXB
- o/3R5VqqcOmERbjE+D5FzT0EaduWMjGSdmMR5Ch1HY0a4RW7JP9zvdSGB9tIDxuFtg36jUhUk8/b
- P2/Mw1j9lmNQqiIAMR1SEszVdPY4ocfmWv3Fe9Iziczdq+A=
-X-Report-Abuse-To: spam@antispamquarantine.host-h.net
+In-Reply-To: <20240306-mbly-i2c-v3-1-605f866aa4ec@bootlin.com>
 
-Add serial1 and serial2 nodes to define the existence of
-UART1 and UART2.
 
-Signed-off-by: Justin Swartz <justin.swartz@risingedge.co.za>
----
- arch/mips/boot/dts/ralink/mt7621.dtsi | 38 +++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+On Wed, 06 Mar 2024 18:59:21 +0100, Théo Lebrun wrote:
+> Add EyeQ5 bindings to the existing Nomadik I2C dt-bindings. Add the
+> EyeQ5-specific property behind a conditional. Add an example for this
+> compatible.
+> 
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  .../devicetree/bindings/i2c/st,nomadik-i2c.yaml    | 49 +++++++++++++++++++---
+>  1 file changed, 43 insertions(+), 6 deletions(-)
+> 
 
-diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
-index dca415fdd..2069249c8 100644
---- a/arch/mips/boot/dts/ralink/mt7621.dtsi
-+++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
-@@ -128,6 +128,44 @@ serial0: serial@c00 {
- 			pinctrl-0 = <&uart1_pins>;
- 		};
- 
-+		serial1: serial@d00 {
-+			status = "disabled";
-+
-+			compatible = "ns16550a";
-+			reg = <0xd00 0x100>;
-+
-+			clocks = <&sysc MT7621_CLK_UART2>;
-+
-+			interrupt-parent = <&gic>;
-+			interrupts = <GIC_SHARED 27 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			reg-shift = <2>;
-+			reg-io-width = <4>;
-+			no-loopback-test;
-+
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&uart2_pins>;
-+		};
-+
-+		serial2: serial@e00 {
-+			status = "disabled";
-+
-+			compatible = "ns16550a";
-+			reg = <0xe00 0x100>;
-+
-+			clocks = <&sysc MT7621_CLK_UART3>;
-+
-+			interrupt-parent = <&gic>;
-+			interrupts = <GIC_SHARED 28 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			reg-shift = <2>;
-+			reg-io-width = <4>;
-+			no-loopback-test;
-+
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&uart3_pins>;
-+		};
-+
- 		spi0: spi@b00 {
- 			status = "disabled";
- 
--- 
+Reviewed-by: Rob Herring <robh@kernel.org>
 
 
