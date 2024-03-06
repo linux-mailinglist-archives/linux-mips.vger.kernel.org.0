@@ -1,57 +1,57 @@
-Return-Path: <linux-mips+bounces-2118-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2119-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7587873D0C
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 18:14:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B214873D20
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 18:16:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D91B1F237E0
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 17:14:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1096E1F237E0
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 17:16:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30B1C13A89D;
-	Wed,  6 Mar 2024 17:14:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE4FD13B7A9;
+	Wed,  6 Mar 2024 17:16:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="hLcCHGoD";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="r2OKQF+b"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="x/PfoZyL";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="LO7ZB53r"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E704132C0C;
-	Wed,  6 Mar 2024 17:14:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227B8137935;
+	Wed,  6 Mar 2024 17:16:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709745292; cv=none; b=UyimjW+kFB/k48w6HZLRkrZqliWXY4P6ZGn5UliZbwn1CkGqHRYKedi3cakAaYVhcJsh6zcq7+p0W0mSkBK5Mc8EHsud4RJeif+ChMXnKOIPPcAEDYzJ1IFrJ8mGB7QdqvCpt6/1/4SjNmcf6bF7lozIJ0JXP793vmWwnPfP9lk=
+	t=1709745365; cv=none; b=LQUaNH0Z90rvk8ib4sZr3cS3M0OrenfRm0X/RC3IP1VFydezaJAcXVoidsEM1854YR3VAw5Zs9FCp04ahO6pHct+GigtjtKUV/kemQROwQ5xbdCyUcUOVbQPfAYFyzEYAjzr76ZOXJ0WmW/meLD6m+bxrRaFRxSmAVE7E9nLZlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709745292; c=relaxed/simple;
-	bh=Vp8CgcEh2+XD1rrYCq9vFCOWhJV6Gj0UcBPHVO/mG3I=;
+	s=arc-20240116; t=1709745365; c=relaxed/simple;
+	bh=bRnUqxYmz7US3PiJQqP3g2Rv7dTwvUQyVio9ZZY8LKI=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=dqlOdOfS0WvFUpfk6O+hYTbqOXylNZ9WO1bX7dy/p6b4c5HMLQGh2g0KAvRLZnAu2mInePlqi00jjWp59eM4EVFpl+tfsSGrAOV4iGoOsMtNHlMRpS7WPHhFIXrsyEHP7OQTWbqWp424a5sTVvY52LjOmwpi0KcWmuizsftAacg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=hLcCHGoD; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=r2OKQF+b; arc=none smtp.client-ip=193.142.43.55
+	 MIME-Version:Content-Type; b=BKGSRHHJA45if49sPDaRes0/pJC2gGaf/RjFP2vhbePCOuNbWIxO6pDPXJ8n3FA0FwltB11B7l9Y31MxCACoZwarugabDyl8OsAIgUzNauKO3xbZ4Ih1VdDnrHWFikLwnVN17beFfPpnF4/iu7eo9wJb3fdwKKO1pU5mra2o5Ds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=x/PfoZyL; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=LO7ZB53r; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1709745282;
+	s=2020; t=1709745362;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Vp8CgcEh2+XD1rrYCq9vFCOWhJV6Gj0UcBPHVO/mG3I=;
-	b=hLcCHGoDD+mz8ZbKjQeB5xXhhoPU/fE2kNC3hQNfd1ma/u8J/zddviA/HqdTgqdG3oVELs
-	yVs1/hPOwmAOTuivi7bn/t5AdXxzOgCbrjnNic9a7P3UD6t9DbBcDDZEQv9mdkZ5gNQmWv
-	7vbCgHbSJECaiSNWreeRIZmRe08ButQng2h/CGVRcpYXfkeDvP8s8MUjoaw0ejkV2aOd6J
-	GhCC5IBZxfnMkFg4BEdSUxSJkuNwB3HEKPGk8Ts8FrpJGs4nl/zkw473YhePn+NXGru8W6
-	nrJgDF25SYoVsf+V+wjNsd9UV9qsXdOpH54xyHauuhHRCs6LH5fgqRzBOaZs6A==
+	bh=bRnUqxYmz7US3PiJQqP3g2Rv7dTwvUQyVio9ZZY8LKI=;
+	b=x/PfoZyLbxCtOLtwhNHZrAjQXk47NM0qm+OUuf1jx9diwAf0o8l0QrENFNc7WZ0SAcP2iu
+	1E3xoLIGmEOu+hfn0K2lPNJvO3b46lm0DOxOiCCku7OS5SbvnNXS1k5nodzwqKqNeT+fYS
+	RkGr9j0rFdgc3W9X3lUHXNB8NKrW75TUo1Im1jkI3tbQA3Xu8jc29FwyOiIOPW69kZ5gI2
+	HFqFMyez91owlk6gDCMWjLsasDv2ZUcIrJ1LGI20cJzK1UAtbOHuYuAhisXVvC2Z9efSuo
+	0ZgOB7XFUmDTVtjkDtaAS4S/3WfhiuenOt6DaTQZiQk6K2C7Z37rod5h/TSpug==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1709745282;
+	s=2020e; t=1709745362;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Vp8CgcEh2+XD1rrYCq9vFCOWhJV6Gj0UcBPHVO/mG3I=;
-	b=r2OKQF+b39Jbfxu8K1wz0pKjaanVs2rF1CqBPX6sZtQq8gqd45t5LNMwP4WV+c9wRqAr36
-	puBSYY3XgU94OPAA==
+	bh=bRnUqxYmz7US3PiJQqP3g2Rv7dTwvUQyVio9ZZY8LKI=;
+	b=LO7ZB53rWp+dyfEzJwj+/7uvMaejjC+uiKbRNMUR/894l60M5BZc+f+41YHx9zRBlkGwEN
+	IuyIzAJJmTm/VdBw==
 To: Arnd Bergmann <arnd@kernel.org>, Anna-Maria Behnsen
  <anna-maria@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>,
  Kees Cook <keescook@chromium.org>
@@ -77,13 +77,13 @@ Cc: Arnd Bergmann <arnd@arndb.de>, Matt Turner <mattst88@gmail.com>, Vineet
  linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
  linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
  linux-um@lists.infradead.org
-Subject: Re: [PATCH v2 1/3] arch: consolidate existing CONFIG_PAGE_SIZE_*KB
- definitions
-In-Reply-To: <20240306141453.3900574-2-arnd@kernel.org>
+Subject: Re: [PATCH v2 2/3] arch: simplify architecture specific page size
+ configuration
+In-Reply-To: <20240306141453.3900574-3-arnd@kernel.org>
 References: <20240306141453.3900574-1-arnd@kernel.org>
- <20240306141453.3900574-2-arnd@kernel.org>
-Date: Wed, 06 Mar 2024 18:14:42 +0100
-Message-ID: <875xxzuvst.ffs@tglx>
+ <20240306141453.3900574-3-arnd@kernel.org>
+Date: Wed, 06 Mar 2024 18:16:02 +0100
+Message-ID: <8734t3uvql.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -95,10 +95,15 @@ Content-Type: text/plain
 On Wed, Mar 06 2024 at 15:14, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> These four architectures define the same Kconfig symbols for configuring
-> the page size. Move the logic into a common place where it can be shared
-> with all other architectures.
+> arc, arm64, parisc and powerpc all have their own Kconfig symbols
+> in place of the common CONFIG_PAGE_SIZE_4KB symbols. Change these
+> so the common symbols are the ones that are actually used, while
+> leaving the arhcitecture specific ones as the user visible
+> place for configuring it, to avoid breaking user configs.
 >
+> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu> (powerpc32)
+> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+> Acked-by: Helge Deller <deller@gmx.de> # parisc
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
 Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
