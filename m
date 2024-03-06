@@ -1,68 +1,95 @@
-Return-Path: <linux-mips+bounces-2108-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2109-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2693A8736FB
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 13:53:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A67238738A6
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 15:15:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A2F01C20994
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 12:53:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA9301C208A2
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 14:15:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BC5B131740;
-	Wed,  6 Mar 2024 12:52:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4393131E27;
+	Wed,  6 Mar 2024 14:15:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="nI3Im3Yg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LqIp2kZT"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39FED604A7;
-	Wed,  6 Mar 2024 12:52:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9624A5DF27;
+	Wed,  6 Mar 2024 14:15:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709729551; cv=none; b=ckeDR1WJp0Ql6VLvW9mjgsz+sSbKePdq7OTarzVeiQO7SM5U1XFu5AQC6CVKoaDJCdSUtNNQXJwUbB9PIPlesdshtfIdtlH+JL2j/7/arxjXwe7QaZK6OgpxgRpzjleaWfW+aFLXc3DujjcWTiXc8MrNByCTziv56BVEzDJZjag=
+	t=1709734517; cv=none; b=OKiPF+fcKBxeqpBjdCMc+ZrAk0uxqkazXJjUXZSH+9+GDw9oSbOFPJm4S/8GD7ne9i2N8tprqoTHdHu10dMuLMtFCfYXgsyGMchfixzWsPHJCtjI/fy/7LKzUbjh+nuHVIHT5wRbh8nhII4T5LwWW1ItUPx9PKxpBPV9tpYtGTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709729551; c=relaxed/simple;
-	bh=zIR4+6NQBxVdPMNMsvrzIZ5lEI5WKXFkgLUZRMtrSAA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fFyjYRNt6n6K1FOGN6Js4hK3Uuum5vhE8l6F23mZuEnLUPYYLwDidaaDb/z7C74gZ34X+bsQiZ/pXy9VQr2m9Ff3de2kMPwWJOqRRtiywWebXXGjumMHKcYKx0gMy5ikt9gcit9RnoyM4Q9/cxEwkkBJX8CDDJlVjGuN9YFq8W8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=nI3Im3Yg; arc=none smtp.client-ip=115.124.30.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1709729547; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=v9ykK3Ir2S9XnRBkS+wPr5uicn0rIrMXIis4IDU1Mxg=;
-	b=nI3Im3YgU27LyaewkKHMH9pD2BCoc30VdQoFnNgxU8CGhBvHkZ73YXe8ETWAOYZZbYBKZYVsmedoDSDizSg0nq0rCtmLBprQ+AL8PQEEjfjThd9w5/cchVURENSH4hGqxO67We0lDviUZisVtx7uVg5bY5UAWVU8vGCWkihrQmM=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=yaoma@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0W1xhgJL_1709729542;
-Received: from localhost.localdomain(mailfrom:yaoma@linux.alibaba.com fp:SMTPD_---0W1xhgJL_1709729542)
-          by smtp.aliyun-inc.com;
-          Wed, 06 Mar 2024 20:52:25 +0800
-From: Bitao Hu <yaoma@linux.alibaba.com>
-To: dianders@chromium.org,
-	tglx@linutronix.de,
-	liusong@linux.alibaba.com,
-	akpm@linux-foundation.org,
-	pmladek@suse.com,
-	kernelfans@gmail.com,
-	deller@gmx.de,
-	npiggin@gmail.com,
-	tsbogend@alpha.franken.de,
-	James.Bottomley@HansenPartnership.com,
-	jan.kiszka@siemens.com
-Cc: linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1709734517; c=relaxed/simple;
+	bh=6p2hAt3DJTtWEmWkGiNmsPvIqV/lUSZTutyoSUX5wpE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=q9zCiavFJ94/ebGWvPPBfJS5GZL3U5exLP5N19rpPXfSa1nku5TJohqKSpqGliznqwPWH62eFtrBeoedB8nZ3J2OAGPtdAZOMAQr5ckSMb0+sIt5VobTQteAEoJ+h8vWZaS/P5qvFoxO0xRKxnD1a+htfEx1Sdlt8pNa+MsorIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LqIp2kZT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F782C433F1;
+	Wed,  6 Mar 2024 14:15:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709734517;
+	bh=6p2hAt3DJTtWEmWkGiNmsPvIqV/lUSZTutyoSUX5wpE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=LqIp2kZTKEk6BDtlGN9YtFBVHmwGfTij/0yFkUBE5XGhta0eqXHuPZZJ3/MIusuUG
+	 1/ai7edE6AbiuxHWjDBSN5GwSx4jO1RwWivNR0PUtakQUcitU1uJh1+vHWYGSiPn+I
+	 /dBaVrtPErxMiFpuWjYe3LW95xWi64gxsDrEvpuJ8OizSORBDPypoeSsLWyXEUGdmf
+	 fJeiWqTrhJi5qxh7Jya6058wrIYZrMi99CnlK2WXNiIm+MJuSG+gSvaihlsEMOBWt5
+	 2fKuqVl7eyYLUWkzPRqLl2zDWANVIuecGX2Qr2I58K0QII0FK3WksaSXHLTuDSmpIM
+	 TYoPCbqqY5j5A==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Kees Cook <keescook@chromium.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Matt Turner <mattst88@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Guo Ren <guoren@kernel.org>,
+	Brian Cain <bcain@quicinc.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Michal Simek <monstr@monstr.eu>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Helge Deller <deller@gmx.de>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Richard Weinberger <richard@nod.at>,
+	x86@kernel.org,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Jan Kiszka <jan.kiszka@siemens.com>,
+	Kieran Bingham <kbingham@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-kernel@vger.kernel.org,
+	linux-alpha@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org,
 	linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org,
 	linux-parisc@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org,
-	yaoma@linux.alibaba.com
-Subject: [PATCHv12 4/4] watchdog/softlockup: report the most frequent interrupts
-Date: Wed,  6 Mar 2024 20:52:08 +0800
-Message-Id: <20240306125208.71803-5-yaoma@linux.alibaba.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
-In-Reply-To: <20240306125208.71803-1-yaoma@linux.alibaba.com>
-References: <20240306125208.71803-1-yaoma@linux.alibaba.com>
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	linux-um@lists.infradead.org
+Subject: [v2 PATCH 0/3] arch: mm, vdso: consolidate PAGE_SIZE definition
+Date: Wed,  6 Mar 2024 15:14:50 +0100
+Message-Id: <20240306141453.3900574-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -71,206 +98,138 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When the watchdog determines that the current soft lockup is due
-to an interrupt storm based on CPU utilization, reporting the
-most frequent interrupts could be good enough for further
-troubleshooting.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Below is an example of interrupt storm. The call tree does not
-provide useful information, but we can analyze which interrupt
-caused the soft lockup by comparing the counts of interrupts.
+Naresh noticed that the newly added usage of the PAGE_SIZE macro in
+include/vdso/datapage.h introduced a build regression. I had an older
+patch that I revived to have this defined through Kconfig rather than
+through including asm/page.h, which is not allowed in vdso code.
 
-[  638.870231] watchdog: BUG: soft lockup - CPU#9 stuck for 26s! [swapper/9:0]
-[  638.870825] CPU#9 Utilization every 4s during lockup:
-[  638.871194]  #1:   0% system,          0% softirq,   100% hardirq,     0% idle
-[  638.871652]  #2:   0% system,          0% softirq,   100% hardirq,     0% idle
-[  638.872107]  #3:   0% system,          0% softirq,   100% hardirq,     0% idle
-[  638.872563]  #4:   0% system,          0% softirq,   100% hardirq,     0% idle
-[  638.873018]  #5:   0% system,          0% softirq,   100% hardirq,     0% idle
-[  638.873494] CPU#9 Detect HardIRQ Time exceeds 50%. Most frequent HardIRQs:
-[  638.873994]  #1: 330945      irq#7
-[  638.874236]  #2: 31          irq#82
-[  638.874493]  #3: 10          irq#10
-[  638.874744]  #4: 2           irq#89
-[  638.874992]  #5: 1           irq#102
-...
-[  638.875313] Call trace:
-[  638.875315]  __do_softirq+0xa8/0x364
+The vdso patch series now has a temporary workaround, but I still want to
+get this into v6.9 so we can place the hack with CONFIG_PAGE_SIZE
+in the vdso.
 
-Signed-off-by: Bitao Hu <yaoma@linux.alibaba.com>
-Reviewed-by: Liu Song <liusong@linux.alibaba.com>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
----
- kernel/watchdog.c | 115 ++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 111 insertions(+), 4 deletions(-)
+I've applied this to the asm-generic tree already, please let me know if
+there are still remaining issues. It's really close to the merge window
+already, so I'd probably give this a few more days before I send a pull
+request, or defer it to v6.10 if anything goes wrong.
 
-diff --git a/kernel/watchdog.c b/kernel/watchdog.c
-index 69e72d7e461d..c9d49ae8d045 100644
---- a/kernel/watchdog.c
-+++ b/kernel/watchdog.c
-@@ -12,22 +12,25 @@
- 
- #define pr_fmt(fmt) "watchdog: " fmt
- 
--#include <linux/mm.h>
- #include <linux/cpu.h>
--#include <linux/nmi.h>
- #include <linux/init.h>
-+#include <linux/irq.h>
-+#include <linux/irqdesc.h>
- #include <linux/kernel_stat.h>
-+#include <linux/kvm_para.h>
- #include <linux/math64.h>
-+#include <linux/mm.h>
- #include <linux/module.h>
-+#include <linux/nmi.h>
-+#include <linux/stop_machine.h>
- #include <linux/sysctl.h>
- #include <linux/tick.h>
-+
- #include <linux/sched/clock.h>
- #include <linux/sched/debug.h>
- #include <linux/sched/isolation.h>
--#include <linux/stop_machine.h>
- 
- #include <asm/irq_regs.h>
--#include <linux/kvm_para.h>
- 
- static DEFINE_MUTEX(watchdog_mutex);
- 
-@@ -417,13 +420,104 @@ static void print_cpustat(void)
- 	}
- }
- 
-+#define HARDIRQ_PERCENT_THRESH          50
-+#define NUM_HARDIRQ_REPORT              5
-+struct irq_counts {
-+	int irq;
-+	u32 counts;
-+};
-+
-+static DEFINE_PER_CPU(bool, snapshot_taken);
-+
-+/* Tabulate the most frequent interrupts. */
-+static void tabulate_irq_count(struct irq_counts *irq_counts, int irq, u32 counts, int rank)
-+{
-+	int i;
-+	struct irq_counts new_count = {irq, counts};
-+
-+	for (i = 0; i < rank; i++) {
-+		if (counts > irq_counts[i].counts)
-+			swap(new_count, irq_counts[i]);
-+	}
-+}
-+
-+/*
-+ * If the hardirq time exceeds HARDIRQ_PERCENT_THRESH% of the sample_period,
-+ * then the cause of softlockup might be interrupt storm. In this case, it
-+ * would be useful to start interrupt counting.
-+ */
-+static bool need_counting_irqs(void)
-+{
-+	u8 util;
-+	int tail = __this_cpu_read(cpustat_tail);
-+
-+	tail = (tail + NUM_HARDIRQ_REPORT - 1) % NUM_HARDIRQ_REPORT;
-+	util = __this_cpu_read(cpustat_util[tail][STATS_HARDIRQ]);
-+	return util > HARDIRQ_PERCENT_THRESH;
-+}
-+
-+static void start_counting_irqs(void)
-+{
-+	if (!__this_cpu_read(snapshot_taken)) {
-+		kstat_snapshot_irqs();
-+		__this_cpu_write(snapshot_taken, true);
-+	}
-+}
-+
-+static void stop_counting_irqs(void)
-+{
-+	__this_cpu_write(snapshot_taken, false);
-+}
-+
-+static void print_irq_counts(void)
-+{
-+	unsigned int i, count;
-+	struct irq_counts irq_counts_sorted[NUM_HARDIRQ_REPORT] = {
-+		{-1, 0}, {-1, 0}, {-1, 0}, {-1, 0}, {-1, 0}
-+	};
-+
-+	if (__this_cpu_read(snapshot_taken)) {
-+		for_each_active_irq(i) {
-+			count = kstat_get_irq_since_snapshot(i);
-+			tabulate_irq_count(irq_counts_sorted, i, count, NUM_HARDIRQ_REPORT);
-+		}
-+
-+		/*
-+		 * We do not want the "watchdog: " prefix on every line,
-+		 * hence we use "printk" instead of "pr_crit".
-+		 */
-+		printk(KERN_CRIT "CPU#%d Detect HardIRQ Time exceeds %d%%. Most frequent HardIRQs:\n",
-+		       smp_processor_id(), HARDIRQ_PERCENT_THRESH);
-+
-+		for (i = 0; i < NUM_HARDIRQ_REPORT; i++) {
-+			if (irq_counts_sorted[i].irq == -1)
-+				break;
-+
-+			printk(KERN_CRIT "\t#%u: %-10u\tirq#%d\n",
-+			       i + 1, irq_counts_sorted[i].counts,
-+			       irq_counts_sorted[i].irq);
-+		}
-+
-+		/*
-+		 * If the hardirq time is less than HARDIRQ_PERCENT_THRESH% in the last
-+		 * sample_period, then we suspect the interrupt storm might be subsiding.
-+		 */
-+		if (!need_counting_irqs())
-+			stop_counting_irqs();
-+	}
-+}
-+
- static void report_cpu_status(void)
- {
- 	print_cpustat();
-+	print_irq_counts();
- }
- #else
- static inline void update_cpustat(void) { }
- static inline void report_cpu_status(void) { }
-+static inline bool need_counting_irqs(void) { return false; }
-+static inline void start_counting_irqs(void) { }
-+static inline void stop_counting_irqs(void) { }
- #endif
- 
- /*
-@@ -527,6 +621,18 @@ static int is_softlockup(unsigned long touch_ts,
- 			 unsigned long now)
- {
- 	if ((watchdog_enabled & WATCHDOG_SOFTOCKUP_ENABLED) && watchdog_thresh) {
-+		/*
-+		 * If period_ts has not been updated during a sample_period, then
-+		 * in the subsequent few sample_periods, period_ts might also not
-+		 * be updated, which could indicate a potential softlockup. In
-+		 * this case, if we suspect the cause of the potential softlockup
-+		 * might be interrupt storm, then we need to count the interrupts
-+		 * to find which interrupt is storming.
-+		 */
-+		if (time_after_eq(now, period_ts + get_softlockup_thresh() / NUM_SAMPLE_PERIODS) &&
-+		    need_counting_irqs())
-+			start_counting_irqs();
-+
- 		/* Warn about unreasonable delays. */
- 		if (time_after(now, period_ts + get_softlockup_thresh()))
- 			return now - touch_ts;
-@@ -549,6 +655,7 @@ static DEFINE_PER_CPU(struct cpu_stop_work, softlockup_stop_work);
- static int softlockup_fn(void *data)
- {
- 	update_touch_ts();
-+	stop_counting_irqs();
- 	complete(this_cpu_ptr(&softlockup_completion));
- 
- 	return 0;
+Sorry for the delay, I was still waiting to resolve the m68k question,
+but there were no further replies in the end, so I kept my original
+version.
+
+Changes from v1:
+
+ - improve Kconfig help texts
+ - remove an extraneous line in hexagon
+
+      Arnd
+
+Link: https://lore.kernel.org/lkml/CA+G9fYtrXXm_KO9fNPz3XaRxHV7UD_yQp-TEuPQrNRHU+_0W_Q@mail.gmail.com/
+Link: https://lore.kernel.org/all/65dc6c14.170a0220.f4a3f.91dd@mx.google.com/
+Link: https://lore.kernel.org/lkml/20240226161414.2316610-1-arnd@kernel.org/
+
+Arnd Bergmann (3):
+  arch: consolidate existing CONFIG_PAGE_SIZE_*KB definitions
+  arch: simplify architecture specific page size configuration
+  arch: define CONFIG_PAGE_SIZE_*KB on all architectures
+
+ arch/Kconfig                       | 92 +++++++++++++++++++++++++++++-
+ arch/alpha/Kconfig                 |  1 +
+ arch/alpha/include/asm/page.h      |  2 +-
+ arch/arc/Kconfig                   |  3 +
+ arch/arc/include/uapi/asm/page.h   |  6 +-
+ arch/arm/Kconfig                   |  1 +
+ arch/arm/include/asm/page.h        |  2 +-
+ arch/arm64/Kconfig                 | 29 +++++-----
+ arch/arm64/include/asm/page-def.h  |  2 +-
+ arch/csky/Kconfig                  |  1 +
+ arch/csky/include/asm/page.h       |  2 +-
+ arch/hexagon/Kconfig               | 24 ++------
+ arch/hexagon/include/asm/page.h    |  6 +-
+ arch/loongarch/Kconfig             | 21 ++-----
+ arch/loongarch/include/asm/page.h  | 10 +---
+ arch/m68k/Kconfig                  |  3 +
+ arch/m68k/Kconfig.cpu              |  2 +
+ arch/m68k/include/asm/page.h       |  6 +-
+ arch/microblaze/Kconfig            |  1 +
+ arch/microblaze/include/asm/page.h |  2 +-
+ arch/mips/Kconfig                  | 58 ++-----------------
+ arch/mips/include/asm/page.h       | 16 +-----
+ arch/nios2/Kconfig                 |  1 +
+ arch/nios2/include/asm/page.h      |  2 +-
+ arch/openrisc/Kconfig              |  1 +
+ arch/openrisc/include/asm/page.h   |  2 +-
+ arch/parisc/Kconfig                |  3 +
+ arch/parisc/include/asm/page.h     | 10 +---
+ arch/powerpc/Kconfig               | 31 ++--------
+ arch/powerpc/include/asm/page.h    |  2 +-
+ arch/riscv/Kconfig                 |  1 +
+ arch/riscv/include/asm/page.h      |  2 +-
+ arch/s390/Kconfig                  |  1 +
+ arch/s390/include/asm/page.h       |  2 +-
+ arch/sh/include/asm/page.h         | 13 +----
+ arch/sh/mm/Kconfig                 | 42 ++++----------
+ arch/sparc/Kconfig                 |  2 +
+ arch/sparc/include/asm/page_32.h   |  2 +-
+ arch/sparc/include/asm/page_64.h   |  3 +-
+ arch/um/Kconfig                    |  1 +
+ arch/um/include/asm/page.h         |  2 +-
+ arch/x86/Kconfig                   |  1 +
+ arch/x86/include/asm/page_types.h  |  2 +-
+ arch/xtensa/Kconfig                |  1 +
+ arch/xtensa/include/asm/page.h     |  2 +-
+ scripts/gdb/linux/constants.py.in  |  2 +-
+ scripts/gdb/linux/mm.py            |  2 +-
+ 47 files changed, 185 insertions(+), 238 deletions(-)
+
 -- 
-2.37.1 (Apple Git-137.1)
+2.39.2
 
+To: Thomas Gleixner <tglx@linutronix.de>
+To: Vincenzo Frascino <vincenzo.frascino@arm.com>
+To: Kees Cook <keescook@chromium.org>
+To: Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: Vineet Gupta <vgupta@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: Brian Cain <bcain@quicinc.com>
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Michal Simek <monstr@monstr.eu>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Helge Deller <deller@gmx.de>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: Andreas Larsson <andreas@gaisler.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: x86@kernel.org
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc: Jan Kiszka <jan.kiszka@siemens.com>
+Cc: Kieran Bingham <kbingham@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-alpha@vger.kernel.org
+Cc: linux-snps-arc@lists.infradead.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-csky@vger.kernel.org
+Cc: linux-hexagon@vger.kernel.org
+Cc: loongarch@lists.linux.dev
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-openrisc@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-sh@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+Cc: linux-um@lists.infradead.org
 
