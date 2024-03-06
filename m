@@ -1,201 +1,113 @@
-Return-Path: <linux-mips+bounces-2098-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2099-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7065872D10
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 03:54:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EE87872ECB
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 07:24:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3C2AB20C46
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 02:54:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B45C7289FAF
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Mar 2024 06:24:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 996968833;
-	Wed,  6 Mar 2024 02:54:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55CFC1C28F;
+	Wed,  6 Mar 2024 06:24:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FfspCDPZ"
+	dkim=pass (2048-bit key) header.d=quicklyemailsend77.com header.i=@quicklyemailsend77.com header.b="XW7XS/yH"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from quicklyemailsend77.com (quicklyemailsend77.com [57.128.172.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6768E134B2
-	for <linux-mips@vger.kernel.org>; Wed,  6 Mar 2024 02:54:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02AB1BF32
+	for <linux-mips@vger.kernel.org>; Wed,  6 Mar 2024 06:24:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.128.172.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709693684; cv=none; b=BJZLLN9PuLnj0xB4jnebuwM019Nw0OaUciYUlij62pcmYyGclgTudhRk3R8w7tWYs2vd6InBiZJW4zOV5b6lk+MbS7bKnZ9kkpYim8SWIoRj3kyYF4QadoNRHnke8PkTeFas7uWQnn+GSfwo4pYpbKXzjBiCTKgaXVmn/fvlr9c=
+	t=1709706243; cv=none; b=lkK6OpU6kN012ehhfMBbxR408D/rNbPAPrUDVrHMiK6pAY6rbGxA5FTNpoH1C4atwXfLWYCJ/iXykYySyXPeMCHV0Ukj6HGqBtP630gizQLyfat3kshVZ3KgWvXQd1dSUvpn063p++hxy9MsSCFVuWecuZgfbUVwub0lvb2Fw/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709693684; c=relaxed/simple;
-	bh=rCsQQP7xgQocqgJZyTCewEFa4pqWP3bm2r+qfnB/Kdw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nUdWlEFvgC5PBRO5jVcewTpnxXg4zYw/pHPy4UrrfCF8ez4ID89kjHY92kQ6BgqxBUSL58wI6Lcc+ITbqRSWTIEL3B0+8vj7T4bkQJRok3ILwKMOnlPHr1YR5PDKxQx3qsHB5uTJ//Crr2L7eG8q5db6gcbLtCA7V6kyh+aib28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FfspCDPZ; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a2f22bfb4e6so195772566b.0
-        for <linux-mips@vger.kernel.org>; Tue, 05 Mar 2024 18:54:42 -0800 (PST)
+	s=arc-20240116; t=1709706243; c=relaxed/simple;
+	bh=UkCnC3hxyWUR811IY5T5PlAQFaHotSY7xhHSl4hh88I=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hhHvbbWJSFgm8E/Y15f3jH7R6+ZFV4N9WO6hpgfMI95G41pdAzZWI8NZ0bklMU9mg/L9N96rUlk8S3AjrYddKDKh5aAihwqVZcY6gnjdvIIe62GXhULDtnPwR78hfIFM4LNwfYxyMm9wLfFun/lEI9aHhJpxFK7fRYRF1HeYR/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicklyemailsend77.com; spf=pass smtp.mailfrom=quicklyemailsend77.com; dkim=pass (2048-bit key) header.d=quicklyemailsend77.com header.i=@quicklyemailsend77.com header.b=XW7XS/yH; arc=none smtp.client-ip=57.128.172.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicklyemailsend77.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicklyemailsend77.com
+Received: from quicklyemailsend77.com (unknown [185.255.114.95])
+	by quicklyemailsend77.com (Postfix) with ESMTPA id 8D61839779D
+	for <linux-mips@vger.kernel.org>; Wed,  6 Mar 2024 03:51:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 quicklyemailsend77.com 8D61839779D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1709693681; x=1710298481; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eS/C6JRe/LZxR5BB0/jvRViDTj3F8vBSe/WWRgNeFIA=;
-        b=FfspCDPZNW8S7Qf7wpydUp7nMkxbIvbEb4ID33aWUPwHOYvxyiL5+xjC/RGuYky5nJ
-         UXbu0gXQCFwnw50zF+4eh5urGT9USQAfcXkEasQoB328Tb8CE77MTWKT72cElYJh0wiU
-         E8M6JwS0IqClv/VPW882Nqjm33OxkixBNmv2B1WPXiL5arG8e00lOAa7AfTo3NB4z5xf
-         jcpIGJ9Llm7DNOCjp3Jw3H51L90Ew0/AcaBWuTDJDOQG4bdnCW1kNOzZmO/JeKseNhq8
-         VZCcpvUcpy7bLKHJluNjLXFu8vbMbxapQ9qoBZgzezbUe/OupdB7FZDjPG1+nCvQ0lcD
-         tgYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709693681; x=1710298481;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eS/C6JRe/LZxR5BB0/jvRViDTj3F8vBSe/WWRgNeFIA=;
-        b=vTlSxFl3vpsQbBQt6i4obRSigKCMyD54yaIV2SXOz8JVx2AKf0HNFODV5wero5evRA
-         oYXPz8NxOlzf6BNYvGG0Glwr71IoXO1HPmLFm62Z61wtDrg0LCcQevVmQ8ezpU1gG20O
-         xC8QzmPDLbkoxcTlWGduxN5cIBjZre9/4w05aYbMSis4ePymJ4MgkJWBTIuVffPcpRGh
-         N4Uf41XRdLF3ah9mom6HiDW77rGJaKGA91gHtgGr/Wrk/rlrgSEMSIEYqdXluj2ol7qY
-         qON5MhlVWdAfaf+s8MtVbkOD+IegaW3G6+um5irmEnWi95MnUPCKlX2bfdLGIvdrecIl
-         XMTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUULajh/V8VekQJbnEZz509NI+EEXnO80L3goAQ7c4BTxIJPrjatHdZQqc8vyEvdzeJKeXwWxQj/llZDkI97uzUhMjUE+mKDKSquA==
-X-Gm-Message-State: AOJu0YwTMvCnhnSTBgJni2A6mavI6Un9vF2/eTJgC05o+h+azR5Euz1C
-	21M94ezrwQMaed70VB7VqDRGUcg1EqW5nGRpidTgFXqYFM5HIA6IIij6ByPQae/y/gUQBbi0QWx
-	DhSIYUpoYM1XHiFNL1yluzsXcIhwvHt+w7kdF
-X-Google-Smtp-Source: AGHT+IEBCHh5at8F+COR4cGDllSpD2J7JpR+ODcNFG7XI5qKLEW8CmG66IZiYQuqBlnDkixdz9i/+yCx3p+Y4GqdUM0=
-X-Received: by 2002:a17:906:4551:b0:a45:270e:3617 with SMTP id
- s17-20020a170906455100b00a45270e3617mr5771839ejq.27.1709693680497; Tue, 05
- Mar 2024 18:54:40 -0800 (PST)
+	d=quicklyemailsend77.com; s=default; t=1709697105;
+	bh=eefLZdwY5mr6nwq86b3d+rtsxGUHJntuGmXl+R35AcQ=;
+	h=Reply-To:From:To:Subject:Date:From;
+	b=XW7XS/yHxkU0U0sVjIPtLxDqPMANpfd8XMW6RkL7CLcNRqr0rWn+ExkTAbc+5/ipT
+	 T7fzJvDx1DqkirFt3VaxiklFPzgFrNBsulEq1sb6T1QWhzwvntGs1WOKVPENOh1Dae
+	 FcaDCZSjY+39l98XmSc+qzu3+EOiyIgnzG2oRd/x+WV14YmH2HtR1X6PgU/k4oV2Ar
+	 V+8pRhUwAHBOUXBoPKM4F2zRgBzO5oV2XFlaGBoyGk+A3uKHQ5qvIuqb848yV/3rqo
+	 Czyl5pS/J1HK6PPRZpNHyi+/qT7TYCGMEzfhoKgZYs5msq6Z9g1yBQ0F1yL0KxBOY5
+	 AcdvX+i2O0etw==
+Reply-To: joakimlarson@skendiaelevator.com
+From: info@quicklyemailsend77.com
+To: linux-mips@vger.kernel.org
+Subject: =?UTF-8?B?7YyQ66ekIOusuOydmCAyMDI0?=
+Date: 05 Mar 2024 19:51:45 -0800
+Message-ID: <20240305195145.1F827CFB71789D6F@quicklyemailsend77.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-10-almasrymina@google.com> <383c4870-167f-4123-bbf3-928db1463e01@davidwei.uk>
- <CAHS8izP_PzDJVxycwZe_d_x10-SX4=Q-CWpKTjoOQ5dc2NSn3w@mail.gmail.com> <6562b8b0-6cc0-4652-b746-75549801c002@davidwei.uk>
-In-Reply-To: <6562b8b0-6cc0-4652-b746-75549801c002@davidwei.uk>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 5 Mar 2024 18:54:28 -0800
-Message-ID: <CAHS8izOExbcxNSW8b5UUO=Y2se8ypZfaoyoviQvqR-WVZ=7s-g@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v6 09/15] memory-provider: dmabuf devmem
- memory provider
-To: David Wei <dw@davidwei.uk>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Kaiyuan Zhang <kaiyuanz@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+	charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 5, 2024 at 6:47=E2=80=AFPM David Wei <dw@davidwei.uk> wrote:
->
-> On 2024-03-05 18:42, Mina Almasry wrote:
-> > On Tue, Mar 5, 2024 at 6:28=E2=80=AFPM David Wei <dw@davidwei.uk> wrote=
-:
-> >>
-> >> On 2024-03-04 18:01, Mina Almasry wrote:
-> >>> +     if (pool->p.queue)
-> >>> +             binding =3D READ_ONCE(pool->p.queue->binding);
-> >>> +
-> >>> +     if (binding) {
-> >>> +             pool->mp_ops =3D &dmabuf_devmem_ops;
-> >>> +             pool->mp_priv =3D binding;
-> >>> +     }
-> >>
-> >> This is specific to TCP devmem. For ZC Rx we will need something more
-> >> generic to let us pass our own memory provider backend down to the pag=
-e
-> >> pool.
-> >>
-> >> What about storing ops and priv void ptr in struct netdev_rx_queue
-> >> instead? Then we can both use it.
-> >
-> > Yes, this is dmabuf specific, I was thinking you'd define your own
-> > member of netdev_rx_queue, and then add something like this to
-> > page_pool_init:
-> >
-> > +       if (pool->p.queue)
-> > +               io_uring_metadata =3D READ_ONCE(pool->p.queue->io_uring=
-_metadata);
-> > +
-> > +       /* We don't support rx-queues that are configured for both
-> > io_uring & dmabuf binding */
-> > +       BUG_ON(io_uring_metadata && binding);
-> > +
-> > +       if (io_uring_metadata) {
-> > +               pool->mp_ops =3D &io_uring_ops;
-> > +               pool->mp_priv =3D io_uring_metadata;
-> > +       }
-> >
-> > I.e., we share the pool->mp_ops and the pool->mp_priv but we don't
-> > really need to share the same netdev_rx_queue member. For me it's a
-> > dma-buf specific data structure (netdev_dmabuf_binding) and for you
-> > it's something else.
->
-> This adds size to struct netdev_rx_queue and requires checks on whether
-> both are set. There can be thousands of these structs at any one time so
-> if we don't need to add size unnecessarily then that would be best.
->
-> We can disambiguate by comparing &mp_ops and then cast the void ptr to
-> our impl specific objects.
->
-> What do you not like about this approach?
->
 
-I was thinking it leaks page_pool specifics into a generic struct
-unrelated to the page pool like netdev_rx_queue. My mental model is
-that the rx-queue just says that it's bound to a dma-buf/io_uring
-unaware of page_pool internals, and the page pool internals figure out
-what to do from there.
-
-Currently netdev_rx_queue.h doesn't include net/page_pool/types.h for
-example because there is no dependency between netdev_rx_queue &
-page_pool, I think this change would add a dependency.
-
-But I concede it does not matter much AFAICT, I can certainly change
-the netdev_rx_queue to hold the mp_priv & mp_ops directly and include
-net/page_pool/types.h if you prefer that. I'll look into applying this
-change in the next iteration if there are no objections.
-
-> >
-> > page_pool_init() probably needs to validate that the queue is
-> > configured for dma-buf or io_uring but not both. If it's configured
-> > for both then the user is doing something funky we shouldn't support.
-> >
-> > Perhaps I can make the intention clearer by renaming 'binding' to
-> > something more specific to dma-buf like queue->dmabuf_binding, to make
-> > it clear that this is the dma-buf binding and not some other binding
-> > like io_uring?
-> >
+=EC=95=88=EB=85=95=ED=95=98=EC=84=B8=EC=9A=94
+=20
+=EC=8A=A4=EC=9B=A8=EB=8D=B4 =EC=8A=A4=EC=B9=B8=EB=94=94=EC=95=84 =EC=97=98=
+=EB=A0=88=EB=B0=94=ED=86=A0(Skandia Elevato)=EC=97=90=EC=84=9C =EC=98=A8 =
+=EC=9A=94=EC=95=84=ED=82=B4 =EB=9D=BC=EB=A5=B4=EC=86=90(JOAKIM LARSSON) .
+=20
+=EC=9A=B0=EB=A6=AC=EB=8A=94 =EA=B8=B4=EA=B8=89=ED=95=98=EA=B2=8C =EA=B7=80=
+=ED=95=98=EC=9D=98 =EC=A0=9C=ED=92=88=EC=9D=84 =ED=95=84=EC=9A=94=EB=A1=9C =
+=ED=95=98=EB=A9=B0 =EA=B0=80=EB=8A=A5=ED=95=9C =ED=95=9C =EB=B9=A8=EB=A6=AC=
+ =EC=8B=9C=ED=97=98 =EC=A3=BC=EB=AC=B8=EC=9D=84 =ED=95=98=EA=B3=A0 =EC=8B=
+=B6=EC=8A=B5=EB=8B=88=EB=8B=A4. 
+=20
+=EC=98=A8=EB=9D=BC=EC=9D=B8=EC=9C=BC=EB=A1=9C =EC=A0=9C=ED=92=88=EC=97=90 =
+=EB=8C=80=ED=95=9C =EC=A0=95=EB=B3=B4=EB=A5=BC =EC=88=98=EC=A7=91=ED=95=98=
+=EA=B3=A0 =EC=9E=88=EC=8A=B5=EB=8B=88=EB=8B=A4. 
+=20
+=EA=B7=B8=EB=A6=AC=EA=B3=A0 =EB=82=B4 =EB=AA=A8=EC=9E=84=EC=97=90=EC=84=9C =
+=EB=82=98=EB=8A=94 =EC=9A=B0=EB=A6=AC=EA=B0=80 =EB=8B=B9=EC=8B=A0=EC=9D=98 =
+=EC=A0=9C=ED=92=88=EC=9D=84 =EC=A3=BC=EB=AC=B8=ED=95=A0 =EA=B2=83=EC=9D=B4=
+=EB=9D=BC=EA=B3=A0 =EC=83=9D=EA=B0=81=ED=95=A9=EB=8B=88=EB=8B=A4.
+=20
+1. =EC=B5=9C=EC=8B=A0 Catalouge=EB=A5=BC =EB=B3=B4=EB=82=BC =EC=88=98 =EC=
+=9E=88=EC=8A=B5=EB=8B=88=EA=B9=8C?
+=20
+2. =EC=9A=B0=EB=A6=AC=EA=B0=80 =EC=A3=BC=EB=AC=B8=ED=95=A0 =EC=88=98 =EC=9E=
+=88=EB=8A=94 =EC=B5=9C=EC=86=8C=ED=95=9C=EC=9D=80 =EB=AC=B4=EC=97=87=EC=9D=
+=B4=EA=B3=A0 =EB=98=90=ED=95=9C =EA=B8=B0=EA=B0=84=EC=9D=84 =EB=B3=B4=EB=82=
+=B4=EC=8B=AD=EC=8B=9C=EC=98=A4=20
+=EB=B0=8F =EC=A1=B0=EA=B1=B4.
+3. =EC=9A=B0=EB=A6=AC=EA=B0=80 =EC=A3=BC=EB=AC=B8=ED=95=98=EB=8A=94 =EA=B2=
+=BD=EC=9A=B0 =EC=A7=80=EB=B6=88=EC=9D=84 =EC=96=B4=EB=96=BB=EA=B2=8C =ED=95=
+=B4=EA=B2=B0=ED=95=98=EA=B8=B0=EB=A5=BC =EC=9B=90=ED=95=98=EC=8B=AD=EB=8B=
+=88=EA=B9=8C?
+=20
+=EA=B7=80=ED=95=98=EC=9D=98 =ED=9A=8C=EC=8B=A0 =EB=8C=80=EA=B8=B0 =EC=A4=91=
 
 
+Mr Joakim larssonv(=EB=B6=80=EC=82=AC=EC=9E=A5/=EC=98=81=EC=97=85 =EA=B4=80=
+=EB=A6=AC=EC=9E=90)
 
---=20
-Thanks,
-Mina
+=EB=B0=A9=EB=AC=B8=EC=9E=90 =EC=A3=BC=EC=86=8C: Kedumsv=C3=A4gen 14, SE-534=
+ 94 Vara, Sweden
+
+=EB=B0=B0=EC=86=A1 =EC=A3=BC=EC=86=8C: Industriv=C3=A4gen, SE-534 94 Vara, =
+Sweden
+
+joakimlarson@skendiaelevator.com
+https://skandiaelevator.com
+
 
