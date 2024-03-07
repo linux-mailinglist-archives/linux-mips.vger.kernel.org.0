@@ -1,84 +1,184 @@
-Return-Path: <linux-mips+bounces-2155-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2156-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAD7F875419
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 17:22:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 237A0875441
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 17:37:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71ADE1F23DE0
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 16:22:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC5C71F2148E
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 16:37:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF12412FB16;
-	Thu,  7 Mar 2024 16:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80FC012F399;
+	Thu,  7 Mar 2024 16:37:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fJ80NUNi"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A67161E878;
-	Thu,  7 Mar 2024 16:21:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0811DA27;
+	Thu,  7 Mar 2024 16:37:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709828513; cv=none; b=szWAYOjRimaCdJyMDVn3J00MTd04Pu42UU+YzmST22kBIKXz0cvH6yWbw/58ZVGAjFMuZhQl9v6TwDhTV+NiKAxhcXOykcTwHf/RHawFHNcpZdyI/U8+d0e4FJTAvuPKLYAG5/rq+wZbw1VGb7s9yivYBoqC7kKweqonT4ty32c=
+	t=1709829426; cv=none; b=gz4S7HRZK0OgIC/ZSZ3d+VREBuzuNlRBuvE5OCoZIPinFp343q0/LGExwQzT7Ad0F5sYUXXlHp2wc3J7qjMrOrMb3xdoUNJuFV76iq3zYWXSk+xPOSR0s1HeoJN6L6tzPSJVfepEQ7KbxabS6Fc68i2z+LaHpoJQsjvYiUvuEWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709828513; c=relaxed/simple;
-	bh=6IZfI0/bsHGNTFF4mSjGwdRGMcsWxvZOAvoR8ODH7tk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HG4+QALwu2wSkj2uEnanzn9529e+ILt3pWXh9o80kN2VVlcR/l/A6J4F79izxTFICsnOQidl4lKk7gGxApAPXmOkP2T8BvcAN75zFlKDtwxtqEmpP46MQBkdmqrxX61h2R8ys9nU4bGnaHiXCNktjc/kVU01wA3NqCnMqAzRKWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1riGV3-0003H9-00; Thu, 07 Mar 2024 17:21:41 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 6D4AEC066F; Thu,  7 Mar 2024 17:21:31 +0100 (CET)
-Date: Thu, 7 Mar 2024 17:21:31 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-	John Crispin <john@phrozen.org>,
-	Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Subject: Re: [PATCH v1 1/1] MIPS: ralink: Remove unused of_gpio.h
-Message-ID: <Zenpi9mNGJxfTU11@alpha.franken.de>
-References: <20240304175439.1199865-1-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1709829426; c=relaxed/simple;
+	bh=R7uLcewIPcCbOUA5r2domMq49Hm7h9Eduw6Ebo4E+5A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lBaxzLUE7RElLcvNl0J8In+usCyQPXaFjbVWG/s777WllOJBomAFHTJLJby5Aqb6vcsNXBcWgGthOb31YSCcXElKpGRd8iXAM0vmnwzqWM5xCBBGpChy+L9mZrRDtKaruNDVWT5a9YrA8Ws8qBCl7tMO1kfi7CTIDhGai3nNV1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fJ80NUNi; arc=none smtp.client-ip=209.85.210.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6e445b4f80bso537673a34.0;
+        Thu, 07 Mar 2024 08:37:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709829424; x=1710434224; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DRR3aMrPNTHPyKTnpZBfnYrcMUQU7aCizh88lK2tEOw=;
+        b=fJ80NUNiUmKnSTARnjTsPNUA+JlWDmHIon6TBUJytnwrGpb3Ho8LnEcSKZBuMjS8pZ
+         kkK7dYyY6q0A6TJCJScBkUSANhR0HDzmyxo7ByneSsMPF1zKcD33g7zeNd2QkcNJk4hE
+         rCFOu0JrLrD2MzxwU8V5Tr2N1jk0QLHl71RRFDGbfvkrh8XEwApKOrBAaVpqEMnU3cKL
+         xCeCyQRMiXQoSgfnayXRrygUd5Gpm9jxlm3jvCUGCSpIkslkR7zZEwlEvGJ/Vb0efp3M
+         CXL221ajBI+YbmNUXNAmErdmkTm8vT3fFZ8l34aJLfS+rZTruxBplMNw5NWsOxNQMsPd
+         de0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709829424; x=1710434224;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DRR3aMrPNTHPyKTnpZBfnYrcMUQU7aCizh88lK2tEOw=;
+        b=q4x/t3VelqAANEIZEu8tsY58Mk7gePb8sMshdYARdlcLlBVK4t1gtiPOonQcSSzihx
+         OmpLmy/Y+9WvH2fTg8f1Z2xzww7qb1ZUHzANZ+SDuNpXxQMfkx2DsG+u/dLX3EcYqi8s
+         l15j0rdF1xEwxwkbBRFAd0ReS2W/Xt3SmlWz9E6wfbu6N+LjLepoSCbiHbPBeNM8Gt2H
+         ToP7sLzVt8zQP+tzbMXr2C6AfQLwmsofIWkLInsoaV9rDxVomIdosIUq5aBxlbEJzgXK
+         IxqTC0KwT8wUNyKoCG+emBKITP5t8EOq3Dkva2ZzHGFEfkLQXRyfg8kl81LK0GIK9/U7
+         bu9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWq8/uoQgSNSqhGH5YrjXF98LYVxv3OG+rU/+Qd4hAGz1dVsWbkoPhwWoSv/9Xfp70lKBYg1Db+kHfTO19daLgVF6B8UrGYBzrZlS/sHvGGbmhlND4GU2pIqx7IKzmlH0Ql+1ika9fPI2LiObdPJgVsW5AYt9nkyzFRJu8aT2zNaoyudQ8=
+X-Gm-Message-State: AOJu0YwYoVnuI5NTQSYOddKuIrNmIuWXqKUYfUzx3wHcgnK/94RCjNgh
+	eopK9LETkx9IxLj9bv2UDOyqr5y4aJnZ+KtqXW1Axvoaf9X8iBPw+3J1nz6cEqQ0FZPXX5FEIAw
+	A1sImKMut1/cprNwrTPYFRS/MCsg=
+X-Google-Smtp-Source: AGHT+IFJQktXHafepx7m2ZI9QAsBmwKMITqcJJIw//kIMZ1qNUrVo2cXeWwX3DelxvQp+xNWB9FVPEmJ0rR4dSgR1Bg=
+X-Received: by 2002:a05:6871:782:b0:21e:e5db:7964 with SMTP id
+ o2-20020a056871078200b0021ee5db7964mr370234oap.23.1709829423970; Thu, 07 Mar
+ 2024 08:37:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240304175439.1199865-1-andriy.shevchenko@linux.intel.com>
+References: <20240306201045.1475-1-justin.swartz@risingedge.co.za>
+ <20240306201045.1475-2-justin.swartz@risingedge.co.za> <CAMhs-H9WyQZsvEvCfUcZ0_eU8--EzxEmaxR50wdRFDGP3E64ZQ@mail.gmail.com>
+ <13e3063facfea3407dba23b74b0a56db@risingedge.co.za>
+In-Reply-To: <13e3063facfea3407dba23b74b0a56db@risingedge.co.za>
+From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date: Thu, 7 Mar 2024 17:36:51 +0100
+Message-ID: <CAMhs-H_eUKm7C40oCzuKwwEMZAcOJ-g4MghAfkGAmxRM0AXPUw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] mips: dts: ralink: mt7621: add serial1 and serial2 nodes
+To: Justin Swartz <justin.swartz@risingedge.co.za>
+Cc: =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-mips@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 04, 2024 at 07:54:39PM +0200, Andy Shevchenko wrote:
-> of_gpio.h is deprecated and subject to remove.
-> The driver doesn't use it, simply remove the unused header.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  arch/mips/ralink/timer.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/mips/ralink/timer.c b/arch/mips/ralink/timer.c
-> index fc503679a93d..8b485cbe854e 100644
-> --- a/arch/mips/ralink/timer.c
-> +++ b/arch/mips/ralink/timer.c
-> @@ -9,7 +9,6 @@
->  #include <linux/platform_device.h>
->  #include <linux/interrupt.h>
->  #include <linux/timer.h>
-> -#include <linux/of_gpio.h>
->  #include <linux/clk.h>
->  
->  #include <asm/mach-ralink/ralink_regs.h>
-> -- 
-> 2.43.0.rc1.1.gbec44491f096
+Hi Justin,
 
-applied to mips-next.
+On Thu, Mar 7, 2024 at 4:15=E2=80=AFPM Justin Swartz
+<justin.swartz@risingedge.co.za> wrote:
+>
+> Hi Sergio
+>
+> On 2024-03-07 12:04, Sergio Paracuellos wrote:
+> > Hi Justin,
+> >
+> > On Wed, Mar 6, 2024 at 9:11=E2=80=AFPM Justin Swartz
+> > <justin.swartz@risingedge.co.za> wrote:
+> >>
+> >> Add serial1 and serial2 nodes to define the existence of
+> >> UART1 and UART2.
+> >>
+> >> Signed-off-by: Justin Swartz <justin.swartz@risingedge.co.za>
+> >> ---
+> >>  arch/mips/boot/dts/ralink/mt7621.dtsi | 38
+> >> +++++++++++++++++++++++++++
+> >>  1 file changed, 38 insertions(+)
+> >>
+> >> diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi
+> >> b/arch/mips/boot/dts/ralink/mt7621.dtsi
+> >> index dca415fdd..2069249c8 100644
+> >> --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
+> >> +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
+> >> @@ -128,6 +128,44 @@ serial0: serial@c00 {
+> >>                         pinctrl-0 =3D <&uart1_pins>;
+> >>                 };
+> >>
+> >> +               serial1: serial@d00 {
+> >> +                       status =3D "disabled";
+> >> +
+> >> +                       compatible =3D "ns16550a";
+> >> +                       reg =3D <0xd00 0x100>;
+> >> +
+> >> +                       clocks =3D <&sysc MT7621_CLK_UART2>;
+> >> +
+> >> +                       interrupt-parent =3D <&gic>;
+> >> +                       interrupts =3D <GIC_SHARED 27
+> >> IRQ_TYPE_LEVEL_HIGH>;
+> >> +
+> >> +                       reg-shift =3D <2>;
+> >> +                       reg-io-width =3D <4>;
+> >> +                       no-loopback-test;
+> >> +
+> >> +                       pinctrl-names =3D "default";
+> >> +                       pinctrl-0 =3D <&uart2_pins>;
+> >> +               };
+> >> +
+> >> +               serial2: serial@e00 {
+> >> +                       status =3D "disabled";
+> >> +
+> >> +                       compatible =3D "ns16550a";
+> >> +                       reg =3D <0xe00 0x100>;
+> >> +
+> >> +                       clocks =3D <&sysc MT7621_CLK_UART3>;
+> >> +
+> >> +                       interrupt-parent =3D <&gic>;
+> >> +                       interrupts =3D <GIC_SHARED 28
+> >> IRQ_TYPE_LEVEL_HIGH>;
+> >> +
+> >> +                       reg-shift =3D <2>;
+> >> +                       reg-io-width =3D <4>;
+> >> +                       no-loopback-test;
+> >> +
+> >> +                       pinctrl-names =3D "default";
+> >> +                       pinctrl-0 =3D <&uart3_pins>;
+> >> +               };
+> >> +
+> >
+> > Please follow the preferred order for properties described in dts
+> > coding style [0]. I know that there is some mess around the properties
+> > order in some nodes with the current dtsi file but we did not have
+> > coding style before and now we have it, so I think we should follow it
+> > at least for new additions.
+>
+> No problem. I see you've already "Acked-by" patch 1 (adding pinctrl
+> properties to serial0) of this set, so would it be a better move to
+> submit a new patch set that would look something like:
+>
+>   1. add pinctrl-name and pinctrl-0 to serial0 [no changes from what I
+> sent]
+>   2. reorder serial0 properties according to the DTS style guidelines
+>   3. add serial1 and serial2 with the correct property order
 
-Thomas.
+This would be ok, thank you.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Best regards,
+    Sergio Paracuellos
 
