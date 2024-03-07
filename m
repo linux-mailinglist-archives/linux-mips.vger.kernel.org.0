@@ -1,189 +1,136 @@
-Return-Path: <linux-mips+bounces-2157-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2158-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 435BC875531
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 18:31:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 006E387568F
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 20:05:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A805F1F22500
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 17:31:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AECFF281D8A
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 19:05:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5082D130E21;
-	Thu,  7 Mar 2024 17:31:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F708135A66;
+	Thu,  7 Mar 2024 19:05:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="JXWx3fcS"
+	dkim=pass (2048-bit key) header.d=risingedge.co.za header.i=@risingedge.co.za header.b="RUnSDqyl"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from outgoing1.flk.host-h.net (outgoing1.flk.host-h.net [188.40.0.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39861130AF1;
-	Thu,  7 Mar 2024 17:31:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FAEC84A2B;
+	Thu,  7 Mar 2024 19:05:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.0.86
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709832706; cv=none; b=RRnSRX1waA97wAXiTMwUvE7ST/2XdbaQq2u7kSnEBfmhjbp/X20ZUm6oQTvTi7ml22mI5DTKHEFM0W4tWhwHeYXI6aFQLMsz5l4NyzSor1O0+8VxO9URrpjJmlAKM4e99tI30deVh84bOkzTcM35nz8OYYBrZDDdV6ZLKLQhaRY=
+	t=1709838318; cv=none; b=G3XQx/O3oSuXQCQFFuYEffOCV+jC4vg6nxsE8rHIXMVZlxi1q+xlJuo3/ozWldRHMnAKnhmgwPVvMHfNQNcADhIOAoiJg6ZJSUT9DpuEIXx5P3IhS1Vu0t7Qz6ouSMFxhGaVTWlBntLGeZfm4Th6H0Pswhw9kk8UQxIbEsTOLYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709832706; c=relaxed/simple;
-	bh=Pw1wjnfdkstP4sMjq/SqSIfAkxHM4ROpPhW1adlHMZI=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=MDWyNvEjUmqvPxv7Uaq5B2Vz3L76Z4uIx5LL6iFzhA/P/jST/DGfDUVj2d6oVCo463fCad9k7jifgRkBum7kL7BaJaVM1MTlACkNz1cQofWGYkzaXe9vF/XOYeaJVUTKxgwyzyrH/xV1fECr/YkISD2KrQE3DQ2Jsz7ubFuZcw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=JXWx3fcS; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1709838318; c=relaxed/simple;
+	bh=o/INtSf7uMcj8vPennDZ0N+2MzVAu0gQN1w02VcOF4c=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=HsZ6b3Uwq+iOV6ALxP+ndci9LA6KImYWJRxyiUid6m0SP0k+igKbRwA+KeAY0m4hME+1hYWTLK9fQsz9WzhcMROLJs8I7EXiP9N3MKy8721Zlv82llmI0FdL6Ce9hq++ibymoNKIw7jKfvjGb50wIRjGV6NGkiv7jZEsV2DYvf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=risingedge.co.za; spf=pass smtp.mailfrom=risingedge.co.za; dkim=pass (2048-bit key) header.d=risingedge.co.za header.i=@risingedge.co.za header.b=RUnSDqyl; arc=none smtp.client-ip=188.40.0.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=risingedge.co.za
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=risingedge.co.za
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=6GKHuULFobI/veCzO71hJuFZMvHW2DBWIwJthjIFZt0=; b=JXWx3fcSvqEd2usjf0tQN1DMCi
-	vSO6xR4WJptmR2KKeHQgwZrwN8Kcxo2SsAwQYU3GqG1uUhHegfI3SUUIcj3xuPPVcnq4qvvd9Z59E
-	QEXIJexwsh/xmTHCzcD+vFT4djVEoZUoeVEOEWDbhnGjDhNOexCanK8oqtsXqubWrWGy58R7eCA5a
-	KMkwOmTd6RBHYUW7MOdrUMkaxa0IBDN9EMKZ1xegBgTvPlxJM2R9eO51SJIrfnnNNvBIZE0Kisxb1
-	7MM1fiEoUnsAibMICY+p3wL4QPlBDDx84amzwvLXj1OsBgSDB7e/8IGpBSO57JhZs1rwQ14crw6Zx
-	jCusX5Yw==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1riHZL-000J8N-R9; Thu, 07 Mar 2024 18:30:11 +0100
-Received: from [77.58.94.13] (helo=localhost.localdomain)
-	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1riHZI-0034Od-1I;
-	Thu, 07 Mar 2024 18:30:08 +0100
-Subject: Re: [PATCH bpf-next RESEND v2 1/2] bpf: Take return from
- set_memory_ro() into account with bpf_prog_lock_ro()
-To: Christophe Leroy <christophe.leroy@csgroup.eu>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Russell King <linux@armlinux.org.uk>,
- Puranjay Mohan <puranjay12@gmail.com>, Tiezhu Yang <yangtiezhu@loongson.cn>,
- Hengqi Chen <hengqi.chen@gmail.com>, Huacai Chen <chenhuacai@kernel.org>,
- WANG Xuerui <kernel@xen0n.name>,
- Johan Almbladh <johan.almbladh@anyfinetworks.com>,
- Paul Burton <paulburton@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Ilya Leoshkevich <iii@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, "David S. Miller"
- <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
- Wang YanQing <udknight@gmail.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>
-Cc: bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
- netdev@vger.kernel.org,
- "linux-hardening @ vger . kernel . org" <linux-hardening@vger.kernel.org>,
- Kees Cook <keescook@chromium.org>
-References: <8f3b3823cce2177e5912ff5f2f11381a16db07db.1709279661.git.christophe.leroy@csgroup.eu>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <093da237-50c1-5898-1637-7a9a84e1076c@iogearbox.net>
-Date: Thu, 7 Mar 2024 18:30:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	d=risingedge.co.za; s=xneelo; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:reply-to:sender:bcc
+	:content-type; bh=uNgnMVsULIy7vFE3ILTyIURmP3dMNjG/ZGbjuQtikzw=; b=RUnSDqyl7+r
+	qakUnibDug6JA7EsMfSwcvkkpgmHhWUHr9yNIdu987R1ReBgjLL4tdzpuJkdGUGo1pfaWyex2A4yr
+	j7SC/uUXVyEWA+U3OSCw2g5Br69PWQy7IhE2XGmaJtxIhENJy/C71PeMUXUtr5YWgY2JYDbLwm1+z
+	a5GGpyPLH6GKrXtS95c37/KrwWlsiFOP3vSqoOaMpu0cf4gXzjAQvYuRefq9ed1duoInA7DMlnW2F
+	9RJNOm8AJoYVo/Zm/3E2v7Un8fWXrQzX31vHA8WhsxTkJgNC3kcEjfYlFkrFIxe7IwrVbaprAxRhI
+	pjpg4VuHeeFR8EAYQGmqtiQ==;
+Received: from www31.flk1.host-h.net ([188.40.1.173])
+	by antispam3-flk1.host-h.net with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <justin.swartz@risingedge.co.za>)
+	id 1riJ37-00Cs1y-CW; Thu, 07 Mar 2024 21:05:06 +0200
+Received: from [41.144.0.96] (helo=localhost.localdomain)
+	by www31.flk1.host-h.net with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <justin.swartz@risingedge.co.za>)
+	id 1riJ35-0007Za-Ju; Thu, 07 Mar 2024 21:05:00 +0200
+From: Justin Swartz <justin.swartz@risingedge.co.za>
+To: =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+	Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Justin Swartz <justin.swartz@risingedge.co.za>,
+	linux-mips@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: [PATCH v2 1/3] mips: dts: ralink: mt7621: associate uart1_pins with serial0
+Date: Thu,  7 Mar 2024 21:04:05 +0200
+Message-Id: <20240307190408.23443-1-justin.swartz@risingedge.co.za>
+In-Reply-To: <CAMhs-H_eUKm7C40oCzuKwwEMZAcOJ-g4MghAfkGAmxRM0AXPUw@mail.gmail.com>
+References: <CAMhs-H_eUKm7C40oCzuKwwEMZAcOJ-g4MghAfkGAmxRM0AXPUw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <8f3b3823cce2177e5912ff5f2f11381a16db07db.1709279661.git.christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27207/Thu Mar  7 10:27:12 2024)
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: justin.swartz@risingedge.co.za
+X-Virus-Scanned: Clear
+X-SpamExperts-Domain: risingedge.co.za
+X-SpamExperts-Username: 
+Authentication-Results: host-h.net; auth=pass (login) smtp.auth=@risingedge.co.za
+X-SpamExperts-Outgoing-Class: ham
+X-SpamExperts-Outgoing-Evidence: Combined (0.02)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT+2dkIiVgdeIwrfJZUlzfSoPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5wCPRB8bAzJcv2cv+UqiTTc2+CpNcmBnO4XM3Sck4bwNogU
+ WCl1nkLBzZX0KuJ9bXiS85Z42w/+2OBolTNFbPomXFWCX8oNdggW7HE9XDTdSejrkEpbuUvwMvHx
+ 3T+KSG//gbuP7hnUK8NQdLwsVWKIFDZRrTGv3rxiw9tFrqFSCFNiLZt/QXQnOBRD+jq1HsKsDh/6
+ Srgk2K3gr1VBfJbChkYH6fbrypLNrde+UooQVNLReLErukdelEOHUIpaBbp5GdnsN8+UvimwMinK
+ 0+Txhz2u9qvrL2PODYgMZQApJXOjDLkqunZ9NcY2bHZn7CfFscMZZf3sCkN20I5vMh4akiObI7Kj
+ vK7X04QEin24qbfMFd8eGjnYW8aSH5qj4ujh/13psIvqSqJFa1CcANErDW/w69saM9prk3jNnHtn
+ nuEt/J9wDZeQfiNOYsLDFBdwYt2XtlLzy7G7T4kla0JNnAWQx3FS11bhwUa9HCIwKB+TroNcRY33
+ oNmH4nRQzHQazgY7lmveanvOdQzf6IMJ3345q/s6ySNrGnXycmhg3DrczAD1WVolgcSeHb4aFR6o
+ naNQbqJUPRwZtKOTN8gOLtBcNrQxKZYuPe8bdCyw79zlPbqLQkZr26Lcxdvj8cqI+CogZdOhX7v3
+ ClXzrmMENhJLl6MBfhzHVBR0wHQZxzIUka7Uq615Mik1qzcz30+tdk6yIuh9K7v+Nq0Cm3JVhle6
+ F/kpBdN+oWjoATjEFDwcaiz0R34rhTN+GTbl4uS+pZovX9cex7Ac4fawcerGI7TrGXpM/B/M0BZd
+ PfIU1BX7pZc1sE3vsz58auH/srM2fgZ9JmgLbj7sqoEiwv7LCxIiAE5ODMnmwjvj2589zjbyZCiM
+ WpBpW8YvoIIqmZcWhL/r/eFjMjJnMHeiAPOVAT1rE1/vP68Bb4z3v3h3gCdXrv2+9GnNX30LKqXb
+ fwFKgm/rnYBl+Mj5KqOl6Jzub/f3QhLRbOgisvi5VU9eNBtgo6zjiatjNO/pnMCjuIvXs/AyV/Ns
+ URB/R+FlEHyAzksgfaRvdgw0WK34QWnzHHMcN6qoXPjenLhIOF1oeRYbjF1Hp647mOWoQlc3hL3c
+ dBMSQgQtiTUcJp5roVy0aUu4QpSck7G+GMKyAf/5Ohx4u/m4iBmYb1/LCV4/EuVHup06w3Vwxf9C
+ F7D6LKKRTfdjzQ6YC7Heg3Xf7O1TOd6RcY/MXB8eEq3bCN2QohZvyS03iBmgsz450Kmjd3fGV1W8
+ G8QuHm3zVXLA16qJoSUoBquXd20U5QRJeq08E+NlIbtf63VNbf0lrvssY+k7AHGi1NevGWTo2+h8
+ Lhk4HCeZR7ymlGVRtthBJ2y8A5arx6JItKpFaUNPGMMlvbMX0nyK1NiAJ0y2Qvvn6ds6mor35w4f
+ SfHzQbABJfgy21HclcZkPRq7NhoxyMwqi8Q23Rgadfh5T5n5D4OHHpbEIgsllZKWnzc5M5WlNtVJ
+ qo05MS+4ayUpOtEhdxekWDmK9g==
+X-Report-Abuse-To: spam@antispamquarantine.host-h.net
 
-On 3/1/24 8:57 AM, Christophe Leroy wrote:
-> set_memory_ro() can fail, leaving memory unprotected.
-> 
-> Check its return and take it into account as an error.
-> 
-> Link: https://github.com/KSPP/linux/issues/7
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: linux-hardening@vger.kernel.org <linux-hardening@vger.kernel.org>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> ---
-> Sorry for the resend, I forgot to flag patch 2 as bpf-next
-> 
-> Note: next patch is autonomous, it is sent as a follow-up of this one to minimize risk of conflict on filter.h because the two changes are too close to each other.
-> 
-> v2: No modification (Just added link in patch message), patchwork discarded this series due to failed test of s390 but it seems unrelated, see https://lore.kernel.org/bpf/wvd5gzde5ejc2rzsbrtwqyof56uw5ea3rxntfrxtkdabzcuwt6@w7iczzhmay2i/T/#m2e61446f42d5dc3d78f2e0e8b7a783f15cfb109d
-> ---
->   include/linux/filter.h | 5 +++--
->   kernel/bpf/core.c      | 4 +++-
->   kernel/bpf/verifier.c  | 4 +++-
->   3 files changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/filter.h b/include/linux/filter.h
-> index 36cc29a2934c..7dd59bccaeec 100644
-> --- a/include/linux/filter.h
-> +++ b/include/linux/filter.h
-> @@ -884,14 +884,15 @@ bpf_ctx_narrow_access_offset(u32 off, u32 size, u32 size_default)
->   
->   #define bpf_classic_proglen(fprog) (fprog->len * sizeof(fprog->filter[0]))
->   
-> -static inline void bpf_prog_lock_ro(struct bpf_prog *fp)
-> +static inline int __must_check bpf_prog_lock_ro(struct bpf_prog *fp)
->   {
->   #ifndef CONFIG_BPF_JIT_ALWAYS_ON
->   	if (!fp->jited) {
->   		set_vm_flush_reset_perms(fp);
-> -		set_memory_ro((unsigned long)fp, fp->pages);
-> +		return set_memory_ro((unsigned long)fp, fp->pages);
->   	}
->   #endif
-> +	return 0;
->   }
->   
->   static inline void bpf_jit_binary_lock_ro(struct bpf_binary_header *hdr)
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 71c459a51d9e..c49619ef55d0 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2392,7 +2392,9 @@ struct bpf_prog *bpf_prog_select_runtime(struct bpf_prog *fp, int *err)
->   	}
->   
->   finalize:
-> -	bpf_prog_lock_ro(fp);
-> +	*err = bpf_prog_lock_ro(fp);
-> +	if (*err)
-> +		return fp;
->   
->   	/* The tail call compatibility check can only be done at
->   	 * this late stage as we need to determine, if we deal
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 1c34b91b9583..6ec134f76a11 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -19096,7 +19096,9 @@ static int jit_subprogs(struct bpf_verifier_env *env)
->   	 * bpf_prog_load will add the kallsyms for the main program.
->   	 */
->   	for (i = 1; i < env->subprog_cnt; i++) {
-> -		bpf_prog_lock_ro(func[i]);
-> +		err = bpf_prog_lock_ro(func[i]);
-> +		if (err)
-> +			goto out_free;
+Add missing pinctrl-name and pinctrl-0 properties to declare
+that the uart1_pins group is associated with serial0.
 
-How does the error path take out the subprogs from kallsyms in your case? Suppose some of
-the loop iterations succeed before we hit an error. I believe the subprogs still exist in
-kallsyms here.
+Signed-off-by: Justin Swartz <justin.swartz@risingedge.co.za>
+---
+ arch/mips/boot/dts/ralink/mt7621.dtsi | 3 +++
+ 1 file changed, 3 insertions(+)
 
->   		bpf_prog_kallsyms_add(func[i]);
->   	}
->   
-> 
+diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
+index 35a10258f..dca415fdd 100644
+--- a/arch/mips/boot/dts/ralink/mt7621.dtsi
++++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
+@@ -123,6 +123,9 @@ serial0: serial@c00 {
+ 			reg-shift = <2>;
+ 			reg-io-width = <4>;
+ 			no-loopback-test;
++
++			pinctrl-names = "default";
++			pinctrl-0 = <&uart1_pins>;
+ 		};
+ 
+ 		spi0: spi@b00 {
+-- 
 
 
