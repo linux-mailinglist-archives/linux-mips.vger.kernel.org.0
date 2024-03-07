@@ -1,184 +1,189 @@
-Return-Path: <linux-mips+bounces-2156-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2157-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 237A0875441
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 17:37:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 435BC875531
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 18:31:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC5C71F2148E
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 16:37:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A805F1F22500
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 17:31:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80FC012F399;
-	Thu,  7 Mar 2024 16:37:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5082D130E21;
+	Thu,  7 Mar 2024 17:31:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fJ80NUNi"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="JXWx3fcS"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0811DA27;
-	Thu,  7 Mar 2024 16:37:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39861130AF1;
+	Thu,  7 Mar 2024 17:31:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709829426; cv=none; b=gz4S7HRZK0OgIC/ZSZ3d+VREBuzuNlRBuvE5OCoZIPinFp343q0/LGExwQzT7Ad0F5sYUXXlHp2wc3J7qjMrOrMb3xdoUNJuFV76iq3zYWXSk+xPOSR0s1HeoJN6L6tzPSJVfepEQ7KbxabS6Fc68i2z+LaHpoJQsjvYiUvuEWg=
+	t=1709832706; cv=none; b=RRnSRX1waA97wAXiTMwUvE7ST/2XdbaQq2u7kSnEBfmhjbp/X20ZUm6oQTvTi7ml22mI5DTKHEFM0W4tWhwHeYXI6aFQLMsz5l4NyzSor1O0+8VxO9URrpjJmlAKM4e99tI30deVh84bOkzTcM35nz8OYYBrZDDdV6ZLKLQhaRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709829426; c=relaxed/simple;
-	bh=R7uLcewIPcCbOUA5r2domMq49Hm7h9Eduw6Ebo4E+5A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lBaxzLUE7RElLcvNl0J8In+usCyQPXaFjbVWG/s777WllOJBomAFHTJLJby5Aqb6vcsNXBcWgGthOb31YSCcXElKpGRd8iXAM0vmnwzqWM5xCBBGpChy+L9mZrRDtKaruNDVWT5a9YrA8Ws8qBCl7tMO1kfi7CTIDhGai3nNV1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fJ80NUNi; arc=none smtp.client-ip=209.85.210.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6e445b4f80bso537673a34.0;
-        Thu, 07 Mar 2024 08:37:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709829424; x=1710434224; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DRR3aMrPNTHPyKTnpZBfnYrcMUQU7aCizh88lK2tEOw=;
-        b=fJ80NUNiUmKnSTARnjTsPNUA+JlWDmHIon6TBUJytnwrGpb3Ho8LnEcSKZBuMjS8pZ
-         kkK7dYyY6q0A6TJCJScBkUSANhR0HDzmyxo7ByneSsMPF1zKcD33g7zeNd2QkcNJk4hE
-         rCFOu0JrLrD2MzxwU8V5Tr2N1jk0QLHl71RRFDGbfvkrh8XEwApKOrBAaVpqEMnU3cKL
-         xCeCyQRMiXQoSgfnayXRrygUd5Gpm9jxlm3jvCUGCSpIkslkR7zZEwlEvGJ/Vb0efp3M
-         CXL221ajBI+YbmNUXNAmErdmkTm8vT3fFZ8l34aJLfS+rZTruxBplMNw5NWsOxNQMsPd
-         de0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709829424; x=1710434224;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DRR3aMrPNTHPyKTnpZBfnYrcMUQU7aCizh88lK2tEOw=;
-        b=q4x/t3VelqAANEIZEu8tsY58Mk7gePb8sMshdYARdlcLlBVK4t1gtiPOonQcSSzihx
-         OmpLmy/Y+9WvH2fTg8f1Z2xzww7qb1ZUHzANZ+SDuNpXxQMfkx2DsG+u/dLX3EcYqi8s
-         l15j0rdF1xEwxwkbBRFAd0ReS2W/Xt3SmlWz9E6wfbu6N+LjLepoSCbiHbPBeNM8Gt2H
-         ToP7sLzVt8zQP+tzbMXr2C6AfQLwmsofIWkLInsoaV9rDxVomIdosIUq5aBxlbEJzgXK
-         IxqTC0KwT8wUNyKoCG+emBKITP5t8EOq3Dkva2ZzHGFEfkLQXRyfg8kl81LK0GIK9/U7
-         bu9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWq8/uoQgSNSqhGH5YrjXF98LYVxv3OG+rU/+Qd4hAGz1dVsWbkoPhwWoSv/9Xfp70lKBYg1Db+kHfTO19daLgVF6B8UrGYBzrZlS/sHvGGbmhlND4GU2pIqx7IKzmlH0Ql+1ika9fPI2LiObdPJgVsW5AYt9nkyzFRJu8aT2zNaoyudQ8=
-X-Gm-Message-State: AOJu0YwYoVnuI5NTQSYOddKuIrNmIuWXqKUYfUzx3wHcgnK/94RCjNgh
-	eopK9LETkx9IxLj9bv2UDOyqr5y4aJnZ+KtqXW1Axvoaf9X8iBPw+3J1nz6cEqQ0FZPXX5FEIAw
-	A1sImKMut1/cprNwrTPYFRS/MCsg=
-X-Google-Smtp-Source: AGHT+IFJQktXHafepx7m2ZI9QAsBmwKMITqcJJIw//kIMZ1qNUrVo2cXeWwX3DelxvQp+xNWB9FVPEmJ0rR4dSgR1Bg=
-X-Received: by 2002:a05:6871:782:b0:21e:e5db:7964 with SMTP id
- o2-20020a056871078200b0021ee5db7964mr370234oap.23.1709829423970; Thu, 07 Mar
- 2024 08:37:03 -0800 (PST)
+	s=arc-20240116; t=1709832706; c=relaxed/simple;
+	bh=Pw1wjnfdkstP4sMjq/SqSIfAkxHM4ROpPhW1adlHMZI=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=MDWyNvEjUmqvPxv7Uaq5B2Vz3L76Z4uIx5LL6iFzhA/P/jST/DGfDUVj2d6oVCo463fCad9k7jifgRkBum7kL7BaJaVM1MTlACkNz1cQofWGYkzaXe9vF/XOYeaJVUTKxgwyzyrH/xV1fECr/YkISD2KrQE3DQ2Jsz7ubFuZcw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=JXWx3fcS; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=6GKHuULFobI/veCzO71hJuFZMvHW2DBWIwJthjIFZt0=; b=JXWx3fcSvqEd2usjf0tQN1DMCi
+	vSO6xR4WJptmR2KKeHQgwZrwN8Kcxo2SsAwQYU3GqG1uUhHegfI3SUUIcj3xuPPVcnq4qvvd9Z59E
+	QEXIJexwsh/xmTHCzcD+vFT4djVEoZUoeVEOEWDbhnGjDhNOexCanK8oqtsXqubWrWGy58R7eCA5a
+	KMkwOmTd6RBHYUW7MOdrUMkaxa0IBDN9EMKZ1xegBgTvPlxJM2R9eO51SJIrfnnNNvBIZE0Kisxb1
+	7MM1fiEoUnsAibMICY+p3wL4QPlBDDx84amzwvLXj1OsBgSDB7e/8IGpBSO57JhZs1rwQ14crw6Zx
+	jCusX5Yw==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1riHZL-000J8N-R9; Thu, 07 Mar 2024 18:30:11 +0100
+Received: from [77.58.94.13] (helo=localhost.localdomain)
+	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1riHZI-0034Od-1I;
+	Thu, 07 Mar 2024 18:30:08 +0100
+Subject: Re: [PATCH bpf-next RESEND v2 1/2] bpf: Take return from
+ set_memory_ro() into account with bpf_prog_lock_ro()
+To: Christophe Leroy <christophe.leroy@csgroup.eu>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Russell King <linux@armlinux.org.uk>,
+ Puranjay Mohan <puranjay12@gmail.com>, Tiezhu Yang <yangtiezhu@loongson.cn>,
+ Hengqi Chen <hengqi.chen@gmail.com>, Huacai Chen <chenhuacai@kernel.org>,
+ WANG Xuerui <kernel@xen0n.name>,
+ Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+ Paul Burton <paulburton@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Ilya Leoshkevich <iii@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>, "David S. Miller"
+ <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
+ Wang YanQing <udknight@gmail.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>
+Cc: bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+ netdev@vger.kernel.org,
+ "linux-hardening @ vger . kernel . org" <linux-hardening@vger.kernel.org>,
+ Kees Cook <keescook@chromium.org>
+References: <8f3b3823cce2177e5912ff5f2f11381a16db07db.1709279661.git.christophe.leroy@csgroup.eu>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <093da237-50c1-5898-1637-7a9a84e1076c@iogearbox.net>
+Date: Thu, 7 Mar 2024 18:30:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240306201045.1475-1-justin.swartz@risingedge.co.za>
- <20240306201045.1475-2-justin.swartz@risingedge.co.za> <CAMhs-H9WyQZsvEvCfUcZ0_eU8--EzxEmaxR50wdRFDGP3E64ZQ@mail.gmail.com>
- <13e3063facfea3407dba23b74b0a56db@risingedge.co.za>
-In-Reply-To: <13e3063facfea3407dba23b74b0a56db@risingedge.co.za>
-From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date: Thu, 7 Mar 2024 17:36:51 +0100
-Message-ID: <CAMhs-H_eUKm7C40oCzuKwwEMZAcOJ-g4MghAfkGAmxRM0AXPUw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] mips: dts: ralink: mt7621: add serial1 and serial2 nodes
-To: Justin Swartz <justin.swartz@risingedge.co.za>
-Cc: =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-mips@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <8f3b3823cce2177e5912ff5f2f11381a16db07db.1709279661.git.christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27207/Thu Mar  7 10:27:12 2024)
 
-Hi Justin,
+On 3/1/24 8:57 AM, Christophe Leroy wrote:
+> set_memory_ro() can fail, leaving memory unprotected.
+> 
+> Check its return and take it into account as an error.
+> 
+> Link: https://github.com/KSPP/linux/issues/7
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: linux-hardening@vger.kernel.org <linux-hardening@vger.kernel.org>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> ---
+> Sorry for the resend, I forgot to flag patch 2 as bpf-next
+> 
+> Note: next patch is autonomous, it is sent as a follow-up of this one to minimize risk of conflict on filter.h because the two changes are too close to each other.
+> 
+> v2: No modification (Just added link in patch message), patchwork discarded this series due to failed test of s390 but it seems unrelated, see https://lore.kernel.org/bpf/wvd5gzde5ejc2rzsbrtwqyof56uw5ea3rxntfrxtkdabzcuwt6@w7iczzhmay2i/T/#m2e61446f42d5dc3d78f2e0e8b7a783f15cfb109d
+> ---
+>   include/linux/filter.h | 5 +++--
+>   kernel/bpf/core.c      | 4 +++-
+>   kernel/bpf/verifier.c  | 4 +++-
+>   3 files changed, 9 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/linux/filter.h b/include/linux/filter.h
+> index 36cc29a2934c..7dd59bccaeec 100644
+> --- a/include/linux/filter.h
+> +++ b/include/linux/filter.h
+> @@ -884,14 +884,15 @@ bpf_ctx_narrow_access_offset(u32 off, u32 size, u32 size_default)
+>   
+>   #define bpf_classic_proglen(fprog) (fprog->len * sizeof(fprog->filter[0]))
+>   
+> -static inline void bpf_prog_lock_ro(struct bpf_prog *fp)
+> +static inline int __must_check bpf_prog_lock_ro(struct bpf_prog *fp)
+>   {
+>   #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+>   	if (!fp->jited) {
+>   		set_vm_flush_reset_perms(fp);
+> -		set_memory_ro((unsigned long)fp, fp->pages);
+> +		return set_memory_ro((unsigned long)fp, fp->pages);
+>   	}
+>   #endif
+> +	return 0;
+>   }
+>   
+>   static inline void bpf_jit_binary_lock_ro(struct bpf_binary_header *hdr)
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 71c459a51d9e..c49619ef55d0 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2392,7 +2392,9 @@ struct bpf_prog *bpf_prog_select_runtime(struct bpf_prog *fp, int *err)
+>   	}
+>   
+>   finalize:
+> -	bpf_prog_lock_ro(fp);
+> +	*err = bpf_prog_lock_ro(fp);
+> +	if (*err)
+> +		return fp;
+>   
+>   	/* The tail call compatibility check can only be done at
+>   	 * this late stage as we need to determine, if we deal
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 1c34b91b9583..6ec134f76a11 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -19096,7 +19096,9 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+>   	 * bpf_prog_load will add the kallsyms for the main program.
+>   	 */
+>   	for (i = 1; i < env->subprog_cnt; i++) {
+> -		bpf_prog_lock_ro(func[i]);
+> +		err = bpf_prog_lock_ro(func[i]);
+> +		if (err)
+> +			goto out_free;
 
-On Thu, Mar 7, 2024 at 4:15=E2=80=AFPM Justin Swartz
-<justin.swartz@risingedge.co.za> wrote:
->
-> Hi Sergio
->
-> On 2024-03-07 12:04, Sergio Paracuellos wrote:
-> > Hi Justin,
-> >
-> > On Wed, Mar 6, 2024 at 9:11=E2=80=AFPM Justin Swartz
-> > <justin.swartz@risingedge.co.za> wrote:
-> >>
-> >> Add serial1 and serial2 nodes to define the existence of
-> >> UART1 and UART2.
-> >>
-> >> Signed-off-by: Justin Swartz <justin.swartz@risingedge.co.za>
-> >> ---
-> >>  arch/mips/boot/dts/ralink/mt7621.dtsi | 38
-> >> +++++++++++++++++++++++++++
-> >>  1 file changed, 38 insertions(+)
-> >>
-> >> diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi
-> >> b/arch/mips/boot/dts/ralink/mt7621.dtsi
-> >> index dca415fdd..2069249c8 100644
-> >> --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
-> >> +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
-> >> @@ -128,6 +128,44 @@ serial0: serial@c00 {
-> >>                         pinctrl-0 =3D <&uart1_pins>;
-> >>                 };
-> >>
-> >> +               serial1: serial@d00 {
-> >> +                       status =3D "disabled";
-> >> +
-> >> +                       compatible =3D "ns16550a";
-> >> +                       reg =3D <0xd00 0x100>;
-> >> +
-> >> +                       clocks =3D <&sysc MT7621_CLK_UART2>;
-> >> +
-> >> +                       interrupt-parent =3D <&gic>;
-> >> +                       interrupts =3D <GIC_SHARED 27
-> >> IRQ_TYPE_LEVEL_HIGH>;
-> >> +
-> >> +                       reg-shift =3D <2>;
-> >> +                       reg-io-width =3D <4>;
-> >> +                       no-loopback-test;
-> >> +
-> >> +                       pinctrl-names =3D "default";
-> >> +                       pinctrl-0 =3D <&uart2_pins>;
-> >> +               };
-> >> +
-> >> +               serial2: serial@e00 {
-> >> +                       status =3D "disabled";
-> >> +
-> >> +                       compatible =3D "ns16550a";
-> >> +                       reg =3D <0xe00 0x100>;
-> >> +
-> >> +                       clocks =3D <&sysc MT7621_CLK_UART3>;
-> >> +
-> >> +                       interrupt-parent =3D <&gic>;
-> >> +                       interrupts =3D <GIC_SHARED 28
-> >> IRQ_TYPE_LEVEL_HIGH>;
-> >> +
-> >> +                       reg-shift =3D <2>;
-> >> +                       reg-io-width =3D <4>;
-> >> +                       no-loopback-test;
-> >> +
-> >> +                       pinctrl-names =3D "default";
-> >> +                       pinctrl-0 =3D <&uart3_pins>;
-> >> +               };
-> >> +
-> >
-> > Please follow the preferred order for properties described in dts
-> > coding style [0]. I know that there is some mess around the properties
-> > order in some nodes with the current dtsi file but we did not have
-> > coding style before and now we have it, so I think we should follow it
-> > at least for new additions.
->
-> No problem. I see you've already "Acked-by" patch 1 (adding pinctrl
-> properties to serial0) of this set, so would it be a better move to
-> submit a new patch set that would look something like:
->
->   1. add pinctrl-name and pinctrl-0 to serial0 [no changes from what I
-> sent]
->   2. reorder serial0 properties according to the DTS style guidelines
->   3. add serial1 and serial2 with the correct property order
+How does the error path take out the subprogs from kallsyms in your case? Suppose some of
+the loop iterations succeed before we hit an error. I believe the subprogs still exist in
+kallsyms here.
 
-This would be ok, thank you.
+>   		bpf_prog_kallsyms_add(func[i]);
+>   	}
+>   
+> 
 
-Best regards,
-    Sergio Paracuellos
 
