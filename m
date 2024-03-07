@@ -1,82 +1,82 @@
-Return-Path: <linux-mips+bounces-2146-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2147-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E9C5874BE8
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 11:08:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05B82874D76
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 12:34:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B4E4F1C20DEB
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 10:08:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 370031C21045
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 11:34:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 249E885284;
-	Thu,  7 Mar 2024 10:04:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DE8512880A;
+	Thu,  7 Mar 2024 11:34:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X5OjH+qj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bBnm/04i"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8743483CAE;
-	Thu,  7 Mar 2024 10:04:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85411292C9;
+	Thu,  7 Mar 2024 11:34:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709805886; cv=none; b=i9GxfsQoUxq0SYKF8QuREdkiHkZlkYAz7xR2+xhi13SG0vjjM8lFRFXtiBRUzeBBR26QrfqA41aI7Ec5OIXa5JMosapu82D5d0MIwEbw/qS2ybrat+bNd2hD98ZHhfI2OuA2g+soha0UC2kFxB0wgPKGUofPApBZ4I1+u3C8qqs=
+	t=1709811243; cv=none; b=tWtUCgZWjqZVAuCGkT5nlAyVMdDNbmG5A+BMVJjxS+BVf/edjjHiddSZhkOI1PV2EoeYeG/xjaewoV1BXravy/8OIObFHCYkWA+2ku3mB9TqYPGcr8DXZGb5so7yLVY7JhJAQMn5EvqqCOC57/nQKbQ6Q6IFvwndpK6j3aCk2dU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709805886; c=relaxed/simple;
-	bh=WFjNa3nUa2rzuGy55gpq6ZUiWUDbWKyxNSUl2tjShI0=;
+	s=arc-20240116; t=1709811243; c=relaxed/simple;
+	bh=hAnNVuxng4LSmgB7omath/lwpxcgnFxLwdyzrf/Vxuc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N5yKbwTiPA15fTEmc8tz+IzXDofp6CRS5QQcf91LK1sebkY6chunjVXJ9/WC6HFpz1VnyXe5OvX5DHjaUmGmqKAt8DwSwPxadsArnSKEyfQGdscwA5T3YgNeMaya0QYwYeO4BMt8Ktaki3998fKvrIBlEF2jv54CxKnh9Rp9Y90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X5OjH+qj; arc=none smtp.client-ip=209.85.210.48
+	 To:Cc:Content-Type; b=he6XSWhqwDjLMi3rEXWfK2kd3C/yFfC6FJxqRZDBQ0KJMFum2343SuwUsqPQb8lGacw0HXQyQmapnjz+9dmSAjHrC7p4BeCIrnVPkAkbS/ft1jeVSITElzqW55yHkgz0bKD1EgKhpF0MBKVkHosW90cLIG9LfKBL/Jy4fznUlNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bBnm/04i; arc=none smtp.client-ip=209.85.161.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-6e4f7c0e723so287083a34.3;
-        Thu, 07 Mar 2024 02:04:44 -0800 (PST)
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-595b3644acbso1058600eaf.1;
+        Thu, 07 Mar 2024 03:34:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709805883; x=1710410683; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709811240; x=1710416040; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xx95w56RGEnqgt7Xz0ZlhIHC5BxWGFuvJi0FDnmldPs=;
-        b=X5OjH+qj48KqrUjGuJGbc/nPmvb54TweHsuY1oRqkGHjsYkcoQ+jAsViqRFs6Fi1EK
-         HzpruZbBBvxegeDvg9+2rBbV+9MgdQ5NRnb7Ix50TPOUPSS9T8Q9kZbdeY7F434dYBta
-         V0Pp6gwQ1PPvju82ZEuCY9bpXfUHzNCoIAfG9Bv5Gr0IDt8MQ7TD3i2oUsi57MSjqi5q
-         bBaW3/NrFHAdHlzMawHYs7H14bJq/lBrEWC/5waIabuETTWqzgXmrvx7+yDw9/AYXpSz
-         NYIZGHkC1czwuGUB8Uaoo/3mg6LNwfekey+eJfPjTaN4N7q46N4B9yY2feTDGRaZmC8k
-         qwaw==
+        bh=XfiN71yjEq06kQnKXoFCj8BeAGC6FOe9WVX5nTE06dw=;
+        b=bBnm/04iRN4trJXsroWW6HcJ3rndAQ/0jl6J+JKl3tjR2erD+aINzTSOh/WOARVbeJ
+         frcFwgUxiDmo04dA03Wl2Nuxx+XFZw+o6nziLUj5oxIDaTfYi1wQBUfdEaDfINQfCpgZ
+         4mcNIE/4pwTKavaRh4hzYTJ8bWCDkTyTE6vbjvn9jfm0XFBQCU5bgTU50Uj8N+UrSeCH
+         CdEa1RR1KhzTNLdPNFxFZe6HvL+OGJiez2spH1KoPhxRxobxU9YqrW4Q1vGXtO9EVoWm
+         Xxpoe2c4ctiGcSwqDwXTEHNtMS9/q611mM8HwrBMmpuQpL4q5oGV7oRVkLJM652ScWF5
+         jM3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709805883; x=1710410683;
+        d=1e100.net; s=20230601; t=1709811240; x=1710416040;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xx95w56RGEnqgt7Xz0ZlhIHC5BxWGFuvJi0FDnmldPs=;
-        b=PN8oalcxHhHlX/SPBDS1ZLCrpcCpy8lETGQXtsfS+N1YxYDGOJT0bHuBfX4+2uKoXQ
-         JgPXPohrMROkhbuwzvRwj/XPz82F/BdoTnpD9eAPzT3VSgIyCPb4Pgou6FujaOOw7ZAi
-         WgIv2WxmiyLMiPlpBCOxAGzz5d6zCu/ig6h38FklJSEA+9M0PSvncFPPZ72aBxbAKJvb
-         9Frfav0kUi4s3VeCJpFlqe0BWiyXJa+RMnP9QOjiJpuB9uovR379i8Ild9Bs9sELqMP3
-         nqrC0uoGdaobZIROgoYblC4i9NzN/Howi2tDPnv5+wuCU2U0fsyp5oM8jYpoVoBJrLv3
-         5WIg==
-X-Forwarded-Encrypted: i=1; AJvYcCUjTNE2MFk/OW6h7PTu0PDSe+lib4bSCRZ5K/PYbeRHqlPJzQCwYlFBE04dNwxieGGn2rjskXifu6nOgQQuSemDgGbglronm0b2S+J5U28cjrictwg2Myrvw05P9IF0u+EW/pR/AMYE8pjinGOadtqOg/UZRgwYS6E2JrpKzrB8xZmIRN8=
-X-Gm-Message-State: AOJu0Yw9v8zuJyz/BslNMc8R2Ru9F18gV9OGEAdsPrQX9Z5MpyaBBYzO
-	Hum/iBOUjU5d9TdGC06PYyqimr33bdIGQMdD1irDYhP8BCh4KXAli21EPx7hW5FhVNnKT892dRR
-	yzczFTNyyOeW5w25KoD3LIIab1tU=
-X-Google-Smtp-Source: AGHT+IGVD3wzaX3Yt+FvOko++C+SVpoj1sdjPBxPgVYX2N06XjupwxcD0RKYjgL/jX1N4ZEi5q0aWnVeEtCsn4tGWZY=
-X-Received: by 2002:a05:6870:1c7:b0:220:cf76:a9b7 with SMTP id
- n7-20020a05687001c700b00220cf76a9b7mr8692531oad.44.1709805883490; Thu, 07 Mar
- 2024 02:04:43 -0800 (PST)
+        bh=XfiN71yjEq06kQnKXoFCj8BeAGC6FOe9WVX5nTE06dw=;
+        b=dSs6LUAON0PViMnUTx1Z/miaxNBhZGsYmKcKu6wVJKWJjV9/Oz15TMRRJCmF00qvfM
+         52lV4ln+bpI9cxtKjvrHItxeJptmDvsRYstmRDsFSvCzvkalAN00o0ZPZEBl0GnP4cca
+         jZSj3TOPuNm1FfvTOp7xWpG/z4qywQ/aE+HM8RGuV+0u1aezMxSp+O6PTJUKQyimUprh
+         viLqmFfmEw8MibQazG65L8oCNhnAIMLZRmSNY5Vm9FPMIiVDTlBawUv85c0kwRJMSjvt
+         2Kh4syJhsG5G+Uryuj1v3IJBRWXqC6BFOwEMbFWXTJEOMeJD0YA6zGKSWWm1YPI6TvXl
+         Op6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWi3zGz+oeDxwuP8JjnqzE6BU9N5eJNfZGKLrc4PaY/0hETjEGp6N7Bm6J3hO19+gcmpIK0QGCLUo80UpwruE1LsEfZzBEQIYPRNN8aFpS7V7VL15X50DE8orugnMAln6tM6S3CFZiPdAzSL2sgKPfoiX3sCZ3wsI4s2NeIc+dieeU7CuQ=
+X-Gm-Message-State: AOJu0YwVOzOVAfo/DWv/cPEcEjPqm0OnysyNah3ZSZ0k/CvueKRHKG/w
+	Vt3zbu9WqsL6K4fib/gFoRKX92c03bkOGucgVO5k4tT2FiCtOaoBvGEAcjDtLup0adQ5zoLZ5Y6
+	i9MawE0RnL12CozHmhZX6VNzbVys=
+X-Google-Smtp-Source: AGHT+IF9nU7Bw5OL1UXfJ/VIJjzxqtaiFExqbxtku03iI/6LOpc+8ghFzU/DzqruvQCOJMPRfluToZmoiQqEG5Q3XkM=
+X-Received: by 2002:a05:6870:1715:b0:221:3ba2:ffef with SMTP id
+ h21-20020a056870171500b002213ba2ffefmr399867oae.14.1709811240638; Thu, 07 Mar
+ 2024 03:34:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240306201045.1475-1-justin.swartz@risingedge.co.za> <20240306201045.1475-2-justin.swartz@risingedge.co.za>
-In-Reply-To: <20240306201045.1475-2-justin.swartz@risingedge.co.za>
+References: <20240306201045.1475-1-justin.swartz@risingedge.co.za>
+In-Reply-To: <20240306201045.1475-1-justin.swartz@risingedge.co.za>
 From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date: Thu, 7 Mar 2024 11:04:31 +0100
-Message-ID: <CAMhs-H9WyQZsvEvCfUcZ0_eU8--EzxEmaxR50wdRFDGP3E64ZQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] mips: dts: ralink: mt7621: add serial1 and serial2 nodes
+Date: Thu, 7 Mar 2024 12:33:48 +0100
+Message-ID: <CAMhs-H9nFA_HKb=8vj+ZESoNKDM8D9UFQmngX+T0Ntamc=5x0g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] mips: dts: ralink: mt7621: associate uart1_pins with serial0
 To: Justin Swartz <justin.swartz@risingedge.co.za>
 Cc: =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>, 
 	Rob Herring <robh+dt@kernel.org>, 
@@ -88,77 +88,19 @@ Cc: =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Justin,
-
 On Wed, Mar 6, 2024 at 9:11=E2=80=AFPM Justin Swartz
 <justin.swartz@risingedge.co.za> wrote:
 >
-> Add serial1 and serial2 nodes to define the existence of
-> UART1 and UART2.
+> Add pinctrl-name and pinctrl-0 properties to declare
+> that the uart1_pins group is associated with serial0.
 >
 > Signed-off-by: Justin Swartz <justin.swartz@risingedge.co.za>
 > ---
->  arch/mips/boot/dts/ralink/mt7621.dtsi | 38 +++++++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
->
-> diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/r=
-alink/mt7621.dtsi
-> index dca415fdd..2069249c8 100644
-> --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
-> +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
-> @@ -128,6 +128,44 @@ serial0: serial@c00 {
->                         pinctrl-0 =3D <&uart1_pins>;
->                 };
->
-> +               serial1: serial@d00 {
-> +                       status =3D "disabled";
-> +
-> +                       compatible =3D "ns16550a";
-> +                       reg =3D <0xd00 0x100>;
-> +
-> +                       clocks =3D <&sysc MT7621_CLK_UART2>;
-> +
-> +                       interrupt-parent =3D <&gic>;
-> +                       interrupts =3D <GIC_SHARED 27 IRQ_TYPE_LEVEL_HIGH=
->;
-> +
-> +                       reg-shift =3D <2>;
-> +                       reg-io-width =3D <4>;
-> +                       no-loopback-test;
-> +
-> +                       pinctrl-names =3D "default";
-> +                       pinctrl-0 =3D <&uart2_pins>;
-> +               };
-> +
-> +               serial2: serial@e00 {
-> +                       status =3D "disabled";
-> +
-> +                       compatible =3D "ns16550a";
-> +                       reg =3D <0xe00 0x100>;
-> +
-> +                       clocks =3D <&sysc MT7621_CLK_UART3>;
-> +
-> +                       interrupt-parent =3D <&gic>;
-> +                       interrupts =3D <GIC_SHARED 28 IRQ_TYPE_LEVEL_HIGH=
->;
-> +
-> +                       reg-shift =3D <2>;
-> +                       reg-io-width =3D <4>;
-> +                       no-loopback-test;
-> +
-> +                       pinctrl-names =3D "default";
-> +                       pinctrl-0 =3D <&uart3_pins>;
-> +               };
-> +
+>  arch/mips/boot/dts/ralink/mt7621.dtsi | 3 +++
+>  1 file changed, 3 insertions(+)
 
-Please follow the preferred order for properties described in dts
-coding style [0]. I know that there is some mess around the properties
-order in some nodes with the current dtsi file but we did not have
-coding style before and now we have it, so I think we should follow it
-at least for new additions.
+Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 
-Best regards,
+Thanks,
     Sergio Paracuellos
-
-[0]: https://docs.kernel.org/devicetree/bindings/dts-coding-style.html
 
