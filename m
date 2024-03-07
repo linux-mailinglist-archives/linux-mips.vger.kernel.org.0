@@ -1,103 +1,164 @@
-Return-Path: <linux-mips+bounces-2145-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2146-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1F9F87494F
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 09:16:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E9C5874BE8
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 11:08:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99DFDB22531
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 08:16:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B4E4F1C20DEB
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 10:08:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 683FB633E5;
-	Thu,  7 Mar 2024 08:15:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 249E885284;
+	Thu,  7 Mar 2024 10:04:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="blvw5orK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X5OjH+qj"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6090C6313B;
-	Thu,  7 Mar 2024 08:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8743483CAE;
+	Thu,  7 Mar 2024 10:04:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709799325; cv=none; b=HGTLjHaqYrmAH9FECmSMnWHzrCtm+7QKVWaYITKbvZ0upTG6Ge77yOJthLjvzU4eYFHTJtvrB1kDfKJJl1c/oYheg657NX2hOEM5Uq65NQPNSbdZhh0nUbLjS5yP2NGa8hwh7YnmTtjg/nSDB6Bqvs/hukRcPmz2I9+SBvSg6dE=
+	t=1709805886; cv=none; b=i9GxfsQoUxq0SYKF8QuREdkiHkZlkYAz7xR2+xhi13SG0vjjM8lFRFXtiBRUzeBBR26QrfqA41aI7Ec5OIXa5JMosapu82D5d0MIwEbw/qS2ybrat+bNd2hD98ZHhfI2OuA2g+soha0UC2kFxB0wgPKGUofPApBZ4I1+u3C8qqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709799325; c=relaxed/simple;
-	bh=ZstXiN8BCb6FOQN96D81OboJCXKA33Stl82Xuecf8cg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=vFCeS7Z5L4cQ4E2+Nap7YXaxLSNTaJ8xiZlQdTLpYtxrjdduSv7fmeb5e2bSw0+EvDDRf9Ta4GhmM4Sjumw6Q19/HjPosZRLvc86MbegenSzmYgiPzfLQ8ZFH0kBKEHbbZ11Nzvx6m+e5FxQSq8WRNv70mOz3y1KDVyM/PT5/TY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=blvw5orK; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 432FE240003;
-	Thu,  7 Mar 2024 08:15:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709799320;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=buhNLZyABPkypJJr6jjWYuCWSEEmx3G3WXbzfi/P7uA=;
-	b=blvw5orKpmVdJ/dB539TbEIfgeahPbmYw365thGcbpUH75juP7CDVqDlaI73HRofGBHhjT
-	rSUx+luK9x/JspZBrKcrQA17WCLNSz4AqQFFOhje2kCoIG1I/Rx1rhE0HEvXz1YROKA7R3
-	bTHZpEQstUB92nTHj4zqd7vFh6Dsz6cSXtz2nAIPajHvOeX79alwbXDAoq3SccCYjjl3Vk
-	b1NPOf8100775Jyc5YgySmD4sMdov+G0yHW3czaj/oKWL8PLvoU2QifgzjNWyA/4ft8Z2E
-	+P10YYalHRf5t+cJEhkC8qsHO0EOsNtCdEwB0BVRKyLC/dcV6m7HnKe3183WTg==
+	s=arc-20240116; t=1709805886; c=relaxed/simple;
+	bh=WFjNa3nUa2rzuGy55gpq6ZUiWUDbWKyxNSUl2tjShI0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=N5yKbwTiPA15fTEmc8tz+IzXDofp6CRS5QQcf91LK1sebkY6chunjVXJ9/WC6HFpz1VnyXe5OvX5DHjaUmGmqKAt8DwSwPxadsArnSKEyfQGdscwA5T3YgNeMaya0QYwYeO4BMt8Ktaki3998fKvrIBlEF2jv54CxKnh9Rp9Y90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X5OjH+qj; arc=none smtp.client-ip=209.85.210.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-6e4f7c0e723so287083a34.3;
+        Thu, 07 Mar 2024 02:04:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709805883; x=1710410683; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xx95w56RGEnqgt7Xz0ZlhIHC5BxWGFuvJi0FDnmldPs=;
+        b=X5OjH+qj48KqrUjGuJGbc/nPmvb54TweHsuY1oRqkGHjsYkcoQ+jAsViqRFs6Fi1EK
+         HzpruZbBBvxegeDvg9+2rBbV+9MgdQ5NRnb7Ix50TPOUPSS9T8Q9kZbdeY7F434dYBta
+         V0Pp6gwQ1PPvju82ZEuCY9bpXfUHzNCoIAfG9Bv5Gr0IDt8MQ7TD3i2oUsi57MSjqi5q
+         bBaW3/NrFHAdHlzMawHYs7H14bJq/lBrEWC/5waIabuETTWqzgXmrvx7+yDw9/AYXpSz
+         NYIZGHkC1czwuGUB8Uaoo/3mg6LNwfekey+eJfPjTaN4N7q46N4B9yY2feTDGRaZmC8k
+         qwaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709805883; x=1710410683;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xx95w56RGEnqgt7Xz0ZlhIHC5BxWGFuvJi0FDnmldPs=;
+        b=PN8oalcxHhHlX/SPBDS1ZLCrpcCpy8lETGQXtsfS+N1YxYDGOJT0bHuBfX4+2uKoXQ
+         JgPXPohrMROkhbuwzvRwj/XPz82F/BdoTnpD9eAPzT3VSgIyCPb4Pgou6FujaOOw7ZAi
+         WgIv2WxmiyLMiPlpBCOxAGzz5d6zCu/ig6h38FklJSEA+9M0PSvncFPPZ72aBxbAKJvb
+         9Frfav0kUi4s3VeCJpFlqe0BWiyXJa+RMnP9QOjiJpuB9uovR379i8Ild9Bs9sELqMP3
+         nqrC0uoGdaobZIROgoYblC4i9NzN/Howi2tDPnv5+wuCU2U0fsyp5oM8jYpoVoBJrLv3
+         5WIg==
+X-Forwarded-Encrypted: i=1; AJvYcCUjTNE2MFk/OW6h7PTu0PDSe+lib4bSCRZ5K/PYbeRHqlPJzQCwYlFBE04dNwxieGGn2rjskXifu6nOgQQuSemDgGbglronm0b2S+J5U28cjrictwg2Myrvw05P9IF0u+EW/pR/AMYE8pjinGOadtqOg/UZRgwYS6E2JrpKzrB8xZmIRN8=
+X-Gm-Message-State: AOJu0Yw9v8zuJyz/BslNMc8R2Ru9F18gV9OGEAdsPrQX9Z5MpyaBBYzO
+	Hum/iBOUjU5d9TdGC06PYyqimr33bdIGQMdD1irDYhP8BCh4KXAli21EPx7hW5FhVNnKT892dRR
+	yzczFTNyyOeW5w25KoD3LIIab1tU=
+X-Google-Smtp-Source: AGHT+IGVD3wzaX3Yt+FvOko++C+SVpoj1sdjPBxPgVYX2N06XjupwxcD0RKYjgL/jX1N4ZEi5q0aWnVeEtCsn4tGWZY=
+X-Received: by 2002:a05:6870:1c7:b0:220:cf76:a9b7 with SMTP id
+ n7-20020a05687001c700b00220cf76a9b7mr8692531oad.44.1709805883490; Thu, 07 Mar
+ 2024 02:04:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20240306201045.1475-1-justin.swartz@risingedge.co.za> <20240306201045.1475-2-justin.swartz@risingedge.co.za>
+In-Reply-To: <20240306201045.1475-2-justin.swartz@risingedge.co.za>
+From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date: Thu, 7 Mar 2024 11:04:31 +0100
+Message-ID: <CAMhs-H9WyQZsvEvCfUcZ0_eU8--EzxEmaxR50wdRFDGP3E64ZQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] mips: dts: ralink: mt7621: add serial1 and serial2 nodes
+To: Justin Swartz <justin.swartz@risingedge.co.za>
+Cc: =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-mips@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 07 Mar 2024 09:15:18 +0100
-Message-Id: <CZND9VGAGS45.210DYP50RTA9F@bootlin.com>
-Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
- <linux-mips@vger.kernel.org>, <linux-clk@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Thomas
- Petazzoni" <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>, <linux-gpio@vger.kernel.org>, "Krzysztof
- Kozlowski" <krzysztof.kozlowski@linaro.org>
-To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, "Gregory
- CLEMENT" <gregory.clement@bootlin.com>, "Michael Turquette"
- <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>, "Linus Walleij"
- <linus.walleij@linaro.org>, =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?=
- <rafal@milecki.pl>, "Philipp Zabel" <p.zabel@pengutronix.de>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v9 0/9] Add support for Mobileye EyeQ5 system controller
-X-Mailer: aerc 0.15.2
-References: <20240301-mbly-clk-v9-0-cbf06eb88708@bootlin.com>
-In-Reply-To: <20240301-mbly-clk-v9-0-cbf06eb88708@bootlin.com>
-X-GND-Sasl: theo.lebrun@bootlin.com
 
-Hello,
+Hi Justin,
 
-On Fri Mar 1, 2024 at 5:22 PM CET, Th=C3=A9o Lebrun wrote:
-> Here again for a new revision of the system-controller on Mobileye
-> EyeQ5. It deals with clk, reset and pinctrl. Drivers are meant to be
-> merged in their respective trees. Each already have their dt-bindings
-> in -next.
+On Wed, Mar 6, 2024 at 9:11=E2=80=AFPM Justin Swartz
+<justin.swartz@risingedge.co.za> wrote:
+>
+> Add serial1 and serial2 nodes to define the existence of
+> UART1 and UART2.
+>
+> Signed-off-by: Justin Swartz <justin.swartz@risingedge.co.za>
+> ---
+>  arch/mips/boot/dts/ralink/mt7621.dtsi | 38 +++++++++++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>
+> diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/r=
+alink/mt7621.dtsi
+> index dca415fdd..2069249c8 100644
+> --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
+> +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
+> @@ -128,6 +128,44 @@ serial0: serial@c00 {
+>                         pinctrl-0 =3D <&uart1_pins>;
+>                 };
+>
+> +               serial1: serial@d00 {
+> +                       status =3D "disabled";
+> +
+> +                       compatible =3D "ns16550a";
+> +                       reg =3D <0xd00 0x100>;
+> +
+> +                       clocks =3D <&sysc MT7621_CLK_UART2>;
+> +
+> +                       interrupt-parent =3D <&gic>;
+> +                       interrupts =3D <GIC_SHARED 27 IRQ_TYPE_LEVEL_HIGH=
+>;
+> +
+> +                       reg-shift =3D <2>;
+> +                       reg-io-width =3D <4>;
+> +                       no-loopback-test;
+> +
+> +                       pinctrl-names =3D "default";
+> +                       pinctrl-0 =3D <&uart2_pins>;
+> +               };
+> +
+> +               serial2: serial@e00 {
+> +                       status =3D "disabled";
+> +
+> +                       compatible =3D "ns16550a";
+> +                       reg =3D <0xe00 0x100>;
+> +
+> +                       clocks =3D <&sysc MT7621_CLK_UART3>;
+> +
+> +                       interrupt-parent =3D <&gic>;
+> +                       interrupts =3D <GIC_SHARED 28 IRQ_TYPE_LEVEL_HIGH=
+>;
+> +
+> +                       reg-shift =3D <2>;
+> +                       reg-io-width =3D <4>;
+> +                       no-loopback-test;
+> +
+> +                       pinctrl-names =3D "default";
+> +                       pinctrl-0 =3D <&uart3_pins>;
+> +               };
+> +
 
-I'd be curious to get the state of mind of the involved maintainers
-about this series?
- - clk, reset, pinctrl: I feel like the three drivers look in good shape
-   now that we've done a few review iterations.
- - MIPS: dt-bindings have been queued in their respective branches so
-   devicetree patches have no reason to change.
+Please follow the preferred order for properties described in dts
+coding style [0]. I know that there is some mess around the properties
+order in some nodes with the current dtsi file but we did not have
+coding style before and now we have it, so I think we should follow it
+at least for new additions.
 
-Can patches be queued before the upcoming merge window?
+Best regards,
+    Sergio Paracuellos
 
-Have a nice day,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+[0]: https://docs.kernel.org/devicetree/bindings/dts-coding-style.html
 
