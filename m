@@ -1,200 +1,121 @@
-Return-Path: <linux-mips+bounces-2148-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2149-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57A30874EB9
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 13:15:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D555D874F2A
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 13:34:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D92241F2300F
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 12:15:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0491A1C23383
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Mar 2024 12:34:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6943412A149;
-	Thu,  7 Mar 2024 12:15:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 142E512B14B;
+	Thu,  7 Mar 2024 12:34:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="m2hV8+Uz"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC444129A7D;
-	Thu,  7 Mar 2024 12:15:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 678111292CD;
+	Thu,  7 Mar 2024 12:34:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709813739; cv=none; b=KPTA8dK7cCg52Bmpo5MmX+2VioQPz3kiPv+WhJu8tFCWRgsXL+BwiwKYFzO59ypyyTGwSI3Ip/Xnk7cxB/XSdQsJ0TcQS7N28uxpcg+qU1A5ewvzFk2MbbWKYCY4eBfw4O4JE637bhSlMaDnkq50c8nfDWd+fnW4SpmZKYVL3PU=
+	t=1709814854; cv=none; b=q9lnFMreDpziGRypK1KILGcPa70m7PVKWYjypoUs0OGANROERInDPwob40yrAPcLR5cidJ0AzGHwQTLrRyYrVlf93kQ+rs9qy768vv6kr2oq+m6GlT1MWUlkSjz/l2WQi6HfggPXPNrTpB1vW6XICi7oYUT6LtyMU9wvWIsstMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709813739; c=relaxed/simple;
-	bh=33Uzy2N/rqj/7YQgQGuWOf/5Tv1toMJF0Qi0AcbhFw0=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=daHia+g5WZ7eODuIVAll5m8QwdGKqk00OLE0IvF8P6SZV7ETbWPIs2RfpKSz6iT7ggoEThqt1pPvRqiq3lSg0uJPztCHDmqMQnoSFsMn4ChBBZ9SznujZovIg76PZ12yj/2cv0iSKnwXhoarG6SjrIUj7nymYXGgpU8EkHdlcF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Tr7Vw2yQsz1Q9QH;
-	Thu,  7 Mar 2024 20:13:28 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7C1EA14059C;
-	Thu,  7 Mar 2024 20:15:27 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Thu, 7 Mar
- 2024 20:15:26 +0800
-Subject: Re: [RFC PATCH net-next v6 05/15] netdev: support binding dma-buf to
- netdevice
-To: Mina Almasry <almasrymina@google.com>
-CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-alpha@vger.kernel.org>,
-	<linux-mips@vger.kernel.org>, <linux-parisc@vger.kernel.org>,
-	<sparclinux@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-media@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Richard
- Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
-	<ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
-	<James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
-	<hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
-	<arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
-	<martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
-	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
-	<john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
-	<sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	David Ahern <dsahern@kernel.org>, Willem de Bruijn
-	<willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, Sumit
- Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=c3=b6nig?=
-	<christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
- Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Shailend Chand
-	<shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel
- Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>, Praveen
- Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>,
-	Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-6-almasrymina@google.com>
- <da42cea9-c169-599e-f087-d38c419e3dab@huawei.com>
- <CAHS8izM7GbvWHrH=h9q0oG0DMU649EjT1udNEW_8F-hGeC15EQ@mail.gmail.com>
- <aa892723-7396-998d-db06-166c28fba1e0@huawei.com>
- <CAHS8izNJFnKGn9nrJ3kRxGwhvjiDey_bfrxQNfsfj=S9hZR_UA@mail.gmail.com>
-From: Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <76266a89-8ec1-6a4c-716b-da422f0b2cd5@huawei.com>
-Date: Thu, 7 Mar 2024 20:15:26 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+	s=arc-20240116; t=1709814854; c=relaxed/simple;
+	bh=A8FmQi+nWttuZkN0OHf+hc97YU7oIRy5k7+znlJGMlI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=fKP66HIDcPfXHGPsU0JkipDg/5RGLq2YWeUE8am3xOhEQu/7tObarZHXNmX707H7b7ua6+apWri1YZrfnza11jgzDfNdBIEoB2kxMnxfepxG0AuCQln3VHbMHw7bi/xswijfy3ymVljb061baJ6QuCgvrh9zznkVtC4aMtBnKh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=m2hV8+Uz; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1709814848;
+	bh=5GCSx/SWwEQN6H1v+rlc6aQIECBTZdtYZCIuJdaUGZc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=m2hV8+UzshtbVo1SMQpGCIZAVMu9h2hQvtpDC9CkF6Ead01MUqjonBYL92rbYu9o5
+	 eONdwUL5JV+qzsPtqxYxcbEZTnxik/VNQnkbfcaMbISw7CbDppUAmAH/9P3sku/f8b
+	 i2LMQgXCW1DJms0NeuRTzJ0tBX4bUIMqKowAPBctWZSTjYyNqR0YILGQIfrcB30lQJ
+	 AxLogULtOaYvLPcYayeLz0xu9HzQh3oaG4608ibo49kkmjQLQ5CoPOkqEhC/05rYgX
+	 JxgCpZfY9Df2KdR0oUWson/F66hS7hXm3iPnnhME1f/unkDf0IfUz0QTmy9qELYv1z
+	 htVjJ1WY+KwZQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tr7yd1VsMz4wc8;
+	Thu,  7 Mar 2024 23:34:01 +1100 (AEDT)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: Arnd Bergmann <arnd@kernel.org>, Anna-Maria Behnsen
+ <anna-maria@linutronix.de>, Thomas Gleixner <tglx@linutronix.de>, Vincenzo
+ Frascino <vincenzo.frascino@arm.com>, Kees Cook <keescook@chromium.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Matt Turner <mattst88@gmail.com>, Vineet
+ Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, Catalin
+ Marinas <catalin.marinas@arm.com>, Guo Ren <guoren@kernel.org>, Brian Cain
+ <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>, Geert
+ Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Helge Deller
+ <deller@gmx.de>, Christophe Leroy <christophe.leroy@csgroup.eu>, Palmer
+ Dabbelt <palmer@dabbelt.com>, John Paul Adrian Glaubitz
+ <glaubitz@physik.fu-berlin.de>, Andreas Larsson <andreas@gaisler.com>,
+ Richard Weinberger <richard@nod.at>, x86@kernel.org, Max Filippov
+ <jcmvbkbc@gmail.com>, Andy Lutomirski <luto@kernel.org>, Jan Kiszka
+ <jan.kiszka@siemens.com>, Kieran Bingham <kbingham@kernel.org>, Andrew
+ Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+ linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+ linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-um@lists.infradead.org
+Subject: Re: [PATCH v2 2/3] arch: simplify architecture specific page size
+ configuration
+In-Reply-To: <20240306141453.3900574-3-arnd@kernel.org>
+References: <20240306141453.3900574-1-arnd@kernel.org>
+ <20240306141453.3900574-3-arnd@kernel.org>
+Date: Thu, 07 Mar 2024 23:34:00 +1100
+Message-ID: <878r2unruv.fsf@mail.lhotse>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAHS8izNJFnKGn9nrJ3kRxGwhvjiDey_bfrxQNfsfj=S9hZR_UA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500005.china.huawei.com (7.185.36.74)
+Content-Type: text/plain
 
-On 2024/3/7 6:10, Mina Almasry wrote:
+Arnd Bergmann <arnd@kernel.org> writes:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> arc, arm64, parisc and powerpc all have their own Kconfig symbols
+> in place of the common CONFIG_PAGE_SIZE_4KB symbols. Change these
+> so the common symbols are the ones that are actually used, while
+> leaving the arhcitecture specific ones as the user visible
+> place for configuring it, to avoid breaking user configs.
+>
+> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu> (powerpc32)
+> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+> Acked-by: Helge Deller <deller@gmx.de> # parisc
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> No changes from v1
+>
+>  arch/arc/Kconfig                  |  3 +++
+>  arch/arc/include/uapi/asm/page.h  |  6 ++----
+>  arch/arm64/Kconfig                | 29 +++++++++++++----------------
+>  arch/arm64/include/asm/page-def.h |  2 +-
+>  arch/parisc/Kconfig               |  3 +++
+>  arch/parisc/include/asm/page.h    | 10 +---------
+>  arch/powerpc/Kconfig              | 31 ++++++-------------------------
+>  arch/powerpc/include/asm/page.h   |  2 +-
+>  scripts/gdb/linux/constants.py.in |  2 +-
+>  scripts/gdb/linux/mm.py           |  2 +-
+>  10 files changed, 32 insertions(+), 58 deletions(-)
 
-...
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
->>>>> +static int netdev_restart_rx_queue(struct net_device *dev, int rxq_idx)
->>>>> +{
->>>>> +     void *new_mem;
->>>>> +     void *old_mem;
->>>>> +     int err;
->>>>> +
->>>>> +     if (!dev || !dev->netdev_ops)
->>>>> +             return -EINVAL;
->>>>> +
->>>>> +     if (!dev->netdev_ops->ndo_queue_stop ||
->>>>> +         !dev->netdev_ops->ndo_queue_mem_free ||
->>>>> +         !dev->netdev_ops->ndo_queue_mem_alloc ||
->>>>> +         !dev->netdev_ops->ndo_queue_start)
->>>>> +             return -EOPNOTSUPP;
->>>>> +
->>>>> +     new_mem = dev->netdev_ops->ndo_queue_mem_alloc(dev, rxq_idx);
->>>>> +     if (!new_mem)
->>>>> +             return -ENOMEM;
->>>>> +
->>>>> +     err = dev->netdev_ops->ndo_queue_stop(dev, rxq_idx, &old_mem);
->>>>> +     if (err)
->>>>> +             goto err_free_new_mem;
->>>>> +
->>>>> +     err = dev->netdev_ops->ndo_queue_start(dev, rxq_idx, new_mem);
->>>>> +     if (err)
->>>>> +             goto err_start_queue;
->>>>> +
->>>>> +     dev->netdev_ops->ndo_queue_mem_free(dev, old_mem);
->>>>> +
->>>>> +     return 0;
->>>>> +
->>>>> +err_start_queue:
->>>>> +     dev->netdev_ops->ndo_queue_start(dev, rxq_idx, old_mem);
->>>>
->>>> It might worth mentioning why queue start with old_mem will always
->>>> success here as the return value seems to be ignored here.
->>>>
->>>
->>> So the old queue, we stopped it, and if we fail to bring up the new
->>> queue, then we want to start the old queue back up to get the queue
->>> back to a workable state.
->>>
->>> I don't see what we can do to recover if restarting the old queue
->>> fails. Seems like it should be a requirement that the driver tries as
->>> much as possible to keep the old queue restartable.
->>
->> Is it possible that we may have the 'old_mem' leaking if the driver
->> fails to restart the old queue? how does the driver handle the
->> firmware cmd failure for ndo_queue_start()? it seems a little
->> tricky to implement it.
->>
-> 
-> I'm not sure what we can do to meaningfully recover from failure to
-> restarting the old queue, except log it so the error is visible. In
-> theory because we have not modifying any queue configurations
-> restarting it would be straight forward, but since it's dealing with
-> hardware then any failures are possible.
-
-Yes, we may need to have a clear semantics of how should the driver
-implement the above interface, for example if the driver should free
-the memory when fail to start a queue or the driver should restart
-the queue when fail to stop a queue? Otherwise we may have different
-driver implementing different behavior.
-
-From the disscusion you mentioned below, does it make senses to
-modeling rdma subsystem by using create_queue/modify_queue/destroy_queue
-semantics instead?
-
-> 
->>>
->>> I can improve this by at least logging or warning if restarting the
->>> old queue fails.
->>
->> Also the semantics of the above function seems odd that it is not
->> only restarting rx queue, but also freeing and allocating memory
->> despite the name only suggests 'restart', I am a litte afraid that
->> it may conflict with future usecae when user only need the
->> 'restart' part, perhaps rename it to a more appropriate name.
->>
-> 
-> Oh, what we want here is just the 'restart' part. However, Jakub
-> mandates that if you restart a queue (or a driver), you do it like
-> this, hence the slightly more complicated implementation.
-> 
-> https://patchwork.kernel.org/project/netdevbpf/patch/20231106024413.2801438-13-almasrymina@google.com/#25590262
-> https://lore.kernel.org/netdev/20230815171638.4c057dcd@kernel.org/
-
-Thanks for the link.
-
-I like david's idea of "a more generic design where H/W queues are created
-and destroyed - e.g., queues unique to a process which makes the cleanup
-so much easier." , but it seems it is a lot of work for networking to
-implement that for now.
-
-> 
+cheers
 
