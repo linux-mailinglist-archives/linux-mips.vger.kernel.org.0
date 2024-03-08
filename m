@@ -1,129 +1,167 @@
-Return-Path: <linux-mips+bounces-2210-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2211-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 068D9876932
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 18:03:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8F3B876966
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 18:14:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 375EE1C22213
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 17:03:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78601B22046
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 17:14:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AA36250F3;
-	Fri,  8 Mar 2024 17:02:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A221F2577B;
+	Fri,  8 Mar 2024 17:13:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=risingedge.co.za header.i=@risingedge.co.za header.b="s3msyLbE"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="awlEQleV"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from outgoing1.flk.host-h.net (outgoing1.flk.host-h.net [188.40.0.86])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F272421E;
-	Fri,  8 Mar 2024 17:01:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.0.86
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCEC828DA5
+	for <linux-mips@vger.kernel.org>; Fri,  8 Mar 2024 17:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709917322; cv=none; b=HOT31gJDPvLicnd0N5YJTmbFR/pNn6N2IcmNYNts8If+L9XdLQtAedV+09wde98yOh1dmrmgev9k/to+I5Dtu97Upgr+buvVMLdXWr2gp7NQiPxhFLYZ2u4vajOZAwSiWGE8SZ6WnRl7cgU86xL5DtY/mgtUNZe4fcD2nEhEPus=
+	t=1709918032; cv=none; b=THa3gfViZA1fynrlwfuUrXBSDEbf2oHUhxxT54mh/15fhmG0hTEnRnYaug+v1On2IWFMb8dHjzE8KPCDzmfV34zczf3aX3ocwB/uZ/tVxn/YMlM7WCKK8ZBt1h+Nk+ZUUl4XlsiawpfzgG0thQIhMc7T7pAHXBoYj4pYjZh6S0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709917322; c=relaxed/simple;
-	bh=AccsSPF0jDJvCAdd9RMQg1UL432jF4z2EPF1mFPu/4U=;
-	h=MIME-Version:Content-Type:Date:From:To:Cc:Subject:In-Reply-To:
-	 References:Message-ID; b=ENiQfir4XRXRFLLVwYv3RU7O+br5UcFDYWjKaAnjZTUbh/S82nmvOKizlTX2BPhNYiZ1ftCqvgtoc1Yib7QEjrepBihHxzl3YZYneaZN1opVN2Ax7YlNJzEJMuabhZGbwF1PwXYFSZIWlgpNFepeiGpd0BRowvX4DlTut6OUNXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=risingedge.co.za; spf=pass smtp.mailfrom=risingedge.co.za; dkim=pass (2048-bit key) header.d=risingedge.co.za header.i=@risingedge.co.za header.b=s3msyLbE; arc=none smtp.client-ip=188.40.0.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=risingedge.co.za
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=risingedge.co.za
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=risingedge.co.za; s=xneelo; h=Message-ID:References:In-Reply-To:Subject:Cc:
-	To:From:Date:Content-Transfer-Encoding:Content-Type:MIME-Version:reply-to:
-	sender:bcc; bh=sRjl7XYl/PGRpGuJTyM07HHols00JQDh+d7SIJ99lF4=; b=s3msyLbEuJDiD1
-	EvIiS5TeOy8LnDzzJMrgZgRlGKJcKbYV2AgR2Y/bu1JpOUYQ++L5Z08crYWeXefo5mALmVz1Lh56p
-	I/cnm3vaL6qCuU9wmTEajKS+/UezYTYsCmAPozFvMhO6E4AvXQhMupgvWykQRI6WdM8oMgi0PHvU7
-	BEptilxZhFeJg1Wtlz21ZnK8vRks+0805gFAxv8/dQ9JaDNZ7JpC+BeaCOl/fl/EPuAh1O2era/+S
-	MMiPzkjZO1ovOdgkrDlQD+tS4Qisrny0YECCPKW6bCrVqzTIbMtxqKmOawvmt26tXoyBM+pguUihr
-	B0+QRQx8JB9pCiEorWSw==;
-Received: from www31.flk1.host-h.net ([188.40.1.173])
-	by antispam3-flk1.host-h.net with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <justin.swartz@risingedge.co.za>)
-	id 1ridbU-006Zrv-Gq; Fri, 08 Mar 2024 19:01:54 +0200
-Received: from roundcubeweb1.flk1.host-h.net ([138.201.244.33] helo=webmail9.konsoleh.co.za)
-	by www31.flk1.host-h.net with esmtpa (Exim 4.92)
-	(envelope-from <justin.swartz@risingedge.co.za>)
-	id 1ridbT-0003Fr-KO; Fri, 08 Mar 2024 19:01:51 +0200
+	s=arc-20240116; t=1709918032; c=relaxed/simple;
+	bh=roMBvLgUN1tKukEBXMcgTKnWog6Eqqm5Kt4rCc4OxnM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NIFWHBtQtKGWN5IrdJEurO8t+APxTfa37V6UScFotw4zPMCWgj+1/fqvFkFEVldtKsZntveVFXqL4js+mXKBuCPvpTDtKR/KT+6DG0En7MG3zOQneZNOf5WGij8JcPP/uTwqeroEdTQ4jTa0SS4IFFGpXEI/sG4LjSC/Qhpoh6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=awlEQleV; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-566e869f631so2826259a12.0
+        for <linux-mips@vger.kernel.org>; Fri, 08 Mar 2024 09:13:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1709918029; x=1710522829; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qK1jns3vULEJfy8OFDSsNxpR6piVHIAeHp2yPIJZNeQ=;
+        b=awlEQleV8xlRsYsb3ldG91uWFd0eXTlfX0sHyivSqKUxFgFy3poY5Q76yPE7kB7yre
+         35d3uksjy4EF+PuVa6UWvij3f2G6Wj6gyBWZOszrqhoXhAXLYh6kwtiRFjHYHV2d50kG
+         ZXwEVPo3Gfwp6vwmpEAV8npFHuyDODxzNbuuJMBaTdZhhi3OLJzgodFdy4H9add5n3IY
+         e71BKAtOWW17gKoxTnC5Hc9OyKhPKo5A1rx/u7j3nBkhLyepjrn/aEZkYTsLFfdgdGaL
+         km9tJUMbA5/Csh/JrogpnbL+REM9bQrE/oP/zK9hkZUPgoUN2WaLY/CfTcqH2HDxUVEv
+         9P8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709918029; x=1710522829;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qK1jns3vULEJfy8OFDSsNxpR6piVHIAeHp2yPIJZNeQ=;
+        b=cq/U8hiGc+GUNyJJ3vSH4bzQ6cc8j0cRUFIIDcK1fziIejm2qIucgKOcyTlobhBAPi
+         BrSfuykDv0n/oOAGJlkUZGWTklfs1nh11OYH4GqEX0pSK3IXnjaU+BdCwuxuujUFGda8
+         y0229h2+dmZ/GCf0/fy2yeZVbYxBz2JjyidA+JOgAj+9OCsvuDG72rI5nxO+kZ2Dk7bi
+         HbwumoEGlylBbGi9AteLki6t6sfk2jjL/XWJGtE8L+UB1gS0CJEhJpcs35CdC3X0dbPh
+         1qu93k1jzDZyfpmjupPGIt/c5VqaZLiskQPZ1hFT8/5ItjNSHBwPKcidZgu0fkGkfa+w
+         DVZg==
+X-Forwarded-Encrypted: i=1; AJvYcCXhhPgc3xgVbR19t4yohnpIn+7vjPGjfczVGpUpswUN5qJ6NzmIHrg0yZMRzY1yPVPrw+VuDf2ua0oPIYX7R16qI6TzTaRlcTYh/g==
+X-Gm-Message-State: AOJu0YyN5aQ3WQ1AVyFyjtFZoOBzbIqpR9kFx2SXuGAx/nOagya6Nrn9
+	sR2f9dwr4quQKNr2C7PKctOBUoxkVcbl3LiHMlery+fIs8gT2Qu81fvqKKo7awE=
+X-Google-Smtp-Source: AGHT+IHh+jGBt7zZqrF3tzGe26VHugYZd2UpdNjYXqM3HAwtD74nVS84faIgE5NU8u/wZqzcHLtbuw==
+X-Received: by 2002:a50:9505:0:b0:568:1b1b:e221 with SMTP id u5-20020a509505000000b005681b1be221mr2397645eda.25.1709918029169;
+        Fri, 08 Mar 2024 09:13:49 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.222.97])
+        by smtp.gmail.com with ESMTPSA id c21-20020aa7df15000000b005682dfd9182sm725756edy.61.2024.03.08.09.13.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Mar 2024 09:13:48 -0800 (PST)
+Message-ID: <eec5be72-e27f-4068-ac7a-566605f3256c@linaro.org>
+Date: Fri, 8 Mar 2024 18:13:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date: Fri, 08 Mar 2024 19:01:51 +0200
-From: Justin Swartz <justin.swartz@risingedge.co.za>
-To: =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>
-Cc: Sergio Paracuellos <sergio.paracuellos@gmail.com>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Matthias Brugger
- <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
- <angelogioacchino.delregno@collabora.com>, linux-mips@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 1/3] mips: dts: ralink: mt7621: associate uart1_pins
  with serial0
-In-Reply-To: <70822db4-d642-4180-9db8-eb0aa5728ef1@arinc9.com>
+Content-Language: en-US
+To: Justin Swartz <justin.swartz@risingedge.co.za>,
+ =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc: Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org
 References: <20240308155616.11742-1-justin.swartz@risingedge.co.za>
  <20240308155616.11742-2-justin.swartz@risingedge.co.za>
  <70822db4-d642-4180-9db8-eb0aa5728ef1@arinc9.com>
-Message-ID: <bec06da5c4099898d9e531181d0797ca@risingedge.co.za>
-X-Sender: justin.swartz@risingedge.co.za
-User-Agent: Roundcube Webmail/1.3.17
-X-Authenticated-Sender: justin.swartz@risingedge.co.za
-X-Virus-Scanned: Clear
-X-SpamExperts-Domain: risingedge.co.za
-X-SpamExperts-Username: 
-Authentication-Results: host-h.net; auth=pass (login) smtp.auth=@risingedge.co.za
-X-SpamExperts-Outgoing-Class: ham
-X-SpamExperts-Outgoing-Evidence: Combined (0.03)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT+Ii1571bF7nYhcAwAFtCT5PUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5wCPRB8bAzJcv2cv+UqiTTc2+CpNcmBnO4XM3Sck4bwNogU
- WCl1nkLBzZX0KuJ9bXiS85Z42w/+2OBolTNFbPomXFWCX8oNdggW7HE9XDTdSejrkEpbuUvwMvHx
- 3T+KSG//gbuP7hnUK8NQdLwsVWKIFDZRrTGv3rxiw9tFrqFSCFNiLZt/QXQnOBRD+jq1HsKsDh/6
- Srgk2K3gr1VBfJbChkYH6fbrypLNrde+UooQVNLReLErukdelEOHUIpaBbp5GdnsN8+UvimwMinK
- 0+Txhz2u9qvrL2PODYgMZQApJXOjDLkqunZ9NcY2bHZn7CfFscMZZf3sCkN20I5vMh4akiObI7Kj
- vK7X04QEin24qbfMFd8eGjnYW8aSH5qj4ujh/13psIvqSqJFa1CcANErDW/w69saM9prk3jNnHtn
- nuEt/J9wDZeQfiNOYsLDFBdwYt2XtlLzy7G7T4kla0JNnAWQx3FS11bhwUa9HCIwKB+TroNcRY33
- oNmH4nRQzHQazgY7lmveanvOdQzf6IMJ3345q/s6ySNrGnXycmhg3NT7e1QHD5IMWQJA50ktgR2o
- naNQbqJUPRwZtKOTN8gOLtBcNrQxKZYuPe8bdCyw79zlPbqLQkZr26Lcxdvj8cqI+CogZdOhX7v3
- ClXzrmMENhJLl6MBfhzHVBR0wHQZxzIUka7Uq615Mik1qzcz30+tdk6yIuh9K7v+Nq0Cm3JVhle6
- F/kpBdN+oWjoATjEFDwcaiz0R34rhTN+GTbl4uS+pZovX9cex7Ac4fawcerGI7TrGXpM/B/M0BZd
- PfIU1BX7pZc1sE3vsz58auH/srM2fgZ9JmgLbj7sqoEiwv7LCxIiAE5ODMnmwjvj2589zjbyZCiM
- WpBpW8YvoIIqmZcWhL/r/eFjMjJnMHeiAPOVAT1rE1/vP68Bb4z3v3h3gCdXrv2+9GnNX30LKqXb
- fwFKgm/rnYBl+Mj5KqOl6Jzub/f3QhLRbOgisvi5VU9eNBtgo6zjiatjNO/pnMCjuIvXs/AyV/Ns
- URB/R+FlEHyAzksgfaRvdgw0WK34QWnzHHMcN6qoXPjenLhIOF1oeRYbjF1Hp647mOWoQlc3hL3c
- dBMSQgQtiTUcJp5roVy0aRtSNV8PU3+FWuyIQnbx8eB4u/m4iBmYb1/LCV4/EuVHup06w3Vwxf9C
- F7D6LKKRTfdjzQ6YC7Heg3Xf7O1TOd6RcY/MXB8eEq3bCN2QohZvyS03iBmgsz450Kmjd3fGV2Jt
- unc/A+T40yFOxOeH+1yxtZHZOXSNzt6etGjYKTk8Ibtf63VNbf0lrvssY+k7AHGi1NevGWTo2+h8
- Lhk4HCeZR7ymlGVRtthBJ2y8A5arx6JItKpFaUNPGMMlvbMX0nyK1NiAJ0y2Qvvn6ds6mor35w4f
- SfHzQbABJfgy21HclcZkPRq7NhoxyMwqi8Q23Rgadfh5T5n5D4OHHpbEIgsllZKWnzc5M5WlNtVJ
- qo05MS+4ayUpOtEhdxekWDmK9g==
-X-Report-Abuse-To: spam@antispamquarantine.host-h.net
+ <bec06da5c4099898d9e531181d0797ca@risingedge.co.za>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <bec06da5c4099898d9e531181d0797ca@risingedge.co.za>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 2024-03-08 18:14, Arınç ÜNAL wrote:
-> On 08/03/2024 18:56, Justin Swartz wrote:
->> Add missing pinctrl-name and pinctrl-0 properties to declare
->> that the uart1_pins group is associated with serial0.
->> 
->> Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
->> Signed-off-by: Justin Swartz <justin.swartz@risingedge.co.za>
+On 08/03/2024 18:01, Justin Swartz wrote:
+> On 2024-03-08 18:14, Arınç ÜNAL wrote:
+>> On 08/03/2024 18:56, Justin Swartz wrote:
+>>> Add missing pinctrl-name and pinctrl-0 properties to declare
+>>> that the uart1_pins group is associated with serial0.
+>>>
+>>> Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>>> Signed-off-by: Justin Swartz <justin.swartz@risingedge.co.za>
+>>
+>> Reviewed-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>
+>> Please add the trailers from previous patch versions from now on.
 > 
-> Reviewed-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> Please add the trailers from previous patch versions from now on.
+> What do you mean by trailers?
 
-What do you mean by trailers?
+https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
 
-Regards
-Justin
+Best regards,
+Krzysztof
+
 
