@@ -1,119 +1,118 @@
-Return-Path: <linux-mips+bounces-2182-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2183-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B11E5875FF9
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 09:45:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35F1387606D
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 09:57:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 684951F243A7
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 08:45:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE02F282BD2
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 08:57:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24D9F23759;
-	Fri,  8 Mar 2024 08:44:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D0CA524CC;
+	Fri,  8 Mar 2024 08:57:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Jc+M824n"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="fSSGiIhj"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8785922EF8;
-	Fri,  8 Mar 2024 08:44:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2F4DCA78;
+	Fri,  8 Mar 2024 08:57:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709887471; cv=none; b=Wcqz5kHsF7iDOB61fahyM2AMUgoQdBpOUyE1U/Ib3hBhqBAneYygGgpT2nCMVfxFyAnpd+sofr4H8VaSQ7ExcQQllIMu3CQMf/6HejCnGEpfD1nlCpf8S/4V8ZDx/84R5oMTbu2whIeht3ikSWwdats18yXMpdbIZZQliJm448Q=
+	t=1709888266; cv=none; b=kHLjeExHCwntr0r21LX/1Rju1gnNEiCwvcAplwvwOik1QarbgFwgzTEKV72bC3yZrn8jqpoQsRsq/9Wy0RxrWrTWdxz7Eg94Ld+RDEWDe6ADSExpA3myzAjM4LqUvylUMOC7hoy3aeutIGOz/9NQs9sCUPmzGNjEoPZvI3WskuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709887471; c=relaxed/simple;
-	bh=B7LQlsTP8n7h7BoltSXzPKTfWSgRJiLpFX0/sEPwOfA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pQzVwrBTp+7m+bl0tYkKSxVHWFkWv9RhukheVNe56xH/Jw+BZ2Q9R1xraUm1FQmKYjBMagwAKxgLw8FYXTknjj0LMYPd8afOqMRKH+1BVujMIHvXn0jJXVAXbQkCqxlyBRXcqpMXBNjx6S6XH0JYl3ftivPz4Iq486NfOrliinY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Jc+M824n; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1709887467;
-	bh=B7LQlsTP8n7h7BoltSXzPKTfWSgRJiLpFX0/sEPwOfA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Jc+M824nUahP8KaBVrM5zRu5925hP6lIzzPi9RvYdAN4ZFGx9IuYsUdbEWnHfhNs4
-	 y9hSpl1tXJtpmYJpU9NT5yp73X/ME3on1IV3XeTm6B/nFHVU693lXJI4u46UFfAj6/
-	 Kpuc5/jlSQx9D5CdTXBHyqdBFDgbzRCBd9sVbvb7Z5QeSZPx0RC3GO49TLhZ4Xe6Ks
-	 FZmsTzSz90xrSazCH46Xhmb9Hu7Ttutt3LpgrNt7Q6La+/SWMSVOoGjqkftFjEjLYV
-	 giFDm+rC8kokq1qLuBsaX9jZ+XMpoUzqI7OK/8nMqrqpl0MDiAEV+WldQ/P4u0V5u+
-	 Ih0a6OXos1bHg==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id DC7A437813CA;
-	Fri,  8 Mar 2024 08:44:26 +0000 (UTC)
-Message-ID: <221bb898-a98f-4a2d-9301-84a3baefbbc7@collabora.com>
-Date: Fri, 8 Mar 2024 09:44:26 +0100
+	s=arc-20240116; t=1709888266; c=relaxed/simple;
+	bh=uJ3EyYuTfpSTSeJvokr2q70eVIcyAYGuvsrPShpdwLk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
+	 References:In-Reply-To; b=AZEHgHB44XTx9/E95N6crSAygnvzRIGRDAx1aYnLluSLKW8Py/r+/8eZf9MdByx86ZVPeC7yCi+oO/yOZ7+SzYuXkC7ivYiJ7sA+jxvW0jxMfOxQqyk6n60zXEdpCmCmZcpuBgnY4SyxnBDi2hYftFk5TPFLIecwvfVA5LCXIWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=fSSGiIhj; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 261D5240012;
+	Fri,  8 Mar 2024 08:57:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1709888260;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6wpE0Hg9jSaOaaAHVX5lz1UQTKT/gbia9ZxM7ce23zk=;
+	b=fSSGiIhjdhlTXL7ypsCX8Q/rGBtXrmUC+3UmYox8nwCoFM+QtNq05DuKpwfjwAgwjDeQ87
+	+dMbqmsTqmv9bjhkIPw9lxpasMEL+liUQNJiyBxSqUmQPn6N8D3J6H3pRZTYZR16dDW/i3
+	DyzzmTr6FT60wlkCts2xU9tP5muwJW0cJ9ir5wCQzVcqdjmWNdiPt4WFI4frZq99DYk5iL
+	PANweUx4Sw3BBo8Hw9VVbo3IAE+k8kTSxQ99WCJUs1dxkCVHK6oHdkfzh44hEPN2xLxQCi
+	yAonmeerihXrGFRu/4e0+DKdlgKHApehOnlARjjGme2WUhMTfqZzaVO2P1rr5Q==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] mips: dts: ralink: mt7621: add serial1 and serial2
- nodes
-Content-Language: en-US
-To: Justin Swartz <justin.swartz@risingedge.co.za>,
- =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
- Sergio Paracuellos <sergio.paracuellos@gmail.com>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Matthias Brugger <matthias.bgg@gmail.com>
-Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org
-References: <CAMhs-H_eUKm7C40oCzuKwwEMZAcOJ-g4MghAfkGAmxRM0AXPUw@mail.gmail.com>
- <20240307190408.23443-1-justin.swartz@risingedge.co.za>
- <20240307190408.23443-3-justin.swartz@risingedge.co.za>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20240307190408.23443-3-justin.swartz@risingedge.co.za>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 08 Mar 2024 09:57:39 +0100
+Message-Id: <CZO8SUELNP4R.230VKX59UIHC8@bootlin.com>
+Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Rob Herring"
+ <robh+dt@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-mips@vger.kernel.org>, "Gregory Clement"
+ <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
+ <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>
+To: "Andi Shyti" <andi.shyti@kernel.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v3 03/11] i2c: nomadik: simplify IRQ masking logic
+X-Mailer: aerc 0.15.2
+References: <20240306-mbly-i2c-v3-0-605f866aa4ec@bootlin.com>
+ <20240306-mbly-i2c-v3-3-605f866aa4ec@bootlin.com>
+ <422szb2dtgnq56xznfqsqtqs3dai2jipnntrp6yb2og353whs7@g4ia5ynnmqu6>
+In-Reply-To: <422szb2dtgnq56xznfqsqtqs3dai2jipnntrp6yb2og353whs7@g4ia5ynnmqu6>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-Il 07/03/24 20:04, Justin Swartz ha scritto:
-> Add serial1 and serial2 nodes to define the existence of
-> the MT7621's second and third UARTs.
-> 
-> Signed-off-by: Justin Swartz <justin.swartz@risingedge.co.za>
-> ---
->   arch/mips/boot/dts/ralink/mt7621.dtsi | 28 +++++++++++++++++++++++++++
->   1 file changed, 28 insertions(+)
-> 
-> diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
-> index 3ad4e2343..5a89f0b8c 100644
-> --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
-> +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
-> @@ -124,6 +124,34 @@ serial0: serial@c00 {
->   			pinctrl-0 = <&uart1_pins>;
->   		};
->   
-> +		serial1: serial@d00 {
-> +			compatible = "ns16550a";
-> +			reg = <0xd00 0x100>;
-> +			reg-io-width = <4>;
-> +			reg-shift = <2>;
-> +			clocks = <&sysc MT7621_CLK_UART2>;
-> +			interrupt-parent = <&gic>;
-> +			interrupts = <GIC_SHARED 27 IRQ_TYPE_LEVEL_HIGH>;
-> +			no-loopback-test;
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&uart2_pins>;
+Hello,
 
-As already commented on patch [1/3], pin muxing is board specific. Please remove.
+On Fri Mar 8, 2024 at 12:01 AM CET, Andi Shyti wrote:
+> Hi Theo,
+>
+> On Wed, Mar 06, 2024 at 06:59:23PM +0100, Th=C3=A9o Lebrun wrote:
+> > IRQ_MASK and I2C_CLEAR_ALL_INTS both mask available interrupts. IRQ_MAS=
+K
+> > removes top options (bits 29-31). I2C_CLEAR_ALL_INTS removes reserved
+> > options including top bits. Keep the latter.
+> >=20
+> > 31  29  27  25  23  21  19  17  15  13  11  09  07  05  03  01
+> >   30  28  26  24  22  20  18  16  14  12  10  08  06  04  02  00
+> > --- IRQ_MASK: --------------------------------------------------
+> >       1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+> > 0 0 0
+> > --- I2C_CLEAR_ALL_INTS: ----------------------------------------
+> >       1     1 1       1 1 1 1 1                   1 1 1 1 1 1 1
+> > 0 0 0   0 0     0 0 0           0 0 0 0 0 0 0 0 0
+> >=20
+> > Notice I2C_CLEAR_ALL_INTS is more restrictive than IRQ_MASK.
+> >=20
+> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+>
+> You did answer my question in v2, thanks, Theo!
 
-Also, is there any reason why you can't simply use the `interrupts-extended`
-property instead of interrupt-parent and interrupts?
+Oops my mailer syntax is telling me that the lines starting with '---'
+might cause issue as it might mark the end of commit messages. I'll fix
+that in next revision. If it gets applied before that it should be
+checked that part of the message doesn't get lost.
 
-Regards,
-Angelo
+Thanks Andi,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
