@@ -1,127 +1,86 @@
-Return-Path: <linux-mips+bounces-2187-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2188-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D103D8763E7
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 13:01:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A75EB87643C
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 13:25:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C51E282399
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 12:01:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6280D2815BB
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 12:25:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 789595647A;
-	Fri,  8 Mar 2024 12:01:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9426856773;
+	Fri,  8 Mar 2024 12:25:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arinc9.com header.i=@arinc9.com header.b="RqQcen2r"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j2FEtCCw"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5601C56471;
-	Fri,  8 Mar 2024 12:01:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61C4E4C84;
+	Fri,  8 Mar 2024 12:25:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709899276; cv=none; b=aaOavy84v2//TM/BDbZ2lAi0SgR/+iYQrI2+LFBPEO6mLn3BdfySGuWN/2+XHvkppdt5PH4x4e74oxqtUGxSehDAN2+cAiiiQ/Et10TeRlQlJvS7lwsPvum/wZW760Rv1fpfqNYvZxKKkusMmOacJRZ+V0R3BpDFP5xV1EqMjOo=
+	t=1709900744; cv=none; b=kOoV/tPDFeue748X0I7uk/mN2kns2TdGG6TsQuMHJ3VzroBOsBWFkzQZmvs0DKeDB6Y7vz/bhSlXV0pLwJeCj4j/OmAsleesIidJvMEV1WPEY6JiFUnQl1XykmF5xu7iW/RsyUy165+QKdlRtKEfXM6UiHY6RyB1sPKXW1GcaSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709899276; c=relaxed/simple;
-	bh=V7A96oraRe9YWxYqcMUNe5v9rhQHsYIqyuX4fkycyss=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XCtFriYzH14Wvrojs7FqKHY9VwvSA/fxoR8N+RzHAgctJE/MnWcfR9UGDS9vGEh1E/DGBRLOeyWqZjwqSynzDYRJ32yLLRnKd0pkEzCWGVfMXuJ9cER/hQkDGSFMWNoOCl9ZcyUNd/tJkqk8mdNNP5OvEgWhkhuefoUNzRNwtzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arinc9.com; spf=pass smtp.mailfrom=arinc9.com; dkim=pass (2048-bit key) header.d=arinc9.com header.i=@arinc9.com header.b=RqQcen2r; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arinc9.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arinc9.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EFDF7240003;
-	Fri,  8 Mar 2024 12:01:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arinc9.com; s=gm1;
-	t=1709899271;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GQFLpfmyEqeXPKgqckeD2rd+DY5hIF5n/f8YwLuQ74w=;
-	b=RqQcen2rU6DljnjLVlUeNiNNuf9fm3lZOkjI55/yyHCmvShczq9vN3ZJ14+nSt8BMKYGO1
-	wKRlLOr/UwG6pcKGVVXYtqKBKJL9hj7nmvuYeniwqbILC6NzGJ1m/UFSYqIYNIXkKn6BXk
-	p/pwpdcOoNLZVpShHlBCBJRqXD4FDL98f54Zo5C8rADOrLZFa59wIpTeLsg6UluaoRE9VB
-	uUGZzD/WTi5GYch6f73VKRaOFHdopxNAzh4Y75Z+2Eb1DqHjlsOiIes9VJQuKdibJg2kV0
-	xpBWX+oGOy72hio8Eq00BRTwk7XUkBj3lNL7XoDx7eSPyNtapfA5++IhfvhNEQ==
-Message-ID: <c445fd12-f8a8-41df-bee8-8b126b26110b@arinc9.com>
-Date: Fri, 8 Mar 2024 15:01:00 +0300
+	s=arc-20240116; t=1709900744; c=relaxed/simple;
+	bh=8D8kuY3yd//sQlXmc6hr/rMSlVVWZ9oszjDcXmuV+T4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I1r+tt4cyV1PD2aW5jou5p+qN7rQtFFoO90kF5J2JH3B907CddRfKGMc1keSTpkli4/K0jngL6coQSfLgXAVd7sG8cWFRM1VoT32tJiafQCo5dIVaqvmHWhBlXlyStp1esAMUMa67gDzegRjsmXNabCPXNa0+PhR8ndztB589nA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j2FEtCCw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43998C433C7;
+	Fri,  8 Mar 2024 12:25:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709900744;
+	bh=8D8kuY3yd//sQlXmc6hr/rMSlVVWZ9oszjDcXmuV+T4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=j2FEtCCw6oPjlepHRFrJiI5QTlCAGZEGLwjRu55agGY+tGVExYhS6E1BCzXglpHtV
+	 fW/JUq1CIt6YSAWBVlTicj1mvqDcGgF6nz0ZF1ucYUtO8WKLbWwILyKIkbVFQj6pcI
+	 VzrPy72fKG0ZaCove/oP1yrBQc+wfItD9aifm42tRM6exVmkXYRYb7luGDk07/cizu
+	 YxwCxITSvO5oMukm6S/uV69EmeyZceXqUQMoZELE/suw5irk+3LIRz9tFQ8oFAL2dD
+	 WnOPMF4iQtnqQSr8+hV2LT+J53OZg8HiXAP81Q7lDHcP/r4jIX6SkqJxPcx/eX3cei
+	 xSN9W2NB8K5uw==
+Date: Fri, 8 Mar 2024 13:25:40 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>, 
+	Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+	Gregory Clement <gregory.clement@bootlin.com>, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH v3 10/11] MIPS: mobileye: eyeq5: add 5 I2C controller
+ nodes
+Message-ID: <dizc2zenbfspugjj7g7fdahjjlr4iiltcozzjmnqmjcnvqiotu@ziyqywzlugx6>
+References: <20240306-mbly-i2c-v3-0-605f866aa4ec@bootlin.com>
+ <20240306-mbly-i2c-v3-10-605f866aa4ec@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] mips: dts: ralink: mt7621: add cell count properties
- to usb
-Content-Language: en-US
-To: Justin Swartz <justin.swartz@risingedge.co.za>,
- Sergio Paracuellos <sergio.paracuellos@gmail.com>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org
-References: <0001-mips-dts-ralink-mt7621-add-cell-count-properties-to-.patch>
- <20240307223756.31643-1-justin.swartz@risingedge.co.za>
-From: =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20240307223756.31643-1-justin.swartz@risingedge.co.za>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Flag: yes
-X-Spam-Level: **************************
-X-GND-Spam-Score: 400
-X-GND-Status: SPAM
-X-GND-Sasl: arinc.unal@arinc9.com
+In-Reply-To: <20240306-mbly-i2c-v3-10-605f866aa4ec@bootlin.com>
 
-On 8.03.2024 01:37, Justin Swartz wrote:
-> Add default #address-cells and #size-cells properties to the
-> usb node, which should be suitable for hubs and devices without
-> explicitly declared interface nodes, as:
-> 
->    "#address-cells":
->      description: should be 1 for hub nodes with device nodes,
->        should be 2 for device nodes with interface nodes.
->      enum: [1, 2]
-> 
->    "#size-cells":
->      const: 0
-> 
-> -- Documentation/devicetree/bindings/usb/usb-device.yaml
-> 
-> This version of the patch places the properties according to
-> the order recommended by:
-> 
->     Documentation/devicetree/bindings/dts-coding-style.rst
-> 
-> Signed-off-by: Justin Swartz <justin.swartz@risingedge.co.za>
-> ---
->   arch/mips/boot/dts/ralink/mt7621.dtsi | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
-> index 5a89f0b8c..7532e17dd 100644
-> --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
-> +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
-> @@ -289,10 +289,10 @@ usb: usb@1e1c0000 {
->   		reg = <0x1e1c0000 0x1000
->   		       0x1e1d0700 0x0100>;
->   		reg-names = "mac", "ippc";
-> -
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
->   		clocks = <&sysc MT7621_CLK_XTAL>;
->   		clock-names = "sys_ck";
-> -
+Hi Theo,
 
-Please keep the empty lines. It's easier to read. I don't see anything on
-the Devicetree Sources (DTS) Coding Style that would restrict this.
+On Wed, Mar 06, 2024 at 06:59:30PM +0100, Théo Lebrun wrote:
+> Add the SoC I2C controller nodes to the platform devicetree. Use a
+> default bus frequency of 400kHz. They are AMBA devices that are matched
+> on PeriphID.
+> 
+> Set transfer timeout to 10ms instead of Linux's default of 200ms.
+> 
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 
-ArÄ±nÃ§
+Acked-by: Andi Shyti <andi.shyti@kernel.org>
+
+Thanks,
+Andi
 
