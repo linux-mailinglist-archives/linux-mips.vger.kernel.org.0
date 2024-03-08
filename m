@@ -1,52 +1,52 @@
-Return-Path: <linux-mips+bounces-2186-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2187-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8BED87627B
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 11:56:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D103D8763E7
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 13:01:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D24F1F23896
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 10:56:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C51E282399
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 12:01:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE8B95576D;
-	Fri,  8 Mar 2024 10:56:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 789595647A;
+	Fri,  8 Mar 2024 12:01:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arinc9.com header.i=@arinc9.com header.b="ZKRh7LPs"
+	dkim=pass (2048-bit key) header.d=arinc9.com header.i=@arinc9.com header.b="RqQcen2r"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13AAF14A82;
-	Fri,  8 Mar 2024 10:56:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5601C56471;
+	Fri,  8 Mar 2024 12:01:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709895410; cv=none; b=hHhdzmpTqXjbiJVMGsyLec42L6/Re+7mKqZkZb36KtewpA3HcL6Z5istlhs9X8+dM+reZBiJG19aQ3kZKLk307dkQL+OSM3TuQId9loF5NetN4yoc2B3SgeUAjk6KwXqgOa8GhoHE4/if6TBNBb4Rb7ahy6PDfuVlwQFo6vMNcA=
+	t=1709899276; cv=none; b=aaOavy84v2//TM/BDbZ2lAi0SgR/+iYQrI2+LFBPEO6mLn3BdfySGuWN/2+XHvkppdt5PH4x4e74oxqtUGxSehDAN2+cAiiiQ/Et10TeRlQlJvS7lwsPvum/wZW760Rv1fpfqNYvZxKKkusMmOacJRZ+V0R3BpDFP5xV1EqMjOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709895410; c=relaxed/simple;
-	bh=eDfcAFfLtMAlFQpX5YR9ldUyPqNu/0sGMCe5kqrcRug=;
+	s=arc-20240116; t=1709899276; c=relaxed/simple;
+	bh=V7A96oraRe9YWxYqcMUNe5v9rhQHsYIqyuX4fkycyss=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kEMvYftsMnNdjfU9aGI8NC1oS6pBypI8BbzVo9lxdQIchtJe2FEYvgNGpVq7RxIlt9lOqxUInonHBHkABRRUi1SFtkr7JzU/1Aaaoycxe7HMoGHlZhEq4eErUgh+C74314QaPPJDc4TZ6aiMylDxz63or5F1vRee3gOIK8qKGdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arinc9.com; spf=pass smtp.mailfrom=arinc9.com; dkim=pass (2048-bit key) header.d=arinc9.com header.i=@arinc9.com header.b=ZKRh7LPs; arc=none smtp.client-ip=217.70.183.195
+	 In-Reply-To:Content-Type; b=XCtFriYzH14Wvrojs7FqKHY9VwvSA/fxoR8N+RzHAgctJE/MnWcfR9UGDS9vGEh1E/DGBRLOeyWqZjwqSynzDYRJ32yLLRnKd0pkEzCWGVfMXuJ9cER/hQkDGSFMWNoOCl9ZcyUNd/tJkqk8mdNNP5OvEgWhkhuefoUNzRNwtzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arinc9.com; spf=pass smtp.mailfrom=arinc9.com; dkim=pass (2048-bit key) header.d=arinc9.com header.i=@arinc9.com header.b=RqQcen2r; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arinc9.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arinc9.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 56D8260007;
-	Fri,  8 Mar 2024 10:56:43 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EFDF7240003;
+	Fri,  8 Mar 2024 12:01:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arinc9.com; s=gm1;
-	t=1709895406;
+	t=1709899271;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FAw+Jiw7p+B61UXDy8G+fuIZSzLjdiTqt3xioTIben4=;
-	b=ZKRh7LPs2bNtgyVYQTqeYkjYgvW7RBQ5+YMIvWLIvDz8aufrottZli9Ee2KqTBPg5+EtmB
-	avSkIHL6LDhcQT+DlHLu94zY3CVZgDBM1aT4jEU9NfmKw6208gaTnadJoUBlT5k3khH5Lf
-	PqeH4U/dEaVCVfFsZRAHuP3oxjsfnd0VA58m7y3OXLCFRohw98X1i338I/1u+Ry92C8kRW
-	zvkATcllLMAKFQR5bbca/rJZumSkl5o7XPaEaUgqIVrhf/Vv2uch35TCSOG04KrO6yQ0m6
-	tCLGnVmQXa6oVJa50i63+fIG0UtyK7BaXLIni8YwM/o7m4cAGTm6sIF9/pZVMA==
-Message-ID: <0af41707-9d00-4eec-91b0-352f75a89360@arinc9.com>
-Date: Fri, 8 Mar 2024 13:56:35 +0300
+	bh=GQFLpfmyEqeXPKgqckeD2rd+DY5hIF5n/f8YwLuQ74w=;
+	b=RqQcen2rU6DljnjLVlUeNiNNuf9fm3lZOkjI55/yyHCmvShczq9vN3ZJ14+nSt8BMKYGO1
+	wKRlLOr/UwG6pcKGVVXYtqKBKJL9hj7nmvuYeniwqbILC6NzGJ1m/UFSYqIYNIXkKn6BXk
+	p/pwpdcOoNLZVpShHlBCBJRqXD4FDL98f54Zo5C8rADOrLZFa59wIpTeLsg6UluaoRE9VB
+	uUGZzD/WTi5GYch6f73VKRaOFHdopxNAzh4Y75Z+2Eb1DqHjlsOiIes9VJQuKdibJg2kV0
+	xpBWX+oGOy72hio8Eq00BRTwk7XUkBj3lNL7XoDx7eSPyNtapfA5++IhfvhNEQ==
+Message-ID: <c445fd12-f8a8-41df-bee8-8b126b26110b@arinc9.com>
+Date: Fri, 8 Mar 2024 15:01:00 +0300
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -54,26 +54,24 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] mips: dts: ralink: mt7621: add serial1 and serial2
- nodes
+Subject: Re: [PATCH v2] mips: dts: ralink: mt7621: add cell count properties
+ to usb
 Content-Language: en-US
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Justin Swartz <justin.swartz@risingedge.co.za>,
+To: Justin Swartz <justin.swartz@risingedge.co.za>,
  Sergio Paracuellos <sergio.paracuellos@gmail.com>,
  Rob Herring <robh+dt@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
  Conor Dooley <conor+dt@kernel.org>,
  Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Matthias Brugger <matthias.bgg@gmail.com>
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-mediatek@lists.infradead.org
-References: <CAMhs-H_eUKm7C40oCzuKwwEMZAcOJ-g4MghAfkGAmxRM0AXPUw@mail.gmail.com>
- <20240307190408.23443-1-justin.swartz@risingedge.co.za>
- <20240307190408.23443-3-justin.swartz@risingedge.co.za>
- <221bb898-a98f-4a2d-9301-84a3baefbbc7@collabora.com>
+References: <0001-mips-dts-ralink-mt7621-add-cell-count-properties-to-.patch>
+ <20240307223756.31643-1-justin.swartz@risingedge.co.za>
 From: =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <221bb898-a98f-4a2d-9301-84a3baefbbc7@collabora.com>
+In-Reply-To: <20240307223756.31643-1-justin.swartz@risingedge.co.za>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Flag: yes
@@ -82,45 +80,48 @@ X-GND-Spam-Score: 400
 X-GND-Status: SPAM
 X-GND-Sasl: arinc.unal@arinc9.com
 
-On 8.03.2024 11:44, AngeloGioacchino Del Regno wrote:
-> Il 07/03/24 20:04, Justin Swartz ha scritto:
->> Add serial1 and serial2 nodes to define the existence of
->> the MT7621's second and third UARTs.
->>
->> Signed-off-by: Justin Swartz <justin.swartz@risingedge.co.za>
->> ---
->>   arch/mips/boot/dts/ralink/mt7621.dtsi | 28 +++++++++++++++++++++++++++
->>   1 file changed, 28 insertions(+)
->>
->> diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
->> index 3ad4e2343..5a89f0b8c 100644
->> --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
->> +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
->> @@ -124,6 +124,34 @@ serial0: serial@c00 {
->>               pinctrl-0 = <&uart1_pins>;
->>           };
->> +        serial1: serial@d00 {
->> +            compatible = "ns16550a";
->> +            reg = <0xd00 0x100>;
->> +            reg-io-width = <4>;
->> +            reg-shift = <2>;
->> +            clocks = <&sysc MT7621_CLK_UART2>;
->> +            interrupt-parent = <&gic>;
->> +            interrupts = <GIC_SHARED 27 IRQ_TYPE_LEVEL_HIGH>;
->> +            no-loopback-test;
->> +            pinctrl-names = "default";
->> +            pinctrl-0 = <&uart2_pins>;
+On 8.03.2024 01:37, Justin Swartz wrote:
+> Add default #address-cells and #size-cells properties to the
+> usb node, which should be suitable for hubs and devices without
+> explicitly declared interface nodes, as:
 > 
-> As already commented on patch [1/3], pin muxing is board specific. Please remove.
+>    "#address-cells":
+>      description: should be 1 for hub nodes with device nodes,
+>        should be 2 for device nodes with interface nodes.
+>      enum: [1, 2]
 > 
-> Also, is there any reason why you can't simply use the `interrupts-extended`
-> property instead of interrupt-parent and interrupts?
+>    "#size-cells":
+>      const: 0
+> 
+> -- Documentation/devicetree/bindings/usb/usb-device.yaml
+> 
+> This version of the patch places the properties according to
+> the order recommended by:
+> 
+>     Documentation/devicetree/bindings/dts-coding-style.rst
+> 
+> Signed-off-by: Justin Swartz <justin.swartz@risingedge.co.za>
+> ---
+>   arch/mips/boot/dts/ralink/mt7621.dtsi | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
+> index 5a89f0b8c..7532e17dd 100644
+> --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
+> +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
+> @@ -289,10 +289,10 @@ usb: usb@1e1c0000 {
+>   		reg = <0x1e1c0000 0x1000
+>   		       0x1e1d0700 0x0100>;
+>   		reg-names = "mac", "ippc";
+> -
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+>   		clocks = <&sysc MT7621_CLK_XTAL>;
+>   		clock-names = "sys_ck";
+> -
 
-I'm looking at the documentation [1], it seems to be useful when multiple
-interrupt parents need to be defined on a node. I'd continue using
-interrupt-parent and interrupts in this case.
-
-[1] https://www.kernel.org/doc/Documentation/devicetree/bindings/interrupt-controller/interrupts.txt
+Please keep the empty lines. It's easier to read. I don't see anything on
+the Devicetree Sources (DTS) Coding Style that would restrict this.
 
 Arınç
 
