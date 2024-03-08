@@ -1,52 +1,52 @@
-Return-Path: <linux-mips+bounces-2206-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2207-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45A9F87683C
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 17:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B6D9C876841
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 17:20:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D99D71F2167F
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 16:18:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 574A41F214D9
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Mar 2024 16:20:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA24925761;
-	Fri,  8 Mar 2024 16:18:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF7E12D029;
+	Fri,  8 Mar 2024 16:19:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arinc9.com header.i=@arinc9.com header.b="dl/SRWri"
+	dkim=pass (2048-bit key) header.d=arinc9.com header.i=@arinc9.com header.b="SeJ+Jjd0"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5B517745;
-	Fri,  8 Mar 2024 16:18:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 743592C862;
+	Fri,  8 Mar 2024 16:19:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709914696; cv=none; b=o85wnzUQW4J1tPyf2uRbBST7oVTEH8Z/aItGBqBjTHzoCmEVeFB5S6BDMiWC5MD3BR0o3UIVBNnDW4X36OktIuYMD1FA190ONDstG37z1HZ1lCDnwOTjcMxxdjZ1RCKB9EqrVC32AQemtmnpQg9bVPKfo4Xb+YuVh7tSZhK7waQ=
+	t=1709914791; cv=none; b=YrXZPaHgleaYH+z3V8B/1iFtDS8ss6T/d4Ru44QD6504oCrxKI+fSidEsbz+o4THgKk03BNtO/SpfuQ6PXlNFtE7d3Gvb4eSWmKr4fGM1zY4+FieJm19lA5Rrz0ZRG7c0b93tUp11CQ1UF+YmlkEfzg6SFhhF/aGdAKHLCNvx6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709914696; c=relaxed/simple;
-	bh=+5j6dBCMMraYYQcFTDRpMYe5DxL2zEk3x6zrkGGMBUI=;
+	s=arc-20240116; t=1709914791; c=relaxed/simple;
+	bh=kR3fOpVm0Wu1r/QtePkS/CtzsAxdrcTI6dF9WfYd7QU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oEUIh2iuZSkHzUSu8WCFATOvbOGnSLTL/oMyrEE8KgFKppyOu4dE3+/S7oxTDq0PLCZkDAu/m7WwQGEMmmYZu5UoyZUrHTF2bP362yBqBkN6Pc5IArpmrbogSB0rtTZF6jGQWH/cHcQCQz/XqWHxe2uZkolTrRKnvnb2G4leenE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arinc9.com; spf=pass smtp.mailfrom=arinc9.com; dkim=pass (2048-bit key) header.d=arinc9.com header.i=@arinc9.com header.b=dl/SRWri; arc=none smtp.client-ip=217.70.183.199
+	 In-Reply-To:Content-Type; b=hgjlCtG2ux2hQKo3yY4BgBg+M+G0B+mqRhYl8HFDgRZ8BgaLA5mPNd8TI38PIaLiTHnYOoqnHSoRrIaS1/D8Rd9rwQq3Al8YPWNAlUF121eYZGBmsvDzMmkBr1AYSnkzs0TUdqtWVHrW4OZNnYMCuzlmAHOyzcXKf4Bb3zH6WIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arinc9.com; spf=pass smtp.mailfrom=arinc9.com; dkim=pass (2048-bit key) header.d=arinc9.com header.i=@arinc9.com header.b=SeJ+Jjd0; arc=none smtp.client-ip=217.70.183.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arinc9.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arinc9.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 43189FF807;
-	Fri,  8 Mar 2024 16:18:08 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5E5C6E0005;
+	Fri,  8 Mar 2024 16:19:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arinc9.com; s=gm1;
-	t=1709914691;
+	t=1709914782;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=0S6dSKiB8zFSBf1O2VOcQH4KdQm9Wkws/HG1/AEyaY8=;
-	b=dl/SRWriu4aZz/xXON+51qcKE3Wa9xX44fyBVTqwjx62WLp2cPcwmcB4rol6BG9SDlZCgu
-	qb5/tY0+A100U8vav/gMSdEYGamy5nYAZq66AiSAj9iZfH/uMBvjTTF75H/YVGOfupO2rF
-	iT6ITCb4MA6mGilxDFIiM74BCTaz4aUE5rKWQ5/5LAV0yfIvQuLlt3orv6ptTlKtnffZOm
-	nayMa5MdBxBTLMpEIzB9MwlFgE8eCPaCrBMuC/2mJBaR+yk346cuP5S/u5pMvi/6534opV
-	PcR92F3GD/hg5OA3MLlRduW9Oi11a8kLJStD5Fcu2fIQevrAg7uy4aA+Rv7pZQ==
-Message-ID: <1a76dc7d-d0d2-4f11-8408-f60d7fd8b6d6@arinc9.com>
-Date: Fri, 8 Mar 2024 19:18:01 +0300
+	bh=AEi4vkq4/ZbcRnurVhVV+qrtb49Z3GiZi5T9t3PQDgU=;
+	b=SeJ+Jjd04YicsVMPPsq3yMAae+MZmdCgBaC88fTaJGH4yCwwvKSIwONCbdy4RZx9RS4X8j
+	i1iGTnnDqvB6JR7x9I0kAN0XgK8ELIF1xGLOvPKujDDqSTP0AH/2q1cYUuO3WqeTNROLII
+	ieZ+k9ses3PiMEMcuOWTvXwwwoB74B6fDkFR5d+Pe2Ln8ULLmP796ZQFXsBvsSaViBLOg/
+	J/J830YF0onRfWo2y9OXd2LjqoAYxruDKQZ79nsiK5Ws2htDp/TQWVlXdYzKHAQZn9CFu4
+	tkY/UUReoLZhOyfoILsZHbZ0PfwaXAZhO8OBkcthZKDtN5nJ6VBkYM+4rDKIOA==
+Message-ID: <88c2035f-bddf-4dad-8aa4-1d8f02631af0@arinc9.com>
+Date: Fri, 8 Mar 2024 19:19:31 +0300
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -54,8 +54,8 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/3] mips: dts: ralink: mt7621: reorder serial0
- properties
+Subject: Re: [PATCH v3 3/3] mips: dts: ralink: mt7621: add serial1 and serial2
+ nodes
 Content-Language: en-GB
 To: Justin Swartz <justin.swartz@risingedge.co.za>,
  Sergio Paracuellos <sergio.paracuellos@gmail.com>,
@@ -69,9 +69,9 @@ Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-mediatek@lists.infradead.org
 References: <20240308155616.11742-1-justin.swartz@risingedge.co.za>
- <20240308155616.11742-3-justin.swartz@risingedge.co.za>
+ <20240308155616.11742-4-justin.swartz@risingedge.co.za>
 From: =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20240308155616.11742-3-justin.swartz@risingedge.co.za>
+In-Reply-To: <20240308155616.11742-4-justin.swartz@risingedge.co.za>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Flag: yes
@@ -81,11 +81,10 @@ X-GND-Status: SPAM
 X-GND-Sasl: arinc.unal@arinc9.com
 
 On 08/03/2024 18:56, Justin Swartz wrote:
-> Reorder serial0 properties according to the guidelines laid
-> out in Documentation/devicetree/bindings/dts-coding-style.rst
+> Add serial1 and serial2 nodes to define the existence of
+> the MT7621's second and third UARTs.
 > 
 > Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > Signed-off-by: Justin Swartz <justin.swartz@risingedge.co.za>
 
 Reviewed-by: Arınç ÜNAL <arinc.unal@arinc9.com>
