@@ -1,124 +1,106 @@
-Return-Path: <linux-mips+bounces-2240-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2236-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DC448780B7
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Mar 2024 14:34:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B9DE8780AC
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Mar 2024 14:33:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D64CA1F215C9
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Mar 2024 13:34:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 36C191C20B48
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Mar 2024 13:33:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CADC440863;
-	Mon, 11 Mar 2024 13:34:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70E283D551;
+	Mon, 11 Mar 2024 13:33:46 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F24314085E;
-	Mon, 11 Mar 2024 13:34:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C441F2E3F7;
+	Mon, 11 Mar 2024 13:33:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710164044; cv=none; b=DCGsLmqlXRZuxpSA+O/cV+e/ll6Syl2DrE0WyBwL3tWZENe5UW2g934NYZ8cvDkuLUnraqQMnRt/h3ePuLai7pmO2wlAJYiV2hIOAqCeI0+7RTgxYXfsTKZHIRh7rZA8iahhUTr33dBrN6EfgbKrH/VNwqVXUpt3qn76iON5LVI=
+	t=1710164026; cv=none; b=b2Y/klesH7NTJyj5xEPlsqna+3ghac88jXjyxG2FxJAOJpE+Z3DJFl9yArZ8o8A9a/hXnQ8kTb4oih1ut6mI3JeelwCEQ6BAf7e/gmCOB8nYlDSVdsZKmMsw83Q6iK8wGJ6hyC/RAAbjhDNA9Uu2V7cHLqfaDbnp+PLN+9rgHM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710164044; c=relaxed/simple;
-	bh=fpFQr843KOifIG2LaYlm2F7Z5q9uRlkCVtNhgQnuXjU=;
+	s=arc-20240116; t=1710164026; c=relaxed/simple;
+	bh=jxq8f271ujvpbwEQPSIylVtewrclzvRsFccoNPWrj2w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BKcJEe9AYGlM2//6btrc+YVpw6GsR3iKMScPgmoFIr6XEAcn2NqL/43pxWHxkesFXmsJoMdsDBMC/5gjJRaUWlAYfVeXduVkJSCV/R1reWf6AX9Oz/7BE53qAf7ANnxR66BFPIiSGfFru5Z3jISlz8ylXmBe7SpAk7f/VTC7e1M=
+	 Content-Type:Content-Disposition:In-Reply-To; b=iLOOoTrAG1vN8rkWFcZ8szdUg8VxhKKwJBdfNzoBkAwRgWHWBCG8+clvRTxHTKhM+yqOUA4YUbvqwBRdp7Z59bc/H3VODu87h6jAVVNAzjIJcVpDMgcoGwkxBsqpuJVk60dy3BoCs0q2n0MJVjfqaTvCHEeWuTiehM9HMRQglcY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1rjfO2-0001bi-00; Mon, 11 Mar 2024 14:08:14 +0100
+	id 1rjfO2-0001bk-00; Mon, 11 Mar 2024 14:08:14 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id E1C83C069B; Mon, 11 Mar 2024 14:05:37 +0100 (CET)
-Date: Mon, 11 Mar 2024 14:05:37 +0100
+	id 3D2C9C0694; Mon, 11 Mar 2024 14:07:19 +0100 (CET)
+Date: Mon, 11 Mar 2024 14:07:19 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 To: Serge Semin <fancer.lancer@gmail.com>
 Cc: Arnd Bergmann <arnd@arndb.de>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
 	Andrew Morton <akpm@linux-foundation.org>,
+	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
 	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] MIPS: Fix missing proto and passing arg warnings
-Message-ID: <Ze8BoUxUZ3CL0yG4@alpha.franken.de>
+Subject: Re: [PATCH v2 1/2] mips: cm: Convert __mips_cm_l2sync_phys_base() to
+ weak function
+Message-ID: <Ze8CB27Ad427Gk3K@alpha.franken.de>
 References: <20240226105427.7191-1-fancer.lancer@gmail.com>
+ <20240226105427.7191-2-fancer.lancer@gmail.com>
+ <34af21b5-a878-418e-a70b-299cab61b37e@app.fastmail.com>
+ <y2lxeu5uvj7ezlv7kf6lox5e5xprmvrhqmf3gvzjsatlrrlub7@mvqzoyq5mnvd>
+ <cc9e02b3-57df-4a7d-bd21-2d574bf4b878@app.fastmail.com>
+ <simbnmm644ouv3kc3agsxiub6fzg6advihkqsbjzgmb44nmuxv@ktgkhn3kr43z>
+ <60e60313-3cc4-452f-a222-aadd7728183d@app.fastmail.com>
+ <6n2synlvazjh2gptxtioju7dciwshwqyei4xnfzorns66b3hqx@c7blt5kwnpbl>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240226105427.7191-1-fancer.lancer@gmail.com>
+In-Reply-To: <6n2synlvazjh2gptxtioju7dciwshwqyei4xnfzorns66b3hqx@c7blt5kwnpbl>
 
-On Mon, Feb 26, 2024 at 01:54:20PM +0300, Serge Semin wrote:
-> After getting my local tree rebased onto the kernel 6.8-rc3 the MIPS32
-> kernel build procedure produced a couple of warnings which I suggest to
-> fix in the framework of this series.
+On Mon, Feb 26, 2024 at 04:11:05PM +0300, Serge Semin wrote:
+> On Mon, Feb 26, 2024 at 01:29:54PM +0100, Arnd Bergmann wrote:
+> > On Mon, Feb 26, 2024, at 13:20, Serge Semin wrote:
+> > > On Mon, Feb 26, 2024 at 01:04:33PM +0100, Arnd Bergmann wrote:
+> > >> On Mon, Feb 26, 2024, at 12:27, Serge Semin wrote:
+> > 
+> > > I see your point now. Thanks for clarification. IMO it would be less
+> > > readable due to the ifdef-ery and the new config, and less
+> > > maintainable due to the conditional compilation, but would provide a
+> > > more performant solution since the compiler will be able to inline the
+> > > singly used static method. Basically you suggest to emulate the weak
+> > > implementation by an additional kernel config.
+> > 
+> > I mean the kernel config that you already need here, since
+> > the strong version of the function is already optional.
 > 
-> A first warning is of the "no previous prototype for `<func>`" type. In
-> particular my arch-specific code has the mips_cm_l2sync_phys_base() method
-> re-defined, but even though the function is global it' prototype isn't
-> declared anywhere. Fix that by moving the __mips_cm_l2sync_phys_base()
-> body to a weak implementation of mips_cm_l2sync_phys_base() and adding the
-> method prototype declaration to the mips/include/asm/mips-cm.h header
-> file. For the sake of unification a similar solution was provided for the
-> mips_cm_phys_base()/__mips_cm_phys_base() couple.
+> Why would I need it if after this patch is applied the
+> mips_cm_l2sync_phys_base() method will be converted to a global weak
+> implementation?
 > 
-> The following text describes the patches which have already merged in at
-> v1 stage of the patchset (see changelog v2).
+> > 
+> > > Not sure whether it would be better than a well-known
+> > > weak-attribute-based pattern. Anyway let's wait for the
+> > > Thomas' opinion about your suggestion. If he thinks
+> > > it would be better I'll update the patches.
+> > 
+> > Weak functions are not used all that much outside of a
+> > couple of parts of the kernel. There is a lot of them
+> > in drivers/pci/, a little bit in acpi and efi, and
+> > then a bit in arch/*/, though most of that is in mips.
 > 
-> One more case of the denoted earlier warning I spotted in the
-> self-extracting kernel (so called zboot) with the debug printouts enabled.
-> In particular there are several putc() method re-definitions available in:
-> arch/mips/boot/compressed/uart-prom.c
-> arch/mips/boot/compressed/uart-16550.c
-> arch/mips/boot/compressed/uart-alchemy.c
-> All of these files lacked the prototype declaration what caused having the
-> "no previous prototype for ‘putc’" printed on my build with the next
-> configs enabled:
-> CONFIG_SYS_SUPPORTS_ZBOOT=y
-> CONFIG_SYS_SUPPORTS_ZBOOT_UART_PROM=y
-> CONFIG_ZBOOT_LOAD_ADDRESS=0x85100000
-> CONFIG_DEBUG_ZBOOT=y
+> + a lot of them in kernel/*, some in mm/* .)
 > 
-> The second warning is of the "passing argument <x> of ‘<func>’ from
-> incompatible pointer type" type which I discovered in the
-> drivers/tty/mips_ejtag_fdc.c driver. The problem most likely happened due
-> to the commit ce7cbd9a6c81 ("tty: mips_ejtag_fdc: use u8 for character
-> pointers").
+> > 
+> > Ifdef checks in .c files are not great, but at least they
+> > are much more common than __weak functions and self-documenting.
 > 
-> That's it for today.) Thanks for review in advance. Any tests are very
-> welcome.
-> 
-> Link: https://lore.kernel.org/linux-mips/20240215171740.14550-1-fancer.lancer@gmail.com
-> Changelog v2:
-> - Drop aleady applied pateches:
->   [PATCH 3/4] mips: zboot: Fix "no previous prototype" build warning
->   [PATCH 4/4] tty: mips_ejtag_fdc: Fix passing incompatible pointer type warning
-> - Drop Linux serial mailing list and the respective maintainers from the
->   Cc-list.
-> - Covert the underscored versions of the CM2/L2-sync base address
->   getters to being the body of the weakly defined original methods.
-> 
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: linux-mips@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> 
-> Serge Semin (2):
->   mips: cm: Convert __mips_cm_l2sync_phys_base() to weak function
->   mips: cm: Convert __mips_cm_phys_base() to weak function
-> 
->  arch/mips/include/asm/mips-cm.h | 20 ++++++++++++++++----
->  arch/mips/kernel/mips-cm.c      | 10 ++--------
->  2 files changed, 18 insertions(+), 12 deletions(-)
-> 
-> -- 
-> 2.43.0
+> Ok. I don't have concretely strong opinion about what is better. Let's
+> wait for what Thomas thinks about this.
 
-series applied to mips-next.
+I've taken your patches as we get rid of this alias thing. As long as
+there is no big push against __weak I'm ok with this case.
 
 Thomas.
 
