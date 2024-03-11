@@ -1,108 +1,117 @@
-Return-Path: <linux-mips+bounces-2233-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2234-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9CA9877C12
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Mar 2024 10:00:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0D76877D2A
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Mar 2024 10:46:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB3611C20D2A
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Mar 2024 09:00:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D5CA281CC4
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Mar 2024 09:46:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 610DF154B1;
-	Mon, 11 Mar 2024 08:59:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11C8B182CF;
+	Mon, 11 Mar 2024 09:46:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LBBKZCWg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c+u7xqhI"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED3A17548;
-	Mon, 11 Mar 2024 08:59:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46B66179B7;
+	Mon, 11 Mar 2024 09:46:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710147590; cv=none; b=WFBJZQiRCbimRTaQb0A+3TtyN+x7zmpCzjliTM2QLTg5NPkgGWAFk4jNYVtxspjm6gPVoPeZO6XlVTCgT4Y68xsZoVnCVRezCBqdGdGFnxcaJEBiuxCSAFSshI0josbuBN96u14OSQm9hASl+tG02YgiXUXaxCFHUOIGQrX0P2c=
+	t=1710150366; cv=none; b=nrtRIKVG8VlktiZgJqVNCfv/52VKot/1Q/IJge1xFXHEOeJZI6j7soSvnlTh2qWa5wR+YwgfmyACP8sofd7CbTYqstMGK9sXXJ8hf4IIfqFSXMh4H2HesHlXr5Sz7PomnYQk5PP2MS+OaUmOe+FThH/IRmE7Jv5G8nSsVPE91+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710147590; c=relaxed/simple;
-	bh=8HAWZFFWAlCxhMwlNt2FrCFBXJMqPsmESdj1whgbCKk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=fE3SbZeKS8vS/KZ4NYVPXoQobAV30yKGJk2ehKggERajI9WVsVYSvHTyYEHHLEARP5gH0bVl6/rffNiJod8BhMNASoPbg/VGfYSD67ALh0ckj9dS64S0msn7Y+CkBNcd8Z6sJpmuY0EAffkmx0Hj9MJsZpHBPtK/OlLXyUYyRmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LBBKZCWg; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 13ACD1C000C;
-	Mon, 11 Mar 2024 08:59:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1710147579;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=i+STwbzW/7mrHsTmrWjA6MMULIW/HeJ9kGi1WDLYRtc=;
-	b=LBBKZCWgbwH3SqwCmfAsnPMEDylrTy7wvt/RQEkUxdx+h+qK7ytt5PhVsQpojO7OgLIzjn
-	2Z8UN1PVIRdoq9LC0yP6/iUXmFj5dW7ZxhaeGaYq/Igo3GKk9gcw4FSdmU83sgHTzeIGVE
-	WWIWVbqwpAGFu4jxbQB6v9RCN+EQYkWvu8G59c6JztUk2YtWQFAcm/0avOWZJ9inM8SOkH
-	W7C0asW1hjva2jgdM8xZjQ/665HcUKfeiEkJly23f/yWhlG8qvwSxZBLdLfkJ48h2vLVbO
-	saag18ZGmADjoovOzjoBwkeHFaG7Tded1dOD6IFl8BOF85BstJw+ODQYyV52lw==
+	s=arc-20240116; t=1710150366; c=relaxed/simple;
+	bh=+mkY7KrHMRxBKwLjX5eeMIcQrmgsR0RArxs9P1e+ZOw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dEzW+6IEcpJJZ8usaPzogoJE3/AdHZI2M3EmjnInXVpsT0lpFq9FIhzd0Btw3wIookZjgQ+ZW/Qf147O8xDIaqVclguSt80x0L5RsJYJRMoD2ULd+9ddKDBUNUab7nLIUw7JUsEtf8ziMOYSIjn8KHimsj20nP18J6pKeJoIl44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c+u7xqhI; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710150364; x=1741686364;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+mkY7KrHMRxBKwLjX5eeMIcQrmgsR0RArxs9P1e+ZOw=;
+  b=c+u7xqhIi50SwZJQsA5VMkDaj4dgYRT2VjOTmj8Pydyb4PCa/N35+DZL
+   xyWqV2HbbCI+fHJRVbuFRn3lXUDX93R9k9rf9kqM4+VG5dYkIKqf8Bq5/
+   uPzMuAhcgt0BA1GwRw4obtxBIOnv3MZCO2X5uGHxEFxBcqXjIrRc9aQs1
+   Oc7/RhHHHEScyXMPddx75fYup9w2mftOwJ+uVq/uOIg6RXmFSReIqedp+
+   XR2n5SMg8/4ILST3eUcdlW/vPvs/gb4Dt/jtqjiV01K/I0N8dkTQqp0Xs
+   sjaCDfyGMPTH1H9CmF75UsVbha5ly5yVXGcl1PoCZDApB6Mvel2VhS6Sf
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11009"; a="8622997"
+X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
+   d="scan'208";a="8622997"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2024 02:46:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11009"; a="937049477"
+X-IronPort-AV: E=Sophos;i="6.07,116,1708416000"; 
+   d="scan'208";a="937049477"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Mar 2024 02:46:01 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 2BCB6204; Mon, 11 Mar 2024 11:46:00 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: John Crispin <john@phrozen.org>,
+	Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH v1 1/1] MIPS: ralink: Don't use "proxy" headers
+Date: Mon, 11 Mar 2024 11:45:58 +0200
+Message-ID: <20240311094559.547083-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 11 Mar 2024 09:59:36 +0100
-Message-Id: <CZQSPYZUWFGD.1ZLSA295LSM77@bootlin.com>
-Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-mips@vger.kernel.org>, "Gregory Clement"
- <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-To: "Andi Shyti" <andi.shyti@kernel.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v3 08/11] i2c: nomadik: support Mobileye EyeQ5 I2C
- controller
-X-Mailer: aerc 0.15.2
-References: <20240306-mbly-i2c-v3-0-605f866aa4ec@bootlin.com>
- <20240306-mbly-i2c-v3-8-605f866aa4ec@bootlin.com>
- <yyyhx62wcvro2zrkxmj6g3esg32zh62f4spox7txv4ghc74ewo@lzduga5d4wzi>
-In-Reply-To: <yyyhx62wcvro2zrkxmj6g3esg32zh62f4spox7txv4ghc74ewo@lzduga5d4wzi>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hello,
+Update header inclusions to follow IWYU (Include What You Use)
+principle.
 
-On Fri Mar 8, 2024 at 11:54 PM CET, Andi Shyti wrote:
-> Hi Theo,
->
-> > +static inline void nmk_i2c_writeb(const struct nmk_i2c_dev *priv, u32 =
-val,
-> > +				unsigned long reg)
->
-> If you don't mind, I fixed this checkpatch warning while
-> applying:
->
-> CHECK: Alignment should match open parenthesis
-> #103: FILE: drivers/i2c/busses/i2c-nomadik.c:247:
-> +static inline void nmk_i2c_writeb(const struct nmk_i2c_dev *priv, u32 va=
-l,
-> +                               unsigned long reg)
+Fixes: 5804be061848 ("MIPS: ralink: Remove unused of_gpio.h")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202403090727.nLhljNp6-lkp@intel.com/
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ arch/mips/ralink/timer.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-Indeed I do not mind. Thanks for the work!
-Do ping me if any follow-up is required.
-
-Regards,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/arch/mips/ralink/timer.c b/arch/mips/ralink/timer.c
+index 8b485cbe854e..54094f6e033e 100644
+--- a/arch/mips/ralink/timer.c
++++ b/arch/mips/ralink/timer.c
+@@ -6,10 +6,16 @@
+  * Copyright (C) 2013 John Crispin <john@phrozen.org>
+ */
+ 
+-#include <linux/platform_device.h>
+-#include <linux/interrupt.h>
+-#include <linux/timer.h>
++#include <linux/bits.h>
+ #include <linux/clk.h>
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/mod_devicetable.h>
++#include <linux/platform_device.h>
++#include <linux/timer.h>
++#include <linux/types.h>
+ 
+ #include <asm/mach-ralink/ralink_regs.h>
+ 
+-- 
+2.43.0.rc1.1.gbec44491f096
 
 
