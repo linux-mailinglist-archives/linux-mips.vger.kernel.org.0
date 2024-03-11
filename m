@@ -1,108 +1,108 @@
-Return-Path: <linux-mips+bounces-2232-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2233-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E29C787796D
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Mar 2024 02:12:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9CA9877C12
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Mar 2024 10:00:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D91A6B20CE6
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Mar 2024 01:12:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB3611C20D2A
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Mar 2024 09:00:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BB65A35;
-	Mon, 11 Mar 2024 01:12:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 610DF154B1;
+	Mon, 11 Mar 2024 08:59:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cPm6Sx4E"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LBBKZCWg"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4AFA10E3;
-	Mon, 11 Mar 2024 01:12:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED3A17548;
+	Mon, 11 Mar 2024 08:59:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710119559; cv=none; b=PBgRMeTH3eE3HtmcUB//hIJjJubSogc2ZVWGYicHaFdRfr4JpCr8oSIma+yrrc4k3iTqcWvCbOZfKiQAz4XTLWsRLULu/8IF89KufRfoRMuQnAJVeVZ/HigZ7dMO30F4pkO7+HAyZkVXb6srHVEdthmIlHfdTW19hkuwWcCjR/s=
+	t=1710147590; cv=none; b=WFBJZQiRCbimRTaQb0A+3TtyN+x7zmpCzjliTM2QLTg5NPkgGWAFk4jNYVtxspjm6gPVoPeZO6XlVTCgT4Y68xsZoVnCVRezCBqdGdGFnxcaJEBiuxCSAFSshI0josbuBN96u14OSQm9hASl+tG02YgiXUXaxCFHUOIGQrX0P2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710119559; c=relaxed/simple;
-	bh=2z5jInwHvNUuGQ13fZ+9l+YxupANHQadDhz4Wpt4Yg4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TMaDHusuOG6qDO06CyVMw2Hohhh/ZhKvidGRBjK3tWhgbcrhVRNu+h6J1lyQKyY1Gtv3xjpCon9/qlyF3xj/BUe//bCqFTY3JBwEiB9/EsWSH/JPx0dyKhThdqGski8izbGoDMYdmvHCjJzeBpohVhWQkDWUxzeQhemEAii7L64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cPm6Sx4E; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76CBFC433C7;
-	Mon, 11 Mar 2024 01:12:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710119558;
-	bh=2z5jInwHvNUuGQ13fZ+9l+YxupANHQadDhz4Wpt4Yg4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=cPm6Sx4E1EG59Iov80OXl2MFAXOcYsH6sW5GBiEeM0WcaeXdKWeKnjLgnzkJAJNUQ
-	 ZGzu+uinfXZiBrCQs/BnKum3xWBjuxiG2Jnz71jbsD0IMC436SUkVVtHUBc/15b5J5
-	 FlPk3Ywx0H9l5f6XBzTHnrtsVcxrCsUls2TXOjJDboqFM5zle++N9DatBuzt45gQv9
-	 A18j7hc9e2S5CULTkLup888zf+AZXZNNkNXEhSYF1+RpxOAoMtWrJsod25hXkO9GSU
-	 RHXZrgsBmlzTI8CgfJbqud+ntqAvcBQ37IkpFwFwxWMNfwcwgLu6iaf5Hgq8eaTHuq
-	 I4nNxU2JaTS7Q==
-Message-ID: <9bd5ff0c-2f56-4fa5-9a78-f3b8981c970f@kernel.org>
-Date: Sun, 10 Mar 2024 19:12:34 -0600
+	s=arc-20240116; t=1710147590; c=relaxed/simple;
+	bh=8HAWZFFWAlCxhMwlNt2FrCFBXJMqPsmESdj1whgbCKk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
+	 References:In-Reply-To; b=fE3SbZeKS8vS/KZ4NYVPXoQobAV30yKGJk2ehKggERajI9WVsVYSvHTyYEHHLEARP5gH0bVl6/rffNiJod8BhMNASoPbg/VGfYSD67ALh0ckj9dS64S0msn7Y+CkBNcd8Z6sJpmuY0EAffkmx0Hj9MJsZpHBPtK/OlLXyUYyRmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LBBKZCWg; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 13ACD1C000C;
+	Mon, 11 Mar 2024 08:59:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1710147579;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=i+STwbzW/7mrHsTmrWjA6MMULIW/HeJ9kGi1WDLYRtc=;
+	b=LBBKZCWgbwH3SqwCmfAsnPMEDylrTy7wvt/RQEkUxdx+h+qK7ytt5PhVsQpojO7OgLIzjn
+	2Z8UN1PVIRdoq9LC0yP6/iUXmFj5dW7ZxhaeGaYq/Igo3GKk9gcw4FSdmU83sgHTzeIGVE
+	WWIWVbqwpAGFu4jxbQB6v9RCN+EQYkWvu8G59c6JztUk2YtWQFAcm/0avOWZJ9inM8SOkH
+	W7C0asW1hjva2jgdM8xZjQ/665HcUKfeiEkJly23f/yWhlG8qvwSxZBLdLfkJ48h2vLVbO
+	saag18ZGmADjoovOzjoBwkeHFaG7Tded1dOD6IFl8BOF85BstJw+ODQYyV52lw==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH net-next v6 01/15] queue_api: define queue api
-Content-Language: en-US
-To: David Wei <dw@davidwei.uk>, Mina Almasry <almasrymina@google.com>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Jeroen de Borst <jeroendb@google.com>,
- Praveen Kaligineedi <pkaligineedi@google.com>
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-2-almasrymina@google.com>
- <54891f27-555a-4ed1-b92f-668813c18c37@davidwei.uk>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <54891f27-555a-4ed1-b92f-668813c18c37@davidwei.uk>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Mon, 11 Mar 2024 09:59:36 +0100
+Message-Id: <CZQSPYZUWFGD.1ZLSA295LSM77@bootlin.com>
+Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Rob Herring"
+ <robh+dt@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-mips@vger.kernel.org>, "Gregory Clement"
+ <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
+ <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>
+To: "Andi Shyti" <andi.shyti@kernel.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v3 08/11] i2c: nomadik: support Mobileye EyeQ5 I2C
+ controller
+X-Mailer: aerc 0.15.2
+References: <20240306-mbly-i2c-v3-0-605f866aa4ec@bootlin.com>
+ <20240306-mbly-i2c-v3-8-605f866aa4ec@bootlin.com>
+ <yyyhx62wcvro2zrkxmj6g3esg32zh62f4spox7txv4ghc74ewo@lzduga5d4wzi>
+In-Reply-To: <yyyhx62wcvro2zrkxmj6g3esg32zh62f4spox7txv4ghc74ewo@lzduga5d4wzi>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On 3/8/24 4:47 PM, David Wei wrote:
-> 
-> I'm working to port bnxt over to using this API. What are your thoughts
-> on maybe pulling this out and use bnxt to drive it?
-> 
+Hello,
 
-I would love to see a second nic implementation; this patch set and
-overall design is driven by GVE limitations.
+On Fri Mar 8, 2024 at 11:54 PM CET, Andi Shyti wrote:
+> Hi Theo,
+>
+> > +static inline void nmk_i2c_writeb(const struct nmk_i2c_dev *priv, u32 =
+val,
+> > +				unsigned long reg)
+>
+> If you don't mind, I fixed this checkpatch warning while
+> applying:
+>
+> CHECK: Alignment should match open parenthesis
+> #103: FILE: drivers/i2c/busses/i2c-nomadik.c:247:
+> +static inline void nmk_i2c_writeb(const struct nmk_i2c_dev *priv, u32 va=
+l,
+> +                               unsigned long reg)
+
+Indeed I do not mind. Thanks for the work!
+Do ping me if any follow-up is required.
+
+Regards,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
