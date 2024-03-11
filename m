@@ -1,106 +1,100 @@
-Return-Path: <linux-mips+bounces-2235-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2239-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15C9C877D89
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Mar 2024 11:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 90E4A8780B5
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Mar 2024 14:34:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFDC01F21E5C
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Mar 2024 10:02:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4490B1F2311C
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Mar 2024 13:34:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC2A224D1;
-	Mon, 11 Mar 2024 10:02:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aDMAzFcG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08B9F3FE2B;
+	Mon, 11 Mar 2024 13:33:58 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E9222338;
-	Mon, 11 Mar 2024 10:02:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D6843FBAA;
+	Mon, 11 Mar 2024 13:33:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710151322; cv=none; b=AlKaJ3xouUWTBWY8dePLkCAc2dSag01uGyR/4hF1jewbVzr3QkkV146xHxsZgpHMoTCvvTIdvHoR4etLNwZbnPMY7NuGNxiBvL2v+/W7ufDoljlqMjGZiE0jzOcOB4y74XoNvuqMHA9CODogjDWLtav1z026Y7h5zi4vsufPhDQ=
+	t=1710164037; cv=none; b=MC3lopgx619PKr2uYtRK/eSwp3FoJQHrU5olB3HktZfk65LREBOcGRbinbDpnNxblDzAbCzQhiBywwxVQrxxIRsXHuDGhvgtIEu+nUJDcTmjPPj0pcH2EOEUAzhN2cbJpR1Ym64wo9u5rItCgL3WmhFOm/K8l4IGN42RX/alGsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710151322; c=relaxed/simple;
-	bh=C0lZ6B2LOqG14mkDCWHzxUAa9DXdg3M75sHJf0k3SEM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gEclJZvtiPArRhKSkkmn8ONFXFAaYbDCz51VK/c2gnGOJk0fJBFeyG+qff+m7SRdfx+IgLyuQK7grEjqcUBVJi9pHlD9Az8dyWh6nNnJE+p7ogio34IGGMfgRj/1Ice3qJxT24O3BdDgxdilpwZtZoukhZ8HAa8EHeYER49Bgqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aDMAzFcG; arc=none smtp.client-ip=209.85.160.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-221a4f9557dso2102308fac.2;
-        Mon, 11 Mar 2024 03:02:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710151320; x=1710756120; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2+Wn2Uqb3xw0M3yXxu8yoQDE/POXlxhsfE/KZsuL0tU=;
-        b=aDMAzFcGemQ/uowqJb7t76OuYzYbEZ8CMZ57XUHI7/bQZW8fK+n5p2Jjm1FSFzk9cB
-         1zJClDgUdVPS9CU2Ic2Wjkkos41XTv2vo/aezYXxVF57mzBkjTMKtVP8bT9eD77xo7eX
-         M0l755pyNPCNisP6VN/PNYuh75RlTCaDt6OVc/B0piTRCA+gvlezXs4789IqBTpH08Yp
-         4EqTQ4QdaVz1NlGKYnYeyGvjCuK8vS8x8Y3lQEu9PyQIH/+d7U+latW5Btuc7OShfxxa
-         88tVryxmnd0XzOQhclEI+sJQGCx9IAf+gTbWCVtbyUFZBYXY3EFZIdf5dNEYRjVDloOU
-         6I1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710151320; x=1710756120;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2+Wn2Uqb3xw0M3yXxu8yoQDE/POXlxhsfE/KZsuL0tU=;
-        b=gY5+yuf9Xve7/NRAacFoCI2t5jq4HA0ogV7g7mOhy29e0UKYR+y4/mAwN9UfCIlOmH
-         0FS+xbtObPblo3OIog6IsVSO1iZdSzzbUrIhnbt1Mx9F1F81RXRojrfJo9FU9QdcestT
-         hHqYeHhYvYRNb+nI65lPdFY5vRias6Vw6OQKyQJ9JRjonAbdYwlh6klxbevzzIO0AIl+
-         g5kkGGadgGBaWTIBJ1jyi7Q/52ln9cOPmTUcr0pfs7+DnbpEma8gSnIDyLsdgNXSYQqk
-         U0MzfG/HEWRv7NFWqgoyjljmbp4keoNEVNd8TayGDXzNrI0HBwfqPTSfJ+/dk8z0fj/B
-         Cn+A==
-X-Forwarded-Encrypted: i=1; AJvYcCUEOCIYx4DhPtS+B15pN9orRgs8HmrGUKJY8PywXrCPTWB98GBtyvd86Wtry0AJM5QlbkJorETbnsFBBqSS5IP5OXiVZU6FFSgP0zaA
-X-Gm-Message-State: AOJu0YzLIPeI93F56Ugz55XiRlVSQsG/R/tFfzQ/HAZJugqy+7mmq1pU
-	0ywFFqPex+jIq0ZqQlWnyNdKHhQy/lEMJl6ae1RkzSt1KBcVfb8XQJSaJE0nZP2/kI9NCMCD7wK
-	VSb2kNVsJd7ZlzgEIHIrRy5Jp95A=
-X-Google-Smtp-Source: AGHT+IE+HdXxVacCokVXm6AG1Enh2GRrurBbBK52TD/DZnfbOMy3nxz2d4aziM1/T87eix+xubS28lgFRxatZxaUF04=
-X-Received: by 2002:a05:6870:1097:b0:21f:9c60:dba8 with SMTP id
- 23-20020a056870109700b0021f9c60dba8mr5592419oaq.4.1710151320411; Mon, 11 Mar
- 2024 03:02:00 -0700 (PDT)
+	s=arc-20240116; t=1710164037; c=relaxed/simple;
+	bh=jbChsX0Vv02KbcvaxVwtHitTmsAunq+PkpTTsi6JQXA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O0wjtSNpvQjbyfb66qZz9WezDtBVy6O/NVri0+M14a5iCilqhUVouUkxeekZDEvxssG19JrfY+rvcIu6W0inC3VuKhsfRtnxFbtjUl4diWvzsaGkC/ZX1dfFs7apMEkZKk9wKajenkAgA7AssQTYgGY0zZ6CCZ6zOREBzaOvcDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1rjfO1-0001bc-00; Mon, 11 Mar 2024 14:08:13 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id AF265C0267; Mon, 11 Mar 2024 14:04:22 +0100 (CET)
+Date: Mon, 11 Mar 2024 14:04:22 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	John Crispin <john@phrozen.org>,
+	Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v1 1/1] MIPS: ralink: Don't use "proxy" headers
+Message-ID: <Ze8BVniIPeFNzmRA@alpha.franken.de>
+References: <20240311094559.547083-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240311094559.547083-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20240311094559.547083-1-andriy.shevchenko@linux.intel.com>
-From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date: Mon, 11 Mar 2024 11:01:47 +0100
-Message-ID: <CAMhs-H8kVSrY-2upSEnLp-F2MXzSu3sCN1st=JghBMrT27buXw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] MIPS: ralink: Don't use "proxy" headers
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	John Crispin <john@phrozen.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 11, 2024 at 10:46=E2=80=AFAM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
+On Mon, Mar 11, 2024 at 11:45:58AM +0200, Andy Shevchenko wrote:
 > Update header inclusions to follow IWYU (Include What You Use)
 > principle.
->
+> 
 > Fixes: 5804be061848 ("MIPS: ralink: Remove unused of_gpio.h")
 > Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202403090727.nLhljNp6-lkp@i=
-ntel.com/
+> Closes: https://lore.kernel.org/oe-kbuild-all/202403090727.nLhljNp6-lkp@intel.com/
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
 >  arch/mips/ralink/timer.c | 12 +++++++++---
 >  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/mips/ralink/timer.c b/arch/mips/ralink/timer.c
+> index 8b485cbe854e..54094f6e033e 100644
+> --- a/arch/mips/ralink/timer.c
+> +++ b/arch/mips/ralink/timer.c
+> @@ -6,10 +6,16 @@
+>   * Copyright (C) 2013 John Crispin <john@phrozen.org>
+>  */
+>  
+> -#include <linux/platform_device.h>
+> -#include <linux/interrupt.h>
+> -#include <linux/timer.h>
+> +#include <linux/bits.h>
+>  #include <linux/clk.h>
+> +#include <linux/device.h>
+> +#include <linux/err.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/timer.h>
+> +#include <linux/types.h>
+>  
+>  #include <asm/mach-ralink/ralink_regs.h>
+>  
+> -- 
+> 2.43.0.rc1.1.gbec44491f096
 
-Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+applied to mips-next.
 
-Thanks,
-     Sergio Paracuellos
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
