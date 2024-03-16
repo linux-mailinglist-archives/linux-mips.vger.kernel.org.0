@@ -1,52 +1,52 @@
-Return-Path: <linux-mips+bounces-2278-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2279-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37FC087D971
-	for <lists+linux-mips@lfdr.de>; Sat, 16 Mar 2024 10:21:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF7A187D973
+	for <lists+linux-mips@lfdr.de>; Sat, 16 Mar 2024 10:22:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6C25282242
-	for <lists+linux-mips@lfdr.de>; Sat, 16 Mar 2024 09:21:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A1B51C20A70
+	for <lists+linux-mips@lfdr.de>; Sat, 16 Mar 2024 09:22:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5900210A0D;
-	Sat, 16 Mar 2024 09:21:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD4C711CAF;
+	Sat, 16 Mar 2024 09:21:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arinc9.com header.i=@arinc9.com header.b="oc4NeA7a"
+	dkim=pass (2048-bit key) header.d=arinc9.com header.i=@arinc9.com header.b="A5SYvb9/"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23D8410A2B;
-	Sat, 16 Mar 2024 09:21:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D4E5101D5;
+	Sat, 16 Mar 2024 09:21:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710580904; cv=none; b=PT/ghWXeVxez38vfVcaN3wVkan+htOdayyshwDj00nkDe7YFQPQLf4FeUyAztNLEoIwfjb2PGOxQ8HsKe5a1SCL7EqvZw6P7qutCbq9GQ0DQPZhzP7N6J9oj6Vnm6TP7+zCZGgPqjebq1eMPDaMMyQQBLwf/5yEkDocs2rvFejQ=
+	t=1710580917; cv=none; b=KE9GG9ja9u/CyfFGorBewD9sNjJu5/6MGExkmhxmwgCTsuUCAtZ8IG0buIR4GRT1euWnpyHAID1h3kDncqdJQYHhz9HfhRJWw0pBYDhByT7p8v7NJZLrm29ZCYD1H7xE1v0gQMKbEFgpQZM35DCP9Q47qfr4fFIUtCwQaHwWEHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710580904; c=relaxed/simple;
-	bh=LPAGYnjbWmZmyQzhqu0sgNpOVxYZ0o5NMoAIZ403F/w=;
+	s=arc-20240116; t=1710580917; c=relaxed/simple;
+	bh=eFvCpcNuMM9rsx6kb6ny11fu28RM1GGpZq697OkqjwU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BJSgzeADj368E48jIr/MFpcxDhUiePNZFsixYmUMbtgw68t3hb6O8mavn3yOxFfDf7nqigLsa9HxeNcaVRra8k1vPsAzGFz91yeSujutxs4nzxGzgUeHW055d6puE3cy6vwVAiRdkR+GUK18ncrAFSfBvNybphdQf8YirQeOqJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arinc9.com; spf=pass smtp.mailfrom=arinc9.com; dkim=pass (2048-bit key) header.d=arinc9.com header.i=@arinc9.com header.b=oc4NeA7a; arc=none smtp.client-ip=217.70.183.200
+	 In-Reply-To:Content-Type; b=XGeV6Gn89Sd6gHOC6qdztqmQZRtPL/tYSKs5cHros4+Vhfk89olll1gDg/VlxWf20MMC1xTNIrRomxD5s08pW7nSj8kuII69GrmFQ59bVMrfHhzJGf60XLCeDcSU8Ou0bo18w6AdCiFRqwQnD0Ep1nVU0LUoHFo5AacAAryIrtM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arinc9.com; spf=pass smtp.mailfrom=arinc9.com; dkim=pass (2048-bit key) header.d=arinc9.com header.i=@arinc9.com header.b=A5SYvb9/; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arinc9.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arinc9.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DACCB20003;
-	Sat, 16 Mar 2024 09:21:37 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3879920003;
+	Sat, 16 Mar 2024 09:21:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arinc9.com; s=gm1;
-	t=1710580900;
+	t=1710580913;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=blfyZg8sXChulnwgaeTe9ss5Hc8woFKCJ7YrVAvwAEs=;
-	b=oc4NeA7a2lbUyLYbGfk3WoWDevbVZKqxLeQYY/AdPm3Akb3F3igDWV6MHgCNzhpfLdWZHg
-	lDmMVgn5lKg+zRn8kotWZH6Yja1n4vCDSrBxZjWmPBNwjbKyDfkpFTVLczONgVRjPBzoDl
-	lCHyHm9PZ1fYBJzhkWhfs/2vxeEMG09mJ8a5D6RfcVKwFKfp0oitdMHDldBG6uPryGbjxx
-	2mV+9N/jdhYXg4NFhAwkb9YzEG5cKN5/lwCRJBZlO5/8dqNDG3njL0FRddi6ZZlEmI0Jns
-	ZXL3GqTj/HEO5p/PvIOfMVsK3TCWfCONTVC7ySKrDU4rUZ+oRTKwD/1vD4Hgkw==
-Message-ID: <97d0f9cb-1121-4be1-850e-cdf154bd03f7@arinc9.com>
-Date: Sat, 16 Mar 2024 12:21:23 +0300
+	bh=/R89qJGYnbeg9WVgcaQ8Cba+D/WxrvX+F1zgBiCfzWc=;
+	b=A5SYvb9/N7NN+b2Ch960ECv6QpDXu7CMYPuwjq5pqY1NoidhgH14sYCDwS6IgCQsjlqwhm
+	E7HvuE9gh/2ZuyRB/Z62wMBAKxtJxB25yECBpZrOINZw5dtANDM7ZMOri5cttsEeJFa0rW
+	VqMF5r2I+Ve4qd7aN5+IibF9+eGBBohdk22OD+66gbenj2odO9rnMtEgeC8re/Nph0kl2H
+	tgGloYUgdYhCukQmarHCcfzaiwtG8S0iHvZ/+LedS5cQAJpa0pkRXKgZmp9pyP0QdHsKEJ
+	Rh94gFlD5zN+YBSaLzJ2ECluPxN02Dj+0nQMGA5+ukzIO9NVL5QcG/CggKKkUw==
+Message-ID: <659f18e3-ed71-49ac-a019-956a7fbdc215@arinc9.com>
+Date: Sat, 16 Mar 2024 12:21:36 +0300
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -54,7 +54,7 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/14] mips: dts: ralink: mt7621: reorder sysc node
+Subject: Re: [PATCH 05/14] mips: dts: ralink: mt7621: reorder gpio node
  attributes
 Content-Language: en-US
 To: Justin Swartz <justin.swartz@risingedge.co.za>,
@@ -69,9 +69,9 @@ Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-mediatek@lists.infradead.org
 References: <20240316045442.31469-1-justin.swartz@risingedge.co.za>
- <20240316045442.31469-5-justin.swartz@risingedge.co.za>
+ <20240316045442.31469-6-justin.swartz@risingedge.co.za>
 From: =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20240316045442.31469-5-justin.swartz@risingedge.co.za>
+In-Reply-To: <20240316045442.31469-6-justin.swartz@risingedge.co.za>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Flag: yes
@@ -81,9 +81,8 @@ X-GND-Status: SPAM
 X-GND-Sasl: arinc.unal@arinc9.com
 
 On 16.03.2024 07:54, Justin Swartz wrote:
-> Reorder the attributes of the sysc node so that the
-> ralink prefixed attribute is placed after those which lack
-> prefixes.
+> Shuffle the attributes of the gpio node to appease the DTS
+> style guide.
 > 
 > Signed-off-by: Justin Swartz <justin.swartz@risingedge.co.za>
 
