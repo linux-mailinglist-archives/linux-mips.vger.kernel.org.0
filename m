@@ -1,174 +1,157 @@
-Return-Path: <linux-mips+bounces-2294-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2295-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E8EB87DA60
-	for <lists+linux-mips@lfdr.de>; Sat, 16 Mar 2024 15:03:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92F9787DA64
+	for <lists+linux-mips@lfdr.de>; Sat, 16 Mar 2024 15:05:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D28F9B212BA
-	for <lists+linux-mips@lfdr.de>; Sat, 16 Mar 2024 14:03:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3255F1F21827
+	for <lists+linux-mips@lfdr.de>; Sat, 16 Mar 2024 14:05:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 449DA1B950;
-	Sat, 16 Mar 2024 14:03:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2733818E1F;
+	Sat, 16 Mar 2024 14:05:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="J0ligexB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GTyPkDiW"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C6011B94D;
-	Sat, 16 Mar 2024 14:03:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E873F2F4A;
+	Sat, 16 Mar 2024 14:05:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710597808; cv=none; b=Lngp6IEG7TyO1fumZjScyCtV3A/pqe1C5v9Ht3Rk1V6E5ccZ7IiMADtDQswoghSl7zOyh9qnt+NSHWZ7wi5wdmB8dml/+93dmKJbI+g511BbOWvlMVnu6Oytoxx+Uv6QOp4IweMOiWD5eUyij+7Yz49GRmuOgvBFsN048f1wFIg=
+	t=1710597905; cv=none; b=uStQ8IzkykXSDfoWbR+Uq+N9iLCgGJJ5HDuZB7rD5c4Ukr+cqMQBdoI9b4qEu9lyN+fQgdQfNIdbsf1VvkPginGsSyt67rAF38Q/xlBZWeUrU2Qo5je3bPtWqcWu+2F99FK8vh8rgbCtu7wEoJC03DlDntiKRk5/NG1Y/CxQyEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710597808; c=relaxed/simple;
-	bh=iurHmmgzGEhzsPovvTwnS7RaWLPjQs7AqlAoNlw71GU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DyUruuWDL6JzVMXhiLYYF9X8Ep8UM7AhmZE6TH93B7FPuAjojtbgJkv9rpDxAZQ9hZdViuDq5nJOkn+DxLdLKonc6EAZhj2MaCaWsb5Gx/uX8f/+wCMVl1LhvWdC6PG8b4qVw6DayISDGQ+p/3l3kM2TsLf7oOa1rrxbfhnWWZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=J0ligexB; arc=none smtp.client-ip=80.12.242.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.18] ([92.140.202.140])
-	by smtp.orange.fr with ESMTPA
-	id lUd0rmhVnu7EMlUd0rHLw0; Sat, 16 Mar 2024 15:03:16 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1710597796;
-	bh=VHWK2/irYPcGg1v/zR7vQ0TWgWp7p1a/IHLgtTM+Hkw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=J0ligexB2EI5ykbsiKRLHGGD4kmZV5hEd/PqsOtRRjuvDqvCl5k9aWrZGoqAFUwiF
-	 jis9w/L5zRF2kTY9f2mPG5X/IxnQcDxvX7mH0vIhh+E4SRf3dTrwY5XRgIAvyGUZRg
-	 lKM1AXppNlt4WxTKvfM3eXUgQfapMm6ZIHxya62ZzTyYfbLXUXAa/tN/4u9pfGsfQH
-	 TGZAXQOI1vFHeEXp+YeNsGGpnmwGj98Hrw0Hi/P8liUR6xfTwcNkhXqvQmzpwJukGi
-	 JpRlcmyVkPjgKRBUMIwXmPVSlS3AcS6V5vmskTPJ6+V52epJS7y3JOfTCXa78/oVHL
-	 V48a7MlAU4ZSw==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 16 Mar 2024 15:03:16 +0100
-X-ME-IP: 92.140.202.140
-Message-ID: <0fda46c7-87e1-41f1-b3f0-ee3d1a4ac601@wanadoo.fr>
-Date: Sat, 16 Mar 2024 15:03:13 +0100
+	s=arc-20240116; t=1710597905; c=relaxed/simple;
+	bh=amixzluleKA1HX6A3tMriG6xxpkzudzpXqwqjiZetbE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fzrKl8pt4Qbulha7BFCjfE8t59vqV/SDD49JTJYpu72hsVM8luu3kNL53NGfA90Wh9RA92eSPpBGWSd9PEvyDqIlKaO5ONmDwUNIkyT+NY9DYucrH1FGcH3GTYxUL4hHetB/PHzDqJV2TGF8qA/1C/HfZ9FF1es+ZogwdP8Te/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GTyPkDiW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 892C4C433C7;
+	Sat, 16 Mar 2024 14:05:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710597904;
+	bh=amixzluleKA1HX6A3tMriG6xxpkzudzpXqwqjiZetbE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=GTyPkDiW/xjYqiebMrtBr69ygwNafwO79gbrZq92gRVVyR6Dv03Pnbt0ieH2o49NR
+	 w089NssxcGEbE3r9gaOWw0DXw9p3NvmvUZOO8p4vCFqwXj3iqVkR0otg4m1YhLexBu
+	 D3B+J8Wasf5Ivde5izXuVcAiEhkF9ELVWdatXJbRed5l6Tk1bvbqu/hcHNAsfHK3sb
+	 Ma44B2bmeeLghltTp1ZBjJS+WxwcaxlIcr+MNxvcrLYI+Be3ggpbmKhnwt8V/qFhWK
+	 Mmk8KO3vFMBK0sOZX2Bgr+5y4WRR1S1CJ+eB+3IDHt44Y/cMCg/u7EYnXpSBk9FwXT
+	 rqwDgO4+EhheA==
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a46805cd977so252048766b.0;
+        Sat, 16 Mar 2024 07:05:04 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWSUYPPrDcV/Yy3Ar41kt86gPYqZxprz+yntBG84anrMDbiyAd6jK3dR33pLAtxsJqFz7jplWQ0lXTxyYjKRVt+ZhTKxtPmbj9jJJlY7vWMM9vx/d2zyh2wjlpR7jIZOHZBtTltt3WQr/jxA1Z07VYR6azZa0v6oVMOj7GAaMFeGYawak1O4KTBkViYD69fJ4uATMLfMP8IuIRWUhnh1CU=
+X-Gm-Message-State: AOJu0Yy2bcggv+4NgHGK1WbtXilpLpMvv05mg4JL10NpqXR2YrtdW5Go
+	GlczByJR8bd8DA6Gbs41aVQT4DvV0Odhm4TLuhUnFhDJiAp4YTkHbDfX2yRb4ZO9avLBii7x7Z5
+	+q+o9fiJVQY4jBh6gYnwX9UZ7WsE=
+X-Google-Smtp-Source: AGHT+IEKrLynn+1R7Lwe8ZlP5ZBJbdrQdC8AxTeaSG9WCvKWqEifH6WOwfvgxH0I3TH4jaUEoyd3OYA49aWSb25FVeA=
+X-Received: by 2002:a17:906:11d6:b0:a45:1850:e6ed with SMTP id
+ o22-20020a17090611d600b00a451850e6edmr3653615eja.6.1710597903023; Sat, 16 Mar
+ 2024 07:05:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2] irqchip/loongson-pch-pic: Update interrupt
- registration policy
-Content-Language: en-MW, en-GB
-To: Tianyang Zhang <zhangtianyang@loongson.cn>, chenhuacai@kernel.org,
- jiaxun.yang@flygoat.com, tglx@linutronix.de
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
- Baoqi Zhang <zhangbaoqi@loongson.cn>, Biao Dong <dongbiao@loongson.cn>
-References: <20240316082141.26139-1-zhangtianyang@loongson.cn>
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20240316082141.26139-1-zhangtianyang@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240316-loongson1-dma-v6-0-90de2c3cc928@gmail.com>
+In-Reply-To: <20240316-loongson1-dma-v6-0-90de2c3cc928@gmail.com>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sat, 16 Mar 2024 22:04:50 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6aGS6VXGzkqWTyxL7bGw=KdjmnRZj7SpwrV5hT6XQcpg@mail.gmail.com>
+Message-ID: <CAAhV-H6aGS6VXGzkqWTyxL7bGw=KdjmnRZj7SpwrV5hT6XQcpg@mail.gmail.com>
+Subject: Re: [PATCH v6 0/2] Add support for Loongson1 DMA
+To: keguang.zhang@gmail.com
+Cc: Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Le 16/03/2024 à 09:21, Tianyang Zhang a écrit :
-> From: Baoqi Zhang <zhangbaoqi@loongson.cn>
-> 
-> This patch remove the fixed mapping between the 7A interrupt source
-> and the HT interrupt vector, and replaced it with a dynamically
-> allocated approach.
-> 
-> We introduce a mapping table in struct pch_pic, where each interrupt
-> source will allocate an index as a 'hwirq' from the table in the order
-> of application and set table value as interrupt source number. This hwirq
-> will be configured as its vector in the HT interrupt controller. For an
-> interrupt source, the validity period of the obtained hwirq will last until
-> the system reset
-> 
-> This will be more conducive to fully utilizing existing vectors to
-> support more devices
-> 
-> Signed-off-by: Baoqi Zhang <zhangbaoqi@loongson.cn>
-> Signed-off-by: Biao Dong <dongbiao@loongson.cn>
-> Signed-off-by: Tianyang Zhang <zhangtianyang@loongson.cn>
+Hi, Keguang,
+
+Sorry for the late reply, there is already a ls2x-apb-dma driver, I'm
+not sure but can they share the same code base? If not, can rename
+this driver to ls1x-apb-dma for consistency?
+
+Huacai
+
+On Sat, Mar 16, 2024 at 7:34=E2=80=AFPM Keguang Zhang via B4 Relay
+<devnull+keguang.zhang.gmail.com@kernel.org> wrote:
+>
+> Add the driver and dt-binding document for Loongson1 DMA.
+>
+> Changelog
+> V5 -> V6:
+>    Change the compatible to the fallback
+>    Implement .device_prep_dma_cyclic for Loongson1 sound driver,
+>    as well as .device_pause and .device_resume.
+>    Set the limitation LS1X_DMA_MAX_DESC and put all descriptors
+>    into one page to save memory
+>    Move dma_pool_zalloc() into ls1x_dma_alloc_desc()
+>    Drop dma_slave_config structure
+>    Use .remove_new instead of .remove
+>    Use KBUILD_MODNAME for the driver name
+>    Improve the debug information
+>    Some minor fixes
+> V4 -> V5:
+>    Add the dt-binding document
+>    Add DT support
+>    Use DT information instead of platform data
+>    Use chan_id of struct dma_chan instead of own id
+>    Use of_dma_xlate_by_chan_id() instead of ls1x_dma_filter()
+>    Update the author information to my official name
+> V3 -> V4:
+>    Use dma_slave_map to find the proper channel.
+>    Explicitly call devm_request_irq() and tasklet_kill().
+>    Fix namespace issue.
+>    Some minor fixes and cleanups.
+> V2 -> V3:
+>    Rename ls1x_dma_filter_fn to ls1x_dma_filter.
+> V1 -> V2:
+>    Change the config from 'DMA_LOONGSON1' to 'LOONGSON1_DMA',
+>    and rearrange it in alphabetical order in Kconfig and Makefile.
+>    Fix comment style.
+>
+> Keguang Zhang (2):
+>   dt-bindings: dma: Add Loongson-1 DMA
+>   dmaengine: Loongson1: Add Loongson1 dmaengine driver
+>
+>  .../bindings/dma/loongson,ls1x-dma.yaml       |  64 +++
+>  drivers/dma/Kconfig                           |   9 +
+>  drivers/dma/Makefile                          |   1 +
+>  drivers/dma/loongson1-dma.c                   | 492 ++++++++++++++++++
+>  4 files changed, 566 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/dma/loongson,ls1x-d=
+ma.yaml
+>  create mode 100644 drivers/dma/loongson1-dma.c
+>
+> --
+> 2.39.2
+>
+> base-commit: 719136e5c24768ebdf80b9daa53facebbdd377c3
 > ---
->   drivers/irqchip/irq-loongson-pch-pic.c | 77 ++++++++++++++++++++------
->   1 file changed, 59 insertions(+), 18 deletions(-)
-> 
-
-...
-
-> @@ -171,6 +183,27 @@ static int pch_pic_domain_translate(struct irq_domain *d,
->   			return -EINVAL;
->   
->   		*hwirq = fwspec->param[0] - priv->gsi_base;
-> +
-> +		raw_spin_lock_irqsave(&priv->pic_lock, flags);
-> +		/* Check pic-table to confirm if the hwirq has been assigned */
-> +		for (i = 0; i < priv->inuse; i++) {
-> +			if (priv->table[i] == *hwirq) {
-> +				*hwirq = i;
-> +				break;
-> +			}
-> +		}
-> +		if (i == priv->inuse) {
-> +			/* Assign a new hwirq in pic-table */
-> +			if (priv->inuse >= PIC_COUNT) {
-> +				pr_err("pch-pic domain has no free vectors\n");
-> +				raw_spin_unlock_irqrestore(&priv->pic_lock, flags);
-> +				return -EINVAL;
-> +			}
-> +			priv->table[priv->inuse] = *hwirq;
-> +			*hwirq = priv->inuse++;
-> +		}
-> +		raw_spin_unlock_irqrestore(&priv->pic_lock, flags);
-
-Hi,
-
-not sure if it helps or if this is a hot path, but, IIUC, taking the 
-lock could be avoided with some code reordering and 'inuse' being an 
-atomic_t.
-
-IIUC, the lock is only needed to protect 'inuse' and 'table' is never 
-modified afterwards.
-
-Somehing like:
-
- > +		int cur_inuse;
-		...
- > +		cur_inuse = atomic_read(&priv->inuse);
- > +		/* Check pic-table to confirm if the hwirq has been assigned */
- > +		for (i = 0; i < cur_inuse; i++) {
- > +			if (priv->table[i] == *hwirq) {
- > +				*hwirq = i;
- > +				break;
- > +			}
- > +		}
- > +		if (i == cur_inuse) {
- > +			/* Assign a new hwirq in pic-table */
- > +			if (cur_inuse >= PIC_COUNT) {
- > +				pr_err("pch-pic domain has no free vectors\n");
- > +				return -EINVAL;
- > +			}
- > +			priv->table[cur_inuse] = *hwirq;
- > +			*hwirq = atomic_inc_return(&priv->inuse);
- > +		}
-
-
-> +
->   		if (fwspec->param_count > 1)
->   			*type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
->   		else
-> @@ -194,6 +227,9 @@ static int pch_pic_alloc(struct irq_domain *domain, unsigned int virq,
->   	if (err)
->   		return err;
->   
-> +	/* Write vector ID */
-> +	writeb(priv->ht_vec_base + hwirq, priv->base + PCH_INT_HTVEC(hwirq_to_bit(priv, hwirq)));
-> +
->   	parent_fwspec.fwnode = domain->parent->fwnode;
->   	parent_fwspec.param_count = 1;
->   	parent_fwspec.param[0] = hwirq + priv->ht_vec_base;
-
-...
-
+> Keguang Zhang (2):
+>       dt-bindings: dma: Add Loongson-1 DMA
+>       dmaengine: Loongson1: Add Loongson1 dmaengine driver
+>
+>  .../devicetree/bindings/dma/loongson,ls1x-dma.yaml |  66 ++
+>  drivers/dma/Kconfig                                |   9 +
+>  drivers/dma/Makefile                               |   1 +
+>  drivers/dma/loongson1-dma.c                        | 665 +++++++++++++++=
+++++++
+>  4 files changed, 741 insertions(+)
+> ---
+> base-commit: a1e7655b77e3391b58ac28256789ea45b1685abb
+> change-id: 20231120-loongson1-dma-163afe5708b9
+>
+> Best regards,
+> --
+> Keguang Zhang <keguang.zhang@gmail.com>
+>
+>
 
