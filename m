@@ -1,75 +1,74 @@
-Return-Path: <linux-mips+bounces-2299-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2300-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96FAB87DDC0
-	for <lists+linux-mips@lfdr.de>; Sun, 17 Mar 2024 16:09:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F9BD87DDC4
+	for <lists+linux-mips@lfdr.de>; Sun, 17 Mar 2024 16:10:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B0752813A5
-	for <lists+linux-mips@lfdr.de>; Sun, 17 Mar 2024 15:09:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C4351C20978
+	for <lists+linux-mips@lfdr.de>; Sun, 17 Mar 2024 15:10:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6F481C687;
-	Sun, 17 Mar 2024 15:09:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 820FF1C28F;
+	Sun, 17 Mar 2024 15:10:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eExJ3xeT"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vMEWi3Zo"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1DE11C28F
-	for <linux-mips@vger.kernel.org>; Sun, 17 Mar 2024 15:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA7F81C691
+	for <linux-mips@vger.kernel.org>; Sun, 17 Mar 2024 15:10:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710688152; cv=none; b=WzMg9DV5g+RZK/k0kyEcNZ8KsGBdk59tjj5392ha5k7ShODagiTFp0kSv2Q7MDu5uSrQl6fTmBcb5VpChf83cAndLeYyzZrxgt6a9FJD1IiQPa4kslz2TxN+/UEuEiPuGu/lFxG1dLO/cbrToErgEURSq2PTa1LPA1Hd+LmpfTo=
+	t=1710688209; cv=none; b=UMkITxk/BJFD4bHEGO4vCkIsSaUhE7NWfK4cc/AgZbZM16Ul75MBoJVPM7c6lSpYJufT1ezz9KaNWW7wxw1+l5PIejq42x/JMdNRVvvDg6nrg2gzF8bYpkJqK72dNR+B8zFUlGtc+63sZaR52qN19A/ZmlMVU5zg1qTPPhlsG6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710688152; c=relaxed/simple;
-	bh=XJgNGd2TZIKB/VT7WUC1E1rn74oEvpWL55BWU7/FHsg=;
+	s=arc-20240116; t=1710688209; c=relaxed/simple;
+	bh=K9vt4fpPcRMmo8/ZtcWt8DxqyTLCJlsdN+NriAeO4MM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Id2nsI8u30Df+ZNucM5zSAUy74YEPZQ26tjQcirAYU89AUwNInOlupIg81GakdalSGSuKiSRCCva1J1Qg9R9lsF9+9hbRBaTSJxKIOnU7maMzWURieTBg791xul0GTORRDXJb01ydh6LlOh9RzawUMHjA038mK98crPpyG5dlf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=eExJ3xeT; arc=none smtp.client-ip=209.85.218.51
+	 In-Reply-To:Content-Type; b=n98oZFCuxnVh6Y09CeSxQhlQKYqFC2nd2/Yg7ZVIspwreuw++klWaoDZ3ituD3NxW2mKOt28cz+xK8wpNQoxwQNPfuvCcdTP4TkDAPGz5xzFr3E8l36PrNzbUJq49z7YUxienKE6oSwDQ5ICEVapO2MRgKZxucm1Fd4EeBB/2Gk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vMEWi3Zo; arc=none smtp.client-ip=209.85.218.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a46ba938de0so36594866b.3
-        for <linux-mips@vger.kernel.org>; Sun, 17 Mar 2024 08:09:10 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a44ad785a44so403559366b.3
+        for <linux-mips@vger.kernel.org>; Sun, 17 Mar 2024 08:10:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710688149; x=1711292949; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=70T5dOB6D1FPwo/2pj5WVXeg4WHQdiUVsaR5CwbCdvc=;
-        b=eExJ3xeTfXrUbji628h0/Ti2BXjAEMBLQDOIf6ztdmijOV3k0ua+eSBfdQ4F6HRYs2
-         xrVBMkZUbHOFuO1DzEPTHcRlQuHZEPMEwuZ8/Z+V1x2/espMkOaNLASE+ZzNnxBOiTzE
-         PXQGkme9wGEhyDObp4w3J2Iz6I7TS+lcWjWRXWYijwT67Ji3OKaoXFhvrzBqR74suXNB
-         b9PNas6BRpU8pa0T526RTege3YWCHlZ1wyKsa1B/MOVTCFDgfI7I+M+Vs+jmKm6lCr/A
-         7/YJWCXoeyddSIoiLTSsQcgt6Kgm5DzYDMURiS2cseHIVD3Lwmlkl0YheoUiSNif/Gy5
-         6xRA==
+        d=linaro.org; s=google; t=1710688206; x=1711293006; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=52LFxewU+lJnUU/UkYouuSQjkj5zFMWyV+Agj/X5Res=;
+        b=vMEWi3Zo3gACNgkWhCsV3NZ+tVzeT8FMExg7Lwl2sB+cTyECwCM3kSjx52s9XJef9j
+         t0cg0X59zLsiPd8uYD+5xKpHmcvb3WnYtsWt2n0XtoZ4DmagahW5t/iOE57vQl0SQ8gh
+         DhhrXw6Ge39CK5vvibV4dncgPuJLBF3z/c3zbshZSHi6ll69uYuXa8vgppAxD4nh+DLa
+         tYALzZo5Tsyr7maN7YA8FlvG2qvgS0XfhhZZNrVaFI8DORckaMe/jWcMOBqWHf2gfTz7
+         Gj8FftyGB/F6sdhchc+8nGVQ2XVGgwx2PwOPV/OQnk3DoP4BV1zmdKs4H001ecmsSj4/
+         zl1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710688149; x=1711292949;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=70T5dOB6D1FPwo/2pj5WVXeg4WHQdiUVsaR5CwbCdvc=;
-        b=OuS0uljkEzI02NC2ew4jPIkzBtm+xmDvIZcv7rrIR/BXw2ihIXKILavkNPBmg3CAlj
-         X4M2IUSKm1RoouFe1mdLA50erlxLz5m/k5/vAb1/MUFB6gxxpzbjR3Hl8MMR4Lnd5ny8
-         ciYyqKK83UgE9b1D0wD7zisTCxeA10lYCNNzfZcaq7Xm/dFCUDNnJXhBlEKSQIwoY7Nh
-         BXTORvLPGvxuSY2ZASMKtoe4Jct4uO1qX0z+zJJYWF4LQxUvZegXdDPZcvohnnwELvOk
-         5sArEUIv/0sblLIQ7F0o6r2EtGPoa/zZ6x2VUrmHDlYfpTpUA2QZHo82TfqgsLLpxDI5
-         LGqA==
-X-Gm-Message-State: AOJu0YyPNeLDuqhxSfBbSjGB8qKLLQfaGmT2V1LTt+RtBUyshl2i4QtH
-	3HZxHBcq0xPzx3z51skNxeznCpI0b7eU87msQ3IfMfuxKv2p6l3JLeyEcQ+9N/Q8q8iNx2vaSVT
-	G
-X-Google-Smtp-Source: AGHT+IGMe7vbN+rcyaflK7UwHGodpy0PhAqDnXszyTvkpEpLuv1D0VhU5uY3RmPQcSZ6d3lWBMc6sA==
-X-Received: by 2002:a17:906:613:b0:a46:37db:b57d with SMTP id s19-20020a170906061300b00a4637dbb57dmr7218423ejb.15.1710688149126;
-        Sun, 17 Mar 2024 08:09:09 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710688206; x=1711293006;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=52LFxewU+lJnUU/UkYouuSQjkj5zFMWyV+Agj/X5Res=;
+        b=ttxiQ1Yo9TlpTt1ncIummOZxk0CPrygzXtZwezJwVFVkuGstX/lsvNax8U1kDdX02q
+         24UvgEdVbLzbIw6sFUazzUIxcTrb4PnUqFkSJZBGu8SQiupAPHsLGpV7Qnp78GURnb1z
+         E6rzcM4DTDJjybXAqZvqukoap8JXGFnslVCLSqNt7m/7mUy2vSWEEO9SKThs2BkRimNi
+         IFN6OA29SzBmM6thki7inTGbSflU9pbLan8EuLabfY0zq/DAmgDZXOqC+XshQBCDYBT8
+         TcqrFb3+Q3I+WCqZSodH2HQC+L4kcDMlS1sw4BMfq6D3e8XD/tVKP1Lb3Jm5FBp2QM5S
+         Mbiw==
+X-Forwarded-Encrypted: i=1; AJvYcCWu/w2pM2QDwNFfUYPZfZFy/NitkP99Rj3J42qg+e0YGjJXlGaQ4FsY3AnaIYU/HuFoLjIMkW0AaF2hYVPiVSXFr09y3mMuw+jkfA==
+X-Gm-Message-State: AOJu0YwB2HOhD1M1y8gx3TeZHoYenZlubt9fVlUFitJXiGeQUsbaF+qC
+	ROkt7BUiVYQjoG7ejSA2L4QxMY9i57fGTkIUK/mfntm+CKE1eQz3WF0B9Y3n4XU=
+X-Google-Smtp-Source: AGHT+IHXTfMCScXM1mkWeoif93ohDO1yjqtnmmUV/LOWvpVMz4oAN4Nji+UifEYxoUMrCTVuc9CW9A==
+X-Received: by 2002:a17:907:868f:b0:a46:a9a7:fbec with SMTP id qa15-20020a170907868f00b00a46a9a7fbecmr2806408ejc.76.1710688206136;
+        Sun, 17 Mar 2024 08:10:06 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.222.97])
-        by smtp.gmail.com with ESMTPSA id f23-20020a170906049700b00a3efa4e033asm3853301eja.151.2024.03.17.08.09.07
+        by smtp.gmail.com with ESMTPSA id f23-20020a170906049700b00a3efa4e033asm3853301eja.151.2024.03.17.08.10.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Mar 2024 08:09:08 -0700 (PDT)
-Message-ID: <ded06cc5-9f98-4259-b081-afdffe051f7b@linaro.org>
-Date: Sun, 17 Mar 2024 16:09:06 +0100
+        Sun, 17 Mar 2024 08:10:05 -0700 (PDT)
+Message-ID: <60512ae2-dd73-4cb6-9514-145f946300fc@linaro.org>
+Date: Sun, 17 Mar 2024 16:10:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -77,23 +76,22 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/14] mips: dts: ralink: mt7621: reorder sysc node
- attributes
-To: Justin Swartz <justin.swartz@risingedge.co.za>,
- =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
- Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+Subject: Re: [PATCH 00/14] mips: dts: ralink: mt7621: improve DTS style
+Content-Language: en-US
+To: Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+ Justin Swartz <justin.swartz@risingedge.co.za>
+Cc: =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
  Rob Herring <robh+dt@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
  Conor Dooley <conor+dt@kernel.org>,
  Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
  Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-mediatek@lists.infradead.org
 References: <20240316045442.31469-1-justin.swartz@risingedge.co.za>
- <20240316045442.31469-5-justin.swartz@risingedge.co.za>
-Content-Language: en-US
+ <CAMhs-H9ZO-sitsrASuvsEd+ddwVyHH35gj7yAABTqFNfOCGYYw@mail.gmail.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -139,36 +137,38 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240316045442.31469-5-justin.swartz@risingedge.co.za>
+In-Reply-To: <CAMhs-H9ZO-sitsrASuvsEd+ddwVyHH35gj7yAABTqFNfOCGYYw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 16/03/2024 05:54, Justin Swartz wrote:
-> Reorder the attributes of the sysc node so that the
-> ralink prefixed attribute is placed after those which lack
-> prefixes.
-> 
-> Signed-off-by: Justin Swartz <justin.swartz@risingedge.co.za>
-> ---
->  arch/mips/boot/dts/ralink/mt7621.dtsi | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
-> index 696460b2d..d1d4399d7 100644
-> --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
-> +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
-> @@ -68,12 +68,15 @@ palmbus: palmbus@1e000000 {
->  		sysc: syscon@0 {
->  			compatible = "mediatek,mt7621-sysc", "syscon";
->  			reg = <0x0 0x100>;
-> +
->  			#clock-cells = <1>;
->  			#reset-cells = <1>;
-> -			ralink,memctl = <&memc>;
-> +
+On 16/03/2024 16:49, Sergio Paracuellos wrote:
+> On Sat, Mar 16, 2024 at 5:54 AM Justin Swartz
+> <justin.swartz@risingedge.co.za> wrote:
+>>
+>> This set of patches was created with the intention of cleaning up
+>> arch/mips/boot/dts/ralink/mt7621.dtsi so that it is aligned with
+>> the Devicetree Sources (DTS) Coding Style [1] [2] guide.
+>>
+>> [1] Documentation/devicetree/bindings/dts-coding-style.rst
+>>
+>> [2] https://docs.kernel.org/devicetree/bindings/dts-coding-style.html
+>>
+>> Justin Swartz (14):
+>>   mips: dts: ralink: mt7621: reorder cpu node attributes
+>>   mips: dts: ralink: mt7621: reorder cpuintc node attributes
+>>   mips: dts: ralink: mt7621: reorder mmc regulator attributes
+>>   mips: dts: ralink: mt7621: reorder sysc node attributes
+>>   mips: dts: ralink: mt7621: reorder gpio node attributes
+>>   mips: dts: ralink: mt7621: reorder i2c node attributes
+>>   mips: dts: ralink: mt7621: reorder spi0 node attributes
+>>   mips: dts: ralink: mt7621: move pinctrl and sort its children
+>>   mips: dts: ralink: mt7621: reorder mmc node attributes
+>>   mips: dts: ralink: mt7621: reorder gic node attributes
+>>   mips: dts: ralink: mt7621: reorder ethernet node attributes and kids
+>>   mips: dts: ralink: mt7621: reorder pcie node attributes and children
+>>   mips: dts: ralink: mt7621: reorder pci?_phy attributes
 
-Why do you move properties one-by-one? This is a lot of churn. Fixup
-entire file in one pass.
+These are all simple cleanups for the same file. It's one patch, not 15.
 
 Best regards,
 Krzysztof
