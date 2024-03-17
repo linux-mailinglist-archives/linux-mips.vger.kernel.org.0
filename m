@@ -1,161 +1,209 @@
-Return-Path: <linux-mips+bounces-2301-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2302-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40C4487DDE4
-	for <lists+linux-mips@lfdr.de>; Sun, 17 Mar 2024 16:23:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6DA587DDF3
+	for <lists+linux-mips@lfdr.de>; Sun, 17 Mar 2024 16:29:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 116B528138E
-	for <lists+linux-mips@lfdr.de>; Sun, 17 Mar 2024 15:23:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 545E31F213BA
+	for <lists+linux-mips@lfdr.de>; Sun, 17 Mar 2024 15:29:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B84D41C6A5;
-	Sun, 17 Mar 2024 15:23:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3C9B1C6B5;
+	Sun, 17 Mar 2024 15:29:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=risingedge.co.za header.i=@risingedge.co.za header.b="j2TNxf4P"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aGCEqa+M"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from outgoing4.flk.host-h.net (outgoing4.flk.host-h.net [188.40.0.90])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 356931C680;
-	Sun, 17 Mar 2024 15:22:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.0.90
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B440F1C6AF
+	for <linux-mips@vger.kernel.org>; Sun, 17 Mar 2024 15:29:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710688981; cv=none; b=qYn5q+vNj8QKHuUYbCn70zUhhy+0y9mDRHpQqaBZGJEht0A3NPndPETI9jIdsOp19fhZs2aBS4gQcaKLY3Dx35ThrMi4Y54MMVlZ9e+U5T2amDYMGZhvjw77bMKMlkKX/TJCPGs8DPMOBJ2fek+VWjnc2SD+i/lUQA6gLvMgdMg=
+	t=1710689380; cv=none; b=SWCs9nwmIp/nMHOegCkWdR+LznoWdlEtghBKAle+Zzmw8IcN2pS0WHt8axSj3OMcWq5vLR4yEZnX19xo5p94KVpJ5HAwyJx1Q27RkIE+P3YnDA00TbNiQgDSwCCbsUyU9/GAIncZ16Xu9P8Gf+xfpVrSSdSKfvr+APbFAEmpeTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710688981; c=relaxed/simple;
-	bh=1VZdH2PB7PZuyYLs/npoQxL3szJMfPoYqJpMGKYICh0=;
-	h=MIME-Version:Content-Type:Date:From:To:Cc:Subject:In-Reply-To:
-	 References:Message-ID; b=bHni4+1h4Ksmd7uTBaIrDiSbk5ldOYWBmFO92IjiiYjHBvos3AVcDp11uVXUpVh52ztSefTe6A0o3H/6lpG5mHhBcfTfk09TnlQ0CU0NNGgyadfDo3ZHXhxidR/MtuKjZ47VwqRO52HieBFhInrJcP6iMDuf4RIhQcV3abg1TL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=risingedge.co.za; spf=pass smtp.mailfrom=risingedge.co.za; dkim=pass (2048-bit key) header.d=risingedge.co.za header.i=@risingedge.co.za header.b=j2TNxf4P; arc=none smtp.client-ip=188.40.0.90
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=risingedge.co.za
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=risingedge.co.za
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=risingedge.co.za; s=xneelo; h=Message-ID:References:In-Reply-To:Subject:Cc:
-	To:From:Date:Content-Transfer-Encoding:Content-Type:MIME-Version:reply-to:
-	sender:bcc; bh=jpJmCXnRWkvipvI+cl7psJeUcSum3HGG9o3Z43g1ycg=; b=j2TNxf4Pgtf1G9
-	tWJ3FqrZY26UZOriQ/i+mwirYaOpaKRVI6JSjuXyBZIjOyJ3YVJ1qtNOi17HiTgJxGmFGrrGJH5Y6
-	SqqN9A4DpEVRT7ZKTVC6kyxxMJM8ONNBlyfaegMGUIxhjewGyTtFwM3eQldfoM92T04q/pm+kBO4S
-	Fsb+EsFEZFRph9ocgXJoJ/KQdfAw1bY7dYLnGjip8ePhy+Gdo6ktp9872SMApqt8eXMyPJwzl+F8j
-	UmxPMqL1tGZ2Fsz9V+jkRjpOJqS86ltBU52yek/bUYHKdn/y4tYXdBTypNFalyCbSnMlQXs6p46HG
-	dmt0hgj7yCIQoiNEktIw==;
-Received: from www31.flk1.host-h.net ([188.40.1.173])
-	by antispam1-flk1.host-h.net with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <justin.swartz@risingedge.co.za>)
-	id 1rlsLS-008gRB-0O; Sun, 17 Mar 2024 17:22:44 +0200
-Received: from roundcubeweb1.flk1.host-h.net ([138.201.244.33] helo=webmail9.konsoleh.co.za)
-	by www31.flk1.host-h.net with esmtpa (Exim 4.92)
-	(envelope-from <justin.swartz@risingedge.co.za>)
-	id 1rlsLQ-0005pa-09; Sun, 17 Mar 2024 17:22:40 +0200
+	s=arc-20240116; t=1710689380; c=relaxed/simple;
+	bh=Phu7nPTCfTt91JBs+SuYy6aiueQt1WUZjJAWb+jpCaI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DygoicqakVGT4zjhOzy5I9RqKHmVzaSrdDmQg2+3E+5ulb7Rj2hQJ/oWOSqP/ZqxAnoTrArOC9umk0+VqJh0UJ22CjjpcVYovi6VwbqpZyLPB7414rXx73eUtz8sfs9S+KaJocvnxwjCEL9J5EfW7tc6bd+AMQjWWn977qfECkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aGCEqa+M; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-513a08f2263so3802847e87.3
+        for <linux-mips@vger.kernel.org>; Sun, 17 Mar 2024 08:29:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1710689377; x=1711294177; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A8WcCyd8vgz263xa9NPZybhQi9kVqK0YmFh146T5x90=;
+        b=aGCEqa+M2UHDd2t55lOiupRFgfLoDZl5TFNbjYzdz7Z8gN5rO/nUJ7Jo8Kv3eiJPra
+         FWQ2JnoyIVaNCL44z4B/90TE+AGeVe10/0r1LSiu3PUgr02f5ivrIEwCYsnbhuZdAhKt
+         itelHuYDSDeTundLtX2L/X2nQQRdki1dwgn4DJFm5f0bh4CosV1sXPWHb3g/wZRkFT/W
+         PrDdiWErYKDGTbz5uvvifj5aN2I1puNv/XNFiJKl5RZUIr0kX9xci0eWDxHOM4omALhp
+         wk0AJH9ecK5gWTeH1CUe6NWx4LrCZ+qzdyqno07D58uTFiBelp3mUawTKMUIqWuAoSaz
+         uR6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710689377; x=1711294177;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A8WcCyd8vgz263xa9NPZybhQi9kVqK0YmFh146T5x90=;
+        b=fpCvwthmGyC4oCeahVyocJQ2oKz1lP7LznGnpzAfQNSpjHDnJmOFLt7b8aU4fGZsXx
+         IVEBXHqDuc/v2dgtLjGOQHBrm0+vSX+VoVUjHt/DdIinkl1nHXPbzrNx6PbWKqfNt2Y8
+         LKPv5u7Y8P+j/VeQsTb4MXrCp08S+4RqIKar5qUmQIRnI8pVDiHAiNDHYfxDCZF+RCAP
+         Lkaq1vxa8lWKxG0MySUq0ySMumE1BrJLYwxdovecdnksMChAGiNfNJclO9m3Quz6uwpW
+         Y1Y2WgJacl9+UF9TZ28PFHNGZDjSH99rwHCr2vKpdwhlFRwV413/vJhWenEsEeGv+2Mv
+         qMzg==
+X-Forwarded-Encrypted: i=1; AJvYcCX6nQgzwAliGpA1OTEYeTiz125j6UQiNCaZjfMCmwDQSaByHLHTs4/7JBDYaHINv3/4uEITaRedUR7GJUYzZyt5WUsixC89MrY5/Q==
+X-Gm-Message-State: AOJu0YyBVBbv4J2mp3XI3rcG5JP07iMofunuB21KFbfi9y322D0xaAPS
+	uyDp3Tts3yyRJOZPF1gFytNjuTvzvtWr5PEaM4ro79rVe5ekY0CzC0vh5ZHcMqI=
+X-Google-Smtp-Source: AGHT+IGgfgH03LvKICjbZS2cDme7K6TcagY32JX5GkRBXMsxFk4N9eETQx3WDI3Zqf+qcERZN+nN1w==
+X-Received: by 2002:a05:6512:3a93:b0:513:e7ff:15af with SMTP id q19-20020a0565123a9300b00513e7ff15afmr1090150lfu.64.1710689376859;
+        Sun, 17 Mar 2024 08:29:36 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.222.97])
+        by smtp.gmail.com with ESMTPSA id sd9-20020a170906ce2900b00a4628cacad4sm3859452ejb.195.2024.03.17.08.29.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 17 Mar 2024 08:29:36 -0700 (PDT)
+Message-ID: <adefc3ff-86a5-4af7-8276-73d0e0108901@linaro.org>
+Date: Sun, 17 Mar 2024 16:29:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date: Sun, 17 Mar 2024 17:22:39 +0200
-From: Justin Swartz <justin.swartz@risingedge.co.za>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Sergio Paracuellos <sergio.paracuellos@gmail.com>, =?UTF-8?Q?Ar=C4=B1?=
- =?UTF-8?Q?n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Matthias Brugger
- <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
- <angelogioacchino.delregno@collabora.com>, linux-mips@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 00/14] mips: dts: ralink: mt7621: improve DTS style
-In-Reply-To: <60512ae2-dd73-4cb6-9514-145f946300fc@linaro.org>
+Content-Language: en-US
+To: Justin Swartz <justin.swartz@risingedge.co.za>
+Cc: Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+ =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org
 References: <20240316045442.31469-1-justin.swartz@risingedge.co.za>
  <CAMhs-H9ZO-sitsrASuvsEd+ddwVyHH35gj7yAABTqFNfOCGYYw@mail.gmail.com>
  <60512ae2-dd73-4cb6-9514-145f946300fc@linaro.org>
-Message-ID: <5d6c36cb9dd9afda1efb69aa34058517@risingedge.co.za>
-X-Sender: justin.swartz@risingedge.co.za
-User-Agent: Roundcube Webmail/1.3.17
-X-Authenticated-Sender: justin.swartz@risingedge.co.za
-X-Virus-Scanned: Clear
-X-SpamExperts-Domain: risingedge.co.za
-X-SpamExperts-Username: 
-Authentication-Results: host-h.net; auth=pass (login) smtp.auth=@risingedge.co.za
-X-SpamExperts-Outgoing-Class: ham
-X-SpamExperts-Outgoing-Evidence: Combined (0.04)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT9ZXznAGsLAbssBYrxq90PQPUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5wCPRB8bAzJcv2cv+UqiTTc2+CpNcmBnO4XM3Sck4bwNogU
- WCl1nkLBzZX0KuJ9bXiS85Z42w/+2OBolTNFbPomXFWCX8oNdggW7HE9XDTdSejrkEpbuUvwMvHx
- 3T+KSG//gbuP7hnUK8NQdLwsVWKIFDZRrTGv3rxiw9tFrqFSCFNiLZt/QXQnOBRD+jq1HsKsDh/6
- Srgk2K3gr1VBfJbChkYH6fbrypLNrde+UooQVNLReLErukdelEOHUIpaBbp5GdnsN8+UvimwMinK
- 0+Txhz2u9qvrL2PODYgMZQApJXOjDLkqunZ9NcY2bHZn7CfFscMZZf3sCkN20I5vMh4akiObI7Kj
- vK7X04QEin24qbfMFd8eGjnYW8aSH5qj4ujh/13psIvqSqJFa1CcANErDW/w69saM9prk3jNnHtn
- nuEt/J9wDZeQfiNOYsLDFBdwYt2XtlLzy7G7T4kla0JNMwpa8J6LDEGB71xpBP9rMN3suOKfn8Hl
- koyhyj7ioi1H+3FR74FPtCVqefSOps3DjBaEzxvm/wSPAqUO1+xOWSBZB5ABM5ibrJKBc41fzX2f
- c4dPBW7pWChw4uEjGhn8NxWJwjYpP3+Q3/7iG2wtXpj+MxXskxADOZtFo1H2i7Tgo+5B/jmqOvZj
- iTeRCozF+pjfbFrzHCaFHgNTrYhVbBAqR8ZRvY88PgTw/yJlftBcHX6tS8NW54gm54VAvfk9VDzu
- 2DWvs648c5Z9erCJvcji+JcS2GUvCK1BsRI8tTKkBVM18TehOmSn2kZRt3z8CHTZnKdQqcB0QMMU
- IPF3mL0sZmYqDqSi6Ubx7BN0H0IaZOsZnP36dPZwQWhvr8FGGENbqE9x654AXkUfGHPAHnWD1MEm
- 8zNnsSuSxjl6RVTXva2Jl4AHe5oTGEWuK7wQuHiJKcf5Sqd6P3zHxU4Ham35bIM7+pzQRR2+p5za
- 8H1gUaDJZGpg6c2oigrh+YcF3SeOS5epce2vBFQn8BLQG4wdJz5OZPl/85ViK8Ea0fe5iniRDU9a
- IkFLX1Ne1hGTitUHsPftyxriH1hAvmSO1crrLwiF2BozUnkjKLcelPzx2oqVYjg7pBU6N7n2Xnf9
- ORWrllgKtBSNx6xUC0rhukb6/HI5FFTbPOoZF9qxZ4vEB++mMxBCD3fThxO9W05FCDXTgie1WJoD
- 4hXRjHZ+R3cXutruHTpS87YkskBoFo6eZ5Uv5yUh4sH+KRvQOJ2675fcuW/3lDmDZZ7XgBhunFdj
- VYxKH3qWyoySMt2NXQeSeCQL64BFVPTx/kcAi/BxQpDwnPv6lZRBE5yf8dBL5neTPEi/hBlrHCDh
- EJ2WARFy2DNwOgV373pfDhBQ21Od8BCsodKtWDQizmRHoSVjKnexcCkQ+p5zWKzxeWKxLCyS8776
- l4RSwc4z5cqDb97hdiFVwaP90eVaqnDphEW4xEWnj3iKGpP30awjRzKpQ4kPl+3D1YhNMZlGTB68
- YWMe6VM9RYQVmV8q7nN/oibcn491jt+pt12gBHaGoo19huz2OKHH5lr9xXvSM4nM3avg
-X-Report-Abuse-To: spam@antispamquarantine.host-h.net
+ <5d6c36cb9dd9afda1efb69aa34058517@risingedge.co.za>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <5d6c36cb9dd9afda1efb69aa34058517@risingedge.co.za>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 2024-03-17 17:10, Krzysztof Kozlowski wrote:
-> On 16/03/2024 16:49, Sergio Paracuellos wrote:
->> On Sat, Mar 16, 2024 at 5:54 AM Justin Swartz
->> <justin.swartz@risingedge.co.za> wrote:
->>> 
->>> This set of patches was created with the intention of cleaning up
->>> arch/mips/boot/dts/ralink/mt7621.dtsi so that it is aligned with
->>> the Devicetree Sources (DTS) Coding Style [1] [2] guide.
->>> 
->>> [1] Documentation/devicetree/bindings/dts-coding-style.rst
->>> 
->>> [2] https://docs.kernel.org/devicetree/bindings/dts-coding-style.html
->>> 
->>> Justin Swartz (14):
->>>   mips: dts: ralink: mt7621: reorder cpu node attributes
->>>   mips: dts: ralink: mt7621: reorder cpuintc node attributes
->>>   mips: dts: ralink: mt7621: reorder mmc regulator attributes
->>>   mips: dts: ralink: mt7621: reorder sysc node attributes
->>>   mips: dts: ralink: mt7621: reorder gpio node attributes
->>>   mips: dts: ralink: mt7621: reorder i2c node attributes
->>>   mips: dts: ralink: mt7621: reorder spi0 node attributes
->>>   mips: dts: ralink: mt7621: move pinctrl and sort its children
->>>   mips: dts: ralink: mt7621: reorder mmc node attributes
->>>   mips: dts: ralink: mt7621: reorder gic node attributes
->>>   mips: dts: ralink: mt7621: reorder ethernet node attributes and 
->>> kids
->>>   mips: dts: ralink: mt7621: reorder pcie node attributes and 
->>> children
->>>   mips: dts: ralink: mt7621: reorder pci?_phy attributes
+On 17/03/2024 16:22, Justin Swartz wrote:
+> On 2024-03-17 17:10, Krzysztof Kozlowski wrote:
+>> On 16/03/2024 16:49, Sergio Paracuellos wrote:
+>>> On Sat, Mar 16, 2024 at 5:54 AM Justin Swartz
+>>> <justin.swartz@risingedge.co.za> wrote:
+>>>>
+>>>> This set of patches was created with the intention of cleaning up
+>>>> arch/mips/boot/dts/ralink/mt7621.dtsi so that it is aligned with
+>>>> the Devicetree Sources (DTS) Coding Style [1] [2] guide.
+>>>>
+>>>> [1] Documentation/devicetree/bindings/dts-coding-style.rst
+>>>>
+>>>> [2] https://docs.kernel.org/devicetree/bindings/dts-coding-style.html
+>>>>
+>>>> Justin Swartz (14):
+>>>>   mips: dts: ralink: mt7621: reorder cpu node attributes
+>>>>   mips: dts: ralink: mt7621: reorder cpuintc node attributes
+>>>>   mips: dts: ralink: mt7621: reorder mmc regulator attributes
+>>>>   mips: dts: ralink: mt7621: reorder sysc node attributes
+>>>>   mips: dts: ralink: mt7621: reorder gpio node attributes
+>>>>   mips: dts: ralink: mt7621: reorder i2c node attributes
+>>>>   mips: dts: ralink: mt7621: reorder spi0 node attributes
+>>>>   mips: dts: ralink: mt7621: move pinctrl and sort its children
+>>>>   mips: dts: ralink: mt7621: reorder mmc node attributes
+>>>>   mips: dts: ralink: mt7621: reorder gic node attributes
+>>>>   mips: dts: ralink: mt7621: reorder ethernet node attributes and 
+>>>> kids
+>>>>   mips: dts: ralink: mt7621: reorder pcie node attributes and 
+>>>> children
+>>>>   mips: dts: ralink: mt7621: reorder pci?_phy attributes
+>>
+>> These are all simple cleanups for the same file. It's one patch, not 
+>> 15.
 > 
-> These are all simple cleanups for the same file. It's one patch, not 
-> 15.
+> I agree these are all simple cleanups.
+> 
+> Even though the cleanup pattern was the same, or very similar,
+> for each node affected, the intention was to isolate each change
+> to a single node (or a grouping of nodes of that seemed logical
+> to me) so that if anyone had any objections, the discussion would
+> be easier to follow in subthreads identifiable by patch names (and
 
-I agree these are all simple cleanups.
+Objections to what? Coding style? Coding style is defined so you either
+implement it or not... and even if someone disagrees with one line swap,
+why it cannot be done like for every contribution: inline?
 
-Even though the cleanup pattern was the same, or very similar,
-for each node affected, the intention was to isolate each change
-to a single node (or a grouping of nodes of that seemed logical
-to me) so that if anyone had any objections, the discussion would
-be easier to follow in subthreads identifiable by patch names (and
-thus subject lines) that clearly indicate the context.
+Organize your patches how described in submitting patches: one per
+logical change. Logical change is to reorder all properties in one file,
+without functional impact.
 
-But if there're no objections and it lessens the burden on
-maintainers upstream to have less patches to apply, then I have no
-problem combining them into a single patch.
+> thus subject lines) that clearly indicate the context.
+> 
+> But if there're no objections and it lessens the burden on
+> maintainers upstream to have less patches to apply, then I have no
+> problem combining them into a single patch.
+> 
 
-Regards
-Justin
+Yeah, one review response instead of 14 responses... One commit in the
+history instead of 14.
+
+Best regards,
+Krzysztof
+
 
