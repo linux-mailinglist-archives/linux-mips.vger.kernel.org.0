@@ -1,74 +1,74 @@
-Return-Path: <linux-mips+bounces-2310-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2311-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3542487E58C
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 10:19:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0245887E5A0
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 10:23:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BF061C20DAC
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 09:19:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FC1D1F21C93
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 09:23:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28EAD28E2B;
-	Mon, 18 Mar 2024 09:19:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE87D2C185;
+	Mon, 18 Mar 2024 09:23:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JRCWbvs1"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="as5ctwoT"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5106C28E17
-	for <linux-mips@vger.kernel.org>; Mon, 18 Mar 2024 09:19:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD8642C68C
+	for <linux-mips@vger.kernel.org>; Mon, 18 Mar 2024 09:23:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710753586; cv=none; b=rRra+7dy1nfEdrQjdg9PW5D3qf40wQ17knDu+2hulzHE1QOmsRa8BElELMKskHDZ7Kt/gvXJ2t9TLgqjH467Lws7RWDTkpaWZlxi/dmTGDsigwfnU+U4wE0RQ3axd8n0LUdnbxVdnojRlmrvt/uhbWsTF9qEM5E/m9MzMhLDMgc=
+	t=1710753808; cv=none; b=QyT5TeWXtbRv686bYIlEnGSUaLuUVX1k4YBelLwjaJG+24PPaFgZ8llGUmqS77ljFGM7dUqWqtTDqecX7CBjh0Fzv+fy14pmUrP0SzxYeWV0syavA45Itbcl2sy0BmyMrjm5DATZZUK877Cx/4vESyNDX37ljk6Wrjq6LQ8Nr9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710753586; c=relaxed/simple;
-	bh=jp7QZPp2a/Gaou65Z69AxcDk/5PHYR3FnTCZRxVmIgs=;
+	s=arc-20240116; t=1710753808; c=relaxed/simple;
+	bh=G2/dGPQHTsouT6SIKS6kEPyTyi7iG8TB8hc9yD1KxMI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kAI9IwRtGmtvsbfAdpnU9cylJCkCVBB5tOA0Z++EJ0bR6EzQ2XQKRtkPKgD69FCSWUivXXxOrSI33XWhBJsZkG86Aj4s0dnLiZI2/NyTzGctcYE2X5am7VRsMPhAx8gKG8gwRrlzL5LLRaq17tHLdZgI8fxn7dgVUWefx8YEYxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JRCWbvs1; arc=none smtp.client-ip=209.85.208.45
+	 In-Reply-To:Content-Type; b=EuBH1RKb1LWY6F85cIKTD4NwfvhDKZJOa4uNGA2FYRnGSCUYklRrT8rODBnSwNkIhXkdfAXSx0gH0x8hkOLhf0DtY3g+mye26YaOSjGL1eJ8F2yhzY3nSwAqCgswadPiAlaFtdWgz4XYmgYSDjzR7lrzOEG6ntqEHJv8hp8xtIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=as5ctwoT; arc=none smtp.client-ip=209.85.218.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-56a2bb1d84eso984141a12.1
-        for <linux-mips@vger.kernel.org>; Mon, 18 Mar 2024 02:19:44 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a46cc947929so38835366b.1
+        for <linux-mips@vger.kernel.org>; Mon, 18 Mar 2024 02:23:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710753583; x=1711358383; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1710753805; x=1711358605; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6DmORVVqQRASoZ9rnkfY0LA6LIBlyeKMNcLspwpQKNk=;
-        b=JRCWbvs12RiY0GNoEpReQSPMXMEUarw5bwO/kdzJHjrjDbryBSzwFH7GwKYx/GN0wk
-         I9aFbTiSPEuqj7L79qHejvTMpK14QcGwNZZc/7hovbRmNBnyiQaLEYx04NVapnt7pou7
-         +PWFJtS4CeViE01GNageelJ2Z4LOUhbTfwVt+iD5lu/Rz+D1Sgor/GJBME1en1SxUvJi
-         s4Y8GXvVh5sX3RCwQzgwLmgUM9S7hiBqcbGO/kENUbIdgNuyzab+dxOINbBM1noIZl02
-         O0vhGvzfzWsZ+8KEr3CmFTvTHiNXt2XTKKhlmAparXlroBqR0JsEGB7+L8pv42fhWuoJ
-         +HHw==
+        bh=tB1Pb2tlLh6YNrZFH5WUvlCJhiEA56vnslfaevBVe4A=;
+        b=as5ctwoTNdc1YA7l820QvGugIDhqgB5mr25YVU9UnbImh7ErwluPR2E5X0aQZeqBgP
+         IdwyBOyqc/yJmOeZiF57VEMLG+EorDDyRk+u3NT/RuWB9YY//b4beymXM8Ir4J+ZUOSU
+         LgGcVsFQ8+XCet/BG9bm9+QWqKDLQN20zqEt8LVQKh/8KyawNA95twMBx8SjcLhN3Y4w
+         2pTHE4l26F4tihLqXMABSbkrBwtwWKVZ7zfno9NVZqdTym9uiGE9lGIk+7ArOeUYl9F1
+         O66afoJ1eWTyJrXDn5HPYNbP8e9d/ddLrWubKNvf/Q5290fkMyyLdBtg5vkVZ4Xu3iop
+         z3Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710753583; x=1711358383;
+        d=1e100.net; s=20230601; t=1710753805; x=1711358605;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6DmORVVqQRASoZ9rnkfY0LA6LIBlyeKMNcLspwpQKNk=;
-        b=JVyIsE13iZAtyoOGjQ6vUsxvs+5O6MxsUSEiBrJJkIW9Ct4/R+Xj8ZCjo4Zk46Gb9J
-         0C0ODZzY4ngocOmnvZZFHrN6KUWB9SXUaKzyClL4uT/Hv8r/Bz41jpNuX+EiNInhK/AV
-         VV4bG9AN3QUsJgW7PxkcWfHacPFogRneO7LEmNkxirocGMcn848TRy4R+popXbla0PoW
-         hIw3F0fiSHPsI//XfBKX7RzzwZcPrVVFRIcEEsWdc+pTMpXl2fq6VMA+ul+9sIbiYY3T
-         Nr299ZffrJZPoVLp/IMl9KTynCgoebTFGestJ21b87V0BhNyW0O2MpRfh+KmANVkN6Ib
-         tFvA==
-X-Forwarded-Encrypted: i=1; AJvYcCXXWahE8KW+iVs2Z5JUVpJ9LOsA1lya4mKmHbTFiyfI/CxOhk4hW8cKRKjIWCkS3x4ngt/4oX2WFJsZgmSTWowWFUvyBXsyclEFpg==
-X-Gm-Message-State: AOJu0YyZQYFFdke5B85quYofA+qIJw+tDU5pCVxWrLyoRkBPYhh8wBIw
-	I+4eZj4uDcG2osZ1f7Dw2ozC5XKqsutNPdjq09CZNXkvKG64YMTuhbtdgnLIAlM=
-X-Google-Smtp-Source: AGHT+IEO7HsXFmgG7cuRv+XQ37xkX8fwJoLmGPXNGPpfTG+c2mFTpqtwRjx9ZqjjwFVZwbR/mziCIg==
-X-Received: by 2002:a05:6402:3814:b0:568:d21c:e0ef with SMTP id es20-20020a056402381400b00568d21ce0efmr3109311edb.6.1710753582701;
-        Mon, 18 Mar 2024 02:19:42 -0700 (PDT)
+        bh=tB1Pb2tlLh6YNrZFH5WUvlCJhiEA56vnslfaevBVe4A=;
+        b=ANJ0dN/HXoPlmsxHb1IhY+ECRpPTuCv3ntkzU7/H+KhA20vBs380rKEQWIY0B3KFbP
+         wtGtni88ZP6PxaEXlIdoBv5tvso0Oz2YdS2ki+mhs0NoSz1ZtANz7YEZpY0SF4Iu/U44
+         oNN4ssvXWXHJJVpO6e6KCpAzjn5IqoNzmIYAEbzSY1/7X+PNu8+OGZK4YRxP6ozFdKE1
+         L3riRX+cyrZUwk/++xCrSM5DiB2uZnKLYJREXHgLsHF7M1z+4rzvNbxJJ4VFA7J8HDOm
+         0QrAdbaWiiqUZashAsh/SdeBKQw1YvGslgVLkR9L/a6QvVUP3vPO1Ijjb4butrfJKQWE
+         /Ydw==
+X-Forwarded-Encrypted: i=1; AJvYcCUV8PqE8GG8E0fenEoX+dZJGHU6kANFGuHJUGAY0l1iLp6LQ+0VLlmJYvdaYT4l32wTAO0HzWi70Rol3hIvLCWpc+ZjbmsW9Kc6Og==
+X-Gm-Message-State: AOJu0Yyq7lJfBABKwDDhZg96eic4tMux2HCCJHNxysPXMinptPIjw/ru
+	9glkBbdwgeA0xWUL35rZYGcW638yvtFD5noyGlbhlryj/CWJkyLN++fVUUhGA9c=
+X-Google-Smtp-Source: AGHT+IFfKgN3fKN/toMx8ietVToFXwqCqDevicEP6FQmK+6HM9KS7j35zgkmTVEAg2/FjcDuOLtWBw==
+X-Received: by 2002:a17:907:724a:b0:a46:8856:e6bf with SMTP id ds10-20020a170907724a00b00a468856e6bfmr7130014ejc.44.1710753805202;
+        Mon, 18 Mar 2024 02:23:25 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.222.97])
-        by smtp.gmail.com with ESMTPSA id x1-20020a056402414100b00568d2d4e4besm1390210eda.54.2024.03.18.02.19.40
+        by smtp.gmail.com with ESMTPSA id cu2-20020a170906e00200b00a4660b63502sm4696764ejb.12.2024.03.18.02.23.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Mar 2024 02:19:42 -0700 (PDT)
-Message-ID: <8a6e717d-a63b-4f1f-9873-efce2a868a4a@linaro.org>
-Date: Mon, 18 Mar 2024 10:19:39 +0100
+        Mon, 18 Mar 2024 02:23:24 -0700 (PDT)
+Message-ID: <18327bbe-10ad-4b39-ab70-2f74f0d4fb08@linaro.org>
+Date: Mon, 18 Mar 2024 10:23:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -78,9 +78,9 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 00/14] mips: dts: ralink: mt7621: improve DTS style
 Content-Language: en-US
-To: Sergio Paracuellos <sergio.paracuellos@gmail.com>,
- Justin Swartz <justin.swartz@risingedge.co.za>
-Cc: =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+To: Justin Swartz <justin.swartz@risingedge.co.za>
+Cc: Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+ =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
  Rob Herring <robh+dt@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
  Conor Dooley <conor+dt@kernel.org>,
@@ -96,7 +96,6 @@ References: <20240316045442.31469-1-justin.swartz@risingedge.co.za>
  <5d6c36cb9dd9afda1efb69aa34058517@risingedge.co.za>
  <adefc3ff-86a5-4af7-8276-73d0e0108901@linaro.org>
  <26633d73360e43b2c548f49e544472ea@risingedge.co.za>
- <CAMhs-H_1bwfKO8yquz-3BHQ0UQYW1FFVJYHE66w8Q9m1+fCCHw@mail.gmail.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -142,33 +141,111 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <CAMhs-H_1bwfKO8yquz-3BHQ0UQYW1FFVJYHE66w8Q9m1+fCCHw@mail.gmail.com>
+In-Reply-To: <26633d73360e43b2c548f49e544472ea@risingedge.co.za>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 18/03/2024 09:48, Sergio Paracuellos wrote:
->>
->>
->>>> But if there're no objections and it lessens the burden on
->>>> maintainers upstream to have less patches to apply, then I have no
->>>> problem combining them into a single patch.
+On 17/03/2024 16:43, Justin Swartz wrote:
+> On 2024-03-17 17:29, Krzysztof Kozlowski wrote:
+>> On 17/03/2024 16:22, Justin Swartz wrote:
+>>> On 2024-03-17 17:10, Krzysztof Kozlowski wrote:
+>>>> On 16/03/2024 16:49, Sergio Paracuellos wrote:
+>>>>> On Sat, Mar 16, 2024 at 5:54 AM Justin Swartz
+>>>>> <justin.swartz@risingedge.co.za> wrote:
+>>>>>>
+>>>>>> This set of patches was created with the intention of cleaning up
+>>>>>> arch/mips/boot/dts/ralink/mt7621.dtsi so that it is aligned with
+>>>>>> the Devicetree Sources (DTS) Coding Style [1] [2] guide.
+>>>>>>
+>>>>>> [1] Documentation/devicetree/bindings/dts-coding-style.rst
+>>>>>>
+>>>>>> [2] 
+>>>>>> https://docs.kernel.org/devicetree/bindings/dts-coding-style.html
+>>>>>>
+>>>>>> Justin Swartz (14):
+>>>>>>   mips: dts: ralink: mt7621: reorder cpu node attributes
+>>>>>>   mips: dts: ralink: mt7621: reorder cpuintc node attributes
+>>>>>>   mips: dts: ralink: mt7621: reorder mmc regulator attributes
+>>>>>>   mips: dts: ralink: mt7621: reorder sysc node attributes
+>>>>>>   mips: dts: ralink: mt7621: reorder gpio node attributes
+>>>>>>   mips: dts: ralink: mt7621: reorder i2c node attributes
+>>>>>>   mips: dts: ralink: mt7621: reorder spi0 node attributes
+>>>>>>   mips: dts: ralink: mt7621: move pinctrl and sort its children
+>>>>>>   mips: dts: ralink: mt7621: reorder mmc node attributes
+>>>>>>   mips: dts: ralink: mt7621: reorder gic node attributes
+>>>>>>   mips: dts: ralink: mt7621: reorder ethernet node attributes and
+>>>>>> kids
+>>>>>>   mips: dts: ralink: mt7621: reorder pcie node attributes and
+>>>>>> children
+>>>>>>   mips: dts: ralink: mt7621: reorder pci?_phy attributes
 >>>>
+>>>> These are all simple cleanups for the same file. It's one patch, not
+>>>> 15.
 >>>
->>> Yeah, one review response instead of 14 responses... One commit in the
->>> history instead of 14.
+>>> I agree these are all simple cleanups.
+>>>
+>>> Even though the cleanup pattern was the same, or very similar,
+>>> for each node affected, the intention was to isolate each change
+>>> to a single node (or a grouping of nodes of that seemed logical
+>>> to me) so that if anyone had any objections, the discussion would
+>>> be easier to follow in subthreads identifiable by patch names (and
 >>
->> I agree that 1 commit vs 14 is better.
->>
->> But for future reference: is it not enough for the Reviewed-by: trailer
->> to be sent in response to the cover letter of a patch set if a reviewer
->> has looked at the entire set?
+>> Objections to what? Coding style? Coding style is defined so you either
+>> implement it or not... and even if someone disagrees with one line 
+>> swap,
+>> why it cannot be done like for every contribution: inline?
 > 
-> It is enough, AFAICT. I found your patchset very easy to review so I
-> am ok with the patchset as it is. However, at the end this will be
-> through the mips tree, so let's do what Thomas prefers: add all
-> patches as they are or squash all of them in one commit.
+> I had been asked to include empty lines when I had left them out when
+> I had contributed a patch regarding the serial nodes, which resulted in
+> a second version of that patch.
 
-Yeah, like fixing language typos in comments: one typo per patch.
+I don't understand why would that matter. It's expected Linux
+development process to receive comments inline in the patch.
+
+> 
+> 
+>> Organize your patches how described in submitting patches: one per
+>> logical change. Logical change is to reorder all properties in one 
+>> file,
+>> without functional impact.
+> 
+> If I had accidentally deleted or modified an attribute in the process
+> of cleanup, this could have had a functional impact. It's easier to
+
+How is it relevant? But you did not and splitting simple cleanup
+one-line-per-patch is not affecting this. Just because you could make
+mistake it does not affect patch readability at all.
+
+Nothing improved with your patch split.
+
+
+> notice this sort of omission when the wall of text you're confronted
+> with is as small as possible, and not multiple pages long.
+
+We are used to handle some length of patches. Multiple scrolls for
+obvious cleanups are not problems. Why aren't you applying this approach
+to everything? Add a new driver with one function per patch and then
+finally Makefile? It would be bisectable and "easy to read" plus
+absolutely unmanageable.
+
+> 
+> 
+>>> But if there're no objections and it lessens the burden on
+>>> maintainers upstream to have less patches to apply, then I have no
+>>> problem combining them into a single patch.
+>>>
+>>
+>> Yeah, one review response instead of 14 responses... One commit in the
+>> history instead of 14.
+> 
+> I agree that 1 commit vs 14 is better.
+> 
+> But for future reference: is it not enough for the Reviewed-by: trailer
+> to be sent in response to the cover letter of a patch set if a reviewer
+> has looked at the entire set?
+
+Sure, one can. I still need to open and download 14 patches.
+
 
 Best regards,
 Krzysztof
