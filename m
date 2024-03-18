@@ -1,183 +1,176 @@
-Return-Path: <linux-mips+bounces-2309-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2310-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AF1A87E532
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 09:48:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3542487E58C
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 10:19:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B0421C2087D
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 08:48:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BF061C20DAC
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 09:19:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDEB228DD3;
-	Mon, 18 Mar 2024 08:48:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28EAD28E2B;
+	Mon, 18 Mar 2024 09:19:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ezDP/fXp"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JRCWbvs1"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A9D28DB3;
-	Mon, 18 Mar 2024 08:48:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5106C28E17
+	for <linux-mips@vger.kernel.org>; Mon, 18 Mar 2024 09:19:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710751710; cv=none; b=PsEAGxUhsbo5Sj3Fe64I0uFl8NaaZ9dN7CvPohjcuvllcMPZCmDhGsES0lxqM0fHXdYYokRw8WT1lWuwANIjPFxfwNmwTF+I6PXU9xdNLMQK0OpeUKbNiFse0Y5ObChwu9m7nI1fn+4ZekBEhlyM/ndMCjNWNAEerNLjIM4IaPo=
+	t=1710753586; cv=none; b=rRra+7dy1nfEdrQjdg9PW5D3qf40wQ17knDu+2hulzHE1QOmsRa8BElELMKskHDZ7Kt/gvXJ2t9TLgqjH467Lws7RWDTkpaWZlxi/dmTGDsigwfnU+U4wE0RQ3axd8n0LUdnbxVdnojRlmrvt/uhbWsTF9qEM5E/m9MzMhLDMgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710751710; c=relaxed/simple;
-	bh=JbhalFVOWE8ob0NFwL/Zd1xtzRDw3LbSHyNV56UbvCw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TvQUSZjfPhxrPyX89l0CpSulrqdAqS5Owjo0x/WaGfqTrkm5vfUCuYZafsk/9df6UqrcbTX1nYSeY6n88dl7dzDcgLBkHxWFPP6VkAyABnQAjmYEj8Q8D2NrFdrPQFRAMN7Ue4zvaddyAtd9N0AK+Wl4JMAMimrTOqgKxZf1p18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ezDP/fXp; arc=none smtp.client-ip=209.85.160.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-2222b96e4d2so2556434fac.3;
-        Mon, 18 Mar 2024 01:48:28 -0700 (PDT)
+	s=arc-20240116; t=1710753586; c=relaxed/simple;
+	bh=jp7QZPp2a/Gaou65Z69AxcDk/5PHYR3FnTCZRxVmIgs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kAI9IwRtGmtvsbfAdpnU9cylJCkCVBB5tOA0Z++EJ0bR6EzQ2XQKRtkPKgD69FCSWUivXXxOrSI33XWhBJsZkG86Aj4s0dnLiZI2/NyTzGctcYE2X5am7VRsMPhAx8gKG8gwRrlzL5LLRaq17tHLdZgI8fxn7dgVUWefx8YEYxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JRCWbvs1; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-56a2bb1d84eso984141a12.1
+        for <linux-mips@vger.kernel.org>; Mon, 18 Mar 2024 02:19:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710751708; x=1711356508; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=npuV+MPjFSDr3HzZ1jEevx08H7DusAET6upqkhgWg4o=;
-        b=ezDP/fXpfbJIwjrzkzzgPVmVe2nDHsQ9tKP2HWBxXKAEO3hleZgg8pafKKR0Uw2OgY
-         VpwIEHJQJn9pprqJLctIs3RDwd+q91F941t//E25METmWA9FNhp2l7rasJJkbaS+xVtl
-         LdzNUKGAJcpakpJcgixOC8Hh4IwycX3JQQnIsVuNtyrZcpOaTBQWp88aBISE1tCUozRh
-         tZlXKXFf3tmmwsQf9+QMhxTZouaTvaZOfWySmHaZjpb6JKGejs8yS27xnjUsV0SoLu/F
-         wn2B10dCg7pT0Lm3WSaan+a9gXnow7iIrDT3d4rivtSH2jRqNLlqd64UKRvl8MLL8H/g
-         bTRw==
+        d=linaro.org; s=google; t=1710753583; x=1711358383; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6DmORVVqQRASoZ9rnkfY0LA6LIBlyeKMNcLspwpQKNk=;
+        b=JRCWbvs12RiY0GNoEpReQSPMXMEUarw5bwO/kdzJHjrjDbryBSzwFH7GwKYx/GN0wk
+         I9aFbTiSPEuqj7L79qHejvTMpK14QcGwNZZc/7hovbRmNBnyiQaLEYx04NVapnt7pou7
+         +PWFJtS4CeViE01GNageelJ2Z4LOUhbTfwVt+iD5lu/Rz+D1Sgor/GJBME1en1SxUvJi
+         s4Y8GXvVh5sX3RCwQzgwLmgUM9S7hiBqcbGO/kENUbIdgNuyzab+dxOINbBM1noIZl02
+         O0vhGvzfzWsZ+8KEr3CmFTvTHiNXt2XTKKhlmAparXlroBqR0JsEGB7+L8pv42fhWuoJ
+         +HHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710751708; x=1711356508;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=npuV+MPjFSDr3HzZ1jEevx08H7DusAET6upqkhgWg4o=;
-        b=gj3KOLCPyzXKXhAZrdFx/xI38Yq2wgXfLtunJ38wJbEysFourA+NittTaQvzeMUcHO
-         zJB3UKDk6WKJpKN/5k5WBFvxZjKeuDPLh01p+8VHY/VoRktB+opv07T05rAThs7hotnM
-         tEmbIiEwXNFA+JU5LpOV4dDWETMqM2pOvSqT84pFR9+I68bi8JRKbzbC46KT1dQjwmA8
-         sHLDGLdEslTRIijq4sXSCKu18w1Sd0ckU3MFYCRDlIzzE6Rh3c+c6/Ji32BG75QT1sSD
-         cRF8J3OiQ/4iFYovGqFL4QhpxQPNFRGU9BCp9HelVc5UlIKWLHFzIiJvnawEWX7v1+uK
-         yviA==
-X-Forwarded-Encrypted: i=1; AJvYcCUdBZp4Mj6lAzESx34aVa/QLyikwW2JOvctV0en3mylsCWqFElwDMUXgCQvxUd+34KNt8GhiV/TKlVki+/uZqs17TYYbV1WujvJX8/5mn4RRYgMkozGFxggJS7l6zo2cE2liI3RKwk2pj362ZSbndGEPSx1DpA09MwvTIlSie6AbsT+HV8=
-X-Gm-Message-State: AOJu0Ywym4CyLLW6+qfi7S+q6+BuzBmtqcs22/lD2MzV2fI3i4eo9Mrs
-	7xKaTQAV6zdtMDnxCt2roTkF1oQQG+2u35mpx2UGkctsob6FxQlt1SLesFcN68f3WjN/xMNwaFV
-	3AEFmj0BBUFMY8PmCl7KDS4occ30=
-X-Google-Smtp-Source: AGHT+IETjYlP8OmJEtS9A7tonlde3gO7yveZ3H0MRWYGfVElthO7L1t7r3b9bdSl8NrQTIQOGzxNqDOGbNgVpYGsXAk=
-X-Received: by 2002:a05:6870:2192:b0:21e:528f:54e9 with SMTP id
- l18-20020a056870219200b0021e528f54e9mr12511527oae.18.1710751708108; Mon, 18
- Mar 2024 01:48:28 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710753583; x=1711358383;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6DmORVVqQRASoZ9rnkfY0LA6LIBlyeKMNcLspwpQKNk=;
+        b=JVyIsE13iZAtyoOGjQ6vUsxvs+5O6MxsUSEiBrJJkIW9Ct4/R+Xj8ZCjo4Zk46Gb9J
+         0C0ODZzY4ngocOmnvZZFHrN6KUWB9SXUaKzyClL4uT/Hv8r/Bz41jpNuX+EiNInhK/AV
+         VV4bG9AN3QUsJgW7PxkcWfHacPFogRneO7LEmNkxirocGMcn848TRy4R+popXbla0PoW
+         hIw3F0fiSHPsI//XfBKX7RzzwZcPrVVFRIcEEsWdc+pTMpXl2fq6VMA+ul+9sIbiYY3T
+         Nr299ZffrJZPoVLp/IMl9KTynCgoebTFGestJ21b87V0BhNyW0O2MpRfh+KmANVkN6Ib
+         tFvA==
+X-Forwarded-Encrypted: i=1; AJvYcCXXWahE8KW+iVs2Z5JUVpJ9LOsA1lya4mKmHbTFiyfI/CxOhk4hW8cKRKjIWCkS3x4ngt/4oX2WFJsZgmSTWowWFUvyBXsyclEFpg==
+X-Gm-Message-State: AOJu0YyZQYFFdke5B85quYofA+qIJw+tDU5pCVxWrLyoRkBPYhh8wBIw
+	I+4eZj4uDcG2osZ1f7Dw2ozC5XKqsutNPdjq09CZNXkvKG64YMTuhbtdgnLIAlM=
+X-Google-Smtp-Source: AGHT+IEO7HsXFmgG7cuRv+XQ37xkX8fwJoLmGPXNGPpfTG+c2mFTpqtwRjx9ZqjjwFVZwbR/mziCIg==
+X-Received: by 2002:a05:6402:3814:b0:568:d21c:e0ef with SMTP id es20-20020a056402381400b00568d21ce0efmr3109311edb.6.1710753582701;
+        Mon, 18 Mar 2024 02:19:42 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.222.97])
+        by smtp.gmail.com with ESMTPSA id x1-20020a056402414100b00568d2d4e4besm1390210eda.54.2024.03.18.02.19.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Mar 2024 02:19:42 -0700 (PDT)
+Message-ID: <8a6e717d-a63b-4f1f-9873-efce2a868a4a@linaro.org>
+Date: Mon, 18 Mar 2024 10:19:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/14] mips: dts: ralink: mt7621: improve DTS style
+Content-Language: en-US
+To: Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+ Justin Swartz <justin.swartz@risingedge.co.za>
+Cc: =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org
 References: <20240316045442.31469-1-justin.swartz@risingedge.co.za>
  <CAMhs-H9ZO-sitsrASuvsEd+ddwVyHH35gj7yAABTqFNfOCGYYw@mail.gmail.com>
- <60512ae2-dd73-4cb6-9514-145f946300fc@linaro.org> <5d6c36cb9dd9afda1efb69aa34058517@risingedge.co.za>
- <adefc3ff-86a5-4af7-8276-73d0e0108901@linaro.org> <26633d73360e43b2c548f49e544472ea@risingedge.co.za>
-In-Reply-To: <26633d73360e43b2c548f49e544472ea@risingedge.co.za>
-From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date: Mon, 18 Mar 2024 09:48:15 +0100
-Message-ID: <CAMhs-H_1bwfKO8yquz-3BHQ0UQYW1FFVJYHE66w8Q9m1+fCCHw@mail.gmail.com>
-Subject: Re: [PATCH 00/14] mips: dts: ralink: mt7621: improve DTS style
-To: Justin Swartz <justin.swartz@risingedge.co.za>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-mips@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <60512ae2-dd73-4cb6-9514-145f946300fc@linaro.org>
+ <5d6c36cb9dd9afda1efb69aa34058517@risingedge.co.za>
+ <adefc3ff-86a5-4af7-8276-73d0e0108901@linaro.org>
+ <26633d73360e43b2c548f49e544472ea@risingedge.co.za>
+ <CAMhs-H_1bwfKO8yquz-3BHQ0UQYW1FFVJYHE66w8Q9m1+fCCHw@mail.gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzTRLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+wsGUBBMBCgA+FiEE
+ m9B+DgxR+NWWd7dUG5NDfTtBYpsFAmI+BxMCGwMFCRRfreEFCwkIBwIGFQoJCAsCBBYCAwEC
+ HgECF4AACgkQG5NDfTtBYptgbhAAjAGunRoOTduBeC7V6GGOQMYIT5n3OuDSzG1oZyM4kyvO
+ XeodvvYv49/ng473E8ZFhXfrre+c1olbr1A8pnz9vKVQs9JGVa6wwr/6ddH7/yvcaCQnHRPK
+ mnXyP2BViBlyDWQ71UC3N12YCoHE2cVmfrn4JeyK/gHCvcW3hUW4i5rMd5M5WZAeiJj3rvYh
+ v8WMKDJOtZFXxwaYGbvFJNDdvdTHc2x2fGaWwmXMJn2xs1ZyFAeHQvrp49mS6PBQZzcx0XL5
+ cU9ZjhzOZDn6Apv45/C/lUJvPc3lo/pr5cmlOvPq1AsP6/xRXsEFX/SdvdxJ8w9KtGaxdJuf
+ rpzLQ8Ht+H0lY2On1duYhmro8WglOypHy+TusYrDEry2qDNlc/bApQKtd9uqyDZ+rx8bGxyY
+ qBP6bvsQx5YACI4p8R0J43tSqWwJTP/R5oPRQW2O1Ye1DEcdeyzZfifrQz58aoZrVQq+innR
+ aDwu8qDB5UgmMQ7cjDSeAQABdghq7pqrA4P8lkA7qTG+aw8Z21OoAyZdUNm8NWJoQy8m4nUP
+ gmeeQPRc0vjp5JkYPgTqwf08cluqO6vQuYL2YmwVBIbO7cE7LNGkPDA3RYMu+zPY9UUi/ln5
+ dcKuEStFZ5eqVyqVoZ9eu3RTCGIXAHe1NcfcMT9HT0DPp3+ieTxFx6RjY3kYTGLOwU0EVUNc
+ NAEQAM2StBhJERQvgPcbCzjokShn0cRA4q2SvCOvOXD+0KapXMRFE+/PZeDyfv4dEKuCqeh0
+ hihSHlaxTzg3TcqUu54w2xYskG8Fq5tg3gm4kh1Gvh1LijIXX99ABA8eHxOGmLPRIBkXHqJY
+ oHtCvPc6sYKNM9xbp6I4yF56xVLmHGJ61KaWKf5KKWYgA9kfHufbja7qR0c6H79LIsiYqf92
+ H1HNq1WlQpu/fh4/XAAaV1axHFt/dY/2kU05tLMj8GjeQDz1fHas7augL4argt4e+jum3Nwt
+ yupodQBxncKAUbzwKcDrPqUFmfRbJ7ARw8491xQHZDsP82JRj4cOJX32sBg8nO2N5OsFJOcd
+ 5IE9v6qfllkZDAh1Rb1h6DFYq9dcdPAHl4zOj9EHq99/CpyccOh7SrtWDNFFknCmLpowhct9
+ 5ZnlavBrDbOV0W47gO33WkXMFI4il4y1+Bv89979rVYn8aBohEgET41SpyQz7fMkcaZU+ok/
+ +HYjC/qfDxT7tjKXqBQEscVODaFicsUkjheOD4BfWEcVUqa+XdUEciwG/SgNyxBZepj41oVq
+ FPSVE+Ni2tNrW/e16b8mgXNngHSnbsr6pAIXZH3qFW+4TKPMGZ2rZ6zITrMip+12jgw4mGjy
+ 5y06JZvA02rZT2k9aa7i9dUUFggaanI09jNGbRA/ABEBAAHCwXwEGAEKACYCGwwWIQSb0H4O
+ DFH41ZZ3t1Qbk0N9O0FimwUCYDzvagUJFF+UtgAKCRAbk0N9O0Fim9JzD/0auoGtUu4mgnna
+ oEEpQEOjgT7l9TVuO3Qa/SeH+E0m55y5Fjpp6ZToc481za3xAcxK/BtIX5Wn1mQ6+szfrJQ6
+ 59y2io437BeuWIRjQniSxHz1kgtFECiV30yHRgOoQlzUea7FgsnuWdstgfWi6LxstswEzxLZ
+ Sj1EqpXYZE4uLjh6dW292sO+j4LEqPYr53hyV4I2LPmptPE9Rb9yCTAbSUlzgjiyyjuXhcwM
+ qf3lzsm02y7Ooq+ERVKiJzlvLd9tSe4jRx6Z6LMXhB21fa5DGs/tHAcUF35hSJrvMJzPT/+u
+ /oVmYDFZkbLlqs2XpWaVCo2jv8+iHxZZ9FL7F6AHFzqEFdqGnJQqmEApiRqH6b4jRBOgJ+cY
+ qc+rJggwMQcJL9F+oDm3wX47nr6jIsEB5ZftdybIzpMZ5V9v45lUwmdnMrSzZVgC4jRGXzsU
+ EViBQt2CopXtHtYfPAO5nAkIvKSNp3jmGxZw4aTc5xoAZBLo0OV+Ezo71pg3AYvq0a3/oGRG
+ KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
+ fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <CAMhs-H_1bwfKO8yquz-3BHQ0UQYW1FFVJYHE66w8Q9m1+fCCHw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, Mar 17, 2024 at 4:43=E2=80=AFPM Justin Swartz
-<justin.swartz@risingedge.co.za> wrote:
->
-> On 2024-03-17 17:29, Krzysztof Kozlowski wrote:
-> > On 17/03/2024 16:22, Justin Swartz wrote:
-> >> On 2024-03-17 17:10, Krzysztof Kozlowski wrote:
-> >>> On 16/03/2024 16:49, Sergio Paracuellos wrote:
-> >>>> On Sat, Mar 16, 2024 at 5:54=E2=80=AFAM Justin Swartz
-> >>>> <justin.swartz@risingedge.co.za> wrote:
-> >>>>>
-> >>>>> This set of patches was created with the intention of cleaning up
-> >>>>> arch/mips/boot/dts/ralink/mt7621.dtsi so that it is aligned with
-> >>>>> the Devicetree Sources (DTS) Coding Style [1] [2] guide.
-> >>>>>
-> >>>>> [1] Documentation/devicetree/bindings/dts-coding-style.rst
-> >>>>>
-> >>>>> [2]
-> >>>>> https://docs.kernel.org/devicetree/bindings/dts-coding-style.html
-> >>>>>
-> >>>>> Justin Swartz (14):
-> >>>>>   mips: dts: ralink: mt7621: reorder cpu node attributes
-> >>>>>   mips: dts: ralink: mt7621: reorder cpuintc node attributes
-> >>>>>   mips: dts: ralink: mt7621: reorder mmc regulator attributes
-> >>>>>   mips: dts: ralink: mt7621: reorder sysc node attributes
-> >>>>>   mips: dts: ralink: mt7621: reorder gpio node attributes
-> >>>>>   mips: dts: ralink: mt7621: reorder i2c node attributes
-> >>>>>   mips: dts: ralink: mt7621: reorder spi0 node attributes
-> >>>>>   mips: dts: ralink: mt7621: move pinctrl and sort its children
-> >>>>>   mips: dts: ralink: mt7621: reorder mmc node attributes
-> >>>>>   mips: dts: ralink: mt7621: reorder gic node attributes
-> >>>>>   mips: dts: ralink: mt7621: reorder ethernet node attributes and
-> >>>>> kids
-> >>>>>   mips: dts: ralink: mt7621: reorder pcie node attributes and
-> >>>>> children
-> >>>>>   mips: dts: ralink: mt7621: reorder pci?_phy attributes
-> >>>
-> >>> These are all simple cleanups for the same file. It's one patch, not
-> >>> 15.
-> >>
-> >> I agree these are all simple cleanups.
-> >>
-> >> Even though the cleanup pattern was the same, or very similar,
-> >> for each node affected, the intention was to isolate each change
-> >> to a single node (or a grouping of nodes of that seemed logical
-> >> to me) so that if anyone had any objections, the discussion would
-> >> be easier to follow in subthreads identifiable by patch names (and
-> >
-> > Objections to what? Coding style? Coding style is defined so you either
-> > implement it or not... and even if someone disagrees with one line
-> > swap,
-> > why it cannot be done like for every contribution: inline?
->
-> I had been asked to include empty lines when I had left them out when
-> I had contributed a patch regarding the serial nodes, which resulted in
-> a second version of that patch.
->
->
-> > Organize your patches how described in submitting patches: one per
-> > logical change. Logical change is to reorder all properties in one
-> > file,
-> > without functional impact.
->
-> If I had accidentally deleted or modified an attribute in the process
-> of cleanup, this could have had a functional impact. It's easier to
-> notice this sort of omission when the wall of text you're confronted
-> with is as small as possible, and not multiple pages long.
->
->
-> >> But if there're no objections and it lessens the burden on
-> >> maintainers upstream to have less patches to apply, then I have no
-> >> problem combining them into a single patch.
-> >>
-> >
-> > Yeah, one review response instead of 14 responses... One commit in the
-> > history instead of 14.
->
-> I agree that 1 commit vs 14 is better.
->
-> But for future reference: is it not enough for the Reviewed-by: trailer
-> to be sent in response to the cover letter of a patch set if a reviewer
-> has looked at the entire set?
+On 18/03/2024 09:48, Sergio Paracuellos wrote:
+>>
+>>
+>>>> But if there're no objections and it lessens the burden on
+>>>> maintainers upstream to have less patches to apply, then I have no
+>>>> problem combining them into a single patch.
+>>>>
+>>>
+>>> Yeah, one review response instead of 14 responses... One commit in the
+>>> history instead of 14.
+>>
+>> I agree that 1 commit vs 14 is better.
+>>
+>> But for future reference: is it not enough for the Reviewed-by: trailer
+>> to be sent in response to the cover letter of a patch set if a reviewer
+>> has looked at the entire set?
+> 
+> It is enough, AFAICT. I found your patchset very easy to review so I
+> am ok with the patchset as it is. However, at the end this will be
+> through the mips tree, so let's do what Thomas prefers: add all
+> patches as they are or squash all of them in one commit.
 
-It is enough, AFAICT. I found your patchset very easy to review so I
-am ok with the patchset as it is. However, at the end this will be
-through the mips tree, so let's do what Thomas prefers: add all
-patches as they are or squash all of them in one commit.
+Yeah, like fixing language typos in comments: one typo per patch.
 
-Thanks,
-    Sergio Paracuellos
+Best regards,
+Krzysztof
+
 
