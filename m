@@ -1,185 +1,154 @@
-Return-Path: <linux-mips+bounces-2305-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2306-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6200787E20E
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 03:08:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE2E487E24E
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 03:49:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83EAA1C211EC
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 02:08:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8744B280E04
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 02:49:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC4E21D558;
-	Mon, 18 Mar 2024 02:08:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A29B1DFF4;
+	Mon, 18 Mar 2024 02:49:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QxUrkA21"
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="iV4pzRO6"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB9FFC19;
-	Mon, 18 Mar 2024 02:08:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C82DB1EB21
+	for <linux-mips@vger.kernel.org>; Mon, 18 Mar 2024 02:49:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710727692; cv=none; b=n1ENK0cfiswYOj7+u8YjHyg3wf1OPpcXM9WLXCVejrAZJG2lpANzVXnZctBPIQI44jYAJ9GPvMLXtskkOfa7n/cXjRZENPy68HIVxkFDNELaCRkCgY4V8DykNIf4VMrVlIAsBzFYujJRI5lyd2f5aaO26mxtaiAnZRv3SZBwyw0=
+	t=1710730189; cv=none; b=HFoItxkJzGeHU9OyyVQUe7cz3v124JUhCS6hqvn+7jxn7dJndjj319cOKI9dipWSj7j7sGTOaRdvtQmMdQjcKsyx3kBljnETLKD199SPkIiGQCTJJ7wriquILev0RpC/vl+GXt+FYiQplraeo2SP+R1hV2f6RsR9IIv4VvYWOZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710727692; c=relaxed/simple;
-	bh=mws7dN5Idqqrfvi+n0P3+pOKyWtSoMBBeE76poHLdbk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BaX6PLnm0Q+bwB++KVGxwvuCngmXcEEXGmcanqutQKCjVtL0lk+Fy1pRivhjyUIoU3esdipNeduQRsGfkmME539hxSBxqklzPDYSNWGKyUV+yOSh4P1AEeqmJRSwZjgi/aaB5oihs6uh/9+C7ovSiuNCWM690E57Q/PrPJsDn7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QxUrkA21; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-512bde3d197so3234340e87.0;
-        Sun, 17 Mar 2024 19:08:09 -0700 (PDT)
+	s=arc-20240116; t=1710730189; c=relaxed/simple;
+	bh=ybVBqVNCXzGJGuz6lwF+tzdhl5wD9gmQp2PXPNadGZI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NmIgxwUeVZmC6sGF9z+y9S1y2lt2hyT6+66zVwVbk4YSAVyZ11twCz5uVkq8ivGJsbjOailot140811PVO2FZqOjMDXoZ8LkRI16QyVoR4xF7LN+Oqkq4WPmhGzkQIVigodjh16xmDLj83vNYJqv4wbEqskgGdKp39H14yN7Olo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=iV4pzRO6; arc=none smtp.client-ip=209.85.210.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-6dc8b280155so2579783a34.0
+        for <linux-mips@vger.kernel.org>; Sun, 17 Mar 2024 19:49:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710727688; x=1711332488; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eWwzY7BG/SocTQKZ/npPoCXiIUvaGwetrinQ1Oo5Q6A=;
-        b=QxUrkA21t6m/ZJKVEFTlMt7M0/ErwP/XRLGZ0uAnKLTXCl/sBuEQcOelXouDItjzxJ
-         RpilwV+O3slTYRAruSqIna1p5N2npY3SiN+31WA3o/1pOeYo4R7+UDrs08kMT4pfq0rn
-         vTsQw/gqzn+LF13eCcIeqj8NbleTidw0k3+uyYCvBpQpKd2YWg5AnKfeIEUbxOnO382P
-         n6bqVhQMhxTZ4dtn0/KE+lVKYpZm2kjlca8sYaRfFcD6aLEwmX3cR8KzinCimmTuvzCl
-         mH7fm/m4gYYp5Z6hue5AU7A/HJwzj6Eiy0eDQS5nT3W18jxamkbBPOB7CrIQddLpGi9c
-         EDXA==
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1710730186; x=1711334986; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QE0CXFBu76tpBM6gpoJrOe0mC6QUf5XbAI8puJxCLjs=;
+        b=iV4pzRO6P3GXwlCKnBLXNP1M23gu1zQrspv6JPJ8fStuXR6pQ39ApKrDntPI5tx/uE
+         /MnuWm41o/lbyJAypmV8amaK7R/DY9hx5GRXs/0r9iXayTGjDZNX/3a3xzI+TRbmrgc5
+         CKaIjiPutwDoASk/sLDAWwavRiaWn0pBM9030+PUUupT3yeK7y4jPmhcyEMY7r4Hl52y
+         XWNfIYJJTMt5wTngWdOXFC2+N/RSAkoF1vsgGy7/X1ZW8EIw0zE/PfsaGzUF6O4qnNcM
+         v/ZuzSbzmtn0escS9ERzZ4uMFZQ9IggD068oFEU9q2JSyZaFtYe56f0HASQWjPvNI5se
+         3jpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710727688; x=1711332488;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eWwzY7BG/SocTQKZ/npPoCXiIUvaGwetrinQ1Oo5Q6A=;
-        b=RTWjbgbtKi/w5z+kCtgruzot2FxL3zOjYUH0jK1Co+Aj0neSON79S2/6VC6SfOSabO
-         bfn+B4nv4/NEFfykIIf4ySeqecJ0mYliFxhM3Lmrhn3FN19iIl9qK/72loiFVGmiXW56
-         ZlhaU12k1VkAo4HE6tlnCTm0iB618/tgz5XK/DyerMDL2sTnjgpYMhv6+/KGVrD+qj9V
-         mlTg3FvB/fwOc6qSgbdmBwujQFFH/EYy+/4fJLN/SjHp0IgPIhqkUaizP1APPk+kG99h
-         Xa8sYifUD3yGnx+qsa7WkYFNwUuoIdkU7qLs+xNdDzHe/hEDttzhzUujeB+AAaBesC94
-         fPLg==
-X-Forwarded-Encrypted: i=1; AJvYcCXZ6Bmy1AfYezUdngWQXct9K1/kQR0IKpq8f9GTkN+W2IoXuADLLplIZuC57zn9+HKj+SXcKqXEuz0gYyDPAGDVlb4KHf/FWvXRoBx95ski09RjlhC252ecuXnogdR9XJTKPr+FYVfY38V2lYvtptB067LZZ0UmJb+nGruWSYLmLioa90+d+Qnjo9dDt92wWUheqqen63fgvThZg6iPh8c=
-X-Gm-Message-State: AOJu0YwEu6b0iqOlxztDUVeNd8eV2PaPZiaJJIY73s0z/U2tKDSx7rur
-	gtf2jpIbacS5UWU26GPrwSdKae0+sDNa83UVD/BFWaYoAQJYe0T0eRXiX1GjUwOhqVxtAoqLYVc
-	1Gkhm4KzDCogxTUdnPFVKtxRWYZaOM6k4X682NL/f
-X-Google-Smtp-Source: AGHT+IELJXfpHKY5OkoWCRxQO1hyaqGsdD/u6pXhrGkKOfTw4yoWtJPKyBqeeDjD/TMgR8o3MZzm+CvWvYv7033/2Os=
-X-Received: by 2002:a19:ae17:0:b0:513:cf5e:f2ad with SMTP id
- f23-20020a19ae17000000b00513cf5ef2admr7502601lfc.60.1710727687838; Sun, 17
- Mar 2024 19:08:07 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710730186; x=1711334986;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QE0CXFBu76tpBM6gpoJrOe0mC6QUf5XbAI8puJxCLjs=;
+        b=KBgZODPgYObm3z7xM1Ut0b/qPdJCxD2rmLtKKhy2jmT13pPnEBPuKccx2KC7Cpgyiq
+         9OklRktlw55cGJTDnQqIJ1rAj/1sM4z5Q/qhyIH7Befr8mAXuCKr+5nbajrriXJ1xMQU
+         KMHYldAk7rzC30zhh8CGt+MrRiBxxW/Gmk4JlSGnBbSTYhGvNaop+FEZxK0hDFnn9eV2
+         5NXQAWmPGJvje8lHWm5K4m9Vda0ZzHsTZZtpPamuwhtzyC0lGWVwQb5C7NMuZqlek3hN
+         0zSCMew9Df0tnUMNWJTZPb4TL3LUv0Rest7CV8P5ARRwl8dnqTsGzq4U2Hswu0Boh3iT
+         8kdg==
+X-Forwarded-Encrypted: i=1; AJvYcCU4YIQqFMgNJQ8A4he5XF6atYao3IgRR4wlIaCTrT6uTR+3hnno8Gsc3MvFt92/MkWTRrqea4BrF82/1jY4spoX6FHLZfgNAArF8A==
+X-Gm-Message-State: AOJu0YxaMyFVeyVzpXqPWcnKM8S9I7M7kPA+Y8ypurrTq1Qx6myrDTZh
+	I25M5YSaefyXmFnjWYTHysOg1su3EfMUA8qsuWyhfFjy6oo8DPYjSXeARf8tSUM=
+X-Google-Smtp-Source: AGHT+IENq8waTwhUkJrEOrb8DEHjfl4QDem6FZJYYGTlmjRRGItMoHQ4P2wTQfIoEZJr502KAVnEEA==
+X-Received: by 2002:a05:6870:8e05:b0:222:d6a:9ae8 with SMTP id lw5-20020a0568708e0500b002220d6a9ae8mr10284561oab.35.1710730185882;
+        Sun, 17 Mar 2024 19:49:45 -0700 (PDT)
+Received: from [192.168.1.24] (71-212-18-124.tukw.qwest.net. [71.212.18.124])
+        by smtp.gmail.com with ESMTPSA id i189-20020a62c1c6000000b006e66a76d877sm7120229pfg.153.2024.03.17.19.49.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 17 Mar 2024 19:49:45 -0700 (PDT)
+Message-ID: <b938514c-61cc-41e6-b592-1003b8deccae@davidwei.uk>
+Date: Sun, 17 Mar 2024 19:49:43 -0700
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240316-loongson1-dma-v6-0-90de2c3cc928@gmail.com> <CAAhV-H6aGS6VXGzkqWTyxL7bGw=KdjmnRZj7SpwrV5hT6XQcpg@mail.gmail.com>
-In-Reply-To: <CAAhV-H6aGS6VXGzkqWTyxL7bGw=KdjmnRZj7SpwrV5hT6XQcpg@mail.gmail.com>
-From: Keguang Zhang <keguang.zhang@gmail.com>
-Date: Mon, 18 Mar 2024 10:07:31 +0800
-Message-ID: <CAJhJPsVSM-8VA604p2Vr58QJEp+Tg72YTTntnip64Ejz=0aQng@mail.gmail.com>
-Subject: Re: [PATCH v6 0/2] Add support for Loongson1 DMA
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
+ custom page providers
+Content-Language: en-GB
+To: Christoph Hellwig <hch@infradead.org>,
+ Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Jeroen de Borst <jeroendb@google.com>,
+ Praveen Kaligineedi <pkaligineedi@google.com>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-3-almasrymina@google.com>
+ <ZfegzB341oNc_Ocz@infradead.org>
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <ZfegzB341oNc_Ocz@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Huacai,
+On 2024-03-17 19:02, Christoph Hellwig wrote:
+> On Mon, Mar 04, 2024 at 06:01:37PM -0800, Mina Almasry wrote:
+>> From: Jakub Kicinski <kuba@kernel.org>
+>>
+>> The page providers which try to reuse the same pages will
+>> need to hold onto the ref, even if page gets released from
+>> the pool - as in releasing the page from the pp just transfers
+>> the "ownership" reference from pp to the provider, and provider
+>> will wait for other references to be gone before feeding this
+>> page back into the pool.
+> 
+> The word hook always rings a giant warning bell for me, and looking into
+> this series I am concerned indeed.
+> 
+> The only provider provided here is the dma-buf one, and that basically
+> is the only sensible one for the documented design.  So instead of
+> adding hooks that random proprietary crap can hook into, why not hard
+> code the dma buf provide and just use a flag?  That'll also avoid
+> expensive indirect calls.
 
-> Hi, Keguang,
->
-> Sorry for the late reply, there is already a ls2x-apb-dma driver, I'm
-> not sure but can they share the same code base? If not, can rename
-> this driver to ls1x-apb-dma for consistency?
+I'm working on a similar proposal for zero copy Rx but to host memory
+and depend on this memory provider API.
 
-There are some differences between ls1x DMA and ls2x DMA, such as
-registers and DMA descriptors.
-I will rename it to ls1x-apb-dma.
-Thanks!
+Jakub also designed this API for hugepages too IIRC. Basically there's
+going to be at least three fancy ways of providing pages (one of which
+isn't actually pages, hence the merged netmem_t series) to drivers.
 
->
-> Huacai
->
-> On Sat, Mar 16, 2024 at 7:34=E2=80=AFPM Keguang Zhang via B4 Relay
-> <devnull+keguang.zhang.gmail.com@kernel.org> wrote:
-> >
-> > Add the driver and dt-binding document for Loongson1 DMA.
-> >
-> > Changelog
-> > V5 -> V6:
-> >    Change the compatible to the fallback
-> >    Implement .device_prep_dma_cyclic for Loongson1 sound driver,
-> >    as well as .device_pause and .device_resume.
-> >    Set the limitation LS1X_DMA_MAX_DESC and put all descriptors
-> >    into one page to save memory
-> >    Move dma_pool_zalloc() into ls1x_dma_alloc_desc()
-> >    Drop dma_slave_config structure
-> >    Use .remove_new instead of .remove
-> >    Use KBUILD_MODNAME for the driver name
-> >    Improve the debug information
-> >    Some minor fixes
-> > V4 -> V5:
-> >    Add the dt-binding document
-> >    Add DT support
-> >    Use DT information instead of platform data
-> >    Use chan_id of struct dma_chan instead of own id
-> >    Use of_dma_xlate_by_chan_id() instead of ls1x_dma_filter()
-> >    Update the author information to my official name
-> > V3 -> V4:
-> >    Use dma_slave_map to find the proper channel.
-> >    Explicitly call devm_request_irq() and tasklet_kill().
-> >    Fix namespace issue.
-> >    Some minor fixes and cleanups.
-> > V2 -> V3:
-> >    Rename ls1x_dma_filter_fn to ls1x_dma_filter.
-> > V1 -> V2:
-> >    Change the config from 'DMA_LOONGSON1' to 'LOONGSON1_DMA',
-> >    and rearrange it in alphabetical order in Kconfig and Makefile.
-> >    Fix comment style.
-> >
-> > Keguang Zhang (2):
-> >   dt-bindings: dma: Add Loongson-1 DMA
-> >   dmaengine: Loongson1: Add Loongson1 dmaengine driver
-> >
-> >  .../bindings/dma/loongson,ls1x-dma.yaml       |  64 +++
-> >  drivers/dma/Kconfig                           |   9 +
-> >  drivers/dma/Makefile                          |   1 +
-> >  drivers/dma/loongson1-dma.c                   | 492 ++++++++++++++++++
-> >  4 files changed, 566 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/dma/loongson,ls1x=
--dma.yaml
-> >  create mode 100644 drivers/dma/loongson1-dma.c
-> >
-> > --
-> > 2.39.2
-> >
-> > base-commit: 719136e5c24768ebdf80b9daa53facebbdd377c3
-> > ---
-> > Keguang Zhang (2):
-> >       dt-bindings: dma: Add Loongson-1 DMA
-> >       dmaengine: Loongson1: Add Loongson1 dmaengine driver
-> >
-> >  .../devicetree/bindings/dma/loongson,ls1x-dma.yaml |  66 ++
-> >  drivers/dma/Kconfig                                |   9 +
-> >  drivers/dma/Makefile                               |   1 +
-> >  drivers/dma/loongson1-dma.c                        | 665 +++++++++++++=
-++++++++
-> >  4 files changed, 741 insertions(+)
-> > ---
-> > base-commit: a1e7655b77e3391b58ac28256789ea45b1685abb
-> > change-id: 20231120-loongson1-dma-163afe5708b9
-> >
-> > Best regards,
-> > --
-> > Keguang Zhang <keguang.zhang@gmail.com>
-> >
-> >
-
-
-
---=20
-Best regards,
-
-Keguang Zhang
+> 
 
