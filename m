@@ -1,181 +1,183 @@
-Return-Path: <linux-mips+bounces-2308-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2309-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD68787E41D
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 08:32:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AF1A87E532
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 09:48:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80CFD2813AC
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 07:32:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B0421C2087D
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 08:48:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 492FB22638;
-	Mon, 18 Mar 2024 07:32:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDEB228DD3;
+	Mon, 18 Mar 2024 08:48:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BPtWy+0D"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ezDP/fXp"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1313B12B76;
-	Mon, 18 Mar 2024 07:32:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A9D28DB3;
+	Mon, 18 Mar 2024 08:48:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710747132; cv=none; b=nTSTYx/aQEJxOgpcGvFnw4895Cweg3eniIyDb3tPEwf6ZWvjHHZJwr9t7wKUGnVgMG8JOWrNh8DiPpM7gfsauEWWdV1XYjqxHBYLGrNnF+e+7L0sWIReyD3iUB22LleE/4ssG6evGXeW8D74ZRrqgKtBa6Wt5L3lQkUAyNLYcn4=
+	t=1710751710; cv=none; b=PsEAGxUhsbo5Sj3Fe64I0uFl8NaaZ9dN7CvPohjcuvllcMPZCmDhGsES0lxqM0fHXdYYokRw8WT1lWuwANIjPFxfwNmwTF+I6PXU9xdNLMQK0OpeUKbNiFse0Y5ObChwu9m7nI1fn+4ZekBEhlyM/ndMCjNWNAEerNLjIM4IaPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710747132; c=relaxed/simple;
-	bh=bbXziPqpBRV0qZLhsg4AuOlJ5+y5Q/jIj9u9f8Qa0oE=;
+	s=arc-20240116; t=1710751710; c=relaxed/simple;
+	bh=JbhalFVOWE8ob0NFwL/Zd1xtzRDw3LbSHyNV56UbvCw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LYe5tKaPFOaUQQgDisaUJMpnh+XXG+FJYco8Ubw9fnTrCEgMIRGsd/bN0lWPj2fGK59T0vv6FXkfeqdipMo7hr5jyRNYUoMSCdBEr7die878q2v7Awe+BkIT53y4HYrhlpGljPfrCKUajihgcYtOF1TI/rMgVXmZX7IYu2a2uBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BPtWy+0D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BD32C433F1;
-	Mon, 18 Mar 2024 07:32:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710747131;
-	bh=bbXziPqpBRV0qZLhsg4AuOlJ5+y5Q/jIj9u9f8Qa0oE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=BPtWy+0DdHelY0cUpomDcHadMgLGsnERO7NmFWITDsTFpK6lYBLOZlL1UYXRjxKdv
-	 jwLuYbEZZHPba25GsXQfPaoAU6XWIwkGnYyq9jgtXIMn6En6oDx5dhagvajEv7/huV
-	 G/o6Vwov+mZluIFM6Lxk7xH2XG3tWyR6P4Q31mMSWpPQuGYEOlnv0ZkfZMdBwAn6Up
-	 pSyc/F+gLepn/StzjSGPAIWMSXGWvenpHTi7qAKnjQWlVJI+dM03CtCApJCelT57RC
-	 QLTLnSsHrs1OjCveuSINDLZb/aEvbBcKuhkZXsX9xgOKcRKRGrwtOLGT9useW7R0u+
-	 NcmmtXPAbERsg==
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a46a7b8e07fso200419266b.2;
-        Mon, 18 Mar 2024 00:32:11 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVBzxt7lVKl7gztnC+BSOpIeNN8YzVH3IbpA6RkINjtvF5NpeEd5PNOyqvPRoWCKqsFkRfcqUejos2hJPgGiPdAhcodNeKPjxyz3iUboRL97M4a5MUo7+owzx7kSB8T31mD5nzq/DHVq/ZAf9tKyWYMqLSIqSLwaH+T9+86S9w9d3yr+NRz9Tg/bC1zJf4ncPzYfcu8dVViNtacH15grs8=
-X-Gm-Message-State: AOJu0YwENSaIcT2ygYcH/sW6Dj8UPM2RSR8FnROXCQeaAI2AiHjJjeL6
-	srK2jLUZNB3zafUSBq2K2cQgwattO+DCS+h2LR6TtTAXfkH5fhnNMSzxLXyU8f1cYPc+Hcle8p+
-	zcTgabF4dGXLAJWuPOGkiRnstKCo=
-X-Google-Smtp-Source: AGHT+IGJX09VGiPCmDBQJOuiE6At/QFzjXzSe62Lp5pSTm289d5FIHTFaalD0QxYzSNcbCHWVXOQPMIzfeA2/rY4UUA=
-X-Received: by 2002:a17:906:aec4:b0:a46:83fd:b52d with SMTP id
- me4-20020a170906aec400b00a4683fdb52dmr5654190ejb.30.1710747130092; Mon, 18
- Mar 2024 00:32:10 -0700 (PDT)
+	 To:Cc:Content-Type; b=TvQUSZjfPhxrPyX89l0CpSulrqdAqS5Owjo0x/WaGfqTrkm5vfUCuYZafsk/9df6UqrcbTX1nYSeY6n88dl7dzDcgLBkHxWFPP6VkAyABnQAjmYEj8Q8D2NrFdrPQFRAMN7Ue4zvaddyAtd9N0AK+Wl4JMAMimrTOqgKxZf1p18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ezDP/fXp; arc=none smtp.client-ip=209.85.160.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-2222b96e4d2so2556434fac.3;
+        Mon, 18 Mar 2024 01:48:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710751708; x=1711356508; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=npuV+MPjFSDr3HzZ1jEevx08H7DusAET6upqkhgWg4o=;
+        b=ezDP/fXpfbJIwjrzkzzgPVmVe2nDHsQ9tKP2HWBxXKAEO3hleZgg8pafKKR0Uw2OgY
+         VpwIEHJQJn9pprqJLctIs3RDwd+q91F941t//E25METmWA9FNhp2l7rasJJkbaS+xVtl
+         LdzNUKGAJcpakpJcgixOC8Hh4IwycX3JQQnIsVuNtyrZcpOaTBQWp88aBISE1tCUozRh
+         tZlXKXFf3tmmwsQf9+QMhxTZouaTvaZOfWySmHaZjpb6JKGejs8yS27xnjUsV0SoLu/F
+         wn2B10dCg7pT0Lm3WSaan+a9gXnow7iIrDT3d4rivtSH2jRqNLlqd64UKRvl8MLL8H/g
+         bTRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710751708; x=1711356508;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=npuV+MPjFSDr3HzZ1jEevx08H7DusAET6upqkhgWg4o=;
+        b=gj3KOLCPyzXKXhAZrdFx/xI38Yq2wgXfLtunJ38wJbEysFourA+NittTaQvzeMUcHO
+         zJB3UKDk6WKJpKN/5k5WBFvxZjKeuDPLh01p+8VHY/VoRktB+opv07T05rAThs7hotnM
+         tEmbIiEwXNFA+JU5LpOV4dDWETMqM2pOvSqT84pFR9+I68bi8JRKbzbC46KT1dQjwmA8
+         sHLDGLdEslTRIijq4sXSCKu18w1Sd0ckU3MFYCRDlIzzE6Rh3c+c6/Ji32BG75QT1sSD
+         cRF8J3OiQ/4iFYovGqFL4QhpxQPNFRGU9BCp9HelVc5UlIKWLHFzIiJvnawEWX7v1+uK
+         yviA==
+X-Forwarded-Encrypted: i=1; AJvYcCUdBZp4Mj6lAzESx34aVa/QLyikwW2JOvctV0en3mylsCWqFElwDMUXgCQvxUd+34KNt8GhiV/TKlVki+/uZqs17TYYbV1WujvJX8/5mn4RRYgMkozGFxggJS7l6zo2cE2liI3RKwk2pj362ZSbndGEPSx1DpA09MwvTIlSie6AbsT+HV8=
+X-Gm-Message-State: AOJu0Ywym4CyLLW6+qfi7S+q6+BuzBmtqcs22/lD2MzV2fI3i4eo9Mrs
+	7xKaTQAV6zdtMDnxCt2roTkF1oQQG+2u35mpx2UGkctsob6FxQlt1SLesFcN68f3WjN/xMNwaFV
+	3AEFmj0BBUFMY8PmCl7KDS4occ30=
+X-Google-Smtp-Source: AGHT+IETjYlP8OmJEtS9A7tonlde3gO7yveZ3H0MRWYGfVElthO7L1t7r3b9bdSl8NrQTIQOGzxNqDOGbNgVpYGsXAk=
+X-Received: by 2002:a05:6870:2192:b0:21e:528f:54e9 with SMTP id
+ l18-20020a056870219200b0021e528f54e9mr12511527oae.18.1710751708108; Mon, 18
+ Mar 2024 01:48:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240316-loongson1-dma-v6-0-90de2c3cc928@gmail.com>
- <CAAhV-H6aGS6VXGzkqWTyxL7bGw=KdjmnRZj7SpwrV5hT6XQcpg@mail.gmail.com> <CAJhJPsVSM-8VA604p2Vr58QJEp+Tg72YTTntnip64Ejz=0aQng@mail.gmail.com>
-In-Reply-To: <CAJhJPsVSM-8VA604p2Vr58QJEp+Tg72YTTntnip64Ejz=0aQng@mail.gmail.com>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Mon, 18 Mar 2024 15:31:59 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5TR=y_AmbF6QMJmoS0BhfB=K7forMg0-b2YWm7trktjA@mail.gmail.com>
-Message-ID: <CAAhV-H5TR=y_AmbF6QMJmoS0BhfB=K7forMg0-b2YWm7trktjA@mail.gmail.com>
-Subject: Re: [PATCH v6 0/2] Add support for Loongson1 DMA
-To: Keguang Zhang <keguang.zhang@gmail.com>
-Cc: Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>, 
+References: <20240316045442.31469-1-justin.swartz@risingedge.co.za>
+ <CAMhs-H9ZO-sitsrASuvsEd+ddwVyHH35gj7yAABTqFNfOCGYYw@mail.gmail.com>
+ <60512ae2-dd73-4cb6-9514-145f946300fc@linaro.org> <5d6c36cb9dd9afda1efb69aa34058517@risingedge.co.za>
+ <adefc3ff-86a5-4af7-8276-73d0e0108901@linaro.org> <26633d73360e43b2c548f49e544472ea@risingedge.co.za>
+In-Reply-To: <26633d73360e43b2c548f49e544472ea@risingedge.co.za>
+From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date: Mon, 18 Mar 2024 09:48:15 +0100
+Message-ID: <CAMhs-H_1bwfKO8yquz-3BHQ0UQYW1FFVJYHE66w8Q9m1+fCCHw@mail.gmail.com>
+Subject: Re: [PATCH 00/14] mips: dts: ralink: mt7621: improve DTS style
+To: Justin Swartz <justin.swartz@risingedge.co.za>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>, 
+	Rob Herring <robh+dt@kernel.org>, 
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-mips@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 18, 2024 at 10:08=E2=80=AFAM Keguang Zhang <keguang.zhang@gmail=
-.com> wrote:
+On Sun, Mar 17, 2024 at 4:43=E2=80=AFPM Justin Swartz
+<justin.swartz@risingedge.co.za> wrote:
 >
-> Hi Huacai,
->
-> > Hi, Keguang,
+> On 2024-03-17 17:29, Krzysztof Kozlowski wrote:
+> > On 17/03/2024 16:22, Justin Swartz wrote:
+> >> On 2024-03-17 17:10, Krzysztof Kozlowski wrote:
+> >>> On 16/03/2024 16:49, Sergio Paracuellos wrote:
+> >>>> On Sat, Mar 16, 2024 at 5:54=E2=80=AFAM Justin Swartz
+> >>>> <justin.swartz@risingedge.co.za> wrote:
+> >>>>>
+> >>>>> This set of patches was created with the intention of cleaning up
+> >>>>> arch/mips/boot/dts/ralink/mt7621.dtsi so that it is aligned with
+> >>>>> the Devicetree Sources (DTS) Coding Style [1] [2] guide.
+> >>>>>
+> >>>>> [1] Documentation/devicetree/bindings/dts-coding-style.rst
+> >>>>>
+> >>>>> [2]
+> >>>>> https://docs.kernel.org/devicetree/bindings/dts-coding-style.html
+> >>>>>
+> >>>>> Justin Swartz (14):
+> >>>>>   mips: dts: ralink: mt7621: reorder cpu node attributes
+> >>>>>   mips: dts: ralink: mt7621: reorder cpuintc node attributes
+> >>>>>   mips: dts: ralink: mt7621: reorder mmc regulator attributes
+> >>>>>   mips: dts: ralink: mt7621: reorder sysc node attributes
+> >>>>>   mips: dts: ralink: mt7621: reorder gpio node attributes
+> >>>>>   mips: dts: ralink: mt7621: reorder i2c node attributes
+> >>>>>   mips: dts: ralink: mt7621: reorder spi0 node attributes
+> >>>>>   mips: dts: ralink: mt7621: move pinctrl and sort its children
+> >>>>>   mips: dts: ralink: mt7621: reorder mmc node attributes
+> >>>>>   mips: dts: ralink: mt7621: reorder gic node attributes
+> >>>>>   mips: dts: ralink: mt7621: reorder ethernet node attributes and
+> >>>>> kids
+> >>>>>   mips: dts: ralink: mt7621: reorder pcie node attributes and
+> >>>>> children
+> >>>>>   mips: dts: ralink: mt7621: reorder pci?_phy attributes
+> >>>
+> >>> These are all simple cleanups for the same file. It's one patch, not
+> >>> 15.
+> >>
+> >> I agree these are all simple cleanups.
+> >>
+> >> Even though the cleanup pattern was the same, or very similar,
+> >> for each node affected, the intention was to isolate each change
+> >> to a single node (or a grouping of nodes of that seemed logical
+> >> to me) so that if anyone had any objections, the discussion would
+> >> be easier to follow in subthreads identifiable by patch names (and
 > >
-> > Sorry for the late reply, there is already a ls2x-apb-dma driver, I'm
-> > not sure but can they share the same code base? If not, can rename
-> > this driver to ls1x-apb-dma for consistency?
+> > Objections to what? Coding style? Coding style is defined so you either
+> > implement it or not... and even if someone disagrees with one line
+> > swap,
+> > why it cannot be done like for every contribution: inline?
 >
-> There are some differences between ls1x DMA and ls2x DMA, such as
-> registers and DMA descriptors.
-> I will rename it to ls1x-apb-dma.
-OK, please also rename the yaml file to keep consistency.
+> I had been asked to include empty lines when I had left them out when
+> I had contributed a patch regarding the serial nodes, which resulted in
+> a second version of that patch.
+>
+>
+> > Organize your patches how described in submitting patches: one per
+> > logical change. Logical change is to reorder all properties in one
+> > file,
+> > without functional impact.
+>
+> If I had accidentally deleted or modified an attribute in the process
+> of cleanup, this could have had a functional impact. It's easier to
+> notice this sort of omission when the wall of text you're confronted
+> with is as small as possible, and not multiple pages long.
+>
+>
+> >> But if there're no objections and it lessens the burden on
+> >> maintainers upstream to have less patches to apply, then I have no
+> >> problem combining them into a single patch.
+> >>
+> >
+> > Yeah, one review response instead of 14 responses... One commit in the
+> > history instead of 14.
+>
+> I agree that 1 commit vs 14 is better.
+>
+> But for future reference: is it not enough for the Reviewed-by: trailer
+> to be sent in response to the cover letter of a patch set if a reviewer
+> has looked at the entire set?
 
-Huacai
+It is enough, AFAICT. I found your patchset very easy to review so I
+am ok with the patchset as it is. However, at the end this will be
+through the mips tree, so let's do what Thomas prefers: add all
+patches as they are or squash all of them in one commit.
 
-> Thanks!
->
-> >
-> > Huacai
-> >
-> > On Sat, Mar 16, 2024 at 7:34=E2=80=AFPM Keguang Zhang via B4 Relay
-> > <devnull+keguang.zhang.gmail.com@kernel.org> wrote:
-> > >
-> > > Add the driver and dt-binding document for Loongson1 DMA.
-> > >
-> > > Changelog
-> > > V5 -> V6:
-> > >    Change the compatible to the fallback
-> > >    Implement .device_prep_dma_cyclic for Loongson1 sound driver,
-> > >    as well as .device_pause and .device_resume.
-> > >    Set the limitation LS1X_DMA_MAX_DESC and put all descriptors
-> > >    into one page to save memory
-> > >    Move dma_pool_zalloc() into ls1x_dma_alloc_desc()
-> > >    Drop dma_slave_config structure
-> > >    Use .remove_new instead of .remove
-> > >    Use KBUILD_MODNAME for the driver name
-> > >    Improve the debug information
-> > >    Some minor fixes
-> > > V4 -> V5:
-> > >    Add the dt-binding document
-> > >    Add DT support
-> > >    Use DT information instead of platform data
-> > >    Use chan_id of struct dma_chan instead of own id
-> > >    Use of_dma_xlate_by_chan_id() instead of ls1x_dma_filter()
-> > >    Update the author information to my official name
-> > > V3 -> V4:
-> > >    Use dma_slave_map to find the proper channel.
-> > >    Explicitly call devm_request_irq() and tasklet_kill().
-> > >    Fix namespace issue.
-> > >    Some minor fixes and cleanups.
-> > > V2 -> V3:
-> > >    Rename ls1x_dma_filter_fn to ls1x_dma_filter.
-> > > V1 -> V2:
-> > >    Change the config from 'DMA_LOONGSON1' to 'LOONGSON1_DMA',
-> > >    and rearrange it in alphabetical order in Kconfig and Makefile.
-> > >    Fix comment style.
-> > >
-> > > Keguang Zhang (2):
-> > >   dt-bindings: dma: Add Loongson-1 DMA
-> > >   dmaengine: Loongson1: Add Loongson1 dmaengine driver
-> > >
-> > >  .../bindings/dma/loongson,ls1x-dma.yaml       |  64 +++
-> > >  drivers/dma/Kconfig                           |   9 +
-> > >  drivers/dma/Makefile                          |   1 +
-> > >  drivers/dma/loongson1-dma.c                   | 492 ++++++++++++++++=
-++
-> > >  4 files changed, 566 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/dma/loongson,ls=
-1x-dma.yaml
-> > >  create mode 100644 drivers/dma/loongson1-dma.c
-> > >
-> > > --
-> > > 2.39.2
-> > >
-> > > base-commit: 719136e5c24768ebdf80b9daa53facebbdd377c3
-> > > ---
-> > > Keguang Zhang (2):
-> > >       dt-bindings: dma: Add Loongson-1 DMA
-> > >       dmaengine: Loongson1: Add Loongson1 dmaengine driver
-> > >
-> > >  .../devicetree/bindings/dma/loongson,ls1x-dma.yaml |  66 ++
-> > >  drivers/dma/Kconfig                                |   9 +
-> > >  drivers/dma/Makefile                               |   1 +
-> > >  drivers/dma/loongson1-dma.c                        | 665 +++++++++++=
-++++++++++
-> > >  4 files changed, 741 insertions(+)
-> > > ---
-> > > base-commit: a1e7655b77e3391b58ac28256789ea45b1685abb
-> > > change-id: 20231120-loongson1-dma-163afe5708b9
-> > >
-> > > Best regards,
-> > > --
-> > > Keguang Zhang <keguang.zhang@gmail.com>
-> > >
-> > >
->
->
->
-> --
-> Best regards,
->
-> Keguang Zhang
+Thanks,
+    Sergio Paracuellos
 
