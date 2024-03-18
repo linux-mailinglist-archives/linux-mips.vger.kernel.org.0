@@ -1,129 +1,185 @@
-Return-Path: <linux-mips+bounces-2304-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2305-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F88F87E1FD
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 03:03:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6200787E20E
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 03:08:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D843E1F210E6
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 02:03:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83EAA1C211EC
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 02:08:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19A651DDF4;
-	Mon, 18 Mar 2024 02:03:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC4E21D558;
+	Mon, 18 Mar 2024 02:08:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Cl4LJpQb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QxUrkA21"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC5701E87E;
-	Mon, 18 Mar 2024 02:03:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB9FFC19;
+	Mon, 18 Mar 2024 02:08:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710727384; cv=none; b=Mt8QUMmDUCeuERpl31klCv8Z3z2MpGXziKj32es2c4DvLZAd8aAXPYRsk7P/ZWh7SVTzG9IYzZ7sQtM+bdCGGYJN/BacN5XkLcdvhCyN9wszOZMEwH8ZDxBQ11yI/X90tfgMVIEs5gN2MTjehDZ02WXz1tUJA7ACkbeq75r9sfw=
+	t=1710727692; cv=none; b=n1ENK0cfiswYOj7+u8YjHyg3wf1OPpcXM9WLXCVejrAZJG2lpANzVXnZctBPIQI44jYAJ9GPvMLXtskkOfa7n/cXjRZENPy68HIVxkFDNELaCRkCgY4V8DykNIf4VMrVlIAsBzFYujJRI5lyd2f5aaO26mxtaiAnZRv3SZBwyw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710727384; c=relaxed/simple;
-	bh=s2DTcYQv5t1E/AgG3AGAU+YYi9lLQeVvZlKV3Acyq9M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t3bmTEdiAyqp1q3XaGdbWkeJM3kHW5qwF7yN9BjkHqVGg/t7dHtsrpD7+yTCqM9P3FPHRtNpJJKCASiuEem/IqH6KTWcozmje7etvBacyIyaxpwI8sdKcQt1LKVivU/UqrsNMCCI0NgkVVXhO1bL1wlWJvt5T2JwbZCQ5+bh41I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Cl4LJpQb; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=nzZSUZc1IlLbKe81oj0XpOImEHMN1QwfDar40WlDId8=; b=Cl4LJpQbj38gTTSZEQUZ+1vpu3
-	kfvxEgbVIrASKys6zjX6NXQRWu09Lgn3IV65yLbtH4dUG8GB1Yqrznlf5YYQk37UR4dpnqVOEhv1o
-	w2K5FOiZ3xKMvsyJFyxhLSnZwjPs1HCtxbr+tuF9JhbtLngwAWn7usG/oNe+6woPNU7cNjWJxlJqD
-	ln0QmERP5F9CIT9MIbbXqzH0GBZ4M10aRQSSRBzUQIDZ7/9+/IL2GfU9AJDXFI35koQIIJJU8jO3B
-	QMSHsOqDU3V3fvm5V+tc15IIGsSZnzBfpqlpQEctTDCEj3pPcRujHYO3Wr1dAgj7vx/NrDvJcf1hE
-	buU9lkcQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rm2Ky-00000006zOo-2Ad2;
-	Mon, 18 Mar 2024 02:02:53 +0000
-Date: Sun, 17 Mar 2024 19:02:52 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Shailend Chand <shailend@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Shakeel Butt <shakeelb@google.com>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
- custom page providers
-Message-ID: <ZfegzB341oNc_Ocz@infradead.org>
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-3-almasrymina@google.com>
+	s=arc-20240116; t=1710727692; c=relaxed/simple;
+	bh=mws7dN5Idqqrfvi+n0P3+pOKyWtSoMBBeE76poHLdbk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BaX6PLnm0Q+bwB++KVGxwvuCngmXcEEXGmcanqutQKCjVtL0lk+Fy1pRivhjyUIoU3esdipNeduQRsGfkmME539hxSBxqklzPDYSNWGKyUV+yOSh4P1AEeqmJRSwZjgi/aaB5oihs6uh/9+C7ovSiuNCWM690E57Q/PrPJsDn7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QxUrkA21; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-512bde3d197so3234340e87.0;
+        Sun, 17 Mar 2024 19:08:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710727688; x=1711332488; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eWwzY7BG/SocTQKZ/npPoCXiIUvaGwetrinQ1Oo5Q6A=;
+        b=QxUrkA21t6m/ZJKVEFTlMt7M0/ErwP/XRLGZ0uAnKLTXCl/sBuEQcOelXouDItjzxJ
+         RpilwV+O3slTYRAruSqIna1p5N2npY3SiN+31WA3o/1pOeYo4R7+UDrs08kMT4pfq0rn
+         vTsQw/gqzn+LF13eCcIeqj8NbleTidw0k3+uyYCvBpQpKd2YWg5AnKfeIEUbxOnO382P
+         n6bqVhQMhxTZ4dtn0/KE+lVKYpZm2kjlca8sYaRfFcD6aLEwmX3cR8KzinCimmTuvzCl
+         mH7fm/m4gYYp5Z6hue5AU7A/HJwzj6Eiy0eDQS5nT3W18jxamkbBPOB7CrIQddLpGi9c
+         EDXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710727688; x=1711332488;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eWwzY7BG/SocTQKZ/npPoCXiIUvaGwetrinQ1Oo5Q6A=;
+        b=RTWjbgbtKi/w5z+kCtgruzot2FxL3zOjYUH0jK1Co+Aj0neSON79S2/6VC6SfOSabO
+         bfn+B4nv4/NEFfykIIf4ySeqecJ0mYliFxhM3Lmrhn3FN19iIl9qK/72loiFVGmiXW56
+         ZlhaU12k1VkAo4HE6tlnCTm0iB618/tgz5XK/DyerMDL2sTnjgpYMhv6+/KGVrD+qj9V
+         mlTg3FvB/fwOc6qSgbdmBwujQFFH/EYy+/4fJLN/SjHp0IgPIhqkUaizP1APPk+kG99h
+         Xa8sYifUD3yGnx+qsa7WkYFNwUuoIdkU7qLs+xNdDzHe/hEDttzhzUujeB+AAaBesC94
+         fPLg==
+X-Forwarded-Encrypted: i=1; AJvYcCXZ6Bmy1AfYezUdngWQXct9K1/kQR0IKpq8f9GTkN+W2IoXuADLLplIZuC57zn9+HKj+SXcKqXEuz0gYyDPAGDVlb4KHf/FWvXRoBx95ski09RjlhC252ecuXnogdR9XJTKPr+FYVfY38V2lYvtptB067LZZ0UmJb+nGruWSYLmLioa90+d+Qnjo9dDt92wWUheqqen63fgvThZg6iPh8c=
+X-Gm-Message-State: AOJu0YwEu6b0iqOlxztDUVeNd8eV2PaPZiaJJIY73s0z/U2tKDSx7rur
+	gtf2jpIbacS5UWU26GPrwSdKae0+sDNa83UVD/BFWaYoAQJYe0T0eRXiX1GjUwOhqVxtAoqLYVc
+	1Gkhm4KzDCogxTUdnPFVKtxRWYZaOM6k4X682NL/f
+X-Google-Smtp-Source: AGHT+IELJXfpHKY5OkoWCRxQO1hyaqGsdD/u6pXhrGkKOfTw4yoWtJPKyBqeeDjD/TMgR8o3MZzm+CvWvYv7033/2Os=
+X-Received: by 2002:a19:ae17:0:b0:513:cf5e:f2ad with SMTP id
+ f23-20020a19ae17000000b00513cf5ef2admr7502601lfc.60.1710727687838; Sun, 17
+ Mar 2024 19:08:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240305020153.2787423-3-almasrymina@google.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <20240316-loongson1-dma-v6-0-90de2c3cc928@gmail.com> <CAAhV-H6aGS6VXGzkqWTyxL7bGw=KdjmnRZj7SpwrV5hT6XQcpg@mail.gmail.com>
+In-Reply-To: <CAAhV-H6aGS6VXGzkqWTyxL7bGw=KdjmnRZj7SpwrV5hT6XQcpg@mail.gmail.com>
+From: Keguang Zhang <keguang.zhang@gmail.com>
+Date: Mon, 18 Mar 2024 10:07:31 +0800
+Message-ID: <CAJhJPsVSM-8VA604p2Vr58QJEp+Tg72YTTntnip64Ejz=0aQng@mail.gmail.com>
+Subject: Re: [PATCH v6 0/2] Add support for Loongson1 DMA
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 04, 2024 at 06:01:37PM -0800, Mina Almasry wrote:
-> From: Jakub Kicinski <kuba@kernel.org>
-> 
-> The page providers which try to reuse the same pages will
-> need to hold onto the ref, even if page gets released from
-> the pool - as in releasing the page from the pp just transfers
-> the "ownership" reference from pp to the provider, and provider
-> will wait for other references to be gone before feeding this
-> page back into the pool.
+Hi Huacai,
 
-The word hook always rings a giant warning bell for me, and looking into
-this series I am concerned indeed.
+> Hi, Keguang,
+>
+> Sorry for the late reply, there is already a ls2x-apb-dma driver, I'm
+> not sure but can they share the same code base? If not, can rename
+> this driver to ls1x-apb-dma for consistency?
 
-The only provider provided here is the dma-buf one, and that basically
-is the only sensible one for the documented design.  So instead of
-adding hooks that random proprietary crap can hook into, why not hard
-code the dma buf provide and just use a flag?  That'll also avoid
-expensive indirect calls.
+There are some differences between ls1x DMA and ls2x DMA, such as
+registers and DMA descriptors.
+I will rename it to ls1x-apb-dma.
+Thanks!
 
+>
+> Huacai
+>
+> On Sat, Mar 16, 2024 at 7:34=E2=80=AFPM Keguang Zhang via B4 Relay
+> <devnull+keguang.zhang.gmail.com@kernel.org> wrote:
+> >
+> > Add the driver and dt-binding document for Loongson1 DMA.
+> >
+> > Changelog
+> > V5 -> V6:
+> >    Change the compatible to the fallback
+> >    Implement .device_prep_dma_cyclic for Loongson1 sound driver,
+> >    as well as .device_pause and .device_resume.
+> >    Set the limitation LS1X_DMA_MAX_DESC and put all descriptors
+> >    into one page to save memory
+> >    Move dma_pool_zalloc() into ls1x_dma_alloc_desc()
+> >    Drop dma_slave_config structure
+> >    Use .remove_new instead of .remove
+> >    Use KBUILD_MODNAME for the driver name
+> >    Improve the debug information
+> >    Some minor fixes
+> > V4 -> V5:
+> >    Add the dt-binding document
+> >    Add DT support
+> >    Use DT information instead of platform data
+> >    Use chan_id of struct dma_chan instead of own id
+> >    Use of_dma_xlate_by_chan_id() instead of ls1x_dma_filter()
+> >    Update the author information to my official name
+> > V3 -> V4:
+> >    Use dma_slave_map to find the proper channel.
+> >    Explicitly call devm_request_irq() and tasklet_kill().
+> >    Fix namespace issue.
+> >    Some minor fixes and cleanups.
+> > V2 -> V3:
+> >    Rename ls1x_dma_filter_fn to ls1x_dma_filter.
+> > V1 -> V2:
+> >    Change the config from 'DMA_LOONGSON1' to 'LOONGSON1_DMA',
+> >    and rearrange it in alphabetical order in Kconfig and Makefile.
+> >    Fix comment style.
+> >
+> > Keguang Zhang (2):
+> >   dt-bindings: dma: Add Loongson-1 DMA
+> >   dmaengine: Loongson1: Add Loongson1 dmaengine driver
+> >
+> >  .../bindings/dma/loongson,ls1x-dma.yaml       |  64 +++
+> >  drivers/dma/Kconfig                           |   9 +
+> >  drivers/dma/Makefile                          |   1 +
+> >  drivers/dma/loongson1-dma.c                   | 492 ++++++++++++++++++
+> >  4 files changed, 566 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/dma/loongson,ls1x=
+-dma.yaml
+> >  create mode 100644 drivers/dma/loongson1-dma.c
+> >
+> > --
+> > 2.39.2
+> >
+> > base-commit: 719136e5c24768ebdf80b9daa53facebbdd377c3
+> > ---
+> > Keguang Zhang (2):
+> >       dt-bindings: dma: Add Loongson-1 DMA
+> >       dmaengine: Loongson1: Add Loongson1 dmaengine driver
+> >
+> >  .../devicetree/bindings/dma/loongson,ls1x-dma.yaml |  66 ++
+> >  drivers/dma/Kconfig                                |   9 +
+> >  drivers/dma/Makefile                               |   1 +
+> >  drivers/dma/loongson1-dma.c                        | 665 +++++++++++++=
+++++++++
+> >  4 files changed, 741 insertions(+)
+> > ---
+> > base-commit: a1e7655b77e3391b58ac28256789ea45b1685abb
+> > change-id: 20231120-loongson1-dma-163afe5708b9
+> >
+> > Best regards,
+> > --
+> > Keguang Zhang <keguang.zhang@gmail.com>
+> >
+> >
+
+
+
+--=20
+Best regards,
+
+Keguang Zhang
 
