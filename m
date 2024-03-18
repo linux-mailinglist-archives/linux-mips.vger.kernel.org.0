@@ -1,154 +1,187 @@
-Return-Path: <linux-mips+bounces-2306-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2307-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE2E487E24E
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 03:49:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F197387E3A7
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 07:19:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8744B280E04
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 02:49:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2BD691C20CC3
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Mar 2024 06:19:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A29B1DFF4;
-	Mon, 18 Mar 2024 02:49:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A59022087;
+	Mon, 18 Mar 2024 06:19:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="iV4pzRO6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YWRVEGTe"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C82DB1EB21
-	for <linux-mips@vger.kernel.org>; Mon, 18 Mar 2024 02:49:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E38322F0E;
+	Mon, 18 Mar 2024 06:19:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710730189; cv=none; b=HFoItxkJzGeHU9OyyVQUe7cz3v124JUhCS6hqvn+7jxn7dJndjj319cOKI9dipWSj7j7sGTOaRdvtQmMdQjcKsyx3kBljnETLKD199SPkIiGQCTJJ7wriquILev0RpC/vl+GXt+FYiQplraeo2SP+R1hV2f6RsR9IIv4VvYWOZ4=
+	t=1710742748; cv=none; b=qRFDMblqd73d16YKQ2AmlWAjYY9YJtkLCigrIA5V3XfTqi8qB3UUi4lTYi4xvrGIQ8QdnsTS8Ana+u83sK+oh8N179EmqOnoQQeaQB2GOzjC+YE+XFgz13gqKzn3Iw6mbKKeJi5ZaSJ6xg2xipMj+j7k7fPcvpQtj5EXAmtxflY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710730189; c=relaxed/simple;
-	bh=ybVBqVNCXzGJGuz6lwF+tzdhl5wD9gmQp2PXPNadGZI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NmIgxwUeVZmC6sGF9z+y9S1y2lt2hyT6+66zVwVbk4YSAVyZ11twCz5uVkq8ivGJsbjOailot140811PVO2FZqOjMDXoZ8LkRI16QyVoR4xF7LN+Oqkq4WPmhGzkQIVigodjh16xmDLj83vNYJqv4wbEqskgGdKp39H14yN7Olo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=iV4pzRO6; arc=none smtp.client-ip=209.85.210.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-6dc8b280155so2579783a34.0
-        for <linux-mips@vger.kernel.org>; Sun, 17 Mar 2024 19:49:46 -0700 (PDT)
+	s=arc-20240116; t=1710742748; c=relaxed/simple;
+	bh=3UOolR8JHoqKDwxkh3gJR0lNhSxsx84z8zqGpiIaiuo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pxd9UzASns0T3RPFAodAGs2n+dngATTmUohmUONXzXxj/nvO3CCoEwiXJp0FPo1uTaHJObpoy3Ih+TxEGureEYZ7cVx4FVccrAB4i0/Lwy2B8jVngLsskmh3q7TpOWZxY5/HjZ/N7QV+henOQGiJnGfKq0XJ2OlBo+Gh3KiQgP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YWRVEGTe; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-56a9f5694dcso338162a12.1;
+        Sun, 17 Mar 2024 23:19:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1710730186; x=1711334986; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QE0CXFBu76tpBM6gpoJrOe0mC6QUf5XbAI8puJxCLjs=;
-        b=iV4pzRO6P3GXwlCKnBLXNP1M23gu1zQrspv6JPJ8fStuXR6pQ39ApKrDntPI5tx/uE
-         /MnuWm41o/lbyJAypmV8amaK7R/DY9hx5GRXs/0r9iXayTGjDZNX/3a3xzI+TRbmrgc5
-         CKaIjiPutwDoASk/sLDAWwavRiaWn0pBM9030+PUUupT3yeK7y4jPmhcyEMY7r4Hl52y
-         XWNfIYJJTMt5wTngWdOXFC2+N/RSAkoF1vsgGy7/X1ZW8EIw0zE/PfsaGzUF6O4qnNcM
-         v/ZuzSbzmtn0escS9ERzZ4uMFZQ9IggD068oFEU9q2JSyZaFtYe56f0HASQWjPvNI5se
-         3jpg==
+        d=gmail.com; s=20230601; t=1710742745; x=1711347545; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1ucpTK5ikX0YK4SSOnWQlhYk2l25hLLVmLN0L3ZgMDk=;
+        b=YWRVEGTeBuRaRas8cWKaokjXBPLecmqD7D2ORlzfoLew9qo209NHq30BGII4JH4tGg
+         dWAOG0r8an90AkIfLImccY94cBUnFduLh9AypbB85Hl7rSSWd8ZVV8+yUH5axJNDSSRO
+         BniLy13CuXrDpynhv9EQ1Fa9CKNklyiAY8QMbzvXzNpeGnhCLuaQdm8bmsL4CQmIZEu8
+         Vz8oLqReOAX7SmM0w+OCSJLHtn4ST8AXXMgmOQ7NPMhYDJakZOfTBuRSjVAj9XI/PyRg
+         P/QOjN7yPWEA3PaD7/cpFAYAgCENXUP1aZwS9mBaN5/xdCbNv9OMkUwEroHVcH0+7D+F
+         8jyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710730186; x=1711334986;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QE0CXFBu76tpBM6gpoJrOe0mC6QUf5XbAI8puJxCLjs=;
-        b=KBgZODPgYObm3z7xM1Ut0b/qPdJCxD2rmLtKKhy2jmT13pPnEBPuKccx2KC7Cpgyiq
-         9OklRktlw55cGJTDnQqIJ1rAj/1sM4z5Q/qhyIH7Befr8mAXuCKr+5nbajrriXJ1xMQU
-         KMHYldAk7rzC30zhh8CGt+MrRiBxxW/Gmk4JlSGnBbSTYhGvNaop+FEZxK0hDFnn9eV2
-         5NXQAWmPGJvje8lHWm5K4m9Vda0ZzHsTZZtpPamuwhtzyC0lGWVwQb5C7NMuZqlek3hN
-         0zSCMew9Df0tnUMNWJTZPb4TL3LUv0Rest7CV8P5ARRwl8dnqTsGzq4U2Hswu0Boh3iT
-         8kdg==
-X-Forwarded-Encrypted: i=1; AJvYcCU4YIQqFMgNJQ8A4he5XF6atYao3IgRR4wlIaCTrT6uTR+3hnno8Gsc3MvFt92/MkWTRrqea4BrF82/1jY4spoX6FHLZfgNAArF8A==
-X-Gm-Message-State: AOJu0YxaMyFVeyVzpXqPWcnKM8S9I7M7kPA+Y8ypurrTq1Qx6myrDTZh
-	I25M5YSaefyXmFnjWYTHysOg1su3EfMUA8qsuWyhfFjy6oo8DPYjSXeARf8tSUM=
-X-Google-Smtp-Source: AGHT+IENq8waTwhUkJrEOrb8DEHjfl4QDem6FZJYYGTlmjRRGItMoHQ4P2wTQfIoEZJr502KAVnEEA==
-X-Received: by 2002:a05:6870:8e05:b0:222:d6a:9ae8 with SMTP id lw5-20020a0568708e0500b002220d6a9ae8mr10284561oab.35.1710730185882;
-        Sun, 17 Mar 2024 19:49:45 -0700 (PDT)
-Received: from [192.168.1.24] (71-212-18-124.tukw.qwest.net. [71.212.18.124])
-        by smtp.gmail.com with ESMTPSA id i189-20020a62c1c6000000b006e66a76d877sm7120229pfg.153.2024.03.17.19.49.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Mar 2024 19:49:45 -0700 (PDT)
-Message-ID: <b938514c-61cc-41e6-b592-1003b8deccae@davidwei.uk>
-Date: Sun, 17 Mar 2024 19:49:43 -0700
+        d=1e100.net; s=20230601; t=1710742745; x=1711347545;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1ucpTK5ikX0YK4SSOnWQlhYk2l25hLLVmLN0L3ZgMDk=;
+        b=GIgJAAFnhNLGXe1JzZ0N+9dHVB9S3WKyPR1DS1EO4cEfy7HwpfyxBr47xjWqY3TjW0
+         m0pDUrcam1Tyf1WUSpVq6JeMAfl7/qgUlS6KPx/AaEsSN27NNRcgjkOeF3YGjCAhyX4b
+         DfJER2a64JI3p/gE3hmS+h6xGRRAXGgvQSeU1WICp+BTX4OuJx7S2+1Qr+Z6yPaxXjJg
+         MIRcebpdmIF126drNstYdQNB/t/95WsXdwMfYuM5/FgC/CY/mfZFkcAo+nLkD63kUUr0
+         YWG3eH2pBZnRfQ34kT1f7yb220K5B4pn5ZXMwPAHVG47RfKJqKvFQWpVfhf7w+RiBTgF
+         TB0A==
+X-Forwarded-Encrypted: i=1; AJvYcCVs2Yrr7KchQCKLoko/Eo8eRsUwACPQC+iPnPbpJAMvG9kDZLLMHBZBRq9Ioe5MZ1n+tlmqVZARiZ/+2qALSIj5S1eOkp3khWXYHpDUvw78ikgHeOKc/3MwLK1RM5k4tRvb6LkFABpveHp+02tZAtu2h4rUXc1W3Y3xJDIvKVLYBHIvQ7FhV1pK13qJZtTCqgJFb15qSlnSSz9Xp9XUMq4=
+X-Gm-Message-State: AOJu0YwBASIg5p/N0KJ99hcPXJj4B1o1IDcIfGYSL3skjJAL3GF8Fmv9
+	pq1J6Oec0VFsQGS5F25zYDJuuf47htGb1FO1KlZXmcM8TPm4rl6hTnNKUVXRRuyDheCAbiCkagA
+	jlbYdJxJVqIEDo7RuKAi5GtgTqvc=
+X-Google-Smtp-Source: AGHT+IGFZlEfND0/QEzYxEFBqsH8cbQPNzEwsHVBGJzBi3UPQPHMyjSKJX6kHW5eCvCzP4I8Ci/M3MkVq0y3iCfhWW4=
+X-Received: by 2002:a05:6402:528a:b0:569:a0e9:3409 with SMTP id
+ en10-20020a056402528a00b00569a0e93409mr981538edb.41.1710742744931; Sun, 17
+ Mar 2024 23:19:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
- custom page providers
-Content-Language: en-GB
-To: Christoph Hellwig <hch@infradead.org>,
- Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Jeroen de Borst <jeroendb@google.com>,
- Praveen Kaligineedi <pkaligineedi@google.com>
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-3-almasrymina@google.com>
- <ZfegzB341oNc_Ocz@infradead.org>
-From: David Wei <dw@davidwei.uk>
-In-Reply-To: <ZfegzB341oNc_Ocz@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240316-loongson1-dma-v6-0-90de2c3cc928@gmail.com>
+ <20240316-loongson1-dma-v6-1-90de2c3cc928@gmail.com> <20240317-exorcist-spectator-90f5acb3fe2a@spud>
+In-Reply-To: <20240317-exorcist-spectator-90f5acb3fe2a@spud>
+From: Keguang Zhang <keguang.zhang@gmail.com>
+Date: Mon, 18 Mar 2024 14:18:27 +0800
+Message-ID: <CAJhJPsWOUZsWFvreRrPqQHAjYW7uRT31THHi7CRDN46+nHpL9g@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] dt-bindings: dma: Add Loongson-1 DMA
+To: Conor Dooley <conor@kernel.org>
+Cc: Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2024-03-17 19:02, Christoph Hellwig wrote:
-> On Mon, Mar 04, 2024 at 06:01:37PM -0800, Mina Almasry wrote:
->> From: Jakub Kicinski <kuba@kernel.org>
->>
->> The page providers which try to reuse the same pages will
->> need to hold onto the ref, even if page gets released from
->> the pool - as in releasing the page from the pp just transfers
->> the "ownership" reference from pp to the provider, and provider
->> will wait for other references to be gone before feeding this
->> page back into the pool.
-> 
-> The word hook always rings a giant warning bell for me, and looking into
-> this series I am concerned indeed.
-> 
-> The only provider provided here is the dma-buf one, and that basically
-> is the only sensible one for the documented design.  So instead of
-> adding hooks that random proprietary crap can hook into, why not hard
-> code the dma buf provide and just use a flag?  That'll also avoid
-> expensive indirect calls.
+On Sun, Mar 17, 2024 at 10:40=E2=80=AFPM Conor Dooley <conor@kernel.org> wr=
+ote:
+>
+> On Sat, Mar 16, 2024 at 07:33:53PM +0800, Keguang Zhang via B4 Relay wrot=
+e:
+> > From: Keguang Zhang <keguang.zhang@gmail.com>
+> >
+> > Add devicetree binding document for Loongson-1 DMA.
+> >
+> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> > ---
+> > V5 -> V6:
+> >    Change the compatible to the fallback
+> >    Some minor fixes
+> > V4 -> V5:
+> >    A newly added patch
+> > ---
+> >  .../devicetree/bindings/dma/loongson,ls1x-dma.yaml | 66 ++++++++++++++=
+++++++++
+> >  1 file changed, 66 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/dma/loongson,ls1x-dma.ya=
+ml b/Documentation/devicetree/bindings/dma/loongson,ls1x-dma.yaml
+> > new file mode 100644
+> > index 000000000000..06358df725c6
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/dma/loongson,ls1x-dma.yaml
+> > @@ -0,0 +1,66 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/dma/loongson,ls1x-dma.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Loongson-1 DMA Controller
+> > +
+> > +maintainers:
+> > +  - Keguang Zhang <keguang.zhang@gmail.com>
+> > +
+> > +description:
+> > +  Loongson-1 DMA controller provides 3 independent channels for
+> > +  peripherals such as NAND and AC97.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+> > +      - const: loongson,ls1b-dma
+> > +      - items:
+> > +          - enum:
+> > +              - loongson,ls1c-dma
+> > +          - const: loongson,ls1b-dma
+>
+> Aren't there several more devices in this family? Do they not have DMA
+> controllers?
+>
+You are right. Loongson1 is a SoC family.
+However, only 1A/1B/1C have DMA controller.
 
-I'm working on a similar proposal for zero copy Rx but to host memory
-and depend on this memory provider API.
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    description: Each channel has a dedicated interrupt line.
+> > +    minItems: 1
+> > +    maxItems: 3
+>
+> Is this number not fixed for each SoC?
+>
+Yes. Actually, it's fixed for the whole family.
 
-Jakub also designed this API for hugepages too IIRC. Basically there's
-going to be at least three fancy ways of providing pages (one of which
-isn't actually pages, hence the merged netmem_t series) to drivers.
+> > +  interrupt-names:
+> > +    minItems: 1
+> > +    items:
+> > +      - pattern: ch0
+> > +      - pattern: ch1
+> > +      - pattern: ch2
+>
+> Why have you made these a pattern? There's no regex being used here at
+> all.
+>
+Will change items to the following regex.
+  interrupt-names:
+    minItems: 1
+    items:
+      - pattern: "^ch[0-2]$"
 
-> 
+Thanks!
+
+> Cheers,
+> Cono4.
+
+
+
+--=20
+Best regards,
+
+Keguang Zhang
 
