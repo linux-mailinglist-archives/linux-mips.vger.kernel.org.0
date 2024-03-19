@@ -1,207 +1,312 @@
-Return-Path: <linux-mips+bounces-2340-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2341-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 684CF87F9D1
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Mar 2024 09:29:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7BA187FCB3
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Mar 2024 12:18:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F9722825C0
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Mar 2024 08:29:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D897284292
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Mar 2024 11:18:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 878097CF06;
-	Tue, 19 Mar 2024 08:29:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cE3LpN2/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71CE97E583;
+	Tue, 19 Mar 2024 11:18:49 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0B9E7C08E;
-	Tue, 19 Mar 2024 08:29:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FDEF7BAFB;
+	Tue, 19 Mar 2024 11:18:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710836955; cv=none; b=PuPNkdzn34LCcZeF0SXzQpJ75oMzmFCqj7PaAE0WEexxl3NVPqN2g8Y9koVd7zN472oSZwb1AH9P70pOmzqrz6MVZa0CNQMFK9AsfMf5ejiOl0d/BFZ3sNYZd+gHd/UKKNNF6laWZ7ilDJPzxOaiDXY85XjAC69lcSuNI+n/ioE=
+	t=1710847129; cv=none; b=kK+ow+Bw/Z/USEDjqvfIVK2TaLMNOGTj3xLYnj3zc84FJM0+weO/7jciyvIn+CZdOLGYSNdzdYCswQZf/qAgLOatCnn22M1TWvguUu8afnBkNht4XFKCIyCvfFv+i+vd8XsAz9dVMqvgNJ+wfN+WxFS9itFR/7da9oXaLzpFYXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710836955; c=relaxed/simple;
-	bh=rVF9H8p5A/tZCcUzg90IMGb1EulK+WvD39yZtuREOCE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JHovoFAQQAEJ3HL3L/H9mk9a+QPvq5T7pbyNZZBB/sG1RkCkOzXiqls2OGnNdCEOs7nPV1qC90uZMSSsA8xpwOKeqFNw2VVuhMBdL5kxQez+lr3hTo7RuDBgFLFfLIr6kk5Mk828MqJ3K6XevZ6Z9FDgA85a/pH66kkcCQxGd9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cE3LpN2/; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5684ea117a3so7717949a12.0;
-        Tue, 19 Mar 2024 01:29:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710836952; x=1711441752; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k+caFpiF1NE9VjCHjmW6BZDvqMJLVV4nvdJHe6aB/9w=;
-        b=cE3LpN2/GMOpGdvs+lXMV+/pVld0OiUT795aLQnqV29mzUD1emWLleOd4Sh9XbZpkG
-         sfDma3OKiBD8qVukQaWKp/hEbgT/nWUiaAms7rospyf7rgghz8rx9oUYwolBvK0Re+59
-         TlLhq35i6D8ygOt4wnYaPJkc5un4K9ozJ5ovAVu7EjW7o3Bji4fbzNFwmjadJt77qlCx
-         ICt1UhGWSg8xm+ThO670FWVa5MVUd3a/A74DwVvO+BE8vqW/qrKEPYBkY+KHxB2d90i7
-         PHlphRw93c5gSBCauOE+oylBG3Dta26vWmQOCZjAoOqDyT2FWCrFMVcF4BV9jO+fXlAd
-         0zyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710836952; x=1711441752;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k+caFpiF1NE9VjCHjmW6BZDvqMJLVV4nvdJHe6aB/9w=;
-        b=Kmweg7FJPiz6kbZmviLmaaZsJwiglloK9v4qRHlefvH+5SCROb/TuI3kS5JHZRSO3B
-         OFaSk4ih4+bHx7aP8XQHndAlfT2BRBBBjj+GlNl1RN7zm31pzcPrjq9/fhx1NqW4kbJf
-         4KY19CStfclaxjkmgaKncHOEDh0DIKTnjpx+YU/GjScTK0uzwPObIcizHUeiTNhjgPkM
-         IHjp/BOJX04bB9XiW3wlKuw4MT7VJwzO1vqMaq1bMBmockkahM01MOnCuXQD4AN0blNh
-         nPRiaqoJfedyAQi+4qLbAeGgXZAFmBCKCrzSK1P6xOkpr42v1ihFsCQ5vocTKDGEDnv8
-         Rftg==
-X-Forwarded-Encrypted: i=1; AJvYcCUYjE76bAnfKVx+YiAT/i2+++OQbdq3iWuyIPF77/yFYptKD3EXS9jEK45hiBvBfzIyvriMoWJHt0uPhE2knTmIWh/VzlgiyY4P0R3iPfgnTNOISbfzpgPvsurStk8H+xZ+SzeFDZK1ctmfDN4xk8LaW70NQla+Ma1Q+9c+sI1OxWA8KRWjgrOZVtflYo8P0BVu0CAX4qbBxre4RSdiB1k=
-X-Gm-Message-State: AOJu0YycfI4gVkc8yZl5Xi5m//o2tYlZASSjgwcNfgDducsOfaFAhg7a
-	h1b/Yv3KIgpDfpP5QTSXGv4CEm4abTctyEGCyx2ttU+AssNFaIJEyMDci83x7pGAzfUn9toW+4q
-	hY8C1gxHG7ENPbXUsEDAbKibfHOk=
-X-Google-Smtp-Source: AGHT+IENQGSo2CY36rseL4WEmz3mPXsVW0fWojGGC/2UdA9byb37TJLO4V6lJIqrbscjz/c+UmnsE5alQVGx2i6us3s=
-X-Received: by 2002:a05:6402:320d:b0:56b:9ef8:f656 with SMTP id
- g13-20020a056402320d00b0056b9ef8f656mr149159eda.7.1710836951986; Tue, 19 Mar
- 2024 01:29:11 -0700 (PDT)
+	s=arc-20240116; t=1710847129; c=relaxed/simple;
+	bh=kc3wrKB5dBNNmJ62TV8MqwyyQAzErdwTYtKfufEHYZA=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=pAWtKnIxUPtu6UB+/GyuqcAl+O+DAHxw0TKsVL+vh8logRyNjDTHqBEcvNRkhxGmbVDNHhEZuUpOJGPr55IHs8epqOYIkHn4qfbn+IR8jIjeFXCUnT+1TbgqZEFTsyAu662s984StiWo1CPLMRC9893aIo3LQn+yS9MQcOwqmL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.24])
+	by gateway (Coremail) with SMTP id _____8DxqeiSdPllmrwaAA--.44567S3;
+	Tue, 19 Mar 2024 19:18:42 +0800 (CST)
+Received: from [10.20.42.24] (unknown [10.20.42.24])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8CxLBOQdPllWmVdAA--.49228S3;
+	Tue, 19 Mar 2024 19:18:42 +0800 (CST)
+Subject: Re: [PATCH V2] irqchip/loongson-pch-pic: Update interrupt
+ registration policy
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: jiaxun.yang@flygoat.com, tglx@linutronix.de, linux-mips@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Baoqi Zhang <zhangbaoqi@loongson.cn>,
+ Biao Dong <dongbiao@loongson.cn>
+References: <20240316082141.26139-1-zhangtianyang@loongson.cn>
+ <CAAhV-H4cFw=JPhsvAYzMSECNvWuYK04HAA2_SLhVNTyZzQ8khA@mail.gmail.com>
+From: Tianyang Zhang <zhangtianyang@loongson.cn>
+Message-ID: <c1a8dc5d-38fd-07f3-26ef-83a55a41877b@loongson.cn>
+Date: Tue, 19 Mar 2024 19:18:39 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240316-loongson1-dma-v6-0-90de2c3cc928@gmail.com>
- <20240316-loongson1-dma-v6-1-90de2c3cc928@gmail.com> <20240317-exorcist-spectator-90f5acb3fe2a@spud>
- <CAJhJPsWOUZsWFvreRrPqQHAjYW7uRT31THHi7CRDN46+nHpL9g@mail.gmail.com>
-In-Reply-To: <CAJhJPsWOUZsWFvreRrPqQHAjYW7uRT31THHi7CRDN46+nHpL9g@mail.gmail.com>
-From: Keguang Zhang <keguang.zhang@gmail.com>
-Date: Tue, 19 Mar 2024 16:28:35 +0800
-Message-ID: <CAJhJPsXzGjD43nj7eLPSmtDLgp1FCvzJFRJDDTY=9Uq_Dc8Qdg@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] dt-bindings: dma: Add Loongson-1 DMA
-To: Conor Dooley <conor@kernel.org>
-Cc: Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAAhV-H4cFw=JPhsvAYzMSECNvWuYK04HAA2_SLhVNTyZzQ8khA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID:AQAAf8CxLBOQdPllWmVdAA--.49228S3
+X-CM-SenderInfo: x2kd0wxwld05hdqjqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW3XFyUtr4UWrW7XFW8AF1xCrX_yoW3ur1kpF
+	WUJ3y3CF4UJry0q3y0vw4UZrySvFy2qFy0ka1fta4Iv3s2vrykGF1xur9rAa18AFyDZrsx
+	Z3yqkryF9an7JFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
+	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+	AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
+	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw
+	1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
+	xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+	1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8zw
+	Z7UUUUU==
 
-On Mon, Mar 18, 2024 at 2:18=E2=80=AFPM Keguang Zhang <keguang.zhang@gmail.=
-com> wrote:
->
-> On Sun, Mar 17, 2024 at 10:40=E2=80=AFPM Conor Dooley <conor@kernel.org> =
-wrote:
-> >
-> > On Sat, Mar 16, 2024 at 07:33:53PM +0800, Keguang Zhang via B4 Relay wr=
-ote:
-> > > From: Keguang Zhang <keguang.zhang@gmail.com>
-> > >
-> > > Add devicetree binding document for Loongson-1 DMA.
-> > >
-> > > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > > ---
-> > > V5 -> V6:
-> > >    Change the compatible to the fallback
-> > >    Some minor fixes
-> > > V4 -> V5:
-> > >    A newly added patch
-> > > ---
-> > >  .../devicetree/bindings/dma/loongson,ls1x-dma.yaml | 66 ++++++++++++=
-++++++++++
-> > >  1 file changed, 66 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/dma/loongson,ls1x-dma.=
-yaml b/Documentation/devicetree/bindings/dma/loongson,ls1x-dma.yaml
-> > > new file mode 100644
-> > > index 000000000000..06358df725c6
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/dma/loongson,ls1x-dma.yaml
-> > > @@ -0,0 +1,66 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/dma/loongson,ls1x-dma.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Loongson-1 DMA Controller
-> > > +
-> > > +maintainers:
-> > > +  - Keguang Zhang <keguang.zhang@gmail.com>
-> > > +
-> > > +description:
-> > > +  Loongson-1 DMA controller provides 3 independent channels for
-> > > +  peripherals such as NAND and AC97.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    oneOf:
-> > > +      - const: loongson,ls1b-dma
-> > > +      - items:
-> > > +          - enum:
-> > > +              - loongson,ls1c-dma
-> > > +          - const: loongson,ls1b-dma
-> >
-> > Aren't there several more devices in this family? Do they not have DMA
-> > controllers?
-> >
-> You are right. Loongson1 is a SoC family.
-> However, only 1A/1B/1C have DMA controller.
->
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupts:
-> > > +    description: Each channel has a dedicated interrupt line.
-> > > +    minItems: 1
-> > > +    maxItems: 3
-> >
-> > Is this number not fixed for each SoC?
-> >
-> Yes. Actually, it's fixed for the whole family.
->
-> > > +  interrupt-names:
-> > > +    minItems: 1
-> > > +    items:
-> > > +      - pattern: ch0
-> > > +      - pattern: ch1
-> > > +      - pattern: ch2
-> >
-> > Why have you made these a pattern? There's no regex being used here at
-> > all.
-> >
-> Will change items to the following regex.
->   interrupt-names:
->     minItems: 1
->     items:
->       - pattern: "^ch[0-2]$"
->
-Sorry. This pattern fails in dt_binding_check.
-Will use const instead of pattern.
-  interrupt-names:
-   items:
-     - const: ch0
-     - const: ch1
-     - const: ch2
+Hi, Huacai
 
+Thanks for your suggestions and corrections. I will make the 
+modifications as required
 
-> Thanks!
->
-> > Cheers,
-> > Cono4.
->
->
->
-> --
-> Best regards,
->
-> Keguang Zhang
+and provide the next version of the patch as soon as possible
 
+Tianyang
 
+在 2024/3/18 下午10:35, Huacai Chen 写道:
+> Hi, Tianyang,
+>
+> On Sat, Mar 16, 2024 at 4:22 PM Tianyang Zhang
+> <zhangtianyang@loongson.cn> wrote:
+>> From: Baoqi Zhang <zhangbaoqi@loongson.cn>
+>>
+>> This patch remove the fixed mapping between the 7A interrupt source
+>> and the HT interrupt vector, and replaced it with a dynamically
+>> allocated approach.
+> Use LS7A instead of 7A here.
+>
+>> We introduce a mapping table in struct pch_pic, where each interrupt
+>> source will allocate an index as a 'hwirq' from the table in the order
+>> of application and set table value as interrupt source number. This hwirq
+>> will be configured as its vector in the HT interrupt controller. For an
+>> interrupt source, the validity period of the obtained hwirq will last until
+>> the system reset
+> Missing a . at the end.
+>
+>> This will be more conducive to fully utilizing existing vectors to
+>> support more devices
+>>
+>> Signed-off-by: Baoqi Zhang <zhangbaoqi@loongson.cn>
+>> Signed-off-by: Biao Dong <dongbiao@loongson.cn>
+>> Signed-off-by: Tianyang Zhang <zhangtianyang@loongson.cn>
+>> ---
+>>   drivers/irqchip/irq-loongson-pch-pic.c | 77 ++++++++++++++++++++------
+>>   1 file changed, 59 insertions(+), 18 deletions(-)
+>>
+>> diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
+>> index 63db8e2172e0..f17187641154 100644
+>> --- a/drivers/irqchip/irq-loongson-pch-pic.c
+>> +++ b/drivers/irqchip/irq-loongson-pch-pic.c
+>> @@ -33,7 +33,7 @@
+>>   #define PIC_COUNT              (PIC_COUNT_PER_REG * PIC_REG_COUNT)
+>>   #define PIC_REG_IDX(irq_id)    ((irq_id) / PIC_COUNT_PER_REG)
+>>   #define PIC_REG_BIT(irq_id)    ((irq_id) % PIC_COUNT_PER_REG)
+>> -
+>> +#define PIC_UNDEF_VECTOR       255
+> Keep a new line after the macro, please.
+>
+> Huacai
+>
+>>   static int nr_pics;
+>>
+>>   struct pch_pic {
+>> @@ -46,12 +46,19 @@ struct pch_pic {
+>>          u32                     saved_vec_en[PIC_REG_COUNT];
+>>          u32                     saved_vec_pol[PIC_REG_COUNT];
+>>          u32                     saved_vec_edge[PIC_REG_COUNT];
+>> +       u8                      table[PIC_COUNT];
+>> +       int                     inuse;
+>>   };
+>>
+>>   static struct pch_pic *pch_pic_priv[MAX_IO_PICS];
+>>
+>>   struct fwnode_handle *pch_pic_handle[MAX_IO_PICS];
+>>
+>> +static inline u8 hwirq_to_bit(struct pch_pic *priv, int hirq)
+>> +{
+>> +       return priv->table[hirq];
+>> +}
+>> +
+>>   static void pch_pic_bitset(struct pch_pic *priv, int offset, int bit)
+>>   {
+>>          u32 reg;
+>> @@ -80,45 +87,47 @@ static void pch_pic_mask_irq(struct irq_data *d)
+>>   {
+>>          struct pch_pic *priv = irq_data_get_irq_chip_data(d);
+>>
+>> -       pch_pic_bitset(priv, PCH_PIC_MASK, d->hwirq);
+>> +       pch_pic_bitset(priv, PCH_PIC_MASK, hwirq_to_bit(priv, d->hwirq));
+>>          irq_chip_mask_parent(d);
+>>   }
+>>
+>>   static void pch_pic_unmask_irq(struct irq_data *d)
+>>   {
+>>          struct pch_pic *priv = irq_data_get_irq_chip_data(d);
+>> +       int bit = hwirq_to_bit(priv, d->hwirq);
+>>
+>> -       writel(BIT(PIC_REG_BIT(d->hwirq)),
+>> -                       priv->base + PCH_PIC_CLR + PIC_REG_IDX(d->hwirq) * 4);
+>> +       writel(BIT(PIC_REG_BIT(bit)),
+>> +                       priv->base + PCH_PIC_CLR + PIC_REG_IDX(bit) * 4);
+>>
+>>          irq_chip_unmask_parent(d);
+>> -       pch_pic_bitclr(priv, PCH_PIC_MASK, d->hwirq);
+>> +       pch_pic_bitclr(priv, PCH_PIC_MASK, bit);
+>>   }
+>>
+>>   static int pch_pic_set_type(struct irq_data *d, unsigned int type)
+>>   {
+>>          struct pch_pic *priv = irq_data_get_irq_chip_data(d);
+>> +       int bit = hwirq_to_bit(priv, d->hwirq);
+>>          int ret = 0;
+>>
+>>          switch (type) {
+>>          case IRQ_TYPE_EDGE_RISING:
+>> -               pch_pic_bitset(priv, PCH_PIC_EDGE, d->hwirq);
+>> -               pch_pic_bitclr(priv, PCH_PIC_POL, d->hwirq);
+>> +               pch_pic_bitset(priv, PCH_PIC_EDGE, bit);
+>> +               pch_pic_bitclr(priv, PCH_PIC_POL, bit);
+>>                  irq_set_handler_locked(d, handle_edge_irq);
+>>                  break;
+>>          case IRQ_TYPE_EDGE_FALLING:
+>> -               pch_pic_bitset(priv, PCH_PIC_EDGE, d->hwirq);
+>> -               pch_pic_bitset(priv, PCH_PIC_POL, d->hwirq);
+>> +               pch_pic_bitset(priv, PCH_PIC_EDGE, bit);
+>> +               pch_pic_bitset(priv, PCH_PIC_POL, bit);
+>>                  irq_set_handler_locked(d, handle_edge_irq);
+>>                  break;
+>>          case IRQ_TYPE_LEVEL_HIGH:
+>> -               pch_pic_bitclr(priv, PCH_PIC_EDGE, d->hwirq);
+>> -               pch_pic_bitclr(priv, PCH_PIC_POL, d->hwirq);
+>> +               pch_pic_bitclr(priv, PCH_PIC_EDGE, bit);
+>> +               pch_pic_bitclr(priv, PCH_PIC_POL, bit);
+>>                  irq_set_handler_locked(d, handle_level_irq);
+>>                  break;
+>>          case IRQ_TYPE_LEVEL_LOW:
+>> -               pch_pic_bitclr(priv, PCH_PIC_EDGE, d->hwirq);
+>> -               pch_pic_bitset(priv, PCH_PIC_POL, d->hwirq);
+>> +               pch_pic_bitclr(priv, PCH_PIC_EDGE, bit);
+>> +               pch_pic_bitset(priv, PCH_PIC_POL, bit);
+>>                  irq_set_handler_locked(d, handle_level_irq);
+>>                  break;
+>>          default:
+>> @@ -133,11 +142,12 @@ static void pch_pic_ack_irq(struct irq_data *d)
+>>   {
+>>          unsigned int reg;
+>>          struct pch_pic *priv = irq_data_get_irq_chip_data(d);
+>> +       int bit = hwirq_to_bit(priv, d->hwirq);
+>>
+>> -       reg = readl(priv->base + PCH_PIC_EDGE + PIC_REG_IDX(d->hwirq) * 4);
+>> -       if (reg & BIT(PIC_REG_BIT(d->hwirq))) {
+>> -               writel(BIT(PIC_REG_BIT(d->hwirq)),
+>> -                       priv->base + PCH_PIC_CLR + PIC_REG_IDX(d->hwirq) * 4);
+>> +       reg = readl(priv->base + PCH_PIC_EDGE + PIC_REG_IDX(bit) * 4);
+>> +       if (reg & BIT(PIC_REG_BIT(bit))) {
+>> +               writel(BIT(PIC_REG_BIT(bit)),
+>> +                       priv->base + PCH_PIC_CLR + PIC_REG_IDX(bit) * 4);
+>>          }
+>>          irq_chip_ack_parent(d);
+>>   }
+>> @@ -159,6 +169,8 @@ static int pch_pic_domain_translate(struct irq_domain *d,
+>>   {
+>>          struct pch_pic *priv = d->host_data;
+>>          struct device_node *of_node = to_of_node(fwspec->fwnode);
+>> +       unsigned long flags;
+>> +       int i;
+>>
+>>          if (of_node) {
+>>                  if (fwspec->param_count < 2)
+>> @@ -171,6 +183,27 @@ static int pch_pic_domain_translate(struct irq_domain *d,
+>>                          return -EINVAL;
+>>
+>>                  *hwirq = fwspec->param[0] - priv->gsi_base;
+>> +
+>> +               raw_spin_lock_irqsave(&priv->pic_lock, flags);
+>> +               /* Check pic-table to confirm if the hwirq has been assigned */
+>> +               for (i = 0; i < priv->inuse; i++) {
+>> +                       if (priv->table[i] == *hwirq) {
+>> +                               *hwirq = i;
+>> +                               break;
+>> +                       }
+>> +               }
+>> +               if (i == priv->inuse) {
+>> +                       /* Assign a new hwirq in pic-table */
+>> +                       if (priv->inuse >= PIC_COUNT) {
+>> +                               pr_err("pch-pic domain has no free vectors\n");
+>> +                               raw_spin_unlock_irqrestore(&priv->pic_lock, flags);
+>> +                               return -EINVAL;
+>> +                       }
+>> +                       priv->table[priv->inuse] = *hwirq;
+>> +                       *hwirq = priv->inuse++;
+>> +               }
+>> +               raw_spin_unlock_irqrestore(&priv->pic_lock, flags);
+>> +
+>>                  if (fwspec->param_count > 1)
+>>                          *type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
+>>                  else
+>> @@ -194,6 +227,9 @@ static int pch_pic_alloc(struct irq_domain *domain, unsigned int virq,
+>>          if (err)
+>>                  return err;
+>>
+>> +       /* Write vector ID */
+>> +       writeb(priv->ht_vec_base + hwirq, priv->base + PCH_INT_HTVEC(hwirq_to_bit(priv, hwirq)));
+>> +
+>>          parent_fwspec.fwnode = domain->parent->fwnode;
+>>          parent_fwspec.param_count = 1;
+>>          parent_fwspec.param[0] = hwirq + priv->ht_vec_base;
+>> @@ -222,7 +258,7 @@ static void pch_pic_reset(struct pch_pic *priv)
+>>
+>>          for (i = 0; i < PIC_COUNT; i++) {
+>>                  /* Write vector ID */
+>> -               writeb(priv->ht_vec_base + i, priv->base + PCH_INT_HTVEC(i));
+>> +               writeb(priv->ht_vec_base + i, priv->base + PCH_INT_HTVEC(hwirq_to_bit(priv, i)));
+>>                  /* Hardcode route to HT0 Lo */
+>>                  writeb(1, priv->base + PCH_INT_ROUTE(i));
+>>          }
+>> @@ -284,6 +320,7 @@ static int pch_pic_init(phys_addr_t addr, unsigned long size, int vec_base,
+>>                          u32 gsi_base)
+>>   {
+>>          struct pch_pic *priv;
+>> +       int i;
+>>
+>>          priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+>>          if (!priv)
+>> @@ -294,6 +331,10 @@ static int pch_pic_init(phys_addr_t addr, unsigned long size, int vec_base,
+>>          if (!priv->base)
+>>                  goto free_priv;
+>>
+>> +       priv->inuse = 0;
+>> +       for (i = 0; i < PIC_COUNT; i++)
+>> +               priv->table[i] = PIC_UNDEF_VECTOR;
+>> +
+>>          priv->ht_vec_base = vec_base;
+>>          priv->vec_count = ((readq(priv->base) >> 48) & 0xff) + 1;
+>>          priv->gsi_base = gsi_base;
+>> --
+>> 2.20.1
+>>
+>>
 
---
-Best regards,
-
-Keguang Zhang
 
