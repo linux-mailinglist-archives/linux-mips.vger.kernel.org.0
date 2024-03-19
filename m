@@ -1,194 +1,284 @@
-Return-Path: <linux-mips+bounces-2342-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2343-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9E1387FCC4
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Mar 2024 12:26:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88E3487FDBB
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Mar 2024 13:46:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 584BA1F233F4
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Mar 2024 11:26:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F56A281E75
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Mar 2024 12:46:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27EF97D410;
-	Tue, 19 Mar 2024 11:26:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2C335813F;
+	Tue, 19 Mar 2024 12:46:38 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EDFB54FAB;
-	Tue, 19 Mar 2024 11:26:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33E681E4BF;
+	Tue, 19 Mar 2024 12:46:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710847596; cv=none; b=qSkmsC0fO58d/TZQWhM6aOIUaHGqN04lWxybxXvSSIf1UYv5TpRPnd14G2jwMUT/Tndv+18BE9y5RS4Sr6LPx4TAD7BDrGEV2ev4YEdcsWgL28vJ+xXi2AXAl4tk5Z42ElCEhITRAbrYcTGPWS17cD+HFZCVmc/CbhutIn+OOww=
+	t=1710852398; cv=none; b=CA42twbWp9t7bcrfsIH69D832AGNYqmL3KHadQgYnCtIrQ4b9eFz6neEHuEnr0pDIoKlyao7UV/OIUNoMqiIe0n1MQrtQwKZV6LSN7bOhigSIuhxgzk6zxlv2je8zdgdLjyscxebGJi+/OpTc09yekV9dDXbhUII12BtxWdCDaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710847596; c=relaxed/simple;
-	bh=UDoNhCNX9cLIwDHxTiLG6Mn94hXAJaVESaCEt/McFi0=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=NVVSWrR3ahrvDXSFb2YyuaC0GolQKU/vZ1QHs6dE4Zx6XjmYCcFzhZ8k1dfAePL7t8S4sTndXIePnnuzJMjxi+tBWFjt6wC+cSj1SYdWUbtn2GdBG4kyO9PTXQs5xnnoN1sWNKRBHHHy6/Iwm60pncNqvPTUIfL+RhnfAxymGCw=
+	s=arc-20240116; t=1710852398; c=relaxed/simple;
+	bh=xDJ9o0U/p8hNV7ctugo3aBUbHoyNSgcIOdZ4zET/yfc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Jw7zYOKh8Wtiho1UEnI7m0Kn+pacSEJOigdUozT7AsGy6C9uFzTP/WzKZoQtoCe5Qk4bJzRz0DhSLCc6hNUEUjTF2uKJxZ2ZTZjFixBMEUfMu1W0m6hXvwoxHca0QGC0nFG4XiAYlI+o9SdUpDEkO15rxvXeT5wHRudNo0tZJoo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.24])
-	by gateway (Coremail) with SMTP id _____8AxDOtldvll87waAA--.54120S3;
-	Tue, 19 Mar 2024 19:26:29 +0800 (CST)
-Received: from [10.20.42.24] (unknown [10.20.42.24])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx8ORjdvllXmddAA--.49291S3;
-	Tue, 19 Mar 2024 19:26:29 +0800 (CST)
-Subject: Re: [PATCH V2] irqchip/loongson-pch-pic: Update interrupt
- registration policy
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- chenhuacai@kernel.org, jiaxun.yang@flygoat.com, tglx@linutronix.de
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
- Baoqi Zhang <zhangbaoqi@loongson.cn>, Biao Dong <dongbiao@loongson.cn>
-References: <20240316082141.26139-1-zhangtianyang@loongson.cn>
- <0fda46c7-87e1-41f1-b3f0-ee3d1a4ac601@wanadoo.fr>
+Received: from loongson.cn (unknown [10.2.10.34])
+	by gateway (Coremail) with SMTP id _____8Ax++goifllWsEaAA--.44396S3;
+	Tue, 19 Mar 2024 20:46:32 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.2.10.34])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8DxPBMnifllzHJdAA--.49319S2;
+	Tue, 19 Mar 2024 20:46:31 +0800 (CST)
 From: Tianyang Zhang <zhangtianyang@loongson.cn>
-Message-ID: <45b36854-fd80-a410-6cca-f3b776566de6@loongson.cn>
-Date: Tue, 19 Mar 2024 19:26:26 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+To: chenhuacai@kernel.org,
+	jiaxun.yang@flygoat.com,
+	tglx@linutronix.de
+Cc: linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Baoqi Zhang <zhangbaoqi@loongson.cn>,
+	Biao Dong <dongbiao@loongson.cn>,
+	Tianyang Zhang <zhangtianyang@loongson.cn>
+Subject: [PATCH V3] irqchip/loongson-pch-pic: Update interrupt registration policy
+Date: Tue, 19 Mar 2024 20:46:29 +0800
+Message-Id: <20240319124629.23925-1-zhangtianyang@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <0fda46c7-87e1-41f1-b3f0-ee3d1a4ac601@wanadoo.fr>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID:AQAAf8Bx8ORjdvllXmddAA--.49291S3
+X-CM-TRANSID:AQAAf8DxPBMnifllzHJdAA--.49319S2
 X-CM-SenderInfo: x2kd0wxwld05hdqjqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxZr1UXryDJr1UAr48ZF47GFX_yoWruw1xpF
-	4kJrWUJryUJr18Jr1kJr1UJFy5Ar1UJ3WDGr18XF1UJw17Jr1jgr17Wr1qgr1UJr48Jr1U
-	Jr1jqr17ur17JFgCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+X-Coremail-Antispam: 1Uk129KBj93XoW3JrWDXr1fKrW7uFyxJry3WrX_yoWxKr4kpF
+	WUArZxuF4UJr10q3y8C3WUZryfZF9Fvay0gaySyw1SqwnFvrykG3WxuF9rAa18JF95Zrsx
+	Zws0kFyF9a1UAagCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
 	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-	AVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-	8JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-	Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
-	cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
-	14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j5xhLUUUUU=
+	0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv
+	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
+	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
+	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
+	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6x
+	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUzZ2-UUUUU
 
-Hi Christophe
+From: Baoqi Zhang <zhangbaoqi@loongson.cn>
 
-This part of the code is not a hotspot path. In fact, it may only be 
-executed once at startup,
+This patch remove the fixed mapping between the LS7A interrupt source
+and the HT interrupt vector, and replaced it with a dynamically
+allocated approach.
 
-so some optimizations that we consider extreme can be omitted
+We introduce a mapping table in struct pch_pic, where each interrupt
+source will allocate an index as a 'hwirq' from the table in the order
+of application and set table value as interrupt source number. This hwirq
+will be configured as its vector in the HT interrupt controller. For an
+interrupt source, the validity period of the obtained hwirq will last until
+the system reset.
 
-Tianyang
+This will be more conducive to fully utilizing existing vectors to
+support more devices.
 
-在 2024/3/16 下午10:03, Christophe JAILLET 写道:
-> Le 16/03/2024 à 09:21, Tianyang Zhang a écrit :
->> From: Baoqi Zhang <zhangbaoqi@loongson.cn>
->>
->> This patch remove the fixed mapping between the 7A interrupt source
->> and the HT interrupt vector, and replaced it with a dynamically
->> allocated approach.
->>
->> We introduce a mapping table in struct pch_pic, where each interrupt
->> source will allocate an index as a 'hwirq' from the table in the order
->> of application and set table value as interrupt source number. This 
->> hwirq
->> will be configured as its vector in the HT interrupt controller. For an
->> interrupt source, the validity period of the obtained hwirq will last 
->> until
->> the system reset
->>
->> This will be more conducive to fully utilizing existing vectors to
->> support more devices
->>
->> Signed-off-by: Baoqi Zhang <zhangbaoqi@loongson.cn>
->> Signed-off-by: Biao Dong <dongbiao@loongson.cn>
->> Signed-off-by: Tianyang Zhang <zhangtianyang@loongson.cn>
->> ---
->>   drivers/irqchip/irq-loongson-pch-pic.c | 77 ++++++++++++++++++++------
->>   1 file changed, 59 insertions(+), 18 deletions(-)
->>
->
-> ...
->
->> @@ -171,6 +183,27 @@ static int pch_pic_domain_translate(struct 
->> irq_domain *d,
->>               return -EINVAL;
->>             *hwirq = fwspec->param[0] - priv->gsi_base;
->> +
->> +        raw_spin_lock_irqsave(&priv->pic_lock, flags);
->> +        /* Check pic-table to confirm if the hwirq has been assigned */
->> +        for (i = 0; i < priv->inuse; i++) {
->> +            if (priv->table[i] == *hwirq) {
->> +                *hwirq = i;
->> +                break;
->> +            }
->> +        }
->> +        if (i == priv->inuse) {
->> +            /* Assign a new hwirq in pic-table */
->> +            if (priv->inuse >= PIC_COUNT) {
->> +                pr_err("pch-pic domain has no free vectors\n");
->> + raw_spin_unlock_irqrestore(&priv->pic_lock, flags);
->> +                return -EINVAL;
->> +            }
->> +            priv->table[priv->inuse] = *hwirq;
->> +            *hwirq = priv->inuse++;
->> +        }
->> +        raw_spin_unlock_irqrestore(&priv->pic_lock, flags);
->
-> Hi,
->
-> not sure if it helps or if this is a hot path, but, IIUC, taking the 
-> lock could be avoided with some code reordering and 'inuse' being an 
-> atomic_t.
->
-> IIUC, the lock is only needed to protect 'inuse' and 'table' is never 
-> modified afterwards.
->
-> Somehing like:
->
-> > +        int cur_inuse;
->         ...
-> > +        cur_inuse = atomic_read(&priv->inuse);
-> > +        /* Check pic-table to confirm if the hwirq has been 
-> assigned */
-> > +        for (i = 0; i < cur_inuse; i++) {
-> > +            if (priv->table[i] == *hwirq) {
-> > +                *hwirq = i;
-> > +                break;
-> > +            }
-> > +        }
-> > +        if (i == cur_inuse) {
-> > +            /* Assign a new hwirq in pic-table */
-> > +            if (cur_inuse >= PIC_COUNT) {
-> > +                pr_err("pch-pic domain has no free vectors\n");
-> > +                return -EINVAL;
-> > +            }
-> > +            priv->table[cur_inuse] = *hwirq;
-> > +            *hwirq = atomic_inc_return(&priv->inuse);
-> > +        }
->
->
->> +
->>           if (fwspec->param_count > 1)
->>               *type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
->>           else
->> @@ -194,6 +227,9 @@ static int pch_pic_alloc(struct irq_domain 
->> *domain, unsigned int virq,
->>       if (err)
->>           return err;
->>   +    /* Write vector ID */
->> +    writeb(priv->ht_vec_base + hwirq, priv->base + 
->> PCH_INT_HTVEC(hwirq_to_bit(priv, hwirq)));
->> +
->>       parent_fwspec.fwnode = domain->parent->fwnode;
->>       parent_fwspec.param_count = 1;
->>       parent_fwspec.param[0] = hwirq + priv->ht_vec_base;
->
-> ...
+Signed-off-by: Baoqi Zhang <zhangbaoqi@loongson.cn>
+Signed-off-by: Biao Dong <dongbiao@loongson.cn>
+Signed-off-by: Tianyang Zhang <zhangtianyang@loongson.cn>
+---
+ drivers/irqchip/irq-loongson-pch-pic.c | 76 ++++++++++++++++++++------
+ 1 file changed, 59 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
+index 63db8e2172e0..1ee63fcf4b5a 100644
+--- a/drivers/irqchip/irq-loongson-pch-pic.c
++++ b/drivers/irqchip/irq-loongson-pch-pic.c
+@@ -33,6 +33,7 @@
+ #define PIC_COUNT		(PIC_COUNT_PER_REG * PIC_REG_COUNT)
+ #define PIC_REG_IDX(irq_id)	((irq_id) / PIC_COUNT_PER_REG)
+ #define PIC_REG_BIT(irq_id)	((irq_id) % PIC_COUNT_PER_REG)
++#define PIC_UNDEF_VECTOR	255
+ 
+ static int nr_pics;
+ 
+@@ -46,12 +47,19 @@ struct pch_pic {
+ 	u32			saved_vec_en[PIC_REG_COUNT];
+ 	u32			saved_vec_pol[PIC_REG_COUNT];
+ 	u32			saved_vec_edge[PIC_REG_COUNT];
++	u8			table[PIC_COUNT];
++	int			inuse;
+ };
+ 
+ static struct pch_pic *pch_pic_priv[MAX_IO_PICS];
+ 
+ struct fwnode_handle *pch_pic_handle[MAX_IO_PICS];
+ 
++static inline u8 hwirq_to_bit(struct pch_pic *priv, int hirq)
++{
++	return priv->table[hirq];
++}
++
+ static void pch_pic_bitset(struct pch_pic *priv, int offset, int bit)
+ {
+ 	u32 reg;
+@@ -80,45 +88,47 @@ static void pch_pic_mask_irq(struct irq_data *d)
+ {
+ 	struct pch_pic *priv = irq_data_get_irq_chip_data(d);
+ 
+-	pch_pic_bitset(priv, PCH_PIC_MASK, d->hwirq);
++	pch_pic_bitset(priv, PCH_PIC_MASK, hwirq_to_bit(priv, d->hwirq));
+ 	irq_chip_mask_parent(d);
+ }
+ 
+ static void pch_pic_unmask_irq(struct irq_data *d)
+ {
+ 	struct pch_pic *priv = irq_data_get_irq_chip_data(d);
++	int bit = hwirq_to_bit(priv, d->hwirq);
+ 
+-	writel(BIT(PIC_REG_BIT(d->hwirq)),
+-			priv->base + PCH_PIC_CLR + PIC_REG_IDX(d->hwirq) * 4);
++	writel(BIT(PIC_REG_BIT(bit)),
++			priv->base + PCH_PIC_CLR + PIC_REG_IDX(bit) * 4);
+ 
+ 	irq_chip_unmask_parent(d);
+-	pch_pic_bitclr(priv, PCH_PIC_MASK, d->hwirq);
++	pch_pic_bitclr(priv, PCH_PIC_MASK, bit);
+ }
+ 
+ static int pch_pic_set_type(struct irq_data *d, unsigned int type)
+ {
+ 	struct pch_pic *priv = irq_data_get_irq_chip_data(d);
++	int bit = hwirq_to_bit(priv, d->hwirq);
+ 	int ret = 0;
+ 
+ 	switch (type) {
+ 	case IRQ_TYPE_EDGE_RISING:
+-		pch_pic_bitset(priv, PCH_PIC_EDGE, d->hwirq);
+-		pch_pic_bitclr(priv, PCH_PIC_POL, d->hwirq);
++		pch_pic_bitset(priv, PCH_PIC_EDGE, bit);
++		pch_pic_bitclr(priv, PCH_PIC_POL, bit);
+ 		irq_set_handler_locked(d, handle_edge_irq);
+ 		break;
+ 	case IRQ_TYPE_EDGE_FALLING:
+-		pch_pic_bitset(priv, PCH_PIC_EDGE, d->hwirq);
+-		pch_pic_bitset(priv, PCH_PIC_POL, d->hwirq);
++		pch_pic_bitset(priv, PCH_PIC_EDGE, bit);
++		pch_pic_bitset(priv, PCH_PIC_POL, bit);
+ 		irq_set_handler_locked(d, handle_edge_irq);
+ 		break;
+ 	case IRQ_TYPE_LEVEL_HIGH:
+-		pch_pic_bitclr(priv, PCH_PIC_EDGE, d->hwirq);
+-		pch_pic_bitclr(priv, PCH_PIC_POL, d->hwirq);
++		pch_pic_bitclr(priv, PCH_PIC_EDGE, bit);
++		pch_pic_bitclr(priv, PCH_PIC_POL, bit);
+ 		irq_set_handler_locked(d, handle_level_irq);
+ 		break;
+ 	case IRQ_TYPE_LEVEL_LOW:
+-		pch_pic_bitclr(priv, PCH_PIC_EDGE, d->hwirq);
+-		pch_pic_bitset(priv, PCH_PIC_POL, d->hwirq);
++		pch_pic_bitclr(priv, PCH_PIC_EDGE, bit);
++		pch_pic_bitset(priv, PCH_PIC_POL, bit);
+ 		irq_set_handler_locked(d, handle_level_irq);
+ 		break;
+ 	default:
+@@ -133,11 +143,12 @@ static void pch_pic_ack_irq(struct irq_data *d)
+ {
+ 	unsigned int reg;
+ 	struct pch_pic *priv = irq_data_get_irq_chip_data(d);
++	int bit = hwirq_to_bit(priv, d->hwirq);
+ 
+-	reg = readl(priv->base + PCH_PIC_EDGE + PIC_REG_IDX(d->hwirq) * 4);
+-	if (reg & BIT(PIC_REG_BIT(d->hwirq))) {
+-		writel(BIT(PIC_REG_BIT(d->hwirq)),
+-			priv->base + PCH_PIC_CLR + PIC_REG_IDX(d->hwirq) * 4);
++	reg = readl(priv->base + PCH_PIC_EDGE + PIC_REG_IDX(bit) * 4);
++	if (reg & BIT(PIC_REG_BIT(bit))) {
++		writel(BIT(PIC_REG_BIT(bit)),
++			priv->base + PCH_PIC_CLR + PIC_REG_IDX(bit) * 4);
+ 	}
+ 	irq_chip_ack_parent(d);
+ }
+@@ -159,6 +170,8 @@ static int pch_pic_domain_translate(struct irq_domain *d,
+ {
+ 	struct pch_pic *priv = d->host_data;
+ 	struct device_node *of_node = to_of_node(fwspec->fwnode);
++	unsigned long flags;
++	int i;
+ 
+ 	if (of_node) {
+ 		if (fwspec->param_count < 2)
+@@ -171,6 +184,27 @@ static int pch_pic_domain_translate(struct irq_domain *d,
+ 			return -EINVAL;
+ 
+ 		*hwirq = fwspec->param[0] - priv->gsi_base;
++
++		raw_spin_lock_irqsave(&priv->pic_lock, flags);
++		/* Check pic-table to confirm if the hwirq has been assigned */
++		for (i = 0; i < priv->inuse; i++) {
++			if (priv->table[i] == *hwirq) {
++				*hwirq = i;
++				break;
++			}
++		}
++		if (i == priv->inuse) {
++			/* Assign a new hwirq in pic-table */
++			if (priv->inuse >= PIC_COUNT) {
++				pr_err("pch-pic domain has no free vectors\n");
++				raw_spin_unlock_irqrestore(&priv->pic_lock, flags);
++				return -EINVAL;
++			}
++			priv->table[priv->inuse] = *hwirq;
++			*hwirq = priv->inuse++;
++		}
++		raw_spin_unlock_irqrestore(&priv->pic_lock, flags);
++
+ 		if (fwspec->param_count > 1)
+ 			*type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
+ 		else
+@@ -194,6 +228,9 @@ static int pch_pic_alloc(struct irq_domain *domain, unsigned int virq,
+ 	if (err)
+ 		return err;
+ 
++	/* Write vector ID */
++	writeb(priv->ht_vec_base + hwirq, priv->base + PCH_INT_HTVEC(hwirq_to_bit(priv, hwirq)));
++
+ 	parent_fwspec.fwnode = domain->parent->fwnode;
+ 	parent_fwspec.param_count = 1;
+ 	parent_fwspec.param[0] = hwirq + priv->ht_vec_base;
+@@ -222,7 +259,7 @@ static void pch_pic_reset(struct pch_pic *priv)
+ 
+ 	for (i = 0; i < PIC_COUNT; i++) {
+ 		/* Write vector ID */
+-		writeb(priv->ht_vec_base + i, priv->base + PCH_INT_HTVEC(i));
++		writeb(priv->ht_vec_base + i, priv->base + PCH_INT_HTVEC(hwirq_to_bit(priv, i)));
+ 		/* Hardcode route to HT0 Lo */
+ 		writeb(1, priv->base + PCH_INT_ROUTE(i));
+ 	}
+@@ -284,6 +321,7 @@ static int pch_pic_init(phys_addr_t addr, unsigned long size, int vec_base,
+ 			u32 gsi_base)
+ {
+ 	struct pch_pic *priv;
++	int i;
+ 
+ 	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+@@ -294,6 +332,10 @@ static int pch_pic_init(phys_addr_t addr, unsigned long size, int vec_base,
+ 	if (!priv->base)
+ 		goto free_priv;
+ 
++	priv->inuse = 0;
++	for (i = 0; i < PIC_COUNT; i++)
++		priv->table[i] = PIC_UNDEF_VECTOR;
++
+ 	priv->ht_vec_base = vec_base;
+ 	priv->vec_count = ((readq(priv->base) >> 48) & 0xff) + 1;
+ 	priv->gsi_base = gsi_base;
+-- 
+2.20.1
 
 
