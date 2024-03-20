@@ -1,64 +1,64 @@
-Return-Path: <linux-mips+bounces-2348-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2349-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15E42880B6C
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Mar 2024 07:50:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6552880B98
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Mar 2024 08:00:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 10BA11C2243B
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Mar 2024 06:50:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 816FF1F21814
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Mar 2024 07:00:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 628EC36AF9;
-	Wed, 20 Mar 2024 06:50:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDB951EB22;
+	Wed, 20 Mar 2024 07:00:14 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93AB936AE4;
-	Wed, 20 Mar 2024 06:49:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CCE31EB23;
+	Wed, 20 Mar 2024 06:59:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710917404; cv=none; b=QafIlcjiI/O0nBA5KN5OBnKvS8Zr8SpPnKU22GE/JO0Q0boT1DEv3rMrfr3sEbF47FTYYmqlPohavuvLFAMops4YgZEUfe0EFjponnKQI5rPDOxOPVbWcuTBi6zKtuV6kawWsfXTfSGkbIrCxsEEomejDZaK7I1a/LPWFRZ2sh8=
+	t=1710918014; cv=none; b=tm2rGpltHfWvScovA9qKaNwqMIz9xb5iFGh9soDhWBmjGuZvjVTt7zrr07q2b6G3HJKFfvBlxMuITVgYYa1bHYmZGxGA9OeHDaTlnVEb0Y8LcEtMckSaG/1JTvX34abhxX1VJDglQjXqpP9nnObkE5k2de++akguySFvaCAK4NI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710917404; c=relaxed/simple;
-	bh=qXzaMmUjLgtfU6ksOSl/6Quc/HlC9r7F3efPpkAMX30=;
+	s=arc-20240116; t=1710918014; c=relaxed/simple;
+	bh=HTTrM5twdcftVhagDn5lY0E4vILkVhvOdzJWy2xZXKw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TL2hF0fVxLJ6LdF+kyYYXX1lKhG9JFsmbtIGInVbArToJ2Y2UWp9Eiq+EX9IiUlPuDS65cIXB0LCtOrRdZ26bM+3JVM1AMK4O2vum90zGL1kM4nucjXH8BjUUDezNRwKX+tV9mfIDxnyD3GUwRtr21ihnf2H4iqnEjr9Wfsz+G4=
+	 In-Reply-To:Content-Type; b=OLVxemp4YuV7ITijsooLY0kHsRB7dpQJUrLt9U/0Kh9nDWsNIYSeEDq0bbqnAjfDpV1lclFp0wrnqghXoTv1GkKamf4jUDSXG8aidB4Txy1sNU0ynHDdbQ2tfJcO8wfu7kCZnGt6DncIZ3VdBOAS8cm+r9RDxCjq4Hnzmonh6Ts=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: de7c52fd4db04ec0b22eddd14bf9b6b8-20240320
+X-UUID: a9e7b00a2d974b92a0c7a8672ac406fe-20240320
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.37,REQID:cf5866be-525f-4540-8c20-3d27b7a82ea4,IP:10,
-	URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACT
-	ION:release,TS:-10
-X-CID-INFO: VERSION:1.1.37,REQID:cf5866be-525f-4540-8c20-3d27b7a82ea4,IP:10,UR
-	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-10
-X-CID-META: VersionHash:6f543d0,CLOUDID:6b169d90-e2c0-40b0-a8fe-7c7e47299109,B
-	ulkID:2403201000570FJ81X2B,BulkQuantity:10,Recheck:0,SF:19|44|64|66|24|17|
-	102,TC:nil,Content:0,EDM:-3,IP:-2,URL:11|1,File:nil,RT:nil,Bulk:40,QS:nil,
+X-CID-O-INFO: VERSION:1.1.37,REQID:b5cb8324-fda2-4f02-82f2-1ea0cbe3fe92,IP:20,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:5
+X-CID-INFO: VERSION:1.1.37,REQID:b5cb8324-fda2-4f02-82f2-1ea0cbe3fe92,IP:20,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:5
+X-CID-META: VersionHash:6f543d0,CLOUDID:9a161b00-c26b-4159-a099-3b9d0558e447,B
+	ulkID:2403201000570FJ81X2B,BulkQuantity:15,Recheck:0,SF:17|19|44|64|66|38|
+	24|102,TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,
 	BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_OBB,TF_CID_SPAM_ULN,TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,
-	TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
-X-UUID: de7c52fd4db04ec0b22eddd14bf9b6b8-20240320
+X-CID-BVR: 1,FCT|NGT
+X-CID-BAS: 1,FCT|NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI,
+	TF_CID_SPAM_OBB
+X-UUID: a9e7b00a2d974b92a0c7a8672ac406fe-20240320
 Received: from node2.com.cn [(39.156.73.10)] by mailgw
 	(envelope-from <mengfanhui@kylinos.cn>)
 	(Generic MTA)
-	with ESMTP id 278497469; Wed, 20 Mar 2024 14:44:25 +0800
+	with ESMTP id 542372133; Wed, 20 Mar 2024 14:59:52 +0800
 Received: from node2.com.cn (localhost [127.0.0.1])
-	by node2.com.cn (NSMail) with SMTP id 0C9FCB80758A;
-	Wed, 20 Mar 2024 14:44:25 +0800 (CST)
-X-ns-mid: postfix-65FA85C8-997272164
+	by node2.com.cn (NSMail) with SMTP id 22D6EB80758A;
+	Wed, 20 Mar 2024 14:59:52 +0800 (CST)
+X-ns-mid: postfix-65FA8968-88231199
 Received: from [172.30.60.81] (unknown [172.30.60.81])
-	by node2.com.cn (NSMail) with ESMTPA id BE370B80758A;
-	Wed, 20 Mar 2024 06:44:21 +0000 (UTC)
-Message-ID: <021efce7-1e40-43a6-9bfd-0d968bfcd5a8@kylinos.cn>
-Date: Wed, 20 Mar 2024 14:44:21 +0800
+	by node2.com.cn (NSMail) with ESMTPA id 97532B80758A;
+	Wed, 20 Mar 2024 06:59:47 +0000 (UTC)
+Message-ID: <7d925338-8646-4480-9c79-83af041de122@kylinos.cn>
+Date: Wed, 20 Mar 2024 14:59:47 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -68,7 +68,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] config/mips: support zswap function
 Content-Language: en-US
-To: Yosry Ahmed <yosryahmed@google.com>
+To: Yosry Ahmed <yosryahmed@google.com>, linux-mips@vger.kernel.org
 Cc: tsbogend@alpha.franken.de, geert+renesas@glider.be,
  linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-mm@vger.kernel.org, hannes@cmpxchg.org, nphamcs@gmail.com,
@@ -80,10 +80,7 @@ In-Reply-To: <Zfp7Y9x2iOE_prpp@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Zswap and zsmalloc are compression methods, and kernel configuration can =
-be configured simultaneously.
-zbud is an algorithm, and users can use that method if they want to use i=
-t.It won't affect each other.
+
 
 =E5=9C=A8 2024/3/20 14:00, Yosry Ahmed =E5=86=99=E9=81=93:
 > On Fri, Jan 26, 2024 at 03:55:47PM +0800, mengfanhui wrote:
