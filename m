@@ -1,156 +1,121 @@
-Return-Path: <linux-mips+bounces-2346-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2347-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EF5F880995
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Mar 2024 03:28:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D0D4880AE2
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Mar 2024 07:00:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F3D74B21AD2
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Mar 2024 02:28:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 972DD1C20B54
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Mar 2024 06:00:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A8248479;
-	Wed, 20 Mar 2024 02:28:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9146217577;
+	Wed, 20 Mar 2024 06:00:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jWsnwBvu"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="38JYpUkT"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8872E8C0B;
-	Wed, 20 Mar 2024 02:27:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00601755C
+	for <linux-mips@vger.kernel.org>; Wed, 20 Mar 2024 06:00:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710901681; cv=none; b=k4p6PSDktVMvCqLITyf1n5/Ap3NYXddxqKfI/GFlTRQ1Re9M3/lZ0CToYI3BeQFlY/Io6u7BvAFZlB32VD40bXfbVxPVLDiGQJ0a/Njb4BVlF4WpQhoRdo+v3uf4pggpLtdmuB0sIqOSY+qUO4JPkMh+YdxDSc6XNM7ooBTiqO4=
+	t=1710914408; cv=none; b=fLZT19/JSgsDQqJ6yvbRsCH0o9FXXIR4U5hVetposRhSBiOe+qxifwneF9EDz4NFm9ih5O9h3+h9bbTLMlY3dB6zWkCRnVpE3Y63tyTGbfl4dDgBEQnmLdHy5x4ylIwDFFlkOEOQ37s/wUIJnT+czzFi+9NR3pjaBsqnlOgWReo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710901681; c=relaxed/simple;
-	bh=CrEDZNktWLaecr9rY/RqMJilDdld6VN4fBZu4A2CU4A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I2pHXomeFIvk/LTinQ3G41/8VbyVgJskimDdBz7F6jWJSXSVRAyUKCOiy6WCy+Mg7k9WNSpnKwWvx8BLcfCwqV84Ji4Q8yXHWgisJeGs0/lMRwOZdsJW5WVHgHsFeK8kHIP+jmY1KOYEq4ctFC5h6rZ+OFCHCES6TDmAqq6no3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jWsnwBvu; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-56a2bb1d84eso797699a12.1;
-        Tue, 19 Mar 2024 19:27:59 -0700 (PDT)
+	s=arc-20240116; t=1710914408; c=relaxed/simple;
+	bh=6FBlmkovYz3g0MfGGxRWQ6YmePlnSlZJ4o3EpgtSrEM=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=F8TAJDToF950RpfmWTtikz/ZNlkEdiyU0TKM+fgjUy5WGXmrKZUSk7NS2yy4H+Wz5y6X9/DrSUHek0oTAXglAZ+ue7/7gTiG2BwLj6J2MoBFC//JTqxOC3j+VV4rjMdZ8r6zxK3hydtw0UBdj4pJJ2BnkPagcM8Jk5lOJSicKfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yosryahmed.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=38JYpUkT; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--yosryahmed.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-60a55cd262aso112243057b3.2
+        for <linux-mips@vger.kernel.org>; Tue, 19 Mar 2024 23:00:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710901678; x=1711506478; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CrEDZNktWLaecr9rY/RqMJilDdld6VN4fBZu4A2CU4A=;
-        b=jWsnwBvuUoWHGHVnDfaNmIDjd7pxM6Hv1OsVRUoo3Ghp7lLlvaQvF0r+rpTaSYgezO
-         vqfRRas+vt+z7YnK272XaFKLgk72RRA99gsokPAvMu6b55ihsoeUDE37vPDNx810puDq
-         IjsSPC0+cnkBxu9RzQd/NBc9jAqTpYcLxsv2/Py/LAi7l8mXpeJ5tCdiCI/dp9DhPHZU
-         2jnDhIX3AQX8uctCgufkk35YgUYo/a9Rbs7e3FdlfC8sH5xsi67KtDwW1B/rydi1vFR6
-         DsE07RIEcENBA/UBMaj0I3sftbIxUrrR2Jh0AQgh5+RQzS0PEiktKUQeL3CMFqRMDTDM
-         f7tA==
+        d=google.com; s=20230601; t=1710914406; x=1711519206; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PZTYFP7cQrHabDLXpeeWZ0a2uWz3voAo8UgAORiNtBY=;
+        b=38JYpUkTGOCR0MzWftEnX+cRzZF5j9zf4UvBmz4xVPRoJzW5Mr+buzwP9liu1AQbc7
+         DW7L1EjQt4AhyyT/cw1ambYZrd9+ndE3pUy/lZfxxX/xCcBS8MdMGiZbXwGyWmMnbsp9
+         zKK8u0+H9KuqqyxDMAhSOItee/J/rQbVrMdVLlo5nZjJmFp3qDBzCcwZ2tRo/6zi/Yut
+         XRYMrT36QrOf+MosFLZzDiNTVdf3TwmBoookPKnoqiZi+HwPh4aiveZvgj97rKaHJ7lt
+         SxbjkiwlAc9pVNZQNro8N5S5UGSCQ2oADrFvjVjE7225Fg3R9usAmPKaM3AK1Sx+mJIp
+         rWGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710901678; x=1711506478;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CrEDZNktWLaecr9rY/RqMJilDdld6VN4fBZu4A2CU4A=;
-        b=XPoobr/fu/jhLsQqrT2hku2wqD2kaNsLeggnjy6y1vk6ZrK3P0D4x+dnfKSagq5cTk
-         9O4WCOEMhO1Z8zqwWNx7SVw2TCNqaf1KiXqBb8hxQjYq9h6q6aryNOyKSEWNXtC1wp07
-         uu0ihCa+naayZcAeJAnN6t1/6EBEiVMcLaJxg/uvw1jYn7iQA3n+AdZm+hXbOHrP1qwD
-         HHoRlFcXjc28lm+xeIohw1rl65X9rycTshd5k+X0qrdo+SH0sTOkxUIX01Vf+ILxgzuL
-         4DThtyc2oXoAZ5+2bJ/Ns8n77NeBZQIGz2wf+9EULMgruOHO+Q6GxsNPrZG+VB/FD4al
-         nkhw==
-X-Forwarded-Encrypted: i=1; AJvYcCVnUAKtmtEiS+4RQ9TzFa/RELa+CfoM9HCH0jkM5uUoh5ikj5+vIiYwxknfGyZXzMTBgNExmaVPL43bBvfibc3+LsaPUR5HKVDGWf4TKuGTnCL7ze/kZq1KYpn9rQuEwSZ5nS6eQldFkPIOwca4aFsaVyJGFVi2hX/hmNyXABYlOz5t/CXLlOGuVBarns8+iPFbd0wYoc16Wx0/c8vq9Ao=
-X-Gm-Message-State: AOJu0YwYrjLTy9IWFY7tjftP7KARVI4UwfiqeECIc03Y3L2qSqQ/0sHt
-	LI1HSLBFt7xzEkz7Pn7WIqeVCC8xtTmPSRj9NtXwk120ywSupjzdcPTRjBoMuyPYp4YqCKsNDow
-	5/q6PJmfz94it1kFyM15oIYteATM=
-X-Google-Smtp-Source: AGHT+IFt/7I86CbjlI0gZQSF/qcTE6qkqcQl29FokubkU6RSRoHeUOxDw6UA1S3xokrCdi4OqK1Tz8KHuh8CHwiixEY=
-X-Received: by 2002:a50:9e61:0:b0:568:a8f5:d47d with SMTP id
- z88-20020a509e61000000b00568a8f5d47dmr3899542ede.17.1710901677672; Tue, 19
- Mar 2024 19:27:57 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710914406; x=1711519206;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=PZTYFP7cQrHabDLXpeeWZ0a2uWz3voAo8UgAORiNtBY=;
+        b=h5Cuwegle+JWXovFct+/rqeNubaorEXH90PGgrRwIF2B0vaDqRh5FhnH686PDTQj7z
+         KcmCT9aOmelVCx0ufZ1ByVD78r6frYJXmk5qBHfb7Q3HNZTfWyvF7P20jjOVWq8SxoMP
+         cA37UEmqjjtXzr50vTM/4kMmrXCx8U3ZTiPVj5jq7KmwnvVF+bp6M1LoBrVeMxecrJmp
+         5FuSpX7YWwRJw/BWwFDgRi8iP/QW4mBLhEfZ/55nPTIVWVxtKldaeuWHgKOfajU5IHtf
+         SiW5C+H+DOdpjVoqQF86Lms1gVj+B8mkSV1pk2ybWNYjXqxcByWpDOcbAOLxHwetVwTy
+         fNRg==
+X-Forwarded-Encrypted: i=1; AJvYcCWnh0ZtbSMf9BdSmIjuCjUfVaW4IL5Dt0cZR4MMNCEO67Q44SthrbEWWjk4tiWj/37cv2RUFfJk3mnwaUJDFw86frmG2fD3NHXhVg==
+X-Gm-Message-State: AOJu0YwFdQbb5OS/plVUyNcx5jR6jc1xYv8ocKTqIwi8Z89N8Tm22sij
+	XGt3hRn4qYV9zFTj6AanArACuf5uiH90TatNaRgRtVS/CmbVVeZw12mQ/LsxNSPxOREtcjuptrv
+	hSc2mzE3EvSuAHj5pbA==
+X-Google-Smtp-Source: AGHT+IGYCsCB0GOLdbVb6ZF9l6feOq/JuFNhQzsMn2U3sWml6myhqGSZU7HKyFffXQbmV74q/yfh269FFwjduW+i
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:29b4])
+ (user=yosryahmed job=sendgmr) by 2002:a05:6902:240e:b0:dc6:f877:ea7b with
+ SMTP id dr14-20020a056902240e00b00dc6f877ea7bmr1139569ybb.9.1710914405429;
+ Tue, 19 Mar 2024 23:00:05 -0700 (PDT)
+Date: Wed, 20 Mar 2024 06:00:03 +0000
+In-Reply-To: <20240126075547.1521556-1-mengfanhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240316-loongson1-dma-v6-0-90de2c3cc928@gmail.com>
- <CAAhV-H6aGS6VXGzkqWTyxL7bGw=KdjmnRZj7SpwrV5hT6XQcpg@mail.gmail.com>
- <CAJhJPsVSM-8VA604p2Vr58QJEp+Tg72YTTntnip64Ejz=0aQng@mail.gmail.com>
- <CAAhV-H5TR=y_AmbF6QMJmoS0BhfB=K7forMg0-b2YWm7trktjA@mail.gmail.com>
- <20240318-average-likely-6a55c18db7bb@spud> <CAAhV-H4oMoPt7WwWc7wbxy-ShNQ8dPkuTAuvSEGAPBKvkkn24w@mail.gmail.com>
- <20240318-saxophone-sudden-ce0df3a953a8@spud> <CAJhJPsXKZr7XDC-i1O_tpcgGE9c0yk7S9Qjnpk7hrU0evAJ+FQ@mail.gmail.com>
- <CAAhV-H5Gm6mACV4smxDB=BJvLr8C1AmgY=mMqfNYOOxEUBhqFA@mail.gmail.com> <20240319-trimester-manhole-3bd092f3343f@spud>
-In-Reply-To: <20240319-trimester-manhole-3bd092f3343f@spud>
-From: Keguang Zhang <keguang.zhang@gmail.com>
-Date: Wed, 20 Mar 2024 10:27:21 +0800
-Message-ID: <CAJhJPsWN24p8VcLeeB8v_JU6KXTVBzWWcE-Aj4Tc2urqx6sYrw@mail.gmail.com>
-Subject: Re: [PATCH v6 0/2] Add support for Loongson1 DMA
-To: Conor Dooley <conor@kernel.org>
-Cc: Huacai Chen <chenhuacai@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+References: <20240126075547.1521556-1-mengfanhui@kylinos.cn>
+Message-ID: <Zfp7Y9x2iOE_prpp@google.com>
+Subject: Re: [PATCH] config/mips: support zswap function
+From: Yosry Ahmed <yosryahmed@google.com>
+To: mengfanhui <mengfanhui@kylinos.cn>
+Cc: tsbogend@alpha.franken.de, geert+renesas@glider.be, 
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@vger.kernel.org, hannes@cmpxchg.org, nphamcs@gmail.com, 
+	chengming.zhou@linux.dev
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 20, 2024 at 1:41=E2=80=AFAM Conor Dooley <conor@kernel.org> wro=
-te:
->
-> On Tue, Mar 19, 2024 at 10:40:54AM +0800, Huacai Chen wrote:
-> > On Tue, Mar 19, 2024 at 10:32=E2=80=AFAM Keguang Zhang <keguang.zhang@g=
-mail.com> wrote:
-> > >
-> > > On Mon, Mar 18, 2024 at 11:42=E2=80=AFPM Conor Dooley <conor@kernel.o=
-rg> wrote:
-> > > >
-> > > > On Mon, Mar 18, 2024 at 10:26:51PM +0800, Huacai Chen wrote:
-> > > > > Hi, Conor,
-> > > > >
-> > > > > On Mon, Mar 18, 2024 at 7:28=E2=80=AFPM Conor Dooley <conor@kerne=
-l.org> wrote:
-> > > > > >
-> > > > > > On Mon, Mar 18, 2024 at 03:31:59PM +0800, Huacai Chen wrote:
-> > > > > > > On Mon, Mar 18, 2024 at 10:08=E2=80=AFAM Keguang Zhang <kegua=
-ng.zhang@gmail.com> wrote:
-> > > > > > > >
-> > > > > > > > Hi Huacai,
-> > > > > > > >
-> > > > > > > > > Hi, Keguang,
-> > > > > > > > >
-> > > > > > > > > Sorry for the late reply, there is already a ls2x-apb-dma=
- driver, I'm
-> > > > > > > > > not sure but can they share the same code base? If not, c=
-an rename
-> > > > > > > > > this driver to ls1x-apb-dma for consistency?
-> > > > > > > >
-> > > > > > > > There are some differences between ls1x DMA and ls2x DMA, s=
-uch as
-> > > > > > > > registers and DMA descriptors.
-> > > > > > > > I will rename it to ls1x-apb-dma.
-> > > > > > > OK, please also rename the yaml file to keep consistency.
-> > > > > >
-> > > > > > No, the yaml file needs to match the (one of the) compatible st=
-rings.
-> > > > > OK, then I think we can also rename the compatible strings, if po=
-ssible.
-> > > >
-> > > > If there are no other types of dma controller on this device, I do =
-not
-> > > > see why would we add "apb" into the compatible as there is nothing =
-to
-> > > > differentiate this controller from.
-> > >
-> > > That's true. 1A/1B/1C only have one APB DMA.
-> > > Should I keep the compatible "ls1b-dma" and "ls1c-dma"?
-> > The name "apbdma" comes from the user manual, "exchange data between
-> > memory and apb devices", at present there are two drivers using this
-> > naming: tegra20-apb-dma.c and ls2x-apb-dma.c.
->
-> I think it's unnessesary but I won't stand in your way.
+On Fri, Jan 26, 2024 at 03:55:47PM +0800, mengfanhui wrote:
+> Solution /sys/module/zswap/parameters/enabled attribute node
+> does not exist issue=EF=BC=8Chandle zpool zbud initialization failed,
+> open CONFIG_ZSWAP CONFIG_ZPOOL CONFIG_ZBUD configuration,manual
+> zswap function by /sys/module/zswap/parameters/enabled file
+>=20
+> Signed-off-by: mengfanhui <mengfanhui@kylinos.cn>
+> ---
+>  arch/mips/configs/generic_defconfig | 3 +++
+>  1 file changed, 3 insertions(+)
+>=20
+> diff --git a/arch/mips/configs/generic_defconfig b/arch/mips/configs/gene=
+ric_defconfig
+> index 071e2205c7ed..14884df392f4 100644
+> --- a/arch/mips/configs/generic_defconfig
+> +++ b/arch/mips/configs/generic_defconfig
+> @@ -13,6 +13,9 @@ CONFIG_CGROUP_DEVICE=3Dy
+>  CONFIG_CGROUP_CPUACCT=3Dy
+>  CONFIG_NAMESPACES=3Dy
+>  CONFIG_USER_NS=3Dy
+> +CONFIG_ZSWAP=3Dy
+> +CONFIG_ZPOOL=3Dy
+> +CONFIG_ZBUD=3Dy
 
-Then I will follow Huacai's suggestion.
-Thanks for your review, Conor and Huacai.
+Any reason for choosing zbud over zsmalloc, the default zswap allocator?
 
---=20
-Best regards,
-
-Keguang Zhang
+>  CONFIG_SCHED_AUTOGROUP=3Dy
+>  CONFIG_BLK_DEV_INITRD=3Dy
+>  CONFIG_BPF_SYSCALL=3Dy
+> --=20
+> 2.25.1
+>=20
 
