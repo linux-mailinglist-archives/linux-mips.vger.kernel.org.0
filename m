@@ -1,107 +1,156 @@
-Return-Path: <linux-mips+bounces-2345-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2346-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC681880954
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Mar 2024 03:01:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EF5F880995
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Mar 2024 03:28:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A7B962839C6
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Mar 2024 02:01:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F3D74B21AD2
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Mar 2024 02:28:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAAC87489;
-	Wed, 20 Mar 2024 02:01:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A8248479;
+	Wed, 20 Mar 2024 02:28:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jWsnwBvu"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3E8B6AB9;
-	Wed, 20 Mar 2024 02:01:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8872E8C0B;
+	Wed, 20 Mar 2024 02:27:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710900068; cv=none; b=JqVlalIVKFcNvmT222V5lpoLCYdf/G6CTLZgYifKhQ3P/iwHW5Vv8mdI0c9adPFA9etq/nlEHIvRiVdEolSCXQdCpmbnHqu67HcHxtbFHkGTtqSjSA4bC7gLw6d/dI0p4y6wJkUTfTcZM2SWO9ccChHFspnMw4gB/GHGGRg3f4M=
+	t=1710901681; cv=none; b=k4p6PSDktVMvCqLITyf1n5/Ap3NYXddxqKfI/GFlTRQ1Re9M3/lZ0CToYI3BeQFlY/Io6u7BvAFZlB32VD40bXfbVxPVLDiGQJ0a/Njb4BVlF4WpQhoRdo+v3uf4pggpLtdmuB0sIqOSY+qUO4JPkMh+YdxDSc6XNM7ooBTiqO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710900068; c=relaxed/simple;
-	bh=KHHjEJoPgy2BM/9wzr00d+uTFTJ2mlQ8A4+YmnEAnMs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sqwAZWFZG8PkzJLfSu2nZwbuDZlAp74Iayq1ARLRipPQMa0sBhYJxoZhnaalw90F6TJHThNkHNLaIqsA+VGN6W5DpMOc//+sF0GlZCif/rwxrsA1IFiiz0SC/Xbx/FO9QyymRi0K4wgj+2gNRq7S3DV8q/ZIiOpB01M/lZ66mxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: ad81665f96ff428799e183e4eb3e3ba6-20240320
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.37,REQID:7a5a4c35-dd4b-408c-82ae-4696d61344e1,IP:10,
-	URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACT
-	ION:release,TS:-10
-X-CID-INFO: VERSION:1.1.37,REQID:7a5a4c35-dd4b-408c-82ae-4696d61344e1,IP:10,UR
-	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-10
-X-CID-META: VersionHash:6f543d0,CLOUDID:c4cab281-4f93-4875-95e7-8c66ea833d57,B
-	ulkID:2403201000570FJ81X2B,BulkQuantity:0,Recheck:0,SF:64|66|38|24|17|19|4
-	4|102,TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,
-	BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI,TF_CID_SPAM_SNR
-X-UUID: ad81665f96ff428799e183e4eb3e3ba6-20240320
-Received: from node2.com.cn [(39.156.73.10)] by mailgw
-	(envelope-from <mengfanhui@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 235439646; Wed, 20 Mar 2024 10:00:52 +0800
-Received: from node2.com.cn (localhost [127.0.0.1])
-	by node2.com.cn (NSMail) with SMTP id 98962B803C9B;
-	Wed, 20 Mar 2024 10:00:52 +0800 (CST)
-X-ns-mid: postfix-65FA4354-583191200
-Received: from [172.30.60.81] (unknown [172.30.60.81])
-	by node2.com.cn (NSMail) with ESMTPA id B440CB80758A;
-	Wed, 20 Mar 2024 02:00:50 +0000 (UTC)
-Message-ID: <a38359d5-0fde-439c-bc04-3452a34482da@kylinos.cn>
-Date: Wed, 20 Mar 2024 10:00:49 +0800
+	s=arc-20240116; t=1710901681; c=relaxed/simple;
+	bh=CrEDZNktWLaecr9rY/RqMJilDdld6VN4fBZu4A2CU4A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=I2pHXomeFIvk/LTinQ3G41/8VbyVgJskimDdBz7F6jWJSXSVRAyUKCOiy6WCy+Mg7k9WNSpnKwWvx8BLcfCwqV84Ji4Q8yXHWgisJeGs0/lMRwOZdsJW5WVHgHsFeK8kHIP+jmY1KOYEq4ctFC5h6rZ+OFCHCES6TDmAqq6no3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jWsnwBvu; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-56a2bb1d84eso797699a12.1;
+        Tue, 19 Mar 2024 19:27:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710901678; x=1711506478; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CrEDZNktWLaecr9rY/RqMJilDdld6VN4fBZu4A2CU4A=;
+        b=jWsnwBvuUoWHGHVnDfaNmIDjd7pxM6Hv1OsVRUoo3Ghp7lLlvaQvF0r+rpTaSYgezO
+         vqfRRas+vt+z7YnK272XaFKLgk72RRA99gsokPAvMu6b55ihsoeUDE37vPDNx810puDq
+         IjsSPC0+cnkBxu9RzQd/NBc9jAqTpYcLxsv2/Py/LAi7l8mXpeJ5tCdiCI/dp9DhPHZU
+         2jnDhIX3AQX8uctCgufkk35YgUYo/a9Rbs7e3FdlfC8sH5xsi67KtDwW1B/rydi1vFR6
+         DsE07RIEcENBA/UBMaj0I3sftbIxUrrR2Jh0AQgh5+RQzS0PEiktKUQeL3CMFqRMDTDM
+         f7tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710901678; x=1711506478;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CrEDZNktWLaecr9rY/RqMJilDdld6VN4fBZu4A2CU4A=;
+        b=XPoobr/fu/jhLsQqrT2hku2wqD2kaNsLeggnjy6y1vk6ZrK3P0D4x+dnfKSagq5cTk
+         9O4WCOEMhO1Z8zqwWNx7SVw2TCNqaf1KiXqBb8hxQjYq9h6q6aryNOyKSEWNXtC1wp07
+         uu0ihCa+naayZcAeJAnN6t1/6EBEiVMcLaJxg/uvw1jYn7iQA3n+AdZm+hXbOHrP1qwD
+         HHoRlFcXjc28lm+xeIohw1rl65X9rycTshd5k+X0qrdo+SH0sTOkxUIX01Vf+ILxgzuL
+         4DThtyc2oXoAZ5+2bJ/Ns8n77NeBZQIGz2wf+9EULMgruOHO+Q6GxsNPrZG+VB/FD4al
+         nkhw==
+X-Forwarded-Encrypted: i=1; AJvYcCVnUAKtmtEiS+4RQ9TzFa/RELa+CfoM9HCH0jkM5uUoh5ikj5+vIiYwxknfGyZXzMTBgNExmaVPL43bBvfibc3+LsaPUR5HKVDGWf4TKuGTnCL7ze/kZq1KYpn9rQuEwSZ5nS6eQldFkPIOwca4aFsaVyJGFVi2hX/hmNyXABYlOz5t/CXLlOGuVBarns8+iPFbd0wYoc16Wx0/c8vq9Ao=
+X-Gm-Message-State: AOJu0YwYrjLTy9IWFY7tjftP7KARVI4UwfiqeECIc03Y3L2qSqQ/0sHt
+	LI1HSLBFt7xzEkz7Pn7WIqeVCC8xtTmPSRj9NtXwk120ywSupjzdcPTRjBoMuyPYp4YqCKsNDow
+	5/q6PJmfz94it1kFyM15oIYteATM=
+X-Google-Smtp-Source: AGHT+IFt/7I86CbjlI0gZQSF/qcTE6qkqcQl29FokubkU6RSRoHeUOxDw6UA1S3xokrCdi4OqK1Tz8KHuh8CHwiixEY=
+X-Received: by 2002:a50:9e61:0:b0:568:a8f5:d47d with SMTP id
+ z88-20020a509e61000000b00568a8f5d47dmr3899542ede.17.1710901677672; Tue, 19
+ Mar 2024 19:27:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] config/mips: support zswap function
-Content-Language: en-US
-To: tsbogend@alpha.franken.de, geert+renesas@glider.be
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240126075547.1521556-1-mengfanhui@kylinos.cn>
-From: mengfanhui <mengfanhui@kylinos.cn>
-In-Reply-To: <20240126075547.1521556-1-mengfanhui@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
+References: <20240316-loongson1-dma-v6-0-90de2c3cc928@gmail.com>
+ <CAAhV-H6aGS6VXGzkqWTyxL7bGw=KdjmnRZj7SpwrV5hT6XQcpg@mail.gmail.com>
+ <CAJhJPsVSM-8VA604p2Vr58QJEp+Tg72YTTntnip64Ejz=0aQng@mail.gmail.com>
+ <CAAhV-H5TR=y_AmbF6QMJmoS0BhfB=K7forMg0-b2YWm7trktjA@mail.gmail.com>
+ <20240318-average-likely-6a55c18db7bb@spud> <CAAhV-H4oMoPt7WwWc7wbxy-ShNQ8dPkuTAuvSEGAPBKvkkn24w@mail.gmail.com>
+ <20240318-saxophone-sudden-ce0df3a953a8@spud> <CAJhJPsXKZr7XDC-i1O_tpcgGE9c0yk7S9Qjnpk7hrU0evAJ+FQ@mail.gmail.com>
+ <CAAhV-H5Gm6mACV4smxDB=BJvLr8C1AmgY=mMqfNYOOxEUBhqFA@mail.gmail.com> <20240319-trimester-manhole-3bd092f3343f@spud>
+In-Reply-To: <20240319-trimester-manhole-3bd092f3343f@spud>
+From: Keguang Zhang <keguang.zhang@gmail.com>
+Date: Wed, 20 Mar 2024 10:27:21 +0800
+Message-ID: <CAJhJPsWN24p8VcLeeB8v_JU6KXTVBzWWcE-Aj4Tc2urqx6sYrw@mail.gmail.com>
+Subject: Re: [PATCH v6 0/2] Add support for Loongson1 DMA
+To: Conor Dooley <conor@kernel.org>
+Cc: Huacai Chen <chenhuacai@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Who will be responsible for reviewing this? This is a necessary feature o=
-f the kernel that many testing agencies need to test
+On Wed, Mar 20, 2024 at 1:41=E2=80=AFAM Conor Dooley <conor@kernel.org> wro=
+te:
+>
+> On Tue, Mar 19, 2024 at 10:40:54AM +0800, Huacai Chen wrote:
+> > On Tue, Mar 19, 2024 at 10:32=E2=80=AFAM Keguang Zhang <keguang.zhang@g=
+mail.com> wrote:
+> > >
+> > > On Mon, Mar 18, 2024 at 11:42=E2=80=AFPM Conor Dooley <conor@kernel.o=
+rg> wrote:
+> > > >
+> > > > On Mon, Mar 18, 2024 at 10:26:51PM +0800, Huacai Chen wrote:
+> > > > > Hi, Conor,
+> > > > >
+> > > > > On Mon, Mar 18, 2024 at 7:28=E2=80=AFPM Conor Dooley <conor@kerne=
+l.org> wrote:
+> > > > > >
+> > > > > > On Mon, Mar 18, 2024 at 03:31:59PM +0800, Huacai Chen wrote:
+> > > > > > > On Mon, Mar 18, 2024 at 10:08=E2=80=AFAM Keguang Zhang <kegua=
+ng.zhang@gmail.com> wrote:
+> > > > > > > >
+> > > > > > > > Hi Huacai,
+> > > > > > > >
+> > > > > > > > > Hi, Keguang,
+> > > > > > > > >
+> > > > > > > > > Sorry for the late reply, there is already a ls2x-apb-dma=
+ driver, I'm
+> > > > > > > > > not sure but can they share the same code base? If not, c=
+an rename
+> > > > > > > > > this driver to ls1x-apb-dma for consistency?
+> > > > > > > >
+> > > > > > > > There are some differences between ls1x DMA and ls2x DMA, s=
+uch as
+> > > > > > > > registers and DMA descriptors.
+> > > > > > > > I will rename it to ls1x-apb-dma.
+> > > > > > > OK, please also rename the yaml file to keep consistency.
+> > > > > >
+> > > > > > No, the yaml file needs to match the (one of the) compatible st=
+rings.
+> > > > > OK, then I think we can also rename the compatible strings, if po=
+ssible.
+> > > >
+> > > > If there are no other types of dma controller on this device, I do =
+not
+> > > > see why would we add "apb" into the compatible as there is nothing =
+to
+> > > > differentiate this controller from.
+> > >
+> > > That's true. 1A/1B/1C only have one APB DMA.
+> > > Should I keep the compatible "ls1b-dma" and "ls1c-dma"?
+> > The name "apbdma" comes from the user manual, "exchange data between
+> > memory and apb devices", at present there are two drivers using this
+> > naming: tegra20-apb-dma.c and ls2x-apb-dma.c.
+>
+> I think it's unnessesary but I won't stand in your way.
 
-=E5=9C=A8 2024/1/26 15:55, mengfanhui =E5=86=99=E9=81=93:
-> Solution /sys/module/zswap/parameters/enabled attribute node
-> does not exist issue=EF=BC=8Chandle zpool zbud initialization failed,
-> open CONFIG_ZSWAP CONFIG_ZPOOL CONFIG_ZBUD configuration,manual
-> zswap function by /sys/module/zswap/parameters/enabled file
->=20
-> Signed-off-by: mengfanhui <mengfanhui@kylinos.cn>
-> ---
->  arch/mips/configs/generic_defconfig | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/arch/mips/configs/generic_defconfig b/arch/mips/configs/ge=
-neric_defconfig
-> index 071e2205c7ed..14884df392f4 100644
-> --- a/arch/mips/configs/generic_defconfig
-> +++ b/arch/mips/configs/generic_defconfig
-> @@ -13,6 +13,9 @@ CONFIG_CGROUP_DEVICE=3Dy
->  CONFIG_CGROUP_CPUACCT=3Dy
->  CONFIG_NAMESPACES=3Dy
->  CONFIG_USER_NS=3Dy
-> +CONFIG_ZSWAP=3Dy
-> +CONFIG_ZPOOL=3Dy
-> +CONFIG_ZBUD=3Dy
->  CONFIG_SCHED_AUTOGROUP=3Dy
->  CONFIG_BLK_DEV_INITRD=3Dy
->  CONFIG_BPF_SYSCALL=3Dy
+Then I will follow Huacai's suggestion.
+Thanks for your review, Conor and Huacai.
+
+--=20
+Best regards,
+
+Keguang Zhang
 
