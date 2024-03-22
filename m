@@ -1,308 +1,304 @@
-Return-Path: <linux-mips+bounces-2355-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2356-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A399886A07
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Mar 2024 11:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 374A9886CD8
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Mar 2024 14:26:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE5F01C2014F
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Mar 2024 10:16:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B3C91C2143D
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Mar 2024 13:26:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8820C3B2BF;
-	Fri, 22 Mar 2024 10:16:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9EDF46522;
+	Fri, 22 Mar 2024 13:26:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="a6wbfcte"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 441E138DDD;
-	Fri, 22 Mar 2024 10:16:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD18345C10
+	for <linux-mips@vger.kernel.org>; Fri, 22 Mar 2024 13:26:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711102574; cv=none; b=EdPgYXrVqvtnOOWfDBYc3P0fHE0WRo4pmsA0Rx98n1YkG2Lxs12NIPs1qW1ZeNi0hugGZOwK13z2nkO0lx24SLNta8xzMpKf9pAoEUSeqGEG9zozgjoRGBQjFD/8N39qhjC+FAJroUBWfB1bLBVtsugJ7EVA7J+Ig/A5jKZro4k=
+	t=1711113993; cv=none; b=C62aHbIizOGwzuFAzDdNVoLvXPDEJUs9I4HYBaI46HEeDmNFfdnFWxRWVKHOxuqQZuQgiiOlMTTAlGhkj1bcGiaOglUCkBLqwuWPRpIBkEXVnc/kv+AprhvqfE6yWfBU+1R2JzHd18AV+SC9rwZS+nbV9TdaDCQ2TUn+xTybJis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711102574; c=relaxed/simple;
-	bh=1TwGmh3YnzHwWCnmV0rktleeOSBDlBNOeg1ghcviBJk=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=Qcx8gxzTDhvA3cmL5JFS0NWG9LdJkkA/qrwpO9jfC5EJ0lnhas5ZsbZAV1JZWZ2EjmVNIO5Mwk/jp+bqr2FEEbq0BIK3oCfa1e8NX40zu3A98SgMaIWCWy/HuHRqwBYJaqMJaqrVtiCveZDTbUceD+PCna4FWoKIfOUqybVyLNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.24])
-	by gateway (Coremail) with SMTP id _____8BxOPBpWv1lN2scAA--.2446S3;
-	Fri, 22 Mar 2024 18:16:09 +0800 (CST)
-Received: from [10.20.42.24] (unknown [10.20.42.24])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8AxTs1nWv1lluRhAA--.58343S3;
-	Fri, 22 Mar 2024 18:16:08 +0800 (CST)
-Subject: Re: [PATCH v2] irqchip/loongson-pch-pic: Update interrupt
- registration policy
-To: Binbin Zhou <zhoubinbin@loongson.cn>, chenhuacai@kernel.org,
- jiaxun.yang@flygoat.com, tglx@linutronix.de
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
- Baoqi Zhang <zhangbaoqi@loongson.cn>, Biao Dong <dongbiao@loongson.cn>,
- zhoubb.aaron@gmail.com
-References: <20240316082141.26139-1-zhangtianyang@loongson.cn>
- <24131107-1e45-415a-b731-c1f97a231e22@loongson.cn>
-From: Tianyang Zhang <zhangtianyang@loongson.cn>
-Message-ID: <260541a1-f4c7-2f9b-7a20-9f9c0aea4fdd@loongson.cn>
-Date: Fri, 22 Mar 2024 18:16:07 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1711113993; c=relaxed/simple;
+	bh=dkHEK5fRN4ISlL8OBFqYbKAYt0DED3N3Yfj6qrUQoVQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dkRTduvZpsx5JDyEjds+6K/jXgHHl4A/m2QiN4OGjFrR4e5XZojITBg61UEPLgP+0COKhfx04SVxxWmAzFf28ylHBZ1SpC9zG//SUueBzTfgCTaog4Zdm5uzTOAckVKnNjG7e0pOoquOtWb5dmb4LRJwMANXKLszR1zTtYO3cCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=a6wbfcte; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=bOf4HkOrzle/Fy
+	JG8mZHPOABnHhQv51u3vi0fpeyQ5Q=; b=a6wbfcte3+iXXCHibc+JrZzTin6dRv
+	R/KSB8hp01+LD2eYy9sHlg2rk631UWOsn12Y+n+kLseFY+llqMyTkAsXsa6SiRwh
+	MWm4LoN2zRJucl7AcBuXiztmbKc/EIBM7mZDtMCuyBPr9HgJZmeZ/QrbcrtglWHS
+	XN+P7gn2zQD/Lze6LmCDGEGHL9G2ujuVTWCU21W3oIUiV/btIhr/tqNO2UzK6c7u
+	GiqtIoKlD88U2nMoYFxi6SLiCaIBiXxhRRTMJxL3pZ9O0lWnbgR868o+Ty13YBXb
+	C70pYVUa6DcFGd/ysTyvqG2U7fdTnfOcmCXLvQLbrSiCtbkj8qjVIAVA==
+Received: (qmail 3869988 invoked from network); 22 Mar 2024 14:26:20 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Mar 2024 14:26:20 +0100
+X-UD-Smtp-Session: l3s3148p1@LoLvxD8UMpNehhtF
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-i2c@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	asahi@lists.linux.dev,
+	chrome-platform@lists.linux.dev,
+	imx@lists.linux.dev,
+	linux-actions@lists.infradead.org,
+	linux-amlogic@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	linux-mips@vger.kernel.org,
+	linux-omap@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-sunxi@lists.linux.dev,
+	linux-tegra@vger.kernel.org,
+	openbmc@lists.ozlabs.org,
+	virtualization@lists.linux.dev
+Subject: [PATCH 00/64] i2c: reword i2c_algorithm according to newest specification
+Date: Fri, 22 Mar 2024 14:24:53 +0100
+Message-ID: <20240322132619.6389-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <24131107-1e45-415a-b731-c1f97a231e22@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID:AQAAf8AxTs1nWv1lluRhAA--.58343S3
-X-CM-SenderInfo: x2kd0wxwld05hdqjqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW3urW5Kw1UZr4rCr47ur4fXrc_yoWDZryUpF
-	WkJrW5AFWUJr1kJr18Jr1UAry3JF17X3WDKr48JFy7Jw47Zryjgr1UWr1qgr1UJr48Xr15
-	Ar1UWr9rZr47JFcCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-	AVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-	8JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-	Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
-	cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
-	14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j5xhLUUUUU=
 
-Hi,Binbin
+Okay, we need to begin somewhere...
 
-Thank you for pointing out the problems in this patch. We will adjust 
-the scheme after the test
+Start changing the wording of the I2C main header wrt. the newest I2C
+v7, SMBus 3.2, I3C specifications and replace "master/slave" with more
+appropriate terms. This first step renames the members of struct
+i2c_algorithm. Once all in-tree users are converted, the anonymous union
+will go away again. All this work will also pave the way for finally
+seperating the monolithic header into more fine-grained headers like
+"i2c/clients.h" etc. So, this is not a simple renaming-excercise but
+also a chance to update the I2C core to recent Linux standards.
 
-Thanks again
+My motivation is to improve the I2C core API, in general. My motivation
+is not to clean each and every driver. I think this is impossible
+because register names based on official documentation will need to stay
+as they are. But the Linux-internal names should be updated IMO.
 
-在 2024/3/21 下午2:10, Binbin Zhou 写道:
-> Hi Tianyang:
->
-> On 2024/3/16 16:21, Tianyang Zhang wrote:
->> From: Baoqi Zhang <zhangbaoqi@loongson.cn>
->>
->> This patch remove the fixed mapping between the 7A interrupt source
->> and the HT interrupt vector, and replaced it with a dynamically
->> allocated approach.
->>
->> We introduce a mapping table in struct pch_pic, where each interrupt
->> source will allocate an index as a 'hwirq' from the table in the order
->> of application and set table value as interrupt source number. This 
->> hwirq
->> will be configured as its vector in the HT interrupt controller. For an
->> interrupt source, the validity period of the obtained hwirq will last 
->> until
->> the system reset
->>
->> This will be more conducive to fully utilizing existing vectors to
->> support more devices
->>
->> Signed-off-by: Baoqi Zhang <zhangbaoqi@loongson.cn>
->> Signed-off-by: Biao Dong <dongbiao@loongson.cn>
->> Signed-off-by: Tianyang Zhang <zhangtianyang@loongson.cn>
->> ---
->>   drivers/irqchip/irq-loongson-pch-pic.c | 77 ++++++++++++++++++++------
->>   1 file changed, 59 insertions(+), 18 deletions(-)
->>
->> diff --git a/drivers/irqchip/irq-loongson-pch-pic.c 
->> b/drivers/irqchip/irq-loongson-pch-pic.c
->> index 63db8e2172e0..f17187641154 100644
->> --- a/drivers/irqchip/irq-loongson-pch-pic.c
->> +++ b/drivers/irqchip/irq-loongson-pch-pic.c
->> @@ -33,7 +33,7 @@
->>   #define PIC_COUNT        (PIC_COUNT_PER_REG * PIC_REG_COUNT)
->>   #define PIC_REG_IDX(irq_id)    ((irq_id) / PIC_COUNT_PER_REG)
->>   #define PIC_REG_BIT(irq_id)    ((irq_id) % PIC_COUNT_PER_REG)
->> -
->> +#define PIC_UNDEF_VECTOR    255
->>   static int nr_pics;
->>     struct pch_pic {
->> @@ -46,12 +46,19 @@ struct pch_pic {
->>       u32            saved_vec_en[PIC_REG_COUNT];
->>       u32            saved_vec_pol[PIC_REG_COUNT];
->>       u32            saved_vec_edge[PIC_REG_COUNT];
->> +    u8            table[PIC_COUNT];
->> +    int            inuse;
->>   };
->>     static struct pch_pic *pch_pic_priv[MAX_IO_PICS];
->>     struct fwnode_handle *pch_pic_handle[MAX_IO_PICS];
->>   +static inline u8 hwirq_to_bit(struct pch_pic *priv, int hirq)
->> +{
->> +    return priv->table[hirq];
->> +}
->> +
->>   static void pch_pic_bitset(struct pch_pic *priv, int offset, int bit)
->>   {
->>       u32 reg;
->> @@ -80,45 +87,47 @@ static void pch_pic_mask_irq(struct irq_data *d)
->>   {
->>       struct pch_pic *priv = irq_data_get_irq_chip_data(d);
->>   -    pch_pic_bitset(priv, PCH_PIC_MASK, d->hwirq);
->> +    pch_pic_bitset(priv, PCH_PIC_MASK, hwirq_to_bit(priv, d->hwirq));
->>       irq_chip_mask_parent(d);
->>   }
->>     static void pch_pic_unmask_irq(struct irq_data *d)
->>   {
->>       struct pch_pic *priv = irq_data_get_irq_chip_data(d);
->> +    int bit = hwirq_to_bit(priv, d->hwirq);
->>   -    writel(BIT(PIC_REG_BIT(d->hwirq)),
->> -            priv->base + PCH_PIC_CLR + PIC_REG_IDX(d->hwirq) * 4);
->> +    writel(BIT(PIC_REG_BIT(bit)),
->> +            priv->base + PCH_PIC_CLR + PIC_REG_IDX(bit) * 4);
->>         irq_chip_unmask_parent(d);
->> -    pch_pic_bitclr(priv, PCH_PIC_MASK, d->hwirq);
->> +    pch_pic_bitclr(priv, PCH_PIC_MASK, bit);
->>   }
->>     static int pch_pic_set_type(struct irq_data *d, unsigned int type)
->>   {
->>       struct pch_pic *priv = irq_data_get_irq_chip_data(d);
->> +    int bit = hwirq_to_bit(priv, d->hwirq);
->>       int ret = 0;
->>         switch (type) {
->>       case IRQ_TYPE_EDGE_RISING:
->> -        pch_pic_bitset(priv, PCH_PIC_EDGE, d->hwirq);
->> -        pch_pic_bitclr(priv, PCH_PIC_POL, d->hwirq);
->> +        pch_pic_bitset(priv, PCH_PIC_EDGE, bit);
->> +        pch_pic_bitclr(priv, PCH_PIC_POL, bit);
->>           irq_set_handler_locked(d, handle_edge_irq);
->>           break;
->>       case IRQ_TYPE_EDGE_FALLING:
->> -        pch_pic_bitset(priv, PCH_PIC_EDGE, d->hwirq);
->> -        pch_pic_bitset(priv, PCH_PIC_POL, d->hwirq);
->> +        pch_pic_bitset(priv, PCH_PIC_EDGE, bit);
->> +        pch_pic_bitset(priv, PCH_PIC_POL, bit);
->>           irq_set_handler_locked(d, handle_edge_irq);
->>           break;
->>       case IRQ_TYPE_LEVEL_HIGH:
->> -        pch_pic_bitclr(priv, PCH_PIC_EDGE, d->hwirq);
->> -        pch_pic_bitclr(priv, PCH_PIC_POL, d->hwirq);
->> +        pch_pic_bitclr(priv, PCH_PIC_EDGE, bit);
->> +        pch_pic_bitclr(priv, PCH_PIC_POL, bit);
->>           irq_set_handler_locked(d, handle_level_irq);
->>           break;
->>       case IRQ_TYPE_LEVEL_LOW:
->> -        pch_pic_bitclr(priv, PCH_PIC_EDGE, d->hwirq);
->> -        pch_pic_bitset(priv, PCH_PIC_POL, d->hwirq);
->> +        pch_pic_bitclr(priv, PCH_PIC_EDGE, bit);
->> +        pch_pic_bitset(priv, PCH_PIC_POL, bit);
->>           irq_set_handler_locked(d, handle_level_irq);
->>           break;
->>       default:
->> @@ -133,11 +142,12 @@ static void pch_pic_ack_irq(struct irq_data *d)
->>   {
->>       unsigned int reg;
->>       struct pch_pic *priv = irq_data_get_irq_chip_data(d);
->> +    int bit = hwirq_to_bit(priv, d->hwirq);
->>   -    reg = readl(priv->base + PCH_PIC_EDGE + PIC_REG_IDX(d->hwirq) 
->> * 4);
->> -    if (reg & BIT(PIC_REG_BIT(d->hwirq))) {
->> -        writel(BIT(PIC_REG_BIT(d->hwirq)),
->> -            priv->base + PCH_PIC_CLR + PIC_REG_IDX(d->hwirq) * 4);
->> +    reg = readl(priv->base + PCH_PIC_EDGE + PIC_REG_IDX(bit) * 4);
->> +    if (reg & BIT(PIC_REG_BIT(bit))) {
->> +        writel(BIT(PIC_REG_BIT(bit)),
->> +            priv->base + PCH_PIC_CLR + PIC_REG_IDX(bit) * 4);
->>       }
->>       irq_chip_ack_parent(d);
->>   }
->> @@ -159,6 +169,8 @@ static int pch_pic_domain_translate(struct 
->> irq_domain *d,
->>   {
->>       struct pch_pic *priv = d->host_data;
->>       struct device_node *of_node = to_of_node(fwspec->fwnode);
->> +    unsigned long flags;
->> +    int i;
->>         if (of_node) {
->>           if (fwspec->param_count < 2)
->> @@ -171,6 +183,27 @@ static int pch_pic_domain_translate(struct 
->> irq_domain *d,
->>               return -EINVAL;
->>             *hwirq = fwspec->param[0] - priv->gsi_base;
->> +
->> +        raw_spin_lock_irqsave(&priv->pic_lock, flags);
->> +        /* Check pic-table to confirm if the hwirq has been assigned */
->> +        for (i = 0; i < priv->inuse; i++) {
->> +            if (priv->table[i] == *hwirq) {
->> +                *hwirq = i;
->> +                break;
->> +            }
->> +        }
->> +        if (i == priv->inuse) {
->> +            /* Assign a new hwirq in pic-table */
->> +            if (priv->inuse >= PIC_COUNT) {
->> +                pr_err("pch-pic domain has no free vectors\n");
->> + raw_spin_unlock_irqrestore(&priv->pic_lock, flags);
->> +                return -EINVAL;
->> +            }
->> +            priv->table[priv->inuse] = *hwirq;
->> +            *hwirq = priv->inuse++;
->> +        }
->> +        raw_spin_unlock_irqrestore(&priv->pic_lock, flags);
->> +
->
-> The patch fails the test on LS2K2000+FDT and does not boot the system 
-> properly.
->
-> The reason the test fails is that this part of the priv->table[] 
-> initialization is needed for FDT as well, so I think it needs to be 
-> put after the whole judgment, at the end of the function.
->
->
-> Thanks.
->
-> Binbin
->
->>           if (fwspec->param_count > 1)
->>               *type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
->>           else
->> @@ -194,6 +227,9 @@ static int pch_pic_alloc(struct irq_domain 
->> *domain, unsigned int virq,
->>       if (err)
->>           return err;
->>   +    /* Write vector ID */
->> +    writeb(priv->ht_vec_base + hwirq, priv->base + 
->> PCH_INT_HTVEC(hwirq_to_bit(priv, hwirq)));
->> +
->>       parent_fwspec.fwnode = domain->parent->fwnode;
->>       parent_fwspec.param_count = 1;
->>       parent_fwspec.param[0] = hwirq + priv->ht_vec_base;
->> @@ -222,7 +258,7 @@ static void pch_pic_reset(struct pch_pic *priv)
->>         for (i = 0; i < PIC_COUNT; i++) {
->>           /* Write vector ID */
->> -        writeb(priv->ht_vec_base + i, priv->base + PCH_INT_HTVEC(i));
->> +        writeb(priv->ht_vec_base + i, priv->base + 
->> PCH_INT_HTVEC(hwirq_to_bit(priv, i)));
->>           /* Hardcode route to HT0 Lo */
->>           writeb(1, priv->base + PCH_INT_ROUTE(i));
->>       }
->> @@ -284,6 +320,7 @@ static int pch_pic_init(phys_addr_t addr, 
->> unsigned long size, int vec_base,
->>               u32 gsi_base)
->>   {
->>       struct pch_pic *priv;
->> +    int i;
->>         priv = kzalloc(sizeof(*priv), GFP_KERNEL);
->>       if (!priv)
->> @@ -294,6 +331,10 @@ static int pch_pic_init(phys_addr_t addr, 
->> unsigned long size, int vec_base,
->>       if (!priv->base)
->>           goto free_priv;
->>   +    priv->inuse = 0;
->> +    for (i = 0; i < PIC_COUNT; i++)
->> +        priv->table[i] = PIC_UNDEF_VECTOR;
->> +
->>       priv->ht_vec_base = vec_base;
->>       priv->vec_count = ((readq(priv->base) >> 48) & 0xff) + 1;
->>       priv->gsi_base = gsi_base;
->>
+That being said, I worked on 62 drivers in this series beyond plain
+renames inside 'struct i2c_algorithm' because the fruits were so
+low-hanging. Before this series, 112 files in the 'busses/' directory
+contained 'master' and/or 'slave'. After the series, only 57. Why not?
+
+Next step is updating the drivers outside the 'i2c'-folder regarding
+'struct i2c_algorithm' so we can remove the anonymous union ASAP. To be
+able to work on this with minimal dependencies, I'd like to apply this
+series between -rc1 and -rc2.
+
+I hope this will work for you guys. The changes are really minimal. If
+you are not comfortable with changes to your driver or need more time to
+review, please NACK the patch and I will drop the patch and/or address
+the issues separeately.
+
+@Andi: are you okay with this approach? It means you'd need to merge
+-rc2 into your for-next branch. Or rebase if all fails.
+
+Speaking of Andi, thanks a lot to him taking care of the controller
+drivers these days. His work really gives me the freedom to work on I2C
+core issues again. Also, Renesas deserves a honorable mention here for
+increased support of my I2C activities. Thank you!
+
+If you have comments, hints, etc, please let me know.
+
+Happy hacking,
+
+   Wolfram
+
+
+Wolfram Sang (64):
+  i2c: reword i2c_algorithm according to newest specification
+  i2c: ali15x3: reword according to newest specification
+  i2c: altera: reword according to newest specification
+  i2c: amd-mp2-pci: reword according to newest specification
+  i2c: aspeed: reword according to newest specification
+  i2c: au1550: reword according to newest specification
+  i2c: bcm-iproc: reword according to newest specification
+  i2c: bcm-kona: reword according to newest specification
+  i2c: bcm2835: reword according to newest specification
+  i2c: brcmstb: reword according to newest specification
+  i2c: cadence: reword according to newest specification
+  i2c: cht-wc: reword according to newest specification
+  i2c: cp2615: reword according to newest specification
+  i2c: cpm: reword according to newest specification
+  i2c: davinci: reword according to newest specification
+  i2c: digicolor: reword according to newest specification
+  i2c: dln2: reword according to newest specification
+  i2c: eg20t: reword according to newest specification
+  i2c: emev2: reword according to newest specification
+  i2c: fsi: reword according to newest specification
+  i2c: gpio: reword according to newest specification
+  i2c: highlander: reword according to newest specification
+  i2c: hix5hd2: reword according to newest specification
+  i2c: i801: reword according to newest specification
+  i2c: ibm_iic: reword according to newest specification
+  i2c: imx-lpi2c: reword according to newest specification
+  i2c: iop3xx: reword according to newest specification
+  i2c: isch: reword according to newest specification
+  i2c: ismt: reword according to newest specification
+  i2c: ljca: reword according to newest specification
+  i2c: lpc2k: reword according to newest specification
+  i2c: ls2x: reword according to newest specification
+  i2c: mchp-pci1xxxx: reword according to newest specification
+  i2c: microchip-corei2c: reword according to newest specification
+  i2c: mlxcpld: reword according to newest specification
+  i2c: mpc: reword according to newest specification
+  i2c: mt7621: reword according to newest specification
+  i2c: mv64xxx: reword according to newest specification
+  i2c: octeon-core: reword according to newest specification
+  i2c: owl: reword according to newest specification
+  i2c: piix4: reword according to newest specification
+  i2c: powermac: reword according to newest specification
+  i2c: pxa-pci: reword according to newest specification
+  i2c: qup: reword according to newest specification
+  i2c: rcar: reword according to newest specification
+  i2c: riic: reword according to newest specification
+  i2c: rk3x: reword according to newest specification
+  i2c: sh7760: reword according to newest specification
+  i2c: sh_mobile: reword according to newest specification
+  i2c: sis5595: reword according to newest specification
+  i2c: sis630: reword according to newest specification
+  i2c: sprd: reword according to newest specification
+  i2c: st: reword according to newest specification
+  i2c: stm32f4: reword according to newest specification
+  i2c: sun6i-p2wi: reword according to newest specification
+  i2c: synquacer: reword according to newest specification
+  i2c: taos-evm: reword according to newest specification
+  i2c: tiny-usb: reword according to newest specification
+  i2c: uniphier-f: reword according to newest specification
+  i2c: uniphier: reword according to newest specification
+  i2c: viperboard: reword according to newest specification
+  i2c: xlp9xx: reword according to newest specification
+  i2c: scx200_acb: reword according to newest specification
+  i2c: reword i2c_algorithm in drivers according to newest specification
+
+ drivers/i2c/busses/i2c-ali15x3.c           |  2 +-
+ drivers/i2c/busses/i2c-altera.c            |  4 +-
+ drivers/i2c/busses/i2c-amd-mp2-pci.c       |  8 ++--
+ drivers/i2c/busses/i2c-amd-mp2-plat.c      |  2 +-
+ drivers/i2c/busses/i2c-aspeed.c            | 26 +++++-----
+ drivers/i2c/busses/i2c-at91-master.c       |  2 +-
+ drivers/i2c/busses/i2c-at91-slave.c        |  8 ++--
+ drivers/i2c/busses/i2c-au1550.c            | 14 +++---
+ drivers/i2c/busses/i2c-axxia.c             | 10 ++--
+ drivers/i2c/busses/i2c-bcm-iproc.c         | 20 ++++----
+ drivers/i2c/busses/i2c-bcm-kona.c          | 14 +++---
+ drivers/i2c/busses/i2c-bcm2835.c           |  8 ++--
+ drivers/i2c/busses/i2c-brcmstb.c           | 12 ++---
+ drivers/i2c/busses/i2c-cadence.c           | 14 +++---
+ drivers/i2c/busses/i2c-cht-wc.c            |  8 ++--
+ drivers/i2c/busses/i2c-cp2615.c            |  6 +--
+ drivers/i2c/busses/i2c-cpm.c               |  4 +-
+ drivers/i2c/busses/i2c-cros-ec-tunnel.c    |  2 +-
+ drivers/i2c/busses/i2c-davinci.c           | 13 +++--
+ drivers/i2c/busses/i2c-designware-master.c |  2 +-
+ drivers/i2c/busses/i2c-designware-slave.c  |  8 ++--
+ drivers/i2c/busses/i2c-digicolor.c         |  4 +-
+ drivers/i2c/busses/i2c-diolan-u2c.c        |  2 +-
+ drivers/i2c/busses/i2c-dln2.c              |  4 +-
+ drivers/i2c/busses/i2c-eg20t.c             | 10 ++--
+ drivers/i2c/busses/i2c-emev2.c             | 10 ++--
+ drivers/i2c/busses/i2c-exynos5.c           |  4 +-
+ drivers/i2c/busses/i2c-fsi.c               | 56 +++++++++++-----------
+ drivers/i2c/busses/i2c-gpio.c              |  8 ++--
+ drivers/i2c/busses/i2c-gxp.c               | 12 ++---
+ drivers/i2c/busses/i2c-highlander.c        |  2 +-
+ drivers/i2c/busses/i2c-hisi.c              |  4 +-
+ drivers/i2c/busses/i2c-hix5hd2.c           |  4 +-
+ drivers/i2c/busses/i2c-i801.c              | 12 ++---
+ drivers/i2c/busses/i2c-ibm_iic.c           | 26 +++++-----
+ drivers/i2c/busses/i2c-img-scb.c           |  2 +-
+ drivers/i2c/busses/i2c-imx-lpi2c.c         | 10 ++--
+ drivers/i2c/busses/i2c-imx.c               | 12 ++---
+ drivers/i2c/busses/i2c-iop3xx.c            | 10 ++--
+ drivers/i2c/busses/i2c-isch.c              |  2 +-
+ drivers/i2c/busses/i2c-ismt.c              |  2 +-
+ drivers/i2c/busses/i2c-jz4780.c            |  2 +-
+ drivers/i2c/busses/i2c-kempld.c            |  2 +-
+ drivers/i2c/busses/i2c-ljca.c              | 20 ++++----
+ drivers/i2c/busses/i2c-lpc2k.c             |  8 ++--
+ drivers/i2c/busses/i2c-ls2x.c              |  8 ++--
+ drivers/i2c/busses/i2c-mchp-pci1xxxx.c     | 40 ++++++++--------
+ drivers/i2c/busses/i2c-meson.c             |  4 +-
+ drivers/i2c/busses/i2c-microchip-corei2c.c |  4 +-
+ drivers/i2c/busses/i2c-mlxbf.c             |  8 ++--
+ drivers/i2c/busses/i2c-mlxcpld.c           | 12 ++---
+ drivers/i2c/busses/i2c-mpc.c               |  4 +-
+ drivers/i2c/busses/i2c-mt65xx.c            |  2 +-
+ drivers/i2c/busses/i2c-mt7621.c            | 22 ++++-----
+ drivers/i2c/busses/i2c-mv64xxx.c           | 12 ++---
+ drivers/i2c/busses/i2c-mxs.c               |  2 +-
+ drivers/i2c/busses/i2c-nomadik.c           |  2 +-
+ drivers/i2c/busses/i2c-npcm7xx.c           | 12 ++---
+ drivers/i2c/busses/i2c-nvidia-gpu.c        |  4 +-
+ drivers/i2c/busses/i2c-ocores.c            |  8 ++--
+ drivers/i2c/busses/i2c-octeon-core.c       |  6 +--
+ drivers/i2c/busses/i2c-octeon-platdrv.c    |  2 +-
+ drivers/i2c/busses/i2c-omap.c              |  4 +-
+ drivers/i2c/busses/i2c-opal.c              |  4 +-
+ drivers/i2c/busses/i2c-owl.c               | 10 ++--
+ drivers/i2c/busses/i2c-pasemi-core.c       |  2 +-
+ drivers/i2c/busses/i2c-piix4.c             |  2 +-
+ drivers/i2c/busses/i2c-pnx.c               |  2 +-
+ drivers/i2c/busses/i2c-powermac.c          |  8 ++--
+ drivers/i2c/busses/i2c-pxa-pci.c           |  2 +-
+ drivers/i2c/busses/i2c-pxa.c               | 12 ++---
+ drivers/i2c/busses/i2c-qcom-cci.c          |  2 +-
+ drivers/i2c/busses/i2c-qcom-geni.c         |  2 +-
+ drivers/i2c/busses/i2c-qup.c               |  6 +--
+ drivers/i2c/busses/i2c-rcar.c              | 16 +++----
+ drivers/i2c/busses/i2c-riic.c              |  6 +--
+ drivers/i2c/busses/i2c-rk3x.c              | 18 +++----
+ drivers/i2c/busses/i2c-robotfuzz-osif.c    |  2 +-
+ drivers/i2c/busses/i2c-rzv2m.c             |  8 ++--
+ drivers/i2c/busses/i2c-s3c2410.c           |  4 +-
+ drivers/i2c/busses/i2c-sh7760.c            | 18 +++----
+ drivers/i2c/busses/i2c-sh_mobile.c         | 12 ++---
+ drivers/i2c/busses/i2c-sis5595.c           |  2 +-
+ drivers/i2c/busses/i2c-sis630.c            | 16 +++----
+ drivers/i2c/busses/i2c-sprd.c              | 14 +++---
+ drivers/i2c/busses/i2c-st.c                | 17 +++----
+ drivers/i2c/busses/i2c-stm32f4.c           |  8 ++--
+ drivers/i2c/busses/i2c-stm32f7.c           | 14 +++---
+ drivers/i2c/busses/i2c-sun6i-p2wi.c        | 20 ++++----
+ drivers/i2c/busses/i2c-synquacer.c         | 30 ++++++------
+ drivers/i2c/busses/i2c-taos-evm.c          |  2 +-
+ drivers/i2c/busses/i2c-tegra-bpmp.c        |  4 +-
+ drivers/i2c/busses/i2c-tegra.c             |  4 +-
+ drivers/i2c/busses/i2c-thunderx-pcidrv.c   |  2 +-
+ drivers/i2c/busses/i2c-tiny-usb.c          |  4 +-
+ drivers/i2c/busses/i2c-uniphier-f.c        | 22 ++++-----
+ drivers/i2c/busses/i2c-uniphier.c          | 12 ++---
+ drivers/i2c/busses/i2c-viperboard.c        |  8 ++--
+ drivers/i2c/busses/i2c-virtio.c            |  2 +-
+ drivers/i2c/busses/i2c-wmt.c               |  2 +-
+ drivers/i2c/busses/i2c-xiic.c              |  2 +-
+ drivers/i2c/busses/i2c-xlp9xx.c            |  4 +-
+ drivers/i2c/busses/scx200_acb.c            |  4 +-
+ include/linux/i2c.h                        | 24 ++++++++--
+ 104 files changed, 460 insertions(+), 464 deletions(-)
+
+-- 
+2.43.0
 
 
