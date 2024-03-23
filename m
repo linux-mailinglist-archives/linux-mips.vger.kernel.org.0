@@ -1,124 +1,107 @@
-Return-Path: <linux-mips+bounces-2372-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2373-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 327A18877C0
-	for <lists+linux-mips@lfdr.de>; Sat, 23 Mar 2024 10:20:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5F41887A3E
+	for <lists+linux-mips@lfdr.de>; Sat, 23 Mar 2024 21:05:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A37F1B2193D
-	for <lists+linux-mips@lfdr.de>; Sat, 23 Mar 2024 09:20:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E57BB21188
+	for <lists+linux-mips@lfdr.de>; Sat, 23 Mar 2024 20:05:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60518DF78;
-	Sat, 23 Mar 2024 09:20:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE71758104;
+	Sat, 23 Mar 2024 20:05:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AmGkF125"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="yddHpm+x";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xqvzGfGy"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFED7DDC5;
-	Sat, 23 Mar 2024 09:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6033318E20;
+	Sat, 23 Mar 2024 20:05:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711185637; cv=none; b=ncOmAjFw4nEPoF0J2y/49n7YILGtVM/GZBxJPRBw7iGx8Q3CF1vxx75esN0JU+6OiKH8slJCUM7G2sYETfMhHBbpRJ7CpCBwHVf9u+7Oyej1He8OBtFzL0YYOMFdz/B17Y3BzBgzDeYdlmG37+laJae/kelDEGxseod/p95RRAM=
+	t=1711224321; cv=none; b=BY9twsYMToBMsrer52V6ydywEVQzknDNIBcqwddwglTkbsIhP1oU+Voo8+u+f/v3qilfaJAoCDBhlz+To17Xs3cqOkdY7SnykdlvRZTcwWLwy4F8OqU6rZjvrBR5GQmfyDuhhFe9H4Y9OOk6wyxWetGaIHYDZFC5hUq7ZHAkYfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711185637; c=relaxed/simple;
-	bh=aGTQuZy7vZpxuhlc2uWM1FWO2cNVLUpXYHPr+30NYM4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rh0DSAdSQVNBS1adbiZGMY4peRzHf0OTI1CLdrkJl+mE1QbOUeJ4y6uzhifAP3lPqxAJ+LIqYAI9lNkveAzkyTTykksIouPaF+eEm+Dp1DBn5jBle6zAmfSWwrlcPoHoim7asJCNSjOC4eFVZF68Wj1uh+JRYU+LavkF/Ophhpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AmGkF125; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D51C0C433F1;
-	Sat, 23 Mar 2024 09:20:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711185636;
-	bh=aGTQuZy7vZpxuhlc2uWM1FWO2cNVLUpXYHPr+30NYM4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AmGkF125xegySFWAiHvPntmZ+07s8hZQPC/0IVIftdkxYeMJTqDHDoBaq087Sl4Ry
-	 qKx2QcAVw6S410SG7j4biAqt4/h5dTjc1vKUs5R8LJBjxtJSQyMNE1PxZTAhzLwpa+
-	 ZvDOHlqhfPGo+3K1JP9tq5K11rxRL31gNRIYe4fcfJjyAcpNQmozM0AzDwGqt7aAAm
-	 vL1bo7yWAyyXHWJXICav98Il7syCI5t9aEO0HLvfyTQ7cJVQX5WfpHiaD8JmvRG1Zm
-	 VmI4taBLphr2uo/nVmCk1uj3x3TE6/IYqaCXMkAcTk/3yvQe9KoaZIneVeSaGY4Thk
-	 hCCXd6I1k2Bcg==
-Date: Sat, 23 Mar 2024 10:20:32 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-i2c@vger.kernel.org, asahi@lists.linux.dev, 
-	chrome-platform@lists.linux.dev, imx@lists.linux.dev, linux-actions@lists.infradead.org, 
-	linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
-	linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org, linux-omap@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-renesas-soc@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-rockchip@lists.infradead.org, 
-	linux-rpi-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
-	openbmc@lists.ozlabs.org, virtualization@lists.linux.dev
-Subject: Re: [PATCH 00/64] i2c: reword i2c_algorithm according to newest
- specification
-Message-ID: <ug266trshvhhbsln3eoh53fmsuj3l63ziz6gavcl7rv2jhjr5t@3av5givh5n7m>
-References: <20240322132619.6389-1-wsa+renesas@sang-engineering.com>
+	s=arc-20240116; t=1711224321; c=relaxed/simple;
+	bh=upuZnzT8aOWZK734xhR2B21P63h5U9ql/DJ8dcXmRSQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=IqP9Rq6ZlHcqU8r9bqhSvtcw+ZuCmSsv+qD32tyLpcibBzl6kwcRcyQKQCHY4zRGCfFNFmTB1uiiKd8hslbwC7b5qSUobguA8fr91ciDFVXHoetxb1obU8BdsQCUbeEpQIZuXOsKDdhEXKf+aBLiPbHMtjxEvE414iimpEbSlDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=yddHpm+x; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xqvzGfGy; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1711224318;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NdDet6KtuaahptjfgPKR+KD91ftph6T4F5W1EFsslQs=;
+	b=yddHpm+xaMoArpJAtlEjYhCNOjY7vHgDQWQjQnGPu2Aygfx/hYk9+2S7y6g0BZL4ZMaN4w
+	Ld11vbnxj5UDr2C5rmJw2noemwGxX2ryP1nKMy9gQjg4mIuJdIl2Kv1m/V7yaFUEyYRNtS
+	jIZkW643UnyFsvB4VDKL6/N69/Z31o/uWud6CIgBloc/NLDES23J6WTCv+0blXVnM4HWV+
+	W98/jrrnXIvlK9kDHjnnjb27WDNxERTlqhtth4D5Oq19uLiPI9mBdwqoaOWLbkr1qDmfo/
+	ESvHOckaUruYoguBKg7kul63VRE6V5u9LhUkLztC/Es42AR0uHu0ljqx2UPSbw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1711224318;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NdDet6KtuaahptjfgPKR+KD91ftph6T4F5W1EFsslQs=;
+	b=xqvzGfGyd9lVzjpQcBopqx0CW5LwkyhUVtMg7uLOgQJig7Vfth87AI5Ew6gIin6vfe7Sxl
+	eMhC/u+0vIfGatAw==
+To: Tianyang Zhang <zhangtianyang@loongson.cn>, chenhuacai@kernel.org,
+ jiaxun.yang@flygoat.com
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, Baoqi Zhang
+ <zhangbaoqi@loongson.cn>, Biao Dong <dongbiao@loongson.cn>
+Subject: Re: [PATCH V3] irqchip/loongson-pch-pic: Update interrupt
+ registration policy
+In-Reply-To: <648e7f23-a2e0-ce8f-7c52-3bcda262de86@loongson.cn>
+References: <20240319124629.23925-1-zhangtianyang@loongson.cn>
+ <878r2di3ak.ffs@tglx> <648e7f23-a2e0-ce8f-7c52-3bcda262de86@loongson.cn>
+Date: Sat, 23 Mar 2024 21:05:17 +0100
+Message-ID: <8734sghfya.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240322132619.6389-1-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain
 
-Hi Wolfram,
+Tianyang!
 
-On Fri, Mar 22, 2024 at 02:24:53PM +0100, Wolfram Sang wrote:
-> Okay, we need to begin somewhere...
-> 
-> Start changing the wording of the I2C main header wrt. the newest I2C
-> v7, SMBus 3.2, I3C specifications and replace "master/slave" with more
-> appropriate terms. This first step renames the members of struct
-> i2c_algorithm. Once all in-tree users are converted, the anonymous union
-> will go away again. All this work will also pave the way for finally
-> seperating the monolithic header into more fine-grained headers like
-> "i2c/clients.h" etc. So, this is not a simple renaming-excercise but
-> also a chance to update the I2C core to recent Linux standards.
+On Fri, Mar 22 2024 at 18:14, Tianyang Zhang wrote:
 
-yes, very good! It's clearly stated in all three documentations
-that Target replaces Slave and Controller replaces Master (i3c is
-at the 1.1.1 version).
+Please do not top-post. See the 'Top-posting' chapter in:
+https://people.kernel.org/tglx/notes-about-netiquette 
 
-> My motivation is to improve the I2C core API, in general. My motivation
-> is not to clean each and every driver. I think this is impossible
-> because register names based on official documentation will need to stay
-> as they are. But the Linux-internal names should be updated IMO.
+> Regarding "WHY", my understanding is that a convincing reason is needed 
+> to explain the necessity of this patch.
 
-Also because some drivers have been written based on previous
-specifications where master/slave was used.
+Yes.
 
-> That being said, I worked on 62 drivers in this series beyond plain
-> renames inside 'struct i2c_algorithm' because the fruits were so
-> low-hanging. Before this series, 112 files in the 'busses/' directory
-> contained 'master' and/or 'slave'. After the series, only 57. Why not?
-> 
-> Next step is updating the drivers outside the 'i2c'-folder regarding
-> 'struct i2c_algorithm' so we can remove the anonymous union ASAP. To be
-> able to work on this with minimal dependencies, I'd like to apply this
-> series between -rc1 and -rc2.
-> 
-> I hope this will work for you guys. The changes are really minimal. If
-> you are not comfortable with changes to your driver or need more time to
-> review, please NACK the patch and I will drop the patch and/or address
-> the issues separeately.
-> 
-> @Andi: are you okay with this approach? It means you'd need to merge
-> -rc2 into your for-next branch. Or rebase if all fails.
+> If so, can the last paragraph "This will be more conducive to fully 
+> utilizing existing vectors to support more devices."
+>
+> be considered a simple explanation?
 
-I think it's a good plan, I'll try to support you with it.
+Kinda, but ideally you describe it in a way that there is context for
+the reader. Like this:
 
-> Speaking of Andi, thanks a lot to him taking care of the controller
-> drivers these days. His work really gives me the freedom to work on I2C
-> core issues again.
+  The fixed mapping between the LS7A interrupt source and the HT
+  interrupt vector prevents the utilization of the full interrupt vector
+  space which limits the number of devices in a system
 
-Thank you, Wolfram!
+  Replace the fixed mapping with a dynamic mapping which allocates a
+  vector when an interrupt source is set up. This avoids that unused
+  sources prevent vectors from being used for other devices.
 
-Andi
+See?
+
+Thanks,
+
+        tglx
 
