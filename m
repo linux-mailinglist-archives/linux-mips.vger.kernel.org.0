@@ -1,143 +1,114 @@
-Return-Path: <linux-mips+bounces-2384-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2386-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87BD888A2A1
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Mar 2024 14:41:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCDB588A603
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Mar 2024 16:15:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B631F1C3613A
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Mar 2024 13:41:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DF10ABE706A
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Mar 2024 14:09:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA3F713FD66;
-	Mon, 25 Mar 2024 10:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B297114A4E2;
+	Mon, 25 Mar 2024 10:42:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="VOh6MWc0"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 396B51509A3;
-	Mon, 25 Mar 2024 08:24:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 492CB1870CB;
+	Mon, 25 Mar 2024 09:48:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711355096; cv=none; b=M/a45R0rf4gEbfcBTpz9aZgrv3csgIWLMyvH13H0/04JfZeG4HoTm7AoGYIZAlnuBJxAEYqpWDpxgZpJ+x3hzXNm3x1h3x+QQhS5EdQzIEjLIhzEwPniH2OgTgguVe2kcFtPb0U0lrT5vZRhOvlSR53PYdl3eRZdsf/DYv85ug8=
+	t=1711360090; cv=none; b=PmaUjRxVfQdb6P8NYwCiyI+mvVfScVeFfG2te0vpvaWP4RkKQZuzG6zLRG1woG6CJkUxLrAZjUgqOLJiZKzwCHmZSEaER0WdgT9XvrT5PS3mMwaL6Z1aV4PyH1l3P2HGPyZMjt7U/ifsGMoReYX7Ns+elW3h9CRGyH+iIxEkn7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711355096; c=relaxed/simple;
-	bh=HdSwpyEJcq7QPVhfAp25p0Tw/TeM+r3NiX2oIuYDiE8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a+MwYvUJZnSB/k4Ok37XnD+aT46BgIeTclTTAXqZieq9pFAdoc9EKyiPmztsyVpnj/k1AjoUM83VVehh1Cd8jzZ38pUHyjAJIHNXftViSpc9HV4/Nbd3Hqv0lOV4qNMtTcwldAW1inzjrkIDS38vfGNuQOtRwyIQInDBLEDs6bE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-609ff069a40so46203857b3.1;
-        Mon, 25 Mar 2024 01:24:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711355091; x=1711959891;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZEfLIiCMu33AlwMloMoi4ICYWpFuuaEkY/DY4cDIgmE=;
-        b=jOo68WsePLya0UTIv2mo5i4/kpavPY6FzloQwGpk/Hb87ae3OvvWibgRGJNpmcB9Ix
-         jAOa0lxGK6X3n1oQd7CtLaycLmodX1mG6K3MRmxry/IsJ9efzUM8XKZSLWiRJoz7dxzm
-         8LhF0Wj4aJlsigUWi5E83+xUtMtB1FiOnucflQLTGxc6RazDoyMqagCAS3Qwlctk0UW+
-         nOTzdGqHmyXwwfc8o3CtdXkymG76zNYPiRKZ6X1hlvwmTqVLlotr8N+okyFk/NJ6C5zQ
-         lCWYBar3zwCiH5Oh7jjor3B+JW4HDtGPhOO/+J0m7Vi5FQWQB5phXP/jMjr5OCkpIi6i
-         pa+w==
-X-Forwarded-Encrypted: i=1; AJvYcCUD6qLHe7qp+XRyqDyvBRnIchmFCkcZzhgztE842VmmMtxA1rlrDXJQQe3P14STXyTaGPaXgFKd8hiIxo4gPI9NjJc4/GRF0hthsv3PzxRCRD+NJdQDiFBnmVwSo3zPxJodU4aDdP59endufe2a1bFfJ8qIuBd+4rZWdSS2iB2TTQ==
-X-Gm-Message-State: AOJu0Yz4nFJOEz4UUHf4gy/PH60aRJTGnwq8u/MyDsQX7jjzy1PQNP+O
-	kbc3fOhf0webxK5FU2VN+sutlnSWbTDTcY8ypXqGcbD1bulNVNck2TkjheNHDkQ=
-X-Google-Smtp-Source: AGHT+IEww2fSQ3Wu/wewUYOYe8KvgDN4m9NQCLgkoHzNH55wlqFjWJPXZrCNHaP/T2qgp1YHW40w6g==
-X-Received: by 2002:a81:9e44:0:b0:609:e4b4:c2fb with SMTP id n4-20020a819e44000000b00609e4b4c2fbmr4842276ywj.27.1711355091363;
-        Mon, 25 Mar 2024 01:24:51 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id t6-20020a81ce06000000b0060a4b02124dsm953873ywi.144.2024.03.25.01.24.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Mar 2024 01:24:50 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-dcc71031680so3466484276.2;
-        Mon, 25 Mar 2024 01:24:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWkKKcySviIElzJ6y7iHyqgGKarKOKI+9+vGQxIlQ66PG47Bwsq0BZ/z4Y1MTBxEYjvhuR6Ro7Lu+r6wCVA7IsMZuEq4U9HDK5RIPEKSySxwUQKI8ijFMeqOgn+coEs8e4g8+xcKQ1x7FIqCvP0UhCtdiZbUycSnN2TT/wKlQN4BA==
-X-Received: by 2002:a25:a2cf:0:b0:dcc:f0a:e495 with SMTP id
- c15-20020a25a2cf000000b00dcc0f0ae495mr4291545ybn.3.1711355089475; Mon, 25 Mar
- 2024 01:24:49 -0700 (PDT)
+	s=arc-20240116; t=1711360090; c=relaxed/simple;
+	bh=CqL8N3jTBybuBJNQiRBKr+JMOLQvMsgRNLLqDTJ9OJ0=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=DLl+SozkaGbSzGlvMbeZaoMBEQF320Qp7tSPMebuYqvB8K7PkRhqHk2cBBRrZ1gjY2qAhLEg2RyiwyHXvZXt7jOrg1eGR8yFhrfPHFhhE4JVLz2tnL7pFL/7RfLkMj0+xpPWjX9dLApwqjUdizkaWXIXZKxBVk7iYNV95tES31o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=VOh6MWc0; arc=none smtp.client-ip=115.124.30.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1711360085; h=Message-ID:Date:MIME-Version:From:Subject:To:Content-Type;
+	bh=QmV+g4GmhsxbZGKeBGO2QlNGUE+VuS1qiEGgbu8EpKw=;
+	b=VOh6MWc0hBgULdgEa8EUijWA92CqIjYcGrrFAmC88UMqwoHbjLwAhFChIhErqVEtGuVaRdw4ZCNfH+jjQ77m0iQWTrYe1++onhtk0t8wpJ5bTANk2n1HmCVr3DjoAvTTEq0sztso/61DJtatEppxUUkdjNGZX+/al2BI+jFXQ3w=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=yaoma@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0W3EQlKh_1711360081;
+Received: from 30.178.67.255(mailfrom:yaoma@linux.alibaba.com fp:SMTPD_---0W3EQlKh_1711360081)
+          by smtp.aliyun-inc.com;
+          Mon, 25 Mar 2024 17:48:04 +0800
+Message-ID: <6109a3e3-ca88-4a4d-86c5-c4eb0d7f6f9c@linux.alibaba.com>
+Date: Mon, 25 Mar 2024 17:47:58 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240124051254.67105-1-bhe@redhat.com> <20240124051254.67105-3-bhe@redhat.com>
-In-Reply-To: <20240124051254.67105-3-bhe@redhat.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 25 Mar 2024 09:24:37 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVxKEGYj9C1=P-493vcrN_HmLNx8gS6i1nheXO9gH46oA@mail.gmail.com>
-Message-ID: <CAMuHMdVxKEGYj9C1=P-493vcrN_HmLNx8gS6i1nheXO9gH46oA@mail.gmail.com>
-Subject: Re: [PATCH linux-next v3 02/14] crash: split vmcoreinfo exporting
- code out from crash_core.c
-To: Baoquan He <bhe@redhat.com>
-Cc: linux-kernel@vger.kernel.org, kexec@lists.infradead.org, x86@kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	loongarch@lists.linux.dev, akpm@linux-foundation.org, ebiederm@xmission.com, 
-	hbathini@linux.ibm.com, piliu@redhat.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+From: Bitao Hu <yaoma@linux.alibaba.com>
+Subject: Re: [PATCHv12 4/4] watchdog/softlockup: report the most frequent
+ interrupts
+To: Thomas Gleixner <tglx@linutronix.de>, dianders@chromium.org,
+ liusong@linux.alibaba.com, akpm@linux-foundation.org, pmladek@suse.com,
+ kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com,
+ tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+ jan.kiszka@siemens.com
+Cc: linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ yaoma@linux.alibaba.com
+References: <20240306125208.71803-1-yaoma@linux.alibaba.com>
+ <20240306125208.71803-5-yaoma@linux.alibaba.com> <87zfuofzld.ffs@tglx>
+Content-Language: en-US
+In-Reply-To: <87zfuofzld.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Baoquan,
+Hi, Thomas
 
-On Wed, Jan 24, 2024 at 6:13=E2=80=AFAM Baoquan He <bhe@redhat.com> wrote:
-> Now move the relevant codes into separate files:
-> kernel/crash_reserve.c, include/linux/crash_reserve.h.
->
-> And add config item CRASH_RESERVE to control its enabling.
->
-> And also update the old ifdeffery of CONFIG_CRASH_CORE, including of
-> <linux/crash_core.h> and config item dependency on CRASH_CORE
-> accordingly.
->
-> And also do renaming as follows:
->  - arch/xxx/kernel/{crash_core.c =3D> vmcore_info.c}
-> because they are only related to vmcoreinfo exporting on x86, arm64,
-> riscv.
->
-> And also Remove config item CRASH_CORE, and rely on CONFIG_KEXEC_CORE to
-> decide if build in crash_core.c.
->
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> ---
-> v2->v3:
-> - There's conflict when rebasing to linux-next in kernel/crash_core.c
->   because of below commits from Uladzislau:
->   commit 699d9351822e ("mm: vmalloc: Fix a warning in the crash_save_vmco=
-reinfo_init()")
->   commit 5f4c0c1e2a51 (:mm/vmalloc: remove vmap_area_list")
+On 2024/3/24 04:43, Thomas Gleixner wrote:
+> On Wed, Mar 06 2024 at 20:52, Bitao Hu wrote:
+>> +	if (__this_cpu_read(snapshot_taken)) {
+>> +		for_each_active_irq(i) {
+>> +			count = kstat_get_irq_since_snapshot(i);
+>> +			tabulate_irq_count(irq_counts_sorted, i, count, NUM_HARDIRQ_REPORT);
+>> +		}
+>> +
+>> +		/*
+>> +		 * We do not want the "watchdog: " prefix on every line,
+>> +		 * hence we use "printk" instead of "pr_crit".
+>> +		 */
+> 
+> You are not providing any justification why the prefix is not
+> wanted. Just saying 'We do not want' does not cut it and who is 'We'. I
+> certainly not.
+> 
+> I really disagree because the prefixes are very useful for searching log
+> files. So not having it makes it harder to filter out for no reason.
+> 
 
-Thanks for your patch, which is now commit 443cbaf9e2fdbef7
-("crash: split vmcoreinfo exporting code out from
-crash_core.c") in v6.9-rc1.
 
-After this, there are still two references left to CRASH_CORE:
+Regarding the use of printk() instead of pr_crit(), I have had a
+discussion with Liu Song and Douglas in PATCHv1:
+https://lore.kernel.org/all/CAD=FV=WEEQeKX=ec3Gr-8CKs2K0MaWN3V0-0yOsuret0qcB_AA@mail.gmail.com/
 
-  1. Documentation/admin-guide/kdump/kdump.rst:
+Please allow me to elaborate on my reasoning. The purpose of the
+report_cpu_status() function I implemented is similar to that of
+print_modules(), show_regs(), and dump_stack(). These functions are
+designed to assist in analyzing the causes of a soft lockup, rather
+than to report that a soft lockup has occurred. Therefore, I think
+that adding the "watchdog: " prefix to every line is redundant and
+not concise. Besides, the existing pr_emerg() in the watchdog.c file
+is already sufficient for searching useful information in the logs.
+The information I added, along with the call tree and other data, is
+located near the line with the "watchdog: " prefix.
 
-         Subsequently, CRASH_CORE is selected by KEXEC_CORE::
+Are the two reasons I've provided reasonable?
 
-  2. arch/loongarch/Kconfig
+Best Regards,
 
-         config ARCH_HAS_GENERIC_CRASHKERNEL_RESERVATION
-             def_bool CRASH_CORE
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+	Bitao Hu
 
