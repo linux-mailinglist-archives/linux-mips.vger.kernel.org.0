@@ -1,126 +1,136 @@
-Return-Path: <linux-mips+bounces-2378-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2379-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2D04889181
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Mar 2024 07:42:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2419889644
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Mar 2024 09:48:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F40591C2C82C
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Mar 2024 06:42:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 730B51F314A4
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Mar 2024 08:48:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD52A1B9DC8;
-	Mon, 25 Mar 2024 00:51:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1079D130AEF;
+	Mon, 25 Mar 2024 05:31:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Rn3ZXEup"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jrPZZfZ0"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625E517655F;
-	Sun, 24 Mar 2024 23:37:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD7F1149C7D;
+	Mon, 25 Mar 2024 01:54:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711323442; cv=none; b=Jlxgk4E1Qku1bGgd74VfbM+L6hBkmXyvNs91o4zo38hRfEFxZsV8xbPpbpabWl1dA+imQZFCRqXIql3aqhPJR5dOE0trT/f2gn5+UKUTXP0RtOBDK4msNvfKz6qIRnjD++MIDKte4sMhEKNHV0KzIuTLuhE5DCSkmRWOEM3D8BQ=
+	t=1711331662; cv=none; b=Gk9MkEKfQh/D1sbgyIJcS2VT44gcR3xdWwM4FEIckwNLvv7lLKUfsZL6pX33r+4ssJpNmxOXlNTGCSwEzqx295gTe/MgmmUU85qEaDJ9kfQYElfB2ZdgUb72cMd+hNq3t16ami7TgpWt6edLJaKM9znWnFndfLfcDZWKWhKqulE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711323442; c=relaxed/simple;
-	bh=FiUcIHSFBZBxALtmt61YlYMiFB6wlrdxR2XHmKr2s7U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=favyb5F3OrEMpateG3M8MGMcWkZIo9rCV6PvgS//O9ZNBakKo5XN5ArKg2zLulzc/LPsjpBOyTEZ2cbmNo7CYzua0WbDr33B0EatD5xtf7pizIXQ6uvmchtW/smN7grOv2vOTEnXX5D4N3l22aGcat2qonzwZvl/0h2CW7zl/lo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Rn3ZXEup; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=FiUcIHSFBZBxALtmt61YlYMiFB6wlrdxR2XHmKr2s7U=; b=Rn3ZXEupjlK9s8ygJnhwVpaGLT
-	dYBT49gIZK2OasO7sRPbhGvozmqTWhWXakl0JdzZ5cKLRDR+c36ME7FaSO3vP+vc0ab55QyF/Tbnm
-	VR7AcUA32IstZO1srXhjDa7+/jYt21mfVP/hFgBA0du80/ImT2KAK+oV3TS9s3xBjbeYDQ0epZRT9
-	GWvOmvyJ3hc5FwMK5EXCGJeM7XPDrx8s13MBRdQZ+diEbvQ1lBI8OFOgmdCv5v+duYq9iPYpNvFOW
-	CEk3k5Zos95tElXC8siQdd3gLpPlZrUQyJ+KwVU69saNmVUOftUpZrECpAe7ts+UYRmTnl4jGiUGq
-	G4f556uA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1roXOo-0000000DuZF-2Stz;
-	Sun, 24 Mar 2024 23:37:15 +0000
-Date: Sun, 24 Mar 2024 16:37:10 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Shailend Chand <shailend@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Shakeel Butt <shakeelb@google.com>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
- custom page providers
-Message-ID: <ZgC5JoSiWAYf3IgX@infradead.org>
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-3-almasrymina@google.com>
- <ZfegzB341oNc_Ocz@infradead.org>
- <CAHS8izOUi6qGp=LSQb_o5oph-EnhNOuhLkPSfbQRU3eniZvbdA@mail.gmail.com>
+	s=arc-20240116; t=1711331662; c=relaxed/simple;
+	bh=x6gbNWDUC3393woiAhRGtrXvkbgxFEKnVO43IWMARsU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=jo4eRyXnHT6pJlze8xtEpd1EeBpqCzs5cNTT6ZJHa8EUHj40hkpdHUwApSEPYljxRFVAPnX0dye4BDIjBhOZuJDCzLFydOpPlDJOiMZB4G7KpGIWtVFbD8Ec9x0bye3cy2qJDr7S0LwJ2Sd7sTThMgJVZwKf91MQmw2WiWm3+TM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jrPZZfZ0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7D974C43399;
+	Mon, 25 Mar 2024 01:54:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711331662;
+	bh=x6gbNWDUC3393woiAhRGtrXvkbgxFEKnVO43IWMARsU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=jrPZZfZ03PsaQD3fMGm9nq2UPpPmNCR2UhRG5lEG5sj1PDjplq8FZ75Zbzq4M++fX
+	 Q6TVSgOVQbUvhZzKhKOQNbQwhQhy2BZ8MRkhAIEF+3w0ilwV/nWxm1rjxE/qfP/Mr+
+	 E3yc5dSuBNp0Bm1L/KI5QDwiA8kFCuNjxzWIU7cCRVNPOgSNBZV+qUtQOY4O/YoTDT
+	 PFwCgNm3HEFcmI1zG6v/j47VLsywRsjUKgaIEweM6/K8U5bK1qRIu9RKHx/KjIcwnX
+	 cAPddvxMuoVuFBd1hKdjXjkxNm2QAvn+OmyKHTZvNymrjm/TZ8YaQVQ3vy0XdpqBcO
+	 88LTlEfD/nBQw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 59B24D2D0E0;
+	Mon, 25 Mar 2024 01:54:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHS8izOUi6qGp=LSQb_o5oph-EnhNOuhLkPSfbQRU3eniZvbdA@mail.gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v6 000/164] pwm: Improve lifetime tracking for pwm_chips
+From: patchwork-bot+chrome-platform@kernel.org
+Message-Id: 
+ <171133166235.9916.5159550524752322105.git-patchwork-notify@kernel.org>
+Date: Mon, 25 Mar 2024 01:54:22 +0000
+References: <cover.1707900770.git.u.kleine-koenig@pengutronix.de>
+In-Reply-To: <cover.1707900770.git.u.kleine-koenig@pengutronix.de>
+To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig_=3Cu=2Ekleine-koenig=40pengutronix=2Ede=3E?=@codeaurora.org
+Cc: linux-pwm@vger.kernel.org, corbet@lwn.net, Jonathan.Cameron@huawei.com,
+ james.clark@arm.com, andriy.shevchenko@linux.intel.com, broonie@kernel.org,
+ marcan@marcan.st, sven@svenpeter.dev, claudiu.beznea@tuxon.dev,
+ nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+ florian.fainelli@broadcom.com, rjui@broadcom.com, sbranden@broadcom.com,
+ shc_work@mail.ru, bleung@chromium.org, p.zabel@pengutronix.de,
+ shawnguo@kernel.org, s.hauer@pengutronix.de, paul@crapouillou.net,
+ vz@mleia.com, mika.westerberg@linux.intel.com, andy@kernel.org,
+ linus.walleij@linaro.org, hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com,
+ matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+ neil.armstrong@linaro.org, khilman@baylibre.com, conor.dooley@microchip.com,
+ daire.mcnamara@microchip.com, j.neuschaefer@gmx.net, heiko@sntech.de,
+ krzysztof.kozlowski@linaro.org, palmer@dabbelt.com, paul.walmsley@sifive.com,
+ mwalle@kernel.org, orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
+ zhang.lyra@gmail.com, fabrice.gasnier@foss.st.com, mcoquelin.stm32@gmail.com,
+ alexandre.torgue@foss.st.com, wens@csie.org, jernej.skrabec@gmail.com,
+ samuel@sholland.org, hammerh0314@gmail.com, thierry.reding@gmail.com,
+ jonathanh@nvidia.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+ sean.anderson@seco.com, michal.simek@amd.com, brgl@bgdev.pl,
+ andrzej.hajda@intel.com, rfoss@kernel.org, maarten.lankhorst@linux.intel.com,
+ mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
+ pavel@ucw.cz, lee@kernel.org, quic_amelende@quicinc.com,
+ quic_bjorande@quicinc.com, keescook@chromium.org, robh@kernel.org,
+ johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
+ kernel@pengutronix.de, linux-doc@vger.kernel.org, alyssa@rosenzweig.io,
+ asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ bcm-kernel-feedback-list@broadcom.com, linux-rpi-kernel@lists.infradead.org,
+ groeck@chromium.org, chrome-platform@lists.linux.dev, festevam@gmail.com,
+ linux-imx@nxp.com, linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org, linux-mediatek@lists.infradead.org,
+ jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+ linux-amlogic@lists.infradead.org, linux-riscv@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, alim.akhtar@samsung.com,
+ linux-samsung-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+ dianders@chromium.org, Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+ dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+ greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+ gustavoars@kernel.org, linux-hardening@vger.kernel.org
 
-On Fri, Mar 22, 2024 at 10:54:54AM -0700, Mina Almasry wrote:
-> Sorry I don't mean to argue but as David mentioned, there are some
-> plans in the works and ones not in the works to extend this to other
-> memory types. David mentioned io_uring & Jakub's huge page use cases
-> which may want to re-use this design. I have an additional one in
-> mind, which is extending devmem TCP for storage devices. Currently
-> storage devices do not support dmabuf and my understanding is that
-> it's very hard to do so, and NVMe uses pci_p2pdma instead. I wonder if
-> it's possible to extend devmem TCP in the future to support pci_p2pdma
-> to support nvme devices in the future.
+Hello:
 
-The block layer needs to suppotr dmabuf for this kind of I/O.
-Any special netdev to block side channel will be NAKed before you can
-even send it out.
+This series was applied to chrome-platform/linux.git (for-kernelci)
+by Uwe Kleine-König <u.kleine-koenig@pengutronix.de>:
+
+On Wed, 14 Feb 2024 10:30:47 +0100 you wrote:
+> Hello,
+> 
+> this is v6 of the series introducing better lifetime tracking for
+> pwmchips that addresses (for now theoretic) lifetime issues of pwm
+> chips. Addressing these is a necessary precondition to introduce chardev
+> support for PWMs.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v6,001/164] pwm: Provide an inline function to get the parent device of a given chip
+    https://git.kernel.org/chrome-platform/c/4e59267c7a20
+  - [v6,003/164] pwm: Provide pwmchip_alloc() function and a devm variant of it
+    https://git.kernel.org/chrome-platform/c/024913dbf99f
+  - [v6,029/164] pwm: cros-ec: Change prototype of helpers to prepare further changes
+    https://git.kernel.org/chrome-platform/c/7256c2e79b8e
+  - [v6,030/164] pwm: cros-ec: Make use of pwmchip_parent() accessor
+    https://git.kernel.org/chrome-platform/c/19a568a8d3c4
+  - [v6,031/164] pwm: cros-ec: Make use of devm_pwmchip_alloc() function
+    https://git.kernel.org/chrome-platform/c/452be9421eda
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
