@@ -1,239 +1,143 @@
-Return-Path: <linux-mips+bounces-2383-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2384-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 787C088A372
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Mar 2024 15:00:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87BD888A2A1
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Mar 2024 14:41:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D7F6B478C5
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Mar 2024 13:36:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B631F1C3613A
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Mar 2024 13:41:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3556F1B4899;
-	Mon, 25 Mar 2024 10:22:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fkXBLBgH"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA3F713FD66;
+	Mon, 25 Mar 2024 10:27:12 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F0C13B7A2;
-	Mon, 25 Mar 2024 07:54:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 396B51509A3;
+	Mon, 25 Mar 2024 08:24:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711353249; cv=none; b=CI/ySSwZp1NGEe0B6KGrUPi/1qd2DpukSFy4GJQVooCBNhg0QVM8AbW+8j32LSyvwFQpBf7PkTDRs3sMYcZpIJK0T4SYyaLVju5ACpbOcu6JZ3pXruG4PsLLf8xSpUR44LKXz3Ay+TVg0fETc2bTlQymZjVPxMHiK6CTYQxNesg=
+	t=1711355096; cv=none; b=M/a45R0rf4gEbfcBTpz9aZgrv3csgIWLMyvH13H0/04JfZeG4HoTm7AoGYIZAlnuBJxAEYqpWDpxgZpJ+x3hzXNm3x1h3x+QQhS5EdQzIEjLIhzEwPniH2OgTgguVe2kcFtPb0U0lrT5vZRhOvlSR53PYdl3eRZdsf/DYv85ug8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711353249; c=relaxed/simple;
-	bh=G9pVMPBkGeSCKm7GL4349gPmBncBHLw8Di6BWoQcag0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Z00wCssCiL3CXGVeYUn/rDXjqAI8cTU490+KtIKY8v+TElyrI4M2j0jYx2flfVJ2MVA6W3TbDzL6XokV6YoaqcjS5TZNLWXo0stoGvvUKv+cyA0ZmIuwrDUaTzYGeOr8+izCEY8h2TTqfwrHS3jb9uYgyOycVreAvep5n0jr7f8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fkXBLBgH; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711353246; x=1742889246;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=G9pVMPBkGeSCKm7GL4349gPmBncBHLw8Di6BWoQcag0=;
-  b=fkXBLBgH37ph5Q0oYqWWbQJliLEsV/7J0cRb9rnT+QtQitFB1LufvUhR
-   6RbAy21oMDg0XwBl2NbcQeU1Th3VwscKlE20dvZ5f7JIhKFElboWiyf9v
-   AoMfPWHhEa189te3dE2STHMcSX1XKpuZC/9kgI4CzPJ9m6PRNtlvqDuaL
-   nN6V2ei/lTfqgAXmfQoLN8yhfvu93Vj4NIIYgfA1T9W0hCDNpKb9uxXQX
-   Dhv3JxCOHVocNU6iEtQTMeJHdCB5MGLVPKCuloulscTuDe93TllMdzTgy
-   OXt8/kHxgpiBw8R+45tukcx9r+bXhkr1PvtE/TQn9JXL8uBNH5WKpQr2p
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11023"; a="6199169"
-X-IronPort-AV: E=Sophos;i="6.07,152,1708416000"; 
-   d="scan'208";a="6199169"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2024 00:54:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,152,1708416000"; 
-   d="scan'208";a="16197266"
-Received: from marquiz-s-2.fi.intel.com (HELO [10.237.72.58]) ([10.237.72.58])
-  by orviesa008.jf.intel.com with ESMTP; 25 Mar 2024 00:53:46 -0700
-Message-ID: <1f1e59a4-359e-4679-8ea9-3d915a930e91@linux.intel.com>
-Date: Mon, 25 Mar 2024 09:53:42 +0200
+	s=arc-20240116; t=1711355096; c=relaxed/simple;
+	bh=HdSwpyEJcq7QPVhfAp25p0Tw/TeM+r3NiX2oIuYDiE8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=a+MwYvUJZnSB/k4Ok37XnD+aT46BgIeTclTTAXqZieq9pFAdoc9EKyiPmztsyVpnj/k1AjoUM83VVehh1Cd8jzZ38pUHyjAJIHNXftViSpc9HV4/Nbd3Hqv0lOV4qNMtTcwldAW1inzjrkIDS38vfGNuQOtRwyIQInDBLEDs6bE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-609ff069a40so46203857b3.1;
+        Mon, 25 Mar 2024 01:24:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711355091; x=1711959891;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZEfLIiCMu33AlwMloMoi4ICYWpFuuaEkY/DY4cDIgmE=;
+        b=jOo68WsePLya0UTIv2mo5i4/kpavPY6FzloQwGpk/Hb87ae3OvvWibgRGJNpmcB9Ix
+         jAOa0lxGK6X3n1oQd7CtLaycLmodX1mG6K3MRmxry/IsJ9efzUM8XKZSLWiRJoz7dxzm
+         8LhF0Wj4aJlsigUWi5E83+xUtMtB1FiOnucflQLTGxc6RazDoyMqagCAS3Qwlctk0UW+
+         nOTzdGqHmyXwwfc8o3CtdXkymG76zNYPiRKZ6X1hlvwmTqVLlotr8N+okyFk/NJ6C5zQ
+         lCWYBar3zwCiH5Oh7jjor3B+JW4HDtGPhOO/+J0m7Vi5FQWQB5phXP/jMjr5OCkpIi6i
+         pa+w==
+X-Forwarded-Encrypted: i=1; AJvYcCUD6qLHe7qp+XRyqDyvBRnIchmFCkcZzhgztE842VmmMtxA1rlrDXJQQe3P14STXyTaGPaXgFKd8hiIxo4gPI9NjJc4/GRF0hthsv3PzxRCRD+NJdQDiFBnmVwSo3zPxJodU4aDdP59endufe2a1bFfJ8qIuBd+4rZWdSS2iB2TTQ==
+X-Gm-Message-State: AOJu0Yz4nFJOEz4UUHf4gy/PH60aRJTGnwq8u/MyDsQX7jjzy1PQNP+O
+	kbc3fOhf0webxK5FU2VN+sutlnSWbTDTcY8ypXqGcbD1bulNVNck2TkjheNHDkQ=
+X-Google-Smtp-Source: AGHT+IEww2fSQ3Wu/wewUYOYe8KvgDN4m9NQCLgkoHzNH55wlqFjWJPXZrCNHaP/T2qgp1YHW40w6g==
+X-Received: by 2002:a81:9e44:0:b0:609:e4b4:c2fb with SMTP id n4-20020a819e44000000b00609e4b4c2fbmr4842276ywj.27.1711355091363;
+        Mon, 25 Mar 2024 01:24:51 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id t6-20020a81ce06000000b0060a4b02124dsm953873ywi.144.2024.03.25.01.24.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Mar 2024 01:24:50 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-dcc71031680so3466484276.2;
+        Mon, 25 Mar 2024 01:24:50 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWkKKcySviIElzJ6y7iHyqgGKarKOKI+9+vGQxIlQ66PG47Bwsq0BZ/z4Y1MTBxEYjvhuR6Ro7Lu+r6wCVA7IsMZuEq4U9HDK5RIPEKSySxwUQKI8ijFMeqOgn+coEs8e4g8+xcKQ1x7FIqCvP0UhCtdiZbUycSnN2TT/wKlQN4BA==
+X-Received: by 2002:a25:a2cf:0:b0:dcc:f0a:e495 with SMTP id
+ c15-20020a25a2cf000000b00dcc0f0ae495mr4291545ybn.3.1711355089475; Mon, 25 Mar
+ 2024 01:24:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 64/64] i2c: reword i2c_algorithm in drivers according to
- newest specification
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org
-Cc: Elie Morisse <syniurge@gmail.com>,
- Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
- Andi Shyti <andi.shyti@kernel.org>,
- Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- Krzysztof Adamski <krzysztof.adamski@nokia.com>,
- Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Jan Dabros <jsd@semihalf.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Jean-Marie Verdun <verdun@hpe.com>,
- Nick Hawkins <nick.hawkins@hpe.com>, Yicong Yang <yangyicong@hisilicon.com>,
- Oleksij Rempel <o.rempel@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Paul Cercueil <paul@crapouillou.net>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Khalil Blaiech <kblaiech@nvidia.com>, Asmaa Mnebhi <asmaa@nvidia.com>,
- Qii Wang <qii.wang@mediatek.com>, Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Linus Walleij <linus.walleij@linaro.org>,
- Avi Fishman <avifishman70@gmail.com>, Tomer Maimon <tmaimon77@gmail.com>,
- Tali Perry <tali.perry1@gmail.com>, Patrick Venture <venture@google.com>,
- Nancy Yuen <yuenn@google.com>, Benjamin Fair <benjaminfair@google.com>,
- Ajay Gupta <ajayg@nvidia.com>, Peter Korsgaard <peter@korsgaard.com>,
- Andrew Lunn <andrew@lunn.ch>, Robert Richter <rric@kernel.org>,
- Aaro Koskinen <aaro.koskinen@iki.fi>,
- Janusz Krzysztofik <jmkrzyszt@gmail.com>, Tony Lindgren <tony@atomide.com>,
- Vignesh R <vigneshr@ti.com>, Michael Ellerman <mpe@ellerman.id.au>,
- Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
- "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
- Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, Vladimir Zapolskiy <vz@mleia.com>,
- Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
- Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
- Alain Volmat <alain.volmat@foss.st.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- Laxman Dewangan <ldewangan@nvidia.com>, Dmitry Osipenko <digetx@gmail.com>,
- Conghui Chen <conghui.chen@intel.com>, Viresh Kumar
- <viresh.kumar@linaro.org>, Michal Simek <michal.simek@amd.com>,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- chrome-platform@lists.linux.dev, linux-samsung-soc@vger.kernel.org,
- imx@lists.linux.dev, linux-mips@vger.kernel.org,
- linux-amlogic@lists.infradead.org, linux-mediatek@lists.infradead.org,
- openbmc@lists.ozlabs.org, linux-omap@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, asahi@lists.linux.dev,
- linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com, linux-tegra@vger.kernel.org,
- virtualization@lists.linux.dev
-References: <20240322132619.6389-1-wsa+renesas@sang-engineering.com>
- <20240322132619.6389-65-wsa+renesas@sang-engineering.com>
-Content-Language: en-US
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20240322132619.6389-65-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240124051254.67105-1-bhe@redhat.com> <20240124051254.67105-3-bhe@redhat.com>
+In-Reply-To: <20240124051254.67105-3-bhe@redhat.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 25 Mar 2024 09:24:37 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVxKEGYj9C1=P-493vcrN_HmLNx8gS6i1nheXO9gH46oA@mail.gmail.com>
+Message-ID: <CAMuHMdVxKEGYj9C1=P-493vcrN_HmLNx8gS6i1nheXO9gH46oA@mail.gmail.com>
+Subject: Re: [PATCH linux-next v3 02/14] crash: split vmcoreinfo exporting
+ code out from crash_core.c
+To: Baoquan He <bhe@redhat.com>
+Cc: linux-kernel@vger.kernel.org, kexec@lists.infradead.org, x86@kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	loongarch@lists.linux.dev, akpm@linux-foundation.org, ebiederm@xmission.com, 
+	hbathini@linux.ibm.com, piliu@redhat.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/22/24 3:25 PM, Wolfram Sang wrote:
-> Match the wording in i2c_algorithm in I2C drivers wrt. the newest I2C
-> v7, SMBus 3.2, I3C specifications and replace "master/slave" with more
-> appropriate terms. For some drivers, this means no more conversions are
-> needed. For the others more work needs to be done but this will be
-> performed incrementally along with API changes/improvements. All these
-> changes here are simple search/replace results.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Hi Baoquan,
+
+On Wed, Jan 24, 2024 at 6:13=E2=80=AFAM Baoquan He <bhe@redhat.com> wrote:
+> Now move the relevant codes into separate files:
+> kernel/crash_reserve.c, include/linux/crash_reserve.h.
+>
+> And add config item CRASH_RESERVE to control its enabling.
+>
+> And also update the old ifdeffery of CONFIG_CRASH_CORE, including of
+> <linux/crash_core.h> and config item dependency on CRASH_CORE
+> accordingly.
+>
+> And also do renaming as follows:
+>  - arch/xxx/kernel/{crash_core.c =3D> vmcore_info.c}
+> because they are only related to vmcoreinfo exporting on x86, arm64,
+> riscv.
+>
+> And also Remove config item CRASH_CORE, and rely on CONFIG_KEXEC_CORE to
+> decide if build in crash_core.c.
+>
+> Signed-off-by: Baoquan He <bhe@redhat.com>
 > ---
->   drivers/i2c/busses/i2c-amd-mp2-plat.c      |  2 +-
->   drivers/i2c/busses/i2c-at91-master.c       |  2 +-
->   drivers/i2c/busses/i2c-at91-slave.c        |  8 ++++----
->   drivers/i2c/busses/i2c-axxia.c             | 10 +++++-----
->   drivers/i2c/busses/i2c-cros-ec-tunnel.c    |  2 +-
->   drivers/i2c/busses/i2c-designware-master.c |  2 +-
->   drivers/i2c/busses/i2c-designware-slave.c  |  8 ++++----
->   drivers/i2c/busses/i2c-diolan-u2c.c        |  2 +-
->   drivers/i2c/busses/i2c-exynos5.c           |  4 ++--
->   drivers/i2c/busses/i2c-gxp.c               | 12 ++++++------
->   drivers/i2c/busses/i2c-hisi.c              |  4 ++--
->   drivers/i2c/busses/i2c-img-scb.c           |  2 +-
->   drivers/i2c/busses/i2c-imx.c               | 12 ++++++------
->   drivers/i2c/busses/i2c-jz4780.c            |  2 +-
->   drivers/i2c/busses/i2c-kempld.c            |  2 +-
->   drivers/i2c/busses/i2c-meson.c             |  4 ++--
->   drivers/i2c/busses/i2c-mlxbf.c             |  8 ++++----
->   drivers/i2c/busses/i2c-mt65xx.c            |  2 +-
->   drivers/i2c/busses/i2c-mxs.c               |  2 +-
->   drivers/i2c/busses/i2c-nomadik.c           |  2 +-
->   drivers/i2c/busses/i2c-npcm7xx.c           | 12 ++++++------
->   drivers/i2c/busses/i2c-nvidia-gpu.c        |  4 ++--
->   drivers/i2c/busses/i2c-ocores.c            |  8 ++++----
->   drivers/i2c/busses/i2c-octeon-platdrv.c    |  2 +-
->   drivers/i2c/busses/i2c-omap.c              |  4 ++--
->   drivers/i2c/busses/i2c-opal.c              |  4 ++--
->   drivers/i2c/busses/i2c-pasemi-core.c       |  2 +-
->   drivers/i2c/busses/i2c-pnx.c               |  2 +-
->   drivers/i2c/busses/i2c-pxa.c               | 12 ++++++------
->   drivers/i2c/busses/i2c-qcom-cci.c          |  2 +-
->   drivers/i2c/busses/i2c-qcom-geni.c         |  2 +-
->   drivers/i2c/busses/i2c-robotfuzz-osif.c    |  2 +-
->   drivers/i2c/busses/i2c-rzv2m.c             |  8 ++++----
->   drivers/i2c/busses/i2c-s3c2410.c           |  4 ++--
->   drivers/i2c/busses/i2c-stm32f7.c           | 14 +++++++-------
->   drivers/i2c/busses/i2c-tegra-bpmp.c        |  4 ++--
->   drivers/i2c/busses/i2c-tegra.c             |  4 ++--
->   drivers/i2c/busses/i2c-thunderx-pcidrv.c   |  2 +-
->   drivers/i2c/busses/i2c-virtio.c            |  2 +-
->   drivers/i2c/busses/i2c-wmt.c               |  2 +-
->   drivers/i2c/busses/i2c-xiic.c              |  2 +-
->   41 files changed, 95 insertions(+), 95 deletions(-)
-> 
+> v2->v3:
+> - There's conflict when rebasing to linux-next in kernel/crash_core.c
+>   because of below commits from Uladzislau:
+>   commit 699d9351822e ("mm: vmalloc: Fix a warning in the crash_save_vmco=
+reinfo_init()")
+>   commit 5f4c0c1e2a51 (:mm/vmalloc: remove vmap_area_list")
 
-> diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-> index c7e56002809a..14c61b31f877 100644
-> --- a/drivers/i2c/busses/i2c-designware-master.c
-> +++ b/drivers/i2c/busses/i2c-designware-master.c
-> @@ -832,7 +832,7 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
->   }
->   
->   static const struct i2c_algorithm i2c_dw_algo = {
-> -	.master_xfer = i2c_dw_xfer,
-> +	.xfer = i2c_dw_xfer,
->   	.functionality = i2c_dw_func,
->   };
->   
-> diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
-> index 2e079cf20bb5..b47ad6b16814 100644
-> --- a/drivers/i2c/busses/i2c-designware-slave.c
-> +++ b/drivers/i2c/busses/i2c-designware-slave.c
-> @@ -58,7 +58,7 @@ static int i2c_dw_init_slave(struct dw_i2c_dev *dev)
->   	return 0;
->   }
->   
-> -static int i2c_dw_reg_slave(struct i2c_client *slave)
-> +static int i2c_dw_reg_target(struct i2c_client *slave)
->   {
->   	struct dw_i2c_dev *dev = i2c_get_adapdata(slave->adapter);
->   
-> @@ -83,7 +83,7 @@ static int i2c_dw_reg_slave(struct i2c_client *slave)
->   	return 0;
->   }
->   
-> -static int i2c_dw_unreg_slave(struct i2c_client *slave)
-> +static int i2c_dw_unreg_target(struct i2c_client *slave)
->   {
->   	struct dw_i2c_dev *dev = i2c_get_adapdata(slave->adapter);
->   
-> @@ -214,8 +214,8 @@ static irqreturn_t i2c_dw_isr_slave(int this_irq, void *dev_id)
->   
->   static const struct i2c_algorithm i2c_dw_algo = {
->   	.functionality = i2c_dw_func,
-> -	.reg_slave = i2c_dw_reg_slave,
-> -	.unreg_slave = i2c_dw_unreg_slave,
-> +	.reg_target = i2c_dw_reg_target,
-> +	.unreg_target = i2c_dw_unreg_target,
->   };
+Thanks for your patch, which is now commit 443cbaf9e2fdbef7
+("crash: split vmcoreinfo exporting code out from
+crash_core.c") in v6.9-rc1.
 
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+After this, there are still two references left to CRASH_CORE:
+
+  1. Documentation/admin-guide/kdump/kdump.rst:
+
+         Subsequently, CRASH_CORE is selected by KEXEC_CORE::
+
+  2. arch/loongarch/Kconfig
+
+         config ARCH_HAS_GENERIC_CRASHKERNEL_RESERVATION
+             def_bool CRASH_CORE
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
