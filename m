@@ -1,113 +1,156 @@
-Return-Path: <linux-mips+bounces-2390-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2391-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF7CB88BBAC
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Mar 2024 08:51:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3275D88C0FC
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Mar 2024 12:41:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F6A61F3A0F7
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Mar 2024 07:51:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 581E81C33E8C
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Mar 2024 11:41:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91F18132816;
-	Tue, 26 Mar 2024 07:51:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2752B548F7;
+	Tue, 26 Mar 2024 11:41:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="MMOrE8a7";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="xd/u8uEc"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [195.130.132.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wfhigh1-smtp.messagingengine.com (wfhigh1-smtp.messagingengine.com [64.147.123.152])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 060D11327ED
-	for <linux-mips@vger.kernel.org>; Tue, 26 Mar 2024 07:51:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 376E538FB9;
+	Tue, 26 Mar 2024 11:41:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711439467; cv=none; b=bcGqfcjPW/XUAB4XO6Osxk1/Mvl8n6NJDX88IZxA6qmXhJIjEoiLraH/RleywO46Shkz9Kl59b1fBn9D+oW0QiJY7NaLLqxbMcExkIqxo/jWvZO0DdUjon1iUiuP3YGoylJZluW9LhuafpamcoF+UocGmM+Bl7mYe9hPq6BJZPU=
+	t=1711453309; cv=none; b=bzhbH35KMDI7P+gyhZxcRVn43B5kBsannoVyTX2EJRoN4HOSqjhw6T9hPlBz4CH2Ia3B9Ki6l8hhiSIAvFgyCbGpN8TlWRjqcl3swdv1rSr7FOz4quYbt2JDP2+Tfanw4lkj4jj/WR3TuG5IYO+XxsvT8YoEF95TDkF+U3K1lgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711439467; c=relaxed/simple;
-	bh=gr9JgkrESZ4jhKkfEzPbJwRvivaU77MYSxc+lDGeHU4=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=nBKMOnc3BcaQEksVPae3/FVCYH96rOR9jJwg23rmJ6++FfIIKvbb5gDJAYjwO6eLnlzJOKpt+NJMh6dhBcCJUlIyDY6Ryj2ShLQXauKaSi7FijMjcT/KqMRwDZtgUUL7VAq0IzbQQUgrvAOjHEFgVtwboyw/aCo7X4lUEJaSceo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:76d0:2bff:fec8:549])
-	by xavier.telenet-ops.be with bizsmtp
-	id 3Kqp2C00C0SSLxL01KqpkN; Tue, 26 Mar 2024 08:50:56 +0100
-Received: from geert (helo=localhost)
-	by ramsan.of.borg with local-esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1rp1a5-004zii-Gc;
-	Tue, 26 Mar 2024 08:50:49 +0100
-Date: Tue, 26 Mar 2024 08:50:49 +0100 (CET)
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-To: linux-kernel@vger.kernel.org
-cc: linux-crypto@vger.kernel.org, Chris Zankel <chris@zankel.net>, 
-    Max Filippov <jcmvbkbc@gmail.com>, Rob Clark <robdclark@gmail.com>, 
-    Abhinav Kumar <quic_abhinavk@quicinc.com>, 
-    Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-    linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-    freedreno@lists.freedesktop.org, 
-    Lucas De Marchi <lucas.demarchi@intel.com>, 
-    Oded Gabbay <ogabbay@kernel.org>, 
-    =?ISO-8859-15?Q?Thomas_Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>, 
-    intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-    linux-mips@vger.kernel.org, sparclinux@vger.kernel.org
-Subject: Re: Build regressions/improvements in v6.9-rc1
-In-Reply-To: <20240325200315.3896021-1-geert@linux-m68k.org>
-Message-ID: <8d78894-dd89-9f4d-52bb-1b873c50be9c@linux-m68k.org>
-References: <CAHk-=wgOw_13JuuX4khpn4K+n09cRG3EBQWufAPBWoa0GLLQ0A@mail.gmail.com> <20240325200315.3896021-1-geert@linux-m68k.org>
+	s=arc-20240116; t=1711453309; c=relaxed/simple;
+	bh=LOYZi8+5ewDBNNpP9PQQw2zJlRjZ4vowyUViqCM6X4I=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=eTW9AIcdxoDLn67eF3LrPypIOEew+6++hKq9H7IMj0hT74a9GXma9wyruG2QKgBekS8K1B1454uRdKQeTi+77PMRgTBA/hzjc09SiHOa/lnuuwmevnOki06wKhdZ494H8rGwoMuYKSltuQM7h7x/y42O3lVFxgc8WD3Ro+N3nQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=MMOrE8a7; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=xd/u8uEc; arc=none smtp.client-ip=64.147.123.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailfhigh.west.internal (Postfix) with ESMTP id C6AAA1800095;
+	Tue, 26 Mar 2024 07:41:45 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 26 Mar 2024 07:41:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm3; t=1711453305; x=1711539705; bh=Yz
+	g7ptgYv8oRD0lDAK7pZDBw1X+IbqXjWAUI3kCBCjo=; b=MMOrE8a7wUIr+VepPn
+	1S4T5s83eF071Kd8WJC777QpVjE1Px7YDLqFUFjbWasQNjpP+HWsmDdK6PDmjteX
+	s4W7AxFXsc0ohxGdaeMcEGQMsEtgGfcbJ1T3ExLGzZqFDkoXueji+M/PANBnFd6p
+	qnA3+2+7OCNKYaKcuAP66r0VTlYbBaCqX5QR6Zo1SC+EJ/I+GONB4xuIVcxlZe2S
+	pvUneGCYfyMBEFUUzruDNKgQAqBGamcjiOCSmdfRIqVjJxr4epwvMok5J+NBVwWY
+	zIKsTRN2PVvtGygm4Pme31kVdHT0zYgnBE/AYeqOVoS0VABZUb6+83PgbYwX0E8r
+	aFBA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm2; t=1711453305; x=1711539705; bh=Yzg7ptgYv8oRD
+	0lDAK7pZDBw1X+IbqXjWAUI3kCBCjo=; b=xd/u8uEcxTKXjdWn9DHBXoAhwSO+D
+	Vl2riBfwZ+UnXeV9NUMRl6/gjyoqKj/wRjBPT6px6oDJjSMZIEC8FIrrRhcBRXS+
+	Do9meykvI/XUDheyWccHb24a2tj3dBp12GFGITIsTlEtPYuCOAHbXZJbNcfXyZPz
+	CVQ8DePmOAkJfo35HluVlX6tWnFzC+33ed1z5Af/bV6llbYKgp+K/7481rZamft9
+	7kunQq94bwL5qKIBEDLaf8Jjew+zmxO9wz7KZKxgvZwcud0rPP1ZgpJHHxYHrpib
+	4bOEr7qBXAH+vHmsnofZp7wz8VwRdUflLAXcfYu7x0G9eiHVxfEdGhhrg==
+X-ME-Sender: <xms:eLQCZnK71Zhp0CJNz5GdmMuyV_bNdN7HGcN6WjgxwCxKgftSCQnASg>
+    <xme:eLQCZrJXdwqLbhh5btgGUCZIh567N5WC6pWlSxX-eWJhLtpiGm6lqR32xVA5-_BpG
+    o67XOKNErV4T_CDL9Y>
+X-ME-Received: <xmr:eLQCZvuaEtls2uNFHnSwRdPnwxE8gWzJTUSABY7y1Y2N1LmxR0gxAXk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledruddufedgfeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephfffufggtgfgkffvvefosehtjeertdertdejnecuhfhrohhmpeflihgrgihu
+    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
+    ftrfgrthhtvghrnhephfffgeejgfejieeugffgudegvdekffevgeeuteetgeejveeiteei
+    vedvffehlefgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehf
+    lhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:eLQCZgbrcPIiJoF-uoGAWsF-T2TfMdtecYHf92KyXbHbys5iDBT85Q>
+    <xmx:eLQCZuY5B8ddyMEOwHiWHeHDPIWTMxj4Vc9SD98Om7UM1mroXDFLwQ>
+    <xmx:eLQCZkDnBpFnhMSgV538f_tiNTGcwNvZA2PXuxJFGyFXGbRX6Y5hXA>
+    <xmx:eLQCZsaHURUN2vXRypI9HGYVsJ6iEQJ2Fcjn7wiJHtuI908O6ONAhg>
+    <xmx:ebQCZjPh0NTAi5rYT5VaAqyhMp9V4I-vbhvMFSanxBxYhWz6_G0TTDNmy7U>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 26 Mar 2024 07:41:43 -0400 (EDT)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Date: Tue, 26 Mar 2024 11:41:45 +0000
+Subject: [PATCH] MIPS: Guard some macros with __ASSEMBLY__ in asm.h
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240326-asm-guard-v1-1-fe0c140a5aea@flygoat.com>
+X-B4-Tracking: v=1; b=H4sIAHi0AmYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDYyMz3cTiXN300sSiFN2UlJTUJCNjI8MUM0sloPqCotS0zAqwWdGxtbU
+ AzHiH21sAAAA=
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Geert Uytterhoeven <geert@linux-m68k.org>, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1083;
+ i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
+ bh=LOYZi8+5ewDBNNpP9PQQw2zJlRjZ4vowyUViqCM6X4I=;
+ b=owGbwMvMwCHmXMhTe71c8zDjabUkhjSmLVWvMtVvzdjCkhfSd7Z94zkFd16F10dEJkbXPn93f
+ TKP6FPhjlIWBjEOBlkxRZYQAaW+DY0XF1x/kPUHZg4rE8gQBi5OAZiIVDLDP/M5K6oEDuVksO67
+ wipn3TTz66UoE7uniW+Pn/xknByl84Phr/QPmXkb5l/oS5YwSN/r3/jIZMf2DY+kRFi/KLzVk/v
+ wiQEA
+X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
+ fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-On Mon, 25 Mar 2024, Geert Uytterhoeven wrote:
-> Below is the list of build error/warning regressions/improvements in
-> v6.9-rc1[1] compared to v6.8[2].
->
-> Summarized:
->  - build errors: +8/-8
+There are some assembly macros with very generic naming
+being defined asm.h. They are clashing with other macros
+from C code.
 
-   + /kisskb/src/crypto/scompress.c: error: unused variable 'dst_page' [-Werror=unused-variable]:  => 174:38
+Guard them with __ASSEMBLY__ to prevent futher clashes.
 
-xtensa-gcc13/xtensa-allmodconfig
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Link: https://lore.kernel.org/linux-mips/8d78894-dd89-9f4d-52bb-1b873c50be9c@linux-m68k.org/
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+ arch/mips/include/asm/asm.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-   + /kisskb/src/drivers/gpu/drm/msm/adreno/adreno_gen7_0_0_snapshot.h: error: 'gen7_0_0_external_core_regs' defined but not used [-Werror=unused-variable]:  => 924:19
-   + /kisskb/src/drivers/gpu/drm/msm/adreno/adreno_gen7_2_0_snapshot.h: error: 'gen7_2_0_external_core_regs' defined but not used [-Werror=unused-variable]:  => 748:19
+diff --git a/arch/mips/include/asm/asm.h b/arch/mips/include/asm/asm.h
+index 2e99450f4228..87ff609b53fe 100644
+--- a/arch/mips/include/asm/asm.h
++++ b/arch/mips/include/asm/asm.h
+@@ -37,6 +37,7 @@
+ #define CFI_SECTIONS
+ #endif
+ 
++#ifdef __ASSEMBLY__
+ /*
+  * LEAF - declare leaf routine
+  */
+@@ -122,6 +123,8 @@ symbol		=	value
+ #define ASM_PRINT(string)
+ #endif
+ 
++#endif /* __ASSEMBLY__ */
++
+ /*
+  * Stack alignment
+  */
 
-arm64-gcc5/arm64-allmodconfig
-powerpc-gcc5/powerpc-allmodconfig
-powerpc-gcc5/powerpc-allyesconfig
-powerpc-gcc5/ppc32_allmodconfig
-powerpc-gcc5/ppc64_book3e_allmodconfig
-powerpc-gcc5/ppc64le_allmodconfig
-sparc64-gcc5/sparc64-allmodconfig
+---
+base-commit: 084c8e315db34b59d38d06e684b1a0dd07d30287
+change-id: 20240326-asm-guard-dddeb2321d69
 
-   + /kisskb/src/drivers/gpu/drm/xe/xe_lrc.c: error: "END" redefined [-Werror]:  => 100
+Best regards,
+-- 
+Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-mips-gcc8/mips-allmodconfig
-mips-gcc13/mips-allmodconfig
-
-   + error: arch/sparc/kernel/process_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.text':  => (.fixup+0xc), (.fixup+0x4)
-   + error: arch/sparc/kernel/signal_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.text':  => (.fixup+0x18), (.fixup+0x8), (.fixup+0x0), (.fixup+0x20), (.fixup+0x10)
-   + error: relocation truncated to fit: R_SPARC_WDISP22 against `.init.text':  => (.head.text+0x5100), (.head.text+0x5040)
-   + error: relocation truncated to fit: R_SPARC_WDISP22 against symbol `leon_smp_cpu_startup' defined in .text section in arch/sparc/kernel/trampoline_32.o:  => (.init.text+0xa4)
-
-sparc64-gcc13/sparc-allmodconfig
-
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/4cece764965020c22cff7665b18a012006359095/ (all 138 configs)
-> [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/e8f897f4afef0031fe618a8e94127a0934896aba/ (all 138 configs)
-
-Gr{oetje,eeting}s,
-
- 						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
 
