@@ -1,92 +1,141 @@
-Return-Path: <linux-mips+bounces-2463-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2464-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D21F388EE1A
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 19:18:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0197188EF4A
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 20:36:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 367EA294C65
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 18:18:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 31E9BB26411
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 19:36:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BD4E14F10C;
-	Wed, 27 Mar 2024 18:17:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFE5D14E2C1;
+	Wed, 27 Mar 2024 19:36:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="RkxWd7fx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XoaXAMOJ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B6C130A63;
-	Wed, 27 Mar 2024 18:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C47D380;
+	Wed, 27 Mar 2024 19:36:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711563463; cv=none; b=KNSdfrj3qdm3WB4VO4w7otPFDA6KbIkv2YwYM98Vc3zXBBS/nf33YzENmouuAA4bvH8GPmRaYoe6cKGXBQhX2Es9CkE4qZXtl5yldu4Iq3Z7Mwldd43EOrwW/KSFpKsRjlfDHQ/ukPFuOsx/ujv6wPqkHdx4+wf6P+hYlDIy9Wo=
+	t=1711568162; cv=none; b=IqaR9I7OSVj2cn5pb2amOwEtxcvVrBX0EAMfJwD3p6Ob27Zzb/SuI1Su3Y6wltd4qJ1yDWFc4Ng818HcZ+H4ri68r0fA9/VLXzsqR2OPt/3WA8/xsqJ11/k82+d51DDgjZrzRot0tVOyCL0OWGdktpraTBXuaQ+f+Jh+QK+o/6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711563463; c=relaxed/simple;
-	bh=cuOPfgYarGsg6xpTgF2yo+uJ/Cd9/PbvYrZtfzWIAWA=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=pz5VT01FaeJh7nPWl99os+j8lz9tJh7uTJr1Fa5+RpgcjCm6qf6NK3DO0jnu5Usnh35hV7vthK/MKOXCYwsOsysHKAkJDkd7MneDS3WzGCna9L4CV+bZZz3OFCVXxOXVy2OYX05yqENksSFJLASWGku/olzB9Aj6s2XC1/Vx24E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=RkxWd7fx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 680A4C43390;
-	Wed, 27 Mar 2024 18:17:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1711563462;
-	bh=cuOPfgYarGsg6xpTgF2yo+uJ/Cd9/PbvYrZtfzWIAWA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=RkxWd7fxszjbkBAhnxMMmGIe1h9FKHAVl8O+/y4E+OyVKiv7IRTOoVWnBexJe9Qi9
-	 +TAsEnYgru/VQSeepmbuUfEprBv2RQg5xWifJm48Tf7YU36SeMA36iZubYcx/pS1In
-	 9D8kpe1b6ypL+O0tgl7HcF34HzDsZeDajYeDtxlE=
-Date: Wed, 27 Mar 2024 11:17:40 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Huang Shijie <shijie@os.amperecomputing.com>
-Cc: gregkh@linuxfoundation.org, patches@amperecomputing.com,
- rafael@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
- aou@eecs.berkeley.edu, yury.norov@gmail.com, kuba@kernel.org,
- vschneid@redhat.com, mingo@kernel.org, vbabka@suse.cz, rppt@kernel.org,
- tglx@linutronix.de, jpoimboe@kernel.org, ndesaulniers@google.com,
- mikelley@microsoft.com, mhiramat@kernel.org, arnd@arndb.de,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
- will@kernel.org, mark.rutland@arm.com, mpe@ellerman.id.au,
- linuxppc-dev@lists.ozlabs.org, chenhuacai@kernel.org,
- jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org,
- cl@os.amperecomputing.com
-Subject: Re: [PATCH v3] NUMA: Early use of cpu_to_node() returns 0 instead
- of the correct node id
-Message-Id: <20240327111740.f8d3802b0eae15bcb8727e04@linux-foundation.org>
-In-Reply-To: <20240126064451.5465-1-shijie@os.amperecomputing.com>
-References: <20240126064451.5465-1-shijie@os.amperecomputing.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1711568162; c=relaxed/simple;
+	bh=T0Gc63+M14jsX7PKFtiIXFMl0tWSi9oDRmgoUZTW/2w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kvWLzCHlXrCLVHGZq9tEGrVrmqm7KSNrNZfM/VNeF3qr9oqwDMT0waNjexrtBYb6MyvcNR0aKcPavrM9Qx1+KwvLDE+6XbMRo3wdksFd9xC7errlqfut1uYd0vGohu9fJUvwGRXMbKgpwpdS/w4jSdfFLTpMMjUYEKK1dPlfb0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XoaXAMOJ; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a4a393b699fso38648266b.0;
+        Wed, 27 Mar 2024 12:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711568159; x=1712172959; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aojaArSnA0JfedDto4elyer8YODIKcUTNNFpLzMMgW8=;
+        b=XoaXAMOJ4Ojmd7idhXiyfKsYBXO1nlVNNBH2lrYeTP5tUZYgJcfSMkvYDdSECwJe3O
+         2WPWBYmKXHC3NZWnWbzWbnrHUyovIC/aoenU0HNzQCX/wvlCFvq+1zEn21HC3sezb8Jz
+         SPURbZsQS6fgh2YVN3sqFKrAbjZhNNG29y5z+ZwHL1BZB0eyGa0r1WlwajFoU7kWaoqZ
+         185ZvXwubU7cpqnWYSzx0ODOXGVS3Mu2DrliJPjTMaV7TwMtsw25xfnbYF5dA8TRfuQ7
+         d8HeMsqPzustoXEui2Uc+vAQDibV6fBvr6di3ODvecj0COgUZeNJQykOCy7aPcLPeDfo
+         WMIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711568159; x=1712172959;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aojaArSnA0JfedDto4elyer8YODIKcUTNNFpLzMMgW8=;
+        b=n8H1GZxWGCDyZS5GqC4sE0iRZ6/9XuV3nlKHKJkja+AZPJKXTt3r1bhBFrxuwpoXLP
+         /AuIC8w+HXy958J1FQf+Iy8P//jBuByUSsJs7ZDJyzOxYeJqyARMljJnc3A2G5ovAQVV
+         yMucFt5nfs8w5c0R/CmBVsN29G8RYl0rdhnkTA4x68Pr6Tc+sVfTGJwKvGsADzkk0z7r
+         ZuacuYt2GO1+otB+99QWCJ431XrYBpUJo2gJUJx+m70N4HppIHuJ0tJcAoyw1Os/6lNk
+         A7IPnFSrw34Qoq2FEpCdpDNEt2tlRguwX14hgVUljq3KsTPBv+nxZOfx3wZjSjKQheEp
+         eLAw==
+X-Forwarded-Encrypted: i=1; AJvYcCVCYs+LogtakcWjQysrzX6wzvIepjw4NCiF8HoEvdnW+fcNZb6q0ncljdi6I5FBFilRdUn5iZ+bKJKGewBdPfMSzBsWPfsv/XqgvyGupEJypYlJ8aUH+Smswfxo10UetclKXgE97Rq//Icad6T7MUFCuayMEwItobDtws+wo/edI1IwriKnb8wNXfmtCeGm1MhBk9yD4Nb6NeeIE2CJi3siS9XkvdLH2QMXSc9ZKCTqjMnArQ2s2S+y+7efnQKwKB7Sh+JQHr9Oali08QD7nkd9+mTNPPesNdBoy5hJdtpUyesJaRFG3rX27s82zYLOQka3WSwt0L3bww8acX1hFWejjOxv/XPiYIHXlO7Qp7cSCgMumKXmmGj/BBqgbPv+hmcJCoJzk0Vg6rREXD4G2sYYooVDZTkzg1NL6i8W/n3poH6AkiaMGuZvsFSjyjfoKCe5k+uOpdSspnFHnd38kzfXebGQ3IHl5+lOODTNJYDDZ5sfGo533LxVP86Tb/wgi5OoYubNq8S7haZuCCbHvffDGirQVz9dYy5SXNsE+g1zIzM=
+X-Gm-Message-State: AOJu0Yyipuc5TsIErMTNm9jkKX/fFMTmqPVE3UYPTd1po8U8p1sC9R2o
+	ZrFIl5QEdHBNhCaYvqj2qCmN3xq+VhVckML3IqGQ17mgDI+OKPapdtBwuK+1qU0=
+X-Google-Smtp-Source: AGHT+IHWYCsKCZfCKe9WJ0A8h2jBWKCzprPvh9Stt4hH84aJN1DmeskwZihR1IueuTRTWs9wYxpP6Q==
+X-Received: by 2002:a17:906:119a:b0:a47:3766:cfec with SMTP id n26-20020a170906119a00b00a473766cfecmr235001eja.9.1711568159337;
+        Wed, 27 Mar 2024 12:35:59 -0700 (PDT)
+Received: from jernej-laptop.localnet (86-58-6-171.dynamic.telemach.net. [86.58.6.171])
+        by smtp.gmail.com with ESMTPSA id j24-20020a17090643d800b00a4672fb2a03sm5858783ejn.10.2024.03.27.12.35.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Mar 2024 12:35:58 -0700 (PDT)
+From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To: linux-kernel@vger.kernel.org, Allen Pais <apais@linux.microsoft.com>
+Cc: tj@kernel.org, keescook@chromium.org, vkoul@kernel.org, marcan@marcan.st,
+ sven@svenpeter.dev, florian.fainelli@broadcom.com, rjui@broadcom.com,
+ sbranden@broadcom.com, paul@crapouillou.net, Eugeniy.Paltsev@synopsys.com,
+ manivannan.sadhasivam@linaro.org, vireshk@kernel.org, Frank.Li@nxp.com,
+ leoyang.li@nxp.com, zw@zh-kernel.org, wangzhou1@hisilicon.com,
+ haijie1@huawei.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+ sean.wang@mediatek.com, matthias.bgg@gmail.com,
+ angelogioacchino.delregno@collabora.com, afaerber@suse.de,
+ logang@deltatee.com, daniel@zonque.org, haojian.zhuang@gmail.com,
+ robert.jarzmik@free.fr, andersson@kernel.org, konrad.dybcio@linaro.org,
+ orsonzhai@gmail.com, baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+ patrice.chotard@foss.st.com, linus.walleij@linaro.org, wens@csie.org,
+ peter.ujfalusi@gmail.com, kys@microsoft.com, haiyangz@microsoft.com,
+ wei.liu@kernel.org, decui@microsoft.com, jassisinghbrar@gmail.com,
+ mchehab@kernel.org, maintainers@bluecherrydvr.com,
+ aubin.constans@microchip.com, ulf.hansson@linaro.org, manuel.lauss@gmail.com,
+ mirq-linux@rere.qmqm.pl, jh80.chung@samsung.com, oakad@yahoo.com,
+ hayashi.kunihiko@socionext.com, mhiramat@kernel.org, brucechang@via.com.tw,
+ HaraldWelte@viatech.com, pierre@ossman.eu, duncan.sands@free.fr,
+ stern@rowland.harvard.edu, oneukum@suse.com,
+ openipmi-developer@lists.sourceforge.net, dmaengine@vger.kernel.org,
+ asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+ imx@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+ linux-mediatek@lists.infradead.org, linux-actions@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+ linux-omap@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-s390@vger.kernel.org, netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 9/9] mmc: Convert from tasklet to BH workqueue
+Date: Wed, 27 Mar 2024 20:35:54 +0100
+Message-ID: <9252961.CDJkKcVGEf@jernej-laptop>
+In-Reply-To: <20240327160314.9982-10-apais@linux.microsoft.com>
+References:
+ <20240327160314.9982-1-apais@linux.microsoft.com>
+ <20240327160314.9982-10-apais@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-On Fri, 26 Jan 2024 14:44:51 +0800 Huang Shijie <shijie@os.amperecomputing.com> wrote:
-
-> During the kernel booting, the generic cpu_to_node() is called too early in
-> arm64, powerpc and riscv when CONFIG_NUMA is enabled.
+Dne sreda, 27. marec 2024 ob 17:03:14 CET je Allen Pais napisal(a):
+> The only generic interface to execute asynchronously in the BH context is
+> tasklet; however, it's marked deprecated and has some design flaws. To
+> replace tasklets, BH workqueue support was recently added. A BH workqueue
+> behaves similarly to regular workqueues except that the queued work items
+> are executed in the BH context.
 > 
-> There are at least four places in the common code where
-> the generic cpu_to_node() is called before it is initialized:
-> 	   1.) early_trace_init()         in kernel/trace/trace.c
-> 	   2.) sched_init()               in kernel/sched/core.c
-> 	   3.) init_sched_fair_class()    in kernel/sched/fair.c
-> 	   4.) workqueue_init_early()     in kernel/workqueue.c
-> 
-> In order to fix the bug, the patch introduces early_numa_node_init()
-> which is called after smp_prepare_boot_cpu() in start_kernel.
-> early_numa_node_init will initialize the "numa_node" as soon as
-> the early_cpu_to_node() is ready, before the cpu_to_node() is called
-> at the first time.
+> This patch converts drivers/infiniband/* from tasklet to BH workqueue.
 
-What are the userspace-visible runtime effects of this bug?
+infiniband -> mmc
+
+Best regards,
+Jernej
+
+> 
+> Based on the work done by Tejun Heo <tj@kernel.org>
+> Branch: https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git for-6.10
+> 
+> Signed-off-by: Allen Pais <allen.lkml@gmail.com>
+
 
 
 
