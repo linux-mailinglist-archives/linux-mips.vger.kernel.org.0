@@ -1,103 +1,156 @@
-Return-Path: <linux-mips+bounces-2456-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2457-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 122C388EB04
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 17:22:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F77188EBF1
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 18:00:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42B061C31BE6
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 16:22:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 844E9B28034
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 16:23:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9197412F397;
-	Wed, 27 Mar 2024 16:22:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4B03130AD9;
+	Wed, 27 Mar 2024 16:23:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b="vSMCQaVH"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="P+vdkTPh";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qzE8tHKH"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpfb2-g21.free.fr (smtpfb2-g21.free.fr [212.27.42.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EACBE83A0B;
-	Wed, 27 Mar 2024 16:22:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.27.42.10
+Received: from fout3-smtp.messagingengine.com (fout3-smtp.messagingengine.com [103.168.172.146])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E99112F397;
+	Wed, 27 Mar 2024 16:22:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711556549; cv=none; b=sxcwfFNWRtw+5ePIjGoTIYPF7/Jzh8s/pJa8oVl153xykUYcCoYQpF7MzU5te9YlHsDWN6OmyjCvpuoYF5pBrQ4Mn61ZFAwmrlk6kxd/L+xqH2z4Ua04Dd0cGlFqdTD4a4BsFaS9tF0mnKlQfTfeBtc/onoRSLPVe1cjKIL6Tyo=
+	t=1711556581; cv=none; b=HDAwSuZh4yVVoUbMIIQhJwEyWkHnSrigtU/nu0C/aUxhtdFYnTSoeaJZ9ijA1lPYuGBzsn8UkqtAHiXR017QeFDWXNskdu5Y7JelcrsvEfQI7Y6GFArD8AClYq3MgC6f22BIAMzqlTSsn9AhGSrDr+PodvwO8yq7maZfISyx374=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711556549; c=relaxed/simple;
-	bh=g9NIYWY7Zqq4Jpe3GVuphoABvUpR98WMNlTO/PqC+cM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W0+VZwtK9f5Ae2J1rFarexkkZwPR1vpW8002AGfSHYDd7Xed82yj7jzhz/Di+7pHWcGWPlzlI0pbIJfaG5z4y99fRqwAKYIIplpNsaNRvbmAVUo+tiNcdRLsCwvT2nLS/09pfrz9RnXVM88O83NjtRigXMMuIhNyQT+QRzHhPL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=free.fr; spf=pass smtp.mailfrom=free.fr; dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr header.b=vSMCQaVH; arc=none smtp.client-ip=212.27.42.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=free.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=free.fr
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
-	by smtpfb2-g21.free.fr (Postfix) with ESMTP id 75DD44C8DC;
-	Wed, 27 Mar 2024 17:22:16 +0100 (CET)
-Received: from [IPV6:2a01:e0a:255:1000:f49a:79c4:c3c6:eaf3] (unknown [IPv6:2a01:e0a:255:1000:f49a:79c4:c3c6:eaf3])
-	(Authenticated sender: duncan.sands@free.fr)
-	by smtp5-g21.free.fr (Postfix) with ESMTPSA id A3A9F60142;
-	Wed, 27 Mar 2024 17:20:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
-	s=smtp-20201208; t=1711556526;
-	bh=g9NIYWY7Zqq4Jpe3GVuphoABvUpR98WMNlTO/PqC+cM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=vSMCQaVHDvOS+MJTVx5PjO8YOXxmIEoXqqAuvBYuRC535uirpZWCAg3Zcduu9rDtt
-	 KXKCxUyreW9ES5/mQaKWuQmfTpoSpYf8IwCcPc988GMFZvS+1wbAKCcOjbSk3mXiD9
-	 ZK8Hamum4SVmsMBE1c9pxQwBG+dsyo12O4SxF8j/IiVpKDUrPYQJdtKDuV/HWRo3xL
-	 PYIWjDHKv6Iwt5jWnepwy1J7Y+fjiF4JTHXVaKfZ4ukUUftUNKj+3Aem3Jcxh8PUFu
-	 tZQKCHeE4q+71+QXSA4TwBR2eiNJVHnD/WyXCPKNPqsgcwl7VuDNvLoWg/63fz6oE5
-	 pvkLMrw2O9NMA==
-Message-ID: <7297be25-a3c8-4e8b-9a80-ff720ccddc90@free.fr>
-Date: Wed, 27 Mar 2024 17:20:26 +0100
+	s=arc-20240116; t=1711556581; c=relaxed/simple;
+	bh=LBDjeQVI8o7x+twcrGb8CfkBSgOrsaUvNZbDSAekMLM=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=btl0u+fK3nAYR+FW13D6PJpOKvOJ+fwUSauZwljdIbXk2sN+xAsszNzScjBqUROL3bkOo+18uHuOtbp99kNlOPuhZ/euca2NoyMxsqemiQy89D/p9he0I9eq0BLgu5x2XSbFpPMtuTr5p5PnP9R631wBFHuOan8uJzScb1gl6f4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=P+vdkTPh; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qzE8tHKH; arc=none smtp.client-ip=103.168.172.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id A1ACF1380097;
+	Wed, 27 Mar 2024 12:22:58 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Wed, 27 Mar 2024 12:22:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1711556578; x=1711642978; bh=04/bv9qv/f
+	J7b6lD5xQpNrs8Wx7z7kkFDtCrZ28H1cg=; b=P+vdkTPhYaNxsDmytF+YVstKTK
+	Pti/rLi9wS8kERhdO3lnq7EGjv2SkvPIoxmsWJMJhLHwEXuzxfpkEd0zo9zuCXe9
+	U+wEG++UW/9ffuDwZQeKjwN2Pdnj3K1fq/uIr+zRKUmmGX2VZikefQZiAdW9+LI+
+	tFc1D5WNqUSuF5nsWnIjQhgKI7iSeKP4j2I+zuHk7DUhCDXwgbx+WVXCooU21c1p
+	i4qEUnq3VWG4y1tvWsJeR3Te+90gCWzNDjx4gK7NRhFzTjJSEaYw6+mIFtvhGc6J
+	uTb8spKcVwxI8gDizZzGDrJfP2J9keJmj5W0iRW5udWe55/wCuskxMEvsLQA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1711556578; x=1711642978; bh=04/bv9qv/fJ7b6lD5xQpNrs8Wx7z
+	7kkFDtCrZ28H1cg=; b=qzE8tHKHnXdh4+H3pRQ/ZQ7HlCMNYT5iwoUelyrNrOO8
+	rHZzjLjTcU1e8WjZdJgpfc5jLq/fS7QujczfIn/RZo9w2sHMwghfmx0B/Pt6ciyY
+	mZLXkBewR4JEfqGSBYoEcrLAYEywprCzg8zl4EfCw/eu0cB+xjol8cRcx4RY2S6G
+	yqYw6EB6oSHbw1fde2y2fpaO35fwy1+1v0G+H5DJwtNWdudg4JulUGwKOMqWw9Fz
+	Sc8MgrZE9ndJY9TQXAX4zlMqZDxTH7TDiDq8JGVK2pWe/jyKZ0+UU4SnTFh/QrUy
+	6QbhllOJ146SyrMw77vTVADthM+W645OaIDvsQniTA==
+X-ME-Sender: <xms:4kcEZiU97SGN7Z_w79poK1nb4N_1GpgTvPhi0lpBpmvTGvWyR8sg2w>
+    <xme:4kcEZuliBFO5zPrdua67vIRl9xLyspg4F5Bc-HYsOxZ4V_RjSuVPQ5Fes-xLTZdBt
+    JRp7P5hoNKuZuOrkdM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudduiedgieefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:4kcEZmbL533qBSNpSxrdX4q5ILP7r7kzKKmlSnDstDRjLbf5N8vcEQ>
+    <xmx:4kcEZpWqWhcavi76Zt4HKiuB6gYaszYGDCTgfWOAAr_Q77vH-hFE1g>
+    <xmx:4kcEZslDfBqUDssPqA0QxV_r5lXOighpBxK0ZhIx_za5D5YM44lNmA>
+    <xmx:4kcEZucOAjhkok5D1ywWCVr9FlOuqT3l6-wCX7uvVOa5-_-KGobtlw>
+    <xmx:4kcEZisfEnJnEcHuvnu41r2ISp1fJRG4dePekVw2WfvYtWEHKQhabQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id EE9E9B60092; Wed, 27 Mar 2024 12:22:57 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-328-gc998c829b7-fm-20240325.002-gc998c829
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/9] USB: Convert from tasklet to BH workqueue
-To: Allen Pais <apais@linux.microsoft.com>, linux-kernel@vger.kernel.org
-Cc: tj@kernel.org, keescook@chromium.org, vkoul@kernel.org, marcan@marcan.st,
- sven@svenpeter.dev, florian.fainelli@broadcom.com, rjui@broadcom.com,
- sbranden@broadcom.com, paul@crapouillou.net, Eugeniy.Paltsev@synopsys.com,
- manivannan.sadhasivam@linaro.org, vireshk@kernel.org, Frank.Li@nxp.com,
- leoyang.li@nxp.com, zw@zh-kernel.org, wangzhou1@hisilicon.com,
- haijie1@huawei.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
- sean.wang@mediatek.com, matthias.bgg@gmail.com,
- angelogioacchino.delregno@collabora.com, afaerber@suse.de,
- logang@deltatee.com, daniel@zonque.org, haojian.zhuang@gmail.com,
- robert.jarzmik@free.fr, andersson@kernel.org, konrad.dybcio@linaro.org,
- orsonzhai@gmail.com, baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
- patrice.chotard@foss.st.com, linus.walleij@linaro.org, wens@csie.org,
- jernej.skrabec@gmail.com, peter.ujfalusi@gmail.com, kys@microsoft.com,
- haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
- jassisinghbrar@gmail.com, mchehab@kernel.org, maintainers@bluecherrydvr.com,
- aubin.constans@microchip.com, ulf.hansson@linaro.org,
- manuel.lauss@gmail.com, mirq-linux@rere.qmqm.pl, jh80.chung@samsung.com,
- oakad@yahoo.com, hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
- brucechang@via.com.tw, HaraldWelte@viatech.com, pierre@ossman.eu,
- stern@rowland.harvard.edu, oneukum@suse.com,
- openipmi-developer@lists.sourceforge.net, dmaengine@vger.kernel.org,
- asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
- imx@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
- linux-mediatek@lists.infradead.org, linux-actions@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
- linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org,
- linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
- linux-omap@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- linux-s390@vger.kernel.org, netdev@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20240327160314.9982-1-apais@linux.microsoft.com>
- <20240327160314.9982-5-apais@linux.microsoft.com>
-Content-Language: en-GB
-From: Duncan Sands <duncan.sands@free.fr>
-In-Reply-To: <20240327160314.9982-5-apais@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Message-Id: <dc1433ea-4e59-4ab7-83fb-23b393020980@app.fastmail.com>
+In-Reply-To: <3922460a-4d01-4ecb-b8c5-7c57fd46f3fd@redhat.com>
+References: <20240327130538.680256-1-david@redhat.com> <ZgQ5hNltQ2DHQXps@x1n>
+ <3922460a-4d01-4ecb-b8c5-7c57fd46f3fd@redhat.com>
+Date: Wed, 27 Mar 2024 17:22:37 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "David Hildenbrand" <david@redhat.com>, peterx <peterx@redhat.com>
+Cc: linux-kernel@vger.kernel.org, "Andrew Morton" <akpm@linux-foundation.org>,
+ "Mike Rapoport" <rppt@kernel.org>, "Jason Gunthorpe" <jgg@nvidia.com>,
+ "John Hubbard" <jhubbard@nvidia.com>, linux-arm-kernel@lists.infradead.org,
+ loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+ linux-sh@vger.kernel.org, linux-mm@kvack.org,
+ linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ x86@kernel.org, "Ryan Roberts" <ryan.roberts@arm.com>,
+ "Alexander Viro" <viro@zeniv.linux.org.uk>,
+ "Matt Turner" <mattst88@gmail.com>, "Vineet Gupta" <vgupta@kernel.org>
+Subject: Re: [PATCH RFC 0/3] mm/gup: consistently call it GUP-fast
+Content-Type: text/plain
 
-Hi Allen, the usbatm bits look very reasonable to me.  Unfortunately I don't 
-have the hardware to test any more.  Still, for what it's worth:
+On Wed, Mar 27, 2024, at 16:39, David Hildenbrand wrote:
+> On 27.03.24 16:21, Peter Xu wrote:
+>> On Wed, Mar 27, 2024 at 02:05:35PM +0100, David Hildenbrand wrote:
+>> 
+>> I'm not sure what config you tried there; as I am doing some build tests
+>> recently, I found turning off CONFIG_SAMPLES + CONFIG_GCC_PLUGINS could
+>> avoid a lot of issues, I think it's due to libc missing.  But maybe not the
+>> case there.
+>
+> CCin Arnd; I use some of his compiler chains, others from Fedora directly. For
+> example for alpha and arc, the Fedora gcc is "13.2.1".
 
-Signed-off-by: Duncan Sands <duncan.sands@free.fr>
+>
+> But there is other stuff like (arc):
+>
+> ./arch/arc/include/asm/mmu-arcv2.h: In function 'mmu_setup_asid':
+> ./arch/arc/include/asm/mmu-arcv2.h:82:9: error: implicit declaration of 
+> function 'write_aux_reg' [-Werro
+> r=implicit-function-declaration]
+>     82 |         write_aux_reg(ARC_REG_PID, asid | MMU_ENABLE);
+>        |         ^~~~~~~~~~~~~
+
+Seems to be missing an #include of soc/arc/aux.h, but I can't
+tell when this first broke without bisecting.
+
+> or (alpha)
+>
+> WARNING: modpost: "saved_config" [vmlinux] is COMMON symbol
+> ERROR: modpost: "memcpy" [fs/reiserfs/reiserfs.ko] undefined!
+> ERROR: modpost: "memcpy" [fs/nfs/nfs.ko] undefined!
+> ERROR: modpost: "memcpy" [fs/nfs/nfsv3.ko] undefined!
+> ERROR: modpost: "memcpy" [fs/nfsd/nfsd.ko] undefined!
+> ERROR: modpost: "memcpy" [fs/lockd/lockd.ko] undefined!
+> ERROR: modpost: "memcpy" [crypto/crypto.ko] undefined!
+> ERROR: modpost: "memcpy" [crypto/crypto_algapi.ko] undefined!
+> ERROR: modpost: "memcpy" [crypto/aead.ko] undefined!
+> ERROR: modpost: "memcpy" [crypto/crypto_skcipher.ko] undefined!
+> ERROR: modpost: "memcpy" [crypto/seqiv.ko] undefined!
+
+Al did a series to fix various build problems on alpha, see
+https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git/log/?h=work.alpha
+Not sure if he still has to send them to Matt, or if Matt
+just needs to apply them.
+
+I also have some alpha patches that I should send upstream.
+
+     Arnd
 
