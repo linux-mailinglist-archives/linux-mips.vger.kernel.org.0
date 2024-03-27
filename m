@@ -1,190 +1,163 @@
-Return-Path: <linux-mips+bounces-2458-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2459-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C4C988EB7A
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 17:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C89B988EBEE
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 17:59:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED002B2492B
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 16:23:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E11B6B2500E
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 16:55:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04C541304AD;
-	Wed, 27 Mar 2024 16:23:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBB1814D420;
+	Wed, 27 Mar 2024 16:55:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="antVw9bE"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="O9UtOMh9"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA7CC1DFFB;
-	Wed, 27 Mar 2024 16:23:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E239130A6F;
+	Wed, 27 Mar 2024 16:55:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711556612; cv=none; b=eA7b//gJtDflaUmh8A4nZ2Z5O9JkC5Ew8CHFDuzl3WXwypSJrPMWK/d6iDxTIZ6o4z3DQ5L3gqGxM6/GXXWt7p9eJj5mknNzAm7kN5TjQ1W9FkMk108fEv4YGerg6D7OKmfNyPrLtiUfFqYvuhNe66UbFvEj7tHiyRJQh2Jeeys=
+	t=1711558536; cv=none; b=uOGHYnicUHW6rF39U/IyJbaEv0EObOUXFregTx9c5mlOgUqa5Hr4K0gx+cO0xA5DYQZFdpkyPh9iD13KjV2Mxm+lrEWKMuIlGaVkFjITMpw0jz1UTbnYGRGY35nXB9sN/0TpqZpABfyC4jI2f60upJnmYbxjTxtHiMM65xyDooQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711556612; c=relaxed/simple;
-	bh=vfPOVeol10GjjIU8ukwbAq6kQFpShA89H7TmSgKAE5Y=;
+	s=arc-20240116; t=1711558536; c=relaxed/simple;
+	bh=vpDkfUBtWL+UxBwjuUm5gYeL/cEacWfXEPKG81vcE0M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E0blSf1DfDllbmS4H6rWK4LwLDaenwsj1ELUQoWueV3GQOSVXVjEbRc595kAnFoqWcd9vd9nXhnJFpjNn47L0FJmcfT2fIwO//bK0p/nh7d3FTC+dKW0X4rETIcvJ0Pmzhbzuu05PpCgfd+W7XndIva83jtK7KitmqfGbesAYm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=antVw9bE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AB43C433F1;
-	Wed, 27 Mar 2024 16:23:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711556612;
-	bh=vfPOVeol10GjjIU8ukwbAq6kQFpShA89H7TmSgKAE5Y=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=tVUCvvyh7H5EYkD1QI3uGSyjr4ez9q64CAjIvv58Baou9v6c4H+DRBtMU1+t5xKscrj6q0dEEdqG5fjCxIeFviFZahdLj00I9hOxqMFMN6Y1gB0sX0/h7PyL8QGDLextS2sgjSoKJBleZY9ULG6mJfeeYJ+DgWKUMqBvNcJ9lpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=O9UtOMh9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ABDBC433C7;
+	Wed, 27 Mar 2024 16:55:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1711558535;
+	bh=vpDkfUBtWL+UxBwjuUm5gYeL/cEacWfXEPKG81vcE0M=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=antVw9bEudlvuPfsZTc4U5PdrQ+1Sv1sJpEBD79eHkcA23MRs6E/67Vh7v+GGzwo+
-	 80UP4CDdyBynFZZhYS1gJUTAbd+NUya50+NYF1FBrPS00OrWRulINJ0v0EE/nmS11I
-	 DF7KsVEjQlTZO9kWv5UB8IKfVmCtYDlJtrw6jUBsqG57YiNWV2uFrbP8gu1aOmOOxz
-	 PC9bo9vCsmMFKgQRLe2bRFKUnJ7DU0OYP/sGcUsuGqrY3KVmhvEQY+wJKOMDMW6c1j
-	 T/OHcS6tovHgtDXoyok9M7rsKgp4a1uRTLEQKAEsfWTDJFjn83qB8e5Qj//O59P45I
-	 XjlIEAxaflZwg==
-Date: Wed, 27 Mar 2024 16:23:28 +0000
-From: Conor Dooley <conor@kernel.org>
-To: keguang.zhang@gmail.com
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-mtd@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 1/3] dt-bindings: mtd: Add Loongson-1 NAND Controller
-Message-ID: <20240327-bonehead-handlebar-1ca8dab95179@spud>
-References: <20240327-loongson1-nand-v6-0-7f9311cef020@gmail.com>
- <20240327-loongson1-nand-v6-1-7f9311cef020@gmail.com>
+	b=O9UtOMh9NhK8uq0mZiMXt2LKgdT1qaV4eqkqQ4OpNjzEIBfNH8AxnSa5LKMbuNnuj
+	 139SwlhRdsUzFtHFa7nm692D1Q6Maoi8Dc8aCzxaDG36oyEKDDYttLwvcqzFnSbA0P
+	 DJD28wQMsDmrT4Kh7AowzV2l5JSL5uf6ZAH6m6jc=
+Date: Wed, 27 Mar 2024 17:55:31 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Allen Pais <apais@linux.microsoft.com>
+Cc: linux-kernel@vger.kernel.org, tj@kernel.org, keescook@chromium.org,
+	vkoul@kernel.org, marcan@marcan.st, sven@svenpeter.dev,
+	florian.fainelli@broadcom.com, rjui@broadcom.com,
+	sbranden@broadcom.com, paul@crapouillou.net,
+	Eugeniy.Paltsev@synopsys.com, manivannan.sadhasivam@linaro.org,
+	vireshk@kernel.org, Frank.Li@nxp.com, leoyang.li@nxp.com,
+	zw@zh-kernel.org, wangzhou1@hisilicon.com, haijie1@huawei.com,
+	shawnguo@kernel.org, s.hauer@pengutronix.de, sean.wang@mediatek.com,
+	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+	afaerber@suse.de, logang@deltatee.com, daniel@zonque.org,
+	haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+	andersson@kernel.org, konrad.dybcio@linaro.org, orsonzhai@gmail.com,
+	baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+	patrice.chotard@foss.st.com, linus.walleij@linaro.org,
+	wens@csie.org, jernej.skrabec@gmail.com, peter.ujfalusi@gmail.com,
+	kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com, jassisinghbrar@gmail.com, mchehab@kernel.org,
+	maintainers@bluecherrydvr.com, aubin.constans@microchip.com,
+	ulf.hansson@linaro.org, manuel.lauss@gmail.com,
+	mirq-linux@rere.qmqm.pl, jh80.chung@samsung.com, oakad@yahoo.com,
+	hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
+	brucechang@via.com.tw, HaraldWelte@viatech.com, pierre@ossman.eu,
+	duncan.sands@free.fr, stern@rowland.harvard.edu, oneukum@suse.com,
+	openipmi-developer@lists.sourceforge.net, dmaengine@vger.kernel.org,
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	imx@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+	linux-mediatek@lists.infradead.org,
+	linux-actions@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-tegra@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-mmc@vger.kernel.org, linux-omap@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, linux-s390@vger.kernel.org,
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 4/9] USB: Convert from tasklet to BH workqueue
+Message-ID: <2024032753-probable-blatancy-80bf@gregkh>
+References: <20240327160314.9982-1-apais@linux.microsoft.com>
+ <20240327160314.9982-5-apais@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="yDH5t1GCumTzOBnO"
-Content-Disposition: inline
-In-Reply-To: <20240327-loongson1-nand-v6-1-7f9311cef020@gmail.com>
-
-
---yDH5t1GCumTzOBnO
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240327160314.9982-5-apais@linux.microsoft.com>
 
-On Wed, Mar 27, 2024 at 06:43:59PM +0800, Keguang Zhang via B4 Relay wrote:
-> From: Keguang Zhang <keguang.zhang@gmail.com>
->=20
-> Add devicetree binding document for Loongson-1 NAND Controller.
->=20
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+On Wed, Mar 27, 2024 at 04:03:09PM +0000, Allen Pais wrote:
+> The only generic interface to execute asynchronously in the BH context is
+> tasklet; however, it's marked deprecated and has some design flaws. To
+> replace tasklets, BH workqueue support was recently added. A BH workqueue
+> behaves similarly to regular workqueues except that the queued work items
+> are executed in the BH context.
+> 
+> This patch converts drivers/infiniband/* from tasklet to BH workqueue.
+
+No it does not, I think your changelog is wrong :(
+
+> 
+> Based on the work done by Tejun Heo <tj@kernel.org>
+> Branch: https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git for-6.10
+> 
+> Signed-off-by: Allen Pais <allen.lkml@gmail.com>
 > ---
-> Changes in v6:
-> - A newly added patch
-> ---
->  .../devicetree/bindings/mtd/loongson,ls1x-nfc.yaml | 66 ++++++++++++++++=
-++++++
->  1 file changed, 66 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/mtd/loongson,ls1x-nfc.yaml=
- b/Documentation/devicetree/bindings/mtd/loongson,ls1x-nfc.yaml
-> new file mode 100644
-> index 000000000000..2494c7b3b506
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mtd/loongson,ls1x-nfc.yaml
-> @@ -0,0 +1,66 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mtd/loongson,ls1x-nfc.yaml#
+>  drivers/usb/atm/usbatm.c            | 55 +++++++++++++++--------------
+>  drivers/usb/atm/usbatm.h            |  3 +-
+>  drivers/usb/core/hcd.c              | 22 ++++++------
+>  drivers/usb/gadget/udc/fsl_qe_udc.c | 21 +++++------
+>  drivers/usb/gadget/udc/fsl_qe_udc.h |  4 +--
+>  drivers/usb/host/ehci-sched.c       |  2 +-
+>  drivers/usb/host/fhci-hcd.c         |  3 +-
+>  drivers/usb/host/fhci-sched.c       | 10 +++---
+>  drivers/usb/host/fhci.h             |  5 +--
+>  drivers/usb/host/xhci-dbgcap.h      |  3 +-
+>  drivers/usb/host/xhci-dbgtty.c      | 15 ++++----
+>  include/linux/usb/cdc_ncm.h         |  2 +-
+>  include/linux/usb/usbnet.h          |  2 +-
+>  13 files changed, 76 insertions(+), 71 deletions(-)
+> 
+> diff --git a/drivers/usb/atm/usbatm.c b/drivers/usb/atm/usbatm.c
+> index 2da6615fbb6f..74849f24e52e 100644
+> --- a/drivers/usb/atm/usbatm.c
+> +++ b/drivers/usb/atm/usbatm.c
+> @@ -17,7 +17,7 @@
+>   *  		- Removed the limit on the number of devices
+>   *  		- Module now autoloads on device plugin
+>   *  		- Merged relevant parts of sarlib
+> - *  		- Replaced the kernel thread with a tasklet
+> + *  		- Replaced the kernel thread with a work
 
-Please make the filename match the compatible.
+a "work"?
 
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson-1 NAND Controller
-> +
-> +maintainers:
-> +  - Keguang Zhang <keguang.zhang@gmail.com>
-> +
-> +allOf:
-> +  - $ref: nand-controller.yaml
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: loongson,ls1b-nfc
-> +      - items:
-> +          - enum:
-> +              - loongson,ls1a-nfc
-> +              - loongson,ls1c-nfc
-> +          - const: loongson,ls1b-nfc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  dmas:
-> +    maxItems: 1
-> +
-> +  dma-names:
-> +    const: rxtx
+>   *  		- New packet transmission code
+>   *  		- Changed proc file contents
+>   *  		- Fixed all known SMP races
+> @@ -68,6 +68,7 @@
+>  #include <linux/wait.h>
+>  #include <linux/kthread.h>
+>  #include <linux/ratelimit.h>
+> +#include <linux/workqueue.h>
+>  
+>  #ifdef VERBOSE_DEBUG
+>  static int usbatm_print_packet(struct usbatm_data *instance, const unsigned char *data, int len);
+> @@ -249,7 +250,7 @@ static void usbatm_complete(struct urb *urb)
+>  	/* vdbg("%s: urb 0x%p, status %d, actual_length %d",
+>  	     __func__, urb, status, urb->actual_length); */
+>  
+> -	/* Can be invoked from task context, protect against interrupts */
+> +	/* Can be invoked from work context, protect against interrupts */
 
-If you only have one dma, why do you need a dma-names entry for it?
+"workqueue"?  This too seems wrong.
 
-Looks fine to me otherwise though,
-COnor.
+Same for other comment changes in this patch.
 
-> +
-> +patternProperties:
-> +  "^nand@[0-3]$":
-> +    type: object
-> +    $ref: raw-nand-chip.yaml
-> +
-> +    unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - dmas
-> +  - dma-names
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    nand-controller@1fe78000 {
-> +        compatible =3D "loongson,ls1b-nfc";
-> +        reg =3D <0x1fe78000 0x40>;
-> +
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +
-> +        dmas =3D <&dma 0>;
-> +        dma-names =3D "rxtx";
-> +
-> +        nand@0 {
-> +            reg =3D <0>;
-> +            nand-use-soft-ecc-engine;
-> +            nand-ecc-algo =3D "hamming";
-> +        };
-> +    };
->=20
-> --=20
-> 2.40.1
->=20
->=20
+thanks,
 
---yDH5t1GCumTzOBnO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZgRH8AAKCRB4tDGHoIJi
-0kj7AP42f1IGw8/uELOCbVdp8rqrSHtY1cdHyVGBqH4jo8IuMwD/U9azUbyS3Hm1
-gd8v7u0uXHNq+KiSBtDQOh2Gsg6REQs=
-=2rtW
------END PGP SIGNATURE-----
-
---yDH5t1GCumTzOBnO--
+greg k-h
 
