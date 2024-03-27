@@ -1,911 +1,234 @@
-Return-Path: <linux-mips+bounces-2428-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2429-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAA5088DB75
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 11:45:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B71788DE6A
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 13:16:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9FF2E29C9AA
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 10:45:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9ED9A1C28D05
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 12:16:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71AC252F85;
-	Wed, 27 Mar 2024 10:44:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF0C11386A0;
+	Wed, 27 Mar 2024 12:08:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fspaD8p+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X0F4aemb"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405A9524D2;
-	Wed, 27 Mar 2024 10:44:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC6A01384AD;
+	Wed, 27 Mar 2024 12:08:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711536292; cv=none; b=ZrLvoamKxdF29cjgHsgpG+AOLLnDIjh+22+qUKgmKPCq+wfZkv3VD/ZgTQDs5LQsq7tVNaud+kVt6UC/i16bbfMWjd1ME5aFdSbZeFUl+FPGRNL5pzcq4TiUUrRstC9tRyLwUJVoxA3NEtf9T9XCieUKjkmCbdd2mBNwuixyhKA=
+	t=1711541310; cv=none; b=K5Sw/u6GWPXQxAAqol5f5FDEuW8rXxBKvltOdthTjus/skA9ZEHgIobAamRQ5sskbCA7wfG5apKATQXKSwWkVbnHsSZSwWlqFp8q0+G7rvLQL5Ezm9gEO+fWAkijVjiuo7jVFhtAKvMuL7kCfMBCIIJiSoeyCX5rTYAAgeTaRuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711536292; c=relaxed/simple;
-	bh=YX+e+X9R2msV1M3nKVd6e+dh2xefcIbdUBG3oRoaXEc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IUgmfU3ICzx5rjt+p6yahIkeA7C4lnaCnjEJOTOCcN4XqVqq0l+O9lKMxLYtJ90RykIgC8o7VfxIISwjcDc6nXn2hjkEpsCEnhX74WEIyZ88sWeYHeEkHRjcWeYfuwyQFD0opgs4hve+fjpPl8Yo8rAvzJC4Tq9Xr6pFZg+kh/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fspaD8p+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D2C46C43330;
-	Wed, 27 Mar 2024 10:44:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711536291;
-	bh=YX+e+X9R2msV1M3nKVd6e+dh2xefcIbdUBG3oRoaXEc=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=fspaD8p+e6rnbdcvuYe5WCWwUGHFTGZH5LVmz+bDlRbMCmauOFS0kv8caikGKvMqJ
-	 ZlWkgQz1zMmZkeK4CShdTNEUROCxIPximC815adPul0+ZE5gvHTEVQQ1SOHkHwuoKv
-	 s/DttnhGACrN5WNY1d9rB94JL3YSTGXVtm0xc1KeSwcQ/5t+UpKEXvlqoe8SefzZiX
-	 zujRFDgu7I8yQidyi2BsRaM5EqN7Vh4dCqgjyfa/9elxFL+fNVIQNFpWp+epVdZ7wn
-	 H0shxpmFcYbZ93xqcbi44rTAdY/Qlpv5V4jE8ajzXZrWeFlglDGffuccxystW9pyPK
-	 TiyRC+Uyu+SFg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C74A8C47DD9;
-	Wed, 27 Mar 2024 10:44:51 +0000 (UTC)
-From: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>
-Date: Wed, 27 Mar 2024 18:44:01 +0800
-Subject: [PATCH v6 3/3] mtd: rawnand: Add Loongson-1 NAND Controller driver
+	s=arc-20240116; t=1711541310; c=relaxed/simple;
+	bh=oZTe2+HsBnrS8zUXYQUyg0A+3ZpwvYYSvqBKARycrgo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fQeNWpwQ0Mg/va9WOWsXJmc+mNgVIWuTXDWsN6pUQAJ5XnRfrGt8wpIIyW79ryTTp0Abz8JpOSU8sYU/7kQQVuSDHlO4MMrZ170k7xUl/nz2DD/8l4TNRC9MVtzlRrx+RfJxLy7bneCZT2huyZhEGGBSN3QXdSfUf2s81KBTBrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X0F4aemb; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a44f2d894b7so813692766b.1;
+        Wed, 27 Mar 2024 05:08:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711541307; x=1712146107; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=GB/oh0gJaySzvfajzZi3YPER75UfgA1zu0gB/OoTPFY=;
+        b=X0F4aemb0a/Ikslz2oLQw67KCTwKdwJJmUTR9OBv9rkv/TCMoca8c7tU7MrUlgi5dy
+         4AvZc47nwwmPQpGUL4YNs5+s5Fm38EmxdGBm0IjovdpSrJnsYPVj/qqb9BdK5QjHcLP4
+         EYFnXwqIyV0vOjSnYQnf1fPuGnq2PQmANbB7zugVlLT2ikAKUIlx9eFUv2bWZEEghVFZ
+         YH0LqR34cBHHLQMpayh0g21xeP46HIfDc2lJDHlPoko98HLTURx+GcDGQbygTEzoJyW6
+         Z4X8Uv6JJclw8vZ0e05JSdpQqqZz6zJhDtV5xTnyCo0TvpWFyFrrKf3eatArRuHHdJun
+         X1jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711541307; x=1712146107;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GB/oh0gJaySzvfajzZi3YPER75UfgA1zu0gB/OoTPFY=;
+        b=XVQfz/Snb+1Y9tzYZDaYWvoFq17mzB1Rta3OjOxw3RXiGqG+kYrmNj+Ikc4RMZZTrU
+         NkXrzjhRq1GaVx2LYSmiEZogO9KzCId6gge086X9g/G5C7wMfrjU3k4pvQ023NKzv3t7
+         2TqCIvbFCS9iVEIdENhDquHFSsw0/dOp1LxyHLeAWdtRWh8b2Ck+jGpuIEmqaFHUAwoP
+         oCCEl3VMNfEP5Z4WhXSuWExxXlWPGleNvrt9wFNLVPqeXfhReYYyOMTEWarFqXsegX4y
+         1bQk916fxl37I1b5s397KdkGO92VUe3k9zq2WmBcZT71pXFdaxBXyXStAmIZ2/Wr1Bho
+         LKUw==
+X-Forwarded-Encrypted: i=1; AJvYcCUE64GD2B3sWz4nLVBkqZNVG7X77e6acA0pDj+X0bMYTmJusJYPfrICbLLqbjYYqDVgmM9P5+bnNrEgnTiphCYiPUbl98jBoUk/k9yp5C+93bMbXTS/WAO10c81UpQanN9IA3URIe1LOPmt2tsfc1oJSFV4H/Apt2L/d2/rUr93N/zgzg==
+X-Gm-Message-State: AOJu0Ywr587YGIIi7lXVP2ikQy0N7f8JHWpKcbEGdRYgV7eUTnmxQPSX
+	MRrVTtnNe7Fm2hCrXInkOly5p7m7kFJi4uRO5DopLuP/QvoH/qBw
+X-Google-Smtp-Source: AGHT+IHcfilyApCcOQkxhGJ5YtMJqkiUwfEkTsluEDoaeeJTBDTlGt8juUP9t7Njs8YkTRW/+DQjYA==
+X-Received: by 2002:a17:906:4709:b0:a4d:f1b4:6235 with SMTP id y9-20020a170906470900b00a4df1b46235mr3332192ejq.27.1711541306927;
+        Wed, 27 Mar 2024 05:08:26 -0700 (PDT)
+Received: from ?IPV6:2a01:c22:7b87:a500:dd0e:a4dd:4c2a:b10a? (dynamic-2a01-0c22-7b87-a500-dd0e-a4dd-4c2a-b10a.c22.pool.telefonica.de. [2a01:c22:7b87:a500:dd0e:a4dd:4c2a:b10a])
+        by smtp.googlemail.com with ESMTPSA id bw26-20020a170906c1da00b00a4650ec48d0sm5436432ejb.140.2024.03.27.05.08.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Mar 2024 05:08:26 -0700 (PDT)
+Message-ID: <f18bb686-5e7c-446b-877c-b92a1dc70145@gmail.com>
+Date: Wed, 27 Mar 2024 13:08:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/3] leds: trigger: Improve handling of
+ led_trigger_event() and simplify mute audio trigger
+To: Lee Jones <lee@kernel.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Pavel Machek <pavel@ucw.cz>, Jaroslav Kysela <perex@perex.cz>,
+ Takashi Iwai <tiwai@suse.com>, linux-leds@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-mips@vger.kernel.org
+References: <3918a80c-b885-40f6-a96e-bcd4c53ff448@gmail.com>
+ <170964052434.128456.128263499797916605.b4-ty@kernel.org>
+ <20240305120947.GD86322@google.com> <20240305145454.GG86322@google.com>
+ <f2e7d244-62f4-4dde-bffc-8d96e5a4bac1@gmail.com>
+ <20240305160626.GH86322@google.com>
+Content-Language: en-US
+From: Heiner Kallweit <hkallweit1@gmail.com>
+Autocrypt: addr=hkallweit1@gmail.com; keydata=
+ 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
+In-Reply-To: <20240305160626.GH86322@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240327-loongson1-nand-v6-3-7f9311cef020@gmail.com>
-References: <20240327-loongson1-nand-v6-0-7f9311cef020@gmail.com>
-In-Reply-To: <20240327-loongson1-nand-v6-0-7f9311cef020@gmail.com>
-To: Miquel Raynal <miquel.raynal@bootlin.com>, 
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
- Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-mips@vger.kernel.org, devicetree@vger.kernel.org, 
- Keguang Zhang <keguang.zhang@gmail.com>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1711536289; l=23438;
- i=keguang.zhang@gmail.com; s=20231129; h=from:subject:message-id;
- bh=ugcQN23/OpXrK+k5TnuLevlq8vkiY3YbSUeH7cZGYqM=;
- b=fgZCavgRzwjG7p+A4WKjS51jVlbGlSnAJcN5M8+2t21tBoyuMTAhPljAYcnJdq/aqrFy3Kdj3
- ogMJEhS7kKID8Wp5t7Jt1ZnxmKNHbywHKNVXGo+RMWVomBb2EAUOPbq
-X-Developer-Key: i=keguang.zhang@gmail.com; a=ed25519;
- pk=FMKGj/JgKll/MgClpNZ3frIIogsh5e5r8CeW2mr+WLs=
-X-Endpoint-Received: by B4 Relay for keguang.zhang@gmail.com/20231129 with
- auth_id=102
-X-Original-From: Keguang Zhang <keguang.zhang@gmail.com>
-Reply-To: keguang.zhang@gmail.com
 
-From: Keguang Zhang <keguang.zhang@gmail.com>
-
-This patch adds NAND Controller driver for Loongson-1 SoCs.
-
-Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
----
-Changes in v6:
-- Amend Kconfig
-- Add DT support
-- Use DT data instead of platform data
-- Remove MAX_ID_SIZE
-- Remove case NAND_OP_CMD_INSTR in ls1x_nand_set_controller()
-- Move ECC configuration to ls1x_nand_attach_chip()
-- Rename variable "nand" to "ls1x"
-- Rename variable "nc" to "nfc"
-- Some minor fixes
-- Link to v5: https://lore.kernel.org/all/20210520224213.7907-1-keguang.zhang@gmail.com
-
-Changes in v5:
-- Update the driver to fit the raw NAND framework.
-- Implement exec_op() instead of legacy cmdfunc().
-- Use dma_request_chan() instead of dma_request_channel().
-- Some minor fixes and cleanups.
-
-Changes in v4:
-- Retrieve the controller from nand_hw_control.
-
-Changes in v3:
-- Replace __raw_readl/__raw_writel with readl/writel.
-- Split ls1x_nand into two structures:
-ls1x_nand_chip and ls1x_nand_controller.
-
-Changes in v2:
-- Modify the dependency in Kconfig due to the changes of DMA module.
----
- drivers/mtd/nand/raw/Kconfig          |   7 +
- drivers/mtd/nand/raw/Makefile         |   1 +
- drivers/mtd/nand/raw/loongson1_nand.c | 748 ++++++++++++++++++++++++++++++++++
- 3 files changed, 756 insertions(+)
-
-diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
-index cbf8ae85e1ae..9e34ce05341b 100644
---- a/drivers/mtd/nand/raw/Kconfig
-+++ b/drivers/mtd/nand/raw/Kconfig
-@@ -449,6 +449,13 @@ config MTD_NAND_RENESAS
- 	  Enables support for the NAND controller found on Renesas R-Car
- 	  Gen3 and RZ/N1 SoC families.
- 
-+config MTD_NAND_LOONGSON1
-+	tristate "Loongson1 NAND controller"
-+	depends on LOONGSON1_DMA || COMPILE_TEST
-+	select REGMAP_MMIO
-+	help
-+	  Enables support for NAND controller on Loongson1 SoCs.
-+
- comment "Misc"
- 
- config MTD_SM_COMMON
-diff --git a/drivers/mtd/nand/raw/Makefile b/drivers/mtd/nand/raw/Makefile
-index 25120a4afada..b3c65cab819c 100644
---- a/drivers/mtd/nand/raw/Makefile
-+++ b/drivers/mtd/nand/raw/Makefile
-@@ -57,6 +57,7 @@ obj-$(CONFIG_MTD_NAND_INTEL_LGM)	+= intel-nand-controller.o
- obj-$(CONFIG_MTD_NAND_ROCKCHIP)		+= rockchip-nand-controller.o
- obj-$(CONFIG_MTD_NAND_PL35X)		+= pl35x-nand-controller.o
- obj-$(CONFIG_MTD_NAND_RENESAS)		+= renesas-nand-controller.o
-+obj-$(CONFIG_MTD_NAND_LOONGSON1)	+= loongson1_nand.o
- 
- nand-objs := nand_base.o nand_legacy.o nand_bbt.o nand_timings.o nand_ids.o
- nand-objs += nand_onfi.o
-diff --git a/drivers/mtd/nand/raw/loongson1_nand.c b/drivers/mtd/nand/raw/loongson1_nand.c
-new file mode 100644
-index 000000000000..d0f66a81ba0b
---- /dev/null
-+++ b/drivers/mtd/nand/raw/loongson1_nand.c
-@@ -0,0 +1,748 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * NAND Controller Driver for Loongson-1 SoC
-+ *
-+ * Copyright (C) 2015-2024 Keguang Zhang <keguang.zhang@gmail.com>
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/dmaengine.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/iopoll.h>
-+#include <linux/mtd/mtd.h>
-+#include <linux/mtd/rawnand.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/sizes.h>
-+
-+/* Loongson-1 NAND Controller Registers */
-+#define NAND_CMD		0x0
-+#define NAND_ADDR1		0x4
-+#define NAND_ADDR2		0x8
-+#define NAND_TIMING		0xc
-+#define NAND_IDL		0x10
-+#define NAND_IDH_STATUS		0x14
-+#define NAND_PARAM		0x18
-+#define NAND_OP_NUM		0x1c
-+#define MAX_DUMP_REGS		0x20
-+
-+#define NAND_DMA_ADDR		0x40
-+
-+/* NAND Command Register Bits */
-+#define OP_DONE			BIT(10)
-+#define OP_SPARE		BIT(9)
-+#define OP_MAIN			BIT(8)
-+#define CMD_STATUS		BIT(7)
-+#define CMD_RESET		BIT(6)
-+#define CMD_READID		BIT(5)
-+#define BLOCKS_ERASE		BIT(4)
-+#define CMD_ERASE		BIT(3)
-+#define CMD_WRITE		BIT(2)
-+#define CMD_READ		BIT(1)
-+#define CMD_VALID		BIT(0)
-+
-+#define MAX_ADDR_CYC		5U
-+
-+#define WAIT_CYCLE_MASK		GENMASK(7, 0)
-+#define HOLD_CYCLE_MASK		GENMASK(15, 8)
-+#define CELL_SIZE_MASK		GENMASK(11, 8)
-+
-+#define BITS_PER_WORD		(4 * BITS_PER_BYTE)
-+
-+/* macros for registers read/write */
-+#define nand_readl(nfc, off)		\
-+	readl((nfc)->reg_base + (off))
-+
-+#define nand_writel(nfc, off, val)	\
-+	writel((val), (nfc)->reg_base + (off))
-+
-+struct ls1x_nfc_data {
-+	unsigned int status_field;
-+	unsigned int op_scope_field;
-+	unsigned int hold_cycle;
-+	unsigned int wait_cycle;
-+	void (*parse_address)(struct nand_chip *chip, const u8 *addrs,
-+			      unsigned int naddrs, int cmd);
-+};
-+
-+struct ls1x_nfc {
-+	void __iomem *reg_base;
-+	struct regmap *regmap;
-+	const struct ls1x_nfc_data *data;
-+	__le32 addr1_reg;
-+	__le32 addr2_reg;
-+
-+	char *buf;
-+	unsigned int len;
-+	unsigned int rdy_timeout;
-+
-+	/* DMA Engine stuff */
-+	struct dma_chan *dma_chan;
-+	dma_cookie_t dma_cookie;
-+	struct completion dma_complete;
-+};
-+
-+struct ls1x_nand {
-+	struct device *dev;
-+	struct nand_chip chip;
-+	struct nand_controller controller;
-+	struct ls1x_nfc nfc;
-+};
-+
-+static const struct regmap_config ls1x_nand_regmap_config = {
-+	.reg_bits = 32,
-+	.val_bits = 32,
-+	.reg_stride = 4,
-+};
-+
-+static inline void ls1b_nand_parse_address(struct nand_chip *chip,
-+					   const u8 *addrs,
-+					   unsigned int naddrs, int cmd)
-+{
-+	struct ls1x_nand *ls1x = nand_get_controller_data(chip);
-+	struct ls1x_nfc *nfc = &ls1x->nfc;
-+	unsigned int page_shift = chip->page_shift + 1;
-+	int i;
-+
-+	nfc->addr1_reg = 0;
-+	nfc->addr2_reg = 0;
-+
-+	if (cmd == CMD_ERASE) {
-+		page_shift = chip->page_shift;
-+
-+		for (i = 0; i < min(MAX_ADDR_CYC - 2, naddrs); i++)
-+			nfc->addr1_reg |=
-+			    (u32)addrs[i] << (page_shift + BITS_PER_BYTE * i);
-+		if (i == MAX_ADDR_CYC - 2)
-+			nfc->addr2_reg |=
-+			    (u32)addrs[i] >> (BITS_PER_WORD - page_shift -
-+					      BITS_PER_BYTE * (i - 1));
-+
-+		return;
-+	}
-+
-+	for (i = 0; i < min(2U, naddrs); i++)
-+		nfc->addr1_reg |= (u32)addrs[i] << BITS_PER_BYTE * i;
-+	for (i = 2; i < min(MAX_ADDR_CYC, naddrs); i++)
-+		nfc->addr1_reg |=
-+		    (u32)addrs[i] << (page_shift + BITS_PER_BYTE * (i - 2));
-+	if (i == MAX_ADDR_CYC)
-+		nfc->addr2_reg |=
-+		    (u32)addrs[i] >> (BITS_PER_WORD - page_shift -
-+				      BITS_PER_BYTE * (i - 1));
-+}
-+
-+static inline void ls1c_nand_parse_address(struct nand_chip *chip,
-+					   const u8 *addrs,
-+					   unsigned int naddrs, int cmd)
-+{
-+	struct ls1x_nand *ls1x = nand_get_controller_data(chip);
-+	struct ls1x_nfc *nfc = &ls1x->nfc;
-+	int i;
-+
-+	nfc->addr1_reg = 0;
-+	nfc->addr2_reg = 0;
-+
-+	if (cmd == CMD_ERASE) {
-+		for (i = 0; i < min(MAX_ADDR_CYC, naddrs); i++)
-+			nfc->addr2_reg |= (u32)addrs[i] << BITS_PER_BYTE * i;
-+
-+		return;
-+	}
-+
-+	for (i = 0; i < min(MAX_ADDR_CYC, naddrs); i++) {
-+		if (i < 2)
-+			nfc->addr1_reg |= (u32)addrs[i] << BITS_PER_BYTE * i;
-+		else
-+			nfc->addr2_reg |=
-+			    (u32)addrs[i] << BITS_PER_BYTE * (i - 2);
-+	}
-+}
-+
-+static int ls1x_nand_set_controller(struct nand_chip *chip,
-+				    const struct nand_subop *subop, int cmd)
-+{
-+	struct ls1x_nand *ls1x = nand_get_controller_data(chip);
-+	struct ls1x_nfc *nfc = &ls1x->nfc;
-+	unsigned int op_id;
-+
-+	nfc->buf = NULL;
-+	nfc->len = 0;
-+	nfc->rdy_timeout = 0;
-+
-+	for (op_id = 0; op_id < subop->ninstrs; op_id++) {
-+		const struct nand_op_instr *instr = &subop->instrs[op_id];
-+		unsigned int offset, naddrs;
-+		const u8 *addrs;
-+
-+		switch (instr->type) {
-+		case NAND_OP_ADDR_INSTR:
-+			offset = nand_subop_get_addr_start_off(subop, op_id);
-+			naddrs = nand_subop_get_num_addr_cyc(subop, op_id);
-+			addrs = &instr->ctx.addr.addrs[offset];
-+
-+			nfc->data->parse_address(chip, addrs, naddrs, cmd);
-+			/* set NAND address */
-+			nand_writel(nfc, NAND_ADDR1, nfc->addr1_reg);
-+			nand_writel(nfc, NAND_ADDR2, nfc->addr2_reg);
-+			break;
-+		case NAND_OP_DATA_IN_INSTR:
-+		case NAND_OP_DATA_OUT_INSTR:
-+			offset = nand_subop_get_data_start_off(subop, op_id);
-+			nfc->len = nand_subop_get_data_len(subop, op_id);
-+			if (instr->type == NAND_OP_DATA_IN_INSTR)
-+				nfc->buf =
-+				    (void *)instr->ctx.data.buf.in + offset;
-+			else if (instr->type == NAND_OP_DATA_OUT_INSTR)
-+				nfc->buf =
-+				    (void *)instr->ctx.data.buf.out + offset;
-+
-+			if (cmd & (CMD_READID | CMD_STATUS))
-+				break;
-+
-+			if (!IS_ALIGNED((u32)nfc->buf, chip->buf_align)) {
-+				dev_err(ls1x->dev,
-+					"nfc->buf %px is not aligned!\n",
-+					nfc->buf);
-+				return -EOPNOTSUPP;
-+			} else if (!IS_ALIGNED(nfc->len, chip->buf_align)) {
-+				dev_err(ls1x->dev,
-+					"nfc->len %u is not aligned!\n",
-+					nfc->len);
-+				return -EOPNOTSUPP;
-+			}
-+
-+			/* set NAND data length */
-+			nand_writel(nfc, NAND_OP_NUM, nfc->len);
-+
-+			if (nfc->data->op_scope_field) {
-+				int op_scope = nfc->len << ffs(nfc->data->op_scope_field);
-+
-+				regmap_update_bits(nfc->regmap, NAND_PARAM,
-+						   nfc->data->op_scope_field,
-+						   op_scope);
-+			}
-+
-+			break;
-+		case NAND_OP_WAITRDY_INSTR:
-+			nfc->rdy_timeout = instr->ctx.waitrdy.timeout_ms;
-+			break;
-+		default:
-+			break;
-+		}
-+	}
-+
-+	/* set NAND erase block count */
-+	if (cmd & CMD_ERASE)
-+		nand_writel(nfc, NAND_OP_NUM, 1);
-+	/* set NAND operation region */
-+	if (nfc->buf && nfc->len)
-+		cmd |= OP_SPARE | OP_MAIN;
-+
-+	/* set NAND command */
-+	nand_writel(nfc, NAND_CMD, cmd);
-+	/* Trigger operation */
-+	regmap_write_bits(nfc->regmap, NAND_CMD, CMD_VALID, CMD_VALID);
-+
-+	return 0;
-+}
-+
-+static void ls1x_nand_dma_callback(void *data)
-+{
-+	struct ls1x_nand *ls1x = (struct ls1x_nand *)data;
-+	struct ls1x_nfc *nfc = &ls1x->nfc;
-+	enum dma_status status;
-+
-+	status = dmaengine_tx_status(nfc->dma_chan, nfc->dma_cookie, NULL);
-+	if (likely(status == DMA_COMPLETE))
-+		dev_dbg(ls1x->dev, "DMA complete with cookie=%d\n",
-+			nfc->dma_cookie);
-+	else
-+		dev_err(ls1x->dev, "DMA error with cookie=%d\n",
-+			nfc->dma_cookie);
-+
-+	complete(&nfc->dma_complete);
-+}
-+
-+static int ls1x_nand_dma_transfer(struct ls1x_nand *ls1x, bool is_write)
-+{
-+	struct ls1x_nfc *nfc = &ls1x->nfc;
-+	struct dma_chan *chan = nfc->dma_chan;
-+	struct dma_async_tx_descriptor *desc;
-+	enum dma_data_direction data_dir =
-+	    is_write ? DMA_TO_DEVICE : DMA_FROM_DEVICE;
-+	enum dma_transfer_direction xfer_dir =
-+	    is_write ? DMA_MEM_TO_DEV : DMA_DEV_TO_MEM;
-+	dma_addr_t dma_addr;
-+	int ret;
-+
-+	dma_addr = dma_map_single(chan->device->dev, nfc->buf, nfc->len,
-+				  data_dir);
-+	if (dma_mapping_error(chan->device->dev, dma_addr)) {
-+		dev_err(ls1x->dev, "failed to map DMA buffer!\n");
-+		return -ENXIO;
-+	}
-+
-+	desc = dmaengine_prep_slave_single(chan, dma_addr, nfc->len, xfer_dir,
-+					   DMA_PREP_INTERRUPT);
-+	if (!desc) {
-+		dev_err(ls1x->dev, "failed to prepare DMA descriptor!\n");
-+		ret = PTR_ERR(desc);
-+		goto err;
-+	}
-+	desc->callback = ls1x_nand_dma_callback;
-+	desc->callback_param = ls1x;
-+
-+	nfc->dma_cookie = dmaengine_submit(desc);
-+	ret = dma_submit_error(nfc->dma_cookie);
-+	if (ret) {
-+		dev_err(ls1x->dev, "failed to submit DMA descriptor!\n");
-+		goto err;
-+	}
-+
-+	dev_dbg(ls1x->dev, "issue DMA with cookie=%d\n", nfc->dma_cookie);
-+	dma_async_issue_pending(chan);
-+
-+	ret = wait_for_completion_timeout(&nfc->dma_complete,
-+					  msecs_to_jiffies(nfc->rdy_timeout));
-+	if (ret <= 0) {
-+		dev_err(ls1x->dev, "DMA timeout!%u\n", nfc->rdy_timeout);
-+		dmaengine_terminate_all(chan);
-+		ret = -EIO;
-+	}
-+	ret = 0;
-+err:
-+	dma_unmap_single(chan->device->dev, dma_addr, nfc->len, data_dir);
-+
-+	return ret;
-+}
-+
-+static inline int ls1x_nand_wait_for_op_done(struct ls1x_nfc *nfc)
-+{
-+	unsigned int val;
-+	int ret = 0;
-+
-+	/* Wait for operation done */
-+	if (nfc->rdy_timeout)
-+		ret = regmap_read_poll_timeout(nfc->regmap, NAND_CMD, val,
-+					       val & OP_DONE, 0,
-+					       nfc->rdy_timeout * 1000);
-+
-+	return ret;
-+}
-+
-+static int ls1x_nand_reset_exec(struct nand_chip *chip,
-+				const struct nand_subop *subop)
-+{
-+	struct ls1x_nand *ls1x = nand_get_controller_data(chip);
-+	struct ls1x_nfc *nfc = &ls1x->nfc;
-+	int ret;
-+
-+	ls1x_nand_set_controller(chip, subop, CMD_RESET);
-+
-+	ret = ls1x_nand_wait_for_op_done(nfc);
-+	if (ret)
-+		dev_err(ls1x->dev, "CMD_RESET failed! %d\n", ret);
-+
-+	return ret;
-+}
-+
-+static int ls1x_nand_read_id_exec(struct nand_chip *chip,
-+				  const struct nand_subop *subop)
-+{
-+	struct ls1x_nand *ls1x = nand_get_controller_data(chip);
-+	struct ls1x_nfc *nfc = &ls1x->nfc;
-+	long long idl = 0;
-+	int i, ret;
-+
-+	ls1x_nand_set_controller(chip, subop, CMD_READID);
-+
-+	ret = ls1x_nand_wait_for_op_done(nfc);
-+	if (ret) {
-+		dev_err(ls1x->dev, "CMD_READID failed! %d\n", ret);
-+		print_hex_dump_debug("REG: ", DUMP_PREFIX_OFFSET, 16, 4,
-+				     nfc->reg_base, MAX_DUMP_REGS, false);
-+		return ret;
-+	}
-+
-+	idl = __be32_to_cpu(nand_readl(nfc, NAND_IDL));
-+	memset(nfc->buf, 0x0, nfc->len);
-+
-+	for (i = 0; i < nfc->len; i++) {
-+		if (i > 0)
-+			nfc->buf[i] = (char)(idl >> (i - 1) * BITS_PER_BYTE);
-+		else
-+			nfc->buf[i] = (char)nand_readl(nfc, NAND_IDH_STATUS);
-+	}
-+
-+	return ret;
-+}
-+
-+static int ls1x_nand_erase_exec(struct nand_chip *chip,
-+				const struct nand_subop *subop)
-+{
-+	struct ls1x_nand *ls1x = nand_get_controller_data(chip);
-+	struct ls1x_nfc *nfc = &ls1x->nfc;
-+	int ret;
-+
-+	ls1x_nand_set_controller(chip, subop, CMD_ERASE);
-+
-+	ret = ls1x_nand_wait_for_op_done(nfc);
-+	if (ret) {
-+		dev_err(ls1x->dev, "CMD_ERASE failed! %d\n", ret);
-+		print_hex_dump_debug("REG: ", DUMP_PREFIX_OFFSET, 16, 4,
-+				     nfc->reg_base, MAX_DUMP_REGS, false);
-+	}
-+
-+	return ret;
-+}
-+
-+static int ls1x_nand_read_exec(struct nand_chip *chip,
-+			       const struct nand_subop *subop)
-+{
-+	struct ls1x_nand *ls1x = nand_get_controller_data(chip);
-+	struct ls1x_nfc *nfc = &ls1x->nfc;
-+	bool is_write = false;
-+	int ret;
-+
-+	ls1x_nand_set_controller(chip, subop, CMD_READ);
-+
-+	ret = ls1x_nand_dma_transfer(ls1x, is_write);
-+	if (ret)
-+		return ret;
-+
-+	ret = ls1x_nand_wait_for_op_done(nfc);
-+	if (ret) {
-+		dev_err(ls1x->dev, "CMD_READ failed! %d\n", ret);
-+		print_hex_dump_debug("REG: ", DUMP_PREFIX_OFFSET, 16, 4,
-+				     nfc->reg_base, MAX_DUMP_REGS, false);
-+	}
-+
-+	return ret;
-+}
-+
-+static int ls1x_nand_write_exec(struct nand_chip *chip,
-+				const struct nand_subop *subop)
-+{
-+	struct ls1x_nand *ls1x = nand_get_controller_data(chip);
-+	struct ls1x_nfc *nfc = &ls1x->nfc;
-+	bool is_write = true;
-+	int ret;
-+
-+	ls1x_nand_set_controller(chip, subop, CMD_WRITE);
-+
-+	ret = ls1x_nand_dma_transfer(ls1x, is_write);
-+	if (ret)
-+		return ret;
-+
-+	ret = ls1x_nand_wait_for_op_done(nfc);
-+	if (ret) {
-+		dev_err(ls1x->dev, "CMD_WRITE failed! %d\n", ret);
-+		print_hex_dump_debug("REG: ", DUMP_PREFIX_OFFSET, 16, 4,
-+				     nfc->reg_base, MAX_DUMP_REGS, false);
-+	}
-+
-+	return ret;
-+}
-+
-+static int ls1x_nand_read_status_exec(struct nand_chip *chip,
-+				      const struct nand_subop *subop)
-+{
-+	struct ls1x_nand *ls1x = nand_get_controller_data(chip);
-+	struct ls1x_nfc *nfc = &ls1x->nfc;
-+	int val, ret;
-+
-+	ls1x_nand_set_controller(chip, subop, CMD_STATUS);
-+
-+	ret = ls1x_nand_wait_for_op_done(nfc);
-+	if (ret) {
-+		dev_err(ls1x->dev, "CMD_STATUS failed! %d\n", ret);
-+		return ret;
-+	}
-+
-+	val = nand_readl(nfc, NAND_IDH_STATUS) & ~nfc->data->status_field;
-+	nfc->buf[0] = val << ffs(nfc->data->status_field);
-+
-+	return ret;
-+}
-+
-+static const struct nand_op_parser ls1x_nand_op_parser = NAND_OP_PARSER(
-+	NAND_OP_PARSER_PATTERN(
-+		ls1x_nand_reset_exec,
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_WAITRDY_ELEM(false)),
-+	NAND_OP_PARSER_PATTERN(
-+		ls1x_nand_read_id_exec,
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDR_CYC),
-+		NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 8)),
-+	NAND_OP_PARSER_PATTERN(
-+		ls1x_nand_erase_exec,
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDR_CYC),
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_WAITRDY_ELEM(false)),
-+	NAND_OP_PARSER_PATTERN(
-+		ls1x_nand_read_exec,
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDR_CYC),
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_WAITRDY_ELEM(true),
-+		NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 0)),
-+	NAND_OP_PARSER_PATTERN(
-+		ls1x_nand_write_exec,
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDR_CYC),
-+		NAND_OP_PARSER_PAT_DATA_OUT_ELEM(false, 0),
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_WAITRDY_ELEM(true)),
-+	NAND_OP_PARSER_PATTERN(
-+		ls1x_nand_read_status_exec,
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 1)),
-+	);
-+
-+static int ls1x_nand_exec_op(struct nand_chip *chip,
-+			     const struct nand_operation *op, bool check_only)
-+{
-+	return nand_op_parser_exec_op(chip, &ls1x_nand_op_parser, op,
-+				      check_only);
-+}
-+
-+static int ls1x_nand_attach_chip(struct nand_chip *chip)
-+{
-+	struct ls1x_nand *ls1x = nand_get_controller_data(chip);
-+	struct ls1x_nfc *nfc = &ls1x->nfc;
-+	u64 chipsize = nanddev_target_size(&chip->base);
-+	int cell_size = 0;
-+
-+	switch (chipsize) {
-+	case SZ_128M:
-+		cell_size = 0x0;
-+		break;
-+	case SZ_256M:
-+		cell_size = 0x1;
-+		break;
-+	case SZ_512M:
-+		cell_size = 0x2;
-+		break;
-+	case SZ_1G:
-+		cell_size = 0x3;
-+		break;
-+	case SZ_2G:
-+		cell_size = 0x4;
-+		break;
-+	case SZ_4G:
-+		cell_size = 0x5;
-+		break;
-+	case (SZ_2G * SZ_4G):	/* 8G */
-+		cell_size = 0x6;
-+		break;
-+	case (SZ_4G * SZ_4G):	/* 16G */
-+		cell_size = 0x7;
-+		break;
-+	default:
-+		dev_err(ls1x->dev, "unsupported chip size: %llu MB\n",
-+			chipsize);
-+		break;
-+	}
-+
-+	/* Set cell size */
-+	regmap_update_bits(nfc->regmap, NAND_PARAM, CELL_SIZE_MASK,
-+			   FIELD_PREP(CELL_SIZE_MASK, cell_size));
-+
-+	regmap_update_bits(nfc->regmap, NAND_TIMING, HOLD_CYCLE_MASK,
-+			   FIELD_PREP(HOLD_CYCLE_MASK, nfc->data->hold_cycle));
-+	regmap_update_bits(nfc->regmap, NAND_TIMING, WAIT_CYCLE_MASK,
-+			   FIELD_PREP(WAIT_CYCLE_MASK, nfc->data->wait_cycle));
-+
-+	chip->ecc.read_page_raw = nand_monolithic_read_page_raw;
-+	chip->ecc.write_page_raw = nand_monolithic_write_page_raw;
-+	chip->options |= NAND_MONOLITHIC_READ;
-+
-+	return 0;
-+}
-+
-+static const struct nand_controller_ops ls1x_nfc_ops = {
-+	.exec_op = ls1x_nand_exec_op,
-+	.attach_chip = ls1x_nand_attach_chip,
-+};
-+
-+static void ls1x_nand_controller_cleanup(struct ls1x_nand *ls1x)
-+{
-+	if (ls1x->nfc.dma_chan)
-+		dma_release_channel(ls1x->nfc.dma_chan);
-+}
-+
-+static int ls1x_nand_controller_init(struct ls1x_nand *ls1x,
-+				     struct platform_device *pdev)
-+{
-+	struct ls1x_nfc *nfc = &ls1x->nfc;
-+	struct dma_slave_config cfg;
-+	int ret;
-+
-+	nfc->reg_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(nfc->reg_base))
-+		return PTR_ERR(nfc->reg_base);
-+
-+	nfc->regmap = devm_regmap_init_mmio(ls1x->dev, nfc->reg_base,
-+					    &ls1x_nand_regmap_config);
-+	if (IS_ERR(nfc->regmap))
-+		return dev_err_probe(ls1x->dev, PTR_ERR(nfc->regmap),
-+				     "failed to init regmap\n");
-+
-+	nfc->dma_chan = dma_request_chan(ls1x->dev, "rxtx");
-+	if (IS_ERR(nfc->dma_chan))
-+		return dev_err_probe(ls1x->dev, PTR_ERR(nfc->dma_chan),
-+				     "failed to request DMA channel\n");
-+	dev_info(ls1x->dev, "got %s for %s access\n",
-+		 dma_chan_name(nfc->dma_chan), dev_name(ls1x->dev));
-+
-+	cfg.src_addr = CPHYSADDR(nfc->reg_base + NAND_DMA_ADDR);
-+	cfg.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
-+	cfg.dst_addr = CPHYSADDR(nfc->reg_base + NAND_DMA_ADDR);
-+	cfg.dst_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
-+
-+	ret = dmaengine_slave_config(nfc->dma_chan, &cfg);
-+	if (ret) {
-+		dev_err(ls1x->dev, "failed to config DMA channel\n");
-+		dma_release_channel(nfc->dma_chan);
-+		return ret;
-+	}
-+
-+	init_completion(&nfc->dma_complete);
-+
-+	return 0;
-+}
-+
-+static int ls1x_nand_chip_init(struct ls1x_nand *ls1x)
-+{
-+	int nchips = of_get_child_count(ls1x->dev->of_node);
-+	struct device_node *chip_np;
-+	struct nand_chip *chip = &ls1x->chip;
-+	struct mtd_info *mtd = nand_to_mtd(chip);
-+	int ret = 0;
-+
-+	if (nchips != 1)
-+		return dev_err_probe(ls1x->dev, -EINVAL,
-+				     "Currently one NAND chip supported\n");
-+
-+	chip_np = of_get_next_child(ls1x->dev->of_node, NULL);
-+	if (!chip_np)
-+		return dev_err_probe(ls1x->dev, -ENODEV,
-+				     "failed to get child node for NAND chip\n");
-+
-+	chip->controller = &ls1x->controller;
-+	chip->options = NAND_NO_SUBPAGE_WRITE | NAND_USES_DMA | NAND_BROKEN_XD;
-+	chip->buf_align = 4;
-+	nand_set_controller_data(chip, ls1x);
-+	nand_set_flash_node(chip, chip_np);
-+
-+	mtd->dev.parent = ls1x->dev;
-+	mtd->name = "ls1x-nand";
-+	mtd->owner = THIS_MODULE;
-+
-+	ret = nand_scan(chip, 1);
-+	if (ret) {
-+		of_node_put(chip_np);
-+		return ret;
-+	}
-+
-+	ret = mtd_device_register(mtd, NULL, 0);
-+	if (ret) {
-+		dev_err(ls1x->dev, "failed to register MTD device! %d\n", ret);
-+		nand_cleanup(chip);
-+		of_node_put(chip_np);
-+	}
-+
-+	return ret;
-+}
-+
-+static int ls1x_nand_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	const struct ls1x_nfc_data *data;
-+	struct ls1x_nand *ls1x;
-+	int ret;
-+
-+	data = of_device_get_match_data(&pdev->dev);
-+	if (!data)
-+		return -ENODEV;
-+
-+	ls1x = devm_kzalloc(dev, sizeof(*ls1x), GFP_KERNEL);
-+	if (!ls1x)
-+		return -ENOMEM;
-+
-+	ls1x->nfc.data = data;
-+	ls1x->dev = dev;
-+	ls1x->controller.ops = &ls1x_nfc_ops;
-+	nand_controller_init(&ls1x->controller);
-+
-+	ret = ls1x_nand_controller_init(ls1x, pdev);
-+	if (ret)
-+		return ret;
-+
-+	ret = ls1x_nand_chip_init(ls1x);
-+	if (ret)
-+		goto err;
-+
-+	platform_set_drvdata(pdev, ls1x);
-+
-+	return 0;
-+err:
-+	ls1x_nand_controller_cleanup(ls1x);
-+	return ret;
-+}
-+
-+static int ls1x_nand_remove(struct platform_device *pdev)
-+{
-+	struct ls1x_nand *ls1x = platform_get_drvdata(pdev);
-+	struct nand_chip *chip = &ls1x->chip;
-+	int ret;
-+
-+	ret = mtd_device_unregister(nand_to_mtd(chip));
-+	WARN_ON(ret);
-+	nand_cleanup(chip);
-+	ls1x_nand_controller_cleanup(ls1x);
-+
-+	return 0;
-+}
-+
-+static const struct ls1x_nfc_data ls1b_nfc_data = {
-+	.status_field = GENMASK(15, 8),
-+	.hold_cycle = 0x2,
-+	.wait_cycle = 0xc,
-+	.parse_address = ls1b_nand_parse_address,
-+};
-+
-+static const struct ls1x_nfc_data ls1c_nfc_data = {
-+	.status_field = GENMASK(23, 16),
-+	.op_scope_field = GENMASK(29, 16),
-+	.hold_cycle = 0x2,
-+	.wait_cycle = 0xc,
-+	.parse_address = ls1c_nand_parse_address,
-+};
-+
-+static const struct of_device_id ls1x_nfc_match[] = {
-+	{ .compatible = "loongson,ls1b-nfc", .data = &ls1b_nfc_data },
-+	{ .compatible = "loongson,ls1c-nfc", .data = &ls1c_nfc_data },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, ls1x_nfc_match);
-+
-+static struct platform_driver ls1x_nand_driver = {
-+	.probe	= ls1x_nand_probe,
-+	.remove	= ls1x_nand_remove,
-+	.driver	= {
-+		.name	= KBUILD_MODNAME,
-+		.of_match_table = ls1x_nfc_match,
-+	},
-+};
-+
-+module_platform_driver(ls1x_nand_driver);
-+
-+MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
-+MODULE_DESCRIPTION("Loongson-1 NAND Controller driver");
-+MODULE_LICENSE("GPL");
-
--- 
-2.40.1
-
+On 05.03.2024 17:06, Lee Jones wrote:
+> On Tue, 05 Mar 2024, Heiner Kallweit wrote:
+> 
+>> On 05.03.2024 15:54, Lee Jones wrote:
+>>> On Tue, 05 Mar 2024, Lee Jones wrote:
+>>>
+>>>> On Tue, 05 Mar 2024, Lee Jones wrote:
+>>>>
+>>>>> On Mon, 04 Mar 2024 21:56:29 +0100, Heiner Kallweit wrote:
+>>>>>> If a simple trigger is assigned to a LED, then the LED may be off until
+>>>>>> the next led_trigger_event() call. This may be an issue for simple
+>>>>>> triggers with rare led_trigger_event() calls, e.g. power supply
+>>>>>> charging indicators (drivers/power/supply/power_supply_leds.c).
+>>>>>> Therefore persist the brightness value of the last led_trigger_event()
+>>>>>> call and use this value if the trigger is assigned to a LED.
+>>>>>> This change allows to use simple triggers in more cases.
+>>>>>> As a first use case simplify handling of the mute audio trigger.
+>>>>>>
+>>>>>> [...]
+>>>>>
+>>>>> Applied, thanks!
+>>>>>
+>>>>> [1/3] leds: trigger: Store brightness set by led_trigger_event()
+>>>>>       commit: 575129855dee0e364af7df84a77ab5cca54b1442
+>>>>> [2/3] ALSA: control-led: Integrate mute led trigger
+>>>>>       commit: ba8adb1646ee498029ac12b20e792d9d0dd17920
+>>>>> [3/3] leds: trigger: audio: Remove this trigger
+>>>>>       commit: 2c61168294d0ea42a5542dbc864afb03a76bbc11
+>>>>
+>>>> Submitted for build testing.
+>>>>
+>>>> Once succeeded, a PR will follow for other maintainers to pull from.
+>>>
+>>> make --silent --keep-going --jobs=8 O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu- 'CC=sccache x86_64-linux-gnu-gcc' 'HOSTCC=sccache gcc' allmodconfig
+>>> make --silent --keep-going --jobs=8 O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu- 'CC=sccache x86_64-linux-gnu-gcc' 'HOSTCC=sccache gcc'
+>>> x86_64-linux-gnu-ld: warning: arch/x86/entry/vdso/vclock_gettime-x32.o: corrupt GNU_PROPERTY_TYPE (5) size: 0x10
+>>> x86_64-linux-gnu-ld: warning: arch/x86/entry/vdso/vgetcpu-x32.o: corrupt GNU_PROPERTY_TYPE (5) size: 0x10
+>>> /builds/linux/drivers/platform/x86/dell/dell-laptop.c: In function 'dell_init':
+>>> /builds/linux/drivers/platform/x86/dell/dell-laptop.c:2255:33: error: implicit declaration of function 'ledtrig_audio_get'; did you mean 'led_trigger_set'? [-Werror=implicit-function-declaration]
+>>>    micmute_led_cdev.brightness = ledtrig_audio_get(LED_AUDIO_MICMUTE);
+>>>                                  ^~~~~~~~~~~~~~~~~
+>>>                                  led_trigger_set
+>>> cc1: all warnings being treated as errors
+>>> make[7]: *** [/builds/linux/scripts/Makefile.build:243: drivers/platform/x86/dell/dell-laptop.o] Error 1
+>>> make[7]: Target 'drivers/platform/x86/dell/' not remade because of errors.
+>>> make[6]: *** [/builds/linux/scripts/Makefile.build:481: drivers/platform/x86/dell] Error 2
+>>> /builds/linux/drivers/platform/x86/huawei-wmi.c: In function 'huawei_wmi_leds_setup':
+>>> /builds/linux/drivers/platform/x86/huawei-wmi.c:313:28: error: implicit declaration of function 'ledtrig_audio_get'; did you mean 'led_trigger_set'? [-Werror=implicit-function-declaration]
+>>>   huawei->cdev.brightness = ledtrig_audio_get(LED_AUDIO_MICMUTE);
+>>>                             ^~~~~~~~~~~~~~~~~
+>>>                             led_trigger_set
+>>> cc1: all warnings being treated as errors
+>>> make[6]: *** [/builds/linux/scripts/Makefile.build:243: drivers/platform/x86/huawei-wmi.o] Error 1
+>>> /builds/linux/drivers/platform/x86/asus-wmi.c: In function 'asus_wmi_led_init':
+>>> /builds/linux/drivers/platform/x86/asus-wmi.c:1623:34: error: implicit declaration of function 'ledtrig_audio_get'; did you mean 'led_trigger_set'? [-Werror=implicit-function-declaration]
+>>>    asus->micmute_led.brightness = ledtrig_audio_get(LED_AUDIO_MICMUTE);
+>>>                                   ^~~~~~~~~~~~~~~~~
+>>>                                   led_trigger_set
+>>> cc1: all warnings being treated as errors
+>>> make[6]: *** [/builds/linux/scripts/Makefile.build:243: drivers/platform/x86/asus-wmi.o] Error 1
+>>> /builds/linux/drivers/platform/x86/thinkpad_acpi.c: In function 'mute_led_init':
+>>> /builds/linux/drivers/platform/x86/thinkpad_acpi.c:9288:33: error: implicit declaration of function 'ledtrig_audio_get'; did you mean 'led_trigger_set'? [-Werror=implicit-function-declaration]
+>>>    mute_led_cdev[i].brightness = ledtrig_audio_get(i);
+>>>                                  ^~~~~~~~~~~~~~~~~
+>>>                                  led_trigger_set
+>>>
+>>> ############################3
+>>>
+>>> Errors were caused
+>>>  
+>>> [v6.8-rc1] ib-leds-mips-sound-6.9 2c61168294d0e ("leds: trigger: audio: Remove this trigger")
+>>>
+>>>  x86_64 allmodconfig gcc-8
+>>>      https://storage.tuxsuite.com/public/google/lee.jones/builds/2dGhtQpYDimIIpMqO0Qm4AMAAPU/ 	Pass (0 errors - 2 warnings) : v6.8-rc1
+>>>      https://storage.tuxsuite.com/public/google/lee.jones/builds/2dGhvxgZA6moBZmToTavyY4Eita/ 	Fail (7 errors - 2 warnings) : ib-leds-mips-sound-6.9 
+>>>
+>>>  x86_64 allmodconfig gcc-9
+>>>      https://storage.tuxsuite.com/public/google/lee.jones/builds/2dGhtYCYEqxnUFmoH73iKlcEIV8/ 	Pass (0 errors - 0 warnings) : v6.8-rc1
+>>>      https://storage.tuxsuite.com/public/google/lee.jones/builds/2dGhw2i4B539YZXCoSN2LSRvsW8/ 	Fail (7 errors - 0 warnings) : ib-leds-mips-sound-6.9 
+>>>
+>>>  x86_64 allyesconfig gcc-8
+>>>      https://storage.tuxsuite.com/public/google/lee.jones/builds/2dGhtTzCsCxRpl9loRyfPrD1uhR/ 	Pass (0 errors - 2 warnings) : v6.8-rc1
+>>>      https://storage.tuxsuite.com/public/google/lee.jones/builds/2dGhw1WQ2BIpJRoyK7ruVCtihSN/ 	Fail (7 errors - 2 warnings) : ib-leds-mips-sound-6.9
+>>>
+>>
+>> Right, I forgot, there are patches applied via a different tree end of January,
+>> that this series depends on. I assume this means that the series can be applied
+>> only after the merge window.
+> 
+> Yes, unless there is a succinct immutable branch I can pull from.
+> 
+Now that 6.9-rc1 is out, can this series be applied?
 
 
