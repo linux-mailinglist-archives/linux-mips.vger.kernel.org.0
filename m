@@ -1,419 +1,1470 @@
-Return-Path: <linux-mips+bounces-2422-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2423-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D733288D369
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 01:39:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 81F4488D904
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 09:28:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8175C2C6366
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 00:39:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D4CD284851
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 08:28:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3998FFC19;
-	Wed, 27 Mar 2024 00:39:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 033FD36B0D;
+	Wed, 27 Mar 2024 08:25:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="R829kLYe"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QibM7Oyo"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117734A32;
-	Wed, 27 Mar 2024 00:39:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CBC36B09
+	for <linux-mips@vger.kernel.org>; Wed, 27 Mar 2024 08:25:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711499954; cv=none; b=RyNI8OalWyDoyfUjo0kIUXgczQGimrc0oD3whX6gXwOaFcLUDFiA+T9lEPLsqz4eiNDamNq3mJt8Id1MHt2cELDp8Vg0aQh+0jH3z4H0CiAOoLJMhw66d0EThgdlQR+MtTSddaWL2i0efwOKIKAZe3QoNJ1NJ3QdSpTCX94563g=
+	t=1711527953; cv=none; b=Id06Z+GluZLIUnWYydFfnoBK3RSmay0kzMp1j+bu5G9e9iIJbQVoUCpMOTb3A52Zh8ydlotKu5r8UgVMOochVkQalS4L7rZnWq9CuW3bF9LKe59H2aiVp+zXrfwU6eeGBdwYpDgw0LTDJ1zff/ekEaF43QyzlLUMEBS+nW9ZuRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711499954; c=relaxed/simple;
-	bh=lM4O1qCIEDxEUxFxG3e/eyhm3l0cH5kZrKl+PEHoY9Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fngoa88N03vZE7ce5DMrjGKw69hgi4Zz0rvaLy8FVUr/agF2UjgLiemiolU8pmaHXRu9cFoX0fh2RpWfmXyZWvStfzLP00IjTB8q1MmXLfoEHeTCCtqLTAPX9FkZ+HzvtAgyaD0f0mvs9eN/GHOIufp9S6JoCuO7CF4zrwBxhS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=R829kLYe; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=kP7WIHOLdzRBQLDrSBJg7izGME+taO/PS6KcXmTaXmA=; b=R829kLYeWxuVRhP3F0l8AK+syA
-	QEH63rPSjU6cE1tUB9vjg/Zru7XGKlHCkGm8UnDZX0WWN4TnXIdlJ0WCiZCc+zozmDKQaebeG8Otb
-	gyunQb5eOnepRvGutL7gjpRAwHFlsqdcqclVFqMr0vyZtopr7+xwWtqWjgaV+MjqFp3U22BjiB+yN
-	hrpvRXIBaXs6tGlDTkTeW+IsWa74VNkZ1lsNunvW7tDimQkfGk1/En8lmoBA8qAVdcqWFJak4HC1p
-	Ae3ZKaz7OrrcZMT5MuKSGX2sdsKSw7PSfpqxR0fKH0RYWoRot45laQOJq0wpX92gC9AGw0DJ8tZEp
-	qhN43EZQ==;
-Received: from [50.53.2.121] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rpHJc-00000006zwt-3DsR;
-	Wed, 27 Mar 2024 00:38:52 +0000
-Message-ID: <b448a180-b43d-435d-9444-60b1163deeed@infradead.org>
-Date: Tue, 26 Mar 2024 17:38:47 -0700
+	s=arc-20240116; t=1711527953; c=relaxed/simple;
+	bh=fdIhlcirGIaRXSuc8+P7k2KZGu6GEPQM4nIh56hB/8M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QeITeLBG4UioM0zKtAB9xd7QGKpwsS34eSKnXSX9+YkDU0zUZI6CHtn0Ne5Z8XrpnIpe8N8QbzQlBQBobXzo11RrXO8RuodD3FZ2LPTv8LJ5/+kgVIWLxC+ceZcAJ+4sft9ItVVBGfo21hf7E32PY/0MTHULUCvnXYj24r6lEsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QibM7Oyo; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-56c0d1bddc1so3700969a12.3
+        for <linux-mips@vger.kernel.org>; Wed, 27 Mar 2024 01:25:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1711527947; x=1712132747; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2HdLw84FgErCH6KQGlU6GIUm6H6phhpIr/o6IK9kFCU=;
+        b=QibM7Oyoo3x5IWGvBh4XV9KsCX2XUd+5KUIsf1vAlH02jbDL1Z5zvKL7+uwWYzqfWl
+         HVPk7vjLXca78A1DGDKS2/JWAWHcikw+W7heW/0JY7PhecxET0J/BccblOGqJM3Yfn+u
+         RnXkTeyHBY/1ESJ+6DNYr5Tt1QCKiKau0+Xp/N4yrl8ZZLXfa3xn5S8Eh9GowtOw5w9r
+         BdK2QNVliTXb/NiJLZuvc4TSkdK/GCKbR5dpmU8Vxg0vmYIRD47NsIpaUrDS7ysPO8P8
+         p8NXvRBQa0uQkkXjyL4aVfOpQ0eCjn6KQdMC5mqJvHwRIiT7vR/MNFbCLZL8Jsokm5dX
+         rtlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711527947; x=1712132747;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2HdLw84FgErCH6KQGlU6GIUm6H6phhpIr/o6IK9kFCU=;
+        b=MejQwY/llFJVjpnDuY3Gvf+KMbWLdrixZddZW7O2o2A+m9sSMfPPfd4FDezIFzEvLP
+         1vRr0alOMO3WbJyHe9EzYbo3ymXYRwsL6EN8B9qP3QhbMMH7HcPwkflbyl2H/AVm4V6c
+         Plt9vhf1kErLuL7UqGLgRtbhl32HKhYEJXYOX+iG3sSQsay9BwibqwEcviz2rshgAdE0
+         jicZ1cBmBCwkR7ohLhSVEvgEDIQ/uZY8TY8c2Bpt5NOc/zZl2pcLai5vHi1hfzbUMYUl
+         x25ne9WHnRk7FupNqg2RMZcukUJG7VCE+O7f1HyxxkZswjMMNNlE15z92iL6+FdLnNR7
+         bZ9A==
+X-Forwarded-Encrypted: i=1; AJvYcCUFHW6H0xj+yykczctJq6wNg7ba0IRBqJvIWeAgtqeJyqi4WWCy1Q3pPz8ko5aCRt05cD7FbUhVMReWfRL8BW1AQuZPuBgM6jo9DQ==
+X-Gm-Message-State: AOJu0YyZyQh/CkhZ+2BBZjOq5Z2rq+XK1KlJr3K59oX67FN95pj96QBH
+	xez++QzYG3qAUX0N/ys9lpb8SxxEWfY9hesbNRLVLCmQwJfj3+q1cw5T1aLN8Uk004PPgYClfcj
+	W7FuyGzLBwq+ONL0v53eP5taHdmABXFyI01HQ
+X-Google-Smtp-Source: AGHT+IHeT0mln/gTRESLr+B6p70F8yD2qZsZ/lFChiWbHs9BXjtMUefzQIp462JuEtD0t52hxqd97DCd4p3D/gD5Ko4=
+X-Received: by 2002:a17:906:af06:b0:a47:2ec5:57dd with SMTP id
+ lx6-20020a170906af0600b00a472ec557ddmr382589ejb.72.1711527946874; Wed, 27 Mar
+ 2024 01:25:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH net-next v7 13/14] net: add devmem TCP documentation
-Content-Language: en-US
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
- Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>,
- Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-References: <20240326225048.785801-1-almasrymina@google.com>
- <20240326225048.785801-14-almasrymina@google.com>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20240326225048.785801-14-almasrymina@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240326225048.785801-1-almasrymina@google.com> <20240326225048.785801-7-almasrymina@google.com>
+In-Reply-To: <20240326225048.785801-7-almasrymina@google.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Wed, 27 Mar 2024 01:25:30 -0700
+Message-ID: <CAHS8izNkJVmvmB1g7p4f+PfT5wb6k9-f7tVdzfBYM5Y-6X6_BA@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v7 06/14] page_pool: convert to use netmem
+To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, Linux-MM <linux-mm@kvack.org>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Matthew Wilcox <willy@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
-
-On 3/26/24 15:50, Mina Almasry wrote:
-> Add documentation outlining the usage and details of devmem TCP.
-> 
+On Tue, Mar 26, 2024 at 3:51=E2=80=AFPM Mina Almasry <almasrymina@google.co=
+m> wrote:
+>
+> Abstrace the memory type from the page_pool so we can later add support
+> for new memory types. Convert the page_pool to use the new netmem type
+> abstraction, rather than use struct page directly.
+>
+> As of this patch the netmem type is a no-op abstraction: it's always a
+> struct page underneath. All the page pool internals are converted to
+> use struct netmem instead of struct page, and the page pool now exports
+> 2 APIs:
+>
+> 1. The existing struct page API.
+> 2. The new struct netmem API.
+>
+> Keeping the existing API is transitional; we do not want to refactor all
+> the current drivers using the page pool at once.
+>
+> The netmem abstraction is currently a no-op. The page_pool uses
+> page_to_netmem() to convert allocated pages to netmem, and uses
+> netmem_to_page() to convert the netmem back to pages to pass to mm APIs,
+>
+> Follow up patches to this series add non-paged netmem support to the
+> page_pool. This change is factored out on its own to limit the code
+> churn to this 1 patch, for ease of code review.
+>
 > Signed-off-by: Mina Almasry <almasrymina@google.com>
-> 
+>
 > ---
-> 
-> v7:
-> - Applied docs suggestions (Jakub).
-> 
-> v2:
-> 
-> - Missing spdx (simon)
-> - add to index.rst (simon)
-> 
+>
+> v6:
+>
+> - Rebased on top of the merged netmem_ref type.
+>
+> To: linux-mm@kvack.org
+
+It looks like this tag to add linux-mm did not work as intended. CCing
+linux-mm manually.
+
+> Cc: Matthew Wilcox <willy@infradead.org>
+>
 > ---
->  Documentation/networking/devmem.rst | 256 ++++++++++++++++++++++++++++
->  Documentation/networking/index.rst  |   1 +
->  2 files changed, 257 insertions(+)
->  create mode 100644 Documentation/networking/devmem.rst
-> 
-> diff --git a/Documentation/networking/devmem.rst b/Documentation/networking/devmem.rst
-> new file mode 100644
-> index 000000000000..b0899e8e9e83
-> --- /dev/null
-> +++ b/Documentation/networking/devmem.rst
-> @@ -0,0 +1,256 @@
-> +.. SPDX-License-Identifier: GPL-2.0
+>  include/linux/skbuff.h           |   4 +-
+>  include/net/netmem.h             |  15 ++
+>  include/net/page_pool/helpers.h  | 122 +++++++++----
+>  include/net/page_pool/types.h    |  17 +-
+>  include/trace/events/page_pool.h |  29 +--
+>  net/bpf/test_run.c               |   5 +-
+>  net/core/page_pool.c             | 303 +++++++++++++++++--------------
+>  net/core/skbuff.c                |   7 +-
+>  8 files changed, 302 insertions(+), 200 deletions(-)
+>
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index b945af8a6208..78659c8efa4e 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -3521,7 +3521,7 @@ int skb_pp_cow_data(struct page_pool *pool, struct =
+sk_buff **pskb,
+>                     unsigned int headroom);
+>  int skb_cow_data_for_xdp(struct page_pool *pool, struct sk_buff **pskb,
+>                          struct bpf_prog *prog);
+> -bool napi_pp_put_page(struct page *page, bool napi_safe);
+> +bool napi_pp_put_page(netmem_ref netmem, bool napi_safe);
+>
+>  static inline void
+>  skb_page_unref(const struct sk_buff *skb, struct page *page, bool napi_s=
+afe)
+> @@ -3539,7 +3539,7 @@ napi_frag_unref(skb_frag_t *frag, bool recycle, boo=
+l napi_safe)
+>         struct page *page =3D skb_frag_page(frag);
+>
+>  #ifdef CONFIG_PAGE_POOL
+> -       if (recycle && napi_pp_put_page(page, napi_safe))
+> +       if (recycle && napi_pp_put_page(page_to_netmem(page), napi_safe))
+>                 return;
+>  #endif
+>         put_page(page);
+> diff --git a/include/net/netmem.h b/include/net/netmem.h
+> index ca17ea1d33f8..21f53b29e5fe 100644
+> --- a/include/net/netmem.h
+> +++ b/include/net/netmem.h
+> @@ -88,4 +88,19 @@ static inline netmem_ref page_to_netmem(struct page *p=
+age)
+>         return (__force netmem_ref)page;
+>  }
+>
+> +static inline int netmem_ref_count(netmem_ref netmem)
+> +{
+> +       return page_ref_count(netmem_to_page(netmem));
+> +}
 > +
-> +=================
-> +Device Memory TCP
-> +=================
+> +static inline unsigned long netmem_to_pfn(netmem_ref netmem)
+> +{
+> +       return page_to_pfn(netmem_to_page(netmem));
+> +}
 > +
+> +static inline netmem_ref netmem_compound_head(netmem_ref netmem)
+> +{
+> +       return page_to_netmem(compound_head(netmem_to_page(netmem)));
+> +}
 > +
-> +Intro
-> +=====
+>  #endif /* _NET_NETMEM_H */
+> diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/help=
+ers.h
+> index 1d397c1a0043..61814f91a458 100644
+> --- a/include/net/page_pool/helpers.h
+> +++ b/include/net/page_pool/helpers.h
+> @@ -53,6 +53,8 @@
+>  #define _NET_PAGE_POOL_HELPERS_H
+>
+>  #include <net/page_pool/types.h>
+> +#include <net/net_debug.h>
+> +#include <net/netmem.h>
+>
+>  #ifdef CONFIG_PAGE_POOL_STATS
+>  /* Deprecated driver-facing API, use netlink instead */
+> @@ -101,7 +103,7 @@ static inline struct page *page_pool_dev_alloc_pages(=
+struct page_pool *pool)
+>   * Get a page fragment from the page allocator or page_pool caches.
+>   *
+>   * Return:
+> - * Return allocated page fragment, otherwise return NULL.
+> + * Return allocated page fragment, otherwise return 0.
+>   */
+>  static inline struct page *page_pool_dev_alloc_frag(struct page_pool *po=
+ol,
+>                                                     unsigned int *offset,
+> @@ -112,22 +114,22 @@ static inline struct page *page_pool_dev_alloc_frag=
+(struct page_pool *pool,
+>         return page_pool_alloc_frag(pool, offset, size, gfp);
+>  }
+>
+> -static inline struct page *page_pool_alloc(struct page_pool *pool,
+> -                                          unsigned int *offset,
+> -                                          unsigned int *size, gfp_t gfp)
+> +static inline netmem_ref page_pool_alloc(struct page_pool *pool,
+> +                                        unsigned int *offset,
+> +                                        unsigned int *size, gfp_t gfp)
+>  {
+>         unsigned int max_size =3D PAGE_SIZE << pool->p.order;
+> -       struct page *page;
+> +       netmem_ref netmem;
+>
+>         if ((*size << 1) > max_size) {
+>                 *size =3D max_size;
+>                 *offset =3D 0;
+> -               return page_pool_alloc_pages(pool, gfp);
+> +               return page_pool_alloc_netmem(pool, gfp);
+>         }
+>
+> -       page =3D page_pool_alloc_frag(pool, offset, *size, gfp);
+> -       if (unlikely(!page))
+> -               return NULL;
+> +       netmem =3D page_pool_alloc_frag_netmem(pool, offset, *size, gfp);
+> +       if (unlikely(!netmem))
+> +               return 0;
+>
+>         /* There is very likely not enough space for another fragment, so=
+ append
+>          * the remaining size to the current fragment to avoid truesize
+> @@ -138,7 +140,7 @@ static inline struct page *page_pool_alloc(struct pag=
+e_pool *pool,
+>                 pool->frag_offset =3D max_size;
+>         }
+>
+> -       return page;
+> +       return netmem;
+>  }
+>
+>  /**
+> @@ -152,7 +154,7 @@ static inline struct page *page_pool_alloc(struct pag=
+e_pool *pool,
+>   * utilization and performance penalty.
+>   *
+>   * Return:
+> - * Return allocated page or page fragment, otherwise return NULL.
+> + * Return allocated page or page fragment, otherwise return 0.
+>   */
+>  static inline struct page *page_pool_dev_alloc(struct page_pool *pool,
+>                                                unsigned int *offset,
+> @@ -160,7 +162,7 @@ static inline struct page *page_pool_dev_alloc(struct=
+ page_pool *pool,
+>  {
+>         gfp_t gfp =3D (GFP_ATOMIC | __GFP_NOWARN);
+>
+> -       return page_pool_alloc(pool, offset, size, gfp);
+> +       return netmem_to_page(page_pool_alloc(pool, offset, size, gfp));
+>  }
+>
+>  static inline void *page_pool_alloc_va(struct page_pool *pool,
+> @@ -170,9 +172,10 @@ static inline void *page_pool_alloc_va(struct page_p=
+ool *pool,
+>         struct page *page;
+>
+>         /* Mask off __GFP_HIGHMEM to ensure we can use page_address() */
+> -       page =3D page_pool_alloc(pool, &offset, size, gfp & ~__GFP_HIGHME=
+M);
+> +       page =3D netmem_to_page(
+> +               page_pool_alloc(pool, &offset, size, gfp & ~__GFP_HIGHMEM=
+));
+>         if (unlikely(!page))
+> -               return NULL;
+> +               return 0;
+>
+>         return page_address(page) + offset;
+>  }
+> @@ -187,7 +190,7 @@ static inline void *page_pool_alloc_va(struct page_po=
+ol *pool,
+>   * it returns va of the allocated page or page fragment.
+>   *
+>   * Return:
+> - * Return the va for the allocated page or page fragment, otherwise retu=
+rn NULL.
+> + * Return the va for the allocated page or page fragment, otherwise retu=
+rn 0.
+>   */
+>  static inline void *page_pool_dev_alloc_va(struct page_pool *pool,
+>                                            unsigned int *size)
+> @@ -210,6 +213,11 @@ inline enum dma_data_direction page_pool_get_dma_dir=
+(struct page_pool *pool)
+>         return pool->p.dma_dir;
+>  }
+>
+> +static inline void page_pool_fragment_netmem(netmem_ref netmem, long nr)
+> +{
+> +       atomic_long_set(&netmem_to_page(netmem)->pp_ref_count, nr);
+> +}
 > +
-> +Device memory TCP (devmem TCP) enables receiving data directly into device
-> +memory (dmabuf). The feature is currently implemented for TCP sockets.
+>  /**
+>   * page_pool_fragment_page() - split a fresh page into fragments
+>   * @page:      page to split
+> @@ -230,11 +238,12 @@ inline enum dma_data_direction page_pool_get_dma_di=
+r(struct page_pool *pool)
+>   */
+>  static inline void page_pool_fragment_page(struct page *page, long nr)
+>  {
+> -       atomic_long_set(&page->pp_ref_count, nr);
+> +       page_pool_fragment_netmem(page_to_netmem(page), nr);
+>  }
+>
+> -static inline long page_pool_unref_page(struct page *page, long nr)
+> +static inline long page_pool_unref_netmem(netmem_ref netmem, long nr)
+>  {
+> +       struct page *page =3D netmem_to_page(netmem);
+>         long ret;
+>
+>         /* If nr =3D=3D pp_ref_count then we have cleared all remaining
+> @@ -277,15 +286,41 @@ static inline long page_pool_unref_page(struct page=
+ *page, long nr)
+>         return ret;
+>  }
+>
+> +static inline long page_pool_unref_page(struct page *page, long nr)
+> +{
+> +       return page_pool_unref_netmem(page_to_netmem(page), nr);
+> +}
 > +
+> +static inline void page_pool_ref_netmem(netmem_ref netmem)
+> +{
+> +       atomic_long_inc(&netmem_to_page(netmem)->pp_ref_count);
+> +}
 > +
-> +Opportunity
-> +-----------
+>  static inline void page_pool_ref_page(struct page *page)
+>  {
+> -       atomic_long_inc(&page->pp_ref_count);
+> +       page_pool_ref_netmem(page_to_netmem(page));
+>  }
+>
+> -static inline bool page_pool_is_last_ref(struct page *page)
+> +static inline bool page_pool_is_last_ref(netmem_ref netmem)
+>  {
+>         /* If page_pool_unref_page() returns 0, we were the last user */
+> -       return page_pool_unref_page(page, 1) =3D=3D 0;
+> +       return page_pool_unref_netmem(netmem, 1) =3D=3D 0;
+> +}
 > +
-> +A large number of data transfers have device memory as the source and/or
-> +destination. Accelerators drastically increased the prevalence of such
-> +transfers.  Some examples include:
+> +static inline void page_pool_put_netmem(struct page_pool *pool,
+> +                                       netmem_ref netmem,
+> +                                       unsigned int dma_sync_size,
+> +                                       bool allow_direct)
+> +{
+> +       /* When page_pool isn't compiled-in, net/core/xdp.c doesn't
+> +        * allow registering MEM_TYPE_PAGE_POOL, but shield linker.
+> +        */
+> +#ifdef CONFIG_PAGE_POOL
+> +       if (!page_pool_is_last_ref(netmem))
+> +               return;
 > +
-> +- Distributed training, where ML accelerators, such as GPUs on different hosts,
-> +  exchange data.
+> +       page_pool_put_unrefed_netmem(pool, netmem, dma_sync_size, allow_d=
+irect);
+> +#endif
+>  }
+>
+>  /**
+> @@ -306,15 +341,15 @@ static inline void page_pool_put_page(struct page_p=
+ool *pool,
+>                                       unsigned int dma_sync_size,
+>                                       bool allow_direct)
+>  {
+> -       /* When page_pool isn't compiled-in, net/core/xdp.c doesn't
+> -        * allow registering MEM_TYPE_PAGE_POOL, but shield linker.
+> -        */
+> -#ifdef CONFIG_PAGE_POOL
+> -       if (!page_pool_is_last_ref(page))
+> -               return;
+> +       page_pool_put_netmem(pool, page_to_netmem(page), dma_sync_size,
+> +                            allow_direct);
+> +}
+>
+> -       page_pool_put_unrefed_page(pool, page, dma_sync_size, allow_direc=
+t);
+> -#endif
+> +static inline void page_pool_put_full_netmem(struct page_pool *pool,
+> +                                            netmem_ref netmem,
+> +                                            bool allow_direct)
+> +{
+> +       page_pool_put_netmem(pool, netmem, -1, allow_direct);
+>  }
+>
+>  /**
+> @@ -329,7 +364,7 @@ static inline void page_pool_put_page(struct page_poo=
+l *pool,
+>  static inline void page_pool_put_full_page(struct page_pool *pool,
+>                                            struct page *page, bool allow_=
+direct)
+>  {
+> -       page_pool_put_page(pool, page, -1, allow_direct);
+> +       page_pool_put_netmem(pool, page_to_netmem(page), -1, allow_direct=
+);
+>  }
+>
+>  /**
+> @@ -363,6 +398,18 @@ static inline void page_pool_free_va(struct page_poo=
+l *pool, void *va,
+>         page_pool_put_page(pool, virt_to_head_page(va), -1, allow_direct)=
+;
+>  }
+>
+> +static inline dma_addr_t page_pool_get_dma_addr_netmem(netmem_ref netmem=
+)
+> +{
+> +       struct page *page =3D netmem_to_page(netmem);
 > +
-> +- Distributed raw block storage applications transfer large amounts of data with
-> +  remote SSDs, much of this data does not require host processing.
+> +       dma_addr_t ret =3D page->dma_addr;
+> +
+> +       if (PAGE_POOL_32BIT_ARCH_WITH_64BIT_DMA)
+> +               ret <<=3D PAGE_SHIFT;
+> +
+> +       return ret;
+> +}
+> +
+>  /**
+>   * page_pool_get_dma_addr() - Retrieve the stored DMA address.
+>   * @page:      page allocated from a page pool
+> @@ -372,16 +419,14 @@ static inline void page_pool_free_va(struct page_po=
+ol *pool, void *va,
+>   */
+>  static inline dma_addr_t page_pool_get_dma_addr(struct page *page)
+>  {
+> -       dma_addr_t ret =3D page->dma_addr;
+> -
+> -       if (PAGE_POOL_32BIT_ARCH_WITH_64BIT_DMA)
+> -               ret <<=3D PAGE_SHIFT;
+> -
+> -       return ret;
+> +       return page_pool_get_dma_addr_netmem(page_to_netmem(page));
+>  }
+>
+> -static inline bool page_pool_set_dma_addr(struct page *page, dma_addr_t =
+addr)
+> +static inline bool page_pool_set_dma_addr_netmem(netmem_ref netmem,
+> +                                                dma_addr_t addr)
+>  {
+> +       struct page *page =3D netmem_to_page(netmem);
+> +
+>         if (PAGE_POOL_32BIT_ARCH_WITH_64BIT_DMA) {
+>                 page->dma_addr =3D addr >> PAGE_SHIFT;
+>
+> @@ -395,6 +440,11 @@ static inline bool page_pool_set_dma_addr(struct pag=
+e *page, dma_addr_t addr)
+>         return false;
+>  }
+>
+> +static inline bool page_pool_set_dma_addr(struct page *page, dma_addr_t =
+addr)
+> +{
+> +       return page_pool_set_dma_addr_netmem(page_to_netmem(page), addr);
+> +}
+> +
+>  static inline bool page_pool_put(struct page_pool *pool)
+>  {
+>         return refcount_dec_and_test(&pool->user_cnt);
+> diff --git a/include/net/page_pool/types.h b/include/net/page_pool/types.=
+h
+> index 07e6afafedbe..0d164624f16d 100644
+> --- a/include/net/page_pool/types.h
+> +++ b/include/net/page_pool/types.h
+> @@ -40,7 +40,7 @@
+>  #define PP_ALLOC_CACHE_REFILL  64
+>  struct pp_alloc_cache {
+>         u32 count;
+> -       struct page *cache[PP_ALLOC_CACHE_SIZE];
+> +       netmem_ref cache[PP_ALLOC_CACHE_SIZE];
+>  };
+>
+>  /**
+> @@ -73,7 +73,7 @@ struct page_pool_params {
+>         struct_group_tagged(page_pool_params_slow, slow,
+>                 struct net_device *netdev;
+>  /* private: used by test code only */
+> -               void (*init_callback)(struct page *page, void *arg);
+> +               void (*init_callback)(netmem_ref netmem, void *arg);
+>                 void *init_arg;
+>         );
+>  };
+> @@ -131,8 +131,8 @@ struct page_pool_stats {
+>  struct memory_provider_ops {
+>         int (*init)(struct page_pool *pool);
+>         void (*destroy)(struct page_pool *pool);
+> -       struct page *(*alloc_pages)(struct page_pool *pool, gfp_t gfp);
+> -       bool (*release_page)(struct page_pool *pool, struct page *page);
+> +       netmem_ref (*alloc_pages)(struct page_pool *pool, gfp_t gfp);
+> +       bool (*release_page)(struct page_pool *pool, netmem_ref netmem);
+>  };
+>
+>  struct pp_memory_provider_params {
+> @@ -147,7 +147,7 @@ struct page_pool {
+>         bool has_init_callback;
+>
+>         long frag_users;
+> -       struct page *frag_page;
+> +       netmem_ref frag_page;
+>         unsigned int frag_offset;
+>         u32 pages_state_hold_cnt;
+>
+> @@ -219,8 +219,12 @@ struct page_pool {
+>  };
+>
+>  struct page *page_pool_alloc_pages(struct page_pool *pool, gfp_t gfp);
+> +netmem_ref page_pool_alloc_netmem(struct page_pool *pool, gfp_t gfp);
+>  struct page *page_pool_alloc_frag(struct page_pool *pool, unsigned int *=
+offset,
+>                                   unsigned int size, gfp_t gfp);
+> +netmem_ref page_pool_alloc_frag_netmem(struct page_pool *pool,
+> +                                      unsigned int *offset, unsigned int=
+ size,
+> +                                      gfp_t gfp);
+>  struct page_pool *page_pool_create(const struct page_pool_params *params=
+);
+>  struct page_pool *page_pool_create_percpu(const struct page_pool_params =
+*params,
+>                                           int cpuid);
+> @@ -250,6 +254,9 @@ static inline void page_pool_put_page_bulk(struct pag=
+e_pool *pool, void **data,
+>  }
+>  #endif
+>
+> +void page_pool_put_unrefed_netmem(struct page_pool *pool, netmem_ref net=
+mem,
+> +                                 unsigned int dma_sync_size,
+> +                                 bool allow_direct);
+>  void page_pool_put_unrefed_page(struct page_pool *pool, struct page *pag=
+e,
+>                                 unsigned int dma_sync_size,
+>                                 bool allow_direct);
+> diff --git a/include/trace/events/page_pool.h b/include/trace/events/page=
+_pool.h
+> index 6834356b2d2a..c5b6383ff276 100644
+> --- a/include/trace/events/page_pool.h
+> +++ b/include/trace/events/page_pool.h
+> @@ -42,51 +42,52 @@ TRACE_EVENT(page_pool_release,
+>  TRACE_EVENT(page_pool_state_release,
+>
+>         TP_PROTO(const struct page_pool *pool,
+> -                const struct page *page, u32 release),
+> +                netmem_ref netmem, u32 release),
+>
+> -       TP_ARGS(pool, page, release),
+> +       TP_ARGS(pool, netmem, release),
+>
+>         TP_STRUCT__entry(
+>                 __field(const struct page_pool *,       pool)
+> -               __field(const struct page *,            page)
+> +               __field(netmem_ref,                     netmem)
+>                 __field(u32,                            release)
+>                 __field(unsigned long,                  pfn)
+>         ),
+>
+>         TP_fast_assign(
+>                 __entry->pool           =3D pool;
+> -               __entry->page           =3D page;
+> +               __entry->netmem         =3D netmem;
+>                 __entry->release        =3D release;
+> -               __entry->pfn            =3D page_to_pfn(page);
+> +               __entry->pfn            =3D netmem_to_pfn(netmem);
+>         ),
+>
+> -       TP_printk("page_pool=3D%p page=3D%p pfn=3D0x%lx release=3D%u",
+> -                 __entry->pool, __entry->page, __entry->pfn, __entry->re=
+lease)
+> +       TP_printk("page_pool=3D%p netmem=3D%lu pfn=3D0x%lx release=3D%u",
+> +                 __entry->pool, (__force unsigned long)__entry->netmem,
+> +                 __entry->pfn, __entry->release)
+>  );
+>
+>  TRACE_EVENT(page_pool_state_hold,
+>
+>         TP_PROTO(const struct page_pool *pool,
+> -                const struct page *page, u32 hold),
+> +                netmem_ref netmem, u32 hold),
+>
+> -       TP_ARGS(pool, page, hold),
+> +       TP_ARGS(pool, netmem, hold),
+>
+>         TP_STRUCT__entry(
+>                 __field(const struct page_pool *,       pool)
+> -               __field(const struct page *,            page)
+> +               __field(netmem_ref,                     netmem)
+>                 __field(u32,                            hold)
+>                 __field(unsigned long,                  pfn)
+>         ),
+>
+>         TP_fast_assign(
+>                 __entry->pool   =3D pool;
+> -               __entry->page   =3D page;
+> +               __entry->netmem =3D netmem;
+>                 __entry->hold   =3D hold;
+> -               __entry->pfn    =3D page_to_pfn(page);
+> +               __entry->pfn    =3D netmem_to_pfn(netmem);
+>         ),
+>
+> -       TP_printk("page_pool=3D%p page=3D%p pfn=3D0x%lx hold=3D%u",
+> -                 __entry->pool, __entry->page, __entry->pfn, __entry->ho=
+ld)
+> +       TP_printk("page_pool=3D%p netmem=3D%lu pfn=3D0x%lx hold=3D%u",
+> +                 __entry->pool, __entry->netmem, __entry->pfn, __entry->=
+hold)
+>  );
+>
+>  TRACE_EVENT(page_pool_update_nid,
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> index 61efeadaff8d..fc300e807e1d 100644
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -127,9 +127,10 @@ struct xdp_test_data {
+>  #define TEST_XDP_FRAME_SIZE (PAGE_SIZE - sizeof(struct xdp_page_head))
+>  #define TEST_XDP_MAX_BATCH 256
+>
+> -static void xdp_test_run_init_page(struct page *page, void *arg)
+> +static void xdp_test_run_init_page(netmem_ref netmem, void *arg)
+>  {
+> -       struct xdp_page_head *head =3D phys_to_virt(page_to_phys(page));
+> +       struct xdp_page_head *head =3D
+> +               phys_to_virt(page_to_phys(netmem_to_page(netmem)));
+>         struct xdp_buff *new_ctx, *orig_ctx;
+>         u32 headroom =3D XDP_PACKET_HEADROOM;
+>         struct xdp_test_data *xdp =3D arg;
+> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+> index 795b7ff1c01f..c8125be3a6e2 100644
+> --- a/net/core/page_pool.c
+> +++ b/net/core/page_pool.c
+> @@ -329,19 +329,18 @@ struct page_pool *page_pool_create(const struct pag=
+e_pool_params *params)
+>  }
+>  EXPORT_SYMBOL(page_pool_create);
+>
+> -static void page_pool_return_page(struct page_pool *pool, struct page *p=
+age);
+> +static void page_pool_return_page(struct page_pool *pool, netmem_ref net=
+mem);
+>
+> -noinline
+> -static struct page *page_pool_refill_alloc_cache(struct page_pool *pool)
+> +static noinline netmem_ref page_pool_refill_alloc_cache(struct page_pool=
+ *pool)
+>  {
+>         struct ptr_ring *r =3D &pool->ring;
+> -       struct page *page;
+> +       netmem_ref netmem;
+>         int pref_nid; /* preferred NUMA node */
+>
+>         /* Quicker fallback, avoid locks when ring is empty */
+>         if (__ptr_ring_empty(r)) {
+>                 alloc_stat_inc(pool, empty);
+> -               return NULL;
+> +               return 0;
+>         }
+>
+>         /* Softirq guarantee CPU and thus NUMA node is stable. This,
+> @@ -356,56 +355,56 @@ static struct page *page_pool_refill_alloc_cache(st=
+ruct page_pool *pool)
+>
+>         /* Refill alloc array, but only if NUMA match */
+>         do {
+> -               page =3D __ptr_ring_consume(r);
+> -               if (unlikely(!page))
+> +               netmem =3D (__force netmem_ref)__ptr_ring_consume(r);
+> +               if (unlikely(!netmem))
+>                         break;
+>
+> -               if (likely(page_to_nid(page) =3D=3D pref_nid)) {
+> -                       pool->alloc.cache[pool->alloc.count++] =3D page;
+> +               if (likely(page_to_nid(netmem_to_page(netmem)) =3D=3D pre=
+f_nid)) {
+> +                       pool->alloc.cache[pool->alloc.count++] =3D netmem=
+;
+>                 } else {
+>                         /* NUMA mismatch;
+>                          * (1) release 1 page to page-allocator and
+>                          * (2) break out to fallthrough to alloc_pages_no=
+de.
+>                          * This limit stress on page buddy alloactor.
+>                          */
+> -                       page_pool_return_page(pool, page);
+> +                       page_pool_return_page(pool, netmem);
+>                         alloc_stat_inc(pool, waive);
+> -                       page =3D NULL;
+> +                       netmem =3D 0;
+>                         break;
+>                 }
+>         } while (pool->alloc.count < PP_ALLOC_CACHE_REFILL);
+>
+>         /* Return last page */
+>         if (likely(pool->alloc.count > 0)) {
+> -               page =3D pool->alloc.cache[--pool->alloc.count];
+> +               netmem =3D pool->alloc.cache[--pool->alloc.count];
+>                 alloc_stat_inc(pool, refill);
+>         }
+>
+> -       return page;
+> +       return netmem;
+>  }
+>
+>  /* fast path */
+> -static struct page *__page_pool_get_cached(struct page_pool *pool)
+> +static netmem_ref __page_pool_get_cached(struct page_pool *pool)
+>  {
+> -       struct page *page;
+> +       netmem_ref netmem;
+>
+>         /* Caller MUST guarantee safe non-concurrent access, e.g. softirq=
+ */
+>         if (likely(pool->alloc.count)) {
+>                 /* Fast-path */
+> -               page =3D pool->alloc.cache[--pool->alloc.count];
+> +               netmem =3D pool->alloc.cache[--pool->alloc.count];
+>                 alloc_stat_inc(pool, fast);
+>         } else {
+> -               page =3D page_pool_refill_alloc_cache(pool);
+> +               netmem =3D page_pool_refill_alloc_cache(pool);
+>         }
+>
+> -       return page;
+> +       return netmem;
+>  }
+>
+>  static void page_pool_dma_sync_for_device(struct page_pool *pool,
+> -                                         struct page *page,
+> +                                         netmem_ref netmem,
+>                                           unsigned int dma_sync_size)
+>  {
+> -       dma_addr_t dma_addr =3D page_pool_get_dma_addr(page);
+> +       dma_addr_t dma_addr =3D page_pool_get_dma_addr_netmem(netmem);
+>
+>         dma_sync_size =3D min(dma_sync_size, pool->p.max_len);
+>         dma_sync_single_range_for_device(pool->p.dev, dma_addr,
+> @@ -413,7 +412,7 @@ static void page_pool_dma_sync_for_device(struct page=
+_pool *pool,
+>                                          pool->p.dma_dir);
+>  }
+>
+> -static bool page_pool_dma_map(struct page_pool *pool, struct page *page)
+> +static bool page_pool_dma_map(struct page_pool *pool, netmem_ref netmem)
+>  {
+>         dma_addr_t dma;
+>
+> @@ -422,18 +421,18 @@ static bool page_pool_dma_map(struct page_pool *poo=
+l, struct page *page)
+>          * into page private data (i.e 32bit cpu with 64bit DMA caps)
+>          * This mapping is kept for lifetime of page, until leaving pool.
+>          */
+> -       dma =3D dma_map_page_attrs(pool->p.dev, page, 0,
+> -                                (PAGE_SIZE << pool->p.order),
+> -                                pool->p.dma_dir, DMA_ATTR_SKIP_CPU_SYNC =
+|
+> -                                                 DMA_ATTR_WEAK_ORDERING)=
+;
+> +       dma =3D dma_map_page_attrs(pool->p.dev, netmem_to_page(netmem), 0=
+,
+> +                                (PAGE_SIZE << pool->p.order), pool->p.dm=
+a_dir,
+> +                                DMA_ATTR_SKIP_CPU_SYNC |
+> +                                        DMA_ATTR_WEAK_ORDERING);
+>         if (dma_mapping_error(pool->p.dev, dma))
+>                 return false;
+>
+> -       if (page_pool_set_dma_addr(page, dma))
+> +       if (page_pool_set_dma_addr_netmem(netmem, dma))
+>                 goto unmap_failed;
+>
+>         if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
+> -               page_pool_dma_sync_for_device(pool, page, pool->p.max_len=
+);
+> +               page_pool_dma_sync_for_device(pool, netmem, pool->p.max_l=
+en);
+>
+>         return true;
+>
+> @@ -445,9 +444,10 @@ static bool page_pool_dma_map(struct page_pool *pool=
+, struct page *page)
+>         return false;
+>  }
+>
+> -static void page_pool_set_pp_info(struct page_pool *pool,
+> -                                 struct page *page)
+> +static void page_pool_set_pp_info(struct page_pool *pool, netmem_ref net=
+mem)
+>  {
+> +       struct page *page =3D netmem_to_page(netmem);
+> +
+>         page->pp =3D pool;
+>         page->pp_magic |=3D PP_SIGNATURE;
+>
+> @@ -457,13 +457,15 @@ static void page_pool_set_pp_info(struct page_pool =
+*pool,
+>          * is dirtying the same cache line as the page->pp_magic above, s=
+o
+>          * the overhead is negligible.
+>          */
+> -       page_pool_fragment_page(page, 1);
+> +       page_pool_fragment_netmem(netmem, 1);
+>         if (pool->has_init_callback)
+> -               pool->slow.init_callback(page, pool->slow.init_arg);
+> +               pool->slow.init_callback(netmem, pool->slow.init_arg);
+>  }
+>
+> -static void page_pool_clear_pp_info(struct page *page)
+> +static void page_pool_clear_pp_info(netmem_ref netmem)
+>  {
+> +       struct page *page =3D netmem_to_page(netmem);
+> +
+>         page->pp_magic =3D 0;
+>         page->pp =3D NULL;
+>  }
+> @@ -479,34 +481,34 @@ static struct page *__page_pool_alloc_page_order(st=
+ruct page_pool *pool,
+>                 return NULL;
+>
+>         if ((pool->p.flags & PP_FLAG_DMA_MAP) &&
+> -           unlikely(!page_pool_dma_map(pool, page))) {
+> +           unlikely(!page_pool_dma_map(pool, page_to_netmem(page)))) {
+>                 put_page(page);
+>                 return NULL;
+>         }
+>
+>         alloc_stat_inc(pool, slow_high_order);
+> -       page_pool_set_pp_info(pool, page);
+> +       page_pool_set_pp_info(pool, page_to_netmem(page));
+>
+>         /* Track how many pages are held 'in-flight' */
+>         pool->pages_state_hold_cnt++;
+> -       trace_page_pool_state_hold(pool, page, pool->pages_state_hold_cnt=
+);
+> +       trace_page_pool_state_hold(pool, page_to_netmem(page),
+> +                                  pool->pages_state_hold_cnt);
+>         return page;
+>  }
+>
+>  /* slow path */
+> -noinline
+> -static struct page *__page_pool_alloc_pages_slow(struct page_pool *pool,
+> -                                                gfp_t gfp)
+> +static noinline netmem_ref __page_pool_alloc_pages_slow(struct page_pool=
+ *pool,
+> +                                                       gfp_t gfp)
+>  {
+>         const int bulk =3D PP_ALLOC_CACHE_REFILL;
+>         unsigned int pp_flags =3D pool->p.flags;
+>         unsigned int pp_order =3D pool->p.order;
+> -       struct page *page;
+> +       netmem_ref netmem;
+>         int i, nr_pages;
+>
+>         /* Don't support bulk alloc for high-order pages */
+>         if (unlikely(pp_order))
+> -               return __page_pool_alloc_page_order(pool, gfp);
+> +               return page_to_netmem(__page_pool_alloc_page_order(pool, =
+gfp));
+>
+>         /* Unnecessary as alloc cache is empty, but guarantees zero count=
+ */
+>         if (unlikely(pool->alloc.count > 0))
+> @@ -515,60 +517,67 @@ static struct page *__page_pool_alloc_pages_slow(st=
+ruct page_pool *pool,
+>         /* Mark empty alloc.cache slots "empty" for alloc_pages_bulk_arra=
+y */
+>         memset(&pool->alloc.cache, 0, sizeof(void *) * bulk);
+>
+> -       nr_pages =3D alloc_pages_bulk_array_node(gfp, pool->p.nid, bulk,
+> -                                              pool->alloc.cache);
+> +       nr_pages =3D alloc_pages_bulk_array_node(gfp,
+> +                                              pool->p.nid, bulk,
+> +                                              (struct page **)pool->allo=
+c.cache);
+>         if (unlikely(!nr_pages))
+> -               return NULL;
+> +               return 0;
+>
+>         /* Pages have been filled into alloc.cache array, but count is ze=
+ro and
+>          * page element have not been (possibly) DMA mapped.
+>          */
+>         for (i =3D 0; i < nr_pages; i++) {
+> -               page =3D pool->alloc.cache[i];
+> +               netmem =3D pool->alloc.cache[i];
+>                 if ((pp_flags & PP_FLAG_DMA_MAP) &&
+> -                   unlikely(!page_pool_dma_map(pool, page))) {
+> -                       put_page(page);
+> +                   unlikely(!page_pool_dma_map(pool, netmem))) {
+> +                       put_page(netmem_to_page(netmem));
+>                         continue;
+>                 }
+>
+> -               page_pool_set_pp_info(pool, page);
+> -               pool->alloc.cache[pool->alloc.count++] =3D page;
+> +               page_pool_set_pp_info(pool, netmem);
+> +               pool->alloc.cache[pool->alloc.count++] =3D netmem;
+>                 /* Track how many pages are held 'in-flight' */
+>                 pool->pages_state_hold_cnt++;
+> -               trace_page_pool_state_hold(pool, page,
+> +               trace_page_pool_state_hold(pool, netmem,
+>                                            pool->pages_state_hold_cnt);
+>         }
+>
+>         /* Return last page */
+>         if (likely(pool->alloc.count > 0)) {
+> -               page =3D pool->alloc.cache[--pool->alloc.count];
+> +               netmem =3D pool->alloc.cache[--pool->alloc.count];
+>                 alloc_stat_inc(pool, slow);
+>         } else {
+> -               page =3D NULL;
+> +               netmem =3D 0;
+>         }
+>
+>         /* When page just alloc'ed is should/must have refcnt 1. */
+> -       return page;
+> +       return netmem;
+>  }
+>
+>  /* For using page_pool replace: alloc_pages() API calls, but provide
+>   * synchronization guarantee for allocation side.
+>   */
+> -struct page *page_pool_alloc_pages(struct page_pool *pool, gfp_t gfp)
+> +netmem_ref page_pool_alloc_netmem(struct page_pool *pool, gfp_t gfp)
+>  {
+> -       struct page *page;
+> +       netmem_ref netmem;
+>
+>         /* Fast-path: Get a page from cache */
+> -       page =3D __page_pool_get_cached(pool);
+> -       if (page)
+> -               return page;
+> +       netmem =3D __page_pool_get_cached(pool);
+> +       if (netmem)
+> +               return netmem;
+>
+>         /* Slow-path: cache empty, do real allocation */
+>         if (static_branch_unlikely(&page_pool_mem_providers) && pool->mp_=
+ops)
+> -               page =3D pool->mp_ops->alloc_pages(pool, gfp);
+> +               netmem =3D pool->mp_ops->alloc_pages(pool, gfp);
+>         else
+> -               page =3D __page_pool_alloc_pages_slow(pool, gfp);
+> -       return page;
+> +               netmem =3D __page_pool_alloc_pages_slow(pool, gfp);
+> +       return netmem;
+> +}
+> +EXPORT_SYMBOL(page_pool_alloc_netmem);
+> +
+> +struct page *page_pool_alloc_pages(struct page_pool *pool, gfp_t gfp)
+> +{
+> +       return netmem_to_page(page_pool_alloc_netmem(pool, gfp));
+>  }
+>  EXPORT_SYMBOL(page_pool_alloc_pages);
+>
+> @@ -596,8 +605,8 @@ s32 page_pool_inflight(const struct page_pool *pool, =
+bool strict)
+>         return inflight;
+>  }
+>
+> -static __always_inline
+> -void __page_pool_release_page_dma(struct page_pool *pool, struct page *p=
+age)
+> +static __always_inline void __page_pool_release_page_dma(struct page_poo=
+l *pool,
+> +                                                        netmem_ref netme=
+m)
+>  {
+>         dma_addr_t dma;
+>
+> @@ -607,13 +616,13 @@ void __page_pool_release_page_dma(struct page_pool =
+*pool, struct page *page)
+>                  */
+>                 return;
+>
+> -       dma =3D page_pool_get_dma_addr(page);
+> +       dma =3D page_pool_get_dma_addr_netmem(netmem);
+>
+>         /* When page is unmapped, it cannot be returned to our pool */
+>         dma_unmap_page_attrs(pool->p.dev, dma,
+>                              PAGE_SIZE << pool->p.order, pool->p.dma_dir,
+>                              DMA_ATTR_SKIP_CPU_SYNC | DMA_ATTR_WEAK_ORDER=
+ING);
+> -       page_pool_set_dma_addr(page, 0);
+> +       page_pool_set_dma_addr_netmem(netmem, 0);
+>  }
+>
+>  /* Disconnects a page (from a page_pool).  API users can have a need
+> @@ -621,26 +630,26 @@ void __page_pool_release_page_dma(struct page_pool =
+*pool, struct page *page)
+>   * a regular page (that will eventually be returned to the normal
+>   * page-allocator via put_page).
+>   */
+> -void page_pool_return_page(struct page_pool *pool, struct page *page)
+> +void page_pool_return_page(struct page_pool *pool, netmem_ref netmem)
+>  {
+>         int count;
+>         bool put;
+>
+>         put =3D true;
+>         if (static_branch_unlikely(&page_pool_mem_providers) && pool->mp_=
+ops)
+> -               put =3D pool->mp_ops->release_page(pool, page);
+> +               put =3D pool->mp_ops->release_page(pool, netmem);
+>         else
+> -               __page_pool_release_page_dma(pool, page);
+> +               __page_pool_release_page_dma(pool, netmem);
+>
+>         /* This may be the last page returned, releasing the pool, so
+>          * it is not safe to reference pool afterwards.
+>          */
+>         count =3D atomic_inc_return_relaxed(&pool->pages_state_release_cn=
+t);
+> -       trace_page_pool_state_release(pool, page, count);
+> +       trace_page_pool_state_release(pool, netmem, count);
+>
+>         if (put) {
+> -               page_pool_clear_pp_info(page);
+> -               put_page(page);
+> +               page_pool_clear_pp_info(netmem);
+> +               put_page(netmem_to_page(netmem));
+>         }
+>         /* An optimization would be to call __free_pages(page, pool->p.or=
+der)
+>          * knowing page is not part of page-cache (thus avoiding a
+> @@ -648,14 +657,14 @@ void page_pool_return_page(struct page_pool *pool, =
+struct page *page)
+>          */
+>  }
+>
+> -static bool page_pool_recycle_in_ring(struct page_pool *pool, struct pag=
+e *page)
+> +static bool page_pool_recycle_in_ring(struct page_pool *pool, netmem_ref=
+ netmem)
+>  {
+>         int ret;
+>         /* BH protection not needed if current is softirq */
+>         if (in_softirq())
+> -               ret =3D ptr_ring_produce(&pool->ring, page);
+> +               ret =3D ptr_ring_produce(&pool->ring, (__force void *)net=
+mem);
+>         else
+> -               ret =3D ptr_ring_produce_bh(&pool->ring, page);
+> +               ret =3D ptr_ring_produce_bh(&pool->ring, (__force void *)=
+netmem);
+>
+>         if (!ret) {
+>                 recycle_stat_inc(pool, ring);
+> @@ -670,7 +679,7 @@ static bool page_pool_recycle_in_ring(struct page_poo=
+l *pool, struct page *page)
+>   *
+>   * Caller must provide appropriate safe context.
+>   */
+> -static bool page_pool_recycle_in_cache(struct page *page,
+> +static bool page_pool_recycle_in_cache(netmem_ref netmem,
+>                                        struct page_pool *pool)
+>  {
+>         if (unlikely(pool->alloc.count =3D=3D PP_ALLOC_CACHE_SIZE)) {
+> @@ -679,14 +688,15 @@ static bool page_pool_recycle_in_cache(struct page =
+*page,
+>         }
+>
+>         /* Caller MUST have verified/know (page_ref_count(page) =3D=3D 1)=
+ */
+> -       pool->alloc.cache[pool->alloc.count++] =3D page;
+> +       pool->alloc.cache[pool->alloc.count++] =3D netmem;
+>         recycle_stat_inc(pool, cached);
+>         return true;
+>  }
+>
+> -static bool __page_pool_page_can_be_recycled(const struct page *page)
+> +static bool __page_pool_page_can_be_recycled(netmem_ref netmem)
+>  {
+> -       return page_ref_count(page) =3D=3D 1 && !page_is_pfmemalloc(page)=
+;
+> +       return page_ref_count(netmem_to_page(netmem)) =3D=3D 1 &&
+> +              !page_is_pfmemalloc(netmem_to_page(netmem));
+>  }
+>
+>  /* If the page refcnt =3D=3D 1, this will try to recycle the page.
+> @@ -695,8 +705,8 @@ static bool __page_pool_page_can_be_recycled(const st=
+ruct page *page)
+>   * If the page refcnt !=3D 1, then the page will be returned to memory
+>   * subsystem.
+>   */
+> -static __always_inline struct page *
+> -__page_pool_put_page(struct page_pool *pool, struct page *page,
+> +static __always_inline netmem_ref
+> +__page_pool_put_page(struct page_pool *pool, netmem_ref netmem,
+>                      unsigned int dma_sync_size, bool allow_direct)
+>  {
+>         lockdep_assert_no_hardirq();
+> @@ -710,19 +720,19 @@ __page_pool_put_page(struct page_pool *pool, struct=
+ page *page,
+>          * page is NOT reusable when allocated when system is under
+>          * some pressure. (page_is_pfmemalloc)
+>          */
+> -       if (likely(__page_pool_page_can_be_recycled(page))) {
+> +       if (likely(__page_pool_page_can_be_recycled(netmem))) {
+>                 /* Read barrier done in page_ref_count / READ_ONCE */
+>
+>                 if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
+> -                       page_pool_dma_sync_for_device(pool, page,
+> +                       page_pool_dma_sync_for_device(pool, netmem,
+>                                                       dma_sync_size);
+>
+>                 if (allow_direct && in_softirq() &&
+> -                   page_pool_recycle_in_cache(page, pool))
+> -                       return NULL;
+> +                   page_pool_recycle_in_cache(netmem, pool))
+> +                       return 0;
+>
+>                 /* Page found as candidate for recycling */
+> -               return page;
+> +               return netmem;
+>         }
+>         /* Fallback/non-XDP mode: API user have elevated refcnt.
+>          *
+> @@ -738,21 +748,30 @@ __page_pool_put_page(struct page_pool *pool, struct=
+ page *page,
+>          * will be invoking put_page.
+>          */
+>         recycle_stat_inc(pool, released_refcnt);
+> -       page_pool_return_page(pool, page);
+> +       page_pool_return_page(pool, netmem);
+>
+> -       return NULL;
+> +       return 0;
+>  }
+>
+> -void page_pool_put_unrefed_page(struct page_pool *pool, struct page *pag=
+e,
+> -                               unsigned int dma_sync_size, bool allow_di=
+rect)
+> +void page_pool_put_unrefed_netmem(struct page_pool *pool, netmem_ref net=
+mem,
+> +                                 unsigned int dma_sync_size, bool allow_=
+direct)
+>  {
+> -       page =3D __page_pool_put_page(pool, page, dma_sync_size, allow_di=
+rect);
+> -       if (page && !page_pool_recycle_in_ring(pool, page)) {
+> +       netmem =3D
+> +               __page_pool_put_page(pool, netmem, dma_sync_size, allow_d=
+irect);
+> +       if (netmem && !page_pool_recycle_in_ring(pool, netmem)) {
+>                 /* Cache full, fallback to free pages */
+>                 recycle_stat_inc(pool, ring_full);
+> -               page_pool_return_page(pool, page);
+> +               page_pool_return_page(pool, netmem);
+>         }
+>  }
+> +EXPORT_SYMBOL(page_pool_put_unrefed_netmem);
+> +
+> +void page_pool_put_unrefed_page(struct page_pool *pool, struct page *pag=
+e,
+> +                               unsigned int dma_sync_size, bool allow_di=
+rect)
+> +{
+> +       page_pool_put_unrefed_netmem(pool, page_to_netmem(page), dma_sync=
+_size,
+> +                                    allow_direct);
+> +}
+>  EXPORT_SYMBOL(page_pool_put_unrefed_page);
+>
+>  /**
+> @@ -777,16 +796,16 @@ void page_pool_put_page_bulk(struct page_pool *pool=
+, void **data,
+>         bool in_softirq;
+>
+>         for (i =3D 0; i < count; i++) {
+> -               struct page *page =3D virt_to_head_page(data[i]);
+> +               netmem_ref netmem =3D page_to_netmem(virt_to_head_page(da=
+ta[i]));
+>
+>                 /* It is not the last user for the page frag case */
+> -               if (!page_pool_is_last_ref(page))
+> +               if (!page_pool_is_last_ref(netmem))
+>                         continue;
+>
+> -               page =3D __page_pool_put_page(pool, page, -1, false);
+> +               netmem =3D __page_pool_put_page(pool, netmem, -1, false);
+>                 /* Approved for bulk recycling in ptr_ring cache */
+> -               if (page)
+> -                       data[bulk_len++] =3D page;
+> +               if (netmem)
+> +                       data[bulk_len++] =3D (__force void *)netmem;
+>         }
+>
+>         if (unlikely(!bulk_len))
+> @@ -812,100 +831,108 @@ void page_pool_put_page_bulk(struct page_pool *po=
+ol, void **data,
+>          * since put_page() with refcnt =3D=3D 1 can be an expensive oper=
+ation
+>          */
+>         for (; i < bulk_len; i++)
+> -               page_pool_return_page(pool, data[i]);
+> +               page_pool_return_page(pool, (__force netmem_ref)data[i]);
+>  }
+>  EXPORT_SYMBOL(page_pool_put_page_bulk);
+>
+> -static struct page *page_pool_drain_frag(struct page_pool *pool,
+> -                                        struct page *page)
+> +static netmem_ref page_pool_drain_frag(struct page_pool *pool,
+> +                                      netmem_ref netmem)
+>  {
+>         long drain_count =3D BIAS_MAX - pool->frag_users;
+>
+>         /* Some user is still using the page frag */
+> -       if (likely(page_pool_unref_page(page, drain_count)))
+> -               return NULL;
+> +       if (likely(page_pool_unref_netmem(netmem, drain_count)))
+> +               return 0;
+>
+> -       if (__page_pool_page_can_be_recycled(page)) {
+> +       if (__page_pool_page_can_be_recycled(netmem)) {
+>                 if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
+> -                       page_pool_dma_sync_for_device(pool, page, -1);
+> +                       page_pool_dma_sync_for_device(pool, netmem, -1);
+>
+> -               return page;
+> +               return netmem;
+>         }
+>
+> -       page_pool_return_page(pool, page);
+> -       return NULL;
+> +       page_pool_return_page(pool, netmem);
+> +       return 0;
+>  }
+>
+>  static void page_pool_free_frag(struct page_pool *pool)
+>  {
+>         long drain_count =3D BIAS_MAX - pool->frag_users;
+> -       struct page *page =3D pool->frag_page;
+> +       netmem_ref netmem =3D pool->frag_page;
+>
+> -       pool->frag_page =3D NULL;
+> +       pool->frag_page =3D 0;
+>
+> -       if (!page || page_pool_unref_page(page, drain_count))
+> +       if (!netmem || page_pool_unref_netmem(netmem, drain_count))
+>                 return;
+>
+> -       page_pool_return_page(pool, page);
+> +       page_pool_return_page(pool, netmem);
+>  }
+>
+> -struct page *page_pool_alloc_frag(struct page_pool *pool,
+> -                                 unsigned int *offset,
+> -                                 unsigned int size, gfp_t gfp)
+> +netmem_ref page_pool_alloc_frag_netmem(struct page_pool *pool,
+> +                                      unsigned int *offset, unsigned int=
+ size,
+> +                                      gfp_t gfp)
+>  {
+>         unsigned int max_size =3D PAGE_SIZE << pool->p.order;
+> -       struct page *page =3D pool->frag_page;
+> +       netmem_ref netmem =3D pool->frag_page;
+>
+>         if (WARN_ON(size > max_size))
+> -               return NULL;
+> +               return 0;
+>
+>         size =3D ALIGN(size, dma_get_cache_alignment());
+>         *offset =3D pool->frag_offset;
+>
+> -       if (page && *offset + size > max_size) {
+> -               page =3D page_pool_drain_frag(pool, page);
+> -               if (page) {
+> +       if (netmem && *offset + size > max_size) {
+> +               netmem =3D page_pool_drain_frag(pool, netmem);
+> +               if (netmem) {
+>                         alloc_stat_inc(pool, fast);
+>                         goto frag_reset;
+>                 }
+>         }
+>
+> -       if (!page) {
+> -               page =3D page_pool_alloc_pages(pool, gfp);
+> -               if (unlikely(!page)) {
+> -                       pool->frag_page =3D NULL;
+> -                       return NULL;
+> +       if (!netmem) {
+> +               netmem =3D page_pool_alloc_netmem(pool, gfp);
+> +               if (unlikely(!netmem)) {
+> +                       pool->frag_page =3D 0;
+> +                       return 0;
+>                 }
+>
+> -               pool->frag_page =3D page;
+> +               pool->frag_page =3D netmem;
+>
+>  frag_reset:
+>                 pool->frag_users =3D 1;
+>                 *offset =3D 0;
+>                 pool->frag_offset =3D size;
+> -               page_pool_fragment_page(page, BIAS_MAX);
+> -               return page;
+> +               page_pool_fragment_netmem(netmem, BIAS_MAX);
+> +               return netmem;
+>         }
+>
+>         pool->frag_users++;
+>         pool->frag_offset =3D *offset + size;
+>         alloc_stat_inc(pool, fast);
+> -       return page;
+> +       return netmem;
+> +}
+> +EXPORT_SYMBOL(page_pool_alloc_frag_netmem);
+> +
+> +struct page *page_pool_alloc_frag(struct page_pool *pool, unsigned int *=
+offset,
+> +                                 unsigned int size, gfp_t gfp)
+> +{
+> +       return netmem_to_page(page_pool_alloc_frag_netmem(pool, offset, s=
+ize,
+> +                                                         gfp));
+>  }
+>  EXPORT_SYMBOL(page_pool_alloc_frag);
+>
+>  static void page_pool_empty_ring(struct page_pool *pool)
+>  {
+> -       struct page *page;
+> +       netmem_ref netmem;
+>
+>         /* Empty recycle ring */
+> -       while ((page =3D ptr_ring_consume_bh(&pool->ring))) {
+> +       while ((netmem =3D (__force netmem_ref)ptr_ring_consume_bh(&pool-=
+>ring))) {
+>                 /* Verify the refcnt invariant of cached pages */
+> -               if (!(page_ref_count(page) =3D=3D 1))
+> +               if (!(page_ref_count(netmem_to_page(netmem)) =3D=3D 1))
+>                         pr_crit("%s() page_pool refcnt %d violation\n",
+> -                               __func__, page_ref_count(page));
+> +                               __func__, netmem_ref_count(netmem));
+>
+> -               page_pool_return_page(pool, page);
+> +               page_pool_return_page(pool, netmem);
+>         }
+>  }
+>
+> @@ -927,7 +954,7 @@ static void __page_pool_destroy(struct page_pool *poo=
+l)
+>
+>  static void page_pool_empty_alloc_cache_once(struct page_pool *pool)
+>  {
+> -       struct page *page;
+> +       netmem_ref netmem;
+>
+>         if (pool->destroy_cnt)
+>                 return;
+> @@ -937,8 +964,8 @@ static void page_pool_empty_alloc_cache_once(struct p=
+age_pool *pool)
+>          * call concurrently.
+>          */
+>         while (pool->alloc.count) {
+> -               page =3D pool->alloc.cache[--pool->alloc.count];
+> -               page_pool_return_page(pool, page);
+> +               netmem =3D pool->alloc.cache[--pool->alloc.count];
+> +               page_pool_return_page(pool, netmem);
+>         }
+>  }
+>
+> @@ -1044,15 +1071,15 @@ EXPORT_SYMBOL(page_pool_destroy);
+>  /* Caller must provide appropriate safe context, e.g. NAPI. */
+>  void page_pool_update_nid(struct page_pool *pool, int new_nid)
+>  {
+> -       struct page *page;
+> +       netmem_ref netmem;
+>
+>         trace_page_pool_update_nid(pool, new_nid);
+>         pool->p.nid =3D new_nid;
+>
+>         /* Flush pool alloc cache, as refill will check NUMA node */
+>         while (pool->alloc.count) {
+> -               page =3D pool->alloc.cache[--pool->alloc.count];
+> -               page_pool_return_page(pool, page);
+> +               netmem =3D pool->alloc.cache[--pool->alloc.count];
+> +               page_pool_return_page(pool, netmem);
+>         }
+>  }
+>  EXPORT_SYMBOL(page_pool_update_nid);
+> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> index 17617c29be2d..7193ee9737a0 100644
+> --- a/net/core/skbuff.c
+> +++ b/net/core/skbuff.c
+> @@ -1005,8 +1005,9 @@ int skb_cow_data_for_xdp(struct page_pool *pool, st=
+ruct sk_buff **pskb,
+>  EXPORT_SYMBOL(skb_cow_data_for_xdp);
+>
+>  #if IS_ENABLED(CONFIG_PAGE_POOL)
+> -bool napi_pp_put_page(struct page *page, bool napi_safe)
+> +bool napi_pp_put_page(netmem_ref netmem, bool napi_safe)
+>  {
+> +       struct page *page =3D netmem_to_page(netmem);
+>         bool allow_direct =3D false;
+>         struct page_pool *pp;
+>
+> @@ -1043,7 +1044,7 @@ bool napi_pp_put_page(struct page *page, bool napi_=
+safe)
+>          * The page will be returned to the pool here regardless of the
+>          * 'flipped' fragment being in use or not.
+>          */
+> -       page_pool_put_full_page(pp, page, allow_direct);
+> +       page_pool_put_full_netmem(pp, page_to_netmem(page), allow_direct)=
+;
+>
+>         return true;
+>  }
+> @@ -1054,7 +1055,7 @@ static bool skb_pp_recycle(struct sk_buff *skb, voi=
+d *data, bool napi_safe)
+>  {
+>         if (!IS_ENABLED(CONFIG_PAGE_POOL) || !skb->pp_recycle)
+>                 return false;
+> -       return napi_pp_put_page(virt_to_page(data), napi_safe);
+> +       return napi_pp_put_page(page_to_netmem(virt_to_page(data)), napi_=
+safe);
+>  }
+>
+>  /**
+> --
+> 2.44.0.396.g6e790dbe36-goog
+>
 
-            SSDs. Much
 
-> +
-> +Typically the Device-to-Device data transfers the network are implemented as the
-
-                                                 in the network
-?
-
-> +following low level operations: Device-to-Host copy, Host-to-Host network
-
-             low-level
-
-> +transfer, and Host-to-Device copy.
-> +
-> +The flow involving host copies is suboptimal, especially for bulk data transfers,
-> +and can put significant strains on system resources such as host memory
-> +bandwidth and PCIe bandwidth.
-> +
-> +Devmem TCP optimizes this use case by implementing socket APIs that enable
-> +the user to receive incoming network packets directly into device memory.
-> +
-> +Packet payloads go directly from the NIC to device memory.
-> +
-> +Packet headers go to host memory and are processed by the TCP/IP stack
-> +normally. The NIC must support header split to achieve this.
-> +
-> +Advantages:
-> +
-> +- Alleviate host memory bandwidth pressure, compared to existing
-> +  network-transfer + device-copy semantics.
-> +
-> +- Alleviate PCIe bandwidth pressure, by limiting data transfer to the lowest
-> +  level of the PCIe tree, compared to traditional path which sends data through
-
-                                      to the
-
-> +  the root complex.
-> +
-> +
-> +More Info
-> +---------
-> +
-> +  slides, video
-> +    https://netdevconf.org/0x17/sessions/talk/device-memory-tcp.html
-> +
-> +  patchset
-> +    [RFC PATCH v6 00/12] Device Memory TCP
-> +    https://lore.kernel.org/netdev/20240305020153.2787423-1-almasrymina@google.com/
-> +
-> +
-> +Interface
-> +=========
-> +
-> +Example
-> +-------
-> +
-> +tools/testing/selftests/net/ncdevmem.c:do_server shows an example of setting up
-> +the RX path of this API.
-> +
-> +NIC Setup
-> +---------
-> +
-> +Header split, flow steering, & RSS are required features for devmem TCP.
-> +
-> +Header split is used to split incoming packets into a header buffer in host
-> +memory, and a payload buffer in device memory.
-> +
-> +Flow steering & RSS are used to ensure that only flows targeting devmem land on> +RX queue bound to devmem.
-
-   an RX queue
-?
-
-> +
-> +Enable header split & flow steering::
-> +
-> +	# enable header split
-> +	ethtool -G eth1 tcp-data-split on
-> +
-> +
-> +	# enable flow steering
-> +	ethtool -K eth1 ntuple on
-> +
-> +Configure RSS to steer all traffic away from the target RX queue (queue 15 in
-> +this example)::
-> +
-> +	ethtool --set-rxfh-indir eth1 equal 15
-> +
-> +
-> +The user must bind a dmabuf to any number of RX queues on a given NIC using
-> +netlink API::
-
-   the netlink API::
-
-> +
-> +	/* Bind dmabuf to NIC RX queue 15 */
-> +	struct netdev_queue *queues;
-> +	queues = malloc(sizeof(*queues) * 1);
-> +
-> +	queues[0]._present.type = 1;
-> +	queues[0]._present.idx = 1;
-> +	queues[0].type = NETDEV_RX_QUEUE_TYPE_RX;
-> +	queues[0].idx = 15;
-> +
-> +	*ys = ynl_sock_create(&ynl_netdev_family, &yerr);
-> +
-> +	req = netdev_bind_rx_req_alloc();
-> +	netdev_bind_rx_req_set_ifindex(req, 1 /* ifindex */);
-> +	netdev_bind_rx_req_set_dmabuf_fd(req, dmabuf_fd);
-> +	__netdev_bind_rx_req_set_queues(req, queues, n_queue_index);
-> +
-> +	rsp = netdev_bind_rx(*ys, req);
-> +
-> +	dmabuf_id = rsp->dmabuf_id;
-> +
-> +
-> +The netlink API returns a dmabuf_id: a unique ID that refers to this dmabuf
-> +that has been bound.
-> +
-> +Socket Setup
-> +------------
-> +
-> +The socket must be flow steering to the dmabuf bound RX queue::
-
-                      flow steered
-?
-
-> +
-> +	ethtool -N eth1 flow-type tcp4 ... queue 15,
-> +
-> +
-> +Receiving data
-> +--------------
-> +
-> +The user application must signal to the kernel that it is capable of receiving
-> +devmem data by passing the MSG_SOCK_DEVMEM flag to recvmsg::
-> +
-> +	ret = recvmsg(fd, &msg, MSG_SOCK_DEVMEM);
-> +
-> +Applications that do not specify the MSG_SOCK_DEVMEM flag will receive an EFAULT
-> +on devmem data.
-> +
-> +Devmem data is received directly into the dmabuf bound to the NIC in 'NIC
-> +Setup', and the kernel signals such to the user via the SCM_DEVMEM_* cmsgs::
-> +
-> +		for (cm = CMSG_FIRSTHDR(&msg); cm; cm = CMSG_NXTHDR(&msg, cm)) {
-> +			if (cm->cmsg_level != SOL_SOCKET ||
-> +				(cm->cmsg_type != SCM_DEVMEM_DMABUF &&
-> +				 cm->cmsg_type != SCM_DEVMEM_LINEAR))
-> +				continue;
-> +
-> +			dmabuf_cmsg = (struct dmabuf_cmsg *)CMSG_DATA(cm);
-> +
-> +			if (cm->cmsg_type == SCM_DEVMEM_DMABUF) {
-> +				/* Frag landed in dmabuf.
-> +				 *
-> +				 * dmabuf_cmsg->dmabuf_id is the dmabuf the
-> +				 * frag landed on.
-> +				 *
-> +				 * dmabuf_cmsg->frag_offset is the offset into
-> +				 * the dmabuf where the frag starts.
-> +				 *
-> +				 * dmabuf_cmsg->frag_size is the size of the
-> +				 * frag.
-> +				 *
-> +				 * dmabuf_cmsg->frag_token is a token used to
-> +				 * refer to this frag for later freeing.
-> +				 */
-> +
-> +				struct dmabuf_token token;
-> +				token.token_start = dmabuf_cmsg->frag_token;
-> +				token.token_count = 1;
-> +				continue;
-> +			}
-> +
-> +			if (cm->cmsg_type == SCM_DEVMEM_LINEAR)
-> +				/* Frag landed in linear buffer.
-> +				 *
-> +				 * dmabuf_cmsg->frag_size is the size of the
-> +				 * frag.
-> +				 */
-> +				continue;
-> +
-> +		}
-> +
-> +Applications may receive 2 cmsgs:
-> +
-> +- SCM_DEVMEM_DMABUF: this indicates the fragment landed in the dmabuf indicated
-> +  by dmabuf_id.
-> +
-> +- SCM_DEVMEM_LINEAR: this indicates the fragment landed in the linear buffer.
-> +  This typically happens when the NIC is unable to split the packet at the
-> +  header boundary, such that part (or all) of the payload landed in host
-> +  memory.
-> +
-> +Applications may receive no SO_DEVMEM_* cmsgs. That indicates non-devmem,
-> +regular TCP data that landed on an RX queue not bound to a dmabuf.
-> +
-> +
-> +Freeing frags
-> +-------------
-> +
-> +Frags received via SCM_DEVMEM_DMABUF are pinned by the kernel while the user
-> +processes the frag. The user must return the frag to the kernel via
-> +SO_DEVMEM_DONTNEED::
-> +
-> +	ret = setsockopt(client_fd, SOL_SOCKET, SO_DEVMEM_DONTNEED, &token,
-> +			 sizeof(token));
-> +
-> +The user must ensure the tokens are returned to the kernel in a timely manner.
-> +Failure to do so will exhaust the limited dmabuf that is bound to the RX queue
-> +and will lead to packet drops.
-> +
-> +
-> +Implementation & Caveats
-> +========================
-> +
-> +Unreadable skbs
-> +---------------
-> +
-> +Devmem payloads are inaccessible to the kernel processing the packets. This
-> +results in a few quirks for payloads of devmem skbs:
-> +
-> +- Loopback is not functional. Loopback relies on copying the payload, which is
-> +  not possible with devmem skbs.
-> +
-> +- Software checksum calculation fails.
-> +
-> +- TCP Dump and bpf can't access devmem packet payloads.
-> +
-> +
-> +Testing
-> +=======
-> +
-> +More realistic example code can be found in the kernel source under
-> +tools/testing/selftests/net/ncdevmem.c
-> +
-> +ncdevmem is a devmem TCP netcat. It works very similarly to netcat, but
-> +receives data directly into a udmabuf.
-> +
-> +To run ncdevmem, you need to run it a server on the machine under test, and you
-
-                                    it on a server
-
-> +need to run netcat on a peer to provide the TX data.
-> +
-> +ncdevmem has a validation mode as well that expects a repeating pattern of
-> +incoming data and validates it as such::
-> +
-> +	# On server:
-> +	ncdevmem -s <server IP> -c <client IP> -f eth1 -d 3 -n 0000:06:00.0 -l \
-> +		 -p 5201 -v 7
-> +
-> +	# On client:
-> +	yes $(echo -e \\x01\\x02\\x03\\x04\\x05\\x06) | \
-> +		tr \\n \\0 | head -c 5G | nc <server IP> 5201 -p 5201
-
-
--- 
-#Randy
+--=20
+Thanks,
+Mina
 
