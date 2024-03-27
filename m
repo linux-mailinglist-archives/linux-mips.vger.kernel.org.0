@@ -1,128 +1,171 @@
-Return-Path: <linux-mips+bounces-2433-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2434-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4C5188E63D
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 15:35:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61BD188E6A0
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 15:41:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D69A61C2D9C2
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 14:35:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 102442C6FAE
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Mar 2024 14:40:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6C88154C0A;
-	Wed, 27 Mar 2024 13:06:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6B1612FB0E;
+	Wed, 27 Mar 2024 13:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Hu6pNYAq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QE8ecp20"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4258154BEB
-	for <linux-mips@vger.kernel.org>; Wed, 27 Mar 2024 13:06:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A73D12CD98;
+	Wed, 27 Mar 2024 13:14:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711544766; cv=none; b=SvZ42HwcQ1KjZ9yubSEmESYZT+kr5So3gaIhk+1SDrQoDP7DdLjMhaSWqtYeD6etPcqIGPbnYPPovl1VaTu2oNja2TlanSlTCjeoptdjoP7otdAV/c/yiY/jRggIggT+4Q7PtyRL4zjuJIIQPQeKm6w9HNQjrH7rhU7KTrsn2a0=
+	t=1711545247; cv=none; b=YyHlqRMjLs+zgxD3TwJTQpITe3sFQAdFHiRUpNCSLyWjskPRAFGNkYs7iKWs4p14SLrf70PQ0ZsOiCcA7MfOwdmuc6HaXsALzHnPvIuH3ZE44qmvj3Q8Fxa4a28P+CGsWjZZqX3Hzzkrzn+DW718rwxWAGETwrgTeQTfCoYx2PA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711544766; c=relaxed/simple;
-	bh=lz/X6qb6AMvUSigIWTdX8rnHxjWqLuYuDOp4idLDdDk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IVsczhEk8wtqMeaOCHScQxRejfpmsa8Pk6oALx0gdtjxINkgHYdQhYCQ8gX4t7dnd0r5hf7Frch45ixbMpE0E4tw8XIY270Cic3yHenojABdmtJU1Tjod4AQ/ce3nNexQ+rYT7ldVU9WcBqETdIcywtUe7Y6cAWx5tpAS7b1TW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Hu6pNYAq; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711544763;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gSD1jJkroCyXm61fF+oNruRo3coWmssTF4skwAil3Lw=;
-	b=Hu6pNYAqCAazk3FG1Lfp7hQJl8jz/7OPUseDgNpCDGKEAt9W69jVuPb5xbbJvgJ10uUXa4
-	cu4+AepXlBC7F3jvo4C6lK4YnuOOoTXX6mM0TBpNO5PIr018NgDKg+rNlsLwbovHIPaTF2
-	Tw/WxxpQPQjEQZo7UcjGO1tEF/3UP10=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-572-n4vWnbRDMPWu0T-sgcsqLg-1; Wed, 27 Mar 2024 09:06:00 -0400
-X-MC-Unique: n4vWnbRDMPWu0T-sgcsqLg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 82920800265;
-	Wed, 27 Mar 2024 13:05:59 +0000 (UTC)
-Received: from t14s.fritz.box (unknown [10.39.193.208])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 203CF1C060D0;
-	Wed, 27 Mar 2024 13:05:55 +0000 (UTC)
-From: David Hildenbrand <david@redhat.com>
-To: linux-kernel@vger.kernel.org
-Cc: David Hildenbrand <david@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Jason Gunthorpe <jgg@nvidia.com>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Peter Xu <peterx@redhat.com>,
-	linux-arm-kernel@lists.infradead.org,
-	loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-perf-users@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	x86@kernel.org
-Subject: [PATCH RFC 3/3] mm: use "GUP-fast" instead "fast GUP" in remaining comments
-Date: Wed, 27 Mar 2024 14:05:38 +0100
-Message-ID: <20240327130538.680256-4-david@redhat.com>
-In-Reply-To: <20240327130538.680256-1-david@redhat.com>
-References: <20240327130538.680256-1-david@redhat.com>
+	s=arc-20240116; t=1711545247; c=relaxed/simple;
+	bh=aPOuPtfFZvuUS61teESlTOGy3EScaFITJd6zIkdxh9E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SzsEBDg+DUV1Ibu/mGTR8T7McDwRg09854+Zlk6zjSjVn6bEudNstt8Z1HJia9TaWfhc89ZSxWEJb7HMXM+/qhc/u+Hz/wikdgF7mvxUFEHp2noGWi0jYYoYtv/8pGHleWcLPs/ef6cAMApQxbNrKk33Q17h56/UAYnsq1VD9yY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QE8ecp20; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71DF2C433C7;
+	Wed, 27 Mar 2024 13:14:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711545247;
+	bh=aPOuPtfFZvuUS61teESlTOGy3EScaFITJd6zIkdxh9E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QE8ecp20wx1JqOfnBKrNrQ1A7il/EPdx7Qb2bU3tEQFAtdxchTsOko14YmIhTc65e
+	 0erb/xIg+6dFfPAs+oSBwJgWmwAEVWH9jcL4J987Qqj/IxyFEnRxHpTlftkEsoAcPI
+	 rHgpIj4isH57zbCSTvhbiZTT1f+uGS73wliYdL2sK2R/RX+FgDwxEC1gNQLiUp2svC
+	 4YuUkVTn9LYjuOz2FylQazVFjSrgANcIAeI0GKo4wsgMuz6M/8vbqKgl8MIVhdo+Il
+	 c9LCzVA++7q5ANbZro2hu+oLAbcmclN8aL7Rfs1tthIILl+9w4VZkFS1j/7Lt8jXPo
+	 GT+PFYbgVwa+A==
+Date: Wed, 27 Mar 2024 13:14:02 +0000
+From: Lee Jones <lee@kernel.org>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Pavel Machek <pavel@ucw.cz>, Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>, linux-leds@vger.kernel.org,
+	linux-sound@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] leds: trigger: Improve handling of
+ led_trigger_event() and simplify mute audio trigger
+Message-ID: <20240327131402.GQ13211@google.com>
+References: <3918a80c-b885-40f6-a96e-bcd4c53ff448@gmail.com>
+ <170964052434.128456.128263499797916605.b4-ty@kernel.org>
+ <20240305120947.GD86322@google.com>
+ <20240305145454.GG86322@google.com>
+ <f2e7d244-62f4-4dde-bffc-8d96e5a4bac1@gmail.com>
+ <20240305160626.GH86322@google.com>
+ <f18bb686-5e7c-446b-877c-b92a1dc70145@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+In-Reply-To: <f18bb686-5e7c-446b-877c-b92a1dc70145@gmail.com>
 
-Let's fixup the remaining comments to consistently call that thing
-"GUP-fast". With this change, we consistently call it "GUP-fast".
+On Wed, 27 Mar 2024, Heiner Kallweit wrote:
 
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- mm/filemap.c    | 2 +-
- mm/khugepaged.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> On 05.03.2024 17:06, Lee Jones wrote:
+> > On Tue, 05 Mar 2024, Heiner Kallweit wrote:
+> > 
+> >> On 05.03.2024 15:54, Lee Jones wrote:
+> >>> On Tue, 05 Mar 2024, Lee Jones wrote:
+> >>>
+> >>>> On Tue, 05 Mar 2024, Lee Jones wrote:
+> >>>>
+> >>>>> On Mon, 04 Mar 2024 21:56:29 +0100, Heiner Kallweit wrote:
+> >>>>>> If a simple trigger is assigned to a LED, then the LED may be off until
+> >>>>>> the next led_trigger_event() call. This may be an issue for simple
+> >>>>>> triggers with rare led_trigger_event() calls, e.g. power supply
+> >>>>>> charging indicators (drivers/power/supply/power_supply_leds.c).
+> >>>>>> Therefore persist the brightness value of the last led_trigger_event()
+> >>>>>> call and use this value if the trigger is assigned to a LED.
+> >>>>>> This change allows to use simple triggers in more cases.
+> >>>>>> As a first use case simplify handling of the mute audio trigger.
+> >>>>>>
+> >>>>>> [...]
+> >>>>>
+> >>>>> Applied, thanks!
+> >>>>>
+> >>>>> [1/3] leds: trigger: Store brightness set by led_trigger_event()
+> >>>>>       commit: 575129855dee0e364af7df84a77ab5cca54b1442
+> >>>>> [2/3] ALSA: control-led: Integrate mute led trigger
+> >>>>>       commit: ba8adb1646ee498029ac12b20e792d9d0dd17920
+> >>>>> [3/3] leds: trigger: audio: Remove this trigger
+> >>>>>       commit: 2c61168294d0ea42a5542dbc864afb03a76bbc11
+> >>>>
+> >>>> Submitted for build testing.
+> >>>>
+> >>>> Once succeeded, a PR will follow for other maintainers to pull from.
+> >>>
+> >>> make --silent --keep-going --jobs=8 O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu- 'CC=sccache x86_64-linux-gnu-gcc' 'HOSTCC=sccache gcc' allmodconfig
+> >>> make --silent --keep-going --jobs=8 O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu- 'CC=sccache x86_64-linux-gnu-gcc' 'HOSTCC=sccache gcc'
+> >>> x86_64-linux-gnu-ld: warning: arch/x86/entry/vdso/vclock_gettime-x32.o: corrupt GNU_PROPERTY_TYPE (5) size: 0x10
+> >>> x86_64-linux-gnu-ld: warning: arch/x86/entry/vdso/vgetcpu-x32.o: corrupt GNU_PROPERTY_TYPE (5) size: 0x10
+> >>> /builds/linux/drivers/platform/x86/dell/dell-laptop.c: In function 'dell_init':
+> >>> /builds/linux/drivers/platform/x86/dell/dell-laptop.c:2255:33: error: implicit declaration of function 'ledtrig_audio_get'; did you mean 'led_trigger_set'? [-Werror=implicit-function-declaration]
+> >>>    micmute_led_cdev.brightness = ledtrig_audio_get(LED_AUDIO_MICMUTE);
+> >>>                                  ^~~~~~~~~~~~~~~~~
+> >>>                                  led_trigger_set
+> >>> cc1: all warnings being treated as errors
+> >>> make[7]: *** [/builds/linux/scripts/Makefile.build:243: drivers/platform/x86/dell/dell-laptop.o] Error 1
+> >>> make[7]: Target 'drivers/platform/x86/dell/' not remade because of errors.
+> >>> make[6]: *** [/builds/linux/scripts/Makefile.build:481: drivers/platform/x86/dell] Error 2
+> >>> /builds/linux/drivers/platform/x86/huawei-wmi.c: In function 'huawei_wmi_leds_setup':
+> >>> /builds/linux/drivers/platform/x86/huawei-wmi.c:313:28: error: implicit declaration of function 'ledtrig_audio_get'; did you mean 'led_trigger_set'? [-Werror=implicit-function-declaration]
+> >>>   huawei->cdev.brightness = ledtrig_audio_get(LED_AUDIO_MICMUTE);
+> >>>                             ^~~~~~~~~~~~~~~~~
+> >>>                             led_trigger_set
+> >>> cc1: all warnings being treated as errors
+> >>> make[6]: *** [/builds/linux/scripts/Makefile.build:243: drivers/platform/x86/huawei-wmi.o] Error 1
+> >>> /builds/linux/drivers/platform/x86/asus-wmi.c: In function 'asus_wmi_led_init':
+> >>> /builds/linux/drivers/platform/x86/asus-wmi.c:1623:34: error: implicit declaration of function 'ledtrig_audio_get'; did you mean 'led_trigger_set'? [-Werror=implicit-function-declaration]
+> >>>    asus->micmute_led.brightness = ledtrig_audio_get(LED_AUDIO_MICMUTE);
+> >>>                                   ^~~~~~~~~~~~~~~~~
+> >>>                                   led_trigger_set
+> >>> cc1: all warnings being treated as errors
+> >>> make[6]: *** [/builds/linux/scripts/Makefile.build:243: drivers/platform/x86/asus-wmi.o] Error 1
+> >>> /builds/linux/drivers/platform/x86/thinkpad_acpi.c: In function 'mute_led_init':
+> >>> /builds/linux/drivers/platform/x86/thinkpad_acpi.c:9288:33: error: implicit declaration of function 'ledtrig_audio_get'; did you mean 'led_trigger_set'? [-Werror=implicit-function-declaration]
+> >>>    mute_led_cdev[i].brightness = ledtrig_audio_get(i);
+> >>>                                  ^~~~~~~~~~~~~~~~~
+> >>>                                  led_trigger_set
+> >>>
+> >>> ############################3
+> >>>
+> >>> Errors were caused
+> >>>  
+> >>> [v6.8-rc1] ib-leds-mips-sound-6.9 2c61168294d0e ("leds: trigger: audio: Remove this trigger")
+> >>>
+> >>>  x86_64 allmodconfig gcc-8
+> >>>      https://storage.tuxsuite.com/public/google/lee.jones/builds/2dGhtQpYDimIIpMqO0Qm4AMAAPU/ 	Pass (0 errors - 2 warnings) : v6.8-rc1
+> >>>      https://storage.tuxsuite.com/public/google/lee.jones/builds/2dGhvxgZA6moBZmToTavyY4Eita/ 	Fail (7 errors - 2 warnings) : ib-leds-mips-sound-6.9 
+> >>>
+> >>>  x86_64 allmodconfig gcc-9
+> >>>      https://storage.tuxsuite.com/public/google/lee.jones/builds/2dGhtYCYEqxnUFmoH73iKlcEIV8/ 	Pass (0 errors - 0 warnings) : v6.8-rc1
+> >>>      https://storage.tuxsuite.com/public/google/lee.jones/builds/2dGhw2i4B539YZXCoSN2LSRvsW8/ 	Fail (7 errors - 0 warnings) : ib-leds-mips-sound-6.9 
+> >>>
+> >>>  x86_64 allyesconfig gcc-8
+> >>>      https://storage.tuxsuite.com/public/google/lee.jones/builds/2dGhtTzCsCxRpl9loRyfPrD1uhR/ 	Pass (0 errors - 2 warnings) : v6.8-rc1
+> >>>      https://storage.tuxsuite.com/public/google/lee.jones/builds/2dGhw1WQ2BIpJRoyK7ruVCtihSN/ 	Fail (7 errors - 2 warnings) : ib-leds-mips-sound-6.9
+> >>>
+> >>
+> >> Right, I forgot, there are patches applied via a different tree end of January,
+> >> that this series depends on. I assume this means that the series can be applied
+> >> only after the merge window.
+> > 
+> > Yes, unless there is a succinct immutable branch I can pull from.
+> > 
+> Now that 6.9-rc1 is out, can this series be applied?
 
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 387b394754fa..c668e11cd6ef 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -1810,7 +1810,7 @@ EXPORT_SYMBOL(page_cache_prev_miss);
-  * C. Return the page to the page allocator
-  *
-  * This means that any page may have its reference count temporarily
-- * increased by a speculative page cache (or fast GUP) lookup as it can
-+ * increased by a speculative page cache (or GUP-fast) lookup as it can
-  * be allocated by another user before the RCU grace period expires.
-  * Because the refcount temporarily acquired here may end up being the
-  * last refcount on the page, any page allocation must be freeable by
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 38830174608f..6972fa05132e 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -1169,7 +1169,7 @@ static int collapse_huge_page(struct mm_struct *mm, unsigned long address,
- 	 * huge and small TLB entries for the same virtual address to
- 	 * avoid the risk of CPU bugs in that area.
- 	 *
--	 * Parallel fast GUP is fine since fast GUP will back off when
-+	 * Parallel GUP-fast is fine since GUP-fast will back off when
- 	 * it detects PMD is changed.
- 	 */
- 	_pmd = pmdp_collapse_flush(vma, address, pmd);
+Catching up with upstream reviews in on my TODO list.
+
 -- 
-2.43.2
-
+Lee Jones [李琼斯]
 
