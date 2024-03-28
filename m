@@ -1,129 +1,250 @@
-Return-Path: <linux-mips+bounces-2470-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2471-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDFA888F772
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Mar 2024 06:51:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99DE288F782
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Mar 2024 06:55:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D4E1B22FE7
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Mar 2024 05:51:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC5641C28323
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Mar 2024 05:55:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1974A4C3D0;
-	Thu, 28 Mar 2024 05:51:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15E334C62E;
+	Thu, 28 Mar 2024 05:55:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tttGRj5y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hysjLZhk"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B7148CC6;
-	Thu, 28 Mar 2024 05:51:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A93913DAC11;
+	Thu, 28 Mar 2024 05:55:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711605103; cv=none; b=n/qhojtqt9T1tFG2mBCeaorzfYth/UYcI5ya1A5KqtQro6crj1ap/vomDRKKxVCEIXzlhV2PLMK9wZ4CqT7d7/n6HtUqCnFVRKfDbt14n/YMauZD8H6koDzExYbiGqsOkjDVMx0z1Xn3qYwTFl1n/EoeHTCCmUpeX0GxoUKbnlM=
+	t=1711605347; cv=none; b=J3Ds7r5eOMEbWMfQ7uqDEJlqtCz+JrTHmxnGm4WED/Cy4b1CkuubQ1a/CYrY8lzS8tsG/9TCriJTZenJnvbwuM3Q4VbJr8g79ZddLaknWhon35QjmHZ4MsrmmJ6j3GwirWSyoLAKChtFvN40iHQ5/flt0i/ln//S4hLoN3CPkfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711605103; c=relaxed/simple;
-	bh=6kv4U+OlSY+qlQflghGbIVo8TBSoBTX2u5cN0RYYRzs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Gs6SOL0529s/ol5mbkqkgdEB5weEkFfmJGoRqKvgZJ6pwKndy7UUl3f9r2HhvqrQAIF04QkWjIR4zOshLzUWtqWY1TmQC02enmEh6GtfFas0z/nzuaGRhitN/knhnHdBkTTWUNdHYF/vd8/KpsHizcx+zLAjpG6nB/y0wcpDmj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tttGRj5y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4998EC43390;
-	Thu, 28 Mar 2024 05:51:41 +0000 (UTC)
+	s=arc-20240116; t=1711605347; c=relaxed/simple;
+	bh=C6skgkr2NMPDni3brGoFkl+5/I4LRqRBMa9zmdDL9uY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OLlER+IyhNXi5cnVjcrG/OL81p81BVQFfPzNN3Zk1SeAZj0z82TyWSUGM40COJDwd2xQkSZ6tyNK4gyFtFA5dLU3naWd19RAA53MPAz6HSVVU5QQzQTPdqi6lAd72Jw7gVyEpVhqsNjM9jesmL6Ppa5Ujox0TN6hi0BOjZwwDac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hysjLZhk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55E6DC433F1;
+	Thu, 28 Mar 2024 05:55:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711605102;
-	bh=6kv4U+OlSY+qlQflghGbIVo8TBSoBTX2u5cN0RYYRzs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=tttGRj5ylh9xVO642wPR1F2Asn5IsF3J1IDJ9pqvnIh1qj6XQgGrpl4six+k1HHRf
-	 aoU7KuEjvUv5Ii9zuOT+mH6BtpmkaBTz4FcZS6L0LCZTPajk2hXlbfy/k1hVU+NZ28
-	 Wg4db9y1MDaDrXtFBBEgTQekHUKH7dUpja3VbrZJgu7ADxfru+YZW5u7cB9IMMs8zC
-	 mrubWP/EDVcMLefx6YTk6HA9erGzEt7LjzHG8vGbMoVsnZ2OEqqw0kIfJszeXgBiPy
-	 1PPy5iqTnZAlh9yVfb4I75n6QCxgZoMfaqW4bU26A3LhUrFRRN7YufRgRneeNEP5Gc
-	 5Xn0oSBC206dA==
-Message-ID: <3360dba8-0fac-4126-b72b-abc036957d6a@kernel.org>
-Date: Wed, 27 Mar 2024 22:51:39 -0700
+	s=k20201202; t=1711605346;
+	bh=C6skgkr2NMPDni3brGoFkl+5/I4LRqRBMa9zmdDL9uY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hysjLZhkEnvXnxd+HtHwjnxShxKJsdr7YRORWMMbG9CAv2Wo4v/3W17f+9SmlwjYP
+	 AyxLZuXRv9YJGW7TBEhuFvjqai5JqAqlAjT7kP1ISp5EH8RS9fJ2YPnuq82HTriscX
+	 k3oc9NY2bXpiP0jGnfR7dbOxiqpXyBbLE3Kr+zaoP4w8AQS+EkbA1t2gSCobYQ2KlV
+	 32f78em/AA4bHgFdo/ljQvmpapnRbgSvmNw6bLqNSxN3FzIz/Su4hMEut3jzJjbgI6
+	 ErlOb5+1jhqeBVqohmzPhEaaC6pQ2kHQXfpk3998EVOS2mUbOgGjtxbSO/uM8abY2C
+	 N/IIGvRGfpoEA==
+Date: Thu, 28 Mar 2024 11:25:41 +0530
+From: Vinod Koul <vkoul@kernel.org>
+To: Allen Pais <apais@linux.microsoft.com>
+Cc: linux-kernel@vger.kernel.org, tj@kernel.org, keescook@chromium.org,
+	marcan@marcan.st, sven@svenpeter.dev, florian.fainelli@broadcom.com,
+	rjui@broadcom.com, sbranden@broadcom.com, paul@crapouillou.net,
+	Eugeniy.Paltsev@synopsys.com, manivannan.sadhasivam@linaro.org,
+	vireshk@kernel.org, Frank.Li@nxp.com, leoyang.li@nxp.com,
+	zw@zh-kernel.org, wangzhou1@hisilicon.com, haijie1@huawei.com,
+	shawnguo@kernel.org, s.hauer@pengutronix.de, sean.wang@mediatek.com,
+	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+	afaerber@suse.de, logang@deltatee.com, daniel@zonque.org,
+	haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+	andersson@kernel.org, konrad.dybcio@linaro.org, orsonzhai@gmail.com,
+	baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+	patrice.chotard@foss.st.com, linus.walleij@linaro.org,
+	wens@csie.org, jernej.skrabec@gmail.com, peter.ujfalusi@gmail.com,
+	kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com, jassisinghbrar@gmail.com, mchehab@kernel.org,
+	maintainers@bluecherrydvr.com, aubin.constans@microchip.com,
+	ulf.hansson@linaro.org, manuel.lauss@gmail.com,
+	mirq-linux@rere.qmqm.pl, jh80.chung@samsung.com, oakad@yahoo.com,
+	hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
+	brucechang@via.com.tw, HaraldWelte@viatech.com, pierre@ossman.eu,
+	duncan.sands@free.fr, stern@rowland.harvard.edu, oneukum@suse.com,
+	openipmi-developer@lists.sourceforge.net, dmaengine@vger.kernel.org,
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	imx@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+	linux-mediatek@lists.infradead.org,
+	linux-actions@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-tegra@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-mmc@vger.kernel.org, linux-omap@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, linux-s390@vger.kernel.org,
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/9] dma: Convert from tasklet to BH workqueue
+Message-ID: <ZgUGXTKPVhrA1tam@matsya>
+References: <20240327160314.9982-1-apais@linux.microsoft.com>
+ <20240327160314.9982-3-apais@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 0/3] mm/gup: consistently call it GUP-fast
-To: Arnd Bergmann <arnd@arndb.de>, David Hildenbrand <david@redhat.com>,
- peterx <peterx@redhat.com>
-Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
- Mike Rapoport <rppt@kernel.org>, Jason Gunthorpe <jgg@nvidia.com>,
- John Hubbard <jhubbard@nvidia.com>, linux-arm-kernel@lists.infradead.org,
- loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
- linux-sh@vger.kernel.org, linux-mm@kvack.org,
- linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- x86@kernel.org, Ryan Roberts <ryan.roberts@arm.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>, Matt Turner <mattst88@gmail.com>,
- Vineet Gupta <vgupta@kernel.org>, Alexey Brodkin <abrodkin@synopsys.com>
-References: <20240327130538.680256-1-david@redhat.com> <ZgQ5hNltQ2DHQXps@x1n>
- <3922460a-4d01-4ecb-b8c5-7c57fd46f3fd@redhat.com>
- <dc1433ea-4e59-4ab7-83fb-23b393020980@app.fastmail.com>
-Content-Language: en-US
-From: Vineet Gupta <vgupta@kernel.org>
-In-Reply-To: <dc1433ea-4e59-4ab7-83fb-23b393020980@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240327160314.9982-3-apais@linux.microsoft.com>
 
-+CC Alexey
+Hi Allen,
 
-On 3/27/24 09:22, Arnd Bergmann wrote:
-> On Wed, Mar 27, 2024, at 16:39, David Hildenbrand wrote:
->> On 27.03.24 16:21, Peter Xu wrote:
->>> On Wed, Mar 27, 2024 at 02:05:35PM +0100, David Hildenbrand wrote:
->>>
->>> I'm not sure what config you tried there; as I am doing some build tests
->>> recently, I found turning off CONFIG_SAMPLES + CONFIG_GCC_PLUGINS could
->>> avoid a lot of issues, I think it's due to libc missing.  But maybe not the
->>> case there.
->> CCin Arnd; I use some of his compiler chains, others from Fedora directly. For
->> example for alpha and arc, the Fedora gcc is "13.2.1".
->> But there is other stuff like (arc):
->>
->> ./arch/arc/include/asm/mmu-arcv2.h: In function 'mmu_setup_asid':
->> ./arch/arc/include/asm/mmu-arcv2.h:82:9: error: implicit declaration of 
->> function 'write_aux_reg' [-Werro
->> r=implicit-function-declaration]
->>     82 |         write_aux_reg(ARC_REG_PID, asid | MMU_ENABLE);
->>        |         ^~~~~~~~~~~~~
-> Seems to be missing an #include of soc/arc/aux.h, but I can't
-> tell when this first broke without bisecting.
+Subsytem is dmaengine, can you rename this to dmaengine: ...
 
-Weird I don't see this one but I only have gcc 12 handy ATM.
+On 27-03-24, 16:03, Allen Pais wrote:
+> The only generic interface to execute asynchronously in the BH context is
+> tasklet; however, it's marked deprecated and has some design flaws. To
+> replace tasklets, BH workqueue support was recently added. A BH workqueue
+> behaves similarly to regular workqueues except that the queued work items
+> are executed in the BH context.
 
-    gcc version 12.2.1 20230306 (ARC HS GNU/Linux glibc toolchain -
-build 1360)
+Thanks for conversion, am happy with BH alternative as it helps in
+dmaengine where we need shortest possible time between tasklet and
+interrupt handling to maximize dma performance
 
-I even tried W=1 (which according to scripts/Makefile.extrawarn) should
-include -Werror=implicit-function-declaration but don't see this still.
+> 
+> This patch converts drivers/dma/* from tasklet to BH workqueue.
 
-Tomorrow I'll try building a gcc 13.2.1 for ARC.
+> 
+> Based on the work done by Tejun Heo <tj@kernel.org>
+> Branch: git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git for-6.10
+> 
+> Signed-off-by: Allen Pais <allen.lkml@gmail.com>
+> ---
+>  drivers/dma/altera-msgdma.c                   | 15 ++++----
+>  drivers/dma/apple-admac.c                     | 15 ++++----
+>  drivers/dma/at_hdmac.c                        |  2 +-
+>  drivers/dma/at_xdmac.c                        | 15 ++++----
+>  drivers/dma/bcm2835-dma.c                     |  2 +-
+>  drivers/dma/dma-axi-dmac.c                    |  2 +-
+>  drivers/dma/dma-jz4780.c                      |  2 +-
+>  .../dma/dw-axi-dmac/dw-axi-dmac-platform.c    |  2 +-
+>  drivers/dma/dw-edma/dw-edma-core.c            |  2 +-
+>  drivers/dma/dw/core.c                         | 13 +++----
+>  drivers/dma/dw/regs.h                         |  3 +-
+>  drivers/dma/ep93xx_dma.c                      | 15 ++++----
+>  drivers/dma/fsl-edma-common.c                 |  2 +-
+>  drivers/dma/fsl-qdma.c                        |  2 +-
+>  drivers/dma/fsl_raid.c                        | 11 +++---
+>  drivers/dma/fsl_raid.h                        |  2 +-
+>  drivers/dma/fsldma.c                          | 15 ++++----
+>  drivers/dma/fsldma.h                          |  3 +-
+>  drivers/dma/hisi_dma.c                        |  2 +-
+>  drivers/dma/hsu/hsu.c                         |  2 +-
+>  drivers/dma/idma64.c                          |  4 +--
+>  drivers/dma/img-mdc-dma.c                     |  2 +-
+>  drivers/dma/imx-dma.c                         | 27 +++++++-------
+>  drivers/dma/imx-sdma.c                        |  6 ++--
+>  drivers/dma/ioat/dma.c                        | 17 ++++-----
+>  drivers/dma/ioat/dma.h                        |  5 +--
+>  drivers/dma/ioat/init.c                       |  2 +-
+>  drivers/dma/k3dma.c                           | 19 +++++-----
+>  drivers/dma/mediatek/mtk-cqdma.c              | 35 ++++++++++---------
+>  drivers/dma/mediatek/mtk-hsdma.c              |  2 +-
+>  drivers/dma/mediatek/mtk-uart-apdma.c         |  4 +--
+>  drivers/dma/mmp_pdma.c                        | 13 +++----
+>  drivers/dma/mmp_tdma.c                        | 11 +++---
+>  drivers/dma/mpc512x_dma.c                     | 17 ++++-----
+>  drivers/dma/mv_xor.c                          | 13 +++----
+>  drivers/dma/mv_xor.h                          |  5 +--
+>  drivers/dma/mv_xor_v2.c                       | 23 ++++++------
+>  drivers/dma/mxs-dma.c                         | 13 +++----
+>  drivers/dma/nbpfaxi.c                         | 15 ++++----
+>  drivers/dma/owl-dma.c                         |  2 +-
+>  drivers/dma/pch_dma.c                         | 17 ++++-----
+>  drivers/dma/pl330.c                           | 31 ++++++++--------
+>  drivers/dma/plx_dma.c                         | 13 +++----
+>  drivers/dma/ppc4xx/adma.c                     | 17 ++++-----
+>  drivers/dma/ppc4xx/adma.h                     |  5 +--
+>  drivers/dma/pxa_dma.c                         |  2 +-
+>  drivers/dma/qcom/bam_dma.c                    | 35 ++++++++++---------
+>  drivers/dma/qcom/gpi.c                        | 18 +++++-----
+>  drivers/dma/qcom/hidma.c                      | 11 +++---
+>  drivers/dma/qcom/hidma.h                      |  5 +--
+>  drivers/dma/qcom/hidma_ll.c                   | 11 +++---
+>  drivers/dma/qcom/qcom_adm.c                   |  2 +-
+>  drivers/dma/sa11x0-dma.c                      | 27 +++++++-------
+>  drivers/dma/sf-pdma/sf-pdma.c                 | 23 ++++++------
+>  drivers/dma/sf-pdma/sf-pdma.h                 |  5 +--
+>  drivers/dma/sprd-dma.c                        |  2 +-
+>  drivers/dma/st_fdma.c                         |  2 +-
+>  drivers/dma/ste_dma40.c                       | 17 ++++-----
+>  drivers/dma/sun6i-dma.c                       | 33 ++++++++---------
+>  drivers/dma/tegra186-gpc-dma.c                |  2 +-
+>  drivers/dma/tegra20-apb-dma.c                 | 19 +++++-----
+>  drivers/dma/tegra210-adma.c                   |  2 +-
+>  drivers/dma/ti/edma.c                         |  2 +-
+>  drivers/dma/ti/k3-udma.c                      | 11 +++---
+>  drivers/dma/ti/omap-dma.c                     |  2 +-
+>  drivers/dma/timb_dma.c                        | 23 ++++++------
+>  drivers/dma/txx9dmac.c                        | 29 +++++++--------
+>  drivers/dma/txx9dmac.h                        |  5 +--
+>  drivers/dma/virt-dma.c                        |  9 ++---
+>  drivers/dma/virt-dma.h                        |  9 ++---
+>  drivers/dma/xgene-dma.c                       | 21 +++++------
+>  drivers/dma/xilinx/xilinx_dma.c               | 23 ++++++------
+>  drivers/dma/xilinx/xilinx_dpdma.c             | 21 +++++------
+>  drivers/dma/xilinx/zynqmp_dma.c               | 21 +++++------
+>  74 files changed, 442 insertions(+), 395 deletions(-)
+> 
+> diff --git a/drivers/dma/altera-msgdma.c b/drivers/dma/altera-msgdma.c
+> index a8e3615235b8..611b5290324b 100644
+> --- a/drivers/dma/altera-msgdma.c
+> +++ b/drivers/dma/altera-msgdma.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/slab.h>
+>  #include <linux/of_dma.h>
+> +#include <linux/workqueue.h>
+>  
+>  #include "dmaengine.h"
+>  
+> @@ -170,7 +171,7 @@ struct msgdma_sw_desc {
+>  struct msgdma_device {
+>  	spinlock_t lock;
+>  	struct device *dev;
+> -	struct tasklet_struct irq_tasklet;
+> +	struct work_struct irq_work;
+
+Can we name these as bh_work to signify that we are always in bh
+context? here and everywhere please
 
 
->
->> or (alpha)
->>
->> WARNING: modpost: "saved_config" [vmlinux] is COMMON symbol
->> ERROR: modpost: "memcpy" [fs/reiserfs/reiserfs.ko] undefined!
->> ERROR: modpost: "memcpy" [fs/nfs/nfs.ko] undefined!
->> ERROR: modpost: "memcpy" [fs/nfs/nfsv3.ko] undefined!
->> ERROR: modpost: "memcpy" [fs/nfsd/nfsd.ko] undefined!
->> ERROR: modpost: "memcpy" [fs/lockd/lockd.ko] undefined!
->> ERROR: modpost: "memcpy" [crypto/crypto.ko] undefined!
->> ERROR: modpost: "memcpy" [crypto/crypto_algapi.ko] undefined!
->> ERROR: modpost: "memcpy" [crypto/aead.ko] undefined!
->> ERROR: modpost: "memcpy" [crypto/crypto_skcipher.ko] undefined!
->> ERROR: modpost: "memcpy" [crypto/seqiv.ko] undefined!
+>  	struct list_head pending_list;
+>  	struct list_head free_list;
+>  	struct list_head active_list;
+> @@ -676,12 +677,12 @@ static int msgdma_alloc_chan_resources(struct dma_chan *dchan)
+>  }
+>  
+>  /**
+> - * msgdma_tasklet - Schedule completion tasklet
+> + * msgdma_work - Schedule completion work
 
-Are these from ARC build or otherwise ?
+...
 
-Thx,
--Vineet
+> @@ -515,7 +516,7 @@ struct gpii {
+>  	enum gpi_pm_state pm_state;
+>  	rwlock_t pm_lock;
+>  	struct gpi_ring ev_ring;
+> -	struct tasklet_struct ev_task; /* event processing tasklet */
+> +	struct work_struct ev_task; /* event processing work */
+>  	struct completion cmd_completion;
+>  	enum gpi_cmd gpi_cmd;
+>  	u32 cntxt_type_irq_msk;
+> @@ -755,7 +756,7 @@ static void gpi_process_ieob(struct gpii *gpii)
+>  	gpi_write_reg(gpii, gpii->ieob_clr_reg, BIT(0));
+>  
+>  	gpi_config_interrupts(gpii, MASK_IEOB_SETTINGS, 0);
+> -	tasklet_hi_schedule(&gpii->ev_task);
+> +	queue_work(system_bh_highpri_wq, &gpii->ev_task);
+
+This is good conversion, thanks for ensuring system_bh_highpri_wq is
+used here
+-- 
+~Vinod
 
