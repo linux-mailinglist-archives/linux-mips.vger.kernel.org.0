@@ -1,235 +1,155 @@
-Return-Path: <linux-mips+bounces-2478-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2479-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7242288FA76
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Mar 2024 09:55:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E027188FBC2
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Mar 2024 10:37:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 952BB1C2B34E
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Mar 2024 08:55:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 965BD1F23E4B
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Mar 2024 09:37:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79A12381BD;
-	Thu, 28 Mar 2024 08:55:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF54B651B6;
+	Thu, 28 Mar 2024 09:37:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OLVMBC2m"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="Xup2Ivl2"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6B73C0B;
-	Thu, 28 Mar 2024 08:55:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1822618E1E;
+	Thu, 28 Mar 2024 09:37:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711616139; cv=none; b=RK1YtJIcESihg3/JuitRjmQTW0GUHo5klO+rpefA7AWsRTKuP0tCS/k5aPAXcVruYzmCgXBDE8MooJg1eFXxh8c1lfMDUTexfi9JIb0euflySyt11AYAKZXYdKCO0nbAtUq/BI4n3RfsRb8UT/NqP5m3AJO9bFAEsnpZ39K6Yh4=
+	t=1711618673; cv=none; b=gZ8pUm3uoF+vB5JuWwrye9DUncXOy3h5+/uJyhvTbtc/eejL8bjL/PC3r/0F9tFv/jWBACfnNXQDKTmkRzTJJKddEM3VphIbQ0DKhkM/Y+0vaKACMQ9AwFgIk7VrtAyhzl5LQOlusSn17+5M9MGFZJG+ScTrb864SUX/1ytL+M4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711616139; c=relaxed/simple;
-	bh=SwBW22qcadeQkdheN+7fvVJxa3pXoLgtNXHI9mpQwMQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QQeDAZ044dH2hTVVW+aSYEVpNIKEm9gTUV1K6rmrpBoaecmzY4VGPtRH67j60zvb2SO2hSSpHKGa/jkbtet1yLK1wcrTaC5VsVb51Vg2JnHl03pjPeItSZ88O4ktxb6m4WSxHqz01aOf3WBjcuazOTJgA3MLjJsMlGptE9Vvkfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OLVMBC2m; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-56899d9bf52so861131a12.2;
-        Thu, 28 Mar 2024 01:55:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711616136; x=1712220936; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VZ3BMMhKAmNs4bhyvnKkEZ82vtuSNj39yw+KO8d5Hvg=;
-        b=OLVMBC2mxMDY7aZaVLrGjedUwVH0dALObfWJkVPY6EkI03jEE8dYVKYBjiyqdQQNXY
-         wJvLghol2GvG4zbNa3tbDy2txfAQh+o/HWCP4pvfiTBB+y7PptxmxD4sP4sFEBo/5UA7
-         ZNafiL3r0PO658cNJ6VVraYMnXHBAizE26PTxtQHI8jV4Er9s04lLkm3yMupVVuDx/h6
-         c6uaW3hR+psloD9er4a1inNoJkaCLONwmoOq/VAI1uvxUM98f2XjRH1PVGgIMWuBk2xY
-         zMDd40nxcl3Smw4eRg0ySsoRcLXrKbOuHeoLx+kGuapxXjFwd1BitTRqlP+bv3GdG+D5
-         teAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711616136; x=1712220936;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VZ3BMMhKAmNs4bhyvnKkEZ82vtuSNj39yw+KO8d5Hvg=;
-        b=VT3dg2YmLas9ojNp08jEPD4yEA44LmdR8msGYkxjBVF6bWV4aIB1iB8mWVnws68zj5
-         pfiQEubratZypnF5BUtXZeyvos3XlfLEIIz/7U5XFt++WnulcyL6vhDvyrKa/gBBKlVp
-         JjvGYln1e5mOiA8MhipkZ3xanJywPw1zzG14Ii1vJJBYlUwrTziCY/zqO3hpGV/2XwHT
-         lA+TRhXdcsGyBLZlB4hZCXlzz2vrkbxlY9PY3lMzze5mSPmiTcROKnIpUQZ5dSklVPxP
-         jr5A3BcHG/LzAzvbYoKo1UhTqyalozqOCoWaMc/kkN6TagZ+z7lqknw01PeVJXX8X1g1
-         RCcw==
-X-Forwarded-Encrypted: i=1; AJvYcCXaiFM+p/tGBfu0DGuzhU+Hm5T9qI9+fCjWPxLfU1xJU7Fcoszx1NKqjIsRg1qd9P5vf3iBjAz1HWQ3QWsSUI5zM1l52Yt4RNxsUDDOVdx6sCVm/0D3TA0VEHpjKDl9o/R8omanQu6Rr/SIySgslvdphHE4ny1Ob4twWVhQBeM28D8Ikz4=
-X-Gm-Message-State: AOJu0YyWakyeAQCbOX9HKqNlyszxw4+f8Cqs9t3gZhWO9JSuGZXQvWR5
-	nmVVIdFowZUieK1InX6HGx9K7WxfjVotzu63+lZGXUsDPAUYECyD4RpGbtSDO31L8WQ6ztSp+Qt
-	t10xd662KjzrHw4d+UkwSTPw4mqCGy7zZxpfjKw==
-X-Google-Smtp-Source: AGHT+IF/Gh0fqkummHE++ODJJmmDYUghD6sTKPcA5xCjIEGld6dcTsKYDT2r02IGeAmJKxsFDo1HaPJup4R1syV1vdI=
-X-Received: by 2002:a05:6402:34cd:b0:56c:56dd:3b5f with SMTP id
- w13-20020a05640234cd00b0056c56dd3b5fmr438045edc.3.1711616135807; Thu, 28 Mar
- 2024 01:55:35 -0700 (PDT)
+	s=arc-20240116; t=1711618673; c=relaxed/simple;
+	bh=je05IT2ra3zgp+R3TY8tIA0/mN+MpWGD8AqLDSxjOnw=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XYE92DxsybxbFMsvjFI2aR/jceVurNIRgUWIEqyy3p31wiil2NSWgHreErCFNJOlhCEiC+KcVjXs2uuHitAApZ4epLacHhPnYOnTgHkJfEDVlO+6ErDkvzVlGSaxSLXmfcf9toDyPmxlZpUnPuPnEC5/ICGYapTyNF35pe/RV3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=Xup2Ivl2; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1711618671; x=1743154671;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=je05IT2ra3zgp+R3TY8tIA0/mN+MpWGD8AqLDSxjOnw=;
+  b=Xup2Ivl2AAl1lj6vaBUEiRETmkWjQljPpZVPBUNnMRuAQoFPAIq7/Z8C
+   72C8Unu27JlgA2GM+yU1PvyFVOyYDsXDE1Ja9WL5c9drUWV9mPZY1kI1B
+   va+iXXnGyaVTHaQ5I45zMJGbckiFMTmDJvXtzJ3bniFKSLnRg/xZdiHZB
+   7WQ7SmtYSzoDEaJZ5eC7CaNLZN4iDP9ElRGoIouA3rnLdH+CBBNjLHKlN
+   kosMeoHtyYeLwK2SZ88sl1cpmAidzK786JUMfj3ENAfnZj8MbNn/e1E32
+   r1QqB0bRiqzVEGHVu9rSobZdHrqT/r7jnpXuCBGy3TjYwp89YYg2syUEp
+   A==;
+X-CSE-ConnectionGUID: DX6dgQOrQEKgaromDnuM8w==
+X-CSE-MsgGUID: oruQuroDSA+lampJ4MlvIw==
+X-IronPort-AV: E=Sophos;i="6.07,161,1708412400"; 
+   d="asc'?scan'208";a="18510167"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Mar 2024 02:37:49 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 28 Mar 2024 02:37:47 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex04.mchp-main.com (10.10.85.152)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Thu, 28 Mar 2024 02:37:45 -0700
+Date: Thu, 28 Mar 2024 09:36:57 +0000
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Keguang Zhang <keguang.zhang@gmail.com>
+CC: Conor Dooley <conor@kernel.org>, Miquel Raynal
+	<miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, Vignesh
+ Raghavendra <vigneshr@ti.com>, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
+	<conor+dt@kernel.org>, <linux-mtd@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+	<devicetree@vger.kernel.org>
+Subject: Re: [PATCH v6 1/3] dt-bindings: mtd: Add Loongson-1 NAND Controller
+Message-ID: <20240328-tinfoil-skillet-b1c1629b97ee@wendy>
+References: <20240327-loongson1-nand-v6-0-7f9311cef020@gmail.com>
+ <20240327-loongson1-nand-v6-1-7f9311cef020@gmail.com>
+ <20240327-bonehead-handlebar-1ca8dab95179@spud>
+ <CAJhJPsX7Ds-UdFpTpLgFMW+rTGAgAYSKAieAMn12Z8RjNn-A8A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240327-loongson1-nand-v6-0-7f9311cef020@gmail.com>
- <20240327-loongson1-nand-v6-1-7f9311cef020@gmail.com> <20240327-bonehead-handlebar-1ca8dab95179@spud>
-In-Reply-To: <20240327-bonehead-handlebar-1ca8dab95179@spud>
-From: Keguang Zhang <keguang.zhang@gmail.com>
-Date: Thu, 28 Mar 2024 16:54:59 +0800
-Message-ID: <CAJhJPsX7Ds-UdFpTpLgFMW+rTGAgAYSKAieAMn12Z8RjNn-A8A@mail.gmail.com>
-Subject: Re: [PATCH v6 1/3] dt-bindings: mtd: Add Loongson-1 NAND Controller
-To: Conor Dooley <conor@kernel.org>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, 
-	Vignesh Raghavendra <vigneshr@ti.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-mips@vger.kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="8CphlZzrFnQFHqWt"
+Content-Disposition: inline
+In-Reply-To: <CAJhJPsX7Ds-UdFpTpLgFMW+rTGAgAYSKAieAMn12Z8RjNn-A8A@mail.gmail.com>
+
+--8CphlZzrFnQFHqWt
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 28, 2024 at 12:23=E2=80=AFAM Conor Dooley <conor@kernel.org> wr=
+On Thu, Mar 28, 2024 at 04:54:59PM +0800, Keguang Zhang wrote:
+> On Thu, Mar 28, 2024 at 12:23=E2=80=AFAM Conor Dooley <conor@kernel.org> =
+wrote:
+> >
+> > On Wed, Mar 27, 2024 at 06:43:59PM +0800, Keguang Zhang via B4 Relay wr=
 ote:
->
-> On Wed, Mar 27, 2024 at 06:43:59PM +0800, Keguang Zhang via B4 Relay wrot=
-e:
-> > From: Keguang Zhang <keguang.zhang@gmail.com>
+> > > From: Keguang Zhang <keguang.zhang@gmail.com>
+> > >
+> > > Add devicetree binding document for Loongson-1 NAND Controller.
+> > >
+> > > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> > > ---
+> > > Changes in v6:
+> > > - A newly added patch
+> > > ---
+> > >  .../devicetree/bindings/mtd/loongson,ls1x-nfc.yaml | 66 ++++++++++++=
+++++++++++
+> > >  1 file changed, 66 insertions(+)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/mtd/loongson,ls1x-nfc.=
+yaml b/Documentation/devicetree/bindings/mtd/loongson,ls1x-nfc.yaml
+> > > new file mode 100644
+> > > index 000000000000..2494c7b3b506
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/mtd/loongson,ls1x-nfc.yaml
+> > > @@ -0,0 +1,66 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/mtd/loongson,ls1x-nfc.yaml#
 > >
-> > Add devicetree binding document for Loongson-1 NAND Controller.
+> > Please make the filename match the compatible.
 > >
-> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > ---
-> > Changes in v6:
-> > - A newly added patch
-> > ---
-> >  .../devicetree/bindings/mtd/loongson,ls1x-nfc.yaml | 66 ++++++++++++++=
-++++++++
-> >  1 file changed, 66 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/mtd/loongson,ls1x-nfc.ya=
-ml b/Documentation/devicetree/bindings/mtd/loongson,ls1x-nfc.yaml
-> > new file mode 100644
-> > index 000000000000..2494c7b3b506
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/mtd/loongson,ls1x-nfc.yaml
-> > @@ -0,0 +1,66 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/mtd/loongson,ls1x-nfc.yaml#
->
-> Please make the filename match the compatible.
->
-Got it. I'll rename it to loongson,ls1-nfc.yaml and change the
-compatible as follows.
-  compatible:
-   items:
-     - enum:
-         - loongson,ls1a-nfc
-         - loongson,ls1b-nfc
-         - loongson,ls1c-nfc
-     - const: loongson,ls1-nfc
+> Got it. I'll rename it to loongson,ls1-nfc.yaml and change the
+> compatible as follows.
+>   compatible:
+>    items:
+>      - enum:
+>          - loongson,ls1a-nfc
+>          - loongson,ls1b-nfc
+>          - loongson,ls1c-nfc
+>      - const: loongson,ls1-nfc
 
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Loongson-1 NAND Controller
-> > +
-> > +maintainers:
-> > +  - Keguang Zhang <keguang.zhang@gmail.com>
-> > +
-> > +allOf:
-> > +  - $ref: nand-controller.yaml
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - const: loongson,ls1b-nfc
-> > +      - items:
-> > +          - enum:
-> > +              - loongson,ls1a-nfc
-> > +              - loongson,ls1c-nfc
-> > +          - const: loongson,ls1b-nfc
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  dmas:
-> > +    maxItems: 1
-> > +
-> > +  dma-names:
-> > +    const: rxtx
->
-> If you only have one dma, why do you need a dma-names entry for it?
->
-Without "dma-names", the following error will come out when doing
-dt_binding_check.
-  nand-controller@1fe78000: 'dma-names' is a required property
+No, please do not do this. Just call the file "ls1b-nfc".
 
-In addition, loongson1_nand.c calls dma_request_chan(). Then
-dma_request_chan() calls of_dma_request_slave_channel(), in which the
-'dma-names' is necessary.
-struct dma_chan *of_dma_request_slave_channel(struct device_node *np,
-                                             const char *name)
-{
-       ...
-       count =3D of_property_count_strings(np, "dma-names");
-       if (count < 0) {
-               pr_err("%s: dma-names property of node '%pOF' missing
-or empty\n",
-                       __func__, np);
-               return ERR_PTR(-ENODEV);
-       }
-       ...
-}
+Thanks,
+Conor.
 
-Thanks for your review!
+--8CphlZzrFnQFHqWt
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> Looks fine to me otherwise though,
-> COnor.
->
-> > +
-> > +patternProperties:
-> > +  "^nand@[0-3]$":
-> > +    type: object
-> > +    $ref: raw-nand-chip.yaml
-> > +
-> > +    unevaluatedProperties: false
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - dmas
-> > +  - dma-names
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    nand-controller@1fe78000 {
-> > +        compatible =3D "loongson,ls1b-nfc";
-> > +        reg =3D <0x1fe78000 0x40>;
-> > +
-> > +        #address-cells =3D <1>;
-> > +        #size-cells =3D <0>;
-> > +
-> > +        dmas =3D <&dma 0>;
-> > +        dma-names =3D "rxtx";
-> > +
-> > +        nand@0 {
-> > +            reg =3D <0>;
-> > +            nand-use-soft-ecc-engine;
-> > +            nand-ecc-algo =3D "hamming";
-> > +        };
-> > +    };
-> >
-> > --
-> > 2.40.1
-> >
-> >
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZgU6OQAKCRB4tDGHoIJi
+0qpNAQDPGcLdo896VBifrNbIBoMmtgOKSlc0RzqTLluuo9ii3wD+J5nVH5Pj+smz
+YxsCrN3q+VxFGdQPTqKzmuxNdvT8owU=
+=1nfV
+-----END PGP SIGNATURE-----
 
-
---
-Best regards,
-
-Keguang Zhang
+--8CphlZzrFnQFHqWt--
 
