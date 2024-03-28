@@ -1,158 +1,221 @@
-Return-Path: <linux-mips+bounces-2503-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2504-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47965890855
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Mar 2024 19:31:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A7BE8908C0
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Mar 2024 19:56:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D331A1F22089
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Mar 2024 18:31:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E592B29FBD4
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Mar 2024 18:56:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0268F136999;
-	Thu, 28 Mar 2024 18:31:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77B3B1386DA;
+	Thu, 28 Mar 2024 18:55:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QQ+Ol01e"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3Hb+XRtA"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A3C1327F8;
-	Thu, 28 Mar 2024 18:31:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99A9313956B
+	for <linux-mips@vger.kernel.org>; Thu, 28 Mar 2024 18:55:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711650709; cv=none; b=SMfPpC/Ltxe6Y8bC5SBajqJZrUZLWeDjd2q2tPn0YmZY9VqROns4nCSEjN28OGtBPUoFVC6vNDa/1JN0QcGmhBt6aACp2g2UpXJYEOUrvYNlyQdao53zf+y/wfrcMLfoc7GQcKGxMhctD+J7/mfxBTufds1UkseUkYlu5fDxnxY=
+	t=1711652141; cv=none; b=RX29mEv2vM4069PdnaJk0RPWhDYgZZEHAvHC4Yq+MKNMsUui+cspPl0UshGXmZYsBNOc2HQFZU6eshSo6bhOmvOjRqUEzy5ZaxoMdnvxfIoFsmwpVKAz5bwlcMip4uRonGPtLsy6JqEVz80ODuhiwM9HnYsnCV5YL+nnpj4hrmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711650709; c=relaxed/simple;
-	bh=09Kq07Ctu1YK6YAopY47/y5AlbJwjHjNBMXfeYxKY3s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mc+bmHU7JCh9T2qz/jKyKISblvHUMRyjYOEKwefhMp+SpBo+KEZunCDaUOfyxVqaH2nRtbEFzsaXfY7St2PHPArtNQ18jv3kbP8sMNYjt2B8WRyDhc54G3/LIVhXybYiD9uu0NBwwzc92ifzdPX4yIYM9RzRZUURIOKxpkoXwjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QQ+Ol01e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9561C433C7;
-	Thu, 28 Mar 2024 18:31:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711650709;
-	bh=09Kq07Ctu1YK6YAopY47/y5AlbJwjHjNBMXfeYxKY3s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QQ+Ol01eGrtbmmXmm5UOF8z3YVrAFzrLyUinoyXQOw2oD/3BtgXxtRpcyL6qEGHMi
-	 Fuf1dGmu1+mXVCx0A2v+QG1OZmZa5GwKeTprSp0vXiGl5WvN4w7glf0wb/Ho4jGsI6
-	 A7WhuNfxRZ+SYEDd2EHDavctgY396ec7mZY6h+UmOVbwQhncgmm56Grgtq512eTU0I
-	 juRVEJtAyO8mA2/2SAJmqgsMiWvU8lqDqaMAEVDmDUSGgn+tYLJ7mum23hafaIgM0S
-	 0/cB+mlWradcKD4+nkGPqD1rFiy3Q7s73Qm1b4qRq5IHy2lK358t2WVn9s4EqNJkuF
-	 qXaWYWlrz6OoQ==
-Date: Fri, 29 Mar 2024 00:01:43 +0530
-From: Vinod Koul <vkoul@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Allen Pais <apais@linux.microsoft.com>, linux-kernel@vger.kernel.org,
-	Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>,
-	Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Paul Cercueil <paul@crapouillou.net>, Eugeniy.Paltsev@synopsys.com,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Viresh Kumar <vireshk@kernel.org>, Frank Li <Frank.Li@nxp.com>,
-	Leo Li <leoyang.li@nxp.com>, zw@zh-kernel.org,
-	Zhou Wang <wangzhou1@hisilicon.com>, haijie1@huawei.com,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Sean Wang <sean.wang@mediatek.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-	logang@deltatee.com, Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>, peter.ujfalusi@gmail.com,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	maintainers@bluecherrydvr.com, aubin.constans@microchip.com,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Manuel Lauss <manuel.lauss@gmail.com>,
-	=?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-	"jh80.chung" <jh80.chung@samsung.com>, oakad@yahoo.com,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>, brucechang@via.com.tw,
-	HaraldWelte@viatech.com, pierre@ossman.eu, duncan.sands@free.fr,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Oliver Neukum <oneukum@suse.com>,
-	openipmi-developer@lists.sourceforge.net, dmaengine@vger.kernel.org,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	imx@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-	linux-mediatek@lists.infradead.org,
-	linux-actions@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev,
-	linux-tegra@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-	"linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
-	Linux-OMAP <linux-omap@vger.kernel.org>,
-	Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-	linux-s390@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/9] dma: Convert from tasklet to BH workqueue
-Message-ID: <ZgW3j1qkLA-QU4iM@matsya>
-References: <20240327160314.9982-1-apais@linux.microsoft.com>
- <20240327160314.9982-3-apais@linux.microsoft.com>
- <ZgUGXTKPVhrA1tam@matsya>
- <2e9257af-c123-406b-a189-eaebeecc1d71@app.fastmail.com>
+	s=arc-20240116; t=1711652141; c=relaxed/simple;
+	bh=HEIIl0JSGFr4znc+2rNtcx7sc7JVm8rdL5u1IoWR8YY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tM+kWVKVKmAcvQsl/kYyb+XRXO55GQiPV+ZE0kzNXnsp3QBtol2UQiYbkSQKWTbsAE0hLVkVVu0s7f+5RMY3IA9hsCK2LKnHCD145maUiSYqXRzG6GzZFsoDLiHuKOQCt8CPf+ULaZk1HN1VKItUdTkXvbtB6wWfMxbtAtylMJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3Hb+XRtA; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a46cd9e7fcaso169587566b.1
+        for <linux-mips@vger.kernel.org>; Thu, 28 Mar 2024 11:55:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1711652137; x=1712256937; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/g0QRd03Q47daRFmOpf216fDEljWTmtj0CWrlO2PgGk=;
+        b=3Hb+XRtAwkk/pUajFr4adIyn143CbCRNoz4ccLHfrEILcL2DaBXJgRzVn523BzxLIW
+         SlDsWRkY+EJzn2phJnhfdGUCWGAvqjRRUGpDhhYGc1RNFKvj/UyIS7tkAOCH+GizezUH
+         Q0FuDIQFk8w+YBWsFoGc95yI0VQehrHpVm5ak6CuvmCt385vHaWYrhRKrFUKfdJsGTeB
+         qjacse03vJTO4H8UVvu3cHA5lqIMt4Q66SXYjFAUjlDi4xTf5nX+vPn0qoxB2hlZGkpP
+         OyarGDeASq0f0xuzTDKXTVNFper3pHEuTcUZWfOaMk7T36Dq65PrYfaQJq9DJkWzpwds
+         x+AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711652137; x=1712256937;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/g0QRd03Q47daRFmOpf216fDEljWTmtj0CWrlO2PgGk=;
+        b=QdklDErFva/39Fz91HsFnP+mleyi9oRweD4PBfWUCyWm6Q0CfmtCve7VgM6znYxd6A
+         Qk/v1E0iY/UZGOdwwf1fUjYfkoMJ+jKRXF7KZ/uABkxmS78dJCB6z5UwznrX0CxL2FIN
+         IBO6pABaiaNdeDQBhWbQQme5DFPk2yho6KxSUr/EUTEN2nygss/tcNWnFErYcBHqEjEF
+         mbdfqJfjTs/Vf7+nGhnA/d+Gro2RzYyXNhX9zOL0Di1V/KDnvrmTRQJXX9iXUmOF+ygL
+         CdseN/UJFGKn22O+ZvG2XxDi72fyjdzw6iPdDd96JBhY4sHLwgrlLNKRjrk6dbZLxleN
+         oyYg==
+X-Forwarded-Encrypted: i=1; AJvYcCX7YGcLXcW7pLpx4EW5sjrcg7NPRTePjD5IhZ5ro3mbjPTuZb9xFiOBJob0+1An4ZltLWijmkRbHJ+DM7bZqqhFSiTuZB1BnikpOw==
+X-Gm-Message-State: AOJu0Yz2ytPVuIY8RCuw5h3LJCI84a/bVWdGscIubzNgqL7Mx9VVkjsq
+	L5FN+9HPfwwaZ2IvyTXDW1GvHCCR74WBwEGn2xqDWD04v9W1+4RIPoFPVilvzq05SrGwrHHGDpy
+	hgrCC+kcjr01IaVW6Zm97OUnqO6jmDfmiIWnr
+X-Google-Smtp-Source: AGHT+IFT7BjTbnc4go6zIYPcPdx3xb2qgp8zmitrga5SNdEeKiv/hX6FeRXvUPA8/BgWnl2x89qqbJVYumySJ8ZZV8Y=
+X-Received: by 2002:a17:907:7898:b0:a4e:eb1:9a3d with SMTP id
+ ku24-20020a170907789800b00a4e0eb19a3dmr85852ejc.68.1711652136773; Thu, 28 Mar
+ 2024 11:55:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2e9257af-c123-406b-a189-eaebeecc1d71@app.fastmail.com>
+References: <20240326225048.785801-1-almasrymina@google.com>
+ <20240326225048.785801-5-almasrymina@google.com> <20240328182812.GJ651713@kernel.org>
+In-Reply-To: <20240328182812.GJ651713@kernel.org>
+From: Mina Almasry <almasrymina@google.com>
+Date: Thu, 28 Mar 2024 11:55:23 -0700
+Message-ID: <CAHS8izMZuRwQZsL7PQdoRcrgeh6rEa7n1NMhbm-aZMes2QHVzg@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v7 04/14] netdev: support binding dma-buf to netdevice
+To: Simon Horman <horms@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 28-03-24, 11:08, Arnd Bergmann wrote:
-> On Thu, Mar 28, 2024, at 06:55, Vinod Koul wrote:
-> > On 27-03-24, 16:03, Allen Pais wrote:
-> >> The only generic interface to execute asynchronously in the BH context is
-> >> tasklet; however, it's marked deprecated and has some design flaws. To
-> >> replace tasklets, BH workqueue support was recently added. A BH workqueue
-> >> behaves similarly to regular workqueues except that the queued work items
-> >> are executed in the BH context.
+On Thu, Mar 28, 2024 at 11:28=E2=80=AFAM Simon Horman <horms@kernel.org> wr=
+ote:
+>
+> On Tue, Mar 26, 2024 at 03:50:35PM -0700, Mina Almasry wrote:
+> > Add a netdev_dmabuf_binding struct which represents the
+> > dma-buf-to-netdevice binding. The netlink API will bind the dma-buf to
+> > rx queues on the netdevice. On the binding, the dma_buf_attach
+> > & dma_buf_map_attachment will occur. The entries in the sg_table from
+> > mapping will be inserted into a genpool to make it ready
+> > for allocation.
 > >
-> > Thanks for conversion, am happy with BH alternative as it helps in
-> > dmaengine where we need shortest possible time between tasklet and
-> > interrupt handling to maximize dma performance
-> 
-> I still feel that we want something different for dmaengine,
-> at least in the long run. As we have discussed in the past,
-> the tasklet context in these drivers is what the callbacks
-> from the dma client device is run in, and a lot of these probably
-> want something other than tasklet context, e.g. just call
-> complete() on a client-provided completion structure.
-> 
-> Instead of open-coding the use of the system_bh_wq in each
-> dmaengine, how about we start with a custom WQ_BH
-> specifically for the dmaengine subsystem and wrap them
-> inside of another interface.
-> 
-> Since almost every driver associates the tasklet with the
-> dma_chan, we could go one step further and add the
-> work_queue structure directly into struct dma_chan,
-> with the wrapper operating on the dma_chan rather than
-> the work_queue.
+> > The chunks in the genpool are owned by a dmabuf_chunk_owner struct whic=
+h
+> > holds the dma-buf offset of the base of the chunk and the dma_addr of
+> > the chunk. Both are needed to use allocations that come from this chunk=
+.
+> >
+> > We create a new type that represents an allocation from the genpool:
+> > net_iov. We setup the net_iov allocation size in the
+> > genpool to PAGE_SIZE for simplicity: to match the PAGE_SIZE normally
+> > allocated by the page pool and given to the drivers.
+> >
+> > The user can unbind the dmabuf from the netdevice by closing the netlin=
+k
+> > socket that established the binding. We do this so that the binding is
+> > automatically unbound even if the userspace process crashes.
+> >
+> > The binding and unbinding leaves an indicator in struct netdev_rx_queue
+> > that the given queue is bound, but the binding doesn't take effect unti=
+l
+> > the driver actually reconfigures its queues, and re-initializes its pag=
+e
+> > pool.
+> >
+> > The netdev_dmabuf_binding struct is refcounted, and releases its
+> > resources only when all the refs are released.
+> >
+> > Signed-off-by: Willem de Bruijn <willemb@google.com>
+> > Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
+> > Signed-off-by: Mina Almasry <almasrymina@google.com>
+>
+> ...
+>
+> > +int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_id=
+x,
+> > +                                 struct net_devmem_dmabuf_binding *bin=
+ding)
+> > +{
+> > +     struct netdev_rx_queue *rxq;
+> > +     u32 xa_idx;
+> > +     int err;
+> > +
+> > +     if (rxq_idx >=3D dev->num_rx_queues)
+> > +             return -ERANGE;
+> > +
+> > +     rxq =3D __netif_get_rx_queue(dev, rxq_idx);
+> > +     if (rxq->mp_params.mp_priv)
+> > +             return -EEXIST;
+> > +
+> > +     err =3D xa_alloc(&binding->bound_rxq_list, &xa_idx, rxq, xa_limit=
+_32b,
+> > +                    GFP_KERNEL);
+> > +     if (err)
+> > +             return err;
+> > +
+> > +     /* We hold the rtnl_lock while binding/unbinding dma-buf, so we c=
+an't
+> > +      * race with another thread that is also modifying this value. Ho=
+wever,
+> > +      * the driver may read this config while it's creating its * rx-q=
+ueues.
+> > +      * WRITE_ONCE() here to match the READ_ONCE() in the driver.
+> > +      */
+> > +     WRITE_ONCE(rxq->mp_params.mp_ops, &dmabuf_devmem_ops);
+>
+> Hi Mina,
+>
+> This causes a build failure because mabuf_devmem_ops is not added until a
+> subsequent patch in this series.
+>
 
-I think that is very great idea. having this wrapped in dma_chan would
-be very good way as well
+My apologies. I do notice the failure in patchwork now. I'll do a
+patch by patch build for the next iteration.
 
-Am not sure if Allen is up for it :-)
+> > +     WRITE_ONCE(rxq->mp_params.mp_priv, binding);
+> > +
+> > +     err =3D net_devmem_restart_rx_queue(dev, rxq_idx);
+> > +     if (err)
+> > +             goto err_xa_erase;
+> > +
+> > +     return 0;
+> > +
+> > +err_xa_erase:
+> > +     WRITE_ONCE(rxq->mp_params.mp_ops, NULL);
+> > +     WRITE_ONCE(rxq->mp_params.mp_priv, NULL);
+> > +     xa_erase(&binding->bound_rxq_list, xa_idx);
+> > +
+> > +     return err;
+> > +}
+>
+> ...
 
--- 
-~Vinod
+
+
+--=20
+Thanks,
+Mina
 
