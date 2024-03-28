@@ -1,365 +1,178 @@
-Return-Path: <linux-mips+bounces-2494-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2495-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E82F8901B4
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Mar 2024 15:28:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C717890288
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Mar 2024 16:01:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DA891F24A24
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Mar 2024 14:28:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7CF3B22D85
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Mar 2024 15:01:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F28AB52F6F;
-	Thu, 28 Mar 2024 14:28:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDAA212DDAC;
+	Thu, 28 Mar 2024 15:00:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="KPsui874";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="aO62qSft"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="Wx3CBzYB"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh5-smtp.messagingengine.com (fhigh5-smtp.messagingengine.com [103.168.172.156])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 971EA1DDF6;
-	Thu, 28 Mar 2024 14:28:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5117812F368;
+	Thu, 28 Mar 2024 15:00:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711636085; cv=none; b=Y3lAZHrcm6JLBysRjg1YF5ifh3faAn+ehIrcgzZcUuTFbL9uKHFs6qGCP6FLRjrn+iDd8Q5c6ZGugc7VvU49KSiRUF44UpPnqLQnHwWRuUnz/xyDr+SzCjkBHN39Kj89MM6Skplyk0FwqLtQ6PjxRmiUZfFcDB8qvPN/2DbTTAk=
+	t=1711638042; cv=none; b=L/noUV9EDB3LtnQTUHEoiWI1PljA5oXYlKN7BcmqDUQFKuNasH8ks2n3T9xT/IebMVW28mBrO8i3ebKn+xNyZPGrYLvzvowCzem85rdHtE/GzEFdgne0je9C9BgnemjV6EsXqv1TfwOHZKPv4Cc/3CL9MS7xKptrxOj615oMaxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711636085; c=relaxed/simple;
-	bh=mwGtBgGJj6bBMqTbrLQj1+R4eADWpsK1gfd2taxNtNU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=L7p21pJuq5JA181MKfwcd/fdcO+rk6BO/5Lh5HkGZbXbEQP4RvFZNAeKCg8CL2eDMo988eYpZ3DxQtxQpB7pZAPH4b5y14n4rEnU/lpMUDvoMSOreR3h4Vvj/pfJWiPv6PIvR+/pvcE6F84HqcD2/L+UjBXTkmTtyDS38c8YOCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=KPsui874; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=aO62qSft; arc=none smtp.client-ip=103.168.172.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 815151140141;
-	Thu, 28 Mar 2024 10:28:02 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 28 Mar 2024 10:28:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm3; t=1711636082; x=1711722482; bh=9S
-	0hsBa+ooMwSt3IfFcNHyKHIupDb10Kyxeb/hBGlq4=; b=KPsui874iMg+NdeupL
-	HqhmcdVgJMPhMIAIOHwKOhpHKRaV4Q0lxBYqnGNboVNUUeHOG6H4huq9KBVRgeRP
-	1iJdZzYduty2QhlVlWq4BOcSiZbeiItXeVvr/44cR1eITiOAPJ6ZBbQt4DVjRH8Z
-	NHhBVuEYE7vnutOaUcZN2nxbzCWw19CQFLuvlnYF/h+lwBpx1sLG+CFjVmye1LDw
-	melXnipPTPynIode5q08R72s6cPcFb+McPE3ozDLq32/EtdDA2FOXebGHiddDKln
-	nxPWtXJp7lP7YxvY+j6YOpPMIC25PxqTq2PWr7w6jm+eeCdAVoVWGK8uz+hq596U
-	65Uw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1711636082; x=1711722482; bh=9S0hsBa+ooMwS
-	t3IfFcNHyKHIupDb10Kyxeb/hBGlq4=; b=aO62qSftb7Dofp+tANAbacqUICmEe
-	/SdEQwusZI4p/hy8LjdK3hx3u55WnoSPDmF2cNZVOhMry5thOSVjqW8iqfSlXrpP
-	+1fKU2BmPQ/QYIKLOHqzrrI08nSdmdVzliu9xt/JJ2KUNZ4dJak/VHhNNIkWGfQi
-	ANumU7Gj2kM+FVb6YRljKJffFhfSFDScwBpLrGL/kzxui4bzZ67e+G5vYOxQe47F
-	6sL6K3dxlJx6WQ3L2kwoqtj7LkIW2xYtMQ4fp7snMpOMv3Vk2wx+4vkNnK43Wstv
-	+bRteI5aQfMkkTmHUwvdSa2j16+jVDbRlFoG672/p1bHu0wDe6kR6KCXw==
-X-ME-Sender: <xms:cX4FZjfJlZXo0SSyHwwkPwr38aPqERdXyPCbqnw9Ympz5WFjSbMIbw>
-    <xme:cX4FZpMyOLwo8COTQPfu3WdEtQ6fqVL1pxwkS-c_n9ZWWEiyBSIbrfkNHlpir0OU2
-    jyJzbnJJmILGtnAc_0>
-X-ME-Received: <xmr:cX4FZsjyQbK2gcalnhaCP2fwqct_eRuphtOOGM6hPGX-8INTpeohHGQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudduledgieefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffufggtgfgkffvvefosehtjeertdertdejnecuhfhrohhmpeflihgrgihu
-    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
-    ftrfgrthhtvghrnhepuddtudevudffjeffhfelgeeileektdelleelkeekteeltefgudei
-    keeuhfejvefgnecuffhomhgrihhnpehgihhthhhusgdrtghomhdpshgtrghllhefvddqoh
-    efvddrshgspdhstggrlhhlieegqdhnfedvrdhssgdpshgtrghllheigedqnheigedrshgs
-    pdhstggrlhhlieegqdhofedvrdhssgenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:cX4FZk97d6sDT9sx3s1VLqyYoNhGlTYs5LI9VVNIGZ414ZidcwNNIg>
-    <xmx:cn4FZvs-wMVW9uOwJ4GnSnYuitpRl9sMkgf21tOno5uGRKi051hTtA>
-    <xmx:cn4FZjHvuiUdv9YBGy9WuoA18sCNJ8RoFMNcc-Kqspj_3wkVPSNTdQ>
-    <xmx:cn4FZmNvR3UecyoGyQEOO1KG2xWlHSm7g77s6fDDqfb_egd2bkQbig>
-    <xmx:cn4FZo-HrzcW94TYy_Gf3hsqGr6UPH9oCJ42SOxtE81f_WfjDBwwKQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 28 Mar 2024 10:28:00 -0400 (EDT)
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Thu, 28 Mar 2024 14:27:56 +0000
-Subject: [PATCH] MIPS: scall: Save thread_info.syscall unconditionally on
- entry
+	s=arc-20240116; t=1711638042; c=relaxed/simple;
+	bh=YDPVzfrvCv+pzuXSEy32SACNexDWUcs4tGK+eCOtLyM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HV7kjQTTDK/b52zBeHmGs5xFROyftDHhDR1+4OBhJmpWP7vCs5a1VVVBkqwR82d6Ldnu3cMLc8Si4Uzo81XUGoV6sLTHGjisAIRCKwo3c+xILLMbFm/VNRCpI4qnUjnlQZLpVnzVzqOjG+w2/kSrqenh+juxZCX9AFdq9ML4200=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b=Wx3CBzYB; arc=none smtp.client-ip=212.227.17.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1711637973; x=1712242773; i=deller@gmx.de;
+	bh=YDPVzfrvCv+pzuXSEy32SACNexDWUcs4tGK+eCOtLyM=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=Wx3CBzYBHr9nc/IRrk2z31GjbumaJZ/bAeCu4XyCdbBU9LgVrXbM5+XVE4MK+Eni
+	 ECldR0xODKA2jN8dW/Aou8jEzj8GdkC0NE1P7w9vRpx5MVIIEfXmfuBWMPJHcmuHC
+	 U2FPSUmWWRFicjFyplPA4lu5eldSexmlLDznzqXSxXt8yhARHmtuPF+JmYIhxkJsD
+	 wmkzWQcVHnqvh2gMgE22wVm/+OEDs87HS5o9sdV6TwHCLBJy6s5bRFDe6Avc6wf7S
+	 KY+qaIG/fGQg8vhqEWHGNMe8gHs1RQ3p3xedh2r44boU7Rb865PHfMbnKel/Z5zXh
+	 3FHelrpVAg0gw9421w==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [10.8.0.6] ([78.94.87.245]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mof57-1se6Ht3RxR-00p0hR; Thu, 28
+ Mar 2024 15:59:33 +0100
+Message-ID: <2a017fe8-5261-4ad9-a958-85f147185e07@gmx.de>
+Date: Thu, 28 Mar 2024 15:59:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240328-mips_save_syscall-v1-1-9e1d62d6999d@flygoat.com>
-X-B4-Tracking: v=1; b=H4sIAGt+BWYC/x3MSwqAMAwA0auUrC2YKvi5ikipNWpAqzQginh3i
- 8u3mHlAKDIJtOqBSCcL7yEBMwV+cWEmzWMymNyUeWFqvfEhVtxJVm7xbl31QGWFBaL3zQCpOyJ
- NfP3Prn/fD55Z+nhjAAAA
-To: Oleg Nesterov <oleg@redhat.com>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Xi Ruoyao <xry111@xry111.site>, Jiaxun Yang <jiaxun.yang@flygoat.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8391;
- i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=mwGtBgGJj6bBMqTbrLQj1+R4eADWpsK1gfd2taxNtNU=;
- b=owGbwMvMwCHmXMhTe71c8zDjabUkhjTWusLwF3KzudmW7EhKPaXzxlLNfeuykJUbeyUXOM6e8
- 6qt1iGjo5SFQYyDQVZMkSVEQKlvQ+PFBdcfZP2BmcPKBDKEgYtTACayupCRYXOzrmxRd3qB0IWS
- QNcy7lXBzIv38xeqn7mmLvazs/Doe0aGWYfUrffxvG0vDo39mLZCtef6xgW7fz12M1VYWfkkXb6
- UHQA=
-X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
- fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/3] arch: Remove struct fb_info from video helpers
+To: Thomas Zimmermann <tzimmermann@suse.de>, arnd@arndb.de,
+ javierm@redhat.com, sui.jingfeng@linux.dev
+Cc: linux-arch@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-fbdev@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-sh@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-snps-arc@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>
+References: <20240327204450.14914-1-tzimmermann@suse.de>
+ <20240327204450.14914-3-tzimmermann@suse.de>
+ <b5a8bc60-ad16-407d-9e57-c224467c3f06@gmx.de>
+ <9db306b2-b102-4bf5-a120-e1d279269fe9@suse.de>
+Content-Language: en-US
+From: Helge Deller <deller@gmx.de>
+Autocrypt: addr=deller@gmx.de; keydata=
+ xsFNBF3Ia3MBEAD3nmWzMgQByYAWnb9cNqspnkb2GLVKzhoH2QD4eRpyDLA/3smlClbeKkWT
+ HLnjgkbPFDmcmCz5V0Wv1mKYRClAHPCIBIJgyICqqUZo2qGmKstUx3pFAiztlXBANpRECgwJ
+ r+8w6mkccOM9GhoPU0vMaD/UVJcJQzvrxVHO8EHS36aUkjKd6cOpdVbCt3qx8cEhCmaFEO6u
+ CL+k5AZQoABbFQEBocZE1/lSYzaHkcHrjn4cQjc3CffXnUVYwlo8EYOtAHgMDC39s9a7S90L
+ 69l6G73lYBD/Br5lnDPlG6dKfGFZZpQ1h8/x+Qz366Ojfq9MuuRJg7ZQpe6foiOtqwKym/zV
+ dVvSdOOc5sHSpfwu5+BVAAyBd6hw4NddlAQUjHSRs3zJ9OfrEx2d3mIfXZ7+pMhZ7qX0Axlq
+ Lq+B5cfLpzkPAgKn11tfXFxP+hcPHIts0bnDz4EEp+HraW+oRCH2m57Y9zhcJTOJaLw4YpTY
+ GRUlF076vZ2Hz/xMEvIJddRGId7UXZgH9a32NDf+BUjWEZvFt1wFSW1r7zb7oGCwZMy2LI/G
+ aHQv/N0NeFMd28z+deyxd0k1CGefHJuJcOJDVtcE1rGQ43aDhWSpXvXKDj42vFD2We6uIo9D
+ 1VNre2+uAxFzqqf026H6cH8hin9Vnx7p3uq3Dka/Y/qmRFnKVQARAQABzRxIZWxnZSBEZWxs
+ ZXIgPGRlbGxlckBnbXguZGU+wsGRBBMBCAA7AhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheA
+ FiEERUSCKCzZENvvPSX4Pl89BKeiRgMFAl3J1zsCGQEACgkQPl89BKeiRgNK7xAAg6kJTPje
+ uBm9PJTUxXaoaLJFXbYdSPfXhqX/BI9Xi2VzhwC2nSmizdFbeobQBTtRIz5LPhjk95t11q0s
+ uP5htzNISPpwxiYZGKrNnXfcPlziI2bUtlz4ke34cLK6MIl1kbS0/kJBxhiXyvyTWk2JmkMi
+ REjR84lCMAoJd1OM9XGFOg94BT5aLlEKFcld9qj7B4UFpma8RbRUpUWdo0omAEgrnhaKJwV8
+ qt0ULaF/kyP5qbI8iA2PAvIjq73dA4LNKdMFPG7Rw8yITQ1Vi0DlDgDT2RLvKxEQC0o3C6O4
+ iQq7qamsThLK0JSDRdLDnq6Phv+Yahd7sDMYuk3gIdoyczRkXzncWAYq7XTWl7nZYBVXG1D8
+ gkdclsnHzEKpTQIzn/rGyZshsjL4pxVUIpw/vdfx8oNRLKj7iduf11g2kFP71e9v2PP94ik3
+ Xi9oszP+fP770J0B8QM8w745BrcQm41SsILjArK+5mMHrYhM4ZFN7aipK3UXDNs3vjN+t0zi
+ qErzlrxXtsX4J6nqjs/mF9frVkpv7OTAzj7pjFHv0Bu8pRm4AyW6Y5/H6jOup6nkJdP/AFDu
+ 5ImdlA0jhr3iLk9s9WnjBUHyMYu+HD7qR3yhX6uWxg2oB2FWVMRLXbPEt2hRGq09rVQS7DBy
+ dbZgPwou7pD8MTfQhGmDJFKm2jvOwU0EXchrcwEQAOsDQjdtPeaRt8EP2pc8tG+g9eiiX9Sh
+ rX87SLSeKF6uHpEJ3VbhafIU6A7hy7RcIJnQz0hEUdXjH774B8YD3JKnAtfAyuIU2/rOGa/v
+ UN4BY6U6TVIOv9piVQByBthGQh4YHhePSKtPzK9Pv/6rd8H3IWnJK/dXiUDQllkedrENXrZp
+ eLUjhyp94ooo9XqRl44YqlsrSUh+BzW7wqwfmu26UjmAzIZYVCPCq5IjD96QrhLf6naY6En3
+ ++tqCAWPkqKvWfRdXPOz4GK08uhcBp3jZHTVkcbo5qahVpv8Y8mzOvSIAxnIjb+cklVxjyY9
+ dVlrhfKiK5L+zA2fWUreVBqLs1SjfHm5OGuQ2qqzVcMYJGH/uisJn22VXB1c48yYyGv2HUN5
+ lC1JHQUV9734I5cczA2Gfo27nTHy3zANj4hy+s/q1adzvn7hMokU7OehwKrNXafFfwWVK3OG
+ 1dSjWtgIv5KJi1XZk5TV6JlPZSqj4D8pUwIx3KSp0cD7xTEZATRfc47Yc+cyKcXG034tNEAc
+ xZNTR1kMi9njdxc1wzM9T6pspTtA0vuD3ee94Dg+nDrH1As24uwfFLguiILPzpl0kLaPYYgB
+ wumlL2nGcB6RVRRFMiAS5uOTEk+sJ/tRiQwO3K8vmaECaNJRfJC7weH+jww1Dzo0f1TP6rUa
+ fTBRABEBAAHCwXYEGAEIACAWIQRFRIIoLNkQ2+89Jfg+Xz0Ep6JGAwUCXchrcwIbDAAKCRA+
+ Xz0Ep6JGAxtdEAC54NQMBwjUNqBNCMsh6WrwQwbg9tkJw718QHPw43gKFSxFIYzdBzD/YMPH
+ l+2fFiefvmI4uNDjlyCITGSM+T6b8cA7YAKvZhzJyJSS7pRzsIKGjhk7zADL1+PJei9p9idy
+ RbmFKo0dAL+ac0t/EZULHGPuIiavWLgwYLVoUEBwz86ZtEtVmDmEsj8ryWw75ZIarNDhV74s
+ BdM2ffUJk3+vWe25BPcJiaZkTuFt+xt2CdbvpZv3IPrEkp9GAKof2hHdFCRKMtgxBo8Kao6p
+ Ws/Vv68FusAi94ySuZT3fp1xGWWf5+1jX4ylC//w0Rj85QihTpA2MylORUNFvH0MRJx4mlFk
+ XN6G+5jIIJhG46LUucQ28+VyEDNcGL3tarnkw8ngEhAbnvMJ2RTx8vGh7PssKaGzAUmNNZiG
+ MB4mPKqvDZ02j1wp7vthQcOEg08z1+XHXb8ZZKST7yTVa5P89JymGE8CBGdQaAXnqYK3/yWf
+ FwRDcGV6nxanxZGKEkSHHOm8jHwvQWvPP73pvuPBEPtKGLzbgd7OOcGZWtq2hNC6cRtsRdDx
+ 4TAGMCz4j238m+2mdbdhRh3iBnWT5yPFfnv/2IjFAk+sdix1Mrr+LIDF++kiekeq0yUpDdc4
+ ExBy2xf6dd+tuFFBp3/VDN4U0UfG4QJ2fg19zE5Z8dS4jGIbLg==
+In-Reply-To: <9db306b2-b102-4bf5-a120-e1d279269fe9@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:7SWJg03mME+2vw8fb9mxmZKSJMDEo0mYJI2J/T0ImsQ5mhttnG0
+ iBaFsAdrlSeIFpZ0cWgCd4uGlQYlXcUi5Zpcy3iAYz1i9QHGWtLhhZjLv9Z8Ir6J86LVacs
+ +aQYyTrzgmYujTZODvUjFNl/NjPQnY2fRMy5lxrzpb922oh+DGwCAsIOL3IYfo3osCDms6X
+ 1BKDcYxw9teL2gTlonvnA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:in3ib8DI/UQ=;kh/43hDUJpFePNUZFXuwCb/rS5P
+ JVZy5WsGUNMASMfYITGnTfXwAZvBSre8fCLA2J/O9Ngw2Cwll7f/hr4EPqpMUpF2hxAC35mB5
+ G0o9h78NFccWc2ws1B3AdrZu1rEYkNmbvCcS56DNZ5DuL3UZ6ITCynCyaTt3ov5bk0uYnCITB
+ Mvehl1G3RNQ14AsbOmooCI+J0iOcfyw9C66+Et+qlTvNIW0GRjK32nj8mDAmPS9ACbtGe0Kvm
+ zDX0ouKF5ojMIc+uUrloPg7D4YRfLzwVMhiDqzm2JtkeUMEe4WtbUzPMo3uiAEjYii/UZ3zPn
+ 65e72gFqvW4nq9lY3sagPOXNFFPrQaGWSHYqsXd8V2ixzeI3fNH3L2fvhaI9PDRVvi7znyToe
+ 5c8MbhTVNubRLjH+cNgUlXaDG2HznwhCWYSeZ5LPBSqSsDb41UQx+O9/6vYAI4E/GvObWZSCK
+ bhaEACmJUbskma36CBnIHqR/EaysUI7QZCrJIZkFRzWpLYozhJKCzo8eXX/S/CkXeHo7CVQpu
+ NxoLBKCn9d0vQN+ke9+yG/RFGY8cL5a8G+51OoMxOkZ2w5+Ss5WAD45Qx7Gur1Y/ZW2yVq5iz
+ XcI5ggmsCUcFa77bh94EtF90IO8OWbdeXDxQvZU+N1uIBfbo/qbuHM6kmeoQa+EdjNDqalYOW
+ XFxeXi6ieCII8Ate1L9ZJKDhkch5ZmCrOAyMRwELBctemqSgFY+xDZz388EZoj+800Sex6I8V
+ prXBpkeMYRJfXCyhkdu23g986R2pWQOr2jthIQ+3HGlQJORhYv5zUSjqtYGHtbbaIomcDQj2y
+ QZfDoRCjtYIGXEaBfiO1+mXRWAMicXr5tMFCqwXztkUUg=
 
-thread_info.syscall is used by syscall_get_nr to supply syscall nr
-over a thread stack frame.
+On 3/28/24 14:33, Thomas Zimmermann wrote:
+> Am 28.03.24 um 12:04 schrieb Helge Deller:
+>> On 3/27/24 21:41, Thomas Zimmermann wrote:
+>>> The per-architecture video helpers do not depend on struct fb_info
+>>> or anything else from fbdev. Remove it from the interface and replace
+>>> fb_is_primary_device() with video_is_primary_device(). The new helper
+>>
+>> Since you rename this function, wouldn't something similar to
+>>
+>> device_is_primary_display()
+>> =C2=A0=C2=A0=C2=A0=C2=A0or
+>> device_is_primary_console()
+>> =C2=A0=C2=A0=C2=A0=C2=A0or
+>> is_primary_graphics_device()
+>> =C2=A0=C2=A0=C2=A0=C2=A0or
+>> is_primary_display_device()
+>>
+>> be a better name?
+>
+> The video_ prefix is there to signal that the code is part of the video =
+subsystem.
+>
+> But there's too much code that tried to figure out a default video
+> device. So I actually have different plans for this function. I'd
+> like to replace it with a helper that returns the default device
+> instead of just testing for it. Sample code for x86 is already in
+> vgaarb.c. [1] The function's name would then be
+> video_default_device() and return the appropriate struct device*.
+> video_is_primary device() will be removed. This rename here is the
+> easiest step towards the new helper. Ok?
+Sounds ok.
 
-Previously, thread_info.syscall is only saved at syscall_trace_enter
-when syscall tracing is enabled. However rest of the kernel code do
-expect syscall_get_nr to be available without syscall tracing. The
-previous design breaks collect_syscall.
-
-Move saving process to syscall entry to fix it.
-
-Reported-by: Xi Ruoyao <xry111@xry111.site>
-Link: https://github.com/util-linux/util-linux/issues/2867
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/include/asm/ptrace.h |  2 +-
- arch/mips/kernel/asm-offsets.c |  1 +
- arch/mips/kernel/ptrace.c      | 15 ++++++---------
- arch/mips/kernel/scall32-o32.S | 23 +++++++++++++----------
- arch/mips/kernel/scall64-n32.S |  3 ++-
- arch/mips/kernel/scall64-n64.S |  3 ++-
- arch/mips/kernel/scall64-o32.S | 33 +++++++++++++++++----------------
- 7 files changed, 42 insertions(+), 38 deletions(-)
-
-diff --git a/arch/mips/include/asm/ptrace.h b/arch/mips/include/asm/ptrace.h
-index d14d0e37ad02..4a2b40ce39e0 100644
---- a/arch/mips/include/asm/ptrace.h
-+++ b/arch/mips/include/asm/ptrace.h
-@@ -159,7 +159,7 @@ extern unsigned long exception_ip(struct pt_regs *regs);
- #define exception_ip(regs) exception_ip(regs)
- #define profile_pc(regs) instruction_pointer(regs)
- 
--extern asmlinkage long syscall_trace_enter(struct pt_regs *regs, long syscall);
-+extern asmlinkage long syscall_trace_enter(struct pt_regs *regs);
- extern asmlinkage void syscall_trace_leave(struct pt_regs *regs);
- 
- extern void die(const char *, struct pt_regs *) __noreturn;
-diff --git a/arch/mips/kernel/asm-offsets.c b/arch/mips/kernel/asm-offsets.c
-index d1b11f66f748..cb1045ebab06 100644
---- a/arch/mips/kernel/asm-offsets.c
-+++ b/arch/mips/kernel/asm-offsets.c
-@@ -101,6 +101,7 @@ void output_thread_info_defines(void)
- 	OFFSET(TI_CPU, thread_info, cpu);
- 	OFFSET(TI_PRE_COUNT, thread_info, preempt_count);
- 	OFFSET(TI_REGS, thread_info, regs);
-+	OFFSET(TI_SYSCALL, thread_info, syscall);
- 	DEFINE(_THREAD_SIZE, THREAD_SIZE);
- 	DEFINE(_THREAD_MASK, THREAD_MASK);
- 	DEFINE(_IRQ_STACK_SIZE, IRQ_STACK_SIZE);
-diff --git a/arch/mips/kernel/ptrace.c b/arch/mips/kernel/ptrace.c
-index 59288c13b581..61503a36067e 100644
---- a/arch/mips/kernel/ptrace.c
-+++ b/arch/mips/kernel/ptrace.c
-@@ -1317,16 +1317,13 @@ long arch_ptrace(struct task_struct *child, long request,
-  * Notification of system call entry/exit
-  * - triggered by current->work.syscall_trace
-  */
--asmlinkage long syscall_trace_enter(struct pt_regs *regs, long syscall)
-+asmlinkage long syscall_trace_enter(struct pt_regs *regs)
- {
- 	user_exit();
- 
--	current_thread_info()->syscall = syscall;
--
- 	if (test_thread_flag(TIF_SYSCALL_TRACE)) {
- 		if (ptrace_report_syscall_entry(regs))
- 			return -1;
--		syscall = current_thread_info()->syscall;
- 	}
- 
- #ifdef CONFIG_SECCOMP
-@@ -1335,7 +1332,7 @@ asmlinkage long syscall_trace_enter(struct pt_regs *regs, long syscall)
- 		struct seccomp_data sd;
- 		unsigned long args[6];
- 
--		sd.nr = syscall;
-+		sd.nr = current_thread_info()->syscall;
- 		sd.arch = syscall_get_arch(current);
- 		syscall_get_arguments(current, regs, args);
- 		for (i = 0; i < 6; i++)
-@@ -1345,23 +1342,23 @@ asmlinkage long syscall_trace_enter(struct pt_regs *regs, long syscall)
- 		ret = __secure_computing(&sd);
- 		if (ret == -1)
- 			return ret;
--		syscall = current_thread_info()->syscall;
- 	}
- #endif
- 
- 	if (unlikely(test_thread_flag(TIF_SYSCALL_TRACEPOINT)))
- 		trace_sys_enter(regs, regs->regs[2]);
- 
--	audit_syscall_entry(syscall, regs->regs[4], regs->regs[5],
-+	audit_syscall_entry(current_thread_info()->syscall,
-+			    regs->regs[4], regs->regs[5],
- 			    regs->regs[6], regs->regs[7]);
- 
- 	/*
- 	 * Negative syscall numbers are mistaken for rejected syscalls, but
- 	 * won't have had the return value set appropriately, so we do so now.
- 	 */
--	if (syscall < 0)
-+	if (current_thread_info()->syscall < 0)
- 		syscall_set_return_value(current, regs, -ENOSYS, 0);
--	return syscall;
-+	return current_thread_info()->syscall;
- }
- 
- /*
-diff --git a/arch/mips/kernel/scall32-o32.S b/arch/mips/kernel/scall32-o32.S
-index 18dc9b345056..2c604717e630 100644
---- a/arch/mips/kernel/scall32-o32.S
-+++ b/arch/mips/kernel/scall32-o32.S
-@@ -77,6 +77,18 @@ loads_done:
- 	PTR_WD	load_a7, bad_stack_a7
- 	.previous
- 
-+	/*
-+	 * syscall number is in v0 unless we called syscall(__NR_###)
-+	 * where the real syscall number is in a0
-+	 */
-+	subu	t2, v0,  __NR_O32_Linux
-+	bnez	t2, 1f /* __NR_syscall at offset 0 */
-+	LONG_S	a0, TI_SYSCALL($28)	# Save a0 as syscall number
-+	b	2f
-+1:
-+	LONG_S	v0, TI_SYSCALL($28)	# Save v0 as syscall number
-+2:
-+
- 	lw	t0, TI_FLAGS($28)	# syscall tracing enabled?
- 	li	t1, _TIF_WORK_SYSCALL_ENTRY
- 	and	t0, t1
-@@ -114,16 +126,7 @@ syscall_trace_entry:
- 	SAVE_STATIC
- 	move	a0, sp
- 
--	/*
--	 * syscall number is in v0 unless we called syscall(__NR_###)
--	 * where the real syscall number is in a0
--	 */
--	move	a1, v0
--	subu	t2, v0,  __NR_O32_Linux
--	bnez	t2, 1f /* __NR_syscall at offset 0 */
--	lw	a1, PT_R4(sp)
--
--1:	jal	syscall_trace_enter
-+	jal	syscall_trace_enter
- 
- 	bltz	v0, 1f			# seccomp failed? Skip syscall
- 
-diff --git a/arch/mips/kernel/scall64-n32.S b/arch/mips/kernel/scall64-n32.S
-index 97456b2ca7dc..97788859238c 100644
---- a/arch/mips/kernel/scall64-n32.S
-+++ b/arch/mips/kernel/scall64-n32.S
-@@ -44,6 +44,8 @@ NESTED(handle_sysn32, PT_SIZE, sp)
- 
- 	sd	a3, PT_R26(sp)		# save a3 for syscall restarting
- 
-+	LONG_S	v0, TI_SYSCALL($28)     # Store syscall number
-+
- 	li	t1, _TIF_WORK_SYSCALL_ENTRY
- 	LONG_L	t0, TI_FLAGS($28)	# syscall tracing enabled?
- 	and	t0, t1, t0
-@@ -72,7 +74,6 @@ syscall_common:
- n32_syscall_trace_entry:
- 	SAVE_STATIC
- 	move	a0, sp
--	move	a1, v0
- 	jal	syscall_trace_enter
- 
- 	bltz	v0, 1f			# seccomp failed? Skip syscall
-diff --git a/arch/mips/kernel/scall64-n64.S b/arch/mips/kernel/scall64-n64.S
-index e6264aa62e45..be11ea5cc67e 100644
---- a/arch/mips/kernel/scall64-n64.S
-+++ b/arch/mips/kernel/scall64-n64.S
-@@ -46,6 +46,8 @@ NESTED(handle_sys64, PT_SIZE, sp)
- 
- 	sd	a3, PT_R26(sp)		# save a3 for syscall restarting
- 
-+	LONG_S	v0, TI_SYSCALL($28)     # Store syscall number
-+
- 	li	t1, _TIF_WORK_SYSCALL_ENTRY
- 	LONG_L	t0, TI_FLAGS($28)	# syscall tracing enabled?
- 	and	t0, t1, t0
-@@ -82,7 +84,6 @@ n64_syscall_exit:
- syscall_trace_entry:
- 	SAVE_STATIC
- 	move	a0, sp
--	move	a1, v0
- 	jal	syscall_trace_enter
- 
- 	bltz	v0, 1f			# seccomp failed? Skip syscall
-diff --git a/arch/mips/kernel/scall64-o32.S b/arch/mips/kernel/scall64-o32.S
-index d3c2616cba22..7a5abb73e531 100644
---- a/arch/mips/kernel/scall64-o32.S
-+++ b/arch/mips/kernel/scall64-o32.S
-@@ -79,6 +79,22 @@ loads_done:
- 	PTR_WD	load_a7, bad_stack_a7
- 	.previous
- 
-+	/*
-+	 * absolute syscall number is in v0 unless we called syscall(__NR_###)
-+	 * where the real syscall number is in a0
-+	 * note: NR_syscall is the first O32 syscall but the macro is
-+	 * only defined when compiling with -mabi=32 (CONFIG_32BIT)
-+	 * therefore __NR_O32_Linux is used (4000)
-+	 */
-+
-+	subu	t2, v0,  __NR_O32_Linux
-+	bnez	t2, 1f /* __NR_syscall at offset 0 */
-+	LONG_S	a0, TI_SYSCALL($28)	# Save a0 as syscall number
-+	b	2f
-+1:
-+	LONG_S	v0, TI_SYSCALL($28)	# Save v0 as syscall number
-+2:
-+
- 	li	t1, _TIF_WORK_SYSCALL_ENTRY
- 	LONG_L	t0, TI_FLAGS($28)	# syscall tracing enabled?
- 	and	t0, t1, t0
-@@ -113,22 +129,7 @@ trace_a_syscall:
- 	sd	a7, PT_R11(sp)		# For indirect syscalls
- 
- 	move	a0, sp
--	/*
--	 * absolute syscall number is in v0 unless we called syscall(__NR_###)
--	 * where the real syscall number is in a0
--	 * note: NR_syscall is the first O32 syscall but the macro is
--	 * only defined when compiling with -mabi=32 (CONFIG_32BIT)
--	 * therefore __NR_O32_Linux is used (4000)
--	 */
--	.set	push
--	.set	reorder
--	subu	t1, v0,  __NR_O32_Linux
--	move	a1, v0
--	bnez	t1, 1f /* __NR_syscall at offset 0 */
--	ld	a1, PT_R4(sp) /* Arg1 for __NR_syscall case */
--	.set	pop
--
--1:	jal	syscall_trace_enter
-+	jal	syscall_trace_enter
- 
- 	bltz	v0, 1f			# seccomp failed? Skip syscall
- 
-
----
-base-commit: a6bd6c9333397f5a0e2667d4d82fef8c970108f2
-change-id: 20240328-mips_save_syscall-be471311cc9b
-
-Best regards,
--- 
-Jiaxun Yang <jiaxun.yang@flygoat.com>
-
+Helge
 
