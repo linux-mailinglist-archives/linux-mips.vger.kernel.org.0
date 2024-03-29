@@ -1,212 +1,148 @@
-Return-Path: <linux-mips+bounces-2512-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2514-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E98F890B77
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Mar 2024 21:38:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9894E8917B4
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Mar 2024 12:28:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E97A428E88F
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Mar 2024 20:38:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E29028295B
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Mar 2024 11:28:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4342913A86A;
-	Thu, 28 Mar 2024 20:38:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FC0B6A33B;
+	Fri, 29 Mar 2024 11:27:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dRfKVHSc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lyQfeNIq"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA73913A407;
-	Thu, 28 Mar 2024 20:38:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4CE13ACB;
+	Fri, 29 Mar 2024 11:27:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711658302; cv=none; b=hHHaFNqYuI9fyEIptO1yDSE6C2TaxhafvFDW7XVfYu0V70oeiOPIUzAPvGkp8QnpD9Jge4jlhBifd4jb9+7j2z/vQv7M5d7j3oIkb47ZVKnxYu+mDXeCBmB1P3TcpMhutuLlxdtl+R8UA3e5ZKvTLCblKI4mRuAhUYd/1rXK6Eg=
+	t=1711711678; cv=none; b=i8NI5JynF7rrk4Yy6fiSm4bnvAL7pwLmMb27sSoJwZYBhA9LPedLe833axi8VDfZxgYKg88lLsEiawFsVckDg76lPAn7+wuCtt77zyb2id0JxVRkjYtHWDP9sxKwxIl0w+T1tOwz3lcioCEB4L2SXfoLce707EXMn2pvpic3mPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711658302; c=relaxed/simple;
-	bh=4V4w7fC0EBbm7te+ffIKRQDvDxxoYpzMpaa3f0AoWlE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R9ZcLK3fDdjNJfw7QbQUGOnuhDgy38LU7BworcsUB7xsk6qRlaD8OuwBstohGL4I/Wg9Z3iSOAtE/ECbk5jHMVMx/vc6KyO4uoPHFcx/ObqiA3pQicp+SEQ0bsEcQR41UB+25r4A1cvT3uMDjYF118Mqfxna02nTb90zZ8bukHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dRfKVHSc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEC19C433F1;
-	Thu, 28 Mar 2024 20:38:10 +0000 (UTC)
+	s=arc-20240116; t=1711711678; c=relaxed/simple;
+	bh=pB9M95X+mXq7mLeBjyS+gbUvkiSUn2UFn0TswCd0KdU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=N5mcbWr74Nx2Vu9aRBil8hKxDw4ylv8TaLYe8mul97I+rVdQ3AsOkL687bf+qVE+VhBtE8x9pccK+QkgUYDQYSC6DmAu1hLsXPfs0kfqWQ2Umc/8zECMjESQtihTm6DakvdGs5NYHMnUY8G8cC1wr9B1oX59vBzygepkq32B8AY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lyQfeNIq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DFAC7C433C7;
+	Fri, 29 Mar 2024 11:27:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711658301;
-	bh=4V4w7fC0EBbm7te+ffIKRQDvDxxoYpzMpaa3f0AoWlE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dRfKVHScDsH8tRE1//91CYwzd5KWuDIPzdzz4FYy70fYNQxTI4FdYsr0rnVlRlDzy
-	 bg2yy/d0f1eEfdelx5bbivx7vjt1I2XcdZlEKOdXeDikFSelU1LkYAktJZJQE5tLsR
-	 aWlyXBPbOFfiGkb1rQ9ZnTbgEL0YbJ4i2SbETO+aCf/YHhMcqNdelehX5uFfKS1xll
-	 hu+eiqfLfnMN5AkY0NodQO3KanPcw3aHDw1BYdD1SX/2LmnaHHwN/NMDk0K7Em2Psg
-	 C2FdKw3cfmIzQDuZNhqbtY1LdZDhPcphkaPSG7Rh5XQWxlmM7Qthw7AzeTMMxiHvhg
-	 jCFiIDoVfirww==
-Date: Thu, 28 Mar 2024 20:38:08 +0000
-From: Simon Horman <horms@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Shailend Chand <shailend@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Kaiyuan Zhang <kaiyuanz@google.com>
-Subject: Re: [RFC PATCH net-next v7 04/14] netdev: support binding dma-buf to
- netdevice
-Message-ID: <20240328203808.GL651713@kernel.org>
-References: <20240326225048.785801-1-almasrymina@google.com>
- <20240326225048.785801-5-almasrymina@google.com>
- <20240328182812.GJ651713@kernel.org>
- <CAHS8izMZuRwQZsL7PQdoRcrgeh6rEa7n1NMhbm-aZMes2QHVzg@mail.gmail.com>
+	s=k20201202; t=1711711678;
+	bh=pB9M95X+mXq7mLeBjyS+gbUvkiSUn2UFn0TswCd0KdU=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=lyQfeNIqdlYFPgYQh+txECZJoEuFvve/z+oCprMXe1fckZL9pI9PSmChdFS5znexm
+	 6++1MDuXJ7OZ6OhzBjDExEbJOmSmnIhkKYVUDJFtp5zFXrdFXHYqaV4W1HhmPvAYiq
+	 EfnuWggK63d/R3uVfXPdBkQvQt0N40lZj2fYBEmTwc7DC7k4fBYlrh4VLCsBYDyLSc
+	 0CXuza/DXT40Qd3lTfkkYspm3RWGe4I379iGOPNo1RxT0KIuLIo7bKoyew/6abEQBx
+	 VVwd5xe0bfj2o0qtQEXwcYpW2nrEm2Ya7APgwC5WcLAAOgV3GmCBTGDqsoFul7OMRD
+	 +1dnYpx5GjO8g==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8A86CD128A;
+	Fri, 29 Mar 2024 11:27:57 +0000 (UTC)
+From: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>
+Subject: [PATCH v7 0/2] Add support for Loongson1 APB DMA
+Date: Fri, 29 Mar 2024 19:26:56 +0800
+Message-Id: <20240329-loongson1-dma-v7-0-37db58608de5@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHS8izMZuRwQZsL7PQdoRcrgeh6rEa7n1NMhbm-aZMes2QHVzg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIClBmYC/12Oyw6CMBQFf8V07SV9QKGu/A/DopZLaQRqWiQq4
+ d8tLIxxOYszcxYSMTiM5HRYSMDZRefHBOXxQEynR4vgmsSEUy4Y4xR670cb/cigGTQwKXSLRUm
+ rqyJpcw/Yuufuu9SJ2+AHmLqA+muhileMM1WIrOC5pBUwuKF9pFj23pJnO2jXZ8YPm7FzcfLht
+ R+c5ebdLDkVTP59mSVQULRBboQxqfIjqtd1/QCOc4A+7AAAAA==
+To: Keguang Zhang <keguang.zhang@gmail.com>, Vinod Koul <vkoul@kernel.org>, 
+ Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Huacai Chen <chenhuacai@kernel.org>
+Cc: linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1711711676; l=2386;
+ i=keguang.zhang@gmail.com; s=20231129; h=from:subject:message-id;
+ bh=pB9M95X+mXq7mLeBjyS+gbUvkiSUn2UFn0TswCd0KdU=;
+ b=fmvKGnrYZtLwAB8SPn36qCHcowVqWJ110I6MjqN4/qCkPrpXsomsDoPZfb60T9iPbrzHQV34u
+ 46ub50gRDCfBEJNfRtmCbaHqK2yFVOq6VpDZLD2/niLBdanVa6gjwnZ
+X-Developer-Key: i=keguang.zhang@gmail.com; a=ed25519;
+ pk=FMKGj/JgKll/MgClpNZ3frIIogsh5e5r8CeW2mr+WLs=
+X-Endpoint-Received: by B4 Relay for keguang.zhang@gmail.com/20231129 with
+ auth_id=102
+X-Original-From: Keguang Zhang <keguang.zhang@gmail.com>
+Reply-To: keguang.zhang@gmail.com
 
-On Thu, Mar 28, 2024 at 11:55:23AM -0700, Mina Almasry wrote:
-> On Thu, Mar 28, 2024 at 11:28 AM Simon Horman <horms@kernel.org> wrote:
-> >
-> > On Tue, Mar 26, 2024 at 03:50:35PM -0700, Mina Almasry wrote:
-> > > Add a netdev_dmabuf_binding struct which represents the
-> > > dma-buf-to-netdevice binding. The netlink API will bind the dma-buf to
-> > > rx queues on the netdevice. On the binding, the dma_buf_attach
-> > > & dma_buf_map_attachment will occur. The entries in the sg_table from
-> > > mapping will be inserted into a genpool to make it ready
-> > > for allocation.
-> > >
-> > > The chunks in the genpool are owned by a dmabuf_chunk_owner struct which
-> > > holds the dma-buf offset of the base of the chunk and the dma_addr of
-> > > the chunk. Both are needed to use allocations that come from this chunk.
-> > >
-> > > We create a new type that represents an allocation from the genpool:
-> > > net_iov. We setup the net_iov allocation size in the
-> > > genpool to PAGE_SIZE for simplicity: to match the PAGE_SIZE normally
-> > > allocated by the page pool and given to the drivers.
-> > >
-> > > The user can unbind the dmabuf from the netdevice by closing the netlink
-> > > socket that established the binding. We do this so that the binding is
-> > > automatically unbound even if the userspace process crashes.
-> > >
-> > > The binding and unbinding leaves an indicator in struct netdev_rx_queue
-> > > that the given queue is bound, but the binding doesn't take effect until
-> > > the driver actually reconfigures its queues, and re-initializes its page
-> > > pool.
-> > >
-> > > The netdev_dmabuf_binding struct is refcounted, and releases its
-> > > resources only when all the refs are released.
-> > >
-> > > Signed-off-by: Willem de Bruijn <willemb@google.com>
-> > > Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
-> > > Signed-off-by: Mina Almasry <almasrymina@google.com>
-> >
-> > ...
-> >
-> > > +int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
-> > > +                                 struct net_devmem_dmabuf_binding *binding)
-> > > +{
-> > > +     struct netdev_rx_queue *rxq;
-> > > +     u32 xa_idx;
-> > > +     int err;
-> > > +
-> > > +     if (rxq_idx >= dev->num_rx_queues)
-> > > +             return -ERANGE;
-> > > +
-> > > +     rxq = __netif_get_rx_queue(dev, rxq_idx);
-> > > +     if (rxq->mp_params.mp_priv)
-> > > +             return -EEXIST;
-> > > +
-> > > +     err = xa_alloc(&binding->bound_rxq_list, &xa_idx, rxq, xa_limit_32b,
-> > > +                    GFP_KERNEL);
-> > > +     if (err)
-> > > +             return err;
-> > > +
-> > > +     /* We hold the rtnl_lock while binding/unbinding dma-buf, so we can't
-> > > +      * race with another thread that is also modifying this value. However,
-> > > +      * the driver may read this config while it's creating its * rx-queues.
-> > > +      * WRITE_ONCE() here to match the READ_ONCE() in the driver.
-> > > +      */
-> > > +     WRITE_ONCE(rxq->mp_params.mp_ops, &dmabuf_devmem_ops);
-> >
-> > Hi Mina,
-> >
-> > This causes a build failure because mabuf_devmem_ops is not added until a
-> > subsequent patch in this series.
-> >
-> 
-> My apologies. I do notice the failure in patchwork now. I'll do a
-> patch by patch build for the next iteration.
+Add the driver and dt-binding document for Loongson1 APB DMA.
 
-Thanks, much appreciated.
+Changes in v7:
+- Change the comptible to 'loongson,ls1*-apbdma' (suggested by Huacai Chen)
+- Update the title and description part accordingly
+- Rename the file to loongson,ls1b-apbdma.yaml
+- Add a compatible string for LS1A
+- Delete minItems of 'interrupts'
+- Change patterns of 'interrupt-names' to const
+- Rename the file to loongson1-apb-dma.c to keep the consistency
+- Update Kconfig and Makefile accordingly
+- Link to v6: https://lore.kernel.org/r/20240316-loongson1-dma-v6-0-90de2c3cc928@gmail.com
 
-> > > +     WRITE_ONCE(rxq->mp_params.mp_priv, binding);
-> > > +
-> > > +     err = net_devmem_restart_rx_queue(dev, rxq_idx);
-> > > +     if (err)
-> > > +             goto err_xa_erase;
-> > > +
-> > > +     return 0;
-> > > +
-> > > +err_xa_erase:
-> > > +     WRITE_ONCE(rxq->mp_params.mp_ops, NULL);
-> > > +     WRITE_ONCE(rxq->mp_params.mp_priv, NULL);
-> > > +     xa_erase(&binding->bound_rxq_list, xa_idx);
-> > > +
-> > > +     return err;
-> > > +}
-> >
-> > ...
-> 
-> 
-> 
-> -- 
-> Thanks,
-> Mina
-> 
+Changes in v6:
+- Change the compatible to the fallback
+- Implement .device_prep_dma_cyclic for Loongson1 sound driver,
+- as well as .device_pause and .device_resume.
+- Set the limitation LS1X_DMA_MAX_DESC and put all descriptors
+- into one page to save memory
+- Move dma_pool_zalloc() into ls1x_dma_alloc_desc()
+- Drop dma_slave_config structure
+- Use .remove_new instead of .remove
+- Use KBUILD_MODNAME for the driver name
+- Improve the debug information
+- Some minor fixes
+- 
+Changes in v5:
+- Add the dt-binding document
+- Add DT support
+- Use DT information instead of platform data
+- Use chan_id of struct dma_chan instead of own id
+- Use of_dma_xlate_by_chan_id() instead of ls1x_dma_filter()
+- Update the author information to my official name
+- 
+Changes in v4:
+- Use dma_slave_map to find the proper channel.
+- Explicitly call devm_request_irq() and tasklet_kill().
+- Fix namespace issue.
+- Some minor fixes and cleanups.
+- 
+Changes in v3:
+- Rename ls1x_dma_filter_fn to ls1x_dma_filter.
+- 
+Changes in v2:
+- Change the config from 'DMA_LOONGSON1' to 'LOONGSON1_DMA',
+- and rearrange it in alphabetical order in Kconfig and Makefile.
+- Fix comment style.
+
+---
+Keguang Zhang (2):
+      dt-bindings: dma: Add Loongson-1 APB DMA
+      dmaengine: Loongson1: Add Loongson-1 APB DMA driver
+
+ .../bindings/dma/loongson,ls1b-apbdma.yaml         |  65 ++
+ drivers/dma/Kconfig                                |   9 +
+ drivers/dma/Makefile                               |   1 +
+ drivers/dma/loongson1-apb-dma.c                    | 665 +++++++++++++++++++++
+ 4 files changed, 740 insertions(+)
+---
+base-commit: a6bd6c9333397f5a0e2667d4d82fef8c970108f2
+change-id: 20231120-loongson1-dma-163afe5708b9
+
+Best regards,
+-- 
+Keguang Zhang <keguang.zhang@gmail.com>
+
+
 
