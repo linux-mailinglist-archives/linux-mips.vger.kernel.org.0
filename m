@@ -1,181 +1,158 @@
-Return-Path: <linux-mips+bounces-2516-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2517-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59764891C42
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Mar 2024 14:45:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4CE98920A5
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Mar 2024 16:41:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D33B1C270B0
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Mar 2024 13:45:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F43E283EFE
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Mar 2024 15:41:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 020B7181477;
-	Fri, 29 Mar 2024 12:41:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BFCB2F50;
+	Fri, 29 Mar 2024 15:41:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="IN2aA162";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UCbueiqL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HPuJTw+U"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE66181316;
-	Fri, 29 Mar 2024 12:41:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.111.4.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100E21DDEA;
+	Fri, 29 Mar 2024 15:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711716104; cv=none; b=DerISdmR63tvMzSivP8X51aIMS0lVhfBYMIXRGSRDEKSw/GZW+gYfa+65bc8RkLC1O3Yy9Cr2IhBdNN1tlt8Zur3+rxnbsUDq6cROFSEXfxyjBZoGcHOQcTGSa++Uev3Edfp9DGACi47jZzLc7weU06C8bCH4XLq7WE7gLyRNH8=
+	t=1711726862; cv=none; b=M1QIVgw4prWTQk4WXsc3K57sYUJ8/tMq/rL0NePo8xAlW6QBUFUVZtma3n0M035jBycazgXPv6oeHJRZ1nR31inZ1WFGaF2s9yTdLqPD+EyUPzSo4nn0rn2WSo4f8aZounGhXCUHVP58pLBeQlz6wMKrJUxV2IcT6QvL6kCOYqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711716104; c=relaxed/simple;
-	bh=Zl4uY056rn3oCq8BYopiJq30V4qLF00RQLUPIhNP+7w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SWd2+JfoP8gKkOPXMckW+OqE5WxNCfXJ6kC2wuVcGVmESAVXHXv4m1ZTgQmhwLmzmvcWMYBG24rCJPF/3qmA/zkgDLAHG2Kb478YNB44SDIUfMeCQEXrouaIDpRf2Y0ZPTkHOzZerzVH67K26i14bScL9eRxxzqjhTZEK8EhBaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=IN2aA162; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=UCbueiqL; arc=none smtp.client-ip=66.111.4.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id CACC05C004D;
-	Fri, 29 Mar 2024 08:41:41 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Fri, 29 Mar 2024 08:41:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1711716101;
-	 x=1711802501; bh=8t+Ooz9N0keYiRnoFQLVfdESXvr9KZsTT+8XDp+LVHw=; b=
-	IN2aA1626fLlJJJz3uPDKlJYEuGJ/afleFjjFRL2a8XAbQdHOOuTSp2M2cfUYCOz
-	ZGORBR6+LBeX1wDMjglfPZn+ERR4TlglkVCQkLHamYEMao0DJwQug0P7KUtXlFoP
-	/ImzUBCYACG4jRWWptk5+kpXvgb4h5/F6iw9FZ1J95uO3YWkApsj6Cq/F026fAoT
-	m4aZT8IWf25JA2eh3KkvjW8f+WidxXVTleqAgZIQw0TeyoQTCBu0jEj4UvquNNIG
-	nc/WnHKBCyvrgU5plrByCnX9fDr8FrkE8gjCePD/sSA7ZRE0Ui9mnBfLbpWlGjoU
-	7bjExy0dyc8FHEiUysibAQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1711716101; x=
-	1711802501; bh=8t+Ooz9N0keYiRnoFQLVfdESXvr9KZsTT+8XDp+LVHw=; b=U
-	CbueiqLtnzNLU8Pdm4XWA2AeThNgvcHfVN/jKDNbUco1DreTiHiXW86geaaUoK79
-	IabSkW8tDTNXVv85E2H7ym8GnM1MaYw6tTKXb1PyalKyzR0icVWKysIf2tPDc2OH
-	3PnHAJuft1Se4OkKoSEm+7DH7mtec7XaOQK8iiQTJcmq/R5ovJqp+1GvpnhwOAtb
-	1Sr2hN7bTTD33aCwpiquwwULGLhodmbhAePNmhXCpxq6UbsHhnodKNzMjYUGj1X7
-	zfCDRwNfDn9E6051qjYY2/e4hpaRpSMaRlKDK+qHxicShX3JS6SonQiv9bVLs7xt
-	JUk+RjF8Tz1dQfvPOPtjw==
-X-ME-Sender: <xms:BbcGZudfTj8qjLiKpKJmuSnz0NHDk2qcfEwMAIhSGwfVBUBP41c4zQ>
-    <xme:BbcGZoN7cmH0LGxNsTfZu-SJArnkfT0NNZDpka3T1BWcl2rkGvCnLqIRxHgI5Inzr
-    Zh6ZrvTVEeDGYuFZFc>
-X-ME-Received: <xmr:BbcGZvig2sZ_1rvO-thErU4g9iCflGa2buvXUja50g7cYP2uAiuYWcihBEc6CsYr5Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledruddvvddggeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtvdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepudehjefgtedvkeevvdevieekleekhfevkeevleehieekfedu
-    teeuffduhfehtdehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvg
-    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhg
-    sehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:BbcGZr_FONH8ap0ljgFSH-ZoDlpYEG013DTczMg4CQ2tB02-bdb5mg>
-    <xmx:BbcGZquQLUGKXsHNq8ovUyZWrOul0TEL71vBvoSgB6PqZroCF1xDxg>
-    <xmx:BbcGZiHX6tiFcSe1XesMeW11LLmAvuv7shGO8r_IKwdJxQGc-IwQow>
-    <xmx:BbcGZpPQTrz9fryKwMK2ghGlj6Xrb_iSfQ7F99AKOQXVI361nhMiFg>
-    <xmx:BbcGZrmjlSVhNr61VYT-lt7wHQr-Gbi9javPIVISOhsEDFSBrrqOfw>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 29 Mar 2024 08:41:40 -0400 (EDT)
-Message-ID: <7da03e9a-051d-4537-8405-a645610fe16c@flygoat.com>
-Date: Fri, 29 Mar 2024 12:41:41 +0000
+	s=arc-20240116; t=1711726862; c=relaxed/simple;
+	bh=bzeVKulJy/hP5GNpCoE2RYDk0i6XfvDfXpyD/AV4Lg4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IQWneDmnPQ/u7ICo2vjUJMcQ1CBZATdtzV2Gqiz9WEQGaUGD3us2yG6C94EgARiks47bVZrE9PlTPFlj6HIqZVbVgFxNDYUhBT+h/iKZchCQKxEgN6xLZYfEC7ipt7PyVA0Un0yiCjhLUuj6CYiUJPKUcDvsYcF5uS26v3aBOcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HPuJTw+U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B77EC433F1;
+	Fri, 29 Mar 2024 15:40:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711726861;
+	bh=bzeVKulJy/hP5GNpCoE2RYDk0i6XfvDfXpyD/AV4Lg4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HPuJTw+U4Lwdm2PhfqOl7arf9uQWMGDioUT4VPWqocBfmxF5bvrua6lI0nk5bEpF6
+	 S23TW/S8CiFM5Qf3RMQp6KaLR0dTfRYMP/FLCCA7LVkJ6+zws5TeYnIyJSuS9a+FED
+	 WrMiY4ehrh6eoBrpVMO4ehijdQ9ocyo77sA1L93U7RRM9jgtR0pZw18rx8CfF/7q8y
+	 J8aJWUSCZZg5OgGscongYcMrs+CBY3zwtHztIpc42MFTTbCB6JG8fhtiuNJjXjEaGu
+	 +teoxnY9ElCdOZN+j29yFxogg4puEYmznow+hseIeYDj+UW25btqU4GNSA3z5emh9K
+	 v9GWw22lvHLxg==
+Date: Fri, 29 Mar 2024 15:40:57 +0000
+From: Conor Dooley <conor@kernel.org>
+To: keguang.zhang@gmail.com
+Cc: Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>, linux-mips@vger.kernel.org,
+	dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 1/2] dt-bindings: dma: Add Loongson-1 APB DMA
+Message-ID: <20240329-destruct-giggling-b27e373295ba@spud>
+References: <20240329-loongson1-dma-v7-0-37db58608de5@gmail.com>
+ <20240329-loongson1-dma-v7-1-37db58608de5@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 0/2] Add support for Loongson1 APB DMA
-To: keguang.zhang@gmail.com, Vinod Koul <vkoul@kernel.org>,
- Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Huacai Chen <chenhuacai@kernel.org>
-Cc: linux-mips@vger.kernel.org, dmaengine@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240329-loongson1-dma-v7-0-37db58608de5@gmail.com>
-Content-Language: en-GB
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20240329-loongson1-dma-v7-0-37db58608de5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="0+H86LmlfZrUlS4b"
+Content-Disposition: inline
+In-Reply-To: <20240329-loongson1-dma-v7-1-37db58608de5@gmail.com>
 
 
-在 2024/3/29 11:26, Keguang Zhang via B4 Relay 写道:
-> Add the driver and dt-binding document for Loongson1 APB DMA.
+--0+H86LmlfZrUlS4b
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-
-For the whole series:
-
-Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-
-Thanks!
-
->
+On Fri, Mar 29, 2024 at 07:26:57PM +0800, Keguang Zhang via B4 Relay wrote:
+> From: Keguang Zhang <keguang.zhang@gmail.com>
+>=20
+> Add devicetree binding document for Loongson-1 APB DMA.
+>=20
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> ---
 > Changes in v7:
-> - Change the comptible to 'loongson,ls1*-apbdma' (suggested by Huacai Chen)
+> - Change the comptible to 'loongson,ls1*-apbdma' (suggested by Huacai Che=
+n)
 > - Update the title and description part accordingly
 > - Rename the file to loongson,ls1b-apbdma.yaml
 > - Add a compatible string for LS1A
 > - Delete minItems of 'interrupts'
 > - Change patterns of 'interrupt-names' to const
-> - Rename the file to loongson1-apb-dma.c to keep the consistency
-> - Update Kconfig and Makefile accordingly
-> - Link to v6: https://lore.kernel.org/r/20240316-loongson1-dma-v6-0-90de2c3cc928@gmail.com
->
+>=20
 > Changes in v6:
 > - Change the compatible to the fallback
-> - Implement .device_prep_dma_cyclic for Loongson1 sound driver,
-> - as well as .device_pause and .device_resume.
-> - Set the limitation LS1X_DMA_MAX_DESC and put all descriptors
-> - into one page to save memory
-> - Move dma_pool_zalloc() into ls1x_dma_alloc_desc()
-> - Drop dma_slave_config structure
-> - Use .remove_new instead of .remove
-> - Use KBUILD_MODNAME for the driver name
-> - Improve the debug information
 > - Some minor fixes
-> -
+>=20
 > Changes in v5:
-> - Add the dt-binding document
-> - Add DT support
-> - Use DT information instead of platform data
-> - Use chan_id of struct dma_chan instead of own id
-> - Use of_dma_xlate_by_chan_id() instead of ls1x_dma_filter()
-> - Update the author information to my official name
-> -
-> Changes in v4:
-> - Use dma_slave_map to find the proper channel.
-> - Explicitly call devm_request_irq() and tasklet_kill().
-> - Fix namespace issue.
-> - Some minor fixes and cleanups.
-> -
-> Changes in v3:
-> - Rename ls1x_dma_filter_fn to ls1x_dma_filter.
-> -
-> Changes in v2:
-> - Change the config from 'DMA_LOONGSON1' to 'LOONGSON1_DMA',
-> - and rearrange it in alphabetical order in Kconfig and Makefile.
-> - Fix comment style.
->
+> - A newly added patch
 > ---
-> Keguang Zhang (2):
->        dt-bindings: dma: Add Loongson-1 APB DMA
->        dmaengine: Loongson1: Add Loongson-1 APB DMA driver
->
->   .../bindings/dma/loongson,ls1b-apbdma.yaml         |  65 ++
->   drivers/dma/Kconfig                                |   9 +
->   drivers/dma/Makefile                               |   1 +
->   drivers/dma/loongson1-apb-dma.c                    | 665 +++++++++++++++++++++
->   4 files changed, 740 insertions(+)
-> ---
-> base-commit: a6bd6c9333397f5a0e2667d4d82fef8c970108f2
-> change-id: 20231120-loongson1-dma-163afe5708b9
->
-> Best regards,
+>  .../bindings/dma/loongson,ls1b-apbdma.yaml         | 65 ++++++++++++++++=
+++++++
+>  1 file changed, 65 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/dma/loongson,ls1b-apbdma.y=
+aml b/Documentation/devicetree/bindings/dma/loongson,ls1b-apbdma.yaml
+> new file mode 100644
+> index 000000000000..449da9fc2de1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/dma/loongson,ls1b-apbdma.yaml
+> @@ -0,0 +1,65 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/dma/loongson,ls1b-apbdma.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson-1 APB DMA Controller
+> +
+> +maintainers:
+> +  - Keguang Zhang <keguang.zhang@gmail.com>
+> +
+> +description:
+> +  Loongson-1 APB DMA controller provides 3 independent channels for
+> +  peripherals such as NAND, audio playback and capture.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - const: loongson,ls1b-apbdma
+> +      - items:
+> +          - enum:
+> +              - loongson,ls1a-apbdma
+> +              - loongson,ls1c-apbdma
+> +          - const: loongson,ls1b-apbdma
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    description: Each channel has a dedicated interrupt line.
+
+If there's a respin, make this an items list. If you do, you can then
+drop the maxItems and description. Ideally with that change made,
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
+--0+H86LmlfZrUlS4b
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZgbhCQAKCRB4tDGHoIJi
+0obNAQDHSnU+L7QN0TvySd5Y0LJgYUIxoxrj+cqFE3M6JzCtuwD/elNAaXBx1lsH
+jQzAYajJtRWsOWzHjRne3oSnDKRFmAg=
+=Mb/N
+-----END PGP SIGNATURE-----
+
+--0+H86LmlfZrUlS4b--
 
