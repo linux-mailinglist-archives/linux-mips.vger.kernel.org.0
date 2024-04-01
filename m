@@ -1,190 +1,184 @@
-Return-Path: <linux-mips+bounces-2534-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2535-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE4D089416D
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Apr 2024 18:42:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC90689456C
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Apr 2024 21:23:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 01CA0B211B5
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Apr 2024 16:42:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 641941F21DCD
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Apr 2024 19:23:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3AB14AECF;
-	Mon,  1 Apr 2024 16:41:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACA2F48CDD;
+	Mon,  1 Apr 2024 19:22:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="n3zGUtc4"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="22uWaDKI"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117254596E
-	for <linux-mips@vger.kernel.org>; Mon,  1 Apr 2024 16:41:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A232852F70
+	for <linux-mips@vger.kernel.org>; Mon,  1 Apr 2024 19:22:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711989717; cv=none; b=XjfTW7dd6BwoNkbXFeCN9lvqbwErDDBKO84icQvSgcCW3O6KDAI0FHkSNdMpVCTpiNv5SBnT6sij1hhGKQJOdPAKrRD7SWsAO45Nz4tiplLgqQECV8jEGRRGZYhbSMxtM+7iXB/Dr5JLKqFEjAs7Di2swuIJowNM393ur8SzAOY=
+	t=1711999361; cv=none; b=O0KdvRU84YyqCkNoPaWPMOqwK2xZF4K60QLlHp8kXGsUZLGQG8+RT3RXkJOzb5DOj2KBuLbDfuWa6gLQdKWmXoGF/U9Clp5DMMA2NQzm0c8pSO1ZKBm3oN/pHaql9Jx/qflBrh6UQxf/RMr0PbHurrR/begDWI4N0O9HnZ9wakY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711989717; c=relaxed/simple;
-	bh=/qz+y5YC2iKyofjEybG266txkeP8b0dMGw22Spe7v0g=;
+	s=arc-20240116; t=1711999361; c=relaxed/simple;
+	bh=8oUFGMmpkpqLpkNpA3EMKT/yDO5+7f6Bm1WN7AwolPE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=g5IjA6yoNZsiLhgoEPwIw8D3oMxVrVLbUrsQAC7qBjOnT29KsdJVYDEr9y6kg0FT3A2SyESOnLcAlosPSz1pLcOQPT+HrZYVb9kz2UFz2/QVL3PC9L4J/JN3S9KeTYvLcdi2ZZBjh32MO4Q5RirPdq0zEDpE67X/aPejmlSRXg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=n3zGUtc4; arc=none smtp.client-ip=209.85.161.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5a52c5c96feso1488159eaf.3
-        for <linux-mips@vger.kernel.org>; Mon, 01 Apr 2024 09:41:55 -0700 (PDT)
+	 To:Cc:Content-Type; b=PZ2R1mcch2/uajl4wt1TCMvalFlAtIFkC53u460XaBoThTefWmZPGi9tYUcAxGIgpyYvBL6kiS+grKgp0ta/BEn89DTIATipXS8VDOM3jjslFg3FCcDNTQkHGzoHMdU2+IcvTZ7lnXJcK+PSj40oY5VnyUIia05JRnM+D9+VEhY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=22uWaDKI; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a4e7e2a257cso71754366b.1
+        for <linux-mips@vger.kernel.org>; Mon, 01 Apr 2024 12:22:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1711989715; x=1712594515; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1711999357; x=1712604157; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tm96Do3HD9Ni1RnQFtInuSgt43w6ZXYVK1hdTCMkucA=;
-        b=n3zGUtc43hdlJzS0vlsQ9zojO+o3JLCLP8Knau9xVG4w1cEG3LDkcIOuLYNp7sjGZu
-         I6vsz97YHQfSNd2A2IkpSq/LDUaZlmsjbdbwPZAUceHgfbmZRQNDMPO084xoAjzzr0eY
-         JiYn+MiR591GvCKF+1tRNonooMpwCei0XARJA=
+        bh=pRKdoK98qnZzkUcUn3OGBOuDQ1g75ltD3kRhKb3BL0c=;
+        b=22uWaDKINClGQOvJi06fBpyOOT7pMDPbf3vKhzp0A0EZNqEMJZEU9ZEQI+hZSku6MG
+         bDpe0EjXvO13ddBX37ofmNnPNsgpJXqGc4AuCCQ8nuthzsZBfIFoF3l84MfjgVpQ/rMz
+         X8r0RgAF5nL/37G5R4ZMVUu7g7ccxrgvXJyBok31bWJ4U/eF8uRTx4l9dRQ4jGtBlNPe
+         xA9xU5PEKcZ6Mo8JfTxnSnXSqVcfGA88I4+hdQ1b5EIF6VP5bvS6Re5X1nESesLYTzOM
+         keFQM0jW7oXypgbtrwSnBZZnye/NvRo6H4FNnGy3aoPjs0A0kSwZBaIAE8vZ+9L09KAa
+         hy5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711989715; x=1712594515;
+        d=1e100.net; s=20230601; t=1711999357; x=1712604157;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tm96Do3HD9Ni1RnQFtInuSgt43w6ZXYVK1hdTCMkucA=;
-        b=CiA82Hx4O1FxfXLOAKnyCGA2CKJQgAWuX1QBkilraS+RXz6DfSBuNC8QIxwnTs4GRu
-         Em5QExne7ZVASdU/AcjR5kTynGE+1KpgosTxh30Cj6YwphJCl5LJ0dTtsPZ/VMSJk5Dc
-         kf6UjiEzBeHhWHs9fyglP4k9gie2iC/3LXVvK1YgLYvQlb47s2iOo8tcjlwPqhC42iwB
-         OQqPZg9HzQFT252MiaKAxHYgbRb0InPQCjewaJKjGxBP33wuP4vfmt/JSMKKfsvmmra5
-         JgpnvdsX7WZ6rvdatX4cRkjIsFgAaPcMovgdp47cSh22kluevSpVuMCBwqzIcTZ0OuuC
-         iJHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU+nyia+IjB4BIUaz8gdfrJo9dxGu9sfrha4QbsINa1l1xgB9s8LL6zuofXNj7w2abmT6k9tY1PLlkGWR5dOgJCadQ8nmWvlgnuTg==
-X-Gm-Message-State: AOJu0Yz/MLtLlGe+1yO0bxH7r2wxjtl6CB6c/K46wEfXsL1dsSgnZWJc
-	AAXzqQs1dXtGgYOpi87bujj5AulJk1hnae/Y476RWyKrQVBCmIhg30hfaLhTNHDvAkSKPEBs+V0
-	=
-X-Google-Smtp-Source: AGHT+IG158V0LntM90aD+XVQRYgTLU9jjFJ92LLOUcdOIp60kMEjgsa5Ac+TPd9aoDDYUGvxWfY04A==
-X-Received: by 2002:a05:6808:3a1b:b0:3c2:fef:2b5f with SMTP id gr27-20020a0568083a1b00b003c20fef2b5fmr16931761oib.32.1711989714723;
-        Mon, 01 Apr 2024 09:41:54 -0700 (PDT)
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com. [209.85.160.173])
-        by smtp.gmail.com with ESMTPSA id bt3-20020ac86903000000b00432bbc3f544sm4149253qtb.57.2024.04.01.09.41.53
-        for <linux-mips@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Apr 2024 09:41:53 -0700 (PDT)
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-42ee0c326e8so733481cf.0
-        for <linux-mips@vger.kernel.org>; Mon, 01 Apr 2024 09:41:53 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU0Nm/KlCD1pxNPPTs6YnDXypC0xSateMShNp3K8mqnC612+THpnmdPh9WFBrEBMZVtx8Nz3KKsY+Xxuq7Y0lnNFgDPF3dYxjCwug==
-X-Received: by 2002:a05:622a:5a89:b0:431:4e0b:d675 with SMTP id
- fz9-20020a05622a5a8900b004314e0bd675mr1027105qtb.18.1711989713017; Mon, 01
- Apr 2024 09:41:53 -0700 (PDT)
+        bh=pRKdoK98qnZzkUcUn3OGBOuDQ1g75ltD3kRhKb3BL0c=;
+        b=VGauiMl6LbY/PBfoTf3w3VUNFMmK8ohgWyaVfYq/wjevKrSUy2lo+r4HTc4k9CxKki
+         GTB6bB3AVuY0ovjKvh1MWd+3JJa+zTzwrt56QW98bGcrvVavAjSwG4gUGOC0IkaAqFYj
+         H0ZBci9VT8YkVaP704eM/o2pzRfdXyYVliyMtYr8dkdgg5ZyXTZtUmHpzYNho8v/0HEC
+         HswcH5kRUGJDjEtCd2U7gq4DHUUO650Nkb/fEFqEGRUXngQbLk0LBZkcQy4yT3+QuWz5
+         QCUYW4jceDEgxcYYEYRN8f3N/ZB6H5eIfcgnlaMLnucNvBga6s3K1bqSe/JDII6UOcDZ
+         29KA==
+X-Forwarded-Encrypted: i=1; AJvYcCWJHO1jagMnMnjTbsgxlMIkB4IaBfSNNwHHtnPA6Jtm1DBvonc6oPHjMro6u8aaGCaPEqR/iK85x9Kt2U4VulthEtg66Y2fHfc/KQ==
+X-Gm-Message-State: AOJu0Yzh+aWFspPtZlhhuOGkGW0e2j4Kpipsp1pSXxdKWCnUCGPAWeFa
+	1+MgVkQGfXmKSVOnMsAU7qUrW6z3Q0f7Zs2enB2245wsqaI/iv1khkPJE8x7UjRBO3KcvBL+CyN
+	wZ0DJJYssWD8xhAsXRp0Wl04uuQf9VsmQTfU5
+X-Google-Smtp-Source: AGHT+IFnZAdqBNjychftax9hJ9HmWGsuFKJlToxmGxuKATUcrfF8Wqh8ADOKipJFMzVFEgjjXqwoqI01MVv3yIjrd3E=
+X-Received: by 2002:a17:906:f289:b0:a46:d978:bf02 with SMTP id
+ gu9-20020a170906f28900b00a46d978bf02mr6594862ejb.34.1711999356578; Mon, 01
+ Apr 2024 12:22:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240306125208.71803-1-yaoma@linux.alibaba.com>
- <20240306125208.71803-5-yaoma@linux.alibaba.com> <87zfuofzld.ffs@tglx> <6109a3e3-ca88-4a4d-86c5-c4eb0d7f6f9c@linux.alibaba.com>
-In-Reply-To: <6109a3e3-ca88-4a4d-86c5-c4eb0d7f6f9c@linux.alibaba.com>
-From: Doug Anderson <dianders@chromium.org>
-Date: Mon, 1 Apr 2024 09:41:38 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Xr8-rzANK8oKyEZpk1FZ2dy5HqBXKpk3O29PhG1fRowg@mail.gmail.com>
-Message-ID: <CAD=FV=Xr8-rzANK8oKyEZpk1FZ2dy5HqBXKpk3O29PhG1fRowg@mail.gmail.com>
-Subject: Re: [PATCHv12 4/4] watchdog/softlockup: report the most frequent interrupts
-To: Bitao Hu <yaoma@linux.alibaba.com>, Thomas Gleixner <tglx@linutronix.de>, pmladek@suse.com
-Cc: liusong@linux.alibaba.com, akpm@linux-foundation.org, kernelfans@gmail.com, 
-	deller@gmx.de, npiggin@gmail.com, tsbogend@alpha.franken.de, 
-	James.Bottomley@hansenpartnership.com, jan.kiszka@siemens.com, 
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-3-almasrymina@google.com> <ZfegzB341oNc_Ocz@infradead.org>
+ <CAHS8izOUi6qGp=LSQb_o5oph-EnhNOuhLkPSfbQRU3eniZvbdA@mail.gmail.com>
+ <ZgC5JoSiWAYf3IgX@infradead.org> <CAHS8izO5-giYhM1bVCLLOXRXq-Xd0=pi0kPq5E1-R=3i=XihmQ@mail.gmail.com>
+ <ZgUc07Szbx5x-obb@infradead.org>
+In-Reply-To: <ZgUc07Szbx5x-obb@infradead.org>
+From: Mina Almasry <almasrymina@google.com>
+Date: Mon, 1 Apr 2024 12:22:24 -0700
+Message-ID: <CAHS8izM8iLC9J1xSHScMrMkVyoY5HZ_nFMRO4V7HYarHhZhk6Q@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v6 02/15] net: page_pool: create hooks for
+ custom page providers
+To: Christoph Hellwig <hch@infradead.org>, Marc Harvey <marcharvey@google.com>, 
+	"Cong Wang ." <cong.wang@bytedance.com>
+Cc: shakeel.butt@linux.dev, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
-
-On Mon, Mar 25, 2024 at 2:48=E2=80=AFAM Bitao Hu <yaoma@linux.alibaba.com> =
-wrote:
+On Thu, Mar 28, 2024 at 12:31=E2=80=AFAM Christoph Hellwig <hch@infradead.o=
+rg> wrote:
 >
-> Hi, Thomas
->
-> On 2024/3/24 04:43, Thomas Gleixner wrote:
-> > On Wed, Mar 06 2024 at 20:52, Bitao Hu wrote:
-> >> +    if (__this_cpu_read(snapshot_taken)) {
-> >> +            for_each_active_irq(i) {
-> >> +                    count =3D kstat_get_irq_since_snapshot(i);
-> >> +                    tabulate_irq_count(irq_counts_sorted, i, count, N=
-UM_HARDIRQ_REPORT);
-> >> +            }
-> >> +
-> >> +            /*
-> >> +             * We do not want the "watchdog: " prefix on every line,
-> >> +             * hence we use "printk" instead of "pr_crit".
-> >> +             */
+> On Tue, Mar 26, 2024 at 01:19:20PM -0700, Mina Almasry wrote:
 > >
-> > You are not providing any justification why the prefix is not
-> > wanted. Just saying 'We do not want' does not cut it and who is 'We'. I
-> > certainly not.
-> >
-> > I really disagree because the prefixes are very useful for searching lo=
-g
-> > files. So not having it makes it harder to filter out for no reason.
-> >
+> > Are you envisioning that dmabuf support would be added to the block
+> > layer
 >
+> Yes.
 >
-> Regarding the use of printk() instead of pr_crit(), I have had a
-> discussion with Liu Song and Douglas in PATCHv1:
-> https://lore.kernel.org/all/CAD=3DFV=3DWEEQeKX=3Dec3Gr-8CKs2K0MaWN3V0-0yO=
-suret0qcB_AA@mail.gmail.com/
+> > (which I understand is part of the VFS and not driver specific),
 >
-> Please allow me to elaborate on my reasoning. The purpose of the
-> report_cpu_status() function I implemented is similar to that of
-> print_modules(), show_regs(), and dump_stack(). These functions are
-> designed to assist in analyzing the causes of a soft lockup, rather
-> than to report that a soft lockup has occurred. Therefore, I think
-> that adding the "watchdog: " prefix to every line is redundant and
-> not concise. Besides, the existing pr_emerg() in the watchdog.c file
-> is already sufficient for searching useful information in the logs.
-> The information I added, along with the call tree and other data, is
-> located near the line with the "watchdog: " prefix.
+> The block layer isn't really the VFS, it's just another core stack
+> like the network stack.
 >
-> Are the two reasons I've provided reasonable?
+> > or as part of the specific storage driver (like nvme for example)? If
+> > we can add dmabuf support to the block layer itself that sounds
+> > awesome. We may then be able to do devmem TCP on all/most storage
+> > devices without having to modify each individual driver.
+>
+> I suspect we'll still need to touch the drivers to understand it,
+> but hopefully all the main infrastructure can live in the block layer.
+>
+> > In your estimation, is adding dmabuf support to the block layer
+> > something technically feasible & acceptable upstream? I notice you
+> > suggested it so I'm guessing yes to both, but I thought I'd confirm.
+>
+> I think so, and I know there has been quite some interest to at least
+> pre-register userspace memory so that the iommu overhead can be
+> pre-loaded.  It also is a much better interface for Peer to Peer
+> transfers than what we currently have.
+>
 
-FWIW I don't feel super strongly about this, but I'm leaning towards
-agreeing with Bitao. The sample output from the commit message looks
-like this:
+I think this is positively thrilling news for me. I was worried that
+adding devmemTCP support to storage devices would involve using a
+non-dmabuf standard of buffer sharing like pci_p2pdma_
+(drivers/pci/p2pdma.c) and that would require messy changes to
+pci_p2pdma_ that would get nacked. Also it would require adding
+pci_p2pdma_ support to devmem TCP, which is a can of worms. If adding
+dma-buf support to storage devices is feasible and desirable, that's a
+much better approach IMO. (a) it will maybe work with devmem TCP
+without any changes needed on the netdev side of things and (b)
+dma-buf support may be generically useful and a good contribution even
+outside of devmem TCP.
 
-[  638.870231] watchdog: BUG: soft lockup - CPU#9 stuck for 26s! [swapper/9=
-:0]
-[  638.870825] CPU#9 Utilization every 4s during lockup:
-[  638.871194]  #1:   0% system,          0% softirq,   100% hardirq,
-   0% idle
-[  638.871652]  #2:   0% system,          0% softirq,   100% hardirq,
-   0% idle
-[  638.872107]  #3:   0% system,          0% softirq,   100% hardirq,
-   0% idle
-[  638.872563]  #4:   0% system,          0% softirq,   100% hardirq,
-   0% idle
-[  638.873018]  #5:   0% system,          0% softirq,   100% hardirq,
-   0% idle
-[  638.873494] CPU#9 Detect HardIRQ Time exceeds 50%. Most frequent HardIRQ=
-s:
-[  638.873994]  #1: 330945      irq#7
-[  638.874236]  #2: 31          irq#82
-[  638.874493]  #3: 10          irq#10
-[  638.874744]  #4: 2           irq#89
-[  638.874992]  #5: 1           irq#102
+I don't have a concrete user for devmem TCP for storage devices but
+the use case is very similar to GPU and I imagine the benefits in perf
+can be significant in some setups.
 
-...and in my mind the "watchdog: BUG: soft lockup - CPU#9 stuck for
-26s! [swapper/9:0]" line is enough to grep through the dmesg. Having
-all the following lines start with "watchdog:" feels like overkill to
-me, but if you feel strongly that they should then it wouldn't bother
-me too much for them all to have the "watchdog:" prefix.
+Christoph, if you have any hints or rough specific design in mind for
+how dma-buf support can be added to the block layer, please do let us
+know and we'll follow your hints to investigate. But I don't want to
+use up too much of your time. Marc and I can definitely read enough
+code to figure out how to do it ourselves :-)
 
-Could you clarify how strongly you feel about this and whether Bitao
-should spin a v13?
+Marc, please review and consider this thread and work, this could be a
+good project for you and I. I imagine the work would be:
 
-I believe that this is the only point of contention on the patch
-series right now and otherwise it could be ready to land. I know in
-the past Petr has wanted ample time to comment though perhaps the fact
-that it's been ~1 month is enough. Petr: do you have anything that
-needs saying before this patch series lands?
+1. Investigate how to add dma-buf support to the block layer (maybe
+write a prototype code, and maybe even test it with devmem TCP).
+2. Share a code or no-code proposal with netdev/fs/block layer mailing
+list and try to work through concerns/nacks.
+3. Finally share RFC through merging etc.
 
-Thanks!
-
--Doug
+--
+Thanks,
+Mina
 
