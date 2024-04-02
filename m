@@ -1,130 +1,139 @@
-Return-Path: <linux-mips+bounces-2545-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2547-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68AFF895404
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Apr 2024 14:56:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E4C98954DD
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Apr 2024 15:13:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0930C1F24DE7
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Apr 2024 12:56:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08DBE284A4C
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Apr 2024 13:13:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95D1483CC2;
-	Tue,  2 Apr 2024 12:55:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E2EB86262;
+	Tue,  2 Apr 2024 13:11:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BmdFBZ99"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pLBmLWbF"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C687F7ED
-	for <linux-mips@vger.kernel.org>; Tue,  2 Apr 2024 12:55:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34D7B84A52;
+	Tue,  2 Apr 2024 13:11:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712062559; cv=none; b=Ql92pWY99Z6arl0BM9ND1zkp50Ubi4C3nYOuuhkvjrkq2UWC9/eZPUDsMhyGiz2NnnuXa92TXJ8WDIrO0BIKzJIQ/gESzVt4M17QcAl4QMFNoSkWMsXtqeK7UeFNOFb7pjHB2dXLNllPNgyhsEIrYzxUSolMTRC56k+2trLECsY=
+	t=1712063487; cv=none; b=Ab+4DOG88HjoOiv4xBM47NxBmgiUFTY3Hy9u7A04HCzOSu5NaXU36utXhJrr9XqYteA58Vepp88PWfxm6gwz+AkPWWY6MSEYgos95d9h2owMCb5CDLtcG02ywQd3NJT2J8z8KmBjuZNtjiGNR8lguydLm74MZtOuQ/1o9cukWos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712062559; c=relaxed/simple;
-	bh=zN8QbrS4azbPCsghFpZd2U9tA5iFf1lkMG/47l0YA4M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XB5mDdqLYhf1iwSPj7/C0DMZA6rGQ/vyXUdsvDGg66xfVGlESNTvSkHdYnJTj/gOouOzC5gPetaZOVGGoZ/CvITPCdULCD0kJjs+Zu44qS9wBZZBFpCnrtUM6pePlnCT42ylAmKJ4KSt/5D5LcPpZoVuxsXL+7FMWsCtf764I/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BmdFBZ99; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712062556;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=z7LWvvJr0ZLeVlbglQU3vOlFLqLTXjJjluvDd3mIpGc=;
-	b=BmdFBZ99KcuwnzKDbgvQ+mFKh1D15J5a/SyOBttCln8u6JAZF2MIGT7FKoJt1KSXPsx8Mg
-	a0FvYlq6MezEfBm26Jk9SuWXx8Kw7XwMjn6pwkeaT+X/dbQuJLai9r3FLvIJ9pM9AYSEmI
-	0+24KlmLIDg33R+wyHb9LV77YQOYrqI=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-410-rp9IQ797NSqx0sgO2R02KQ-1; Tue,
- 02 Apr 2024 08:55:55 -0400
-X-MC-Unique: rp9IQ797NSqx0sgO2R02KQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3FBAA2823F33;
-	Tue,  2 Apr 2024 12:55:54 +0000 (UTC)
-Received: from t14s.redhat.com (unknown [10.39.194.247])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 02C913C22;
-	Tue,  2 Apr 2024 12:55:50 +0000 (UTC)
-From: David Hildenbrand <david@redhat.com>
-To: linux-kernel@vger.kernel.org
-Cc: linux-mm@kvack.org,
-	David Hildenbrand <david@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Jason Gunthorpe <jgg@nvidia.com>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Peter Xu <peterx@redhat.com>,
-	linux-arm-kernel@lists.infradead.org,
-	loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	x86@kernel.org
-Subject: [PATCH v1 3/3] mm: use "GUP-fast" instead "fast GUP" in remaining comments
-Date: Tue,  2 Apr 2024 14:55:16 +0200
-Message-ID: <20240402125516.223131-4-david@redhat.com>
-In-Reply-To: <20240402125516.223131-1-david@redhat.com>
-References: <20240402125516.223131-1-david@redhat.com>
+	s=arc-20240116; t=1712063487; c=relaxed/simple;
+	bh=9zAsnZKUtdaB+0oUBoSFWoiBkfOWRDSb/L5GPa9FOno=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YxBMH/vw9BRleuY+Tgiarjh9bwd72GPxFeu0mmPcJREbnWAJBZN/yKpfG4Kaaw+TbuiZXI9i0CP5GUV3A+mByQFFdOpijlcJdW5RjXrn4OVvBEWp4ZFd+dDZ7/Uk5W0BYB24fbqwaTmKHhiEhGZq2SnC/vrbfUdgjDel2Xq/w7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pLBmLWbF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECE50C433F1;
+	Tue,  2 Apr 2024 13:11:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712063486;
+	bh=9zAsnZKUtdaB+0oUBoSFWoiBkfOWRDSb/L5GPa9FOno=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pLBmLWbFq8b7R4iZ1CSvRnROpQc318dtdynLw3zTplx/2SSnxsPhnBaGB0KWLxJLw
+	 gtTVGsvy4tfXtBGJpBXwq9+p3MCPwkvK/hDkMvCwjFUh5usnZu6XFTibfhvcKn+2H6
+	 bNq+gdNLc+F4UpxqMWgGKmEwi+KPVyCSJwAIqsT2U4GGmN/LnMTaAplp/AjMnXlBu3
+	 Ft/ordeAQQOyjQYy8NAB2+7Nq/5pKWCsboYnCGnNR1VKTyBFWEf/lcch7254rsWnWE
+	 MLVvNT3x0cyP38rdvhtkwlombEcbUi6JLHcn3CjFq0MSnQTG+8Cf+UPPNEYFD7jwHP
+	 CjyG1mwKRgoUQ==
+Date: Tue, 2 Apr 2024 18:41:22 +0530
+From: Vinod Koul <vkoul@kernel.org>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Allen Pais <apais@linux.microsoft.com>, linux-kernel@vger.kernel.org,
+	tj@kernel.org, keescook@chromium.org, marcan@marcan.st,
+	sven@svenpeter.dev, florian.fainelli@broadcom.com,
+	rjui@broadcom.com, sbranden@broadcom.com, paul@crapouillou.net,
+	Eugeniy.Paltsev@synopsys.com, manivannan.sadhasivam@linaro.org,
+	vireshk@kernel.org, Frank.Li@nxp.com, leoyang.li@nxp.com,
+	zw@zh-kernel.org, wangzhou1@hisilicon.com, haijie1@huawei.com,
+	shawnguo@kernel.org, s.hauer@pengutronix.de, sean.wang@mediatek.com,
+	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+	afaerber@suse.de, logang@deltatee.com, daniel@zonque.org,
+	haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+	andersson@kernel.org, konrad.dybcio@linaro.org, orsonzhai@gmail.com,
+	baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+	patrice.chotard@foss.st.com, wens@csie.org,
+	jernej.skrabec@gmail.com, peter.ujfalusi@gmail.com,
+	kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com, jassisinghbrar@gmail.com, mchehab@kernel.org,
+	maintainers@bluecherrydvr.com, aubin.constans@microchip.com,
+	ulf.hansson@linaro.org, manuel.lauss@gmail.com,
+	mirq-linux@rere.qmqm.pl, jh80.chung@samsung.com, oakad@yahoo.com,
+	hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
+	brucechang@via.com.tw, HaraldWelte@viatech.com, pierre@ossman.eu,
+	duncan.sands@free.fr, stern@rowland.harvard.edu, oneukum@suse.com,
+	openipmi-developer@lists.sourceforge.net, dmaengine@vger.kernel.org,
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	imx@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+	linux-mediatek@lists.infradead.org,
+	linux-actions@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-tegra@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-mmc@vger.kernel.org, linux-omap@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, linux-s390@vger.kernel.org,
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/9] dma: Convert from tasklet to BH workqueue
+Message-ID: <ZgwD-iScEb9zzB8H@matsya>
+References: <20240327160314.9982-1-apais@linux.microsoft.com>
+ <20240327160314.9982-3-apais@linux.microsoft.com>
+ <CACRpkdaSBGe0EFm1gK-7qPK4e6T2H1dxFXjhJqO2hWCm1-bNdA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
+In-Reply-To: <CACRpkdaSBGe0EFm1gK-7qPK4e6T2H1dxFXjhJqO2hWCm1-bNdA@mail.gmail.com>
 
-Let's fixup the remaining comments to consistently call that thing
-"GUP-fast". With this change, we consistently call it "GUP-fast".
+On 02-04-24, 14:25, Linus Walleij wrote:
+> Hi Allen,
+> 
+> thanks for your patch!
+> 
+> On Wed, Mar 27, 2024 at 5:03 PM Allen Pais <apais@linux.microsoft.com> wrote:
+> 
+> > The only generic interface to execute asynchronously in the BH context is
+> > tasklet; however, it's marked deprecated and has some design flaws. To
+> > replace tasklets, BH workqueue support was recently added. A BH workqueue
+> > behaves similarly to regular workqueues except that the queued work items
+> > are executed in the BH context.
+> >
+> > This patch converts drivers/dma/* from tasklet to BH workqueue.
+> >
+> > Based on the work done by Tejun Heo <tj@kernel.org>
+> > Branch: git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git for-6.10
+> >
+> > Signed-off-by: Allen Pais <allen.lkml@gmail.com>
+> (...)
+> > diff --git a/drivers/dma/ste_dma40.c b/drivers/dma/ste_dma40.c
+> (...)
+> >         if (d40c->pending_tx)
+> > -               tasklet_schedule(&d40c->tasklet);
+> > +               queue_work(system_bh_wq, &d40c->work);
+> 
+> Why is "my" driver not allowed to use system_bh_highpri_wq?
+> 
+> I can't see the reasoning between some drivers using system_bh_wq
+> and others being highpri?
+> 
+> Given the DMA usecase I would expect them all to be high prio.
 
-Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- mm/filemap.c    | 2 +-
- mm/khugepaged.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+It didnt use tasklet_hi_schedule(), I guess Allen has done the
+conversion of tasklet_schedule -> system_bh_wq and tasklet_hi_schedule
+-> system_bh_highpri_wq
 
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 387b394754fa..c668e11cd6ef 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -1810,7 +1810,7 @@ EXPORT_SYMBOL(page_cache_prev_miss);
-  * C. Return the page to the page allocator
-  *
-  * This means that any page may have its reference count temporarily
-- * increased by a speculative page cache (or fast GUP) lookup as it can
-+ * increased by a speculative page cache (or GUP-fast) lookup as it can
-  * be allocated by another user before the RCU grace period expires.
-  * Because the refcount temporarily acquired here may end up being the
-  * last refcount on the page, any page allocation must be freeable by
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 38830174608f..6972fa05132e 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -1169,7 +1169,7 @@ static int collapse_huge_page(struct mm_struct *mm, unsigned long address,
- 	 * huge and small TLB entries for the same virtual address to
- 	 * avoid the risk of CPU bugs in that area.
- 	 *
--	 * Parallel fast GUP is fine since fast GUP will back off when
-+	 * Parallel GUP-fast is fine since GUP-fast will back off when
- 	 * it detects PMD is changed.
- 	 */
- 	_pmd = pmdp_collapse_flush(vma, address, pmd);
+Anyway, we are going to use a dma queue so should be better performance
+
 -- 
-2.44.0
-
+~Vinod
 
