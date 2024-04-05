@@ -1,139 +1,154 @@
-Return-Path: <linux-mips+bounces-2594-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2595-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C2EA89A01A
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Apr 2024 16:48:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A174789A071
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Apr 2024 17:02:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 775A91C20FC1
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Apr 2024 14:48:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A03E1F21F00
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Apr 2024 15:02:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71A7216F29C;
-	Fri,  5 Apr 2024 14:48:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4C8E16F841;
+	Fri,  5 Apr 2024 15:02:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dwol0GCP"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JxRT5eL3"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 259D116F280;
-	Fri,  5 Apr 2024 14:48:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576FA16F29F;
+	Fri,  5 Apr 2024 15:02:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712328491; cv=none; b=LUFsDxlIPRpMyJylD3fmQLddTD+uCdz94Vpv1Z2lMUoeV3zHV0WBNh4cQx59G4MWbCZ9ttVj72o4dJvJW6A77hVXdflkdmObv+ModvsH82kAor28cz5Mu28ODBBs7OU2ZmYm6r/PzvxJh6V897dhwLJSBEwyaH5vZ3B4jNZC9e4=
+	t=1712329339; cv=none; b=qdvIi7+/hp79ME86rJnR2xkDJhkJxgg8U39fGo0wWpAY3b1EY2rph6eXQBBhmIxWCvz4YBjA+8kdJxKSiVn9Lart9Y4yWwUFmBxEi49xFYvKHw8WwAcmIPgyiioLiyQeluszeJtebqPoWMX7mzyWvKF7FuIEcWYaxt8G71FbTlo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712328491; c=relaxed/simple;
-	bh=LreOfBm3nT3gJWEyzyhSzgs3L/UNn7htcugC08IxS+o=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=FhgyibBrjJJerqiN/xeELx8ulCCrttsO0ifuLkAQRilvHTt8dc17/78NwwTJnSXQEqrJQ8DisuzIHcFqbHjvPn01zf4LD/EJBHgwdOEMyr7Gr7BsIfFsUNcHoR6ig7bid8SbbcBFr9WiRyN282kf8SRPz1aT+thhXGL6mPaITkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dwol0GCP; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712328490; x=1743864490;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=LreOfBm3nT3gJWEyzyhSzgs3L/UNn7htcugC08IxS+o=;
-  b=Dwol0GCPWx+Us9Nc1oDUYLAbXkYQJcB5drZ+e/z/NKeBnRPKlHflWqwg
-   Yw4hfY96xZ99qi69FRx5ApTzn4s2dFblzbbBBZNmELoBZmGrLsyqtM1Tt
-   7XjrCxjQMHslh/maB2ZlqYKL/yOQMjvgJRfWGYWnGNV7Vntchhy9rR8TZ
-   Bb2dQ7D0gvEJ7yATUvatm8poVjm9GIXwUZIigfZX2E2sxkH557mmMjsO5
-   rZ7L7bNjJUz2yHE8sx+31QYnqvC2LiTeEdXaUSgSRysjyX39H+VV/136X
-   wLuzAh2SxZvbL9cXjjV9ut1CJiMFoQgDWGkSykGgExg565dSBn0UcBDyS
-   g==;
-X-CSE-ConnectionGUID: pNjzk4eXTSSVd+EE9ISQhg==
-X-CSE-MsgGUID: xKDuxmsPSK60Uth0ervh2Q==
-X-IronPort-AV: E=McAfee;i="6600,9927,11035"; a="11478923"
-X-IronPort-AV: E=Sophos;i="6.07,181,1708416000"; 
-   d="scan'208";a="11478923"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2024 07:48:09 -0700
-X-CSE-ConnectionGUID: H55LyW5ASaqr4vhL9J0MYQ==
-X-CSE-MsgGUID: +963A5O0TASYUpMZv+tuJQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,181,1708416000"; 
-   d="scan'208";a="23821308"
-Received: from dtorrice-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.41.202])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2024 07:47:59 -0700
-From: Jani Nikula <jani.nikula@linux.intel.com>
-To: Peter Zijlstra <peterz@infradead.org>, Andrzej Hajda
- <andrzej.hajda@intel.com>
-Cc: Mark Rutland <mark.rutland@arm.com>, linux-ia64@vger.kernel.org,
- linux-sh@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-hexagon@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- intel-gfx@lists.freedesktop.org, linux-xtensa@linux-xtensa.org, Arnd
- Bergmann <arnd@arndb.de>, Boqun Feng <boqun.feng@gmail.com>,
- linux-m68k@lists.linux-m68k.org, openrisc@lists.librecores.org,
- loongarch@lists.linux.dev, Rodrigo Vivi <rodrigo.vivi@intel.com>, Andy
- Shevchenko <andriy.shevchenko@linux.intel.com>,
- linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-alpha@vger.kernel.org, Andrew Morton
- <akpm@linux-foundation.org>, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [Intel-gfx] [PATCH v5 0/7] Introduce __xchg, non-atomic xchg
-In-Reply-To: <Y/y0/VoPAVCXGKp3@hirez.programming.kicks-ass.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230118153529.57695-1-andrzej.hajda@intel.com>
- <Y/ZLH5F8LA3H10aL@hirez.programming.kicks-ass.net>
- <17f40b7c-f98d-789d-fa19-12ec077b756a@intel.com>
- <Y/y0/VoPAVCXGKp3@hirez.programming.kicks-ass.net>
-Date: Fri, 05 Apr 2024 17:47:56 +0300
-Message-ID: <87r0fjc1cz.fsf@intel.com>
+	s=arc-20240116; t=1712329339; c=relaxed/simple;
+	bh=Qd6G5maD/2bB1FBCGYcJGy50moLaCDUjrKAdzbS6uh4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=EulqVlXik8Oa3nXXhqA5hcpWnF0cZ4gVlVy4pYzs/Qw5O73sv8X0sWkoh0Ire2Srhz0912zZ6UUkecJrZBHo8zh6A8xusrzw8P2x5j+RY6BLWkWHFq3/2Zt8iBcE5+qdKxlP7m2Iv/8vc3TJ0EG01AY5HHWzDCuoBZ98eh6g5OE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JxRT5eL3; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8FB601BF20F;
+	Fri,  5 Apr 2024 15:02:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1712329335;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jePpTY9wJhZN+709Nb4n6FZ8IJ1Mh7MLk4EHKC+eTMg=;
+	b=JxRT5eL3R3EXBHm0arUs8v088hDO1F4xaZiNcL62n2ehvtBnR0V0tB9pc1S1FoC2CIEYV6
+	M73Slz1iGfdqETMbMYi1hgjb6EB2YsXyqZjckQBrb85TpNqxr0utviSLgFEMskUoYuUGEl
+	+Yw23A3rvlWlejGs0ahEcjSd4JxtEHRHhbCUYnBqzXrZETwpkRc4bOm3PKIcjL+cOr9CoY
+	Bh9MuesdboX5aFzgkZwSbU4h87qMfJog7ZzVzYvqsLEAcyBYIwCVNLefLyq7rdzO5iv5ww
+	4QlMBCspCiuNwOUdqdLkJC3W65E7Y3Ey8YNPXHEwMkAUGNUmrpkNghvQ+vmXzg==
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: [PATCH v2 00/11] spi: cadence-qspi: add Mobileye EyeQ5 support
+Date: Fri, 05 Apr 2024 17:02:10 +0200
+Message-Id: <20240405-cdns-qspi-mbly-v2-0-956679866d6d@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAHISEGYC/13MQQ6CMBCF4auQWTtmKK1BV97DsChtlUmghZYQC
+ eHuVty5/F/yvg2Si+wS3IoNols4cfA5xKkA02n/csg2NwgSkgRd0VifcEoj49D2K1onBCktpW4
+ ryKcxuie/D/DR5O44zSGuh7+U3/VHVVT/U0uJhFpRVauLtVm9tyHMPfuzCQM0+75/AOuSe1+uA
+ AAA
+To: Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Vaishnav Achath <vaishnav.a@ti.com>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Rob Herring <robh@kernel.org>
+Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.13.0
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Mon, 27 Feb 2023, Peter Zijlstra <peterz@infradead.org> wrote:
-> On Thu, Feb 23, 2023 at 10:24:19PM +0100, Andrzej Hajda wrote:
->> On 22.02.2023 18:04, Peter Zijlstra wrote:
->> > On Wed, Jan 18, 2023 at 04:35:22PM +0100, Andrzej Hajda wrote:
->> > 
->> > > Andrzej Hajda (7):
->> > >    arch: rename all internal names __xchg to __arch_xchg
->> > >    linux/include: add non-atomic version of xchg
->> > >    arch/*/uprobes: simplify arch_uretprobe_hijack_return_addr
->> > >    llist: simplify __llist_del_all
->> > >    io_uring: use __xchg if possible
->> > >    qed: use __xchg if possible
->> > >    drm/i915/gt: use __xchg instead of internal helper
->> > 
->> > Nothing crazy in here I suppose, I somewhat wonder why you went through
->> > the trouble, but meh.
->> 
->> If you are asking why I have proposed this patchset, then the answer is
->> simple, 1st I've tried to find a way to move internal i915 helper to core
->> (see patch 7).
->> Then I was looking for possible other users of this helper. And apparently
->> there are many of them, patches 3-7 shows some.
->> 
->> 
->> > 
->> > You want me to take this through te locking tree (for the next cycle,
->> > not this one) where I normally take atomic things or does someone else
->> > want this?
->> 
->> If you could take it I will be happy.
->
-> OK, I'll go queue it in tip/locking/core after -rc1. Thanks!
+Hi all,
 
-Is this where the series fell between the cracks, or was there some
-follow-up that I missed?
+V2 of this series adding octal SPI-NOR support to Mobileye EyeQ5
+platform. It has been tested on EyeQ5 hardware successfully.
+V1 cover letter [5] contains a brief summary of what gets added.
 
-I think this would still be useful. Andrzej, would you mind rebasing and
-resending if there are no objections?
+There is no dependency except if you want zero errors in devicetree:
+system-controller series [3] for <&clocks> phandle.
 
-BR,
-Jani.
+Have a nice day,
+Théo
 
+[0]: https://lore.kernel.org/lkml/20240216174227.409400-1-gregory.clement@bootlin.com/
+[1]: https://lore.kernel.org/linux-mips/20240209-regname-v1-0-2125efa016ef@flygoat.com/
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/log/
+[3]: https://lore.kernel.org/lkml/20240301-mbly-clk-v9-0-cbf06eb88708@bootlin.com/
+[4]: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git/log/
+[5]: https://lore.kernel.org/lkml/20240308-cdns-qspi-mbly-v1-0-a503856dd205@bootlin.com/
 
+To: Mark Brown <broonie@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Vaishnav Achath <vaishnav.a@ti.com>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Rob Herring <robh@kernel.org>
+Cc: linux-spi@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+
+Changes in v2:
+- Rebase upon v6.9-rc2.
+- Fix dt-bindings commit subject tags.
+- Take Reviewed-by: Krzysztof Kozlowski on dt-bindings commit.
+- Add dt-bindings commit to order compatibles alphabetically.
+  adding EyeQ5 compatible can be taken alone easily.
+- Drop patch taken upstream:
+- Add To: Rob Herring, following get_maintainer.pl recommendation.
+- Link to v1: https://lore.kernel.org/r/20240308-cdns-qspi-mbly-v1-0-a503856dd205@bootlin.com
+
+Krzysztof: unsure if you want this. It is second so that commit
+spi: cadence-qspi: switch from legacy names to modern ones
+---
+Théo Lebrun (11):
+      spi: dt-bindings: cdns,qspi-nor: add mobileye,eyeq5-ospi compatible
+      spi: dt-bindings: cdns,qspi-nor: sort compatibles alphabetically
+      spi: cadence-qspi: allow building for MIPS
+      spi: cadence-qspi: store device data pointer in private struct
+      spi: cadence-qspi: add FIFO depth detection quirk
+      spi: cadence-qspi: minimise register accesses on each op if !DTR
+      spi: cadence-qspi: add no-IRQ mode to indirect reads
+      spi: cadence-qspi: add early busywait to cqspi_wait_for_bit()
+      spi: cadence-qspi: add mobileye,eyeq5-ospi compatible
+      MIPS: mobileye: eyeq5: Add SPI-NOR controller node
+      MIPS: mobileye: eyeq5: add octal flash node to eval board DTS
+
+ .../devicetree/bindings/spi/cdns,qspi-nor.yaml     |  19 +++-
+ arch/mips/boot/dts/mobileye/eyeq5-epm5.dts         |  15 +++
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi             |  15 +++
+ drivers/spi/Kconfig                                |   2 +-
+ drivers/spi/spi-cadence-quadspi.c                  | 114 ++++++++++++++++-----
+ 5 files changed, 132 insertions(+), 33 deletions(-)
+---
+base-commit: afccf1991d034a11ce0a1c21d90feba510838e34
+change-id: 20240209-cdns-qspi-mbly-de2205a44ab3
+
+Best regards,
 -- 
-Jani Nikula, Intel
+Théo Lebrun <theo.lebrun@bootlin.com>
+
 
