@@ -1,96 +1,75 @@
-Return-Path: <linux-mips+bounces-2584-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2585-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB9358998F4
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Apr 2024 11:05:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73DE0899959
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Apr 2024 11:23:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4ABDEB232B3
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Apr 2024 09:05:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 967681C2113E
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Apr 2024 09:23:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 057D915F30D;
-	Fri,  5 Apr 2024 09:04:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BA4E15FA9B;
+	Fri,  5 Apr 2024 09:23:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="NTHIOwZ+";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="KToj6Ik8";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="NTHIOwZ+";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="KToj6Ik8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aDqRjjxG"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191B317721;
-	Fri,  5 Apr 2024 09:04:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA83715FA9A;
+	Fri,  5 Apr 2024 09:23:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712307869; cv=none; b=giC8/D86pp78vwztcvEKYVq/bieXqxL1/GdigGj9CFoRCPR253CA3s8kEzXKEVeq3hUGvqUAJUnO9992sl6gGrrK4Bb5RTauIKJ5xbOxOYUqV8pjZ9Zoehj67PZaYFOS5oo1VLetCncRklUDJGMWCvSi1rh5AThxYRI/WgfH9Ng=
+	t=1712308982; cv=none; b=PViiWr+rfWKWf+cSJah3ffvOEy5lx3NNP3v1hFUfzNaYNUqSwXdyiDANLBuuz8Dzc9D3cCfc1gOOCVny98IfRwTPZQRYIyVvLMOQqol9A+JC6BiFGvZaOJgdVBVektzi9HCrNkkMjgNJGatUlhrm+sltZfJyy/BFpI9OPjaoWJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712307869; c=relaxed/simple;
-	bh=CZ7sdleduXPFl026NflXweEHKoQ3VxVB/rZ/gonnO14=;
+	s=arc-20240116; t=1712308982; c=relaxed/simple;
+	bh=3ZuskFzn33/aCK7Jkdn1rVWi3XVf1KzYd4iZcT97pNM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BRXfKaoUj3UdX3Xh7cexJkp/mGWvubYXAtk0rCmfvq51aSRxEXIvdvec8NF5ZpWam9sLbfvCu4z+U3g3c0v3xn5mAcGiRy44TCZS5z7miPFvrt7O8Ww4KwN2PbmZkFIiMawtoUEBJUys4j8PKEiVpTpy8qs/0hVL8o7WMBEngO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=NTHIOwZ+; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=KToj6Ik8; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=NTHIOwZ+; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=KToj6Ik8; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:98])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 1491D1F78A;
-	Fri,  5 Apr 2024 09:04:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1712307866; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=q6m7RkFG+I05tVEKqU5D+NUntnuekF2Z+soqECDuzWU=;
-	b=NTHIOwZ+L3b2OUEsvJLD8ClmWEK1V9PGjFmF3hXDlTtwirb0F7vborCm2hzx0SiFnjhbIv
-	zzjmLpjtndDKGRKFQdcMcew0yVU0osvQibX+CHvUnAA8pJZGyIsXDp0AdfGiyaEVYugdhw
-	ZyfnpyppmEFhkJ8JcRJr91khwROWpFk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1712307866;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=q6m7RkFG+I05tVEKqU5D+NUntnuekF2Z+soqECDuzWU=;
-	b=KToj6Ik8dGLGisbepSgkxn4mN2+dzr6QWAUlbfj7teTNyD0Xb003EKLmDQCOQOFBFeFQjI
-	d81wCJIrvTO/D4Bw==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=NTHIOwZ+;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=KToj6Ik8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1712307866; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=q6m7RkFG+I05tVEKqU5D+NUntnuekF2Z+soqECDuzWU=;
-	b=NTHIOwZ+L3b2OUEsvJLD8ClmWEK1V9PGjFmF3hXDlTtwirb0F7vborCm2hzx0SiFnjhbIv
-	zzjmLpjtndDKGRKFQdcMcew0yVU0osvQibX+CHvUnAA8pJZGyIsXDp0AdfGiyaEVYugdhw
-	ZyfnpyppmEFhkJ8JcRJr91khwROWpFk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1712307866;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=q6m7RkFG+I05tVEKqU5D+NUntnuekF2Z+soqECDuzWU=;
-	b=KToj6Ik8dGLGisbepSgkxn4mN2+dzr6QWAUlbfj7teTNyD0Xb003EKLmDQCOQOFBFeFQjI
-	d81wCJIrvTO/D4Bw==
-Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 98D09139F1;
-	Fri,  5 Apr 2024 09:04:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id LEQAJJm+D2ZoTwAAn2gu4w
-	(envelope-from <tzimmermann@suse.de>); Fri, 05 Apr 2024 09:04:25 +0000
-Message-ID: <c281bb8e-0719-4b28-a637-56615ad16913@suse.de>
-Date: Fri, 5 Apr 2024 11:04:25 +0200
+	 In-Reply-To:Content-Type; b=tL76eOOrDFGoHRYVqOEiL1MD5J5BIbEhDxPrrxXUOAkDMeVzYRjdAc7lzDXFjMcAUElOEQ/76WJLPLr33fAfAJCxKIEmFh1yMRCvzJ64BnU5eqI08QfhA9pxV8CD7z9lwK5ROEBBbFEunHqPRP/6BCA5UpDcpBnECl/TSAurnHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aDqRjjxG; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a4702457ccbso265059766b.3;
+        Fri, 05 Apr 2024 02:23:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712308979; x=1712913779; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=noqD/5X0c5Dn8ZuUFAcFbdLma+HUeke+SMpKeYbbirA=;
+        b=aDqRjjxGE9jaaWNn4o0jnifT37U1zs7cncw4O1sJ1qw0kkXLEzelGRIJhWds92/g6K
+         kAypMpDAvFvMtryQQHtXCc+/yKFtsc/Jnd3svWJNIfNJw4syY34mOWOY4q0AX5spKVir
+         NI36MPZnKolDfvxg5D5pgCAoT6iPjQi/1b1WcTJUHAfcVJkYA1E+Oy7L/UqpoCCZMP8Y
+         MObTm8Pptb5zEjVUIkLQb+tubJFX9ozHSggzdGEmRk/2sgMGcn9ec+aheVQPmrcgzANo
+         h6lgq/e5n9QygavjNQgWiuVFUls/fDWXxcJJAiPfn3p2cUEoMETeakdSUG9wuc2+qnoE
+         kCwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712308979; x=1712913779;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=noqD/5X0c5Dn8ZuUFAcFbdLma+HUeke+SMpKeYbbirA=;
+        b=wynY5pqj14rqLVMC9vy+qDTuzbSfAVdT6qcPZeKGd4hjAzD9zPLZDxPAzNRFrXGtgG
+         WBOnTl4YFx36ALbGbHuTG/3N8PJXJq97MAtLbNm1okPg5VwdGlnmxEJ2wkvj+NIDd75z
+         8Z6NcRYT8X965Cm+ii+ZOcB5kqrAxGshKMll0I9uIP9eyra8lF4/Lm+PfiVB10wDtJa9
+         UVAXdWnTsh2JTG9PW6pzSR4qlHNCvOu3g2qMR+Qo6S13Foe3UPGuQUXYfHtYEXxRnrQs
+         MWPVX37Cxn81qGRovJo0YLSuFrhmf2lKmO6FcJEduDY2VYhueHDIkfiDQBTezVp6Q4Po
+         f/cg==
+X-Forwarded-Encrypted: i=1; AJvYcCV6lgcy4UUy00PPdI7oPsbTk4NjSqFuh1+ObOSVBiPBZ9dTPTVuSXrdsv6moTEWgUznGjgnOijuhSv2/jEEuDEeCG+dXh0SGk4pyyt6xLMfRJmcZH6xh7T/hRa9ijN88tKy82dIHxF9
+X-Gm-Message-State: AOJu0Yy5mTuA958WEgFEzDXLWbAQWnD0pJMzXvQV38jFTf1eZwMJWaVr
+	M5zTg7+O++6QZM2BfdC9ndlDG2Qr2XFvsqzr1UJuY+2EFEJB/GDB
+X-Google-Smtp-Source: AGHT+IEgQddVqn3eIR/IcjcljU5/pt9BT7UF8+EoQj9V2Nd3SGUgkdY1anII0v6MlQwyQYIjUksQuQ==
+X-Received: by 2002:a17:906:7c54:b0:a51:962d:e06b with SMTP id g20-20020a1709067c5400b00a51962de06bmr617313ejp.55.1712308978893;
+        Fri, 05 Apr 2024 02:22:58 -0700 (PDT)
+Received: from ?IPV6:2a01:c22:72bb:b200:3c73:5b9d:154b:3af6? (dynamic-2a01-0c22-72bb-b200-3c73-5b9d-154b-3af6.c22.pool.telefonica.de. [2a01:c22:72bb:b200:3c73:5b9d:154b:3af6])
+        by smtp.googlemail.com with ESMTPSA id jg29-20020a170907971d00b00a518bcb41c1sm609593ejc.126.2024.04.05.02.22.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Apr 2024 02:22:58 -0700 (PDT)
+Message-ID: <6c0a1792-50a2-4208-8f6e-fbf0295110c0@gmail.com>
+Date: Fri, 5 Apr 2024 11:22:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -98,174 +77,97 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/3] arch: Remove fbdev dependency from video helpers
-To: arnd@arndb.de, sam@ravnborg.org, javierm@redhat.com, deller@gmx.de,
- sui.jingfeng@linux.dev
-Cc: linux-arch@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-fbdev@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-sh@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-snps-arc@lists.infradead.org,
- linux-kernel@vger.kernel.org
-References: <20240329203450.7824-1-tzimmermann@suse.de>
+Subject: Re: [PATCH v2 0/3] leds: trigger: Improve handling of
+ led_trigger_event() and simplify mute audio trigger
+To: Lee Jones <lee@kernel.org>
+Cc: linux-leds@vger.kernel.org, linux-sound@vger.kernel.org,
+ linux-mips@vger.kernel.org, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>,
+ Pavel Machek <pavel@ucw.cz>
+References: <3918a80c-b885-40f6-a96e-bcd4c53ff448@gmail.com>
+ <170964052434.128456.128263499797916605.b4-ty@kernel.org>
+ <20240305120947.GD86322@google.com> <20240328104232.GZ13211@google.com>
 Content-Language: en-US
-From: Thomas Zimmermann <tzimmermann@suse.de>
-Autocrypt: addr=tzimmermann@suse.de; keydata=
- xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
- XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
- BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
- hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
- 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
- AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
- AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
- AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
- lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
- U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
- vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
- 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
- j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
- T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
- 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
- GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
- hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
- EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
- C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
- yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
- SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
- Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
- 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
-In-Reply-To: <20240329203450.7824-1-tzimmermann@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Heiner Kallweit <hkallweit1@gmail.com>
+Autocrypt: addr=hkallweit1@gmail.com; keydata=
+ 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
+In-Reply-To: <20240328104232.GZ13211@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Flag: NO
-X-Spam-Score: -5.50
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: 1491D1F78A
-X-Spam-Level: 
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-5.50 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	DWL_DNSWL_LOW(-1.00)[suse.de:dkim];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	XM_UA_NO_VERSION(0.01)[];
-	MX_GOOD(-0.01)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	ARC_NA(0.00)[];
-	FREEMAIL_TO(0.00)[arndb.de,ravnborg.org,redhat.com,gmx.de,linux.dev];
-	FREEMAIL_ENVRCPT(0.00)[gmx.de];
-	DKIM_TRACE(0.00)[suse.de:+];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_NONE(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap2.dmz-prg2.suse.org:helo,imap2.dmz-prg2.suse.org:rdns,suse.de:dkim]
 
-Hi,
-
-if there are no further comments, can this series be merged through 
-asm-generic?
-
-Best regards
-Thomas
-
-Am 29.03.24 um 21:32 schrieb Thomas Zimmermann:
-> Make architecture helpers for display functionality depend on general
-> video functionality instead of fbdev. This avoids the dependency on
-> fbdev and makes the functionality available for non-fbdev code.
->
-> Patch 1 replaces the variety of Kconfig options that control the
-> Makefiles with CONFIG_VIDEO. More fine-grained control of the build
-> can then be done within each video/ directory; see parisc for an
-> example.
->
-> Patch 2 replaces fb_is_primary_device() with video_is_primary_device(),
-> which has no dependencies on fbdev. The implementation remains identical
-> on all affected platforms. There's one minor change in fbcon, which is
-> the only caller of fb_is_primary_device().
->
-> Patch 3 renames the source and header files from fbdev to video.
->
-> v3:
-> - arc, arm, arm64, sh, um: generate asm/video.h (Sam, Helge, Arnd)
-> - fix typos (Sam)
-> v2:
-> - improve cover letter
-> - rebase onto v6.9-rc1
->
-> Thomas Zimmermann (3):
->    arch: Select fbdev helpers with CONFIG_VIDEO
->    arch: Remove struct fb_info from video helpers
->    arch: Rename fbdev header and source files
->
->   arch/arc/include/asm/fb.h                    |  8 ------
->   arch/arm/include/asm/fb.h                    |  6 -----
->   arch/arm64/include/asm/fb.h                  | 10 --------
->   arch/loongarch/include/asm/{fb.h => video.h} |  8 +++---
->   arch/m68k/include/asm/{fb.h => video.h}      |  8 +++---
->   arch/mips/include/asm/{fb.h => video.h}      | 12 ++++-----
->   arch/parisc/Makefile                         |  2 +-
->   arch/parisc/include/asm/fb.h                 | 14 -----------
->   arch/parisc/include/asm/video.h              | 16 ++++++++++++
->   arch/parisc/video/Makefile                   |  2 +-
->   arch/parisc/video/{fbdev.c => video-sti.c}   |  9 ++++---
->   arch/powerpc/include/asm/{fb.h => video.h}   |  8 +++---
->   arch/powerpc/kernel/pci-common.c             |  2 +-
->   arch/sh/include/asm/fb.h                     |  7 ------
->   arch/sparc/Makefile                          |  4 +--
->   arch/sparc/include/asm/{fb.h => video.h}     | 15 +++++------
->   arch/sparc/video/Makefile                    |  2 +-
->   arch/sparc/video/fbdev.c                     | 26 --------------------
->   arch/sparc/video/video.c                     | 25 +++++++++++++++++++
->   arch/um/include/asm/Kbuild                   |  2 +-
->   arch/x86/Makefile                            |  2 +-
->   arch/x86/include/asm/fb.h                    | 19 --------------
->   arch/x86/include/asm/video.h                 | 21 ++++++++++++++++
->   arch/x86/video/Makefile                      |  3 ++-
->   arch/x86/video/{fbdev.c => video.c}          | 21 +++++++---------
->   drivers/video/fbdev/core/fbcon.c             |  2 +-
->   include/asm-generic/Kbuild                   |  2 +-
->   include/asm-generic/{fb.h => video.h}        | 17 +++++++------
->   include/linux/fb.h                           |  2 +-
->   29 files changed, 124 insertions(+), 151 deletions(-)
->   delete mode 100644 arch/arc/include/asm/fb.h
->   delete mode 100644 arch/arm/include/asm/fb.h
->   delete mode 100644 arch/arm64/include/asm/fb.h
->   rename arch/loongarch/include/asm/{fb.h => video.h} (86%)
->   rename arch/m68k/include/asm/{fb.h => video.h} (86%)
->   rename arch/mips/include/asm/{fb.h => video.h} (76%)
->   delete mode 100644 arch/parisc/include/asm/fb.h
->   create mode 100644 arch/parisc/include/asm/video.h
->   rename arch/parisc/video/{fbdev.c => video-sti.c} (78%)
->   rename arch/powerpc/include/asm/{fb.h => video.h} (76%)
->   delete mode 100644 arch/sh/include/asm/fb.h
->   rename arch/sparc/include/asm/{fb.h => video.h} (75%)
->   delete mode 100644 arch/sparc/video/fbdev.c
->   create mode 100644 arch/sparc/video/video.c
->   delete mode 100644 arch/x86/include/asm/fb.h
->   create mode 100644 arch/x86/include/asm/video.h
->   rename arch/x86/video/{fbdev.c => video.c} (66%)
->   rename include/asm-generic/{fb.h => video.h} (89%)
->
-
--- 
---
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Frankenstrasse 146, 90461 Nuernberg, Germany
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-HRB 36809 (AG Nuernberg)
+On 28.03.2024 11:42, Lee Jones wrote:
+> On Tue, 05 Mar 2024, Lee Jones wrote:
+> 
+>> On Tue, 05 Mar 2024, Lee Jones wrote:
+>>
+>>> On Mon, 04 Mar 2024 21:56:29 +0100, Heiner Kallweit wrote:
+>>>> If a simple trigger is assigned to a LED, then the LED may be off until
+>>>> the next led_trigger_event() call. This may be an issue for simple
+>>>> triggers with rare led_trigger_event() calls, e.g. power supply
+>>>> charging indicators (drivers/power/supply/power_supply_leds.c).
+>>>> Therefore persist the brightness value of the last led_trigger_event()
+>>>> call and use this value if the trigger is assigned to a LED.
+>>>> This change allows to use simple triggers in more cases.
+>>>> As a first use case simplify handling of the mute audio trigger.
+>>>>
+>>>> [...]
+>>>
+>>> Applied, thanks!
+>>>
+>>> [1/3] leds: trigger: Store brightness set by led_trigger_event()
+>>>       commit: 575129855dee0e364af7df84a77ab5cca54b1442
+>>> [2/3] ALSA: control-led: Integrate mute led trigger
+>>>       commit: ba8adb1646ee498029ac12b20e792d9d0dd17920
+>>> [3/3] leds: trigger: audio: Remove this trigger
+>>>       commit: 2c61168294d0ea42a5542dbc864afb03a76bbc11
+>>
+>> Submitted for build testing.
+>>
+>> Once succeeded, a PR will follow for other maintainers to pull from.
+> 
+> Rebased onto v6.9-rc1 and resubmitted for build testing.
+> 
+Can the series be expected soon in linux-next for broader testing?
 
 
