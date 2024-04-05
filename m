@@ -1,96 +1,139 @@
-Return-Path: <linux-mips+bounces-2593-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2594-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF039899E09
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Apr 2024 15:09:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C2EA89A01A
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Apr 2024 16:48:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95D8E1F21683
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Apr 2024 13:09:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 775A91C20FC1
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Apr 2024 14:48:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AC3616D4DA;
-	Fri,  5 Apr 2024 13:09:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71A7216F29C;
+	Fri,  5 Apr 2024 14:48:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JgBfZS1E"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dwol0GCP"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0BE016D4D7;
-	Fri,  5 Apr 2024 13:09:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 259D116F280;
+	Fri,  5 Apr 2024 14:48:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712322584; cv=none; b=Jgs3BJIvtzDD8tfH+WIbjfqyTTG1mZoyVCAZj6G9ZzSxKvmvfBY6SPXZ3ll0b4ylODzl26bGw78yHMuN5Ps266Ogixan3fEqrHVPYH4BMQjI33n04/5Mhgj+m7PQIbidnR0sgQAQnSIoqRcOwP2QPd57S8J2sc3nNv5A2/wGnhg=
+	t=1712328491; cv=none; b=LUFsDxlIPRpMyJylD3fmQLddTD+uCdz94Vpv1Z2lMUoeV3zHV0WBNh4cQx59G4MWbCZ9ttVj72o4dJvJW6A77hVXdflkdmObv+ModvsH82kAor28cz5Mu28ODBBs7OU2ZmYm6r/PzvxJh6V897dhwLJSBEwyaH5vZ3B4jNZC9e4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712322584; c=relaxed/simple;
-	bh=v7bIaae5C/I6EIJFTJcdJOvBIkgxWyP1jUsycI59f+8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=dXyYGq5AyPPmlKdjTqwFgdkA/NmdwN9U+KHa85yqw8wlG1zmbRAQ4jjQwPwwrSO9c+5qTpqJ/Wz/uwo0Ei0j3sVR61wCvNSE9CuVdMgy8PTnCxZrmfKnOifCimodP1TdUKQqw9dBlVBwNbB0Ix66UGAAVk1llfJCke9jMARIN9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JgBfZS1E; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2615C433F1;
-	Fri,  5 Apr 2024 13:09:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712322583;
-	bh=v7bIaae5C/I6EIJFTJcdJOvBIkgxWyP1jUsycI59f+8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=JgBfZS1EDsNnoTq60ro9de0ZIbrh2fHpnCts5KpU6pOCszcYuYFrKZ+ZNwxTb0VN+
-	 4q9fU8l9sFekTKY+zdDStYi/jZu/SdaxmJ4yeD9tXLI6h9nSqvKPF392lX2Ob1zMqw
-	 boTG21b9AfgMljRTZ3UYt9r8/oQ6PxaYoMBJmwXHdqAMifkSbR4rY0VHufsurS7skW
-	 Hwz90Im0NKVDpwmq7S/iyZcY93sGNpGrKWdAPjHzA6g2bWjOMRpFK02YWFg8Mpl3J3
-	 7Gil4ozHLUjgw0NxmBc+4LtbPSo4YwX0w3TzBedmKeUtUsSsAq9BPA/uklsOjL9Q8N
-	 MhHD9Y9vLXLSA==
-From: Maxime Ripard <mripard@kernel.org>
-To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
- Daniel Vetter <daniel@ffwll.ch>, Jani Nikula <jani.nikula@intel.com>, 
- Andrzej Hajda <andrzej.hajda@intel.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Javier Martinez Canillas <javierm@redhat.com>, 
- Russell King <linux@armlinux.org.uk>, Shawn Guo <shawnguo@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, Chen-Yu Tsai <wens@csie.org>, 
- Samuel Holland <samuel@sholland.org>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Maxime Ripard <mripard@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>, 
- Alexander Stein <alexander.stein@ew.tq-group.com>, 
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev, 
- linux-sunxi@lists.linux.dev, linux-mips@vger.kernel.org
-In-Reply-To: <20240403-fix-dw-hdmi-kconfig-v1-2-afbc4a835c38@kernel.org>
-References: <20240403-fix-dw-hdmi-kconfig-v1-0-afbc4a835c38@kernel.org>
- <20240403-fix-dw-hdmi-kconfig-v1-2-afbc4a835c38@kernel.org>
-Subject: Re: (subset) [PATCH 2/7] drm/bridge: dw-hdmi: Make DRM_DW_HDMI
- selectable
-Message-Id: <171232258054.9066.6298567481555840770.b4-ty@kernel.org>
-Date: Fri, 05 Apr 2024 15:09:40 +0200
+	s=arc-20240116; t=1712328491; c=relaxed/simple;
+	bh=LreOfBm3nT3gJWEyzyhSzgs3L/UNn7htcugC08IxS+o=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=FhgyibBrjJJerqiN/xeELx8ulCCrttsO0ifuLkAQRilvHTt8dc17/78NwwTJnSXQEqrJQ8DisuzIHcFqbHjvPn01zf4LD/EJBHgwdOEMyr7Gr7BsIfFsUNcHoR6ig7bid8SbbcBFr9WiRyN282kf8SRPz1aT+thhXGL6mPaITkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dwol0GCP; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712328490; x=1743864490;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=LreOfBm3nT3gJWEyzyhSzgs3L/UNn7htcugC08IxS+o=;
+  b=Dwol0GCPWx+Us9Nc1oDUYLAbXkYQJcB5drZ+e/z/NKeBnRPKlHflWqwg
+   Yw4hfY96xZ99qi69FRx5ApTzn4s2dFblzbbBBZNmELoBZmGrLsyqtM1Tt
+   7XjrCxjQMHslh/maB2ZlqYKL/yOQMjvgJRfWGYWnGNV7Vntchhy9rR8TZ
+   Bb2dQ7D0gvEJ7yATUvatm8poVjm9GIXwUZIigfZX2E2sxkH557mmMjsO5
+   rZ7L7bNjJUz2yHE8sx+31QYnqvC2LiTeEdXaUSgSRysjyX39H+VV/136X
+   wLuzAh2SxZvbL9cXjjV9ut1CJiMFoQgDWGkSykGgExg565dSBn0UcBDyS
+   g==;
+X-CSE-ConnectionGUID: pNjzk4eXTSSVd+EE9ISQhg==
+X-CSE-MsgGUID: xKDuxmsPSK60Uth0ervh2Q==
+X-IronPort-AV: E=McAfee;i="6600,9927,11035"; a="11478923"
+X-IronPort-AV: E=Sophos;i="6.07,181,1708416000"; 
+   d="scan'208";a="11478923"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2024 07:48:09 -0700
+X-CSE-ConnectionGUID: H55LyW5ASaqr4vhL9J0MYQ==
+X-CSE-MsgGUID: +963A5O0TASYUpMZv+tuJQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,181,1708416000"; 
+   d="scan'208";a="23821308"
+Received: from dtorrice-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.41.202])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2024 07:47:59 -0700
+From: Jani Nikula <jani.nikula@linux.intel.com>
+To: Peter Zijlstra <peterz@infradead.org>, Andrzej Hajda
+ <andrzej.hajda@intel.com>
+Cc: Mark Rutland <mark.rutland@arm.com>, linux-ia64@vger.kernel.org,
+ linux-sh@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-hexagon@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ intel-gfx@lists.freedesktop.org, linux-xtensa@linux-xtensa.org, Arnd
+ Bergmann <arnd@arndb.de>, Boqun Feng <boqun.feng@gmail.com>,
+ linux-m68k@lists.linux-m68k.org, openrisc@lists.librecores.org,
+ loongarch@lists.linux.dev, Rodrigo Vivi <rodrigo.vivi@intel.com>, Andy
+ Shevchenko <andriy.shevchenko@linux.intel.com>,
+ linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-alpha@vger.kernel.org, Andrew Morton
+ <akpm@linux-foundation.org>, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [Intel-gfx] [PATCH v5 0/7] Introduce __xchg, non-atomic xchg
+In-Reply-To: <Y/y0/VoPAVCXGKp3@hirez.programming.kicks-ass.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230118153529.57695-1-andrzej.hajda@intel.com>
+ <Y/ZLH5F8LA3H10aL@hirez.programming.kicks-ass.net>
+ <17f40b7c-f98d-789d-fa19-12ec077b756a@intel.com>
+ <Y/y0/VoPAVCXGKp3@hirez.programming.kicks-ass.net>
+Date: Fri, 05 Apr 2024 17:47:56 +0300
+Message-ID: <87r0fjc1cz.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
+Content-Type: text/plain
 
-On Wed, 03 Apr 2024 12:56:20 +0200, Maxime Ripard wrote:
-> Commit c0e0f139354c ("drm: Make drivers depends on DRM_DW_HDMI") turned
-> select dependencies into depends on ones. However, DRM_DW_HDMI was not
-> manually selectable which resulted in no way to enable the drivers that
-> were now depending on it.
-> 
-> 
+On Mon, 27 Feb 2023, Peter Zijlstra <peterz@infradead.org> wrote:
+> On Thu, Feb 23, 2023 at 10:24:19PM +0100, Andrzej Hajda wrote:
+>> On 22.02.2023 18:04, Peter Zijlstra wrote:
+>> > On Wed, Jan 18, 2023 at 04:35:22PM +0100, Andrzej Hajda wrote:
+>> > 
+>> > > Andrzej Hajda (7):
+>> > >    arch: rename all internal names __xchg to __arch_xchg
+>> > >    linux/include: add non-atomic version of xchg
+>> > >    arch/*/uprobes: simplify arch_uretprobe_hijack_return_addr
+>> > >    llist: simplify __llist_del_all
+>> > >    io_uring: use __xchg if possible
+>> > >    qed: use __xchg if possible
+>> > >    drm/i915/gt: use __xchg instead of internal helper
+>> > 
+>> > Nothing crazy in here I suppose, I somewhat wonder why you went through
+>> > the trouble, but meh.
+>> 
+>> If you are asking why I have proposed this patchset, then the answer is
+>> simple, 1st I've tried to find a way to move internal i915 helper to core
+>> (see patch 7).
+>> Then I was looking for possible other users of this helper. And apparently
+>> there are many of them, patches 3-7 shows some.
+>> 
+>> 
+>> > 
+>> > You want me to take this through te locking tree (for the next cycle,
+>> > not this one) where I normally take atomic things or does someone else
+>> > want this?
+>> 
+>> If you could take it I will be happy.
+>
+> OK, I'll go queue it in tip/locking/core after -rc1. Thanks!
 
-Applied to misc/kernel.git (drm-misc-next).
+Is this where the series fell between the cracks, or was there some
+follow-up that I missed?
 
-Thanks!
-Maxime
+I think this would still be useful. Andrzej, would you mind rebasing and
+resending if there are no objections?
 
+BR,
+Jani.
+
+
+-- 
+Jani Nikula, Intel
 
