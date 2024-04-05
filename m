@@ -1,118 +1,149 @@
-Return-Path: <linux-mips+bounces-2607-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2608-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B84C689A13B
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Apr 2024 17:32:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89E0789A254
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Apr 2024 18:20:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6DB0D1F24B00
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Apr 2024 15:32:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29E081F2150E
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Apr 2024 16:20:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAF6F16F919;
-	Fri,  5 Apr 2024 15:30:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B732F171085;
+	Fri,  5 Apr 2024 16:20:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="EEXXnvfl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C/HZKJyO"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C520A16F85A;
-	Fri,  5 Apr 2024 15:30:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A229F16EC0B;
+	Fri,  5 Apr 2024 16:20:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712331057; cv=none; b=pTTgC17zeovay7u9OXZfZpeIu9+nWPcaOr83Jq7v08W/NTwMv1q169jekf+XbJhczxKyinSqqln+dp8IywXZxLTW7PWsW8COgyWedOR5FicZlAgseQNhG6VXDX79chyoyE+9mXVYxuoj+sse4Wps9YPnYjMsSX9T7x/hZv4nW8o=
+	t=1712334023; cv=none; b=AdrHaGquIBeE1VYPJoXeT+j6pafJDdaneJ3n03R/ybdf96Iacdy3kmUB+luXONESbIU+VKLSIB2MaMPIw/Bp4Dss79/i4TU/fiK1hSltHYaG2CzTygY/zb3qtSoloUq7isnNk5qggnl6uaBz7MDQ0FlhdKFtZyf3/9f8lbmcCRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712331057; c=relaxed/simple;
-	bh=sMNJIxBprxubhaye0IIgUc67P+qbDko1VoABUsSnzLk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=SDR/u2fOcJ+3nNBaUAOIC66Sqptfde3qT7D0+CQpGFTaeFIZ9Qtu33bpKGykRVc8AHPUt5tvEerWS8JH6N5O2Cu8bPKRsDnPoN3RBkHVjUapkefjvrHVwE5p6Ormnbrb6qSrKh5ACNV6esnRH4FpEhQf6/XdTGZVhVS2VRel5H8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=EEXXnvfl; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 32547FF805;
-	Fri,  5 Apr 2024 15:30:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1712331047;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7b788CjK3FnCFFobILff+QLbjBhrb4RBIAYgwhlFDXs=;
-	b=EEXXnvflfhiQ9MbzcRVhPb0/yry6uUKXweIpal43BcouwwWH3gkOwZfPJkXJkoO/eL96OA
-	0940EHWPnzpPNq5/+pGw2Wt1knW5fINQBj+dulrpMMtf75NQCWhWb0PRqbDai6wKVkJbr3
-	nYfzAwWUYGH+3J/EbTAleGeeu9tVS0ZFkB/uKqMf+eotQFTElTfT/Uc02mIfjm9BbN7XOy
-	D16xyjHtuLh96zwaDry97wNls4nU8JZSZG7LxsJy2pGRILvP8Ieorkb1ATSMoGP/mJo3gq
-	C9tf/tR3hLqHcXhGebfpxOQgne7D234N1lr5aPCAmJ041L0iJectYrGvw0eodg==
+	s=arc-20240116; t=1712334023; c=relaxed/simple;
+	bh=STODT/c3z6ypoEyUkP1OAtZ6EfyLMQK08sm/bPAw1AU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bpCe1wr+PhrXcDLHMINC/2k3Hfz7yUiqrhZCFfQQwCsrEXp/a/fYnvuxwHxGt9pQtCawtRIofy9vFYuMuZLcSey5CbBMeUTlfFuT95YLKbh/ZmuFctV1pxRayk6ulrG4Uxdt71HFIqxABpWkSwSSJPo471TRVEp1IfONY+SVDVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C/HZKJyO; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712334022; x=1743870022;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=STODT/c3z6ypoEyUkP1OAtZ6EfyLMQK08sm/bPAw1AU=;
+  b=C/HZKJyOXQsAnQLLdmXcHCDA1Oj9zUYbkZJI3PKPtdR14MbisCDrDaB2
+   r5e0RsjB6CgPAD5n2FAuURvNDJscUSlVjKokVsRNBfzkvdkx/VLPo9jfr
+   wcHaxJyEPoE4BNO5SbRekOeDN5GSNg05N0VwD/Ng42ZTgkYG35vq4jCPu
+   welg7W7cuKNTu+rsVkPVQ5ccEpLGhuJtyfJuzysb5SzSEBfAMujObO0Q3
+   y/sW3at4rgzjODiCno7yi00nesMOHXwWrH9DI22WB5RTSxtst9rA0vBuT
+   OhlrFWlej/VLezTiY2N7B719jUixuNzr9T9FCWGZH1ExFDb2FLOrYaz0t
+   w==;
+X-CSE-ConnectionGUID: VfvLy42BRLKqtvdc08ALkQ==
+X-CSE-MsgGUID: Lkc5O6X7Sd6hAg5bOc/uqA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11035"; a="11462790"
+X-IronPort-AV: E=Sophos;i="6.07,181,1708416000"; 
+   d="scan'208";a="11462790"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2024 09:20:21 -0700
+X-CSE-ConnectionGUID: EGOUsw1jS4iffZcF7In7vA==
+X-CSE-MsgGUID: OzVkpaElRkSa/fAWFgBa3A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,181,1708416000"; 
+   d="scan'208";a="19141333"
+Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.245.80.70]) ([10.245.80.70])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2024 09:20:15 -0700
+Message-ID: <340d23fc-7abf-4ad0-bd95-f1760b9ac458@intel.com>
+Date: Fri, 5 Apr 2024 18:20:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 05 Apr 2024 17:30:45 +0200
-Message-Id: <D0CAP2UDPY4N.1TX594UI2CAN6@bootlin.com>
-Subject: Re: [PATCH v2 00/11] spi: cadence-qspi: add Mobileye EyeQ5 support
-Cc: <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-mips@vger.kernel.org>, "Vladimir
- Kondratiev" <vladimir.kondratiev@mobileye.com>, "Gregory CLEMENT"
- <gregory.clement@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski@linaro.org>
-To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, "Mark Brown"
- <broonie@kernel.org>, "Rob Herring" <robh+dt@kernel.org>, "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
- <conor+dt@kernel.org>, "Vaishnav Achath" <vaishnav.a@ti.com>, "Thomas
- Bogendoerfer" <tsbogend@alpha.franken.de>, "Rob Herring" <robh@kernel.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: aerc 0.15.2
-References: <20240405-cdns-qspi-mbly-v2-0-956679866d6d@bootlin.com>
-In-Reply-To: <20240405-cdns-qspi-mbly-v2-0-956679866d6d@bootlin.com>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [Intel-gfx] [PATCH v5 0/7] Introduce __xchg, non-atomic xchg
+To: Jani Nikula <jani.nikula@linux.intel.com>,
+ Peter Zijlstra <peterz@infradead.org>
+Cc: Mark Rutland <mark.rutland@arm.com>, linux-ia64@vger.kernel.org,
+ linux-sh@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-hexagon@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ intel-gfx@lists.freedesktop.org, linux-xtensa@linux-xtensa.org,
+ Arnd Bergmann <arnd@arndb.de>, Boqun Feng <boqun.feng@gmail.com>,
+ linux-m68k@lists.linux-m68k.org, openrisc@lists.librecores.org,
+ loongarch@lists.linux.dev, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-alpha@vger.kernel.org,
+ Andrew Morton <akpm@linux-foundation.org>, linuxppc-dev@lists.ozlabs.org
+References: <20230118153529.57695-1-andrzej.hajda@intel.com>
+ <Y/ZLH5F8LA3H10aL@hirez.programming.kicks-ass.net>
+ <17f40b7c-f98d-789d-fa19-12ec077b756a@intel.com>
+ <Y/y0/VoPAVCXGKp3@hirez.programming.kicks-ass.net> <87r0fjc1cz.fsf@intel.com>
+Content-Language: en-US
+From: Andrzej Hajda <andrzej.hajda@intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <87r0fjc1cz.fsf@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri Apr 5, 2024 at 5:02 PM CEST, Th=C3=A9o Lebrun wrote:
 
-[...]
 
-> Changes in v2:
-> - Rebase upon v6.9-rc2.
-> - Fix dt-bindings commit subject tags.
-> - Take Reviewed-by: Krzysztof Kozlowski on dt-bindings commit.
-> - Add dt-bindings commit to order compatibles alphabetically.
->   adding EyeQ5 compatible can be taken alone easily.
-> - Drop patch taken upstream:
-> - Add To: Rob Herring, following get_maintainer.pl recommendation.
-> - Link to v1: https://lore.kernel.org/r/20240308-cdns-qspi-mbly-v1-0-a503=
-856dd205@bootlin.com
+On 05.04.2024 16:47, Jani Nikula wrote:
+> On Mon, 27 Feb 2023, Peter Zijlstra <peterz@infradead.org> wrote:
+>> On Thu, Feb 23, 2023 at 10:24:19PM +0100, Andrzej Hajda wrote:
+>>> On 22.02.2023 18:04, Peter Zijlstra wrote:
+>>>> On Wed, Jan 18, 2023 at 04:35:22PM +0100, Andrzej Hajda wrote:
+>>>>
+>>>>> Andrzej Hajda (7):
+>>>>>     arch: rename all internal names __xchg to __arch_xchg
+>>>>>     linux/include: add non-atomic version of xchg
+>>>>>     arch/*/uprobes: simplify arch_uretprobe_hijack_return_addr
+>>>>>     llist: simplify __llist_del_all
+>>>>>     io_uring: use __xchg if possible
+>>>>>     qed: use __xchg if possible
+>>>>>     drm/i915/gt: use __xchg instead of internal helper
+>>>> Nothing crazy in here I suppose, I somewhat wonder why you went through
+>>>> the trouble, but meh.
+>>> If you are asking why I have proposed this patchset, then the answer is
+>>> simple, 1st I've tried to find a way to move internal i915 helper to core
+>>> (see patch 7).
+>>> Then I was looking for possible other users of this helper. And apparently
+>>> there are many of them, patches 3-7 shows some.
+>>>
+>>>
+>>>> You want me to take this through te locking tree (for the next cycle,
+>>>> not this one) where I normally take atomic things or does someone else
+>>>> want this?
+>>> If you could take it I will be happy.
+>> OK, I'll go queue it in tip/locking/core after -rc1. Thanks!
+> Is this where the series fell between the cracks, or was there some
+> follow-up that I missed?
 >
-> Krzysztof: unsure if you want this. It is second so that commit
-> spi: cadence-qspi: switch from legacy names to modern ones
+> I think this would still be useful. Andrzej, would you mind rebasing and
+> resending if there are no objections?
 
-Sorry for the weird formatting; b4 saw those two lines as trailers and
-moved them last I guess. Proper formatting is:
+The patchset was rejected/dropped by Linus at the pull-request stage.
+He didn't like many things, but the most __xchg name. However he was 
+quite positive about i915 name fetch_and_zero.
+I can try to revive patchset with fetch_and_zero, and maybe 
+fetch_and_set, instead of __xchg.
 
-Changes in v2:
-- Rebase upon v6.9-rc2.
-- Fix dt-bindings commit subject tags.
-- Take Reviewed-by: Krzysztof Kozlowski on dt-bindings commit.
-- Add dt-bindings commit to order compatibles alphabetically.
-  Krzysztof: unsure if you want this. It is second so that commit
-  adding EyeQ5 compatible can be taken alone easily.
-- Drop patch taken upstream:
-  spi: cadence-qspi: switch from legacy names to modern ones
-- Add To: Rob Herring, following get_maintainer.pl recommendation.
-- Link to v1: https://lore.kernel.org/r/20240308-cdns-qspi-mbly-v1-0-a50385=
-6dd205@bootlin.com
+Regards
+Andrzej
 
-Thanks,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>
+> BR,
+> Jani.
+>
+>
 
 
