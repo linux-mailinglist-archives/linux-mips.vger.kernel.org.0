@@ -1,65 +1,75 @@
-Return-Path: <linux-mips+bounces-2608-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2609-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89E0789A254
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Apr 2024 18:20:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACDE689AAA2
+	for <lists+linux-mips@lfdr.de>; Sat,  6 Apr 2024 13:38:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29E081F2150E
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Apr 2024 16:20:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CB181C20D9D
+	for <lists+linux-mips@lfdr.de>; Sat,  6 Apr 2024 11:38:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B732F171085;
-	Fri,  5 Apr 2024 16:20:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1607A2C6AE;
+	Sat,  6 Apr 2024 11:38:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C/HZKJyO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MR1M6YPW"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A229F16EC0B;
-	Fri,  5 Apr 2024 16:20:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 602E82B9D7
+	for <linux-mips@vger.kernel.org>; Sat,  6 Apr 2024 11:38:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712334023; cv=none; b=AdrHaGquIBeE1VYPJoXeT+j6pafJDdaneJ3n03R/ybdf96Iacdy3kmUB+luXONESbIU+VKLSIB2MaMPIw/Bp4Dss79/i4TU/fiK1hSltHYaG2CzTygY/zb3qtSoloUq7isnNk5qggnl6uaBz7MDQ0FlhdKFtZyf3/9f8lbmcCRs=
+	t=1712403504; cv=none; b=DjPR52tDySNsQJ7X+N33raxf525fOWtPp4fRNFkqNkzGYr2a5L+eA8vzXVGbmZH4vbfjrnpv6O7YEQliEt/wvt96uhslQaH5+7K5SBvvBqqrEph4W3JwWJ87yjgnOuSykE/A9AvNOfr8mFKWxoPDZoxrrXPIcEX0IKBJAwPHuV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712334023; c=relaxed/simple;
-	bh=STODT/c3z6ypoEyUkP1OAtZ6EfyLMQK08sm/bPAw1AU=;
+	s=arc-20240116; t=1712403504; c=relaxed/simple;
+	bh=Aw5SNTxjZi1tbmtpGGvoJKiNvmpFYMOzWbUQVuMKgho=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bpCe1wr+PhrXcDLHMINC/2k3Hfz7yUiqrhZCFfQQwCsrEXp/a/fYnvuxwHxGt9pQtCawtRIofy9vFYuMuZLcSey5CbBMeUTlfFuT95YLKbh/ZmuFctV1pxRayk6ulrG4Uxdt71HFIqxABpWkSwSSJPo471TRVEp1IfONY+SVDVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C/HZKJyO; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712334022; x=1743870022;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=STODT/c3z6ypoEyUkP1OAtZ6EfyLMQK08sm/bPAw1AU=;
-  b=C/HZKJyOXQsAnQLLdmXcHCDA1Oj9zUYbkZJI3PKPtdR14MbisCDrDaB2
-   r5e0RsjB6CgPAD5n2FAuURvNDJscUSlVjKokVsRNBfzkvdkx/VLPo9jfr
-   wcHaxJyEPoE4BNO5SbRekOeDN5GSNg05N0VwD/Ng42ZTgkYG35vq4jCPu
-   welg7W7cuKNTu+rsVkPVQ5ccEpLGhuJtyfJuzysb5SzSEBfAMujObO0Q3
-   y/sW3at4rgzjODiCno7yi00nesMOHXwWrH9DI22WB5RTSxtst9rA0vBuT
-   OhlrFWlej/VLezTiY2N7B719jUixuNzr9T9FCWGZH1ExFDb2FLOrYaz0t
-   w==;
-X-CSE-ConnectionGUID: VfvLy42BRLKqtvdc08ALkQ==
-X-CSE-MsgGUID: Lkc5O6X7Sd6hAg5bOc/uqA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11035"; a="11462790"
-X-IronPort-AV: E=Sophos;i="6.07,181,1708416000"; 
-   d="scan'208";a="11462790"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2024 09:20:21 -0700
-X-CSE-ConnectionGUID: EGOUsw1jS4iffZcF7In7vA==
-X-CSE-MsgGUID: OzVkpaElRkSa/fAWFgBa3A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,181,1708416000"; 
-   d="scan'208";a="19141333"
-Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.245.80.70]) ([10.245.80.70])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2024 09:20:15 -0700
-Message-ID: <340d23fc-7abf-4ad0-bd95-f1760b9ac458@intel.com>
-Date: Fri, 5 Apr 2024 18:20:11 +0200
+	 In-Reply-To:Content-Type; b=h2xnzikvZ7kU5fLBcGOLjin5k6JZNngYFHLYUI6xa0hzdqqIkq6SBdgY/sB5UYQzTJdFblhIqs/QmFdyuPejdJacMbRs0jL8lWTAGTPCsEDo7KdIyCiRCEwCcMJOXAiKJHFhF3cesKXHDzXPk6DlSKZ873S8R/z7b2kZwY7Jglc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MR1M6YPW; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a51c308acdaso10954866b.2
+        for <linux-mips@vger.kernel.org>; Sat, 06 Apr 2024 04:38:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1712403501; x=1713008301; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=xpm6cTC899zJSUU/nsqzotcxta+BcxYRUKrfUu3lXBA=;
+        b=MR1M6YPWDEObSxtKivMIRZrPoVwyMcUaRdqFbwYcvc5YGABHEdOocuEtfbEXTTfVa6
+         OB5mqpUPJIL16hMjeDwo4rMeHBTGn/dvUyxjfLTlGNcZW89CV8NVJOZ4He+WywlNMYZf
+         Ufz1yW2rApEic1ep+ivHh2ZGdJwA92B+DujKDctkkKCyaOQGca5tKJiD42TTp9OHKc4R
+         aRoBQW++QO/3bKH6rms1D6hewrtOlYAJe73/dLm2t9ehZd511ljkD6xF5upyh0WTchEE
+         U5JROicI8Y/3aLk+Y41UjvPmP3lwKjQLvpxxEhlGh/FgTSpwHxE+tlPwiwjsVytYEdLH
+         MPZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712403501; x=1713008301;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xpm6cTC899zJSUU/nsqzotcxta+BcxYRUKrfUu3lXBA=;
+        b=sVoaxE3KanwAD6zzNmwWd0wcv6Gcv3W2oIW14SfG8WWJzjWDYdqN6oA8hfD8hql9cz
+         SVX9jljWV3DSVado0ECTrY9eAtb8ItgqcC5lpTdl0CU8nQX7AUK+wu6N2eR4DsjXwM4M
+         PkX4Tjpg7CTQ2n5YEj2DQS4wPmzXPitIsItzwhyKpg5Gq9xWeuAn+fDZamD8cUtdJ4rA
+         6VgdlSaQUy+s2ZYiyx/vUB0k0ANTUp3vAy8TJoDtyEBRxCICUmVtWjZte88S0QyZ+O9L
+         WdLZ7072NzJmjSmIulEfr7w6KAhrdAUelrIT/h9bWgwj+zI/bLxOyQ3sxXOgepqvAI8j
+         6pxA==
+X-Forwarded-Encrypted: i=1; AJvYcCU+XxUr2rN5bpaOPG4SmbuXPnSCtjMPcZNoU4e7OHHAAwuYXSppEsDwwLW5fqDLvEVCcadSZfZiWNZNj9EcJ97NWS2haQXm/zMhDg==
+X-Gm-Message-State: AOJu0YyS8Df6ByA7X7s3Nu4EYX26xRXl4OGzYAnOXirgMU1EnlmIWY0i
+	yfcIOHJmzM0ekJ8tmWo/rvL88ulLyKrobyfTe4BDiIuztIkXPRYQRZqnYMZUQuo=
+X-Google-Smtp-Source: AGHT+IExalUXo25x4H/1xSjgkbY/UCf9VdNHeCUOsoxJYze0W3UxHho+nZyy10XAsUCuq/Syv4Omgg==
+X-Received: by 2002:a17:906:39b:b0:a51:92df:57c6 with SMTP id b27-20020a170906039b00b00a5192df57c6mr3135926eja.57.1712403500610;
+        Sat, 06 Apr 2024 04:38:20 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.16])
+        by smtp.gmail.com with ESMTPSA id a13-20020a170906244d00b00a51be2b75f3sm475104ejb.35.2024.04.06.04.38.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 06 Apr 2024 04:38:19 -0700 (PDT)
+Message-ID: <c15d2dde-b5d6-438c-929e-99a5e5e2d370@linaro.org>
+Date: Sat, 6 Apr 2024 13:38:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -67,83 +77,84 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [Intel-gfx] [PATCH v5 0/7] Introduce __xchg, non-atomic xchg
-To: Jani Nikula <jani.nikula@linux.intel.com>,
- Peter Zijlstra <peterz@infradead.org>
-Cc: Mark Rutland <mark.rutland@arm.com>, linux-ia64@vger.kernel.org,
- linux-sh@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-hexagon@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- intel-gfx@lists.freedesktop.org, linux-xtensa@linux-xtensa.org,
- Arnd Bergmann <arnd@arndb.de>, Boqun Feng <boqun.feng@gmail.com>,
- linux-m68k@lists.linux-m68k.org, openrisc@lists.librecores.org,
- loongarch@lists.linux.dev, Rodrigo Vivi <rodrigo.vivi@intel.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-alpha@vger.kernel.org,
- Andrew Morton <akpm@linux-foundation.org>, linuxppc-dev@lists.ozlabs.org
-References: <20230118153529.57695-1-andrzej.hajda@intel.com>
- <Y/ZLH5F8LA3H10aL@hirez.programming.kicks-ass.net>
- <17f40b7c-f98d-789d-fa19-12ec077b756a@intel.com>
- <Y/y0/VoPAVCXGKp3@hirez.programming.kicks-ass.net> <87r0fjc1cz.fsf@intel.com>
+Subject: Re: [PATCH v2 02/11] spi: dt-bindings: cdns,qspi-nor: sort
+ compatibles alphabetically
+To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Vaishnav Achath <vaishnav.a@ti.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Rob Herring <robh@kernel.org>
+Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+ Gregory CLEMENT <gregory.clement@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+References: <20240405-cdns-qspi-mbly-v2-0-956679866d6d@bootlin.com>
+ <20240405-cdns-qspi-mbly-v2-2-956679866d6d@bootlin.com>
 Content-Language: en-US
-From: Andrzej Hajda <andrzej.hajda@intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <87r0fjc1cz.fsf@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240405-cdns-qspi-mbly-v2-2-956679866d6d@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+On 05/04/2024 17:02, Théo Lebrun wrote:
+> Compatibles are ordered by date of addition.
+> Switch to (deterministic) alphabetical ordering.
+> 
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-On 05.04.2024 16:47, Jani Nikula wrote:
-> On Mon, 27 Feb 2023, Peter Zijlstra <peterz@infradead.org> wrote:
->> On Thu, Feb 23, 2023 at 10:24:19PM +0100, Andrzej Hajda wrote:
->>> On 22.02.2023 18:04, Peter Zijlstra wrote:
->>>> On Wed, Jan 18, 2023 at 04:35:22PM +0100, Andrzej Hajda wrote:
->>>>
->>>>> Andrzej Hajda (7):
->>>>>     arch: rename all internal names __xchg to __arch_xchg
->>>>>     linux/include: add non-atomic version of xchg
->>>>>     arch/*/uprobes: simplify arch_uretprobe_hijack_return_addr
->>>>>     llist: simplify __llist_del_all
->>>>>     io_uring: use __xchg if possible
->>>>>     qed: use __xchg if possible
->>>>>     drm/i915/gt: use __xchg instead of internal helper
->>>> Nothing crazy in here I suppose, I somewhat wonder why you went through
->>>> the trouble, but meh.
->>> If you are asking why I have proposed this patchset, then the answer is
->>> simple, 1st I've tried to find a way to move internal i915 helper to core
->>> (see patch 7).
->>> Then I was looking for possible other users of this helper. And apparently
->>> there are many of them, patches 3-7 shows some.
->>>
->>>
->>>> You want me to take this through te locking tree (for the next cycle,
->>>> not this one) where I normally take atomic things or does someone else
->>>> want this?
->>> If you could take it I will be happy.
->> OK, I'll go queue it in tip/locking/core after -rc1. Thanks!
-> Is this where the series fell between the cracks, or was there some
-> follow-up that I missed?
->
-> I think this would still be useful. Andrzej, would you mind rebasing and
-> resending if there are no objections?
-
-The patchset was rejected/dropped by Linus at the pull-request stage.
-He didn't like many things, but the most __xchg name. However he was 
-quite positive about i915 name fetch_and_zero.
-I can try to revive patchset with fetch_and_zero, and maybe 
-fetch_and_set, instead of __xchg.
-
-Regards
-Andrzej
-
->
-> BR,
-> Jani.
->
->
+Best regards,
+Krzysztof
 
 
