@@ -1,815 +1,1022 @@
-Return-Path: <linux-mips+bounces-2610-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2611-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC61F89AE97
-	for <lists+linux-mips@lfdr.de>; Sun,  7 Apr 2024 06:50:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F88C89B3A6
+	for <lists+linux-mips@lfdr.de>; Sun,  7 Apr 2024 20:56:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C6C02823E6
-	for <lists+linux-mips@lfdr.de>; Sun,  7 Apr 2024 04:50:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 74D6C1C20D50
+	for <lists+linux-mips@lfdr.de>; Sun,  7 Apr 2024 18:56:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35C683C0D;
-	Sun,  7 Apr 2024 04:50:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B22973D3A2;
+	Sun,  7 Apr 2024 18:56:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="OWZNvuvP"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Q5liLnbm"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE52B17C9
-	for <linux-mips@vger.kernel.org>; Sun,  7 Apr 2024 04:50:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C96CA3D0BD
+	for <linux-mips@vger.kernel.org>; Sun,  7 Apr 2024 18:56:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712465421; cv=none; b=eXUoJoyjuNVyjIuFF6S34JuQ74Og/+6OeGG5RhksAEJYMXUrhkMmTS0jqP/6LKZKqX34feWxTHGys+wsjjq/dUTrl++kiVVWZlempkqqIYBx4Pw5mKhkc07H/HVhjYHyTgO6gmFSzgXmHbXyrEBYR9ASIAS4L89iKs8a+dm7yTo=
+	t=1712516204; cv=none; b=TZEx33liF4TW7Gnkp0/NBfi0w41ngV+UWHD+JMu/bHWNDSQDKVOqy/JPHDEI1cFyQYFQ9PdiZiGTGrmJ19XuCHhoM+nOi5r2PVgDnRdqcNAgkoPqi7wy84TfA23qhLW1J9Sj5v258PaXAdxfx7Y6owPvtv8hmLpDxLZxg9lNFNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712465421; c=relaxed/simple;
-	bh=CXKG7CR6Ad1RcyWyUm4BVZcLZ7MtFfDf+m7AFdG7I/g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Bu/Adpre+hZglw6FC9wht6248ZNEZq6VQnbRQqjz9T8KKDYr4uRH9N6aHC+cqZZxFyjU2Gr/EJNfsugAsKyAcx6w+NManStDa1zJS2dTmHew7M0VM54AO7rL6gH7AWUY5d2g421NTVuxk9WpiJ231u3jWrDOfAy23qYVN5cpEPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=OWZNvuvP; arc=none smtp.client-ip=209.85.166.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
-Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-36a0e43afd8so7741855ab.2
-        for <linux-mips@vger.kernel.org>; Sat, 06 Apr 2024 21:50:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1712465417; x=1713070217; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eSOyMWuiKoh8+FxVm+reFs1vh/ly1S0wriyHj88dOco=;
-        b=OWZNvuvPQW8HGhNfub1MHk+k4RzsMqTywjtr0PhK5V6w1lBNNf8e8W59a9j6Tt7zSj
-         /3ZrTZM0S/WcnG16W3swkFJ9LBys+ivusb2saYSyc5Vh3eoaJCJFJHt8DEoRjHKDAP94
-         NgSy1eR0ydJu4KlJtKxjZ+h1/t0KU6wG0oHNTZy6V36InmMnhqJ58ul/nEdaVqTlj2CC
-         SqBvzsZurQ3y8KIl1lxVgbUiK1IcXjKBm0qMUVSPJrkZU6e0Aa1HCS0/0XWTTgMgvADV
-         W+djfAumvHwRDIGXoH/tlY8mrSuhG/yabCVI8XWSSN3zkVJxZ6Uyyv5yr3RvzdaI1zgk
-         2VHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712465417; x=1713070217;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eSOyMWuiKoh8+FxVm+reFs1vh/ly1S0wriyHj88dOco=;
-        b=hOyy9nSbLeNQpuTnT45u34Qk3HzFkw6KkeaLjQmM3EsCZPVTgWqzpsBjCoBw+9SS0z
-         da199kGLaq/DruaTqY9pfLgUV2VsQiKRfqFlyeQNj7PhXDq5Q8iMJALJkiCV4rHD1F68
-         HqUPWa93HA9fBmMnOpM/dawAEMFMWFEOCB4MuElcqJ35de/SjjzwSyjCABX+9IGgbYy9
-         ZYuaRELXsxQSoJ2TRm0uynEc/lsRtW6KGUvptYYvE4xQok06cDnVyY12KXr9qoblLnaf
-         HHqQ6Axfs0ksyxXLR8T3INXDOTmN9cuo07MFI2r2zwgaqRnYM++m38g8uOC+3PFzfvj2
-         Wv9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWYKdbLYapfBOcecfNJmPnwP2t9IftXZS8xR9/dMb46B7An3EBGLDV08kk4DnB1fZbr91pdLFgEP4NMWlonjABIgiQ4w7LY2Zqzdw==
-X-Gm-Message-State: AOJu0YwK4748l5l2P/68slpnW9brWeW2aDOHxaNHP7425WZJ7fhC2o4V
-	1WUAAHZ0yzz5LJUELJes4VeraiMobkDQs72LxDpPQvcSfDoipaDiUYdISBlaQAsnploGW9nOvMS
-	c/LSMA/Z0VcsG6//MDlMIISBAITLlLPRTKw3sNw==
-X-Google-Smtp-Source: AGHT+IEziIiZJFv2t0jKP6V2qifN/y4SuoxWAqldWlR3rrZlBX9Z/5AfdEzJNFyrwauRwTlIhTShFzey1rao1yYt3Lc=
-X-Received: by 2002:a05:6e02:1cae:b0:369:f8b7:f5a6 with SMTP id
- x14-20020a056e021cae00b00369f8b7f5a6mr6303460ill.8.1712465416867; Sat, 06 Apr
- 2024 21:50:16 -0700 (PDT)
+	s=arc-20240116; t=1712516204; c=relaxed/simple;
+	bh=XUCEUi3tlAK5SiGgAyJi822HRi/+WAizduBAWmVOpPY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=emn1YvojShiw1CNv4/jEvPcZNqqYndozk7NsKNrWf2WblfBnTJtWWAfjFmtuJsKP7etgAmrTJiCuEQY2xXhJPrBjiM9EO6rTnzc2R0v95DS/TnPOJJSsQjsl98WLoqkKoFhZsgf7LgnZu2rCqXAV63mYogDNJXFIJz5l22svoQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Q5liLnbm; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <20158645-6637-4f36-a247-d3a15ff56d63@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712516198;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VPWMmDLO77UTrV5Jci0z2krEZP1mwBlTU+VWJnRngNk=;
+	b=Q5liLnbmSKwUcufa6Y/hCudLg415TvisZKo+32dn2P1GN0Cz/UdESwnaEu+89Vnp2zLK4I
+	/qgPFYLf1pT/TpYGYYWBkP/+c/BbYo7gOSvhzDlobjaZUyLlmwjwnadI5XNGD1V4SQqNQ8
+	TNsraRLAtKkEMRR6LzCj9vEfrS5OgLo=
+Date: Sun, 7 Apr 2024 20:56:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240405115815.3226315-1-pbonzini@redhat.com> <20240405115815.3226315-2-pbonzini@redhat.com>
-In-Reply-To: <20240405115815.3226315-2-pbonzini@redhat.com>
-From: Anup Patel <anup@brainfault.org>
-Date: Sun, 7 Apr 2024 10:20:05 +0530
-Message-ID: <CAAhSdy0rmUPaQhKd_iuv805th4oUB3e5PYw8io3evKAhcrjSXw@mail.gmail.com>
-Subject: Re: [PATCH 1/4] KVM: delete .change_pte MMU notifier callback
-To: Paolo Bonzini <pbonzini@redhat.com>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Nicholas Piggin <npiggin@gmail.com>, 
-	Atish Patra <atishp@atishpatra.org>, Sean Christopherson <seanjc@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@redhat.com>, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 3/9] IB: Convert from tasklet to BH workqueue
+To: Allen Pais <apais@linux.microsoft.com>, linux-kernel@vger.kernel.org
+Cc: tj@kernel.org, keescook@chromium.org, vkoul@kernel.org, marcan@marcan.st,
+ sven@svenpeter.dev, florian.fainelli@broadcom.com, rjui@broadcom.com,
+ sbranden@broadcom.com, paul@crapouillou.net, Eugeniy.Paltsev@synopsys.com,
+ manivannan.sadhasivam@linaro.org, vireshk@kernel.org, Frank.Li@nxp.com,
+ leoyang.li@nxp.com, zw@zh-kernel.org, wangzhou1@hisilicon.com,
+ haijie1@huawei.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+ sean.wang@mediatek.com, matthias.bgg@gmail.com,
+ angelogioacchino.delregno@collabora.com, afaerber@suse.de,
+ logang@deltatee.com, daniel@zonque.org, haojian.zhuang@gmail.com,
+ robert.jarzmik@free.fr, andersson@kernel.org, konrad.dybcio@linaro.org,
+ orsonzhai@gmail.com, baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+ patrice.chotard@foss.st.com, linus.walleij@linaro.org, wens@csie.org,
+ jernej.skrabec@gmail.com, peter.ujfalusi@gmail.com, kys@microsoft.com,
+ haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+ jassisinghbrar@gmail.com, mchehab@kernel.org, maintainers@bluecherrydvr.com,
+ aubin.constans@microchip.com, ulf.hansson@linaro.org,
+ manuel.lauss@gmail.com, mirq-linux@rere.qmqm.pl, jh80.chung@samsung.com,
+ oakad@yahoo.com, hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
+ brucechang@via.com.tw, HaraldWelte@viatech.com, pierre@ossman.eu,
+ duncan.sands@free.fr, stern@rowland.harvard.edu, oneukum@suse.com,
+ openipmi-developer@lists.sourceforge.net, dmaengine@vger.kernel.org,
+ asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+ imx@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+ linux-mediatek@lists.infradead.org, linux-actions@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+ linux-omap@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-s390@vger.kernel.org, netdev@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20240327160314.9982-1-apais@linux.microsoft.com>
+ <20240327160314.9982-4-apais@linux.microsoft.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+In-Reply-To: <20240327160314.9982-4-apais@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Apr 5, 2024 at 5:28=E2=80=AFPM Paolo Bonzini <pbonzini@redhat.com> =
-wrote:
->
-> The .change_pte() MMU notifier callback was intended as an
-> optimization. The original point of it was that KSM could tell KVM to fli=
-p
-> its secondary PTE to a new location without having to first zap it. At
-> the time there was also an .invalidate_page() callback; both of them were
-> *not* bracketed by calls to mmu_notifier_invalidate_range_{start,end}(),
-> and .invalidate_page() also doubled as a fallback implementation of
-> .change_pte().
->
-> Later on, however, both callbacks were changed to occur within an
-> invalidate_range_start/end() block.
->
-> In the case of .change_pte(), commit 6bdb913f0a70 ("mm: wrap calls to
-> set_pte_at_notify with invalidate_range_start and invalidate_range_end",
-> 2012-10-09) did so to remove the fallback from .invalidate_page() to
-> .change_pte() and allow sleepable .invalidate_page() hooks.
->
-> This however made KVM's usage of the .change_pte() callback completely
-> moot, because KVM unmaps the sPTEs during .invalidate_range_start()
-> and therefore .change_pte() has no hope of finding a sPTE to change.
-> Drop the generic KVM code that dispatches to kvm_set_spte_gfn(), as
-> well as all the architecture specific implementations.
->
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+在 2024/3/27 17:03, Allen Pais 写道:
+> The only generic interface to execute asynchronously in the BH context is
+> tasklet; however, it's marked deprecated and has some design flaws. To
+> replace tasklets, BH workqueue support was recently added. A BH workqueue
+> behaves similarly to regular workqueues except that the queued work items
+> are executed in the BH context.
+> 
+> This patch converts drivers/infiniband/* from tasklet to BH workqueue.
+> 
+> Based on the work done by Tejun Heo <tj@kernel.org>
+> Branch: https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git for-6.10
 
-For KVM RISC-V:
-Acked-by: Anup Patel <anup@brainfault.org>
+I made simple tests. And I can not find the difference on latency and 
+throughput on RoCEv2 devices.
 
-Regards,
-Anup
+Anyone also made tests with these patches on IB? Any difference on 
+Latency and throughput?
 
+Thanks,
+Zhu Yanjun
+
+> 
+> Signed-off-by: Allen Pais <allen.lkml@gmail.com>
 > ---
->  arch/arm64/kvm/mmu.c                  | 34 -----------------
->  arch/loongarch/include/asm/kvm_host.h |  1 -
->  arch/loongarch/kvm/mmu.c              | 32 ----------------
->  arch/mips/kvm/mmu.c                   | 30 ---------------
->  arch/powerpc/include/asm/kvm_ppc.h    |  1 -
->  arch/powerpc/kvm/book3s.c             |  5 ---
->  arch/powerpc/kvm/book3s.h             |  1 -
->  arch/powerpc/kvm/book3s_64_mmu_hv.c   | 12 ------
->  arch/powerpc/kvm/book3s_hv.c          |  1 -
->  arch/powerpc/kvm/book3s_pr.c          |  7 ----
->  arch/powerpc/kvm/e500_mmu_host.c      |  6 ---
->  arch/riscv/kvm/mmu.c                  | 20 ----------
->  arch/x86/kvm/mmu/mmu.c                | 54 +--------------------------
->  arch/x86/kvm/mmu/spte.c               | 16 --------
->  arch/x86/kvm/mmu/spte.h               |  2 -
->  arch/x86/kvm/mmu/tdp_mmu.c            | 46 -----------------------
->  arch/x86/kvm/mmu/tdp_mmu.h            |  1 -
->  include/linux/kvm_host.h              |  2 -
->  include/trace/events/kvm.h            | 15 --------
->  virt/kvm/kvm_main.c                   | 43 ---------------------
->  20 files changed, 2 insertions(+), 327 deletions(-)
->
-> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> index dc04bc767865..ff17849be9f4 100644
-> --- a/arch/arm64/kvm/mmu.c
-> +++ b/arch/arm64/kvm/mmu.c
-> @@ -1768,40 +1768,6 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct k=
-vm_gfn_range *range)
->         return false;
->  }
->
-> -bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
-> -{
-> -       kvm_pfn_t pfn =3D pte_pfn(range->arg.pte);
-> -
-> -       if (!kvm->arch.mmu.pgt)
-> -               return false;
-> -
-> -       WARN_ON(range->end - range->start !=3D 1);
-> -
-> -       /*
-> -        * If the page isn't tagged, defer to user_mem_abort() for saniti=
-sing
-> -        * the MTE tags. The S2 pte should have been unmapped by
-> -        * mmu_notifier_invalidate_range_end().
-> -        */
-> -       if (kvm_has_mte(kvm) && !page_mte_tagged(pfn_to_page(pfn)))
-> -               return false;
-> -
-> -       /*
-> -        * We've moved a page around, probably through CoW, so let's trea=
-t
-> -        * it just like a translation fault and the map handler will clea=
-n
-> -        * the cache to the PoC.
-> -        *
-> -        * The MMU notifiers will have unmapped a huge PMD before calling
-> -        * ->change_pte() (which in turn calls kvm_set_spte_gfn()) and
-> -        * therefore we never need to clear out a huge PMD through this
-> -        * calling path and a memcache is not required.
-> -        */
-> -       kvm_pgtable_stage2_map(kvm->arch.mmu.pgt, range->start << PAGE_SH=
-IFT,
-> -                              PAGE_SIZE, __pfn_to_phys(pfn),
-> -                              KVM_PGTABLE_PROT_R, NULL, 0);
-> -
-> -       return false;
-> -}
-> -
->  bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
->  {
->         u64 size =3D (range->end - range->start) << PAGE_SHIFT;
-> diff --git a/arch/loongarch/include/asm/kvm_host.h b/arch/loongarch/inclu=
-de/asm/kvm_host.h
-> index 2d62f7b0d377..69305441f40d 100644
-> --- a/arch/loongarch/include/asm/kvm_host.h
-> +++ b/arch/loongarch/include/asm/kvm_host.h
-> @@ -203,7 +203,6 @@ void kvm_flush_tlb_all(void);
->  void kvm_flush_tlb_gpa(struct kvm_vcpu *vcpu, unsigned long gpa);
->  int kvm_handle_mm_fault(struct kvm_vcpu *vcpu, unsigned long badv, bool =
-write);
->
-> -void kvm_set_spte_hva(struct kvm *kvm, unsigned long hva, pte_t pte);
->  int kvm_unmap_hva_range(struct kvm *kvm, unsigned long start, unsigned l=
-ong end, bool blockable);
->  int kvm_age_hva(struct kvm *kvm, unsigned long start, unsigned long end)=
-;
->  int kvm_test_age_hva(struct kvm *kvm, unsigned long hva);
-> diff --git a/arch/loongarch/kvm/mmu.c b/arch/loongarch/kvm/mmu.c
-> index a556cff35740..98883aa23ab8 100644
-> --- a/arch/loongarch/kvm/mmu.c
-> +++ b/arch/loongarch/kvm/mmu.c
-> @@ -494,38 +494,6 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm=
-_gfn_range *range)
->                         range->end << PAGE_SHIFT, &ctx);
->  }
->
-> -bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
-> -{
-> -       unsigned long prot_bits;
-> -       kvm_pte_t *ptep;
-> -       kvm_pfn_t pfn =3D pte_pfn(range->arg.pte);
-> -       gpa_t gpa =3D range->start << PAGE_SHIFT;
-> -
-> -       ptep =3D kvm_populate_gpa(kvm, NULL, gpa, 0);
-> -       if (!ptep)
-> -               return false;
-> -
-> -       /* Replacing an absent or old page doesn't need flushes */
-> -       if (!kvm_pte_present(NULL, ptep) || !kvm_pte_young(*ptep)) {
-> -               kvm_set_pte(ptep, 0);
-> -               return false;
-> -       }
-> -
-> -       /* Fill new pte if write protected or page migrated */
-> -       prot_bits =3D _PAGE_PRESENT | __READABLE;
-> -       prot_bits |=3D _CACHE_MASK & pte_val(range->arg.pte);
-> -
-> -       /*
-> -        * Set _PAGE_WRITE or _PAGE_DIRTY iff old and new pte both suppor=
-t
-> -        * _PAGE_WRITE for map_page_fast if next page write fault
-> -        * _PAGE_DIRTY since gpa has already recorded as dirty page
-> -        */
-> -       prot_bits |=3D __WRITEABLE & *ptep & pte_val(range->arg.pte);
-> -       kvm_set_pte(ptep, kvm_pfn_pte(pfn, __pgprot(prot_bits)));
-> -
-> -       return true;
-> -}
-> -
->  bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
->  {
->         kvm_ptw_ctx ctx;
-> diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c
-> index 467ee6b95ae1..c17157e700c0 100644
-> --- a/arch/mips/kvm/mmu.c
-> +++ b/arch/mips/kvm/mmu.c
-> @@ -444,36 +444,6 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm=
-_gfn_range *range)
->         return true;
->  }
->
-> -bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
-> -{
-> -       gpa_t gpa =3D range->start << PAGE_SHIFT;
-> -       pte_t hva_pte =3D range->arg.pte;
-> -       pte_t *gpa_pte =3D kvm_mips_pte_for_gpa(kvm, NULL, gpa);
-> -       pte_t old_pte;
-> -
-> -       if (!gpa_pte)
-> -               return false;
-> -
-> -       /* Mapping may need adjusting depending on memslot flags */
-> -       old_pte =3D *gpa_pte;
-> -       if (range->slot->flags & KVM_MEM_LOG_DIRTY_PAGES && !pte_dirty(ol=
-d_pte))
-> -               hva_pte =3D pte_mkclean(hva_pte);
-> -       else if (range->slot->flags & KVM_MEM_READONLY)
-> -               hva_pte =3D pte_wrprotect(hva_pte);
-> -
-> -       set_pte(gpa_pte, hva_pte);
-> -
-> -       /* Replacing an absent or old page doesn't need flushes */
-> -       if (!pte_present(old_pte) || !pte_young(old_pte))
-> -               return false;
-> -
-> -       /* Pages swapped, aged, moved, or cleaned require flushes */
-> -       return !pte_present(hva_pte) ||
-> -              !pte_young(hva_pte) ||
-> -              pte_pfn(old_pte) !=3D pte_pfn(hva_pte) ||
-> -              (pte_dirty(old_pte) && !pte_dirty(hva_pte));
-> -}
-> -
->  bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
->  {
->         return kvm_mips_mkold_gpa_pt(kvm, range->start, range->end);
-> diff --git a/arch/powerpc/include/asm/kvm_ppc.h b/arch/powerpc/include/as=
-m/kvm_ppc.h
-> index 3281215097cc..ca3829d47ab7 100644
-> --- a/arch/powerpc/include/asm/kvm_ppc.h
-> +++ b/arch/powerpc/include/asm/kvm_ppc.h
-> @@ -287,7 +287,6 @@ struct kvmppc_ops {
->         bool (*unmap_gfn_range)(struct kvm *kvm, struct kvm_gfn_range *ra=
-nge);
->         bool (*age_gfn)(struct kvm *kvm, struct kvm_gfn_range *range);
->         bool (*test_age_gfn)(struct kvm *kvm, struct kvm_gfn_range *range=
-);
-> -       bool (*set_spte_gfn)(struct kvm *kvm, struct kvm_gfn_range *range=
-);
->         void (*free_memslot)(struct kvm_memory_slot *slot);
->         int (*init_vm)(struct kvm *kvm);
->         void (*destroy_vm)(struct kvm *kvm);
-> diff --git a/arch/powerpc/kvm/book3s.c b/arch/powerpc/kvm/book3s.c
-> index 8acec144120e..0d0624088e6b 100644
-> --- a/arch/powerpc/kvm/book3s.c
-> +++ b/arch/powerpc/kvm/book3s.c
-> @@ -899,11 +899,6 @@ bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gf=
-n_range *range)
->         return kvm->arch.kvm_ops->test_age_gfn(kvm, range);
->  }
->
-> -bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
-> -{
-> -       return kvm->arch.kvm_ops->set_spte_gfn(kvm, range);
-> -}
-> -
->  int kvmppc_core_init_vm(struct kvm *kvm)
->  {
->
-> diff --git a/arch/powerpc/kvm/book3s.h b/arch/powerpc/kvm/book3s.h
-> index 58391b4b32ed..4aa2ab89afbc 100644
-> --- a/arch/powerpc/kvm/book3s.h
-> +++ b/arch/powerpc/kvm/book3s.h
-> @@ -12,7 +12,6 @@ extern void kvmppc_core_flush_memslot_hv(struct kvm *kv=
-m,
->  extern bool kvm_unmap_gfn_range_hv(struct kvm *kvm, struct kvm_gfn_range=
- *range);
->  extern bool kvm_age_gfn_hv(struct kvm *kvm, struct kvm_gfn_range *range)=
-;
->  extern bool kvm_test_age_gfn_hv(struct kvm *kvm, struct kvm_gfn_range *r=
-ange);
-> -extern bool kvm_set_spte_gfn_hv(struct kvm *kvm, struct kvm_gfn_range *r=
-ange);
->
->  extern int kvmppc_mmu_init_pr(struct kvm_vcpu *vcpu);
->  extern void kvmppc_mmu_destroy_pr(struct kvm_vcpu *vcpu);
-> diff --git a/arch/powerpc/kvm/book3s_64_mmu_hv.c b/arch/powerpc/kvm/book3=
-s_64_mmu_hv.c
-> index 2b1f0cdd8c18..1b51b1c4713b 100644
-> --- a/arch/powerpc/kvm/book3s_64_mmu_hv.c
-> +++ b/arch/powerpc/kvm/book3s_64_mmu_hv.c
-> @@ -1010,18 +1010,6 @@ bool kvm_test_age_gfn_hv(struct kvm *kvm, struct k=
-vm_gfn_range *range)
->                 return kvm_test_age_rmapp(kvm, range->slot, range->start)=
-;
->  }
->
-> -bool kvm_set_spte_gfn_hv(struct kvm *kvm, struct kvm_gfn_range *range)
-> -{
-> -       WARN_ON(range->start + 1 !=3D range->end);
-> -
-> -       if (kvm_is_radix(kvm))
-> -               kvm_unmap_radix(kvm, range->slot, range->start);
-> -       else
-> -               kvm_unmap_rmapp(kvm, range->slot, range->start);
-> -
-> -       return false;
-> -}
-> -
->  static int vcpus_running(struct kvm *kvm)
->  {
->         return atomic_read(&kvm->arch.vcpus_running) !=3D 0;
-> diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
-> index 8e86eb577eb8..35cb014a0c51 100644
-> --- a/arch/powerpc/kvm/book3s_hv.c
-> +++ b/arch/powerpc/kvm/book3s_hv.c
-> @@ -6364,7 +6364,6 @@ static struct kvmppc_ops kvm_ops_hv =3D {
->         .unmap_gfn_range =3D kvm_unmap_gfn_range_hv,
->         .age_gfn =3D kvm_age_gfn_hv,
->         .test_age_gfn =3D kvm_test_age_gfn_hv,
-> -       .set_spte_gfn =3D kvm_set_spte_gfn_hv,
->         .free_memslot =3D kvmppc_core_free_memslot_hv,
->         .init_vm =3D  kvmppc_core_init_vm_hv,
->         .destroy_vm =3D kvmppc_core_destroy_vm_hv,
-> diff --git a/arch/powerpc/kvm/book3s_pr.c b/arch/powerpc/kvm/book3s_pr.c
-> index 5b92619a05fd..a7d7137ea0c8 100644
-> --- a/arch/powerpc/kvm/book3s_pr.c
-> +++ b/arch/powerpc/kvm/book3s_pr.c
-> @@ -461,12 +461,6 @@ static bool kvm_test_age_gfn_pr(struct kvm *kvm, str=
-uct kvm_gfn_range *range)
->         return false;
->  }
->
-> -static bool kvm_set_spte_gfn_pr(struct kvm *kvm, struct kvm_gfn_range *r=
-ange)
-> -{
-> -       /* The page will get remapped properly on its next fault */
-> -       return do_kvm_unmap_gfn(kvm, range);
-> -}
-> -
->  /*****************************************/
->
->  static void kvmppc_set_msr_pr(struct kvm_vcpu *vcpu, u64 msr)
-> @@ -2071,7 +2065,6 @@ static struct kvmppc_ops kvm_ops_pr =3D {
->         .unmap_gfn_range =3D kvm_unmap_gfn_range_pr,
->         .age_gfn  =3D kvm_age_gfn_pr,
->         .test_age_gfn =3D kvm_test_age_gfn_pr,
-> -       .set_spte_gfn =3D kvm_set_spte_gfn_pr,
->         .free_memslot =3D kvmppc_core_free_memslot_pr,
->         .init_vm =3D kvmppc_core_init_vm_pr,
->         .destroy_vm =3D kvmppc_core_destroy_vm_pr,
-> diff --git a/arch/powerpc/kvm/e500_mmu_host.c b/arch/powerpc/kvm/e500_mmu=
-_host.c
-> index ccb8f16ffe41..c664fdec75b1 100644
-> --- a/arch/powerpc/kvm/e500_mmu_host.c
-> +++ b/arch/powerpc/kvm/e500_mmu_host.c
-> @@ -747,12 +747,6 @@ bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gf=
-n_range *range)
->         return false;
->  }
->
-> -bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
-> -{
-> -       /* The page will get remapped properly on its next fault */
-> -       return kvm_e500_mmu_unmap_gfn(kvm, range);
-> -}
-> -
->  /*****************************************/
->
->  int e500_mmu_host_init(struct kvmppc_vcpu_e500 *vcpu_e500)
-> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> index a9e2fd7245e1..b63650f9b966 100644
-> --- a/arch/riscv/kvm/mmu.c
-> +++ b/arch/riscv/kvm/mmu.c
-> @@ -550,26 +550,6 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm=
-_gfn_range *range)
->         return false;
->  }
->
-> -bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
-> -{
-> -       int ret;
-> -       kvm_pfn_t pfn =3D pte_pfn(range->arg.pte);
-> -
-> -       if (!kvm->arch.pgd)
-> -               return false;
-> -
-> -       WARN_ON(range->end - range->start !=3D 1);
-> -
-> -       ret =3D gstage_map_page(kvm, NULL, range->start << PAGE_SHIFT,
-> -                             __pfn_to_phys(pfn), PAGE_SIZE, true, true);
-> -       if (ret) {
-> -               kvm_debug("Failed to map G-stage page (error %d)\n", ret)=
-;
-> -               return true;
-> -       }
-> -
-> -       return false;
-> -}
-> -
->  bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
->  {
->         pte_t *ptep;
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 0049d49aa913..87ba2a9da196 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -432,8 +432,8 @@ static u64 __update_clear_spte_slow(u64 *sptep, u64 s=
-pte)
->   * The idea using the light way get the spte on x86_32 guest is from
->   * gup_get_pte (mm/gup.c).
->   *
-> - * An spte tlb flush may be pending, because kvm_set_pte_rmap
-> - * coalesces them and we are running out of the MMU lock.  Therefore
-> + * An spte tlb flush may be pending, because they are coalesced and
-> + * we are running out of the MMU lock.  Therefore
->   * we need to protect against in-progress updates of the spte.
->   *
->   * Reading the spte while an update is in progress may get the old value
-> @@ -1454,43 +1454,6 @@ static bool kvm_zap_rmap(struct kvm *kvm, struct k=
-vm_rmap_head *rmap_head,
->         return __kvm_zap_rmap(kvm, rmap_head, slot);
->  }
->
-> -static bool kvm_set_pte_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap=
-_head,
-> -                            struct kvm_memory_slot *slot, gfn_t gfn, int=
- level,
-> -                            pte_t pte)
-> -{
-> -       u64 *sptep;
-> -       struct rmap_iterator iter;
-> -       bool need_flush =3D false;
-> -       u64 new_spte;
-> -       kvm_pfn_t new_pfn;
-> -
-> -       WARN_ON_ONCE(pte_huge(pte));
-> -       new_pfn =3D pte_pfn(pte);
-> -
-> -restart:
-> -       for_each_rmap_spte(rmap_head, &iter, sptep) {
-> -               need_flush =3D true;
-> -
-> -               if (pte_write(pte)) {
-> -                       kvm_zap_one_rmap_spte(kvm, rmap_head, sptep);
-> -                       goto restart;
-> -               } else {
-> -                       new_spte =3D kvm_mmu_changed_pte_notifier_make_sp=
-te(
-> -                                       *sptep, new_pfn);
-> -
-> -                       mmu_spte_clear_track_bits(kvm, sptep);
-> -                       mmu_spte_set(sptep, new_spte);
-> -               }
-> -       }
-> -
-> -       if (need_flush && kvm_available_flush_remote_tlbs_range()) {
-> -               kvm_flush_remote_tlbs_gfn(kvm, gfn, level);
-> -               return false;
-> -       }
-> -
-> -       return need_flush;
-> -}
-> -
->  struct slot_rmap_walk_iterator {
->         /* input fields. */
->         const struct kvm_memory_slot *slot;
-> @@ -1596,19 +1559,6 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct k=
-vm_gfn_range *range)
->         return flush;
->  }
->
-> -bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
-> -{
-> -       bool flush =3D false;
-> -
-> -       if (kvm_memslots_have_rmaps(kvm))
-> -               flush =3D kvm_handle_gfn_range(kvm, range, kvm_set_pte_rm=
-ap);
-> -
-> -       if (tdp_mmu_enabled)
-> -               flush |=3D kvm_tdp_mmu_set_spte_gfn(kvm, range);
-> -
-> -       return flush;
-> -}
-> -
->  static bool kvm_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_hea=
-d,
->                          struct kvm_memory_slot *slot, gfn_t gfn, int lev=
-el,
->                          pte_t unused)
-> diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-> index 318135daf685..283af5b90016 100644
-> --- a/arch/x86/kvm/mmu/spte.c
-> +++ b/arch/x86/kvm/mmu/spte.c
-> @@ -322,22 +322,6 @@ u64 make_nonleaf_spte(u64 *child_pt, bool ad_disable=
-d)
->         return spte;
->  }
->
-> -u64 kvm_mmu_changed_pte_notifier_make_spte(u64 old_spte, kvm_pfn_t new_p=
-fn)
-> -{
-> -       u64 new_spte;
-> -
-> -       new_spte =3D old_spte & ~SPTE_BASE_ADDR_MASK;
-> -       new_spte |=3D (u64)new_pfn << PAGE_SHIFT;
-> -
-> -       new_spte &=3D ~PT_WRITABLE_MASK;
-> -       new_spte &=3D ~shadow_host_writable_mask;
-> -       new_spte &=3D ~shadow_mmu_writable_mask;
-> -
-> -       new_spte =3D mark_spte_for_access_track(new_spte);
-> -
-> -       return new_spte;
-> -}
-> -
->  u64 mark_spte_for_access_track(u64 spte)
->  {
->         if (spte_ad_enabled(spte))
-> diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
-> index 1a163aee9ec6..92da4c419171 100644
-> --- a/arch/x86/kvm/mmu/spte.h
-> +++ b/arch/x86/kvm/mmu/spte.h
-> @@ -511,8 +511,6 @@ static inline u64 restore_acc_track_spte(u64 spte)
->         return spte;
->  }
->
-> -u64 kvm_mmu_changed_pte_notifier_make_spte(u64 old_spte, kvm_pfn_t new_p=
-fn);
-> -
->  void __init kvm_mmu_spte_module_init(void);
->  void kvm_mmu_reset_all_pte_masks(void);
->
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 3627744fcab6..fbb86932b766 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -1250,52 +1250,6 @@ bool kvm_tdp_mmu_test_age_gfn(struct kvm *kvm, str=
-uct kvm_gfn_range *range)
->         return kvm_tdp_mmu_handle_gfn(kvm, range, test_age_gfn);
->  }
->
-> -static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
-> -                        struct kvm_gfn_range *range)
-> -{
-> -       u64 new_spte;
-> -
-> -       /* Huge pages aren't expected to be modified without first being =
-zapped. */
-> -       WARN_ON_ONCE(pte_huge(range->arg.pte) || range->start + 1 !=3D ra=
-nge->end);
-> -
-> -       if (iter->level !=3D PG_LEVEL_4K ||
-> -           !is_shadow_present_pte(iter->old_spte))
-> -               return false;
-> -
-> -       /*
-> -        * Note, when changing a read-only SPTE, it's not strictly necess=
-ary to
-> -        * zero the SPTE before setting the new PFN, but doing so preserv=
-es the
-> -        * invariant that the PFN of a present * leaf SPTE can never chan=
-ge.
-> -        * See handle_changed_spte().
-> -        */
-> -       tdp_mmu_iter_set_spte(kvm, iter, SHADOW_NONPRESENT_VALUE);
-> -
-> -       if (!pte_write(range->arg.pte)) {
-> -               new_spte =3D kvm_mmu_changed_pte_notifier_make_spte(iter-=
->old_spte,
-> -                                                                 pte_pfn=
-(range->arg.pte));
-> -
-> -               tdp_mmu_iter_set_spte(kvm, iter, new_spte);
-> -       }
-> -
-> -       return true;
-> -}
-> -
-> -/*
-> - * Handle the changed_pte MMU notifier for the TDP MMU.
-> - * data is a pointer to the new pte_t mapping the HVA specified by the M=
-MU
-> - * notifier.
-> - * Returns non-zero if a flush is needed before releasing the MMU lock.
-> - */
-> -bool kvm_tdp_mmu_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *ran=
-ge)
-> -{
-> -       /*
-> -        * No need to handle the remote TLB flush under RCU protection, t=
-he
-> -        * target SPTE _must_ be a leaf SPTE, i.e. cannot result in freei=
-ng a
-> -        * shadow page. See the WARN on pfn_changed in handle_changed_spt=
-e().
-> -        */
-> -       return kvm_tdp_mmu_handle_gfn(kvm, range, set_spte_gfn);
-> -}
-> -
->  /*
->   * Remove write access from all SPTEs at or above min_level that map GFN=
-s
->   * [start, end). Returns true if an SPTE has been changed and the TLBs n=
-eed to
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.h b/arch/x86/kvm/mmu/tdp_mmu.h
-> index 6e1ea04ca885..58b55e61bd33 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.h
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.h
-> @@ -31,7 +31,6 @@ bool kvm_tdp_mmu_unmap_gfn_range(struct kvm *kvm, struc=
-t kvm_gfn_range *range,
->                                  bool flush);
->  bool kvm_tdp_mmu_age_gfn_range(struct kvm *kvm, struct kvm_gfn_range *ra=
-nge);
->  bool kvm_tdp_mmu_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *ran=
-ge);
-> -bool kvm_tdp_mmu_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *ran=
-ge);
->
->  bool kvm_tdp_mmu_wrprot_slot(struct kvm *kvm,
->                              const struct kvm_memory_slot *slot, int min_=
-level);
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index ab439706ea2f..8dea11701ab2 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -259,7 +259,6 @@ int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu);
->
->  #ifdef CONFIG_KVM_GENERIC_MMU_NOTIFIER
->  union kvm_mmu_notifier_arg {
-> -       pte_t pte;
->         unsigned long attributes;
->  };
->
-> @@ -273,7 +272,6 @@ struct kvm_gfn_range {
->  bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range);
->  bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
->  bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
-> -bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
->  #endif
->
->  enum {
-> diff --git a/include/trace/events/kvm.h b/include/trace/events/kvm.h
-> index 011fba6b5552..74e40d5d4af4 100644
-> --- a/include/trace/events/kvm.h
-> +++ b/include/trace/events/kvm.h
-> @@ -456,21 +456,6 @@ TRACE_EVENT(kvm_unmap_hva_range,
->                   __entry->start, __entry->end)
->  );
->
-> -TRACE_EVENT(kvm_set_spte_hva,
-> -       TP_PROTO(unsigned long hva),
-> -       TP_ARGS(hva),
-> -
-> -       TP_STRUCT__entry(
-> -               __field(        unsigned long,  hva             )
-> -       ),
-> -
-> -       TP_fast_assign(
-> -               __entry->hva            =3D hva;
-> -       ),
-> -
-> -       TP_printk("mmu notifier set pte hva: %#016lx", __entry->hva)
-> -);
-> -
->  TRACE_EVENT(kvm_age_hva,
->         TP_PROTO(unsigned long start, unsigned long end),
->         TP_ARGS(start, end),
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 4eb8afd0b961..2fcd9979752a 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -717,48 +717,6 @@ static __always_inline int kvm_handle_hva_range_no_f=
-lush(struct mmu_notifier *mn
->         return __kvm_handle_hva_range(kvm, &range).ret;
->  }
->
-> -static bool kvm_change_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *r=
-ange)
-> -{
-> -       /*
-> -        * Skipping invalid memslots is correct if and only change_pte() =
-is
-> -        * surrounded by invalidate_range_{start,end}(), which is current=
-ly
-> -        * guaranteed by the primary MMU.  If that ever changes, KVM need=
-s to
-> -        * unmap the memslot instead of skipping the memslot to ensure th=
-at KVM
-> -        * doesn't hold references to the old PFN.
-> -        */
-> -       WARN_ON_ONCE(!READ_ONCE(kvm->mn_active_invalidate_count));
-> -
-> -       if (range->slot->flags & KVM_MEMSLOT_INVALID)
-> -               return false;
-> -
-> -       return kvm_set_spte_gfn(kvm, range);
-> -}
-> -
-> -static void kvm_mmu_notifier_change_pte(struct mmu_notifier *mn,
-> -                                       struct mm_struct *mm,
-> -                                       unsigned long address,
-> -                                       pte_t pte)
-> -{
-> -       struct kvm *kvm =3D mmu_notifier_to_kvm(mn);
-> -       const union kvm_mmu_notifier_arg arg =3D { .pte =3D pte };
-> -
-> -       trace_kvm_set_spte_hva(address);
-> -
-> -       /*
-> -        * .change_pte() must be surrounded by .invalidate_range_{start,e=
-nd}().
-> -        * If mmu_invalidate_in_progress is zero, then no in-progress
-> -        * invalidations, including this one, found a relevant memslot at
-> -        * start(); rechecking memslots here is unnecessary.  Note, a fal=
-se
-> -        * positive (count elevated by a different invalidation) is sub-o=
-ptimal
-> -        * but functionally ok.
-> -        */
-> -       WARN_ON_ONCE(!READ_ONCE(kvm->mn_active_invalidate_count));
-> -       if (!READ_ONCE(kvm->mmu_invalidate_in_progress))
-> -               return;
-> -
-> -       kvm_handle_hva_range(mn, address, address + 1, arg, kvm_change_sp=
-te_gfn);
-> -}
-> -
->  void kvm_mmu_invalidate_begin(struct kvm *kvm)
->  {
->         lockdep_assert_held_write(&kvm->mmu_lock);
-> @@ -976,7 +934,6 @@ static const struct mmu_notifier_ops kvm_mmu_notifier=
-_ops =3D {
->         .clear_flush_young      =3D kvm_mmu_notifier_clear_flush_young,
->         .clear_young            =3D kvm_mmu_notifier_clear_young,
->         .test_young             =3D kvm_mmu_notifier_test_young,
-> -       .change_pte             =3D kvm_mmu_notifier_change_pte,
->         .release                =3D kvm_mmu_notifier_release,
->  };
->
-> --
-> 2.43.0
->
->
+>   drivers/infiniband/hw/bnxt_re/bnxt_re.h    |  3 +-
+>   drivers/infiniband/hw/bnxt_re/qplib_fp.c   | 21 ++++++------
+>   drivers/infiniband/hw/bnxt_re/qplib_fp.h   |  2 +-
+>   drivers/infiniband/hw/bnxt_re/qplib_rcfw.c | 25 ++++++++-------
+>   drivers/infiniband/hw/bnxt_re/qplib_rcfw.h |  2 +-
+>   drivers/infiniband/hw/erdma/erdma.h        |  3 +-
+>   drivers/infiniband/hw/erdma/erdma_eq.c     | 11 ++++---
+>   drivers/infiniband/hw/hfi1/rc.c            |  2 +-
+>   drivers/infiniband/hw/hfi1/sdma.c          | 37 +++++++++++-----------
+>   drivers/infiniband/hw/hfi1/sdma.h          |  9 +++---
+>   drivers/infiniband/hw/hfi1/tid_rdma.c      |  6 ++--
+>   drivers/infiniband/hw/irdma/ctrl.c         |  2 +-
+>   drivers/infiniband/hw/irdma/hw.c           | 24 +++++++-------
+>   drivers/infiniband/hw/irdma/main.h         |  5 +--
+>   drivers/infiniband/hw/qib/qib.h            |  7 ++--
+>   drivers/infiniband/hw/qib/qib_iba7322.c    |  9 +++---
+>   drivers/infiniband/hw/qib/qib_rc.c         | 16 +++++-----
+>   drivers/infiniband/hw/qib/qib_ruc.c        |  4 +--
+>   drivers/infiniband/hw/qib/qib_sdma.c       | 11 ++++---
+>   drivers/infiniband/sw/rdmavt/qp.c          |  2 +-
+>   20 files changed, 106 insertions(+), 95 deletions(-)
+> 
+> diff --git a/drivers/infiniband/hw/bnxt_re/bnxt_re.h b/drivers/infiniband/hw/bnxt_re/bnxt_re.h
+> index 9dca451ed522..f511c8415806 100644
+> --- a/drivers/infiniband/hw/bnxt_re/bnxt_re.h
+> +++ b/drivers/infiniband/hw/bnxt_re/bnxt_re.h
+> @@ -42,6 +42,7 @@
+>   #include <rdma/uverbs_ioctl.h>
+>   #include "hw_counters.h"
+>   #include <linux/hashtable.h>
+> +#include <linux/workqueue.h>
+>   #define ROCE_DRV_MODULE_NAME		"bnxt_re"
+>   
+>   #define BNXT_RE_DESC	"Broadcom NetXtreme-C/E RoCE Driver"
+> @@ -162,7 +163,7 @@ struct bnxt_re_dev {
+>   	u8				cur_prio_map;
+>   
+>   	/* FP Notification Queue (CQ & SRQ) */
+> -	struct tasklet_struct		nq_task;
+> +	struct work_struct 		nq_work;
+>   
+>   	/* RCFW Channel */
+>   	struct bnxt_qplib_rcfw		rcfw;
+> diff --git a/drivers/infiniband/hw/bnxt_re/qplib_fp.c b/drivers/infiniband/hw/bnxt_re/qplib_fp.c
+> index 439d0c7c5d0c..052906982cdf 100644
+> --- a/drivers/infiniband/hw/bnxt_re/qplib_fp.c
+> +++ b/drivers/infiniband/hw/bnxt_re/qplib_fp.c
+> @@ -46,6 +46,7 @@
+>   #include <linux/delay.h>
+>   #include <linux/prefetch.h>
+>   #include <linux/if_ether.h>
+> +#include <linux/workqueue.h>
+>   #include <rdma/ib_mad.h>
+>   
+>   #include "roce_hsi.h"
+> @@ -294,9 +295,9 @@ static void __wait_for_all_nqes(struct bnxt_qplib_cq *cq, u16 cnq_events)
+>   	}
+>   }
+>   
+> -static void bnxt_qplib_service_nq(struct tasklet_struct *t)
+> +static void bnxt_qplib_service_nq(struct work_struct *t)
+>   {
+> -	struct bnxt_qplib_nq *nq = from_tasklet(nq, t, nq_tasklet);
+> +	struct bnxt_qplib_nq *nq = from_work(nq, t, nq_work);
+>   	struct bnxt_qplib_hwq *hwq = &nq->hwq;
+>   	struct bnxt_qplib_cq *cq;
+>   	int budget = nq->budget;
+> @@ -394,7 +395,7 @@ void bnxt_re_synchronize_nq(struct bnxt_qplib_nq *nq)
+>   	int budget = nq->budget;
+>   
+>   	nq->budget = nq->hwq.max_elements;
+> -	bnxt_qplib_service_nq(&nq->nq_tasklet);
+> +	bnxt_qplib_service_nq(&nq->nq_work);
+>   	nq->budget = budget;
+>   }
+>   
+> @@ -409,7 +410,7 @@ static irqreturn_t bnxt_qplib_nq_irq(int irq, void *dev_instance)
+>   	prefetch(bnxt_qplib_get_qe(hwq, sw_cons, NULL));
+>   
+>   	/* Fan out to CPU affinitized kthreads? */
+> -	tasklet_schedule(&nq->nq_tasklet);
+> +	queue_work(system_bh_wq, &nq->nq_work);
+>   
+>   	return IRQ_HANDLED;
+>   }
+> @@ -430,8 +431,8 @@ void bnxt_qplib_nq_stop_irq(struct bnxt_qplib_nq *nq, bool kill)
+>   	nq->name = NULL;
+>   
+>   	if (kill)
+> -		tasklet_kill(&nq->nq_tasklet);
+> -	tasklet_disable(&nq->nq_tasklet);
+> +		cancel_work_sync(&nq->nq_work);
+> +	disable_work_sync(&nq->nq_work);
+>   }
+>   
+>   void bnxt_qplib_disable_nq(struct bnxt_qplib_nq *nq)
+> @@ -465,9 +466,9 @@ int bnxt_qplib_nq_start_irq(struct bnxt_qplib_nq *nq, int nq_indx,
+>   
+>   	nq->msix_vec = msix_vector;
+>   	if (need_init)
+> -		tasklet_setup(&nq->nq_tasklet, bnxt_qplib_service_nq);
+> +		INIT_WORK(&nq->nq_work, bnxt_qplib_service_nq);
+>   	else
+> -		tasklet_enable(&nq->nq_tasklet);
+> +		enable_and_queue_work(system_bh_wq, &nq->nq_work);
+>   
+>   	nq->name = kasprintf(GFP_KERNEL, "bnxt_re-nq-%d@pci:%s",
+>   			     nq_indx, pci_name(res->pdev));
+> @@ -477,7 +478,7 @@ int bnxt_qplib_nq_start_irq(struct bnxt_qplib_nq *nq, int nq_indx,
+>   	if (rc) {
+>   		kfree(nq->name);
+>   		nq->name = NULL;
+> -		tasklet_disable(&nq->nq_tasklet);
+> +		disable_work_sync(&nq->nq_work);
+>   		return rc;
+>   	}
+>   
+> @@ -541,7 +542,7 @@ int bnxt_qplib_enable_nq(struct pci_dev *pdev, struct bnxt_qplib_nq *nq,
+>   	nq->cqn_handler = cqn_handler;
+>   	nq->srqn_handler = srqn_handler;
+>   
+> -	/* Have a task to schedule CQ notifiers in post send case */
+> +	/* Have a work to schedule CQ notifiers in post send case */
+>   	nq->cqn_wq  = create_singlethread_workqueue("bnxt_qplib_nq");
+>   	if (!nq->cqn_wq)
+>   		return -ENOMEM;
+> diff --git a/drivers/infiniband/hw/bnxt_re/qplib_fp.h b/drivers/infiniband/hw/bnxt_re/qplib_fp.h
+> index 7fd4506b3584..6ee3e501d136 100644
+> --- a/drivers/infiniband/hw/bnxt_re/qplib_fp.h
+> +++ b/drivers/infiniband/hw/bnxt_re/qplib_fp.h
+> @@ -494,7 +494,7 @@ struct bnxt_qplib_nq {
+>   	u16				ring_id;
+>   	int				msix_vec;
+>   	cpumask_t			mask;
+> -	struct tasklet_struct		nq_tasklet;
+> +	struct work_struct 		nq_work;
+>   	bool				requested;
+>   	int				budget;
+>   
+> diff --git a/drivers/infiniband/hw/bnxt_re/qplib_rcfw.c b/drivers/infiniband/hw/bnxt_re/qplib_rcfw.c
+> index 3ffaef0c2651..2fba712d88db 100644
+> --- a/drivers/infiniband/hw/bnxt_re/qplib_rcfw.c
+> +++ b/drivers/infiniband/hw/bnxt_re/qplib_rcfw.c
+> @@ -43,6 +43,7 @@
+>   #include <linux/pci.h>
+>   #include <linux/prefetch.h>
+>   #include <linux/delay.h>
+> +#include <linux/workqueue.h>
+>   
+>   #include "roce_hsi.h"
+>   #include "qplib_res.h"
+> @@ -51,7 +52,7 @@
+>   #include "qplib_fp.h"
+>   #include "qplib_tlv.h"
+>   
+> -static void bnxt_qplib_service_creq(struct tasklet_struct *t);
+> +static void bnxt_qplib_service_creq(struct work_struct *t);
+>   
+>   /**
+>    * bnxt_qplib_map_rc  -  map return type based on opcode
+> @@ -165,7 +166,7 @@ static int __wait_for_resp(struct bnxt_qplib_rcfw *rcfw, u16 cookie)
+>   		if (!crsqe->is_in_used)
+>   			return 0;
+>   
+> -		bnxt_qplib_service_creq(&rcfw->creq.creq_tasklet);
+> +		bnxt_qplib_service_creq(&rcfw->creq.creq_work);
+>   
+>   		if (!crsqe->is_in_used)
+>   			return 0;
+> @@ -206,7 +207,7 @@ static int __block_for_resp(struct bnxt_qplib_rcfw *rcfw, u16 cookie)
+>   
+>   		udelay(1);
+>   
+> -		bnxt_qplib_service_creq(&rcfw->creq.creq_tasklet);
+> +		bnxt_qplib_service_creq(&rcfw->creq.creq_work);
+>   		if (!crsqe->is_in_used)
+>   			return 0;
+>   
+> @@ -403,7 +404,7 @@ static int __poll_for_resp(struct bnxt_qplib_rcfw *rcfw, u16 cookie)
+>   
+>   		usleep_range(1000, 1001);
+>   
+> -		bnxt_qplib_service_creq(&rcfw->creq.creq_tasklet);
+> +		bnxt_qplib_service_creq(&rcfw->creq.creq_work);
+>   		if (!crsqe->is_in_used)
+>   			return 0;
+>   		if (jiffies_to_msecs(jiffies - issue_time) >
+> @@ -727,9 +728,9 @@ static int bnxt_qplib_process_qp_event(struct bnxt_qplib_rcfw *rcfw,
+>   }
+>   
+>   /* SP - CREQ Completion handlers */
+> -static void bnxt_qplib_service_creq(struct tasklet_struct *t)
+> +static void bnxt_qplib_service_creq(struct work_struct *t)
+>   {
+> -	struct bnxt_qplib_rcfw *rcfw = from_tasklet(rcfw, t, creq.creq_tasklet);
+> +	struct bnxt_qplib_rcfw *rcfw = from_work(rcfw, t, creq.creq_work);
+>   	struct bnxt_qplib_creq_ctx *creq = &rcfw->creq;
+>   	u32 type, budget = CREQ_ENTRY_POLL_BUDGET;
+>   	struct bnxt_qplib_hwq *hwq = &creq->hwq;
+> @@ -800,7 +801,7 @@ static irqreturn_t bnxt_qplib_creq_irq(int irq, void *dev_instance)
+>   	sw_cons = HWQ_CMP(hwq->cons, hwq);
+>   	prefetch(bnxt_qplib_get_qe(hwq, sw_cons, NULL));
+>   
+> -	tasklet_schedule(&creq->creq_tasklet);
+> +	queue_work(system_bh_wq, &creq->creq_work);
+>   
+>   	return IRQ_HANDLED;
+>   }
+> @@ -1007,8 +1008,8 @@ void bnxt_qplib_rcfw_stop_irq(struct bnxt_qplib_rcfw *rcfw, bool kill)
+>   	creq->irq_name = NULL;
+>   	atomic_set(&rcfw->rcfw_intr_enabled, 0);
+>   	if (kill)
+> -		tasklet_kill(&creq->creq_tasklet);
+> -	tasklet_disable(&creq->creq_tasklet);
+> +		cancel_work_sync(&creq->creq_work);
+> +	disable_work_sync(&creq->creq_work);
+>   }
+>   
+>   void bnxt_qplib_disable_rcfw_channel(struct bnxt_qplib_rcfw *rcfw)
+> @@ -1045,9 +1046,9 @@ int bnxt_qplib_rcfw_start_irq(struct bnxt_qplib_rcfw *rcfw, int msix_vector,
+>   
+>   	creq->msix_vec = msix_vector;
+>   	if (need_init)
+> -		tasklet_setup(&creq->creq_tasklet, bnxt_qplib_service_creq);
+> +		INIT_WORK(&creq->creq_work, bnxt_qplib_service_creq);
+>   	else
+> -		tasklet_enable(&creq->creq_tasklet);
+> +		enable_and_queue_work(system_bh_wq, &creq->creq_work);
+>   
+>   	creq->irq_name = kasprintf(GFP_KERNEL, "bnxt_re-creq@pci:%s",
+>   				   pci_name(res->pdev));
+> @@ -1058,7 +1059,7 @@ int bnxt_qplib_rcfw_start_irq(struct bnxt_qplib_rcfw *rcfw, int msix_vector,
+>   	if (rc) {
+>   		kfree(creq->irq_name);
+>   		creq->irq_name = NULL;
+> -		tasklet_disable(&creq->creq_tasklet);
+> +		disable_work_sync(&creq->creq_work);
+>   		return rc;
+>   	}
+>   	creq->requested = true;
+> diff --git a/drivers/infiniband/hw/bnxt_re/qplib_rcfw.h b/drivers/infiniband/hw/bnxt_re/qplib_rcfw.h
+> index 45996e60a0d0..8efa474fcf3f 100644
+> --- a/drivers/infiniband/hw/bnxt_re/qplib_rcfw.h
+> +++ b/drivers/infiniband/hw/bnxt_re/qplib_rcfw.h
+> @@ -207,7 +207,7 @@ struct bnxt_qplib_creq_ctx {
+>   	struct bnxt_qplib_hwq		hwq;
+>   	struct bnxt_qplib_creq_db	creq_db;
+>   	struct bnxt_qplib_creq_stat	stats;
+> -	struct tasklet_struct		creq_tasklet;
+> +	struct work_struct 		creq_work;
+>   	aeq_handler_t			aeq_handler;
+>   	u16				ring_id;
+>   	int				msix_vec;
+> diff --git a/drivers/infiniband/hw/erdma/erdma.h b/drivers/infiniband/hw/erdma/erdma.h
+> index 5df401a30cb9..9a47c1432c27 100644
+> --- a/drivers/infiniband/hw/erdma/erdma.h
+> +++ b/drivers/infiniband/hw/erdma/erdma.h
+> @@ -11,6 +11,7 @@
+>   #include <linux/netdevice.h>
+>   #include <linux/pci.h>
+>   #include <linux/xarray.h>
+> +#include <linux/workqueue.h>
+>   #include <rdma/ib_verbs.h>
+>   
+>   #include "erdma_hw.h"
+> @@ -161,7 +162,7 @@ struct erdma_eq_cb {
+>   	void *dev; /* All EQs use this fields to get erdma_dev struct */
+>   	struct erdma_irq irq;
+>   	struct erdma_eq eq;
+> -	struct tasklet_struct tasklet;
+> +	struct work_struct work;
+>   };
+>   
+>   struct erdma_resource_cb {
+> diff --git a/drivers/infiniband/hw/erdma/erdma_eq.c b/drivers/infiniband/hw/erdma/erdma_eq.c
+> index ea47cb21fdb8..252906fd73b0 100644
+> --- a/drivers/infiniband/hw/erdma/erdma_eq.c
+> +++ b/drivers/infiniband/hw/erdma/erdma_eq.c
+> @@ -160,14 +160,16 @@ static irqreturn_t erdma_intr_ceq_handler(int irq, void *data)
+>   {
+>   	struct erdma_eq_cb *ceq_cb = data;
+>   
+> -	tasklet_schedule(&ceq_cb->tasklet);
+> +	queue_work(system_bh_wq, &ceq_cb->work);
+>   
+>   	return IRQ_HANDLED;
+>   }
+>   
+> -static void erdma_intr_ceq_task(unsigned long data)
+> +static void erdma_intr_ceq_task(struct work_struct *t)
+>   {
+> -	erdma_ceq_completion_handler((struct erdma_eq_cb *)data);
+> +	struct erdma_eq_cb *ceq_cb = from_work(ceq_cb, t, work);
+> +
+> +	erdma_ceq_completion_handler(ceq_cb);
+>   }
+>   
+>   static int erdma_set_ceq_irq(struct erdma_dev *dev, u16 ceqn)
+> @@ -179,8 +181,7 @@ static int erdma_set_ceq_irq(struct erdma_dev *dev, u16 ceqn)
+>   		 pci_name(dev->pdev));
+>   	eqc->irq.msix_vector = pci_irq_vector(dev->pdev, ceqn + 1);
+>   
+> -	tasklet_init(&dev->ceqs[ceqn].tasklet, erdma_intr_ceq_task,
+> -		     (unsigned long)&dev->ceqs[ceqn]);
+> +	INIT_WORK(&dev->ceqs[ceqn].work, erdma_intr_ceq_task);
+>   
+>   	cpumask_set_cpu(cpumask_local_spread(ceqn + 1, dev->attrs.numa_node),
+>   			&eqc->irq.affinity_hint_mask);
+> diff --git a/drivers/infiniband/hw/hfi1/rc.c b/drivers/infiniband/hw/hfi1/rc.c
+> index b36242c9d42c..ec19ddbfdacb 100644
+> --- a/drivers/infiniband/hw/hfi1/rc.c
+> +++ b/drivers/infiniband/hw/hfi1/rc.c
+> @@ -1210,7 +1210,7 @@ static inline void hfi1_queue_rc_ack(struct hfi1_packet *packet, bool is_fecn)
+>   	if (is_fecn)
+>   		qp->s_flags |= RVT_S_ECN;
+>   
+> -	/* Schedule the send tasklet. */
+> +	/* Schedule the send work. */
+>   	hfi1_schedule_send(qp);
+>   unlock:
+>   	spin_unlock_irqrestore(&qp->s_lock, flags);
+> diff --git a/drivers/infiniband/hw/hfi1/sdma.c b/drivers/infiniband/hw/hfi1/sdma.c
+> index b67d23b1f286..5e1a1dd45511 100644
+> --- a/drivers/infiniband/hw/hfi1/sdma.c
+> +++ b/drivers/infiniband/hw/hfi1/sdma.c
+> @@ -11,6 +11,7 @@
+>   #include <linux/timer.h>
+>   #include <linux/vmalloc.h>
+>   #include <linux/highmem.h>
+> +#include <linux/workqueue.h>
+>   
+>   #include "hfi.h"
+>   #include "common.h"
+> @@ -190,11 +191,11 @@ static const struct sdma_set_state_action sdma_action_table[] = {
+>   static void sdma_complete(struct kref *);
+>   static void sdma_finalput(struct sdma_state *);
+>   static void sdma_get(struct sdma_state *);
+> -static void sdma_hw_clean_up_task(struct tasklet_struct *);
+> +static void sdma_hw_clean_up_task(struct work_struct *);
+>   static void sdma_put(struct sdma_state *);
+>   static void sdma_set_state(struct sdma_engine *, enum sdma_states);
+>   static void sdma_start_hw_clean_up(struct sdma_engine *);
+> -static void sdma_sw_clean_up_task(struct tasklet_struct *);
+> +static void sdma_sw_clean_up_task(struct work_struct *);
+>   static void sdma_sendctrl(struct sdma_engine *, unsigned);
+>   static void init_sdma_regs(struct sdma_engine *, u32, uint);
+>   static void sdma_process_event(
+> @@ -503,9 +504,9 @@ static void sdma_err_progress_check(struct timer_list *t)
+>   	schedule_work(&sde->err_halt_worker);
+>   }
+>   
+> -static void sdma_hw_clean_up_task(struct tasklet_struct *t)
+> +static void sdma_hw_clean_up_task(struct work_struct *t)
+>   {
+> -	struct sdma_engine *sde = from_tasklet(sde, t,
+> +	struct sdma_engine *sde = from_work(sde, t,
+>   					       sdma_hw_clean_up_task);
+>   	u64 statuscsr;
+>   
+> @@ -563,9 +564,9 @@ static void sdma_flush_descq(struct sdma_engine *sde)
+>   		sdma_desc_avail(sde, sdma_descq_freecnt(sde));
+>   }
+>   
+> -static void sdma_sw_clean_up_task(struct tasklet_struct *t)
+> +static void sdma_sw_clean_up_task(struct work_struct *t)
+>   {
+> -	struct sdma_engine *sde = from_tasklet(sde, t, sdma_sw_clean_up_task);
+> +	struct sdma_engine *sde = from_work(sde, t, sdma_sw_clean_up_task);
+>   	unsigned long flags;
+>   
+>   	spin_lock_irqsave(&sde->tail_lock, flags);
+> @@ -624,7 +625,7 @@ static void sdma_sw_tear_down(struct sdma_engine *sde)
+>   
+>   static void sdma_start_hw_clean_up(struct sdma_engine *sde)
+>   {
+> -	tasklet_hi_schedule(&sde->sdma_hw_clean_up_task);
+> +	queue_work(system_bh_highpri_wq, &sde->sdma_hw_clean_up_task);
+>   }
+>   
+>   static void sdma_set_state(struct sdma_engine *sde,
+> @@ -1415,9 +1416,9 @@ int sdma_init(struct hfi1_devdata *dd, u8 port)
+>   		sde->tail_csr =
+>   			get_kctxt_csr_addr(dd, this_idx, SD(TAIL));
+>   
+> -		tasklet_setup(&sde->sdma_hw_clean_up_task,
+> +		INIT_WORK(&sde->sdma_hw_clean_up_task,
+>   			      sdma_hw_clean_up_task);
+> -		tasklet_setup(&sde->sdma_sw_clean_up_task,
+> +		INIT_WORK(&sde->sdma_sw_clean_up_task,
+>   			      sdma_sw_clean_up_task);
+>   		INIT_WORK(&sde->err_halt_worker, sdma_err_halt_wait);
+>   		INIT_WORK(&sde->flush_worker, sdma_field_flush);
+> @@ -2741,7 +2742,7 @@ static void __sdma_process_event(struct sdma_engine *sde,
+>   		switch (event) {
+>   		case sdma_event_e00_go_hw_down:
+>   			sdma_set_state(sde, sdma_state_s00_hw_down);
+> -			tasklet_hi_schedule(&sde->sdma_sw_clean_up_task);
+> +			queue_work(system_bh_highpri_wq, &sde->sdma_sw_clean_up_task);
+>   			break;
+>   		case sdma_event_e10_go_hw_start:
+>   			break;
+> @@ -2783,13 +2784,13 @@ static void __sdma_process_event(struct sdma_engine *sde,
+>   		switch (event) {
+>   		case sdma_event_e00_go_hw_down:
+>   			sdma_set_state(sde, sdma_state_s00_hw_down);
+> -			tasklet_hi_schedule(&sde->sdma_sw_clean_up_task);
+> +			queue_work(system_bh_highpri_wq, &sde->sdma_sw_clean_up_task);
+>   			break;
+>   		case sdma_event_e10_go_hw_start:
+>   			break;
+>   		case sdma_event_e15_hw_halt_done:
+>   			sdma_set_state(sde, sdma_state_s30_sw_clean_up_wait);
+> -			tasklet_hi_schedule(&sde->sdma_sw_clean_up_task);
+> +			queue_work(system_bh_highpri_wq, &sde->sdma_sw_clean_up_task);
+>   			break;
+>   		case sdma_event_e25_hw_clean_up_done:
+>   			break;
+> @@ -2824,13 +2825,13 @@ static void __sdma_process_event(struct sdma_engine *sde,
+>   		switch (event) {
+>   		case sdma_event_e00_go_hw_down:
+>   			sdma_set_state(sde, sdma_state_s00_hw_down);
+> -			tasklet_hi_schedule(&sde->sdma_sw_clean_up_task);
+> +			queue_work(system_bh_highpri_wq, &sde->sdma_sw_clean_up_task);
+>   			break;
+>   		case sdma_event_e10_go_hw_start:
+>   			break;
+>   		case sdma_event_e15_hw_halt_done:
+>   			sdma_set_state(sde, sdma_state_s30_sw_clean_up_wait);
+> -			tasklet_hi_schedule(&sde->sdma_sw_clean_up_task);
+> +			queue_work(system_bh_highpri_wq, &sde->sdma_sw_clean_up_task);
+>   			break;
+>   		case sdma_event_e25_hw_clean_up_done:
+>   			break;
+> @@ -2864,7 +2865,7 @@ static void __sdma_process_event(struct sdma_engine *sde,
+>   		switch (event) {
+>   		case sdma_event_e00_go_hw_down:
+>   			sdma_set_state(sde, sdma_state_s00_hw_down);
+> -			tasklet_hi_schedule(&sde->sdma_sw_clean_up_task);
+> +			queue_work(system_bh_highpri_wq, &sde->sdma_sw_clean_up_task);
+>   			break;
+>   		case sdma_event_e10_go_hw_start:
+>   			break;
+> @@ -2888,7 +2889,7 @@ static void __sdma_process_event(struct sdma_engine *sde,
+>   			break;
+>   		case sdma_event_e81_hw_frozen:
+>   			sdma_set_state(sde, sdma_state_s82_freeze_sw_clean);
+> -			tasklet_hi_schedule(&sde->sdma_sw_clean_up_task);
+> +			queue_work(system_bh_highpri_wq, &sde->sdma_sw_clean_up_task);
+>   			break;
+>   		case sdma_event_e82_hw_unfreeze:
+>   			break;
+> @@ -2903,7 +2904,7 @@ static void __sdma_process_event(struct sdma_engine *sde,
+>   		switch (event) {
+>   		case sdma_event_e00_go_hw_down:
+>   			sdma_set_state(sde, sdma_state_s00_hw_down);
+> -			tasklet_hi_schedule(&sde->sdma_sw_clean_up_task);
+> +			queue_work(system_bh_highpri_wq, &sde->sdma_sw_clean_up_task);
+>   			break;
+>   		case sdma_event_e10_go_hw_start:
+>   			break;
+> @@ -2947,7 +2948,7 @@ static void __sdma_process_event(struct sdma_engine *sde,
+>   		switch (event) {
+>   		case sdma_event_e00_go_hw_down:
+>   			sdma_set_state(sde, sdma_state_s00_hw_down);
+> -			tasklet_hi_schedule(&sde->sdma_sw_clean_up_task);
+> +			queue_work(system_bh_highpri_wq, &sde->sdma_sw_clean_up_task);
+>   			break;
+>   		case sdma_event_e10_go_hw_start:
+>   			break;
+> diff --git a/drivers/infiniband/hw/hfi1/sdma.h b/drivers/infiniband/hw/hfi1/sdma.h
+> index d77246b48434..3f047260cebe 100644
+> --- a/drivers/infiniband/hw/hfi1/sdma.h
+> +++ b/drivers/infiniband/hw/hfi1/sdma.h
+> @@ -11,6 +11,7 @@
+>   #include <asm/byteorder.h>
+>   #include <linux/workqueue.h>
+>   #include <linux/rculist.h>
+> +#include <linux/workqueue.h>
+>   
+>   #include "hfi.h"
+>   #include "verbs.h"
+> @@ -346,11 +347,11 @@ struct sdma_engine {
+>   
+>   	/* CONFIG SDMA for now, just blindly duplicate */
+>   	/* private: */
+> -	struct tasklet_struct sdma_hw_clean_up_task
+> +	struct work_struct sdma_hw_clean_up_task
+>   		____cacheline_aligned_in_smp;
+>   
+>   	/* private: */
+> -	struct tasklet_struct sdma_sw_clean_up_task
+> +	struct work_struct sdma_sw_clean_up_task
+>   		____cacheline_aligned_in_smp;
+>   	/* private: */
+>   	struct work_struct err_halt_worker;
+> @@ -471,7 +472,7 @@ void _sdma_txreq_ahgadd(
+>    * Completions of submitted requests can be gotten on selected
+>    * txreqs by giving a completion routine callback to sdma_txinit() or
+>    * sdma_txinit_ahg().  The environment in which the callback runs
+> - * can be from an ISR, a tasklet, or a thread, so no sleeping
+> + * can be from an ISR, a work, or a thread, so no sleeping
+>    * kernel routines can be used.   Aspects of the sdma ring may
+>    * be locked so care should be taken with locking.
+>    *
+> @@ -551,7 +552,7 @@ static inline int sdma_txinit_ahg(
+>    * Completions of submitted requests can be gotten on selected
+>    * txreqs by giving a completion routine callback to sdma_txinit() or
+>    * sdma_txinit_ahg().  The environment in which the callback runs
+> - * can be from an ISR, a tasklet, or a thread, so no sleeping
+> + * can be from an ISR, a work, or a thread, so no sleeping
+>    * kernel routines can be used.   The head size of the sdma ring may
+>    * be locked so care should be taken with locking.
+>    *
+> diff --git a/drivers/infiniband/hw/hfi1/tid_rdma.c b/drivers/infiniband/hw/hfi1/tid_rdma.c
+> index c465966a1d9c..31cb5a092f42 100644
+> --- a/drivers/infiniband/hw/hfi1/tid_rdma.c
+> +++ b/drivers/infiniband/hw/hfi1/tid_rdma.c
+> @@ -2316,7 +2316,7 @@ void hfi1_rc_rcv_tid_rdma_read_req(struct hfi1_packet *packet)
+>   	 */
+>   	qpriv->r_tid_alloc = qp->r_head_ack_queue;
+>   
+> -	/* Schedule the send tasklet. */
+> +	/* Schedule the send work. */
+>   	qp->s_flags |= RVT_S_RESP_PENDING;
+>   	if (fecn)
+>   		qp->s_flags |= RVT_S_ECN;
+> @@ -3807,7 +3807,7 @@ void hfi1_rc_rcv_tid_rdma_write_req(struct hfi1_packet *packet)
+>   	hfi1_tid_write_alloc_resources(qp, true);
+>   	trace_hfi1_tid_write_rsp_rcv_req(qp);
+>   
+> -	/* Schedule the send tasklet. */
+> +	/* Schedule the send work. */
+>   	qp->s_flags |= RVT_S_RESP_PENDING;
+>   	if (fecn)
+>   		qp->s_flags |= RVT_S_ECN;
+> @@ -5389,7 +5389,7 @@ static void hfi1_do_tid_send(struct rvt_qp *qp)
+>   
+>   			/*
+>   			 * If the packet cannot be sent now, return and
+> -			 * the send tasklet will be woken up later.
+> +			 * the send work will be woken up later.
+>   			 */
+>   			if (hfi1_verbs_send(qp, &ps))
+>   				return;
+> diff --git a/drivers/infiniband/hw/irdma/ctrl.c b/drivers/infiniband/hw/irdma/ctrl.c
+> index 6aed6169c07d..e9644f2b774d 100644
+> --- a/drivers/infiniband/hw/irdma/ctrl.c
+> +++ b/drivers/infiniband/hw/irdma/ctrl.c
+> @@ -5271,7 +5271,7 @@ int irdma_process_cqp_cmd(struct irdma_sc_dev *dev,
+>   }
+>   
+>   /**
+> - * irdma_process_bh - called from tasklet for cqp list
+> + * irdma_process_bh - called from work for cqp list
+>    * @dev: sc device struct
+>    */
+>   int irdma_process_bh(struct irdma_sc_dev *dev)
+> diff --git a/drivers/infiniband/hw/irdma/hw.c b/drivers/infiniband/hw/irdma/hw.c
+> index ad50b77282f8..18d552919c28 100644
+> --- a/drivers/infiniband/hw/irdma/hw.c
+> +++ b/drivers/infiniband/hw/irdma/hw.c
+> @@ -440,12 +440,12 @@ static void irdma_ena_intr(struct irdma_sc_dev *dev, u32 msix_id)
+>   }
+>   
+>   /**
+> - * irdma_dpc - tasklet for aeq and ceq 0
+> - * @t: tasklet_struct ptr
+> + * irdma_dpc - work for aeq and ceq 0
+> + * @t: work_struct ptr
+>    */
+> -static void irdma_dpc(struct tasklet_struct *t)
+> +static void irdma_dpc(struct work_struct *t)
+>   {
+> -	struct irdma_pci_f *rf = from_tasklet(rf, t, dpc_tasklet);
+> +	struct irdma_pci_f *rf = from_work(rf, t, dpc_work);
+>   
+>   	if (rf->msix_shared)
+>   		irdma_process_ceq(rf, rf->ceqlist);
+> @@ -455,11 +455,11 @@ static void irdma_dpc(struct tasklet_struct *t)
+>   
+>   /**
+>    * irdma_ceq_dpc - dpc handler for CEQ
+> - * @t: tasklet_struct ptr
+> + * @t: work_struct ptr
+>    */
+> -static void irdma_ceq_dpc(struct tasklet_struct *t)
+> +static void irdma_ceq_dpc(struct work_struct *t)
+>   {
+> -	struct irdma_ceq *iwceq = from_tasklet(iwceq, t, dpc_tasklet);
+> +	struct irdma_ceq *iwceq = from_work(iwceq, t, dpc_work);
+>   	struct irdma_pci_f *rf = iwceq->rf;
+>   
+>   	irdma_process_ceq(rf, iwceq);
+> @@ -533,7 +533,7 @@ static irqreturn_t irdma_irq_handler(int irq, void *data)
+>   {
+>   	struct irdma_pci_f *rf = data;
+>   
+> -	tasklet_schedule(&rf->dpc_tasklet);
+> +	queue_work(system_bh_wq, &rf->dpc_work);
+>   
+>   	return IRQ_HANDLED;
+>   }
+> @@ -550,7 +550,7 @@ static irqreturn_t irdma_ceq_handler(int irq, void *data)
+>   	if (iwceq->irq != irq)
+>   		ibdev_err(to_ibdev(&iwceq->rf->sc_dev), "expected irq = %d received irq = %d\n",
+>   			  iwceq->irq, irq);
+> -	tasklet_schedule(&iwceq->dpc_tasklet);
+> +	queue_work(system_bh_wq, &iwceq->dpc_work);
+>   
+>   	return IRQ_HANDLED;
+>   }
+> @@ -1121,14 +1121,14 @@ static int irdma_cfg_ceq_vector(struct irdma_pci_f *rf, struct irdma_ceq *iwceq,
+>   	if (rf->msix_shared && !ceq_id) {
+>   		snprintf(msix_vec->name, sizeof(msix_vec->name) - 1,
+>   			 "irdma-%s-AEQCEQ-0", dev_name(&rf->pcidev->dev));
+> -		tasklet_setup(&rf->dpc_tasklet, irdma_dpc);
+> +		INIT_WORK(&rf->dpc_work, irdma_dpc);
+>   		status = request_irq(msix_vec->irq, irdma_irq_handler, 0,
+>   				     msix_vec->name, rf);
+>   	} else {
+>   		snprintf(msix_vec->name, sizeof(msix_vec->name) - 1,
+>   			 "irdma-%s-CEQ-%d",
+>   			 dev_name(&rf->pcidev->dev), ceq_id);
+> -		tasklet_setup(&iwceq->dpc_tasklet, irdma_ceq_dpc);
+> +		INIT_WORK(&iwceq->dpc_work, irdma_ceq_dpc);
+>   
+>   		status = request_irq(msix_vec->irq, irdma_ceq_handler, 0,
+>   				     msix_vec->name, iwceq);
+> @@ -1162,7 +1162,7 @@ static int irdma_cfg_aeq_vector(struct irdma_pci_f *rf)
+>   	if (!rf->msix_shared) {
+>   		snprintf(msix_vec->name, sizeof(msix_vec->name) - 1,
+>   			 "irdma-%s-AEQ", dev_name(&rf->pcidev->dev));
+> -		tasklet_setup(&rf->dpc_tasklet, irdma_dpc);
+> +		INIT_WORK(&rf->dpc_work, irdma_dpc);
+>   		ret = request_irq(msix_vec->irq, irdma_irq_handler, 0,
+>   				  msix_vec->name, rf);
+>   	}
+> diff --git a/drivers/infiniband/hw/irdma/main.h b/drivers/infiniband/hw/irdma/main.h
+> index b65bc2ea542f..54301093b746 100644
+> --- a/drivers/infiniband/hw/irdma/main.h
+> +++ b/drivers/infiniband/hw/irdma/main.h
+> @@ -30,6 +30,7 @@
+>   #endif
+>   #include <linux/auxiliary_bus.h>
+>   #include <linux/net/intel/iidc.h>
+> +#include <linux/workqueue.h>
+>   #include <crypto/hash.h>
+>   #include <rdma/ib_smi.h>
+>   #include <rdma/ib_verbs.h>
+> @@ -192,7 +193,7 @@ struct irdma_ceq {
+>   	u32 irq;
+>   	u32 msix_idx;
+>   	struct irdma_pci_f *rf;
+> -	struct tasklet_struct dpc_tasklet;
+> +	struct work_struct dpc_work;
+>   	spinlock_t ce_lock; /* sync cq destroy with cq completion event notification */
+>   };
+>   
+> @@ -316,7 +317,7 @@ struct irdma_pci_f {
+>   	struct mc_table_list mc_qht_list;
+>   	struct irdma_msix_vector *iw_msixtbl;
+>   	struct irdma_qvlist_info *iw_qvlist;
+> -	struct tasklet_struct dpc_tasklet;
+> +	struct work_struct dpc_work;
+>   	struct msix_entry *msix_entries;
+>   	struct irdma_dma_mem obj_mem;
+>   	struct irdma_dma_mem obj_next;
+> diff --git a/drivers/infiniband/hw/qib/qib.h b/drivers/infiniband/hw/qib/qib.h
+> index 26c615772be3..d2ebaf31ce5a 100644
+> --- a/drivers/infiniband/hw/qib/qib.h
+> +++ b/drivers/infiniband/hw/qib/qib.h
+> @@ -53,6 +53,7 @@
+>   #include <linux/sched.h>
+>   #include <linux/kthread.h>
+>   #include <linux/xarray.h>
+> +#include <linux/workqueue.h>
+>   #include <rdma/ib_hdrs.h>
+>   #include <rdma/rdma_vt.h>
+>   
+> @@ -562,7 +563,7 @@ struct qib_pportdata {
+>   	u8                    sdma_generation;
+>   	u8                    sdma_intrequest;
+>   
+> -	struct tasklet_struct sdma_sw_clean_up_task
+> +	struct work_struct sdma_sw_clean_up_task
+>   		____cacheline_aligned_in_smp;
+>   
+>   	wait_queue_head_t state_wait; /* for state_wanted */
+> @@ -1068,8 +1069,8 @@ struct qib_devdata {
+>   	u8 psxmitwait_supported;
+>   	/* cycle length of PS* counters in HW (in picoseconds) */
+>   	u16 psxmitwait_check_rate;
+> -	/* high volume overflow errors defered to tasklet */
+> -	struct tasklet_struct error_tasklet;
+> +	/* high volume overflow errors defered to work */
+> +	struct work_struct error_work;
+>   
+>   	int assigned_node_id; /* NUMA node closest to HCA */
+>   };
+> diff --git a/drivers/infiniband/hw/qib/qib_iba7322.c b/drivers/infiniband/hw/qib/qib_iba7322.c
+> index f93906d8fc09..c3325071f2b3 100644
+> --- a/drivers/infiniband/hw/qib/qib_iba7322.c
+> +++ b/drivers/infiniband/hw/qib/qib_iba7322.c
+> @@ -46,6 +46,7 @@
+>   #include <rdma/ib_smi.h>
+>   #ifdef CONFIG_INFINIBAND_QIB_DCA
+>   #include <linux/dca.h>
+> +#include <linux/workqueue.h>
+>   #endif
+>   
+>   #include "qib.h"
+> @@ -1711,9 +1712,9 @@ static noinline void handle_7322_errors(struct qib_devdata *dd)
+>   	return;
+>   }
+>   
+> -static void qib_error_tasklet(struct tasklet_struct *t)
+> +static void qib_error_work(struct work_struct *t)
+>   {
+> -	struct qib_devdata *dd = from_tasklet(dd, t, error_tasklet);
+> +	struct qib_devdata *dd = from_work(dd, t, error_work);
+>   
+>   	handle_7322_errors(dd);
+>   	qib_write_kreg(dd, kr_errmask, dd->cspec->errormask);
+> @@ -3001,7 +3002,7 @@ static noinline void unlikely_7322_intr(struct qib_devdata *dd, u64 istat)
+>   		unknown_7322_gpio_intr(dd);
+>   	if (istat & QIB_I_C_ERROR) {
+>   		qib_write_kreg(dd, kr_errmask, 0ULL);
+> -		tasklet_schedule(&dd->error_tasklet);
+> +		queue_work(system_bh_wq, &dd->error_work);
+>   	}
+>   	if (istat & INT_MASK_P(Err, 0) && dd->rcd[0])
+>   		handle_7322_p_errors(dd->rcd[0]->ppd);
+> @@ -3515,7 +3516,7 @@ static void qib_setup_7322_interrupt(struct qib_devdata *dd, int clearpend)
+>   	for (i = 0; i < ARRAY_SIZE(redirect); i++)
+>   		qib_write_kreg(dd, kr_intredirect + i, redirect[i]);
+>   	dd->cspec->main_int_mask = mask;
+> -	tasklet_setup(&dd->error_tasklet, qib_error_tasklet);
+> +	INIT_WORK(&dd->error_work, qib_error_work);
+>   }
+>   
+>   /**
+> diff --git a/drivers/infiniband/hw/qib/qib_rc.c b/drivers/infiniband/hw/qib/qib_rc.c
+> index a1c20ffb4490..79e31921e384 100644
+> --- a/drivers/infiniband/hw/qib/qib_rc.c
+> +++ b/drivers/infiniband/hw/qib/qib_rc.c
+> @@ -593,7 +593,7 @@ int qib_make_rc_req(struct rvt_qp *qp, unsigned long *flags)
+>    *
+>    * This is called from qib_rc_rcv() and qib_kreceive().
+>    * Note that RDMA reads and atomics are handled in the
+> - * send side QP state and tasklet.
+> + * send side QP state and work.
+>    */
+>   void qib_send_rc_ack(struct rvt_qp *qp)
+>   {
+> @@ -670,7 +670,7 @@ void qib_send_rc_ack(struct rvt_qp *qp)
+>   		/*
+>   		 * We are out of PIO buffers at the moment.
+>   		 * Pass responsibility for sending the ACK to the
+> -		 * send tasklet so that when a PIO buffer becomes
+> +		 * send work so that when a PIO buffer becomes
+>   		 * available, the ACK is sent ahead of other outgoing
+>   		 * packets.
+>   		 */
+> @@ -715,7 +715,7 @@ void qib_send_rc_ack(struct rvt_qp *qp)
+>   		qp->s_nak_state = qp->r_nak_state;
+>   		qp->s_ack_psn = qp->r_ack_psn;
+>   
+> -		/* Schedule the send tasklet. */
+> +		/* Schedule the send work. */
+>   		qib_schedule_send(qp);
+>   	}
+>   unlock:
+> @@ -806,7 +806,7 @@ static void reset_psn(struct rvt_qp *qp, u32 psn)
+>   	qp->s_psn = psn;
+>   	/*
+>   	 * Set RVT_S_WAIT_PSN as qib_rc_complete() may start the timer
+> -	 * asynchronously before the send tasklet can get scheduled.
+> +	 * asynchronously before the send work can get scheduled.
+>   	 * Doing it in qib_make_rc_req() is too late.
+>   	 */
+>   	if ((qib_cmp24(qp->s_psn, qp->s_sending_hpsn) <= 0) &&
+> @@ -1292,7 +1292,7 @@ static void qib_rc_rcv_resp(struct qib_ibport *ibp,
+>   		    (qib_cmp24(qp->s_sending_psn, qp->s_sending_hpsn) <= 0)) {
+>   
+>   			/*
+> -			 * If send tasklet not running attempt to progress
+> +			 * If send work not running attempt to progress
+>   			 * SDMA queue.
+>   			 */
+>   			if (!(qp->s_flags & RVT_S_BUSY)) {
+> @@ -1629,7 +1629,7 @@ static int qib_rc_rcv_error(struct ib_other_headers *ohdr,
+>   	case OP(FETCH_ADD): {
+>   		/*
+>   		 * If we didn't find the atomic request in the ack queue
+> -		 * or the send tasklet is already backed up to send an
+> +		 * or the send work is already backed up to send an
+>   		 * earlier entry, we can ignore this request.
+>   		 */
+>   		if (!e || e->opcode != (u8) opcode || old_req)
+> @@ -1996,7 +1996,7 @@ void qib_rc_rcv(struct qib_ctxtdata *rcd, struct ib_header *hdr,
+>   		qp->r_nak_state = 0;
+>   		qp->r_head_ack_queue = next;
+>   
+> -		/* Schedule the send tasklet. */
+> +		/* Schedule the send work. */
+>   		qp->s_flags |= RVT_S_RESP_PENDING;
+>   		qib_schedule_send(qp);
+>   
+> @@ -2059,7 +2059,7 @@ void qib_rc_rcv(struct qib_ctxtdata *rcd, struct ib_header *hdr,
+>   		qp->r_nak_state = 0;
+>   		qp->r_head_ack_queue = next;
+>   
+> -		/* Schedule the send tasklet. */
+> +		/* Schedule the send work. */
+>   		qp->s_flags |= RVT_S_RESP_PENDING;
+>   		qib_schedule_send(qp);
+>   
+> diff --git a/drivers/infiniband/hw/qib/qib_ruc.c b/drivers/infiniband/hw/qib/qib_ruc.c
+> index 1fa21938f310..f44a2a8b4b1e 100644
+> --- a/drivers/infiniband/hw/qib/qib_ruc.c
+> +++ b/drivers/infiniband/hw/qib/qib_ruc.c
+> @@ -257,7 +257,7 @@ void _qib_do_send(struct work_struct *work)
+>    * @qp: pointer to the QP
+>    *
+>    * Process entries in the send work queue until credit or queue is
+> - * exhausted.  Only allow one CPU to send a packet per QP (tasklet).
+> + * exhausted.  Only allow one CPU to send a packet per QP (work).
+>    * Otherwise, two threads could send packets out of order.
+>    */
+>   void qib_do_send(struct rvt_qp *qp)
+> @@ -299,7 +299,7 @@ void qib_do_send(struct rvt_qp *qp)
+>   			spin_unlock_irqrestore(&qp->s_lock, flags);
+>   			/*
+>   			 * If the packet cannot be sent now, return and
+> -			 * the send tasklet will be woken up later.
+> +			 * the send work will be woken up later.
+>   			 */
+>   			if (qib_verbs_send(qp, priv->s_hdr, qp->s_hdrwords,
+>   					   qp->s_cur_sge, qp->s_cur_size))
+> diff --git a/drivers/infiniband/hw/qib/qib_sdma.c b/drivers/infiniband/hw/qib/qib_sdma.c
+> index 5e86cbf7d70e..facb3964d2ec 100644
+> --- a/drivers/infiniband/hw/qib/qib_sdma.c
+> +++ b/drivers/infiniband/hw/qib/qib_sdma.c
+> @@ -34,6 +34,7 @@
+>   #include <linux/spinlock.h>
+>   #include <linux/netdevice.h>
+>   #include <linux/moduleparam.h>
+> +#include <linux/workqueue.h>
+>   
+>   #include "qib.h"
+>   #include "qib_common.h"
+> @@ -62,7 +63,7 @@ static void sdma_get(struct qib_sdma_state *);
+>   static void sdma_put(struct qib_sdma_state *);
+>   static void sdma_set_state(struct qib_pportdata *, enum qib_sdma_states);
+>   static void sdma_start_sw_clean_up(struct qib_pportdata *);
+> -static void sdma_sw_clean_up_task(struct tasklet_struct *);
+> +static void sdma_sw_clean_up_task(struct work_struct *);
+>   static void unmap_desc(struct qib_pportdata *, unsigned);
+>   
+>   static void sdma_get(struct qib_sdma_state *ss)
+> @@ -119,9 +120,9 @@ static void clear_sdma_activelist(struct qib_pportdata *ppd)
+>   	}
+>   }
+>   
+> -static void sdma_sw_clean_up_task(struct tasklet_struct *t)
+> +static void sdma_sw_clean_up_task(struct work_struct *t)
+>   {
+> -	struct qib_pportdata *ppd = from_tasklet(ppd, t,
+> +	struct qib_pportdata *ppd = from_work(ppd, t,
+>   						 sdma_sw_clean_up_task);
+>   	unsigned long flags;
+>   
+> @@ -188,7 +189,7 @@ static void sdma_sw_tear_down(struct qib_pportdata *ppd)
+>   
+>   static void sdma_start_sw_clean_up(struct qib_pportdata *ppd)
+>   {
+> -	tasklet_hi_schedule(&ppd->sdma_sw_clean_up_task);
+> +	queue_work(system_bh_highpri_wq, &ppd->sdma_sw_clean_up_task);
+>   }
+>   
+>   static void sdma_set_state(struct qib_pportdata *ppd,
+> @@ -437,7 +438,7 @@ int qib_setup_sdma(struct qib_pportdata *ppd)
+>   
+>   	INIT_LIST_HEAD(&ppd->sdma_activelist);
+>   
+> -	tasklet_setup(&ppd->sdma_sw_clean_up_task, sdma_sw_clean_up_task);
+> +	INIT_WORK(&ppd->sdma_sw_clean_up_task, sdma_sw_clean_up_task);
+>   
+>   	ret = dd->f_init_sdma_regs(ppd);
+>   	if (ret)
+> diff --git a/drivers/infiniband/sw/rdmavt/qp.c b/drivers/infiniband/sw/rdmavt/qp.c
+> index e6203e26cc06..efe4689151c2 100644
+> --- a/drivers/infiniband/sw/rdmavt/qp.c
+> +++ b/drivers/infiniband/sw/rdmavt/qp.c
+> @@ -1306,7 +1306,7 @@ int rvt_error_qp(struct rvt_qp *qp, enum ib_wc_status err)
+>   
+>   	rdi->driver_f.notify_error_qp(qp);
+>   
+> -	/* Schedule the sending tasklet to drain the send work queue. */
+> +	/* Schedule the sending work to drain the send work queue. */
+>   	if (READ_ONCE(qp->s_last) != qp->s_head)
+>   		rdi->driver_f.schedule_send(qp);
+>   
+
 
