@@ -1,177 +1,120 @@
-Return-Path: <linux-mips+bounces-2628-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2629-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9573689BC9B
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Apr 2024 12:04:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4ABA589BE45
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Apr 2024 13:45:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CBE14B21102
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Apr 2024 10:04:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFAA31F22748
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Apr 2024 11:45:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ADC552F6B;
-	Mon,  8 Apr 2024 10:04:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4011969E01;
+	Mon,  8 Apr 2024 11:45:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="V1m9DY18"
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="h0ErTczH"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 144A84EB3D;
-	Mon,  8 Apr 2024 10:04:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4976769DF5;
+	Mon,  8 Apr 2024 11:45:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712570662; cv=none; b=GDwaMx5d0F2vD5YytD5yojIKNSI4sCYDBkB7rRrfLlUvaxKThN1M8hK5PpXaY1lHLRCUgton/htXO+D4TeDVO8JdYOQ4nf/oU7qWKGXYnkW5zTfpVvsKzdClp6gMeNqmeQ6uFVCTIrv/PpYrnKTe+vvY5lHw7WN5rNa7uOUXx5M=
+	t=1712576726; cv=none; b=rI9sD6GSZZjmPHMB7/V+piQP9ggjZw89UBx5AI2g0M5DbVrVhvrCdcSD3HezLiwj/K6MSjj9R2zh7/ubBPVOYn5vk3eoExaho/721opaVlfNmVIzaPHnPmhocDOom8NwhzoSjsVzuS++88Y7u3Fjq22hKWbZP5NhNK4DrAuqvOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712570662; c=relaxed/simple;
-	bh=7Um93ynodoKWvmi4hudSQ6ODRbJB2kpvSRbso69Gbb0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID:
-	 Content-Type:MIME-Version; b=NKjnsSbiRp4IZpjZe1msAQqMNApu96BxB5dCVMfisWNM3jfA1oZKRdgmBehRABZki2inWVx4zkNEsAycXXR8NRqZkCPqhSq7audkvpgZCo36byNGOnFGbrBFRS5oev5ka3ebc7UjI48SJVTk8FxjMLSHYj3AnS4jlacRaDOtLOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=V1m9DY18; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 4389vTLC024196;
-	Mon, 8 Apr 2024 10:03:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : reply-to : in-reply-to : references : message-id : content-type
- : content-transfer-encoding : mime-version; s=pp1;
- bh=WGRw+wpQ+8BkQKcdJ/jvqWzRkTuOQNEebcPy5PQD4Kw=;
- b=V1m9DY18uGHMz8vh9IxAKCdhy2XzRwg7vXDe5eU16f5nEfVNyFSH2bkwzlSGAU2+MppO
- 4KiihhZ6Fk01FJPzdXSR1BLEuGht8lFKOYZkgyQ+XDX6d86NzlDgaIq0J9qJC+jfnfB7
- aEeGTfrHV1qJLbUVw7VwF0wJD3GQGVNebGmuEEwqhBLJ9iqNw/OPA1h1UuFrYBwI63SP
- L8QiPE5Ov/+xNvSEFsQF6+fJ779nZgk/JgjuEZ8d5Yw4SPP9YYyN9phnIKPRv8VXU/FC
- LdWtpshSMMqQ0phdyUamMRN3ZDDlZNvPvkSzaRMK+nFo6z+Im4121GSQHwYWxTP0de2t 7g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xceda00e7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Apr 2024 10:03:21 +0000
-Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 438A3KAu002830;
-	Mon, 8 Apr 2024 10:03:20 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xceda00e4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Apr 2024 10:03:20 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 4387uZ0H019096;
-	Mon, 8 Apr 2024 10:03:18 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3xbh3yym76-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Apr 2024 10:03:18 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 438A3FKl53084522
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 8 Apr 2024 10:03:18 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D2E1D58058;
-	Mon,  8 Apr 2024 10:03:15 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id F35F85806B;
-	Mon,  8 Apr 2024 10:03:10 +0000 (GMT)
-Received: from ltc.linux.ibm.com (unknown [9.5.196.140])
-	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  8 Apr 2024 10:03:10 +0000 (GMT)
-Date: Mon, 08 Apr 2024 12:03:10 +0200
-From: Harald Freudenberger <freude@linux.ibm.com>
-To: Allen Pais <apais@linux.microsoft.com>
-Cc: linux-kernel@vger.kernel.org, tj@kernel.org, keescook@chromium.org,
-        vkoul@kernel.org, marcan@marcan.st, sven@svenpeter.dev,
-        florian.fainelli@broadcom.com, rjui@broadcom.com,
-        sbranden@broadcom.com, paul@crapouillou.net,
-        Eugeniy.Paltsev@synopsys.com, manivannan.sadhasivam@linaro.org,
-        vireshk@kernel.org, Frank.Li@nxp.com, leoyang.li@nxp.com,
-        zw@zh-kernel.org, wangzhou1@hisilicon.com, haijie1@huawei.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, sean.wang@mediatek.com,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        afaerber@suse.de, logang@deltatee.com, daniel@zonque.org,
-        haojian.zhuang@gmail.com, robert.jarzmik@free.fr, andersson@kernel.org,
-        konrad.dybcio@linaro.org, orsonzhai@gmail.com,
-        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
-        patrice.chotard@foss.st.com, linus.walleij@linaro.org, wens@csie.org,
-        jernej.skrabec@gmail.com, peter.ujfalusi@gmail.com, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        jassisinghbrar@gmail.com, mchehab@kernel.org,
-        maintainers@bluecherrydvr.com, aubin.constans@microchip.com,
-        ulf.hansson@linaro.org, manuel.lauss@gmail.com,
-        mirq-linux@rere.qmqm.pl, jh80.chung@samsung.com, oakad@yahoo.com,
-        hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
-        brucechang@via.com.tw, HaraldWelte@viatech.com, pierre@ossman.eu,
-        duncan.sands@free.fr, stern@rowland.harvard.edu, oneukum@suse.com,
-        openipmi-developer@lists.sourceforge.net, dmaengine@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        imx@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-        linux-mediatek@lists.infradead.org, linux-actions@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, Holger Dengler <dengler@linux.ibm.com>
-Subject: Re: [PATCH 7/9] s390: Convert from tasklet to BH workqueue
-Reply-To: freude@linux.ibm.com
-Mail-Reply-To: freude@linux.ibm.com
-In-Reply-To: <20240327160314.9982-8-apais@linux.microsoft.com>
-References: <20240327160314.9982-1-apais@linux.microsoft.com>
- <20240327160314.9982-8-apais@linux.microsoft.com>
-Message-ID: <702594ec5852c482f96cfcf84a02cab2@linux.ibm.com>
-X-Sender: freude@linux.ibm.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: vcJ1PwKFq1RysBO3jh1OFUS_rcqMuAYv
-X-Proofpoint-ORIG-GUID: X3ilzQ7TzOIWEyFQfqPrw-z8aSdSkVVd
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1712576726; c=relaxed/simple;
+	bh=Lvr4Q9WQMTuj4LqkHya0HKL9JodxZNBHVeLenTpYopw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=EDXwRu52Sy9oXr+MuO/StmrzEo+2LLChmj2Uql18uwMhNSV33XlQ9cAv9nmcOoQjH8xfj2W9i0v9G7Hf+u7pzCYevQzbvTBDPz3aZV3LeBUuXR/aNTddr9wR5jtRUcKxHD7jSV5h2SJYSM0u5/SdsicfQB9UkXvEwYwzx0KOQJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=h0ErTczH; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1712576721;
+	bh=taqzyuzUm+h1dAr9up1EmBlmxQ7Pw3TT7Dqle3r+vfk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=h0ErTczH+J8eOKMVXpItrHYKRUMh+pxxcV6/0CoHG40VtMk6SjHBicTMij8g0QPcl
+	 DqWHMNnSfi+fwP5HiCdifsYmHpkp4Xn+DbOgdxU7qWixZBXfw3jqmo2Mf9TSyh+dfR
+	 6VbzGd3EpRZksCPRiEZyrpuPnkVP77GEek1dnGxxPTCQfwlANrE42GRZMWo8lTHAps
+	 +9qTuFxiU3mHHBuAnio0EBxVUDdvEu22B/D31hrzTZyHyg754PmZ251qNdGHU6OTRk
+	 8cDtgXORRLDOqu5a0FunAuYei0U3LrNTqxk35BBWQCXaFVALq9JB3md16kAgiWqViN
+	 5wPghIA4bJBwA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VCnMf3rffz4wcF;
+	Mon,  8 Apr 2024 21:45:18 +1000 (AEST)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
+ Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Nicholas Piggin
+ <npiggin@gmail.com>, Anup Patel <anup@brainfault.org>, Atish Patra
+ <atishp@atishpatra.org>, Sean Christopherson <seanjc@google.com>, Andrew
+ Morton <akpm@linux-foundation.org>, David Hildenbrand <david@redhat.com>,
+ linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+ loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+ linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH 1/4] KVM: delete .change_pte MMU notifier callback
+In-Reply-To: <20240405115815.3226315-2-pbonzini@redhat.com>
+References: <20240405115815.3226315-1-pbonzini@redhat.com>
+ <20240405115815.3226315-2-pbonzini@redhat.com>
+Date: Mon, 08 Apr 2024 21:45:18 +1000
+Message-ID: <87h6gcaxip.fsf@mail.lhotse>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-08_08,2024-04-05_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=918
- lowpriorityscore=0 bulkscore=0 spamscore=0 adultscore=0 priorityscore=1501
- malwarescore=0 phishscore=0 impostorscore=0 clxscore=1011 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2404010000
- definitions=main-2404080077
+Content-Type: text/plain
 
-On 2024-03-27 17:03, Allen Pais wrote:
-> The only generic interface to execute asynchronously in the BH context 
-> is
-> tasklet; however, it's marked deprecated and has some design flaws. To
-> replace tasklets, BH workqueue support was recently added. A BH 
-> workqueue
-> behaves similarly to regular workqueues except that the queued work 
-> items
-> are executed in the BH context.
-> 
-> This patch converts drivers/infiniband/* from tasklet to BH workqueue.
-> 
-> Based on the work done by Tejun Heo <tj@kernel.org>
-> Branch: https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git 
-> for-6.10
-> 
-> Note: Not tested. Please test/review.
-> 
-> Signed-off-by: Allen Pais <allen.lkml@gmail.com>
+Paolo Bonzini <pbonzini@redhat.com> writes:
+> The .change_pte() MMU notifier callback was intended as an
+> optimization. The original point of it was that KSM could tell KVM to flip
+> its secondary PTE to a new location without having to first zap it. At
+> the time there was also an .invalidate_page() callback; both of them were
+> *not* bracketed by calls to mmu_notifier_invalidate_range_{start,end}(),
+> and .invalidate_page() also doubled as a fallback implementation of
+> .change_pte().
+>
+> Later on, however, both callbacks were changed to occur within an
+> invalidate_range_start/end() block.
+>
+> In the case of .change_pte(), commit 6bdb913f0a70 ("mm: wrap calls to
+> set_pte_at_notify with invalidate_range_start and invalidate_range_end",
+> 2012-10-09) did so to remove the fallback from .invalidate_page() to
+> .change_pte() and allow sleepable .invalidate_page() hooks.
+>
+> This however made KVM's usage of the .change_pte() callback completely
+> moot, because KVM unmaps the sPTEs during .invalidate_range_start()
+> and therefore .change_pte() has no hope of finding a sPTE to change.
+> Drop the generic KVM code that dispatches to kvm_set_spte_gfn(), as
+> well as all the architecture specific implementations.
+>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > ---
-> ...
->  drivers/s390/crypto/ap_bus.c           | 24 +++++++-------
->  drivers/s390/crypto/ap_bus.h           |  2 +-
->  drivers/s390/crypto/zcrypt_msgtype50.c |  2 +-
->  drivers/s390/crypto/zcrypt_msgtype6.c  |  4 +--
-> ...
+>  arch/arm64/kvm/mmu.c                  | 34 -----------------
+>  arch/loongarch/include/asm/kvm_host.h |  1 -
+>  arch/loongarch/kvm/mmu.c              | 32 ----------------
+>  arch/mips/kvm/mmu.c                   | 30 ---------------
+>  arch/powerpc/include/asm/kvm_ppc.h    |  1 -
+>  arch/powerpc/kvm/book3s.c             |  5 ---
+>  arch/powerpc/kvm/book3s.h             |  1 -
+>  arch/powerpc/kvm/book3s_64_mmu_hv.c   | 12 ------
+>  arch/powerpc/kvm/book3s_hv.c          |  1 -
+>  arch/powerpc/kvm/book3s_pr.c          |  7 ----
+>  arch/powerpc/kvm/e500_mmu_host.c      |  6 ---
 
-Applied and tested the s390 AP bus and zcrypt part of the patch.
-Works fine, a sniff test did not show any problems.
-Thanks for your work.
+LGTM.
 
-Reviewed-by: Harald Freudenberger <freude@linux.ibm.com>
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+
+cheers
 
