@@ -1,118 +1,108 @@
-Return-Path: <linux-mips+bounces-2644-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2645-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1F5489CB4F
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Apr 2024 19:57:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 380E689D621
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Apr 2024 11:58:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CA83282A26
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Apr 2024 17:57:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE1881F2490A
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Apr 2024 09:58:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBF68143C7A;
-	Mon,  8 Apr 2024 17:57:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BED7E8060A;
+	Tue,  9 Apr 2024 09:58:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kvbLmrdO"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="yUJNjNeK";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="RudeqC4D"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A8DF1E489;
-	Mon,  8 Apr 2024 17:57:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 240BC8004F;
+	Tue,  9 Apr 2024 09:58:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712599064; cv=none; b=CcW2EOSVPa9Xw8KYIyeRVMNq7Bli5tt5sXITVzx329Jb/KRKwvZuaHHB8ejU3IJUYccEjwXaztwkr4iMyJza9GKY2IgKlzbCT22BvJUwF2hRMrOCoXp9Bj7e1WQw/ywsWWdXe3GuIpCoaLTqw+6V8oqEWkgsJS+VtW18yegS7lw=
+	t=1712656718; cv=none; b=Tj+nnyQVusnGWRNpgmu+U+0WJblWge8sG6wUpzbfX6X6YEiDqLhq+Qnv6lml0lc5iANrf1ILf5VNvIHjMcJzAqz2pekFBqMAkRMoru8QoFkq3h63HJanyFIi/ERp0np9XbWfy6sedXqk9xWD3t0Gie8RIwDJTJEsxn2+sSTI8vw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712599064; c=relaxed/simple;
-	bh=38xl/39xHyX9p6uux9sbNynsxqvNDIzxrbqqGV2Ia7A=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=ikV9XBCqbW4QGB1QIY6Zg9NPNw80F6GPzyYz/6asXg4u/0tO4yE3RXE8GQ+DAG0KvY8kXiUYUdTwqiEx1UcU5CthTCBLBnksCkwLWaammQYlFfzxc5Xlparzb7bsDb4Us2KlrjrkXFD/P9GL5t3Gdwh0ktYVjjDkLvyg0Y6D57Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kvbLmrdO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1128BC433F1;
-	Mon,  8 Apr 2024 17:57:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712599064;
-	bh=38xl/39xHyX9p6uux9sbNynsxqvNDIzxrbqqGV2Ia7A=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=kvbLmrdOdq759DeSzwgWiRlTkPEBE3SIzbWhMl/z6apsp8s3PT2iihcbqDfyM1iJd
-	 oNXSiPSmi+to4x/YMcTVwf29lgEGpQQaiuDvePQtYTvmn+cFPzpQALu+aG4Dau97mX
-	 iWTGt1+xlP57k3ojlinjdgD5sHjpudV+RdVNgaSvzTuRoK2MU04ZzYJus8oxzENMjd
-	 Jy73Fh7acaurjtqJh6up+A44I63smoGe23UGXu0RT627biSIMzcz/mdL9lodcUkxJT
-	 sBVLMOMC7Hk01inV77cHw3burUcAoHxYr0t9xtUgfx/xBXLrzRPq9TNJmLxiqRf4He
-	 1N+WveIha/vRA==
-From: Mark Brown <broonie@kernel.org>
-To: Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Vaishnav Achath <vaishnav.a@ti.com>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Rob Herring <robh@kernel.org>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- Gregory CLEMENT <gregory.clement@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20240405-cdns-qspi-mbly-v2-0-956679866d6d@bootlin.com>
-References: <20240405-cdns-qspi-mbly-v2-0-956679866d6d@bootlin.com>
-Subject: Re: (subset) [PATCH v2 00/11] spi: cadence-qspi: add Mobileye
- EyeQ5 support
-Message-Id: <171259906078.120310.15397790336440498713.b4-ty@kernel.org>
-Date: Mon, 08 Apr 2024 18:57:40 +0100
+	s=arc-20240116; t=1712656718; c=relaxed/simple;
+	bh=TDWicARIPMuMDq2ra9wZntrVl26yeJtNleDsR89JkN0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=QHrRECpUkFfY7O+Gg+UHd6DzKZJbI698cwnWnzbwz2mO3RgkvjPBKyOSmWreNRna7FRxfgl6FPtgi83g9rH9sbxPzKxfiLvQVlpTDqJDvKyOMePmxiqQBvHVxCXsJ166BqpKHWbHFjD6qRNGKGqPzFr2Krbd0OxwYNIUFVN9hRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=yUJNjNeK; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=RudeqC4D; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1712656715;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qKspgdo2jemqpn3T00b+Xa65C9dMoGtY4Dq7FXO0Tyg=;
+	b=yUJNjNeKDiThpVYIfc/hToqHg6dkX3L/HoTYvzbPfhlp1m8uKGs2XlnA7L8y5fI5N4cOFQ
+	dQ32nytZ/3UjhNV3dbTOO3Jfj16arUKQd3ugTeQbmVrxaxteUt94atCZh9WNssL7HPPxr3
+	pCn1ZaCza7yC716aaOz0E9ElJsPiAsyL6aSGwchk4R4+heV6rolxLRbt3rqpDlNbHV0Zsg
+	LM1od7FRSc1KMmptgN9TzUpAkmHkOtD8w6Z/GiQIOQr0nIuvqpNqMb/4UrsnnroGwkCm8s
+	MZ283Al2wq+ZdOXvpPy3OWQoVsoJT3sajNpnJ3c4lnq/exiGmnSga1uqUzT3tA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1712656715;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qKspgdo2jemqpn3T00b+Xa65C9dMoGtY4Dq7FXO0Tyg=;
+	b=RudeqC4DlrksEdfkH3Xkz8ONgur7Wdpdnh1N4nAB5MWJHlWx6HGF7wJP3MPuxDdcYmBaf0
+	oxZPsIOLB3/qZhBw==
+To: Bitao Hu <yaoma@linux.alibaba.com>, dianders@chromium.org,
+ liusong@linux.alibaba.com, akpm@linux-foundation.org, pmladek@suse.com,
+ kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com,
+ tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+ jan.kiszka@siemens.com
+Cc: linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ yaoma@linux.alibaba.com
+Subject: Re: [PATCHv12 1/4] genirq: Provide a snapshot mechanism for
+ interrupt statistics
+In-Reply-To: <20240306125208.71803-2-yaoma@linux.alibaba.com>
+References: <20240306125208.71803-1-yaoma@linux.alibaba.com>
+ <20240306125208.71803-2-yaoma@linux.alibaba.com>
+Date: Tue, 09 Apr 2024 11:58:34 +0200
+Message-ID: <87frvu7t85.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.14-dev
+Content-Type: text/plain
 
-On Fri, 05 Apr 2024 17:02:10 +0200, Théo Lebrun wrote:
-> V2 of this series adding octal SPI-NOR support to Mobileye EyeQ5
-> platform. It has been tested on EyeQ5 hardware successfully.
-> V1 cover letter [5] contains a brief summary of what gets added.
-> 
-> There is no dependency except if you want zero errors in devicetree:
-> system-controller series [3] for <&clocks> phandle.
-> 
-> [...]
+On Wed, Mar 06 2024 at 20:52, Bitao Hu wrote:
+> The soft lockup detector lacks a mechanism to identify interrupt storms
+> as root cause of a lockup. To enable this the detector needs a
+> mechanism to snapshot the interrupt count statistics on a CPU when the
+> detector observes a potential lockup scenario and compare that against
+> the interrupt count when it warns about the lockup later on. The number
+> of interrupts in that period give a hint whether the lockup might be
+> caused by an interrupt storm.
+>
+> Instead of having extra storage in the lockup detector and accessing
+> the internals of the interrupt descriptor directly, convert the per CPU
+> irq_desc::kstat_irq member to a data structure which contains the
+> counter plus a snapshot member and provide interfaces to take a
+> snapshot of all interrupts on the current CPU and to retrieve the delta
+> of a specific interrupt later on.
+>
+> Originally-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Bitao Hu <yaoma@linux.alibaba.com>
+> Reviewed-by: Liu Song <liusong@linux.alibaba.com>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
-Applied to
+This does not apply anymore.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[03/11] spi: cadence-qspi: allow building for MIPS
-        commit: 708eafeba9eec51c5bde8efef2a7c22d7113b771
-[04/11] spi: cadence-qspi: store device data pointer in private struct
-        commit: dcc594aef1bf3a6a49b77ad2c0348d894b7cd956
-[06/11] spi: cadence-qspi: minimise register accesses on each op if !DTR
-        commit: 563f8598cbc246a81d256e0e888dc085504caa90
-[07/11] spi: cadence-qspi: add no-IRQ mode to indirect reads
-        (no commit info)
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Also can you please split this apart to convert kstat_irqs to a struct
+with just the count in it and then add the snapshot mechanics on top.
 
 Thanks,
-Mark
+
+        tglx
 
 
