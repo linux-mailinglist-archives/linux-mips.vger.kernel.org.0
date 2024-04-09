@@ -1,125 +1,84 @@
-Return-Path: <linux-mips+bounces-2648-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2649-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67D1689DC13
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Apr 2024 16:20:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C96889DF0B
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Apr 2024 17:29:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DFF91F22CF4
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Apr 2024 14:20:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D8C21C219C7
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Apr 2024 15:29:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90D6812FB1D;
-	Tue,  9 Apr 2024 14:20:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="pcoVXCGB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B12E13D251;
+	Tue,  9 Apr 2024 15:26:01 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E10112F5BD;
-	Tue,  9 Apr 2024 14:20:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.50.220
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 002AC1304BD;
+	Tue,  9 Apr 2024 15:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712672421; cv=none; b=q7TXrfyGc3wG4mWGpI43KOuCotPosDyvYHd1eL0HOKbK4oxAcp4SS0TVqi92gEbpQkJm/bIgUlWU7BVlYfM4dE67oE0QbL+Kr/NRRoDXTB3O5kjwTe1FPKFzNpPj6T9Hc3z5Sebz/fX2w7dPDaznYyIMkkuBQfUs6u8dwYDYKLI=
+	t=1712676361; cv=none; b=Fw6ajb5oZWP3KvZfInX5qSnZLtrvoWJREh4SdnEQ0sgOSCVGs2m/h3LzAbubT5sH8OZBHhLa/EaEFUb2huD0jNHUEW8TApAQ+bho94onhqR4Vmd+z2KFRLAH5HHGKStCYvjQs0KPHH7f8N9PqMCCnxYbzrJIauujg+y2ooB5EFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712672421; c=relaxed/simple;
-	bh=eR8mjObwrnxacavEWLjfNBi8mwmRrdwSFLbY2h+f4BA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pud5QLJ7eAiVpOsdwjpY9uGEYrayP5rRE3jc4VrdCn7ayhc5asFNAxBFDaDAMnQnX5HXtbpJFEAysE7FJQeKC8bjWsGKE1+ZeAnslwIkttwTnLwZ6geJe/jaBzaZeThO4GfPF0/xTRIbZrZ72NnQJSmNWRu0kPQKdFtXuoyCznI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=pcoVXCGB; arc=none smtp.client-ip=45.254.50.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=KCt6W
-	vX38grmIkpZ6PL0d3x3MonnLIxac4chg0TbkU0=; b=pcoVXCGBcf3ls8oM/5EwT
-	uSID642AiI/E7VjA1lR/aiVBBSfxTlGdc/k7jd4YafZmEPPnHmVvWI+tF9uSNkRd
-	uCP5a8CITybzK097P8sS82+twb0JF/fJTAJYNj+vNKPhtgktDeNNNTl5e6O03F/b
-	+tJiSf6mCAoVIGjELc9TLM=
-Received: from localhost.localdomain (unknown [101.86.11.106])
-	by gzga-smtp-mta-g0-1 (Coremail) with SMTP id _____wDndzFkThVmu5ZqAg--.477S4;
-	Tue, 09 Apr 2024 22:19:45 +0800 (CST)
-From: Lizhe <sensor1010@163.com>
-To: rafael@kernel.org,
-	viresh.kumar@linaro.org,
-	axun.yang@flygoat.com
-Cc: linux-pm@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Lizhe <sensor1010@163.com>
-Subject: [PATCH] cpufreq: Remove redundant exit() functions
-Date: Tue,  9 Apr 2024 07:19:09 -0700
-Message-Id: <20240409141909.4413-1-sensor1010@163.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1712676361; c=relaxed/simple;
+	bh=X2IfKt2qfJOWHO4OqiBIlMOe/82/ecVxOkQzXgLMQkQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=izvDVZDQ4VXoP2StHQUT/i6HSRRp4XUcknRu5yv9UjCEUkkJ+E1S6y3nM6uAolSYpU2gnkoSLwiobmJJaPxNYL6WErABAbXKeuAM8ZjeCwtPYUm5aXWx9TBsttD175q1xK5W6wiGsD96nSbJjhBbtMgRVyNa490WRdWUMgkdyP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1ruCwh-0002sV-00; Tue, 09 Apr 2024 16:59:35 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 7DB4FC0135; Tue,  9 Apr 2024 16:59:02 +0200 (CEST)
+Date: Tue, 9 Apr 2024 16:59:02 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Oleg Nesterov <oleg@redhat.com>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Xi Ruoyao <xry111@xry111.site>
+Subject: Re: [PATCH] MIPS: scall: Save thread_info.syscall unconditionally on
+ entry
+Message-ID: <ZhVXtv7CX7CGm3R6@alpha.franken.de>
+References: <20240328-mips_save_syscall-v1-1-9e1d62d6999d@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDndzFkThVmu5ZqAg--.477S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJF1UCF1UKw13XF1xtrW8Zwb_yoW8CrW3pF
-	W3ZrWUur1rJFWqq3Zru3ykW3W5u3ZFyFyDGFW7GwnYvF13AF15W3WUKFyUZrZ5CrykGFsI
-	vF1kXay7GF48JrUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRI38UUUUUU=
-X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/1tbiSAe7q2XAk0aYWwABst
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240328-mips_save_syscall-v1-1-9e1d62d6999d@flygoat.com>
 
-The return value of exit() is 0 and it performs no action.
-This function can be omitted. Please refer to the end condition
-check in the __cpufreq_offline() function.
+On Thu, Mar 28, 2024 at 02:27:56PM +0000, Jiaxun Yang wrote:
+> thread_info.syscall is used by syscall_get_nr to supply syscall nr
+> over a thread stack frame.
+> 
+> Previously, thread_info.syscall is only saved at syscall_trace_enter
+> when syscall tracing is enabled. However rest of the kernel code do
+> expect syscall_get_nr to be available without syscall tracing. The
+> previous design breaks collect_syscall.
+> 
+> Move saving process to syscall entry to fix it.
+> 
+> Reported-by: Xi Ruoyao <xry111@xry111.site>
+> Link: https://github.com/util-linux/util-linux/issues/2867
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  arch/mips/include/asm/ptrace.h |  2 +-
+>  arch/mips/kernel/asm-offsets.c |  1 +
+>  arch/mips/kernel/ptrace.c      | 15 ++++++---------
+>  arch/mips/kernel/scall32-o32.S | 23 +++++++++++++----------
+>  arch/mips/kernel/scall64-n32.S |  3 ++-
+>  arch/mips/kernel/scall64-n64.S |  3 ++-
+>  arch/mips/kernel/scall64-o32.S | 33 +++++++++++++++++----------------
+>  7 files changed, 42 insertions(+), 38 deletions(-)
 
-Signed-off-by: Lizhe <sensor1010@163.com>
----
- drivers/cpufreq/cpufreq-nforce2.c   | 6 ------
- drivers/cpufreq/loongson2_cpufreq.c | 6 ------
- 2 files changed, 12 deletions(-)
+applied to mips-fixes.
 
-diff --git a/drivers/cpufreq/cpufreq-nforce2.c b/drivers/cpufreq/cpufreq-nforce2.c
-index f7a7bcf6f52e..fedad1081973 100644
---- a/drivers/cpufreq/cpufreq-nforce2.c
-+++ b/drivers/cpufreq/cpufreq-nforce2.c
-@@ -359,11 +359,6 @@ static int nforce2_cpu_init(struct cpufreq_policy *policy)
- 	return 0;
- }
- 
--static int nforce2_cpu_exit(struct cpufreq_policy *policy)
--{
--	return 0;
--}
--
- static struct cpufreq_driver nforce2_driver = {
- 	.name = "nforce2",
- 	.flags = CPUFREQ_NO_AUTO_DYNAMIC_SWITCHING,
-@@ -371,7 +366,6 @@ static struct cpufreq_driver nforce2_driver = {
- 	.target = nforce2_target,
- 	.get = nforce2_get,
- 	.init = nforce2_cpu_init,
--	.exit = nforce2_cpu_exit,
- };
- 
- #ifdef MODULE
-diff --git a/drivers/cpufreq/loongson2_cpufreq.c b/drivers/cpufreq/loongson2_cpufreq.c
-index afc59b292153..6a8e97896d38 100644
---- a/drivers/cpufreq/loongson2_cpufreq.c
-+++ b/drivers/cpufreq/loongson2_cpufreq.c
-@@ -85,18 +85,12 @@ static int loongson2_cpufreq_cpu_init(struct cpufreq_policy *policy)
- 	return 0;
- }
- 
--static int loongson2_cpufreq_exit(struct cpufreq_policy *policy)
--{
--	return 0;
--}
--
- static struct cpufreq_driver loongson2_cpufreq_driver = {
- 	.name = "loongson2",
- 	.init = loongson2_cpufreq_cpu_init,
- 	.verify = cpufreq_generic_frequency_table_verify,
- 	.target_index = loongson2_cpufreq_target,
- 	.get = cpufreq_generic_get,
--	.exit = loongson2_cpufreq_exit,
- 	.attr = cpufreq_generic_attr,
- };
- 
+Thomas.
+
 -- 
-2.25.1
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
