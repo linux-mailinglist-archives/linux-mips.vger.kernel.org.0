@@ -1,92 +1,77 @@
-Return-Path: <linux-mips+bounces-2681-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2682-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E04A08A013A
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 22:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CBDA78A021E
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 23:30:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D0561C23285
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 20:23:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03C3E1C21E96
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 21:30:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00DF41836E0;
-	Wed, 10 Apr 2024 20:22:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C365E184107;
+	Wed, 10 Apr 2024 21:30:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WAxFe44W"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="JFp1xYoQ"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3C5F1836D8;
-	Wed, 10 Apr 2024 20:22:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CAB6181D19;
+	Wed, 10 Apr 2024 21:30:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712780575; cv=none; b=EWSYAMWiyvvkGL+77UTeAEvAtQ9HgjKsCevp5UhPom5o+fe5izq6gBBm9spX1B2d3JpUMYgT6BEo4TGXTwOHaTMPbuqpmj99R09yEXgP2g3hkfyCry+rzbYE0APMOGqtuIbjsE292GvXRgOay78vUQSrYj7jfYxVGwlaqwBg25k=
+	t=1712784622; cv=none; b=lTLgg42KzFAluHZid+Rnm+BAuLydkteZUiLtOgWEsgNkc7RWHvBmYWvQxp0e9HqS7PEvvFOv03XVjJcP5EhYd5wliLoQ9l3H+f4/XukV21+I0unlW1ANLeOfedgqNb33YiXvTZeosuz9fEDGsXjHoscuixJ6SqX2Z0WvSut/Dtw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712780575; c=relaxed/simple;
-	bh=zvb47o4mf8GUH8SVKa0m5GiIb1eeKuKunwVjqMtmuhk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N/WU2SLFYdPINbqqPOWlP0CF9Dzkli8br1yc/1m8bcicWCsSSOzKmh/sxO7dabVtpRV9Lnxl+1i1LKmWtCuDx8rn5TwZHGQnfpRGjS7LZtUqjNERSojjZoFnTuMjVuGCPagCuH8Qmm/CCBzFvuRlasiLUe4t5bAScihBTnKmJK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WAxFe44W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 759F2C43394;
-	Wed, 10 Apr 2024 20:22:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712780575;
-	bh=zvb47o4mf8GUH8SVKa0m5GiIb1eeKuKunwVjqMtmuhk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WAxFe44Wo9BGnqrVxsazyCzHllK6MSAnUlKym5Kj51SsjK0vgNjrmieVANrt6HX+G
-	 qQLEKWx5FAWHk42/PSn8UCU0XiCsvKwv1Cq1RSNJUoLiAFYldoa/naDB8idGENz8Cn
-	 7oaS8fmWVd8LGC+mpBxWyO9BkTmLMG2xmtXojemYJ2E8ZuB5gv7BUjUJkUXZjsQuTi
-	 8hfn7TaJBDH9fQGzY4heUCmkhNs7SP6C5BcAUavExJ3xURQKb5RfB7P5FtiJsckTuB
-	 Av0L+T7ZKoZJ3/W/1a7E40itpF9Rznpyxv9yEZNFHQ9IL/FCJMS9TEDk01ZV6G6XbU
-	 BcF363w7Bc0Ug==
-Date: Wed, 10 Apr 2024 15:22:53 -0500
-From: Rob Herring <robh@kernel.org>
-To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
-Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Mark Brown <broonie@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	devicetree@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-	Vaishnav Achath <vaishnav.a@ti.com>, linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 3/9] spi: dt-bindings: cdns,qspi-nor: make
- cdns,fifo-depth optional
-Message-ID: <171278057106.1281345.946727466928284923.robh@kernel.org>
-References: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
- <20240410-cdns-qspi-mbly-v3-3-7b7053449cf7@bootlin.com>
+	s=arc-20240116; t=1712784622; c=relaxed/simple;
+	bh=14ZzdB+5ZJ89hfQO2P/iVaITshCuwOTD8j6Uc+CSv9s=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=RVKIiybVTk8YzfeObd1QnAs+wgJbs2i4F7jdHJK59qK6ZQOu+vlq6iPQjlcyUDhVpxNj2WqOY6mgZ48+FQ/QYL7HnTw5GVE1+m+AsljUvDIsV+E5Oj/hLSNdHsuEw59IobOB/5q+4m3sA5L6mS0L2MIwWPv54WGRomc59NV1QMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=JFp1xYoQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44D19C433F1;
+	Wed, 10 Apr 2024 21:30:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1712784622;
+	bh=14ZzdB+5ZJ89hfQO2P/iVaITshCuwOTD8j6Uc+CSv9s=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=JFp1xYoQBbQ39g+uTbt4JLn3SBzgRbjqJ31eyFQf9/KYKQPg93LaIEw4AqO9qBCBd
+	 IaZLQJEvG3vUqIKZSLW207ouLZUCv3OzXKGTpgCVOAXkPkkakvzfiiajTuIeyu76gy
+	 L/McdS+iJHvTrIxiRy4HiJClm2JWS4c9rS0J95ME=
+Date: Wed, 10 Apr 2024 14:30:20 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, Marc Zyngier
+ <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao
+ <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, Nicholas Piggin
+ <npiggin@gmail.com>, Anup Patel <anup@brainfault.org>, Atish Patra
+ <atishp@atishpatra.org>, Sean Christopherson <seanjc@google.com>, David
+ Hildenbrand <david@redhat.com>, linux-arm-kernel@lists.infradead.org,
+ kvmarm@lists.linux.dev, loongarch@lists.linux.dev,
+ linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ kvm-riscv@lists.infradead.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH 0/4] KVM, mm: remove the .change_pte() MMU notifier and
+ set_pte_at_notify()
+Message-Id: <20240410143020.420cafd47bf8af257b2e647a@linux-foundation.org>
+In-Reply-To: <20240405115815.3226315-1-pbonzini@redhat.com>
+References: <20240405115815.3226315-1-pbonzini@redhat.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240410-cdns-qspi-mbly-v3-3-7b7053449cf7@bootlin.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Fri,  5 Apr 2024 07:58:11 -0400 Paolo Bonzini <pbonzini@redhat.com> wrote:
 
-On Wed, 10 Apr 2024 11:29:06 +0200, Théo Lebrun wrote:
-> Make cdns,fifo-depth devicetree property optional.
-> Value can be detected at runtime.
-> 
-> Upper SRAMPARTITION register bits are read-only. Procedure to find FIFO
-> depth is therefore to write 0xFFFFFFFF and read back to get amount of
-> writeable bits.
-> 
-> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-> ---
->  Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml | 1 -
->  1 file changed, 1 deletion(-)
-> 
+> Please review!  Also feel free to take the KVM patches through the mm
+> tree, as I don't expect any conflicts.
 
-Acked-by: Rob Herring <robh@kernel.org>
-
+It's mainly a KVM thing and the MM changes are small and simple.
+I'd say that the KVM tree would be a better home?
 
