@@ -1,122 +1,125 @@
-Return-Path: <linux-mips+bounces-2679-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2680-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 962418A000F
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 20:52:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E08AB8A00FA
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 22:03:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 221E0B21D9E
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 18:52:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C5A128A99E
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 20:03:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7869517BB11;
-	Wed, 10 Apr 2024 18:52:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6D99181B88;
+	Wed, 10 Apr 2024 20:03:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I6OuxsVT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c7aByR5K"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E41A16F0DF;
-	Wed, 10 Apr 2024 18:52:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 932E628FD;
+	Wed, 10 Apr 2024 20:03:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712775142; cv=none; b=sLhWb8bu+Xr78gnHNTKCsJJnX3WxaL4QfEt0UVeySYPu+9qGdAQDLNKYMNYliAjFgcFxp8N9G6q7/eIc1NCeq+TCj3atLfBS6MGpGU3uJWzN3R3p+nKeE7uj0Aylmcn2YqKF1ExqTD/CVg0hi1tThbqN15InqYCss3geYaG4f3M=
+	t=1712779402; cv=none; b=ltR169iKRMzkS+22Om09Do37qo2G8h0hw6nDpDsylbmSYodHPqrHhQ6tA5RO6Alp3R5YUT+HXPq6o/7D73BeVqPq1zr2QR+FCWk815aGK24qFvtzbPphligDYacEmMnj/h18XA7nDwWyoKADy6oHBs7yunIdH8gxYDM9zItz7G0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712775142; c=relaxed/simple;
-	bh=z5JVLaH+fp0+7NF0boo5IQT2gY7gn3yvbn52zrvcvJ0=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=o90WXOtYo2qlap/p+3CUY6xbgD8+uB+483Sgrdn8VEy+UOV/Yco3t4pnczQK3acsz0wtOxPiPe9U2333UhQIGIJEaP6THoFpD3+LrWAc/SMpt1zNQWVIe9GUy/mAXBoKF1VtPMez0NVgtQo+77w1ZIR7om0cqsAh4jPNGnpV3+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I6OuxsVT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F86AC433F1;
-	Wed, 10 Apr 2024 18:52:21 +0000 (UTC)
+	s=arc-20240116; t=1712779402; c=relaxed/simple;
+	bh=OQZjFvx3Au1OHLYkCyOKCIW526eMMbQD5hbmY4kRkZI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fbd0rCY82kl6hlxblCAGAphF7O9eEm4Kw59QGaFRrTX/cz0QR7r4Pr2ItdqoyvvULefPQwsfmEzE5pK5OQZatUJFsAFBpYj2cPLzb9lp1DpP1jvd91YB8DEqNFmPvAKWl+Lm7gH7EeOWyijI0t1TpRIV/b4RKujL3qydJ9/Xpe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c7aByR5K; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ABA9C433C7;
+	Wed, 10 Apr 2024 20:03:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712775141;
-	bh=z5JVLaH+fp0+7NF0boo5IQT2gY7gn3yvbn52zrvcvJ0=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=I6OuxsVT4AkYCNqtMs94w+YdgDTmc7sZi1OxRFxEEY7TdKkHVJLcff0Ns9HQaWzZJ
-	 CJzELzUg6LhW/Zb2WUONLbjORl/K/NFFYoiLPrAM9BlAsKDbk2d0opNG3Oe/mBsz/f
-	 LSIY661NBeHfccgnhAeH1yRgTFxTnGCfX5FWEGYNzFHgzKfk7qsgH8sc5xD/S3x/DU
-	 svDLtE/k8eLctNrc8VUwJn+aoiuNdhTEFhChq/a7rgOmJGEr6sHa+OUHyvvjVUkKaR
-	 mxiam+sNWKUBU7VM5dtuK6YPrlAybjIy+Uubf/kxua+j/QwydgWgS+mGV46n6F7ekT
-	 1tGYgjy5Mebig==
-Date: Wed, 10 Apr 2024 13:52:20 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1712779402;
+	bh=OQZjFvx3Au1OHLYkCyOKCIW526eMMbQD5hbmY4kRkZI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=c7aByR5KjH2/wHYQghVF8YUXXkVjxKI32XD4S6NRrAk2pXOx+19xgkLxiSMEr8+55
+	 iz5OOzQq2kF93WIuCQCJ5+Qzshs1fB10OzsXibnp436RkhbIxxL7hXElUzDu9LqoTR
+	 Ku18U3A0y+MRAVF2+p0u/PbnfMiUclRH6cjaT6W5EAnaGTZu7bbPeZTPYQJjYhVFLR
+	 1Whji84ZVMxTuHDnrYSzefDAJjxDXV7aKhQcvdyWaGW4bSfm+5cq8cKPTkoMYh6JMB
+	 HfuFdFYHgzwxT0Bos7/X2RASdJhxKOBaCnVS/xQinY+uS567eBPdLawPAFfHod5xn7
+	 M7QcJkoKBFCQg==
+Date: Wed, 10 Apr 2024 21:03:14 +0100
+From: Mark Brown <broonie@kernel.org>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Vaishnav Achath <vaishnav.a@ti.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Rob Herring <robh@kernel.org>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH v3 4/9] spi: cadence-qspi: allow FIFO depth detection
+Message-ID: <161eebc1-9417-4ab0-ad8c-c1b17be119b4@sirena.org.uk>
+References: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
+ <20240410-cdns-qspi-mbly-v3-4-7b7053449cf7@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Rob Herring <robh@kernel.org>
-To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Cc: Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- linux-gpio@vger.kernel.org, Michael Turquette <mturquette@baylibre.com>, 
- linux-clk@vger.kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Stephen Boyd <sboyd@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
- linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-In-Reply-To: <20240410-mbly-olb-v1-1-335e496d7be3@bootlin.com>
-References: <20240410-mbly-olb-v1-0-335e496d7be3@bootlin.com>
- <20240410-mbly-olb-v1-1-335e496d7be3@bootlin.com>
-Message-Id: <171277513936.883835.18187305941709008733.robh@kernel.org>
-Subject: Re: [PATCH 01/11] dt-bindings: soc: mobileye: add EyeQ5 OLB system
- controller
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="BRtEqc5sxDPHJ2tk"
+Content-Disposition: inline
+In-Reply-To: <20240410-cdns-qspi-mbly-v3-4-7b7053449cf7@bootlin.com>
+X-Cookie: Jenkinson's Law:
 
 
-On Wed, 10 Apr 2024 19:12:30 +0200, Théo Lebrun wrote:
-> Add documentation to describe the "Other Logic Block" syscon.
-> 
-> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-> ---
->  .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  | 125 +++++++++++++++++++++
->  MAINTAINERS                                        |   1 +
->  2 files changed, 126 insertions(+)
-> 
+--BRtEqc5sxDPHJ2tk
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-My bot found errors running 'make dt_binding_check' on your patch:
+On Wed, Apr 10, 2024 at 11:29:07AM +0200, Th=C3=A9o Lebrun wrote:
 
-yamllint warnings/errors:
+> If FIFO depth DT property is provided, check it matches what hardware
+> reports and warn otherwise. Else, use hardware provided value.
+>=20
+> Hardware exposes FIFO depth indirectly because
+> CQSPI_REG_SRAMPARTITION is partially read-only.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@d2003000: clock-controller@d2003040:compatible:0: 'mobileye,eyeq5-clk' was expected
-	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@d2003000: clock-controller@d2003040:reg: [[64, 56]] is too short
-	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@d2003000: clock-controller@d2003040: 'reg-names' is a required property
-	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@d2003000: reset-controller@d2003000:compatible:0: 'mobileye,eyeq5-reset' was expected
-	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@d2003000: reset-controller@d2003000:reg: [[0, 60]] is too short
-	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@d2003000: reset-controller@d2003000:#reset-cells:0:0: 2 was expected
-	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@d2003000: reset-controller@d2003000: 'reg-names' is a required property
-	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
-Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: /example-1/soc/system-controller@d2003000/reset-controller@d2003000: failed to match any schema with compatible: ['mobileye,eyeq6h-acc-reset']
-Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: /example-1/soc/system-controller@d2003000/clock-controller@d2003040: failed to match any schema with compatible: ['mobileye,eyeq6h-acc-clk']
+This breaks an allmodconfig build:
 
-doc reference errors (make refcheckdocs):
+/build/stage/linux/drivers/spi/spi-cadence-quadspi.c: In function =E2=80=98=
+cqspi_of_get_
+pdata=E2=80=99:
+/build/stage/linux/drivers/spi/spi-cadence-quadspi.c:1506:45: error: unused=
+ vari
+able =E2=80=98ddata=E2=80=99 [-Werror=3Dunused-variable]
+ 1506 |         const struct cqspi_driver_platdata *ddata =3D cqspi->ddata;
+      |                                             ^~~~~
+/build/stage/linux/drivers/spi/spi-cadence-quadspi.c: In function =E2=80=98=
+cqspi_control
+ler_detect_fifo_depth=E2=80=99:
+/build/stage/linux/drivers/spi/spi-cadence-quadspi.c:1582:45: error: unused=
+ vari
+able =E2=80=98ddata=E2=80=99 [-Werror=3Dunused-variable]
+ 1582 |         const struct cqspi_driver_platdata *ddata =3D cqspi->ddata;
+      |                                             ^~~~~
+cc1: all warnings being treated as errors
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240410-mbly-olb-v1-1-335e496d7be3@bootlin.com
+--BRtEqc5sxDPHJ2tk
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+-----BEGIN PGP SIGNATURE-----
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYW8IEACgkQJNaLcl1U
+h9AP3Qf9HrV26p6I6pNjiy1Rr+g3QMlk44F2HNPvnj7jvAfZmd1M6+sG/WykOdPX
+Wnkq1igLy45LZzQB/smyw3eFOzlDyZHs7diTtDOKsx7hC1KLYzbX1n7s8IVzx2FD
+UDJYdBzop0PAQT6Sk1VrHPgC5TCWwRNlwTs+WKqo+/aLndCxKlS+4ZVZeyGV+FYJ
+gE1YZe/Z9EZZoVm86tEd9Os57oQUfq0T6gU29g7H9cDMu0TJy4uwPnnOxbf74GCO
+z1qBAffTfUAERgs7anH+e3xNyvejRwTM9spESFKPxeNiH8s0eg9N+tzcGTa5GsAl
+I2Dx4GjIaTHoao5epVvxs6ODnuTk5w==
+=sDD9
+-----END PGP SIGNATURE-----
 
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+--BRtEqc5sxDPHJ2tk--
 
