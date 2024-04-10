@@ -1,128 +1,90 @@
-Return-Path: <linux-mips+bounces-2663-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2664-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA8BF89F019
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 12:43:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0275389F9B4
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 16:17:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 12D491C21AE7
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 10:43:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A27CB1F30F1D
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 14:17:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82F9515920E;
-	Wed, 10 Apr 2024 10:43:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5125A15ECF9;
+	Wed, 10 Apr 2024 14:17:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m4qWInpE"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="HyGuA7aN";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="4xJUkqSe"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0087D155385;
-	Wed, 10 Apr 2024 10:43:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4DE15B12A;
+	Wed, 10 Apr 2024 14:17:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712745835; cv=none; b=sCwg2RNkR+0cwO39tLWXHMcj153lLmvpsjk8VZOtBDMX315BClZP7wg6vlb+o2pc/6C9+ul7HCoD2HY4ObHHUuaw2rDqYMYyuQ+Z7lWy11zp9yPcw1PkXaIp+YQ0fKm+OFNVp0I+PdFuI9s2jpS6U9YFDuA2wAwcvm27HR2P3WQ=
+	t=1712758645; cv=none; b=o2bRg+vCO4BM2cU2JAE4QiOQNulAyFw8c1XqVff0Qu20bdM2hA56ed7pfIC2rD8br/7yTNaRDp7IdtqBiw1jOiH7M/qP1CLZhMJkuxZ2q9NYRpiYQHkfmUskL+OniJ3mwG7ceaEfeEvnJNmVZEXzwkNYEcBj9f9GYAVVqSYeXcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712745835; c=relaxed/simple;
-	bh=CMXlteTKOwFAuVMW0aMjJuXqhJP5cUNUL11/P+b21/8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=G1Mhy+FomU48vR8aq8pXg+Jw2j+HvDovNfdv7nkG/rryE2LG+mxWLkvhGQC+q6PuuaiXdiOOruwcHw7p58ppQQfCQ6L364qOzfwN6FQ2VCUVq/pK4w3lM8tHkDsMgRSELQEUKabXrAR3XBWDBDP9V67UkFO9/Y2CdyP4fGlNdK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m4qWInpE; arc=none smtp.client-ip=209.85.160.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-23333dddd8aso54356fac.1;
-        Wed, 10 Apr 2024 03:43:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712745833; x=1713350633; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D1Sp7n1FvxcNzxiV/M3Whh5xnznJqzGBI91xq3AgOsc=;
-        b=m4qWInpEPQTK9n7pQpzT31t1omK0K8TSleOPXKDBI9LQh4tZv1MdhH/O0xKDlfEAxX
-         sOVehc+QaG8mTxlJ5SAwJwKc7xLTN94ACvbBPeebkNPTbo0utQrxomxDYMCKA6aaMme4
-         eAs7IuKkfwHjtk6tZg9WRN2lsURdmSdx9uXIxRmeHKxcN2Fq7fWZW5GqJFhqz3vCjSg7
-         hS0h0Gsa70YtMnaSGPWugFNEyC1RnINpfgiVk5s3UkGFVRiOERwWD9Gxdtqy/tJauToV
-         /zuzlqzzsRj1h1SbP7LB9PSa7EMDJiVlaw5btP76zwWH2XfCkwQOtH2ShzyCfmm3Y/oI
-         2psA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712745833; x=1713350633;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D1Sp7n1FvxcNzxiV/M3Whh5xnznJqzGBI91xq3AgOsc=;
-        b=RQIzXWGNQJ93L/h222WePSASPA2GBawxW28OEYsG9+GWs9PcmkxxbVHt8Rc2+zrCv4
-         /X2U9viCXqb7wqQ/+F1I9aGmnlmOiYnK6M/+PWPqVaMD8Bvobym6WdyKrsLICy21MjN6
-         SGPulGSdSycgzEptLAcARUhJudBIBHLLXiX9sT/kB2qlofFIMGr3VTWg5VB+R6xwmUok
-         jnUV2gE5xbeHWfAFlk/Kv0JYh5d6Ys/jqJNL9wOtFm9aq7ye8YABu8WfmJU8t5x6DFpU
-         Z3tpZdTaMWL6zGhS6mBcnDEsfVNHZYiVDCBnbB93UbbMnYkjtKjFZoiZ/AmpSavgGMPu
-         UJ1g==
-X-Forwarded-Encrypted: i=1; AJvYcCWDVFe6HWN8xn0QKceaE4KS161a5x/O9YtVvwdeODJWCYqOU7gMoJDRXrlToY84LEFGDuG4jUB+6ChnsdfpNeSK38NsZKzYKKi7i36Zqk0e4c56HlR8lMHdg8TM/sDfC1SDgxS5wuFRjw==
-X-Gm-Message-State: AOJu0YyA40LI0MMM1vjQb3FIITmLXObFuI11eGsyFDslpMpOUEK5ouoq
-	LvQ8ypj7lQ0EUYXlB664FmIxSeO3VONImfouV7iVV7/YWOyi8Yvclahrm3Yu2YGcTfEJbU20080
-	lAd9VLiZdvUfOygBiefBQlmjpCY8=
-X-Google-Smtp-Source: AGHT+IEGPf5fgJ+Ji13oItqw8ThUKQ2lo5EoXR03Lt9sU+JG4aSaJBKXhCfpCYKEoA5qiJCcmGLynCsasGEkZeYqbCg=
-X-Received: by 2002:a05:6870:1682:b0:22e:bd35:d3fb with SMTP id
- j2-20020a056870168200b0022ebd35d3fbmr2593686oae.22.1712745833092; Wed, 10 Apr
- 2024 03:43:53 -0700 (PDT)
+	s=arc-20240116; t=1712758645; c=relaxed/simple;
+	bh=iiLXM1gHb2fTzL1lNsUML+2NbfICPf9BJeU7hfbuI6k=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=h4z6HxxZPtBzaJB3RZXrPINYq/omKg3Yt0SOavIO4mmjbW9kGWzMHgTJCffhjh39OQh4nfhV6osPG+vFv489qoAYXKjhBwuWvL8hFIfCHu+RWZDU5XTqL6DjmtSckXmKTnohAqwnOYzBV2kKTs87bRvJQ7DaHXhRzcIqYOk9UuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=HyGuA7aN; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=4xJUkqSe; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1712758642;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dKudWSPi1Iu7TxLjPm3UxpQgYscfG9LL8/XF7l+GrvA=;
+	b=HyGuA7aNqIHvi+4YBZ2QTOZarh53jTI7l8pcSR0KU9yTM0x6W08XWU/pG67KKgdebK+sIX
+	FwjoVZmyg7O6xEUcvy+MO47yD03ffWBG/lff3YyabpnGJKHwoaheyhwW5IP8k9wEfXefaF
+	mYA/SjvfDZJZ+GKi2/1UsSyopdwaYdea5VK+/9Nr6IAnCdWrbNvA+4ezEc0FS8/ORLA2Ae
+	0koMqYMoes8RWFR8DrFeCRaZJ93fDlcnb2QUW9W+gXdKfhuFJpYMazyq1XlKIkYJx1OGKA
+	7GcCYStS4+NRnOcXxE9Xnrn+uwyydjRUi4I/lXtbSu2V6sqJgXLpz/ph/JC4Cw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1712758642;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dKudWSPi1Iu7TxLjPm3UxpQgYscfG9LL8/XF7l+GrvA=;
+	b=4xJUkqSelu6YTEbO70Sq2RQ639AxhkKBi91Xaeg78LxGCFeiiaamNADOI/cbtpAQXtMwxa
+	U0veKRge4GuNBODg==
+To: Bitao Hu <yaoma@linux.alibaba.com>, dianders@chromium.org,
+ liusong@linux.alibaba.com, akpm@linux-foundation.org, pmladek@suse.com,
+ kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com,
+ tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+ jan.kiszka@siemens.com
+Cc: linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ yaoma@linux.alibaba.com
+Subject: Re: [PATCHv12 1/4] genirq: Provide a snapshot mechanism for
+ interrupt statistics
+In-Reply-To: <f3c7ef07-8fad-4ef6-9095-16e4bd734477@linux.alibaba.com>
+References: <20240306125208.71803-1-yaoma@linux.alibaba.com>
+ <20240306125208.71803-2-yaoma@linux.alibaba.com> <87frvu7t85.ffs@tglx>
+ <f3c7ef07-8fad-4ef6-9095-16e4bd734477@linux.alibaba.com>
+Date: Wed, 10 Apr 2024 16:17:21 +0200
+Message-ID: <875xwp480e.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240409153519.291205-2-thorsten.blum@toblux.com>
-In-Reply-To: <20240409153519.291205-2-thorsten.blum@toblux.com>
-From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date: Wed, 10 Apr 2024 12:43:41 +0200
-Message-ID: <CAMhs-H8EByNhBAkhDvtHL_ZUgLnMFQcR1zeYhaKQSg-13uFnVQ@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: ralink: Use min() to fix Coccinelle warning
-To: Thorsten Blum <thorsten.blum@toblux.com>
-Cc: John Crispin <john@phrozen.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-Hi Thorsten,
+On Wed, Apr 10 2024 at 14:45, Bitao Hu wrote:
+> On 2024/4/9 17:58, Thomas Gleixner wrote:
+> By the way, what do you think of my reason for using printk() instead of
+> pr_crit()? Should I change this part of the code in v13?
 
-On Tue, Apr 9, 2024 at 5:36=E2=80=AFPM Thorsten Blum <thorsten.blum@toblux.=
-com> wrote:
->
-> Fixes the following Coccinelle/coccicheck warning reported by
-> minmax.cocci:
->
->         WARNING opportunity for min()
->
-> Signed-off-by: Thorsten Blum <thorsten.blum@toblux.com>
-> ---
->  arch/mips/ralink/timer.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
->
-> diff --git a/arch/mips/ralink/timer.c b/arch/mips/ralink/timer.c
-> index 54094f6e033e..d271ac98312a 100644
-> --- a/arch/mips/ralink/timer.c
-> +++ b/arch/mips/ralink/timer.c
-> @@ -75,11 +75,7 @@ static int rt_timer_request(struct rt_timer *rt)
->
->  static int rt_timer_config(struct rt_timer *rt, unsigned long divisor)
->  {
-> -       if (rt->timer_freq < divisor)
-> -               rt->timer_div =3D rt->timer_freq;
-> -       else
-> -               rt->timer_div =3D divisor;
-> -
-> +       rt->timer_div =3D min(rt->timer_freq, divisor);
+Either way is fine. Just put a proper explanation into the change log if
+you stick with printk().
 
-I do find the original code more readable.
+Thanks,
 
-Best regards,
-    Sergio Paracuellos
-
->         rt_timer_w32(rt, TIMER_REG_TMR0LOAD, rt->timer_freq / rt->timer_d=
-iv);
->
->         return 0;
-> --
-> 2.44.0
->
+        tglx
 
