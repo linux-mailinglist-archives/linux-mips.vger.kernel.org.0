@@ -1,110 +1,100 @@
-Return-Path: <linux-mips+bounces-2651-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2652-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24D4E89E051
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Apr 2024 18:26:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 367D189EB39
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 08:46:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 362F2B2A9FF
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Apr 2024 15:51:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6DE0282EA3
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 06:46:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48FFB13B5BA;
-	Tue,  9 Apr 2024 15:51:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 668BE29D11;
+	Wed, 10 Apr 2024 06:45:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gKglQhqX"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Asj7+RZD"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A49B13667F;
-	Tue,  9 Apr 2024 15:51:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 688BA524A;
+	Wed, 10 Apr 2024 06:45:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712677875; cv=none; b=R5BPcjU9cdhKnVR+CzE0WnXb0fztIpTxcL1AX8nj14evkkNrc2rQk/tmTHd9nJ6BdS6eMLuhT5JX+QSoz03Amak9xLkbRPVr2VEXNXTZsb2s4Oq4LBiXZC2ouHU7Wtq6kzNw09AEeuiGrO+o5u/h0SbHzGpFvt7cgIPz4+TJwl4=
+	t=1712731511; cv=none; b=Fs47zeNsosy9B5CMTGiTwRasRyhKXMeQzqPIj6x1o8dU216vv364UdR7vgiEIYpMj+Pb4DEBcoyQx+nmWlA9om7QmiJDjs4NdogthsKK0Xj9mZmCgBaASrAAJcDYicMHe1H2PsIZ9tetQbsVZaGqk88X/pPDav5mQobpW+/md+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712677875; c=relaxed/simple;
-	bh=3rRigGgrftXHxJMkPsD1T8AKbfSmr3FbCk/KvX7w3vk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YuqaqwhQk35CWvvWmGuxsoRaXo/ixoYPpgDGxWzNT/Mu+tnj4GqeBpk+J53XtrYISnSo5GWxyNa0SlVHfXpBqtVloUkr1ps69sTVZXudjSZ1O3VriaG54OJmNv2Sqk1Tj0zklEfgnWom7inyfJwLCBz+2VrfcK06GQXqrMpM3q4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gKglQhqX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12F9DC433B1;
-	Tue,  9 Apr 2024 15:51:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712677874;
-	bh=3rRigGgrftXHxJMkPsD1T8AKbfSmr3FbCk/KvX7w3vk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gKglQhqXcTVxJi1naUItRLt/gwaK1khmO0uOdyi47teij5ePlbSCMLSqqu6O5n9u3
-	 q3+noVB29K61ferPB1f2rRYhL1D0fwyK54WLxQbNchz1q0+8a9jULG3jRF20wm7//f
-	 J9WjURMRfKBmwr1re5d/XIyKeJlZr5ACOBLGTWeIgGrzpkviTWuAFtt0vEirWW/YVm
-	 95NZVK173pBwrMPfD9LpG+r3yzxYo6XGso2QGeBhNpRflzz9uHa/wRHpbUKL2DgA05
-	 7j3thoTSyKMbjF8Az/hP6izpL7zSrBGxrjdXCNcvHiKOL1lY6A0vLgICWjz68aFCqG
-	 YCFuR7IWa7eOw==
-Date: Tue, 9 Apr 2024 16:51:06 +0100
-From: Mark Brown <broonie@kernel.org>
-To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Vaishnav Achath <vaishnav.a@ti.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Rob Herring <robh@kernel.org>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: [PATCH v2 05/11] spi: cadence-qspi: add FIFO depth detection
- quirk
-Message-ID: <c058fd5e-f5ef-4469-a41f-38d72a345f77@sirena.org.uk>
-References: <20240405-cdns-qspi-mbly-v2-0-956679866d6d@bootlin.com>
- <20240405-cdns-qspi-mbly-v2-5-956679866d6d@bootlin.com>
- <551bea0a-1c9e-4e04-87db-c643fdaee85e@sirena.org.uk>
- <D0ETH1AG1ONG.1M1FPSZM69H0Z@bootlin.com>
- <66bf7d58-a726-49ba-9765-f769f6189310@sirena.org.uk>
- <D0FIC34Z35BV.1RT6NNGWA85SL@bootlin.com>
+	s=arc-20240116; t=1712731511; c=relaxed/simple;
+	bh=RNjTiw+z2UXgWb291KUYhTrh7oCU2XpYJTpoXJoJ2Ps=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MGDIno2L0xoeVYQ4Frrw3h5TFsS55vWuyKAEoXkzHN93samR4FTisMCrgLkCRoHzWm3ERZIO4dfvaTK/48m/i9y0fcbKQNTMPRxmCFN0SyJlCsK+5/9eia1OJ3zwJonMgPXHGqqnH5SrkYAWWRcZDNUf4IC7+XYCo/Xk283OphU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Asj7+RZD; arc=none smtp.client-ip=115.124.30.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1712731506; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=ebzbpFm8mKtEwX879U96DPZbzdY2iwe+NayJYElOkPM=;
+	b=Asj7+RZD2qJ3sk6kwrOGu/K8WACsgX4zQ/QnqQtLILH+U2iD9p19DDk+0mOnW/oklBThk5AI4z1MOorrcyXMNXUw7GLF6c9SN5gkXoJD0tFDaHt4nfwWIlWqU4joGLO/HjZxwvLcQJLpndBh9KPxU5llzB+d7hRcqatQjbraZF8=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=yaoma@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0W4GtVHI_1712731503;
+Received: from 30.178.67.212(mailfrom:yaoma@linux.alibaba.com fp:SMTPD_---0W4GtVHI_1712731503)
+          by smtp.aliyun-inc.com;
+          Wed, 10 Apr 2024 14:45:04 +0800
+Message-ID: <f3c7ef07-8fad-4ef6-9095-16e4bd734477@linux.alibaba.com>
+Date: Wed, 10 Apr 2024 14:45:02 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="i0WU2ZVJwt5+hsRw"
-Content-Disposition: inline
-In-Reply-To: <D0FIC34Z35BV.1RT6NNGWA85SL@bootlin.com>
-X-Cookie: Everything you know is wrong!
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHv12 1/4] genirq: Provide a snapshot mechanism for interrupt
+ statistics
+To: Thomas Gleixner <tglx@linutronix.de>, dianders@chromium.org,
+ liusong@linux.alibaba.com, akpm@linux-foundation.org, pmladek@suse.com,
+ kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com,
+ tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+ jan.kiszka@siemens.com
+Cc: linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ yaoma@linux.alibaba.com
+References: <20240306125208.71803-1-yaoma@linux.alibaba.com>
+ <20240306125208.71803-2-yaoma@linux.alibaba.com> <87frvu7t85.ffs@tglx>
+Content-Language: en-US
+From: Bitao Hu <yaoma@linux.alibaba.com>
+In-Reply-To: <87frvu7t85.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+Hi,
 
---i0WU2ZVJwt5+hsRw
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2024/4/9 17:58, Thomas Gleixner wrote:
+> 
+> This does not apply anymore.
+OK, I will update this patch based on the latest kernel code.
+> 
+> Also can you please split this apart to convert kstat_irqs to a struct
+> with just the count in it and then add the snapshot mechanics on top.
+> 
+OK, I will split this patch into two. The changelog for the first patch
+will be as follows.
 
-On Tue, Apr 09, 2024 at 12:07:56PM +0200, Th=E9o Lebrun wrote:
+genirq: Convert kstat_irqs to a struct
 
->  - (3) Make DT property optional for all compatibles.
->     - (3a) If provided, warn if runtime detect value is different.
->     - (3b) If provided, do not detect+warn.
+The irq_desc::kstat_irqs member is a per-CPU variable of type int, and
+it is only capable of counting. The snapshot mechanism for interrupt
+statistics will be added soon, which requires an additional variable to
+store snapshot. To facilitate expansion, convert kstat_irqs here to
+a struct containing only the count.
 
-I think either of these is fine.
+By the way, what do you think of my reason for using printk() instead of
+pr_crit()? Should I change this part of the code in v13?
 
---i0WU2ZVJwt5+hsRw
-Content-Type: application/pgp-signature; name="signature.asc"
+Besides, are there any other issues with this set of patches? I hope we
+can resolve all points of contention in v13.
 
------BEGIN PGP SIGNATURE-----
+Best Regards,
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYVY+kACgkQJNaLcl1U
-h9C/6wf/R39iaV51I3X0bI2R7WmoJqIn1NUIMRkmNhL3JTH0GuiS0y4uhXxAi1Mh
-ctXKqYIe88R+Tj6JFqZ94QN/UPne013ighl8AK5g77nyUQudXNSMyU60jzsf2BeB
-T91CvGIJM4taLxkcZ+Mb9RNOY6sFDzGOvPJmaidb1hV0LPy6VIxdnyUpjj8MZi+H
-Rll8YToay3JntnlqkTCi5PFiDeJra4ZfUKiHJlyDoxQ9knxMqPjseOlovAP99e6w
-oPHzWyDQds/d75m349lz2X24njRunjmg638jtf+7zZFsd7Q6cr12lS+BdwN7mz9x
-Jbw0UghamdQziIwhj2zfRssV2RM27g==
-=EeT2
------END PGP SIGNATURE-----
-
---i0WU2ZVJwt5+hsRw--
+	Bitao Hu
 
