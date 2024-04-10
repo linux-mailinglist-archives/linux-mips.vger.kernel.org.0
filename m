@@ -1,124 +1,122 @@
-Return-Path: <linux-mips+bounces-2678-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2679-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1283189FF64
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 20:06:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 962418A000F
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 20:52:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FAB51C22A21
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 18:06:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 221E0B21D9E
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 18:52:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B12717F386;
-	Wed, 10 Apr 2024 18:06:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7869517BB11;
+	Wed, 10 Apr 2024 18:52:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lu35qvDv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I6OuxsVT"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39D81168DC;
-	Wed, 10 Apr 2024 18:06:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E41A16F0DF;
+	Wed, 10 Apr 2024 18:52:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712772409; cv=none; b=cvVhkt10WA5E3n8qKxX3rqMgOO4Bj3zTqjq9auucAgElsxEt8UaaV8rC8ndsFiSUxeR1BuL+B2NOJKKKkJaa38RCpFG9gZXhniZeyTLxAWK2qD6p5y1aECBaBTWJjnu6rpBPdJXCW5eBMYKW/uw1tOAyVjta13wN/WjEITaT4oA=
+	t=1712775142; cv=none; b=sLhWb8bu+Xr78gnHNTKCsJJnX3WxaL4QfEt0UVeySYPu+9qGdAQDLNKYMNYliAjFgcFxp8N9G6q7/eIc1NCeq+TCj3atLfBS6MGpGU3uJWzN3R3p+nKeE7uj0Aylmcn2YqKF1ExqTD/CVg0hi1tThbqN15InqYCss3geYaG4f3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712772409; c=relaxed/simple;
-	bh=9mHUvsMCvHI/lEf3R28H/lWIRLZtajg6D7uHi+gu8Xc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r8twqME6l/et37TLPfTs6QuxMvdt9P7kS9QlHkHZQK5g3sTCXs18LZdJCpCm1C9ZsnC+Z7yMWO6hrVQ94ALN3IGiPd0ZragT3bzos3XeOIH9i7FJdO7olABbuziAvCSPq9TXbf+QPPnyMeuAnC6lht+uRU2wkN3nUb2HVeARjZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lu35qvDv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55443C433C7;
-	Wed, 10 Apr 2024 18:06:42 +0000 (UTC)
+	s=arc-20240116; t=1712775142; c=relaxed/simple;
+	bh=z5JVLaH+fp0+7NF0boo5IQT2gY7gn3yvbn52zrvcvJ0=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=o90WXOtYo2qlap/p+3CUY6xbgD8+uB+483Sgrdn8VEy+UOV/Yco3t4pnczQK3acsz0wtOxPiPe9U2333UhQIGIJEaP6THoFpD3+LrWAc/SMpt1zNQWVIe9GUy/mAXBoKF1VtPMez0NVgtQo+77w1ZIR7om0cqsAh4jPNGnpV3+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I6OuxsVT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F86AC433F1;
+	Wed, 10 Apr 2024 18:52:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712772408;
-	bh=9mHUvsMCvHI/lEf3R28H/lWIRLZtajg6D7uHi+gu8Xc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Lu35qvDvmqNkvq1o9nxg+w5hL5Uh7lDNWfNvkA5+kkFTIkp1zcQ2dCvhQ7Bmyxiky
-	 srIkPzXyQsbllzfitfQ3qBA04frMons8w+N3qunJ0qiyagfuyd8VP3Wuf7DsDyJCX4
-	 sADFRrR0lpwBWt2T/VQjb2jupa0lm1/2y1SDR5He9xfnB53rtkenMoKQxAXzpQxaIg
-	 g/QgpMxZFgNPTpg/nPfDmiJRljqUaN2o19G9m8w1lUwu/8qPu2foYaJ0CJBQaut8gi
-	 mhsGnnBNyndkfB8TLRrdqBenQDhN1PWT6Wo8fCofnQbnBcmDG7c1G0chPGnp2afnGE
-	 5WTuil65Gnjfg==
-Date: Wed, 10 Apr 2024 19:06:39 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Jani Nikula <jani.nikula@intel.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
-	Samuel Holland <samuel@sholland.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Alexander Stein <alexander.stein@ew.tq-group.com>,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
-	linux-sunxi@lists.linux.dev, linux-mips@vger.kernel.org,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH 0/7] drm/display: Fix display helpers depends on fallouts
-Message-ID: <117b0d3b-a60b-4bc0-9f2c-f0e4fffe634a@sirena.org.uk>
-References: <20240403-fix-dw-hdmi-kconfig-v1-0-afbc4a835c38@kernel.org>
+	s=k20201202; t=1712775141;
+	bh=z5JVLaH+fp0+7NF0boo5IQT2gY7gn3yvbn52zrvcvJ0=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=I6OuxsVT4AkYCNqtMs94w+YdgDTmc7sZi1OxRFxEEY7TdKkHVJLcff0Ns9HQaWzZJ
+	 CJzELzUg6LhW/Zb2WUONLbjORl/K/NFFYoiLPrAM9BlAsKDbk2d0opNG3Oe/mBsz/f
+	 LSIY661NBeHfccgnhAeH1yRgTFxTnGCfX5FWEGYNzFHgzKfk7qsgH8sc5xD/S3x/DU
+	 svDLtE/k8eLctNrc8VUwJn+aoiuNdhTEFhChq/a7rgOmJGEr6sHa+OUHyvvjVUkKaR
+	 mxiam+sNWKUBU7VM5dtuK6YPrlAybjIy+Uubf/kxua+j/QwydgWgS+mGV46n6F7ekT
+	 1tGYgjy5Mebig==
+Date: Wed, 10 Apr 2024 13:52:20 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="m8uHuXe8Pt8zgPJR"
-Content-Disposition: inline
-In-Reply-To: <20240403-fix-dw-hdmi-kconfig-v1-0-afbc4a835c38@kernel.org>
-X-Cookie: A bachelor is an unaltared male.
+From: Rob Herring <robh@kernel.org>
+To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Cc: Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ linux-gpio@vger.kernel.org, Michael Turquette <mturquette@baylibre.com>, 
+ linux-clk@vger.kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Stephen Boyd <sboyd@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+ linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
+In-Reply-To: <20240410-mbly-olb-v1-1-335e496d7be3@bootlin.com>
+References: <20240410-mbly-olb-v1-0-335e496d7be3@bootlin.com>
+ <20240410-mbly-olb-v1-1-335e496d7be3@bootlin.com>
+Message-Id: <171277513936.883835.18187305941709008733.robh@kernel.org>
+Subject: Re: [PATCH 01/11] dt-bindings: soc: mobileye: add EyeQ5 OLB system
+ controller
 
 
---m8uHuXe8Pt8zgPJR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, 10 Apr 2024 19:12:30 +0200, Théo Lebrun wrote:
+> Add documentation to describe the "Other Logic Block" syscon.
+> 
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  | 125 +++++++++++++++++++++
+>  MAINTAINERS                                        |   1 +
+>  2 files changed, 126 insertions(+)
+> 
 
-On Wed, Apr 03, 2024 at 12:56:18PM +0200, Maxime Ripard wrote:
-> Hi,
->=20
-> Here's a series addressing the various regressions that were reported
-> after the Kconfig rework for the DRM display helpers.
->=20
-> Let me know what you think,
-> Maxime
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Is there any news on getting the rest of this merged?  It's been more
-than a week now and the Designware display controllers are all still
-broken in -next, causing widespread breakage in CI.  For bisection
-purposes it probably makes sense for the defconfig updates to go along
-with the changes to the Kconfig for the driver...
+yamllint warnings/errors:
 
---m8uHuXe8Pt8zgPJR
-Content-Type: application/pgp-signature; name="signature.asc"
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@d2003000: clock-controller@d2003040:compatible:0: 'mobileye,eyeq5-clk' was expected
+	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@d2003000: clock-controller@d2003040:reg: [[64, 56]] is too short
+	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@d2003000: clock-controller@d2003040: 'reg-names' is a required property
+	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@d2003000: reset-controller@d2003000:compatible:0: 'mobileye,eyeq5-reset' was expected
+	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@d2003000: reset-controller@d2003000:reg: [[0, 60]] is too short
+	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@d2003000: reset-controller@d2003000:#reset-cells:0:0: 2 was expected
+	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: system-controller@d2003000: reset-controller@d2003000: 'reg-names' is a required property
+	from schema $id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
+Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: /example-1/soc/system-controller@d2003000/reset-controller@d2003000: failed to match any schema with compatible: ['mobileye,eyeq6h-acc-reset']
+Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.example.dtb: /example-1/soc/system-controller@d2003000/clock-controller@d2003040: failed to match any schema with compatible: ['mobileye,eyeq6h-acc-clk']
 
------BEGIN PGP SIGNATURE-----
+doc reference errors (make refcheckdocs):
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYW1S4ACgkQJNaLcl1U
-h9DOSwf/cU2i83arQzeCO07s0n4/uba3xhNrWfvc7xN0GLO+Z8KtAnVQfRMhXF5j
-ayRYwyjGMYcJmGugvdeX68HEbnVSq3PF1F0CSIjX4ElPZ9S7Wbiik4vnL45HJP6c
-IveEkj+HqtAvILP5/07YrflUuqawBsUKDiELWs2p8AqwcpiDy4j6sMJpPZd6n9gf
-9GzlZ5KCvzOua+GmCz9skxnIsXwSIB2HQ2y2zA0hyBbte7XjFFBUE36JW/kSt4z5
-eRZ8AW4MG2hO6f/x965L+SShk1aLPhnYQXx/683Eu5MhYCGzGW7XPuGQDJJ1rAZU
-YkvZX/nVERJeD10LMsjYYPcH/8N8Cw==
-=swV+
------END PGP SIGNATURE-----
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240410-mbly-olb-v1-1-335e496d7be3@bootlin.com
 
---m8uHuXe8Pt8zgPJR--
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
 
