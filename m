@@ -1,65 +1,77 @@
-Return-Path: <linux-mips+bounces-2677-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2678-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F03AE89FF0A
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 19:50:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1283189FF64
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 20:06:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C7321C232B1
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 17:50:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FAB51C22A21
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 18:06:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62EF6180A80;
-	Wed, 10 Apr 2024 17:47:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B12717F386;
+	Wed, 10 Apr 2024 18:06:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PcuTXzk5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lu35qvDv"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3225017F36C;
-	Wed, 10 Apr 2024 17:47:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39D81168DC;
+	Wed, 10 Apr 2024 18:06:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712771273; cv=none; b=atOwB/tmtVZdt0wLE+E2+DBIfYwjEhE/QCnDhC01n+7ufundYp5QHYYkKh79p7gFbhHHCDEifhCi3nAnrmCsE5/T3Ygl/OHwwQJND3vmmM1mXelSACix1i1AORek6lyeAUwEShDglstxJ493RpIhbjG4e312hEKXBIxaZsQxg08=
+	t=1712772409; cv=none; b=cvVhkt10WA5E3n8qKxX3rqMgOO4Bj3zTqjq9auucAgElsxEt8UaaV8rC8ndsFiSUxeR1BuL+B2NOJKKKkJaa38RCpFG9gZXhniZeyTLxAWK2qD6p5y1aECBaBTWJjnu6rpBPdJXCW5eBMYKW/uw1tOAyVjta13wN/WjEITaT4oA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712771273; c=relaxed/simple;
-	bh=pNdVV+75knRysY/hsbPP+XHfRDHsUixHnqw79Bm+MJc=;
+	s=arc-20240116; t=1712772409; c=relaxed/simple;
+	bh=9mHUvsMCvHI/lEf3R28H/lWIRLZtajg6D7uHi+gu8Xc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fki/s2Elav4syeR4KRyQDMU9iEo0oRhFR8XWaTzfPpSMvvqBn0fsQy52ZM+NdLL50TT0yxaCOw4XAF7aFNwlKN25D/hQQcMFH7e9eClXWIReG+lk1LT9RQx5mAS9Fj8hJbs4ItFQieGmUO0IsPwToK+Qgiu2YGM7490QjqWkNYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PcuTXzk5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67380C43390;
-	Wed, 10 Apr 2024 17:47:49 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=r8twqME6l/et37TLPfTs6QuxMvdt9P7kS9QlHkHZQK5g3sTCXs18LZdJCpCm1C9ZsnC+Z7yMWO6hrVQ94ALN3IGiPd0ZragT3bzos3XeOIH9i7FJdO7olABbuziAvCSPq9TXbf+QPPnyMeuAnC6lht+uRU2wkN3nUb2HVeARjZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lu35qvDv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55443C433C7;
+	Wed, 10 Apr 2024 18:06:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712771272;
-	bh=pNdVV+75knRysY/hsbPP+XHfRDHsUixHnqw79Bm+MJc=;
+	s=k20201202; t=1712772408;
+	bh=9mHUvsMCvHI/lEf3R28H/lWIRLZtajg6D7uHi+gu8Xc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PcuTXzk53QUv7yzxQgNLs8gWhhaYa0uriJUCeSVQtqw6mAoCBhBJCRCQ813RW7yOa
-	 G/A4BFnhcyaBPo85GH+dG1M68uthtslSG98P1N2Nc9JHlx9Ghx0GcNvFk8shiY8x1k
-	 xj28oMM+bwIRG7a9Y8Ma9yJp+KNhV/0sngACWI3ic0NBEenfj0NcPdNmcq7AsGO5rx
-	 fad2XgJIrglXpQSNAUUFZAL2ycKo0V5v7qrKU47d9TAXYbWcz+26KqHjQtBDCnx+r0
-	 0hnBXaOomLjCdk7tUNinnoZIDw4YPasz8ioAfomQKzpPjuuZeBcyJw58a5EzY1tisd
-	 O49kIRRxgMIdg==
-Date: Wed, 10 Apr 2024 18:47:46 +0100
+	b=Lu35qvDvmqNkvq1o9nxg+w5hL5Uh7lDNWfNvkA5+kkFTIkp1zcQ2dCvhQ7Bmyxiky
+	 srIkPzXyQsbllzfitfQ3qBA04frMons8w+N3qunJ0qiyagfuyd8VP3Wuf7DsDyJCX4
+	 sADFRrR0lpwBWt2T/VQjb2jupa0lm1/2y1SDR5He9xfnB53rtkenMoKQxAXzpQxaIg
+	 g/QgpMxZFgNPTpg/nPfDmiJRljqUaN2o19G9m8w1lUwu/8qPu2foYaJ0CJBQaut8gi
+	 mhsGnnBNyndkfB8TLRrdqBenQDhN1PWT6Wo8fCofnQbnBcmDG7c1G0chPGnp2afnGE
+	 5WTuil65Gnjfg==
+Date: Wed, 10 Apr 2024 19:06:39 +0100
 From: Mark Brown <broonie@kernel.org>
-To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Vaishnav Achath <vaishnav.a@ti.com>,
+To: Maxime Ripard <mripard@kernel.org>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Jani Nikula <jani.nikula@intel.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
+	Samuel Holland <samuel@sholland.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Rob Herring <robh@kernel.org>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v3 0/9] spi: cadence-qspi: add Mobileye EyeQ5 support
-Message-ID: <48b302d4-a835-41fe-aa22-2b79ea01c7a4@sirena.org.uk>
-References: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
+	linux-sunxi@lists.linux.dev, linux-mips@vger.kernel.org,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH 0/7] drm/display: Fix display helpers depends on fallouts
+Message-ID: <117b0d3b-a60b-4bc0-9f2c-f0e4fffe634a@sirena.org.uk>
+References: <20240403-fix-dw-hdmi-kconfig-v1-0-afbc4a835c38@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -67,39 +79,46 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="MxtsBf7T/9C7oqKy"
+	protocol="application/pgp-signature"; boundary="m8uHuXe8Pt8zgPJR"
 Content-Disposition: inline
-In-Reply-To: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
-X-Cookie: Join the march to save individuality!
+In-Reply-To: <20240403-fix-dw-hdmi-kconfig-v1-0-afbc4a835c38@kernel.org>
+X-Cookie: A bachelor is an unaltared male.
 
 
---MxtsBf7T/9C7oqKy
-Content-Type: text/plain; charset=iso-8859-1
+--m8uHuXe8Pt8zgPJR
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 10, 2024 at 11:29:03AM +0200, Th=E9o Lebrun wrote:
+On Wed, Apr 03, 2024 at 12:56:18PM +0200, Maxime Ripard wrote:
+> Hi,
+>=20
+> Here's a series addressing the various regressions that were reported
+> after the Kconfig rework for the DRM display helpers.
+>=20
+> Let me know what you think,
+> Maxime
 
-> V1 cover letter [5] contains a brief summary of what gets added.
+Is there any news on getting the rest of this merged?  It's been more
+than a week now and the Designware display controllers are all still
+broken in -next, causing widespread breakage in CI.  For bisection
+purposes it probably makes sense for the defconfig updates to go along
+with the changes to the Kconfig for the driver...
 
-Please make your cover letters stand alone things, things like a basic
-description of the contents of the series should just be included
-directly.
-
---MxtsBf7T/9C7oqKy
+--m8uHuXe8Pt8zgPJR
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYW0MEACgkQJNaLcl1U
-h9AIJwgAgF4+CxnKc6DP5yCGYWySSpmbeaIK2XNWOU0gi97h3kWAqzcL5bIaOQzW
-2YqOg18yh4oGytWwAMsFSVscj0YDyQD7A/MsP0A5d1eZ4KAu9u5RN5oNdZO3gL2v
-ojkHdR2ygMlBTVXUv098a9LO6V6LEt8edAF4hlgARNgZlFuyAovIMTsDVqR2QTWm
-82UII45YVBKaCWGOz44LrAWVwyQT6hJ4n88+mURXe/AJw43XdkWryfYvzcRA+LTH
-VfLT3c65h9HOGdPHz77e7gHd2khnyozRvQDfpjMfLeoMS7Ij7aqurcMtoQFy5e7t
-TqmjAWnojFy3DVG7dyMbSjFcOnTOTw==
-=1tM3
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYW1S4ACgkQJNaLcl1U
+h9DOSwf/cU2i83arQzeCO07s0n4/uba3xhNrWfvc7xN0GLO+Z8KtAnVQfRMhXF5j
+ayRYwyjGMYcJmGugvdeX68HEbnVSq3PF1F0CSIjX4ElPZ9S7Wbiik4vnL45HJP6c
+IveEkj+HqtAvILP5/07YrflUuqawBsUKDiELWs2p8AqwcpiDy4j6sMJpPZd6n9gf
+9GzlZ5KCvzOua+GmCz9skxnIsXwSIB2HQ2y2zA0hyBbte7XjFFBUE36JW/kSt4z5
+eRZ8AW4MG2hO6f/x965L+SShk1aLPhnYQXx/683Eu5MhYCGzGW7XPuGQDJJ1rAZU
+YkvZX/nVERJeD10LMsjYYPcH/8N8Cw==
+=swV+
 -----END PGP SIGNATURE-----
 
---MxtsBf7T/9C7oqKy--
+--m8uHuXe8Pt8zgPJR--
 
