@@ -1,100 +1,161 @@
-Return-Path: <linux-mips+bounces-2652-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2660-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 367D189EB39
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 08:46:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A35B389EEF6
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 11:34:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6DE0282EA3
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 06:46:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2785B1F22013
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 09:34:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 668BE29D11;
-	Wed, 10 Apr 2024 06:45:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C4B7155722;
+	Wed, 10 Apr 2024 09:33:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Asj7+RZD"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="lq3OFtjb"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 688BA524A;
-	Wed, 10 Apr 2024 06:45:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C64E1598EA;
+	Wed, 10 Apr 2024 09:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712731511; cv=none; b=Fs47zeNsosy9B5CMTGiTwRasRyhKXMeQzqPIj6x1o8dU216vv364UdR7vgiEIYpMj+Pb4DEBcoyQx+nmWlA9om7QmiJDjs4NdogthsKK0Xj9mZmCgBaASrAAJcDYicMHe1H2PsIZ9tetQbsVZaGqk88X/pPDav5mQobpW+/md+s=
+	t=1712741588; cv=none; b=FoXAiMl872YVVzsDioZDzZOS2tcL9OdMXn5wccSluF7iOl6gkw26cWBduhC3aQAolLPDlj71OExZIBxkHECpjMFlZHbVXcH202mCCU+/AxFhFdUXrCTTgxfyZP8RRc3oGVUJaXDKp0l5teGGbF+w+PsIfoBmTPVcf1FnurC8DLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712731511; c=relaxed/simple;
-	bh=RNjTiw+z2UXgWb291KUYhTrh7oCU2XpYJTpoXJoJ2Ps=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MGDIno2L0xoeVYQ4Frrw3h5TFsS55vWuyKAEoXkzHN93samR4FTisMCrgLkCRoHzWm3ERZIO4dfvaTK/48m/i9y0fcbKQNTMPRxmCFN0SyJlCsK+5/9eia1OJ3zwJonMgPXHGqqnH5SrkYAWWRcZDNUf4IC7+XYCo/Xk283OphU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Asj7+RZD; arc=none smtp.client-ip=115.124.30.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1712731506; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=ebzbpFm8mKtEwX879U96DPZbzdY2iwe+NayJYElOkPM=;
-	b=Asj7+RZD2qJ3sk6kwrOGu/K8WACsgX4zQ/QnqQtLILH+U2iD9p19DDk+0mOnW/oklBThk5AI4z1MOorrcyXMNXUw7GLF6c9SN5gkXoJD0tFDaHt4nfwWIlWqU4joGLO/HjZxwvLcQJLpndBh9KPxU5llzB+d7hRcqatQjbraZF8=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=yaoma@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0W4GtVHI_1712731503;
-Received: from 30.178.67.212(mailfrom:yaoma@linux.alibaba.com fp:SMTPD_---0W4GtVHI_1712731503)
-          by smtp.aliyun-inc.com;
-          Wed, 10 Apr 2024 14:45:04 +0800
-Message-ID: <f3c7ef07-8fad-4ef6-9095-16e4bd734477@linux.alibaba.com>
-Date: Wed, 10 Apr 2024 14:45:02 +0800
+	s=arc-20240116; t=1712741588; c=relaxed/simple;
+	bh=3vWRWxGstffzqNLW5/6mKLAWNYHCv7iLTBpmewWgXE8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Ebrr+mS2gA5iIP/j/H8WzMheeF52ZpCx4Jw28Fgkqu1m5pp1IoSJGGApvuJeQhnE2cmAmtgYyZ5cg+6ex08hzNg4tppngJxrjjASKpOaSCAsCHXSZNJo6Z6d8drO6CXAhnFlwt7womcl22kbwTWzjsYfRjt9kbqWP7PkFTNQPIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=lq3OFtjb; arc=none smtp.client-ip=217.70.178.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from relay6-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::226])
+	by mslow1.mail.gandi.net (Postfix) with ESMTP id 9D294C5F26;
+	Wed, 10 Apr 2024 09:29:11 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 54410C0003;
+	Wed, 10 Apr 2024 09:29:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1712741349;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Tg+gZ2Bg6yVJahNX0kkZdYlh/opG4Qc066zEoNLOrlo=;
+	b=lq3OFtjbylpQEyw4abJL9bQ2DdKZznZLPoHR4hWZTcQvvCldz63SG6Wd1Rxxa5wyPaHTmg
+	cx/0fnMdh4cmVg5/21ZXzo5aW9PmXmpIo/y0NXH9yqpW4vHEChruKw17IevfjB9bWzexjv
+	kcPKQZnCVBAEKwBgFW1WhEtmJcvdF6VB4eRnsYNPXqqnjBVRs72wk8d6/jOFfDW9KvJ4wt
+	rHKDOvTat1XYcHmK7iryU43mOty9iSFnpXWV7aU4Mr4mJ61U1QEkSBGiY7v3PdD2r/JC+q
+	rDf4UAMZeY8WFli4Hx3bU5yqv9IqrFQzYIAjrh9M01C0EjY3VHDHk5+osSZ3tg==
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: [PATCH v3 0/9] spi: cadence-qspi: add Mobileye EyeQ5 support
+Date: Wed, 10 Apr 2024 11:29:03 +0200
+Message-Id: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHv12 1/4] genirq: Provide a snapshot mechanism for interrupt
- statistics
-To: Thomas Gleixner <tglx@linutronix.de>, dianders@chromium.org,
- liusong@linux.alibaba.com, akpm@linux-foundation.org, pmladek@suse.com,
- kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com,
- tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
- jan.kiszka@siemens.com
-Cc: linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- yaoma@linux.alibaba.com
-References: <20240306125208.71803-1-yaoma@linux.alibaba.com>
- <20240306125208.71803-2-yaoma@linux.alibaba.com> <87frvu7t85.ffs@tglx>
-Content-Language: en-US
-From: Bitao Hu <yaoma@linux.alibaba.com>
-In-Reply-To: <87frvu7t85.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAN9bFmYC/2XMSw6CMBSF4a2Qjq259iU4ch/GQaFVbgIttqSRE
+ PZuwYFRh/9JzjeTaAPaSE7FTIJNGNG7HHxXkKbV7m4pmtyEARPAoKKNcZE+4oC0r7uJGssYSC2
+ ErjnJpyHYGz438HLN3WIcfZg2Px3W9U1xKH+pdKBAtQReSmVMVs+192OHbt/4nqxYYh9AgPwDW
+ AYqqdSxKpUyynwDy7K8AEalhPHvAAAA
+To: Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Vaishnav Achath <vaishnav.a@ti.com>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Rob Herring <robh@kernel.org>
+Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.13.0
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-Hi,
+Hi all,
 
-On 2024/4/9 17:58, Thomas Gleixner wrote:
-> 
-> This does not apply anymore.
-OK, I will update this patch based on the latest kernel code.
-> 
-> Also can you please split this apart to convert kstat_irqs to a struct
-> with just the count in it and then add the snapshot mechanics on top.
-> 
-OK, I will split this patch into two. The changelog for the first patch
-will be as follows.
+V3 of this series adding octal SPI-NOR support to Mobileye EyeQ5
+platform. It has been tested on EyeQ5 hardware successfully.
+V1 cover letter [5] contains a brief summary of what gets added.
 
-genirq: Convert kstat_irqs to a struct
+There is no dependency except if you want zero errors in devicetree:
+system-controller series [3] for <&clocks> phandle.
 
-The irq_desc::kstat_irqs member is a per-CPU variable of type int, and
-it is only capable of counting. The snapshot mechanism for interrupt
-statistics will be added soon, which requires an additional variable to
-store snapshot. To facilitate expansion, convert kstat_irqs here to
-a struct containing only the count.
+Have a nice day,
+Théo
 
-By the way, what do you think of my reason for using printk() instead of
-pr_crit()? Should I change this part of the code in v13?
+[0]: https://lore.kernel.org/lkml/20240216174227.409400-1-gregory.clement@bootlin.com/
+[1]: https://lore.kernel.org/linux-mips/20240209-regname-v1-0-2125efa016ef@flygoat.com/
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/log/
+[3]: https://lore.kernel.org/lkml/20240301-mbly-clk-v9-0-cbf06eb88708@bootlin.com/
+[4]: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git/log/
+[5]: https://lore.kernel.org/lkml/20240308-cdns-qspi-mbly-v1-0-a503856dd205@bootlin.com/
+[6]: https://lore.kernel.org/lkml/171259906078.120310.15397790336440498713.b4-ty@kernel.org/
 
-Besides, are there any other issues with this set of patches? I hope we
-can resolve all points of contention in v13.
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+---
+Changes in v3:
+- dt-bindings:
+  - Patch "sort compatibles alphabetically":
+    - Moved first.
+    - Take Reviewed-By Krzysztof.
+  - Patch "add mobileye,eyeq5-ospi compatible":
+  - EyeQ5 no longer implies no cdns,fifo-depth prop. Patch now only adds
+    compatible, no more property conditional.
+  - New "make cdns,fifo-depth optional" patch, for all compatibles.
+- Driver:
+  - FIFO depth detection is no longer a quirk. It is for all compatibles
+    if no DT property is provided.
+  - Rebase onto spi-next [4] to drop three patches. No-IRQ mode patch is
+    mentioned in email saying a subset of patches got applied [6].
+    However, it is not in spi-next, so it is kept in series.
+  - Busywait is no longer behind a quirk; it applies to all compatibles.
+  - No-IRQ mode patch got modified to change its quirk index because
+    previous quirk got removed.
+  - As we removed some quirks, we no longer overflow u8 quirks.
+- Link to v2: https://lore.kernel.org/r/20240405-cdns-qspi-mbly-v2-0-956679866d6d@bootlin.com
 
-Best Regards,
+Changes in v2:
+- Rebase upon v6.9-rc2.
+- Fix dt-bindings commit subject tags.
+- Take Reviewed-by: Krzysztof Kozlowski on dt-bindings commit.
+- Add dt-bindings commit to order compatibles alphabetically.
+  Krzysztof: unsure if you want this. It is second so that commit
+  adding EyeQ5 compatible can be taken alone easily.
+- Drop patch taken upstream:
+  spi: cadence-qspi: switch from legacy names to modern ones
+- Add To: Rob Herring, following get_maintainer.pl recommendation.
+- Link to v1: https://lore.kernel.org/r/20240308-cdns-qspi-mbly-v1-0-a503856dd205@bootlin.com
 
-	Bitao Hu
+---
+Théo Lebrun (9):
+      spi: dt-bindings: cdns,qspi-nor: sort compatibles alphabetically
+      spi: dt-bindings: cdns,qspi-nor: add mobileye,eyeq5-ospi compatible
+      spi: dt-bindings: cdns,qspi-nor: make cdns,fifo-depth optional
+      spi: cadence-qspi: allow FIFO depth detection
+      spi: cadence-qspi: add no-IRQ mode to indirect reads
+      spi: cadence-qspi: add early busywait to cqspi_wait_for_bit()
+      spi: cadence-qspi: add mobileye,eyeq5-ospi compatible
+      MIPS: mobileye: eyeq5: Add SPI-NOR controller node
+      MIPS: mobileye: eyeq5: add octal flash node to eval board DTS
+
+ .../devicetree/bindings/spi/cdns,qspi-nor.yaml     |  8 +-
+ arch/mips/boot/dts/mobileye/eyeq5-epm5.dts         | 15 ++++
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi             | 15 ++++
+ drivers/spi/spi-cadence-quadspi.c                  | 93 +++++++++++++++++-----
+ 4 files changed, 108 insertions(+), 23 deletions(-)
+---
+base-commit: d442072c067c86787dcee22c5d30d36b14edbba7
+change-id: 20240209-cdns-qspi-mbly-de2205a44ab3
+
+Best regards,
+-- 
+Théo Lebrun <theo.lebrun@bootlin.com>
+
 
