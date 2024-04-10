@@ -1,90 +1,184 @@
-Return-Path: <linux-mips+bounces-2664-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2665-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0275389F9B4
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 16:17:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C1BC89FE0E
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 19:17:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A27CB1F30F1D
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 14:17:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 07496B2FE41
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 17:12:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5125A15ECF9;
-	Wed, 10 Apr 2024 14:17:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E699E17BB39;
+	Wed, 10 Apr 2024 17:12:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="HyGuA7aN";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="4xJUkqSe"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="AxOGyNET"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4DE15B12A;
-	Wed, 10 Apr 2024 14:17:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A068D17BB05;
+	Wed, 10 Apr 2024 17:12:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712758645; cv=none; b=o2bRg+vCO4BM2cU2JAE4QiOQNulAyFw8c1XqVff0Qu20bdM2hA56ed7pfIC2rD8br/7yTNaRDp7IdtqBiw1jOiH7M/qP1CLZhMJkuxZ2q9NYRpiYQHkfmUskL+OniJ3mwG7ceaEfeEvnJNmVZEXzwkNYEcBj9f9GYAVVqSYeXcI=
+	t=1712769157; cv=none; b=qqZj3XkRY6ird6BJSKcbEAABNVodvHxfXKurZSvOmvMnTupyY/tY+vxo57q4BdKPvAvpgF3PWYcyW1SYxwmbZrJBan/lU9kQMsQmANslS/bmnu1dYlEdFnxM0E/QewZGMXofhWFx3lQDyLx2EHpZXkCcV590+MV5z8sYWU6oNHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712758645; c=relaxed/simple;
-	bh=iiLXM1gHb2fTzL1lNsUML+2NbfICPf9BJeU7hfbuI6k=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=h4z6HxxZPtBzaJB3RZXrPINYq/omKg3Yt0SOavIO4mmjbW9kGWzMHgTJCffhjh39OQh4nfhV6osPG+vFv489qoAYXKjhBwuWvL8hFIfCHu+RWZDU5XTqL6DjmtSckXmKTnohAqwnOYzBV2kKTs87bRvJQ7DaHXhRzcIqYOk9UuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=HyGuA7aN; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=4xJUkqSe; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1712758642;
+	s=arc-20240116; t=1712769157; c=relaxed/simple;
+	bh=UZN6bZ/VOXpFVmBzCZFb4rCBgwKePZT8MRaqGDGNeJc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=EZRfgsGpz+2iz1BS4P0uvFo+9VhlZjn4VOVySF61cSGyx9+o7LRo8umVDJ9OhoINVD/WQfGR44IYv+Z+ZZ6A4M9t+SYHXwZTC1/3eapHphnMPpvAAqWDhyY46352+XfQHaG7X4i24hkISenyih6pcNVfqLcVNea71SVg+nnLTNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=AxOGyNET; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 316DC1C0007;
+	Wed, 10 Apr 2024 17:12:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1712769153;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dKudWSPi1Iu7TxLjPm3UxpQgYscfG9LL8/XF7l+GrvA=;
-	b=HyGuA7aNqIHvi+4YBZ2QTOZarh53jTI7l8pcSR0KU9yTM0x6W08XWU/pG67KKgdebK+sIX
-	FwjoVZmyg7O6xEUcvy+MO47yD03ffWBG/lff3YyabpnGJKHwoaheyhwW5IP8k9wEfXefaF
-	mYA/SjvfDZJZ+GKi2/1UsSyopdwaYdea5VK+/9Nr6IAnCdWrbNvA+4ezEc0FS8/ORLA2Ae
-	0koMqYMoes8RWFR8DrFeCRaZJ93fDlcnb2QUW9W+gXdKfhuFJpYMazyq1XlKIkYJx1OGKA
-	7GcCYStS4+NRnOcXxE9Xnrn+uwyydjRUi4I/lXtbSu2V6sqJgXLpz/ph/JC4Cw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1712758642;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dKudWSPi1Iu7TxLjPm3UxpQgYscfG9LL8/XF7l+GrvA=;
-	b=4xJUkqSelu6YTEbO70Sq2RQ639AxhkKBi91Xaeg78LxGCFeiiaamNADOI/cbtpAQXtMwxa
-	U0veKRge4GuNBODg==
-To: Bitao Hu <yaoma@linux.alibaba.com>, dianders@chromium.org,
- liusong@linux.alibaba.com, akpm@linux-foundation.org, pmladek@suse.com,
- kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com,
- tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
- jan.kiszka@siemens.com
-Cc: linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- yaoma@linux.alibaba.com
-Subject: Re: [PATCHv12 1/4] genirq: Provide a snapshot mechanism for
- interrupt statistics
-In-Reply-To: <f3c7ef07-8fad-4ef6-9095-16e4bd734477@linux.alibaba.com>
-References: <20240306125208.71803-1-yaoma@linux.alibaba.com>
- <20240306125208.71803-2-yaoma@linux.alibaba.com> <87frvu7t85.ffs@tglx>
- <f3c7ef07-8fad-4ef6-9095-16e4bd734477@linux.alibaba.com>
-Date: Wed, 10 Apr 2024 16:17:21 +0200
-Message-ID: <875xwp480e.ffs@tglx>
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=dqccYW4TTVMR245oWOMT2QE+v65GZJhVyqPmQez5YqY=;
+	b=AxOGyNET4LG1HW8fSstIXz09u4haS/irmvIXJwE+egN4x7TBc7ozRAEpcDcq+Ho1M4zbdQ
+	9ApaXNMtozqImA5//vRRIIfJ9bBnadcfrS6ylMxAFTP7BK92xLEFslIW/VakwDZZBerra7
+	9vQ2DEp6kLggGdis0ULzAQJGitGq3Wl8xYIaJPq3syuIcBl9TYFW2lQHfaHfu7VkbTMB+T
+	F15GVbK2S2jcX7ZcjC8sAozClZZYmP6E2BFSijilbI2YyLLHPrJZz3xkLAqdDvbiH4KFEG
+	X7fal4duV454FlGG14edLIRRkblyevjDN0ERjeB6sQyw9DUW+y7E4qR477aPNg==
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: [PATCH 00/11] Add Mobileye EyeQ system controller support (clk,
+ reset, pinctrl)
+Date: Wed, 10 Apr 2024 19:12:29 +0200
+Message-Id: <20240410-mbly-olb-v1-0-335e496d7be3@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAH3IFmYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDEwML3dyknErd/JwkXXPTRAvTNNPktJRUYyWg8oKi1LTMCrBR0bG1tQD
+ bvinJWgAAAA==
+To: Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+ Linus Walleij <linus.walleij@linaro.org>
+Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: b4 0.13.0
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Wed, Apr 10 2024 at 14:45, Bitao Hu wrote:
-> On 2024/4/9 17:58, Thomas Gleixner wrote:
-> By the way, what do you think of my reason for using printk() instead of
-> pr_crit()? Should I change this part of the code in v13?
+Hello,
 
-Either way is fine. Just put a proper explanation into the change log if
-you stick with printk().
+This builds on previous EyeQ5 system-controller revisions [0] and adds
+EyeQ6L + EyeQ6H support. Pinctrl is not affected because it is not
+handled in the same manner on those new platforms; it will be dealt
+with with pinctrl-single. Only clk and reset expand to support those
+new platform.
 
-Thanks,
+Changes in drivers are pretty massive, which explains why I started a
+new revision count.
 
-        tglx
+EyeQ6H is particular in that it has not one but seven OLB instances.
+All seven host a (different) clock controller. Three host a reset
+controller.
+
+Patches are targeting MIPS, clk, reset and pinctrl trees independently.
+
+ - dt-bindings: soc: mobileye: add EyeQ5 OLB system controller
+ - MIPS: mobileye: eyeq5: add OLB syscon node
+ - MIPS: mobileye: eyeq5: use OLB clocks controller node
+ - MIPS: mobileye: eyeq5: add OLB reset controller node
+ - MIPS: mobileye: eyeq5: add pinctrl node & pinmux function nodes
+
+   Patches have no dependencies on this series. All required devicetrees
+   and bindings got in the last release. Bindings changes below are
+   only related to EyeQ6L/EyeQ6H.
+
+ - dt-bindings: clock: mobileye,eyeq5-clk: add EyeQ6L and EyeQ6H
+ - clk: divider: Introduce CLK_DIVIDER_EVEN_INTEGERS flag
+ - clk: eyeq: add driver
+
+   Clocks on all three platforms are rather similar. We have a bunch of
+   PLLs children to the main crystal, some being required early
+   (at of_clk_init(), before platform bus init).
+
+   We have a few divider clocks in some instances. A custom clk-divider
+   flag is introduced for the divisor because one clk would have a 256
+   entries table otherwise.
+
+   Compatible match data stores it all, nothing is declared in DT. Match
+   data has three arrays for the three types of clocks: early PLLs,
+   standard PLLs and divider clks.
+
+ - dt-bindings: reset: mobileye,eyeq5-reset: add EyeQ6L and EyeQ6H
+ - reset: eyeq: add platform driver
+
+   Resets on all three platforms are rather similar. We therefore
+   declare reset domain types and assign compatibles to an array of
+   domains, with types and valid masks associated. The rest is pretty
+   similar to previous code.
+
+   EyeQ6H west and east OLB each host an instance of the same compat.
+
+ - pinctrl: eyeq5: add platform driver
+
+   Not affected by EyeQ6L/EyeQ6H additions. It has not changed.
+
+Have a nice day,
+Théo
+
+[0]: https://lore.kernel.org/lkml/20240301-mbly-clk-v9-0-cbf06eb88708@bootlin.com/
+
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+---
+Théo Lebrun (11):
+      dt-bindings: soc: mobileye: add EyeQ5 OLB system controller
+      dt-bindings: clock: mobileye,eyeq5-clk: add EyeQ6L and EyeQ6H
+      dt-bindings: reset: mobileye,eyeq5-reset: add EyeQ6L and EyeQ6H
+      clk: divider: Introduce CLK_DIVIDER_EVEN_INTEGERS flag
+      clk: eyeq: add driver
+      reset: eyeq: add platform driver
+      pinctrl: eyeq5: add platform driver
+      MIPS: mobileye: eyeq5: add OLB syscon node
+      MIPS: mobileye: eyeq5: use OLB clocks controller node
+      MIPS: mobileye: eyeq5: add OLB reset controller node
+      MIPS: mobileye: eyeq5: add pinctrl node & pinmux function nodes
+
+ .../bindings/clock/mobileye,eyeq5-clk.yaml         | 103 +++-
+ .../bindings/reset/mobileye,eyeq5-reset.yaml       |  88 ++-
+ .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  | 125 ++++
+ MAINTAINERS                                        |   8 +
+ .../{eyeq5-fixed-clocks.dtsi => eyeq5-clocks.dtsi} |  54 +-
+ arch/mips/boot/dts/mobileye/eyeq5-pins.dtsi        | 125 ++++
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi             |  42 +-
+ drivers/clk/Kconfig                                |  11 +
+ drivers/clk/Makefile                               |   1 +
+ drivers/clk/clk-divider.c                          |  12 +-
+ drivers/clk/clk-eyeq.c                             | 644 +++++++++++++++++++++
+ drivers/pinctrl/Kconfig                            |  14 +
+ drivers/pinctrl/Makefile                           |   1 +
+ drivers/pinctrl/pinctrl-eyeq5.c                    | 579 ++++++++++++++++++
+ drivers/reset/Kconfig                              |  13 +
+ drivers/reset/Makefile                             |   1 +
+ drivers/reset/reset-eyeq.c                         | 543 +++++++++++++++++
+ include/dt-bindings/clock/mobileye,eyeq5-clk.h     |  21 +
+ include/linux/clk-provider.h                       |  11 +-
+ 19 files changed, 2322 insertions(+), 74 deletions(-)
+---
+base-commit: c8e31f416e99bd460f6f8847709bf69c72a3e146
+change-id: 20240408-mbly-olb-75a85f5cfde3
+
+Best regards,
+-- 
+Théo Lebrun <theo.lebrun@bootlin.com>
+
 
