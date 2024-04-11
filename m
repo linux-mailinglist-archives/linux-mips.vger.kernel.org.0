@@ -1,77 +1,90 @@
-Return-Path: <linux-mips+bounces-2682-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2683-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBDA78A021E
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 23:30:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 599038A0675
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Apr 2024 05:06:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03C3E1C21E96
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Apr 2024 21:30:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8036D1C239FF
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Apr 2024 03:06:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C365E184107;
-	Wed, 10 Apr 2024 21:30:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0BFB13B5AF;
+	Thu, 11 Apr 2024 03:06:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="JFp1xYoQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L/eZxjtf"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CAB6181D19;
-	Wed, 10 Apr 2024 21:30:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA341F5FA;
+	Thu, 11 Apr 2024 03:06:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712784622; cv=none; b=lTLgg42KzFAluHZid+Rnm+BAuLydkteZUiLtOgWEsgNkc7RWHvBmYWvQxp0e9HqS7PEvvFOv03XVjJcP5EhYd5wliLoQ9l3H+f4/XukV21+I0unlW1ANLeOfedgqNb33YiXvTZeosuz9fEDGsXjHoscuixJ6SqX2Z0WvSut/Dtw=
+	t=1712804797; cv=none; b=lvwAOXhStOgPP2Mid1rPuXFguYrPGapBED/a2CpLBpeqB6zrQtUCzy8ayT2k1QJFp4NDdCvu7nVU8f8w3n1vR3FvBJvf6X7UxFIuhIyWaJ5GqC0zuMWPkdHc1kDcmwnUNtfpKg0PjNDikjOlthHCPo/gI+MI35J+JV6c21ENnt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712784622; c=relaxed/simple;
-	bh=14ZzdB+5ZJ89hfQO2P/iVaITshCuwOTD8j6Uc+CSv9s=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=RVKIiybVTk8YzfeObd1QnAs+wgJbs2i4F7jdHJK59qK6ZQOu+vlq6iPQjlcyUDhVpxNj2WqOY6mgZ48+FQ/QYL7HnTw5GVE1+m+AsljUvDIsV+E5Oj/hLSNdHsuEw59IobOB/5q+4m3sA5L6mS0L2MIwWPv54WGRomc59NV1QMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=JFp1xYoQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44D19C433F1;
-	Wed, 10 Apr 2024 21:30:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1712784622;
-	bh=14ZzdB+5ZJ89hfQO2P/iVaITshCuwOTD8j6Uc+CSv9s=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=JFp1xYoQBbQ39g+uTbt4JLn3SBzgRbjqJ31eyFQf9/KYKQPg93LaIEw4AqO9qBCBd
-	 IaZLQJEvG3vUqIKZSLW207ouLZUCv3OzXKGTpgCVOAXkPkkakvzfiiajTuIeyu76gy
-	 L/McdS+iJHvTrIxiRy4HiJClm2JWS4c9rS0J95ME=
-Date: Wed, 10 Apr 2024 14:30:20 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Paolo Bonzini <pbonzini@redhat.com>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, Marc Zyngier
- <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao
- <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Nicholas Piggin
- <npiggin@gmail.com>, Anup Patel <anup@brainfault.org>, Atish Patra
- <atishp@atishpatra.org>, Sean Christopherson <seanjc@google.com>, David
- Hildenbrand <david@redhat.com>, linux-arm-kernel@lists.infradead.org,
- kvmarm@lists.linux.dev, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- kvm-riscv@lists.infradead.org, linux-mm@kvack.org,
- linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH 0/4] KVM, mm: remove the .change_pte() MMU notifier and
- set_pte_at_notify()
-Message-Id: <20240410143020.420cafd47bf8af257b2e647a@linux-foundation.org>
-In-Reply-To: <20240405115815.3226315-1-pbonzini@redhat.com>
-References: <20240405115815.3226315-1-pbonzini@redhat.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1712804797; c=relaxed/simple;
+	bh=tdJ0lgF+UwsqfOZfw3fpBD95sXmyAoj2othwTClSfJE=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=u1m63Adcz1fRbuWzGRpTYmgWKkboMVQdqR0AI0PpmNifJKo7TD4CGqMixr6mN926d9xtLGOx60vCa2SXiQT6x+XIN2EVqZCBxPgW9Cmu78pvgSskCC+wKbZgylqufePcO7xFAE3Olwk+SBZ62qSDbCiklyFyHHV0P6gxudu4HdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L/eZxjtf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D10B5C433C7;
+	Thu, 11 Apr 2024 03:06:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712804797;
+	bh=tdJ0lgF+UwsqfOZfw3fpBD95sXmyAoj2othwTClSfJE=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=L/eZxjtfp55i5cWvAWE5b6ObdnG+fiTqKBQ4sVFR4SMAruzZ/dVCFou+5hvn+fYEv
+	 7tBLQ5GlKEOKb0NdUGRqaP1mWZLhSaq8D/DgDA6rNQnHKCdHgZo4gkOizsOq4hVPUR
+	 uWmnFXbUuqCnuScJ/OBuSR7Y8INxeIJHrTSiz85C+jTPNQTCL2xju6dClMupdmEp6i
+	 Pp9oLsCdF0YqC27sUINL8FUUiMuYx1XhI2MoKBP0auAWXXa3lBlHS2PAczDCfR/RlH
+	 FVktnQaSK7TtAx6sFNZUWsfWIVytlMfUKtE0IitP6FiG0bDHT90q2bmy+ODECEjyqk
+	 WChS70Bal3K+A==
+Message-ID: <4ce9f3cea1ecd3777cf3e291cc865210.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240410-mbly-olb-v1-4-335e496d7be3@bootlin.com>
+References: <20240410-mbly-olb-v1-0-335e496d7be3@bootlin.com> <20240410-mbly-olb-v1-4-335e496d7be3@bootlin.com>
+Subject: Re: [PATCH 04/11] clk: divider: Introduce CLK_DIVIDER_EVEN_INTEGERS flag
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, Gregory CLEMENT <gregory.clement@bootlin.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>, =?utf-8?q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>
+To: Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Linus Walleij <linus.walleij@linaro.org>, Michael Turquette <mturquette@baylibre.com>, Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>, =?utf-8?q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>
+Date: Wed, 10 Apr 2024 20:06:34 -0700
+User-Agent: alot/0.10
 
-On Fri,  5 Apr 2024 07:58:11 -0400 Paolo Bonzini <pbonzini@redhat.com> wrote:
+Quoting Th=C3=A9o Lebrun (2024-04-10 10:12:33)
+> index 4a537260f655..cb348e502e41 100644
+> --- a/include/linux/clk-provider.h
+> +++ b/include/linux/clk-provider.h
+> @@ -675,13 +675,15 @@ struct clk_div_table {
+>   * CLK_DIVIDER_BIG_ENDIAN - By default little endian register accesses a=
+re used
+>   *     for the divider register.  Setting this flag makes the register a=
+ccesses
+>   *     big endian.
+> + * CLK_DIVIDER_EVEN_INTEGERS - clock divisor is 2, 4, 6, 8, 10, etc.
+> + *     Formula is 2 * (value read from hardware + 1).
+>   */
+>  struct clk_divider {
+>         struct clk_hw   hw;
+>         void __iomem    *reg;
+>         u8              shift;
+>         u8              width;
+> -       u8              flags;
+> +       u16             flags;
 
-> Please review!  Also feel free to take the KVM patches through the mm
-> tree, as I don't expect any conflicts.
+This can stay u8
 
-It's mainly a KVM thing and the MM changes are small and simple.
-I'd say that the KVM tree would be a better home?
+>         const struct clk_div_table      *table;
+>         spinlock_t      *lock;
+>  };
+
+We should add a kunit test.
 
