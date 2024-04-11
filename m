@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-2702-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2703-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CEA28A1646
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Apr 2024 15:50:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 534FF8A16A0
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Apr 2024 16:06:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D8621C21791
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Apr 2024 13:50:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF6341F2187D
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Apr 2024 14:06:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9628614D431;
-	Thu, 11 Apr 2024 13:49:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36F691509BD;
+	Thu, 11 Apr 2024 14:04:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="EizjFafu"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dW6gxsCV"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4D5E147C9D;
-	Thu, 11 Apr 2024 13:49:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4556614EC6A;
+	Thu, 11 Apr 2024 14:04:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712843386; cv=none; b=fv4S1gMD3bBNXv7EorAQTfc6A+kDAjds40V7XeRJuqCwVQKtbXZHxipFkzXIfyfVeElF8FiSacpDgtCt8uQoXuwTjLB6r7F1Lw5POcvaAoJTzTgx9/o00Xk6C8QINkYChBS7OVfYHawoF4ESiR7jZatwKSyuUfMs2kSP9cunP6k=
+	t=1712844282; cv=none; b=MBMbe5BD03nKMEsRxXFXUnW2cjAHvuMT0mvoOEOvbWKewVxmlW7d9Y4mbNUBxHEt7/UwY7r7RwMXiAREx0e/Puey0SYKD4soUvnc4rYDp8NA9aToSPmY6j6ZTD4gzOVJBXorkm34bfhv5Dj26Tx7AcRar/CpFY63h6zLbR2GWeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712843386; c=relaxed/simple;
-	bh=gmld257+GG6WGIrfxRjRkWvqnB1xsmhIW/xZjCHCGSs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=PNFuh1jo5O7VWWt2z0KE051Dr4gjF0QUh64Si7ehM0xsU3aqCr7IDXwMBveY146SET12YCVEv2JxYN6ocxvFszPNgsBCtyrUv8sF92niZzTDDugnbRgiR7gRAGmXhSZSia0VhtBmgOjGuV7Jf8wbvP7zd8ccyNo2H6EZLIzfSH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=EizjFafu; arc=none smtp.client-ip=217.70.183.196
+	s=arc-20240116; t=1712844282; c=relaxed/simple;
+	bh=ZrCt6oej6WWRtK9ajy4DESiiMvZN55Rd82Z7cAO61lE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
+	 References:In-Reply-To; b=u+KgXPEieQ3WCmSiDLMfKLZFDyc7YYoqIWsr7VZAPgtJgFCv/CxS/YFnP7iT+j7nAxM/2pX9LOHqcY1jHnsdc6T4ev//9MmsN+AuaD7TJfyo+yJv4v2bfo/lUjjTS6oh0UR+CJKGPWGEOZ9BrhCe+JfJxifO7NGeSbZDR2U7Dz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dW6gxsCV; arc=none smtp.client-ip=217.70.183.198
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5317FE0002;
-	Thu, 11 Apr 2024 13:49:34 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 923E7C0008;
+	Thu, 11 Apr 2024 14:04:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1712843375;
+	t=1712844277;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=LiWlRAVSR0J/gKNCGbaKB/gU7+67qgp/9tQ2GW51RFg=;
-	b=EizjFafu2wVellm9z3fq9e6dRFMrKjVuDPuEA1bw5u5vNk6VBC0vRcw+BeMrH6oCoLXcIi
-	Qxt76lhOLB4npENtewa0dPrw1lvXzL6WSZRZWfqQ135hC8PBFSvtc+ag2mXuZTRYXTbDq6
-	EkWX6/K53V4hpwwN9FTWp5gT9g3HlKj5EYLoG5UFzSJ2a5zzezO9RnlKuqm230fN/xeyDC
-	4xsZzVJCXzvPfr1fPHL9/tJprb9trw9zAVVRz+c63mutYJl4+jhQRECYBiyk8rP1z11agX
-	mnL7ztnQ03MD84uBDEak2FDgNNupMAHtz12zls0OA16jGk7gaIzv2zcvqKVP9A==
+	bh=yHMOCEThioFNBRb0/pbHA6siONYSvI8bftJSI3SDdxw=;
+	b=dW6gxsCVgdghqn/IQbcGvOrg1mwarJk5nvxU2EHuog49c2PESSCXprtlxzegLMubTQWTll
+	ob7G/iNruURS6u6995ukRb7IuuEDM+JwqApqib94ioelO8Q01YlC4cK+J1K9MOQolSPRRw
+	3nBIHdL0PD0DQyx9r2Gckk9WbK+dX5wRN/h54M2U0K/V5BxtTqZzyzKXsOQbOmuC7Ezwr6
+	xwpVw7nK3o/VUhABP2sr4Pb0b3DYlCqAXYwyWUDaSgAh4fHhEAZdfIuD5OqTAO/2TVdRGV
+	8LO4Vqf2fDiQLDyx44laxhlTBWi7vcFAKRsxNMTdvEhwPcFDTIZVPLUNzael8g==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,11 +53,8 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 11 Apr 2024 15:49:34 +0200
-Message-Id: <D0HCAV6APTSD.WKGPESJ29D8A@bootlin.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH 02/11] dt-bindings: clock: mobileye,eyeq5-clk: add
- EyeQ6L and EyeQ6H
+Date: Thu, 11 Apr 2024 16:04:36 +0200
+Message-Id: <D0HCMDMWTO61.1F860N5I5SKS3@bootlin.com>
 Cc: <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
  <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
  <linux-gpio@vger.kernel.org>, "Vladimir Kondratiev"
@@ -71,218 +68,118 @@ To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Rob Herring"
  "Michael Turquette" <mturquette@baylibre.com>, "Stephen Boyd"
  <sboyd@kernel.org>, "Philipp Zabel" <p.zabel@pengutronix.de>, "Linus
  Walleij" <linus.walleij@linaro.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH 03/11] dt-bindings: reset: mobileye,eyeq5-reset: add
+ EyeQ6L and EyeQ6H
 X-Mailer: aerc 0.15.2
 References: <20240410-mbly-olb-v1-0-335e496d7be3@bootlin.com>
- <20240410-mbly-olb-v1-2-335e496d7be3@bootlin.com>
- <29ece6c8-ddf4-4dcd-b5b4-1cad8bc858d3@linaro.org>
-In-Reply-To: <29ece6c8-ddf4-4dcd-b5b4-1cad8bc858d3@linaro.org>
+ <20240410-mbly-olb-v1-3-335e496d7be3@bootlin.com>
+ <975a8554-a299-4394-be15-c910cf9688ae@linaro.org>
+In-Reply-To: <975a8554-a299-4394-be15-c910cf9688ae@linaro.org>
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-Hello Krzysztof,
+Hello,
 
 On Thu Apr 11, 2024 at 8:14 AM CEST, Krzysztof Kozlowski wrote:
 > On 10/04/2024 19:12, Th=C3=A9o Lebrun wrote:
-> > Add bindings describing EyeQ6L and EyeQ6H clock controllers.
-> > Add constants to index clocks.
+> > Add bindings for EyeQ6L and EyeQ6H reset controllers.
 > >=20
-> > Bindings are conditional for two reasons:
-> >  - Some compatibles expose a single clock; they do not take clock cells=
-.
-> >  - All compatibles take a PLLs resource, not all take others (aimed at
-> >    divider clocks). Those that only take a resource for PLLs do not
-> >    require named resources.
+> > Some controllers host a single domain, meaning a single cell is enough.
+> > We do not enforce reg-names for such nodes.
 > >=20
 > > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 > > ---
-> >  .../bindings/clock/mobileye,eyeq5-clk.yaml         | 103 +++++++++++++=
-+++++---
-> >  MAINTAINERS                                        |   2 +
-> >  include/dt-bindings/clock/mobileye,eyeq5-clk.h     |  21 +++++
-> >  3 files changed, 113 insertions(+), 13 deletions(-)
+> >  .../bindings/reset/mobileye,eyeq5-reset.yaml       | 88 ++++++++++++++=
+++++----
+> >  MAINTAINERS                                        |  1 +
+> >  2 files changed, 74 insertions(+), 15 deletions(-)
 > >=20
-> > diff --git a/Documentation/devicetree/bindings/clock/mobileye,eyeq5-clk=
-.yaml b/Documentation/devicetree/bindings/clock/mobileye,eyeq5-clk.yaml
-
-[...]
-
+> > diff --git a/Documentation/devicetree/bindings/reset/mobileye,eyeq5-res=
+et.yaml b/Documentation/devicetree/bindings/reset/mobileye,eyeq5-reset.yaml
+> > index 062b4518347b..799bcf15bed9 100644
+> > --- a/Documentation/devicetree/bindings/reset/mobileye,eyeq5-reset.yaml
+> > +++ b/Documentation/devicetree/bindings/reset/mobileye,eyeq5-reset.yaml
+> > @@ -4,11 +4,13 @@
+> >  $id: http://devicetree.org/schemas/reset/mobileye,eyeq5-reset.yaml#
+> >  $schema: http://devicetree.org/meta-schemas/core.yaml#
+> > =20
+> > -title: Mobileye EyeQ5 reset controller
+> > +title: Mobileye EyeQ reset controller
+> > =20
+> >  description:
+> > -  The EyeQ5 reset driver handles three reset domains. Its registers li=
+ve in a
+> > -  shared region called OLB.
+> > +  EyeQ reset controller handles one or more reset domains. They live i=
+n shared
+> > +  regions called OLB. EyeQ5 and EyeQ6L host one OLB each, each with on=
+e reset
+> > +  instance. EyeQ6H hosts 7 OLB regions; three of those (west, east,
+> > +  accelerator) host reset controllers. West and east are duplicates.
+> > =20
+> >  maintainers:
+> >    - Gr=C3=A9gory Clement <gregory.clement@bootlin.com>
+> > @@ -17,27 +19,83 @@ maintainers:
+> > =20
 > >  properties:
 > >    compatible:
-> > -    const: mobileye,eyeq5-clk
+> > -    const: mobileye,eyeq5-reset
 > > +    enum:
-> > +      - mobileye,eyeq5-clk
-> > +      - mobileye,eyeq6l-clk
-> > +      - mobileye,eyeq6h-central-clk
-> > +      - mobileye,eyeq6h-west-clk
-> > +      - mobileye,eyeq6h-east-clk
-> > +      - mobileye,eyeq6h-south-clk
-> > +      - mobileye,eyeq6h-ddr0-clk
-> > +      - mobileye,eyeq6h-ddr1-clk
-> > +      - mobileye,eyeq6h-acc-clk
+> > +      - mobileye,eyeq5-reset
+> > +      - mobileye,eyeq6l-reset
+> > +      - mobileye,eyeq6h-we-reset
+> > +      - mobileye,eyeq6h-acc-reset
 > > =20
 > > -  reg:
-> > -    maxItems: 2
+> > -    maxItems: 3
 > > +  reg: true
 >
-> No, you must leave widest constraints here.
+> Same mistakes. Please open existing bindings with multiple variants,
+> e.g. some Qualcomm, and take a look how it is done there.
 
-Noted, will do.
+Thanks for the pointer to good example, that is useful! So if we take
+one random binding matching
+Documentation/devicetree/bindings/clock/qcom,*.yaml and that contains
+the "reg-names" string, we see:
 
-> > -  reg-names:
-> > -    items:
-> > -      - const: plls
-> > -      - const: ospi
-> > +  reg-names: true
->
-> No, you must leave widest constraints here.
+  reg:
+    items:
+      - description: LPASS qdsp6ss register
+      - description: LPASS top-cc register
 
-Noted, will do.
+  reg-names:
+    items:
+      - const: qdsp6ss
+      - const: top_cc
 
-> >    "#clock-cells":
-> > -    const: 1
-> > +    enum: [0, 1]
->
-> Looks like you squash here quite different devices...
+I don't understand one thing; this doesn't tell you:
 
-They are the same controllers but some only expose a single clock. It is
-EyeQ6H that has 7 OLB instances, so some don't deal with many clocks.
+   You can provide 2 MMIO blocks, which must be qdsp6ss and top_cc.
 
-I started with a more generic approach of #clock-cells =3D <1> and only
-have index zero available for those that have a single clock.
-I am not a fan of this however.
+But it tells you:
 
-> >    clocks:
-> >      maxItems: 1
-> > @@ -43,9 +49,80 @@ properties:
-> >  required:
-> >    - compatible
-> >    - reg
-> > -  - reg-names
-> >    - "#clock-cells"
-> >    - clocks
-> >    - clock-names
-> > =20
-> > +allOf:
-> > +  # "mobileye,eyeq5-clk" provides:
-> > +  #  - PLLs and,
-> > +  #  - One divider clock related to ospi.
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          const: mobileye,eyeq5-clk
-> > +    then:
-> > +      properties:
-> > +        reg:
-> > +          minItems: 2
-> > +          maxItems: 2
-> > +        reg-names:
-> > +          minItems: 2
-> > +          maxItems: 2
->
-> So any name is now valid? Like "yellow-pony"?
+   Block zero must be qdsp6ss.
+   Block one must be top_cc.
 
-I do not understand what implies this. Below "items: enum: [...]"
-ensures only two allowed values. dtbs_check agrees:
+If we do that I do not get the point of reg-names; we put more
+information in our devicetree that is in any case imposed.
 
-=E2=9F=A9 git diff
-diff --git a/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-           b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-index 8d4f65ec912d..5031eb8b4270 100644
---- a/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-+++ b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-@@ -126,7 +126,7 @@ reset: reset-controller@e00000 {
-                        clocks: clock-controller@e0002c {
-                                compatible =3D "mobileye,eyeq5-clk";
-                                reg =3D <0x02c 0x50>, <0x11c 0x04>;
--                               reg-names =3D "plls", "ospi";
-+                               reg-names =3D "plls", "yellow-pony";
-                                #clock-cells =3D <1>;
-                                clocks =3D <&xtal>;
-                                clock-names =3D "ref";
+This is why I went with a different approach looking like:
 
-=E2=9F=A9 make dtbs_check DT_SCHEMA_FILES=3Dmobileye DT_CHECKER_FLAGS=3D-m
-  UPD     include/config/kernel.release
-  DTC_CHK arch/mips/boot/dts/mobileye/eyeq5-epm5.dtb
-arch/mips/boot/dts/mobileye/eyeq5-epm5.dtb: system-controller@e00000:
-  clock-controller@e0002c:reg-names:1:
-  'yellow-pony' is not one of ['plls', 'ospi']
-  from schema $id:
-    http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
+  reg:
+    minItems: 2
+    maxItems: 2
+  reg-names:
+    minItems: 2
+    maxItems: 2
+    items:
+      enum: [ d0, d1 ]
 
-> > +          items:
-> > +            enum: [ plls, ospi ]
-> > +      required:
-> > +        - reg-names
-> > +
-> > +  # "mobileye,eyeq6h-south-clk" provides:
-> > +  #  - PLLs and,
-> > +  #  - Four divider clocks related to emmc, ospi and tsu.
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          const: mobileye,eyeq6h-south-clk
-> > +    then:
-> > +      properties:
-> > +        reg:
-> > +          minItems: 4
-> > +          maxItems: 4
-> > +        reg-names:
-> > +          minItems: 4
-> > +          maxItems: 4
-> > +          items:
-> > +            enum: [ plls, emmc, ospi, tsu ]
-> > +      required:
-> > +        - reg-names
-> > +
-> > +  # Other compatibles only provide PLLs. Do not ask for named resource=
-s.
-> > +  - if:
-> > +      not:
-> > +        required:
-> > +          - reg-names
-> > +    then:
-> > +      properties:
-> > +        reg:
-> > +          minItems: 1
-> > +          maxItems: 1
->
-> No, just restrict properly reg per variant.
+I know this is not perfect, but at least you don't enforce an order for
+no reason. If "items: const..." approach should be taken, then I'll
+remove reg-names which bring no benefit.
 
-Noted, will do.
-
-> > +        reg-names: false
->
-> That's redundant. Drop entire if.
-
-Ah, yes. Will fix that.
-
-> > +
-> > +  # Some compatibles provide a single clock; they do not take a clock =
-cell.
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          enum:
-> > +            - mobileye,eyeq6h-central-clk
-> > +            - mobileye,eyeq6h-west-clk
-> > +            - mobileye,eyeq6h-east-clk
-> > +            - mobileye,eyeq6h-ddr0-clk
-> > +            - mobileye,eyeq6h-ddr1-clk
-> > +    then:
-> > +      properties:
-> > +        "#clock-cells":
-> > +          const: 0
->
-> Wait, so you define device-per-clock? That's a terrible idea. We also
-> discussed it many times and it was rejected many times.
->
-> You have one device, not 5.
-
-Each region must be a syscon to make its various registers accessible to
-drivers that'll need it. Following that, I have a hard time seeing what
-would be the DT structure of 7 OLB system-controllers but a single
-clock node?
-
-Regards,
+Thanks Krzysztof,
 
 --
 Th=C3=A9o Lebrun, Bootlin
