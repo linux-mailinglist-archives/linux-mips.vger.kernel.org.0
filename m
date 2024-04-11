@@ -1,124 +1,292 @@
-Return-Path: <linux-mips+bounces-2701-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2702-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 164128A13E3
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Apr 2024 14:03:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CEA28A1646
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Apr 2024 15:50:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 67D2AB251D6
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Apr 2024 12:03:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D8621C21791
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Apr 2024 13:50:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C49E414AD3B;
-	Thu, 11 Apr 2024 12:03:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9628614D431;
+	Thu, 11 Apr 2024 13:49:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W/0021Bd"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="EizjFafu"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93520140E3C;
-	Thu, 11 Apr 2024 12:03:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4D5E147C9D;
+	Thu, 11 Apr 2024 13:49:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712836994; cv=none; b=nFhqVQ7qIHohTSWqC0Kp9BuT9Wgnxyw7fafU5SrqTWhk78SPgAH/q3CM4BUqCy/2dNb0DPazPgrXx6vAdjHoAP8MafUMpCsvhqKSuVy0PSBDJtK9iBo6auVNcyTH/nCkVmqWsAG3vzWCqqZ2L0CCgRq8EgqDlgizK1H250qR0vU=
+	t=1712843386; cv=none; b=fv4S1gMD3bBNXv7EorAQTfc6A+kDAjds40V7XeRJuqCwVQKtbXZHxipFkzXIfyfVeElF8FiSacpDgtCt8uQoXuwTjLB6r7F1Lw5POcvaAoJTzTgx9/o00Xk6C8QINkYChBS7OVfYHawoF4ESiR7jZatwKSyuUfMs2kSP9cunP6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712836994; c=relaxed/simple;
-	bh=nL9f2S8UZ4KVTsuWcIhw2zuRANiF6mbd5sOWnMoueFQ=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=qtC9B9xVLB7B/ZXndmrfb2PKvnaTzupTdc26fmO4Zg52tKiwHDZTZhajplYkrIQ5SBrDGOnk70YGY49ijByCgEzddxJHUy6pgVY+eoLtHoi7YzrpSeOUTjEXSf0mRWawFPoj80IGRRGR0HJZDyFtemBbujSznPLbmXeF9xhIR80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W/0021Bd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59C85C433F1;
-	Thu, 11 Apr 2024 12:03:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712836994;
-	bh=nL9f2S8UZ4KVTsuWcIhw2zuRANiF6mbd5sOWnMoueFQ=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=W/0021BdskERYdkTfh1jLdhIBilHqvxAORF5B+ExNQ3XfSTi+OyHiwJ09adr7jN93
-	 0KHUpheGwPYxY4gN4wOlcpqC+eMifuuBe90ellHh29cub71H5zv+ZEJ0jpEbaC0QnT
-	 JcQMbEXs0XxwhxQhleoPLn2qwpX2sQBZaQjL9BvCHaxtSvf90x+bKryEly8qUVsqa3
-	 iv70ImT88uf7kJfS9HyXSgls7vkrwSUh9GLiAq6bBCgYeEnqb/rB2c2nXBak8DY8Hg
-	 0jeSMRTuL6ZlsdshueukOk09RItvoEwBiKQQInoC6UYdHbeP2h2DPdQqYy+6p3jNG9
-	 s5VzoBS+GKWEg==
-From: Mark Brown <broonie@kernel.org>
-To: Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Vaishnav Achath <vaishnav.a@ti.com>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Rob Herring <robh@kernel.org>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- Gregory CLEMENT <gregory.clement@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
-References: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
-Subject: Re: (subset) [PATCH v3 0/9] spi: cadence-qspi: add Mobileye EyeQ5
- support
-Message-Id: <171283699002.32012.7629247540689477794.b4-ty@kernel.org>
-Date: Thu, 11 Apr 2024 13:03:10 +0100
+	s=arc-20240116; t=1712843386; c=relaxed/simple;
+	bh=gmld257+GG6WGIrfxRjRkWvqnB1xsmhIW/xZjCHCGSs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
+	 References:In-Reply-To; b=PNFuh1jo5O7VWWt2z0KE051Dr4gjF0QUh64Si7ehM0xsU3aqCr7IDXwMBveY146SET12YCVEv2JxYN6ocxvFszPNgsBCtyrUv8sF92niZzTDDugnbRgiR7gRAGmXhSZSia0VhtBmgOjGuV7Jf8wbvP7zd8ccyNo2H6EZLIzfSH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=EizjFafu; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5317FE0002;
+	Thu, 11 Apr 2024 13:49:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1712843375;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LiWlRAVSR0J/gKNCGbaKB/gU7+67qgp/9tQ2GW51RFg=;
+	b=EizjFafu2wVellm9z3fq9e6dRFMrKjVuDPuEA1bw5u5vNk6VBC0vRcw+BeMrH6oCoLXcIi
+	Qxt76lhOLB4npENtewa0dPrw1lvXzL6WSZRZWfqQ135hC8PBFSvtc+ag2mXuZTRYXTbDq6
+	EkWX6/K53V4hpwwN9FTWp5gT9g3HlKj5EYLoG5UFzSJ2a5zzezO9RnlKuqm230fN/xeyDC
+	4xsZzVJCXzvPfr1fPHL9/tJprb9trw9zAVVRz+c63mutYJl4+jhQRECYBiyk8rP1z11agX
+	mnL7ztnQ03MD84uBDEak2FDgNNupMAHtz12zls0OA16jGk7gaIzv2zcvqKVP9A==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.14-dev
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 11 Apr 2024 15:49:34 +0200
+Message-Id: <D0HCAV6APTSD.WKGPESJ29D8A@bootlin.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH 02/11] dt-bindings: clock: mobileye,eyeq5-clk: add
+ EyeQ6L and EyeQ6H
+Cc: <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+ <linux-gpio@vger.kernel.org>, "Vladimir Kondratiev"
+ <vladimir.kondratiev@mobileye.com>, "Gregory CLEMENT"
+ <gregory.clement@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>
+To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Rob Herring"
+ <robh@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Michael Turquette" <mturquette@baylibre.com>, "Stephen Boyd"
+ <sboyd@kernel.org>, "Philipp Zabel" <p.zabel@pengutronix.de>, "Linus
+ Walleij" <linus.walleij@linaro.org>
+X-Mailer: aerc 0.15.2
+References: <20240410-mbly-olb-v1-0-335e496d7be3@bootlin.com>
+ <20240410-mbly-olb-v1-2-335e496d7be3@bootlin.com>
+ <29ece6c8-ddf4-4dcd-b5b4-1cad8bc858d3@linaro.org>
+In-Reply-To: <29ece6c8-ddf4-4dcd-b5b4-1cad8bc858d3@linaro.org>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Wed, 10 Apr 2024 11:29:03 +0200, Théo Lebrun wrote:
-> V3 of this series adding octal SPI-NOR support to Mobileye EyeQ5
-> platform. It has been tested on EyeQ5 hardware successfully.
-> V1 cover letter [5] contains a brief summary of what gets added.
-> 
-> There is no dependency except if you want zero errors in devicetree:
-> system-controller series [3] for <&clocks> phandle.
-> 
-> [...]
+Hello Krzysztof,
 
-Applied to
+On Thu Apr 11, 2024 at 8:14 AM CEST, Krzysztof Kozlowski wrote:
+> On 10/04/2024 19:12, Th=C3=A9o Lebrun wrote:
+> > Add bindings describing EyeQ6L and EyeQ6H clock controllers.
+> > Add constants to index clocks.
+> >=20
+> > Bindings are conditional for two reasons:
+> >  - Some compatibles expose a single clock; they do not take clock cells=
+.
+> >  - All compatibles take a PLLs resource, not all take others (aimed at
+> >    divider clocks). Those that only take a resource for PLLs do not
+> >    require named resources.
+> >=20
+> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> > ---
+> >  .../bindings/clock/mobileye,eyeq5-clk.yaml         | 103 +++++++++++++=
++++++---
+> >  MAINTAINERS                                        |   2 +
+> >  include/dt-bindings/clock/mobileye,eyeq5-clk.h     |  21 +++++
+> >  3 files changed, 113 insertions(+), 13 deletions(-)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/clock/mobileye,eyeq5-clk=
+.yaml b/Documentation/devicetree/bindings/clock/mobileye,eyeq5-clk.yaml
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+[...]
 
-Thanks!
+> >  properties:
+> >    compatible:
+> > -    const: mobileye,eyeq5-clk
+> > +    enum:
+> > +      - mobileye,eyeq5-clk
+> > +      - mobileye,eyeq6l-clk
+> > +      - mobileye,eyeq6h-central-clk
+> > +      - mobileye,eyeq6h-west-clk
+> > +      - mobileye,eyeq6h-east-clk
+> > +      - mobileye,eyeq6h-south-clk
+> > +      - mobileye,eyeq6h-ddr0-clk
+> > +      - mobileye,eyeq6h-ddr1-clk
+> > +      - mobileye,eyeq6h-acc-clk
+> > =20
+> > -  reg:
+> > -    maxItems: 2
+> > +  reg: true
+>
+> No, you must leave widest constraints here.
 
-[1/9] spi: dt-bindings: cdns,qspi-nor: sort compatibles alphabetically
-      commit: 002514d91fccde2adbe750c9ec5c6207d56c890b
-[2/9] spi: dt-bindings: cdns,qspi-nor: add mobileye,eyeq5-ospi compatible
-      commit: 52826aee484b3ebb6ed94c1ae89c0944110ed8b1
-[3/9] spi: dt-bindings: cdns,qspi-nor: make cdns,fifo-depth optional
-      commit: eb4fdb4bf46f875eac3c093f7ff43a223985f7b8
-[4/9] spi: cadence-qspi: allow FIFO depth detection
-      (no commit info)
-[5/9] spi: cadence-qspi: add no-IRQ mode to indirect reads
-      (no commit info)
-[6/9] spi: cadence-qspi: add early busywait to cqspi_wait_for_bit()
-      (no commit info)
-[7/9] spi: cadence-qspi: add mobileye,eyeq5-ospi compatible
-      (no commit info)
+Noted, will do.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+> > -  reg-names:
+> > -    items:
+> > -      - const: plls
+> > -      - const: ospi
+> > +  reg-names: true
+>
+> No, you must leave widest constraints here.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Noted, will do.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+> >    "#clock-cells":
+> > -    const: 1
+> > +    enum: [0, 1]
+>
+> Looks like you squash here quite different devices...
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+They are the same controllers but some only expose a single clock. It is
+EyeQ6H that has 7 OLB instances, so some don't deal with many clocks.
 
-Thanks,
-Mark
+I started with a more generic approach of #clock-cells =3D <1> and only
+have index zero available for those that have a single clock.
+I am not a fan of this however.
+
+> >    clocks:
+> >      maxItems: 1
+> > @@ -43,9 +49,80 @@ properties:
+> >  required:
+> >    - compatible
+> >    - reg
+> > -  - reg-names
+> >    - "#clock-cells"
+> >    - clocks
+> >    - clock-names
+> > =20
+> > +allOf:
+> > +  # "mobileye,eyeq5-clk" provides:
+> > +  #  - PLLs and,
+> > +  #  - One divider clock related to ospi.
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          const: mobileye,eyeq5-clk
+> > +    then:
+> > +      properties:
+> > +        reg:
+> > +          minItems: 2
+> > +          maxItems: 2
+> > +        reg-names:
+> > +          minItems: 2
+> > +          maxItems: 2
+>
+> So any name is now valid? Like "yellow-pony"?
+
+I do not understand what implies this. Below "items: enum: [...]"
+ensures only two allowed values. dtbs_check agrees:
+
+=E2=9F=A9 git diff
+diff --git a/arch/mips/boot/dts/mobileye/eyeq5.dtsi
+           b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
+index 8d4f65ec912d..5031eb8b4270 100644
+--- a/arch/mips/boot/dts/mobileye/eyeq5.dtsi
++++ b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
+@@ -126,7 +126,7 @@ reset: reset-controller@e00000 {
+                        clocks: clock-controller@e0002c {
+                                compatible =3D "mobileye,eyeq5-clk";
+                                reg =3D <0x02c 0x50>, <0x11c 0x04>;
+-                               reg-names =3D "plls", "ospi";
++                               reg-names =3D "plls", "yellow-pony";
+                                #clock-cells =3D <1>;
+                                clocks =3D <&xtal>;
+                                clock-names =3D "ref";
+
+=E2=9F=A9 make dtbs_check DT_SCHEMA_FILES=3Dmobileye DT_CHECKER_FLAGS=3D-m
+  UPD     include/config/kernel.release
+  DTC_CHK arch/mips/boot/dts/mobileye/eyeq5-epm5.dtb
+arch/mips/boot/dts/mobileye/eyeq5-epm5.dtb: system-controller@e00000:
+  clock-controller@e0002c:reg-names:1:
+  'yellow-pony' is not one of ['plls', 'ospi']
+  from schema $id:
+    http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
+
+> > +          items:
+> > +            enum: [ plls, ospi ]
+> > +      required:
+> > +        - reg-names
+> > +
+> > +  # "mobileye,eyeq6h-south-clk" provides:
+> > +  #  - PLLs and,
+> > +  #  - Four divider clocks related to emmc, ospi and tsu.
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          const: mobileye,eyeq6h-south-clk
+> > +    then:
+> > +      properties:
+> > +        reg:
+> > +          minItems: 4
+> > +          maxItems: 4
+> > +        reg-names:
+> > +          minItems: 4
+> > +          maxItems: 4
+> > +          items:
+> > +            enum: [ plls, emmc, ospi, tsu ]
+> > +      required:
+> > +        - reg-names
+> > +
+> > +  # Other compatibles only provide PLLs. Do not ask for named resource=
+s.
+> > +  - if:
+> > +      not:
+> > +        required:
+> > +          - reg-names
+> > +    then:
+> > +      properties:
+> > +        reg:
+> > +          minItems: 1
+> > +          maxItems: 1
+>
+> No, just restrict properly reg per variant.
+
+Noted, will do.
+
+> > +        reg-names: false
+>
+> That's redundant. Drop entire if.
+
+Ah, yes. Will fix that.
+
+> > +
+> > +  # Some compatibles provide a single clock; they do not take a clock =
+cell.
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          enum:
+> > +            - mobileye,eyeq6h-central-clk
+> > +            - mobileye,eyeq6h-west-clk
+> > +            - mobileye,eyeq6h-east-clk
+> > +            - mobileye,eyeq6h-ddr0-clk
+> > +            - mobileye,eyeq6h-ddr1-clk
+> > +    then:
+> > +      properties:
+> > +        "#clock-cells":
+> > +          const: 0
+>
+> Wait, so you define device-per-clock? That's a terrible idea. We also
+> discussed it many times and it was rejected many times.
+>
+> You have one device, not 5.
+
+Each region must be a syscon to make its various registers accessible to
+drivers that'll need it. Following that, I have a hard time seeing what
+would be the DT structure of 7 OLB system-controllers but a single
+clock node?
+
+Regards,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
