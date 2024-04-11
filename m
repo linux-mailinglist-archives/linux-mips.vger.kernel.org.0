@@ -1,115 +1,189 @@
-Return-Path: <linux-mips+bounces-2726-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2727-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82E708A1D49
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Apr 2024 20:07:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 577338A1E32
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Apr 2024 20:30:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F625286DD5
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Apr 2024 18:07:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 782F21C228E1
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Apr 2024 18:30:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E577E4D9F4;
-	Thu, 11 Apr 2024 16:57:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B012314AB4;
+	Thu, 11 Apr 2024 18:00:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jG8xIRjD"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="F6A8Ql6Y"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7859C4D9FC
-	for <linux-mips@vger.kernel.org>; Thu, 11 Apr 2024 16:57:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1DC74437F
+	for <linux-mips@vger.kernel.org>; Thu, 11 Apr 2024 18:00:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712854663; cv=none; b=Py8ZZRpLIkGSCjnvLL46GyqecodyUzb0IbQ9Zd52XBDsxp4Cfx8To/4BzyB4hO/8IimZTI/ih7hye/vpUlda0MhiPYGFtZAXJGhzHAXwbIKhEKzHBBObzQ+GtiuH+1OwIrADPvkqH1II/ow9DkyTTvbJ/um430a72PdNwruSAjw=
+	t=1712858434; cv=none; b=CnDhsDkfM3sNDhhCuECULYzY6t5A8xLtyRwwRB/X/2rC1gK13U7ufgzj09mCCzDh+egK0S4YjzHlu1qiX8kgeOxlqkomVj8b0K+v/lgcPeySiUBm/x2gzDjNBCuo8gA3ADdpB9F5VlmNd0zEq/Lyjm2iidxsTjAeuRtpor4npWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712854663; c=relaxed/simple;
-	bh=mW9Wy5zwtCPwddAQPsiCFCBdlF3xxhTlbzOesWPW9Dw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GY/Zs7GlVp+faZIjaWRq7oFGh6CpU9NyF9ZT3KDR6aoHbxx+CVnDSvHYWOf5pUXwjjCVGl/RpdrBvFRPFTfQjuQy1P6QiR3x/Hb0KKzk8cWfW0l++qhlrvRTsyHI/2B+GAeu4vNXgyv5xPWE5IHljJZznL95JuLMhfT5g2NeB/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jG8xIRjD; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712854661;
+	s=arc-20240116; t=1712858434; c=relaxed/simple;
+	bh=yh/ixDQ5eg6OWrim9+bm1G6d/37CpJ1/QL+beESG4jw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AdfQoAvwlhY3RVuZSstzgOIl+pb/hf5PK/Rde7eS6IDjZF7ugzaMbsQWldq3yoZyKsXeX6aVnBG97E96SvKQVskaboSEdncnL142CIppr7OcA1NlFk3pEWdoxZpLiL3hD3nzNWoz8oQxjLjx+TpjCoqr4O6FMjAZvnsHH9a8cdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=F6A8Ql6Y; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Thu, 11 Apr 2024 14:00:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712858430;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=wzMoeKDG3HLVO21BydyhZtfJookrt2+0z0ZoaUJK4l8=;
-	b=jG8xIRjDRu3wF9/9EX+DlVHb4kaZXOYZvahAgm0A8+t2B8cBpIqQDd2YyUdb3T07tnTQyV
-	SzfMrirNl7umdwrQxKArQ6vM1n6FM9gehFJLIPh2xQXdSG7aSBC7AnnZRdyzM1pfSi91Ub
-	6OBgWJTbPx7mwMv8vNCRato1Acg1os0=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-633-_jXPEAjFM5GYvY-KRpH_oA-1; Thu, 11 Apr 2024 12:57:40 -0400
-X-MC-Unique: _jXPEAjFM5GYvY-KRpH_oA-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-417df7b0265so373015e9.3
-        for <linux-mips@vger.kernel.org>; Thu, 11 Apr 2024 09:57:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712854658; x=1713459458;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wzMoeKDG3HLVO21BydyhZtfJookrt2+0z0ZoaUJK4l8=;
-        b=q6cq8gpKI0huEKazWON0f+C6n0LcBWuE6WRUXw+6wjjwt/VhqZUi74AFWGnxJz2r3/
-         bVJ4UH6NSa4aGL4rJNuACqAqiC2cymq+kR84o12MmnDl/0Ap+lxuPhjevwOlYGlBCK1T
-         YSaihkZW/cJZbbLHxfsx3/rapC/8BzjYhCVuRktFa0y9FSv5gWRp/7lS0/hVZrOc+Yfm
-         16vpf0LcCi7lYKKlzEOOuopYbn/Shrf3grEsesZnC5ZjdTeigVRDxx2TAKJv1e0RYrz4
-         vaaZurIs+kqE6i9I4N3Vht7hJYZWPLMvBIIlXa1oEgAQzEPey1+eaDiBlr+NrQdG2jir
-         NBLw==
-X-Forwarded-Encrypted: i=1; AJvYcCWYMBFPMtakVODAWYX8DDAFYIiGMnbocT3wSkBjzJjSdd1gvLfXg1yYMJQUPxGdy3IKAMO2FZ9VQh6FWFbmuvvurX+0lE2+8fSZXA==
-X-Gm-Message-State: AOJu0YyY1NNpYyYGaKhQcph/QiN8UY0nAUguHr+hnrVlnulyrubCWB+/
-	AMyW5VXIoSIjxpjlhj8NrDx2DnvBOmwI5zZGUXkGyA5va980AdUhrNeefv0uR1nLwvxuy3/g5n1
-	O+mWgmB/kD2cuAQ/QosRZgOZgGcykIJfp68fTeJug/ogi9Qa7Ef6fOekNLZmUNyCH9t3acYccqX
-	ya+IVLIPOJbz2KstsVAmlh936aDvS0HdyABA==
-X-Received: by 2002:a05:600c:c07:b0:416:b75e:ffb9 with SMTP id fm7-20020a05600c0c0700b00416b75effb9mr294484wmb.19.1712854657978;
-        Thu, 11 Apr 2024 09:57:37 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFmoGFz39xTCvG23vKtpQgogb148s+KvVt7/U1rBvktp1dcwHHxjM7spsq3rgOmQW5LGi5xUnT62q1v5vcy7Gk=
-X-Received: by 2002:a05:600c:c07:b0:416:b75e:ffb9 with SMTP id
- fm7-20020a05600c0c0700b00416b75effb9mr294473wmb.19.1712854657685; Thu, 11 Apr
- 2024 09:57:37 -0700 (PDT)
+	bh=hugd8ugKeGXlWiLmTwUcSwxtoNqEbzFWRyiumV4I0QI=;
+	b=F6A8Ql6YjuHeVhFhvCjRCHtt6+j5Zmavb6rBRVS2UPMjaUzBr8Uy9YMXKrMLS6Bdu93QAe
+	+1JDwGCXhSmYXVX/GYkUtjra2ilUH2ndkI9p7bCt0GDxnXoAiXvPRveKB1Tl7czCP5mSyl
+	LwnxqSrFPBMBfyHHV7aQPCs6G/4zVIs=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	"David S. Miller" <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>, 
+	Donald Dutile <ddutile@redhat.com>, Eric Chanudet <echanude@redhat.com>, 
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, 
+	Huacai Chen <chenhuacai@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nadav Amit <nadav.amit@gmail.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Puranjay Mohan <puranjay12@gmail.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
+	Will Deacon <will@kernel.org>, bpf@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, netdev@vger.kernel.org, 
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v4 00/15] mm: jit/text allocator
+Message-ID: <v52bizaflxzrxqk2wtuek2m2juwbzr6jxnpzlvtswkarcaejow@kd7tygzbmijs>
+References: <20240411160051.2093261-1-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240405115815.3226315-1-pbonzini@redhat.com> <20240410143020.420cafd47bf8af257b2e647a@linux-foundation.org>
-In-Reply-To: <20240410143020.420cafd47bf8af257b2e647a@linux-foundation.org>
-From: Paolo Bonzini <pbonzini@redhat.com>
-Date: Thu, 11 Apr 2024 18:57:25 +0200
-Message-ID: <CABgObfZiEiLbbp35gNmSGd9vNr03__Eep+D_Mj7r2o+XbF96TQ@mail.gmail.com>
-Subject: Re: [PATCH 0/4] KVM, mm: remove the .change_pte() MMU notifier and set_pte_at_notify()
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Nicholas Piggin <npiggin@gmail.com>, 
-	Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
-	Sean Christopherson <seanjc@google.com>, David Hildenbrand <david@redhat.com>, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240411160051.2093261-1-rppt@kernel.org>
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Apr 10, 2024 at 11:30=E2=80=AFPM Andrew Morton
-<akpm@linux-foundation.org> wrote:
-> On Fri,  5 Apr 2024 07:58:11 -0400 Paolo Bonzini <pbonzini@redhat.com> wr=
-ote:
-> > Please review!  Also feel free to take the KVM patches through the mm
-> > tree, as I don't expect any conflicts.
->
-> It's mainly a KVM thing and the MM changes are small and simple.
-> I'd say that the KVM tree would be a better home?
+On Thu, Apr 11, 2024 at 07:00:36PM +0300, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> 
+> Hi,
+> 
+> Since v3 I looked into making execmem more of an utility toolbox, as we
+> discussed at LPC with Mark Rutland, but it was getting more hairier than
+> having a struct describing architecture constraints and a type identifying
+> the consumer of execmem.
+> 
+> And I do think that having the description of architecture constraints for
+> allocations of executable memory in a single place is better that having it
+> spread all over the place.
+> 
+> The patches available via git:
+> https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=execmem/v4
+> 
+> v4 changes:
+> * rebase on v6.9-rc2
+> * rename execmem_params to execmem_info and execmem_arch_params() to
+>   execmem_arch_setup()
+> * use single execmem_alloc() API instead of execmem_{text,data}_alloc() (Song)
+> * avoid extra copy of execmem parameters (Rick)
+> * run execmem_init() as core_initcall() except for the architectures that
+>   may allocated text really early (currently only x86) (Will)
+> * add acks for some of arm64 and riscv changes, thanks Will and Alexandre
+> * new commits:
+>   - drop call to kasan_alloc_module_shadow() on arm64 because it's not
+>     needed anymore
+>   - rename MODULE_START to MODULES_VADDR on MIPS
+>   - use CONFIG_EXECMEM instead of CONFIG_MODULES on powerpc as per Christophe:
+>     https://lore.kernel.org/all/79062fa3-3402-47b3-8920-9231ad05e964@csgroup.eu/
+> 
+> v3: https://lore.kernel.org/all/20230918072955.2507221-1-rppt@kernel.org
+> * add type parameter to execmem allocation APIs
+> * remove BPF dependency on modules
+> 
+> v2: https://lore.kernel.org/all/20230616085038.4121892-1-rppt@kernel.org
+> * Separate "module" and "others" allocations with execmem_text_alloc()
+> and jit_text_alloc()
+> * Drop ROX entailment on x86
+> * Add ack for nios2 changes, thanks Dinh Nguyen
+> 
+> v1: https://lore.kernel.org/all/20230601101257.530867-1-rppt@kernel.org
+> 
+> = Cover letter from v1 (sligtly updated) =
+> 
+> module_alloc() is used everywhere as a mean to allocate memory for code.
+> 
+> Beside being semantically wrong, this unnecessarily ties all subsystmes
+> that need to allocate code, such as ftrace, kprobes and BPF to modules and
+> puts the burden of code allocation to the modules code.
+> 
+> Several architectures override module_alloc() because of various
+> constraints where the executable memory can be located and this causes
+> additional obstacles for improvements of code allocation.
+> 
+> A centralized infrastructure for code allocation allows allocations of
+> executable memory as ROX, and future optimizations such as caching large
+> pages for better iTLB performance and providing sub-page allocations for
+> users that only need small jit code snippets.
+> 
+> Rick Edgecombe proposed perm_alloc extension to vmalloc [1] and Song Liu
+> proposed execmem_alloc [2], but both these approaches were targeting BPF
+> allocations and lacked the ground work to abstract executable allocations
+> and split them from the modules core.
+> 
+> Thomas Gleixner suggested to express module allocation restrictions and
+> requirements as struct mod_alloc_type_params [3] that would define ranges,
+> protections and other parameters for different types of allocations used by
+> modules and following that suggestion Song separated allocations of
+> different types in modules (commit ac3b43283923 ("module: replace
+> module_layout with module_memory")) and posted "Type aware module
+> allocator" set [4].
+> 
+> I liked the idea of parametrising code allocation requirements as a
+> structure, but I believe the original proposal and Song's module allocator
+> was too module centric, so I came up with these patches.
+> 
+> This set splits code allocation from modules by introducing execmem_alloc()
+> and and execmem_free(), APIs, replaces call sites of module_alloc() and
+> module_memfree() with the new APIs and implements core text and related
+> allocations in a central place.
+> 
+> Instead of architecture specific overrides for module_alloc(), the
+> architectures that require non-default behaviour for text allocation must
+> fill execmem_info structure and implement execmem_arch_setup() that returns
+> a pointer to that structure. If an architecture does not implement
+> execmem_arch_setup(), the defaults compatible with the current
+> modules::module_alloc() are used.
+> 
+> Since architectures define different restrictions on placement,
+> permissions, alignment and other parameters for memory that can be used by
+> different subsystems that allocate executable memory, execmem APIs
+> take a type argument, that will be used to identify the calling subsystem
+> and to allow architectures to define parameters for ranges suitable for that
+> subsystem.
+> 
+> The new infrastructure allows decoupling of BPF, kprobes and ftrace from
+> modules, and most importantly it paves the way for ROX allocations for
+> executable memory.
 
-Sure! I'll queue them on my side then.
+It looks like you're just doing API cleanup first, then improving the
+implementation later?
 
-Paolo
+Patch set looks nice and clean; previous versions did seem to leak too
+much arch/module details (or perhaps we were just bikeshedding too much
+;) - but the API first approach is nice.
 
+Looking forward to seeing this merged.
 
