@@ -1,79 +1,97 @@
-Return-Path: <linux-mips+bounces-2744-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2745-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44C528A332E
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Apr 2024 18:08:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16A728A350C
+	for <lists+linux-mips@lfdr.de>; Fri, 12 Apr 2024 19:44:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BB87AB242C2
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Apr 2024 16:08:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B81E0287263
+	for <lists+linux-mips@lfdr.de>; Fri, 12 Apr 2024 17:44:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A810148FE2;
-	Fri, 12 Apr 2024 16:08:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ABA514D70E;
+	Fri, 12 Apr 2024 17:44:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hIt/acAl"
+	dkim=pass (1024-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="Im0iVk8f"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7FE0148850;
-	Fri, 12 Apr 2024 16:08:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2F05491F;
+	Fri, 12 Apr 2024 17:43:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712938113; cv=none; b=Zmfc3pCK73JFjjkldm/kiGrcEKFdqTVwBPFz5llYOXF9LI728Q4snhEysix0Q3oXN1Ldn2zEMAOZhBb4S1eeyHbS3u8Piu+8CBTW6C2vYFSuU9BiQG9HFz1duieFLs7oiMftXmdV23QAsnNqJMiXEfJ/XPK2WpT/D6HH6wR2fwA=
+	t=1712943842; cv=none; b=bwSSqlIiqirlNos7U7JzyxjFkXCR5LbEibmxgn0pJ5Cno7MCWnip2wD7pOQeRwaeQj/32LhDSTjDRG26JHMW59Ny86YB3lNx7HzQuo3iyhq6W03owMk7MMZbNDSuhwwilLUcrpQwswnwRlMVkCF9jGVe5K2ezSQIwVCY1FH3o3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712938113; c=relaxed/simple;
-	bh=xSWV+KnJYn2lSIamPr8N7d4rlC7P/QjHVeILNIKPSds=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=YDx1EZXloZzhoL7VqATOH4YreUEmyk6/aRPcGYNeDQURCJJ8bcYVCkoODksHu6DpiYttjtOqhW2eFvxt1VWe7N/zbxIMmfKGKuF49FQHqbb3+uiPGsbboe/3sAfIxlSRc2BOTXdx2c2Rtv+BxrljPgEh0U4o9SSLjZnhhX5kRGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hIt/acAl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 70D07C2BD11;
-	Fri, 12 Apr 2024 16:08:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712938113;
-	bh=xSWV+KnJYn2lSIamPr8N7d4rlC7P/QjHVeILNIKPSds=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=hIt/acAlmEccT6NRuayraEKzmJaIbIS1JO2WKmlRJHSFKB8J9bAttxiCXFRn4T55p
-	 8RKNzj8yPNxE8iNPUpGnMhU9iQ40rgQ2/dYJsrV72Ls8UXm9ha8MQ/NS5veYd2cbsR
-	 yCIbXl7Bs9knslhhal6FmgjxqOgZ5/BZ4HL6LMCReveNHGw8//nThoh/vsOpKYJPZW
-	 hmuFpjfW54Eb5KIgb8yITvbhF+xkyW0/25enQwi3HpLorpwe+OvY3C7b/MY77m002U
-	 XRcsA/ywOxZEZm91fPQLgKJ5BvhRF5z2uTDlx65072kyCKf0zialCJFaRDqtbbuuC7
-	 obcHN6jmLhtSQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 63450DF7854;
-	Fri, 12 Apr 2024 16:08:33 +0000 (UTC)
-Subject: Re: [GIT PULL] MIPS fixes for v6.9
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <Zhjt0hXiftxCyFsH@alpha.franken.de>
-References: <Zhjt0hXiftxCyFsH@alpha.franken.de>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Zhjt0hXiftxCyFsH@alpha.franken.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.9_1
-X-PR-Tracked-Commit-Id: 4370b673ccf240bf7587b0cb8e6726a5ccaf1f17
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e00011a146cde3a86fff96cb643f9b7dd40166ac
-Message-Id: <171293811340.2506.13074166850125020009.pr-tracker-bot@kernel.org>
-Date: Fri, 12 Apr 2024 16:08:33 +0000
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: torvalds@linux-foundation.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+	s=arc-20240116; t=1712943842; c=relaxed/simple;
+	bh=9jVpBA4jgJ0UG7XI8lXz3tsBG24mQMEc1vToCewTYO0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pBkShjob7DM6eL4mY7OI2oE8SXvfyS11UwRffEkb3NSZ6lkfFDKcBRy8XGicN0ZCIUxnHNRBwS2iZX+MlhadTWhmPooWEFmwhBXqe4i8KnGKseux+5HgOsR2qS5LHKkTG74nBVI/7OFpedhC2XDvDWSdcq6LeL5xnUIrf2LWbZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=pass (1024-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=Im0iVk8f; arc=none smtp.client-ip=94.231.106.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gaisler.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
+Received: from localhost (localhost [127.0.0.1])
+	by smtp.simply.com (Simply.com) with ESMTP id 4VGP7R5WBkz680X;
+	Fri, 12 Apr 2024 19:43:47 +0200 (CEST)
+Received: from [10.10.15.20] (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(Client did not present a certificate)
+	by smtp.simply.com (Simply.com) with ESMTPSA id 4VGP7R12RYz67yx;
+	Fri, 12 Apr 2024 19:43:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
+	s=unoeuro; t=1712943827;
+	bh=rz6jPUrsijT1INaAxqASzjJlCA1E00oo2UxdhuDoHkY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Im0iVk8feRxQgKlsQWaCXv3LUGHwDcqreNg4bxaJ3/IOrXfx2QiN1rnYBfEc+f2u5
+	 8MbqJsx4mJ8FaAweR4s/LxS3LCYE612Agy+eKqOKsD0gLkupmeXqyp8GmT5sJHqtiZ
+	 kRuaHnbzajuZP5Rptmhe/G5mAFIlHj5p1NxY+ApA=
+Message-ID: <1b48be5f-bcc2-4cc0-8a23-85c472168082@gaisler.com>
+Date: Fri, 12 Apr 2024 19:43:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: Build regressions/improvements in v6.9-rc1
+To: Sam Ravnborg <sam@ravnborg.org>, Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+ Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
+ Rob Clark <robdclark@gmail.com>, Abhinav Kumar <quic_abhinavk@quicinc.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ freedreno@lists.freedesktop.org, Lucas De Marchi <lucas.demarchi@intel.com>,
+ Oded Gabbay <ogabbay@kernel.org>,
+ =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+ intel-xe@lists.freedesktop.org, linux-mips@vger.kernel.org,
+ sparclinux@vger.kernel.org
+References: <CAHk-=wgOw_13JuuX4khpn4K+n09cRG3EBQWufAPBWoa0GLLQ0A@mail.gmail.com>
+ <20240325200315.3896021-1-geert@linux-m68k.org>
+ <8d78894-dd89-9f4d-52bb-1b873c50be9c@linux-m68k.org>
+ <20240326181500.GA1501083@ravnborg.org>
+Content-Language: en-US
+From: Andreas Larsson <andreas@gaisler.com>
+In-Reply-To: <20240326181500.GA1501083@ravnborg.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The pull request you sent on Fri, 12 Apr 2024 10:16:18 +0200:
+On 2024-03-26 19:15, Sam Ravnborg wrote:
+> Hi all.
+> 
+>>   + error: arch/sparc/kernel/process_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.text':  => (.fixup+0xc), (.fixup+0x4)
+>>   + error: arch/sparc/kernel/signal_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.text':  => (.fixup+0x18), (.fixup+0x8), (.fixup+0x0), (.fixup+0x20), (.fixup+0x10)
+>>   + error: relocation truncated to fit: R_SPARC_WDISP22 against `.init.text':  => (.head.text+0x5100), (.head.text+0x5040)
+>>   + error: relocation truncated to fit: R_SPARC_WDISP22 against symbol `leon_smp_cpu_startup' defined in .text section in arch/sparc/kernel/trampoline_32.o:  => (.init.text+0xa4)
+> 
+> Looks like something is too big for the available space here.
+> Any hints how to dig into this would be nice.
+> 
+> Note: this is a sparc32 allmodconfig build
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.9_1
+I have a patch for this. I'll clean it up and send it next week.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e00011a146cde3a86fff96cb643f9b7dd40166ac
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Cheers,
+Andreas
 
