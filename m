@@ -1,166 +1,155 @@
-Return-Path: <linux-mips+bounces-2739-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2738-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D6A18A2B55
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Apr 2024 11:36:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 766288A2AAD
+	for <lists+linux-mips@lfdr.de>; Fri, 12 Apr 2024 11:16:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 802591C221B7
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Apr 2024 09:36:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 254E3287864
+	for <lists+linux-mips@lfdr.de>; Fri, 12 Apr 2024 09:16:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79CED482EF;
-	Fri, 12 Apr 2024 09:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC8054DA10;
+	Fri, 12 Apr 2024 09:16:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="nwVeG1Lb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OOfxs4gw"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEAD051016
-	for <linux-mips@vger.kernel.org>; Fri, 12 Apr 2024 09:36:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BC2138DD8;
+	Fri, 12 Apr 2024 09:16:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712914587; cv=none; b=QYxQyPgsUrjUxDMEh5vVQbLFy0PDXwkrTBRaYtBY4kb2bWqp7z0DEuKjWp6mRTmorXf3iVaHbm54njhgxA/VOiIVEA4By5fzSCTyrjn1Ns1LNUSEUSSB9rhvG2gNAVdFbphS2IcdZuA+TMP3j79if6vKHQA5AchcGtgqbTIbm9c=
+	t=1712913377; cv=none; b=NGjY0MkPICJqk/pof9+n6eROPtux8P3oo4vkhsrc9cKqDZjV5cpyT7u2inrB5kjMgXf0wHTSxfwdiP3Bs+AVUEgIyNHlE+Tuh2l7KMywTkCzlbonoV2iUChrYhMbwKiGICrBDWEh+lwai70zycKHLIFMMtlUaSjjp37WyI7sNJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712914587; c=relaxed/simple;
-	bh=ECG66815UF5U5UZ532M011H3Hgu9sb1nS+RlWPOzlVI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
-	 References; b=ASD3f9BdGtvlrM8UQRYvG/9VHaSOR8ENnz7RVuYkwwjS1TxJFazXz7zem52vHMtxLA/Y58PBz/XdlKvq003mWlNbYRnTvum5vEagMZUDQrSZFBL5YVIDz2teC8tQWwlT3wC8/wC2L8j8Vr9m+oVtaVmelvDibxCHKpsucRDvLhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=nwVeG1Lb; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20240412093622epoutp04c561e5d757478b5054701e82a7d22f7b~FfrzbYF5u1989819898epoutp04c
-	for <linux-mips@vger.kernel.org>; Fri, 12 Apr 2024 09:36:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20240412093622epoutp04c561e5d757478b5054701e82a7d22f7b~FfrzbYF5u1989819898epoutp04c
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1712914582;
-	bh=18OZ4wgAdnYQqHPQ+QR1sMRA2rNC7ROaX7uQYViKJU4=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=nwVeG1Lbkm8L09VoWgzd/8konc0f8a/Z7G7DuXLrz35HRtr3SSMZ/ytNm+WKxIe4a
-	 J82srKZMG8QJN+KPuDWAh56/Q4145Ce5+MnPIuuxWtLnTwYkz9IJrGCjGMuVqEoNfq
-	 TjqdWY4mClLi3jeBRsbPGDG93rLiIoYCwzKiPF4Q=
-Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-	20240412093622epcas5p385256fbd7d1a71ac8596442246fd206d~Ffry0_EfB1567515675epcas5p38;
-	Fri, 12 Apr 2024 09:36:22 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-	epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	C1.9B.09665.69009166; Fri, 12 Apr 2024 18:36:22 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20240412090801epcas5p1beb5c87f7582cf4f53c245a642468763~FfTCzoULs2335923359epcas5p1O;
-	Fri, 12 Apr 2024 09:08:01 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240412090801epsmtrp1648b0aa57349dc8c8ecdfcd74ae84238~FfTCyqBJq0149901499epsmtrp1B;
-	Fri, 12 Apr 2024 09:08:01 +0000 (GMT)
-X-AuditID: b6c32a4b-829fa700000025c1-6a-661900963857
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	3B.70.08390.1F9F8166; Fri, 12 Apr 2024 18:08:01 +0900 (KST)
-Received: from localhost.localdomain (unknown [107.109.224.44]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240412090759epsmtip230e5033ab5bdd5f1ba3ac3202ccf54c7~FfTBKbzXQ1740317403epsmtip2g;
-	Fri, 12 Apr 2024 09:07:59 +0000 (GMT)
-From: Onkarnarth <onkarnath.1@samsung.com>
-To: paulburton@kernel.org, mturquette@baylibre.com, sboyd@kernel.org
-Cc: linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org, r.thapliyal@samsung.com,
-	maninder1.s@samsung.com, Onkarnath <onkarnath.1@samsung.com>
-Subject: [PATCH v2 1/1] clk: imgtec: use %pe for better readability of
- errors while printing
-Date: Fri, 12 Apr 2024 14:37:49 +0530
-Message-Id: <20240412090749.15392-1-onkarnath.1@samsung.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1712913377; c=relaxed/simple;
+	bh=T/TL4P6RqoXnShkICgxGFcoEXV/L8guRkl+BR8oz3qQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ra6zP4ElDYTP0tsWtoX7uKraN2Fj4uGF707LCAB37cozdE29w55xB3xd0Zkby9UPN7Oxk8aI4me7VVNWYtCLWHY81VT6R6wmFuzna4JQkiyjs7UrcwtBGxUU1/s8fTQJDl39XoH8UbiIuUmOBH5IQfE0Rp1J+ShVeD6GTna4HPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OOfxs4gw; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-56c404da0ebso974821a12.0;
+        Fri, 12 Apr 2024 02:16:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712913374; x=1713518174; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1P5rS5dDZ6bz9RnNGWXjXGeZ5LSFZB2izV8TdsSyfhY=;
+        b=OOfxs4gwGdSJYF5Rg1YrEPMa7aeAv3TXdkArvWg7NxpuxZ+eQflhdOQQREts0AWpFH
+         OiCjfBQWQM0eYpv+b8QlzIkfhqgKkAdXKkJ8xIU8keCiO9qD/6L8dCADBbUJEVR7SxOq
+         DXe+RoOC2Be5trhfR+hNGmrVl3wkxSAYTZPs2i9bGawVCW7V86nVB/xqHRp8Fa9TCSWU
+         CandjXr5Bdh9jksVy37KzaU4YV58iY+HxPJIOPrgmqGt02QA+sL8Re56nvhddQ6DY2eF
+         UcnPl1y3nY7H8667oqVxZ4Ffu5M9GMM6NyAnNb1sjVlipM0fP8lSJYGo3BRU4KwtP3eZ
+         jpiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712913374; x=1713518174;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1P5rS5dDZ6bz9RnNGWXjXGeZ5LSFZB2izV8TdsSyfhY=;
+        b=Z7lqARcsm6CccpGbcjPISLnBHKJzfNk8pN08gMcCL2OD3v0oZ0/SMs2OiwRTOpBS66
+         UuLBr6pEQMRqfAx7osL/08VFpRekxub+LdF+7tLpgPE1dfMaxzkHqwcIMJG1mXJQMZ7t
+         9PZrwjuT2iCh6fEGmlxk3oK9HBfOz8FE/06p5wNK5Rbm9G+6HnSCTom7oNRXXoO0B4kW
+         TVdoS71chMLO1cCRDoJf2cSakvoeMGukwQlZhISe4S/n8EPmoIU26FIBaAwmqCjrzANI
+         UdmP9LJqNt651L/m/urQUZkIlfQN7nSD2+vN+G+K1eZPM5wp26fTLkGHNmB+OuCZYlh3
+         yN5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUPEX8P9Ow3xwnnn9l7E+J+ej1dDoB77dawHjEnNWSfOQaUpOd+hs4GzMVrq/1LnBkieU4uQ31wxq32CJDrxvg/NqZoY2COxkKJRSHIBcGxqutnoDFKDvsf+dw1f9PH8EyZbtjVbi52w7E8XZUUdZtC0xeQPm8U8qufFe7KeJU7eO+wSKqwXwRm4wM3VAjXQssJ6AkJcCoJO6qiq/5+QTDyWlS5CK0s6wL1s6NSakFqVgpyqhXT6Sm4rKSOLaKufjhtwXYCHqDlQYissNSY7xIv94C/p4Gm5aTYKBAZdNXF62AOWRe4iIDpA1IOYPqEpABUKjqzrwlTr1vJaJh34/BRBGBguHXOjst4+BeRiitNh9CakGpdgRUTdQGtW1u5lXxMKI6YpVUv/kIFuhg=
+X-Gm-Message-State: AOJu0YwKcgA7Q+Mgdg5hZnfBVwvIn/EJqMurxXosdswDTSCgg6jk3TYh
+	LcchT5B9Af7nZ+vSdVKRii+R89lIJIkMEZvMIvNwt/g3+6m/jGIU
+X-Google-Smtp-Source: AGHT+IF2JLt070H6U+NVwXUCGShMgUTVG3TFLf6L4pd2nPVSBBMwXn0qR7EXkAPf+SwG43RHlRZl8g==
+X-Received: by 2002:a50:f68d:0:b0:56e:4039:add5 with SMTP id d13-20020a50f68d000000b0056e4039add5mr1892328edn.22.1712913374186;
+        Fri, 12 Apr 2024 02:16:14 -0700 (PDT)
+Received: from gmail.com (1F2EF1A5.nat.pool.telekom.hu. [31.46.241.165])
+        by smtp.gmail.com with ESMTPSA id el9-20020a056402360900b0056fe755f1e6sm1454709edb.91.2024.04.12.02.16.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Apr 2024 02:16:13 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date: Fri, 12 Apr 2024 11:16:10 +0200
+From: Ingo Molnar <mingo@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Donald Dutile <ddutile@redhat.com>,
+	Eric Chanudet <echanude@redhat.com>,
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nadav Amit <nadav.amit@gmail.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linux-mm@kvack.org, linux-modules@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v4 05/15] mm: introduce execmem_alloc() and execmem_free()
+Message-ID: <Zhj72l6uN9OFilxA@gmail.com>
+References: <20240411160051.2093261-1-rppt@kernel.org>
+ <20240411160051.2093261-6-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupkleLIzCtJLcpLzFFi42LZdlhTXXcag2SawYF5XBYfe+6xWlzeNYfN
-	onPTVkaLw/PbWCwunnK1WNHzgdWi49tcFouN97It/l3byOLA6fH+Riu7x6ZVnWwefVtWMXp8
-	3iQXwBLFZZOSmpNZllqkb5fAlXFgwjKWgkvcFR9PNrI3MJ7l7GLk4JAQMJE4Pzuki5GLQ0hg
-	N6PEsY8djBDOJ0aJGzP6mCGcb4wSp/fvYoTpWL23touREyi+l1HiUGshRM0XRok5D88ygyTY
-	BLQkZtw5wARiiwi4SPSu2wU2lVlgE6PE0pk/wIqEBeIkVj+dzghiswioSnSs2MUGYvMK2Eic
-	O34arEZCQF5i5qXv7BBxQYmTM5+wgNjMQPHmrbPBrpMQuMYucebpFyaIBheJx3+vQdnCEq+O
-	b2GHsKUkXva3Qdn5Ei2zZzFDfFMjcfWpKkTYXuLJxYWsIGFmAU2J9bv0IcKyElNPrWOCWMsn
-	0fv7CdR0Xokd82BsVYlfU6ayQNjSEvd/z2WDsD0k3q2+zQgJrFiJl5fXs01glJ+F5JtZSL6Z
-	hbB5ASPzKkbJ1ILi3PTUYtMC47zUcr3ixNzi0rx0veT83E2M4NSi5b2D8dGDD3qHGJk4GA8x
-	SnAwK4nwSmuJpgnxpiRWVqUW5ccXleakFh9ilOZgURLnfd06N0VIID2xJDU7NbUgtQgmy8TB
-	KdXAdO7LXmYRXp/Tionitoem/jvZ89780b62g1w++ypVVn2Wrbly/YzGzSc/vfZ8syz7+qW+
-	cds2/zfi7e5i9/VqjbbbXUj+8/K3/PqY2KNzX8ufW/frY8Lts5xSWc/VJJofhHqJ+X96a1Bu
-	tN9GLbbvZbQsb3pLAevCy2k3dz+4Zzs5kDfk7xuLwwej9jbXO78rezWP+fTV1Jj4oCT/5fcC
-	/wQ13Djuf8dK2O7siUth0yVYm76qW8XqzF2ntX7Bks7Yx9w7/br+CD8KZl290f9CfZqYzo69
-	kVrFr3T0PUMEjXcuvyUpdar/y+1e7f0N18r1fjrtniix+8qP95O1Ps++eZb7/XvWaedOFE4/
-	dYAvJVSJpTgj0VCLuag4EQA6AiKTnAMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrELMWRmVeSWpSXmKPExsWy7bCSvO7HnxJpBt+PCVl87LnHanF51xw2
-	i85NWxktDs9vY7G4eMrVYkXPB1aLjm9zWSw23su2+HdtI4sDp8f7G63sHptWdbJ59G1Zxejx
-	eZNcAEsUl01Kak5mWWqRvl0CV8aBCctYCi5xV3w82cjewHiWs4uRg0NCwERi9d7aLkYuDiGB
-	3YwSa6/tZ+li5ASKS0t8ujyHHcIWllj57zk7RNEnRomGzauZQBJsAloSM+4cALNFBDwkdh15
-	wwxSxCywg1HicvMVsG5hgRiJmTMvghWxCKhKdKzYxQZi8wrYSJw7fpoZYoO8xMxL39kh4oIS
-	J2c+AbuCGSjevHU28wRGvllIUrOQpBYwMq1ilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/d
-	xAgOVi2tHYx7Vn3QO8TIxMF4iFGCg1lJhFdaSzRNiDclsbIqtSg/vqg0J7X4EKM0B4uSOO+3
-	170pQgLpiSWp2ampBalFMFkmDk6pBqboZ1teqics3SR4+FpRwiEnE1mfz7putksP/unYaHzP
-	s9x3Ss3z+Zm8a1bczStde7stcolUwrpipqXXWDf3/jhn2BbYlrJqc+p2Of6QNKvdzyrU7+7J
-	WLcsfVGaa9JTjmPW3d3cPCsUX+S0TmUomnq7o3xmWeWNzu293YI6tyy+2n+LYpQ0i41+nCbD
-	urH6XW34meM2X/+KBs/Q3/RDhmfhB/OM9J2+fifV5/X+zchoSuau55g+hz17kukexdvL9Fr4
-	DJbdMnna8KTCy+OmZUGfybu7B6Z0fD1hlypqd3bPwf7EHxLzLCPslKQubv95oVlw5tbOQxd/
-	1PvMTxeJWbjB87Ct5xHF+X7LOnZc2a/EUpyRaKjFXFScCAC1KF73xQIAAA==
-X-CMS-MailID: 20240412090801epcas5p1beb5c87f7582cf4f53c245a642468763
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-CMS-RootMailID: 20240412090801epcas5p1beb5c87f7582cf4f53c245a642468763
-References: <CGME20240412090801epcas5p1beb5c87f7582cf4f53c245a642468763@epcas5p1.samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240411160051.2093261-6-rppt@kernel.org>
 
-From: Onkarnath <onkarnath.1@samsung.com>
 
-instead of printing errros as a number(%ld), it's better to print in string
-format for better readability of logs.
+* Mike Rapoport <rppt@kernel.org> wrote:
 
-Signed-off-by: Onkarnath <onkarnath.1@samsung.com>
----
-v1 -> v2 : Removed unnecessary SOB tag.
+> +/**
+> + * enum execmem_type - types of executable memory ranges
+> + *
+> + * There are several subsystems that allocate executable memory.
+> + * Architectures define different restrictions on placement,
+> + * permissions, alignment and other parameters for memory that can be used
+> + * by these subsystems.
+> + * Types in this enum identify subsystems that allocate executable memory
+> + * and let architectures define parameters for ranges suitable for
+> + * allocations by each subsystem.
+> + *
+> + * @EXECMEM_DEFAULT: default parameters that would be used for types that
+> + * are not explcitly defined.
+> + * @EXECMEM_MODULE_TEXT: parameters for module text sections
+> + * @EXECMEM_KPROBES: parameters for kprobes
+> + * @EXECMEM_FTRACE: parameters for ftrace
+> + * @EXECMEM_BPF: parameters for BPF
+> + * @EXECMEM_TYPE_MAX:
+> + */
+> +enum execmem_type {
+> +	EXECMEM_DEFAULT,
+> +	EXECMEM_MODULE_TEXT = EXECMEM_DEFAULT,
+> +	EXECMEM_KPROBES,
+> +	EXECMEM_FTRACE,
+> +	EXECMEM_BPF,
+> +	EXECMEM_TYPE_MAX,
+> +};
 
- drivers/clk/imgtec/clk-boston.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+s/explcitly
+ /explicitly
 
-diff --git a/drivers/clk/imgtec/clk-boston.c b/drivers/clk/imgtec/clk-boston.c
-index b00cbd045af5..db96f8bea630 100644
---- a/drivers/clk/imgtec/clk-boston.c
-+++ b/drivers/clk/imgtec/clk-boston.c
-@@ -67,21 +67,21 @@ static void __init clk_boston_setup(struct device_node *np)
- 
- 	hw = clk_hw_register_fixed_rate(NULL, "input", NULL, 0, in_freq);
- 	if (IS_ERR(hw)) {
--		pr_err("failed to register input clock: %ld\n", PTR_ERR(hw));
-+		pr_err("failed to register input clock: %pe\n", hw);
- 		goto fail_input;
- 	}
- 	onecell->hws[BOSTON_CLK_INPUT] = hw;
- 
- 	hw = clk_hw_register_fixed_rate(NULL, "sys", "input", 0, sys_freq);
- 	if (IS_ERR(hw)) {
--		pr_err("failed to register sys clock: %ld\n", PTR_ERR(hw));
-+		pr_err("failed to register sys clock: %pe\n", hw);
- 		goto fail_sys;
- 	}
- 	onecell->hws[BOSTON_CLK_SYS] = hw;
- 
- 	hw = clk_hw_register_fixed_rate(NULL, "cpu", "input", 0, cpu_freq);
- 	if (IS_ERR(hw)) {
--		pr_err("failed to register cpu clock: %ld\n", PTR_ERR(hw));
-+		pr_err("failed to register cpu clock: %pe\n", hw);
- 		goto fail_cpu;
- 	}
- 	onecell->hws[BOSTON_CLK_CPU] = hw;
--- 
-2.25.1
+Thanks,
 
+	Ingo
 
