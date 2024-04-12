@@ -1,51 +1,58 @@
-Return-Path: <linux-mips+bounces-2740-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2741-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C68B88A2CBA
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Apr 2024 12:44:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A1AB8A2EDA
+	for <lists+linux-mips@lfdr.de>; Fri, 12 Apr 2024 15:07:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55EE228A7F9
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Apr 2024 10:44:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9ADF01C20C76
+	for <lists+linux-mips@lfdr.de>; Fri, 12 Apr 2024 13:07:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D699241231;
-	Fri, 12 Apr 2024 10:44:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 126EB5D91E;
+	Fri, 12 Apr 2024 13:07:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q5wzc5tB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mlWYRY6R"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9044E3FBA4;
-	Fri, 12 Apr 2024 10:44:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC854224D8;
+	Fri, 12 Apr 2024 13:07:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712918657; cv=none; b=TK+OGF7d2kaWwNFhNFRtNoLx5wow7ZXtY7gZN36Rnsfry9XYl2sVHwb1L/x3QpzwRFUYzau/xLd+uSiisJDefEtkw8n8XDenDkMJxPdDK7Bpjv/JyrThd9PrezZLdv8uT1xo8lTCj5oQ1SL5TI/DtZZmkJPUJWDuMZ2rRCVMimA=
+	t=1712927263; cv=none; b=iH/E8a1bESxvMQRDDxc6HNPMm7+uaZWyuN682tWdbBBlgbz0PMwe8aweteOrMqpEIGDun7r2xAlprMXCn9+/4muIxBZmvTqs0TRR5b4bTkxjJvOWHJ0WZC9MgTB1Qyl+qjA0ZjVSXRqNhDaqAWmCmk73PwhXx5a7GL/uhshW2h8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712918657; c=relaxed/simple;
-	bh=1VOBD4fGV0wS/+b3v+F56U0irySBTtLVMq1jk0/3aNs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kZ5NrSGjR2vHbYESpFrN2YuDNHcmOK04iyfeOHTNeZxjqsiRqYBFem/P1ivJ8zV5RYg6WHGWhoNkka+Tx27diygzBGDek4g7aPRT4noMEB2DIcKmsEIqjZWuYNaJLVUa/jDVf3mH4lSeSfXkEcUzlyLMwNhjoK111FoOtn5pitg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q5wzc5tB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E150DC2BD10;
-	Fri, 12 Apr 2024 10:44:12 +0000 (UTC)
+	s=arc-20240116; t=1712927263; c=relaxed/simple;
+	bh=WXXIdGk+X4xSO8A0Mdd/JdZXvSOz7cKKHzKcx7zp/e4=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YmMAEgkC1dkAh6rJCF1JtWJEJT8jcU3rBhxyMeJizZ9bzyWivMdqYo5cBR3krZC+zaZcugYMRGftcokw8uTEplW+tMQXCQZf6D02vbrI0o7tX6vGcpmXnBHpZam62Tn42chkWaa49jh3NEmRa3Zz9ISBkqapBmvDp7JYsPNO/AU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mlWYRY6R; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C47CC113CC;
+	Fri, 12 Apr 2024 13:07:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712918657;
-	bh=1VOBD4fGV0wS/+b3v+F56U0irySBTtLVMq1jk0/3aNs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=q5wzc5tBoiGBsuRhpRnOXn+/JuA2Y0L1EtRojaOy61UqRCGrwmOi61B2T1bcDZaV7
-	 NbeRh9B8kksCJt8R7pFX3UfmmSq/2LH88b9pMLZWTv2gnx4GpA7DoH+Ua+/V5vG0Nk
-	 hQ9OiK295o+5817rlVHgqnSFpwuxD94ALmfSL/fo+n9Eqg2oPkF9PNzAWoq+5vRQyS
-	 L84JYDrUOnGdWUMq7ZD58Z1trqP5rnJGDBgLeKsRca2aKXrhpgBlqIPrNxvH9n1XP1
-	 tdm7TK+oNWh6Sghw9RDsr0XR1COHVxmNS79Ysf/5OIwilPqZvdbbq19zgYHTJOcM6C
-	 Q1X6HLwip4qhg==
-Date: Fri, 12 Apr 2024 11:44:09 +0100
-From: Will Deacon <will@kernel.org>
+	s=k20201202; t=1712927262;
+	bh=WXXIdGk+X4xSO8A0Mdd/JdZXvSOz7cKKHzKcx7zp/e4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=mlWYRY6R+uO4KNbt8cIf64MguVd8/GHUg7jqEfibnb2j2yYOr842hoff3W6jZ2W6Q
+	 BRWCuZA/oNlXy6/0CFH3viAXrc8qD5Z1kg2VqyfMrkRlL0GkKt6FGGkq7vjol+/rWf
+	 xhKn1pcS/RFNPqEmpu+De8hHFtcOYW9290Q6wreBB+LuxJjv7MvmphVuMNI5yVeK6v
+	 8LwCZ6+IMlvHhnGCu56SknAEpcfLvStMVcRpKtbhCnCjRQrnLJanixlnZPvxJPcLtA
+	 DyvXUuh5xMgv1rPhe/ETCYBkM2o42kXk36Yi7g8UEQFJ2zPIyYqG+w5RiuGqXWqE3I
+	 xnLxdM3U5CxIw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1rvGd1-003tLC-MV;
+	Fri, 12 Apr 2024 14:07:39 +0100
+Date: Fri, 12 Apr 2024 14:07:38 +0100
+Message-ID: <86le5isp9h.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
 To: Paolo Bonzini <pbonzini@redhat.com>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	Marc Zyngier <maz@kernel.org>,
+Cc: linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
 	Oliver Upton <oliver.upton@linux.dev>,
 	Tianrui Zhao <zhaotianrui@loongson.cn>,
 	Bibo Mao <maobibo@loongson.cn>,
@@ -56,84 +63,101 @@ Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
 	Sean Christopherson <seanjc@google.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@redhat.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	kvm-riscv@lists.infradead.org,
+	linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org,
 	linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH 1/4] KVM: delete .change_pte MMU notifier callback
-Message-ID: <20240412104408.GA27645@willie-the-truck>
+Subject: Re: [PATCH 0/4] KVM, mm: remove the .change_pte() MMU notifier and set_pte_at_notify()
+In-Reply-To: <20240405115815.3226315-1-pbonzini@redhat.com>
 References: <20240405115815.3226315-1-pbonzini@redhat.com>
- <20240405115815.3226315-2-pbonzini@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240405115815.3226315-2-pbonzini@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: pbonzini@redhat.com, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, oliver.upton@linux.dev, zhaotianrui@loongson.cn, maobibo@loongson.cn, tsbogend@alpha.franken.de, npiggin@gmail.com, anup@brainfault.org, atishp@atishpatra.org, seanjc@google.com, akpm@linux-foundation.org, david@redhat.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, loongarch@lists.linux.dev, linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Fri, Apr 05, 2024 at 07:58:12AM -0400, Paolo Bonzini wrote:
-> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> index dc04bc767865..ff17849be9f4 100644
-> --- a/arch/arm64/kvm/mmu.c
-> +++ b/arch/arm64/kvm/mmu.c
-> @@ -1768,40 +1768,6 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
->  	return false;
->  }
->  
-> -bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
-> -{
-> -	kvm_pfn_t pfn = pte_pfn(range->arg.pte);
-> -
-> -	if (!kvm->arch.mmu.pgt)
-> -		return false;
-> -
-> -	WARN_ON(range->end - range->start != 1);
-> -
-> -	/*
-> -	 * If the page isn't tagged, defer to user_mem_abort() for sanitising
-> -	 * the MTE tags. The S2 pte should have been unmapped by
-> -	 * mmu_notifier_invalidate_range_end().
-> -	 */
-> -	if (kvm_has_mte(kvm) && !page_mte_tagged(pfn_to_page(pfn)))
-> -		return false;
-> -
-> -	/*
-> -	 * We've moved a page around, probably through CoW, so let's treat
-> -	 * it just like a translation fault and the map handler will clean
-> -	 * the cache to the PoC.
-> -	 *
-> -	 * The MMU notifiers will have unmapped a huge PMD before calling
-> -	 * ->change_pte() (which in turn calls kvm_set_spte_gfn()) and
-> -	 * therefore we never need to clear out a huge PMD through this
-> -	 * calling path and a memcache is not required.
-> -	 */
-> -	kvm_pgtable_stage2_map(kvm->arch.mmu.pgt, range->start << PAGE_SHIFT,
-> -			       PAGE_SIZE, __pfn_to_phys(pfn),
-> -			       KVM_PGTABLE_PROT_R, NULL, 0);
-> -
-> -	return false;
-> -}
-> -
->  bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
->  {
->  	u64 size = (range->end - range->start) << PAGE_SHIFT;
+On Fri, 05 Apr 2024 12:58:11 +0100,
+Paolo Bonzini <pbonzini@redhat.com> wrote:
+> 
+> The .change_pte() MMU notifier callback was intended as an optimization
+> and for this reason it was initially called without a surrounding
+> mmu_notifier_invalidate_range_{start,end}() pair.  It was only ever
+> implemented by KVM (which was also the original user of MMU notifiers)
+> and the rules on when to call set_pte_at_notify() rather than set_pte_at()
+> have always been pretty obscure.
+> 
+> It may seem a miracle that it has never caused any hard to trigger
+> bugs, but there's a good reason for that: KVM's implementation has
+> been nonfunctional for a good part of its existence.  Already in
+> 2012, commit 6bdb913f0a70 ("mm: wrap calls to set_pte_at_notify with
+> invalidate_range_start and invalidate_range_end", 2012-10-09) changed the
+> .change_pte() callback to occur within an invalidate_range_start/end()
+> pair; and because KVM unmaps the sPTEs during .invalidate_range_start(),
+> .change_pte() has no hope of finding a sPTE to change.
+> 
+> Therefore, all the code for .change_pte() can be removed from both KVM
+> and mm/, and set_pte_at_notify() can be replaced with just set_pte_at().
+> 
+> Please review!  Also feel free to take the KVM patches through the mm
+> tree, as I don't expect any conflicts.
+> 
+> Thanks,
+> 
+> Paolo
+> 
+> Paolo Bonzini (4):
+>   KVM: delete .change_pte MMU notifier callback
+>   KVM: remove unused argument of kvm_handle_hva_range()
+>   mmu_notifier: remove the .change_pte() callback
+>   mm: replace set_pte_at_notify() with just set_pte_at()
+> 
+>  arch/arm64/kvm/mmu.c                  | 34 -----------------
+>  arch/loongarch/include/asm/kvm_host.h |  1 -
+>  arch/loongarch/kvm/mmu.c              | 32 ----------------
+>  arch/mips/kvm/mmu.c                   | 30 ---------------
+>  arch/powerpc/include/asm/kvm_ppc.h    |  1 -
+>  arch/powerpc/kvm/book3s.c             |  5 ---
+>  arch/powerpc/kvm/book3s.h             |  1 -
+>  arch/powerpc/kvm/book3s_64_mmu_hv.c   | 12 ------
+>  arch/powerpc/kvm/book3s_hv.c          |  1 -
+>  arch/powerpc/kvm/book3s_pr.c          |  7 ----
+>  arch/powerpc/kvm/e500_mmu_host.c      |  6 ---
+>  arch/riscv/kvm/mmu.c                  | 20 ----------
+>  arch/x86/kvm/mmu/mmu.c                | 54 +--------------------------
+>  arch/x86/kvm/mmu/spte.c               | 16 --------
+>  arch/x86/kvm/mmu/spte.h               |  2 -
+>  arch/x86/kvm/mmu/tdp_mmu.c            | 46 -----------------------
+>  arch/x86/kvm/mmu/tdp_mmu.h            |  1 -
+>  include/linux/kvm_host.h              |  2 -
+>  include/linux/mmu_notifier.h          | 44 ----------------------
+>  include/trace/events/kvm.h            | 15 --------
+>  kernel/events/uprobes.c               |  5 +--
+>  mm/ksm.c                              |  4 +-
+>  mm/memory.c                           |  7 +---
+>  mm/migrate_device.c                   |  8 +---
+>  mm/mmu_notifier.c                     | 17 ---------
+>  virt/kvm/kvm_main.c                   | 50 +------------------------
+>  26 files changed, 10 insertions(+), 411 deletions(-)
+> 
 
-Thanks. It's nice to see this code retire:
+Reviewed-by: Marc Zyngier <maz@kernel.org>
 
-Acked-by: Will Deacon <will@kernel.org>
+	M.
 
-Also, if you're in the business of hacking the MMU notifier code, it
-would be really great to change the .clear_flush_young() callback so
-that the architecture could handle the TLB invalidation. At the moment,
-the core KVM code invalidates the whole VMID courtesy of 'flush_on_ret'
-being set by kvm_handle_hva_range(), whereas we could do a much
-lighter-weight and targetted TLBI in the architecture page-table code
-when we actually update the ptes for small ranges.
-
-Will
+-- 
+Without deviation from the norm, progress is not possible.
 
