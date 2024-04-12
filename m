@@ -1,156 +1,79 @@
-Return-Path: <linux-mips+bounces-2743-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2744-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50ACD8A319D
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Apr 2024 16:54:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44C528A332E
+	for <lists+linux-mips@lfdr.de>; Fri, 12 Apr 2024 18:08:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7388D1C22A44
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Apr 2024 14:54:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BB87AB242C2
+	for <lists+linux-mips@lfdr.de>; Fri, 12 Apr 2024 16:08:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0508C1482EA;
-	Fri, 12 Apr 2024 14:54:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A810148FE2;
+	Fri, 12 Apr 2024 16:08:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jZMOLO9M"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hIt/acAl"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 703CE1482E2
-	for <linux-mips@vger.kernel.org>; Fri, 12 Apr 2024 14:54:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7FE0148850;
+	Fri, 12 Apr 2024 16:08:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712933665; cv=none; b=lgU4bGD8lSO3Oir9vzRuRjk6IeZ38y5gnwOm1R7VKIitVEP/X4bGsnkmH/i/EznSKuRjiBAoyWzwxJ3QMSWstLQdkgyVBmuXjWpAQRlXXsMfbQ6KUKJiecK3vx2Ff643l0jZ6IiN7w+GmJHXNqyEF1wKTZg9wE3HNwxlX694F5E=
+	t=1712938113; cv=none; b=Zmfc3pCK73JFjjkldm/kiGrcEKFdqTVwBPFz5llYOXF9LI728Q4snhEysix0Q3oXN1Ldn2zEMAOZhBb4S1eeyHbS3u8Piu+8CBTW6C2vYFSuU9BiQG9HFz1duieFLs7oiMftXmdV23QAsnNqJMiXEfJ/XPK2WpT/D6HH6wR2fwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712933665; c=relaxed/simple;
-	bh=ZtUMxIcPii7SYptK1bsvjnMTv2XY+8o/C+H99TV4mko=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=dFj05Kw6pvBbfqblYiG9YIc356NaxobK2eXclSmDK35t23D/u4n2AmFubfPBZ/sOMuRzGiyOkLx/gFRCeluTttsORa2/Wi3Vn+ssW96P4e+KMmi/uumHALOFt+/veKc7S6VbVnNBiZHd6DlP+J7mvPwqtFtNt+pcE6IEOf7uTdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jZMOLO9M; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-6edddd0375fso809941b3a.2
-        for <linux-mips@vger.kernel.org>; Fri, 12 Apr 2024 07:54:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712933664; x=1713538464; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZrmdCrVWtwb7lFW6AyHWbgOgdloa5ymd2fy0iQuLqTo=;
-        b=jZMOLO9Mr0xDTGxrxV8mIoSXOfsy0NmwYQW0zI/ASTTgNcMfwZ1UQ+4+EWeTJclvO0
-         Taso9FlZRd68oNAXtsEXqF+Zh6esim3EnEM79tEAtREazLVZQ6C9RcZr2bB6YXUecyGS
-         i7mCDGukKBi1YWkZxqotQaPbtcMhvIO0ZTKV6N8znDXDGxWCjC5OU7bIOqzfxP3fuG1U
-         E2JP1zqWTjEE923qoZFUYQEtzonrgr20LU+ra6Rlt0Z1LsoznWEvbR4GBs+l5h7rbR0e
-         cIJ7OWbCRDSO7twJVl7NouedyjTGtc284+QIYkl4d3Zq7NLXu8Bt0ccYTnihc37Pwxpl
-         yNYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712933664; x=1713538464;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZrmdCrVWtwb7lFW6AyHWbgOgdloa5ymd2fy0iQuLqTo=;
-        b=insDHK9eHFZcPXRcpO8zJkj4CDj3BT+xAJ4lRWoHEQ9t+eulY2jiV6G3LGVXw5kNUZ
-         wa9UpbeBOmKbTT/E3rxUN7jOSh5VGn9aBEmmSZo/E9xR3IuaMFLF68x6wArpWAXR356C
-         giDGIB8Z6JBnIRKY6wWdiSeik04NeQEDro8FiKS7TAf1nsEGrQoCqOcCvpnAtUAADLr5
-         no8K/e/9sKJkN0QKQ/md/aZvPx6EndIIPkkxU7XMwlSyyMSotEolU6XKrEi8MgZ1p3T+
-         wbLadDyjF3WjEJi4Vz9iSS57H79CdE+zVUtvnosAcqTIZjCMQGwZESlh7Aa4Yhygz8G2
-         ziyw==
-X-Forwarded-Encrypted: i=1; AJvYcCUmGacwYYnw0EPD5cErzfL0qlMMOfbZteQ/ie+lzQb9oQcQOKkEGbCariRdCF8aDS1Y6HISpm7t9t7ckXmx1XM5Q7nd6cu3Tsw7/w==
-X-Gm-Message-State: AOJu0YxXJW4RwJ6bMXbYCuP7I2ZokpKNFDq0XR2XhY8467tNAFp/NjKX
-	eViwG0Eysmb11VF/4oLU6UJH8VNiN56/SQd/XDitzjAnaTY8uGaWwxmCfEByQoed6LGfHg4Jkxx
-	ilQ==
-X-Google-Smtp-Source: AGHT+IE8CrGE6yHurBu6oRRUdhNStzcxsQMqGws9O1toyt+VIrjo1lbnGIr3E72VqB9zErBllk+K4v4iLAw=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:2d94:b0:6ed:95ce:3417 with SMTP id
- fb20-20020a056a002d9400b006ed95ce3417mr191844pfb.5.1712933663717; Fri, 12 Apr
- 2024 07:54:23 -0700 (PDT)
-Date: Fri, 12 Apr 2024 07:54:22 -0700
-In-Reply-To: <86jzl2sovz.wl-maz@kernel.org>
+	s=arc-20240116; t=1712938113; c=relaxed/simple;
+	bh=xSWV+KnJYn2lSIamPr8N7d4rlC7P/QjHVeILNIKPSds=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=YDx1EZXloZzhoL7VqATOH4YreUEmyk6/aRPcGYNeDQURCJJ8bcYVCkoODksHu6DpiYttjtOqhW2eFvxt1VWe7N/zbxIMmfKGKuF49FQHqbb3+uiPGsbboe/3sAfIxlSRc2BOTXdx2c2Rtv+BxrljPgEh0U4o9SSLjZnhhX5kRGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hIt/acAl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 70D07C2BD11;
+	Fri, 12 Apr 2024 16:08:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712938113;
+	bh=xSWV+KnJYn2lSIamPr8N7d4rlC7P/QjHVeILNIKPSds=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=hIt/acAlmEccT6NRuayraEKzmJaIbIS1JO2WKmlRJHSFKB8J9bAttxiCXFRn4T55p
+	 8RKNzj8yPNxE8iNPUpGnMhU9iQ40rgQ2/dYJsrV72Ls8UXm9ha8MQ/NS5veYd2cbsR
+	 yCIbXl7Bs9knslhhal6FmgjxqOgZ5/BZ4HL6LMCReveNHGw8//nThoh/vsOpKYJPZW
+	 hmuFpjfW54Eb5KIgb8yITvbhF+xkyW0/25enQwi3HpLorpwe+OvY3C7b/MY77m002U
+	 XRcsA/ywOxZEZm91fPQLgKJ5BvhRF5z2uTDlx65072kyCKf0zialCJFaRDqtbbuuC7
+	 obcHN6jmLhtSQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 63450DF7854;
+	Fri, 12 Apr 2024 16:08:33 +0000 (UTC)
+Subject: Re: [GIT PULL] MIPS fixes for v6.9
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <Zhjt0hXiftxCyFsH@alpha.franken.de>
+References: <Zhjt0hXiftxCyFsH@alpha.franken.de>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Zhjt0hXiftxCyFsH@alpha.franken.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.9_1
+X-PR-Tracked-Commit-Id: 4370b673ccf240bf7587b0cb8e6726a5ccaf1f17
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: e00011a146cde3a86fff96cb643f9b7dd40166ac
+Message-Id: <171293811340.2506.13074166850125020009.pr-tracker-bot@kernel.org>
+Date: Fri, 12 Apr 2024 16:08:33 +0000
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: torvalds@linux-foundation.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240405115815.3226315-1-pbonzini@redhat.com> <20240405115815.3226315-2-pbonzini@redhat.com>
- <20240412104408.GA27645@willie-the-truck> <86jzl2sovz.wl-maz@kernel.org>
-Message-ID: <ZhlLHtfeSHk9gRRO@google.com>
-Subject: Re: [PATCH 1/4] KVM: delete .change_pte MMU notifier callback
-From: Sean Christopherson <seanjc@google.com>
-To: Marc Zyngier <maz@kernel.org>
-Cc: Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org, 
-	kvm@vger.kernel.org, Oliver Upton <oliver.upton@linux.dev>, 
-	Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Nicholas Piggin <npiggin@gmail.com>, 
-	Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@redhat.com>, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
 
-On Fri, Apr 12, 2024, Marc Zyngier wrote:
-> On Fri, 12 Apr 2024 11:44:09 +0100, Will Deacon <will@kernel.org> wrote:
-> > On Fri, Apr 05, 2024 at 07:58:12AM -0400, Paolo Bonzini wrote:
-> > Also, if you're in the business of hacking the MMU notifier code, it
-> > would be really great to change the .clear_flush_young() callback so
-> > that the architecture could handle the TLB invalidation. At the moment,
-> > the core KVM code invalidates the whole VMID courtesy of 'flush_on_ret'
-> > being set by kvm_handle_hva_range(), whereas we could do a much
-> > lighter-weight and targetted TLBI in the architecture page-table code
-> > when we actually update the ptes for small ranges.
-> 
-> Indeed, and I was looking at this earlier this week as it has a pretty
-> devastating effect with NV (it blows the shadow S2 for that VMID, with
-> costly consequences).
-> 
-> In general, it feels like the TLB invalidation should stay with the
-> code that deals with the page tables, as it has a pretty good idea of
-> what needs to be invalidated and how -- specially on architectures
-> that have a HW-broadcast facility like arm64.
+The pull request you sent on Fri, 12 Apr 2024 10:16:18 +0200:
 
-Would this be roughly on par with an in-line flush on arm64?  The simpler, more
-straightforward solution would be to let architectures override flush_on_ret,
-but I would prefer something like the below as x86 can also utilize a range-based
-flush when running as a nested hypervisor.
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.9_1
 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index ff0a20565f90..b65116294efe 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -601,6 +601,7 @@ static __always_inline kvm_mn_ret_t __kvm_handle_hva_range(struct kvm *kvm,
-        struct kvm_gfn_range gfn_range;
-        struct kvm_memory_slot *slot;
-        struct kvm_memslots *slots;
-+       bool need_flush = false;
-        int i, idx;
- 
-        if (WARN_ON_ONCE(range->end <= range->start))
-@@ -653,10 +654,22 @@ static __always_inline kvm_mn_ret_t __kvm_handle_hva_range(struct kvm *kvm,
-                                        break;
-                        }
-                        r.ret |= range->handler(kvm, &gfn_range);
-+
-+                       /*
-+                        * Use a precise gfn-based TLB flush when possible, as
-+                        * most mmu_notifier events affect a small-ish range.
-+                        * Fall back to a full TLB flush if the gfn-based flush
-+                        * fails, and don't bother trying the gfn-based flush
-+                        * if a full flush is already pending.
-+                        */
-+                       if (range->flush_on_ret && !need_flush && r.ret &&
-+                           kvm_arch_flush_remote_tlbs_range(kvm, gfn_range.start
-+                                                            gfn_range.end - gfn_range.start + 1))
-+                               need_flush = true;
-                }
-        }
- 
--       if (range->flush_on_ret && r.ret)
-+       if (need_flush)
-                kvm_flush_remote_tlbs(kvm);
- 
-        if (r.found_memslot)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/e00011a146cde3a86fff96cb643f9b7dd40166ac
 
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
