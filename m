@@ -1,181 +1,120 @@
-Return-Path: <linux-mips+bounces-2747-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2748-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 817258A3C10
-	for <lists+linux-mips@lfdr.de>; Sat, 13 Apr 2024 11:56:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 121EF8A3E22
+	for <lists+linux-mips@lfdr.de>; Sat, 13 Apr 2024 20:49:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19C89283999
-	for <lists+linux-mips@lfdr.de>; Sat, 13 Apr 2024 09:56:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AAA3A1F212C4
+	for <lists+linux-mips@lfdr.de>; Sat, 13 Apr 2024 18:49:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 674E42C870;
-	Sat, 13 Apr 2024 09:56:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B815B5336A;
+	Sat, 13 Apr 2024 18:49:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mFZQ2ioQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P3hMO5sg"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18F4B3DBB7;
-	Sat, 13 Apr 2024 09:56:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AD1C537E6;
+	Sat, 13 Apr 2024 18:49:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713002189; cv=none; b=dNznbpcJ5iZs5l+Cik4vKLdHuBLqxBNH4tZzD2C7HJxzN0tQNEBEWwFixIQu79RwnrK9hbVCnB4FaOHpSPe+xr6ZDrgJ52rw+4YSTK30dQeVKfEkLzC4mnjC63qW3ri3FfXgdnwizveCHGthe92JcF2xZ5twOpER3NuQRdLp+VY=
+	t=1713034158; cv=none; b=l0VbUdQzrP6ud4ThZBc1+cAGuFtDd6Cmy99bNQs6dh1f+DazlsAw7V1LPb+p+r6xWNgEGqlJwoxyYJs91QYJRb8VNX6c7Yyok9Tt5iyINxHlVzedFbDF7hVT5uALJ2QanVqPINh1oO8g/6XRCK8KYv7SG6r1Gis6OoJETRnzUhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713002189; c=relaxed/simple;
-	bh=QDdFeOtdYZxjp46RxGOVjOsa4iTVpoIZG/FPIUq7PkU=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=k4sb9BW3qRClr6agh2lOEc+GAWDMbBtdlx5PmfUjlVAuvD6YKQoFn9CuJfcESE+aYsJLN3ZK4NsGqku47mN4dWdTvbgvPruaSZpu3wOUYr5UG6wVEp43cieghAV2zGliEDhPZPVMKjb00GpIaObQAXTRS8P6zHIHFMSHtylKVp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mFZQ2ioQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FB85C4AF55;
-	Sat, 13 Apr 2024 09:56:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713002188;
-	bh=QDdFeOtdYZxjp46RxGOVjOsa4iTVpoIZG/FPIUq7PkU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=mFZQ2ioQYI4SPEajzb0CoDJ+DBpEtqV/6Z/BFQ4PKiYU1objwuCL1h0YEV5wVvaaV
-	 CStVGbxbg2PLEvUpiruu3vkH/y4cM4+cyaR6uTFrqiuCgSAt4YmdU+kQNO4mhteYE5
-	 q333pUGrVdvWTX2jJozMVr1WfreRxN9CZWgNdxAf4RoHKNGu901fhZ7/hHch++3d1I
-	 m2eFAZSX3y2YCFXBDOjGGbQYp+igVsDeuNqTryAXEm0o7f2cHg2zXaMLKr1soTFZ2j
-	 ofMp5Ohw4rwS2q0YaHgiHwMQ7+YkitOG5MjuKApjtCEFb8HYoNf/A99GWK9EyWwGw/
-	 8+Y5NXUY8UrNA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1rva7W-0047Ih-AA;
-	Sat, 13 Apr 2024 10:56:26 +0100
-Date: Sat, 13 Apr 2024 10:56:25 +0100
-Message-ID: <86h6g5si0m.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Will Deacon <will@kernel.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Tianrui Zhao <zhaotianrui@loongson.cn>,
-	Bibo Mao <maobibo@loongson.cn>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Anup Patel <anup@brainfault.org>,
-	Atish Patra <atishp@atishpatra.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@redhat.com>,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	loongarch@lists.linux.dev,
+	s=arc-20240116; t=1713034158; c=relaxed/simple;
+	bh=z5FQ/+JIFzZLsKnwxuDvNC7NZmX+DCl2VNkM6o23eSg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Z+ASSSzJn3z7nznTcEtjW006jj/69bGHOBah6nvhspnKvA9S76PvqVdkNfZ/DHBVf14PhyxJDrRXvINYJsVs98GsBpzgdX9Jy0N28eWVY8YFrdjNYaq7gjjOg9p07nlbalHHTlWHpVaBtcv9iDBtBVq1NDL9IBUVuIN4HHSY3dM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P3hMO5sg; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-618944792c3so9375407b3.1;
+        Sat, 13 Apr 2024 11:49:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713034156; x=1713638956; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=160OjO5rJ+6EO7hckAf9kwMm6qEF4sLw5PXx2sn7OvA=;
+        b=P3hMO5sgXSX6kfQnVgP9WBDqm/IQgUoo+/OZMbQ4JOspC+SOLWZic2I3afJ3j6smxp
+         tCY8gfbWYsk5CWJrBnYPKnJBz6hqaXjlWdKEwueUAHGV/gFrlqBK2GKD/lS77Vtv7/nU
+         ATn3dLfjo3YoGCZ5k8ZJmOqPtC0FzppyIqjeKcIzim1PTlJGOWfJWJCgfGf+Vdzqa1EW
+         5BfEdYFkxuIu70FMnqhhwOoerGoKgIHHdRzjUPIeOB4VG0WoYrJxJ+zkkKzUoOP53PWp
+         ijIx93PnVNl7BU3MR4XPe69Loz+cV2V4hgG0eCVCczonLmeyowg18XLmI1k01W/eBS1c
+         E9Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713034156; x=1713638956;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=160OjO5rJ+6EO7hckAf9kwMm6qEF4sLw5PXx2sn7OvA=;
+        b=eDOABbkm5j/prySW1hGeIpWsx9UAEjAZJ/xPiJeYInp2HDjd83TR2FRBdQuQ5ygOAl
+         PfgjO/8k6t3ZhQ5TEpNrd9G5F6kGriYFeWggG15mrGjjJfRuOp9QAjOI+SqvVFGRbg3m
+         sFEZ9RoC1nHG8ophi7GTjIqpX4p7FAwxMo897FyVPMLP0/H616Xmj0iW3QTVJctZKdlr
+         Izr89AEhIAfGq6fvcvyul8COf80lIuIAzUHce0Qh+gVG9KPCZf7lRfLw94dpCcUXJunI
+         hVMabxKX1Lc3m59Q+mFuW3j0KLwRMCIqjmHzG0QrB96i84n2VgvLJYpRTUscg4gTobVY
+         g5zQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVuX8T3VQR1Fi60zeoGnVOm5oZP/3aNagVXZwQ+2/Y2B7qXmuuJWpDFiF80fXoukRaNlwWYJW/t23SdFTdXXv+eLQ/VInprHS7TEyKwBHaWqAhMoalOgO8qC12EKE3t1AjEyP9azvln5Q==
+X-Gm-Message-State: AOJu0Yxif52ayPX3fcIvcSYIqxTItrXZ+125hLpo9u+hRT/5CIO8rh7R
+	ApHZ0wJTtva2488GF3K3fl5XHO/Jhb2BLuv06RCwwCZ345ufZ+4Ch6ePNA==
+X-Google-Smtp-Source: AGHT+IEVjHmFoEl1AYMhS97dzrWkQXhK8NSU71a+3aFFmsOqdyhU15s4H0okQPP0caOTw9tOzhjTng==
+X-Received: by 2002:a0d:d794:0:b0:609:ef57:2266 with SMTP id z142-20020a0dd794000000b00609ef572266mr6214284ywd.34.1713034156101;
+        Sat, 13 Apr 2024 11:49:16 -0700 (PDT)
+Received: from localhost ([69.73.66.55])
+        by smtp.gmail.com with ESMTPSA id k4-20020a81ed04000000b006145e0aa9c5sm1312426ywm.60.2024.04.13.11.49.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Apr 2024 11:49:15 -0700 (PDT)
+From: Yury Norov <yury.norov@gmail.com>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Florian Fainelli <f.fainelli@gmail.com>,
 	linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	kvm-riscv@lists.infradead.org,
-	linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH 1/4] KVM: delete .change_pte MMU notifier callback
-In-Reply-To: <ZhlLHtfeSHk9gRRO@google.com>
-References: <20240405115815.3226315-1-pbonzini@redhat.com>
-	<20240405115815.3226315-2-pbonzini@redhat.com>
-	<20240412104408.GA27645@willie-the-truck>
-	<86jzl2sovz.wl-maz@kernel.org>
-	<ZhlLHtfeSHk9gRRO@google.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.2
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	linux-kernel@vger.kernel.org
+Cc: Yury Norov <yury.norov@gmail.com>
+Subject: [PATCH] MIPS: SGI-IP27: micro-optimize arch_init_irq()
+Date: Sat, 13 Apr 2024 11:49:13 -0700
+Message-Id: <20240413184913.69268-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: seanjc@google.com, will@kernel.org, pbonzini@redhat.com, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, oliver.upton@linux.dev, zhaotianrui@loongson.cn, maobibo@loongson.cn, tsbogend@alpha.franken.de, npiggin@gmail.com, anup@brainfault.org, atishp@atishpatra.org, akpm@linux-foundation.org, david@redhat.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, loongarch@lists.linux.dev, linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, 12 Apr 2024 15:54:22 +0100,
-Sean Christopherson <seanjc@google.com> wrote:
-> 
-> On Fri, Apr 12, 2024, Marc Zyngier wrote:
-> > On Fri, 12 Apr 2024 11:44:09 +0100, Will Deacon <will@kernel.org> wrote:
-> > > On Fri, Apr 05, 2024 at 07:58:12AM -0400, Paolo Bonzini wrote:
-> > > Also, if you're in the business of hacking the MMU notifier code, it
-> > > would be really great to change the .clear_flush_young() callback so
-> > > that the architecture could handle the TLB invalidation. At the moment,
-> > > the core KVM code invalidates the whole VMID courtesy of 'flush_on_ret'
-> > > being set by kvm_handle_hva_range(), whereas we could do a much
-> > > lighter-weight and targetted TLBI in the architecture page-table code
-> > > when we actually update the ptes for small ranges.
-> > 
-> > Indeed, and I was looking at this earlier this week as it has a pretty
-> > devastating effect with NV (it blows the shadow S2 for that VMID, with
-> > costly consequences).
-> > 
-> > In general, it feels like the TLB invalidation should stay with the
-> > code that deals with the page tables, as it has a pretty good idea of
-> > what needs to be invalidated and how -- specially on architectures
-> > that have a HW-broadcast facility like arm64.
-> 
-> Would this be roughly on par with an in-line flush on arm64?  The simpler, more
-> straightforward solution would be to let architectures override flush_on_ret,
-> but I would prefer something like the below as x86 can also utilize a range-based
-> flush when running as a nested hypervisor.
-> 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index ff0a20565f90..b65116294efe 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -601,6 +601,7 @@ static __always_inline kvm_mn_ret_t __kvm_handle_hva_range(struct kvm *kvm,
->         struct kvm_gfn_range gfn_range;
->         struct kvm_memory_slot *slot;
->         struct kvm_memslots *slots;
-> +       bool need_flush = false;
->         int i, idx;
->  
->         if (WARN_ON_ONCE(range->end <= range->start))
-> @@ -653,10 +654,22 @@ static __always_inline kvm_mn_ret_t __kvm_handle_hva_range(struct kvm *kvm,
->                                         break;
->                         }
->                         r.ret |= range->handler(kvm, &gfn_range);
-> +
-> +                       /*
-> +                        * Use a precise gfn-based TLB flush when possible, as
-> +                        * most mmu_notifier events affect a small-ish range.
-> +                        * Fall back to a full TLB flush if the gfn-based flush
-> +                        * fails, and don't bother trying the gfn-based flush
-> +                        * if a full flush is already pending.
-> +                        */
-> +                       if (range->flush_on_ret && !need_flush && r.ret &&
-> +                           kvm_arch_flush_remote_tlbs_range(kvm, gfn_range.start
-> +                                                            gfn_range.end - gfn_range.start + 1))
-> +                               need_flush = true;
->                 }
->         }
->  
-> -       if (range->flush_on_ret && r.ret)
-> +       if (need_flush)
->                 kvm_flush_remote_tlbs(kvm);
->  
->         if (r.found_memslot)
+The function sets adjasted groups of bits in hub_irq_map by using
+for-loops. There's a bitmap_set() function dedicated to do this.
 
-I think this works for us on HW that has range invalidation, which
-would already be a positive move.
+Because [0, CPU_CALL_B_IRQ] and [NI_BRDCAST_ERR_A, MSC_PANIC_INTR]
+ranges belong to the same machine word, bitmap_set() would boil down
+to an inline wrapper in both cases, avoiding generating a loop, whth
+the associate overhead.
 
-For the lesser HW that isn't range capable, it also gives the
-opportunity to perform the iteration ourselves or go for the nuclear
-option if the range is larger than some arbitrary constant (though
-this is additional work).
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+---
+ arch/mips/sgi-ip27/ip27-irq.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-But this still considers the whole range as being affected by
-range->handler(). It'd be interesting to try and see whether more
-precise tracking is (or isn't) generally beneficial.
-
-Thanks,
-
-	M.
-
+diff --git a/arch/mips/sgi-ip27/ip27-irq.c b/arch/mips/sgi-ip27/ip27-irq.c
+index e6ca34cc9853..3c3a4b56ab95 100644
+--- a/arch/mips/sgi-ip27/ip27-irq.c
++++ b/arch/mips/sgi-ip27/ip27-irq.c
+@@ -279,11 +279,8 @@ void __init arch_init_irq(void)
+ 	 * Mark these as reserved right away so they won't be used accidentally
+ 	 * later.
+ 	 */
+-	for (i = 0; i <= CPU_CALL_B_IRQ; i++)
+-		set_bit(i, hub_irq_map);
+-
+-	for (i = NI_BRDCAST_ERR_A; i <= MSC_PANIC_INTR; i++)
+-		set_bit(i, hub_irq_map);
++	bitmap_set(hub_irq_map, 0, CPU_CALL_B_IRQ + 1);
++	bitmap_set(hub_irq_map, NI_BRDCAST_ERR_A, MSC_PANIC_INTR - NI_BRDCAST_ERR_A + 1);
+ 
+ 	fn = irq_domain_alloc_named_fwnode("HUB");
+ 	WARN_ON(fn == NULL);
 -- 
-Without deviation from the norm, progress is not possible.
+2.40.1
+
 
