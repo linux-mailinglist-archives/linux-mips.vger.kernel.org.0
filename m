@@ -1,212 +1,151 @@
-Return-Path: <linux-mips+bounces-2754-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2755-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 606728A40E2
-	for <lists+linux-mips@lfdr.de>; Sun, 14 Apr 2024 09:28:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBA518A419D
+	for <lists+linux-mips@lfdr.de>; Sun, 14 Apr 2024 11:55:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5CB051C20CC5
-	for <lists+linux-mips@lfdr.de>; Sun, 14 Apr 2024 07:28:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97BEA2818FA
+	for <lists+linux-mips@lfdr.de>; Sun, 14 Apr 2024 09:55:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CBB31CFBD;
-	Sun, 14 Apr 2024 07:28:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0955E23775;
+	Sun, 14 Apr 2024 09:55:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mSn3bFIT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KzLfFXWS"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213BE17565;
-	Sun, 14 Apr 2024 07:28:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 669E223763;
+	Sun, 14 Apr 2024 09:55:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713079683; cv=none; b=ekIp91v3s3LBHAb2WunZcXrjH4xV3xGCu+c6oWltHqyO/V7ICXpHU7SFrr9NaxZu6OCYlp3u1+MZsxen3cNlwzBzpYU8k/j+Z5/7qoVjgTf8av2a1ickI3nlBiVyab0RNknvZV/Z1KU4m4IYjvdxuZHAMrCHC9NhD2YLRBTf7LE=
+	t=1713088534; cv=none; b=UDXQMVpGnXGqWl5cy8vawDRY/Ey58cw+LDPimWDjGzI8CeC163EqCs6Qt31W5hJu7f8N7ttDK0yQgJUNC/1SYl/p0iIFfopHAdxAobrNeOsPVfwunHt1ebqDK0L96M6NE3I4CbAXOlWB6+EhyL80XJZHVZT0xzQeLxerFDWcipg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713079683; c=relaxed/simple;
-	bh=7UcAoz/SHZJ9dQ0bgxdPwC8jDXsqkfxw4nZlv0SLw5o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qbtxOfhZcaHsLD9jYrV2UIUzMCUE9EUXt1oaTpBMKzUZn1goQjZB8pC3+WRqLnjsOZnjz5GFc1H0/VPGjPGUY5yL3HHcR6uudTMBBTuF9XHxapMb6wL1ZZxvPcrwVX7L6g+IAnkXJRbzpuc2X1Q9qW95KlpFG4HTyJ5E5ImdaFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mSn3bFIT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 759F8C072AA;
-	Sun, 14 Apr 2024 07:27:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713079682;
-	bh=7UcAoz/SHZJ9dQ0bgxdPwC8jDXsqkfxw4nZlv0SLw5o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mSn3bFITK7eYlJdTFbScch0ThBeU+CtfVZynIF2TKYAjwpfIWpT9mvprRtl/vRdi+
-	 PWs0IudDlFW6Beno7xjDAiW1ip7pL/FGhEaTkCamfUxQ5eDkHTs4QkNm97zhVJccwv
-	 UxX9+hkJgUV7GSohwVI620vdp0JYtwTWKKysZvcjBk9t6kUNPFg5Eeatgn84u8vivs
-	 7On6vy8KLlD97z5wp8DI0bLXFhxIaSTkHjS//iWFuOPg7CQ+rJyeDYDISTJa6W6AFc
-	 TXNbcHaOhhepqyuh8BUKoPaV89wZMsoGzWH9gtBjUYYSDb1AqF+wsfY3ZeQjYF2dQ5
-	 tmillpYns8epg==
-Date: Sun, 14 Apr 2024 10:26:47 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Sam Ravnborg <sam@ravnborg.org>
-Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Donald Dutile <ddutile@redhat.com>,
-	Eric Chanudet <echanude@redhat.com>,
-	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nadav Amit <nadav.amit@gmail.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-mm@kvack.org, linux-modules@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v4 06/15] mm/execmem, arch: convert simple overrides of
- module_alloc to execmem
-Message-ID: <ZhuFNyaZcfOrp7Cl@kernel.org>
-References: <20240411160051.2093261-1-rppt@kernel.org>
- <20240411160051.2093261-7-rppt@kernel.org>
- <20240411205346.GA66667@ravnborg.org>
+	s=arc-20240116; t=1713088534; c=relaxed/simple;
+	bh=b3tnisE5mCthW2dJBswBPlSIzQlrQrLbNhzUABTmHY4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=anwMLDERcusQawWEFIgkeqjMYJPDY++oyLxsL11Zms0G+j9rTtDmiYzrfCuNYTyx3s9zCgNZ9QLwJ2k9dxLKP0tjraWnvB43DPf1IxhwznXpTKpjWDCqnOMD29MI8NC9OaScgxk3wfMM9/vE23pd8URAbXTYbwcWYLGj2ky1j9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KzLfFXWS; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-518d98b9620so213053e87.3;
+        Sun, 14 Apr 2024 02:55:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713088531; x=1713693331; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mAW8FE3757+N73ozBr48CQyvPZHQOC5ywYwUdbEQp2A=;
+        b=KzLfFXWSY+ctCoHn3r52g9vyeTJaMDvRF/C+25b7H23WrwErCL+a7r0rLcqgW5UcV+
+         2JFvlGCsitldlPZ+1fvtUZCjMdhM9tqw+hdM0KTgE7pdFqAZ0FmrwMYjwzrhFHs4D3ZQ
+         xgs+gURcxFTihBLbuEmS1hWrhAR/ESqF0InbaNf+wud41nwIKjS4cutyWyk2iRtlX6VF
+         C22uwJTSmnGNPkabws6l2t+v6G+ljd/RfL8vaa3XLm9CizHEU4416pMS4/xh/fvNryU5
+         pVH6VmdesLtD/wAC67I80fz1/EZb2vcQQLWZ7bn0v47rAyEdiof6H03sehYwD56yUmlG
+         83Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713088531; x=1713693331;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mAW8FE3757+N73ozBr48CQyvPZHQOC5ywYwUdbEQp2A=;
+        b=GdLHFSWTyoXiJGATTtwghQadKmaTQ5hst1/0cnKcFRDs9Felf7Ck7qCeH2zZNjQgu7
+         ut5wyqWPd6W12kpxZ0KtVaG0N8LuLilTzHNHNd/beYyKpuMJp6HoWVI1FTc40Nmbk8Cj
+         vUVFSSollMlgaW/aTeJ7nptiILAOoSKC23qjhU5iLwQnirlvdgvAKjhG9AR5vFfJc/Av
+         UfOzzdPi1+Y6KIkVUB/K2uq4KZ7oIuQ6qc5E2EGecpzggTbnXsuxm3DvIoCV7sr5Kitu
+         ekGZLgZc+eZihf7LlLu/+whcRDMDo8+b9/KG5XZbfYPLT4MWmoR0HBYXvWgj8w8zoHqk
+         HGbw==
+X-Forwarded-Encrypted: i=1; AJvYcCUt5kU/RR7fVrgjpWGZLXnxaUQQ9HHaGu0dBZ73cf4xqqTYlRB8T/nYHQaW7gNWbZTWDfij2UG7XDX1sf9XZ0QgEK26UCFMhiT9ZmSFHdmFNBBPr3wrZErCUtxPqIQlFl1M6+khD+dEpQ==
+X-Gm-Message-State: AOJu0Yw+9EMlNVnaZuiedTLzXbiuCVQBrDRK4ZNpeOeERIdgeDeM4kNN
+	Sq69+xPC9LRJww3csStoGFldxMspyWV64S60m1v8BJtADoy3FvAq
+X-Google-Smtp-Source: AGHT+IEEKoM/iDTJCuznVR9HiQN/AVCO8Nii+pEgbCzxUMbS3kxqr5wisBFEtwUu4Hozxm6Lwg6jLw==
+X-Received: by 2002:ac2:51b7:0:b0:516:c099:e785 with SMTP id f23-20020ac251b7000000b00516c099e785mr4409977lfk.20.1713088531265;
+        Sun, 14 Apr 2024 02:55:31 -0700 (PDT)
+Received: from jernej-laptop.localnet (APN-123-252-50-gprs.simobil.net. [46.123.252.50])
+        by smtp.gmail.com with ESMTPSA id f10-20020a056000128a00b003436a3cae6dsm8677094wrx.98.2024.04.14.02.55.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Apr 2024 02:55:30 -0700 (PDT)
+From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Jani Nikula <jani.nikula@intel.com>,
+ Andrzej Hajda <andrzej.hajda@intel.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+ Jonas Karlman <jonas@kwiboo.se>,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ Russell King <linux@armlinux.org.uk>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
+ Samuel Holland <samuel@sholland.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Maxime Ripard <mripard@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>,
+ Alexander Stein <alexander.stein@ew.tq-group.com>,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
+ linux-sunxi@lists.linux.dev, linux-mips@vger.kernel.org,
+ Maxime Ripard <mripard@kernel.org>
+Subject: Re: [PATCH 5/7] ARM: configs: sunxi: Enable DRM_DW_HDMI
+Date: Sun, 14 Apr 2024 11:55:27 +0200
+Message-ID: <3289340.44csPzL39Z@jernej-laptop>
+In-Reply-To: <20240403-fix-dw-hdmi-kconfig-v1-5-afbc4a835c38@kernel.org>
+References:
+ <20240403-fix-dw-hdmi-kconfig-v1-0-afbc4a835c38@kernel.org>
+ <20240403-fix-dw-hdmi-kconfig-v1-5-afbc4a835c38@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240411205346.GA66667@ravnborg.org>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-On Thu, Apr 11, 2024 at 10:53:46PM +0200, Sam Ravnborg wrote:
-> Hi Mike.
+Dne sreda, 3. april 2024 ob 12:56:23 CEST je Maxime Ripard napisal(a):
+> Commit 4fc8cb47fcfd ("drm/display: Move HDMI helpers into display-helper
+> module") turned the DRM_DW_HDMI dependency of DRM_SUN8I_DW_HDMI into a
+> depends on which ended up disabling the driver in the defconfig. Make
+> sure it's still enabled.
 > 
-> On Thu, Apr 11, 2024 at 07:00:42PM +0300, Mike Rapoport wrote:
-> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> > 
-> > Several architectures override module_alloc() only to define address
-> > range for code allocations different than VMALLOC address space.
-> > 
-> > Provide a generic implementation in execmem that uses the parameters for
-> > address space ranges, required alignment and page protections provided
-> > by architectures.
-> > 
-> > The architectures must fill execmem_info structure and implement
-> > execmem_arch_setup() that returns a pointer to that structure. This way the
-> > execmem initialization won't be called from every architecture, but rather
-> > from a central place, namely a core_initcall() in execmem.
-> > 
-> > The execmem provides execmem_alloc() API that wraps __vmalloc_node_range()
-> > with the parameters defined by the architectures.  If an architecture does
-> > not implement execmem_arch_setup(), execmem_alloc() will fall back to
-> > module_alloc().
-> > 
-> > Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> > ---
-> 
-> This code snippet could be more readable ...
-> > diff --git a/arch/sparc/kernel/module.c b/arch/sparc/kernel/module.c
-> > index 66c45a2764bc..b70047f944cc 100644
-> > --- a/arch/sparc/kernel/module.c
-> > +++ b/arch/sparc/kernel/module.c
-> > @@ -14,6 +14,7 @@
-> >  #include <linux/string.h>
-> >  #include <linux/ctype.h>
-> >  #include <linux/mm.h>
-> > +#include <linux/execmem.h>
-> >  
-> >  #include <asm/processor.h>
-> >  #include <asm/spitfire.h>
-> > @@ -21,34 +22,26 @@
-> >  
-> >  #include "entry.h"
-> >  
-> > +static struct execmem_info execmem_info __ro_after_init = {
-> > +	.ranges = {
-> > +		[EXECMEM_DEFAULT] = {
-> >  #ifdef CONFIG_SPARC64
-> > -
-> > -#include <linux/jump_label.h>
-> > -
-> > -static void *module_map(unsigned long size)
-> > -{
-> > -	if (PAGE_ALIGN(size) > MODULES_LEN)
-> > -		return NULL;
-> > -	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
-> > -				GFP_KERNEL, PAGE_KERNEL, 0, NUMA_NO_NODE,
-> > -				__builtin_return_address(0));
-> > -}
-> > +			.start = MODULES_VADDR,
-> > +			.end = MODULES_END,
-> >  #else
-> > -static void *module_map(unsigned long size)
-> > +			.start = VMALLOC_START,
-> > +			.end = VMALLOC_END,
-> > +#endif
-> > +			.alignment = 1,
-> > +		},
-> > +	},
-> > +};
-> > +
-> > +struct execmem_info __init *execmem_arch_setup(void)
-> >  {
-> > -	return vmalloc(size);
-> > -}
-> > -#endif /* CONFIG_SPARC64 */
-> > -
-> > -void *module_alloc(unsigned long size)
-> > -{
-> > -	void *ret;
-> > -
-> > -	ret = module_map(size);
-> > -	if (ret)
-> > -		memset(ret, 0, size);
-> > +	execmem_info.ranges[EXECMEM_DEFAULT].pgprot = PAGE_KERNEL;
-> >  
-> > -	return ret;
-> > +	return &execmem_info;
-> >  }
-> >  
-> >  /* Make generic code ignore STT_REGISTER dummy undefined symbols.  */
-> 
-> ... if the following was added:
-> 
-> diff --git a/arch/sparc/include/asm/pgtable_32.h b/arch/sparc/include/asm/pgtable_32.h
-> index 9e85d57ac3f2..62bcafe38b1f 100644
-> --- a/arch/sparc/include/asm/pgtable_32.h
-> +++ b/arch/sparc/include/asm/pgtable_32.h
-> @@ -432,6 +432,8 @@ static inline int io_remap_pfn_range(struct vm_area_struct *vma,
-> 
->  #define VMALLOC_START           _AC(0xfe600000,UL)
->  #define VMALLOC_END             _AC(0xffc00000,UL)
-> +#define MODULES_VADDR           VMALLOC_START
-> +#define MODULES_END             VMALLOC_END
-> 
-> 
-> Then the #ifdef CONFIG_SPARC64 could be dropped and the code would be
-> the same for 32 and 64 bits.
- 
-Yeah, the #ifdef there can be dropped even regardless of execmem.
-I'll add a patch for that.
+> Fixes: 4fc8cb47fcfd ("drm/display: Move HDMI helpers into display-helper module")
+> Reported-by: Mark Brown <broonie@kernel.org>
+> Reported-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Signed-off-by: Maxime Ripard <mripard@kernel.org>
 
-> Just a drive-by comment.
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+
+Best regards,
+Jernej
+
+> ---
+>  arch/arm/configs/sunxi_defconfig | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> 	Sam
+> diff --git a/arch/arm/configs/sunxi_defconfig b/arch/arm/configs/sunxi_defconfig
+> index bddc82f78942..a83d29fed175 100644
+> --- a/arch/arm/configs/sunxi_defconfig
+> +++ b/arch/arm/configs/sunxi_defconfig
+> @@ -108,10 +108,11 @@ CONFIG_DRM_SUN4I_HDMI_CEC=y
+>  CONFIG_DRM_SUN8I_DW_HDMI=y
+>  CONFIG_DRM_PANEL_LVDS=y
+>  CONFIG_DRM_PANEL_SIMPLE=y
+>  CONFIG_DRM_PANEL_EDP=y
+>  CONFIG_DRM_SIMPLE_BRIDGE=y
+> +CONFIG_DRM_DW_HDMI=y
+>  CONFIG_DRM_LIMA=y
+>  CONFIG_FB_SIMPLE=y
+>  CONFIG_BACKLIGHT_CLASS_DEVICE=y
+>  CONFIG_BACKLIGHT_PWM=y
+>  CONFIG_SOUND=y
+> 
 > 
 
--- 
-Sincerely yours,
-Mike.
+
+
+
 
