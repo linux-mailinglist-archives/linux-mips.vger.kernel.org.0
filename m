@@ -1,124 +1,159 @@
-Return-Path: <linux-mips+bounces-2769-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2770-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B284D8A4D8D
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Apr 2024 13:22:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A18F18A5833
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Apr 2024 18:53:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51E9C1F22D2C
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Apr 2024 11:22:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4EFF01F21044
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Apr 2024 16:53:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5CF65FBB2;
-	Mon, 15 Apr 2024 11:21:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A24E8248D;
+	Mon, 15 Apr 2024 16:53:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yyl0jw8F"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n9583Q6y"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8384A5FB9D;
-	Mon, 15 Apr 2024 11:21:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4233642072;
+	Mon, 15 Apr 2024 16:53:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713180110; cv=none; b=OKWcdSYpxHEJErXGOSllEI9ajlBynw2vFcky7YrYOmMF6HRRs2XRKu2RXTPA9JV+DTMKYJ/bA13v4if7mYR6Tji5BNSxN8RlCb0YkpheTrmwUs1Gj7u/h9gY2p7w2BZFi+kbdWRVT+3P2bk7vSxIME54soBzdfbemFVuJPbsk+g=
+	t=1713199990; cv=none; b=Pci6F4BLaJbSnJCtfw0RQXSH2KUYyJg/21lTO4yrsWcG4PdkgGnPEYvuP/+7j09E07wDZ84S9ar0J8YslP2ZbZQHybKPSQPPcUvPo/j63eT8EdmWnlPjt3bi/NI9ZzQg/Bhp67eBLEvWNwstM+aRtMBsUtj0mcQORNPx13B7OsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713180110; c=relaxed/simple;
-	bh=zaeta5YRsGP9vG705wmBldVE6zWx2ubesmRsCMtwiKM=;
+	s=arc-20240116; t=1713199990; c=relaxed/simple;
+	bh=xJZBsBz/ovkewwHaqkWgEKUCLl3sCJ9igaEyaiYi248=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zh1xmuQyDj2lN66LYGaoHxbcc2CnmhKiCMRnI9TLynlcoKRTJdH9/uOGU6TTNBNRY4R72ualtvG0D8VClU/w3HeZ2H0J4WysiiDnU5v6ycQq4ErebToXMns2FeVIZoOD3zx7qooR7ccryTLm1KbcsdURCcUhziXM59smAduSrgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yyl0jw8F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90F5DC113CC;
-	Mon, 15 Apr 2024 11:21:49 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=B+zQfhfRZUb683zSkhUtYDFDYn/bvHU6nvLZL6TLONTpV6+GTMtmLFwd9AK3LXvJ/wftAN3INL5I7WnAwUHy3VrvCfdXfEevTnNX4gH3SB+26f0OIpvHNk+s8Lk0xxcKmRCR/73S+WrBh2Rw8+05OleT1cTD3y6Eju4ShGk44SM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n9583Q6y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57527C113CC;
+	Mon, 15 Apr 2024 16:52:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713180110;
-	bh=zaeta5YRsGP9vG705wmBldVE6zWx2ubesmRsCMtwiKM=;
+	s=k20201202; t=1713199989;
+	bh=xJZBsBz/ovkewwHaqkWgEKUCLl3sCJ9igaEyaiYi248=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Yyl0jw8FOgIlaxoOAe3p2F9YP256URFG19ccbzwnvLP+nXPKhgD5ZpMounJJGJTGl
-	 W56F7hvPz3yssyAye//nUgEICHyExmh3si6KPUCTQVp+F3t+vLFGf9crAm/lbPZ/tG
-	 oYVox67bc7RG6kHrc53DAHLbGGYZcw0qIMfntJXAZfcS1WFZVqdlHmxrcw0KYz+okp
-	 Pkrupra89W8My0fKez1OycDL7lFi3BMj9x0gWr6hV/lLIp2y2H5n0Od+vGtF3NYO0c
-	 CRzHx1TYaq8LcPQqKjZbGk4YUzmaWnW59PnqFLEdHv4oY9iqpgJNXI7PCDHsTpTWV7
-	 4/moMdyU2qz2A==
-Date: Mon, 15 Apr 2024 13:21:47 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Jani Nikula <jani.nikula@intel.com>, 
-	Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Javier Martinez Canillas <javierm@redhat.com>, Russell King <linux@armlinux.org.uk>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Chen-Yu Tsai <wens@csie.org>, 
-	Samuel Holland <samuel@sholland.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Alexander Stein <alexander.stein@ew.tq-group.com>, dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev, linux-sunxi@lists.linux.dev, 
-	linux-mips@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH 0/7] drm/display: Fix display helpers depends on fallouts
-Message-ID: <20240415-sloppy-invisible-crocodile-da4545@houat>
-References: <20240403-fix-dw-hdmi-kconfig-v1-0-afbc4a835c38@kernel.org>
- <117b0d3b-a60b-4bc0-9f2c-f0e4fffe634a@sirena.org.uk>
+	b=n9583Q6y/kVDUsC/Sk35DHsUlzQxomP4brOeJWEqMK5tTGdFfL5yXDBwNh/dc1R8t
+	 OnTvm1XERGxz1JxTUG2JWpufMQFhEpCf0upLztHBi97mz83HQzMB81Cj+bMHmQeLrO
+	 vdSyDt4foue7u5p0z1MAb6dHJ1a7FzO8x/EelybB33sZUvBK4gAoiim0DQVOThRBq2
+	 3ERPw7wOWw5Nw3DB6b+PtiKpkHgDPedzRaGZsUTWRIfT1yQsmJ+qNm4oAZ/M1rF747
+	 dHBdlhRGfIq7wIyTjPR6B4GdpTUD5V0JGj4lcLZS8oQu4cdKYlcTv5ldjuZ1AicK/r
+	 qCFC3y/AMEfuA==
+Date: Mon, 15 Apr 2024 19:51:52 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Donald Dutile <ddutile@redhat.com>,
+	Eric Chanudet <echanude@redhat.com>,
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nadav Amit <nadav.amit@gmail.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linux-mm@kvack.org, linux-modules@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v4 05/15] mm: introduce execmem_alloc() and execmem_free()
+Message-ID: <Zh1bKAaD7nLyJ9ya@kernel.org>
+References: <20240411160051.2093261-1-rppt@kernel.org>
+ <20240411160051.2093261-6-rppt@kernel.org>
+ <20240415075241.GF40213@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="wn4eudraeu4chaua"
-Content-Disposition: inline
-In-Reply-To: <117b0d3b-a60b-4bc0-9f2c-f0e4fffe634a@sirena.org.uk>
-
-
---wn4eudraeu4chaua
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240415075241.GF40213@noisy.programming.kicks-ass.net>
 
-Hi Mark
+On Mon, Apr 15, 2024 at 09:52:41AM +0200, Peter Zijlstra wrote:
+> On Thu, Apr 11, 2024 at 07:00:41PM +0300, Mike Rapoport wrote:
+> > +/**
+> > + * enum execmem_type - types of executable memory ranges
+> > + *
+> > + * There are several subsystems that allocate executable memory.
+> > + * Architectures define different restrictions on placement,
+> > + * permissions, alignment and other parameters for memory that can be used
+> > + * by these subsystems.
+> > + * Types in this enum identify subsystems that allocate executable memory
+> > + * and let architectures define parameters for ranges suitable for
+> > + * allocations by each subsystem.
+> > + *
+> > + * @EXECMEM_DEFAULT: default parameters that would be used for types that
+> > + * are not explcitly defined.
+> > + * @EXECMEM_MODULE_TEXT: parameters for module text sections
+> > + * @EXECMEM_KPROBES: parameters for kprobes
+> > + * @EXECMEM_FTRACE: parameters for ftrace
+> > + * @EXECMEM_BPF: parameters for BPF
+> > + * @EXECMEM_TYPE_MAX:
+> > + */
+> > +enum execmem_type {
+> > +	EXECMEM_DEFAULT,
+> > +	EXECMEM_MODULE_TEXT = EXECMEM_DEFAULT,
+> > +	EXECMEM_KPROBES,
+> > +	EXECMEM_FTRACE,
+> > +	EXECMEM_BPF,
+> > +	EXECMEM_TYPE_MAX,
+> > +};
+> 
+> Can we please get a break-down of how all these types are actually
+> different from one another?
+> 
+> I'm thinking some platforms have a tiny immediate space (arm64 comes to
+> mind) and has less strict placement constraints for some of them?
 
-On Wed, Apr 10, 2024 at 07:06:39PM +0100, Mark Brown wrote:
-> On Wed, Apr 03, 2024 at 12:56:18PM +0200, Maxime Ripard wrote:
-> > Hi,
-> >=20
-> > Here's a series addressing the various regressions that were reported
-> > after the Kconfig rework for the DRM display helpers.
-> >=20
-> > Let me know what you think,
-> > Maxime
->=20
-> Is there any news on getting the rest of this merged?  It's been more
-> than a week now and the Designware display controllers are all still
-> broken in -next, causing widespread breakage in CI.  For bisection
-> purposes it probably makes sense for the defconfig updates to go along
-> with the changes to the Kconfig for the driver...
+loongarch, mips, nios2 and sparc define modules address space different
+from vmalloc and use that for modules, kprobes and bpf (where supported).
 
-I was on holidays so I've admittedly hoped that it would be picked up /
-reviewed by the relevant maintainers.
+parisc uses vmalloc range for everything, but it sets permissions to
+PAGE_KERNEL_RWX because it's PAGE_KERNEL_EXEC is read only and it lacks
+set_memory_* APIs.
 
-Aside from the changes on sunxi_defconfig, I haven't seen any review
-=66rom the relevant maintainers so I'm not sure how to merge this. Should
-we get an Acked-by from Arnd, Olof, Catalin or Will and merge everything
-through drm-misc?
+arm has an address space for modules, but it fall back to the entire
+vmalloc with CONFIG_ARM_MODULE_PLTS=y.
 
-Maxime
+arm64 uses different ranges for modules and bpf/kprobes. For kprobes it
+does vmalloc(PAGE_KERNEL_ROX) and for bpf just plain vmalloc().
+For modules arm64 first tries to allocated from 128M below kernel_end and
+if that fails it uses 2G below kernel_end as a fallback.
 
+powerpc uses vmalloc space for everything for some configurations. For
+book3s-32 and 8xx it defines two ranges that are used for module text,
+kprobes and bpf and the module data can be allocated anywhere in vmalloc.
 
---wn4eudraeu4chaua
-Content-Type: application/pgp-signature; name="signature.asc"
+riscv has an address space for modules, a different address space for bpf
+and uses vmalloc space for kprobes.
 
------BEGIN PGP SIGNATURE-----
+s390 and x86 have modules address space and use that space for all
+executable allocations.
 
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCZh0NywAKCRAnX84Zoj2+
-dorNAX9YIzjToH375MPL7Ax5ZuueLWq41eVy07FoPTf31aMEQyEy/VR56sILKVLf
-TzYFX28BgODebjC3eC3QNfJYDoWKcB+vda0h0cCbUxE3QnqF2xMfORawm4oSmu2E
-dt3E8cNkCg==
-=f2Da
------END PGP SIGNATURE-----
+The EXECMEM_FTRACE type is only used on s390 and x86 and for now it's there
+more for completeness rather to denote special constraints or properties.
 
---wn4eudraeu4chaua--
+-- 
+Sincerely yours,
+Mike.
 
