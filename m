@@ -1,43 +1,44 @@
-Return-Path: <linux-mips+bounces-2760-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2762-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C02998A4A72
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Apr 2024 10:36:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C4CD8A4A75
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Apr 2024 10:36:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F13DA1C20FA3
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Apr 2024 08:36:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8E13DB24A66
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Apr 2024 08:36:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02CEE39AF3;
-	Mon, 15 Apr 2024 08:36:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4F143BBF0;
+	Mon, 15 Apr 2024 08:36:08 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A7682868D;
-	Mon, 15 Apr 2024 08:35:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41AEF3BBED;
+	Mon, 15 Apr 2024 08:36:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713170162; cv=none; b=UOrxwggZnxMhr23Sm41RyHaZPFEfjIzwbt5+ykCgJRDnGw5BbxxSbryw2AMi2AyxePVYxVRL6FOBVAN6HtE65hO2sdhbOKgnTeGr42FPwCfDDcHhSsP89PVLeWuK75DiTU8CIumuKjY6dj7ESqOOSjl12sGAu5EY+9/rtqGk9/Q=
+	t=1713170168; cv=none; b=hrrB3Dh06WrJ2k/u77kpBM7KiV/zADY5SeXdhAPWcd6XM+VpopBfcYQa5CC1gxKu1hUV9AdAPxfRQj0Qb2D8DLlejx/r2BS5KP8B9TNRA/BTZuKaXhkf/lT7Rvjy9HFJEIX11CADLa7w0APF5gE4fzrLl8LTq0YHd8ij5nSuqjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713170162; c=relaxed/simple;
-	bh=I0ov0M45VZjgvYYqhyn0aZOdOUazf6x4v6erec5mCa4=;
+	s=arc-20240116; t=1713170168; c=relaxed/simple;
+	bh=3pn1236NH8HERFeQ80zUKBBGeBNC3NuW3A04K3Vi/pY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OMUaALKKGguaiilBwPdDqFzf1yHt4dbhLqNUkigUpYqGkEUfgCSCht2uUVxnJGSkUTlmO4H9FhIu7OYrTSwjnppXKMQWxN82dpHaS+/XM2huv1lvHB+5CoS7f41sPFq62Fv+DsJkV6UqT9HRdjb4pABIcjXZLx4qv3D/1e86Rns=
+	 Content-Type:Content-Disposition:In-Reply-To; b=h9eWsKF4Jhzrgd+SGA9TD1+x2htjUjQ66Ir46QumPOReA+8ZS0MWxOIM0tN0W7Oc+Fgyw5FMv7+RyHR14JMTRI4caPu5nsOs39e6w0gzQnN27rhLRSvkVOEbhJOtp0u+fagwr9GWORAFUvVz9OaO/+JsdAEm/Asw7Sxs8ydsJ4s=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1rwHob-0004hn-00; Mon, 15 Apr 2024 10:35:49 +0200
+	id 1rwHob-0004hw-00; Mon, 15 Apr 2024 10:35:49 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id B9E3CC04B7; Mon, 15 Apr 2024 10:34:26 +0200 (CEST)
-Date: Mon, 15 Apr 2024 10:34:26 +0200
+	id 7D228C05B3; Mon, 15 Apr 2024 10:34:56 +0200 (CEST)
+Date: Mon, 15 Apr 2024 10:34:56 +0200
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Songyang Li <leesongyang@outlook.com>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Octeon: Add PCIe link status check
-Message-ID: <ZhzmkuYJOTIVNVL9@alpha.franken.de>
-References: <TY3P286MB27542582C36379EB4A128DEFB4332@TY3P286MB2754.JPNP286.PROD.OUTLOOK.COM>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH] MIPS: Guard some macros with __ASSEMBLY__ in asm.h
+Message-ID: <ZhzmsE/jH3/sx0X6@alpha.franken.de>
+References: <20240326-asm-guard-v1-1-fe0c140a5aea@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -46,52 +47,51 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <TY3P286MB27542582C36379EB4A128DEFB4332@TY3P286MB2754.JPNP286.PROD.OUTLOOK.COM>
+In-Reply-To: <20240326-asm-guard-v1-1-fe0c140a5aea@flygoat.com>
 
-On Wed, Mar 20, 2024 at 11:22:00PM +0800, Songyang Li wrote:
-> The standard PCIe configuration read-write interface is used to
-> access the configuration space of the peripheral PCIe devices
-> of the mips processor after the PCIe link surprise down, it can
-> generate kernel panic caused by "Data bus error". So it is
-> necessary to add PCIe link status check for system protection.
-> When the PCIe link is down or in training, assigning a value
-> of 0 to the configuration address can prevent read-write behavior
-> to the configuration space of peripheral PCIe devices, thereby
-> preventing kernel panic.
+On Tue, Mar 26, 2024 at 11:41:45AM +0000, Jiaxun Yang wrote:
+> There are some assembly macros with very generic naming
+> being defined asm.h. They are clashing with other macros
+> from C code.
 > 
-> Signed-off-by: Songyang Li <leesongyang@outlook.com>
+> Guard them with __ASSEMBLY__ to prevent futher clashes.
+> 
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Link: https://lore.kernel.org/linux-mips/8d78894-dd89-9f4d-52bb-1b873c50be9c@linux-m68k.org/
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > ---
->  arch/mips/pci/pcie-octeon.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->  mode change 100644 => 100755 arch/mips/pci/pcie-octeon.c
+>  arch/mips/include/asm/asm.h | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/arch/mips/pci/pcie-octeon.c b/arch/mips/pci/pcie-octeon.c
-> old mode 100644
-> new mode 100755
-> index 2583e318e8c6..b080c7c6cc46
-> --- a/arch/mips/pci/pcie-octeon.c
-> +++ b/arch/mips/pci/pcie-octeon.c
-> @@ -230,12 +230,18 @@ static inline uint64_t __cvmx_pcie_build_config_addr(int pcie_port, int bus,
->  {
->  	union cvmx_pcie_address pcie_addr;
->  	union cvmx_pciercx_cfg006 pciercx_cfg006;
-> +	union cvmx_pciercx_cfg032 pciercx_cfg032;
+> diff --git a/arch/mips/include/asm/asm.h b/arch/mips/include/asm/asm.h
+> index 2e99450f4228..87ff609b53fe 100644
+> --- a/arch/mips/include/asm/asm.h
+> +++ b/arch/mips/include/asm/asm.h
+> @@ -37,6 +37,7 @@
+>  #define CFI_SECTIONS
+>  #endif
 >  
->  	pciercx_cfg006.u32 =
->  	    cvmx_pcie_cfgx_read(pcie_port, CVMX_PCIERCX_CFG006(pcie_port));
->  	if ((bus <= pciercx_cfg006.s.pbnum) && (dev != 0))
->  		return 0;
+> +#ifdef __ASSEMBLY__
+>  /*
+>   * LEAF - declare leaf routine
+>   */
+> @@ -122,6 +123,8 @@ symbol		=	value
+>  #define ASM_PRINT(string)
+>  #endif
 >  
-> +	pciercx_cfg032.u32 =
-> +		cvmx_pcie_cfgx_read(pcie_port, CVMX_PCIERCX_CFG032(pcie_port));
-> +	if ((pciercx_cfg032.s.dlla == 0) || (pciercx_cfg032.s.lt == 1))
-> +		return 0;
+> +#endif /* __ASSEMBLY__ */
 > +
->  	pcie_addr.u64 = 0;
->  	pcie_addr.config.upper = 2;
->  	pcie_addr.config.io = 1;
+>  /*
+>   * Stack alignment
+>   */
+> 
+> ---
+> base-commit: 084c8e315db34b59d38d06e684b1a0dd07d30287
+> change-id: 20240326-asm-guard-dddeb2321d69
+> 
+> Best regards,
 > -- 
-> 2.34.1
+> Jiaxun Yang <jiaxun.yang@flygoat.com>
 
 applied to mips-next.
 
