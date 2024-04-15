@@ -1,104 +1,145 @@
-Return-Path: <linux-mips+bounces-2767-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2768-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A98E48A4AA3
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Apr 2024 10:43:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E79138A4BA7
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Apr 2024 11:38:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 379CCB25C05
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Apr 2024 08:43:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 879661F229D7
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Apr 2024 09:38:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BB293F9C6;
-	Mon, 15 Apr 2024 08:42:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 443AB4AEFB;
+	Mon, 15 Apr 2024 09:37:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="WL3mGK96"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D553D3A1D7
-	for <linux-mips@vger.kernel.org>; Mon, 15 Apr 2024 08:42:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A54164F5F8;
+	Mon, 15 Apr 2024 09:37:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713170578; cv=none; b=dpFUg9n9e7Q+BfpX+4ewvmCauZ2bpY8HEa43I+jIT/JvNSSMSOTbb0vlhi/NtBr9CXwXU4rOuRlToyzS18ZA4UwSRdEM8h5SOj2LK0iSz8ZfVu/ZkBZ9QFCxpwyOV4tjkj2W75+fpYg2agO1i4A0VgICg731JfBkhZ0gkmMI5go=
+	t=1713173842; cv=none; b=pbQqkCTcje0HWDFhbzBqrEPHQx2b6HeINO5CanXLwM1bWOq8S/AnvHg5BTywTq4oVZIuv+g0aAFyPgGm1ErLhRzdEm94U+Ul/rOa5tgZ6AN6nuIdm1RQ4edWwkTcKC3acHEGvQH6tctxRJuQeFS9aX2K8LCuDJ1qnv/+zJYjQHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713170578; c=relaxed/simple;
-	bh=gCoRy+oXMwriNz7xWCEPJfPnWsZEN1vLk9TxR53ud+c=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=Xhczy3Nw58NQ63olDkeQSsa9oIzn88Jh4NfSl3M7RDCQ9XA0eSuTmFN3JjG8lU2ntxflD/rALis7fznvw7sGl9JK0WP4jLT2/S2i7C/pOyxiACFvNhuei4RP36GGdGhMNGe0q9qB8TVK8IGVY2ZX0YhWm5HGerJb+5PP89hYyMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-200-Eemd-UoyMe6maN2y4dENkg-1; Mon, 15 Apr 2024 09:42:48 +0100
-X-MC-Unique: Eemd-UoyMe6maN2y4dENkg-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 15 Apr
- 2024 09:42:13 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Mon, 15 Apr 2024 09:42:13 +0100
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Sergio Paracuellos' <sergio.paracuellos@gmail.com>, Thorsten Blum
-	<thorsten.blum@toblux.com>
-CC: John Crispin <john@phrozen.org>, Thomas Bogendoerfer
-	<tsbogend@alpha.franken.de>, "linux-mips@vger.kernel.org"
-	<linux-mips@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] MIPS: ralink: Use min() to fix Coccinelle warning
-Thread-Topic: [PATCH] MIPS: ralink: Use min() to fix Coccinelle warning
-Thread-Index: AQHaizP0h4uzp/dw0kCg8BnSEaASErFpCYSA
-Date: Mon, 15 Apr 2024 08:42:13 +0000
-Message-ID: <e6ff2dbaf23d4d66bd8ea1bf1b87a26c@AcuMS.aculab.com>
-References: <20240409153519.291205-2-thorsten.blum@toblux.com>
- <CAMhs-H8EByNhBAkhDvtHL_ZUgLnMFQcR1zeYhaKQSg-13uFnVQ@mail.gmail.com>
-In-Reply-To: <CAMhs-H8EByNhBAkhDvtHL_ZUgLnMFQcR1zeYhaKQSg-13uFnVQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+	s=arc-20240116; t=1713173842; c=relaxed/simple;
+	bh=iWSAcKBzCT/GfR3CUsNAvXWE2GqvA4i8aFyoJ/HJFOE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=q2lNb9r/DxUP93+ofQORD7YKXJKeRsJoE/3dIqBgHS5rsnw59UpuUAiIXByBpnqgJJMx/UNjjt62ks4laRvVeCLv82IiHSQ4JB5dYZ8nLxD0+Up5pAjZ/soNov6lJiecpVMDpS8YICWGIy2cEgqWycZTJy7RywZeMzDIt2RR+4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=WL3mGK96; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=gJURSN8ZhZs54MX6UPe8WS991KHmcU3CMSr/wsPBYas=; b=WL3mGK96b4dqocWg2WT6S+o3Lh
+	6R4hcBA6RfcHuQQK7isTyMyXCwDos8Q1HdHKBvnc80dazhTsMKZZh+HOA+2p3MytoMgm0z79fe1lO
+	6VNzmYAbfQ0K4rY/gTJDrpu5Cj+twK8P8H6r2xTaYF5wANkZ19gJAqZM8x7uwfcFkyoEWlipCNTWk
+	6fylSl1gmglon4eNg+zb/yC04zTO/2Lfq8d+LNZPMMi03er3jB/2uzdVHk4Db9ls69FN+sjSeErGv
+	ir1OIAWRPD8gvlVd9eQwbdsiTncbhidLvva928W/3FSV8BR+sXBV2NxpcV2Vc46i56RkcJA4zwnpr
+	gpLaCNRw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rwIlk-0000000FOjV-0IDN;
+	Mon, 15 Apr 2024 09:36:56 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id B1DC030040C; Mon, 15 Apr 2024 11:36:55 +0200 (CEST)
+Date: Mon, 15 Apr 2024 11:36:55 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Donald Dutile <ddutile@redhat.com>,
+	Eric Chanudet <echanude@redhat.com>,
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nadav Amit <nadav.amit@gmail.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linux-mm@kvack.org, linux-modules@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v4 07/15] mm/execmem, arch: convert remaining overrides
+ of module_alloc to execmem
+Message-ID: <20240415093655.GH40213@noisy.programming.kicks-ass.net>
+References: <20240411160051.2093261-1-rppt@kernel.org>
+ <20240411160051.2093261-8-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240411160051.2093261-8-rppt@kernel.org>
 
-RnJvbTogU2VyZ2lvIFBhcmFjdWVsbG9zDQo+IFNlbnQ6IDEwIEFwcmlsIDIwMjQgMTE6NDQNCj4g
-T24gVHVlLCBBcHIgOSwgMjAyNCBhdCA1OjM24oCvUE0gVGhvcnN0ZW4gQmx1bSA8dGhvcnN0ZW4u
-Ymx1bUB0b2JsdXguY29tPiB3cm90ZToNCj4gPg0KPiA+IEZpeGVzIHRoZSBmb2xsb3dpbmcgQ29j
-Y2luZWxsZS9jb2NjaWNoZWNrIHdhcm5pbmcgcmVwb3J0ZWQgYnkNCj4gPiBtaW5tYXguY29jY2k6
-DQo+ID4NCj4gPiAgICAgICAgIFdBUk5JTkcgb3Bwb3J0dW5pdHkgZm9yIG1pbigpDQo+ID4NCj4g
-PiBTaWduZWQtb2ZmLWJ5OiBUaG9yc3RlbiBCbHVtIDx0aG9yc3Rlbi5ibHVtQHRvYmx1eC5jb20+
-DQo+ID4gLS0tDQo+ID4gIGFyY2gvbWlwcy9yYWxpbmsvdGltZXIuYyB8IDYgKy0tLS0tDQo+ID4g
-IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgNSBkZWxldGlvbnMoLSkNCj4gPg0KPiA+
-IGRpZmYgLS1naXQgYS9hcmNoL21pcHMvcmFsaW5rL3RpbWVyLmMgYi9hcmNoL21pcHMvcmFsaW5r
-L3RpbWVyLmMNCj4gPiBpbmRleCA1NDA5NGY2ZTAzM2UuLmQyNzFhYzk4MzEyYSAxMDA2NDQNCj4g
-PiAtLS0gYS9hcmNoL21pcHMvcmFsaW5rL3RpbWVyLmMNCj4gPiArKysgYi9hcmNoL21pcHMvcmFs
-aW5rL3RpbWVyLmMNCj4gPiBAQCAtNzUsMTEgKzc1LDcgQEAgc3RhdGljIGludCBydF90aW1lcl9y
-ZXF1ZXN0KHN0cnVjdCBydF90aW1lciAqcnQpDQo+ID4NCj4gPiAgc3RhdGljIGludCBydF90aW1l
-cl9jb25maWcoc3RydWN0IHJ0X3RpbWVyICpydCwgdW5zaWduZWQgbG9uZyBkaXZpc29yKQ0KDQpJ
-IGRvdWJ0ICd1bnNpZ25lZCBsb25nJyBpcyB0aGUgYmVzdCB0eXBlIHRoZXJlLg0KSXQgc2hvdWxk
-IHByb2JhYmx5IGJlIHUzMiAtIHNvIHN0aWxsIDMyYml0IG9uIDY0Yml0IHN5c3RlbXMuDQoNCj4g
-PiAgew0KPiA+IC0gICAgICAgaWYgKHJ0LT50aW1lcl9mcmVxIDwgZGl2aXNvcikNCj4gPiAtICAg
-ICAgICAgICAgICAgcnQtPnRpbWVyX2RpdiA9IHJ0LT50aW1lcl9mcmVxOw0KPiA+IC0gICAgICAg
-ZWxzZQ0KPiA+IC0gICAgICAgICAgICAgICBydC0+dGltZXJfZGl2ID0gZGl2aXNvcjsNCj4gPiAt
-DQo+ID4gKyAgICAgICBydC0+dGltZXJfZGl2ID0gbWluKHJ0LT50aW1lcl9mcmVxLCBkaXZpc29y
-KTsNCj4gDQo+IEkgZG8gZmluZCB0aGUgb3JpZ2luYWwgY29kZSBtb3JlIHJlYWRhYmxlLg0KDQpQ
-cm9iYWJseSBiZWNhdXNlIGl0IGlzbid0IHJlYWxseSBhICdtaW4oKScgYnV0IGF2b2lkaW5nIGEg
-ZGl2aXNpb24NCmdlbmVyYXRpbmcgYSBxdW90aWVudCBvZiB6ZXJvLg0KSXQgbWlnaHQgYmUgYmV0
-dGVyIHRvIGV4cGxpY2l0bHkgYXZvaWQgdGhlIHgveCBiZWxvdy4NCg0KCURhdmlkDQo+IA0KPiBC
-ZXN0IHJlZ2FyZHMsDQo+ICAgICBTZXJnaW8gUGFyYWN1ZWxsb3MNCj4gDQo+ID4gICAgICAgICBy
-dF90aW1lcl93MzIocnQsIFRJTUVSX1JFR19UTVIwTE9BRCwgcnQtPnRpbWVyX2ZyZXEgLyBydC0+
-dGltZXJfZGl2KTsNCj4gPg0KPiA+ICAgICAgICAgcmV0dXJuIDA7DQo+ID4gLS0NCj4gPiAyLjQ0
-LjANCj4gPg0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwg
-TW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzog
-MTM5NzM4NiAoV2FsZXMpDQo=
+On Thu, Apr 11, 2024 at 07:00:43PM +0300, Mike Rapoport wrote:
 
+> +static struct execmem_info execmem_info __ro_after_init = {
+> +	.ranges = {
+> +		[EXECMEM_DEFAULT] = {
+> +			.flags = EXECMEM_KASAN_SHADOW,
+> +			.alignment = MODULE_ALIGN,
+> +		},
+> +	},
+> +};
+>  
+> +struct execmem_info __init *execmem_arch_setup(void)
+>  {
+> +	unsigned long start, offset = 0;
+>  
+> +	if (kaslr_enabled())
+> +		offset = get_random_u32_inclusive(1, 1024) * PAGE_SIZE;
+>  
+> +	start = MODULES_VADDR + offset;
+> +	execmem_info.ranges[EXECMEM_DEFAULT].start = start;
+> +	execmem_info.ranges[EXECMEM_DEFAULT].end = MODULES_END;
+> +	execmem_info.ranges[EXECMEM_DEFAULT].pgprot = PAGE_KERNEL;
+>  
+> +	return &execmem_info;
+>  }
+
+struct execmem_info __init *execmem_arch_setup(void)
+{
+	unsigned long offset = 0;
+
+	if (kaslr_enabled())
+		offset = get_random_u32_inclusive(1, 1024) * PAGE_SIZE;
+
+	execmem_info = (struct execmem_info){
+		.ranges = {
+			[EXECMEM_DEFAULT] = {
+				.start     = MODULES_VADDR + offset,
+				.end       = MODULES_END,
+				.pgprot    = PAGE_KERNEL,
+				.flags     = EXECMEM_KASAN_SHADOW,
+				.alignment = 1,
+			},
+		},
+	};
+
+	return &execmem_info;
+}
 
