@@ -1,126 +1,132 @@
-Return-Path: <linux-mips+bounces-2773-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2774-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFB3D8A5CFA
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Apr 2024 23:33:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1F208A5EE9
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Apr 2024 01:54:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2CF2EB21ECE
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Apr 2024 21:33:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7B0C1F21B3C
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Apr 2024 23:54:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92897156F57;
-	Mon, 15 Apr 2024 21:33:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C97A15920B;
+	Mon, 15 Apr 2024 23:53:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CpUgDnVx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZL1hpYiq"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DDC8125C9;
-	Mon, 15 Apr 2024 21:33:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07F71591F9;
+	Mon, 15 Apr 2024 23:53:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713216791; cv=none; b=Ud83st4D/BDVN7alnJqwld2TuRnwaG8V4kHIHlX2lEKmkcfnzc6EL7qGHzLMbLqJTXuWwy1MtZYXoEY6z2Z5nKPHBZxTf6b4pQqZw/UoXSaQ0mgIJpF1/RQgLSmmLIyQKAwoW82ClSTa58bcbbAPILYLDAY7N++6E89xUIHE4ZM=
+	t=1713225228; cv=none; b=aY50IK6GX+EVjIUf3TzZQNnv9bFKEQwO6OAqfLs+FifVEbrH5H4LUNP9JYRRHLPB6uI3n446sfnj5CITOvySxatlX99/upcXwoLMrnvBmpEBcVoitLYvsaBXXJXnwhwzkIXbt8Bmzc/Y9aiHuTUh+h3hpgb7rVR4uScAOc0W4dw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713216791; c=relaxed/simple;
-	bh=4dQXK8rM5riTwBJcZYfqprll9axw8fcL3Iwa1nRYEr4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jeTOF174Z+hfFLnhkwaMdfPJZmqhUDmaL07VCBK+WT42+YmPcElD0lrg+QBAw6bXY0yKIQQwspdDXWK84NGXDd7o8Qe8YynD2PeJh6he7EFq7jLuKewGf8zwsz0X6kWFrihox7mM/zIrDP10GnWcDBkpGP8MBBOkHWgtMelWke8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CpUgDnVx; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-41551639550so23060355e9.2;
-        Mon, 15 Apr 2024 14:33:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713216788; x=1713821588; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nvC0crxQ4hv14tVfrEC0cLFgOk4kwCtX5f1hXnZbvIs=;
-        b=CpUgDnVxjhtP+1MrQK79zAhuRgzG8yPJ8gy13iQ0cmn8LPeiqd7NA2nahpGHssyE9U
-         Bk7/U92Yz6aULesu4yFnqo0OVJaGRB97ueMgg/WigePSgNDVcrdN9pd9fLESRfhKWBSp
-         /KQScW1pnwgvZwQc2Oi50st26iGFwWqXAnVJfSuT3koUp8DSmdDLx23Qf0XiAYyfb89A
-         1SEVV7O4QVns3jfDVSw2y/buAw59zSzV6DQbuV/kJO7m1hGVltvqqX1c8aY7sA2mNjm2
-         vjydCd0sHTWwlOzUVP/1U0Pq+A3tVmT+5bZ34rTTbEvOckxQehr8RvVCtZBFBmljQHdH
-         cNJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713216788; x=1713821588;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nvC0crxQ4hv14tVfrEC0cLFgOk4kwCtX5f1hXnZbvIs=;
-        b=Rc8uY6BQvYnugpfyuXTTDB+IdiUaGAMIot0S6H0Qfy7nFTSBo9rtXTUWGjrCucgTza
-         5mneqSn8V0cAg/JFQOrwbY2lE0cjQRGnZp5z0TzNllv6/YYsWh/eVpwiUjlSmC3e5p8h
-         O8Ib5mOZzc/uymPOBPOB01wzzO7IVUhlpx03O4/s4bgC8IVwTsUI0wATTOdT+gHvXhi3
-         SDlxPlZKPkdja5Fjf/l2ULHy9VJYrPJV9GbK3FdYHEMqROP7XqW6kZM6+b+QCnBnanVm
-         JvGlKdKuUfWgRfCH4ZyrLvMI3OHx0MqMa08xHDGZkoZqcHeSjcaNcARO530+cZwO/xqL
-         ousA==
-X-Forwarded-Encrypted: i=1; AJvYcCVORoTpyQ1wzlRZUtNsrfGrB8NOX1T6MwCKZ8S1wLj6MygbQPifsmVWb4UDpsEUYfJOIhhL+WVR9hwWp/d80IEU8g5B8EawchryHU5dSw+aBVMCjftdXky4kl6cdTtLiwDdPaN0ik77Bg==
-X-Gm-Message-State: AOJu0YwLZ8xc33OCacPdvex2IGwc3xGomR3SrXK2uzYnjYx70xOgu5OR
-	nyEuRurRY2oMWUVO44kFY+OA6gSJkPeeux4nLMplB4LXhIqiWqUW
-X-Google-Smtp-Source: AGHT+IGbVwjwj6P/XwJYoeDaKXfrZhxrIYcAxjHA9f44sCvNTZGbYDkW0+pIuu1H7oDt8UlPAumR3w==
-X-Received: by 2002:a05:600c:358d:b0:416:b75e:ffbe with SMTP id p13-20020a05600c358d00b00416b75effbemr8521621wmq.32.1713216788218;
-        Mon, 15 Apr 2024 14:33:08 -0700 (PDT)
-Received: from jernej-laptop.localnet (86-58-6-171.dynamic.telemach.net. [86.58.6.171])
-        by smtp.gmail.com with ESMTPSA id v9-20020a05600c444900b00416b163e52bsm20901026wmn.14.2024.04.15.14.33.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Apr 2024 14:33:07 -0700 (PDT)
-From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Jani Nikula <jani.nikula@intel.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>,
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>,
- Javier Martinez Canillas <javierm@redhat.com>,
- Russell King <linux@armlinux.org.uk>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
- Samuel Holland <samuel@sholland.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Maxime Ripard <mripard@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>,
- Alexander Stein <alexander.stein@ew.tq-group.com>,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
- linux-sunxi@lists.linux.dev, linux-mips@vger.kernel.org,
- Maxime Ripard <mripard@kernel.org>
-Subject: Re: [PATCH 5/7] ARM: configs: sunxi: Enable DRM_DW_HDMI
-Date: Mon, 15 Apr 2024 23:33:06 +0200
-Message-ID: <8399384.NyiUUSuA9g@jernej-laptop>
-In-Reply-To: <20240403-fix-dw-hdmi-kconfig-v1-5-afbc4a835c38@kernel.org>
-References:
- <20240403-fix-dw-hdmi-kconfig-v1-0-afbc4a835c38@kernel.org>
- <20240403-fix-dw-hdmi-kconfig-v1-5-afbc4a835c38@kernel.org>
+	s=arc-20240116; t=1713225228; c=relaxed/simple;
+	bh=Glti5hmyaExB5aURz0ZlgjDbYGJVM7NX72vmMzXnptw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hwHMwN0a3mumtyZkBOu5QpmDRk+Yln1khT0rT/roY1rM8R1AYejYT7lsINYGNZUlhLwCaWWJESOcb0Y3dNJ1IPFd/JMJLJJnfrjWytyXGVXOq0/RJYjrv3MoA7kPSlsK4bID0pNuYz1BenEIsIF+gVS6wtDHEnnTwLFBnY8RJIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZL1hpYiq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CAEFC113CC;
+	Mon, 15 Apr 2024 23:53:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713225228;
+	bh=Glti5hmyaExB5aURz0ZlgjDbYGJVM7NX72vmMzXnptw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZL1hpYiqFFDqEGcnDjrAmsFrlATUjRRZYpTwcmizOz0LFIFtZNFdvRy1mN1IFPBfc
+	 WKhjgFdNYyuXRRIP7E55JZ15scpBAphhvGyqy01JkbCkAqyPNjaq/Rb3zgvOCRtMtg
+	 U+b0hvgvCsCHj48SPclceOQU2PaC/XQX/WOL9tjvJzR7xiIZ2Py7xfsQAvhKmjezyg
+	 GBuxyh0pQMfR2gkRe2josr74QsPhHNKT8doEeokNaAHLhNRpPBHW+yEiZZDgGC0b3d
+	 D59ME0/rdlohUULjuEmzYZJ/jw3jcaRhYSrYHTXKtYYSnM33E4eOw99zTY4n6Y9uyH
+	 f+/I59nHzeKmg==
+Date: Tue, 16 Apr 2024 08:53:45 +0900
+From: Mark Brown <broonie@kernel.org>
+To: Maxime Ripard <mripard@kernel.org>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Jani Nikula <jani.nikula@intel.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
+	Samuel Holland <samuel@sholland.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
+	linux-sunxi@lists.linux.dev, linux-mips@vger.kernel.org,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH 0/7] drm/display: Fix display helpers depends on fallouts
+Message-ID: <Zh2+CZ2G9UOxcUaf@finisterre.sirena.org.uk>
+References: <20240403-fix-dw-hdmi-kconfig-v1-0-afbc4a835c38@kernel.org>
+ <117b0d3b-a60b-4bc0-9f2c-f0e4fffe634a@sirena.org.uk>
+ <20240415-sloppy-invisible-crocodile-da4545@houat>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
-
-Dne sreda, 3. april 2024 ob 12:56:23 GMT +2 je Maxime Ripard napisal(a):
-> Commit 4fc8cb47fcfd ("drm/display: Move HDMI helpers into display-helper
-> module") turned the DRM_DW_HDMI dependency of DRM_SUN8I_DW_HDMI into a
-> depends on which ended up disabling the driver in the defconfig. Make
-> sure it's still enabled.
-> 
-> Fixes: 4fc8cb47fcfd ("drm/display: Move HDMI helpers into display-helper module")
-> Reported-by: Mark Brown <broonie@kernel.org>
-> Reported-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> Signed-off-by: Maxime Ripard <mripard@kernel.org>
-
-Applied, thanks!
-
-Best regards,
-Jernej
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="hvR5IVqVtFxbshiT"
+Content-Disposition: inline
+In-Reply-To: <20240415-sloppy-invisible-crocodile-da4545@houat>
+X-Cookie: You might have mail.
 
 
+--hvR5IVqVtFxbshiT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Mon, Apr 15, 2024 at 01:21:47PM +0200, Maxime Ripard wrote:
+> On Wed, Apr 10, 2024 at 07:06:39PM +0100, Mark Brown wrote:
+
+> > Is there any news on getting the rest of this merged?  It's been more
+> > than a week now and the Designware display controllers are all still
+> > broken in -next, causing widespread breakage in CI.  For bisection
+> > purposes it probably makes sense for the defconfig updates to go along
+> > with the changes to the Kconfig for the driver...
+
+> I was on holidays so I've admittedly hoped that it would be picked up /
+> reviewed by the relevant maintainers.
+
+> Aside from the changes on sunxi_defconfig, I haven't seen any review
+> from the relevant maintainers so I'm not sure how to merge this. Should
+> we get an Acked-by from Arnd, Olof, Catalin or Will and merge everything
+> through drm-misc?
+
+Sounds like a reasonable plan to me - usually it'd be the SoC
+maintainers for stuff like this but they're not on the CC, though TBH it
+seems sufficiently obvious that I doubt anyone would mind if you just
+merged things without waiting.
+
+--hvR5IVqVtFxbshiT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYdvggACgkQJNaLcl1U
+h9AFegf/bZsYaXP8tRkdBSjyeRExVkNbru80uysU+lEbQYvxVG8vF5HBon4Llvvy
+FRg2q45T55EjATaU7/f1FDFJ3TVDtXnQ4bWRlx4dvbk5S4Hcb5XaoGmwatO6eHmX
+rQz/hduFIKhwU+82v3ND/kJYfR1f9+8dvnCdL5TblWBG4o/p21dMWJKoAOlDkAzQ
+Ygt03tBG4O46UgmwS8aPVSbv0ShId3zR/L9lYdIVvtQaK6a0CK7+5EIoS5emLKlZ
+zeXN2qxSfzaUNhhGtJ3aD0Fa76bGjFeXB54Io6f8fPawV/QkDfaxIGFf9FG/G2gq
+D7fQ+Bg6302L5j6cebEC3qW3tmxzdg==
+=U8FE
+-----END PGP SIGNATURE-----
+
+--hvR5IVqVtFxbshiT--
 
