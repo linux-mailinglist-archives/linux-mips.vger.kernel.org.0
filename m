@@ -1,124 +1,149 @@
-Return-Path: <linux-mips+bounces-2783-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2784-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D10E8A7CF0
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Apr 2024 09:18:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9120F8A7D70
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Apr 2024 09:53:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC1BAB20F31
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Apr 2024 07:18:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1ED11C2187A
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Apr 2024 07:53:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D31C524CA;
-	Wed, 17 Apr 2024 07:18:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C378271B47;
+	Wed, 17 Apr 2024 07:53:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DNENXekw"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="in2TKG1Q"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73A1040850
-	for <linux-mips@vger.kernel.org>; Wed, 17 Apr 2024 07:18:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6CF66E61E;
+	Wed, 17 Apr 2024 07:53:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713338316; cv=none; b=SnxJ2Ia9pL+m0sf7ZeQrj+2ONwnY9tPWs8eCkSKnkdHYbRBl+APlAl4zaMwef/nqDn27nmXaN6gI4GDd85DyAugc1e45fGdd9zHA1+y0vcmhdZwQ2dHxuPvJs+/Vj7hlRXQwebwHiExB4lDaa1Y1Jr7de+wxJ36pn2pmEDfTQcc=
+	t=1713340409; cv=none; b=BUobtl+jIqB3N4ghcKXPNw6fSS6Czb5+JptP7PeBp+tJbw/ikHKOLDtgfQVoJZagfNQVXPK6pbOVWfMGoyPKeyMRa9FldtW9ddPK8DFeGv4vb9sQHxRD6kQfGJxliWyI+z/A3Eu8lP48NsFZouHKgty8ss8OeOlYcrkYvkj7w4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713338316; c=relaxed/simple;
-	bh=TB/D7fxuc2FU5nX9qCx8WdK9WcTt68q6+ZnoUCYowms=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PZ9+2MhYMcud3uTjNg7aGTzCkXkJaH79YtlQaGvDXrfws+yvbxlC1pzCVcaoZMVIn4hMB+YeUYkjmVYAkdXQIQe3FfGmBnPyUiqER2Dekr1SbCoaXmKJ71Pdp9Cg8Z9UsIkKx6sB1ERFrNRJrU0F2IKZ3gGZNb7Et18He5qqOo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DNENXekw; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-56e6acb39d4so6962567a12.1
-        for <linux-mips@vger.kernel.org>; Wed, 17 Apr 2024 00:18:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713338313; x=1713943113; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AXRXAl2kT0MfE33bwRwOz2wnLwcGRTRbDdp7T707wv4=;
-        b=DNENXekwnLT5TKE2Mq213H454PZXL0eFlYpJxgPRlFcMInxZW5USDcea/hgvEwpAPY
-         2pMZyTxcm+mIxnunPOAZwBD4d+AgXxPe88+xonTwE1V4Qza7zn7BEvQO31tYM/nV9AUH
-         VxSRLxm3fhiUXm9uI9YgewzYZfnkj8Vro/PQTKVFoGe5NkhC5KILMcM/M7PhxdXNciYE
-         Qw6K9EHFtlMn10T53RUphpx4+kc998aEWWbkPg9M/XEG3IDdGLJjgd7SsnUhICVHIU76
-         PzYN/80+S4D8PCnKxmW5gwZZFSAsH6PW2WYsdxaxSGUNuB7QFcOTlYIjzy9CSw22d4Dz
-         ugyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713338313; x=1713943113;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AXRXAl2kT0MfE33bwRwOz2wnLwcGRTRbDdp7T707wv4=;
-        b=ZlJB0WQtqzO0lK8LRO+R+3ITyX6ZcGAeCYQKn6BFulMOBAwnPIKwS0Q9mTvsgbgv1F
-         f7N0Hlhw35CbF7ugsct3oA4kRhDtyHoKdB/XxEEMvU8gNNPkQmoUGAxLcHdj+2g7DHV0
-         IPBkQxfzzTgWkI/Y2/sR0z0DZCpYzXAtQoz2Bj/MK6JjUgIORZHitXUgkqaC+24Sf+KD
-         bE4n7gruZ8mT+yu1sKiwQlHuMdv6bEFZpcPiNfdv2nsk9gr3QgyB99JM9YBnL8qFVBy8
-         DrB5/1Vl29w5Y6iyPuk7LeLcYSi9so32CRMbp0XlsNQDJZhpoAuh3u34eJpAJjrl/5a0
-         93EA==
-X-Forwarded-Encrypted: i=1; AJvYcCXgrNd5ZgA/Ulmk3bE0BtnB4XuzWvQjFwQveLy6/sI3KT0/CunpbkBwWYxYHoUvI9r0cCFH7UJjuCN5MFW9Sp6PuS/nGYI5I0pQZg==
-X-Gm-Message-State: AOJu0YzNFFMz98lWBSNWQnbzg6Lx6jUtHpzu6Uk4V7zDRqiB3EHzO238
-	KhKeF6JUmddV5/fEqtK/oU6h3xq9VAJBfZfVCIwQX4oJmbefV1MGGxdf+gparmY=
-X-Google-Smtp-Source: AGHT+IFb5WMv4oCbmxuwzYidrVHp+49PZjeH5slEBNxA63Q77qrpQ02X+jgTmzDsvqvQBGPhDs6AFw==
-X-Received: by 2002:a17:906:4ad8:b0:a55:57cd:1ccb with SMTP id u24-20020a1709064ad800b00a5557cd1ccbmr569843ejt.19.1713338312611;
-        Wed, 17 Apr 2024 00:18:32 -0700 (PDT)
-Received: from m1x-phil.lan ([176.187.201.23])
-        by smtp.gmail.com with ESMTPSA id gc22-20020a170906c8d600b00a534000d525sm3011114ejb.158.2024.04.17.00.18.31
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 17 Apr 2024 00:18:32 -0700 (PDT)
-From: =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-To: linux-kernel@vger.kernel.org
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-mips@vger.kernel.org,
-	=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-	Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH] MIPS: SGI-IP30: Use bitmap API when iterating over bitmap
-Date: Wed, 17 Apr 2024 09:18:29 +0200
-Message-ID: <20240417071830.47703-1-philmd@linaro.org>
-X-Mailer: git-send-email 2.41.0
+	s=arc-20240116; t=1713340409; c=relaxed/simple;
+	bh=Mb2a7596Lmd6anWCFMHZ+kYccUmgTpwKjnEeL5+XNOQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=jms4mf8n9GScZ96m5WBP0KBrpi8qsUXb6O2FvxJc6WcofANs0cNm7Ckqzwx+N0v9qaTkBcPe3+P/+Ab6aqI4ljid6kdNe6b8o4ZO/kdv9EEcDI0yDIgp7lLJ989/TUoH4kfPJd/rEltEBn8M+ZzUTASvpC0n0N9Zzw9+sT+iZJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=in2TKG1Q; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2BA64E0004;
+	Wed, 17 Apr 2024 07:53:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1713340405;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1/f2fgDpr3YH/Sb3o75KFxeysANmwnrDztJzWkxW1KI=;
+	b=in2TKG1QGupbNAYcOgKkb0N+dVS1KjzghCUGoMBe/aO0EnXrHvmHWh7B4fgRNMDorqxFxk
+	Vuehzy3mwP2JIu5l0/DQ/WKBZfYpRZOx0XlqZ3B8KbIhltcld9wUuIsulVWvTVWiN24eY1
+	mfPUHr8xDB9sSUC6vVHNZLQzFMpXdjiz6Ujf6rhHILx2mJDDlA+9NsLIjSID/W+j12L43J
+	EmmVr+jH3vl643xlJo/0mKxo0gSrnePqWBG00NOY447pgnnknE0J7w+W8r1pwapgNpvK6S
+	IU1JqiqWAMdbTSh6T9vkRiJYUb2FweW+P7Vs/Kqvy6f1vMJsYJH8GfgFhhdIcg==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Date: Wed, 17 Apr 2024 09:53:23 +0200
+Message-Id: <D0M8HFHFPO6M.KXQCAE8TZNIH@bootlin.com>
+Subject: Re: [PATCH 08/11] MIPS: mobileye: eyeq5: add OLB syscon node
+Cc: <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+ <linux-gpio@vger.kernel.org>, "Vladimir Kondratiev"
+ <vladimir.kondratiev@mobileye.com>, "Gregory CLEMENT"
+ <gregory.clement@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>
+To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Rob Herring"
+ <robh@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Michael Turquette" <mturquette@baylibre.com>, "Stephen Boyd"
+ <sboyd@kernel.org>, "Philipp Zabel" <p.zabel@pengutronix.de>, "Linus
+ Walleij" <linus.walleij@linaro.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.15.2
+References: <20240410-mbly-olb-v1-0-335e496d7be3@bootlin.com>
+ <20240410-mbly-olb-v1-8-335e496d7be3@bootlin.com>
+ <faa0769f-bd5e-4c6b-9f61-1a369830ad28@linaro.org>
+ <D0HD94HI3W7W.3KLAW6WFIN6ZE@bootlin.com>
+ <6e3b02d9-9a1e-4fc0-9459-9c9c0d37aa92@linaro.org>
+In-Reply-To: <6e3b02d9-9a1e-4fc0-9459-9c9c0d37aa92@linaro.org>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-Do not open-code bitmap_set(). Besides, <linux/bitmap.h> API
-allows architecture specific optimizations, so prefer it.
+Hello,
 
-Use the HEART_NUM_IRQS definition to express the end of the
-HEART bitmap.
+On Thu Apr 11, 2024 at 5:07 PM CEST, Krzysztof Kozlowski wrote:
+> On 11/04/2024 16:34, Th=C3=A9o Lebrun wrote:
+> > Hello,
+> >=20
+> > On Thu Apr 11, 2024 at 8:15 AM CEST, Krzysztof Kozlowski wrote:
+> >> On 10/04/2024 19:12, Th=C3=A9o Lebrun wrote:
+> >>> The OLB ("Other Logic Block") is a syscon region hosting clock, reset
+> >>> and pin controllers. It contains registers such as I2C speed mode tha=
+t
+> >>> need to be accessible by other nodes.
+> >>>
+> >>> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> >>> ---
+> >>>  arch/mips/boot/dts/mobileye/eyeq5.dtsi | 8 ++++++++
+> >>>  1 file changed, 8 insertions(+)
+> >>>
+> >>> diff --git a/arch/mips/boot/dts/mobileye/eyeq5.dtsi b/arch/mips/boot/=
+dts/mobileye/eyeq5.dtsi
+> >>> index 6cc5980e2fa1..e82d2a57f6da 100644
+> >>> --- a/arch/mips/boot/dts/mobileye/eyeq5.dtsi
+> >>> +++ b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
+> >>> @@ -100,6 +100,14 @@ uart2: serial@a00000 {
+> >>>  			clock-names =3D "uartclk", "apb_pclk";
+> >>>  		};
+> >>> =20
+> >>> +		olb: system-controller@e00000 {
+> >>> +			compatible =3D "mobileye,eyeq5-olb", "syscon", "simple-mfd";
+> >>> +			reg =3D <0 0xe00000 0x0 0x400>;
+> >>> +			ranges =3D <0x0 0x0 0xe00000 0x400>;
+> >>> +			#address-cells =3D <1>;
+> >>> +			#size-cells =3D <1>;
+> >>
+> >> Do not add incomplete node. ranges, address/size-cells are incorrect i=
+n
+> >> this context and you will have warnings.
+> >>
+> >> Add complete node, so these properties make sense.
+> >=20
+> > I'll squash all four commits into one. For reference, commits are:
+> >=20
+> >  - MIPS: mobileye: eyeq5: add OLB syscon node
+> >  - MIPS: mobileye: eyeq5: use OLB clocks controller node
+> >  - MIPS: mobileye: eyeq5: add OLB reset controller node
+> >  - MIPS: mobileye: eyeq5: add pinctrl node & pinmux function nodes
+> >=20
+> > This means two things: (1) it won't be partially applicable and (2) it
+>
+> Why?
+>
+> > will make one big commit adding pins and editing clocks.
+>
+> It never was partially applicable. Causing warnings does not make things
+> partially applicable. If node is too big, although I personally do not
+> agree, it's quite moderate size chunk, then sure, split pinctrl groups
+> or pinctrl node to additional patch.
 
-Inspired-by: Yury Norov <yury.norov@gmail.com>
-Signed-off-by: Philippe Mathieu-Daudé <philmd@linaro.org>
----
- arch/mips/sgi-ip30/ip30-irq.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Thanks for feedback; it'll become a single patch as it is fine with you.
 
-diff --git a/arch/mips/sgi-ip30/ip30-irq.c b/arch/mips/sgi-ip30/ip30-irq.c
-index 423c32cb66ed..bdafff076191 100644
---- a/arch/mips/sgi-ip30/ip30-irq.c
-+++ b/arch/mips/sgi-ip30/ip30-irq.c
-@@ -264,7 +264,6 @@ void __init arch_init_irq(void)
- 	struct irq_domain *domain;
- 	struct fwnode_handle *fn;
- 	unsigned long *mask;
--	int i;
- 
- 	mips_cpu_irq_init();
- 
-@@ -300,8 +299,7 @@ void __init arch_init_irq(void)
- 	set_bit(HEART_L3_INT_TIMER, heart_irq_map);
- 
- 	/* Reserve the error interrupts (#51 to #63). */
--	for (i = HEART_L4_INT_XWID_ERR_9; i <= HEART_L4_INT_HEART_EXCP; i++)
--		set_bit(i, heart_irq_map);
-+	bitmap_set(heart_irq_map, HEART_L4_INT_XWID_ERR_9, HEART_NUM_IRQS);
- 
- 	fn = irq_domain_alloc_named_fwnode("HEART");
- 	WARN_ON(fn == NULL);
--- 
-2.41.0
+Regards,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
