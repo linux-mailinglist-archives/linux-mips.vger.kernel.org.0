@@ -1,83 +1,63 @@
-Return-Path: <linux-mips+bounces-2786-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2787-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3B448A81CE
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Apr 2024 13:14:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47AEE8A81CF
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Apr 2024 13:14:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 894C71F21C5E
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 790E51C21C3E
 	for <lists+linux-mips@lfdr.de>; Wed, 17 Apr 2024 11:14:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5182913C81A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51C3D13C81D;
 	Wed, 17 Apr 2024 11:14:27 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 390126A02E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3906313C68A;
 	Wed, 17 Apr 2024 11:14:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713352467; cv=none; b=CWKggYpCkMCb7xwsDWsdDRe7Z66O08sA4UFh5Y7RR22yCnjQ7l6/IQwhFMx7Bv0iUGJoqCNhjLTF6gHLGhqy97/Ks2UxdyHZsTaEar0VdJdi38N/G761MPyVKY7cF8vt8dm9SG3du8iu96FpmxlT5UWvalOeAdwDPlx5t9fXzEk=
+	t=1713352467; cv=none; b=Xl9KMYjqiWXVtFeIhBARzIra9E0ufqyXUrco+iiJN+cE7yfymRW2BLmUK7lsZMsVkf96k7seVIQirZwB1ui92SwQv/k8flYk8vzuTZgns7AkVssyvtzw59sco1qR/ZE6lZ/KLiXJYtxdnUqdHRLxGcO2QXHmuRYjh6ah/IDmC5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1713352467; c=relaxed/simple;
-	bh=WzRvm8JFqBZI9PDvUaCvjiXbej6u5EVb2PLAKCqA8jk=;
+	bh=Gl1vItHn+rNA+MEGIq5JA3lS5NZmhUbWAoI2YhYHJTE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uOOMYcpz49XvX/uYlDGyS1MU9RcvW6anUSHAQm2yJNX7QLl9u7FE0AlxQpjpfgDuf6dI309a7aZi6sPAB53V+TtBvM1fPYsb0ol4IgMqXxNcB2837Ej3J7nQD4zgQ6hkjM/J6tqZKS9R7K9v5p1gy0CDno2cdF/eQbNSKxVIbck=
+	 Content-Type:Content-Disposition:In-Reply-To; b=VsM5I4ZHhNsK1v42NDj0YK1MqvzDTydIGtOglBEmVZuDPvZ2PAl4oA5SHmvORK2XjSOeuYeWBK/7h6Ig6pt7+M5zqwq1PFBEXaWr52lTMPQAtGxO7hHXF6jce9laWPRtMI3ViiR/o3B/+f+qs0M+2JRGwJ+wPy1MCfEmnGl1lDQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1rx3En-0003qf-00; Wed, 17 Apr 2024 13:14:01 +0200
+	id 1rx3En-0003qh-00; Wed, 17 Apr 2024 13:14:01 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id B18B4C01B0; Wed, 17 Apr 2024 13:10:52 +0200 (CEST)
-Date: Wed, 17 Apr 2024 13:10:52 +0200
+	id D8324C0168; Wed, 17 Apr 2024 13:13:48 +0200 (CEST)
+Date: Wed, 17 Apr 2024 13:13:48 +0200
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Florian Fainelli <f.fainelli@gmail.com>, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] MIPS: SGI-IP27: micro-optimize arch_init_irq()
-Message-ID: <Zh+uPB0druail4XC@alpha.franken.de>
-References: <20240416173711.613750-1-yury.norov@gmail.com>
- <20240416173711.613750-2-yury.norov@gmail.com>
+To: Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
+Cc: linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+	Yury Norov <yury.norov@gmail.com>
+Subject: Re: [PATCH] MIPS: SGI-IP30: Use bitmap API when iterating over bitmap
+Message-ID: <Zh+u7JM358bCntr7@alpha.franken.de>
+References: <20240417071830.47703-1-philmd@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240416173711.613750-2-yury.norov@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240417071830.47703-1-philmd@linaro.org>
 
-On Tue, Apr 16, 2024 at 10:37:10AM -0700, Yury Norov wrote:
-> The function sets adjusted groups of bits in hub_irq_map by using
-> for-loops. There's a bitmap_set() function dedicated to do this.
+On Wed, Apr 17, 2024 at 09:18:29AM +0200, Philippe Mathieu-Daudé wrote:
+> Do not open-code bitmap_set(). Besides, <linux/bitmap.h> API
+> allows architecture specific optimizations, so prefer it.
 > 
-> Because [0, CPU_CALL_B_IRQ] and [NI_BRDCAST_ERR_A, MSC_PANIC_INTR]
-> ranges belong to the same machine word, bitmap_set() would boil down
-> to an inline wrapper in both cases, avoiding generating a loop, with
-> the associate overhead. Effectively, it would be a compile-time:
-> 
-> 	*hub_irq_map = GENMASK() | GENMASK();
-> 
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->  arch/mips/sgi-ip27/ip27-irq.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/mips/sgi-ip27/ip27-irq.c b/arch/mips/sgi-ip27/ip27-irq.c
-> index 8f5299b269e7..d8acdf0439d2 100644
-> --- a/arch/mips/sgi-ip27/ip27-irq.c
-> +++ b/arch/mips/sgi-ip27/ip27-irq.c
-> @@ -277,7 +277,6 @@ void __init arch_init_irq(void)
->  {
->  	struct irq_domain *domain;
->  	struct fwnode_handle *fn;
-> -	int i;
+> Use the HEART_NUM_IRQS definition to express the end of the
+> HEART bitmap.
 
-I've already applied your first version, so I need an incremental
-patch, which just removes the unused variable.
+please use HEART_L4_INT_HEART_EXCP + 1, like what the code did before.
 
 Thomas.
 
