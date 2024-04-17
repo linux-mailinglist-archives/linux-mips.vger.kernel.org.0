@@ -1,136 +1,663 @@
-Return-Path: <linux-mips+bounces-2788-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2789-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B7B48A8A27
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Apr 2024 19:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A0DD88A8D71
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Apr 2024 23:06:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDA041F2248A
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Apr 2024 17:27:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FED01F214F7
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Apr 2024 21:06:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D27E6171678;
-	Wed, 17 Apr 2024 17:27:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63286481D3;
+	Wed, 17 Apr 2024 21:06:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JmFzZbJk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lbBgfz1g"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 676E4171673;
-	Wed, 17 Apr 2024 17:27:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C109481A7;
+	Wed, 17 Apr 2024 21:06:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713374837; cv=none; b=lZr6HNoOhsWm/oyK+4tDmH2BPGWYOz/J2YaxpxdTPmSwHglewd3iCCyTWHbOl35NWoWYZ+kzHX9sCTWxNVRA+3B4A1JLBxQeK9DdfpBlnnkivoO1GjMmmX1aLnFGYfK7JSgw0LnM2yC6rdjNKaMOO3yvMBQQkss0XxheFzCWT1Y=
+	t=1713387984; cv=none; b=ka2UsoKwoewJsHTQpUAiqdJyhXdxs2Pvqm/jdEgOVni1Dtv590wa7pt8r+GAfBHDR+x8KADJ2Ze0+HJSnYa4Ualb0wSpTi1efes+j/FtIMVk21m0sshr2/Acb00nygCNxr9kDeyvnX62LZzKWTxee0JH2oTGEFd8bLuoj5H/pEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713374837; c=relaxed/simple;
-	bh=LH0E3f14sFod+vFzZXCOs/IXORwqoeiG9y513UfProA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gj4grDn4fa96vaNBDVOzdg2a6suZsnWA+DFIhaw9Fe/xTAoVn47A7IVKV0V4QxSIlW3YMpdUrxNiPL6YUHYi63NJ5nYI6UfYnwLDl4NKWohWfwwfvaxbscO+On2elKKYfnz800yz9Y54bTeYuiPySB12+bL9IOmt/KninhWn3Eg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JmFzZbJk; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6150670d372so53482077b3.1;
-        Wed, 17 Apr 2024 10:27:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713374835; x=1713979635; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=H1FLmdDfTUyGnOxaA/bUaKhz9a7gwzyhRJlNB5u2xbs=;
-        b=JmFzZbJkjbA/MaeSUo7H/uF9Re1ettKdLBbG/D+KEHSV8heQSzwfO5lyGCawgGmxUd
-         uAQn+Xjs1LKZFBCvAohd5DfavDDFGaw98UOqznqrbBK26ntXcCqHspKf8du0VAQtGPxj
-         yPdoutAH3kaGTs7TJY8jz3VN5yRFe+ojelSqLSc6xUd1qdWKjEdCN6NB66oBKbnoNtmt
-         r1xoAlU+Ec4wJqAyGW14+pd1oXjMWaoHlcuTW0QzEj8ZoytvHdNAsmY5mrXDrXg8G5WR
-         sMC1bp2ahueb4zo7u+uPAz/T0NvjdaZejzEUXup9n9S/wGRQvcgszyAGyQwdvOJZXWqD
-         NKZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713374835; x=1713979635;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H1FLmdDfTUyGnOxaA/bUaKhz9a7gwzyhRJlNB5u2xbs=;
-        b=ViW8CXMMuYzKvTMpy5VQFFtNxO+uv9uxfcbL+fzHQLRFfYifEZfLmQC2CYxuVJjsVk
-         DoDF1tpMaQL+aK314cx+qE4WLgUSeO2dofs1j0gnulWl8BcIz1JuNZigza1p1cv+J8XF
-         yDS3Jv56puinABznsqhry0KngQ140Y1k5IuAEPhf/ydTDcyXiPkJZ3/5zhwNSmzri0WT
-         BcbRt+kaptvHhUpaxC8j033MK1IYH+U457UtevwCrZevdvk0BhxavcCjccmuaimr5U9j
-         jjYpEJiWYZq03EUDjtrqcc9ouUCTZTcqgvelaRWR86c9N9K1kP9TwbzKWCfr78rMsjtG
-         2Hlw==
-X-Forwarded-Encrypted: i=1; AJvYcCX7Jt3ObzhgQVEkgGvSt+Fys1x717oEsd27WzhZP5WQIU9dx9E8vH4s4N4FpCPgAPZkj6hfZ95VWcZvdQj+9+ykyyb+sTlljSv4Ig==
-X-Gm-Message-State: AOJu0YzDaKVkpGI2Aw3qTJNISlvBXRNlYoYtSV2cY0srL83k4hTKKwnR
-	Wk7qlVzuJ+ZEFmoKan4HIaq/peqDCRUbUjPuEkpkPJWsaQEzM3Ww
-X-Google-Smtp-Source: AGHT+IHrgo/4WOLhe519ATtEJSHUOL3hyJCh7y166B/d1PG7w93DabYySgJ2SkIflN7ls6t/cZU4Xw==
-X-Received: by 2002:a05:690c:6f05:b0:61b:11d5:a675 with SMTP id jd5-20020a05690c6f0500b0061b11d5a675mr2147492ywb.32.1713374835278;
-        Wed, 17 Apr 2024 10:27:15 -0700 (PDT)
-Received: from localhost ([2601:344:8301:57f0:7ca6:7207:b6c4:2389])
-        by smtp.gmail.com with ESMTPSA id t1-20020a81e441000000b00610eaf46c6dsm3028484ywl.117.2024.04.17.10.27.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Apr 2024 10:27:14 -0700 (PDT)
-Date: Wed, 17 Apr 2024 10:27:13 -0700
-From: Yury Norov <yury.norov@gmail.com>
-To: Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
-Cc: linux-kernel@vger.kernel.org,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-mips@vger.kernel.org
-Subject: Re: [PATCH] MIPS: SGI-IP30: Use bitmap API when iterating over bitmap
-Message-ID: <ZiAGcb3eY/Nqamb9@yury-ThinkPad>
-References: <20240417071830.47703-1-philmd@linaro.org>
+	s=arc-20240116; t=1713387984; c=relaxed/simple;
+	bh=jQajXNUTSdJbOiuE3X14B9u4IThzdGztOYCaLIYkni8=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=XKOWuZzeb6nDT7OPOqbMCTw1SjtbX/KmijdfIEhIaW6BUkV9Taz36V5z/g2l3IxitD9v90SVgPHdOMMXIBlLV3btLj0tRVGPwBV9h7t/mccrE3gMNfrrKlS7DcjA7GRIZllE6RkvLkUgKnDrrMqWeSxc42DXa33QphUZAOc4JKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lbBgfz1g; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84D73C072AA;
+	Wed, 17 Apr 2024 21:06:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713387983;
+	bh=jQajXNUTSdJbOiuE3X14B9u4IThzdGztOYCaLIYkni8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=lbBgfz1g+EmTpf/8B5LIXDK5AF+zBI+SdBC4ANMbfR6bQy5kajH30uqxk71pfMuvr
+	 cJZB6d+U9AflERemSpVZHriQJFfT/Z8DFuTlYVyXvQJnSapgiRnEO7t/KOgW6pwcaS
+	 z5Lm5RAA1OxjUUlwXOrBldmqUzlSWaTXyrLOGADjCWzkJdtuKGaC8DdXWXo4pSdXIV
+	 BeW8RFqLQMeqhkQGZ4unhmrg2J0L+4KdO1LN7vnTam7UWqspWie+u+aDSM0c42Q0D+
+	 m9IG0KDe7SBu0YWrOMaaNeWVon+uqrzpeW1LEIVNSnooBS9s9ht4q6rRfMNeSk6pb+
+	 e1WagiG+9QRUg==
+Date: Thu, 18 Apr 2024 06:06:13 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
+ Andrew Morton <akpm@linux-foundation.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Christophe
+ Leroy <christophe.leroy@csgroup.eu>, "David S. Miller"
+ <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>, Donald Dutile
+ <ddutile@redhat.com>, Eric Chanudet <echanude@redhat.com>, Heiko Carstens
+ <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, Huacai Chen
+ <chenhuacai@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, Luis
+ Chamberlain <mcgrof@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nadav Amit <nadav.amit@gmail.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Puranjay Mohan <puranjay12@gmail.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>, Russell King
+ <linux@armlinux.org.uk>, Song Liu <song@kernel.org>, Steven Rostedt
+ <rostedt@goodmis.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+ bpf@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+ linux-mm@kvack.org, linux-modules@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+ netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v4 05/15] mm: introduce execmem_alloc() and
+ execmem_free()
+Message-Id: <20240418060613.cdcf85650e5d0c43da5d1c1b@kernel.org>
+In-Reply-To: <20240411160051.2093261-6-rppt@kernel.org>
+References: <20240411160051.2093261-1-rppt@kernel.org>
+	<20240411160051.2093261-6-rppt@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240417071830.47703-1-philmd@linaro.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 17, 2024 at 09:18:29AM +0200, Philippe Mathieu-Daudé wrote:
-> Do not open-code bitmap_set(). Besides, <linux/bitmap.h> API
-> allows architecture specific optimizations, so prefer it.
+On Thu, 11 Apr 2024 19:00:41 +0300
+Mike Rapoport <rppt@kernel.org> wrote:
+
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 > 
-> Use the HEART_NUM_IRQS definition to express the end of the
-> HEART bitmap.
+> module_alloc() is used everywhere as a mean to allocate memory for code.
 > 
-> Inspired-by: Yury Norov <yury.norov@gmail.com>
-> Signed-off-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+> Beside being semantically wrong, this unnecessarily ties all subsystems
+> that need to allocate code, such as ftrace, kprobes and BPF to modules and
+> puts the burden of code allocation to the modules code.
+> 
+> Several architectures override module_alloc() because of various
+> constraints where the executable memory can be located and this causes
+> additional obstacles for improvements of code allocation.
+> 
+> Start splitting code allocation from modules by introducing execmem_alloc()
+> and execmem_free() APIs.
+> 
+> Initially, execmem_alloc() is a wrapper for module_alloc() and
+> execmem_free() is a replacement of module_memfree() to allow updating all
+> call sites to use the new APIs.
+> 
+> Since architectures define different restrictions on placement,
+> permissions, alignment and other parameters for memory that can be used by
+> different subsystems that allocate executable memory, execmem_alloc() takes
+> a type argument, that will be used to identify the calling subsystem and to
+> allow architectures define parameters for ranges suitable for that
+> subsystem.
+> 
+
+This looks good to me for the kprobe part.
+
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Thank you,
+
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 > ---
->  arch/mips/sgi-ip30/ip30-irq.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>  arch/powerpc/kernel/kprobes.c    |  6 ++--
+>  arch/s390/kernel/ftrace.c        |  4 +--
+>  arch/s390/kernel/kprobes.c       |  4 +--
+>  arch/s390/kernel/module.c        |  5 +--
+>  arch/sparc/net/bpf_jit_comp_32.c |  8 ++---
+>  arch/x86/kernel/ftrace.c         |  6 ++--
+>  arch/x86/kernel/kprobes/core.c   |  4 +--
+>  include/linux/execmem.h          | 57 ++++++++++++++++++++++++++++++++
+>  include/linux/moduleloader.h     |  3 --
+>  kernel/bpf/core.c                |  6 ++--
+>  kernel/kprobes.c                 |  8 ++---
+>  kernel/module/Kconfig            |  1 +
+>  kernel/module/main.c             | 25 +++++---------
+>  mm/Kconfig                       |  3 ++
+>  mm/Makefile                      |  1 +
+>  mm/execmem.c                     | 26 +++++++++++++++
+>  16 files changed, 122 insertions(+), 45 deletions(-)
+>  create mode 100644 include/linux/execmem.h
+>  create mode 100644 mm/execmem.c
 > 
-> diff --git a/arch/mips/sgi-ip30/ip30-irq.c b/arch/mips/sgi-ip30/ip30-irq.c
-> index 423c32cb66ed..bdafff076191 100644
-> --- a/arch/mips/sgi-ip30/ip30-irq.c
-> +++ b/arch/mips/sgi-ip30/ip30-irq.c
-> @@ -264,7 +264,6 @@ void __init arch_init_irq(void)
->  	struct irq_domain *domain;
->  	struct fwnode_handle *fn;
->  	unsigned long *mask;
-> -	int i;
+> diff --git a/arch/powerpc/kernel/kprobes.c b/arch/powerpc/kernel/kprobes.c
+> index bbca90a5e2ec..9fcd01bb2ce6 100644
+> --- a/arch/powerpc/kernel/kprobes.c
+> +++ b/arch/powerpc/kernel/kprobes.c
+> @@ -19,8 +19,8 @@
+>  #include <linux/extable.h>
+>  #include <linux/kdebug.h>
+>  #include <linux/slab.h>
+> -#include <linux/moduleloader.h>
+>  #include <linux/set_memory.h>
+> +#include <linux/execmem.h>
+>  #include <asm/code-patching.h>
+>  #include <asm/cacheflush.h>
+>  #include <asm/sstep.h>
+> @@ -130,7 +130,7 @@ void *alloc_insn_page(void)
+>  {
+>  	void *page;
 >  
->  	mips_cpu_irq_init();
+> -	page = module_alloc(PAGE_SIZE);
+> +	page = execmem_alloc(EXECMEM_KPROBES, PAGE_SIZE);
+>  	if (!page)
+>  		return NULL;
 >  
-> @@ -300,8 +299,7 @@ void __init arch_init_irq(void)
->  	set_bit(HEART_L3_INT_TIMER, heart_irq_map);
+> @@ -142,7 +142,7 @@ void *alloc_insn_page(void)
+>  	}
+>  	return page;
+>  error:
+> -	module_memfree(page);
+> +	execmem_free(page);
+>  	return NULL;
+>  }
 >  
->  	/* Reserve the error interrupts (#51 to #63). */
-> -	for (i = HEART_L4_INT_XWID_ERR_9; i <= HEART_L4_INT_HEART_EXCP; i++)
-> -		set_bit(i, heart_irq_map);
-> +	bitmap_set(heart_irq_map, HEART_L4_INT_XWID_ERR_9, HEART_NUM_IRQS);
+> diff --git a/arch/s390/kernel/ftrace.c b/arch/s390/kernel/ftrace.c
+> index c46381ea04ec..798249ef5646 100644
+> --- a/arch/s390/kernel/ftrace.c
+> +++ b/arch/s390/kernel/ftrace.c
+> @@ -7,13 +7,13 @@
+>   *   Author(s): Martin Schwidefsky <schwidefsky@de.ibm.com>
+>   */
+>  
+> -#include <linux/moduleloader.h>
+>  #include <linux/hardirq.h>
+>  #include <linux/uaccess.h>
+>  #include <linux/ftrace.h>
+>  #include <linux/kernel.h>
+>  #include <linux/types.h>
+>  #include <linux/kprobes.h>
+> +#include <linux/execmem.h>
+>  #include <trace/syscall.h>
+>  #include <asm/asm-offsets.h>
+>  #include <asm/text-patching.h>
+> @@ -220,7 +220,7 @@ static int __init ftrace_plt_init(void)
+>  {
+>  	const char *start, *end;
+>  
+> -	ftrace_plt = module_alloc(PAGE_SIZE);
+> +	ftrace_plt = execmem_alloc(EXECMEM_FTRACE, PAGE_SIZE);
+>  	if (!ftrace_plt)
+>  		panic("cannot allocate ftrace plt\n");
+>  
+> diff --git a/arch/s390/kernel/kprobes.c b/arch/s390/kernel/kprobes.c
+> index f0cf20d4b3c5..3c1b1be744de 100644
+> --- a/arch/s390/kernel/kprobes.c
+> +++ b/arch/s390/kernel/kprobes.c
+> @@ -9,7 +9,6 @@
+>  
+>  #define pr_fmt(fmt) "kprobes: " fmt
+>  
+> -#include <linux/moduleloader.h>
+>  #include <linux/kprobes.h>
+>  #include <linux/ptrace.h>
+>  #include <linux/preempt.h>
+> @@ -21,6 +20,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/hardirq.h>
+>  #include <linux/ftrace.h>
+> +#include <linux/execmem.h>
+>  #include <asm/set_memory.h>
+>  #include <asm/sections.h>
+>  #include <asm/dis.h>
+> @@ -38,7 +38,7 @@ void *alloc_insn_page(void)
+>  {
+>  	void *page;
+>  
+> -	page = module_alloc(PAGE_SIZE);
+> +	page = execmem_alloc(EXECMEM_KPROBES, PAGE_SIZE);
+>  	if (!page)
+>  		return NULL;
+>  	set_memory_rox((unsigned long)page, 1);
+> diff --git a/arch/s390/kernel/module.c b/arch/s390/kernel/module.c
+> index 42215f9404af..ac97a905e8cd 100644
+> --- a/arch/s390/kernel/module.c
+> +++ b/arch/s390/kernel/module.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/moduleloader.h>
+>  #include <linux/bug.h>
+>  #include <linux/memory.h>
+> +#include <linux/execmem.h>
+>  #include <asm/alternative.h>
+>  #include <asm/nospec-branch.h>
+>  #include <asm/facility.h>
+> @@ -76,7 +77,7 @@ void *module_alloc(unsigned long size)
+>  #ifdef CONFIG_FUNCTION_TRACER
+>  void module_arch_cleanup(struct module *mod)
+>  {
+> -	module_memfree(mod->arch.trampolines_start);
+> +	execmem_free(mod->arch.trampolines_start);
+>  }
+>  #endif
+>  
+> @@ -510,7 +511,7 @@ static int module_alloc_ftrace_hotpatch_trampolines(struct module *me,
+>  
+>  	size = FTRACE_HOTPATCH_TRAMPOLINES_SIZE(s->sh_size);
+>  	numpages = DIV_ROUND_UP(size, PAGE_SIZE);
+> -	start = module_alloc(numpages * PAGE_SIZE);
+> +	start = execmem_alloc(EXECMEM_FTRACE, numpages * PAGE_SIZE);
+>  	if (!start)
+>  		return -ENOMEM;
+>  	set_memory_rox((unsigned long)start, numpages);
+> diff --git a/arch/sparc/net/bpf_jit_comp_32.c b/arch/sparc/net/bpf_jit_comp_32.c
+> index da2df1e84ed4..bda2dbd3f4c5 100644
+> --- a/arch/sparc/net/bpf_jit_comp_32.c
+> +++ b/arch/sparc/net/bpf_jit_comp_32.c
+> @@ -1,10 +1,10 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> -#include <linux/moduleloader.h>
+>  #include <linux/workqueue.h>
+>  #include <linux/netdevice.h>
+>  #include <linux/filter.h>
+>  #include <linux/cache.h>
+>  #include <linux/if_vlan.h>
+> +#include <linux/execmem.h>
+>  
+>  #include <asm/cacheflush.h>
+>  #include <asm/ptrace.h>
+> @@ -713,7 +713,7 @@ cond_branch:			f_offset = addrs[i + filter[i].jf];
+>  				if (unlikely(proglen + ilen > oldproglen)) {
+>  					pr_err("bpb_jit_compile fatal error\n");
+>  					kfree(addrs);
+> -					module_memfree(image);
+> +					execmem_free(image);
+>  					return;
+>  				}
+>  				memcpy(image + proglen, temp, ilen);
+> @@ -736,7 +736,7 @@ cond_branch:			f_offset = addrs[i + filter[i].jf];
+>  			break;
+>  		}
+>  		if (proglen == oldproglen) {
+> -			image = module_alloc(proglen);
+> +			image = execmem_alloc(EXECMEM_BPF, proglen);
+>  			if (!image)
+>  				goto out;
+>  		}
+> @@ -758,7 +758,7 @@ cond_branch:			f_offset = addrs[i + filter[i].jf];
+>  void bpf_jit_free(struct bpf_prog *fp)
+>  {
+>  	if (fp->jited)
+> -		module_memfree(fp->bpf_func);
+> +		execmem_free(fp->bpf_func);
+>  
+>  	bpf_prog_unlock_free(fp);
+>  }
+> diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+> index 70139d9d2e01..c8ddb7abda7c 100644
+> --- a/arch/x86/kernel/ftrace.c
+> +++ b/arch/x86/kernel/ftrace.c
+> @@ -25,6 +25,7 @@
+>  #include <linux/memory.h>
+>  #include <linux/vmalloc.h>
+>  #include <linux/set_memory.h>
+> +#include <linux/execmem.h>
+>  
+>  #include <trace/syscall.h>
+>  
+> @@ -261,15 +262,14 @@ void arch_ftrace_update_code(int command)
+>  #ifdef CONFIG_X86_64
+>  
+>  #ifdef CONFIG_MODULES
+> -#include <linux/moduleloader.h>
+>  /* Module allocation simplifies allocating memory for code */
+>  static inline void *alloc_tramp(unsigned long size)
+>  {
+> -	return module_alloc(size);
+> +	return execmem_alloc(EXECMEM_FTRACE, size);
+>  }
+>  static inline void tramp_free(void *tramp)
+>  {
+> -	module_memfree(tramp);
+> +	execmem_free(tramp);
+>  }
+>  #else
+>  /* Trampolines can only be created if modules are supported */
+> diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
+> index d0e49bd7c6f3..72e6a45e7ec2 100644
+> --- a/arch/x86/kernel/kprobes/core.c
+> +++ b/arch/x86/kernel/kprobes/core.c
+> @@ -40,12 +40,12 @@
+>  #include <linux/kgdb.h>
+>  #include <linux/ftrace.h>
+>  #include <linux/kasan.h>
+> -#include <linux/moduleloader.h>
+>  #include <linux/objtool.h>
+>  #include <linux/vmalloc.h>
+>  #include <linux/pgtable.h>
+>  #include <linux/set_memory.h>
+>  #include <linux/cfi.h>
+> +#include <linux/execmem.h>
+>  
+>  #include <asm/text-patching.h>
+>  #include <asm/cacheflush.h>
+> @@ -495,7 +495,7 @@ void *alloc_insn_page(void)
+>  {
+>  	void *page;
+>  
+> -	page = module_alloc(PAGE_SIZE);
+> +	page = execmem_alloc(EXECMEM_KPROBES, PAGE_SIZE);
+>  	if (!page)
+>  		return NULL;
+>  
+> diff --git a/include/linux/execmem.h b/include/linux/execmem.h
+> new file mode 100644
+> index 000000000000..43e7995593a1
+> --- /dev/null
+> +++ b/include/linux/execmem.h
+> @@ -0,0 +1,57 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _LINUX_EXECMEM_ALLOC_H
+> +#define _LINUX_EXECMEM_ALLOC_H
+> +
+> +#include <linux/types.h>
+> +#include <linux/moduleloader.h>
+> +
+> +/**
+> + * enum execmem_type - types of executable memory ranges
+> + *
+> + * There are several subsystems that allocate executable memory.
+> + * Architectures define different restrictions on placement,
+> + * permissions, alignment and other parameters for memory that can be used
+> + * by these subsystems.
+> + * Types in this enum identify subsystems that allocate executable memory
+> + * and let architectures define parameters for ranges suitable for
+> + * allocations by each subsystem.
+> + *
+> + * @EXECMEM_DEFAULT: default parameters that would be used for types that
+> + * are not explcitly defined.
+> + * @EXECMEM_MODULE_TEXT: parameters for module text sections
+> + * @EXECMEM_KPROBES: parameters for kprobes
+> + * @EXECMEM_FTRACE: parameters for ftrace
+> + * @EXECMEM_BPF: parameters for BPF
+> + * @EXECMEM_TYPE_MAX:
+> + */
+> +enum execmem_type {
+> +	EXECMEM_DEFAULT,
+> +	EXECMEM_MODULE_TEXT = EXECMEM_DEFAULT,
+> +	EXECMEM_KPROBES,
+> +	EXECMEM_FTRACE,
+> +	EXECMEM_BPF,
+> +	EXECMEM_TYPE_MAX,
+> +};
+> +
+> +/**
+> + * execmem_alloc - allocate executable memory
+> + * @type: type of the allocation
+> + * @size: how many bytes of memory are required
+> + *
+> + * Allocates memory that will contain executable code, either generated or
+> + * loaded from kernel modules.
+> + *
+> + * The memory will have protections defined by architecture for executable
+> + * region of the @type.
+> + *
+> + * Return: a pointer to the allocated memory or %NULL
+> + */
+> +void *execmem_alloc(enum execmem_type type, size_t size);
+> +
+> +/**
+> + * execmem_free - free executable memory
+> + * @ptr: pointer to the memory that should be freed
+> + */
+> +void execmem_free(void *ptr);
+> +
+> +#endif /* _LINUX_EXECMEM_ALLOC_H */
+> diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
+> index 89b1e0ed9811..a3b8caee9405 100644
+> --- a/include/linux/moduleloader.h
+> +++ b/include/linux/moduleloader.h
+> @@ -29,9 +29,6 @@ unsigned int arch_mod_section_prepend(struct module *mod, unsigned int section);
+>     sections.  Returns NULL on failure. */
+>  void *module_alloc(unsigned long size);
+>  
+> -/* Free memory returned from module_alloc. */
+> -void module_memfree(void *module_region);
+> -
+>  /* Determines if the section name is an init section (that is only used during
+>   * module loading).
+>   */
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 696bc55de8e8..75a54024e2f4 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -22,7 +22,6 @@
+>  #include <linux/skbuff.h>
+>  #include <linux/vmalloc.h>
+>  #include <linux/random.h>
+> -#include <linux/moduleloader.h>
+>  #include <linux/bpf.h>
+>  #include <linux/btf.h>
+>  #include <linux/objtool.h>
+> @@ -37,6 +36,7 @@
+>  #include <linux/nospec.h>
+>  #include <linux/bpf_mem_alloc.h>
+>  #include <linux/memcontrol.h>
+> +#include <linux/execmem.h>
+>  
+>  #include <asm/barrier.h>
+>  #include <asm/unaligned.h>
+> @@ -1050,12 +1050,12 @@ void bpf_jit_uncharge_modmem(u32 size)
+>  
+>  void *__weak bpf_jit_alloc_exec(unsigned long size)
+>  {
+> -	return module_alloc(size);
+> +	return execmem_alloc(EXECMEM_BPF, size);
+>  }
+>  
+>  void __weak bpf_jit_free_exec(void *addr)
+>  {
+> -	module_memfree(addr);
+> +	execmem_free(addr);
+>  }
+>  
+>  struct bpf_binary_header *
+> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> index 9d9095e81792..047ca629ce49 100644
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+> @@ -26,7 +26,6 @@
+>  #include <linux/slab.h>
+>  #include <linux/stddef.h>
+>  #include <linux/export.h>
+> -#include <linux/moduleloader.h>
+>  #include <linux/kallsyms.h>
+>  #include <linux/freezer.h>
+>  #include <linux/seq_file.h>
+> @@ -39,6 +38,7 @@
+>  #include <linux/jump_label.h>
+>  #include <linux/static_call.h>
+>  #include <linux/perf_event.h>
+> +#include <linux/execmem.h>
+>  
+>  #include <asm/sections.h>
+>  #include <asm/cacheflush.h>
+> @@ -113,17 +113,17 @@ enum kprobe_slot_state {
+>  void __weak *alloc_insn_page(void)
+>  {
+>  	/*
+> -	 * Use module_alloc() so this page is within +/- 2GB of where the
+> +	 * Use execmem_alloc() so this page is within +/- 2GB of where the
+>  	 * kernel image and loaded module images reside. This is required
+>  	 * for most of the architectures.
+>  	 * (e.g. x86-64 needs this to handle the %rip-relative fixups.)
+>  	 */
+> -	return module_alloc(PAGE_SIZE);
+> +	return execmem_alloc(EXECMEM_KPROBES, PAGE_SIZE);
+>  }
+>  
+>  static void free_insn_page(void *page)
+>  {
+> -	module_memfree(page);
+> +	execmem_free(page);
+>  }
+>  
+>  struct kprobe_insn_cache kprobe_insn_slots = {
+> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+> index f3e0329337f6..744383c1eed1 100644
+> --- a/kernel/module/Kconfig
+> +++ b/kernel/module/Kconfig
+> @@ -2,6 +2,7 @@
+>  menuconfig MODULES
+>  	bool "Enable loadable module support"
+>  	modules
+> +	select EXECMEM
+>  	help
+>  	  Kernel modules are small pieces of compiled code which can
+>  	  be inserted in the running kernel, rather than being
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 5b82b069e0d3..d56b7df0cbb6 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -57,6 +57,7 @@
+>  #include <linux/audit.h>
+>  #include <linux/cfi.h>
+>  #include <linux/debugfs.h>
+> +#include <linux/execmem.h>
+>  #include <uapi/linux/module.h>
+>  #include "internal.h"
+>  
+> @@ -1179,16 +1180,6 @@ resolve_symbol_wait(struct module *mod,
+>  	return ksym;
+>  }
+>  
+> -void __weak module_memfree(void *module_region)
+> -{
+> -	/*
+> -	 * This memory may be RO, and freeing RO memory in an interrupt is not
+> -	 * supported by vmalloc.
+> -	 */
+> -	WARN_ON(in_interrupt());
+> -	vfree(module_region);
+> -}
+> -
+>  void __weak module_arch_cleanup(struct module *mod)
+>  {
+>  }
+> @@ -1213,7 +1204,7 @@ static int module_memory_alloc(struct module *mod, enum mod_mem_type type)
+>  	if (mod_mem_use_vmalloc(type))
+>  		ptr = vmalloc(size);
+>  	else
+> -		ptr = module_alloc(size);
+> +		ptr = execmem_alloc(EXECMEM_MODULE_TEXT, size);
+>  
+>  	if (!ptr)
+>  		return -ENOMEM;
+> @@ -1244,7 +1235,7 @@ static void module_memory_free(struct module *mod, enum mod_mem_type type)
+>  	if (mod_mem_use_vmalloc(type))
+>  		vfree(ptr);
+>  	else
+> -		module_memfree(ptr);
+> +		execmem_free(ptr);
+>  }
+>  
+>  static void free_mod_mem(struct module *mod)
+> @@ -2496,9 +2487,9 @@ static void do_free_init(struct work_struct *w)
+>  
+>  	llist_for_each_safe(pos, n, list) {
+>  		initfree = container_of(pos, struct mod_initfree, node);
+> -		module_memfree(initfree->init_text);
+> -		module_memfree(initfree->init_data);
+> -		module_memfree(initfree->init_rodata);
+> +		execmem_free(initfree->init_text);
+> +		execmem_free(initfree->init_data);
+> +		execmem_free(initfree->init_rodata);
+>  		kfree(initfree);
+>  	}
+>  }
+> @@ -2608,10 +2599,10 @@ static noinline int do_init_module(struct module *mod)
+>  	 * We want to free module_init, but be aware that kallsyms may be
+>  	 * walking this with preempt disabled.  In all the failure paths, we
+>  	 * call synchronize_rcu(), but we don't want to slow down the success
+> -	 * path. module_memfree() cannot be called in an interrupt, so do the
+> +	 * path. execmem_free() cannot be called in an interrupt, so do the
+>  	 * work and call synchronize_rcu() in a work queue.
+>  	 *
+> -	 * Note that module_alloc() on most architectures creates W+X page
+> +	 * Note that execmem_alloc() on most architectures creates W+X page
+>  	 * mappings which won't be cleaned up until do_free_init() runs.  Any
+>  	 * code such as mark_rodata_ro() which depends on those mappings to
+>  	 * be cleaned up needs to sync with the queued work by invoking
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index b1448aa81e15..f08a216d4793 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -1241,6 +1241,9 @@ config LOCK_MM_AND_FIND_VMA
+>  config IOMMU_MM_DATA
+>  	bool
+>  
+> +config EXECMEM
+> +	bool
+> +
+>  source "mm/damon/Kconfig"
+>  
+>  endmenu
+> diff --git a/mm/Makefile b/mm/Makefile
+> index 4abb40b911ec..001336c91864 100644
+> --- a/mm/Makefile
+> +++ b/mm/Makefile
+> @@ -133,3 +133,4 @@ obj-$(CONFIG_IO_MAPPING) += io-mapping.o
+>  obj-$(CONFIG_HAVE_BOOTMEM_INFO_NODE) += bootmem_info.o
+>  obj-$(CONFIG_GENERIC_IOREMAP) += ioremap.o
+>  obj-$(CONFIG_SHRINKER_DEBUG) += shrinker_debug.o
+> +obj-$(CONFIG_EXECMEM) += execmem.o
+> diff --git a/mm/execmem.c b/mm/execmem.c
+> new file mode 100644
+> index 000000000000..ed2ea41a2543
+> --- /dev/null
+> +++ b/mm/execmem.c
+> @@ -0,0 +1,26 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/mm.h>
+> +#include <linux/vmalloc.h>
+> +#include <linux/execmem.h>
+> +#include <linux/moduleloader.h>
+> +
+> +static void *__execmem_alloc(size_t size)
+> +{
+> +	return module_alloc(size);
+> +}
+> +
+> +void *execmem_alloc(enum execmem_type type, size_t size)
+> +{
+> +	return __execmem_alloc(size);
+> +}
+> +
+> +void execmem_free(void *ptr)
+> +{
+> +	/*
+> +	 * This memory may be RO, and freeing RO memory in an interrupt is not
+> +	 * supported by vmalloc.
+> +	 */
+> +	WARN_ON(in_interrupt());
+> +	vfree(ptr);
+> +}
+> -- 
+> 2.43.0
+> 
+> 
 
-This function has a signature
-        bitmap_set(map, start, length)
 
-So this should be a:
-        bitmap_set(heart_irq_map, HEART_L4_INT_XWID_ERR_9,
-                   HEART_NUM_IRQS - HEART_L4_INT_XWID_ERR_9 + 1)
-
-Also on the above group of set_bit(). It should be 2 bitmap_set()
-calls to me. HEART_L0_INT [0, 2] is the first one, and HEART_L2_INT
-to HEART_L4_INT [46, 63] is the other. Isn't?
-
-Thanks,
-Yury
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
