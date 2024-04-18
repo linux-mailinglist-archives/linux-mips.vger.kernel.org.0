@@ -1,215 +1,144 @@
-Return-Path: <linux-mips+bounces-2791-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2792-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 484478A8F5C
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Apr 2024 01:33:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA0FD8A9B6A
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Apr 2024 15:38:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F388828339E
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Apr 2024 23:33:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 275991C2302F
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Apr 2024 13:38:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 634E885C62;
-	Wed, 17 Apr 2024 23:33:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E068F1607B1;
+	Thu, 18 Apr 2024 13:38:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g9dcUgih"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tBe7sZli"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10AE38004A;
-	Wed, 17 Apr 2024 23:33:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF34A84D02
+	for <linux-mips@vger.kernel.org>; Thu, 18 Apr 2024 13:38:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713396784; cv=none; b=tStEU1qZ3kPrUPt4zO2FXdihlFei6FjD0B7bp6AF4aFqa8loJsyyEiDZ9bwaVQizWc+Gyn9cZudEgKIXgJFKeLBxr4gm9+zCi8JB/wmFRXpVNXDYKJ3Fa8RUol4F1DJw95aPiD4F4oGxI3DN0un9ZLK8sxda7khEFwYtjY9R0/8=
+	t=1713447484; cv=none; b=n9XJbwVuO5r27YmDlwWsBYauLHgixLxvblqmz8DKrDX1z72qvqTkds4oNNxJbV/8tsDDjJGk9G6dMBd/lpugmfz9k3yrZ7omIcu4DOxIrWWiym83prM0uhCNMs8BUE3h0407mxA++10Er/IlSMk4qcsSX0yNs/oWbtONk5gl/gY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713396784; c=relaxed/simple;
-	bh=UVEJ59zmDjoboUO24xHkWUbtsfOaV4nMW96i+du0QWo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hD+sh86VP2lCUppSurKD/L+rUY8cfZvRrMZUmdGsKcHdRpy92xeEQMLXVngZYg1M372dbwOIOli+rjcX/qwOmPWC2CXT2pbmYmwkMbf/QVmu408XchGLSPtmJSX1h7DzIPdWLqPzu5msbdk/LP1Tims5JIGYosyhge3mjQMIvGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g9dcUgih; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79E66C2BD11;
-	Wed, 17 Apr 2024 23:33:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713396782;
-	bh=UVEJ59zmDjoboUO24xHkWUbtsfOaV4nMW96i+du0QWo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=g9dcUgihUruqLdH2UkphJBhOp4CI2upjvdLl3d3rVz9siUPLfDQYchyou7LXngIUI
-	 cWzssC+Ais5exj0vlxdgkfD0UISDabYE9ps2nLAsnUvPuJqZuWrDEKlEQm/130dxlJ
-	 TrDcK7sck1xghtXie5KS50aVdgaMGiZE0PmL7090xIdMdRRtto0B1IoLe8MFPUV77p
-	 MjHgPTklEJZLkSAT7P4KNSPweSGMUIkieLAdyvPoe4eF1OoYaNQIWGFhr3Y6mGm6h+
-	 jJ7M8h436v/tDSG5Z2WP2ZPQpJ7Xt9Fh8ZQRH+KDS3CTVxJrkYmgSzmsULNtE2/7ia
-	 VcpAfL6YqmCUQ==
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-518931f8d23so181559e87.3;
-        Wed, 17 Apr 2024 16:33:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWU+Mf3njgqRifWxHNpROfCS/UruBBh8dyGnOStdbmcfQ1BA9TTxFeQZdcP/NktvCH9tRvk1GBXhEnQ2/Id0n1nOAs1N5KzdtGf38Ohka637wbiMGMiwxcUEx8ULsm3PjZvZ7PEP7eR5MfYnqTqQnCJxSJMNOZjKdGP7f21H7fJENmcgHGWiTS+nQor5G1Zoydv+JRjRyXK3Y+sniFHtakwH+szWz+/xo7xbh5c2S+4XHf/8ERz1U6Viutvs1sSGfogDyA5Ugcu0XyAcMAOZd63H5JW3JkcosODo9URBruOpi9rnIJON0yn5nwZtipqIcfT1wqJ5XRDtBfCsSi4FRjbvwoox2BI/7N5bh8SRp4o5AEvUvIewouxPYy0FxtwnBdtn9/ju33Cc+RjExNDt6BocTVAmFtotyjmzPDTICgvOabDu1BU1vVbUWk=
-X-Gm-Message-State: AOJu0Yxp3ZJcwr3NGUg945EqKE2eQ6SFNdNTi+8iMeKrnZK6kQzGpujY
-	QXpq+nG8gzn9qAhGZ/VNMh1jqtO+K9ut5wM42wMW9u9csx75aIvPH9fMyD7Oy7nwS3xLPFU3Qw6
-	8AfGAYq/KVgTrYxBdx/hr/fFXt98=
-X-Google-Smtp-Source: AGHT+IEHuhOgcI3i5xgKWDt/RXWKyZ/pV78ei3ikSzZKT8X4nbojHe59GGn0FqOU5qFFQVvC8y10X+N0SPB8sxHbE0Q=
-X-Received: by 2002:a05:6512:3184:b0:519:b95:22b5 with SMTP id
- i4-20020a056512318400b005190b9522b5mr446945lfe.51.1713396780753; Wed, 17 Apr
- 2024 16:33:00 -0700 (PDT)
+	s=arc-20240116; t=1713447484; c=relaxed/simple;
+	bh=4hjplUlSINU/7vUpvdsZ49nq4pYPWpHaCsB+ygdVKuM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TwB0H/10utMjL0BJkKTORCpuNv5bo5HpfsOOgBF9peFcZrrVYZWFq0nM138SWepe+XMN+nG2OdgBx0eMODpq0fS7JxMp+LSSE1m8LjdlM+F46vT3G70AlIQVM60bxb3UlNYfFMHOXsCwed79b7bjqD7di46R0ipqSI7IM/+bCss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tBe7sZli; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-518931f8d23so855594e87.3
+        for <linux-mips@vger.kernel.org>; Thu, 18 Apr 2024 06:38:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1713447481; x=1714052281; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o9+0LMiqya8BHuNPxYT08/6EM9gAsFbYCDS1Bf/hZvc=;
+        b=tBe7sZliHYEdIs1t9pZC8kswaj756Q4fGZvzTqkq4qAVs2MB44r1W44YVFTPUjaWAR
+         +fvksdSUtBUmHtcrse0hB6tRpl036vtN93dy4/Jvw0RUIllXgnEuhC6YrhKENlv9SBOo
+         as+kVbjFKTtLrWCcff7onRh5FexH5f4vDz3N1doCg4Jhk5mdlyc4O+pAtW3ljRbk7UfE
+         g+B+F9AWev+8frn6fNQmRTs2euEj0J4jjQoZ5fP5+sQ8a2zvZq1Qo5yiW5lcvqeR5ZHX
+         aWiG+MHrJUf8nUgq3AFiOogqJDN81AgZjcAGQWI+O3NWMgMZTSqorYkErErHV0dkltKM
+         SC+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713447481; x=1714052281;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o9+0LMiqya8BHuNPxYT08/6EM9gAsFbYCDS1Bf/hZvc=;
+        b=N9UWO1iJxn3exTel1eQQmEI67D/is6nwINiqCxf5VpAZ2sr6muS8kxm58r2ZDvRhrP
+         ArYW3f0lggKGpiHpA6m9DJCZNrkmiJaekex8JYESVPhZ3E60Sx3g3MWsQ807q4QL2aJw
+         y0rQfY7diIwpHNIMWhUCXWAti8Rn4Q6Lmg3wOP/mQUfk9P9ZuH9Jlao46A71DJWBp0wD
+         LcWVbsFu/e5o+Je2W/dYfze4oFPINNR16ePxDp9zSkb7A/XaBuxORvebeZggEK2R9P3p
+         pO2StGACBzk47HpUJFAQy7N22hWsZG73H9yYQW/XBtVlOv33tgfZ5gxa5gnKIg5W5zqE
+         DcYA==
+X-Forwarded-Encrypted: i=1; AJvYcCVoSRK1jr74AoIWk6C6Q38zsunSRDnQCvzeACijGZOsdQ+QKGmENmJN4/KK0qKHm2o7wrlgBFav0U59AOXG8Ws+Ov5HG+UwCsq+iw==
+X-Gm-Message-State: AOJu0Yxo5eUOLtkDaV+XdaBMNpMx3d/FcTi/b428xlXVa3IC72NVubvF
+	BkQa2qGq/Rb5Rt0GR7wHIns1k7E7YA6bnjGyu7K3LvwBCPHtUvG9MN4p+GMqwuY5oHeLJFY5Vbx
+	/
+X-Google-Smtp-Source: AGHT+IGB38BuDP29A3iEAISCkTP6Ro2q8oS06IBiYeWlANMwwe5QEswXNqPg7+d9TKzxZOXxb2STLQ==
+X-Received: by 2002:a19:6417:0:b0:517:dc07:612f with SMTP id y23-20020a196417000000b00517dc07612fmr1501445lfb.39.1713447481010;
+        Thu, 18 Apr 2024 06:38:01 -0700 (PDT)
+Received: from [192.168.69.100] ([176.176.151.213])
+        by smtp.gmail.com with ESMTPSA id 25-20020a170906311900b00a52331a9bdasm905137ejx.48.2024.04.18.06.37.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Apr 2024 06:38:00 -0700 (PDT)
+Message-ID: <fbbabdc6-2505-45d2-a46a-c80c1eca6ee8@linaro.org>
+Date: Thu, 18 Apr 2024 15:37:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240411160051.2093261-1-rppt@kernel.org> <20240411160051.2093261-6-rppt@kernel.org>
- <20240415075241.GF40213@noisy.programming.kicks-ass.net> <Zh1lnIdgFeM1o8S5@FVFF77S0Q05N.cambridge.arm.com>
- <Zh4nJp8rv1qRBs8m@kernel.org>
-In-Reply-To: <Zh4nJp8rv1qRBs8m@kernel.org>
-From: Song Liu <song@kernel.org>
-Date: Wed, 17 Apr 2024 16:32:49 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6Pbg2k_Gu4dsBx+H8H5XCHvNdtEZJBPiG_eT0qqr9D1w@mail.gmail.com>
-Message-ID: <CAPhsuW6Pbg2k_Gu4dsBx+H8H5XCHvNdtEZJBPiG_eT0qqr9D1w@mail.gmail.com>
-Subject: Re: [PATCH v4 05/15] mm: introduce execmem_alloc() and execmem_free()
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
-	linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Bjorn Topel <bjorn@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	"David S. Miller" <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>, 
-	Donald Dutile <ddutile@redhat.com>, Eric Chanudet <echanude@redhat.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, 
-	Kent Overstreet <kent.overstreet@linux.dev>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nadav Amit <nadav.amit@gmail.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Puranjay Mohan <puranjay12@gmail.com>, 
-	Rick Edgecombe <rick.p.edgecombe@intel.com>, Russell King <linux@armlinux.org.uk>, 
-	Steven Rostedt <rostedt@goodmis.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>, bpf@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mips@vger.kernel.org, linux-mm@kvack.org, linux-modules@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
-	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] MIPS: SGI-IP30: Use bitmap API when iterating over bitmap
+To: Yury Norov <yury.norov@gmail.com>
+Cc: linux-kernel@vger.kernel.org,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org
+References: <20240417071830.47703-1-philmd@linaro.org>
+ <ZiAGcb3eY/Nqamb9@yury-ThinkPad>
+Content-Language: en-US
+From: =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+In-Reply-To: <ZiAGcb3eY/Nqamb9@yury-ThinkPad>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 16, 2024 at 12:23=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wr=
-ote:
->
-> On Mon, Apr 15, 2024 at 06:36:39PM +0100, Mark Rutland wrote:
-> > On Mon, Apr 15, 2024 at 09:52:41AM +0200, Peter Zijlstra wrote:
-> > > On Thu, Apr 11, 2024 at 07:00:41PM +0300, Mike Rapoport wrote:
-> > > > +/**
-> > > > + * enum execmem_type - types of executable memory ranges
-> > > > + *
-> > > > + * There are several subsystems that allocate executable memory.
-> > > > + * Architectures define different restrictions on placement,
-> > > > + * permissions, alignment and other parameters for memory that can=
- be used
-> > > > + * by these subsystems.
-> > > > + * Types in this enum identify subsystems that allocate executable=
- memory
-> > > > + * and let architectures define parameters for ranges suitable for
-> > > > + * allocations by each subsystem.
-> > > > + *
-> > > > + * @EXECMEM_DEFAULT: default parameters that would be used for typ=
-es that
-> > > > + * are not explcitly defined.
-> > > > + * @EXECMEM_MODULE_TEXT: parameters for module text sections
-> > > > + * @EXECMEM_KPROBES: parameters for kprobes
-> > > > + * @EXECMEM_FTRACE: parameters for ftrace
-> > > > + * @EXECMEM_BPF: parameters for BPF
-> > > > + * @EXECMEM_TYPE_MAX:
-> > > > + */
-> > > > +enum execmem_type {
-> > > > + EXECMEM_DEFAULT,
-> > > > + EXECMEM_MODULE_TEXT =3D EXECMEM_DEFAULT,
-> > > > + EXECMEM_KPROBES,
-> > > > + EXECMEM_FTRACE,
-> > > > + EXECMEM_BPF,
-> > > > + EXECMEM_TYPE_MAX,
-> > > > +};
-> > >
-> > > Can we please get a break-down of how all these types are actually
-> > > different from one another?
-> > >
-> > > I'm thinking some platforms have a tiny immediate space (arm64 comes =
-to
-> > > mind) and has less strict placement constraints for some of them?
-> >
-> > Yeah, and really I'd *much* rather deal with that in arch code, as I ha=
-ve said
-> > several times.
-> >
-> > For arm64 we have two bsaic restrictions:
-> >
-> > 1) Direct branches can go +/-128M
-> >    We can expand this range by having direct branches go to PLTs, at a
-> >    performance cost.
-> >
-> > 2) PREL32 relocations can go +/-2G
-> >    We cannot expand this further.
-> >
-> > * We don't need to allocate memory for ftrace. We do not use trampoline=
-s.
-> >
-> > * Kprobes XOL areas don't care about either of those; we don't place an=
-y
-> >   PC-relative instructions in those. Maybe we want to in future.
-> >
-> > * Modules care about both; we'd *prefer* to place them within +/-128M o=
-f all
-> >   other kernel/module code, but if there's no space we can use PLTs and=
- expand
-> >   that to +/-2G. Since modules can refreence other modules, that ends u=
-p
-> >   actually being halved, and modules have to fit within some 2G window =
-that
-> >   also covers the kernel.
+On 17/4/24 19:27, Yury Norov wrote:
+> On Wed, Apr 17, 2024 at 09:18:29AM +0200, Philippe Mathieu-Daudé wrote:
+>> Do not open-code bitmap_set(). Besides, <linux/bitmap.h> API
+>> allows architecture specific optimizations, so prefer it.
+>>
+>> Use the HEART_NUM_IRQS definition to express the end of the
+>> HEART bitmap.
+>>
+>> Inspired-by: Yury Norov <yury.norov@gmail.com>
+>> Signed-off-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+>> ---
+>>   arch/mips/sgi-ip30/ip30-irq.c | 4 +---
+>>   1 file changed, 1 insertion(+), 3 deletions(-)
+>>
+>> diff --git a/arch/mips/sgi-ip30/ip30-irq.c b/arch/mips/sgi-ip30/ip30-irq.c
+>> index 423c32cb66ed..bdafff076191 100644
+>> --- a/arch/mips/sgi-ip30/ip30-irq.c
+>> +++ b/arch/mips/sgi-ip30/ip30-irq.c
+>> @@ -264,7 +264,6 @@ void __init arch_init_irq(void)
+>>   	struct irq_domain *domain;
+>>   	struct fwnode_handle *fn;
+>>   	unsigned long *mask;
+>> -	int i;
+>>   
+>>   	mips_cpu_irq_init();
+>>   
+>> @@ -300,8 +299,7 @@ void __init arch_init_irq(void)
+>>   	set_bit(HEART_L3_INT_TIMER, heart_irq_map);
+>>   
+>>   	/* Reserve the error interrupts (#51 to #63). */
+>> -	for (i = HEART_L4_INT_XWID_ERR_9; i <= HEART_L4_INT_HEART_EXCP; i++)
+>> -		set_bit(i, heart_irq_map);
+>> +	bitmap_set(heart_irq_map, HEART_L4_INT_XWID_ERR_9, HEART_NUM_IRQS);
+> 
+> This function has a signature
+>          bitmap_set(map, start, length)
 
-Is +/- 2G enough for all realistic use cases? If so, I guess we don't
-really need
-EXECMEM_ANYWHERE below?
+Doh, I thought it was (map, from_inc, to_exc), my bad.
 
-> >
-> > * I'm not sure about BPF's requirements; it seems happy doing the same =
-as
-> >   modules.
->
-> BPF are happy with vmalloc().
->
-> > So if we *must* use a common execmem allocator, what we'd reall want is=
- our own
-> > types, e.g.
-> >
-> >       EXECMEM_ANYWHERE
-> >       EXECMEM_NOPLT
-> >       EXECMEM_PREL32
-> >
-> > ... and then we use those in arch code to implement module_alloc() and =
-friends.
->
-> I'm looking at execmem_types more as definition of the consumers, maybe I
-> should have named the enum execmem_consumer at the first place.
+> So this should be a:
+>          bitmap_set(heart_irq_map, HEART_L4_INT_XWID_ERR_9,
+>                     HEART_NUM_IRQS - HEART_L4_INT_XWID_ERR_9 + 1)
+> 
+> Also on the above group of set_bit(). It should be 2 bitmap_set()
+> calls to me. HEART_L0_INT [0, 2] is the first one, and HEART_L2_INT
+> to HEART_L4_INT [46, 63] is the other. Isn't?
 
-I think looking at execmem_type from consumers' point of view adds
-unnecessary complexity. IIUC, for most (if not all) archs, ftrace, kprobe,
-and bpf (and maybe also module text) all have the same requirements.
-Did I miss something?
+Please disregard this patch, sorry for the noise.
 
-IOW, we have
+Regards,
 
-enum execmem_type {
-        EXECMEM_DEFAULT,
-        EXECMEM_TEXT,
-        EXECMEM_KPROBES =3D EXECMEM_TEXT,
-        EXECMEM_FTRACE =3D EXECMEM_TEXT,
-        EXECMEM_BPF =3D EXECMEM_TEXT,      /* we may end up without
-_KPROBE, _FTRACE, _BPF */
-        EXECMEM_DATA,  /* rw */
-        EXECMEM_RO_DATA,
-        EXECMEM_RO_AFTER_INIT,
-        EXECMEM_TYPE_MAX,
-};
-
-Does this make sense?
-
-Thanks,
-Song
+Phil.
 
