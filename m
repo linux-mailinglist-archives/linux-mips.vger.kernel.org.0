@@ -1,46 +1,46 @@
-Return-Path: <linux-mips+bounces-2862-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2863-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4558A8ADAC4
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Apr 2024 02:20:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA0778ADADF
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Apr 2024 02:22:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8BD7281B75
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Apr 2024 00:20:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B79571C20DAB
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Apr 2024 00:22:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C6B8158D81;
-	Mon, 22 Apr 2024 23:58:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76741158DCB;
+	Mon, 22 Apr 2024 23:59:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G+gwfXv8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M2igqz22"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A7D158D9A;
-	Mon, 22 Apr 2024 23:58:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E241158DC6;
+	Mon, 22 Apr 2024 23:59:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713830333; cv=none; b=ephxSztYN89wBS8HHRMrquA1E7EQk+rDXlAJ/dCnKcjnZyVTsNtU1mlKc4yce2hX8qRMvbT0oUind7OabKONBvgmaBIx48I5xIVuPyxsd/K7JQPlAKzBcemW9Ue02Xa1Pbk9MUPdIvuk3MWWZK2Tb0vCra0/2M215BYT3z7dKSA=
+	t=1713830356; cv=none; b=SJyl7O7gX/W07f2nL7yYJj/RiSItG8+NuKpZPyrBCpOu++0DOtvSxLTOVHgd06/UsAQAhkc80iyU/SmMTm+vXa+HmMc8Iy3ifzj+U/jZUs1zZ4Kg0oZlixKE3XNLCo0y9TQUBwjDqFBUXjLgktCfNYeF2OSAxSFM6nBbsEoyPwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713830333; c=relaxed/simple;
-	bh=/1uXWxbkR2uMkuL7kRWIJaGQnXNNIDvnTd26WESTL8A=;
+	s=arc-20240116; t=1713830356; c=relaxed/simple;
+	bh=2d/pUPpu0nPoQ0KqdnMyks+b9rKpBfvgrfddWyMYkWY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AX6NdlONfpzrwTP+rqzIp4MLn9xb7eSYdJ/XHq9UBOCHzLhzJ5AqFQulHqlBSorb1qmtwV7jDV3YZDiK6WYbP3XAGVZ361SJkJevmiV43LPCytJaeXQECEFaSphFffFzzLT20vg9ZLHcYRlwfrWqlB7NjoobHOFPZjPt/mirHv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G+gwfXv8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA673C3277B;
-	Mon, 22 Apr 2024 23:58:51 +0000 (UTC)
+	 MIME-Version; b=KZZaKFMZp27QhsQenYXH64s83OG76Sa4/uuafDcHJEQzsUYtS/amflAp0Lj07bkDOijqZHFZQpZnXLgQlp+SLCm8ZwBElDotfGmajQFhpS5S0wP3LA/KQtoeSs+DFdY/PSD617go0Kj7F8zm00CJAN3bLkvGLaeuirnhPkhrEaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M2igqz22; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E31E5C3277B;
+	Mon, 22 Apr 2024 23:59:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713830332;
-	bh=/1uXWxbkR2uMkuL7kRWIJaGQnXNNIDvnTd26WESTL8A=;
+	s=k20201202; t=1713830355;
+	bh=2d/pUPpu0nPoQ0KqdnMyks+b9rKpBfvgrfddWyMYkWY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=G+gwfXv8KIk000+wFiCQFhEycHWRnDICbxd/avP6qBQ5Mb5REYZ9zKyq8M2lw1yRM
-	 nKsAPeQqNrhYCZpVvs+EI+sR2v68vMKHq55mfT3b/74Nne8QRhwnef7vveBMlhfaFB
-	 U6GoKsAYoOh31wmo7ADv4BjY3Wkyfrbh5omv9Qdobzma/afdJkpAXDGQrq/Mpi50bF
-	 WTSESxK2gB+B7sWPMUt0zua+G4241uCL+lhngEXC7jQ+dtua4I8e3crXUk7ysxZPgX
-	 a4/cIuIVOL9+ElTKvbUMQvOd2MCw6j8CiDRmM2JgLnXZnuGNch8fTBNAJORtr5vPfE
-	 yt1sM0oq+7oQw==
+	b=M2igqz22D/hUQznp+tW/WDe2UeIqEY44rmPo1B95q14Cm8gqgiSIX1S6UP0DRatBk
+	 j2d/+dj4UQr55AkNgccnLQxmsIQ2l2V9EI4MKAEjtex2ikoFUuskHwZrrBTN3y7ZPB
+	 F1Br2ws4XvkQlVK6apb6iOqTVW1cMaameDpicOis9YrjgK5UnGRoWsPKkF3gWyUwsw
+	 u5qglbLdS15T+SpeiG13ZijjtjoE1hbI2yA6hMRLkZto36bOzpjiYJA3975iAnaj7J
+	 QRTnoMOFiPzR3B2Ucu8xiaxE3IKZzzPGNnD14jnCf6+FrwJ27NPncsGfP5XIreL/hp
+	 yVFkP5d1RO+zQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -51,12 +51,12 @@ Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>,
 	oleg@redhat.com,
 	arnd@arndb.de,
 	linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 8/9] MIPS: scall: Save thread_info.syscall unconditionally on entry
-Date: Mon, 22 Apr 2024 19:19:49 -0400
-Message-ID: <20240422231955.1613650-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 7/9] MIPS: scall: Save thread_info.syscall unconditionally on entry
+Date: Mon, 22 Apr 2024 19:20:12 -0400
+Message-ID: <20240422232020.1615476-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240422231955.1613650-1-sashal@kernel.org>
-References: <20240422231955.1613650-1-sashal@kernel.org>
+In-Reply-To: <20240422232020.1615476-1-sashal@kernel.org>
+References: <20240422232020.1615476-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -65,7 +65,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.215
+X-stable-base: Linux 5.4.274
 Content-Transfer-Encoding: 8bit
 
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
@@ -123,10 +123,10 @@ index aebfda81120a1..6c5269d3aacba 100644
  	DEFINE(_THREAD_MASK, THREAD_MASK);
  	DEFINE(_IRQ_STACK_SIZE, IRQ_STACK_SIZE);
 diff --git a/arch/mips/kernel/ptrace.c b/arch/mips/kernel/ptrace.c
-index db7c5be1d4a35..dd454b429ff73 100644
+index 414b6e9c900b2..cfb548fd2712c 100644
 --- a/arch/mips/kernel/ptrace.c
 +++ b/arch/mips/kernel/ptrace.c
-@@ -1310,16 +1310,13 @@ long arch_ptrace(struct task_struct *child, long request,
+@@ -1399,16 +1399,13 @@ long arch_ptrace(struct task_struct *child, long request,
   * Notification of system call entry/exit
   * - triggered by current->work.syscall_trace
   */
@@ -144,7 +144,7 @@ index db7c5be1d4a35..dd454b429ff73 100644
  	}
  
  #ifdef CONFIG_SECCOMP
-@@ -1328,7 +1325,7 @@ asmlinkage long syscall_trace_enter(struct pt_regs *regs, long syscall)
+@@ -1417,7 +1414,7 @@ asmlinkage long syscall_trace_enter(struct pt_regs *regs, long syscall)
  		struct seccomp_data sd;
  		unsigned long args[6];
  
@@ -153,7 +153,7 @@ index db7c5be1d4a35..dd454b429ff73 100644
  		sd.arch = syscall_get_arch(current);
  		syscall_get_arguments(current, regs, args);
  		for (i = 0; i < 6; i++)
-@@ -1338,23 +1335,23 @@ asmlinkage long syscall_trace_enter(struct pt_regs *regs, long syscall)
+@@ -1427,23 +1424,23 @@ asmlinkage long syscall_trace_enter(struct pt_regs *regs, long syscall)
  		ret = __secure_computing(&sd);
  		if (ret == -1)
  			return ret;
@@ -265,7 +265,7 @@ index 23b2e2b1609cf..a3b5ab509b412 100644
  
  	bltz	v0, 1f			# seccomp failed? Skip syscall
 diff --git a/arch/mips/kernel/scall64-o32.S b/arch/mips/kernel/scall64-o32.S
-index 50c9a57e0d3ad..6757368e9c940 100644
+index 41df8221bb8fd..d8f41e919c171 100644
 --- a/arch/mips/kernel/scall64-o32.S
 +++ b/arch/mips/kernel/scall64-o32.S
 @@ -79,6 +79,22 @@ loads_done:
