@@ -1,329 +1,139 @@
-Return-Path: <linux-mips+bounces-2851-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2852-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6A348ACF0A
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Apr 2024 16:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E5768AD2C2
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Apr 2024 18:52:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A28A281072
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Apr 2024 14:12:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00A3C28306C
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Apr 2024 16:52:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D21E1509B9;
-	Mon, 22 Apr 2024 14:12:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 423CE153824;
+	Mon, 22 Apr 2024 16:52:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XZI2g4Uq"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="SVbbHamD"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C338414F9E1;
-	Mon, 22 Apr 2024 14:12:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F19221DDE9;
+	Mon, 22 Apr 2024 16:52:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713795124; cv=none; b=I8NvMLwqdlQrL69bFqT3d0w6JhCFuJp58mH4j+iwVSK+pPnEAhObe1/JB9IdQQyFcr/XF9+6A/KxCZkqFpC/Qub5zmiLdQmgANRuFdUa2gbPa3HHAySNrMS1eQhezZttUupEirvnPm2HGG6ECYIr75FhebBS0rqX21fhTWzQRLY=
+	t=1713804773; cv=none; b=QIjOchrkQOaU1Vq+MMm2IcHW8xhhPuAheCZZ8PS88B0cz9rXknVw9bStuJgvMReptvWNmve2O/KG6O8x00aGCe6Jdo86OQSHE1ZiE0mDJvhbbgIEjT8Bd8AOwDtzXrMyw17tC2G+YAZg2US8q6xKOd/cYKUTourIRQBEi6uQs7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713795124; c=relaxed/simple;
-	bh=63rvt2yz8r57hl8myRcuStiGVHTSpmv479F+BVPlgOk=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=EXwSD1gOrzC1UFPRGE5PVklfn2EoSRdpM7bDx5A8c6v9xGY92yUE7DYBMuHjcoWboURdTr2w4X7aiJpQwuRUlk6lCh0sCZljFPZTVx+fOjhme6Pl/doOqdc+R6TiLVs9/VPwgnkJtli8CrbQU9LQGi+34iQfac4+sgukfYDjUD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XZI2g4Uq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAAD5C32783;
-	Mon, 22 Apr 2024 14:11:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713795123;
-	bh=63rvt2yz8r57hl8myRcuStiGVHTSpmv479F+BVPlgOk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=XZI2g4UqcleGPHMCMSqV3/iC7oJP0tZWbpfXP00rfR9bLCRfpzFMwC9X4q54oxXMM
-	 DnhZrHtKfWP5KsKR0UwBwIDd4eHpEkLzxxX7LPi42cCObWXCldmkT2ETPDxFRfwhiK
-	 nyXLCvvf3mWcIJjGAf2BRpg+sGk/r9FACse9FCIZKTAIMRKChgqXwhJ7CqFLLV8oy/
-	 QLrmKiFkxPB4YBmwLg/Hf4QkKGO2SUvS8pCcc0bNoMWOtMRS3u0h3n+olJg1vGec5V
-	 55mbL/zgu8a6qrqHPaT4tJ+d8LCTGjRW/TTRHz6/VaV0UanNJA0VfQalKnV9xzPuaQ
-	 EUKZMBGXl8nFQ==
-Date: Mon, 22 Apr 2024 23:11:51 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
- Andrew Morton <akpm@linux-foundation.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Christophe
- Leroy <christophe.leroy@csgroup.eu>, "David S. Miller"
- <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>, Donald Dutile
- <ddutile@redhat.com>, Eric Chanudet <echanude@redhat.com>, Heiko Carstens
- <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, Huacai Chen
- <chenhuacai@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, Luis
- Chamberlain <mcgrof@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, Michael Ellerman
- <mpe@ellerman.id.au>, Nadav Amit <nadav.amit@gmail.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>, Rick Edgecombe
- <rick.p.edgecombe@intel.com>, Russell King <linux@armlinux.org.uk>, Sam
- Ravnborg <sam@ravnborg.org>, Song Liu <song@kernel.org>, Steven Rostedt
- <rostedt@goodmis.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
- bpf@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
- linux-mm@kvack.org, linux-modules@vger.kernel.org,
- linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
- netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v5 14/15] kprobes: remove dependency on CONFIG_MODULES
-Message-Id: <20240422231151.0d7c18ec1917887c7f323d4c@kernel.org>
-In-Reply-To: <20240422094436.3625171-15-rppt@kernel.org>
-References: <20240422094436.3625171-1-rppt@kernel.org>
-	<20240422094436.3625171-15-rppt@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1713804773; c=relaxed/simple;
+	bh=3/GWBoMvjgEOep+U+PUV0wTmJjwtNpbj6ntfK4jNUks=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=a4BhoqZ8XyZnH487v7gkhUgiszZUxVWFf3z2YGqHiKoAnk77JZnoVYH1TAJuLJsAFfNl9vgHIkl9Pf7dzZk+MY+hPT4dmG8U50j75NaYLPqtmAEYJ0DSsccUtCnWTQVunvUIUCee/4NFZdLddS0Sk7qDmYtkWK4I354xWlGHWIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=SVbbHamD; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 59D60240005;
+	Mon, 22 Apr 2024 16:52:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1713804768;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/bdZjyK+cz4gPmCanhUjDaq4XaZFBYb3A0dLn9Cm1x8=;
+	b=SVbbHamDIX+Ww/Itls8kkhQCUnzjTqVQ3QYkJRK+jmV7MbWq/nwSJmjoE2pFg6c8O13//U
+	e0UxUzw/pR/hQrHzqzX4add5r8vrS35AwF04slxe2FMpy81QpXwnpiXIC9SLMYu46y1FUO
+	zdNc6FhULzaP0VRMdTqgUuY3kzlwygFf9QQkxv8GcllV++vPNsZ1EWabZXKoMTpd9U8JFw
+	gwO7Z2fZwBDI1jjKs+wbGSADSKTsjWLpHaBZeZj2JKDtqkUu+t6JrM+zlOVHyrAjwApYvo
+	PI3UDOXquh2kgrLGavBOssYoNyPl7MnuBM4HUZqueLSpxCq+x3yyhC5rcgo8sA==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 22 Apr 2024 18:52:47 +0200
+Message-Id: <D0QT350IJHFH.36EXE1UT9QM10@bootlin.com>
+To: "Mark Brown" <broonie@kernel.org>, "Rob Herring" <robh+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
+ <conor+dt@kernel.org>, "Vaishnav Achath" <vaishnav.a@ti.com>, "Thomas
+ Bogendoerfer" <tsbogend@alpha.franken.de>, "Rob Herring" <robh@kernel.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: (subset) [PATCH v3 0/9] spi: cadence-qspi: add Mobileye EyeQ5
+ support
+Cc: <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-mips@vger.kernel.org>, "Vladimir
+ Kondratiev" <vladimir.kondratiev@mobileye.com>, "Gregory CLEMENT"
+ <gregory.clement@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski@linaro.org>
+X-Mailer: aerc 0.17.0
+References: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
+ <171283699002.32012.7629247540689477794.b4-ty@kernel.org>
+In-Reply-To: <171283699002.32012.7629247540689477794.b4-ty@kernel.org>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Mon, 22 Apr 2024 12:44:35 +0300
-Mike Rapoport <rppt@kernel.org> wrote:
+Hello Mark,
 
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> 
-> kprobes depended on CONFIG_MODULES because it has to allocate memory for
-> code.
-> 
-> Since code allocations are now implemented with execmem, kprobes can be
-> enabled in non-modular kernels.
-> 
-> Add #ifdef CONFIG_MODULE guards for the code dealing with kprobes inside
-> modules, make CONFIG_KPROBES select CONFIG_EXECMEM and drop the
-> dependency of CONFIG_KPROBES on CONFIG_MODULES.
+On Thu Apr 11, 2024 at 2:03 PM CEST, Mark Brown wrote:
+> On Wed, 10 Apr 2024 11:29:03 +0200, Th=C3=A9o Lebrun wrote:
+> > V3 of this series adding octal SPI-NOR support to Mobileye EyeQ5
+> > platform. It has been tested on EyeQ5 hardware successfully.
+> > V1 cover letter [5] contains a brief summary of what gets added.
+> >=20
+> > There is no dependency except if you want zero errors in devicetree:
+> > system-controller series [3] for <&clocks> phandle.
+> >=20
+> > [...]
+>
+> Applied to
+>
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-ne=
+xt
+>
+> Thanks!
+>
+> [1/9] spi: dt-bindings: cdns,qspi-nor: sort compatibles alphabetically
+>       commit: 002514d91fccde2adbe750c9ec5c6207d56c890b
+> [2/9] spi: dt-bindings: cdns,qspi-nor: add mobileye,eyeq5-ospi compatible
+>       commit: 52826aee484b3ebb6ed94c1ae89c0944110ed8b1
+> [3/9] spi: dt-bindings: cdns,qspi-nor: make cdns,fifo-depth optional
+>       commit: eb4fdb4bf46f875eac3c093f7ff43a223985f7b8
+> [4/9] spi: cadence-qspi: allow FIFO depth detection
+>       (no commit info)
+> [5/9] spi: cadence-qspi: add no-IRQ mode to indirect reads
+>       (no commit info)
+> [6/9] spi: cadence-qspi: add early busywait to cqspi_wait_for_bit()
+>       (no commit info)
+> [7/9] spi: cadence-qspi: add mobileye,eyeq5-ospi compatible
+>       (no commit info)
 
-Looks good to me.
+All commits tagged "(no commit info)" do not show up in your for-next
+branch. Is that expected and is there anything I can do? There was one
+pending -Wunused-variable compiler warning to be addressed for
+example, see [0].
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+=E2=9F=A9 git log --oneline --author theo.lebrun v6.9-rc1..spi/for-next
+eb4fdb4bf46f spi: dt-bindings: cdns,qspi-nor: make cdns,fifo-depth optional
+52826aee484b spi: dt-bindings: cdns,qspi-nor: add mobileye,eyeq5-ospi compa=
+tible
+002514d91fcc spi: dt-bindings: cdns,qspi-nor: sort compatibles alphabetical=
+ly
+563f8598cbc2 spi: cadence-qspi: minimise register accesses on each op if !D=
+TR
+dcc594aef1bf spi: cadence-qspi: store device data pointer in private struct
+708eafeba9ee spi: cadence-qspi: allow building for MIPS
 
-Thank you!
+[0]: https://lore.kernel.org/lkml/161eebc1-9417-4ab0-ad8c-c1b17be119b4@sire=
+na.org.uk/
 
-> 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
->  arch/Kconfig                |  2 +-
->  include/linux/module.h      |  9 ++++++
->  kernel/kprobes.c            | 55 +++++++++++++++++++++++--------------
->  kernel/trace/trace_kprobe.c | 20 +++++++++++++-
->  4 files changed, 63 insertions(+), 23 deletions(-)
-> 
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index 7006f71f0110..a48ce6a488b3 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -52,9 +52,9 @@ config GENERIC_ENTRY
->  
->  config KPROBES
->  	bool "Kprobes"
-> -	depends on MODULES
->  	depends on HAVE_KPROBES
->  	select KALLSYMS
-> +	select EXECMEM
->  	select TASKS_RCU if PREEMPTION
->  	help
->  	  Kprobes allows you to trap at almost any kernel address and
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 1153b0d99a80..ffa1c603163c 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -605,6 +605,11 @@ static inline bool module_is_live(struct module *mod)
->  	return mod->state != MODULE_STATE_GOING;
->  }
->  
-> +static inline bool module_is_coming(struct module *mod)
-> +{
-> +        return mod->state == MODULE_STATE_COMING;
-> +}
-> +
->  struct module *__module_text_address(unsigned long addr);
->  struct module *__module_address(unsigned long addr);
->  bool is_module_address(unsigned long addr);
-> @@ -857,6 +862,10 @@ void *dereference_module_function_descriptor(struct module *mod, void *ptr)
->  	return ptr;
->  }
->  
-> +static inline bool module_is_coming(struct module *mod)
-> +{
-> +	return false;
-> +}
->  #endif /* CONFIG_MODULES */
->  
->  #ifdef CONFIG_SYSFS
-> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> index ddd7cdc16edf..ca2c6cbd42d2 100644
-> --- a/kernel/kprobes.c
-> +++ b/kernel/kprobes.c
-> @@ -1588,7 +1588,7 @@ static int check_kprobe_address_safe(struct kprobe *p,
->  	}
->  
->  	/* Get module refcount and reject __init functions for loaded modules. */
-> -	if (*probed_mod) {
-> +	if (IS_ENABLED(CONFIG_MODULES) && *probed_mod) {
->  		/*
->  		 * We must hold a refcount of the probed module while updating
->  		 * its code to prohibit unexpected unloading.
-> @@ -1603,12 +1603,13 @@ static int check_kprobe_address_safe(struct kprobe *p,
->  		 * kprobes in there.
->  		 */
->  		if (within_module_init((unsigned long)p->addr, *probed_mod) &&
-> -		    (*probed_mod)->state != MODULE_STATE_COMING) {
-> +		    !module_is_coming(*probed_mod)) {
->  			module_put(*probed_mod);
->  			*probed_mod = NULL;
->  			ret = -ENOENT;
->  		}
->  	}
-> +
->  out:
->  	preempt_enable();
->  	jump_label_unlock();
-> @@ -2488,24 +2489,6 @@ int kprobe_add_area_blacklist(unsigned long start, unsigned long end)
->  	return 0;
->  }
->  
-> -/* Remove all symbols in given area from kprobe blacklist */
-> -static void kprobe_remove_area_blacklist(unsigned long start, unsigned long end)
-> -{
-> -	struct kprobe_blacklist_entry *ent, *n;
-> -
-> -	list_for_each_entry_safe(ent, n, &kprobe_blacklist, list) {
-> -		if (ent->start_addr < start || ent->start_addr >= end)
-> -			continue;
-> -		list_del(&ent->list);
-> -		kfree(ent);
-> -	}
-> -}
-> -
-> -static void kprobe_remove_ksym_blacklist(unsigned long entry)
-> -{
-> -	kprobe_remove_area_blacklist(entry, entry + 1);
-> -}
-> -
->  int __weak arch_kprobe_get_kallsym(unsigned int *symnum, unsigned long *value,
->  				   char *type, char *sym)
->  {
-> @@ -2570,6 +2553,25 @@ static int __init populate_kprobe_blacklist(unsigned long *start,
->  	return ret ? : arch_populate_kprobe_blacklist();
->  }
->  
-> +#ifdef CONFIG_MODULES
-> +/* Remove all symbols in given area from kprobe blacklist */
-> +static void kprobe_remove_area_blacklist(unsigned long start, unsigned long end)
-> +{
-> +	struct kprobe_blacklist_entry *ent, *n;
-> +
-> +	list_for_each_entry_safe(ent, n, &kprobe_blacklist, list) {
-> +		if (ent->start_addr < start || ent->start_addr >= end)
-> +			continue;
-> +		list_del(&ent->list);
-> +		kfree(ent);
-> +	}
-> +}
-> +
-> +static void kprobe_remove_ksym_blacklist(unsigned long entry)
-> +{
-> +	kprobe_remove_area_blacklist(entry, entry + 1);
-> +}
-> +
->  static void add_module_kprobe_blacklist(struct module *mod)
->  {
->  	unsigned long start, end;
-> @@ -2672,6 +2674,17 @@ static struct notifier_block kprobe_module_nb = {
->  	.priority = 0
->  };
->  
-> +static int kprobe_register_module_notifier(void)
-> +{
-> +	return register_module_notifier(&kprobe_module_nb);
-> +}
-> +#else
-> +static int kprobe_register_module_notifier(void)
-> +{
-> +	return 0;
-> +}
-> +#endif /* CONFIG_MODULES */
-> +
->  void kprobe_free_init_mem(void)
->  {
->  	void *start = (void *)(&__init_begin);
-> @@ -2731,7 +2744,7 @@ static int __init init_kprobes(void)
->  	if (!err)
->  		err = register_die_notifier(&kprobe_exceptions_nb);
->  	if (!err)
-> -		err = register_module_notifier(&kprobe_module_nb);
-> +		err = kprobe_register_module_notifier();
->  
->  	kprobes_initialized = (err == 0);
->  	kprobe_sysctls_init();
-> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-> index 14099cc17fc9..2cb2a3951b4f 100644
-> --- a/kernel/trace/trace_kprobe.c
-> +++ b/kernel/trace/trace_kprobe.c
-> @@ -111,6 +111,7 @@ static nokprobe_inline bool trace_kprobe_within_module(struct trace_kprobe *tk,
->  	return strncmp(module_name(mod), name, len) == 0 && name[len] == ':';
->  }
->  
-> +#ifdef CONFIG_MODULES
->  static nokprobe_inline bool trace_kprobe_module_exist(struct trace_kprobe *tk)
->  {
->  	char *p;
-> @@ -129,6 +130,12 @@ static nokprobe_inline bool trace_kprobe_module_exist(struct trace_kprobe *tk)
->  
->  	return ret;
->  }
-> +#else
-> +static inline bool trace_kprobe_module_exist(struct trace_kprobe *tk)
-> +{
-> +	return false;
-> +}
-> +#endif
->  
->  static bool trace_kprobe_is_busy(struct dyn_event *ev)
->  {
-> @@ -670,6 +677,7 @@ static int register_trace_kprobe(struct trace_kprobe *tk)
->  	return ret;
->  }
->  
-> +#ifdef CONFIG_MODULES
->  /* Module notifier call back, checking event on the module */
->  static int trace_kprobe_module_callback(struct notifier_block *nb,
->  				       unsigned long val, void *data)
-> @@ -704,6 +712,16 @@ static struct notifier_block trace_kprobe_module_nb = {
->  	.notifier_call = trace_kprobe_module_callback,
->  	.priority = 1	/* Invoked after kprobe module callback */
->  };
-> +static int trace_kprobe_register_module_notifier(void)
-> +{
-> +	return register_module_notifier(&trace_kprobe_module_nb);
-> +}
-> +#else
-> +static int trace_kprobe_register_module_notifier(void)
-> +{
-> +	return 0;
-> +}
-> +#endif /* CONFIG_MODULES */
->  
->  static int count_symbols(void *data, unsigned long unused)
->  {
-> @@ -1933,7 +1951,7 @@ static __init int init_kprobe_trace_early(void)
->  	if (ret)
->  		return ret;
->  
-> -	if (register_module_notifier(&trace_kprobe_module_nb))
-> +	if (trace_kprobe_register_module_notifier())
->  		return -EINVAL;
->  
->  	return 0;
-> -- 
-> 2.43.0
-> 
+Thanks,
 
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
