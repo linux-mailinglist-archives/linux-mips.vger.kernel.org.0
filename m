@@ -1,140 +1,153 @@
-Return-Path: <linux-mips+bounces-2855-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2856-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1102E8AD740
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Apr 2024 00:27:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C55B8AD8DF
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Apr 2024 01:10:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 892751F223AC
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Apr 2024 22:27:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42D251C209AA
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Apr 2024 23:10:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F8D424A03;
-	Mon, 22 Apr 2024 22:26:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9F4646B83;
+	Mon, 22 Apr 2024 23:04:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MtIEshkF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jCinPE1x"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82AB1F945;
-	Mon, 22 Apr 2024 22:26:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F49944C73;
+	Mon, 22 Apr 2024 23:04:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713824784; cv=none; b=Mkf+23ySAR3qs24LXKcP64YLjiybc0n6sEOe9re6Ox/fzdibIwC4JYSoRD6R03Di0XXTdF6qklN+wvI52tTVnN9Yex/bPdFMnBlJAcJaoSXWPTDe5C0qTTHRcaRh55XBS+2LYl4Da6GmpB+ckuIkXCYeITxvFLqPm+FiwNayEro=
+	t=1713827068; cv=none; b=GayMkHgeTo/S+WGE59WJuKRZnJATpypj9mVj5UZ+CIm5LUTL8QYQmRhXwCEohL0HNFYWuD/xroq8FnOaeKJIAN4avV7Yvx0qoh5aiTEAWQ166+bqaR9uNBFo7T+y07Vt12usP4PmuXsEo26erKpngpa08zRaCRy63xC0yne/CAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713824784; c=relaxed/simple;
-	bh=yytd/TKDcz0zO0Y37oJt6qufnxgJiwwtFNIShmyvX+0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZWVwAep1BP2slK5bVnAa3EHbdWdz9P3isUmoizGTC1y+ycT44p+hsRqL4h/ImUvVub7Zbvz2JCjV2czoaEhBXfli0XmXdkMaAY4w++8af2RPQ6RPTfM26Dw8QL8j3ugUwhSXd5QeLhCrdDddQgPD6DtF0xb2UmJqPmntEPLMWuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MtIEshkF; arc=none smtp.client-ip=209.85.210.182
+	s=arc-20240116; t=1713827068; c=relaxed/simple;
+	bh=6Ac6vQ0aXcvvz3srSM0acKosA+te7+BqjbTdKTXWGyE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gYPv0SKuGm95SpwHu2g3bE8cfa7jDe37sPSWEW1t6dXZkBqH/KUaS5Xylq7NjJ/fzwxWHJMBRZYO+WigTJdmfuTrX+dwW3zmVzGEa1ZnyRQ/M9cTe5SKSrQ3+YNFNfTEcKnuSsH4QXt7TqfL/h2XGhOjeMyuM5arBnJQVXIcfLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jCinPE1x; arc=none smtp.client-ip=209.85.128.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6ecff9df447so4768513b3a.1;
-        Mon, 22 Apr 2024 15:26:22 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6114c9b4d83so40490957b3.3;
+        Mon, 22 Apr 2024 16:04:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713824782; x=1714429582; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JuM0/xDG6R+np+C0O0vux1OzQYg+atHpSL0uJUVCs4k=;
-        b=MtIEshkFTRxMmE3RfQ/JKnBBk3PXoADrzJi/hV/LoN4cevMbP103XRb+A4edqOvGhg
-         uWfr2WLC+DIo2x1sq90Lk4DjHbUQmwcPUpcyrngfoP/VwpY4J8SQ0Jabn1MZ2slKl/Fc
-         nLUNHwPatPdZVuk0dl+pJZNiu+yfAlI/BtYvSes4zIrNDb/IOM0NFX3C0EKf01BYg2EW
-         fBseyI4nxhi9cDN3dbpRvjVPfAr/LHjpcJADqKbAb3MS+EVGpmUVcuN2QkG0H6Y/tmzn
-         /McLfbbNaiYm6GzSQN0qRIocx5W9YruNj8nboNYAFg+WcYzzg4um9Tx6Vu4LWdH9cdPl
-         G9rA==
+        d=gmail.com; s=20230601; t=1713827065; x=1714431865; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=H+vHDpfrpWXucDC0uFH0aat5EFwvU5PRrpWR2paW/O4=;
+        b=jCinPE1x3BqBxQMTSxeTqH8QlKgzroVdulPE2kuEZXWPEfFofPlEKflWai9QZo6CJK
+         pqUCd+rPYMeIkr+0t+sO1kLRTMIg9wK7LOrvF7PvIv9avUXHgpWdfSdxZv/TKwq96I0c
+         eGwPNUIUq6Y/UOg/m/Qa2yZVOT2ETnA0fQZq9XA5gNgS3fCifcPzHEYfu8WslSGyFxCo
+         xKouKXbNUwKeN1inf+8mYlBw87KPrpKqNaziV9dsIp3hpunR0NCBchSgTdn1xCkcw+KV
+         5ae5Iy7uSqFiFTWT4o+zoqe5E4W4v7mJ2uxn6N6Tm+Kp6H1XSWfCEc2twYJUw68duDHY
+         Ib3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713824782; x=1714429582;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JuM0/xDG6R+np+C0O0vux1OzQYg+atHpSL0uJUVCs4k=;
-        b=KJpn4jLW+MROAe10UhFHBg6FE2zA31bHLyLelIH+jv0EIBL3OcpdhHJ+TYynCcLTna
-         5rR/WTE5M357te0APHpcwBkUWcOEyRhoH34naIVCwpP/zmQiojeGVNWiSF/m6nxet3dk
-         awmYts4nvjejfUZ3mnlBuyqS/H/Oqn7De7cZ4F3NeJYlBVdUZFPRvNkDeYuk+wiEhX7P
-         +i5UIn0MYDqKq5DOmdI9EmxoUutUPQ/vKuKZ4N8i/D3voDnZg8v+uW/69nxbkLjtI8FH
-         kyIYvS0wSS7dp/Y0SWVM8KWa1GKzUZAbbel1tKfBMp+sMd+NCWZLJUj4x7SKhd3THwnX
-         3HDg==
-X-Forwarded-Encrypted: i=1; AJvYcCWPs9IHJw9gXVSJNCVMhsl9UGlTlO3ZP49j+yJDbVUJCS3uuRlYnDv3infNtmozcxVvM7L24zPmKXk12oUEDZPXH6ULVL3evgv/OXKHB/XPUNpIlwiZ9boWZDHi9IPgBrvAH+X2wT9dpw==
-X-Gm-Message-State: AOJu0YwLm7634BCaQjF09Pi8QNJEY0RiNjU/SyWIH4nInUdoI4d6Kt38
-	LiNlqV8d3moI9wzo4pbYQWCixzuraA4OSo+P/7wFiWpjw6gBxLp9
-X-Google-Smtp-Source: AGHT+IHelQAPOIkLBsZeo/EkIlImeVDt9hnHq5y+I8dvw2RRE4WOw7SDyeajvl0NT5G42CRA3VEBfQ==
-X-Received: by 2002:a05:6a00:929e:b0:6ed:1c7:8c5d with SMTP id jw30-20020a056a00929e00b006ed01c78c5dmr14921405pfb.12.1713824781952;
-        Mon, 22 Apr 2024 15:26:21 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id k63-20020a638442000000b005fd88b393b4sm3381015pgd.59.2024.04.22.15.26.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Apr 2024 15:26:20 -0700 (PDT)
-Message-ID: <958c27b1-26d7-4927-976b-4502f33f31f7@gmail.com>
-Date: Mon, 22 Apr 2024 15:26:16 -0700
+        d=1e100.net; s=20230601; t=1713827065; x=1714431865;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H+vHDpfrpWXucDC0uFH0aat5EFwvU5PRrpWR2paW/O4=;
+        b=GXFwfhWTIYgntcnJqr18qYyf4+Fr0LCdxVUXksYSIroEx0/rLQjwZwj4aKKuTmRRRV
+         TN0ANHB7c4IpBtkRjjWl8iJmURJOz+CWKum8+FSYoXNWMWiZs3XdxgOPklbIw4weeD4I
+         99LCkAzZuuCHs9CbDioAex91SFx6LuzeCMC7OQaKqlWOV8FIf+ycsJwuSF4IZLpgIrUw
+         DdJBJZGDDGhG3PEBgU7AO5Hcjb+RCWAHNaJm7NYzFhdTmIohYItyBrwD+HQ8KWb6u7ho
+         2ow/Q4l/wpHVFLCWzD0PJW8eRRV0lA1cciRgVJEuIWNiPhLKheg2A5lCsuIaIeJFmXSS
+         4t7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVwaQNEwvoJT6yOEe5HaL0fYYrlibf/cmUzs8G1i9rBOG40F+jPNCizIdzH1gDS/fE4aJOTjqVMJASOKN5ymLEvhI7MQTGo/4h+qvf8r71b7WFciDkZZcanm5TZ1qcu0CSlLMmIEJ5BGA==
+X-Gm-Message-State: AOJu0YxPDTeUzjPnZJc7lEm+gkN/VtGPAT+FEWnR5aC1hu8kYOUBXXB7
+	HfQuqQesNv0xETROBzvj6vC7ABjiY3OP9En8o9hJf+9wdGVOU24w3DlOMA==
+X-Google-Smtp-Source: AGHT+IEyT5gjpNg1SKPchjhC9EvW1KlqB4FVRX3CAsfPDdO8c2iAhlqRKmL4LchCE48cnLNUOhUEzA==
+X-Received: by 2002:a05:690c:3701:b0:61b:33b7:9e11 with SMTP id fv1-20020a05690c370100b0061b33b79e11mr10814531ywb.9.1713827065225;
+        Mon, 22 Apr 2024 16:04:25 -0700 (PDT)
+Received: from localhost ([2601:344:8301:57f0:baf4:bd67:a305:2140])
+        by smtp.gmail.com with ESMTPSA id 5-20020a5b0105000000b00dcda90f43d7sm2194016ybx.59.2024.04.22.16.04.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Apr 2024 16:04:24 -0700 (PDT)
+Date: Mon, 22 Apr 2024 16:04:23 -0700
+From: Yury Norov <yury.norov@gmail.com>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Florian Fainelli <f.fainelli@gmail.com>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] MIPS: SGI-IP27: micro-optimize arch_init_irq()
+Message-ID: <Zibs96v+uK/2uFT8@yury-ThinkPad>
+References: <20240416173711.613750-1-yury.norov@gmail.com>
+ <20240416173711.613750-2-yury.norov@gmail.com>
+ <Zh+uPB0druail4XC@alpha.franken.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] irqchip/irq-brcmstb-l2: Avoid saving mask on shutdown
-To: Thomas Gleixner <tglx@linutronix.de>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- linux-kernel@vger.kernel.org
-Cc: opendmb@gmail.com, Tim Ross <tim.ross@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,
- "open list:BROADCOM BMIPS MIPS ARCHITECTURE" <linux-mips@vger.kernel.org>,
- "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE"
- <linux-arm-kernel@lists.infradead.org>
-References: <20240416194343.469318-1-florian.fainelli@broadcom.com>
- <87le55ulw5.ffs@tglx>
-Content-Language: en-US
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <87le55ulw5.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zh+uPB0druail4XC@alpha.franken.de>
 
-On 4/22/24 14:29, Thomas Gleixner wrote:
-> On Tue, Apr 16 2024 at 12:43, Florian Fainelli wrote:
->> The interrupt controller shutdown path does not need to save the mask of
->> enabled interrupts because the next state the system is going to be in
->> is akin to a cold boot, or a kexec'd kernel.
+On Wed, Apr 17, 2024 at 01:10:52PM +0200, Thomas Bogendoerfer wrote:
+> On Tue, Apr 16, 2024 at 10:37:10AM -0700, Yury Norov wrote:
+> > The function sets adjusted groups of bits in hub_irq_map by using
+> > for-loops. There's a bitmap_set() function dedicated to do this.
+> > 
+> > Because [0, CPU_CALL_B_IRQ] and [NI_BRDCAST_ERR_A, MSC_PANIC_INTR]
+> > ranges belong to the same machine word, bitmap_set() would boil down
+> > to an inline wrapper in both cases, avoiding generating a loop, with
+> > the associate overhead. Effectively, it would be a compile-time:
+> > 
+> > 	*hub_irq_map = GENMASK() | GENMASK();
+> > 
+> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> > ---
+> >  arch/mips/sgi-ip27/ip27-irq.c | 8 ++------
+> >  1 file changed, 2 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/arch/mips/sgi-ip27/ip27-irq.c b/arch/mips/sgi-ip27/ip27-irq.c
+> > index 8f5299b269e7..d8acdf0439d2 100644
+> > --- a/arch/mips/sgi-ip27/ip27-irq.c
+> > +++ b/arch/mips/sgi-ip27/ip27-irq.c
+> > @@ -277,7 +277,6 @@ void __init arch_init_irq(void)
+> >  {
+> >  	struct irq_domain *domain;
+> >  	struct fwnode_handle *fn;
+> > -	int i;
 > 
-> Sure, but
-> 
->> Reported-by: Tim Ross <tim.ross@broadcom.com>
->> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
->> ---
->>   drivers/irqchip/irq-brcmstb-l2.c | 17 ++++++++++++++---
->>   1 file changed, 14 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/irqchip/irq-brcmstb-l2.c b/drivers/irqchip/irq-brcmstb-l2.c
->> index 2b0b3175cea0..c988886917f7 100644
->> --- a/drivers/irqchip/irq-brcmstb-l2.c
->> +++ b/drivers/irqchip/irq-brcmstb-l2.c
->> @@ -118,7 +118,7 @@ static void brcmstb_l2_intc_irq_handle(struct irq_desc *desc)
->>   	chained_irq_exit(chip, desc);
->>   }
->>   
->> -static void brcmstb_l2_intc_suspend(struct irq_data *d)
->> +static void __brcmstb_l2_intc_suspend(struct irq_data *d, bool save)
->>   {
->>   	struct irq_chip_generic *gc = irq_data_get_irq_chip_data(d);
->>   	struct irq_chip_type *ct = irq_data_get_chip_type(d);
->> @@ -127,7 +127,8 @@ static void brcmstb_l2_intc_suspend(struct irq_data *d)
->>   
->>   	irq_gc_lock_irqsave(gc, flags);
->>   	/* Save the current mask */
->> -	b->saved_mask = irq_reg_readl(gc, ct->regs.mask);
->> +	if (save)
->> +		b->saved_mask = irq_reg_readl(gc, ct->regs.mask);
-> 
-> what's the conditional actually buying you except more complex code?
+> I've already applied your first version, so I need an incremental
+> patch, which just removes the unused variable.
 
-Not much this is an optimization that is simple to carry out. There can 
-be dozens of such L2 interrupt controllers in a given system and the 
-MMIO accesses start adding up eventually.
+Sure, please find below.
+
+From ce447fe69092c48bb59a6c4cb08ee5f9080f0ad6 Mon Sep 17 00:00:00 2001
+From: Yury Norov <yury.norov@gmail.com>
+Date: Mon, 22 Apr 2024 15:52:12 -0700
+Subject: [PATCH] MIPS: SGI-IP27: fix -Wunused-variable in arch_init_irq()
+
+Commit 40e20fbccfb722f21 (MIPS: SGI-IP27: micro-optimize arch_init_irq())
+replaced a for-loop iteration with bitmap_set() calls, but didn't remove
+an iteration variable.
+
+Fixes: 40e20fbccfb722f21 (MIPS: SGI-IP27: micro-optimize arch_init_irq())
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202404161933.izfqZ32k-lkp@intel.com/
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+---
+ arch/mips/sgi-ip27/ip27-irq.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/mips/sgi-ip27/ip27-irq.c b/arch/mips/sgi-ip27/ip27-irq.c
+index dcb14a234b1c..d8acdf0439d2 100644
+--- a/arch/mips/sgi-ip27/ip27-irq.c
++++ b/arch/mips/sgi-ip27/ip27-irq.c
+@@ -277,7 +277,6 @@ void __init arch_init_irq(void)
+ {
+ 	struct irq_domain *domain;
+ 	struct fwnode_handle *fn;
+-	int i;
+ 
+ 	mips_cpu_irq_init();
+ 
 -- 
-Florian
+2.40.1
 
 
