@@ -1,153 +1,321 @@
-Return-Path: <linux-mips+bounces-2856-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2858-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C55B8AD8DF
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Apr 2024 01:10:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E27668AD9C9
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Apr 2024 01:58:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42D251C209AA
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Apr 2024 23:10:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96D36287041
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Apr 2024 23:58:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9F4646B83;
-	Mon, 22 Apr 2024 23:04:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51EFA13CA82;
+	Mon, 22 Apr 2024 23:54:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jCinPE1x"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ozyEYXSA"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F49944C73;
-	Mon, 22 Apr 2024 23:04:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2536813BC05;
+	Mon, 22 Apr 2024 23:54:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713827068; cv=none; b=GayMkHgeTo/S+WGE59WJuKRZnJATpypj9mVj5UZ+CIm5LUTL8QYQmRhXwCEohL0HNFYWuD/xroq8FnOaeKJIAN4avV7Yvx0qoh5aiTEAWQ166+bqaR9uNBFo7T+y07Vt12usP4PmuXsEo26erKpngpa08zRaCRy63xC0yne/CAc=
+	t=1713830088; cv=none; b=Wdm/C+L512TO7tFt5Lm23lT3KGmKXO72fM2PvTGFYpdTOysoy/lZX4ERXvKTKMsQWghjdE0xTkUVh49bO8KPfy+w5ayOiKl/kPlowW4uO2RDzAlYHPEscjtWjpxpQIgH3Xlu7lTq3RNlwbRwutsE70mCEb9Dstaj3eq0gnae6gU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713827068; c=relaxed/simple;
-	bh=6Ac6vQ0aXcvvz3srSM0acKosA+te7+BqjbTdKTXWGyE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gYPv0SKuGm95SpwHu2g3bE8cfa7jDe37sPSWEW1t6dXZkBqH/KUaS5Xylq7NjJ/fzwxWHJMBRZYO+WigTJdmfuTrX+dwW3zmVzGEa1ZnyRQ/M9cTe5SKSrQ3+YNFNfTEcKnuSsH4QXt7TqfL/h2XGhOjeMyuM5arBnJQVXIcfLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jCinPE1x; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6114c9b4d83so40490957b3.3;
-        Mon, 22 Apr 2024 16:04:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713827065; x=1714431865; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=H+vHDpfrpWXucDC0uFH0aat5EFwvU5PRrpWR2paW/O4=;
-        b=jCinPE1x3BqBxQMTSxeTqH8QlKgzroVdulPE2kuEZXWPEfFofPlEKflWai9QZo6CJK
-         pqUCd+rPYMeIkr+0t+sO1kLRTMIg9wK7LOrvF7PvIv9avUXHgpWdfSdxZv/TKwq96I0c
-         eGwPNUIUq6Y/UOg/m/Qa2yZVOT2ETnA0fQZq9XA5gNgS3fCifcPzHEYfu8WslSGyFxCo
-         xKouKXbNUwKeN1inf+8mYlBw87KPrpKqNaziV9dsIp3hpunR0NCBchSgTdn1xCkcw+KV
-         5ae5Iy7uSqFiFTWT4o+zoqe5E4W4v7mJ2uxn6N6Tm+Kp6H1XSWfCEc2twYJUw68duDHY
-         Ib3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713827065; x=1714431865;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H+vHDpfrpWXucDC0uFH0aat5EFwvU5PRrpWR2paW/O4=;
-        b=GXFwfhWTIYgntcnJqr18qYyf4+Fr0LCdxVUXksYSIroEx0/rLQjwZwj4aKKuTmRRRV
-         TN0ANHB7c4IpBtkRjjWl8iJmURJOz+CWKum8+FSYoXNWMWiZs3XdxgOPklbIw4weeD4I
-         99LCkAzZuuCHs9CbDioAex91SFx6LuzeCMC7OQaKqlWOV8FIf+ycsJwuSF4IZLpgIrUw
-         DdJBJZGDDGhG3PEBgU7AO5Hcjb+RCWAHNaJm7NYzFhdTmIohYItyBrwD+HQ8KWb6u7ho
-         2ow/Q4l/wpHVFLCWzD0PJW8eRRV0lA1cciRgVJEuIWNiPhLKheg2A5lCsuIaIeJFmXSS
-         4t7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVwaQNEwvoJT6yOEe5HaL0fYYrlibf/cmUzs8G1i9rBOG40F+jPNCizIdzH1gDS/fE4aJOTjqVMJASOKN5ymLEvhI7MQTGo/4h+qvf8r71b7WFciDkZZcanm5TZ1qcu0CSlLMmIEJ5BGA==
-X-Gm-Message-State: AOJu0YxPDTeUzjPnZJc7lEm+gkN/VtGPAT+FEWnR5aC1hu8kYOUBXXB7
-	HfQuqQesNv0xETROBzvj6vC7ABjiY3OP9En8o9hJf+9wdGVOU24w3DlOMA==
-X-Google-Smtp-Source: AGHT+IEyT5gjpNg1SKPchjhC9EvW1KlqB4FVRX3CAsfPDdO8c2iAhlqRKmL4LchCE48cnLNUOhUEzA==
-X-Received: by 2002:a05:690c:3701:b0:61b:33b7:9e11 with SMTP id fv1-20020a05690c370100b0061b33b79e11mr10814531ywb.9.1713827065225;
-        Mon, 22 Apr 2024 16:04:25 -0700 (PDT)
-Received: from localhost ([2601:344:8301:57f0:baf4:bd67:a305:2140])
-        by smtp.gmail.com with ESMTPSA id 5-20020a5b0105000000b00dcda90f43d7sm2194016ybx.59.2024.04.22.16.04.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Apr 2024 16:04:24 -0700 (PDT)
-Date: Mon, 22 Apr 2024 16:04:23 -0700
-From: Yury Norov <yury.norov@gmail.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Florian Fainelli <f.fainelli@gmail.com>, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] MIPS: SGI-IP27: micro-optimize arch_init_irq()
-Message-ID: <Zibs96v+uK/2uFT8@yury-ThinkPad>
-References: <20240416173711.613750-1-yury.norov@gmail.com>
- <20240416173711.613750-2-yury.norov@gmail.com>
- <Zh+uPB0druail4XC@alpha.franken.de>
+	s=arc-20240116; t=1713830088; c=relaxed/simple;
+	bh=pHRSMkjvRC6uT+ug9x42saQv5MB4uHsuKedXX3kCabg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nnNgb1ISASLDHZ2ziNKuGRgBPKdSjy0yaunXpbMriUyz1Car+iMbLzFXMe1842yD1lTtiftuCFBFDfM6EQcpiZDi8edytmA3Qm21U36SwXGm89t98AQ7xmS6ACvq4x/2JTpFM8YqMBtyGNWiijp8Op8WbNubaE27T5EQulE7KUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ozyEYXSA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB1BEC3277B;
+	Mon, 22 Apr 2024 23:54:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713830087;
+	bh=pHRSMkjvRC6uT+ug9x42saQv5MB4uHsuKedXX3kCabg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ozyEYXSAWg1fIRPKo4AtPqSKPdXT1ACicEWfpiLwLn+LsY2GISdHvH7zULlL0Z8OH
+	 QyexGcd2sH9uYM/wZ7f5mnfnOtNvu5pKtWvmyZoQPKH+zG5mKrvA68PASy+ra5BwoO
+	 /J74+HWym7s5REjR8rasq9Al2yMH0bqWg5M9JrUxZQhvzTPzbjJwr8LC84YvMU0kMs
+	 /Ju3Wis9YF81/q+bruR5ara38izo5oxeeWM6j7UYL6DiBCosZjwFiyYNbF2He6HV8y
+	 /YJ6ispKlRGiSfdeC6cLtHERGMPtALVyYh71/yyvgKvrinWYGMbrWjjsnDFyYm7DhC
+	 Uhryq96nxQkEA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Xi Ruoyao <xry111@xry111.site>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Sasha Levin <sashal@kernel.org>,
+	oleg@redhat.com,
+	arnd@arndb.de,
+	linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.8 22/43] MIPS: scall: Save thread_info.syscall unconditionally on entry
+Date: Mon, 22 Apr 2024 19:14:08 -0400
+Message-ID: <20240422231521.1592991-22-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240422231521.1592991-1-sashal@kernel.org>
+References: <20240422231521.1592991-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zh+uPB0druail4XC@alpha.franken.de>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.8.7
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 17, 2024 at 01:10:52PM +0200, Thomas Bogendoerfer wrote:
-> On Tue, Apr 16, 2024 at 10:37:10AM -0700, Yury Norov wrote:
-> > The function sets adjusted groups of bits in hub_irq_map by using
-> > for-loops. There's a bitmap_set() function dedicated to do this.
-> > 
-> > Because [0, CPU_CALL_B_IRQ] and [NI_BRDCAST_ERR_A, MSC_PANIC_INTR]
-> > ranges belong to the same machine word, bitmap_set() would boil down
-> > to an inline wrapper in both cases, avoiding generating a loop, with
-> > the associate overhead. Effectively, it would be a compile-time:
-> > 
-> > 	*hub_irq_map = GENMASK() | GENMASK();
-> > 
-> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> > ---
-> >  arch/mips/sgi-ip27/ip27-irq.c | 8 ++------
-> >  1 file changed, 2 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/arch/mips/sgi-ip27/ip27-irq.c b/arch/mips/sgi-ip27/ip27-irq.c
-> > index 8f5299b269e7..d8acdf0439d2 100644
-> > --- a/arch/mips/sgi-ip27/ip27-irq.c
-> > +++ b/arch/mips/sgi-ip27/ip27-irq.c
-> > @@ -277,7 +277,6 @@ void __init arch_init_irq(void)
-> >  {
-> >  	struct irq_domain *domain;
-> >  	struct fwnode_handle *fn;
-> > -	int i;
-> 
-> I've already applied your first version, so I need an incremental
-> patch, which just removes the unused variable.
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-Sure, please find below.
+[ Upstream commit 4370b673ccf240bf7587b0cb8e6726a5ccaf1f17 ]
 
-From ce447fe69092c48bb59a6c4cb08ee5f9080f0ad6 Mon Sep 17 00:00:00 2001
-From: Yury Norov <yury.norov@gmail.com>
-Date: Mon, 22 Apr 2024 15:52:12 -0700
-Subject: [PATCH] MIPS: SGI-IP27: fix -Wunused-variable in arch_init_irq()
+thread_info.syscall is used by syscall_get_nr to supply syscall nr
+over a thread stack frame.
 
-Commit 40e20fbccfb722f21 (MIPS: SGI-IP27: micro-optimize arch_init_irq())
-replaced a for-loop iteration with bitmap_set() calls, but didn't remove
-an iteration variable.
+Previously, thread_info.syscall is only saved at syscall_trace_enter
+when syscall tracing is enabled. However rest of the kernel code do
+expect syscall_get_nr to be available without syscall tracing. The
+previous design breaks collect_syscall.
 
-Fixes: 40e20fbccfb722f21 (MIPS: SGI-IP27: micro-optimize arch_init_irq())
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202404161933.izfqZ32k-lkp@intel.com/
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
+Move saving process to syscall entry to fix it.
+
+Reported-by: Xi Ruoyao <xry111@xry111.site>
+Link: https://github.com/util-linux/util-linux/issues/2867
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/sgi-ip27/ip27-irq.c | 1 -
- 1 file changed, 1 deletion(-)
+ arch/mips/include/asm/ptrace.h |  2 +-
+ arch/mips/kernel/asm-offsets.c |  1 +
+ arch/mips/kernel/ptrace.c      | 15 ++++++---------
+ arch/mips/kernel/scall32-o32.S | 23 +++++++++++++----------
+ arch/mips/kernel/scall64-n32.S |  3 ++-
+ arch/mips/kernel/scall64-n64.S |  3 ++-
+ arch/mips/kernel/scall64-o32.S | 33 +++++++++++++++++----------------
+ 7 files changed, 42 insertions(+), 38 deletions(-)
 
-diff --git a/arch/mips/sgi-ip27/ip27-irq.c b/arch/mips/sgi-ip27/ip27-irq.c
-index dcb14a234b1c..d8acdf0439d2 100644
---- a/arch/mips/sgi-ip27/ip27-irq.c
-+++ b/arch/mips/sgi-ip27/ip27-irq.c
-@@ -277,7 +277,6 @@ void __init arch_init_irq(void)
- {
- 	struct irq_domain *domain;
- 	struct fwnode_handle *fn;
--	int i;
+diff --git a/arch/mips/include/asm/ptrace.h b/arch/mips/include/asm/ptrace.h
+index d14d0e37ad02d..4a2b40ce39e09 100644
+--- a/arch/mips/include/asm/ptrace.h
++++ b/arch/mips/include/asm/ptrace.h
+@@ -159,7 +159,7 @@ extern unsigned long exception_ip(struct pt_regs *regs);
+ #define exception_ip(regs) exception_ip(regs)
+ #define profile_pc(regs) instruction_pointer(regs)
  
- 	mips_cpu_irq_init();
+-extern asmlinkage long syscall_trace_enter(struct pt_regs *regs, long syscall);
++extern asmlinkage long syscall_trace_enter(struct pt_regs *regs);
+ extern asmlinkage void syscall_trace_leave(struct pt_regs *regs);
+ 
+ extern void die(const char *, struct pt_regs *) __noreturn;
+diff --git a/arch/mips/kernel/asm-offsets.c b/arch/mips/kernel/asm-offsets.c
+index d1b11f66f748f..cb1045ebab062 100644
+--- a/arch/mips/kernel/asm-offsets.c
++++ b/arch/mips/kernel/asm-offsets.c
+@@ -101,6 +101,7 @@ void output_thread_info_defines(void)
+ 	OFFSET(TI_CPU, thread_info, cpu);
+ 	OFFSET(TI_PRE_COUNT, thread_info, preempt_count);
+ 	OFFSET(TI_REGS, thread_info, regs);
++	OFFSET(TI_SYSCALL, thread_info, syscall);
+ 	DEFINE(_THREAD_SIZE, THREAD_SIZE);
+ 	DEFINE(_THREAD_MASK, THREAD_MASK);
+ 	DEFINE(_IRQ_STACK_SIZE, IRQ_STACK_SIZE);
+diff --git a/arch/mips/kernel/ptrace.c b/arch/mips/kernel/ptrace.c
+index 59288c13b581b..61503a36067e9 100644
+--- a/arch/mips/kernel/ptrace.c
++++ b/arch/mips/kernel/ptrace.c
+@@ -1317,16 +1317,13 @@ long arch_ptrace(struct task_struct *child, long request,
+  * Notification of system call entry/exit
+  * - triggered by current->work.syscall_trace
+  */
+-asmlinkage long syscall_trace_enter(struct pt_regs *regs, long syscall)
++asmlinkage long syscall_trace_enter(struct pt_regs *regs)
+ {
+ 	user_exit();
+ 
+-	current_thread_info()->syscall = syscall;
+-
+ 	if (test_thread_flag(TIF_SYSCALL_TRACE)) {
+ 		if (ptrace_report_syscall_entry(regs))
+ 			return -1;
+-		syscall = current_thread_info()->syscall;
+ 	}
+ 
+ #ifdef CONFIG_SECCOMP
+@@ -1335,7 +1332,7 @@ asmlinkage long syscall_trace_enter(struct pt_regs *regs, long syscall)
+ 		struct seccomp_data sd;
+ 		unsigned long args[6];
+ 
+-		sd.nr = syscall;
++		sd.nr = current_thread_info()->syscall;
+ 		sd.arch = syscall_get_arch(current);
+ 		syscall_get_arguments(current, regs, args);
+ 		for (i = 0; i < 6; i++)
+@@ -1345,23 +1342,23 @@ asmlinkage long syscall_trace_enter(struct pt_regs *regs, long syscall)
+ 		ret = __secure_computing(&sd);
+ 		if (ret == -1)
+ 			return ret;
+-		syscall = current_thread_info()->syscall;
+ 	}
+ #endif
+ 
+ 	if (unlikely(test_thread_flag(TIF_SYSCALL_TRACEPOINT)))
+ 		trace_sys_enter(regs, regs->regs[2]);
+ 
+-	audit_syscall_entry(syscall, regs->regs[4], regs->regs[5],
++	audit_syscall_entry(current_thread_info()->syscall,
++			    regs->regs[4], regs->regs[5],
+ 			    regs->regs[6], regs->regs[7]);
+ 
+ 	/*
+ 	 * Negative syscall numbers are mistaken for rejected syscalls, but
+ 	 * won't have had the return value set appropriately, so we do so now.
+ 	 */
+-	if (syscall < 0)
++	if (current_thread_info()->syscall < 0)
+ 		syscall_set_return_value(current, regs, -ENOSYS, 0);
+-	return syscall;
++	return current_thread_info()->syscall;
+ }
+ 
+ /*
+diff --git a/arch/mips/kernel/scall32-o32.S b/arch/mips/kernel/scall32-o32.S
+index 18dc9b3450561..2c604717e6308 100644
+--- a/arch/mips/kernel/scall32-o32.S
++++ b/arch/mips/kernel/scall32-o32.S
+@@ -77,6 +77,18 @@ loads_done:
+ 	PTR_WD	load_a7, bad_stack_a7
+ 	.previous
+ 
++	/*
++	 * syscall number is in v0 unless we called syscall(__NR_###)
++	 * where the real syscall number is in a0
++	 */
++	subu	t2, v0,  __NR_O32_Linux
++	bnez	t2, 1f /* __NR_syscall at offset 0 */
++	LONG_S	a0, TI_SYSCALL($28)	# Save a0 as syscall number
++	b	2f
++1:
++	LONG_S	v0, TI_SYSCALL($28)	# Save v0 as syscall number
++2:
++
+ 	lw	t0, TI_FLAGS($28)	# syscall tracing enabled?
+ 	li	t1, _TIF_WORK_SYSCALL_ENTRY
+ 	and	t0, t1
+@@ -114,16 +126,7 @@ syscall_trace_entry:
+ 	SAVE_STATIC
+ 	move	a0, sp
+ 
+-	/*
+-	 * syscall number is in v0 unless we called syscall(__NR_###)
+-	 * where the real syscall number is in a0
+-	 */
+-	move	a1, v0
+-	subu	t2, v0,  __NR_O32_Linux
+-	bnez	t2, 1f /* __NR_syscall at offset 0 */
+-	lw	a1, PT_R4(sp)
+-
+-1:	jal	syscall_trace_enter
++	jal	syscall_trace_enter
+ 
+ 	bltz	v0, 1f			# seccomp failed? Skip syscall
+ 
+diff --git a/arch/mips/kernel/scall64-n32.S b/arch/mips/kernel/scall64-n32.S
+index 97456b2ca7dc3..97788859238c3 100644
+--- a/arch/mips/kernel/scall64-n32.S
++++ b/arch/mips/kernel/scall64-n32.S
+@@ -44,6 +44,8 @@ NESTED(handle_sysn32, PT_SIZE, sp)
+ 
+ 	sd	a3, PT_R26(sp)		# save a3 for syscall restarting
+ 
++	LONG_S	v0, TI_SYSCALL($28)     # Store syscall number
++
+ 	li	t1, _TIF_WORK_SYSCALL_ENTRY
+ 	LONG_L	t0, TI_FLAGS($28)	# syscall tracing enabled?
+ 	and	t0, t1, t0
+@@ -72,7 +74,6 @@ syscall_common:
+ n32_syscall_trace_entry:
+ 	SAVE_STATIC
+ 	move	a0, sp
+-	move	a1, v0
+ 	jal	syscall_trace_enter
+ 
+ 	bltz	v0, 1f			# seccomp failed? Skip syscall
+diff --git a/arch/mips/kernel/scall64-n64.S b/arch/mips/kernel/scall64-n64.S
+index e6264aa62e457..be11ea5cc67e0 100644
+--- a/arch/mips/kernel/scall64-n64.S
++++ b/arch/mips/kernel/scall64-n64.S
+@@ -46,6 +46,8 @@ NESTED(handle_sys64, PT_SIZE, sp)
+ 
+ 	sd	a3, PT_R26(sp)		# save a3 for syscall restarting
+ 
++	LONG_S	v0, TI_SYSCALL($28)     # Store syscall number
++
+ 	li	t1, _TIF_WORK_SYSCALL_ENTRY
+ 	LONG_L	t0, TI_FLAGS($28)	# syscall tracing enabled?
+ 	and	t0, t1, t0
+@@ -82,7 +84,6 @@ n64_syscall_exit:
+ syscall_trace_entry:
+ 	SAVE_STATIC
+ 	move	a0, sp
+-	move	a1, v0
+ 	jal	syscall_trace_enter
+ 
+ 	bltz	v0, 1f			# seccomp failed? Skip syscall
+diff --git a/arch/mips/kernel/scall64-o32.S b/arch/mips/kernel/scall64-o32.S
+index d3c2616cba226..7a5abb73e5312 100644
+--- a/arch/mips/kernel/scall64-o32.S
++++ b/arch/mips/kernel/scall64-o32.S
+@@ -79,6 +79,22 @@ loads_done:
+ 	PTR_WD	load_a7, bad_stack_a7
+ 	.previous
+ 
++	/*
++	 * absolute syscall number is in v0 unless we called syscall(__NR_###)
++	 * where the real syscall number is in a0
++	 * note: NR_syscall is the first O32 syscall but the macro is
++	 * only defined when compiling with -mabi=32 (CONFIG_32BIT)
++	 * therefore __NR_O32_Linux is used (4000)
++	 */
++
++	subu	t2, v0,  __NR_O32_Linux
++	bnez	t2, 1f /* __NR_syscall at offset 0 */
++	LONG_S	a0, TI_SYSCALL($28)	# Save a0 as syscall number
++	b	2f
++1:
++	LONG_S	v0, TI_SYSCALL($28)	# Save v0 as syscall number
++2:
++
+ 	li	t1, _TIF_WORK_SYSCALL_ENTRY
+ 	LONG_L	t0, TI_FLAGS($28)	# syscall tracing enabled?
+ 	and	t0, t1, t0
+@@ -113,22 +129,7 @@ trace_a_syscall:
+ 	sd	a7, PT_R11(sp)		# For indirect syscalls
+ 
+ 	move	a0, sp
+-	/*
+-	 * absolute syscall number is in v0 unless we called syscall(__NR_###)
+-	 * where the real syscall number is in a0
+-	 * note: NR_syscall is the first O32 syscall but the macro is
+-	 * only defined when compiling with -mabi=32 (CONFIG_32BIT)
+-	 * therefore __NR_O32_Linux is used (4000)
+-	 */
+-	.set	push
+-	.set	reorder
+-	subu	t1, v0,  __NR_O32_Linux
+-	move	a1, v0
+-	bnez	t1, 1f /* __NR_syscall at offset 0 */
+-	ld	a1, PT_R4(sp) /* Arg1 for __NR_syscall case */
+-	.set	pop
+-
+-1:	jal	syscall_trace_enter
++	jal	syscall_trace_enter
+ 
+ 	bltz	v0, 1f			# seccomp failed? Skip syscall
  
 -- 
-2.40.1
+2.43.0
 
 
