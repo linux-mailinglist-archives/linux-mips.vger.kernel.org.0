@@ -1,124 +1,136 @@
-Return-Path: <linux-mips+bounces-2875-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2876-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 785698AF474
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Apr 2024 18:41:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E46D8AF56E
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Apr 2024 19:24:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 183BA1F264A1
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Apr 2024 16:41:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF8BF1C23E60
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Apr 2024 17:24:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC18B13D27E;
-	Tue, 23 Apr 2024 16:41:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A3F413E055;
+	Tue, 23 Apr 2024 17:23:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b="Tw8FQkWz";
-	dkim=permerror (0-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b="MCt7cKSc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c+7lX35t"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mailrelay5-1.pub.mailoutpod2-cph3.one.com (mailrelay5-1.pub.mailoutpod2-cph3.one.com [46.30.211.180])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E0913D287
-	for <linux-mips@vger.kernel.org>; Tue, 23 Apr 2024 16:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.30.211.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0872713D287;
+	Tue, 23 Apr 2024 17:23:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713890497; cv=none; b=Qt27QqD98Vk5uj/HiW7zg136YvdFonsWAlaAzC6C1sOT5tAf/lxBE7Sq6mXEg0gu9MRGjMLDVwRzfAv+lNkRZnV/I/sJ8Fxrzu1WVlDJ2ZFH4qNWqZKrnj4r8x/hEZoue9tXGr+DJl9BmXgLHF4NJ2bpAKbTzi3buIqrVAphLfU=
+	t=1713893003; cv=none; b=GNQBy6BoygBF+mSVpA35ra3Q8YG3s3vzOHxzb4W5129XQ29g6LcCS2pFYrwNJR4l2eFBe67b5AuwIVPWoIscBBgufNHMDtXANIEppHcVZ4Usp5nTl+WF/LdFKBB6Cq3/1EynMNlxM3127kpLZDjhYlDiQoYC+yG27L+U1DLN0q0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713890497; c=relaxed/simple;
-	bh=Ew4ZwP340aTNrveQuDNc86ipPLYtcqn5HIz7uAO7cFI=;
+	s=arc-20240116; t=1713893003; c=relaxed/simple;
+	bh=LNIkqN117CWF9zanEHE17vB3B3+2CNeQYopVecWmHeI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QlyueLuDvanTUigAVUMIYE4aqK9zfKv/0p66YhXZIilTEDgiTlMz/ukMpnO8GMTuacrytoxXLK/53speBj7uw2i6hY0bFLcm5woe+YLzkjuKnog5uDcJm2A/RuHq+VMPwWo4D6DcT6BMaQVYske4BhuKvHGlIhZDG41OH8K0GD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ravnborg.org; spf=none smtp.mailfrom=ravnborg.org; dkim=pass (2048-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b=Tw8FQkWz; dkim=permerror (0-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b=MCt7cKSc; arc=none smtp.client-ip=46.30.211.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ravnborg.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ravnborg.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=ravnborg.org; s=rsa1;
-	h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-	 from:date:from;
-	bh=ce+ZqFlarA8IAt5zfwbr2hxRLFQAtI7f0O/GFL7QRfQ=;
-	b=Tw8FQkWzueJByde49pf2Etw1JNd+9Cs/a8VSdP4sAjZamDT998lpGJ8OUSXZPgdnq9YK80Ld79By0
-	 E1ZePxzkIVPPM3w68Ti2ki86ZQSTo/Qengh+ox/5EsZdMfGxT/LtyRbZzNkl+eBPCbtoD00qByBVfh
-	 QlogVQorbOUCuNhfuDWjsPIOEK757mimusKghDsKCrDlzJS1s6Psw/PaVE8r407gkh53FMLrF7D1dO
-	 uDYiPtxot3rmREDV43Zw4JTzOwK/+pqOJcBE6+tKyTzcGurjSzSuf0Roh28MmUDSp64HXkjpWwAEu0
-	 fCub6cvUfUdVz3Rx5TFyQR6t2+r0Tlw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-	d=ravnborg.org; s=ed1;
-	h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-	 from:date:from;
-	bh=ce+ZqFlarA8IAt5zfwbr2hxRLFQAtI7f0O/GFL7QRfQ=;
-	b=MCt7cKScu1j54dhTCuf6RoKzDR6Pxv4AhcExl3aouinnY7Cygl2lgVcGjoVORGMB/icOvVzGnLV0S
-	 zdG43KuBQ==
-X-HalOne-ID: 4e317c2c-0190-11ef-8c96-edf132814434
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-	by mailrelay5.pub.mailoutpod2-cph3.one.com (Halon) with ESMTPSA
-	id 4e317c2c-0190-11ef-8c96-edf132814434;
-	Tue, 23 Apr 2024 16:41:22 +0000 (UTC)
-Date: Tue, 23 Apr 2024 18:41:17 +0200
-From: Sam Ravnborg <sam@ravnborg.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Donald Dutile <ddutile@redhat.com>,
-	Eric Chanudet <echanude@redhat.com>,
-	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nadav Amit <nadav.amit@gmail.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=bmlwRq9CYnjun7PhdZkpum7kpH5oYTSV4o52Ktj4Jrl1+9g5fR7opMMFUgyKwFWThDxt+sV1CdyL397LjvWzLQCKShCsWylMuqJshDmUYRyEsFh9/99lfRARKOvct1Cx3gjls+drLvRqoOl05977HOUcjAnUT9/gyS6CNfIoVZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c+7lX35t; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23A31C32781;
+	Tue, 23 Apr 2024 17:23:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713893002;
+	bh=LNIkqN117CWF9zanEHE17vB3B3+2CNeQYopVecWmHeI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=c+7lX35tQMnGBj2ewu8z9oSTSqQeMf4Seo+ZmZnUCWoxo3+DKcsB53gBYHpLMvwWp
+	 1f8cAUpA3BJumfz2r+/t76yvkeczbcgQMKttml0pqszh9gjC6crKVL0yCNE5MvnKzp
+	 hpzBvnS+fQ2QH7NOxG0lcJ8/7ei/uXlcqegV6iZly+dnoSD6FnVJHV6ghMAIrFofWo
+	 LRfmFT9uzdiD+Vyb8ElaS5D0+SUiIopFBKaaFGJgmczqN0Tn9rwuygOnVQDrquVbUE
+	 NnXHoOqegvoiCOYeroGp0zqdUUlyW6zL2D7NuORkLauwS8UXdt9hjqnC6IsTUzL6tk
+	 O8ONK1DpjAfuw==
+Date: Tue, 23 Apr 2024 18:23:16 +0100
+From: Conor Dooley <conor@kernel.org>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Vaishnav Achath <vaishnav.a@ti.com>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-mm@kvack.org, linux-modules@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v5 04/15] sparc: simplify module_alloc()
-Message-ID: <20240423164117.GA897977@ravnborg.org>
-References: <20240422094436.3625171-1-rppt@kernel.org>
- <20240422094436.3625171-5-rppt@kernel.org>
+	Rob Herring <robh@kernel.org>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Subject: Re: (subset) [PATCH v3 0/9] spi: cadence-qspi: add Mobileye EyeQ5
+ support
+Message-ID: <20240423-epidemic-schedule-6fa9869b3e87@spud>
+References: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
+ <171283699002.32012.7629247540689477794.b4-ty@kernel.org>
+ <D0QT350IJHFH.36EXE1UT9QM10@bootlin.com>
+ <ZidAefc0Ejrklopf@finisterre.sirena.org.uk>
+ <D0RF1AKWAEAE.44N64GHMV2ZY@bootlin.com>
+ <3f891794-0083-4245-bad7-518b1c48bb7c@linaro.org>
+ <D0RIXN4JG6ZA.4W4HN68M9U6I@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="dLUQzGTCWgy5qnxs"
 Content-Disposition: inline
-In-Reply-To: <20240422094436.3625171-5-rppt@kernel.org>
+In-Reply-To: <D0RIXN4JG6ZA.4W4HN68M9U6I@bootlin.com>
 
-Hi Mike,
-On Mon, Apr 22, 2024 at 12:44:25PM +0300, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> 
-> Define MODULES_VADDR and MODULES_END as VMALLOC_START and VMALLOC_END
-> for 32-bit and reduce module_alloc() to
-> 
-> 	__vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END, ...)
-> 
-> as with the new defines the allocations becames identical for both 32
-> and 64 bits.
-> 
-> While on it, drop unsed include of <linux/jump_label.h>
-> 
-> Suggested-by: Sam Ravnborg <sam@ravnborg.org>
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-Looks good.
-Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+--dLUQzGTCWgy5qnxs
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Apr 23, 2024 at 03:08:05PM +0200, Th=E9o Lebrun wrote:
+> Hello,
+>=20
+> On Tue Apr 23, 2024 at 12:25 PM CEST, Krzysztof Kozlowski wrote:
+> > On 23/04/2024 12:04, Th=E9o Lebrun wrote:
+> > > Hello,
+> > >=20
+> > > On Tue Apr 23, 2024 at 7:00 AM CEST, Mark Brown wrote:
+> > >> On Mon, Apr 22, 2024 at 06:52:47PM +0200, Th=E9o Lebrun wrote:
+> > >>> All commits tagged "(no commit info)" do not show up in your for-ne=
+xt
+> > >>> branch. Is that expected and is there anything I can do? There was =
+one
+> > >>> pending -Wunused-variable compiler warning to be addressed for
+> > >>> example, see [0].
+> > >>
+> > >> Please submit any patches you'd like to see included.  If there were
+> > >> outstanding issues that need fixing then fixing those prior to
+> > >> submitting would be sensible.
+> > >=20
+> > > Seeing "Applied" followed by a list of commits, with some of those not
+> > > being applied confused me.
+> >
+> > That's a standard output of b4 and maybe also Patchwork, if some parts
+> > are applied.
+>=20
+> Thanks for the pointer. I've created an issue over at b4 to see what
+> people think about this matter. Current behavior is not intuitive as a
+> young contributor.
+
+FWIW, given I see `having a more confident comment such as
+"(commit not applied)".` there, having (no commit info) doesn't mean
+that it wasn't applied always. Sometimes I've found that due to changes
+in the patch b4 could not detect that it was applied and reported (no
+commit info).
+
+--dLUQzGTCWgy5qnxs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZifuhAAKCRB4tDGHoIJi
+0l7bAQDnzDqSfwWn/wDBsIvN00NjQAGOFccnLtQcSDf6yj2z1gEA+DyINGJ3YxOM
+oaJn81egHe6ayRZEwloZJ8SXlXa8mgI=
+=nkkg
+-----END PGP SIGNATURE-----
+
+--dLUQzGTCWgy5qnxs--
 
