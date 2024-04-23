@@ -1,120 +1,124 @@
-Return-Path: <linux-mips+bounces-2874-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2875-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B183D8AE77B
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Apr 2024 15:09:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 785698AF474
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Apr 2024 18:41:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E4A4B24BCC
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Apr 2024 13:08:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 183BA1F264A1
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Apr 2024 16:41:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55807134CFE;
-	Tue, 23 Apr 2024 13:08:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC18B13D27E;
+	Tue, 23 Apr 2024 16:41:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DbElU/od"
+	dkim=pass (2048-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b="Tw8FQkWz";
+	dkim=permerror (0-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b="MCt7cKSc"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from mailrelay5-1.pub.mailoutpod2-cph3.one.com (mailrelay5-1.pub.mailoutpod2-cph3.one.com [46.30.211.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50282135A6E;
-	Tue, 23 Apr 2024 13:08:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E0913D287
+	for <linux-mips@vger.kernel.org>; Tue, 23 Apr 2024 16:41:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.30.211.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713877698; cv=none; b=g6kiTwmFkbyCc/QZr/KQnb+jw09YzqXhN/ktrFVB4xULRDeNtT6LdQbPCtbzB3eLI3VtSnnaJdDs+4E1CUm4SzOsdPxz2Kd3v9X7ourzFm8bGdbXyElzZ9PRPQ8wgbXIGTMBqPapwxjigE/4Dn3Sdx6XaO+DP3pq2gDNBPjIRGI=
+	t=1713890497; cv=none; b=Qt27QqD98Vk5uj/HiW7zg136YvdFonsWAlaAzC6C1sOT5tAf/lxBE7Sq6mXEg0gu9MRGjMLDVwRzfAv+lNkRZnV/I/sJ8Fxrzu1WVlDJ2ZFH4qNWqZKrnj4r8x/hEZoue9tXGr+DJl9BmXgLHF4NJ2bpAKbTzi3buIqrVAphLfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713877698; c=relaxed/simple;
-	bh=dlhH2ikJL+CjYyT5tXlg1eD1GvZPgftjtRMAdq5xhKc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=YWx2AxkgCQTkriIi3GXNJySIRH4i1CJKUUlJMrVJm6zr9G3eeQtxcR8KBu5g34g9h573Ys/Wz1Ic7VgfHprbf3rxYUzlg4dRhpwbcngksdXextZIUEwyVn0kn38K17NGPpIYHqU5Qz4PgxZzt5CwkbPkm4sFd76Vd9hxA06YYuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DbElU/od; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6BFD7240002;
-	Tue, 23 Apr 2024 13:08:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1713877686;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fkEpdkG026UGxnP+K6Y14R8MUybzKxtIX1NVxXz3z98=;
-	b=DbElU/odY8l5M8g9YDeNsim7YMAfn5f6facsnHHOshFQExqhgFztKsG8IWz97QrGxydv0j
-	U13+KtzqtZOvO+YsuFabrlIfBWZUh7bKbJwU83vgryN2U+7tyGZZd/4CN1jA9r6+1Zsuou
-	oKzkIAxED8RTiRxCyu5vVWrHW69QraZfnT0TU79tLywPPkcQQVmiy9WZ0muAG2JuR/ShII
-	oUMHYHOH7+clvPjVKNEA1l8svyYL3dwGHE3jC0CabRhsbuaQWzxxi8E1hUO3fHSMkj4CJs
-	7sJ4YKhwuhzVkSEbKvQNedoo/GajcAxkMgtAIAfl81qQXV2cACcux2R/Cg3llw==
+	s=arc-20240116; t=1713890497; c=relaxed/simple;
+	bh=Ew4ZwP340aTNrveQuDNc86ipPLYtcqn5HIz7uAO7cFI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QlyueLuDvanTUigAVUMIYE4aqK9zfKv/0p66YhXZIilTEDgiTlMz/ukMpnO8GMTuacrytoxXLK/53speBj7uw2i6hY0bFLcm5woe+YLzkjuKnog5uDcJm2A/RuHq+VMPwWo4D6DcT6BMaQVYske4BhuKvHGlIhZDG41OH8K0GD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ravnborg.org; spf=none smtp.mailfrom=ravnborg.org; dkim=pass (2048-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b=Tw8FQkWz; dkim=permerror (0-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b=MCt7cKSc; arc=none smtp.client-ip=46.30.211.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ravnborg.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ravnborg.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=ravnborg.org; s=rsa1;
+	h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+	 from:date:from;
+	bh=ce+ZqFlarA8IAt5zfwbr2hxRLFQAtI7f0O/GFL7QRfQ=;
+	b=Tw8FQkWzueJByde49pf2Etw1JNd+9Cs/a8VSdP4sAjZamDT998lpGJ8OUSXZPgdnq9YK80Ld79By0
+	 E1ZePxzkIVPPM3w68Ti2ki86ZQSTo/Qengh+ox/5EsZdMfGxT/LtyRbZzNkl+eBPCbtoD00qByBVfh
+	 QlogVQorbOUCuNhfuDWjsPIOEK757mimusKghDsKCrDlzJS1s6Psw/PaVE8r407gkh53FMLrF7D1dO
+	 uDYiPtxot3rmREDV43Zw4JTzOwK/+pqOJcBE6+tKyTzcGurjSzSuf0Roh28MmUDSp64HXkjpWwAEu0
+	 fCub6cvUfUdVz3Rx5TFyQR6t2+r0Tlw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+	d=ravnborg.org; s=ed1;
+	h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+	 from:date:from;
+	bh=ce+ZqFlarA8IAt5zfwbr2hxRLFQAtI7f0O/GFL7QRfQ=;
+	b=MCt7cKScu1j54dhTCuf6RoKzDR6Pxv4AhcExl3aouinnY7Cygl2lgVcGjoVORGMB/icOvVzGnLV0S
+	 zdG43KuBQ==
+X-HalOne-ID: 4e317c2c-0190-11ef-8c96-edf132814434
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+	by mailrelay5.pub.mailoutpod2-cph3.one.com (Halon) with ESMTPSA
+	id 4e317c2c-0190-11ef-8c96-edf132814434;
+	Tue, 23 Apr 2024 16:41:22 +0000 (UTC)
+Date: Tue, 23 Apr 2024 18:41:17 +0200
+From: Sam Ravnborg <sam@ravnborg.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Donald Dutile <ddutile@redhat.com>,
+	Eric Chanudet <echanude@redhat.com>,
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nadav Amit <nadav.amit@gmail.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linux-mm@kvack.org, linux-modules@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v5 04/15] sparc: simplify module_alloc()
+Message-ID: <20240423164117.GA897977@ravnborg.org>
+References: <20240422094436.3625171-1-rppt@kernel.org>
+ <20240422094436.3625171-5-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 23 Apr 2024 15:08:05 +0200
-Message-Id: <D0RIXN4JG6ZA.4W4HN68M9U6I@bootlin.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: (subset) [PATCH v3 0/9] spi: cadence-qspi: add Mobileye EyeQ5
- support
-Cc: "Rob Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Vaishnav Achath" <vaishnav.a@ti.com>, "Thomas Bogendoerfer"
- <tsbogend@alpha.franken.de>, "Rob Herring" <robh@kernel.org>,
- <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-mips@vger.kernel.org>, "Vladimir
- Kondratiev" <vladimir.kondratiev@mobileye.com>, "Gregory CLEMENT"
- <gregory.clement@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Mark Brown"
- <broonie@kernel.org>
-X-Mailer: aerc 0.17.0
-References: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
- <171283699002.32012.7629247540689477794.b4-ty@kernel.org>
- <D0QT350IJHFH.36EXE1UT9QM10@bootlin.com>
- <ZidAefc0Ejrklopf@finisterre.sirena.org.uk>
- <D0RF1AKWAEAE.44N64GHMV2ZY@bootlin.com>
- <3f891794-0083-4245-bad7-518b1c48bb7c@linaro.org>
-In-Reply-To: <3f891794-0083-4245-bad7-518b1c48bb7c@linaro.org>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240422094436.3625171-5-rppt@kernel.org>
 
-Hello,
+Hi Mike,
+On Mon, Apr 22, 2024 at 12:44:25PM +0300, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> 
+> Define MODULES_VADDR and MODULES_END as VMALLOC_START and VMALLOC_END
+> for 32-bit and reduce module_alloc() to
+> 
+> 	__vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END, ...)
+> 
+> as with the new defines the allocations becames identical for both 32
+> and 64 bits.
+> 
+> While on it, drop unsed include of <linux/jump_label.h>
+> 
+> Suggested-by: Sam Ravnborg <sam@ravnborg.org>
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-On Tue Apr 23, 2024 at 12:25 PM CEST, Krzysztof Kozlowski wrote:
-> On 23/04/2024 12:04, Th=C3=A9o Lebrun wrote:
-> > Hello,
-> >=20
-> > On Tue Apr 23, 2024 at 7:00 AM CEST, Mark Brown wrote:
-> >> On Mon, Apr 22, 2024 at 06:52:47PM +0200, Th=C3=A9o Lebrun wrote:
-> >>> All commits tagged "(no commit info)" do not show up in your for-next
-> >>> branch. Is that expected and is there anything I can do? There was on=
-e
-> >>> pending -Wunused-variable compiler warning to be addressed for
-> >>> example, see [0].
-> >>
-> >> Please submit any patches you'd like to see included.  If there were
-> >> outstanding issues that need fixing then fixing those prior to
-> >> submitting would be sensible.
-> >=20
-> > Seeing "Applied" followed by a list of commits, with some of those not
-> > being applied confused me.
->
-> That's a standard output of b4 and maybe also Patchwork, if some parts
-> are applied.
-
-Thanks for the pointer. I've created an issue over at b4 to see what
-people think about this matter. Current behavior is not intuitive as a
-young contributor.
-
-See: https://github.com/mricon/b4/issues/26
-
-Regards,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+Looks good.
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
 
