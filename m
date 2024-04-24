@@ -1,143 +1,104 @@
-Return-Path: <linux-mips+bounces-2885-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2886-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B167E8B1189
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Apr 2024 19:57:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30D308B13CF
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Apr 2024 21:53:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2A481C22A21
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Apr 2024 17:57:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E26F0287A73
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Apr 2024 19:53:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6E7F16D4CA;
-	Wed, 24 Apr 2024 17:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9C4213B58A;
+	Wed, 24 Apr 2024 19:53:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="bjx9UMH2"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cXq6ERfA"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.208])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D4F16D4EF;
-	Wed, 24 Apr 2024 17:57:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.208
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B4441848;
+	Wed, 24 Apr 2024 19:53:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713981459; cv=none; b=E//NsXC+Sm1a4uDfBfMFu+wz0QERXGf2IyQQXcDb7q8Xrr60/48/1WlFXBx7Sx9pJ/PNA44jT8j6bAPtxNWphoAxTorNNW17nCUzQ8W/fP4zf3VglhyMu1xeEKA93zW68lR3JAKbgliw8dX79trmWBf/nR0zfAArfhTga827ciE=
+	t=1713988385; cv=none; b=OGQTYP8HEl7FYC0Wvn6attQEcqmitNb+WN69ZlcZ2Sh+MbwP1VWWUCG17o6BK/yuoMrfvGjyy2r3DPNp2tOqtkKYLihvm2DGhRv9D838yj3CC+UkXEoWLhosb6Z+NubO7XkFm6IDteuBMSPGEyrDUgsuOkRKa6bfykLqUD8dUCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713981459; c=relaxed/simple;
-	bh=AbpQ6ac5gCGcv4jIbn0lkX2wvKzhocFgo1B53jkt0Js=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qgzJIic7zh/85H3uUt+6GHtMBmx7lnh9Cs2FXnPPuNvN9mJKMA7VA7CMkOqoF7XQTdgTOnUftm5iv87X+9gpNDTdg3jmZmLIQ6kWuuOm/BlWu6q+I2pRMYJQDoAQAuiXHKR9WB38wHZ7aDUSRIgPJ+vSp8jekDdc8GgzW+CdsC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=bjx9UMH2; arc=none smtp.client-ip=192.19.144.208
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id CD44AC00498D;
-	Wed, 24 Apr 2024 10:57:35 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com CD44AC00498D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1713981455;
-	bh=AbpQ6ac5gCGcv4jIbn0lkX2wvKzhocFgo1B53jkt0Js=;
-	h=From:To:Cc:Subject:Date:From;
-	b=bjx9UMH2pQaATU4j8GayhhrOxm/n8zAzh70UWVcibyUaFDLqXjZ+cBWN99PVBcuiw
-	 Ap+NHVHmxPruuED8jRgFuEUCVU/727oVLy4tz2ggeMe9X9cJULEBh+2Ee5qzGNCPco
-	 fhkhKikh3xi9rggpaKxRt6A542+ORH2bMyp0uA+Q=
-Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id E2F5D18041CAC4;
-	Wed, 24 Apr 2024 10:57:33 -0700 (PDT)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: linux-kernel@vger.kernel.org
-Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
-	Tim Ross <tim.ross@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	linux-mips@vger.kernel.org (open list:BROADCOM BMIPS MIPS ARCHITECTURE),
-	linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE)
-Subject: [PATCH v2] irqchip/irq-brcmstb-l2: Avoid saving mask on shutdown
-Date: Wed, 24 Apr 2024 10:57:32 -0700
-Message-Id: <20240424175732.1526531-1-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1713988385; c=relaxed/simple;
+	bh=GjKZEcEZNz517Hib5vIHPrJfExb6oo/SGzk4kdrUJ2Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pCdrfEY29TAJg2ZnLfvrcGSsjl4HrIoA9kyXt4Qos3kzXRFiNYDWI/grR/Mvwl+J2kkSlh8a60qc17cm+PSu7BCtp/kOYyzSQ1z9z2rTwKRrkc/McrS5IF1PvHmO+YtHFu8PSeEYlxclVxW639pgnith3AZmBA0WCqO38UraDIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cXq6ERfA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBD6CC113CD;
+	Wed, 24 Apr 2024 19:53:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1713988385;
+	bh=GjKZEcEZNz517Hib5vIHPrJfExb6oo/SGzk4kdrUJ2Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cXq6ERfA4ce7lVmRFDaE/b5ubkDHXq11uWlYLVa6opZhMrQcZfRLSTyvwJWeaDbAi
+	 MI5pOHbzlf16nVefraWLp1/AzyM+6JrIK9pSZJX3V/YLTdFFnda/pjxgtRDGfnqjwX
+	 tAMXhPyCIg4o0/akMSlsZObBkNYLaOMwokHvPwSw=
+Date: Wed, 24 Apr 2024 15:53:03 -0400
+From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Conor Dooley <conor@kernel.org>, 
+	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Vaishnav Achath <vaishnav.a@ti.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Rob Herring <robh@kernel.org>, linux-spi@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, Gregory CLEMENT <gregory.clement@bootlin.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: (subset) [PATCH v3 0/9] spi: cadence-qspi: add Mobileye EyeQ5
+ support
+Message-ID: <20240424-calm-wolverine-of-drama-0349dc@lemur>
+References: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
+ <171283699002.32012.7629247540689477794.b4-ty@kernel.org>
+ <D0QT350IJHFH.36EXE1UT9QM10@bootlin.com>
+ <ZidAefc0Ejrklopf@finisterre.sirena.org.uk>
+ <D0RF1AKWAEAE.44N64GHMV2ZY@bootlin.com>
+ <3f891794-0083-4245-bad7-518b1c48bb7c@linaro.org>
+ <D0RIXN4JG6ZA.4W4HN68M9U6I@bootlin.com>
+ <20240423-epidemic-schedule-6fa9869b3e87@spud>
+ <ZihaBGwVRpI9hV0B@finisterre.sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZihaBGwVRpI9hV0B@finisterre.sirena.org.uk>
 
-The interrupt controller shutdown path does not need to save the mask of
-enabled interrupts because the next state the system is going to be in
-is akin to a cold boot, or a kexec'd kernel. Saving the mask only makes
-sense if the software state needs to preserve the hardware state across
-a system suspend/resume cycle.
+On Wed, Apr 24, 2024 at 10:01:56AM +0900, Mark Brown wrote:
+> > > Thanks for the pointer. I've created an issue over at b4 to see what
+> > > people think about this matter. Current behavior is not intuitive as a
+> > > young contributor.
+> 
+> > FWIW, given I see `having a more confident comment such as
+> > "(commit not applied)".` there, having (no commit info) doesn't mean
+> > that it wasn't applied always. Sometimes I've found that due to changes
+> > in the patch b4 could not detect that it was applied and reported (no
+> > commit info).
+> 
+> Right, it can't prove a negative - if it can't find the patch it could
+> be because it wasn't sent against current code and got changed
+> sufficiently in application to cause issues.
 
-As an optimization, and given that there are systems with dozens of such
-interrupt controller, we can save a "slow" memory mapped I/O read in the
-shutdown path where no saving/restoring is required.
+We can also be a bit more relaxed. For example, we can look at 
+consecutive commits and compare the subjects to see if there's a match.  
+I'll see if that's something I can add in.
 
-Reported-by: Tim Ross <tim.ross@broadcom.com>
-Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
----
+In general, though, I prefer to push people in a different direction -- 
+we really shouldn't be fixing up people's patches, because this 
+misattributes the code to the wrong author. Instead, we really should 
+either ask senders to send an updated revision, or make the changes in 
+merge commits instead.
 
-Changes in v2:
+Merge commits can be created using "b4 shazam -M", but I must admit that 
+editing the contents of the merge commit isn't really that 
+straightforward, unfortunately.
 
-- expand the commit message to explain this is an optimiation saving a
-  slow MMIO read
-
- drivers/irqchip/irq-brcmstb-l2.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/irqchip/irq-brcmstb-l2.c b/drivers/irqchip/irq-brcmstb-l2.c
-index 2b0b3175cea0..c988886917f7 100644
---- a/drivers/irqchip/irq-brcmstb-l2.c
-+++ b/drivers/irqchip/irq-brcmstb-l2.c
-@@ -118,7 +118,7 @@ static void brcmstb_l2_intc_irq_handle(struct irq_desc *desc)
- 	chained_irq_exit(chip, desc);
- }
- 
--static void brcmstb_l2_intc_suspend(struct irq_data *d)
-+static void __brcmstb_l2_intc_suspend(struct irq_data *d, bool save)
- {
- 	struct irq_chip_generic *gc = irq_data_get_irq_chip_data(d);
- 	struct irq_chip_type *ct = irq_data_get_chip_type(d);
-@@ -127,7 +127,8 @@ static void brcmstb_l2_intc_suspend(struct irq_data *d)
- 
- 	irq_gc_lock_irqsave(gc, flags);
- 	/* Save the current mask */
--	b->saved_mask = irq_reg_readl(gc, ct->regs.mask);
-+	if (save)
-+		b->saved_mask = irq_reg_readl(gc, ct->regs.mask);
- 
- 	if (b->can_wake) {
- 		/* Program the wakeup mask */
-@@ -137,6 +138,16 @@ static void brcmstb_l2_intc_suspend(struct irq_data *d)
- 	irq_gc_unlock_irqrestore(gc, flags);
- }
- 
-+static void brcmstb_l2_intc_shutdown(struct irq_data *d)
-+{
-+	__brcmstb_l2_intc_suspend(d, false);
-+}
-+
-+static void brcmstb_l2_intc_suspend(struct irq_data *d)
-+{
-+	__brcmstb_l2_intc_suspend(d, true);
-+}
-+
- static void brcmstb_l2_intc_resume(struct irq_data *d)
- {
- 	struct irq_chip_generic *gc = irq_data_get_irq_chip_data(d);
-@@ -252,7 +263,7 @@ static int __init brcmstb_l2_intc_of_init(struct device_node *np,
- 
- 	ct->chip.irq_suspend = brcmstb_l2_intc_suspend;
- 	ct->chip.irq_resume = brcmstb_l2_intc_resume;
--	ct->chip.irq_pm_shutdown = brcmstb_l2_intc_suspend;
-+	ct->chip.irq_pm_shutdown = brcmstb_l2_intc_shutdown;
- 
- 	if (data->can_wake) {
- 		/* This IRQ chip can wake the system, set all child interrupts
--- 
-2.34.1
-
+-K
 
