@@ -1,121 +1,164 @@
-Return-Path: <linux-mips+bounces-2888-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2889-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2899E8B17EA
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Apr 2024 02:19:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C40F28B239E
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Apr 2024 16:12:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B60C21F225FA
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Apr 2024 00:19:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E87ED1C20B78
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Apr 2024 14:12:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E7E080C;
-	Thu, 25 Apr 2024 00:19:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED6EE149E0B;
+	Thu, 25 Apr 2024 14:12:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B12pKhcS"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qkxol9Yc"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F01CE36E;
-	Thu, 25 Apr 2024 00:19:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B02F149DFA
+	for <linux-mips@vger.kernel.org>; Thu, 25 Apr 2024 14:12:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714004388; cv=none; b=selQ3jwt9TaEU1c5rfWs2f+HX29aYDllbNjIMq3GT94VaNx3vw0zwWOp8isZ81weFHElG1RN2+H8u3JeU8h3u1HfRgEY0XdZmNWW5BBn2WudLm0QXd5d+sokbZKqO/+mkuXYqY0r3Dhn3+mIT1jLx9xv2QMfnsKoigK7+prhN+o=
+	t=1714054359; cv=none; b=lPVrBU3NRTcEfKV4zl6vJ1Ye4WDJY5TgbPmUZE6fNGgfr3cxprIxnXjTsNu18TUnMZ24DXpJz8OwTDEsr22484Dk2WoR/8Jh4Qg0gOzgnY0PFysd9ORbDjJSh8EwSs4EDQlzN8y7NbLyUjI9JEIbFtafitDA1mbsFw/a8F185B8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714004388; c=relaxed/simple;
-	bh=WnfatMnZ7DsLt4qQJGNxgG9a1O4mRAFq+EIPLHMRPjM=;
+	s=arc-20240116; t=1714054359; c=relaxed/simple;
+	bh=OXlcNY8pu8S/MyjEy2GLENjCN5qdRSRqTym8qU2je0I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M883PzJFUuT6XEMBl1RI2PDwBVf6UKZdu58QfrKP1n200jMwiecX6GSxw4cs5UnJgmiX3NaPt7I8Rb1RbMm80AkZPYzr/rf+m3uty4Aurvrtw3BpQ7cT+QSWvwDA/0fbw5GJnQ3cjS+D7Aql+5gW2ys18S5+NsvydkRZtVXuwi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B12pKhcS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B560DC113CD;
-	Thu, 25 Apr 2024 00:19:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714004387;
-	bh=WnfatMnZ7DsLt4qQJGNxgG9a1O4mRAFq+EIPLHMRPjM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=B12pKhcSOVyl0Kn+T+f6WWram1wTQgJh2g3Mt7jQtw2z7GKyj5rvgKimEmyK5jt/l
-	 51BWmKrDJFSBCjeYzf2kbYDGP7adaTOuBiR6C0rUSYvd5g0f9I+6QS1SlmtNz/BeKo
-	 eeBGGLvg+FMbwvJR/ApJXiey1kVNNLj4i1h/7EziTy+UOJWcaIj315e66U6uHLMqot
-	 rOlbNLQGHOx4oL0afYbLfGKGl5sXR17FJeHTEs5X+7tx+cmbKfh9JIMC5AQYRzrKkO
-	 Knp6xoJbSAfVIF/rt/hldrj24pMXS6LKG3N31QwIBE5fIPEtAB+kCRkexhZom1vjMs
-	 7Ua/8vJmLXpKg==
-Date: Thu, 25 Apr 2024 09:19:44 +0900
-From: Mark Brown <broonie@kernel.org>
-To: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc: Conor Dooley <conor@kernel.org>,
-	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Vaishnav Achath <vaishnav.a@ti.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Rob Herring <robh@kernel.org>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: (subset) [PATCH v3 0/9] spi: cadence-qspi: add Mobileye EyeQ5
- support
-Message-ID: <ZimhoF_Rm4J-Hx9k@finisterre.sirena.org.uk>
-References: <20240410-cdns-qspi-mbly-v3-0-7b7053449cf7@bootlin.com>
- <171283699002.32012.7629247540689477794.b4-ty@kernel.org>
- <D0QT350IJHFH.36EXE1UT9QM10@bootlin.com>
- <ZidAefc0Ejrklopf@finisterre.sirena.org.uk>
- <D0RF1AKWAEAE.44N64GHMV2ZY@bootlin.com>
- <3f891794-0083-4245-bad7-518b1c48bb7c@linaro.org>
- <D0RIXN4JG6ZA.4W4HN68M9U6I@bootlin.com>
- <20240423-epidemic-schedule-6fa9869b3e87@spud>
- <ZihaBGwVRpI9hV0B@finisterre.sirena.org.uk>
- <20240424-calm-wolverine-of-drama-0349dc@lemur>
+	 Content-Type:Content-Disposition:In-Reply-To; b=PAoZ6etRyOdKaRfOeFX3oIkxDHO6oo+ZwwJOpAd2UbgWr3CUm4yCS2U1UHxG0Jr9OvrqHpT8HSSYA9t69ij19B5tmpvKTpP2gKbhdU0+7PVyUKmCzgB5N66JOVQ4IJUW+JaE0c/eN0QHQg5AL4uM7Rj0mELSMRvDXIIx3mT3IkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qkxol9Yc; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2dde561f852so11570051fa.2
+        for <linux-mips@vger.kernel.org>; Thu, 25 Apr 2024 07:12:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1714054356; x=1714659156; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zgj3m/Cw0cxG7wHpYlRihQfjnwxhhxsXHcabhCA3Erw=;
+        b=qkxol9YcHy4N7TFJyEYLH7LFZlNrVSlQMe/1FAbMvE53CxVwyFKPhnJgjgr4SSRS62
+         ond/Iujmcy9zTgDJuDTZpPbK1wI6b0sTqyenMmvo+5VQ4nwOrLJUjv7myToPU52MULoN
+         d+Z4X6AS/W0n9EgbNifYU/HmsVElp/3mEdUdwHw6Qg4db0dEkr20kwe6LcO2VmUNy0MD
+         na+5YVJJChBvnTU7TQ7Hb0+aJtctizCnR0WoDgKG1cy7sG+Hu7u49n7rGCEhxtXqSZ8s
+         /+67fViRi42PttiDXYYEjgHFJwu4hNeTEkjtw82VzqxD2Pp6ZjFE0A5cVeQ7+OsBKMZP
+         xpAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714054356; x=1714659156;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zgj3m/Cw0cxG7wHpYlRihQfjnwxhhxsXHcabhCA3Erw=;
+        b=ZPy7ie7BSaesQuyAkzpSja+AoU1C0zS2L9bnU3XLbJkwpUHGhL25ze6okOCLNSI2Eu
+         QpasZpAGnjNYx84Wj6lo3W+MPWaqYZMx+VKrJIM37wBn0QHYvm3aXf+075yWmtGbQu+S
+         jCmhRuwBrDEwqU+3rRPZSK3Qa4pTvVlVTjEt4eoI1hChnSItHFQwwM45EprId0ixovrD
+         N2SUGt3K+Mf6Tx2imCHe03SipwgesXLka3vywBEzQz45sC9ZvDbBuBCNuEh8QT7AW92u
+         fRJr4hakStPqpJyMYSXdhBZ+BU0JKNfilnHza9se5tAa45rvCn0yX3LDRxFTecCVxsfC
+         a4NQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU7q6zUEjk6c9L1XulTDXK372yhfGU71Z+JZ+qL5KA1VVrwZtomcFV0K+aaV9hVsVMii++EOQRElSvFwhsAO3OpWzOFaw5XSnOoLw==
+X-Gm-Message-State: AOJu0YyNxsNYopWc77+jYsNo9Mh1wiQ6twHD7tgs0aUvJ3UQ/2tCeBGd
+	4IAJ0ZhnWcfbzuhEglfla2Le7DAA0Gg4AGmfILGiR7QAN/iPZLCNo+N3Fkjzfko=
+X-Google-Smtp-Source: AGHT+IG4h73e/VD0OiMdGC2ljHdBFoL8+iSdydmC9vOMTBe1nYjTZzgcSwjFqh+dbSJpqsAZN+aRMQ==
+X-Received: by 2002:a2e:818a:0:b0:2de:4b8d:ee31 with SMTP id e10-20020a2e818a000000b002de4b8dee31mr3860645ljg.37.1714054356205;
+        Thu, 25 Apr 2024 07:12:36 -0700 (PDT)
+Received: from localhost ([102.222.70.76])
+        by smtp.gmail.com with ESMTPSA id hg16-20020a05600c539000b0041aa8ad46d6sm10244618wmb.16.2024.04.25.07.12.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Apr 2024 07:12:35 -0700 (PDT)
+Date: Thu, 25 Apr 2024 17:12:31 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Anup Patel <anup@brainfault.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>,
+	Chao Peng <chao.p.peng@linux.intel.com>,
+	Fuad Tabba <tabba@google.com>, Jarkko Sakkinen <jarkko@kernel.org>,
+	Anish Moorthy <amoorthy@google.com>,
+	David Matlack <dmatlack@google.com>,
+	Yu Zhang <yu.c.zhang@linux.intel.com>,
+	Isaku Yamahata <isaku.yamahata@intel.com>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Vishal Annapurve <vannapurve@google.com>,
+	Ackerley Tng <ackerleytng@google.com>,
+	Maciej Szmigiero <mail@maciej.szmigiero.name>,
+	David Hildenbrand <david@redhat.com>,
+	Quentin Perret <qperret@google.com>,
+	Michael Roth <michael.roth@amd.com>, Wang <wei.w.wang@intel.com>,
+	Liam Merwick <liam.merwick@oracle.com>,
+	Isaku Yamahata <isaku.yamahata@gmail.com>,
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Benjamin Copeland <ben.copeland@linaro.org>
+Subject: Re: [PATCH v13 25/35] KVM: selftests: Convert lib's mem regions to
+ KVM_SET_USER_MEMORY_REGION2
+Message-ID: <69ae0694-8ca3-402c-b864-99b500b24f5d@moroto.mountain>
+References: <20231027182217.3615211-1-seanjc@google.com>
+ <20231027182217.3615211-26-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="UrurdvMxrDj/5aGL"
-Content-Disposition: inline
-In-Reply-To: <20240424-calm-wolverine-of-drama-0349dc@lemur>
-X-Cookie: TANSTAAFL
-
-
---UrurdvMxrDj/5aGL
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20231027182217.3615211-26-seanjc@google.com>
 
-On Wed, Apr 24, 2024 at 03:53:03PM -0400, Konstantin Ryabitsev wrote:
+On Fri, Oct 27, 2023 at 11:22:07AM -0700, Sean Christopherson wrote:
+> Use KVM_SET_USER_MEMORY_REGION2 throughout KVM's selftests library so that
+> support for guest private memory can be added without needing an entirely
+> separate set of helpers.
+> 
+> Note, this obviously makes selftests backwards-incompatible with older KVM
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> versions from this point forward.
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-> In general, though, I prefer to push people in a different direction --=
-=20
-> we really shouldn't be fixing up people's patches, because this=20
-> misattributes the code to the wrong author. Instead, we really should=20
-> either ask senders to send an updated revision, or make the changes in=20
-> merge commits instead.
+Is there a way we could disable the tests on older kernels instead of
+making them fail?  Check uname or something?  There is probably a
+standard way to do this...  It's these tests which fail.
 
-I don't do that - if this triggers with any of my stuff it's either that
-the patch was dropped or git am did something.
+ kvm_aarch32_id_regs
+ kvm_access_tracking_perf_test
+ kvm_arch_timer
+ kvm_debug-exceptions
+ kvm_demand_paging_test
+ kvm_dirty_log_perf_test
+ kvm_dirty_log_test
+ kvm_guest_print_test
+ kvm_hypercalls
+ kvm_kvm_page_table_test
+ kvm_memslot_modification_stress_test
+ kvm_memslot_perf_test
+ kvm_page_fault_test
+ kvm_psci_test
+ kvm_rseq_test
+ kvm_smccc_filter
+ kvm_steal_time
+ kvm_vgic_init
+ kvm_vgic_irq
+ kvm_vpmu_counter_access
 
---UrurdvMxrDj/5aGL
-Content-Type: application/pgp-signature; name="signature.asc"
+regards,
+dan carpenter
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYpoZ8ACgkQJNaLcl1U
-h9AxPgf/RptDzTx87oUXDhc4KhKk/qu0/0AIepdP4sOQY7OhdavtITZyL3rSZ7rM
-tIFcViQ/jr2q2LahPE1XeVIPqdrBYjG3g5JILHoShFJtkuaRxQhQLdHhKsKhR45c
-g8OFDixkwiyPYCHpO9Op7T14EGE1xEwIVn9I8n1GZrk3TbEuT+70PnCQiNvrO4S2
-CAURaYRm3pUijyf8nzcO80/DWsPnegcZEifupJ5cGtv1YNMlUJ//zZt0wW2lSLX3
-nGcY17EwktRboYV3hGWUigM1D80NcUxpIyjQMYjKUkdW92R2Zr+ODWUTF2Q0fUE8
-hI1hASm7LlERmBgHIp+gT7jeNPGLMg==
-=czej
------END PGP SIGNATURE-----
-
---UrurdvMxrDj/5aGL--
 
