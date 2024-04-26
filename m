@@ -1,78 +1,78 @@
-Return-Path: <linux-mips+bounces-2912-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2913-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF43F8B38C7
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Apr 2024 15:45:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D266D8B3C80
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Apr 2024 18:13:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B04A1F2217F
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Apr 2024 13:45:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87BA8285729
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Apr 2024 16:13:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE75D1482F4;
-	Fri, 26 Apr 2024 13:45:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F369A15686F;
+	Fri, 26 Apr 2024 16:12:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AnWVJSjF"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LypP9JvO"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D0B147C84
-	for <linux-mips@vger.kernel.org>; Fri, 26 Apr 2024 13:45:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB00214EC4C
+	for <linux-mips@vger.kernel.org>; Fri, 26 Apr 2024 16:12:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714139107; cv=none; b=TcU1eVCmgC8pljIEQp+IvGPjByybWVJuLhheJm0UXq5Nuur6lqAoA6MNytYXGwZVnT0t+x1jq5UUNDWJkgCLkwOYBCRbqaLbv4MwqgivnnEOIecSRSrpXomdVEz4I5pFUaxNynvlIVvOEWPW2jSoPoR6uMuyynIgTXy1GRUCwF0=
+	t=1714147966; cv=none; b=OUhnGCVqaOJUs5+AkTuVkHFjJMV98RvLGQbxa4qXwcp6oby0y7NMRzhBtdbWRpxiE2j24QQ9xcYYphBcQFrjHEEby3vev6HSyMwAFAS4ILHJkYln04lk0swoL7D1ctyBzOGif062CF50pVr++p7sMv6I2ZHqR94PX4eamaIH+IU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714139107; c=relaxed/simple;
-	bh=/wyjt9d4AZ8Mo8vzASxA6mAa3oblPdVQKxM3OHzZLF8=;
+	s=arc-20240116; t=1714147966; c=relaxed/simple;
+	bh=VHk3yV3ykPgBDTFB6jGO3B/kKnE4mwuV8+QA4otgjj8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ekStbR6aupM8mRS13R5QPzXkxsvbU6Uu18wmOi3Ap8CbmA+mOIuBcTXoXOQL/Xt5TePCy53Mt8dskSK/ECN+OcqhfRurgRNOHbGBktWfy7A5RqdTg04RibJ8gYRkAWDcISYXi31J1n9cE0mZzx8s5ygx1o4nD3VxdK/rzTewWeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AnWVJSjF; arc=none smtp.client-ip=170.10.129.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=uWVXiMBc5JcJd0JenkczOeKnjy6L9kshfqPeLMjFQukn6sEe3kz7EwfJFOndR9TiFNTPcBhlI6Yz+1/yz42Pmf+A6QNjl6jDOhfT+sPHGqBlmxaRDm49sN7ma1UL9cVbW3zsyS3K7oH/Fg72bpXHHzUtI6IIoILwqyIIZBwzF08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LypP9JvO; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1714139105;
+	s=mimecast20190719; t=1714147963;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=uF1kPlR2Ck3Z44kTNMrT7zanJ3tMGvooilBaXGx0yJc=;
-	b=AnWVJSjFSnHjjYWtAbnhvq9Sc7VC3Dy2GOp85jbo2iL3f4Lt8LQGzA8v90i5530WxK+bD/
-	nd4jqOMtpTrUiC5NY2ECmn0ES0xGmlnLP3HxXh4i+KK8i5yZARJanuLMiXl0cx5TSsl8zi
-	7y8aCRrQ6uP2xyJgdSOHGihva0EM+yo=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=eYUqEa4yY2qzSFoFdIvLcLWvg/98iZ7Cq/Vjg2cb5Pg=;
+	b=LypP9JvOUwTJ+H67rwONo9wwRCDu7c4QosQU9i/xSC7EmmvETQP+nnNJgYw4vxqKKqI2rT
+	p6+9SIKxj7B8VcSqnaf+5p3cIiRNM+TEH2OxbP52yBiEALFUWqq9N6PaG46XJ+JZ/4ZpKC
+	y8QXaCCaiIVIz4CAWLMaud9ezd13PoQ=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-619-PHVkfWS0Mvy4lSEp04Zz5Q-1; Fri, 26 Apr 2024 09:45:02 -0400
-X-MC-Unique: PHVkfWS0Mvy4lSEp04Zz5Q-1
-Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-6eba7dc8f1eso477071a34.3
-        for <linux-mips@vger.kernel.org>; Fri, 26 Apr 2024 06:45:02 -0700 (PDT)
+ us-mta-251-6IPr-_5oNPG5U0bClftkUg-1; Fri, 26 Apr 2024 12:12:42 -0400
+X-MC-Unique: 6IPr-_5oNPG5U0bClftkUg-1
+Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6eb607b308bso730680a34.0
+        for <linux-mips@vger.kernel.org>; Fri, 26 Apr 2024 09:12:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714139102; x=1714743902;
+        d=1e100.net; s=20230601; t=1714147961; x=1714752761;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uF1kPlR2Ck3Z44kTNMrT7zanJ3tMGvooilBaXGx0yJc=;
-        b=X0J3yHAowt6QH33MAZAvZ12sq2vnrGg/kRtGvcRM0zc22dDlDXqraNfUjJqV5z3GNy
-         Bn5QrA4+eZdJO0Yd4RSsrAzKDAiEc4wZqLy0gB+1uweY8J34yJ2BTLKnK/Gv3bpBVPFQ
-         oagx5SjUtePxcL6fwe8JaP+qG3cW5UzCBf8+w0jxA80QnScQuNm6cd6xVfOq+aseIlKJ
-         +a1MnkDBcbhsNefNEqfWZiFXYf8k6jh4XT7GBoxUto4FJsnvCh1UUb5Y82cApsEtG/7Q
-         dguybvgX+NUTp+91Yo0rfsbGdHazRczgHz1ws5wtniEGCZmw1M10YF5izn851GDgDUPa
-         lEew==
-X-Forwarded-Encrypted: i=1; AJvYcCU4rTLg5P4kFYg2rQyIX+8NLNGClGiygwg9UI/omIEB4oeJqAgWFEnaAS4xueDkgnx5fe0/rNs7cm695AL/LA6jWfaiQyYm+Wpkgg==
-X-Gm-Message-State: AOJu0YwYLWR0tWqnLCoGRPfkrYXmcRiH26eARlzSvOZYtIVIDW8yTvnB
-	PcQXo7i8qz+5YNRdptURuV6kXhdUMk0+GkpeNCycM3DFLglnNPHx0kB76RvR9ujgu6yy/geCsc1
-	BQ+CnKrNtHCEDXKZHV4QpooEVojuKblMiHmWmcwiCTNye8yZXhvIyffoVr1w=
-X-Received: by 2002:a05:6808:d53:b0:3c5:f29a:5fda with SMTP id w19-20020a0568080d5300b003c5f29a5fdamr3101413oik.3.1714139101692;
-        Fri, 26 Apr 2024 06:45:01 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGzrxrCF28uWDRUo6q+zp4qFvioOS0q1e4hOagwn8iRvVD4UFCuaQuTxLkqj/Vp49yVezlG5g==
-X-Received: by 2002:a05:6808:d53:b0:3c5:f29a:5fda with SMTP id w19-20020a0568080d5300b003c5f29a5fdamr3101360oik.3.1714139100964;
-        Fri, 26 Apr 2024 06:45:00 -0700 (PDT)
+        bh=eYUqEa4yY2qzSFoFdIvLcLWvg/98iZ7Cq/Vjg2cb5Pg=;
+        b=RSIAhAvXQv3fwd4JSUHXf2eC1/H/WIaeWW5nE7IuJj/D/KV5Qv3uX4JNb/g2ftGFWe
+         CsvwXa7EsCvzRJWE26LYAQGFlYiOmGgadT4I8ksepAvokcS1nZ8XGCKZUl7B5WPmrO0T
+         y7+TrdIq8ynIXRcCM50zU8mrDefzhlRlFBgr8U3AWLhpf2HkrYXLCe7ADdreoWyAM+fr
+         EvM13u+S3rg6tBGkgoiDI6Cj3xzgCqudehPtbkeix2HzpX4NXw/G2kL88BBPR3vRLOGy
+         Vl6EUdmWeAk8M1DDixJ8Jsw/FtrlS5fdAv6B52NjM+FiqQsxy1yMT4zeQ/COWaoxx/gu
+         pfwg==
+X-Forwarded-Encrypted: i=1; AJvYcCX10a2U6EdUaEgpSb9HbS6Bc9AD0PnCBXnNp4U9Ufzyv4zw7qTE8Vn0zBhPT+5wnPu9Bb3yJusoFDC3Z5TqrgCP5iIDAX0e8tFADw==
+X-Gm-Message-State: AOJu0YxtttaEvzWKSkd3Z2jQQVxoRE3uSQKufHvvud+9Si8iGSTuo3nJ
+	xL1UMRYbP9/laFfclKTlP/lA5UgwZdVx2SfBZZw3fuwSCXVj9pDjCixQJV3CKGMtui+XC3bR4/+
+	csAWNe7lYAydzICIjx/xjjnc3WxmCY6jLCRbfUmKhsOEBEY7hDj9R6enJDR0=
+X-Received: by 2002:a05:6870:a40f:b0:235:3e97:ed24 with SMTP id m15-20020a056870a40f00b002353e97ed24mr3125223oal.1.1714147961407;
+        Fri, 26 Apr 2024 09:12:41 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFKK09FSsz1w18C9O+QSKywaneNtUpj/aPvoeb+SOH3u9egTJYXPSkxUgqSN3BOrRHAMYNm3w==
+X-Received: by 2002:a05:6870:a40f:b0:235:3e97:ed24 with SMTP id m15-20020a056870a40f00b002353e97ed24mr3125169oal.1.1714147960484;
+        Fri, 26 Apr 2024 09:12:40 -0700 (PDT)
 Received: from x1n (pool-99-254-121-117.cpe.net.cable.rogers.com. [99.254.121.117])
-        by smtp.gmail.com with ESMTPSA id w9-20020a0ca809000000b00696b1050be8sm6864026qva.133.2024.04.26.06.44.59
+        by smtp.gmail.com with ESMTPSA id m6-20020ac807c6000000b00434fd7d6d00sm8007149qth.2.2024.04.26.09.12.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Apr 2024 06:45:00 -0700 (PDT)
-Date: Fri, 26 Apr 2024 09:44:58 -0400
+        Fri, 26 Apr 2024 09:12:40 -0700 (PDT)
+Date: Fri, 26 Apr 2024 12:12:32 -0400
 From: Peter Xu <peterx@redhat.com>
 To: David Hildenbrand <david@redhat.com>
 Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
@@ -85,10 +85,11 @@ Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
 	linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org,
 	linux-riscv@lists.infradead.org, x86@kernel.org
 Subject: Re: [PATCH v1 1/3] mm/gup: consistently name GUP-fast functions
-Message-ID: <Ziuv2jLY1wgBITiP@x1n>
+Message-ID: <ZivScN8-Uoi9eye8@x1n>
 References: <20240402125516.223131-1-david@redhat.com>
  <20240402125516.223131-2-david@redhat.com>
  <e685c532-8330-4a57-bc08-c67845e0c352@redhat.com>
+ <Ziuv2jLY1wgBITiP@x1n>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -97,82 +98,144 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e685c532-8330-4a57-bc08-c67845e0c352@redhat.com>
+In-Reply-To: <Ziuv2jLY1wgBITiP@x1n>
 
-On Fri, Apr 26, 2024 at 09:17:47AM +0200, David Hildenbrand wrote:
-> On 02.04.24 14:55, David Hildenbrand wrote:
-> > Let's consistently call the "fast-only" part of GUP "GUP-fast" and rename
-> > all relevant internal functions to start with "gup_fast", to make it
-> > clearer that this is not ordinary GUP. The current mixture of
-> > "lockless", "gup" and "gup_fast" is confusing.
+On Fri, Apr 26, 2024 at 09:44:58AM -0400, Peter Xu wrote:
+> On Fri, Apr 26, 2024 at 09:17:47AM +0200, David Hildenbrand wrote:
+> > On 02.04.24 14:55, David Hildenbrand wrote:
+> > > Let's consistently call the "fast-only" part of GUP "GUP-fast" and rename
+> > > all relevant internal functions to start with "gup_fast", to make it
+> > > clearer that this is not ordinary GUP. The current mixture of
+> > > "lockless", "gup" and "gup_fast" is confusing.
+> > > 
+> > > Further, avoid the term "huge" when talking about a "leaf" -- for
+> > > example, we nowadays check pmd_leaf() because pmd_huge() is gone. For the
+> > > "hugepd"/"hugepte" stuff, it's part of the name ("is_hugepd"), so that
+> > > stays.
+> > > 
+> > > What remains is the "external" interface:
+> > > * get_user_pages_fast_only()
+> > > * get_user_pages_fast()
+> > > * pin_user_pages_fast()
+> > > 
+> > > The high-level internal functions for GUP-fast (+slow fallback) are now:
+> > > * internal_get_user_pages_fast() -> gup_fast_fallback()
+> > > * lockless_pages_from_mm() -> gup_fast()
+> > > 
+> > > The basic GUP-fast walker functions:
+> > > * gup_pgd_range() -> gup_fast_pgd_range()
+> > > * gup_p4d_range() -> gup_fast_p4d_range()
+> > > * gup_pud_range() -> gup_fast_pud_range()
+> > > * gup_pmd_range() -> gup_fast_pmd_range()
+> > > * gup_pte_range() -> gup_fast_pte_range()
+> > > * gup_huge_pgd()  -> gup_fast_pgd_leaf()
+> > > * gup_huge_pud()  -> gup_fast_pud_leaf()
+> > > * gup_huge_pmd()  -> gup_fast_pmd_leaf()
+> > > 
+> > > The weird hugepd stuff:
+> > > * gup_huge_pd() -> gup_fast_hugepd()
+> > > * gup_hugepte() -> gup_fast_hugepte()
 > > 
-> > Further, avoid the term "huge" when talking about a "leaf" -- for
-> > example, we nowadays check pmd_leaf() because pmd_huge() is gone. For the
-> > "hugepd"/"hugepte" stuff, it's part of the name ("is_hugepd"), so that
-> > stays.
+> > I just realized that we end up calling these from follow_hugepd() as well.
+> > And something seems to be off, because gup_fast_hugepd() won't have the VMA
+> > even in the slow-GUP case to pass it to gup_must_unshare().
 > > 
-> > What remains is the "external" interface:
-> > * get_user_pages_fast_only()
-> > * get_user_pages_fast()
-> > * pin_user_pages_fast()
+> > So these are GUP-fast functions and the terminology seem correct. But the
+> > usage from follow_hugepd() is questionable,
 > > 
-> > The high-level internal functions for GUP-fast (+slow fallback) are now:
-> > * internal_get_user_pages_fast() -> gup_fast_fallback()
-> > * lockless_pages_from_mm() -> gup_fast()
+> > commit a12083d721d703f985f4403d6b333cc449f838f6
+> > Author: Peter Xu <peterx@redhat.com>
+> > Date:   Wed Mar 27 11:23:31 2024 -0400
 > > 
-> > The basic GUP-fast walker functions:
-> > * gup_pgd_range() -> gup_fast_pgd_range()
-> > * gup_p4d_range() -> gup_fast_p4d_range()
-> > * gup_pud_range() -> gup_fast_pud_range()
-> > * gup_pmd_range() -> gup_fast_pmd_range()
-> > * gup_pte_range() -> gup_fast_pte_range()
-> > * gup_huge_pgd()  -> gup_fast_pgd_leaf()
-> > * gup_huge_pud()  -> gup_fast_pud_leaf()
-> > * gup_huge_pmd()  -> gup_fast_pmd_leaf()
+> >     mm/gup: handle hugepd for follow_page()
 > > 
-> > The weird hugepd stuff:
-> > * gup_huge_pd() -> gup_fast_hugepd()
-> > * gup_hugepte() -> gup_fast_hugepte()
+> > 
+> > states "With previous refactors on fast-gup gup_huge_pd(), most of the code
+> > can be leveraged", which doesn't look quite true just staring the the
+> > gup_must_unshare() call where we don't pass the VMA. Also,
+> > "unlikely(pte_val(pte) != pte_val(ptep_get(ptep)" doesn't make any sense for
+> > slow GUP ...
 > 
-> I just realized that we end up calling these from follow_hugepd() as well.
-> And something seems to be off, because gup_fast_hugepd() won't have the VMA
-> even in the slow-GUP case to pass it to gup_must_unshare().
+> Yes it's not needed, just doesn't look worthwhile to put another helper on
+> top just for this.  I mentioned this in the commit message here:
 > 
-> So these are GUP-fast functions and the terminology seem correct. But the
-> usage from follow_hugepd() is questionable,
+>   There's something not needed for follow page, for example, gup_hugepte()
+>   tries to detect pgtable entry change which will never happen with slow
+>   gup (which has the pgtable lock held), but that's not a problem to check.
 > 
-> commit a12083d721d703f985f4403d6b333cc449f838f6
-> Author: Peter Xu <peterx@redhat.com>
-> Date:   Wed Mar 27 11:23:31 2024 -0400
+> > 
+> > @Peter, any insights?
 > 
->     mm/gup: handle hugepd for follow_page()
+> However I think we should pass vma in for sure, I guess I overlooked that,
+> and it didn't expose in my tests too as I probably missed ./cow.
 > 
-> 
-> states "With previous refactors on fast-gup gup_huge_pd(), most of the code
-> can be leveraged", which doesn't look quite true just staring the the
-> gup_must_unshare() call where we don't pass the VMA. Also,
-> "unlikely(pte_val(pte) != pte_val(ptep_get(ptep)" doesn't make any sense for
-> slow GUP ...
+> I'll prepare a separate patch on top of this series and the gup-fast rename
+> patches (I saw this one just reached mm-stable), and I'll see whether I can
+> test it too if I can find a Power system fast enough.  I'll probably drop
+> the "fast" in the hugepd function names too.
 
-Yes it's not needed, just doesn't look worthwhile to put another helper on
-top just for this.  I mentioned this in the commit message here:
+Hmm, so when I enable 2M hugetlb I found ./cow is even failing on x86.
 
-  There's something not needed for follow page, for example, gup_hugepte()
-  tries to detect pgtable entry change which will never happen with slow
-  gup (which has the pgtable lock held), but that's not a problem to check.
+  # ./cow  | grep -B1 "not ok"
+  # [RUN] vmsplice() + unmap in child ... with hugetlb (2048 kB)
+  not ok 161 No leak from parent into child
+  --
+  # [RUN] vmsplice() + unmap in child with mprotect() optimization ... with hugetlb (2048 kB)
+  not ok 215 No leak from parent into child
+  --
+  # [RUN] vmsplice() before fork(), unmap in parent after fork() ... with hugetlb (2048 kB)
+  not ok 269 No leak from child into parent
+  --
+  # [RUN] vmsplice() + unmap in parent after fork() ... with hugetlb (2048 kB)
+  not ok 323 No leak from child into parent
 
-> 
-> @Peter, any insights?
+And it looks like it was always failing.. perhaps since the start?  We
+didn't do the same on hugetlb v.s. normal anon from that regard on the
+vmsplice() fix.
 
-However I think we should pass vma in for sure, I guess I overlooked that,
-and it didn't expose in my tests too as I probably missed ./cow.
+I drafted a patch to allow refcount>1 detection as the same, then all tests
+pass for me, as below.
 
-I'll prepare a separate patch on top of this series and the gup-fast rename
-patches (I saw this one just reached mm-stable), and I'll see whether I can
-test it too if I can find a Power system fast enough.  I'll probably drop
-the "fast" in the hugepd function names too.
+David, I'd like to double check with you before I post anything: is that
+your intention to do so when working on the R/O pinning or not?
 
 Thanks,
+
+=========
+From 7300c249738dadda1457c755b597c1551dfe8dc6 Mon Sep 17 00:00:00 2001
+From: Peter Xu <peterx@redhat.com>
+Date: Fri, 26 Apr 2024 11:41:12 -0400
+Subject: [PATCH] mm/hugetlb: Fix vmsplice case on memory leak once more
+
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ mm/hugetlb.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 417fc5cdb6ee..1ca102013561 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -5961,10 +5961,13 @@ static vm_fault_t hugetlb_wp(struct folio *pagecache_folio,
+ 
+ retry_avoidcopy:
+ 	/*
+-	 * If no-one else is actually using this page, we're the exclusive
+-	 * owner and can reuse this page.
++	 * If the page is marked exlusively owned (e.g. longterm pinned),
++	 * we can reuse it.  Otherwise if no-one else is using this page,
++	 * we can savely set the exclusive bit and reuse it.
+ 	 */
+-	if (folio_mapcount(old_folio) == 1 && folio_test_anon(old_folio)) {
++	if (folio_test_anon(old_folio) &&
++	    (PageAnonExclusive(&old_folio->page) ||
++	     folio_ref_count(old_folio) == 1)) {
+ 		if (!PageAnonExclusive(&old_folio->page)) {
+ 			folio_move_anon_rmap(old_folio, vma);
+ 			SetPageAnonExclusive(&old_folio->page);
+-- 
+2.44.0
+
 
 -- 
 Peter Xu
