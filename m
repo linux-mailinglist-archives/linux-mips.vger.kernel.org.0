@@ -1,136 +1,123 @@
-Return-Path: <linux-mips+bounces-2957-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2958-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 343C68B585A
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Apr 2024 14:23:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B250A8B5DDB
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Apr 2024 17:37:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF4921F212E0
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Apr 2024 12:23:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E408F1C217D4
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Apr 2024 15:37:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4F19839E3;
-	Mon, 29 Apr 2024 12:19:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9715D8287C;
+	Mon, 29 Apr 2024 15:37:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X7f0wuVA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U2aUTXJ0"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83AEA76050;
-	Mon, 29 Apr 2024 12:19:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67CA87BB17;
+	Mon, 29 Apr 2024 15:37:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714393180; cv=none; b=kHCMKOzRw8hy90oDdNSgr+HR/5MyBMnn6QbS7ukeUe5PBfZtlUaDvRM25P6QMW8Of6OE01AmFWCH0SAOMTEPALGL/Y00GdrlTurCz/gr8MA2r1I2b/iVSdrXDlplUCjQcsLuAuHQ4gL4qHjQjBhZNZrNEUBLefmDUDbzwQ8GRvo=
+	t=1714405039; cv=none; b=LZiCASTHqW4z3GwZcaZ/LwzEOhThostncG7VdrcHsvbGcfj/evWfh6D/TRqUuyUeCoCXRhmkiNfN386Mzi989JXvdmVVSESqMaIxxaU0F4iKas4a1CTOUvMdYhGCPJXwBphy8T1knDVedVVrPLUFhaOjg22ZJmUfsiacTJ4OJvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714393180; c=relaxed/simple;
-	bh=+AOj3OMDSB3feHYUPdQfVhUVtDWDdcImqVlO1v4xpng=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EhcfYpY4ZCfwVypE4QAAEviejzQJmV/49iFzPK9HzhYYaSV7IaeCVTdnQr67Q2Gg5tuFuOZIeEG4YvC6IiGs7L2rxd+bNrIPjwHQAIajg4OfmBh3Wg2TZj9A0OIXiV3rD3jYywtmrO/0jCYFaO2DYeK06oku7Z6dJKKKc5X9ylY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X7f0wuVA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5FDEC4AF1A;
-	Mon, 29 Apr 2024 12:19:29 +0000 (UTC)
+	s=arc-20240116; t=1714405039; c=relaxed/simple;
+	bh=wkw00x65JD2z/zUy53Xusx3TmiNHgV4aXrSReAeslNU=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Px5oueUpA5Dup0VmfN7Vq1HXtX+8PM34DqKAsSHF283+m9TMFRPSVoz6CZ02jqPeG8qaiHn1qlmhBn0YQhe/rxsHnVMrPSmMxD5zwXNofZHuclyZUpRgSQY+2VGFiwPYt2+Qo4mvqJIGllUORbwXnly3k14fkEjSMiJLwA4isJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U2aUTXJ0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B500C113CD;
+	Mon, 29 Apr 2024 15:37:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714393180;
-	bh=+AOj3OMDSB3feHYUPdQfVhUVtDWDdcImqVlO1v4xpng=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=X7f0wuVAWdgbS5Dnrk/8uxCz/WMBnwfIEbrYQjsFBoWK/NO+gFsetX++9RtisOg+R
-	 lyducI87XJq0Sa6/5knT2xgBqH7K2xW/qMnGa0g1XffUGK3v88+KqpLas4BZaDB8ho
-	 7TEZf3UWszPCEBdKLSl5tSKkPNsGUW+hGDbSDeQiXvAbbZQ7/jWj/FVqaI9aEzKfJ3
-	 n7rBw9DjLbVvNCoFkwi9pBCXtg9xh2adrE6zMXEpc+zsBt1S+VUeMtGvQpJ7f9J2+M
-	 Gqm1Q42MZd9YPy1rtpJAQ/o+FnD8mnYQVVTP4aKCUYjgJ2YMq1N1K7OajA96dLskDm
-	 vAoCNMH3V0h1Q==
-From: Mike Rapoport <rppt@kernel.org>
-To: linux-kernel@vger.kernel.org
-Cc: Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Donald Dutile <ddutile@redhat.com>,
-	Eric Chanudet <echanude@redhat.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Mike Rapoport <rppt@kernel.org>,
-	Nadav Amit <nadav.amit@gmail.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Sam Ravnborg <sam@ravnborg.org>,
-	Song Liu <song@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-modules@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev,
-	netdev@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	x86@kernel.org
-Subject: [PATCH v7 16/16] bpf: remove CONFIG_BPF_JIT dependency on CONFIG_MODULES of
-Date: Mon, 29 Apr 2024 15:16:20 +0300
-Message-ID: <20240429121620.1186447-17-rppt@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240429121620.1186447-1-rppt@kernel.org>
-References: <20240429121620.1186447-1-rppt@kernel.org>
+	s=k20201202; t=1714405038;
+	bh=wkw00x65JD2z/zUy53Xusx3TmiNHgV4aXrSReAeslNU=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=U2aUTXJ0qBqnfV1G4kuhMFIHzs54ReUNSO9gdQNtg4aGDsfvXSEOuTceTJIHCrepO
+	 enWS0OujmfpxwX44YIbD/uwDAXH+g3thvf3iqnDonevsW/ibWuO1issIRj68s6X5ep
+	 TuOLh/uOmVlCl7Wc29Ak4CUQKxvedSO5ft1qKfGJng0yCptHMPdODDhJzQLQjsfs/l
+	 wlvhb5J02hOJeMsxzxw6t/D8G4UL3WC/yHXQ4fssWwT8BLkn9jLpWH1Z7kkNmXwYGr
+	 IjPG1cDEH5VNXTaduRwcJHGacrVRQzzcKpy3euQrZsOX1H03TxYl2IyQ08YvZ9n/nk
+	 EvBLVSqx4zzmA==
+From: Mark Brown <broonie@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Vaishnav Achath <vaishnav.a@ti.com>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Rob Herring <robh@kernel.org>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+In-Reply-To: <20240423-cdns-qspi-mbly-v4-0-3d2a7b535ad0@bootlin.com>
+References: <20240423-cdns-qspi-mbly-v4-0-3d2a7b535ad0@bootlin.com>
+Subject: Re: (subset) [PATCH v4 0/6] spi: cadence-qspi: add Mobileye EyeQ5
+ support
+Message-Id: <171440503607.1841738.5217862939003945939.b4-ty@kernel.org>
+Date: Tue, 30 Apr 2024 00:37:16 +0900
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.14-dev
 
-From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+On Tue, 23 Apr 2024 12:01:39 +0200, Théo Lebrun wrote:
+> V4 of this series adding octal SPI-NOR support to Mobileye EyeQ5
+> platform. It has been tested on EyeQ5 hardware successfully. Patches
+> have been taken over time, meaning series got smaller over time.
+> 
+> Patches:
+>  - Make cdns,fifo-depth optional by computing it from hardware.
+>  - No-IRQ mode for indirect read operations. Behind a quirk flag.
+>  - Busywait on commands and indirect reads; reduces hrtimeouts load.
+>  - Add mobileye,eyeq5-ospi compatible.
+>  - EyeQ5 devicetree:
+>     - Add octal SPI-NOR node.
+>     - Add SPI-NOR flash node on eval board.
+> 
+> [...]
 
-BPF just-in-time compiler depended on CONFIG_MODULES because it used
-module_alloc() to allocate memory for the generated code.
+Applied to
 
-Since code allocations are now implemented with execmem, drop dependency of
-CONFIG_BPF_JIT on CONFIG_MODULES and make it select CONFIG_EXECMEM.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Suggested-by: Björn Töpel <bjorn@kernel.org>
-Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
----
- kernel/bpf/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks!
 
-diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-index bc25f5098a25..f999e4e0b344 100644
---- a/kernel/bpf/Kconfig
-+++ b/kernel/bpf/Kconfig
-@@ -43,7 +43,7 @@ config BPF_JIT
- 	bool "Enable BPF Just In Time compiler"
- 	depends on BPF
- 	depends on HAVE_CBPF_JIT || HAVE_EBPF_JIT
--	depends on MODULES
-+	select EXECMEM
- 	help
- 	  BPF programs are normally handled by a BPF interpreter. This option
- 	  allows the kernel to generate native code when a program is loaded
--- 
-2.43.0
+[1/6] spi: cadence-qspi: allow FIFO depth detection
+      commit: 3bf64a2b66edffd28614b004648ccd60e3139c9e
+[2/6] spi: cadence-qspi: add no-IRQ mode to indirect reads
+      commit: 1f257b92e6330d576cc826fb8f0b74fe0e8209de
+[3/6] spi: cadence-qspi: add early busywait to cqspi_wait_for_bit()
+      commit: c1887396373b8faecef61d352bd521ac66162706
+[4/6] spi: cadence-qspi: add mobileye,eyeq5-ospi compatible
+      commit: 47766799f546249813e97a0ccde8978ba114e89f
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
