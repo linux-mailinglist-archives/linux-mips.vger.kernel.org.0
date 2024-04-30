@@ -1,79 +1,93 @@
-Return-Path: <linux-mips+bounces-2960-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2961-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 805FB8B62D9
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Apr 2024 21:49:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E0958B66BA
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Apr 2024 02:07:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 311051F22206
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Apr 2024 19:49:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B1C3283CC4
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Apr 2024 00:07:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 698C913CFB8;
-	Mon, 29 Apr 2024 19:49:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABC3B63B;
+	Tue, 30 Apr 2024 00:07:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nona.1cooldns.com header.i=ghim@nona.1cooldns.com header.b="DuL2K7yt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YCQ7Y/lG"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from rdns0.nona.1cooldns.com (rdns0.nona.1cooldns.com [31.192.235.70])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6EE413C697
-	for <linux-mips@vger.kernel.org>; Mon, 29 Apr 2024 19:49:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=31.192.235.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61507170;
+	Tue, 30 Apr 2024 00:07:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714420184; cv=none; b=AmFWJRIniWs5Xcu9cu8Xf1XZCqh9mB3n+7Ap9XGQ5vRs8Q2+FD3r2YD6XnA1QZIMSrVyZNw64unlreZEqQv/27PGpIvhPx51u20OchZC1/Mv9c0vdQQx2/svrMisY11ZPQFI/NqKu+qSzZnxfwMFYMkRstTNWBApwokFInaQ/WE=
+	t=1714435669; cv=none; b=DP9y8cVFo3340WSCu8pxSCdkpyqY3f/Q0SLOqyvyOJOfkPmmIYoLT2yGZS/DbJbSFzeAUnyDbPggkZT0Tm5b0mNGVNDP7D7I/Xe6oZFlASG9WjJ2qwWJRrvqOev0LYwRu1kKFFypwrJxu+LGOEGLkkIjFUvC7IURI+H+4zE3wP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714420184; c=relaxed/simple;
-	bh=JG0SV9hXY/1TtbjjSQkLyMvYYfN5KWdFuiRFpI+nqE8=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=trAaCsv27QCJq29e/VeYVzBkCEqNQvoBxlZuyhJTEXfal2QdVrpzg09W5IKSm7VOWOdQAjZ3C3hhXnyywPIfK7XNCAZ434OJCJ5uyTN1+CY6e0of4+o7pDhw68jhiBOVr9iVGTOHgQ4nUT+JocXi4h5in3KV1QsRTeH+gfGYM/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=permerror header.from=nona.1cooldns.com; spf=pass smtp.mailfrom=nona.1cooldns.com; dkim=pass (1024-bit key) header.d=nona.1cooldns.com header.i=ghim@nona.1cooldns.com header.b=DuL2K7yt; arc=none smtp.client-ip=31.192.235.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=permerror header.from=nona.1cooldns.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nona.1cooldns.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=default; d=nona.1cooldns.com;
- h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:
- Content-Transfer-Encoding; i=ghim@nona.1cooldns.com;
- bh=JG0SV9hXY/1TtbjjSQkLyMvYYfN5KWdFuiRFpI+nqE8=;
- b=DuL2K7yt3RCSKLxWjvBmQhXKs8Br7LlRe9zqqiKeZhSfffn+b3V+3vm2XRQ9XpxsCxcHD/tuXsil
-   NeZ4TlXVBixvKS4oVGHcUN0xuhA1oFKjDOgfmK3R+4JWmEKhhHvG9lElDhvOxVyWv0QxCw0fZpRw
-   T5yiJqc/HpeCHAR0Krw=
-Reply-To: stanislav.marcel@aliancegroup-se.com
-From: "Support" <ghim@nona.1cooldns.com>
-To: linux-mips@vger.kernel.org
-Subject: request for quote from sweden
-Date: 30 Apr 2024 05:49:37 +1000
-Message-ID: <20240430054937.E277C93CB6048145@nona.1cooldns.com>
+	s=arc-20240116; t=1714435669; c=relaxed/simple;
+	bh=vhMJowDwRuHTlntrjfGcVCQMNqbpSZQLuzucFeDjBg8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EiRdzf4VOzPiJor1k+axXrzinfSLZwXBaYwEjd165VFv5V8nOeDiLLvL7X/kAIMIBewx4OXodYIPAZ8f7DoAm5D1oQONiy1ZU9oRvvy5lTw9CKdzREii2wghyW4d1T1K40Q6yVHsd0SenCIZyHb2zils0JZeZ9WfcWd2Bxhx1KA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YCQ7Y/lG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79B9BC113CD;
+	Tue, 30 Apr 2024 00:07:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714435668;
+	bh=vhMJowDwRuHTlntrjfGcVCQMNqbpSZQLuzucFeDjBg8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YCQ7Y/lGUacL2IZijCKBlGObESxVjjzsNASBP6BpxH7vYi0yR/wJ2unwlXZKOgThD
+	 Bq45bgnTPaVF7espT+Nhd5rEHV2F1W1XQ9W3pUqNK7HsrhdCigz5URD9um1NcrO07A
+	 9Rru4vTA2LWW2s0BlH+12gPtJCa4vWrNjg//+P5CooPJo1vEZWZRaw561F6OuM5n9B
+	 HptYENweRlTg8pMcX2pRffTkhIH4rQCk7KUu4bLw5KlYtCMK4LKva2NYtjvccX2h9y
+	 bCa2bYiIjdF3covsdemMsir4FU94t25zzA82/eE7zzn5O+wmQGg1yi3ETGyQAfGXFt
+	 MPE8NlBvInCdA==
+Date: Tue, 30 Apr 2024 02:07:45 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-omap@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH 00/15] i2c: use 'time_left' with wait_for_*
+Message-ID: <cscisecgo547dngzcpmcvertywekxtctyxv6hwhnmi5dq4azh2@4lpq6a4qga3s>
+References: <20240427203611.3750-1-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240427203611.3750-1-wsa+renesas@sang-engineering.com>
 
-Hello,
+Hi Wolfram,
 
-My name is Stanislav Head of Department, purchase. We would
-like to know if you export to Sweden, as we need some of your
-products for our client, kindly gives us a reply so we can send
-you the full specifications and details of what we would like to
-purchase.
+On Sat, Apr 27, 2024 at 10:35:52PM +0200, Wolfram Sang wrote:
+> There is a confusing pattern in the kernel to use a variable named 'timeout' to
+> store the result of wait_for_*() causing patterns like:
+> 
+>         timeout = wait_for_completion_timeout(...)
+>         if (!timeout) return -ETIMEDOUT;
+> 
+> with all kinds of permutations. Use 'time_left' as a variable to make the code
+> self explaining.
+> 
+> This is the I2C part of a tree-wide series. The rest of the patches can
+> be found here (slightly WIP):
+> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/time_left
+> 
+> Because these patches are generated, they need manual audit. So, I will
+> send them step by step. This is part 1 and also a call for opinions if
+> this is a desirable change. But at least in the I2C realm, I really want
+> to have it proper.
+> 
+> Build bot is happy with these patches and I also compile tested them
+> (except two). No functional changes intended.
 
+It all looks good, I will give people a few days more for reviews
+and comments and then I'll take it in.
 
-We would appreciate your prompt attention to this request, as we
-should begin a cooperation as soon as possible.
-
-
-thanks & best regards.
-
-
-Sten Arnlund
-
-Purchase Manager
-stanislav.marcel@aliancegrup-se.com
-
-
-a: Veddige by 2, Holmerskulle, 432 68 Sweden.
+Andi
 
