@@ -1,193 +1,192 @@
-Return-Path: <linux-mips+bounces-2969-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2970-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECCE88B7668
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Apr 2024 14:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 677518B772F
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Apr 2024 15:33:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BAE8EB2357D
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Apr 2024 12:56:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E5B3B20D88
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Apr 2024 13:33:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F02AF172BD2;
-	Tue, 30 Apr 2024 12:55:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEBF01791FC;
+	Tue, 30 Apr 2024 13:31:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="pRrgql8g"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZGDkLB6Z"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from aposti.net (aposti.net [89.234.176.197])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 470CD17279C;
-	Tue, 30 Apr 2024 12:55:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.234.176.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09A12175570;
+	Tue, 30 Apr 2024 13:31:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714481753; cv=none; b=CkwTiMwyWOuq7coOE1aMeOvRuqxOadIAeE2k/StM/kStq3AFaGg6LugHmH6mSAgtRCDLdbdNzIGBhq6qWurt9+d5A8Ztjpy0rQWQrPp93HYegpMlcmI+3HPcJSLfrv29/UFHdmydwkmvqAMzw9Y8WeXfKFoHd9rjSYq0lJs/cOo=
+	t=1714483882; cv=none; b=LNbMPl+/NNTstr8Aqe2Wg5GmEn6xOe9b668l3tX2xADQmNbf72XPyB6ndkhT5j070lIW3o92pRV/l6mdtcxQ5xhm42gXvxYx7muZmQTFATacUw4W8KGWIxUQSAqlizqNk+0MucC3c5kEiTa6rv1kP5SXx/VdJH/DU1HIPxyPvGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714481753; c=relaxed/simple;
-	bh=h1L/HFA86d8yYp7QrNCUAGu7UScmEPtBVcWRfNzKEnY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CmiubbLhj9Yw3/BbtK/WVvgSUYhAWwkfpwCcOJ9jKWnSVq5hC7ZV8Vf3/zDTRjnmrzKGFoaCESA1/gVuoZKb61WF2/CFWUeYxml3Fv4youWqQnMJH66+y0hKoRXzbKDl5JT7jFSb2Xsks9DkhGRcijx/HYERjabjh66Eck44hmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=pRrgql8g; arc=none smtp.client-ip=89.234.176.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-	s=mail; t=1714481392;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=rwUo9fW2TVE8Ef255vklCN/02eGVq/9QqsXdrnT9H4A=;
-	b=pRrgql8gXGvkBcFrqAfrVkBEdBtDICNZvNLy29XU8ZUF5SRr5aoK8WgojRsT2aOLGS52Uh
-	84Ok/Vzr/82s8p+FIfxrabWY+HgGdoDDRX/e1JfdXR5n/6PABifzC5YGvfzOk0C2rltE9O
-	tnRDIpTubyB8TDEDfL5haERyG2zYtcU=
-Message-ID: <1a72ad2d6f72805de2c99db8ba8ea984711da81b.camel@crapouillou.net>
-Subject: Re: [PATCH 11/15] i2c: jz4780: use 'time_left' variable with
- wait_for_completion_timeout()
-From: Paul Cercueil <paul@crapouillou.net>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	linux-i2c@vger.kernel.org
-Cc: Andi Shyti <andi.shyti@kernel.org>, linux-mips@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Date: Tue, 30 Apr 2024 14:49:50 +0200
-In-Reply-To: <20240427203611.3750-12-wsa+renesas@sang-engineering.com>
-References: <20240427203611.3750-1-wsa+renesas@sang-engineering.com>
-	 <20240427203611.3750-12-wsa+renesas@sang-engineering.com>
-Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
- keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZM
- LQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5Uz
- FZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtN
- z8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe
- +rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY
- 3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr
- 1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f
- 33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIP
- dlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET
- 4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7U
- rf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KF
- lBwgAhlGy6nqP7O3u7q23hRW5AQ0EXQqFwQEIAMo+MgvYHsyjX3Ja4Oolg1Txzm8woj30ch2nACFC
- qaO0R/1kLj2VVeLrDyQUOlXx9PD6IQI4M8wy8m0sR4wV2p/g/paw7k65cjzYYLh+FdLNyO7IWYXnd
- JO+wDPi3aK/YKUYepqlP+QsmaHNYNdXEQDRKqNfJg8t0f5rfzp9ryxd1tCnbV+tG8VHQWiZXNqN70
- 62DygSNXFUfQ0vZ3J2D4oAcIAEXTymRQ2+hr3Hf7I61KMHWeSkCvCG2decTYsHlw5Erix/jYWqVOt
- X0roOOLqWkqpQQJWtU+biWrAksmFmCp5fXIg1Nlg39v21xCXBGxJkxyTYuhdWyu1yDQ+LSIUAEQEA
- AYkBNgQYAQoAIBYhBNdHYd8OeCBwpMuVxnPua9InSr1BBQJdCoXBAhsMAAoJEHPua9InSr1B4wsH/
- Az767YCT0FSsMNt1jkkdLCBi7nY0GTW+PLP1a4zvVqFMo/vD6uz1ZflVTUAEvcTi3VHYZrlgjcxmc
- Gu239oruqUS8Qy/xgZBp9KF0NTWQSl1iBfVbIU5VV1vHS6r77W5x0qXgfvAUWOH4gmN3MnF01SH2z
- McLiaUGF+mcwl15rHbjnT3Nu2399aSE6cep86igfCAyFUOXjYEGlJy+c6UyT+DUylpjQg0nl8MlZ/
- 7Whg2fAU9+FALIbQYQzGlT4c71SibR9T741jnegHhlmV4WXXUD6roFt54t0MSAFSVxzG8mLcSjR2c
- LUJ3NIPXixYUSEn3tQhfZj07xIIjWxAYZo=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1714483882; c=relaxed/simple;
+	bh=SuC9FZBFdHxF1mZgxsS3cEgWTqlhBFUTnYsCDjyTNtU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NC00rlowCeXRadA/6XkeLdmWhGYisXKP7liXe1wRROjAXuFUoRG0vSSaslhyTlMZXKkjEd1kG3e8EuhFTr/3NDQ1c2q0YAedM8Y3B3YnVMfAv/to9n111W+88DEaJ6OCpW6Po32B+B0uzAipNrKpDiu0P5FAQ4k0Ld4P/1R0gcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZGDkLB6Z; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a556d22fa93so620037066b.3;
+        Tue, 30 Apr 2024 06:31:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714483879; x=1715088679; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sQkyBn4Lnt15qpQKjjn6/FTdXdojZaggT0oJDgNx33c=;
+        b=ZGDkLB6ZeQHM7S3Is+kCTnTiARqKq4qV587fbHYAro6WfXbhqOJl4xElhj+paZsYmf
+         zsAUaz2PKpwWr/nReu83KrPWzL6GJ3NUIxxkikoY8QndVlFBB2kiW68I82oyP7jC6rRy
+         Kue90XOs9J1KUp/gg2ntdEqvPa2dNn7gTu+YQBJukKO9o97AEgFgOwO/3/oDzmTNYn7Z
+         y11S4Gq7YyhptxbmCSG4fqN/oKfSdHaJfTjR+/gghddtiAmMsnce6A9NKgDCIc8BdxRr
+         259AoX88DoDPU3UBi4BHE09WQIb1BCfB+Y6qiyc+rt/Pb6Hau/+OsPS5FrxyhRdjsoO+
+         KPYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714483879; x=1715088679;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sQkyBn4Lnt15qpQKjjn6/FTdXdojZaggT0oJDgNx33c=;
+        b=JAcftVU9819Df72KVKUuHnMPN5upC2nEnDHOXmwiHa/Mqd+nmSAv3AMwHfJtBagS+e
+         cT4dtJMHpeiKwD8GOBBfy7z9s+FlYWcf8y8O5DNvEbZ3jmEGdrqyeDORwHPNtJheMH8u
+         wbr8sgNO5kk1/HagI63jfYfPZwnByelcETO0aRYQuUgULnKKWyrBVDRskUDNMqTI48+k
+         Scnd785HFs5P9LWN4GE3HWvYb1Vr7EbjCdPGIYTLiprCO5P9LexLTNzWT1FY3dzcvFGe
+         8m82EnqztsJ+xRGTCSXLCXolzX7vhAll+CV5KiHaYTWPwu8g1HR9KqJcWBL0x3QmA995
+         /xXA==
+X-Forwarded-Encrypted: i=1; AJvYcCWO3Mh4iihGe+Ze3I9w69Mb8md/2Vgbcuk/pLV58IhsuuR2WJFdzyOfltYCYnTAzhyC3Q96pMnb/hapYki6ldbplKvipp/UGR14OMd7t+nyiHg9UAEhuQyqT390Cak0Dp389zqiVBmq8K56IZOWCR8LL7yrlDLr2eY7tghHxSHpoHbqi6gG11LFCEFiamASp3Vrj8sSNxwdF3/F5xLeXnqUhkRjJqFPXVMh4gGkdCMqR1e8LsIHJbmvUqAQjD+Plg/Xl64uBE2w1oL0lHwfzLclfEkOhylIGPpOYN0HOcP6L6hr4f568biULGqbqyAzHy+JxxkK/4RF2UQCccyO5l2TEBEKp0GpRMmu0l8RZU2Y/sDSbbOEDEI7+zWPY+EmYTeaBzOlsJQtRv9FwrepTHNgSLpUZDI/61aJJ5X7bi3PfaaLuxs5TehX6+ZnU5donnEdr74tYqEGIpcQNFOXqKitiOaOjKw1UyKmuRb9EQ==
+X-Gm-Message-State: AOJu0Yw6lPjiuEN734nsx/qsNMGgMZPKsd83Z7mLWp1YTakIoYgSLDHK
+	97DEipXt50d6B6REktqCeL5bFxAzsqNHolJf7BHCzaFFBuLw0vNj
+X-Google-Smtp-Source: AGHT+IG4D9H/56/A4rQ0pU5al3G+zQuIMq1mBSgq9KUwXS9Rk/+kL4o0ZAf4JvbTFbHU0G4DNFxL/g==
+X-Received: by 2002:a17:906:fb17:b0:a58:e74b:7e16 with SMTP id lz23-20020a170906fb1700b00a58e74b7e16mr2032608ejb.46.1714483879081;
+        Tue, 30 Apr 2024 06:31:19 -0700 (PDT)
+Received: from [192.168.42.188] ([163.114.131.193])
+        by smtp.gmail.com with ESMTPSA id l9-20020a17090615c900b00a555be38aaasm15011385ejd.164.2024.04.30.06.31.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Apr 2024 06:31:18 -0700 (PDT)
+Message-ID: <35a79edf-e4ca-4501-99ad-231a3ab2b216@gmail.com>
+Date: Tue, 30 Apr 2024 14:31:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH net-next v8 07/14] page_pool: devmem support
+To: Mina Almasry <almasrymina@google.com>, David Wei <dw@davidwei.uk>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Amritha Nambiar <amritha.nambiar@intel.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+ Kaiyuan Zhang <kaiyuanz@google.com>, Christian Brauner <brauner@kernel.org>,
+ Simon Horman <horms@kernel.org>, David Howells <dhowells@redhat.com>,
+ Florian Westphal <fw@strlen.de>, Yunsheng Lin <linyunsheng@huawei.com>,
+ Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
+ Arseniy Krasnov <avkrasnov@salutedevices.com>,
+ Aleksander Lobakin <aleksander.lobakin@intel.com>,
+ Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Lorenzo Bianconi <lorenzo@kernel.org>,
+ Richard Gobert <richardbgobert@gmail.com>,
+ Sridhar Samudrala <sridhar.samudrala@intel.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+ Johannes Berg <johannes.berg@intel.com>, Abel Wu <wuyun.abel@bytedance.com>,
+ Breno Leitao <leitao@debian.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+ linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>
+References: <20240403002053.2376017-1-almasrymina@google.com>
+ <20240403002053.2376017-8-almasrymina@google.com>
+ <8357256a-f0e9-4640-8fec-23341fc607db@davidwei.uk>
+ <CAHS8izPeYryoLdCAQdGQU-wn7YVdtuofVKNvRFjFjhqTDsT7zA@mail.gmail.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CAHS8izPeYryoLdCAQdGQU-wn7YVdtuofVKNvRFjFjhqTDsT7zA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Le samedi 27 avril 2024 =C3=A0 22:36 +0200, Wolfram Sang a =C3=A9crit=C2=A0=
-:
-> There is a confusing pattern in the kernel to use a variable named
-> 'timeout' to
-> store the result of wait_for_completion_timeout() causing patterns
-> like:
->=20
-> 	timeout =3D wait_for_completion_timeout(...)
-> 	if (!timeout) return -ETIMEDOUT;
->=20
-> with all kinds of permutations. Use 'time_left' as a variable to make
-> the code
-> self explaining.
->=20
-> Fix to the proper variable type 'unsigned long' while here.
->=20
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On 4/27/24 03:11, Mina Almasry wrote:
+> On Fri, Apr 26, 2024 at 5:18 PM David Wei <dw@davidwei.uk> wrote:
+>>
+>> On 2024-04-02 5:20 pm, Mina Almasry wrote:
+>>> @@ -69,20 +106,26 @@ net_iov_binding(const struct net_iov *niov)
+>>>    */
+>>>   typedef unsigned long __bitwise netmem_ref;
+>>>
+>>> +static inline bool netmem_is_net_iov(const netmem_ref netmem)
+>>> +{
+>>> +#if defined(CONFIG_PAGE_POOL) && defined(CONFIG_DMA_SHARED_BUFFER)
+>>
+>> I am guessing you added this to try and speed up the fast path? It's
+>> overly restrictive for us since we do not need dmabuf necessarily. I
+>> spent a bit too much time wondering why things aren't working only to
+>> find this :(
+> 
+> My apologies, I'll try to put the changelog somewhere prominent, or
+> notify you when I do something that I think breaks you.
+> 
+> Yes, this is a by-product of a discussion with regards to the
+> page_pool benchmark regressions due to adding devmem. There is some
+> background on why this was added and the impact on the
+> bench_page_pool_simple tests in the cover letter.
+> 
+> For you, I imagine you want to change this to something like:
+> 
+> #if defined(CONFIG_PAGE_POOL)
+> #if defined(CONFIG_DMA_SHARED_BUFFER) || defined(CONFIG_IOURING)
+> 
+> or something like that, right? Not sure if this is something I should
 
-Acked-by: Paul Cercueil <paul@crapouillou.net>
+Feels a bit flimsy, if the argument is that you want to be able
+to disable netmem overhead, then adding a netmem config option
+sounds like a better way forward.
 
-Cheers,
--Paul
+I have doubts this conditional handling is desirable in the first
+place, but perhaps I missed the discussion.
 
-> ---
-> =C2=A0drivers/i2c/busses/i2c-jz4780.c | 22 +++++++++++-----------
-> =C2=A01 file changed, 11 insertions(+), 11 deletions(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-jz4780.c
-> b/drivers/i2c/busses/i2c-jz4780.c
-> index 55035cca0ae5..7951891d6b97 100644
-> --- a/drivers/i2c/busses/i2c-jz4780.c
-> +++ b/drivers/i2c/busses/i2c-jz4780.c
-> @@ -565,7 +565,7 @@ static inline int jz4780_i2c_xfer_read(struct
-> jz4780_i2c *i2c,
-> =C2=A0				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int idx)
-> =C2=A0{
-> =C2=A0	int ret =3D 0;
-> -	long timeout;
-> +	unsigned long time_left;
-> =C2=A0	int wait_time =3D JZ4780_I2C_TIMEOUT * (len + 5);
-> =C2=A0	unsigned short tmp;
-> =C2=A0	unsigned long flags;
-> @@ -600,10 +600,10 @@ static inline int jz4780_i2c_xfer_read(struct
-> jz4780_i2c *i2c,
-> =C2=A0
-> =C2=A0	spin_unlock_irqrestore(&i2c->lock, flags);
-> =C2=A0
-> -	timeout =3D wait_for_completion_timeout(&i2c->trans_waitq,
-> -					=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
-> msecs_to_jiffies(wait_time));
-> +	time_left =3D wait_for_completion_timeout(&i2c->trans_waitq,
-> +						msecs_to_jiffies(wai
-> t_time));
-> =C2=A0
-> -	if (!timeout) {
-> +	if (!time_left) {
-> =C2=A0		dev_err(&i2c->adap.dev, "irq read timeout\n");
-> =C2=A0		dev_dbg(&i2c->adap.dev, "send cmd count:%d=C2=A0 %d\n",
-> =C2=A0			i2c->cmd, i2c->cmd_buf[i2c->cmd]);
-> @@ -627,7 +627,7 @@ static inline int jz4780_i2c_xfer_write(struct
-> jz4780_i2c *i2c,
-> =C2=A0{
-> =C2=A0	int ret =3D 0;
-> =C2=A0	int wait_time =3D JZ4780_I2C_TIMEOUT * (len + 5);
-> -	long timeout;
-> +	unsigned long time_left;
-> =C2=A0	unsigned short tmp;
-> =C2=A0	unsigned long flags;
-> =C2=A0
-> @@ -655,14 +655,14 @@ static inline int jz4780_i2c_xfer_write(struct
-> jz4780_i2c *i2c,
-> =C2=A0
-> =C2=A0	spin_unlock_irqrestore(&i2c->lock, flags);
-> =C2=A0
-> -	timeout =3D wait_for_completion_timeout(&i2c->trans_waitq,
-> -					=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
-> msecs_to_jiffies(wait_time));
-> -	if (timeout && !i2c->stop_hold) {
-> +	time_left =3D wait_for_completion_timeout(&i2c->trans_waitq,
-> +						msecs_to_jiffies(wai
-> t_time));
-> +	if (time_left && !i2c->stop_hold) {
-> =C2=A0		unsigned short i2c_sta;
-> =C2=A0		int write_in_process;
-> =C2=A0
-> -		timeout =3D JZ4780_I2C_TIMEOUT * 100;
-> -		for (; timeout > 0; timeout--) {
-> +		time_left =3D JZ4780_I2C_TIMEOUT * 100;
-> +		for (; time_left > 0; time_left--) {
-> =C2=A0			i2c_sta =3D jz4780_i2c_readw(i2c,
-> JZ4780_I2C_STA);
-> =C2=A0
-> =C2=A0			write_in_process =3D (i2c_sta &
-> JZ4780_I2C_STA_MSTACT) ||
-> @@ -673,7 +673,7 @@ static inline int jz4780_i2c_xfer_write(struct
-> jz4780_i2c *i2c,
-> =C2=A0		}
-> =C2=A0	}
-> =C2=A0
-> -	if (!timeout) {
-> +	if (!time_left) {
-> =C2=A0		dev_err(&i2c->adap.dev, "write wait timeout\n");
-> =C2=A0		ret =3D -EIO;
-> =C2=A0	}
+> do here or if something more appropriate to be in the patches you
+> apply on top.
+> 
+> I additionally think you may also need to run the
+> page_pool_benchmark_simple tests like I do in the cover letter to see
+> if you're affecting those.
 
+-- 
+Pavel Begunkov
 
