@@ -1,146 +1,180 @@
-Return-Path: <linux-mips+bounces-2987-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-2988-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF36C8B8F51
-	for <lists+linux-mips@lfdr.de>; Wed,  1 May 2024 20:01:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 035558B9840
+	for <lists+linux-mips@lfdr.de>; Thu,  2 May 2024 11:59:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2BA711C21630
-	for <lists+linux-mips@lfdr.de>; Wed,  1 May 2024 18:01:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B571285AC3
+	for <lists+linux-mips@lfdr.de>; Thu,  2 May 2024 09:59:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CC0A1384B1;
-	Wed,  1 May 2024 18:01:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 117565674B;
+	Thu,  2 May 2024 09:59:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OKthm/ur"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="ThypioNq";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MwWsdNvK"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from fout6-smtp.messagingengine.com (fout6-smtp.messagingengine.com [103.168.172.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43722146D5F
-	for <linux-mips@vger.kernel.org>; Wed,  1 May 2024 18:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E89B44374;
+	Thu,  2 May 2024 09:59:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714586503; cv=none; b=Wv2ojFFMLKcaB2mAM4Qt7L4Lem/c2MAYoZcZ9QndKFQsC6mBwcMSTKB9dwbkE1olx7ILq4DZ+R+8/4LdxinAGYIGCys1UOOSnkAjtBpeWgeHxfiqAHKhfxbngLWLfp6WUyDAwCumqnC6wT3htVaEuxsNkKNo79Ic9CLrF0LAFAU=
+	t=1714643980; cv=none; b=lUODh5ocmtm7R286BEEx7nFe7WvCkCkTR/aqulOb4Sxiy/ddnWP5XHUzDPlA9WUdFFFo4mrA+CgYFdeFwoCQ/cT7PhRkiQLq2ZlQC3H+Dat8DeMiflBEgB5ZrKnk0CaxNgWxCvcuxjt2kTo9cgFyS09hgK3lyNdkH4uEjO3l208=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714586503; c=relaxed/simple;
-	bh=zjpxgyAK4GAbrd3HGC5s/4QO74a8GhDO3MiVtLjfZEA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uVu3hMXiE2N2y3+1GWTk1o2FKgMnYFxN/1W/g4fPNpj5puIY8147MbUXhYRv0waxNVjs/rgPjwF75FzvUYWdaBqVH1E8FdtjDCx5BOIWOor10zySA5XWjv/gfCDkAlL7XRxazOXt26/Fz8rkqODpFhEW4ACnq33tler7kN7Mohk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OKthm/ur; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Wed, 1 May 2024 18:01:31 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1714586499;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=69cqu9i0hgyzyuHYDqr+vrRYe6XfjRaXapX+zs6xjnE=;
-	b=OKthm/ur+byGKYcHm2DPTNC5z/URFbkOGPadzI7eiZzZ5mezBuOrZl7iO90ODYz9fRbgEy
-	6ouYU5nahmPlBewz9DVswxKYUkCE/I5p4/wec5b9+XAdcs6XajZ/4HudNHe28xxU0lQwpd
-	WHY0DzOGslb59/2viaOe877XKsJlqEk=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Oliver Upton <oliver.upton@linux.dev>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Marc Zyngier <maz@kernel.org>, Tianrui Zhao <zhaotianrui@loongson.cn>,
-	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Anup Patel <anup@brainfault.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] KVM: Fold kvm_arch_sched_in() into
- kvm_arch_vcpu_load()
-Message-ID: <ZjKDe6SlVWGj0ugA@linux.dev>
-References: <20240430193157.419425-1-seanjc@google.com>
- <ZjGMn5tlq8edKZYv@linux.dev>
- <ZjJRhQhX_12eBvY-@google.com>
+	s=arc-20240116; t=1714643980; c=relaxed/simple;
+	bh=DcVD+OAMhzUIPuBLicTKktBmrnqdwg9u8cdk9CXSAuc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fbjFJrJ35T2qKv7P5su4mrtN2+hHHtbi0DuT08QfLJ1X0Fg0aTR0fpCBsZYaiGTT5V8M2FA6hIX7E08U3zytoCdyjf659mOrfo/Tk7cbPfNgpbM78OtSN4QxB7sqwLXtlQDrVLVEPShPN+oOJcQjC+Vu3fufWKnPvptgVpglKSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=ThypioNq; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MwWsdNvK; arc=none smtp.client-ip=103.168.172.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 6132613810C2;
+	Thu,  2 May 2024 05:59:36 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute7.internal (MEProxy); Thu, 02 May 2024 05:59:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm1; t=1714643976; x=1714730376; bh=ko
+	Bi8a5OtpD29T0eV24Y2ij/s7j1apAbux+6IxIHaR0=; b=ThypioNqNlMuH8fNFf
+	N4HyccuabbnohpAri65HT93Enp+EdhGrKDjAuVDYTGBtclnullUCh7rRawDDuz4A
+	BnZDcPPtpuuCGEaGMLK88zkS0zqn8KAmKYKl5+kPfke3GdUZlzQHRLmPPW2HWzYw
+	RzSYLA4PINhcmrsbLKVrqqFlHbO/ASfL/PGOTx3H8muBN74I7099doAMiNcwl6CU
+	vB2Ge/d2c7rMX1aJ41RNFLAdAzhPmgfkt0fuuR53CGx9vTflUQKJ544Kl9c/LgLx
+	gfxy+LZCcVHT5rgOoi/DWfIVufzYgFnWetrmloRBrOQa7RhBbm4iTKIM/NRh7yUA
+	Mebw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1714643976; x=1714730376; bh=koBi8a5OtpD29
+	T0eV24Y2ij/s7j1apAbux+6IxIHaR0=; b=MwWsdNvKNeM7xslSQoINFqem3I7RC
+	GaIHB0maHz55oFz+eyg+EeNi2zttMQLct5x0NoSymmPOurhyuUCmpVBQ56XMGPHn
+	AWaJByinctob/IooKGGuIOcNcOeZRMPRAygfPachOh4D9Ka06UIW5S1NKjs7QbVq
+	R7/Q5uGg20S2trwQGe31EfIBkZjX6rg7OWkUMo7Xf4ok67gYEPBoW4M1VkQL4wpl
+	aw1Iee70HWvpUJyhjcVJRGo5G7EOc8gOGgQxyIfRTAsuhmqFGTerQFcvKIfcpCE5
+	q+DEzeP1fIPBZnG6n5vVTgH1YgVd0g12kBDG71L2TK7OAnx5EcT/UqRYQ==
+X-ME-Sender: <xms:B2QzZhVy2UzZ_1J_kEzh9RlhvWqSPnN8hU_6BmHRnimd6BLJ58gqHQ>
+    <xme:B2QzZhmNZr6tiKdsy5S9_TmFtGehS-L84zHpBj5UBqkRyrPJOLlgZZN3ePp83XIrJ
+    fnou5zqGpVPdEj31ic>
+X-ME-Received: <xmr:B2QzZtbh2uwZpRfSSJbm9VC3cDFonnWyNAQoTFJNNKi_QSYx4thSwXc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvddukedgvdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecuhfhrohhmpeflihgrgihu
+    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
+    ftrfgrthhtvghrnhepgfevffejteegjeeflefgkeetleekhfeugfegvdeuueejkeejteek
+    kedvfffffedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehf
+    lhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:B2QzZkXYQ4qlcHQcouTyGNE30-_jzepjcvtEOCBeK0IVKua3hCAW9g>
+    <xmx:CGQzZrnXEEUKoxK1nvI-at-bw48hL0xjtnC4_8q7euxmYJXPb0Se6Q>
+    <xmx:CGQzZhesblcpcimgkRwo2waDDbme-dekv2XGgh1X8F6INnuDH6vgIQ>
+    <xmx:CGQzZlGBjbLQVLB4nFmeuGI2mfDEOt4sqjZu6tP2QiCvyrQlcHQoNg>
+    <xmx:CGQzZmvmY_fa1-O997jRNmxS4zjbvI0daYoqLChIZlt2MqJH_e18UahT>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 2 May 2024 05:59:35 -0400 (EDT)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v3 0/9] MIPS: Unify low-level debugging functionalities
+Date: Thu, 02 May 2024 10:59:27 +0100
+Message-Id: <20240502-mips_debug_ll-v3-0-3b61f30e484c@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZjJRhQhX_12eBvY-@google.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAP9jM2YC/32MSwqDMBQAryJZNyU+JbZd9R5FJJ8XfaCNJFYq4
+ t0b3XXRLmdgZmURA2Fkt2xlAWeK5J8JilPGTKeeLXKyiRkIKEUBkg80xsaifrVN33ODFTjEXEs
+ FLDVjQEfv4/eoE3cUJx+WYz/Dbn+dZuCCV4WQFwXK2vx6d/3SejWdjR/29b9Oy1JpU0kHKv/q6
+ m3bPss3m/bkAAAA
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+ =?utf-8?q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2679;
+ i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
+ bh=DcVD+OAMhzUIPuBLicTKktBmrnqdwg9u8cdk9CXSAuc=;
+ b=owGbwMvMwCHmXMhTe71c8zDjabUkhjTjFPaHsRfPCJ1RWfr29GwrBR+TH0rrnsQyvOuoXnNAo
+ vdidJF2RykLgxgHg6yYIkuIgFLfhsaLC64/yPoDM4eVCWQIAxenAEzkTCfD/9Dcv7NORx20VY81
+ 548x1WfbPpUrbl/z6/a8GpckT6ViBYZfTP/TFoc6T3/ttnup4iyTpNvrxd8VP721dMExbrvHXNs
+ amAA=
+X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
+ fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-On Wed, May 01, 2024 at 07:28:21AM -0700, Sean Christopherson wrote:
-> On Wed, May 01, 2024, Oliver Upton wrote:
-> > On Tue, Apr 30, 2024 at 12:31:53PM -0700, Sean Christopherson wrote:
-> > > Drop kvm_arch_sched_in() and instead pass a @sched_in boolean to
-> > > kvm_arch_vcpu_load().
-> > > 
-> > > While fiddling with an idea for optimizing state management on AMD CPUs,
-> > > I wanted to skip re-saving certain host state when a vCPU is scheduled back
-> > > in, as the state (theoretically) shouldn't change for the task while it's
-> > > scheduled out.  Actually doing that was annoying and unnecessarily brittle
-> > > due to having a separate API for the kvm_sched_in() case (the state save
-> > > needed to be in kvm_arch_vcpu_load() for the common path).
-> > > 
-> > > E.g. I could have set a "temporary"-ish flag somewhere in kvm_vcpu, but (a)
-> > > that's gross and (b) it would rely on the arbitrary ordering between
-> > > sched_in() and vcpu_load() staying the same.
-> > 
-> > Another option would be to change the rules around kvm_arch_sched_in()
-> > where the callee is expected to load the vCPU context.
-> > 
-> > The default implementation could just call kvm_arch_vcpu_load() directly
-> > and the x86 implementation can order things the way it wants before
-> > kvm_arch_vcpu_load().
-> > 
-> > I say this because ...
-> > 
-> > > The only real downside I see is that arm64 and riscv end up having to pass
-> > > "false" for their direct usage of kvm_arch_vcpu_load(), and passing boolean
-> > > literals isn't ideal.  But that can be solved by adding an inner helper that
-> > > omits the @sched_in param (I almost added a patch to do that, but I couldn't
-> > > convince myself it was necessary).
-> > 
-> > Needing to pass @sched_in for other usage of kvm_arch_vcpu_load() hurts
-> > readability, especially when no other architecture besides x86 cares
-> > about it.
-> 
-> Yeah, that bothers me too.
-> 
-> I tried your suggestion of having x86's kvm_arch_sched_in() do kvm_arch_vcpu_load(),
-> and even with an added kvm_arch_sched_out() to provide symmetry, the x86 code is
-> kludgy, and even the common code is a bit confusing as it's not super obvious
-> that kvm_sched_{in,out}() is really just kvm_arch_vcpu_{load,put}().
-> 
-> Staring a bit more at the vCPU flags we have, adding a "bool scheduled_out" isn't
-> terribly gross if it's done in common code and persists across load() and put(),
-> i.e. isn't so blatantly a temporary field.  And because it's easy, it could be
-> set with WRITE_ONCE() so that if it can be read cross-task if there's ever a
-> reason to do so.
-> 
-> The x86 code ends up being less ugly, and adding future arch/vendor code for
-> sched_in() *or* sched_out() requires minimal churn, e.g. arch code doesn't need
-> to override kvm_arch_sched_in().
-> 
-> The only weird part is that vcpu->preempted and vcpu->ready have slightly
-> different behavior, as they are cleared before kvm_arch_vcpu_load().  But the
-> weirdness is really with those flags no having symmetry, not with scheduled_out
-> itself.
-> 
-> Thoughts?
+Hi all,
 
-Yeah, this seems reasonable. Perhaps scheduled_out could be a nice hint
-for guardrails / sanity checks in the future.
+This is a attempt to bring all low-level debugging print functions
+together and provide a arm-like low-level debugging interface and
+a further capability to debug early exceptions.
 
+This patch elimiate platform specific early_printk, zboot printing
+functions and cps-vec-ns16550 by newly introduced debug_ll.
+
+Hope you'll find them handy :-)
+
+Happy hacking!
+
+Thanks
+
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+Changes in v3:
+- Collect review tags
+- Fix an indentation
+- Link to v2: https://lore.kernel.org/r/20240326-mips_debug_ll-v2-0-b64abc76f2a1@flygoat.com
+
+---
+Jiaxun Yang (9):
+      MIPS: asm: Move strings to .rodata.str section
+      MIPS: debug: Implement low-level debugging functions
+      MIPS: debug: Hook up DEBUG_LL with early printk
+      MIPS: debug: Provide an early exception vector for low-level debugging
+      MIPS: debug_ll: Add Kconfig symbols for some 8250 uarts
+      MIPS: debug_ll: Implement support for Alchemy uarts
+      MIPS: debug_ll: Implement support for AR933X uarts
+      MIPS: zboot: Convert to use debug_ll facilities
+      MIPS: CPS: Convert to use debug_ll facilities
+
+ arch/mips/Kconfig                        |  12 +-
+ arch/mips/Kconfig.debug                  | 240 +++++++++++++++++++++++--------
+ arch/mips/boot/compressed/Makefile       |   9 +-
+ arch/mips/boot/compressed/dbg.c          |  39 -----
+ arch/mips/boot/compressed/debug-vec.S    |   3 +
+ arch/mips/boot/compressed/debug.S        |   3 +
+ arch/mips/boot/compressed/decompress.h   |   8 +-
+ arch/mips/boot/compressed/head.S         |   6 +
+ arch/mips/boot/compressed/uart-16550.c   |  49 -------
+ arch/mips/boot/compressed/uart-alchemy.c |   9 --
+ arch/mips/boot/compressed/uart-ath79.c   |   2 -
+ arch/mips/boot/compressed/uart-prom.c    |   9 --
+ arch/mips/include/asm/asm.h              |   2 +-
+ arch/mips/include/debug/8250.S           |  60 ++++++++
+ arch/mips/include/debug/alchemy.S        |  46 ++++++
+ arch/mips/include/debug/ar933x.S         |  41 ++++++
+ arch/mips/include/debug/uhi.S            |  48 +++++++
+ arch/mips/kernel/Makefile                |   4 +-
+ arch/mips/kernel/cps-vec.S               |  16 +--
+ arch/mips/kernel/debug-vec.S             | 194 +++++++++++++++++++++++++
+ arch/mips/kernel/debug.S                 | 130 +++++++++++++++++
+ arch/mips/kernel/early_printk.c          |  19 +++
+ arch/mips/kernel/head.S                  |   4 +
+ 23 files changed, 756 insertions(+), 197 deletions(-)
+---
+base-commit: 084c8e315db34b59d38d06e684b1a0dd07d30287
+change-id: 20240326-mips_debug_ll-ce72fee1b6a2
+
+Best regards,
 -- 
-Thanks,
-Oliver
+Jiaxun Yang <jiaxun.yang@flygoat.com>
+
 
