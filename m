@@ -1,118 +1,199 @@
-Return-Path: <linux-mips+bounces-3062-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3063-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F2148BB5C4
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 23:33:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E94628BB5D9
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 23:35:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FF411C2385E
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 21:33:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1885F1C22FA7
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 21:35:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65EBC56B8B;
-	Fri,  3 May 2024 21:33:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EDEC60DCF;
+	Fri,  3 May 2024 21:34:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V7Xcns+h"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m1p4Rwzk"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EEFB535A8;
-	Fri,  3 May 2024 21:33:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED56E5914C;
+	Fri,  3 May 2024 21:34:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714772005; cv=none; b=HT2o2lzg6YVvVLJ9RBKBIeA7e4PtfMsboxkBl/LCwC12qe+HL/MqE2VDx5Hb2Z+a6b3VglJbN6rX8MPw6GUjb6mKVWOggrXpdVuuRyGcBrMGJZs0LrEVH9djg5yE7Q2xtC8pfoJ2KrU0Yrd1jJsrG21VgXcI4z/f5u2sEzn2TUM=
+	t=1714772094; cv=none; b=Y6jarzwu+ejJ7OBMJur3bmamqlIijA4bf19DpmXgGQASdzvhMGTAqPlPNRnwhIFxUyYY/hJAGFT6FaYhgC/cwPkcJtM6EcZdUJFq17BDDhD4PZos2GgISZvNJSenjhTmXdwEcachuZZ9aWxThyYgF2ISjw/ICUnT1K/CqctXkJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714772005; c=relaxed/simple;
-	bh=NCAXwfHyr61OCXX/ZRFhD5O/01D/pMK9dk2BzvaMrcc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=bnm6z5LYoDTS93WFK2S9vuHZ2wGrSESrWfBKFVHY7+EEFBhn8ZlzlPE92xmdHWmLGcSG0xCfTj1Fy4icFuDyxplmpJAx9KhoLQN/wTjQvKgQEkT84AuYwEwFYH7IyqcY4MOuFMEiKhRqMtOXlnI6Q37PF4CsqbLxvwC6c1ilwOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V7Xcns+h; arc=none smtp.client-ip=209.85.210.172
+	s=arc-20240116; t=1714772094; c=relaxed/simple;
+	bh=G+qm8/ugbECOEVX98AimsGMwO62Rp+FghrrPhBFcwwk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iKcvFv3dfL2v45LyjD0zdT9ENp/KiMjisTEKQgKihJryTsm4FLkBEtENfpIgQ9WF2ySgeSJJgWSMDWlK9kRiaNJVcGG6Fu2DrHs+Ov7kdtJGgmItsdfd5OKzRXDgF2/dqb/pN9TBXbAVRys34jK1yigVdMy5+C4/QoEDAA3bavs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m1p4Rwzk; arc=none smtp.client-ip=209.85.219.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6f44d2b3130so166110b3a.2;
-        Fri, 03 May 2024 14:33:23 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-de54b28c41eso174466276.0;
+        Fri, 03 May 2024 14:34:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714772003; x=1715376803; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=yJ1rjd2I3L8WgYwmzP2Belj1FKW5S0lN+W1hzufyv1M=;
-        b=V7Xcns+hoctowIec1VLFRsvlHL51CwS+X6jFv7OkMpCilJOnRsu4YZJ5TNFv10/OWK
-         +jLS6wRi6nFpA44iMooN1kG3LDoreKMoAKfszooIdx+4hK5NTQUOJ6CI3D78e+wALS5F
-         mhuZnPxBuomHf3xK9qlQDf3jR/S19wuOX1l0drObmUTIMrGpvz1cib1Q9GccKNmyCW2m
-         Aka9sH3U9r3Qpw4sU//G0aP1PnOrjsAuNAHEqPaPdAZus6iWLW+7nHoHXbD3cbG0vzAJ
-         hNV1Q9mElG3un6xkK/d2AXtsS5omu8RkfG2/DDstskmoA+UY23eAVwDK0DCK+CGcbLRb
-         N2Kg==
+        d=gmail.com; s=20230601; t=1714772092; x=1715376892; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tC7sH68VgjfgX9UDWZ/v/q9uL8QvGp7TNkRbmhFCwL4=;
+        b=m1p4Rwzky0+igvUxP9f9wcQ+rnhCXMXAfOabXcMxTOYv2ycEoOJTrHPaDOcz4/n6Y2
+         TrH1TutXaA4g8Jqh7LGSp6DKGdmdTj7u+ecOhyzU5FfplNiYDUXG/zZwWlwz4z30jnIR
+         xoR578/tlAtYIaWdi0iil7vqOUPU8i74e3G4yq+0muG8mFxg/pDSWmND+M+fSsJSPOMG
+         eowVOh7ar6xjrq/q8J6ePNDLyDYETkw+F49vXgOxlNa+mQ7sXHRsZtAA/wzL+LShQKR/
+         TA/6dzJd91n6sBjDbU7piHst71tiOzk+3VqMF9a1ua6I8XmSZ6cFz475Xhz04GqrUhbG
+         Q9Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714772003; x=1715376803;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yJ1rjd2I3L8WgYwmzP2Belj1FKW5S0lN+W1hzufyv1M=;
-        b=vsKCO1volPDijkoToIdpctue2zf5epReldeZB3Iown2URPNR2Ir7SgFRfpNRiCZPns
-         b5XOAJum70kECvU3SlHZNEj9n/sCvKAQXlagZYfZKKnFLlktqeXE6o40hs7LM0IsawzF
-         JEIYjTNNgvQJ86hkYv1G0/2JU8PvMrT8fyfyVgrA53eRJoontR1XYkcWK8zV1YSrkA/l
-         14z+F6WXe9DkxJAcJB104Qxlocbrr5e8Bf+cVZBoi224626mDLVm+le7HFLo9vCR6QOh
-         PnB71ENczTCaOEY9ovb/OUBhmivyUQMeLgN05XK3XwAoqaCyDM2LAaf37DMWNKdDAXke
-         9NJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUMCLkTtLRH5nBu6P45dPpMy4xDghlHDjU7jJ901xFutyoduHbIORUV0tdAKyqPPkPK0qaCWU+IYPX7D0IEtWiLzqrEaCAqXlogF3mRrOXSDcXcxCoPMYzyq+wTJuzWGXJD1q/Uz9emGbe8ryq+SwnbStTgWIjJLgV6qIFYT4fj6HKIXBM=
-X-Gm-Message-State: AOJu0Yzd9+RHCDdupmZFSX2y8CVKL9cBGhKLZzspH/FVrox0IMeZykis
-	+JIvj7xGlv/IZqSOL/F/lakKF9zhkbH9BmStNuXIz8pHGOg2+J0A
-X-Google-Smtp-Source: AGHT+IGu4d+JB6H6GVxzxsiFWbM1p1lxUwqo0405OocYqBrS24F6eOYzEVRzk7IwracOeHHe6x7wyg==
-X-Received: by 2002:a05:6a20:948c:b0:1ad:747:3fd9 with SMTP id hs12-20020a056a20948c00b001ad07473fd9mr3790769pzb.54.1714772003163;
-        Fri, 03 May 2024 14:33:23 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id y8-20020a17090264c800b001e868e29fabsm3793795pli.251.2024.05.03.14.33.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 May 2024 14:33:22 -0700 (PDT)
-Message-ID: <f010f127-ed51-43ca-9c88-7bc7e06025e1@gmail.com>
-Date: Fri, 3 May 2024 14:33:20 -0700
+        d=1e100.net; s=20230601; t=1714772092; x=1715376892;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tC7sH68VgjfgX9UDWZ/v/q9uL8QvGp7TNkRbmhFCwL4=;
+        b=kwrTdqzDBc99dGZOmxD/EpbXrMC2Oh6DUxHTDENc5gj1FPtTrZwg9lQ54fZQKt3SGt
+         nm6dnLOU43TKbuxaevl6uvo5BmmfNV1jhkkzHzZIv789/fK4y7a8Kp0fZBSV69qY0YQE
+         KLl7zfRQfRpJ7ZLYx8oSpSm8vgMYrNckqcwpNtDYPZZCcUPXFCHL82dj3+QLUyxXaNkf
+         NKPg44dUdoTJSIaE/X5GLoaGjE11bBwc79nsOmNAneNl8nLAWGj9ypg7UtEl7CD2Rq3t
+         /+krfJf4YZgHbD9FcKMu7CFNpyTIWA54O3AEkMAy8iEI9X+2bBIbVVRaPYgWtO77seCx
+         NWyg==
+X-Forwarded-Encrypted: i=1; AJvYcCUGJlQt3OWuSvQfSeYFCLZ7OW1Zs/a77NwDZxk412zDPIAIrWoxVUaKht03CxNYBfX2KvIA/7zt+iUmtOvEX1fhr0T33gSGk3TQk+315eC8W74eVYSsr4Ht2IXbbdcCEb/IYuzHFMzTXYteu5rmzCisNT/8U/XZYxK/d5S8ts/d/AsthFU=
+X-Gm-Message-State: AOJu0Yx3cvRUHfE2X/zkFo4b1jBxE4+AMuNm19X6dR6YGGAKeDRBmPrL
+	j6hoPyGgKPUQAkiGUjTQsxvTmha+H0zpRL7SiTtk/5x1XGoPtsyzkN/EPAeOdDuNiDvCHaN0w+v
+	/ZoRnJ6Xhi9E5/1SG81F6JPDE2QE=
+X-Google-Smtp-Source: AGHT+IEQvMYH3a3ssvxy7/wLXnv0LSmhPbEgC7ELP4izinqJGxMGJIE45fXICeFpMs8mFmdPFgPcOMLIbyUy2gK1MHA=
+X-Received: by 2002:a25:c70c:0:b0:dc5:f51e:6a60 with SMTP id
+ w12-20020a25c70c000000b00dc5f51e6a60mr3921979ybe.6.1714772091984; Fri, 03 May
+ 2024 14:34:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/5] mips: bmips: enable RAC on BMIPS4350
-To: Christian Marangi <ansuelsmth@gmail.com>,
- Hauke Mehrtens <hauke@hauke-m.de>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
- <zajec5@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,
- =?UTF-8?Q?=C3=81lvaro_Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>,
- linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, =?UTF-8?Q?Daniel_Gonz=C3=A1lez_Cabanelas?=
- <dgcbueu@gmail.com>
-References: <20240503212139.5811-1-ansuelsmth@gmail.com>
- <20240503212139.5811-6-ansuelsmth@gmail.com>
-Content-Language: en-US
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20240503212139.5811-6-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240503135455.966-1-ansuelsmth@gmail.com> <20240503135455.966-6-ansuelsmth@gmail.com>
+ <5529fe79-e2f8-47ab-a0cf-2b37bb13bbd7@broadcom.com> <CABwr4_sz4DKjp_cJqTNBCyQSUhXGJM4_h1JSiK-h=8uAbPPoVQ@mail.gmail.com>
+ <66355403.050a0220.9e59a.8031@mx.google.com>
+In-Reply-To: <66355403.050a0220.9e59a.8031@mx.google.com>
+From: =?UTF-8?Q?Daniel_Gonz=C3=A1lez_Cabanelas?= <dgcbueu@gmail.com>
+Date: Fri, 3 May 2024 23:34:41 +0200
+Message-ID: <CABwr4_u6bgdWHeYwyDTW3xoM-z+JaEPan98jY7QZjP6thgkGRA@mail.gmail.com>
+Subject: Re: [PATCH 5/6] mips: bmips: enable RAC on BMIPS4350
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>, Hauke Mehrtens <hauke@hauke-m.de>, 
+	=?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+	=?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>, 
+	linux-mips@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/3/24 14:21, Christian Marangi wrote:
-> From: Daniel González Cabanelas <dgcbueu@gmail.com>
-> 
-> The data RAC is left disabled by the bootloader in some SoCs, at least in
-> the core it boots from.
-> Enabling this feature increases the performance up to +30% depending on the
-> task.
-> 
-> Signed-off-by: Daniel González Cabanelas <dgcbueu@gmail.com>
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-> [ rework code and reduce code duplication ]
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+El vie, 3 may 2024 a las 23:15, Christian Marangi
+(<ansuelsmth@gmail.com>) escribi=C3=B3:
+>
+> On Fri, May 03, 2024 at 11:11:13PM +0200, Daniel Gonz=C3=A1lez Cabanelas =
+wrote:
+> > El vie, 3 may 2024 a las 20:56, Florian Fainelli
+> > (<florian.fainelli@broadcom.com>) escribi=C3=B3:
+> > >
+> > > On 5/3/24 06:54, Christian Marangi wrote:
+> > > > From: Daniel Gonz=C3=A1lez Cabanelas <dgcbueu@gmail.com>
+> > > >
+> > > > The data RAC is left disabled by the bootloader in some SoCs, at le=
+ast in
+> > > > the core it boots from.
+> > > > Enabling this feature increases the performance up to +30% dependin=
+g on the
+> > > > task.
+> > > >
+> > > > Signed-off-by: Daniel Gonz=C3=A1lez Cabanelas <dgcbueu@gmail.com>
+> > > > Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
+> > > > [ rework code and reduce code duplication ]
+> > > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > > > ---
+> > > >   arch/mips/kernel/smp-bmips.c | 12 ++++++++++++
+> > > >   1 file changed, 12 insertions(+)
+> > > >
+> > > > diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bm=
+ips.c
+> > > > index 6048c471b5ee..7bde6bbaa41f 100644
+> > > > --- a/arch/mips/kernel/smp-bmips.c
+> > > > +++ b/arch/mips/kernel/smp-bmips.c
+> > > > @@ -617,6 +617,18 @@ void bmips_cpu_setup(void)
+> > > >               __raw_readl(bmips_cbr_addr + BMIPS_RAC_ADDRESS_RANGE)=
+;
+> > > >               break;
+> > > >
+> > > > +     case CPU_BMIPS4350:
+> > > > +             u32 rac_addr =3D BMIPS_RAC_CONFIG_1;
+> > > > +
+> > > > +             if (!(read_c0_brcm_cmt_local() & (1 << 31)))
+> > > > +                     rac_addr =3D BMIPS_RAC_CONFIG;
+> > > > +
+> > > > +             /* Enable data RAC */
+> > > > +             cfg =3D __raw_readl(bmips_cbr_addr + rac_addr);
+> > > > +             __raw_writel(cfg | 0xa, bmips_cbr_addr + rac_addr);
+> > >
+> > > This enables data pre-fetching (bit 3) and data-caching (bit 1), have
+> > > you tried with 0xF to see if this provides any additional speed-up?
+> > >
+> > > Looks correct to me otherwise, I wonder if a flush would be in order
+> > > right after enabling, though I did not see any specific instructions
+> > > towards that part in the programming notes.
+> > >
+> > > > +             __raw_readl(bmips_cbr_addr + rac_addr);
+> > > > +             break;
+> > > > +
+> > > >       case CPU_BMIPS4380:
+> > > >               /* CBG workaround for early BMIPS4380 CPUs */
+> > > >               switch (read_c0_prid()) {
+> > >
+> > Hi Florian.
+> > Bits 0 and 1 are already enabled by the bootloader, so no need to
 
-Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
--- 
-Florian
+I meant bits 0 and 2. These are the RAC bits:
+#define RAC_FLH         (1 << 8)
+#define RAC_DPF         (1 << 6)
+#define RAC_NCH         (1 << 5)
+#define RAC_C_INV       (1 << 4)
+#define RAC_PF_D        (1 << 3)
+#define RAC_PF_I        (1 << 2)
+#define RAC_D           (1 << 1)
+#define RAC_I           (1 << 0)
 
+> > write 0xF. I checked it on some devices with BCM6328, 6358, 6368 SoCs.
+> >
+> > Example, without the patch, reading the RAC Configuration Register 0 an=
+d 1:
+> >
+> > - BCM6368 booting from TP0:
+> > root@OpenWrt:/# devmem 0xff400000
+> > 0x02A07015
+> > root@OpenWrt:/# devmem 0xff400008
+> > 0x0000000F
+> >
+> > - BCM6368 booting from TP1:
+> > root@OpenWrt:/# devmem 0xff400000
+> > 0x02A0701F
+> > root@OpenWrt:/# devmem 0xff400008
+> > 0x00000005
+> > root@OpenWrt:/#
+> >
+>
+> [ fixed the top-post ]
+>
+> If that's the case then i'm setting 0xf since we verified it doesn't
+> cause problem and it's already set.
+
+It's harmless to re-enable the instruction bits. BTW the log commit
+refers only to data RAC, 0xF is enabling both the data and instruction
+RAC.
+
+Daniel
+>
+> --
+>         Ansuel
 
