@@ -1,218 +1,149 @@
-Return-Path: <linux-mips+bounces-3007-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3008-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 683F58BAD49
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 15:14:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 052658BAE22
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 15:55:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B2701C21653
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 13:14:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95D771F22F10
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 13:55:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC285153BD1;
-	Fri,  3 May 2024 13:14:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B172154423;
+	Fri,  3 May 2024 13:55:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gcauIy26"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EUJL8gXF"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE8215358B;
-	Fri,  3 May 2024 13:14:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 532FA153584;
+	Fri,  3 May 2024 13:55:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714742048; cv=none; b=fiybGIh0WBX0bRyQbxo1cmcVUgNJHxr+k75ANuGHDk7iViQo5jyd9Q6VeK6GWx6FMp/X6iQHEJ29nrS+Rit93+fzbE2maVHDlpq6VCQpn0aRopoj3twk51aNaYw2Ko0a3WblSn8rScpgxO9MGX4pt9OE7oWy+nF+rM0m2zVKjHc=
+	t=1714744511; cv=none; b=aPoBpcXoZ6Oqv5YOWFiBNgnF9smL4euXccYoOMBkMW42Scpa6yossQaO1DAKhI+RSOfXhql+0T3JoGYVTE6pubvTk2uzrqj1d/Ej4MZY+bHLGU5SPom3kcs29jzN1unAkH1rTh79Hg1u9hRiIF9BswIMw938tDhU/dvUnAhkxfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714742048; c=relaxed/simple;
-	bh=emDrdx6WOkQnF2Eso3DR0P187wYGRr+WTfcYUP8aUXY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uFXxjxIXve9tB75TqzA1vNN7p1ZU5NDyFqcopoA0UUVfvFh1JS/nMk3ot7qef24ngbQ2n4pmTs+DAMMeRmnMpMzJeVPMb6hApDjw+5Kkz/K+wFS/+9iHnupJ9J3qE+gTXxDy7nljRkmNzUGN9Vz3vgKH6DzhoQSrEPGwoTNjwh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gcauIy26; arc=none smtp.client-ip=209.85.210.169
+	s=arc-20240116; t=1714744511; c=relaxed/simple;
+	bh=1TqRqX0vchG7ZeLj5rZpj0bbcajRLFLaX86OmUcFEYk=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dAFNgMF/Ii7aQjjGsI630QnYvM0PZHGPPh/HOKQYrwtWxNdR5IzoYcJYxjXyfT8qjvUoPyREYhMUPUnwMg1pTwDsghAzzFNjSSkaQK4eok7gmYf2gp4j5soNuuAsbvDMM/aR7+kn4RuHZ6M0oj7YqSC7MReixjvAPTXClOk0Q7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EUJL8gXF; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6f44ed6e82fso314106b3a.3;
-        Fri, 03 May 2024 06:14:06 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-41bab13ca80so53659785e9.0;
+        Fri, 03 May 2024 06:55:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714742046; x=1715346846; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=S6Kz22nN7XZpw5/QYn8eU3Vl5d2ZzmTa9J6l4Ufw1zs=;
-        b=gcauIy26MtzJYA8Gns6kXZilBsGTzVoH5HBE70noznhGOD4euDnekA10A01JhJPaLO
-         3g/gVlbyt0HrO4AS2vlEUGm9fP40LfNNZhe05qHmQQDDTXbdlsjL6mGTAhieH0jEnWuf
-         2UXYKRmnjAejy9goG3wES6Ad1+iG+/facnZgyyouKsCRo2hXWbGOu9VtEEfnnefyPTSW
-         7iMwwes0uuOIIV/vYUUhSG5tqOsagJyJGfgu3ygTA3yLrrmBgMDFctfaUxslbfdu6TXe
-         7IgKNvm5WAWO0WLGUO0ftNS79LC27eJf2MhdRHCgpdbxC0N19AnVU+8e/hJVtiOaJ5Cd
-         29Pw==
+        d=gmail.com; s=20230601; t=1714744509; x=1715349309; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2WBNj/VR5ac+nTFLoYRIDIw/3Obo4NiY5moJd8YisDE=;
+        b=EUJL8gXFtHjfNAKHZvcdsi41XuhDNoxjV0TPrwotwUC24TgRu/5xainh0j1XcYbnNE
+         WvPQz06nTLWrurHENIRnm7QEb9xZvVRUTRkA1JnLuZaAG0OFwNNXhaPWEobmiZKpCL+L
+         e4HRRIMyNv1ihN2+GPyC7GpitavsEDoIzHBdMDFRFMNIePMp3RinTvwb0VhjLXeLe/g4
+         Bf0QHZENDUFQxZCNBc7r/RX84cEAwvs+Ue9/WQOj98uVpjYgrn3bCdsrm9mffdo9hQ+5
+         /STGQrmW7HE6CPZXScGdlZ2L9nyUe02NmwbmIBr656Ohcs3h+uKqF8lzaRIy5OVVL1UR
+         NfJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714742046; x=1715346846;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S6Kz22nN7XZpw5/QYn8eU3Vl5d2ZzmTa9J6l4Ufw1zs=;
-        b=Q5uGiD4D6J/PrQvGzWl+iPWr35x9BFY32I3uffYTmLVU2gJccyoYKYOihx6Fucj+B2
-         gA9t9O9JpEcUdshqKBBY3YCp0zSPaM3r3ggiRYt5d2a9tFWwBJysy/QI1VF2ZIdh/kqB
-         A/9K4Iba1nfp9IQNqChm4DMSW+jJQFBInncsAwtQzpGZfpG4qVrw7aJAnBg9AhKTNzyJ
-         CvJJNDlUZJhFLk8OtF++fxDILWOYY7glkSaunLgvoUQ8H7V/vnzoma6qsa9Oq4WR37v3
-         k1r2JE9Ti1N+wYw4p0cPfi5eCPspBIp8y5CqBJuaZT6vG4MvG9ej9DIo+7PWdwc/GODd
-         6v+w==
-X-Forwarded-Encrypted: i=1; AJvYcCVILL6wtpyjp9AhtO3obmCsPN3ndhJIKkDpP0EPmFncQvyR/Krsp4rbEJ1jlY3jNJys+oXkf0RSHkgUMRCcecEATmVTc8kc/SRJU3HPnjLguE9vdE6uLjh53jSmXZ2MKaq/VnlNFdZ5DIwROEPEe96L/QUYjImbzgkZsUyKoZBxz1NA8JaCYGyjt5tdyIVPi97Oublw5HQ+zpiA9zKv86vL1l68FUcazL/PG2xQp0i4poNkbUioC9mTRE3VcTwJBq9Rl+Vkmzd/fcpEaT8aPn6FSeOm5TShzeECXsf3O3G8vwrzHoicyoBNXwlrmfKz3sWspenNHP1fv5grRcEa7yRbL3HruID7AYjsySZj4ntgyGwixOYBAZQcOjAoqD3lOiCr7HpZSQ3Gsa/+mJjUtR+RiVCqV8kn6cGhYgf9W12xfI0LMH/hkK06p7fNn16Zygg23SlxfvDBE/Qgc1uf1zwru5rc3ua53X6Dyudnn3XWunVjFj1GemFEY89xD+ymFrqlAuUu3w==
-X-Gm-Message-State: AOJu0YxrOPSFGgA0SvXlclJbHO9actMARbcZeqFgnXwjiekXoN7gsQcY
-	eOQa9hGvHl7K5jXKPV9hHKiye5303LSuvCHluvvjR8nW59v/1Zny
-X-Google-Smtp-Source: AGHT+IGAxZcx6M5jku9xJQNGsk1mq4nfDpmBwjTTeZ5TRCe/HqThlL4pFRsVfzRAFzuWYWRs0QPHbQ==
-X-Received: by 2002:a05:6a20:3cac:b0:1ac:c8dc:3e5e with SMTP id b44-20020a056a203cac00b001acc8dc3e5emr3146813pzj.24.1714742046301;
-        Fri, 03 May 2024 06:14:06 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id j1-20020a170902da8100b001e509d4d6ddsm3203863plx.1.2024.05.03.06.14.05
+        d=1e100.net; s=20230601; t=1714744509; x=1715349309;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2WBNj/VR5ac+nTFLoYRIDIw/3Obo4NiY5moJd8YisDE=;
+        b=WcmG+1mELBuqM4XkHyjpgnIGKI2h0UP92SS7EHW4GW8SfQKjO/w34Gj4+K8T88D7Mk
+         MmHXltd9Ufa7X0UgV9iowZv14pbzfG2TyNr1LrCR/876vCn4JRKr5phRENITPKcpGAj8
+         R6szQiJZa7DqTtrCfZ4X/skC0iDzUisirIF3MHqjZty5L/r9Fw00H3Yynsex4VRzXqDI
+         wdtCYnDrGw66J7uqFMaoYs7LNHJOUIvq0HPME57Hve9jdkBCCmoYVS0PTYndYli5Md3s
+         txKMj1XzF8fn8GBi21ZsVfg7vXqQ3tGo1ubEb3bKPpvCtBzuBLHoJp7n+dllxASqPfO8
+         8b6A==
+X-Forwarded-Encrypted: i=1; AJvYcCUqQnX00839TKt8DS0FREEp/TPfZPBvotVqLnAK5YZEtwhAJ3mrsjg4puLym19trXONXSIsLjeNnmcz2lwD1tXmJLaJ6lk5ONxjY2b0FItHU8CujKYpw+L52CffopobGT8o4nC7w/y7HuPwtsHaZJjgYY61vlF/K4VOdVq1bEA0ctnT/IQ=
+X-Gm-Message-State: AOJu0YwVhY1t6h3vqvUE2IwMR0vOOFnXlbOjCpX7TIFBYDkI81Si2K2y
+	sZkD7ReP7Z74UEwI95AlIrE2SK/E8bR9noehBkk9hAVJ2zvcC4d2
+X-Google-Smtp-Source: AGHT+IFlrskj0LqTQQGBB2GxKrC+k+M2iyDA1OCBcbk+lQHMNMS0NoKYDT2EiE1y1YB/7xg/An/L3g==
+X-Received: by 2002:a05:600c:19d2:b0:41b:fd63:1981 with SMTP id u18-20020a05600c19d200b0041bfd631981mr2042633wmq.41.1714744508331;
+        Fri, 03 May 2024 06:55:08 -0700 (PDT)
+Received: from localhost.localdomain (93-34-90-105.ip49.fastwebnet.it. [93.34.90.105])
+        by smtp.googlemail.com with ESMTPSA id k8-20020a05600c1c8800b00418a6d62ad0sm9537339wms.34.2024.05.03.06.55.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 May 2024 06:14:05 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id C0EA918462B27; Fri, 03 May 2024 20:14:03 +0700 (WIB)
-Date: Fri, 3 May 2024 20:14:03 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
+        Fri, 03 May 2024 06:55:08 -0700 (PDT)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Hauke Mehrtens <hauke@hauke-m.de>,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	Amritha Nambiar <amritha.nambiar@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-	Kaiyuan Zhang <kaiyuanz@google.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Florian Westphal <fw@strlen.de>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
-	Arseniy Krasnov <avkrasnov@salutedevices.com>,
-	Aleksander Lobakin <aleksander.lobakin@intel.com>,
-	Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Richard Gobert <richardbgobert@gmail.com>,
-	Sridhar Samudrala <sridhar.samudrala@intel.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Johannes Berg <johannes.berg@intel.com>,
-	Abel Wu <wuyun.abel@bytedance.com>,
-	Breno Leitao <leitao@debian.org>,
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Shailend Chand <shailend@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Subject: Re: [RFC PATCH net-next v8 13/14] net: add devmem TCP documentation
-Message-ID: <ZjTjG_INUM4G1Pf5@archie.me>
-References: <20240403002053.2376017-1-almasrymina@google.com>
- <20240403002053.2376017-14-almasrymina@google.com>
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	=?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= <noltari@gmail.com>,
+	linux-mips@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?Daniel=20Gonz=C3=A1lez=20Cabanelas?= <dgcbueu@gmail.com>
+Subject: [PATCH 0/6] mips: bmips: improve handling of RAC and CBR addr
+Date: Fri,  3 May 2024 15:54:00 +0200
+Message-ID: <20240503135455.966-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="p760D9CQLIFGzr8t"
-Content-Disposition: inline
-In-Reply-To: <20240403002053.2376017-14-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Hi,
 
---p760D9CQLIFGzr8t
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+this simple series improve handling of RAC and CBR address and try to
+upstream these simple patch we have in OpenWrt for a while.
 
-On Tue, Apr 02, 2024 at 05:20:50PM -0700, Mina Almasry wrote:
-> +ncdevmem has a validation mode as well that expects a repeating pattern =
-of
-> +incoming data and validates it as such::
-> +
-> +	# On server:
-> +	ncdevmem -s <server IP> -c <client IP> -f eth1 -d 3 -n 0000:06:00.0 -l \
-> +		 -p 5201 -v 7
-> +
-> +	# On client:
-> +	yes $(echo -e \\x01\\x02\\x03\\x04\\x05\\x06) | \
-> +		tr \\n \\0 | head -c 5G | nc <server IP> 5201 -p 5201
+The first patch fix a straight kernel panic where some Bootloader might
+enable RAC but misconfigure the CBR address. The current logic only
+check if RAC is enabled but doesn't verify if the CBR address is usable.
 
-What about splitting server and client usage?
+The DMA sync function cause a kernel panic for invalid write. (as CBR is
+0 or something like 0xa)
 
----- >8 ----
-diff --git a/Documentation/networking/devmem.rst b/Documentation/networking=
-/devmem.rst
-index e4e978fbcdbd5f..f32acfd62075d2 100644
---- a/Documentation/networking/devmem.rst
-+++ b/Documentation/networking/devmem.rst
-@@ -245,12 +245,14 @@ To run ncdevmem, you need to run it on a server on th=
-e machine under test, and
- you need to run netcat on a peer to provide the TX data.
-=20
- ncdevmem has a validation mode as well that expects a repeating pattern of
--incoming data and validates it as such::
-+incoming data and validates it as such. For example, you can launch
-+ncdevmem on the server by::
-=20
--	# On server:
- 	ncdevmem -s <server IP> -c <client IP> -f eth1 -d 3 -n 0000:06:00.0 -l \
- 		 -p 5201 -v 7
-=20
--	# On client:
-+On client side, use regular netcat to send TX data to ncdevmem process
-+on the server::
-+
- 	yes $(echo -e \\x01\\x02\\x03\\x04\\x05\\x06) | \
- 		tr \\n \\0 | head -c 5G | nc <server IP> 5201 -p 5201
+The second is preparation for making the CBR address configurable in DT.
+Since this address doesn't change, we can cache it and reference it with
+a local variable instead of calling the register to access the value.
 
-Thanks.
+The 4th patch make it configurable with 2 DT property, one to actually
+set the reg and the other to force set it.
 
---=20
-An old man doll... just what I always wanted! - Clara
+The first property is used when CBR is set to 0. The second property is
+to force it if the Bootloader sets it to something wrong.
 
---p760D9CQLIFGzr8t
-Content-Type: application/pgp-signature; name="signature.asc"
+If the CBR value is not 0 and is not forced with the second property a
+WARN is printed and the DT value is ignored.
 
------BEGIN PGP SIGNATURE-----
+The 5th patch enable RAC on BMIPS4350 and the 5th patch is a micro
+optimization to skip more call on DMA sync to save as resource as
+possible on low spec devices. (since DMA sync is called many times for
+the Ethernet Switch and we can reference the bool instead of checking
+the CPU type everytime)
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZjTjFwAKCRD2uYlJVVFO
-o9RPAQCNza/o9eilURPtLMgckHLWGXSLgl+m05JS4n+5eQOBfAEAuaR+vADZuSKC
-PnV18jn47Aqz1SmrD+MDjjeFy4rw0gM=
-=E6BN
------END PGP SIGNATURE-----
+These has been tested on BCM6358 (HG556a) and BCM6368 (VH4032N) and
+reported correct functionality.
 
---p760D9CQLIFGzr8t--
+Christian Marangi (5):
+  mips: bmips: BCM6358: make sure CBR is correctly set
+  mips: bmips: rework and cache CBR addr handling
+  dt-bindings: mips: brcm: Document mips-cbr-reg property
+  mips: bmips: setup: make CBR address configurable
+  mips: bmips: dma: drop redundant boot_cpu_type in arch_dma_sync
+
+Daniel González Cabanelas (1):
+  mips: bmips: enable RAC on BMIPS4350
+
+ .../devicetree/bindings/mips/brcm/soc.yaml    | 32 ++++++++++++
+ arch/mips/bmips/dma.c                         | 12 ++---
+ arch/mips/bmips/setup.c                       | 36 +++++++++++--
+ arch/mips/include/asm/bmips.h                 |  2 +
+ arch/mips/kernel/smp-bmips.c                  | 50 ++++++++++++-------
+ 5 files changed, 102 insertions(+), 30 deletions(-)
+
+-- 
+2.43.0
+
 
