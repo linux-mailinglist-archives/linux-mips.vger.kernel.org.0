@@ -1,182 +1,156 @@
-Return-Path: <linux-mips+bounces-3035-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3036-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E88668BB0C5
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 18:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 903A78BB2AA
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 20:19:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2456D1C209D2
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 16:21:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B30351C20F6B
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 18:19:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B10F3155343;
-	Fri,  3 May 2024 16:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F6E1158845;
+	Fri,  3 May 2024 18:17:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o8Qb7Kok"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KY9EphbW"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C86154428;
-	Fri,  3 May 2024 16:21:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9492F1586CB
+	for <linux-mips@vger.kernel.org>; Fri,  3 May 2024 18:17:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714753307; cv=none; b=WREhSFTRIAiC/B3g1sUtlFT78+UWiDMi0J7aZ40swubXhuXKG9YcSUYuvzo9FBPHDt4fyk6jhJ2g2f7yeZY4+Cm9TD13/pYk+yiKZIhr0+vfAHONaz86TED7Y/INtIdNC8Ycwky9rZE/Fu6ams1X33ccQp6i7HrqKaH9nJz3NE8=
+	t=1714760261; cv=none; b=N/tHfzWGlJ+izNKF/vxU17TfVmU4P8m9tykqajaMpq1ahL96ORiOXJmUD1JdQhaNHhj2uw46QgQ3sPk6pqYC57VSigeF/LItKHT2qLn4s3GxPJ43V4TQ5EymHmYwaCg+nKqYt48+qyxvwIKceWJu5QnxWP+Cn97Qrq4ovSznTRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714753307; c=relaxed/simple;
-	bh=1xspHNPP+TAZ5j87YBguQVSvoCMWV6Hj7z2sBpc6Hfo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fzW4jDLqCMQXPh4IXpF7VUzqNnfsp/ho1BwuFmdGZkarC3AuaUoZyBeh5dUN1bmfMz2RJQPXqdl+f2NeYCtHanNA16VbPoxNnXY0SY4JgHyN8pTnyGDPPkuBn8hhjmaS1VUmSTQrZFsmYUEAW/L+RYN9SLuHPhYtkHyjigHumQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o8Qb7Kok; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ECD2C32789;
-	Fri,  3 May 2024 16:21:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714753306;
-	bh=1xspHNPP+TAZ5j87YBguQVSvoCMWV6Hj7z2sBpc6Hfo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=o8Qb7Kok9YovhpoYrNxz5FxEMbMUkRFVMkQHsBPD8AB14xyiH5BEBEaXXhLcgyLva
-	 3a+J3KrE2k0Y2f4EJQ8qvf+7B2k5wdW8XVFSmlLwOA09cBtBQojng0v+lpI1UVNdry
-	 bF9I6r961mQGpUhMd5pP1HEgtU5Kf1hHTYpqiiKXsyTt8MhxdbJZ3IUYI0/uwzhRCj
-	 FmX2JPdPgc66nGFIr0l+AQYknCaBDnP2TGm2lUpjab64QY8rPw278SKNnSyM5DGPdr
-	 Ne1hJsF/0AmSojg7Mim/dTvurTJpp924uEvCW2rFnzAy05fIQB8er2EDKpNbc7p93U
-	 96cL6plnyP48g==
-Date: Fri, 3 May 2024 17:21:41 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Hauke Mehrtens <hauke@hauke-m.de>,
-	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	=?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>,
-	linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Daniel =?iso-8859-1?Q?Gonz=E1lez?= Cabanelas <dgcbueu@gmail.com>
-Subject: Re: [PATCH 3/6] dt-bindings: mips: brcm: Document mips-cbr-reg
- property
-Message-ID: <20240503-oncoming-taste-bab71375b67c@spud>
-References: <20240503135455.966-1-ansuelsmth@gmail.com>
- <20240503135455.966-4-ansuelsmth@gmail.com>
+	s=arc-20240116; t=1714760261; c=relaxed/simple;
+	bh=xBGFTYdyUOnHArOcW3JXAxjXjjvPLqJKxAY8xK+n/W4=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=dlNLJe64OqSynX93MWI1Pgnddn2QjZXSEl+N1DL42IR9DPEAG/IAycENHYXiMU3sOcfqy8LcR7ZCSrGVqEalv0SYZQwnV6+uqoA96eGILHr5FMjh3VoZb/FJRe0kGBZURmqgncBnj7BimCnPSh0xG+b9Gq6X8LZdxnUJg+JHsHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KY9EphbW; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-de60321ce6cso9989969276.1
+        for <linux-mips@vger.kernel.org>; Fri, 03 May 2024 11:17:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1714760258; x=1715365058; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=u5lOataUl4CqNIE0BOfGoSKjtAnehJHFOaimjTGPj/Y=;
+        b=KY9EphbWEvaWYHycofn0JF+oFT1mV0XIuivbBWnIfDJQv5jMYDnOjvyO88kHqX/HPE
+         nyf3+FOHtdA20hzKXRBcBOzvP9+LTiarTyJnqxGSC9QPoR58KUpIQSTmDmCMZzxW+XdF
+         jd3SD5VL/OA52STy0Q3yg0JlonqF8mSC4G+asI65FHUYrkp5Q3NlcKcOn21NhvTnFoV2
+         +yZ/Ru2gU4aN8o8mnjH4aZflGF54Ug1F3T4nV+5zh75Ooi+pcznvJx1Wr5GV7AeIYY9V
+         hL7VUF9eQ7AcTO0263AQ58k0PyG+JbI0onDpo5Ylle4A1Dwr9Xy8p9dSWFv3Edmk4GKW
+         yZsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714760258; x=1715365058;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u5lOataUl4CqNIE0BOfGoSKjtAnehJHFOaimjTGPj/Y=;
+        b=v4CZPJctpwVTd5ko1c1U90N6ZNM/xogSNMXUGSxGVJ54c7uHOm17h/YnxJyZwILJoq
+         7AI3WisN4tJPEJVQMIvvP3aXTTp2kMfvTF8QsXP3YjXkmYRD9E3UlEyTpGxs8GJMmvC+
+         GJhbgwZGMZNoZYzjavrSt5GGmm2iPynE8PO9Q1IEm5YBbhpnxYLWp9XmdQ+UzbsNll0/
+         ByycOI6LPLgt91HHtDuYbyoaRR2JlWh+Hkm68Y3yt29aTRfyGRpMYjMss6JITPncWnGF
+         rGWNHo/YRXmd4JiBiloXLSKSRBxbTS8rd18/nyjmMT4IVAG/hf0glY60AD5Km49wB3DE
+         S+Hg==
+X-Forwarded-Encrypted: i=1; AJvYcCVR4S3mx8R1id29OWcsyVeZt+aJvdlmTTWuEackp77T9o+PKAFll2oBREEIafm3R1Hc82p+ozVKJMAMC6Y6wxg/X8e7z+4zRZWnOA==
+X-Gm-Message-State: AOJu0YzLau1u3+dOGOqCiJ0vjamkKHPL7CACRNChFA5zc1n8pP91OK4B
+	49jgms3Gb6AEe+dEevNya29htHkZdfwmJcVzlUHCkHy7tsI1Aj7hofkY4bdd8TP7ZuXmd1pE0Tw
+	riqvJj5Kpfw==
+X-Google-Smtp-Source: AGHT+IGi/6BGSqLUvb7wYnWHXOlhd9obpauunW/BcufWuEVmkE7H211A4Dm9y03t3pfp70UoCYU1Se1aO50snA==
+X-Received: from dmatlack-n2d-128.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1309])
+ (user=dmatlack job=sendgmr) by 2002:a05:6902:729:b0:dcc:c57c:8873 with SMTP
+ id l9-20020a056902072900b00dccc57c8873mr1104781ybt.9.1714760258668; Fri, 03
+ May 2024 11:17:38 -0700 (PDT)
+Date: Fri,  3 May 2024 11:17:31 -0700
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="LyhWp7dhQDBYJl7Z"
-Content-Disposition: inline
-In-Reply-To: <20240503135455.966-4-ansuelsmth@gmail.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.45.0.rc1.225.g2a3ae87e7f-goog
+Message-ID: <20240503181734.1467938-1-dmatlack@google.com>
+Subject: [PATCH v3 0/3] KVM: Set vcpu->preempted/ready iff scheduled out while running
+From: David Matlack <dmatlack@google.com>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
+	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, Anup Patel <anup@brainfault.org>, 
+	Atish Patra <atishp@atishpatra.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, David Hildenbrand <david@redhat.com>, 
+	Sean Christopherson <seanjc@google.com>, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, kvm@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	David Matlack <dmatlack@google.com>
+Content-Type: text/plain; charset="UTF-8"
+
+This series changes KVM to mark a vCPU as preempted/ready if-and-only-if
+it's scheduled out while running. i.e. Do not mark a vCPU
+preempted/ready if it's scheduled out during a non-KVM_RUN ioctl() or
+when userspace is doing KVM_RUN with immediate_exit=true.
+
+This is a logical extension of commit 54aa83c90198 ("KVM: x86: do not
+set st->preempted when going back to user space"), which  stopped
+marking a vCPU as preempted when returning to userspace. But if userspace
+invokes a KVM vCPU ioctl() that gets preempted, the vCPU will be marked
+preempted/ready. This is arguably incorrect behavior since the vCPU was
+not actually preempted while the guest was running, it was preempted
+while doing something on behalf of userspace.
+
+In practice, this avoids KVM dirtying guest memory via the steal time
+page after userspace has paused vCPUs, e.g. for Live Migration, which
+allows userspace to collect the final dirty bitmap before or in parallel
+with saving vCPU state without having to worry about saving vCPU state
+triggering writes to guest memory.
+
+Patch 1 introduces vcpu->wants_to_run to allow KVM to detect when a vCPU
+is in its core run loop.
+
+Patch 2 renames immediated_exit to immediated_exit__unsafe within KVM to
+ensure that any new references get extra scrutiny.
+
+Patch 3 perform leverages vcpu->wants_to_run to contrain when
+vcpu->preempted and vcpu->ready are set.
+
+v3:
+ - Use READ_ONCE() to read immediate_exit [Sean]
+ - Replace use of immediate_exit with !wants_to_run to avoid TOCTOU [Sean]
+ - Hide/Rename immediate_exit in KVM to harden against TOCTOU bugs [Sean]
+
+v2: https://lore.kernel.org/kvm/20240307163541.92138-1-dmatlack@google.com/
+ - Drop Google-specific "PRODKERNEL: " shortlog prefix [me]
+
+v1: https://lore.kernel.org/kvm/20231218185850.1659570-1-dmatlack@google.com/
+
+David Matlack (3):
+  KVM: Introduce vcpu->wants_to_run
+  KVM: Ensure new code that references immediate_exit gets extra
+    scrutiny
+  KVM: Mark a vCPU as preempted/ready iff it's scheduled out while
+    running
+
+ arch/arm64/kvm/arm.c       |  2 +-
+ arch/loongarch/kvm/vcpu.c  |  2 +-
+ arch/mips/kvm/mips.c       |  2 +-
+ arch/powerpc/kvm/powerpc.c |  2 +-
+ arch/riscv/kvm/vcpu.c      |  2 +-
+ arch/s390/kvm/kvm-s390.c   |  2 +-
+ arch/x86/kvm/x86.c         |  4 ++--
+ include/linux/kvm_host.h   |  1 +
+ include/uapi/linux/kvm.h   | 15 ++++++++++++++-
+ virt/kvm/kvm_main.c        |  5 ++++-
+ 10 files changed, 27 insertions(+), 10 deletions(-)
 
 
---LyhWp7dhQDBYJl7Z
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+base-commit: 296655d9bf272cfdd9d2211d099bcb8a61b93037
+-- 
+2.45.0.rc1.225.g2a3ae87e7f-goog
 
-On Fri, May 03, 2024 at 03:54:03PM +0200, Christian Marangi wrote:
-> Document mips-cbr-reg and mips-broken-cbr-reg property.
->=20
-> Some SoC suffer from a BUG where read_c0_brcm_cbr() might return 0
-> if called from TP1. The CBR address is always the same on the SoC
-> hence it can be provided in DT to handle broken case where bootloader
-> doesn't init it or SMP where read_c0_brcm_cbr() returns 0 from TP1.
->=20
-> Usage of this property is to give an address also in these broken
-> configuration/bootloader.
->=20
-> If the SoC/Bootloader ALWAYS provide a broken CBR address the property
-> "mips-broken-cbr-reg" can be used to ignore any value already set in the
-> registers for CBR address.
->=20
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
->  .../devicetree/bindings/mips/brcm/soc.yaml    | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/mips/brcm/soc.yaml b/Docum=
-entation/devicetree/bindings/mips/brcm/soc.yaml
-> index 975945ca2888..12d394b7e011 100644
-> --- a/Documentation/devicetree/bindings/mips/brcm/soc.yaml
-> +++ b/Documentation/devicetree/bindings/mips/brcm/soc.yaml
-> @@ -55,6 +55,21 @@ properties:
->           under the "cpus" node.
->          $ref: /schemas/types.yaml#/definitions/uint32
-> =20
-> +      mips-broken-cbr-reg:
-> +        description: Declare that the Bootloader init a broken
-> +          CBR address in the registers and the one provided from
-> +          DT should always be used.
-
-Why is this property even needed, is it not sufficient to just add the
-mips-cbr-reg property to the DT for SoCs that need it and use the
-property when present?
-
-> +        type: boolean
-> +
-> +      mips-cbr-reg:
-
-Missing a vendor prefix.
-
-> +        description: Reference address of the CBR.
-> +          Some SoC suffer from a BUG where read_c0_brcm_cbr() might
-> +          return 0 if called from TP1. The CBR address is always the
-> +          same on the SoC hence it can be provided in DT to handle
-> +          broken case where bootloader doesn't init it or SMP where
-
-s/init/initialise/ please :)
-
-Thanks,
-Conor.
-
-> +          read_c0_brcm_cbr() returns 0 from TP1.
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +
->      patternProperties:
->        "^cpu@[0-9]$":
->          type: object
-> @@ -64,6 +79,23 @@ properties:
->      required:
->        - mips-hpt-frequency
-> =20
-> +dependencies:
-> +  mips-broken-cbr-reg: [ mips-cbr-reg ]
-> +
-> +if:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        anyOf:
-> +          - const: brcm,bcm6358
-> +          - const: brcm,bcm6368
-> +
-> +then:
-> +  properties:
-> +    cpus:
-> +      required:
-> +        - mips-cbr-reg
-> +
->  additionalProperties: true
-> =20
->  examples:
-> --=20
-> 2.43.0
->=20
-
---LyhWp7dhQDBYJl7Z
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZjUPFQAKCRB4tDGHoIJi
-0pNZAP96jyklbklNPKY4YnOx/KmP7ftWMWURZUPZ4jJx+TeBcgEA5ffTEJvJzWNp
-Msg4JtZu9TUybY2OeU8jwDgGHKilzQQ=
-=Csss
------END PGP SIGNATURE-----
-
---LyhWp7dhQDBYJl7Z--
 
