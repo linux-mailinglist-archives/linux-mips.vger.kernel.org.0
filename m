@@ -1,166 +1,118 @@
-Return-Path: <linux-mips+bounces-3061-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3062-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ED5D8BB5B4
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 23:27:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F2148BB5C4
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 23:33:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C276B1C22181
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 21:27:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FF411C2385E
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 21:33:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA29F4F88C;
-	Fri,  3 May 2024 21:27:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65EBC56B8B;
+	Fri,  3 May 2024 21:33:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dE1ZbsvY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V7Xcns+h"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 220C81E4B2;
-	Fri,  3 May 2024 21:27:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EEFB535A8;
+	Fri,  3 May 2024 21:33:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714771663; cv=none; b=j0BBubZLBC4oFXNstf7Ix3vnnVZWZpL2y5zGGEnvuyVaRJ4d51fJnp/rov1LXA9LU43rQAk+0g6zAuPK2mDB/rJk41RCv0uUUm/8ssUv/Ex1j351R55Vn4WditAFGADRfJRQ/Mr3JupX0aj18+Av502SUFwRWONhRxDFn+j3Z1k=
+	t=1714772005; cv=none; b=HT2o2lzg6YVvVLJ9RBKBIeA7e4PtfMsboxkBl/LCwC12qe+HL/MqE2VDx5Hb2Z+a6b3VglJbN6rX8MPw6GUjb6mKVWOggrXpdVuuRyGcBrMGJZs0LrEVH9djg5yE7Q2xtC8pfoJ2KrU0Yrd1jJsrG21VgXcI4z/f5u2sEzn2TUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714771663; c=relaxed/simple;
-	bh=8UGuQyl1YLOhI8Kxv67deOSw/fy+Ogx3abFFRGzZn4w=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XplN5mCX6J3q2bd3bDShnOq65sz3AVXqAf7xOUQMWl7WtHUsUbSSPjwrIui5tC7Ke7ov8/X5CKoZHM79qKQHs977nSNzJSgdxQHjC5WUp7NiF1ntr9b/iQdGjQVrhhsKvipvHbr8LbYpNU1+5aG+jGacoy7xTE7bK/YjfE8y3VM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dE1ZbsvY; arc=none smtp.client-ip=209.85.128.41
+	s=arc-20240116; t=1714772005; c=relaxed/simple;
+	bh=NCAXwfHyr61OCXX/ZRFhD5O/01D/pMK9dk2BzvaMrcc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=bnm6z5LYoDTS93WFK2S9vuHZ2wGrSESrWfBKFVHY7+EEFBhn8ZlzlPE92xmdHWmLGcSG0xCfTj1Fy4icFuDyxplmpJAx9KhoLQN/wTjQvKgQEkT84AuYwEwFYH7IyqcY4MOuFMEiKhRqMtOXlnI6Q37PF4CsqbLxvwC6c1ilwOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V7Xcns+h; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-41b2119da94so1616545e9.0;
-        Fri, 03 May 2024 14:27:41 -0700 (PDT)
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6f44d2b3130so166110b3a.2;
+        Fri, 03 May 2024 14:33:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714771660; x=1715376460; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=lP6SJGCFUENAZKan9UGF3hOihdCg3RIImp4IDQjfYL8=;
-        b=dE1ZbsvYdZrRmSs7zkdrvANcTFaPA8+PkLeSBO9QE0/38k+4r5vtYQQplQMnf4ZoX8
-         AIxOkI2Bu0hbQ5Z1J0gSuKLUMFPyYv3wtwk/Uk/ykDbUTQUfOvi6H6oBqPdcfSTu2pYy
-         H8G2roIt/2aD0N/PaiWFpgOFKMOiowUBu4TD0oN9oHAdq4k6NcgfLfye+ckyHzQI/C/k
-         64SPMhra2bo69L0HvDmLwU6kD3gWxyk96CjdgNcD/ynO+XGZXFAVBFQpc1PztNaX/y0O
-         UVmwyMZqCHXlQyfszmr+bv4vRXMjvuQXWUbucl13FVTsuPivPQKganYhPyHx3e0n+ZH7
-         98dQ==
+        d=gmail.com; s=20230601; t=1714772003; x=1715376803; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=yJ1rjd2I3L8WgYwmzP2Belj1FKW5S0lN+W1hzufyv1M=;
+        b=V7Xcns+hoctowIec1VLFRsvlHL51CwS+X6jFv7OkMpCilJOnRsu4YZJ5TNFv10/OWK
+         +jLS6wRi6nFpA44iMooN1kG3LDoreKMoAKfszooIdx+4hK5NTQUOJ6CI3D78e+wALS5F
+         mhuZnPxBuomHf3xK9qlQDf3jR/S19wuOX1l0drObmUTIMrGpvz1cib1Q9GccKNmyCW2m
+         Aka9sH3U9r3Qpw4sU//G0aP1PnOrjsAuNAHEqPaPdAZus6iWLW+7nHoHXbD3cbG0vzAJ
+         hNV1Q9mElG3un6xkK/d2AXtsS5omu8RkfG2/DDstskmoA+UY23eAVwDK0DCK+CGcbLRb
+         N2Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714771660; x=1715376460;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lP6SJGCFUENAZKan9UGF3hOihdCg3RIImp4IDQjfYL8=;
-        b=k5esGYSYg2yDP871aIuMLnd/sGhZ1fIxMbZ5cRV6rVLsbEDLa9upioCiJ8TSUSrpEZ
-         mbFAoqCPHB3X7eIxMAGBgKImsj4AlLjGvcTLcvoDmrbfdUOVvEQFlB3Uc2F7EWgJDhSh
-         CyKyXzZqMeioJJ8nng2Xaaq8oCnOCayuRUSnSTdxXM/2F7A+K11VFqySaAxYteNm/My/
-         Fuo1xpYjIMJyhqv6fyegXTbCxhNXEwVPQLCQvUGEuSgS9VekYlthjmEux6oJsJ27IsCP
-         9A4PVU1wQjiOww4PXxQnD9p6lcXyX9CUhtWXGots0d23VZWCuP23CTuCm2Y33Eohyq9t
-         8xxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWBpQbFwIFZiDowvnPIio9i36R202z3FRcHTZkXXvZM3GTJ3a49x6FzoH7XgcRL+n+Mo/w2sekZcXCy9M1HQbQq7Uagbr6H606PxlNWGZ653i1zPp/XsjOLBU73m6ewTZLixiMRXsmjPo2WwZuVGgHbGDMIlhWmr1kUMkCmephGmf9drvg=
-X-Gm-Message-State: AOJu0YyxSj3n9CApI/NvKwkp31+G+8StrHsvQIplVZjUAscMl7fChPqP
-	RgLtbo7ZoDaoZKVQ07EPqcKC6ZIiTUcjt/WfTTVNl8Ta3VD3b/wD
-X-Google-Smtp-Source: AGHT+IEZYot0B0Di33qEEFt7H+5/RPeGvMBEZAbjLzGwunv2i5jjiRIm2NNr7msFu9RwCfDrj5uSXw==
-X-Received: by 2002:a05:600c:1d90:b0:41b:55b1:6cfc with SMTP id p16-20020a05600c1d9000b0041b55b16cfcmr3007659wms.1.1714771660285;
-        Fri, 03 May 2024 14:27:40 -0700 (PDT)
-Received: from Ansuel-XPS. (93-34-90-105.ip49.fastwebnet.it. [93.34.90.105])
-        by smtp.gmail.com with ESMTPSA id o10-20020a5d684a000000b0034a7a95c8cfsm4655300wrw.9.2024.05.03.14.27.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 May 2024 14:27:39 -0700 (PDT)
-Message-ID: <663556cb.5d0a0220.4b13a.04d5@mx.google.com>
-X-Google-Original-Message-ID: <ZjVWy3ha9OTeMn9O@Ansuel-XPS.>
-Date: Fri, 3 May 2024 23:27:39 +0200
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
-	Hauke Mehrtens <hauke@hauke-m.de>,
-	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	=?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>,
-	linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Daniel =?iso-8859-1?Q?Gonz=E1lez?= Cabanelas <dgcbueu@gmail.com>
-Subject: Re: [PATCH 4/6] mips: bmips: setup: make CBR address configurable
-References: <20240503135455.966-1-ansuelsmth@gmail.com>
- <20240503135455.966-5-ansuelsmth@gmail.com>
- <bf20e911-26db-4291-95d4-c91cc1d7f000@broadcom.com>
- <66353c92.050a0220.fd42f.7cfb@mx.google.com>
- <6ca4f556-28ea-4f51-a8dc-a10a94d726f0@gmail.com>
+        d=1e100.net; s=20230601; t=1714772003; x=1715376803;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yJ1rjd2I3L8WgYwmzP2Belj1FKW5S0lN+W1hzufyv1M=;
+        b=vsKCO1volPDijkoToIdpctue2zf5epReldeZB3Iown2URPNR2Ir7SgFRfpNRiCZPns
+         b5XOAJum70kECvU3SlHZNEj9n/sCvKAQXlagZYfZKKnFLlktqeXE6o40hs7LM0IsawzF
+         JEIYjTNNgvQJ86hkYv1G0/2JU8PvMrT8fyfyVgrA53eRJoontR1XYkcWK8zV1YSrkA/l
+         14z+F6WXe9DkxJAcJB104Qxlocbrr5e8Bf+cVZBoi224626mDLVm+le7HFLo9vCR6QOh
+         PnB71ENczTCaOEY9ovb/OUBhmivyUQMeLgN05XK3XwAoqaCyDM2LAaf37DMWNKdDAXke
+         9NJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUMCLkTtLRH5nBu6P45dPpMy4xDghlHDjU7jJ901xFutyoduHbIORUV0tdAKyqPPkPK0qaCWU+IYPX7D0IEtWiLzqrEaCAqXlogF3mRrOXSDcXcxCoPMYzyq+wTJuzWGXJD1q/Uz9emGbe8ryq+SwnbStTgWIjJLgV6qIFYT4fj6HKIXBM=
+X-Gm-Message-State: AOJu0Yzd9+RHCDdupmZFSX2y8CVKL9cBGhKLZzspH/FVrox0IMeZykis
+	+JIvj7xGlv/IZqSOL/F/lakKF9zhkbH9BmStNuXIz8pHGOg2+J0A
+X-Google-Smtp-Source: AGHT+IGu4d+JB6H6GVxzxsiFWbM1p1lxUwqo0405OocYqBrS24F6eOYzEVRzk7IwracOeHHe6x7wyg==
+X-Received: by 2002:a05:6a20:948c:b0:1ad:747:3fd9 with SMTP id hs12-20020a056a20948c00b001ad07473fd9mr3790769pzb.54.1714772003163;
+        Fri, 03 May 2024 14:33:23 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id y8-20020a17090264c800b001e868e29fabsm3793795pli.251.2024.05.03.14.33.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 May 2024 14:33:22 -0700 (PDT)
+Message-ID: <f010f127-ed51-43ca-9c88-7bc7e06025e1@gmail.com>
+Date: Fri, 3 May 2024 14:33:20 -0700
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6ca4f556-28ea-4f51-a8dc-a10a94d726f0@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 5/5] mips: bmips: enable RAC on BMIPS4350
+To: Christian Marangi <ansuelsmth@gmail.com>,
+ Hauke Mehrtens <hauke@hauke-m.de>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
+ <zajec5@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>,
+ =?UTF-8?Q?=C3=81lvaro_Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>,
+ linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, =?UTF-8?Q?Daniel_Gonz=C3=A1lez_Cabanelas?=
+ <dgcbueu@gmail.com>
+References: <20240503212139.5811-1-ansuelsmth@gmail.com>
+ <20240503212139.5811-6-ansuelsmth@gmail.com>
+Content-Language: en-US
+From: Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20240503212139.5811-6-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 03, 2024 at 02:24:49PM -0700, Florian Fainelli wrote:
-> On 5/3/24 12:35, Christian Marangi wrote:
-> > On Fri, May 03, 2024 at 12:09:02PM -0700, Florian Fainelli wrote:
-> > > On 5/3/24 06:54, Christian Marangi wrote:
-> > > > Add support to provide CBR address from DT to handle broken
-> > > > SoC/Bootloader that doesn't correctly init it. This permits to use the
-> > > > RAC flush even in these condition.
-> > > > 
-> > > > To provide a CBR address from DT, the property "mips-cbr-reg" needs to
-> > > > be set in the "cpus" node. On DT init, this property presence will be
-> > > > checked and will set the bmips_cbr_addr value accordingly. Also
-> > > > bmips_rac_flush_disable will be set to false as RAC flush can be
-> > > > correctly supported.
-> > > > 
-> > > > The CBR address from DT will be applied only if the CBR address from the
-> > > > registers is 0, if the CBR address from the registers is not 0 and
-> > > > is not equal to the one set in DT (if provided) a WARN is printed.
-> > > > 
-> > > > To ALWAYS overwrite the CBR address the additional property
-> > > > "mips-broken-cbr-reg" needs to be set.
-> > > > 
-> > > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > > > ---
-> > > >    arch/mips/bmips/setup.c | 30 +++++++++++++++++++++++++++---
-> > > >    1 file changed, 27 insertions(+), 3 deletions(-)
-> > > > 
-> > > > diff --git a/arch/mips/bmips/setup.c b/arch/mips/bmips/setup.c
-> > > > index 18561d426f89..bef84677248e 100644
-> > > > --- a/arch/mips/bmips/setup.c
-> > > > +++ b/arch/mips/bmips/setup.c
-> > > > @@ -34,7 +34,11 @@
-> > > >    #define REG_BCM6328_OTP		((void __iomem *)CKSEG1ADDR(0x1000062c))
-> > > >    #define BCM6328_TP1_DISABLED	BIT(9)
-> > > > -/* CBR addr doesn't change and we can cache it */
-> > > > +/*
-> > > > + * CBR addr doesn't change and we can cache it.
-> > > > + * For broken SoC/Bootloader CBR addr might also be provided via DT
-> > > > + * with "mips-cbr-reg" in the "cpus" node.
-> > > > + */
-> > > >    void __iomem *bmips_cbr_addr;
-> > > >    extern bool bmips_rac_flush_disable;
-> > > > @@ -212,8 +216,28 @@ void __init device_tree_init(void)
-> > > >    	/* Disable SMP boot unless both CPUs are listed in DT and !disabled */
-> > > >    	np = of_find_node_by_name(NULL, "cpus");
-> > > > -	if (np && of_get_available_child_count(np) <= 1)
-> > > > -		bmips_smp_enabled = 0;
-> > > > +	if (np) {
-> > > 
-> > > Please reduce the indentation with early return/gotos. There might also be a
-> > > need to do some validation that the CBR is at least outside of the DRAM
-> > > window, that is we cannot blindly trust the DT to have gotten the CBR right
-> > > IMHO.
-> > 
-> > Do you have any hint on how to do the check if we are outside DRAM?
-> > 
+On 5/3/24 14:21, Christian Marangi wrote:
+> From: Daniel González Cabanelas <dgcbueu@gmail.com>
 > 
-> I was going to suggest the use of memblock_start_of_DRAM() and
-> memblock_end_of_DRAM() but before I sent that out your v2 already had it!
+> The data RAC is left disabled by the bootloader in some SoCs, at least in
+> the core it boots from.
+> Enabling this feature increases the performance up to +30% depending on the
+> task.
+> 
+> Signed-off-by: Daniel González Cabanelas <dgcbueu@gmail.com>
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+> [ rework code and reduce code duplication ]
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 
-Ehehe, I was initially using mem_map and totalram_pages but then I inspected
-memblock header and notice those good API.
-
+Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
 -- 
-	Ansuel
+Florian
+
 
