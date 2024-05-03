@@ -1,71 +1,71 @@
-Return-Path: <linux-mips+bounces-3058-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3059-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2EB78BB598
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 23:24:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 678DC8BB5A3
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 23:25:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C4991F23A0B
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 21:24:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B0AE1C23258
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 21:25:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC66A51037;
-	Fri,  3 May 2024 21:23:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D3A277F08;
+	Fri,  3 May 2024 21:23:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="EgqqiRFt"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="WRnowxmu"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EE2F54BD8
-	for <linux-mips@vger.kernel.org>; Fri,  3 May 2024 21:23:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D40E768E1
+	for <linux-mips@vger.kernel.org>; Fri,  3 May 2024 21:23:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714771405; cv=none; b=qnFCJa6ROzsuRItftXHgo2q11kau/UFho3l/Yi1OcNGRuTBCGvQ83aSD6TE+qHruhaFCnvPD39npaOHBrywFhV8NDViHTD3CT/UcePaF6VVYdM9y1zOOE/gHrED3M3YDf+n6t2M5H5zCmIh6lTW9HCgzLvyB3NZntstvKKcJ7lw=
+	t=1714771432; cv=none; b=c+CHAKfqP/tlMEPiPpTiqH3HYNHuLoVT+hzCRzNAGyJIgbxRTI3sj2gHGAhZHAXhLK0CrvOubus5FDtquEKJvc0FW7IOfpLBnda7OPtGPTh8I4ysWGp9mqWL+CUAzDwxqmiNpADQblmxInFLsuj/pOxS5blUWR0Dpe+q98S5yyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714771405; c=relaxed/simple;
-	bh=gInyidjKqzPQxxKpCcXtvdpRr2mYNQEiaoM5zdx3mms=;
+	s=arc-20240116; t=1714771432; c=relaxed/simple;
+	bh=jkOU362CIL06kRZkK+ADAmjuQxqboRPgmhdEYcTtuws=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=FTEWLljMRFchWg+s9GDKfm/8LdkSWTbaWiapTMw6hxydEdOeS/+7w25T3cZFfojVeF1XIJMbi8mut4Dj4Xf+GQ4Z2Q0EeEYe973dI3SJ62zgBO7W1edQvAselCNshyE5UT1otv0Q/1x8+ie8j5FU77UBWnaPR+SFGrAGNB+6t7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=EgqqiRFt; arc=none smtp.client-ip=209.85.210.180
+	 In-Reply-To:Content-Type; b=sBswdZ2BMaQMK4mtbWlPTbptS4IsxvOdygdc1vblGj2Pe5r3NA8kcJmm4HzuAAAFOZAooyBTfL5itCRI4zXh7/QmP2HV4YLbDcgzyidI4FR2mUgXYs3XGvFjAFP44U1l881UmLh7qRF/4EQRBRo8JVpHz8qyMSv/G+WR3d4s2xQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=WRnowxmu; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6e46dcd8feaso119023b3a.2
-        for <linux-mips@vger.kernel.org>; Fri, 03 May 2024 14:23:24 -0700 (PDT)
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2a559928f46so128597a91.0
+        for <linux-mips@vger.kernel.org>; Fri, 03 May 2024 14:23:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1714771404; x=1715376204; darn=vger.kernel.org;
+        d=broadcom.com; s=google; t=1714771430; x=1715376230; darn=vger.kernel.org;
         h=in-reply-to:autocrypt:from:references:to:subject:user-agent
          :mime-version:date:message-id:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=79HywMDRTPgjPWMk4W6RVqFYKC6wq/myCW+Q4fyWWAE=;
-        b=EgqqiRFtDCsYnEXpHDftlR/rkFvtxnNSAJ15zVkjr6r9WOdabywL6gHGyh7Y5k4MZ/
-         t7w0Chd6hOmQw3bvOsYvWkFB4TGk8Ca3Sq8UPVGcAVPB+sNVf8vVjaoH7CDJR6MKV+ZP
-         +07OpMdRa5n+eXBuhLlVbMFkyohE8zjgr0nRY=
+        bh=XhqXu7UHz8pWu55aJ1sAsoxHszK+jPXZ98bCPatlOaQ=;
+        b=WRnowxmuZnGY0TGt8nUXSzjywK2LUB44haz7Z9b2fERrDb66akIjIo7/dzFcXzUBAh
+         br12WPGvSR5TvvGbhasnNtb4zANVhgnB5WWPAHIif641eVYKQuRzvAaRuM5CCpMSadyH
+         1JpD442N72HEQ01j/jsjz0uRENfRhQkbDpvao=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714771404; x=1715376204;
+        d=1e100.net; s=20230601; t=1714771430; x=1715376230;
         h=in-reply-to:autocrypt:from:references:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=79HywMDRTPgjPWMk4W6RVqFYKC6wq/myCW+Q4fyWWAE=;
-        b=q1UITzr/sKSQHL3Fyba7+c8mgjabHbnB3QwJMhE+BDQf75kxNV0nvRBUCLcWVKbBOY
-         ATT1MFBlywevE07yLxHUHsm8FiatoVnjsPfVe4CaZz4AsTzLAMw0NhxbwGBX5jSUavPv
-         TzgrmcvUDkpx/VJ/juCXXCQJknAgA+o+ejp3wKcDKPjOBPHm49dFp8TZL6w7nu6C83CF
-         EY1N8MPrwgAlWfYNYzXO7yJ8eAkZtM+PA8I/krtw76HQdO9odCvvXitAMsIJqSVsFlB3
-         nOd45krn2GEfI6IpxYdSS3mgkc4BsXKvw8ePj8qQxzi7hLGMATrZPrh82wFKwEmxLcFi
-         u/qw==
-X-Forwarded-Encrypted: i=1; AJvYcCVWCmyACiwZBiCLVk1V8EEZQ6wvMLe8husj27e2waIaQZ0y3MaLt3dKtJaw9ccNO9dZm1kghBYhszIFK735P2W2/D+nj++owAg2mA==
-X-Gm-Message-State: AOJu0YxlWv6OgxwNi+M9w0f16LiEV9PP9BWmk0NNkppZ531du/aPPuyt
-	yRhboYEDDkwGHtihyb4iX9pCa37+XiG8XG5N8EDa6ftRjqEaYy6IyeP1XyRu4Q==
-X-Google-Smtp-Source: AGHT+IFAsHUFyZ2l39HT5bvonHBzLRpRf/3PfAwQnmHhtwVQTM1LYugk1+YlPCfpYtz0vsaKStci/A==
-X-Received: by 2002:a05:6a00:2e26:b0:6f4:46ea:2f26 with SMTP id fc38-20020a056a002e2600b006f446ea2f26mr4902414pfb.15.1714771403754;
-        Fri, 03 May 2024 14:23:23 -0700 (PDT)
+        bh=XhqXu7UHz8pWu55aJ1sAsoxHszK+jPXZ98bCPatlOaQ=;
+        b=u0wUtHWmw+nSXcrQ5oyaqcnx9lXRHl0CpLL2CUhWT3mysnIxgmzjtwEYUi/ihEBsDs
+         BfAnzQAB83ie3EJ7akfKRd0q4Qtfr6EcvajgFvXfJZGpv+Q5l9gSrRQAbllP4Qkq/5p+
+         DktdU7gc8sre5QrVdKZh8MyIvvh72/iuzCaL0ltipoGaJ5ag5Q7v3UtclG5vDuW9p6bT
+         ezTA+oVlmZ9kcBaiLuVbW3eBUicZSYRA88eju4WQcoL3vRAi289shytMUDt4enk8TRym
+         IpNDE54PxhDc77XpatkwgTC/6EwBvz41n4CXJRbSy33QGQHpMjSXuznYW+JR6bmBwsKD
+         n9RQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUGLbrU1CtFKg5+sjlPyumOsmflMXeUdTROSc1OA5k4o69Hk14Nw7CJwtROO2Oz8/yLfk6BGyh1+4Xl+92bzfG3UiTFvje81CpdaA==
+X-Gm-Message-State: AOJu0Yzfrbs/OP57mZfbW+WFhHIEQegvkScONk81SgJuEQEfIbODYTEk
+	Gs5YcCXhCXePE+QV1kA1lhqKZx7FrTm/7cbWXUNBmLzF1HBmOv7YmzJrgKHD/A==
+X-Google-Smtp-Source: AGHT+IGI33LXYSMMf/+cc0EwdinJn2Elu0nt784mH7aw4vB6qjT6X8GrgXrsGbE5l+qeSCyecvtWKg==
+X-Received: by 2002:a17:90a:5897:b0:2b3:be55:bf6f with SMTP id j23-20020a17090a589700b002b3be55bf6fmr3996778pji.22.1714771430334;
+        Fri, 03 May 2024 14:23:50 -0700 (PDT)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id t20-20020a056a0021d400b006eb3c3db4afsm3512334pfj.186.2024.05.03.14.23.21
+        by smtp.gmail.com with ESMTPSA id e5-20020a17090a818500b002afd65ff881sm3581902pjn.44.2024.05.03.14.23.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 May 2024 14:23:22 -0700 (PDT)
-Message-ID: <a6e178d1-da53-4e03-b1bb-c8343fdcfb59@broadcom.com>
-Date: Fri, 3 May 2024 14:23:20 -0700
+        Fri, 03 May 2024 14:23:49 -0700 (PDT)
+Message-ID: <ff3df04e-300d-4ee1-840f-09bbd15ac3d5@broadcom.com>
+Date: Fri, 3 May 2024 14:23:47 -0700
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -73,8 +73,7 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/5] mips: bmips: BCM6358: make sure CBR is correctly
- set
+Subject: Re: [PATCH v2 2/5] mips: bmips: rework and cache CBR addr handling
 To: Christian Marangi <ansuelsmth@gmail.com>,
  Hauke Mehrtens <hauke@hauke-m.de>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
  <zajec5@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -88,7 +87,7 @@ To: Christian Marangi <ansuelsmth@gmail.com>,
  linux-kernel@vger.kernel.org, =?UTF-8?Q?Daniel_Gonz=C3=A1lez_Cabanelas?=
  <dgcbueu@gmail.com>
 References: <20240503212139.5811-1-ansuelsmth@gmail.com>
- <20240503212139.5811-2-ansuelsmth@gmail.com>
+ <20240503212139.5811-3-ansuelsmth@gmail.com>
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
@@ -122,27 +121,23 @@ Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
  7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
  95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <20240503212139.5811-2-ansuelsmth@gmail.com>
+In-Reply-To: <20240503212139.5811-3-ansuelsmth@gmail.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000006a73c906179354c7"
+	boundary="0000000000000036c006179356db"
 
---0000000000006a73c906179354c7
+--0000000000000036c006179356db
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 5/3/24 14:20, Christian Marangi wrote:
-> It was discovered that some device have CBR address set to 0 causing
-> kernel panic when arch_sync_dma_for_cpu_all is called.
+> Rework the handling of the CBR address and cache it. This address
+> doesn't change and can be cached instead of reading the register every
+> time.
 > 
-> This was notice in situation where the system is booted from TP1 and
-> BMIPS_GET_CBR() returns 0 instead of a valid address and
-> !!(read_c0_brcm_cmt_local() & (1 << 31)); not failing.
+> This is in preparation of permitting to tweak the CBR address in DT with
+> broken SoC or bootloader.
 > 
-> The current check whether RAC flush should be disabled or not are not
-> enough hence lets check if CBR is a valid address or not.
-> 
-> Fixes: ab327f8acdf8 ("mips: bmips: BCM6358: disable RAC flush for TP1")
 > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 
 Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
@@ -150,7 +145,7 @@ Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
 Florian
 
 
---0000000000006a73c906179354c7
+--0000000000000036c006179356db
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -221,15 +216,15 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIMSdT/DiQCC7jOfD
-RnDVEItmTxhAVWhaBrsWbl/FfvvgMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTI0MDUwMzIxMjMyNFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJ2AapXC9S+Ayrvg
+dFAU9/aWYCnx/kGDxI9V6xqmzKTvMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTI0MDUwMzIxMjM1MFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQA/KlmD/DKXClZS0KE8YYHgFUQlpHppZmBS
-ejLt36E3fGjnReFOKmNZY8HPklV9CkfpnsIR3oEpswzPV8ngApEl42pbUa8K8rCVxFA2oRe8qrYE
-Z6LcLyraXFdsXp0tWCxsy2Wete0c1xJ22p73ziryYTxzyMdWRBnQ4LHN2VYXi7ui9Hxc9yixQXeH
-WnuQNtkbA/3ohYMKjzjPGt6557cuB6b7qPqlk/mxSwyIWewiCjaSwz7haYzXbvl5/D2NaLO/7Kd3
-J1lrEDYR4oOTsP+jGLg8XoYc5uJ3lnUPkHo5UOyHU/z9094p6dd7kXUFgNkD0UeSccwXJYUDaSx+
-BAq+
---0000000000006a73c906179354c7--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCkG87HOxoDRkIajCAGymzOX1hTgluXVzpw
++ChX9mDMldsIQIK1fCMVvICa7FHkFlAYuzfhfuk70kOvbUAKBX6ac6aKNBb/eTp0p4PhytWwUn7Q
+GBYhkMAwX9H1cQAoSVrrBr814PyAnKaa5DDvOdAjVBcUCvJ6/e3Z98cqnVdseUAcCp47UXnCW6Or
+EHhkmZD7WWyZEbY+v0rzycEyysNuw5V8nzSkTANR6DeXFwPagGT2n4jZv7qodU1UAUwufgrGBT4J
+cFPFAbBK2KngJZhzp6W5FPrKLDvattVqxCaR6cIobKDpmlP/YkDI9F4lbNZgQc7h769gVFIarLlZ
+ligE
+--0000000000000036c006179356db--
 
