@@ -1,93 +1,91 @@
-Return-Path: <linux-mips+bounces-3044-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3045-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C51AC8BB41C
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 21:33:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6253A8BB430
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 21:35:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53B761F21421
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 19:33:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 543BEB24286
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 19:35:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56D1F158866;
-	Fri,  3 May 2024 19:33:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D19D158219;
+	Fri,  3 May 2024 19:35:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DrAs+DQF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Eo5QI00p"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 995BE134B1;
-	Fri,  3 May 2024 19:33:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50A0E2206E;
+	Fri,  3 May 2024 19:35:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714764822; cv=none; b=YqGqAwdRhWh85IUegXlPrJaf//LAGlWDPGMASyU9e2Kbomy19vXvClDBWGxrM07BLdA85sJf688VpJ1LfFMSCnW6wZLVs1Ndr1ArHpaU+j2gYtsuTMsna2tcnLShS9699fdSz/+dsMsH9pop4sagiZXSvh2nXSasgv00E96v5lk=
+	t=1714764950; cv=none; b=p8r4sblhTg9Pkq68IxpQDeu3kttXJ3nusMSGt0+cFSdO3HWCe1LcYI/OXFj8ZeyP7frkfO4rabooUbvIDqSsM5zSLFaNDdTCfenyQO4rfC0FlzKJtRr35uDOW8n1DOLTycix9Sc+BsoUnxH/HWO1j8g7TRj16xvs6Z5B22ReYV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714764822; c=relaxed/simple;
-	bh=WnxtnG5F2ZSL/UrBBiWEVqdNo/iZ7mg4Zelf0DhwJxQ=;
+	s=arc-20240116; t=1714764950; c=relaxed/simple;
+	bh=OhK3E+a940tahvBPeiK0xswt7avRqyafDuFtSYMIobs=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bRgRpZKBCrYZEl/Wz4RMfkjfHBUFFjmrY4aI2k5N9auzZ/mbU2/H5Xt2NgLHrcHEqVfTP/8KuAGljNBWBTxtckF4ndlENJ5NHFMGmDa6JOfJkTyRp70Z6jpAqTJ+ozAZcNFYSgvAiZNbTPo8GWUPgnj/MEXDkQvwbcckgATRYek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DrAs+DQF; arc=none smtp.client-ip=209.85.221.53
+	 Content-Type:Content-Disposition:In-Reply-To; b=N3SZTZSndJSn2TfTLHN5xPsWmep7VAaBh2rgbT5g3x6z+GM9yyKlHfyGtMsME2DzkfX0+63EkL4QaV8x2nuT+4MLijNGbzS2U+0ZIZRy9et5lzzuMu+73f+AqQ4a86PWinGqAWatZtISODIDROafQj9cXaGcBmy6BScut8KzKNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Eo5QI00p; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-34db9a38755so17805f8f.1;
-        Fri, 03 May 2024 12:33:40 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-34d96054375so5978f8f.2;
+        Fri, 03 May 2024 12:35:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714764819; x=1715369619; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1714764948; x=1715369748; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:subject:cc
          :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=UbjwZx8MEe2bGhAnyoiiAxBTi8jV9NStJqBk4W+NrSE=;
-        b=DrAs+DQFQxof1k8TdfrTPbD4Bm6gOTB85mevASfsK1riDv6PsDCc4G5Xiq0kF14YE5
-         ZFdMilYrN+fPf00pxM80PDKXuAW/5Viv2Uc3CMGhuLW1L7w1mKRqzxb7pauSJsE7kHQR
-         PYQWIUuVVo7GGn0g6SZi1QnSi9EuNfyWwELgTasbp6rdyMf7T2eb1wMWIeOcoWgzoSde
-         wSpWtWJThYcFTcTOrxNXeH0O0/u8CS8WofOa72BXdz9D/V4Exwe/07QsvQZElVHrOJ6r
-         GLkG9nSfS3h+VnarFnSg9i408poc+3QnMxJKhhT6iiyhFUelUp/R013D4YJW27smhyAx
-         TF5w==
+        bh=U0mqsADwP2HKMLmT/kWuFaaNyNjoyU0vnELezZHXEzQ=;
+        b=Eo5QI00p1NBIHgNKBOAYzVrJ9Y1VfFACJQ3IMblkIOeSiQJ4B1niWy8QPcMWgQMOuL
+         FZtc2pANoDkooo5iKlv0rn53DPu/Pn7QSDZbtaT6NNQs7cSD4EsNbNUJNWNm/avgSmBZ
+         ap5ry83Bt9wLh672e6YfmVsDMJoY85G0oTC++AuqmXuLGfFXfn3If2jyLdWlp6Fuk8hV
+         5ZNEZZf+DeIKY9aYccVhN8Uucawb5RTngqgtEJQqeVcwYdcLkZE9/jINnAAHXm5GE8Dp
+         hrx/fGogEk8puCDj/VssnRM2LAxbREtgA53j+tyzqk8zIUCosxnF5ifeRcy9hTeY2W7X
+         FS+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714764819; x=1715369619;
+        d=1e100.net; s=20230601; t=1714764948; x=1715369748;
         h=in-reply-to:content-disposition:mime-version:references:subject:cc
          :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UbjwZx8MEe2bGhAnyoiiAxBTi8jV9NStJqBk4W+NrSE=;
-        b=FvYqXD3s90lfB9JG9ggrwi1FcnnAy6vULij0WqjJDrhseKOCvqwN2HC221IVPGGEA9
-         UGR+uCpR8EvtitJ+LKLKeNy+KxOGo2ROUOOT7hAL8qXP7dKEh0Bg6w2xg0XfFkBMYgYD
-         72U/7H1Jg1qVvejuc5jT0Yx4R1hdDfwn4X9KBBOs5c6JshaugKoYqkdyy2uNWorSO+u3
-         5ZWjvdUWWY3mF7RTIfFy4wjUFZfmGrezOXpeVHrGai/Zn9jXRqplT1rag0a0owzzarPG
-         RfBwZXofHvFHFDoD4GWARtTZqD07FklcwRowE81mXl1IQ1lEUeLXo6uYG1hQfqaDoqj5
-         4IOw==
-X-Forwarded-Encrypted: i=1; AJvYcCUTOMPjClPu3qKieCsq58I/KGeuZMRh7iF2QpCOVciS4qUlSIF05R28ifYWj3rTPOgHelq+uLvac7K8QEGbGm+cX9Kkjb6jT02NAOJFikD7FwDj7LfxRP+/ZgmI3sGpw9iPJjpU/g2oBQH9KEepKpCidG3mjz5DrvGShYHdpIzOQXrcQb0=
-X-Gm-Message-State: AOJu0YymOq5wPThFWuC1JNSiM9zSIyuVG8FGAgDNKJJQBgBgfHNpcOUS
-	384B2eXsBUddqPUw9YI16lhoQ3ddot0goIUYihhSLEZEveoDyQhs
-X-Google-Smtp-Source: AGHT+IGJoLKFGAWGFD04zm9WgUj9sVAHiRRlSUoM+RS/MeaUrE1ztcbqtoT/S/bWD93YNQW1zePuOw==
-X-Received: by 2002:a5d:5483:0:b0:34a:35c7:22a3 with SMTP id h3-20020a5d5483000000b0034a35c722a3mr3218989wrv.20.1714764818605;
-        Fri, 03 May 2024 12:33:38 -0700 (PDT)
+        bh=U0mqsADwP2HKMLmT/kWuFaaNyNjoyU0vnELezZHXEzQ=;
+        b=Xq3EuHbR83BxT6+UasNrlbTHrnuS/4EMi/3Oyj8/5pUi/33ibp72S3z1N1zfO86B28
+         3GuUg+yCIh//r4Yc54apkayB2S855rWm/Sf5iSHyqHAnOssuovQzAjkIQlHLIUEdaQQ6
+         s6MRvx4L7A9ALqYh8rt1OC/CsIBput/BULC4k0LLKD7Ay0s0Sloue9owfmlopoILrgRg
+         OF/wUWS8CtGwSKNHPhgqa9RfaxSsWkjQwpIhFLGqcxV2sBVghx9IgeZ5eDVRNIZa3TTP
+         xB0HSuq68vzMN9ECopSjGJZQhzQB1JR/2WvdervH8NyUPwbQ7fDa/5u/JuHwnroT7P9y
+         32CA==
+X-Forwarded-Encrypted: i=1; AJvYcCU5Qy6jzRIRE7Ila8VWzb7W6tZYK3Sk77HTIyTmBzd3ttZz5Ni7HStQJxvq6Azr9Us9pCgx6ZWfXjLaihsxbOvoDPuTmFMcYR30ISL5U62EJQIFFd5/Q/9eObcw6Mna1AojBq5Vh9h4T2PyWXvY7HlqwRRaLS3kV9kl9VGgVq94k4s24Zk=
+X-Gm-Message-State: AOJu0YyyYOqFzyKRCLUIT2lKyCZ5dLwbAi4nM5o3vdpo45JRr7N3iTWU
+	LkVPtvTxE2q6o+cW4EbLVxxOav+NFpF/KZMbneJ5KyJb4mzd59yF
+X-Google-Smtp-Source: AGHT+IHo44bJgKTBq2upb63EKQBywuVxOdIxe/H649mJQj0Mlb9UwkEBkVjGLEGcFAKKFyNU3DY9+w==
+X-Received: by 2002:a5d:558e:0:b0:34d:b605:ec68 with SMTP id i14-20020a5d558e000000b0034db605ec68mr2531426wrv.17.1714764946919;
+        Fri, 03 May 2024 12:35:46 -0700 (PDT)
 Received: from Ansuel-XPS. (93-34-90-105.ip49.fastwebnet.it. [93.34.90.105])
-        by smtp.gmail.com with ESMTPSA id g4-20020a5d5404000000b0034ca136f0e9sm4457292wrv.88.2024.05.03.12.33.37
+        by smtp.gmail.com with ESMTPSA id s11-20020a05600c45cb00b00419f572671dsm6673868wmo.20.2024.05.03.12.35.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 May 2024 12:33:37 -0700 (PDT)
-Message-ID: <66353c11.5d0a0220.bb93c.fb57@mx.google.com>
-X-Google-Original-Message-ID: <ZjU8Dw8rxwlS8vJV@Ansuel-XPS.>
-Date: Fri, 3 May 2024 21:33:35 +0200
+        Fri, 03 May 2024 12:35:46 -0700 (PDT)
+Message-ID: <66353c92.050a0220.fd42f.7cfb@mx.google.com>
+X-Google-Original-Message-ID: <ZjU8kKfPANkAF6gG@Ansuel-XPS.>
+Date: Fri, 3 May 2024 21:35:44 +0200
 From: Christian Marangi <ansuelsmth@gmail.com>
-To: Conor Dooley <conor@kernel.org>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
 Cc: Hauke Mehrtens <hauke@hauke-m.de>,
 	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
 	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
 	=?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>,
 	linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Daniel =?iso-8859-1?Q?Gonz=E1lez?= Cabanelas <dgcbueu@gmail.com>
-Subject: Re: [PATCH 3/6] dt-bindings: mips: brcm: Document mips-cbr-reg
- property
+Subject: Re: [PATCH 4/6] mips: bmips: setup: make CBR address configurable
 References: <20240503135455.966-1-ansuelsmth@gmail.com>
- <20240503135455.966-4-ansuelsmth@gmail.com>
- <20240503-oncoming-taste-bab71375b67c@spud>
+ <20240503135455.966-5-ansuelsmth@gmail.com>
+ <bf20e911-26db-4291-95d4-c91cc1d7f000@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -96,109 +94,60 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240503-oncoming-taste-bab71375b67c@spud>
+In-Reply-To: <bf20e911-26db-4291-95d4-c91cc1d7f000@broadcom.com>
 
-On Fri, May 03, 2024 at 05:21:41PM +0100, Conor Dooley wrote:
-> On Fri, May 03, 2024 at 03:54:03PM +0200, Christian Marangi wrote:
-> > Document mips-cbr-reg and mips-broken-cbr-reg property.
+On Fri, May 03, 2024 at 12:09:02PM -0700, Florian Fainelli wrote:
+> On 5/3/24 06:54, Christian Marangi wrote:
+> > Add support to provide CBR address from DT to handle broken
+> > SoC/Bootloader that doesn't correctly init it. This permits to use the
+> > RAC flush even in these condition.
 > > 
-> > Some SoC suffer from a BUG where read_c0_brcm_cbr() might return 0
-> > if called from TP1. The CBR address is always the same on the SoC
-> > hence it can be provided in DT to handle broken case where bootloader
-> > doesn't init it or SMP where read_c0_brcm_cbr() returns 0 from TP1.
+> > To provide a CBR address from DT, the property "mips-cbr-reg" needs to
+> > be set in the "cpus" node. On DT init, this property presence will be
+> > checked and will set the bmips_cbr_addr value accordingly. Also
+> > bmips_rac_flush_disable will be set to false as RAC flush can be
+> > correctly supported.
 > > 
-> > Usage of this property is to give an address also in these broken
-> > configuration/bootloader.
+> > The CBR address from DT will be applied only if the CBR address from the
+> > registers is 0, if the CBR address from the registers is not 0 and
+> > is not equal to the one set in DT (if provided) a WARN is printed.
 > > 
-> > If the SoC/Bootloader ALWAYS provide a broken CBR address the property
-> > "mips-broken-cbr-reg" can be used to ignore any value already set in the
-> > registers for CBR address.
+> > To ALWAYS overwrite the CBR address the additional property
+> > "mips-broken-cbr-reg" needs to be set.
 > > 
 > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 > > ---
-> >  .../devicetree/bindings/mips/brcm/soc.yaml    | 32 +++++++++++++++++++
-> >  1 file changed, 32 insertions(+)
+> >   arch/mips/bmips/setup.c | 30 +++++++++++++++++++++++++++---
+> >   1 file changed, 27 insertions(+), 3 deletions(-)
 > > 
-> > diff --git a/Documentation/devicetree/bindings/mips/brcm/soc.yaml b/Documentation/devicetree/bindings/mips/brcm/soc.yaml
-> > index 975945ca2888..12d394b7e011 100644
-> > --- a/Documentation/devicetree/bindings/mips/brcm/soc.yaml
-> > +++ b/Documentation/devicetree/bindings/mips/brcm/soc.yaml
-> > @@ -55,6 +55,21 @@ properties:
-> >           under the "cpus" node.
-> >          $ref: /schemas/types.yaml#/definitions/uint32
-> >  
-> > +      mips-broken-cbr-reg:
-> > +        description: Declare that the Bootloader init a broken
-> > +          CBR address in the registers and the one provided from
-> > +          DT should always be used.
+> > diff --git a/arch/mips/bmips/setup.c b/arch/mips/bmips/setup.c
+> > index 18561d426f89..bef84677248e 100644
+> > --- a/arch/mips/bmips/setup.c
+> > +++ b/arch/mips/bmips/setup.c
+> > @@ -34,7 +34,11 @@
+> >   #define REG_BCM6328_OTP		((void __iomem *)CKSEG1ADDR(0x1000062c))
+> >   #define BCM6328_TP1_DISABLED	BIT(9)
+> > -/* CBR addr doesn't change and we can cache it */
+> > +/*
+> > + * CBR addr doesn't change and we can cache it.
+> > + * For broken SoC/Bootloader CBR addr might also be provided via DT
+> > + * with "mips-cbr-reg" in the "cpus" node.
+> > + */
+> >   void __iomem *bmips_cbr_addr;
+> >   extern bool bmips_rac_flush_disable;
+> > @@ -212,8 +216,28 @@ void __init device_tree_init(void)
+> >   	/* Disable SMP boot unless both CPUs are listed in DT and !disabled */
+> >   	np = of_find_node_by_name(NULL, "cpus");
+> > -	if (np && of_get_available_child_count(np) <= 1)
+> > -		bmips_smp_enabled = 0;
+> > +	if (np) {
 > 
-> Why is this property even needed, is it not sufficient to just add the
-> mips-cbr-reg property to the DT for SoCs that need it and use the
-> property when present?
->
+> Please reduce the indentation with early return/gotos. There might also be a
+> need to do some validation that the CBR is at least outside of the DRAM
+> window, that is we cannot blindly trust the DT to have gotten the CBR right
+> IMHO.
 
-I described this in the cover letter. CBR might be set by the Bootloader
-and might be not 0. In that case the value is ignored as an extra
-precaution and the broken propetry is needed.
-
-> > +        type: boolean
-> > +
-> > +      mips-cbr-reg:
-> 
-> Missing a vendor prefix.
-> 
-
-I will change this to bmips,cbr-reg hope it's O.K.
-
-> > +        description: Reference address of the CBR.
-> > +          Some SoC suffer from a BUG where read_c0_brcm_cbr() might
-> > +          return 0 if called from TP1. The CBR address is always the
-> > +          same on the SoC hence it can be provided in DT to handle
-> > +          broken case where bootloader doesn't init it or SMP where
-> 
-> s/init/initialise/ please :)
-> 
-
-Sure!
-
-> Thanks,
-> Conor.
-> 
-> > +          read_c0_brcm_cbr() returns 0 from TP1.
-> > +        $ref: /schemas/types.yaml#/definitions/uint32
-> > +
-> >      patternProperties:
-> >        "^cpu@[0-9]$":
-> >          type: object
-> > @@ -64,6 +79,23 @@ properties:
-> >      required:
-> >        - mips-hpt-frequency
-> >  
-> > +dependencies:
-> > +  mips-broken-cbr-reg: [ mips-cbr-reg ]
-> > +
-> > +if:
-> > +  properties:
-> > +    compatible:
-> > +      contains:
-> > +        anyOf:
-> > +          - const: brcm,bcm6358
-> > +          - const: brcm,bcm6368
-> > +
-> > +then:
-> > +  properties:
-> > +    cpus:
-> > +      required:
-> > +        - mips-cbr-reg
-> > +
-> >  additionalProperties: true
-> >  
-> >  examples:
-> > -- 
-> > 2.43.0
-> > 
-
-
+Do you have any hint on how to do the check if we are outside DRAM?
 
 -- 
 	Ansuel
