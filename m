@@ -1,71 +1,71 @@
-Return-Path: <linux-mips+bounces-3040-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3041-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48B018BB390
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 20:57:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0F388BB39B
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 21:00:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD7781F23F37
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 18:57:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3C391C22FC4
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 19:00:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9AB6154C12;
-	Fri,  3 May 2024 18:56:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C76115535A;
+	Fri,  3 May 2024 19:00:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="MaYyxBpS"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="aETeJ0yE"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6680D13A244
-	for <linux-mips@vger.kernel.org>; Fri,  3 May 2024 18:56:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C276502A1
+	for <linux-mips@vger.kernel.org>; Fri,  3 May 2024 19:00:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714762610; cv=none; b=oOQygg/K53ZFdWQHU16jBuqfhkD9Rv1d8p57IsFXlfb9RZ/pChlplXAWQMX+gOFJexV7p/5849hm0Hcw4erm+9p6Sm6AORIAavO8ln1PM1+P9sQFtbPDKQRCCDviEnVP/3IHiwwiCmTa/+XL5pHZU3zJKcQknl7LljRrv3TeUC8=
+	t=1714762834; cv=none; b=HXySjOWEh5On8LPSGeLXhQ3Easu5SuMDBm+gNbJ8Ffe+p+WC99DRfiJlgIOmz1FlVqQqnoOewknETIp5pu8sXzgWMwn49HFr8GbUiMuZd1Q+1ktQmVC/fSUNgX24hMbpiLe5E5dyR7HPCsaGWPcFG0xvRXPhH/jd5RbkTcXVx2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714762610; c=relaxed/simple;
-	bh=Ke4Z/ESiRqUY9Mttj9+Wd4W2kFlJ5K+Osa7Ud4skh40=;
+	s=arc-20240116; t=1714762834; c=relaxed/simple;
+	bh=CI57NvU4qKUF1WqjJziOmK7hz2ZWrSQ2B/vT4ij0OoA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=LXbbA5sqnIIMmgoYcEeagMZOxL4cYEw723DKuKeZNnHWNGvYADZ3M5+lKnMUg+c7Fkyg4ttyx+8BqWYqmOzrXqqw8nD0rkbr/PzCBZ8KMZbQgrhh4aa+SaSbP+DlYcRGRsY/2dqlqiRoU+qQl5rOYOkhxMev8mPR/3Yw25v14Qg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=MaYyxBpS; arc=none smtp.client-ip=209.85.222.174
+	 In-Reply-To:Content-Type; b=rFpzHEVNlpm4gJpXuHNYHR1j4AQC3h2CgKPTLNHt7Mdw5ZQl6vJV4Sub+cKqsyk0gq7NY/qJJ02pAkJB/n3uw14YlxCtrv17zubzhgMEB+5gyP78JiYBjSy+oeTaO6JOuNgkgDipEK3+6I05hP+89sZ+Ok4iawp8Ztts+2RN66A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=aETeJ0yE; arc=none smtp.client-ip=209.85.160.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-78f03917484so643651085a.3
-        for <linux-mips@vger.kernel.org>; Fri, 03 May 2024 11:56:48 -0700 (PDT)
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-43c5c5496a3so20500491cf.0
+        for <linux-mips@vger.kernel.org>; Fri, 03 May 2024 12:00:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1714762607; x=1715367407; darn=vger.kernel.org;
+        d=broadcom.com; s=google; t=1714762816; x=1715367616; darn=vger.kernel.org;
         h=in-reply-to:autocrypt:from:references:to:subject:user-agent
          :mime-version:date:message-id:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XhVToIu9/8k4CYZBNf70pFhmRbUMAtotyWHSglaa85U=;
-        b=MaYyxBpSbJxJ1SU8MhDwMBrT9uxxiPtSGPa3cX3QAnAAAe9kXozahJo6uR5LSTKPa7
-         3cSh9K69fbocgHpa0DJhUcql0fbDi2HE9t4iWB77HZcodlgxNd6PQ4ygsVQjRHG1X7AQ
-         tws/VPyJltzbUuc71thu6a5tCIXq5CIIfLCE8=
+        bh=BhhDn+7XBgBKjWgSLUapVFTVA3TbJYZrOzcpJXB/RgY=;
+        b=aETeJ0yEx7RdO6qsje1mXzU3V8scMw+jJgAGlaRREs/f/T90G3+p1sIJ0BgeLNel6q
+         AHXeQzFgiQcHo1kADG9RWOU8NsAXtC3qpjl5clLGqb8MU4vQQE/pgrWkY533XN5BfFBc
+         5viVM0VZQep7abCS8LY5CNXwD7FtcNnLcyBwE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714762607; x=1715367407;
+        d=1e100.net; s=20230601; t=1714762816; x=1715367616;
         h=in-reply-to:autocrypt:from:references:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=XhVToIu9/8k4CYZBNf70pFhmRbUMAtotyWHSglaa85U=;
-        b=BMUMym/NqLZcV2zBmJehgW0LOs7iawcLUCAQE+RPGeXK0rz9614Q8xTfHwjys9+YBr
-         Yu7iNFEnYOULkNmdJTYc3Fse48Z7ZTyk8xCeV8vXLQzVRwNQ0HlwaqiUT1KGByApOD9P
-         wg571WnZP8W5JmLm6kW5b7+JJP66aGnVIB4gDL8vLeQN4zydOZM++/wtuiuWtppKGhVx
-         i2/17APqQTBu21/Ecno2+xrBkBqEJuFqNDnlkw4mNN2qArc4HbVxgS8HyKURfYGNGLBD
-         dpZ7MSUKLEsKOyzM4qM3OZi4Mgw6ymEmrbld9+qNCKFQWEtJ25c0CBcEnMXOFQj2HDf0
-         gSPg==
-X-Forwarded-Encrypted: i=1; AJvYcCVMmou55LfprhHNLKQLF4qagDwrbsa6pXFyX0nrAZviySV/6gBlIJh4WjzWX0PvO6XHSX844nZGHFMBDPuyWMOhu9cN6kW6xOeJwg==
-X-Gm-Message-State: AOJu0YwiXxUNoIkPw4oxg49Xs52rq1+gQHkhYPZ579kRPyFTcaAKtGoj
-	HIPsPju8oSCB/bWec9PYV8KOS4a1gKklFeNWhSmwKShglkXKb+avLjIuo8f0vQ==
-X-Google-Smtp-Source: AGHT+IF7PY/j62h7bpayLByq3wbqI573NYlXNgxPoVNxfAr6/g4PFXXV7GrxQuK1isuFVGRevYNzpQ==
-X-Received: by 2002:a05:620a:5a53:b0:78f:ec9:387f with SMTP id wx19-20020a05620a5a5300b0078f0ec9387fmr3293825qkn.56.1714762607298;
-        Fri, 03 May 2024 11:56:47 -0700 (PDT)
+        bh=BhhDn+7XBgBKjWgSLUapVFTVA3TbJYZrOzcpJXB/RgY=;
+        b=Q4oQ93G5bIBpPj5Bp38gn5TCM50xXTbBIp96+p1AC1QVz0TWCyPqvmS6+2BEjTDlcs
+         7QTj7jHEKrF23Y3NPuUcxrpW3vIuupZOGeFmQtagPMT8SDdpr92gTKcvxvialNqz41gk
+         Z8hXg8IvMGeaviNcdbOhbVdRtntoMN2KsUv6rqFqEJrxLOnvudL8A25heKhYF2Uy7ZqE
+         fNJYYtL6cznID/ydDOS3ZlV//VP59Ko33FeRyiRueaDZIgRYeSpwOjkRhCkqSderNIei
+         Zad6Ptkch+jYruR/ko8uaKx24OONJuANlHkm0sswM+9lkDQha6c9RKuPndbt8GfdtrAd
+         UlLw==
+X-Forwarded-Encrypted: i=1; AJvYcCUQ1+fWprZQKXONNmvaoBpc5wqiE4IaTZWSuUjCX9SJPZ1wX54VUzJJzv8QRIP+5m+kLgRB6AJtGR85bWJ63C8OKOBNyH8UlsrDUw==
+X-Gm-Message-State: AOJu0YwBORnXGUP+xP+qdqMKKzhWctdROny4/eOg5cfWroNXl9tYlHZH
+	H5qtzTF/ZoYbVtUwXjHj/IsmgRn5RQltKNFW+wB/fsDqPFzCdJzNMAqkVnTpdg==
+X-Google-Smtp-Source: AGHT+IFT9zSXXqQ+x5L4Ox2l4/RNqXi+lfQztj5D9gFXkH6MtlRkX2h+PfZWP+U5Vjrp0yfKfzKZfw==
+X-Received: by 2002:ac8:59c4:0:b0:43a:d40d:861f with SMTP id f4-20020ac859c4000000b0043ad40d861fmr3321439qtf.29.1714762816090;
+        Fri, 03 May 2024 12:00:16 -0700 (PDT)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id b6-20020a05620a126600b0078d6349aa03sm1455294qkl.103.2024.05.03.11.56.45
+        by smtp.gmail.com with ESMTPSA id bw17-20020a05622a099100b004349bb95e01sm1849762qtb.26.2024.05.03.12.00.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 May 2024 11:56:46 -0700 (PDT)
-Message-ID: <5529fe79-e2f8-47ab-a0cf-2b37bb13bbd7@broadcom.com>
-Date: Fri, 3 May 2024 11:56:43 -0700
+        Fri, 03 May 2024 12:00:15 -0700 (PDT)
+Message-ID: <596537a9-0cc4-4f90-9b3b-bbb728e2d8c6@broadcom.com>
+Date: Fri, 3 May 2024 12:00:12 -0700
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -73,7 +73,7 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/6] mips: bmips: enable RAC on BMIPS4350
+Subject: Re: [PATCH 2/6] mips: bmips: rework and cache CBR addr handling
 To: Christian Marangi <ansuelsmth@gmail.com>,
  Hauke Mehrtens <hauke@hauke-m.de>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
  <zajec5@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -88,7 +88,7 @@ To: Christian Marangi <ansuelsmth@gmail.com>,
  linux-kernel@vger.kernel.org, =?UTF-8?Q?Daniel_Gonz=C3=A1lez_Cabanelas?=
  <dgcbueu@gmail.com>
 References: <20240503135455.966-1-ansuelsmth@gmail.com>
- <20240503135455.966-6-ansuelsmth@gmail.com>
+ <20240503135455.966-3-ansuelsmth@gmail.com>
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
@@ -122,68 +122,185 @@ Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
  7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
  95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <20240503135455.966-6-ansuelsmth@gmail.com>
+In-Reply-To: <20240503135455.966-3-ansuelsmth@gmail.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000001a4da9061791487b"
+	boundary="0000000000008d9b2906179154e6"
 
---0000000000001a4da9061791487b
+--0000000000008d9b2906179154e6
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 On 5/3/24 06:54, Christian Marangi wrote:
-> From: Daniel González Cabanelas <dgcbueu@gmail.com>
+> Rework the handling of the CBR address and cache it. This address
+> doesn't chance and can be cache instead of calling the register every
+> time.
+
+s/change/change/
+s/be cache/be cached/
+s/calling the register/reading from the register/
+
 > 
-> The data RAC is left disabled by the bootloader in some SoCs, at least in
-> the core it boots from.
-> Enabling this feature increases the performance up to +30% depending on the
-> task.
+> This is in preparation of permitting to tweak the CBR address in DT with
+> broken SoC or bootloader.
 > 
-> Signed-off-by: Daniel González Cabanelas <dgcbueu@gmail.com>
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-> [ rework code and reduce code duplication ]
 > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 > ---
->   arch/mips/kernel/smp-bmips.c | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
+>   arch/mips/bmips/dma.c         |  7 +++----
+>   arch/mips/bmips/setup.c       |  6 +++++-
+>   arch/mips/include/asm/bmips.h |  1 +
+>   arch/mips/kernel/smp-bmips.c  | 31 ++++++++++++++-----------------
+>   4 files changed, 23 insertions(+), 22 deletions(-)
 > 
+> diff --git a/arch/mips/bmips/dma.c b/arch/mips/bmips/dma.c
+> index 3779e7855bd7..799cc3e12fc3 100644
+> --- a/arch/mips/bmips/dma.c
+> +++ b/arch/mips/bmips/dma.c
+> @@ -9,7 +9,6 @@ bool bmips_rac_flush_disable;
+>   
+>   void arch_sync_dma_for_cpu_all(void)
+>   {
+> -	void __iomem *cbr = BMIPS_GET_CBR();
+>   	u32 cfg;
+>   
+>   	if (boot_cpu_type() != CPU_BMIPS3300 &&
+> @@ -21,7 +20,7 @@ void arch_sync_dma_for_cpu_all(void)
+>   		return;
+>   
+>   	/* Flush stale data out of the readahead cache */
+> -	cfg = __raw_readl(cbr + BMIPS_RAC_CONFIG);
+> -	__raw_writel(cfg | 0x100, cbr + BMIPS_RAC_CONFIG);
+> -	__raw_readl(cbr + BMIPS_RAC_CONFIG);
+> +	cfg = __raw_readl(bmips_cbr_addr + BMIPS_RAC_CONFIG);
+> +	__raw_writel(cfg | 0x100, bmips_cbr_addr + BMIPS_RAC_CONFIG);
+> +	__raw_readl(bmips_cbr_addr + BMIPS_RAC_CONFIG);
+>   }
+> diff --git a/arch/mips/bmips/setup.c b/arch/mips/bmips/setup.c
+> index 66a8ba19c287..18561d426f89 100644
+> --- a/arch/mips/bmips/setup.c
+> +++ b/arch/mips/bmips/setup.c
+> @@ -34,6 +34,8 @@
+>   #define REG_BCM6328_OTP		((void __iomem *)CKSEG1ADDR(0x1000062c))
+>   #define BCM6328_TP1_DISABLED	BIT(9)
+>   
+> +/* CBR addr doesn't change and we can cache it */
+> +void __iomem *bmips_cbr_addr;
+
+Maybe __ro_after_init and __read_mostly, too?
+
+>   extern bool bmips_rac_flush_disable;
+>   
+>   static const unsigned long kbase = VMLINUX_LOAD_ADDRESS & 0xfff00000;
+> @@ -111,7 +113,7 @@ static void bcm6358_quirks(void)
+>   	 * because the bootloader is not initializing it properly.
+>   	 */
+>   	bmips_rac_flush_disable = !!(read_c0_brcm_cmt_local() & (1 << 31)) ||
+> -				  !!BMIPS_GET_CBR();
+> +				  !!bmips_cbr_addr;
+>   }
+>   
+>   static void bcm6368_quirks(void)
+> @@ -144,6 +146,8 @@ static void __init bmips_init_cfe(void)
+>   
+>   void __init prom_init(void)
+>   {
+> +	/* Cache CBR addr before CPU/DMA setup */
+> +	bmips_cbr_addr = BMIPS_GET_CBR();
+>   	bmips_init_cfe();
+>   	bmips_cpu_setup();
+>   	register_bmips_smp_ops();
+> diff --git a/arch/mips/include/asm/bmips.h b/arch/mips/include/asm/bmips.h
+> index 581a6a3c66e4..3a1cdfddb987 100644
+> --- a/arch/mips/include/asm/bmips.h
+> +++ b/arch/mips/include/asm/bmips.h
+> @@ -81,6 +81,7 @@ extern char bmips_smp_movevec[];
+>   extern char bmips_smp_int_vec[];
+>   extern char bmips_smp_int_vec_end[];
+>   
+> +extern void __iomem *bmips_cbr_addr;
+>   extern int bmips_smp_enabled;
+>   extern int bmips_cpu_offset;
+>   extern cpumask_t bmips_booted_mask;
 > diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
-> index 6048c471b5ee..7bde6bbaa41f 100644
+> index b3dbf9ecb0d6..6048c471b5ee 100644
 > --- a/arch/mips/kernel/smp-bmips.c
 > +++ b/arch/mips/kernel/smp-bmips.c
-> @@ -617,6 +617,18 @@ void bmips_cpu_setup(void)
->   		__raw_readl(bmips_cbr_addr + BMIPS_RAC_ADDRESS_RANGE);
+> @@ -518,14 +518,12 @@ static void bmips_set_reset_vec(int cpu, u32 val)
+>   		info.val = val;
+>   		bmips_set_reset_vec_remote(&info);
+>   	} else {
+> -		void __iomem *cbr = BMIPS_GET_CBR();
+> -
+>   		if (cpu == 0)
+> -			__raw_writel(val, cbr + BMIPS_RELO_VECTOR_CONTROL_0);
+> +			__raw_writel(val, bmips_cbr_addr + BMIPS_RELO_VECTOR_CONTROL_0);
+>   		else {
+>   			if (current_cpu_type() != CPU_BMIPS4380)
+>   				return;
+> -			__raw_writel(val, cbr + BMIPS_RELO_VECTOR_CONTROL_1);
+> +			__raw_writel(val, bmips_cbr_addr + BMIPS_RELO_VECTOR_CONTROL_1);
+>   		}
+>   	}
+>   	__sync();
+> @@ -591,7 +589,6 @@ asmlinkage void __weak plat_wired_tlb_setup(void)
+>   
+>   void bmips_cpu_setup(void)
+>   {
+> -	void __iomem __maybe_unused *cbr = BMIPS_GET_CBR();
+
+Could keep the local variable here to minimize the amount of changes, 
+should not matter how the resulting code is generated, as it should 
+cache it in a register.
+
+>   	u32 __maybe_unused cfg;
+>   
+>   	switch (current_cpu_type()) {
+> @@ -607,17 +604,17 @@ void bmips_cpu_setup(void)
+>   		clear_c0_brcm_reset(BIT(16));
+>   
+>   		/* Flush and enable RAC */
+> -		cfg = __raw_readl(cbr + BMIPS_RAC_CONFIG);
+> -		__raw_writel(cfg | 0x100, cbr + BMIPS_RAC_CONFIG);
+> -		__raw_readl(cbr + BMIPS_RAC_CONFIG);
+> +		cfg = __raw_readl(bmips_cbr_addr + BMIPS_RAC_CONFIG);
+> +		__raw_writel(cfg | 0x100, bmips_cbr_addr + BMIPS_RAC_CONFIG);
+> +		__raw_readl(bmips_cbr_addr + BMIPS_RAC_CONFIG);
+>   
+> -		cfg = __raw_readl(cbr + BMIPS_RAC_CONFIG);
+> -		__raw_writel(cfg | 0xf, cbr + BMIPS_RAC_CONFIG);
+> -		__raw_readl(cbr + BMIPS_RAC_CONFIG);
+> +		cfg = __raw_readl(bmips_cbr_addr + BMIPS_RAC_CONFIG);
+> +		__raw_writel(cfg | 0xf, bmips_cbr_addr + BMIPS_RAC_CONFIG);
+> +		__raw_readl(bmips_cbr_addr + BMIPS_RAC_CONFIG);
+>   
+> -		cfg = __raw_readl(cbr + BMIPS_RAC_ADDRESS_RANGE);
+> -		__raw_writel(cfg | 0x0fff0000, cbr + BMIPS_RAC_ADDRESS_RANGE);
+> -		__raw_readl(cbr + BMIPS_RAC_ADDRESS_RANGE);
+> +		cfg = __raw_readl(bmips_cbr_addr + BMIPS_RAC_ADDRESS_RANGE);
+> +		__raw_writel(cfg | 0x0fff0000, bmips_cbr_addr + BMIPS_RAC_ADDRESS_RANGE);
+> +		__raw_readl(bmips_cbr_addr + BMIPS_RAC_ADDRESS_RANGE);
 >   		break;
 >   
-> +	case CPU_BMIPS4350:
-> +		u32 rac_addr = BMIPS_RAC_CONFIG_1;
-> +
-> +		if (!(read_c0_brcm_cmt_local() & (1 << 31)))
-> +			rac_addr = BMIPS_RAC_CONFIG;
-> +
-> +		/* Enable data RAC */
-> +		cfg = __raw_readl(bmips_cbr_addr + rac_addr);
-> +		__raw_writel(cfg | 0xa, bmips_cbr_addr + rac_addr);
-
-This enables data pre-fetching (bit 3) and data-caching (bit 1), have 
-you tried with 0xF to see if this provides any additional speed-up?
-
-Looks correct to me otherwise, I wonder if a flush would be in order 
-right after enabling, though I did not see any specific instructions 
-towards that part in the programming notes.
-
-> +		__raw_readl(bmips_cbr_addr + rac_addr);
-> +		break;
-> +
 >   	case CPU_BMIPS4380:
->   		/* CBG workaround for early BMIPS4380 CPUs */
->   		switch (read_c0_prid()) {
+> @@ -627,9 +624,9 @@ void bmips_cpu_setup(void)
+>   		case 0x2a042:
+>   		case 0x2a044:
+>   		case 0x2a060:
+> -			cfg = __raw_readl(cbr + BMIPS_L2_CONFIG);
+> -			__raw_writel(cfg & ~0x07000000, cbr + BMIPS_L2_CONFIG);
+> -			__raw_readl(cbr + BMIPS_L2_CONFIG);
+> +			cfg = __raw_readl(bmips_cbr_addr + BMIPS_L2_CONFIG);
+> +			__raw_writel(cfg & ~0x07000000, bmips_cbr_addr + BMIPS_L2_CONFIG);
+> +			__raw_readl(bmips_cbr_addr + BMIPS_L2_CONFIG);
+>   		}
+>   
+>   		/* clear BHTD to enable branch history table */
 
 -- 
 Florian
 
 
---0000000000001a4da9061791487b
+--0000000000008d9b2906179154e6
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -254,15 +371,15 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEICpFcYpks+3YKIZl
-biFvEaQNUXxxqbUVHn5Cj1La67cVMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTI0MDUwMzE4NTY0N1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIKzdiF5/g6W64Zjl
++DuaWQQm4O0Ft09eSf2XHBKqUIOZMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTI0MDUwMzE5MDAxNlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAZAbP1O5HkPNKCPyyaLBjOHv08IT6XtgkK
-3XRjSsAAWwjJjnfct+Y6UR6Fm5k6B+YBQCG52LLMQnDC7l6+NgQ5CL5KBETWxaO9Lp7Iu6QAopyj
-pfJcs+vFOnrQa5PKOQEtJY1bK19b/Fd/NNu47DHQqwGADzcJW84Y8mUskd3UwuxoEXEGtRgToOec
-yxarxgXqJEq1yDcqxsaC56gdjrZkrijJ6ipdNitF4nfkhI55XfI9QostZkW92c/p66ASi60/mRsU
-bHwqsRmUap/nAnicemaueAkRaSBpRzAeaf12Nex//pNdevvq9LLI1zKogDN8nDWfB9Nefzq9JH0m
-3nsm
---0000000000001a4da9061791487b--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQDLGPaPwfv1BDOVMkWrY1mWsuMeurUkrQFo
+QdwxNE3v86JIWk9AK+vFNxQo9Vl1sT16pm68fmP9LG35SmqmrFMUsnQOCngj7meQ018RFwYG22vR
+76jmd5C6T4pz6srpdpqSVQ3LS0UkmzJ3RiFvECza87DovVqvSuBkGKq/7qKdtTvg2By5fAKaOYf3
+NcfokE/yjjM6ushSWWLAyYTWSusEu4jlezVNXSfZQTMOggXzU3TeqyYv7568QZUXgmRrWq/FA//m
+PIdAZYDS+T86N9XQVtHHGefsclOCpLlU//CAfVAbWSQXqFQb1+yH6Ap8bYeQw8XWcssyJJ+4mcsp
+xb9R
+--0000000000008d9b2906179154e6--
 
