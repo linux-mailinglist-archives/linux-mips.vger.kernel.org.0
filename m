@@ -1,118 +1,84 @@
-Return-Path: <linux-mips+bounces-3065-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3066-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 040398BB6FB
-	for <lists+linux-mips@lfdr.de>; Sat,  4 May 2024 00:16:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6632A8BB94C
+	for <lists+linux-mips@lfdr.de>; Sat,  4 May 2024 04:34:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ECEFCB21F1E
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2024 22:16:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97B151C226A3
+	for <lists+linux-mips@lfdr.de>; Sat,  4 May 2024 02:34:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 688325B1E9;
-	Fri,  3 May 2024 22:16:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D5E8AD59;
+	Sat,  4 May 2024 02:34:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sqd3wEFd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CSuvkY0S"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5094CDE0;
-	Fri,  3 May 2024 22:16:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15C5F80B;
+	Sat,  4 May 2024 02:34:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714774571; cv=none; b=mmW7wLP+AdBySrlmAoq+d/ZIY/nUal5/nyNxNSldmmji1FpI/bhalFEyUePoVrfr8xJc8FciZ9lQfNj6Q9gP2MV0pHHWS9SKR7N4GD8VZ9bqfDORZ+CwN+z5Zic/dguWRwAC+iULnv/YcZijfR/8rPaaoyXhPJQyV3yXzE68Fxg=
+	t=1714790078; cv=none; b=XkoLt+SZDvYtF/SiOQTeGs7kgsur6zDvqsYXufy8PjLiMogHT5AVzSNMfQ3GXBhcnoLZcCMu4eLY4nCn9aUy1TJR0zsO8EyOfs4wiLtfJMSYJOBg3GFQ1fG1sIO2k8KKMYfYStjuNUU589uc4WCb+wb5dEEnO1WEovKWrauit6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714774571; c=relaxed/simple;
-	bh=/UJu1Ov70BGuD271Kroj1aGJrc0n51VS/Nnq25arbrk=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=pSaBXcyMmktA5QLLXp+TezU7nnf+NgtL/T1hIxAVbWDUzPNBO9Uf2v4+ruSHj1Vt/291lqRx2310o012NwnyKwEG++Xwnu/EP7XAgxYjgwV0lFUSaLCjVak++LQ2HqgsaAn0SJkbi8c8WZcGFPetDB9y1MiDsHw5JffCRg2WM8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sqd3wEFd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EDCBC116B1;
-	Fri,  3 May 2024 22:16:10 +0000 (UTC)
+	s=arc-20240116; t=1714790078; c=relaxed/simple;
+	bh=yVXtEN60WPDs64dv0Sh0OrP9dwoVq7s070uOhEnMXTI=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=EBWN5d5Gjq7FJu7VCtGjmskKj5SHSPJAHo2JMkzfSVgQkMCwX6hzAikQG2qP1nK/s6ITafa6CoFXYCnSXm192sL3/7PIxSq4WoiJj5ZP+y4NeUtfA5PGtcKHp9OM6E+HtbqInmfuqAriSETTb+7Wd78wv0/P2gY8jOFJIoelv1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CSuvkY0S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 729ECC116B1;
+	Sat,  4 May 2024 02:34:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714774570;
-	bh=/UJu1Ov70BGuD271Kroj1aGJrc0n51VS/Nnq25arbrk=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=Sqd3wEFdli/3nBIAxEQRsE9SruP28ELXjSws6p4x9+nB1JuIEgsRodtoMBnIKhswT
-	 692ZoZdsdLNcG3d/EJNbQFY9SgCHgVQ+h0tjmrUsYotwzJEMmGMGsbKXHn0/PLLd1N
-	 Wn3uUW64QR9+Ynu7uku7/c/HNmrIYSdGA3nz3FER+oxY8aPWnXoFbtMrc7zLfsYNVh
-	 Ov95K9wlcK2wtR7n6KXzwzanrILRdoHLDhMQQJNwW7IlQgsixbwmrUUeydujHeNf5l
-	 sJADaoWLo5f7hTJLycotZyCUyswWW9qeUKH9gOFbSB5lde9ngz08w5t6e9vRLruLfB
-	 82r21W9jZyNCQ==
-Date: Fri, 03 May 2024 17:16:09 -0500
+	s=k20201202; t=1714790077;
+	bh=yVXtEN60WPDs64dv0Sh0OrP9dwoVq7s070uOhEnMXTI=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=CSuvkY0STqC1kOsfeQtFTBRAqnzH39UXnwMdiVfjFg8MPe6tAXdsHGdLC2aw9L9Yr
+	 Lbi7jZ7BC+ZdIHdpTCM0butQqpvIVTJbtokAAXtOgUEnazbsMf/bJ481YB+eK0kc+u
+	 Q+PN9K2u2word9wovED4Vu8bfqYigtkn3r5j9TGxjCQKMqsyVZgX69jgwOmdctC0/F
+	 qn61F6ElPnVIyIGMzdFtVMOjPjZLHsByndJl4apRR791VCDfgovWNycWnWhEPM2tyl
+	 gCu+RtFaqmV23gPo3N5PPEBTt7s+7cWoGGRZ7iAl1/Sk0Rs3O9YTHwZ+aTh0jfpo5h
+	 z6IsnyR27zhdA==
+Message-ID: <8dcdb1422cd144128c1dc6fff1c273d3.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
- =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>, 
- Hauke Mehrtens <hauke@hauke-m.de>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Florian Fainelli <florian.fainelli@broadcom.com>, 
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- =?utf-8?q?=C3=81lvaro_Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>, 
- =?utf-8?q?Daniel_Gonz=C3=A1lez_Cabanelas?= <dgcbueu@gmail.com>, 
- Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org
-In-Reply-To: <20240503212139.5811-4-ansuelsmth@gmail.com>
-References: <20240503212139.5811-1-ansuelsmth@gmail.com>
- <20240503212139.5811-4-ansuelsmth@gmail.com>
-Message-Id: <171477456930.1857104.15200554671056631850.robh@kernel.org>
-Subject: Re: [PATCH v2 3/5] dt-bindings: mips: brcm: Document
- brcm,bmips-cbr-reg property
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240503-mbly-olb-v2-0-95ce5a1e18fe@bootlin.com>
+References: <20240503-mbly-olb-v2-0-95ce5a1e18fe@bootlin.com>
+Subject: Re: [PATCH v2 00/11] Add Mobileye EyeQ system controller support (clk, reset, pinctrl)
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, Gregory CLEMENT <gregory.clement@bootlin.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>, =?utf-8?q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>
+To: Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Lee Jones <lee@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, Michael Turquette <mturquette@baylibre.com>, Philipp Zabel <p.zabel@pengutronix.de>, Rafael J. Wysocki <rafael@kernel.org>, Rob Herring <robh@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, =?utf-8?q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>
+Date: Fri, 03 May 2024 19:34:35 -0700
+User-Agent: alot/0.10
 
+Quoting Th=C3=A9o Lebrun (2024-05-03 07:20:45)
+> Hello,
+>=20
+> This builds on previous EyeQ5 system-controller revisions[0], supporting
+> EyeQ5, EyeQ6L and EyeQ6H. We expose a few OLB system-controller
+> features here:
+>  - Clocks: some read-only PLLs derived from main crystal and some
+>    divider clocks based on PLLs.
+>  - Resets.
+>  - Pin controller, only on EyeQ5 (rest will use generic pinctrl-single).
+>=20
+> EyeQ6H is special in that it has seven instances of this
+> system-controller. Those are spread around and cannot be seen as a
+> single device, hence are exposed as seven DT nodes and seven
+> compatibles.
+>=20
+> This revision differs from previous in that it exposes all devices as a
+> single DT node. Driver-wise, a MFD registers multiple cells for each
+> device. Each driver is still in isolation from one another, each in
+> their respective subsystem.
 
-On Fri, 03 May 2024 23:20:59 +0200, Christian Marangi wrote:
-> Document brcm,bmips-cbr-reg and brcm,bmips-broken-cbr-reg property.
-> 
-> Some SoC suffer from a BUG where read_c0_brcm_cbr() might return 0
-> if called from TP1. The CBR address is always the same on the SoC
-> hence it can be provided in DT to handle broken case where bootloader
-> doesn't init it or SMP where read_c0_brcm_cbr() returns 0 from TP1.
-> 
-> Usage of this property is to give an address also in these broken
-> configuration/bootloader.
-> 
-> If the SoC/Bootloader ALWAYS provide a broken CBR address the property
-> "brcm,bmips-broken-cbr-reg" can be used to ignore any value already set
-> in the registers for CBR address.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
->  .../devicetree/bindings/mips/brcm/soc.yaml    | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
-> 
-
-My bot found errors running 'make dt_binding_check' on your patch:
-
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/mips/brcm/soc.yaml:83:37: [warning] too few spaces after comma (commas)
-
-dtschema/dtc warnings/errors:
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240503212139.5811-4-ansuelsmth@gmail.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Why can't you use auxiliary device and driver APIs?
 
