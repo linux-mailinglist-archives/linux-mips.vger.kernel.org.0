@@ -1,128 +1,145 @@
-Return-Path: <linux-mips+bounces-3084-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3085-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DCD78BC166
-	for <lists+linux-mips@lfdr.de>; Sun,  5 May 2024 16:33:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAFD28BC16B
+	for <lists+linux-mips@lfdr.de>; Sun,  5 May 2024 16:33:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8A1F8B20DFA
-	for <lists+linux-mips@lfdr.de>; Sun,  5 May 2024 14:33:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1ACB1C20F55
+	for <lists+linux-mips@lfdr.de>; Sun,  5 May 2024 14:33:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1F71548FD;
-	Sun,  5 May 2024 14:29:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6289635280;
+	Sun,  5 May 2024 14:30:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k8RBPZLa"
+	dkim=pass (1024-bit key) header.d=antgroup.com header.i=@antgroup.com header.b="Xy1J2stR"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out187-14.us.a.mail.aliyun.com (out187-14.us.a.mail.aliyun.com [47.90.187.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6DF93839C;
-	Sun,  5 May 2024 14:29:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6953E2BAF6;
+	Sun,  5 May 2024 14:30:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.187.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714919386; cv=none; b=K3JGyDoeQCQ7n7UJKVDjmPwIYAYIzxMlmQKKxYRDsJ/ohY0WhiCxoqhsUGubDEK69FCGieUmjYlzxUeRl+3Obn++izBubKV1tep/wunamKgFAfy9XVLE7/jxkLkqGx3o+n9fN3fHjLZc6FS3tOgWdLQBwRccho8jF/GcerD2CeY=
+	t=1714919423; cv=none; b=T/s8x5QXVSeGMNxfypCSG6YiK8+sqe4nJnEuYxJE8fat5GgnAB1BA6pcydKgv7LtcuURii7nEoh7YVfWmprfpTyeDBshArxPjd7qp++/tBFvEVRxc5sajaxjHYeXjpNUjBSH+B+v7itigi597EduhagirpfYamA48Wlo5nnFblM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714919386; c=relaxed/simple;
-	bh=jltW+mxex+RltLVmEvdEIXvbtM9OL57nIYiRLA2L7XA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HUxgHD1PwnHSVOsVIDXMFCWoV7VaNfmYCv2xrQtOI3EQB33kkzk+FzTz8SFZYHNaLRCdQcjnGHbZRUE6swtJKKvLCoiwN7suSR4A7JSgoAs8RDnC3foaCBT52XpruNb/xBU0q3XVPhMw/VVGpnvasy1/RVP+y54IAJ+ZW2eZCZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k8RBPZLa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCF5DC4AF67;
-	Sun,  5 May 2024 14:29:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714919386;
-	bh=jltW+mxex+RltLVmEvdEIXvbtM9OL57nIYiRLA2L7XA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=k8RBPZLaWniIrQ3iX1xRzq7LYGRguu4TjAeVU5ImeurmYjKnTMgH7LC1fVS/xPaWG
-	 Ei1rxYohyvJ4MvBnrpxNLXXdhHkPuqcjyx1mPgPPT/hmr8EU7DlkiqiMBUgBBwiRfO
-	 YGJqd/rv6So6su7wmo1rrAUGVmw+z+TWjSnUQQrxzllurDPeBLUKNx5WhjcSc8GE9+
-	 7C5MxR9hNoqJ51TJU+A6sQLEM7Xeu44i9pZBrgUQwNnBdrtHeh9Wv9jfIuM27SN/xQ
-	 0BXXwSLIKlwsoHlL6lW14hzPaBfJMAG5xJSM5Uo7xDZ+JvAqnIMimG/VkxiafIgGD6
-	 3QLqoThL3dX5Q==
-From: Mike Rapoport <rppt@kernel.org>
-To: linux-kernel@vger.kernel.org
-Cc: Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Donald Dutile <ddutile@redhat.com>,
-	Eric Chanudet <echanude@redhat.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Liviu Dudau <liviu@dudau.co.uk>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Mike Rapoport <rppt@kernel.org>,
-	Nadav Amit <nadav.amit@gmail.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Sam Ravnborg <sam@ravnborg.org>,
-	Song Liu <song@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-modules@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev,
-	netdev@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	x86@kernel.org
-Subject: [PATCH v8 17/17] fixup: convert remaining archs: defaults handling
-Date: Sun,  5 May 2024 17:26:00 +0300
-Message-ID: <20240505142600.2322517-18-rppt@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240505142600.2322517-1-rppt@kernel.org>
-References: <20240505142600.2322517-1-rppt@kernel.org>
+	s=arc-20240116; t=1714919423; c=relaxed/simple;
+	bh=+5M/UHVCF/4+zdZT19hNfPftPYcVlDMS+M5WUIbdi+8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WQuzcduQuXTikITJfHYLVrH+ZAWXKToe+lFC1WBXobU9x+lKRoiIgoNYtlRG4lgJdlZX5ylflFVrAkN5KaJQwWNukq+7Tl3HiMK3OOgLAHHwcb4KEwGLqWDqecukcuDAoUxzb1MMVxRbOu1tYxx+LVu1VFaZ8Ug5thgS92+WElA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=antgroup.com; spf=pass smtp.mailfrom=antgroup.com; dkim=pass (1024-bit key) header.d=antgroup.com header.i=@antgroup.com header.b=Xy1J2stR; arc=none smtp.client-ip=47.90.187.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=antgroup.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antgroup.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=antgroup.com; s=default;
+	t=1714919402; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=yUcsdhnPhmEHzxVOANaSCTb2AazIh17RKQgQDGLXMqg=;
+	b=Xy1J2stR+8iy4ZuHVyuZVktpQFwq6tqdzeuaM6lf6frMKWZwniuyea86RfCVkvmCYNTuly07KR85+ax2rXOQDSyepfhwgKaX+0c+QXIJppStMU7rA/wnxQWUxOW0gU3DTmfVlhPifoS5YnwAdxo4rB4r3bahcE2r+vGAxBj4bo4=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R711e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047188;MF=libang.li@antgroup.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---.XSX6Fdd_1714919399;
+Received: from 30.121.4.198(mailfrom:libang.li@antgroup.com fp:SMTPD_---.XSX6Fdd_1714919399)
+          by smtp.aliyun-inc.com;
+          Sun, 05 May 2024 22:30:01 +0800
+Message-ID: <f3114a5a-3ddb-474b-897c-0d96d25c31f9@antgroup.com>
+Date: Sun, 05 May 2024 22:29:59 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 5/5] mm: Add update_mmu_tlb_range()
+To: Lance Yang <ioworker0@gmail.com>
+Cc: akpm@linux-foundation.org, chenhuacai@kernel.org,
+ tsbogend@alpha.franken.de, paul.walmsley@sifive.com, palmer@dabbelt.com,
+ chris@zankel.net, jcmvbkbc@gmail.com, david@redhat.com,
+ ryan.roberts@arm.com, libang.linux@gmail.com, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linux-riscv@lists.infradead.org
+References: <20240429103346.59115-1-libang.li@antgroup.com>
+ <20240429103346.59115-6-libang.li@antgroup.com>
+ <CAK1f24n4usJm4=e0+jrTxGtRjqTJZvn4gBp8d_vU=p2CrU=TsA@mail.gmail.com>
+Content-Language: en-US
+From: "Bang Li" <libang.li@antgroup.com>
+In-Reply-To: <CAK1f24n4usJm4=e0+jrTxGtRjqTJZvn4gBp8d_vU=p2CrU=TsA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+Hey Lance,
 
-Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
----
- mm/execmem.c | 1 -
- 1 file changed, 1 deletion(-)
+Thanks for taking time to review!
 
-diff --git a/mm/execmem.c b/mm/execmem.c
-index f6dc3fabc1ca..0c4b36bc6d10 100644
---- a/mm/execmem.c
-+++ b/mm/execmem.c
-@@ -118,7 +118,6 @@ static void __init __execmem_init(void)
- 		info->ranges[EXECMEM_DEFAULT].end = VMALLOC_END;
- 		info->ranges[EXECMEM_DEFAULT].pgprot = PAGE_KERNEL_EXEC;
- 		info->ranges[EXECMEM_DEFAULT].alignment = 1;
--		return;
- 	}
- 
- 	if (!execmem_validate(info))
--- 
-2.43.0
+On 2024/4/29 19:23, Lance Yang wrote:
+> Hey Bang,
+> 
+> On Mon, Apr 29, 2024 at 6:36 PM Bang Li <libang.li@antgroup.com> wrote:
+>>
+>> After the commit 19eaf44954df ("mm: thp: support allocation of anonymous
+>> multi-size THP"), it may need to batch update tlb of an address range
+>> through the update_mmu_tlb function. We can simplify this operation by
+>> adding the update_mmu_tlb_range function, which may also reduce the
+>> execution of some unnecessary code in some architectures.
+>>
+>> Signed-off-by: Bang Li <libang.li@antgroup.com>
+>> ---
+>>   include/linux/pgtable.h | 5 +++++
+>>   mm/memory.c             | 4 +---
+>>   2 files changed, 6 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+>> index 18019f037bae..73411dfebf7a 100644
+>> --- a/include/linux/pgtable.h
+>> +++ b/include/linux/pgtable.h
+>> @@ -734,6 +734,11 @@ static inline void update_mmu_tlb(struct vm_area_struct *vma,
+>>                                  unsigned long address, pte_t *ptep)
+>>   {
+>>   }
+>> +
+>> +static inline void update_mmu_tlb_range(struct vm_area_struct *vma,
+>> +                               unsigned long address, pte_t *ptep, unsigned int nr)
+>> +{
+>> +}
+>>   #define __HAVE_ARCH_UPDATE_MMU_TLB
+>>   #endif
+> 
+> IMO, it might be better to use a separate definition to determine whether
+> update_mmu_tlb_range() is overridden by a specific architecture.
 
+I have also considered this, and I will modify it in the next version.
+thank you again for your review!
+
+Thanks,
+Bang
+
+> 
+> Thanks,
+> Lance
+> 
+>>
+>> diff --git a/mm/memory.c b/mm/memory.c
+>> index 6647685fd3c4..1f0ca362b82a 100644
+>> --- a/mm/memory.c
+>> +++ b/mm/memory.c
+>> @@ -4396,7 +4396,6 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
+>>          vm_fault_t ret = 0;
+>>          int nr_pages = 1;
+>>          pte_t entry;
+>> -       int i;
+>>
+>>          /* File mapping without ->vm_ops ? */
+>>          if (vma->vm_flags & VM_SHARED)
+>> @@ -4465,8 +4464,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
+>>                  update_mmu_tlb(vma, addr, vmf->pte);
+>>                  goto release;
+>>          } else if (nr_pages > 1 && !pte_range_none(vmf->pte, nr_pages)) {
+>> -               for (i = 0; i < nr_pages; i++)
+>> -                       update_mmu_tlb(vma, addr + PAGE_SIZE * i, vmf->pte + i);
+>> +               update_mmu_tlb_range(vma, addr, vmf->pte, nr_pages);
+>>                  goto release;
+>>          }
+>>
+>> --
+>> 2.19.1.6.gb485710b
+>>
 
