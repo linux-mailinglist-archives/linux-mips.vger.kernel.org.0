@@ -1,167 +1,190 @@
-Return-Path: <linux-mips+bounces-3141-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3142-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FDCC8BE9B6
-	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 18:51:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59A468BE9D7
+	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 18:55:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 001171F21970
-	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 16:51:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E28C283373
+	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 16:55:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FF9838DD6;
-	Tue,  7 May 2024 16:50:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 125F853E16;
+	Tue,  7 May 2024 16:55:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fy0d52nm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aKuM9kIF"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1D0CC148;
-	Tue,  7 May 2024 16:50:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53DD8747F;
+	Tue,  7 May 2024 16:55:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715100654; cv=none; b=oxSInL40wbkNVd6kw2fjxzDiHhAsMZvuO0ZubadXvYIJudmWqty9SyGBbIOl1W9eac7u0WQOaDCSLNqXaRTRc8bNOPHuRZYA+1rb/9ZY6mnrSq06cb4hlZKyDw6XLyD3aZsPx5tVzH27dk97MP7L4zGmWrk/wZSv/ODgy+XZUew=
+	t=1715100906; cv=none; b=PUOn3eiI6iwi1NKXygWHwM8g0LtoqUQmoV4xkeTTA/ov/KB8lVK0msPEeLKs1SRTRFF6aMMYHWfAKkJ9gcCbL8/nRMBcXL1uuEpgEZFVlJKwKEbNttQfNhkfqVN+bTHPw61PAh9uQDat8aGc/sJ4+sBL57hzAn28rvMhw772PLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715100654; c=relaxed/simple;
-	bh=4KlGXEb5MaJvVfdIChb4oVA/A+O8sO7IHBsckW8932E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AIcA2/mTAW5oUXH/tvWKSiy978aMgymoOdQ4SXnfeAR8J2hjB2BZK8JuVEtNmXYItgColwEs/nKkwFwMDyU9KFzCIpnDZKuRmXC+k5UhInrFINFpHJRcKx/PiDEkOqlPRr3GhCrf38adBSKSYAc1inD+rit4Xz14L0QshhMmvu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fy0d52nm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 939CCC2BBFC;
-	Tue,  7 May 2024 16:50:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715100653;
-	bh=4KlGXEb5MaJvVfdIChb4oVA/A+O8sO7IHBsckW8932E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Fy0d52nmTSnKrXLiL+qFfs06Vypp7P+IwnrCTs0QOvWhvsBQeo/AsAlhDw1iwUsQF
-	 xfC72eu8okO91wpGrlcPJJokgj3yROxwnYrssdCd+hXYvfxgDTM6ARwWKESlXXNrMS
-	 c9ydBiJiE1ct3KFKTbJWYMcfk0yQXTWhiHdZ9nTSp8MyiEc3fayqTXcXyvXfS9D+xR
-	 CYvB6Iv6oPUrhP8ElZ7mrFV0/x9EszsaWny1lOiaKu5aRk7Wju/4cor3xstN3o+A5T
-	 AaE9AQij0VhCijug/NGd2UWRJ9LR97Xe4x23iBNf5As91HtFw06MWlnbUQQv4x1e0B
-	 j8Icafg5QDlrg==
-Date: Tue, 7 May 2024 17:50:49 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Paul Burton <paulburton@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 4/5] dt-bindings: mips: Document mti,mips-cm
-Message-ID: <20240507-jokester-antelope-808b21b957e6@spud>
-References: <20240507-cm_probe-v1-0-11dbfd598f3c@flygoat.com>
- <20240507-cm_probe-v1-4-11dbfd598f3c@flygoat.com>
+	s=arc-20240116; t=1715100906; c=relaxed/simple;
+	bh=w2F56fiWPcf3I7Mdw2SWi3X1Jhti8Ih4jgxuRbud9h4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Nh2zxiJ0Mt+ofzGVLLJ8gQoWOSReGo9j0eWG1qtpIQJQZC0IA45Z918j7wvesx4W10et6QCSBkw5QmRlMw13lDFzugaLfQXxqiLDfMKnrPmPNmvu7pIsxX54quL/xFiyJ28cPeMk+MbTLRcWeTn9azFAXhrzipqZ3S/UFgx9Zto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aKuM9kIF; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-41b782405d5so35528355e9.2;
+        Tue, 07 May 2024 09:55:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715100904; x=1715705704; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dF9l/kgRlz0B5vWAs2atat+U+Sdoi0d3PjFaa8gJGnw=;
+        b=aKuM9kIFVQWqKmaTHy+os7H0DqcqgEUt1BUiomV2TUsYKMVs2xjJChnn+MSshvCFdx
+         /PnMHUkPs1otUDw4GTYd0Ehhv1phXeaSg0UBuI8AxOWFpqLAa08d1hMXw6bWF15mANZw
+         ItewV1yNygyyM5rAfOoYr8gdsiZpbq6HRK8jRFLA0nuY+9Qtsfz8ky17qxby/uV7iyiE
+         VWFDC7kWP0tzzS+b0d65fFp4dNKX6fjG1sOPsK7FmA4rKJMMB/CbNPrBz6VyRwd8BhoN
+         C1ShwLLzOcC/KjA25Ky691Y/1fBdyeVQZS42eylyeB3eGenV21MhmDIT6oSYfpwTXRWo
+         3qWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715100904; x=1715705704;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dF9l/kgRlz0B5vWAs2atat+U+Sdoi0d3PjFaa8gJGnw=;
+        b=g57z0eQJ3HGh4y+RNT9NfAgUByYXUJtOkvpPiGBVXWirQidAyIejEDF7VqTj6AhKEW
+         h8dmepsg22Zom/W/KRpGXqBjA7zTkEZzq+T9olA0VnSC1zBoXBULwnCxzMSE7bsxH/Vt
+         WRI3HtwD7CnYTruKua/Klx08kUpIHZ58IgByXitUpadiP3WeD7KaROoJxTqP/r3gQvBJ
+         kkOoARxRGEjZyxX3389uI5EU9gmpUWqTneUZWc3QtMUxaSTPGaOMT8s9NHtjBbkjReWV
+         J0GwzdjEeqChjkcB5xtYkrYMOEVMgMz6nT+cjs5oCOTf0hYitB7yayioQ+QiGYYHx7BF
+         sn5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVpBDGgY1n2F76L31sps4cYmoUhT9HY0585kXqSG4VgGBRYXamm0lfZ1O3ky6Ky0UGW580F64EGSAMQsGUiqpbn2YVO4sLLotb7KpoUZCArCBK9oaOmuvx9oakO0ZakzMqr8L2WX+tPEKVYwt64Ev28Cea6QZTnHj78xJIAdS9pR4rAiE75ysr3FVuhtPNv5A8U2uyoe9Nlw1H+P5ac72ZuAKr8bwvuTPSWGcfPmPPOBm7QsVVn8fKlOG1P70o0eoavIM2hiL+hJ4xDuoCpbmQqCmfjeenwSq/yNc5QNN2W037t+hz7Uo2HIj+Jy9jDBsH0/TScKSwKCATBg8P0eYWdfVm/IxLhkNALZf0/dUddA1verD5TYTh8klwX1HxlxQS7ORCLuFbri0SGU0MtJ4L7QBHF0mRoi2JW2bt2vgpiMC4720ssp2jrBzOVbKvfnbZRyA3rQGeo7du2XQiPxbeLlKdyrDNzWdX7gEFsGngX9+z7G4Q1n0CGzBKL8cAKDlYnrevoow==
+X-Gm-Message-State: AOJu0Yz8k54iFeURo2jo29iLzMWOo5yiAK19SLmyxk9Of7JuImPyanP8
+	4Nm2iiyHlg85Pb3QkAnzybiImE1JKuYDysnopsVw1VvjW6r03fMG
+X-Google-Smtp-Source: AGHT+IH7DHe6/ECg4cq2RKtLIjPPmczYwSJQD4jpcfKG6nOXnELQiScPGDQJbCXwTIzCZULoDPCQXg==
+X-Received: by 2002:a05:600c:4747:b0:41c:2313:da8d with SMTP id 5b1f17b1804b1-41f7093c658mr4744345e9.0.1715100903326;
+        Tue, 07 May 2024 09:55:03 -0700 (PDT)
+Received: from [192.168.42.69] ([85.255.235.91])
+        by smtp.gmail.com with ESMTPSA id p17-20020a05600c359100b0041adf358058sm20132504wmq.27.2024.05.07.09.54.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 May 2024 09:55:03 -0700 (PDT)
+Message-ID: <54b1bf11-0f9a-4e9e-9e5c-7d81e066fc7c@gmail.com>
+Date: Tue, 7 May 2024 17:55:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="Ms7utr74CnSeXu0u"
-Content-Disposition: inline
-In-Reply-To: <20240507-cm_probe-v1-4-11dbfd598f3c@flygoat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH net-next v8 02/14] net: page_pool: create hooks for
+ custom page providers
+To: Christoph Hellwig <hch@infradead.org>, Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Amritha Nambiar <amritha.nambiar@intel.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+ Kaiyuan Zhang <kaiyuanz@google.com>, Christian Brauner <brauner@kernel.org>,
+ Simon Horman <horms@kernel.org>, David Howells <dhowells@redhat.com>,
+ Florian Westphal <fw@strlen.de>, Yunsheng Lin <linyunsheng@huawei.com>,
+ Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
+ Arseniy Krasnov <avkrasnov@salutedevices.com>,
+ Aleksander Lobakin <aleksander.lobakin@intel.com>,
+ Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Lorenzo Bianconi <lorenzo@kernel.org>,
+ Richard Gobert <richardbgobert@gmail.com>,
+ Sridhar Samudrala <sridhar.samudrala@intel.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+ Johannes Berg <johannes.berg@intel.com>, Abel Wu <wuyun.abel@bytedance.com>,
+ Breno Leitao <leitao@debian.org>, David Wei <dw@davidwei.uk>,
+ Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
+References: <20240403002053.2376017-1-almasrymina@google.com>
+ <20240403002053.2376017-3-almasrymina@google.com>
+ <ZjH1QaSSQ98mw158@infradead.org>
+ <CAHS8izM0=xc2UhUxhnF_BixuFs5VaDV9W1jbso1K+Rg=35NzeA@mail.gmail.com>
+ <ZjjHUh1eINPg1wkn@infradead.org>
+ <20b1c2d9-0b37-414c-b348-89684c0c0998@gmail.com>
+ <20240507161857.GA4718@ziepe.ca> <ZjpVfPqGNfE5N4bl@infradead.org>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <ZjpVfPqGNfE5N4bl@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 5/7/24 17:23, Christoph Hellwig wrote:
+> On Tue, May 07, 2024 at 01:18:57PM -0300, Jason Gunthorpe wrote:
+>> On Tue, May 07, 2024 at 05:05:12PM +0100, Pavel Begunkov wrote:
+>>>> even in tree if you give them enough rope, and they should not have
+>>>> that rope when the only sensible options are page/folio based kernel
+>>>> memory (incuding large/huge folios) and dmabuf.
+>>>
+>>> I believe there is at least one deep confusion here, considering you
+>>> previously mentioned Keith's pre-mapping patches. The "hooks" are not
+>>> that about in what format you pass memory, it's arguably the least
+>>> interesting part for page pool, more or less it'd circulate whatever
+>>> is given. It's more of how to have a better control over buffer lifetime
+>>> and implement a buffer pool passing data to users and empty buffers
+>>> back.
+>>
+>> Isn't that more or less exactly what dmabuf is? Why do you need
+>> another almost dma-buf thing for another project?
+> 
+> That's the exact point I've been making since the last round of
+> the series.  We don't need to reinvent dmabuf poorly in every
+> subsystem, but instead fix the odd parts in it and make it suitable
+> for everyone.
 
---Ms7utr74CnSeXu0u
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Someone would need to elaborate how dma-buf is like that addition
+to page pool infra. The granularity here is usually 4K and less
+(hw dictated), what user receives cannot be guaranteed to be
+contiguous in memory. Having thousands of dma-buf instances is
+not an option, so a completion would need to include a range
+where data sits. Then who controls lifetime of buffers? If it's
+dma-buf, then at least it needs to track what sub-buffers are
+handed to user and what are currently in the kernel. How it would be
+accounted? ioctl_return_subrange(dmabuf, [range]), sounds like
+a bad idea for performance. To cover user memory it'd also need
+to be read from userspace, ioctl here wouldn't be an option, but
+let's say it's somehow done in the kernel.
 
-On Tue, May 07, 2024 at 10:01:52AM +0100, Jiaxun Yang wrote:
-> Add devicetree binding documentation for MIPS Coherence Manager.
->=20
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->  .../devicetree/bindings/mips/mips-cm.yaml          | 37 ++++++++++++++++=
-++++++
->  1 file changed, 37 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/mips/mips-cm.yaml b/Docume=
-ntation/devicetree/bindings/mips/mips-cm.yaml
-> new file mode 100644
-> index 000000000000..b92b008d7758
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mips/mips-cm.yaml
+That's not all the list, but in short, even though I haven't been
+following dma-buf developments too closely, I have hard time seeing
+how it can be a replacement here.
 
-Filename matching the compatible please.
-
-> @@ -0,0 +1,37 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mips/mips-cm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MIPS Coherence Manager
-> +
-> +description: |
-> +  Defines a location of the MIPS Coherence Manager registers.
-> +
-> +maintainers:
-> +  - Jiaxun Yang <jiaxun.yang@flygoat.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: mti,mips-cm
-
-Is it actually only available on mips? Google seems to report there
-being Coherence Managers on their RISC-V offerings too.
-
-> +  reg:
-> +    description: |
-
-The | isn't needed, there's no formatting to preserve.
-
-> +      Base address and size of an unoccupied memory region, which will be
-> +      used to map the MIPS CM registers block.
-
-This sounds like it should actually be a memory-region that references
-some reserved memory, not a reg, given the description. I think the
-commit message here is lacking any information about what the intentions
-are for this binding.
-
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    cm@1fbf8000 {
-
-And a generic node name here please. I actually don't quite know what to
-suggest though, but "coherency-manager" would likely be better than
-"cm".
-
-Thanks,
-Conor.
-
-> +      compatible =3D "mti,mips-cm";
-> +      reg =3D <0x1bde8000 0x8000>;
-> +    };
-> +...
->=20
-> --=20
-> 2.34.1
->=20
-
---Ms7utr74CnSeXu0u
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZjpb6QAKCRB4tDGHoIJi
-0qZ1AP9isaOpzM2dAWT6giwIsfSBgSxT3zhqxMO6xdhbcbBDQAD/ZVphdXVgl1Ks
-xK6CpzPPmSCgNjQT2sCRv5jFuTHHxwE=
-=K2q4
------END PGP SIGNATURE-----
-
---Ms7utr74CnSeXu0u--
+-- 
+Pavel Begunkov
 
