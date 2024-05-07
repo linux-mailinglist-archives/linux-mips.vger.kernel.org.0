@@ -1,234 +1,168 @@
-Return-Path: <linux-mips+bounces-3149-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3150-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F8BD8BEB78
-	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 20:23:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 347F48BEBE9
+	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 20:51:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 510EDB290FF
-	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 18:17:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C2241F24E9B
+	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 18:51:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4FC516D30C;
-	Tue,  7 May 2024 18:16:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F05B16D4EE;
+	Tue,  7 May 2024 18:51:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="HvQYFbPx";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ff3XKmpn"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="uNN1kSma";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="i2kZ990K"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from wfhigh1-smtp.messagingengine.com (wfhigh1-smtp.messagingengine.com [64.147.123.152])
+Received: from wfout8-smtp.messagingengine.com (wfout8-smtp.messagingengine.com [64.147.123.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE6716D30F;
-	Tue,  7 May 2024 18:16:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D12F54C8A;
+	Tue,  7 May 2024 18:51:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715105814; cv=none; b=alVyYEiBfV5302Ydv8pYSN5Ptp8A7WnTQ/Dg+SbYMfRXnZsG6McrkPmRGjdO1IOvdQRmazEw2/uQoFsuHWuwkXkl9cyKGal8kwJlycBht6DxG9XY4vJrIiceZgJtyFfwPnwhqzkNH5ENg4Bez4n3eXKKfk1T8QwoCmgSFusUFC4=
+	t=1715107890; cv=none; b=Ilz5t5H+7yzrnagiqHFmMZq0/HAIu3MTPNuu6CB3Fx6WafvR2hSqDtbFNKds62flnLxorHx3HVREsdc279IVWRJhONFQ8T1XBU2tknBFHI1tfeKlARP5D73EIK9kO8khMcH4c+vv7G0yuHmETwo4PvTbAq2dMRVHqZQX6q2Oi68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715105814; c=relaxed/simple;
-	bh=tkkLup4fz7SXQkE6wLRmN85VKtFi0Vkf6N3FNeMPO4M=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=Me1iubFhZA6NVS4tycyGXTJfb55AoyRmF+d1gw2K7SzC0lJFCrGWJNsWYsVKcEDyXi0IU9D2sCci+762gEiae+VCOrK89i4isv0Gq0S0ZYxD0ah16HUJ7egxThId+/kNCmHSHDbO70h+vYn9cKVNnHjeRMo1Zaz5ut07cVCAUv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=HvQYFbPx; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ff3XKmpn; arc=none smtp.client-ip=64.147.123.152
+	s=arc-20240116; t=1715107890; c=relaxed/simple;
+	bh=8CbRw+0pirm48NYUcf2cv3mIQF1sVjvBhz0096eLJAk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CSK1WmAHU9CXr9XPqmPjvJW7/Q7g270c0k3xJhzTZm5M9Xg/G7pubDEUL1Yo9HGM7QXU8jyMp5o68P+/1dMmF4v9F7l2HuOfs6sU8gvGRxP/VWPZOrXRWwXroo1ETLu3g8g7cnkxzcrWPoQ305fjA8xYjRaB6NXXq2YLKXiiXSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=uNN1kSma; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=i2kZ990K; arc=none smtp.client-ip=64.147.123.151
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailfhigh.west.internal (Postfix) with ESMTP id 638291800101;
-	Tue,  7 May 2024 14:16:51 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Tue, 07 May 2024 14:16:52 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailfout.west.internal (Postfix) with ESMTP id 3782A1C00091;
+	Tue,  7 May 2024 14:51:27 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Tue, 07 May 2024 14:51:28 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1715105811;
-	 x=1715192211; bh=xkZUyYvJJx8Ghug4jhe04XLSU69l2vONZ4Ow52k89Ng=; b=
-	HvQYFbPxc8YlfjpFXvw1MuSgSeGVfGjSsiV0vrW/5xGQMOoCpDmh5gyMAYAOl8Ym
-	NhEmh1T3kBzfPC4hT5VG+MLJllU0q6ABk3NtyEWCORXf3kli1ZgLtrKHnM7XUQf3
-	l4dW1/1flG6SOWec+rojzHejjnieogmsEGZ1AyWoBTRh8B78it2+JHD4mWjlVQIn
-	jqPjaCARHkKzQXRgKhEKBnDxvTQJWw51L85xmBNitw5WN8D/SkMG62vjDpOGgtL3
-	pIL/Cck6RWp60byfRHKp4cuPfnRxFORJV0iOpTFcjwxIahdmHTLkF1Ca/1J0Dwar
-	wFzzVz8OnP4BDAk1SXPW+g==
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm1; t=1715107886; x=1715194286; bh=0S
+	zFP3E4cwWXZmWMu/IYHJ1K2inzAgP+RUX3bH5/YEE=; b=uNN1kSmauOpQ7JC1SS
+	o4uWdbpMQxl6gnBg6xB8EbeWgIAzjDuFnC0JZ7MCMN6G7TXs5SdZsO7w1oScsP9L
+	CXVLox2k6OktYz2tFnB9d8Hkbkz7LBMWTf2IFTjR2xwfrcTTlW2LgCqvdA1NfVD2
+	DM6NEajnLh7p/n21bAwYBYCXIPE4sYuBXQaBqMnb4fbbu0AoqM5ur5OJXpcedxlT
+	ZNH31y+jOluCoijuEWOa/hyTVFGBepCWFLD0lNpXAPpbG8Nvbk0PZ0yfQfWOAIvn
+	nvSua81pBX8Di9gLhBLQ9MrUDBHfKKBaddfCheomIHPcfuRNExHvMq3UT34ZjkpP
+	lT+w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1715105811; x=
-	1715192211; bh=xkZUyYvJJx8Ghug4jhe04XLSU69l2vONZ4Ow52k89Ng=; b=f
-	f3XKmpnrjqrj2Fofs2mBN4Pp58nD2YBGhsz7HVta5gtiVF0jwSkrFnKtwDHwnrbn
-	bNJWaaAAl1ctIjycb7GbAj6lKL2NJP+4GSUAzjzHdnfMqwhS1OcOBrqQ+/HZHlBg
-	A40qVCEtSmHNzGpHOlXj19pS3BRPXC9VC2QVEuMETjDInkmBQtmShpbQFnImgzjo
-	fMhrEkWmFrwrhjCi9YoU64eUNbzou74/VWMFZOmhGKFGyqJtsS7uEJ+j4+9f7Wbb
-	zWI/CGiyp15yEVMKtDQ6txbSveOOngph5MhTh+/c2DN1u7vvIbmvq0D0Gen2w9tE
-	FjF+8dgZVeqOOIUUVq7Yw==
-X-ME-Sender: <xms:EnA6ZjhgEbhjhOaTsBpa1trjh01D9uujWdp9FOWqtPQyg_kO7eZCMQ>
-    <xme:EnA6ZgBkbofPe7FeGJ76JCvwB8c0Ebzyu1zOwWUXbO8sGJ8BHpP7K4vMMDvo6RM_O
-    rDkBFSq7Vekkwt21Lc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvddvkedguddvtdcutefuodetggdotefrod
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1715107886; x=1715194286; bh=0SzFP3E4cwWXZ
+	mWMu/IYHJ1K2inzAgP+RUX3bH5/YEE=; b=i2kZ990KSuNafOH44x3MeFwVHtl1L
+	SMDOHNBTtMBJ5jh5FR9io07AATn8GzYQzm1FrjjoOcBecgwPfBIv/10OlJ9zoND1
+	LxP7fNOQRhqdwR8DmyUaSrjFMUzgKFX5HlfE+YDrWsp+uJD42oTU85jev/kzb5KS
+	Zj/jcfxqXPbhyH55ZcAqEWx0hIF861tDlMUiEOd7+Yx+9c2CrtzbBgQgdKzw266P
+	Z+FczkgmZ5dAKl5XxVoAQCa10sEwtAaF4nC8on+I6A46gMXlcPhBZfGrcPTnfQkT
+	qlq9RwYwoB1tCpwVjv6kQx6Oj/HQueW4NY6HOT4uuBYT+PkDD0TeQPOwQ==
+X-ME-Sender: <xms:Lng6Zo8qS6oUhPHnnT9qu9aykS6MXezTwcr1KCIVOuLSHzXX4IMHxA>
+    <xme:Lng6Zgu1B5AswNPBUdrGyXbDSFgpZq84YWaQ12fs2uawYFVOQxwq0lulaQjRfTDmR
+    Qq0D9jThLuXNLxwxlw>
+X-ME-Received: <xmr:Lng6ZuBPdKeJ6yQyzladYs92M0l1sUSeOPKRZFHsjWar9a-FqYjBDJk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvddvkedguddvkecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
-    lfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtg
-    homheqnecuggftrfgrthhtvghrnhepjedutdeuhfdvjeevgfehudeitdehiefgveelheff
-    uddulefhkeeihfehudehgfevnecuffhomhgrihhnpeguvghvihgtvghtrhgvvgdrohhrgh
-    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgr
-    gihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:EnA6ZjHsOP8reLn_5GRUUjNM8x-hVbOFx5O2GRPkZ3ZPn5DM2UYyPw>
-    <xmx:EnA6ZgQDgE_x1e2R-JJBWr2mTSYYemsGE8dIt6QiijgZ8FpNXKTcpg>
-    <xmx:EnA6ZgylKlh2ajJTVijgDmL5GbzRkohoN0YtOGQtqv86sjACZebceg>
-    <xmx:EnA6Zm6qZ-pcWPEiKrbH5tAGAeXLXtkcjLjlgoHq5rdC-gJcUII8eg>
-    <xmx:EnA6ZvlCL922gQQb2JU6kYwWLtk3jL6IoXeCnneu4bzu6-fUMZ-VKmLM>
+    enucfjughrpefhufffkfggtgfgvfevofesthejredtredtjeenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpefgveffjeetgeejfeelgfekteelkefhuefggedvueeujeekjeet
+    keekvdffffefudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:Lng6ZoeurPMwTcP0TefZEJ8a2YMchxQQsJvLhcc4Ckfs1A0sr72eQw>
+    <xmx:Lng6ZtNdCxjlZdcwN53kZcQkmcrgPq5jEB9I1md4YreuI0tRi8THSA>
+    <xmx:Lng6ZikhjWzSWGpYYhPfhfbx0zrQwhe7Upt7fUY2lDsRCqRImLuV9Q>
+    <xmx:Lng6ZvuFS5Yh0BwHWOM4PxnvuCpPrFLfUB9P3wuY6VLFauPNQM-JiA>
+    <xmx:Lng6Zhn7oDzFjjPhV9oysc5TdpqgE2PIxpDytwjIyH-5ytj7Bm9SNwPB>
 Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 3ECE536A0074; Tue,  7 May 2024 14:16:50 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-443-g0dc955c2a-fm-20240507.001-g0dc955c2
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 7 May 2024 14:51:25 -0400 (EDT)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH 0/4] MIPS: Loongson64: Sweeping build warnings
+Date: Tue, 07 May 2024 19:51:18 +0100
+Message-Id: <20240507-loongson64-warnings-v1-0-2cad88344e9e@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <fbb4b8e2-edf4-4b4e-8b71-154a09f24ccd@app.fastmail.com>
-In-Reply-To: <20240507-jokester-antelope-808b21b957e6@spud>
-References: <20240507-cm_probe-v1-0-11dbfd598f3c@flygoat.com>
- <20240507-cm_probe-v1-4-11dbfd598f3c@flygoat.com>
- <20240507-jokester-antelope-808b21b957e6@spud>
-Date: Tue, 07 May 2024 19:16:25 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Conor Dooley" <conor@kernel.org>
-Cc: "paulburton@kernel.org" <paulburton@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 4/5] dt-bindings: mips: Document mti,mips-cm
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACd4OmYC/33NQQ6CMBAF0KuQWVszxRaIK+9hWNTawiTYIS1BC
+ endrRzA5fvJ/3+H5CK5BNdqh+hWSsShQJ4qsKMJgxP0LIYaa4UaWzExhyFxaJR4mxioQHTaWql
+ 1I81FQ2nO0Xn6HKv3vniktHDcjpNV/tL/e6sUKFqsO680GmwfNz9tA5vlbPkFfc75C0F+3R24A
+ AAA
+To: Huacai Chen <chenhuacai@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>, 
+ Paolo Bonzini <pbonzini@redhat.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org, 
+ kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1715;
+ i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
+ bh=8CbRw+0pirm48NYUcf2cv3mIQF1sVjvBhz0096eLJAk=;
+ b=owGbwMvMwCHmXMhTe71c8zDjabUkhjSrCt2crnY3P5f/C2t7G033P7WWWW0rvPhc5aTiiSkrb
+ WwP56V2lLIwiHEwyIopsoQIKPVtaLy44PqDrD8wc1iZQIYwcHEKwES+H2VkmBy+JiQlMPP+//WX
+ VRf//lru++yUhey9eUUfLG3f+wQ982NkeFy/xeKjZ5lPq31LgNqdXSf+8NZvX7zSsu6JSsPDIOe
+ vfAA=
+X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
+ fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
+Hi all,
 
+This series sweeped various build warnings for loongson3_defconfig.
+This is based on next-20240507.
 
-=E5=9C=A82024=E5=B9=B45=E6=9C=887=E6=97=A5=E4=BA=94=E6=9C=88 =E4=B8=8B=E5=
-=8D=885:50=EF=BC=8CConor Dooley=E5=86=99=E9=81=93=EF=BC=9A
-> On Tue, May 07, 2024 at 10:01:52AM +0100, Jiaxun Yang wrote:
->> Add devicetree binding documentation for MIPS Coherence Manager.
->>=20
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->> ---
->>  .../devicetree/bindings/mips/mips-cm.yaml          | 37 ++++++++++++=
-++++++++++
->>  1 file changed, 37 insertions(+)
->>=20
->> diff --git a/Documentation/devicetree/bindings/mips/mips-cm.yaml b/Do=
-cumentation/devicetree/bindings/mips/mips-cm.yaml
->> new file mode 100644
->> index 000000000000..b92b008d7758
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/mips/mips-cm.yaml
-Hi Cornor,
+There are still some warnings remain in pm.c, those errors are
+covered by [1].
 
-Thanks for your comments.
+Thanks
 
->
-> Filename matching the compatible please.
-Ok.
+[1]: https://lore.kernel.org/linux-mips/20240507-loongson64-suspend-v1-0-534d92a4e09a@flygoat.com/
 
->
->> @@ -0,0 +1,37 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/mips/mips-cm.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: MIPS Coherence Manager
->> +
->> +description: |
->> +  Defines a location of the MIPS Coherence Manager registers.
->> +
->> +maintainers:
->> +  - Jiaxun Yang <jiaxun.yang@flygoat.com>
->> +
->> +properties:
->> +  compatible:
->> +    const: mti,mips-cm
->
-> Is it actually only available on mips? Google seems to report there
-> being Coherence Managers on their RISC-V offerings too.
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+To: Huacai Chen <chenhuacai@kernel.org>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+To: Paolo Bonzini <pbonzini@redhat.com>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: devicetree@vger.kernel.org
 
-I think for MIPS's RISC-V system, it is only used by SBI and transparent
-to kernel, so it won't present in DT.=20
+---
+Jiaxun Yang (4):
+      MIPS: kvm: Declare prototype for kvm_init_loongson_ipi
+      MIPS: Loongson64: Include bootinfo.h in dma.c
+      MIPS: Loongson64: DTS: Fix msi node for ls7a
+      MIPS: Loongson64: DTS: Fix PCIe port nodes for ls7a
 
-Register fields for RISC-V system is totally different with MIPS one, and
-there is no driver to be reused. In MIPS system CM code is highly coupled
-with arch code, so for RISC-V if we want to expose it to kernel we'll ne=
-ed
-a new set of driver and a new binding.
+ arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi | 37 ++++++++++++++++++----
+ .../boot/dts/loongson/loongson64g_4core_ls7a.dts   |  1 +
+ arch/mips/kvm/interrupt.h                          |  4 +++
+ arch/mips/kvm/loongson_ipi.c                       |  2 ++
+ arch/mips/kvm/mips.c                               |  2 --
+ arch/mips/loongson64/dma.c                         |  1 +
+ 6 files changed, 38 insertions(+), 9 deletions(-)
+---
+base-commit: 93a39e4766083050ca0ecd6a3548093a3b9eb60c
+change-id: 20240507-loongson64-warnings-85cc15561a35
 
->
->> +  reg:
->> +    description: |
->
-> The | isn't needed, there's no formatting to preserve.
-Ok.
+Best regards,
+-- 
+Jiaxun Yang <jiaxun.yang@flygoat.com>
 
->
->> +      Base address and size of an unoccupied memory region, which wi=
-ll be
->> +      used to map the MIPS CM registers block.
->
-> This sounds like it should actually be a memory-region that references
-> some reserved memory, not a reg, given the description. I think the
-> commit message here is lacking any information about what the intentio=
-ns
-> are for this binding.
-So it's actually a register block that can be remapped to anywhere in
-MMIO address space. DeviceTree usually passes firmware's mapping location
-to kernel.
-
-There are some other similar bindings like mti,mips-cdmm and mti,mips-cp=
-c,
-I just copied phraseology from them, should I try to explain it more her=
-e?
-
->
->> +    maxItems: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    cm@1fbf8000 {
->
-> And a generic node name here please. I actually don't quite know what =
-to
-> suggest though, but "coherency-manager" would likely be better than
-> "cm".
-Ok
-
-Thanks!
-- Jiaxun
->
-> Thanks,
-> Conor.
->
->> +      compatible =3D "mti,mips-cm";
->> +      reg =3D <0x1bde8000 0x8000>;
->> +    };
->> +...
->>=20
->> --=20
->> 2.34.1
->>=20
->
-> =E9=99=84=E4=BB=B6:
-> * signature.asc
-
---=20
-- Jiaxun
 
