@@ -1,289 +1,192 @@
-Return-Path: <linux-mips+bounces-3134-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3135-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A4948BE752
-	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 17:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B135A8BE784
+	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 17:34:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D3AE1F21831
-	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 15:22:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DEB61F256FB
+	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 15:34:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EECC16ABD5;
-	Tue,  7 May 2024 15:22:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1691161331;
+	Tue,  7 May 2024 15:34:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="Pw4ZbWsN";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MfR7q9PK"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gW00Oyc8"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from wfhigh8-smtp.messagingengine.com (wfhigh8-smtp.messagingengine.com [64.147.123.159])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD492168AF8;
-	Tue,  7 May 2024 15:22:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0940315FD0E
+	for <linux-mips@vger.kernel.org>; Tue,  7 May 2024 15:34:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715095338; cv=none; b=uLLHZnEGIYsKV5pBDBMoIDo76YAt03lz0o2w5Tpi6h16BUyF/o0W7coTmHiCzL50hs/COGomjWqkrTzidxmw0YEF/Tc15Ftr/iZkjcpu4ZuVHWKhav5+7uqoDICVbeoja3SIJ8FHqPkcZ30rxB5kfWRhCY9kPii8SvPtdcqC/68=
+	t=1715096070; cv=none; b=kB56tmUtwohxef6BA5nYSMiKuUo2jwJr19B0nrIbAD0MvhX+9U9qnum3PBIBCB7I0XQFjyR/gvqoACQt0b6KFuNVZe8Z1109nDJkX96ToD58opBzp5nifPCdPbdZLrj3VHFluVzt9gIWBq1LrTOE9szNtJv9opCKZYWlpN3uMKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715095338; c=relaxed/simple;
-	bh=pQz0w1yBfPHUBv/v0nbOyM9aMVNE+JcqduRqxVhK+yQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RSIPxuPPT9qENnEGefleu9rAwGU/wp/6psvvSJoyBfh+uh2OJoTQUp7OvFAJ9S+qd6IyK+hLdIIXrjEV0ClCG8w+BY15B8SSpu9iJAkOTJCcIY8Vb03LZE0emIHNeveVDVQX5PS6hnuzQDiZqTC/dn303CxHCu1y+tYJa3v8QoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=Pw4ZbWsN; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MfR7q9PK; arc=none smtp.client-ip=64.147.123.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-	by mailfhigh.west.internal (Postfix) with ESMTP id E623C180013F;
-	Tue,  7 May 2024 11:22:15 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute7.internal (MEProxy); Tue, 07 May 2024 11:22:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1715095335;
-	 x=1715181735; bh=3D0GaVF05UsiobMGqr5NYu1yNUERD1Uibyz1tRmG9fM=; b=
-	Pw4ZbWsN/RUod8jQLaOL2WJEEMdQba8MbGhrUKPtnQbZtx04SKiJDdR5tJykk9bz
-	+DUId1bJxG1RJ6xa82TX0dLJc+FbB1a3tZG4g7cfeIkBJe0FWUqyDWcxXdDEX6uH
-	bSwz/zrM5gLY/CUbKX10SNWjbNJObCpdRx0Z+tGKwXohfOqww/nrUGBcW++Iexug
-	uxRMWtqjiLzYi5fUm5xBXcDBZkKo03lI581lER7F5+NoEH4KMvRwbCJELmFxiqFv
-	zwfIPvSLgdLU72Jqouxpmln3P8LAXd39JaVu94E7qTrKmv98ZA8bLyf7IFwWHBgR
-	wVvt8T9g1hALJOmy6COVEw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1715095335; x=
-	1715181735; bh=3D0GaVF05UsiobMGqr5NYu1yNUERD1Uibyz1tRmG9fM=; b=M
-	fR7q9PKO26AnH9L4CgQLtPo6e8M4TqPOAUFH3anG7GTblZALqimK/FofhuQeUvE9
-	DPmNokjWTX+yz6LiUHmXLCQvQhSfTWLFbkjBaFECtwRdYm+j8gY60Pr9R1Lv2OlU
-	V/QRRi2clCwSEgGzi10atPdIyuFP3z+8RpTooF96quDhgT6JCJHYskYFWVCdX20G
-	v92TIKjDJVsNLjMorwsykgzFs3NPFl0VUUyq0Dg/ZO2CkmHfndcr4Gompo0EDTYl
-	ZH1UGwmypCWXgKAYn67LWEj4l1l+6fO0X6JhPL/4DTxnlgg8Kb+geWKFTCEL+LsQ
-	9Z1ldv6U6sqxRw+ALNcDA==
-X-ME-Sender: <xms:J0c6ZhNB5Z4crQc-Ak--CB_3r8Dg6NYIO0qDJwCfdvx-Ksvdl8C8fw>
-    <xme:J0c6Zj_jjV-3tXRLmKQQmyG2QXnoNYeoxTI_wQb66CZMooMFyw_CTEbtNRsjhmzKQ
-    1ivHWAZQRXlZ6zns8M>
-X-ME-Received: <xmr:J0c6ZgS0CEFpaiaajdy2-MjgpGea57epJPoZ1UihesgGCS1CR8OQC_o>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvddvkedgkeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepiefgleeivefgieejhfdvhfdvieeiudehvdevfeetveetieek
-    tdfffedufffhgeehnecuffhomhgrihhnpehslhgvvghpvghrrdhssgenucevlhhushhtvg
-    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhg
-    sehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:J0c6ZtupAzN8AN5gEeZHf6yx2vUCUWU3fl38JqQ_ZIcA80OSVyOVjA>
-    <xmx:J0c6ZpfYUb-H8chJJbSMmKBymfmV2-em5wBM0CDlK46tL_G-fHsivA>
-    <xmx:J0c6Zp1-ixz35OaJMPLl2nMtMXoLG059NKJTRKSVUihYepj7tMZPLw>
-    <xmx:J0c6Zl-If8x4GqC7cRaqGDFeunii7vNfIaqDCbtCB64paTnsIhj9gA>
-    <xmx:J0c6ZiHkNMcmJS-0jwGNeLaYZfOLuiNSsRVtGM8NBLMzyRe_Q-feVMc8>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 7 May 2024 11:22:14 -0400 (EDT)
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Tue, 07 May 2024 16:22:01 +0100
-Subject: [PATCH 3/3] MIPS: Loongson64: Implement PM suspend for LEFI
- firmware
+	s=arc-20240116; t=1715096070; c=relaxed/simple;
+	bh=tu+2KsqH6Kw2kSlfjdVYv3BxFYp5x00TFFNEkPzGHcg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ITYvM14l/4ufMUh0L+8FSnXENVvh+b7raXz80ozFMMjQQ625mEfAvcoSof+rCa0eCYeEZc91a6x9z9z/DnT6pG6Kz/S9MprbM7BxUpCAqUG8A0C7W629Bj5zKwd1Lc7SDFljIsS7tRZNV48XSIN2Tad1DmKFtvg4TPCCDPNxgWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gW00Oyc8; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-51fb14816f6so4112299e87.0
+        for <linux-mips@vger.kernel.org>; Tue, 07 May 2024 08:34:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1715096067; x=1715700867; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=BHoEecY35FMnmlhyVpSrsI+xWHMu8Vy09k8sd+/BChg=;
+        b=gW00Oyc8fLfPJID4YqM9e720ru5kWxlyfA1OnHKru9Y74tCJNW0bi7hzQy0U2ENcbZ
+         u8XaWeOgdfrnO72cKVQxcdPtEyAHNldFYd3Ibb3v73tQhEqqdGx9RuYhzUVLqQdw8SR+
+         aLrDYqrsLx2znhsjK+xdx5ibbH2sKV7FrGXixPd2RX6S3ela5RKS5hinnj16Z5yefmo0
+         LpYKUNhh9F/u8kUhtRbFhQ+6h4h1x8TOHG6Qb4ApUYfmk/LGdA95UcWNoHLdw3yuqMYk
+         Ln9c5fQL08E9tGJmONl076FUUVmfyF2pE9dhrSCIeGEEwKXqhPRCSBW62mD2cgMtcmMi
+         7XZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715096067; x=1715700867;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BHoEecY35FMnmlhyVpSrsI+xWHMu8Vy09k8sd+/BChg=;
+        b=JcohkU8UHvfKxLArRxITAzbUYxMqfLGtVhh2ocGeOvZwGBllO4f579QlsiFKNSj6ic
+         6Yz/UKTmFEoxjWy+9HaKoVOf9bWL9dmOXDl7hj1e/QR5pRJ91+9BNjSBh4ZDbWILe9ae
+         qvI4ud+r4M7N/n6chAIeUJE3c4YwHk11qKvjd+GF6Lgiki5EL2j1tyOv21cLuBBa0sYe
+         zUtB102UOeD3++7NGhGkleW+PfFzizjGyzHNLsa+W/zSyR1x7Yj4UB0TdygMcWAHtX0+
+         hvf3vlyYdfaC4zvczRF3kWiRsIjrE4zZ+TM4aljKx95Svb+JIiqkHRC06FDsKccPgNox
+         qapQ==
+X-Gm-Message-State: AOJu0Yz1GBaDDGRKVj8Rg2+4xfhvQ4j7VAPQJwImXFDiqvbyDW53j00C
+	rbLJ/wOLEJkFLCiEJbluZ+hAxIkQQ+PZ3tgeWwf3Vl+gghyNTuoU0WUDRqAFiRk=
+X-Google-Smtp-Source: AGHT+IEhWswRvXH88vuHJvUkIcH5ToHsgKLLHbQdBcNKmFn28UP+tHurJV3VIwnR15xNbDtbkI+YCg==
+X-Received: by 2002:a19:ac49:0:b0:51d:97e8:b780 with SMTP id r9-20020a19ac49000000b0051d97e8b780mr8499462lfc.44.1715096067213;
+        Tue, 07 May 2024 08:34:27 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.206.169])
+        by smtp.gmail.com with ESMTPSA id n4-20020aa7d044000000b005720e083878sm6440132edo.49.2024.05.07.08.34.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 May 2024 08:34:26 -0700 (PDT)
+Message-ID: <fd0228f2-2f41-4194-b804-7a90ea3a6091@linaro.org>
+Date: Tue, 7 May 2024 17:34:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240507-loongson64-suspend-v1-3-534d92a4e09a@flygoat.com>
-References: <20240507-loongson64-suspend-v1-0-534d92a4e09a@flygoat.com>
-In-Reply-To: <20240507-loongson64-suspend-v1-0-534d92a4e09a@flygoat.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Huacai Chen <chenhuacai@kernel.org>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Jiaxun Yang <jiaxun.yang@flygoat.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4701;
- i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=pQz0w1yBfPHUBv/v0nbOyM9aMVNE+JcqduRqxVhK+yQ=;
- b=owGbwMvMwCHmXMhTe71c8zDjabUkhjQrd8VJbZHfa7xbO1M4Zy16/EJD0fPswri0fG3zug37P
- h4Vtq/oKGVhEONgkBVTZAkRUOrb0HhxwfUHWX9g5rAygQxh4OIUgInI9zP84cn/Ezpxy+q9R47n
- 9/zQDLJPDGxd4RoY2Vt+z7b2kVXmZIa/0hN2nbq1675885YLf+OT50Rn2ITHdMUkcHc33TN/a+X
- GBAA=
-X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
- fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 01/11] dt-bindings: clock: mobileye,eyeq5-clk: drop
+ bindings
+To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Lee Jones <lee@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-gpio@vger.kernel.org,
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+ Gregory CLEMENT <gregory.clement@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+References: <20240503-mbly-olb-v2-0-95ce5a1e18fe@bootlin.com>
+ <20240503-mbly-olb-v2-1-95ce5a1e18fe@bootlin.com>
+ <ee278102-f4b8-4ca0-879e-f83cd54efbd0@linaro.org>
+ <13ed1865-d702-47b6-b186-d5f060103280@linaro.org>
+ <D13I8TFIF77X.2EFWZ14LM2H6N@bootlin.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <D13I8TFIF77X.2EFWZ14LM2H6N@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Implement PM suspend for LEFI firmware.
-Entering STR (Suspend to RAM) is as simple as save our context
-then go to a firmware vector.
-Wake is a little bit treaky as we need to setup some CP0 status
-first, which can be done with smp_slave_setup.
+On 07/05/2024 17:07, Théo Lebrun wrote:
+> Hello,
+> 
+> On Fri May 3, 2024 at 6:05 PM CEST, Krzysztof Kozlowski wrote:
+>> On 03/05/2024 17:57, Krzysztof Kozlowski wrote:
+>>> On 03/05/2024 16:20, Théo Lebrun wrote:
+>>>> Switch from sub-nodes in system-controller for each functionality to a
+>>>> single node representing the entire OLB instance. dt-bindings is
+>>>> unnecessary and soc/mobileye/mobileye,eyeq5-olb.yaml will inherit all
+>>>> properties.
+>>>
+>>> Why changing this? You just added these bindings not so long time ago...
+>>> This is very confusing to push bindings and then immediately ask to
+>>> remove them.
+> 
+> See this revision as a proposal of something that has been asked
+> multiple times in previous reviews. See message from Stephen Boyd on
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/loongson64/Makefile  |  2 +-
- arch/mips/loongson64/pm.c      | 88 +++++++++---------------------------------
- arch/mips/loongson64/sleeper.S | 17 ++++++++
- 3 files changed, 36 insertions(+), 71 deletions(-)
+That's driver, we talk about bindings.
 
-diff --git a/arch/mips/loongson64/Makefile b/arch/mips/loongson64/Makefile
-index e806280bbb85..cbba30dfddf5 100644
---- a/arch/mips/loongson64/Makefile
-+++ b/arch/mips/loongson64/Makefile
-@@ -8,7 +8,7 @@ obj-$(CONFIG_MACH_LOONGSON64) += cop2-ex.o dma.o \
- obj-$(CONFIG_SMP)	+= smp.o
- obj-$(CONFIG_NUMA)	+= numa.o
- obj-$(CONFIG_RS780_HPET) += hpet.o
--obj-$(CONFIG_SUSPEND) += pm.o
-+obj-$(CONFIG_SUSPEND) += pm.o sleeper.o
- obj-$(CONFIG_PCI_QUIRKS) += vbios_quirk.o
- obj-$(CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION) += cpucfg-emul.o
- obj-$(CONFIG_SYSFS) += boardinfo.o
-diff --git a/arch/mips/loongson64/pm.c b/arch/mips/loongson64/pm.c
-index 7c8556f09781..5f0604af8f13 100644
---- a/arch/mips/loongson64/pm.c
-+++ b/arch/mips/loongson64/pm.c
-@@ -6,98 +6,46 @@
-  *  Author: Wu Zhangjin <wuzhangjin@gmail.com>
-  */
- #include <linux/suspend.h>
--#include <linux/interrupt.h>
- #include <linux/pm.h>
- 
--#include <asm/i8259.h>
- #include <asm/mipsregs.h>
- 
- #include <loongson.h>
- 
--static unsigned int __maybe_unused cached_master_mask;	/* i8259A */
--static unsigned int __maybe_unused cached_slave_mask;
--static unsigned int __maybe_unused cached_bonito_irq_mask; /* bonito */
-+asmlinkage void loongson_lefi_sleep(unsigned long sleep_addr);
- 
--void arch_suspend_disable_irqs(void)
-+static int lefi_pm_enter(suspend_state_t state)
- {
--	/* disable all mips events */
--	local_irq_disable();
--
--#ifdef CONFIG_I8259
--	/* disable all events of i8259A */
--	cached_slave_mask = inb(PIC_SLAVE_IMR);
--	cached_master_mask = inb(PIC_MASTER_IMR);
--
--	outb(0xff, PIC_SLAVE_IMR);
--	inb(PIC_SLAVE_IMR);
--	outb(0xff, PIC_MASTER_IMR);
--	inb(PIC_MASTER_IMR);
--#endif
--	/* disable all events of bonito */
--	cached_bonito_irq_mask = LOONGSON_INTEN;
--	LOONGSON_INTENCLR = 0xffff;
--	(void)LOONGSON_INTENCLR;
--}
--
--void arch_suspend_enable_irqs(void)
--{
--	/* enable all mips events */
--	local_irq_enable();
--#ifdef CONFIG_I8259
--	/* only enable the cached events of i8259A */
--	outb(cached_slave_mask, PIC_SLAVE_IMR);
--	outb(cached_master_mask, PIC_MASTER_IMR);
--#endif
--	/* enable all cached events of bonito */
--	LOONGSON_INTENSET = cached_bonito_irq_mask;
--	(void)LOONGSON_INTENSET;
--}
--
--/*
-- * Setup the board-specific events for waking up loongson from wait mode
-- */
--void __weak setup_wakeup_events(void)
--{
--}
--
--void __weak mach_suspend(void)
--{
--}
--
--void __weak mach_resume(void)
--{
--}
--
--static int loongson_pm_enter(suspend_state_t state)
--{
--	mach_suspend();
--
--	mach_resume();
--
--	return 0;
-+	switch (state) {
-+	case PM_SUSPEND_MEM:
-+		pm_set_suspend_via_firmware();
-+		loongson_lefi_sleep(loongson_sysconf.suspend_addr);
-+		pm_set_resume_via_firmware();
-+		return 0;
-+	default:
-+		return -EINVAL;
-+	}
- }
- 
--static int loongson_pm_valid_state(suspend_state_t state)
-+static int lefi_pm_valid_state(suspend_state_t state)
- {
- 	switch (state) {
--	case PM_SUSPEND_ON:
--	case PM_SUSPEND_STANDBY:
- 	case PM_SUSPEND_MEM:
--		return 1;
--
-+		return !!loongson_sysconf.suspend_addr;
- 	default:
- 		return 0;
- 	}
- }
- 
--static const struct platform_suspend_ops loongson_pm_ops = {
--	.valid	= loongson_pm_valid_state,
--	.enter	= loongson_pm_enter,
-+static const struct platform_suspend_ops lefi_pm_ops = {
-+	.valid	= lefi_pm_valid_state,
-+	.enter	= lefi_pm_enter,
- };
- 
- static int __init loongson_pm_init(void)
- {
--	suspend_set_ops(&loongson_pm_ops);
-+	if (loongson_sysconf.fw_interface == LOONGSON_LEFI)
-+		suspend_set_ops(&lefi_pm_ops);
- 
- 	return 0;
- }
-diff --git a/arch/mips/loongson64/sleeper.S b/arch/mips/loongson64/sleeper.S
-new file mode 100644
-index 000000000000..04874b9bf430
---- /dev/null
-+++ b/arch/mips/loongson64/sleeper.S
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ *  Copyright (C) 2024, Jiaxun Yang <jiaxun.yang@flygoat.com>
-+ *  Loongson EFI firmware sleeper routine
-+ */
-+
-+#include <asm/asm.h>
-+#include <asm/pm.h>
-+
-+#include <kernel-entry-init.h>
-+
-+LEAF(loongson_lefi_sleep)
-+	SUSPEND_SAVE
-+	jalr    a0
-+    smp_slave_setup
-+	RESUME_RESTORE_REGS_RETURN
-+END(loongson_lefi_sleep)
+> last revision [0], or discussion with Rob Herring on much earlier
+> revision [1].
+> 
+> Proposal from Stephen Boyd of using auxiliary devices makes sense, that
+> could be the future direction of this series. It won't change the
+> dt-bindings aspect of it, only the driver implementations.
+> 
+> [0]: https://lore.kernel.org/lkml/daa732cb31d947c308513b535930c729.sboyd@kernel.org/
+> [1]: https://lore.kernel.org/lkml/20240124151405.GA930997-robh@kernel.org/
 
--- 
-2.34.1
+So after Robs comment above, you still pushed the wrong approach and now
+you revert it?
+
+Why v7 was sent ignoring Rob's comments:
+https://lore.kernel.org/all/20240221-mbly-clk-v7-3-31d4ce3630c3@bootlin.com/
+
+Best regards,
+Krzysztof
 
 
