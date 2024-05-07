@@ -1,152 +1,168 @@
-Return-Path: <linux-mips+bounces-3125-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3126-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E0FA8BE28A
-	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 14:52:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A43EA8BE30E
+	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 15:07:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D2F61F26673
-	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 12:52:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55FBF285415
+	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 13:07:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D021F15B992;
-	Tue,  7 May 2024 12:51:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE8E415D5DE;
+	Tue,  7 May 2024 13:07:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tGPbKqa1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M3ee16o3"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 976D315B12B;
-	Tue,  7 May 2024 12:51:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844D615D5C8;
+	Tue,  7 May 2024 13:07:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715086315; cv=none; b=EJ7vIS8n6pddTFFIJWMYOgskVHeR2ivq0ibgYbgx0KrvGhLgTaOn8t8lxm2l5PuAoOJfmEl2r1dZ0ZfFPvYdHZ+bBfkF0j6WQ9t14J5HfO6sibpC9rkx68ZXQV4zPHDpbbJINp4Yk1Cjt3UDt6Rsi+dn8xNONnWFEYKt57K6Di0=
+	t=1715087252; cv=none; b=GNNFBn8PjcqlGt4M2RQx9EU4m2o8RoHg/PiBZREOFXX+7ErqK2JGz093ycUiLM8y0c6iZTlihwSzO21+W27OwVYhXCQPHdrWq2AaQeXA1dFwxu1gsaD+kInX7s0aDedlHEyqb0Qv+4KefVA0EJ9PnfKTHwC2EyHI34YOF566U4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715086315; c=relaxed/simple;
-	bh=YkrG41OUg30UlrJKdM2bXKdavDQXZarnRBrRAJenv4U=;
+	s=arc-20240116; t=1715087252; c=relaxed/simple;
+	bh=07xKq6uVQTOhZY1PkzNIAHYYpUnqYhkmoVQ+zhvB8bk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gMYeNzV63szQv+ZoaQ9fzc6TdJMniSSdwgGVn75+TJoMphCrm+JRI0oYMN8Rm6n37tb+PRgvQLs9PzLAsR6vRs2aQOFXWdM3QKLEAUz5SjgY3J/fIwwD1hFcTLDAPoXu56Mt/COfjjAkkq6nPskdirzuYNsnUOJD+5SY4+yP6sU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tGPbKqa1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23982C2BBFC;
-	Tue,  7 May 2024 12:51:55 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=jXR2TZ6UJEZsTrtOJos79XzDcFg0MktrH2nV5QtHkCFBkDO+BTu1gS9+R6rufcWesWYZmDGOo00bd5bOwsVqJEvhg09JqVQXTRUANn/HARxys/KnjnI45gvlgBkZXDwvaxF6jLB7Mk4NUi0vwbhNqDWC++NVgV7c75qP8G0pn/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M3ee16o3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4074C4AF66;
+	Tue,  7 May 2024 13:07:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715086315;
-	bh=YkrG41OUg30UlrJKdM2bXKdavDQXZarnRBrRAJenv4U=;
+	s=k20201202; t=1715087252;
+	bh=07xKq6uVQTOhZY1PkzNIAHYYpUnqYhkmoVQ+zhvB8bk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tGPbKqa1QRN6Q8vFBcvwfLx5Wt0iXO2sD7KX/SqIxxdt7QCFRTz59ORppTJzP/E5E
-	 E+o5R2lTJKTnve0vuPp7cVVXZpzmLKXIOrZArK+Q6i6BeGTxTLNoaeobynnF1zW6pa
-	 pM1WTbYOysJHbgGRcD6z3H5idi+XFleUZu9ys5UFfGq503If2Ob2d2b7XpQsPM3a/a
-	 8q7Dj6g32Y+2DS+lXznIz4TvIhD3GdvEFdo5CyO1TwZs8vZxnqlpsymVbhUdvB7Lqk
-	 3fyNLOhyfENEckwYD0ia99Ne2XOAtcLZPo/G7tTHXEx474rUyeyQnlHsdZ7DosI1LZ
-	 LXSrzSxeS8jnw==
-Date: Tue, 7 May 2024 07:51:52 -0500
+	b=M3ee16o3tJya6jdSpMwrMODwS3xpR7LVqzMd2sfXnEaMWgRrvo/PD1fYFfraXarDl
+	 GNhPz4+37jHHVtZDgkLkj1/KG9w3bx//fmkolbNT8gV0c5bZUlh/emW7rl63XV5bUi
+	 QS0QFAzoSfE56v0PgKCKBkY5s+oz8gCwSDMRFLMgtMdqmJNjaJaStmhbtmTU7Puhx0
+	 uHxEgb1a/8+xxLgxV5cKQuCaiCHMF2DIITnznvlt4ESsZEoaEPL4VupnYkzTBK0bNk
+	 Zf8ZmIY/8XvcG1XEeSZVBYbUBYlF7QuV2CcL1mb1XBjRHboqBmafjXE0B280/Bw/sU
+	 +9EWo4Er6QUxQ==
+Date: Tue, 7 May 2024 08:07:28 -0500
 From: Rob Herring <robh@kernel.org>
-To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>, Lee Jones <lee@kernel.org>,
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: Hauke Mehrtens <hauke@hauke-m.de>,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	=?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>,
 	linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: [PATCH v2 03/11] dt-bindings: soc: mobileye: add EyeQ OLB system
- controller
-Message-ID: <20240507125152.GA38845-robh@kernel.org>
-References: <20240503-mbly-olb-v2-0-95ce5a1e18fe@bootlin.com>
- <20240503-mbly-olb-v2-3-95ce5a1e18fe@bootlin.com>
+	linux-kernel@vger.kernel.org,
+	Daniel =?iso-8859-1?Q?Gonz=E1lez?= Cabanelas <dgcbueu@gmail.com>
+Subject: Re: [PATCH v2 3/5] dt-bindings: mips: brcm: Document
+ brcm,bmips-cbr-reg property
+Message-ID: <20240507130728.GA43076-robh@kernel.org>
+References: <20240503212139.5811-1-ansuelsmth@gmail.com>
+ <20240503212139.5811-4-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240503-mbly-olb-v2-3-95ce5a1e18fe@bootlin.com>
+In-Reply-To: <20240503212139.5811-4-ansuelsmth@gmail.com>
 
-On Fri, May 03, 2024 at 04:20:48PM +0200, Théo Lebrun wrote:
-> Add documentation to describe the "Other Logic Block" system-controller.
-> It deals with three platforms: EyeQ5, EyeQ6L and EyeQ6H. First two have
-> a single instance, whereas EyeQ6H has seven named instances.
+On Fri, May 03, 2024 at 11:20:59PM +0200, Christian Marangi wrote:
+> Document brcm,bmips-cbr-reg and brcm,bmips-broken-cbr-reg property.
 > 
-> Features provided are:
->  - Clocks, children to main crystal. Some PLLs and divider clocks.
->  - Resets. EyeQ6H central, south, DDR0 and DDR1 do not have resets.
->  - Pinctrl. Only EyeQ5 has such feature.
+> Some SoC suffer from a BUG where read_c0_brcm_cbr() might return 0
+> if called from TP1. The CBR address is always the same on the SoC
+> hence it can be provided in DT to handle broken case where bootloader
+> doesn't init it or SMP where read_c0_brcm_cbr() returns 0 from TP1.
 > 
-> Those are NOT the only registers exposed in OLB system-controllers! Many
-> individual registers, related to IP block integration, can be found.
+> Usage of this property is to give an address also in these broken
+> configuration/bootloader.
 > 
-> We simplify devicetree references to OLB in two ways:
->  - Compatibles exposing a single clock do not ask for a index argument.
->  - Compatibles exposing a single reset domain do not ask for a domain
->    index, only a reset index.
+> If the SoC/Bootloader ALWAYS provide a broken CBR address the property
+> "brcm,bmips-broken-cbr-reg" can be used to ignore any value already set
+> in the registers for CBR address.
+
+Why can't these be implied from an SoC specific compatible?
+
+It's not a great design where you have to update the DT which should be 
+provided from the bootloader in order to work-around bootloader 
+issues...
+
 > 
-> About pinctrl subnodes: all pins have two functionality, either GPIO or
-> something-else. The latter is pin dependent, we express constraints
-> using many if-then.
-> 
-> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 > ---
->  .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  | 375 +++++++++++++++++++++
->  MAINTAINERS                                        |   2 +
->  include/dt-bindings/clock/mobileye,eyeq5-clk.h     |  21 ++
->  3 files changed, 398 insertions(+)
+>  .../devicetree/bindings/mips/brcm/soc.yaml    | 32 +++++++++++++++++++
+>  1 file changed, 32 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml b/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml
-> new file mode 100644
-> index 000000000000..bbd75b81166e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml
-> @@ -0,0 +1,375 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq5-olb.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mobileye EyeQ SoC system controller
-> +
-> +maintainers:
-> +  - Grégory Clement <gregory.clement@bootlin.com>
-> +  - Théo Lebrun <theo.lebrun@bootlin.com>
-> +  - Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
-> +
-> +description:
-> +  OLB ("Other Logic Block") is a hardware block grouping smaller blocks. Clocks,
-> +  resets, pinctrl are being handled from here. EyeQ5 and EyeQ6L host a single
-> +  instance. EyeQ6H hosts seven instances.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - mobileye,eyeq5-olb
-> +          - mobileye,eyeq6l-olb
-> +          - mobileye,eyeq6h-acc-olb
-> +          - mobileye,eyeq6h-central-olb
-> +          - mobileye,eyeq6h-east-olb
-> +          - mobileye,eyeq6h-west-olb
-> +          - mobileye,eyeq6h-south-olb
-> +          - mobileye,eyeq6h-ddr0-olb
-> +          - mobileye,eyeq6h-ddr1-olb
-> +      - const: syscon
-> +      - const: simple-mfd
+> diff --git a/Documentation/devicetree/bindings/mips/brcm/soc.yaml b/Documentation/devicetree/bindings/mips/brcm/soc.yaml
+> index 975945ca2888..29af8f0db785 100644
+> --- a/Documentation/devicetree/bindings/mips/brcm/soc.yaml
+> +++ b/Documentation/devicetree/bindings/mips/brcm/soc.yaml
+> @@ -55,6 +55,21 @@ properties:
+>           under the "cpus" node.
+>          $ref: /schemas/types.yaml#/definitions/uint32
+>  
+> +      brcm,bmips-broken-cbr-reg:
+> +        description: Declare that the Bootloader init a broken
+> +          CBR address in the registers and the one provided from
+> +          DT should always be used.
 
-You are getting rid of the child nodes, so you shouldn't need simple-mfd 
-any more.
+Why wouldn't brcm,bmips-cbr-reg being present indicate to use it?
 
-Rob
+> +        type: boolean
+> +
+> +      brcm,bmips-cbr-reg:
+> +        description: Reference address of the CBR.
+> +          Some SoC suffer from a BUG where read_c0_brcm_cbr() might
+> +          return 0 if called from TP1. The CBR address is always the
+> +          same on the SoC hence it can be provided in DT to handle
+> +          broken case where bootloader doesn't initialise it or SMP
+> +          where read_c0_brcm_cbr() returns 0 from TP1.
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+
+CBR is never defined anywhere in this patch. 
+
+> +
+>      patternProperties:
+>        "^cpu@[0-9]$":
+>          type: object
+> @@ -64,6 +79,23 @@ properties:
+>      required:
+>        - mips-hpt-frequency
+>  
+> +dependencies:
+> +  brcm,bmips-broken-cbr-reg: [ brcm,bmips-cbr-reg ]
+
+The inline syntax (i.e. []) means you need quotes for commas.
+
+This has no effect because you are applying it to the root node. Needs 
+to be a the same level as the properties.
+
+> +
+> +if:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        anyOf:
+> +          - const: brcm,bcm6358
+> +          - const: brcm,bcm6368
+
+Replace anyOf+const with enum.
+
+> +
+> +then:
+> +  properties:
+> +    cpus:
+> +      required:
+> +        - brcm,bmips-cbr-reg
+> +
+>  additionalProperties: true
+>  
+>  examples:
+> -- 
+> 2.43.0
+> 
 
