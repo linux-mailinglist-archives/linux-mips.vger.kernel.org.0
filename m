@@ -1,89 +1,91 @@
-Return-Path: <linux-mips+bounces-3133-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3134-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9313A8BE74E
-	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 17:22:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A4948BE752
+	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 17:22:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6CFB1C21FD3
-	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 15:22:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D3AE1F21831
+	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 15:22:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D00D165FDE;
-	Tue,  7 May 2024 15:22:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EECC16ABD5;
+	Tue,  7 May 2024 15:22:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="lL8ITcWp";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Ek4d7dsU"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="Pw4ZbWsN";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MfR7q9PK"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from wfout5-smtp.messagingengine.com (wfout5-smtp.messagingengine.com [64.147.123.148])
+Received: from wfhigh8-smtp.messagingengine.com (wfhigh8-smtp.messagingengine.com [64.147.123.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F027F1649CD;
-	Tue,  7 May 2024 15:22:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD492168AF8;
+	Tue,  7 May 2024 15:22:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715095336; cv=none; b=YMcPGGWYZj0Fcekm/IZgJVjBV3xRcAFE1v+Sg2toCY3sJmpiTyAcFhPRq+X1KYq7JrYIqXzsW4KbRogg2w7q4MA3f61ah0XW08Ba3duyAvaBE9XyDqOfiNRVgwKBE0cRePTmG2/OzgRn85FU/2YdOn2IBgVFKbsuSqdpq/aNA0s=
+	t=1715095338; cv=none; b=uLLHZnEGIYsKV5pBDBMoIDo76YAt03lz0o2w5Tpi6h16BUyF/o0W7coTmHiCzL50hs/COGomjWqkrTzidxmw0YEF/Tc15Ftr/iZkjcpu4ZuVHWKhav5+7uqoDICVbeoja3SIJ8FHqPkcZ30rxB5kfWRhCY9kPii8SvPtdcqC/68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715095336; c=relaxed/simple;
-	bh=aCG31ggx5FwnkAw89eRrVEa5H/1D1f/hLv5GcL5wb5w=;
+	s=arc-20240116; t=1715095338; c=relaxed/simple;
+	bh=pQz0w1yBfPHUBv/v0nbOyM9aMVNE+JcqduRqxVhK+yQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=M2QQnRwv2UXpnoVMMz6Dwym/ip0K3qE2r1eeovZnllOGdyC4eSBrvuTWDyHTS40Mo0xt62JfVwe//rjxCSm6ua/b2dVB2D9glZPK5Y42Y/rp8iwJo70sqTPDZZGEZjaPDvFzw+LiK0QhvyDucWE1k6aEkLiD06Lq5b+/tOyUxUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=lL8ITcWp; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Ek4d7dsU; arc=none smtp.client-ip=64.147.123.148
+	 In-Reply-To:To:Cc; b=RSIPxuPPT9qENnEGefleu9rAwGU/wp/6psvvSJoyBfh+uh2OJoTQUp7OvFAJ9S+qd6IyK+hLdIIXrjEV0ClCG8w+BY15B8SSpu9iJAkOTJCcIY8Vb03LZE0emIHNeveVDVQX5PS6hnuzQDiZqTC/dn303CxHCu1y+tYJa3v8QoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=Pw4ZbWsN; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MfR7q9PK; arc=none smtp.client-ip=64.147.123.159
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-	by mailfout.west.internal (Postfix) with ESMTP id D97331C000E3;
-	Tue,  7 May 2024 11:22:13 -0400 (EDT)
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
+	by mailfhigh.west.internal (Postfix) with ESMTP id E623C180013F;
+	Tue,  7 May 2024 11:22:15 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Tue, 07 May 2024 11:22:14 -0400
+  by compute7.internal (MEProxy); Tue, 07 May 2024 11:22:16 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1715095333;
-	 x=1715181733; bh=TjtLInAZcfnZsukDv2PQiAwljAXLKqwg2HYQT5PZI7k=; b=
-	lL8ITcWpbUaMIEiza+q8ZyNjs5XXZm85axAgbkFYJbahmgHlGESHrRn4f/VjdYD0
-	TskNcx5G2pFJEdrdirFnCu4rIvFMn0yGzHq3P3ckEedgM+VxGKM5dpy8sYmvuHQ0
-	H8xfSyEfStsYKB6nYv+vdoC6d6nAO3/KEXMNQAw+tsQvZVlWk/2MpM4jxFujIZ2V
-	8S6s1+cNCJ11dUVSY0qWxH5q4UcI2NFtj2VwG2YxcJf7+pA+tVeoctK0JS4XQyJn
-	pu8Y2Vje6FbDnsOCfBgFo/NVxHg1rbpaqTJY3p1l8oZlH2Uf1euAR8YNH+cClmyz
-	pA//6k4T8a9hbZNpnKkroA==
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1715095335;
+	 x=1715181735; bh=3D0GaVF05UsiobMGqr5NYu1yNUERD1Uibyz1tRmG9fM=; b=
+	Pw4ZbWsN/RUod8jQLaOL2WJEEMdQba8MbGhrUKPtnQbZtx04SKiJDdR5tJykk9bz
+	+DUId1bJxG1RJ6xa82TX0dLJc+FbB1a3tZG4g7cfeIkBJe0FWUqyDWcxXdDEX6uH
+	bSwz/zrM5gLY/CUbKX10SNWjbNJObCpdRx0Z+tGKwXohfOqww/nrUGBcW++Iexug
+	uxRMWtqjiLzYi5fUm5xBXcDBZkKo03lI581lER7F5+NoEH4KMvRwbCJELmFxiqFv
+	zwfIPvSLgdLU72Jqouxpmln3P8LAXd39JaVu94E7qTrKmv98ZA8bLyf7IFwWHBgR
+	wVvt8T9g1hALJOmy6COVEw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1715095333; x=
-	1715181733; bh=TjtLInAZcfnZsukDv2PQiAwljAXLKqwg2HYQT5PZI7k=; b=E
-	k4d7dsU/2VYIWc6w5jlq7qQtAlr6o9VaBM9JYbE3AxpbFMOfJAnMAh2v82hq/YWJ
-	lzC4JHNvKpYWYEsSnp11dn/uH2utDBypFuXISAS/fwlN9TuTck5WQTZk0KLo0Kiy
-	vFoJ7Ty31qPg/FaD8zUb98tLkTwgjSrmwqyCm5dfIZdVJpij3A636FhLd09JrPVg
-	rEbe7bDTQrcXAVtog4pL/D1lGXzesrcWGfHHYurWGb8ZgGAld6iPjvjLOtFeXpnL
-	Stv8afyPHX53he/ZoUw5DkXaKsYqMNRavTpaReLgkixGzMDIvXBpGb8VRfwpIbC5
-	gZiz4h2JcKd5YcA9a2sxQ==
-X-ME-Sender: <xms:JUc6Zsal4UqHpkfiIijViG_8h4ecPUMXRgx6sUT48dXauHIB6RrrZg>
-    <xme:JUc6ZnaVgWs71K6acAqTLxAo0u6d0fj_iSULk6rUhA9JPHGSbPGR9FmMu7q9oBhTu
-    meYDOIYJFniu8d3ci0>
-X-ME-Received: <xmr:JUc6Zm__nEakCcaU8duR0GOS0r04U5iWpN8ND4BGtJhhyjPbqA0OIjI>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1715095335; x=
+	1715181735; bh=3D0GaVF05UsiobMGqr5NYu1yNUERD1Uibyz1tRmG9fM=; b=M
+	fR7q9PKO26AnH9L4CgQLtPo6e8M4TqPOAUFH3anG7GTblZALqimK/FofhuQeUvE9
+	DPmNokjWTX+yz6LiUHmXLCQvQhSfTWLFbkjBaFECtwRdYm+j8gY60Pr9R1Lv2OlU
+	V/QRRi2clCwSEgGzi10atPdIyuFP3z+8RpTooF96quDhgT6JCJHYskYFWVCdX20G
+	v92TIKjDJVsNLjMorwsykgzFs3NPFl0VUUyq0Dg/ZO2CkmHfndcr4Gompo0EDTYl
+	ZH1UGwmypCWXgKAYn67LWEj4l1l+6fO0X6JhPL/4DTxnlgg8Kb+geWKFTCEL+LsQ
+	9Z1ldv6U6sqxRw+ALNcDA==
+X-ME-Sender: <xms:J0c6ZhNB5Z4crQc-Ak--CB_3r8Dg6NYIO0qDJwCfdvx-Ksvdl8C8fw>
+    <xme:J0c6Zj_jjV-3tXRLmKQQmyG2QXnoNYeoxTI_wQb66CZMooMFyw_CTEbtNRsjhmzKQ
+    1ivHWAZQRXlZ6zns8M>
+X-ME-Received: <xmr:J0c6ZgS0CEFpaiaajdy2-MjgpGea57epJPoZ1UihesgGCS1CR8OQC_o>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvddvkedgkeehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeflihgr
     gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepvdekiefhfeevkeeuveetfeelffekgedugefhtdduudeghfeu
-    veegffegudekjeelnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:JUc6ZmrojR-U21xTvgNGT4qNm18_pP1kgiOX3yOAAGRenlqUvya73A>
-    <xmx:JUc6Znr1Nlikwygc4BGfd7jSaDkeooweq8bAE-Q8ZSUDmx_eC0xO8A>
-    <xmx:JUc6ZkS9UIkDgDEVRnnb3sNzjmKm2NeCvTs42Erz_aInmr_DCUIgdQ>
-    <xmx:JUc6Zno_ueaA1ZKDV8UftxBXx17J02kiAB5xZXyH2CC-BvfAEYge2A>
-    <xmx:JUc6ZoANx1e1dyxZ2IZ5OlKg6u3fnaXmAivxXeytYFUGh5xKV1U1CcJm>
+    cuggftrfgrthhtvghrnhepiefgleeivefgieejhfdvhfdvieeiudehvdevfeetveetieek
+    tdfffedufffhgeehnecuffhomhgrihhnpehslhgvvghpvghrrdhssgenucevlhhushhtvg
+    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhg
+    sehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:J0c6ZtupAzN8AN5gEeZHf6yx2vUCUWU3fl38JqQ_ZIcA80OSVyOVjA>
+    <xmx:J0c6ZpfYUb-H8chJJbSMmKBymfmV2-em5wBM0CDlK46tL_G-fHsivA>
+    <xmx:J0c6Zp1-ixz35OaJMPLl2nMtMXoLG059NKJTRKSVUihYepj7tMZPLw>
+    <xmx:J0c6Zl-If8x4GqC7cRaqGDFeunii7vNfIaqDCbtCB64paTnsIhj9gA>
+    <xmx:J0c6ZiHkNMcmJS-0jwGNeLaYZfOLuiNSsRVtGM8NBLMzyRe_Q-feVMc8>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 7 May 2024 11:22:12 -0400 (EDT)
+ 7 May 2024 11:22:14 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Tue, 07 May 2024 16:22:00 +0100
-Subject: [PATCH 2/3] MIPS: select CPU_PM with SUSPEND
+Date: Tue, 07 May 2024 16:22:01 +0100
+Subject: [PATCH 3/3] MIPS: Loongson64: Implement PM suspend for LEFI
+ firmware
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -92,7 +94,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240507-loongson64-suspend-v1-2-534d92a4e09a@flygoat.com>
+Message-Id: <20240507-loongson64-suspend-v1-3-534d92a4e09a@flygoat.com>
 References: <20240507-loongson64-suspend-v1-0-534d92a4e09a@flygoat.com>
 In-Reply-To: <20240507-loongson64-suspend-v1-0-534d92a4e09a@flygoat.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
@@ -100,37 +102,186 @@ To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Jiaxun Yang <jiaxun.yang@flygoat.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=696;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4701;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=aCG31ggx5FwnkAw89eRrVEa5H/1D1f/hLv5GcL5wb5w=;
- b=owGbwMvMwCHmXMhTe71c8zDjabUkhjQrd0X5P9OzJBusvSOy+CZXX61Sej1HS+Mw08Wj/Vfnd
- 1rVauzpKGVhEONgkBVTZAkRUOrb0HhxwfUHWX9g5rAygQxh4OIUgIl0WzAy9H46eNDTSden8efz
- e2rFziefhxx0ElOuSqmdv3uLdh8HMyND8xLrHTuv5vk+i76xSjle62p2NkfThYI7D7QetCmyNte
- wAAA=
+ bh=pQz0w1yBfPHUBv/v0nbOyM9aMVNE+JcqduRqxVhK+yQ=;
+ b=owGbwMvMwCHmXMhTe71c8zDjabUkhjQrd8VJbZHfa7xbO1M4Zy16/EJD0fPswri0fG3zug37P
+ h4Vtq/oKGVhEONgkBVTZAkRUOrb0HhxwfUHWX9g5rAygQxh4OIUgInI9zP84cn/Ezpxy+q9R47n
+ 9/zQDLJPDGxd4RoY2Vt+z7b2kVXmZIa/0hN2nbq1675885YLf+OT50Rn2ITHdMUkcHc33TN/a+X
+ GBAA=
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-Functionalities provided by CPU_PM are essential for suspend
-to work on all platforms.
+Implement PM suspend for LEFI firmware.
+Entering STR (Suspend to RAM) is as simple as save our context
+then go to a firmware vector.
+Wake is a little bit treaky as we need to setup some CP0 status
+first, which can be done with smp_slave_setup.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/loongson64/Makefile  |  2 +-
+ arch/mips/loongson64/pm.c      | 88 +++++++++---------------------------------
+ arch/mips/loongson64/sleeper.S | 17 ++++++++
+ 3 files changed, 36 insertions(+), 71 deletions(-)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index f1aa1bf11166..c5753cb0953d 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -30,7 +30,7 @@ config MIPS
- 	select BUILDTIME_TABLE_SORT
- 	select CLONE_BACKWARDS
- 	select CPU_NO_EFFICIENT_FFS if (TARGET_ISA_REV < 1)
--	select CPU_PM if CPU_IDLE
-+	select CPU_PM if CPU_IDLE || SUSPEND
- 	select GENERIC_ATOMIC64 if !64BIT
- 	select GENERIC_CMOS_UPDATE
- 	select GENERIC_CPU_AUTOPROBE
+diff --git a/arch/mips/loongson64/Makefile b/arch/mips/loongson64/Makefile
+index e806280bbb85..cbba30dfddf5 100644
+--- a/arch/mips/loongson64/Makefile
++++ b/arch/mips/loongson64/Makefile
+@@ -8,7 +8,7 @@ obj-$(CONFIG_MACH_LOONGSON64) += cop2-ex.o dma.o \
+ obj-$(CONFIG_SMP)	+= smp.o
+ obj-$(CONFIG_NUMA)	+= numa.o
+ obj-$(CONFIG_RS780_HPET) += hpet.o
+-obj-$(CONFIG_SUSPEND) += pm.o
++obj-$(CONFIG_SUSPEND) += pm.o sleeper.o
+ obj-$(CONFIG_PCI_QUIRKS) += vbios_quirk.o
+ obj-$(CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION) += cpucfg-emul.o
+ obj-$(CONFIG_SYSFS) += boardinfo.o
+diff --git a/arch/mips/loongson64/pm.c b/arch/mips/loongson64/pm.c
+index 7c8556f09781..5f0604af8f13 100644
+--- a/arch/mips/loongson64/pm.c
++++ b/arch/mips/loongson64/pm.c
+@@ -6,98 +6,46 @@
+  *  Author: Wu Zhangjin <wuzhangjin@gmail.com>
+  */
+ #include <linux/suspend.h>
+-#include <linux/interrupt.h>
+ #include <linux/pm.h>
+ 
+-#include <asm/i8259.h>
+ #include <asm/mipsregs.h>
+ 
+ #include <loongson.h>
+ 
+-static unsigned int __maybe_unused cached_master_mask;	/* i8259A */
+-static unsigned int __maybe_unused cached_slave_mask;
+-static unsigned int __maybe_unused cached_bonito_irq_mask; /* bonito */
++asmlinkage void loongson_lefi_sleep(unsigned long sleep_addr);
+ 
+-void arch_suspend_disable_irqs(void)
++static int lefi_pm_enter(suspend_state_t state)
+ {
+-	/* disable all mips events */
+-	local_irq_disable();
+-
+-#ifdef CONFIG_I8259
+-	/* disable all events of i8259A */
+-	cached_slave_mask = inb(PIC_SLAVE_IMR);
+-	cached_master_mask = inb(PIC_MASTER_IMR);
+-
+-	outb(0xff, PIC_SLAVE_IMR);
+-	inb(PIC_SLAVE_IMR);
+-	outb(0xff, PIC_MASTER_IMR);
+-	inb(PIC_MASTER_IMR);
+-#endif
+-	/* disable all events of bonito */
+-	cached_bonito_irq_mask = LOONGSON_INTEN;
+-	LOONGSON_INTENCLR = 0xffff;
+-	(void)LOONGSON_INTENCLR;
+-}
+-
+-void arch_suspend_enable_irqs(void)
+-{
+-	/* enable all mips events */
+-	local_irq_enable();
+-#ifdef CONFIG_I8259
+-	/* only enable the cached events of i8259A */
+-	outb(cached_slave_mask, PIC_SLAVE_IMR);
+-	outb(cached_master_mask, PIC_MASTER_IMR);
+-#endif
+-	/* enable all cached events of bonito */
+-	LOONGSON_INTENSET = cached_bonito_irq_mask;
+-	(void)LOONGSON_INTENSET;
+-}
+-
+-/*
+- * Setup the board-specific events for waking up loongson from wait mode
+- */
+-void __weak setup_wakeup_events(void)
+-{
+-}
+-
+-void __weak mach_suspend(void)
+-{
+-}
+-
+-void __weak mach_resume(void)
+-{
+-}
+-
+-static int loongson_pm_enter(suspend_state_t state)
+-{
+-	mach_suspend();
+-
+-	mach_resume();
+-
+-	return 0;
++	switch (state) {
++	case PM_SUSPEND_MEM:
++		pm_set_suspend_via_firmware();
++		loongson_lefi_sleep(loongson_sysconf.suspend_addr);
++		pm_set_resume_via_firmware();
++		return 0;
++	default:
++		return -EINVAL;
++	}
+ }
+ 
+-static int loongson_pm_valid_state(suspend_state_t state)
++static int lefi_pm_valid_state(suspend_state_t state)
+ {
+ 	switch (state) {
+-	case PM_SUSPEND_ON:
+-	case PM_SUSPEND_STANDBY:
+ 	case PM_SUSPEND_MEM:
+-		return 1;
+-
++		return !!loongson_sysconf.suspend_addr;
+ 	default:
+ 		return 0;
+ 	}
+ }
+ 
+-static const struct platform_suspend_ops loongson_pm_ops = {
+-	.valid	= loongson_pm_valid_state,
+-	.enter	= loongson_pm_enter,
++static const struct platform_suspend_ops lefi_pm_ops = {
++	.valid	= lefi_pm_valid_state,
++	.enter	= lefi_pm_enter,
+ };
+ 
+ static int __init loongson_pm_init(void)
+ {
+-	suspend_set_ops(&loongson_pm_ops);
++	if (loongson_sysconf.fw_interface == LOONGSON_LEFI)
++		suspend_set_ops(&lefi_pm_ops);
+ 
+ 	return 0;
+ }
+diff --git a/arch/mips/loongson64/sleeper.S b/arch/mips/loongson64/sleeper.S
+new file mode 100644
+index 000000000000..04874b9bf430
+--- /dev/null
++++ b/arch/mips/loongson64/sleeper.S
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/*
++ *  Copyright (C) 2024, Jiaxun Yang <jiaxun.yang@flygoat.com>
++ *  Loongson EFI firmware sleeper routine
++ */
++
++#include <asm/asm.h>
++#include <asm/pm.h>
++
++#include <kernel-entry-init.h>
++
++LEAF(loongson_lefi_sleep)
++	SUSPEND_SAVE
++	jalr    a0
++    smp_slave_setup
++	RESUME_RESTORE_REGS_RETURN
++END(loongson_lefi_sleep)
 
 -- 
 2.34.1
