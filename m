@@ -1,188 +1,234 @@
-Return-Path: <linux-mips+bounces-3148-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3149-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3E1A8BEAEC
-	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 19:56:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F8BD8BEB78
+	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 20:23:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B8411F22575
-	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 17:56:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 510EDB290FF
+	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 18:17:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33EFB16D317;
-	Tue,  7 May 2024 17:56:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4FC516D30C;
+	Tue,  7 May 2024 18:16:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="lIpXG8KP"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="HvQYFbPx";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ff3XKmpn"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wfhigh1-smtp.messagingengine.com (wfhigh1-smtp.messagingengine.com [64.147.123.152])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EECE16C871
-	for <linux-mips@vger.kernel.org>; Tue,  7 May 2024 17:56:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE6716D30F;
+	Tue,  7 May 2024 18:16:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715104609; cv=none; b=u9Sc/Eger/mjJpv/uM/7ReNDSNjBVP+iROhMwTH/p5Ln+dHinYVkjI1bP6kUzbKoR81xo0gQ/aj54ypumvomzxOuWPr3BE1tZj8vvu5UrIP1qIHfhGQL00JLF0Ow5rOEzLBLKfEGP+ou+FyXOBNQOk1SYjOaPpHjpYsrEgTd+pE=
+	t=1715105814; cv=none; b=alVyYEiBfV5302Ydv8pYSN5Ptp8A7WnTQ/Dg+SbYMfRXnZsG6McrkPmRGjdO1IOvdQRmazEw2/uQoFsuHWuwkXkl9cyKGal8kwJlycBht6DxG9XY4vJrIiceZgJtyFfwPnwhqzkNH5ENg4Bez4n3eXKKfk1T8QwoCmgSFusUFC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715104609; c=relaxed/simple;
-	bh=2WVuSd42XVbejvGzvbE/XdmU6u71Lu82dpSc5WCFvqQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mf4U0wlT1grSVjxZ14XkjaiLCMYCkSwjSIDGdXDwKR/1KNQ49jqlG0+Uh/xlTScVDRf40k6DRKSgY8OsGJ9bFUgogyXq8nIf4T3Ba6p8I7vZynzQnW5e+ryy2kF2VQyIDbF8iwlKdwg1EQtClr1ehXbTUOtWvOdSjDsa3FP9YD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=lIpXG8KP; arc=none smtp.client-ip=209.85.222.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7928c54e945so284684885a.2
-        for <linux-mips@vger.kernel.org>; Tue, 07 May 2024 10:56:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1715104606; x=1715709406; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wu9WbbBrtYOSeavstfMRlNJlMm/0/4MuzUdv+q+e+RU=;
-        b=lIpXG8KPmCMXpUh7JZ5V/2Srhwf1899y4M6b9Z4m2rUYLhAVXEKRAj2RbS/QyN5GNf
-         2R8Y4+kgBdJGnCvROMTlZNIII1WTss+Y5khV/PgrQo+7sFWO045oo8Cqya9djusUOWdw
-         LjZeH6XKCmyZLORSKOBUwlvwrfH4qmIGzYQkzC0FW+KOzcd1qDlIaV378bwVFn5loS4F
-         wqiIsJ0r9R80fgWfGYfaMSewGq3VGJUQqs2m7pEBn1QuVVPuWPc+JHx7ApEjyrIF6254
-         hWGm76/BZ+9Oo3kYlmqV0lfJs1bxJo0/Ebfpx75oRZa2ZnfSRTfebpn97TzpAwwECN+Z
-         +lTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715104606; x=1715709406;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wu9WbbBrtYOSeavstfMRlNJlMm/0/4MuzUdv+q+e+RU=;
-        b=RlIEr9Cf8bmY5NzVGMqtmYsKDdq8sB2MXvmp0+toD0Gp8iRsQRYyg0BhqVKxs3TMWT
-         mAYDBYVBtS5qtjna25Mc6WcP9F2MWf+s093Pl2qo3C8aq2l7+GrXshEL86IxuNK9tzJx
-         SQmk8MJVlnp07VSTSARduS2s6B+G0Np3aCmYbVt0IJBysHGFh6Zv/pSPSNhXpOElU+TE
-         Wl5fWOKdEmWAeB++KvHHF/OR62yAkZc+ddpaneKgnBginAx4aqsXX9ZfrFx2YzghM3S8
-         Pdd2zbneOi+CImvZOU1zxZLkpk2Jq28LGcR7MB01uM4w18DnjikfSyYrNK5KITkzMsMl
-         eJFg==
-X-Forwarded-Encrypted: i=1; AJvYcCVXhibZl5YmXA/U+7g0d41kSVfRVxfXbQMuwKY6TqSdZLHn54dahe/oXifyyJeHd1iHvvIeHL5lw85qMd9KevVOfMA8AAdJugxKgA==
-X-Gm-Message-State: AOJu0YweZjx62QdLLjBNakPzDpKVZCFpTo1HqM/i7psUzcE6hw1vAzMC
-	hsTyFQIKusrWKr1Sb4dhVtwFa06aDNA+sBvxKCzbXXnKVIDKuhthA0pI5Ndm2lE=
-X-Google-Smtp-Source: AGHT+IGCzj6XuEJPrKRVtB6HNDvjYgTlCCuf3Mc1RlNFJ90uDv9nZUQTLULizJXrrgrWoRFfeuAAuA==
-X-Received: by 2002:a05:620a:5a4b:b0:790:7345:2791 with SMTP id af79cd13be357-792b274eabbmr46464985a.56.1715104606118;
-        Tue, 07 May 2024 10:56:46 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-80-239.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.80.239])
-        by smtp.gmail.com with ESMTPSA id bm34-20020a05620a19a200b0078ec3aa9cc7sm5127446qkb.25.2024.05.07.10.56.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 May 2024 10:56:45 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1s4P3U-00022m-Vn;
-	Tue, 07 May 2024 14:56:44 -0300
-Date: Tue, 7 May 2024 14:56:44 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Mina Almasry <almasrymina@google.com>,
-	Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	Amritha Nambiar <amritha.nambiar@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-	Kaiyuan Zhang <kaiyuanz@google.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Florian Westphal <fw@strlen.de>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
-	Arseniy Krasnov <avkrasnov@salutedevices.com>,
-	Aleksander Lobakin <aleksander.lobakin@intel.com>,
-	Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Richard Gobert <richardbgobert@gmail.com>,
-	Sridhar Samudrala <sridhar.samudrala@intel.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Johannes Berg <johannes.berg@intel.com>,
-	Abel Wu <wuyun.abel@bytedance.com>,
-	Breno Leitao <leitao@debian.org>, David Wei <dw@davidwei.uk>,
-	Shailend Chand <shailend@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Subject: Re: [RFC PATCH net-next v8 02/14] net: page_pool: create hooks for
- custom page providers
-Message-ID: <20240507175644.GJ4718@ziepe.ca>
-References: <20240403002053.2376017-3-almasrymina@google.com>
- <ZjH1QaSSQ98mw158@infradead.org>
- <CAHS8izM0=xc2UhUxhnF_BixuFs5VaDV9W1jbso1K+Rg=35NzeA@mail.gmail.com>
- <ZjjHUh1eINPg1wkn@infradead.org>
- <20b1c2d9-0b37-414c-b348-89684c0c0998@gmail.com>
- <20240507161857.GA4718@ziepe.ca>
- <ZjpVfPqGNfE5N4bl@infradead.org>
- <CAHS8izPH+sRLSiZ7vbrNtRdHrFEf8XQ61XAyHuxRSL9Jjy8YbQ@mail.gmail.com>
- <20240507164838.GG4718@ziepe.ca>
- <0d5da361-cc7b-46e9-a635-9a7a4c208444@gmail.com>
+	s=arc-20240116; t=1715105814; c=relaxed/simple;
+	bh=tkkLup4fz7SXQkE6wLRmN85VKtFi0Vkf6N3FNeMPO4M=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=Me1iubFhZA6NVS4tycyGXTJfb55AoyRmF+d1gw2K7SzC0lJFCrGWJNsWYsVKcEDyXi0IU9D2sCci+762gEiae+VCOrK89i4isv0Gq0S0ZYxD0ah16HUJ7egxThId+/kNCmHSHDbO70h+vYn9cKVNnHjeRMo1Zaz5ut07cVCAUv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=HvQYFbPx; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ff3XKmpn; arc=none smtp.client-ip=64.147.123.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailfhigh.west.internal (Postfix) with ESMTP id 638291800101;
+	Tue,  7 May 2024 14:16:51 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Tue, 07 May 2024 14:16:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1715105811;
+	 x=1715192211; bh=xkZUyYvJJx8Ghug4jhe04XLSU69l2vONZ4Ow52k89Ng=; b=
+	HvQYFbPxc8YlfjpFXvw1MuSgSeGVfGjSsiV0vrW/5xGQMOoCpDmh5gyMAYAOl8Ym
+	NhEmh1T3kBzfPC4hT5VG+MLJllU0q6ABk3NtyEWCORXf3kli1ZgLtrKHnM7XUQf3
+	l4dW1/1flG6SOWec+rojzHejjnieogmsEGZ1AyWoBTRh8B78it2+JHD4mWjlVQIn
+	jqPjaCARHkKzQXRgKhEKBnDxvTQJWw51L85xmBNitw5WN8D/SkMG62vjDpOGgtL3
+	pIL/Cck6RWp60byfRHKp4cuPfnRxFORJV0iOpTFcjwxIahdmHTLkF1Ca/1J0Dwar
+	wFzzVz8OnP4BDAk1SXPW+g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1715105811; x=
+	1715192211; bh=xkZUyYvJJx8Ghug4jhe04XLSU69l2vONZ4Ow52k89Ng=; b=f
+	f3XKmpnrjqrj2Fofs2mBN4Pp58nD2YBGhsz7HVta5gtiVF0jwSkrFnKtwDHwnrbn
+	bNJWaaAAl1ctIjycb7GbAj6lKL2NJP+4GSUAzjzHdnfMqwhS1OcOBrqQ+/HZHlBg
+	A40qVCEtSmHNzGpHOlXj19pS3BRPXC9VC2QVEuMETjDInkmBQtmShpbQFnImgzjo
+	fMhrEkWmFrwrhjCi9YoU64eUNbzou74/VWMFZOmhGKFGyqJtsS7uEJ+j4+9f7Wbb
+	zWI/CGiyp15yEVMKtDQ6txbSveOOngph5MhTh+/c2DN1u7vvIbmvq0D0Gen2w9tE
+	FjF+8dgZVeqOOIUUVq7Yw==
+X-ME-Sender: <xms:EnA6ZjhgEbhjhOaTsBpa1trjh01D9uujWdp9FOWqtPQyg_kO7eZCMQ>
+    <xme:EnA6ZgBkbofPe7FeGJ76JCvwB8c0Ebzyu1zOwWUXbO8sGJ8BHpP7K4vMMDvo6RM_O
+    rDkBFSq7Vekkwt21Lc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvddvkedguddvtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    lfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtg
+    homheqnecuggftrfgrthhtvghrnhepjedutdeuhfdvjeevgfehudeitdehiefgveelheff
+    uddulefhkeeihfehudehgfevnecuffhomhgrihhnpeguvghvihgtvghtrhgvvgdrohhrgh
+    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgr
+    gihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:EnA6ZjHsOP8reLn_5GRUUjNM8x-hVbOFx5O2GRPkZ3ZPn5DM2UYyPw>
+    <xmx:EnA6ZgQDgE_x1e2R-JJBWr2mTSYYemsGE8dIt6QiijgZ8FpNXKTcpg>
+    <xmx:EnA6ZgylKlh2ajJTVijgDmL5GbzRkohoN0YtOGQtqv86sjACZebceg>
+    <xmx:EnA6Zm6qZ-pcWPEiKrbH5tAGAeXLXtkcjLjlgoHq5rdC-gJcUII8eg>
+    <xmx:EnA6ZvlCL922gQQb2JU6kYwWLtk3jL6IoXeCnneu4bzu6-fUMZ-VKmLM>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 3ECE536A0074; Tue,  7 May 2024 14:16:50 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-443-g0dc955c2a-fm-20240507.001-g0dc955c2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0d5da361-cc7b-46e9-a635-9a7a4c208444@gmail.com>
+Message-Id: <fbb4b8e2-edf4-4b4e-8b71-154a09f24ccd@app.fastmail.com>
+In-Reply-To: <20240507-jokester-antelope-808b21b957e6@spud>
+References: <20240507-cm_probe-v1-0-11dbfd598f3c@flygoat.com>
+ <20240507-cm_probe-v1-4-11dbfd598f3c@flygoat.com>
+ <20240507-jokester-antelope-808b21b957e6@spud>
+Date: Tue, 07 May 2024 19:16:25 +0100
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Conor Dooley" <conor@kernel.org>
+Cc: "paulburton@kernel.org" <paulburton@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 4/5] dt-bindings: mips: Document mti,mips-cm
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 07, 2024 at 06:25:52PM +0100, Pavel Begunkov wrote:
-> On 5/7/24 17:48, Jason Gunthorpe wrote:
-> > On Tue, May 07, 2024 at 09:42:05AM -0700, Mina Almasry wrote:
-> > 
-> > > 1. Align with devmem TCP to use udmabuf for your io_uring memory. I
-> > > think in the past you said it's a uapi you don't link but in the face
-> > > of this pushback you may want to reconsider.
-> > 
-> > dmabuf does not force a uapi, you can acquire your pages however you
-> > want and wrap them up in a dmabuf. No uapi at all.
-> > 
-> > The point is that dmabuf already provides ops that do basically what
-> > is needed here. We don't need ops calling ops just because dmabuf's
-> > ops are not understsood or not perfect. Fixup dmabuf.
-> 
-> Those ops, for example, are used to efficiently return used buffers
-> back to the kernel, which is uapi, I don't see how dmabuf can be
-> fixed up to cover it.
 
-Sure, but that doesn't mean you can't use dma buf for the other parts
-of the flow. The per-page lifetime is a different topic than the
-refcounting and access of the entire bulk of memory.
 
-Jason
+=E5=9C=A82024=E5=B9=B45=E6=9C=887=E6=97=A5=E4=BA=94=E6=9C=88 =E4=B8=8B=E5=
+=8D=885:50=EF=BC=8CConor Dooley=E5=86=99=E9=81=93=EF=BC=9A
+> On Tue, May 07, 2024 at 10:01:52AM +0100, Jiaxun Yang wrote:
+>> Add devicetree binding documentation for MIPS Coherence Manager.
+>>=20
+>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>> ---
+>>  .../devicetree/bindings/mips/mips-cm.yaml          | 37 ++++++++++++=
+++++++++++
+>>  1 file changed, 37 insertions(+)
+>>=20
+>> diff --git a/Documentation/devicetree/bindings/mips/mips-cm.yaml b/Do=
+cumentation/devicetree/bindings/mips/mips-cm.yaml
+>> new file mode 100644
+>> index 000000000000..b92b008d7758
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/mips/mips-cm.yaml
+Hi Cornor,
+
+Thanks for your comments.
+
+>
+> Filename matching the compatible please.
+Ok.
+
+>
+>> @@ -0,0 +1,37 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/mips/mips-cm.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: MIPS Coherence Manager
+>> +
+>> +description: |
+>> +  Defines a location of the MIPS Coherence Manager registers.
+>> +
+>> +maintainers:
+>> +  - Jiaxun Yang <jiaxun.yang@flygoat.com>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: mti,mips-cm
+>
+> Is it actually only available on mips? Google seems to report there
+> being Coherence Managers on their RISC-V offerings too.
+
+I think for MIPS's RISC-V system, it is only used by SBI and transparent
+to kernel, so it won't present in DT.=20
+
+Register fields for RISC-V system is totally different with MIPS one, and
+there is no driver to be reused. In MIPS system CM code is highly coupled
+with arch code, so for RISC-V if we want to expose it to kernel we'll ne=
+ed
+a new set of driver and a new binding.
+
+>
+>> +  reg:
+>> +    description: |
+>
+> The | isn't needed, there's no formatting to preserve.
+Ok.
+
+>
+>> +      Base address and size of an unoccupied memory region, which wi=
+ll be
+>> +      used to map the MIPS CM registers block.
+>
+> This sounds like it should actually be a memory-region that references
+> some reserved memory, not a reg, given the description. I think the
+> commit message here is lacking any information about what the intentio=
+ns
+> are for this binding.
+So it's actually a register block that can be remapped to anywhere in
+MMIO address space. DeviceTree usually passes firmware's mapping location
+to kernel.
+
+There are some other similar bindings like mti,mips-cdmm and mti,mips-cp=
+c,
+I just copied phraseology from them, should I try to explain it more her=
+e?
+
+>
+>> +    maxItems: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    cm@1fbf8000 {
+>
+> And a generic node name here please. I actually don't quite know what =
+to
+> suggest though, but "coherency-manager" would likely be better than
+> "cm".
+Ok
+
+Thanks!
+- Jiaxun
+>
+> Thanks,
+> Conor.
+>
+>> +      compatible =3D "mti,mips-cm";
+>> +      reg =3D <0x1bde8000 0x8000>;
+>> +    };
+>> +...
+>>=20
+>> --=20
+>> 2.34.1
+>>=20
+>
+> =E9=99=84=E4=BB=B6:
+> * signature.asc
+
+--=20
+- Jiaxun
 
