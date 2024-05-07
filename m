@@ -1,132 +1,206 @@
-Return-Path: <linux-mips+bounces-3156-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3157-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A7A08BEF31
-	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 23:48:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B6388BF2F9
+	for <lists+linux-mips@lfdr.de>; Wed,  8 May 2024 02:03:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE19BB21C4D
-	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 21:48:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF6E71C217DE
+	for <lists+linux-mips@lfdr.de>; Wed,  8 May 2024 00:03:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 857AA78C72;
-	Tue,  7 May 2024 21:48:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B251130AEB;
+	Tue,  7 May 2024 23:32:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M25IOCRZ"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="kLgbb4QD"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4C177658;
-	Tue,  7 May 2024 21:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F19882D68
+	for <linux-mips@vger.kernel.org>; Tue,  7 May 2024 23:32:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715118517; cv=none; b=uzdZkBRnuO9/mMNFZzG9O95iqkfC2/5eWnbYyJ677iHrbSX6oPnXpZnwVuIxWavEqeqsXeZueMYC1q85K1to4Gl6A4WKyYiAoQB91ms8sk+7czAxOJut6fIkRAATkWMsCfditc1dBILHPYkMT3qLdymj++HDEAzDd5oYl8yJTGg=
+	t=1715124771; cv=none; b=Y6Di7WQT2y4dhuGnd5PsdXYHKSlNj8bOZOD3va8GmW9+eIAguqN6ZJ0/NA/4Gm2R02tG+mGiW2K4MXS+e8+cqxxmbwt+ma3v+tgeqQK3QFBhC1/HsUXtH8GP7Dj5LtaKmPHIlwtBMfZW5AL9v1yHmj7nU79k59L+Sh+tTyHfXWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715118517; c=relaxed/simple;
-	bh=kYExVs3vNwZrtKx+Xy37TbIuGlIJdAuIbdrEdpK1v1w=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=tzLamFpbp+KPo/x+4UV/3OXVF0Uz5R7JooNRNfuHgQPQqiTXQqUNTg57HLfy6tEquLqfACodFy+jkKYL5xuVdKYWsLkuQXnrXnGzvuTREtT27KxpG2oHQDKd5IG06UO3UVexwJSuMPrmypbe+lwyt76C5DBLkT4I8ipHPn2uSSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M25IOCRZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8C75C2BBFC;
-	Tue,  7 May 2024 21:48:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715118516;
-	bh=kYExVs3vNwZrtKx+Xy37TbIuGlIJdAuIbdrEdpK1v1w=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=M25IOCRZTNR8OgIC66y02fXlHkoX8fDq82A9T1fvm2I0jY47iyDErvHoTEfFbchYl
-	 mSHHEfUmA1loX81Nbx+G0Y0kBF4uSlUF3mJbTr9ATPeCSLwLIFOzt66L8IcjtWLWr/
-	 EtJsZOkf5WVfpj0ug8T5jUyCG6EM5BOWL/bwWNhWOnhCElU8SR0Rf0GbwiaOl/cMgj
-	 hN9xwJJU5mwisMFd+/Ze4IN0bmph62tYR00qvhDPXmd3D5f/a8NFEgXtyqxFiEGcP5
-	 JuyEGh923mgDUcMVgFa2rNWUN2pd0NqCNttTvM9rIb2Hmoc/+S4UmNp7sF12wFeZ7Y
-	 okDaNLFtqTVbA==
-Message-ID: <62e1512be0bc44acae9afb34467753db.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1715124771; c=relaxed/simple;
+	bh=S2uBTZg89QC23t/2WuaFpXUGHgJQVwlXA9YYtSljwBo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hDgAiIGFvpP24WSOrkLnvDSjmkIhz1jrsSpQXwJ9GwAr+0EG8mneV1pzVZdtT52iPsJsWAzeAUeWT0+UUlUJD54aeJx1eOJlUEqCCgsyob6zQEylK4kYgDEUAOzqQ1rQ4YfiAkHsFVW2FIZgNQ/glrk2NQFE/6sdnLFjerJPanc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=kLgbb4QD; arc=none smtp.client-ip=209.85.222.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-792940cc64cso332850385a.3
+        for <linux-mips@vger.kernel.org>; Tue, 07 May 2024 16:32:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1715124768; x=1715729568; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cP7hm5cgGIFObZwmlEXmT4H6ZLJ5hLejs2qh73QUpsY=;
+        b=kLgbb4QDiYjjhbVyqnASJTqYVBMpFZOu0trzJrO++O0tgH216w9YbqRM7XZIqXipzP
+         DU7LaKiHJo+E9DfRMOf3yG/lgGvIKPfZegBXl5VnL64GTcnVXxbA2wVHsGQ+Grsyo0fc
+         eSCOy1wI0RHUjdPVCTMH8wp2yDyyMFvV/XUHhkbTPNutQ72aqilYR3nVWDQQVwt5D1z2
+         CKQtLDYFc1SFzbSLM1F6oA/FT669ybhGR9UhqpSu7S/9p/Y0yeuCrv1BtOQGkQuoiPKM
+         IRDQC38DkPdYqATOLE4nt7CYXbckLb/80m/t3XhzxmOZ+VOgARatj3XQtpjCKsgKUATY
+         kZXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715124768; x=1715729568;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cP7hm5cgGIFObZwmlEXmT4H6ZLJ5hLejs2qh73QUpsY=;
+        b=EBmb+HsVooVQVs8OWmpSQMDbgOXcuMuKVWAASuPZb0VKRyoCiyYYvmeoopypS7gCpu
+         gzDNyLWPmSxjCl59mW8yAxzgihQXNMn6rMqVBAQD8/3N17qFfszOg6d/QCDkNAn+n8PN
+         GX3X3i8nEE/7PNZp5pF1kxM2vwK/+I2zRMCJfgAkfMtNad591wkFjb+1DJXvhtF5hK5b
+         tuDeiINbFNqLgMfIhdZ07dBU7yiqy/tacxkOrD60MVCiVFpMhcGdD6md+xJYbyE8eyHQ
+         XnuTTKdeGwZ7tFUFxXhUOwQdDLVerasRewy/ztcksQijutwm0jR64y0iUx5UAudPPARI
+         i+zg==
+X-Forwarded-Encrypted: i=1; AJvYcCWMHCCsWJ2ppmJ624iabHPgsHTr+qqj/RjKRZn3llxq9dhCiNPtM8s5Q+li9soPouiTrg1wrATWcl+QF+ZRLOmvldI5VqlSqHOZZA==
+X-Gm-Message-State: AOJu0YyPL4IyVCP8MStgMsuv2h3vBpARyAdnYW2/gn7yfOX3rsOeVTDj
+	IO9Dl8/U0FK2RXISrWoNejO8nbnZivgjawGUkNOmPLpRNfHG5APUIFzrVhVkpCk=
+X-Google-Smtp-Source: AGHT+IHk+yKjIhj9AR797n1JaOj9Z/2rWjQRz+xGELrz6+y3H07eSktk/E/cHfzwS8PtlVFgYI8C4w==
+X-Received: by 2002:a05:622a:60c:b0:434:b593:2d25 with SMTP id d75a77b69052e-43dbf0b35e3mr10728951cf.66.1715124768502;
+        Tue, 07 May 2024 16:32:48 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-80-239.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.80.239])
+        by smtp.gmail.com with ESMTPSA id fb20-20020a05622a481400b00434efa0feaasm6953842qtb.1.2024.05.07.16.32.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 May 2024 16:32:48 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1s4UIh-0003NT-Cq;
+	Tue, 07 May 2024 20:32:47 -0300
+Date: Tue, 7 May 2024 20:32:47 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: Mina Almasry <almasrymina@google.com>,
+	Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	David Ahern <dsahern@kernel.org>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	Amritha Nambiar <amritha.nambiar@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+	Kaiyuan Zhang <kaiyuanz@google.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Florian Westphal <fw@strlen.de>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
+	Arseniy Krasnov <avkrasnov@salutedevices.com>,
+	Aleksander Lobakin <aleksander.lobakin@intel.com>,
+	Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Richard Gobert <richardbgobert@gmail.com>,
+	Sridhar Samudrala <sridhar.samudrala@intel.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Johannes Berg <johannes.berg@intel.com>,
+	Abel Wu <wuyun.abel@bytedance.com>,
+	Breno Leitao <leitao@debian.org>, David Wei <dw@davidwei.uk>,
+	Shailend Chand <shailend@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Subject: Re: [RFC PATCH net-next v8 02/14] net: page_pool: create hooks for
+ custom page providers
+Message-ID: <20240507233247.GK4718@ziepe.ca>
+References: <CAHS8izM0=xc2UhUxhnF_BixuFs5VaDV9W1jbso1K+Rg=35NzeA@mail.gmail.com>
+ <ZjjHUh1eINPg1wkn@infradead.org>
+ <20b1c2d9-0b37-414c-b348-89684c0c0998@gmail.com>
+ <20240507161857.GA4718@ziepe.ca>
+ <ZjpVfPqGNfE5N4bl@infradead.org>
+ <CAHS8izPH+sRLSiZ7vbrNtRdHrFEf8XQ61XAyHuxRSL9Jjy8YbQ@mail.gmail.com>
+ <20240507164838.GG4718@ziepe.ca>
+ <0d5da361-cc7b-46e9-a635-9a7a4c208444@gmail.com>
+ <20240507175644.GJ4718@ziepe.ca>
+ <6a50d01a-b5b9-4699-9d58-94e5f8f81c13@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <D13HXGJGMS76.XIIIZLZBCZ09@bootlin.com>
-References: <20240503-mbly-olb-v2-0-95ce5a1e18fe@bootlin.com> <8dcdb1422cd144128c1dc6fff1c273d3.sboyd@kernel.org> <D13HXGJGMS76.XIIIZLZBCZ09@bootlin.com>
-Subject: Re: [PATCH v2 00/11] Add Mobileye EyeQ system controller support (clk, reset, pinctrl)
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, Gregory CLEMENT <gregory.clement@bootlin.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-To: Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Lee Jones <lee@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, Michael Turquette <mturquette@baylibre.com>, Philipp Zabel <p.zabel@pengutronix.de>, Rafael J. Wysocki <rafael@kernel.org>, Rob Herring <robh@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, =?utf-8?q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>
-Date: Tue, 07 May 2024 14:48:34 -0700
-User-Agent: alot/0.10
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6a50d01a-b5b9-4699-9d58-94e5f8f81c13@gmail.com>
 
-Quoting Th=C3=A9o Lebrun (2024-05-07 07:52:49)
-> On Sat May 4, 2024 at 4:34 AM CEST, Stephen Boyd wrote:
-> >
-> > Why can't you use auxiliary device and driver APIs?
->=20
-> Good question. Reasons I see:
->=20
->  - I didn't know about auxdev beforehand. I discussed the rework with a
->    few colleagues and none mentioned it either.
->=20
->  - It feels simpler to let each device access iomem resources. From my
->    understanding, an auxdev is supposed to make function calls to its
->    parent without inheriting iomem access. That sounds like it will put
->    the register logic/knowledge inside a single driver, which could or
->    could not be a better option.
+On Tue, May 07, 2024 at 08:35:37PM +0100, Pavel Begunkov wrote:
+> On 5/7/24 18:56, Jason Gunthorpe wrote:
+> > On Tue, May 07, 2024 at 06:25:52PM +0100, Pavel Begunkov wrote:
+> > > On 5/7/24 17:48, Jason Gunthorpe wrote:
+> > > > On Tue, May 07, 2024 at 09:42:05AM -0700, Mina Almasry wrote:
+> > > > 
+> > > > > 1. Align with devmem TCP to use udmabuf for your io_uring memory. I
+> > > > > think in the past you said it's a uapi you don't link but in the face
+> > > > > of this pushback you may want to reconsider.
+> > > > 
+> > > > dmabuf does not force a uapi, you can acquire your pages however you
+> > > > want and wrap them up in a dmabuf. No uapi at all.
+> > > > 
+> > > > The point is that dmabuf already provides ops that do basically what
+> > > > is needed here. We don't need ops calling ops just because dmabuf's
+> > > > ops are not understsood or not perfect. Fixup dmabuf.
+> > > 
+> > > Those ops, for example, are used to efficiently return used buffers
+> > > back to the kernel, which is uapi, I don't see how dmabuf can be
+> > > fixed up to cover it.
+> > 
+> > Sure, but that doesn't mean you can't use dma buf for the other parts
+> > of the flow. The per-page lifetime is a different topic than the
+> > refcounting and access of the entire bulk of memory.
+> 
+> Ok, so if we're leaving uapi (and ops) and keep per page/sub-buffer as
+> is, the rest is resolving uptr -> pages, and passing it to page pool in
+> a convenient to page pool format (net_iov).
 
-You can pass the iomem pointer to the child device, either through the
-struct device platform_data void pointer or you can make a wrapper
-struct for struct auxiliary_device that the child device/driver, e.g.
-pinctrl, would know about. Or you can use a regmap and pass that through
-to the function that creates the auxiliary device.
+I'm not going to pretend to know about page pool details, but dmabuf
+is the way to get the bulk of pages into a pool within the net stack's
+allocator and keep that bulk properly refcounted while.
 
-Either way, we don't want the iomem register logic inside a single
-driver. Conor recently made that change for mpfs. See this patch[1].
+An object like dmabuf is needed for the general case because there are
+not going to be per-page references or otherwise available.
 
-The syscon code uses a regmap so that register access uses a spinlock.
-Maybe you need that, or maybe you don't. I don't know. It depends on if
-the device has logical drivers that access some shared register. If that
-doesn't happen then letting the logical drivers map and access the
-registers with iomem accessors is fine. Otherwise, you want some sort of
-mediator function, where regmap helps make that easy to provide.
+What you seem to want is to alter how the actual allocation flow works
+from that bulk of memory and delay the free. It seems like a different
+topic to me, and honestly hacking into the allocator free function
+seems a bit weird..
 
->=20
->    Implementing a function like this feels like cheating:
->       int olb_read(struct device *dev, u32 offset, u32 *val);
->=20
->    With an MFD, we hand over a part of the iomem resource to each child
->    and they deal with it however they like.
->=20
->  - Syscon is what I picked to share parts of OLB to other devices that
->    need it. Currently that is only for I2C speed mode but other devices
->    have wrapping-related registers. MFD and syscon are deeply connected
->    so an MFD felt natural.
->=20
->  - That would require picking one device that is platform driver, the
->    rest being all aux devices. Clock driver appears to be the one, same
->    as two existing mpfs and starfive-jh7110 that use auxdev for clk and
->    reset.
->=20
-> Main reason I see for picking auxdev is that it forces devices to
-> interact with a defined internal API. That can lead to nicer
-> abstractions rather than inheriting resources as is being done in MFD.
->=20
-
-The simple-mfd binding encourages sub-nodes for drivers. This is an
-anti-pattern because we want nodes for devices, not drivers. We should
-discourage the use of that compatible in my opinion.
-
-I could see the MFD subsystem gaining support for creating child
-auxiliary devices for some compatible string node, and passing those
-devices a regmap. Maybe that would be preferable to having to pick a
-driver subsystem to put the platform driver in. Outside of making a
-general purpose framework, you could put the platform driver in
-drivers/mfd and have that populate the child devices like clk, reset,
-pinctrl, etc.
-
-The overall goal is still the same. Don't make child nodes.
-
-[1] https://lore.kernel.org/linux-clk/20240424-strangle-sharpener-34755c5e6=
-e3e@spud/
+Jason
 
