@@ -1,268 +1,188 @@
-Return-Path: <linux-mips+bounces-3154-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3155-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03A558BEBF9
-	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 20:53:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 492EF8BECAA
+	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 21:35:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 27D111C2335C
-	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 18:53:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B08BFB23B7E
+	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2024 19:35:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82CA416F0E0;
-	Tue,  7 May 2024 18:51:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3C9116E862;
+	Tue,  7 May 2024 19:35:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="kUo3SyVr";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="aYEDvQiN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UuFlJ0su"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from wfhigh2-smtp.messagingengine.com (wfhigh2-smtp.messagingengine.com [64.147.123.153])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D2816F0CE;
-	Tue,  7 May 2024 18:51:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387B61607A7;
+	Tue,  7 May 2024 19:35:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715107903; cv=none; b=JYfzHRNfH06MnEcH+h6RNe7lW+igckb3tvZqYLL4LPIPeaSsQJ0yJCIyG0R1WhoHLERHohh0N1v3wuspFJ6THlIHjI7/FLq0mwTCBKuMUAaMYjDt0wP5BiP7Bh8fP3wZNwTg0qb6ocT64FjgtOeSgi0ia/vVjotS+rkHfXN13LM=
+	t=1715110534; cv=none; b=habkOchynkxOnnxzvrE+ARJcehWMkU66aYgA5XMuTlT9/7pwBg+/3Kw/HMNGl1BpfqigvawLgdxVq3X9nDm2ijaT3SjKk8guPUvg2dKCfGMj9mx1jMIkttUsgWFHluqZImi28xWWrVHWSg5tdOB/zaH+DuvEpxfh0b4UMbKcjxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715107903; c=relaxed/simple;
-	bh=NkwgO3Xx+CZsPTw6Ct6xNfXjIzDoPYKA1nrX18S20Ho=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XF8Y9Ahniz6aDfMaYo3/f4oFw2zOUAV+fbRhUPnmscoI99Ad4GeNiE5j5r/B5nBuLaWev+uu4vqwXHHXeJlle4kI8pWE5OhHXJCtyoiJuTop04eHVdgVGLHOY+paecVPS1ixMP+/xzYRDoVuzFJ3/eM1PeaaQbBS7vKDDoqKxoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=kUo3SyVr; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=aYEDvQiN; arc=none smtp.client-ip=64.147.123.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-	by mailfhigh.west.internal (Postfix) with ESMTP id 7EF1A180008E;
-	Tue,  7 May 2024 14:51:40 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute7.internal (MEProxy); Tue, 07 May 2024 14:51:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1715107900;
-	 x=1715194300; bh=jf3K4jfhVQv94P++cE/GZXhfZxx3dBPciOpFjrGUmBw=; b=
-	kUo3SyVrVhaV6HJw+Mi2+XKYQz+bJgVj38c2a2j+gr2xGXsFM+obkZ0h70U9CfQU
-	sXN84h3tiOW73IhJwlXVXrZxK80DYWnevDc2sU4CmWS2oJtgp3ZYhZNoEIPK41bh
-	h2phgaVnnkgn8wjrXsbf8xo8L8zzM5Dx90W7brlhpmCgQLMzztu1EvQZphGrGYb3
-	9XyUjIspZD4TdR+83FkLH3ZaTOXgACiT2U2YqZHUub1QyCBmHR+T8lWGftGkVCDg
-	L/SQT90nCguXguta8qWG9WEKLhhk33y8HF0EWPfq0ygSORO4yXA3qffew5s0KkuE
-	cCgwFwnLmj2lgqsoxasvvg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1715107900; x=
-	1715194300; bh=jf3K4jfhVQv94P++cE/GZXhfZxx3dBPciOpFjrGUmBw=; b=a
-	YEDvQiNwF5keLlmSpuA/NggsJAF72KvQkuxwI7j74sTHFAblloqn8gU5r5BGWAet
-	Co3NyboJcLAGBxOJ6QorUUre0iHTCGh758EWkYOnc5xSddERSUFmsrjdquTFrQ5p
-	hr0MkA8tW44+ahDUtQclHt9SUBzhAgBTjZeZOLFQXCfFkRIhh6c7IQq+Gep9cBoN
-	sDmgyJlnYgbBSQMj0veNNwdh2QjNMfT0pllHMPoQLuUlFuaM5uFsdNZlZ+aep7H+
-	nz/T0uK0/YP/DQSwAJViXE+mvF5PyE7ND3wI1NwbO3LMMKUKzoyXOUKCG7gf2jfJ
-	KbPiwz2slLV51cUEumjeA==
-X-ME-Sender: <xms:O3g6ZlFGzOxPrZi4NEjfLcIHPf8UXBJWNhy6k22saqrfAY-d6V6fpQ>
-    <xme:O3g6ZqXSyLLFOKLRo_7jXvnSo9bOWccYzCzEDS1Kmll4Yn5SM7AsWsHeGG_CZUXnz
-    K--zt0ETFksLAjJ5wU>
-X-ME-Received: <xmr:O3g6ZnJGPspH_e7Ssw8XmKRIMQALPR222IvKDhefgz_CAHs7E92Rq0w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvddvkedguddvkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpedvkeeihfefveekueevteefleffkeegudeghfdtuddugefh
-    ueevgeffgedukeejleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:O3g6ZrHWySEwmg6qZeNW4vFoOEzTdz4EehLwrL_iST4jCqVzdB0kdQ>
-    <xmx:O3g6ZrUzQ18Xy-D1_etmA9yqxbK2Mr4idbJ7BRtk5GHML0T111A5Jg>
-    <xmx:O3g6ZmM-1BGbwmYIYpGRlPEKPmVlun4guvxCbIGON2t1oX-8h6MNzw>
-    <xmx:O3g6Zq0TTRdYHD0lFt9COPh3T_j3ByJ9bOBdzBK6BX8oFxZyTNEb6A>
-    <xmx:PHg6ZktZyfUqRV-GdSlEZlQu3Tug5htDsNTV2wPo1I7WB7ESUk0OEgEH>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 7 May 2024 14:51:38 -0400 (EDT)
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Tue, 07 May 2024 19:51:22 +0100
-Subject: [PATCH 4/4] MIPS: Loongson64: DTS: Fix PCIe port nodes for ls7a
+	s=arc-20240116; t=1715110534; c=relaxed/simple;
+	bh=K7koNsOotobWiysspCzAcVC3GFkF8Gu5l5G8dKp2Hak=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EAmh29qBxSn4VkyAw+CQOCB+/5RA/drT0+1hJA83BaZWRy8jdUiIu6zjhcFYqv5OHJQd7oTpwvcWgFrBgyZi9Bx+fBRhb5tG3ECZmDzTV+Vu7s7eye8VdD4U9/FYHGkQDWzhRFk7qtgqD9P4fIdYr88QTlGmpOfWOFfEaNpmG4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UuFlJ0su; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-41c1b75ca31so26297875e9.2;
+        Tue, 07 May 2024 12:35:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715110531; x=1715715331; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0MsVmwcc7IjdJ/e1qKc5IeNtKIDJim+5sn115KirsXM=;
+        b=UuFlJ0suPwJAUR9NA4My7Sr82F1k55jAJas2JUPg41UEYltdHEHV2ud2/6txlmgxDy
+         YKvZ/Letr2rCL08NZuYM9UnoXohx3ZIih0KyrvtucKBHXoGLo9PvYI8fHbJMIUPNHgqh
+         tUWYaGnZXsdLhKdI6VYiH2xg4Ph1niwTSIuWZeNLCilDaKa0YfrGjZgJvJ4L+PI+fbfK
+         2PQxFozR/WueZRSzZK6FNLafTuqos6y22WvJRtOxBRscZf4k+AZ0tQ8eZnlQ/Bd23qHO
+         1e7rXg+pTAzZtjVRl5onJ6VVczBpYRT6b242KVfR+Q/u6bBVakLasqPYxmeGYWfe7A2b
+         eDBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715110531; x=1715715331;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0MsVmwcc7IjdJ/e1qKc5IeNtKIDJim+5sn115KirsXM=;
+        b=YtXJMXgxu/pu7uH4kznEhGIShVKwUV5ja/yiEciIucAQLv79lnL+yV6O796uURabIl
+         BthNkKeVBfiC7hUyU8AdywQ/MylR3nlo4JJaJodJweCPeWpydfBSaym2Xfw4Nd4hm2JY
+         CE8UIK5DZBHJw/DK+fcl+v5PrHLJ23+l6f2bzwWaSFC6K/uNRkt3nZwp72dPmamPkcK3
+         ruOM7qF8wevuRdc46Ll9OE1JvcB29+BE7M3rRyz2cGx+la3Qg6vqAeKULs6BESwsitYg
+         9RFHkVhI3H0wenJDPXf4xzr6VcI9FwF2G31265zVHrOW8HrzfgN23LiyfV1hTaG6E97v
+         wdjw==
+X-Forwarded-Encrypted: i=1; AJvYcCVFVgyFYMcvrkM2ANpIpJbyDvBKnVMsfOyYlKgtcErJiJriNxnRwu2mgZRlmpJUaVBxvOIzpfff9SCJdYj//abMa2xfWi0VGh2Oc9b01xo1WkhvYVW362ud66c/+G85z64L2WHsmToEzT0s5Tr/z1fy1eSormgU3hPOT4mzipw6BAzmsVS3o6TS8FDrrFXoc9dRcOLd8aP5kx93YdBEZSqjWFqsHrYaDcXkC2VT2gDeX4A9r0Ks40drbK+HuZpVyq+7DkcCYIp7O9X3zKPfTTjLVd/3Czti/m1LLYbh6vIsOek+qH6xYnyHk1P7HeUyam3J4L+tk2N+BCWlUK6Y608TzJd/TN2C5FYt9fwMMngHhESJgQru5WluPAjA6Qv0Hc624tnX1EsY2IFu0eOJnJh58PMGXdw5mIXaPigUngLa5RW0npxyc98eFHM/o/sF933e1Zqk/l3BvbpNYSrrvKer/T+4CWtlj2ZWaW/g8TLRtMD2CVYWTzWyfvJOhVJKAGSvTkwG6w==
+X-Gm-Message-State: AOJu0YyjcI6OSzo3UzcOA1ufPXfhtl/igDrHzHNil1Z0xD2+SZ6l+Z0n
+	u7whzzC5MqGnzgc0bndbMfTRgya8NR4R2h9DNDxoo6ydchvy3F5u
+X-Google-Smtp-Source: AGHT+IEykirY9gyWc0Q9cAc6TvBa0+t0xp9ehEp+M4lSOcYK9DTE6BwXpCm/3e/UtlGIJu+qNRFaFg==
+X-Received: by 2002:a05:600c:3583:b0:418:ed13:302d with SMTP id 5b1f17b1804b1-41f723a1a0amr5612735e9.26.1715110531198;
+        Tue, 07 May 2024 12:35:31 -0700 (PDT)
+Received: from [192.168.42.69] ([85.255.235.91])
+        by smtp.gmail.com with ESMTPSA id z5-20020a05600c0a0500b0041bd85cd3f2sm20447278wmp.19.2024.05.07.12.35.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 May 2024 12:35:30 -0700 (PDT)
+Message-ID: <6a50d01a-b5b9-4699-9d58-94e5f8f81c13@gmail.com>
+Date: Tue, 7 May 2024 20:35:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH net-next v8 02/14] net: page_pool: create hooks for
+ custom page providers
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Mina Almasry <almasrymina@google.com>,
+ Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Amritha Nambiar <amritha.nambiar@intel.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+ Kaiyuan Zhang <kaiyuanz@google.com>, Christian Brauner <brauner@kernel.org>,
+ Simon Horman <horms@kernel.org>, David Howells <dhowells@redhat.com>,
+ Florian Westphal <fw@strlen.de>, Yunsheng Lin <linyunsheng@huawei.com>,
+ Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
+ Arseniy Krasnov <avkrasnov@salutedevices.com>,
+ Aleksander Lobakin <aleksander.lobakin@intel.com>,
+ Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Lorenzo Bianconi <lorenzo@kernel.org>,
+ Richard Gobert <richardbgobert@gmail.com>,
+ Sridhar Samudrala <sridhar.samudrala@intel.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+ Johannes Berg <johannes.berg@intel.com>, Abel Wu <wuyun.abel@bytedance.com>,
+ Breno Leitao <leitao@debian.org>, David Wei <dw@davidwei.uk>,
+ Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
+References: <20240403002053.2376017-3-almasrymina@google.com>
+ <ZjH1QaSSQ98mw158@infradead.org>
+ <CAHS8izM0=xc2UhUxhnF_BixuFs5VaDV9W1jbso1K+Rg=35NzeA@mail.gmail.com>
+ <ZjjHUh1eINPg1wkn@infradead.org>
+ <20b1c2d9-0b37-414c-b348-89684c0c0998@gmail.com>
+ <20240507161857.GA4718@ziepe.ca> <ZjpVfPqGNfE5N4bl@infradead.org>
+ <CAHS8izPH+sRLSiZ7vbrNtRdHrFEf8XQ61XAyHuxRSL9Jjy8YbQ@mail.gmail.com>
+ <20240507164838.GG4718@ziepe.ca>
+ <0d5da361-cc7b-46e9-a635-9a7a4c208444@gmail.com>
+ <20240507175644.GJ4718@ziepe.ca>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20240507175644.GJ4718@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240507-loongson64-warnings-v1-4-2cad88344e9e@flygoat.com>
-References: <20240507-loongson64-warnings-v1-0-2cad88344e9e@flygoat.com>
-In-Reply-To: <20240507-loongson64-warnings-v1-0-2cad88344e9e@flygoat.com>
-To: Huacai Chen <chenhuacai@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>, 
- Paolo Bonzini <pbonzini@redhat.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org, 
- kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4399;
- i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=NkwgO3Xx+CZsPTw6Ct6xNfXjIzDoPYKA1nrX18S20Ho=;
- b=owGbwMvMwCHmXMhTe71c8zDjabUkhjSrCt1Ky+OVNZtkZycEOfxuE460CH8r1HhS1ezpyfOL9
- hU2LYnuKGVhEONgkBVTZAkRUOrb0HhxwfUHWX9g5rAygQxh4OIUgInYv2dk+LVD0Dv/b+xmaZNT
- SQGST+bvnVecZcpz1PBp2JnqhNZblxgZdjAkVtSUxS71Kxbk37pJuuew/cL9v56kFlQ+er1GqGo
- LGwA=
-X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
- fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-Add various required properties to silent warnings:
+On 5/7/24 18:56, Jason Gunthorpe wrote:
+> On Tue, May 07, 2024 at 06:25:52PM +0100, Pavel Begunkov wrote:
+>> On 5/7/24 17:48, Jason Gunthorpe wrote:
+>>> On Tue, May 07, 2024 at 09:42:05AM -0700, Mina Almasry wrote:
+>>>
+>>>> 1. Align with devmem TCP to use udmabuf for your io_uring memory. I
+>>>> think in the past you said it's a uapi you don't link but in the face
+>>>> of this pushback you may want to reconsider.
+>>>
+>>> dmabuf does not force a uapi, you can acquire your pages however you
+>>> want and wrap them up in a dmabuf. No uapi at all.
+>>>
+>>> The point is that dmabuf already provides ops that do basically what
+>>> is needed here. We don't need ops calling ops just because dmabuf's
+>>> ops are not understsood or not perfect. Fixup dmabuf.
+>>
+>> Those ops, for example, are used to efficiently return used buffers
+>> back to the kernel, which is uapi, I don't see how dmabuf can be
+>> fixed up to cover it.
+> 
+> Sure, but that doesn't mean you can't use dma buf for the other parts
+> of the flow. The per-page lifetime is a different topic than the
+> refcounting and access of the entire bulk of memory.
 
-arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi:116.16-297.5: Warning (interrupt_provider): /bus@10000000/pci@1a000000: '#interrupt-cells' found, but node is not an interrupt provider
-arch/mips/boot/dts/loongson/loongson64_2core_2k1000.dtb: Warning (interrupt_map): Failed prerequisite 'interrupt_provider'
-
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi | 37 ++++++++++++++++++----
- 1 file changed, 30 insertions(+), 7 deletions(-)
-
-diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-index ee3e2153dd13..b5593f7cc383 100644
---- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-+++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-@@ -118,7 +118,6 @@ pci@1a000000 {
- 			device_type = "pci";
- 			#address-cells = <3>;
- 			#size-cells = <2>;
--			#interrupt-cells = <2>;
- 
- 			reg = <0 0x1a000000 0 0x02000000>,
- 				<0xfe 0x00000000 0 0x20000000>;
-@@ -204,93 +203,117 @@ sata@8,0 {
- 				interrupt-parent = <&liointc0>;
- 			};
- 
--			pci_bridge@9,0 {
-+			pcie@9,0 {
- 				compatible = "pci0014,7a19.0",
- 						   "pci0014,7a19",
- 						   "pciclass060400",
- 						   "pciclass0604";
- 
- 				reg = <0x4800 0x0 0x0 0x0 0x0>;
-+				#address-cells = <3>;
-+				#size-cells = <2>;
-+				device_type = "pci";
- 				#interrupt-cells = <1>;
- 				interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
- 				interrupt-parent = <&liointc1>;
- 				interrupt-map-mask = <0 0 0 0>;
- 				interrupt-map = <0 0 0 0 &liointc1 0 IRQ_TYPE_LEVEL_LOW>;
-+				ranges;
- 				external-facing;
- 			};
- 
--			pci_bridge@a,0 {
-+			pcie@a,0 {
- 				compatible = "pci0014,7a09.0",
- 						   "pci0014,7a09",
- 						   "pciclass060400",
- 						   "pciclass0604";
- 
- 				reg = <0x5000 0x0 0x0 0x0 0x0>;
-+				#address-cells = <3>;
-+				#size-cells = <2>;
-+				device_type = "pci";
- 				#interrupt-cells = <1>;
- 				interrupts = <1 IRQ_TYPE_LEVEL_LOW>;
- 				interrupt-parent = <&liointc1>;
- 				interrupt-map-mask = <0 0 0 0>;
- 				interrupt-map = <0 0 0 0 &liointc1 1 IRQ_TYPE_LEVEL_LOW>;
-+				ranges;
- 				external-facing;
- 			};
- 
--			pci_bridge@b,0 {
-+			pcie@b,0 {
- 				compatible = "pci0014,7a09.0",
- 						   "pci0014,7a09",
- 						   "pciclass060400",
- 						   "pciclass0604";
- 
- 				reg = <0x5800 0x0 0x0 0x0 0x0>;
-+				#address-cells = <3>;
-+				#size-cells = <2>;
-+				device_type = "pci";
- 				#interrupt-cells = <1>;
- 				interrupts = <2 IRQ_TYPE_LEVEL_LOW>;
- 				interrupt-parent = <&liointc1>;
- 				interrupt-map-mask = <0 0 0 0>;
- 				interrupt-map = <0 0 0 0 &liointc1 2 IRQ_TYPE_LEVEL_LOW>;
-+				ranges;
- 				external-facing;
- 			};
- 
--			pci_bridge@c,0 {
-+			pcie@c,0 {
- 				compatible = "pci0014,7a09.0",
- 						   "pci0014,7a09",
- 						   "pciclass060400",
- 						   "pciclass0604";
- 
- 				reg = <0x6000 0x0 0x0 0x0 0x0>;
-+				#address-cells = <3>;
-+				#size-cells = <2>;
-+				device_type = "pci";
- 				#interrupt-cells = <1>;
- 				interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
- 				interrupt-parent = <&liointc1>;
- 				interrupt-map-mask = <0 0 0 0>;
- 				interrupt-map = <0 0 0 0 &liointc1 3 IRQ_TYPE_LEVEL_LOW>;
-+				ranges;
- 				external-facing;
- 			};
- 
--			pci_bridge@d,0 {
-+			pcie@d,0 {
- 				compatible = "pci0014,7a19.0",
- 						   "pci0014,7a19",
- 						   "pciclass060400",
- 						   "pciclass0604";
- 
- 				reg = <0x6800 0x0 0x0 0x0 0x0>;
-+				#address-cells = <3>;
-+				#size-cells = <2>;
-+				device_type = "pci";
- 				#interrupt-cells = <1>;
- 				interrupts = <4 IRQ_TYPE_LEVEL_LOW>;
- 				interrupt-parent = <&liointc1>;
- 				interrupt-map-mask = <0 0 0 0>;
- 				interrupt-map = <0 0 0 0 &liointc1 4 IRQ_TYPE_LEVEL_LOW>;
-+				ranges;
- 				external-facing;
- 			};
- 
--			pci_bridge@e,0 {
-+			pcie@e,0 {
- 				compatible = "pci0014,7a09.0",
- 						   "pci0014,7a09",
- 						   "pciclass060400",
- 						   "pciclass0604";
- 
- 				reg = <0x7000 0x0 0x0 0x0 0x0>;
-+				#address-cells = <3>;
-+				#size-cells = <2>;
-+				device_type = "pci";
- 				#interrupt-cells = <1>;
- 				interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
- 				interrupt-parent = <&liointc1>;
- 				interrupt-map-mask = <0 0 0 0>;
- 				interrupt-map = <0 0 0 0 &liointc1 5 IRQ_TYPE_LEVEL_LOW>;
-+				ranges;
- 				external-facing;
- 			};
- 
+Ok, so if we're leaving uapi (and ops) and keep per page/sub-buffer as
+is, the rest is resolving uptr -> pages, and passing it to page pool in
+a convenient to page pool format (net_iov). I don't see how dmabuf would
+help here. Adding dmabuf in the middle (internally wrapping pages) would
+add more setup code with the same final result, that is a format that
+page pool can work with. And for io_uring it's normal user memory. We'll
+have to use dmabuf when we'd want to extend to peer-to-peer and all that
+fun, but that's a small fraction of it, and we'll hopefully reuse some
+setup helpers from devmem tcp.
 
 -- 
-2.34.1
-
+Pavel Begunkov
 
