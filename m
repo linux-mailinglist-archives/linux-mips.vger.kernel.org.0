@@ -1,184 +1,190 @@
-Return-Path: <linux-mips+bounces-3176-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3177-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4685C8C0273
-	for <lists+linux-mips@lfdr.de>; Wed,  8 May 2024 19:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D35758C027E
+	for <lists+linux-mips@lfdr.de>; Wed,  8 May 2024 19:02:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB8EB1F243F4
-	for <lists+linux-mips@lfdr.de>; Wed,  8 May 2024 17:01:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 495911F2310F
+	for <lists+linux-mips@lfdr.de>; Wed,  8 May 2024 17:02:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01AC68828;
-	Wed,  8 May 2024 17:01:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E6A7DF59;
+	Wed,  8 May 2024 17:02:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MfScOLOR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OnynkGDj"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C847DDDD2;
-	Wed,  8 May 2024 17:01:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A327D3D6D;
+	Wed,  8 May 2024 17:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715187667; cv=none; b=RK3fQAr3g1a43DBktoyW6FAzNoLteq7TkoHtuCKbbPKvPTm4h3FsOtX6zwXQTLGkoIkKz0hfwVFDixfinqTFV8Vg4Abt/32yhaACAw0btG4cJCVRcT5iki00hHWmiZax1I1+G5r3xA8xYxRdpo/Y4lBdqYmI8qtZDxu37fWUAmU=
+	t=1715187731; cv=none; b=UxH8eXHBHkuj34qgT9p99MVGWvI9rFKZIQSpHRWj2u5yGaKNOE9ALmtlXSBVUGvFHl+slDS2KsaSxQ1Pxav6CmQAfGTeMiEvnEg6oWQz67APrU6zUEqaECrcK8A9VROX+QD/V5IMkl9sC7Z6cmAQnIPWvM0arrFxqTS7I+TqFto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715187667; c=relaxed/simple;
-	bh=STM3fI9GyHweIwkuRf0VR/kVGXkNc6VIGqBgZKTd3ew=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WyIpTt4rZdRoBYgyzhFQrKyu94UiA7JT3PWo4hxLc6eytIXnHiUANh/pwjk1oxPH7KQ/qGzP9MnZlyzB80L/EvnRTtTJ2UODdZV5XXS9bjl5l0E6nd5jkDEvyZ5CcGBXKNv3hsnBzh1LGvJpV5cnPl0+Mi9qDV/nVGgqp7z3CfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MfScOLOR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55029C113CC;
-	Wed,  8 May 2024 17:01:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715187667;
-	bh=STM3fI9GyHweIwkuRf0VR/kVGXkNc6VIGqBgZKTd3ew=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MfScOLORS/pkJar9tewfFa5frHmMHnT+LrmuC494vapwjBZ3A7mwT3ApzF/dGf8Jp
-	 0Bpdlnt9bXIYYUHmaZyaehVQUOLa29TK15ziK1WUnGUjEwgyevk6zDhqYPrLSgoZMz
-	 +tQjrlfZZMK4odyzAAAIV3F4SAtosgVNj6YMYg1IOFUVyh41n+84Cx032dYbxvShtC
-	 DWlbbvP/Ug9HWlz/BZpOYBy2TW2yNc30pCPnPffremMMcWUwIPDk1zWcQI7Es2A27i
-	 JwuzxbxvzShmCL3y7A4n734T/GVhQNVE6tHTxSICEF2VT8RpRQ7ujHxqo2339KQ/zt
-	 nmI9TAN/vcxWQ==
-Date: Wed, 8 May 2024 18:01:03 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: "paulburton@kernel.org" <paulburton@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 4/5] dt-bindings: mips: Document mti,mips-cm
-Message-ID: <20240508-puzzle-directive-b6f771f92fe9@spud>
-References: <20240507-cm_probe-v1-0-11dbfd598f3c@flygoat.com>
- <20240507-cm_probe-v1-4-11dbfd598f3c@flygoat.com>
- <20240507-jokester-antelope-808b21b957e6@spud>
- <fbb4b8e2-edf4-4b4e-8b71-154a09f24ccd@app.fastmail.com>
+	s=arc-20240116; t=1715187731; c=relaxed/simple;
+	bh=RJTd0DFSkwcgQXADy0NPRv8wgTOjMh4ljQ8AnIpUJ68=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=l2oy45pIPoxI6s7jE2GHb4Fw9dOipddjkUxShixpx5G0Yt5PhU0P3Odnpvc/w2rhN/bTnjouPGPa1ePzx27ZaEf7BbMKTsiXd0iFIxYyH7pXPjFZts52pQ2qIg6swO+0Pnan+sqU0eI0Bjz2AJ3Kc7q6AMwUMT2q7d8FP96Q7ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OnynkGDj; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a599af16934so1168471766b.1;
+        Wed, 08 May 2024 10:02:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715187728; x=1715792528; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w63SX1W8IWtKWaRdVmF8DRJBTDth/aiRDPCWeP/m/u8=;
+        b=OnynkGDjg0vGkDGdSEon5d0xDjiqrzpioqZiHuL0Nag9NOdtNmLL3NPjDyUSxO/8Zh
+         Sl+gc5S7CVBd88KtjhJXiNeDchtVDDGKv6H/SAE6+GLdMr1ysapTuwr7Pr4/78062sv7
+         U1lM4WybzDoSe5R2r24p9NH3yIBvBq9+pDtp0CzFHUBmR/pJCTQiP0KU5gSlQeVFN4rX
+         IZgnJ+Sil5bIFR5pjfTpMuErMJKV2AJwbjhVuPdWn6lEcT1GnlbKS3hG7EdRBqH91WIf
+         QZNhxXRNenOywRA9FMky14JAU1+sR83V/REHv91nu+Q82sjYZhD1WE/rxIzMUY0c6uZX
+         cirQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715187728; x=1715792528;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w63SX1W8IWtKWaRdVmF8DRJBTDth/aiRDPCWeP/m/u8=;
+        b=bmsFr1k1KAJQ7Q3VUl8EgsqIvJ4zlhHOTlJAFPNLqOfUOXUaUNjsa4FJ1cck1yIQ/E
+         qgmHYmaTf3bnH7E8vdW1sX2XKBWzJwT6Vg9cgxlyaHkrDKKvC0WKN8ncxsvQz9cdkJDk
+         DrragEDQ550BH3PcG5acaNQoJjjC8/zRHXiko+XZXNecX8+XWK5MOYMAqrCMjk7DxLdg
+         2GCWkLgDr274wq25oI/vkS1fmr1ikW6ZzDULYq0htd5k1lSi9uQP3PDDHOAbZh1XJmzK
+         KCVC7AwCLecgS/Gz+ocUG8uGMav5V7rYwdMSi4eKqqtKIpyXLTi6KsDmUWEYwIY2ZHnP
+         BeZA==
+X-Forwarded-Encrypted: i=1; AJvYcCVpZDVMJVxmnosHfPGBUJMOY92ouCL7Dc7PEjsoGbREL1ZbBeSsordAD3mlP+0KGUAYo+xo+Z9CsdgRakUKWjkHXcs71G8S5O568Ki8JmyxizvHh2iqX+jmRSaQzHEiORYPR1UfuO8sfXG2unlshuu/BJvLBJ8yIhZukc3/RxrWKs2sUGBjENu0x9D+3+drv9jU6aty54HCvgwcyDXEEBOqIcuvylKvAPKGT9S8upE+KcSriQ6rjbTOpn86kI3OOQEK88UemXG2lsRnLMoKd3u9+Bep3b16RXRt/hiCNxLLvG9xfuN1rAAax2y8pbjCS+inxRjmwjJUNArkS3Guza5x69y5Rm3ApBxxizEcjyOLZ1gy0ZeT8E8Xv6/4ARSX3IKjjs0Gy5vfZossSp54rsDPqP3ZMSc+rNPULtkfQ3PIg/Us2jH7h1bPsZzDGqB9brrPJ/237rk0AKogMHh80g3k+ugvK9gOGVMWetnLavzm68pQBEPoP6iaq4QQAVmu1aEpk9QdQg==
+X-Gm-Message-State: AOJu0Yyj11/IJlgWqJLmmpp73awguVVf+GMiNUelEDHixyVS4C+4Of5W
+	MZeZKY7W70ZMHk5kmHJiaRKhShh5qBSlDiuepajjS5JyNVNG+1JV
+X-Google-Smtp-Source: AGHT+IGnIbHLe2S57apepPi+KOdstUOemuaNblSGc79A9OnsYp187XWHNbGjxYPqzEX3412l6BXKTQ==
+X-Received: by 2002:a17:907:7286:b0:a59:bacc:b07f with SMTP id a640c23a62f3a-a59fb9d6452mr265356266b.52.1715187727754;
+        Wed, 08 May 2024 10:02:07 -0700 (PDT)
+Received: from [192.168.42.40] ([163.114.131.193])
+        by smtp.gmail.com with ESMTPSA id n18-20020a170906841200b00a59a8a5dd15sm5634228ejx.206.2024.05.08.10.02.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 May 2024 10:02:07 -0700 (PDT)
+Message-ID: <8ced4c49-d153-40fb-9e62-0a5784cfa864@gmail.com>
+Date: Wed, 8 May 2024 18:02:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="L+OpDBD0ahnwdeqe"
-Content-Disposition: inline
-In-Reply-To: <fbb4b8e2-edf4-4b4e-8b71-154a09f24ccd@app.fastmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH net-next v8 02/14] net: page_pool: create hooks for
+ custom page providers
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, Mina Almasry <almasrymina@google.com>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Amritha Nambiar <amritha.nambiar@intel.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+ Kaiyuan Zhang <kaiyuanz@google.com>, Christian Brauner <brauner@kernel.org>,
+ Simon Horman <horms@kernel.org>, David Howells <dhowells@redhat.com>,
+ Florian Westphal <fw@strlen.de>, Yunsheng Lin <linyunsheng@huawei.com>,
+ Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
+ Arseniy Krasnov <avkrasnov@salutedevices.com>,
+ Aleksander Lobakin <aleksander.lobakin@intel.com>,
+ Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Lorenzo Bianconi <lorenzo@kernel.org>,
+ Richard Gobert <richardbgobert@gmail.com>,
+ Sridhar Samudrala <sridhar.samudrala@intel.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+ Johannes Berg <johannes.berg@intel.com>, Abel Wu <wuyun.abel@bytedance.com>,
+ Breno Leitao <leitao@debian.org>, David Wei <dw@davidwei.uk>,
+ Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
+References: <20240507161857.GA4718@ziepe.ca> <ZjpVfPqGNfE5N4bl@infradead.org>
+ <CAHS8izPH+sRLSiZ7vbrNtRdHrFEf8XQ61XAyHuxRSL9Jjy8YbQ@mail.gmail.com>
+ <20240507164838.GG4718@ziepe.ca>
+ <0d5da361-cc7b-46e9-a635-9a7a4c208444@gmail.com>
+ <20240507175644.GJ4718@ziepe.ca>
+ <6a50d01a-b5b9-4699-9d58-94e5f8f81c13@gmail.com>
+ <20240507233247.GK4718@ziepe.ca> <Zjsm3vO6rIY_sw5A@phenom.ffwll.local>
+ <1e2823db-504b-4829-856f-3f45a45ccada@gmail.com>
+ <ZjufddNVJs5Csaix@infradead.org>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <ZjufddNVJs5Csaix@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 5/8/24 16:51, Christoph Hellwig wrote:
+> On Wed, May 08, 2024 at 12:35:52PM +0100, Pavel Begunkov wrote:
+>>> all these, because e.g. ttm internally does have a page pool because
+>>> depending upon allocator, that's indeed beneficial. Other drm drivers have
+>>> more buffer-based concepts for opportunistically memory around, usually
+>>> by marking buffers that are just kept as cache as purgeable (which is a
+>>> concept that goes all the way to opengl/vulkan).
+>>
+>> Because in this case it solves nothing and helps with nothing, quite
+>> the opposite. Just as well we can ask why NVMe doesn't wrap user pages
+>> into a dmabuf while doing IO.
+> 
+> You seem to confused totally unrelated things.
+>
+> For short-term pins, that is pin_user_pages without FOLL_LONGTERM there
+> would never be any point in using a dmabuf as the pin is transient.  For
+> long-term pin dmabufs in the block layer absolutely make sense, and I
 
---L+OpDBD0ahnwdeqe
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Well, the example fell flat, but you don't use dmabuf when there are
+no upsides from using it. For instance, when you already have pinned
+pages, you're going to use pages, and there are no other refcounting
+concerns. Unless there is an advantage of dmabufs over FOLL_LONGTERM
+that I don't know about when used with normal user pages.
 
-On Tue, May 07, 2024 at 07:16:25PM +0100, Jiaxun Yang wrote:
->=20
->=20
-> =E5=9C=A82024=E5=B9=B45=E6=9C=887=E6=97=A5=E4=BA=94=E6=9C=88 =E4=B8=8B=E5=
-=8D=885:50=EF=BC=8CConor Dooley=E5=86=99=E9=81=93=EF=BC=9A
-> > On Tue, May 07, 2024 at 10:01:52AM +0100, Jiaxun Yang wrote:
-> >> Add devicetree binding documentation for MIPS Coherence Manager.
-> >>=20
-> >> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> >> ---
-> >>  .../devicetree/bindings/mips/mips-cm.yaml          | 37 +++++++++++++=
-+++++++++
-> >>  1 file changed, 37 insertions(+)
-> >>=20
-> >> diff --git a/Documentation/devicetree/bindings/mips/mips-cm.yaml b/Doc=
-umentation/devicetree/bindings/mips/mips-cm.yaml
-> >> new file mode 100644
-> >> index 000000000000..b92b008d7758
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/mips/mips-cm.yaml
-> Hi Cornor,
->=20
-> Thanks for your comments.
->=20
-> >
-> > Filename matching the compatible please.
-> Ok.
->=20
-> >
-> >> @@ -0,0 +1,37 @@
-> >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >> +%YAML 1.2
-> >> +---
-> >> +$id: http://devicetree.org/schemas/mips/mips-cm.yaml#
-> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: MIPS Coherence Manager
-> >> +
-> >> +description: |
-> >> +  Defines a location of the MIPS Coherence Manager registers.
-> >> +
-> >> +maintainers:
-> >> +  - Jiaxun Yang <jiaxun.yang@flygoat.com>
-> >> +
-> >> +properties:
-> >> +  compatible:
-> >> +    const: mti,mips-cm
-> >
-> > Is it actually only available on mips? Google seems to report there
-> > being Coherence Managers on their RISC-V offerings too.
->=20
-> I think for MIPS's RISC-V system, it is only used by SBI and transparent
-> to kernel, so it won't present in DT.=20
+> wish io_uring would have just implemented them from the start instead of
+> the current fixed buffers that are not quite as useful by not
+> pre-mapping DMA and not supporting P2P.
 
-Devicetree isn't just for Linux, things that only the SBI implementation
-cares about should also be documented in bindings - or at least I try to
-get them to be, where I have enough sway to have it happen..
+fdget(dmabuf) would be horrible, I assume that's not the suggestion.
+But then it's really about kernel internals, and theoretically can
+be patched to wrap user pages into a dmabuf and pass it in. The tricky
+part is how that "pass it in" should looks like. Keith tried to cover
+both pre-mapping and p2p by registering dmabuf and passing the mapped
+addresses in an iter IIRC.
 
-> Register fields for RISC-V system is totally different with MIPS one, and
-> there is no driver to be reused. In MIPS system CM code is highly coupled
-> with arch code, so for RISC-V if we want to expose it to kernel we'll need
-> a new set of driver and a new binding.
+Anyway, this discussion should better move from to block/fs lists,
+if there is any interest.
 
-Right, that's a reasonable reason (lol) for having it be declared as
-mips-specific.
-
-> >> +  reg:
-> >> +    description: |
-> >
-> > The | isn't needed, there's no formatting to preserve.
-> Ok.
->=20
-> >
-> >> +      Base address and size of an unoccupied memory region, which wil=
-l be
-> >> +      used to map the MIPS CM registers block.
-> >
-> > This sounds like it should actually be a memory-region that references
-> > some reserved memory, not a reg, given the description. I think the
-> > commit message here is lacking any information about what the intentions
-> > are for this binding.
-> So it's actually a register block that can be remapped to anywhere in
-> MMIO address space. DeviceTree usually passes firmware's mapping location
-> to kernel.
->=20
-> There are some other similar bindings like mti,mips-cdmm and mti,mips-cpc,
-> I just copied phraseology from them, should I try to explain it more here?
-
-The description that you've given here is of something that sounded
-awfully like mapping into a location in DDR etc, is it actually being
-mapped into a non-memory address?
-
-Thanks,
-Conor.
-
---L+OpDBD0ahnwdeqe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZjuvzwAKCRB4tDGHoIJi
-0hWmAQDczIwGwAw6NKsPZytb5KFOytlrWSv+Tv2mAiWS/KhzmQEAhfoJKb3390mf
-xqMiTAXMuYU+iAjqyZfpWgcymnsVBQY=
-=GnaL
------END PGP SIGNATURE-----
-
---L+OpDBD0ahnwdeqe--
+-- 
+Pavel Begunkov
 
