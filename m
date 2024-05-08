@@ -1,188 +1,195 @@
-Return-Path: <linux-mips+bounces-3173-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3174-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0A2F8C01BB
-	for <lists+linux-mips@lfdr.de>; Wed,  8 May 2024 18:13:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 284978C01E9
+	for <lists+linux-mips@lfdr.de>; Wed,  8 May 2024 18:24:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C2C228B607
-	for <lists+linux-mips@lfdr.de>; Wed,  8 May 2024 16:13:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D823228184A
+	for <lists+linux-mips@lfdr.de>; Wed,  8 May 2024 16:24:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74AC2129E9A;
-	Wed,  8 May 2024 16:13:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B235C1292C3;
+	Wed,  8 May 2024 16:24:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TAvZlWEK"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="M5r0f/1E";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bzOvvdS9"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout3-smtp.messagingengine.com (fout3-smtp.messagingengine.com [103.168.172.146])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A348184A38;
-	Wed,  8 May 2024 16:13:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEDF76D1B0;
+	Wed,  8 May 2024 16:24:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715184820; cv=none; b=iOBI6jT+0x7qgRqlefPWItZGAzdQMoDV5wHts1Jhq/CM32ChJpVNnr9FAlYci4NgHtPOJ3Huuguf+sy6UzN7zjz+vzpsIaKe9n99nsm1m98F9mj8yHW/EPtNORcExh81+18U7PCJONb3fCFyycxEif606OR//2zg8i0Oq/7d9f8=
+	t=1715185450; cv=none; b=DHx9vzmZaekKwPdAIL7Gsz2QnSn+gHZEpxdYsedkqD7+ayWh5kEcrDmyJUFnzWK0mmWG/oTjNDyIBiFk9mP51fcJMLmCNDJZOa2315mrSxbKTY/Y2U95n+6FE/bmWb0ZPbo9AAvWk7FJqh+kbftAJa4xp0bkgjIOqkLjtZFw6jI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715184820; c=relaxed/simple;
-	bh=KTTPfU3G93nUaSQQ03SoA08BLzmCwzGHhrMxQMHXbrw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LgKElpLYBQhs0SGUE+TA72SzgMC+9b3QdVzi/LdMjdf1kRmrQ0nvRlCQcLDXgEJpYyKrnUio0uwmOrD+CUUxdSG/2Tujg4uunpXZET60e93ipH7ttL6DXYIrCm1qkIeiNGaO03FhJAm9YU5YafEwOIbrvuAh4go7KU315zLmkyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TAvZlWEK; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-520f9d559f6so3322217e87.3;
-        Wed, 08 May 2024 09:13:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715184817; x=1715789617; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8f/oNkLNRVDgyHz7SZX/CbDK9NIee4eeJWH9FsmJVO4=;
-        b=TAvZlWEKkXb77emTrSTwOzBRHL8ug8NMAuDKE6BOic+fg2A7sA90de4JHF7Wau2xW5
-         fecK+x6qcOchdMWceLOVCNtBN29n9EbLiF/VWB34UYv6uvvLtKjIh1rqTFNtKJ7/krIS
-         OySf2q0HOyl5vWpjxzO1Kl3kfiRxEC+TBDnnaTDgiasl3rQkCCWzVb6KbtNa+U1XbbCL
-         HEw0epDxohvWiPfAsCRtRxMpzgdkyLs+2OwCfwAO9dtE/FZKYU98hKP2pbxk4nCoRm1e
-         QbNM36jsnDINHtE5tHuYRuBaLZQic0qSEvHy7zReKTHmNjOI03FvxeOJM0XHjvoTGZC6
-         Us/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715184817; x=1715789617;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8f/oNkLNRVDgyHz7SZX/CbDK9NIee4eeJWH9FsmJVO4=;
-        b=aoKtCQ1fZ40sBjZa/Tldul+O4hQjk9kqh76dKiHfAdvc0m/f73cEcMpIUnaLMRieOL
-         vgwJKV8vLou8Xy3RKLXOUXgm9y1hKbtLJDaQiH/6RYZXs+B2EAgIesaIzeQXBdIIyXV7
-         bgCcZ97KLpUOLBXYlQYSH0GywipVxD0StrUWqu+d90RUKzLDpKSW5kQuBkW5hzGqLAHA
-         BUPvSAY+zY9nkW8HJ5mAFvMkH0x4PSVmdinpMSNKZLrAYtCohxXnsD66wBN/Hod5i5/I
-         gVi2+H78MyVTHkomrYwufOaVtezIh/99zBAER8eQKoanCfEm7ntbYocYrIiO4IPP0m6B
-         WFxA==
-X-Forwarded-Encrypted: i=1; AJvYcCWib0r6e0Dq+xKF4iG8tjOM3ZoRl+qq4gosrqYCe6sarAjMbxGO7kDsTu13VRqaFxQBjsqR2INTArIjEKC/ferF9JfLX5ykGmfYtEfc2oEPBgY/FMG+DKPxEF4+mrEFkzm5lbP6li7VpMY3f+xEb9vwaZlMfrOccBYBPe8R8BLQpEfSL/ODPomo4ZemdQTwzXdpER4g5icdcrh+GrIMbiKRatm1vUXfC/BA+xLO6sD1AxS0TuXj0uUmi/k4Yhx0jNmqewFlTKWrS4l9bzzqWJ7CC2T/yzXpzfYSz7JWoNb9vvWNucV3YNgwMqgFkbOJSAIGi8nzATxwXXdozLXW1xGTlWMoAcONLGoJi9Ws1co7lmPBTh37DbQQ/YXdlfQ/E8U0/k9HatLt323fcx024x0ggRMghnNp/cKi25AY6t+eeieaqpAOVBmYRoJo3MNQI4Eo+C+Cg+1osmHiOLQfTm/fCaaLQzgwplxfIyQFst4xoHGXglC+byKSvoNQIAISHMw4WLrdlA==
-X-Gm-Message-State: AOJu0YxeYZoGNExeJ5GWhVwEPF8RcOKIHyh0kb4oynuO3PQ+1iBopLv7
-	f5FPJwETVM65Q/ruWjfHV8Yu/kAfrdWcGPs76i+FoyKHmQgop5LDe3ikSxVK
-X-Google-Smtp-Source: AGHT+IGOsGKTobWTIXaEhASc0QNiWa87Ncv1n8+a1K7thxeRTWIrU67BwG7R0FIWXrNbhbARcUS18g==
-X-Received: by 2002:a05:6512:3da6:b0:51b:f78d:c189 with SMTP id 2adb3069b0e04-5217c3707fdmr2707077e87.14.1715184816352;
-        Wed, 08 May 2024 09:13:36 -0700 (PDT)
-Received: from [192.168.42.40] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id my37-20020a1709065a6500b00a59ae892a68sm5208655ejc.167.2024.05.08.09.13.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 May 2024 09:13:35 -0700 (PDT)
-Message-ID: <710dfcb5-8489-446d-a230-0e01828dfc58@gmail.com>
-Date: Wed, 8 May 2024 17:13:43 +0100
+	s=arc-20240116; t=1715185450; c=relaxed/simple;
+	bh=ibNJ8Xe8MiZ/i4OLkjlyLfRh2B8XMD+/gb/5ylg6D/U=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=CyaYnjyfROxoTB198bKaKBHQlqyV9FaLxk8op6dnbglLDRRahZbg+NEbI+uSv0MP87k9kn0BNmo+0XhfG7PZwGP4kR9ei74Yng0hhVmpxY96T2lE2SkIPSAUug4Y/7KCnOgnwl5WhefA1UZ0cvkCLRtslx+0b1w36L6DIf6U5VI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=M5r0f/1E; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=bzOvvdS9; arc=none smtp.client-ip=103.168.172.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailfout.nyi.internal (Postfix) with ESMTP id DDF5D1380259;
+	Wed,  8 May 2024 12:24:07 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Wed, 08 May 2024 12:24:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1715185447;
+	 x=1715271847; bh=4nGit7XxeGIk2SVfnODtOYvvu5kqArp+iKedBGicZYU=; b=
+	M5r0f/1EYGGBMZdHb2yx3K2srlH9EtawFjd1OIHaqMNPGJgqZGax9dOsaauwRxgi
+	gSinIxlrgKyYVldrm1EG9CKjma973HUuKh3TWGSaqpKve3np8dFKWWmUcv8AZApU
+	z/IKRMxtlcEmWmp6F9vyvY8ELHu76qZ/wEuHvne8GWpMHCVglpC/cSCYsACKXlmc
+	gElXZYJTXNlu4wTb7iiQvWPwRq9CaY8suDi26qd5nvENKrdrOcDmWBSFEemGMhpi
+	S5hqgo5wqYWh2h+9Q7cgs3wh2OvCFxJVIcWhNqrrewym6jyL1IZVNWYFTO2gs2ke
+	Nt5C2NmzxhB+8PcOzOu9jA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1715185447; x=
+	1715271847; bh=4nGit7XxeGIk2SVfnODtOYvvu5kqArp+iKedBGicZYU=; b=b
+	zOvvdS9bVHsE0CusftMhnE2toFhTfNuk39zVNqUSBWlIHeyETt4HK12QuBRTDOde
+	eb974p/2CNtXMYdqR+iuyTwEhfljN5u9A+GMJwHwRfwRTq2OsIZcw4OA2T9r3zZM
+	paPt1ecjgWhoPVYaHgeyULeh7J3ijMF1pfALbPvmEhbciSf8Nt7zqdY6OAloLD6D
+	hQeVDTr2Y5XDkLPJ43NE+0HSjvQPJauehOBqORzqMo48NTezKD/v/LcAXI3csUi5
+	v94cm0iRGvT0Zq+Spri84UUhWLFTzccfqjsmppHyAr8Ur/hzD3CG1sODcA0iFP1w
+	qMdEAeB/6wt1tQbxiP48Q==
+X-ME-Sender: <xms:J6c7ZnKgPQIPzd-dMOjCFvhu7Iaq_7gwtCnOITu-_pqudo7vQlY3Ug>
+    <xme:J6c7ZrLYcV82q6-CuDb5q2XgYseEioX9D6Beib_mbLsHCfXm3rEcw4IrIOez-xb8w
+    LO5oLz797m27Wuc_-E>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdeftddgleelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
+    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
+    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:J6c7ZvuHoQMWAVCFq_9NOwcNCqjmhsrI5GRCuOAmDHqxwviLFt06Lw>
+    <xmx:J6c7ZgbUOfY7ajcYqJCxsuPb07bZLIbwrPOqzIa9b5ppL38lAhfEdA>
+    <xmx:J6c7ZuZu6LAb-gGkp6T5AfkzH40niWILIuhOdypY_VzWshPM8MOS3A>
+    <xmx:J6c7ZkB4iFfJvfFdPAlN4lwblXZshDW3nPtlJDwo_WqgH5K4Tk8IcQ>
+    <xmx:J6c7ZkNlfiQSEAo4BcU2NRQoO5PTsHQ5SQFDAWKlo0akBXXjQgWDRehr>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 34C0D36A0074; Wed,  8 May 2024 12:24:07 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-443-g0dc955c2a-fm-20240507.001-g0dc955c2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH net-next v8 02/14] net: page_pool: create hooks for
- custom page providers
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Mina Almasry <almasrymina@google.com>,
- Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Amritha Nambiar <amritha.nambiar@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Alexander Mikhalitsyn <alexander@mihalicyn.com>,
- Kaiyuan Zhang <kaiyuanz@google.com>, Christian Brauner <brauner@kernel.org>,
- Simon Horman <horms@kernel.org>, David Howells <dhowells@redhat.com>,
- Florian Westphal <fw@strlen.de>, Yunsheng Lin <linyunsheng@huawei.com>,
- Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
- Arseniy Krasnov <avkrasnov@salutedevices.com>,
- Aleksander Lobakin <aleksander.lobakin@intel.com>,
- Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Lorenzo Bianconi <lorenzo@kernel.org>,
- Richard Gobert <richardbgobert@gmail.com>,
- Sridhar Samudrala <sridhar.samudrala@intel.com>,
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- Johannes Berg <johannes.berg@intel.com>, Abel Wu <wuyun.abel@bytedance.com>,
- Breno Leitao <leitao@debian.org>, David Wei <dw@davidwei.uk>,
- Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-References: <ZjpVfPqGNfE5N4bl@infradead.org>
- <CAHS8izPH+sRLSiZ7vbrNtRdHrFEf8XQ61XAyHuxRSL9Jjy8YbQ@mail.gmail.com>
- <20240507164838.GG4718@ziepe.ca>
- <0d5da361-cc7b-46e9-a635-9a7a4c208444@gmail.com>
- <20240507175644.GJ4718@ziepe.ca>
- <6a50d01a-b5b9-4699-9d58-94e5f8f81c13@gmail.com>
- <20240507233247.GK4718@ziepe.ca>
- <54830914-1ec9-4312-96ad-423ac0aeb233@gmail.com>
- <20240508142530.GR4718@ziepe.ca>
- <6f69694b-4281-45a6-92aa-d9d72b918df2@gmail.com>
- <20240508155813.GS4718@ziepe.ca>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20240508155813.GS4718@ziepe.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Message-Id: <8d02a270-c9b7-4389-899e-cd755e55f0a4@app.fastmail.com>
+In-Reply-To: 
+ <forgoxnzqnwreba7j57lgs6lgzny3zdnaqnpctr2qhtlcad3pg@l44sn4zf7hu3>
+References: <20240507-cm_probe-v1-0-11dbfd598f3c@flygoat.com>
+ <20240507-cm_probe-v1-3-11dbfd598f3c@flygoat.com>
+ <forgoxnzqnwreba7j57lgs6lgzny3zdnaqnpctr2qhtlcad3pg@l44sn4zf7hu3>
+Date: Wed, 08 May 2024 17:23:48 +0100
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Serge Semin" <fancer.lancer@gmail.com>
+Cc: "paulburton@kernel.org" <paulburton@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 3/5] MIPS: Move mips_cm_probe after prom_init
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 5/8/24 16:58, Jason Gunthorpe wrote:
-> On Wed, May 08, 2024 at 04:44:32PM +0100, Pavel Begunkov wrote:
-> 
->>> like a weird and indirect way to get there. Why can't io_uring just be
->>> the entity that does the final free and not mess with the logic
->>> allocator?
+
+
+=E5=9C=A82024=E5=B9=B45=E6=9C=888=E6=97=A5=E4=BA=94=E6=9C=88 =E4=B8=8B=E5=
+=8D=881:50=EF=BC=8CSerge Semin=E5=86=99=E9=81=93=EF=BC=9A
+> On Tue, May 07, 2024 at 10:01:51AM +0100, Jiaxun Yang wrote:
+>> Move mips_cm_probe after prom_init so we can use fdt functions
+>> in mips_cm_probe to obtain essential information.
+>>=20
+>> Impat for all systems that may have CM in system:
+>
+>> - geneirc: Adjusted code to accommodate this change
+>
+> s/geneirc/generic
+>
+>> - Lantiq: No impact, CM configuration won't be changed at all
+>> - ralink: Called mips_cm_probe on it's own, in prom_init->prom_soc_in=
+it
+>
+>> - malta: No impact, CM address comes from CP0_CMGCR
+>
+> Are you sure about this? This was one of the problematic part I met
+> back when was trying to implement the feature.
+> arch/mips/mti-malta/malta-init.c:
+> prom_init()
+> +-> mips_cpc_probe()
+>     +-> mips_cpc_phys_base()
+>         +-> mips_cm_present(): mips_gcr_base !=3D NULL
+>         +-> read_gcr_cpc_status()
+>         +-> read_gcr_cpc_base()
+>         +-> write_gcr_cpc_base()
+>
+> So by moving mips_cm_probe() to being executed after prom_init() the
+> calls-chain above will be broken since the mips_gcr_base will be left
+> uninitialized. Do I miss something?
+
+Hi Serge,
+
+Good catch! This is indeed a problem.
+I tried to dig a little bit and found that a possible solution is to
+move SMP initialization to device_tree_init(), as what generic platform
+did.
+
+I was able to test malta boot with this solution on my heavily patched
+QEMU, I can confirm that both CM-SMP and scache are working as expected.
+
+Will share my QEMU patches and configurations in next rev.=20
+
+Thanks
+- Jiaxun
+
+>
+> Please, note originally the mips_cm_probe() invocation was right
+> above the Malta's mips_cpc_probe():
+> 3af5a67c86a3 ("MIPS: Fix early CM probing")
+>
+> -Serge(y)
+>
+>>=20
+>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>> ---
+>>  arch/mips/kernel/setup.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>=20
+>> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+>> index 12a1a4ffb602..732579c8f4f8 100644
+>> --- a/arch/mips/kernel/setup.c
+>> +++ b/arch/mips/kernel/setup.c
+>> @@ -773,8 +773,8 @@ static void __init setup_rng_seed(void)
+>>  void __init setup_arch(char **cmdline_p)
+>>  {
+>>  	cpu_probe();
+>> -	mips_cm_probe();
+>>  	prom_init();
+>> +	mips_cm_probe();
+>> =20
+>>  	setup_early_fdc_console();
+>>  #ifdef CONFIG_EARLY_PRINTK
+>>=20
+>> --=20
+>> 2.34.1
+>>=20
 >>
->> Then the user has to do a syscall (e.g. via io_uring) to return pages,
->> and there we'd need to care how to put the pages efficiently, i.e.
->> hitting the page pool's fast path, e.g. by hoping napi is scheduled and
->> scheduled for the CPU we're running on, or maybe transferring the pages
->> to the right CPU first.
->>
->> Compare it with userspace putting pages into a ring, and the allocator
->> taking from there when needed without any extra synchronisation and
->> hassle just because it's a sole consumer.
-> 
-> Wow, that sounds a bit terrifying for security, but I guess I can see
-> your point.
 
-Mind elaborating about security? "No synchronisation" is for grabbing
-from the ring, it's napi exclusive, but it does refcounting to make sure
-there are no previous net users left and the userspace doesn't try
-anything funny like returning a page twice. And it's not even a page
-but rather a separately refcounted buffer represented by an offset
-from the userspace POV. It doesn't even have to be page sized, hw
-benefits from smaller chunks.
-
-> You are replacing the whole allocator logic if you are effectively
-> putting the free list in userspace memory.
-> 
-> Jason
-
--- 
-Pavel Begunkov
+--=20
+- Jiaxun
 
