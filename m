@@ -1,81 +1,82 @@
-Return-Path: <linux-mips+bounces-3166-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3167-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 179678BFD46
-	for <lists+linux-mips@lfdr.de>; Wed,  8 May 2024 14:37:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F297D8BFDA8
+	for <lists+linux-mips@lfdr.de>; Wed,  8 May 2024 14:50:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A7CB1C20CD6
-	for <lists+linux-mips@lfdr.de>; Wed,  8 May 2024 12:37:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA67B2859D9
+	for <lists+linux-mips@lfdr.de>; Wed,  8 May 2024 12:50:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D759942055;
-	Wed,  8 May 2024 12:37:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A97DE56B60;
+	Wed,  8 May 2024 12:50:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fVuDMYxI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nF8mCKjC"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B774347B6;
-	Wed,  8 May 2024 12:37:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0828722071;
+	Wed,  8 May 2024 12:50:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715171858; cv=none; b=C2e8VJqZITpGdcS9oZJ8w1VsQrqIiMdH9LIQWrbpfRhv6RjWyaa611PxDjsvBxvqDBGmYgieCfWi28MCYaqR6s3zEZIsCyyezCK2k3eDVDwCnfSmpvkyNcMmtxJdMDMYh/8bdba/t2nDhrKhfClGw7u41Pge9VJrKstNnvd5GR4=
+	t=1715172641; cv=none; b=sXGDODACVmairh7Yl29q4beZndePa4BmdYGYNAwP5nPAG31p33W3LRnLGMuDBOD0osT3TG2EXKukMCaZm0T5UhLXx/ytR2wosCHXrBbXaI4OTcF2zbXzM8yA7ZGYZmspRzbLr/UnOTHj4j5ev4vEK7BWhX3Zpq3hWHrcmFHFqks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715171858; c=relaxed/simple;
-	bh=cAz7HeJbFspsZFZ1DAYm8MdRx4JYFVuGaZU2/nEtWSE=;
+	s=arc-20240116; t=1715172641; c=relaxed/simple;
+	bh=xxoigdMuZDH/elCkReVLK7gi7lt+nFEyJsXIqj3Mwp4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A3uatjmnBs5N/o44CSyLBQEUsXepmq3lAOjLTQePvISbfnGudIPUzihe+339luIXgQR2RLQYlAHHJgkJgiSpgGjDfvXhCunlCi3sost8LDsvBvN3tGHWaRYDZ1ljQz57uTiECfTm3glm1AmGJyJDOabLE2Er9+jubj3eavlx/1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fVuDMYxI; arc=none smtp.client-ip=209.85.167.44
+	 Content-Type:Content-Disposition:In-Reply-To; b=BjwMn6+7EyG1tfZ6t+Su0vTpT+lAEqmQyHxKdPto5aD0HUfdh4a2LdcmkkM6j+DrTmKQu7jHjagNU3jRjkiP9QjJMucS6by2u+/KWw/sgCPthjIsUsZ6asKdxJym71ovwpWU3C2Hcp4cEDKNe2VlgsIkfJm+KPL1k5fAM6eZEUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nF8mCKjC; arc=none smtp.client-ip=209.85.167.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-51f300b318cso5068490e87.3;
-        Wed, 08 May 2024 05:37:36 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-51f74fa2a82so4951118e87.0;
+        Wed, 08 May 2024 05:50:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715171855; x=1715776655; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1715172638; x=1715777438; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=i58eGKPvYNQTQcyeap/7W0ADrn9Va3j9vHO5Ufznw58=;
-        b=fVuDMYxIfgSgSsxnBwdSAog3UeLFFOUY36lksdFcyybPUCbXi6q7A2TfG78WyElM29
-         iVwaTnJKGSdtt51DCZFAEqWFUd9VPHA+41OqaHdMoZr3VRCFlmZHTS38bC/4W2e/lKnS
-         /daTZc6XY4We4nTZElyehmPL47waAww/oQ47fw4u3YqvefPHDs+WOvhbwxJwU0oirZrr
-         mWA7eRCdo0Dyt7yLYErgXufCMQsuS55erUEW0bWKwZJM3RqR34F4VhXeAKrpAe04FL8p
-         XA1RwhcLXMHjKXzWSwEOUJZ1initQTpB1EbTKNj6AyIk/3d0wf/zS6I5anGdJ6ew2KNU
-         Qswg==
+        bh=5W3/T5hNFLBQFwQnjoXHkZWSTE3Wc9MBCfUpRXABUCY=;
+        b=nF8mCKjCSwJBqHEu/jUWV4YdMn6DTOJ4/bCg5+0ihNSaJrbZrRtJna/vTYXHWWblPQ
+         13lwIFvjp4Lx7q5il+heRbgrQy709mPXe/t7QrcxUnWItcwxw9bFBQB4/oxU01q1Q/vt
+         oMYyqVcS0gjyoMf/NihJuxM9Wk/3MUyczhlVtB7332dVMYWvpveWscvmKN77EYPQyYbN
+         vSpe9b0192MESngxPxVzXXvATMBBPu043dHnqELQ9+tQRVh3YSglXtu+eWHoOzRtlxdQ
+         KKKP5OC3S+vBWnSYqbtMxGwWypW9Yh5bNvi2hwfwsezzqxQkVocJQer7ub/UrEXzbIDH
+         i2RA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715171855; x=1715776655;
+        d=1e100.net; s=20230601; t=1715172638; x=1715777438;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i58eGKPvYNQTQcyeap/7W0ADrn9Va3j9vHO5Ufznw58=;
-        b=V1v0PamH0EZlIQ8lpZYSO4q4n6s9mDFgYOxmtI3w1Z4lwwCeWcB56oFIsfIgA6UN4i
-         AW1p5+eIrG13BveDUdLIXIDZRcf+KhRkuTsBlfBkII8E0SWKGoPe7VJHgZAoE4Omv01h
-         L/JJHKm/NQJVOlj35o0cYHT5rJX7AEYFhuCLWR83J4eQVOKcDBQJOgcwnRUJJIqIo2Yn
-         osRVzlzuRwmkOR0idnPVXDofpEqHfjNSZ4E3t5QNGC0P5v1JOnIXsH/+x8J9PdWMMIV+
-         nUZle008w4Pz4+9K2oSLhu5S2CUrhlOkkLP2fzbUdyYEmvPiorWhy/gAZnPKfM+MzVEz
-         VfNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVjQih1N0gDkgLwoVkMFJSaXwvJMtu2MGJE7sQuSfmI03ALToSH01uP55UO92PYN8HH0aCmfAVxTkLE6Fg2kFWdP6uUXoC+TP0s7mvUYoOhlIUjJdhSEVOuzFC7L1Ozn9Nnj+gygbxz+V287oKvUOA/Z7AAyCdOX4/XmPP5+THtX1Y3fP0=
-X-Gm-Message-State: AOJu0YwTPevSSDI8VHgbDlxqAYyfAC7qOEn5KV3F0zxFlxLqGi+h3ztR
-	RJxUhfqMwafqp+M8bkKTGvNXe2T1fnHx4i+mDhZ4npHSJwNZUQLHQo66pw==
-X-Google-Smtp-Source: AGHT+IESdzI9ECXTCgEWOcIfTwT0hKXRiT5PTOUn7yNGACujM0l6NidLseL3uzfgExjDFynctwp+jA==
-X-Received: by 2002:ac2:4a7a:0:b0:51d:605e:c1e0 with SMTP id 2adb3069b0e04-5217c5664d4mr1346867e87.19.1715171855101;
-        Wed, 08 May 2024 05:37:35 -0700 (PDT)
+        bh=5W3/T5hNFLBQFwQnjoXHkZWSTE3Wc9MBCfUpRXABUCY=;
+        b=An5N85Lkw9CooRKi0XG/XkEoRFw9hRJZzH0bDCvnl0bCn58M9F4WJuH1HK27FBoLeT
+         9liwiE+nnvQPPOxt2Q1jOWMtBPwg6KSTXmDKnVLF7MqnD13pyQ5MVmpLyJC24CdV1Zcx
+         6ybM9xeXPpxb8PFkQIEjRaBhQje5ej8XuQYTrNyVnHAdvjecEZbX88/slJqPwwo0IeNj
+         guG3Wt8g8nssHFJ76Xco+gzxVtQ9MmrIQOoXcBC6e5/SWX9hODrqtxWqlNuyFcciG0o3
+         /H162cj1fwHGLIDCR3F+dN+q+3OSXc5jlZZ3vg1j2sEaw2pYNUdho+qSbvKPAQfLN2uK
+         jnkA==
+X-Forwarded-Encrypted: i=1; AJvYcCUzm2TyX8EbI1kYegQWO8c7WSk7EtpD/34+IOCm/3Ncn2uVlO9/lebB4NhOX39Iqq45VN8MmG/9iRT3OTZAvlTxaoBC+1riYH1u1j2DK2EK/6loLSraxTRpIP2Dw0tr2bIlelFa78QeIHnWyQvczpzkog35uETVc0K768zksVHnIeAmhRw=
+X-Gm-Message-State: AOJu0YxqynJDP3WQEaE/T17moAg03QP/3JxXo9Uw/8YKwRk5YwyvJw4T
+	ztg+oHXM4BysIASLAXcM/0WanKUxqqXOBx8WncDBN9fiDm/ZOeGD
+X-Google-Smtp-Source: AGHT+IExQ9Bo3wFOlD3cPw8vNboAsh5CWVK1tusp2l9JO65IhQgGzC0hKoUwKiy+1C44igc64lZdvQ==
+X-Received: by 2002:a19:8c11:0:b0:51d:804a:232 with SMTP id 2adb3069b0e04-5217c372ea6mr1996300e87.11.1715172637827;
+        Wed, 08 May 2024 05:50:37 -0700 (PDT)
 Received: from mobilestation ([178.176.56.174])
-        by smtp.gmail.com with ESMTPSA id b26-20020a056512025a00b0051f026412b5sm2514455lfo.141.2024.05.08.05.37.34
+        by smtp.gmail.com with ESMTPSA id g3-20020a056512118300b00518e17fc331sm2499159lfr.157.2024.05.08.05.50.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 May 2024 05:37:34 -0700 (PDT)
-Date: Wed, 8 May 2024 15:37:31 +0300
+        Wed, 08 May 2024 05:50:37 -0700 (PDT)
+Date: Wed, 8 May 2024 15:50:34 +0300
 From: Serge Semin <fancer.lancer@gmail.com>
 To: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Cc: Paul Burton <paulburton@kernel.org>, 
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Rob Herring <robh@kernel.org>, 
 	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 0/5] MIPS: cm: Probe GCR address from devicetree
-Message-ID: <zy2p2ebyjmuaj6fv2qhglljnjz2x4jmb5d7rkwipu6rn5rrxnc@2tavfilxs7ie>
+Subject: Re: [PATCH 3/5] MIPS: Move mips_cm_probe after prom_init
+Message-ID: <forgoxnzqnwreba7j57lgs6lgzny3zdnaqnpctr2qhtlcad3pg@l44sn4zf7hu3>
 References: <20240507-cm_probe-v1-0-11dbfd598f3c@flygoat.com>
+ <20240507-cm_probe-v1-3-11dbfd598f3c@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -84,54 +85,67 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240507-cm_probe-v1-0-11dbfd598f3c@flygoat.com>
+In-Reply-To: <20240507-cm_probe-v1-3-11dbfd598f3c@flygoat.com>
 
-Hi Jiaxun
-
-On Tue, May 07, 2024 at 10:01:48AM +0100, Jiaxun Yang wrote:
-> Hi all,
+On Tue, May 07, 2024 at 10:01:51AM +0100, Jiaxun Yang wrote:
+> Move mips_cm_probe after prom_init so we can use fdt functions
+> in mips_cm_probe to obtain essential information.
 > 
-> This series enabled mips-cm code to probe GCR address from devicetree.
-> 
-> This feature has been implemented in MIPS's out-of-tree kernel for
-> a while, and MIPS's u-boot fork on boston will generate required
-> "mti,mips-cm" node as well.
+> Impat for all systems that may have CM in system:
 
-Thank you very much for the series. This work has been scheduled in my
-TODO list for years. I could have done it earlier but a simple at the
-first glance change turned to be tricky. The main concern was the
-stage at what CM was probed. I was afraid to break things by changing
-the order of the CM-base address getting. Let's discuss this matter in
-the respective patch. It might get to be I was wrong to worry.
+> - geneirc: Adjusted code to accommodate this change
+
+s/geneirc/generic
+
+> - Lantiq: No impact, CM configuration won't be changed at all
+> - ralink: Called mips_cm_probe on it's own, in prom_init->prom_soc_init
+
+> - malta: No impact, CM address comes from CP0_CMGCR
+
+Are you sure about this? This was one of the problematic part I met
+back when was trying to implement the feature.
+arch/mips/mti-malta/malta-init.c:
+prom_init()
++-> mips_cpc_probe()
+    +-> mips_cpc_phys_base()
+        +-> mips_cm_present(): mips_gcr_base != NULL
+        +-> read_gcr_cpc_status()
+        +-> read_gcr_cpc_base()
+        +-> write_gcr_cpc_base()
+
+So by moving mips_cm_probe() to being executed after prom_init() the
+calls-chain above will be broken since the mips_gcr_base will be left
+uninitialized. Do I miss something?
+
+Please, note originally the mips_cm_probe() invocation was right
+above the Malta's mips_cpc_probe():
+3af5a67c86a3 ("MIPS: Fix early CM probing")
 
 -Serge(y)
 
 > 
-> Please review.
-> Thanks
-> 
 > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > ---
-> Jiaxun Yang (5):
->       MIPS: generic: Do __dt_setup_arch in prom_init
->       MIPS: cm: Prefix probe functions with __init
->       MIPS: Move mips_cm_probe after prom_init
->       dt-bindings: mips: Document mti,mips-cm
->       MIPS: cm: Probe GCR address from DeviceTree
+>  arch/mips/kernel/setup.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->  .../devicetree/bindings/mips/mips-cm.yaml          | 37 ++++++++++++
->  arch/mips/generic/init.c                           |  9 ++-
->  arch/mips/include/asm/mips-cm.h                    |  4 +-
->  arch/mips/kernel/mips-cm.c                         | 66 ++++++++++++++++++----
->  arch/mips/kernel/setup.c                           |  2 +-
->  5 files changed, 100 insertions(+), 18 deletions(-)
-> ---
-> base-commit: 2b84edefcad14934796fad37b16512b6a2ca467e
-> change-id: 20240506-cm_probe-0c667c8b63bf
+> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+> index 12a1a4ffb602..732579c8f4f8 100644
+> --- a/arch/mips/kernel/setup.c
+> +++ b/arch/mips/kernel/setup.c
+> @@ -773,8 +773,8 @@ static void __init setup_rng_seed(void)
+>  void __init setup_arch(char **cmdline_p)
+>  {
+>  	cpu_probe();
+> -	mips_cm_probe();
+>  	prom_init();
+> +	mips_cm_probe();
+>  
+>  	setup_early_fdc_console();
+>  #ifdef CONFIG_EARLY_PRINTK
 > 
-> Best regards,
 > -- 
-> Jiaxun Yang <jiaxun.yang@flygoat.com>
+> 2.34.1
 > 
 > 
 
