@@ -1,139 +1,258 @@
-Return-Path: <linux-mips+bounces-3188-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3189-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7F598C0EBF
-	for <lists+linux-mips@lfdr.de>; Thu,  9 May 2024 13:15:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E40F48C1262
+	for <lists+linux-mips@lfdr.de>; Thu,  9 May 2024 18:02:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 593E31F21F48
-	for <lists+linux-mips@lfdr.de>; Thu,  9 May 2024 11:15:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3934DB22205
+	for <lists+linux-mips@lfdr.de>; Thu,  9 May 2024 16:02:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EB5B130E34;
-	Thu,  9 May 2024 11:15:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D90116F287;
+	Thu,  9 May 2024 16:02:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lyA2yVOw"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="GLOsm7gU"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CE2A130E46;
-	Thu,  9 May 2024 11:15:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84F8F16F832
+	for <linux-mips@vger.kernel.org>; Thu,  9 May 2024 16:02:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715253307; cv=none; b=noawz/jd0zcWpXLtHQXws0uaA8pCu5nQ6dRHrEYcDG/k2t0B2zlqz/Yk6/Tjbd0usF0aQI+4oZvbQteQ/Q/NXBm7qAT1K0XsS+AD4c2oyn+i0OVoT0p5n5DikP2ti8inL0jaaMsGAy6g00r3OMmjEltSuDLdcwSwihW9LTYtqag=
+	t=1715270523; cv=none; b=eJqdScvFwcpROcBdjzIzV4s/mmUr9vvGIRtXB86dXkxo/1Bbs9iZRfAONJWO6x25dJkZpwqLTZPdcPT7ZP1LYEOLaVtu7h1QBQcvuCm0tJ1KtLddsULdd6TdcX+nesivXC8c6yb8/ZiEQle+W5gpsjk1wwoloRS2OkgcVHx5qLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715253307; c=relaxed/simple;
-	bh=vXsFMRaxSZwNwrtFNURLPwY0cD8dWAmv9PX27I1oIPQ=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dNzF3x0uc3SrO71hm3geg2DDWlbNibll49+Cg4BP0xi34BzhENvI9FeKyCYa5uk3IebB3CqgpeUaKgmdMZH/gWq8RPxvwlnmS93VyO4w8QYlnHvbQvvDTDx0tdA0KbVofzuSdqcYBWT1ioN+i7LCsn6n9MUBcJ7ho6rASMFHYN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lyA2yVOw; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-34e0d8b737eso1078793f8f.1;
-        Thu, 09 May 2024 04:15:05 -0700 (PDT)
+	s=arc-20240116; t=1715270523; c=relaxed/simple;
+	bh=QuinAYWxgu1ViyNST8r+MivMAQgD0lfBJmkX69mIrd4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZSZ2weToO3FS32Yjw9w1Lb9BHOulqa81H+FzbYM2MO47oq2kPz1fxAEWE99xxTag5AwLGCLZHFZPwpo4PoN4gd21H4GYUVB7OkLvl9LacwGvT94G6maUYRKUKl0qfbA7uVhSe9XWrXK5HxThaDq2nBd3w2/kCTgTRXq2Z96yJS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=GLOsm7gU; arc=none smtp.client-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-43df3b00becso2944361cf.2
+        for <linux-mips@vger.kernel.org>; Thu, 09 May 2024 09:02:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715253304; x=1715858104; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=IJB+OgvYLYogQhbVxq5DLy1Lyjt+NholKOBiVxc0zRI=;
-        b=lyA2yVOwOWzGWUNIoK7J65jieH6XYi3xE7atmFVJj6GTtof3/nJ2gBWfVuQz6AT+aZ
-         Sy/fPJYfExeNRvpAMWxTFby7tqbcw36dCjv2+ZKgvtBO6vexlRv/wzjdeSBJozEmlAWF
-         9LMuOtLGxPQe2OECy0eHmx4pItXdjpXBE4PVF3tq7v2Rl+QKar+RHv++TKXDAB5oHaZ1
-         lY8+8GDG1yhAd5vO6VmxBZySYjD5fzSeLidFW9+c57QU5uR53T7ubnPWWLRDM+oqmVYQ
-         cgKa/U/INlQTznMIoiUJrV5NlYjyXSRIpuovpALUmH+v8V7qaCvWichxNXIPFHM7kDUO
-         nNCg==
+        d=broadcom.com; s=google; t=1715270520; x=1715875320; darn=vger.kernel.org;
+        h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TdX8AD0IHrdPL49eor678xF8hxN5P88l5nOmdXHyaS4=;
+        b=GLOsm7gUK9XUCtJGSSj4eZyAvC9BmA7s7eRIG4OomRGQg+ot8QJ/GURb2nKVTKYmoj
+         DGPxtBxAxfQ1hzex54gOHjM4q4Yr19agln5JQYx1UYiHebsALOuYwGr2SzCcQ9SWRSG5
+         UUsLLfAG6d7h+oz4AjZEsyrHK14Ef0iVXH6U4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715253304; x=1715858104;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IJB+OgvYLYogQhbVxq5DLy1Lyjt+NholKOBiVxc0zRI=;
-        b=E/3zgIkBcd3slxgwAgHFPSWscZq2rW9+0+w9BQ/PgCTWDMBCLjy7qWM0OZp63YwJkS
-         Ib4w+kMsK5JRQib8hAtfZLTxRlOUi2bB7kv+yt3702/Cr3pN8YamuZtL9isNqrhQ968U
-         2yoQuI7b5kE3eoQ9lujuuFMeNYdTdRHSO/gb7FDJfb1hf3sPSwGBDa+WNS2/uddetqc9
-         CWvmSB+Rnhnfrpf/Sq79LDPQWs8Jk5F4oQo8bhzOGn7gh48wkvKkd+4wQegfZVVA7sUu
-         NtksikkRnZdkotKTcpMxRuMQYWP1XDtfEVVHiK5B3mgpruYTq/Rj/64OpHjLhS8Pg0zs
-         58qA==
-X-Forwarded-Encrypted: i=1; AJvYcCXJyu0BkXlKV83+qLPcSUvVcqze4fqOnl7cYrZebUvuC8fmSZjQw9V2Z2vdC+NKcC3Y3Dqr3Jl6d6AHM69wqxXEtSXvhGbFpgn9x7pYx381UOJ7ASMgbfHN7rutOVbEeaVnCaB02Lun2GOkz2Tn6/4HDFmTNvcxAHAhU2vElQQ0hQQyEHM=
-X-Gm-Message-State: AOJu0YwNE72W2nWgAWedxxd5zSr2uDd/p8ep//re2Dtsdgg3wLF9tMq9
-	31cs3clHBgzIqvis3VHgsmGJN9qqtywnLLO8oYNZWFyFWUKDvaKd
-X-Google-Smtp-Source: AGHT+IHHCRkykSFXuu6ipQb2TuDdXJTI3AAL4s9XQ0bI3eoTF9YXQdmpGXJ2MLVDIqVGbi11gFDoDg==
-X-Received: by 2002:adf:fe8a:0:b0:34c:fd92:3359 with SMTP id ffacd0b85a97d-350185d57e7mr2016967f8f.21.1715253303584;
-        Thu, 09 May 2024 04:15:03 -0700 (PDT)
-Received: from Ansuel-XPS. (93-34-90-105.ip49.fastwebnet.it. [93.34.90.105])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3502baacfd3sm1426846f8f.84.2024.05.09.04.15.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 May 2024 04:15:03 -0700 (PDT)
-Message-ID: <663cb037.5d0a0220.41af4.3328@mx.google.com>
-X-Google-Original-Message-ID: <ZjywNBzF0EwuS4MM@Ansuel-XPS.>
-Date: Thu, 9 May 2024 13:15:00 +0200
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Hauke Mehrtens <hauke@hauke-m.de>,
-	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	=?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>,
-	linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Daniel =?iso-8859-1?Q?Gonz=E1lez?= Cabanelas <dgcbueu@gmail.com>,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 2/5] mips: bmips: rework and cache CBR addr handling
-References: <20240503212139.5811-3-ansuelsmth@gmail.com>
- <202405090546.iqx9FAqu-lkp@intel.com>
+        d=1e100.net; s=20230601; t=1715270520; x=1715875320;
+        h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=TdX8AD0IHrdPL49eor678xF8hxN5P88l5nOmdXHyaS4=;
+        b=DqLI4CwE6UIGMwZx34+v139tqODm6ZQEdaAtYPuD9U+lWnCkOCM4o8HOUT1Z4AyyUv
+         vUz4TFz5JAO9X4YKLqPsBZBcNpGkjwkfb3nV1fBqUfbuJpVVl9guY9ALB3drZo6t8bHH
+         ZoeuIJqHChMwzl3iirtXJrR5qmBH4HKlI88bo7PmblCPWvPWTFPA1m0tK2UNt3et/Emt
+         yrtsboC/SzasTpYMQ7/6YL2Z0WrX7EEJsGcaklHefVKAijimTxtOqnam8dRnLjpEVlhw
+         v6vIYb8wL2anrEVNJBnND5g1zzsDf6wXPbs3DzD1TCR/VS+hXn1AiVywNvgPkhNtsOO/
+         S8aw==
+X-Forwarded-Encrypted: i=1; AJvYcCUm4q2MmWOElk3TIBw4KF0MTxBHG45ALqB4E62wamdBNGEdZ6s8vnBYdGQt9YGJU+7qlZQWUv+Mjkl3ohTfRMn09ReOahb9Og+w1A==
+X-Gm-Message-State: AOJu0Yzd3ILFAsNZ4KEPitOK+2k9nYtp0Mdow9lQBssg9nQ/HWvo87ES
+	AcaRdjb0f0cXFPtee+5AxVUidK9U6ZflP/lHgN4JKMHgtGoQRtE3RedzI5bXmQ==
+X-Google-Smtp-Source: AGHT+IG+Jjg/moqOJkwvUsWRhe5cbO3M53KG2UIs2qMajEt1bu09nUSXD5K+ScR9pLxuLIiqydaOoQ==
+X-Received: by 2002:ac8:7d4f:0:b0:43a:c27b:df34 with SMTP id d75a77b69052e-43dbf62142dmr60725111cf.31.1715270520159;
+        Thu, 09 May 2024 09:02:00 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-43df553ff3fsm9746311cf.54.2024.05.09.09.01.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 May 2024 09:01:59 -0700 (PDT)
+Message-ID: <6828e1da-65c5-43a5-9b5c-0c86f4e523ea@broadcom.com>
+Date: Thu, 9 May 2024 09:01:56 -0700
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202405090546.iqx9FAqu-lkp@intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/4] dt-bindings: mips: brcm: Document
+ brcm,bmips-cbr-reg property
+To: Christian Marangi <ansuelsmth@gmail.com>, Conor Dooley <conor@kernel.org>
+Cc: Hauke Mehrtens <hauke@hauke-m.de>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
+ <zajec5@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, linux-mips@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240508170721.3023-1-ansuelsmth@gmail.com>
+ <20240508170721.3023-3-ansuelsmth@gmail.com>
+ <20240508-prong-serving-660e6046621d@spud>
+ <663bb3bf.050a0220.38dcc.9b82@mx.google.com>
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
+ xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
+ M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
+ JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
+ PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
+ KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
+ AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
+ IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
+ ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
+ bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
+ Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
+ tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
+ TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
+ zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
+ WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
+ IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
+ U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
+ 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
+ pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
+ MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
+ IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
+ gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
+ obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
+ N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
+ CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
+ C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
+ wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
+ EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
+ fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
+ MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
+ 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
+ 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
+In-Reply-To: <663bb3bf.050a0220.38dcc.9b82@mx.google.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="000000000000142dc80618078ab8"
 
-On Thu, May 09, 2024 at 07:13:16AM +0800, kernel test robot wrote:
-> Hi Christian,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on robh/for-next]
-> [also build test ERROR on linus/master v6.9-rc7 next-20240508]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/mips-bmips-BCM6358-make-sure-CBR-is-correctly-set/20240504-052513
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-> patch link:    https://lore.kernel.org/r/20240503212139.5811-3-ansuelsmth%40gmail.com
-> patch subject: [PATCH v2 2/5] mips: bmips: rework and cache CBR addr handling
-> config: mips-bcm63xx_defconfig (https://download.01.org/0day-ci/archive/20240509/202405090546.iqx9FAqu-lkp@intel.com/config)
-> compiler: mips-linux-gcc (GCC) 13.2.0
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240509/202405090546.iqx9FAqu-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202405090546.iqx9FAqu-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    mips-linux-ld: arch/mips/kernel/smp-bmips.o: in function `bmips_ebase_setup':
-> >> smp-bmips.c:(.text+0x114): undefined reference to `bmips_cbr_addr'
-> >> mips-linux-ld: smp-bmips.c:(.text+0x118): undefined reference to `bmips_cbr_addr'
->    mips-linux-ld: arch/mips/kernel/smp-bmips.o: in function `bmips_cpu_setup':
->    smp-bmips.c:(.text+0x1a4): undefined reference to `bmips_cbr_addr'
->    mips-linux-ld: smp-bmips.c:(.text+0x1b4): undefined reference to `bmips_cbr_addr'
->
+--000000000000142dc80618078ab8
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-This is caused by legacy brcm47xx and brcm63xx target. v4 will have this
-fixed (and I will drop the ACK since I moved code around)
+On 5/8/24 10:17, Christian Marangi wrote:
+> On Wed, May 08, 2024 at 06:14:34PM +0100, Conor Dooley wrote:
+>> On Wed, May 08, 2024 at 07:07:18PM +0200, Christian Marangi wrote:
+>>> Document brcm,bmips-cbr-reg property.
+>>>
+>>> Some SoC suffer from a BUG where read_c0_brcm_cbr() might return 0
+>>> if called from TP1. The CBR address is always the same on the SoC
+>>> hence it can be provided in DT to handle broken case where bootloader
+>>> doesn't init it or SMP where read_c0_brcm_cbr() returns 0 from TP1.
+>>>
+>>> Usage of this property is to give an address also in these broken
+>>> configuration/bootloader.
+>>>
+>>> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+>>> ---
+>>>   .../devicetree/bindings/mips/brcm/soc.yaml    | 23 +++++++++++++++++++
+>>>   1 file changed, 23 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/mips/brcm/soc.yaml b/Documentation/devicetree/bindings/mips/brcm/soc.yaml
+>>> index 975945ca2888..77f73ab48c11 100644
+>>> --- a/Documentation/devicetree/bindings/mips/brcm/soc.yaml
+>>> +++ b/Documentation/devicetree/bindings/mips/brcm/soc.yaml
+>>> @@ -55,6 +55,15 @@ properties:
+>>>            under the "cpus" node.
+>>>           $ref: /schemas/types.yaml#/definitions/uint32
+>>>   
+>>> +      brcm,bmips-cbr-reg:
+>>> +        description: Reference address of the CBR.
+>>
+>> Pretty sure that Rob commented last time that there's no definition
+>> anywhere here of CBR, but I don't see either a response to him or an
+>> explanation in v3 as to what CBR means.
+>>
+> 
+> Sorry I missed it.
 
+FWIW, CBR mean Core Base Register. It is accessed via co-processor 0, 
+register 22, selector 6 using the MIPS processor's way of adding custom 
+co-processor registers.
 -- 
-	Ansuel
+Florian
+
+
+--000000000000142dc80618078ab8
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIEju64HEgjETArB1
+fTLsmI3A1aJy12Ao31uv7AyEiYGwMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTI0MDUwOTE2MDIwMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBF6d2miPB3oYiFra7B6kFoSCzlcxw74ur6
+RaAgfZVodLf5nrMFJwavTFDig26LgvarqdflKdPLk0juT0a6ehXASLJgdIKJstutUgBrQqjCCZFO
+XPAA8tkRG/Ub72w4NSrRDXSFP+FVKZhANgve+2ppwydLuVg7RaP3/NB0L+ATsLQxoDeNaFlBbPtV
+6ia9I3jTx1AIT4VBI+yrLxbsEwiiuSQegwymFlCr7Kt6iiXBf7vZk67Ob402MAcnQ53XWek3tW0e
+ZZOEioW+yw8CWvg1rcHrN8CIw2YlpzK0FXXmFvBqoVudQQo+jzOzhfY+rdjzJJWSRMTJwSM1LOAz
+2CXw
+--000000000000142dc80618078ab8--
 
