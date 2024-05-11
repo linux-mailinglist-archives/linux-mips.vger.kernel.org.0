@@ -1,147 +1,153 @@
-Return-Path: <linux-mips+bounces-3237-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3238-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DAE88C3184
-	for <lists+linux-mips@lfdr.de>; Sat, 11 May 2024 15:04:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A6AF8C3246
+	for <lists+linux-mips@lfdr.de>; Sat, 11 May 2024 18:00:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A988B1F2182F
-	for <lists+linux-mips@lfdr.de>; Sat, 11 May 2024 13:04:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A9921C209E4
+	for <lists+linux-mips@lfdr.de>; Sat, 11 May 2024 16:00:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DD0555C3B;
-	Sat, 11 May 2024 13:04:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78D2856740;
+	Sat, 11 May 2024 16:00:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RcO22sk9"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="VgbnpXqE";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="g/cgWqhm"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wfout1-smtp.messagingengine.com (wfout1-smtp.messagingengine.com [64.147.123.144])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A7053368;
-	Sat, 11 May 2024 13:04:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B159738DD3;
+	Sat, 11 May 2024 16:00:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715432656; cv=none; b=l+6pmfykZWIrXv2vWdf2j+IdemI2hE7VOI/y+/y3LPjYh1Q+VpwBEAR9oX8N0Jp841gCnqno9cJ9tdUvWIstyctsSF4ZWdgpFFtLmegSdr+PvwdkZIXdyhGXw+SBykn22NhgGOaJApd6+LTOg70uqGkgIDGU9Kigbrv3RQDkIEo=
+	t=1715443213; cv=none; b=kVgW26IVWkqgavGGPUTypywe5MNmy866x6nq3TbWm++J6x+cddlpz/bjxDBSCSczvb2ghOPCL2xXKb7ZZCfFZDw9z3SPbiJ2C8/skloI4o2H3BeYltdYkh5GknDVgSRmuJPg5150WIAhKeyw45qHI1FR50jZBLG6nWk96/M9Chs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715432656; c=relaxed/simple;
-	bh=yxOj5YfSwj2DTCNzCutbgmJ5WuKiiT3kbxTl71R4Wu4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UO7S1wnTqNZa4YwSwpQEwj99AB7Q0Mt4PK/Qcpj7XvJW8+Vrh7fDzrfQuVV/vv/w4xiUmN1WmKT7eT4IEbzVZBSVP3kmmY1FW0LxyfjPbAg/6sx7yHEdrZHmHZGEhqUXqTgUDqGITQoQyD4bJ/qjRjUefuCBjuUS4GK5kd9L/Js=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RcO22sk9; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4200ee47de7so3826155e9.2;
-        Sat, 11 May 2024 06:04:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715432653; x=1716037453; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CrwA2vIrlWfZjdips+U6g09WGPgGGcS7uLLAmHynIVM=;
-        b=RcO22sk9GxqkwZ3rck1Uwsj9MCll4+QgD/Q15jfXjqZpDbtJ+Oepj6hTiSpBWaT/1z
-         75p/NOabouYwV90TrlLfxHJHqMMTBdnEDJyv38bPz3TR9Ft+VlHjNekwFlrAL2PvODgG
-         SQ7Tq6+/v2ZyiTD0U+1fGek/xqP09XIlFo0+MS7/OcWiZtSsp0Qx3xAHrHc0ebhRByaJ
-         JmtwnsAgbFt0KI4UWrLR+W9YDLECzNmFhg1y1uzcCkVwExPvUygI0jDPfdsrcIGR7HXQ
-         g/jqjpBGMff+3supla9V4+1lWr17MyniwGSbQRhE6fs0U/NOvbG7wNnNU5p1vipUUIH8
-         f1ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715432653; x=1716037453;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CrwA2vIrlWfZjdips+U6g09WGPgGGcS7uLLAmHynIVM=;
-        b=totQPlaEJhe5CnhhNefhXv7NjAiXfT9rbJH3Lisk8GLpvXZu8TUm0wFqQeMIAK56iu
-         d4rvwFuDpC804/SoDYo/KHiVKnnbNYVn/KcTFdGXM8Da76UP1hNkY8gF0w1fSvr0oK+P
-         u2d9aya2SGPeM9GQpIHJ582ZFZY6OFrSQLimyLWo/vksXUdm+9ji/4pB/pPOc/FRkmiP
-         anzRMD3LSffZVzIkIlRvdWY6wMYFVzDoh1unGQ3KnANxn6wnTpYMurAEMQZ6New4+VQY
-         rDTSjw/NYI//bRwPJXEFfPHJzaKMXZJu+xLX+BmMJr26pgJCDTiO7F6T6VPenb+Mrzn2
-         4qmA==
-X-Forwarded-Encrypted: i=1; AJvYcCVs6TY97YuvMdfqjkEt/mzK0VfFlH64RfUYFOq65HF6CmXWugPiVtY6OxgNsL2OGuEERs4gXGlfG9e5wTPCEV+PctZG0jmKKeWkRoKD4svmL0lCgKijhqP95xfe13EC0FkINEX7FFCp+Zv/P+mpxsDncmwHnP2Zbi/Y8TVdegGShFTMojU=
-X-Gm-Message-State: AOJu0YxzyYYiBVmClSx5S0D1mXgGdMGL2TV5hdVYR6Jt+BLInMehZAja
-	wpF+NG+JUfMu9UirD4PGBmk51YLh9FiuWDZ4bhp2cBI0hHB1o3Sb
-X-Google-Smtp-Source: AGHT+IH6zVREnewqTrqvb/pUGLF8t9A9Pi6KWKq0s48v6RX42K/A72ugZcftF2KiD4CDa4ZO3tSsYg==
-X-Received: by 2002:a05:600c:4286:b0:418:fe93:22d0 with SMTP id 5b1f17b1804b1-41feaa397f7mr35465605e9.11.1715432652606;
-        Sat, 11 May 2024 06:04:12 -0700 (PDT)
-Received: from localhost.localdomain (93-34-90-105.ip49.fastwebnet.it. [93.34.90.105])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-42010ca475asm15995495e9.16.2024.05.11.06.04.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 May 2024 06:04:12 -0700 (PDT)
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Hauke Mehrtens <hauke@hauke-m.de>,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Christian Marangi <ansuelsmth@gmail.com>,
-	linux-mips@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: =?UTF-8?q?Daniel=20Gonz=C3=A1lez=20Cabanelas?= <dgcbueu@gmail.com>,
-	=?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= <noltari@gmail.com>
-Subject: [PATCH v5 4/4] mips: bmips: enable RAC on BMIPS4350
-Date: Sat, 11 May 2024 15:03:48 +0200
-Message-ID: <20240511130349.23409-5-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240511130349.23409-1-ansuelsmth@gmail.com>
-References: <20240511130349.23409-1-ansuelsmth@gmail.com>
+	s=arc-20240116; t=1715443213; c=relaxed/simple;
+	bh=whMjsLZJGaUajod7KF9MLT0d0IbLjahrsbL31bpTkAo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Wt/eJsXrrmSoqCk2hNEOee1USiM3Cvj0wGNyFmV26ApPSLk5/SDEalxg93ce4WAGndKSeIwgpcHY8lyEpHChixU4NZvABGPtba6eMW4cBy4QIl0cpGqlR1Ub2/pQw3Nwcb6yQsCaNlofaq8Qm++qNdSolxWNx71lIesw5zLUvVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=VgbnpXqE; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=g/cgWqhm; arc=none smtp.client-ip=64.147.123.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+	by mailfout.west.internal (Postfix) with ESMTP id 607701C000F7;
+	Sat, 11 May 2024 12:00:10 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Sat, 11 May 2024 12:00:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm1; t=1715443210; x=1715529610; bh=W6
+	xDaVpMV3svJD9qzdHdtlzYKGqhyjFklxVbS5VleSo=; b=VgbnpXqEcHykLaUrL3
+	igbjKCTauJKq3vshSWnb6RB9Dj1/w3dFWXIMwd+1osZ2DNyfdPamMG7k3uFjDeXY
+	syo1274AS3TClRT75E+Hgd+vLGN8PRph9BSzguR/65fLidNQM6rYCZTU47cGNjHe
+	85/4+YeCmpuDdyVDcSug2Iz9/27AR56Jd8+XTKvLBWpJw4WvzIq8BWhZVGAJJSne
+	Zd8xMilwIzCpn2D8HXwtFPeyah6XmFS6KsAQ6ptrCkLuDsXPP4iCQf7sVm4IEClI
+	aYL3lMZG7PmZZNPErIoJUG93pgyQZ+x+4e6k1+1za2yu6V03FUMFCR+7wGBTH17D
+	WnOg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1715443210; x=1715529610; bh=W6xDaVpMV3svJ
+	D9qzdHdtlzYKGqhyjFklxVbS5VleSo=; b=g/cgWqhmRe6hXkSA+L5pW0/lYcG+O
+	Q+bCnWEQYhhTq6ORs0+1GXi/AJ2w9nIfNXgIyacScfeTVlDeTaMuLonXk32Wga+9
+	En0Wu/GTcKFyKvRHd1rLVaLk3D37D10PKe3JM0eFDKYw1IU00M3qr5tUYA39Lnl1
+	wCMPHriSGZOXtfAPAIOx9q0PTKc3mQdkh2JOjFvTbWcMH3KuRz+3G/K2Dr8ohkHK
+	JtquVgTAZv61WMvQBz89zfHmAaEfYtk63FPXC0bf7JK2Vi1gDfd8pC1BGD94BNyw
+	lWDauYxQGggBrZrypTHCeOabu/dL8LqCvcPtml+P34PS2YAu/28Txn+dA==
+X-ME-Sender: <xms:CZY_ZvLL1quJbmpA78tvkEfjZesfcDdxA1_M1bKhGh3YMPOtbvN5jg>
+    <xme:CZY_ZjJevkz7fM1MY08OIUTYKzZm9mjo413vu46VYwb_z4MDXLXnjBwzASp6byRXt
+    6EwsN8HxqnX7KyTKJ8>
+X-ME-Received: <xmr:CZY_ZntfJ99AFofMEuABCLCLuud6pGnPVuevITvNv65tIqgoKXHuIIE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdegtddgleegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecuhfhrohhmpeflihgrgihu
+    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
+    ftrfgrthhtvghrnhepudffffffhfeuheevhffgleevkeeugeetfeegieeijeehfeekheek
+    veduveeigeeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:CZY_ZoaV01d29FijQpgyzJd7ce-KwRGTQxYL-40QVVZa9gIL6hl7Ng>
+    <xmx:CZY_ZmbSOMXjK6VEo8pKI4BZ8DdSpOKvme9yI9kv3QgCzXVX79tK_w>
+    <xmx:CZY_ZsDVJ_HV5dNZLW8SdWYl0xcJXVj23mG7TAipWqzplm6IwJdF-w>
+    <xmx:CZY_ZkYUnnfjZXN54_kilJjFWPhyCH0fs8RDkj03YnHD4MqGmrrbDw>
+    <xmx:CZY_Zu7YI1pm_lS78tcLoMkoLZWnVDQXaqrhnKcIl1DhX0B2CYY_N4qX>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 11 May 2024 12:00:08 -0400 (EDT)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH 0/7] MIPS: clocksource cumulative enhancements
+Date: Sat, 11 May 2024 17:00:07 +0100
+Message-Id: <20240511-mips-clks-v1-0-ddb4a10ee9f9@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAeWP2YC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDUwNL3dzMgmLd5JzsYl1LAwNDIzOTtOS0pFQloPqCotS0zAqwWdGxtbU
+ Ac4p0wlsAAAA=
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Serge Semin <fancer.lancer@gmail.com>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ Thomas Gleixner <tglx@linutronix.de>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1375;
+ i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
+ bh=whMjsLZJGaUajod7KF9MLT0d0IbLjahrsbL31bpTkAo=;
+ b=owGbwMvMwCHmXMhTe71c8zDjabUkhjT7aZydpf9lAmbv26x/JlJrYalDHmPkAnGFH/c2z8v/o
+ bTUNt++o5SFQYyDQVZMkSVEQKlvQ+PFBdcfZP2BmcPKBDKEgYtTACZyLpDhr9iVKXwL7VZJ5hU/
+ c/Oavv7C7QQJNtGKy/sPfd6zpejspkuMDJ/O8xrJ81x49OvW8psx2t0aUateyj/PXDJ57hv9ogt
+ n2TgB
+X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
+ fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-From: Daniel González Cabanelas <dgcbueu@gmail.com>
+Hi all,
 
-The data RAC is left disabled by the bootloader in some SoCs, at least in
-the core it boots from.
-Enabling this feature increases the performance up to +30% depending on the
-task.
+This series combined many enhancements for MIPS clocksource subsystems,
+It improved r4k count synchronisation process, clock source rating for
+selection, sched_clock eligibility and so on.
 
-Signed-off-by: Daniel González Cabanelas <dgcbueu@gmail.com>
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-[ rework code and reduce code duplication ]
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
+It seems fixed random RCU stall issue on Loongson 3A4000 multi-node
+system and some boot failures on QEMU.
+
+Please review.
+
+Thanks 
+
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/kernel/smp-bmips.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Jiaxun Yang (7):
+      MIPS: csrc-r4k: Refine rating computation
+      MIPS: csrc-r4k: Apply verification clocksource flags
+      MIPS: csrc-r4k: Select HAVE_UNSTABLE_SCHED_CLOCK if 64BIT
+      MIPS: csrc-r4k: Don't register as sched_clock if unfit
+      MIPS: sync-r4k: Rework based on x86 tsc_sync
+      clocksource: mips-gic-timer: Refine rating computation
+      clocksource: mips-gic-timer: Correct sched_clock width
 
-diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
-index 20e2fb10022d..52324738cbb3 100644
---- a/arch/mips/kernel/smp-bmips.c
-+++ b/arch/mips/kernel/smp-bmips.c
-@@ -626,6 +626,23 @@ void bmips_cpu_setup(void)
- 		__raw_readl(cbr + BMIPS_RAC_ADDRESS_RANGE);
- 		break;
- 
-+	case CPU_BMIPS4350:
-+		u32 rac_addr = BMIPS_RAC_CONFIG_1;
-+
-+		if (!(read_c0_brcm_cmt_local() & (1 << 31)))
-+			rac_addr = BMIPS_RAC_CONFIG;
-+
-+		/* Enable data RAC */
-+		cfg = __raw_readl(cbr + rac_addr);
-+		__raw_writel(cfg | 0xf, cbr + rac_addr);
-+		__raw_readl(cbr + rac_addr);
-+
-+		/* Flush stale data out of the readahead cache */
-+		cfg = __raw_readl(cbr + BMIPS_RAC_CONFIG);
-+		__raw_writel(cfg | 0x100, cbr + BMIPS_RAC_CONFIG);
-+		__raw_readl(cbr + BMIPS_RAC_CONFIG);
-+		break;
-+
- 	case CPU_BMIPS4380:
- 		/* CBG workaround for early BMIPS4380 CPUs */
- 		switch (read_c0_prid()) {
+ arch/mips/Kconfig                    |   1 +
+ arch/mips/include/asm/r4k-timer.h    |   5 -
+ arch/mips/kernel/csrc-r4k.c          |  24 ++-
+ arch/mips/kernel/smp.c               |   2 -
+ arch/mips/kernel/sync-r4k.c          | 281 +++++++++++++++++++++++++----------
+ drivers/clocksource/mips-gic-timer.c |  20 ++-
+ 6 files changed, 234 insertions(+), 99 deletions(-)
+---
+base-commit: 704ba27ac55579704ba1289392448b0c66b56258
+change-id: 20240509-mips-clks-9001264fcfbe
+
+Best regards,
 -- 
-2.43.0
+Jiaxun Yang <jiaxun.yang@flygoat.com>
 
 
