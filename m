@@ -1,62 +1,62 @@
-Return-Path: <linux-mips+bounces-3223-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3224-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0919D8C30AA
-	for <lists+linux-mips@lfdr.de>; Sat, 11 May 2024 12:45:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 380BE8C30AB
+	for <lists+linux-mips@lfdr.de>; Sat, 11 May 2024 12:45:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 744591F21979
-	for <lists+linux-mips@lfdr.de>; Sat, 11 May 2024 10:45:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6B32CB210D0
+	for <lists+linux-mips@lfdr.de>; Sat, 11 May 2024 10:45:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80FC95DF0D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5A545FB8A;
 	Sat, 11 May 2024 10:44:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=syrmia.com header.i=@syrmia.com header.b="SuhQNGD8"
+	dkim=pass (1024-bit key) header.d=syrmia.com header.i=@syrmia.com header.b="0WthayAN"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2117.outbound.protection.outlook.com [40.107.241.117])
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2094.outbound.protection.outlook.com [40.107.241.94])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C0CA57C9E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B391154278;
 	Sat, 11 May 2024 10:44:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.241.117
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.241.94
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715424245; cv=fail; b=XfsrPkgZPN6cx7jnvHPGZws4R6GieZid8EbD0pG+827QtHGvtIInG7DUxzuUR+3cCJhJEfPkm/qbUsMa1fQvyO15S9Rdiws0DJ2runj+xttRzOgSXpSDbnW2hSubJlnVrPYI++4YIBp+jvY6pOBo06JyShXcd3JQtZQf3g1lkCQ=
+	t=1715424245; cv=fail; b=Rr8P4tBWV4iX5ndaBXKxV7mJMeQS0uuAdwJShZzLaTFICJz3XatEkEbcw/pDB11FtSDPm2RLKV7l9o37oN6gjsVKcH+zaELZBzNw4TAlYxJo6CRTmm/m2cMfvN1wNErCRRcGdJEOfQvLQw701p17u4QIvx3C60JFqslhAKj/rNM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1715424245; c=relaxed/simple;
-	bh=ZqlHejko1LJFqsFSSAVAhkWiVHkuE2P/LOyddFG8zrI=;
+	bh=0eQ2D7SqI3x3pkcdFxyKDWIBDFaIORLehudZLhTuHek=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VpwItEDvRXCWYwn5J2kbtFKxzqb9c+67tIPsYnlJptg02fA0/hCeWtjXbvMtKbo8c1GimTGgS/JaThbqh+EsrKb3DatAwv4o0+Yw7opyP9zvtXf45zQhkYRaXtvdAk/cVbuVw8dUAaU+ErZaII8tn38T8p8WBs8BgMvyLs9L2Xw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=syrmia.com; spf=pass smtp.mailfrom=syrmia.com; dkim=pass (1024-bit key) header.d=syrmia.com header.i=@syrmia.com header.b=SuhQNGD8; arc=fail smtp.client-ip=40.107.241.117
+	 Content-Type:MIME-Version; b=AMcM1ptGzV8O3rmdNbdul3qUku5TnvDlc3iKThvTWnA5vI7OWjq1tV5b9lKbLMS7hQGrDQ6vD1umxB6CxiqU1DaPl5bptGzJPKOFKpoz7tpVTdLKGov+bsI/lVq4QwHRfbSEPaqhTAMKsXO/mKBsdCyqoBU/WAct4go5sKgvs7o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=syrmia.com; spf=pass smtp.mailfrom=syrmia.com; dkim=pass (1024-bit key) header.d=syrmia.com header.i=@syrmia.com header.b=0WthayAN; arc=fail smtp.client-ip=40.107.241.94
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=syrmia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=syrmia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Qp3JoDEhDNPBZ7E66uDM9GkZFKRJwBO2qgUtyEquCmbmj0BloI2vKMdAbStnjbKvhm1zTx93lM9ICi7AhPlxm4vPfB4I5szlNkniidlHowtMhid9WpPWbkW3RLZ2hbzow2ytukjUkhuNGG+wuGyblsnsmwrXkq/di0wCjZh9GW06SCzPgtFjqGNecyGBYI716jHDl+tmd4c63hQoO50QiptISx9hUIYS+8NGOSQfzuWSQYT1CAeYysJyyuCLrMZ3xVAex74veJ+F76EYqbgugWc0XgTxN2YO6Q6jXfz7wGtQtMoiG+AYKTo9xZKL89DqUraDcYMZzJx0+JOU3VUCuA==
+ b=a3eO6zxqvLZ3P7NXaCsZDxgTzMBnKszyxvLyAFPxbbXsydz3nv1ET8Pa8v7XlZLxqKNgv4x6nEUrKrkQ57abw+qi63CNNtQm8Evsf9R7Pfzgtss96u59aucYtr/GUNfQ/q5JSIdkxwNoi5/9Khn5qP06rghhlKYsCi/pFCRsf7sO/Ue9hUWM8HJ0STfhKBKP6ji78Z6t+Jsjt5LgN+lovtaQJld+qichHvbSPsYnkBTrODL9V22LcuiV0NdFaENdETvoumfRe3CfuSKjbtos7oD5sDLaH6dILeKdluu8teUjaj2A5BXJUtZF6pWUvIDs6rN6UBielghDuALlbyOvrw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iz1LL4xwR1qY+CI3VRAXbhSeafq8ULEMhuPza2lb/BY=;
- b=VSqujoRi9u2oIBaKjcjVw5m3eBIDOoU7mpZS5bmfJZLmgLgCh+fSgbWvBovaQP4bJN/zilK050VOnMQPms5nevPIlmj5Y2tasgQwTdQRIS2G48JYFJE0mQMslad6+gjs46lAoLrTqQBG5gJQ4451EgPMR5vy+Qvl+x0ER2tLJs/mTfafGA1LqHHOXfs18XxefIh/j10MgS5+0sAnKO1MW9EP4/IaQAUwGDHaAp/0NIyA5WiZ4CKbJlelyqdzDCRo7RMEkW5BilDQOfQkprz5IxTuXD29fUKSpuAQQIX67gVrO9iUC6qcqCeg5oXMGQlO3SJ9OIfFN6TjovuEeGCR4Q==
+ bh=Ct2Cg0KG7EH/O+Dk8ak7pvWe7+OldfaueVSVk84gMb8=;
+ b=S8lps4f8/0aZfezqUmBChYv/x1hhVdSK1bPeyBsdopeFKLq3EHChi0vTsO65g3/0PEFS9Imdvx46vANqVRyZx8oz47MJ10373GrBmIQgyGHJi9ddsCUOPk/xSKIbq3hcFkwxNvaNbKKNyLXUem/FJM4cFJwN8frkEFZrzkGAIJmsU+NrQdegdYc+xfqbKGNFa5DQ7nE0ma2i+YUCijqkY3KYndwIq2c5GjVxe8DZFM3umv053eI/tfXl43Rofgj4AFN124kai3SgCp/mCIuNs5hA66q6nIklv+xSfRrXua1FREm/SMQTr3fH7s7n+GVQWMHIY+YYzeI8Q+MYcip3OA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=syrmia.com; dmarc=pass action=none header.from=syrmia.com;
  dkim=pass header.d=syrmia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=syrmia.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iz1LL4xwR1qY+CI3VRAXbhSeafq8ULEMhuPza2lb/BY=;
- b=SuhQNGD8A3lOV0pQmb3Eq9VyWpdMnTLNMNtwyJ5WBHe1r5d08NoDSQgCNjE1mGeVliBypg3TUdu9YJkh0/rCRyQYkAdqKsG1JH9ctQl9iCObNVG9VvXOZWXkHeVA0A+p46oUrnlZM8UwhXq8mXKC9aFlRB/zrxuvv76q4bPr4I8=
+ bh=Ct2Cg0KG7EH/O+Dk8ak7pvWe7+OldfaueVSVk84gMb8=;
+ b=0WthayANb46Ti2KuJkXxOUm6hV7L394wKnvYrNRhcZRHO1Oru495nRTWzDN5gjloc7a/822Vn6XcB3bs9p0Ruf6OVbdUuLGM+QYpOgoEM75AyNbTe0uA17tD1eka0oDkuYC6s37X8PWRBEe3f7odEJF/bv1BtMNRfSq3+78AkqM=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=syrmia.com;
 Received: from AM9PR03MB6916.eurprd03.prod.outlook.com (2603:10a6:20b:2d7::14)
  by GVXPR03MB8449.eurprd03.prod.outlook.com (2603:10a6:150:5::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.45; Sat, 11 May
- 2024 10:43:56 +0000
+ 2024 10:43:57 +0000
 Received: from AM9PR03MB6916.eurprd03.prod.outlook.com
  ([fe80::b417:d676:e3ff:9268]) by AM9PR03MB6916.eurprd03.prod.outlook.com
  ([fe80::b417:d676:e3ff:9268%3]) with mapi id 15.20.7587.018; Sat, 11 May 2024
- 10:43:56 +0000
+ 10:43:57 +0000
 From: Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: Aleksandar Rikalo <arikalo@gmail.com>,
@@ -75,9 +75,9 @@ Cc: Aleksandar Rikalo <arikalo@gmail.com>,
 	Serge Semin <fancer.lancer@gmail.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: [PATCH v4 08/14] clocksource: mips-gic-timer: Enable counter when CPUs start
-Date: Sat, 11 May 2024 12:43:35 +0200
-Message-Id: <20240511104341.151550-9-aleksandar.rikalo@syrmia.com>
+Subject: [PATCH v4 09/14] MIPS: pm-cps: Use per-CPU variables as per-CPU, not per-core
+Date: Sat, 11 May 2024 12:43:36 +0200
+Message-Id: <20240511104341.151550-10-aleksandar.rikalo@syrmia.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240511104341.151550-1-aleksandar.rikalo@syrmia.com>
 References: <20240511104341.151550-1-aleksandar.rikalo@syrmia.com>
@@ -94,131 +94,193 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM9PR03MB6916:EE_|GVXPR03MB8449:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0d327e19-d0f4-4464-c944-08dc71a74229
+X-MS-Office365-Filtering-Correlation-Id: 7fcdf014-855e-4889-54d9-08dc71a742ba
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230031|366007|7416005|52116005|376005|1800799015|38350700005;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?qUhAEUKXcnkcxm1nwMi369iMT4VK/+YcOHSj09mR5LZ5Nor06lgHBl93FhHS?=
- =?us-ascii?Q?AcBLlGNpVYJ7XcZjprCrNa+XAUBHPcow0PKiDoY1GwU5qDOgMNVUHyEPEHFS?=
- =?us-ascii?Q?81fWMl+sbrndYdRD9NF1uhIIDQLx4F7EyVdP/2LC4vI/LkwqK90YfEfqhxxq?=
- =?us-ascii?Q?DYTlhqe4Nq5RuyeCFJYc361f3brDNRqhwEErRl1nodkOzI0v1mQxhf/i/66b?=
- =?us-ascii?Q?meR04xDD1f3HH3t0ERdi2lQr2hpvan3Fx6etvw0iEZFuBTIWD4/BaSjlkMbV?=
- =?us-ascii?Q?WylQaXiKXSmKkqpGjH907R2/bge0Wi+wnxbBUDfGWJL6GH7euMsPE92D9e0Y?=
- =?us-ascii?Q?YRroR9a4onQ2c6s4n2YV67qCnMpfLBMNd3eyjT0Yke5+aJPtq3Nax3jN9Reb?=
- =?us-ascii?Q?DUddTQ+yboBbgEwSnsENTDUUFmdBUi/PLRNvbUAPjUcEVla48ux2mhj81KYZ?=
- =?us-ascii?Q?Mr79rbGQJvbBOQFIvYkW7N06fQJqYLlwyQcNL3EmcbLm7hqZrevRDTcZO/OF?=
- =?us-ascii?Q?LIW8BQI/dHNiWz6y5KdBSDgJ0TI+hwWlIibeXjM8uMWM7+3Vxb9uWw/AUC8c?=
- =?us-ascii?Q?Wsaw/+sKGHzbdZPUN3O0Kgrq2DfsvDuWGVblFZKXHes33cvd62r/WXIrbyx1?=
- =?us-ascii?Q?QG54QkQIBECi4OhSNuJG/u/LGNJI6Z5yqYQBA66jV0bnPNIpTzx5Tl4VQgVT?=
- =?us-ascii?Q?u0Ebi+rbBnLShuaFbNPeZioOaRsfLw3r5rvTD6lEYyt+CK1KV8HpKU/HH83W?=
- =?us-ascii?Q?+mc4S2AMf4OQweAUpRUHqsJ0JQsOB4MKwKkV9H6RMnzg5TT6oVOhmPehQIFL?=
- =?us-ascii?Q?HM9ZwSucNg7LppIE8wAHwqaw+ylkUcb8Bzep5RzP1pzm3PYeQp83HRJ1QBI4?=
- =?us-ascii?Q?JT0GBpb3cUWBADH2/piaVib7LzMistYwE1GlDixfrB9oGrZ5OG2Sj41csiCN?=
- =?us-ascii?Q?PBe5jaIgEWluIOxzDW0WGqcsmxV462OIWN/e5h4cqg7oD1VZmnEECn2V5+BE?=
- =?us-ascii?Q?FWd5PATrCQd9F3Mw3lhSojoP8PWnqNHAE/xlmylm/7bOE+THXQK+rvix4T7P?=
- =?us-ascii?Q?R1KkkpAueoGtoJ95ex/T/tBrLYWnoOSfk2zPOEEA4c1VKucIklGY/vCcHpAg?=
- =?us-ascii?Q?xFqXEQSxQd99HMciuW9dbI1gZO/lDavnq91u8TnpE3JIPrBMiCURBR8ruO10?=
- =?us-ascii?Q?DZoukLmhLK58SFP+hNHVhPc3iqbs333AugeVxqQK3p8l3DDDm6vb034HQXGd?=
- =?us-ascii?Q?28WbwPubEqq+l8mc9hCvJQTbD51lZhFf0OMeMICw1MD3k4gJxZlxCXOKrBux?=
- =?us-ascii?Q?XSY6mEpC1P4zjMUdqoUp5rwJkMzYzqfmvflTYXRAvZ/hqQ=3D=3D?=
+	=?us-ascii?Q?iZ91aXeRDOV5zsNyg/eSbz8F2wH3M4if92UhNMw9b5zctsOhzQke/xDW4U3N?=
+ =?us-ascii?Q?LhoTmr4NpdR2fX0N+vjdFIZjLSFrKXZm/3PVFGJJHIbA2yFXBS+5riXhO19C?=
+ =?us-ascii?Q?Y3GKH7tcJwWOiLKuMOorcSut+yPqFby2ue0wKZcFF4xw08lrESkO2rGPRKFp?=
+ =?us-ascii?Q?oeRHv11tRbPab9XIGa0c3ctMStdTTl3Vv+6N4TMxVWWJ2Y3MTXwxLBZ056wv?=
+ =?us-ascii?Q?zZvPEElh34qutNtZ2TLsKBzS+bCKOMHJDjS70ts61NCpdna+8aRaReBPkpWu?=
+ =?us-ascii?Q?ySwHJZ0xf3yxZQm6j4gmidz+0kxyekzAr0bWMJ44YrfBseaNWNTovbmvuHON?=
+ =?us-ascii?Q?F3ntGSzVaDLVSEQiM1/uqbOT6gC6eheZpWon7gBBuySFADGymC4Qe8/br3D5?=
+ =?us-ascii?Q?Ge9p5LJaPqonG8g1u9L0kwHxnit4fU5Wl1Ew0iE2LfuHxvmA245BTEsFTVdX?=
+ =?us-ascii?Q?SkDPDZGzJSPZhBwbh4Z9JcwloGuH8ABnEv5FFg6Bi5XtJX7ImKA1/6kRILVc?=
+ =?us-ascii?Q?m4jiy3scAr7fqnB6Lc5a/5+FpIxvfTz3nSjaO2V0gHJCoEXj7aNRP5WIrKnt?=
+ =?us-ascii?Q?SBSvJzm/0fNLAuclMN7vStogMnEO+7ZrYFI6g4uQYeckGocHS1umiH//O+/E?=
+ =?us-ascii?Q?fZVqh1bsrfN++cScjwLzYWu1eHtTe3l2d+JgkEIdYXJJsi8+dQERexNpdnPR?=
+ =?us-ascii?Q?3j3UUv3q9ba1RcaKKcxVcgqDm+O1Pn/i10+JwmtABl60jtTvVvgJEgGCZB0Q?=
+ =?us-ascii?Q?V8mjihouwpXme6ASeqzxDQqPG8wlP70JgLVRXUUo+BiYoFalsFbsR5KYRPad?=
+ =?us-ascii?Q?P585HcMnxw+KYBtr03JGQe2v7uIJptxMMSC83dlrqGUGVc/8g1uv0MxKEvkE?=
+ =?us-ascii?Q?xamuz0ls0BbUNTncQMcICeRC7TKuEhFKwWtReO/msvf82vOFrE6Qc+8z47/F?=
+ =?us-ascii?Q?F1g4RJGfYHUZC8g+poqjilvKqlCTwIgpGZluviHRFP4lS1gIrSwk9hqRSuLK?=
+ =?us-ascii?Q?yIXvwcupo2zI9f9jD889R9aQ1wcjxMkU2XlkdAgAOdj4Rvg/Tso1H6b+eE26?=
+ =?us-ascii?Q?5s8EE+xBVRVNFIC4zDNta/oxk1cZt7PtHohrk5p+DYa0/JmmV9Ebx/LO8Lda?=
+ =?us-ascii?Q?hz1AUxugZkXEaMZO26jmGJYpq2aG2UfuHTlpTxiENALjnvNgL4k2Z3BAXBFJ?=
+ =?us-ascii?Q?/0DcIoDZmPHIdZXo5RlCjoALJGEtNtOeaXi5HQgYO2+1TUPJbGzRzeyufnOE?=
+ =?us-ascii?Q?XRhYMkwcBP1kBttLWPrzPbbLsD14jsO6mqDUaBxIOO5AYxzAvadwd6NHmU8p?=
+ =?us-ascii?Q?+2xXu5fxtwmML3OH6ffpKh/c9LUs+CQ99zR7EUz5xfiARA=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR03MB6916.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(7416005)(52116005)(376005)(1800799015)(38350700005);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ne0e9sHvlIwq7OmQJSg24/4foc6irr0jMD6n87OqbDY4VNrhnF70MJCkAW/A?=
- =?us-ascii?Q?Hex0TTNgxpjlZ8tHVodTUBqLQf2KVNnOUOOuXptJijHgyXvHAM1ncjFbH2WS?=
- =?us-ascii?Q?rUsWOxQkNPqJqZkZIYSuLUi7ud4Gs7DZr36kmEfJfa4HpM3gFNpIkIAFq+/h?=
- =?us-ascii?Q?tu6bZp6GDVL8LDZBX4aP7SrUzbz9Q4+HuEpVzVNrQEI2nZSkKvNuj2s4GKV3?=
- =?us-ascii?Q?oN3yUAmV6tgvj7LocvBKep1yZkGbQcIFYthUCPD/MADYcyo5fgdtiA7hYOyA?=
- =?us-ascii?Q?AbWwYpM9g3AgW9sFMFHDfC5Fb+Gj2r1F7DWgfl0KGiBAk1yTUhInDQmED1sr?=
- =?us-ascii?Q?rN/J8tOOvOHG68hLSuLTK/zguEyhQrThdBpLGrydN738pMviCO6fnOB/4jGh?=
- =?us-ascii?Q?eo2bfAmLtu4ZHovs1jdKCD/N3cW6voRMXQXOcjSewGo7qK/aSMzpvsikjW6s?=
- =?us-ascii?Q?pEOsp1AHXV7MqWehA95sLQO24h7Jfcwk/mbvS82O10HMpkfM/g5l8zriLg2T?=
- =?us-ascii?Q?ODl3Gv4v1XYnO0s7RFGElocWnzafe0tKRRBVY5BsLF7JM1g7ojWX5f/mdjjl?=
- =?us-ascii?Q?dKcA148HB0RlGzXYy0D2bR6wKRWm7TZtHZsPS+yCX+mL4HAnFuSP5YDSJCWi?=
- =?us-ascii?Q?bW1mn0XIysY0l9rKQr8TdMwwxiz4vA1ukDZ9ZWZFHvAIsRyp7MUidSnWzaec?=
- =?us-ascii?Q?ik35ps8M793hnounv+VUihcZOnVpALh3PtTs6Py7KtX5q8XtY2XGpBx7a2EC?=
- =?us-ascii?Q?T852BEwum+Aet6Gu/62O5+Ewkg19T2BZmX8NGm7SAu5bKeq1sCatnh/y+ia6?=
- =?us-ascii?Q?DySs35fppIHvUmsikr6krMqygLfGkMNHvWvLdXLTgct0NUnpaaPs9BE2eulE?=
- =?us-ascii?Q?HyL1I+ejTzNX9R3kRYjp8kaRnKVY+kmx1diiGHvn8vW9O7mAd2q8UT3yxzYi?=
- =?us-ascii?Q?urcf4BkmN16BZw5L99q5Vq6iVQRgU58BksP7CClD6jxyGVRFzNdFwfJYdO7n?=
- =?us-ascii?Q?F52AQ+5A6hqGOjMyCcnwYlLe5OuPM2j2sWMWLxgJOwWOAJb0pgN48+DuNca2?=
- =?us-ascii?Q?Yv+5VZluFSOVQhuRO+0Yma2wh3rhHhMf6C0AKyypc9SG2un66BKX7eibFo00?=
- =?us-ascii?Q?YbHSldOEt5x64ShYtRcg/G/EjqEABeF8mirPlagP4RirIq11FJZPvl0x1D1n?=
- =?us-ascii?Q?gdnue/gJwruQD4GrPBkCGiYAbFPlutHUkClZ9asgDZwAL55BwW0ac1islzqV?=
- =?us-ascii?Q?c4iN73k4d4RvOIeax0o71hH/u72j1bzchcvG960Sa6ntMcJniMc1B4knN5yW?=
- =?us-ascii?Q?eKi9LVnMHfc5CSOXtonGlQXpLzW2qHWB2Awl3DiSK6As3UWEHPUG86z79cbI?=
- =?us-ascii?Q?M5dzNISfl5slnh64kiXtHf6Kcmy76gsA66uhR9vauPcr044tdqxNKgcdXWHz?=
- =?us-ascii?Q?PHOH9wmbBuV/uqZ/9da56O4ulw2NaIsIxwK8TD/a61nKzjmFG1YVW/xjKr7M?=
- =?us-ascii?Q?JsrKdNXP56MCWOM7h8Z14O/1YUgnmevcUKRF3ebTa+otoCaa2IWgbHuHv/lg?=
- =?us-ascii?Q?6/9LCpJLwlTDgN6tUBwk3AQ4LkMhX4xpLyKXmyXWyIq83oU2LfHtQSJy/gws?=
- =?us-ascii?Q?qw=3D=3D?=
+	=?us-ascii?Q?6R/4RH6K04L3el6fUGLYv4FYz0wjkOlarP/s1/eVTw90O8BibI5ngJ2IjNHj?=
+ =?us-ascii?Q?6wTwjzPdL1QEbku7cSoiPoQ339Evjuy2dvTcpPHWJGqhaN01Bd0lCpWGgosK?=
+ =?us-ascii?Q?0STB8QiinrpWyX/z74vl94uRAj/aTLNT9R7vbwDj7fOJl7nHp36CD/Sl0F3m?=
+ =?us-ascii?Q?JrjKz6/ElrNs835cPYlO6ZdbRKBc45jm+8S0R4V7VrWf7kxA6BJN4Cjvq/c4?=
+ =?us-ascii?Q?IcwqdGp2VryunRmYx6w5FRakHGA4DxDBIb2wzPFtjuqGqT3jC0OmL+QHXH8f?=
+ =?us-ascii?Q?wu9rvQWRNMNm1zlDlDiBVkAAhKg5l1R9/akWHfnrvEErCwYVQT7mtBmmg9X0?=
+ =?us-ascii?Q?ue6abEKkOKvD5G8tGjeem4kwp2qCFmXcszawa7N+Z9uaS6LzMtFT9C3bdQoo?=
+ =?us-ascii?Q?9ZsgWWkV1nnvhAY+x1/azBjUar/fNnZw2b2U7NXz1fLyNzmE+ePKTfp6si17?=
+ =?us-ascii?Q?5BqlUVpTyVXeZZ7tMM7ubzrcqGQFiyC6weKvSo+jR815L46gq0Kb4o+2HEqc?=
+ =?us-ascii?Q?LEbANmKS0ht5/MUI2SZh18r63UF9dJB1waK9hOpg5VXAeJ3naqOq4NhPvi+f?=
+ =?us-ascii?Q?zfSLtLWR/Wm952/eJhiujKcJlv6bUAC9pscj+oZ84++B7+BiCdwk+tvwCdYS?=
+ =?us-ascii?Q?ptY3oqMtcvdlAv0K6RWxyWuwq57qlg2+g708/eYALBHW6AnYFjW5HZnh6GfC?=
+ =?us-ascii?Q?UXx+wnsFYZXDUn/4wdcA4x25KICZByqy4cp08ObaKsrzjUli0fd5GQzybWTB?=
+ =?us-ascii?Q?rialWO3SY8w9VuW0g6bkYqwuwWMGqwNE6vRZFi2C4ZSEa08K0+qMuk6h8YOg?=
+ =?us-ascii?Q?Fj9JcqP16HkvHeJtNlfFYvPfPzj3496n5t5KYHqwU8FRAqqCGeftMM3lbW/j?=
+ =?us-ascii?Q?wO2K0xR5AYZYmmB8xCuHr8YcJGVVzjuomdPL1qK1D6ni8es0pGZxPH6aLmxK?=
+ =?us-ascii?Q?VsNZYUklT+n7OdLHcOLDQNk8C11Y5JmfvOc5uorAThQbAiAZ1BkPtpjQTmng?=
+ =?us-ascii?Q?xrypVYR+4Qy1pY6V33Yrm3XEcO/v4FW/rkHw7DEiurMn00/QCzeePEWuQiQn?=
+ =?us-ascii?Q?YRab8va43MNkr0JPrNVyY3IMT5I1Zj47zlmL99jz0qKGFu36AOntR2R9wIxz?=
+ =?us-ascii?Q?q0t4RvAY4BxDb/t01iIQZn+yymWuN3rBRCkgg6N0ZQLXu97W1eww3hxSbR/E?=
+ =?us-ascii?Q?UKAfqJcGtHWArH9t2vya+OcUgj2A5HeCY4GQrVKwmgzqK3U2lhcyLFGSTL9C?=
+ =?us-ascii?Q?DUHO0mAv2OO/RftF+93iYwuTWUS8kuDiJabGLmzPoz/jC7NVBzbg2FBnqsPf?=
+ =?us-ascii?Q?yTcTSbPy2SmjMwETilT9xENTvIcDU68Wh+EcefMhxzhTNmZPjNJXDekmmGZE?=
+ =?us-ascii?Q?3gTPo2B4+I5jnrEe7nhv866MMp5PdLDePkh8iQOvoyzNTQIA9QatweSMbIQP?=
+ =?us-ascii?Q?JAYJPQqYwKsgeisF69Qbo3Ohey4aAboGfEVOiP868xThyLv7pVrNdII/2mGD?=
+ =?us-ascii?Q?xtKnNgCvdKEyCXmkHhrN/nfc+RWkYxy3eZz5c0PTUzlZAnNs3FmdfFnokzbS?=
+ =?us-ascii?Q?XY2O5HQc1zTEBhb0/h72BlJ0adhEXoN81373ll4yvoD7E8Otuafinbc6uMZN?=
+ =?us-ascii?Q?7Q=3D=3D?=
 X-OriginatorOrg: syrmia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0d327e19-d0f4-4464-c944-08dc71a74229
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7fcdf014-855e-4889-54d9-08dc71a742ba
 X-MS-Exchange-CrossTenant-AuthSource: AM9PR03MB6916.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2024 10:43:56.3987
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2024 10:43:57.3692
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 19214a73-c1ab-4e19-8f59-14bdcb09a66e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lPitt4rsU0l09X7QcscaCQjurfaIqdlOURttv11feJ7lThRB2HgvM1pJPSrPSNR5CCGCCKz1wUE5kXlJ5YYKgxTpg+HHOKKrCO4KiwI4Vog=
+X-MS-Exchange-CrossTenant-UserPrincipalName: U+RmZhF1oAPFE70qHiHG80TEm1Kw7eN2DnSJZHQhiKvKqIQXbChsNyx/9V9Q9OcrBGcU5mC8jqtcbJZCjulCcjygt2OGLaQZWWtMfFKGFWM=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR03MB8449
 
 From: Paul Burton <paulburton@kernel.org>
 
-In multi-cluster MIPS I6500 systems we have a GIC in each cluster, each
-with its own counter. When a cluster powers up the counter will be
-stopped, with the COUNTSTOP bit set in the GIC_CONFIG register.
+The pm-cps code has up until now used per-CPU variables indexed by core,
+rather than CPU number, in order to share data amongst sibling CPUs (ie.
+VPs/threads in a core). This works fine for single cluster systems, but
+with multi-cluster systems a core number is no longer unique in the
+system, leading to sharing between CPUs that are not actually siblings.
 
-In single cluster systems it has been fine for us to clear COUNTSTOP
-once in gic_clocksource_of_init() in order to start the counter, since
-with only one cluster we know that we won't be resetting that cluster's
-GIC at any point (ignoring suspend/resume cycles which would need to
-handle clearing COUNTSTOP in the resume path). Once we support
-multi-cluster systems this will only have started the counter in the
-boot cluster, and any CPUs in other clusters will find their counter
-stopped which will break the GIC clock_event_device.
+Avoid this issue by using per-CPU variables as they are more generally
+used - ie. access them using CPU numbers rather than core numbers.
+Sharing between siblings is then accomplished by:
+ - Assigning the same pointer to entries for each sibling CPU for the
+   nc_asm_enter & ready_count variables, which allow this by virtue of
+   being per-CPU pointers.
 
-Resolve this by having CPUs clear the COUNTSTOP bit when they come
-online, using the existing gic_starting_cpu() CPU hotplug callback. This
-will allow CPUs in secondary clusters to ensure that the cluster's GIC
-counter is running as expected.
+ - Indexing by the first CPU set in a CPUs cpu_sibling_map in the case
+   of pm_barrier, for which we can't use the previous approach because
+   the per-CPU variable is not a pointer.
 
 Signed-off-by: Paul Burton <paulburton@kernel.org>
-Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
 Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
 Signed-off-by: Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>
 ---
- drivers/clocksource/mips-gic-timer.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/mips/kernel/pm-cps.c | 30 +++++++++++++++++-------------
+ 1 file changed, 17 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/clocksource/mips-gic-timer.c b/drivers/clocksource/mips-gic-timer.c
-index ebf308916fb1..4d7659c119e1 100644
---- a/drivers/clocksource/mips-gic-timer.c
-+++ b/drivers/clocksource/mips-gic-timer.c
-@@ -114,6 +114,9 @@ static void gic_update_frequency(void *data)
+diff --git a/arch/mips/kernel/pm-cps.c b/arch/mips/kernel/pm-cps.c
+index d09ca77e624d..9369a8dc385e 100644
+--- a/arch/mips/kernel/pm-cps.c
++++ b/arch/mips/kernel/pm-cps.c
+@@ -57,10 +57,7 @@ static DEFINE_PER_CPU_ALIGNED(u32*, ready_count);
+ /* Indicates online CPUs coupled with the current CPU */
+ static DEFINE_PER_CPU_ALIGNED(cpumask_t, online_coupled);
  
- static int gic_starting_cpu(unsigned int cpu)
+-/*
+- * Used to synchronize entry to deep idle states. Actually per-core rather
+- * than per-CPU.
+- */
++/* Used to synchronize entry to deep idle states */
+ static DEFINE_PER_CPU_ALIGNED(atomic_t, pm_barrier);
+ 
+ /* Saved CPU state across the CPS_PM_POWER_GATED state */
+@@ -112,9 +109,10 @@ int cps_pm_enter_state(enum cps_pm_state state)
+ 	cps_nc_entry_fn entry;
+ 	struct core_boot_config *core_cfg;
+ 	struct vpe_boot_config *vpe_cfg;
++	atomic_t *barrier;
+ 
+ 	/* Check that there is an entry function for this state */
+-	entry = per_cpu(nc_asm_enter, core)[state];
++	entry = per_cpu(nc_asm_enter, cpu)[state];
+ 	if (!entry)
+ 		return -EINVAL;
+ 
+@@ -150,7 +148,7 @@ int cps_pm_enter_state(enum cps_pm_state state)
+ 	smp_mb__after_atomic();
+ 
+ 	/* Create a non-coherent mapping of the core ready_count */
+-	core_ready_count = per_cpu(ready_count, core);
++	core_ready_count = per_cpu(ready_count, cpu);
+ 	nc_addr = kmap_noncoherent(virt_to_page(core_ready_count),
+ 				   (unsigned long)core_ready_count);
+ 	nc_addr += ((unsigned long)core_ready_count & ~PAGE_MASK);
+@@ -158,7 +156,8 @@ int cps_pm_enter_state(enum cps_pm_state state)
+ 
+ 	/* Ensure ready_count is zero-initialised before the assembly runs */
+ 	WRITE_ONCE(*nc_core_ready_count, 0);
+-	coupled_barrier(&per_cpu(pm_barrier, core), online);
++	barrier = &per_cpu(pm_barrier, cpumask_first(&cpu_sibling_map[cpu]));
++	coupled_barrier(barrier, online);
+ 
+ 	/* Run the generated entry code */
+ 	left = entry(online, nc_core_ready_count);
+@@ -629,12 +628,14 @@ static void *cps_gen_entry_code(unsigned cpu, enum cps_pm_state state)
+ 
+ static int cps_pm_online_cpu(unsigned int cpu)
  {
-+	/* Ensure the GIC counter is running */
-+	clear_gic_config(GIC_CONFIG_COUNTSTOP);
+-	enum cps_pm_state state;
+-	unsigned core = cpu_core(&cpu_data[cpu]);
++	unsigned int sibling, core;
+ 	void *entry_fn, *core_rc;
++	enum cps_pm_state state;
 +
- 	gic_clockevent_cpu_init(cpu, this_cpu_ptr(&gic_clockevent_device));
- 	return 0;
- }
-@@ -284,9 +287,6 @@ static int __init gic_clocksource_of_init(struct device_node *node)
- 			pr_warn("Unable to register clock notifier\n");
++	core = cpu_core(&cpu_data[cpu]);
+ 
+ 	for (state = CPS_PM_NC_WAIT; state < CPS_PM_STATE_COUNT; state++) {
+-		if (per_cpu(nc_asm_enter, core)[state])
++		if (per_cpu(nc_asm_enter, cpu)[state])
+ 			continue;
+ 		if (!test_bit(state, state_support))
+ 			continue;
+@@ -646,16 +647,19 @@ static int cps_pm_online_cpu(unsigned int cpu)
+ 			clear_bit(state, state_support);
+ 		}
+ 
+-		per_cpu(nc_asm_enter, core)[state] = entry_fn;
++		for_each_cpu(sibling, &cpu_sibling_map[cpu])
++			per_cpu(nc_asm_enter, sibling)[state] = entry_fn;
  	}
  
--	/* And finally start the counter */
--	clear_gic_config(GIC_CONFIG_COUNTSTOP);
--
- 	/*
- 	 * It's safe to use the MIPS GIC timer as a sched clock source only if
- 	 * its ticks are stable, which is true on either the platforms with
+-	if (!per_cpu(ready_count, core)) {
++	if (!per_cpu(ready_count, cpu)) {
+ 		core_rc = kmalloc(sizeof(u32), GFP_KERNEL);
+ 		if (!core_rc) {
+ 			pr_err("Failed allocate core %u ready_count\n", core);
+ 			return -ENOMEM;
+ 		}
+-		per_cpu(ready_count, core) = core_rc;
++
++		for_each_cpu(sibling, &cpu_sibling_map[cpu])
++			per_cpu(ready_count, sibling) = core_rc;
+ 	}
+ 
+ 	return 0;
 -- 
 2.25.1
 
