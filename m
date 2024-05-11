@@ -1,62 +1,62 @@
-Return-Path: <linux-mips+bounces-3220-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3221-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B27B8C30A3
-	for <lists+linux-mips@lfdr.de>; Sat, 11 May 2024 12:44:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AA7A8C30A6
+	for <lists+linux-mips@lfdr.de>; Sat, 11 May 2024 12:44:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C5EC1C20915
-	for <lists+linux-mips@lfdr.de>; Sat, 11 May 2024 10:44:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8820C1F2185B
+	for <lists+linux-mips@lfdr.de>; Sat, 11 May 2024 10:44:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 693A556771;
-	Sat, 11 May 2024 10:44:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64A0057C8E;
+	Sat, 11 May 2024 10:44:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=syrmia.com header.i=@syrmia.com header.b="HaWlBnNi"
+	dkim=pass (1024-bit key) header.d=syrmia.com header.i=@syrmia.com header.b="bhkzxgKS"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2094.outbound.protection.outlook.com [40.107.241.94])
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2117.outbound.protection.outlook.com [40.107.241.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 982C056444;
-	Sat, 11 May 2024 10:43:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.241.94
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 335E05674B;
+	Sat, 11 May 2024 10:44:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.241.117
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715424241; cv=fail; b=HD/jEPB73hOfUxnTg+vnMSjS7tr96+Ot6ZIO3BzAVDhgdSYYJ7aXwR2jQax/wR+glV/a5hX4UAnuZV/KBaqpJeDhpdaDmMHRaHhssvO+/ofNVUCPdPHcGG7WOarv/qomn9nTUpMIwpdTLbpp0K8tKd2QkmrF/sxS7csYedz6DoE=
+	t=1715424243; cv=fail; b=UtANokQp3fr+yksustl9iub0plXq0pPpnuaNv20O9ABk1qbbf6+mBxxG0c67/trJ98gaXGzHmKYiE6adumR2bHparCpmy0uG3sk3xIlk4YUaF0ovF2LOqa7ZDaVR1Tt7hebH25IFSqCv/WFvh2RxnQ8ZvruhT3NqIiMP+hSPars=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715424241; c=relaxed/simple;
-	bh=V+up9kRDIyYiKB0Gj4PBrv98qGZNgLPOeQDg0TdoqIY=;
+	s=arc-20240116; t=1715424243; c=relaxed/simple;
+	bh=wdfBHU+kas5IRcH+QP3mj1eQGTyMR/nNeO+3Vv1mj4E=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=kKVVv5HNaWg8f3a+2qDJATje6vSMClWcgyLxFndAdIQE2FKvZCRwugUEDzmHvZpcKprc0tRozur/fsj0ParaJljSjbY9+DQoyqawR4fS2KavJvCcb/m0LoTbjkGCsdtmIR7qB4rJyDWRaNCSEVunTjT+DMU/XtZHj08AwyN+phY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=syrmia.com; spf=pass smtp.mailfrom=syrmia.com; dkim=pass (1024-bit key) header.d=syrmia.com header.i=@syrmia.com header.b=HaWlBnNi; arc=fail smtp.client-ip=40.107.241.94
+	 Content-Type:MIME-Version; b=J3c+vDzbw42krn8INy11nAlylP5z68qnIvglusaBRc53VWNVLKgQjTFO4nI2XWMZkL2YNbkJ9LxI43MOYI88nnwRaYaLxhqbnUvHgK34hhqOvt4sPu7ks/j8WkLr81rNbr5Aqeh5AWeCxSLRRgdgeIIESBBw+Bc69HyHidRWcpg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=syrmia.com; spf=pass smtp.mailfrom=syrmia.com; dkim=pass (1024-bit key) header.d=syrmia.com header.i=@syrmia.com header.b=bhkzxgKS; arc=fail smtp.client-ip=40.107.241.117
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=syrmia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=syrmia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XPWwfgnn5IGEQMfa/qf48B/kxdvryoleuTBr0kbm4FN31s02cSWuzQKF55sWTU/tmQ4rAoNDaKx50Xl7qlBAQ1Z2PBuuA+czQYD6F0GeZNzFG21Gl3EXfr7mFS+65g2m5xbIceamBuuOjUbFVs/SFMrWDAnHX9DpPmtZnU5IamDapPAOZL3SZ3yNMJibxecLHJ02zrLnWXGKtS9q/GNAatZLLm/Rl+q2XRji1vzL8MVJ8u+XaedAs5PkWLccqlH3hSJkaEWPTRZcN1Vo92sPuGeHkc95oUlDcVJEH6wogyYSDSB0PGdFYEqtOn0MJsz419H2vcjB1wQ2Ez5V/88AxA==
+ b=kFLHSctPKPXRaXlcYeNuCkmjUHV1viEsg1gWhgKCNZ5GmRQSdR1RY1e9PponsFoVFasf9xoervSgua4/Adwm6Q0n8ufkGT2i5Td8+96g1tP0yZWzvKqn4E930rrnSF6a8bkB4Q50uIg1Cimav33KUjz7e/XVUfo7mdkNar7msHmTXB+Py7B5wuYZSrjUPuTcFkPBOfYRhcjgqBNZNFovSjdU0OyCHUnMI92vQG3LQZSOrOYfHeynRK7CfViVjiUlWC7rA7sZuha6dRi0Q0L8AYhkqbiJNcvuTJYW4hMH++GLBly3Gm8R8+RVWNyid4f1rwdLqQgllgzNpyUuP5QAIw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=38E6eM+S/5PuGgIFZvPuBnf0H+1kJD3Y+e8qzqv2r1s=;
- b=BZWiRYagBMf8aojqv/9w2sr8tkPKExaenaEB3e8EMYh9g6tsjLCABHh8ADmo2BbRL38lwVptKqsRvRYc8H2tEkW4saTTy5p7pciqpfLMsV0f4S5s08766ZhrTpdYpj07teOjS1B4l3s/xmWIDqVsMHmykx4EK+MaZ1NefgqIRuBZYWqK0Y3e5K+EabZwS5LHWbiHrAF3BpdEn5ZaUwVXXvM+LGstaMKut6Xln2rcM37IP8+rRuL9a0PMZQaQEoFTHVNUwkMiGdlIX4/idxj922oJ0duGTkD6C/ILFRHWt9WGGIhqCKAcMsWFsixegbTx/rS6X5FCoDQ8dmobgSe6Og==
+ bh=8Z+QxqBZdAG5DlGWpDMtaRHL0+S5xvmq8uvUIrO4CFs=;
+ b=cG2C+KyVkdLWH3iZbxOOBnLRu/q9unkdzTgLOPZYlT827396YurfrDhcoj6Tm5y5myiQphtj5xqCMTDmpMh8eaiLt8ngfV6L95MOhLsHXKF6Cl0w3DMgYU7PnkrHHuTvOPJRnNiITxg50SinY02tci+177G/mtn6Clbdrqt1eY0prvdLhx8RjbrjHh3TTz6UitWUXUraxn3r1jy/J0KbAGPR8QRF8ttMPV9Us8Lu01/B2qSCW0RBPRR1vMQaYL0kOmPS7A3v/btG+Tg6hkHuPC6V/3ZEH0KloOI8yXNqOo5oRaATZdl9p3o0sBml8WLrtpD8/9IeM0ejf4MhbqFcEw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=syrmia.com; dmarc=pass action=none header.from=syrmia.com;
  dkim=pass header.d=syrmia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=syrmia.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=38E6eM+S/5PuGgIFZvPuBnf0H+1kJD3Y+e8qzqv2r1s=;
- b=HaWlBnNi9ASIb0bYAC52LacOnzcPbk1QcUEL0TXAQ3eUfvlofjr0xzAosYIMt7eytbScw3WGlm1fFPHrA6f+XqjM9edtDe+VuuBhnGKQ56Tbf5h7T/B9YHT8GHjKxLVtlemEa7lyv7RnkpHKJbgkzZRh/pBxjgdPO0Y748kpugw=
+ bh=8Z+QxqBZdAG5DlGWpDMtaRHL0+S5xvmq8uvUIrO4CFs=;
+ b=bhkzxgKSj+OtTSyqvmzONG18cZTlJ8UvfZ1HroW6EuBvu7ALsX30b0XW90dSbFvclFZ1i+Hw2AibWGQt71S1w9R6lqs/8M0WsBja8DnwzTDesNQU/XsNkmcbsSgTT9QotG8wymkAyPjrSA2ilLhSOfaku71neixa14Au4HK5zw8=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=syrmia.com;
 Received: from AM9PR03MB6916.eurprd03.prod.outlook.com (2603:10a6:20b:2d7::14)
  by GVXPR03MB8449.eurprd03.prod.outlook.com (2603:10a6:150:5::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.45; Sat, 11 May
- 2024 10:43:53 +0000
+ 2024 10:43:54 +0000
 Received: from AM9PR03MB6916.eurprd03.prod.outlook.com
  ([fe80::b417:d676:e3ff:9268]) by AM9PR03MB6916.eurprd03.prod.outlook.com
  ([fe80::b417:d676:e3ff:9268%3]) with mapi id 15.20.7587.018; Sat, 11 May 2024
- 10:43:53 +0000
+ 10:43:54 +0000
 From: Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: Aleksandar Rikalo <arikalo@gmail.com>,
@@ -75,9 +75,9 @@ Cc: Aleksandar Rikalo <arikalo@gmail.com>,
 	Serge Semin <fancer.lancer@gmail.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: [PATCH v4 05/14] irqchip: mips-gic: Setup defaults in each cluster
-Date: Sat, 11 May 2024 12:43:32 +0200
-Message-Id: <20240511104341.151550-6-aleksandar.rikalo@syrmia.com>
+Subject: [PATCH v4 06/14] irqchip: mips-gic: Multi-cluster support
+Date: Sat, 11 May 2024 12:43:33 +0200
+Message-Id: <20240511104341.151550-7-aleksandar.rikalo@syrmia.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240511104341.151550-1-aleksandar.rikalo@syrmia.com>
 References: <20240511104341.151550-1-aleksandar.rikalo@syrmia.com>
@@ -94,143 +94,401 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM9PR03MB6916:EE_|GVXPR03MB8449:EE_
-X-MS-Office365-Filtering-Correlation-Id: 24ecd299-eb87-4122-6ee5-08dc71a74074
+X-MS-Office365-Filtering-Correlation-Id: 78f418ab-11c5-435d-f84a-08dc71a74102
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230031|366007|7416005|52116005|376005|1800799015|38350700005;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?QgIp444PTTWyQBhuNgVlfULe6nK2Jo45qMR8i2n8d9nPKld2oW1A6kq4YpV2?=
- =?us-ascii?Q?kaAY7M1AI2ZW2NO/LNheKUpkQP6klFpozIrsi7KpTSQ0WrhiR+6oa58/faf0?=
- =?us-ascii?Q?5VdXY36xSMcgDQ2EY1s79xNaa3PzWVqfaO07S/8i/TE8v+Sm0BY7SEwebumQ?=
- =?us-ascii?Q?Y1iDCWCXMJ6hEdRtmZ8xWxy7frpuGLoORTua2XuR7jksfh+LzBXzIbJ76JVO?=
- =?us-ascii?Q?agLNT0hIkLnXaNH/sVXUqaKkAzyUwSooiZHgysVA6CltInZUoJaZjeGu7Gcq?=
- =?us-ascii?Q?R6i8YlwkZJxr3XIXs8D+0AnGS4y2AhjXRl8UKVfZVKY9YgZJnI7xrtLlOQUM?=
- =?us-ascii?Q?RygXVLe5wuuNm0LN+4am13ydKqFDfALTPgf6SWgG3cHWXo8Mx0zDPYbHUQJ+?=
- =?us-ascii?Q?DD0hRL/5DvDJoPepol2eZHzEPb6J32e/dNIAoAgerMkB88kY1czFGrTtZv2M?=
- =?us-ascii?Q?8KaurfueSuUyvxEUDNWqHOJey5ra3/zgMJRVECqWRcvmcxWAG3feW09NS3Qi?=
- =?us-ascii?Q?vNpzBamE0x5jwgJNLbYjJnLMT3uzXQi31Q8y4Nc0qdyFkRQLExnNp7UM2gd3?=
- =?us-ascii?Q?qO4d/LrjXLmRDn+nHFdo7juha968nysMVkG6N8P7nZdOCHN2T+ztAVlds/ZX?=
- =?us-ascii?Q?VwHnwew31qU2rV2sFO/MsFcvHW7A8NXgnXlqCksL3cB1oreqiw84rWrfcK5d?=
- =?us-ascii?Q?3P1WMoIasMw/28lCbXh94o4BsxfXeAK1SOPkSCiL22lDCWHjqszztnyRjBE6?=
- =?us-ascii?Q?GxY6Mn8DK0jKD+amJ1LgO5EDQkqyXfoCto8HJnMnCH6vUaUjtxiBtpWBG9a+?=
- =?us-ascii?Q?DxKyBz3183t3iKFTuBzTNvUnZeErJ1vcMUzDUArUUcEeF43r8QyS0+dNT/+W?=
- =?us-ascii?Q?FmyYupAae4oajmFiDRt5+YP3jIw2LNceD+yebNd6bOxcqT//PR618mfWNgt7?=
- =?us-ascii?Q?vXx+29uBGrJnpMTuh5yLjWo5Hb12sbCJ9f9Wr9t5FuGpGNwCTkqnzNyn3+1a?=
- =?us-ascii?Q?5ewNMzQ4UqehRsA7mtxYHg0WbS6t57CYGdRi0t+i7t0mt/bZ4vIS/LqZQ0U+?=
- =?us-ascii?Q?FhljpbhePuT6h7lInxLdV3VwjYsgf5u/eoX2gkoDDtKMcKUOiiwmdJXZmsUC?=
- =?us-ascii?Q?3paMo6E7T6HSgbRse5GgB6EeGztT0euOxl5Y4mWH9YQ1zf/Nv/dQ//DGmLxw?=
- =?us-ascii?Q?XOHF+sF4VvjrMfqqtelQQuCfj+hZvYRE7loMenfmJIqpklcwmNeKEozHhXqa?=
- =?us-ascii?Q?zY0xPozi5I8Yn1tM3N9zf46808d962ods0TN946mIUOjOGRz7PfjQeYF8/8C?=
- =?us-ascii?Q?5h3wxxuF8S65rhK4dP3oO9DWmjcDo43YOf/x8tj+ftqGOw=3D=3D?=
+	=?us-ascii?Q?xpASwHYOl57M3WJrE+4xsPv6ywwN8MsD/l/XYHmGWRMTAkMnkGghk5p1uMaW?=
+ =?us-ascii?Q?KjD6SswjRvgg15AHOnLIsmSh+ftPfbQeLSa+e9+vQUteBccaRqQzOy2LBZKn?=
+ =?us-ascii?Q?pa+yx5yrkriBjFFcmTLJMJnEfQRM79P0BV6Ch2OncbQ5EqmwHDGa4vxjlPvv?=
+ =?us-ascii?Q?0T4ZhDB/xPugYrPrIVu8KoUx/mOXgGPrnCwNQbrRjosOERCVrebfU9Znyuv8?=
+ =?us-ascii?Q?LTpcM4evXBOXKdVA1gxgqZASXaReezRS2KOznHKnmge4TqJsVyserxiDGn/A?=
+ =?us-ascii?Q?1AXIVq37ENCTGEa79zexY6G3DHIpJ67IfAwJAA9ET+bKMNvCAMMpwT7K4my8?=
+ =?us-ascii?Q?2pfOKqAwLSne4jbTvVYcMmZ03+SsvrXsZkIgEb+QuCj1jHQ9UrtyAwgVBXXx?=
+ =?us-ascii?Q?F90DF4FMY7gY4OiZ7pDhgsyU1u0kHWbvXawkxxZjhRvTrbz6itekEiezCSZL?=
+ =?us-ascii?Q?5wVkaeEjrBVvk93g0mQtf13cAwZMNq1FBTGIanQjFSyFRy2w+y8/M2SSo9Wn?=
+ =?us-ascii?Q?dbMrqfST0BSHLYrNB3uElvEnB0i02Dk731ShxuOM/jx7d6BAss572loCv790?=
+ =?us-ascii?Q?1vpxPkpQRZxYbAgmgCNEz+JhpM10Aa7X0K2ivMBjXEjdMHA8nv3xMlum752b?=
+ =?us-ascii?Q?FGS4ozraA2vp7GN07+xJOZRhFfFhbg0oOn86/phqHRiek0Rdu/o+vdNd89bZ?=
+ =?us-ascii?Q?KKifuA776M0Ac+mn9Y7E36Xh8Xi+I3IpuYMruqGPRM/xSmMTL11Ndm6qc04p?=
+ =?us-ascii?Q?bWdfplCz54PH60SlyHmUFj2Va2CxgDUfkCChmetUDcxK36A4yBDc2TFxdz5H?=
+ =?us-ascii?Q?q2JFjexFu8YIZFzOxvz4pcxCbohl7zIj6aK7OU7hxaWwzW34mrAtdg/PkMY8?=
+ =?us-ascii?Q?V0ss8wVtaQDpakBMXI+L7lSGvdE/wL3B53PiqDilv4NatxMtzXs+i3JEXqDM?=
+ =?us-ascii?Q?IfQiprNKa7atKCVpR65yEVuukRBKl0AyF1ucBSlHrhTjoDg61tJOlLEL2jx5?=
+ =?us-ascii?Q?NNLpGXBa4mjcoN4qQuo7AFLkTkrQFFtJPPAzJI6l3PZ+kDQansK+1jr5X+pb?=
+ =?us-ascii?Q?UJ9yIVeogc4PK+/NkHtv7eXHXe1GoSas/LTlGS/7Wp0C0cEQGHu6vOiGhK7+?=
+ =?us-ascii?Q?Sm0cyhA5YCriyzXN8BFp4XWJssELabIHtt6Bvu2K/hfs29yJVDizpEwTUoXa?=
+ =?us-ascii?Q?46ff7cXhprJ0YIhrMeA9VjWWSdugzpkM68g557JCE/QUMRS1VSqP4RJlsLqX?=
+ =?us-ascii?Q?GYwUQxiMIZpfHfIW5w2BpPc7HdkEMbfGeXkez8xoMYB5xWqrleuf2ekOIdcH?=
+ =?us-ascii?Q?kb0HlksxYxFXDO4qblVZ/yhniHfH/rgnPQy2QlUlG3MOTw=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR03MB6916.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(7416005)(52116005)(376005)(1800799015)(38350700005);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?jSvjFFkB36GxMI+cyPBaMEseydDVphh5JaBLO9XJ7lBxMESV8EN/lLssDkF/?=
- =?us-ascii?Q?3yoH48Q2agWZ6P5ycmuaEnt5Hh1WOD4dLfoWkhRl9Y+M9Nd7r9Sjn6rmT5mV?=
- =?us-ascii?Q?TTtWpyoZfzCY8qB0U6cdmnAkXiFd/vejkw82M8eqOhvj09PyU4lQCtRP9la6?=
- =?us-ascii?Q?GNjAqSCxFMwb7mEZH9GfL1P6/dCv99qdPFEG/0gcy+LHwYllHhjtTu+PjxJt?=
- =?us-ascii?Q?sDPd3yf2Qia3kFeXamNoAv8OAkLKVEBSLKi6hGLkaMCWQff/58UBdm/JB5Yx?=
- =?us-ascii?Q?0sP6kAGlYyVLUB4Kw/EV24HaDSGk8xkSlc9mFN67O6j5IjjjzZ8ahOu9rJO5?=
- =?us-ascii?Q?KE3s9kCktXwBN9zeF2JQsxEV5/Tt07ZoxYy93H2+jNa3KdNgY8JCCAfF+QnJ?=
- =?us-ascii?Q?QTbx0C2IVmzm2BQTDqHtwaFF8UIe6KMPLMdEbhBFB0gxqbrMx1rZW0cvXyDv?=
- =?us-ascii?Q?4HAh0P5L4nink7mIGmjir3/uzM0kky6C6ScuHfhkGjK/+L2kHDHBOjJbr9ze?=
- =?us-ascii?Q?2Omqx/aGS1mJFubhAnnILWL0OiJ0+YnAp/t/dvo0tUaTfhPvLfOHmqFELWTZ?=
- =?us-ascii?Q?A5PM393upYJ+lpJmQqHWsQ8/Ms0nkUhEVTCbpiXEuOGA5B6+58vO7hagh/fO?=
- =?us-ascii?Q?JuvhJd3vxhT2dWBYE/t0lRU0Zd4zA2jHuN53EEvVIZooqVxBoqc+eSUQKAUQ?=
- =?us-ascii?Q?Clp/gZ8++eztepA1zZecyVix1caWnwOcvRsjJkEHEEKwIZoIs5+nV9OglRV3?=
- =?us-ascii?Q?erWDq4BJgnB4RZLqBahgJnatT5vURd47kIqPgFS20ORjkBzhAAUCO/sb+bvU?=
- =?us-ascii?Q?7/5EYU2wqs1O+/1fqTZN3m/pySFuB4W84uSK7Bt+glYsOXOF7qnLTV2gRxW+?=
- =?us-ascii?Q?gi9MHD8RbEOYzzo3TWJucO+GDsEpk3F2CYWVUlcxSQXByvcW8w+NWSvN3Y3y?=
- =?us-ascii?Q?ub5zDV5kczWl77z2ochGX9fSV1aPNv7FF8St8MpXxolx41K7PeJ2qFdQmYN2?=
- =?us-ascii?Q?ipbMfK01WMTtc0dgwOJOiyLN++fkoXi4mErNw9AK/pwiJed8ACFNlTrPeHcV?=
- =?us-ascii?Q?dm72gv049WI9+uFGSUidYhcSpV5VVKGzb8Uu+RgD0253g1m/qQMRo8WETh6E?=
- =?us-ascii?Q?DqlVnzDZUcjven7v0DLwrOCihmQk8+pBPD+Aqtu/hMevKyv+yMSolP++tbW2?=
- =?us-ascii?Q?YV+o7Jxcd3lwQgcCQkWU3gRaXMCQl01NDctLsx5cXhf4L7srGdAdUt6VuFok?=
- =?us-ascii?Q?GUICM+HLrupcVkpG4XJz66mpyQx5P8c3wN9B4HNmJblk0+ZSruG0dbzXCgl6?=
- =?us-ascii?Q?eeOCtC068NYAUyCns2+q9mVaT/dXxP9shpQFYmLovwVrxSN1RD/cHC80pOCv?=
- =?us-ascii?Q?JdLSjy20hMZ6iKIYcFdxsRaTmwfVOGpkC9z/TAiLIstpdw3vmQv5jCElXrVb?=
- =?us-ascii?Q?9LAMtyKvqXa+6KCpTP6kk4EoI9jBLgza2IjD0jo5TfGjztyiXQ54zm43+UmF?=
- =?us-ascii?Q?nUVwzbQ/6I3V8oJJXuX+13w2gLxUSelGZuFdeDL/+T1stxDINrGgK6hKxzbg?=
- =?us-ascii?Q?hNwWCdw8ec84mkIiomvumorxaZdE85ptDf4QJGi3Iw92l/HpHFjdDyhGFNR/?=
- =?us-ascii?Q?4Q=3D=3D?=
+	=?us-ascii?Q?iBtXglI5Stw41FGq020VxiH8eD9hP0gPzMqIq1jnJtxzPu6bDpd4GMh8mH+z?=
+ =?us-ascii?Q?YCZfZSwQdC5Vo5FkyoN7jy9PwwbA6jHDHVhBXvTSSUYnOZv4Oadj7CA5LQkM?=
+ =?us-ascii?Q?zDB3d8PzN6Eqeh87QaVMvd7hzf1MKmggmgF8pGlp+LnSuEYEkvPVGLKPIF7N?=
+ =?us-ascii?Q?xcxwk6oVvcUGuYkSh6kUMge5x1KW10JtOKCyMFtnGg9RnDxidUk7p0eMjCL2?=
+ =?us-ascii?Q?C/EUZxc1lFxcaJ1SwGExWlT27bFynb6QZqaFiNAeDl1P2nfaEmoCWr9pmpzv?=
+ =?us-ascii?Q?plJjuFbFAPBL1ZwNJiL+5nyWHpyeHgpxtR9XGM9Wi7Vay3JCNbXudqCoksGG?=
+ =?us-ascii?Q?cAXpqCEIaFGpfExkP9Umurwhu4J6+59vKF43KaD/KiLuvJRqpSI8Kc+M6EDU?=
+ =?us-ascii?Q?eDp32mCG3OY/7iLLcAi6D/SzsAJdUYnw7h1/txLyNrtyK19d09KHUmu/UOpw?=
+ =?us-ascii?Q?BtK2rlwnOe6vG7RgtYIGwd3yE9uUDfl4gBDXAasrUWE1ZtOdKU14j1wRUa+O?=
+ =?us-ascii?Q?CnFDWI+78CG3LwlZCCJlXn8lACz4mpItH9nSQMKltEqITAh1gsjhv8u8+aE1?=
+ =?us-ascii?Q?PaLwxEipAwmKYgcV59Qbr4lgj7gibTarUjf7A2bfZ7TOTPM/PMH/jhe9Isai?=
+ =?us-ascii?Q?ruyu7v3ICNX8TWb7IW0JD5gvt3/yVlUvA7W6c108OjMugxxiCjOZKDwzmNZb?=
+ =?us-ascii?Q?3ze8D42rxHx556Ve7cbOesHASpVQ3iBjVG9ZcMkiNX+dRz6PsR0QoUCmACFc?=
+ =?us-ascii?Q?VSy7ftGP/lIfzEp10kLnoRfq6FTkAm6jcIwx74zKjz1Y8DzJjz2jVGYpyw/4?=
+ =?us-ascii?Q?YD2RuW5P71ua4JsmBFPgPfqyX0XMPdsLPoYFQuWdQs2zYbsph+m6YGElT7Mo?=
+ =?us-ascii?Q?D8By6HpwjKW8XZyXN1jNXFiO/OeQm9IS87CV1QHmtiKX5SnXKINeY6WViqzh?=
+ =?us-ascii?Q?R9MU8g2oFqZXxfy3kzIurjcgzXO4axxg05ELZ2AJFjYFGWPhMz/23AiNq852?=
+ =?us-ascii?Q?plqi6qQjh/HPNxkEaINK9P8EqvKKqYY8/fLupCGe+JZ227SADqBF1UTZHbiA?=
+ =?us-ascii?Q?qZu9o8SMV7OVCgwXmC73VevhkavQfJujMaChhVS9Z8IYH0h6kgpGDM8LmyJb?=
+ =?us-ascii?Q?9k/Uz8Q2lTP80lo951BZJ8FWl4isRT1cwNalbcweo7GWdG19AdiSy2U3YIjm?=
+ =?us-ascii?Q?DqIOayEfnbIO/fWg5nkXb0QWgrY79sTaYXhbu8OBOo70HGSYYwvWo1ZKd7Pw?=
+ =?us-ascii?Q?uItE1geT5p77YlSwNCHZ5bRvSYoDc93Byc2bKlrXNvHh57KkFheLShN95cLs?=
+ =?us-ascii?Q?XKOPkWdlFJNz9SLK+v+SktDJJdSVuNoRRc+IFJTJPFzBL5GMUB2DeoQwbBtj?=
+ =?us-ascii?Q?4SgFehfGtT7YpWzcMu2GbYK0WIOl55jK1IVN5rdpmA9nF2kPbPBsHrNO2Ihy?=
+ =?us-ascii?Q?a9gffFYErp8BBaFEf+9TBKKD9dyJG3U0TKOofUMz9y7A+MEuiqXgpH/Q859S?=
+ =?us-ascii?Q?3PUZ2BjVkFJA5HQJeFk6HDrrt7lfGPloalZbXmXwc9cyLKPspeNkV2FbXcrG?=
+ =?us-ascii?Q?SbrVXsJ09umwQJc0SfQYc+XCbIxg1PJhqgLykBNvLzLLeO7oNQoLXFLiVsaf?=
+ =?us-ascii?Q?Sg=3D=3D?=
 X-OriginatorOrg: syrmia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 24ecd299-eb87-4122-6ee5-08dc71a74074
+X-MS-Exchange-CrossTenant-Network-Message-Id: 78f418ab-11c5-435d-f84a-08dc71a74102
 X-MS-Exchange-CrossTenant-AuthSource: AM9PR03MB6916.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2024 10:43:53.5451
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2024 10:43:54.4697
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 19214a73-c1ab-4e19-8f59-14bdcb09a66e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: O0qafwxkOLVdF/Bm/QPpZ5moOXJtjV//Vb6v6FRFXiSlCQ92Ood/ZPtCNeMGk3EXcO4uGgqHBYZtSxH6KQX4VdMvZ2d8AOcIcAwdvvU+2cE=
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8Jn+LGtg4aBtGBfFrXOhsIXedGckIM/cS+dJxer8F/asV8eWWoyDzLIilaDUlxlbYyQRpdSQAh4OIOK9NiiuDxdN9XoEiK1e+mIERN0lIHQ=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR03MB8449
 
-From: Chao-ying Fu <cfu@wavecomp.com>
+From: Paul Burton <paulburton@kernel.org>
 
-In multi-cluster MIPS I6500 systems we have a GIC per cluster. The
-default shared interrupt setup that we configure in gic_of_init() will
-only apply to the GIC in the cluster containing the boot CPU, leaving
-the GICs of other clusters unconfigured. Similarly configure other
-clusters here.
+The MIPS I6500 CPU & CM (Coherence Manager) 3.5 introduce the concept of
+multiple clusters to the system. In these systems each cluster contains
+its own GIC, so the GIC isn't truly global any longer. We do have the
+ability to access registers in the GICs of remote clusters using a
+redirect register block much like the redirect register blocks provided
+by the CM & CPC, and configured through the same GCR_REDIRECT register
+that we our mips_cm_lock_other() abstraction builds upon.
 
+It is expected that external interrupts are connected identically to all
+clusters. That is, if we have a device providing an interrupt connected
+to GIC interrupt pin 0 then it should be connected to pin 0 of every GIC
+in the system. This simplifies things somewhat by allowing us for the
+most part to treat the GIC as though it is still truly global, so long
+as we take care to configure interrupts in the cluster that we want them
+affine to.
+
+This patch introduces support for such multi-cluster systems in the MIPS
+GIC irqchip driver. We introduce a new gic_irq_lock_cluster() function
+which allows us to either:
+
+  1) Configure access to a GIC in a remote cluster via the redirect
+     register block, using mips_cm_lock_other().
+
+Or:
+
+  2) Detect that the interrupt in question is affine to the local
+     cluster and we should use plain old GIC register access to the GIC
+     in the local cluster.
+
+It is possible to access the local cluster's GIC registers via the
+redirect block, but keeping the special case for them is both good for
+performance (because we avoid the locking & indirection overhead of
+using the redirect block) and necessary to maintain compatibility with
+systems using CM revisions prior to 3.5 which don't support the redirect
+block.
+
+The gic_irq_lock_cluster() function relies upon an IRQs effective
+affinity in order to discover which cluster the IRQ is affine to. In
+order to track this & allow it to be updated at an appropriate point
+during gic_set_affinity() we select the generic support for effective
+affinity using CONFIG_GENERIC_IRQ_EFFECTIVE_AFF_MASK.
+
+gic_set_affinity() is the one function which gains much complexity. It
+now deconfigures routing to any VP(E), ie. CPU, on the old cluster when
+moving affinity to a new cluster. Because we only configure an
+interrupts trigger type in the cluster which it is affine to we call
+gic_set_type() to configure that in the new cluster, after having
+updated the effective affinity mask such that gic_irq_lock_cluster()
+begins operating on the new cluster. Finally we map the interrupt to the
+appropriate pin & VP(E) in the new cluster.
+
+gic_shared_irq_domain_map() moves its update of the IRQs effective
+affinity to before its use of gic_irq_lock_cluster(), in order to ensure
+we operate on the cluster the IRQ is affine to.
+
+The remaining changes are straightforward use of the
+gic_irq_lock_cluster() function to select between local cluster & remote
+cluster code-paths when configuring interrupts.
+
+Signed-off-by: Paul Burton <paulburton@kernel.org>
 Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
 Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
 Signed-off-by: Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>
 ---
- drivers/irqchip/irq-mips-gic.c | 31 +++++++++++++++++++++++++------
- 1 file changed, 25 insertions(+), 6 deletions(-)
+ drivers/irqchip/Kconfig        |   1 +
+ drivers/irqchip/irq-mips-gic.c | 161 +++++++++++++++++++++++++++++----
+ 2 files changed, 143 insertions(+), 19 deletions(-)
 
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index 72c07a12f5e1..e0e9d32816a3 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -328,6 +328,7 @@ config KEYSTONE_IRQ
+ 
+ config MIPS_GIC
+ 	bool
++	select GENERIC_IRQ_EFFECTIVE_AFF_MASK
+ 	select GENERIC_IRQ_IPI if SMP
+ 	select IRQ_DOMAIN_HIERARCHY
+ 	select MIPS_CM
 diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
-index 317ccc2593d1..cdd8973912a9 100644
+index cdd8973912a9..8e9046516e63 100644
 --- a/drivers/irqchip/irq-mips-gic.c
 +++ b/drivers/irqchip/irq-mips-gic.c
-@@ -800,7 +800,7 @@ static int gic_cpu_startup(unsigned int cpu)
- static int __init gic_of_init(struct device_node *node,
- 			      struct device_node *parent)
+@@ -135,6 +135,41 @@ static inline void __lockdep_assert_held(raw_spinlock_t *gic_lock)
+ 	     (cpu) = __gic_with_next_online_cpu(cpu),	\
+ 	     (cpu) < nr_cpu_ids;)
+ 
++/**
++ * gic_irq_lock_cluster() - Lock redirect block access to IRQ's cluster
++ * @d: struct irq_data corresponding to the interrupt we're interested in
++ *
++ * Locks redirect register block access to the global register block of the GIC
++ * within the remote cluster that the IRQ corresponding to @d is affine to,
++ * returning true when this redirect block setup & locking has been performed.
++ *
++ * If @d is affine to the local cluster then no locking is performed and this
++ * function will return false, indicating to the caller that it should access
++ * the local clusters registers without the overhead of indirection through the
++ * redirect block.
++ *
++ * In summary, if this function returns true then the caller should access GIC
++ * registers using redirect register block accessors & then call
++ * mips_cm_unlock_other() when done. If this function returns false then the
++ * caller should trivially access GIC registers in the local cluster.
++ *
++ * Returns true if locking performed, else false.
++ */
++static bool gic_irq_lock_cluster(struct irq_data *d)
++{
++	unsigned int cpu, cl;
++
++	cpu = cpumask_first(irq_data_get_effective_affinity_mask(d));
++	BUG_ON(cpu >= NR_CPUS);
++
++	cl = cpu_cluster(&cpu_data[cpu]);
++	if (cl == cpu_cluster(&current_cpu_data))
++		return false;
++
++	mips_cm_lock_other(cl, 0, 0, CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
++	return true;
++}
++
+ static void gic_clear_pcpu_masks(unsigned int intr)
  {
--	unsigned int cpu_vec, i, gicconfig;
-+	unsigned int cpu_vec, i, gicconfig, cl, nclusters;
- 	unsigned long reserved;
- 	phys_addr_t gic_base;
- 	struct resource res;
-@@ -881,11 +881,30 @@ static int __init gic_of_init(struct device_node *node,
+ 	unsigned int i;
+@@ -181,7 +216,12 @@ static void gic_send_ipi(struct irq_data *d, unsigned int cpu)
+ {
+ 	irq_hw_number_t hwirq = GIC_HWIRQ_TO_SHARED(irqd_to_hwirq(d));
  
- 	board_bind_eic_interrupt = &gic_bind_eic_interrupt;
+-	write_gic_wedge(GIC_WEDGE_RW | hwirq);
++	if (gic_irq_lock_cluster(d)) {
++		write_gic_redir_wedge(GIC_WEDGE_RW | hwirq);
++		mips_cm_unlock_other();
++	} else {
++		write_gic_wedge(GIC_WEDGE_RW | hwirq);
++	}
+ }
  
--	/* Setup defaults */
--	for (i = 0; i < gic_shared_intrs; i++) {
--		change_gic_pol(i, GIC_POL_ACTIVE_HIGH);
--		change_gic_trig(i, GIC_TRIG_LEVEL);
--		write_gic_rmask(i);
-+	/*
-+	 * Initialise each cluster's GIC shared registers to sane default
-+	 * values.
-+	 * Otherwise, the IPI set up will be erased if we move code
-+	 * to gic_cpu_startup for each cpu.
-+	 */
-+	nclusters = mips_cps_numclusters();
-+	for (cl = 0; cl < nclusters; cl++) {
-+		if (cl == cpu_cluster(&current_cpu_data)) {
-+			for (i = 0; i < gic_shared_intrs; i++) {
-+				change_gic_pol(i, GIC_POL_ACTIVE_HIGH);
-+				change_gic_trig(i, GIC_TRIG_LEVEL);
-+				write_gic_rmask(i);
-+			}
-+		} else {
-+			mips_cm_lock_other(cl, 0, 0,
-+					   CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
-+			for (i = 0; i < gic_shared_intrs; i++) {
-+				change_gic_redir_pol(i, GIC_POL_ACTIVE_HIGH);
-+				change_gic_redir_trig(i, GIC_TRIG_LEVEL);
-+				write_gic_redir_rmask(i);
-+			}
-+			mips_cm_unlock_other();
-+		}
+ int gic_get_c0_compare_int(void)
+@@ -249,7 +289,13 @@ static void gic_mask_irq(struct irq_data *d)
+ {
+ 	unsigned int intr = GIC_HWIRQ_TO_SHARED(d->hwirq);
+ 
+-	write_gic_rmask(intr);
++	if (gic_irq_lock_cluster(d)) {
++		write_gic_redir_rmask(intr);
++		mips_cm_unlock_other();
++	} else {
++		write_gic_rmask(intr);
++	}
++
+ 	gic_clear_pcpu_masks(intr);
+ }
+ 
+@@ -258,7 +304,12 @@ static void gic_unmask_irq(struct irq_data *d)
+ 	unsigned int intr = GIC_HWIRQ_TO_SHARED(d->hwirq);
+ 	unsigned int cpu;
+ 
+-	write_gic_smask(intr);
++	if (gic_irq_lock_cluster(d)) {
++		write_gic_redir_smask(intr);
++		mips_cm_unlock_other();
++	} else {
++		write_gic_smask(intr);
++	}
+ 
+ 	gic_clear_pcpu_masks(intr);
+ 	cpu = cpumask_first(irq_data_get_effective_affinity_mask(d));
+@@ -269,7 +320,12 @@ static void gic_ack_irq(struct irq_data *d)
+ {
+ 	unsigned int irq = GIC_HWIRQ_TO_SHARED(d->hwirq);
+ 
+-	write_gic_wedge(irq);
++	if (gic_irq_lock_cluster(d)) {
++		write_gic_redir_wedge(irq);
++		mips_cm_unlock_other();
++	} else {
++		write_gic_wedge(irq);
++	}
+ }
+ 
+ static int gic_set_type(struct irq_data *d, unsigned int type)
+@@ -309,9 +365,16 @@ static int gic_set_type(struct irq_data *d, unsigned int type)
+ 		break;
  	}
  
- 	return cpuhp_setup_state(CPUHP_AP_IRQ_MIPS_GIC_STARTING,
+-	change_gic_pol(irq, pol);
+-	change_gic_trig(irq, trig);
+-	change_gic_dual(irq, dual);
++	if (gic_irq_lock_cluster(d)) {
++		change_gic_redir_pol(irq, pol);
++		change_gic_redir_trig(irq, trig);
++		change_gic_redir_dual(irq, dual);
++		mips_cm_unlock_other();
++	} else {
++		change_gic_pol(irq, pol);
++		change_gic_trig(irq, trig);
++		change_gic_dual(irq, dual);
++	}
+ 
+ 	if (trig == GIC_TRIG_EDGE)
+ 		irq_set_chip_handler_name_locked(d, &gic_edge_irq_controller,
+@@ -329,25 +392,72 @@ static int gic_set_affinity(struct irq_data *d, const struct cpumask *cpumask,
+ 			    bool force)
+ {
+ 	unsigned int irq = GIC_HWIRQ_TO_SHARED(d->hwirq);
++	unsigned int cpu, cl, old_cpu, old_cl;
+ 	unsigned long flags;
+-	unsigned int cpu;
+ 
++	/*
++	 * The GIC specifies that we can only route an interrupt to one VP(E),
++	 * ie. CPU in Linux parlance, at a time. Therefore we always route to
++	 * the first online CPU in the mask.
++	 */
+ 	cpu = cpumask_first_and(cpumask, cpu_online_mask);
+ 	if (cpu >= NR_CPUS)
+ 		return -EINVAL;
+ 
+-	/* Assumption : cpumask refers to a single CPU */
+-	raw_spin_lock_irqsave(&gic_lock, flags);
++	old_cpu = cpumask_first(irq_data_get_effective_affinity_mask(d));
++	old_cl = cpu_cluster(&cpu_data[old_cpu]);
++	cl = cpu_cluster(&cpu_data[cpu]);
+ 
+-	/* Re-route this IRQ */
+-	write_gic_map_vp(irq, BIT(mips_cm_vp_id(cpu)));
++	raw_spin_lock_irqsave(&gic_lock, flags);
+ 
+-	/* Update the pcpu_masks */
+-	gic_clear_pcpu_masks(irq);
+-	if (read_gic_mask(irq))
+-		set_bit(irq, per_cpu_ptr(pcpu_masks, cpu));
++	/*
++	 * If we're moving affinity between clusters, stop routing the
++	 * interrupt to any VP(E) in the old cluster.
++	 */
++	if (cl != old_cl) {
++		if (gic_irq_lock_cluster(d)) {
++			write_gic_redir_map_vp(irq, 0);
++			mips_cm_unlock_other();
++		} else {
++			write_gic_map_vp(irq, 0);
++		}
++	}
+ 
++	/*
++	 * Update effective affinity - after this gic_irq_lock_cluster() will
++	 * begin operating on the new cluster.
++	 */
+ 	irq_data_update_effective_affinity(d, cpumask_of(cpu));
++
++	/*
++	 * If we're moving affinity between clusters, configure the interrupt
++	 * trigger type in the new cluster.
++	 */
++	if (cl != old_cl)
++		gic_set_type(d, irqd_get_trigger_type(d));
++
++	/* Route the interrupt to its new VP(E) */
++	if (gic_irq_lock_cluster(d)) {
++		write_gic_redir_map_pin(irq,
++					GIC_MAP_PIN_MAP_TO_PIN | gic_cpu_pin);
++		write_gic_redir_map_vp(irq, BIT(mips_cm_vp_id(cpu)));
++
++		/* Update the pcpu_masks */
++		gic_clear_pcpu_masks(irq);
++		if (read_gic_redir_mask(irq))
++			set_bit(irq, per_cpu_ptr(pcpu_masks, cpu));
++
++		mips_cm_unlock_other();
++	} else {
++		write_gic_map_pin(irq, GIC_MAP_PIN_MAP_TO_PIN | gic_cpu_pin);
++		write_gic_map_vp(irq, BIT(mips_cm_vp_id(cpu)));
++
++		/* Update the pcpu_masks */
++		gic_clear_pcpu_masks(irq);
++		if (read_gic_mask(irq))
++			set_bit(irq, per_cpu_ptr(pcpu_masks, cpu));
++	}
++
+ 	raw_spin_unlock_irqrestore(&gic_lock, flags);
+ 
+ 	return IRQ_SET_MASK_OK;
+@@ -503,11 +613,21 @@ static int gic_shared_irq_domain_map(struct irq_domain *d, unsigned int virq,
+ 	unsigned long flags;
+ 
+ 	data = irq_get_irq_data(virq);
++	irq_data_update_effective_affinity(data, cpumask_of(cpu));
+ 
+ 	raw_spin_lock_irqsave(&gic_lock, flags);
+-	write_gic_map_pin(intr, GIC_MAP_PIN_MAP_TO_PIN | gic_cpu_pin);
+-	write_gic_map_vp(intr, BIT(mips_cm_vp_id(cpu)));
+-	irq_data_update_effective_affinity(data, cpumask_of(cpu));
++
++	/* Route the interrupt to its VP(E) */
++	if (gic_irq_lock_cluster(data)) {
++		write_gic_redir_map_pin(intr,
++					GIC_MAP_PIN_MAP_TO_PIN | gic_cpu_pin);
++		write_gic_redir_map_vp(intr, BIT(mips_cm_vp_id(cpu)));
++		mips_cm_unlock_other();
++	} else {
++		write_gic_map_pin(intr, GIC_MAP_PIN_MAP_TO_PIN | gic_cpu_pin);
++		write_gic_map_vp(intr, BIT(mips_cm_vp_id(cpu)));
++	}
++
+ 	raw_spin_unlock_irqrestore(&gic_lock, flags);
+ 
+ 	return 0;
+@@ -687,6 +807,9 @@ static int gic_ipi_domain_alloc(struct irq_domain *d, unsigned int virq,
+ 		if (ret)
+ 			goto error;
+ 
++		/* Set affinity to cpu.  */
++		irq_data_update_effective_affinity(irq_get_irq_data(virq + i),
++						   cpumask_of(cpu));
+ 		ret = irq_set_irq_type(virq + i, IRQ_TYPE_EDGE_RISING);
+ 		if (ret)
+ 			goto error;
 -- 
 2.25.1
 
