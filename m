@@ -1,735 +1,233 @@
-Return-Path: <linux-mips+bounces-3214-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3215-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D2DD8C2D89
-	for <lists+linux-mips@lfdr.de>; Sat, 11 May 2024 01:27:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 461598C309A
+	for <lists+linux-mips@lfdr.de>; Sat, 11 May 2024 12:43:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04982281B7F
-	for <lists+linux-mips@lfdr.de>; Fri, 10 May 2024 23:27:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5EF231C20ABF
+	for <lists+linux-mips@lfdr.de>; Sat, 11 May 2024 10:43:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A62917F38B;
-	Fri, 10 May 2024 23:22:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 293744D9F6;
+	Sat, 11 May 2024 10:43:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iRI3ggNe"
+	dkim=pass (1024-bit key) header.d=syrmia.com header.i=@syrmia.com header.b="yXab0w76"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2094.outbound.protection.outlook.com [40.107.241.94])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 957CB178CCD
-	for <linux-mips@vger.kernel.org>; Fri, 10 May 2024 23:22:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715383342; cv=none; b=oj9C94hk7MChKyJPbPmbQYla7MNqlRN1dttghGsIvBHeo+zpCuNf6cyvpQ5ZX4ih4HFWvzuasvfAVFgH6X3bXjCAC2syzpP/oTS7EMBnzlV3DXyQGyoafs8k/t7/OJCnB1QU//U2CC1yPO4vL+kDMrybuRcBse0VUGzvT7C0jH4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715383342; c=relaxed/simple;
-	bh=0R3ZndeV2re1C10RJtFktRSd0nmQgX52O6U9V7pTd0g=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=E9JtFIuMds+Vwx3rEU16OMWMHPGwWQPKyuL3/+uNXzdurMkTNajqRu9U0p8sn0dfbHdCy/addaa2wHQEf6c/uf78zG1+8s22S9rJpIuDm/J16oOhWvs6RxvCXtNqXhBWDjZ1tEVFUYxKM0+CMP5XAWurqghPEOrpBFXdAapfMWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iRI3ggNe; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-de617c7649dso3763176276.0
-        for <linux-mips@vger.kernel.org>; Fri, 10 May 2024 16:22:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715383322; x=1715988122; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=X8Y591fAVbsy0Ggn3mk3MJ+twsFTaAcwQ3TT1QOpE7E=;
-        b=iRI3ggNet3qwlgrW2GK+jVS42b8UY4MG/cy33jBxoZM66QxcH8Q94Ur4WBTsRij+ec
-         mGOqW6kNy9pftpDDp4kKpTAGRVbl6u4VqixDYf1LLCSxZ5PCMf3ut86VI6v67fY0F3Uo
-         RMGL4pQgeMGW8UzY6B/4/S+l5C5qVVKBlsyRVln8nkKM5hK6wJEcynswm4bBT9co3hoU
-         onu/BJQaW8ZZH6j5FHlOD04UrXkyeAuhaxuxsMjZ2VXT9qavU50ob9BuHMDcd7FtBciL
-         +T+bpn3AFsLb4i/IQTUPtdmK1XH7t8kpjSm8EazVGL1mKHEIba3M7wwj9MXGb5j87Eik
-         uKHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715383322; x=1715988122;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X8Y591fAVbsy0Ggn3mk3MJ+twsFTaAcwQ3TT1QOpE7E=;
-        b=bLSr3MX2F0qL5LKasBRSmwbtFtASK9L1+D/uKUCvElwC/z0mCO3SxVMJc/b5pQ3b3l
-         qO3V2aoED7msF53pFBNpFV/bkRTXNEbHq2MdJlzweudgDhlth+WsbreyFlAhmajYNZxL
-         KaSpYujRP/Yz5Fnsq6nbuRlfUdg6hHQwX2UzHoqVxaixcnnkfkpmiQz8xS/3dV69Rz/J
-         9nDNr1vSfp2Ooz5x2nMmzGcXKSvMkMfVXQGWGdjIL5Nb3sFLfnt5hfFIaK+saiVa0sfJ
-         rcDFqC8AgvSoYEK45W9b5vyrhCkZuXt8VwGs4zKQvTBYf/gPHXYWOKshtI4ZyEQrWHbz
-         5UhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXAQWXo5BbXmJuxdFuxfZ0n0yLjSM8SMe1tAw6yeY+giixHTuyYBuidTrfjbwEp8hZB+wzSYOkZvPevy6DBt/3xP8iewJF3y5GJBQ==
-X-Gm-Message-State: AOJu0Ywe5Vb+f7pebtZICkUCshIsV9R1tevM5aOY/QfAgPxLfvn77jiL
-	H/8GPM6w/KloEzLUQOwu7t6QBsnTtCcbpPCkOqeGzhYjShSLppgeVkADu+CcBodd29uk8ZzRnNZ
-	lU+48ckwHH3qAxpEcTds1NA==
-X-Google-Smtp-Source: AGHT+IED7Dya2yCZvsAa2tqUP6b4trNlcTkvQdXgr8QhwxGpvcUjUK6qnI+lJS2kIeTKisYDFk3nzyqGOECpK5X2mA==
-X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2c4:200:3428:1b4e:e75a:d31b])
- (user=almasrymina job=sendgmr) by 2002:a05:6902:1881:b0:de4:7a4b:903 with
- SMTP id 3f1490d57ef6-dee4f30f717mr342350276.3.1715383321941; Fri, 10 May 2024
- 16:22:01 -0700 (PDT)
-Date: Fri, 10 May 2024 16:21:25 -0700
-In-Reply-To: <20240510232128.1105145-1-almasrymina@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28AC828F3;
+	Sat, 11 May 2024 10:43:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.241.94
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715424235; cv=fail; b=K+ydAQGxHARzRrtIf875IDc0HyQz7L+W3ZRBkEATTUDnayQshMxzWGBzkJ3C0FA9gJBE4Yr8vPmHbq5HnoGH7S8SVlLoEyuRPJ2lc6tPOcPihLOAMlR6ZXhgkDxOGYdUYrZo3xAE5W1mSQUlQzRUTVODR6L2lDZVCxsaUyZt8Bw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715424235; c=relaxed/simple;
+	bh=pgUexYEdCc/S8MrOO4Vfi9aA9LHSMydEuSaS7N1UTKQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=SAmPrBrSKcjSoaA78IkToNGnRWsp0QGphLbBn46abbY6EqWVXaJoEWAlWbhco6fG6Ya0y63pwzhagzfgLeMwU+xhFV8I9WVTrrXURBBaRpfz8d63iZFVthaLeYJNqKez1Qr3zy/yt1KoaZlV/9uWEvokr9D05iAmeNMflPGhUvU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=syrmia.com; spf=pass smtp.mailfrom=syrmia.com; dkim=pass (1024-bit key) header.d=syrmia.com header.i=@syrmia.com header.b=yXab0w76; arc=fail smtp.client-ip=40.107.241.94
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=syrmia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=syrmia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GIHbRjGWYfiPsQr/V8/j5qdUEj/uxQGQnfgUY+WDNUYVSBk7B1fQ+Jr1uqyl5aJHw/csi6rRnr/o9U7IYpXtIwbaa/O4MP+xXWCeAD/ZzrtXhdoZ9YODUS7h4xDMMjneckaIYyOHIdtgtQz56GEyBy97yDossZkafuGNIjibKfL5ade+HXUae+ExkEFDXntz6Iwd5sfyzacKlKfq2e2sDMCO5k7DsOF6KdESrT6qu1xA5CXmNpt68w5pFX/kH5/34il/+qvoVlFIbgrm4XJJnL6Blxs+aEx+7pDo4+iu5xofBWT2uzlj6N8+2Ei888pQxwEoAxxg1Ol8lurOs1+jMA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Bt/6KW/FjypkfnMGjZFo25lpX0HEMiyDlEHf70CsfoU=;
+ b=Mdc6FQMvc5Q8eSwq/Chca98aomJWLkDfPbwlLeZMs7kjvSohm7HCaKE2EKqFHl+942Yr1LUEhuzUftv+e5VWH2ItOsoGkwiOUcmIzSM4uaGpA0FO6v2wltZ+NJCwbX8p/ZZvy9sljneTjUrHArl+8PIiq6sC/nUmpK6ipdwDdpiqCzM/mz7WavLkhaPoi1rou+c/sYEF6bnbzTl6cB9LfUJJfyuGF/VxlzyJxfmh1FdH8oSry1zZ9FjIB9wiIJ6TBBryK6pcxFrEuGD1UObwVcwY1ReKeM+dyDNCUzmOV0dEyMCLuUm2zebTeMIGOgSsSdrM8PZFgYSkcLRdSb1vJw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=syrmia.com; dmarc=pass action=none header.from=syrmia.com;
+ dkim=pass header.d=syrmia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=syrmia.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Bt/6KW/FjypkfnMGjZFo25lpX0HEMiyDlEHf70CsfoU=;
+ b=yXab0w76Ax/LEu/S5v39uXZJr+YPFC3y9qgRRZzuPe3m06HHSGGKP7daZYml+Jf/r+pNYOKNjiCgF87VJNQoz9ZVwv2mL8yREuo8OB1U41ci1B6E7/SDoZC9IxzsgY5hTURIjSm44KnjhYaLGeziINIQh7eyd5OLhzUaB24rNBU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=syrmia.com;
+Received: from AM9PR03MB6916.eurprd03.prod.outlook.com (2603:10a6:20b:2d7::14)
+ by GVXPR03MB8449.eurprd03.prod.outlook.com (2603:10a6:150:5::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.45; Sat, 11 May
+ 2024 10:43:48 +0000
+Received: from AM9PR03MB6916.eurprd03.prod.outlook.com
+ ([fe80::b417:d676:e3ff:9268]) by AM9PR03MB6916.eurprd03.prod.outlook.com
+ ([fe80::b417:d676:e3ff:9268%3]) with mapi id 15.20.7587.018; Sat, 11 May 2024
+ 10:43:47 +0000
+From: Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Aleksandar Rikalo <arikalo@gmail.com>,
+	Chao-ying Fu <cfu@wavecomp.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Greg Ungerer <gerg@kernel.org>,
+	Hauke Mehrtens <hauke@hauke-m.de>,
+	Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Marc Zyngier <maz@kernel.org>,
+	Paul Burton <paulburton@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Serge Semin <fancer.lancer@gmail.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: [PATCH v4 00/14] MIPS: Support I6500 multi-cluster configuration
+Date: Sat, 11 May 2024 12:43:27 +0200
+Message-Id: <20240511104341.151550-1-aleksandar.rikalo@syrmia.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR07CA0235.eurprd07.prod.outlook.com
+ (2603:10a6:802:58::38) To AM9PR03MB6916.eurprd03.prod.outlook.com
+ (2603:10a6:20b:2d7::14)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240510232128.1105145-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.45.0.118.g7fe29c98d7-goog
-Message-ID: <20240510232128.1105145-15-almasrymina@google.com>
-Subject: [PATCH net-next v9 14/14] selftests: add ncdevmem, netcat for devmem TCP
-From: Mina Almasry <almasrymina@google.com>
-To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org
-Cc: Mina Almasry <almasrymina@google.com>, Donald Hunter <donald.hunter@gmail.com>, 
-	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, 
-	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, 
-	David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM9PR03MB6916:EE_|GVXPR03MB8449:EE_
+X-MS-Office365-Filtering-Correlation-Id: bebbf372-de0e-4cd4-8a4b-08dc71a73d0c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230031|366007|7416005|52116005|376005|1800799015|38350700005;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Ny88mFyyvRWWx7Yey6ZYl1WDBgkQGkFWL7JoXEcDBo5mDg3oS+jSWrxcS8g6?=
+ =?us-ascii?Q?i5qoy2F5OI8a23xLePQLrA7D1ON2nImr/Dr8gCM7SEp4jyfDxZ8J8iZ3uBI/?=
+ =?us-ascii?Q?X2ZklFYZm5DhKkqHzqt9+hEINO+c8Zoon4Nu8d8Zlnv38N39/ddK3acZaF7Q?=
+ =?us-ascii?Q?sgmZUZ4qRR0NxT/N+Cr/ervHKf5eU2nK4NetGn7Wa0ZLCnHzyv8v9nIiXqrl?=
+ =?us-ascii?Q?icWxtRVWrucxMKohhvcA2V+wc0h0INyD1hxrG+F3mMHlcxY48oyq/NXETlIr?=
+ =?us-ascii?Q?XrjtpXeweNBF/aNVnKg885hCoAqBhU4IN6unCKYLMMK7H0HUK72d/nO/8Qaz?=
+ =?us-ascii?Q?YTEedCJyXF+RvexyDzt/1SFirFytK++Hr0jfbjgnAUsUQ+4J3CDL2F25gIA1?=
+ =?us-ascii?Q?0HVrpkxIYuvPq7CKM83yS/EU6NC3LpEhYpXHX5GT6jjgTGnqKklW/tjQAvUm?=
+ =?us-ascii?Q?NXDe0307LhfHsWxyHWFCXyRKQkxuz2UghMGL/qDI7vZ7h0bT0BTsU7XtVL06?=
+ =?us-ascii?Q?zGdrZ7w9vM3XLOyGDdynEkh+GtW7yHBBr7Uex4u6htCrESq4tcxg1viVN8Wr?=
+ =?us-ascii?Q?XR5NYdUKwKTBT6NjbV6nnP9NOvF0rkAM/Aq+QjDWrRbSs93aeXU6ga23/4Ut?=
+ =?us-ascii?Q?FK8BwUBTax5AwRo44l9jMWqgxXqQyPR6N9YAvm1s6PPxgZSWmmIpc5s3WReU?=
+ =?us-ascii?Q?QwvmQTjJ1QocJUbQsKcnigzmz9QHXjclK/Hky0ZHkxoYZYpPUbrOvUH7vC/w?=
+ =?us-ascii?Q?7i2x1fBJC0LPNCV30Pxs829PtrVtfvfUMEL0iWPqHlQCf+Q5J4SybS23yH3r?=
+ =?us-ascii?Q?E10cC8dnVeoaG1Xx/g96Lm1dUnCMT67ZaXL8rwVvOmTk3v7acfMFdFXhWO1j?=
+ =?us-ascii?Q?JcbiC4rzGr9nw3NP3hMjGILbs+FlCOD78aottVbJeLuh9VYMaICf8BklnuKi?=
+ =?us-ascii?Q?XKDWEBC3WNiKANi27oVkrX+6cWRxLdGTEr3MqkaOiKao2WNKtvubGUpLoM17?=
+ =?us-ascii?Q?1ZU8X3ocamMEaxmm5Zp7fDzQNJlGFeG3zP+ORR4SWyYcjn9ojThBkk+saCvS?=
+ =?us-ascii?Q?EdE9FVRr4ZIMkqltAClT6xXCc8kQlpwni/Pnh31UF2HS8WIOqxzCH3pY2Oap?=
+ =?us-ascii?Q?6+WUQV6+AwBv6ejIajMWjI02L/BBMeWYUP4JcAimhxtFW5BvaIhtyEfIHGB/?=
+ =?us-ascii?Q?M68rluUJnGM1FcRX6wXFnYkWEZEFMrvvmHbHnu42fIHe3kHGp7YTBwCeYU7L?=
+ =?us-ascii?Q?z7lDxAnDV4mlH8K2jEosgUjD1p4ubm4ywjzTDmdrrWGo61sBWrcCCZnPkQeK?=
+ =?us-ascii?Q?yd67JNncy3kR0jqNuCruXC3tTRGAqfWKjbMGzX2/8M8aww=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR03MB6916.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(7416005)(52116005)(376005)(1800799015)(38350700005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?+Gflctzk98D87hBl0waGzBGUVUpuuo0OUu7mgYPSMHtxrhUK3sXL/h/Oq0nc?=
+ =?us-ascii?Q?ULOthS9p4Frea4YtpkJ/MKwLkr5mu8s5H7+bQFZQNHH2m4vHGgxWPgOdMoUY?=
+ =?us-ascii?Q?fhMrsIVPthpwNJMGMkefRYJb8YXIHO4BMooNkpTMoyOW40Arh+5k6XYCQ3Hy?=
+ =?us-ascii?Q?MeidtusRi6xLp7L+M/MknjKZ1F/pMrvvExbW+H4fC9xZYy1b9EqIEVam155N?=
+ =?us-ascii?Q?Vkur9zFt4OY+tDw4jY9pKo0TGA4To3YdqYEBWPM93AytanlfFi1uUTjmD/CH?=
+ =?us-ascii?Q?3ofnm6JYhHdORT5oIvnypVtMz0RC6z9f10q7knJwAcRb6s+2wGNqIwk7f+e6?=
+ =?us-ascii?Q?l6sWnkrf4ySY+IMrcG4w9YI+9jvTc+jj+nPKOTWTMgw+IO0eNutL2ml4mRC7?=
+ =?us-ascii?Q?JSttFiExMMXF511t/coQjGHAX4tKSygsOAMBKorf+gmmo5u7uJYihWIrWFMq?=
+ =?us-ascii?Q?m+c6RouEcB56u5JT9V5sBuiBui0mKydqyzCL8rkuJLyL/aBDqWgNgBeIIkk7?=
+ =?us-ascii?Q?+ZXX5/z2aaG4mQhWnhvXg3BoYvG1n4N1MIbzVA6TyLsbhdayVI+jm5rnD/ix?=
+ =?us-ascii?Q?bWgs0j3kOSyl3mX0KNIBqzzJPCE3Sq9IHoL+yKds3NwHJPuakS8sMVJVWuXX?=
+ =?us-ascii?Q?hrvf2LCwcssQtMLzIGsV8eWUYMARm04vV8IyrgPuPd5Y0VTtyOCQBGOU5sFe?=
+ =?us-ascii?Q?joN1qVPrXoo4v3dsfP0TB8Rb4dsaGa5gAIVRKwcBMA4lX8Kz126TlxwEvRbd?=
+ =?us-ascii?Q?HA0YabhyGCJ6BQURbmK2+pY9iO4hNU6hRgcmJDZUtRBaJmI3fYiuysr8ztM/?=
+ =?us-ascii?Q?gAEIPBcSp6HY/Ol94TRag9on9TsXMpuXLvkVwFggPV0TtUPvIiiJYi5kakTa?=
+ =?us-ascii?Q?a82Kz02LhmV4UkF1QnknWUtKOaQSZRW+y61EVmNJL0PtP4J+gz9ghH6aWNs7?=
+ =?us-ascii?Q?Sdva+sgXsoqnvj0/0y8LvFOtuGegUMZFarWBO1mBXq45MIr7O1AyeOc38VGp?=
+ =?us-ascii?Q?2KdvJIpSkLCg5mokSXX3dvmpQjPfcNzFzNDRRv1tu2gGx2JaWqDJVbZudWvn?=
+ =?us-ascii?Q?fL4H1EeDf0W3B9HNoWKQp50aTcmk8ufeF0eggEPextpuq5IaiwYJghcWbgCw?=
+ =?us-ascii?Q?k11f9+8wemjv5aYnhGG/TX3TI89IHhXzfx3c9DHbFFeWVzg1/mdC5Gq8YYKf?=
+ =?us-ascii?Q?JbE9UvU/A4tlw76ruy2AKCH3ThtzR0+X8J92hGScBGkzyZZbz1zNX7aUG18Q?=
+ =?us-ascii?Q?oFthhkPeE/cwveF9SF6r59096ktZePU8vaN25UCw5UkaitX9ST3EODTGbUxQ?=
+ =?us-ascii?Q?AUnBwVzsZhvcY5s0LPGb0Rc5tPMc4Bfprz/1Yhd/lfqhOt4SRiQogVvxD4bG?=
+ =?us-ascii?Q?5lqiPPrGGR0uPA4jKwwgmFJ3EomWQFtseSBuHPPvG3CsY7fZzOpqdBiiwBL6?=
+ =?us-ascii?Q?4ifaH0LIjHPoo1+bHyX9luoMMc8NuFqaqvn4zECtf8f2VSWB45zcfa8Pg53c?=
+ =?us-ascii?Q?fyKnPs0bXS5mF79S3hD7swTGU1X5ZWJxs8RLxN52Moqkz7wqST33dqTpwzxQ?=
+ =?us-ascii?Q?Ps0Dy9MmzYRmEz6SlWMIPuzCAB6QxWF+9nEpMQHIl3JsGHamRt1WIVarfpNy?=
+ =?us-ascii?Q?Cg=3D=3D?=
+X-OriginatorOrg: syrmia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bebbf372-de0e-4cd4-8a4b-08dc71a73d0c
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR03MB6916.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2024 10:43:47.8244
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 19214a73-c1ab-4e19-8f59-14bdcb09a66e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aimFoV5sZ76mC2y6G3NFVGBgLzxCFiqyh4JlWJE6N+aUsqdPMC5M0KI/nh84lkITolQOf7vSRfn0EFwws4R4DO1IuvuI8xBZHmMITqQMODM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR03MB8449
 
-ncdevmem is a devmem TCP netcat. It works similarly to netcat, but it
-sends and receives data using the devmem TCP APIs. It uses udmabuf as
-the dmabuf provider. It is compatible with a regular netcat running on
-a peer, or a ncdevmem running on a peer.
+Taken from Paul Burton MIPS repo with minor changes from Chao-ying Fu.
+Tested with 64r6el_defconfig on Boston board in 2 cluster/2 VPU and
+1 cluster/4 VPU configurations.
 
-In addition to normal netcat support, ncdevmem has a validation mode,
-where it sends a specific pattern and validates this pattern on the
-receiver side to ensure data integrity.
+v4:
+ - Re-base onto the master branch, with no functionality impact.
+ - Refactor MIPS FDC driver in the context of multicluster support.
 
-Suggested-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Mina Almasry <almasrymina@google.com>
+v3:
+ - Add Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com> for the patch 02/12.
+ - Add the changes requested by Marc Zyngier for the 3/12 patch.
+ - Remove the patch 11/12 (a consequence of a discussion between Jiaxun Yang
+   and Marc Zyngier.
+ - Re-base onto the master branch, with no functionality impact.
 
----
-v9: https://lore.kernel.org/netdev/20240403002053.2376017-15-almasrymina@google.com/
-- Remove unused nic_pci_addr entry (Cong).
+v2:
+ - Apply correct Signed-off-by to avoid confusion.
 
-v6:
-- Updated to bind 8 queues.
-- Added RSS configuration.
-- Added some more tests for the netlink API.
+Aleksandar Rikalo (3):
+  mips: Enable FDC on MIPS R6 platforms.
+  mips: Move FDC driver to a separate directory
+  mips: FDC driver refactor
 
-Changes in v1:
-- Many more general cleanups (Willem).
-- Removed driver reset (Jakub).
-- Removed hardcoded if index (Paolo).
+Chao-ying Fu (1):
+  irqchip: mips-gic: Setup defaults in each cluster
 
-RFC v2:
-- General cleanups (Willem).
+Paul Burton (10):
+  MIPS: CPS: Add a couple of multi-cluster utility functions
+  MIPS: GIC: Generate redirect block accessors
+  irqchip: mips-gic: Introduce for_each_online_cpu_gic()
+  irqchip: mips-gic: Support multi-cluster in for_each_online_cpu_gic()
+  irqchip: mips-gic: Multi-cluster support
+  clocksource: mips-gic-timer: Always use cluster 0 counter as
+    clocksource
+  clocksource: mips-gic-timer: Enable counter when CPUs start
+  MIPS: pm-cps: Use per-CPU variables as per-CPU, not per-core
+  MIPS: CPS: Introduce struct cluster_boot_config
+  MIPS: CPS: Boot CPUs in secondary clusters
 
----
- tools/testing/selftests/net/.gitignore |   1 +
- tools/testing/selftests/net/Makefile   |   5 +
- tools/testing/selftests/net/ncdevmem.c | 542 +++++++++++++++++++++++++
- 3 files changed, 548 insertions(+)
- create mode 100644 tools/testing/selftests/net/ncdevmem.c
+ arch/mips/include/asm/mips-cm.h               |  18 ++
+ arch/mips/include/asm/mips-cps.h              |  38 +++
+ arch/mips/include/asm/mips-gic.h              |  50 ++-
+ arch/mips/include/asm/smp-cps.h               |   7 +-
+ arch/mips/kernel/asm-offsets.c                |   3 +
+ arch/mips/kernel/cps-vec.S                    |  19 +-
+ arch/mips/kernel/mips-cm.c                    |  41 ++-
+ arch/mips/kernel/pm-cps.c                     |  35 ++-
+ arch/mips/kernel/smp-cps.c                    | 288 ++++++++++++++----
+ drivers/bus/Kconfig                           |   2 +-
+ drivers/clocksource/mips-gic-timer.c          |  45 ++-
+ drivers/irqchip/Kconfig                       |   1 +
+ drivers/irqchip/irq-mips-gic.c                | 276 ++++++++++++++---
+ drivers/tty/Makefile                          |   2 +-
+ drivers/tty/mips_fdc/Makefile                 |   4 +
+ drivers/tty/mips_fdc/ejtag-fdc-mips.c         |  29 ++
+ .../ejtag-fdc.c}                              |  66 +---
+ drivers/tty/mips_fdc/ejtag-fdc.h              |  55 ++++
+ 18 files changed, 794 insertions(+), 185 deletions(-)
+ create mode 100644 drivers/tty/mips_fdc/Makefile
+ create mode 100644 drivers/tty/mips_fdc/ejtag-fdc-mips.c
+ rename drivers/tty/{mips_ejtag_fdc.c => mips_fdc/ejtag-fdc.c} (92%)
+ create mode 100644 drivers/tty/mips_fdc/ejtag-fdc.h
 
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index 49a56eb5d0368..9cd3c99c6e5d4 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -17,6 +17,7 @@ ipv6_flowlabel
- ipv6_flowlabel_mgr
- log.txt
- msg_zerocopy
-+ncdevmem
- nettest
- psock_fanout
- psock_snd
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index bd01e4a0be2c2..df3fdd727ffb3 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -5,6 +5,10 @@ CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g
- CFLAGS += -I../../../../usr/include/ $(KHDR_INCLUDES)
- # Additional include paths needed by kselftest.h
- CFLAGS += -I../
-+CFLAGS += -I../../../net/ynl/generated/
-+CFLAGS += -I../../../net/ynl/lib/
-+
-+LDLIBS += ../../../net/ynl/lib/ynl.a ../../../net/ynl/generated/protos.a
- 
- TEST_PROGS := run_netsocktests run_afpackettests test_bpf.sh netdevice.sh \
- 	      rtnetlink.sh xfrm_policy.sh test_blackhole_dev.sh
-@@ -91,6 +95,7 @@ TEST_PROGS += fdb_flush.sh
- TEST_PROGS += fq_band_pktlimit.sh
- TEST_PROGS += vlan_hw_filter.sh
- TEST_PROGS += bpf_offload.py
-+TEST_GEN_FILES += ncdevmem
- 
- TEST_FILES := settings
- TEST_FILES += in_netns.sh lib.sh net_helper.sh setup_loopback.sh setup_veth.sh
-diff --git a/tools/testing/selftests/net/ncdevmem.c b/tools/testing/selftests/net/ncdevmem.c
-new file mode 100644
-index 0000000000000..e00255e54f77b
---- /dev/null
-+++ b/tools/testing/selftests/net/ncdevmem.c
-@@ -0,0 +1,542 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#define __EXPORTED_HEADERS__
-+
-+#include <linux/uio.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <stdbool.h>
-+#include <string.h>
-+#include <errno.h>
-+#define __iovec_defined
-+#include <fcntl.h>
-+#include <malloc.h>
-+#include <error.h>
-+
-+#include <arpa/inet.h>
-+#include <sys/socket.h>
-+#include <sys/mman.h>
-+#include <sys/ioctl.h>
-+#include <sys/syscall.h>
-+
-+#include <linux/memfd.h>
-+#include <linux/if.h>
-+#include <linux/dma-buf.h>
-+#include <linux/udmabuf.h>
-+#include <libmnl/libmnl.h>
-+#include <linux/types.h>
-+#include <linux/netlink.h>
-+#include <linux/genetlink.h>
-+#include <linux/netdev.h>
-+#include <time.h>
-+
-+#include "netdev-user.h"
-+#include <ynl.h>
-+
-+#define PAGE_SHIFT 12
-+#define TEST_PREFIX "ncdevmem"
-+#define NUM_PAGES 16000
-+
-+#ifndef MSG_SOCK_DEVMEM
-+#define MSG_SOCK_DEVMEM 0x2000000
-+#endif
-+
-+/*
-+ * tcpdevmem netcat. Works similarly to netcat but does device memory TCP
-+ * instead of regular TCP. Uses udmabuf to mock a dmabuf provider.
-+ *
-+ * Usage:
-+ *
-+ *	On server:
-+ *	ncdevmem -s <server IP> -c <client IP> -f eth1 -d 3 -n 0000:06:00.0 -l \
-+ *		-p 5201 -v 7
-+ *
-+ *	On client:
-+ *	yes $(echo -e \\x01\\x02\\x03\\x04\\x05\\x06) | \
-+ *		tr \\n \\0 | \
-+ *		head -c 5G | \
-+ *		nc <server IP> 5201 -p 5201
-+ *
-+ * Note this is compatible with regular netcat. i.e. the sender or receiver can
-+ * be replaced with regular netcat to test the RX or TX path in isolation.
-+ */
-+
-+static char *server_ip = "192.168.1.4";
-+static char *client_ip = "192.168.1.2";
-+static char *port = "5201";
-+static size_t do_validation;
-+static int start_queue = 8;
-+static int num_queues = 8;
-+static char *ifname = "eth1";
-+static unsigned int ifindex = 3;
-+static unsigned int iterations;
-+static unsigned int dmabuf_id;
-+
-+void print_bytes(void *ptr, size_t size)
-+{
-+	unsigned char *p = ptr;
-+	int i;
-+
-+	for (i = 0; i < size; i++)
-+		printf("%02hhX ", p[i]);
-+	printf("\n");
-+}
-+
-+void print_nonzero_bytes(void *ptr, size_t size)
-+{
-+	unsigned char *p = ptr;
-+	unsigned int i;
-+
-+	for (i = 0; i < size; i++)
-+		putchar(p[i]);
-+	printf("\n");
-+}
-+
-+void validate_buffer(void *line, size_t size)
-+{
-+	static unsigned char seed = 1;
-+	unsigned char *ptr = line;
-+	int errors = 0;
-+	size_t i;
-+
-+	for (i = 0; i < size; i++) {
-+		if (ptr[i] != seed) {
-+			fprintf(stderr,
-+				"Failed validation: expected=%u, actual=%u, index=%lu\n",
-+				seed, ptr[i], i);
-+			errors++;
-+			if (errors > 20)
-+				error(1, 0, "validation failed.");
-+		}
-+		seed++;
-+		if (seed == do_validation)
-+			seed = 0;
-+	}
-+
-+	fprintf(stdout, "Validated buffer\n");
-+}
-+
-+static void reset_flow_steering(void)
-+{
-+	char command[256];
-+
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command), "sudo ethtool -K %s ntuple off",
-+		 "eth1");
-+	system(command);
-+
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command), "sudo ethtool -K %s ntuple on",
-+		 "eth1");
-+	system(command);
-+}
-+
-+static void configure_rss(void)
-+{
-+	char command[256];
-+
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command), "sudo ethtool -X %s equal %d",
-+		 ifname, start_queue);
-+	system(command);
-+}
-+
-+static void configure_flow_steering(void)
-+{
-+	char command[256];
-+
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command),
-+		 "sudo ethtool -N %s flow-type tcp4 src-ip %s dst-ip %s src-port %s dst-port %s queue %d",
-+		 ifname, client_ip, server_ip, port, port, start_queue);
-+	system(command);
-+}
-+
-+static int bind_rx_queue(unsigned int ifindex, unsigned int dmabuf_fd,
-+			 struct netdev_queue_dmabuf *queues,
-+			 unsigned int n_queue_index, struct ynl_sock **ys)
-+{
-+	struct netdev_bind_rx_req *req = NULL;
-+	struct netdev_bind_rx_rsp *rsp = NULL;
-+	struct ynl_error yerr;
-+
-+	*ys = ynl_sock_create(&ynl_netdev_family, &yerr);
-+	if (!*ys) {
-+		fprintf(stderr, "YNL: %s\n", yerr.msg);
-+		return -1;
-+	}
-+
-+	req = netdev_bind_rx_req_alloc();
-+	netdev_bind_rx_req_set_ifindex(req, ifindex);
-+	netdev_bind_rx_req_set_dmabuf_fd(req, dmabuf_fd);
-+	__netdev_bind_rx_req_set_queues(req, queues, n_queue_index);
-+
-+	rsp = netdev_bind_rx(*ys, req);
-+	if (!rsp) {
-+		perror("netdev_bind_rx");
-+		goto err_close;
-+	}
-+
-+	if (!rsp->_present.dmabuf_id) {
-+		perror("dmabuf_id not present");
-+		goto err_close;
-+	}
-+
-+	printf("got dmabuf id=%d\n", rsp->dmabuf_id);
-+	dmabuf_id = rsp->dmabuf_id;
-+
-+	netdev_bind_rx_req_free(req);
-+	netdev_bind_rx_rsp_free(rsp);
-+
-+	return 0;
-+
-+err_close:
-+	fprintf(stderr, "YNL failed: %s\n", (*ys)->err.msg);
-+	netdev_bind_rx_req_free(req);
-+	ynl_sock_destroy(*ys);
-+	return -1;
-+}
-+
-+static void create_udmabuf(int *devfd, int *memfd, int *buf, size_t dmabuf_size)
-+{
-+	struct udmabuf_create create;
-+	int ret;
-+
-+	*devfd = open("/dev/udmabuf", O_RDWR);
-+	if (*devfd < 0) {
-+		error(70, 0,
-+		      "%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
-+		      TEST_PREFIX);
-+	}
-+
-+	*memfd = memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
-+	if (*memfd < 0)
-+		error(70, 0, "%s: [skip,no-memfd]\n", TEST_PREFIX);
-+
-+	/* Required for udmabuf */
-+	ret = fcntl(*memfd, F_ADD_SEALS, F_SEAL_SHRINK);
-+	if (ret < 0)
-+		error(73, 0, "%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
-+
-+	ret = ftruncate(*memfd, dmabuf_size);
-+	if (ret == -1)
-+		error(74, 0, "%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
-+
-+	memset(&create, 0, sizeof(create));
-+
-+	create.memfd = *memfd;
-+	create.offset = 0;
-+	create.size = dmabuf_size;
-+	*buf = ioctl(*devfd, UDMABUF_CREATE, &create);
-+	if (*buf < 0)
-+		error(75, 0, "%s: [FAIL, create udmabuf]\n", TEST_PREFIX);
-+}
-+
-+int do_server(void)
-+{
-+	char ctrl_data[sizeof(int) * 20000];
-+	struct netdev_queue_dmabuf *queues;
-+	size_t non_page_aligned_frags = 0;
-+	struct sockaddr_in client_addr;
-+	struct sockaddr_in server_sin;
-+	size_t page_aligned_frags = 0;
-+	int devfd, memfd, buf, ret;
-+	size_t total_received = 0;
-+	socklen_t client_addr_len;
-+	bool is_devmem = false;
-+	char *buf_mem = NULL;
-+	struct ynl_sock *ys;
-+	size_t dmabuf_size;
-+	char iobuf[819200];
-+	char buffer[256];
-+	int socket_fd;
-+	int client_fd;
-+	size_t i = 0;
-+	int opt = 1;
-+
-+	dmabuf_size = getpagesize() * NUM_PAGES;
-+
-+	create_udmabuf(&devfd, &memfd, &buf, dmabuf_size);
-+
-+	reset_flow_steering();
-+
-+	/* Configure RSS to divert all traffic from our devmem queues */
-+	configure_rss();
-+
-+	/* Flow steer our devmem flows to start_queue */
-+	configure_flow_steering();
-+
-+	sleep(1);
-+
-+	queues = malloc(sizeof(*queues) * num_queues);
-+
-+	for (i = 0; i < num_queues; i++) {
-+		queues[i]._present.type = 1;
-+		queues[i]._present.idx = 1;
-+		queues[i].type = NETDEV_QUEUE_TYPE_RX;
-+		queues[i].idx = start_queue + i;
-+	}
-+
-+	if (bind_rx_queue(ifindex, buf, queues, num_queues, &ys))
-+		error(1, 0, "Failed to bind\n");
-+
-+	buf_mem = mmap(NULL, dmabuf_size, PROT_READ | PROT_WRITE, MAP_SHARED,
-+		       buf, 0);
-+	if (buf_mem == MAP_FAILED)
-+		error(1, 0, "mmap()");
-+
-+	server_sin.sin_family = AF_INET;
-+	server_sin.sin_port = htons(atoi(port));
-+
-+	ret = inet_pton(server_sin.sin_family, server_ip, &server_sin.sin_addr);
-+	if (socket < 0)
-+		error(79, 0, "%s: [FAIL, create socket]\n", TEST_PREFIX);
-+
-+	socket_fd = socket(server_sin.sin_family, SOCK_STREAM, 0);
-+	if (socket < 0)
-+		error(errno, errno, "%s: [FAIL, create socket]\n", TEST_PREFIX);
-+
-+	ret = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEPORT, &opt,
-+			 sizeof(opt));
-+	if (ret)
-+		error(errno, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
-+
-+	ret = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &opt,
-+			 sizeof(opt));
-+	if (ret)
-+		error(errno, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
-+
-+	printf("binding to address %s:%d\n", server_ip,
-+	       ntohs(server_sin.sin_port));
-+
-+	ret = bind(socket_fd, &server_sin, sizeof(server_sin));
-+	if (ret)
-+		error(errno, errno, "%s: [FAIL, bind]\n", TEST_PREFIX);
-+
-+	ret = listen(socket_fd, 1);
-+	if (ret)
-+		error(errno, errno, "%s: [FAIL, listen]\n", TEST_PREFIX);
-+
-+	client_addr_len = sizeof(client_addr);
-+
-+	inet_ntop(server_sin.sin_family, &server_sin.sin_addr, buffer,
-+		  sizeof(buffer));
-+	printf("Waiting or connection on %s:%d\n", buffer,
-+	       ntohs(server_sin.sin_port));
-+	client_fd = accept(socket_fd, &client_addr, &client_addr_len);
-+
-+	inet_ntop(client_addr.sin_family, &client_addr.sin_addr, buffer,
-+		  sizeof(buffer));
-+	printf("Got connection from %s:%d\n", buffer,
-+	       ntohs(client_addr.sin_port));
-+
-+	while (1) {
-+		struct iovec iov = { .iov_base = iobuf,
-+				     .iov_len = sizeof(iobuf) };
-+		struct dmabuf_cmsg *dmabuf_cmsg = NULL;
-+		struct dma_buf_sync sync = { 0 };
-+		struct cmsghdr *cm = NULL;
-+		struct msghdr msg = { 0 };
-+		struct dmabuf_token token;
-+		ssize_t ret;
-+
-+		is_devmem = false;
-+		printf("\n\n");
-+
-+		msg.msg_iov = &iov;
-+		msg.msg_iovlen = 1;
-+		msg.msg_control = ctrl_data;
-+		msg.msg_controllen = sizeof(ctrl_data);
-+		ret = recvmsg(client_fd, &msg, MSG_SOCK_DEVMEM);
-+		printf("recvmsg ret=%ld\n", ret);
-+		if (ret < 0 && (errno == EAGAIN || errno == EWOULDBLOCK))
-+			continue;
-+		if (ret < 0) {
-+			perror("recvmsg");
-+			continue;
-+		}
-+		if (ret == 0) {
-+			printf("client exited\n");
-+			goto cleanup;
-+		}
-+
-+		i++;
-+		for (cm = CMSG_FIRSTHDR(&msg); cm; cm = CMSG_NXTHDR(&msg, cm)) {
-+			if (cm->cmsg_level != SOL_SOCKET ||
-+			    (cm->cmsg_type != SCM_DEVMEM_DMABUF &&
-+			     cm->cmsg_type != SCM_DEVMEM_LINEAR)) {
-+				fprintf(stdout, "skipping non-devmem cmsg\n");
-+				continue;
-+			}
-+
-+			dmabuf_cmsg = (struct dmabuf_cmsg *)CMSG_DATA(cm);
-+			is_devmem = true;
-+
-+			if (cm->cmsg_type == SCM_DEVMEM_LINEAR) {
-+				/* TODO: process data copied from skb's linear
-+				 * buffer.
-+				 */
-+				fprintf(stdout,
-+					"SCM_DEVMEM_LINEAR. dmabuf_cmsg->frag_size=%u\n",
-+					dmabuf_cmsg->frag_size);
-+
-+				continue;
-+			}
-+
-+			token.token_start = dmabuf_cmsg->frag_token;
-+			token.token_count = 1;
-+
-+			total_received += dmabuf_cmsg->frag_size;
-+			printf("received frag_page=%llu, in_page_offset=%llu, frag_offset=%llu, frag_size=%u, token=%u, total_received=%lu, dmabuf_id=%u\n",
-+			       dmabuf_cmsg->frag_offset >> PAGE_SHIFT,
-+			       dmabuf_cmsg->frag_offset % getpagesize(),
-+			       dmabuf_cmsg->frag_offset, dmabuf_cmsg->frag_size,
-+			       dmabuf_cmsg->frag_token, total_received,
-+			       dmabuf_cmsg->dmabuf_id);
-+
-+			if (dmabuf_cmsg->dmabuf_id != dmabuf_id)
-+				error(1, 0,
-+				      "received on wrong dmabuf_id: flow steering error\n");
-+
-+			if (dmabuf_cmsg->frag_size % getpagesize())
-+				non_page_aligned_frags++;
-+			else
-+				page_aligned_frags++;
-+
-+			sync.flags = DMA_BUF_SYNC_READ | DMA_BUF_SYNC_START;
-+			ioctl(buf, DMA_BUF_IOCTL_SYNC, &sync);
-+
-+			if (do_validation)
-+				validate_buffer(
-+					((unsigned char *)buf_mem) +
-+						dmabuf_cmsg->frag_offset,
-+					dmabuf_cmsg->frag_size);
-+			else
-+				print_nonzero_bytes(
-+					((unsigned char *)buf_mem) +
-+						dmabuf_cmsg->frag_offset,
-+					dmabuf_cmsg->frag_size);
-+
-+			sync.flags = DMA_BUF_SYNC_READ | DMA_BUF_SYNC_END;
-+			ioctl(buf, DMA_BUF_IOCTL_SYNC, &sync);
-+
-+			ret = setsockopt(client_fd, SOL_SOCKET,
-+					 SO_DEVMEM_DONTNEED, &token,
-+					 sizeof(token));
-+			if (ret != 1)
-+				error(1, 0,
-+				      "SO_DEVMEM_DONTNEED not enough tokens");
-+		}
-+		if (!is_devmem)
-+			error(1, 0, "flow steering error\n");
-+
-+		printf("total_received=%lu\n", total_received);
-+	}
-+
-+	fprintf(stdout, "%s: ok\n", TEST_PREFIX);
-+
-+	fprintf(stdout, "page_aligned_frags=%lu, non_page_aligned_frags=%lu\n",
-+		page_aligned_frags, non_page_aligned_frags);
-+
-+	fprintf(stdout, "page_aligned_frags=%lu, non_page_aligned_frags=%lu\n",
-+		page_aligned_frags, non_page_aligned_frags);
-+
-+cleanup:
-+
-+	munmap(buf_mem, dmabuf_size);
-+	close(client_fd);
-+	close(socket_fd);
-+	close(buf);
-+	close(memfd);
-+	close(devfd);
-+	ynl_sock_destroy(ys);
-+
-+	return 0;
-+}
-+
-+void run_devmem_tests(void)
-+{
-+	struct netdev_queue_dmabuf *queues;
-+	int devfd, memfd, buf;
-+	struct ynl_sock *ys;
-+	size_t dmabuf_size;
-+	size_t i = 0;
-+
-+	dmabuf_size = getpagesize() * NUM_PAGES;
-+
-+	create_udmabuf(&devfd, &memfd, &buf, dmabuf_size);
-+
-+	/* Configure RSS to divert all traffic from our devmem queues */
-+	configure_rss();
-+
-+	sleep(1);
-+
-+	queues = malloc(sizeof(*queues) * num_queues);
-+
-+	for (i = 0; i < num_queues; i++) {
-+		queues[i]._present.type = 1;
-+		queues[i]._present.idx = 1;
-+		queues[i].type = NETDEV_QUEUE_TYPE_RX;
-+		queues[i].idx = start_queue + i;
-+	}
-+
-+	if (bind_rx_queue(ifindex, buf, queues, num_queues, &ys))
-+		error(1, 0, "Failed to bind\n");
-+
-+	/* Closing the netlink socket does an implicit unbind */
-+	ynl_sock_destroy(ys);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int is_server = 0, opt;
-+
-+	while ((opt = getopt(argc, argv, "ls:c:p:v:q:f:n:i:d:")) != -1) {
-+		switch (opt) {
-+		case 'l':
-+			is_server = 1;
-+			break;
-+		case 's':
-+			server_ip = optarg;
-+			break;
-+		case 'c':
-+			client_ip = optarg;
-+			break;
-+		case 'p':
-+			port = optarg;
-+			break;
-+		case 'v':
-+			do_validation = atoll(optarg);
-+			break;
-+		case 'q':
-+			num_queues = atoi(optarg);
-+			break;
-+		case 't':
-+			start_queue = atoi(optarg);
-+			break;
-+		case 'f':
-+			ifname = optarg;
-+			break;
-+		case 'd':
-+			ifindex = atoi(optarg);
-+			break;
-+		case 'i':
-+			iterations = atoll(optarg);
-+			break;
-+		case '?':
-+			printf("unknown option: %c\n", optopt);
-+			break;
-+		}
-+	}
-+
-+	for (; optind < argc; optind++)
-+		printf("extra arguments: %s\n", argv[optind]);
-+
-+	run_devmem_tests();
-+
-+	if (is_server)
-+		return do_server();
-+
-+	return 0;
-+}
 -- 
-2.45.0.118.g7fe29c98d7-goog
+2.25.1
 
 
