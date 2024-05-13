@@ -1,152 +1,112 @@
-Return-Path: <linux-mips+bounces-3251-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3252-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A78358C36B1
-	for <lists+linux-mips@lfdr.de>; Sun, 12 May 2024 15:26:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 032708C3CBA
+	for <lists+linux-mips@lfdr.de>; Mon, 13 May 2024 09:55:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E23051C2111F
-	for <lists+linux-mips@lfdr.de>; Sun, 12 May 2024 13:26:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADC491F23F7F
+	for <lists+linux-mips@lfdr.de>; Mon, 13 May 2024 07:55:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B46F46557;
-	Sun, 12 May 2024 13:25:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4454D146D56;
+	Mon, 13 May 2024 07:55:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N29LfkAs"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="f9ac95v6"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED4B383A9;
-	Sun, 12 May 2024 13:25:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8248146A8E;
+	Mon, 13 May 2024 07:55:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715520332; cv=none; b=luiZU7+6+CIuxgLXm5JU/KyGuqE++0XSjlPvKDu2vVlwmYzZz0BAMkUiy08CaE9DQAjwFGRtYeqVCUlGx6LpkEh8r6HS++aqiGppnI0nulbqLs+Yoo00w1gEM8j5YxH+jgiySjY8qD0hmbv29rx6Hu/NgsZ5rZKpuUQlQUA/MGk=
+	t=1715586913; cv=none; b=q+bnEeOmQbDKcyZlihRPH1HsdYxA9OK4J3ExhoHeikdzJA6nloA/srzubo1BakKDxJNpcSG9+KGLlfHzL/2PEPeRVOViRNoplvyHNpAV7s3ElSQpHzqTXqKG4bsxgVkOxtpLG6SnZ216YSTkmrcBt7qKgUGrGX+GU7DkXq+xzic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715520332; c=relaxed/simple;
-	bh=J+g8IFFwy/vjVlcPhULbDtQ2VliUzl+7eSs2atsxppo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aBDECtxzE4A7Lqe9aKvLOC7RgS0UL9h828Cw7jJQXfuxULvpYroIQBjlMgULXPzWmI0+elJjDRHVn0OLgoVCWn1O3d+gvmhiaPSJHaVSHaEek660YBJsSh5GA9wkH78CDp8GX5KZ1CK4xBilHpqyEAsr4pQJeO/rv185SWZHivo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N29LfkAs; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-34da4d6f543so2474888f8f.3;
-        Sun, 12 May 2024 06:25:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715520329; x=1716125129; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BVMmxV0x3lE9AAJXo4i0SZvZEcFwdqyDwVz0Ae897gs=;
-        b=N29LfkAsr/kAgpVCsgMQ7dMoFKgENWriyGYCSxUIWoRkyahowO9gnJqf2V/HuJstH6
-         /1xnaEZ2IDJ4eLp1a5PKUmPoX42MLwxUET1hvP/KIO5W4HJVFnm+uCqPmxml9XuASWGl
-         wCOx4aeRfBzDvJhnKfLyYwc8Md/y6Z25ftaBeCinc9KWLv0fbSYPzQvU/F/8+2zHXFkn
-         1srgbp2FvsyK5J9qPkWrm2n+bmhEZTynlEoF1W0LDcC/TquHM3iHRwmkd0O9G/OnVjLa
-         4I8ebT1lLNLPRWYoUgKkbtJ85C3JwwbspblA5UwhBtHmWxcbMWmq4Mv/mHFLw/21VGtx
-         sZoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715520329; x=1716125129;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BVMmxV0x3lE9AAJXo4i0SZvZEcFwdqyDwVz0Ae897gs=;
-        b=teKfkUNBtMOWYYLK/a4SHwbkcybFmQ17LsZDGrQPRIHX+50TGWZpvIiZ3Jtamky7Tn
-         K+pZ2XOW2iKGYdx7H3lVf507wYsOX4Zgfn1g7WmPqFyiav3a3N3HuuSb+RbfFgXYyPmp
-         sKwSCu5Dsfobs1TBKpa3Vo4oEEgGEd+T9tuZ4WKCQgD2DefSXGAcvOzi9OjffV7Vd7+B
-         iDPosJpMh4wQo5zvTNSmTfuXjzgcEnIeslfzbppDKEZaD7mW7QvRpaRo425Q+YRG4vrO
-         B0RvKVataEhot1yvcJqhldqTJuYo3poVsA4uMMhTVb6y3ztKQ6ROFzoethyOvzhUhMhh
-         kIRg==
-X-Forwarded-Encrypted: i=1; AJvYcCX1PIDf54oKbuFex7hwmcOSiNzMbij543ZhHTLtaRUOtus4LSXxmHJeh/lClbS9GZFwIMbzMzUcbukAloViJ+Tv2nMzqzKgNPtS1Bp9B+Uw+wLGPzNf2C5mDvmEcVKYiC/AlIMIWPuQoG5J0eBiRa3dHnxgWiWVEdZvewrKDPB1OliimGc=
-X-Gm-Message-State: AOJu0Yz6JBG+63mReXg2mWty4IC2OHBYU5GcMVcDy+BOGDLVGAGqrTyW
-	/qEQAeCIOCBnyvAyyCy/0UUPiKx/DteLRxcolnqHoHE2CO+eqjsm
-X-Google-Smtp-Source: AGHT+IGPgmj9+HFj7ZmEj4HsMNnaUpkxl+HBirbu9OeF3UbYZa3LMM4sHMUqN7Itsxvn58XENpHmLg==
-X-Received: by 2002:a05:6000:12d0:b0:34d:bbaf:27cf with SMTP id ffacd0b85a97d-3504a96a4b7mr5028390f8f.51.1715520328598;
-        Sun, 12 May 2024 06:25:28 -0700 (PDT)
-Received: from localhost.localdomain (93-34-90-105.ip49.fastwebnet.it. [93.34.90.105])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3502b79bd09sm8822468f8f.14.2024.05.12.06.25.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 May 2024 06:25:28 -0700 (PDT)
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Saravana Kannan <saravanak@google.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Helge Deller <deller@gmx.de>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	Baoquan He <bhe@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	David Bauer <mail@david-bauer.net>,
-	Liviu Dudau <liviu@dudau.co.uk>,
-	Serge Semin <fancer.lancer@gmail.com>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org
-Cc: Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH 4/4] MIPS: add bootargs-override property
-Date: Sun, 12 May 2024 15:25:11 +0200
-Message-ID: <20240512132513.2831-5-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240512132513.2831-1-ansuelsmth@gmail.com>
-References: <20240512132513.2831-1-ansuelsmth@gmail.com>
+	s=arc-20240116; t=1715586913; c=relaxed/simple;
+	bh=9+2cK1PXmxBJWUEqMxM1uY0vrLMNMV723THFoCBGhJw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qHoqUENT3uurX+OK9Casvke+7e5h9mHH0c26+MzoMYSSxBn0YKE4KB8VQKr4CyyPxzGKqaX6ihDJtY94GR5GWHhiioL7h8vgJFLNk8OV8dHfHmIvEAO43wlmR7VfaB00v6MHTsnu5RZY0j8Hz9qCAizItVUzbVRsuiL1LiUaZJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=f9ac95v6; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 175BDE001E;
+	Mon, 13 May 2024 07:55:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1715586908;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ih1uGOfjRAxCt+6sZss4Yfl3azQjSUpDGJBEtOH8mvE=;
+	b=f9ac95v6i1XDmaygmdpkS9KIhKeyRRR3rzxuphI0Luyq5ePjJX81Na7xIwxyP9jltiorT5
+	o3RQdE4J0iBlv5VwiuDCBnPjk/bdNj4DrgwUQku75ZXXHOqytN8sUi3raDKyJY2X9piWrO
+	USUjdu+raME12Enpsa1gnuUglmy0oHkqtHN8/y0e60Dc6F39+3tJfrm18pfdfraCjaA0no
+	wIWhvD6hR/8n67SgI2C5gTU3q2ihA6qXYu4+AHgnSzsCbeRsNJjPcWwDwF/qAiUy3BfoR0
+	Ch9OAOcKjdSFVA88ufca5XaZyeLXxw6gUY9xSEYupyKwu6Jpav7BN9WR9OV68A==
+Date: Mon, 13 May 2024 09:55:04 +0200
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea
+ <claudiu.beznea@tuxon.dev>, Andrew Lunn <andrew@lunn.ch>, Sebastian
+ Hesselbarth <sebastian.hesselbarth@gmail.com>, Gregory Clement
+ <gregory.clement@bootlin.com>, Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Lee Jones <lee@kernel.org>,
+ UNGLinuxDriver@microchip.com, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>, Richard Weinberger <richard@nod.at>, Vignesh
+ Raghavendra <vigneshr@ti.com>, Yisen Zhuang <yisen.zhuang@huawei.com>,
+ Salil Mehta <salil.mehta@huawei.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Matthias Brugger
+ <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+ <angelogioacchino.delregno@collabora.com>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+ linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] dt-bindings: mfd: syscon: Add more simple compatibles
+Message-ID: <20240513095504.37776289@xps-13>
+In-Reply-To: <20240510123018.3902184-1-robh@kernel.org>
+References: <20240510123018.3902184-1-robh@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
 
-From: David Bauer <mail@david-bauer.net>
+Hi Rob,
 
-Add support for the bootargs-override and bootargs-append property
-to the chosen node similar to the one used on ipq806x or mpc85xx.
+robh@kernel.org wrote on Fri, 10 May 2024 07:30:14 -0500:
 
-This is necessary, as the U-Boot used on some boards, notably the
-Ubiquiti UniFi 6 Lite, overwrite the bootargs property of the chosen
-node leading to a kernel panic on kernel loading (hardcoded root path or
-other not compatible thing).
+> Add another batch of various "simple" syscon compatibles which were
+> undocumented or still documented with old text bindings. Remove the old
+> text binding docs for the ones which were documented.
 
-Signed-off-by: David Bauer <mail@david-bauer.net>
-[ rework and simplify implementation, add support for bootargs-append ]
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- arch/mips/kernel/setup.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+...
 
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index 12a1a4ffb602..725e3f19f342 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -538,11 +538,23 @@ static int __init bootcmdline_scan_chosen(unsigned long node, const char *uname,
- 	    (strcmp(uname, "chosen") != 0 && strcmp(uname, "chosen@0") != 0))
- 		return 0;
- 
--	p = of_get_flat_dt_prop(node, "bootargs", &l);
-+	/*
-+	 * Retrieve command line
-+	 * bootargs might be hardcoded and overwrite by bootloader on
-+	 * kernel load.
-+	 * Check if alternative bootargs-override is present instead
-+	 * first.
-+	 */
-+	p = of_get_flat_dt_prop(node, "bootargs-override", &l);
-+	if (p == NULL || l == 0)
-+		p = of_get_flat_dt_prop(node, "bootargs", &l);
- 	if (p != NULL && l > 0) {
- 		bootcmdline_append(p, min(l, COMMAND_LINE_SIZE));
- 		*dt_bootargs = true;
- 	}
-+	p = of_get_flat_dt_prop(node, "bootargs-append", &l);
-+	if (p != NULL && l > 0)
-+		bootcmdline_append(p, min_t(int, strlen(boot_command_line) + l, COMMAND_LINE_SIZE));
- 
- 	return 1;
- }
--- 
-2.43.0
+>  .../devicetree/bindings/mtd/atmel-nand.txt    |  9 ------
 
+I don't know how useful are these compatibles, but if I take the case
+of atmel,sama5d3-nfc-io, it is only described in this file, while
+several DTSI reference it. After this change they will no longer be
+referenced at all but still in use. Is this intended? Shall these
+compatibles be totally dropped from the device trees as well?
+
+$ git grep -c atmel,sama5d3-nfc-io arch/
+arch/arm/boot/dts/microchip/sama5d2.dtsi:1
+arch/arm/boot/dts/microchip/sama5d3.dtsi:1
+arch/arm/boot/dts/microchip/sama5d4.dtsi:1
+arch/arm/boot/dts/microchip/sama7g5.dtsi:1
+
+Thanks,
+Miqu=C3=A8l
 
