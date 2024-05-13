@@ -1,140 +1,116 @@
-Return-Path: <linux-mips+bounces-3264-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3265-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 613608C474A
-	for <lists+linux-mips@lfdr.de>; Mon, 13 May 2024 20:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F43A8C47D8
+	for <lists+linux-mips@lfdr.de>; Mon, 13 May 2024 21:49:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9289F1C20E31
-	for <lists+linux-mips@lfdr.de>; Mon, 13 May 2024 18:58:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADF731C23156
+	for <lists+linux-mips@lfdr.de>; Mon, 13 May 2024 19:48:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD6DA5914D;
-	Mon, 13 May 2024 18:58:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9A5876C61;
+	Mon, 13 May 2024 19:48:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="P2Gs6F4k";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jaoiE/KA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B3/TvDQb"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh3-smtp.messagingengine.com (fhigh3-smtp.messagingengine.com [103.168.172.154])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA1057C94;
-	Mon, 13 May 2024 18:58:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A9F77107;
+	Mon, 13 May 2024 19:48:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715626700; cv=none; b=Up3YifoKACAU25MdnS22ct5iv7AEh2Ccwugh4xbct8gpz5Vn9UVLP580KNAGnuwgnigJ3j4T7afhYkJFocdjPk6h00MSLhX+0PrhICpNry3LiHCM/FZinOXbntgEIqLj0A7AyMGzt5Dhql3kF8ckpefkjPmUnJ6RLn3cD/zhzJc=
+	t=1715629734; cv=none; b=TEjLScff29YDanoZswNrHiOdSqxhsCbOlnjbHVBE8Fcy5wsF+Y4t+L//f6THYYSSStPFdbq8yUhpdYYllM9yihT3p9uqmRYLScBASjNfNuVkxBWimuAq5aXI5Z8mqF46R63jP6Kjrow0jW3WLMNr+sGUi3z5QLa6Miub1w42ImU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715626700; c=relaxed/simple;
-	bh=AxqJL6jRCqV6vjY2t6hZsW6Hct2fql6azgLtT1kWzBE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Iaj5ZOlzQ3SiPymPwAFwaY3nzgRcgro8yEgELR8rP8aD+18kwocjXzpmH/ewR7T7Lj5N5eyqJynrFH/FOwq9O55Xliehu7YXv2E2M31iQWKGr/aPT8H/T+1KcEOsmloMzLMwnPf/nqfXLWe/aFh86WfRWyNYePzrNwQvKWCjb5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=P2Gs6F4k; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jaoiE/KA; arc=none smtp.client-ip=103.168.172.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 778E9114017A;
-	Mon, 13 May 2024 14:58:18 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 13 May 2024 14:58:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1715626698;
-	 x=1715713098; bh=VDFbaTESjI+KTwwEwgBDTk2QVAvlm0Ozsc93TRmAp1I=; b=
-	P2Gs6F4k8JzfhAxBW1F+KApwfLU+Estb8+Lv8EDL1MfyJEPr3iklD23T0NBljCOD
-	xgZjr/7cfz66dxarVBYLYqpSj5LVQCGDiqhwqgaSMFcvJIskU47+pFyZI+Wkpmp+
-	Iksq3j49yz29oeBtbfDGGpqtY1iMQtBjdzYpv5ZFOgc4CBX3eW4JJFIeHbg8N28j
-	cx84ncKLfvH5GtZtYSsYMpZzQ94xV4ZzfZ50zer990NxS6Ri7ZGBPxQ6Ebt/sy9e
-	telf4ihevfEjrSdoRurJu96a01y9PrP47YsqiKWI/CGdzGPQug3WlIS4PdQ1MdxP
-	fOLC9yv0izuY9wgPa90yhA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1715626698; x=
-	1715713098; bh=VDFbaTESjI+KTwwEwgBDTk2QVAvlm0Ozsc93TRmAp1I=; b=j
-	aoiE/KArf0rNW+jUUQ1tJQCtQnWC2vrjM4wJ6fPMmk9PpZhyFeQr6ABAl+Z+7goI
-	IbrrJUoB76DWTdqXYJEXs4mWefMdIRsh2WL4wUcX3ypf+OuQvJklpPV4TM9yAaeH
-	jp6bIVtdbOP4FPUbOzbJrDodziCxzPt10nx4qHEGcCd8wcVVsosyKxMuGsYXba4v
-	+eg06yn9n9dUB/jbuODIVYmnWhcqygDTHbItd9JLuD04xsytdEUvfQ+GehulOkp9
-	cwBATst179iH6fzIX4gq2s5x+L6BJKpNV9JMKWPV3srosN9QcKow9+X4N7+xbkhm
-	MBuJeACWkXfcgaDaktJdQ==
-X-ME-Sender: <xms:ymJCZvsma4gIGFpafHjT4bQBlXmMrlOJROYvIOqWYd9E2X5mNb5Now>
-    <xme:ymJCZgc3_zscivg3BWHJ8151AS_BAi9hfSvtV83Y7k44puOqYDbe6C9BExxA1ul79
-    TJf3YbjeJRFMBLVpSk>
-X-ME-Received: <xmr:ymJCZiwQ75o_R7g4cYfJbb-zvkqCmqad1xF1BAsKswxjtLutvcAjS-Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdeggedgudeftdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpedvkeeihfefveekueevteefleffkeegudeghfdtuddugefh
-    ueevgeffgedukeejleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:ymJCZuPWxBU5hKlfiWZFQQWjHqw1_M_qySR-bHnrRXM-tLX0lccYeQ>
-    <xmx:ymJCZv80Z02dqTn6ZxxQFnaVbfYd3lD8x4YO6yHu8F9JtbebJeRifA>
-    <xmx:ymJCZuVGiSyWQQVa3CGLcETEgVKEtWie3FUp0NMVbzL2LQhrOY-eDA>
-    <xmx:ymJCZgd_3q9iZMVyVgQqUNnuXHpl7lNF5Kn0ESKkpD1Kor5dx_WDwQ>
-    <xmx:ymJCZg0FkalagIgjED6vFTPK7QtxSw9O8LW3jltMVt_RvxH3nGRStAMj>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 13 May 2024 14:58:16 -0400 (EDT)
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Mon, 13 May 2024 19:58:15 +0100
-Subject: [PATCH 2/2] MIPS: dts: Boston: Add simple-mfd compatible
+	s=arc-20240116; t=1715629734; c=relaxed/simple;
+	bh=GWnloP3tT/YXXyk4QBq6IzLYt0yUwn9pk8D1SDfG4So=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a2+mXEth7QChItbvHU3ny4AkpaBxmTh5CS3rYXsqLuJuujlFrPgfd9IMslC/HQ7JPZuQ6o6V6LkATH4c873+LpViwtlQTPinQ/9DiEsRa99PER/GrViLXD5jC4qEa796VEgvS6qb4yVW+cdNz9LlIhREX5bS3dlOBaiGuxJJ3gQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B3/TvDQb; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715629733; x=1747165733;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GWnloP3tT/YXXyk4QBq6IzLYt0yUwn9pk8D1SDfG4So=;
+  b=B3/TvDQb229/Hm75qbULTKzVRU0FfCX9mNBSo8pmFCH8mAnL3p6MVXby
+   ehCfmQHIIxz9Y6VdwuVXqNgc9JziP4vw7JMptfX6eXvDeF+HObWVoeZsj
+   +gdNhxBEpGk7bwZldmdiRDeh/mDii3FoVTl+OaQJoT62KKiBk3RpkPnTp
+   /q7Uhzrt/lh8L1lUjGmm/ov0HbLQMJuY+Qx5TsDBCED1gE1clvkwIQj8C
+   OAgbYe4649BC/7MQgz+KWaeONYL9q7z0qn9bvLOJUvv4gu9+WxW+do5ja
+   YsXBj0H9iNXU6JF4r3Eni//D/vCpVpm5C53MwSZK1u2GsDU+jzyWQBKv9
+   A==;
+X-CSE-ConnectionGUID: 05owgKGfSt+70jjdh7jKsA==
+X-CSE-MsgGUID: 4figUi2uRWy8r3+cfFmAyQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11072"; a="29074350"
+X-IronPort-AV: E=Sophos;i="6.08,159,1712646000"; 
+   d="scan'208";a="29074350"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2024 12:48:52 -0700
+X-CSE-ConnectionGUID: XA58acsLS7aXmsJ6E+RhRw==
+X-CSE-MsgGUID: BDcvxECwSLyPGiiR4vN7zA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,159,1712646000"; 
+   d="scan'208";a="67912153"
+Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 13 May 2024 12:48:51 -0700
+Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s6bfE-000Ac9-04;
+	Mon, 13 May 2024 19:48:48 +0000
+Date: Tue, 14 May 2024 03:48:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH] clocksource: Add node counter timer driver for
+ MIPS/Loongson64
+Message-ID: <202405140342.uKkbQKIJ-lkp@intel.com>
+References: <20240512-loongson_nodecnt-v1-1-2157b92ef8f8@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240513-boston-syscon-v1-2-93ff557d3548@flygoat.com>
-References: <20240513-boston-syscon-v1-0-93ff557d3548@flygoat.com>
-In-Reply-To: <20240513-boston-syscon-v1-0-93ff557d3548@flygoat.com>
-To: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Paul Burton <paulburton@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=765;
- i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=AxqJL6jRCqV6vjY2t6hZsW6Hct2fql6azgLtT1kWzBE=;
- b=owGbwMvMwCHmXMhTe71c8zDjabUkhjSnpOOu7s/PtvVUXBRTMtpl+GEZdymfitjGldzfPgkvU
- qqILT3dUcrCIMbBICumyBIioNS3ofHigusPsv7AzGFlAhnCwMUpABM5yczwv1pzncXze+dcPvhP
- vewtIfqFyVlTvLvsyg0jkYzQKN/IRQz/PU86LpjoFtwY4KevLX1lc5e4xJ/G7aXBU6yiWUK221i
- yAgA=
-X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
- fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240512-loongson_nodecnt-v1-1-2157b92ef8f8@flygoat.com>
 
-We certainly want subnodes of system-controller node to
-be populated, add simple-mfd compatible to make that happen.
+Hi Jiaxun,
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/boot/dts/img/boston.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/arch/mips/boot/dts/img/boston.dts b/arch/mips/boot/dts/img/boston.dts
-index 72f7605d2e31..f7a2c46f1eb8 100644
---- a/arch/mips/boot/dts/img/boston.dts
-+++ b/arch/mips/boot/dts/img/boston.dts
-@@ -203,7 +203,7 @@ cpc@16200000 {
- 	};
- 
- 	plat_regs: system-controller@17ffd000 {
--		compatible = "img,boston-platform-regs", "syscon";
-+		compatible = "img,boston-platform-regs", "syscon", "simple-mfd";
- 		reg = <0x17ffd000 0x1000>;
- 
- 		clk_boston: clock {
+[auto build test ERROR on 75fa778d74b786a1608d55d655d42b480a6fa8bd]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiaxun-Yang/clocksource-Add-node-counter-timer-driver-for-MIPS-Loongson64/20240512-200356
+base:   75fa778d74b786a1608d55d655d42b480a6fa8bd
+patch link:    https://lore.kernel.org/r/20240512-loongson_nodecnt-v1-1-2157b92ef8f8%40flygoat.com
+patch subject: [PATCH] clocksource: Add node counter timer driver for MIPS/Loongson64
+config: mips-loongson2k_defconfig (https://download.01.org/0day-ci/archive/20240514/202405140342.uKkbQKIJ-lkp@intel.com/config)
+compiler: mips64el-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240514/202405140342.uKkbQKIJ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405140342.uKkbQKIJ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   mips64el-linux-ld: arch/mips/loongson64/time.o: in function `plat_time_init':
+>> time.c:(.init.text+0xb4): undefined reference to `nodecnt_clocksource_init'
+>> mips64el-linux-ld: time.c:(.init.text+0xcc): undefined reference to `nodecnt_clocksource_init'
 
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
