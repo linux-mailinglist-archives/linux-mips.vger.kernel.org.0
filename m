@@ -1,126 +1,78 @@
-Return-Path: <linux-mips+bounces-3269-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3270-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E51558C5A20
-	for <lists+linux-mips@lfdr.de>; Tue, 14 May 2024 19:15:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA4658C5D03
+	for <lists+linux-mips@lfdr.de>; Tue, 14 May 2024 23:46:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 739E7B21837
-	for <lists+linux-mips@lfdr.de>; Tue, 14 May 2024 17:15:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7174B28121F
+	for <lists+linux-mips@lfdr.de>; Tue, 14 May 2024 21:46:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1457A1802AA;
-	Tue, 14 May 2024 17:15:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0iOWUnBD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A228181BB3;
+	Tue, 14 May 2024 21:46:09 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DFCE17F38D
-	for <linux-mips@vger.kernel.org>; Tue, 14 May 2024 17:15:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 014F9180A77;
+	Tue, 14 May 2024 21:46:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715706937; cv=none; b=pB5xHrmcYdauRuxDdyVt1h4sxfZwt5PNd1iGGfQ6g8+BkRbUt4a8IikatlMp3mS9pgPmsL1mbBbteYMw42A4hd5n1ZynHlYnTvhLUw8QzVPD7kg3qTE3krFy9FcIVdfMruwT8xXH9VAMM8LgtTXdBvV9C6CLle2Iry80+JgqYRE=
+	t=1715723169; cv=none; b=ctLcyD7o2DFeW5CqPNDThUmmnn33Rp42Gc47gwyG5w50QpPwJ38c0sODMm/m4iT40BjEdzdc1UANT2+HCRzZzaf4ShWxJpKHgWccUa6BREVHrJIhgMZu4yl97WUeZsMIPxLWgUS6otl2ZkE41F2Fdzxo5IXinJmW0fVCsbKisSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715706937; c=relaxed/simple;
-	bh=JphrTnGE11d/hcgLanrvMdnjxLSu0oYp2e2Hwwop9sM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=c8bv3UMnpZTHD4qDnHpKgqHaStevRvJyap+/cFhsfuNbu4iK7MRuZYV71ei8IUU+UPSO87I3UE6Os3cYdI3jQNSdVK970RSnH3a5zy6mK4TIxOGpHNQQm93W3wXU/iouhtLLk45l2Oau6AgTbKWyGLkGkeORYpb9yo1oL9EgBc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0iOWUnBD; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a59a64db066so46548666b.3
-        for <linux-mips@vger.kernel.org>; Tue, 14 May 2024 10:15:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715706934; x=1716311734; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JphrTnGE11d/hcgLanrvMdnjxLSu0oYp2e2Hwwop9sM=;
-        b=0iOWUnBDzJP8ffTn7q6qGPHMBKoAK2jWGPB1fnj68OQljM1csqUFLvPtPlrkGkTqDY
-         Vqdbb3tImIM99DQ8Lglibm2JxMP7EWa1fUXdHtcBAfOkOZPh6XI3f535F8wRWntSYn3O
-         0t9exVre0Q9nMFx72/hEX35IFOOgJFYZMPJSQJuvvoitWok2x8anqnrLIN9k2E77gx3/
-         GMql6scUnB/KnFb2CYg+ikZG9YSGieC1q+VcKFydFMlbmiyCoTW5qJgM3qPxX4qw/SQc
-         BVSK6uLSIAeDmF+4lm1Q4UJaWQZUEaY/ocJSIVWJ+/RUhIg5dDBTwfiS+AqwJ529ZUQx
-         Z4XA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715706934; x=1716311734;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JphrTnGE11d/hcgLanrvMdnjxLSu0oYp2e2Hwwop9sM=;
-        b=Muu60pyr5ii5jpCkVBh2IDAm3lBEX7Jm4rUt3bGnUL3tMo2kyaFdnPMtz2UJFSfmnP
-         WMGd3Wwwta5YvKOUBx/W6Ar1Wg8IvJFf+1YWkFjP4+eQj+lEET5Xt+l2+/OknwHk5dPe
-         JWcUwbJkIIRuhlvbSYG7ypLQ38fS6czeNghjhKZUmIVwUAGkudFZCXXvO5+DGdI2aQLj
-         8NqWTQvHY0M+5eoST0XNAu+w21DSeKKdOYuasmPXlCGVeUBZfseDRaqX8UwaBJ0ojOwX
-         jW9LsL+1XD/t/M0Vh84PvqDk+1DL+LUns/ZsBpkIZzRr9d7Ep5zupDcqQ7Brxk5GCeG7
-         Sr6g==
-X-Forwarded-Encrypted: i=1; AJvYcCUTDABvqNw267myrG377TassnwWXcWg4/J4/UWWSjbNVYEpTmodaKhoukCZE5WUi1KEKtta2VTxHGKwjsug4PHuSL7AGD0gCEveaQ==
-X-Gm-Message-State: AOJu0Yyn930M4w6zIbp35xdqY8mxbiN0CHY4BQwyUNY91VxRJOcXmICY
-	3rsSf0PxJBSRyUKO7OOLena21YgWJRqBrmJfCcSFQL36MrPNEkXEZyvCEgynAA7TRQliN/5p0jd
-	gpkt6CB5LiL2y6y0fAOt/JE76++BIK1nOgSvX8KkfuyR6OvVMXdMy
-X-Google-Smtp-Source: AGHT+IEwOQpqw4ZMKIlz9X6LbLlfb8P5lzGCaO4YFYW5AVzaTN7hWpB9KsS7Ts3tYb3EwJ+JwuI+UCM3+u1xlOEFWOo=
-X-Received: by 2002:a17:906:714a:b0:a5a:8ac4:3c4c with SMTP id
- a640c23a62f3a-a5a8ac43e15mr130162166b.68.1715706933383; Tue, 14 May 2024
- 10:15:33 -0700 (PDT)
+	s=arc-20240116; t=1715723169; c=relaxed/simple;
+	bh=tA0JXE2hoL6cfxV24wwc92Ng3pYIs8abpFOuRnVXY1A=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=f50cqnDPUsJWKwy9shL5Ue2Wk+gfwmwLNiBf0TK2KK+A0AklYo5/WIYJZAHbTZ5jWxYtXiJ1F9apIBlDP0y70CJPupKlWTwEeYS3LcsfKRmQ2FgAkerHQXL1zKwWDePRrCJJCcGqghSPHHlmf3WCTL63I4Ntyj6RF/pdWZelPv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 2B44792009C; Tue, 14 May 2024 23:38:19 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 2116892009B;
+	Tue, 14 May 2024 22:38:19 +0100 (BST)
+Date: Tue, 14 May 2024 22:38:19 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    Nathan Chancellor <nathan@kernel.org>, 
+    Nick Desaulniers <ndesaulniers@google.com>, 
+    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+    linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+    llvm@lists.linux.dev, Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 6/8] MIPS: Limit MIPS_MT_SMP support by ISA reversion
+In-Reply-To: <20240202-llvm-msym32-v1-6-52f0631057d6@flygoat.com>
+Message-ID: <alpine.DEB.2.21.2405142235100.45291@angie.orcam.me.uk>
+References: <20240202-llvm-msym32-v1-0-52f0631057d6@flygoat.com> <20240202-llvm-msym32-v1-6-52f0631057d6@flygoat.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240510232128.1105145-1-almasrymina@google.com> <20240513163114.52b44f66@kernel.org>
-In-Reply-To: <20240513163114.52b44f66@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 14 May 2024 10:15:18 -0700
-Message-ID: <CAHS8izMH9223wbHQk8zbtqP-hfydvqkmo3k3BYeWYrpkuVcnVw@mail.gmail.com>
-Subject: Re: [PATCH net-next v9 00/14] Device Memory TCP
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
-	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
 
-On Mon, May 13, 2024 at 4:31=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> On Fri, 10 May 2024 16:21:11 -0700 Mina Almasry wrote:
-> > Device Memory TCP
->
-> Sorry Mina, this is too big to apply during the merge window :(
+On Fri, 2 Feb 2024, Jiaxun Yang wrote:
 
-No worries at all. I'll repost once it re-opens with any feedback I
-get in the meantime.
+> MIPS MT ASE is only available on ISA between Release 1 and Release 5.
 
---=20
-Thanks,
-Mina
+ R2+ only actually, as also evident from Kconfig...
+
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -2171,7 +2171,8 @@ config CPU_R4K_CACHE_TLB
+>  config MIPS_MT_SMP
+>  	bool "MIPS MT SMP support (1 TC on each available VPE)"
+>  	default y
+> -	depends on SYS_SUPPORTS_MULTITHREADING && !CPU_MIPSR6 && !CPU_MICROMIPS
+> +	depends on TARGET_ISA_REV > 0 && TARGET_ISA_REV < 6
+> +	depends on SYS_SUPPORTS_MULTITHREADING && !CPU_MICROMIPS
+>  	select CPU_MIPSR2_IRQ_VI
+>  	select CPU_MIPSR2_IRQ_EI
+                   ^^^^^^
+ ... here.  I wish people looked beyond the line they change, sigh...
+
+  Maciej
 
