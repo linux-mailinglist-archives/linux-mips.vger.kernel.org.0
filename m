@@ -1,158 +1,325 @@
-Return-Path: <linux-mips+bounces-3289-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3290-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C67B8C89CA
-	for <lists+linux-mips@lfdr.de>; Fri, 17 May 2024 18:09:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FB598C8AA3
+	for <lists+linux-mips@lfdr.de>; Fri, 17 May 2024 19:13:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F5991C214B0
-	for <lists+linux-mips@lfdr.de>; Fri, 17 May 2024 16:09:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA7951F24EE4
+	for <lists+linux-mips@lfdr.de>; Fri, 17 May 2024 17:13:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A85112F5B9;
-	Fri, 17 May 2024 16:09:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EF1713DB83;
+	Fri, 17 May 2024 17:13:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gzY46KJ2"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="PmaZ43dh";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="QGa+i0S7"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh6-smtp.messagingengine.com (fhigh6-smtp.messagingengine.com [103.168.172.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E0A2EAE1;
-	Fri, 17 May 2024 16:09:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA7512F5A3;
+	Fri, 17 May 2024 17:13:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715962189; cv=none; b=acPGVc2me7c9+7EKOs6WvsCqzQV/9Ya6YyfrqUu3lG+umJ3s9UUruqo8NGEty4SyQOSg+0TCV5TKoiUT5USfExJV6YRipBACNog3u3VCy7nm5Arqlq7BdHO8x9GSelwxa2G7YvJmEPmNHSLMnqOocKD9cR9z4u6pYulZxl5hnmk=
+	t=1715966000; cv=none; b=FdEmR56Dvo4PHRZd2swZZKZnfqp5JWR933QwNxAuX6SmFl+tjB3Mv99/vcuWGvhdjqmERRF32wBUqp2wq49BIRpHQa1wj/xPQlut2+96QyF0L2PzpwZi+rjLFK2pyPruNBMTMKeLCBt97ItPlqREOF5aVr/B12+i/rZmlGehIzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715962189; c=relaxed/simple;
-	bh=Nf4RNkeImLEAmR+itasCgmxOOOn/nmm3CPvksEHRQiQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e/4D3wXVH3g7ZYzav0YUFeSkZyznpy4HASdZk+nRjeNipuuqOTdl4XBGZJwgqz5DJv+cWXCy4YJfsZ1gjMv258XOPdBFYPU1XQ+nbb2OHQJWFT+CBMBCicPFMyKviNld8BLIjBKDTDpbx7WngkH08lVlBjOFm7itTrTYQQvykac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gzY46KJ2; arc=none smtp.client-ip=209.85.208.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2e09138a2b1so11564841fa.3;
-        Fri, 17 May 2024 09:09:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715962186; x=1716566986; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IstAfylTBNaTxmmaRyk4imp16sEYUHGaznoMjv7UZHs=;
-        b=gzY46KJ24SqO952EeXZ1ZO64bPCcjC9ww5yqMYdkda2VCXqZ1BHujAjp48nLIIhP+S
-         cT2FibLbWOCcbAhe8wD3crfcaviP0/zRZ0+5bs/6JiMQuG/Mm20itWyTvIQvzY6+Dv3X
-         mVYiRewPhKc3UO/H0zDT1uzxqM1GzZ6WFT8uWdUxhjOC0j1zyuLVpQEXUAds8Ll8SBDR
-         2vaUVuPdVRMjfp+cGKOXGirmJAWaP00pVr9bE8jAxG+UVkMd4K1xyMzGy9vD2fh0ubz/
-         Hh62aMMN+izN0mgiwBL1BNy4ecDGxBLvL+wc++odjdJ+dGXHRMjUn+ySqQY3LKvMmAle
-         8vXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715962186; x=1716566986;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IstAfylTBNaTxmmaRyk4imp16sEYUHGaznoMjv7UZHs=;
-        b=U23BflJQlQ2SGJx6BVQqRxoFzFWgcmhTqIm1wSvgx3EyT3hwUs2+5BGBwZNKB7kere
-         MoeIJ946/NxmLgjRu3LL8wV2uecsu37yvbcF6GGWVRtFIc3iEoXeZuqTLXtT6XP30GhO
-         9pr1lnw7TPURUUP7nhr6sUiPYcYHTBst/pfXzMJUF+WDjaFo7KAx7CEItwyXwG60rhRz
-         LQU8wait7HO3oaeXn9gt+F3SZItVu6J7zzvGwC6xDdqavqJ0qT0PTVYPrwNXaz1y5FU2
-         oK6FfLTOVtxcpBkNxrZ+BCGko7ppZQnA3BOeia8I6Kkc+RUtXSiJdb/4S4Mu2NRRZHaP
-         S/4A==
-X-Forwarded-Encrypted: i=1; AJvYcCVzrSMCrjLxH+iRV0A35S2goPPB7Ob/Ks0PtFJEQluR3WUOaZ0wAYAojqCSrw8LUSgND8nWjrVyAC0iudBvgq6lu30F+E3jX21QEK8DdPIglEJt5keV3Aj39yBeuqAqo5/dktfEo7vyZFtjosNlbp/kPvsf/EczQHymfiMM66snE7D2egW8Qqm+D07E2Yz9JkiOIk4NL421Xz+mmp4nGlAkQr4IHxjjfHlyM7XPbz2gMw5tWwvtp4+AB4q7qhgLjkxwQFFFL6VKautv5puOPnvg3f3l8FEjWH8PXei73VlCeADJcTqi6Tj9RYW5msNrhPedxvJu5x/U6bjMnK+ZwTxt8R0tsLrwcuNs9Wc6ctG72lMZXsXr1s9S0c67BGUm/qFAjrXMxcPlqFMC0+mFcY/VhsCtMc9EWF2OV+OeDoCnN1jmwBZ9izYEcKY=
-X-Gm-Message-State: AOJu0Yx1QqQpPvKlKY35dejdl+ioSYdJ8e3F1ggS4wOeT4PT6j9KumUx
-	JijzxMan+uhxZgF5wivoX6We58viImiA10v2lncSfF0OabKe5kks
-X-Google-Smtp-Source: AGHT+IHgmwwit2WhgD28ItKwKm0UGYj6mPQDthm9VUXNUEsMkvdnQLGvWiUajRHCK+r/d8TH466Lzg==
-X-Received: by 2002:ac2:54b9:0:b0:51f:d72:cd2d with SMTP id 2adb3069b0e04-5220fc7aeb4mr13493469e87.22.1715962185544;
-        Fri, 17 May 2024 09:09:45 -0700 (PDT)
-Received: from ?IPV6:2001:678:a5c:1202:2659:d6e4:5d55:b864? (soda.int.kasm.eu. [2001:678:a5c:1202:2659:d6e4:5d55:b864])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-521f38d7ee4sm3314135e87.182.2024.05.17.09.09.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 May 2024 09:09:45 -0700 (PDT)
-Message-ID: <170eca58-8950-40b5-b2af-3ac3844af3aa@gmail.com>
-Date: Fri, 17 May 2024 18:09:42 +0200
+	s=arc-20240116; t=1715966000; c=relaxed/simple;
+	bh=eRIcU31KqTg7XP1KK5CO/h4djKFMTvtSgXQZ/wf9Lv0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=WvAJhoNMeIea0FL0C0CVWF90m8opWFysIEpNgDO8EChhHRkoIl9JUTxlHbuqEIYMPsEIqzof1ynKQYraJrbiKgQmRc5ye35S0waBYCbGFww/WTM8/QYh255Ip2bDONqLYB+WTOfxZ+4eaZJc9PJSfsgGLvXXBsX5VOutyuOYiHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=PmaZ43dh; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=QGa+i0S7; arc=none smtp.client-ip=103.168.172.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id 5B39D11400BC;
+	Fri, 17 May 2024 13:13:17 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Fri, 17 May 2024 13:13:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm1; t=1715965997; x=1716052397; bh=S0
+	ae6Op1KMk+gXKqxzXaZSqYv4HS7YhFYfRFLWzD9J8=; b=PmaZ43dhtnvfCtzkSM
+	r6q/uGQdCWFHh+s1EK2KbDSAtrjdDbgmTl3FalqC3MsIYX4NqtsALOZrg+rb5Z8y
+	NIGU1i/tGbD4kz4w73XOJURABwxQbJ7yF6PdusPGO4vwzyPqBXpvuZrMtFxGaSFc
+	q5jGjjFCW28oEyXYyZWCmeCTLFZDSnRxbbOeW7HnPNZejRP67sUncdVtnxz8g5eh
+	2PXF887bDDWynYFbgUF6m+btYzZ9Uoyo5q0Q65nFSPfwr0GeIN96rQwBQ81+/JxB
+	2DhLUGQ6wE6RGIfVmk73EVKNaxT9jyFTbrZ7VIwDlL3bNxB8qmQK/OxO2VeYYW56
+	YyBg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1715965997; x=1716052397; bh=S0ae6Op1KMk+g
+	XKqxzXaZSqYv4HS7YhFYfRFLWzD9J8=; b=QGa+i0S73G9uwbsIXg+zNNY6uqlE3
+	V8Zs0VXuFLWYcItFF+YQ5p29PYBx62lgKzxAThIzRL1ZW/rYDnC5Fu5c1h8v1MJd
+	5klN9/X2/cjkVVcP+MC5nkgFx7Ph9M6lU6JgAaTRuWFpIN7ub6ulq/wkTafRXDMQ
+	l4kH5FS35DFQmB6FGvKOd/cHfkYc0FKgwzNuBYE+yho0SBfaWNNpbxcPT8oMs9Rr
+	kJeVHl34EFUqUa/cATi2sDwebPi1B34zjDTAtkVqr690cHX3p00wbGeFJ22Od+uz
+	Q4rKr+adcSb/+yHwelKb2qrTPkmzQmLgJeG3HbEMwpzcnZDNonIjaD/xA==
+X-ME-Sender: <xms:LJBHZm58HMVu6Y1m4dseDL1ti5ImkNunBlKuioHA1Xi3yJBNAkpfAA>
+    <xme:LJBHZv7qSeZzOdOA2kp4hdbreTRPTZevu4SnFjJ-zDbKH3pil5wOnQ-blO6z-6uUF
+    8oDcjiH_Jh0xzDa5XY>
+X-ME-Received: <xmr:LJBHZleaIVTDI57XdkyngadisSeckaJGdLgjOyZG6sD1QrM7Dz7imhw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdehgedgudejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephfffufggtgfgkffvvefosehtjeertdertdejnecuhfhrohhmpeflihgrgihu
+    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
+    ftrfgrthhtvghrnhephfffgeejgfejieeugffgudegvdekffevgeeuteetgeejveeiteei
+    vedvffehlefgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehf
+    lhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:LJBHZjJNEAJXG8QK2g1En8s9cUP1Av5fN05LfB4RWR8w0XA8C-CG8w>
+    <xmx:LJBHZqKOp0js6tgUQnWPXjQG5iLcbYFMa9-TFCQt3XQIgFohw3RD2w>
+    <xmx:LJBHZkzju_Mr1FljI0TqPvNuDhp8DNkDX24AoKgfiT3BMBQvkagrBg>
+    <xmx:LJBHZuKg43l5uX5CvqVzWzNZVN-vRfNFXP75US4TAiBKR207gCo9SQ>
+    <xmx:LZBHZrowHLrcAm8XGnJI7pGj2bOqtqvPefu47m9Y88OUu-ONWhHnQATe>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 17 May 2024 13:13:15 -0400 (EDT)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Date: Fri, 17 May 2024 18:13:10 +0100
+Subject: [PATCH v2] clocksource: Add node counter timer driver for
+ MIPS/Loongson64
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v8 16/16] bpf: remove CONFIG_BPF_JIT dependency on
- CONFIG_MODULES of
-To: Will Deacon <will@kernel.org>
-Cc: Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
- Alexandre Ghiti <alexghiti@rivosinc.com>,
- Andrew Morton <akpm@linux-foundation.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- "David S. Miller" <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>,
- Donald Dutile <ddutile@redhat.com>, Eric Chanudet <echanude@redhat.com>,
- Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
- Huacai Chen <chenhuacai@kernel.org>,
- Kent Overstreet <kent.overstreet@linux.dev>, Liviu Dudau
- <liviu@dudau.co.uk>, Luis Chamberlain <mcgrof@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu <mhiramat@kernel.org>,
- Michael Ellerman <mpe@ellerman.id.au>, Nadav Amit <nadav.amit@gmail.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>,
- =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Russell King <linux@armlinux.org.uk>, Sam Ravnborg <sam@ravnborg.org>,
- Song Liu <song@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Thomas Gleixner <tglx@linutronix.de>, bpf@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mips@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, linux-parisc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- loongarch@lists.linux.dev, netdev@vger.kernel.org,
- sparclinux@vger.kernel.org, x86@kernel.org
-References: <20240505160628.2323363-1-rppt@kernel.org>
- <20240505160628.2323363-17-rppt@kernel.org>
- <7983fbbf-0127-457c-9394-8d6e4299c685@gmail.com>
- <20240517154632.GA320@willie-the-truck>
-Content-Language: en-US, sv-SE
-From: Klara Modin <klarasmodin@gmail.com>
-In-Reply-To: <20240517154632.GA320@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20240517-loongson_nodecnt-v2-1-5bd0bb20ff5f@flygoat.com>
+X-B4-Tracking: v=1; b=H4sIACWQR2YC/32NQQqDMBBFryKzbkoSTKNd9R5FisZJDNiMJBIq4
+ t2beoAu34P//g4Jo8cE92qHiNknT6GAvFRgpj44ZH4sDJLLmish2UwUXKLwCjSiCSvjmtdW3wb
+ TqhbKbIlo/edMPrvCk08rxe18yOJn/8SyYIJJofTQSrSNbR523hz169XQG7rjOL6A9kI3sgAAA
+ A==
+To: Huacai Chen <chenhuacai@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ Thomas Gleixner <tglx@linutronix.de>
+Cc: linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6427;
+ i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
+ bh=eRIcU31KqTg7XP1KK5CO/h4djKFMTvtSgXQZ/wf9Lv0=;
+ b=owGbwMvMwCHmXMhTe71c8zDjabUkhjT3CdpvmcocTwXOYvNKd82UZYqW+mw8c32e3v3/J32Op
+ 137qOjUUcrCIMbBICumyBIioNS3ofHigusPsv7AzGFlAhnCwMUpABMRC2VkmFXCr6+4QpDv4GSx
+ Y+4b786Uc9qh92T5PYFZTPXpiRGXPzD8s/dJ1l9y3XqOsM7jlMcSZXzfY3VYmqKO3Hl2t/yE4VU
+ WdgA=
+X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
+ fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-On 2024-05-17 17:46, Will Deacon wrote:
-> Hi Klara,
-> 
-> On Fri, May 17, 2024 at 01:00:31AM +0200, Klara Modin wrote:
->>
->> This does not seem to work entirely. If build with BPF_JIT without module
->> support for my Raspberry Pi 3 B I get warnings in my kernel log (easiest way
->> to trigger it seems to be trying to ssh into it, which fails).
-> 
-> Thanks for the report. I was able to reproduce this using QEMU and it
-> looks like the problem is because bpf_arch_text_copy() silently fails
-> to write to the read-only area as a result of patch_map() faulting and
-> the resulting -EFAULT being chucked away.
-> 
-> Please can you try the diff below?
-> 
-> Will
-> 
-> --->8
-> 
-> diff --git a/arch/arm64/kernel/patching.c b/arch/arm64/kernel/patching.c
-> index 255534930368..94b9fea65aca 100644
-> --- a/arch/arm64/kernel/patching.c
-> +++ b/arch/arm64/kernel/patching.c
-> @@ -36,7 +36,7 @@ static void __kprobes *patch_map(void *addr, int fixmap)
->   
->          if (image)
->                  page = phys_to_page(__pa_symbol(addr));
-> -       else if (IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
-> +       else if (IS_ENABLED(CONFIG_EXECMEM))
->                  page = vmalloc_to_page(addr);
->          else
->                  return addr;
-> 
+Node counter is a timer presents on many Loongson-3 series CPUs.
+It is maintained on every node in system. To avoid synchronisation
+complexity we only access the copy from first node in system.
 
-This seems to work from my short testing.
+It also has many ways to be accessed, on latest Loongson-3 CPU with
+IOCSR instruction support it should be accessed with a IOCSR request,
+while on earlier Loongson-3 CPUs it is attached to a 32 bits MMIO bus.
+For QEMU's Loongson-3 virt system it is mapped to a 64 bit MMIO location.
 
-Thanks,
-Tested-by: Klara Modin <klarasmodin@gmail.com>
+On some rare case the counter is disabled by firmware or not present
+on chip, so we need to perform a lightweight test to ensure it is
+running before actually use it.
+
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+Changes in v2:
+- Fix build failure when it's not enabled.
+- Link to v1: https://lore.kernel.org/r/20240512-loongson_nodecnt-v1-1-2157b92ef8f8@flygoat.com
+---
+ MAINTAINERS                                      |   1 +
+ arch/mips/include/asm/mach-loongson64/loongson.h |   3 +
+ arch/mips/loongson64/time.c                      |   3 +
+ drivers/clocksource/Kconfig                      |   8 ++
+ drivers/clocksource/loongson-nodecnt.c           | 112 +++++++++++++++++++++++
+ 5 files changed, 127 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c675fc296b19..b36bff5b9803 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15117,6 +15117,7 @@ L:	linux-mips@vger.kernel.org
+ S:	Maintained
+ F:	arch/mips/include/asm/mach-loongson64/
+ F:	arch/mips/loongson64/
++F:	drivers/clocksource/loongson-nodecnt.c
+ F:	drivers/irqchip/irq-loongson*
+ F:	drivers/platform/mips/cpu_hwmon.c
+ 
+diff --git a/arch/mips/include/asm/mach-loongson64/loongson.h b/arch/mips/include/asm/mach-loongson64/loongson.h
+index f7c3ab6d724e..d07f4be06595 100644
+--- a/arch/mips/include/asm/mach-loongson64/loongson.h
++++ b/arch/mips/include/asm/mach-loongson64/loongson.h
+@@ -56,6 +56,9 @@ extern void *loongson_fdt_blob;
+ extern void mach_irq_dispatch(unsigned int pending);
+ extern int mach_i8259_irq(void);
+ 
++/* Time functions */
++extern int __init nodecnt_clocksource_init(void);
++
+ /* We need this in some places... */
+ #define delay() ({		\
+ 	int x;				\
+diff --git a/arch/mips/loongson64/time.c b/arch/mips/loongson64/time.c
+index f6d2c1e30570..6e0603a6d713 100644
+--- a/arch/mips/loongson64/time.c
++++ b/arch/mips/loongson64/time.c
+@@ -44,4 +44,7 @@ void __init plat_time_init(void)
+ #ifdef CONFIG_RS780_HPET
+ 	setup_hpet_timer();
+ #endif
++#ifdef CONFIG_LOONGSON_NODECNT
++	nodecnt_clocksource_init();
++#endif
+ }
+diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+index 34faa0320ece..1c068f604333 100644
+--- a/drivers/clocksource/Kconfig
++++ b/drivers/clocksource/Kconfig
+@@ -743,4 +743,12 @@ config EP93XX_TIMER
+ 	  Enables support for the Cirrus Logic timer block
+ 	  EP93XX.
+ 
++config LOONGSON_NODECNT
++	bool "Loongson Node Conunter timer driver"
++	default y if MIPS && MACH_LOONGSON64
++	depends on (MIPS && MACH_LOONGSON64) || COMPILE_TEST
++	depends on GENERIC_SCHED_CLOCK
++	help
++	  Enables support for the Loongson Node Counter timer.
++
+ endmenu
+diff --git a/drivers/clocksource/loongson-nodecnt.c b/drivers/clocksource/loongson-nodecnt.c
+new file mode 100644
+index 000000000000..3cea4045ce75
+--- /dev/null
++++ b/drivers/clocksource/loongson-nodecnt.c
+@@ -0,0 +1,112 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ *  Copyright (C) 2024, Jiaxun Yang <jiaxun.yang@flygoat.com>
++ *  Loongson-3 Node Counter clocksource
++ */
++
++#include <linux/clocksource.h>
++#include <linux/delay.h>
++#include <linux/errno.h>
++#include <linux/init.h>
++#include <linux/sched_clock.h>
++
++#include <loongson.h>
++#include <loongson_regs.h>
++
++#define NODECNT_REGBASE		0x3ff00408
++
++static void __iomem *nodecnt_reg;
++static u64 (*nodecnt_read_fn)(void);
++
++static u64 notrace nodecnt_read_2x32(void)
++{
++	unsigned int hi, hi2, lo;
++
++	do {
++		hi = readl_relaxed(nodecnt_reg + 4);
++		lo = readl_relaxed(nodecnt_reg);
++		hi2 = readl_relaxed(nodecnt_reg + 4);
++	} while (hi2 != hi);
++
++	return (((u64) hi) << 32) + lo;
++}
++
++static u64 notrace nodecnt_read_64(void)
++{
++	return readq_relaxed(nodecnt_reg);
++}
++
++static u64 notrace nodecnt_read_csr(void)
++{
++	return csr_readq(LOONGSON_CSR_NODECNT);
++}
++
++static u64 nodecnt_clocksource_read(struct clocksource *cs)
++{
++	return nodecnt_read_fn();
++}
++
++static struct clocksource nodecnt_clocksource = {
++	.name	= "nodecnt",
++	.read	= nodecnt_clocksource_read,
++	.mask	= CLOCKSOURCE_MASK(64),
++	.flags	= CLOCK_SOURCE_IS_CONTINUOUS,
++};
++
++int __init nodecnt_clocksource_init(void)
++{
++	int err;
++	uint64_t delta;
++
++	if (!cpu_clock_freq)
++		return -ENODEV;
++
++	if (cpu_has_csr() && csr_readl(LOONGSON_CSR_FEATURES) & LOONGSON_CSRF_NODECNT) {
++		nodecnt_read_fn = nodecnt_read_csr;
++	} else if (loongson_sysconf.bridgetype == VIRTUAL) {
++		nodecnt_reg = ioremap(NODECNT_REGBASE, 8);
++		if (!nodecnt_reg)
++			return -ENOMEM;
++		nodecnt_read_fn = nodecnt_read_64;
++	} else {
++		switch (boot_cpu_data.processor_id & (PRID_IMP_MASK | PRID_REV_MASK)) {
++		case PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0:
++		case PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_1:
++		case PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R3_0:
++		case PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R3_1:
++			break;
++		default:
++			return -ENODEV;
++		}
++		nodecnt_reg = ioremap(NODECNT_REGBASE, 8);
++		if (!nodecnt_reg)
++			return -ENOMEM;
++		nodecnt_read_fn = nodecnt_read_2x32;
++	}
++
++	/* Test if nodecnt is usable */
++	delta = nodecnt_read_fn();
++	udelay(10);
++	delta = nodecnt_read_fn() - delta;
++
++	if (!delta) {
++		pr_info("nodecnt: clocksource unusable\n");
++		err = -ENODEV;
++		goto out;
++	}
++
++	err = clocksource_register_hz(&nodecnt_clocksource, cpu_clock_freq);
++	if (err) {
++		pr_err("nodecnt: clocksource register failed\n");
++		goto out;
++	}
++
++	/* It fits for sched_clock if we don't suffer from cross node access */
++	if (loongson_sysconf.bridgetype == VIRTUAL || loongson_sysconf.nr_nodes <= 1)
++		sched_clock_register(nodecnt_read_fn, 64, cpu_clock_freq);
++
++out:
++	if (nodecnt_reg)
++		iounmap(nodecnt_reg);
++	return err;
++}
+
+---
+base-commit: 75fa778d74b786a1608d55d655d42b480a6fa8bd
+change-id: 20240512-loongson_nodecnt-0704f76bc959
+
+Best regards,
+-- 
+Jiaxun Yang <jiaxun.yang@flygoat.com>
+
 
