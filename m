@@ -1,325 +1,211 @@
-Return-Path: <linux-mips+bounces-3290-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3291-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FB598C8AA3
-	for <lists+linux-mips@lfdr.de>; Fri, 17 May 2024 19:13:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9728A8C8EF2
+	for <lists+linux-mips@lfdr.de>; Sat, 18 May 2024 02:39:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA7951F24EE4
-	for <lists+linux-mips@lfdr.de>; Fri, 17 May 2024 17:13:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 499F0282F44
+	for <lists+linux-mips@lfdr.de>; Sat, 18 May 2024 00:39:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EF1713DB83;
-	Fri, 17 May 2024 17:13:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF0F21FAA;
+	Sat, 18 May 2024 00:39:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="PmaZ43dh";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="QGa+i0S7"
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="SV2zemg5"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh6-smtp.messagingengine.com (fhigh6-smtp.messagingengine.com [103.168.172.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA7512F5A3;
-	Fri, 17 May 2024 17:13:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2184A3D64
+	for <linux-mips@vger.kernel.org>; Sat, 18 May 2024 00:39:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715966000; cv=none; b=FdEmR56Dvo4PHRZd2swZZKZnfqp5JWR933QwNxAuX6SmFl+tjB3Mv99/vcuWGvhdjqmERRF32wBUqp2wq49BIRpHQa1wj/xPQlut2+96QyF0L2PzpwZi+rjLFK2pyPruNBMTMKeLCBt97ItPlqREOF5aVr/B12+i/rZmlGehIzk=
+	t=1715992775; cv=none; b=SBaHBpKFZwU4gu3QMkMPEBNrGniqxjigz43656IY2RMIz5I/sCHudNwrV9TTBzN9lOoSn2J35lYOD2IUWRzcSMKUTxbTpbj12g7dzsi/Pnpr9eQGunm+B6FccbAwZ7rLCoT8eKyrhqK3lEwPIcl9V0/h6myHpkEjxmTgaEKUCCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715966000; c=relaxed/simple;
-	bh=eRIcU31KqTg7XP1KK5CO/h4djKFMTvtSgXQZ/wf9Lv0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=WvAJhoNMeIea0FL0C0CVWF90m8opWFysIEpNgDO8EChhHRkoIl9JUTxlHbuqEIYMPsEIqzof1ynKQYraJrbiKgQmRc5ye35S0waBYCbGFww/WTM8/QYh255Ip2bDONqLYB+WTOfxZ+4eaZJc9PJSfsgGLvXXBsX5VOutyuOYiHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=PmaZ43dh; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=QGa+i0S7; arc=none smtp.client-ip=103.168.172.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 5B39D11400BC;
-	Fri, 17 May 2024 13:13:17 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Fri, 17 May 2024 13:13:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm1; t=1715965997; x=1716052397; bh=S0
-	ae6Op1KMk+gXKqxzXaZSqYv4HS7YhFYfRFLWzD9J8=; b=PmaZ43dhtnvfCtzkSM
-	r6q/uGQdCWFHh+s1EK2KbDSAtrjdDbgmTl3FalqC3MsIYX4NqtsALOZrg+rb5Z8y
-	NIGU1i/tGbD4kz4w73XOJURABwxQbJ7yF6PdusPGO4vwzyPqBXpvuZrMtFxGaSFc
-	q5jGjjFCW28oEyXYyZWCmeCTLFZDSnRxbbOeW7HnPNZejRP67sUncdVtnxz8g5eh
-	2PXF887bDDWynYFbgUF6m+btYzZ9Uoyo5q0Q65nFSPfwr0GeIN96rQwBQ81+/JxB
-	2DhLUGQ6wE6RGIfVmk73EVKNaxT9jyFTbrZ7VIwDlL3bNxB8qmQK/OxO2VeYYW56
-	YyBg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm3; t=1715965997; x=1716052397; bh=S0ae6Op1KMk+g
-	XKqxzXaZSqYv4HS7YhFYfRFLWzD9J8=; b=QGa+i0S73G9uwbsIXg+zNNY6uqlE3
-	V8Zs0VXuFLWYcItFF+YQ5p29PYBx62lgKzxAThIzRL1ZW/rYDnC5Fu5c1h8v1MJd
-	5klN9/X2/cjkVVcP+MC5nkgFx7Ph9M6lU6JgAaTRuWFpIN7ub6ulq/wkTafRXDMQ
-	l4kH5FS35DFQmB6FGvKOd/cHfkYc0FKgwzNuBYE+yho0SBfaWNNpbxcPT8oMs9Rr
-	kJeVHl34EFUqUa/cATi2sDwebPi1B34zjDTAtkVqr690cHX3p00wbGeFJ22Od+uz
-	Q4rKr+adcSb/+yHwelKb2qrTPkmzQmLgJeG3HbEMwpzcnZDNonIjaD/xA==
-X-ME-Sender: <xms:LJBHZm58HMVu6Y1m4dseDL1ti5ImkNunBlKuioHA1Xi3yJBNAkpfAA>
-    <xme:LJBHZv7qSeZzOdOA2kp4hdbreTRPTZevu4SnFjJ-zDbKH3pil5wOnQ-blO6z-6uUF
-    8oDcjiH_Jh0xzDa5XY>
-X-ME-Received: <xmr:LJBHZleaIVTDI57XdkyngadisSeckaJGdLgjOyZG6sD1QrM7Dz7imhw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdehgedgudejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffufggtgfgkffvvefosehtjeertdertdejnecuhfhrohhmpeflihgrgihu
-    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
-    ftrfgrthhtvghrnhephfffgeejgfejieeugffgudegvdekffevgeeuteetgeejveeiteei
-    vedvffehlefgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehf
-    lhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:LJBHZjJNEAJXG8QK2g1En8s9cUP1Av5fN05LfB4RWR8w0XA8C-CG8w>
-    <xmx:LJBHZqKOp0js6tgUQnWPXjQG5iLcbYFMa9-TFCQt3XQIgFohw3RD2w>
-    <xmx:LJBHZkzju_Mr1FljI0TqPvNuDhp8DNkDX24AoKgfiT3BMBQvkagrBg>
-    <xmx:LJBHZuKg43l5uX5CvqVzWzNZVN-vRfNFXP75US4TAiBKR207gCo9SQ>
-    <xmx:LZBHZrowHLrcAm8XGnJI7pGj2bOqtqvPefu47m9Y88OUu-ONWhHnQATe>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 17 May 2024 13:13:15 -0400 (EDT)
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Fri, 17 May 2024 18:13:10 +0100
-Subject: [PATCH v2] clocksource: Add node counter timer driver for
- MIPS/Loongson64
+	s=arc-20240116; t=1715992775; c=relaxed/simple;
+	bh=4V5YW8ORGMY45KRj8UEqSm59pF8Y+sc6mDeE+TSeGJM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=R/D2F75T4wMiCCpjOn/OP38DLixCOLyUU/3B84wK/8bCFu7+KiGV/E/7ru2FOqIAxZvOFgcoYS9KjRz0NNRNU970avKxI0U+aFSbg3gpdvHVTTkmWrfAb11GK3fZPjH4w3HA1vtU2W1tYIBANeNxmZX3lesF2ezxvVfiGdDKC4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=SV2zemg5; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1e3c3aa8938so25542175ad.1
+        for <linux-mips@vger.kernel.org>; Fri, 17 May 2024 17:39:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1715992772; x=1716597572; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=p7Punv+O2VI5RKAkHRkhtEk7CBj9yRK2PJX5XN6bfhc=;
+        b=SV2zemg5NtIR3pbXcUpjQL4Nh2uV808bM0bYra4XbVqoECYENJz6/Yy1du6GUsBF1T
+         XjClNZyHgkq1IjzGsNu0VF4KSRcFvP8duWW93pNhihxONKxIBHEuEju184pzDGSNNupq
+         ib3YMvRdDHjiHmp2OxcZgusnPxfFWYkd34Nlw+eS/M5SIsLUf3Mrx9wPF3j4JbN0L51J
+         8Ns52iIbDMMJzhPw7VAE6tB2RCkaU9f1rM9auoIgPX19Bn4lqARdC5AzZbrjVYBG9xPX
+         cdNuEoJX1TmbwOv4k+7AFSI4ow5gFWRUrYzogvoH4IJNgoo7XBVgU2ba15ADfeNZaYsV
+         sGRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715992772; x=1716597572;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p7Punv+O2VI5RKAkHRkhtEk7CBj9yRK2PJX5XN6bfhc=;
+        b=m4M04qspfDbBmVyCDElr7NomWSo0QK/KfCJtVwzcCMX16bkp4Zgp6L5kSm+2lS1xRu
+         G4L5DKuHmzfrfQ/nM0u5pYlj6JQoSAk0RTGvxZ75VGzLDuKc8t4upk29Zh/sFLifziDw
+         gf8m5a4T8KnPcE+A5kBemXSfQfdNmx+gBbnzuieGAvMTrlihOYJHbiUvhWCnvEjtqL9i
+         zMSQt0fIxsNgj4CTY/CJyWbmQWYLa4zaxKszhjJPVDPFahfGqE3fU4f6E7lSmPJ82b88
+         sqM6mG4byW+zNQ2S+vs7I7zLMRuMsrqxx4w2dFm4PfLNYGVxZeoXPnc2+SBJlnxWUIG4
+         oUHg==
+X-Forwarded-Encrypted: i=1; AJvYcCWxGHNw5leKrUVkYZ+QNM+Ss1TjNANPXaIZGzBUpjJiLE/Lfa9lkMtGgval/6nu/+HoipGtrvqDy2DaUu16afIjXjpXye2JZijfbw==
+X-Gm-Message-State: AOJu0YwyZ2RXVosLPbErhIs2e6Bk8mN2UoAGxoGuGFpsZo9w/kbMRZEz
+	ipSvNAXEsXKmEL5UMBZHitqQscywZWyEg2PqyrW8qywdaLAeB+yShnwzkDHNTuo=
+X-Google-Smtp-Source: AGHT+IG2kizdOiSw0uylPEq0qK5Nujj1quEtxgB2wxc39/tXdkGx33RSfpvHjRCh3dNNGsAUN6Msjg==
+X-Received: by 2002:a05:6a00:1397:b0:6e6:89ad:1233 with SMTP id d2e1a72fcca58-6f4e02a6150mr30537733b3a.2.1715992772166;
+        Fri, 17 May 2024 17:39:32 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1156:1:1cbd:da2b:a9f2:881? ([2620:10d:c090:500::6:9fd9])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4d2af2bccsm16503658b3a.170.2024.05.17.17.39.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 May 2024 17:39:31 -0700 (PDT)
+Message-ID: <090be3c0-42e6-4b97-8b03-eb64b06a2911@davidwei.uk>
+Date: Fri, 17 May 2024 17:39:25 -0700
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v9 05/14] netdev: netdevice devmem allocator
+Content-Language: en-GB
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
+ <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20240510232128.1105145-1-almasrymina@google.com>
+ <20240510232128.1105145-6-almasrymina@google.com>
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <20240510232128.1105145-6-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240517-loongson_nodecnt-v2-1-5bd0bb20ff5f@flygoat.com>
-X-B4-Tracking: v=1; b=H4sIACWQR2YC/32NQQqDMBBFryKzbkoSTKNd9R5FisZJDNiMJBIq4
- t2beoAu34P//g4Jo8cE92qHiNknT6GAvFRgpj44ZH4sDJLLmish2UwUXKLwCjSiCSvjmtdW3wb
- TqhbKbIlo/edMPrvCk08rxe18yOJn/8SyYIJJofTQSrSNbR523hz169XQG7rjOL6A9kI3sgAAA
- A==
-To: Huacai Chen <chenhuacai@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, 
- Thomas Gleixner <tglx@linutronix.de>
-Cc: linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
- Jiaxun Yang <jiaxun.yang@flygoat.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6427;
- i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=eRIcU31KqTg7XP1KK5CO/h4djKFMTvtSgXQZ/wf9Lv0=;
- b=owGbwMvMwCHmXMhTe71c8zDjabUkhjT3CdpvmcocTwXOYvNKd82UZYqW+mw8c32e3v3/J32Op
- 137qOjUUcrCIMbBICumyBIioNS3ofHigusPsv7AzGFlAhnCwMUpABMRC2VkmFXCr6+4QpDv4GSx
- Y+4b786Uc9qh92T5PYFZTPXpiRGXPzD8s/dJ1l9y3XqOsM7jlMcSZXzfY3VYmqKO3Hl2t/yE4VU
- WdgA=
-X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
- fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-Node counter is a timer presents on many Loongson-3 series CPUs.
-It is maintained on every node in system. To avoid synchronisation
-complexity we only access the copy from first node in system.
+On 2024-05-10 16:21, Mina Almasry wrote:
+> +/* This returns the absolute dma_addr_t calculated from
+> + * net_iov_owner(niov)->owner->base_dma_addr, not the page_pool-owned
+> + * niov->dma_addr.
+> + *
+> + * The absolute dma_addr_t is a dma_addr_t that is always uncompressed.
+> + *
+> + * The page_pool-owner niov->dma_addr is the absolute dma_addr compressed into
+> + * an unsigned long. Special handling is done when the unsigned long is 32-bit
+> + * but the dma_addr_t is 64-bit.
+> + *
+> + * In general code looking for the dma_addr_t should use net_iov_dma_addr(),
+> + * while page_pool code looking for the unsigned long dma_addr which mirrors
+> + * the field in struct page should use niov->dma_addr.
+> + */
+> +static inline dma_addr_t net_iov_dma_addr(const struct net_iov *niov)
+> +{
+> +	struct dmabuf_genpool_chunk_owner *owner = net_iov_owner(niov);
+> +
+> +	return owner->base_dma_addr +
+> +	       ((dma_addr_t)net_iov_idx(niov) << PAGE_SHIFT);
+> +}
 
-It also has many ways to be accessed, on latest Loongson-3 CPU with
-IOCSR instruction support it should be accessed with a IOCSR request,
-while on earlier Loongson-3 CPUs it is attached to a 32 bits MMIO bus.
-For QEMU's Loongson-3 virt system it is mapped to a 64 bit MMIO location.
+This part feels like devmem TCP specific, yet the function is in
+netmem.h. Please consider moving it into devmem.{h,c} which makes it
+less likely that people not reading your comment will try using it.
 
-On some rare case the counter is disabled by firmware or not present
-on chip, so we need to perform a lightweight test to ensure it is
-running before actually use it.
-
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
-Changes in v2:
-- Fix build failure when it's not enabled.
-- Link to v1: https://lore.kernel.org/r/20240512-loongson_nodecnt-v1-1-2157b92ef8f8@flygoat.com
----
- MAINTAINERS                                      |   1 +
- arch/mips/include/asm/mach-loongson64/loongson.h |   3 +
- arch/mips/loongson64/time.c                      |   3 +
- drivers/clocksource/Kconfig                      |   8 ++
- drivers/clocksource/loongson-nodecnt.c           | 112 +++++++++++++++++++++++
- 5 files changed, 127 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c675fc296b19..b36bff5b9803 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15117,6 +15117,7 @@ L:	linux-mips@vger.kernel.org
- S:	Maintained
- F:	arch/mips/include/asm/mach-loongson64/
- F:	arch/mips/loongson64/
-+F:	drivers/clocksource/loongson-nodecnt.c
- F:	drivers/irqchip/irq-loongson*
- F:	drivers/platform/mips/cpu_hwmon.c
- 
-diff --git a/arch/mips/include/asm/mach-loongson64/loongson.h b/arch/mips/include/asm/mach-loongson64/loongson.h
-index f7c3ab6d724e..d07f4be06595 100644
---- a/arch/mips/include/asm/mach-loongson64/loongson.h
-+++ b/arch/mips/include/asm/mach-loongson64/loongson.h
-@@ -56,6 +56,9 @@ extern void *loongson_fdt_blob;
- extern void mach_irq_dispatch(unsigned int pending);
- extern int mach_i8259_irq(void);
- 
-+/* Time functions */
-+extern int __init nodecnt_clocksource_init(void);
-+
- /* We need this in some places... */
- #define delay() ({		\
- 	int x;				\
-diff --git a/arch/mips/loongson64/time.c b/arch/mips/loongson64/time.c
-index f6d2c1e30570..6e0603a6d713 100644
---- a/arch/mips/loongson64/time.c
-+++ b/arch/mips/loongson64/time.c
-@@ -44,4 +44,7 @@ void __init plat_time_init(void)
- #ifdef CONFIG_RS780_HPET
- 	setup_hpet_timer();
- #endif
-+#ifdef CONFIG_LOONGSON_NODECNT
-+	nodecnt_clocksource_init();
-+#endif
- }
-diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
-index 34faa0320ece..1c068f604333 100644
---- a/drivers/clocksource/Kconfig
-+++ b/drivers/clocksource/Kconfig
-@@ -743,4 +743,12 @@ config EP93XX_TIMER
- 	  Enables support for the Cirrus Logic timer block
- 	  EP93XX.
- 
-+config LOONGSON_NODECNT
-+	bool "Loongson Node Conunter timer driver"
-+	default y if MIPS && MACH_LOONGSON64
-+	depends on (MIPS && MACH_LOONGSON64) || COMPILE_TEST
-+	depends on GENERIC_SCHED_CLOCK
-+	help
-+	  Enables support for the Loongson Node Counter timer.
-+
- endmenu
-diff --git a/drivers/clocksource/loongson-nodecnt.c b/drivers/clocksource/loongson-nodecnt.c
-new file mode 100644
-index 000000000000..3cea4045ce75
---- /dev/null
-+++ b/drivers/clocksource/loongson-nodecnt.c
-@@ -0,0 +1,112 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ *  Copyright (C) 2024, Jiaxun Yang <jiaxun.yang@flygoat.com>
-+ *  Loongson-3 Node Counter clocksource
-+ */
-+
-+#include <linux/clocksource.h>
-+#include <linux/delay.h>
-+#include <linux/errno.h>
-+#include <linux/init.h>
-+#include <linux/sched_clock.h>
-+
-+#include <loongson.h>
-+#include <loongson_regs.h>
-+
-+#define NODECNT_REGBASE		0x3ff00408
-+
-+static void __iomem *nodecnt_reg;
-+static u64 (*nodecnt_read_fn)(void);
-+
-+static u64 notrace nodecnt_read_2x32(void)
-+{
-+	unsigned int hi, hi2, lo;
-+
-+	do {
-+		hi = readl_relaxed(nodecnt_reg + 4);
-+		lo = readl_relaxed(nodecnt_reg);
-+		hi2 = readl_relaxed(nodecnt_reg + 4);
-+	} while (hi2 != hi);
-+
-+	return (((u64) hi) << 32) + lo;
-+}
-+
-+static u64 notrace nodecnt_read_64(void)
-+{
-+	return readq_relaxed(nodecnt_reg);
-+}
-+
-+static u64 notrace nodecnt_read_csr(void)
-+{
-+	return csr_readq(LOONGSON_CSR_NODECNT);
-+}
-+
-+static u64 nodecnt_clocksource_read(struct clocksource *cs)
-+{
-+	return nodecnt_read_fn();
-+}
-+
-+static struct clocksource nodecnt_clocksource = {
-+	.name	= "nodecnt",
-+	.read	= nodecnt_clocksource_read,
-+	.mask	= CLOCKSOURCE_MASK(64),
-+	.flags	= CLOCK_SOURCE_IS_CONTINUOUS,
-+};
-+
-+int __init nodecnt_clocksource_init(void)
-+{
-+	int err;
-+	uint64_t delta;
-+
-+	if (!cpu_clock_freq)
-+		return -ENODEV;
-+
-+	if (cpu_has_csr() && csr_readl(LOONGSON_CSR_FEATURES) & LOONGSON_CSRF_NODECNT) {
-+		nodecnt_read_fn = nodecnt_read_csr;
-+	} else if (loongson_sysconf.bridgetype == VIRTUAL) {
-+		nodecnt_reg = ioremap(NODECNT_REGBASE, 8);
-+		if (!nodecnt_reg)
-+			return -ENOMEM;
-+		nodecnt_read_fn = nodecnt_read_64;
-+	} else {
-+		switch (boot_cpu_data.processor_id & (PRID_IMP_MASK | PRID_REV_MASK)) {
-+		case PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0:
-+		case PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_1:
-+		case PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R3_0:
-+		case PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R3_1:
-+			break;
-+		default:
-+			return -ENODEV;
-+		}
-+		nodecnt_reg = ioremap(NODECNT_REGBASE, 8);
-+		if (!nodecnt_reg)
-+			return -ENOMEM;
-+		nodecnt_read_fn = nodecnt_read_2x32;
-+	}
-+
-+	/* Test if nodecnt is usable */
-+	delta = nodecnt_read_fn();
-+	udelay(10);
-+	delta = nodecnt_read_fn() - delta;
-+
-+	if (!delta) {
-+		pr_info("nodecnt: clocksource unusable\n");
-+		err = -ENODEV;
-+		goto out;
-+	}
-+
-+	err = clocksource_register_hz(&nodecnt_clocksource, cpu_clock_freq);
-+	if (err) {
-+		pr_err("nodecnt: clocksource register failed\n");
-+		goto out;
-+	}
-+
-+	/* It fits for sched_clock if we don't suffer from cross node access */
-+	if (loongson_sysconf.bridgetype == VIRTUAL || loongson_sysconf.nr_nodes <= 1)
-+		sched_clock_register(nodecnt_read_fn, 64, cpu_clock_freq);
-+
-+out:
-+	if (nodecnt_reg)
-+		iounmap(nodecnt_reg);
-+	return err;
-+}
-
----
-base-commit: 75fa778d74b786a1608d55d655d42b480a6fa8bd
-change-id: 20240512-loongson_nodecnt-0704f76bc959
-
-Best regards,
--- 
-Jiaxun Yang <jiaxun.yang@flygoat.com>
-
+> +
+> +static inline struct net_devmem_dmabuf_binding *
+> +net_iov_binding(const struct net_iov *niov)
+> +{
+> +	return net_iov_owner(niov)->binding;
+> +}
+> +
+>  /* netmem */
+>  
+>  /**
+> diff --git a/net/core/devmem.c b/net/core/devmem.c
+> index d82f92d7cf9ce..1f90e23a81441 100644
+> --- a/net/core/devmem.c
+> +++ b/net/core/devmem.c
+> @@ -54,6 +54,42 @@ void __net_devmem_dmabuf_binding_free(struct net_devmem_dmabuf_binding *binding)
+>  	kfree(binding);
+>  }
+>  
+> +struct net_iov *
+> +net_devmem_alloc_dmabuf(struct net_devmem_dmabuf_binding *binding)
+> +{
+> +	struct dmabuf_genpool_chunk_owner *owner;
+> +	unsigned long dma_addr;
+> +	struct net_iov *niov;
+> +	ssize_t offset;
+> +	ssize_t index;
+> +
+> +	dma_addr = gen_pool_alloc_owner(binding->chunk_pool, PAGE_SIZE,
+> +					(void **)&owner);
+> +	if (!dma_addr)
+> +		return NULL;
+> +
+> +	offset = dma_addr - owner->base_dma_addr;
+> +	index = offset / PAGE_SIZE;
+> +	niov = &owner->niovs[index];
+> +
+> +	niov->dma_addr = 0;
+> +
+> +	net_devmem_dmabuf_binding_get(binding);
+> +
+> +	return niov;
+> +}
+> +
+> +void net_devmem_free_dmabuf(struct net_iov *niov)
+> +{
+> +	struct net_devmem_dmabuf_binding *binding = net_iov_binding(niov);
+> +	unsigned long dma_addr = net_iov_dma_addr(niov);
+> +
+> +	if (gen_pool_has_addr(binding->chunk_pool, dma_addr, PAGE_SIZE))
+> +		gen_pool_free(binding->chunk_pool, dma_addr, PAGE_SIZE);
+> +
+> +	net_devmem_dmabuf_binding_put(binding);
+> +}
+> +
+>  /* Protected by rtnl_lock() */
+>  static DEFINE_XARRAY_FLAGS(net_devmem_dmabuf_bindings, XA_FLAGS_ALLOC1);
+>  
 
