@@ -1,74 +1,48 @@
-Return-Path: <linux-mips+bounces-3295-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3296-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C97518C9206
-	for <lists+linux-mips@lfdr.de>; Sat, 18 May 2024 20:57:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3581D8C9214
+	for <lists+linux-mips@lfdr.de>; Sat, 18 May 2024 21:26:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42F671F20FE2
-	for <lists+linux-mips@lfdr.de>; Sat, 18 May 2024 18:57:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E2951C215DD
+	for <lists+linux-mips@lfdr.de>; Sat, 18 May 2024 19:26:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6ED66A33A;
-	Sat, 18 May 2024 18:57:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBC0B3A1B5;
+	Sat, 18 May 2024 19:26:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="v/AmV8kq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FGnlxQVS"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A23462A02
-	for <linux-mips@vger.kernel.org>; Sat, 18 May 2024 18:57:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBFAD6A33E;
+	Sat, 18 May 2024 19:26:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716058652; cv=none; b=lG/L8ZmN9C9owM0Qx6z9l7zIYVwC3vNiHTzPJVlwH3DzlA75m1xDe9Lh6ODgd35Xe/QUMc08oAj0URUSe2FgLPOgo1YUF7fPuhBeW5Zr8fJXXKQU3zd9hZIro8dDh8cNqEyWaaeQaaR34/OWSLdHqHdoNz8wIDMe2H3lZ+jz0dg=
+	t=1716060375; cv=none; b=XQP5WJML2UqZPTK5JyiWMky18thdUXjPWG1gFbrD4ShpQen6ZaoZgjK/nIfwKqmTBpeQgB7B4N6xc5bhYAZRI6sC6phX1O4MbHyDOdv7u0WRowYNx8WTZj29wFlZdkGJONEXgsCMkkYIQe0L2xLRalG1jyvFcGtkGxn5fzb8m0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716058652; c=relaxed/simple;
-	bh=wAqIRcCabbfn5FNmvGNIGPL+iroeEmFcrvMhrlMZdAE=;
+	s=arc-20240116; t=1716060375; c=relaxed/simple;
+	bh=pS7/FQKAboSjZ4dU+UOgLuhCwuMawr64gb0JWqrROIQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VCc7d8fJtwZTFl0ikterF8vc6Yf30zmELofZEUQCTklpbh/n/H6b5FiGtExbWuE1RyfUPAsr5kop4yEiAHT/bZKBwA0TSjl+ZEC+VIeuvO6xxGJuYy6FHjEPS89HEKvd3iw/bJt0cu2rdV+aSE4j0WSXsqCMMLpyMTXuNzvw9HY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=v/AmV8kq; arc=none smtp.client-ip=209.85.161.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5b2e942171cso741534eaf.3
-        for <linux-mips@vger.kernel.org>; Sat, 18 May 2024 11:57:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1716058649; x=1716663449; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YguLbfIUe9SPEVY4PVRNzJgWNLjHIbYrZNjYPjw1wDY=;
-        b=v/AmV8kq3UZnHRDaqHKqhNVypfUF8x6d6yBi1N5G0tcfRYE7ce3MRpUzwl4YK2pDOY
-         0gSkGZswCXm5bMtnmSlhuxkbS/tIUF9okGsjBZ5fby4NKwqYTPIwTzC4ZoclOyTZFLem
-         RT2+G780T4Rvt6sAdooeJFD4Qw3kSZNGJ+JoLSw1NmiZZpBQstNxMDIY5BleC4qlptFg
-         +S8gDOPygxpPebphBpPjxk+hnz5mYSWeMnl3BWZFaLUWoQw272KOFLgpA509meCbeaTc
-         1zy687rDIDcZ+p0a/pi8z2PkHBDskEdl/PpU+UT704u1+W7ImWvpp5WEZODo1Gd2YGEU
-         ZAqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716058649; x=1716663449;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YguLbfIUe9SPEVY4PVRNzJgWNLjHIbYrZNjYPjw1wDY=;
-        b=DZUu742z53RY9Vn+XCyuKoNHVmOaGeC+GVDYX3p8BgBY72PqmjZTwn+l4lnrUpseSX
-         HkZsgEqbqQbJttIYx0EfC4fQH/0JQVSupJv2fA3d6oJ5wQTvFBRwEFDNvDHesJZ/pZoM
-         DCMXJTeSRLCCElb8h8HoG4oZzFrjBThz7h6JEgNWm35DSsJwNucbwt89B7vYn/37HZis
-         Zf6rfNPBjbTe2D/iuoERHA1oGQpflYtj+O84T5CFpqy7Iy29Wn7DnKl/t3vtnglmoUDH
-         DsNdDAvl5Bu/eLa3mDHr5rPknqnj8fDSlfMG/aHnyjc/TVzGxWC1hwnL/km/IUQdBnMp
-         9aEw==
-X-Forwarded-Encrypted: i=1; AJvYcCWmH/VbvSeF486crqso+fso7TkGY0HE/OrW4WJUq95G1Nsfp3WG39yQj46Unph1rhomKAGvFHCQjkBCYd8K2rj+5D0uTP2sfviLZA==
-X-Gm-Message-State: AOJu0YxnOEMN2ZSmfVisFCZM7m4XhXH4fuz9pOPJ+dPwT7HXZIpefXRU
-	BWRa0FIkvPitkV3507h7tCEm1E4hhke/dC6n68R7WCzTUPW3E5RKkMdwUW3UpF0=
-X-Google-Smtp-Source: AGHT+IHilXoeJ/w5ohYR0i7AU3401ochXIU5LArEI0v5RdvvJ31YBmDQam4A7KpiPZymCfWrte5bew==
-X-Received: by 2002:a05:6358:3a11:b0:17b:5661:5e2b with SMTP id e5c5f4694b2df-193bb64065bmr2817534555d.18.1716058648846;
-        Sat, 18 May 2024 11:57:28 -0700 (PDT)
-Received: from [192.168.1.16] (174-21-188-197.tukw.qwest.net. [174.21.188.197])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-658764fda40sm5342410a12.5.2024.05.18.11.57.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 May 2024 11:57:28 -0700 (PDT)
-Message-ID: <eeb59c4f-9208-4700-b73b-9652398371d7@davidwei.uk>
-Date: Sat, 18 May 2024 11:57:26 -0700
+	 In-Reply-To:Content-Type; b=tmpCPvvXK4aVBRO+/31CfwMZyt5l85KPUu5tODOfHWRBLaGYN/rQ+OxUKtGJNLAijtxVHVUTzg8JDjKVTCz/rGik5+q9auy72qwsbGnNIGk9T7CA2vywvIZWBaxvrMeqLcAgIvfvdzbSnOs7YuTsvGGtY6RnsAmItKle8cEqGuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FGnlxQVS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73AD9C113CC;
+	Sat, 18 May 2024 19:26:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716060375;
+	bh=pS7/FQKAboSjZ4dU+UOgLuhCwuMawr64gb0JWqrROIQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=FGnlxQVSLyGfCh1HpdC3bZZOPEuzKKBdWozEWgsTmwrcyTMKl5Ue4qdREsC9SUTpK
+	 OyO7ymdSgCjqp+7h0emx8YFLY7htd9JTxSsj6ImCQAlCLMZTbjTkAIiZsN0MXyTNgA
+	 mfmynlRTkIf9bJKoMwl17eNNi6xSo2e+RfLU/MwpL3mciYefllRTgVENchg5tkyATA
+	 p6PB7CtBOJBfnNG0Zv8h5/Dni25TtcH4lvv1u65nhHBPHQr5Pcln4VgY+TjuXLuhlo
+	 +m5+iZNlb4BQ86AndXenc7as14rxqmvbYKi56K6rFsRV0O+hwALojnbuzaHjDo9kae
+	 VnhAD0zc1mMXw==
+Message-ID: <418f3270-553b-4b01-b906-2855956b2b4e@kernel.org>
+Date: Sat, 18 May 2024 21:26:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -76,155 +50,116 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v9 04/14] netdev: support binding dma-buf to
- netdevice
-Content-Language: en-GB
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
- <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
- Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20240510232128.1105145-1-almasrymina@google.com>
- <20240510232128.1105145-5-almasrymina@google.com>
-From: David Wei <dw@davidwei.uk>
-In-Reply-To: <20240510232128.1105145-5-almasrymina@google.com>
+Subject: Re: [PATCH 1/2] dt-bindings: mfd: syscon: Add
+ img,boston-platform-regs
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>, Lee Jones <lee@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ "paulburton@kernel.org" <paulburton@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+References: <20240513-boston-syscon-v1-0-93ff557d3548@flygoat.com>
+ <20240513-boston-syscon-v1-1-93ff557d3548@flygoat.com>
+ <c7317ea0-fcd6-40e0-9d90-bb1ff349c0e0@kernel.org>
+ <31769e8d-ab52-4f4c-84ca-2f546287d006@kernel.org>
+ <61445fe0-9137-44a6-ab36-ffb8985254df@app.fastmail.com>
+ <2245e750-0b5d-49d1-88f3-7c1c75f275e7@kernel.org>
+ <2aec4e38-f596-47d7-9e2a-a99e628dff5a@app.fastmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <2aec4e38-f596-47d7-9e2a-a99e628dff5a@app.fastmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 2024-05-10 16:21, Mina Almasry wrote:
-> -/* Stub */
->  int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
->  {
-> -	return 0;
-> +	struct nlattr *tb[ARRAY_SIZE(netdev_queue_dmabuf_nl_policy)];
-> +	struct net_devmem_dmabuf_binding *out_binding;
-> +	struct list_head *sock_binding_list;
-> +	u32 ifindex, dmabuf_fd, rxq_idx;
-> +	struct net_device *netdev;
-> +	struct sk_buff *rsp;
-> +	struct nlattr *attr;
-> +	int rem, err = 0;
-> +	void *hdr;
-> +
-> +	if (GENL_REQ_ATTR_CHECK(info, NETDEV_A_DEV_IFINDEX) ||
-> +	    GENL_REQ_ATTR_CHECK(info, NETDEV_A_BIND_DMABUF_DMABUF_FD) ||
-> +	    GENL_REQ_ATTR_CHECK(info, NETDEV_A_BIND_DMABUF_QUEUES))
-> +		return -EINVAL;
-> +
-> +	ifindex = nla_get_u32(info->attrs[NETDEV_A_DEV_IFINDEX]);
-> +	dmabuf_fd = nla_get_u32(info->attrs[NETDEV_A_BIND_DMABUF_DMABUF_FD]);
-> +
-> +	rtnl_lock();
-> +
-> +	netdev = __dev_get_by_index(genl_info_net(info), ifindex);
-> +	if (!netdev) {
-> +		err = -ENODEV;
-> +		goto err_unlock;
-> +	}
-> +
-> +	err = net_devmem_bind_dmabuf(netdev, dmabuf_fd, &out_binding);
-> +	if (err)
-> +		goto err_unlock;
-> +
-> +	nla_for_each_attr(attr, genlmsg_data(info->genlhdr),
-> +			  genlmsg_len(info->genlhdr), rem) {
-> +		if (nla_type(attr) != NETDEV_A_BIND_DMABUF_QUEUES)
-> +			continue;
-> +
-> +		err = nla_parse_nested(
-> +			tb, ARRAY_SIZE(netdev_queue_dmabuf_nl_policy) - 1, attr,
-> +			netdev_queue_dmabuf_nl_policy, info->extack);
-> +		if (err < 0)
-> +			goto err_unbind;
-> +
-> +		rxq_idx = nla_get_u32(tb[NETDEV_A_QUEUE_DMABUF_IDX]);
-> +		if (rxq_idx >= netdev->num_rx_queues) {
-> +			err = -ERANGE;
-> +			goto err_unbind;
-> +		}
+On 17/05/2024 12:15, Jiaxun Yang wrote:
+>>>
+>>> Do you mind telling dumb as me how to test bindings properly?
+>>>
+>>> I tried to run make check_dtbs after applying this patch and that's all
+>>> the warnings I got:
+>>> ```
+>>> arch/mips/boot/dts/img/boston.dtb: Warning (interrupt_map): Failed prerequisite 'interrupt_provider'
+>>> /home/flygoat/linux-next/arch/mips/boot/dts/img/boston.dtb: /: 'model' is a required property
+>>>         from schema $id: http://devicetree.org/schemas/root-node.yaml#
+>>> arch/mips/boot/dts/img/boston.dtb: /: failed to match any schema with compatible: ['img,boston']
+>>> arch/mips/boot/dts/img/boston.dtb: /cpus/cpu@0: failed to match any schema with compatible: ['img,mips']
+>>> arch/mips/boot/dts/img/boston.dtb: /system-controller@17ffd000/clock: failed to match any schema with compatible: ['img,boston-clock']
+>>> /home/flygoat/linux-next/arch/mips/boot/dts/img/boston.dtb: uart@17ffe000: $nodename:0: 'uart@17ffe000' does not match '^serial(@.*)?$'
+>>>         from schema $id: http://devicetree.org/schemas/serial/8250.yaml#
+>>> ```
+>>>
+>>> I think there is no new warning introduced by this patch.
+>>> Did I miss anything here?
+>>
+>> Indeed there might be no warning for this, because syscon allows a lot,
+>> including children. You need custom binding anyway.
+> 
+> Hi Krzysztof,
+> 
+> I really don't understand the reason behind having a custom binding for
+> such device. It even doesn't have a driver and purely rely on generic
+> syscon regmap to work.
+> 
+> I can see devices like mediatek,mt8365-syscfg being described by simple
+> binding have a similar nature, they all describe a register bank and with
+> serval sub nodes to describe devices being instanced under that register
+> block.
+> 
+> What makes img,boston-platform-regs special here?
 
-net_devmem_bind_dmabuf_to_queue() checks for rxq_idx >=
-netdev->num_rx_queues as well. I'd say remove the one in
-netdev_nl_bind_rx_doit().
+Nothing is special here, I am in writing a patchset which will fix this
+up and all will be treated similarly.
 
-Also we may want a generic netdev function e.g. netdev_rx_queue_set_mp()
-since I need the same functionality.
+Bindings for devices should be specific, which then allows to see that
+you do not have dependency of children on the parent, and your current
+patch allows basically anything as a child. It allows also an
+dependency, even if you did not code it.
 
-> +
-> +		err = net_devmem_bind_dmabuf_to_queue(netdev, rxq_idx,
-> +						      out_binding);
-> +		if (err)
-> +			goto err_unbind;
-> +	}
-> +
-> +	sock_binding_list = genl_sk_priv_get(&netdev_nl_family,
-> +					     NETLINK_CB(skb).sk);
-> +	if (IS_ERR(sock_binding_list)) {
-> +		err = PTR_ERR(sock_binding_list);
-> +		goto err_unbind;
-> +	}
-> +
-> +	list_add(&out_binding->list, sock_binding_list);
-> +
-> +	rsp = genlmsg_new(GENLMSG_DEFAULT_SIZE, GFP_KERNEL);
-> +	if (!rsp) {
-> +		err = -ENOMEM;
-> +		goto err_unbind;
-> +	}
-> +
-> +	hdr = genlmsg_iput(rsp, info);
-> +	if (!hdr) {
-> +		err = -EMSGSIZE;
-> +		goto err_genlmsg_free;
-> +	}
-> +
-> +	nla_put_u32(rsp, NETDEV_A_BIND_DMABUF_DMABUF_ID, out_binding->id);
-> +	genlmsg_end(rsp, hdr);
-> +
-> +	rtnl_unlock();
-> +
-> +	return genlmsg_reply(rsp, info);
-> +
-> +err_genlmsg_free:
-> +	nlmsg_free(rsp);
-> +err_unbind:
-> +	net_devmem_unbind_dmabuf(out_binding);
-> +err_unlock:
-> +	rtnl_unlock();
-> +	return err;
->  }
+Best regards,
+Krzysztof
+
 
