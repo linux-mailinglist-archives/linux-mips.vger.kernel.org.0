@@ -1,184 +1,79 @@
-Return-Path: <linux-mips+bounces-3302-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3303-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CFA68C9FB9
-	for <lists+linux-mips@lfdr.de>; Mon, 20 May 2024 17:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 061E88CA0C7
+	for <lists+linux-mips@lfdr.de>; Mon, 20 May 2024 18:34:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CB3E280CD6
-	for <lists+linux-mips@lfdr.de>; Mon, 20 May 2024 15:33:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4A88281DBC
+	for <lists+linux-mips@lfdr.de>; Mon, 20 May 2024 16:34:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB35A136E21;
-	Mon, 20 May 2024 15:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FE9B137C58;
+	Mon, 20 May 2024 16:34:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="osh0pZEi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m0bugqHC"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A776AFC01;
-	Mon, 20 May 2024 15:33:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.240
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A312137C4E;
+	Mon, 20 May 2024 16:34:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716219226; cv=none; b=KFdSgIusr3pGk31ScFqMswyXu5QXUnXcf1BC4trytm0bWw23G6IOuN6mHtLAc/eIm/3Zi8JxGIGYlZXlO7PccgBaFgh4wO4kOz7feZTLbg6G02eVou7h5zRhPLpNoP9Ypkkjp4g7YQKhwd5hMIiwb6vlYB0mwbjFqzBlqj0rZho=
+	t=1716222841; cv=none; b=oYMKmSCT7HWzo1k2OAmzq2Lc3+dX6TpoI0olWntPp0UEzN5on4A8gWJ27pD2bQp3IZTNftfdBMS4sAekNhU6CHFATnxkco4slnV2HfEuPu6pZbJunGtTYhLFyGVNFZtEDV0xckJ8RWTFo1vuDyV2Mbmt3KEsfglvEElzlcoqbJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716219226; c=relaxed/simple;
-	bh=rQMWP962e6Sxt6mbk/SRohCyTNQpGXCJTddT2Gn7Ftk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZRcfcqpzv9WUjzFgdY7XSuSNYTVdMwjopfE1UihPjwR0tfjSzU4es5und1YMMKkJbeDPXzvL0cS1Rkrx4GuvJ5tNhRpSOarHDYa63aUqtdXqtJZBixm2dWFSX1NoWwLqXmqXYTiiXtYxl+svG/JMxUklZ9OKLMPVDOIGxYehWvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=osh0pZEi; arc=none smtp.client-ip=217.70.178.240
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from relay5-d.mail.gandi.net (unknown [217.70.183.197])
-	by mslow1.mail.gandi.net (Postfix) with ESMTP id 027D7C16D2;
-	Mon, 20 May 2024 15:33:35 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 311121C0005;
-	Mon, 20 May 2024 15:33:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1716219207;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rQMWP962e6Sxt6mbk/SRohCyTNQpGXCJTddT2Gn7Ftk=;
-	b=osh0pZEiKz2NLzJhXOamqtbb7XdoPCcycfzd4Iwdlgqym12zVGghQ/4577puKxdno8AiFL
-	UItSjOjdlus1zIt0IPRhtfE5PicJBuTuh+omti0iVO+mseJ4ZHrdZ+Ch0KzBRHiHm9iFSU
-	/vjEum4wC/Tj7r5XPHnMwU8UOrXwLbbnHu6iL3zm+jcO8EQbNDD7qDv7jNOjUMHJ+cZP/b
-	4+sgesKYE1zz/vhBXJj48Jd2OQTc/FJ3uTnEzrm33QwQGGnqJNhaq0GOGnPYEf2wV2hIUm
-	vxVMI/b43FHaxAKFF9wSXM+Nj5eHoJQtLpBn8Ayf4LQLTa8PYfjdsqKljwOklw==
-Date: Mon, 20 May 2024 17:33:25 +0200
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Keguang Zhang <keguang.zhang@gmail.com>
-Cc: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
- linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v7 2/3] mtd: rawnand: Enable monolithic read when
- reading subpages
-Message-ID: <20240520173325.79fee6a5@xps-13>
-In-Reply-To: <CAJhJPsVOx_AZmsRuZ5jy2-wJ+7-Wm+8RQAJ_LhKGLU3aFzrR7g@mail.gmail.com>
-References: <20240430-loongson1-nand-v7-0-60787c314fa4@gmail.com>
-	<20240430-loongson1-nand-v7-2-60787c314fa4@gmail.com>
-	<20240506091748.18c120d5@xps-13>
-	<CAJhJPsVOx_AZmsRuZ5jy2-wJ+7-Wm+8RQAJ_LhKGLU3aFzrR7g@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1716222841; c=relaxed/simple;
+	bh=ohKZsJk1S/2Prr9MsAsv8bEiFYhen6pA9AUJZ6jDPaA=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=iKPTB87GdBanieCMcaPjiuGH3bzNsobIv8wovboI1NT4KBv5u0qVEdGqs1Kbd1wm0SXdkXjh3qk2lHlQOYR9iVftq89Ot0XiGGhazAjXuOpSTw98lZHNo5eI1dE1W9BXllVE7vyvCAzE43wzNnBbgWwb2QtZfO6BoHIx0tqwLaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m0bugqHC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E1FBEC4AF0C;
+	Mon, 20 May 2024 16:34:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716222840;
+	bh=ohKZsJk1S/2Prr9MsAsv8bEiFYhen6pA9AUJZ6jDPaA=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=m0bugqHCfqOAWcwCzPWo8iiQtKDJWXmmrIf1ekecCPv8x/Oh6neQzLYnyZi0u+FGx
+	 qyg91Y4NQIagJE9FyfFdvPz9NdfCn/sEy3MBYThOap4MhH3LnBnVKVj5ybVczKWI9U
+	 +6O3tq+59O6R2BNtupN4BpPHGsJpA/YlAOjpZvyWueSopHhfE2Gu88hEm3m21Wj5va
+	 dWw/EnnC2PgUgI34Dyv0uI3uIM8V2/z0r9yGP5kfBJWAsrFvI8ELevcappW41xmEAO
+	 Db6kQUVx/uLNehbIHVxRx32Utr2xwMVkug4Bx6957eVqZsZ+DJ7KdGn1dLOQ+72LpS
+	 XGl3bcNji8p2Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D9D61C54BDA;
+	Mon, 20 May 2024 16:34:00 +0000 (UTC)
+Subject: Re: [GIT PULL] MIPS changes for v6.10
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <ZksWGd0Kr7D19kp/@alpha.franken.de>
+References: <ZksWGd0Kr7D19kp/@alpha.franken.de>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZksWGd0Kr7D19kp/@alpha.franken.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.10
+X-PR-Tracked-Commit-Id: 07e6a6d7f1d9fa4685003a195032698ba99577bb
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 6e51b4b5bbc07e52b226017936874715629932d1
+Message-Id: <171622284088.31783.15521993900488575082.pr-tracker-bot@kernel.org>
+Date: Mon, 20 May 2024 16:34:00 +0000
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: torvalds@linux-foundation.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
 
-Hi Keguang,
+The pull request you sent on Mon, 20 May 2024 11:21:29 +0200:
 
-keguang.zhang@gmail.com wrote on Mon, 20 May 2024 18:42:30 +0800:
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.10
 
-> On Mon, May 6, 2024 at 3:17=E2=80=AFPM Miquel Raynal <miquel.raynal@bootl=
-in.com> wrote:
-> >
-> > Hi,
-> >
-> > devnull+keguang.zhang.gmail.com@kernel.org wrote on Tue, 30 Apr 2024
-> > 19:11:11 +0800:
-> > =20
-> > > From: Keguang Zhang <keguang.zhang@gmail.com>
-> > >
-> > > nand_read_subpage() reads data and ECC data by two separate
-> > > operations.
-> > > This patch allows the NAND controllers who support
-> > > monolithic page read to do subpage read by a single operation,
-> > > which is more effective than nand_read_subpage(). =20
-> >
-> > I am a bit puzzled by this change. Usually nand_read_subpage is used
-> > for optimizations (when less data than a full page must be retrieved).
-> > I know it may be used in other cases (because it's easier for the core
-> > in order to support a wide range of controllers). Can you please show a
-> > speed test showing the results before I consider merging this patch?
-> > =20
-> With this patch:
-> # flash_speed -c 128 -d /dev/mtd1
-> scanning for bad eraseblocks
-> scanned 128 eraseblocks, 0 are bad
-> testing eraseblock write speed
-> eraseblock write speed is 2112 KiB/s
-> testing eraseblock read speed
-> eraseblock read speed is 3454 KiB/s
-> testing page write speed
-> page write speed is 1915 KiB/s
-> testing page read speed
-> page read speed is 2999 KiB/s
-> testing 2 page write speed
-> 2 page write speed is 2000 KiB/s
-> testing 2 page read speed
-> 2 page read speed is 3207 KiB/s
-> Testing erase speed
-> erase speed is 72495 KiB/s
-> Testing 2x multi-block erase speed
-> 2x multi-block erase speed is 74135 KiB/s
-> Testing 4x multi-block erase speed
-> 4x multi-block erase speed is 74812 KiB/s
-> Testing 8x multi-block erase speed
-> 8x multi-block erase speed is 75502 KiB/s
-> Testing 16x multi-block erase speed
-> 16x multi-block erase speed is 75851 KiB/s
-> Testing 32x multi-block erase speed
-> 32x multi-block erase speed is 75851 KiB/s
-> Testing 64x multi-block erase speed
-> 64x multi-block erase speed is 76204 KiB/s
-> finished
->=20
-> Without this patch:
-> # flash_speed -c 128 -d /dev/mtd1
-> scanning for bad eraseblocks
-> scanned 128 eraseblocks, 0 are bad
-> testing eraseblock write speed
-> eraseblock write speed is 2074 KiB/s
-> testing eraseblock read speed
-> eraseblock read speed is 2895 KiB/s
-> testing page write speed
-> page write speed is 998 KiB/s
-> testing page read speed
-> page read speed is 1499 KiB/s
-> testing 2 page write speed
-> 2 page write speed is 1002 KiB/s
-> testing 2 page read speed
-> 2 page read speed is 1554 KiB/s
-> Testing erase speed
-> erase speed is 76560 KiB/s
-> Testing 2x multi-block erase speed
-> 2x multi-block erase speed is 74019 KiB/s
-> Testing 4x multi-block erase speed
-> 4x multi-block erase speed is 74769 KiB/s
-> Testing 8x multi-block erase speed
-> 8x multi-block erase speed is 75149 KiB/s
-> Testing 16x multi-block erase speed
-> 16x multi-block erase speed is 75921 KiB/s
-> Testing 32x multi-block erase speed
-> 32x multi-block erase speed is 75921 KiB/s
-> Testing 64x multi-block erase speed
-> 64x multi-block erase speed is 75921 KiB/s
-> finished
->=20
-> The throughput of the former is twice that of the latter.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/6e51b4b5bbc07e52b226017936874715629932d1
 
-And what is your NAND controller driver?
+Thank you!
 
-subpage reads are used when you only want to read a subset of a NAND
-page.
-
-Otherwise the core may use the RNDOUT command to change the pointer in
-the chip's SRAM to read from a different location, but I don't see what
-is impacting so much, unless if the driver implementation is really
-sub-optimized.
-
-Thanks,
-Miqu=C3=A8l
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
