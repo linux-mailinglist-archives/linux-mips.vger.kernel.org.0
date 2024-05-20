@@ -1,113 +1,184 @@
-Return-Path: <linux-mips+bounces-3301-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3302-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C78888C9F61
-	for <lists+linux-mips@lfdr.de>; Mon, 20 May 2024 17:12:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CFA68C9FB9
+	for <lists+linux-mips@lfdr.de>; Mon, 20 May 2024 17:33:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 619EF1F21A2E
-	for <lists+linux-mips@lfdr.de>; Mon, 20 May 2024 15:12:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CB3E280CD6
+	for <lists+linux-mips@lfdr.de>; Mon, 20 May 2024 15:33:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19D2F136E0C;
-	Mon, 20 May 2024 15:12:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB35A136E21;
+	Mon, 20 May 2024 15:33:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ltclPiRv"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="osh0pZEi"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DADAA1369AF;
-	Mon, 20 May 2024 15:12:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A776AFC01;
+	Mon, 20 May 2024 15:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716217929; cv=none; b=ZHrzV4dxY8TCVNMoPX1+9vcqQSFYktbtyT0NA6z6zhbT0S6LW2FCRHotFx03JyYAQfVlRpfc85TWSLiJpqMy8eRw3OCha/EGmdobkYhXRc+caUnf/N+gg0nBgvDJh8OtYnMHyBFbgJ1wKyBkcD629p27roDzOZ6iLQBYUT2fYBk=
+	t=1716219226; cv=none; b=KFdSgIusr3pGk31ScFqMswyXu5QXUnXcf1BC4trytm0bWw23G6IOuN6mHtLAc/eIm/3Zi8JxGIGYlZXlO7PccgBaFgh4wO4kOz7feZTLbg6G02eVou7h5zRhPLpNoP9Ypkkjp4g7YQKhwd5hMIiwb6vlYB0mwbjFqzBlqj0rZho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716217929; c=relaxed/simple;
-	bh=CqITRP3HvOUhv+CLwPKkqznN2CVoZFJoOynUjb76pHE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H0LqAli+ObfTFkqvkw7P7FycZyY1rFNzCE1Hg6k/Yw30ekCzjThpgvc8/EZuPnOrLt7OGHyFecuGJiobwlbTfy6mAP5BTJnNUNBrW5x6xM2FDjdjYmNKdTyoSV2WjZmdvzM0TeIqddAAGR9tLmFisxSo79AXrt102UwRNXnC+uY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ltclPiRv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31117C2BD10;
-	Mon, 20 May 2024 15:12:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716217928;
-	bh=CqITRP3HvOUhv+CLwPKkqznN2CVoZFJoOynUjb76pHE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ltclPiRv0EHCt0sEpJJLkNKcb0Y1LQb30bqAXOTMUhxgVlFClbHgN8yE6D5epWZ6M
-	 mjqTuUfmAK4tYtDW0pCvgtN7P+42kH/P59Kl2cr3l8N/D+UJSd7TQ9hvsUjMXm+hGk
-	 mB4aHvGZ5ZwpeOCwW0JrB2w/Nm28B6Nt/sIjmDuUIcpGvcgRf6gqb7DfIR70f7UQPE
-	 ULPeI8JZ8Ggl3u9FEJbnCtQmmTbupBP1pov8wp8KRzWRkd2XOV0/BBueQLwJzRzw/k
-	 jpysawP7sE5pjCgeTqEm96CzFoezfFiX9M7VRyi982cUDMVx7v8ydxriE20FZEVM5z
-	 gE1GN4vy0eoFg==
-Date: Mon, 20 May 2024 10:12:07 -0500
-From: Rob Herring <robh@kernel.org>
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Saravana Kannan <saravanak@google.com>,
-	Arnd Bergmann <arnd@arndb.de>, Helge Deller <deller@gmx.de>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	Baoquan He <bhe@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	David Bauer <mail@david-bauer.net>, Liviu Dudau <liviu@dudau.co.uk>,
-	Serge Semin <fancer.lancer@gmail.com>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH 0/4] of: bootargs handling improvement
-Message-ID: <20240520151207.GA541701-robh@kernel.org>
-References: <20240512132513.2831-1-ansuelsmth@gmail.com>
+	s=arc-20240116; t=1716219226; c=relaxed/simple;
+	bh=rQMWP962e6Sxt6mbk/SRohCyTNQpGXCJTddT2Gn7Ftk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZRcfcqpzv9WUjzFgdY7XSuSNYTVdMwjopfE1UihPjwR0tfjSzU4es5und1YMMKkJbeDPXzvL0cS1Rkrx4GuvJ5tNhRpSOarHDYa63aUqtdXqtJZBixm2dWFSX1NoWwLqXmqXYTiiXtYxl+svG/JMxUklZ9OKLMPVDOIGxYehWvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=osh0pZEi; arc=none smtp.client-ip=217.70.178.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from relay5-d.mail.gandi.net (unknown [217.70.183.197])
+	by mslow1.mail.gandi.net (Postfix) with ESMTP id 027D7C16D2;
+	Mon, 20 May 2024 15:33:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 311121C0005;
+	Mon, 20 May 2024 15:33:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1716219207;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rQMWP962e6Sxt6mbk/SRohCyTNQpGXCJTddT2Gn7Ftk=;
+	b=osh0pZEiKz2NLzJhXOamqtbb7XdoPCcycfzd4Iwdlgqym12zVGghQ/4577puKxdno8AiFL
+	UItSjOjdlus1zIt0IPRhtfE5PicJBuTuh+omti0iVO+mseJ4ZHrdZ+Ch0KzBRHiHm9iFSU
+	/vjEum4wC/Tj7r5XPHnMwU8UOrXwLbbnHu6iL3zm+jcO8EQbNDD7qDv7jNOjUMHJ+cZP/b
+	4+sgesKYE1zz/vhBXJj48Jd2OQTc/FJ3uTnEzrm33QwQGGnqJNhaq0GOGnPYEf2wV2hIUm
+	vxVMI/b43FHaxAKFF9wSXM+Nj5eHoJQtLpBn8Ayf4LQLTa8PYfjdsqKljwOklw==
+Date: Mon, 20 May 2024 17:33:25 +0200
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Keguang Zhang <keguang.zhang@gmail.com>
+Cc: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
+ linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v7 2/3] mtd: rawnand: Enable monolithic read when
+ reading subpages
+Message-ID: <20240520173325.79fee6a5@xps-13>
+In-Reply-To: <CAJhJPsVOx_AZmsRuZ5jy2-wJ+7-Wm+8RQAJ_LhKGLU3aFzrR7g@mail.gmail.com>
+References: <20240430-loongson1-nand-v7-0-60787c314fa4@gmail.com>
+	<20240430-loongson1-nand-v7-2-60787c314fa4@gmail.com>
+	<20240506091748.18c120d5@xps-13>
+	<CAJhJPsVOx_AZmsRuZ5jy2-wJ+7-Wm+8RQAJ_LhKGLU3aFzrR7g@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240512132513.2831-1-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
 
-On Sun, May 12, 2024 at 03:25:07PM +0200, Christian Marangi wrote:
-> This is a very simple series that try to solve a very simple problem.
-> 
-> Many emebedded devices have very hacked (by OEMS) bootloader that do all
-> kind of modification and makes the kernel unbootable with the very first
-> small modification. And also many times these broken bootloader have
-> hardcoded values that can't be modified and would require risky
-> procedure that can brick the device.
-> 
-> One of the common modification done is hardcoding bootargs in the
-> appended kernel DT trashing the bootargs set in the /chosen.
-> 
-> The main usage of this is to have dynamic stuff to support dual
-> partition scheme and make the kernel load a dedicated rootfs. But the
-> other usage of this is to effectively lockup the device and cause kernel
-> panic on modification like using squashfs instead of legacy jffs2.
-> 
-> The simple solution to this is to let the bootloader override the
-> bootargs in /chosen and make the kernel parse a different property.
+Hi Keguang,
 
-What happens when bootloaders start using these new "standard" bootarg 
-properties and you need to override them? Perhaps name it something the 
-OEM wouldn't use (maybe): 
-"use-this-bootargs-instead-for-the-broken-bootloader"
+keguang.zhang@gmail.com wrote on Mon, 20 May 2024 18:42:30 +0800:
 
-> >From long time on OpenWRT we use bootargs-override as the alternative
-> property for this task fixing the problem of overridden bootargs.
-> 
-> The second feature is bootargs-append. This is self-explanatory,
-> sometimes bootargs from bootloader might be good but lack of some
-> crucial things that needs to be appended, like rootfstype or rootfs
-> path.
+> On Mon, May 6, 2024 at 3:17=E2=80=AFPM Miquel Raynal <miquel.raynal@bootl=
+in.com> wrote:
+> >
+> > Hi,
+> >
+> > devnull+keguang.zhang.gmail.com@kernel.org wrote on Tue, 30 Apr 2024
+> > 19:11:11 +0800:
+> > =20
+> > > From: Keguang Zhang <keguang.zhang@gmail.com>
+> > >
+> > > nand_read_subpage() reads data and ECC data by two separate
+> > > operations.
+> > > This patch allows the NAND controllers who support
+> > > monolithic page read to do subpage read by a single operation,
+> > > which is more effective than nand_read_subpage(). =20
+> >
+> > I am a bit puzzled by this change. Usually nand_read_subpage is used
+> > for optimizations (when less data than a full page must be retrieved).
+> > I know it may be used in other cases (because it's easier for the core
+> > in order to support a wide range of controllers). Can you please show a
+> > speed test showing the results before I consider merging this patch?
+> > =20
+> With this patch:
+> # flash_speed -c 128 -d /dev/mtd1
+> scanning for bad eraseblocks
+> scanned 128 eraseblocks, 0 are bad
+> testing eraseblock write speed
+> eraseblock write speed is 2112 KiB/s
+> testing eraseblock read speed
+> eraseblock read speed is 3454 KiB/s
+> testing page write speed
+> page write speed is 1915 KiB/s
+> testing page read speed
+> page read speed is 2999 KiB/s
+> testing 2 page write speed
+> 2 page write speed is 2000 KiB/s
+> testing 2 page read speed
+> 2 page read speed is 3207 KiB/s
+> Testing erase speed
+> erase speed is 72495 KiB/s
+> Testing 2x multi-block erase speed
+> 2x multi-block erase speed is 74135 KiB/s
+> Testing 4x multi-block erase speed
+> 4x multi-block erase speed is 74812 KiB/s
+> Testing 8x multi-block erase speed
+> 8x multi-block erase speed is 75502 KiB/s
+> Testing 16x multi-block erase speed
+> 16x multi-block erase speed is 75851 KiB/s
+> Testing 32x multi-block erase speed
+> 32x multi-block erase speed is 75851 KiB/s
+> Testing 64x multi-block erase speed
+> 64x multi-block erase speed is 76204 KiB/s
+> finished
+>=20
+> Without this patch:
+> # flash_speed -c 128 -d /dev/mtd1
+> scanning for bad eraseblocks
+> scanned 128 eraseblocks, 0 are bad
+> testing eraseblock write speed
+> eraseblock write speed is 2074 KiB/s
+> testing eraseblock read speed
+> eraseblock read speed is 2895 KiB/s
+> testing page write speed
+> page write speed is 998 KiB/s
+> testing page read speed
+> page read speed is 1499 KiB/s
+> testing 2 page write speed
+> 2 page write speed is 1002 KiB/s
+> testing 2 page read speed
+> 2 page read speed is 1554 KiB/s
+> Testing erase speed
+> erase speed is 76560 KiB/s
+> Testing 2x multi-block erase speed
+> 2x multi-block erase speed is 74019 KiB/s
+> Testing 4x multi-block erase speed
+> 4x multi-block erase speed is 74769 KiB/s
+> Testing 8x multi-block erase speed
+> 8x multi-block erase speed is 75149 KiB/s
+> Testing 16x multi-block erase speed
+> 16x multi-block erase speed is 75921 KiB/s
+> Testing 32x multi-block erase speed
+> 32x multi-block erase speed is 75921 KiB/s
+> Testing 64x multi-block erase speed
+> 64x multi-block erase speed is 75921 KiB/s
+> finished
+>=20
+> The throughput of the former is twice that of the latter.
 
-It is unfortunate that the kernel's handling of appending or prepending 
-to bootargs is ambiguous. And MIPS is a further mess with handling 
-cmdline from multiple sources.
+And what is your NAND controller driver?
 
-I'm not really interested in adding any more complexity to the cmdline 
-handling until it is made common. There's been at least 2 approaches to 
-doing that.
+subpage reads are used when you only want to read a subset of a NAND
+page.
 
-Rob
+Otherwise the core may use the RNDOUT command to change the pointer in
+the chip's SRAM to read from a different location, but I don't see what
+is impacting so much, unless if the driver implementation is really
+sub-optimized.
+
+Thanks,
+Miqu=C3=A8l
 
