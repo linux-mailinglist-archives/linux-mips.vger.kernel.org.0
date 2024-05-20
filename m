@@ -1,143 +1,118 @@
-Return-Path: <linux-mips+bounces-3298-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3299-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C0AD8C95F1
-	for <lists+linux-mips@lfdr.de>; Sun, 19 May 2024 20:44:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A96188C9AF1
+	for <lists+linux-mips@lfdr.de>; Mon, 20 May 2024 12:05:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BDE21C20D4A
-	for <lists+linux-mips@lfdr.de>; Sun, 19 May 2024 18:44:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D797B2084B
+	for <lists+linux-mips@lfdr.de>; Mon, 20 May 2024 10:05:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D02836F06E;
-	Sun, 19 May 2024 18:43:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RMEh+3g8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 655A742044;
+	Mon, 20 May 2024 10:05:00 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987D16D1B9;
-	Sun, 19 May 2024 18:43:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55C301EA67;
+	Mon, 20 May 2024 10:04:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716144235; cv=none; b=bAuYdzxna5e0C9M3exGLsLxfvArhS6W2J5gWzLwGMiRhh5A9pVz9RatIHC86ZjdW0iDZLB8BUBwkbkTncf+YeQPQorjtnjzqDig9j0IIg13HQDz2N5liP2+3Lm97cvC7BjhyJ0hNfvkgb+/zlFodeLHt2UoUFls6PRZ+4VHUIGw=
+	t=1716199500; cv=none; b=t6aejTJlYKMlw1NIwuq5p9w/dBYPAnQC/MQ3PF/aSuIrXahL5xjuBGPY7EeazLsaq7JtHD3wnDxyhhAj/rqBQ9a4xA4JnOXg3vtpy/fiMhY8/1qjPXakgb+o5RY7BnylfxzJAOXOqQe5lZ8vFyc+8yc765bUJxUGpQk0VyzJh0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716144235; c=relaxed/simple;
-	bh=Z64QIpvqXdl7muS6/ZZuI9SyD5ANwufO0lUkLdugi2Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FnH+DBNenv1i1xeUjru/36uDJkdoyf81K61tXLQaDsDtKo2FgiQ1iSeqqGtHWrECvQCKQhMqDoYY7wjOh3VDIsxXH51lyaO6zQPYLkZc3t0c36fdntiWGB4+CoAKLwToEAFMAOWG2qNfoiGM0utMSq3PVDMRUXLmlfkchPAdF2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RMEh+3g8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7730EC32781;
-	Sun, 19 May 2024 18:43:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716144235;
-	bh=Z64QIpvqXdl7muS6/ZZuI9SyD5ANwufO0lUkLdugi2Q=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RMEh+3g8XQyK6rjiZUSCTCYPIyk9FpkDhV7ISReUlZDmNB6lLwK/VYNzwpEC2ShGz
-	 zq5hYbdMeYWafC+nh/aelaqTeAAiIUggqG7knY5IuiSXpzohhsAUKDJ/Xu8pKOa7j7
-	 8Skr4ZDquy2AUAaGIcdfoMvC2Etf2ii1rQL9LczlKcULAak8PBxy+GdJ8NdcUQ8MnS
-	 X5jU01b09eHIJpw95Hq08v8+Y/meKqvKPEULr+QIdeh4OO+lF7NHhtqFR1aQs+gP+5
-	 w2WWBpl1i/+AYnwMtC4piLpwN0woUkq6ZsmtFSv/ILHWFFv83Y/eKvkHwgosZ0Q4u8
-	 MH5gVF1Qi+Fbg==
-Message-ID: <7b3cd3a1-1fcf-48b7-a4ed-b110ecdce9bf@kernel.org>
-Date: Sun, 19 May 2024 20:43:44 +0200
+	s=arc-20240116; t=1716199500; c=relaxed/simple;
+	bh=Lh/a5CQnHWFVHPLTcboaMYD8avCNkkGAiOMBkLALvxs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ib52Dg2BbYgxYyYtMHQ/4oPxL6KarO3CNz24sFtOWiXG1ny0IxgCbllal6v1GLxTA8VskJVtlRPvN2gKel08tmATLHKJld8m45UyG1nxtdYVpXntAHFWF3lQP2tdRK0Xe1EM1nobjxTB0ublUBpz9aKowIA9RW/DjXjW9PBdNf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1s8zD8-0007O9-00; Mon, 20 May 2024 11:21:38 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 21EF2C0120; Mon, 20 May 2024 11:21:29 +0200 (CEST)
+Date: Mon, 20 May 2024 11:21:29 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: torvalds@linux-foundation.org
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] MIPS changes for v6.10
+Message-ID: <ZksWGd0Kr7D19kp/@alpha.franken.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: mfd: syscon: Add more simple compatibles
-To: "Rob Herring (Arm)" <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, Andrew Lunn <andrew@lunn.ch>,
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
- Gregory Clement <gregory.clement@bootlin.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Lee Jones <lee@kernel.org>,
- UNGLinuxDriver@microchip.com, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- Yisen Zhuang <yisen.zhuang@huawei.com>, Salil Mehta
- <salil.mehta@huawei.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-mtd@lists.infradead.org,
- netdev@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20240510123018.3902184-1-robh@kernel.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240510123018.3902184-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 10/05/2024 14:30, Rob Herring (Arm) wrote:
-> Add another batch of various "simple" syscon compatibles which were
-> undocumented or still documented with old text bindings. Remove the old
-> text binding docs for the ones which were documented.
-> 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> ---
-> This batch is mostly from arm32 platforms.
-> ---
+The following changes since commit 0bbac3facb5d6cc0171c45c9873a2dc96bea9680:
 
-Cool! I have a followup (on top):
-https://lore.kernel.org/r/20240519-dt-bindings-mfd-syscon-split-v1-0-aaf996e2313a@linaro.org
+  Linux 6.9-rc4 (2024-04-14 13:38:39 -0700)
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+are available in the Git repository at:
 
-Best regards,
-Krzysztof
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.10
 
+for you to fetch changes up to 07e6a6d7f1d9fa4685003a195032698ba99577bb:
+
+  MIPS: Take in account load hazards for HI/LO restoring (2024-05-03 14:22:38 +0200)
+
+----------------------------------------------------------------
+just cleanups and fixes
+
+----------------------------------------------------------------
+Jiaxun Yang (1):
+      MIPS: Guard some macros with __ASSEMBLY__ in asm.h
+
+Justin Swartz (14):
+      mips: dts: ralink: mt7621: reorder cpu node attributes
+      mips: dts: ralink: mt7621: reorder cpuintc node attributes
+      mips: dts: ralink: mt7621: reorder mmc regulator attributes
+      mips: dts: ralink: mt7621: reorder sysc node attributes
+      mips: dts: ralink: mt7621: reorder gpio node attributes
+      mips: dts: ralink: mt7621: reorder i2c node attributes
+      mips: dts: ralink: mt7621: reorder spi0 node attributes
+      mips: dts: ralink: mt7621: move pinctrl and sort its children
+      mips: dts: ralink: mt7621: reorder mmc node attributes
+      mips: dts: ralink: mt7621: reorder gic node attributes
+      mips: dts: ralink: mt7621: reorder ethernet node attributes and kids
+      mips: dts: ralink: mt7621: reorder pcie node attributes and children
+      mips: dts: ralink: mt7621: reorder pci?_phy attributes
+      mips: dts: ralink: mt7621: reorder the attributes of the root node
+
+Nathan Chancellor (1):
+      MIPS: Add prototypes for plat_post_relocation() and relocate_kernel()
+
+Siarhei Volkau (1):
+      MIPS: Take in account load hazards for HI/LO restoring
+
+Songyang Li (1):
+      MIPS: Octeon: Add PCIe link status check
+
+Yongzhen Zhang (3):
+      MIPS: BCM47XX: include header for bcm47xx_prom_highmem_init() prototype
+      MIPS: BCM47XX: Declare early_tlb_init() static
+      MIPS: RB532: Declare prom_setup_cmdline() and rb532_gpio_init() static
+
+Yury Norov (3):
+      MIPS: SGI-IP27: micro-optimize arch_init_irq()
+      MIPS: SGI-IP27: fix -Wunused-variable in arch_init_irq()
+      MIPS: SGI-IP27: use WARN_ON() output
+
+ arch/mips/bcm47xx/prom.c              |   3 +-
+ arch/mips/boot/dts/ralink/mt7621.dtsi | 430 +++++++++++++++++++---------------
+ arch/mips/include/asm/asm.h           |   3 +
+ arch/mips/include/asm/setup.h         |   6 +
+ arch/mips/include/asm/stackframe.h    |  19 +-
+ arch/mips/pci/pcie-octeon.c           |   6 +
+ arch/mips/rb532/gpio.c                |   2 +-
+ arch/mips/rb532/prom.c                |   2 +-
+ arch/mips/sgi-ip27/ip27-irq.c         |  15 +-
+ 9 files changed, 274 insertions(+), 212 deletions(-)
+ mode change 100644 => 100755 arch/mips/pci/pcie-octeon.c
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
