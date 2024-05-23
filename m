@@ -1,134 +1,223 @@
-Return-Path: <linux-mips+bounces-3315-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3316-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69EB88CC3F0
-	for <lists+linux-mips@lfdr.de>; Wed, 22 May 2024 17:16:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42A888CCBFB
+	for <lists+linux-mips@lfdr.de>; Thu, 23 May 2024 08:03:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23C4B283262
-	for <lists+linux-mips@lfdr.de>; Wed, 22 May 2024 15:16:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66F491C20CA1
+	for <lists+linux-mips@lfdr.de>; Thu, 23 May 2024 06:03:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6701E4206B;
-	Wed, 22 May 2024 15:16:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A4B47A7C;
+	Thu, 23 May 2024 06:02:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MR8HfGt/"
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="Uz2AHfik"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC3FB1864C
-	for <linux-mips@vger.kernel.org>; Wed, 22 May 2024 15:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3EE13B29F
+	for <linux-mips@vger.kernel.org>; Thu, 23 May 2024 06:02:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716390982; cv=none; b=OJOZ2Q9aXcbUXMcsKOrGEpGgapu0uqV/CGV8lCF3MF+msAYRAQjHO9wSCER2dkmBqitxwRcsZm3ppAs4ITTXlhycGVGlPqto3miiQ+zBSG9MFYeF+yr/eoW2txTcpKAEERc5T5bk4XMhsDrdbU/30jEVqUO0MCRLc7qlzfIqcsI=
+	t=1716444178; cv=none; b=PnssHn9bZL1V6BUU/B+e+oOPGKof+2ZVSm3RF3xoBfGYl7R4cuc37EhLfFw5GDiNRkN9JtycnsBUgQJ5g1KYVgTLiZr9ZuK9oMxX9rngNqiziwBfdoC8qcuJnT17dh3nVs2ExJV4TzofXcnsSVtp81T8ZpOb+F26mLtWtJntiEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716390982; c=relaxed/simple;
-	bh=LBsuxRIt25iSTct1CaOFF4pb8q9+nLplzWcPNkULdk8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p5YhSkKWqejiee7ekEq0w6WzHFDzfu3lzmJKx11i1PMD9gzUzIslBqv2onzQ7A7gB/842jXc0Jrib0LSDUMWv1ABPeZLJLENWGpikZtIWQ4n/QB05S6Gie5oO66LG1qYEREiTU93ei6MGy9usbrgdt9/zP2b2cMmXgTVc/eZ+Hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MR8HfGt/; arc=none smtp.client-ip=95.215.58.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Envelope-To: seanjc@google.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1716390977;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qPx5VBeAtVusPub5h8jjoS2Zp/k7LiSDo3T23EUz3Cc=;
-	b=MR8HfGt/7NWj1OeZKFuwxnVF9+ndS7xCoaOY+r1JI2bWBzf2MynLiEMDjC1DrcozAH8hei
-	TUnFiYL5Pyj+E10/+shwWi4h/9LVvu0Mc6mkr1yRH6n++3msAFiuDQVzo86zkrGkaVb0hH
-	6NbyKC1AGLafKPP8z0hv7d6a9IuqBaQ=
-X-Envelope-To: maz@kernel.org
-X-Envelope-To: zhaotianrui@loongson.cn
-X-Envelope-To: maobibo@loongson.cn
-X-Envelope-To: chenhuacai@kernel.org
-X-Envelope-To: mpe@ellerman.id.au
-X-Envelope-To: anup@brainfault.org
-X-Envelope-To: paul.walmsley@sifive.com
-X-Envelope-To: palmer@dabbelt.com
-X-Envelope-To: aou@eecs.berkeley.edu
-X-Envelope-To: borntraeger@linux.ibm.com
-X-Envelope-To: frankja@linux.ibm.com
-X-Envelope-To: imbrenda@linux.ibm.com
-X-Envelope-To: pbonzini@redhat.com
-X-Envelope-To: linux-arm-kernel@lists.infradead.org
-X-Envelope-To: kvmarm@lists.linux.dev
-X-Envelope-To: kvm@vger.kernel.org
-X-Envelope-To: loongarch@lists.linux.dev
-X-Envelope-To: linux-mips@vger.kernel.org
-X-Envelope-To: linuxppc-dev@lists.ozlabs.org
-X-Envelope-To: kvm-riscv@lists.infradead.org
-X-Envelope-To: linux-riscv@lists.infradead.org
-X-Envelope-To: linux-kernel@vger.kernel.org
-Date: Wed, 22 May 2024 08:16:07 -0700
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Oliver Upton <oliver.upton@linux.dev>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Marc Zyngier <maz@kernel.org>, Tianrui Zhao <zhaotianrui@loongson.cn>,
-	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Anup Patel <anup@brainfault.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] KVM: Add a flag to track if a loaded vCPU is
- scheduled out
-Message-ID: <Zk4MN49212SaW1_z@linux.dev>
-References: <20240522014013.1672962-1-seanjc@google.com>
- <20240522014013.1672962-2-seanjc@google.com>
+	s=arc-20240116; t=1716444178; c=relaxed/simple;
+	bh=B9lGrOwbzZ9cwWP1ohGSBcMGMvcXioUh06F1RRqtc5A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BuHStP3lUhb8HOYxjn6BGsyfZqrGMAfJdw7GBypqGwjoDIDGKd6yx76tKyNoDcUv/jmMGo2Pg/AwRrVR5dFSV5L3cBniqGGV2DYXLdbvmPqp2n1Ghrc0fi1rcDoG9V5i9vUeQPfHe5fyA174CNWmYOnrkt09itS+IzFkWUjtdbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=Uz2AHfik; arc=none smtp.client-ip=209.85.166.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7d86adab5a7so285563439f.3
+        for <linux-mips@vger.kernel.org>; Wed, 22 May 2024 23:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1716444176; x=1717048976; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=txOSv1K2CA1USg0Ze10vD1qMyJxbEs9Mfk9GiCoI090=;
+        b=Uz2AHfikahhuUowwWHZ/rUV3mnPgvxCUBUVLy75Ni4QVr3Zm8DMJc7X+YPT/ZlueFf
+         fM09t2fSBt5pPpQRo2M2zZC0pkRmdXI9FCcScF4/EKN/cySBOR/qDzA5ekE4ILkpPwpy
+         5mKNJ6bHDg+TEheZbQ3IkCrHP/NZCEn3hQOxoKAsaSNFqq1PjKOo0dSQD72z4WdrL11T
+         SDuOkvOaGOZFmfxRTdXg/vfbkBY5oBXpiOFGPI2dN03MwRCRVp7zTktF7l5JeFQL9kbh
+         gj4aNjvikrd9qQBAiO+5XOkySFNkgVh2QVR/GkOax5g1Q2KM/PsKBO5u3BVjXDevfa5r
+         Zpcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716444176; x=1717048976;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=txOSv1K2CA1USg0Ze10vD1qMyJxbEs9Mfk9GiCoI090=;
+        b=kimHIDPDlHQrthyj0Sz6O2GbpXguPCCNpBxzRjxmbcoiMhOhFil7c28YmYDdmY0RgD
+         Bl0wSQD9Kn3AB78lf+z3Hz1d+GyC/L8gT4OP7b7TZYilTBPC3CaD6hGTNJekYPlJMqTu
+         0QZAiVU/vg0Hxtdyyp60X7TwCZruGGuSR7TSGGN5iSJvwjn93K25DtkiCk6JGAzXH4Sj
+         3obBh7sn7PXLePlSknoRubNwu4lNfkcsfH/BYgaj3vtKHNH7lwAg8NsJfFhMqj2d3jiB
+         iokdhfm8Kn9u8am1B8x3Coz9jI5N5NnxIXNJ5TZemcgqRlog8D2b68fGKzHchERZtDzy
+         kfow==
+X-Forwarded-Encrypted: i=1; AJvYcCVKwfAmKJ+rb9vR/huh89ORGCMW4PAM6XDfFpcdSDQHs/PJ+8SYPanGDZKjxs3l0QP8ItN+ONoBYC7fddfRO1yKxHoxndhJ1hrLmw==
+X-Gm-Message-State: AOJu0YzUMo9pqc8+P3WxSGl2KJZCaEpKMq5xvEatBoQzY3sksVdiNR1H
+	INE49sTys4PgbcTdPNw4BLu65fEKeF932Yn7iy6e8ZZDzSMrw9dC2112rOenZh8=
+X-Google-Smtp-Source: AGHT+IEHlOqXvdbfYiugVF0TXgIiftVk0fEr87owHTsVUKSpnXRyU8iozPM5JlvqTh0LUpuxvOHGhg==
+X-Received: by 2002:a05:6e02:1447:b0:36c:7f3d:59a with SMTP id e9e14a558f8ab-371f7c80fe6mr48056835ab.4.1716444176327;
+        Wed, 22 May 2024 23:02:56 -0700 (PDT)
+Received: from [192.168.1.16] (174-21-188-197.tukw.qwest.net. [174.21.188.197])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-634117190absm23448503a12.87.2024.05.22.23.02.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 May 2024 23:02:55 -0700 (PDT)
+Message-ID: <9097e78d-0e7d-43bd-bafd-e53a4872a4d1@davidwei.uk>
+Date: Wed, 22 May 2024 23:02:54 -0700
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240522014013.1672962-2-seanjc@google.com>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v9 11/14] tcp: RX path for devmem TCP
+Content-Language: en-GB
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
+ <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20240510232128.1105145-1-almasrymina@google.com>
+ <20240510232128.1105145-12-almasrymina@google.com>
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <20240510232128.1105145-12-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, May 21, 2024 at 06:40:08PM -0700, Sean Christopherson wrote:
-> Add a kvm_vcpu.scheduled_out flag to track if a vCPU is in the process of
-> being scheduled out (vCPU put path), or if the vCPU is being reloaded
-> after being scheduled out (vCPU load path).  In the short term, this will
-> allow dropping kvm_arch_sched_in(), as arch code can query scheduled_out
-> during kvm_arch_vcpu_load().
-> 
-> Longer term, scheduled_out opens up other potential optimizations, without
-> creating subtle/brittle dependencies.  E.g. it allows KVM to keep guest
-> state (that is managed via kvm_arch_vcpu_{load,put}()) loaded across
-> kvm_sched_{out,in}(), if KVM knows the state isn't accessed by the host
-> kernel.  Forcing arch code to coordinate between kvm_arch_sched_{in,out}()
-> and kvm_arch_vcpu_{load,put}() is awkward, not reusable, and relies on the
-> exact ordering of calls into arch code.
-> 
-> Adding scheduled_out also obviates the need for a kvm_arch_sched_out()
-> hook, e.g. if arch code needs to do something novel when putting vCPU
-> state.
-> 
-> And even if KVM never uses scheduled_out for anything beyond dropping
-> kvm_arch_sched_in(), just being able to remove all of the arch stubs makes
-> it worth adding the flag.
-> 
-> Link: https://lore.kernel.org/all/20240430224431.490139-1-seanjc@google.com
-> Cc: Oliver Upton <oliver.upton@linux.dev>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+On 2024-05-10 16:21, Mina Almasry wrote:
+> +/* On error, returns the -errno. On success, returns number of bytes sent to the
+> + * user. May not consume all of @remaining_len.
+> + */
+> +static int tcp_recvmsg_dmabuf(struct sock *sk, const struct sk_buff *skb,
+> +			      unsigned int offset, struct msghdr *msg,
+> +			      int remaining_len)
+> +{
+> +	struct dmabuf_cmsg dmabuf_cmsg = { 0 };
+> +	struct tcp_xa_pool tcp_xa_pool;
+> +	unsigned int start;
+> +	int i, copy, n;
+> +	int sent = 0;
+> +	int err = 0;
+> +
+> +	tcp_xa_pool.max = 0;
+> +	tcp_xa_pool.idx = 0;
+> +	do {
+> +		start = skb_headlen(skb);
+> +
+> +		if (skb_frags_readable(skb)) {
+> +			err = -ENODEV;
+> +			goto out;
+> +		}
+> +
+> +		/* Copy header. */
+> +		copy = start - offset;
+> +		if (copy > 0) {
+> +			copy = min(copy, remaining_len);
+> +
+> +			n = copy_to_iter(skb->data + offset, copy,
+> +					 &msg->msg_iter);
+> +			if (n != copy) {
+> +				err = -EFAULT;
+> +				goto out;
+> +			}
+> +
+> +			offset += copy;
+> +			remaining_len -= copy;
+> +
+> +			/* First a dmabuf_cmsg for # bytes copied to user
+> +			 * buffer.
+> +			 */
+> +			memset(&dmabuf_cmsg, 0, sizeof(dmabuf_cmsg));
+> +			dmabuf_cmsg.frag_size = copy;
+> +			err = put_cmsg(msg, SOL_SOCKET, SO_DEVMEM_LINEAR,
+> +				       sizeof(dmabuf_cmsg), &dmabuf_cmsg);
+> +			if (err || msg->msg_flags & MSG_CTRUNC) {
+> +				msg->msg_flags &= ~MSG_CTRUNC;
+> +				if (!err)
+> +					err = -ETOOSMALL;
+> +				goto out;
+> +			}
+> +
+> +			sent += copy;
+> +
+> +			if (remaining_len == 0)
+> +				goto out;
+> +		}
+> +
+> +		/* after that, send information of dmabuf pages through a
+> +		 * sequence of cmsg
+> +		 */
+> +		for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
+> +			skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
+> +			struct net_iov *niov;
+> +			u64 frag_offset;
+> +			int end;
+> +
+> +			/* !skb_frags_readable() should indicate that ALL the
+> +			 * frags in this skb are dmabuf net_iovs. We're checking
+> +			 * for that flag above, but also check individual frags
+> +			 * here. If the tcp stack is not setting
+> +			 * skb_frags_readable() correctly, we still don't want
+> +			 * to crash here.
+> +			 */
+> +			if (!skb_frag_net_iov(frag)) {
+> +				net_err_ratelimited("Found non-dmabuf skb with net_iov");
+> +				err = -ENODEV;
+> +				goto out;
+> +			}
+> +
+> +			niov = skb_frag_net_iov(frag);
 
-Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
+Sorry if we've already discussed this.
 
--- 
-Thanks,
-Oliver
+We have this additional hunk:
+
++ if (niov->pp->mp_ops != &dmabuf_devmem_ops) {
++ 	err = -ENODEV;
++ 	goto out;
++ }
+
+In case one of our skbs end up here, skb_frag_is_net_iov() and
+!skb_frags_readable(). Does this even matter? And if so then is there a
+better way to distinguish between our two types of net_iovs?
 
