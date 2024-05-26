@@ -1,87 +1,80 @@
-Return-Path: <linux-mips+bounces-3322-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3323-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E55528CEEA7
-	for <lists+linux-mips@lfdr.de>; Sat, 25 May 2024 13:25:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 792DF8CF44F
+	for <lists+linux-mips@lfdr.de>; Sun, 26 May 2024 14:44:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 224281C20A97
-	for <lists+linux-mips@lfdr.de>; Sat, 25 May 2024 11:25:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35321281588
+	for <lists+linux-mips@lfdr.de>; Sun, 26 May 2024 12:44:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B66883A1BC;
-	Sat, 25 May 2024 11:25:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="K8OssRaN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 465C011181;
+	Sun, 26 May 2024 12:44:19 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22040208CA;
-	Sat, 25 May 2024 11:25:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF74E10A25;
+	Sun, 26 May 2024 12:44:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716636324; cv=none; b=B2jyME4JtvPipdiXampFliE750DHPZsXGzbEJOp2VMLvYXv0mvKbccPD4TD1RS4ZnmhUSAO/tF08F4kgZxJHuzkGvOa3fIDPyI5Zg+PNsXrvCTjuRig45oPl7r9jrCNeCGH6v653156ktjgKe8ubtqeCeB3j5UyHea82t78YQyY=
+	t=1716727459; cv=none; b=qmux1/89rbWOb1ZbQtwKBun3WByhjVLTMAFNdklgg1+y7X9NpPGj05vpngx8I4bMmPBeDHeqIan60ZALOCrmlIhxXkO+yungSwcHrImWtPohN9c/IsHMLIXHnrKknqcKs4EVHC+IhO/PeyGH2V1J07C/rZ7TFsQOTLqjSEyrq1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716636324; c=relaxed/simple;
-	bh=lyAM/tBraUaivTSqVpDtdzYQDwPph0gQ4F1yGKtmYvg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LAs8uaP4LinHhdgEHocjlq8F91lFITyiXHYJgyTgwOMW5bQNc5gVA+ksknU8t2tKE01oCu5muGNYXpUSU+6Y/aN7ccIlIjHKo1YokrB4beUoWfjDyak7TWvCvybiEodBo0TajAF3cQip8KdIwWEJgG4gqkA/Vmn9Vxjqnfu6jrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=K8OssRaN; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:Content-Type
-	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-	Reply-To:Content-ID:Content-Description;
-	bh=zCkqzdYte65um3TtRP0XYZF8yZbFnXz5HUvdaLbNJr4=; b=K8OssRaNgSBfwKviWP02A2CM7+
-	ZCubjH/HFYfnl65AOFifLwmuvZtNbfBOGOKfN8NIH5F4qZCDYOSRt+kCeum8hY3zqyst8+knLZwb+
-	a6uBCPYhJaVlCychknk9PUd9OJ6bL1ZihKHzJVskD+VuyqueGoA3G1by/Q3RSLEt3XNapqaXJrNhg
-	6PRfKndPICr+4Mo2NXIBIw5QiCNvZPsq52OjKZ48FhmeTWfkGmKCjTvPSvBCLb7VkHLFL1UTab6/8
-	bqLQYeNzYqrgsHaWLuOjb5ouQpSIsa0/c3qAD4Ut7ynFZzeneCvbgXLjW2sd1iqdoZTyfWQAwiLHd
-	ZQ6Ono0w==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
-	(Exim 4.94.2)
-	(envelope-from <bage@debian.org>)
-	id 1sApWK-00GNrA-Tx; Sat, 25 May 2024 11:25:05 +0000
-Message-ID: <57f845bb-9b67-4c09-9e21-701872c936e3@debian.org>
-Date: Sat, 25 May 2024 13:25:01 +0200
+	s=arc-20240116; t=1716727459; c=relaxed/simple;
+	bh=g6i85qqwj3MGax/kH7EXAdoQlIeb9sPfRzXZA92Ashg=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=pP4tyhj/fI3s0CP/ItwVo/huzLBwiXVNDLiH+XiuWdwhMNVFkb0EKk7DV2tYzD279RVDoxjTChs33ilm5BYQOsiXqRlIBtYcJrmOMr9mDgpxy0EeYpngawh/CgcSpbBJbzEdv4LGEljw8GenaQKnF/U3w1CeG7Lm1MQlW9ELs5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id DF3BA92009C; Sun, 26 May 2024 14:44:07 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id D17C992009B;
+	Sun, 26 May 2024 13:44:07 +0100 (BST)
+Date: Sun, 26 May 2024 13:44:07 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
+    linux-kernel@vger.kernel.org, 
+    =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+Subject: Re: [PATCH v3 0/9] MIPS: Unify low-level debugging functionalities
+In-Reply-To: <a62c1c0b-0b2a-4b3f-85df-da586e103fcb@app.fastmail.com>
+Message-ID: <alpine.DEB.2.21.2405261326260.1257@angie.orcam.me.uk>
+References: <20240502-mips_debug_ll-v3-0-3b61f30e484c@flygoat.com> <3dcf3ac1-5494-482a-a80a-df4126e6ae59@app.fastmail.com> <3d6883ed-f8f4-44e5-a184-e5499c44f0f7@app.fastmail.com> <Zk2mt/FsgltvhVzf@alpha.franken.de> <13aa508f-6830-4d52-87fd-5063f737c990@app.fastmail.com>
+ <a62c1c0b-0b2a-4b3f-85df-da586e103fcb@app.fastmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] xfs_io: make MADV_SOFT_OFFLINE conditional
-To: Christoph Hellwig <hch@infradead.org>
-Cc: linux-xfs@vger.kernel.org, "Darrick J . Wong" <djwong@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org,
- linux-api@vger.kernel.org
-References: <20240522223748.9986-1-bage@debian.org>
- <ZlBNPDomQpTfAmt2@infradead.org>
-Content-Language: de-DE
-From: Bastian Germann <bage@debian.org>
-In-Reply-To: <ZlBNPDomQpTfAmt2@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Debian-User: bage
+Content-Type: text/plain; charset=US-ASCII
 
-Am 24.05.24 um 10:18 schrieb Christoph Hellwig:
->> +#ifdef MADV_SOFT_OFFLINE
-> 
-> Can you add a comment here that this is missing on mips as of Linux
-> 6.9?
+On Wed, 22 May 2024, Jiaxun Yang wrote:
 
-Sure.
+> That being said, have you noticed that prom_putchar and early_printk is
+> a non-extant on generic mach, ingenic, ralink etc? That's because we
+> really don't want to introduce any platform specific UART code for
+> early debugging on new platforms. With DEBUG_LL introduced by Arm it's
+> only a Kconfig option to do the trick.
 
-> Also adding the mips maintainer so he can add it, as missing a madvise
-> random feature on a random architecture looks like a bug that should be
-> fixed.
+ IMHO that is however the logical thing to do.  And then you need no magic 
+options to fiddle with and say a distribution kernel will dump whatever it 
+has to say if something wrong has happened early on.
 
-There are more of this class of bugs which f82b77462b ("tools include:
-Add mman macros needed by perf for all arch") presents.
+ IOW just wire `prom_putchar' as required, using C code preferably.  NB 
+YAMON does have a `print' entry point for console output, so for the Malta 
+platform you can trivially use just that, no need for messy ad hoc 8250 
+code.
 
+ As to intercepting exceptions, it depends.  Again YAMON does handle that 
+and dumps the register state, so with the Malta you get the information 
+required.  For less capable ones it might make sense, but it ISTM like a 
+candidate for an independent change, and then again I fail to see why the 
+handler has to be written in the assembly language rather than C.
+
+  Maciej
 
