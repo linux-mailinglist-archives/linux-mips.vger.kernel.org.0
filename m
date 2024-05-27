@@ -1,139 +1,111 @@
-Return-Path: <linux-mips+bounces-3334-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3335-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A0C38D08AF
-	for <lists+linux-mips@lfdr.de>; Mon, 27 May 2024 18:32:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD1B88D0F70
+	for <lists+linux-mips@lfdr.de>; Mon, 27 May 2024 23:27:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ECBAF1F21DD8
-	for <lists+linux-mips@lfdr.de>; Mon, 27 May 2024 16:32:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8295328300D
+	for <lists+linux-mips@lfdr.de>; Mon, 27 May 2024 21:27:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D56261FE5;
-	Mon, 27 May 2024 16:32:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="DOlHSyAF";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EzRLbrem"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DD49161306;
+	Mon, 27 May 2024 21:27:52 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from wfhigh3-smtp.messagingengine.com (wfhigh3-smtp.messagingengine.com [64.147.123.154])
+Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C962C17D2;
-	Mon, 27 May 2024 16:32:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63B216133E
+	for <linux-mips@vger.kernel.org>; Mon, 27 May 2024 21:27:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.83
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716827556; cv=none; b=arAHM2Wy5ssy71U9PCnA0RfrS7bflpm32lFxbZH7Fr1tczPUgNVXxslDJrIuUAxgWs+/4/rGtvcpMtB73/WZTR/84kvKIKUBibmsH4cPeSTEeY+iNWww9UN5r53d8jN/c1LxklrruJYUiyW2NTHJvPYSr0d9ss1TMExsr+F1nLU=
+	t=1716845272; cv=none; b=b+gxKccwmDGvk6c3ERo9Yr0yIP/Z3xrhIUsziTDoITVW3pJurlasrS0ZLxFL7esFqXQrzG0twVesg9sl1D4wvPeJ1efa+wyDKuTMyCZ9wD8gr/ujXJa8Sn+FgKz7mieFPi/Bke27sI6grAzyBfd4rsJaUBRZu1v7HdRakph5V8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716827556; c=relaxed/simple;
-	bh=vvZ/FbEHkHjmV4YVtrOr07e4SJaIpDJtFPbO2aNqId0=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=X7bYtZcTvaQfizoBpHrrtse7C4gumJ9gS+l6D9+pcB4zlwj4YKEFTlmccGHqzXpYRCcpzD70virV91FzDbTejKhbaZkOgHIBP8uiBzt/o0tZnnUFpKs/5HO0R/CvmtNq52V66zfvyws/UZXl5xzlR739Y90l0+Bpg811Z8DLRgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=DOlHSyAF; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=EzRLbrem; arc=none smtp.client-ip=64.147.123.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailfhigh.west.internal (Postfix) with ESMTP id 800FD18000A9;
-	Mon, 27 May 2024 12:32:33 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Mon, 27 May 2024 12:32:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1716827553;
-	 x=1716913953; bh=x9BxI7LFCFkFrM7Q7G2UlUaRQ+JZjCElOdG4eDd2QZk=; b=
-	DOlHSyAFRBV2Mx/yoQUqxNcEmIiKW/GwGshwVqBYrQSBRxAVWowiOVzcEhjhA+fB
-	XtqIigGL/JpZoDv502EyXr5HBsLEh8ovEexssgrcl3JAk5NnazoRuHcFat0gdIFt
-	WTOhrFyDIoWZYn1WFst/+gPf8sJrwcgIt0eCEcUgs4wHPciLSsKTigQzWoDqvrn1
-	HGO3CGFhT7FVXDi808om8xYMMKp27cKK2awOfboGxzDlxJ94ytEhOoys1QWa9xfi
-	Eul8N5jZq4N42rROWGQ6gy/9/9WZwWu5Djbl0jkRy1GjY4O72JxDuyPkEetUvwTd
-	wO0UxAgy5wLHF6yC2boSSg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1716827553; x=
-	1716913953; bh=x9BxI7LFCFkFrM7Q7G2UlUaRQ+JZjCElOdG4eDd2QZk=; b=E
-	zRLbrem9B11b3QyZ5S6rJQaBGIeTJA5k3Df96Me+aQ6QYrVIab0ypx1XJZRUPHyX
-	LqZAKRCUc9KD4IIi4c5sT3M4s0KS9EOHAQWBQJIUbyMfO6k7aPikgMoSxvXeoWv4
-	I6K4kFxm3zzCM/Cuk5qQSsoPkQUX/MAcUGgLvmFrijf5+nhu3cpfyXPQpyKJLOg+
-	xDB1vXr/xk57NfazKFmcSbJ4Ok3vhd+SBA1XGOaRPoODSwLvyC5epMo8O8E1II6w
-	mmx6ufFb2sFfUbtBHgs3YEox7jGaoeYu9w4IvKjLGYIRslOLIS1o3wFIRyzW/JoK
-	A6fybOG+tLeGaPhQfHJvA==
-X-ME-Sender: <xms:oLVUZhPCTZy0dV6wRPWdZEKtMWRq1_ctX1olunHacysejeYJqs8K8g>
-    <xme:oLVUZj_Q8hQ47ybqxnJHCblDxf91ybhPR6vHuW7nvbQ2VHT7bkCRW7aEw3sJRPAeP
-    j-36S_8A7dU90xJDX4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdejgedgleelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
-    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
-    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:oLVUZgSd76ViWuBKm_4CkA_HTmf0j12gauMghmwtYyHmKcLXHnegDQ>
-    <xmx:oLVUZtveqmox785dgDlQI-Z0uT-puGopVSwe_BNFlKDBuv9Rva6sOQ>
-    <xmx:oLVUZpdpIYfhoDcepnSrSRj6ZMXIA_APGcz4teLqoqn-mvBb_fATgg>
-    <xmx:oLVUZp07MlhMW91f5DVk0czmvJ3kHRsQIiR71beLbG-dC8Q3zo4_kw>
-    <xmx:obVUZiEJRuFrOK4hgbiPkzTBa6CAzEtwSY0i-Cb-K2WAfsJrRQtBo1T5>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id A288536A0074; Mon, 27 May 2024 12:32:32 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-491-g033e30d24-fm-20240520.001-g033e30d2
+	s=arc-20240116; t=1716845272; c=relaxed/simple;
+	bh=hcPCGtyNt9BtsRv3MK9CcRwmRQmt//+7sIK53y3Zy5s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RXvJo0eaiUvw+iQ1HEVQP1T5rCJgpABjmK6mZ9UH75gXUgpj7F58/02dYyNg2KkuCa5ReIKGDOHpXUXipkdksQtE5nj0gScEhaxuKMxlheL2TA02vJdrXZZ1pVJRf8BfEYLRO4WXzLEa+eisVi6abM8tqW59c0vmrA8pjS6fleo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.83
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
+Received: from localhost (88-113-26-230.elisa-laajakaista.fi [88.113.26.230])
+	by fgw22.mail.saunalahti.fi (Halon) with ESMTP
+	id f5f62320-1c6f-11ef-8e2a-005056bdf889;
+	Tue, 28 May 2024 00:27:47 +0300 (EEST)
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	linux-mips@vger.kernel.org
+Cc: Dong Aisheng <aisheng.dong@nxp.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Jacky Bai <ping.bai@nxp.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Sean Wang <sean.wang@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH v1 00/11] pinctrl: pinmux: Embed and reuse struct pinfunction
+Date: Tue, 28 May 2024 00:24:35 +0300
+Message-ID: <20240527212742.1432960-1-andy.shevchenko@gmail.com>
+X-Mailer: git-send-email 2.45.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <9947f7a5-1a95-48f2-b0eb-0385eb2b3d55@app.fastmail.com>
-In-Reply-To: <87sey3b6de.ffs@tglx>
-References: <20240517-loongson_nodecnt-v2-1-5bd0bb20ff5f@flygoat.com>
- <87sey3b6de.ffs@tglx>
-Date: Mon, 27 May 2024 17:32:13 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Thomas Gleixner" <tglx@linutronix.de>,
- "Huacai Chen" <chenhuacai@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Daniel Lezcano" <daniel.lezcano@linaro.org>
-Cc: linux-kernel@vger.kernel.org,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH v2] clocksource: Add node counter timer driver for MIPS/Loongson64
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
+As promised to Linus W. there is a series that converts struct function_desc
+to use struct pinfunction. With this it both struct group_desc and struct
+function_desc will rely on the generic data types (struct pingroup and struct
+pinfunction respectively).
 
+I haven't compiled everything, some builds might fail. Anyway, comments, reviews,
+testing are all appreciated.
 
-=E5=9C=A82024=E5=B9=B45=E6=9C=8827=E6=97=A5=E4=BA=94=E6=9C=88 =E4=B8=8B=E5=
-=8D=884:51=EF=BC=8CThomas Gleixner=E5=86=99=E9=81=93=EF=BC=9A
-> Jiaxun!
->
-Hi Thomas,
-[...]
->
-> What's this indirection for? Why dont you update=20
-[...]
->
->> +static struct clocksource nodecnt_clocksource =3D {
->> +	.name	=3D "nodecnt",
->> +	.read	=3D nodecnt_clocksource_read,
->
-> the read function pointer here and spare the indirection?
-Smart! sched_clock takes slightly different function pointer argument ty=
-pe
-but as we don't use the argument anyway, it should be safe to relax this
-indirection.
+Andy Shevchenko (11):
+  pinctrl: berlin: Make use of struct pinfunction
+  pinctrl: equilibrium: Make use of struct pinfunction
+  pinctrl: ingenic: Provide a helper macro INGENIC_PIN_FUNCTION()
+  pinctrl: mediatek: Provide a helper macro PINCTRL_PIN_FUNCTION()
+  pinctrl: pinmux: Add a convenient define PINCTRL_FUNCTION_DESC()
+  pinctrl: pinmux: Embed struct pinfunction into struct function_desc
+  pinctrl: imx: Convert to use func member
+  pinctrl: ingenic: Convert to use func member
+  pinctrl: keembay: Convert to use func member
+  pinctrl: mediatek: Convert to use func member
+  pinctrl: pinmux: Remove unused members from struct function_desc
 
-Will fix in v3.
+ drivers/pinctrl/berlin/berlin.c           |  33 +-
+ drivers/pinctrl/berlin/berlin.h           |   6 -
+ drivers/pinctrl/core.h                    |   2 +-
+ drivers/pinctrl/freescale/pinctrl-imx.c   |  14 +-
+ drivers/pinctrl/mediatek/pinctrl-moore.c  |  10 +-
+ drivers/pinctrl/mediatek/pinctrl-moore.h  |   6 +
+ drivers/pinctrl/mediatek/pinctrl-mt7622.c |  32 +-
+ drivers/pinctrl/mediatek/pinctrl-mt7623.c |  42 +-
+ drivers/pinctrl/mediatek/pinctrl-mt7629.c |  20 +-
+ drivers/pinctrl/mediatek/pinctrl-mt7981.c |  34 +-
+ drivers/pinctrl/mediatek/pinctrl-mt7986.c |  24 +-
+ drivers/pinctrl/pinctrl-equilibrium.c     |  18 +-
+ drivers/pinctrl/pinctrl-equilibrium.h     |  12 -
+ drivers/pinctrl/pinctrl-ingenic.c         | 707 +++++++++++-----------
+ drivers/pinctrl/pinctrl-keembay.c         |  22 +-
+ drivers/pinctrl/pinmux.c                  |  15 +-
+ drivers/pinctrl/pinmux.h                  |  19 +-
+ 17 files changed, 501 insertions(+), 515 deletions(-)
 
-Thanks
->
-> Thanks
->
->         tglx
+-- 
+2.45.1
 
---=20
-- Jiaxun
 
