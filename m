@@ -1,262 +1,325 @@
-Return-Path: <linux-mips+bounces-3324-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3325-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B74A8CF4AA
-	for <lists+linux-mips@lfdr.de>; Sun, 26 May 2024 17:03:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E4B78CF76A
+	for <lists+linux-mips@lfdr.de>; Mon, 27 May 2024 04:21:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C7E9281114
-	for <lists+linux-mips@lfdr.de>; Sun, 26 May 2024 15:03:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 915851F213F5
+	for <lists+linux-mips@lfdr.de>; Mon, 27 May 2024 02:21:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 336E417756;
-	Sun, 26 May 2024 15:02:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 419D51FAA;
+	Mon, 27 May 2024 02:21:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="byNlD+xq";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UgRuQ8Qj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ksYQ7rkd"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from wfout8-smtp.messagingengine.com (wfout8-smtp.messagingengine.com [64.147.123.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 283FF1773D;
-	Sun, 26 May 2024 15:02:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A090E38C;
+	Mon, 27 May 2024 02:21:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716735777; cv=none; b=NkeBAmyGJB2A2JgUTj2bl4EJ1bM4aSor6ZI7i88uMwil+z7oOEhJVIHEGlYIZiD94fxWJ0wM2HSbZCPMbNQeu4JscZt2UoUh4bA1BjB5nVehThixCs82HnekX5HpkNHS54kFTw1vp+8ugC3aB52IR7Q8wugrEbDpdQrPvpWcxa8=
+	t=1716776462; cv=none; b=JkX0PD+qLpLLNHaxTVE+bwa9BoRPt2wQZRmcW/+yLZttHC/7HgkYoiy2dyGCetba/jgPqoXo0dNb+aWWuCdFedDLUK9r3rBxbumClH08W08/wUWheo1Zlyo2r4NadKtQCRUutmgZ4WMN566nAMogrBIG2opdBe5n8PiZ7e+Rwco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716735777; c=relaxed/simple;
-	bh=MiAHNYRovMXshXgiTw6K2ZIPBGUR8TTQAYUWxWuE/g0=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=HOYE0eyjtudeKRS+IDP1hMLDU8Sz+bDsc1cR10TubvXyp+kkiT3CFRwZfBafPQhbwY4McJ2ZKtiBT7xqm85Q0phWUI26Etog+RywNgkySuYRPobObbGdXMcDlYxl+hO5VOALgyVK8XqSKDmPa41Zvae7gUmVA1tVEh0AfIHsXvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=byNlD+xq; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=UgRuQ8Qj; arc=none smtp.client-ip=64.147.123.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailfout.west.internal (Postfix) with ESMTP id 0B1441C000C5;
-	Sun, 26 May 2024 11:02:53 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Sun, 26 May 2024 11:02:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1716735773;
-	 x=1716822173; bh=OERK5ughi7qdH+rJKwLlPV1a5cd/Fg+ElYS7NyPvt1o=; b=
-	byNlD+xqVZDwXo/5y7QEuwpD3t05AEM4H14PJBvC5vUgayoYU6blVrydEEq6mXXC
-	IfcfOGrB4E3WieyksmoIsI/aguWzLwBS8iptHPemWa25nHkpREnI2Atq5UQLOEX6
-	WZyJ98U4KU5HRn1KSDorTC0M0bvQkOxZsO+ykEiKfyFl6qoyeZJvOeQXs411chFk
-	QTTu+BCL3303y/KOhDcxUC6VWhjD8xZHH8AiYZPYCiJFHCzCiPT+Ya0QBBQNUU/Y
-	QrDWLYPKkdupqSrXCV3MWHbpNgacvc6ZOE9DZWxFQTVmWTWQ5DrjGvPNCL6I1Oke
-	phNzLBG3tFAxAX4yrPcvJA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1716735773; x=
-	1716822173; bh=OERK5ughi7qdH+rJKwLlPV1a5cd/Fg+ElYS7NyPvt1o=; b=U
-	gRuQ8Qj+fKYjBYC5puORZ6CpTb2tKJzIiX54nZJgFwjvL2nYepZUmlKoL9n1zd42
-	U0it2OM0VxHqjRMNsFmZUumhbJc6snpqheIsJspgvmrahuq2jEsqCAyzhcLmNDGC
-	qSAMMwtUHH3tVLlMlz+oNTc6ESwZC7CisaCv57k4rJnBijclm2gMEchNdkWqDKwz
-	RQPBYaT50ngN1/mG4HJZK7BAwppxFexOK4TMSv+QkpHBB4Ub8OLfW3i7uF37vMSB
-	vnX1VL0ebkzkc0sFYP/ZFshtbADtzkw7l42M2EUcjDAq6q4Ggyi3fnanBKbPzZJ3
-	LEsBpihdmY38/CPF1/sqg==
-X-ME-Sender: <xms:HE9TZrZ4L1tunzP_5XoWmOiDB6CdFYvml_u8TGzwDnOq-ZEw0ctU6A>
-    <xme:HE9TZqYFaN2AzYyW4nFXm95VCWwuBC4-7MD0iexsTApbHJfeSvRMSrPn9wYbW2THY
-    vsILXQYr3Vcn8pMLrM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdejvddgkedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
-    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
-    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:HU9TZt_jxdpLF91XSyuakIXBPLQ1DvmeCqkKTbuio3BFbQqysob9AQ>
-    <xmx:HU9TZhrMc6mn3g5Y0BwTxgmuXfxqDNi2Q3xMImJizD6YfLV1cm2uLQ>
-    <xmx:HU9TZmoH6R-S9Tj4YNb1FFwocHtPZEKIUgyrY2jcJMLun1qqHm0k3A>
-    <xmx:HU9TZnQAgDWu1Pbt_qiBGucbLXlFfQTtVtTk2zz92xLamu0ZvsKqwQ>
-    <xmx:HU9TZvk80CGzvXcP4WmZHAO3KKQaAAS9DEkDRGPqlP1xu5Cw4CVFgOza>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id E054C36A0074; Sun, 26 May 2024 11:02:52 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-480-g515a2f54a-fm-20240515.001-g515a2f54
+	s=arc-20240116; t=1716776462; c=relaxed/simple;
+	bh=8xvabG6/BcJ5K1hea946q4r4qo0WFZdduPQJhPCnuzE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DTJnp6V7OVd9bSnE0q9MujxN1cjZwb3aKwgT1rdmdqwduiXc4u6VrcLAMcnqCYoIXBYxpgzu9E6+iJz4qN32/zLS7Qqgors6O+2eYohRhv1hSQECCsmuIERctM3sZy9kgiMMfQjw6QnJe7Uft+7z6PlqR12+kwsiwzEFrwmRql0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ksYQ7rkd; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6f6bddf57f6so5993811b3a.0;
+        Sun, 26 May 2024 19:21:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716776460; x=1717381260; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kTCB9YMJ5c3P04qp9UfuZvhdVWxo9nPAMP6wDm7zFWI=;
+        b=ksYQ7rkdFyptdrIG/G9PMKTJw/avs8M5F3bUzJx2D+sVcsAyDu17K516PAovP34fFq
+         yw5eeZqXuXVw4ZxJkA0ATuUAIDbcGaFmE63OaKR0gfaEEkLdHzGIiTs8jx4ndxvcEYsy
+         1nYMC/A0s0REjKY/EwZbp7yl6YWjbLskvh6w28f35TAdGXoFyFhonQEI0KeOc0/E5g4c
+         1iXeUSZW8ZaBTIJ8XRjFuyajL+vmytI1VSnG9JMrrFJAPbCLiWwry7hwRry8SDZhfEkI
+         kDsQvHn22ZL+VqZQj7xSt5BXmy0Mk7+rZ5zlFlUKwdE5/khWpVSFOwgoWaLa78EcAWtD
+         504A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716776460; x=1717381260;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kTCB9YMJ5c3P04qp9UfuZvhdVWxo9nPAMP6wDm7zFWI=;
+        b=nHcIr3nT8RxP0zIzsSeO3xdH9vmXcAZ/Ht8wOIiP83O6D3yY3SnPv8btR7v6z6AB7u
+         WTBNFPhPLuzNjsPRtNr4H2Tuia6Xu6VVlXXN+dhz6uRgvejYhjdeX5r+0E4/wfwej0I7
+         +pw3/flitSI5vGvqNloBJ1JpZ23JfmQ1mcim+i68KUOiUp09BG0mpKAyavbi+cSOxqHI
+         22AY6TxVdjlHpQCi9kbQgJFWIzw/UhTA70P9aTYmy4hxZDUoqMQc4ePLKbKM6bhLYwbv
+         2fICrYq6b59SY80WZHPuw3cjC/k+lS2+99Z5fhkOfQmGmkHODM7WM9edc677u95JH4CO
+         VCdg==
+X-Forwarded-Encrypted: i=1; AJvYcCUXUf7wz9WtL4oHiovimU6w/jakABiuZMrcOsQpIeac+vL062MU8peLiBsatVE8ozJQwqyKWYiIRKHE3Qdxed9XrMztQCSR67MVR8qBfifcCxpIMkrLhaNDNa+de5vRdJV4mAiBntNbdw==
+X-Gm-Message-State: AOJu0YwNYltSC+QBx9AzXQ+Zk7zo0vwKZAJNvPJTjWmeX+rKtVcYZkVF
+	3FeA5zZyWzUBSKdRzPsiaaYB55yEeLjw1JwrJaR/d7EqeeJpbn4N
+X-Google-Smtp-Source: AGHT+IHIpbifuhRbtMptst2IR+v5hq6qg/hEKOC0HACV/2qiQJwQlm1FgP1fRHAPgl4u3HkI4dBG/A==
+X-Received: by 2002:aa7:9302:0:b0:6f3:f30a:19b with SMTP id d2e1a72fcca58-6f8f38010f7mr7553576b3a.18.1716776459707;
+        Sun, 26 May 2024 19:20:59 -0700 (PDT)
+Received: from localhost.localdomain ([36.112.179.1])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-6822198a705sm5004137a12.36.2024.05.26.19.20.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 May 2024 19:20:59 -0700 (PDT)
+From: liweihao <cn.liweihao@gmail.com>
+X-Google-Original-From: liweihao <liweihao@loongson-pc>
+To: arinc.unal@arinc9.com,
+	sergio.paracuellos@gmail.com,
+	sean.wang@kernel.org,
+	linus.walleij@linaro.org,
+	matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com
+Cc: linux-mips@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Weihao Li <cn.liweihao@gmail.com>
+Subject: [PATCH] pinctrl: ralink: mt76x8: fix pinmux function
+Date: Mon, 27 May 2024 10:20:36 +0800
+Message-Id: <20240527022036.31985-1-user@blabla>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <08ad13a3-45f8-4121-8e95-8a17dfe4773b@app.fastmail.com>
-In-Reply-To: <alpine.DEB.2.21.2405261326260.1257@angie.orcam.me.uk>
-References: <20240502-mips_debug_ll-v3-0-3b61f30e484c@flygoat.com>
- <3dcf3ac1-5494-482a-a80a-df4126e6ae59@app.fastmail.com>
- <3d6883ed-f8f4-44e5-a184-e5499c44f0f7@app.fastmail.com>
- <Zk2mt/FsgltvhVzf@alpha.franken.de>
- <13aa508f-6830-4d52-87fd-5063f737c990@app.fastmail.com>
- <a62c1c0b-0b2a-4b3f-85df-da586e103fcb@app.fastmail.com>
- <alpine.DEB.2.21.2405261326260.1257@angie.orcam.me.uk>
-Date: Sun, 26 May 2024 16:02:32 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-kernel@vger.kernel.org,
- =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Subject: Re: [PATCH v3 0/9] MIPS: Unify low-level debugging functionalities
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
+From: Weihao Li <cn.liweihao@gmail.com>
 
+The current version of the pinctrl driver has some issues:
 
-=E5=9C=A82024=E5=B9=B45=E6=9C=8826=E6=97=A5=E4=BA=94=E6=9C=88 =E4=B8=8B=E5=
-=8D=881:44=EF=BC=8CMaciej W. Rozycki=E5=86=99=E9=81=93=EF=BC=9A
-> On Wed, 22 May 2024, Jiaxun Yang wrote:
->
->> That being said, have you noticed that prom_putchar and early_printk =
-is
->> a non-extant on generic mach, ingenic, ralink etc? That's because we
->> really don't want to introduce any platform specific UART code for
->> early debugging on new platforms. With DEBUG_LL introduced by Arm it's
->> only a Kconfig option to do the trick.
+1. Duplicated "gpio" pmx function
 
-Hi Maciej,
+The common code will add a "gpio" pmx functon to every pin group, so
+it's not necessary to define a separate "gpio" pmx function in pin
+groups.
 
-Thanks for your thoughts, my two cents below.
->
->  IMHO that is however the logical thing to do.  And then you need no m=
-agic=20
-> options to fiddle with and say a distribution kernel will dump whateve=
-r it=20
-> has to say if something wrong has happened early on.
+2. Duplicated pmx function name
 
-This is a strict debug only options, we are not expecting any distributi=
-on
-kernel to enable it. It has made itself explicit that no production devi=
-ce
-should enable it.
+There are some same function name in different pin groups, which will
+cause some problems. For example, when we want to use PAD_GPIO0 as
+refclk output function, the common clk framework code will search the
+entire pin function lists, then return the first one matched, in this
+case the matched function list only include the PAD_CO_CLKO pin group
+because there are three "refclk" pin function, which is added by
+refclk_grp, spi_cs1_grp and gpio_grp.
 
-Setting UART address for debug console by developers know what are they
-doing is a proven approach among multiple places in multiple projects.
+To solve this problem, a simple way is just add a pingrp refix to
+function name like mt7620 pinctrl driver does.
 
-For kernel we have general earlycon cmdline option that would take MMIO
-base address, Arm's DEBUG_LL had taken a similar approach and U-Boot have
-CONFIG_DEBUG_UART_BASE, even our old zboot debug print code is taking su=
-ch
-approach.
+3. Useless "-" or "rsvd" functon
 
-It takes a balance between platform dependent code addition and bring-up
-debugging capability. I fail to see why does it suddenly become an undes=
-ired
-thing here.
+It's really unnecessary to add a reserved pin mux function to the
+function lists, because we never use it.
 
->
->  IOW just wire `prom_putchar' as required, using C code preferably.  N=
-B=20
-> YAMON does have a `print' entry point for console output, so for the M=
-alta=20
-> platform you can trivially use just that, no need for messy ad hoc 825=
-0=20
-> code.
+Signed-off-by: Weihao Li <cn.liweihao@gmail.com>
+---
+ drivers/pinctrl/mediatek/pinctrl-mt76x8.c | 88 +++++++----------------
+ 1 file changed, 27 insertions(+), 61 deletions(-)
 
-Sadly for the majority of modern MIPS devices are dominated by U-Boot or
-vendor's simple loader. In most cases, runtime APIs are not provided by
-default. Even if it's enabled, there are still a couple of reasons preve=
-nting
-it to be utilized properly. U-Boot relies on global pointer stored in K0=
- to
-save global runtime data, kernel will clobber it very early and makes U-=
-Boot
-non-functional. On devices with limited memory, it's easy to get U-Boot =
-memory
-being clobbered by kernel and render U-Boot's runtime useless anyway.
+diff --git a/drivers/pinctrl/mediatek/pinctrl-mt76x8.c b/drivers/pinctrl/mediatek/pinctrl-mt76x8.c
+index e7d6ad2f62e4e..2bc8d4409ca27 100644
+--- a/drivers/pinctrl/mediatek/pinctrl-mt76x8.c
++++ b/drivers/pinctrl/mediatek/pinctrl-mt76x8.c
+@@ -37,36 +37,30 @@
+ 
+ static struct mtmips_pmx_func pwm1_grp[] = {
+ 	FUNC("sdxc d6", 3, 19, 1),
+-	FUNC("utif", 2, 19, 1),
+-	FUNC("gpio", 1, 19, 1),
++	FUNC("pwm1 utif", 2, 19, 1),
+ 	FUNC("pwm1", 0, 19, 1),
+ };
+ 
+ static struct mtmips_pmx_func pwm0_grp[] = {
+ 	FUNC("sdxc d7", 3, 18, 1),
+-	FUNC("utif", 2, 18, 1),
+-	FUNC("gpio", 1, 18, 1),
++	FUNC("pwm0 utif", 2, 18, 1),
+ 	FUNC("pwm0", 0, 18, 1),
+ };
+ 
+ static struct mtmips_pmx_func uart2_grp[] = {
+ 	FUNC("sdxc d5 d4", 3, 20, 2),
+-	FUNC("pwm", 2, 20, 2),
+-	FUNC("gpio", 1, 20, 2),
++	FUNC("uart2 pwm", 2, 20, 2),
+ 	FUNC("uart2", 0, 20, 2),
+ };
+ 
+ static struct mtmips_pmx_func uart1_grp[] = {
+ 	FUNC("sw_r", 3, 45, 2),
+-	FUNC("pwm", 2, 45, 2),
+-	FUNC("gpio", 1, 45, 2),
++	FUNC("uart1 pwm", 2, 45, 2),
+ 	FUNC("uart1", 0, 45, 2),
+ };
+ 
+ static struct mtmips_pmx_func i2c_grp[] = {
+-	FUNC("-", 3, 4, 2),
+ 	FUNC("debug", 2, 4, 2),
+-	FUNC("gpio", 1, 4, 2),
+ 	FUNC("i2c", 0, 4, 2),
+ };
+ 
+@@ -76,128 +70,100 @@ static struct mtmips_pmx_func wdt_grp[] = { FUNC("wdt", 0, 38, 1) };
+ static struct mtmips_pmx_func spi_grp[] = { FUNC("spi", 0, 7, 4) };
+ 
+ static struct mtmips_pmx_func sd_mode_grp[] = {
+-	FUNC("jtag", 3, 22, 8),
+-	FUNC("utif", 2, 22, 8),
+-	FUNC("gpio", 1, 22, 8),
++	FUNC("sdxc jtag", 3, 22, 8),
++	FUNC("sdxc utif", 2, 22, 8),
+ 	FUNC("sdxc", 0, 22, 8),
+ };
+ 
+ static struct mtmips_pmx_func uart0_grp[] = {
+-	FUNC("-", 3, 12, 2),
+-	FUNC("-", 2, 12, 2),
+-	FUNC("gpio", 1, 12, 2),
+ 	FUNC("uart0", 0, 12, 2),
+ };
+ 
+ static struct mtmips_pmx_func i2s_grp[] = {
+ 	FUNC("antenna", 3, 0, 4),
+ 	FUNC("pcm", 2, 0, 4),
+-	FUNC("gpio", 1, 0, 4),
+ 	FUNC("i2s", 0, 0, 4),
+ };
+ 
+ static struct mtmips_pmx_func spi_cs1_grp[] = {
+-	FUNC("-", 3, 6, 1),
+-	FUNC("refclk", 2, 6, 1),
+-	FUNC("gpio", 1, 6, 1),
++	FUNC("spi refclk", 2, 6, 1),
+ 	FUNC("spi cs1", 0, 6, 1),
+ };
+ 
+ static struct mtmips_pmx_func spis_grp[] = {
+ 	FUNC("pwm_uart2", 3, 14, 4),
+-	FUNC("utif", 2, 14, 4),
+-	FUNC("gpio", 1, 14, 4),
++	FUNC("spis utif", 2, 14, 4),
+ 	FUNC("spis", 0, 14, 4),
+ };
+ 
+ static struct mtmips_pmx_func gpio_grp[] = {
+ 	FUNC("pcie", 3, 11, 1),
+-	FUNC("refclk", 2, 11, 1),
+-	FUNC("gpio", 1, 11, 1),
+-	FUNC("gpio", 0, 11, 1),
++	FUNC("gpio refclk", 2, 11, 1),
+ };
+ 
+ static struct mtmips_pmx_func p4led_kn_grp[] = {
+-	FUNC("jtag", 3, 30, 1),
+-	FUNC("utif", 2, 30, 1),
+-	FUNC("gpio", 1, 30, 1),
++	FUNC("p4led_kn jtag", 3, 30, 1),
++	FUNC("p4led_kn utif", 2, 30, 1),
+ 	FUNC("p4led_kn", 0, 30, 1),
+ };
+ 
+ static struct mtmips_pmx_func p3led_kn_grp[] = {
+-	FUNC("jtag", 3, 31, 1),
+-	FUNC("utif", 2, 31, 1),
+-	FUNC("gpio", 1, 31, 1),
++	FUNC("p3led_kn jtag", 3, 31, 1),
++	FUNC("p3led_kn utif", 2, 31, 1),
+ 	FUNC("p3led_kn", 0, 31, 1),
+ };
+ 
+ static struct mtmips_pmx_func p2led_kn_grp[] = {
+-	FUNC("jtag", 3, 32, 1),
+-	FUNC("utif", 2, 32, 1),
+-	FUNC("gpio", 1, 32, 1),
++	FUNC("p2led_kn jtag", 3, 32, 1),
++	FUNC("p2led_kn utif", 2, 32, 1),
+ 	FUNC("p2led_kn", 0, 32, 1),
+ };
+ 
+ static struct mtmips_pmx_func p1led_kn_grp[] = {
+-	FUNC("jtag", 3, 33, 1),
+-	FUNC("utif", 2, 33, 1),
+-	FUNC("gpio", 1, 33, 1),
++	FUNC("p1led_kn jtag", 3, 33, 1),
++	FUNC("p1led_kn utif", 2, 33, 1),
+ 	FUNC("p1led_kn", 0, 33, 1),
+ };
+ 
+ static struct mtmips_pmx_func p0led_kn_grp[] = {
+-	FUNC("jtag", 3, 34, 1),
+-	FUNC("rsvd", 2, 34, 1),
+-	FUNC("gpio", 1, 34, 1),
++	FUNC("p0led_kn jtag", 3, 34, 1),
+ 	FUNC("p0led_kn", 0, 34, 1),
+ };
+ 
+ static struct mtmips_pmx_func wled_kn_grp[] = {
+-	FUNC("rsvd", 3, 35, 1),
+-	FUNC("rsvd", 2, 35, 1),
+-	FUNC("gpio", 1, 35, 1),
+ 	FUNC("wled_kn", 0, 35, 1),
+ };
+ 
+ static struct mtmips_pmx_func p4led_an_grp[] = {
+-	FUNC("jtag", 3, 39, 1),
+-	FUNC("utif", 2, 39, 1),
+-	FUNC("gpio", 1, 39, 1),
++	FUNC("p4led_an jtag", 3, 39, 1),
++	FUNC("p4led_an utif", 2, 39, 1),
+ 	FUNC("p4led_an", 0, 39, 1),
+ };
+ 
+ static struct mtmips_pmx_func p3led_an_grp[] = {
+-	FUNC("jtag", 3, 40, 1),
+-	FUNC("utif", 2, 40, 1),
+-	FUNC("gpio", 1, 40, 1),
++	FUNC("p3led_an jtag", 3, 40, 1),
++	FUNC("p3led_an utif", 2, 40, 1),
+ 	FUNC("p3led_an", 0, 40, 1),
+ };
+ 
+ static struct mtmips_pmx_func p2led_an_grp[] = {
+-	FUNC("jtag", 3, 41, 1),
+-	FUNC("utif", 2, 41, 1),
+-	FUNC("gpio", 1, 41, 1),
++	FUNC("p2led_an jtag", 3, 41, 1),
++	FUNC("p2led_an utif", 2, 41, 1),
+ 	FUNC("p2led_an", 0, 41, 1),
+ };
+ 
+ static struct mtmips_pmx_func p1led_an_grp[] = {
+-	FUNC("jtag", 3, 42, 1),
+-	FUNC("utif", 2, 42, 1),
+-	FUNC("gpio", 1, 42, 1),
++	FUNC("p1led_an jtag", 3, 42, 1),
++	FUNC("p1led_an utif", 2, 42, 1),
+ 	FUNC("p1led_an", 0, 42, 1),
+ };
+ 
+ static struct mtmips_pmx_func p0led_an_grp[] = {
+-	FUNC("jtag", 3, 43, 1),
+-	FUNC("rsvd", 2, 43, 1),
+-	FUNC("gpio", 1, 43, 1),
++	FUNC("p0led_an jtag", 3, 43, 1),
+ 	FUNC("p0led_an", 0, 43, 1),
+ };
+ 
+ static struct mtmips_pmx_func wled_an_grp[] = {
+-	FUNC("rsvd", 3, 44, 1),
+-	FUNC("rsvd", 2, 44, 1),
+-	FUNC("gpio", 1, 44, 1),
+ 	FUNC("wled_an", 0, 44, 1),
+ };
+ 
+-- 
+2.39.2
 
-That's why many new-ish platforms such as lantiq brings it's own UART
-implementations for prom_putchar.
-
-However, for generic platform implementing prom_putchar means we need to
-introduce platform dependent code, which we had to pay all the price to
-avoid. We have many in-tree and out-of tree generic platform users who
-don't need to add any single line of code to bring up their platform,
-thanks to DeviceTree, but they still need something to help with debuggi=
-ng
-bring up process when devicetree went wrong or early panics.
-
->
->  As to intercepting exceptions, it depends.  Again YAMON does handle t=
-hat=20
-> and dumps the register state, so with the Malta you get the informatio=
-n=20
-> required.  For less capable ones it might make sense, but it ISTM like=
- a=20
-> candidate for an independent change, and then again I fail to see why =
-the=20
-> handler has to be written in the assembly language rather than C.
-
-Again for U-Boot debug exception dumping is optional and I know many dev=
-ices
-not shipping with that enabled. Even if it's enabled, it will stop to wo=
-rk
-after U-Boot's memory/global pointer being clobbered or ebase being over=
-ridden
-by kernel. Not to mention that Bootloader's exception dumping won't work
-with CPS secondary cores.
-
-Paul wrote cps-vec.S and cps-vec-ns16550.S in pure assembly for reasons.
-Stack pointer is not initialized at second core & we really want to redu=
-ce
-code footprint on secondary core to minimize side effects before coheren=
-ce
-is enabled.
-
-When the infra is here, expand it to generic early exception is just tens
-of lines. I fail to see the reason to bring in hundreds lines of C code =
-for
-the same functionality.
-
->
->   Maciej
-
-Although it's a pure technical discussion, I still want to expand that w=
-hile
-I appreciate what you have done to the MIPS, sometimes I feel like we ar=
-e not
-on the same page because you guys are away from frontliner for so long a=
-nd
-missed many contexts. MIPS is still evolving, although I never appeared =
-here
-with my corp email, I'm one of those behind the scene. I draft new archi=
-tecture
-specs, write AVP and internal simulators, do RTL coding for future core =
-products,
-helping customers design SoC products, design software architecture and =
-bringing
-them up. I kept FOSS as my hobby and I tried my best to keep upstream in=
- sync with
-modern practices.
-
-I love MIPS heritages, I own an SGI Indy and Algorithmics P-4032, I made=
- some
-fixes on MAME emulator for indy to keep kernel running on it. I'm still =
-frequently
-fascinated by those brilliant old designs. But I think we still need to =
-make progress.
-While maintaining compatibility with all those old things, we need to ad=
-opt common
-practices that have been proven by other architectures and make our own =
-innovations.
-We need to make the development process agile, so no developer is turned=
- away. We
-need to adopt modern booting protocols like EFI and ensure generic kerne=
-l is really
-generic and not being diverted because of different loading address....
-
-I don't know if you would agree with my in both technical details and id=
-eology,
-but I think it's the time to make my intention clear.
-
-Thanks
---=20
-- Jiaxun
 
