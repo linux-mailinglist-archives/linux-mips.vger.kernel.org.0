@@ -1,73 +1,74 @@
-Return-Path: <linux-mips+bounces-3331-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3332-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76B9C8D0015
-	for <lists+linux-mips@lfdr.de>; Mon, 27 May 2024 14:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E487C8D002D
+	for <lists+linux-mips@lfdr.de>; Mon, 27 May 2024 14:38:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31F35284AB2
-	for <lists+linux-mips@lfdr.de>; Mon, 27 May 2024 12:33:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0F21280D4F
+	for <lists+linux-mips@lfdr.de>; Mon, 27 May 2024 12:38:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF57B15E5A9;
-	Mon, 27 May 2024 12:33:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59D3F38FA6;
+	Mon, 27 May 2024 12:38:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xzdbb6fq"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cSOTj1+6"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35B3B15DBCA
-	for <linux-mips@vger.kernel.org>; Mon, 27 May 2024 12:33:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1328D15DBCA
+	for <linux-mips@vger.kernel.org>; Mon, 27 May 2024 12:38:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716813189; cv=none; b=Q9egfA2DQu/SkPzqHis9JMPgchm35AE77bl8LGL3H6dWTm7FbTKfld0k6mhYY4h3BQGz5oltOTAa2V76HWW9KR7nGYcICkiYDJlpaCaO+XpGOssRMLcr4M5eqsyhBYJOVgWv8tiAN3WG2DQG5BqDiqpwCVKnoan0twYJGhpaJqg=
+	t=1716813523; cv=none; b=Gp89vOCFo+rt4PGYWd3k3K9va2hAa/NPs2TjZwMREc8QzL8qqucF1uDx08Pewqczn/JCoWKR3WE/TybNYqETNa3047xnNc4UASs4ggP47k5/D73LTO8iKHVEfCKHLnA46jsDDhCxgx/nMKZ9nIA7eiekKtNtI0yBSG9Kwdwkzfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716813189; c=relaxed/simple;
-	bh=6gpy4QnlXfn+3VfnJIdKkS3eQTcH5CkCvAbl/LBAL7Y=;
+	s=arc-20240116; t=1716813523; c=relaxed/simple;
+	bh=KUPmkaVNi0PLQviM9npC6+ISIfhFnQySeRNyLrPRQXI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rubrhJ4vLZSSJ3ypBHrTXuaqMq6sc+nRWn/iJEkTGZlNH9RRoTaporveCo/kZNNnsLdfJJkKSLmGbs/KfIo6z5tNAIfYjRmZ6t2NAkF2KyPcQz1z4P4C2iWkVHol+L8o7/Cs+zjfUXj+nho09rdG8lnAwSV8xUG/mZ3zs4jJh9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xzdbb6fq; arc=none smtp.client-ip=209.85.221.42
+	 In-Reply-To:Content-Type; b=WJLRVeJ0yrW3oUb9Wfu0Qr6M/iZYx9F3VLVK5P+3wRz50Qf8y4Wk2QtugovJta606sbCA5oKyklXwPvlUUTydICemtYDsmRO3EKFvvzNmz1rnkJ0WcJ7LqEcwKZgT9yh0AGIDYRmyNBA/IqipXWAYeW+TPugcdvM5X/IHuX2B9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cSOTj1+6; arc=none smtp.client-ip=209.85.167.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-354e22bc14bso4463775f8f.1
-        for <linux-mips@vger.kernel.org>; Mon, 27 May 2024 05:33:07 -0700 (PDT)
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-52388d9ca98so16767897e87.0
+        for <linux-mips@vger.kernel.org>; Mon, 27 May 2024 05:38:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1716813186; x=1717417986; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1716813519; x=1717418319; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4PbKr6F4qyJEGh68m1meo5rRQR6WxkeJ7FMZXKENRV0=;
-        b=xzdbb6fq0LJntuZkZBwLuTISb20CAGSt8MJhSIqpmOu0fbKFrJBjur2YzKCkG/3zlF
-         BieO76tfiki5EqA4MN6au6YEbknU+cWfL5ElLfvjUsfgWmSndXJn3IjbWeH0FTxTXto1
-         6b/j3y7CSxSspyexMO3FV8dqakGw6w8kN5MUjDSSSZJaF8+JppoAeYKklOjZVq+xqk/b
-         sLoKvZqjE9pf4cwpxEkwrFiqm6B/dEjLB1O/EcDzO3sunHSD7gISnWUIWaUphIkNZYK1
-         oOl7tpzlZxe2iuoNgrvVeNLiTyHlyu/HMZy/beD6Vm1ssbxsd1ZPHSKqhoUTSM7I1T0L
-         ciCg==
+        bh=U0MksHKwBICLwuSG6OgSnqATRY+MnKcyIIXC1UuoUb4=;
+        b=cSOTj1+6tgggUjBV+F0I/iX9/C7/h5mRFTUWEaHczTBlPedAmFhH9/HhLde6D2s5yb
+         CpjoEvD2hdnHecfwb88IpdMYmGpfpuH6j23Q+9MarOkkgnYFqwelGfe7HXuUfMWoclUF
+         NaML2RsFSS36ZuAy2Dp4ppQmHETjJ+UPDbTa7OohaJVRkhdYgeEmWVqKq5JL7Ps3C2Zv
+         d9IYyCVVSXpr9YTUt4csDcEP3D5Ij1h3DNH6W4xW2Vvf7ZO3O4E8Reg3bhdwqsQgVZaW
+         IZmo0D4u9L2Ry7+dyxQJDgDBYGRmqYSmkH8Dho/T+euE8YEP14bQjket9kNpHk7C0YDz
+         oCGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716813186; x=1717417986;
+        d=1e100.net; s=20230601; t=1716813519; x=1717418319;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4PbKr6F4qyJEGh68m1meo5rRQR6WxkeJ7FMZXKENRV0=;
-        b=m1iyCbQGOpQuy8VFmXFhbxMjWGdxBB7SgK3M0xXflEGP9KwBD/3hY+nJRK6sqQTtQg
-         vVCEEQ8bp7NUakCfchgbalttqbCKeop2/RczJokfyR0zbBvESSsU/DirJOpQ6IIMS+Sg
-         3D93F0cNjvSzwU1zgvda29sARG6o0dZ8nU9gpQMeENY8aOiVzg+9wRg5raJO4Y7HKTx2
-         qn3wIZ+UYX0KqdQxBSLQMWJYiAuagGUu/3q1Y1ebPpl267FxbB/CZfeq4GFbZjto6vOP
-         PfyX3yAN0FeIVh5amNGpFKpaEnZ7kIfpLfx63Y3Djkd3m5LpG7Z9nfgyNAg/FEiWK+hN
-         /fWg==
-X-Gm-Message-State: AOJu0YzK185Wl3MH9QFbW2/fmHLxIA7Mg8bjDMyrHVSkOrcNRDFH/Vid
-	ppOQp4P0ijGgYxOdksVa3+2NRqrrSreFCvJbl/VK081PxsmGGwujRKKd5BujpYE=
-X-Google-Smtp-Source: AGHT+IF3YzofNuY7fs0Qc1CTGRPqO/DtJKUbJFULuqF8piYQueCYqw+R3VAn7929Wkj5lhKwclJHmw==
-X-Received: by 2002:adf:eccf:0:b0:349:eb59:c188 with SMTP id ffacd0b85a97d-35526d67290mr6935711f8f.5.1716813186518;
-        Mon, 27 May 2024 05:33:06 -0700 (PDT)
+        bh=U0MksHKwBICLwuSG6OgSnqATRY+MnKcyIIXC1UuoUb4=;
+        b=JPyhAKFvYsZKMNHZP6KKMBgRfY+GnL4xfpPTC3rj2mKmWuhIp4GoPrpS+nBgzSuG5r
+         uo1W9Rs80a/9MEpoUdju+pfNxlisGlNzdXFzPeORL82VgJ2g2sdlXen7PR1n7GQrFiDq
+         mOrFYxlh0ZZS6jL0Oc66YjldYBOSQA0PZmeiNZgQ8g+P+y1fiHtTiR0X1wIxi1bTszj4
+         ufKVKjwj/LvpWygHaUBuuXTZX4Xd0gKtKY+OerR4MDzKzX7A3yO6LG3PLu8ay9QfOXLP
+         w7gt854Gthxt70egcsc+v8XpqwyHUPvBZOa87CeMIP7JHTLCH7NnUW7quyBToqhLPpER
+         dv6g==
+X-Forwarded-Encrypted: i=1; AJvYcCX++3RGixRvrAvtHNMCjsPy/6ZD1kLnlxpFq6ctb7hZAz7q3KHzI323Sxdt5SYQVUp7+EPJfGCEIWfThTCv2MaAXB8bP+/dccN6GQ==
+X-Gm-Message-State: AOJu0YwSSt7EVQjIJIS48mdib71BcIe1Ml7sxkpY5nHuxf5xQbQypJIg
+	v37UiQpc2B4an4/fa/dO63r2FGBluZc0X207u8PHCNxrcg/mWklHuMkmhs9du3w=
+X-Google-Smtp-Source: AGHT+IG1nhVnExbK4ShBNQp8AOL1BeyHFQcVZ25huQqTJip9CI8Tg0co5jAULq+rDZ4Vc1qdUlRr3g==
+X-Received: by 2002:ac2:43b9:0:b0:523:ae99:b333 with SMTP id 2adb3069b0e04-52967a26df9mr6335447e87.64.1716813519261;
+        Mon, 27 May 2024 05:38:39 -0700 (PDT)
 Received: from [192.168.69.100] ([176.176.152.134])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3557a08cc1bsm9025986f8f.45.2024.05.27.05.33.05
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a626c818139sm491740266b.35.2024.05.27.05.38.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 May 2024 05:33:06 -0700 (PDT)
-Message-ID: <bcca84a0-f12b-490c-a61f-b10a9fa0395d@linaro.org>
-Date: Mon, 27 May 2024 14:33:04 +0200
+        Mon, 27 May 2024 05:38:38 -0700 (PDT)
+Message-ID: <e3cc1552-4f96-4aa0-a375-a5582094c1ae@linaro.org>
+Date: Mon, 27 May 2024 14:38:36 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -75,35 +76,42 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] MIPS: Loongson64: Include bootinfo.h in dma.c
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>, Huacai Chen
- <chenhuacai@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-mips@vger.kernel.org, kvm@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20240507-loongson64-warnings-v1-0-2cad88344e9e@flygoat.com>
- <20240507-loongson64-warnings-v1-2-2cad88344e9e@flygoat.com>
+Subject: Re: [PATCH] MIPS: Implement ieee754 NAN2008 emulation mode
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org
+References: <20240507-mips_ieee754_emul-v1-1-1dc7c0d13cac@flygoat.com>
 Content-Language: en-US
 From: =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-In-Reply-To: <20240507-loongson64-warnings-v1-2-2cad88344e9e@flygoat.com>
+In-Reply-To: <20240507-mips_ieee754_emul-v1-1-1dc7c0d13cac@flygoat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 7/5/24 20:51, Jiaxun Yang wrote:
-> dma.c defined function plat_swiotlb_setup, which is declared in
-> bootinfo.h.
+On 7/5/24 14:34, Jiaxun Yang wrote:
+> Implement ieee754 NAN2008 emulation mode.
 > 
-> Fixes warning:
-> arch/mips/loongson64/dma.c:25:13: warning: no previous prototype for ‘plat_swiotlb_setup’ [-Wmissing-prototypes]
->     25 | void __init plat_swiotlb_setup(void)
->        |             ^~~~~~~~~~~~~~~~~~
+> When this mode is enabled, kernel will accept ELF file
+> compiled for both NaN 2008 and NaN legacy, but if hardware
+> does not have capability to match ELF's NaN mode, __own_fpu
+> will fail for corresponding thread and fpuemu will then kick
+> in.
+> 
+> This mode trade performance for corretness, while maintaining
+
+"correctness"
+
+> support for both NaN mode regardless of hardware capability.
+> It is useful for multilib installation that have both types
+> of binary exist in system.
 > 
 > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > ---
->   arch/mips/loongson64/dma.c | 1 +
->   1 file changed, 1 insertion(+)
+>   Documentation/admin-guide/kernel-parameters.txt |  4 +++-
+>   arch/mips/include/asm/fpu.h                     | 15 +++++++++++++++
+>   arch/mips/kernel/elf.c                          |  4 ++++
+>   arch/mips/kernel/fpu-probe.c                    | 10 +++++++++-
+>   4 files changed, 31 insertions(+), 2 deletions(-)
 
 Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
