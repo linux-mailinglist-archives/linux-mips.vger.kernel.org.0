@@ -1,134 +1,161 @@
-Return-Path: <linux-mips+bounces-3355-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3356-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6D058D1E5A
-	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 16:20:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7D9E8D1EE4
+	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 16:32:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C09241C23093
-	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 14:20:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4063D281E27
+	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 14:32:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55EE116F270;
-	Tue, 28 May 2024 14:20:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E82F16D313;
+	Tue, 28 May 2024 14:32:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RX+0u/Yo"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="mUGXXBLk";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bpRwgVbJ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wfhigh1-smtp.messagingengine.com (wfhigh1-smtp.messagingengine.com [64.147.123.152])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C0A6A8A3;
-	Tue, 28 May 2024 14:20:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51CC1DFDE;
+	Tue, 28 May 2024 14:32:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716906007; cv=none; b=aFsW1mqh842custE3iw7a2z22wMsbXf7JXep/DDGmWYX43jtbGCJlGsMX9qFlzw0q/WI8mNS4vdVLtGULCS+FGmyf+cPnzD6/3poizGhsQkt4raiLdqRer2HouFVDjpWLSQqJrBZmQf1txPjS+E9/M2tyjVB/ScfqsP4ax5KtNo=
+	t=1716906735; cv=none; b=o+2TW5lqxvZiI4KRi0i2V7K03ZxaID0Sb7t5l1kuodWFR/eYWmFtcQ+/8FPyoSPMCH56qwHMwlSmqGdTZpd0q/9FURv764OkPI4OnpCtb6bhSP2UmOtTrsr90RnBWhDbxC/xxDaIj2+6ojt+//a23/kyHYYMmPSclnVkaYpYOe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716906007; c=relaxed/simple;
-	bh=bpQn0hcSQW6hPE3NrOFr46vQiIynNIQoCqQvX6ZahE0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bLAemgpyEm6t287UtZSVBhggWil5UNwU3REkiRLxZIzcEDzp9CPDdw03jlf8pNW7hIYzfwwrx3cgZ9IfgTkd5PrFILX8VGse6FRMpwo3eBpIY6AHZtJ5qM5nWRu+1BHIlwXzBiNNE/ajEhn3LW++zFMsrpJBTNW0gFdWFEbVR+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RX+0u/Yo; arc=none smtp.client-ip=209.85.167.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3d1d11cb556so293626b6e.2;
-        Tue, 28 May 2024 07:20:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716906005; x=1717510805; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tmcnOFfWuLtl64aa9TIaj9hn63sQ/KKgzde61ukyY2Y=;
-        b=RX+0u/Yo7mvsQNthUTkAgUO2nhkiDF0RZRpGf9lF4ymFXuVn61O6HR/aM6HRJ0JIWS
-         OWkBdi/VdUeXyR16nL9Pp/clv+/8JKAjJsqx0EsFl10kldtoLbxpYHIsxAxEZHuJwkLX
-         G+c4k4DvrqywiwgpW0hftdAunRhOEWktbNwix/OWdsenQmgqFdNWqB3wSCNtOb6ntDHr
-         Woq9l0zjnZI+xe8nBupULbnjpABpRKkP5tteo0TTIUlXYr5aT8mqp3Qyy5xYG9pKnUGS
-         SlJIj8QajNBcgOwtKeXlQF/qsbCRav6BRPiLaqMoQZIn3xuk4o4pTMnDLPm7ZNq8ae2V
-         e6Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716906005; x=1717510805;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tmcnOFfWuLtl64aa9TIaj9hn63sQ/KKgzde61ukyY2Y=;
-        b=HhQcYnJ5gPzexm4bRIcziWhDQPOFd4YsRrIPdxvWXfnsjwRwaTUZJCyNEGlRWQE7KG
-         KF0cmMNSP5F7fyB1jzuUYZ49doCSqWPLNEo3fwfu2jd40Wzmc82+j0be1bQVRA/4E90Y
-         mOVdZhKFcF2+c7GT+iMPG2JO3rcyVzxgd3rE9eWArsxjySCJiTQGVsubJM6uor/YpS5m
-         BcFQapYPiNhcHQwaEhtiaDmmQriGxetTkGS7MDfRmkvHowF00uFtt3mHR/zEUXtlhfOA
-         2yRk54XRspL0wDPklxa2FgRYO5wAvnSYgCGkQemA3hCRXtQjdOBwXkTEMLxlUJ8a4M+C
-         kGzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWPmwvsO/HHH69uBmRizx5ldjQbPCJFquOjrSZpv1Qg/N5BvvdCl/VeGXXAwIjWaZ/paimpbz3MYj8wbLt0hoQAiQPUt2Kg3R0ady/7/MJ0dJ+QKG+/Ko8Q2dEMrjGkGYAA9hRtk1ZaJCJWX0X/r2PdJLO1CdS36WtnlUDh2LWkXpjoPlM=
-X-Gm-Message-State: AOJu0YyXW33Dwjy2tYI5MDObrmrOnQomDQzqUIPmR9dp+Bwr3gck31fG
-	4UfCwg94bxqH6s6lfeiHb5HKR5K9apnY6izsy6fakOcJGFeHaTbulYJ4HcR9676H990SA+CqVi/
-	Z/yOf5j1QzSBJWBeHb9EsMtDp7Qc1AQ==
-X-Google-Smtp-Source: AGHT+IFf/tGif+N88k+BsDHerrioFJmSg7BKXYE2WrzeXw7pJ6A8L5MSkqM1O+Gw60tDphcpECwn0p6PAbc7rdEiELA=
-X-Received: by 2002:a05:6808:1a01:b0:3c9:c4a3:41a0 with SMTP id
- 5614622812f47-3d1d0ccc89cmr2138642b6e.33.1716906004937; Tue, 28 May 2024
- 07:20:04 -0700 (PDT)
+	s=arc-20240116; t=1716906735; c=relaxed/simple;
+	bh=E0twsAQJp0cxsMgxYktc9tQCh6ugKHehv97qng9KsZI=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=GVa76KvDyHXT7Z60NS7umgmT0py8Qvr40ATsszQULYIKMG2ke83sKTiv1b8pxuwDUIsK/HvsbnrAwkrXd+tN7R0N5e6P7ZB/6ndEBVdg5+KE97V2MQJsu5pW0vnbai6cakcTToaFnMIgMkNSq6UZxIvUjTIrQ1sp6bUdfnqfslQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=mUGXXBLk; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=bpRwgVbJ; arc=none smtp.client-ip=64.147.123.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailfhigh.west.internal (Postfix) with ESMTP id A549D18000E9;
+	Tue, 28 May 2024 10:32:12 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Tue, 28 May 2024 10:32:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1716906732;
+	 x=1716993132; bh=GkVpBdu2u/m4Dx1VMyzxVy0HTZ7tx3XoPoYCq0553jo=; b=
+	mUGXXBLkuIo2GMHF/8Wjuji5S0T+SwcCjPC6Y/t8okus5g5P5Ytg9L9ABI+oTP2S
+	w15ecJMQ8txN9TQYxYfZ81iDPa/tk8YNsJQ7n9xUOOc6/PNlo79I+/S2vViHOwGF
+	ingBjfO7ZOjCVTRA6/MebPtZ1oPxRBPLHp81WKMsC/0jzlOrbX2KKKGJ2XFT+Gxi
+	BTeR5Cf/6BmGnUP1pUZ7t7+hiUywVJFUsuDgZVqgQ6oqmIl3vhGyLxrQ5lFEWnRW
+	6SqQ3qznT78wKGEvdwNCQU8yXb6YPw6xJUOBFz1gBaRqra/ffRi9/juFSC12Pj8R
+	MpLtziQ5u/De7FC0dtwH9g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1716906732; x=
+	1716993132; bh=GkVpBdu2u/m4Dx1VMyzxVy0HTZ7tx3XoPoYCq0553jo=; b=b
+	pRwgVbJRWzHY/6JbV1MbwXFdlRTnV/kbCz1Bq5V34L6sRlD7INXw3b2J84rDNa+s
+	27V2VDXem5tqa0H4wzGWzQLhFcA9hfKJHjKm9iy8WvweJ2OP9RUMwf7YXgW88sJl
+	efWuAZ5TY/wtE7/2EjjvFxe9a+k+C21ImbR/CqJOc+B3eSnhQd5zBBpeP3lz63yx
+	7bmelkjPjC47zbJ7/lK7pRsMyxRipD007hFRpO/3rTfwGWUswizWSkjuDPnYNckP
+	hcRXY5i4jr4FqSq/REIwiILrGb8ydm5jHa8WIHfRw4Uvl1Fkz9w/duAhLIbWO5nn
+	/9ymi1llhl5wFA5s6Gk+Q==
+X-ME-Sender: <xms:6-pVZjx9Ej-TnDdWZvrPhfgL_CpQSv9iHDzHhMsFwT4RCdHV5UVBIQ>
+    <xme:6-pVZrRWqTodgLtqEjNkyQCD5yHVfNdfaPgv8PM6oB4jsswUKjxp3gpilR0MHVQHi
+    thuUK9D0DRG_Obiyww>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdejkedghedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
+    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
+    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:6-pVZtX6TxtsDTv_MTgnGnLg4bMsinjkYpY0E2hAmdSf0PxDOmv_Dw>
+    <xmx:6-pVZtiWqLN-ZC1dUO4cErPzhyjW8iM4DBwkwta1SD0CrRcz8lf_nA>
+    <xmx:6-pVZlAOspG1OQhL87AxSBA5Rfso90uOaZdJQVhZ4MXE3bUHbvE14g>
+    <xmx:6-pVZmKUUhTP88RB8P1-RQ06W2rrG158dmzjmf2OL9szF6iW_1xd1Q>
+    <xmx:7OpVZo7Qq5YyLR4-OjzWXxg_bpvPJmgJu_M9FMc5qy5GE96zmMHlO6wz>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 8E16A36A0074; Tue, 28 May 2024 10:32:11 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-491-g033e30d24-fm-20240520.001-g033e30d2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240527022036.31985-1-user@blabla> <CACRpkdY99LACAUsg_S4ww4U7-KU_EtkLZ+c8dsa0M85i9eJZbA@mail.gmail.com>
-In-Reply-To: <CACRpkdY99LACAUsg_S4ww4U7-KU_EtkLZ+c8dsa0M85i9eJZbA@mail.gmail.com>
-From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date: Tue, 28 May 2024 16:19:53 +0200
-Message-ID: <CAMhs-H-3yM3sLvgtOn1KWPF-Ch52hqZZXbFPe2YP=xgFjZLDug@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: ralink: mt76x8: fix pinmux function
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: liweihao <cn.liweihao@gmail.com>, arinc.unal@arinc9.com, sean.wang@kernel.org, 
-	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com, 
-	linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <558b1d58-08a5-410d-97b8-e77def7c1cf8@app.fastmail.com>
+In-Reply-To: <9947f7a5-1a95-48f2-b0eb-0385eb2b3d55@app.fastmail.com>
+References: <20240517-loongson_nodecnt-v2-1-5bd0bb20ff5f@flygoat.com>
+ <87sey3b6de.ffs@tglx> <9947f7a5-1a95-48f2-b0eb-0385eb2b3d55@app.fastmail.com>
+Date: Tue, 28 May 2024 15:31:52 +0100
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Thomas Gleixner" <tglx@linutronix.de>,
+ "Huacai Chen" <chenhuacai@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Daniel Lezcano" <daniel.lezcano@linaro.org>
+Cc: linux-kernel@vger.kernel.org,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH v2] clocksource: Add node counter timer driver for MIPS/Loongson64
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 28, 2024 at 3:54=E2=80=AFPM Linus Walleij <linus.walleij@linaro=
-.org> wrote:
->
-> On Mon, May 27, 2024 at 4:21=E2=80=AFAM liweihao <cn.liweihao@gmail.com> =
-wrote:
->
-> > From: Weihao Li <cn.liweihao@gmail.com>
-> >
-> > The current version of the pinctrl driver has some issues:
-> >
-> > 1. Duplicated "gpio" pmx function
-> >
-> > The common code will add a "gpio" pmx functon to every pin group, so
-> > it's not necessary to define a separate "gpio" pmx function in pin
-> > groups.
-> >
-> > 2. Duplicated pmx function name
-> >
-> > There are some same function name in different pin groups, which will
-> > cause some problems. For example, when we want to use PAD_GPIO0 as
-> > refclk output function, the common clk framework code will search the
-> > entire pin function lists, then return the first one matched, in this
-> > case the matched function list only include the PAD_CO_CLKO pin group
-> > because there are three "refclk" pin function, which is added by
-> > refclk_grp, spi_cs1_grp and gpio_grp.
-> >
-> > To solve this problem, a simple way is just add a pingrp refix to
-> > function name like mt7620 pinctrl driver does.
-> >
-> > 3. Useless "-" or "rsvd" functon
-> >
-> > It's really unnecessary to add a reserved pin mux function to the
-> > function lists, because we never use it.
-> >
-> > Signed-off-by: Weihao Li <cn.liweihao@gmail.com>
->
-> The patch looks good to me and Sergio: patch applied so
-> it gets some testing in linux-next.
->
-> If Arinc has issues with it or something else occurs I can
-> always drop it again.
 
-Thanks, Linus :)
 
-Best regards,
-    Sergio Paracuellos
+=E5=9C=A82024=E5=B9=B45=E6=9C=8827=E6=97=A5=E4=BA=94=E6=9C=88 =E4=B8=8B=E5=
+=8D=885:32=EF=BC=8CJiaxun Yang=E5=86=99=E9=81=93=EF=BC=9A
+> =E5=9C=A82024=E5=B9=B45=E6=9C=8827=E6=97=A5=E4=BA=94=E6=9C=88 =E4=B8=8B=
+=E5=8D=884:51=EF=BC=8CThomas Gleixner=E5=86=99=E9=81=93=EF=BC=9A
+>> Jiaxun!
+>>
+> Hi Thomas,
+> [...]
+>>
+>> What's this indirection for? Why dont you update=20
+> [...]
+>>
+>>> +static struct clocksource nodecnt_clocksource =3D {
+>>> +	.name	=3D "nodecnt",
+>>> +	.read	=3D nodecnt_clocksource_read,
+>>
+>> the read function pointer here and spare the indirection?
+> Smart! sched_clock takes slightly different function pointer argument =
+type
+> but as we don't use the argument anyway, it should be safe to relax th=
+is
+> indirection.
+
+Sadly, I'm unable to remove it with force type catsing :-/
+
+drivers/clocksource/loongson-nodecnt.c: In function =E2=80=98nodecnt_clo=
+cksource_init=E2=80=99:
+drivers/clocksource/loongson-nodecnt.c:89:36: warning: cast between inco=
+mpatible function types from =E2=80=98u64 (*)(void)=E2=80=99 {aka =E2=80=
+=98long long unsigned int (*)(void)=E2=80=99} to =E2=80=98u64 (*)(struct=
+ clocksource *)=E2=80=99 {aka =E2=80=98long long unsigned int (*)(struct=
+ clocksource *)=E2=80=99} [-Wcast-function-type]
+   89 |         nodecnt_clocksource.read =3D (u64 (*)(struct clocksource=
+ *))nodecnt_read_fn;
+
+I'll leave it here.
+
+Thanks
+>
+> Will fix in v3.
+>
+> Thanks
+>>
+>> Thanks
+>>
+>>         tglx
+>
+> --=20
+> - Jiaxun
+
+--=20
+- Jiaxun
 
