@@ -1,252 +1,346 @@
-Return-Path: <linux-mips+bounces-3349-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3350-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE8618D10E4
-	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 02:31:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CF218D14F9
+	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 09:10:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E3C8282129
-	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 00:31:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90FECB21CB5
+	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 07:10:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4953CB677;
-	Tue, 28 May 2024 00:31:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C91A86F066;
+	Tue, 28 May 2024 07:10:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hIvC0fdb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fSWF6FnM"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 161A8567D;
-	Tue, 28 May 2024 00:31:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0F11DFEF;
+	Tue, 28 May 2024 07:10:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716856270; cv=none; b=HKUfmBIV6Jxa1+fzR8HhyOP2VcXT92FYQKVGchwCoY1QU31o6UlHVRAJgGtbED4Jk8+MlMp93Z+NmJqwJ5tVKaRUP84x41xjGgGMKScIlOAodOeh+lbb6h805y7bwewtnAlaQSyvhmDF/W2bhduu/a7AHVVK7L8eDP6DF02qxzc=
+	t=1716880234; cv=none; b=QY7Xcp2GimLRyg6X6Z7UEYxOYkfn+b2eK5pS4rTq3sd5ziDlq9a52Ai1S7s2Hw/yGRaNx2yTf2z/PA18TPMwjjM1hLdhTVWVdOrc2cgjRp27m0OMmSmBEt2u+2nvKdChYLIfCViVKQhGNayzaNzsoXRJeAmaZ3LVfnthP67s/rw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716856270; c=relaxed/simple;
-	bh=5wyq/PCQQDCnYxQzdKRW3eAoy0uAeddcUgmwP9qxBFQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KqQJtv171W8EcSllYHmpFXm9DLf6s0pNbp/uSCzdMjfD73bRaXvO/Q9LOoZev4QPQc1wgfjXHAvjb//yS1KlciAhSim+/Er1eZjGazb0Oy9HEizoeQ3kkdrTofxlhYFpBJ8BSxz0Q8dpA10KFCWilEcj77uBDOxvf5a7k7Oi54k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hIvC0fdb; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716856269; x=1748392269;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5wyq/PCQQDCnYxQzdKRW3eAoy0uAeddcUgmwP9qxBFQ=;
-  b=hIvC0fdbdrYCZcI+zRfSyhHNJ0lkBOPrcegI9cIHAllYNsZnJibe2xUe
-   f32oHh5YjXm9SBckmp7YSaSA+8nMrSzrR8lNgoRB3NJX/1SMusSHzBcOW
-   llvfh4+7+XHVpYa8XRZfDu3fJUVC18WGgQKK73cUXjlUM500s9HPo3OYA
-   w+/CHw/rYNw+Xas0QcfRRIKJwnm/FLfa4fgUpRqRvpEg5zKWGxnMFgfIa
-   8ytCLDFRFtRQxPKv1T7j0X4esPyASscHoo51M5AlYDgmBW1G5r5gcB9BT
-   GZt1zuInNeHlilYtJPWHcMRG8DDtA94t7UxRH0g66hMoR9zzt/+bcRz0v
-   A==;
-X-CSE-ConnectionGUID: RvhksCLOStOLy3QET9wn5w==
-X-CSE-MsgGUID: 1MHEFIQ2QhuxSYJOTmO22g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="23739179"
-X-IronPort-AV: E=Sophos;i="6.08,194,1712646000"; 
-   d="scan'208";a="23739179"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2024 17:31:06 -0700
-X-CSE-ConnectionGUID: AnToqBoySGyg8R8G3srTXQ==
-X-CSE-MsgGUID: DOdQIOmjRaWtK/W8/LXsTA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,194,1712646000"; 
-   d="scan'208";a="66098718"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 27 May 2024 17:31:01 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sBkjy-000BEB-2J;
-	Tue, 28 May 2024 00:30:58 +0000
-Date: Tue, 28 May 2024 08:30:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Dong Aisheng <aisheng.dong@nxp.com>,
-	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
-	Jacky Bai <ping.bai@nxp.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Sean Wang <sean.wang@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
-Subject: Re: [PATCH v1 01/11] pinctrl: berlin: Make use of struct pinfunction
-Message-ID: <202405280810.6djYxvIm-lkp@intel.com>
-References: <20240527212742.1432960-2-andy.shevchenko@gmail.com>
+	s=arc-20240116; t=1716880234; c=relaxed/simple;
+	bh=u1KdQGbuF/ITXcz/RuVt+SXFHLsAqvm7w1Mpj1vuha8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rJ/H1iAzImW8bWvCNY7zSOo4qT+YdSW7n4v7itxpCK03mEW8SJrZYWTL9WoqKjtWdC4CREwc8H62fiAr2KWUYCySD7NM3751YdGV1IDXcVee8eI1IiPVSlCnOn+gyJIj4+Owg57E3Q0kfWl6B0s2/5sYWg7H0b2DzQb9YDiK+DA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fSWF6FnM; arc=none smtp.client-ip=209.85.167.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3d1b88ce99cso349027b6e.1;
+        Tue, 28 May 2024 00:10:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716880232; x=1717485032; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SXVLAY2x3v6SruhAQks8WRKld2PmcTHYFpAvp6RqutY=;
+        b=fSWF6FnMHSXHiJsjmQCzjtRcnbDumkW++eJj02mIMJBYh3kVGT0xT8hmviStscRJ07
+         EFEXw+03SV/9IP0mZ13kEYAjXmTUA2CmWQVJm6n71Dvk2NbCatUK67yv41hcBDpUc2nS
+         gn0g/TOn7fv4uKN4T/Uhk6BsDyPhX/pe74fg11UgskeTdH/qyVf0qPm9xvesrXUwBDNk
+         EJF543YnMrhHwzkezV/NO9Jb03Cw198W+4mRqot7Fg8kSR10wr7ubVWHRJQVNBqG8+7s
+         oXzT2FSU2TlVpAzAylj/az716yPsy7aj0QM6l9Gk0sA7Vm0T4kX1JdVL8pf5Zo/m/k2P
+         xV+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716880232; x=1717485032;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SXVLAY2x3v6SruhAQks8WRKld2PmcTHYFpAvp6RqutY=;
+        b=xEPhCXII5jOexh3dk/LXRGzcjdfPnfNPZ6vUk7xHWS7bZhqd55EwJRdKCOGbEQa0aU
+         CyJ6UZy/F2d+Ei4zdFz3ikWrgDZITijPSl0dg8ULTg5gsm5w/BOmNcdylR0X8heEaluB
+         KGzim0TSe3EwJXzprb5Z60Nu4fK9NcZSfOoxpIQfIWOXs/MzVdVfdC57qhmJeZq0wLpu
+         2WZd4LmQ4LKDDhZx7mTWgpIwMEUK7Fd73JRRILtlRhvIb5JSWnCUHK3c/gkRIZZtR6dl
+         Y8WCg/5ghGABeP5k2yTg9D6LUiRTMLa5PxwpZx6d9TdSHFLuvgveg98hNeY0c8E0BLvf
+         u/Jw==
+X-Forwarded-Encrypted: i=1; AJvYcCUhdQ1dTkHMyIy1s+5VQ5m23dOG6hHFkf9UpH/PKxZMtiOeUwk7ofqkkXEIzGj9L1B40MuaZwGF/uPDbRiWd/eobiEE9GyPTQBH8XIK2PBtsFNEtKZf2g5GydJL/DKd8zjWjuR0EaDcNIDv/PcPj4LddeX86KijV9TzbB+qyDGzUIqbfDM=
+X-Gm-Message-State: AOJu0YzQxuN0j/SucvzBaMbX6uyui75j6u69W653+Wsq/oUsX0eLLQPx
+	Ao4e/Lm8Nop6dkw6GcBzOBQw0tSHe8d4CVHLzKP+ZSUqQ5q904Kw4GwfK2gjqwuDfRtz6Ep7ZW9
+	gGPsCctrZTLE6aPlaLkSW1OmhvaA=
+X-Google-Smtp-Source: AGHT+IG7/4IGI6+FU57FIPweI541/H6tVsdVG55Of6kcOatVKCdmr/2wrFN29fLomtzAblGnLVtjLzKIeq+lRQve53c=
+X-Received: by 2002:a05:6808:6284:b0:3d1:b4d5:88fe with SMTP id
+ 5614622812f47-3d1b4d593d2mr11295324b6e.54.1716880230778; Tue, 28 May 2024
+ 00:10:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240527212742.1432960-2-andy.shevchenko@gmail.com>
+References: <20240527022036.31985-1-user@blabla>
+In-Reply-To: <20240527022036.31985-1-user@blabla>
+From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date: Tue, 28 May 2024 09:10:18 +0200
+Message-ID: <CAMhs-H9CEvN8QXcQgin6NRZYzYFn5T82tLsu4rBbSMMBy=Xoiw@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: ralink: mt76x8: fix pinmux function
+To: liweihao <cn.liweihao@gmail.com>
+Cc: arinc.unal@arinc9.com, sean.wang@kernel.org, linus.walleij@linaro.org, 
+	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com, 
+	linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Shiji Yang <yangshiji66@outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andy,
+Hi,
 
-kernel test robot noticed the following build errors:
+On Mon, May 27, 2024 at 4:21=E2=80=AFAM liweihao <cn.liweihao@gmail.com> wr=
+ote:
+>
+> From: Weihao Li <cn.liweihao@gmail.com>
+>
+> The current version of the pinctrl driver has some issues:
 
-[auto build test ERROR on linusw-pinctrl/devel]
-[also build test ERROR on linusw-pinctrl/for-next linus/master v6.10-rc1 next-20240523]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Regarding the dtsi file which is in the kernel tree mt76x8 is using
+'pinctrl-single' for pin muxing [0].
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/pinctrl-berlin-Make-use-of-struct-pinfunction/20240528-053304
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
-patch link:    https://lore.kernel.org/r/20240527212742.1432960-2-andy.shevchenko%40gmail.com
-patch subject: [PATCH v1 01/11] pinctrl: berlin: Make use of struct pinfunction
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240528/202405280810.6djYxvIm-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project bafda89a0944d947fc4b3b5663185e07a397ac30)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240528/202405280810.6djYxvIm-lkp@intel.com/reproduce)
+>
+> 1. Duplicated "gpio" pmx function
+>
+> The common code will add a "gpio" pmx functon to every pin group, so
+> it's not necessary to define a separate "gpio" pmx function in pin
+> groups.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405280810.6djYxvIm-lkp@intel.com/
+Do you mean that pin 0 always has a GPIO function? [1]
 
-All errors (new ones prefixed by >>):
+> 2. Duplicated pmx function name
+>
+> There are some same function name in different pin groups, which will
+> cause some problems. For example, when we want to use PAD_GPIO0 as
+> refclk output function, the common clk framework code will search the
+> entire pin function lists, then return the first one matched, in this
+> case the matched function list only include the PAD_CO_CLKO pin group
+> because there are three "refclk" pin function, which is added by
+> refclk_grp, spi_cs1_grp and gpio_grp.
+>
+> To solve this problem, a simple way is just add a pingrp refix to
+> function name like mt7620 pinctrl driver does.
+>
+> 3. Useless "-" or "rsvd" functon
+>
+> It's really unnecessary to add a reserved pin mux function to the
+> function lists, because we never use it.
+>
+> Signed-off-by: Weihao Li <cn.liweihao@gmail.com>
+> ---
+>  drivers/pinctrl/mediatek/pinctrl-mt76x8.c | 88 +++++++----------------
+>  1 file changed, 27 insertions(+), 61 deletions(-)
+>
+> diff --git a/drivers/pinctrl/mediatek/pinctrl-mt76x8.c b/drivers/pinctrl/=
+mediatek/pinctrl-mt76x8.c
+> index e7d6ad2f62e4e..2bc8d4409ca27 100644
+> --- a/drivers/pinctrl/mediatek/pinctrl-mt76x8.c
+> +++ b/drivers/pinctrl/mediatek/pinctrl-mt76x8.c
+> @@ -37,36 +37,30 @@
+>
+>  static struct mtmips_pmx_func pwm1_grp[] =3D {
+>         FUNC("sdxc d6", 3, 19, 1),
+> -       FUNC("utif", 2, 19, 1),
+> -       FUNC("gpio", 1, 19, 1),
+> +       FUNC("pwm1 utif", 2, 19, 1),
+>         FUNC("pwm1", 0, 19, 1),
+>  };
+>
+>  static struct mtmips_pmx_func pwm0_grp[] =3D {
+>         FUNC("sdxc d7", 3, 18, 1),
+> -       FUNC("utif", 2, 18, 1),
+> -       FUNC("gpio", 1, 18, 1),
+> +       FUNC("pwm0 utif", 2, 18, 1),
+>         FUNC("pwm0", 0, 18, 1),
+>  };
+>
+>  static struct mtmips_pmx_func uart2_grp[] =3D {
+>         FUNC("sdxc d5 d4", 3, 20, 2),
+> -       FUNC("pwm", 2, 20, 2),
+> -       FUNC("gpio", 1, 20, 2),
+> +       FUNC("uart2 pwm", 2, 20, 2),
+>         FUNC("uart2", 0, 20, 2),
+>  };
+>
+>  static struct mtmips_pmx_func uart1_grp[] =3D {
+>         FUNC("sw_r", 3, 45, 2),
+> -       FUNC("pwm", 2, 45, 2),
+> -       FUNC("gpio", 1, 45, 2),
+> +       FUNC("uart1 pwm", 2, 45, 2),
+>         FUNC("uart1", 0, 45, 2),
+>  };
+>
+>  static struct mtmips_pmx_func i2c_grp[] =3D {
+> -       FUNC("-", 3, 4, 2),
+>         FUNC("debug", 2, 4, 2),
+> -       FUNC("gpio", 1, 4, 2),
+>         FUNC("i2c", 0, 4, 2),
+>  };
+>
+> @@ -76,128 +70,100 @@ static struct mtmips_pmx_func wdt_grp[] =3D { FUNC(=
+"wdt", 0, 38, 1) };
+>  static struct mtmips_pmx_func spi_grp[] =3D { FUNC("spi", 0, 7, 4) };
+>
+>  static struct mtmips_pmx_func sd_mode_grp[] =3D {
+> -       FUNC("jtag", 3, 22, 8),
+> -       FUNC("utif", 2, 22, 8),
+> -       FUNC("gpio", 1, 22, 8),
+> +       FUNC("sdxc jtag", 3, 22, 8),
+> +       FUNC("sdxc utif", 2, 22, 8),
+>         FUNC("sdxc", 0, 22, 8),
+>  };
+>
+>  static struct mtmips_pmx_func uart0_grp[] =3D {
+> -       FUNC("-", 3, 12, 2),
+> -       FUNC("-", 2, 12, 2),
+> -       FUNC("gpio", 1, 12, 2),
+>         FUNC("uart0", 0, 12, 2),
+>  };
+>
+>  static struct mtmips_pmx_func i2s_grp[] =3D {
+>         FUNC("antenna", 3, 0, 4),
+>         FUNC("pcm", 2, 0, 4),
+> -       FUNC("gpio", 1, 0, 4),
+>         FUNC("i2s", 0, 0, 4),
+>  };
+>
+>  static struct mtmips_pmx_func spi_cs1_grp[] =3D {
+> -       FUNC("-", 3, 6, 1),
+> -       FUNC("refclk", 2, 6, 1),
+> -       FUNC("gpio", 1, 6, 1),
+> +       FUNC("spi refclk", 2, 6, 1),
+>         FUNC("spi cs1", 0, 6, 1),
+>  };
+>
+>  static struct mtmips_pmx_func spis_grp[] =3D {
+>         FUNC("pwm_uart2", 3, 14, 4),
+> -       FUNC("utif", 2, 14, 4),
+> -       FUNC("gpio", 1, 14, 4),
+> +       FUNC("spis utif", 2, 14, 4),
+>         FUNC("spis", 0, 14, 4),
+>  };
+>
+>  static struct mtmips_pmx_func gpio_grp[] =3D {
+>         FUNC("pcie", 3, 11, 1),
+> -       FUNC("refclk", 2, 11, 1),
+> -       FUNC("gpio", 1, 11, 1),
+> -       FUNC("gpio", 0, 11, 1),
+> +       FUNC("gpio refclk", 2, 11, 1),
+>  };
+>
+>  static struct mtmips_pmx_func p4led_kn_grp[] =3D {
+> -       FUNC("jtag", 3, 30, 1),
+> -       FUNC("utif", 2, 30, 1),
+> -       FUNC("gpio", 1, 30, 1),
+> +       FUNC("p4led_kn jtag", 3, 30, 1),
+> +       FUNC("p4led_kn utif", 2, 30, 1),
+>         FUNC("p4led_kn", 0, 30, 1),
+>  };
+>
+>  static struct mtmips_pmx_func p3led_kn_grp[] =3D {
+> -       FUNC("jtag", 3, 31, 1),
+> -       FUNC("utif", 2, 31, 1),
+> -       FUNC("gpio", 1, 31, 1),
+> +       FUNC("p3led_kn jtag", 3, 31, 1),
+> +       FUNC("p3led_kn utif", 2, 31, 1),
+>         FUNC("p3led_kn", 0, 31, 1),
+>  };
+>
+>  static struct mtmips_pmx_func p2led_kn_grp[] =3D {
+> -       FUNC("jtag", 3, 32, 1),
+> -       FUNC("utif", 2, 32, 1),
+> -       FUNC("gpio", 1, 32, 1),
+> +       FUNC("p2led_kn jtag", 3, 32, 1),
+> +       FUNC("p2led_kn utif", 2, 32, 1),
+>         FUNC("p2led_kn", 0, 32, 1),
+>  };
+>
+>  static struct mtmips_pmx_func p1led_kn_grp[] =3D {
+> -       FUNC("jtag", 3, 33, 1),
+> -       FUNC("utif", 2, 33, 1),
+> -       FUNC("gpio", 1, 33, 1),
+> +       FUNC("p1led_kn jtag", 3, 33, 1),
+> +       FUNC("p1led_kn utif", 2, 33, 1),
+>         FUNC("p1led_kn", 0, 33, 1),
+>  };
+>
+>  static struct mtmips_pmx_func p0led_kn_grp[] =3D {
+> -       FUNC("jtag", 3, 34, 1),
+> -       FUNC("rsvd", 2, 34, 1),
+> -       FUNC("gpio", 1, 34, 1),
+> +       FUNC("p0led_kn jtag", 3, 34, 1),
+>         FUNC("p0led_kn", 0, 34, 1),
+>  };
+>
+>  static struct mtmips_pmx_func wled_kn_grp[] =3D {
+> -       FUNC("rsvd", 3, 35, 1),
+> -       FUNC("rsvd", 2, 35, 1),
+> -       FUNC("gpio", 1, 35, 1),
+>         FUNC("wled_kn", 0, 35, 1),
+>  };
+>
+>  static struct mtmips_pmx_func p4led_an_grp[] =3D {
+> -       FUNC("jtag", 3, 39, 1),
+> -       FUNC("utif", 2, 39, 1),
+> -       FUNC("gpio", 1, 39, 1),
+> +       FUNC("p4led_an jtag", 3, 39, 1),
+> +       FUNC("p4led_an utif", 2, 39, 1),
+>         FUNC("p4led_an", 0, 39, 1),
+>  };
+>
+>  static struct mtmips_pmx_func p3led_an_grp[] =3D {
+> -       FUNC("jtag", 3, 40, 1),
+> -       FUNC("utif", 2, 40, 1),
+> -       FUNC("gpio", 1, 40, 1),
+> +       FUNC("p3led_an jtag", 3, 40, 1),
+> +       FUNC("p3led_an utif", 2, 40, 1),
+>         FUNC("p3led_an", 0, 40, 1),
+>  };
+>
+>  static struct mtmips_pmx_func p2led_an_grp[] =3D {
+> -       FUNC("jtag", 3, 41, 1),
+> -       FUNC("utif", 2, 41, 1),
+> -       FUNC("gpio", 1, 41, 1),
+> +       FUNC("p2led_an jtag", 3, 41, 1),
+> +       FUNC("p2led_an utif", 2, 41, 1),
+>         FUNC("p2led_an", 0, 41, 1),
+>  };
+>
+>  static struct mtmips_pmx_func p1led_an_grp[] =3D {
+> -       FUNC("jtag", 3, 42, 1),
+> -       FUNC("utif", 2, 42, 1),
+> -       FUNC("gpio", 1, 42, 1),
+> +       FUNC("p1led_an jtag", 3, 42, 1),
+> +       FUNC("p1led_an utif", 2, 42, 1),
+>         FUNC("p1led_an", 0, 42, 1),
+>  };
+>
+>  static struct mtmips_pmx_func p0led_an_grp[] =3D {
+> -       FUNC("jtag", 3, 43, 1),
+> -       FUNC("rsvd", 2, 43, 1),
+> -       FUNC("gpio", 1, 43, 1),
+> +       FUNC("p0led_an jtag", 3, 43, 1),
+>         FUNC("p0led_an", 0, 43, 1),
+>  };
+>
+>  static struct mtmips_pmx_func wled_an_grp[] =3D {
+> -       FUNC("rsvd", 3, 44, 1),
+> -       FUNC("rsvd", 2, 44, 1),
+> -       FUNC("gpio", 1, 44, 1),
+>         FUNC("wled_an", 0, 44, 1),
+>  };
+>
+> --
+> 2.39.2
+>
 
-   In file included from drivers/pinctrl/berlin/berlin.c:10:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/pinctrl/berlin/berlin.c:10:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/pinctrl/berlin/berlin.c:10:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/pinctrl/berlin/berlin.c:261:45: error: passing 'const char *const *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     261 |                         groups = devm_krealloc_array(&pdev->dev, function->groups,
-         |                                                                  ^~~~~~~~~~~~~~~~
-   include/linux/device.h:346:47: note: passing argument to parameter 'p' here
-     346 | devm_krealloc_array(struct device *dev, void *p, size_t new_n, size_t new_size, gfp_t flags)
-         |                                               ^
-   6 warnings and 1 error generated.
+Changes look good to me. However I cannot test them.
 
+[+cc Shiji Yang] who probably has a related board to test.
 
-vim +261 drivers/pinctrl/berlin/berlin.c
+Thanks,
+    Sergio Paracuellos
 
-   200	
-   201	static int berlin_pinctrl_build_state(struct platform_device *pdev)
-   202	{
-   203		struct berlin_pinctrl *pctrl = platform_get_drvdata(pdev);
-   204		const struct berlin_desc_group *desc_group;
-   205		const struct berlin_desc_function *desc_function;
-   206		int i, max_functions = 0;
-   207	
-   208		pctrl->nfunctions = 0;
-   209	
-   210		for (i = 0; i < pctrl->desc->ngroups; i++) {
-   211			desc_group = pctrl->desc->groups + i;
-   212			/* compute the maximum number of functions a group can have */
-   213			max_functions += 1 << (desc_group->bit_width + 1);
-   214		}
-   215	
-   216		/* we will reallocate later */
-   217		pctrl->functions = kcalloc(max_functions, sizeof(*pctrl->functions), GFP_KERNEL);
-   218		if (!pctrl->functions)
-   219			return -ENOMEM;
-   220	
-   221		/* register all functions */
-   222		for (i = 0; i < pctrl->desc->ngroups; i++) {
-   223			desc_group = pctrl->desc->groups + i;
-   224			desc_function = desc_group->functions;
-   225	
-   226			while (desc_function->name) {
-   227				berlin_pinctrl_add_function(pctrl, desc_function->name);
-   228				desc_function++;
-   229			}
-   230		}
-   231	
-   232		pctrl->functions = krealloc(pctrl->functions,
-   233					    pctrl->nfunctions * sizeof(*pctrl->functions),
-   234					    GFP_KERNEL);
-   235		if (!pctrl->functions)
-   236			return -ENOMEM;
-   237	
-   238		/* map functions to theirs groups */
-   239		for (i = 0; i < pctrl->desc->ngroups; i++) {
-   240			desc_group = pctrl->desc->groups + i;
-   241			desc_function = desc_group->functions;
-   242	
-   243			while (desc_function->name) {
-   244				struct pinfunction *function = pctrl->functions;
-   245				const char **groups;
-   246				bool found = false;
-   247	
-   248				while (function->name) {
-   249					if (!strcmp(desc_function->name, function->name)) {
-   250						found = true;
-   251						break;
-   252					}
-   253					function++;
-   254				}
-   255	
-   256				if (!found) {
-   257					kfree(pctrl->functions);
-   258					return -EINVAL;
-   259				}
-   260	
- > 261				groups = devm_krealloc_array(&pdev->dev, function->groups,
-   262							     function->ngroups,
-   263							     sizeof(*function->groups),
-   264							     GFP_KERNEL);
-   265				if (!groups) {
-   266					kfree(pctrl->functions);
-   267					return -ENOMEM;
-   268				}
-   269				function->groups = groups;
-   270				while (*groups)
-   271					groups++;
-   272	
-   273				*groups = desc_group->name;
-   274	
-   275				desc_function++;
-   276			}
-   277		}
-   278	
-   279		return 0;
-   280	}
-   281	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[0]: https://elixir.bootlin.com/linux/latest/source/arch/mips/boot/dts/rali=
+nk/mt7628a.dtsi#L45
+[1]: https://elixir.bootlin.com/linux/latest/source/drivers/pinctrl/mediate=
+k/pinctrl-mtmips.c#L297
 
