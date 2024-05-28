@@ -1,38 +1,38 @@
-Return-Path: <linux-mips+bounces-3361-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3362-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 685DC8D2550
-	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 21:58:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 937B88D251F
+	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 21:50:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E4325B26D3B
-	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 19:50:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B46D28546A
+	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 19:50:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E7EF17839B;
-	Tue, 28 May 2024 19:50:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1955E17994C;
+	Tue, 28 May 2024 19:50:04 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fgw23-7.mail.saunalahti.fi (fgw23-7.mail.saunalahti.fi [62.142.5.84])
+Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CACFE178372
-	for <linux-mips@vger.kernel.org>; Tue, 28 May 2024 19:49:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB37179203
+	for <linux-mips@vger.kernel.org>; Tue, 28 May 2024 19:50:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716925800; cv=none; b=BlFtCQXSBfO5ZzRRMpsm8Fx1gb/P63ofqoG63UFHNZBksUOS4YRbdtOMWcr01A1OkRU12iWDg21a7YdgN6M2QQK0ndr3/U0VKCaRzvUw7rpW3jEU1kGS3TNjYjEY3CySN2f+/oB+BHhFAiw+W7OdEXAnrN3At/sWVI0UDH1rU38=
+	t=1716925804; cv=none; b=my4foO2AokZXayhaRaIrSgmABqGDfWnxgP00nNtj7lo4OsrPSdSDi77wHP8MFXVRWu6tUnneU7ZJVAxM6VubJgp+t1+PHdsWODR3Fiedy7Y8LwrWf+KdXQ6OJGzuWNSsoAcVKJLmdKeIXnpy+wmtZsLANgpfe/p7r6gIxEj4dwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716925800; c=relaxed/simple;
-	bh=1XtJWJ5PeRCirDjIxVIenINEe49dxjFUvbLv8ITaSpM=;
+	s=arc-20240116; t=1716925804; c=relaxed/simple;
+	bh=UUNlZAPD7ufWrtpQqrGWyMeB5Qmh9EtgLPVDRPhTSwU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EbZiPle9/ewdN9n/9IFRvre7eP8EORr35Zevr1GtJJDhvoKqecgYEOu59trYTpw3w3wnQG/Gd+GR0b0qnd5sw/6DC/dTm4O4z6vvFJSVxm6bhcmhsd9kJR38tdw/SO667vhz5Zbf6jVGSAcpixL+BgneemxL6NEQwkSNO37qraw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.84
+	 MIME-Version; b=oo5utbPT4E3F4rkAVPgVL62FLoiFO80RkkBWlwnN/Kt0KRUweym98wXXbkj0UVxbDVuVSonC4RSiC/x0Qskwk6Ka3jb+MMxIrgVo5Ox/5PMamOM/C3vSGIGgijNZHBAlSlJrBESBUIkj091Favhjr6Z6MZHh3BVHNEZGdwu0vBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.81
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
 Received: from localhost (88-113-26-230.elisa-laajakaista.fi [88.113.26.230])
 	by fgw20.mail.saunalahti.fi (Halon) with ESMTP
-	id 74d7eea0-1d2b-11ef-8d3a-005056bd6ce9;
-	Tue, 28 May 2024 22:49:56 +0300 (EEST)
+	id 76055e70-1d2b-11ef-8d3a-005056bd6ce9;
+	Tue, 28 May 2024 22:49:57 +0300 (EEST)
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Linus Walleij <linus.walleij@linaro.org>,
@@ -55,9 +55,9 @@ Cc: Dong Aisheng <aisheng.dong@nxp.com>,
 	Paul Cercueil <paul@crapouillou.net>,
 	Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
 	Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v2 01/11] pinctrl: berlin: Make use of struct pinfunction
-Date: Tue, 28 May 2024 22:44:52 +0300
-Message-ID: <20240528194951.1489887-2-andy.shevchenko@gmail.com>
+Subject: [PATCH v2 02/11] pinctrl: equilibrium: Make use of struct pinfunction
+Date: Tue, 28 May 2024 22:44:53 +0300
+Message-ID: <20240528194951.1489887-3-andy.shevchenko@gmail.com>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <20240528194951.1489887-1-andy.shevchenko@gmail.com>
 References: <20240528194951.1489887-1-andy.shevchenko@gmail.com>
@@ -76,112 +76,115 @@ use it in the driver.
 
 Signed-off-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 ---
- drivers/pinctrl/berlin/berlin.c | 21 +++++++++------------
- drivers/pinctrl/berlin/berlin.h |  6 ------
- 2 files changed, 9 insertions(+), 18 deletions(-)
+ drivers/pinctrl/pinctrl-equilibrium.c | 24 +++++++++++++-----------
+ drivers/pinctrl/pinctrl-equilibrium.h | 12 ------------
+ 2 files changed, 13 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/pinctrl/berlin/berlin.c b/drivers/pinctrl/berlin/berlin.c
-index 9550cc8095c2..c372a2a24be4 100644
---- a/drivers/pinctrl/berlin/berlin.c
-+++ b/drivers/pinctrl/berlin/berlin.c
-@@ -27,7 +27,7 @@ struct berlin_pinctrl {
- 	struct regmap *regmap;
- 	struct device *dev;
- 	const struct berlin_pinctrl_desc *desc;
--	struct berlin_pinctrl_function *functions;
-+	struct pinfunction *functions;
- 	unsigned nfunctions;
- 	struct pinctrl_dev *pctrl_dev;
+diff --git a/drivers/pinctrl/pinctrl-equilibrium.c b/drivers/pinctrl/pinctrl-equilibrium.c
+index 6e1be38865c3..a6d089eaaae5 100644
+--- a/drivers/pinctrl/pinctrl-equilibrium.c
++++ b/drivers/pinctrl/pinctrl-equilibrium.c
+@@ -566,8 +566,8 @@ static const struct pinconf_ops eqbr_pinconf_ops = {
+ 	.pin_config_config_dbg_show	= pinconf_generic_dump_config,
  };
-@@ -120,12 +120,12 @@ static const char *berlin_pinmux_get_function_name(struct pinctrl_dev *pctrl_dev
- static int berlin_pinmux_get_function_groups(struct pinctrl_dev *pctrl_dev,
- 					     unsigned function,
- 					     const char * const **groups,
--					     unsigned * const num_groups)
-+					     unsigned * const ngroups)
+ 
+-static bool is_func_exist(struct eqbr_pmx_func *funcs, const char *name,
+-			 unsigned int nr_funcs, unsigned int *idx)
++static bool is_func_exist(struct pinfunction *funcs, const char *name,
++			  unsigned int nr_funcs, unsigned int *idx)
  {
- 	struct berlin_pinctrl *pctrl = pinctrl_dev_get_drvdata(pctrl_dev);
+ 	int i;
  
- 	*groups = pctrl->functions[function].groups;
--	*num_groups = pctrl->functions[function].ngroups;
-+	*ngroups = pctrl->functions[function].ngroups;
- 
- 	return 0;
+@@ -584,13 +584,14 @@ static bool is_func_exist(struct eqbr_pmx_func *funcs, const char *name,
+ 	return false;
  }
-@@ -153,7 +153,7 @@ static int berlin_pinmux_set(struct pinctrl_dev *pctrl_dev,
+ 
+-static int funcs_utils(struct device *dev, struct eqbr_pmx_func *funcs,
++static int funcs_utils(struct device *dev, struct pinfunction *funcs,
+ 		       unsigned int *nr_funcs, funcs_util_ops op)
  {
- 	struct berlin_pinctrl *pctrl = pinctrl_dev_get_drvdata(pctrl_dev);
- 	const struct berlin_desc_group *group_desc = pctrl->desc->groups + group;
--	struct berlin_pinctrl_function *func = pctrl->functions + function;
-+	struct pinfunction *func = pctrl->functions + function;
- 	struct berlin_desc_function *function_desc =
- 		berlin_pinctrl_find_function_by_name(pctrl, group_desc,
- 						     func->name);
-@@ -180,7 +180,7 @@ static const struct pinmux_ops berlin_pinmux_ops = {
- static int berlin_pinctrl_add_function(struct berlin_pinctrl *pctrl,
- 				       const char *name)
- {
--	struct berlin_pinctrl_function *function = pctrl->functions;
-+	struct pinfunction *function = pctrl->functions;
+ 	struct device_node *node = dev->of_node;
+ 	struct device_node *np;
+ 	struct property *prop;
+ 	const char *fn_name;
++	const char **groups;
+ 	unsigned int fid;
+ 	int i, j;
  
- 	while (function->name) {
- 		if (!strcmp(function->name, name)) {
-@@ -214,8 +214,7 @@ static int berlin_pinctrl_build_state(struct platform_device *pdev)
- 	}
+@@ -620,15 +621,16 @@ static int funcs_utils(struct device *dev, struct eqbr_pmx_func *funcs,
  
- 	/* we will reallocate later */
--	pctrl->functions = kcalloc(max_functions,
--				   sizeof(*pctrl->functions), GFP_KERNEL);
-+	pctrl->functions = kcalloc(max_functions, sizeof(*pctrl->functions), GFP_KERNEL);
- 	if (!pctrl->functions)
- 		return -ENOMEM;
+ 		case OP_COUNT_NR_FUNC_GRPS:
+ 			if (is_func_exist(funcs, fn_name, *nr_funcs, &fid))
+-				funcs[fid].nr_groups++;
++				funcs[fid].ngroups++;
+ 			break;
  
-@@ -242,8 +241,7 @@ static int berlin_pinctrl_build_state(struct platform_device *pdev)
- 		desc_function = desc_group->functions;
- 
- 		while (desc_function->name) {
--			struct berlin_pinctrl_function
--				*function = pctrl->functions;
-+			struct pinfunction *function = pctrl->functions;
- 			const char **groups;
- 			bool found = false;
- 
-@@ -264,16 +262,15 @@ static int berlin_pinctrl_build_state(struct platform_device *pdev)
- 				function->groups =
- 					devm_kcalloc(&pdev->dev,
- 						     function->ngroups,
--						     sizeof(char *),
-+						     sizeof(*function->groups),
- 						     GFP_KERNEL);
--
- 				if (!function->groups) {
- 					kfree(pctrl->functions);
- 					return -ENOMEM;
- 				}
+ 		case OP_ADD_FUNC_GRPS:
+ 			if (is_func_exist(funcs, fn_name, *nr_funcs, &fid)) {
+-				for (j = 0; j < funcs[fid].nr_groups; j++)
+-					if (!funcs[fid].groups[j])
++				groups = (const char **)funcs[fid].groups;
++				for (j = 0; j < funcs[fid].ngroups; j++)
++					if (!groups[j])
+ 						break;
+-				funcs[fid].groups[j] = prop->value;
++				groups[j] = prop->value;
  			}
+ 			break;
  
--			groups = function->groups;
-+			groups = (const char **)function->groups;
- 			while (*groups)
- 				groups++;
+@@ -645,7 +647,7 @@ static int funcs_utils(struct device *dev, struct eqbr_pmx_func *funcs,
+ static int eqbr_build_functions(struct eqbr_pinctrl_drv_data *drvdata)
+ {
+ 	struct device *dev = drvdata->dev;
+-	struct eqbr_pmx_func *funcs = NULL;
++	struct pinfunction *funcs = NULL;
+ 	unsigned int nr_funcs = 0;
+ 	int i, ret;
  
-diff --git a/drivers/pinctrl/berlin/berlin.h b/drivers/pinctrl/berlin/berlin.h
-index d7787754d1ed..231aab61d415 100644
---- a/drivers/pinctrl/berlin/berlin.h
-+++ b/drivers/pinctrl/berlin/berlin.h
-@@ -28,12 +28,6 @@ struct berlin_pinctrl_desc {
- 	unsigned			ngroups;
+@@ -666,9 +668,9 @@ static int eqbr_build_functions(struct eqbr_pinctrl_drv_data *drvdata)
+ 		return ret;
+ 
+ 	for (i = 0; i < nr_funcs; i++) {
+-		if (!funcs[i].nr_groups)
++		if (!funcs[i].ngroups)
+ 			continue;
+-		funcs[i].groups = devm_kcalloc(dev, funcs[i].nr_groups,
++		funcs[i].groups = devm_kcalloc(dev, funcs[i].ngroups,
+ 					       sizeof(*(funcs[i].groups)),
+ 					       GFP_KERNEL);
+ 		if (!funcs[i].groups)
+@@ -688,7 +690,7 @@ static int eqbr_build_functions(struct eqbr_pinctrl_drv_data *drvdata)
+ 		ret = pinmux_generic_add_function(drvdata->pctl_dev,
+ 						  funcs[i].name,
+ 						  funcs[i].groups,
+-						  funcs[i].nr_groups,
++						  funcs[i].ngroups,
+ 						  drvdata);
+ 		if (ret < 0) {
+ 			dev_err(dev, "Failed to register function %s\n",
+diff --git a/drivers/pinctrl/pinctrl-equilibrium.h b/drivers/pinctrl/pinctrl-equilibrium.h
+index 83768cc8b3db..b4d149bde39d 100644
+--- a/drivers/pinctrl/pinctrl-equilibrium.h
++++ b/drivers/pinctrl/pinctrl-equilibrium.h
+@@ -67,18 +67,6 @@ struct gpio_irq_type {
+ 	unsigned int logic_type;
  };
  
--struct berlin_pinctrl_function {
--	const char	*name;
--	const char	**groups;
--	unsigned	ngroups;
+-/**
+- * struct eqbr_pmx_func: represent a pin function.
+- * @name: name of the pin function, used to lookup the function.
+- * @groups: one or more names of pin groups that provide this function.
+- * @nr_groups: number of groups included in @groups.
+- */
+-struct eqbr_pmx_func {
+-	const char		*name;
+-	const char		**groups;
+-	unsigned int		nr_groups;
 -};
 -
- #define BERLIN_PINCTRL_GROUP(_name, _offset, _width, _lsb, ...)		\
- 	{								\
- 		.name = _name,						\
+ /**
+  * struct eqbr_pin_bank: represent a pin bank.
+  * @membase: base address of the pin bank register.
 -- 
 2.45.1
 
