@@ -1,123 +1,122 @@
-Return-Path: <linux-mips+bounces-3358-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3359-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F5CC8D2472
-	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 21:17:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 320638D2478
+	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 21:18:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0775D1F23018
-	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 19:17:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C878C1F2705B
+	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 19:18:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1CB2177981;
-	Tue, 28 May 2024 19:16:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF04A171E5D;
+	Tue, 28 May 2024 19:17:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="viVzdojg"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="4Q0uIKf0";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="dlDZNGS9"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17627174EF4
-	for <linux-mips@vger.kernel.org>; Tue, 28 May 2024 19:16:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5956DD0D;
+	Tue, 28 May 2024 19:17:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716923776; cv=none; b=YhifxE9wE2UkF83cuVDZQvdIUWzHCAnwSVCnSUFEN1xHPGlcusXqLK5ciNPNEVjJMn6P5fvldRrzZY3ZBeXCNMcDT6QSk6MzU2+ox3Vt14MGw9xDkshclATznnvQdGJDESEuHLONU9riFw7TPf13C7Yt6t91igKWpiEhpaWQEaM=
+	t=1716923842; cv=none; b=ddxNC53wXVGY0vk9YeffR9lJ//NgC/qEarCL9E4l31Bkz8TcoKXFNXNB2W6mZA/3oev1E9jcSz+SRQxipI/GXyZ8ZF/CmJkdIeE8U4x0kEvjbAqSwB4V7Ve9JVH7B60SRC+fiSuxwDMyTOkUU0C1YAyo9SQ79aWHMOgF2M8vnBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716923776; c=relaxed/simple;
-	bh=ag7+h70RDNCub6CI9FhMvv9doD/tLeJlJWjTiOiUnAE=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=P/U0NdRX04ze95U6s+X/2yNR6OafzcAHrM/MCtn85eW4qA9JJrdyL9ZWPSVSTv9Hvu+YmMdMMlxnWxrkox8wGiX1clGUslxaRAlzTxCLSjEHbTlOzMe24fy6qqlsFGwM2QuO4i3+F5KN5+vvOVnkmUjnC4NYDSdzNrQjdyklF38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=viVzdojg; arc=none smtp.client-ip=209.85.219.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-df771bdee6bso1938257276.3
-        for <linux-mips@vger.kernel.org>; Tue, 28 May 2024 12:16:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1716923773; x=1717528573; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aN1FoCckBsPH3nlr2F+fxU8+3rgvDDBf83ZZTupmDzY=;
-        b=viVzdojgJrWKjqTJr5Izw239q1ePp6TGp5Ng4+2J1ZBKYzp1Q5vdvLiaPr+X+zsujL
-         OenUB1emtOYJB40+qpa9UulYOpd//+GI6WTtyFKPru4x/E4X5IuLATSB+5pVXE2We5gZ
-         X4kojHm4A9VvBmbKwT6iPtnBsWLBak9V6I5BR1qUzfYBF0LJj2Jzh1gNml1u4saDvued
-         EOj4eHTt+pr56Gl/LzD1hJUzUusxiiGQ97hVG62ed8Yu+UX57r21cJIKRV+VDlwjMEdH
-         L0t910eLNg7jRLgk8BefxA7L7r5I2kC0KSWPX7FnLSmWFck+WIq+HZxCOIxSG9NzzoSX
-         dMdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716923773; x=1717528573;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aN1FoCckBsPH3nlr2F+fxU8+3rgvDDBf83ZZTupmDzY=;
-        b=iBYatibNmaEPVDE1t3nBy0YWNyLHs+HN+xrgatgE6a9iCMSzB7TXPe5iSbz3o6TTbm
-         VgYeXI6N5aIR8lLDHHFCnV4YLAcMhlFQhgVQNesFwrXIjrUW0GK9H0YrmBMGdqh0o/qw
-         evKuEhJ2qX/cmHubJJMa9zOtuVDtbtFSI+I4k+sOegCqu5PyHCKbnVoRyqByv8La8Neu
-         P6X9xTpDRJVFNJT1ChH5C4pByGs7l+WejMuFTHwidqmz4KMerw1EbRiPIl6HdVlBq9Mh
-         w3uiqHWIW4ODsnDtMFCylnXWDkP7txVWN5ZqqjaL75DTpCMkN4/Ydna6wLy9/azpc+sq
-         kuzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXbSbbTjyYWG/dqG151XQtr96daypkSXp/0t1p0ZiVDJmJrU///SVpryRpdyDpi305wqHlAJS6rmcWEYqdTrAaiYVCDGKGIJesRMA==
-X-Gm-Message-State: AOJu0YydRQSvIlnEQALW9YssET3DQNagFb2iovZ1SOpZxxuz36CtxrLd
-	dE+evPHH92AxqYlF3fUf+lA1aRM0XpmDV3BKtVTIHo/K0GJ/H+DlJQZbeJKBfrpHYv3VKp/7HvN
-	q6Q==
-X-Google-Smtp-Source: AGHT+IEYffSoUdZ4cg7KX8v+KoP4uvokISlIeu5qUtxtXAQ85EyWGJZei7jVgr6jZvnufr8gfWsoMUgR1K8=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:10c3:b0:df7:943d:f935 with SMTP id
- 3f1490d57ef6-df7943e55a0mr788014276.2.1716923773190; Tue, 28 May 2024
- 12:16:13 -0700 (PDT)
-Date: Tue, 28 May 2024 12:16:11 -0700
-In-Reply-To: <c77f3931-31b2-4695-bd74-c69cba9b96c1@intel.com>
+	s=arc-20240116; t=1716923842; c=relaxed/simple;
+	bh=CnnAhhfLz0yuidAHDeeEXBYwXWBSYSxgEY9NZ458gW0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=PbpYEen+ChoF39TpGpm0l+hnl71vmGqxlaEke+afHsc8EQh0fCTxGAzoPtgfI98FyUv6/yYLJmMwNGQ/ougwNtjqUastpY4iYN70h23UhK1aFs3oIjGeclys4GMHBOHpobuGRRoqMoOuYRQm+VtPGcwbIPq+XJLuz+K10Jsm2Io=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=4Q0uIKf0; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=dlDZNGS9; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1716923839;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yJ1hwXGxp5OziMITpimO5gMUZCDRn1KBiPlKiBihrWA=;
+	b=4Q0uIKf0G8CeKyw1PtsLVCbUOOC9UuZaDRd3Kl9M7VLtjJsA8bmbOw26giQO8UW4MO2dG3
+	Gfwm7SS/uF+VkocqhAr0TR57SDovXB9WMan8RGB9vefJKqBSbeaMZ861oHFSoQPO2X1V3e
+	QYSPBMCYroAILOusV9zsslgjKzv8f6DG/cgdqJaIO1YVt/ckZPiap++MNv4HIi4yIo4Dy5
+	CxOEUKQKmb6U5kuCLsdmGpwrEcAhwKCt+28G8toQTtRtPhYGNcUXSHWh+z8eUX71ZKGVLJ
+	hd8gvOb+O9IYhOpIr/C2P8sDSIbDGvwvQMxIszldpcWSLOap31jmVo5fl6DF7g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1716923839;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yJ1hwXGxp5OziMITpimO5gMUZCDRn1KBiPlKiBihrWA=;
+	b=dlDZNGS9j37CdmsfrI+XNgAf9uk8CeaU3aUHLYh+8UhnM4BeOT90CsmTSpQJ3nlzgV4tEI
+	jdRGc/Ee4nS5K9Bg==
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>, Huacai Chen
+ <chenhuacai@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: linux-kernel@vger.kernel.org, "linux-mips@vger.kernel.org"
+ <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH v2] clocksource: Add node counter timer driver for
+ MIPS/Loongson64
+In-Reply-To: <558b1d58-08a5-410d-97b8-e77def7c1cf8@app.fastmail.com>
+References: <20240517-loongson_nodecnt-v2-1-5bd0bb20ff5f@flygoat.com>
+ <87sey3b6de.ffs@tglx>
+ <9947f7a5-1a95-48f2-b0eb-0385eb2b3d55@app.fastmail.com>
+ <558b1d58-08a5-410d-97b8-e77def7c1cf8@app.fastmail.com>
+Date: Tue, 28 May 2024 21:17:19 +0200
+Message-ID: <878qztbvb4.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240522014013.1672962-1-seanjc@google.com> <20240522014013.1672962-4-seanjc@google.com>
- <c77f3931-31b2-4695-bd74-c69cba9b96c1@intel.com>
-Message-ID: <ZlYte16cvQpPGHkx@google.com>
-Subject: Re: [PATCH v2 3/6] KVM: x86: Fold kvm_arch_sched_in() into kvm_arch_vcpu_load()
-From: Sean Christopherson <seanjc@google.com>
-To: Kai Huang <kai.huang@intel.com>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
-	Huacai Chen <chenhuacai@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Anup Patel <anup@brainfault.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	kvm@vger.kernel.org, loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 24, 2024, Kai Huang wrote:
-> > @@ -1548,6 +1548,9 @@ static void svm_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
-> >   	struct vcpu_svm *svm = to_svm(vcpu);
-> >   	struct svm_cpu_data *sd = per_cpu_ptr(&svm_data, cpu);
-> > +	if (vcpu->scheduled_out && !kvm_pause_in_guest(vcpu->kvm))
-> > +		shrink_ple_window(vcpu);
-> > +
-> 
-> [...]
-> 
-> > @@ -1517,6 +1517,9 @@ void vmx_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
-> >   {
-> >   	struct vcpu_vmx *vmx = to_vmx(vcpu);
-> > +	if (vcpu->scheduled_out && !kvm_pause_in_guest(vcpu->kvm))
-> > +		shrink_ple_window(vcpu);
-> > +
-> 
-> Nit:  Perhaps we need a kvm_x86_ops::shrink_ple_window()?  :-)
+On Tue, May 28 2024 at 15:31, Jiaxun Yang wrote:
+> =E5=9C=A82024=E5=B9=B45=E6=9C=8827=E6=97=A5=E4=BA=94=E6=9C=88 =E4=B8=8B=
+=E5=8D=885:32=EF=BC=8CJiaxun Yang=E5=86=99=E9=81=93=EF=BC=9A
+>> =E5=9C=A82024=E5=B9=B45=E6=9C=8827=E6=97=A5=E4=BA=94=E6=9C=88 =E4=B8=8B=
+=E5=8D=884:51=EF=BC=8CThomas Gleixner=E5=86=99=E9=81=93=EF=BC=9A
+>>> Jiaxun!
+>>>
+>> Hi Thomas,
+>> [...]
+>>>
+>>> What's this indirection for? Why dont you update=20
+>> [...]
+>>>
+>>>> +static struct clocksource nodecnt_clocksource =3D {
+>>>> +	.name	=3D "nodecnt",
+>>>> +	.read	=3D nodecnt_clocksource_read,
+>>>
+>>> the read function pointer here and spare the indirection?
+>> Smart! sched_clock takes slightly different function pointer argument ty=
+pe
+>> but as we don't use the argument anyway, it should be safe to relax this
+>> indirection.
+>
+> Sadly, I'm unable to remove it with force type catsing :-/
+>
+> drivers/clocksource/loongson-nodecnt.c: In function =E2=80=98nodecnt_cloc=
+ksource_init=E2=80=99:
+> drivers/clocksource/loongson-nodecnt.c:89:36: warning: cast between incom=
+patible function types from =E2=80=98u64 (*)(void)=E2=80=99 {aka =E2=80=98l=
+ong long unsigned int (*)(void)=E2=80=99} to =E2=80=98u64 (*)(struct clocks=
+ource *)=E2=80=99 {aka =E2=80=98long long unsigned int (*)(struct clocksour=
+ce *)=E2=80=99} [-Wcast-function-type]
+>    89 |         nodecnt_clocksource.read =3D (u64 (*)(struct clocksource =
+*))nodecnt_read_fn;
+>
 
-Heh, that duplicate code annoys me too.  The problem is the "old" window value
-comes from the VMCS/VMCB, so either we'd end up with multiple kvm_x86_ops, or
-we'd only be able to consolidate the scheduled_out + kvm_pause_in_guest() code,
-which isn't all that interesting.
+What about making the actual read functions have the required function
+signature? The clocksource argument is not used in those real functions.
 
-Aha!  Actually, VMX already open codes the functionality provided by VCPU_EXREG_*,
-e.g. has vmx->ple_window_dirty.  If we add VCPU_EXREG_PLE_WINDOW, then the info
-get be made available to common x86 code without having to add new hooks.  And
-that would also allow moving the guts of handle_pause()/pause_interception() to
-common code, i.e. will also allow deduplicating the "grow" side of things.
+Thanks,
+
+        tglx
 
