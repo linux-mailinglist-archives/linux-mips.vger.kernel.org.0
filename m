@@ -1,169 +1,129 @@
-Return-Path: <linux-mips+bounces-3353-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3354-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 733088D1A83
-	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 14:01:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FFA78D1DA6
+	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 15:55:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 966AA1C22C56
-	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 12:01:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5248285A04
+	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2024 13:55:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBFE516ABC4;
-	Tue, 28 May 2024 12:01:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1820D16FF2A;
+	Tue, 28 May 2024 13:54:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kbKZgCgM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tSQ0mrHG"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4778E13A242;
-	Tue, 28 May 2024 12:01:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75D6516F28D
+	for <linux-mips@vger.kernel.org>; Tue, 28 May 2024 13:54:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716897679; cv=none; b=e0sUh2FGWOEFAFVkYq+caiumDOnoOWzWyRuR37e9296kHfQxz6+VCRHUTJ6BcFcMnD+VmO7Taw2beksLwgMShX1FIOWj2Rg98Y005rK7OALFgTvcvdlCq3Tz8d8tuFTofVp8qRPsli2DiCLhpf9J/jo0jIUDfXC7o+W6FTvUczc=
+	t=1716904459; cv=none; b=D2qvuWtf5e10zMtSK//qpCs57sUJynUmWuslfm0LmlNH1d5YaRRS/lYi6Aqf+bUR4QsR5OpoJnvDo5Q9xWsllMJvO1SLNb8uLb5mtz5IsncUlxf+zO2hXrUgRS6IPJtHkWimpL2NXHdy6bLzPUk+wgR1ByL6cN/4dVPbGLN+l/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716897679; c=relaxed/simple;
-	bh=8WRHDTUZ0RTZvELeR+4+qbfh9ozH4kaFF8ljxt36pEI=;
+	s=arc-20240116; t=1716904459; c=relaxed/simple;
+	bh=7FRvHhRIIGYDk4+qwxfvO9/uo5NTHqwlQyzNXACIsqE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gku19gd/XCFfBfmV9UeKRPhyeZnpAMv3/zua1HcEC13+9aCWqNy2u8Okx02pmEeXdpD70vwctyFylLiI5j+2MhsOqGawfpzApQ/dXOYPBmvsw6MCuL8gtwWTYyaL/D8TcRpiEhTc/g2cR4yf9i2rMVSdKXv+vx8Dej6H14o4jHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kbKZgCgM; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5785d466c82so889381a12.3;
-        Tue, 28 May 2024 05:01:18 -0700 (PDT)
+	 To:Cc:Content-Type; b=KkK31Co5oEfRe2logJKoPLyldJtI07282EnZ6I10iycgUYT2I6CP5kO8x7R0CM9IlnDpqoh3rtSUBVjb9Nk1/KzfJUe0ZbVfgPEbd9PZ+KzcYinLGLG5kl9hs9y3s3IYKrpcQIevf1PwGRc631hS/7B5lRov/8ycVn2+t7ojnnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tSQ0mrHG; arc=none smtp.client-ip=209.85.219.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-df4e6ece05aso873733276.0
+        for <linux-mips@vger.kernel.org>; Tue, 28 May 2024 06:54:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716897676; x=1717502476; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1716904456; x=1717509256; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NAgN1LldmRrlrSvzizrGCKqLHlKjnztSUaZS5Nc7Gtg=;
-        b=kbKZgCgMiVQU6z+wB7b/hCP1+KtZ/23hcZjyWvmXE8IPeQHgM7XVzwbrwxj5W9Liil
-         ZG38VIa9LRpT2hoEKkVRz7gz/oMWh8tRkKeeUBNzIM468+XbCc1aB8KQNVolRQ7dh2yr
-         dw3hZUIy3Pf8N/65q6MRdK6uPhpv1olPLHdHwr8Z5KnnwvVsIHjmhhYmmRWEEmW6OYHW
-         VYanJNqOdJuMrNAuWb17q8vcShCNImy5+wpW9I1aIcGoyXP3vqfhOYeDrbZaLetG9wEc
-         nNl2e6MZFYpvQfRoSXE0kB0OfN/wT9D4i1nwjW6+42uLqkvbLW9S/gttcSYCDGfjAH7n
-         j8qA==
+        bh=7FRvHhRIIGYDk4+qwxfvO9/uo5NTHqwlQyzNXACIsqE=;
+        b=tSQ0mrHG3+n3PGa7X9pcZE1Chu/Ou4kJD5PRZeuVs6X0UgWzGhjAKz12y4MXw9+B08
+         QpdwOLF04csZe9v+E/6RDvFZ3pFEHnNLPHykMSobr+H4Jc8N0qZuVuNMqA7cemTP7E/P
+         Br7A5Q3p7PFXO+QdwqJs3tnZm8XLaFvdTuGZCpqwrfLfYuqi+ZlQxtMsb873oasKObTE
+         Um9H50l7SA449CHzSMzd1Bm8MA6HBYGxHXLL6SYocnxsHjW/yjCkx1XQOQO2wiELJnMf
+         /F+Js73JovAr7xSKVQ+N1cf1wa7OoZ7ij2x61L4Ty6hgGo7c6YGFH+Wp1QI5BM2Mm+z5
+         7JRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716897676; x=1717502476;
+        d=1e100.net; s=20230601; t=1716904456; x=1717509256;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NAgN1LldmRrlrSvzizrGCKqLHlKjnztSUaZS5Nc7Gtg=;
-        b=F+0TrEmqexeeHiPEZO4iCgdkLkhZ9K7Omiy4u/cTBXnlU0OK4vlwyDSZEh09u8Mwa9
-         TM+WOehEqqm74ILKyt+9wPziijx/8SLb9+p38iETvDgZcW6uuCalR0ZeV1ssOWbVI9xO
-         55co0dmW7kOJvngoTNoUK+Rfo/9/RkF5qRSyNivao9nrtoG2aqtJwo5oSmBEjZ7ZUVjL
-         yBArVtlXZ68543I7RL/K+ftk0udlTO1fprIfSijR47JkkHt60HzRk7JwznJseadEAMY9
-         SQGJT0N+ZuAyIMeVHONaRSfPODIuYYwIm9bUIHEHKPmbSEKzmQgHRa/Nvyc7q5rIMSkx
-         J+YA==
-X-Forwarded-Encrypted: i=1; AJvYcCXhgCeoFdn8EcVEAkj65GiVbFmNvNaY+ykaBNq+LykukoaCHjnnTZcp6QV0HUBIyVdcsxln63Qc2OVvZR2xxjXm+u+EWBkBTDfxGcAr+9qcYtADBOUnHp1PiphQwjETponsDxnBf66dXg==
-X-Gm-Message-State: AOJu0Yw1V29ouZIxLq0yeysI/4w5G4aOb14guGKZaubkyZ95E35SpxE0
-	BT6JaVT6Y7EcEDt6j0xGnExq9kxfc/i34bpfwwmdvS6O7NLzoADniXJbVMhowam4nQihktD35m7
-	6o157emKGs7JMZTnc65k1HGexACc=
-X-Google-Smtp-Source: AGHT+IGWXAZnzJq/outpGdrrF+BzVco1qSOLCnXc5XWK+E8bGR9GWy0ZahU9VxoRM4PaeRGMN+5E3TDdnybOYtKZhcQ=
-X-Received: by 2002:a17:906:cb8b:b0:a59:c3d0:550c with SMTP id
- a640c23a62f3a-a62643e4d86mr656965266b.43.1716897676330; Tue, 28 May 2024
- 05:01:16 -0700 (PDT)
+        bh=7FRvHhRIIGYDk4+qwxfvO9/uo5NTHqwlQyzNXACIsqE=;
+        b=rxzBHlkNYKZ74iasOZ91s5dMgmBrwFThoHljjCFmLNoQG6uooudKhLAOB4uHBvL0Gj
+         u92ZbGp/RwlvCoBFNQtgp4YmDiwyPv9IzstbHMQ4VPbOu187SeDmcvwDVl2H9/qruNlo
+         ecZ6gNtmTNgjS0XOufHbS39hfKq2bcUy0UF/sjlS/Ws7/S+/+zHORzpalnebo7g1ZMvt
+         JmmNuAZOfh5Ro9kBwu6t+MAAVXzLOjv0DZhBzVZwaTB9ODid5zYFGnvao5gNI8vr9zen
+         TtqUSsDYSVhMObJ3VtuYztx4IIZjHnzAfMpZeczCm4Br8Kfh+RQdWLxVZCBK6ghVvQeb
+         SzgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXiB0TKG/rcbLrwsEALP1M51Szr8EcTp7e+OSajsv597QB2byUCiXxN+lzLBRraR2otnM9/ijtM8pprUEyqMFlmCB5+c7ZcRSyi/A==
+X-Gm-Message-State: AOJu0YwILdn459AtjkUvxVRtH9dLEs4D/E6PCqQ8ke56Kga3nIFXqRDl
+	QGXVGXb+/UWrNzWqB3CNUM00h8rfKz+Mm5ZKD8EpnNphzHSq17DwutWMzt7OmM5rWX6ZSuWbcVe
+	V3dIYh49EvLyqJc6JhQGE24GdT5W5u13b0862bg==
+X-Google-Smtp-Source: AGHT+IGiPfPdnxrsrhzRu1zp22yduOAlK20srMU3ZfVqa4PYk+PdmHe6VAHg28ob32G6Sc5b0+jA9ivDKnJzxrYwPFU=
+X-Received: by 2002:a25:a545:0:b0:deb:42d2:c299 with SMTP id
+ 3f1490d57ef6-df7721ff9dbmr11796718276.55.1716904456264; Tue, 28 May 2024
+ 06:54:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240527022036.31985-1-user@blabla> <9abb1d5e-fdac-4500-9218-fb9f28ff2c05@web.de>
-In-Reply-To: <9abb1d5e-fdac-4500-9218-fb9f28ff2c05@web.de>
-From: =?UTF-8?B?5p2O57u06LGq?= <cn.liweihao@gmail.com>
-Date: Tue, 28 May 2024 20:01:04 +0800
-Message-ID: <CAPEOAkRjKm_bcfX4CJe3HON=6abcfzBGjXo6VpcnhR-u9OCHzg@mail.gmail.com>
+References: <20240527022036.31985-1-user@blabla>
+In-Reply-To: <20240527022036.31985-1-user@blabla>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Tue, 28 May 2024 15:54:04 +0200
+Message-ID: <CACRpkdY99LACAUsg_S4ww4U7-KU_EtkLZ+c8dsa0M85i9eJZbA@mail.gmail.com>
 Subject: Re: [PATCH] pinctrl: ralink: mt76x8: fix pinmux function
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org, 
-	Angelo Gioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	=?UTF-8?B?QXLEsW7DpyDDnG5hbA==?= <arinc.unal@arinc9.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	Sean Wang <sean.wang@kernel.org>, Sergio Paracuellos <sergio.paracuellos@gmail.com>, 
-	LKML <linux-kernel@vger.kernel.org>
+To: liweihao <cn.liweihao@gmail.com>
+Cc: arinc.unal@arinc9.com, sergio.paracuellos@gmail.com, sean.wang@kernel.org, 
+	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com, 
+	linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Markus Elfring <Markus.Elfring@web.de> =E4=BA=8E2024=E5=B9=B45=E6=9C=8828=
-=E6=97=A5=E5=91=A8=E4=BA=8C 19:37=E5=86=99=E9=81=93=EF=BC=9A
+On Mon, May 27, 2024 at 4:21=E2=80=AFAM liweihao <cn.liweihao@gmail.com> wr=
+ote:
+
+> From: Weihao Li <cn.liweihao@gmail.com>
 >
-> =E2=80=A6
-> > There are some same function name in different pin groups, =E2=80=A6
+> The current version of the pinctrl driver has some issues:
 >
->                                names?
+> 1. Duplicated "gpio" pmx function
 >
-
-refclk [0][1], pwm [2][3] and some others. For example, without this
-patch, part of the pinmux-functions in the kernel debug fs looks like
-this
-
-root@mt7628:/sys/kernel/debug/pinctrl/pinctrl-ralink-pinmux# cat
-pinmux-functions
-function 0: gpio, groups =3D [ pwm1 pwm0 uart2 uart1 i2c refclk perst
-wdt spi sdmode uart0 i2s spi cs1 spis gpio0 wled_an p0led_an p1led_an
-p2led_an p3led_an p4led_an wled_kn p0led_kn p1led_kn p2led_kn p3led_kn
-p4led_kn ]
-function 1: sdxc d6, groups =3D [ pwm1 ]
-function 2: utif, groups =3D [ pwm1 ]
-function 3: gpio, groups =3D [ pwm1 ]
-function 4: pwm1, groups =3D [ pwm1 ]
-function 5: sdxc d7, groups =3D [ pwm0 ]
-function 6: utif, groups =3D [ pwm0 ]
-function 7: gpio, groups =3D [ pwm0 ]
-function 8: pwm0, groups =3D [ pwm0 ]
-function 9: sdxc d5 d4, groups =3D [ uart2 ]
-function 10: pwm, groups =3D [ uart2 ]
-function 11: gpio, groups =3D [ uart2 ]
-function 12: uart2, groups =3D [ uart2 ]
-function 13: sw_r, groups =3D [ uart1 ]
-function 14: pwm, groups =3D [ uart1 ]
-function 15: gpio, groups =3D [ uart1 ]
-function 16: uart1, groups =3D [ uart1 ]
-function 17: -, groups =3D [ i2c ]
-function 18: debug, groups =3D [ i2c ]
-function 19: gpio, groups =3D [ i2c ]
-function 20: i2c, groups =3D [ i2c ]
-function 21: refclk, groups =3D [ refclk ]
-function 22: perst, groups =3D [ perst ]
-function 23: wdt, groups =3D [ wdt ]
-function 24: spi, groups =3D [ spi ]
-function 25: jtag, groups =3D [ sdmode ]
-function 26: utif, groups =3D [ sdmode ]
-function 27: gpio, groups =3D [ sdmode ]
-function 28: sdxc, groups =3D [ sdmode ]
-function 29: -, groups =3D [ uart0 ]
-function 30: -, groups =3D [ uart0 ]
-function 31: gpio, groups =3D [ uart0 ]
-function 32: uart0, groups =3D [ uart0 ]
-function 33: antenna, groups =3D [ i2s ]
-function 34: pcm, groups =3D [ i2s ]
-function 35: gpio, groups =3D [ i2s ]
-function 36: i2s, groups =3D [ i2s ]
-function 37: -, groups =3D [ spi cs1 ]
-function 38: refclk, groups =3D [ spi cs1 ]
-
-
+> The common code will add a "gpio" pmx functon to every pin group, so
+> it's not necessary to define a separate "gpio" pmx function in pin
+> groups.
 >
-> =E2=80=A6
-> > To solve this problem, a simple way is just add a pingrp refix to
+> 2. Duplicated pmx function name
 >
->                                                     pin group prefix?
+> There are some same function name in different pin groups, which will
+> cause some problems. For example, when we want to use PAD_GPIO0 as
+> refclk output function, the common clk framework code will search the
+> entire pin function lists, then return the first one matched, in this
+> case the matched function list only include the PAD_CO_CLKO pin group
+> because there are three "refclk" pin function, which is added by
+> refclk_grp, spi_cs1_grp and gpio_grp.
 >
+> To solve this problem, a simple way is just add a pingrp refix to
+> function name like mt7620 pinctrl driver does.
+>
+> 3. Useless "-" or "rsvd" functon
+>
+> It's really unnecessary to add a reserved pin mux function to the
+> function lists, because we never use it.
+>
+> Signed-off-by: Weihao Li <cn.liweihao@gmail.com>
 
-Yes. Just add a pin group prefix like pinctrl-mt7620.c does.
+The patch looks good to me and Sergio: patch applied so
+it gets some testing in linux-next.
 
-> Regards,
-> Markus
+If Arinc has issues with it or something else occurs I can
+always drop it again.
 
-[0] https://elixir.bootlin.com/linux/latest/source/drivers/pinctrl/mediatek=
-/pinctrl-mt76x8.c#L73
-[1] https://elixir.bootlin.com/linux/latest/source/drivers/pinctrl/mediatek=
-/pinctrl-mt76x8.c#L101
-[2] https://elixir.bootlin.com/linux/latest/source/drivers/pinctrl/mediatek=
-/pinctrl-mt76x8.c#L54
-[3] https://elixir.bootlin.com/linux/latest/source/drivers/pinctrl/mediatek=
-/pinctrl-mt76x8.c#L61
+Yours,
+Linus Walleij
 
