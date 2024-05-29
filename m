@@ -1,143 +1,211 @@
-Return-Path: <linux-mips+bounces-3372-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3373-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 512418D29CF
-	for <lists+linux-mips@lfdr.de>; Wed, 29 May 2024 03:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 959828D2B22
+	for <lists+linux-mips@lfdr.de>; Wed, 29 May 2024 04:43:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF6A628569D
-	for <lists+linux-mips@lfdr.de>; Wed, 29 May 2024 01:16:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BFF5287292
+	for <lists+linux-mips@lfdr.de>; Wed, 29 May 2024 02:43:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CB311E86E;
-	Wed, 29 May 2024 01:15:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2A0215B104;
+	Wed, 29 May 2024 02:42:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DqWK6XrZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ETKXRptG"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E36C632;
-	Wed, 29 May 2024 01:15:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1CD315B102;
+	Wed, 29 May 2024 02:42:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716945357; cv=none; b=QoGJCmKXoSPVUL06lSV1pjGyY1HikuPkg3DjMnd5MLfDmHwqEi7i7DDA3/Egr2XgKWEMUItxUVZZZhKdIspRi5Gx/aBTmvHE7CWHzXPYPyyROFTeV40ZBaMk99sFVre0WKFhzh3UbTtjpJITdk8abywCPNyg2HxttiBWdW9Yu8s=
+	t=1716950568; cv=none; b=JbRPAQBjOhGTIxe57fOBnx+xXYboRh8yNJaQlJ9a4M5zRUCF+yeM5GpWBKjZlMvHosaeT8M9Fnc0uNnTm55zCXWbfRkKu1n7TQlTh3MSU+K6D4HU0xAMC0TfgpDI9UzOHhgzO81cQWQmNNglHPowHfH2z9/i5n/goPt/TF9icv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716945357; c=relaxed/simple;
-	bh=fu5h1VLTePpmxGzHtWBWm8qsfXfU3OcS0nx2N9r/Z20=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cwFFKRE0YHWb5YBj5PnI1nqtH6PiIuu0sDoQrtrmfkwHszl2mUtMJk8oNyKqC9ckJA1DMlt+bJYfW/bdsQH4U4P1cmzfgIsVsBqaNWwIHQHfs3IWNe4AIEuBJGlwyOFFHEcSpbuWX+mXrxmJ7oxYSw3/jHIVx8CJ+wLQRhdTdmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DqWK6XrZ; arc=none smtp.client-ip=209.85.208.44
+	s=arc-20240116; t=1716950568; c=relaxed/simple;
+	bh=Jdw6MVrlDfRwAQ4Dvlaenq+UtdPYZrI/GgT7O1G/w1I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ttxs8XeA4GFa4EEarJMKTAggkpU7mTtZMT+iCbGExkeEABOtDAPp3GcfaCG2LXudUwNQMUxbmO9QUIZFrLNawWKRLb7C1V1ORYrVaouSPUPmGpQFDHbnwuMYpuhLvqmro3rERO0EgUN+MpaI/4QqDpNvZbbQlZKZIsse7POL7J8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ETKXRptG; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5785e443cf4so1491128a12.3;
-        Tue, 28 May 2024 18:15:55 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-354b722fe81so1229634f8f.3;
+        Tue, 28 May 2024 19:42:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716945354; x=1717550154; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dkttBqYur5VmeYZbcuQ4bNxlcQKOfUsclUNLqJlUw/0=;
-        b=DqWK6XrZNDKSX1BURG61tvVg3bDsW/Qp2YczHv1uuEZoHbZSJWpOXgG5G8K4fy+OFK
-         KBGMpAQrkF0vo+oCXsNE2iLM90yaHvH0lRt2yX19wOiG1l5RG0bqTJV68qjSWe3R3xoS
-         aYg+4g96rvFzB8mKjuI77vJw6tKpSKQzrwGHzHFZIi3OYIBAVbQ0C7GRFpOrtjHw5FzT
-         Zvu8NwRJdCPXeJP4sumnS3kPJO5R/B7YwR8VIfTCjqQAhe87k1UL1CYBY0FlZ9qOI7jS
-         Fa801gOHmJpxJFCpORLZRyxNqlNSSeEtGt8wNRbQ/QHPFpT0mCm23xZREJeFQfiq6fHo
-         zbDQ==
+        d=gmail.com; s=20230601; t=1716950565; x=1717555365; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WaUSmZ7PBffPeOQ7gcFKeRJS00p2asbGxa8dHTdLep4=;
+        b=ETKXRptGUP3WRzXGWJruTx4VieKCMCMbbQflyXyagF+8I3xrMhNH8yC+ycGZbob2ho
+         KBm8I8KOuo0z+ndzqqlETXDizzycjvFtL5dVIV9t+pem9DeZykIqViQxT+eVSA3/ewrg
+         R6m9pc7c4LWKiR7lwJjWIlIo04t5jdBSrjfIqG0xv0UeSOlLPK+EJcDBaEJDX+GDbLW4
+         FbEJMdUL2ENe1iJgMZfY5317AQdUY2rUoWkOPVIDMbs8NhivC6cHjujmM8OSsvVe5ac+
+         cSyLJN+RNnW7/1fAHtl7hpGk2KVzADz8X5zcIcyTOg4wYNi1d0ucbeDZ1i+YlL9VQKby
+         hKxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716945354; x=1717550154;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dkttBqYur5VmeYZbcuQ4bNxlcQKOfUsclUNLqJlUw/0=;
-        b=fvG6yujCOaue4hGev0Lx5MxHeIvQ8nneMkpMIhwWV67RAPQjtqvKfnElBXgxfWUYmR
-         ezhQoMsDUbmUigtk1PyK7QNJpUyGII4FsReRYAUjOmEFTdDs8DUAiZOO0xdClL7k5HHS
-         7a6q/XPsCFPKrpr6QGaFIVy/n6jaQNVUeLdIVvVETWnOg+UKNBjlIs8pCOTemGNLdJ2n
-         zyd1uhf3t4DmxCM8xv2W66TqJO2lQF9ip5OC7CPSLSQTyhvT7/bib1B2RdFBiWcWcYFz
-         utCTpFs0f6TAidLN8hMpXFv4AWnwufdk6YqlnRk+21fHFZSY+U4Sm6Wa/oOFsBHC9CRl
-         4+/A==
-X-Forwarded-Encrypted: i=1; AJvYcCVG8O/cWpSxlRyFPlVqgtonR5Yw158zmOuS+BA6mxNqu7/U1yVVwA7byDV2TGTIgPBTNeONy6Bcm3OFZrCfSHnPriO28Vr8EiGaqx8MLh2ARZVdTUFD3PUQFGKvz7uUwQSUjPdWR4GKJHfcIx511QRNspVvSbZ0pLLHC1MBwNj6JGKrDsg=
-X-Gm-Message-State: AOJu0YzepHV6jfN1pA2gEUgHV0irzLAjgCalOaBzXjE4MxGNPcG3pwjY
-	2rv6jXqTnFuWt8gr9WnO/7b6bAT+kjKRCD6py4tmMu2Yp/kF7aRLfhy0/MONZfu5tFZYp0EOB+c
-	RYdPWNB8+0LkcbZ0P6za0GpADPWZAng==
-X-Google-Smtp-Source: AGHT+IHyxyhKthaWgMwE6kMyfK+bLZ11R28UBPmFZV6BzjKc6hhsxMuv7nztpRo3OH+U9Y+ASwIkM7c0M+DokgYcKJg=
-X-Received: by 2002:a50:cd4d:0:b0:578:5245:3296 with SMTP id
- 4fb4d7f45d1cf-57852453300mr9164565a12.28.1716945353450; Tue, 28 May 2024
- 18:15:53 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1716950565; x=1717555365;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WaUSmZ7PBffPeOQ7gcFKeRJS00p2asbGxa8dHTdLep4=;
+        b=DsgYxP4TrLwNJuC37uaHBHU56LdDDIcCE/k7qZUmHuS+2CcOC/oB6JUhBSLkrWAVE8
+         POubmHZws1uB+kDshLOOzZhJbdRbqP1Hd+Hq1JwZPykuWfM3UA69KEhqmSHxnb+6vrUh
+         3J+oIwqfGJDsRqpn32yWXQpducdT80z19czsBjoZHVtUSN5DdyKT99ddvYalLKSzTji7
+         PmbywfYjaSTCPqxLBvxnd34J3IZXSgBfpYONlsqDWVCqh6ewEqn86XyL0KeROw+MNdX7
+         BLbE+8foVeXtb0VVfFR9X5t0+YfvZL6odufrF5rE2yKlxKfqv02HxGqpyuKMvajM2ZhD
+         zu4w==
+X-Forwarded-Encrypted: i=1; AJvYcCU+xFNTt3yU2m5zHnRtwEABYtR9y5pMx2IkgB560lICrBMPoyq5IQOGmxfExGB6MxxidESn6Vto9dkaJEbPSR4TRCmWeI23ryocsF/Mdsfi67dXF9uDOSAulqIwp+zbYtHkAztn6Vp9JY7fO4tgbWZaFRQjHikFvD0gsGgRkwLOR4+pixgEMmTYFDD9eOKuKmO2TDwAT+jNgcsrTaNsL5Iw4Po9Z+dj8kNTlpuZcUwxMG7vCbU77fFY6qRxAvh3xFi3CkVpOuJHDjrczJsTCRt9SX7x6CJw32P4ZVlQ9mLNGd/3ofjc36EH22iHvZUT6lwgzvxdjZBME2IvHxVfjB3OTvinFpRNFJ4v2BMKZ7rU7Dci9Fyf40PpB8bL98Qwh0+V0/B+/KXVrKRiMTObJzoL0k61zTQ9NKfl/HJZQGZQAY3+162oTKws2w98r145NpprPcmP1PWanc1RUw8wBR0WGWu1juMwWMfdhOWkHw==
+X-Gm-Message-State: AOJu0YwiAWxCGmd0ajxweAkaVndJZKQHhjyPkvemz8iQw2HoJmDaZYaB
+	FXY2tTBmJyj7DR3aZw6etCz22nSa0hDujF5u/hskmOTxhSDpoOB2
+X-Google-Smtp-Source: AGHT+IHY3mIPt+8r+bWSLhyahH3HSb2DqvQP0sw5Fzxjvwkj4ZywRulvtF7xu0QbCHkAVDUw9UJ96A==
+X-Received: by 2002:a05:6000:1841:b0:354:c0a6:2815 with SMTP id ffacd0b85a97d-355245e30f8mr11028033f8f.4.1716950565027;
+        Tue, 28 May 2024 19:42:45 -0700 (PDT)
+Received: from [192.168.42.154] ([185.69.144.120])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35579d7d963sm13608610f8f.21.2024.05.28.19.42.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 May 2024 19:42:44 -0700 (PDT)
+Message-ID: <29464e46-e196-47aa-9ff5-23173099c95e@gmail.com>
+Date: Wed, 29 May 2024 03:42:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240527022036.31985-1-user@blabla> <CACRpkdY99LACAUsg_S4ww4U7-KU_EtkLZ+c8dsa0M85i9eJZbA@mail.gmail.com>
- <CAMhs-H-3yM3sLvgtOn1KWPF-Ch52hqZZXbFPe2YP=xgFjZLDug@mail.gmail.com>
-In-Reply-To: <CAMhs-H-3yM3sLvgtOn1KWPF-Ch52hqZZXbFPe2YP=xgFjZLDug@mail.gmail.com>
-From: =?UTF-8?B?5p2O57u06LGq?= <cn.liweihao@gmail.com>
-Date: Wed, 29 May 2024 09:15:41 +0800
-Message-ID: <CAPEOAkSH7hRJQ2duHDcUZY-0jRjcwRDks+u6KzzJ6wesgo8UCw@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: ralink: mt76x8: fix pinmux function
-To: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>, arinc.unal@arinc9.com, sean.wang@kernel.org, 
-	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com, 
-	linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v9 11/14] tcp: RX path for devmem TCP
+To: Mina Almasry <almasrymina@google.com>, David Wei <dw@davidwei.uk>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
+ Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>,
+ Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20240510232128.1105145-1-almasrymina@google.com>
+ <20240510232128.1105145-12-almasrymina@google.com>
+ <9097e78d-0e7d-43bd-bafd-e53a4872a4d1@davidwei.uk>
+ <CAHS8izOe-uYjm0ttQgHOFpvp_Tj4_oRHV6d1Y1sWJAZJdCdCBA@mail.gmail.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CAHS8izOe-uYjm0ttQgHOFpvp_Tj4_oRHV6d1Y1sWJAZJdCdCBA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Sergio Paracuellos <sergio.paracuellos@gmail.com> =E4=BA=8E2024=E5=B9=B45=
-=E6=9C=8828=E6=97=A5=E5=91=A8=E4=BA=8C 22:20=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Tue, May 28, 2024 at 3:54=E2=80=AFPM Linus Walleij <linus.walleij@lina=
-ro.org> wrote:
-> >
-> > On Mon, May 27, 2024 at 4:21=E2=80=AFAM liweihao <cn.liweihao@gmail.com=
-> wrote:
-> >
-> > > From: Weihao Li <cn.liweihao@gmail.com>
-> > >
-> > > The current version of the pinctrl driver has some issues:
-> > >
-> > > 1. Duplicated "gpio" pmx function
-> > >
-> > > The common code will add a "gpio" pmx functon to every pin group, so
-> > > it's not necessary to define a separate "gpio" pmx function in pin
-> > > groups.
-> > >
-> > > 2. Duplicated pmx function name
-> > >
-> > > There are some same function name in different pin groups, which will
-> > > cause some problems. For example, when we want to use PAD_GPIO0 as
-> > > refclk output function, the common clk framework code will search the
-> > > entire pin function lists, then return the first one matched, in this
-> > > case the matched function list only include the PAD_CO_CLKO pin group
-> > > because there are three "refclk" pin function, which is added by
-> > > refclk_grp, spi_cs1_grp and gpio_grp.
-> > >
-> > > To solve this problem, a simple way is just add a pingrp refix to
-> > > function name like mt7620 pinctrl driver does.
-> > >
-> > > 3. Useless "-" or "rsvd" functon
-> > >
-> > > It's really unnecessary to add a reserved pin mux function to the
-> > > function lists, because we never use it.
-> > >
-> > > Signed-off-by: Weihao Li <cn.liweihao@gmail.com>
-> >
-> > The patch looks good to me and Sergio: patch applied so
-> > it gets some testing in linux-next.
-> >
-> > If Arinc has issues with it or something else occurs I can
-> > always drop it again.
->
-> Thanks, Linus :)
->
-> Best regards,
->     Sergio Paracuellos
+On 5/28/24 18:36, Mina Almasry wrote:
+> On Wed, May 22, 2024 at 11:02 PM David Wei <dw@davidwei.uk> wrote:
+...
+>>> +                      */
+>>> +                     if (!skb_frag_net_iov(frag)) {
+>>> +                             net_err_ratelimited("Found non-dmabuf skb with net_iov");
+>>> +                             err = -ENODEV;
+>>> +                             goto out;
+>>> +                     }
+>>> +
+>>> +                     niov = skb_frag_net_iov(frag);
+>>
+>> Sorry if we've already discussed this.
+>>
+>> We have this additional hunk:
+>>
+>> + if (niov->pp->mp_ops != &dmabuf_devmem_ops) {
+>> +       err = -ENODEV;
+>> +       goto out;
+>> + }
+>>
+>> In case one of our skbs end up here, skb_frag_is_net_iov() and
+>> !skb_frags_readable(). Does this even matter? And if so then is there a
+>> better way to distinguish between our two types of net_iovs?
+> 
+> Thanks for bringing this up, yes, maybe we do need a way to
+> distinguish, but it's not 100% critical, no? It's mostly for debug
+> checking?
 
-Thanks for reviewing the code.
+Not really. io_uring definitely wouldn't want the devmem completion path
+taking an iov and basically stashing it into a socket (via refcount),
+that's a lifetime problem. Nor we'd have all the binding/chunk_owner
+parts you have and probably use there.
 
-Best regards,
-Weihao Li
+Same the other way around, you don't want io_uring grabbing your iov
+and locking it up, it won't even be possible to return it back. We
+also may want to have access to backing pages for different fallback
+purposes, for which we need to know the iov came from this particular
+ring.
+
+It shouldn't happen for a behaving user, but most of it would likely
+be exploitable one way or another.
+
+> I would say add a helper, like net_iov_is_dmabuf() or net_iov_is_io_uring().
+
+We're verifying that the context the iov bound to is the current
+context (e.g. io_uring instance) we're executing from. If we can
+agree that mp_priv should be a valid pointer, the check would look
+like:
+
+if (pp->mp_priv == io_uring_ifq)
+
+> Checking for niov->pp->mp_ops seems a bit hacky to me, and may be
+> outright broken. IIRC niov's can be disconnected from the page_pool
+> via page_pool_clear_pp_info(), and niov->pp may be null. Abstractly
+
+It's called in the release path like page_pool_return_page(),
+I can't imagine someone can sanely clear it while inflight ...
+
+> speaking the niov type maybe should be a property of the niov itself,
+> and not the pp the niov is attached to.
+
+... but I can just stash all that in niov->owner,
+struct dmabuf_genpool_chunk_owner you have. That might be even
+cleaner. And regardless of it I'll be making some minor changes
+to the structure to make it generic.
+
+> It is not immediately obvious to me what the best thing to do here is,
+> maybe it's best to add a flag to niov or to use niov->pp_magic for
+> this.
+> 
+> I would humbly ask that your follow up patchset takes care of this
+> bit, if possible. I think mine is doing quite a bit of heavy lifting
+> as is (and I think may be close to ready?), when it comes to concerns
+> of devmem + io_uring coexisting if you're able to take care, awesome,
+> if not, I can look into squashing some fix.
+
+Let it be this way then. It's not a problem while there is
+only one such a provider.
+
+-- 
+Pavel Begunkov
 
