@@ -1,183 +1,146 @@
-Return-Path: <linux-mips+bounces-3389-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3390-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B4918D3F0F
-	for <lists+linux-mips@lfdr.de>; Wed, 29 May 2024 21:49:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 249E38D3FFC
+	for <lists+linux-mips@lfdr.de>; Wed, 29 May 2024 23:04:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C1281F24878
-	for <lists+linux-mips@lfdr.de>; Wed, 29 May 2024 19:49:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FA611C2127B
+	for <lists+linux-mips@lfdr.de>; Wed, 29 May 2024 21:04:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D45D61C688C;
-	Wed, 29 May 2024 19:49:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C2481C8FC7;
+	Wed, 29 May 2024 21:04:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WaKJxj2r"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ijRmXGee"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26220167288
-	for <linux-mips@vger.kernel.org>; Wed, 29 May 2024 19:49:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 645CA1C8FB1
+	for <linux-mips@vger.kernel.org>; Wed, 29 May 2024 21:04:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717012165; cv=none; b=GXdCTGb+RIWLy8RmDGo6bgU36AVVd5F2kMAjY34kbltEBC46bYNg9BoU/P5ZNlgnXSg/RWexvGWea5GLu7GNSNO4zrEXn7ZL40dm38McNZPcAXKAi5VVJI7oAW2zLpRXOLi9ZftfDSet3n9mZAnQbCxOUEoN19W6+WI0NyN5tco=
+	t=1717016643; cv=none; b=fU8nyo2rJUYRCauzmpBtK1m0gUDGqZd8K4tjwzoX7rKRq3XBUWwANZNKLboueov2DmnIcVpyAxkUgNeCwAFvBO6bf8GHDyW82QeX40PpxEloceHjYUJvSqEc9xjUvq7zmIxv27einCPPIfAeZOp4vWVBOUV1qK5HGTG+QRltYno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717012165; c=relaxed/simple;
-	bh=6SM4nGMq6YXwjPx3hzOgTtkr8rnEX3Vki2GtQ9/v/Tg=;
+	s=arc-20240116; t=1717016643; c=relaxed/simple;
+	bh=BCBSe826+nKw2daLQ4TIlXiD2I054RSipXGDwuLppXE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BLqTjxBKQkEZuijWFMt6JyQ3olUA7NoAZicgFOXDBepIxj41TFxPHDcFI2ItRh0MGOMjb3CV4IThUCuZkmjbQ1x1hntomjwWiUnzTRfRGKYHibgWL2gNGb6nfT76WxMnSzQpHYk0I/w+pK6BgsQa7d7GVxR5thBHtrnJxPgsUSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WaKJxj2r; arc=none smtp.client-ip=209.85.208.47
+	 To:Cc:Content-Type; b=egTcnN1UqHFtNdpncIU8I8EhkATSJhoSqvPOl400kLGxA8qrKy3sKAS24/XsKDEMpBJxnE/jW2MmEjHDzBBb/7tB+2ZnoGTQZKX20kL0/Y+eX9MTAs3xoWIgMSP2OlQG+srnEHSGAbDFdZ1TsiNX0XGwRYH9GtW2Z9+9OSA7M8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ijRmXGee; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-57883b25b50so106669a12.2
-        for <linux-mips@vger.kernel.org>; Wed, 29 May 2024 12:49:23 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-41ff3a5af40so4585e9.1
+        for <linux-mips@vger.kernel.org>; Wed, 29 May 2024 14:04:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717012162; x=1717616962; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1717016640; x=1717621440; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Mc6m1mM9m4Ud5DdSGHmt9Zcx4NpBQQ1agEgintMCgFk=;
-        b=WaKJxj2rSmiptfxPuIpvUd4DO37VpSMk36dQcSjU2nfbhLrs/6sj+L957ozHRkSxyE
-         TahFIlyXavs4CwVkXbGgibHaZ78nBGAoNz1E+2HWXC9+7wpBE9x3fU/+vVUNcUW6rJqc
-         n0wSQUBi2d3dc4nr8ulLpmSegCq86rCBEhG/icMRdmocKpO4NWAppHoIuWkJ8uNPH+jX
-         o2ArPykUTi8L9m/w0vlaDn5Dc8OxRXwlaoO9jd/ezYSXQJ3I6lBNJtlfF/AcwBvjH0to
-         Qv6SqMuA/Yte/M52TzTy7XMHZ3YE8iF0RhhZ/93YZjD2Ch6+/yU4fVLtCjI9qC9Bx0KN
-         3KUw==
+        bh=BCBSe826+nKw2daLQ4TIlXiD2I054RSipXGDwuLppXE=;
+        b=ijRmXGeehgI5neC/TycAug7mg9rG5pDgOZvkwGtuJu0Mbm6pCFIKJJEmsjebY27VN4
+         TYxqZUnaQwiGe0N4+pHJr9YfbZWWkpOIa0EAMt5v4sQgsxfOBGzB+ucbFyg4FVeEYAi0
+         m4agMhgSlwT3Nh5p2vkLIV2K0te9MHyVdPh/jh7rj6CgsGecdwrVkD8XSYgOWjDYU3jf
+         ME2TKK9utqccJwGFaIQsqjGIEe6xx5MDZQfupSmeD5MZkTY6bj6omccpJZg1KuTKpNsa
+         LZJu/3OssGgYM8xlkEmpXmJYtJw0idtnC6CxfTQPi1TgVNLXCnCPBd/M3UljA9velwvc
+         rbsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717012162; x=1717616962;
+        d=1e100.net; s=20230601; t=1717016640; x=1717621440;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Mc6m1mM9m4Ud5DdSGHmt9Zcx4NpBQQ1agEgintMCgFk=;
-        b=UzC0Oj88BA7pG0nCAcDy/W6ulQgE3RStj8S8G0Mi2P2U2KLUJ9vOlbE4ei30h43FYU
-         Nb/0dqfbabR1nIPDC1v/7vTTCSZ95iFmOI2/P3FSnJIXvTDNNo1cYxC4HYGMDAL7pbVH
-         tXOvKrtPPtooWucDu6rZwIlyFjGuHxlc8ocSvJGRmHv3JV5ruHcWTpHHqP8MlsA8YVHB
-         WO57JeyiXg10MdHiiF7eOIv5k+WqFjI6FRHis6qgvB5Q5coOnuLh1hVJFS2ioSrYqj4b
-         lMyu+0SXy2SdnrfKnZSuQ9/skDn9qQ2uW15NvcWON08fHwpE1BVEJmPjL6Cj0WCxE50W
-         /UOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVOnQ5NBXTD21oIzhEbjNgZfsFRP3GKK5kvhMErOqBo3pzhVIYxa00+lg/XaPA6MSceA4jn+m1kgRCPT4zfheTtT7wj8BNlAL+S3w==
-X-Gm-Message-State: AOJu0Yw6Gs78WRUVMPpXcexue8WOdDy3QuqU9KngDV4DtaKO9uF/AiIg
-	dTakvvS0YOQ4jgog7qAL7D09F+MmojeuVyr4zb2H6rlawW5EDUg0EPHueUVKX1bM3EBsLbuCwdB
-	BJnQvGepFNaSVptJ3e2+nZv3kdKvtWNhwTxN4
-X-Google-Smtp-Source: AGHT+IF9PV9JeYxxToH3qJtJfXsnwGUXtNUCB5FusC4DI8sGVRwbRTrnhLkmsIc9tQHh+KHAMPViyk6pTFPRs1HCH10=
-X-Received: by 2002:a17:906:c18f:b0:a63:49a5:9390 with SMTP id
- a640c23a62f3a-a65e8f74d3dmr11845366b.41.1717012162364; Wed, 29 May 2024
- 12:49:22 -0700 (PDT)
+        bh=BCBSe826+nKw2daLQ4TIlXiD2I054RSipXGDwuLppXE=;
+        b=JqUKAP+5wn6ams3kiBlvIQkDdx40Jm6zUEtB/QTPu2dGCbj1TK7yzmyzmww+Ybjk83
+         6e2oEmQb3hLiWHd9+4/lK+43p/BBes8DIzRcF7/WofWQMpizYfvI99apkU9cCwxJcygb
+         dlwg4zJ8azfDsVVMyHivqp+hoTiDss3BwsyQFUYmvE2e4cI0F2+fPYn6DG75J0psQmbx
+         LCmAZiUeTq7lU3BM3v7LKyeJvgMaMsYZJ3bEprj7RJrdmVFew7KRx1BmWyNyuqsVSYYb
+         twi5YaAbCCjOkntUO1ELcOer9o9ls7HKtFXe2fyTvThBG5+ZQCYqXwp9AYkOIEaTKnjC
+         B3bA==
+X-Forwarded-Encrypted: i=1; AJvYcCXh3M7hrKZyenHlH4aUFWaIR7lAybcaRSlpQyiLCJVGa6ZybbL1IlxFoqHb7ckW1+n1DyqXiWH71WUyMaMeNmXoK9iriQripn9raA==
+X-Gm-Message-State: AOJu0YwxGq5ROq5/vRwFiPIWLv4cwzJ+X/wz6rbfcNiE6ohYzKK+RE1s
+	GdpS1vQGd76SKutCQNXN25DO5x9g9DWCnsR0eXtA99mMjsamG7URb2MPKrmD5LQowt4QxJnEeY9
+	g0yJ845ppN+Rgu3v5aDrp8rD+31LpLFuVlHdd
+X-Google-Smtp-Source: AGHT+IHwVBgFo5das5shZb/z5hgC8KCkV+Jkj5w99z9LyfmWhmSM4ldtkdm2dxotNGGlvICz4N/Nu5ZLrwoOjjiw7Io=
+X-Received: by 2002:a05:600c:3b85:b0:41b:4c6a:de7a with SMTP id
+ 5b1f17b1804b1-42127ec7dbdmr148185e9.3.1717016639372; Wed, 29 May 2024
+ 14:03:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240510232128.1105145-1-almasrymina@google.com>
- <20240510232128.1105145-5-almasrymina@google.com> <d85f4ba4-774f-4577-985f-45a5a1866da7@davidwei.uk>
-In-Reply-To: <d85f4ba4-774f-4577-985f-45a5a1866da7@davidwei.uk>
-From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 29 May 2024 12:49:08 -0700
-Message-ID: <CAHS8izPVhDaokO9C+S4RR9b6+77OV2CsNb8jnGGKxNqGTa6DXg@mail.gmail.com>
-Subject: Re: [PATCH net-next v9 04/14] netdev: support binding dma-buf to netdevice
-To: David Wei <dw@davidwei.uk>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>, 
-	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
-	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20240529180510.2295118-1-jthoughton@google.com> <20240529180510.2295118-3-jthoughton@google.com>
+In-Reply-To: <20240529180510.2295118-3-jthoughton@google.com>
+From: Yu Zhao <yuzhao@google.com>
+Date: Wed, 29 May 2024 15:03:21 -0600
+Message-ID: <CAOUHufYFHKLwt1PWp2uS6g174GZYRZURWJAmdUWs5eaKmhEeyQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/7] mm: multi-gen LRU: Have secondary MMUs participate
+ in aging
+To: James Houghton <jthoughton@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Ankit Agrawal <ankita@nvidia.com>, 
+	Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Bibo Mao <maobibo@loongson.cn>, 
+	Catalin Marinas <catalin.marinas@arm.com>, David Matlack <dmatlack@google.com>, 
+	David Rientjes <rientjes@google.com>, Huacai Chen <chenhuacai@kernel.org>, 
+	James Morse <james.morse@arm.com>, Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Oliver Upton <oliver.upton@linux.dev>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Raghavendra Rao Ananta <rananta@google.com>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Sean Christopherson <seanjc@google.com>, 
+	Shaoqin Huang <shahuang@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
+	Will Deacon <will@kernel.org>, Zenghui Yu <yuzenghui@huawei.com>, kvm-riscv@lists.infradead.org, 
+	kvm@vger.kernel.org, kvmarm@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+	linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+	loongarch@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, May 18, 2024 at 11:46=E2=80=AFAM David Wei <dw@davidwei.uk> wrote:
+On Wed, May 29, 2024 at 12:05=E2=80=AFPM James Houghton <jthoughton@google.=
+com> wrote:
 >
-> On 2024-05-10 16:21, Mina Almasry wrote:
-> > +void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *bindin=
-g)
-> > +{
-> > +     struct netdev_rx_queue *rxq;
-> > +     unsigned long xa_idx;
-> > +     unsigned int rxq_idx;
-> > +
-> > +     if (!binding)
-> > +             return;
-> > +
-> > +     if (binding->list.next)
-> > +             list_del(&binding->list);
-> > +
-> > +     xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
-> > +             if (rxq->mp_params.mp_priv =3D=3D binding) {
-> > +                     /* We hold the rtnl_lock while binding/unbinding
-> > +                      * dma-buf, so we can't race with another thread =
-that
-> > +                      * is also modifying this value. However, the pag=
-e_pool
-> > +                      * may read this config while it's creating its
-> > +                      * rx-queues. WRITE_ONCE() here to match the
-> > +                      * READ_ONCE() in the page_pool.
-> > +                      */
-> > +                     WRITE_ONCE(rxq->mp_params.mp_ops, NULL);
-> > +                     WRITE_ONCE(rxq->mp_params.mp_priv, NULL);
-> > +
-> > +                     rxq_idx =3D get_netdev_rx_queue_index(rxq);
-> > +
-> > +                     netdev_rx_queue_restart(binding->dev, rxq_idx);
+> Secondary MMUs are currently consulted for access/age information at
+> eviction time, but before then, we don't get accurate age information.
+> That is, pages that are mostly accessed through a secondary MMU (like
+> guest memory, used by KVM) will always just proceed down to the oldest
+> generation, and then at eviction time, if KVM reports the page to be
+> young, the page will be activated/promoted back to the youngest
+> generation.
+
+Correct, and as I explained offline, this is the only reasonable
+behavior if we can't locklessly walk secondary MMUs.
+
+Just for the record, the (crude) analogy I used was:
+Imagine a large room with many bills ($1, $5, $10, ...) on the floor,
+but you are only allowed to pick up 10 of them (and put them in your
+pocket). A smart move would be to survey the room *first and then*
+pick up the largest ones. But if you are carrying a 500 lbs backpack,
+you would just want to pick up whichever that's in front of you rather
+than walk the entire room.
+
+MGLRU should only scan (or lookaround) secondary MMUs if it can be
+done lockless. Otherwise, it should just fall back to the existing
+approach, which existed in previous versions but is removed in this
+version.
+
+> Do not do look around if there is a secondary MMU we have to interact
+> with.
 >
-> What if netdev_rx_queue_restart() fails? Depending on where it failed, a
-> queue might still be filled from struct net_devmem_dmabuf_binding. This
-> is one downside of the current situation with netdev_rx_queue_restart()
-> needing to do allocations each time.
+> The added feature bit (0x8), if disabled, will make MGLRU behave as if
+> there are no secondary MMUs subscribed to MMU notifiers except at
+> eviction time.
 >
-> Perhaps a full reset if individual queue restart fails?
->
+> Suggested-by: Yu Zhao <yuzhao@google.com>
+> Signed-off-by: James Houghton <jthoughton@google.com>
 
-Sorry for the late reply, I've been out on vacation for a few days and
-caught up to some other work.
+This is not what I suggested, and it would have been done in the first
+place if it hadn't regressed the non-lockless case.
 
-Yes, netdev_rx_queue_restart() can fail, but I'm not sure how to
-recover. Full reset would be an option, but it may be way too big of a
-hammer to do a full reset on this failure. Also, last I discussed with
-Jakub, AFAIU, there is no way for core to reset the driver? I had
-suggested to Jakub to use ndo_stop/ndo_open to reset the driver on
-queue binding/unbinding, but he rejected that as it could cause the
-driver to fail to come back up, which would leave the machine stranded
-from the network. This is why we implemented the queue API, as a way
-to do the binding/unbinding without risking the machine stranding via
-a full reset. This is the previous convo from months back[1].
-
-So, all in all, I don't see anything amazing we can do here to
-recover. How about just log? I will add a warning in the next
-iteration.
-
-(I applied most of the rest of your suggestions btw).
-
-[1] https://patchwork.kernel.org/project/netdevbpf/patch/20231106024413.280=
-1438-13-almasrymina@google.com/#25590262
-
---=20
-Thanks,
-Mina
+NAK.
 
