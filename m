@@ -1,173 +1,169 @@
-Return-Path: <linux-mips+bounces-3447-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3448-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2861D8D69A0
-	for <lists+linux-mips@lfdr.de>; Fri, 31 May 2024 21:19:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF07D8D6AB8
+	for <lists+linux-mips@lfdr.de>; Fri, 31 May 2024 22:32:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4E732891A4
-	for <lists+linux-mips@lfdr.de>; Fri, 31 May 2024 19:19:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9300428A7F9
+	for <lists+linux-mips@lfdr.de>; Fri, 31 May 2024 20:32:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8334C8060D;
-	Fri, 31 May 2024 19:18:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B38F71420D0;
+	Fri, 31 May 2024 20:31:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OL//CPF3"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0NBYD5ft"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FCA669DF7
-	for <linux-mips@vger.kernel.org>; Fri, 31 May 2024 19:18:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF44E1946F
+	for <linux-mips@vger.kernel.org>; Fri, 31 May 2024 20:31:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717183106; cv=none; b=pBnA/SObIfeihc2/MUxyvlIabdjGHKgvzzKbyHq60d207gjowkIXmgtRqhSY1t7Odl2gi8bJOrYyOlXbShZ8GVXbATnO1/5ARKNSlWom2I5df93KgXLw5f+VCnKalFvylA5NYcHzPUmF7jEmxJHEQY9s6SexnyH2UiK7N/QlwE4=
+	t=1717187519; cv=none; b=hUwS7GIs5+QWTcFBgG90b9jYNyNZhGmBVWmZoUr1S/Yfhvn0JqdWEK/04hZP4HTXP77EAe7b9/8vIHmvDqFIteb+RNLRKkJt2CPPvaQrVDpSKltRcrcJ1aVRiYwVOuE7FP0G+D3v0qR4yvOdTz5h0qKKqYBqJmh3kOKDCicS288=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717183106; c=relaxed/simple;
-	bh=8HZ1n1s6qKTPU9KH0f7lccCKB3kfMQ8uzpkLiQlx0XM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bg2O3geoKyXg0oHk2u2z7Z6tZ3nVN3w2yyvlMC82VAcBQSmGc+POM3g8yf1MdtuT/Lubqxk0mr6Q8Ngd8+6xU14v1bENbY9nMS7oPCEsivPl3NVUi7Av21/qzOiTArrZD/FBBbvTDfxlzQPeLp8s46NxzLPJxl3xfOiMnKTYR6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OL//CPF3; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Envelope-To: jthoughton@google.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1717183102;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2PNxbejm0F++LAZR/c3kykM2MBahftMSuulGipIjRRI=;
-	b=OL//CPF3OaxDLNyUcF7L7kyNMf3VPjTvzSryLUW5C3BaNJ8N7qvdo+GYUTIaqfYoH8qbo6
-	hUFuWYcFNlSydh5QitAFxaO+uiSO8irmL6Dy7FoK51VSXO1IpH+zzZd24unXmg4kvPBA2e
-	eDLUrnlpHUL5vYjUk6kginvv7JlKt2g=
-X-Envelope-To: akpm@linux-foundation.org
-X-Envelope-To: pbonzini@redhat.com
-X-Envelope-To: aou@eecs.berkeley.edu
-X-Envelope-To: ankita@nvidia.com
-X-Envelope-To: anup@brainfault.org
-X-Envelope-To: atishp@atishpatra.org
-X-Envelope-To: axelrasmussen@google.com
-X-Envelope-To: maobibo@loongson.cn
-X-Envelope-To: catalin.marinas@arm.com
-X-Envelope-To: dmatlack@google.com
-X-Envelope-To: rientjes@google.com
-X-Envelope-To: chenhuacai@kernel.org
-X-Envelope-To: james.morse@arm.com
-X-Envelope-To: corbet@lwn.net
-X-Envelope-To: maz@kernel.org
-X-Envelope-To: mpe@ellerman.id.au
-X-Envelope-To: npiggin@gmail.com
-X-Envelope-To: palmer@dabbelt.com
-X-Envelope-To: paul.walmsley@sifive.com
-X-Envelope-To: rananta@google.com
-X-Envelope-To: ryan.roberts@arm.com
-X-Envelope-To: seanjc@google.com
-X-Envelope-To: shahuang@redhat.com
-X-Envelope-To: shuah@kernel.org
-X-Envelope-To: suzuki.poulose@arm.com
-X-Envelope-To: zhaotianrui@loongson.cn
-X-Envelope-To: will@kernel.org
-X-Envelope-To: yuzhao@google.com
-X-Envelope-To: yuzenghui@huawei.com
-X-Envelope-To: kvm-riscv@lists.infradead.org
-X-Envelope-To: kvm@vger.kernel.org
-X-Envelope-To: kvmarm@lists.linux.dev
-X-Envelope-To: linux-arm-kernel@lists.infradead.org
-X-Envelope-To: linux-doc@vger.kernel.org
-X-Envelope-To: linux-kernel@vger.kernel.org
-X-Envelope-To: linux-kselftest@vger.kernel.org
-X-Envelope-To: linux-mips@vger.kernel.org
-X-Envelope-To: linux-mm@kvack.org
-X-Envelope-To: linux-riscv@lists.infradead.org
-X-Envelope-To: linuxppc-dev@lists.ozlabs.org
-X-Envelope-To: loongarch@lists.linux.dev
-Date: Fri, 31 May 2024 12:18:11 -0700
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Oliver Upton <oliver.upton@linux.dev>
-To: James Houghton <jthoughton@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Ankit Agrawal <ankita@nvidia.com>, Anup Patel <anup@brainfault.org>,
-	Atish Patra <atishp@atishpatra.org>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Bibo Mao <maobibo@loongson.cn>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	David Matlack <dmatlack@google.com>,
-	David Rientjes <rientjes@google.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	James Morse <james.morse@arm.com>, Jonathan Corbet <corbet@lwn.net>,
-	Marc Zyngier <maz@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Raghavendra Rao Ananta <rananta@google.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shaoqin Huang <shahuang@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Tianrui Zhao <zhaotianrui@loongson.cn>,
-	Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-	Zenghui Yu <yuzenghui@huawei.com>, kvm-riscv@lists.infradead.org,
-	kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev
-Subject: Re: [PATCH v4 6/7] KVM: arm64: Relax locking for kvm_test_age_gfn
- and kvm_age_gfn
-Message-ID: <Zloicw4IU8_-V5Ns@linux.dev>
-References: <20240529180510.2295118-1-jthoughton@google.com>
- <20240529180510.2295118-7-jthoughton@google.com>
- <Zlog5Yk_Pjq0jQhC@linux.dev>
+	s=arc-20240116; t=1717187519; c=relaxed/simple;
+	bh=InPM3IgrwlWAIe+nSHKsuhmVDndDnlj7rMcdOWuFi5w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FfOhsOJpTX1Nj+HJaFD1ng6e9Yt2jcDlKwtYXZPyo+TYpnVt4jspneuPiJGQN27mEGrlHEHoPKk6ErntmeO27YNNSbd0qUNocZzywg+qxxFsxNnJKoHvX9xMMY01KEOchAXP7IXoDbBw06cv3TUsVQ/9js67su9YJFqbHvL3iZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0NBYD5ft; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-42133fbe137so4915e9.0
+        for <linux-mips@vger.kernel.org>; Fri, 31 May 2024 13:31:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1717187516; x=1717792316; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=InPM3IgrwlWAIe+nSHKsuhmVDndDnlj7rMcdOWuFi5w=;
+        b=0NBYD5ftjqzLMMU9S/ShWY0r9adcsacAYrM6QxiDfQawAq5CIU1qD7b8p/9X1Hh9Vn
+         lCeav7KbQTZC6WocF6DzhU0JB4kTTRoGMFPgYyLf6liDfGpbROuuf0wi9Ii3IF2Wp6ZH
+         LVAHYybeCo0IO6rGM34tdAhVTzb/Y/5xa6yThldfSM2fHLRpWf9tyD3zhhSPVOvMnQ5F
+         HsTmc2o2GZfb5q551QKtw3Su6tbc7M+8j+U/aPJi73PXxJ0zf4OgSd+qNvvQsbGx64r9
+         MyGt8lz5GklSwzrPofU6xaiWPHie5vbk9RrAhk6LaMlnayWdQ6y7x3a9KE9fRKZisF3z
+         z+Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717187516; x=1717792316;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=InPM3IgrwlWAIe+nSHKsuhmVDndDnlj7rMcdOWuFi5w=;
+        b=j6r4nUnvkfvXCWfycbr+v5m0Y+sZWYkNyxuSHjf5EQZC/LKj6i89dIFjXmLYmX8UiQ
+         SzH76yapRJrAgiJ5VorPbnLGKVl8zI087Jztx1sEmvbMxRfdjGlYjTjULc8Nk5OPoFMq
+         t3FcVUJdvadu1MJyNRwKn6hcvftSkNVe0IJCTP4MmZpM1f0c/tlP30e81V4AE34/5mzG
+         Vo3y1idLGjAiu7UpqEjTzux1ANicyWu2NJuuqBycbqIKMPyc2eRROgo8yla4X79Mh6vC
+         CyhB0Ft1Tm1CDYQ3uubTLfm9aBsHqx8EA2+6iS5MtkdxbXzOTB78d+hk2Lb1IAc3Vsg8
+         tkqA==
+X-Forwarded-Encrypted: i=1; AJvYcCWp9vS93KzMigV5izdWDaY+pSniYZKTmXd7BcyNi2YJ4xs00ABTPh36OrKIVkAaQHLuu3RQzUJYslP5H/XCTv8Qz4PShPlvQNGqbw==
+X-Gm-Message-State: AOJu0Yxw5Pu6OU9K9miNbwKytu6DOXGgTPqAIA53drod3E8qjqvBMgNd
+	gPgOiMfgY7cPyELDeJOO9LuByZA38AAOt4kxLDTs5roIpWuCA+FubWKtL+ph6avlLPI5cSCxp6/
+	/lMAVR1KQdJYVWpd74s792lyGsYbE2UEOskNe
+X-Google-Smtp-Source: AGHT+IECr7zScct/L9KDZG2FMT9+ZV9pueXumB1G4qrj8mkBEYnZr/Z/kM44zsq5c/gUQqURoi9spkN6RMIRJ4Ct+FE=
+X-Received: by 2002:a05:600c:299:b0:418:97c6:188d with SMTP id
+ 5b1f17b1804b1-421358ce41bmr41075e9.7.1717187515962; Fri, 31 May 2024 13:31:55
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zlog5Yk_Pjq0jQhC@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+References: <20240529180510.2295118-1-jthoughton@google.com>
+ <20240529180510.2295118-3-jthoughton@google.com> <CAOUHufYFHKLwt1PWp2uS6g174GZYRZURWJAmdUWs5eaKmhEeyQ@mail.gmail.com>
+ <Zll7IuGYGG5uI20W@linux.dev>
+In-Reply-To: <Zll7IuGYGG5uI20W@linux.dev>
+From: Yu Zhao <yuzhao@google.com>
+Date: Fri, 31 May 2024 14:31:17 -0600
+Message-ID: <CAOUHufa50Dy8CJ5+D10Khs4NU-3Pv0B8qi-GYkcppctTVUkPcA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/7] mm: multi-gen LRU: Have secondary MMUs participate
+ in aging
+To: Oliver Upton <oliver.upton@linux.dev>
+Cc: James Houghton <jthoughton@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Ankit Agrawal <ankita@nvidia.com>, Anup Patel <anup@brainfault.org>, 
+	Atish Patra <atishp@atishpatra.org>, Axel Rasmussen <axelrasmussen@google.com>, 
+	Bibo Mao <maobibo@loongson.cn>, Catalin Marinas <catalin.marinas@arm.com>, 
+	David Matlack <dmatlack@google.com>, David Rientjes <rientjes@google.com>, 
+	Huacai Chen <chenhuacai@kernel.org>, James Morse <james.morse@arm.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Raghavendra Rao Ananta <rananta@google.com>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Sean Christopherson <seanjc@google.com>, 
+	Shaoqin Huang <shahuang@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
+	Will Deacon <will@kernel.org>, Zenghui Yu <yuzenghui@huawei.com>, kvm-riscv@lists.infradead.org, 
+	kvm@vger.kernel.org, kvmarm@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+	linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+	loongarch@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 31, 2024 at 12:11:33PM -0700, Oliver Upton wrote:
-> On Wed, May 29, 2024 at 06:05:09PM +0000, James Houghton wrote:
-> 
-> [...]
-> 
-> > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-> > index 9e2bbee77491..eabb07c66a07 100644
-> > --- a/arch/arm64/kvm/hyp/pgtable.c
-> > +++ b/arch/arm64/kvm/hyp/pgtable.c
-> > @@ -1319,10 +1319,8 @@ static int stage2_age_walker(const struct kvm_pgtable_visit_ctx *ctx,
-> >  	data->young = true;
-> >  
-> >  	/*
-> > -	 * stage2_age_walker() is always called while holding the MMU lock for
-> > -	 * write, so this will always succeed. Nonetheless, this deliberately
-> > -	 * follows the race detection pattern of the other stage-2 walkers in
-> > -	 * case the locking mechanics of the MMU notifiers is ever changed.
-> > +	 * This walk may not be exclusive; the PTE is permitted to change
-> > +	 * from under us.
-> >  	 */
-> >  	if (data->mkold && !stage2_try_set_pte(ctx, new))
-> >  		return -EAGAIN;
-> 
-> It is probably worth mentioning that if there was a race to update the
-> PTE then the GFN is most likely young, so failing to clear AF probably
-> isn't even consequential.
+On Fri, May 31, 2024 at 1:24=E2=80=AFAM Oliver Upton <oliver.upton@linux.de=
+v> wrote:
+>
+> On Wed, May 29, 2024 at 03:03:21PM -0600, Yu Zhao wrote:
+> > On Wed, May 29, 2024 at 12:05=E2=80=AFPM James Houghton <jthoughton@goo=
+gle.com> wrote:
+> > >
+> > > Secondary MMUs are currently consulted for access/age information at
+> > > eviction time, but before then, we don't get accurate age information=
+.
+> > > That is, pages that are mostly accessed through a secondary MMU (like
+> > > guest memory, used by KVM) will always just proceed down to the oldes=
+t
+> > > generation, and then at eviction time, if KVM reports the page to be
+> > > young, the page will be activated/promoted back to the youngest
+> > > generation.
+> >
+> > Correct, and as I explained offline, this is the only reasonable
+> > behavior if we can't locklessly walk secondary MMUs.
+> >
+> > Just for the record, the (crude) analogy I used was:
+> > Imagine a large room with many bills ($1, $5, $10, ...) on the floor,
+> > but you are only allowed to pick up 10 of them (and put them in your
+> > pocket). A smart move would be to survey the room *first and then*
+> > pick up the largest ones. But if you are carrying a 500 lbs backpack,
+> > you would just want to pick up whichever that's in front of you rather
+> > than walk the entire room.
+> >
+> > MGLRU should only scan (or lookaround) secondary MMUs if it can be
+> > done lockless. Otherwise, it should just fall back to the existing
+> > approach, which existed in previous versions but is removed in this
+> > version.
+>
+> Grabbing the MMU lock for write to scan sucks, no argument there. But
+> can you please be specific about the impact of read lock v. RCU in the
+> case of arm64? I had asked about this before and you never replied.
+>
+> My concern remains that adding support for software table walkers
+> outside of the MMU lock entirely requires more work than just deferring
+> the deallocation to an RCU callback. Walkers that previously assumed
+> 'exclusive' access while holding the MMU lock for write must now cope
+> with volatile PTEs.
+>
+> Yes, this problem already exists when hardware sets the AF, but the
+> lock-free walker implementation needs to be generic so it can be applied
+> for other PTE bits.
 
-Oh, and the WARN_ON() in kvm_pgtable_stage2_test_clear_young() is bogus
-now. Maybe demote it to:
+Direct reclaim is multi-threaded and each reclaimer can take the mmu
+lock for read (testing the A-bit) or write (unmapping before paging
+out) on arm64. The fundamental problem of using the readers-writer
+lock in this case is priority inversion: the readers have lower
+priority than the writers, so ideally, we don't want the readers to
+block the writers at all.
 
-  r = kvm_pgtable_walk(...);
-  WARN_ON_ONCE(r && r != -EAGAIN);
+Using my previous (crude) analogy: puting the bill right in front of
+you (the writers) profits immediately whereas searching for the
+largest bill (the readers) can be futile.
 
--- 
-Thanks,
-Oliver
+As I said earlier, I prefer we drop the arm64 support for now, but I
+will not object to taking the mmu lock for read when clearing the
+A-bit, as long as we fully understand the problem here and document it
+clearly.
 
