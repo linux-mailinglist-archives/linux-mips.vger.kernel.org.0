@@ -1,46 +1,46 @@
-Return-Path: <linux-mips+bounces-3446-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3447-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E1878D697C
-	for <lists+linux-mips@lfdr.de>; Fri, 31 May 2024 21:12:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2861D8D69A0
+	for <lists+linux-mips@lfdr.de>; Fri, 31 May 2024 21:19:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCCDE2898AE
-	for <lists+linux-mips@lfdr.de>; Fri, 31 May 2024 19:12:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4E732891A4
+	for <lists+linux-mips@lfdr.de>; Fri, 31 May 2024 19:19:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55ABC17C223;
-	Fri, 31 May 2024 19:12:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8334C8060D;
+	Fri, 31 May 2024 19:18:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="c+stuysy"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OL//CPF3"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA93917B51D
-	for <linux-mips@vger.kernel.org>; Fri, 31 May 2024 19:11:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FCA669DF7
+	for <linux-mips@vger.kernel.org>; Fri, 31 May 2024 19:18:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717182720; cv=none; b=KS5a74SKwEyd11u2lyovwYMmV1KBx+dAtQb9T0fWQnoqrJ5fyIepJordb3BXDwFdLvWiAXOMaYtFKMKZqFjmcCk+seQaDnBLDuWpr3qab8WdpNexnxtuphfqQfo1GYYH4y+sD5ZmsiLwmp80VASb5tmX7/pwLoQWQb/r5/A1Lfo=
+	t=1717183106; cv=none; b=pBnA/SObIfeihc2/MUxyvlIabdjGHKgvzzKbyHq60d207gjowkIXmgtRqhSY1t7Odl2gi8bJOrYyOlXbShZ8GVXbATnO1/5ARKNSlWom2I5df93KgXLw5f+VCnKalFvylA5NYcHzPUmF7jEmxJHEQY9s6SexnyH2UiK7N/QlwE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717182720; c=relaxed/simple;
-	bh=sgtQujDi/xwJoTvozQThnGUOv2FF51IL2+0TqRg8OEA=;
+	s=arc-20240116; t=1717183106; c=relaxed/simple;
+	bh=8HZ1n1s6qKTPU9KH0f7lccCKB3kfMQ8uzpkLiQlx0XM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B7pNBHNTmzJk5q9fMvYyMBiiONsbe2pQaDk8KeAOZYdUMB6M3EuU6BqaeH5TmyTvbDcpzKZvtbDve9jEcI3ez7q8EnldokIDMvnLEHFc64i5Loy52czONrPhY5KQEDHG6jWJ22YGJ0ET3p4on89FvSblUs5H0jGHHjSbUiXxNqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=c+stuysy; arc=none smtp.client-ip=91.218.175.179
+	 Content-Type:Content-Disposition:In-Reply-To; b=bg2O3geoKyXg0oHk2u2z7Z6tZ3nVN3w2yyvlMC82VAcBQSmGc+POM3g8yf1MdtuT/Lubqxk0mr6Q8Ngd8+6xU14v1bENbY9nMS7oPCEsivPl3NVUi7Av21/qzOiTArrZD/FBBbvTDfxlzQPeLp8s46NxzLPJxl3xfOiMnKTYR6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OL//CPF3; arc=none smtp.client-ip=91.218.175.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Envelope-To: jthoughton@google.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1717182706;
+	t=1717183102;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=H/R5IQbpE5t+x2dR39LRiJBqiBXfmFPbwxdtpnn5hGs=;
-	b=c+stuysyrYtChztUjj8bfOLa+pidnwFeuWOXm8J8IFP59C7O1SPwkzhQYX7vXUlN1P6bs5
-	FvYG4eEtw8I3Z1F5NDtIKLP4wlgV4ZNL+EPxaYtUlojUk2IX9MNoL7r3xWNfltbQiD1hec
-	SsERK6rU5wdZ1zfN5Rp0Z+kjvAVliNw=
+	bh=2PNxbejm0F++LAZR/c3kykM2MBahftMSuulGipIjRRI=;
+	b=OL//CPF3OaxDLNyUcF7L7kyNMf3VPjTvzSryLUW5C3BaNJ8N7qvdo+GYUTIaqfYoH8qbo6
+	hUFuWYcFNlSydh5QitAFxaO+uiSO8irmL6Dy7FoK51VSXO1IpH+zzZd24unXmg4kvPBA2e
+	eDLUrnlpHUL5vYjUk6kginvv7JlKt2g=
 X-Envelope-To: akpm@linux-foundation.org
 X-Envelope-To: pbonzini@redhat.com
 X-Envelope-To: aou@eecs.berkeley.edu
@@ -82,7 +82,7 @@ X-Envelope-To: linux-mm@kvack.org
 X-Envelope-To: linux-riscv@lists.infradead.org
 X-Envelope-To: linuxppc-dev@lists.ozlabs.org
 X-Envelope-To: loongarch@lists.linux.dev
-Date: Fri, 31 May 2024 12:11:33 -0700
+Date: Fri, 31 May 2024 12:18:11 -0700
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Oliver Upton <oliver.upton@linux.dev>
 To: James Houghton <jthoughton@google.com>
@@ -119,9 +119,10 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	loongarch@lists.linux.dev
 Subject: Re: [PATCH v4 6/7] KVM: arm64: Relax locking for kvm_test_age_gfn
  and kvm_age_gfn
-Message-ID: <Zlog5Yk_Pjq0jQhC@linux.dev>
+Message-ID: <Zloicw4IU8_-V5Ns@linux.dev>
 References: <20240529180510.2295118-1-jthoughton@google.com>
  <20240529180510.2295118-7-jthoughton@google.com>
+ <Zlog5Yk_Pjq0jQhC@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -130,34 +131,41 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240529180510.2295118-7-jthoughton@google.com>
+In-Reply-To: <Zlog5Yk_Pjq0jQhC@linux.dev>
 X-Migadu-Flow: FLOW_OUT
 
-On Wed, May 29, 2024 at 06:05:09PM +0000, James Houghton wrote:
+On Fri, May 31, 2024 at 12:11:33PM -0700, Oliver Upton wrote:
+> On Wed, May 29, 2024 at 06:05:09PM +0000, James Houghton wrote:
+> 
+> [...]
+> 
+> > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+> > index 9e2bbee77491..eabb07c66a07 100644
+> > --- a/arch/arm64/kvm/hyp/pgtable.c
+> > +++ b/arch/arm64/kvm/hyp/pgtable.c
+> > @@ -1319,10 +1319,8 @@ static int stage2_age_walker(const struct kvm_pgtable_visit_ctx *ctx,
+> >  	data->young = true;
+> >  
+> >  	/*
+> > -	 * stage2_age_walker() is always called while holding the MMU lock for
+> > -	 * write, so this will always succeed. Nonetheless, this deliberately
+> > -	 * follows the race detection pattern of the other stage-2 walkers in
+> > -	 * case the locking mechanics of the MMU notifiers is ever changed.
+> > +	 * This walk may not be exclusive; the PTE is permitted to change
+> > +	 * from under us.
+> >  	 */
+> >  	if (data->mkold && !stage2_try_set_pte(ctx, new))
+> >  		return -EAGAIN;
+> 
+> It is probably worth mentioning that if there was a race to update the
+> PTE then the GFN is most likely young, so failing to clear AF probably
+> isn't even consequential.
 
-[...]
+Oh, and the WARN_ON() in kvm_pgtable_stage2_test_clear_young() is bogus
+now. Maybe demote it to:
 
-> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-> index 9e2bbee77491..eabb07c66a07 100644
-> --- a/arch/arm64/kvm/hyp/pgtable.c
-> +++ b/arch/arm64/kvm/hyp/pgtable.c
-> @@ -1319,10 +1319,8 @@ static int stage2_age_walker(const struct kvm_pgtable_visit_ctx *ctx,
->  	data->young = true;
->  
->  	/*
-> -	 * stage2_age_walker() is always called while holding the MMU lock for
-> -	 * write, so this will always succeed. Nonetheless, this deliberately
-> -	 * follows the race detection pattern of the other stage-2 walkers in
-> -	 * case the locking mechanics of the MMU notifiers is ever changed.
-> +	 * This walk may not be exclusive; the PTE is permitted to change
-> +	 * from under us.
->  	 */
->  	if (data->mkold && !stage2_try_set_pte(ctx, new))
->  		return -EAGAIN;
-
-It is probably worth mentioning that if there was a race to update the
-PTE then the GFN is most likely young, so failing to clear AF probably
-isn't even consequential.
+  r = kvm_pgtable_walk(...);
+  WARN_ON_ONCE(r && r != -EAGAIN);
 
 -- 
 Thanks,
