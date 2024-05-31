@@ -1,129 +1,71 @@
-Return-Path: <linux-mips+bounces-3439-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3440-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3737D8D5B54
-	for <lists+linux-mips@lfdr.de>; Fri, 31 May 2024 09:24:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B85438D603A
+	for <lists+linux-mips@lfdr.de>; Fri, 31 May 2024 13:06:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5ADEF1C211D1
-	for <lists+linux-mips@lfdr.de>; Fri, 31 May 2024 07:24:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DBE85B23314
+	for <lists+linux-mips@lfdr.de>; Fri, 31 May 2024 11:06:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71DFD81720;
-	Fri, 31 May 2024 07:24:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C28BD156F46;
+	Fri, 31 May 2024 11:05:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="r37JI0j7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gpZOJktQ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out-175.mta0.migadu.com (out-175.mta0.migadu.com [91.218.175.175])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC1680C07
-	for <linux-mips@vger.kernel.org>; Fri, 31 May 2024 07:24:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ACA8153BC1;
+	Fri, 31 May 2024 11:05:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717140277; cv=none; b=KOVT7mGHulGECcC8Ngd8+06D1gmwcGHIAjs0UIMRrQ5S9sOiSWG3xRCe8XSwA4JhGEFbDuoaKMNT3x8RJ/hPfaVc8Q1h/RmUgW4BecVS4G3kZS+KyKt2CkW196Fr7bDZQTsB8A+u7k0lwYuiXIXd9ei21myUsM5fNRwD+szpI48=
+	t=1717153558; cv=none; b=TbmCYq84Uf6cKdauquTU2tuVElCSlr0ODIHUu37JCkxjSFM0Pj6QV7O5x+80YYD6T6O7UXHdKSYjDqNoKQKOile1OSh7iITvZIUCpSyApD1Q52Oi6b3T5wXEyru9udi6O3AZsUR7VI/35mahmkcBwHUPUe9aj1S7WUvbs8IkdVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717140277; c=relaxed/simple;
-	bh=TCC6im0osMHH/ZsvTuf9nvpEoA9dgsRlPGyvUIj8bLY=;
+	s=arc-20240116; t=1717153558; c=relaxed/simple;
+	bh=jduYK+IkE5H/UmTDzJBdVFl6pnfSyIqLlyC96vaz1kE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ctl6thucfnDx/TKWXEr7wZMvMY2tql0ZfTqjl8v6lkI7MpaB0NXCkbf+RlfN1q5gV4oI8XYfICexUUajf20AfqhcUwEHowIR6V98yn7t4pYgXYhNbPViumSTz+YMFDNwlgRbOixACSJKplrtWU6BDblwhM5zTZANJa0WEnQ2KD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=r37JI0j7; arc=none smtp.client-ip=91.218.175.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Envelope-To: yuzhao@google.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1717140273;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=v6pyP4SRO/9BT5GrT52jbiQuxRO/wk0HtBPD4YgPhLk=;
-	b=r37JI0j7taWeZmoSnTE82903GeLstAD8AcPnN/lPbb+eAAkY0defxPmiJPHwGWnd294WLb
-	FjgHxx1Px9O8RnwjA1f9bxRoJnyH+BVooELFS2MSFgtlTifw+nQzg6kbOK9o4nC/oVDgtV
-	trAyzjYJwoWDB3IsG5rivC2BXJjWLQk=
-X-Envelope-To: jthoughton@google.com
-X-Envelope-To: akpm@linux-foundation.org
-X-Envelope-To: pbonzini@redhat.com
-X-Envelope-To: aou@eecs.berkeley.edu
-X-Envelope-To: ankita@nvidia.com
-X-Envelope-To: anup@brainfault.org
-X-Envelope-To: atishp@atishpatra.org
-X-Envelope-To: axelrasmussen@google.com
-X-Envelope-To: maobibo@loongson.cn
-X-Envelope-To: catalin.marinas@arm.com
-X-Envelope-To: dmatlack@google.com
-X-Envelope-To: rientjes@google.com
-X-Envelope-To: chenhuacai@kernel.org
-X-Envelope-To: james.morse@arm.com
-X-Envelope-To: corbet@lwn.net
-X-Envelope-To: maz@kernel.org
-X-Envelope-To: mpe@ellerman.id.au
-X-Envelope-To: npiggin@gmail.com
-X-Envelope-To: palmer@dabbelt.com
-X-Envelope-To: paul.walmsley@sifive.com
-X-Envelope-To: rananta@google.com
-X-Envelope-To: ryan.roberts@arm.com
-X-Envelope-To: seanjc@google.com
-X-Envelope-To: shahuang@redhat.com
-X-Envelope-To: shuah@kernel.org
-X-Envelope-To: suzuki.poulose@arm.com
-X-Envelope-To: zhaotianrui@loongson.cn
-X-Envelope-To: will@kernel.org
-X-Envelope-To: yuzenghui@huawei.com
-X-Envelope-To: kvm-riscv@lists.infradead.org
-X-Envelope-To: kvm@vger.kernel.org
-X-Envelope-To: kvmarm@lists.linux.dev
-X-Envelope-To: linux-arm-kernel@lists.infradead.org
-X-Envelope-To: linux-doc@vger.kernel.org
-X-Envelope-To: linux-kernel@vger.kernel.org
-X-Envelope-To: linux-kselftest@vger.kernel.org
-X-Envelope-To: linux-mips@vger.kernel.org
-X-Envelope-To: linux-mm@kvack.org
-X-Envelope-To: linux-riscv@lists.infradead.org
-X-Envelope-To: linuxppc-dev@lists.ozlabs.org
-X-Envelope-To: loongarch@lists.linux.dev
-Date: Fri, 31 May 2024 00:24:18 -0700
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Oliver Upton <oliver.upton@linux.dev>
-To: Yu Zhao <yuzhao@google.com>
-Cc: James Houghton <jthoughton@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Ankit Agrawal <ankita@nvidia.com>, Anup Patel <anup@brainfault.org>,
-	Atish Patra <atishp@atishpatra.org>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Bibo Mao <maobibo@loongson.cn>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	David Matlack <dmatlack@google.com>,
-	David Rientjes <rientjes@google.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	James Morse <james.morse@arm.com>, Jonathan Corbet <corbet@lwn.net>,
-	Marc Zyngier <maz@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Raghavendra Rao Ananta <rananta@google.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shaoqin Huang <shahuang@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Tianrui Zhao <zhaotianrui@loongson.cn>,
-	Will Deacon <will@kernel.org>, Zenghui Yu <yuzenghui@huawei.com>,
-	kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev
-Subject: Re: [PATCH v4 2/7] mm: multi-gen LRU: Have secondary MMUs
- participate in aging
-Message-ID: <Zll7IuGYGG5uI20W@linux.dev>
-References: <20240529180510.2295118-1-jthoughton@google.com>
- <20240529180510.2295118-3-jthoughton@google.com>
- <CAOUHufYFHKLwt1PWp2uS6g174GZYRZURWJAmdUWs5eaKmhEeyQ@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=IUP3DPLTwO8gjIKdzB8Dh5aIxYBvf6VZpQf2dAY3L6tQTnjWwZ6i5SV6vvv6epql/O6c0IAgosozUVdRUhM1df8i5XqqcOBcA65h4FekgI810R2/+IxxPzaC3nJN2W8AFSK2FcnDahPgwzFNqklzEPlTVR1Qxz5h4SK0XxzXo2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gpZOJktQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7A46C116B1;
+	Fri, 31 May 2024 11:05:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717153558;
+	bh=jduYK+IkE5H/UmTDzJBdVFl6pnfSyIqLlyC96vaz1kE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gpZOJktQL3e+5T6Ai787a8gkJ9B+HxqmeGnrR5gBb8fBHn2nOLXoKLaUtjm83vT4n
+	 Sg1y2FGUkUhKIT7h1pNhs7d1FfoCXZ9XUVXJ0I2jcFHNpLRXXFsqb68q23ojptccjp
+	 fvrDJUrg5NDqfJuWPTTcTrahRmic3zU1ONdBrLVWIKciZ49NcTiOou0NchWB1FMETf
+	 SFM78RRUlrwHAerco41jqW6PzzFvVG70zy6X3r0VVqXdhhIpFIsMFT+ZR701GxiHCw
+	 5PI0k2OgnD2VFQIr6G0glzib6q9YG/SB2Jkbv5GuvhQOxOE54HFEZdlCVLzv09UfkX
+	 juCRgqwfJdeog==
+Date: Fri, 31 May 2024 12:05:50 +0100
+From: Lee Jones <lee@kernel.org>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH v2 06/11] mfd: olb: Add support for Mobileye OLB
+ system-controller
+Message-ID: <20240531110550.GE1005600@google.com>
+References: <20240503-mbly-olb-v2-0-95ce5a1e18fe@bootlin.com>
+ <20240503-mbly-olb-v2-6-95ce5a1e18fe@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -133,51 +75,268 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOUHufYFHKLwt1PWp2uS6g174GZYRZURWJAmdUWs5eaKmhEeyQ@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20240503-mbly-olb-v2-6-95ce5a1e18fe@bootlin.com>
 
-On Wed, May 29, 2024 at 03:03:21PM -0600, Yu Zhao wrote:
-> On Wed, May 29, 2024 at 12:05 PM James Houghton <jthoughton@google.com> wrote:
-> >
-> > Secondary MMUs are currently consulted for access/age information at
-> > eviction time, but before then, we don't get accurate age information.
-> > That is, pages that are mostly accessed through a secondary MMU (like
-> > guest memory, used by KVM) will always just proceed down to the oldest
-> > generation, and then at eviction time, if KVM reports the page to be
-> > young, the page will be activated/promoted back to the youngest
-> > generation.
+On Fri, 03 May 2024, Théo Lebrun wrote:
+
+> Mobileye OLB system-controller gets used in EyeQ5, EyeQ6L and EyeQ6H
+> platforms. It hosts clock, reset and pinctrl functionality.
 > 
-> Correct, and as I explained offline, this is the only reasonable
-> behavior if we can't locklessly walk secondary MMUs.
+> Tiny iomem resources are declared for all cells. Some features are
+> spread apart. Pinctrl is only used on EyeQ5.
 > 
-> Just for the record, the (crude) analogy I used was:
-> Imagine a large room with many bills ($1, $5, $10, ...) on the floor,
-> but you are only allowed to pick up 10 of them (and put them in your
-> pocket). A smart move would be to survey the room *first and then*
-> pick up the largest ones. But if you are carrying a 500 lbs backpack,
-> you would just want to pick up whichever that's in front of you rather
-> than walk the entire room.
+> EyeQ6H is special: it hosts seven OLB controllers, each with a
+> compatible. That means many clock and reset cells. Use cell->devname
+> for explicit device names rather than clk-eyeq.ID or clk-eyeq.ID.auto.
 > 
-> MGLRU should only scan (or lookaround) secondary MMUs if it can be
-> done lockless. Otherwise, it should just fall back to the existing
-> approach, which existed in previous versions but is removed in this
-> version.
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  drivers/mfd/Kconfig        |  10 +++
+>  drivers/mfd/Makefile       |   2 +
+>  drivers/mfd/mobileye-olb.c | 180 +++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 192 insertions(+)
+> 
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 4b023ee229cf..d004a3f4d493 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -1030,6 +1030,16 @@ config MFD_OCELOT
+>  
+>  	  If unsure, say N.
+>  
+> +config MFD_OLB
+> +	bool "Mobileye EyeQ OLB System Controller Support"
+> +	select MFD_CORE
+> +	depends on MACH_EYEQ5 || MACH_EYEQ6H || COMPILE_TEST
+> +	default MACH_EYEQ5 || MACH_EYEQ6H
+> +	help
+> +	  Say yes here to add support for EyeQ platforms (EyeQ5, EyeQ6L and
+> +	  EyeQ6H). This core MFD platform driver provides clock, reset and
+> +	  pinctrl (only EyeQ5) support.
+> +
+>  config EZX_PCAP
+>  	bool "Motorola EZXPCAP Support"
+>  	depends on SPI_MASTER
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index c66f07edcd0e..d872833966a8 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -120,6 +120,8 @@ obj-$(CONFIG_MFD_CORE)		+= mfd-core.o
+>  ocelot-soc-objs			:= ocelot-core.o ocelot-spi.o
+>  obj-$(CONFIG_MFD_OCELOT)	+= ocelot-soc.o
+>  
+> +obj-$(CONFIG_MFD_OLB)		+= mobileye-olb.o
+> +
+>  obj-$(CONFIG_EZX_PCAP)		+= ezx-pcap.o
+>  obj-$(CONFIG_MFD_CPCAP)		+= motorola-cpcap.o
+>  
+> diff --git a/drivers/mfd/mobileye-olb.c b/drivers/mfd/mobileye-olb.c
+> new file mode 100644
+> index 000000000000..1640d63a3ddd
+> --- /dev/null
+> +++ b/drivers/mfd/mobileye-olb.c
+> @@ -0,0 +1,180 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * System controller multi-function device for EyeQ platforms.
+> + *
+> + * Mobileye EyeQ5, EyeQ6L and EyeQ6H platforms have MMIO mapped registers
+> + * controlling core platform clocks, resets and pin control. Many other
+> + * features are present and not yet exposed.
+> + *
+> + * Declare cells for each compatible. Only EyeQ5 has pinctrl.
+> + * EyeQ6H has seven OLB instances; each has a name which we propagate to
+> + * sub-devices using cell->devname.
+> + *
+> + * Copyright (C) 2024 Mobileye Vision Technologies Ltd.
+> + */
+> +
+> +#include <linux/array_size.h>
+> +#include <linux/device.h>
+> +#include <linux/errno.h>
+> +#include <linux/ioport.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/property.h>
+> +
+> +#define OLB_MFD_CELL(_name, _res, _devname) \
+> +	MFD_CELL_ALL(_name, _res, NULL, 0, 0, NULL, 0, false, NULL, _devname)
 
-Grabbing the MMU lock for write to scan sucks, no argument there. But
-can you please be specific about the impact of read lock v. RCU in the
-case of arm64? I had asked about this before and you never replied.
+The reason we provide generic MACROs is so that you don't have to define
+your own.
 
-My concern remains that adding support for software table walkers
-outside of the MMU lock entirely requires more work than just deferring
-the deallocation to an RCU callback. Walkers that previously assumed
-'exclusive' access while holding the MMU lock for write must now cope
-with volatile PTEs.
+> +struct olb_match_data {
+> +	const struct mfd_cell	*cells;
+> +	int			nb_cells; /* int to match devm_mfd_add_devices() argument */
+> +};
+> +
+> +#define OLB_DATA(_cells) { .cells = (_cells), .nb_cells = ARRAY_SIZE(_cells) }
+> +
+> +static int olb_probe(struct platform_device *pdev)
+> +{
+> +	const struct olb_match_data *match_data;
+> +	struct device *dev = &pdev->dev;
+> +	struct resource *res;
+> +
+> +	match_data = device_get_match_data(dev);
+> +	if (!match_data)
+> +		return -ENODEV;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (!res)
+> +		return -ENODEV;
+> +
+> +	return devm_mfd_add_devices(dev, PLATFORM_DEVID_NONE,
+> +				    match_data->cells, match_data->nb_cells,
+> +				    res, 0, NULL);
+> +}
+> +
+> +static const struct resource olb_eyeq5_clk_resources[] = {
+> +	DEFINE_RES_MEM_NAMED(0x02C, 10 * 8, "pll"),
+> +	DEFINE_RES_MEM_NAMED(0x11C, 1 * 4, "ospi"),
+> +};
+> +
+> +static const struct resource olb_eyeq5_reset_resources[] = {
+> +	DEFINE_RES_MEM_NAMED(0x004, 2 * 4, "d0"),
+> +	DEFINE_RES_MEM_NAMED(0x200, 13 * 4, "d1"),
+> +	DEFINE_RES_MEM_NAMED(0x120, 1 * 4, "d2"),
+> +};
+> +
+> +static const struct resource olb_eyeq5_pinctrl_resources[] = {
+> +	DEFINE_RES_MEM_NAMED(0x0B0, 12 * 4, "pinctrl"),
+> +};
+> +
+> +static const struct mfd_cell olb_eyeq5_cells[] = {
+> +	OLB_MFD_CELL("clk-eyeq", olb_eyeq5_clk_resources, NULL),
+> +	OLB_MFD_CELL("reset-eyeq", olb_eyeq5_reset_resources, NULL),
+> +	OLB_MFD_CELL("eyeq5-pinctrl", olb_eyeq5_pinctrl_resources, NULL),
+> +};
+> +
+> +static const struct olb_match_data olb_eyeq5_match_data = OLB_DATA(olb_eyeq5_cells);
+> +
+> +static const struct resource olb_eyeq6l_clk_resources[] = {
+> +	DEFINE_RES_MEM_NAMED(0x02C, 4 * 8, "pll"),
+> +};
+> +
+> +static const struct resource olb_eyeq6l_reset_resources[] = {
+> +	DEFINE_RES_MEM_NAMED(0x004, 2 * 4, "d0"),
+> +	DEFINE_RES_MEM_NAMED(0x200, 13 * 4, "d1"),
+> +};
+> +
+> +static const struct mfd_cell olb_eyeq6l_cells[] = {
+> +	OLB_MFD_CELL("clk-eyeq", olb_eyeq6l_clk_resources, NULL),
+> +	OLB_MFD_CELL("reset-eyeq", olb_eyeq6l_reset_resources, NULL),
+> +};
+> +
+> +static const struct olb_match_data olb_eyeq6l_match_data = OLB_DATA(olb_eyeq6l_cells);
+> +
+> +static const struct resource olb_eyeq6h_acc_clk_resources[] = {
+> +	DEFINE_RES_MEM_NAMED(0x040, 7 * 8, "pll"),
+> +};
+> +
+> +static const struct resource olb_eyeq6h_acc_reset_resources[] = {
+> +	DEFINE_RES_MEM_NAMED(0x000, 15 * 4, "d0"),
+> +};
+> +
+> +static const struct mfd_cell olb_eyeq6h_acc_cells[] = {
+> +	OLB_MFD_CELL("clk-eyeq", olb_eyeq6h_acc_clk_resources, "clk-eyeq-acc"),
 
-Yes, this problem already exists when hardware sets the AF, but the
-lock-free walker implementation needs to be generic so it can be applied
-for other PTE bits.
+The point of enumerating platform device names is to identify devices
+that are identical.  We lose this with bespoke naming.
+
+If you want to identify devices either define a value to pass to .id or
+adapt the first parameter and make the clk-eyeq driver accept different
+device names.
+
+> +	OLB_MFD_CELL("reset-eyeq", olb_eyeq6h_acc_reset_resources, "reset-eyeq-acc"),
+> +};
+> +
+> +static const struct olb_match_data olb_eyeq6h_acc_match_data = OLB_DATA(olb_eyeq6h_acc_cells);
+> +
+> +static const struct resource olb_eyeq6h_we_clk_resources[] = {
+> +	DEFINE_RES_MEM_NAMED(0x074, 1 * 8, "pll"),
+> +};
+> +
+> +static const struct resource olb_eyeq6h_we_reset_resources[] = {
+> +	DEFINE_RES_MEM_NAMED(0x004, 4 * 4, "d0"),
+> +};
+> +
+> +static const struct mfd_cell olb_eyeq6h_west_cells[] = {
+> +	OLB_MFD_CELL("clk-eyeq", olb_eyeq6h_we_clk_resources, "clk-eyeq-west"),
+> +	OLB_MFD_CELL("reset-eyeq", olb_eyeq6h_we_reset_resources, "reset-eyeq-west"),
+> +};
+> +
+> +static const struct olb_match_data olb_eyeq6h_west_match_data = OLB_DATA(olb_eyeq6h_west_cells);
+> +
+> +static const struct mfd_cell olb_eyeq6h_east_cells[] = {
+> +	OLB_MFD_CELL("clk-eyeq", olb_eyeq6h_we_clk_resources, "clk-eyeq-east"),
+> +	OLB_MFD_CELL("reset-eyeq", olb_eyeq6h_we_reset_resources, "reset-eyeq-east"),
+> +};
+> +
+> +static const struct olb_match_data olb_eyeq6h_east_match_data = OLB_DATA(olb_eyeq6h_east_cells);
+> +
+> +static const struct resource olb_eyeq6h_south_clk_resources[] = {
+> +	DEFINE_RES_MEM_NAMED(0x000, 4 * 8, "pll"),
+> +	DEFINE_RES_MEM_NAMED(0x070, 1 * 4, "emmc"),
+> +	DEFINE_RES_MEM_NAMED(0x090, 1 * 4, "ospi"),
+> +	DEFINE_RES_MEM_NAMED(0x098, 1 * 4, "tsu"),
+> +};
+> +
+> +static const struct mfd_cell olb_eyeq6h_south_cells[] = {
+> +	OLB_MFD_CELL("clk-eyeq", olb_eyeq6h_south_clk_resources, "clk-eyeq-south"),
+> +};
+> +
+> +static const struct olb_match_data olb_eyeq6h_south_match_data = OLB_DATA(olb_eyeq6h_south_cells);
+> +
+> +static const struct resource olb_eyeq6h_ddr_clk_resources[] = {
+> +	DEFINE_RES_MEM_NAMED(0x074, 1 * 8, "pll"),
+> +};
+> +
+> +static const struct mfd_cell olb_eyeq6h_ddr0_cells[] = {
+> +	OLB_MFD_CELL("clk-eyeq", olb_eyeq6h_ddr_clk_resources, "clk-eyeq-ddr0"),
+> +};
+> +
+> +static const struct olb_match_data olb_eyeq6h_ddr0_match_data = OLB_DATA(olb_eyeq6h_ddr0_cells);
+> +
+> +static const struct mfd_cell olb_eyeq6h_ddr1_cells[] = {
+> +	OLB_MFD_CELL("clk-eyeq", olb_eyeq6h_ddr_clk_resources, "clk-eyeq-ddr1"),
+> +};
+> +
+> +static const struct olb_match_data olb_eyeq6h_ddr1_match_data = OLB_DATA(olb_eyeq6h_ddr1_cells);
+> +
+> +static const struct of_device_id olb_of_match[] = {
+> +	{ .compatible = "mobileye,eyeq5-olb", .data = &olb_eyeq5_match_data },
+
+We're not passing MFD init data through the OF API, sorry.
+
+Pass defined identifiers through instead and match on those please.
+
+> +	{ .compatible = "mobileye,eyeq6l-olb", .data = &olb_eyeq6l_match_data },
+> +	{ .compatible = "mobileye,eyeq6h-acc-olb", .data = &olb_eyeq6h_acc_match_data },
+> +	/* No central: it only has an early clock handled using CLK_OF_DECLARE_DRIVER(). */
+> +	{ .compatible = "mobileye,eyeq6h-east-olb", .data = &olb_eyeq6h_east_match_data },
+> +	{ .compatible = "mobileye,eyeq6h-west-olb", .data = &olb_eyeq6h_west_match_data },
+> +	{ .compatible = "mobileye,eyeq6h-south-olb", .data = &olb_eyeq6h_south_match_data },
+> +	{ .compatible = "mobileye,eyeq6h-ddr0-olb", .data = &olb_eyeq6h_ddr0_match_data },
+> +	{ .compatible = "mobileye,eyeq6h-ddr1-olb", .data = &olb_eyeq6h_ddr1_match_data },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, olb_of_match);
+> +
+> +static struct platform_driver olb_driver = {
+> +	.probe =  olb_probe,
+> +	.driver = {
+> +		.name = "olb",
+> +		.of_match_table = olb_of_match,
+> +	},
+> +};
+> +builtin_platform_driver(olb_driver);
+> 
+> -- 
+> 2.45.0
+> 
 
 -- 
-Thanks,
-Oliver
+Lee Jones [李琼斯]
 
