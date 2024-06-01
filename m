@@ -1,171 +1,77 @@
-Return-Path: <linux-mips+bounces-3453-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3454-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B99CF8D6FE8
-	for <lists+linux-mips@lfdr.de>; Sat,  1 Jun 2024 15:09:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 963BB8D727D
+	for <lists+linux-mips@lfdr.de>; Sun,  2 Jun 2024 00:23:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CA9C1F21C69
-	for <lists+linux-mips@lfdr.de>; Sat,  1 Jun 2024 13:09:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D81F280D81
+	for <lists+linux-mips@lfdr.de>; Sat,  1 Jun 2024 22:23:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D0791509B8;
-	Sat,  1 Jun 2024 13:09:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XK+toAIN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 412851F5E6;
+	Sat,  1 Jun 2024 22:23:51 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA99412FB34;
-	Sat,  1 Jun 2024 13:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6157A1C6BD;
+	Sat,  1 Jun 2024 22:23:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717247351; cv=none; b=R3Q51BL6JEI6Omgp8nwceETtxU83cO/5UMRjnXP5ad0GqG93Zwluz/NgOZKPGJ6Vn1+O8Hhdu/ei8n2nNvJIa5OlGiN6YTFFd+6mWFJWcASHiHTy/56xA9O4o8xaG2z4pYMQrk6bcN2PpIL6Rm+TvgkvqHHBShHpeWAcv+jRGKk=
+	t=1717280631; cv=none; b=ZGAfQ5LAmTz34NoyGycwmS4Ib0tVX2hD7udsyT3PoBTNmcIades+FMBLcXGwG1np+faisASLvNfLey6NwsAjDvsI30tJ+oKOYHNG9QkZo/4ZHmX/FRAlOvhOuzwyWBt/R905cJUbY1cm3QQ2UC2CxyM2emyfl06506AFiDI9yiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717247351; c=relaxed/simple;
-	bh=JeCV8WyWwZWgsRBoBsXvODv76tCrqrpoTPjcXqyhaow=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M4JE/cPlbdfXEZc7eWNN3ckQSVLOig2VDk4AFk8gaz9q/hj8vLloWO3bTMxvoPR9xx+Q9wW3ffdjgSClrcG6MTScG6PXztxsrJU5ARNj3yqCRq4Dtxl4iaYFAuTJTLtA44gkvYDbYWsmfeyDVljzvmDVDH4qeLdOzDd0OVwNbVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XK+toAIN; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1f480624d10so23883935ad.1;
-        Sat, 01 Jun 2024 06:09:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717247349; x=1717852149; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JeCV8WyWwZWgsRBoBsXvODv76tCrqrpoTPjcXqyhaow=;
-        b=XK+toAINfJVGtTmUD3Soy0vZsJyLB8cubuJe/oohosJE2IaO7hXTeDKjcG9hNos62f
-         GJyptL3LNYxldQS3PWjxKnVoONl/DcgWoivTLhiCf8MJwquaGfIx1+g28tsf5TnrcAXt
-         fcNA1NdeyxXUHba0NrCYx5W3sUMwNejEysDA/iTRVdVLisVjYmp30WtRwT4k8NipW/ME
-         0drREBCxR0emIhka6DiTUPv5kg6pe/qxH+AqefRsu7GY79OKUwy40EaqFaVsapp5AiaI
-         V70SSn/KVtxFC8XCcqvioQacmZMftg3asl7k1QEBNqT4rv/DN3rNTxPvYLvAD+tM5+/z
-         SXlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717247349; x=1717852149;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JeCV8WyWwZWgsRBoBsXvODv76tCrqrpoTPjcXqyhaow=;
-        b=mupf7dbpkqcr2BPc2+heTZBijVidN6ng2Quj0GtUTQZrHwszyit75IbOlH+VFWgmki
-         mnqqMvSL5gqqLrl5rOxjNZyPprSryhxaAiCRAiTDSVU3nuGP6gmrmZNr0LOpaoyaQ9nk
-         y/Fg+Xoo2R6rVom+Oe5V4zt3lODm23VoPJWDObB1INKnWj+dVJIK85Y7N5mpeIZjs7ph
-         ra3jmOcFMeErpagEdOUycLhsgITfVKS9jyCee/GyuEzT89xVQLl7B0Xi/ZhTr+FgB/8u
-         ESXlyLnlhKptDbvHfyukGCFdEs+QHAJqUBgMRpvc0P9BqoNdSg4rHH4xFAXUGqZJtt4s
-         G3XA==
-X-Forwarded-Encrypted: i=1; AJvYcCXsDpo+RVKG33/tJ8B2nSqKJjAo1fE5UyixihAQfJyfstahQQdZ98IgGaSXh/WOPmQfBsG+wUsAE60iAffF1iuw+YNNab4chkoaQwj6KVjshlUVCboxjDqvA/sZAbSNCo42nBsgotRNb1KIqq/Nkwh4e/G32hi6ZSExVMFNJ73SmwzOXyid+ed47S2T0SPJvN8ocQpopjAk7ujPGD44PHD4jF6G9z0Y0GPtZNkglZ8nnBaVtX6UTlDMeo6pgMqBcc26xgeqv9OuVdNxuNNSK3dkvV331S5HTQHByrX4NKwXiRExtdw2O6y6U8nCTXzWVQBnCdhN9xsr8/s66bg+QgpKeEioCh8caFlyCG7XTj2quynZe/1LQ1l5TrwvR9VBK4EJViRtZ68adA1HbkoR9VfCPo8+cr+CQ5WT4I3ycUzaa/RKtakCVdFDV4CSnzWC4RRRsmZSHwLgMKqRB0PwnYK+uYQNFCHPcsK4mcyt6BFgG/GDhNmJngp/kSehLtlKSk2GGmK/Fg==
-X-Gm-Message-State: AOJu0YxlpxYMMmDiIQZDSJutOxeVxlxT7Tzqckmx691LsIRcQIFd0xGf
-	au+Un04HmZjznlSwpaTdoUJ0bMe/vuOnUpOvOF6lpLCoNjtzTEgl
-X-Google-Smtp-Source: AGHT+IFMrqly2po5FAbpY8Ll75+7jqZGxykv2GKZgaeba5l+UFazICmi5KDmbbiaIzRe6tWODUDHbA==
-X-Received: by 2002:a17:902:c412:b0:1f6:310b:a3cd with SMTP id d9443c01a7336-1f637018d0dmr55346295ad.20.1717247349084;
-        Sat, 01 Jun 2024 06:09:09 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f632338afbsm33014155ad.47.2024.06.01.06.09.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Jun 2024 06:09:08 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id B7AAC186E1EBA; Sat, 01 Jun 2024 20:09:03 +0700 (WIB)
-Date: Sat, 1 Jun 2024 20:09:03 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Shailend Chand <shailend@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>,
-	Mao Zhu <zhumao001@208suo.com>, Ran Sun <sunran001@208suo.com>,
-	Xiang wangx <wangxiang@cdjrlc.com>,
-	Shaomin Deng <dengshaomin@cdjrlc.com>,
-	Charles Han <hanchunchao@inspur.com>,
-	Attreyee M <tintinm2017@gmail.com>, LihaSika <lihasika@gmail.com>
-Subject: Re: [PATCH net-next v10 13/14] net: add devmem TCP documentation
-Message-ID: <Zlsdb05xe4EnIXmq@archie.me>
-References: <20240530201616.1316526-1-almasrymina@google.com>
- <20240530201616.1316526-14-almasrymina@google.com>
+	s=arc-20240116; t=1717280631; c=relaxed/simple;
+	bh=a2DEIn9JBgr/CBzEsnUbi8PgL8QTJbR6+n1UoaXTpVU=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=TmC3ElvkFC0oXMijhPmutGiHS02MzOFOV9CSNoA9Xg/bRL7BVFWn77eJ3lOGoDDyYWjvJQrRaJH5h1vxJRMgLlgdH8j1dGritLKI/zGU/xeBtypXznS1Hvi+J7B+k4AZiSNSexMfbvGsGtRRWMvxckrj3VAjvoh0iL6RAd5F/bs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 1C9C592009C; Sun,  2 Jun 2024 00:23:40 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 0E79192009B;
+	Sat,  1 Jun 2024 23:23:40 +0100 (BST)
+Date: Sat, 1 Jun 2024 23:23:39 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    Serge Semin <fancer.lancer@gmail.com>, 
+    Daniel Lezcano <daniel.lezcano@linaro.org>, 
+    Thomas Gleixner <tglx@linutronix.de>, linux-mips@vger.kernel.org, 
+    linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/7] MIPS: csrc-r4k: Refine rating computation
+In-Reply-To: <20240511-mips-clks-v1-1-ddb4a10ee9f9@flygoat.com>
+Message-ID: <alpine.DEB.2.21.2406012319200.23854@angie.orcam.me.uk>
+References: <20240511-mips-clks-v1-0-ddb4a10ee9f9@flygoat.com> <20240511-mips-clks-v1-1-ddb4a10ee9f9@flygoat.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="aC8Ai/5tbLCsiak5"
-Content-Disposition: inline
-In-Reply-To: <20240530201616.1316526-14-almasrymina@google.com>
+Content-Type: text/plain; charset=US-ASCII
 
+On Sat, 11 May 2024, Jiaxun Yang wrote:
 
---aC8Ai/5tbLCsiak5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Increase frequency addend dividend to 100000000 (10MHz) to
 
-On Thu, May 30, 2024 at 08:16:12PM +0000, Mina Almasry wrote:
-> Add documentation outlining the usage and details of devmem TCP.
->=20
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
->=20
+ The value of 100000000 is AFAICT 100MHz.
 
-The doc LGTM, thanks!
+> diff --git a/arch/mips/kernel/csrc-r4k.c b/arch/mips/kernel/csrc-r4k.c
+> index edc4afc080fa..262896871351 100644
+> --- a/arch/mips/kernel/csrc-r4k.c
+> +++ b/arch/mips/kernel/csrc-r4k.c
+> @@ -111,7 +111,8 @@ int __init init_r4k_clocksource(void)
+>  		return -ENXIO;
+>  
+>  	/* Calculate a somewhat reasonable rating value */
+> -	clocksource_mips.rating = 200 + mips_hpt_frequency / 10000000;
+> +	clocksource_mips.rating = 200;
+> +	clocksource_mips.rating += clamp(mips_hpt_frequency / 100000000, 0, 99);
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+ And FAOD the code change does match it.
 
---=20
-An old man doll... just what I always wanted! - Clara
-
---aC8Ai/5tbLCsiak5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZlsdaQAKCRD2uYlJVVFO
-o0YSAP9oUIejut2Xeqpj9kDBtkMcGA4Nf4zKVIgKdapDIWoSMAEA/6GrjlpUnXa2
-aFvYS6BFsRnMWpsP7c/bQ/LplabX6wM=
-=YUa0
------END PGP SIGNATURE-----
-
---aC8Ai/5tbLCsiak5--
+  Maciej
 
