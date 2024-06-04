@@ -1,80 +1,81 @@
-Return-Path: <linux-mips+bounces-3474-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3475-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF5338FAFC7
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Jun 2024 12:24:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BB548FB046
+	for <lists+linux-mips@lfdr.de>; Tue,  4 Jun 2024 12:47:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F1D0283FA7
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Jun 2024 10:24:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E662D2830A3
+	for <lists+linux-mips@lfdr.de>; Tue,  4 Jun 2024 10:47:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34E5F1420B7;
-	Tue,  4 Jun 2024 10:23:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C163B1A286;
+	Tue,  4 Jun 2024 10:46:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iSjDdIdt"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YT1+KKEi"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E83142640
-	for <linux-mips@vger.kernel.org>; Tue,  4 Jun 2024 10:23:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C81D714532A
+	for <linux-mips@vger.kernel.org>; Tue,  4 Jun 2024 10:46:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717496637; cv=none; b=trkA7pmvYL0DsCKLc74QYkD4+FouCwGR6DijHja5TXXV5JwFE533ULkgGgWOSPgs/y/ntG/QuFBtAhnxfva8xt2/1byptY6YalZVzOg7K9DsWL9qTAr3ndaqmERz7PTcIbfSdtzMQoyj/njrKUEm7BuE/ViYxXW4LyfHTA3k1EQ=
+	t=1717497970; cv=none; b=qnHG462TcB9I4l1irGzyuP0MmzvEnMMI8zYrLzq2rNyhg1lW1PIYci6KQQbNbhoxq0wmoMU6787iE7CCfbxRESuxi2Z53xQ8yaC6r68ocGWF5Ykw/lqOdbLLMdzycvZWFeUwE49+IiAVoAWXBE4aWvjhWqJ54V4AIEWhkNo5ocY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717496637; c=relaxed/simple;
-	bh=3fA+ijMelVGnpHEMrovsOfjpvNZBvc0ULJRMousTutk=;
+	s=arc-20240116; t=1717497970; c=relaxed/simple;
+	bh=hZouHW3Be7oHDmJaYU8Pk6X1E3qcjMSGo2PmSWsTIao=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nxlb7PPsAElqE+Ss9Wc1IPpMSlEPOb0rNAs9GuBjzJqxGNKZQzbbUYorS83eWcGWRYXlREO17GyuVa4jansJsLC5xZSaaAG0uu3w2bXLpbi98buC8FRn+e6wXzMeSrtQ77d+Fuf/vO8tItlfVvPGyyzGK4GXPw7EtajoI0jRwYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iSjDdIdt; arc=none smtp.client-ip=170.10.129.124
+	 Content-Type:MIME-Version; b=fzO2wNvIXBNwrcD74c0NqPoGzD1lVYmCfDvj64aCjcSWiLp5soH1qsgvNVdoHgjKxgvsihm+bB0LbLbQXvB5ULOCAFeDduT3MzmY2itiyRJd+9jxaoNGgPk8jbZ10rZH8Cuyq7VQWGoQDVhVvRkimhUPDC4WI2PYfhI4A14VRFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YT1+KKEi; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1717496634;
+	s=mimecast20190719; t=1717497968;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=O6tikh5JBiLBm1a4LVwhDF58Q+DFMaskKtK9m6Z5K2w=;
-	b=iSjDdIdtNp7XgzAbulBGvkRkbxWyRbZ1JmMVoSwx9XaAL++oQP2r/gtRTda6ey45ndkYbm
-	4njAyg0Yng6pmKJ6uaqYZMszAxDz8AVc6dtXdfyOGRERLMFshQaY4DnaMgn5l9QmSyuOuI
-	b+IXJRwmNRlnYnC8Jikk54Lw3tB2NmU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=2INWL2HfkCEOUaQcejz/ZeHkVaV6BSYyKwTdM3007eI=;
+	b=YT1+KKEiNxdCOtFtsQjXJhhtgRZzrgUHIg+L2vZqIw5ppNNNrsHkB2l+E8wnY9Fj1n2ZvK
+	zKbylNFIfQ6LdeQ40nfhDTTvqkJaObZ+P1rjt0OZMN2wMSzqHG/xS/d1Fd98gBHWTd3ZCC
+	uEEwwWlCKW0yvbeyDV+9UzwUwriHskQ=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-529-MEPnABRjPBSusgsKSymKWQ-1; Tue, 04 Jun 2024 06:23:53 -0400
-X-MC-Unique: MEPnABRjPBSusgsKSymKWQ-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4210e98f8d7so3960775e9.3
-        for <linux-mips@vger.kernel.org>; Tue, 04 Jun 2024 03:23:52 -0700 (PDT)
+ us-mta-691-bb_9jYp9MZmIh99lYhSMrA-1; Tue, 04 Jun 2024 06:46:06 -0400
+X-MC-Unique: bb_9jYp9MZmIh99lYhSMrA-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-35e532f32d8so87413f8f.2
+        for <linux-mips@vger.kernel.org>; Tue, 04 Jun 2024 03:46:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717496632; x=1718101432;
+        d=1e100.net; s=20230601; t=1717497965; x=1718102765;
         h=mime-version:user-agent:content-transfer-encoding:autocrypt
          :references:in-reply-to:date:cc:to:from:subject:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O6tikh5JBiLBm1a4LVwhDF58Q+DFMaskKtK9m6Z5K2w=;
-        b=uJ9CfaBZzsa5ZMDRxUF1UpASRvUwXW6STzBoGXvfGKBPwWDgrNF4976VJqvhZIVTTo
-         FjpN1NZveCKx+NjFX4VhLs1zE+fp0srG62oAKsHFp0D5w1il5qK6kM0MIQI/jK1oEToY
-         /r9/FRQo0snpcuaJQMYI4LtF4t7wZylAa7+uCFaIDKoWOWz4oZ9kdxJaRBWynbNJjwJ6
-         VelElJgDm070qhHZoDHEOPX35aQqA241jIcKiq72fAsoIDr+jFei0UoaQYDUY2Mqxxqz
-         tlTsTaHLmaqIXCd1My9i/4BSGao/sUxvX4SHyG+3/mGPMQ0YGZbs2oI4/uslMR88PWSW
-         8Vng==
-X-Forwarded-Encrypted: i=1; AJvYcCXy35RvhqJAh4UlIA4dR5qFwVK9Cu8/jjMB3dohO3gt8PvnhnfH4jdwX2sJLmcatNL7iYSR9T+XrEs2jbT+/gWV5yvzPk7PGQom9g==
-X-Gm-Message-State: AOJu0YxpLVgEUlj4kBHYCz/jHvEGann0coflOiFMpKYn73ZcchLt3HN7
-	7CQNLW5JwKW7aqLf/sBPnWGbK8pYO/iyobYA3rdiN1z0s7+ZIjXM7E5of1c/uPmyHEwfdzkRV+Y
-	gzXZKog9yLewvpTFe2aKW+4nAjo7QoF3SwdgGxv6ADUcQK9BXaJIFU1zAxMs=
-X-Received: by 2002:a05:6000:400a:b0:35e:51cf:6908 with SMTP id ffacd0b85a97d-35e51cf6a65mr6304462f8f.0.1717496631989;
-        Tue, 04 Jun 2024 03:23:51 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHrhzH032AI5YL7gUIyX1AtuXBZC4N92hUDih0vFJ9VAbnPZz6xUFLcLH2nJjeRcYQ09o42TQ==
-X-Received: by 2002:a05:6000:400a:b0:35e:51cf:6908 with SMTP id ffacd0b85a97d-35e51cf6a65mr6304415f8f.0.1717496631543;
-        Tue, 04 Jun 2024 03:23:51 -0700 (PDT)
+        bh=2INWL2HfkCEOUaQcejz/ZeHkVaV6BSYyKwTdM3007eI=;
+        b=IwFO8oq/a3vji8PthCOw0VI37yUnMahNY7L+/g6EvT2L7Zr0NenkfBzN5A6KYPcaIB
+         +qv/XC0SLb9NJNB1eUYERMH4KSolb7FzuqZ28SCWEEbUpjVCsi7+tGRq3mo2AMz8cvkf
+         lEbbnCEuFLsEmYxObU7BxuparS0q8twAmjV1PHjOSwB7tTH+nFxpBxsAENYNEBKdHB7g
+         oo615V/0RjS+IsQsKamxQ/NC/+Y7gPILezfVUHu8ZWuGNLppr9kD8tMh7G+iKB+gTTaI
+         KE1V017xDtE8B9TLFinHnjN+YOKZcNqfQfShNe5LOrVHhk4O8I5FWMRtC2vFYJpFlKFj
+         4ZTg==
+X-Forwarded-Encrypted: i=1; AJvYcCVMfIaWAlCNJv+/kof6wmpi3RttluGu7BVITKmbeCXhZZpe98N+097MHem+daRUrGaeEZvDQ1RhGx43DB2ePJwpfHj8CIjb4nFKOA==
+X-Gm-Message-State: AOJu0YznYws6XjTTubyNKtRryJdpGd0iCOFDYf6rO5tSPRABUkZv2sYF
+	wQCIkdDBJrGsRobqlEAd2Q5mLZtWLojos+/ct8ZaLV/jib7ISENYrNHBXUSo+ZHTUPvFHAjwiBT
+	D/cly55q4NggxFkmalW7WjlfoCMqKUG/UsSugHf6iNuok/AjoKPfWYtd8g/Q=
+X-Received: by 2002:a05:600c:1c1d:b0:41f:9c43:574f with SMTP id 5b1f17b1804b1-4212e0c3a8amr93112655e9.3.1717497965499;
+        Tue, 04 Jun 2024 03:46:05 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHhZkg/0Z/sKJT7J3TWrid9lXiu2XPNT//okkfjNQbBrbPkwkDbEMZqKI/3Co973LwwfL0QWQ==
+X-Received: by 2002:a05:600c:1c1d:b0:41f:9c43:574f with SMTP id 5b1f17b1804b1-4212e0c3a8amr93112015e9.3.1717497965040;
+        Tue, 04 Jun 2024 03:46:05 -0700 (PDT)
 Received: from gerbillo.redhat.com ([2a0d:3344:1b74:3a10::f71])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35dd04c4388sm11260215f8f.14.2024.06.04.03.23.48
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4212b84f8e7sm148593855e9.20.2024.06.04.03.46.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jun 2024 03:23:51 -0700 (PDT)
-Message-ID: <31b376371d52797894809ad8a2edd4b76a76775f.camel@redhat.com>
-Subject: Re: [PATCH net-next v10 06/14] page_pool: convert to use netmem
+        Tue, 04 Jun 2024 03:46:04 -0700 (PDT)
+Message-ID: <84162ef4c695cb764454087ca0bc81082d4fac8d.camel@redhat.com>
+Subject: Re: [PATCH net-next v10 10/14] net: add support for skbs with
+ unreadable frags
 From: Paolo Abeni <pabeni@redhat.com>
 To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
@@ -109,12 +110,12 @@ Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
  <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand
  <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>,
  Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
- linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>
-Date: Tue, 04 Jun 2024 12:23:48 +0200
-In-Reply-To: <20240530201616.1316526-7-almasrymina@google.com>
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+Date: Tue, 04 Jun 2024 12:46:01 +0200
+In-Reply-To: <20240530201616.1316526-11-almasrymina@google.com>
 References: <20240530201616.1316526-1-almasrymina@google.com>
-	 <20240530201616.1316526-7-almasrymina@google.com>
+	 <20240530201616.1316526-11-almasrymina@google.com>
 Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=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
@@ -130,58 +131,39 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Thu, 2024-05-30 at 20:16 +0000, Mina Almasry wrote:
-> diff --git a/include/trace/events/page_pool.h b/include/trace/events/page=
-_pool.h
-> index 6834356b2d2ae..c5b6383ff2760 100644
-> --- a/include/trace/events/page_pool.h
-> +++ b/include/trace/events/page_pool.h
-> @@ -42,51 +42,52 @@ TRACE_EVENT(page_pool_release,
->  TRACE_EVENT(page_pool_state_release,
+> diff --git a/net/core/gro.c b/net/core/gro.c
+> index 26f09c3e830b7..7b9d018f552bd 100644
+> --- a/net/core/gro.c
+> +++ b/net/core/gro.c
+> @@ -422,6 +422,9 @@ static void gro_pull_from_frag0(struct sk_buff *skb, =
+int grow)
+>  {
+>  	struct skb_shared_info *pinfo =3D skb_shinfo(skb);
 > =20
->  	TP_PROTO(const struct page_pool *pool,
-> -		 const struct page *page, u32 release),
-> +		 netmem_ref netmem, u32 release),
+> +	if (WARN_ON_ONCE(!skb_frags_readable(skb)))
+> +		return;
+> +
+>  	BUG_ON(skb->end - skb->tail < grow);
+> =20
+>  	memcpy(skb_tail_pointer(skb), NAPI_GRO_CB(skb)->frag0, grow);
+> @@ -443,7 +446,7 @@ static void gro_try_pull_from_frag0(struct sk_buff *s=
+kb)
+>  {
+>  	int grow =3D skb_gro_offset(skb) - skb_headlen(skb);
+> =20
+> -	if (grow > 0)
+> +	if (grow > 0 && skb_frags_readable(skb))
+>  		gro_pull_from_frag0(skb, grow);
+>  }
 
-This causes a sparse warning, as the caller is still passing a 'page'
-argument.
+I'm unsure if this was already mentioned, so please pardon the eventual
+duplicate...
 
-> =20
-> -	TP_ARGS(pool, page, release),
-> +	TP_ARGS(pool, netmem, release),
-> =20
->  	TP_STRUCT__entry(
->  		__field(const struct page_pool *,	pool)
-> -		__field(const struct page *,		page)
-> +		__field(netmem_ref,			netmem)
->  		__field(u32,				release)
->  		__field(unsigned long,			pfn)
->  	),
-> =20
->  	TP_fast_assign(
->  		__entry->pool		=3D pool;
-> -		__entry->page		=3D page;
-> +		__entry->netmem		=3D netmem;
->  		__entry->release	=3D release;
-> -		__entry->pfn		=3D page_to_pfn(page);
-> +		__entry->pfn		=3D netmem_to_pfn(netmem);
->  	),
-> =20
-> -	TP_printk("page_pool=3D%p page=3D%p pfn=3D0x%lx release=3D%u",
-> -		  __entry->pool, __entry->page, __entry->pfn, __entry->release)
-> +	TP_printk("page_pool=3D%p netmem=3D%lu pfn=3D0x%lx release=3D%u",
-> +		  __entry->pool, (__force unsigned long)__entry->netmem,
-> +		  __entry->pfn, __entry->release)
->  );
-> =20
->  TRACE_EVENT(page_pool_state_hold,
-> =20
->  	TP_PROTO(const struct page_pool *pool,
-> -		 const struct page *page, u32 hold),
-> +		 netmem_ref netmem, u32 hold),
+The above code is quite critical performance wise, and the previous
+patch already prevent frag0 from being set to a non paged frag, so what
+about dropping the above additional checks?
 
-Same here.
-
-Thanks,
+thanks!
 
 Paolo
 
