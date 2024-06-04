@@ -1,143 +1,144 @@
-Return-Path: <linux-mips+bounces-3477-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3478-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2676F8FB14B
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Jun 2024 13:44:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A08E8FB63B
+	for <lists+linux-mips@lfdr.de>; Tue,  4 Jun 2024 16:54:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B4D61C221F0
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Jun 2024 11:44:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BD641C246C9
+	for <lists+linux-mips@lfdr.de>; Tue,  4 Jun 2024 14:54:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C35F145A1A;
-	Tue,  4 Jun 2024 11:44:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CB8D1474C9;
+	Tue,  4 Jun 2024 14:51:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="PUNm465m"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="fIYiekmS";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dEh4fzyA"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wfhigh1-smtp.messagingengine.com (wfhigh1-smtp.messagingengine.com [64.147.123.152])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9972D1459E2
-	for <linux-mips@vger.kernel.org>; Tue,  4 Jun 2024 11:44:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7245C1448CB;
+	Tue,  4 Jun 2024 14:51:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717501469; cv=none; b=o6XkDNcxbJlaBOxQi3YyF1FjlgAmFfXk1NN4buLjSPsr9V5bApU/wxcj+Ks7Ig2LA3+ctKJLHIt+DdFVik0/ovRCEaMheDzL8Qtmnp/SQWQfh2bPpVWV7rnL21hMglGLf7xj/YJiKBE81Ux1jhqQZl9dhCKmrZ9th1QQEm4XUrY=
+	t=1717512714; cv=none; b=KDxZbLuYavEJQBhGR4/2yfKE6zMsI7nkIVL7n2M4h/sJlr7IgdAEPOnkB22z+awsPB9tnpWdq3LYBzXMz9TLl1BsyMHuB6t41kB/wnNhmn1/kuA1XW5sBd3Pm9HA5Acdc5I38NNIb7QvLpwfuBIJGbuyRNgj2VbEHZ3J9LQNV08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717501469; c=relaxed/simple;
-	bh=3BXu54JL29te3bk0JIakNdnue3MoNyfA1fQ0KpkafnY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R6qo8qgZPKAiuu261rneoOMuP3XuMgfCm/BcLfaF4Fnv4r0RkKArQAjGiIg1vXsLfxClM0lP06G5pzuxSlI3jCHvni3+Hqq/rdyBPQ7qfn1NGwcPRhutgTMd5E0Na/iEoSNxfjA295xeTPzN71xF22RDg2IJAgsdK0ak3LMEM2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=PUNm465m; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a62ef52e837so100536966b.3
-        for <linux-mips@vger.kernel.org>; Tue, 04 Jun 2024 04:44:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1717501466; x=1718106266; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3BXu54JL29te3bk0JIakNdnue3MoNyfA1fQ0KpkafnY=;
-        b=PUNm465mt0L+oMsosDaaJ7pHYyJCaIEQFFn6bbrPcdwVwl0DvmsVU0FjLUKb2SCUK3
-         OpV+aZDTG1E7CUmKBDpFk6rW42+hWu/k9bZtOPElGsoyHDd3+EOlNqCDxc4Oxcoqab1C
-         EsuE7Sw4lJyTu6SmglSltu4RvZnByV4qp91pt9eM6w3YMsHisr4gaErBQ8FIe+L/MJGK
-         0L9Txovpgdh4UwXc6ULR+L4TTEjTcr2Rr5QgO4FNI0yCXXcHIvWHgJr4NQnAQIDkcCjl
-         ydBgOuIpXaMuTksEyS+I7hYz7CYJ6S2NwQm2vAtWNScKJ+FqhBNrheBnCaAG2QSncbSj
-         Eu1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717501466; x=1718106266;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3BXu54JL29te3bk0JIakNdnue3MoNyfA1fQ0KpkafnY=;
-        b=SUimr6LiNyHWBH41MWqPUUBorIVvLM4h5dz8PhxR1IIQD4eBprd2gxojkuNc8K3/r7
-         S2meePiwit7PvemQk+FiDLQyDLewCv7c4eTgGVWenDWuFjf9KXiXu1lqf0EaWRn18R9C
-         4Z+GZXVBfPwmAuIjKLxHr6npWYH89m2/YalbiRMzHB/jYS2p4qsFZlc2/XtB4oNO03SR
-         bitzRUSscSv81Pp85QfbFyZod26xOJdwIj4COL11LzL4PgPVllTS/Kz4jJblr2+x3X5b
-         efiFG5inuumjYgRS3NtIow+khnvM5umrswDy2iBkqmQWTiehQx2oAscMBe6hYlctszku
-         qbIA==
-X-Forwarded-Encrypted: i=1; AJvYcCWK5YyHvimDZPTLqQjf8kIUuYcx5AgHpK/bYJUaRlrnQix8h5vecCOGB9680pkJONcquK9iecw6JutaQu79IWKUmC9mK9b6rjPzJg==
-X-Gm-Message-State: AOJu0YyVi2d8EtKPOCs6xxJPObRpjmDO5AjIvjrodBWsPCXLrcYwh0yX
-	TQLVQ1HaJ3T80xwk8zuKErX0EZp9zNFQN9zDa8pIG2zOz3XRaeQunO420I2dBEI3JV65uDAdRtD
-	x/cxfw9F3lnEX4EkWyfJpPP8fM6KgS53P15tVOA==
-X-Google-Smtp-Source: AGHT+IF5j0HlHcUwqZev1qhJa4XLMrGdrhzyscNN/jd+ZNq5k0ymbm8yvqEpsVyAB4LEq75CK9UuVo8NGyvZXeKaCp4=
-X-Received: by 2002:a17:907:7ea1:b0:a68:e9dc:b07 with SMTP id
- a640c23a62f3a-a68e9dc0feemr501609066b.60.1717501465846; Tue, 04 Jun 2024
- 04:44:25 -0700 (PDT)
+	s=arc-20240116; t=1717512714; c=relaxed/simple;
+	bh=oxH7A7jHOC00jl2KczggEgfZrVmHaHme+p6JqJSfp/U=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=cogcDdrHpnM1aKVFO1rcjJ1J1qXCsz/7AgoTa8MYWlvI8fqWlXMxNZ///XzL8fUeDH+R5bCQPKDFwEdVmp8DfcZmlLY98Xd8cq7WoIoUedoY3JXHPH+d0XTd8Q5oXUJRqsMK+/vB+f7iWzWsfyWvpPa8pllFwmbQiwTskXgT+ZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=fIYiekmS; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dEh4fzyA; arc=none smtp.client-ip=64.147.123.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailfhigh.west.internal (Postfix) with ESMTP id 20CA81800083;
+	Tue,  4 Jun 2024 10:51:51 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Tue, 04 Jun 2024 10:51:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1717512710;
+	 x=1717599110; bh=WZ21gytJ86etwseUsdEa3ZebPAHaM4+/yWQPikdVbjQ=; b=
+	fIYiekmS2yy1am1YbbUACG1vyY8jhxdVShJdiFZzlzT6vyMIQf2JWg+bQjeeSqLM
+	jTz9lRvEjHJvQiD2Pc97v6D6dCwNZsVs+j/U5lXphm8yL6c/ueJlrgE/M27vzPmC
+	en/ZPeXCXxBXYP3Ld8zsnRbtb+fRz5bZE9xPTgDazAbhRchv/Gpg0/qlIu8/J1XC
+	LYTihkSxGbNWNe3I3w8AHZFNReg27wAOZCuRcqgJTdx+lPDlfiAheAVfsnq9+iL2
+	3tzDbbIbtpSrPiM+YFUWeuMYkFyUDNwk7dgoh3tsVkV9OauaTBkhXz9fHJyRzLkL
+	47H1mPlLpz/6UTx0eWXF9Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1717512710; x=
+	1717599110; bh=WZ21gytJ86etwseUsdEa3ZebPAHaM4+/yWQPikdVbjQ=; b=d
+	Eh4fzyA433/zoO8obDFqiz42lJglV7GfZQVPh3xJ9ku22TaJsUF3RgptnDAewAwF
+	JqCnwKUv9VAzKGifCJ/m5LaBWFd+s5lz6vvxdRURoJRXvcJR3ycpTmM3U4hAYF6V
+	xxaUhX0/fq6+64zaSNo7xyoNjAKP2mgQdnX5fi1azFwCE/40SDN2M8Le46PdB6ap
+	8Cupmh9qJRb9aCPToSM3VFHPMNtA3l1n68MgdoJsqFBqB0pJyxim16D3kVG43wR6
+	vrPV7QB6+OOBfBlH2Jd9CMi6m9R4c+Vib1ikMiJ6H3gYm4X7xsOEpBS0p12zfiOr
+	ahZQh2aFdu1A3nfpXHt7w==
+X-ME-Sender: <xms:BipfZpwWozKfBNUYf0XHMF1Ldk4aoIvNw5isc00Wgh1Rne784kbKwg>
+    <xme:BipfZpTkhn0BdXJaZ_ZzQLXyNqnmYKSCL0ihLrOuaM3c2PmQZtyinEZ1WkfBElVXM
+    Ag_W-RBJskclyitZ_8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdelgedgjeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
+    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
+    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:BipfZjWjnKtDZipeOVXUORa00ySyrkjGwzzgjmADZZFQrZFmNubPkg>
+    <xmx:BipfZriHEnxBC3QOQEF6tQWt9eNcwwmLQDD15PpLdyw0LErPGTMjlw>
+    <xmx:BipfZrDdtmO7y5aKABUgCwwOAYO98BwXVictq6elfqzN85fr6lnPlA>
+    <xmx:BipfZkIgLz_Yu0RB6iZ8r4dFF6kqFetibyjtFeTqPyTcoOjwGninuw>
+    <xmx:BipfZt1as4uDHZ4PRN80bp445gkN0o_vElkShctpFjjHAqhLOQ5Oc15N>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 1EA7036A0074; Tue,  4 Jun 2024 10:51:50 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-497-g97f96844c-fm-20240526.001-g97f96844
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240131155929.169961-1-alexghiti@rivosinc.com>
- <20240131155929.169961-4-alexghiti@rivosinc.com> <CAEEQ3wnT-K18R1KQjJbeSdnFnRFQZt=wCuAHeDrf7EohwZ7n=w@mail.gmail.com>
- <CAHVXubiKAY_L04ZwYSp-MpPPT5sPzxm4wB6HVFPzsMcB-3zq9w@mail.gmail.com>
- <CAEEQ3wkkNyrjVCDxprNP5Z=NzO=EYeKeWf3CDvVNJHY1uovmMQ@mail.gmail.com>
- <CAHVXubi+s2Q0y_xLbHpQJpz+yXvKWJ8e96wwAHP6A9C7U-He7g@mail.gmail.com>
- <CAHVXubg4vtfjSJ-w8-7suzZ9L5ZmTo8udUMaYjJ5veKBmikNjA@mail.gmail.com> <20240604-dazzling-envy-1dcf111eb2c5@spud>
-In-Reply-To: <20240604-dazzling-envy-1dcf111eb2c5@spud>
-From: Alexandre Ghiti <alexghiti@rivosinc.com>
-Date: Tue, 4 Jun 2024 13:44:15 +0200
-Message-ID: <CAHVXubhy1yEKOx91gc9S++yKOoQa+sJ5EDSiMFwR6qepwzRMew@mail.gmail.com>
-Subject: Re: [External] [PATCH RFC/RFT v2 3/4] riscv: Stop emitting preventive
- sfence.vma for new vmalloc mappings
-To: Conor Dooley <conor@kernel.org>
-Cc: yunhui cui <cuiyunhui@bytedance.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Andrew Morton <akpm@linux-foundation.org>, Ved Shanbhogue <ved@rivosinc.com>, 
-	Matt Evans <mev@rivosinc.com>, Dylan Jhong <dylan@andestech.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <7f0681ea-cd4c-441c-9ac5-0259d0965734@app.fastmail.com>
+In-Reply-To: <alpine.DEB.2.21.2406012326580.23854@angie.orcam.me.uk>
+References: <20240511-mips-clks-v1-0-ddb4a10ee9f9@flygoat.com>
+ <20240511-mips-clks-v1-3-ddb4a10ee9f9@flygoat.com>
+ <alpine.DEB.2.21.2406012326580.23854@angie.orcam.me.uk>
+Date: Tue, 04 Jun 2024 15:51:31 +0100
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Serge Semin" <fancer.lancer@gmail.com>,
+ "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+ "Thomas Gleixner" <tglx@linutronix.de>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/7] MIPS: csrc-r4k: Select HAVE_UNSTABLE_SCHED_CLOCK if 64BIT
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 4, 2024 at 10:52=E2=80=AFAM Conor Dooley <conor@kernel.org> wro=
-te:
->
-> On Tue, Jun 04, 2024 at 09:17:26AM +0200, Alexandre Ghiti wrote:
-> > On Tue, Jun 4, 2024 at 9:15=E2=80=AFAM Alexandre Ghiti <alexghiti@rivos=
-inc.com> wrote:
-> > > On Tue, Jun 4, 2024 at 8:21=E2=80=AFAM yunhui cui <cuiyunhui@bytedanc=
-e.com> wrote:
-> > > >
-> > > > As for the current status of the patch, there are two points that c=
-an
-> > > > be optimized:
-> > > > 1. Some chip hardware implementations may not cache TLB invalid
-> > > > entries, so it doesn't matter whether svvptc is available or not. C=
-an
-> > > > we consider adding a CONFIG_RISCV_SVVPTC to control it?
-> >
-> > That would produce a non-portable kernel. But I'm not opposed to that
-> > at all, let me check how we handle other extensions. Maybe @Conor
-> > Dooley has some feedback here?
->
-> To be honest, not really sure what to give feedback on. Could you
-> elaborate on exactly what the option is going to do? Given the
-> portability concern, I guess you were proposing that the option would
-> remove the preventative fences, rather than your current patch that
-> removes them via an alternative?
 
-No no, I won't do that, we need a generic kernel for distros so that's
-not even a question. What Yunhui was asking about (to me) is: can we
-introduce a Kconfig option to always remove the preventive fences,
-bypassing the use of alternatives altogether?
 
-To me, it won't make a difference in terms of performance. But if we
-already offer such a possibility for other extensions, well I'll do
-it. Otherwise, the question is: should we start doing that?
-
-> I don't think we have any extension
-> related options that work like that at the moment, and making that an
-> option will just mean that distros that look to cater for multiple
-> platforms won't be able to turn it on.
+=E5=9C=A82024=E5=B9=B46=E6=9C=881=E6=97=A5=E5=85=AD=E6=9C=88 =E4=B8=8B=E5=
+=8D=8811:30=EF=BC=8CMaciej W. Rozycki=E5=86=99=E9=81=93=EF=BC=9A
+> On Sat, 11 May 2024, Jiaxun Yang wrote:
 >
-> Thanks,
-> Conor.
+>> csrc-r4k suffers from SMP synchronization overhead.
+> [...]
+>> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+>> index f1aa1bf11166..fa8ca0287568 100644
+>> --- a/arch/mips/Kconfig
+>> +++ b/arch/mips/Kconfig
+>> @@ -1083,6 +1083,7 @@ config CSRC_IOASIC
+>> =20
+>>  config CSRC_R4K
+>>  	select CLOCKSOURCE_WATCHDOG if CPU_FREQ
+>> +	select HAVE_UNSTABLE_SCHED_CLOCK if 64BIT
+>
+>  Shouldn't it be:
+>
+> 	select HAVE_UNSTABLE_SCHED_CLOCK if 64BIT && SMP
+
+This option is not depending on SMP on x86 and PARISC, so I followed
+the same approach.
+
+But yes, it makes sense to depend on SMP.
+
+Thanks
+>
+> then?
+>
+>   Maciej
+
+--=20
+- Jiaxun
 
