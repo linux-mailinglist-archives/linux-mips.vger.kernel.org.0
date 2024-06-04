@@ -1,148 +1,146 @@
-Return-Path: <linux-mips+bounces-3481-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3482-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E072D8FB948
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Jun 2024 18:43:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64DE08FBD2F
+	for <lists+linux-mips@lfdr.de>; Tue,  4 Jun 2024 22:18:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DC6E1F20D22
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Jun 2024 16:43:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 008EEB21B0D
+	for <lists+linux-mips@lfdr.de>; Tue,  4 Jun 2024 20:18:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C52C148FF3;
-	Tue,  4 Jun 2024 16:43:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA30114AD32;
+	Tue,  4 Jun 2024 20:18:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YoZ0l1zC"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1BF1148847;
-	Tue,  4 Jun 2024 16:43:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A06F283CD6;
+	Tue,  4 Jun 2024 20:18:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717519384; cv=none; b=OlCJephw07T+5wvKsyAOGxJ1edQZ/0O0T6Y4aSahpKs3XXLgB03Fo+dCHRuNOCx2SbBWc2QED+gY7rnW3Nb8Qr0ECi8rFyhe6Ct6drLDYTpekI5vclA07hkBXtZPPeKs3SYvXYjMBTR0/n5ofKPveqKYvqlldfXp50K6aOzmi1I=
+	t=1717532280; cv=none; b=KWFCB3HNrtUQAJiPqob49Yxl286SNosuvmuuVI6rjVVDdHx7xKUqZeb90HE5ZN5Wx5n5mByiI4Pi/yrxnuVO969lRJJx3NtA3gzOHlMrW+D9i7LEExyDIBBk8NQg9opJnkTnSMh6E9qQGd5TPCLfJrOD72U9pfKpD2T+DHikIIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717519384; c=relaxed/simple;
-	bh=oPp4w96Wn+D5XlEch5Zme9OLK7LhiUVGAGTFRFKOodA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CWbYMHgM1cifiFHLmlbP09OUtTS+Ry8+r19Gr0bqFWtyd+wPaV/Cj+EygfiwmeegBBZjSvzaTldp5y96y09bPFf2cXFMEAHQQqZy3rolER7p7J/LM4AbixTbhjCSsP8BJ4KQaNo1UqHfzC91m503+RhV/tS+fKrrcNewc+/KBnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0BBAC2BBFC;
-	Tue,  4 Jun 2024 16:42:46 +0000 (UTC)
-Date: Tue, 4 Jun 2024 12:42:43 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Paolo Abeni <pabeni@redhat.com>, Mina Almasry <almasrymina@google.com>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
- <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Masami
- Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Arnd Bergmann <arnd@arndb.de>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>,
- Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan
- <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, Christian
- =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>, Pavel Begunkov
- <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Yunsheng Lin
- <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
- <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, Kaiyuan
- Zhang <kaiyuanz@google.com>
-Subject: Re: [PATCH net-next v10 05/14] netdev: netdevice devmem allocator
-Message-ID: <20240604124243.66203a46@gandalf.local.home>
-In-Reply-To: <20240604163158.GB21513@ziepe.ca>
-References: <20240530201616.1316526-1-almasrymina@google.com>
-	<20240530201616.1316526-6-almasrymina@google.com>
-	<bea8b8bf1630309bb004f614e4a3c7f684a6acb6.camel@redhat.com>
-	<20240604121551.07192993@gandalf.local.home>
-	<20240604163158.GB21513@ziepe.ca>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1717532280; c=relaxed/simple;
+	bh=hzO5VxyNboH0UxSA8oeS3DN/P0lxl1+qVDrF4lH35fg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IJvdXMnKQ3y0fCG1/wZsuar6CzM7tITqReqJZQ4Nlfz+GOcvqoSVPqDOgUEt4hbidPPe3Ea+ytG1ltIP4fJqNsQ52iUILXc/fCg6s/7QhSapD8skUyE8sSZGt8THqyD/wXWV5FWOXZ856CFXAb+1FczACvxPcpvJldNlj5AYELo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YoZ0l1zC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50DD4C2BBFC;
+	Tue,  4 Jun 2024 20:17:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717532280;
+	bh=hzO5VxyNboH0UxSA8oeS3DN/P0lxl1+qVDrF4lH35fg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YoZ0l1zC3xE7XjFm6AyGqJGICJLDpBXsff7pMRSlEudgDhIe2FAqUIlZOHMrcDAr3
+	 JFMzUTUWby1raWnTIk9qkVwqwtiz6/Z6smnBNReiuYlHT8eUSl0Z+Aqd5Gb2Mvh34S
+	 wAKOpf6ZGKyFw6YsjI3fHnZC+rpMWQawCWhKqPCdn6EmlNin9YkQkOohgJvSm0Jfdq
+	 EA1DmGUVMobN6eu67mYDQTP4RfwK6SHx4st2n6F8wStZwJn0RmP6KpiZmkZX3cYHhC
+	 s3AwyJtNeSyuaNXCJfi8TiyYPNzftuerF7VkPZyKLtWbcx/eMh95QAsbx5XROxuYBO
+	 Zsx5ZvhbZVrFA==
+Date: Tue, 4 Jun 2024 21:17:54 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc: yunhui cui <cuiyunhui@bytedance.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ved Shanbhogue <ved@rivosinc.com>, Matt Evans <mev@rivosinc.com>,
+	Dylan Jhong <dylan@andestech.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-mm@kvack.org
+Subject: Re: [External] [PATCH RFC/RFT v2 3/4] riscv: Stop emitting
+ preventive sfence.vma for new vmalloc mappings
+Message-ID: <20240604-finalist-screen-c9f35b5cfc56@spud>
+References: <20240131155929.169961-1-alexghiti@rivosinc.com>
+ <20240131155929.169961-4-alexghiti@rivosinc.com>
+ <CAEEQ3wnT-K18R1KQjJbeSdnFnRFQZt=wCuAHeDrf7EohwZ7n=w@mail.gmail.com>
+ <CAHVXubiKAY_L04ZwYSp-MpPPT5sPzxm4wB6HVFPzsMcB-3zq9w@mail.gmail.com>
+ <CAEEQ3wkkNyrjVCDxprNP5Z=NzO=EYeKeWf3CDvVNJHY1uovmMQ@mail.gmail.com>
+ <CAHVXubi+s2Q0y_xLbHpQJpz+yXvKWJ8e96wwAHP6A9C7U-He7g@mail.gmail.com>
+ <CAHVXubg4vtfjSJ-w8-7suzZ9L5ZmTo8udUMaYjJ5veKBmikNjA@mail.gmail.com>
+ <20240604-dazzling-envy-1dcf111eb2c5@spud>
+ <CAHVXubhy1yEKOx91gc9S++yKOoQa+sJ5EDSiMFwR6qepwzRMew@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="rwD0Txngxq5MBoPY"
+Content-Disposition: inline
+In-Reply-To: <CAHVXubhy1yEKOx91gc9S++yKOoQa+sJ5EDSiMFwR6qepwzRMew@mail.gmail.com>
 
-On Tue, 4 Jun 2024 13:31:58 -0300
-Jason Gunthorpe <jgg@ziepe.ca> wrote:
 
-> On Tue, Jun 04, 2024 at 12:15:51PM -0400, Steven Rostedt wrote:
-> > On Tue, 04 Jun 2024 12:13:15 +0200
-> > Paolo Abeni <pabeni@redhat.com> wrote:
-> >   
-> > > On Thu, 2024-05-30 at 20:16 +0000, Mina Almasry wrote:  
-> > > > diff --git a/net/core/devmem.c b/net/core/devmem.c
-> > > > index d82f92d7cf9ce..d5fac8edf621d 100644
-> > > > --- a/net/core/devmem.c
-> > > > +++ b/net/core/devmem.c
-> > > > @@ -32,6 +32,14 @@ static void net_devmem_dmabuf_free_chunk_owner(struct gen_pool *genpool,
-> > > >  	kfree(owner);
-> > > >  }
-> > > >  
-> > > > +static inline dma_addr_t net_devmem_get_dma_addr(const struct net_iov *niov)    
-> > > 
-> > > Minor nit: please no 'inline' keyword in c files.  
-> > 
-> > I'm curious. Is this a networking rule? I use 'inline' in my C code all the
-> > time.  
-> 
-> It mostly comes from Documentation/process/coding-style.rst:
-> 
-> 15) The inline disease
-> ----------------------
-> 
-> There appears to be a common misperception that gcc has a magic "make me
-> faster" speedup option called ``inline``. While the use of inlines can be
-> appropriate (for example as a means of replacing macros, see Chapter 12), it
-> very often is not. Abundant use of the inline keyword leads to a much bigger
-> kernel, which in turn slows the system as a whole down, due to a bigger
-> icache footprint for the CPU and simply because there is less memory
-> available for the pagecache. Just think about it; a pagecache miss causes a
-> disk seek, which easily takes 5 milliseconds. There are a LOT of cpu cycles
-> that can go into these 5 milliseconds.
-> 
-> A reasonable rule of thumb is to not put inline at functions that have more
-> than 3 lines of code in them. An exception to this rule are the cases where
-> a parameter is known to be a compiletime constant, and as a result of this
-> constantness you *know* the compiler will be able to optimize most of your
-> function away at compile time. For a good example of this later case, see
-> the kmalloc() inline function.
-> 
-> Often people argue that adding inline to functions that are static and used
-> only once is always a win since there is no space tradeoff. While this is
-> technically correct, gcc is capable of inlining these automatically without
-> help, and the maintenance issue of removing the inline when a second user
-> appears outweighs the potential value of the hint that tells gcc to do
-> something it would have done anyway.
-> 
+--rwD0Txngxq5MBoPY
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Interesting, as I sped up the ftrace ring buffer by a substantial amount by
-adding strategic __always_inline, noinline, likely() and unlikely()
-throughout the code. It had to do with what was considered the fast path
-and slow path, and not actually the size of the function. gcc got it
-horribly wrong.
+On Tue, Jun 04, 2024 at 01:44:15PM +0200, Alexandre Ghiti wrote:
+> On Tue, Jun 4, 2024 at 10:52=E2=80=AFAM Conor Dooley <conor@kernel.org> w=
+rote:
+> >
+> > On Tue, Jun 04, 2024 at 09:17:26AM +0200, Alexandre Ghiti wrote:
+> > > On Tue, Jun 4, 2024 at 9:15=E2=80=AFAM Alexandre Ghiti <alexghiti@riv=
+osinc.com> wrote:
+> > > > On Tue, Jun 4, 2024 at 8:21=E2=80=AFAM yunhui cui <cuiyunhui@byteda=
+nce.com> wrote:
+> > > > >
+> > > > > As for the current status of the patch, there are two points that=
+ can
+> > > > > be optimized:
+> > > > > 1. Some chip hardware implementations may not cache TLB invalid
+> > > > > entries, so it doesn't matter whether svvptc is available or not.=
+ Can
+> > > > > we consider adding a CONFIG_RISCV_SVVPTC to control it?
+> > >
+> > > That would produce a non-portable kernel. But I'm not opposed to that
+> > > at all, let me check how we handle other extensions. Maybe @Conor
+> > > Dooley has some feedback here?
+> >
+> > To be honest, not really sure what to give feedback on. Could you
+> > elaborate on exactly what the option is going to do? Given the
+> > portability concern, I guess you were proposing that the option would
+> > remove the preventative fences, rather than your current patch that
+> > removes them via an alternative?
+>=20
+> No no, I won't do that, we need a generic kernel for distros so that's
+> not even a question. What Yunhui was asking about (to me) is: can we
+> introduce a Kconfig option to always remove the preventive fences,
+> bypassing the use of alternatives altogether?
+>=20
+> To me, it won't make a difference in terms of performance. But if we
+> already offer such a possibility for other extensions, well I'll do
+> it. Otherwise, the question is: should we start doing that?
 
--- Steve
+We don't do that for other extensions yet, because currently all the
+extensions we have options for are additive. There's like 3 alternative
+patchsites, and they are all just one nop? I don't see the point of
+having a Kconfig knob for that.
+
+--rwD0Txngxq5MBoPY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZl92cgAKCRB4tDGHoIJi
+0jejAP4q4iC1BCvHT6xTV9Sna0UEFmTHPbvuyI/Dr8hN0BftCQEA2HLRmlNNqiPJ
+abULfaYTpyjXRctzj8H5FL5kCUjY6gs=
+=929z
+-----END PGP SIGNATURE-----
+
+--rwD0Txngxq5MBoPY--
 
