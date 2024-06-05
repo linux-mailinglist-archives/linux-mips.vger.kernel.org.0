@@ -1,61 +1,61 @@
-Return-Path: <linux-mips+bounces-3495-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3496-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C65548FCC2E
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Jun 2024 14:14:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFF108FCC47
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Jun 2024 14:16:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B1991F2442D
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Jun 2024 12:14:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3996FB24FF3
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Jun 2024 12:16:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55EEC1B29D7;
-	Wed,  5 Jun 2024 11:54:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D0DF1B4C2E;
+	Wed,  5 Jun 2024 11:54:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AmjavBrU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hI1CmksD"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D733197510;
-	Wed,  5 Jun 2024 11:54:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A161B4C2B;
+	Wed,  5 Jun 2024 11:54:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717588467; cv=none; b=Ju/p3DeskVSXdjA8v2f0azxwV0ecQZPCdvXv4tEUO0vR5D6To9tGfOSK8KgOmEdWRdk5YgT5iJVnVQJ0uff2Njzd0oAqfMNIHK/XLOw7y/9oR20iW8Wx41L/hH3U8STbIzLKdJVBuxEDGBIx+k21fNF+3h7+1Q54R7MEL5I/gGw=
+	t=1717588493; cv=none; b=q47IiA4oYUdYylyFyuPMcZJ1/v+lGEIHYuXZOkRr+lrHAWbBWUKeJe+7SpErDgjkysjAw/fTkQJdCMgyCXf7oDnCyAMd16+twsglxWWSFGl16UO8ldbSTWU1cKxvN44kE1HDTn3yTKNwYhTaSc3wH5th/QQ/mIfBuY9luslvaU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717588467; c=relaxed/simple;
+	s=arc-20240116; t=1717588493; c=relaxed/simple;
 	bh=ghaJ6hQdbi2GgdV2gtK7tru7aQc6vMTFxyqHR4nedXA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ttte8NSHVV6YkbfNkX1oUgcs6KzfrKgfSQqB82cWuoUVHv0g8fh0oi3Ox/J2hVF7chQItnviybRANg3x7QVyYoKPlsjC1whyXnqY/GcHy3lNOM5NK0NHya/iBNvlU8V8bGcu0DxJLPVYTcLpwmmDucbQyyptu+ARiVBDw/mbMu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AmjavBrU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BECEC3277B;
-	Wed,  5 Jun 2024 11:54:26 +0000 (UTC)
+	 MIME-Version; b=ZCgSMq5bM6AizJNFe5XejxmW1Cnro+hZln3h/9fmSBZCwxAmH8ud/kbr6mLvo3xL0kUkpnqqf4S1QvedPCEE68w9Jl5RRbwY3WDt+Zw+0pjL4jqbxyw7LCTxf/LbZZK+jzB8PCZ9vK706t8UyudTtpLiLX8K79+YzislBZFKQ60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hI1CmksD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F05C3C3277B;
+	Wed,  5 Jun 2024 11:54:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717588467;
+	s=k20201202; t=1717588492;
 	bh=ghaJ6hQdbi2GgdV2gtK7tru7aQc6vMTFxyqHR4nedXA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AmjavBrU2R9OGVGvchzqoappaJVrl3tpWL+r7kLazQX6M0Sp1+WPRdzuhwqtZdfnB
-	 QLrv6TL2ekamMjA5H8+dwO8+F2aMHkeVURPxTpbhkiOtWGBMAaf/4eWFoY7X3FwadL
-	 tGh6+40INNrKTlP3qkctbaNZ2Xfvrz7YnRJCfzSP5IeVZdtEvmlW44lS4p2lDEhGmN
-	 l40y5cx05J4eNAiNyP6JANGUvzOMI4hWoUZHjHCjDYYgw9Jh6bB3hwuqyRG3IExhAT
-	 INBg5kx8mJBBG7Mqf2mCtI+js+UzPUy5Ghl4SIoyQ+U7ASagQU+BWQtCqDhDppl5qh
-	 QMUYa8MDMvMrw==
+	b=hI1CmksDwIxuLZlQ5Sf3AkULf+G9GFNg9EVDBm/ThjPTBuc37bLKj72DqGOmKJh8f
+	 ch9EbPlaqyqzfrQ+REA22YYKfR0muj26fwH9F0UOb3jkQAibOyh26tgx3GQIA364/x
+	 RJmjqkT1SEW0YGbFkutpvNFmC3Bf9BdhwP4ga2YOgNun80swPqyY6NtdsWSXQNlVIK
+	 28cCTasWopm70y9OLrUJZEsazoZ3bSkY0tWS/z/eLLyqPDA6g/kwOEyE2dDN2AtDXk
+	 3SEhDTkk8Y5eH8wdi/8GMmRdGfltMg4u15CdwggvpzwQBw0+7bvzDau9UZ1R0QfQUI
+	 NwHpKEmhA1Vew==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Songyang Li <leesongyang@outlook.com>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 	Sasha Levin <sashal@kernel.org>,
-	rdunlap@infradead.org,
 	bhelgaas@google.com,
+	rdunlap@infradead.org,
 	linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 6/9] MIPS: Octeon: Add PCIe link status check
-Date: Wed,  5 Jun 2024 07:54:04 -0400
-Message-ID: <20240605115415.2964165-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 5/7] MIPS: Octeon: Add PCIe link status check
+Date: Wed,  5 Jun 2024 07:54:34 -0400
+Message-ID: <20240605115442.2964376-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240605115415.2964165-1-sashal@kernel.org>
-References: <20240605115415.2964165-1-sashal@kernel.org>
+In-Reply-To: <20240605115442.2964376-1-sashal@kernel.org>
+References: <20240605115442.2964376-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.160
+X-stable-base: Linux 5.10.218
 Content-Transfer-Encoding: 8bit
 
 From: Songyang Li <leesongyang@outlook.com>
