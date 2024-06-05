@@ -1,61 +1,61 @@
-Return-Path: <linux-mips+bounces-3493-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3494-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 415B48FCBDC
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Jun 2024 14:08:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17C838FCC07
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Jun 2024 14:11:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B83A288F32
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Jun 2024 12:06:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C12A11F22CDC
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Jun 2024 12:11:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9A6A1ACAE4;
-	Wed,  5 Jun 2024 11:52:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2413E19925D;
+	Wed,  5 Jun 2024 11:53:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PLXEY2ZU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jP5RKlEO"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909961ACACA;
-	Wed,  5 Jun 2024 11:52:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF9D4196D96;
+	Wed,  5 Jun 2024 11:53:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717588365; cv=none; b=tQs/zH99VXAvC3bKnrXsjkAtkZ70R5JNVfOXRu5nfmfnCX6LWID0HeHUHhsmDqXwop8a/a1wPUCgdmH04OkkfzhgP44GYmL2V+NbVfzj2FFyccS9D3V7GEJCq/oODg2VDsWbN3Xdq4B3wvMBEB56tHSkBBMKHKP//fOFYkUpojU=
+	t=1717588427; cv=none; b=JmfeiibnbUGYCQTdpPXIDbB9KsqDCy7XyjvfXIM+5P2pMvaaSx6jL5SUat9ASj+z9vcxVIsCFtk7NWPA+vIwrNe8OukVveFwvd1kHfp2thWOQN/RZGhSqHqfuv3qd45+B38qqlPfjbLyDy4WdpG95FZEdDhvNXR9rNcuk1jyNJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717588365; c=relaxed/simple;
+	s=arc-20240116; t=1717588427; c=relaxed/simple;
 	bh=2Eq7FXzfZwx2HaQ3uWYtAcoK8wDlGTa/EEgdlOM4Who=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rjhdc/43TCLdxOibMEwHNsBWDin42mDRSli7hldsN3pmY1EutIoGDYqO/6e0hi1PMsH/TsY+zXHr8zLbXnuj8fWzplYbtoPeDpvT8iBR4meTZ+2f0nnnpl+ufS4Wnr0zit1OUzoaPpd3Wj4gT014pLm6yhyJSrVM1Qfsx7rm4MU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PLXEY2ZU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C69CC3277B;
-	Wed,  5 Jun 2024 11:52:44 +0000 (UTC)
+	 MIME-Version; b=uNKc6kZQ0bwCylTNWrvHHQbwTHjhXQNs9NChNGvjC1hYyZ05o4g8KT/KLyO1FVuGkJYPXd2FA4r+gCAgFLVkwZNDl1yPlG7qlG6VFXpC7KPkhor+RObre+lCI9prWJ8685i0KwMRSMDzq4ie1rXVIo4E8vt7oK8GdGxt1AIF4/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jP5RKlEO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBCEAC3277B;
+	Wed,  5 Jun 2024 11:53:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717588365;
+	s=k20201202; t=1717588426;
 	bh=2Eq7FXzfZwx2HaQ3uWYtAcoK8wDlGTa/EEgdlOM4Who=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PLXEY2ZU4Chgee1Rt2cKuNILr/0FBJd59qVG5qTEnudewdcKKaaLInz/7/qzo1zBw
-	 /05YuvUnoJB29UuhFIXVK3JYka363X6mJvyII08+J9FeRfbmk3LxU3z37o9Wrg59Iz
-	 vzL/TGLOPb4RrYllNbyPDOCJUPkRLfcBWADTsUgNmf/jhEAr6pvjcoAZg8Pr423Hk+
-	 DMvHgKNlJVgb4BP06jYerY/WcR+oFDA9LRueehis263rHMXcZpQ5f8NtXJ1AIK74zR
-	 LkVyZPo6JpHytEX5XGguzOZZ1tueZVcbxT6Eb1PhceoTN+3aTloycfcIHWAKl82Ddw
-	 EpcsnnicgZlOQ==
+	b=jP5RKlEOWBes72VLE4R/J0j9nVUPPT2XqHS3BPmgxnKs50cTPZnI4DHfkLoH4jLIb
+	 Ury3s8uAqfKoXFFo2VwTegt2Gb5rVHGQ1stKR0uJUMbfE4V1vMAAbdXsSgmnf/JdyK
+	 Ch3IUqHFlbMPADQWJyonI3/lhlhqQ0Tnv6r09n6S/UX0PGApJN5wjYLcpXX780oUsm
+	 sAz15wjdygp2yjcEGcpZHthDr0plkyS/VcT757Um+/ymz8/Ggsjhc+hgt5FNRrYPW4
+	 KNnbdZSZMc27Fcq6Z5+PzO5pD2q3A6WHd6NBfy1xV5Yc5nV9/ENVN6HAgj6rIPwWpi
+	 q+jqquJJ+GEBw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Songyang Li <leesongyang@outlook.com>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 	Sasha Levin <sashal@kernel.org>,
-	rdunlap@infradead.org,
 	bhelgaas@google.com,
+	rdunlap@infradead.org,
 	linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 10/20] MIPS: Octeon: Add PCIe link status check
-Date: Wed,  5 Jun 2024 07:51:53 -0400
-Message-ID: <20240605115225.2963242-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 07/12] MIPS: Octeon: Add PCIe link status check
+Date: Wed,  5 Jun 2024 07:53:12 -0400
+Message-ID: <20240605115334.2963803-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240605115225.2963242-1-sashal@kernel.org>
-References: <20240605115225.2963242-1-sashal@kernel.org>
+In-Reply-To: <20240605115334.2963803-1-sashal@kernel.org>
+References: <20240605115334.2963803-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.32
+X-stable-base: Linux 6.1.92
 Content-Transfer-Encoding: 8bit
 
 From: Songyang Li <leesongyang@outlook.com>
