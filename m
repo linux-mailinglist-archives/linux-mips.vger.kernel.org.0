@@ -1,268 +1,111 @@
-Return-Path: <linux-mips+bounces-3502-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3504-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D432B8FE4B6
-	for <lists+linux-mips@lfdr.de>; Thu,  6 Jun 2024 12:53:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F421E8FF2B9
+	for <lists+linux-mips@lfdr.de>; Thu,  6 Jun 2024 18:41:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE9CB1C263A6
-	for <lists+linux-mips@lfdr.de>; Thu,  6 Jun 2024 10:53:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91FD31F23EA8
+	for <lists+linux-mips@lfdr.de>; Thu,  6 Jun 2024 16:41:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94DCA194C96;
-	Thu,  6 Jun 2024 10:53:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0E6217BC9;
+	Thu,  6 Jun 2024 16:41:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RKnpftcq"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="SN0u6ZAu"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B20312E639;
-	Thu,  6 Jun 2024 10:53:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AA7019884A
+	for <linux-mips@vger.kernel.org>; Thu,  6 Jun 2024 16:41:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717671228; cv=none; b=NslVh2vc8Zio6axRiXceXuepSRdqe4Kqcvl0/jvpg9bDZ/xnODy7nHaQOtikxs58UxWYF4D40+Rm2GeFChXv1469sfNJj8tBWlwVdSNj/cL5RQoJDCcWm21xV3go6/AMKeHKPSrd2IjDhB9Nw4Yi/eSsOxQiKnNYRK/dbh5rh1g=
+	t=1717692079; cv=none; b=LkVZd0/JAPm3VKI7qzq4HK+ZtvAYL/dYazmGQeIkd9p3qFUF5ag5YhhfLjIqEkTzZHmgUQcvK5z/0GY2qZyUOa4ME/sbWoTv5mprKngV8URHafug6XHrfaHrpXDlmHk/NnzQq4ZG+ok0b+5CtYiGpu4UXyIDmgSSCocWyuRiqgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717671228; c=relaxed/simple;
-	bh=IwvdKHEGFEfuaUJOTiyFszzjDelzpkHXySk7OYxTe2Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P4BQ2qRC+YI4L3qBFElfSnwRHLEhF5Rs2y2+rF+Qpyuwn1OHpclhbrtTniI2Ct+pCEj4Uk37vNJ3TXwjK4RS9wXsKszrn6uPqd8Uw6Zg/ya1YqCdBvcyAajjJ78ZTnmq/PAsiQFmSG3dnC9RUVbfNSspnkxcfB0bvdNyYyehnfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RKnpftcq; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-579fa270e53so1084316a12.3;
-        Thu, 06 Jun 2024 03:53:46 -0700 (PDT)
+	s=arc-20240116; t=1717692079; c=relaxed/simple;
+	bh=NgEp4wJFP8OQoG1f967uwvuzPv7RniPGm3kP8chKzEk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=V6uijROJkGVve5/nCMnWpF7YVUAwolUAqjFsQl00Ki2V0yqo1RcaihEGm0DF0AqHT5Lxnases4NU3FgGRdI0do4JBLcxpmhk83OS8N3amR+T5z+8JrUf9tBmuxCfLhsokqyGGO1a7BQzt/FBDTzZVgmf9ki1FSdjU4Mm5yLLEGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=SN0u6ZAu; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4213b94b8b5so12278045e9.0
+        for <linux-mips@vger.kernel.org>; Thu, 06 Jun 2024 09:41:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717671225; x=1718276025; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=935StyJmCjoE4Ghn59CDu5In+96Jm1afri4FQ4OW13w=;
-        b=RKnpftcqRgiNirkGErcvS5e6Bpr24PpWVDboT+hVlx0Jf1OiKHVv02/LnmphsyTSoz
-         oxEQnn2UW5gRB2O9zMEvJCD5RNS1pMI2F3NWToGsQhGtatF+UORQjmMrB2vZmjglFGkD
-         qWYgutzUFSEDv53vmrisPkn4Oq74udG1JTaXZbz0oCbp/JzZXd77O3Z9Rxg+9evpr1w8
-         /7/jT5ET4JQeO/QV/nmx8glGKbzOAt1qchyCEJpmfGpFN9iq6gW2YCeU8vRjt5Hgipj/
-         Oc2rjFvcRlthCkSpuiTDFBJKeVoQgUejIq9PbQpA2YzWvJDi5xCFIIPMo0+m5AhtjaGQ
-         WF9Q==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1717692074; x=1718296874; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NFlvoUhHTBcZh8w8IJw3LmmJrN9QNxWkJzuoMzje6c8=;
+        b=SN0u6ZAuirEKCRCWlNfFOB4qBS3pHE2uwEAC2DVYShVzHRNAFwMtdlF5XsXJ1c1urm
+         NU0fiAGzlEAJma0SZ+sGt08mA+5rTGotO4zGiSumEixm7L3hSmfshlaKhhZrrml8uMW4
+         WlHCbkaxyQGxMsamZeHBweI/Ho3R7Zx3pukM35j+zhzOxMqTDjhk2bEsnjzzV5eVuUuQ
+         1Xv/400dySyhlejtHamTW0CnfY0DmURsvEvvK3GSf0YQDwtLHaIBn2jK6pxcctZVKoOX
+         wgaNkCsOdMIgg80ArQmT5+S2OAJQhR9K2iP8Op4HtTrxZgJR8z9pmQszVuqvEk6IQFaE
+         x5OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717671225; x=1718276025;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=935StyJmCjoE4Ghn59CDu5In+96Jm1afri4FQ4OW13w=;
-        b=R10fpSJr2tXWvgnvFxN2vmu358/Q0YlWA4H/d+Aa2LfF8vJXfIs/zX+KG2zsmib6JE
-         3G5yL2czj4kAyRV7KNDYaiXkYC8IBHwch92R9y2wqTSMkSkWSNUowgRCKRDm0LsqGqRb
-         nttlr+IcoaCJl0m5ETwxLXjrcqTIScRkuSPzz0Pzs4ASrYjjDAbd/fXFZtTPScKJ2DaU
-         LKc6NefBNdi1d940uWIucPY+lYT8Vant/VGawyXyxDsgPLcNlptGSSD7mq3glHFAIn/v
-         n2ZfcFrILFkJF3Q2/0zeXpUaok+QS/NikyxzGg31KWCwpMxUy/GNa4oUYsKqx0FnzuJh
-         Q+VQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU4lHZC5n93FRnJRotGe9mmbVwhcoG8Q4wF2mshSLbcKI5Kio4NA6oiddc2SE2FDpn+S95De3yKDmrg4rZahlrzuTnGIHx6jfMPulqtQqHEQybAMuByDlLbJ0eUtAb5uQoxrdxjwVqsmqW+YzfQfIew0ZDgifSC/ECd279eRb2hCs+DBdo=
-X-Gm-Message-State: AOJu0YxhsRrAvvPFN+kjknH0lQFxW6tmWUCC4MIntmXBfLCgmsUoPsjR
-	lGd04qkifgyYVes8MF3FVGI0vMZjyH/scQETJcVjWcM+hnF7Q/FjiZz46uN9GOlnm5TZXcFNCkZ
-	nTw+aC1Wa4JHmDY1EkegySK9pdao=
-X-Google-Smtp-Source: AGHT+IE0J+VGwd0Ea7QUc/PFc4yHChLtDGJkWcYqgbuGIHKRsfdwqpE5pP07w0oAGDb9xZmHKtpmnWMeMuH42TH1CSc=
-X-Received: by 2002:a50:8d54:0:b0:579:c3f8:5923 with SMTP id
- 4fb4d7f45d1cf-57a8b6a8778mr4076479a12.13.1717671224760; Thu, 06 Jun 2024
- 03:53:44 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1717692074; x=1718296874;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NFlvoUhHTBcZh8w8IJw3LmmJrN9QNxWkJzuoMzje6c8=;
+        b=pmIFpf5CLMojrB3qEz85GC2hPTj49UCx+pMHxsJebhSpO58+uYwImXqmAVAzC5bJu4
+         kWDKWdT7gwVnXQSK1zZSlitVlQSCmGdU4L63fNx69F8BzhvXZLGP55qd/kJq8gGUgGIP
+         oL5bfFgaQ8wag5uG8Cwj+DCTnGgVZRL07HI6I/ER6qRCnvF58txaCcbElTqxB1F1E6c6
+         +a1Ib4vs1GiUpXbQXCvtl4thcX/WChjceNOJvFte7R768dPjH8qdDEyc5j1Bebmi2hxC
+         Fjvj5683OSeuIQqm6Y40sgSkUxXjTjOfKKQjBGE7OXwwgQF5y8Dtln79PgXMErM/+O9M
+         cvfA==
+X-Gm-Message-State: AOJu0Yza4T9U0cTRZfXALvfd+L0LAX57Z8ew+NyM8Bd9mhO82ZK/V3hq
+	JdF0BKvtKw8W9j7tNkMgK2sZb9awRwyOgY5Zk4p2eRPhs1csStVXll6Nm4aaBgo=
+X-Google-Smtp-Source: AGHT+IFI2CKQghwXxPOkm3Fd6QZzekxPjX0h8JBpBiwlKcaOKDJJpkDQTFN8JnYlJlnbpzb1YKSR/A==
+X-Received: by 2002:a05:600c:a09:b0:421:494c:9e74 with SMTP id 5b1f17b1804b1-42164a07144mr1895225e9.23.1717692073932;
+        Thu, 06 Jun 2024 09:41:13 -0700 (PDT)
+Received: from localhost (p509153eb.dip0.t-ipconnect.de. [80.145.83.235])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4215810826csm62355245e9.17.2024.06.06.09.41.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jun 2024 09:41:13 -0700 (PDT)
+From: "=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?=" <ukleinek@baylibre.com>
+X-Google-Original-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Paul Cercueil <paul@crapouillou.net>,
+	Trevor Gamblin <tgamblin@baylibre.com>
+Cc: linux-mips@vger.kernel.org,
+	linux-pwm@vger.kernel.org,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	=?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+Subject: [PATCH 0/2] pwm: Make use of regmap_{set,clear}_bits()
+Date: Thu,  6 Jun 2024 18:40:45 +0200
+Message-ID: <20240606164047.534741-4-u.kleine-koenig@baylibre.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240430-loongson1-nand-v7-0-60787c314fa4@gmail.com>
- <20240430-loongson1-nand-v7-1-60787c314fa4@gmail.com> <20240506091444.59228fa9@xps-13>
- <CAJhJPsV1aCvji1G2F94A=pJa8+x6Aw7ndkQUBPtFeeKSxJK9Nw@mail.gmail.com> <20240518124732.584f441d@xps-13>
-In-Reply-To: <20240518124732.584f441d@xps-13>
-From: Keguang Zhang <keguang.zhang@gmail.com>
-Date: Thu, 6 Jun 2024 18:53:08 +0800
-Message-ID: <CAJhJPsW9gVe2F1qvxvOkQUX_K1BsK5q_1XjT0u2+QH2gRMNqXA@mail.gmail.com>
-Subject: Re: [PATCH v7 1/3] dt-bindings: mtd: Add Loongson-1 NAND Controller
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>, 
-	Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-mips@vger.kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=581; i=u.kleine-koenig@baylibre.com; h=from:subject; bh=NgEp4wJFP8OQoG1f967uwvuzPv7RniPGm3kP8chKzEk=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBmYeaPBInvQdNHM6Stx2iHKkOq3tnLNPTc0gBLD AC6QWIwbY6JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZmHmjwAKCRCPgPtYfRL+ TpJjB/4+OejqU6/wmRq8FxmCM+Ymr9bg7nRNHcxhOqBuUHgZwBejWrsZ74AjHPFHVJ39qnq+9ih iQTUV7UOjVjykTQF97eubsdy/Xvq12Y+O8i8RrRF0HBPuCCUX885Z5hnRe+mzJucpru4/QJQYYw HGN9lmoRaXEyodkTo8su7SVS4D3l8kNGPLDmqrBSTA3rhtKo+WK76srwusvNc7Fd6BvPW/eJJxV gF0v6GM965hZfqoXTnZqerEUy/+VWBHatQlQ+UOG/jSMUISBLtVGmIbSHFQAdMZ8weWMWPBRmbJ xERIGLVBkysqvwrfVCOR/bLMjZO9M3kdykY6N2xTvd0axGVp
+X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
 
-Hi Miquel,
-Sorry for the late reply.
+Hello,
 
-On Sat, May 18, 2024 at 6:47=E2=80=AFPM Miquel Raynal <miquel.raynal@bootli=
-n.com> wrote:
->
-> Hi,
->
-> keguang.zhang@gmail.com wrote on Sat, 18 May 2024 16:01:01 +0800:
->
-> > On Mon, May 6, 2024 at 3:14=E2=80=AFPM Miquel Raynal <miquel.raynal@boo=
-tlin.com> wrote:
-> > >
-> > > Hello,
-> > >
-> > > devnull+keguang.zhang.gmail.com@kernel.org wrote on Tue, 30 Apr 2024
-> > > 19:11:10 +0800:
-> > >
-> > > > From: Keguang Zhang <keguang.zhang@gmail.com>
-> > > >
-> > > > Add devicetree binding document for Loongson-1 NAND Controller.
-> > > >
-> > > > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > > > ---
-> > > > Changes in v7:
-> > > > - rename the file to loongson,ls1b-nfc.yaml
-> > > >
-> > > > Changes in v6:
-> > > > - A newly added patch
-> > > > ---
-> > > >  .../devicetree/bindings/mtd/loongson,ls1b-nfc.yaml | 66 ++++++++++=
-++++++++++++
-> > > >  1 file changed, 66 insertions(+)
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/mtd/loongson,ls1b-nf=
-c.yaml b/Documentation/devicetree/bindings/mtd/loongson,ls1b-nfc.yaml
-> > > > new file mode 100644
-> > > > index 000000000000..a69f22b9fd9e
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/mtd/loongson,ls1b-nfc.yaml
-> > > > @@ -0,0 +1,66 @@
-> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > +%YAML 1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/mtd/loongson,ls1b-nfc.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: Loongson-1 NAND Controller
-> > > > +
-> > > > +maintainers:
-> > > > +  - Keguang Zhang <keguang.zhang@gmail.com>
-> > > > +
-> > > > +allOf:
-> > > > +  - $ref: nand-controller.yaml
-> > > > +
-> > > > +properties:
-> > > > +  compatible:
-> > > > +    oneOf:
-> > > > +      - const: loongson,ls1b-nfc
-> > >
-> > > What is the rationale behind this choice? Seems like the b variant ha=
-s
-> > > two possible implementations and should always be preceded by a more
-> > > specific compatible.
-> > >
-> > > As there is currently no description of this controller upstream, I
-> > > would not care too much about any out-of-tree description and directl=
-y
-> > > go for a clean description.
-> > >
-> > Excuse me, should I add a description for this property?
->
-> No, description is not needed. But you are allowing the
-> "loongson,ls1b-nfc" compatible alone, which I think is not relevant,
-> unless you convince me it is :-)
->
-"loongson,ls1b-nfc" itself is a specific implementation.
-I was suggested to set up a fallback before.
-https://lore.kernel.org/all/20231007-untapped-masses-01f80b7c13c7@spud/
-Then "loongson,ls1b-nfc" became the fallback.
+during the final look over Trevor's axi-pwmgen patch I found an opportunity to
+use regmap_clear_bits(). Looking through the other drivers I found another
+patch opportunity in the jz4740 driver.
 
-> > > > +      - items:
-> > > > +          - enum:
-> > > > +              - loongson,ls1a-nfc
-> > > > +              - loongson,ls1c-nfc
-> > > > +          - const: loongson,ls1b-nfc
-> > > > +
-> > > > +  reg:
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  dmas:
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  dma-names:
-> > > > +    const: rxtx
-> > > > +
-> > > > +patternProperties:
-> > > > +  "^nand@[0-3]$":
-> > > > +    type: object
-> > > > +    $ref: raw-nand-chip.yaml
-> > > > +
-> > > > +    unevaluatedProperties: false
-> > > > +
-> > > > +required:
-> > > > +  - compatible
-> > > > +  - reg
-> > > > +  - dmas
-> > > > +  - dma-names
-> > >
-> > > Should DMA props be required?
-> > >
-> > Yes. This NAND controller only works with DMA, which means the DMA is n=
-ecessary.
->
-> Ok
->
-> >
-> > > > +
-> > > > +unevaluatedProperties: false
-> > > > +
-> > > > +examples:
-> > > > +  - |
-> > > > +    nand-controller@1fe78000 {
-> > > > +        compatible =3D "loongson,ls1b-nfc";
-> > > > +        reg =3D <0x1fe78000 0x40>;
-> > > > +
-> > > > +        #address-cells =3D <1>;
-> > > > +        #size-cells =3D <0>;
-> > > > +
-> > > > +        dmas =3D <&dma 0>;
-> > > > +        dma-names =3D "rxtx";
-> > >
-> > > There is a preferred spacing for DT nodes, see:
-> > > https://docs.kernel.org/devicetree/bindings/dts-coding-style.html
-> > >
-> > Sorry. I don't get the meaning of preferred spacing.
-> > https://docs.kernel.org/devicetree/bindings/writing-schema.html says
-> > "For DTS examples in the schema, preferred is four-space indentation."
-> > Then I used four-space indentation.
->
-> I'm talking about the new lines (\n) between the properties.
->
-Will remove the superfluous new lines.
-> >
-> > > > +
-> > > > +        nand@0 {
-> > > > +            reg =3D <0>;
-> > > > +            nand-use-soft-ecc-engine;
-> > > > +            nand-ecc-algo =3D "hamming";
-> > >
-> > > These two properties are not needed. Unless there is no hardware ECC
-> > > capability on this controller and in this case you need to ensure the
-> > > properties are present in the schema.
-> >
-> > Exactly. This NAND controller doesn't support hardware ECC.
-> > 'nand-use-soft-ecc-engine' and 'nand-ecc-algo' are present in nand-chip=
-.yaml.
-> > Is there anything else I should do?
->
-> Thry are in nand-chip.yaml, which means they are allowed, but I want
-> them mandatory:
->
-Will do.
+Best regards
+Uwe
 
-> required:
->   - foo
->   - bar
->
-> Thanks,
-> Miqu=C3=A8l
+Uwe Kleine-König (2):
+  pwm: jz4740: Another few conversions to regmap_{set,clear}_bits()
+  pwm: axi-pwmgen: Make use of regmap_clear_bits()
 
+ drivers/pwm/pwm-axi-pwmgen.c | 2 +-
+ drivers/pwm/pwm-jz4740.c     | 9 ++++-----
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
+base-commit: 7cf775737d4ec337e46bf8497882cb6a7650839a
+-- 
+2.43.0
 
---=20
-Best regards,
-
-Keguang Zhang
 
