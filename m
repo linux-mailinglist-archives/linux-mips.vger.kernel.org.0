@@ -1,147 +1,135 @@
-Return-Path: <linux-mips+bounces-3536-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3537-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14BA7900A2A
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Jun 2024 18:18:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36D06900A34
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Jun 2024 18:21:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3AA8A1C20831
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Jun 2024 16:18:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA0021F22B2A
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Jun 2024 16:21:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9297E1974E3;
-	Fri,  7 Jun 2024 16:18:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 087A519A29A;
+	Fri,  7 Jun 2024 16:21:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="R4U5rZz5"
+	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="u4LKJjnM"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from aposti.net (aposti.net [89.234.176.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DA596D1B9;
-	Fri,  7 Jun 2024 16:18:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56BFF1991C6;
+	Fri,  7 Jun 2024 16:21:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.234.176.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717777099; cv=none; b=YlTVQd+H3XrQro0low24h+9xF1A7o9Nx4k3j6bytwh77uV+xyGqis/17cGzgbuvnFbSScFZUlw2zFM8aXkT1SIlfhxZQ56ObwkI3rqcCzHwdRpoi+vdQ3uBUSiK/ui+uZqQYeAAApAbbx0oBXbhiM6xv5kv86FMcvOEoufKUwAE=
+	t=1717777299; cv=none; b=FM8B6mcCwO03Zq1yeadapu+HeO91qni/BzZMrAxRqSk6mkqtpiIp/toT8koO9AINbHNCxJYn4E0kkT8jiUCkfXIw1WR80YsD1VKFMIopg9Wv3rYyH9LlcVbehk4JxVS8BOORGuJBxLTqZaZg1aurgths7qmx9fuJxC6hgO6FgkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717777099; c=relaxed/simple;
-	bh=62rTEi5JGTfNytOFoVt4sTFxXodoPen0JmPPMiO6/W8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=kxPkQREgeGFafdT/9wGQ5Q8ezXGzJ1vDbp+CDkhUpfx78+6jDrggztEsiV8cIPjSyQi25EkdsZCmgrwtrW8fkFM3p6bgi5NQL8BEoSmCCLiTMbvk8TtDrIZ3XCM4wXHr/4SdILvn8uEcuPwv5ZtgGAvodQWuAPjgz5bkO/lDSX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=R4U5rZz5; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 457DcGqu031633;
-	Fri, 7 Jun 2024 16:17:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=AOfebpdrL/lq80KY6gYHFI
-	wPkcYngdV1lGgArMf6bMY=; b=R4U5rZz5miea+u0T0gJgDWYjqSxRdEEkV4E9eZ
-	xqrTERd1fx649Lk1DLaI1Z94hJSpBGlmvNb2Enu8u0zpp617JLR06p6YuBAUxLtT
-	1ART9FQMj2KzeStj0MqcWFtLyR4JZHJcR5k6amQaSKRHkMH4TSxqRInbQDzwGucc
-	OqWze0CeZBDN43cks8pFK+58ZCEF/51XPrW3eMFqaGe78Nj0z/PMoFpSBZGgT4HK
-	0bBAyepk61ARl0y/cGZUosDbMhvyCJxXbkOFpf8VTRoT4TFgjS7METiSlkMk3QIS
-	y0Oj+rQlySjp/vTjV1VACW/ceBHOpBWgyoMAPU1GeqseBpXA==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yk8tcc493-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 07 Jun 2024 16:17:55 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 457GHs2v012396
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 7 Jun 2024 16:17:54 GMT
-Received: from [169.254.0.1] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 7 Jun 2024
- 09:17:53 -0700
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-Date: Fri, 7 Jun 2024 09:17:52 -0700
-Subject: [PATCH] iio: add missing MODULE_DESCRIPTION() macros
+	s=arc-20240116; t=1717777299; c=relaxed/simple;
+	bh=aQXTonn+rCEvnOa03Z5Pbq/BMr7MESN8eypXAa2XNdQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=B2EJGyu8Z5sSKFCq+4Advxe823L9WXN3DVKrfAQu0NVIFSM3EgE8PF9wBN/rjeLEE7cdvQxqaaOQitRjtN7Y6bGZOpkMuIJBrIWNbVTCgfV4nzgLRnCE9IR+cTpL/V3azAWBw8Tr9xkXqgyNQotMZEbKE1OPU+XFQxg8X1rVuCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=u4LKJjnM; arc=none smtp.client-ip=89.234.176.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+	s=mail; t=1717777295;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=dFKzEmzfIFXqH+040GCz1074H3PC/FG49nbXpt318BQ=;
+	b=u4LKJjnMrgGYf2qgIiLnWUepxK4HkkLek8QZUKsWcWBiactcmsoXPIBYqAzkDscSoD7Gm9
+	HTGhNMMRzza+NJcK3rTZupVyCDp0rFbd3wP8RcZ2rAn485zMQ0TmTsl7+x/Om1FbzLM78+
+	007tcxTcdEs/clafrWKvg5WWqg2L94Q=
+Message-ID: <625c57a75902797952b915640e0013ad11ac8c96.camel@crapouillou.net>
+Subject: Re: [PATCH 1/2] pwm: jz4740: Another few conversions to
+ regmap_{set,clear}_bits()
+From: Paul Cercueil <paul@crapouillou.net>
+To: Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= <ukleinek@baylibre.com>
+Cc: linux-mips@vger.kernel.org, linux-pwm@vger.kernel.org
+Date: Fri, 07 Jun 2024 18:21:34 +0200
+In-Reply-To: <20240606164047.534741-5-u.kleine-koenig@baylibre.com>
+References: <20240606164047.534741-4-u.kleine-koenig@baylibre.com>
+	 <20240606164047.534741-5-u.kleine-koenig@baylibre.com>
+Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
+ keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZM
+ LQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5Uz
+ FZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtN
+ z8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe
+ +rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY
+ 3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr
+ 1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f
+ 33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIP
+ dlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET
+ 4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7U
+ rf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KF
+ lBwgAhlGy6nqP7O3u7q23hRW5AQ0EXQqFwQEIAMo+MgvYHsyjX3Ja4Oolg1Txzm8woj30ch2nACFC
+ qaO0R/1kLj2VVeLrDyQUOlXx9PD6IQI4M8wy8m0sR4wV2p/g/paw7k65cjzYYLh+FdLNyO7IWYXnd
+ JO+wDPi3aK/YKUYepqlP+QsmaHNYNdXEQDRKqNfJg8t0f5rfzp9ryxd1tCnbV+tG8VHQWiZXNqN70
+ 62DygSNXFUfQ0vZ3J2D4oAcIAEXTymRQ2+hr3Hf7I61KMHWeSkCvCG2decTYsHlw5Erix/jYWqVOt
+ X0roOOLqWkqpQQJWtU+biWrAksmFmCp5fXIg1Nlg39v21xCXBGxJkxyTYuhdWyu1yDQ+LSIUAEQEA
+ AYkBNgQYAQoAIBYhBNdHYd8OeCBwpMuVxnPua9InSr1BBQJdCoXBAhsMAAoJEHPua9InSr1B4wsH/
+ Az767YCT0FSsMNt1jkkdLCBi7nY0GTW+PLP1a4zvVqFMo/vD6uz1ZflVTUAEvcTi3VHYZrlgjcxmc
+ Gu239oruqUS8Qy/xgZBp9KF0NTWQSl1iBfVbIU5VV1vHS6r77W5x0qXgfvAUWOH4gmN3MnF01SH2z
+ McLiaUGF+mcwl15rHbjnT3Nu2399aSE6cep86igfCAyFUOXjYEGlJy+c6UyT+DUylpjQg0nl8MlZ/
+ 7Whg2fAU9+FALIbQYQzGlT4c71SibR9T741jnegHhlmV4WXXUD6roFt54t0MSAFSVxzG8mLcSjR2c
+ LUJ3NIPXixYUSEn3tQhfZj07xIIjWxAYZo=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20240607-md-drivers-iic-v1-1-9f9db6246083@quicinc.com>
-X-B4-Tracking: v=1; b=H4sIAK8yY2YC/x3MwQqDMAyA4VeRnBeoRRzuVYaHtI0zMDtJpgjiu
- 1s9fof/38FYhQ1e1Q7Kq5j8ckH9qCCOlD+MkorBO9+41j1xSphUVlZDkYiRQuMddZ2vWyjRrDz
- Idg/ffXEgYwxKOY7X5it52XAi+7PCcZz7T12QfwAAAA==
-To: Paul Cercueil <paul@crapouillou.net>, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Anand Ashok Dumbre
-	<anand.ashok.dumbre@xilinx.com>,
-        Michal Simek <michal.simek@amd.com>
-CC: <linux-mips@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <kernel-janitors@vger.kernel.org>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>
-X-Mailer: b4 0.13.0
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: _z9vmYdy_Nn8E46Sf6JPtW5yxZ0HYiZQ
-X-Proofpoint-GUID: _z9vmYdy_Nn8E46Sf6JPtW5yxZ0HYiZQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-07_09,2024-06-06_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- clxscore=1011 malwarescore=0 suspectscore=0 phishscore=0 impostorscore=0
- mlxlogscore=912 priorityscore=1501 spamscore=0 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405170001
- definitions=main-2406070118
 
-make allmodconfig && make W=1 C=1 reports:
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/ingenic-adc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/xilinx-ams.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/buffer/kfifo_buf.o
+Hi Uwe,
 
-Add the missing invocations of the MODULE_DESCRIPTION() macro.
+Le jeudi 06 juin 2024 =C3=A0 18:40 +0200, Uwe Kleine-K=C3=B6nig a =C3=A9cri=
+t=C2=A0:
+> Similar to commit 7d9199995412 ("pwm: jz4740: Use
+> regmap_{set,clear}_bits") convert two more regmap_update_bits() calls
+> to
+> regmap_{set,clear}_bits() which were missed back then.
+>=20
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@baylibre.com>
 
-Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
----
- drivers/iio/adc/ingenic-adc.c  | 1 +
- drivers/iio/adc/xilinx-ams.c   | 1 +
- drivers/iio/buffer/kfifo_buf.c | 1 +
- 3 files changed, 3 insertions(+)
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 
-diff --git a/drivers/iio/adc/ingenic-adc.c b/drivers/iio/adc/ingenic-adc.c
-index a7325dbbb99a..af70ca760797 100644
---- a/drivers/iio/adc/ingenic-adc.c
-+++ b/drivers/iio/adc/ingenic-adc.c
-@@ -920,4 +920,5 @@ static struct platform_driver ingenic_adc_driver = {
- 	.probe = ingenic_adc_probe,
- };
- module_platform_driver(ingenic_adc_driver);
-+MODULE_DESCRIPTION("ADC driver for the Ingenic JZ47xx SoCs");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/iio/adc/xilinx-ams.c b/drivers/iio/adc/xilinx-ams.c
-index f0b71a1220e0..ee45475c495b 100644
---- a/drivers/iio/adc/xilinx-ams.c
-+++ b/drivers/iio/adc/xilinx-ams.c
-@@ -1430,5 +1430,6 @@ static struct platform_driver ams_driver = {
- };
- module_platform_driver(ams_driver);
- 
-+MODULE_DESCRIPTION("Xilinx AMS driver");
- MODULE_LICENSE("GPL v2");
- MODULE_AUTHOR("Xilinx, Inc.");
-diff --git a/drivers/iio/buffer/kfifo_buf.c b/drivers/iio/buffer/kfifo_buf.c
-index 05b285f0eb22..38034c8bcc04 100644
---- a/drivers/iio/buffer/kfifo_buf.c
-+++ b/drivers/iio/buffer/kfifo_buf.c
-@@ -287,4 +287,5 @@ int devm_iio_kfifo_buffer_setup_ext(struct device *dev,
- }
- EXPORT_SYMBOL_GPL(devm_iio_kfifo_buffer_setup_ext);
- 
-+MODULE_DESCRIPTION("Industrial I/O buffering based on kfifo");
- MODULE_LICENSE("GPL");
+Thanks!
 
----
-base-commit: 19ca0d8a433ff37018f9429f7e7739e9f3d3d2b4
-change-id: 20240607-md-drivers-iic-cab420a99216
+Cheers,
+-Paul
+
+> ---
+> =C2=A0drivers/pwm/pwm-jz4740.c | 9 ++++-----
+> =C2=A01 file changed, 4 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/pwm/pwm-jz4740.c b/drivers/pwm/pwm-jz4740.c
+> index da4bf543d357..6bdb01619380 100644
+> --- a/drivers/pwm/pwm-jz4740.c
+> +++ b/drivers/pwm/pwm-jz4740.c
+> @@ -201,12 +201,11 @@ static int jz4740_pwm_apply(struct pwm_chip
+> *chip, struct pwm_device *pwm,
+> =C2=A0	 * state instead of its inactive state.
+> =C2=A0	 */
+> =C2=A0	if ((state->polarity =3D=3D PWM_POLARITY_NORMAL) ^ state-
+> >enabled)
+> -		regmap_update_bits(jz->map, TCU_REG_TCSRc(pwm-
+> >hwpwm),
+> -				=C2=A0=C2=A0 TCU_TCSR_PWM_INITL_HIGH, 0);
+> +		regmap_clear_bits(jz->map, TCU_REG_TCSRc(pwm-
+> >hwpwm),
+> +				=C2=A0 TCU_TCSR_PWM_INITL_HIGH);
+> =C2=A0	else
+> -		regmap_update_bits(jz->map, TCU_REG_TCSRc(pwm-
+> >hwpwm),
+> -				=C2=A0=C2=A0 TCU_TCSR_PWM_INITL_HIGH,
+> -				=C2=A0=C2=A0 TCU_TCSR_PWM_INITL_HIGH);
+> +		regmap_set_bits(jz->map, TCU_REG_TCSRc(pwm->hwpwm),
+> +				TCU_TCSR_PWM_INITL_HIGH);
+> =C2=A0
+> =C2=A0	if (state->enabled)
+> =C2=A0		jz4740_pwm_enable(chip, pwm);
 
 
