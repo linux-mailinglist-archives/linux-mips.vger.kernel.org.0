@@ -1,116 +1,131 @@
-Return-Path: <linux-mips+bounces-3539-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3540-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09E7C900D0A
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Jun 2024 22:35:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7C0B9012CB
+	for <lists+linux-mips@lfdr.de>; Sat,  8 Jun 2024 18:39:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B07CA1F2675C
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Jun 2024 20:35:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68D3D1F21C97
+	for <lists+linux-mips@lfdr.de>; Sat,  8 Jun 2024 16:39:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1A6839FFB;
-	Fri,  7 Jun 2024 20:34:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 516BF17B4F5;
+	Sat,  8 Jun 2024 16:39:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="m1BB8A7y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B69bAYcK"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F1913E034
-	for <linux-mips@vger.kernel.org>; Fri,  7 Jun 2024 20:34:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E885158A1F;
+	Sat,  8 Jun 2024 16:38:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717792487; cv=none; b=Bw/WdqG9hnbj7jFimesizJIW/siKI810/fSJ1SXtJS0E74naRhbQ5gwWaVukV5Lhv9FxjEYOIuRgz7ubmmTuVHKSUfKMC6fx7PcfaoF+TAhZr2f/3PMWYxG/X9lErZvDoLj/RQcABQ5OCVLTkNkAD6AtjuWR6eKoDW3inU+z528=
+	t=1717864740; cv=none; b=gP/7EV8VWNVthHiyqursfN9w7UxVaZT71A0cIp/5hIgwvq4RhPYahDybLrhqMGgCEVRt2UnHg4vHrNkz7ozMSCerYgymEP8LISfYYRGt/gLIim2phFpNxg23K7LGGrYOwyWyRx3iD7fkjVAMEsC3DFebgpHEIYHSL5ouA05NDVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717792487; c=relaxed/simple;
-	bh=k/qOH0xVbdv81jM0nNIDKLRqUAZO1z/a91QrrgXPknI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DsX/+NenOucXLUgc06T1yGFLVUqXVSPnkspr0wxRozyvZdUYLpcJ85KmUXVhfPUItwvRvdx5Hi2RoEeS1NofDpzx5MAmBCbsDzYI55Rz/F/31HLKngBkvjckH6BBkk196e+sNEX+5RoeqePLCZRL2wdO9y1K3fclpQowWJ8K0+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=m1BB8A7y; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-52c525257feso235443e87.1
-        for <linux-mips@vger.kernel.org>; Fri, 07 Jun 2024 13:34:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1717792484; x=1718397284; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k/qOH0xVbdv81jM0nNIDKLRqUAZO1z/a91QrrgXPknI=;
-        b=m1BB8A7yBiNPShRrmqz7xPwDKfXBlpNZK2rsZ6BA3nJqPB1ooli/n1nd+8SBZBRc3m
-         Z1N23zpsp+oxIPeXZntr9qBa2bUYdGe4tnBD3FjquRTZXYHOWdr8uKIdIqNRmhCx7xLC
-         BOcVCf92IW6ki5CFqFc83g0alflBApdihWjES6LJpLdJ+MnDX0o5ItR2FbwS0J5mXNZp
-         D5BkdAgBEHf0o9hUCRZwS6OXQCw4YebQYIRzQNrUyCRAfTcjgqMUvAA8fuL5qgSiM0LT
-         D2I6SlFdAzy6ELVzn6CkUT2l1/lP7SASLw6EEcD9ZAiA/Clf3Oi7ZV72SiRd5cMImrOb
-         DfdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717792484; x=1718397284;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k/qOH0xVbdv81jM0nNIDKLRqUAZO1z/a91QrrgXPknI=;
-        b=MV3oW77Zuhw6Duo1BzGgBFFOvUTw9m5vhwupIS9MjTgCgCIOujanQWEsZI9yUYIb4k
-         hyGG8Y9RpbBuPPLAmWi1tvf7Elzf1rcTgCOzHqQAzmEVlARAIspwPhk0CYc21QUQkNV1
-         pbshiKqrGybYcjjLJ8kNm6EYmLbs7CqjlHvQZnzXOFwPTsGo8p0nZab5Sljm6bxMMRp1
-         TadvP7oxcYcDMhSvaGvuIHDNo1EIlu266uzk4OvCNDYBVpT8lsMVKLJ2RXo0lkWLOhha
-         VuZTdoPFFv9wP3ojywxJyPDLJ5OyqhKZR4w1yAH5siihEDS1w4Pj9LPdARUPOXhNf/HH
-         SKYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUpm5Y7RiSUo74FhsEZInKlPFaVeiQfGsUeHs0CFdg+dGtvc13rNxmB3u0qKKqWTTClNaU0rRGbHQljkFS+nDk0gf9x7hXSTlr9xQ==
-X-Gm-Message-State: AOJu0Yx5RJuKhLtcIuVI6uB/hlIUOgQweUDwRDKNUcppYzzjPhlF7nRW
-	fGh9NVC+vFmHDs/ztA5GiywEWvAYbJuYrTyOPu1Cba0tkSyKafa1cqeTITZlfpMc2P1IIS204B6
-	1WKpxYSJVLjhLv04ZQzUfYPgBJNjiF8nVyDse/g==
-X-Google-Smtp-Source: AGHT+IGEyJ+w+NYHGdHZTgbtEUQOfYGBIFct41lT8WKTrSrUoBr0eDijD2Dx44IKe7RqxIodGmEk6AWnkM/ViP3EgMk=
-X-Received: by 2002:a05:6512:131c:b0:52b:e2ab:7db2 with SMTP id
- 2adb3069b0e04-52be2ab7e90mr867659e87.22.1717792484193; Fri, 07 Jun 2024
- 13:34:44 -0700 (PDT)
+	s=arc-20240116; t=1717864740; c=relaxed/simple;
+	bh=NRDypsUCwfI33OUpmlEU3120t7rA9JE3Pg3U+I93Uhs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gM2LRBkrW0SoMXaNUje9+hHXAOprpzihg0VnMNguF0r/I2ny2qlUipPX+QPZKo7x/7UNoAs/pkIivQNC5aFvlXTWndt8pnCcB7Gl7zpLbP+dX9wEXhHYz4LxWG3tntLGuG3UcIN7fyroI1l/wXdI02aZdMvqPfXQ6pRHKxUl+vA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B69bAYcK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84998C2BD11;
+	Sat,  8 Jun 2024 16:38:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717864739;
+	bh=NRDypsUCwfI33OUpmlEU3120t7rA9JE3Pg3U+I93Uhs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=B69bAYcKw8dym5L3MbgCzJ28mi3wHTzqDDw7asjfy/vMjDRiorhwuZqZlsdlWTuy9
+	 tf+lzNAo6o7EzNfvW1mg0qkOGQi3A2W36dEdYitQ3Kn8r+JIZwPTrr1e2phcxFQG19
+	 T0qlQe/Yky9RQJDHXWnb0w+5EOTr0z/k4olt3nIF4ihk4jjjPvoEsIM5lZdhvoorJA
+	 HZ8pF+0E+o8FOSoEs4olfu/I+n0VMWGuI+pEzM3btJA2zPptIcoUAGoTzlERzDjWnF
+	 LX8UwHfgTuydrB4E1PwDL8hCw8APreKBxHSJcFm+9NMJecwf1LlW7hkoTnVzOGVWv6
+	 RHovd7RxIL57w==
+Date: Sat, 8 Jun 2024 17:38:51 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Jeff Johnson <quic_jjohnson@quicinc.com>
+Cc: Paul Cercueil <paul@crapouillou.net>, Lars-Peter Clausen
+ <lars@metafoo.de>, Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+ Michal Simek <michal.simek@amd.com>, <linux-mips@vger.kernel.org>,
+ <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <kernel-janitors@vger.kernel.org>
+Subject: Re: [PATCH] iio: add missing MODULE_DESCRIPTION() macros
+Message-ID: <20240608173851.7c575f1f@jic23-huawei>
+In-Reply-To: <20240607-md-drivers-iic-v1-1-9f9db6246083@quicinc.com>
+References: <20240607-md-drivers-iic-v1-1-9f9db6246083@quicinc.com>
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.42; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240530085745.1539925-1-andy.shevchenko@gmail.com>
-In-Reply-To: <20240530085745.1539925-1-andy.shevchenko@gmail.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Fri, 7 Jun 2024 22:34:33 +0200
-Message-ID: <CACRpkdbHwY2UJ-OodeJu2VrhML6tcjKeD-00ZoZotmi1tKzsEg@mail.gmail.com>
-Subject: Re: [PATCH v3 00/11] pinctrl: pinmux: Embed and reuse struct
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Daniel Golle <daniel@makrotopia.org>, linux-gpio@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-mips@vger.kernel.org, Dong Aisheng <aisheng.dong@nxp.com>, 
-	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Sean Wang <sean.wang@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	Paul Cercueil <paul@crapouillou.net>, Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, May 30, 2024 at 10:57=E2=80=AFAM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
+On Fri, 7 Jun 2024 09:17:52 -0700
+Jeff Johnson <quic_jjohnson@quicinc.com> wrote:
 
-> As promised to Linus W. there is a series that converts struct function_d=
-esc
-> to use struct pinfunction. With this it both struct group_desc and struct
-> function_desc will rely on the generic data types (struct pingroup and st=
-ruct
-> pinfunction respectively). I haven't compiled everything, some builds mig=
-ht
-> fail. Anyway, comments, reviews, testing are all appreciated.
->
-> In v3:
-> - added 'moore' to the mediatek patches summary (AngeloGioacchino)
-> - added tags (AngeloGioacchino)
-> - fixed build error in IMX driver (LKP)
+> make allmodconfig && make W=1 C=1 reports:
+> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/ingenic-adc.o
+> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/xilinx-ams.o
+> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/buffer/kfifo_buf.o
+> 
+> Add the missing invocations of the MODULE_DESCRIPTION() macro.
+> 
+> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+Hi Jeff,
 
-A week passed, no comments.
-Patches applied!
+Thanks for tidying these up.
 
-Yours,
-Linus Walleij
+Applied to the togreg branch of iio.git and pushed out as testing
+because there is other stuff I need 0-day to take a look at.
+
+Thanks,
+
+Jonathan
+
+> ---
+>  drivers/iio/adc/ingenic-adc.c  | 1 +
+>  drivers/iio/adc/xilinx-ams.c   | 1 +
+>  drivers/iio/buffer/kfifo_buf.c | 1 +
+>  3 files changed, 3 insertions(+)
+> 
+> diff --git a/drivers/iio/adc/ingenic-adc.c b/drivers/iio/adc/ingenic-adc.c
+> index a7325dbbb99a..af70ca760797 100644
+> --- a/drivers/iio/adc/ingenic-adc.c
+> +++ b/drivers/iio/adc/ingenic-adc.c
+> @@ -920,4 +920,5 @@ static struct platform_driver ingenic_adc_driver = {
+>  	.probe = ingenic_adc_probe,
+>  };
+>  module_platform_driver(ingenic_adc_driver);
+> +MODULE_DESCRIPTION("ADC driver for the Ingenic JZ47xx SoCs");
+>  MODULE_LICENSE("GPL v2");
+> diff --git a/drivers/iio/adc/xilinx-ams.c b/drivers/iio/adc/xilinx-ams.c
+> index f0b71a1220e0..ee45475c495b 100644
+> --- a/drivers/iio/adc/xilinx-ams.c
+> +++ b/drivers/iio/adc/xilinx-ams.c
+> @@ -1430,5 +1430,6 @@ static struct platform_driver ams_driver = {
+>  };
+>  module_platform_driver(ams_driver);
+>  
+> +MODULE_DESCRIPTION("Xilinx AMS driver");
+>  MODULE_LICENSE("GPL v2");
+>  MODULE_AUTHOR("Xilinx, Inc.");
+> diff --git a/drivers/iio/buffer/kfifo_buf.c b/drivers/iio/buffer/kfifo_buf.c
+> index 05b285f0eb22..38034c8bcc04 100644
+> --- a/drivers/iio/buffer/kfifo_buf.c
+> +++ b/drivers/iio/buffer/kfifo_buf.c
+> @@ -287,4 +287,5 @@ int devm_iio_kfifo_buffer_setup_ext(struct device *dev,
+>  }
+>  EXPORT_SYMBOL_GPL(devm_iio_kfifo_buffer_setup_ext);
+>  
+> +MODULE_DESCRIPTION("Industrial I/O buffering based on kfifo");
+>  MODULE_LICENSE("GPL");
+> 
+> ---
+> base-commit: 19ca0d8a433ff37018f9429f7e7739e9f3d3d2b4
+> change-id: 20240607-md-drivers-iic-cab420a99216
+> 
+
 
