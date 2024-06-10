@@ -1,167 +1,150 @@
-Return-Path: <linux-mips+bounces-3547-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3548-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B534B9024AF
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Jun 2024 16:54:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 319AA902557
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Jun 2024 17:20:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3B65B2A502
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Jun 2024 14:49:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EA77DB27292
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Jun 2024 15:19:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDAE3132112;
-	Mon, 10 Jun 2024 14:47:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7880914E2E6;
+	Mon, 10 Jun 2024 15:16:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ifX7rIUS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ETS5HpY/"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA91114AD25;
-	Mon, 10 Jun 2024 14:47:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1758D14372B;
+	Mon, 10 Jun 2024 15:16:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718030878; cv=none; b=NnrrgX/IE+Vl7KAiHhAnb+nRmTDpCcCxZmDq8jV4hoQN0u2uOImCp0Z1BTUQJ/XHKUDGuYqw2Wy5goAz9Tl3JMwMA6d6RR4/7tDBEejPlyHNLLYmFC0hL6ppM6bEZZXPj42RE+u3DB9w4tkxPTKp/kxQg1INhuPd1ouPiHe5E2o=
+	t=1718032608; cv=none; b=ZhYILebKFCMEgzSN4EGBu+fvUU5Pw6mpMCH2wztUqfRDD+DM5kxAl4Stq6eg+jkffrA6eC7VnVoj0e2lqEuV9MPPxurzMfxcXRT7MNQKfkW4sgz348FIFW26ZLlbykX1I5iDcp9wf9THCKVWRl5eRCHgHW0mAwOncAZHrKGjdmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718030878; c=relaxed/simple;
-	bh=TsLWppSPyTvO/wBPl+NGtsl/yO1/CzgHsa3MtV4F7no=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=VTT13C04wfiRoR9aEtKNklLpY1BCD0YMjsLIvT3i+6OoZqn0tRH3mCajruQCOu3/fYWREBPS5TrcdcWunISQeup0wRWJifJwxuqYNHV/QLFGf2vCy70BoqSXXOMvCoUwmK9aU183oXnUO07xXa9dLlgo9NlBETpKyaHwgXRn6Ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ifX7rIUS; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 870D7240006;
-	Mon, 10 Jun 2024 14:47:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1718030868;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Vvn/MhvQ3J4B43BBQxlzVkw4aP0ekyeFTkzrVKHeCps=;
-	b=ifX7rIUS9OInjeonbpesN5x3CYcBcvGq4JhrOV974+mteff293TVyRTgIOqUm6AG1s0Mbj
-	TjwdqC1UaiC3opP40tDomlj0C6J9MmkpH5rBImgMfretXoOGdlAT5wJR7Z7qzNdweVvLe9
-	VtvA+wNzFPcSvDU/OA8EztOKB75vgxCBKDXj5UFbGR+gTMBKLnjUYKbMVhzViQCzm2OvnH
-	JSxAzSb8y1ClaPX+Fnbw7uTsNM8cMDAMue+q9kUNZPv+fjyY/j5Im8/l3tvx7JeFt2qCng
-	mslbvF2zDpq8VmdrbdxW+GwwdZM5SGkOjXkW9S9nuC854M/U2oSoqyU9gcbf8w==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To:  Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, =?utf-8?Q?Th?=
- =?utf-8?Q?=C3=A9o?= Lebrun
- <theo.lebrun@bootlin.com>, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org> ,
- linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Alexandre Belloni
- <alexandre.belloni@bootlin.com>, Conor Dooley
- <conor.dooley@microchip.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH v2 0/3] Add support for the Mobileye EyeQ6H SoC
-In-Reply-To: <20240513-eyeq6h-v2-0-ae8c1974b52b@bootlin.com>
-References: <20240513-eyeq6h-v2-0-ae8c1974b52b@bootlin.com>
-Date: Mon, 10 Jun 2024 16:47:47 +0200
-Message-ID: <87zfrsetws.fsf@BLaptop.bootlin.com>
+	s=arc-20240116; t=1718032608; c=relaxed/simple;
+	bh=O4K2WVyffh0yFu7MqI9zVOz6iOMDjKw5eu0ZI4dIaVk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XUvcn3DdELyY03D87REYHx1VY9vm+OUjg+iJsv8rYbaod2/+9Gdqt7xWt/A0+cZiZOOvSKB2wGQbjqc3c8cgdIzBKmFbKcnhjoeAG9Q+swGp7HDTQw7C8J8IME/9ne9nrJW9x6l8JWLAJJIfM96tA9lauerGIrl6OHn4OF1pdJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ETS5HpY/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17272C32786;
+	Mon, 10 Jun 2024 15:16:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718032607;
+	bh=O4K2WVyffh0yFu7MqI9zVOz6iOMDjKw5eu0ZI4dIaVk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ETS5HpY/0Kf6xf4RQ1EeQ5ezwwa3Hu3a2SFdCj67odD7KI2UYD7Fs2d1r5g7y6wIf
+	 vTIqROSJQNRXs1n9kJDCdzxcS7+nLskAscR53y6Tg+D3s6zi6S/mSwJ7junGgMfPGz
+	 cFVN88hW7TnVgKXnCw7asGpLrZreR7IS4oFRMy+H9qtpSq3cfrL6cdUOlH8XQCjevL
+	 VdpqhB/9QWwIUedEYRuh4MevTomxzXE6ulQ6FOvNli9X5RdARoFkmIdzyPoMwtaZ2o
+	 jqiLoW+RrYZ9fTS86/FAROafJwR54RozEVCGgmVDPux00UDvaj3N87ZaAfFbOkWXsm
+	 4oYGUGuuH8ZZQ==
+Message-ID: <59443d14-1f1d-42bb-8be3-73e6e4a0b683@kernel.org>
+Date: Mon, 10 Jun 2024 09:16:43 -0600
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: gregory.clement@bootlin.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
+ custom page providers
+Content-Language: en-US
+To: Jason Gunthorpe <jgg@ziepe.ca>, Pavel Begunkov <asml.silence@gmail.com>
+Cc: David Wei <dw@davidwei.uk>, Mina Almasry <almasrymina@google.com>,
+ Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
+References: <20240530201616.1316526-3-almasrymina@google.com>
+ <ZlqzER_ufrhlB28v@infradead.org>
+ <CAHS8izMU_nMEr04J9kXiX6rJqK4nQKA+W-enKLhNxvK7=H2pgA@mail.gmail.com>
+ <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
+ <CAHS8izNmT_NzgCu1pY1RKgJh+kP2rCL_90Gqau2Pkd3-48Q1_w@mail.gmail.com>
+ <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com>
+ <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
+ <20240607145247.GG791043@ziepe.ca>
+ <45803740-442c-4298-b47e-2d87ae5a6012@davidwei.uk>
+ <54975459-7a5a-46ff-a9ae-dc16ceffbab4@gmail.com>
+ <20240610121625.GI791043@ziepe.ca>
+From: David Ahern <dsahern@kernel.org>
+In-Reply-To: <20240610121625.GI791043@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello Thomas,
+On 6/10/24 6:16 AM, Jason Gunthorpe wrote:
+> On Mon, Jun 10, 2024 at 02:07:01AM +0100, Pavel Begunkov wrote:
+>> On 6/10/24 01:37, David Wei wrote:
+>>> On 2024-06-07 17:52, Jason Gunthorpe wrote:
+>>>> IMHO it seems to compose poorly if you can only use the io_uring
+>>>> lifecycle model with io_uring registered memory, and not with DMABUF
+>>>> memory registered through Mina's mechanism.
+>>>
+>>> By this, do you mean io_uring must be exclusively used to use this
+>>> feature?
+>>>
+>>> And you'd rather see the two decoupled, so userspace can register w/ say
+>>> dmabuf then pass it to io_uring?
+>>
+>> Personally, I have no clue what Jason means. You can just as
+>> well say that it's poorly composable that write(2) to a disk
+>> cannot post a completion into a XDP ring, or a netlink socket,
+>> or io_uring's main completion queue, or name any other API.
+> 
+> There is no reason you shouldn't be able to use your fast io_uring
+> completion and lifecycle flow with DMABUF backed memory. Those are not
+> widly different things and there is good reason they should work
+> together.
+> 
+> Pretending they are totally different just because two different
+> people wrote them is a very siloed view.
+> 
+>> The devmem TCP callback can implement it in a way feasible to
+>> the project, but it cannot directly post events to an unrelated
+>> API like io_uring. And devmem attaches buffers to a socket,
+>> for which a ring for returning buffers might even be a nuisance.
+> 
+> If you can't compose your io_uring completion mechanism with a DMABUF
+> provided backing store then I think it needs more work.
+> 
 
-> Hello,
->
-> Following the support of the EyeQ5 SoC, this series adds the initial
-> support for a newer SoC, the EyeQ6H.
->
-> The EyeQ6H (or "High") from Mobileye is still based on the MIPS I6500
-> architecture as the EyeQ5. The 2 clusters of this SoC contain 4 cores
-> each, which are capable of running 4 threads per core. Besides this,
-> it features multiple controllers such as the classic UART, high-speed
-> I2C, SPI, as well as CAN-FD, PCIe Gen4, Octal/Quad SPI Flash
-> interface, Gigabit Ethernet, MIPI CSI-2, MIPI DSI, and eMMC 5.1. It
-> also includes a Hardware Security Module, Functional Safety Hardware,
-> and video encoders, among other features.
->
-> For now, this series just adds initial support with UART and Pinctrl
-> support. Another current limitation pointed out in patch 3 is that
-> only one CPU is actually running. This limitation will be solved with
-> upcoming series.
->
-> The main change in this new version is the use of the new way to name
-> the clock nodes.
+exactly. io_uring, page_pool, dmabuf - all kernel building blocks for
+solutions. This why I was pushing for Mina's set not to be using the
+name `devmem` - it is but one type of memory and with dmabuf it should
+not matter if it is gpu or host (or something else later on - cxl?).
 
-I sent this second version a month ago and the first version even before
-that, and I still haven't received any feedback from your side. Does it
-mean that you will merge it?
-
-If you think there are some changes to be made, please let me know now
-so I will have time to implement them.
-
-Thanks,
-
-Gregpry
-
->
-> Regards,
->
-> Gregory
->
-> To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
-> To: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-> To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> To: Rob Herring <robh@kernel.org>
-> To: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> To: Conor Dooley <conor+dt@kernel.org>
-> Cc: linux-mips@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> cc: Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-> CC: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
->
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> ---
-> Changes in v2:
->
-> - Renamed clock node names based on
->   https://lore.kernel.org/all/20240430180415.657067-1-robh@kernel.org/>
-> - Use "eyeq6h" instead of "eyeq6" for the compatible string
-> - Move compatible string as the first property
-> - Link to v1: https://lore.kernel.org/r/20240506-eyeq6h-v1-0-f29b5269cc43=
-@bootlin.com
->
-> ---
-> Gregory CLEMENT (3):
->       dt-bindings: mips: Add bindings for a new Mobileye SoC EyeQ6H
->       MIPS: mobileye: Add EyeQ6H device tree
->       MIPS: mobileye: Add EyeQ6H support
->
->  .../devicetree/bindings/mips/mobileye.yaml         |   5 +
->  arch/mips/Kbuild.platforms                         |   2 +-
->  arch/mips/Kconfig                                  |   7 +-
->  arch/mips/boot/dts/Makefile                        |   2 +-
->  arch/mips/boot/dts/mobileye/Makefile               |   1 +
->  arch/mips/boot/dts/mobileye/eyeq6h-epm6.dts        |  22 ++++
->  .../boot/dts/mobileye/eyeq6h-fixed-clocks.dtsi     |  52 ++++++++++
->  arch/mips/boot/dts/mobileye/eyeq6h-pins.dtsi       |  88 ++++++++++++++++
->  arch/mips/boot/dts/mobileye/eyeq6h.dtsi            |  98 +++++++++++++++=
-+++
->  arch/mips/configs/eyeq5_defconfig                  |   1 +
->  arch/mips/configs/eyeq6_defconfig                  | 111 +++++++++++++++=
-++++++
->  arch/mips/mobileye/Kconfig                         |  26 +++++
->  arch/mips/mobileye/Platform                        |   1 +
->  13 files changed, 411 insertions(+), 5 deletions(-)
-> ---
-> base-commit: 07e6a6d7f1d9fa4685003a195032698ba99577bb
-> change-id: 20240506-eyeq6h-f4c5a95b0909
->
-> Best regards,
-> --=20
-> Gregory CLEMENT <gregory.clement@bootlin.com>
 
