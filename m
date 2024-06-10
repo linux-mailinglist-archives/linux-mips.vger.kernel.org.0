@@ -1,131 +1,141 @@
-Return-Path: <linux-mips+bounces-3540-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3541-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7C0B9012CB
-	for <lists+linux-mips@lfdr.de>; Sat,  8 Jun 2024 18:39:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDFBC9018F0
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Jun 2024 02:28:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68D3D1F21C97
-	for <lists+linux-mips@lfdr.de>; Sat,  8 Jun 2024 16:39:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 568B31F21332
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Jun 2024 00:28:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 516BF17B4F5;
-	Sat,  8 Jun 2024 16:39:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 242A223B0;
+	Mon, 10 Jun 2024 00:27:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B69bAYcK"
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="eaS/rB5p"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E885158A1F;
-	Sat,  8 Jun 2024 16:38:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC21317F6
+	for <linux-mips@vger.kernel.org>; Mon, 10 Jun 2024 00:27:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717864740; cv=none; b=gP/7EV8VWNVthHiyqursfN9w7UxVaZT71A0cIp/5hIgwvq4RhPYahDybLrhqMGgCEVRt2UnHg4vHrNkz7ozMSCerYgymEP8LISfYYRGt/gLIim2phFpNxg23K7LGGrYOwyWyRx3iD7fkjVAMEsC3DFebgpHEIYHSL5ouA05NDVI=
+	t=1717979279; cv=none; b=ensK1DxD4o33pTDo7L/Ihyvz4mBgivLOyhIcz6wfV3g+C5ttZg/WzJK4D5PNP1F6puQp0BlsUD5NPU6wIXtxDraGvUBjBT8QvqpPV0w6r6IgjU1LR2CFEHl4OCXvTaISgyXItNsfd28oe5oqUg3ljGQAN5nHuSGaMwzhnK4Sp2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717864740; c=relaxed/simple;
-	bh=NRDypsUCwfI33OUpmlEU3120t7rA9JE3Pg3U+I93Uhs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gM2LRBkrW0SoMXaNUje9+hHXAOprpzihg0VnMNguF0r/I2ny2qlUipPX+QPZKo7x/7UNoAs/pkIivQNC5aFvlXTWndt8pnCcB7Gl7zpLbP+dX9wEXhHYz4LxWG3tntLGuG3UcIN7fyroI1l/wXdI02aZdMvqPfXQ6pRHKxUl+vA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B69bAYcK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84998C2BD11;
-	Sat,  8 Jun 2024 16:38:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717864739;
-	bh=NRDypsUCwfI33OUpmlEU3120t7rA9JE3Pg3U+I93Uhs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=B69bAYcKw8dym5L3MbgCzJ28mi3wHTzqDDw7asjfy/vMjDRiorhwuZqZlsdlWTuy9
-	 tf+lzNAo6o7EzNfvW1mg0qkOGQi3A2W36dEdYitQ3Kn8r+JIZwPTrr1e2phcxFQG19
-	 T0qlQe/Yky9RQJDHXWnb0w+5EOTr0z/k4olt3nIF4ihk4jjjPvoEsIM5lZdhvoorJA
-	 HZ8pF+0E+o8FOSoEs4olfu/I+n0VMWGuI+pEzM3btJA2zPptIcoUAGoTzlERzDjWnF
-	 LX8UwHfgTuydrB4E1PwDL8hCw8APreKBxHSJcFm+9NMJecwf1LlW7hkoTnVzOGVWv6
-	 RHovd7RxIL57w==
-Date: Sat, 8 Jun 2024 17:38:51 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc: Paul Cercueil <paul@crapouillou.net>, Lars-Peter Clausen
- <lars@metafoo.de>, Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
- Michal Simek <michal.simek@amd.com>, <linux-mips@vger.kernel.org>,
- <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <kernel-janitors@vger.kernel.org>
-Subject: Re: [PATCH] iio: add missing MODULE_DESCRIPTION() macros
-Message-ID: <20240608173851.7c575f1f@jic23-huawei>
-In-Reply-To: <20240607-md-drivers-iic-v1-1-9f9db6246083@quicinc.com>
-References: <20240607-md-drivers-iic-v1-1-9f9db6246083@quicinc.com>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.42; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1717979279; c=relaxed/simple;
+	bh=MhpwXQPEWuldXab2yRt6lwaofFGFqOHBQxOKwwMzkWs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=prlKI0dqTcJvnfzb5Q34nNP4hjKAtkdbWev+w5GNawBE90I6+48cl1ZRwYwmZKvpOqpP9LUPYayF5rFsFnbN91KESJ5CN2XkxudVjDMn3hKrw9VZ/xQZQqsn24eJTVwDJbmLgNjN85wqel08TagC2uxvUOuXuEGzUid4OBH7/Aw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=eaS/rB5p; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2c1ab9e17f6so3306079a91.1
+        for <linux-mips@vger.kernel.org>; Sun, 09 Jun 2024 17:27:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1717979277; x=1718584077; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MhpwXQPEWuldXab2yRt6lwaofFGFqOHBQxOKwwMzkWs=;
+        b=eaS/rB5ptAbHAU0q7qdhCVXxZ7lbplvWL9hU4TV8HO/se05eThjpH8FgH1E6aS56n0
+         rW/FP7pOSyTxC+8whzwcsq90dLgrS0QhatoUNkRaMF2tATXfBuMr+yUVS6o0AfoXCkNB
+         TQ/NutpDHJ4gJiMiKl9PcUGQqkiHEQYofisKHAoQrKewsoipTcj45F4gmgOrwRNPXnAG
+         hLrgEbuXXS/YMk9seiceNyXS95VU2N5n+4a/vXtDWKNahfG762KAc+Imp1kvFGXC0A+p
+         MU7pTWE7PVbAluvuq5FFXNSY19XM4DoyPVbkO2q5ZxDdT0TvSqVt3YTSZnHaNO60Y+T1
+         bMRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717979277; x=1718584077;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MhpwXQPEWuldXab2yRt6lwaofFGFqOHBQxOKwwMzkWs=;
+        b=Z/G+NI5Yu7ShxR5kJeAeyiW4Wtp5LMzUrWlLWDv0vJb5AJnXVQ+Z0E51IAXWV6V+Kq
+         qcNw8kqSOlq6WzfPoG4jVaRz6roxXu1pQjF6kgxUyufRtRqLt0tforTmftgiK1Rm+uTe
+         sSVLkBOZrsui4baAmwNSTKf1EBkWyrOgxUMLFJxAB7wFa05t54e3sYEYD5bJNkWC1XHk
+         sFimppwO4uVA3w0ZXdqE8BllAeYDOVviEqxgjyKJpIyMAQIue9olsvEERA3yIPYw47Th
+         /ztblGIOdjS2ueSPBI0QOUbRRVV21Cc1cDXhk/FfPva6/+CPc/9sheelnlLrpHibpkz6
+         PSWg==
+X-Forwarded-Encrypted: i=1; AJvYcCVonCuNvjxkeF9wlFBusUtVeff8dwngFhH+c3WF6BASYtcEj5OgsYgRBMceDvEsCzPZj/0m/hot7Y3P8M3sBpcQH2m1SttMmxEGLQ==
+X-Gm-Message-State: AOJu0YzUEAlE4FW0BOlKsZyuQjlfqudMtZxZLDGxl/nTVk0yYBNDf9PT
+	xUdCyli2BQOLlXMJZ03af5yBiAbhvgmO2cZhfUVB3QHA71tqIo/euUAmshGynv4=
+X-Google-Smtp-Source: AGHT+IHFUY13EgQWeWpod8cMzpAhYoaErdO5QtBiSVL31xjUWTYCgJQDuWf1poRGpWIptTmVDcqXrA==
+X-Received: by 2002:a17:902:d4c3:b0:1f4:a36c:922c with SMTP id d9443c01a7336-1f6d02de0d6mr98614085ad.20.1717979276488;
+        Sun, 09 Jun 2024 17:27:56 -0700 (PDT)
+Received: from [192.168.1.8] (174-21-189-109.tukw.qwest.net. [174.21.189.109])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6bd75f162sm70228185ad.61.2024.06.09.17.27.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Jun 2024 17:27:56 -0700 (PDT)
+Message-ID: <8f7bc361-aa92-4d73-b276-f2d6bb4fbd6a@davidwei.uk>
+Date: Sun, 9 Jun 2024 17:27:54 -0700
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
+ custom page providers
+Content-Language: en-GB
+To: David Ahern <dsahern@kernel.org>, Pavel Begunkov
+ <asml.silence@gmail.com>, Mina Almasry <almasrymina@google.com>
+Cc: Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>,
+ Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
+References: <20240530201616.1316526-1-almasrymina@google.com>
+ <20240530201616.1316526-3-almasrymina@google.com>
+ <ZlqzER_ufrhlB28v@infradead.org>
+ <CAHS8izMU_nMEr04J9kXiX6rJqK4nQKA+W-enKLhNxvK7=H2pgA@mail.gmail.com>
+ <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
+ <CAHS8izNmT_NzgCu1pY1RKgJh+kP2rCL_90Gqau2Pkd3-48Q1_w@mail.gmail.com>
+ <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com>
+ <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Fri, 7 Jun 2024 09:17:52 -0700
-Jeff Johnson <quic_jjohnson@quicinc.com> wrote:
+On 2024-06-07 17:27, David Ahern wrote:
+> I also do not understand why the ifq cache and overloading xdp functions
+> have stuck around; I always thought both were added by Jonathan to
+> simplify kernel ports during early POC days.
 
-> make allmodconfig && make W=1 C=1 reports:
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/ingenic-adc.o
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/xilinx-ams.o
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/buffer/kfifo_buf.o
-> 
-> Add the missing invocations of the MODULE_DESCRIPTION() macro.
-> 
-> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
-Hi Jeff,
-
-Thanks for tidying these up.
-
-Applied to the togreg branch of iio.git and pushed out as testing
-because there is other stuff I need 0-day to take a look at.
-
-Thanks,
-
-Jonathan
-
-> ---
->  drivers/iio/adc/ingenic-adc.c  | 1 +
->  drivers/iio/adc/xilinx-ams.c   | 1 +
->  drivers/iio/buffer/kfifo_buf.c | 1 +
->  3 files changed, 3 insertions(+)
-> 
-> diff --git a/drivers/iio/adc/ingenic-adc.c b/drivers/iio/adc/ingenic-adc.c
-> index a7325dbbb99a..af70ca760797 100644
-> --- a/drivers/iio/adc/ingenic-adc.c
-> +++ b/drivers/iio/adc/ingenic-adc.c
-> @@ -920,4 +920,5 @@ static struct platform_driver ingenic_adc_driver = {
->  	.probe = ingenic_adc_probe,
->  };
->  module_platform_driver(ingenic_adc_driver);
-> +MODULE_DESCRIPTION("ADC driver for the Ingenic JZ47xx SoCs");
->  MODULE_LICENSE("GPL v2");
-> diff --git a/drivers/iio/adc/xilinx-ams.c b/drivers/iio/adc/xilinx-ams.c
-> index f0b71a1220e0..ee45475c495b 100644
-> --- a/drivers/iio/adc/xilinx-ams.c
-> +++ b/drivers/iio/adc/xilinx-ams.c
-> @@ -1430,5 +1430,6 @@ static struct platform_driver ams_driver = {
->  };
->  module_platform_driver(ams_driver);
->  
-> +MODULE_DESCRIPTION("Xilinx AMS driver");
->  MODULE_LICENSE("GPL v2");
->  MODULE_AUTHOR("Xilinx, Inc.");
-> diff --git a/drivers/iio/buffer/kfifo_buf.c b/drivers/iio/buffer/kfifo_buf.c
-> index 05b285f0eb22..38034c8bcc04 100644
-> --- a/drivers/iio/buffer/kfifo_buf.c
-> +++ b/drivers/iio/buffer/kfifo_buf.c
-> @@ -287,4 +287,5 @@ int devm_iio_kfifo_buffer_setup_ext(struct device *dev,
->  }
->  EXPORT_SYMBOL_GPL(devm_iio_kfifo_buffer_setup_ext);
->  
-> +MODULE_DESCRIPTION("Industrial I/O buffering based on kfifo");
->  MODULE_LICENSE("GPL");
-> 
-> ---
-> base-commit: 19ca0d8a433ff37018f9429f7e7739e9f3d3d2b4
-> change-id: 20240607-md-drivers-iic-cab420a99216
-> 
-
+Setting up an Rx queue for ZC w/ a different pp will be done properly
+using the new queue API that Mina merged recently. Those custom XDP
+hooks will be gone in a non-RFC patchset.
 
