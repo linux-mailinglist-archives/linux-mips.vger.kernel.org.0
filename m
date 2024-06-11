@@ -1,79 +1,54 @@
-Return-Path: <linux-mips+bounces-3554-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3555-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3EA6902B6D
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Jun 2024 00:15:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1911A90327C
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Jun 2024 08:25:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 628BBB23765
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Jun 2024 22:15:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 184A7B25AAE
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Jun 2024 06:25:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FD841514CB;
-	Mon, 10 Jun 2024 22:15:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 516C1171656;
+	Tue, 11 Jun 2024 06:25:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="DV1B8yAB"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="vsk5TKRp"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC371509A5
-	for <linux-mips@vger.kernel.org>; Mon, 10 Jun 2024 22:15:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D42ED16F8E1;
+	Tue, 11 Jun 2024 06:25:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718057708; cv=none; b=nc2dMff6jELwLxzK06KN3z2DXsKrqKK/G9th/eYGdzo5lpQ/mFeDIWtXsMBCWWGDVVEt52EDxrM1D5fg91BTguAcPKTnEOA15OLbiLLCeo3wm1SFDMKuqBo77sSneg0OSHSgFCLMOdUjfTL6n1tLL1RNVRy2BMdjHsRKXLj2CrI=
+	t=1718087119; cv=none; b=DY5Zt5i9h9EJJmYTtrySH6AfLwmlZU269g28ibyDVwEXcCUE5fWR0j5pXG1echEGAV8VA48FezGYZgsaicSQe5uCm27JvhRD05txtGAYzVkGl4nF7klfbQ0eV+K0K92rBzhUPm26euLNCWiXAWvZVCoC+NV1532UAXIztfzuNA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718057708; c=relaxed/simple;
-	bh=z+wd9sAGfEDNr43zUFts3rXiT7ShOZVNnrA/+9o7y3k=;
+	s=arc-20240116; t=1718087119; c=relaxed/simple;
+	bh=NwZHYp51blvYYi6voSW7p7zTGyG43lBc53N0AUPKbMY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HK7nMcbau4K8/BqZMMv2K4vKmKIuYZncM5+yCprvrqvEDMrCvEeFF2d5q3wF+fJApYOiLrSvTkh7DfzYBZqTEvV/iHNVF17dIMhn+j702X7JDnSqFuPYbMvLdxHZz2cWelhUBzuyzPCquTc4P0ficI/v6/603hEQ7DRRCmNxDbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=DV1B8yAB; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-43fecdecd32so26994141cf.1
-        for <linux-mips@vger.kernel.org>; Mon, 10 Jun 2024 15:15:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1718057705; x=1718662505; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fYxIeKtLL3lQwNiFRr25O1e9GIX4G5slG5d4Uc4G46M=;
-        b=DV1B8yABKh8zcLUmgBZlPAFY0iTcPLR8YOx7LLCpFjMnV7rXNkaRxAYuvwk3C7PPOH
-         jZB05ZxEeozQlYPvsSKrdHH9XRsHaWMfRgA07nc67PzNRXJVUcgHaMaIwTLkn/0NBaej
-         Y+DkdkBwr03IdCK/sG3d/54s8BvaqhWBnl/jBki+4FuzFDk5MC/R7srQTW0MtfyTEffw
-         S/cazkXqzTrhTNLq77EhsuipjQDoKG+ONrmQBCCYr/YTuVzQ2K1qnCx+gVlmf+ptUByB
-         YHBold4jl4t0CXl3DWfVhfY0nGwvEmmEftLaTtJM4KO8eLCbZeisPO65pggAcwOIB0GE
-         jnmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718057705; x=1718662505;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fYxIeKtLL3lQwNiFRr25O1e9GIX4G5slG5d4Uc4G46M=;
-        b=ACN/+jSTaHaCS48qixgamBTa6Y3EnCLgDDbRiDRmqJsnfjyqSj1tBfzqFjKmDSF105
-         O6NlJCMaIUIJqIGZhML0Dk91a1S+amHA38kriI4bVL122XeOp0RJMuxzVUe4Ka+GWqbg
-         5pcnR7ewo7BM6ejCjEIHDa/9qzqArHOWCk6VIr4X6eiW0rVBz1DMVnM30TN04wepeKjG
-         lu5VZ57+R3bbWeYpT2PU40fJPmz6nZLfzr6f/0kylqIP23bl9b5Es17dnCuJpLLvAmuj
-         ZCrABBFsIP027bZ0KUp5Ngm2aQkaV2rquvS20+wfylMDTrdvwkU+90f3Wgz72Zo14zmh
-         vfFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX6iS7EFhbmtQhCG7Gyhzc9pC85VdKKVF5HiufGeHCTIsZHJN4OwRLpVTBAvoMuALRn2YTJQHZ5L9cdoIS9Aaxc3hgXe0VHLvViKw==
-X-Gm-Message-State: AOJu0YxiDZ1wV1LampPpS62LJrFXC4NiCOAUbThY11uy7OwJd2NSa8KD
-	WwtRVhYcetS3t617b58fBLxpVRB1ghjieMiI7sJejV7awcj9pltAyVHG7nUFkwA=
-X-Google-Smtp-Source: AGHT+IGNwK7dorh82QSLW5MV/WzZAixZNPt6ZilaFo6ceP30TQ1KYPRJL2ImTAjvrOrdYOBtAU+f5Q==
-X-Received: by 2002:a05:6214:4a06:b0:6b0:72ef:2877 with SMTP id 6a1803df08f44-6b072ef2a2bmr79573716d6.40.1718057705068;
-        Mon, 10 Jun 2024 15:15:05 -0700 (PDT)
-Received: from ziepe.ca ([128.77.69.89])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b076a42242sm20947266d6.59.2024.06.10.15.15.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jun 2024 15:15:03 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1sGnI4-00FsKs-9Z;
-	Mon, 10 Jun 2024 19:15:00 -0300
-Date: Mon, 10 Jun 2024 19:15:00 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: David Ahern <dsahern@kernel.org>, David Wei <dw@davidwei.uk>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=dkEIG5xtw2LACJjAUMWizasFat5lf7Ud6+LVUR3sl7OBCXtYEOuao77CqjWgUprTduG/vebobnP8sPHp+wIEjaLdhwnAI8NvLJpYWp7RQEtRH61WfNG+4LiRfV41eS3662spa22+u8EyUpV40v9h/gbbMPVqfNFcufabpsoh46g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=vsk5TKRp; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
+	:Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=NwZHYp51blvYYi6voSW7p7zTGyG43lBc53N0AUPKbMY=; b=vsk5TKRpCpoLMJwN4+N0Xoce51
+	gKqcmhrI8PGJLqTcZutaWEzny49LEjldaSM6NmvaVDtRZNxFhkUaHoZs8k2IkAw/fSYqS/NpbNJ99
+	4I1IhUkLjfFTWmZJ3fkPDjAWZE7YIc6yjaI/bvKrOEGOLnvFOolePciBdRXEhFkeX+a4rf2V8LQ24
+	ASrGu9QSNlIbshOV8VyBqP04jK0Pm23TNGVHvX3jw2bIFWfbbynmxLhqIPBKJvJYn5jeTr0NJd/fJ
+	FcXmdLCQg3rcquFvDdfQ+TZfRZEf5PeJN+Qpvz3aTjMUEDbZyWXSccEEf+6LaxquvbvSltTCUEM4G
+	+1WPY34w==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sGuwL-00000007gBF-0Jyi;
+	Tue, 11 Jun 2024 06:25:05 +0000
+Date: Mon, 10 Jun 2024 23:25:05 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, Pavel Begunkov <asml.silence@gmail.com>,
+	David Wei <dw@davidwei.uk>, David Ahern <dsahern@kernel.org>,
 	Mina Almasry <almasrymina@google.com>,
 	Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
@@ -112,7 +87,6 @@ Cc: David Ahern <dsahern@kernel.org>, David Wei <dw@davidwei.uk>,
 	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
 	Shuah Khan <shuah@kernel.org>,
 	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
 	Yunsheng Lin <linyunsheng@huawei.com>,
 	Shailend Chand <shailend@google.com>,
 	Harshitha Ramamurthy <hramamurthy@google.com>,
@@ -121,8 +95,9 @@ Cc: David Ahern <dsahern@kernel.org>, David Wei <dw@davidwei.uk>,
 	Praveen Kaligineedi <pkaligineedi@google.com>
 Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
  custom page providers
-Message-ID: <20240610221500.GN791043@ziepe.ca>
-References: <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
+Message-ID: <ZmftwZDXYk53fKzm@infradead.org>
+References: <CAHS8izMU_nMEr04J9kXiX6rJqK4nQKA+W-enKLhNxvK7=H2pgA@mail.gmail.com>
+ <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
  <CAHS8izNmT_NzgCu1pY1RKgJh+kP2rCL_90Gqau2Pkd3-48Q1_w@mail.gmail.com>
  <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com>
  <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
@@ -130,46 +105,23 @@ References: <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
  <45803740-442c-4298-b47e-2d87ae5a6012@davidwei.uk>
  <54975459-7a5a-46ff-a9ae-dc16ceffbab4@gmail.com>
  <20240610121625.GI791043@ziepe.ca>
- <59443d14-1f1d-42bb-8be3-73e6e4a0b683@kernel.org>
- <00c67cf0-2bf3-4eaf-b200-ffe00d91593b@gmail.com>
+ <cdbc0d5f-bfbc-4f58-a6dd-c13b0bb5ff1c@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <00c67cf0-2bf3-4eaf-b200-ffe00d91593b@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cdbc0d5f-bfbc-4f58-a6dd-c13b0bb5ff1c@amd.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Mon, Jun 10, 2024 at 08:20:08PM +0100, Pavel Begunkov wrote:
-> On 6/10/24 16:16, David Ahern wrote:
+On Mon, Jun 10, 2024 at 02:38:18PM +0200, Christian König wrote:
+> Well there is the fundamental problem that you can't use io_uring to
+> implement the semantics necessary for a dma_fence.
 
-> > > There is no reason you shouldn't be able to use your fast io_uring
-> > > completion and lifecycle flow with DMABUF backed memory. Those are not
-> > > widly different things and there is good reason they should work
-> > > together.
-> 
-> Let's not mix up devmem TCP and dmabuf specifically, as I see it
-> your question was concerning the latter: "... DMABUF memory registered
-> through Mina's mechanism". io_uring's zcrx can trivially get dmabuf
-> support in future, as mentioned it's mostly the setup side. ABI,
-> buffer workflow and some details is a separate issue, and I don't
-> see how further integration aside from what we're already sharing
-> is beneficial, on opposite it'll complicate things.
+What is the exact problem there?
 
-Again, I am talking about composability here, duplicating the DMABUF
-stuff into io_uring is not composable, it is just duplicating things.
-
-It does not match the view that there should be two distinct layers
-here, one that provides the pages and one that manages the
-lifecycle. As HCH pushes for pages either come from the allocator and
-get to use the struct folio or the come from a dmabuf and they
-don't. That is it, the only two choices.
-
-The iouring stuff is trying to confuse the source of the pages with
-the lifecycle - which is surely convenient, but is why Christoph is
-opposing it.
-
-Jason
 
