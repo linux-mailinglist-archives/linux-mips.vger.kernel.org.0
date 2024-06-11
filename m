@@ -1,91 +1,92 @@
-Return-Path: <linux-mips+bounces-3589-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3590-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 437B59042B8
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Jun 2024 19:49:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 890F6904329
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Jun 2024 20:09:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4524F1C24B61
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Jun 2024 17:49:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 98BBDB22499
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Jun 2024 18:09:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A597F6EB58;
-	Tue, 11 Jun 2024 17:49:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 315CB6D1D7;
+	Tue, 11 Jun 2024 18:09:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IPVFjqjN"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ORBH1T28"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82BEF6EB60
-	for <linux-mips@vger.kernel.org>; Tue, 11 Jun 2024 17:49:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D72D59162
+	for <linux-mips@vger.kernel.org>; Tue, 11 Jun 2024 18:09:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718128143; cv=none; b=OoM1OUllfoHWT3Jto2RJSPpVBECJnpvxQHKoLokvYGfR/flv7pXdUGcdfN9XKuPgsnDMFwpxcOsE8roF+D7etf5y9Q3jCi3YhKPjjITCmn4MNvUKMkFKfTNVKOeyq6+xTKVQR5o7MhFbQWoBOIHvFa4kqQu1TZkwea83UJDUK4Y=
+	t=1718129374; cv=none; b=X5EpyaFxcgEWsffmvruAqLuPXe5du/+LyG95dkpxCHqq+ComKDjHYy9PSOF43dTV/QPbK4ebvVNtThvF7rbZJ3z2OFUcofOdDHoCWz1LY1H0KJLWBnQjx1PRUXh4nLMqRicIKLOmF4D7FYxpD48wwCuIR2pbqI3saQ1hwdg/fmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718128143; c=relaxed/simple;
-	bh=qqI28F86pyCn46b6E2hC9EGzpBvx1aR16iSkTi1rBL8=;
+	s=arc-20240116; t=1718129374; c=relaxed/simple;
+	bh=+lxPetrPpHvENSTokBRC6xognbIAj4RmicEAyuXDxTU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=peaJsswF+tgEyXdmiDVaqGDD3Zdjs0sEVHUeCPKdvqip+YuVa0+nLpC0+H77wKlK0se23UbmhGZ3mlB0gbyuS8ByqLnh4E33szmSnBkNXp9okdDJHMR7jqGOdwVv59Qb8nx7IL4ljWjffKVP+7iOx9uUY+tB3K/xwek46YrDAhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IPVFjqjN; arc=none smtp.client-ip=209.85.167.45
+	 To:Cc:Content-Type; b=kQM6KKznUHizFz6FOsjxLcbkk3rXmZV/rk3jSZY6SBfvHgb6fuYC2mHDaXrWImcOLgf+XpCgR26tu06G97HwamPfWt8D4iWhsX/jzUb9x/lSCZ5B2xGE+3/SxlQIdXzQMvuzEXEaS3HaEkJ3Petb0zVPCIq0oS0NBTQLXcHFo1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ORBH1T28; arc=none smtp.client-ip=209.85.218.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-52bd48cf36bso4797062e87.3
-        for <linux-mips@vger.kernel.org>; Tue, 11 Jun 2024 10:49:01 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a6f21ff4e6dso274144866b.3
+        for <linux-mips@vger.kernel.org>; Tue, 11 Jun 2024 11:09:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718128140; x=1718732940; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1718129370; x=1718734170; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qqI28F86pyCn46b6E2hC9EGzpBvx1aR16iSkTi1rBL8=;
-        b=IPVFjqjN/tV8zxx7PkHbMF4K/IYb/jlC2tNit5JdvoLifzWpkyDf9JrBFefkflu+aW
-         hiA18c2EjQNXyBLcSixdWO0kk2xuSNuKdKO/T7XNH/JOiYXo+V6xtEBI+/UQnZVN4Wi4
-         wJmV3pBdP3FZ+M+BJPCgzvoMJX6U7b0v6zRx97/K244ibz8EcDPiJyb24JuTdFHzGOps
-         N87qOHVGTsz0jLlKV2cAcqOd96eJfNPr8SjRHvz2/Ne5EGuStsAG8Se3GTIfhH3848XQ
-         tTf1dm55Al2vnllfL+M3Kh3sVeZM4YFd8HbBIyODEajeZeimEvCZznCejuVCGbBO8fyz
-         HLTQ==
+        bh=+lxPetrPpHvENSTokBRC6xognbIAj4RmicEAyuXDxTU=;
+        b=ORBH1T28Kv+Gm9vfDRFh0o9KoHNuPBRhIxafHB3qgyANZSEAx+9LLa6Wv5Iv2FulVM
+         1C4r4QsMP/tolax4DaWy4QrJlMTPTRDUpbMg8JdQqiADkwRyXa1Iy11Ylt5B7YbjRIRq
+         OctBI7JiWrNqmKnqBVdhpMRueuExFqKOmwSK+7OfBSrsjK4SgORfTkvjgaMoS3DMo0Q7
+         FkTsN8QksrcUNYzFDEG1UmAfTCd8yxst6SYakYd6YSlIZ9FEq+7SBeD6XMUjZNk9BCcy
+         Wrv4JJvkiSqmCMz3b9EpLjg4cplFB6acY4gYixvwk4VoXVVCe+PzWeGjji2mognTN5AY
+         C0/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718128140; x=1718732940;
+        d=1e100.net; s=20230601; t=1718129370; x=1718734170;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qqI28F86pyCn46b6E2hC9EGzpBvx1aR16iSkTi1rBL8=;
-        b=i9e5CyydGwZ2RcqTbMqI5h/ylux06SM2Akq5szKaWYRdbv+O/MhR4aKMI98A8G9MVo
-         aWzwxCqXPpPZNSaJS3908g07EsAS9XLpvih2t9Y0EOi7BwFYP5y6BEIovMa49BK4lwY/
-         7RCDrWAjf3bs6eRDefd1qqfKuHZzbILwKNmg390La2VNh7xEnMdcciVKXH+9ECWD6VN3
-         V+HlK/rvIwuTHgLLZ0NIZJ/8lGTGpYCfhZs/5JTaqg8KjWitASjAO+ZLTOW8YT9MSFYn
-         6D17s7TWC1jFbFuUwlpCc+daWhGIhRkKEJiMk6+JXLzV2X8EG+o1U4b7N3Af00URSnyv
-         gShg==
-X-Forwarded-Encrypted: i=1; AJvYcCXKjh+S+d/9oitnnDvqGbNboZlrYRpzBZYWeiIi0DGF4Sua0dCSBiEB6OHzGF/4Y+hfDrNhmA9j342WK7ajGiAJ5prhP3WqTKWcIw==
-X-Gm-Message-State: AOJu0Ywmf+pEkkh+njkBq8nh6O/s2QSzhUNYiL8ADi+xadAKcdlZhxHr
-	Mihp8/6saYmRrItlwSnPwH5J+WgvMVebm3+yxUPPVdlxFFClch3ojMAD0aoVIPY4OdRwO80E56c
-	Dsazn5O2dn52bxWFJ6Niw4v4kNzWb5PlcRVEA
-X-Google-Smtp-Source: AGHT+IGQwZWXRepZRotKaxzF2bqAPZNCNL5wX5Y/FzlEvs4cnUetjrNqG6bJ0xN0MmD46e2zpfETL/dJPuZcdCbp5Pc=
-X-Received: by 2002:a05:6512:324f:b0:52b:fc90:acdc with SMTP id
- 2adb3069b0e04-52bfc90ae01mr6138523e87.32.1718128139379; Tue, 11 Jun 2024
- 10:48:59 -0700 (PDT)
+        bh=+lxPetrPpHvENSTokBRC6xognbIAj4RmicEAyuXDxTU=;
+        b=K2amdW165zFg299GBACZ6sCYh9zZJoO4elgfQtnPkkgM4t67B3Z7ZjpGVBwTlDKmOD
+         45Q+9yVvlEGArIsclrNP9FzQwxG52iBuJCyNr9KZitcEtA6HwSZtNVj2JcRBLnl6nmY2
+         fd6jzaceu1923P/sQFIXwb/lVKOSsQ7e0MODnhteTXzAEwigRrF+Pn2kRgkrvumI8Ttj
+         ehofszV15RWceEh+0jM8GjE9nfoBTEBaKv/+7MHhxTM/WYrfejfeX3t0M2nvFCLVwqlr
+         qzxpHDfdv0EhuvW4KqEoK6Vr1wv6jHN8o3tJXqYVInlmovJMSveZZQUwTf0eNi9QtwzO
+         Kezg==
+X-Forwarded-Encrypted: i=1; AJvYcCXxedt0yTE59JL5fZoxQN1emua6MqKJ/Drmv4clNrC2gMQmgU57LfyWpwODP+LGzIB1pFWGXf5nQLI+1rAGjjReewy82s4XzL61LA==
+X-Gm-Message-State: AOJu0YyA9NN7dllW28zcJuTIE59JZmC1E14Qz325zop+lLPwLU0n1Bl8
+	lzSDU3CPV+AeF2EcsX8fRfE+0Xr/3N4pOZstxMQnhytgcYMOcMMWdutbQjuEXxlWw2TwgwCC5v8
+	qvfWn5ykj+WBlW99lxL3E4MMOfAcJM6diLVxI
+X-Google-Smtp-Source: AGHT+IHSnbMlQQE9x/zPWpkI90JIlOTBHgyEzLn5RoXQZyiGaSSB2YwhfXwjdqq72pgI+LQF0hGDSafJjuWqavJQlB4=
+X-Received: by 2002:a17:906:4742:b0:a6f:393a:9dea with SMTP id
+ a640c23a62f3a-a6f393aa161mr132795366b.77.1718129370030; Tue, 11 Jun 2024
+ 11:09:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAHS8izMU_nMEr04J9kXiX6rJqK4nQKA+W-enKLhNxvK7=H2pgA@mail.gmail.com>
- <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com> <CAHS8izNmT_NzgCu1pY1RKgJh+kP2rCL_90Gqau2Pkd3-48Q1_w@mail.gmail.com>
+References: <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
+ <CAHS8izNmT_NzgCu1pY1RKgJh+kP2rCL_90Gqau2Pkd3-48Q1_w@mail.gmail.com>
  <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com> <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
  <20240607145247.GG791043@ziepe.ca> <45803740-442c-4298-b47e-2d87ae5a6012@davidwei.uk>
  <54975459-7a5a-46ff-a9ae-dc16ceffbab4@gmail.com> <20240610121625.GI791043@ziepe.ca>
- <59443d14-1f1d-42bb-8be3-73e6e4a0b683@kernel.org> <ZmfuGUugiwMPdnkR@infradead.org>
-In-Reply-To: <ZmfuGUugiwMPdnkR@infradead.org>
+ <59443d14-1f1d-42bb-8be3-73e6e4a0b683@kernel.org> <00c67cf0-2bf3-4eaf-b200-ffe00d91593b@gmail.com>
+ <20240610221500.GN791043@ziepe.ca>
+In-Reply-To: <20240610221500.GN791043@ziepe.ca>
 From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 11 Jun 2024 10:48:47 -0700
-Message-ID: <CAHS8izOyV4ZFi=sC5BofaS2NQ=QDAKsmpd2Z1iaNDLpd9rOKVw@mail.gmail.com>
+Date: Tue, 11 Jun 2024 11:09:15 -0700
+Message-ID: <CAHS8izNRd=f=jHgrYKKfzgcU3JzkZA1NkZnbQM+hfYd8-0NyBQ@mail.gmail.com>
 Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
  custom page providers
-To: Christoph Hellwig <hch@infradead.org>
-Cc: David Ahern <dsahern@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, netdev@vger.kernel.org, 
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Pavel Begunkov <asml.silence@gmail.com>, David Ahern <dsahern@kernel.org>, 
+	David Wei <dw@davidwei.uk>, Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
 	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
 	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org, 
@@ -116,27 +117,49 @@ Cc: David Ahern <dsahern@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 10, 2024 at 11:26=E2=80=AFPM Christoph Hellwig <hch@infradead.o=
-rg> wrote:
+On Mon, Jun 10, 2024 at 3:15=E2=80=AFPM Jason Gunthorpe <jgg@ziepe.ca> wrot=
+e:
 >
-> On Mon, Jun 10, 2024 at 09:16:43AM -0600, David Ahern wrote:
+> On Mon, Jun 10, 2024 at 08:20:08PM +0100, Pavel Begunkov wrote:
+> > On 6/10/24 16:16, David Ahern wrote:
+>
+> > > > There is no reason you shouldn't be able to use your fast io_uring
+> > > > completion and lifecycle flow with DMABUF backed memory. Those are =
+not
+> > > > widly different things and there is good reason they should work
+> > > > together.
 > >
-> > exactly. io_uring, page_pool, dmabuf - all kernel building blocks for
-> > solutions. This why I was pushing for Mina's set not to be using the
-> > name `devmem` - it is but one type of memory and with dmabuf it should
-> > not matter if it is gpu or host (or something else later on - cxl?).
+> > Let's not mix up devmem TCP and dmabuf specifically, as I see it
+> > your question was concerning the latter: "... DMABUF memory registered
+> > through Mina's mechanism". io_uring's zcrx can trivially get dmabuf
+> > support in future, as mentioned it's mostly the setup side. ABI,
+> > buffer workflow and some details is a separate issue, and I don't
+> > see how further integration aside from what we're already sharing
+> > is beneficial, on opposite it'll complicate things.
 >
-> While not really realted to the rest of the discussion I agree.
-> It really is dmabuf integration now, so let's call it that?
+> Again, I am talking about composability here, duplicating the DMABUF
+> stuff into io_uring is not composable, it is just duplicating things.
+>
+> It does not match the view that there should be two distinct layers
+> here, one that provides the pages and one that manages the
+> lifecycle. As HCH pushes for pages either come from the allocator and
+> get to use the struct folio or the come from a dmabuf and they
+> don't. That is it, the only two choices.
+>
+> The iouring stuff is trying to confuse the source of the pages with
+> the lifecycle - which is surely convenient, but is why Christoph is
+> opposing it.
+>
 
-My mental model is that the feature folks care about is the ability to
-use TCP with device memory, and dmabuf is an implementation detail
-that is the format that device memory is packaged in. Although not
-likely given this discussion, in theory we could want to extend devmem
-TCP to support p2pdma for nvme, or some other format if a new one
-arises in device drivers. I also think it's more obvious to an end
-user what 'devmem TCP' aims to do rather than 'dmabuf TCP' especially
-if the user is not a kernel developer familiar with dmabuf.
+Just curious: in Pavel's effort, io_uring - which is not a device - is
+trying to share memory with the page_pool, which is also not a device.
+And Pavel is being asked to wrap the memory in a dmabuf. Is dmabuf
+going to be the kernel's standard for any memory sharing between any 2
+components in the future, even when they're not devices? As in you
+expect dmabuf exporters which are not devices to be added to the
+kernel? Currently the only dmabuf exporter which is not a device
+(AFAIK) is udmabuf, which is used for testing and emulation, not
+really a production thing, I think.
 
 --=20
 Thanks,
