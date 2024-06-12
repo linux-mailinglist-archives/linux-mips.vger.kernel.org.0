@@ -1,167 +1,162 @@
-Return-Path: <linux-mips+bounces-3622-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3623-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 295839051D6
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 13:58:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97713905203
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 14:06:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B16A1C23858
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 11:58:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CAF82817E2
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 12:06:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE4F017CA1D;
-	Wed, 12 Jun 2024 11:57:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02C9616F820;
+	Wed, 12 Jun 2024 12:06:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="eVEegoCh";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="je75aGZ8"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="b+K+9yut"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 301B017C206;
-	Wed, 12 Jun 2024 11:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33B0416F281
+	for <linux-mips@vger.kernel.org>; Wed, 12 Jun 2024 12:06:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718193421; cv=none; b=iUPnvouXQSxhMwokEvnfdDLEt+awORFSvJtFA/GWYQo8m1Unpidwx2BY1xxQLnT7Nb66RWsTz/o6M4X1Cj02NyhpD0D2DHM8DeRsX9SpN0FOqPgPepB59tcOSD/ZXs4R0ajIA/HG22iFxJ6TlFuFJB3scGd3/he3R95492GpjH4=
+	t=1718193969; cv=none; b=JWilCRBPanKopaSspBzQiWoODhfuuST7sF4Qv50TwnPglpG2/uqwhrMwVygUUhkNb4kU2qYUg5/h0alRnoURCDU31wjaj09JarUZylJjQGwCGRps7/OPi8/2zUhGFE8Xw6U8lELbkpdsorqiFro80uEroGRMUjXSRQfJ00rZm7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718193421; c=relaxed/simple;
-	bh=FqYFcbHWrq35Q20DJGtu08zhvYZISHWayM6Dshw2k94=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=c/abcaj/jiy7hhHGuXD5PybXl98imC0qmstXV+aj0vnwDmVg9YDH87NtigjhEz50tskTP/NjdF68tFF4o99CC3nbWNGCYhCwaZZoKE+/OmpjlkydXjzG3iF12BMLsM+aB06tRB9Ze4gbSMCezOPYtZz83E/LQFKFUvnXWKvyz/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=eVEegoCh; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=je75aGZ8; arc=none smtp.client-ip=103.168.172.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 489DC13801C8;
-	Wed, 12 Jun 2024 07:56:59 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 12 Jun 2024 07:56:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1718193419;
-	 x=1718279819; bh=dEkQj1pEyhcYOVI2l79QHwfWgHUy/egfEwBVNSft4zY=; b=
-	eVEegoCh9hQ3BjI7EsYqCQmYZbFh923aoJxBynMKJ1FF84gJAN6Vn5MO1wKxAcZM
-	6UFOnRw799gE0KBlf5XruDPHFq0oW7fOjuXD0kAKovP3XmYadYUT6o2yA241sSwR
-	x4QaR5pB/uWCJTBeBMoiuATZLuMxklJgk8VPwGyIZY14dnpRRVO+5d+sSXrE1hFF
-	M7KramaojSfb9nUM1xNECiP56DAdhtXpOkgBVXjfpZEGyiaez446/tiF2W/DZ2Av
-	2hVYyut2I/VQcCagV3yYNsl3spbwgtN7kfB9+UpUZH7oGX8djeXCqVpJpoN7FmDA
-	8ADFNDadT5/z/+dCbDURSQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718193419; x=
-	1718279819; bh=dEkQj1pEyhcYOVI2l79QHwfWgHUy/egfEwBVNSft4zY=; b=j
-	e75aGZ8g09uTzmtYolyYKG+vG4Xx6SVJuw2Twy+f3wmw7ZkYfsMJuuyNTAJuIzcK
-	bKwxOPu9/04OOj+dQumSDQam2bNOZC7QXBc2j1nLbvJocv4IDpqjX/1WAbKbOkt1
-	91SAr0/UR2vvWJqWCQORpNmumTCoJ7PRXi7KRzAeKMVZPdnF+HUW2z2i37aAwwRM
-	H74TT5q3IFBwQAt52TcTczN2f5YNGB3x5rtEdGRqxkrvKCtH8LaA0EEJQjZzAqqd
-	kIrh69YyQ31xJCxtgm2QeAK3vQ1AEYckP5ilr/D5U2yA3X8O8j1pxjrBNWuYWWDI
-	kRUDw7pp7aLIgG0kSOvdQ==
-X-ME-Sender: <xms:C41pZr578lEHSs-Er_rny-SN-Fd2kOirScvHW8A4lImNu3_3Ol70Iw>
-    <xme:C41pZg6Aid7Ll5gCxICeketjH3oPzCXL9icuO29udYHKB9b6-cpfovjVYu_S2nEHe
-    7rp5qRwC7e3sxnmm6c>
-X-ME-Received: <xmr:C41pZidy4HE2meX_Cyzn-KDtxNnt6937Vw7c3Psxn04BFbLnuGtzk0E>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedugedggeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnheptdffudefteeijeeljedtvdekteduvedtkeetheefkeetkedu
-    tdetkefhfeeuffdvnecuffhomhgrihhnpeguvghvihgtvghtrhgvvgdrohhrghenucevlh
-    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdr
-    higrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:C41pZsIQ93Whj9XUPBXmSXFLns4TXlzcTdWu5uXwQnHLLqjjOiuUWA>
-    <xmx:C41pZvIyXB61Ve616igc6RCjsoUiv97wYLYemNMBr30jeOzM5ErRxQ>
-    <xmx:C41pZly5BRerneg_CjXjIY97leSgZpygeacWkAcyYgj90TJrvIVfEg>
-    <xmx:C41pZrIlZg0cx3RQzPkvIR7H5vidRzIKcAhEh8Ne-fcdNsjp0NTn3A>
-    <xmx:C41pZsBl3dPCIP0mhdZaU0wNjli3NOs9mYtdqT1JdpgPdE-OSTKjHlWy>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 12 Jun 2024 07:56:57 -0400 (EDT)
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Wed, 12 Jun 2024 12:56:27 +0100
-Subject: [PATCH v2 8/8] dt-bindings: mips: img: Add devices binding
+	s=arc-20240116; t=1718193969; c=relaxed/simple;
+	bh=654VBwTTZj6O5cwvd+Nmv/nVSh8Rktw+YZv2YfH5NqU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f4llldoQbKj8A/Dlst1rQf3tdiegOJmKV8eLTjrx5xE/f+S5L3uczlslHwKBYUct5Pct8tF18yfugwW051rf62KUF4ZTQKRP3fYcVCZfBZ9ptwxKkrCGZO1oVOC3o2wSfDMkbQV52zXZqu7QQ+YPfJR8cmA3nqKUOCNzoDOAYIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=b+K+9yut; arc=none smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4405304d062so28208081cf.1
+        for <linux-mips@vger.kernel.org>; Wed, 12 Jun 2024 05:06:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1718193967; x=1718798767; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=654VBwTTZj6O5cwvd+Nmv/nVSh8Rktw+YZv2YfH5NqU=;
+        b=b+K+9yutIZvL7EhYnDc9PCqyJQyg2rNZnBSM82DUh/mVjbpDQy0AjlTT1QxvPywdj1
+         5x3Bd9/ca2iYboUwAHk3ommKdZwLtidiIZFwneX47/uHtGfpvI9RYqChNL0+zSjfMHo1
+         eLjMobFz+Qu1oy3MVyvb4rEeOUKTLSjore47JD2UdH3oqgTIkXqhVcGm+UYAEnMiQ+T5
+         RK5UP92BF1rCkwKJet0x6kGN6ceBNfxoJL/qrz8UJcsTrQpKGIJJ91JIlvqFFjM3nnYj
+         7adAlrkKUSp2YwiQ+JcrIa0p91XG2fUzPI4njv/lY/djRSEZJX+zpmehJwwsBOi4fkfY
+         pCDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718193967; x=1718798767;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=654VBwTTZj6O5cwvd+Nmv/nVSh8Rktw+YZv2YfH5NqU=;
+        b=lII7eV9y+3ncMk3uHIaDl8LqZeoBDH18QMGDoAHIGqgoSjRTA+OMvpFA2hGjGKIExR
+         khoVfe6I9Jrf0Z/GQtani3I1BQLn1Q0FVZM/IFcaS36fko9p0O8w3cPGSCqlJ5fYQYnF
+         pNsjOO2RMiwG8iXBPMKHXmJ0vHzvqb3sRQPmthKbFpbDgxg1Q0gAHPZe0N8bpFm+bTID
+         UNOu3Sey79GLMdtQS8r7MIhfK1ZUVl0lVMJ7z2jXQRNyBOpTqSJqEoWR6WWZvMAooTl7
+         dx5/TZX1SY5Nz3pf50BqhdBS/hCyUJKUjSOBwVYe/XrUhCJuobybQaK3SuvfEgYsqpkm
+         ZxcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU+rC3TaER84TTcxtS81TYSBxaCGA5RY6V3SUj8PCKTW48fxjKVe3sk8UoFsSL+e3Bw6nZMmCn9h7pSzpB5SOQSX80925DjK7UVJA==
+X-Gm-Message-State: AOJu0YzBKlPfRrtrxgJVYKgpB4MMzxoOeAeSPxMOoQphntGpWUkWjZGV
+	pvXNN/Oq2sv66OBP0vm4cnqIEA0ihE6KiAyn2kgQb9I1i/5AS5lz/K/UQPlF3HY=
+X-Google-Smtp-Source: AGHT+IElu+dk9DZ7aij8c0y6F8TXy6i5LV0OSLpqQpTgGbv9PZ9NHP5JfFSWjv6MHZMgeDua9fHUGQ==
+X-Received: by 2002:a05:622a:30f:b0:440:5de2:2a03 with SMTP id d75a77b69052e-4415abae5a3mr13859041cf.1.1718193967008;
+        Wed, 12 Jun 2024 05:06:07 -0700 (PDT)
+Received: from ziepe.ca ([128.77.69.89])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-44152b1585bsm12849751cf.27.2024.06.12.05.06.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jun 2024 05:06:06 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1sHMjq-008UjB-Tl;
+	Wed, 12 Jun 2024 09:06:02 -0300
+Date: Wed, 12 Jun 2024 09:06:02 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Mina Almasry <almasrymina@google.com>
+Cc: Pavel Begunkov <asml.silence@gmail.com>,
+	David Ahern <dsahern@kernel.org>, David Wei <dw@davidwei.uk>,
+	Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Shailend Chand <shailend@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
+ custom page providers
+Message-ID: <20240612120602.GQ791043@ziepe.ca>
+References: <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com>
+ <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
+ <20240607145247.GG791043@ziepe.ca>
+ <45803740-442c-4298-b47e-2d87ae5a6012@davidwei.uk>
+ <54975459-7a5a-46ff-a9ae-dc16ceffbab4@gmail.com>
+ <20240610121625.GI791043@ziepe.ca>
+ <59443d14-1f1d-42bb-8be3-73e6e4a0b683@kernel.org>
+ <00c67cf0-2bf3-4eaf-b200-ffe00d91593b@gmail.com>
+ <20240610221500.GN791043@ziepe.ca>
+ <CAHS8izNRd=f=jHgrYKKfzgcU3JzkZA1NkZnbQM+hfYd8-0NyBQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240612-boston-syscon-v2-8-9f8e1a07fa63@flygoat.com>
-References: <20240612-boston-syscon-v2-0-9f8e1a07fa63@flygoat.com>
-In-Reply-To: <20240612-boston-syscon-v2-0-9f8e1a07fa63@flygoat.com>
-To: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Paul Burton <paulburton@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1356;
- i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=FqYFcbHWrq35Q20DJGtu08zhvYZISHWayM6Dshw2k94=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTMnj8/Loavfi4+j+PEhbtxpbUX1Voa69tFRW0OFZsnC
- TYEnNvQUcrCIMbFICumyBIioNS3ofHigusPsv7AzGFlAhnCwMUpABNxNGH4Z/XXyuLoeVtTG8vn
- jGVMP291TJtaM1/ubgTLlSbtGY88zRn+ac0oXZQjncK/NaZy0bPewFlKk4zSe4tj1s1T0izh81z
- IBgA=
-X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
- fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHS8izNRd=f=jHgrYKKfzgcU3JzkZA1NkZnbQM+hfYd8-0NyBQ@mail.gmail.com>
 
-Add devices binding for various Imagination Technologies
-MIPS based Platforms.
+On Tue, Jun 11, 2024 at 11:09:15AM -0700, Mina Almasry wrote:
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- .../devicetree/bindings/mips/img/devices.yaml      | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+> Just curious: in Pavel's effort, io_uring - which is not a device - is
+> trying to share memory with the page_pool, which is also not a device.
+> And Pavel is being asked to wrap the memory in a dmabuf. Is dmabuf
+> going to be the kernel's standard for any memory sharing between any 2
+> components in the future, even when they're not devices?
 
-diff --git a/Documentation/devicetree/bindings/mips/img/devices.yaml b/Documentation/devicetree/bindings/mips/img/devices.yaml
-new file mode 100644
-index 000000000000..460ca96577ad
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mips/img/devices.yaml
-@@ -0,0 +1,33 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mips/img/devices.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Imagination Technologies MIPS based Platforms
-+
-+maintainers:
-+  - Jiaxun Yang <jiaxun.yang@flygoat.com>
-+
-+properties:
-+  $nodename:
-+    const: '/'
-+  compatible:
-+    oneOf:
-+
-+      - description: IMG Boston
-+        const: img,boston
-+
-+      - description: IMG Marduk (Creator Ci40)
-+        items:
-+          - const: img,pistachio-marduk
-+          - const: img,pistachio
-+
-+      - description: Imagination University Program MIPSfpga
-+        items:
-+          - const: img,xilfpga
-+          - const: digilent,nexys4ddr
-+
-+additionalProperties: true
-+
-+...
+dmabuf is how we are refcounting non-struct page memory, there is
+nothing about it that says it has to be MMIO memory, or even that the
+memory doesn't have struct pages.
 
--- 
-2.43.0
+All it says is that the memory is alive according to dmabuf
+refcounting rules. And the importer obviously don't get to touch the
+underlying folios, if any.
 
+Jason
 
