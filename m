@@ -1,90 +1,89 @@
-Return-Path: <linux-mips+bounces-3606-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3607-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6B17904FA4
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 11:54:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9093E905015
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 12:09:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C1E028339C
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 09:54:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EB482822BE
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 10:09:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8233916EBE7;
-	Wed, 12 Jun 2024 09:53:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45C2916EBE1;
+	Wed, 12 Jun 2024 10:08:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="B8Tz9pui";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="aF3fLhvJ"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="vzMRfhY8";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jTlIT4pC"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout5-smtp.messagingengine.com (fout5-smtp.messagingengine.com [103.168.172.148])
+Received: from fhigh4-smtp.messagingengine.com (fhigh4-smtp.messagingengine.com [103.168.172.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C95616E87C;
-	Wed, 12 Jun 2024 09:53:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9052316E881;
+	Wed, 12 Jun 2024 10:08:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718186021; cv=none; b=Rp6zBzgzAftK8sAFEKscGCpIwcBTxyj5ZJzBYawYBKpZA4XeUPew1NGsObb/+5AerbOB/xO3R6NMb2dNSRy00WlzGyf7Gbkw5ziyDPsc0+7iSgUPpmlbdUcE0HwZzFpBaUJrYJTW4uwIXcXtD4OShoYc2d07pfGeh4HS7+KEOS8=
+	t=1718186938; cv=none; b=tERVmUqTp9lFbJBMnv+Pa5yMA7nTRgePhYy5oZ0sbYNbAsaHGujeT3IxXx10ozDwXVjRAHWUHvXqt+mqfdRW7sib+wt9SWKe+9PexTp75mKQ84HEeALO2VK/iIdJoviS764C1eaY8mQH+deBidDSxIlyld8a7YIPyhMTbUSVwkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718186021; c=relaxed/simple;
-	bh=NSrQU7oxV782OTF1pzPrNXGHVTnX0ocauyLrs3G9UWw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=F65hmWHQsfGf897GL33IIc3SxQQSAMPHEvlb58pRvttcE/zKKhKbTmSX7IlZShcOEkxW2TuRK7K16x7PdUf+WajaciBI+S29z6D5FLTZsvr0/zbqYr6vu+mkqkrTrNNjicT7rrwk6/ENm3FDY/xkmPZcASPFqb1H9S76Nlza3a4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=B8Tz9pui; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=aF3fLhvJ; arc=none smtp.client-ip=103.168.172.148
+	s=arc-20240116; t=1718186938; c=relaxed/simple;
+	bh=kDKnbPN2HdEb0ASZjrHmYSVseFvVUKnuH39mFiiBr68=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jS+v95moMPOJbQRv4Yck7aDN3x76VEs5bR0A5QO2J8dEjgPGo3Swj9jk4dfzvY/QpTFSuVV3ZpBylz//2GxWXmoQtHXdLU69lR8OsGAaGeSIYUFI2m5FXnoWirhUEJ2Rq1XNVLyL5dL7jaMSnPcOKGA4C5fxoyABWwsxlwF/kbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=vzMRfhY8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jTlIT4pC; arc=none smtp.client-ip=103.168.172.155
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 250B213801B6;
-	Wed, 12 Jun 2024 05:53:39 -0400 (EDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id B3A6411401D4;
+	Wed, 12 Jun 2024 06:08:55 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Wed, 12 Jun 2024 05:53:39 -0400
+  by compute4.internal (MEProxy); Wed, 12 Jun 2024 06:08:55 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1718186019;
-	 x=1718272419; bh=eTw/3uGoMaLNBc00Ig08jpj75W3u53E9jYmieBPTfWU=; b=
-	B8Tz9puigFIHyA4uL2uLeAZfR5lVpixa3qnlj0f8iVSo2xuQ6PyVq0U+eVdfdy0K
-	T6LFgIX7Xu93MmmogGKW04YQNo30yW4cvAgCE1311fWyNufwlndNLkZsaJO0PKrk
-	N6IaBDChMRC3PhZHxUsdOtIcQFMkvtYegfr69EHfKLDRr4bi/jqa4nfq2Cb22Fkx
-	XATiu+C0Lmug00xsoWhk2jUn78HCZrMT37wggG1tfR2zDErUnbKISOuTc62eliZQ
-	Fsu9KxTEWNrIgQXE3ZNj0ND4FXZQ+8QKmvV5KdCpi9deEIXDOzQHXGDlb9PhVelb
-	bv3P82pEa6CGx/O9lyG9MA==
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm2; t=1718186935; x=1718273335; bh=4N
+	V1RUD3ve28x6fczxn0+RvtHY141lPA7ObponZntjo=; b=vzMRfhY8ZbaxC34eaW
+	OUJ/XJKXR12u8+fg8LlsvPD89szTORzdYXxim8Xx4HkSMwjsmAVLONaZb+SzrXLr
+	Z40suefOzJupm5FfgydmPRj69XHsMfQ9P8KsHhB8enuy7NwNFIoovOZ1wBfHS9p9
+	hcYrjZ6A/P/OUr5phyStjefg6GB+phrwd2xGAKixVXekWupF71nMQvsVKxD4bHDJ
+	khKFzoKNrc4k0Fj39nZk9OcZG68P3DOZPD3RhRF2Mcf41ljUfz0v3w39lHSFKsC9
+	vL141PErK4HgIFnNNvuhQk99RRH3q6zGb3LqWMfwl9I52it414MapvyB1MWhfFGd
+	PHKA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718186019; x=
-	1718272419; bh=eTw/3uGoMaLNBc00Ig08jpj75W3u53E9jYmieBPTfWU=; b=a
-	F3fLhvJqW/Z7Erq9KoHi69WfmcZiFoRLrH47iSyzZ9USw8+xdHoTXB9yGNUED/Ur
-	yxyjtmUa/qj27URKoDAickrTmzEKVvz/4gUxHYYo3DVFhK/lsr+k4FMRd6oHCOMp
-	KuZMDkV4V5yk9JoeGW2HEGBHyEom/Aas/05oatWq4socA6hBFnk45hpTilX86prx
-	MPYZ7+ddM0ZVtF17b3NskroogylaHdxNWL5bqZ3dUd46CAHvVHVPVctdz3Yo2YNc
-	PD0FWfoPML6szVJoPc9J5cSmQjIRZcM97HFxTdvnLPV8DHm8Er/qB+1H6lnYJtmx
-	Qneq4Gx87ef9epqLu1Z2g==
-X-ME-Sender: <xms:InBpZlssg7QkE_g5N9CEIUe5Tqcyrn1H-13e2pDmZqMtzp5U213rHw>
-    <xme:InBpZufAjcuyZuDXJCbL-umv50h2V9p6xgjggbLouZ4X18sQUxPtapZZvbqix3jZ-
-    AUYaBwi-8J69Kkk0JI>
-X-ME-Received: <xmr:InBpZowE_yR0huv-pAXNBJeXofSOAo3rnTvgBiTTjKRQOOIzB7GlUuE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedugedgvddtucetufdoteggodetrfdotf
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; t=1718186935; x=1718273335; bh=4NV1RUD3ve28x
+	6fczxn0+RvtHY141lPA7ObponZntjo=; b=jTlIT4pCXhfMLcMJ/OvH8p+etmINn
+	9djp5coQBWDgWcjqlhJKm5ceG0LH6fKwYPjCDE4U2s4hfT5DwMs5vwrLmXvYCf2G
+	fLCP+rs7eh1F8CxoG032p96MHZWTHW1jBTHTi2r2emxf9GWiLMncRD5f60Wmncjt
+	ZFDKPPSAkncMhuOcYuSv1gJ65IQMbR/iLUb0refiQ2RYLSUwq9XeMKI6UE7AwLFt
+	7TmVTHIyWBj07gpaDWq6ECk1zc/+VOjucKoe4YdMbG/IkafiMi3d8EJP2Ji7N9VE
+	lbWYc/lSPX5rEBQKDRPbsAWrG9GY3sFr4knCYBFYPn7mHTC+VyOx3DOnA==
+X-ME-Sender: <xms:t3NpZqsX6vwlilyTVitDQD5Hf9ZxueORMmgFjc3FNvvmxTVxFHNm0g>
+    <xme:t3NpZvfRiWQhsQkPakQT2VJBQWsOttk4vNf5JkVvxDZs1QYnTu5tDm_0sNruHkMPv
+    jSh9elP2shIuFaV_LM>
+X-ME-Received: <xmr:t3NpZlyoZlqYg2Bz0l3cUW4vv6igXjCTo3-czPw_aeKdKXEloSowjrQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedugedgvdegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepvdekiefhfeevkeeuveetfeelffekgedugefhtdduudeghfeu
-    veegffegudekjeelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:InBpZsMjnry50j_-zi2NM2uQExsp-_4o9hlfWvqgOmgIUkSp4olo6g>
-    <xmx:I3BpZl8wfrH6sc84ZGFTSoqx7VUGn8Z1shcjVU8M3cwQw7tiog8U8Q>
-    <xmx:I3BpZsWOqmyt2PSJ0saV2WJm-67tFdewwSFZEp2BB6P7kbW8pS1fFA>
-    <xmx:I3BpZmdZHWchKWtZwGOPk5DS6rqXJyS6wMWysXS2DXwSRshgd6pW_w>
-    <xmx:I3BpZlxeUMDcoxkN4uSDMEVeBeUJ0ezvam7bCfvD52lz4su0Jv2LufGi>
+    cujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecuhfhrohhmpeflihgrgihu
+    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
+    ftrfgrthhtvghrnhepgfevffejteegjeeflefgkeetleekhfeugfegvdeuueejkeejteek
+    kedvfffffedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehf
+    lhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:t3NpZlPDq_r47ps23fCXNUlV_0LjvaGmTLdfaKT9MG-1m4bHji-3PQ>
+    <xmx:t3NpZq-AZlNIqzOOJpe8yNY1IBdAlCK0Gk2K8Aywo2flmZvgYUevew>
+    <xmx:t3NpZtWgfH5XJTLu6RthrfImfOBcpZdSOQa6ut1tuJLt0YxClxcRuA>
+    <xmx:t3NpZjdqiUCH036LvaceS3DtUZmdqGCEUxt0llGvP0gUe3tnSSE4gw>
+    <xmx:t3NpZr2cunn_r3xhveMz35WN8GTa0qUO93cKDAsJE5iZA2z9LxYG1Q4m>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 12 Jun 2024 05:53:38 -0400 (EDT)
+ 12 Jun 2024 06:08:54 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Wed, 12 Jun 2024 10:53:32 +0100
-Subject: [PATCH v2 4/4] MIPS: Select ARCH_HAVE_NMI_SAFE_CMPXCHG when
- possible
+Subject: [PATCH v2 0/6] MIPS: cm: Probe GCR address from devicetree
+Date: Wed, 12 Jun 2024 11:08:52 +0100
+Message-Id: <20240612-cm_probe-v2-0-a5b55440563c@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -93,45 +92,68 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240612-mips-llsc-v2-4-a42bd5562bdb@flygoat.com>
-References: <20240612-mips-llsc-v2-0-a42bd5562bdb@flygoat.com>
-In-Reply-To: <20240612-mips-llsc-v2-0-a42bd5562bdb@flygoat.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Jonas Gorski <jonas.gorski@gmail.com>, 
- "Maciej W. Rozycki" <macro@orcam.me.uk>, linux-mips@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
+X-B4-Tracking: v=1; b=H4sIALRzaWYC/0XM0QqCMBTG8VeRc91imzmtq94jJNw80wPpZJORy
+ N69JUSX/4+P3w4BPWGAW7GDx0iB3JxDngowYzcPyKjPDZLLC6+4YmZ6Lt5pZNwoVZtGq1JbyPf
+ Fo6X3QT3a3COF1fntkKP4rj+k/iNRMM6E6LXtq2tjS3O3r21w3Xo2boI2pfQBMi8ZqqIAAAA=
+To: Paul Burton <paulburton@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: Serge Semin <fancer.lancer@gmail.com>, linux-mips@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=635;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1491;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=NSrQU7oxV782OTF1pzPrNXGHVTnX0ocauyLrs3G9UWw=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTMAlmP7QHTs8w8JoU2PjhS4ayfIDfz4xHv5T4Xs7sUe
- 67evtPeUcrCIMbFICumyBIioNS3ofHigusPsv7AzGFlAhnCwMUpABPZVsbwzy7v9w6uKzPjpN/v
- P27M5mi+4rKHY+5enjJVG43WdIvt4owMkxn/hv7bqGjLerummSdQWWT9lMs9mueW739k1HH73Sx
- 3TgA=
+ bh=kDKnbPN2HdEb0ASZjrHmYSVseFvVUKnuH39mFiiBr68=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTM4m0saiFHVm7n7Naeo7y895vme2eH6VPOrt0gumNS0
+ owr53fd6ihlYRDjYpAVU2QJEVDq29B4ccH1B1l/YOawMoEMYeDiFICJZF1i+B9yYt/+aV7rzoaX
+ /dpe1b/t2FnznxvnrHm4VWGTxnPx+bN4GBnumFtOFVDedOrm1I0CS0xlrjn8z+pbOY/v63nJuo2
+ 3ergZAQ==
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-LLSC based CMPXCHG is safe for NMI.
+Hi all,
+
+This series enabled mips-cm code to probe GCR address from devicetree.
+
+This feature has been implemented in MIPS's out-of-tree kernel for
+a while, and MIPS's u-boot fork on boston will generate required
+"mti,mips-cm" node as well.
+
+Please review.
+Thanks
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Changes in v2:
+- Fix probe order on malta (Serge)
+- dt binding improvements (Conor)
+- Build warning fix
+- Link to v1: https://lore.kernel.org/r/20240507-cm_probe-v1-0-11dbfd598f3c@flygoat.com
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index e83036580a47..1bb274c50636 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -17,6 +17,7 @@ config MIPS
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UBSAN
- 	select ARCH_HAS_GCOV_PROFILE_ALL
-+	select ARCH_HAVE_NMI_SAFE_CMPXCHG if CPU_HAS_LLSC
- 	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_CMPXCHG_LOCKREF if 64BIT
+---
+Jiaxun Yang (6):
+      MIPS: generic: Do __dt_setup_arch in prom_init
+      MIPS: malta: Move SMP initialisation to device_tree_init
+      MIPS: cm: Prefix probe functions with __init
+      MIPS: Move mips_cm_probe after prom_init
+      dt-bindings: mips: Document mti,mips-cm
+      MIPS: cm: Probe GCR address from DeviceTree
 
+ .../devicetree/bindings/mips/mti,mips-cm.yaml      | 38 ++++++++++++
+ arch/mips/generic/init.c                           |  9 ++-
+ arch/mips/include/asm/mips-cm.h                    |  4 +-
+ arch/mips/kernel/mips-cm.c                         | 69 ++++++++++++++++++----
+ arch/mips/kernel/setup.c                           |  2 +-
+ arch/mips/mti-malta/malta-init.c                   |  8 ++-
+ 6 files changed, 111 insertions(+), 19 deletions(-)
+---
+base-commit: 2b84edefcad14934796fad37b16512b6a2ca467e
+change-id: 20240506-cm_probe-0c667c8b63bf
+
+Best regards,
 -- 
-2.43.0
+Jiaxun Yang <jiaxun.yang@flygoat.com>
 
 
