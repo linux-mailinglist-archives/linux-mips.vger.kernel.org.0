@@ -1,70 +1,70 @@
-Return-Path: <linux-mips+bounces-3615-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3616-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 837469051C1
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 13:57:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CCB69051C4
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 13:57:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EDB07284516
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 11:57:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B632A1F24AD5
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 11:57:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C4FB16F83E;
-	Wed, 12 Jun 2024 11:56:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E68D6170824;
+	Wed, 12 Jun 2024 11:56:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="qzsrfVye";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HN+rHjO8"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="KhzMx8Ow";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="cOBQ/Qpg"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh5-smtp.messagingengine.com (fhigh5-smtp.messagingengine.com [103.168.172.156])
+Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100D616F0EA;
-	Wed, 12 Jun 2024 11:56:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 696BE16F902;
+	Wed, 12 Jun 2024 11:56:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718193409; cv=none; b=jRF0dhhJca4R3R5Cu5/YY8tGDWTa79AHoeguw/m4RV3k4aZHJ3ua0bVeR240b8rxaOXHM6LAUiYxmbeYe8rtEZRVlmbnD+U8VYCFzYV++XX2L/VX11D4OmQgtXJpi2TS6T+orIspjXRo+AljYb6/oRzLCRrUJICJboRRgHsV0Ts=
+	t=1718193411; cv=none; b=T03Rf7kDQf/m1LyQn+f5F2EI0+j5MliVUP8BbDOrrOUVD972UAv9jLKLs3cHHV1/WK88VbVp/DYaepz8P/QCYy/jEIfgdtHGzv30Lw/RdYrXBasmZooXPRJlrhPwUy7NPTzfY5oVxW8cTUrRntHQT07XFUgkC3j/bfy4utTvdmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718193409; c=relaxed/simple;
-	bh=JSYhFbklJ21DX3+jgOTr/ABWpsu7gnUiobdTKgnr/SM=;
+	s=arc-20240116; t=1718193411; c=relaxed/simple;
+	bh=Ib5Em0TWqjbDBBwR7LvVG+z4BvQZifAL7Hccm1zm8U8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=G450KUudIU+zcvarAfeKC3ytCqz8xVEVLk2/jyXfKWFEVv9cxJAe4MNvL1lJ7zqe7dpi1v8WRRDu0FziY0TlezVJKYS3qvXOMVUq1zrgqxnbF3NV1WVUOiFMfhuadVvWcYSBboYohMxvPPu8ZA1hBYcmSr4g0xamBItZTFHf8m8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=qzsrfVye; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=HN+rHjO8; arc=none smtp.client-ip=103.168.172.156
+	 In-Reply-To:To:Cc; b=YIWIDUHDbQ0PGunTo8RLS/+3CxhsoKtLKPvIhZa3eR7n6RzuRBAlzVJd7/woshy+UjWi630hDneuA4UCsElG14mkEdhpnCP836q67oNA8LvucvidZ/bdZgwAR0gyYex6/dHInYW5QvrAfse5CUX5CXdTshEN3OpAXndF+rJdrIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=KhzMx8Ow; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=cOBQ/Qpg; arc=none smtp.client-ip=103.168.172.150
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 1CAFC11400E9;
-	Wed, 12 Jun 2024 07:56:47 -0400 (EDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 7C8E113801CF;
+	Wed, 12 Jun 2024 07:56:49 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Wed, 12 Jun 2024 07:56:47 -0400
+  by compute5.internal (MEProxy); Wed, 12 Jun 2024 07:56:49 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1718193407;
-	 x=1718279807; bh=rQGXV91xg3Znz8sXoHGgtxMKbP9vrLOi7qy3n72Y0Vg=; b=
-	qzsrfVye9IPKL00S918MbFJEHcwCZwbQKfPUMmTvEZBF/kkPHzUqefnEovcZFOc3
-	+ytwG/0feVtkt4Yr6a920CCVFiqFtQnAZ66c1TdT66+jIlOugJiUw2VVqDU7NYuj
-	0xYOfE1/qhVD8HOwWYgOlTqBkYySljTBmVpRXXNZyrIeUZDDViR40CMAU9TYAcbr
-	vC5XOuwZE21pElswQC6PVItdAnZ9WhlxAdkoRMVDhlUL9958DQs+azrv3bXyeo5q
-	LTGYysVFGMtlJq3OoaIXkd9HF/S7bSAjSrYGaKjZjfAaDmzrfmqbecLaj26M61+g
-	GcT5Eonzp2KeT2DOSeR+jg==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1718193409;
+	 x=1718279809; bh=643RtZuFZs3vORSN7HPuX8/BrfnT6frE7UnbpKjPr1I=; b=
+	KhzMx8OwQJOMEa9rDw8gzHRfBsle8DFbEwbors0/RwNCmdpSoIzOxrkDBBYgQxkc
+	kLYGh/fmtrzT03pO1SQhbg0IbC1l5OIp/ieLvUHyKTe81+zieLAlbLTniX2DStYG
+	smH7/LHYq+4Ih9OmuaePDKWuD3fxLRHJJlS4QppyseiKkCY3TSZd2yZ2YI0RSh4q
+	zVutc6u/xi4t2PEVz3e1b25VxVa7Pthl8+ehzP8wUQ+2gXwsabXB32fy9G8he0jH
+	oJ6XUhAb7LSrjoywHfdrynV85L6PIxi67UxaxctoxA6FKLXNWM3BYMMm5Hr4fwcl
+	xoD/zcGpgGIkQhRZdmwWbQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718193407; x=
-	1718279807; bh=rQGXV91xg3Znz8sXoHGgtxMKbP9vrLOi7qy3n72Y0Vg=; b=H
-	N+rHjO8TSLMu1CCGPCRDojO7RkfSEx3L7Nhh3Zp3inXyU8wDPPCs1NRLIvinmja5
-	p1j/JeE0U8Sz140Cc3ehfmIAtUGfr55VMt0bgpY4ejP19OwmGXxM37SSakL8cXTz
-	mVZQGSlWT9/O4dXKsHwn9K6iGeyxD7ZMsMAcZWfV8qeKUKMPCyjD0z8nm8V1As4v
-	/7Z6Y8B2MKgVcno3OB0z7WlIg1+ngo/KjGUAMgiQ2/7IUQhvE691Tzmusflapglb
-	ID+rNCHAHGZTRIb9Q0NPcB7OQuy0i7BsmRrwmqVwsYtfgLh55sYEsn4PEe+Cl8Rn
-	kiiUFgkejK89ExoueXBnA==
-X-ME-Sender: <xms:_oxpZn4WxXY4AknG8TtZRFQGXkZFtOKon1cYOZaWzcDKzyMKEGKEuA>
-    <xme:_oxpZs7jPex9B_azY4oGLWPJ4jKR7BpNdy8LTjbv51qKC-iYgWrO-qNzvsQ-WSO-B
-    jdYFrdNXJCKJbJmvx4>
-X-ME-Received: <xmr:_oxpZudqTc7nl2GIGzUi6fFo4hpWgx5OPHWT1Y2QdpJr79m17jZpC-E>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718193409; x=
+	1718279809; bh=643RtZuFZs3vORSN7HPuX8/BrfnT6frE7UnbpKjPr1I=; b=c
+	OBQ/Qpgi65R/AetRuJg13lEkP8fFfsb6uh5KDjNGkwxC9lMqrPMQzZJl8TBe7qad
+	z7kuEYu2tHKy1a+IdtiRtL0QuUKbh3mKp4SsBBLMCkXHE7b8iBlE1n6UCqoJIZie
+	/yeR30RCtzoy3aFUI/ZwpXlsNTF96q/Zn221ojE+dMus0+skqeZZLVcAnyKbIlbA
+	HhDnPeTggFAGLb5wVdL0tnfhRpLmVlOuMycLyf5Fpg4y+wnjW0mREtfq2NemmIXH
+	tr/AzuopYWXBH0BtNKdRWB9woQp/et+4QAFG9eprjiSdDG3m6Z4S2o4zO8PTXZsX
+	OMwfm6D11m7BPztZatw3g==
+X-ME-Sender: <xms:AI1pZn_yeLr7JmKktEH_JzveYQjhwH45pcRPsNUE7W7UyQHcxaeOyQ>
+    <xme:AI1pZjt2ZwZmOL21OFFT11RAUnXrWXcG7apQi-v8DMPESAFF0iJIk0zz2wxEYqGwM
+    30Y1XHkCOW3z252eiQ>
+X-ME-Received: <xmr:AI1pZlCxCs4MyJ0b_PMzC2eWZ6pe0-R-nRK-eTvGfBc4sCNTyzWsW4U>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedugedggeehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -73,17 +73,17 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedugedggeehucetufdoteggod
     cuggftrfgrthhtvghrnhepvdekiefhfeevkeeuveetfeelffekgedugefhtdduudeghfeu
     veegffegudekjeelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
     hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:_oxpZoJ62YiR0n-saT86wfDl1IkLAXXNnGaR_y-x9JFtrELvsxg0KQ>
-    <xmx:_oxpZrK5xZD_nf6qw_Uo-C9iGtznCBXt3BNSzbHo9CXdwF-x04-EvQ>
-    <xmx:_oxpZhyZBFbVBOxu8zn3NwerPhCABJTEJyQyq6DEYd0oWZEsCS7OUQ>
-    <xmx:_oxpZnLq8aH6AZ6-v7ztifzW4WRWx5bwIO2Zgt7eFuJYw7StHmBu_w>
-    <xmx:_4xpZoActsKyL9n6XRdNZVEgTrogFLUeD1bevmldQnwnxBAKVFZLMD0e>
+X-ME-Proxy: <xmx:AI1pZjfLfnDjEaqQIT83uuNVy-YHJe3OzBLqqChlEzccIaVOhJmN8g>
+    <xmx:AI1pZsO0hxVpPT2aVAcEuD6hEe4kNsNmJ7GBlzW3MaTLrDv7wARAgg>
+    <xmx:AI1pZlnF2VW0vtKO_0X4EaQgXmVpS36rt8XTz6SjE9MUCFX11o1s7A>
+    <xmx:AI1pZmuOsMOKhqbaUOfwI0VyVJBeiAna_cEHPamJaNlTtLf82YNnew>
+    <xmx:AY1pZtH9oB9mpjgVjPVXwjCr33dAw8rzB66mOWwem4HzApg7uogj_f2p>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 12 Jun 2024 07:56:45 -0400 (EDT)
+ 12 Jun 2024 07:56:47 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Wed, 12 Jun 2024 12:56:20 +0100
-Subject: [PATCH v2 1/8] MIPS: dts: Boston: Add simple-mfd compatible for
+Date: Wed, 12 Jun 2024 12:56:21 +0100
+Subject: [PATCH v2 2/8] MIPS: dts: Boston: Move syscon-reboot node under
  syscon
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -93,7 +93,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240612-boston-syscon-v2-1-9f8e1a07fa63@flygoat.com>
+Message-Id: <20240612-boston-syscon-v2-2-9f8e1a07fa63@flygoat.com>
 References: <20240612-boston-syscon-v2-0-9f8e1a07fa63@flygoat.com>
 In-Reply-To: <20240612-boston-syscon-v2-0-9f8e1a07fa63@flygoat.com>
 To: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -103,37 +103,47 @@ To: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=765;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=850;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=JSYhFbklJ21DX3+jgOTr/ABWpsu7gnUiobdTKgnr/SM=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTMnj97Q53cvx4IWHQmqWRdql+cMOv/54GicgoaTNVKf
- dfPnvrcUcrCIMbFICumyBIioNS3ofHigusPsv7AzGFlAhnCwMUpABO5c4/hf4aO14HmUMXlHMJ5
- O1y/hpi5+PQEz5ueyf19whn2pr1nBRgZ5nmWqikZm9fqabVMfxLQvf3hDB5JDeX+V6Efnjz8Nfs
- fLwA=
+ bh=Ib5Em0TWqjbDBBwR7LvVG+z4BvQZifAL7Hccm1zm8U8=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTMnj++u07OrdlsueGv8Lddtsvy54euXlblq7SRv+xCc
+ 2ebYuzJjlIWBjEuBlkxRZYQAaW+DY0XF1x/kPUHZg4rE8gQBi5OAZhI1i+G/1Fe26yyLpg8Oal4
+ qcrt0ecKJZek1LwUtmUrdujO/RKwQZ2R4djT1vMW6Qct5gp9tUp9/EPu+hVDATl1m7+KJ+b1x96
+ VYAUA
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-We certainly want subnodes of system-controller node to
-be populated, add simple-mfd compatible to make that happen.
+To match actual hardware topology.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/boot/dts/img/boston.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/boot/dts/img/boston.dts | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/arch/mips/boot/dts/img/boston.dts b/arch/mips/boot/dts/img/boston.dts
-index 72f7605d2e31..f7a2c46f1eb8 100644
+index f7a2c46f1eb8..7379be7d46e1 100644
 --- a/arch/mips/boot/dts/img/boston.dts
 +++ b/arch/mips/boot/dts/img/boston.dts
-@@ -203,7 +203,7 @@ cpc@16200000 {
+@@ -210,13 +210,13 @@ clk_boston: clock {
+ 			compatible = "img,boston-clock";
+ 			#clock-cells = <1>;
+ 		};
+-	};
+ 
+-	reboot: syscon-reboot {
+-		compatible = "syscon-reboot";
+-		regmap = <&plat_regs>;
+-		offset = <0x10>;
+-		mask = <0x10>;
++		reboot: syscon-reboot {
++			compatible = "syscon-reboot";
++			regmap = <&plat_regs>;
++			offset = <0x10>;
++			mask = <0x10>;
++		};
  	};
  
- 	plat_regs: system-controller@17ffd000 {
--		compatible = "img,boston-platform-regs", "syscon";
-+		compatible = "img,boston-platform-regs", "syscon", "simple-mfd";
- 		reg = <0x17ffd000 0x1000>;
- 
- 		clk_boston: clock {
+ 	uart0: uart@17ffe000 {
 
 -- 
 2.43.0
