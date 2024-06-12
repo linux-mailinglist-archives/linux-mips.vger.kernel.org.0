@@ -1,89 +1,89 @@
-Return-Path: <linux-mips+bounces-3602-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3603-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2166904F9C
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 11:53:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B283904F9E
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 11:53:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A7771F2575B
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 09:53:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6226A1C232F7
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 09:53:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1363E16DEB7;
-	Wed, 12 Jun 2024 09:53:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AF5C16DED5;
+	Wed, 12 Jun 2024 09:53:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="2fiUFocI";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Z2sSrXNB"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="kpghKClB";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="N8V0OcSj"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout5-smtp.messagingengine.com (fout5-smtp.messagingengine.com [103.168.172.148])
+Received: from fhigh4-smtp.messagingengine.com (fhigh4-smtp.messagingengine.com [103.168.172.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C314A34;
-	Wed, 12 Jun 2024 09:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83F0116D9AD;
+	Wed, 12 Jun 2024 09:53:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718186017; cv=none; b=R6J8u4mZQFjO3VsZtP6KRb5jxBVngsPnQEhuIwlZ4w+Q1Xq7/X837YqOSf0Ej3slHy/k1JRnMCdTV22adSGu/kW5v7MByOMIajc4XkBbrYxzhHMa6TuIeiuZ8qEmb3YldM+tRMg5+HD6JuHWNPaBEMWhsEz5X15rbhm+1tjJFBA=
+	t=1718186018; cv=none; b=aCnjqUMSgncAMrhccxrjI3ZpKu6FmFr4T9W73yWAY98xr2KWq96auSVvhBRuxC3Np3tBTfj2LuS33x/grajHp8zw8oJp+PTF5vXfqc3hQaYzKakeSUMwqcu86Mv0TOJOIPPwFfFhd7dLNgsFORPjov64q0ri3u5kIkDgO2ItST8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718186017; c=relaxed/simple;
-	bh=LTt8Soc7AMOTMEDD18dBhsJ9SMhm26/CHqO5qzg9vxg=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=qDJTixV4UWKuEqdazdTVQk6sWnbz7MzqbIjjNxixibz9jtgSk27grbU4oyt58LqyazV8eHgEtACNKnskg8f16KiSVrogwyTxK/UuMNVM1irToDI+cQjJc+OoyhYu2UtnFSfQCXoBlSg5RrB1boIUtdLJvfquw36L44G8SmlfnyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=2fiUFocI; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Z2sSrXNB; arc=none smtp.client-ip=103.168.172.148
+	s=arc-20240116; t=1718186018; c=relaxed/simple;
+	bh=9nYC1z3pwGvu5sxqw2LkoGhWr5mHdSDkIDT42XnAyFA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Ls/JS5LHYd4Hv9/KtJDI2CXbbpj9o6Ib2ThCclUfe5XuhEFGy97kIzUd8iCk6cPMuRnDmuw4K2jd1lDRySXlbaDnSYL4zRwEYQhZdLfzxaIVWHHBrY+eMt/Vyp1vgWg2vNRdPNfgYdJDxZ/fOBVSD82qWqtAlkV5caeOxvoEFmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=kpghKClB; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=N8V0OcSj; arc=none smtp.client-ip=103.168.172.155
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 6024F13801AD;
-	Wed, 12 Jun 2024 05:53:34 -0400 (EDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id 9377A11400DD;
+	Wed, 12 Jun 2024 05:53:35 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Wed, 12 Jun 2024 05:53:34 -0400
+  by compute5.internal (MEProxy); Wed, 12 Jun 2024 05:53:35 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm2; t=1718186014; x=1718272414; bh=cQ
-	HyV8JnUmrwi4UXdpt8Fz/R++EiBrxTEeAiMYKquj4=; b=2fiUFocIm6MKx+iF7U
-	jcwIxKirHmAxbKf4f462HEQF/WZG5ptIMOveFcjFcA+88chcrP8Qqo0jY67KN2w1
-	ayxJKmHc18C14Q3RxP8Z0vNXTomefa6+M0ewJNVfHDuPyebmPDjj1qqxG7nJCMgu
-	Aji9UOmTSmmnpwfhQpGE5v4/by7ySXAELYIo1UpOGJ8Lk3oKVQ40TvNKYBrwg9Cq
-	4FJKVljEqOZb8enG93yxtiaQ5NqaBh7PpX5ONM4qKlZMtWXV4EKUNcVZs8JqvMwx
-	OVEz2Q/p3SIqM+SFajcv+kQRJ/1DWrCkObXecVo10I7XZnj5T7UW8EtmbM2Tx6Dm
-	vctg==
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1718186015;
+	 x=1718272415; bh=Lio36dveHM/2JUJ658p4iwLNmnULKJaqe7pYTyb44Xw=; b=
+	kpghKClB6sXWt6zH0RE64hpyegoeNjXuxx5UTlD4mwQ/AUktktDMjDeAn4d1//sy
+	vqfN5sSbFnMc2QDIe9cZbdNRRqCtSb+DczkN3NcLr2Ib0fds6E4lzrZSdiwf7le4
+	Mtu/1TJcnqJ++76erynH5uYRU1GvX95m5Qmje2Wx2twUlvJrISpwbkCAQLkOW7mn
+	p25aB9SMiLs+eBY6a+EVTxkdur8pJ8+7o3GBLoAV6soR2ygoaJbbjPFLJ6EA+NMQ
+	qngbwdAuyx+6j8tt4kdV8M+nN4LS+FzSw7uUG85evKsRTs7S4BnY/D8+YmwYBd53
+	BKXTlI1bdiieIDWnoTqcDg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1718186014; x=1718272414; bh=cQHyV8JnUmrwi
-	4UXdpt8Fz/R++EiBrxTEeAiMYKquj4=; b=Z2sSrXNBsuaYRfKGSVKKsSjsZx3WB
-	PZwAerV1qVa+BVcXyjihKi+Qz19KsnL2kvLdTQqu1Mr+rBS6oSkNdG8DFlf4bd/9
-	DBTYP8+i+D4E/j0OT6Z8GDVf/tbmnUuOJKFVUiR52Kxo4GDGs5S7tYAvaxk+f16D
-	WO+2E1nUBX196O0U23QReRuzDVbDp4cYtf1bPCqiDRLRXSuC16tbQ1LX4PD7DExW
-	79GrshaFx/HPY0VppOpjzKOru/jcKGecJy21GU9ZRJeo/0mYOJ9Nhrb6zW4/Mrwt
-	TBaRWPHe97w3zyljQEcoBuKk6ARr7JbJkd6fsEB/DCYrUeNUpIE3jAXag==
-X-ME-Sender: <xms:HnBpZny0AhU4fDHMQUapMGuPl1Vpd0Gg8Z_21aiiNvFjlX0ybD1hMQ>
-    <xme:HnBpZvRclJKkEGdNfUF8FbS2F2NiAkMKde7tz5mWPaGZap3_fzpzDeU7lJEtV3_Is
-    kt7eTCn6C7IDssoccE>
-X-ME-Received: <xmr:HnBpZhUk__SU2x7HTQd69lKjlc55xecfEX5NTYKJ0k7rF52P96ZLm6k>
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718186015; x=
+	1718272415; bh=Lio36dveHM/2JUJ658p4iwLNmnULKJaqe7pYTyb44Xw=; b=N
+	8V0OcSjWY+JW7o6wrJSo4U2J1Mh4sNJsTUHQJ7N5c0QKW+akDWO/IiRvf9EvNuw/
+	C5zGsr2GevzF3M83i5zPYNAKxkztF+22tpFf9wYdz4vRwelBTZxe6EAztBIL2/ep
+	wbhx3rE8CM82dDaqe0wjwQGdSWRum+4eh82gZ21NVLvB3vH702/L+yAZ96X2l92b
+	pJWanfp/eQUdzMG7S+s2zpYYf/mJ35KU1mTHTrKXU6pEnAk0KHrMdAnC7XLfcko3
+	2MbpNPs7Zr9WQEV+iKNvsZ0/78s2NGvm1F+W0zMp+uk5cn9K03xM+jrHjN/6a0lE
+	GfC1uYYwsLh5KyuYJ6D7w==
+X-ME-Sender: <xms:H3BpZi6yr8QUYpJodQLJVHDNVBBAoJNcQDxYqJENX_LyxpDu2KCbZA>
+    <xme:H3BpZr5NQgdun9a8B6ij7CS1NujKqoaQ-I_ni7aZss5jq1zdeI_C-2K_Av9ORd-0l
+    89wkaqXUNlFAMzlU2E>
+X-ME-Received: <xmr:H3BpZhcmnA8tvEvv84QFuVB9FCXtlsUd4ALmbGKuN3CunGNtozb_6S0>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedugedgvddtucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecuhfhrohhmpeflihgrgihu
-    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
-    ftrfgrthhtvghrnhepgfevffejteegjeeflefgkeetleekhfeugfegvdeuueejkeejteek
-    kedvfffffedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehf
-    lhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:HnBpZhinTEmeaLEsNce0wYZajqDZfp2RCRzXy0hxCtO0fi-OVZ-FRg>
-    <xmx:HnBpZpB5Jir4bWZ324tkTFHTq-toBlxQTqFenn_m6NCh1gYTcGpjOA>
-    <xmx:HnBpZqK-P_URGWTLymsmBjaT7RnbPcV6vx-vueemfKyMtg4eRwgBVg>
-    <xmx:HnBpZoBIX11wl-b3btcgj7Qpgrhl9BqsmH9Y-4oGsYSnUBvC0fJshw>
-    <xmx:HnBpZr0wtk7dixymJTeyZE4Qaa-v5vvdHjyWRCGkgWJS1h4s-vGqAqkj>
+    cujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepvdekiefhfeevkeeuveetfeelffekgedugefhtdduudeghfeu
+    veegffegudekjeelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:H3BpZvJNzENWOxGeM9vKexeh6kSwBdyIkI83qgLJHWX8AeR3CrTPHw>
+    <xmx:H3BpZmJgYF8EUkFg6ACLEXFzBJxKsrOMUHYrs1hVCgpVF-NM0X7W2g>
+    <xmx:H3BpZgyy34mY_yOJIw1bvVG4lCC8Nq7xo4w9Qlrw-iF-6LoQa7-zPg>
+    <xmx:H3BpZqIo46t4gGKCXvSTTacBnzUuHdjPjN_XxV9Iqpen7uqJma7GfQ>
+    <xmx:H3BpZu_-Rfi9Bn3YbGA4qaTBkirT2Z4j7IatXJuuV8BOiXKAelGbxGRk>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 12 Jun 2024 05:53:33 -0400 (EDT)
+ 12 Jun 2024 05:53:34 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v2 0/4] MIPS: Enable ARCH_SUPPORTS_ATOMIC_RMW
-Date: Wed, 12 Jun 2024 10:53:28 +0100
-Message-Id: <20240612-mips-llsc-v2-0-a42bd5562bdb@flygoat.com>
+Date: Wed, 12 Jun 2024 10:53:29 +0100
+Subject: [PATCH v2 1/4] MIPS: Introduce WAR_4KC_LLSC config option
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -92,57 +92,123 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIABhwaWYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyjHQUlJIzE
- vPSU3UzU4B8JSMDIxMDM0Mj3dzMgmLdnJziZF3DNKO0JEtDM8tkgyQloPqCotS0zAqwWdGxtbU
- Aw19DZFsAAAA=
+Message-Id: <20240612-mips-llsc-v2-1-a42bd5562bdb@flygoat.com>
+References: <20240612-mips-llsc-v2-0-a42bd5562bdb@flygoat.com>
+In-Reply-To: <20240612-mips-llsc-v2-0-a42bd5562bdb@flygoat.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: Jonas Gorski <jonas.gorski@gmail.com>, 
  "Maciej W. Rozycki" <macro@orcam.me.uk>, linux-mips@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1184;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3467;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=LTt8Soc7AMOTMEDD18dBhsJ9SMhm26/CHqO5qzg9vxg=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTMAlnmuji3CdNlnhk5T1u/N7V3oWP9sm/hQdneDZ+N7
- vkfvbWho5SFQYyLQVZMkSVEQKlvQ+PFBdcfZP2BmcPKBDKEgYtTACaik83wP7osJ/WSmOusjxcY
- OlRWf9239rnC6dPZ5VO2Fal8nSgx9xYjw/8v6k8id9VYPFHudT/8Ye692e6vt6eWBGmkMomdD7q
- pyAMA
+ bh=9nYC1z3pwGvu5sxqw2LkoGhWr5mHdSDkIDT42XnAyFA=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTMAtl2hkK5Oz9Ub3t7d035+7b+ewJDo+M8Yd/e+79Uh
+ Y5OWr+6o5SFQYyLQVZMkSVEQKlvQ+PFBdcfZP2BmcPKBDKEgYtTACYSsI/hf80GYQ37NzsMljju
+ 9QkQ+2Xz79DV4iM7BGav5T/64bmqwxVGhs4kJ+v9O7zfHVMW5Zl9mP+Usul2wSmRZtdncAR6rb1
+ 9lBcA
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-Hi all,
+WAR_4KC_LLSC is used to control workaround of 4KC LLSC issue
+that affects 4Kc up to version 0.9.
 
-This series enables ARCH_SUPPORTS_ATOMIC_RMW for MIPS.
-The first two patches are for making LLSC availability information
-available to Kconfig, and the last two select actual options.
-
-Please review.
-
-v1: https://lore.kernel.org/all/20230519164753.72065-1-jiaxun.yang@flygoat.com/
-
-Thanks
-- Jiaxun
+Early ath25 chips are known to be affected.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
-Jiaxun Yang (4):
-      MIPS: Introduce WAR_4KC_LLSC config option
-      MIPS: Introduce config options for LLSC availability
-      MIPS: Select ARCH_SUPPORTS_ATOMIC_RMW when possible
-      MIPS: Select ARCH_HAVE_NMI_SAFE_CMPXCHG when possible
-
- arch/mips/Kconfig                                  | 28 ++++++++++++++++++++++
- arch/mips/include/asm/cpu-features.h               |  9 ++++++-
- arch/mips/include/asm/cpu.h                        |  1 +
- .../include/asm/mach-ath25/cpu-feature-overrides.h |  6 ++---
- arch/mips/kernel/cpu-probe.c                       |  9 +++++++
- 5 files changed, 48 insertions(+), 5 deletions(-)
+v2:
+- Improve error message, taint kernel on error
+- Don't override cpu_has_llsc if WAR_4KC_LLSC is not selected,
+  cpu-probe logic can handle it, there is no need to mess around
+  ifdef as suggested in previous review comments as WAR_4KC_LLSC
+  is gated by SOC_AR5312.
 ---
-base-commit: 03d44168cbd7fc57d5de56a3730427db758fc7f6
-change-id: 20240612-mips-llsc-1f2fb9169c0b
+ arch/mips/Kconfig                                        | 6 ++++++
+ arch/mips/include/asm/cpu.h                              | 1 +
+ arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h | 6 ++----
+ arch/mips/kernel/cpu-probe.c                             | 9 +++++++++
+ 4 files changed, 18 insertions(+), 4 deletions(-)
 
-Best regards,
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 1236ea122061..8ac467c1f9c8 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -221,6 +221,7 @@ config ATH25
+ 	select SYS_SUPPORTS_BIG_ENDIAN
+ 	select SYS_SUPPORTS_32BIT_KERNEL
+ 	select SYS_HAS_EARLY_PRINTK
++	select WAR_4KC_LLSC if SOC_AR5312
+ 	help
+ 	  Support for Atheros AR231x and Atheros AR531x based boards
+ 
+@@ -2543,6 +2544,11 @@ config WAR_ICACHE_REFILLS
+ config WAR_R10000_LLSC
+ 	bool
+ 
++# On 4Kc up to version 0.9 (PRID_REV < 1) there is a bug that may cause llsc
++# sequences to deadlock.
++config WAR_4KC_LLSC
++	bool
++
+ # 34K core erratum: "Problems Executing the TLBR Instruction"
+ config WAR_MIPS34K_MISSED_ITLB
+ 	bool
+diff --git a/arch/mips/include/asm/cpu.h b/arch/mips/include/asm/cpu.h
+index ecb9854cb432..84bb1931a8b4 100644
+--- a/arch/mips/include/asm/cpu.h
++++ b/arch/mips/include/asm/cpu.h
+@@ -247,6 +247,7 @@
+ #define PRID_REV_VR4122			0x0070
+ #define PRID_REV_VR4181A		0x0070	/* Same as VR4122 */
+ #define PRID_REV_VR4130			0x0080
++#define PRID_REV_4KC_V1_0		0x0001
+ #define PRID_REV_34K_V1_0_2		0x0022
+ #define PRID_REV_LOONGSON1B		0x0020
+ #define PRID_REV_LOONGSON1C		0x0020	/* Same as Loongson-1B */
+diff --git a/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h b/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h
+index ec3604c44ef2..4cf3d1ffba1a 100644
+--- a/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h
++++ b/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h
+@@ -24,14 +24,12 @@
+ #define cpu_has_counter			1
+ #define cpu_has_ejtag			1
+ 
+-#if !defined(CONFIG_SOC_AR5312)
+-#  define cpu_has_llsc			1
+-#else
+ /*
+  * The MIPS 4Kc V0.9 core in the AR5312/AR2312 have problems with the
+  * ll/sc instructions.
+  */
+-#  define cpu_has_llsc			0
++#if !defined(WAR_4KC_LLSC)
++#  define cpu_has_llsc			1
+ #endif
+ 
+ #define cpu_has_mips16			0
+diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+index bda7f193baab..ff2905f59f2a 100644
+--- a/arch/mips/kernel/cpu-probe.c
++++ b/arch/mips/kernel/cpu-probe.c
+@@ -152,6 +152,15 @@ static inline void check_errata(void)
+ 	struct cpuinfo_mips *c = &current_cpu_data;
+ 
+ 	switch (current_cpu_type()) {
++	case CPU_4KC:
++		if ((c->processor_id & PRID_REV_MASK) < PRID_REV_4KC_V1_0) {
++			c->options &= ~MIPS_CPU_LLSC;
++			if (cpu_has_llsc) {
++				pr_crit("CPU has LLSC erratum, but cpu_has_llsc is force enabled!\n");
++				add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
++			}
++		}
++		break;
+ 	case CPU_34K:
+ 		/*
+ 		 * Erratum "RPS May Cause Incorrect Instruction Execution"
+
 -- 
-Jiaxun Yang <jiaxun.yang@flygoat.com>
+2.43.0
 
 
