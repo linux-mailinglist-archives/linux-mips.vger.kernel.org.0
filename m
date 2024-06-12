@@ -1,71 +1,71 @@
-Return-Path: <linux-mips+bounces-3616-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3617-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CCB69051C4
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 13:57:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A284B9051C7
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 13:57:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B632A1F24AD5
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 11:57:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54689289555
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 11:57:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E68D6170824;
-	Wed, 12 Jun 2024 11:56:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76C0517164E;
+	Wed, 12 Jun 2024 11:56:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="KhzMx8Ow";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="cOBQ/Qpg"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="Hut9KdXL";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="h9ViVlEE"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
+Received: from fhigh5-smtp.messagingengine.com (fhigh5-smtp.messagingengine.com [103.168.172.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 696BE16F902;
-	Wed, 12 Jun 2024 11:56:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F332E17082B;
+	Wed, 12 Jun 2024 11:56:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718193411; cv=none; b=T03Rf7kDQf/m1LyQn+f5F2EI0+j5MliVUP8BbDOrrOUVD972UAv9jLKLs3cHHV1/WK88VbVp/DYaepz8P/QCYy/jEIfgdtHGzv30Lw/RdYrXBasmZooXPRJlrhPwUy7NPTzfY5oVxW8cTUrRntHQT07XFUgkC3j/bfy4utTvdmU=
+	t=1718193413; cv=none; b=lX767GH26uywblDl+KZS1JqRp1oeeXwkNFcJApEjD6SrvNdzE40ZlHY/zzcsSnLo4SzZbF6kz764vLnWmK9MgRlYKj6FxS5FlqjRgk9d8BxMpBtn4LbkIs4uxU2cawtx/5DTU9crMQNWAwIxv2VDc4I4cQ6l0RCvpPbpTkbh9Sg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718193411; c=relaxed/simple;
-	bh=Ib5Em0TWqjbDBBwR7LvVG+z4BvQZifAL7Hccm1zm8U8=;
+	s=arc-20240116; t=1718193413; c=relaxed/simple;
+	bh=ucNOokm+BqbipXH3f1pK/co5d8rHxuTfKigD8DzLXwk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YIWIDUHDbQ0PGunTo8RLS/+3CxhsoKtLKPvIhZa3eR7n6RzuRBAlzVJd7/woshy+UjWi630hDneuA4UCsElG14mkEdhpnCP836q67oNA8LvucvidZ/bdZgwAR0gyYex6/dHInYW5QvrAfse5CUX5CXdTshEN3OpAXndF+rJdrIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=KhzMx8Ow; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=cOBQ/Qpg; arc=none smtp.client-ip=103.168.172.150
+	 In-Reply-To:To:Cc; b=bQYjhTOpm/8alCO6kdeo+0G3xkr7kVWPlqeCDLmbmvRkWxkJeF5Sk+Vu/z9bddWMDdks2+w8w1g6sgYjN0A55S+EzXcaNEY2lQQLuChDKIfDJ50x2uIHwWPS+pa3+DkO8cRLitjTLg1Y6tVf4TEPEsypVimIsj+S4rf6fEyguBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=Hut9KdXL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=h9ViVlEE; arc=none smtp.client-ip=103.168.172.156
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 7C8E113801CF;
-	Wed, 12 Jun 2024 07:56:49 -0400 (EDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id 140D61140116;
+	Wed, 12 Jun 2024 07:56:51 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 12 Jun 2024 07:56:49 -0400
+  by compute1.internal (MEProxy); Wed, 12 Jun 2024 07:56:51 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1718193409;
-	 x=1718279809; bh=643RtZuFZs3vORSN7HPuX8/BrfnT6frE7UnbpKjPr1I=; b=
-	KhzMx8OwQJOMEa9rDw8gzHRfBsle8DFbEwbors0/RwNCmdpSoIzOxrkDBBYgQxkc
-	kLYGh/fmtrzT03pO1SQhbg0IbC1l5OIp/ieLvUHyKTe81+zieLAlbLTniX2DStYG
-	smH7/LHYq+4Ih9OmuaePDKWuD3fxLRHJJlS4QppyseiKkCY3TSZd2yZ2YI0RSh4q
-	zVutc6u/xi4t2PEVz3e1b25VxVa7Pthl8+ehzP8wUQ+2gXwsabXB32fy9G8he0jH
-	oJ6XUhAb7LSrjoywHfdrynV85L6PIxi67UxaxctoxA6FKLXNWM3BYMMm5Hr4fwcl
-	xoD/zcGpgGIkQhRZdmwWbQ==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1718193411;
+	 x=1718279811; bh=NboveGjMdoPaE3uhh2w67a5bhpM1+FIMNI71YEzkMmQ=; b=
+	Hut9KdXLUif1+/dnNfMDa/+DKnovVfMbABxZvWohqMHYsMbg+Hc38OxjZ8EphkID
+	L6mtmoVNKHri6+Q42hqmj/5f5xiqojFQBMfT1y7DGIUe2lQTcthYGzVpYgqKz4sO
+	YlHe3Xj+BR+DgNscEugTtJxrEHJNjY+eIGglcoYfEWrMmYzg6EcuxrrksXmL31Gp
+	E1+rh5oU3RW196PX0kf2ZFzosf+rpKFoNLkLXdareVdx4LPCx6z+/al6IVj6BpUI
+	ORG6DQI6Mt8o++JJ18cTHJUU83ZKw5ZHCUeqQd9JYZUTsFHt+S6p7c/xyA0U1K9J
+	rDVSFqfWouJA21gCK43QPw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718193409; x=
-	1718279809; bh=643RtZuFZs3vORSN7HPuX8/BrfnT6frE7UnbpKjPr1I=; b=c
-	OBQ/Qpgi65R/AetRuJg13lEkP8fFfsb6uh5KDjNGkwxC9lMqrPMQzZJl8TBe7qad
-	z7kuEYu2tHKy1a+IdtiRtL0QuUKbh3mKp4SsBBLMCkXHE7b8iBlE1n6UCqoJIZie
-	/yeR30RCtzoy3aFUI/ZwpXlsNTF96q/Zn221ojE+dMus0+skqeZZLVcAnyKbIlbA
-	HhDnPeTggFAGLb5wVdL0tnfhRpLmVlOuMycLyf5Fpg4y+wnjW0mREtfq2NemmIXH
-	tr/AzuopYWXBH0BtNKdRWB9woQp/et+4QAFG9eprjiSdDG3m6Z4S2o4zO8PTXZsX
-	OMwfm6D11m7BPztZatw3g==
-X-ME-Sender: <xms:AI1pZn_yeLr7JmKktEH_JzveYQjhwH45pcRPsNUE7W7UyQHcxaeOyQ>
-    <xme:AI1pZjt2ZwZmOL21OFFT11RAUnXrWXcG7apQi-v8DMPESAFF0iJIk0zz2wxEYqGwM
-    30Y1XHkCOW3z252eiQ>
-X-ME-Received: <xmr:AI1pZlCxCs4MyJ0b_PMzC2eWZ6pe0-R-nRK-eTvGfBc4sCNTyzWsW4U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedugedggeehucetufdoteggodetrfdotf
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718193411; x=
+	1718279811; bh=NboveGjMdoPaE3uhh2w67a5bhpM1+FIMNI71YEzkMmQ=; b=h
+	9ViVlEE2lsXJOa1Fl/XPY5vleoDtPBk6aHq1N4A+f3JUxBq4+FX/9pDmhhAf2Uuk
+	xB5bX9kDmSUZuDScquqtpTrXsa8Z+HAHTwa76yZlcS3kTmsvLyHUokhbf/I78Amm
+	tU2akvDi21u5QhTAa5Zj+tOminzpm7YO+l3X8Y46ZxEozohRlxGmYZQ8fCZF4vV+
+	ya/8CbOIk22wvUckS/lKKy0HRyr36x5KK857sG2hX1dENgtah9YCwi8an3y8Qk+1
+	RI7em88UC/4qeZzmUg5vPYKryzzm8AQAMDhc1MwdP/Np6notWMHxpQO8xkmzAWye
+	iVjeaGJK/sZhcKM8cUYEg==
+X-ME-Sender: <xms:Ao1pZviU3LZsxUO8pEEGK5lM2-MTass9g1IY_25BjnYBpb-PuWm34w>
+    <xme:Ao1pZsBZWLaxJcV8z1RYx173COxWUQmMtg72CrFLW07Y1-ZNEL0Lki1eiGcrjb9ed
+    UULhQ8Rg647uwwVhbQ>
+X-ME-Received: <xmr:Ao1pZvEOoTi4bNS9uj017lIMVp48WfEhZfS9eAh2GAZexVTPF7QuJ38>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedugedggeegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeflihgr
@@ -73,18 +73,17 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedugedggeehucetufdoteggod
     cuggftrfgrthhtvghrnhepvdekiefhfeevkeeuveetfeelffekgedugefhtdduudeghfeu
     veegffegudekjeelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
     hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:AI1pZjfLfnDjEaqQIT83uuNVy-YHJe3OzBLqqChlEzccIaVOhJmN8g>
-    <xmx:AI1pZsO0hxVpPT2aVAcEuD6hEe4kNsNmJ7GBlzW3MaTLrDv7wARAgg>
-    <xmx:AI1pZlnF2VW0vtKO_0X4EaQgXmVpS36rt8XTz6SjE9MUCFX11o1s7A>
-    <xmx:AI1pZmuOsMOKhqbaUOfwI0VyVJBeiAna_cEHPamJaNlTtLf82YNnew>
-    <xmx:AY1pZtH9oB9mpjgVjPVXwjCr33dAw8rzB66mOWwem4HzApg7uogj_f2p>
+X-ME-Proxy: <xmx:Ao1pZsROD9l8NqpnqlsYUiKX3ckDUUWhEbmU61MPj6MxVsmPgZs1Hg>
+    <xmx:Ao1pZsxlPP3kazOx8hbfflEwxEW0HG-FTFNcnY44agnDD_3Fp7UaSg>
+    <xmx:Ao1pZi48I1e3Eba7iYNBZhqKac2ESRpeuwQiCw6ZpwxOIs9IMQ90zg>
+    <xmx:Ao1pZhyFF5OnMkPVZGeeI3FuFkTg_k86TqxO3mXRehtYbuXwkKLzQQ>
+    <xmx:A41pZhoD-PVCnC5pgIjl6E-y4O9NQhGOw8SICBNNXnCvSwmcGkUp5sUt>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 12 Jun 2024 07:56:47 -0400 (EDT)
+ 12 Jun 2024 07:56:49 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Wed, 12 Jun 2024 12:56:21 +0100
-Subject: [PATCH v2 2/8] MIPS: dts: Boston: Move syscon-reboot node under
- syscon
+Date: Wed, 12 Jun 2024 12:56:22 +0100
+Subject: [PATCH v2 3/8] MIPS: dts: Boston: Remove unused #interrupt-cells
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -93,7 +92,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240612-boston-syscon-v2-2-9f8e1a07fa63@flygoat.com>
+Message-Id: <20240612-boston-syscon-v2-3-9f8e1a07fa63@flygoat.com>
 References: <20240612-boston-syscon-v2-0-9f8e1a07fa63@flygoat.com>
 In-Reply-To: <20240612-boston-syscon-v2-0-9f8e1a07fa63@flygoat.com>
 To: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -103,47 +102,44 @@ To: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=850;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=806;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=Ib5Em0TWqjbDBBwR7LvVG+z4BvQZifAL7Hccm1zm8U8=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTMnj++u07OrdlsueGv8Lddtsvy54euXlblq7SRv+xCc
- 2ebYuzJjlIWBjEuBlkxRZYQAaW+DY0XF1x/kPUHZg4rE8gQBi5OAZhI1i+G/1Fe26yyLpg8Oal4
- qcrt0ecKJZek1LwUtmUrdujO/RKwQZ2R4djT1vMW6Qct5gp9tUp9/EPu+hVDATl1m7+KJ+b1x96
- VYAUA
+ bh=ucNOokm+BqbipXH3f1pK/co5d8rHxuTfKigD8DzLXwk=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTMnj96gv1HbRXK3qdP0Nkikhn+9qT2u/vCDkwXDlzZ1
+ WFovsGyo5SFQYyLQVZMkSVEQKlvQ+PFBdcfZP2BmcPKBDKEgYtTACZyioORYVONQPO+/Wsbvp5f
+ y3RMfJl11sMTp08d/5jXeezyNM3X8ysYGS5deSD8cc4no0PiX2Oue7lEdd/k33jjwIY33bP2pL3
+ 6HsIBAA==
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-To match actual hardware topology.
+There is no reason to have #interrupt-cells node for a
+pci device.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/boot/dts/img/boston.dts | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ arch/mips/boot/dts/img/boston.dts | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/arch/mips/boot/dts/img/boston.dts b/arch/mips/boot/dts/img/boston.dts
-index f7a2c46f1eb8..7379be7d46e1 100644
+index 7379be7d46e1..bee5bd0655cd 100644
 --- a/arch/mips/boot/dts/img/boston.dts
 +++ b/arch/mips/boot/dts/img/boston.dts
-@@ -210,13 +210,13 @@ clk_boston: clock {
- 			compatible = "img,boston-clock";
- 			#clock-cells = <1>;
- 		};
--	};
+@@ -131,7 +131,6 @@ pci2_root@0,0 {
  
--	reboot: syscon-reboot {
--		compatible = "syscon-reboot";
--		regmap = <&plat_regs>;
--		offset = <0x10>;
--		mask = <0x10>;
-+		reboot: syscon-reboot {
-+			compatible = "syscon-reboot";
-+			regmap = <&plat_regs>;
-+			offset = <0x10>;
-+			mask = <0x10>;
-+		};
- 	};
+ 			#address-cells = <3>;
+ 			#size-cells = <2>;
+-			#interrupt-cells = <1>;
  
- 	uart0: uart@17ffe000 {
+ 			eg20t_bridge@1,0,0 {
+ 				compatible = "pci8086,8800";
+@@ -139,7 +138,6 @@ eg20t_bridge@1,0,0 {
+ 
+ 				#address-cells = <3>;
+ 				#size-cells = <2>;
+-				#interrupt-cells = <1>;
+ 
+ 				eg20t_phub@2,0,0 {
+ 					compatible = "pci8086,8801";
 
 -- 
 2.43.0
