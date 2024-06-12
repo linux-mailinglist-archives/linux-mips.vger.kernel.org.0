@@ -1,89 +1,90 @@
-Return-Path: <linux-mips+bounces-3613-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3614-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86396905028
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 12:10:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FB4A9051BE
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 13:57:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E5CFFB27332
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 10:10:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBC29288184
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2024 11:57:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E69D16F900;
-	Wed, 12 Jun 2024 10:09:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 449F716F28C;
+	Wed, 12 Jun 2024 11:56:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="RwqP4uio";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Sw6eC1NS"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="bLTTTIAJ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Acs/FxLM"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout6-smtp.messagingengine.com (fout6-smtp.messagingengine.com [103.168.172.149])
+Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF88C16F27B;
-	Wed, 12 Jun 2024 10:09:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E92C16E881;
+	Wed, 12 Jun 2024 11:56:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718186948; cv=none; b=W63RWupehb5BumBfyP57OQQMKYqQ/o918LiNAy5Vl64N0LPwQpTKr45RodKuElCGUpUdqWa60VZHsNDKRHooh9Nh8xKgkx9kdB0Hz0bQ78xWrK4YV1pCSqGpUeu6Xdhx+bBvBgYoAa5pAoZVAgcGMOU4IXEvivrsmchInQASlU4=
+	t=1718193408; cv=none; b=n2xsa3txx8v7Rgjufk7fYKQTbf9b1XgQC4WHkc3MFNBFXCySo2ycZHnL11sKwWMv8j5UQhTHNwmPS9H2EuF4zHXFSg+Hn8NUaXYaAZ3ndrHIvYACBW01fWXkvol9UiLbVtSLqtGhGj60unYJqbUlnd/4pHU7i6pph3zRKkX0jOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718186948; c=relaxed/simple;
-	bh=L0sI9SNX8Fl8dWHCmZcs43fJIyWpWY+8oHGPiv/o1WY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HEaC+MkiJZgDwEleSUSDtxqD88ovo0mGsEHQij9ADMNi2bXibOgL9XTZyVQUKDn72ax1k4TjHXCG6Oj9zmNKCEEtpPV7sdl+Xw/HWQ1pfhMpM/1stoW/at811n6+nY/TMQUl0uCtXHIRDKgnJPNeXafJhtYXFa9dg0Rm+Zm2vOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=RwqP4uio; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Sw6eC1NS; arc=none smtp.client-ip=103.168.172.149
+	s=arc-20240116; t=1718193408; c=relaxed/simple;
+	bh=ls/nWAOTi8XvMgR9Re+u8+3eb2zQ0ipLSfasbrSfUps=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=IXu5OcPSoCiLzgM7t445CKqnLggE69ACGbYWubX9jv2CtyaH9+rtHSPA0A0/pQnxn1q6GNLVDm/asD3Ims7XiJb4WkGaST85oHapOvyRr0s3vlLfdiYD9zdv6sdsFP5nF8wfp22O9rkj7tEkDn/YeSXhuLDpUfIF8xt7xWwovB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=bLTTTIAJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Acs/FxLM; arc=none smtp.client-ip=103.168.172.150
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailfout.nyi.internal (Postfix) with ESMTP id CAEC91380083;
-	Wed, 12 Jun 2024 06:09:05 -0400 (EDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 7BB6213801C8;
+	Wed, 12 Jun 2024 07:56:45 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Wed, 12 Jun 2024 06:09:05 -0400
+  by compute1.internal (MEProxy); Wed, 12 Jun 2024 07:56:45 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1718186945;
-	 x=1718273345; bh=iPbRKS8KTP23XarmKKdaRK6HQu116D/aznYejgpVkTM=; b=
-	RwqP4uioREdG08LA9b6XESYE9EIuxp+Ic3pCMPDeZnfG8gkmC3IgdS+E+xxw4ztw
-	d1M3Mkxfjy96GpIfw3QjnW8Xy8gns19TssM+5vUsV+osCbZ1KZtktDtaa71i5tEd
-	7QB4mePpKeHn9dT4Kbr6FcgppTuevc25LgdVEdIpvRNCF5e9xP0FDUX3GNQ4xumC
-	6VAlRtw0HqweGxN9KETrmoos9om9fUHzH8ADSXC/tCoJoZ3hBPsoZgyy9t5KEXEk
-	MG+VgNPZ78ILLZ3fgDLyfs1JQoHon69i4fHJT1VunQvoZLcNulPNtqRohfZp543m
-	nMmIfqHe1OV7fCFf6vQc5g==
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm2; t=1718193405; x=1718279805; bh=qr
+	6GvDGfUn90TNcCageDe0j6K7jl/OS6aFThJQQ6PdU=; b=bLTTTIAJZmGz0oUMuk
+	6FbvBu/xpup+HSYrIHBYgoat297hzeFzTNds6Ja4o8xkFJ2wNQSd5Bc8JlZhW8yW
+	RbkzHRfaszytcV073oJkhA+qcGpoZQF+LhEY2MWvByqSFc8E6mA2QgCV9geNqZWP
+	NDxeQppx9YBIhU4y8MEU/Jqy6S2Og7PWmpi6TGEa9HyrHfgJw/u9H6pY7dYSnn0H
+	+CYoGab3SJy7GnAo5Go31wN9RndC2PVBFoWbia/m2zVGCeUvfvjLPo5f7fMhO5KG
+	UYuAc8FGdAGkB4KgJKmI2ZZfFgrDA+WUJXJe+kaFjYAcXDhBX8EW3fj/MX+mZ91V
+	g23A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718186945; x=
-	1718273345; bh=iPbRKS8KTP23XarmKKdaRK6HQu116D/aznYejgpVkTM=; b=S
-	w6eC1NSnubDJJ2ZGOR729+Q3fXYdkn1bgC6Ui2ftwTjRRdeG7hY7W3M3OT+Ghmhp
-	svr2Xu861cHpZYSVANF7SeJPei+nbVwnGpxR61usIk8vP9jOxiGpMFlje987L+qA
-	GkzkO2neWbeI4LHmn0zEQtpQ6YukvDyGXEHMbkSf5oC3qAcj51VIRYJRSGdUxn7X
-	rZgkLF+AtASS7Q7OLV6oHCyi7cUM0yDz0WYwC832oLCa75QZyLy61zGYHovBT9Yo
-	CZy33v5IH2zmPRmywTVOWjDBv+xMdost79599RxSADkhjBZVkSFb0u4fvani/cuo
-	bvK6WhvNJBO2wRdZPghJA==
-X-ME-Sender: <xms:wXNpZq5jscxXipYlQhg0L7b5izblmXZnD16HEVqamYBdy8S_TTRyuw>
-    <xme:wXNpZj7hc5c_ag93goytpqAyVVKUJ3StmWs8zgqG59jEQcaLO0AN8jbxiSw_Wv-T_
-    EVGq3z1vHLkwnS7x5E>
-X-ME-Received: <xmr:wXNpZpfzPPnQxhAC9kyYauY_mG9-7Q8d-OpzZKIJezxu4xPA3V1ru7w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedugedgvdefucetufdoteggodetrfdotf
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; t=1718193405; x=1718279805; bh=qr6GvDGfUn90T
+	NcCageDe0j6K7jl/OS6aFThJQQ6PdU=; b=Acs/FxLMHZBPx7mmEhF4+gRtoWKV0
+	CMbABIUIJ2TjaUAz8nN2wQh5rvQpSnMXv0GXx+G0mzQdAFluirYrtOWAVjMwgmkB
+	fEDETQeie63eMQM7ei1Phh1/hUcQ4nS7pQ3U4fmvfZZqu0rr7lhOHB5dvh98cHRa
+	Fmb1b+vgzx5xGah1zhBHg3PnYRazG2DrUEX4KFAlsAaubyayMEELoLs7irvjse7W
+	7mRBedJiZJFHY0gsQbS1cyQBjeiTyC1z0U46d7+YxTH5ikxRTX3jrGPJ35NLl1zS
+	6tuivr2SjUevNG9Sf2YPgsRjf8NOkJnsawrjVtBSxx5uVSRIvGJP6fUNg==
+X-ME-Sender: <xms:_YxpZvcETBV0hXyy5WlB-7zpUeVk3C07BgA3iG6uGgRYSwXWyyMM1w>
+    <xme:_YxpZlMjfmvtTuvhPzx2qx7eMfSuiMbzE9hQmcGAA04tfUXVNKZH43nYPUHkV2NhN
+    5rw_hlLKOYIB44xr68>
+X-ME-Received: <xmr:_YxpZoj0VZpMZAwR-QQ9uujLNDwcPzpANeU8jYdmMcuzalf3CsmMRUQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedugedggeegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepvdekiefhfeevkeeuveetfeelffekgedugefhtdduudeghfeu
-    veegffegudekjeelnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:wXNpZnLN5Kcoao3oDd-IB2jB0Qz4kCieqxT2xIxRGVwFttLDT8yYTA>
-    <xmx:wXNpZuKpW4pLRHm_0OrBRsfbHMaKmP3FHG98sIM7y-oT3Wqd83o5vA>
-    <xmx:wXNpZoz95lwrFLlnBViDv4gG0EFsA9GfI39wptIN9H7jKMblQKnLug>
-    <xmx:wXNpZiJO062dWsyroOuyCYD-hKpHD0UJtYU_mqdIvRVkehQPgl-wsA>
-    <xmx:wXNpZrB4aCOywsjhk0TC23QjIaVM8mwdWxHumcai0clQxoAr71_k88nN>
+    cujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecuhfhrohhmpeflihgrgihu
+    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
+    ftrfgrthhtvghrnhepgfevffejteegjeeflefgkeetleekhfeugfegvdeuueejkeejteek
+    kedvfffffedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehf
+    lhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:_YxpZg-6jpKFzV1jEwpsQdOMvcA2AU7OAPOHyqWOXv4dndXETd_LcQ>
+    <xmx:_YxpZrt2Bmb4L4bjAuDp7REkcDGyLsQ-5uRTg6YiHMEqxjsqAEkOtQ>
+    <xmx:_YxpZvErt14WDfWHT_FSfHwlXH5Icf58sFQVlu-S8ktbbI__twWtcw>
+    <xmx:_YxpZiPNQdgAEXgr6gQwIy8ztSapOdp3Do7V-DQvo0FLDnUjluyJ0w>
+    <xmx:_YxpZskttHE4d0ed5ZyNRuHtYsRzDDc0BcTvEh2AH_OhFA1AgSjXR5HG>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 12 Jun 2024 06:09:04 -0400 (EDT)
+ 12 Jun 2024 07:56:43 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Wed, 12 Jun 2024 11:08:58 +0100
-Subject: [PATCH v2 6/6] MIPS: cm: Probe GCR address from DeviceTree
+Subject: [PATCH v2 0/8] MIPS: Boston: Fix syscon devicetree binding and
+ node
+Date: Wed, 12 Jun 2024 12:56:19 +0100
+Message-Id: <20240612-boston-syscon-v2-0-9f8e1a07fa63@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -92,137 +93,56 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240612-cm_probe-v2-6-a5b55440563c@flygoat.com>
-References: <20240612-cm_probe-v2-0-a5b55440563c@flygoat.com>
-In-Reply-To: <20240612-cm_probe-v2-0-a5b55440563c@flygoat.com>
-To: Paul Burton <paulburton@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: Serge Semin <fancer.lancer@gmail.com>, linux-mips@vger.kernel.org, 
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
- Jiaxun Yang <jiaxun.yang@flygoat.com>
+X-B4-Tracking: v=1; b=H4sIAOOMaWYC/3WMyw7CIBREf6W5azE8I7jyP0wXSC8tiRYDDZE0/
+ LvYvavJmcycHTKmgBmuww4JS8ghrh34aQC32HVGEqbOwCmXVDFBHjFvcSW5ZtdDo2AKjbTaSOi
+ fd0IfPofvPnZeQl+neugL+7X/TIURSozwXqnLJJTUN/+sc7Tb2cUXjK21L3xr76usAAAA
+To: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Paul Burton <paulburton@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3047;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1269;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=L0sI9SNX8Fl8dWHCmZcs43fJIyWpWY+8oHGPiv/o1WY=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTM4m3tk30Z190JfPNlzmuVmrNfz70x/v/9Rleah8Xmx
- MRvLU0POkpZGMS4GGTFFFlCBJT6NjReXHD9QdYfmDmsTCBDGLg4BWAisQIM/3TCUti9+J5dmVbr
- tGDFdklpwd6V8e2+X4IvKsgu+qjQUcPIcOTo5ZffGWMu7zi1x1Nu0pqr62cfEQ086TFTJGru14X
- vbPgB
+ bh=ls/nWAOTi8XvMgR9Re+u8+3eb2zQ0ipLSfasbrSfUps=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTMnj/qxhktxXnfVO9kt76WPPh6fvOd5mZuy1d/cqfvP
+ XFEPH1BRykLgxgXg6yYIkuIgFLfhsaLC64/yPoDM4eVCWQIAxenAExkw12G/xXFWxoLJ2d1v9aw
+ tVY0WLto7et1XPGzd2gsui6+6o+68lxGhhefD1ue6Pne5xAuvoaRVXMFU/Khf3uPsas1s208W9Z
+ mxwkA
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-Traditionally, CM GCR address can be probed from CP0_CMGCRBase.
-
-However there are chips in wild that do have CM GCR but CP0_CMGCRBase
-is not available from CPU point of view. Thus we need to be able to
-probe GCR address from DeviceTree.
-
-It is implemented as:
-- If only CP0_CMGCRBase present, trust CP0_CMGCRBase
-- If only mti,mips-cm node present, trust mti,mips-cm reg prop
-- If both present, remap address space to address specified in dt
-
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
-v2: Fix build warning (test bot)
+Changes in v2:
+- Write a new binding for this device (Krzysztof)
+- Sweep other warnings
+- Link to v1: https://lore.kernel.org/r/20240513-boston-syscon-v1-0-93ff557d3548@flygoat.com
+
 ---
- arch/mips/kernel/mips-cm.c | 61 +++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 55 insertions(+), 6 deletions(-)
+Jiaxun Yang (8):
+      MIPS: dts: Boston: Add simple-mfd compatible for syscon
+      MIPS: dts: Boston: Move syscon-reboot node under syscon
+      MIPS: dts: Boston: Remove unused #interrupt-cells
+      MIPS: dts: Boston: Add model property
+      MIPS: dts: Boston: Rename uart node
+      dt-bindings: mfd: Add img,boston-platform-regs
+      du-bindings: mips: cpu: Add img,mips compatible
+      dt-bindings: mips: img: Add devices binding
 
-diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
-index dddc9428fe58..02afc795ba8a 100644
---- a/arch/mips/kernel/mips-cm.c
-+++ b/arch/mips/kernel/mips-cm.c
-@@ -5,6 +5,8 @@
-  */
- 
- #include <linux/errno.h>
-+#include <linux/of_address.h>
-+#include <linux/of_fdt.h>
- #include <linux/percpu.h>
- #include <linux/spinlock.h>
- 
-@@ -179,23 +181,70 @@ static char *cm3_causes[32] = {
- static DEFINE_PER_CPU_ALIGNED(spinlock_t, cm_core_lock);
- static DEFINE_PER_CPU_ALIGNED(unsigned long, cm_core_lock_flags);
- 
-+static int __init mips_cm_fdt_scan(unsigned long node, const char *uname,
-+		int depth, void *data)
-+{
-+	u64 addr;
-+	unsigned long *cmgcr = data;
-+
-+	if (!of_flat_dt_is_compatible(node, "mti,mips-cm"))
-+		return 0;
-+
-+	addr = of_flat_dt_translate_address(node);
-+	if (addr == OF_BAD_ADDR || addr >= ULONG_MAX)
-+		*cmgcr = 0;
-+	else
-+		*cmgcr = addr;
-+
-+	return 0;
-+}
-+
- phys_addr_t __init __weak mips_cm_phys_base(void)
- {
--	unsigned long cmgcr;
-+	unsigned long gcr_reg = 0, gcr_dt = 0;
-+
-+	if (of_have_populated_dt()) {
-+		int err;
-+		struct resource res;
-+		struct device_node *cm_node;
-+
-+		cm_node = of_find_compatible_node(of_root, NULL, "mti,mips-cm");
-+		if (cm_node) {
-+			err = of_address_to_resource(cm_node, 0, &res);
-+			of_node_put(cm_node);
-+			if (!err)
-+				gcr_dt = res.start;
-+		}
-+	} else {
-+		of_scan_flat_dt(mips_cm_fdt_scan, &gcr_dt);
-+	}
- 
- 	/* Check the CMGCRBase register is implemented */
- 	if (!(read_c0_config() & MIPS_CONF_M))
--		return 0;
-+		return gcr_dt;
- 
- 	if (!(read_c0_config2() & MIPS_CONF_M))
--		return 0;
-+		return gcr_dt;
- 
- 	if (!(read_c0_config3() & MIPS_CONF3_CMGCR))
--		return 0;
-+		return gcr_dt;
- 
- 	/* Read the address from CMGCRBase */
--	cmgcr = read_c0_cmgcrbase();
--	return (cmgcr & MIPS_CMGCRF_BASE) << (36 - 32);
-+	gcr_reg = read_c0_cmgcrbase();
-+	gcr_reg = (gcr_reg & MIPS_CMGCRF_BASE) << (36 - 32);
-+
-+	/* If no of node, return straight away */
-+	if (!gcr_dt)
-+		return gcr_reg;
-+
-+	/* If the CMGCRBase mismatches with dt, remap it */
-+	if (gcr_reg != gcr_dt) {
-+		pr_info("Remapping CMGCRBase from 0x%08lx to 0x%08lx\n",
-+			gcr_reg, gcr_dt);
-+		change_gcr_base(CM_GCR_BASE_GCRBASE, gcr_dt);
-+	}
-+
-+	return gcr_dt;
- }
- 
- phys_addr_t __init __weak mips_cm_l2sync_phys_base(void)
+ .../devicetree/bindings/clock/img,boston-clock.txt | 31 ---------
+ .../bindings/mfd/img,boston-platform-regs.yaml     | 74 ++++++++++++++++++++++
+ Documentation/devicetree/bindings/mips/cpus.yaml   |  1 +
+ .../devicetree/bindings/mips/img/devices.yaml      | 33 ++++++++++
+ arch/mips/boot/dts/img/boston.dts                  | 23 ++++---
+ 5 files changed, 119 insertions(+), 43 deletions(-)
+---
+base-commit: 6ba6c795dc73c22ce2c86006f17c4aa802db2a60
+change-id: 20240513-boston-syscon-8e315e94a894
 
+Best regards,
 -- 
-2.43.0
+Jiaxun Yang <jiaxun.yang@flygoat.com>
 
 
