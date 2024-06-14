@@ -1,71 +1,71 @@
-Return-Path: <linux-mips+bounces-3680-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3681-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E05BA908F0D
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Jun 2024 17:41:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 435F3908F13
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Jun 2024 17:41:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AFBD11C23D83
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Jun 2024 15:41:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1D2828510A
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Jun 2024 15:41:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 543CE181CE3;
-	Fri, 14 Jun 2024 15:40:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5725C195FDE;
+	Fri, 14 Jun 2024 15:40:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="AR/OO4HY";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="TLmg2TNg"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="o/mgGA4g";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="RQh+CsZ4"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from wfhigh5-smtp.messagingengine.com (wfhigh5-smtp.messagingengine.com [64.147.123.156])
+Received: from wfout4-smtp.messagingengine.com (wfout4-smtp.messagingengine.com [64.147.123.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA5E218131A;
-	Fri, 14 Jun 2024 15:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16E716FF5B;
+	Fri, 14 Jun 2024 15:40:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718379631; cv=none; b=lSONCOTKhTdOsSzNT6ofc/RrRplSmUn0+WTASrmS+Dd9hlnjARg9uwxvNHE876iKC25R1kmmnchylAkfZyC0tlBGySJAjRaC/VYknwI/X7SWuJfeNXYuW+U/h0KrE/VeEeJPRboQHYuZalEpvTk6KMZw6ubqhAKPF/dbVyZHrws=
+	t=1718379634; cv=none; b=SBS9I/qrukM+KD7zDiIsVhTjG7/ZjoW0V4IWFIpmOQw5EjjtB8PofjXlZkS8g8zk+O1JG/nhfYOPuCBatlqxR5cIsr/LaN/RB/dfs53kZFBwTXn0hfmAGoSki8DKuBs8AkStUdQU/319WBJKNTbgdM3j6RnycZR3SjZ0ZXBLVlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718379631; c=relaxed/simple;
-	bh=FweENlZ63bOWfTc5I4r3KjymBEwR3NO4d7vDQ/jtcek=;
+	s=arc-20240116; t=1718379634; c=relaxed/simple;
+	bh=HzMhEsr51vYpidTghc9maE7b4789hAfmuqm/KoGBGWg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XhyqGv+LD1CduZiz4Dyhc0cc8/KwsCWBH0FjcwMFHfFL4DwgM02P+9olkAtUAqqFDpfR9CcHnsqzRf8FbpZv1iZDqvrjZudfmHhu1XGNFHQ81LRJm6J4EnftefZnGIEaobd/EjthaUMvl4YCiVwBFVdnjEfLrzr76AaLqaBJSMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=AR/OO4HY; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=TLmg2TNg; arc=none smtp.client-ip=64.147.123.156
+	 In-Reply-To:To:Cc; b=bXcU3k4cmJXtpNhhnPhraHshhvjMXCrD7Arv4ghcLCOPtNXn6SaJ6P2qtAZs39q0X8Y15ggdrvWlr1glA9JQjtMXs+sVRGMYh6Nxs1Mp5HFdEljG60vJx4s1tYq6NCofrMO7pIhTBKFcNEp1aWEnuqX0dIh75rGD6V0yZSeE2DE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=o/mgGA4g; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=RQh+CsZ4; arc=none smtp.client-ip=64.147.123.147
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-	by mailfhigh.west.internal (Postfix) with ESMTP id DBF00180013A;
-	Fri, 14 Jun 2024 11:40:27 -0400 (EDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailfout.west.internal (Postfix) with ESMTP id 54B2D1C0014D;
+	Fri, 14 Jun 2024 11:40:31 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Fri, 14 Jun 2024 11:40:28 -0400
+  by compute4.internal (MEProxy); Fri, 14 Jun 2024 11:40:32 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1718379627;
-	 x=1718466027; bh=VL2IWi8aIIhAUiv5ylXPwd8C3J2xPWc4eXe91OcTt90=; b=
-	AR/OO4HYLjw6CezpKAWEVbGVGzJumdkzYl8hzss/YoR01saFXIAO+MFt98JZzLwz
-	+yhRLRwaAqU4ZeEDzKRS0ha1AOl2Bd1+QMV8MUFbi9BCdNwJuhlql3X4FJKauGu9
-	+VhZcUgWZhKhSUV5DGyojHPDbuZmU9LtFY8C52f3jrKx0JPc/7SvRzTVat19R1rL
-	X5Vv/cScHj7ilOOQfBPo5IagnJlK1WjQ1pGUMDntCMx5crWF1Uje+FSDeWlqREq2
-	ieFYDx5ZqFrsiKTWqqGqvRuG7PRpbeMi/e5YYDlLnBCELFc2QrBgfHRRL5ASoV46
-	WcovfqTnZtY1Gh+0pN1m3Q==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1718379630;
+	 x=1718466030; bh=QaCvkT5gjowegsNR38maMud8/3kZWd7+YmbceMRJp0E=; b=
+	o/mgGA4gZYsjgxflitD2eVtb0WDdorrl3vobWGPtwe/0G4GCdEPpUIfX/5l5Z29m
+	x3D1DTPUvfZAh40JKkAb/ihHfIsNe8RTr2vML+7rKkxoRn6i0Lji0hKPtfjQVHob
+	wFLZYXWhmmiqQ2K48BkpwBOXhfd2qXVqvzOK/vmBKLuGNeJPGJLUOsOCzsmUktTi
+	HRLW75S0wkl3V5lSAW0lSYKnkTcYM7TKEY+9VBDF8CAzEWk0IDZqZjtQtUkvOOYm
+	xf2KDOD5K9RgLEyFeJs921QIPM9WM5OE0+EbRBd9D2QvBODQNHPgHKLwUFj1WDfl
+	dAnhn3RuCReuTZhyE2iF+Q==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718379627; x=
-	1718466027; bh=VL2IWi8aIIhAUiv5ylXPwd8C3J2xPWc4eXe91OcTt90=; b=T
-	Lmg2TNgcF91xsiPDOvEyHXPJQWxB3cAEISzHE7G6MbtpL7oL8qtHFU/ZqXRriSZ3
-	t98Tf0HKrVRR5vEumZSkg1kb2dKyKjAE+wgI1hu0ESu8Bif4CrPGsbgAVArC5Z1h
-	2CUkF9BUem3ACYclbZgDo7hZMWHHreZLoHQS9YvEUohDUEJtBdu8Bjrvjojw8Xpx
-	y9HY5EePukwPbC5KK8rYvhoERJf+Aa/Ijg6Mdo5XycgFnMTI+swOdw7BxbeMYHoB
-	eRbL2QrunUDXP1zz3NplEvvt5eC3mOCvsYsaiNyCksPPAm8FUDDVAX02obUN0+5P
-	RG2rr1J9jbm9RLdH8yqnw==
-X-ME-Sender: <xms:a2RsZiEVQkgZpb_E7NQy55RA5yO07FYHMvnnhKrDJYSv6cjY93VcJg>
-    <xme:a2RsZjXBgIM5jp4vUEBRBAI-iKKvmE2SqIMVc0a7KxNY1sJ9dRqxHchpKqOq9Yusb
-    2WNZjTSACfeNTerjmk>
-X-ME-Received: <xmr:a2RsZsI5pLXy13Du25yfMXlyYGYM3-9zKDQ-NkUNl8---R2HwPvGJFo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfeduledgledtucetufdoteggodetrfdotf
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718379630; x=
+	1718466030; bh=QaCvkT5gjowegsNR38maMud8/3kZWd7+YmbceMRJp0E=; b=R
+	Qh+CsZ4qNJ4ANscNQPiaLEtqDHqNQxkYeNdYn7YoOIyJCvQniTPeRghXRD56cxRw
+	EaMFOVlzeoZIB2Ih8ITSRZF1904SLvbhGcSwnNNKXlboyS5umQJRUIdkZfF0yr74
+	IjM8hscs/NF4PruLoBu8ht+Dn0vJ/Bsk+5fSS/QgV7Xmbs3btNCLxdZze3P1s77C
+	9urgAe9QFD3FgS/21becaIWF3+TyINaaDccM+ftoJIzK+vxyIsYj4gZHbHQlSv47
+	VK5MQn5wOwNYvc2ocEd3aUA0Dr0JKiq+N5Hj1C3DaT/yrFOkbMLOQaLtma25gB9m
+	7xoPqnmktJO9B9dle+SKA==
+X-ME-Sender: <xms:bmRsZv0BsAH8YgnthFnbWOtplu67exYdgvPm2fXoSL1GYdaPdopFNA>
+    <xme:bmRsZuFC7Fw9uL4fYkG2teHWBrARpw3EYXO-_av9DflAxph_BG0qkU6sLy1xX70Fm
+    FskiDvzIGK7V4cHCJk>
+X-ME-Received: <xmr:bmRsZv73epFEgTv8AwUkMDNnPr7C4ebT-0gz5Hn03NsR5Kb7k7hgQ-w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfeduledgleduucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeflihgr
@@ -73,17 +73,17 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfeduledgledtucetufdoteggod
     cuggftrfgrthhtvghrnhepvdekiefhfeevkeeuveetfeelffekgedugefhtdduudeghfeu
     veegffegudekjeelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
     hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:a2RsZsFPjKLVAubPjhjL7vRraVjDt7_Gk3tAusfVmXk2pZTu41lAVg>
-    <xmx:a2RsZoUflWVoCxMesYqLQhwMl57xVXzkR2P79TJuYeUAiJ1nM1miAA>
-    <xmx:a2RsZvOFUiAJy-XgTXTOYnJAZ26dYnGGyO4JfjNhgmydyACXtvLhZw>
-    <xmx:a2RsZv3rHJB6dy7ak4cwIrM2ZxCheR_3B52GaaxDQjngxRj1nwP7jg>
-    <xmx:a2RsZpvlf0b5pLmef5OnjfYupv-xQkzVCbVW6nl84NOZ8BE1jBB-DV3i>
+X-ME-Proxy: <xmx:bmRsZk03NZOR8iRNlxM9Cj4YeGQAYjrmbBQhWoVrrobhvljbT4mDgw>
+    <xmx:bmRsZiF-l3qY0he6R9QEwn3P3l7w-FAVWW7RQt5lp93EEtmfAoTmdg>
+    <xmx:bmRsZl_2JLOr0Nvp0bvX17uceQYy2cb9_HApoc7JAa2UviWZBEf2RA>
+    <xmx:bmRsZvnRR3CTF9wuWKPmOgpOP3SP2cxZsp0Qk6sdZ78uVaNguzVpig>
+    <xmx:bmRsZpdCYD2SuoAHU9h4aZYS868rdlJSxBHhGlqlyJAqJVpQbjjoGZ4H>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 14 Jun 2024 11:40:25 -0400 (EDT)
+ 14 Jun 2024 11:40:29 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Fri, 14 Jun 2024 16:40:11 +0100
-Subject: [PATCH 03/10] MIPS: dts: loongson: Fix ls2k1000-rtc interrupt
+Date: Fri, 14 Jun 2024 16:40:12 +0100
+Subject: [PATCH 04/10] MIPS: dts: loongson: Fix GMAC phy node
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -92,7 +92,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240614-ls3k-mips-v1-3-7614340ace7d@flygoat.com>
+Message-Id: <20240614-ls3k-mips-v1-4-7614340ace7d@flygoat.com>
 References: <20240614-ls3k-mips-v1-0-7614340ace7d@flygoat.com>
 In-Reply-To: <20240614-ls3k-mips-v1-0-7614340ace7d@flygoat.com>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -104,40 +104,51 @@ Cc: devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
  linux-kernel@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
  stable@vger.kernel.org
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=998;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1305;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=FweENlZ63bOWfTc5I4r3KjymBEwR3NO4d7vDQ/jtcek=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhrSclLj3XzyDqg1elz94teOk8eRkvZ+TRTZOP9HfE/BUp
- pP174mQjlIWBjEuBlkxRZYQAaW+DY0XF1x/kPUHZg4rE8gQBi5OAZjIYUNGhlk6QbovlP0aZs6P
- O+v4KO6m0X6G9NmvI16wa73e+Cv0x3dGhokm57f/+3zH4VCC+YTTcmr667QvvTxR68Jistrkvew
- ucU4A
+ bh=HzMhEsr51vYpidTghc9maE7b4789hAfmuqm/KoGBGWg=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrSclLjIC54V+ve4vrM7tqoe2bL2he0Tp52196S9Olfxz
+ XlkmB3UUcrCIMbFICumyBIioNS3ofHigusPsv7AzGFlAhnCwMUpABOZ/57hf80PL1a1+NqEnfUR
+ +1ZFLX0hEXycOea+6fWDk5vv3VLsaWX4H8/uGKGzyU+zM+rNrKu3FbVruN6lfpN7E5T65l3uxTt
+ /mQE=
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-The correct interrupt line for RTC is line 8 on liointc1.
+phy-mode should be rgmii-id to match hardware configuration.
 
-Fixes: e47084e116fc ("MIPS: Loongson64: DTS: Add RTC support to Loongson-2K1000")
+Also there should be a phy-handle to reference phy node.
+
+Fixes: f8a11425075f ("MIPS: Loongson64: Add GMAC support for Loongson-2K1000")
 Cc: stable@vger.kernel.org
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-index 3f5255584c30..c3a57a0befa7 100644
+index c3a57a0befa7..b2f66f6bb2fe 100644
 --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
 +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-@@ -92,8 +92,8 @@ liointc1: interrupt-controller@1fe11440 {
- 		rtc0: rtc@1fe07800 {
- 			compatible = "loongson,ls2k1000-rtc";
- 			reg = <0 0x1fe07800 0 0x78>;
--			interrupt-parent = <&liointc0>;
--			interrupts = <60 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-parent = <&liointc1>;
-+			interrupts = <8 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
- 		uart0: serial@1fe00000 {
+@@ -128,7 +128,8 @@ gmac@3,0 {
+ 					     <13 IRQ_TYPE_LEVEL_HIGH>;
+ 				interrupt-names = "macirq", "eth_lpi";
+ 				interrupt-parent = <&liointc0>;
+-				phy-mode = "rgmii";
++				phy-mode = "rgmii-id";
++				phy-handle = <&phy1>;
+ 				mdio {
+ 					#address-cells = <1>;
+ 					#size-cells = <0>;
+@@ -151,7 +152,8 @@ gmac@3,1 {
+ 					     <15 IRQ_TYPE_LEVEL_HIGH>;
+ 				interrupt-names = "macirq", "eth_lpi";
+ 				interrupt-parent = <&liointc0>;
+-				phy-mode = "rgmii";
++				phy-mode = "rgmii-id";
++				phy-handle = <&phy1>;
+ 				mdio {
+ 					#address-cells = <1>;
+ 					#size-cells = <0>;
 
 -- 
 2.43.0
