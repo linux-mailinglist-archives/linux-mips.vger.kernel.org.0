@@ -1,211 +1,160 @@
-Return-Path: <linux-mips+bounces-3676-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3677-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34CF19086A3
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Jun 2024 10:44:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7427C908F02
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Jun 2024 17:40:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8BB5B2327E
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Jun 2024 08:44:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27A531F282BD
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Jun 2024 15:40:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25F1D186E4B;
-	Fri, 14 Jun 2024 08:43:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94A8E15B562;
+	Fri, 14 Jun 2024 15:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="4Wt1PtHi";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="GwtxQTfL"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
+Received: from wfhigh5-smtp.messagingengine.com (wfhigh5-smtp.messagingengine.com [64.147.123.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF692186E36;
-	Fri, 14 Jun 2024 08:43:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.37.255.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E8FD249FF;
+	Fri, 14 Jun 2024 15:40:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718354638; cv=none; b=rRHBQQJdNLd5XHhgBymfplBR319I6nWiXo5IjQL2NQC3bzwEqv13b+9/evNbRlq0VvWM0gK3PyMAUILlORPoNJjmaGQocK1OgNmTPL3BRD5qovxdjuexmIzX1k8g78ycTpXXnjGaRCfU27H67ekBXi/EuUp3zd6COvdnyYxGCJU=
+	t=1718379621; cv=none; b=VdQts3hryxy2xS3XjycJe/rWkWmCWZgIwW6Sv7FFMHUDaJJZis3/CmjoHyE0yd1lI57iPu+rCGxg9JOj+nCEhv89PD5UNHoExUPf6qNsXePEPOiXYFhu5ATllhpAtLeeu89c5V4ybo8dxYtbBHmTFaajaL5UpW38fZyoaWHU0/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718354638; c=relaxed/simple;
-	bh=5sIskQjtFcX9EHh0WMpQ/QiDv3OPpfeQ2c/Dx/e4xTo=;
-	h=MIME-Version:Content-Type:Date:From:To:Cc:Subject:In-Reply-To:
-	 References:Message-ID; b=irN1t0v4YWTuAlf+2jKZcGY1ER+B2VDmOV4XQKHXxhhqn/c+WuwI2jX8p6EweQYg+1PCzkDvvfVSWnMT6fb1yiqDMrOv2H0KGH/UWUrjk9H1UzfaVbBaXynoPxj04EpDI6OYW0xQ0vtMTKflM4rpbQBaTJd40nirPFCA+w/pec4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dev.tdt.de; spf=pass smtp.mailfrom=dev.tdt.de; arc=none smtp.client-ip=194.37.255.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dev.tdt.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dev.tdt.de
-Received: from [127.0.0.1] (helo=localhost)
-	by relay.expurgate.net with smtp (Exim 4.92)
-	(envelope-from <prvs=9909fcaec8=ms@dev.tdt.de>)
-	id 1sI2Wz-004jVP-3p; Fri, 14 Jun 2024 10:43:33 +0200
-Received: from [195.243.126.94] (helo=securemail.tdt.de)
-	by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ms@dev.tdt.de>)
-	id 1sI2Wx-00A0SN-5s; Fri, 14 Jun 2024 10:43:31 +0200
-Received: from securemail.tdt.de (localhost [127.0.0.1])
-	by securemail.tdt.de (Postfix) with ESMTP id C0C84240053;
-	Fri, 14 Jun 2024 10:43:30 +0200 (CEST)
-Received: from mail.dev.tdt.de (unknown [10.2.4.42])
-	by securemail.tdt.de (Postfix) with ESMTP id 2A5B7240050;
-	Fri, 14 Jun 2024 10:43:30 +0200 (CEST)
-Received: from mail.dev.tdt.de (localhost [IPv6:::1])
-	by mail.dev.tdt.de (Postfix) with ESMTP id BE63C30F70;
-	Fri, 14 Jun 2024 10:43:29 +0200 (CEST)
+	s=arc-20240116; t=1718379621; c=relaxed/simple;
+	bh=EZf0lUnELN2GWQaIJ6nDvEZTqExvv3t6/H3YbZP8zlI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=JKQkQDVOkjm2nuawVr/2ESwLZ8HmojLg/ydV7WKXOnD7JMLlKO+k+1Wk92pn8SswbehRoFSZFvYArfvkenEzE0TLNSApgm0f+qLFdbJqon0QJ65q93a2Pi9aNdBDVEP4kpTdtP9fj0GRpYYJAmP06nMR30bfA73gDntGFqvQyUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=4Wt1PtHi; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=GwtxQTfL; arc=none smtp.client-ip=64.147.123.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
+	by mailfhigh.west.internal (Postfix) with ESMTP id 986A1180014A;
+	Fri, 14 Jun 2024 11:40:17 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute7.internal (MEProxy); Fri, 14 Jun 2024 11:40:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm2; t=1718379617; x=1718466017; bh=Ga
+	O+yIwWZyZ40p7yxj6bdxp1mbhr5lltwIpK9CcOxIg=; b=4Wt1PtHimXGBKHPitr
+	FlLcoEeXsQH3BwaAd8ppBL0uS4D9ZD9BpPG9iLPE0mv1GDKWj4rZMbj83hsPYSBN
+	1Im6tXyhm9FdnDSwTIoVlE0MR/i3VcF8NQAmgpoqH4Icr0odqGfcOAtwxdyuKGfx
+	TNy37z/zhSuU1iKq+YTxiugLEOJQ8Dv0mtF4jO3Vpd0JMwN9gumwc8l74qh9jbEU
+	scCr2mucE9MWnzlFcgfyRPX5ZBEkB/hOrvie37uHLvQRUn4d1zHfNl3JVLlhG6LS
+	CGQr2JXJKmmIkRy5yH0t4OQjGQ9nh/k5eU0nKrJURtscdo0qrN1aZyFK8DBH0EKh
+	x1iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; t=1718379617; x=1718466017; bh=GaO+yIwWZyZ40
+	p7yxj6bdxp1mbhr5lltwIpK9CcOxIg=; b=GwtxQTfLb84xlPp4DzQ+u/h3fAkXO
+	iZ64xFHORVpUJSFhsurg5IOHAtHrY5q82WhAkp5zD0gv0WER5KTUWLDQI1R1ssu+
+	htuAo/aM9F+ZJ9mI93J4IP/bwMVJiPWfkSs+n4uo54LpD9gPepvBOTRtX2JkAEza
+	wBHdd32voUMREZAcQ/tPNbO3jY/+HIU5ROsCShFvyN/bo5kH47XOwFJjQ+DlHj6m
+	xgV6al1mHrqfb0dPbAL+TQFIt8Q2LFtjROF1DiLAZ95B6kwcj2Ov27L/TY0Vw9ut
+	dHpVwRMaXc7oaWCsM2ishOeIEOGW+LGkT0pQn0mEPaUUpHZYncmaBtL9Q==
+X-ME-Sender: <xms:YGRsZlEDuvFGxpy5BXX3XdjvrbG2NozZnxS7BTNNpA6mXOpkGbcujg>
+    <xme:YGRsZqVL0J88I2aGjg3REshcX19v9qi_nBz34oh7ZsPcvTzwRH99ji-o8SgLwnCvt
+    vCkR1Y93cnAuamBVpo>
+X-ME-Received: <xmr:YGRsZnLLIvn8EWaIBadJzdiwSsDuqiujyChecLzcQKvvukkSejGpxBQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfeduledgleduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecuhfhrohhmpeflihgrgihu
+    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
+    ftrfgrthhtvghrnhepudffffffhfeuheevhffgleevkeeugeetfeegieeijeehfeekheek
+    veduveeigeeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:YGRsZrF3lARW-ovoc5eOCKQLoUIhKKl26ytU-zdjpQ-a9FR-umEWqw>
+    <xmx:YGRsZrXAL2g2YSJEn4ZKQCjbsjTmiMOKqTQ45SyoBBk1AvsyOjxv3A>
+    <xmx:YGRsZmNHOmEz8jW5obK9gyiKAvRD39CBRYOki9yDfT6xmjLAVonK4g>
+    <xmx:YGRsZq3o1N2P5Qxaaq_IUc6DF4hrdDVD9NSpn9luHZW3XcPrBdXzfw>
+    <xmx:YWRsZktu8PElbVNPUh9Qx6xBYdwQfgai0OglCXA9fsMWPEi22gf8j2kc>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 14 Jun 2024 11:40:14 -0400 (EDT)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH 00/10] MIPS: Loongson64: Loongson-2K1000 fixes
+Date: Fri, 14 Jun 2024 16:40:08 +0100
+Message-Id: <20240614-ls3k-mips-v1-0-7614340ace7d@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Date: Fri, 14 Jun 2024 10:43:29 +0200
-From: Martin Schiller <ms@dev.tdt.de>
-To: Hauke Mehrtens <hauke@hauke-m.de>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>, tsbogend@alpha.franken.de,
- rdunlap@infradead.org, robh@kernel.org, bhelgaas@google.com,
- linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFhkbGYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDM0Nj3Zxi42zd3MyCYl1To9Qk47Qk41RLQ3MloPqCotS0zAqwWdGxtbU
+ AhPKejVsAAAA=
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Qing Zhang <zhangqing@loongson.cn>, Binbin Zhou <zhoubinbin@loongson.cn>, 
+ Huacai Chen <chenhuacai@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-mips@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
  stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: pci: lantiq: restore reset gpio polarity
-Organization: TDT AG
-In-Reply-To: <6e4eed26-0a15-4ab4-8f3f-7ed0e223db5e@hauke-m.de>
-References: <20240607090400.1816612-1-ms@dev.tdt.de>
- <ZmnfQWFoIw5UCV-k@google.com> <7d34eb4017e809245daa342e3ccddf4f@dev.tdt.de>
- <b6bea9239050ed39ce3a051a5985b86d@dev.tdt.de>
- <6e4eed26-0a15-4ab4-8f3f-7ed0e223db5e@hauke-m.de>
-Message-ID: <c1813503ba16e1d46a93382dd806ffa6@dev.tdt.de>
-X-Sender: ms@dev.tdt.de
-User-Agent: Roundcube Webmail/1.3.17
-Content-Transfer-Encoding: quoted-printable
-X-purgate-ID: 151534::1718354611-4697E746-AC1839CE/0/0
-X-purgate-type: clean
-X-purgate: clean
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1729;
+ i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
+ bh=EZf0lUnELN2GWQaIJ6nDvEZTqExvv3t6/H3YbZP8zlI=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrSclLhzix+fUaz+em3JB6fDE15tfhXM81nNLmXPTJbFv
+ +ad8Ki411HKwiDGxSArpsgSIqDUt6Hx4oLrD7L+wMxhZQIZwsDFKQAT+WvMyLDLPbixRJ/H8sXP
+ iYfeyD3p+r89OnGSjv2tpV+i78cLBr1j+MNpxNNx14y9KdZF6hV3wENfUZvJyyaI5e3bwMab9NC
+ glx0A
+X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
+ fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-On 2024-06-13 22:06, Hauke Mehrtens wrote:
-> On 6/12/24 21:47, Martin Schiller wrote:
->> On 2024-06-12 20:39, Martin Schiller wrote:
->>> On 2024-06-12 19:47, Dmitry Torokhov wrote:
->>>> Hi Marton,
->>>=20
->>> Hi Dmitry,
->>>=20
->>>>=20
->>>> On Fri, Jun 07, 2024 at 11:04:00AM +0200, Martin Schiller wrote:
->>>>> Commit 90c2d2eb7ab5 ("MIPS: pci: lantiq: switch to using gpiod=20
->>>>> API") not
->>>>> only switched to the gpiod API, but also inverted / changed the=20
->>>>> polarity
->>>>> of the GPIO.
->>>>>=20
->>>>> According to the PCI specification, the RST# pin is an active-low
->>>>> signal. However, most of the device trees that have been widely=20
->>>>> used for
->>>>> a long time (mainly in the openWrt project) define this GPIO as
->>>>> active-high and the old driver code inverted the signal internally.
->>>>>=20
->>>>> Apparently there are actually boards where the reset gpio must be
->>>>> operated inverted. For this reason, we cannot use the=20
->>>>> GPIOD_OUT_LOW/HIGH
->>>>> flag for initialization. Instead, we must explicitly set the gpio=20
->>>>> to
->>>>> value 1 in order to take into account any "GPIO_ACTIVE_LOW" flag=20
->>>>> that
->>>>> may have been set.
->>>>=20
->>>> Do you have example of such boards? They could not have worked=20
->>>> before
->>>> 90c2d2eb7ab5 because it was actively setting the reset line to=20
->>>> physical
->>>> high, which should leave the device in reset state if there is an
->>>> inverter between the AP and the device.
->>>=20
->>> Oh, you're right. I totally missed that '__gpio_set_value' was used=20
->>> in
->>> the original code and that raw accesses took place without paying
->>> attention to the GPIO_ACTIVE_* flags.
->>>=20
->>> You can find the device trees I am talking about in [1].
->>>=20
->>> @Thomas Bogendoerfer:
->>> Would it be possible to stop the merging of this patch?
->>> I think We have to do do some further/other changes.
->>>=20
->>>>=20
->>>>>=20
->>>>> In order to remain compatible with all these existing device trees,=
-=20
->>>>> we
->>>>> should therefore keep the logic as it was before the commit.
->>>>=20
->>>> With gpiod API operating with logical states there's still=20
->>>> difference in
->>>> logic:
->>>>=20
->>>> =C2=A0=C2=A0=C2=A0=C2=A0gpiod_set_value_cansleep(reset_gpio, 1);
->>>>=20
->>>> will leave GPIO at 1 if it is described as GPIO_ACTIVE_HIGH (which=20
->>>> is
->>>> apparently what you want for boards with broken DTS) but for boards
->>>> that accurately describe GPIO as GPIO_ACTIVE_LOW it well drive GPIO=20
->>>> to
->>>> 0, leaving the card in reset state.
->>>>=20
->>>> You should either use gpiod_set_raw_value_calsleep() or we can try=20
->>>> and
->>>> quirk it in gpiolib (like we do for many other cases of incorrect=20
->>>> GPIO
->>>> polarity descriptions and which is my preference).
->>=20
->> So you mean we should add an entry for "lantiq,pci-xway" to the
->> of_gpio_try_fixup_polarity()?
->> Do you know any dts / device outside the openWrt universe which is=20
->> using
->> this driver.
->>=20
->> For the lantiq targets in openWrt, the devicetree blob is appended to
->> the kernel image and therefore also updated when doing a firmware
->> upgrade. So, maybe it would also be an option to fix the driver (using
->> GPIO_ACTIVE_* flag for the initial level and set it to 0 -> 1 -> 0)=20
->> and
->> rework all the dts files to use GPIO_ACTIVE_LOW.
->>=20
->> Then we won't need any quirks.
->=20
-> I am not aware that anyone is using a recent kernel on the VRX200
-> outside of OpenWrt. I am also not aware that anyone is *not* appending
-> the DTB to the kernel. The SoC is pretty old now, the successor of
-> this SoC was released about 10 years ago.
->=20
+Hi all,
 
-We're not just talking about VRX200 (VR9) here, but even older devices
-such as AR9 and Danube.
+This series fixed various problems I meet when I was trying to
+boot kernel on my Loongson-2K PI2 system.
 
-> For me it would be fine if you fix the broken device device trees
-> shipped with the upstream kernel and with OpenWrt to make them work
-> with the PCI driver instead of investing too much time into handling
-> old DTBs.
->=20
-> The PCI reset is inverted on some boards to handle a dying gasp. If
-> the power breaks down the reset should get triggered and the PCIe
-> device can send a dying gasp signal to the other side. This is done on
-> the reference designs of some Lantiq PCIe DSL card for the VRX318 and
-> probably also some other components.
->=20
-> Hauke
+Although most of the series are taged for stable, please apply
+it to mips-next tree as it has dependency to commits in next
+and I'm not in rush to get them into linus tree. I have some
+future works planed based on this series that may get into this
+cycle.
 
-What I missed so far is the fact that the driver used '__gpio_set_value'
-before Dmitry's commit and thus used raw access to the GPIO.
+Thanks
+- Jiaxun
 
-This effectively means that every device that has worked with the driver
-so far must have an ACTIVE_LOW reset, no matter what was configured in
-the device tree.
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+Jiaxun Yang (10):
+      MIPS: Loongson64: Remove memory node for builtin-dtb
+      MIPS: dts: loongson: Fix liointc IRQ polarity
+      MIPS: dts: loongson: Fix ls2k1000-rtc interrupt
+      MIPS: dts: loongson: Fix GMAC phy node
+      MIPS: dts: loongson: Add ISA node
+      MIPS: Loongson64: Test register availability before use
+      platform: mips: cpu_hwmon: Disable driver on unsupported hardware
+      MIPS: Loongson64: reset: Prioritise firmware service
+      MIPS: Loongson64: sleeper: Pass ra and sp as arguments
+      MIPS: Loongson64: env: Hook up Loongsson-2K
 
+ arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi | 65 +++++++++++-----------
+ arch/mips/include/asm/mach-loongson64/boot_param.h |  2 +
+ arch/mips/loongson64/env.c                         |  8 +++
+ arch/mips/loongson64/reset.c                       | 38 ++++++-------
+ arch/mips/loongson64/sleeper.S                     |  8 ++-
+ arch/mips/loongson64/smp.c                         | 23 +++++++-
+ drivers/platform/mips/cpu_hwmon.c                  |  3 +
+ 7 files changed, 89 insertions(+), 58 deletions(-)
+---
+base-commit: 6906a84c482f098d31486df8dc98cead21cce2d0
+change-id: 20240613-ls3k-mips-52eb3fb3e917
 
-So renaming the property in the dts from "gpio-reset" to "reset-gpios"
-and setting the FLAGS to "GPIO_ACTIVE_LOW" should actually solve the
-problem.
+Best regards,
+-- 
+Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-What still bothers me about the driver itself are 2 things:
-1. the initial value of GPIOD_OUT_LOW. This means that there is no real
-    defined HIGH -> LOW -> HIGH on reset.
-2. if we change 1., then I think "mdelay(1)" is too short and we would
-    have to change it to at least "mdelay(100)".
-
-Martin
 
