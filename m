@@ -1,89 +1,91 @@
-Return-Path: <linux-mips+bounces-3692-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3693-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E661909DB6
-	for <lists+linux-mips@lfdr.de>; Sun, 16 Jun 2024 15:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CEBEA909DB9
+	for <lists+linux-mips@lfdr.de>; Sun, 16 Jun 2024 15:26:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B895E281B1D
-	for <lists+linux-mips@lfdr.de>; Sun, 16 Jun 2024 13:26:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58460281C2B
+	for <lists+linux-mips@lfdr.de>; Sun, 16 Jun 2024 13:26:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C900F18C353;
-	Sun, 16 Jun 2024 13:25:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E92B18F2D8;
+	Sun, 16 Jun 2024 13:25:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="5sZ+v/mw";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="He2QgiyW"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="q0avPZ/e";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="RqA2k1Ht"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from wfout1-smtp.messagingengine.com (wfout1-smtp.messagingengine.com [64.147.123.144])
+Received: from wfhigh1-smtp.messagingengine.com (wfhigh1-smtp.messagingengine.com [64.147.123.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0604118C326;
-	Sun, 16 Jun 2024 13:25:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E72D718C357;
+	Sun, 16 Jun 2024 13:25:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718544344; cv=none; b=Qu0jqqUdq0zXnV6AxYBcDfoOQ8YLMrkJXGyzvl+cSHhng7UEFmNfze198jx2T2Gm5Q5l4SVhunKUBPLnKE0U2TaD/Lxzt8EdgOVGdkp0V8XF5FKesjFJQD+a7HagAr9M2xEyteeQHeHp9/eUQxznPW2FbojZbCmyaL8DxiwSw04=
+	t=1718544346; cv=none; b=np26vVRhewmEIGoAxzXGiVnH7TEQHiwlWYboFmZgyq8IWcsCCvbo52QRlBAEgrC4OqC6l55Lwe9aWqVKTFT+NIMSUqQJqwZ5iJyViZJOOwwybTbhL8wYOYpOcIQ4hAGHaU1oWkM8ygnPTbb1XbCsFQhk84+FayhYHmREDYsC0Cw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718544344; c=relaxed/simple;
-	bh=Z94dl7IpamAHQv/0lMzgPz4eZUJaxYmpmOqVkJyuvnY=;
+	s=arc-20240116; t=1718544346; c=relaxed/simple;
+	bh=7cSLBtKRq6YaTXhaLa0m+ISxtSQg5UXm3uggSRQ815c=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=lJfQEIY8KnZuP69+JYTRRpQt4tnXG2Gv17SU7COWxZn7fyrB+ME2Gu1CGhrn1j0ovTPSHSrMf4da2S7QDyLEJ27/bIh+3pC5wAtrlFZ/FUOJsFBzW+bke+kYzGjkkTB9rlOkpbtew++FziK55vb30dWLb6Jff2it/sNJKeGr5DA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=5sZ+v/mw; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=He2QgiyW; arc=none smtp.client-ip=64.147.123.144
+	 In-Reply-To:To:Cc; b=IQ5D8nK/ubC58AfBR2VSeE0YKH4ZZfDvkuExlwJZ7BFbZe03K3cwCVR+CnIQV9ob7j78MJeB0lV3FxQaftqqTFCHz576AapueIa1yzIjDxBYhIR27F2XbiiJ5ufgmzrXiZMLEBRLeVI/2sWhFurLM7xq1UCQCLgXQItejoSMPAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=q0avPZ/e; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=RqA2k1Ht; arc=none smtp.client-ip=64.147.123.152
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailfout.west.internal (Postfix) with ESMTP id C24731C0009A;
-	Sun, 16 Jun 2024 09:25:41 -0400 (EDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailfhigh.west.internal (Postfix) with ESMTP id B73391800096;
+	Sun, 16 Jun 2024 09:25:43 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sun, 16 Jun 2024 09:25:42 -0400
+  by compute6.internal (MEProxy); Sun, 16 Jun 2024 09:25:44 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1718544341;
-	 x=1718630741; bh=M+jqqh+E+uc1iXu00gj0bi4c376MoxwluD57W+QxSMU=; b=
-	5sZ+v/mwt1SFPw6NQ9TcSEgbRGhgO4IabzausAZSFxYYmfRX0Mtrpft7pJ5tbNhz
-	2qeIV3o/V+tNBdNV13bcaxrhVlYldRy6rUwiPUNOPT0KdhErfTxeFn/u1fko6gYn
-	SG9GWwsUf4yCaaCf++kLm9oMU56j0kxq/k67Tdrn8UUnWkFAeOs4HHNaPjJnSPPu
-	IqrQS+x6k8R8T2YA24J8XYa0vZrpEb9wWbxPNhvDOWkagk7+urwDw7AnZbfi8tHh
-	usowR9mIAdEbrq5mvZZMSvTAri3J19/L3MdBJZ/W98FYkfM4PLkyyBnH6QpH/Opr
-	TocRSj4U18q5/Jnb6kCSVA==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1718544343;
+	 x=1718630743; bh=tw7w9ixWV3+oEg9VLDWnKLUZs2qogH7m1+lmuT9GE80=; b=
+	q0avPZ/eZ5wiMUBAU+Os86HZICqxdJmjqhPPz295NBrtVdrE/qm410KLQBJzd90Y
+	8+Dp6LSKCb+7+SP09zAl0ABfNDfDAOJLD8H1fhcccLR/yX0lCumw10i6OD2Nt88b
+	5fxr2a+VYWLNCQS+3ZJKTN/BOnHqCsSqtdB4LfkyLn228u/0WqPdCXRdEbEAs1zk
+	awBoSi/Q5Y3hv2qftNgDZqai4ReRgEuMNJWk2fS5dK4M0Nyt7ouUQvNmZaNDnlna
+	J8dkJLHMBSUzcaMSyF1NmWBb7eKZbyFcds2nu4JkKt06YvkCdragljpTzeKeMjZf
+	zYnUewJebIQPy1+9CcWHXw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718544341; x=
-	1718630741; bh=M+jqqh+E+uc1iXu00gj0bi4c376MoxwluD57W+QxSMU=; b=H
-	e2QgiyW/pv4PUhLZseSEjrtp+8mf0/1gWbTbGrGP7NMVyQ6BnX08R6fkDISp+q6J
-	OHKHaysXlTWGIcXbs4uEw6tKtCMqacPtk5PO5YdUZKQmfDDvGGdxT0Uia/W7tJey
-	sjd53KWxeRnGrQjDJlTLFBPRL0hidtBX6lAgZW44iIPWHwSiuam0pomaNfmU5kOU
-	v/2Ta54fDUDf6P+mhP0F93nIYv4Rg48LCV0wFovSYwaJOVRJboVBTPU4+Ekfuf6D
-	gcyWeyUHGbRAOI+/dZkkLAtKi4iezgO1BDaJt0Z7GItLObaqA2J5g7GVWch+lE2X
-	pBcQLbATjZza6x5yAmJ5A==
-X-ME-Sender: <xms:1eduZuXHOAMaQoUcJCwYW5CGcQPNi9nywo0CNvI6korqQB_OaKwn_Q>
-    <xme:1eduZqn21odYBRZP9Mba8bgvlCAzF7XRdZao18eQeG66NlW9tIcV-fSYq30-fLtCr
-    E3BUfDIP38J_-Up6eY>
-X-ME-Received: <xmr:1eduZiY0T-F6gGiKBQrnmJXqhdg446LP2Lqgv9cA8gF0hy-OP9lLSws>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718544343; x=
+	1718630743; bh=tw7w9ixWV3+oEg9VLDWnKLUZs2qogH7m1+lmuT9GE80=; b=R
+	qA2k1Ht3ZjujjY7TU4JDU8KdmUBYeOLchvBRrY8+6iwqUzxkms/7bGVHNVS14+ek
+	Mu1rjTgQLB2W8Zcq/QZu1HSwaNhscMrBjSb4N9muBOlFf4ZI09MLneDd+4AEOYP4
+	8QCKTSgq2JVQ/b6d+UEQVnm8mCWxEoEuAY3p00GFgO+eofvooatoza/YhQGcNmcK
+	nww8Vkfs1A/8Mc5UKropLz/gN68FMhYgcL4cc55oueehU0pWIg7wS0bJjUx/YwVB
+	YqSmPiG/qPk/LfBN/GFG3nexoUCrgy2NohsB32F3ZY/cOGz30pr5NEDpT0KKz16b
+	1gyvDpcNHSJH42o+rLSsg==
+X-ME-Sender: <xms:1-duZoYyIBDcOLVY2OwVOzNUjj-KKjy7G7z7Q3oo6O3jT_ujOtrAmQ>
+    <xme:1-duZjYDmNpO_uIpEnkFq_Vz9GgYhlkGCFytHPa19mQle0q724BgZnSW4PtcuHR4U
+    nyO_h63O5YkfPiiwnM>
+X-ME-Received: <xmr:1-duZi86xGZg-zYBpzW7M1sN0h8aNiP8dOYvvES-x4741WikPH6dT2U>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedvfedgieehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeflihgr
     gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepvdekiefhfeevkeeuveetfeelffekgedugefhtdduudeghfeu
-    veegffegudekjeelnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:1eduZlXEfmOh_TAJ2SpUIZVL3C0vLDyzUAMCDDX4NIJkbwGuBU9BYg>
-    <xmx:1eduZom6_TEi2_tQLD8wYGisX01gqS815i4z-psOptVHc2-dTf3MAA>
-    <xmx:1eduZqce0oOZWVpAoP-9OpGe6Ty1nAwsGX1BKQhdUiJLtZV5a-sTFA>
-    <xmx:1eduZqGokm4foHPp3yCV9ctApezm0ePIgXbzpwsX_bht3CYqfTl0AQ>
-    <xmx:1eduZnsV-I7gM4SgJHCgfNNDijhw4coND3Hhwona4DtstXN6HUmGcFGi>
+    cuggftrfgrthhtvghrnheptdevhfehgefgleeikedukefhgeejveeltdduleettdeigfel
+    geegudelleekjedvnecuffhomhgrihhnpegtphhsqdhvvggtrdhssgenucevlhhushhtvg
+    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhg
+    sehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:1-duZipsCri9GdcgTjAiKxWy9Le8cEYILImlFuJpD_CHOqBh8III2g>
+    <xmx:1-duZjqOmRg3xYt6CTRz4E91cxJHAN3PkFCWLuZs1kRpbZQZr0pVRA>
+    <xmx:1-duZgRHiFlSnTqtzw8GDviTbW94-GK6eKzdi-oQ_SQTlhU8KHNcDg>
+    <xmx:1-duZjpmIfEeD4TABoLcJm1c77BmzwpLd9Ejz9LIhxiHTfBYgtKueA>
+    <xmx:1-duZkBFqIT98PJAFJEv069vDT3UVTpWFWkXnwNCH8jWXDodh90J16Fl>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 16 Jun 2024 09:25:40 -0400 (EDT)
+ 16 Jun 2024 09:25:42 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Sun, 16 Jun 2024 14:25:03 +0100
-Subject: [PATCH fixes 2/4] MIPS: asmmacro: Fix MT ASE macros
+Date: Sun, 16 Jun 2024 14:25:04 +0100
+Subject: [PATCH fixes 3/4] MIPS: cps-vec: Replace MT instructions with
+ macros
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -92,239 +94,193 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240616-mips-mt-fixes-v1-2-83913e0e60fc@flygoat.com>
+Message-Id: <20240616-mips-mt-fixes-v1-3-83913e0e60fc@flygoat.com>
 References: <20240616-mips-mt-fixes-v1-0-83913e0e60fc@flygoat.com>
 In-Reply-To: <20240616-mips-mt-fixes-v1-0-83913e0e60fc@flygoat.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4973;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3851;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=Z94dl7IpamAHQv/0lMzgPz4eZUJaxYmpmOqVkJyuvnY=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhrS85xct0/KrXvtOOrDN72Udz0XHGa6v5nx3nmFuHqX33
- PKe34q4jlIWBjEuBlkxRZYQAaW+DY0XF1x/kPUHZg4rE8gQBi5OAZjIxm+MDOeM9ulKqluf0a3j
- lhF2WLVtPtMH/ke9B+s+Oc6odpwytYjhr3iAnU5xdKnU9DW5Dz68WnxnwYP96/aw/Xwc+1N1bem
- zu7wA
+ bh=7cSLBtKRq6YaTXhaLa0m+ISxtSQg5UXm3uggSRQ815c=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrS85xcDT2U/WrB+8SLdwMJpxuzJUTJyO3Z/K9T7umZzg
+ Uxy3T6fjlIWBjEuBlkxRZYQAaW+DY0XF1x/kPUHZg4rE8gQBi5OAZjIInVGhlX7pi1OeOPmEDPp
+ NOtaXVbVaRrMy4pTDN5sMa/s6fre/pWR4doKZdk247O1W+cWfpOUVFFOO7FN0IFJk0n62G/26Jj
+ JvAA=
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-Introduce and use parse_r from C inline assembly equivalent to parse
-assembly register names properly.
+Replace MT instructions with macros to deal with assemblers
+not supporting MT ASE properly.
 
-Fix MTTR macro to include h parameter, also mark parameters besides
-h mandatory.
-
-Implement MFTC0, MTTC0, MFTGPR, MTTGPR with MTTR.
-
-Rename all macros to prefix with _, as assmbly macros are case
-insensitive, we are risking clash with assembler instructions
-if we just use capitalized instruction name as macro name.
+Remove all .set mt as they are going to be handled in macros.
 
 Cc: stable@vger.kernel.org
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
-This patch has two over long lines on raw instruction words (104),
-I don't think it's a good idea to split it into multiple lines
-as it only cause difficulties on reading the code.
----
- arch/mips/include/asm/asmmacro.h | 166 ++++++++++++++++++++++++++++++++++-----
- 1 file changed, 148 insertions(+), 18 deletions(-)
+ arch/mips/kernel/cps-vec.S | 62 ++++++++++++++++++----------------------------
+ 1 file changed, 24 insertions(+), 38 deletions(-)
 
-diff --git a/arch/mips/include/asm/asmmacro.h b/arch/mips/include/asm/asmmacro.h
-index 18c2ae58cdf3..6eadd59f53e9 100644
---- a/arch/mips/include/asm/asmmacro.h
-+++ b/arch/mips/include/asm/asmmacro.h
-@@ -44,6 +44,112 @@
- 	.endm
+diff --git a/arch/mips/kernel/cps-vec.S b/arch/mips/kernel/cps-vec.S
+index f876309130ad..5a4120ce4a56 100644
+--- a/arch/mips/kernel/cps-vec.S
++++ b/arch/mips/kernel/cps-vec.S
+@@ -195,15 +195,11 @@ LEAF(mips_cps_core_init)
+ 	/* Check that the core implements the MT ASE */
+ 	has_mt	t0, 3f
+ 
+-	.set	push
+-	.set	MIPS_ISA_LEVEL_RAW
+-	.set	mt
+-
+ 	/* Only allow 1 TC per VPE to execute... */
+-	dmt
++	_dmt
+ 
+ 	/* ...and for the moment only 1 VPE */
+-	dvpe
++	_dvpe
+ 	PTR_LA	t1, 1f
+ 	jr.hb	t1
+ 	 nop
+@@ -231,20 +227,20 @@ LEAF(mips_cps_core_init)
+ 	ehb
+ 
+ 	/* Bind TC to VPE (1:1 TC:VPE mapping) */
+-	mttc0	ta1, CP0_TCBIND
++	_mttc0	ta1, CP0_TCBIND
+ 
+ 	/* Set exclusive TC, non-active, master */
+ 	li	t0, VPECONF0_MVP
+ 	sll	t1, ta1, VPECONF0_XTC_SHIFT
+ 	or	t0, t0, t1
+-	mttc0	t0, CP0_VPECONF0
++	_mttc0	t0, CP0_VPECONF0
+ 
+ 	/* Set TC non-active, non-allocatable */
+-	mttc0	zero, CP0_TCSTATUS
++	_mttc0	zero, CP0_TCSTATUS
+ 
+ 	/* Set TC halted */
+ 	li	t0, TCHALT_H
+-	mttc0	t0, CP0_TCHALT
++	_mttc0	t0, CP0_TCHALT
+ 
+ 	/* Next VPE */
+ 	addiu	ta1, ta1, 1
+@@ -257,7 +253,7 @@ LEAF(mips_cps_core_init)
+ 	xori	t0, t0, MVPCONTROL_VPC
+ 	mtc0	t0, CP0_MVPCONTROL
+ 
+-3:	.set	pop
++3:
  #endif
+ 	jr	ra
+ 	 nop
+@@ -353,11 +349,7 @@ LEAF(mips_cps_boot_vpes)
+ 	has_mt	t0, 5f
  
-+/*
-+ * parse_r var, r - Helper assembler macro for parsing register names.
-+ */
-+.macro	parse_r var r
-+	\var = -1
-+	.ifc \r, $0
-+	\var = 0
-+	.endif
-+	.ifc \r, $1
-+	\var = 1
-+	.endif
-+	.ifc \r, $2
-+	\var = 2
-+	.endif
-+	.ifc \r, $3
-+	\var = 3
-+	.endif
-+	.ifc \r, $4
-+	\var = 4
-+	.endif
-+	.ifc \r, $5
-+	\var = 5
-+	.endif
-+	.ifc \r, $6
-+	\var = 6
-+	.endif
-+	.ifc \r, $7
-+	\var = 7
-+	.endif
-+	.ifc \r, $8
-+	\var = 8
-+	.endif
-+	.ifc \r, $9
-+	\var = 9
-+	.endif
-+	.ifc \r, $10
-+	\var = 10
-+	.endif
-+	.ifc \r, $11
-+	\var = 11
-+	.endif
-+	.ifc \r, $12
-+	\var = 12
-+	.endif
-+	.ifc \r, $13
-+	\var = 13
-+	.endif
-+	.ifc \r, $14
-+	\var = 14
-+	.endif
-+	.ifc \r, $15
-+	\var = 15
-+	.endif
-+	.ifc \r, $16
-+	\var = 16
-+	.endif
-+	.ifc \r, $17
-+	\var = 17
-+	.endif
-+	.ifc \r, $18
-+	\var = 18
-+	.endif
-+	.ifc \r, $19
-+	\var = 19
-+	.endif
-+	.ifc \r, $20
-+	\var = 20
-+	.endif
-+	.ifc \r, $21
-+	\var = 21
-+	.endif
-+	.ifc \r, $22
-+	\var = 22
-+	.endif
-+	.ifc \r, $23
-+	\var = 23
-+	.endif
-+	.ifc \r, $24
-+	\var = 24
-+	.endif
-+	.ifc \r, $25
-+	\var = 25
-+	.endif
-+	.ifc \r, $26
-+	\var = 26
-+	.endif
-+	.ifc \r, $27
-+	\var = 27
-+	.endif
-+	.ifc \r, $28
-+	\var = 28
-+	.endif
-+	.ifc \r, $29
-+	\var = 29
-+	.endif
-+	.ifc \r, $30
-+	\var = 30
-+	.endif
-+	.ifc \r, $31
-+	\var = 31
-+	.endif
-+	.iflt	\var
-+	.error "Unable to parse register name \r"
-+	.endif
-+.endm
-+
- #ifdef CONFIG_CPU_HAS_DIEI
- 	.macro	local_irq_enable
- 	ei
-@@ -215,34 +321,58 @@
- /*
-  * Temporary until all gas have MT ASE support
-  */
--	.macro	DMT	reg=0
--	insn_if_mips	0x41600bc1 | (\reg << 16)
--	insn32_if_mm    0x0000057C | (\reg << 21)
-+	.macro	_dmt	reg = $0
-+	parse_r		__reg, \reg
-+	insn_if_mips	0x41600bc1 | (__reg << 16)
-+	insn32_if_mm    0x0000057C | (__reg << 21)
-+	.endm
-+
-+	.macro	_emt	reg = $0
-+	parse_r		__reg, \reg
-+	insn_if_mips	0x41600be1 | (__reg << 16)
-+	insn32_if_mm    0x0000257C | (__reg << 21)
-+	.endm
-+
-+	.macro	_dvpe	reg = $0
-+	parse_r		__reg, \reg
-+	insn_if_mips	0x41600001 | (__reg << 16)
-+	insn32_if_mm    0x0000157C | (__reg << 21)
-+	.endm
-+
-+	.macro	_evpe	reg = $0
-+	parse_r		__reg, \reg
-+	insn_if_mips	0x41600021 | (__reg << 16)
-+	insn32_if_mm    0x0000357C | (__reg << 21)
-+	.endm
-+
-+	.macro	_mftr	rs, rt, u, sel, h = 0
-+	parse_r		__rs, \rs
-+	parse_r		__rt, \rt
-+	insn_if_mips	0x41000000 | (__rt << 16) | (__rs << 11) | (\u << 5) | (\h << 3) | (\sel)
-+	insn32_if_mm	0x0000000E | (__rt << 21) | (__rs << 16) | (\u << 10) | (\h << 9) | (\sel << 4)
- 	.endm
+ 	/* Enter VPE configuration state */
+-	.set	push
+-	.set	MIPS_ISA_LEVEL_RAW
+-	.set	mt
+-	dvpe
+-	.set	pop
++	_dvpe
  
--	.macro	EMT	reg=0
--	insn_if_mips	0x41600be1 | (\reg << 16)
--	insn32_if_mm    0x0000257C | (\reg << 21)
-+	.macro	_mttr	rt, rs, u, sel, h = 0
-+	parse_r		__rs, \rs
-+	parse_r		__rt, \rt
-+	insn_if_mips	0x41800000 | (__rt << 16) | (__rs << 11) | (\u << 5) | (\h << 3) | (\sel)
-+	insn32_if_mm	0x00000006 | (__rt << 21) | (__rs << 16) | (\u << 10) | (\h << 9) | (\sel << 4)
- 	.endm
+ 	PTR_LA	t1, 1f
+ 	jr.hb	t1
+@@ -384,12 +376,8 @@ LEAF(mips_cps_boot_vpes)
+ 	mtc0	t0, CP0_VPECONTROL
+ 	ehb
  
--	.macro	DVPE	reg=0
--	insn_if_mips	0x41600001 | (\reg << 16)
--	insn32_if_mm    0x0000157C | (\reg << 21)
-+	.macro	_mftc0	rs, rt, sel = 0
-+	_mftr		\rs, \rt, 0, \sel, 0
- 	.endm
+-	.set	push
+-	.set	MIPS_ISA_LEVEL_RAW
+-	.set	mt
+-
+ 	/* Skip the VPE if its TC is not halted */
+-	mftc0	t0, CP0_TCHALT
++	_mftc0	t0, CP0_TCHALT
+ 	beqz	t0, 2f
+ 	 nop
  
--	.macro	EVPE	reg=0
--	insn_if_mips	0x41600021 | (\reg << 16)
--	insn32_if_mm    0x0000357C | (\reg << 21)
-+	.macro	_mttc0	rt, rs, sel = 0
-+	_mttr		\rt, \rs, 0, \sel, 0
- 	.endm
+@@ -400,19 +388,19 @@ LEAF(mips_cps_boot_vpes)
  
--	.macro	MFTR	rs=0, rt=0, u=0, sel=0
--	insn_if_mips	0x41000000 | (\rt << 16) | (\rs << 11) | (\u << 5) | (\sel)
--	insn32_if_mm	0x0000000E | (\rt << 21) | (\rs << 16) | (\u << 10) | (\sel << 4)
-+	.macro	_mftgpr	rs, rt
-+	_mftr		\rs, \rt, 1, 0, 0
- 	.endm
+ 	/* Set the TC restart PC */
+ 	lw	t1, VPEBOOTCFG_PC(t0)
+-	mttc0	t1, CP0_TCRESTART
++	_mttc0	t1, CP0_TCRESTART
  
--	.macro	MTTR	rt=0, rs=0, u=0, sel=0
--	insn_if_mips	0x41800000 | (\rt << 16) | (\rs << 11) | (\u << 5) | (\sel)
--	insn32_if_mm	0x00000006 | (\rt << 21) | (\rs << 16) | (\u << 10) | (\sel << 4)
-+	.macro	_mttgpr	rs, rt
-+	_mttr		\rt, \rs, 1, 0, 0
- 	.endm
+ 	/* Set the TC stack pointer */
+ 	lw	t1, VPEBOOTCFG_SP(t0)
+-	mttgpr	t1, sp
++	_mttgpr	t1, sp
  
- #ifdef TOOLCHAIN_SUPPORTS_MSA
+ 	/* Set the TC global pointer */
+ 	lw	t1, VPEBOOTCFG_GP(t0)
+-	mttgpr	t1, gp
++	_mttgpr	t1, gp
+ 
+ 	/* Copy config from this VPE */
+ 	mfc0	t0, CP0_CONFIG
+-	mttc0	t0, CP0_CONFIG
++	_mttc0	t0, CP0_CONFIG
+ 
+ 	/*
+ 	 * Copy the EVA config from this VPE if the CPU supports it.
+@@ -423,30 +411,30 @@ LEAF(mips_cps_boot_vpes)
+ 	beqz	t0, 3f
+ 	 nop
+ 	mfc0    t0, CP0_SEGCTL0
+-	mttc0	t0, CP0_SEGCTL0
++	_mttc0	t0, CP0_SEGCTL0
+ 	mfc0    t0, CP0_SEGCTL1
+-	mttc0	t0, CP0_SEGCTL1
++	_mttc0	t0, CP0_SEGCTL1
+ 	mfc0    t0, CP0_SEGCTL2
+-	mttc0	t0, CP0_SEGCTL2
++	_mttc0	t0, CP0_SEGCTL2
+ 3:
+ 	/* Ensure no software interrupts are pending */
+-	mttc0	zero, CP0_CAUSE
+-	mttc0	zero, CP0_STATUS
++	_mttc0	zero, CP0_CAUSE
++	_mttc0	zero, CP0_STATUS
+ 
+ 	/* Set TC active, not interrupt exempt */
+-	mftc0	t0, CP0_TCSTATUS
++	_mftc0	t0, CP0_TCSTATUS
+ 	li	t1, ~TCSTATUS_IXMT
+ 	and	t0, t0, t1
+ 	ori	t0, t0, TCSTATUS_A
+-	mttc0	t0, CP0_TCSTATUS
++	_mttc0	t0, CP0_TCSTATUS
+ 
+ 	/* Clear the TC halt bit */
+-	mttc0	zero, CP0_TCHALT
++	_mttc0	zero, CP0_TCHALT
+ 
+ 	/* Set VPE active */
+-	mftc0	t0, CP0_VPECONF0
++	_mftc0	t0, CP0_VPECONF0
+ 	ori	t0, t0, VPECONF0_VPA
+-	mttc0	t0, CP0_VPECONF0
++	_mttc0	t0, CP0_VPECONF0
+ 
+ 	/* Next VPE */
+ 2:	srl	ta2, ta2, 1
+@@ -459,9 +447,7 @@ LEAF(mips_cps_boot_vpes)
+ 	xori	t1, t1, MVPCONTROL_VPC
+ 	mtc0	t1, CP0_MVPCONTROL
+ 	ehb
+-	evpe
+-
+-	.set	pop
++	_evpe
+ 
+ 	/* Check whether this VPE is meant to be running */
+ 	li	t0, 1
 
 -- 
 2.43.0
