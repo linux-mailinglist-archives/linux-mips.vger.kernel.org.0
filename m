@@ -1,74 +1,61 @@
-Return-Path: <linux-mips+bounces-3712-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3713-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E741190B407
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Jun 2024 17:23:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C277290B598
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Jun 2024 18:00:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7190F1F25E76
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Jun 2024 15:23:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EBB121C22F38
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Jun 2024 16:00:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92DB615FA87;
-	Mon, 17 Jun 2024 14:45:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06FC714EC40;
+	Mon, 17 Jun 2024 15:50:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jJEj4efi"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="cTTwHyU3"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B981415FA77;
-	Mon, 17 Jun 2024 14:45:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C1414F129;
+	Mon, 17 Jun 2024 15:50:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718635545; cv=none; b=jkJOWrPrBzepku6NixjfW69+c5bMUXchY7knpRZDAPJCiyOEWnjtUmE/eDn/afq6lEhIULtdyS1HFBCLGvDgjsDSnDMmop/iI7cxUudRVQeTEIGWseCUAY3NAPDJSeDjM66zWAgalgZW7zhemEwxTe5MN3nwK2FkU6avvIlai1I=
+	t=1718639407; cv=none; b=hln74/QNXiTn4ixMlf9BxuQOg+ifzqlMwezipEIZ93K1MYafIe1T7fuZP6cQ+3tFiJVWBxkreARQz79kejWBvW3bsVjhwSnHrsctwg7pR6ErZ40dq31rEyXJAqA2KQTAqrSDhiweYogoSGOIUP6f/sjYhJ4L7bjIJTOLa62kTpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718635545; c=relaxed/simple;
-	bh=rFVsoK865UN32ZC+/dEHN/mQE5ZBn9kkvYV25JTrEHM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oLuQUsJM0TXVxgkoXehzcFpvK+Q7I6Oi93o1Lmivxz5+6yb+YkvJuQGXjlQ4v3XCHQyPt34yj7w4fAClKWjdzEt5xeMe15RKivI1Z9GRpDW3scbsdADU3zvrAff0XPk54QKlZ3NEHv+KyU8aOxpm+fdy8FEcJhnOLsG0EqQW+Mo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jJEj4efi; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a6f09eaf420so519264266b.3;
-        Mon, 17 Jun 2024 07:45:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718635542; x=1719240342; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ah3rcgKtsiLLs9s7Ep0iHOREj7mRgLBYmdEE8sYGz64=;
-        b=jJEj4efijRqlYzaiwfpV62eIpDfDx9+5ZsV9vDy7gteF6E2KsKun5uGC5Rbaqb4iOo
-         nnRzGttnsVzlwJv7UeAgPaqFaFreqMV5+Rx2VZ9gQmHS2nR5/7jVfcjDQx0REz82YrPd
-         W9JmaY3hM2TVjwduqN+PTnXWQVXnv766EQpAYyU1vkhES1iVZauDFUvL2ftMDGd9ip5k
-         MMP6NTad1SEYIebq9+hBMt2I+4eaD+YqV3iaNagwCsKnWP4AUAKI9rEgywii1oS1SxQQ
-         2bTknUjBsGJtXlq0W8ye/1Kl6DV4s4nUa7Dbfla8hy36NB8uuQiVnezjjgKRdwckdMUi
-         qV1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718635542; x=1719240342;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ah3rcgKtsiLLs9s7Ep0iHOREj7mRgLBYmdEE8sYGz64=;
-        b=PEfqkyX+UAA2ipiTczPNSmADI4cHJYUO+8MMeDfHFX9EfqXk5CFrRvYMPd5q5LBPvk
-         b/zLmfB4Re1dQuKm1hpL+2bvdM2PiAP/j6g2fFnhM2u3ZIplTANuVziBW7GImLFcEBhB
-         ZdbPfQUN5UJ2md2yXKJMYTAmYwoBu2nglQxqSjabKyqDQcA0PcEyDZRe93PnpGiOIW0s
-         FjO2c+lt/Jgip+0nFdVLzOgm0dniIWgaTdOQGhP8iYgTS6WNDyF/Vps5dMe691gPEW+R
-         5aYiXACZQbCwvmuecD7csMpZJD5/wEzwTvKSnyobI9h+ZzX2yx+Sg82+8md3PNMlJMgJ
-         vaxw==
-X-Forwarded-Encrypted: i=1; AJvYcCV6Qu1hNTIXDGWBjaLOdKPabPsn5blNBf22rLfwGHedUQNV7elp4hSubn5+B97gR6ie9QIR5mWSiOL3y7LayFVllJNJArOY9mdldK4rPndYOvN+P/SKzXSuHcJWlxh6teRoymxCGTrrjGaVRqDC57Fn/Iv0YuXWNc8SubWJ5K6sd6k8UjtfLaQXPKy2GnoDKzQ9W89FS4aI2REdIclq9Eli9xDywKt2g6UN1ZBhmN9geXUvek9lm4JTya41rMoA6X01p7Tg8xFJEnIB+6uOWpNpJEseHwENoejH/EgS2HSl8hGoAE/vt/3SBMGhNSMjDfcstn76Cu2RcMf5ZCktByTW9yLbeNGUi7xoSeqJrWtAiLF7nwMwz4e0vqCzHSCcZt0c4iJZEHJQU1125DwkZQhICVYIfRso3eZ6+/NdJJSNn049GlXzRC9H/GY6ypTsZhmO6QByuWh7fVCL7TQ5b+Re5Hfmx/IdvZls9bWf9LUxn5PR1yv72J1JfvEk9qhxfRNQCMsDlfCwjze4sNKZQNqY2RQcLet+X/+6Jk8KvwMCuQqOy7V81doa
-X-Gm-Message-State: AOJu0YwL+fsaQIYP3BYBAKUsYYbEpvj8VW+jZpvFqPf8kjyzZkuVOwnU
-	31ck+TZz+IeM0Z4DMHEs67LUmByaAQBQkQgotvglOIwNqRZ1Xcxq
-X-Google-Smtp-Source: AGHT+IGy29Bog/6x0frVCqVR0gtIWSVZ7NmfaBwvNVXbu4bGaKBQqObsvBBOakN7w58CXi9kwdrLlg==
-X-Received: by 2002:a17:906:aacb:b0:a5a:6bde:c3fb with SMTP id a640c23a62f3a-a6f60d29568mr573906666b.28.1718635541341;
-        Mon, 17 Jun 2024 07:45:41 -0700 (PDT)
-Received: from [192.168.42.82] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f56fa41cbsm522762466b.225.2024.06.17.07.45.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jun 2024 07:45:40 -0700 (PDT)
-Message-ID: <14b7af66-04fe-4b49-94d6-bea5d554252e@gmail.com>
-Date: Mon, 17 Jun 2024 15:45:42 +0100
+	s=arc-20240116; t=1718639407; c=relaxed/simple;
+	bh=ggmEO6kh8N+t27DXxD23LioxVz5/oJATMOXCT+P2PEE=;
+	h=Message-ID:Date:MIME-Version:From:To:Subject:Content-Type; b=i471D6Zn0/te2Mh6Z3x+IX5nJ+L1cW08Rwir2vs+yaC9dqdpL6sCVRAaUkY7jGI9mHPriLCEt2dvGPn+AI/Qc9LWNiqyLBtweMk6biXzcsracMzZp7PujU/SF7A8jFXcOKwSVw+7iMOAWFQ8d8tqIh7/A2EgNa+7ocRwE0BwRzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=cTTwHyU3; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45HAxZ1w016060;
+	Mon, 17 Jun 2024 15:50:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=ggmEO6kh8N+t27DXxD23Li
+	oxVz5/oJATMOXCT+P2PEE=; b=cTTwHyU3M0amrmT5gTcMMEwLh/lW24McHAYwfX
+	pAVyCRe5tlzFF8VaWmAb7Oss6RFzJgOkkp6YNxm4BjaeTwN1Toi1rZK7y419ZalX
+	OZIQGEOSEiSirYIQNhuIerHTm7ECFbIVAI3WkODf5mKJHOXlwAYekDzSjpPrdfDn
+	xRc7PTu1EQR77310FHpmSBO3X/edl6K7CN9xz4N1kexXevAYgeCJXnuN9awDArZ2
+	96WdX/hliLpnJ3k6zrD6GtQvvqe5OBCZNv6/7TSpjB09le/UsKF8RhkNv9YECiDj
+	hzU0zIklAvBORQ37jfsDLq9vKd1/BI6FuTubm8uEYJyDeXjA==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ys0nfcd8g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 17 Jun 2024 15:50:03 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45HFo2jV023329
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 17 Jun 2024 15:50:02 GMT
+Received: from [10.48.243.231] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 17 Jun
+ 2024 08:50:01 -0700
+Message-ID: <a138bd58-80b3-4adb-8cbb-65e92a0d0b6e@quicinc.com>
+Date: Mon, 17 Jun 2024 08:50:00 -0700
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -76,135 +63,52 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v12 07/13] memory-provider: dmabuf devmem memory
- provider
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Sergey Shtylyov <s.shtylyov@omp.ru>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>,
- Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>,
- Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>,
- Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
- Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20240613013557.1169171-1-almasrymina@google.com>
- <20240613013557.1169171-8-almasrymina@google.com>
 Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20240613013557.1169171-8-almasrymina@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+To: <linux-mips@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: mips allmodconfig build error with llvm-18.1.7-x86_64
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: k-8u4kh4Y9hnNCzAgPlBbL1SQB7GPM3O
+X-Proofpoint-ORIG-GUID: k-8u4kh4Y9hnNCzAgPlBbL1SQB7GPM3O
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-17_13,2024-06-17_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ adultscore=0 clxscore=1011 suspectscore=0 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 mlxlogscore=450 impostorscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405170001 definitions=main-2406170122
 
-On 6/13/24 02:35, Mina Almasry wrote:
-> Implement a memory provider that allocates dmabuf devmem in the form of
-> net_iov.
-> 
-> The provider receives a reference to the struct netdev_dmabuf_binding
-> via the pool->mp_priv pointer. The driver needs to set this pointer for
-> the provider in the net_iov.
-> 
-> The provider obtains a reference on the netdev_dmabuf_binding which
-> guarantees the binding and the underlying mapping remains alive until
-> the provider is destroyed.
-> 
-> Usage of PP_FLAG_DMA_MAP is required for this memory provide such that
-> the page_pool can provide the driver with the dma-addrs of the devmem.
-> 
-> Support for PP_FLAG_DMA_SYNC_DEV is omitted for simplicity & p.order !=
-> 0.
-> 
-> Signed-off-by: Willem de Bruijn <willemb@google.com>
-> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
+As part of my tree-wide cleanup of missing MODULE_DESCRIPTION() macros I'm
+trying to do allmodconfig builds for every architecture.
 
-Comments below, apart from them
+With:
+export ARCH=mips
+export LLVM=llvm-18.1.7-x86_64/bin/
+make distclean
+make allmodconfig
+make -j$(nproc)
 
-Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
+I'm getting build errors like:
+Cannot find symbol for section 46: .text.free_initmem.
+init/main.o: failed
 
+Cannot find symbol for section 6: .text.copy_from_kernel_nofault_allowed.
+mm/maccess.o: failed
 
-> diff --git a/net/core/devmem.c b/net/core/devmem.c
-> index f4fd9b9dbb675..d3843eade5fc2 100644
-> --- a/net/core/devmem.c
-> +++ b/net/core/devmem.c
-> @@ -17,6 +17,7 @@
-...
-> +
-> +bool mp_dmabuf_devmem_release_page(struct page_pool *pool, netmem_ref netmem)
-> +{
-> +	WARN_ON_ONCE(!netmem_is_net_iov(netmem));
-> +	WARN_ON_ONCE(atomic_long_read(netmem_get_pp_ref_count_ref(netmem)) !=
-> +		     1);
+Cannot find symbol for section 10: .text.arch_asym_cpu_priority.
+kernel/sched/fair.o: failed
 
-If you're adding it anyway, maybe
-"if (warn) return" ?
+Interestingly, if I make 'defconfig' instead of 'allmodconfig' I don't see
+this issue.
 
-> +
-> +	page_pool_clear_pp_info(netmem);
-> +
-> +	net_devmem_free_dmabuf(netmem_to_net_iov(netmem));
-> +
-> +	/* We don't want the page pool put_page()ing our net_iovs. */
-> +	return false;
-> +}
-> +
->   #endif
-> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-> index 1152e3547795a..22e3c58648d42 100644
-> --- a/net/core/page_pool.c
-> +++ b/net/core/page_pool.c
-> @@ -13,6 +13,7 @@
-...
-> @@ -269,7 +275,25 @@ static int page_pool_init(struct page_pool *pool,
->   	if (pool->dma_map)
->   		get_device(pool->p.dev);
->   
-> +	if (pool->p.queue)
-> +		pool->mp_priv = READ_ONCE(pool->p.queue->mp_params.mp_priv);
-> +
-> +	if (pool->mp_priv) {
-> +		err = mp_dmabuf_devmem_init(pool);
-> +		if (err) {
-> +			pr_warn("%s() mem-provider init failed %d\n", __func__,
-> +				err);
-> +			goto free_ptr_ring;
+Any thoughts on how to have a successful mips allmodconfig build?
 
-Should also free stats, look up
+/jeff
 
-free_percpu(pool->recycle_stats);
-
--- 
-Pavel Begunkov
 
