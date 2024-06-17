@@ -1,187 +1,198 @@
-Return-Path: <linux-mips+bounces-3718-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3719-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A3B190BAA8
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Jun 2024 21:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 23B5F90BC09
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Jun 2024 22:22:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0CB091C22BBD
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Jun 2024 19:15:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 269211C213B8
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Jun 2024 20:22:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3517C198E98;
-	Mon, 17 Jun 2024 19:15:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDCDC19DF8F;
+	Mon, 17 Jun 2024 20:18:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HANXyEhB"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Fo+ueEWx"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D12CF4E2;
-	Mon, 17 Jun 2024 19:15:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E896719DF81;
+	Mon, 17 Jun 2024 20:18:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718651721; cv=none; b=nOFEykaLR32XHhIsTPSpeti4x1pSgUi6Dl2fYXWEG70+9MxN+I37ayCmqtdoCyeovyUaqsyRvM+tiMEJ+D6O+2yD3RJHSn+62j63TjlUKa/k+9gpYDeFT4aUYoFvpTrzz1EVw4WU48YwQy64LByKoqJuBi8hUZumRAB/s5AbGNE=
+	t=1718655500; cv=none; b=ch1lxOElGrjShJD11KijpAOO0ipmWeNPcn10DNRFTwgeuPzFxbLkeeTZCX7z6F+IzHe+cjk5XZT2BTTc/OAYKYlEBZiAZijMUxWgXNXc2QBogl0nAzplsjZtfIHRglkPCbT+5Fb/SJtT1OAjyPhgA7G6qDJX1FOplC18H+pgiDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718651721; c=relaxed/simple;
-	bh=nsufkampkQL2B/KAL+B3WIShcveSuYLyusXyX+/OFns=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RffSTQOBRSHzSr3kDdWL/C2dnPSH570Zc6yHv/xeKghqfvE/s6jH23VKH6yGlD7DIzZqygheVNbA68uOAtqAZqbbxQVN1kffdDHdsdf8UDq6xOQtEB8/wPhFPHggPXWusKslN1pf/SXURKzAzC/J2zQX1FL+Rkknf0i7f+koSW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HANXyEhB; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-57cce3bc8c6so2771519a12.3;
-        Mon, 17 Jun 2024 12:15:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718651718; x=1719256518; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RTI1O6QA7ca9OdFzDxJ8jDm0hCKKz6E+AKsMSF5c9gg=;
-        b=HANXyEhB51G9lWZwRDA1TOvJNnGv/ofkV+kDmuSt/rKrULJ6xyRh2HBWyjyqHEQASJ
-         +j7agjw4Kva8YAgjMVVUSMq6z+QlPRLneyycPJz0BjrIccphF3ydLvKSrEDa6f0aD/4y
-         JV0BVMsa9E12gzG93ygjZTWzxGCxeOligbNCtOGOaKeEA6hXIhS3HMwLr03TheiWv7NZ
-         FOAh09l9mNZ/zDXe2go2ChA07t4phg7nyZRkTHz/7UdHHyI/Kk4xz4+mQY867Mgcjxx6
-         t3mxgEhNP4/HK5JHevm1CAseJKqIKADOUneXl6l+krvaFjvBFDfaTZTPMH8NX66CBc3s
-         0f0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718651718; x=1719256518;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RTI1O6QA7ca9OdFzDxJ8jDm0hCKKz6E+AKsMSF5c9gg=;
-        b=hWb6mdp7gFx/3r5K2QEq/32nA2uOmpLT3UIJljCRaYUHehZDMSigXAj+DX0eXYaHNb
-         rJNOWD2DGsbcN+yjKdnGhgJWHXO2XQPavgD2jTyidZpW/2EHk40h9T6hfQuiysBXYBSv
-         zKJgDvvuAgYFunpTpVIkb6vVvFnY/EfF/ztYYCxURodBPi0raS9Bv/uFEFvghUTBaTbg
-         HUOIMUmwlXoqR2zFjYuOm3IrJ7jZjyJGiz5TGQ5RkthN+exgYweZ1zoRiAj1zeGzTGkb
-         oGAuncXmY1iTb13lOfxfbyXFLIT7HW3pKueEmIta2RXNdkTKfqy4XhIYVqCL6eWNPOOe
-         l5aA==
-X-Forwarded-Encrypted: i=1; AJvYcCWgzo9l7x071P6jenBNY0DCnB4K1SSENdBQkUqPbXJYpsyWrkJABFnDCxfuQ93OP7SgZbb63ReQ/JWy5uStVdU74EmZXXWKOJQ/rpiNQb1XokJctAMJdOHzlIIWA7C8yqY8cc36lWneIlqmvBU61PPpQKNhz8wD7GJaZJf+CDx9/Nr2EGhrIeANrCEwlwxOda6hYJwAayjpTpU9z4wRAH+K8/ENDTL+SyMV8YUg9IIW8PwZDYMBWnCyFnLQNhkZ/rEifvawAjpOZVs8qXI/BPaER6CZ6I/dD/0fBtzr9dzd+yA4vgXwOPay3V5bDdZ3rVpgP1gBq1pJy5chAciQKiAG3ZH062A5zt3gk6/YRt5+DFSz6hdwwD1nDyg9axp1pIO0YGDElcC/fqQ6wktkbAFXd5hIEP/7RjBbZKOfGjPnWymqD8rCRjq2cOzxh5WtFXCpwLuV2y24GC1yydE7KsD6Ftbd7uB8ZKtEd8ke8UyeVI8ioJDSzMMOyQaEOtYIiCTIVvRIZQ==
-X-Gm-Message-State: AOJu0YycgqRiOaGC3XEhLbbGkw9FaW8+UbsV7HoeYegOKY/XZfgp5Sjp
-	eHRNZ3KyX+uDD6ur2G4cSvKuzLrNxMGMipc4Co0JKB8h/LTUDgda
-X-Google-Smtp-Source: AGHT+IHBSjL7hP+WPtAP2SKF5/rsbIqC60y9fVUpbG/XrFpirHjiCxXr5Vsl09CmHgTmroNfpH7Tcw==
-X-Received: by 2002:a50:9b45:0:b0:57c:9cd3:4f96 with SMTP id 4fb4d7f45d1cf-57cbd908fcdmr6110311a12.40.1718651717456;
-        Mon, 17 Jun 2024 12:15:17 -0700 (PDT)
-Received: from [192.168.42.137] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57ce0457d82sm2034856a12.39.2024.06.17.12.15.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jun 2024 12:15:16 -0700 (PDT)
-Message-ID: <ff109ca0-3056-45fd-b1ae-5482e1affeb0@gmail.com>
-Date: Mon, 17 Jun 2024 20:15:17 +0100
+	s=arc-20240116; t=1718655500; c=relaxed/simple;
+	bh=pI8S1fTmLevYqlSJ2RmuXBG1RjiHQm/2Y+Jibhl8KCg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=JzyCokqalzx/tDdsJQs718rFGk9mRowrjNBO6pgBhEC5kLdBFak/JdCT8wQ8TuinlYoA+vyr+7dvzY59AcnPvL47JUSK2q5ZIZDkoSnxFM0S86kHN/nuMGZ6i6r7UKAYkPmOK+GeVeToiZsWdDorDL5oUIBT5ioruFLrvItotFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Fo+ueEWx; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45HAdMtY022524;
+	Mon, 17 Jun 2024 19:53:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=OWEmTilDE5Bxmu7DUuNISj
+	VpdcVGU0wupZbmMvDx5ic=; b=Fo+ueEWx6vUz8qUHIsEoVu9JjK8rTmDM2RyQNK
+	Lic48hKQtD6ya/SazzFSEk3bTB615yvogOJNLtEWrpqCWnWaUroz+FyG7r6bsVLP
+	f8jv2/C64eraSuG0BbeOV4bkMNFi1Jww+hpykAnygTiR7N8OEY6R1KMW7xXeVdkv
+	4SFFneLwS9yeVgCcUsbgDOOxK6egC398bF5LLvh9LRVMxDGhG25goWqioDlLInSK
+	WSJY2ehV2UQICfTxKY6CTccJLQFt0nnlvBger6VNt4t6j5Aj+17fUNZHLBUqQn36
+	HeExBVbhjOizS4xXIPoWo9qwpk3MUMev8SFDqoygyeeCwoRQ==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ys3b74n9q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 17 Jun 2024 19:53:56 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45HJrskd017640
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 17 Jun 2024 19:53:54 GMT
+Received: from [169.254.0.1] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 17 Jun
+ 2024 12:53:54 -0700
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+Date: Mon, 17 Jun 2024 12:53:52 -0700
+Subject: [PATCH v2] EDAC: add missing MODULE_DESCRIPTION() macros
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
- custom page providers
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: David Ahern <dsahern@kernel.org>, David Wei <dw@davidwei.uk>,
- Mina Almasry <almasrymina@google.com>, Christoph Hellwig
- <hch@infradead.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-References: <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
- <CAHS8izNmT_NzgCu1pY1RKgJh+kP2rCL_90Gqau2Pkd3-48Q1_w@mail.gmail.com>
- <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com>
- <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
- <20240607145247.GG791043@ziepe.ca>
- <45803740-442c-4298-b47e-2d87ae5a6012@davidwei.uk>
- <54975459-7a5a-46ff-a9ae-dc16ceffbab4@gmail.com>
- <20240610121625.GI791043@ziepe.ca>
- <59443d14-1f1d-42bb-8be3-73e6e4a0b683@kernel.org>
- <00c67cf0-2bf3-4eaf-b200-ffe00d91593b@gmail.com>
- <20240610221500.GN791043@ziepe.ca>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20240610221500.GN791043@ziepe.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-ID: <20240617-md-arm64-drivers-edac-v2-1-6d6c5dd1e5da@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAE+UcGYC/4WOSw6CMBCGr2K6dkxbKkZX3sOw6GOQSWzRKRAM4
+ e4WLmD+1Zf8r0VkZMIsbodFME6UqU8F9PEgfGfTE4FCYaGlNrJWFcQAlmNtIDBNyBkwWA+6tUZ
+ XlZHhchYl+2Zsad57H01hZzOCY5t8t7W9KI0zRJsH5M3eUR56/u4vJrWF/g1OCorM1ZpWtrVy7
+ v4ZyVPyJ99H0azr+gO+bJd52wAAAA==
+To: Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
+        "James
+ Morse" <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Johannes Thumshirn <morbidrsa@gmail.com>,
+        Ralf Baechle <ralf@linux-mips.org>
+CC: <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+        Jeff Johnson
+	<quic_jjohnson@quicinc.com>
+X-Mailer: b4 0.14.0
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: tzT8BRGZZ6xqabbT97xOx6oZWxCefee6
+X-Proofpoint-ORIG-GUID: tzT8BRGZZ6xqabbT97xOx6oZWxCefee6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-17_14,2024-06-17_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ bulkscore=0 spamscore=0 mlxscore=0 priorityscore=1501 clxscore=1011
+ mlxlogscore=999 adultscore=0 lowpriorityscore=0 phishscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405170001 definitions=main-2406170153
 
-On 6/10/24 23:15, Jason Gunthorpe wrote:
-> On Mon, Jun 10, 2024 at 08:20:08PM +0100, Pavel Begunkov wrote:
->> On 6/10/24 16:16, David Ahern wrote:
-> 
->>>> There is no reason you shouldn't be able to use your fast io_uring
->>>> completion and lifecycle flow with DMABUF backed memory. Those are not
->>>> widly different things and there is good reason they should work
->>>> together.
->>
->> Let's not mix up devmem TCP and dmabuf specifically, as I see it
->> your question was concerning the latter: "... DMABUF memory registered
->> through Mina's mechanism". io_uring's zcrx can trivially get dmabuf
->> support in future, as mentioned it's mostly the setup side. ABI,
->> buffer workflow and some details is a separate issue, and I don't
->> see how further integration aside from what we're already sharing
->> is beneficial, on opposite it'll complicate things.
-> 
-> Again, I am talking about composability here, duplicating the DMABUF
-> stuff into io_uring is not composable, it is just duplicating things.
+With ARCH=arm64, make allmodconfig && make W=1 C=1 reports:
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/edac/layerscape_edac_mod.o
 
-Ok, then registering, say, a dmabuf via devmem TCP and then using it
-in io_uring. Let's say we make devmem TCP API to be able to register
-a dmabuf without using it, from where io_uring can take ownership
-over it and use in the flow. And I strongly believe the same memory
-region/dmabuf should never be used by both at the same time and hence
-lifetime of any such memory should be exclusively bound to io_uring.
+Add the missing invocation of the MODULE_DESCRIPTION() macro to all
+files which have a MODULE_LICENSE().
 
-That leaves the user api, where to add memory you need to create
-a netlink socket and pass everything through it, which is an extra
-step, and then letting know io_uring that it can use the memory, not
-forgetting to eject it from netlink. That's not a good api as far as
-it goes with io_uring.
+This includes mpc85xx_edac.c and four octeon_edac-*.c files which,
+although they did not produce a warning with the arm64 allmodconfig
+configuration, may cause this warning with other configurations.
 
-I don't think slight duplicating of registration is a problem when
-the upside is much cleaner API. Internals, however, can be easily
-shared. We can even say that the net stack should provide helpers
-like init_page_pool_from_dmabuf_fd() and now allow poking into
-related bits aside from it (initialising net_iov / etc.).
+Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+---
+Changes in v2:
+- Updated to fix all missing MODULE_DESCRIPTION() macros in drivers/edac
+- Link to v1: https://lore.kernel.org/r/20240613-md-arm64-drivers-edac-v1-1-149a4f0f61bb@quicinc.com
+- v1 subject: [PATCH] EDAC: layerscape: add missing MODULE_DESCRIPTION() macro
+---
+ drivers/edac/layerscape_edac.c | 1 +
+ drivers/edac/mpc85xx_edac.c    | 1 +
+ drivers/edac/octeon_edac-l2c.c | 1 +
+ drivers/edac/octeon_edac-lmc.c | 1 +
+ drivers/edac/octeon_edac-pc.c  | 1 +
+ drivers/edac/octeon_edac-pci.c | 1 +
+ 6 files changed, 6 insertions(+)
 
-> It does not match the view that there should be two distinct layers
-> here, one that provides the pages and one that manages the
-> lifecycle. As HCH pushes for pages either come from the allocator and
-> get to use the struct folio or the come from a dmabuf and they
-> don't. That is it, the only two choices.
-> 
-> The iouring stuff is trying to confuse the source of the pages with
-> the lifecycle - which is surely convenient, but is why Christoph is
-> opposing it.
+diff --git a/drivers/edac/layerscape_edac.c b/drivers/edac/layerscape_edac.c
+index d2f895033280..b70d5d258fcb 100644
+--- a/drivers/edac/layerscape_edac.c
++++ b/drivers/edac/layerscape_edac.c
+@@ -69,6 +69,7 @@ static void __exit fsl_ddr_mc_exit(void)
+ 
+ module_exit(fsl_ddr_mc_exit);
+ 
++MODULE_DESCRIPTION("Freescale Layerscape EDAC module");
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("NXP Semiconductor");
+ module_param(edac_op_state, int, 0444);
+diff --git a/drivers/edac/mpc85xx_edac.c b/drivers/edac/mpc85xx_edac.c
+index e8945d4adbad..d0266cbcbeda 100644
+--- a/drivers/edac/mpc85xx_edac.c
++++ b/drivers/edac/mpc85xx_edac.c
+@@ -704,6 +704,7 @@ static void __exit mpc85xx_mc_exit(void)
+ 
+ module_exit(mpc85xx_mc_exit);
+ 
++MODULE_DESCRIPTION("Freescale MPC85xx Memory Controller EDAC driver");
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Montavista Software, Inc.");
+ module_param(edac_op_state, int, 0444);
+diff --git a/drivers/edac/octeon_edac-l2c.c b/drivers/edac/octeon_edac-l2c.c
+index 919095d10528..2adb9c8093f8 100644
+--- a/drivers/edac/octeon_edac-l2c.c
++++ b/drivers/edac/octeon_edac-l2c.c
+@@ -201,5 +201,6 @@ static struct platform_driver octeon_l2c_driver = {
+ };
+ module_platform_driver(octeon_l2c_driver);
+ 
++MODULE_DESCRIPTION("Cavium Octeon Secondary Caches (L2C) EDAC driver");
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Ralf Baechle <ralf@linux-mips.org>");
+diff --git a/drivers/edac/octeon_edac-lmc.c b/drivers/edac/octeon_edac-lmc.c
+index 18615cbcd9ea..4112c2ee34b8 100644
+--- a/drivers/edac/octeon_edac-lmc.c
++++ b/drivers/edac/octeon_edac-lmc.c
+@@ -319,5 +319,6 @@ static struct platform_driver octeon_lmc_edac_driver = {
+ };
+ module_platform_driver(octeon_lmc_edac_driver);
+ 
++MODULE_DESCRIPTION("Cavium Octeon DRAM Memory Controller (LMC) EDAC driver");
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Ralf Baechle <ralf@linux-mips.org>");
+diff --git a/drivers/edac/octeon_edac-pc.c b/drivers/edac/octeon_edac-pc.c
+index b8404cc7b65f..d9eeb40d2784 100644
+--- a/drivers/edac/octeon_edac-pc.c
++++ b/drivers/edac/octeon_edac-pc.c
+@@ -137,5 +137,6 @@ static struct platform_driver co_cache_error_driver = {
+ };
+ module_platform_driver(co_cache_error_driver);
+ 
++MODULE_DESCRIPTION("Cavium Octeon Primary Caches EDAC driver");
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Ralf Baechle <ralf@linux-mips.org>");
+diff --git a/drivers/edac/octeon_edac-pci.c b/drivers/edac/octeon_edac-pci.c
+index 108ad9493cfb..4d368af2c5f0 100644
+--- a/drivers/edac/octeon_edac-pci.c
++++ b/drivers/edac/octeon_edac-pci.c
+@@ -104,5 +104,6 @@ static struct platform_driver octeon_pci_driver = {
+ };
+ module_platform_driver(octeon_pci_driver);
+ 
++MODULE_DESCRIPTION("Cavium Octeon PCI Controller EDAC driver");
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Ralf Baechle <ralf@linux-mips.org>");
 
--- 
-Pavel Begunkov
+---
+base-commit: 83a7eefedc9b56fe7bfeff13b6c7356688ffa670
+change-id: 20240613-md-arm64-drivers-edac-2fa423340d75
+
 
