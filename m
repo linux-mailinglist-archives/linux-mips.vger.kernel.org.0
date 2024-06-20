@@ -1,168 +1,143 @@
-Return-Path: <linux-mips+bounces-3772-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3779-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 969C2910CD8
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 18:31:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21A23910D13
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 18:35:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50860283C78
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 16:31:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52E141C2405E
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 16:35:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 953CF1BD017;
-	Thu, 20 Jun 2024 16:25:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B54EB1B47AB;
+	Thu, 20 Jun 2024 16:31:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mgf3e1Fh"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="hNLxRoxR";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VUGOWjv2"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from wfhigh7-smtp.messagingengine.com (wfhigh7-smtp.messagingengine.com [64.147.123.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5830A1B3F17;
-	Thu, 20 Jun 2024 16:25:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E1F1BA889;
+	Thu, 20 Jun 2024 16:31:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718900719; cv=none; b=AcnVL7KjTNAyp8NWMOaq/B2bsvl8Bg6kZeYBQlED2ugDYc/qyOWCRNe8lJX4H8e8v/AZdpKmNzM1MtcLPHz/6IviDF580QQ5f3IBdrZ/AhJiEtp4Lee8XKr8PClmUlaFh9PmnPg+4zJiik6OuaHms20ypRkawjRQuDgtH1zhQ9Q=
+	t=1718901070; cv=none; b=cXl4MyQjel5R8qicUw2p8pB/Ob8fsV/QaNgCphJdo6i8WHYBemjDNjBTgqnA/0R+2bVHHrIKK5w2+ioWf7Juqp861ooznx7l+FDydyrPQf0vF6dLWAiWIPIftUI74T1lDtc0DkRTNtFvQhov1+nNhU3gpl144VVNNnpAQo0Ds3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718900719; c=relaxed/simple;
-	bh=kDUL0eQ/6YSJ1bK+6Lr69ZdPp0RU2xbPAfoz6UW7TTg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=M+TxOH9W4/vMJbE0pwqQ1uU74mnkGkbKEWqTzvl+I/1HWgzoAi2UEoD99fIEay3FT2rfa2MnZ6x/q0dbrnaIPVdYVc+9UCo3dKs915Pca/MQ4+iadBW77MGz3JwG6NXOSgvMLr+ctDx1a+P+ePIwEHb623BkrWnYgz70syw/sUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mgf3e1Fh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1817C32786;
-	Thu, 20 Jun 2024 16:25:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718900719;
-	bh=kDUL0eQ/6YSJ1bK+6Lr69ZdPp0RU2xbPAfoz6UW7TTg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Mgf3e1FhIJ34BxmZFn82Ln9S0Qv6QXhxwCJKDARqYjkFgu+PeLy+HbQQiPNlRIlpH
-	 CJPg8GeMhGdXNWnFJ7rs6CxgQTJgS3aIOdECU1hUTPI3GTqq1wFPc1n7ygAUyYEwl9
-	 +8r+PlwF95EJ6Ir8u8mktZFBaZpsQVlPwxTyDXM7TdcPf38yXtOg8ExYgy0jNH9ePX
-	 1ViSkxDmMk4r4dOWXWQ9/QUe8Zx98JIfQyCBmd0SwBnHw1BZMRTpQwEpjMClIy+kE/
-	 qhRXIrGZpKimne/UDkbRtj9V6uWojsT4fcxvIhFSPeJGeHucTaUEAfjbySdUDB53iI
-	 PtNJzQd1HEs7A==
-From: Arnd Bergmann <arnd@kernel.org>
-To: linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-mips@vger.kernel.org,
-	Helge Deller <deller@gmx.de>,
-	linux-parisc@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	sparclinux@vger.kernel.org,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-	linuxppc-dev@lists.ozlabs.org,
-	Brian Cain <bcain@quicinc.com>,
-	linux-hexagon@vger.kernel.org,
-	Guo Ren <guoren@kernel.org>,
-	linux-csky@vger.kernel.org,
-	Heiko Carstens <hca@linux.ibm.com>,
-	linux-s390@vger.kernel.org,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	linux-sh@vger.kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	linux-fsdevel@vger.kernel.org,
-	libc-alpha@sourceware.org,
-	musl@lists.openwall.com,
-	ltp@lists.linux.it
-Subject: [PATCH 15/15] linux/syscalls.h: add missing __user annotations
-Date: Thu, 20 Jun 2024 18:23:16 +0200
-Message-Id: <20240620162316.3674955-16-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240620162316.3674955-1-arnd@kernel.org>
-References: <20240620162316.3674955-1-arnd@kernel.org>
+	s=arc-20240116; t=1718901070; c=relaxed/simple;
+	bh=xMb013uPEOBTWMmM5zBsJ8UlvQ2ArjFJ+gwip7i51Z0=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=qETYUKnZcpcQFLao7nIyov7P7Pf8ZmzthJqyo73PpN4EgWrVYahDqSqAyJpmWaTQR5IhQrTjMn5FaecNO3TJWnNda1k7lCrQrn1djC/Syn9f/xwUBaFVJjlHq19UfJdU3Z9tIvNEALJMAd5NYU5nE7Lo81mkvIvJymD70Ecbx+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=hNLxRoxR; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VUGOWjv2; arc=none smtp.client-ip=64.147.123.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailfhigh.west.internal (Postfix) with ESMTP id 5EF341800131;
+	Thu, 20 Jun 2024 12:31:07 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Thu, 20 Jun 2024 12:31:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1718901066;
+	 x=1718987466; bh=tvZfZePdD8ufJsjGr1KQrYgsonsCq0tGwrSVJY/6Mmc=; b=
+	hNLxRoxRW4mVdw7y1u/WTiTWqNZ8+YhBwV57h6TpiXs0UMVlqAHZHukwDJQ5ZqZB
+	SUIYCzxeDRYVeX3WwqSJDuMAlBxNTGKuI7hBRKBz5mqGPUT5rM0iK19n4QUV6B8f
+	1Z7cQFBpvAGWTP04Zoh4SKyZRyGZi6OWAzj5s7R1h7mnjzoc5nSC3T2hMk+UmIkh
+	pqJ7EQKFmkpOHiqkDdf78kWcTbWKpCXGrk8guXqWg9Vy0zoJlz5EIRNg3V+g4CKH
+	xOpoffIs7DHSezlpodhM+UK6Bh08wnWcCca01swpxIBi7lUyuXOIxwpRzCBWo+Yt
+	gCG6kKh3Z10zZ1sgeYL3pA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1718901066; x=
+	1718987466; bh=tvZfZePdD8ufJsjGr1KQrYgsonsCq0tGwrSVJY/6Mmc=; b=V
+	UGOWjv2PQpdAbjzA0oGq8n1vbOfXU4uuJ0KJLB0guPfMB+KtOqQoDKjBY5O3W5vT
+	cAaXA7zbGUTF7ejntpwqUiJBD2EbJZ6KcpRIWVoOgCL4NRw4kYwH3hcghygPlXDJ
+	EofeYKaRyAkg6DUUgVklSCOT29yVVIb5qNkH6PDs9G9yCfkUogjldBMVc4tvQa93
+	QcAIfPZpmgkJUVNMkNN59miiKSLUQp0Kvww6G/VcZLudNYnRDkBY1mwr8J7CYHa1
+	Ch2by9SAytnDVemv6DhvQsKVj/VK300fplqKwvmQ+XEf8D0fquMRHg6cupiSs94R
+	RDPV5I7l5paqZHLkvTNYw==
+X-ME-Sender: <xms:Sll0ZqRk_7TkioOfUiv1wHY7hUnazbtMGg4_aC8rXSFrwhetUjRe0A>
+    <xme:Sll0ZvxNT8wZsnCesFH9tZ5s7tQMGTX2F1vuMyZVYosJ4XMhNI2N5bM8cF7wRA-YY
+    g5YzK5lxGLkr7TNCvM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfeefvddguddtfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    lfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtg
+    homheqnecuggftrfgrthhtvghrnhepgeeitddvvdffheegleekudfffffgkeeiteffiedt
+    keekkeevgfefleeijeelkefhnecuffhomhgrihhnpegtihhpuhhnihhtvggurdgtohhmne
+    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgig
+    uhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:Sll0Zn30hKE9zHofCAaDgDKnApMnpbcdq0BjV6zkRxLPC9asFxeslg>
+    <xmx:Sll0ZmDTY0eyQ6SnDPl3tb1igIBK0Sk86k5FlKMF9aN-pAlbHdKdyA>
+    <xmx:Sll0ZjgELW5NXBybaVFaH8ei6hsAL5YAI05ELIgqQiiAaxdh3JyV3g>
+    <xmx:Sll0Ziq4e09G3NQVYjhIMFKGIePzGkSD82TdFjAxK7G7ZKZPuS-Abg>
+    <xmx:Sll0ZjfLcpxT8lnGFUpi_bcy2Fbq1vqc7k9P_DmID4WBWltuf3IYipZ9>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 5A9BE36A0074; Thu, 20 Jun 2024 12:31:06 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-522-ga39cca1d5-fm-20240610.002-ga39cca1d
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <743a2297-ff4a-4cb3-ae61-8cd4956aa565@app.fastmail.com>
+In-Reply-To: <ZnRThFlqqyDEprGz@alpha.franken.de>
+References: <20240612-mips-llsc-v2-0-a42bd5562bdb@flygoat.com>
+ <20240612-mips-llsc-v2-2-a42bd5562bdb@flygoat.com>
+ <ZnRThFlqqyDEprGz@alpha.franken.de>
+Date: Thu, 20 Jun 2024 17:30:48 +0100
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+Cc: "Jonas Gorski" <jonas.gorski@gmail.com>,
+ "Maciej W. Rozycki" <macro@orcam.me.uk>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] MIPS: Introduce config options for LLSC availability
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-From: Arnd Bergmann <arnd@arndb.de>
 
-A couple of declarations in linux/syscalls.h are missing __user
-annotations on their pointers, which can lead to warnings from
-sparse because these don't match the implementation that have
-the correct address space annotations.
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- include/linux/syscalls.h | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+=E5=9C=A82024=E5=B9=B46=E6=9C=8820=E6=97=A5=E5=85=AD=E6=9C=88 =E4=B8=8B=E5=
+=8D=885:06=EF=BC=8CThomas Bogendoerfer=E5=86=99=E9=81=93=EF=BC=9A
+[...]
+> do you have an user manual stating that the R5k bug is fixed on this C=
+PUs ?
 
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index ba9337709878..63424af87bba 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -322,13 +322,13 @@ asmlinkage long sys_io_pgetevents(aio_context_t ctx_id,
- 				long nr,
- 				struct io_event __user *events,
- 				struct __kernel_timespec __user *timeout,
--				const struct __aio_sigset *sig);
-+				const struct __aio_sigset __user *sig);
- asmlinkage long sys_io_pgetevents_time32(aio_context_t ctx_id,
- 				long min_nr,
- 				long nr,
- 				struct io_event __user *events,
- 				struct old_timespec32 __user *timeout,
--				const struct __aio_sigset *sig);
-+				const struct __aio_sigset __user *sig);
- asmlinkage long sys_io_uring_setup(u32 entries,
- 				struct io_uring_params __user *p);
- asmlinkage long sys_io_uring_enter(unsigned int fd, u32 to_submit,
-@@ -441,7 +441,7 @@ asmlinkage long sys_fchown(unsigned int fd, uid_t user, gid_t group);
- asmlinkage long sys_openat(int dfd, const char __user *filename, int flags,
- 			   umode_t mode);
- asmlinkage long sys_openat2(int dfd, const char __user *filename,
--			    struct open_how *how, size_t size);
-+			    struct open_how __user *how, size_t size);
- asmlinkage long sys_close(unsigned int fd);
- asmlinkage long sys_close_range(unsigned int fd, unsigned int max_fd,
- 				unsigned int flags);
-@@ -555,7 +555,7 @@ asmlinkage long sys_get_robust_list(int pid,
- asmlinkage long sys_set_robust_list(struct robust_list_head __user *head,
- 				    size_t len);
- 
--asmlinkage long sys_futex_waitv(struct futex_waitv *waiters,
-+asmlinkage long sys_futex_waitv(struct futex_waitv __user *waiters,
- 				unsigned int nr_futexes, unsigned int flags,
- 				struct __kernel_timespec __user *timeout, clockid_t clockid);
- 
-@@ -907,7 +907,7 @@ asmlinkage long sys_seccomp(unsigned int op, unsigned int flags,
- asmlinkage long sys_getrandom(char __user *buf, size_t count,
- 			      unsigned int flags);
- asmlinkage long sys_memfd_create(const char __user *uname_ptr, unsigned int flags);
--asmlinkage long sys_bpf(int cmd, union bpf_attr *attr, unsigned int size);
-+asmlinkage long sys_bpf(int cmd, union bpf_attr __user *attr, unsigned int size);
- asmlinkage long sys_execveat(int dfd, const char __user *filename,
- 			const char __user *const __user *argv,
- 			const char __user *const __user *envp, int flags);
-@@ -960,11 +960,11 @@ asmlinkage long sys_cachestat(unsigned int fd,
- 		struct cachestat_range __user *cstat_range,
- 		struct cachestat __user *cstat, unsigned int flags);
- asmlinkage long sys_map_shadow_stack(unsigned long addr, unsigned long size, unsigned int flags);
--asmlinkage long sys_lsm_get_self_attr(unsigned int attr, struct lsm_ctx *ctx,
--				      u32 *size, u32 flags);
--asmlinkage long sys_lsm_set_self_attr(unsigned int attr, struct lsm_ctx *ctx,
-+asmlinkage long sys_lsm_get_self_attr(unsigned int attr, struct lsm_ctx __user *ctx,
-+				      u32 __user *size, u32 flags);
-+asmlinkage long sys_lsm_set_self_attr(unsigned int attr, struct lsm_ctx __user *ctx,
- 				      u32 size, u32 flags);
--asmlinkage long sys_lsm_list_modules(u64 *ids, u32 *size, u32 flags);
-+asmlinkage long sys_lsm_list_modules(u64 __user *ids, u32 __user *size, u32 flags);
- 
- /*
-  * Architecture-specific system calls
--- 
-2.39.2
+I actually investigated R5500 a little bit.
 
+There is no explicit document mentioned this bug is fixed on R5500, but =
+it's not
+mentioned on "VR Series 64-/32-Bit Microprocessor Programming Guide" [1]=
+ either,
+while some other hardware limitations are mentioned in that guide.
+
+Plus EMMA platform, which was removed form the kernel, doesn't have
+cpu-feature-overrides.h. This means that the platform was running with L=
+LSC
+enabled.
+
+So I think this CPU is not affected.
+
+[1]: https://repo.oss.cipunited.com/archives/docs/NEC/U10710EJ5V0AN00.pdf
+>
+> Thomas.
+>
+> --=20
+> Crap can work. Given enough thrust pigs will fly, but it's not necessa=
+rily a
+> good idea.                                                [ RFC1925, 2=
+.3 ]
+
+--=20
+- Jiaxun
 
