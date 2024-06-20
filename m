@@ -1,120 +1,85 @@
-Return-Path: <linux-mips+bounces-3792-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3793-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5C9F910F62
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 19:49:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8C90910F69
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 19:50:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24CB31C224E9
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 17:49:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6673D283004
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 17:50:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98A7A1BC082;
-	Thu, 20 Jun 2024 17:41:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="lrv87RYM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F23161B9AA6;
+	Thu, 20 Jun 2024 17:42:03 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FB171B9AA4;
-	Thu, 20 Jun 2024 17:41:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADCA51B3F3C;
+	Thu, 20 Jun 2024 17:41:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718905269; cv=none; b=MQR2sYhl1okD55zxWT65i83nC8yLoXIitZC5DWaPqBBX5f7eQNSoMQ6mRTZOionfwTykWXbXNRyqjlOhxzacJu4PAEnBaYbokFqO3wL3F/WpBVGcK2i3ef3Jg+wrUqTaUWMnMQxVYA5XNXpVyXbeWX5T5x6lLgQu+hkQFivg5TQ=
+	t=1718905323; cv=none; b=ZZiZWHkQGkEJk6n78cenkZj3RhBLreMsTkkn4KAW6TduNY1lphcKMT7d91MNNjH9nprTmKKVfz4o5SSCAVMBWEEfEsE/gYnD7+K2n++FjMzIi5wve2YtQjmU8SWnc088vSaBGOFvgOmCRytiaTMTxkewbR2j2eVhoj7SRPwoyZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718905269; c=relaxed/simple;
-	bh=6wUHeTu1QhttKGhu/ZTrHU5kfJDX1NlSsMPXIreIsa0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=ooCRzeE9ngDQ+xNDKSv6Giy1YUfArzWoC+BOwJp2XzMAzcoTzdC6nfVX8V7CjXyIYaiqVObIqMH48LFISk6CmfJ9jxCMJVTP0YusTUmvmpjZZmI0s3Wxog1OFFesrzRGNBKcosl83p811rDfcyj/3BdExIXJRwtwo25CfYM73k8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=lrv87RYM; arc=none smtp.client-ip=217.70.183.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B311520002;
-	Thu, 20 Jun 2024 17:41:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1718905264;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lZf4ibwZLzKClCqjh35Z7HVpohlqofD5SzhTF8YVstQ=;
-	b=lrv87RYMhTRu7xGiwLQoJDXjAgPeAkwGzToH2x0IxEARvWNADq1kB/0sTQG8txeOZXrTCx
-	nFGKkqxoFJsm4zOnrhGKfuVtsp3qlQvLvmX65Bmn42UxyMLxqN+IJB4GY+eqBbgxbSYfKY
-	K6QrWAYpMaHB1UxVjW2hUR0Ee8eQDXYPAKsYz1+Ij+fqt6zCwjDejJTVOGu3h1R3S/yS0j
-	jxXRm9nhw3dV7J622mVKpHweESZ+n4M1B+RODqKUAh276ELhCROHoUYK4pyjSR2RE6g+g8
-	4RULGAfEPxmVleDWEG535AhO7epenkknfM/1PcWwB7PG3dFmmnuTtWIcmnNu7A==
+	s=arc-20240116; t=1718905323; c=relaxed/simple;
+	bh=+nR5QNLtGvEfCYocFDjiHDm8ngwhk+jo6AdzPgyzDdU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SQfez70Yig4O0WHxZWAX5qo2cyOC7MFcnFV0KdtJJwN9EImJckHBVVN6qEWdnIWa2aPcntJVb0sm/aM9nOuBm8ORWJWgriqQHTpDsJj3T5QgvCfChTcb4p1ze0PoA6wFn415F83Sfvb2OyrL8ul1zPZsDAYylrcvAvx7g9AIEwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1sKLn5-0002k1-00; Thu, 20 Jun 2024 19:41:43 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 22837C0120; Thu, 20 Jun 2024 19:41:24 +0200 (CEST)
+Date: Thu, 20 Jun 2024 19:41:24 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Jonas Gorski <jonas.gorski@gmail.com>,
+	"Maciej W. Rozycki" <macro@orcam.me.uk>,
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] MIPS: Introduce config options for LLSC
+ availability
+Message-ID: <ZnRpxMfs0Eql87r3@alpha.franken.de>
+References: <20240612-mips-llsc-v2-0-a42bd5562bdb@flygoat.com>
+ <20240612-mips-llsc-v2-2-a42bd5562bdb@flygoat.com>
+ <ZnRThFlqqyDEprGz@alpha.franken.de>
+ <743a2297-ff4a-4cb3-ae61-8cd4956aa565@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 20 Jun 2024 19:41:03 +0200
-Message-Id: <D25128N9MEYE.5KAMN7OG53O2@bootlin.com>
-Subject: Re: [PATCH v2 03/11] dt-bindings: soc: mobileye: add EyeQ OLB
- system controller
-Cc: "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor
- Dooley" <conor+dt@kernel.org>, "Michael Turquette"
- <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Philipp
- Zabel" <p.zabel@pengutronix.de>, "Linus Walleij"
- <linus.walleij@linaro.org>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, "Lee
- Jones" <lee@kernel.org>, "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
- <linux-gpio@vger.kernel.org>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Gregory CLEMENT"
- <gregory.clement@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-To: "Rob Herring" <robh@kernel.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: aerc 0.17.0
-References: <20240503-mbly-olb-v2-0-95ce5a1e18fe@bootlin.com>
- <20240503-mbly-olb-v2-3-95ce5a1e18fe@bootlin.com>
- <20240507125152.GA38845-robh@kernel.org>
-In-Reply-To: <20240507125152.GA38845-robh@kernel.org>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <743a2297-ff4a-4cb3-ae61-8cd4956aa565@app.fastmail.com>
 
-Hello Rob,
+On Thu, Jun 20, 2024 at 05:30:48PM +0100, Jiaxun Yang wrote:
+> 
+> 
+> 在2024年6月20日六月 下午5:06，Thomas Bogendoerfer写道：
+> [...]
+> > do you have an user manual stating that the R5k bug is fixed on this CPUs ?
+> 
+> I actually investigated R5500 a little bit.
+> 
+> There is no explicit document mentioned this bug is fixed on R5500, but it's not
+> mentioned on "VR Series 64-/32-Bit Microprocessor Programming Guide" [1] either,
+> while some other hardware limitations are mentioned in that guide.
+> 
+> Plus EMMA platform, which was removed form the kernel, doesn't have
+> cpu-feature-overrides.h. This means that the platform was running with LLSC
+> enabled.
+> 
+> So I think this CPU is not affected.
 
-On Tue May 7, 2024 at 2:51 PM CEST, Rob Herring wrote:
-> On Fri, May 03, 2024 at 04:20:48PM +0200, Th=C3=A9o Lebrun wrote:
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - enum:
-> > +          - mobileye,eyeq5-olb
-> > +          - mobileye,eyeq6l-olb
-> > +          - mobileye,eyeq6h-acc-olb
-> > +          - mobileye,eyeq6h-central-olb
-> > +          - mobileye,eyeq6h-east-olb
-> > +          - mobileye,eyeq6h-west-olb
-> > +          - mobileye,eyeq6h-south-olb
-> > +          - mobileye,eyeq6h-ddr0-olb
-> > +          - mobileye,eyeq6h-ddr1-olb
-> > +      - const: syscon
-> > +      - const: simple-mfd
->
-> You are getting rid of the child nodes, so you shouldn't need simple-mfd=
-=20
-> any more.
+found a preliminary datasheet and it supports your thinking;-)
 
-Indeed, simple-mfd was heritage from previous revisions. It has been
-removed in the latest one [0].
+Thomas.
 
-Thanks Rob,
-
-[0]: https://lore.kernel.org/lkml/20240620-mbly-olb-v3-0-5f29f8ca289c@bootl=
-in.com/
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
