@@ -1,157 +1,121 @@
-Return-Path: <linux-mips+bounces-3801-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3800-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D8B6911116
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 20:41:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73AFB911055
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 20:12:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1C680B20E50
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 18:15:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 87A6B1C24180
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 18:12:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58C881BA088;
-	Thu, 20 Jun 2024 18:07:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 536701BD017;
+	Thu, 20 Jun 2024 18:00:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="CiQU5BIZ"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="nXQuPruI"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA341B9AA8
-	for <linux-mips@vger.kernel.org>; Thu, 20 Jun 2024 18:07:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7A41BC098;
+	Thu, 20 Jun 2024 18:00:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718906829; cv=none; b=QevFkFCZpvU75kBsNQVXyu4NasmEISMEuNGRv2q0nQsr3mgb5n9TDJkSkqRclaeCH60puc0OhKd36R2++uLVX299nQxDDn5sR0pDVnrGyzUPwI7r4n+0BkfLl8rCCeEHU15d/rQqXMX8nyKjAsbS1ni1QSlAyYb08c/AqNGOewo=
+	t=1718906453; cv=none; b=gEuqDP2lSPNoqpBwaNdrqd9hq+NvEVJivRcz4UDLb5VkGsiQSG45c26KZbBP+T/zpOJW39iIkbD5bzmMeb5zL1f7S1VXVoe4Njg5Kc814yalGIcS+8eWM080vC8OT44n0fWrtet4g3N+Gu2UX680+WUsFiJnjyYmakfGFKXxD7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718906829; c=relaxed/simple;
-	bh=29OxgEL3l6wtk/wr9HSlAcydEGnms+qvS9bonjZCeq4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EdNYYZiSj/taAvJx0ZZGyPShDmmOJA1NurpZvT2Y0QG6U/QHCBeC6qbJkvW/ltd6rMaVNbomwh0rFU6U9pRtDl/0FKboRN8FagDXFWeZyMK2iJKr7GoHnrAEZNsZrhmIdH+yDA9nTGeCdcxpPGvD8vuDyVEdD+89VQpS99sQVB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=CiQU5BIZ; arc=none smtp.client-ip=209.85.208.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2eaea28868dso16150481fa.3
-        for <linux-mips@vger.kernel.org>; Thu, 20 Jun 2024 11:07:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1718906825; x=1719511625; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fuatl8An2r1cXJScFESolD1f90VPFvdc9a3mKIi/oro=;
-        b=CiQU5BIZ30qld9QZNTSL7BrCTCsHBQkTYdOrO36WO/y77qO28j8Az5Ht3Sn1o6QYng
-         +m7OHiPvUCiom596/RoIO7c+cN3Y760YXWXlypKtGnBxpwAFIRgZVeo+TbKOs9bBQYwV
-         Tj2hGbk3YIrBhtkZf7fppwKsOAg4s6UHXEDA8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718906825; x=1719511625;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fuatl8An2r1cXJScFESolD1f90VPFvdc9a3mKIi/oro=;
-        b=llc05WXPIE114/rafJweF0BMnm5eMD7CxhhG8wOjAsGcYFaG0pUeNYmuDP/2ZdXfE9
-         CjyNio8hiKgcxjsPlGzsS7QDgj2nezm6elpLujI07pKFf6f15j197y+cWWissyhXfsTU
-         64FRPgJMj/WYWW0ocmSj34EUZ9COtPHPl8Nkb9ebF3PeySsyGqFZIuXWxcf7hrFliYAm
-         aSTyRsvByZRptTwUdkWkcMix/CaPPPY+v/DQf2cr282SxrUFmtuYKjVJKuDLACDDCsjm
-         8vCXJDImC23xT+3XOtrZ08ozZDgJ2Ih2CLEx5avkoydCLhzuhR9+l7fMr16mGOuKXqYM
-         bB7g==
-X-Forwarded-Encrypted: i=1; AJvYcCW+BJsuD7YQTIC+BoBdjma9JyEIBh/ysNIwmAuwSdSQ14eEnwAX8xDH0jR3zTO7KgL1i7X+/IvO29WJr7fzfyTXgQd5psiB7uGSqQ==
-X-Gm-Message-State: AOJu0YyGYbqqbvjdD/CS1ELVd1/loAcUIodiCdWYeA73DlkHyohDdDtx
-	n+2Jlb9JOmIwdhhAYgy5Uhzn5/KP2IKMJ8MNRehTMp2QWjivmoxIj7FkS4Z4VJOIXi506VDqEL8
-	11Y+VhqWn
-X-Google-Smtp-Source: AGHT+IEsgzww8bcaAFtqu1Y+QyiXC9bAOIg6lfhX3QVKHyB4j5/jKEh0IK01E+a/MjA9pFELO8FBLA==
-X-Received: by 2002:a2e:2e0c:0:b0:2ea:e2d2:6231 with SMTP id 38308e7fff4ca-2ec3cfe9213mr51644461fa.33.1718906825602;
-        Thu, 20 Jun 2024 11:07:05 -0700 (PDT)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6fc3f3efb3sm78794066b.15.2024.06.20.11.07.05
-        for <linux-mips@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jun 2024 11:07:05 -0700 (PDT)
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-421d32fda86so14050355e9.0
-        for <linux-mips@vger.kernel.org>; Thu, 20 Jun 2024 11:07:05 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU7iblIp1VV+R3njJYNMkgZpChNp3qyILId0iezh92tRvoxX36ARcrxuYp6qCxjpEwNsOugKVpk+yFO2PkM2oozzgBIO2oJexh+5A==
-X-Received: by 2002:a50:96cf:0:b0:57c:5874:4f5c with SMTP id
- 4fb4d7f45d1cf-57d07ea857fmr5124279a12.32.1718906455555; Thu, 20 Jun 2024
- 11:00:55 -0700 (PDT)
+	s=arc-20240116; t=1718906453; c=relaxed/simple;
+	bh=K3FDmzmWo3PowEgtwwebEio5I5t4ZNfKyn+kSIZil5M=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=JA853FZdynP1zGpxBnDEusUHqQckzDdCnxb8V7xDpdb2zYsD+4PWWYFc893dvdruqpfb39/64peLeRF5QI0pJSTgUr0c/lq6g49AqI+xKpBkf/yagt3LiboDnrjBcYCgkF0Q19Wlu0I1OSszIF+C3gYmnkvEGVMzTr8worAfpGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=nXQuPruI; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B0B3AFF803;
+	Thu, 20 Jun 2024 18:00:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1718906448;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fl1pRBkgxx3hCPtJuR7dl8WXtq89w/4Jn+JJJxvnML8=;
+	b=nXQuPruI9WoyrMqrDMEoSj6TAmBGWPemPJTZuwzaRu8cnfQXhJrw+1VecqdM6DwBIiztcK
+	cCo99uN3Xd5QYpWdH4Ue49ciSqQaD+fmAFPFCq+m8leit5G6SorLFCy2tIal8wprrhScw4
+	1DPlgfY8pUeVCfW8zYQlfnjvuCcvMXnqVQedL7r8cXX2bymjyVZaQMeoBMc60ll+Z9E6ZY
+	Kg2NWHL7QY7JZV+W/I55+ivmVoVzL61LSw+l3qVdQhbCoj884dR1bmPrXRygaF52YcCGPQ
+	cW0+1k4rntofZh+PSMqHZDKXjoZLHGdv4VY9jIY7M/eAmODySDsxFlYn6VCDbA==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240620175703.605111-1-yury.norov@gmail.com>
-In-Reply-To: <20240620175703.605111-1-yury.norov@gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 20 Jun 2024 11:00:38 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiUTXC452qbypG3jW6XCZGfc8d-iehSavxn5JkQ=sv0zA@mail.gmail.com>
-Message-ID: <CAHk-=wiUTXC452qbypG3jW6XCZGfc8d-iehSavxn5JkQ=sv0zA@mail.gmail.com>
-Subject: Re: [PATCH v4 00/40] lib/find: add atomic find_bit() primitives
-To: Yury Norov <yury.norov@gmail.com>
-Cc: linux-kernel@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
-	"H. Peter Anvin" <hpa@zytor.com>, "James E.J. Bottomley" <jejb@linux.ibm.com>, 
-	"K. Y. Srinivasan" <kys@microsoft.com>, "Md. Haris Iqbal" <haris.iqbal@ionos.com>, 
-	Akinobu Mita <akinobu.mita@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Borislav Petkov <bp@alien8.de>, Chaitanya Kulkarni <kch@nvidia.com>, 
-	Christian Brauner <brauner@kernel.org>, Damien Le Moal <damien.lemoal@opensource.wdc.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, David Disseldorp <ddiss@suse.de>, 
-	Edward Cree <ecree.xilinx@gmail.com>, Eric Dumazet <edumazet@google.com>, 
-	Fenghua Yu <fenghua.yu@intel.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Gregory Greenman <gregory.greenman@intel.com>, 
-	Hans Verkuil <hverkuil@xs4all.nl>, Hans de Goede <hdegoede@redhat.com>, 
-	Hugh Dickins <hughd@google.com>, Ingo Molnar <mingo@redhat.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Jaroslav Kysela <perex@perex.cz>, Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>, 
-	Jiri Pirko <jiri@resnulli.us>, Jiri Slaby <jirislaby@kernel.org>, Kalle Valo <kvalo@kernel.org>, 
-	Karsten Graul <kgraul@linux.ibm.com>, Karsten Keil <isdn@linux-pingi.de>, 
-	Kees Cook <keescook@chromium.org>, Leon Romanovsky <leon@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Martin Habets <habetsm.xilinx@gmail.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, Michal Simek <monstr@monstr.eu>, 
-	Nicholas Piggin <npiggin@gmail.com>, Oliver Neukum <oneukum@suse.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ping-Ke Shih <pkshih@realtek.com>, Rich Felker <dalias@libc.org>, Rob Herring <robh@kernel.org>, 
-	Robin Murphy <robin.murphy@arm.com>, Sean Christopherson <seanjc@google.com>, 
-	Shuai Xue <xueshuai@linux.alibaba.com>, Stanislaw Gruszka <stf_xl@wp.pl>, 
-	Steven Rostedt <rostedt@goodmis.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Thomas Gleixner <tglx@linutronix.de>, Valentin Schneider <vschneid@redhat.com>, 
-	Vitaly Kuznetsov <vkuznets@redhat.com>, Wenjia Zhang <wenjia@linux.ibm.com>, 
-	Will Deacon <will@kernel.org>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
-	GR-QLogic-Storage-Upstream@marvell.com, alsa-devel@alsa-project.org, 
-	ath10k@lists.infradead.org, dmaengine@vger.kernel.org, iommu@lists.linux.dev, 
-	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, linux-block@vger.kernel.org, 
-	linux-bluetooth@vger.kernel.org, linux-hyperv@vger.kernel.org, 
-	linux-m68k@lists.linux-m68k.org, linux-media@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-net-drivers@amd.com, 
-	linux-pci@vger.kernel.org, linux-rdma@vger.kernel.org, 
-	linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-sh@vger.kernel.org, 
-	linux-sound@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	mpi3mr-linuxdrv.pdl@broadcom.com, netdev@vger.kernel.org, 
-	sparclinux@vger.kernel.org, x86@kernel.org, 
-	Alexey Klimov <alexey.klimov@linaro.org>, Bart Van Assche <bvanassche@acm.org>, Jan Kara <jack@suse.cz>, 
-	Matthew Wilcox <willy@infradead.org>, Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Sergey Shtylyov <s.shtylyov@omp.ru>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 20 Jun 2024 20:00:46 +0200
+Message-Id: <D251HCFITAUR.2SM3S9Q75K4C7@bootlin.com>
+Subject: Re: [PATCH v2 00/11] Add Mobileye EyeQ system controller support
+ (clk, reset, pinctrl)
+Cc: <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+ <linux-gpio@vger.kernel.org>, "Vladimir Kondratiev"
+ <vladimir.kondratiev@mobileye.com>, "Gregory CLEMENT"
+ <gregory.clement@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>
+To: "Stephen Boyd" <sboyd@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Lee Jones" <lee@kernel.org>, "Linus
+ Walleij" <linus.walleij@linaro.org>, "Michael Turquette"
+ <mturquette@baylibre.com>, "Philipp Zabel" <p.zabel@pengutronix.de>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, "Rob Herring" <robh@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.17.0
+References: <20240503-mbly-olb-v2-0-95ce5a1e18fe@bootlin.com>
+ <8dcdb1422cd144128c1dc6fff1c273d3.sboyd@kernel.org>
+ <D13HXGJGMS76.XIIIZLZBCZ09@bootlin.com>
+ <62e1512be0bc44acae9afb34467753db.sboyd@kernel.org>
+In-Reply-To: <62e1512be0bc44acae9afb34467753db.sboyd@kernel.org>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Thu, 20 Jun 2024 at 10:57, Yury Norov <yury.norov@gmail.com> wrote:
->
->
-> The typical lock-protected bit allocation may look like this:
+Hello Stephen,
 
-If it looks like this, then nobody cares. Clearly the user in question
-never actually cared about performance, and you SHOULD NOT then say
-"let's optimize this that nobody cares about":.
+So, you should have received the latest revision [0]. It takes the
+approach you advised:
 
-Yury, I spend an inordinate amount of time just double-checking your
-patches. I ended up having to basically undo one of them just days
-ago.
+ - One driver (clk) is platform. Others (reset, pinctrl) are auxiliary
+   drivers.
+ - The clk driver spawns auxiliary devices, passing to it the iomem
+   pointer using ->platform_data.
+ - The auxdevs spawned are based on compatible match data. We don't need
+   any info to spawn them except their name, so match data only has an
+   optional string. No array needed even, just two pointers: plain, simple.
+ - This means the iomem register logic is split across each driver.
 
-New rule: before you send some optimization, you need to have NUMBERS.
+[0]: https://lore.kernel.org/lkml/20240620-mbly-olb-v3-0-5f29f8ca289c@bootl=
+in.com/
 
-Some kind of "look, this code is visible in profiles, so we actually care".
+On Tue May 7, 2024 at 11:48 PM CEST, Stephen Boyd wrote:
+> I could see the MFD subsystem gaining support for creating child
+> auxiliary devices for some compatible string node, and passing those
+> devices a regmap. Maybe that would be preferable to having to pick a
+> driver subsystem to put the platform driver in. Outside of making a
+> general purpose framework, you could put the platform driver in
+> drivers/mfd and have that populate the child devices like clk, reset,
+> pinctrl, etc.
 
-Because without numbers, I'm just not going to pull anything from you.
-These insane inlines for things that don't matter need to stop.
+Having one of the driver be platform and spawn others reduces the amount
+of boilerplate (no driver that only creates sub devices). That sounds
+like a nice advantage; to be contrasted with having unrelated code in
+subsystems (eg auxdev spawning code in drivers/clk/).
 
-And if they *DO* matter, you need to show that they matter.
+Thanks for your pieces of advice Stephen,
 
-               Linus
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
