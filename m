@@ -1,155 +1,135 @@
-Return-Path: <linux-mips+bounces-3777-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3778-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A719910CED
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 18:32:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6029910CFD
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 18:33:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C9722B25B15
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 16:32:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 597BA28224A
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 16:33:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DF061BD516;
-	Thu, 20 Jun 2024 16:26:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E66851B5828;
+	Thu, 20 Jun 2024 16:27:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="knoIvOUE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IO8PASGV"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4714C1B4C3B;
-	Thu, 20 Jun 2024 16:26:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A221B5824;
+	Thu, 20 Jun 2024 16:27:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718900766; cv=none; b=L1BKcgwI7j8MX/NblBvEqos5DsJTbNAVxHa6eSh52YHA+ADQXBP9z7j8WBuAAT7c0844GIRKgYPkjgdLsFRkgL8nANqSxCt7l6h9+Vc888Bkk0SZUZX8EHK9V8oSGiXYwQlzeiaFgBInnAyDY858IhuK3RA01/RYuZTEkwNTagg=
+	t=1718900858; cv=none; b=EXciMLlA7B+bJ0/Pv4FwXUzwCH1CSOoWFCOkPB2AUhKKQdnQDkcNn3xdIcQ6pW4XMF7VmeuZZ4zTWHDOtK2pMA4OumDDlcSw70Vsk/bLhQU82boUH7d4xuzqnP7TKW5x6ZXAIjM84Y9X5t62baHqXf6dpcFAzSBiSlZMPQg9M9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718900766; c=relaxed/simple;
-	bh=Ua5Wlts7wNpHZL5hvbWj8KXVM7QOoXJPqG8In6tdSdY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EHgDR4s8JjjJ5GV0/m5HK6435MY3G66SD4cZF+CZF3Mh5QkthhmiwmgDn5FabxRBIbvSe4gvPuH3sfXAKE0h4aFCWkOxoRczsKZAzAWRd+YmOnkah4GhCp+kprNP0LNChYmvwz9dzAFWdIWhW+RHKsS39msYAONar+KatFnsgPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=knoIvOUE; arc=none smtp.client-ip=209.85.221.46
+	s=arc-20240116; t=1718900858; c=relaxed/simple;
+	bh=apJ0/kNo2UZsYa4YtPzkJl8ibvA2beUTWa1fEwZmGvc=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mDcS/PWt2DAI6WuuVALH4ZhJ/6Q7+SrZDT4FrzJHq+KBoBohF9O9Qb51E9aHbXDvrWWmyU3Pz7EEB5V9Bb/qESLAxbIFBCGLvQCKj41ADTBzmKmKEtmDm+Yz9OKjcu0vadd6L4uSgZStOWTM2NAcmgG/+Hu7DNJL8pqKWxd1VYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IO8PASGV; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-361785bfa71so915019f8f.2;
-        Thu, 20 Jun 2024 09:26:03 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-42189d3c7efso12830465e9.2;
+        Thu, 20 Jun 2024 09:27:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718900762; x=1719505562; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oyhPAil700VgPIg6DuQD4ahisl4U/95chdTNhKoOxhQ=;
-        b=knoIvOUEzwjJAkEudwHK12CcvEuFhurFeXGDAqK5Q6CHHSRlqh4AHOPwtwbow6ohDG
-         Fqm19ZllgWhbdeZsBSzOq+x+HdqiUbAvL2BcJVkP3DO8Kus90FzyiPmlft5UMbhPzls2
-         hADni9wgq+aV1lJllubiiPgJ5F5awc42z3v2oA/l4MN+pbTbhU9/yKyNFVI9tFv0/7kH
-         /MteP3Kt+Z05LBmv8R1Cks9mNiSkX1WeaAeLeqhev5+0mL4ijUmTHhQExJeYaZ7YfTC8
-         8HXiGjjFOPinE8TttUw4aZ4Z9yTWUk+2dTrBQqWdxJfXjJwTAaK3Xd8sflNpx8r973vE
-         iuZg==
+        d=gmail.com; s=20230601; t=1718900855; x=1719505655; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=YyMK6ZV0xdCVF8y1Q7YEZ0a3pJ8CrAW6HMQoj1k8taw=;
+        b=IO8PASGVC+7Gcy6xVJH+uKWaA5IHBYgcrplRhXkiSoyifKu+qnm4k6wUI/b4Z4sqp7
+         r3bVBF8Xw9Wnq+fT+qkVzi620e/0bCHGDGrRlN6VxUvMJ0jXZw9f22GOCYjomDfmBeMp
+         FMN4uy5iZaG3Ze69x63UKUo2fAc7ot7VSw+LKuIu1z57SlLgvNpMJ3Zumy2innyDCHY+
+         VG5BnHwN3pCHKYomQOnr7ARFSfZDoyTsbqyAJGyoFpkQgKbQPweYbFivF16EwMK82sPk
+         03NzvNQNK9qM/vSjgXP42QwyOI+dpHloYn8a/RXLA5E89O8s925+PSy26ILlN7W0lgRP
+         HLvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718900762; x=1719505562;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oyhPAil700VgPIg6DuQD4ahisl4U/95chdTNhKoOxhQ=;
-        b=RnLj1/62GYcYrt2nppGfCS1B7JYRrECneRGAeiMKCzRK3BQlG4TsP+p3yDPbwiYhPS
-         DGuOXVUfHYBde43a3NSfItFqtdPyUepSHRRHvDF4TuY2c1l9ARvuzb9HEjjYfHR8WCBX
-         O/iyNn39OkWXBIwck66rqffGG15oTvM6PJIJN0UWUinOfGipGTHZa6MpcsZr2RTxJ65o
-         e8B2v/IYdYGRF1+sZnLDqK8qDXj0iBsASWoxbmTZ4a2bLDQeFg+F2XY8KnrQ3xesV8mO
-         40gVGDb9zTfE/LzO0q6RXz1hloyzB9Kk9J4DRt6YpdJJh2DYLO/CAC/GvGabE5MTJPp1
-         e+OA==
-X-Forwarded-Encrypted: i=1; AJvYcCWfr0XIdPSUD3Kjcd/77ql60IVNV3HAjNr4Iy8dQgTZZ5LWzT1DompuAvol10Phub8dF6Tz9RbUaYWa+jzVnZbnniobmgqkUrztV5nZ5VcR/7Psz4tJ6V1VpPwJ1LpO/gBw0e2FetEer79tD13jIt0jiwzC8VU86aTnj9i6XuUm0ehdn7o=
-X-Gm-Message-State: AOJu0Yz87wA9a9hy2AaklVhMYVWnCOBfyx/UaFyJC/xA9i++WRqhdfqS
-	26Baz9e5mrGc6AaDTim+rw7v5wUvgn06OU1+IHLteWO6FxX4ctHs
-X-Google-Smtp-Source: AGHT+IGIY10g7FmHbibRhqlObKCnHDMnPOxDLE1jTG94vjc+tPuD9nHsAzb92AMmiz35tyYnPaf8cQ==
-X-Received: by 2002:a5d:69c8:0:b0:360:8476:678a with SMTP id ffacd0b85a97d-363192ce1camr4012556f8f.45.1718900762401;
-        Thu, 20 Jun 2024 09:26:02 -0700 (PDT)
-Received: from localhost.localdomain (93-34-90-105.ip49.fastwebnet.it. [93.34.90.105])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-362c7c2dffdsm6277480f8f.35.2024.06.20.09.26.01
+        d=1e100.net; s=20230601; t=1718900855; x=1719505655;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YyMK6ZV0xdCVF8y1Q7YEZ0a3pJ8CrAW6HMQoj1k8taw=;
+        b=Um37RPQNV3d+EURU7gzWz5KYEDo8JAqx1zzi6hd0JEA32Z7nnDBH2b80LsQ87cPC0u
+         qGFvWdLBYZkgogG2iKmKBlCYBRiWozVjvoMb7qgarmT262dKPSplrsAT4Ql3QbKAxHwn
+         ob2bhCfMoAO7DB7iFaisRahlRVUDKWO0pJSr57KA3QwxiHOePIw+fze700Qw25Hs4tmb
+         Gz9KB86aP1gygyaphOrDy2TExcFwmPe45ufCWP4WuZ7vAeF/3sCFRpGgONTVdIhVYGF7
+         3wQt1qkK10Y386WEH5gajD7JCNoY4YF5otagf1fDYYsiP4uZ6S0thVV3kTNdTq8MUiqL
+         XexQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWWiXWW+Ill0lBs39WZGppOxUyEwXglhiPH4EMJOuGwHMpNpBBkVBTDr3/uMVQvQSAD5uK7RzouU63G91f/OwQI+sRnhSk/R40r0fUp3VZCUlJqoW6OWSZUf5rHdl9FESsnLS3yuE3gpj6AnZR/vTyZBfkh3Q6CG6xfzScIy8hsjqzP9UI=
+X-Gm-Message-State: AOJu0YymKkNYL+gFy4Kz39KQgJ0ZxeMfwalmin/ELLPEziyx9WUwV3Po
+	EXXw5drKd/i0cWYFg1/qRsPgrjZUrTwrwx5JFUxdE0wjD1V4XNrz
+X-Google-Smtp-Source: AGHT+IFofNUfeVidCg819q1QRgkprtjFmMX3Cf/3zkluvCmtE81tZYV+0Y/oXvxwcBZq+A8+VnLFUg==
+X-Received: by 2002:a5d:6152:0:b0:362:3358:48cd with SMTP id ffacd0b85a97d-363170ed20dmr4784758f8f.6.1718900855370;
+        Thu, 20 Jun 2024 09:27:35 -0700 (PDT)
+Received: from Ansuel-XPS. (93-34-90-105.ip49.fastwebnet.it. [93.34.90.105])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4247d0be841sm30518035e9.20.2024.06.20.09.27.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jun 2024 09:26:02 -0700 (PDT)
+        Thu, 20 Jun 2024 09:27:34 -0700 (PDT)
+Message-ID: <66745876.050a0220.24048.c6a0@mx.google.com>
+X-Google-Original-Message-ID: <ZnRKsOhGjKdQcpus@Ansuel-XPS.>
+Date: Thu, 20 Jun 2024 17:28:48 +0200
 From: Christian Marangi <ansuelsmth@gmail.com>
-To: Hauke Mehrtens <hauke@hauke-m.de>,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Hauke Mehrtens <hauke@hauke-m.de>,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Florian Fainelli <florian.fainelli@broadcom.com>,
 	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Christian Marangi <ansuelsmth@gmail.com>,
-	linux-mips@vger.kernel.org,
-	devicetree@vger.kernel.org,
+	=?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>,
+	linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Cc: =?UTF-8?q?Daniel=20Gonz=C3=A1lez=20Cabanelas?= <dgcbueu@gmail.com>,
-	=?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= <noltari@gmail.com>
-Subject: [PATCH v8 4/4] mips: bmips: enable RAC on BMIPS4350
-Date: Thu, 20 Jun 2024 17:26:45 +0200
-Message-ID: <20240620152649.994-5-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240620152649.994-1-ansuelsmth@gmail.com>
-References: <20240620152649.994-1-ansuelsmth@gmail.com>
+Subject: Re: [PATCH v7 2/5] mips: bmips: rework and cache CBR addr handling
+References: <20240611113538.9004-1-ansuelsmth@gmail.com>
+ <20240611113538.9004-3-ansuelsmth@gmail.com>
+ <ZnQ/auhuPWb1SGjb@alpha.franken.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZnQ/auhuPWb1SGjb@alpha.franken.de>
 
-From: Daniel González Cabanelas <dgcbueu@gmail.com>
+On Thu, Jun 20, 2024 at 04:40:42PM +0200, Thomas Bogendoerfer wrote:
+> On Tue, Jun 11, 2024 at 01:35:34PM +0200, Christian Marangi wrote:
+> > Rework the handling of the CBR address and cache it. This address
+> > doesn't change and can be cached instead of reading the register every
+> > time.
+> > 
+> > This is in preparation of permitting to tweak the CBR address in DT with
+> > broken SoC or bootloader.
+> > 
+> > bmips_cbr_addr is defined in smp-bmips.c to keep compatibility with
+> > legacy brcm47xx/brcm63xx and generic BMIPS target.
+> > 
+> > Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > ---
+> >  arch/mips/bcm47xx/prom.c      | 3 +++
+> >  arch/mips/bcm63xx/prom.c      | 3 +++
+> >  arch/mips/bmips/dma.c         | 2 +-
+> >  arch/mips/bmips/setup.c       | 4 +++-
+> >  arch/mips/include/asm/bmips.h | 1 +
+> >  arch/mips/kernel/smp-bmips.c  | 6 ++++--
+> >  6 files changed, 15 insertions(+), 4 deletions(-)
+> 
+> still problems on a bcm47xx build:
+> 
+> mips64-linux-gnu-ld: arch/mips/bcm47xx/prom.o: in function `prom_init':
+> /local/tbogendoerfer/korg/linux/arch/mips/bcm47xx/prom.c:(.init.text+0x3c): undefined reference to `bmips_cbr_addr'
+> mips64-linux-gnu-ld: /local/tbogendoerfer/korg/linux/arch/mips/bcm47xx/prom.c:(.init.text+0x44): undefined reference to `bmips_cbr_addr'
+>
 
-The data RAC is left disabled by the bootloader in some SoCs, at least in
-the core it boots from.
-Enabling this feature increases the performance up to +30% depending on the
-task.
+I'm really sorry and it's embarassing (those legacy target are hard to
+compile)
 
-Signed-off-by: Daniel González Cabanelas <dgcbueu@gmail.com>
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-[ rework code and reduce code duplication ]
-Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- arch/mips/kernel/smp-bmips.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+I pushed v8 that should handle the problem, tested bcm47xx and bmips.
 
-diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
-index a4f84667a901..35b8d810833c 100644
---- a/arch/mips/kernel/smp-bmips.c
-+++ b/arch/mips/kernel/smp-bmips.c
-@@ -592,6 +592,7 @@ asmlinkage void __weak plat_wired_tlb_setup(void)
- void bmips_cpu_setup(void)
- {
- 	void __iomem __maybe_unused *cbr = bmips_cbr_addr;
-+	u32 __maybe_unused rac_addr;
- 	u32 __maybe_unused cfg;
- 
- 	switch (current_cpu_type()) {
-@@ -620,6 +621,23 @@ void bmips_cpu_setup(void)
- 		__raw_readl(cbr + BMIPS_RAC_ADDRESS_RANGE);
- 		break;
- 
-+	case CPU_BMIPS4350:
-+		rac_addr = BMIPS_RAC_CONFIG_1;
-+
-+		if (!(read_c0_brcm_cmt_local() & (1 << 31)))
-+			rac_addr = BMIPS_RAC_CONFIG;
-+
-+		/* Enable data RAC */
-+		cfg = __raw_readl(cbr + rac_addr);
-+		__raw_writel(cfg | 0xf, cbr + rac_addr);
-+		__raw_readl(cbr + rac_addr);
-+
-+		/* Flush stale data out of the readahead cache */
-+		cfg = __raw_readl(cbr + BMIPS_RAC_CONFIG);
-+		__raw_writel(cfg | 0x100, cbr + BMIPS_RAC_CONFIG);
-+		__raw_readl(cbr + BMIPS_RAC_CONFIG);
-+		break;
-+
- 	case CPU_BMIPS4380:
- 		/* CBG workaround for early BMIPS4380 CPUs */
- 		switch (read_c0_prid()) {
 -- 
-2.45.1
-
+	Ansuel
 
