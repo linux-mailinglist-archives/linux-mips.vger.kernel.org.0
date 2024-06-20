@@ -1,156 +1,266 @@
-Return-Path: <linux-mips+bounces-3807-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3808-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8142B911377
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 22:41:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 584CB911472
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 23:24:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A39331C21CC6
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 20:40:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7747C1C20B45
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2024 21:24:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 167EF5C8EF;
-	Thu, 20 Jun 2024 20:40:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58D0E1411ED;
+	Thu, 20 Jun 2024 21:23:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="YYXX/vqj"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="KnHLzNaE"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 474715915A
-	for <linux-mips@vger.kernel.org>; Thu, 20 Jun 2024 20:40:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC6E80C03;
+	Thu, 20 Jun 2024 21:23:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718916048; cv=none; b=h3SDZP9jJSb70Q4Vig2K39elm9RC9i/CJgBhdpmD4hAXQBux4WF/PNeUqnkHJ0XF00OSPXBqPMAmiDDHsSXwf5jqos42exhDau4GQLx8Pmh72VQeOttAQVTzLHyZe4q+bb+qNChGHlNHBskxuUPyfN/NZheNAsfZH2wZ8R6bCNs=
+	t=1718918601; cv=none; b=NKVHwKVI+9AZ4tH3I1eDWY5LwjpG2TkKi6c7ObQml3S/JM4V4W/O+WQnDnTe4G0jx/7KBtuA1IH2dmQ6ARmy3atoEWkttU8cgJy2gKSikhp6uLSvJ2jwxEqtR3kuDfBcdC5FBkORcCnQfpI1RcaD9+YWyqyeprIWRwZYepMoil4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718916048; c=relaxed/simple;
-	bh=xe0CLiytQL+w07wMVqUc1rJS0v+e/Ti6ErqFWmVCp7I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hLlRNmUatKa1jDIGif8cpt/BKGfDXZL22uimRnEGXDIi/vU2Mug21F59AgmkA/SsOcWwTt0j7SRYi/OKJG2xs7J+UAaug6AVUg6lh3LN7oWTxBKO244BUZ3mjgMG0hrWYavwW9fGtCqpEpJBTJ6J4KB2OHZjsVXQReMc4ylk5g8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=YYXX/vqj; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a6f11a2d18aso145489766b.2
-        for <linux-mips@vger.kernel.org>; Thu, 20 Jun 2024 13:40:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1718916044; x=1719520844; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=w6VZWpwlG7GhpGptpxtkhZuBw3s+vrw3bJ0KsbwAf6c=;
-        b=YYXX/vqjqr+OsZ15aEKK95QpayOfPD6b2DScRuJckEBIDd6iYA2FyOgXBSsABDS9k5
-         Hjq7g8XVqG+Ks910C0MgVxZBB1aH3SdskEstdb3DJ/iaOPLxFDff/F9CGPS7oArE9oQd
-         bJ7hxcQ/CsYRUJTZYvIxI2/kBuDyfzyoheflk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718916044; x=1719520844;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w6VZWpwlG7GhpGptpxtkhZuBw3s+vrw3bJ0KsbwAf6c=;
-        b=XuJZzTGY/spjyMIwCiotAwu5koGcLDaJ5VpgYrIfDxubbRd7OcD6KcU0IuxtO5NJn3
-         iGtq6OW/RsXJI47t7lhUe65mQxhG/oJHke+U/LAfJrjUbOyuWoX4HTqcVqHJssZWXGTD
-         CA5dmc6ZxYWcH/4bN9pbE2ODjT/m8p5hBvAfdKTim2ntX+5UR7A+ebuo0IeUnyS8KJ1E
-         xXh7oaeA5p31oX9jTnv9Og3wLieDBPJHHFLoSrQ0fxMebZwrOvw9wBBlfKKHXjpeqqpI
-         WN9SoSJmPEbCK2gfQfISJAEdM1w6XWl4U1LYOHX0Vl03WRwZFSevC4LkWfbG1JihxmVu
-         teHA==
-X-Forwarded-Encrypted: i=1; AJvYcCV/Xcupobc7O6a9Z5mj2Z0bF6pH9Fr3SpBiiSccsBOrc1/GYuSCkcYeHCXnUaje/S0ahLA5Sva7+wdjQb0rbynN+gEOS1um3fnApQ==
-X-Gm-Message-State: AOJu0YwBY/jdm7iJ0WJC+8xHC565RYBh3GVl688UC9/6rzDlYORML3kt
-	MEJLKUy2pXwKHg1IvXGX+ak9Cvdeppwd7HANFiAvIeWP0cGAZGDKylOgoP3RnnnSVBOjM1OJl2g
-	q0spSuEJq
-X-Google-Smtp-Source: AGHT+IETqGI63UiSTRfButvlJ3TvItLsOX/kgJiYIvhpDXOrwCWGtuJlzVu+i3hRGx0ZQVpmcFpxqw==
-X-Received: by 2002:a17:907:30d7:b0:a6f:3135:e2ce with SMTP id a640c23a62f3a-a6fab7cd5e0mr257842466b.68.1718916044299;
-        Thu, 20 Jun 2024 13:40:44 -0700 (PDT)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6fcf4ba8ecsm8217966b.92.2024.06.20.13.40.43
-        for <linux-mips@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jun 2024 13:40:44 -0700 (PDT)
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-424720e73e0so13334935e9.0
-        for <linux-mips@vger.kernel.org>; Thu, 20 Jun 2024 13:40:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX26XtMqEEz74xcdPSDxn6V4phsmDBK8g/ujNYl58CT3NK3LgxvHooHH926oxAkSfGrXE3GzFQ0jbRCHTsF0gSiOWumO3ih55yg1g==
-X-Received: by 2002:a17:906:1348:b0:a6e:2a67:7899 with SMTP id
- a640c23a62f3a-a6fab63aaabmr312193466b.35.1718915542284; Thu, 20 Jun 2024
- 13:32:22 -0700 (PDT)
+	s=arc-20240116; t=1718918601; c=relaxed/simple;
+	bh=+Uo7sonqUh5Rfxt7PuAB78dQaC+jLKNfw3Y25y2aTz8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a48ah7fk7jU3S4JXenQukTXW7SYDHIwiqA44VkbXTIPKPLJOQQuG+gUxIoU0eWRONAkQPJB8mFuI2pWcPTksXeF2u8J2Uir7Q0mo101cJgCf+yC8WauuQEubhvfJiL1/xCKPo/fCgZr8IgqtISYYzK0m/fGrI+for73bkAuM4zA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b=KnHLzNaE; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1718918524; x=1719523324; i=deller@gmx.de;
+	bh=6VCd1TqwAbp3zAEcjaKM6L/q747d5LQnckUw8HW0fKQ=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=KnHLzNaETegScDXA4KLTbpOouNlDC5HK80KPxpnpc40DX4T77w59Ss3e/HCAWSye
+	 B5FFpnXjd36IThbLSgp9AsD1FIjyapMoaXduiedhffga9f8izZAcQieP/arXioZr1
+	 JKTwkwKglRCGFTD34YyX5mgixXE+4SieRCr0oc2R4CDSn++J7hULKoKmY/5cX3jPf
+	 Uotwdjhj0gZS3ylvnDgxiDkmmDvNJtaAk2YPeg837491xS6QrhgubQkxJhTUMX/O8
+	 vU+csoxYJ8FEp1YyPi6pumi5ketDs80L0fdIZ88ioSMXKu5/pWdh1iQEghPUO2QQU
+	 E6PtQWx0ll+p+Yvz5g==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.55] ([109.250.63.133]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MJmKh-1s5LBS43M9-00LsXl; Thu, 20
+ Jun 2024 23:22:04 +0200
+Message-ID: <e80809ba-ee81-47a5-9b08-54b11f118a78@gmx.de>
+Date: Thu, 20 Jun 2024 23:21:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240620175703.605111-1-yury.norov@gmail.com> <CAHk-=wiUTXC452qbypG3jW6XCZGfc8d-iehSavxn5JkQ=sv0zA@mail.gmail.com>
- <ZnR1tQN01kN97G_F@yury-ThinkPad> <CAHk-=wjv-DkukaKb7f04WezyPjRERp=xfxv34j5fA8cDQ_JudA@mail.gmail.com>
- <ZnSPBFW5wL0D0b86@yury-ThinkPad>
-In-Reply-To: <ZnSPBFW5wL0D0b86@yury-ThinkPad>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 20 Jun 2024 13:32:05 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi2R7-jyoOw27Svf1PmfDFQgBWVAH3DP5CXO+JF-BeFZA@mail.gmail.com>
-Message-ID: <CAHk-=wi2R7-jyoOw27Svf1PmfDFQgBWVAH3DP5CXO+JF-BeFZA@mail.gmail.com>
-Subject: Re: [PATCH v4 00/40] lib/find: add atomic find_bit() primitives
-To: Yury Norov <yury.norov@gmail.com>
-Cc: linux-kernel@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
-	"H. Peter Anvin" <hpa@zytor.com>, "James E.J. Bottomley" <jejb@linux.ibm.com>, 
-	"K. Y. Srinivasan" <kys@microsoft.com>, "Md. Haris Iqbal" <haris.iqbal@ionos.com>, 
-	Akinobu Mita <akinobu.mita@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Borislav Petkov <bp@alien8.de>, Chaitanya Kulkarni <kch@nvidia.com>, 
-	Christian Brauner <brauner@kernel.org>, Damien Le Moal <damien.lemoal@opensource.wdc.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, David Disseldorp <ddiss@suse.de>, 
-	Edward Cree <ecree.xilinx@gmail.com>, Eric Dumazet <edumazet@google.com>, 
-	Fenghua Yu <fenghua.yu@intel.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Gregory Greenman <gregory.greenman@intel.com>, 
-	Hans Verkuil <hverkuil@xs4all.nl>, Hans de Goede <hdegoede@redhat.com>, 
-	Hugh Dickins <hughd@google.com>, Ingo Molnar <mingo@redhat.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Jaroslav Kysela <perex@perex.cz>, Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>, 
-	Jiri Pirko <jiri@resnulli.us>, Jiri Slaby <jirislaby@kernel.org>, Kalle Valo <kvalo@kernel.org>, 
-	Karsten Graul <kgraul@linux.ibm.com>, Karsten Keil <isdn@linux-pingi.de>, 
-	Kees Cook <keescook@chromium.org>, Leon Romanovsky <leon@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Martin Habets <habetsm.xilinx@gmail.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, Michal Simek <monstr@monstr.eu>, 
-	Nicholas Piggin <npiggin@gmail.com>, Oliver Neukum <oneukum@suse.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ping-Ke Shih <pkshih@realtek.com>, Rich Felker <dalias@libc.org>, Rob Herring <robh@kernel.org>, 
-	Robin Murphy <robin.murphy@arm.com>, Sean Christopherson <seanjc@google.com>, 
-	Shuai Xue <xueshuai@linux.alibaba.com>, Stanislaw Gruszka <stf_xl@wp.pl>, 
-	Steven Rostedt <rostedt@goodmis.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Thomas Gleixner <tglx@linutronix.de>, Valentin Schneider <vschneid@redhat.com>, 
-	Vitaly Kuznetsov <vkuznets@redhat.com>, Wenjia Zhang <wenjia@linux.ibm.com>, 
-	Will Deacon <will@kernel.org>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
-	GR-QLogic-Storage-Upstream@marvell.com, alsa-devel@alsa-project.org, 
-	ath10k@lists.infradead.org, dmaengine@vger.kernel.org, iommu@lists.linux.dev, 
-	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, linux-block@vger.kernel.org, 
-	linux-bluetooth@vger.kernel.org, linux-hyperv@vger.kernel.org, 
-	linux-m68k@lists.linux-m68k.org, linux-media@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-net-drivers@amd.com, 
-	linux-pci@vger.kernel.org, linux-rdma@vger.kernel.org, 
-	linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-sh@vger.kernel.org, 
-	linux-sound@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	mpi3mr-linuxdrv.pdl@broadcom.com, netdev@vger.kernel.org, 
-	sparclinux@vger.kernel.org, x86@kernel.org, 
-	Alexey Klimov <alexey.klimov@linaro.org>, Bart Van Assche <bvanassche@acm.org>, Jan Kara <jack@suse.cz>, 
-	Matthew Wilcox <willy@infradead.org>, Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Sergey Shtylyov <s.shtylyov@omp.ru>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 07/15] parisc: use generic sys_fanotify_mark
+ implementation
+To: Arnd Bergmann <arnd@kernel.org>, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+ Andreas Larsson <andreas@gaisler.com>, sparclinux@vger.kernel.org,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+ linuxppc-dev@lists.ozlabs.org, Brian Cain <bcain@quicinc.com>,
+ linux-hexagon@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+ linux-csky@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+ linux-s390@vger.kernel.org, Rich Felker <dalias@libc.org>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ linux-sh@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org,
+ libc-alpha@sourceware.org, musl@lists.openwall.com, ltp@lists.linux.it,
+ Adhemerval Zanella <adhemerval.zanella@linaro.org>
+References: <20240620162316.3674955-1-arnd@kernel.org>
+ <20240620162316.3674955-8-arnd@kernel.org>
+Content-Language: en-US
+From: Helge Deller <deller@gmx.de>
+Autocrypt: addr=deller@gmx.de; keydata=
+ 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
+In-Reply-To: <20240620162316.3674955-8-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:cTOmKaZgB4+8zdTJJh1n5TDacfeJ38i7AgNBdwGwc4CoHa/X8U4
+ bE+1vJy0vhvQ2uWD+vixAMUbThDwHKmI1c65UoVWRiM/nQoMEdjbqq1otbBNx+OGkFQx4fn
+ mgJ5rTZYpK+2fKlwVnN5rHKZd/pen/VHbL9pcK3jqJcyR3UYVt4o8k+0GGaMmIGz+hI3M7M
+ mxH58vLwhXQKSSi6vLPJg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:x5UQlMD/2YU=;CsNl/nTOJkYUZhki9fDs6q9vDdf
+ oM+hcHUSHc2ExRaAv7sWxiFIV8RJgpM+0H30e2S+d0xjY5m5CFKsoiphUxhHCh4nDQzy9j4f/
+ CAskEQ1LAWY63KLspKWj1iGcZmCy15ITifFhVoSXQpQDvhWolZHd+sZ/FWzC9Jskhw58xC3St
+ zCb4lTQHRcOW3K1ff+yoDOzakZ+eIJFBCtjWod6xoF7MIYAl1aLPFkYJTwRNB2/I9SmW27sg4
+ lO6OtLdS7MW2LW5Z51kQkGtA8pg1iScpKIwu9GRxCU4nEvo+WsH0N+ANLqOcuQUexTYTNBMVo
+ grsDY67nIhqyh2iE5ily0sSTCby/JVN9stnKQW+s0gbtMpxa2VT6zy4UvXaTolnHPmzaX1z9+
+ E/8tW6ZOsyl9AFn0H+Uh1HmbcHDxK0yVbK8WU3bVEcpJ63PUlFdD70l1k7BrQ57p6yNrWKR+e
+ w0mlz7jE2kn5yoCFlcZjPKc3Wy5/aGfcXSBOT92fvinOiFkULNI76JsjwtbKefoj8xeEj1Ife
+ EI9MfxKRMepPXxJ5+zkDukmniYaJihem8WojdMAe1HdqPseztXPpwCEhMVIB6vTlJGNuofmIQ
+ yLv4eyDDE2Y2CIdo2MYGlDlXh0hvgYVjJSDwEDyBEZmo37kVFpruNTpwigw3f8pTFtIj3GS3J
+ WRTi/Qd3p8WceIYbj3c2sSF4dSzle72ZmdOqSRxapMn5CasyJmt8R9AW5ygWmr+mivL1X4F/1
+ fBo8Go3QBJop+BznMDn+WSuee6eImhKYr1ixjpi5z4KOmxDsWMfflgHzm21WPAGAqegbt8keP
+ y6o3DzmUma2nfAV/lB6gdbPyBEkpAuZoY91r3fqj87H6I=
 
-On Thu, 20 Jun 2024 at 13:20, Yury Norov <yury.norov@gmail.com> wrote:
+On 6/20/24 18:23, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> FORCE_NR_CPUS helped to generate a better code for me back then. I'll
-> check again against the current kernel.
+> The sys_fanotify_mark() syscall on parisc uses the reverse word order
+> for the two halves of the 64-bit argument compared to all syscalls on
+> all 32-bit architectures. As far as I can tell, the problem is that
+> the function arguments on parisc are sorted backwards (26, 25, 24, 23,
+> ...) compared to everyone else,
 
-Of _course_ it generates better code.
+r26 is arg0, r25 is arg1, and so on.
+I'm not sure I would call this "sorted backwards".
+I think the reason is simply that hppa is the only 32-bit big-endian
+arch left...
 
-But when "better code" is a source of bugs, and isn't actually useful
-in general, it's not better, is it.
+> so the calling conventions of using an
+> even/odd register pair in native word order result in the lower word
+> coming first in function arguments, matching the expected behavior
+> on little-endian architectures. The system call conventions however
+> ended up matching what the other 32-bit architectures do.
+>
+> A glibc cleanup in 2020 changed the userspace behavior in a way that
+> handles all architectures consistently, but this inadvertently broke
+> parisc32 by changing to the same method as everyone else.
 
-> The 5d272dd1b343 is wrong. Limiting FORCE_NR_CPUS to UP case makes no
-> sense because in UP case nr_cpu_ids is already a compile-time macro:
+I appreciate such cleanups to make arches consistent.
+But it's bad if breakages aren't noticed or reported then...
 
-Yury, I'm very aware. That was obviously intentional. the whole point
-of the commit is to just disable the the whole thing as useless and
-problematic.
+> The change made it into glibc-2.35 and subsequently into debian 12
+> (bookworm), which is the latest stable release. This means we
+> need to choose between reverting the glibc change or changing the
+> kernel to match it again, but either hange will leave some systems
+> broken.
+>
+> Pick the option that is more likely to help current and future
+> users and change the kernel to match current glibc.
 
-I could have just ripped it out entirely. I ended up doing a one-liner instead.
+Agreed (assuming we have really a problem on parisc).
 
-                Linus
+> This also
+> means the behavior is now consistent across architectures, but
+> it breaks running new kernels with old glibc builds before 2.35.
+>
+> Link: https://sourceware.org/git/?p=3Dglibc.git;a=3Dcommitdiff;h=3Dd1501=
+81d73d9
+> Link: https://git.kernel.org/pub/scm/linux/kernel/git/history/history.gi=
+t/commit/arch/parisc/kernel/sys_parisc.c?h=3D57b1dfbd5b4a39d
+> Cc: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> I found this through code inspection, please double-check to make
+> sure I got the bug and the fix right.
+
+The patch looks good at first sight.
+I'll pick it up in my parisc git tree and will do some testing the
+next few days and then push forward for 6.11 when it opens....
+
+Thank you!!
+
+Helge
+
+> The alternative is to fix this by reverting glibc back to the
+> unusual behavior.
+> ---
+>   arch/parisc/Kconfig                     | 1 +
+>   arch/parisc/kernel/sys_parisc32.c       | 9 ---------
+>   arch/parisc/kernel/syscalls/syscall.tbl | 2 +-
+>   3 files changed, 2 insertions(+), 10 deletions(-)
+>
+> diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
+> index daafeb20f993..dc9b902de8ea 100644
+> --- a/arch/parisc/Kconfig
+> +++ b/arch/parisc/Kconfig
+> @@ -16,6 +16,7 @@ config PARISC
+>   	select ARCH_HAS_UBSAN
+>   	select ARCH_HAS_PTE_SPECIAL
+>   	select ARCH_NO_SG_CHAIN
+> +	select ARCH_SPLIT_ARG64 if !64BIT
+>   	select ARCH_SUPPORTS_HUGETLBFS if PA20
+>   	select ARCH_SUPPORTS_MEMORY_FAILURE
+>   	select ARCH_STACKWALK
+> diff --git a/arch/parisc/kernel/sys_parisc32.c b/arch/parisc/kernel/sys_=
+parisc32.c
+> index 2a12a547b447..826c8e51b585 100644
+> --- a/arch/parisc/kernel/sys_parisc32.c
+> +++ b/arch/parisc/kernel/sys_parisc32.c
+> @@ -23,12 +23,3 @@ asmlinkage long sys32_unimplemented(int r26, int r25,=
+ int r24, int r23,
+>       	current->comm, current->pid, r20);
+>       return -ENOSYS;
+>   }
+> -
+> -asmlinkage long sys32_fanotify_mark(compat_int_t fanotify_fd, compat_ui=
+nt_t flags,
+> -	compat_uint_t mask0, compat_uint_t mask1, compat_int_t dfd,
+> -	const char  __user * pathname)
+> -{
+> -	return sys_fanotify_mark(fanotify_fd, flags,
+> -			((__u64)mask1 << 32) | mask0,
+> -			 dfd, pathname);
+> -}
+> diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kerne=
+l/syscalls/syscall.tbl
+> index 39e67fab7515..66dc406b12e4 100644
+> --- a/arch/parisc/kernel/syscalls/syscall.tbl
+> +++ b/arch/parisc/kernel/syscalls/syscall.tbl
+> @@ -364,7 +364,7 @@
+>   320	common	accept4			sys_accept4
+>   321	common	prlimit64		sys_prlimit64
+>   322	common	fanotify_init		sys_fanotify_init
+> -323	common	fanotify_mark		sys_fanotify_mark		sys32_fanotify_mark
+> +323	common	fanotify_mark		sys_fanotify_mark		compat_sys_fanotify_mark
+>   324	32	clock_adjtime		sys_clock_adjtime32
+>   324	64	clock_adjtime		sys_clock_adjtime
+>   325	common	name_to_handle_at	sys_name_to_handle_at
+
 
