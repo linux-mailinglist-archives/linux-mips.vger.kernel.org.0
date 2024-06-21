@@ -1,134 +1,265 @@
-Return-Path: <linux-mips+bounces-3831-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3832-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D850C91203C
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Jun 2024 11:13:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDBDA91210E
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Jun 2024 11:43:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 147DB1C21CDB
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Jun 2024 09:13:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CA5B1C2394B
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Jun 2024 09:43:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5E4816D9DD;
-	Fri, 21 Jun 2024 09:13:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E942516F282;
+	Fri, 21 Jun 2024 09:42:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l8Rp3pDH"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="kSi1J5v8";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="pA/sp92C"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh1-smtp.messagingengine.com (fhigh1-smtp.messagingengine.com [103.168.172.152])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FF3116D9B1;
-	Fri, 21 Jun 2024 09:13:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4B5216F27B;
+	Fri, 21 Jun 2024 09:42:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718961212; cv=none; b=amjYLG97c/dOj38d2wsiaOiMAdU4RTi7157vmpapLcZv7gM6M6V7jHX06ThxechHnMqOJp8y5MEEtmgSctBuHsTfmqpUBT2FeKg4xTHn6oAbyP2Gn/JwHZpfguvh46uXPOkgdPy06Y1MfO9ZLER3DKBHAbE50kmoizMXqaPpd74=
+	t=1718962964; cv=none; b=YkKCapWR2EbYJxq1pT8cuKKbIz7g1EEeQzaVzARHaASDdcpeCatF0b7067UHC+q/zObTOrmL2QJ7kgGTgNXDt3NH9gQM7cWyT1b7uuaTcwPi1Lv01kOiVbTYkkfxgSun1jtoDv99v5Oqhz3AOymiSGf8lEz9z3zN1U5saFT//xc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718961212; c=relaxed/simple;
-	bh=fv/S5/9ybJPJUxF48OIewvL3HfLZ+JrH7Cn0THjtD/8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X2L70L8//eWnETxwsRGXnmmj/h1e7srKTGgHdpubWJa/D7O+bUOCAXhJqNlNrmzK7sFusqjUvMFIREBNs0Nv3p+Z4WTt4OWI/sPWy9oZRsawJ3JE44eLWdFWU8GdWoXgMtpUGPeh4UTYOxAnLe90g+iLuLzsBc3vQ67Xyf4cXgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l8Rp3pDH; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2eabd22d3f4so22642421fa.1;
-        Fri, 21 Jun 2024 02:13:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718961209; x=1719566009; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ON+cg4TNotxKMww6ho7vuLBsVf7edBNVPSZgwt8adtg=;
-        b=l8Rp3pDHCRm1LyWwsq043jYyGTxulWwuFdkMioZ34tklaOo0fpeB8EFI4y0fHuQC/a
-         L3+rQiXAb/TuCFLQdYYJP120XPE7ZDouM4LcRvVsx9boB2VI9aSrJnYC5evARzVKUfWH
-         I2AIDZjXz0d93bsyF94ZbvubQ/tw+oPiikzSe3766agZKrXYLPt30/+BWdoh9fpSxlN9
-         0Nx77bLWQdCBhUj+Q1ItRo1gVkx+0ZysiBuC81nJqZWA6QrM/kY+lP4/BzJ2rkJcxKwu
-         1GgA/ypYiaI9o519JGfv1WP6sRC4VX+XQFnpI3K9zRICN7XTXm5K84fY0RkW2tZcOmHb
-         W8mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718961209; x=1719566009;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ON+cg4TNotxKMww6ho7vuLBsVf7edBNVPSZgwt8adtg=;
-        b=fwb3mWs1+/OSU3C07mCI+rd/+sd4nWGGwTVJ9lX8COd4TQBy6payEOfQz+XUZ3Vum+
-         t6gjk1nz8Hqxa+5Dl/bWfPIyE85VK91qeCLYJrVk3IuxBjrTisTDOPxigFEgmAUek/W/
-         +K0JOM/pr6dAJjmpgXTF+egU9ONt6W+bToholM3Qdmmefi4/yfJ3XPdSfcJXFdlH5Hnt
-         I3GbFg7Hsxun9BchSsc/4KNopb/DZlr80DOrPZ5koTA3odOOmALvvYw/uQWy/Br25mt+
-         Q5ZBGk84jwDYdWou5JEIQx7KsWQOriavmT6vehGULUcVYQdOqmZxDzVs7EYZNnwRWmId
-         noMg==
-X-Forwarded-Encrypted: i=1; AJvYcCV4d5ry5/XgER54imF25df6R7g677TasqqunNyJrBOi+ztmrBdI1p4sPOEStPfMboedD0HBMXYUxLzxwZV0gDdMFd5Qwy/VhODWakBJ1HdAA/s+muP0BFXYVlWlgl75W3gfdxa4pdCPUA==
-X-Gm-Message-State: AOJu0YzRK1NcP209z7t9Kwf5VfUOFR0RnzdYfWEnUXLqlKUWFI/gFHO4
-	wZTzRfaoJ4jMZlVwKiQmg03nDHHXxskCq1xhtv1wbD/iAHH+aWcQYJqc0Q==
-X-Google-Smtp-Source: AGHT+IFGfYBJTSuwKjWDOTsWo8Gf3r828qh8/V9VCSnLJn3X01qHalRZ0j488/n0+5sOMfKWUz977w==
-X-Received: by 2002:a05:6512:688:b0:52c:1c56:a230 with SMTP id 2adb3069b0e04-52ccaa2d625mr4987238e87.5.1718961208958;
-        Fri, 21 Jun 2024 02:13:28 -0700 (PDT)
-Received: from mobilestation ([178.176.56.174])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52cd63b4bfdsm142418e87.11.2024.06.21.02.13.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jun 2024 02:13:28 -0700 (PDT)
-Date: Fri, 21 Jun 2024 12:13:25 +0300
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, 
-	Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>, Aleksandar Rikalo <arikalo@gmail.com>, 
-	Chao-ying Fu <cfu@wavecomp.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Greg Ungerer <gerg@kernel.org>, 
-	Hauke Mehrtens <hauke@hauke-m.de>, Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>, 
-	linux-kernel@vger.kernel.org, "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
-	Marc Zyngier <maz@kernel.org>, "paulburton@kernel.org" <paulburton@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: Re: [PATCH v4 00/14] MIPS: Support I6500 multi-cluster configuration
-Message-ID: <4xsbpttlr5tetkuiipsieimrbq2syera74tkuy2ikxiskx5jpd@y24epvmvg7gr>
-References: <20240511104341.151550-1-aleksandar.rikalo@syrmia.com>
- <ZnRtYFr5HFffyK7E@alpha.franken.de>
- <ff6fe06d-6209-4e34-9cc8-eb516fa4ffae@app.fastmail.com>
- <ZnU3/c1T55k4WbYx@alpha.franken.de>
+	s=arc-20240116; t=1718962964; c=relaxed/simple;
+	bh=I6t6ZNrhm5J8olmFqMz7UqaHFBnlVaXvJq+5xRhx/EY=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=fff/B3oLsw149r1saZHZQUnyb/kXKVsbOI0UWsASGVHwoxqsKHsoxZ3IPmiuxL+5xc0f+75weJ2PgNDQ+3aspTJvUBULEb9C7y6to+Y5mhAqQvTkVA5aRjsYSX4NAjnXqXcUrtDAqoQieUK2REFOLmanOs03pEz5imFySnW0MUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=kSi1J5v8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=pA/sp92C; arc=none smtp.client-ip=103.168.172.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id D8CC711401FF;
+	Fri, 21 Jun 2024 05:42:41 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Fri, 21 Jun 2024 05:42:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1718962961; x=1719049361; bh=lJXqjdPTQI
+	taFSDd10WfQGJxSki8+9Ze2rE4p5l7G8Y=; b=kSi1J5v8ppTJzytghvi1egT/Ia
+	9+ldYodLYyQldPhXZRr0j1nxE8kP4yF9rHPsPspfJ841d5Q5ViQCWPuzmJZYJhT0
+	fIPEcp9V5qyFi7AEspKXJAcZ8Qnrpck3uIjdg9iw88FiJ2Wo2LaQWYbgwGImcW7C
+	SpIcDx9Toe1sQYoHixkBqQoDzyIS5FDmxlQhwooSdNQAdklgoz+seVjqfk4aHoHW
+	A4nhpIj6RE6BQA1UWJz+o6XPMovw6j7YWgktwR2q22qomJ85HYJ9k056LTXLoiRz
+	WD9ilToyXgKaO9cFbF1gMcl7y3CNzrqtd1tPSWbkBskpZg5jBtQcCdYH8f0Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1718962961; x=1719049361; bh=lJXqjdPTQItaFSDd10WfQGJxSki8
+	+9Ze2rE4p5l7G8Y=; b=pA/sp92CHnJRaYFltnW5QQm7YBjn/jr/ORskiDkKKzJl
+	es2qBBGdWZliar0A5Kt0UJqrpEU4HfKnpliN/sw1rbQRc8GZN17uqvH62Xdp65aO
+	HH4ZKtJaiUAEtH7SeW0V3fTHziEaAELtfXcAj6AnMTZ3k0lepGRrxJCxl9OSjxhO
+	lrVQJp4nYJovgRwRBg3lJyy+XhTf+vZxUn0FaYa+EL1F28QKT9bkP7mjgvvecyX2
+	rx/x7rRF+kOUWLCm+uckYztrfeWrqKylwbWptaWMLC7rcnOXK0JF9wcYkrUL02Ld
+	uvsGXTrQA/s11hPdfq45FwQ1U6lT/5DWR0yPsQsVig==
+X-ME-Sender: <xms:EEt1ZvB6G2PmM5kie6pjx4J0kwhwapMYWSw4DcrX6M9h7hocxKHJ8w>
+    <xme:EEt1ZlgUXaDSD8WQ0CEL_JlssJqq4EDGp4Ney_-vJAO7ERiU2itSUwJrrWPUB5SR8
+    7BAJDLbUpC-lBdGYRE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfeefgedgudelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:EEt1ZqkRafADEQrJf8fGwDRNf9qLPmQttrQTA8SJE5VMXyUp47q0OA>
+    <xmx:EEt1ZhzHSd2BpK5qLZBCt85dxk3lTUQgTd6Yq5zXPpL7vx6j5FvYDA>
+    <xmx:EEt1ZkSzYJMxhTWj-DTlPeLtH4YVzU09BgRS1XV2zTJycJrFNGNNnA>
+    <xmx:EEt1ZkYI0lwtPdvtdsfprTMcjjfBdPzDgJZAoKQiLXDF_QmFyq4zOg>
+    <xmx:EUt1Zlc-JXdIYOCpzBrwI2UwFLz8XWzD9oFzvIkQq9DRBjTUQjstWQl->
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id B4DADB6008D; Fri, 21 Jun 2024 05:42:40 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-522-ga39cca1d5-fm-20240610.002-ga39cca1d
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZnU3/c1T55k4WbYx@alpha.franken.de>
+Message-Id: <9d4ba5e5-bb7f-432e-9354-47cc84eaa9e1@app.fastmail.com>
+In-Reply-To: 
+ <366548c1a0d9749e42c0d0c993414a353c9b0b02.camel@physik.fu-berlin.de>
+References: <20240620162316.3674955-1-arnd@kernel.org>
+ <20240620162316.3674955-10-arnd@kernel.org>
+ <366548c1a0d9749e42c0d0c993414a353c9b0b02.camel@physik.fu-berlin.de>
+Date: Fri, 21 Jun 2024 11:41:43 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+ "Arnd Bergmann" <arnd@kernel.org>, Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-kernel@vger.kernel.org
+Cc: "Rich Felker" <dalias@libc.org>, "Andreas Larsson" <andreas@gaisler.com>,
+ guoren <guoren@kernel.org>,
+ "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ "H. Peter Anvin" <hpa@zytor.com>, sparclinux@vger.kernel.org,
+ linux-s390@vger.kernel.org, "Helge Deller" <deller@gmx.de>,
+ linux-sh@vger.kernel.org,
+ "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+ "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+ "Heiko Carstens" <hca@linux.ibm.com>,
+ "musl@lists.openwall.com" <musl@lists.openwall.com>,
+ "Nicholas Piggin" <npiggin@gmail.com>,
+ "Alexander Viro" <viro@zeniv.linux.org.uk>,
+ "LTP List" <ltp@lists.linux.it>, "Brian Cain" <bcain@quicinc.com>,
+ "Christian Brauner" <brauner@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Xi Ruoyao" <libc-alpha@sourceware.org>, linux-parisc@vger.kernel.org,
+ linux-mips@vger.kernel.org, stable@vger.kernel.org,
+ linux-hexagon@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 09/15] sh: rework sync_file_range ABI
+Content-Type: text/plain
 
-Hi Thomas, Jiaxun
+On Fri, Jun 21, 2024, at 10:44, John Paul Adrian Glaubitz wrote:
+> On Thu, 2024-06-20 at 18:23 +0200, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> The unusual function calling conventions on superh ended up causing
+>                                               ^^^^^^
+>                                        It's spelled SuperH
 
-On Fri, Jun 21, 2024 at 10:21:17AM +0200, Thomas Bogendoerfer wrote:
-> On Fri, Jun 21, 2024 at 12:05:32AM +0100, Jiaxun Yang wrote:
-> > 
-> > 
-> > 在2024年6月20日六月 下午6:56，Thomas Bogendoerfer写道：
-> > > On Sat, May 11, 2024 at 12:43:27PM +0200, Aleksandar Rikalo wrote:
-> > >> Taken from Paul Burton MIPS repo with minor changes from Chao-ying Fu.
-> > >> Tested with 64r6el_defconfig on Boston board in 2 cluster/2 VPU and
-> > >> 1 cluster/4 VPU configurations.
-> > >
-> > > which existing CPUs can use this ?
-> > 
-> > Besides Boston are some multi cluster I6500 systems in wild, including Fungible F1,
-> > which comes with 52 cores in data panel.
-> > 
-> > Those vendors show no interest on mainline kernel support though.
-> 
+Fixed now.
 
-> ok, so looking at the series it touches areas with different maintainers,
-> I'm fine taking the MIPS parts, can I simply cherry-pick them out
-> of the series ?
+>> diff --git a/arch/sh/kernel/sys_sh32.c b/arch/sh/kernel/sys_sh32.c
+>> index 9dca568509a5..d5a4f7c697d8 100644
+>> --- a/arch/sh/kernel/sys_sh32.c
+>> +++ b/arch/sh/kernel/sys_sh32.c
+>> @@ -59,3 +59,14 @@ asmlinkage int sys_fadvise64_64_wrapper(int fd, u32 offset0, u32 offset1,
+>>  				 (u64)len0 << 32 | len1, advice);
+>>  #endif
+>>  }
+>> +
+>> +/*
+>> + * swap the arguments the way that libc wants it instead of
+>
+> I think "swap the arguments to the order that libc wants them" would
+> be easier to understand here.
 
-Please hold on with merging it in for a bit. I'll give the series a
-try on my MIPS P5600-based SoC later, on this weekends.
+Done
 
--Serge(y)
+>> diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
+>> index bbf83a2db986..c55fd7696d40 100644
+>> --- a/arch/sh/kernel/syscalls/syscall.tbl
+>> +++ b/arch/sh/kernel/syscalls/syscall.tbl
+>> @@ -321,7 +321,7 @@
+>>  311	common	set_robust_list			sys_set_robust_list
+>>  312	common	get_robust_list			sys_get_robust_list
+>>  313	common	splice				sys_splice
+>> -314	common	sync_file_range			sys_sync_file_range
+>> +314	common	sync_file_range			sys_sh_sync_file_range6
+>                                                                  ^^^^^^ 
+> Why the suffix 6 here?
 
-> 
-> Thomas.
-> 
-> -- 
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+In a later part of my cleanup, I'm consolidating all the
+copies of this function (arm64, mips, parisc, powerpc,
+s390, sh, sparc, x86) and picked the name
+sys_sync_file_range6() for common implementation.
+
+I end up with four entry points here, so the naming is a bit
+confusing:
+
+- sys_sync_file_range() is only used on 64-bit architectures,
+  on x32 and on mips-n32. This uses four arguments, including
+  two 64-bit wide ones.
+
+- sys_sync_file_range2() continues to be used on arm, powerpc,
+  xtensa and now on sh, hexagon and csky. I change the
+  implementation to take six 32-bit arguments, but the ABI
+  remains the same as before, with the flags before offset.
+
+- sys_sync_file_range6() is used for most other 32-bit ABIs:
+  arc, m68k, microblaze, nios2, openrisc, parisc, s390, sh, sparc
+  and x86. This also has six 32-bit arguments but in the
+  default order (fd, offset, nbytes, flags).
+
+- sys_sync_file_range7() is exclusive to mips-o32, this one
+  has an unused argument and is otherwise the same as
+  sys_sync_file_range6().
+
+My plan is to then have some infrastructure to ensure
+userspace tools (libc, strace, qemu, rust, ...) use the
+same calling conventions as the kernel. I'm doing the
+same thing for all other syscalls that have architecture
+specific calling conventions, so far I'm using
+
+fadvise64_64_7
+fanotify_mark6
+truncate3
+truncate4
+ftruncate3
+ftruncate4
+fallocate6
+pread5
+pread6
+pwrite5
+pwrite6
+preadv5
+preadv6
+pwritev5
+pwritev6
+sync_file_range6
+fadvise64_64_2
+fadvise64_64_6
+fadvise64_5
+fadvise64_6
+readahead4
+readahead5
+
+The last number here is usually the number of 32-bit
+arguments, except for fadvise64_64_2 that uses the
+same argument reordering trick as sync_file_range2.
+
+I'm not too happy with the naming but couldn't come up with
+anything clearer either, so let me know if you have any
+ideas there.
+
+>>  315	common	tee				sys_tee
+>>  316	common	vmsplice			sys_vmsplice
+>>  317	common	move_pages			sys_move_pages
+>> @@ -395,6 +395,7 @@
+>>  385	common	pkey_alloc			sys_pkey_alloc
+>>  386	common	pkey_free			sys_pkey_free
+>>  387	common	rseq				sys_rseq
+>> +388	common	sync_file_range2		sys_sync_file_range2
+>>  # room for arch specific syscalls
+>>  393	common	semget				sys_semget
+>>  394	common	semctl				sys_semctl
+>
+> I wonder how you discovered this bug. Did you look up the calling 
+> convention on SuperH
+> and compare the argument order for the sys_sync_file_range system call 
+> documented there
+> with the order in the kernel?
+
+I had to categorize all architectures based on their calling
+conventions to see if 64-bit arguments need aligned pairs or
+not, so I wrote a set of simple C files that I compiled for
+all architectures to see in which cases they insert unused
+arguments or swap the order of the upper and lower halves.
+
+SuperH, parisc and s390 are each slightly different from all the
+others here, so I ended up reading the ELF psABI docs and/or
+the compiler sources to be sure.
+I also a lot of git history.
+
+> Did you also check what order libc uses? I would expect libc on SuperH 
+> misordering the
+> arguments as well unless I am missing something. Or do we know that the 
+> code is actually
+> currently broken?
+
+Yes, I checked glibc, musl and uclibc-ng for all the cases in
+which the ABI made no sense, as well as to check that my analysis
+of the kernel sources matches the expectations of the libc.
+
+     Arnd
 
