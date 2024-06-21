@@ -1,175 +1,129 @@
-Return-Path: <linux-mips+bounces-3847-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3848-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09630912E4D
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Jun 2024 22:12:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DAC5912E70
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Jun 2024 22:21:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B490D287619
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Jun 2024 20:12:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B78C51F27193
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Jun 2024 20:21:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A04517BB0D;
-	Fri, 21 Jun 2024 20:12:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC82116B732;
+	Fri, 21 Jun 2024 20:21:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="DnNfLW/b";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="0rXQJ7U3"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from brightrain.aerifal.cx (brightrain.aerifal.cx [104.156.224.86])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 086C616D303
-	for <linux-mips@vger.kernel.org>; Fri, 21 Jun 2024 20:12:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.156.224.86
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A11416849B;
+	Fri, 21 Jun 2024 20:21:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719000737; cv=none; b=bGo20aVxbbcEzPTBNILtgD/2D898wydmSTLUIR9cfwT3BZ0jvSRFUDNd1Beh7mwdZ8di74ABIU5FeNdSIFKaP7JFWqve/9AIycnqPT/c1KNlaq7OA/HecNE+9YzdC5I55yFdyPixQ8Sx7Gwxv7Sf0AH5Mlfx9Jbu7VmXd6NEoAI=
+	t=1719001314; cv=none; b=ESvjFaebymtTWWIFwtb2IA1Mb5sNLRUmz/FeBNjhijuc8GPifjPNXvxAwMUljE2ru6kCAbUdwCoxCieYHzVTc2avTlbN2OpaA3QOdvcqwm+4nZKm/mipztAqnxJZcvCOAusGMVwMrIewcJ6yU/l3IjoNdfUc6+mY3WBvs7ZBDPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719000737; c=relaxed/simple;
-	bh=vhcmxHuEfXQE4obMPoKgf5UPHRF9VVw2LNmHi4WI0f8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o+mcpJO6EWGbRCWUtV1cYJUHtsxPxdOGx1scHnhoRwPH8mPjATHpJGifxExxM9Wvra9cetElqijsiarf6R9uVIw06uIMx7g1F9SIUeuoPL1tsv07LrRBIa1khkjdjZoq84GqjTL+NtonrNiPVjBQa9vbqMt5tdn1vXRRWFU3jAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=libc.org; spf=pass smtp.mailfrom=aerifal.cx; arc=none smtp.client-ip=104.156.224.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=libc.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aerifal.cx
-Date: Fri, 21 Jun 2024 15:57:23 -0400
-From: Rich Felker <dalias@libc.org>
-To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc: Arnd Bergmann <arnd@kernel.org>, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-mips@vger.kernel.org, Helge Deller <deller@gmx.de>,
-	linux-parisc@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>, sparclinux@vger.kernel.org,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-	linuxppc-dev@lists.ozlabs.org, Brian Cain <bcain@quicinc.com>,
-	linux-hexagon@vger.kernel.org, Guo Ren <guoren@kernel.org>,
-	linux-csky@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	linux-fsdevel@vger.kernel.org, libc-alpha@sourceware.org,
-	musl@lists.openwall.com, ltp@lists.linux.it, stable@vger.kernel.org
-Subject: Re: [musl] Re: [PATCH 09/15] sh: rework sync_file_range ABI
-Message-ID: <20240621195723.GB10433@brightrain.aerifal.cx>
-References: <20240620162316.3674955-1-arnd@kernel.org>
- <20240620162316.3674955-10-arnd@kernel.org>
- <366548c1a0d9749e42c0d0c993414a353c9b0b02.camel@physik.fu-berlin.de>
+	s=arc-20240116; t=1719001314; c=relaxed/simple;
+	bh=Boj2Z+grM+gfZ64rTto8rPtLcCuX8GZ23pfF+5fgq0g=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=UQWbbe+h9evWftHE4RPHu2KA/haq0Jk/20Nx17HMmxH+DCo9yDAlQuHFVkU9gILx5LPMgy7m0oP1Y+KCn51xMHn6tQVt/dVBbDS4maujR1VkkyCWlPzaW8hw6ncHz+xS5rVJL6Ptp+jji4BKaqtnOx3aQm30/Bab0kjlVypOxcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=DnNfLW/b; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=0rXQJ7U3; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1719001311;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4lsx8f9TYNOd8SucPBY9EWfWUAhnz2U9CTVv/68dhJY=;
+	b=DnNfLW/bh9wkezsEyVeCrUu1VXQUPZhopnBm+UIZqVOoHFjaiu8Gc1trBGUQ+m0lvLRyvU
+	vRd7yvU/yzX475PT+Ap+QRhrkIYkJDPf+MKQVPmks7zaBp0ucQiaeq2/ah3OUrV4QH3vOy
+	+BKDCojBUrdhaXwIOUqiCAlsSHG7IqurPUxlMi/onZ3DlHuWGNCu1ovQTGEn/Y9cVTRpw/
+	/xFLSxTO1ouD31vMensYp+tQbW1C4PG67O1K/efgfT9jDh6OsaeYURmHTt3KZWdOm8SOui
+	n4B0qeuR8R9/ktOLrsGOGlq3p7BNRVb46bsuLB+zhTjFbsZ6o9GV9jw7MudJHQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1719001311;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4lsx8f9TYNOd8SucPBY9EWfWUAhnz2U9CTVv/68dhJY=;
+	b=0rXQJ7U32eVikTpLGALaf5cl3MmXZ2BDG+AHIliAxje6KTvVgRD7Q2P7N3oT/TqjA3WZZw
+	aCx0an2n8uzxRuAg==
+To: Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>
+Cc: Aleksandar Rikalo <arikalo@gmail.com>, Chao-ying Fu <cfu@wavecomp.com>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Geert Uytterhoeven
+ <geert@linux-m68k.org>, Greg Ungerer <gerg@kernel.org>, Hauke Mehrtens
+ <hauke@hauke-m.de>, Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>, Jiaxun
+ Yang <jiaxun.yang@flygoat.com>, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, Marc Zyngier <maz@kernel.org>, Paul Burton
+ <paulburton@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Serge
+ Semin <fancer.lancer@gmail.com>, Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v4 04/14] irqchip: mips-gic: Support multi-cluster in
+ for_each_online_cpu_gic()
+In-Reply-To: <20240511104341.151550-5-aleksandar.rikalo@syrmia.com>
+References: <20240511104341.151550-1-aleksandar.rikalo@syrmia.com>
+ <20240511104341.151550-5-aleksandar.rikalo@syrmia.com>
+Date: Fri, 21 Jun 2024 22:21:50 +0200
+Message-ID: <87sex6m4gx.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <366548c1a0d9749e42c0d0c993414a353c9b0b02.camel@physik.fu-berlin.de>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Type: text/plain
 
-On Fri, Jun 21, 2024 at 10:44:39AM +0200, John Paul Adrian Glaubitz wrote:
-> Hi Arnd,
-> 
-> thanks for your patch!
-> 
-> On Thu, 2024-06-20 at 18:23 +0200, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > The unusual function calling conventions on superh ended up causing
->                                               ^^^^^^
->                                        It's spelled SuperH
-> 
-> > sync_file_range to have the wrong argument order, with the 'flags'
-> > argument getting sorted before 'nbytes' by the compiler.
-> > 
-> > In userspace, I found that musl, glibc, uclibc and strace all expect the
-> > normal calling conventions with 'nbytes' last, so changing the kernel
-> > to match them should make all of those work.
-> > 
-> > In order to be able to also fix libc implementations to work with existing
-> > kernels, they need to be able to tell which ABI is used. An easy way
-> > to do this is to add yet another system call using the sync_file_range2
-> > ABI that works the same on all architectures.
-> > 
-> > Old user binaries can now work on new kernels, and new binaries can
-> > try the new sync_file_range2() to work with new kernels or fall back
-> > to the old sync_file_range() version if that doesn't exist.
-> > 
-> > Cc: stable@vger.kernel.org
-> > Fixes: 75c92acdd5b1 ("sh: Wire up new syscalls.")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  arch/sh/kernel/sys_sh32.c           | 11 +++++++++++
-> >  arch/sh/kernel/syscalls/syscall.tbl |  3 ++-
-> >  2 files changed, 13 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/sh/kernel/sys_sh32.c b/arch/sh/kernel/sys_sh32.c
-> > index 9dca568509a5..d5a4f7c697d8 100644
-> > --- a/arch/sh/kernel/sys_sh32.c
-> > +++ b/arch/sh/kernel/sys_sh32.c
-> > @@ -59,3 +59,14 @@ asmlinkage int sys_fadvise64_64_wrapper(int fd, u32 offset0, u32 offset1,
-> >  				 (u64)len0 << 32 | len1, advice);
-> >  #endif
-> >  }
-> > +
-> > +/*
-> > + * swap the arguments the way that libc wants it instead of
-> 
-> I think "swap the arguments to the order that libc wants them" would
-> be easier to understand here.
-> 
-> > + * moving flags ahead of the 64-bit nbytes argument
-> > + */
-> > +SYSCALL_DEFINE6(sh_sync_file_range6, int, fd, SC_ARG64(offset),
-> > +                SC_ARG64(nbytes), unsigned int, flags)
-> > +{
-> > +        return ksys_sync_file_range(fd, SC_VAL64(loff_t, offset),
-> > +                                    SC_VAL64(loff_t, nbytes), flags);
-> > +}
-> > diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
-> > index bbf83a2db986..c55fd7696d40 100644
-> > --- a/arch/sh/kernel/syscalls/syscall.tbl
-> > +++ b/arch/sh/kernel/syscalls/syscall.tbl
-> > @@ -321,7 +321,7 @@
-> >  311	common	set_robust_list			sys_set_robust_list
-> >  312	common	get_robust_list			sys_get_robust_list
-> >  313	common	splice				sys_splice
-> > -314	common	sync_file_range			sys_sync_file_range
-> > +314	common	sync_file_range			sys_sh_sync_file_range6
->                                                                  ^^^^^^ Why the suffix 6 here?
-> 
-> >  315	common	tee				sys_tee
-> >  316	common	vmsplice			sys_vmsplice
-> >  317	common	move_pages			sys_move_pages
-> > @@ -395,6 +395,7 @@
-> >  385	common	pkey_alloc			sys_pkey_alloc
-> >  386	common	pkey_free			sys_pkey_free
-> >  387	common	rseq				sys_rseq
-> > +388	common	sync_file_range2		sys_sync_file_range2
-> >  # room for arch specific syscalls
-> >  393	common	semget				sys_semget
-> >  394	common	semctl				sys_semctl
-> 
-> I wonder how you discovered this bug. Did you look up the calling convention on SuperH
-> and compare the argument order for the sys_sync_file_range system call documented there
-> with the order in the kernel?
-> 
-> Did you also check what order libc uses? I would expect libc on SuperH misordering the
-> arguments as well unless I am missing something. Or do we know that the code is actually
-> currently broken?
+On Sat, May 11 2024 at 12:43, Aleksandar Rikalo wrote:
+> From: Paul Burton <paulburton@kernel.org>
+>
+> Introduce support for multi-cluster GIC register access in
+> __gic_with_next_online_cpu(), and therefore in its user
+> for_each_online_cpu_gic(). We access registers in remote clusters
+> using the CM's GCR_CL_REDIRECT register, and so here we delegate
+> to mips_cm_lock_other() in order to configure this access.
 
-No, there's no reason libc would misorder them because syscalls aren't
-function calls, and aren't subject to function call ABI. We have to
-explicitly bind the arguments to registers and make a syscall
-instruction.
+Again: We do nothing. See docs.
 
-The only reason this bug happened on the kernel side is that someone
-thought it would be a smart idea to save maybe 10 instructions by
-treating the register state on entry as directly suitable to jump from
-asm to a C function rather than explicitly marshalling the arguments
-out of the user-kernel syscall ABI positions into actual arguments to
-a C function call.
+> @@ -70,6 +70,20 @@ static int __gic_with_next_online_cpu(int prev)
+>  {
+>  	unsigned int cpu;
+>  
+> +	/*
+> +	 * Unlock access to the previous CPU's GIC local register block.
+> +	 *
+> +	 * Delegate to the CM locking code in the multi-cluster case, since
+> +	 * other clusters can only be accessed using GCR_CL_REDIRECT.
+> +	 *
+> +	 * In the single cluster case we don't need to do anything; the caller
+> +	 * is responsible for maintaining gic_lock & nothing should be
+> +	 * expecting any particular value of GIC_VL_OTHER so we can leave it
+> +	 * as-is.
+> +	 */
+> +	if ((prev != -1) && mips_cps_multicluster_cpus())
+> +		mips_cm_unlock_other();
 
-Rich
+Eew.
+
+static inline void gic_unlock_cluster(void)
+{
+	if (mips_cps_multicluster_cpus())
+		mips_cm_unlock_other();
+}
+
+#define for_each_online_cpu_gic(cpu, gic_lock)		\
+	guard(raw_spinlock_irqsave)(gic_lock);		\
+	for ((cpu) = __gic_with_next_online_cpu(-1);	\
+	     (cpu) < nr_cpu_ids;			\
+             gic_unlock_cluster(),			\
+	     (cpu) = __gic_with_next_online_cpu(cpu);)
+
+No?
+
+Thanks,
+
+        tglx
 
