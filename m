@@ -1,48 +1,48 @@
-Return-Path: <linux-mips+bounces-3861-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3862-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 703179138A1
-	for <lists+linux-mips@lfdr.de>; Sun, 23 Jun 2024 09:16:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 532A89138BD
+	for <lists+linux-mips@lfdr.de>; Sun, 23 Jun 2024 09:19:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2FBE1F223BE
-	for <lists+linux-mips@lfdr.de>; Sun, 23 Jun 2024 07:16:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 791181C21E9D
+	for <lists+linux-mips@lfdr.de>; Sun, 23 Jun 2024 07:19:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93AE81805E;
-	Sun, 23 Jun 2024 07:16:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 336EB26AFF;
+	Sun, 23 Jun 2024 07:19:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q/W89Niq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b8lMnO02"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6645B16419;
-	Sun, 23 Jun 2024 07:16:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05CF920332;
+	Sun, 23 Jun 2024 07:19:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719126962; cv=none; b=WjbKv4kxdMBfEtFjZ4adTfvECIYExnFQswtflTij7LhCxpcrbWfHuVFK/IuxQ/p+Im/ANy7Z8ij7l5EIU64kFDBBi+1kppuwGUDRu2U1AhnzbENKqSl+l/2WtdaR0GuOTcA7IDwF5qdKBvbLu/RjnvcUYNmj+ZkUwnCp948GyCY=
+	t=1719127152; cv=none; b=nCD5ZuEPN6IUBRZXc7dzaxnX+INjjhqP2qNVZlBm5t5JBFfOblYjlhAdux6HfexYbRZpKnkma4CKtQoSTUepcSPlQh+SEcTDg9Vfhzu+VdGpI4amy1wkv1QJ+594cT8ZQSjo6yRVROYiQLzLKjaMk/672U78eZN04CxL8pvdr74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719126962; c=relaxed/simple;
-	bh=kvi33n7OkM2//Cwxig7e4n0YCswTp6CpYoaVzl3d164=;
+	s=arc-20240116; t=1719127152; c=relaxed/simple;
+	bh=4gzYPG4f5GXMJ3BXT6w9nYXuM3wNyOtWOt5XpdBem/g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ETHCqMimzmZ/sO6MeP0bAef/bpsd39QmJsZQQ1tMKu0sn62yzn5VG+uAgoLEJw+GY+dBDNz5yipBU6nKaN/d6y1zsn2umBZZRw0+pfDMQcYx1oMgde54klXnXaiGwL9blyuZp/Wnxv9imhjI1yP7ZwHxY5Iyiv0xh45NM22+R3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q/W89Niq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F240C2BD10;
-	Sun, 23 Jun 2024 07:15:55 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=FJXTkJVvwQzSxN6iaJWzcfrAkcOUOr0bHjdDT1T9Np19Y/0oecm09m2dFcHYfoUN6/vpy7ZA8bO+LL0/wUpq5Kq6rjAMURoWTvbINnGypztPpYOSNQDNCivZw+as7ke9LwBqIEcygK/9a+UJT6smR4eB74H+24Vudym3Z6UpvAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b8lMnO02; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDDCAC2BD10;
+	Sun, 23 Jun 2024 07:19:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719126961;
-	bh=kvi33n7OkM2//Cwxig7e4n0YCswTp6CpYoaVzl3d164=;
+	s=k20201202; t=1719127151;
+	bh=4gzYPG4f5GXMJ3BXT6w9nYXuM3wNyOtWOt5XpdBem/g=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Q/W89NiqGUqdL2Cz6lds2CxXPuIPAVqDQ1S/BT4RUkBFKppETr7SSOAABkozBcoXx
-	 Ay43fJxp/TrWu49CEokBlHLnakGwTkig4Ltr8dJ9fIIsKSOVaL2yd4EYFUAzwO7/JA
-	 3//5IuN6DtYQNFFTbeh5FoignQ3sVUj3bRpL8/bIjj0wjqcP0v8Iquy+bL9sZ6u93G
-	 dd1KXX5fIL3yJhpFoqpcSBVlJMFCnDoqoD4FBtshke+nfKIuWRqUbD0jw2WqLIU2iV
-	 aGecwUhSiPL3wRCWT9r3e0Qa5QsG2wsKpJVZM6HwLKAlAb1g2m2DE6j+CHoAUgyFXj
-	 8LizBFlB4v3Mg==
-Message-ID: <c05da1a1-5d22-449e-874f-80028e2b88ec@kernel.org>
-Date: Sun, 23 Jun 2024 09:15:53 +0200
+	b=b8lMnO02O2DbdpyCi/NxhF0fcoDr5xglSfDKnScWx+0I9oJAZDwxiJKw5mCn6Lqai
+	 Ig3Olh6/ddaCVHk6fEraueA62FwONgBcqg4nryO3ppY0TL9upUT8YkQdPtC6qfYwU5
+	 d4CQW9tUUlCVAPhdWddcDXc3MNFIQZYgW+IE1BHtDaQxCdh2KPExeAUAGEv5uNkxs8
+	 0u7xwV8SmJ7w2SK5v89+zN1Yiyg+x/mSs4MjI7EkcSmksE1e2oQ0nubbYDv8M7MUeV
+	 QPxgRiq51BFnrdkclCL9BiEqK9WKfElDV2eKhTZVK1QDFJH0Mh9uQEIUEAJhQbBS5z
+	 /rHPAhgD0AXtA==
+Message-ID: <e9d02416-b361-477a-8d18-eb19762e0e53@kernel.org>
+Date: Sun, 23 Jun 2024 09:19:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/6] mips: dts: realtek: Add RTL9302C board
+Subject: Re: [PATCH 2/6] dt-bindings: timer: Add schema for realtek,otto-timer
 To: Chris Packham <chris.packham@alliedtelesis.co.nz>, tglx@linutronix.de,
  robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
  tsbogend@alpha.franken.de, daniel.lezcano@linaro.org, paulburton@kernel.org,
@@ -59,7 +59,7 @@ To: Chris Packham <chris.packham@alliedtelesis.co.nz>, tglx@linutronix.de,
 Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
  linux-mips@vger.kernel.org, kabel@kernel.org, ericwouds@gmail.com
 References: <20240621042737.674128-1-chris.packham@alliedtelesis.co.nz>
- <20240621042737.674128-7-chris.packham@alliedtelesis.co.nz>
+ <20240621042737.674128-3-chris.packham@alliedtelesis.co.nz>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -105,223 +105,111 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240621042737.674128-7-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20240621042737.674128-3-chris.packham@alliedtelesis.co.nz>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 21/06/2024 06:27, Chris Packham wrote:
-> Add support for the RTL930x SoC and the RTL9302C reference board.
-> 
-> The RTL930x family of SoCs are Realtek switches with an embedded MIPS
-> core (800MHz 34Kc). Most of the peripherals are similar to the RTL838x
-> SoC and can make use of many existing drivers.
-> 
-> Add in full DSA switch support is still a work in progress.
+> Add the devicetree schema for the realtek,otto-timer present on a number
+> of Realtek SoCs.
+
+Please order your patches correctly: bindings always go before users.
+
+A nit, subject: drop second/last, redundant "schema for". The
+"dt-bindings" prefix is already stating that these are bindings (so schema).
+See also:
+https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
+
 > 
 > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 > ---
->  arch/mips/boot/dts/realtek/Makefile     |  1 +
->  arch/mips/boot/dts/realtek/RTL9302C.dts | 74 +++++++++++++++++++++++
->  arch/mips/boot/dts/realtek/rtl930x.dtsi | 78 +++++++++++++++++++++++++
->  3 files changed, 153 insertions(+)
->  create mode 100644 arch/mips/boot/dts/realtek/RTL9302C.dts
->  create mode 100644 arch/mips/boot/dts/realtek/rtl930x.dtsi
+>  .../bindings/timer/realtek,otto-timer.yaml    | 54 +++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/timer/realtek,otto-timer.yaml
 > 
-> diff --git a/arch/mips/boot/dts/realtek/Makefile b/arch/mips/boot/dts/realtek/Makefile
-> index fba4e93187a6..54dc2d280cd5 100644
-> --- a/arch/mips/boot/dts/realtek/Makefile
-> +++ b/arch/mips/boot/dts/realtek/Makefile
-> @@ -1,2 +1,3 @@
->  # SPDX-License-Identifier: GPL-2.0
->  dtb-y	+= cisco_sg220-26.dtb
-> +dtb-y	+= RTL9302C.dtb
-> diff --git a/arch/mips/boot/dts/realtek/RTL9302C.dts b/arch/mips/boot/dts/realtek/RTL9302C.dts
+> diff --git a/Documentation/devicetree/bindings/timer/realtek,otto-timer.yaml b/Documentation/devicetree/bindings/timer/realtek,otto-timer.yaml
 > new file mode 100644
-> index 000000000000..d921067d5006
+> index 000000000000..b6e85aadbc99
 > --- /dev/null
-> +++ b/arch/mips/boot/dts/realtek/RTL9302C.dts
-> @@ -0,0 +1,74 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/dts-v1/;
+> +++ b/Documentation/devicetree/bindings/timer/realtek,otto-timer.yaml
+> @@ -0,0 +1,54 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/timer/realtek,otto-timer.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +#include "rtl930x.dtsi"
+> +title: Realtek Otto SoCs Timer/Counter
 > +
-> +#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/leds/common.h>
-> +#include <dt-bindings/thermal/thermal.h>
+> +description:
+> +  Realtek SoCs support a number of timers/counters. These are used
+> +  as a per CPU clock event generator and an overall CPU clocksource.
 > +
-> +/ {
-> +	compatible = "realtek,RTL9302C", "realtek,rtl930x-soc";
+> +maintainers:
+> +  - Chris Packham <chris.packham@alliedtelesis.co.nz>
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^timer@[0-9a-f]+$"
+> +
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - realtek,rtl930x-timer
 
-Really, this wasn't ever tested.
+No wildcards.
 
-> +	model = "RTL9302C Development Board";
-> +
-> +	memory@0 {
-> +		device_type = "memory";
-> +		reg = <0x0 0x8000000>;
-> +	};
-> +
-> +	chosen {
-> +		bootargs = "earlycon";
+> +      - const: realtek,otto-timer
 
-Drop. earlycon is debugging tool, not a wide-mainline usage configuration.
+Do you have access to datasheet of all Otto SoCs and can you confirm
+that all of them have the same timer programming interface? Just drop
+generic compatible and use SoCs compatible.
 
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +};
-> +
-> +&uart0 {
-> +	status = "okay";
-> +};
-> +
-> +&spi0 {
-> +	status = "okay";
-> +	flash@0 {
-> +		compatible = "jedec,spi-nor";
-> +		reg = <0>;
-> +		spi-max-frequency = <10000000>;
-> +
-> +		partitions {
-> +			compatible = "fixed-partitions";
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +
-> +			partition@0 {
-> +				label = "u-boot";
-> +				reg = <0x0 0xe0000>;
-> +				read-only;
-> +			};
-> +			partition@e0000 {
-> +				label = "u-boot-env";
-> +				reg = <0xe0000 0x10000>;
-> +			};
-> +			partition@f0000 {
-> +				label = "u-boot-env2";
-> +				reg = <0xf0000 0x10000>;
-> +				read-only;
-> +			};
-> +			partition@100000 {
-> +				label = "jffs";
-> +				reg = <0x100000 0x100000>;
-> +			};
-> +			partition@200000 {
-> +				label = "jffs2";
-> +				reg = <0x200000 0x100000>;
-> +			};
-> +			partition@300000 {
-> +				label = "runtime";
-> +				reg = <0x300000 0xe80000>;
-> +			};
-> +			partition@1180000 {
-> +				label = "runtime2";
-> +				reg = <0x1180000 0xe80000>;
-> +			};
-> +		};
-> +	};
-> +};
-> diff --git a/arch/mips/boot/dts/realtek/rtl930x.dtsi b/arch/mips/boot/dts/realtek/rtl930x.dtsi
-> new file mode 100644
-> index 000000000000..5e088c90d2ee
-> --- /dev/null
-> +++ b/arch/mips/boot/dts/realtek/rtl930x.dtsi
-> @@ -0,0 +1,78 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
-> +
-> +#include "rtl83xx.dtsi"
-> +
-> +/ {
-> +	compatible = "realtek,rtl930x-soc";
-> +
-> +	cpus {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		cpu@0 {
-> +			compatible = "mips,mips34Kc";
-> +			reg = <0>;
-> +			clocks = <&baseclk 0>;
-> +			clock-names = "cpu";
-> +		};
-> +	};
-> +
-> +	baseclk: baseclk {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <800000000>;
-> +	};
-> +
-> +	lx_clk: lx_clk {
+Blank line.
 
-No underscors in node names.
+> +  reg:
+> +    minItems: 5
+> +    maxItems: 5
 
-Use recommended clock names, see:
-Documentation/devicetree/bindings/clock/fixed-clock.yaml
+Instead list and describe the items.
+
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    minItems: 5
+> +    maxItems: 5
+
+Instead list and describe the items.
 
 
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency  = <175000000>;
-> +	};
-> +};
 > +
-> +&soc {
-> +	intc: interrupt-controller@3000 {
-> +		compatible = "realtek,rtl9300-intc", "realtek,rtl-intc";
-> +		reg = <0x3000 0x18>, <0x3018 0x18>;
-> +		interrupt-controller;
-> +		#interrupt-cells = <2>;
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - interrupts
 > +
-> +		interrupt-parent = <&cpuintc>;
-> +		interrupts = <2>, <3>, <4>, <5>, <6>, <7>;
-> +	};
+> +additionalProperties: false
 > +
-> +	spi0: spi@1200 {
-> +		compatible = "realtek,rtl8380-spi";
-> +		reg = <0x1200 0x100>;
-> +
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +	};
-> +
-> +	timer0: timer@3200 {
-> +		compatible = "realtek,rtl930x-timer", "realtek,otto-timer";
-> +		reg = <0x3200 0x10>, <0x3210 0x10>, <0x3220 0x10>,
-> +		    <0x3230 0x10>, <0x3240 0x10>;
-> +
-> +		interrupt-parent = <&intc>;
-> +		interrupts = <7 4>, <8 4>, <9 4>, <10 4>, <11 4>;
+> +examples:
+> +  - |
+> +    timer0: timer@3200 {
 
-Are you open-coding IRQ flags?
+Drop unused label
 
-> +		clocks = <&lx_clk>;
-> +	};
-> +};
+> +      compatible = "realtek,rtl930x-timer", "realtek,otto-timer";
+> +      reg = <0x3200 0x10>, <0x3210 0x10>, <0x3220 0x10>,
+> +            <0x3230 0x10>, <0x3240 0x10>;
 > +
-> +&uart0 {
-> +	/delete-property/ clock-frequency;
-> +	clocks = <&lx_clk>;
-> +
-> +	interrupt-parent = <&intc>;
-> +	interrupts = <30 1>;
+> +      interrupt-parent = <&intc>;
+> +      interrupts = <7 4>, <8 4>, <9 4>, <10 4>, <11 4>;
 
-Are you open-coding IRQ flags?
+Use proper defines for the flags.
 
-
-> +};
-> +
-> +&uart1 {
-> +	/delete-property/ clock-frequency;
-> +	clocks = <&lx_clk>;
-> +
-> +	interrupt-parent = <&intc>;
-> +	interrupts = <31 0>;
-
-Are you open-coding IRQ flags?
-
-> +};
-> +
+> +      clocks = <&lx_clk>;
+> +    };
 
 Best regards,
 Krzysztof
