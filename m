@@ -1,125 +1,79 @@
-Return-Path: <linux-mips+bounces-3864-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3865-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04E8C913A14
-	for <lists+linux-mips@lfdr.de>; Sun, 23 Jun 2024 13:28:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFA9A913BFF
+	for <lists+linux-mips@lfdr.de>; Sun, 23 Jun 2024 17:14:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6783CB20D53
-	for <lists+linux-mips@lfdr.de>; Sun, 23 Jun 2024 11:28:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48AD2B20FC4
+	for <lists+linux-mips@lfdr.de>; Sun, 23 Jun 2024 15:14:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F03F11369BE;
-	Sun, 23 Jun 2024 11:26:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BA1E183087;
+	Sun, 23 Jun 2024 15:13:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JCozp3lY"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E75141369B4;
-	Sun, 23 Jun 2024 11:26:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 339D9183085;
+	Sun, 23 Jun 2024 15:13:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719142009; cv=none; b=jKCh7CxRJ1wiZG6XFzZNY3HBLgV+3dDxk9WpS4aWpvemamq/B+VHXperaTHkZJ54rT4nNW5SdxQ1mv57GE6hJIymRtQP2gaenfDl6XcwX46FDw8srHG2IkJRT8vVOtXrgUfsJv+eEi1Ged76qK/MGpRfM2ac8H46BQJUeiAUZow=
+	t=1719155599; cv=none; b=j6Yl585kTZQLn7yNGO+rbjO3hk9bexIHGOZSGq4aFncnY0DzgSwvErNDwYqMGceKno4z6XhEgqvTYbqgufT6vyCblKUx1rHs2e/B+pAnstW8G5KifP6JF8qZB3cgg6xav2LcvrjhxYOGCzd6hsIYjuGn7PDe+h4gK0D+HS3NPiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719142009; c=relaxed/simple;
-	bh=Dd6YcmLb8o+G6RWqBuwSGvOw3f/TCS3z7u0PqBD9BPg=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=qHvxh4d9Q/XUmydvjiG+irW0eYuI/+OnFO20I5kZnkrT+6sWxD3AGlgEjyNR4Zu8LcS0CmDxe1mtD4LMiiLHdNgJ9RkNreaiuRl+1MmG712rRhp9VZknlLuEo5r5UqGYPrwsvhzXFbnqdmhBdnN2Wwbpn5Bc4qDdETG/fa2xDik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=artur-rojek.eu; spf=pass smtp.mailfrom=artur-rojek.eu; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=artur-rojek.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=artur-rojek.eu
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3C80BC0005;
-	Sun, 23 Jun 2024 11:26:38 +0000 (UTC)
+	s=arc-20240116; t=1719155599; c=relaxed/simple;
+	bh=EelfNt0DZqfzjiXUZAeA1uRcfgcS0xksHQrXZ+B3MP4=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=XcPmZ127hfbtIJIeY2e2+DOKjmHq30eUJuolEclmvPpJsd4IyC/VY9ek7biBRoN6apflPvckvEMMCoyLax2kAoDiZBg2CP3ei3WxsQ3JAEr1DXYBSuMCjUEAC/8HKT9LFVQ4m+T3o4irNMiI/Qz2G2L9V6XYOc4DhUYclBZ94qQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JCozp3lY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 106B1C4AF09;
+	Sun, 23 Jun 2024 15:13:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719155599;
+	bh=EelfNt0DZqfzjiXUZAeA1uRcfgcS0xksHQrXZ+B3MP4=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=JCozp3lYsYok9+sDPD8pMKCluFcBYHuz438G/cP5/W0L91iRO3FBLZsONc6J22whX
+	 EHo1ZxkV4d4OpejTdJDUgh9TYRCEZhYfDEbyW7dZKavOeO4eDAQqj3YQO4ouOw9syX
+	 pgka4wUlblZYYhzy09w6bpbKgHL+NdAWUGvaTo+OsFZtdsva+YsNP+su/v64mHrMLF
+	 LryLsQScso/DVjsEoQi5ACGQ0bnnHkAiKOFYJ2iI4keap8h4ySL24s8UEiXLKsnlM6
+	 +jHIAL9QnLVYkytPXbllVAynpsNJlFmw50u4ukrD+moIx5EzgCNaGw+VaBQ0p7QB44
+	 JwkMA7LcuNTVQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 02471E7C4CA;
+	Sun, 23 Jun 2024 15:13:19 +0000 (UTC)
+Subject: Re: [GIT PULL] MIPS fixes for v6.10
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <Znf0bReGRC9C1ACk@alpha.franken.de>
+References: <Znf0bReGRC9C1ACk@alpha.franken.de>
+X-PR-Tracked-List-Id: <linux-mips.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Znf0bReGRC9C1ACk@alpha.franken.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.10_2
+X-PR-Tracked-Commit-Id: 0d5679a0aae2d8cda72169452c32e5cb88a7ab33
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b67eeff799489b2d5350130828d1793ff6c74cfb
+Message-Id: <171915559900.3671.16992226190571995885.pr-tracker-bot@kernel.org>
+Date: Sun, 23 Jun 2024 15:13:19 +0000
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: torvalds@linux-foundation.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Date: Sun, 23 Jun 2024 13:26:38 +0200
-From: Artur Rojek <contact@artur-rojek.eu>
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Paul Cercueil <paul@crapouillou.net>, Sebastian Reichel
- <sre@kernel.org>, Jonathan Cameron <Jonathan.Cameron@huawei.com>,
- linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org, Sebastian
- Reichel <sebastian.reichel@collabora.com>, linux-mips@vger.kernel.org,
- linux-pm@vger.kernel.org
-Subject: Re: [PATCH] power: supply: ingenic: Fix some error handling paths in
- ingenic_battery_get_property()
-In-Reply-To: <51e49c18574003db1e20c9299061a5ecd1661a3c.1719121781.git.christophe.jaillet@wanadoo.fr>
-References: <51e49c18574003db1e20c9299061a5ecd1661a3c.1719121781.git.christophe.jaillet@wanadoo.fr>
-Message-ID: <f3b7a454fbd761450303ea8128c888fa@artur-rojek.eu>
-X-Sender: contact@artur-rojek.eu
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: contact@artur-rojek.eu
 
-Hi Christophe,
+The pull request you sent on Sun, 23 Jun 2024 12:09:49 +0200:
 
-thanks for the patch, looking good.
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.10_2
 
-Acked-by: Artur Rojek <contact@artur-rojek.eu>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b67eeff799489b2d5350130828d1793ff6c74cfb
 
-Cheers,
-Artur
+Thank you!
 
-On 2024-06-23 07:50, Christophe JAILLET wrote:
-> If iio_read_channel_processed() fails, 'val->intval' is not updated, 
-> but it
-> is still *1000 just after. So, in case of error, the *1000 accumulate 
-> and
-> 'val->intval' becomes erroneous.
-> 
-> So instead of rescaling the value after the fact, use the dedicated 
-> scaling
-> API. This way the result is updated only when needed. In case of error, 
-> the
-> previous value is kept, unmodified.
-> 
-> This should also reduce any inaccuracies resulting from the scaling.
-> 
-> Finally, this is also slightly more efficient as it saves a function 
-> call
-> and a multiplication.
-> 
-> Fixes: fb24ccfbe1e0 ("power: supply: add Ingenic JZ47xx battery 
-> driver.")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/power/supply/ingenic-battery.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/power/supply/ingenic-battery.c 
-> b/drivers/power/supply/ingenic-battery.c
-> index 2e7fdfde47ec..0a40f425c277 100644
-> --- a/drivers/power/supply/ingenic-battery.c
-> +++ b/drivers/power/supply/ingenic-battery.c
-> @@ -31,8 +31,9 @@ static int ingenic_battery_get_property(struct 
-> power_supply *psy,
-> 
->  	switch (psp) {
->  	case POWER_SUPPLY_PROP_HEALTH:
-> -		ret = iio_read_channel_processed(bat->channel, &val->intval);
-> -		val->intval *= 1000;
-> +		ret = iio_read_channel_processed_scale(bat->channel,
-> +						       &val->intval,
-> +						       1000);
->  		if (val->intval < info->voltage_min_design_uv)
->  			val->intval = POWER_SUPPLY_HEALTH_DEAD;
->  		else if (val->intval > info->voltage_max_design_uv)
-> @@ -41,8 +42,9 @@ static int ingenic_battery_get_property(struct 
-> power_supply *psy,
->  			val->intval = POWER_SUPPLY_HEALTH_GOOD;
->  		return ret;
->  	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-> -		ret = iio_read_channel_processed(bat->channel, &val->intval);
-> -		val->intval *= 1000;
-> +		ret = iio_read_channel_processed_scale(bat->channel,
-> +						       &val->intval,
-> +						       1000);
->  		return ret;
->  	case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
->  		val->intval = info->voltage_min_design_uv;
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
