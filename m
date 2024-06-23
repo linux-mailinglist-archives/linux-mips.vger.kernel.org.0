@@ -1,48 +1,48 @@
-Return-Path: <linux-mips+bounces-3858-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3859-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9B3691387A
-	for <lists+linux-mips@lfdr.de>; Sun, 23 Jun 2024 09:12:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53F3F91387E
+	for <lists+linux-mips@lfdr.de>; Sun, 23 Jun 2024 09:12:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75A3F281B21
-	for <lists+linux-mips@lfdr.de>; Sun, 23 Jun 2024 07:12:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BADE1F2243E
+	for <lists+linux-mips@lfdr.de>; Sun, 23 Jun 2024 07:12:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D777B3A8D0;
-	Sun, 23 Jun 2024 07:12:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5233A3B1AB;
+	Sun, 23 Jun 2024 07:12:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L5Q+vc6F"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tzxrk7G+"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC8DC27453;
-	Sun, 23 Jun 2024 07:12:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2512327453;
+	Sun, 23 Jun 2024 07:12:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719126744; cv=none; b=ohcuNF7EvFGLOBzbb2y/u+eQyoyG4+pck+0J3a5SB3o205PvvL9GJo067IVhPFMPz7k90DytMRvgaZ2U5BoB7JxkysFtqQH1xM72mgxTiSiwDBW6CM0rmw6DORGt8bN/eX3UDkU8NBfHfXStaTBGOs7ns5QzMDPbPW2d/2kS+JE=
+	t=1719126763; cv=none; b=JOw3/Z3n+/ILlah1G6+5+T+YP8xloryvV4ZWtue6XvlyjU4imhiVqtfxwvqQwvQ/Xs/+jQO1hVu3imxfLMQjJR3hntcJWsxxt+K1XIIIpiGT0uij+jsHe/7b+CB7DouygUJP/a2Gf5SpOxZW3pbyksr6Z7GSLrIQDhtrDVYUNt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719126744; c=relaxed/simple;
-	bh=Bp9qbvgUC/vEjBZbMUqq+ORKDzQCPuZRxMu8gALovNM=;
+	s=arc-20240116; t=1719126763; c=relaxed/simple;
+	bh=TGqFYjEVBJ22Tn9eAWhCIrcWuyOnLDAC522lUz6W+n0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i7LUrJGAQxvrTJXXebZV8omeVpH7peqKjoJGPzjYW/MkMLGg5wzwNu0GinNffaLnQecbv8e0FPf9k5PilGU28ameOO1//ghm1roiY1B/wqS6LiQZwtEUbBSrK2SbWcMwhgak06wQbwNJWIpLPvAxeu/njFYGkNahuLCTmjGExcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L5Q+vc6F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6ECFC2BD10;
-	Sun, 23 Jun 2024 07:12:18 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ld7ZyJt68Zm1cmqgqoaS9JYL2B6F2OL3vYl3nmv/aUSofFaQ0MZpxgWHbDPyI7pjwCWcMcqhhEN8UeFhfiajgFGZ1Jtwo5OurgZRUzXUxFVodYeLt9Qp36UipAJO+meHcp+ycXDgLbmyDAg7d/A8qJlF9dY2T5YrZGrDmuyOHxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tzxrk7G+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77170C2BD10;
+	Sun, 23 Jun 2024 07:12:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719126744;
-	bh=Bp9qbvgUC/vEjBZbMUqq+ORKDzQCPuZRxMu8gALovNM=;
+	s=k20201202; t=1719126762;
+	bh=TGqFYjEVBJ22Tn9eAWhCIrcWuyOnLDAC522lUz6W+n0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=L5Q+vc6FnUbKe8RgEgISTHKK67P4rI80iAPd11PhHHRjJ+scqgaSEdyDFY1MDS/YA
-	 S6sKRxXsFBqKvgqts8ttm0zSq/tmh6/KYdO6Rf9pfZcBKOBFGuA3exaCJsdyXORvuR
-	 w1mazUPRsMyuC0uhV68VU0PFQeGboi5TiP8Jm2aOVVGw6ZM3Q9KqZQ7cUgDu9Sv98q
-	 JTqhHsLf3Dkz5+ZNRqZ5t3I8n/hlvvEd8HGIUfNGPEMGgs4Rpaps69qPIzIlyBpdFO
-	 Xqgja1RuZO7yLZ82jphQBxOAXwtSYvMFIooWxo8u/a5dVhI6p0QvABwaHB+jk579KT
-	 WLFA1+HoFD+/Q==
-Message-ID: <73e55bc3-2409-4309-9eaa-64be1e8ecf6f@kernel.org>
-Date: Sun, 23 Jun 2024 09:12:16 +0200
+	b=tzxrk7G+/vIiDRlreM5C9AFfYOUOuyLMZx+7JLH7PpW2PZ6Ww+ocsq21Lg4rKUkC3
+	 Xuwmlhwwv7fMgriK+ZvDw1/Rf1ASSmFMm4EvjiVSgZPlVh3zRpHquuv5GLchYAxCjD
+	 0GxawEY/jKlw9H9AeXtDAu1qsqEeRv8kOovHSkIzfEss9Yk3NwSQGnmuiMugdDxgbz
+	 zzGjLH0W6NjISd4MhdQn2/RcMu/0q+PVOLjYTM227yTVwkiuSBhQm/0I8QEyX99PMO
+	 bg88EDLbcqqAek8dtSb+vmmE4qBZelqBh+pTExSbPOUmv8vTwRTzH8s3RZ/5pXraNz
+	 YIkK2QV+DeKOA==
+Message-ID: <aaf62888-cb52-485b-9a7f-e12a3fbfc722@kernel.org>
+Date: Sun, 23 Jun 2024 09:12:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/6] dt-bindings: mips: realtek: Add rtl930x-soc
- compatible
+Subject: Re: [PATCH 3/6] dt-bindings: interrupt-controller: realtek,rtl-intc:
+ Add rtl9300-intc
 To: Chris Packham <chris.packham@alliedtelesis.co.nz>, tglx@linutronix.de,
  robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
  tsbogend@alpha.franken.de, daniel.lezcano@linaro.org, paulburton@kernel.org,
@@ -60,7 +60,7 @@ To: Chris Packham <chris.packham@alliedtelesis.co.nz>, tglx@linutronix.de,
 Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
  linux-mips@vger.kernel.org, kabel@kernel.org, ericwouds@gmail.com
 References: <20240621042737.674128-1-chris.packham@alliedtelesis.co.nz>
- <20240621042737.674128-2-chris.packham@alliedtelesis.co.nz>
+ <20240621042737.674128-4-chris.packham@alliedtelesis.co.nz>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -106,36 +106,17 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240621042737.674128-2-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20240621042737.674128-4-chris.packham@alliedtelesis.co.nz>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 21/06/2024 06:27, Chris Packham wrote:
-> Add the rtl930x-soc and RTL9302C board to the list of Realtek compatible
-> strings.
-
-No, you did not do this. You added fallback, without any rationale.
-
+> Add a compatible string for the interrupt controller found on the
+> rtl930x SoCs.
 > 
 > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
->  Documentation/devicetree/bindings/mips/realtek-rtl.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/mips/realtek-rtl.yaml b/Documentation/devicetree/bindings/mips/realtek-rtl.yaml
-> index f8ac309d2994..f59249a2cefe 100644
-> --- a/Documentation/devicetree/bindings/mips/realtek-rtl.yaml
-> +++ b/Documentation/devicetree/bindings/mips/realtek-rtl.yaml
-> @@ -19,6 +19,8 @@ properties:
->        - items:
->            - enum:
->                - cisco,sg220-26
-> +              - realtek,RTL9302C
->            - const: realtek,rtl8382-soc
-> +          - const: realtek,rtl930x-soc
 
-Does not look right. First: Not tested. Second: does not really make
-sense and commit msg does not explain it to me. Also, no wildcards.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
