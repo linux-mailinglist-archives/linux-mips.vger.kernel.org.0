@@ -1,97 +1,155 @@
-Return-Path: <linux-mips+bounces-3880-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3881-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30E56914078
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 04:24:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06CDC914140
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 06:48:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF61F280D4A
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 02:24:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B48B7283942
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 04:48:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D44944A33;
-	Mon, 24 Jun 2024 02:24:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16EA7D502;
+	Mon, 24 Jun 2024 04:48:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="KX8RM+U5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MDe9JP7w"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1E6F4A2D;
-	Mon, 24 Jun 2024 02:24:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91C4DDC1;
+	Mon, 24 Jun 2024 04:48:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719195848; cv=none; b=BYGl6V2YottxA4mmdJNhz2hxxF52DH/bDnFlcAyTh+Cff9M86lY3D8vwk4IAsfYn1ylvzG1G2mzdEnHIbaunY+J7ryXGs855/ASMvk953yQZKIIL+bXV6f84bXuVZDEgo6ETSUhR1xHrcmmJVvfm6Ah64HfQMO1rNKstPWJwd/Y=
+	t=1719204511; cv=none; b=smtq/5LXU3F81TrlLC43CPlP5MXkngmZ+mXeYyE26qdrVhPJLb3KTcdvKuMkUw2Pg3OtSsKhOuRhWDpv2oA+7qyYPVXezwLIsLR3gm7DlcSrwelSxruDd1XIBzFwLrgS8KP8i2KDtHb4M9UTnA03bGCwpwB+ZXVf8+N5WnvVtfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719195848; c=relaxed/simple;
-	bh=MIZ+d9HVKB7l6t281umhcoUxFGn6SV9luOFbz0dNbIs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=qOzWokqrh9oTPjOnbqIAjS+rVB8urnmNeJXybRk5eQrHAfWvWaSsyZeEYblF01ZesFG207AOc51nbDM0XRBgNCuC/mFLqJfUuHSWuoAOrTt0UaeBkWR/aV3TfPMr4pudDiQQ+runS8udtbELqeHf4YfZBt3zChtxRZei815u1wQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=KX8RM+U5; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1719195836;
-	bh=BKlnKRhf6nOKvpU2yiC5wPra7+gk0fCQGmL8XKcMn0U=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=KX8RM+U5NabS/m3sC+tWRHbeSjKdVCYygRWRhGcNZfuATg8lPbu11OtJuslFGBGAC
-	 Wz/fHPAOgow+LyxR89oZOXJd0a3f4dU9OFnc9eDWIjgE79UH+hrSeMYPjAAzI/IuFW
-	 NuU2PXZTUObRBcXVLvLq9fW/iHCjn9gTJ/D/BDT26gm+5spRewoRqZDHnknbA28Ozg
-	 G+STsT+QNuUpt0Ic340jHnh8m6iMF/pftiNpSUXevcqIiFEVW3/7qYFZEsrvdkpx2y
-	 gsAsX1el1xuveLygKU26SOCWitwndKbI71vrgTKYRAdZkRGPPV6fF7EhY6RmMITXEm
-	 8GV31u4x5U7mw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4W6sGC1H48z4w2N;
-	Mon, 24 Jun 2024 12:23:47 +1000 (AEST)
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: Arnd Bergmann <arnd@kernel.org>, linux-arch@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org, Helge Deller
- <deller@gmx.de>, linux-parisc@vger.kernel.org, "David S. Miller"
- <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>,
- sparclinux@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>, "Naveen N . Rao"
- <naveen.n.rao@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org, Brian Cain
- <bcain@quicinc.com>, linux-hexagon@vger.kernel.org, Guo Ren
- <guoren@kernel.org>, linux-csky@vger.kernel.org, Heiko Carstens
- <hca@linux.ibm.com>, linux-s390@vger.kernel.org, Rich Felker
- <dalias@libc.org>, John Paul Adrian Glaubitz
- <glaubitz@physik.fu-berlin.de>, linux-sh@vger.kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>, Alexander Viro <viro@zeniv.linux.org.uk>, Christian
- Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org,
- libc-alpha@sourceware.org, musl@lists.openwall.com, ltp@lists.linux.it
-Subject: Re: [PATCH 08/15] powerpc: restore some missing spu syscalls
-In-Reply-To: <20240620162316.3674955-9-arnd@kernel.org>
-References: <20240620162316.3674955-1-arnd@kernel.org>
- <20240620162316.3674955-9-arnd@kernel.org>
-Date: Mon, 24 Jun 2024 12:23:46 +1000
-Message-ID: <874j9jqdsd.fsf@mail.lhotse>
+	s=arc-20240116; t=1719204511; c=relaxed/simple;
+	bh=NDJaXB/nKzpYeop5UXLPi8qOuSov8fo+Km4a9y9Er+8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Q8K1HVIRAL0nZlWL6XKsPDWWyf0l5YPY8I6DjMYA8z67T+sGsDh6mcud8RlfLPh0AaBe4HnKb+fyK7ApYlxklxhRum5tkQfNVOYVixQpbLYAf40mkRjGaEfnHH+yufpohAE92booT6fhaLFKz3Q3TdVFKMokKIBPGfjTlx/7s/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MDe9JP7w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F16DC2BBFC;
+	Mon, 24 Jun 2024 04:48:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719204510;
+	bh=NDJaXB/nKzpYeop5UXLPi8qOuSov8fo+Km4a9y9Er+8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=MDe9JP7w3gmPyoICO906486pxbci3aIpLWkvlgbUatgTKmm6WMYJrZjb2bB+UND5i
+	 xYl31CNbmgI/UsGU90WUHgIdKT91caUnSeUHX3yXbwPEeF9SGgZZvTbQvIt21L5EYt
+	 vIEGOPWC1dSN1kLXagmxnlcYODZgXDur2O6dK9SPhM27h5aldRvUbEU1ys5ivipRiK
+	 tzCAa+tBQWBmilucBsJEOYEG2Di2p9v/ZBepnJsvIflRqjdMWMh/+eXVasXJLjIDBL
+	 inQebxyh+DzG39A67NKYFfn9SZMlsMYyWy23ZlMvKryRgrqkPAoxj4WjmtVRxmNqvh
+	 NpbFaA4GYnBqg==
+Message-ID: <e71780a1-8d53-44ae-ac0f-d406de7e26e8@kernel.org>
+Date: Mon, 24 Jun 2024 06:48:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/8] dt-bindings: mips: realtek: Add rtl930x-soc
+ compatible
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>, tglx@linutronix.de,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ tsbogend@alpha.franken.de, daniel.lezcano@linaro.org, paulburton@kernel.org,
+ peterz@infradead.org, mail@birger-koblitz.de, bert@biot.com,
+ john@phrozen.org, sander@svanheule.net
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-mips@vger.kernel.org, kabel@kernel.org, ericwouds@gmail.com
+References: <20240624012300.1713290-1-chris.packham@alliedtelesis.co.nz>
+ <20240624012300.1713290-4-chris.packham@alliedtelesis.co.nz>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240624012300.1713290-4-chris.packham@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Arnd Bergmann <arnd@kernel.org> writes:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> A couple of system calls were inadventently removed from the table during
-> a bugfix for 32-bit powerpc entry. Restore the original behavior.
->
-> Fixes: e23750623835 ("powerpc/32: fix syscall wrappers with 64-bit arguments of unaligned register-pairs")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On 24/06/2024 03:22, Chris Packham wrote:
+> Add the rtl930x-soc and RTL9302C board to the list of Realtek compatible
+
+930x or 9302?
+
+> strings.
+> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 > ---
->  arch/powerpc/kernel/syscalls/syscall.tbl | 4 ++++
+> 
+> Notes:
+>     Changes in v2:
+>     - Use specific compatible for rtl9302-soc
+>     - Fix to allow correct board, soc compatible
+> 
+>  Documentation/devicetree/bindings/mips/realtek-rtl.yaml | 4 ++++
 >  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mips/realtek-rtl.yaml b/Documentation/devicetree/bindings/mips/realtek-rtl.yaml
+> index f8ac309d2994..05daa53417e5 100644
+> --- a/Documentation/devicetree/bindings/mips/realtek-rtl.yaml
+> +++ b/Documentation/devicetree/bindings/mips/realtek-rtl.yaml
+> @@ -20,5 +20,9 @@ properties:
+>            - enum:
+>                - cisco,sg220-26
+>            - const: realtek,rtl8382-soc
+> +      - items:
+> +          - enum:
+> +              - realtek,rtl9302c
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+Why board has the name of SoC?
 
-cheers
+> +          - const: realtek,rtl9302-soc
+
+Drop the -soc suffix. The rtl9302 is the soc.
+
+>  
+>  additionalProperties: true
+
+Best regards,
+Krzysztof
+
 
