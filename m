@@ -1,186 +1,116 @@
-Return-Path: <linux-mips+bounces-3904-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3905-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECAFE9157AA
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 22:13:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFE9A9157D5
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 22:20:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1411D1C21241
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 20:13:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 55F101F21512
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 20:20:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 038EC1A0702;
-	Mon, 24 Jun 2024 20:12:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DC381A01DA;
+	Mon, 24 Jun 2024 20:20:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GQK85FJb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kG4UjMzW"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F5881A01DE;
-	Mon, 24 Jun 2024 20:12:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8E6A262A3;
+	Mon, 24 Jun 2024 20:20:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719259972; cv=none; b=YUxEzDUyqbmTkfxQbju6DGGYcd0cQTfpn2tbA6gtKj6RPThuA8lhUsVfa3sQlePDUhM6UMRIT02oV3Bxlr58s0uaSc5UrToEbCRHef4RyF6YXw3LM2mdd1t1T2U3+H8O3ERIrv1xrInbR0m6nRomSd3TY1nlC/Wmxh9BaDX+Pac=
+	t=1719260409; cv=none; b=i7YgcLZ/Kxsgm2Ow5YinNVytx85HfD4nQIAHzYQ6NUWGodqwLeg/IcxdE8vPZA6mE1TGoHyv89jZuLUXxkhFHH1CdOMwUL9Vqgb4BrX9m8yfdP3QLprqZHukOFAGmM38ugt6cgXSPx6yPvgCOvVoaCGbkzAkc5TyQh1I78Xbe64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719259972; c=relaxed/simple;
-	bh=yFtE17HTlosHIVcFUM4z1zvLxD7sJ9qun5JCnkP3TKU=;
+	s=arc-20240116; t=1719260409; c=relaxed/simple;
+	bh=tAbvRsIY1ZRGz3ZBltZKorbmqsymD3xAmW5bX7SWz0w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BKGKK5CJuD24JsX6vsdePLwKQFD6CbEY+zSCU9OBCqpLQAT7vuAE10v80EylWTVU/PgEbIfZtvvWB4ysDBzp2PhfAmWi2iKXQ4rm90mI9KQ3KRFWIM4b8UIz0HDV//Exn4duz31T5rB6zSvgRkv6MwsdnnyVf/f0Gm8+NhZZJQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GQK85FJb; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-52ccc40e72eso3111153e87.3;
-        Mon, 24 Jun 2024 13:12:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719259969; x=1719864769; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FG0rjkLNtZEXx+lFuMZgaZtLjyrE4I+sN/EHPPKJNHg=;
-        b=GQK85FJbaFnE4addopqDmy9l9mVIDhhBhJ7PvhK/K+QH48FAl3s7VUPPBJIa0Ex+bO
-         gl3oNmIxNtVQSdDxcU/6jy576/n1Jth+XhYIUrerdGDi7BwlQZ+UHszoqoYYM4rObxIt
-         eYySsyKrZ2IFwS/tEXXq8Kv12aYpq8WQ2X8i0CXiJbYjwOYmZ5Hy/nxFMTBsyvSn5hus
-         83nAgL2PIOvHWCqnSNQvZiQ9w4c47za/ah39DjksBQ1ire3fu+DM3bsQ8zOADfUPOER5
-         u4zj1avcZvCsIo0ugz5dJQZZmgQ+R//UwOLyb5yaLyPTuD1l3c9TgFETKG4qLOQX00Dk
-         vf3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719259969; x=1719864769;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FG0rjkLNtZEXx+lFuMZgaZtLjyrE4I+sN/EHPPKJNHg=;
-        b=fTfCCRO5HUMk92WUbGOzFGkhRBhrqaP3LHf3RGEzlmCCZXVNyCrH8qK0CgfJriL5n7
-         NYAfOVk+Qweajc+91BHj41ec4PedU/NKO2XjZp54Fn041omTEXoYnfPmZCIox0Dn6+5I
-         qtU7QyV26EuuXb7ZJyizM6piTvjkF/W5bS3zD1DE9tghMxovzFlubolmXcljdnJXMW3a
-         PzC6loSqjXjH39VX1ACOWwSUaiLyktT07/B0la+lXOEOwx6b4+WOGLVAF+xz2qPYXQ4p
-         +E7MERevNd0YmnHz6S2SsBcU2crMYOuQyh6rocPM5KC19r1Ny+hJsoL3Ex4k3pzcciz1
-         lfGg==
-X-Forwarded-Encrypted: i=1; AJvYcCWw92vorZrzWmX7PuL8C0IYU3qhrbf4PEEwfrYcY5FqYpi7GxfYkBXW1ZlHtQz8RuS0DCwjvsWjswuwHnj4Bfn3i6RDuMZndm9aG0wBrkpW5Qbm7YcDEfbJgicvizr0gPkfeL4T2Rc0qg==
-X-Gm-Message-State: AOJu0YyGbaRci/dNS9HBU6mX7lYpWTz1ABqKlH7o0UcpoM4t1uhXHOwp
-	JngmMHjTBp32slAzLoDllRltwt1wjg8mZtkWSmf4fTLSqir0qDdEdWAMGUFD
-X-Google-Smtp-Source: AGHT+IGFJh01j7ehf+ir7t82LIj+iFCc3aatWl+En4SYM8wyeKmG2RWRNueymHtHMSB7O7vCBgY5xg==
-X-Received: by 2002:ac2:464d:0:b0:52c:a88b:9997 with SMTP id 2adb3069b0e04-52ce185d20dmr4288140e87.49.1719259968861;
-        Mon, 24 Jun 2024 13:12:48 -0700 (PDT)
-Received: from mobilestation ([213.79.110.82])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52cda72b401sm959645e87.136.2024.06.24.13.12.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jun 2024 13:12:48 -0700 (PDT)
-Date: Mon, 24 Jun 2024 23:12:46 +0300
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>, 
-	Aleksandar Rikalo <arikalo@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Chao-ying Fu <cfu@wavecomp.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Greg Ungerer <gerg@kernel.org>, Hauke Mehrtens <hauke@hauke-m.de>, 
-	Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, Marc Zyngier <maz@kernel.org>, 
-	Paul Burton <paulburton@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: Re: [PATCH v4 00/14] MIPS: Support I6500 multi-cluster configuration
-Message-ID: <sshcqxwvt7gh4log4u7prw6udsd5k23wpautiocuwitapajhur@bffjuaeoxtaq>
-References: <20240511104341.151550-1-aleksandar.rikalo@syrmia.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ksbiB8MYlu8NozWk3zyvU9mdRIOucCrlnynCflZ+/H0rS5l0RX+SFGALSJA08HZLFLnPWR2RlXmWOV0IcY4LRP6JQhup1g8JLnWWZ6kjbu5dqdbUn6Xj/5Yrt3QEffksawdWpSlBHe8EbuyrvTqdUqCDzQtNhHrCGxqd095ONQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kG4UjMzW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A344C2BBFC;
+	Mon, 24 Jun 2024 20:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719260409;
+	bh=tAbvRsIY1ZRGz3ZBltZKorbmqsymD3xAmW5bX7SWz0w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kG4UjMzWgKqQiuAL6L8kJJl0l9QgfrYuqk1lu/FNf9omEVFDKK62+iwEcEHbfhrIw
+	 xu33wFmB95HERgacLucs8oOP5WnzpzKfKgbMvgG297XDsCIvphRvaUzGMsDF+RK+C/
+	 MwhLHecaZwfYujomPDGhMfMCqSG0b3UkGBt0s136Y+TcLGwHf4X6G9zUPIPNW/tZv1
+	 XmtTFlwKypGF01Kk7qcAM/ULUbdjpq7C7X9iQ6LWqkHKvognZpBkqzSa0q5PUc2zCD
+	 G/FdHO+oRsGHdqZKe93u4gT4H9VaCQk2gNE0EsPBxcE4vPdEBatKwlORhVEoW5XdQC
+	 iCNxw3D7xS1Jg==
+Date: Mon, 24 Jun 2024 14:20:07 -0600
+From: Rob Herring <robh@kernel.org>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	linux-gpio@vger.kernel.org, Lee Jones <lee@kernel.org>,
+	linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	linux-kernel@vger.kernel.org,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 2/9] Revert "dt-bindings: reset: mobileye,eyeq5-reset:
+ add bindings"
+Message-ID: <20240624202007.GA333492-robh@kernel.org>
+References: <20240620-mbly-olb-v3-0-5f29f8ca289c@bootlin.com>
+ <20240620-mbly-olb-v3-2-5f29f8ca289c@bootlin.com>
+ <171890801579.3178249.13779438329936311446.robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240511104341.151550-1-aleksandar.rikalo@syrmia.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <171890801579.3178249.13779438329936311446.robh@kernel.org>
 
-Hi folks,
-
-On Sat, May 11, 2024 at 12:43:27PM +0200, Aleksandar Rikalo wrote:
-> Taken from Paul Burton MIPS repo with minor changes from Chao-ying Fu.
-> Tested with 64r6el_defconfig on Boston board in 2 cluster/2 VPU and
-> 1 cluster/4 VPU configurations.
-
-Finally got it tested on my P5600-based SoC. No problems has been
-spotted. So for the entire patchset:
-
-Tested-by: Serge Semin <fancer.lancer@gmail.com>
-
+On Thu, Jun 20, 2024 at 12:26:57PM -0600, Rob Herring (Arm) wrote:
 > 
-> v4:
->  - Re-base onto the master branch, with no functionality impact.
+> On Thu, 20 Jun 2024 19:30:54 +0200, Théo Lebrun wrote:
+> > Switch from one sub-node per functionality in the system-controller to a
+> > single node representing the entire OLB instance. This is the
+> > recommended approach for controllers handling many different
+> > functionalities; it is a single controller and should be represented by
+> > a single devicetree node.
+> > 
+> > The reset bindings is removed and all properties will be described by:
+> > soc/mobileye/mobileye,eyeq5-olb.yaml
+> > 
+> > Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> > ---
+> >  .../bindings/reset/mobileye,eyeq5-reset.yaml       | 43 ----------------------
+> >  1 file changed, 43 deletions(-)
+> > 
+> 
+> My bot found errors running 'make dt_binding_check' on your patch:
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> Documentation/devicetree/bindings/sound/st,stm32-sai.example.dtb: /example-0/sai@4400b000/audio-controller@4400b004: failed to match any schema with compatible: ['st,stm32-sai-sub-a']
+> Documentation/devicetree/bindings/net/wireless/qcom,ath11k.example.dtb: /example-0/remoteproc@cd00000: failed to match any schema with compatible: ['qcom,ipq8074-wcss-pil']
+> Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.example.dtb: /example-0/avs-monitor@7d5d2000: failed to match any schema with compatible: ['brcm,bcm2711-avs-monitor', 'syscon', 'simple-mfd']
+> Documentation/devicetree/bindings/clock/sprd,sc9863a-clk.example.dtb: /example-1/syscon@20e00000: failed to match any schema with compatible: ['sprd,sc9863a-glbregs', 'syscon', 'simple-mfd']
+> Documentation/devicetree/bindings/clock/milbeaut-clock.example.dtb: /example-2/serial@1e700010: failed to match any schema with compatible: ['socionext,milbeaut-usio-uart']
+> Documentation/devicetree/bindings/arm/hisilicon/controller/hi3798cv200-perictrl.example.dtb: /example-0/peripheral-controller@8a20000/phy@850: failed to match any schema with compatible: ['hisilicon,hi3798cv200-combphy']
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/stm32/st,mlahb.example.dtb: ahb@38000000: Unevaluated properties are not allowed ('reg' was unexpected)
+> 	from schema $id: http://devicetree.org/schemas/arm/stm32/st,mlahb.yaml#
 
+Not sure what happened here, but this can be ignored.
 
->  - Refactor MIPS FDC driver in the context of multicluster support.
-
-I failed to see anything useful in the MIPS FDC refactoring. Besides
-there is no patches utilizing the change provided in the patches 13
-and 14 with the refactoring. The commits log don't well justify the
-changes either. Moreover the commit log of the patch providing the
-actual refactoring says "Separate the FDC driver code into two parts,
-common and mips-specific." Has _MIPS_ FDC been utilized in some
-non-MIPS arch, or what?
-
-To sum up I'd drop the FDC refactoring patches from these series and
-have them added to the patchset where the changes are actually needed
-(if there is one).
-
--Serge(y)
-
-> 
-> v3:
->  - Add Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com> for the patch 02/12.
->  - Add the changes requested by Marc Zyngier for the 3/12 patch.
->  - Remove the patch 11/12 (a consequence of a discussion between Jiaxun Yang
->    and Marc Zyngier.
->  - Re-base onto the master branch, with no functionality impact.
-> 
-> v2:
->  - Apply correct Signed-off-by to avoid confusion.
-> 
-> Aleksandar Rikalo (3):
->   mips: Enable FDC on MIPS R6 platforms.
->   mips: Move FDC driver to a separate directory
->   mips: FDC driver refactor
-> 
-> Chao-ying Fu (1):
->   irqchip: mips-gic: Setup defaults in each cluster
-> 
-> Paul Burton (10):
->   MIPS: CPS: Add a couple of multi-cluster utility functions
->   MIPS: GIC: Generate redirect block accessors
->   irqchip: mips-gic: Introduce for_each_online_cpu_gic()
->   irqchip: mips-gic: Support multi-cluster in for_each_online_cpu_gic()
->   irqchip: mips-gic: Multi-cluster support
->   clocksource: mips-gic-timer: Always use cluster 0 counter as
->     clocksource
->   clocksource: mips-gic-timer: Enable counter when CPUs start
->   MIPS: pm-cps: Use per-CPU variables as per-CPU, not per-core
->   MIPS: CPS: Introduce struct cluster_boot_config
->   MIPS: CPS: Boot CPUs in secondary clusters
-> 
->  arch/mips/include/asm/mips-cm.h               |  18 ++
->  arch/mips/include/asm/mips-cps.h              |  38 +++
->  arch/mips/include/asm/mips-gic.h              |  50 ++-
->  arch/mips/include/asm/smp-cps.h               |   7 +-
->  arch/mips/kernel/asm-offsets.c                |   3 +
->  arch/mips/kernel/cps-vec.S                    |  19 +-
->  arch/mips/kernel/mips-cm.c                    |  41 ++-
->  arch/mips/kernel/pm-cps.c                     |  35 ++-
->  arch/mips/kernel/smp-cps.c                    | 288 ++++++++++++++----
->  drivers/bus/Kconfig                           |   2 +-
->  drivers/clocksource/mips-gic-timer.c          |  45 ++-
->  drivers/irqchip/Kconfig                       |   1 +
->  drivers/irqchip/irq-mips-gic.c                | 276 ++++++++++++++---
->  drivers/tty/Makefile                          |   2 +-
->  drivers/tty/mips_fdc/Makefile                 |   4 +
->  drivers/tty/mips_fdc/ejtag-fdc-mips.c         |  29 ++
->  .../ejtag-fdc.c}                              |  66 +---
->  drivers/tty/mips_fdc/ejtag-fdc.h              |  55 ++++
->  18 files changed, 794 insertions(+), 185 deletions(-)
->  create mode 100644 drivers/tty/mips_fdc/Makefile
->  create mode 100644 drivers/tty/mips_fdc/ejtag-fdc-mips.c
->  rename drivers/tty/{mips_ejtag_fdc.c => mips_fdc/ejtag-fdc.c} (92%)
->  create mode 100644 drivers/tty/mips_fdc/ejtag-fdc.h
-> 
-> -- 
-> 2.25.1
-> 
+Rob
 
