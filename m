@@ -1,269 +1,259 @@
-Return-Path: <linux-mips+bounces-3886-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3887-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB74891428D
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 08:14:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 447B2914522
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 10:43:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41016283678
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 06:14:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE07A2842AF
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 08:43:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 503FD21340;
-	Mon, 24 Jun 2024 06:14:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="dQ9BR6as"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 233FC61FF2;
+	Mon, 24 Jun 2024 08:42:58 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1164225D9;
-	Mon, 24 Jun 2024 06:14:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996745FEED;
+	Mon, 24 Jun 2024 08:42:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.37.255.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719209688; cv=none; b=BCDSkad1t9VpPpO8fEHnAEQfZj6jru9UokItF4ZPJxVyxMV/d6N6IDAVXlKlPj1GQdpAcGQfnbl3u3TqB77A2/NnV8Igf+SUjeikV10oEy4i6CLyANce57Ok0YwQu6g+T6v3p5r5Or4pt/yOjkoAik3PPAMlfcYZcK6gmCFCfI8=
+	t=1719218578; cv=none; b=U8Wwi3X3KEZ+rsxZUm/zWov5Xx+dVzO2tyV/cWWTI9BMBTFDPoovcg6Qr4QRtvUJJtluKOPwvGBAofZJfyr7xDE9PVT6Dbx1gYHUprUHVz8zAtThZEBvOjKuF6dbkRnXN3bWFFLnKUki/y0drirJXwOJYs1Qp4PbxyoJVVHmnJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719209688; c=relaxed/simple;
-	bh=pRGt+YpMPsKjwZfW86V837WN4JGPkKGnorvBXTL/O2g=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=TJsUk8aKDtPzhpBKSkCP/knB9+oPmUw0UxXznm8RQjDRHObd+n9AwdJTEAIA3DEfE2GdBMcAextzEVpMKL2aRAk7eDd7tNxo4B0GAkS3VtnH4HVRh0DBV1zDpPZbrBV/gNlher+gpFdt21luf3gVKT8hgGH/SrSsMc04eArXobA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=dQ9BR6as; arc=none smtp.client-ip=130.133.4.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=ew1xoLiUEpaRO/Rd2+BU3bX5mn9fF1xUB9iaO1b3Vho=; t=1719209684; x=1719814484; 
-	b=dQ9BR6asAKMN2pqrPhzQT4pEo2OWxYr6vtX66xZ8kyycsc/u1IVh2RwUhv6K9mQu2KybYllWwPR
-	PCpBe6uSEwnvDJqPCmaOBYlF/Ztg+NcI09GK2cXDHqG8CNAwK5I67wKXaXP/TrUEg5/LUkGitqz4M
-	FjueDU0/MeYJV45J1ji5bCX8MAinSm/9TYjOFQ0PBLiQkOh+PDyJ8bs5CQNTG5C4I4J6TSLweF2Hg
-	BpfnO/2K3VGc0NJHulI0qn5eGL55Com37tDttEiS+kaSFzLhuxmSkwwwlGJ5WZqthjQbNzk82CNhY
-	nmUkL9vGte34g0uS6eVfqRFHRk58pTg/tcDA==;
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.97)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1sLcyL-00000003SnY-21KD; Mon, 24 Jun 2024 08:14:37 +0200
-Received: from dynamic-077-191-015-086.77.191.pool.telefonica.de ([77.191.15.86] helo=[192.168.178.20])
-          by inpost2.zedat.fu-berlin.de (Exim 4.97)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1sLcyL-00000002KF0-2nE0; Mon, 24 Jun 2024 08:14:37 +0200
-Message-ID: <e0e373fa13636a403322fd0ba96915fd25dbbefa.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 09/15] sh: rework sync_file_range ABI
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To: Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org
-Cc: Rich Felker <dalias@libc.org>, Andreas Larsson <andreas@gaisler.com>, 
- guoren <guoren@kernel.org>, Christophe Leroy <christophe.leroy@csgroup.eu>,
- "H. Peter Anvin" <hpa@zytor.com>, sparclinux@vger.kernel.org,
- linux-s390@vger.kernel.org, Helge Deller <deller@gmx.de>,
- linux-sh@vger.kernel.org, "linux-csky@vger.kernel.org"
- <linux-csky@vger.kernel.org>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-  Heiko Carstens <hca@linux.ibm.com>, "musl@lists.openwall.com"
- <musl@lists.openwall.com>, Nicholas Piggin <npiggin@gmail.com>, Alexander
- Viro <viro@zeniv.linux.org.uk>, LTP List <ltp@lists.linux.it>, Brian Cain
- <bcain@quicinc.com>, Christian Brauner <brauner@kernel.org>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Xi Ruoyao
- <libc-alpha@sourceware.org>, linux-parisc@vger.kernel.org,
- linux-mips@vger.kernel.org,  stable@vger.kernel.org,
- linux-hexagon@vger.kernel.org,  linux-fsdevel@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, "David S . Miller" <davem@davemloft.net>
-Date: Mon, 24 Jun 2024 08:14:36 +0200
-In-Reply-To: <9d4ba5e5-bb7f-432e-9354-47cc84eaa9e1@app.fastmail.com>
-References: <20240620162316.3674955-1-arnd@kernel.org>
-	 <20240620162316.3674955-10-arnd@kernel.org>
-	 <366548c1a0d9749e42c0d0c993414a353c9b0b02.camel@physik.fu-berlin.de>
-	 <9d4ba5e5-bb7f-432e-9354-47cc84eaa9e1@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.2 
+	s=arc-20240116; t=1719218578; c=relaxed/simple;
+	bh=uou/1X38TpOV1H5lzk1XUMo5zHQwtHBpEjhyhwTfJHY=;
+	h=MIME-Version:Content-Type:Date:From:To:Cc:Subject:In-Reply-To:
+	 References:Message-ID; b=CLAGUwDBK9o8jqf1uqhzOUaeezU+/UMF551hqKSpAlOqbegEmSxgxUkxMu7BPf7GBueijP5bfd8aJ2KjHtKxnY9FJRHOc+esCs0txDxGAtbtH71ihnBOX6sINGM0mmqS0T2SHiqxMb0md9U1yNctho8tRHnwlsjSe53mjhTFOxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dev.tdt.de; spf=pass smtp.mailfrom=dev.tdt.de; arc=none smtp.client-ip=194.37.255.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dev.tdt.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dev.tdt.de
+Received: from [127.0.0.1] (helo=localhost)
+	by relay.expurgate.net with smtp (Exim 4.92)
+	(envelope-from <prvs=99192e773b=ms@dev.tdt.de>)
+	id 1sLesm-008vkJ-9h; Mon, 24 Jun 2024 10:17:00 +0200
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+	by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ms@dev.tdt.de>)
+	id 1sLesk-00Ctb6-St; Mon, 24 Jun 2024 10:16:58 +0200
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+	by securemail.tdt.de (Postfix) with ESMTP id 72BD9240053;
+	Mon, 24 Jun 2024 10:16:58 +0200 (CEST)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+	by securemail.tdt.de (Postfix) with ESMTP id CF369240050;
+	Mon, 24 Jun 2024 10:16:57 +0200 (CEST)
+Received: from mail.dev.tdt.de (localhost [IPv6:::1])
+	by mail.dev.tdt.de (Postfix) with ESMTP id 038F634826;
+	Mon, 24 Jun 2024 10:16:56 +0200 (CEST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-ZEDAT-Hint: PO
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Date: Mon, 24 Jun 2024 10:16:56 +0200
+From: Martin Schiller <ms@dev.tdt.de>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Hauke Mehrtens <hauke@hauke-m.de>, tsbogend@alpha.franken.de,
+ rdunlap@infradead.org, robh@kernel.org, bhelgaas@google.com,
+ linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+Subject: Re: [PATCH] MIPS: pci: lantiq: restore reset gpio polarity
+Organization: TDT AG
+In-Reply-To: <ZnN9rkNqucEYuXzR@google.com>
+References: <20240607090400.1816612-1-ms@dev.tdt.de>
+ <ZmnfQWFoIw5UCV-k@google.com> <7d34eb4017e809245daa342e3ccddf4f@dev.tdt.de>
+ <b6bea9239050ed39ce3a051a5985b86d@dev.tdt.de>
+ <6e4eed26-0a15-4ab4-8f3f-7ed0e223db5e@hauke-m.de>
+ <c1813503ba16e1d46a93382dd806ffa6@dev.tdt.de> <ZnN9rkNqucEYuXzR@google.com>
+Message-ID: <ce1ba2382d12010f960d3e4c04d78fb2@dev.tdt.de>
+X-Sender: ms@dev.tdt.de
+User-Agent: Roundcube Webmail/1.3.17
+Content-Transfer-Encoding: quoted-printable
+X-purgate-ID: 151534::1719217019-4697E746-1C37EBBB/0/0
+X-purgate: clean
+X-purgate-type: clean
 
-Hi Arnd,
+On 2024-06-20 02:54, Dmitry Torokhov wrote:
+> On Fri, Jun 14, 2024 at 10:43:29AM +0200, Martin Schiller wrote:
+>> On 2024-06-13 22:06, Hauke Mehrtens wrote:
+>> > On 6/12/24 21:47, Martin Schiller wrote:
+>> > > On 2024-06-12 20:39, Martin Schiller wrote:
+>> > > > On 2024-06-12 19:47, Dmitry Torokhov wrote:
+>> > > > > Hi Marton,
+>> > > >
+>> > > > Hi Dmitry,
+>> > > >
+>> > > > >
+>> > > > > On Fri, Jun 07, 2024 at 11:04:00AM +0200, Martin Schiller wrot=
+e:
+>> > > > > > Commit 90c2d2eb7ab5 ("MIPS: pci: lantiq: switch to using
+>> > > > > > gpiod API") not
+>> > > > > > only switched to the gpiod API, but also inverted /
+>> > > > > > changed the polarity
+>> > > > > > of the GPIO.
+>> > > > > >
+>> > > > > > According to the PCI specification, the RST# pin is an activ=
+e-low
+>> > > > > > signal. However, most of the device trees that have been
+>> > > > > > widely used for
+>> > > > > > a long time (mainly in the openWrt project) define this GPIO=
+ as
+>> > > > > > active-high and the old driver code inverted the signal inte=
+rnally.
+>> > > > > >
+>> > > > > > Apparently there are actually boards where the reset gpio mu=
+st be
+>> > > > > > operated inverted. For this reason, we cannot use the
+>> > > > > > GPIOD_OUT_LOW/HIGH
+>> > > > > > flag for initialization. Instead, we must explicitly set
+>> > > > > > the gpio to
+>> > > > > > value 1 in order to take into account any
+>> > > > > > "GPIO_ACTIVE_LOW" flag that
+>> > > > > > may have been set.
+>> > > > >
+>> > > > > Do you have example of such boards? They could not have
+>> > > > > worked before
+>> > > > > 90c2d2eb7ab5 because it was actively setting the reset line
+>> > > > > to physical
+>> > > > > high, which should leave the device in reset state if there is=
+ an
+>> > > > > inverter between the AP and the device.
+>> > > >
+>> > > > Oh, you're right. I totally missed that '__gpio_set_value' was
+>> > > > used in
+>> > > > the original code and that raw accesses took place without payin=
+g
+>> > > > attention to the GPIO_ACTIVE_* flags.
+>> > > >
+>> > > > You can find the device trees I am talking about in [1].
+>> > > >
+>> > > > @Thomas Bogendoerfer:
+>> > > > Would it be possible to stop the merging of this patch?
+>> > > > I think We have to do do some further/other changes.
+>> > > >
+>> > > > >
+>> > > > > >
+>> > > > > > In order to remain compatible with all these existing
+>> > > > > > device trees, we
+>> > > > > > should therefore keep the logic as it was before the commit.
+>> > > > >
+>> > > > > With gpiod API operating with logical states there's still
+>> > > > > difference in
+>> > > > > logic:
+>> > > > >
+>> > > > > =C2=A0=C2=A0=C2=A0=C2=A0gpiod_set_value_cansleep(reset_gpio, 1=
+);
+>> > > > >
+>> > > > > will leave GPIO at 1 if it is described as GPIO_ACTIVE_HIGH
+>> > > > > (which is
+>> > > > > apparently what you want for boards with broken DTS) but for b=
+oards
+>> > > > > that accurately describe GPIO as GPIO_ACTIVE_LOW it well
+>> > > > > drive GPIO to
+>> > > > > 0, leaving the card in reset state.
+>> > > > >
+>> > > > > You should either use gpiod_set_raw_value_calsleep() or we
+>> > > > > can try and
+>> > > > > quirk it in gpiolib (like we do for many other cases of
+>> > > > > incorrect GPIO
+>> > > > > polarity descriptions and which is my preference).
+>> > >
+>> > > So you mean we should add an entry for "lantiq,pci-xway" to the
+>> > > of_gpio_try_fixup_polarity()?
+>> > > Do you know any dts / device outside the openWrt universe which is
+>> > > using
+>> > > this driver.
+>> > >
+>> > > For the lantiq targets in openWrt, the devicetree blob is appended=
+ to
+>> > > the kernel image and therefore also updated when doing a firmware
+>> > > upgrade. So, maybe it would also be an option to fix the driver (u=
+sing
+>> > > GPIO_ACTIVE_* flag for the initial level and set it to 0 -> 1 -> 0=
+)
+>> > > and
+>> > > rework all the dts files to use GPIO_ACTIVE_LOW.
+>=20
+> Yes, cleaning up DTS files when it is possible is nice.
+>=20
+>> > >
+>> > > Then we won't need any quirks.
+>=20
+> Quirks are fairly cheap and we are not in a hot path here.
+>=20
+>> >
+>> > I am not aware that anyone is using a recent kernel on the VRX200
+>> > outside of OpenWrt. I am also not aware that anyone is *not* appendi=
+ng
+>> > the DTB to the kernel. The SoC is pretty old now, the successor of
+>> > this SoC was released about 10 years ago.
+>> >
+>>=20
+>> We're not just talking about VRX200 (VR9) here, but even older devices
+>> such as AR9 and Danube.
+>>=20
+>> > For me it would be fine if you fix the broken device device trees
+>> > shipped with the upstream kernel and with OpenWrt to make them work
+>> > with the PCI driver instead of investing too much time into handling
+>> > old DTBs.
+>> >
+>> > The PCI reset is inverted on some boards to handle a dying gasp. If
+>> > the power breaks down the reset should get triggered and the PCIe
+>> > device can send a dying gasp signal to the other side. This is done =
+on
+>> > the reference designs of some Lantiq PCIe DSL card for the VRX318 an=
+d
+>> > probably also some other components.
+>> >
+>> > Hauke
+>>=20
+>> What I missed so far is the fact that the driver used=20
+>> '__gpio_set_value'
+>> before Dmitry's commit and thus used raw access to the GPIO.
+>>=20
+>> This effectively means that every device that has worked with the=20
+>> driver
+>> so far must have an ACTIVE_LOW reset, no matter what was configured in
+>> the device tree.
+>>=20
+>>=20
+>> So renaming the property in the dts from "gpio-reset" to "reset-gpios"
+>> and setting the FLAGS to "GPIO_ACTIVE_LOW" should actually solve the
+>> problem.
+>=20
+> Right, luckily (to a definition of luckily) the driver and DTB used
+> "wrong" syntax for the gpio property, so we can quirk it and make
+> force ACTIVE_LOW polarity on old DTBs, and new DTBs with "reset-gpios"
+> property will follow polarity specified in DTB.
 
-On Fri, 2024-06-21 at 11:41 +0200, Arnd Bergmann wrote:
-> On Fri, Jun 21, 2024, at 10:44, John Paul Adrian Glaubitz wrote:
-> > On Thu, 2024-06-20 at 18:23 +0200, Arnd Bergmann wrote:
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > >=20
-> > > The unusual function calling conventions on superh ended up causing
-> >                                               ^^^^^^
-> >                                        It's spelled SuperH
->=20
-> Fixed now.
->=20
-> > > diff --git a/arch/sh/kernel/sys_sh32.c b/arch/sh/kernel/sys_sh32.c
-> > > index 9dca568509a5..d5a4f7c697d8 100644
-> > > --- a/arch/sh/kernel/sys_sh32.c
-> > > +++ b/arch/sh/kernel/sys_sh32.c
-> > > @@ -59,3 +59,14 @@ asmlinkage int sys_fadvise64_64_wrapper(int fd, u3=
-2 offset0, u32 offset1,
-> > >  				 (u64)len0 << 32 | len1, advice);
-> > >  #endif
-> > >  }
-> > > +
-> > > +/*
-> > > + * swap the arguments the way that libc wants it instead of
-> >=20
-> > I think "swap the arguments to the order that libc wants them" would
-> > be easier to understand here.
->=20
-> Done
+We have already adapted the device trees in openWrt. [1]
+Will you create a quirk patch for the old DTBs or should I create one?
 
-Thanks for the two improvements!
+>=20
+>>=20
+>> What still bothers me about the driver itself are 2 things:
+>> 1. the initial value of GPIOD_OUT_LOW. This means that there is no=20
+>> real
+>>    defined HIGH -> LOW -> HIGH on reset.
+>=20
+> Is this actually needed? Typically a card requires certain time in=20
+> reset
+> state (with reset line active) before it can be released, however there
+> usually no restrictions on line being inactive beforehand. But=20
+> typically
+> it will be pulled up to avoid leakage...
+>=20
 
-> > > diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/sys=
-calls/syscall.tbl
-> > > index bbf83a2db986..c55fd7696d40 100644
-> > > --- a/arch/sh/kernel/syscalls/syscall.tbl
-> > > +++ b/arch/sh/kernel/syscalls/syscall.tbl
-> > > @@ -321,7 +321,7 @@
-> > >  311	common	set_robust_list			sys_set_robust_list
-> > >  312	common	get_robust_list			sys_get_robust_list
-> > >  313	common	splice				sys_splice
-> > > -314	common	sync_file_range			sys_sync_file_range
-> > > +314	common	sync_file_range			sys_sh_sync_file_range6
-> >                                                                  ^^^^^^=
-=20
-> > Why the suffix 6 here?
->=20
-> In a later part of my cleanup, I'm consolidating all the
-> copies of this function (arm64, mips, parisc, powerpc,
-> s390, sh, sparc, x86) and picked the name
-> sys_sync_file_range6() for common implementation.
->=20
-> I end up with four entry points here, so the naming is a bit
-> confusing:
->=20
-> - sys_sync_file_range() is only used on 64-bit architectures,
->   on x32 and on mips-n32. This uses four arguments, including
->   two 64-bit wide ones.
->=20
-> - sys_sync_file_range2() continues to be used on arm, powerpc,
->   xtensa and now on sh, hexagon and csky. I change the
->   implementation to take six 32-bit arguments, but the ABI
->   remains the same as before, with the flags before offset.
->=20
-> - sys_sync_file_range6() is used for most other 32-bit ABIs:
->   arc, m68k, microblaze, nios2, openrisc, parisc, s390, sh, sparc
->   and x86. This also has six 32-bit arguments but in the
->   default order (fd, offset, nbytes, flags).
->=20
-> - sys_sync_file_range7() is exclusive to mips-o32, this one
->   has an unused argument and is otherwise the same as
->   sys_sync_file_range6().
->=20
-> My plan is to then have some infrastructure to ensure
-> userspace tools (libc, strace, qemu, rust, ...) use the
-> same calling conventions as the kernel. I'm doing the
-> same thing for all other syscalls that have architecture
-> specific calling conventions, so far I'm using
->=20
-> fadvise64_64_7
-> fanotify_mark6
-> truncate3
-> truncate4
-> ftruncate3
-> ftruncate4
-> fallocate6
-> pread5
-> pread6
-> pwrite5
-> pwrite6
-> preadv5
-> preadv6
-> pwritev5
-> pwritev6
-> sync_file_range6
-> fadvise64_64_2
-> fadvise64_64_6
-> fadvise64_5
-> fadvise64_6
-> readahead4
-> readahead5
->=20
-> The last number here is usually the number of 32-bit
-> arguments, except for fadvise64_64_2 that uses the
-> same argument reordering trick as sync_file_range2.
->=20
-> I'm not too happy with the naming but couldn't come up with
-> anything clearer either, so let me know if you have any
-> ideas there.
+No, I don't think that's absolutely necessary. Several tests have so far
+shown that it works as it is at the moment.
 
-OK, gotcha. I thought the 6 suffix was for SH only. I'm fine
-with the naming scheme.
+[1]=20
+https://git.openwrt.org/?p=3Dopenwrt/openwrt.git;a=3Dcommitdiff;h=3Df6fe1=
+9ed6dfaf0444cd80f530bf89f6878fd5936
 
-> > >  315	common	tee				sys_tee
-> > >  316	common	vmsplice			sys_vmsplice
-> > >  317	common	move_pages			sys_move_pages
-> > > @@ -395,6 +395,7 @@
-> > >  385	common	pkey_alloc			sys_pkey_alloc
-> > >  386	common	pkey_free			sys_pkey_free
-> > >  387	common	rseq				sys_rseq
-> > > +388	common	sync_file_range2		sys_sync_file_range2
-> > >  # room for arch specific syscalls
-> > >  393	common	semget				sys_semget
-> > >  394	common	semctl				sys_semctl
-> >=20
-> > I wonder how you discovered this bug. Did you look up the calling=20
-> > convention on SuperH
-> > and compare the argument order for the sys_sync_file_range system call=
-=20
-> > documented there
-> > with the order in the kernel?
->=20
-> I had to categorize all architectures based on their calling
-> conventions to see if 64-bit arguments need aligned pairs or
-> not, so I wrote a set of simple C files that I compiled for
-> all architectures to see in which cases they insert unused
-> arguments or swap the order of the upper and lower halves.
->=20
-> SuperH, parisc and s390 are each slightly different from all the
-> others here, so I ended up reading the ELF psABI docs and/or
-> the compiler sources to be sure.
-> I also a lot of git history.
-
-Great job, thanks for doing the extra work to verify the ABI.
-
-> > Did you also check what order libc uses? I would expect libc on SuperH=
-=20
-> > misordering the
-> > arguments as well unless I am missing something. Or do we know that the=
-=20
-> > code is actually
-> > currently broken?
->=20
-> Yes, I checked glibc, musl and uclibc-ng for all the cases in
-> which the ABI made no sense, as well as to check that my analysis
-> of the kernel sources matches the expectations of the libc.
-
-OK, awesome.
-
-Will you send a v2 so I can ack the updated version of the patch?
-
-I'm also fine with the patch going through your tree, as I would
-like to start with the changes for v6.11 this week.
-
-Thanks,
-Adrian
-
---=20
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 
