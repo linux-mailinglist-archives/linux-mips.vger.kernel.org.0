@@ -1,161 +1,269 @@
-Return-Path: <linux-mips+bounces-3885-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3886-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F71D9141E6
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 07:21:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB74891428D
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 08:14:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 906AA1F2330B
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 05:21:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41016283678
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 06:14:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4630C17BCC;
-	Mon, 24 Jun 2024 05:21:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 503FD21340;
+	Mon, 24 Jun 2024 06:14:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="YPVRZZfy"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="dQ9BR6as"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F9FD11CAF
-	for <linux-mips@vger.kernel.org>; Mon, 24 Jun 2024 05:21:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1164225D9;
+	Mon, 24 Jun 2024 06:14:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719206502; cv=none; b=aunxaJhDj8Y+JpOacq7XcnVew+PahqxOqaVb7G4Zf4nXvW52s1PncGGR3wPXCdgGTIZrXW2ZImRI6tD7wl5F6CwyWuhBAXYCHDMzVQR3lfkC+xM7r43+Estmklk9BWACaFAABgMgukMCkAP7b3/LQNdhAXMD+pO3eSE8qnXH8tQ=
+	t=1719209688; cv=none; b=BCDSkad1t9VpPpO8fEHnAEQfZj6jru9UokItF4ZPJxVyxMV/d6N6IDAVXlKlPj1GQdpAcGQfnbl3u3TqB77A2/NnV8Igf+SUjeikV10oEy4i6CLyANce57Ok0YwQu6g+T6v3p5r5Or4pt/yOjkoAik3PPAMlfcYZcK6gmCFCfI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719206502; c=relaxed/simple;
-	bh=OY5b1Ggd3joKj5pX4/idm+tD9G3lsLgLiaGEWIKtYz8=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=XX8x9yrFZ+g+yxu4QIt+gK38fBja01aCnNufP71BK04RcugmikwISIdpDP1JmyCm2/qXHD3YjK28L+WodhhVv6E8YNCoIN5y+2eKi8AKz835khnJyk6fIh6uTkvqHrAxRTE8ZTExWL/jDVnTRU44HdhQ3IL6KRQNIAwrIMZ7XOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=YPVRZZfy; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 137302C0A5C;
-	Mon, 24 Jun 2024 17:21:37 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1719206497;
-	bh=OY5b1Ggd3joKj5pX4/idm+tD9G3lsLgLiaGEWIKtYz8=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=YPVRZZfyU5Rx07BO6sGyiceubU5pqHmOjzEsHt3/aUpfkvOMmVCmbfQzNRD35wNGf
-	 mRlWaLzy72VktAu2YadYR4e3ea8YNhMBJh+h7XsE0j9SF9awSKMimGXTwhuQIA+D/O
-	 GAjgmLdSa4xHRN0NCCFf7L0vcxus7iYo11s6cvAAHJvyGHh3tlT++f8TpZKFRvI6ee
-	 7S2KQQozAUDhWy49Zgoptw3QA4+tN1e1EzOt5fyBLOlM5LNq2QXvaDZtVvW5GY6LlF
-	 hh2cJ/jbRRC2tlnsNtDNaj0RNmMgxhYQqoKFAdnqxWx1M/mfV5SB+TEYZIzoKYCGWH
-	 yMOCq3UNIKnDw==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B667902610000>; Mon, 24 Jun 2024 17:21:37 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1544.11; Mon, 24 Jun 2024 17:21:36 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
- SMTP Server (TLS) id 15.0.1497.48; Mon, 24 Jun 2024 17:21:36 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1544.011; Mon, 24 Jun 2024 17:21:36 +1200
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Krzysztof Kozlowski <krzk@kernel.org>, "tglx@linutronix.de"
-	<tglx@linutronix.de>, "robh@kernel.org" <robh@kernel.org>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "conor+dt@kernel.org"
-	<conor+dt@kernel.org>, "tsbogend@alpha.franken.de"
-	<tsbogend@alpha.franken.de>, "daniel.lezcano@linaro.org"
-	<daniel.lezcano@linaro.org>, "paulburton@kernel.org" <paulburton@kernel.org>,
-	"peterz@infradead.org" <peterz@infradead.org>, "mail@birger-koblitz.de"
-	<mail@birger-koblitz.de>, "bert@biot.com" <bert@biot.com>, "john@phrozen.org"
-	<john@phrozen.org>, "sander@svanheule.net" <sander@svanheule.net>
-CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, "kabel@kernel.org"
-	<kabel@kernel.org>, "ericwouds@gmail.com" <ericwouds@gmail.com>
-Subject: Re: [PATCH v2 4/8] dt-bindings: timer: Add schema for
- realtek,otto-timer
-Thread-Topic: [PATCH v2 4/8] dt-bindings: timer: Add schema for
- realtek,otto-timer
-Thread-Index: AQHaxdUT70y18GNyjU2Cd/YSeK4JbLHVjweAgAAI6AA=
-Date: Mon, 24 Jun 2024 05:21:36 +0000
-Message-ID: <052a4bdb-88fe-4891-a69c-0d90c610d816@alliedtelesis.co.nz>
-References: <20240624012300.1713290-1-chris.packham@alliedtelesis.co.nz>
- <20240624012300.1713290-5-chris.packham@alliedtelesis.co.nz>
- <d65648d6-4e2b-4009-b0e0-7d1f9a926eb7@kernel.org>
-In-Reply-To: <d65648d6-4e2b-4009-b0e0-7d1f9a926eb7@kernel.org>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <9386FAE2B7F22D438C9101F4D379748F@atlnz.lc>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1719209688; c=relaxed/simple;
+	bh=pRGt+YpMPsKjwZfW86V837WN4JGPkKGnorvBXTL/O2g=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=TJsUk8aKDtPzhpBKSkCP/knB9+oPmUw0UxXznm8RQjDRHObd+n9AwdJTEAIA3DEfE2GdBMcAextzEVpMKL2aRAk7eDd7tNxo4B0GAkS3VtnH4HVRh0DBV1zDpPZbrBV/gNlher+gpFdt21luf3gVKT8hgGH/SrSsMc04eArXobA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=dQ9BR6as; arc=none smtp.client-ip=130.133.4.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=ew1xoLiUEpaRO/Rd2+BU3bX5mn9fF1xUB9iaO1b3Vho=; t=1719209684; x=1719814484; 
+	b=dQ9BR6asAKMN2pqrPhzQT4pEo2OWxYr6vtX66xZ8kyycsc/u1IVh2RwUhv6K9mQu2KybYllWwPR
+	PCpBe6uSEwnvDJqPCmaOBYlF/Ztg+NcI09GK2cXDHqG8CNAwK5I67wKXaXP/TrUEg5/LUkGitqz4M
+	FjueDU0/MeYJV45J1ji5bCX8MAinSm/9TYjOFQ0PBLiQkOh+PDyJ8bs5CQNTG5C4I4J6TSLweF2Hg
+	BpfnO/2K3VGc0NJHulI0qn5eGL55Com37tDttEiS+kaSFzLhuxmSkwwwlGJ5WZqthjQbNzk82CNhY
+	nmUkL9vGte34g0uS6eVfqRFHRk58pTg/tcDA==;
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.97)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1sLcyL-00000003SnY-21KD; Mon, 24 Jun 2024 08:14:37 +0200
+Received: from dynamic-077-191-015-086.77.191.pool.telefonica.de ([77.191.15.86] helo=[192.168.178.20])
+          by inpost2.zedat.fu-berlin.de (Exim 4.97)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1sLcyL-00000002KF0-2nE0; Mon, 24 Jun 2024 08:14:37 +0200
+Message-ID: <e0e373fa13636a403322fd0ba96915fd25dbbefa.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH 09/15] sh: rework sync_file_range ABI
+From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To: Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org
+Cc: Rich Felker <dalias@libc.org>, Andreas Larsson <andreas@gaisler.com>, 
+ guoren <guoren@kernel.org>, Christophe Leroy <christophe.leroy@csgroup.eu>,
+ "H. Peter Anvin" <hpa@zytor.com>, sparclinux@vger.kernel.org,
+ linux-s390@vger.kernel.org, Helge Deller <deller@gmx.de>,
+ linux-sh@vger.kernel.org, "linux-csky@vger.kernel.org"
+ <linux-csky@vger.kernel.org>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+  Heiko Carstens <hca@linux.ibm.com>, "musl@lists.openwall.com"
+ <musl@lists.openwall.com>, Nicholas Piggin <npiggin@gmail.com>, Alexander
+ Viro <viro@zeniv.linux.org.uk>, LTP List <ltp@lists.linux.it>, Brian Cain
+ <bcain@quicinc.com>, Christian Brauner <brauner@kernel.org>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, Xi Ruoyao
+ <libc-alpha@sourceware.org>, linux-parisc@vger.kernel.org,
+ linux-mips@vger.kernel.org,  stable@vger.kernel.org,
+ linux-hexagon@vger.kernel.org,  linux-fsdevel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, "David S . Miller" <davem@davemloft.net>
+Date: Mon, 24 Jun 2024 08:14:36 +0200
+In-Reply-To: <9d4ba5e5-bb7f-432e-9354-47cc84eaa9e1@app.fastmail.com>
+References: <20240620162316.3674955-1-arnd@kernel.org>
+	 <20240620162316.3674955-10-arnd@kernel.org>
+	 <366548c1a0d9749e42c0d0c993414a353c9b0b02.camel@physik.fu-berlin.de>
+	 <9d4ba5e5-bb7f-432e-9354-47cc84eaa9e1@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.2 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=CvQccW4D c=1 sm=1 tr=0 ts=66790261 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=T1WGqf2p2xoA:10 a=gEfo2CItAAAA:8 a=OqrPyMiAPZdSGt2y27EA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=sptkURWiP4Gy88Gu7hUp:22
-X-SEG-SpamProfiler-Score: 0
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-ZEDAT-Hint: PO
 
-DQpPbiAyNC8wNi8yNCAxNjo0OSwgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4gT24gMjQv
-MDYvMjAyNCAwMzoyMiwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4+IEFkZCB0aGUgZGV2aWNldHJl
-ZSBzY2hlbWEgZm9yIHRoZSByZWFsdGVrLG90dG8tdGltZXIgcHJlc2VudCBvbiBhIG51bWJlcg0K
-Pj4gb2YgUmVhbHRlayBTb0NzLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IENocmlzIFBhY2toYW0g
-PGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNpcy5jby5uej4NCj4+IC0tLQ0KPj4NCj4+IE5vdGVz
-Og0KPj4gICAgICBDaGFuZ2VzIGluIHYyOg0KPj4gICAgICAtIFVzZSBzcGVjaWZpYyBjb21wYXRp
-YmxlDQo+IFdoZXJlPyBJIGRvIG5vdCBzZWUgY2hhbmdlcy4NCg0KSW4gdjEgaXQgd2FzIHJ0bDkz
-MHgtdGltZXIsIEkndmUgdXBkYXRlZCBpdCB0byBydGw5MzAyLXRpbWVyDQoNCj4+ICAgICAgLSBS
-ZW1vdmUgdW5uZWNlc3NhcnkgbGFiZWwNCj4+ICAgICAgLSBSZW1vdmUgdW51c2VkIGlycSBmbGFn
-cyAoaW50ZXJydXB0IGNvbnRyb2xsZXIgaXMgb25lLWNlbGwpDQo+PiAgICAgIC0gU2V0IG1pbkl0
-ZW1zIGZvciByZWcgYW5kIGludGVycnVwdHMgYmFzZWQgb24gY29tcGF0aWJsZQ0KPj4NCj4+ICAg
-Li4uL2JpbmRpbmdzL3RpbWVyL3JlYWx0ZWssb3R0by10aW1lci55YW1sICAgIHwgNjYgKysrKysr
-KysrKysrKysrKysrKw0KPj4gICAxIGZpbGUgY2hhbmdlZCwgNjYgaW5zZXJ0aW9ucygrKQ0KPj4g
-ICBjcmVhdGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Rp
-bWVyL3JlYWx0ZWssb3R0by10aW1lci55YW1sDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50
-YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy90aW1lci9yZWFsdGVrLG90dG8tdGltZXIueWFtbCBi
-L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy90aW1lci9yZWFsdGVrLG90dG8tdGlt
-ZXIueWFtbA0KPj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4+IGluZGV4IDAwMDAwMDAwMDAwMC4u
-MTNlYTdhYTk0NmZlDQo+PiAtLS0gL2Rldi9udWxsDQo+PiArKysgYi9Eb2N1bWVudGF0aW9uL2Rl
-dmljZXRyZWUvYmluZGluZ3MvdGltZXIvcmVhbHRlayxvdHRvLXRpbWVyLnlhbWwNCj4+IEBAIC0w
-LDAgKzEsNjYgQEANCj4+ICsjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiAoR1BMLTIuMC1vbmx5
-IE9SIEJTRC0yLUNsYXVzZSkNCj4+ICslWUFNTCAxLjINCj4+ICstLS0NCj4+ICskaWQ6IGh0dHA6
-Ly9kZXZpY2V0cmVlLm9yZy9zY2hlbWFzL3RpbWVyL3JlYWx0ZWssb3R0by10aW1lci55YW1sIw0K
-Pj4gKyRzY2hlbWE6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9tZXRhLXNjaGVtYXMvY29yZS55YW1s
-Iw0KPj4gKw0KPj4gK3RpdGxlOiBSZWFsdGVrIE90dG8gU29DcyBUaW1lci9Db3VudGVyDQo+PiAr
-DQo+PiArZGVzY3JpcHRpb246DQo+PiArICBSZWFsdGVrIFNvQ3Mgc3VwcG9ydCBhIG51bWJlciBv
-ZiB0aW1lcnMvY291bnRlcnMuIFRoZXNlIGFyZSB1c2VkDQo+PiArICBhcyBhIHBlciBDUFUgY2xv
-Y2sgZXZlbnQgZ2VuZXJhdG9yIGFuZCBhbiBvdmVyYWxsIENQVSBjbG9ja3NvdXJjZS4NCj4+ICsN
-Cj4+ICttYWludGFpbmVyczoNCj4+ICsgIC0gQ2hyaXMgUGFja2hhbSA8Y2hyaXMucGFja2hhbUBh
-bGxpZWR0ZWxlc2lzLmNvLm56Pg0KPj4gKw0KPj4gK3Byb3BlcnRpZXM6DQo+PiArICAkbm9kZW5h
-bWU6DQo+PiArICAgIHBhdHRlcm46ICJedGltZXJAWzAtOWEtZl0rJCINCj4+ICsNCj4+ICsgIGNv
-bXBhdGlibGU6DQo+PiArICAgIGl0ZW1zOg0KPj4gKyAgICAgIC0gZW51bToNCj4+ICsgICAgICAg
-ICAgLSByZWFsdGVrLHJ0bDkzMDItdGltZXINCj4+ICsgICAgICAtIGNvbnN0OiByZWFsdGVrLG90
-dG8tdGltZXINCj4+ICsNCj4+ICsgIHJlZzoNCj4+ICsgICAgbWF4SXRlbXM6IDUNCj4gTm90aGlu
-ZyBpbXByb3ZlZC4NCj4NCj4+ICsNCj4+ICsgIGNsb2NrczoNCj4+ICsgICAgbWF4SXRlbXM6IDEN
-Cj4+ICsNCj4+ICsgIGludGVycnVwdHM6DQo+PiArICAgIG1heEl0ZW1zOiA1DQo+IE5vdGhpbmcg
-aW1wcm92ZWQuDQo+DQo+PiArDQo+PiArYWxsT2Y6DQo+PiArICAtIGlmOg0KPj4gKyAgICAgIHBy
-b3BlcnRpZXM6DQo+PiArICAgICAgICBjb21wYXRpYmxlOg0KPj4gKyAgICAgICAgICBjb250YWlu
-czoNCj4+ICsgICAgICAgICAgICBjb25zdDogcmVhbHRlayxydGw5MzAyLXRpbWVyDQo+PiArICAg
-IHRoZW46DQo+PiArICAgICAgcHJvcGVydGllczoNCj4+ICsgICAgICAgIHJlZzoNCj4+ICsgICAg
-ICAgICAgbWluSXRlbXM6IDINCj4+ICsgICAgICAgIGludGVycnVwdHM6DQo+PiArICAgICAgICAg
-IG1pbkl0ZW1zOiAyDQo+IE5vLCB0aGF0J3MganVzdCBpbmNvcnJlY3QuIFlvdSBkbyBub3QgaGF2
-ZSBtb3JlIHRoYW4gb25lIHZhcmlhbnQsIHNvIGl0DQo+IGlzIGp1c3QgMiBpdGVtcy4gT3IgNSBp
-dGVtcywgbm90IDItNS4NCg0KSSd2ZSBiZWVuIHRvbGQgaW4gdGhlIHBhc3QgdGhhdCB0aGUgZGV2
-aWNlLXRyZWUgc2hvdWxkIGRlc2NyaWJlIHRoZSANCmhhcmR3YXJlLiBXaGljaCBpbiB0aGlzIGNh
-c2UgaGFzIDUgdGltZXJzLiBCdXQgSSdtIGFsc28gdG9sZCB0byBnaXZlIA0KdGhlbSBuYW1lcyB3
-aGljaCBJIHN0cnVnZ2xlIHRvIGRvIGJlY2F1c2Ugc29tZSBvZiB0aGVtIGFyZW4ndCB1c2VkLg0K
-DQpTbyBkbyB5b3Ugd2FudCBzb21ldGhpbmcgbGlrZSB0aGlzOg0KDQpjbG9ja3M6DQogwqDCoMKg
-IGl0ZW1zOg0KIMKgwqDCoCDCoMKgwqAgLSBkZXNjcmlwdGlvbjogQ1BVMCBldmVudCBjbG9jaw0K
-IMKgwqDCoCDCoMKgwqAgLSBkZXNjcmlwdGlvbjogc3lzdGVtIGNsb2NrIHNvdXJjZQ0KIMKgwqDC
-oCDCoMKgwqAgLSBkZXNjcmlwdGlvbjogdW51c2VkDQogwqDCoMKgIMKgwqDCoCAtIGRlc2NyaXB0
-aW9uOiB1bnVzZWQNCiDCoMKgwqAgwqDCoMKgIC0gZGVzY3JpcHRpb246IHVudXNlZA0KDQppbnRl
-cnJ1cHRzOg0KIMKgwqDCoCBpdGVtczoNCiDCoMKgwqDCoMKgwqDCoCAtIGRlc2NyaXB0aW9uOiBD
-UFUwIGV2ZW50IGNsb2NrIGludGVycnVwdA0KIMKgwqDCoMKgwqDCoMKgIC0gZGVzY3JpcHRpb246
-IHN5c3RlbSBjbG9jayBzb3VyY2UgaW50ZXJydXB0DQogwqDCoMKgwqDCoMKgwqAgLSBkZXNjcmlw
-dGlvbjogdW51c2VkDQogwqDCoMKgwqDCoMKgwqAgLSBkZXNjcmlwdGlvbjogdW51c2VkDQogwqDC
-oMKgwqDCoMKgwqAgLSBkZXNjcmlwdGlvbjogdW51c2VkDQoNCj4NCj4NCj4gQmVzdCByZWdhcmRz
-LA0KPiBLcnp5c3p0b2YNCj4NCj4=
+Hi Arnd,
+
+On Fri, 2024-06-21 at 11:41 +0200, Arnd Bergmann wrote:
+> On Fri, Jun 21, 2024, at 10:44, John Paul Adrian Glaubitz wrote:
+> > On Thu, 2024-06-20 at 18:23 +0200, Arnd Bergmann wrote:
+> > > From: Arnd Bergmann <arnd@arndb.de>
+> > >=20
+> > > The unusual function calling conventions on superh ended up causing
+> >                                               ^^^^^^
+> >                                        It's spelled SuperH
+>=20
+> Fixed now.
+>=20
+> > > diff --git a/arch/sh/kernel/sys_sh32.c b/arch/sh/kernel/sys_sh32.c
+> > > index 9dca568509a5..d5a4f7c697d8 100644
+> > > --- a/arch/sh/kernel/sys_sh32.c
+> > > +++ b/arch/sh/kernel/sys_sh32.c
+> > > @@ -59,3 +59,14 @@ asmlinkage int sys_fadvise64_64_wrapper(int fd, u3=
+2 offset0, u32 offset1,
+> > >  				 (u64)len0 << 32 | len1, advice);
+> > >  #endif
+> > >  }
+> > > +
+> > > +/*
+> > > + * swap the arguments the way that libc wants it instead of
+> >=20
+> > I think "swap the arguments to the order that libc wants them" would
+> > be easier to understand here.
+>=20
+> Done
+
+Thanks for the two improvements!
+
+> > > diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/sys=
+calls/syscall.tbl
+> > > index bbf83a2db986..c55fd7696d40 100644
+> > > --- a/arch/sh/kernel/syscalls/syscall.tbl
+> > > +++ b/arch/sh/kernel/syscalls/syscall.tbl
+> > > @@ -321,7 +321,7 @@
+> > >  311	common	set_robust_list			sys_set_robust_list
+> > >  312	common	get_robust_list			sys_get_robust_list
+> > >  313	common	splice				sys_splice
+> > > -314	common	sync_file_range			sys_sync_file_range
+> > > +314	common	sync_file_range			sys_sh_sync_file_range6
+> >                                                                  ^^^^^^=
+=20
+> > Why the suffix 6 here?
+>=20
+> In a later part of my cleanup, I'm consolidating all the
+> copies of this function (arm64, mips, parisc, powerpc,
+> s390, sh, sparc, x86) and picked the name
+> sys_sync_file_range6() for common implementation.
+>=20
+> I end up with four entry points here, so the naming is a bit
+> confusing:
+>=20
+> - sys_sync_file_range() is only used on 64-bit architectures,
+>   on x32 and on mips-n32. This uses four arguments, including
+>   two 64-bit wide ones.
+>=20
+> - sys_sync_file_range2() continues to be used on arm, powerpc,
+>   xtensa and now on sh, hexagon and csky. I change the
+>   implementation to take six 32-bit arguments, but the ABI
+>   remains the same as before, with the flags before offset.
+>=20
+> - sys_sync_file_range6() is used for most other 32-bit ABIs:
+>   arc, m68k, microblaze, nios2, openrisc, parisc, s390, sh, sparc
+>   and x86. This also has six 32-bit arguments but in the
+>   default order (fd, offset, nbytes, flags).
+>=20
+> - sys_sync_file_range7() is exclusive to mips-o32, this one
+>   has an unused argument and is otherwise the same as
+>   sys_sync_file_range6().
+>=20
+> My plan is to then have some infrastructure to ensure
+> userspace tools (libc, strace, qemu, rust, ...) use the
+> same calling conventions as the kernel. I'm doing the
+> same thing for all other syscalls that have architecture
+> specific calling conventions, so far I'm using
+>=20
+> fadvise64_64_7
+> fanotify_mark6
+> truncate3
+> truncate4
+> ftruncate3
+> ftruncate4
+> fallocate6
+> pread5
+> pread6
+> pwrite5
+> pwrite6
+> preadv5
+> preadv6
+> pwritev5
+> pwritev6
+> sync_file_range6
+> fadvise64_64_2
+> fadvise64_64_6
+> fadvise64_5
+> fadvise64_6
+> readahead4
+> readahead5
+>=20
+> The last number here is usually the number of 32-bit
+> arguments, except for fadvise64_64_2 that uses the
+> same argument reordering trick as sync_file_range2.
+>=20
+> I'm not too happy with the naming but couldn't come up with
+> anything clearer either, so let me know if you have any
+> ideas there.
+
+OK, gotcha. I thought the 6 suffix was for SH only. I'm fine
+with the naming scheme.
+
+> > >  315	common	tee				sys_tee
+> > >  316	common	vmsplice			sys_vmsplice
+> > >  317	common	move_pages			sys_move_pages
+> > > @@ -395,6 +395,7 @@
+> > >  385	common	pkey_alloc			sys_pkey_alloc
+> > >  386	common	pkey_free			sys_pkey_free
+> > >  387	common	rseq				sys_rseq
+> > > +388	common	sync_file_range2		sys_sync_file_range2
+> > >  # room for arch specific syscalls
+> > >  393	common	semget				sys_semget
+> > >  394	common	semctl				sys_semctl
+> >=20
+> > I wonder how you discovered this bug. Did you look up the calling=20
+> > convention on SuperH
+> > and compare the argument order for the sys_sync_file_range system call=
+=20
+> > documented there
+> > with the order in the kernel?
+>=20
+> I had to categorize all architectures based on their calling
+> conventions to see if 64-bit arguments need aligned pairs or
+> not, so I wrote a set of simple C files that I compiled for
+> all architectures to see in which cases they insert unused
+> arguments or swap the order of the upper and lower halves.
+>=20
+> SuperH, parisc and s390 are each slightly different from all the
+> others here, so I ended up reading the ELF psABI docs and/or
+> the compiler sources to be sure.
+> I also a lot of git history.
+
+Great job, thanks for doing the extra work to verify the ABI.
+
+> > Did you also check what order libc uses? I would expect libc on SuperH=
+=20
+> > misordering the
+> > arguments as well unless I am missing something. Or do we know that the=
+=20
+> > code is actually
+> > currently broken?
+>=20
+> Yes, I checked glibc, musl and uclibc-ng for all the cases in
+> which the ABI made no sense, as well as to check that my analysis
+> of the kernel sources matches the expectations of the libc.
+
+OK, awesome.
+
+Will you send a v2 so I can ack the updated version of the patch?
+
+I'm also fine with the patch going through your tree, as I would
+like to start with the changes for v6.11 this week.
+
+Thanks,
+Adrian
+
+--=20
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 
