@@ -1,259 +1,146 @@
-Return-Path: <linux-mips+bounces-3887-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3888-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 447B2914522
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 10:43:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CB91914A42
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 14:37:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE07A2842AF
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 08:43:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01C811F240CD
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 12:37:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 233FC61FF2;
-	Mon, 24 Jun 2024 08:42:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 582BD13C691;
+	Mon, 24 Jun 2024 12:37:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="HKfHHn7u";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SqE/KFUp"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
+Received: from fhigh7-smtp.messagingengine.com (fhigh7-smtp.messagingengine.com [103.168.172.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996745FEED;
-	Mon, 24 Jun 2024 08:42:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.37.255.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E959F1386DA;
+	Mon, 24 Jun 2024 12:37:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719218578; cv=none; b=U8Wwi3X3KEZ+rsxZUm/zWov5Xx+dVzO2tyV/cWWTI9BMBTFDPoovcg6Qr4QRtvUJJtluKOPwvGBAofZJfyr7xDE9PVT6Dbx1gYHUprUHVz8zAtThZEBvOjKuF6dbkRnXN3bWFFLnKUki/y0drirJXwOJYs1Qp4PbxyoJVVHmnJc=
+	t=1719232631; cv=none; b=u5PKPBsMQh5BdRTxwEXl6ZxRP6b4l3dIEgTLuKi3VEAAUeeWAOEp9KanPjqZH4nLOOmlXWzur+VSf/VFgGNZQaIMb93F9I0tPJU5iaiqsh4NriKvmAueQ+qYBINSvrMelxKwlKip5zoukTXLIwncXVJ82V1yWr6bz8Bke7p4cH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719218578; c=relaxed/simple;
-	bh=uou/1X38TpOV1H5lzk1XUMo5zHQwtHBpEjhyhwTfJHY=;
-	h=MIME-Version:Content-Type:Date:From:To:Cc:Subject:In-Reply-To:
-	 References:Message-ID; b=CLAGUwDBK9o8jqf1uqhzOUaeezU+/UMF551hqKSpAlOqbegEmSxgxUkxMu7BPf7GBueijP5bfd8aJ2KjHtKxnY9FJRHOc+esCs0txDxGAtbtH71ihnBOX6sINGM0mmqS0T2SHiqxMb0md9U1yNctho8tRHnwlsjSe53mjhTFOxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dev.tdt.de; spf=pass smtp.mailfrom=dev.tdt.de; arc=none smtp.client-ip=194.37.255.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dev.tdt.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dev.tdt.de
-Received: from [127.0.0.1] (helo=localhost)
-	by relay.expurgate.net with smtp (Exim 4.92)
-	(envelope-from <prvs=99192e773b=ms@dev.tdt.de>)
-	id 1sLesm-008vkJ-9h; Mon, 24 Jun 2024 10:17:00 +0200
-Received: from [195.243.126.94] (helo=securemail.tdt.de)
-	by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ms@dev.tdt.de>)
-	id 1sLesk-00Ctb6-St; Mon, 24 Jun 2024 10:16:58 +0200
-Received: from securemail.tdt.de (localhost [127.0.0.1])
-	by securemail.tdt.de (Postfix) with ESMTP id 72BD9240053;
-	Mon, 24 Jun 2024 10:16:58 +0200 (CEST)
-Received: from mail.dev.tdt.de (unknown [10.2.4.42])
-	by securemail.tdt.de (Postfix) with ESMTP id CF369240050;
-	Mon, 24 Jun 2024 10:16:57 +0200 (CEST)
-Received: from mail.dev.tdt.de (localhost [IPv6:::1])
-	by mail.dev.tdt.de (Postfix) with ESMTP id 038F634826;
-	Mon, 24 Jun 2024 10:16:56 +0200 (CEST)
+	s=arc-20240116; t=1719232631; c=relaxed/simple;
+	bh=TbmH+yoyAgf4fe9CUvwuV5yJgzh5ZHwbkVCsLRZgEQ8=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=UyEObqEv0W7q47teygKnMYdf+FuJzUPP+2QoJRe/Len2hnAvPYUzi9gww2O4ecbPQBXejxKwAZE+6IhAPorNIXblrp4elQvOYBxt3TyFdFkgbqzlXzvE3Vc0J5OTHS1M2PaDsXvI7syb2fIGp6aJihVJYiJgSQ5mFo9X+J+LYjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=HKfHHn7u; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SqE/KFUp; arc=none smtp.client-ip=103.168.172.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id 07C5B11400E4;
+	Mon, 24 Jun 2024 08:37:08 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Mon, 24 Jun 2024 08:37:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1719232628; x=1719319028; bh=lFXvov0ksU
+	8Pc4ucksxO9SvwB7S7ZcSyst60pbeeZH8=; b=HKfHHn7umsdW+0c1ehuSJQ99eI
+	Myjn3JHII41XjBGkBE82U3ZLF1gpqJUHWfu0fD1R2wDTT4O5lDapBn9tPESvQu77
+	8adNnRplVreG2sPNDp0X/rfGleHLut9Gk/BSzkxRKhL04EDXsG1YRKgxv6IL6gBV
+	hiECEd8aKPxpc7cvdwq2YkiIfftlQjXB9+KAYBuvYvOjmxwZ7/F9l3LRlEL5RFo3
+	063MmLg36ab0j12O1asXtLt3D5DVUiK5EvC72HFvCSk3AleE/g7i2STrQpvD5No4
+	i+lJKlbqcQQIUGGQGOvBpwpmcMBptK7y9aRt5R4yzWI1IbKl5+ANpAHr7VSA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1719232628; x=1719319028; bh=lFXvov0ksU8Pc4ucksxO9SvwB7S7
+	ZcSyst60pbeeZH8=; b=SqE/KFUphRWeVMJb+kfwzgwN1/Hu23nlRESAJfYgc8ML
+	pUz2mmmI8F5nmEqE+5ox0g/rjJ6d0Zb285uqwFyeJQcQZsscUdL/sXj/UaEluip+
+	Y8hGi2uVUqhxSS2j+Tg9/Mp0Zm2wYNokTin+aYRk4BLKmOWC6+/LDFt4sIkWw2DL
+	h/Je6x5AernFk742JykHMAJAodzv6NFC7WvmD1gw90TOsbHe5Ze1AinDq0CmjjKA
+	Z95MIl9q9aP4NXQ+7dphFhlbY9tl+CfCvo6YBxD12RGqejBt7qQshI8pAPifYgLG
+	pqaC18LuaHL4DH+Btw3GZ5ixeMLofnITMxBNO+thYQ==
+X-ME-Sender: <xms:cWh5ZrLj7Is9v5gIq1mXIwuK3B6Z67FMFXi_sBM56MqeKqAR64n6TQ>
+    <xme:cWh5ZvL6fPST5egK7_VqUyPLzOA0tCn6X6DlKYOektXFx1cgWvkKCjEMrv6PEjXyW
+    4yPi_m7QPeT9rWgx9c>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfeeguddgheegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:cWh5ZjudJI3oixudlca83stC9GtoJPVF-yfqIooUyooPVxKMkRay5w>
+    <xmx:cWh5ZkZgIV_EAxNKJdd3dn5ts0jsz0iQNgpwAoaYwIkaiwKIL8UoqA>
+    <xmx:cWh5ZiamgC5g2Z463RDvkqIdIU3iA-8c5MxvqJ4odiwM6cjvoG_-fQ>
+    <xmx:cWh5ZoB--wGmM0xyN9laN1DWgxiskyw40gTH9IFx_cFQRyZCDpYBHA>
+    <xmx:c2h5ZhnZnhgadejE1PelPCjBJhfYQ9s6ZgcSotBgFkM80Ux8nV4bq0wf>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 838B9B6008D; Mon, 24 Jun 2024 08:37:05 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-522-ga39cca1d5-fm-20240610.002-ga39cca1d
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Date: Mon, 24 Jun 2024 10:16:56 +0200
-From: Martin Schiller <ms@dev.tdt.de>
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: Hauke Mehrtens <hauke@hauke-m.de>, tsbogend@alpha.franken.de,
- rdunlap@infradead.org, robh@kernel.org, bhelgaas@google.com,
- linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: pci: lantiq: restore reset gpio polarity
-Organization: TDT AG
-In-Reply-To: <ZnN9rkNqucEYuXzR@google.com>
-References: <20240607090400.1816612-1-ms@dev.tdt.de>
- <ZmnfQWFoIw5UCV-k@google.com> <7d34eb4017e809245daa342e3ccddf4f@dev.tdt.de>
- <b6bea9239050ed39ce3a051a5985b86d@dev.tdt.de>
- <6e4eed26-0a15-4ab4-8f3f-7ed0e223db5e@hauke-m.de>
- <c1813503ba16e1d46a93382dd806ffa6@dev.tdt.de> <ZnN9rkNqucEYuXzR@google.com>
-Message-ID: <ce1ba2382d12010f960d3e4c04d78fb2@dev.tdt.de>
-X-Sender: ms@dev.tdt.de
-User-Agent: Roundcube Webmail/1.3.17
-Content-Transfer-Encoding: quoted-printable
-X-purgate-ID: 151534::1719217019-4697E746-1C37EBBB/0/0
-X-purgate: clean
-X-purgate-type: clean
+Message-Id: <eaa0ffaf-e42d-4b86-9eed-534684815cf8@app.fastmail.com>
+In-Reply-To: <20240620162316.3674955-15-arnd@kernel.org>
+References: <20240620162316.3674955-1-arnd@kernel.org>
+ <20240620162316.3674955-15-arnd@kernel.org>
+Date: Mon, 24 Jun 2024 14:36:45 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Arnd Bergmann" <arnd@kernel.org>,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org
+Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ linux-mips@vger.kernel.org, "Helge Deller" <deller@gmx.de>,
+ linux-parisc@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
+ "Andreas Larsson" <andreas@gaisler.com>, sparclinux@vger.kernel.org,
+ "Michael Ellerman" <mpe@ellerman.id.au>,
+ "Nicholas Piggin" <npiggin@gmail.com>,
+ "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+ linuxppc-dev@lists.ozlabs.org, "Brian Cain" <bcain@quicinc.com>,
+ linux-hexagon@vger.kernel.org, guoren <guoren@kernel.org>,
+ "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+ "Heiko Carstens" <hca@linux.ibm.com>, linux-s390@vger.kernel.org,
+ "Rich Felker" <dalias@libc.org>,
+ "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+ linux-sh@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ "Alexander Viro" <viro@zeniv.linux.org.uk>,
+ "Christian Brauner" <brauner@kernel.org>, linux-fsdevel@vger.kernel.org,
+ "Xi Ruoyao" <libc-alpha@sourceware.org>,
+ "musl@lists.openwall.com" <musl@lists.openwall.com>,
+ "LTP List" <ltp@lists.linux.it>, stable@vger.kernel.org
+Subject: Re: [PATCH 14/15] asm-generic: unistd: fix time32 compat syscall handling
+Content-Type: text/plain
 
-On 2024-06-20 02:54, Dmitry Torokhov wrote:
-> On Fri, Jun 14, 2024 at 10:43:29AM +0200, Martin Schiller wrote:
->> On 2024-06-13 22:06, Hauke Mehrtens wrote:
->> > On 6/12/24 21:47, Martin Schiller wrote:
->> > > On 2024-06-12 20:39, Martin Schiller wrote:
->> > > > On 2024-06-12 19:47, Dmitry Torokhov wrote:
->> > > > > Hi Marton,
->> > > >
->> > > > Hi Dmitry,
->> > > >
->> > > > >
->> > > > > On Fri, Jun 07, 2024 at 11:04:00AM +0200, Martin Schiller wrot=
-e:
->> > > > > > Commit 90c2d2eb7ab5 ("MIPS: pci: lantiq: switch to using
->> > > > > > gpiod API") not
->> > > > > > only switched to the gpiod API, but also inverted /
->> > > > > > changed the polarity
->> > > > > > of the GPIO.
->> > > > > >
->> > > > > > According to the PCI specification, the RST# pin is an activ=
-e-low
->> > > > > > signal. However, most of the device trees that have been
->> > > > > > widely used for
->> > > > > > a long time (mainly in the openWrt project) define this GPIO=
- as
->> > > > > > active-high and the old driver code inverted the signal inte=
-rnally.
->> > > > > >
->> > > > > > Apparently there are actually boards where the reset gpio mu=
-st be
->> > > > > > operated inverted. For this reason, we cannot use the
->> > > > > > GPIOD_OUT_LOW/HIGH
->> > > > > > flag for initialization. Instead, we must explicitly set
->> > > > > > the gpio to
->> > > > > > value 1 in order to take into account any
->> > > > > > "GPIO_ACTIVE_LOW" flag that
->> > > > > > may have been set.
->> > > > >
->> > > > > Do you have example of such boards? They could not have
->> > > > > worked before
->> > > > > 90c2d2eb7ab5 because it was actively setting the reset line
->> > > > > to physical
->> > > > > high, which should leave the device in reset state if there is=
- an
->> > > > > inverter between the AP and the device.
->> > > >
->> > > > Oh, you're right. I totally missed that '__gpio_set_value' was
->> > > > used in
->> > > > the original code and that raw accesses took place without payin=
-g
->> > > > attention to the GPIO_ACTIVE_* flags.
->> > > >
->> > > > You can find the device trees I am talking about in [1].
->> > > >
->> > > > @Thomas Bogendoerfer:
->> > > > Would it be possible to stop the merging of this patch?
->> > > > I think We have to do do some further/other changes.
->> > > >
->> > > > >
->> > > > > >
->> > > > > > In order to remain compatible with all these existing
->> > > > > > device trees, we
->> > > > > > should therefore keep the logic as it was before the commit.
->> > > > >
->> > > > > With gpiod API operating with logical states there's still
->> > > > > difference in
->> > > > > logic:
->> > > > >
->> > > > > =C2=A0=C2=A0=C2=A0=C2=A0gpiod_set_value_cansleep(reset_gpio, 1=
-);
->> > > > >
->> > > > > will leave GPIO at 1 if it is described as GPIO_ACTIVE_HIGH
->> > > > > (which is
->> > > > > apparently what you want for boards with broken DTS) but for b=
-oards
->> > > > > that accurately describe GPIO as GPIO_ACTIVE_LOW it well
->> > > > > drive GPIO to
->> > > > > 0, leaving the card in reset state.
->> > > > >
->> > > > > You should either use gpiod_set_raw_value_calsleep() or we
->> > > > > can try and
->> > > > > quirk it in gpiolib (like we do for many other cases of
->> > > > > incorrect GPIO
->> > > > > polarity descriptions and which is my preference).
->> > >
->> > > So you mean we should add an entry for "lantiq,pci-xway" to the
->> > > of_gpio_try_fixup_polarity()?
->> > > Do you know any dts / device outside the openWrt universe which is
->> > > using
->> > > this driver.
->> > >
->> > > For the lantiq targets in openWrt, the devicetree blob is appended=
- to
->> > > the kernel image and therefore also updated when doing a firmware
->> > > upgrade. So, maybe it would also be an option to fix the driver (u=
-sing
->> > > GPIO_ACTIVE_* flag for the initial level and set it to 0 -> 1 -> 0=
-)
->> > > and
->> > > rework all the dts files to use GPIO_ACTIVE_LOW.
->=20
-> Yes, cleaning up DTS files when it is possible is nice.
->=20
->> > >
->> > > Then we won't need any quirks.
->=20
-> Quirks are fairly cheap and we are not in a hot path here.
->=20
->> >
->> > I am not aware that anyone is using a recent kernel on the VRX200
->> > outside of OpenWrt. I am also not aware that anyone is *not* appendi=
-ng
->> > the DTB to the kernel. The SoC is pretty old now, the successor of
->> > this SoC was released about 10 years ago.
->> >
->>=20
->> We're not just talking about VRX200 (VR9) here, but even older devices
->> such as AR9 and Danube.
->>=20
->> > For me it would be fine if you fix the broken device device trees
->> > shipped with the upstream kernel and with OpenWrt to make them work
->> > with the PCI driver instead of investing too much time into handling
->> > old DTBs.
->> >
->> > The PCI reset is inverted on some boards to handle a dying gasp. If
->> > the power breaks down the reset should get triggered and the PCIe
->> > device can send a dying gasp signal to the other side. This is done =
-on
->> > the reference designs of some Lantiq PCIe DSL card for the VRX318 an=
-d
->> > probably also some other components.
->> >
->> > Hauke
->>=20
->> What I missed so far is the fact that the driver used=20
->> '__gpio_set_value'
->> before Dmitry's commit and thus used raw access to the GPIO.
->>=20
->> This effectively means that every device that has worked with the=20
->> driver
->> so far must have an ACTIVE_LOW reset, no matter what was configured in
->> the device tree.
->>=20
->>=20
->> So renaming the property in the dts from "gpio-reset" to "reset-gpios"
->> and setting the FLAGS to "GPIO_ACTIVE_LOW" should actually solve the
->> problem.
->=20
-> Right, luckily (to a definition of luckily) the driver and DTB used
-> "wrong" syntax for the gpio property, so we can quirk it and make
-> force ACTIVE_LOW polarity on old DTBs, and new DTBs with "reset-gpios"
-> property will follow polarity specified in DTB.
+On Thu, Jun 20, 2024, at 18:23, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> arch/riscv/ appears to have accidentally enabled the compat time32
+> syscalls in 64-bit kernels even though the native 32-bit ABI does
+> not expose those.
+>
+> Address this by adding another level of indirection, checking for both
+> the target ABI (32 or 64) and the __ARCH_WANT_TIME32_SYSCALLS macro.
+>
+> The macro arguments are meant to follow the syscall.tbl format, the idea
+> here is that by the end of the series, all other syscalls are changed
+> to the same format to make it possible to move all architectures over
+> to generating the system call table consistently.
+> Only this patch needs to be backported though.
+>
+> Cc: stable@vger.kernel.org # v5.19+
+> Fixes: 7eb6369d7acf ("RISC-V: Add support for rv32 userspace via COMPAT")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-We have already adapted the device trees in openWrt. [1]
-Will you create a quirk patch for the old DTBs or should I create one?
+I had pulled this in from my longer series, but as the kernel
+build bot reported, this produced build time regressions, so
+I'll drop it from the v6.10 fixes and will integrated it back
+as part of the cleanup series.
 
->=20
->>=20
->> What still bothers me about the driver itself are 2 things:
->> 1. the initial value of GPIOD_OUT_LOW. This means that there is no=20
->> real
->>    defined HIGH -> LOW -> HIGH on reset.
->=20
-> Is this actually needed? Typically a card requires certain time in=20
-> reset
-> state (with reset line active) before it can be released, however there
-> usually no restrictions on line being inactive beforehand. But=20
-> typically
-> it will be pulled up to avoid leakage...
->=20
-
-No, I don't think that's absolutely necessary. Several tests have so far
-shown that it works as it is at the moment.
-
-[1]=20
-https://git.openwrt.org/?p=3Dopenwrt/openwrt.git;a=3Dcommitdiff;h=3Df6fe1=
-9ed6dfaf0444cd80f530bf89f6878fd5936
-
+     Arnd
 
