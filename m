@@ -1,48 +1,48 @@
-Return-Path: <linux-mips+bounces-3881-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3882-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06CDC914140
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 06:48:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74F09914159
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 06:51:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B48B7283942
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 04:48:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D51C3B22AE5
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 04:51:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16EA7D502;
-	Mon, 24 Jun 2024 04:48:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAA3BDDCD;
+	Mon, 24 Jun 2024 04:49:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MDe9JP7w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O4ILAnK0"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91C4DDC1;
-	Mon, 24 Jun 2024 04:48:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E3A31C280;
+	Mon, 24 Jun 2024 04:49:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719204511; cv=none; b=smtq/5LXU3F81TrlLC43CPlP5MXkngmZ+mXeYyE26qdrVhPJLb3KTcdvKuMkUw2Pg3OtSsKhOuRhWDpv2oA+7qyYPVXezwLIsLR3gm7DlcSrwelSxruDd1XIBzFwLrgS8KP8i2KDtHb4M9UTnA03bGCwpwB+ZXVf8+N5WnvVtfc=
+	t=1719204592; cv=none; b=iwNLHhmFbW4rvr6DUoSlsyOoXpkzSlSu2N6RjT3p7v7jKEtkS8Nxi3NES1Lrg5SxoIkXgyeKMtcRhE3j2m5M7Phh9G6JxZdaRgUGH+/CEhnfLkuKok/8YKN4tXTQYhIJjgOJn0nDzv6kettMDZX8Xtf2NxoTtpYKxCLCmU3hMVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719204511; c=relaxed/simple;
-	bh=NDJaXB/nKzpYeop5UXLPi8qOuSov8fo+Km4a9y9Er+8=;
+	s=arc-20240116; t=1719204592; c=relaxed/simple;
+	bh=VaH3p3Wt08SZduLWzdttwcNli5xWlhzJY8l/GsaXuKk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q8K1HVIRAL0nZlWL6XKsPDWWyf0l5YPY8I6DjMYA8z67T+sGsDh6mcud8RlfLPh0AaBe4HnKb+fyK7ApYlxklxhRum5tkQfNVOYVixQpbLYAf40mkRjGaEfnHH+yufpohAE92booT6fhaLFKz3Q3TdVFKMokKIBPGfjTlx/7s/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MDe9JP7w; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F16DC2BBFC;
-	Mon, 24 Jun 2024 04:48:24 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Z1fg/deeprIL6gM3I2QW/GAb3sMbjp6DK447K+4j3ij2NBbcQXH6R9m6Xps39vJEXrcTTFSgmL8d/yb7zSRIIvJLmdOUjPu5qtdEQeeWiG38w4yDLR+z+sBRQhQuue600sxfcH2lxXaUxZhOq1hUzUQxUkEOzDg8ESY2kn3TsEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O4ILAnK0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09F6AC2BBFC;
+	Mon, 24 Jun 2024 04:49:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719204510;
-	bh=NDJaXB/nKzpYeop5UXLPi8qOuSov8fo+Km4a9y9Er+8=;
+	s=k20201202; t=1719204592;
+	bh=VaH3p3Wt08SZduLWzdttwcNli5xWlhzJY8l/GsaXuKk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=MDe9JP7w3gmPyoICO906486pxbci3aIpLWkvlgbUatgTKmm6WMYJrZjb2bB+UND5i
-	 xYl31CNbmgI/UsGU90WUHgIdKT91caUnSeUHX3yXbwPEeF9SGgZZvTbQvIt21L5EYt
-	 vIEGOPWC1dSN1kLXagmxnlcYODZgXDur2O6dK9SPhM27h5aldRvUbEU1ys5ivipRiK
-	 tzCAa+tBQWBmilucBsJEOYEG2Di2p9v/ZBepnJsvIflRqjdMWMh/+eXVasXJLjIDBL
-	 inQebxyh+DzG39A67NKYFfn9SZMlsMYyWy23ZlMvKryRgrqkPAoxj4WjmtVRxmNqvh
-	 NpbFaA4GYnBqg==
-Message-ID: <e71780a1-8d53-44ae-ac0f-d406de7e26e8@kernel.org>
-Date: Mon, 24 Jun 2024 06:48:22 +0200
+	b=O4ILAnK05o4UmvQ55RUw9sq47RlEBRQzPxRWyVC+1piWc3XUGb+39LEsFIYfjoGJa
+	 o1VGZicV8aIXVfThpjGdWmxkh7PwPfqsNdztJjZT68PrjDA1KO9SOA4SqI8HEZEVjB
+	 ZlaoYgqFUP2sMEy/JCdZ9+IbUM894qxJAU2IRVRrIG4hfcUJaRHgNdMHkr+NbVyaCK
+	 A8QBOZMO0gOz+9wiiqHqGK/GFPu4e2zW19ZpK89VaYaFGWSFpqQpJpNoVNOGwcaWiB
+	 HHp41CHvpSEfcq2rehk9iTpj/TIzXbR/7g6YI4PNJMpIajCOhnjxFNuop5oqUqBEjW
+	 5GU8MwFHsXMwQ==
+Message-ID: <d65648d6-4e2b-4009-b0e0-7d1f9a926eb7@kernel.org>
+Date: Mon, 24 Jun 2024 06:49:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/8] dt-bindings: mips: realtek: Add rtl930x-soc
- compatible
+Subject: Re: [PATCH v2 4/8] dt-bindings: timer: Add schema for
+ realtek,otto-timer
 To: Chris Packham <chris.packham@alliedtelesis.co.nz>, tglx@linutronix.de,
  robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
  tsbogend@alpha.franken.de, daniel.lezcano@linaro.org, paulburton@kernel.org,
@@ -60,7 +60,7 @@ To: Chris Packham <chris.packham@alliedtelesis.co.nz>, tglx@linutronix.de,
 Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
  linux-mips@vger.kernel.org, kabel@kernel.org, ericwouds@gmail.com
 References: <20240624012300.1713290-1-chris.packham@alliedtelesis.co.nz>
- <20240624012300.1713290-4-chris.packham@alliedtelesis.co.nz>
+ <20240624012300.1713290-5-chris.packham@alliedtelesis.co.nz>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -106,48 +106,93 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240624012300.1713290-4-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20240624012300.1713290-5-chris.packham@alliedtelesis.co.nz>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 24/06/2024 03:22, Chris Packham wrote:
-> Add the rtl930x-soc and RTL9302C board to the list of Realtek compatible
-
-930x or 9302?
-
-> strings.
+> Add the devicetree schema for the realtek,otto-timer present on a number
+> of Realtek SoCs.
 > 
 > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 > ---
 > 
 > Notes:
 >     Changes in v2:
->     - Use specific compatible for rtl9302-soc
->     - Fix to allow correct board, soc compatible
+>     - Use specific compatible
+
+Where? I do not see changes.
+
+>     - Remove unnecessary label
+>     - Remove unused irq flags (interrupt controller is one-cell)
+>     - Set minItems for reg and interrupts based on compatible
 > 
->  Documentation/devicetree/bindings/mips/realtek-rtl.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+>  .../bindings/timer/realtek,otto-timer.yaml    | 66 +++++++++++++++++++
+>  1 file changed, 66 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/timer/realtek,otto-timer.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/mips/realtek-rtl.yaml b/Documentation/devicetree/bindings/mips/realtek-rtl.yaml
-> index f8ac309d2994..05daa53417e5 100644
-> --- a/Documentation/devicetree/bindings/mips/realtek-rtl.yaml
-> +++ b/Documentation/devicetree/bindings/mips/realtek-rtl.yaml
-> @@ -20,5 +20,9 @@ properties:
->            - enum:
->                - cisco,sg220-26
->            - const: realtek,rtl8382-soc
-> +      - items:
-> +          - enum:
-> +              - realtek,rtl9302c
+> diff --git a/Documentation/devicetree/bindings/timer/realtek,otto-timer.yaml b/Documentation/devicetree/bindings/timer/realtek,otto-timer.yaml
+> new file mode 100644
+> index 000000000000..13ea7aa946fe
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/timer/realtek,otto-timer.yaml
+> @@ -0,0 +1,66 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/timer/realtek,otto-timer.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Realtek Otto SoCs Timer/Counter
+> +
+> +description:
+> +  Realtek SoCs support a number of timers/counters. These are used
+> +  as a per CPU clock event generator and an overall CPU clocksource.
+> +
+> +maintainers:
+> +  - Chris Packham <chris.packham@alliedtelesis.co.nz>
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^timer@[0-9a-f]+$"
+> +
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - realtek,rtl9302-timer
+> +      - const: realtek,otto-timer
+> +
+> +  reg:
+> +    maxItems: 5
 
-Why board has the name of SoC?
+Nothing improved.
 
-> +          - const: realtek,rtl9302-soc
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 5
 
-Drop the -soc suffix. The rtl9302 is the soc.
+Nothing improved.
 
->  
->  additionalProperties: true
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: realtek,rtl9302-timer
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 2
+> +        interrupts:
+> +          minItems: 2
+
+No, that's just incorrect. You do not have more than one variant, so it
+is just 2 items. Or 5 items, not 2-5.
+
 
 Best regards,
 Krzysztof
