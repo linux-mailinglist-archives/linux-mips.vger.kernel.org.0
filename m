@@ -1,185 +1,200 @@
-Return-Path: <linux-mips+bounces-3892-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3893-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03F3B9153FF
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 18:35:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E263915411
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 18:37:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 363421C20A01
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 16:35:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C901F280F25
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2024 16:37:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DF9719DF77;
-	Mon, 24 Jun 2024 16:34:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6430E19DFA0;
+	Mon, 24 Jun 2024 16:37:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GZ69Sbqu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XAOXiQwJ"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E8E319AA7E;
-	Mon, 24 Jun 2024 16:34:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DF1519DF7C;
+	Mon, 24 Jun 2024 16:37:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719246896; cv=none; b=tZXoEkt6p2wMo/zLQuUvml+X5YG9EDjgx8q5Y3QYQwuITfdImoOoHHVN3Fto8jYtMHDjwcnoF9YggPQCYfKmlZPqP9POVENdrWIH9DXK/tYnaIhmrOMGJz/WHQBZjkWB6HlxHl/cNzsEEcRstK2kSrUXqBffiXhY27oKc5RY+vs=
+	t=1719247040; cv=none; b=dee0EMzA9ETXhL2OOX9CJy1LdKeQ1QIXNWMrI3nJSMm9oD3sVYwn6XiusFWriUXtTLY+JsD0oH07jGqQ9T9u4ahnU74ISQcMhI9p/XavdRW2hl4ukHCeZCcPgdCvTN33O3nzAj3Eoa9RotHzbpyGcjzzHwm2p2FW0IOlQk+Er9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719246896; c=relaxed/simple;
-	bh=xcCXb1OAJeu5YbHF3396C+1CaivyqQWq1obgNCA8UfU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=duz7sMlDCFXgWHFiCBZXGvtjKw1E9bf9VKC5t8PO7zbPS8MnkPezBTOr+J04NU/4fPzls81nPa0JflQucoabwLP1FcMC9WuA6b5A6eHkegc25VeG5B6qRjR+Phg6M3bEk5oDwS9vuHRDcc1Ns/oB8UAIf8P1i4Vv5iNA/X1D9gA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GZ69Sbqu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C0F1C2BBFC;
-	Mon, 24 Jun 2024 16:34:52 +0000 (UTC)
+	s=arc-20240116; t=1719247040; c=relaxed/simple;
+	bh=9d9HuVaLbxVvYIk0v7QFxagihDIyuBmHy3l8B29CCxM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=l68DvojM0Cz7Ls6LGlAgueYCNSMdbGxPHmcBtJiWP9eh7vleiBGhtnA5G2rfy8iWELWZM6Lwiy+YhMxTJL0aacD3EsPTLuXjxv6bnQp7Hg6DSn6FVXUk52vLUKOaFE2lTpipXoMz2x//9+nrOKbvdq6UWyKDeHVnhxM1rZ4RmEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XAOXiQwJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE60CC2BBFC;
+	Mon, 24 Jun 2024 16:37:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719246895;
-	bh=xcCXb1OAJeu5YbHF3396C+1CaivyqQWq1obgNCA8UfU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GZ69SbquEzYZrVfsPLrp2+IFRZ4bxPTRlG3SGbzMQqajqVKv8p3id27UupW5f67HX
-	 G/becUAkHu4ToDjdXErtqKmLRy+ZJerri1e/XrowN9r8W0kKit5Up9EPqOuEg5ojRu
-	 cVOBr3VlGGuvHTRSUWTmFK7nUVXUHhBUeXv+hn4QMtKt6IvD+fUcDuaE53lpgCTFqI
-	 p5h5sA5mTQrJ0RaBhjUU2M+D9LydZQYkgj38Ty3OQtCRh1o1C9v8X+6Q240PGDWiP3
-	 UKLplUXmx3xpoAKSN+ebCYrslsC5indQjIXICtlBb41BAsNQ6fMTLSIe/Vjd3aj4VP
-	 hgDM8xZouAs3A==
-Date: Mon, 24 Jun 2024 17:34:50 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc: "tglx@linutronix.de" <tglx@linutronix.de>,
-	"robh@kernel.org" <robh@kernel.org>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
-	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-	"paulburton@kernel.org" <paulburton@kernel.org>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"mail@birger-koblitz.de" <mail@birger-koblitz.de>,
-	"bert@biot.com" <bert@biot.com>,
-	"john@phrozen.org" <john@phrozen.org>,
-	"sander@svanheule.net" <sander@svanheule.net>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-	"kabel@kernel.org" <kabel@kernel.org>,
-	"ericwouds@gmail.com" <ericwouds@gmail.com>
-Subject: Re: [PATCH 2/6] dt-bindings: timer: Add schema for realtek,otto-timer
-Message-ID: <20240624-dining-bullseye-5397d0921701@spud>
-References: <20240621042737.674128-1-chris.packham@alliedtelesis.co.nz>
- <20240621042737.674128-3-chris.packham@alliedtelesis.co.nz>
- <20240622-dagger-willpower-8dc828553384@spud>
- <2ed9ba19-ef0b-481c-b17a-5499cc0664ed@alliedtelesis.co.nz>
+	s=k20201202; t=1719247039;
+	bh=9d9HuVaLbxVvYIk0v7QFxagihDIyuBmHy3l8B29CCxM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=XAOXiQwJP3v0AYOMXFbOl+aKwam/G8B8vHPH86S/9LShi99xORnlW4piK1/QXzERr
+	 xSDLEVIY2XUL2OstfMJIdt0rq3JemXryccEJPkd4ghrh6UDdFQr1tbDgHrMymJ5lkT
+	 LCJAwLpGg/YP4mak7hJUeKjerzj3Sjeuk9mEeI0PO4M8ngXVwYPSEkSZYIjYXv3lsO
+	 IWmu9kkIzBkQryYrYGbzA0waCr299MRkDBhVI15NNGekWiHeTRxr6a39naS5fy6XeX
+	 AT9Pv9joOgDX2Gg6Zy/ej9wfBbyGwtMGKM4NEGi3ynRBEI8qKiLmDIsSwZL2m2icP1
+	 basUBX/zL+P3Q==
+From: Arnd Bergmann <arnd@kernel.org>
+To: linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org,
+	Helge Deller <deller@gmx.de>,
+	linux-parisc@vger.kernel.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	sparclinux@vger.kernel.org,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+	linuxppc-dev@lists.ozlabs.org,
+	Brian Cain <bcain@quicinc.com>,
+	linux-hexagon@vger.kernel.org,
+	Guo Ren <guoren@kernel.org>,
+	linux-csky@vger.kernel.org,
+	Heiko Carstens <hca@linux.ibm.com>,
+	linux-s390@vger.kernel.org,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	linux-sh@vger.kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	linux-fsdevel@vger.kernel.org,
+	libc-alpha@sourceware.org,
+	musl@lists.openwall.com
+Subject: [PATCH v2 00/13] linux system call fixes
+Date: Mon, 24 Jun 2024 18:36:58 +0200
+Message-Id: <20240624163707.299494-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="72/0f+nl4k9+kRLS"
-Content-Disposition: inline
-In-Reply-To: <2ed9ba19-ef0b-481c-b17a-5499cc0664ed@alliedtelesis.co.nz>
+Content-Transfer-Encoding: 8bit
 
+From: Arnd Bergmann <arnd@arndb.de>
 
---72/0f+nl4k9+kRLS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is a minor update to v1 of this series. If there are no new
+concerns, I would like to send this as a pull request for v6.10-rc6,
+which is a little late, but these are all bug fixes. Changes since
+v1 are:
 
-On Sun, Jun 23, 2024 at 09:23:55PM +0000, Chris Packham wrote:
-> (resend as plain text)
->=20
-> On 23/06/24 00:11, Conor Dooley wrote:
-> > On Fri, Jun 21, 2024 at 04:27:33PM +1200, Chris Packham wrote:
-> >> Add the devicetree schema for the realtek,otto-timer present on a numb=
-er
-> >> of Realtek SoCs.
-> >>
-> >> Signed-off-by: Chris Packham<chris.packham@alliedtelesis.co.nz>
-> >> ---
-> >>   .../bindings/timer/realtek,otto-timer.yaml    | 54 +++++++++++++++++=
-++
-> >>   1 file changed, 54 insertions(+)
-> >>   create mode 100644 Documentation/devicetree/bindings/timer/realtek,o=
-tto-timer.yaml
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/timer/realtek,otto-time=
-r.yaml b/Documentation/devicetree/bindings/timer/realtek,otto-timer.yaml
-> >> new file mode 100644
-> >> index 000000000000..b6e85aadbc99
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/timer/realtek,otto-timer.yaml
-> >> @@ -0,0 +1,54 @@
-> >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >> +%YAML 1.2
-> >> +---
-> >> +$id:http://devicetree.org/schemas/timer/realtek,otto-timer.yaml#
-> >> +$schema:http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: Realtek Otto SoCs Timer/Counter
-> >> +
-> >> +description:
-> >> +  Realtek SoCs support a number of timers/counters. These are used
-> >> +  as a per CPU clock event generator and an overall CPU clocksource.
-> >> +
-> >> +maintainers:
-> >> +  - Chris Packham<chris.packham@alliedtelesis.co.nz>
-> >> +
-> >> +properties:
-> >> +  $nodename:
-> >> +    pattern: "^timer@[0-9a-f]+$"
-> >> +
-> >> +  compatible:
-> >> +    items:
-> >> +      - enum:
-> >> +          - realtek,rtl930x-timer
->=20
-> I'll change this to rtl9302
->=20
-> >> +      - const: realtek,otto-timer
-> >> +  reg:
-> >> +    minItems: 5
-> >> +    maxItems: 5
-> > Since minitems =3D=3D maxitems, can you just make this a list, and defi=
-ne
-> > what they all are? Ditto interrupts.
->=20
-> This is where more conditions might need to be added. The rtl9302 is a=20
-> single core SoC. So technically it only needs 2 timers (the hardware=20
-> still has 5 but 3 would be unused at the moment). The rtl9312 is a dual=
-=20
-> core SoC so needs 3 timers (I won't be looking at that platform for a=20
-> while). So I think maybe maxItems should stay at 5 but minItems should=20
-> be set based on the compatible.
+ - collect acks
+ - minor fixes to the changelog text
+ - drop mips patch that was already merged
+ - drop the time32 patch that caused build failures
+ - fix a kernel/sys_ni.c stub bug that was exposed by
+   the compat_sys_io_pgetevents_time64 change
 
-Sounds good to me.
+     Arnd
+ 
+--- 
+Original series description:
 
-> > reg:
-> >    items:
-> >      - foo
-> >      - bar
-> >      - baz
-> >
-> > etc.
->=20
-> I can do. But they'd all be something like cpuN-event. The way the=20
-> driver is written it grabs a timer for each CPU and uses the next one=20
-> for a global timer.
+I'm working on cleanup series for Linux system call handling, trying to
+unify some of the architecture specific code there among other things.
 
-I think it's fine if they all have very simplistic names, their roles
-should be documented somehow.
+In the process, I came across a number of bugs that are ABI relevant,
+so I'm trying to merge these first. I found all of these by inspection,
+not by running the code, so any extra review would help. I assume some
+of the issues were already caught by existing LTP tests, while for others
+we could add a test. Again, I did not check what is already there.
 
-Cheers,
-Conor.
+The sync_file_range and fadvise64_64 changes on sh, csky and hexagon
+are likely to also require changes in the libc implementation.
 
---72/0f+nl4k9+kRLS
-Content-Type: application/pgp-signature; name="signature.asc"
+Once the patches are reviewed, I plan to merge my changes as bugfixes
+through the asm-generic tree, but architecture maintainers can also
+pick them up directly to speed up the bugfix.
 
------BEGIN PGP SIGNATURE-----
+Cc: linux-arch@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Cc: Helge Deller <deller@gmx.de>
+Cc: linux-parisc@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Andreas Larsson <andreas@gaisler.com>
+Cc: sparclinux@vger.kernel.org
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Naveen N. Rao <naveen.n.rao@linux.ibm.com>
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: Brian Cain <bcain@quicinc.com>
+Cc: linux-hexagon@vger.kernel.org
+Cc: Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: linux-s390@vger.kernel.org
+Cc: Rich Felker <dalias@libc.org>
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: linux-sh@vger.kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org
+Cc: libc-alpha@sourceware.org
+Cc: musl@lists.openwall.com
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZnmgKgAKCRB4tDGHoIJi
-0meqAQC8j5BEwXHy4TeXKS37GL/K4+lldlY8ECFGCT/7scItCAEAiT0zRYX9JJix
-9JKuz3kg+oujYnMFPsUSFvVDAFt7/Qw=
-=Uzax
------END PGP SIGNATURE-----
+Arnd Bergmann (13):
+  ftruncate: pass a signed offset
+  syscalls: fix compat_sys_io_pgetevents_time64 usage
+  sparc: fix old compat_sys_select()
+  sparc: fix compat recv/recvfrom syscalls
+  parisc: use correct compat recv/recvfrom syscalls
+  parisc: use generic sys_fanotify_mark implementation
+  powerpc: restore some missing spu syscalls
+  sh: rework sync_file_range ABI
+  csky, hexagon: fix broken sys_sync_file_range
+  hexagon: fix fadvise64_64 calling conventions
+  s390: remove native mmap2() syscall
+  syscalls: mmap(): use unsigned offset type consistently
+  linux/syscalls.h: add missing __user annotations
 
---72/0f+nl4k9+kRLS--
+ arch/arm64/include/asm/unistd32.h         |   2 +-
+ arch/csky/include/uapi/asm/unistd.h       |   1 +
+ arch/csky/kernel/syscall.c                |   2 +-
+ arch/hexagon/include/asm/syscalls.h       |   6 +
+ arch/hexagon/include/uapi/asm/unistd.h    |   1 +
+ arch/hexagon/kernel/syscalltab.c          |   7 +
+ arch/loongarch/kernel/syscall.c           |   2 +-
+ arch/microblaze/kernel/sys_microblaze.c   |   2 +-
+ arch/mips/kernel/syscalls/syscall_n32.tbl |   2 +-
+ arch/mips/kernel/syscalls/syscall_o32.tbl |   2 +-
+ arch/parisc/Kconfig                       |   1 +
+ arch/parisc/kernel/sys_parisc32.c         |   9 -
+ arch/parisc/kernel/syscalls/syscall.tbl   |   6 +-
+ arch/powerpc/kernel/syscalls/syscall.tbl  |   6 +-
+ arch/riscv/kernel/sys_riscv.c             |   4 +-
+ arch/s390/kernel/syscall.c                |  27 ---
+ arch/s390/kernel/syscalls/syscall.tbl     |   2 +-
+ arch/sh/kernel/sys_sh32.c                 |  11 ++
+ arch/sh/kernel/syscalls/syscall.tbl       |   3 +-
+ arch/sparc/kernel/sys32.S                 | 221 ----------------------
+ arch/sparc/kernel/syscalls/syscall.tbl    |   8 +-
+ arch/x86/entry/syscalls/syscall_32.tbl    |   2 +-
+ fs/open.c                                 |   4 +-
+ include/asm-generic/syscalls.h            |   2 +-
+ include/linux/compat.h                    |   2 +-
+ include/linux/syscalls.h                  |  20 +-
+ include/uapi/asm-generic/unistd.h         |   2 +-
+ kernel/sys_ni.c                           |   2 +-
+ 28 files changed, 67 insertions(+), 292 deletions(-)
+ create mode 100644 arch/hexagon/include/asm/syscalls.h
+
+-- 
+2.39.2
+
 
