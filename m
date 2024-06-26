@@ -1,48 +1,48 @@
-Return-Path: <linux-mips+bounces-3948-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3949-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36D6691795F
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Jun 2024 09:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E4DC917969
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Jun 2024 09:14:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E146728404F
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Jun 2024 07:12:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53C022866FC
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Jun 2024 07:14:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD7B5158A02;
-	Wed, 26 Jun 2024 07:12:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47DE8158A02;
+	Wed, 26 Jun 2024 07:13:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u+NN+MUi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bM4jU0Od"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 963B7155316;
-	Wed, 26 Jun 2024 07:12:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1835B13541B;
+	Wed, 26 Jun 2024 07:13:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719385930; cv=none; b=ODgmO8UlsY4iZbT39PuiE9YNzVCEXoUgytesljNrwEGGFYpp3YwEfGICe1BbOt8nii7BAN/FXL8fYmuTBFXYKdk7aOFj8lhM1HrkQoQIRUPzPw0lknbCtwhG0w0D4oFFSsCw/Gq1G3Bzgvtpi7C7GBgg6jUrgT1m0XLwJokLZHk=
+	t=1719386039; cv=none; b=Su2pQaeMXRyhxd6+u332q3agOuJM5i74DptA62ZUQg9U1HM/moTAO4ZTBSL7QzTQL1688C6IY0uNXMpJJEf71laB2Md8jqqp6LKJKMJVyuaQKzaRqK9LqZhf7Nuw+bedUND1Kc0FX9yhdvpfzTi+FBMmUBeq7Iex3sRkplx5bJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719385930; c=relaxed/simple;
-	bh=6XsOg7UqkhRAwrD+4PQezyUZ3ZQ094gHiGcfRbRA4YY=;
+	s=arc-20240116; t=1719386039; c=relaxed/simple;
+	bh=99uL6JL2d+Ir+A1G5QShZvBz4fTOsERCAQ80mQw689w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GFah348jdAQtiEw5ZPVkyw2leq2HUJXlxVVcSv4n3Pe2y2YxbCmY67p+W997EapLGni59aiAhdInGnRBQ8YPd3BMBKZlDjlsA1PmeOZx10O4lcL6n/2YVtyaR3jrO/TjjgLMlLClzdAlApjf6hpRZWJ0W4WB6kKh/5gq/paefQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u+NN+MUi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60524C2BD10;
-	Wed, 26 Jun 2024 07:12:04 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=FcjnAPemRDXU4BtyrXAVXnItdB+UcvZlSGkcvOfuna8lTW/UqTYHenPh+7yWU8GY9EtnycRq6JnKQAB4eYifc3J2UuN9lfU4WqLtIzc6hXdMeUJYcPQUnB6HVXkyEr9Cxkqj6QEUOLWewvmeSVM1uHbLIbKYmIihAuF3uuK6iwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bM4jU0Od; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 948E6C2BD10;
+	Wed, 26 Jun 2024 07:13:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719385930;
-	bh=6XsOg7UqkhRAwrD+4PQezyUZ3ZQ094gHiGcfRbRA4YY=;
+	s=k20201202; t=1719386038;
+	bh=99uL6JL2d+Ir+A1G5QShZvBz4fTOsERCAQ80mQw689w=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=u+NN+MUizcD6EkdtEmqivwIhvCocNpwVCnkLtJho0CPujAKYISR+Tk2AK3HAAnuHj
-	 HJWAjRByRFJ40WttQb9sg/rX4wuT5zUYP8Q0wVJSd/6xSuhqF9wP8Oo+oZS2CCrYQF
-	 ZJrqKiqkwNeJ3O4JJmISv+u2DAKgPsjGy8IuLjNl/UqzVUlk4A12Jjxe1xKPAuLp5e
-	 vlpSUcLlsu6gD72yjdAq2cDIxLzTbXpv5pWbMNsitLApo8R0tgZeshzVPxEt3eS/W4
-	 llAAkI3tq6ER9oFchO03uEhFQYawPSgM7Cc3mXZUfApjKZ1Ze/t1OTpamYNL8zct/E
-	 HeaBvAk3fr+/A==
-Message-ID: <365fcddb-095d-4907-97bf-0810818c8265@kernel.org>
-Date: Wed, 26 Jun 2024 09:12:01 +0200
+	b=bM4jU0OdvlwV33nbrkoAdhc3d6g9/FDODXYWSP/KnY6l5NtT7u4AZq1GjD72sQeQN
+	 xI9lP2PhZsS/3L/vFmPwIW7h5XY3OL98aHWFdPr4Ren97Yjvu3SuyDHdb0vv7Bq0uo
+	 E6YMjMWEqTkk2pGPLfBLtdEttdXl5Gn5V3AF35e0ezjUNp2B/2iwuiPJtX+2YfGuxM
+	 2ilb93OgjMZokoeNrVlo7nkNMHKBY7yCrG2CRyZhHY1RY40jZ1eRpBgPi9wnmiPjOh
+	 mPpLV1tJ9sOOd4TMHauwaA8sTEkrbmhBmlKYts63Eucz+EUxK51qwpvPqGMcBgQtmm
+	 N8p807VlCMTgA==
+Message-ID: <8676afd3-8a95-4517-ae38-0f8539e81f19@kernel.org>
+Date: Wed, 26 Jun 2024 09:13:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/8] dt-bindings: mips: realtek: Add rtl930x-soc
- compatible
+Subject: Re: [PATCH v2 4/8] dt-bindings: timer: Add schema for
+ realtek,otto-timer
 To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
  "tglx@linutronix.de" <tglx@linutronix.de>, "robh@kernel.org"
  <robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
@@ -69,9 +69,9 @@ Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
  "kabel@kernel.org" <kabel@kernel.org>,
  "ericwouds@gmail.com" <ericwouds@gmail.com>
 References: <20240624012300.1713290-1-chris.packham@alliedtelesis.co.nz>
- <20240624012300.1713290-4-chris.packham@alliedtelesis.co.nz>
- <e71780a1-8d53-44ae-ac0f-d406de7e26e8@kernel.org>
- <2b33e7d2-24e5-48c3-a2e3-f128f5d7e39b@alliedtelesis.co.nz>
+ <20240624012300.1713290-5-chris.packham@alliedtelesis.co.nz>
+ <d65648d6-4e2b-4009-b0e0-7d1f9a926eb7@kernel.org>
+ <052a4bdb-88fe-4891-a69c-0d90c610d816@alliedtelesis.co.nz>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -117,70 +117,118 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <2b33e7d2-24e5-48c3-a2e3-f128f5d7e39b@alliedtelesis.co.nz>
+In-Reply-To: <052a4bdb-88fe-4891-a69c-0d90c610d816@alliedtelesis.co.nz>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 24/06/2024 07:00, Chris Packham wrote:
-> Hi Krzysztof,
+On 24/06/2024 07:21, Chris Packham wrote:
 > 
-> On 24/06/24 16:48, Krzysztof Kozlowski wrote:
+> On 24/06/24 16:49, Krzysztof Kozlowski wrote:
 >> On 24/06/2024 03:22, Chris Packham wrote:
->>> Add the rtl930x-soc and RTL9302C board to the list of Realtek compatible
->> 930x or 9302?
-> 
-> Oops. Will fix.
-> 
->>> strings.
+>>> Add the devicetree schema for the realtek,otto-timer present on a number
+>>> of Realtek SoCs.
 >>>
 >>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 >>> ---
 >>>
 >>> Notes:
 >>>      Changes in v2:
->>>      - Use specific compatible for rtl9302-soc
->>>      - Fix to allow correct board, soc compatible
+>>>      - Use specific compatible
+>> Where? I do not see changes.
+> 
+> In v1 it was rtl930x-timer, I've updated it to rtl9302-timer
+
+Ah, I thought you wanted to switch from generic fallback to specific
+compatible... fine.
+
+> 
+>>>      - Remove unnecessary label
+>>>      - Remove unused irq flags (interrupt controller is one-cell)
+>>>      - Set minItems for reg and interrupts based on compatible
 >>>
->>>   Documentation/devicetree/bindings/mips/realtek-rtl.yaml | 4 ++++
->>>   1 file changed, 4 insertions(+)
+>>>   .../bindings/timer/realtek,otto-timer.yaml    | 66 +++++++++++++++++++
+>>>   1 file changed, 66 insertions(+)
+>>>   create mode 100644 Documentation/devicetree/bindings/timer/realtek,otto-timer.yaml
 >>>
->>> diff --git a/Documentation/devicetree/bindings/mips/realtek-rtl.yaml b/Documentation/devicetree/bindings/mips/realtek-rtl.yaml
->>> index f8ac309d2994..05daa53417e5 100644
->>> --- a/Documentation/devicetree/bindings/mips/realtek-rtl.yaml
->>> +++ b/Documentation/devicetree/bindings/mips/realtek-rtl.yaml
->>> @@ -20,5 +20,9 @@ properties:
->>>             - enum:
->>>                 - cisco,sg220-26
->>>             - const: realtek,rtl8382-soc
->>> +      - items:
->>> +          - enum:
->>> +              - realtek,rtl9302c
->> Why board has the name of SoC?
+>>> diff --git a/Documentation/devicetree/bindings/timer/realtek,otto-timer.yaml b/Documentation/devicetree/bindings/timer/realtek,otto-timer.yaml
+>>> new file mode 100644
+>>> index 000000000000..13ea7aa946fe
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/timer/realtek,otto-timer.yaml
+>>> @@ -0,0 +1,66 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/timer/realtek,otto-timer.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Realtek Otto SoCs Timer/Counter
+>>> +
+>>> +description:
+>>> +  Realtek SoCs support a number of timers/counters. These are used
+>>> +  as a per CPU clock event generator and an overall CPU clocksource.
+>>> +
+>>> +maintainers:
+>>> +  - Chris Packham <chris.packham@alliedtelesis.co.nz>
+>>> +
+>>> +properties:
+>>> +  $nodename:
+>>> +    pattern: "^timer@[0-9a-f]+$"
+>>> +
+>>> +  compatible:
+>>> +    items:
+>>> +      - enum:
+>>> +          - realtek,rtl9302-timer
+>>> +      - const: realtek,otto-timer
+>>> +
+>>> +  reg:
+>>> +    maxItems: 5
+>> Nothing improved.
+>>
+>>> +
+>>> +  clocks:
+>>> +    maxItems: 1
+>>> +
+>>> +  interrupts:
+>>> +    maxItems: 5
+>> Nothing improved.
+>>
+>>> +
+>>> +allOf:
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            const: realtek,rtl9302-timer
+>>> +    then:
+>>> +      properties:
+>>> +        reg:
+>>> +          minItems: 2
+>>> +        interrupts:
+>>> +          minItems: 2
+>> No, that's just incorrect. You do not have more than one variant, so it
+>> is just 2 items. Or 5 items, not 2-5.
 > 
-> What I have is actually a reference board with the name 
-> RTL9302C_2xRTL8224_2XGE. If found that a bit incomprehensible so I 
-> (over) shortened it. Technically it would be something like 
-> cameo,rtl9302c-2x-rtl8224-2xge which I can include in the next round.
+> I've been told in the past that the device-tree should describe the 
+> hardware. Which in this case has 5 timers. But I'm also told to give 
+> them names which I struggle to do because some of them aren't used.
 
-Looks fine to me.
+Used as in Linux driver? Does not matter.
 
 > 
->>> +          - const: realtek,rtl9302-soc
->> Drop the -soc suffix. The rtl9302 is the soc.
+> So do you want something like this:
 > 
-> On that. I hope to eventually add "realtek,rtl9302-switch" for the DSA 
-> switch block in the same chip. So keeping the -soc suffix was 
-> intentional to try to disambiguate things. I can drop the -soc if the 
-> consensus is that there is no need to disambiguate the two.
+> clocks:
+>      items:
+>          - description: CPU0 event clock
+>          - description: system clock source
+>          - description: unused
+>          - description: unused
+>          - description: unused
 
-Thanks for explanation, kind of depends on what exactly is this. Most of
-SoCs comprise of several items. The entire chip is the soc, e.g.
-"qcom,foo1234". It might have MAC/Ethernet/whatever inside, controllable
-by the SoC (Linux, bootloader, TF, hypervisor, other VM guest) and that
-part is "qcom,foo1234-ethernet". Regardless whether Linux OS actually
-controls it or not.
-
-The question is whether DSA switch is part of the SoC or not.
+No, if your datasheet or any other source of information (e.g.
+downstream sources) mention 5 items, then name properly 5 items.
+Otherwise how do you know that there are 5, not 2, clocks/interrupts/reg?
 
 Best regards,
 Krzysztof
