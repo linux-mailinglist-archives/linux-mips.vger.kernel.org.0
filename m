@@ -1,166 +1,159 @@
-Return-Path: <linux-mips+bounces-3961-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3962-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E95391999D
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Jun 2024 23:07:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CBF69199B9
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Jun 2024 23:23:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF8911C21D78
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Jun 2024 21:07:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D9490B20B82
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Jun 2024 21:23:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35F1E193072;
-	Wed, 26 Jun 2024 21:07:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80E0B193084;
+	Wed, 26 Jun 2024 21:23:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="InvD1YI4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kHFElrjU"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4748614D6EB
-	for <linux-mips@vger.kernel.org>; Wed, 26 Jun 2024 21:07:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7C9C16A928;
+	Wed, 26 Jun 2024 21:23:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719436028; cv=none; b=gqyaYDl/1JhAwiH8LeFXlVWGT9HWCKVyrjGfD42qB2GOYiXsoFGB+pUmfgTH6LZznUPFmocIZ/h4TlSYmqD4gDZ87foxkW0GidkTRHEyfFtD1bTi2h4BJs8FyrifbFb4Z8NAeD5MHI+hv0yfogIAzbfCRWA9bphWokKZCNMRDi8=
+	t=1719436985; cv=none; b=G7c858fKpHuBTqf5z/fS9ELBpYyif1jtLRjH3NCKeVQc4Jjvr4IWQ5JtciE7kFsGL2z6GA8GJfujPzmOtnITwVZbTxG3JondFBwA8w+JcRCOwmkhOvCBHzO9P5qhkv4t3n0f3gz907bpLDcq1Wvob2U69Wk6npXr7WG9E6hOwaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719436028; c=relaxed/simple;
-	bh=6rozKt0gfvrsNRqJXzjfPzDzoukPahDrXQLci6geBTU=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=JpwTa5IuWlzHUQN43PNZLcnUv7r6NA4G+ocBGHPSRGxjML0I3WnGwHqdHH3n/ZRJmfTVuhN0lurYLiOER8ZCXXkb2YSvR+jPa/vMYp1CMsnFYbJtQ1mEIeM92KPHu8ANBVsIDMYJeSl22ZfLjUzpkmW2DQM4b+pvYKCGFO+URrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=InvD1YI4; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 34D182C01F6;
-	Thu, 27 Jun 2024 09:07:03 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1719436023;
-	bh=6rozKt0gfvrsNRqJXzjfPzDzoukPahDrXQLci6geBTU=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=InvD1YI4aIM3YLbcCIUgBDMe4GO64PmttEkHz+6w+5WerdQ1dwFHAY02eG4r+DoU1
-	 jXzZvzs9ERBEwWnxEjqtB+kSWh6KGSaiQgtKla+LdHbw5x/YO5DgKMlGJbD3ZL/LDy
-	 TFPuliO9WJTBXURD674MtFu17rkO2a3Z1Qlm8Pey3uI/RXdX8+tZhVZAqQSa2yLcUN
-	 oUDp5KW5ZJpY8XclyyOPPNZcuSaO9U8bGKODb5B84pXityWIuRNWeq0Ihj24U98THL
-	 r2h+ma5pyE4ifnTmxwNxKPnfWFyjn96NLbHDmn3FXyWOWgqzfpYyirvHQz2Ec+VPLQ
-	 fREkkrYJ4oZ0w==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B667c82f70001>; Thu, 27 Jun 2024 09:07:03 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 27 Jun 2024 09:07:02 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1544.011; Thu, 27 Jun 2024 09:07:02 +1200
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Krzysztof Kozlowski <krzk@kernel.org>, "tglx@linutronix.de"
-	<tglx@linutronix.de>, "robh@kernel.org" <robh@kernel.org>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "conor+dt@kernel.org"
-	<conor+dt@kernel.org>, "tsbogend@alpha.franken.de"
-	<tsbogend@alpha.franken.de>, "daniel.lezcano@linaro.org"
-	<daniel.lezcano@linaro.org>, "paulburton@kernel.org" <paulburton@kernel.org>,
-	"peterz@infradead.org" <peterz@infradead.org>, "mail@birger-koblitz.de"
-	<mail@birger-koblitz.de>, "bert@biot.com" <bert@biot.com>, "john@phrozen.org"
-	<john@phrozen.org>, "sander@svanheule.net" <sander@svanheule.net>
-CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, "kabel@kernel.org"
-	<kabel@kernel.org>, "ericwouds@gmail.com" <ericwouds@gmail.com>
-Subject: Re: [PATCH v2 4/8] dt-bindings: timer: Add schema for
- realtek,otto-timer
-Thread-Topic: [PATCH v2 4/8] dt-bindings: timer: Add schema for
- realtek,otto-timer
-Thread-Index: AQHaxdUT70y18GNyjU2Cd/YSeK4JbLHVjweAgAAI6ACAA0QFAIAA6MwA
-Date: Wed, 26 Jun 2024 21:07:02 +0000
-Message-ID: <533ba27e-a286-4b2e-8560-07148796e1d5@alliedtelesis.co.nz>
-References: <20240624012300.1713290-1-chris.packham@alliedtelesis.co.nz>
- <20240624012300.1713290-5-chris.packham@alliedtelesis.co.nz>
- <d65648d6-4e2b-4009-b0e0-7d1f9a926eb7@kernel.org>
- <052a4bdb-88fe-4891-a69c-0d90c610d816@alliedtelesis.co.nz>
- <8676afd3-8a95-4517-ae38-0f8539e81f19@kernel.org>
-In-Reply-To: <8676afd3-8a95-4517-ae38-0f8539e81f19@kernel.org>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A8C1D46C0CA9BB4E902C483BCC2AB9EA@atlnz.lc>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1719436985; c=relaxed/simple;
+	bh=f4nVLOzta92hqUMfbJwPA04s+mQnQATUqGTW4c+CO3s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K1MpiRB6qnXNmStMl+khLEyTFvl3l77ZGLcAjdx1JPZrxzn8CjKrjiliHkl+1M6BaphGAWjZeXCg5PrB6e0sOGd5HEdI3wO6+HUTJJy0CLe/SorNgq+Su4HMPqLoW4UqsMBbxm1OxXtQ/KkqO6ru3C5kqDgNao0zZbWo2BXpKJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kHFElrjU; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719436984; x=1750972984;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=f4nVLOzta92hqUMfbJwPA04s+mQnQATUqGTW4c+CO3s=;
+  b=kHFElrjUhr0ruf2kLfo0ZosVeHwAOle0At2FGy++0XzkYWB0Jy/BL7i8
+   tT0f2w3EGSvS46ecEfbV+i6k4Re3gyCUdq9QKkrNZNAFhHeWaFRPqaBWC
+   h+HyQgRrUKiC0kVrI8qNDqaEiwuPCe6W1IDFS2gB1LpOYo8qdA/rkQwU9
+   AdYa4M+feMo9ENXBiF3rVbNN+YI8LAM6M3MDY9sPkcc5Jok03I86FsEgk
+   NBXEEbUJzn8GUEdufs1pOObtg4Aw38LKCS4+VetCy/fNtJVeYNGPAtYCv
+   v/43haQhAMMUEFJwdhWE09eKVRux/NRpFp6wj0XOrB34Sh/bIdsvc1J7U
+   A==;
+X-CSE-ConnectionGUID: dxZO9einTzGV0JgrQ6kZVw==
+X-CSE-MsgGUID: YOT2yJLsQXiahSLkPHOKYQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11115"; a="20307547"
+X-IronPort-AV: E=Sophos;i="6.08,268,1712646000"; 
+   d="scan'208";a="20307547"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2024 14:23:03 -0700
+X-CSE-ConnectionGUID: eucNGz6ARgWIexgd0PGxqw==
+X-CSE-MsgGUID: vVdluytuQzCpKty0TEu4kA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,268,1712646000"; 
+   d="scan'208";a="43962303"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 26 Jun 2024 14:22:59 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sMa6S-000FZD-24;
+	Wed, 26 Jun 2024 21:22:56 +0000
+Date: Thu, 27 Jun 2024 05:22:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>, tglx@linutronix.de,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	tsbogend@alpha.franken.de, daniel.lezcano@linaro.org,
+	paulburton@kernel.org, peterz@infradead.org, mail@birger-koblitz.de,
+	bert@biot.com, john@phrozen.org, sander@svanheule.net
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+	kabel@kernel.org, ericwouds@gmail.com,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	Markus Stockhausen <markus.stockhausen@gmx.de>
+Subject: Re: [PATCH v2 6/8] clocksource: realtek: Add timer driver for
+ rtl-otto platforms
+Message-ID: <202406270511.czjiMAQk-lkp@intel.com>
+References: <20240624012300.1713290-7-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=CvQccW4D c=1 sm=1 tr=0 ts=667c82f7 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=T1WGqf2p2xoA:10 a=gEfo2CItAAAA:8 a=pVNfCJjWaEiOd-6bYA8A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=sptkURWiP4Gy88Gu7hUp:22
-X-SEG-SpamProfiler-Score: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240624012300.1713290-7-chris.packham@alliedtelesis.co.nz>
 
-DQpPbiAyNi8wNi8yNCAxOToxMywgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4gT24gMjQv
-MDYvMjAyNCAwNzoyMSwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4+IE9uIDI0LzA2LzI0IDE2OjQ5
-LCBLcnp5c3p0b2YgS296bG93c2tpIHdyb3RlOg0KPj4+IE9uIDI0LzA2LzIwMjQgMDM6MjIsIENo
-cmlzIFBhY2toYW0gd3JvdGU6DQo+Pj4+IEFkZCB0aGUgZGV2aWNldHJlZSBzY2hlbWEgZm9yIHRo
-ZSByZWFsdGVrLG90dG8tdGltZXIgcHJlc2VudCBvbiBhIG51bWJlcg0KPj4+PiBvZiBSZWFsdGVr
-IFNvQ3MuDQo+Pj4+DQo+Pj4+IFNpZ25lZC1vZmYtYnk6IENocmlzIFBhY2toYW0gPGNocmlzLnBh
-Y2toYW1AYWxsaWVkdGVsZXNpcy5jby5uej4NCj4+Pj4gLS0tDQo+Pj4+DQo+Pj4+IE5vdGVzOg0K
-Pj4+PiAgICAgICBDaGFuZ2VzIGluIHYyOg0KPj4+PiAgICAgICAtIFVzZSBzcGVjaWZpYyBjb21w
-YXRpYmxlDQo+Pj4gV2hlcmU/IEkgZG8gbm90IHNlZSBjaGFuZ2VzLg0KPj4gSW4gdjEgaXQgd2Fz
-IHJ0bDkzMHgtdGltZXIsIEkndmUgdXBkYXRlZCBpdCB0byBydGw5MzAyLXRpbWVyDQo+IEFoLCBJ
-IHRob3VnaHQgeW91IHdhbnRlZCB0byBzd2l0Y2ggZnJvbSBnZW5lcmljIGZhbGxiYWNrIHRvIHNw
-ZWNpZmljDQo+IGNvbXBhdGlibGUuLi4gZmluZS4NCj4NCj4+Pj4gICAgICAgLSBSZW1vdmUgdW5u
-ZWNlc3NhcnkgbGFiZWwNCj4+Pj4gICAgICAgLSBSZW1vdmUgdW51c2VkIGlycSBmbGFncyAoaW50
-ZXJydXB0IGNvbnRyb2xsZXIgaXMgb25lLWNlbGwpDQo+Pj4+ICAgICAgIC0gU2V0IG1pbkl0ZW1z
-IGZvciByZWcgYW5kIGludGVycnVwdHMgYmFzZWQgb24gY29tcGF0aWJsZQ0KPj4+Pg0KPj4+PiAg
-ICAuLi4vYmluZGluZ3MvdGltZXIvcmVhbHRlayxvdHRvLXRpbWVyLnlhbWwgICAgfCA2NiArKysr
-KysrKysrKysrKysrKysrDQo+Pj4+ICAgIDEgZmlsZSBjaGFuZ2VkLCA2NiBpbnNlcnRpb25zKCsp
-DQo+Pj4+ICAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
-ZGluZ3MvdGltZXIvcmVhbHRlayxvdHRvLXRpbWVyLnlhbWwNCj4+Pj4NCj4+Pj4gZGlmZiAtLWdp
-dCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy90aW1lci9yZWFsdGVrLG90dG8t
-dGltZXIueWFtbCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy90aW1lci9yZWFs
-dGVrLG90dG8tdGltZXIueWFtbA0KPj4+PiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPj4+PiBpbmRl
-eCAwMDAwMDAwMDAwMDAuLjEzZWE3YWE5NDZmZQ0KPj4+PiAtLS0gL2Rldi9udWxsDQo+Pj4+ICsr
-KyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy90aW1lci9yZWFsdGVrLG90dG8t
-dGltZXIueWFtbA0KPj4+PiBAQCAtMCwwICsxLDY2IEBADQo+Pj4+ICsjIFNQRFgtTGljZW5zZS1J
-ZGVudGlmaWVyOiAoR1BMLTIuMC1vbmx5IE9SIEJTRC0yLUNsYXVzZSkNCj4+Pj4gKyVZQU1MIDEu
-Mg0KPj4+PiArLS0tDQo+Pj4+ICskaWQ6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9zY2hlbWFzL3Rp
-bWVyL3JlYWx0ZWssb3R0by10aW1lci55YW1sIw0KPj4+PiArJHNjaGVtYTogaHR0cDovL2Rldmlj
-ZXRyZWUub3JnL21ldGEtc2NoZW1hcy9jb3JlLnlhbWwjDQo+Pj4+ICsNCj4+Pj4gK3RpdGxlOiBS
-ZWFsdGVrIE90dG8gU29DcyBUaW1lci9Db3VudGVyDQo+Pj4+ICsNCj4+Pj4gK2Rlc2NyaXB0aW9u
-Og0KPj4+PiArICBSZWFsdGVrIFNvQ3Mgc3VwcG9ydCBhIG51bWJlciBvZiB0aW1lcnMvY291bnRl
-cnMuIFRoZXNlIGFyZSB1c2VkDQo+Pj4+ICsgIGFzIGEgcGVyIENQVSBjbG9jayBldmVudCBnZW5l
-cmF0b3IgYW5kIGFuIG92ZXJhbGwgQ1BVIGNsb2Nrc291cmNlLg0KPj4+PiArDQo+Pj4+ICttYWlu
-dGFpbmVyczoNCj4+Pj4gKyAgLSBDaHJpcyBQYWNraGFtIDxjaHJpcy5wYWNraGFtQGFsbGllZHRl
-bGVzaXMuY28ubno+DQo+Pj4+ICsNCj4+Pj4gK3Byb3BlcnRpZXM6DQo+Pj4+ICsgICRub2RlbmFt
-ZToNCj4+Pj4gKyAgICBwYXR0ZXJuOiAiXnRpbWVyQFswLTlhLWZdKyQiDQo+Pj4+ICsNCj4+Pj4g
-KyAgY29tcGF0aWJsZToNCj4+Pj4gKyAgICBpdGVtczoNCj4+Pj4gKyAgICAgIC0gZW51bToNCj4+
-Pj4gKyAgICAgICAgICAtIHJlYWx0ZWsscnRsOTMwMi10aW1lcg0KPj4+PiArICAgICAgLSBjb25z
-dDogcmVhbHRlayxvdHRvLXRpbWVyDQo+Pj4+ICsNCj4+Pj4gKyAgcmVnOg0KPj4+PiArICAgIG1h
-eEl0ZW1zOiA1DQo+Pj4gTm90aGluZyBpbXByb3ZlZC4NCj4+Pg0KPj4+PiArDQo+Pj4+ICsgIGNs
-b2NrczoNCj4+Pj4gKyAgICBtYXhJdGVtczogMQ0KPj4+PiArDQo+Pj4+ICsgIGludGVycnVwdHM6
-DQo+Pj4+ICsgICAgbWF4SXRlbXM6IDUNCj4+PiBOb3RoaW5nIGltcHJvdmVkLg0KPj4+DQo+Pj4+
-ICsNCj4+Pj4gK2FsbE9mOg0KPj4+PiArICAtIGlmOg0KPj4+PiArICAgICAgcHJvcGVydGllczoN
-Cj4+Pj4gKyAgICAgICAgY29tcGF0aWJsZToNCj4+Pj4gKyAgICAgICAgICBjb250YWluczoNCj4+
-Pj4gKyAgICAgICAgICAgIGNvbnN0OiByZWFsdGVrLHJ0bDkzMDItdGltZXINCj4+Pj4gKyAgICB0
-aGVuOg0KPj4+PiArICAgICAgcHJvcGVydGllczoNCj4+Pj4gKyAgICAgICAgcmVnOg0KPj4+PiAr
-ICAgICAgICAgIG1pbkl0ZW1zOiAyDQo+Pj4+ICsgICAgICAgIGludGVycnVwdHM6DQo+Pj4+ICsg
-ICAgICAgICAgbWluSXRlbXM6IDINCj4+PiBObywgdGhhdCdzIGp1c3QgaW5jb3JyZWN0LiBZb3Ug
-ZG8gbm90IGhhdmUgbW9yZSB0aGFuIG9uZSB2YXJpYW50LCBzbyBpdA0KPj4+IGlzIGp1c3QgMiBp
-dGVtcy4gT3IgNSBpdGVtcywgbm90IDItNS4NCj4+IEkndmUgYmVlbiB0b2xkIGluIHRoZSBwYXN0
-IHRoYXQgdGhlIGRldmljZS10cmVlIHNob3VsZCBkZXNjcmliZSB0aGUNCj4+IGhhcmR3YXJlLiBX
-aGljaCBpbiB0aGlzIGNhc2UgaGFzIDUgdGltZXJzLiBCdXQgSSdtIGFsc28gdG9sZCB0byBnaXZl
-DQo+PiB0aGVtIG5hbWVzIHdoaWNoIEkgc3RydWdnbGUgdG8gZG8gYmVjYXVzZSBzb21lIG9mIHRo
-ZW0gYXJlbid0IHVzZWQuDQo+IFVzZWQgYXMgaW4gTGludXggZHJpdmVyPyBEb2VzIG5vdCBtYXR0
-ZXIuDQo+DQo+PiBTbyBkbyB5b3Ugd2FudCBzb21ldGhpbmcgbGlrZSB0aGlzOg0KPj4NCj4+IGNs
-b2NrczoNCj4+ICAgwqDCoMKgIGl0ZW1zOg0KPj4gICDCoMKgwqAgwqDCoMKgIC0gZGVzY3JpcHRp
-b246IENQVTAgZXZlbnQgY2xvY2sNCj4+ICAgwqDCoMKgIMKgwqDCoCAtIGRlc2NyaXB0aW9uOiBz
-eXN0ZW0gY2xvY2sgc291cmNlDQo+PiAgIMKgwqDCoCDCoMKgwqAgLSBkZXNjcmlwdGlvbjogdW51
-c2VkDQo+PiAgIMKgwqDCoCDCoMKgwqAgLSBkZXNjcmlwdGlvbjogdW51c2VkDQo+PiAgIMKgwqDC
-oCDCoMKgwqAgLSBkZXNjcmlwdGlvbjogdW51c2VkDQo+IE5vLCBpZiB5b3VyIGRhdGFzaGVldCBv
-ciBhbnkgb3RoZXIgc291cmNlIG9mIGluZm9ybWF0aW9uIChlLmcuDQo+IGRvd25zdHJlYW0gc291
-cmNlcykgbWVudGlvbiA1IGl0ZW1zLCB0aGVuIG5hbWUgcHJvcGVybHkgNSBpdGVtcy4NCj4gT3Ro
-ZXJ3aXNlIGhvdyBkbyB5b3Uga25vdyB0aGF0IHRoZXJlIGFyZSA1LCBub3QgMiwgY2xvY2tzL2lu
-dGVycnVwdHMvcmVnPw0KDQpTbyBqdXN0IHRpbWVyMCwgdGltZXIyLCAuLi4gdGltZXI1Pw0KDQo=
+Hi Chris,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on tip/timers/core tip/irq/core tip/smp/core linus/master v6.10-rc5 next-20240625]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Packham/mips-dts-realtek-use-serial-instead-of-uart-in-node-name/20240626-054938
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20240624012300.1713290-7-chris.packham%40alliedtelesis.co.nz
+patch subject: [PATCH v2 6/8] clocksource: realtek: Add timer driver for rtl-otto platforms
+config: m68k-randconfig-r081-20240627 (https://download.01.org/0day-ci/archive/20240627/202406270511.czjiMAQk-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240627/202406270511.czjiMAQk-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406270511.czjiMAQk-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/tegra/hdmi.c:35:
+>> drivers/gpu/drm/tegra/hdmi.h:122: warning: "ACR_ENABLE" redefined
+     122 | #define ACR_ENABLE         (1 << 31)
+         | 
+   In file included from arch/m68k/include/asm/m520xsim.h:19,
+                    from arch/m68k/include/asm/mcfsim.h:24,
+                    from arch/m68k/include/asm/io_no.h:35,
+                    from arch/m68k/include/asm/io.h:6,
+                    from include/linux/io.h:14,
+                    from include/linux/irq.h:20,
+                    from include/asm-generic/hardirq.h:17,
+                    from ./arch/m68k/include/generated/asm/hardirq.h:1,
+                    from include/linux/hardirq.h:11,
+                    from include/linux/interrupt.h:11,
+                    from include/linux/kernel_stat.h:9,
+                    from include/linux/cgroup.h:26,
+                    from include/linux/memcontrol.h:13,
+                    from include/linux/swap.h:9,
+                    from include/linux/suspend.h:5,
+                    from include/linux/regulator/consumer.h:35,
+                    from drivers/gpu/drm/tegra/hdmi.c:17:
+   arch/m68k/include/asm/m52xxacr.h:47: note: this is the location of the previous definition
+      47 | #define ACR_ENABLE      0x00008000      /* Enable this ACR */
+         | 
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for COMMON_CLK
+   Depends on [n]: !HAVE_LEGACY_CLK [=y]
+   Selected by [y]:
+   - REALTEK_OTTO_TIMER [=y] && GENERIC_CLOCKEVENTS [=y]
+
+
+vim +/ACR_ENABLE +122 drivers/gpu/drm/tegra/hdmi.h
+
+edec4af4c3d6d22 Thierry Reding 2012-11-15  119  
+edec4af4c3d6d22 Thierry Reding 2012-11-15  120  #define ACR_SUBPACK_CTS(x) (((x) & 0xffffff) << 8)
+edec4af4c3d6d22 Thierry Reding 2012-11-15  121  #define ACR_SUBPACK_N(x)   (((x) & 0xffffff) << 0)
+edec4af4c3d6d22 Thierry Reding 2012-11-15 @122  #define ACR_ENABLE         (1 << 31)
+edec4af4c3d6d22 Thierry Reding 2012-11-15  123  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
