@@ -1,141 +1,110 @@
-Return-Path: <linux-mips+bounces-3997-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3998-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6860F91B0B5
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Jun 2024 22:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D516291B0D5
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Jun 2024 22:49:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D2B21F242E3
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Jun 2024 20:45:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B0531F26A85
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Jun 2024 20:49:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA52E19F499;
-	Thu, 27 Jun 2024 20:44:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A54D01A01D1;
+	Thu, 27 Jun 2024 20:47:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UpJOHbOj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fm14q7G0"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E55D19F46D;
-	Thu, 27 Jun 2024 20:44:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4948219F49C;
+	Thu, 27 Jun 2024 20:47:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719521047; cv=none; b=AMjMVQR0Bf6OmgWxmOHKT0t8Cn4JfLSXEf/6ZD901gsNFzWE+bFw60Ej1CpHT/zxdwT6VzCflgR+/bqemINMXyJ5vSEJArDxyWK7/c2vpbFGZE1nlE9t9ZpCy6ME8JtCuXY4YrDXMf8aiDRI1sHI1Z4zlMMOjZDagUSSbMPVHMY=
+	t=1719521263; cv=none; b=F6KYTp9qln4e2C9yZ7+Htv2tNwe9hdGzxMo7aMM0wlTAgOkhlp0XfTr/R7mfLUkhfYMZApKDeM9F4E/CHLkGYQGw59bEFH7mUfsQlHP0PWuND1xGupX3m6Iec0UjYkEYBK7B+ZP1DRdqqMrGKqVHYFqWdaw6EDTW8WSZnnuMIAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719521047; c=relaxed/simple;
-	bh=KRz3Wwjp0DZmm5tZweJgQynTTMc/MpaTAzpm85PtvWM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GY2DkI924kT2zwHGjMkj65ZqGG7jCupoUi81PC58o3SoPdSQYSGh/AMoSdwv68AKGTFdPbm9WLGTkNbRKNC64MNCq7bxJx49OPOpZAe16O5XjA2wJgf2+pIdR/iG9QY5YRCjAosxugbWREzlTsb7KTgBIHT2FO/jiWUEOROc74Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UpJOHbOj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB32EC2BD10;
-	Thu, 27 Jun 2024 20:44:06 +0000 (UTC)
+	s=arc-20240116; t=1719521263; c=relaxed/simple;
+	bh=A5AMW+ZLMpX4csf8vnGmP52U32Ex4ZiXhPpAfEuGJIM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ChNBTvjtJNeBD8/HgEQmU3kwoU/Jwu2TbQMoMIdL594Dpgz+E1Ov4gCElmWBbL/uD1i55IgkwXrq6viT+dYbvWuCbmNGVo+vYKYYLCJ+mPoZ3Is/in5kFwtRRgnXdcuce4BlfWkThbz0W0sxNYR4kjUsnhyPYk+1wtCnXeF1Bwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fm14q7G0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8520C2BBFC;
+	Thu, 27 Jun 2024 20:47:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719521047;
-	bh=KRz3Wwjp0DZmm5tZweJgQynTTMc/MpaTAzpm85PtvWM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UpJOHbOjOekA4y+xp1K8M6hbKgsiq82JNdPsM1YZYZsSF2p0thpeC+584G2HSQJEd
-	 TMkGd7jvx+sPOkbQFTZ7n7JZ1Bh187tVL98dTXRlqxkTTyfLz65ylkybQwX0JwyIoK
-	 TISF2ph1KxNhmSTLt5WXR+yFrpnavdA3ds/+F2V0UI4SXG2jw7pwGqDVFl2ZUKWXZs
-	 f75WfemHe4VELewXS46B2j9eTwSGAfenyysP8TthggnsDMIHbg78BgOqi1v0R+sDBU
-	 LPS9+hFuwZ9XqK+TB7pwUC3fDiPQtYVTvF9t9oynnVlZIQxMyB3qxKLX8Zv6puM+8c
-	 9bN6wjQSvr2fA==
-Date: Thu, 27 Jun 2024 14:44:05 -0600
-From: Rob Herring <robh@kernel.org>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"paulburton@kernel.org" <paulburton@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH v3 7/8] dt-bindings: mfd: Add img,boston-platform-regs
-Message-ID: <20240627204405.GA479596-robh@kernel.org>
-References: <20240618-boston-syscon-v3-0-c47c06647a26@flygoat.com>
- <20240618-boston-syscon-v3-7-c47c06647a26@flygoat.com>
- <6d3fbd07-72a0-43fd-a1e5-c39e3a833bc1@kernel.org>
- <51557e31-0a59-4278-a8c1-25cf66fa3c3f@app.fastmail.com>
+	s=k20201202; t=1719521262;
+	bh=A5AMW+ZLMpX4csf8vnGmP52U32Ex4ZiXhPpAfEuGJIM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=fm14q7G0XfP2HRyb1ZONJ+pqWBWPdhH2d6IjA0ofu+ehRYg/250v2wrmD+hEAIzhy
+	 5caUG+fhduRYCsICV5ZrbBJAXKlcmtzxiOCz6jFU00UwMVMtD6dbVR0LU5kxOr3Vzi
+	 0cAbW2JKPpLqSba16PMnQX/dcfAOoGDpmPAXuSdllZi6nWn1C7I2SU1ch36qi0pxGU
+	 IihY3N5vgcgKBWatl6HEJmjhiMyCz8n3KjAwTl+PBG+9aUmYsI19ix1s++aG1UBGv+
+	 aAFQxni9Alv0KyIBRf2yCiEWUthS2Fyw4DdcUmhxlFEm6zWfMYW2ck/kevCRcJ1ha3
+	 waS1l0dqJcZJQ==
+Date: Thu, 27 Jun 2024 13:47:38 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet
+ <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, Ivan
+ Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+ <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan
+ <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, Christian
+ =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>, Bagas Sanjaya
+ <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, Nikolay
+ Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>,
+ David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
+ <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
+ <pkaligineedi@google.com>, Stanislav Fomichev <sdf@google.com>
+Subject: Re: [PATCH net-next v14 13/13] selftests: add ncdevmem, netcat for
+ devmem TCP
+Message-ID: <20240627134738.163f97e3@kernel.org>
+In-Reply-To: <CAHS8izNBB3+axWFR6cQChAawu194UqzVZ+oZp=c+H5TD4Nd8Zw@mail.gmail.com>
+References: <20240625195407.1922912-1-almasrymina@google.com>
+	<20240625195407.1922912-14-almasrymina@google.com>
+	<20240626150822.742eaf6a@kernel.org>
+	<20240626174634.2adec19d@kernel.org>
+	<CAHS8izOd_yYNJ6+xv35XoCvF7MzqachPVrkQJbic8-h=T1Vg_A@mail.gmail.com>
+	<CAHS8izNBB3+axWFR6cQChAawu194UqzVZ+oZp=c+H5TD4Nd8Zw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <51557e31-0a59-4278-a8c1-25cf66fa3c3f@app.fastmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jun 19, 2024 at 12:20:54PM +0100, Jiaxun Yang wrote:
-> 
-> 
-> 在2024年6月19日六月 上午10:28，Krzysztof Kozlowski写道：
-> > On 18/06/2024 17:11, Jiaxun Yang wrote:
-> >> This compatible has been used in arch/mips/boot/dts/img/boston.dts
-> >> for a while but never documented properly.
-> >> 
-> >
-> >> diff --git a/Documentation/devicetree/bindings/mfd/img,boston-platform-regs.yaml b/Documentation/devicetree/bindings/mfd/img,boston-platform-regs.yaml
-> >> new file mode 100644
-> >> index 000000000000..79cae87c6758
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/mfd/img,boston-platform-regs.yaml
-> >> @@ -0,0 +1,74 @@
-> >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >> +%YAML 1.2
-> >> +---
-> >> +$id: http://devicetree.org/schemas/mfd/img,boston-platform-regs.yaml#
-> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: Imagination Technologies Boston Platform Registers
-> >> +
-> >> +maintainers:
-> >> +  - Jiaxun Yang <jiaxun.yang@flygoat.com>
-> >> +
-> >> +properties:
-> >> +  compatible:
-> >> +    items:
-> >> +      - const: img,boston-platform-regs
-> >> +      - const: syscon
-> >> +      - const: simple-mfd
-> >
-> >
-> > Fix U-boot to populate devices instead of relying on simple-mfd.
-> 
-> Hi Krzysztof,
-> 
-> I believe U-Boot's implementation is correct. As per simple-mfd binding:
-> 
-> ```
-> simple-mfd" - this signifies that the operating system should
->   consider all subnodes of the MFD device as separate devices akin to how
->   "simple-bus" indicates when to see subnodes as children for a simple
->   memory-mapped bus.
-> ```
-> 
-> This reads to me as "if you want sub nodes to be populated as devices
-> you need this."
-> 
-> In our case there are "clock" and "reset" node sub nodes which should be
-> probed as regular device, so it's true for us.
-> 
-> Linux managed to work without "simple-mfd" only because clock subsystem
-> is bypassing regular OF population process. Semantically we need this.
+On Thu, 27 Jun 2024 13:36:57 -0700 Mina Almasry wrote:
+> `make -C ./tools/testing/selftests/net TARGETS=ncdevmem`, which works.
 
-I'm confused. Neither u-boot nor linux .dts files have 'simple-mfd' for 
-this binding. So why do you need it? Why are we changing a platform 
-that's had 1 dts change since 2018?
+AFAIU the most supported incantation would have to be something rather
+insane, like:
 
-If anything, add it in a separate patch and we can discuss it there 
-instead of a conversion.
+make -C tools/testing/selftests TARGETS=net TEST_GEN_PROGS="$(pwd)/tools/testing/selftests/net/tls" TEST_GEN_FILES=""
 
-> Besides Linux as upstream of devicetree source had accepted U-Boot
-> only stuff here, such as "bootph-all" property.
-
-Yes, and there are things we've rejected. See Arm FFA threads if you 
-want to waste a few hours reading.
-
-Rob
+but yes, don't worry.
 
