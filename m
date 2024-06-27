@@ -1,69 +1,69 @@
-Return-Path: <linux-mips+bounces-3990-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3991-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CDF891A96A
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Jun 2024 16:42:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3802F91AE70
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Jun 2024 19:48:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E7621C20C33
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Jun 2024 14:42:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E37332853E4
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Jun 2024 17:48:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5825197A60;
-	Thu, 27 Jun 2024 14:42:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0503D19AA74;
+	Thu, 27 Jun 2024 17:48:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xo04DL3U"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eCiWXR9K"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89FFC197555;
-	Thu, 27 Jun 2024 14:42:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC2519AA65;
+	Thu, 27 Jun 2024 17:48:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719499354; cv=none; b=Ybpdd4ueb2mUJO7mI/6m9EURUi2TCfEJkALNfzZYoTyWcQs+RgSHpwv5vIm3u7OzW95zgao4RyJQ/vGbWDATyhlkMg72U6iUA+OsRpExLRd/oYnV/rKpzVp9PsVISnvULkI+3JRJsC7299STRl7eQ4CowfqgZs+El0804z0ffXo=
+	t=1719510500; cv=none; b=h9FHshVkcsQJ4r49trFFx1vW3Q+/eHI+IVBr+8qABrDqbxEKCIyJqdjL62+ez+4bpmvvLOkcTAoC2ea3g0fVjrZSPyKJJ/9bXoNeYF4GDAkgEdteSEfQs71Qm77nl3Md8fnFXyF6kAo3nKAFR2oyEvG3olmkd3ghLj1E99w1s6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719499354; c=relaxed/simple;
-	bh=2epyvIMgz/umKD0zxRhjVW1mRZUXIsUBKKbBDmo4di4=;
+	s=arc-20240116; t=1719510500; c=relaxed/simple;
+	bh=7PmzWQkmMO3Dn1RO3gbp/FgtsLrjZ6ti7V62R7Rxfsc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F2f/6c9qZATQG3bvbq17LtEkKLHbTWygybSkdjq79hca233WFyN7586bjgjmTDfZOH2kH6rVgNmmjoXGlcgZSpP2RW8Uzd5zn9LOdjAPg/ktsJQ8iLDrh3lxPrx2ejJzZUfA0pxJGYbuepcxbAVP6N1byBM/6JZZ8Vj7YGZDEAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xo04DL3U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68CF1C4AF13;
-	Thu, 27 Jun 2024 14:42:34 +0000 (UTC)
+	 To:Cc:Content-Type; b=D5bGWpcyJ9eF8Zr27y9Eoy/bzaMYnvpuX3x+TCqu7bwMIT/n2X/FqUsYD1xidecwFDCwZ2s9XDKNb+kkj6P5IiRE4sVUxyURnlnRVpuRexCS9/ApTM3XA26I0EH06l/0AnAgRkpHm6KLQT9IIRL30y1Vq/cdbqSMXePK2iaKYBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eCiWXR9K; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2C6FC4AF07;
+	Thu, 27 Jun 2024 17:48:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719499354;
-	bh=2epyvIMgz/umKD0zxRhjVW1mRZUXIsUBKKbBDmo4di4=;
+	s=k20201202; t=1719510499;
+	bh=7PmzWQkmMO3Dn1RO3gbp/FgtsLrjZ6ti7V62R7Rxfsc=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Xo04DL3UVemmECpwY64ES8e42gsvrt9q4M3TVRlXctyDXkQRl1pXP67dc/kQUHOBb
-	 Jwr1LgPcXns8f5ArGCbsj28zJRtGafIWgOw88bHuU95a31msvn0jkcL6Gi5h0+7gwL
-	 HTqKinNGs1+Rgk4ORxnyNf6umn9Ay5vuosGPBiAKq3gtQG1CnDLF+UJrjqNy18R0WY
-	 2r7MfMkXWZhxjYEmbSlOWUIt2Cd5erMnGe3UEF9V97V4UQIKV3ZiDh8hVxe1mb+rhZ
-	 0vs5i/Nh219zLYpfJW+W5MFigo3pfrpYf+/OQNtv7eOjjJ+itLEDgolYA7sNzSG+Tj
-	 kbBrgYiXLU6Dw==
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2e72224c395so92478741fa.3;
-        Thu, 27 Jun 2024 07:42:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU0xXKtAEupCoCEM2ydWc+p4Eo2vMPiohfQafS6EtEhZAn6TOnZsvYaK3C9T9qhP8dVmqXL5LGY76Y267e0qajZf1dk1OB9tT9PQzSLlvChlYv5rRfqGOYOyfNPl7yLU4ThrhkEUpZu/D+Gh5sdPn/3lxooDaffeSEm0zzopa9BTFF8OVg=
-X-Gm-Message-State: AOJu0Yys/jqusM24/3stzE7XMCoZEAXTbR/9Hj2/5/nyz0vj65FclpcU
-	mXmzaQ2+Cb40UbmFvV82KhZqBA9j57HBXpDje7cg6qS+pmxwbIJm61VM3kXZ1MRT1mp8TZz7mV7
-	UO2E8NLbvVB1GW3wXGUUSjjc69Q==
-X-Google-Smtp-Source: AGHT+IGdl09ud227mx6eWzKbhuN9jD43lHc173QiIvTh5p9OBHVav1TbmbgaqVowBm1lPdgNDMA0Q9EBVBXaFgPM5nE=
-X-Received: by 2002:ac2:47e8:0:b0:52c:d905:9645 with SMTP id
- 2adb3069b0e04-52ce183293cmr8939536e87.13.1719499352719; Thu, 27 Jun 2024
- 07:42:32 -0700 (PDT)
+	b=eCiWXR9KMoz9cZXBt0bYVwje8vrZth4Fohylmz1hB6HNUh7ZPyqDYibF+OrhrFR97
+	 e6eMe2+qTIeCKwK2JNY9Hb08zWAeftt+a4j0Nn/VDkeaSKkgJLe1xnXFTZx/5nATIS
+	 RHb+6r0KR4dzCtKvgnKr+46u/fUbBAKv+Hss2+vFFxN8vmIh7Is/KYXfJAns4X9E+n
+	 ZvVwdMrx3yPf4AeMPAI3Rj68kQvAh1fD1gHQ2/COFcCkdqTHYg2UJXCvfueJwEP/0A
+	 TdREQMP/w58gA3M9X5n6L3TEGKbZPaOjkYFzhWAyI+NF2a0qeAWQErZcunxCaGaQlr
+	 tPEc4z0kDzztQ==
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-52db11b1d31so3378967e87.0;
+        Thu, 27 Jun 2024 10:48:19 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVNu/YXVbaKtshz1FgBVb3GaLrN1D6wJ9LwvHQ3qtRNmnulsf8Py+lJlh6Ni9nKpJ80vpmHdmD0orpDQys5TpN9BG32PaUzahek6XrO4CinUDP3j5E42gMlJpnmKyiN/rI3lCjzqQI/IeDttL27j2NUurt/aV/8PaIxNjRmVrKwiL66vAk=
+X-Gm-Message-State: AOJu0Yznc7TUiTNg3p+fHIZgoxdo+x83AniYDsF2YQMsWJ4vE55HjQEh
+	qjOA6TOO+/B+IYHYZv8AR0gKPIrgztWHvQGxFUnNP13lP0RH50C0G356QTEC0a94MPGtjkafVKi
+	tImMcb7b0LXQgagNrZmENCJ0POA==
+X-Google-Smtp-Source: AGHT+IF3/jp/Se8SW3GtFuTT+mhw6PLtTffimJ68HQJOQJw6GO4rJiW1gpfVQofLoFVj0WF7muLIr/yZ3J7+kg1ZnfM=
+X-Received: by 2002:a19:6b08:0:b0:52c:8944:2427 with SMTP id
+ 2adb3069b0e04-52cdf7f65f3mr9553120e87.31.1719510497932; Thu, 27 Jun 2024
+ 10:48:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240627043317.3751996-1-chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <20240627043317.3751996-1-chris.packham@alliedtelesis.co.nz>
+References: <20240627043317.3751996-1-chris.packham@alliedtelesis.co.nz> <20240627043317.3751996-9-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20240627043317.3751996-9-chris.packham@alliedtelesis.co.nz>
 From: Rob Herring <robh@kernel.org>
-Date: Thu, 27 Jun 2024 08:42:20 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+1M47kRb5xELSqroPLbava4TJkiLjDT8er0=iiBmutfw@mail.gmail.com>
-Message-ID: <CAL_Jsq+1M47kRb5xELSqroPLbava4TJkiLjDT8er0=iiBmutfw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/9] mips: Support for RTL9302C
+Date: Thu, 27 Jun 2024 11:48:05 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKGJ_MNbfuApdziDusYzYoFC3LD_zqkt1ZkWL4AWkjVrw@mail.gmail.com>
+Message-ID: <CAL_JsqKGJ_MNbfuApdziDusYzYoFC3LD_zqkt1ZkWL4AWkjVrw@mail.gmail.com>
+Subject: Re: [PATCH v3 8/9] mips: generic: add fdt fixup for Realtek reference board
 To: Chris Packham <chris.packham@alliedtelesis.co.nz>
 Cc: tglx@linutronix.de, krzk+dt@kernel.org, conor+dt@kernel.org, 
 	tsbogend@alpha.franken.de, daniel.lezcano@linaro.org, paulburton@kernel.org, 
@@ -77,21 +77,150 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Jun 26, 2024 at 10:33=E2=80=AFPM Chris Packham
 <chris.packham@alliedtelesis.co.nz> wrote:
 >
-> This series adds basic support for the RTL9302C reference board. Currentl=
-y the
-> focus is on the CPU block stuff. I hope to get around to the DSA switch d=
-river
-> eventually but this is a small start that lets me boot a mainline kernel =
-on the
-> board I have. I initialiy started with code from openwrt but have paired =
-it
-> down to just the clocksource driver and devicetree.
+> The bootloader used on the Realtek RTL9302C boards is an ancient vendor
+> fork of U-Boot that doesn't understand device trees. So to run a modern
+> kernel it is necessary use one of the APPENDED_DTB options.
+>
+> When appending the DTB the inintrd information, if present, needs to be
+> inserted into the /chosen device tree node. The bootloader provides the
+> initrd start/size via the firmware environment. Add a fdt fixup that
+> will update the device tree with the initrd information.
 
-Your emails are being sent as quoted-printable encoding which is
-generally preferred to be avoided on maillists (as is base64).
-git-send-email should normally use 8-bit encoding, but the man page
-indicates QP may be used if there are carriage returns (there
-shouldn't be).
+Is this really specific to this board/soc? I think there are lots of
+MIPS boards in this state. The code to handle all the possible
+combinations of bootloader handoff information and sources of DTB is
+quite the mess. Just for DTB source you have bootloader DTB, appended
+DTB, or built-in DTB (and there's even logic if you have multiple of
+those). Contrast that to arm32 ('the zoo"), where you have 2 choices:
+bootloader DTB or appended DTB with legacy bootloader parameters
+transferred to DTB. All the uglyness is contained and the kernel boot
+deals with 1 possibility. </rant>
 
-Rob
+>
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+>
+> Notes:
+>     Changes in v3:
+>     - None
+>     Changes in v2:
+>     - update compatible string
+>
+>  arch/mips/generic/Makefile        |  1 +
+>  arch/mips/generic/board-realtek.c | 81 +++++++++++++++++++++++++++++++
+>  2 files changed, 82 insertions(+)
+>  create mode 100644 arch/mips/generic/board-realtek.c
+>
+> diff --git a/arch/mips/generic/Makefile b/arch/mips/generic/Makefile
+> index 56011d738441..ea0e4ad5e600 100644
+> --- a/arch/mips/generic/Makefile
+> +++ b/arch/mips/generic/Makefile
+> @@ -13,3 +13,4 @@ obj-$(CONFIG_LEGACY_BOARD_SEAD3)      +=3D board-sead3.=
+o
+>  obj-$(CONFIG_LEGACY_BOARD_OCELOT)      +=3D board-ocelot.o
+>  obj-$(CONFIG_MACH_INGENIC)                     +=3D board-ingenic.o
+>  obj-$(CONFIG_VIRT_BOARD_RANCHU)                +=3D board-ranchu.o
+> +obj-$(CONFIG_MACH_REALTEK_RTL)         +=3D board-realtek.o
+> diff --git a/arch/mips/generic/board-realtek.c b/arch/mips/generic/board-=
+realtek.c
+> new file mode 100644
+> index 000000000000..cd83fbf1968c
+> --- /dev/null
+> +++ b/arch/mips/generic/board-realtek.c
+> @@ -0,0 +1,81 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+
+Kernel license by default is GPL-2.0-only. Why do something different?
+
+> +/*
+> + * Copyright (C) 2024 Allied Telesis
+> + */
+> +
+> +#include <linux/errno.h>
+> +#include <linux/libfdt.h>
+> +#include <linux/of_address.h>
+
+You aren't using this header.
+
+> +#include <linux/types.h>
+> +
+> +#include <asm/fw/fw.h>
+> +#include <asm/machine.h>
+> +
+> +static __init int realtek_add_initrd(void *fdt)
+> +{
+> +       int node, err;
+> +       u32 start, size;
+> +
+> +       node =3D fdt_path_offset(fdt, "/chosen");
+> +       if (node < 0) {
+> +               pr_err("/chosen node not found\n");
+> +               return -ENOENT;
+> +       }
+> +
+> +       start =3D fw_getenvl("initrd_start");
+> +       size =3D fw_getenvl("initrd_size");
+> +
+> +       if (start =3D=3D 0 && size =3D=3D 0)
+> +               return 0;
+> +
+> +       pr_info("Adding initrd info from environment\n");
+> +
+> +       err =3D fdt_setprop_u32(fdt, node, "linux,initrd-start", start);
+> +       if (err) {
+> +               pr_err("unable to set initrd-start: %d\n", err);
+> +               return err;
+> +       }
+> +
+> +       err =3D fdt_setprop_u32(fdt, node, "linux,initrd-end", start + si=
+ze);
+> +       if (err) {
+> +               pr_err("unable to set initrd-end: %d\n", err);
+> +               return err;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct mips_fdt_fixup realtek_fdt_fixups[] __initconst =3D =
+{
+> +       { realtek_add_initrd, "add initrd" },
+> +       {},
+> +};
+> +
+> +static __init const void *realtek_fixup_fdt(const void *fdt, const void =
+*match_data)
+> +{
+> +       static unsigned char fdt_buf[16 << 10] __initdata;
+> +       int err;
+> +
+> +       if (fdt_check_header(fdt))
+> +               panic("Corrupt DT");
+> +
+> +       fw_init_cmdline();
+> +
+> +       err =3D apply_mips_fdt_fixups(fdt_buf, sizeof(fdt_buf), fdt, real=
+tek_fdt_fixups);
+> +       if (err)
+> +               panic("Unable to fixup FDT: %d", err);
+> +
+> +       return fdt_buf;
+> +
+> +}
+> +
+> +static const struct of_device_id realtek_of_match[] __initconst =3D {
+> +       {
+> +               .compatible =3D "realtek,rtl9302",
+> +       },
+> +       {}
+> +};
+> +
+> +MIPS_MACHINE(realtek) =3D {
+> +       .matches =3D realtek_of_match,
+> +       .fixup_fdt =3D realtek_fixup_fdt,
+> +};
+> --
+> 2.45.2
+>
+>
 
