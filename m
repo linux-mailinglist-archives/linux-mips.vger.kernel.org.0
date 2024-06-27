@@ -1,48 +1,48 @@
-Return-Path: <linux-mips+bounces-3979-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-3980-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FD5291A090
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Jun 2024 09:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EAD9D91A096
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Jun 2024 09:41:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FB541C21105
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Jun 2024 07:40:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18CD91C21082
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Jun 2024 07:41:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC9AD52F6F;
-	Thu, 27 Jun 2024 07:40:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82CDC535B7;
+	Thu, 27 Jun 2024 07:41:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G8Wua+iA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mxg2E/LS"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB9B85381E;
-	Thu, 27 Jun 2024 07:40:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F46374D4;
+	Thu, 27 Jun 2024 07:41:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719474027; cv=none; b=Nspy9WfK0EJDWQf9L+Cq4+noHo/Qirm3RuhtZcmXhDkGq9YK2x0jI5uQo7J+FkyC2YWAG4I67LQLB1+WWsRtNdrYoTjMuBT0rqjnHlXn1To1WDsvBSYEbssAEFyvNl4OtSbFY4Z2sy8tZEu8VbQoSnHoev5rEsK2F4ZNgwjfQ8E=
+	t=1719474080; cv=none; b=C1/y/TxnXZYvvluAkNtlPvqecDgqKN+Dziw3nTvn/EXQCoDwNvMWC43eSGtU6mtwUeC968rlzCEyzOuiBztYKpVUcyv8QJM0XyEF9oDNjbi92xL7W42rwiNL11MpwN/y+68GFv+Xl6Bk9FsAfKWyMyFrvR5D8kalk4vDahL+kds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719474027; c=relaxed/simple;
-	bh=1QdVEZCSY7t62QyfwJazns3/I5EtfbjMNBrc0SgPt7Y=;
+	s=arc-20240116; t=1719474080; c=relaxed/simple;
+	bh=sbLpv7m+siZklFWYl2LE4GRyqJmlPHKII//pNVv9QUg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HZCYz7oV80rumeCWBT9zjRB22t+xu+ZQLl/UzoGCLq15fv2v/crPKjSjbIwGwuqNmxXGBCFtEwGa0epKO6piPw9EPFVwyVaDRE0Nrh/cqztmsNdDYEJLV45rQqloMIEMonYXn2tGOvBOgR4FwLkbxfZJ4TxOgscC4diqCps7iQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G8Wua+iA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8CC3C2BBFC;
-	Thu, 27 Jun 2024 07:40:21 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=B38BbKHEKYJEhp1DelbV4qnq6LUzLW/6NwtNJCW1R0xPI7YzHVGHzEMhQ89Eb+GX18BZu0pqH9J7+eQfp/3zad5kbeQWcGpT5k4aLKt9RHHVepyL7xMAdk9aIUXDUsDiOuYRev9iRL1GBcDRuMyg2+Iaof59g/CEaqKOKB/I9ME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mxg2E/LS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F357CC32786;
+	Thu, 27 Jun 2024 07:41:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719474027;
-	bh=1QdVEZCSY7t62QyfwJazns3/I5EtfbjMNBrc0SgPt7Y=;
+	s=k20201202; t=1719474079;
+	bh=sbLpv7m+siZklFWYl2LE4GRyqJmlPHKII//pNVv9QUg=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=G8Wua+iAFl9fsAuEzYY4bTst4d3a1RvNbG1LN35mju6OQl5JKUOFIrh5wbElUrGkj
-	 9C4VTsyxuxRYQkO34fmUeM8WitVeCKcmgcnnhZoqyXfhlmJRkuVtcZS7+lhf4HCTqq
-	 3Ont6vWplcF9GkuYYonHhj8yKqpIOjWAgkNTOpl4eX5EOtbQ2P8RMHSL3tBCg7lXpX
-	 bazJriduYoSpfnWVN4xpbWxWCD0qldKATMpryqerFCDGIUQikBaiRd+PHNr6KcMUTr
-	 uvXluv5r5EEFlBeusad8fA0LMQbbKl+B2lfMJz4YPGx2sz5PqobtWRmTlnKNoQg6vg
-	 i+4q6GrpW0z7w==
-Message-ID: <6c2076d7-3b9c-45b4-885f-310e8d8f9e04@kernel.org>
-Date: Thu, 27 Jun 2024 09:40:19 +0200
+	b=Mxg2E/LSJxfUDJZrLBBcJJbxVYwgramw+N1Yu5KfyABps82xkTO2VTg3hGfRXStf6
+	 nBVfMPZeOsR0N5HkBEkX49XjEAGbQwgheqPRwz2Btr+aJPE4p4CwACK0nsbDoVubpO
+	 yw9bcyFXClMj+AiaHSMHxUJGpy5UhLEnjHaFfv+Dulgc5Fgex/rdc12f31lc3/t+b4
+	 fltC2WYkUMnbTPVYl1ZdBuCBg5pXJYjTf1EiTmrUHjJ2e77J9lBxlOMvuP39e5lfVR
+	 oObniC+nnmwGdYY8vDzz84kerGb0lfTCBm4Fak23IQa+DDssUQXr/KorRQx77HpAS6
+	 g+6wDiW7eCQtA==
+Message-ID: <8a708add-52a7-4189-b0f1-e2a4c83230a9@kernel.org>
+Date: Thu, 27 Jun 2024 09:41:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 5/9] dt-bindings: timer: Add schema for
- realtek,otto-timer
+Subject: Re: [PATCH v3 6/9] dt-bindings: interrupt-controller:
+ realtek,rtl-intc: Add rtl9300-intc
 To: Chris Packham <chris.packham@alliedtelesis.co.nz>, tglx@linutronix.de,
  robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
  tsbogend@alpha.franken.de, daniel.lezcano@linaro.org, paulburton@kernel.org,
@@ -60,7 +60,7 @@ To: Chris Packham <chris.packham@alliedtelesis.co.nz>, tglx@linutronix.de,
 Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
  linux-mips@vger.kernel.org, kabel@kernel.org, ericwouds@gmail.com
 References: <20240627043317.3751996-1-chris.packham@alliedtelesis.co.nz>
- <20240627043317.3751996-6-chris.packham@alliedtelesis.co.nz>
+ <20240627043317.3751996-7-chris.packham@alliedtelesis.co.nz>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -106,18 +106,79 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240627043317.3751996-6-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20240627043317.3751996-7-chris.packham@alliedtelesis.co.nz>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 27/06/2024 06:33, Chris Packham wrote:
-> Add the devicetree schema for the realtek,otto-timer present on a number
-> of Realtek SoCs.
+> Add a compatible string for the interrupt controller found on the
+> rtl930x SoCs. The interrupt controller has registers for VPE1 so these
+> are added as a second reg cell.
 > 
 > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+> 
+> Notes:
+>     Changes in v3:
+>     - Use items to describe the regs property
+>     Changes in v2:
+>     - Set reg:maxItems to 2 to allow for VPE1 registers on the rtl9300. Add
+>       a condition to enforce the old limit on other SoCs.
+>     - Connor and Krzysztof offered acks on v1 but I think the changes here
+>       are big enough to void those.
+> 
+>  .../interrupt-controller/realtek,rtl-intc.yaml | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
+> index fb5593724059..d0e5bdf45d05 100644
+> --- a/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
+> @@ -25,6 +25,7 @@ properties:
+>        - items:
+>            - enum:
+>                - realtek,rtl8380-intc
+> +              - realtek,rtl9300-intc
+>            - const: realtek,rtl-intc
+>        - const: realtek,rtl-intc
+>          deprecated: true
+> @@ -35,7 +36,9 @@ properties:
+>      const: 1
+>  
+>    reg:
+> -    maxItems: 1
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Missing minItems (as testing would tell you)
 
+> +    items:
+> +      - description: vpe0 registers
+> +      - description: vpe1 registers
+>  
+>    interrupts:
+>      minItems: 1
+> @@ -71,6 +74,19 @@ allOf:
+>      else:
+>        required:
+>          - interrupts
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: realtek,rtl9300-intc
+> +    then:
+> +      properties:
+> +        reg:
+
+Needed is: minItems: 2
+
+> +          maxItems: 2
+> +    else:
+> +      properties:
+> +        reg:
+> +          maxItems: 1
+>  
+>  additionalProperties: false
+>  
 
 Best regards,
 Krzysztof
