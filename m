@@ -1,185 +1,228 @@
-Return-Path: <linux-mips+bounces-4021-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4022-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 604AD91BE31
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Jun 2024 14:08:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E77C91C2F7
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Jun 2024 17:52:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 836B31C20A83
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Jun 2024 12:08:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41FE4283129
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Jun 2024 15:52:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE55F1581FC;
-	Fri, 28 Jun 2024 12:08:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c4+L47Br"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AD741C68A0;
+	Fri, 28 Jun 2024 15:52:54 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A88A1E492;
-	Fri, 28 Jun 2024 12:08:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70731DFFB;
+	Fri, 28 Jun 2024 15:52:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.92.39.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719576497; cv=none; b=Y/PESww6HT3+IYSkw5P643MePBs08tXw6evoC9rIM4e2DFdKxim05YEuRh2y484xlTyxX2++OyXpK9vcDlymFVXQfUIgIpIpeBMu/R6/kekXYVFjhrnKXsOQlJwRHRAO6VHPYrOPOgO1QuwyGLrRjH0lMFnJZTytewbMT0CsAZk=
+	t=1719589974; cv=none; b=YIfaA53G9lz054YJF1WsVG+VxTsQgl4Vnv4/7aV6hF5csRr1QP3oTCv3Tnip+g7S3OZh7FtWhOqKnASZ/AxQUfpNgHuHtEBqTY65hICV5QaeE2r7wLS374b56xvumHoDdFdprZQhsk5f/RYyMeaab4LRcLuQnqlahLhYvUN3P94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719576497; c=relaxed/simple;
-	bh=Rlq0WqzihhkeL6wZg4CBjygd+CaipHSo+ZHvvPst5+Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z3Q+oIfaoAzSRWtDRls9BkYWit0fLRBN8kqxJcftew7EGOEs9fFABOeGSM5SSeMMPoDNxqve8TW44adel15ce7Fzcv9zscZ7nDMhPav1TenpWdTmp0uTE5p+qDA7TimUmn7hogIafvqrHhVsfcBQT0kWr5Me8iSFsccqScLoU6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c4+L47Br; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-57ccd1111aeso700041a12.0;
-        Fri, 28 Jun 2024 05:08:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719576494; x=1720181294; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O/QwPiwzSZOk4Q6RbA8p937/Li3WK6XZCuDkf/fR6vE=;
-        b=c4+L47BrHNlQV0RP8wPu6SjtrrJLr6IixOX97xCYvMASpze6paZM3dxgIYiO3Esf6m
-         mx9y7ELypwdqV2OBnRnP2iDLnppWZZP5mlQIJkesy9Zf4WnOPLsawawNhA/P6bthSM62
-         wyPg1sztcNRPMR9WKrROouarhfu6VeFosJIc6h9geZb4lUmoLjA6evQw5xMKUfYo6mCG
-         HJxn2ORc98XJYREHfjfbOzYdN0XPMtM76v3G8AfbK2SR2ShESqO7v2GDRoeMOghDa7qL
-         DJsIfIMuOoJU5lhmW+j9E63iM7WDyPCtWDeFJ/tMyD3PtJ84q42vj34hZc71BnME+Oll
-         Y9wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719576494; x=1720181294;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O/QwPiwzSZOk4Q6RbA8p937/Li3WK6XZCuDkf/fR6vE=;
-        b=T8NPi3EtBniz9hMALQdUOv2uaxE7jmssTM8pxSIYRM/LwVZUD+fJ7HEosdfdAX2bj0
-         W4uldbedC79BOPBZaWoawr1iQUfHCODSAysEbzGdi2arzcXfnv7T9xV0kxdFb7tQxcAt
-         a6eqYfmrKUluqQI3d+2vugnDknkHGPrdzJb1wEuY7bT47RgOG8xw3VOtjw2g+F0kv2jx
-         vV7RiRz47ZNjJ3ZMvVxRhuw+yfxGreogqN6RpvE/M5BfBRcoU7C3jC++6Fvs3hZrYtdb
-         4m9bvpwKUM4RasiH3MagWMEcc5xEl3wFpdPzlJaIh9ZzI6Q0GKkAvJ+v/vKxGwr6qp3q
-         X83w==
-X-Forwarded-Encrypted: i=1; AJvYcCXzVlUmd36/7EhFx7FQ2nAJ/B/Ri7xDZQ9NDpd37B/12ktqenSEEI4jhL8Q8A+70YBIqFejJegCYC/zMCwZbj9KSSUnSa2CI82bZg9VpNO/5qIsaXmTi0yRWXETRlcLfCy572R6NA8JOV/vLotmxrjBf9sbQ1K186Em+uk/jzzmTRezOuEyEXnlTVCnSMb/5dLAGxc57RIlIZppmTTQ/uY=
-X-Gm-Message-State: AOJu0Yyl8xPyqMqlV/ZSsW1a/+f5FV2Opsu2K2VAxWh3yO7xn5fIpp9H
-	a7p8/GwN/S2ELX8FSc0aOVQ3G7o6pDHIokXWYg57zLsWkn3DDtNxglXZ9suj6cna1TAvdJzInAk
-	1V+/HkNQL5Wa+z33O5l6i7Psqclw=
-X-Google-Smtp-Source: AGHT+IEeOmHcYeyBM9vdMvSUCMXEjfEksvTMrtTl63tXcl5SMpXT8DoHqdqha8zQeeVtKUpRgDLSBKLuB/8RprKcdsM=
-X-Received: by 2002:a50:d503:0:b0:57d:4d7:4c06 with SMTP id
- 4fb4d7f45d1cf-57d4a2815b1mr13818662a12.13.1719576494290; Fri, 28 Jun 2024
- 05:08:14 -0700 (PDT)
+	s=arc-20240116; t=1719589974; c=relaxed/simple;
+	bh=AESRoCtdfYIEKI2FzdomGfG8TR8mQBKd5L+uqnwzWp0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PRq2pPLfljC/yJa3at0gR1nqdOzZr1kUaHx34o+h6tYYKAz5atStKi7FzeJcY/ZzehRVMPO96lrtEUA9k5IowWP/F+e/mfuse7Jyyear+ExCScxqqiGHUi/C3ZPZhFkBU+UYXE9PfBeKgtikRhHwn4wPeTXaNqF7fOCd0DDF/Y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; arc=none smtp.client-ip=54.92.39.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+X-QQ-mid: bizesmtpsz13t1719589914t2js4i
+X-QQ-Originating-IP: ge8KyYfF/y74egXHDOj1Cmc5ujh0vTQl+zJIQK3W50k=
+Received: from [10.20.53.89] ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 28 Jun 2024 23:51:53 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 14412566357318969333
+Message-ID: <CD5FFEE4BEA56308+0122a540-e098-4982-9bb1-110b449cbe02@uniontech.com>
+Date: Fri, 28 Jun 2024 23:51:53 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240613-loongson1-dma-v9-0-6181f2c7dece@gmail.com>
-In-Reply-To: <20240613-loongson1-dma-v9-0-6181f2c7dece@gmail.com>
-From: Keguang Zhang <keguang.zhang@gmail.com>
-Date: Fri, 28 Jun 2024 20:07:38 +0800
-Message-ID: <CAJhJPsWMs0=k+7051mxG+DiOG8oNrPoG_3RUoC-ni7t2_3dyDg@mail.gmail.com>
-Subject: Re: [PATCH v9 0/2] Add support for Loongson1 APB DMA
-To: keguang.zhang@gmail.com
-Cc: Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Conor Dooley <conor.dooley@microchip.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Vinod,
-Sorry to bother you.
-For this patchset, is there anything that needs improvement?
-Thank very much!
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] MIPS: crypto: Clean up useless assignment operations
+To: herbert@gondor.apana.org.au
+Cc: linux-crypto@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Guan Wentao <guanwentao@uniontech.com>,
+ davem@davemloft.net, tsbogend@alpha.franken.de
+References: <1D248893502B75F5+20240628084117.84264-1-wangyuli@uniontech.com>
+From: WangYuli <wangyuli@uniontech.com>
+In-Reply-To: <1D248893502B75F5+20240628084117.84264-1-wangyuli@uniontech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpsz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
 
 
-On Thu, Jun 13, 2024 at 7:50=E2=80=AFPM Keguang Zhang via B4 Relay
-<devnull+keguang.zhang.gmail.com@kernel.org> wrote:
->
-> Add the driver and dt-binding document for Loongson1 APB DMA.
->
-> ---
-> Changes in v9:
-> - Fix all the errors and warnings when building with W=3D1 and C=3D1
-> - Link to v8: https://lore.kernel.org/r/20240607-loongson1-dma-v8-0-f9992=
-d257250@gmail.com
->
-> Changes in v8:
-> - Change 'interrupts' property to an items list
-> - Link to v7: https://lore.kernel.org/r/20240329-loongson1-dma-v7-0-37db5=
-8608de5@gmail.com
->
-> Changes in v7:
-> - Change the comptible to 'loongson,ls1*-apbdma' (suggested by Huacai Che=
-n)
-> - Update the title and description part accordingly
-> - Rename the file to loongson,ls1b-apbdma.yaml
-> - Add a compatible string for LS1A
-> - Delete minItems of 'interrupts'
-> - Change patterns of 'interrupt-names' to const
-> - Rename the file to loongson1-apb-dma.c to keep the consistency
-> - Update Kconfig and Makefile accordingly
-> - Link to v6: https://lore.kernel.org/r/20240316-loongson1-dma-v6-0-90de2=
-c3cc928@gmail.com
->
-> Changes in v6:
-> - Change the compatible to the fallback
-> - Implement .device_prep_dma_cyclic for Loongson1 sound driver,
-> - as well as .device_pause and .device_resume.
-> - Set the limitation LS1X_DMA_MAX_DESC and put all descriptors
-> - into one page to save memory
-> - Move dma_pool_zalloc() into ls1x_dma_alloc_desc()
-> - Drop dma_slave_config structure
-> - Use .remove_new instead of .remove
-> - Use KBUILD_MODNAME for the driver name
-> - Improve the debug information
-> - Some minor fixes
->
-> Changes in v5:
-> - Add the dt-binding document
-> - Add DT support
-> - Use DT information instead of platform data
-> - Use chan_id of struct dma_chan instead of own id
-> - Use of_dma_xlate_by_chan_id() instead of ls1x_dma_filter()
-> - Update the author information to my official name
->
-> Changes in v4:
-> - Use dma_slave_map to find the proper channel.
-> - Explicitly call devm_request_irq() and tasklet_kill().
-> - Fix namespace issue.
-> - Some minor fixes and cleanups.
->
-> Changes in v3:
-> - Rename ls1x_dma_filter_fn to ls1x_dma_filter.
->
-> Changes in v2:
-> - Change the config from 'DMA_LOONGSON1' to 'LOONGSON1_DMA',
-> - and rearrange it in alphabetical order in Kconfig and Makefile.
-> - Fix comment style.
->
-> ---
-> Keguang Zhang (2):
->       dt-bindings: dma: Add Loongson-1 APB DMA
->       dmaengine: Loongson1: Add Loongson-1 APB DMA driver
->
->  .../bindings/dma/loongson,ls1b-apbdma.yaml         |  67 +++
->  drivers/dma/Kconfig                                |   9 +
->  drivers/dma/Makefile                               |   1 +
->  drivers/dma/loongson1-apb-dma.c                    | 665 +++++++++++++++=
-++++++
->  4 files changed, 742 insertions(+)
-> ---
-> base-commit: d35b2284e966c0bef3e2182a5c5ea02177dd32e4
-> change-id: 20231120-loongson1-dma-163afe5708b9
->
-> Best regards,
-> --
-> Keguang Zhang <keguang.zhang@gmail.com>
->
->
+On 2024/6/28 18:12, Herbert Xu wrote:
+ > On Fri, Jun 28, 2024 at 04:41:17PM +0800, WangYuli wrote:
+ >> When entering the "len & sizeof(u32)" branch, len must be less than 8.
+ >> So after one operation, len must be less than 4.
+ >> At this time, "len -= sizeof(u32)" is not necessary for 64-bit CPUs.
+ >>
+ >> A similar issue has been solved at Loongarch.
+ >>
+ >> Link: 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v6.10-rc5&id=fea1c949f6ca5059e12de00d0483645debc5b206
+ >> Signed-off-by: Guan Wentao <guanwentao@uniontech.com>
+ >> Signed-off-by: WangYuli <wangyuli@uniontech.com>
+ >> ---
+ >>  arch/mips/crypto/crc32-mips.c | 4 ++++
+ >>  1 file changed, 4 insertions(+)
+ >>
+ >> diff --git a/arch/mips/crypto/crc32-mips.c 
+b/arch/mips/crypto/crc32-mips.c
+ >> index ec6d58008f8e..505d2d897849 100644
+ >> --- a/arch/mips/crypto/crc32-mips.c
+ >> +++ b/arch/mips/crypto/crc32-mips.c
+ >> @@ -94,7 +94,9 @@ static u32 crc32_mips_le_hw(u32 crc_, const u8 *p, 
+unsigned int len)
+ >>
+ >>          CRC32(crc, value, w);
+ >>          p += sizeof(u32);
+ >> +#ifndef CONFIG_64BIT
+ >>          len -= sizeof(u32);
+ >> +#endif
+ >
+ > First of all, did you verify that this actually makes a difference?
+ > Please post the actual assembly output with and without this patch.
+
+Sure.
+
+The left shows the assembly after applying this patch, while the right 
+shows the origin. ( Generated by Clang 17.0.6 )
+
+0000000000000018 <chksum_update>: 0000000000000018 <chksum_update>:
+;     ctx->crc = crc32_mips_le_hw(ctx->crc, data, length); ;     
+ctx->crc = crc32_mips_le_hw(ctx->crc, data, length);
+       18: 08 00 82 8c      lw    $2, 0x8($4) 18: 08 00 82 8c      lw    
+$2, 0x8($4)
+;     while (len >= sizeof(u64)) { ;     while (len >= sizeof(u64)) {
+       1c: 08 00 c1 2c      sltiu    $1, $6, 0x8 <chksum_init+0x8> 1c: 
+08 00 c1 2c      sltiu    $1, $6, 0x8 <chksum_init+0x8>
+       20: 06 00 20 f8      bnezc    $1, 0x3c <chksum_update+0x24> 20: 
+06 00 20 f8      bnezc    $1, 0x3c <chksum_update+0x24>
+;     return le64_to_cpu(__get_unaligned_t(__le64, p)); ;     return 
+le64_to_cpu(__get_unaligned_t(__le64, p));
+       24: 00 00 a3 dc      ld    $3, 0x0($5) 24: 00 00 a3 dc      ld    
+$3, 0x0($5)
+;         CRC32(crc, value, d); ;         CRC32(crc, value, d);
+       28: cf 00 62 7c      <unknown> crc32d v0,v1,v0 28: cf 00 62 
+7c      <unknown> crc32d    v0,v1,v0
+;         len -= sizeof(u64); ;         len -= sizeof(u64);
+       2c: f8 ff c6 24      addiu    $6, $6, -0x8 
+<chksumc_digest+0xfffffffffffffce0> 2c: f8 ff c6 24      addiu    $6, 
+$6, -0x8 <chksumc_digest+0xfffffffffffffd48>
+;     while (len >= sizeof(u64)) { ;     while (len >= sizeof(u64)) {
+       30: 08 00 c1 2c      sltiu    $1, $6, 0x8 <chksum_init+0x8> 30: 
+08 00 c1 2c      sltiu    $1, $6, 0x8 <chksum_init+0x8>
+       34: fb ff 20 10      beqz    $1, 0x24 <chksum_update+0xc> 34: fb 
+ff 20 10      beqz    $1, 0x24 <chksum_update+0xc>
+       38: 08 00 a5 64      daddiu    $5, $5, 0x8 <chksum_init+0x8> 38: 
+08 00 a5 64      daddiu    $5, $5, 0x8 <chksum_init+0x8>
+;     if (len & sizeof(u32)) { ;     if (len & sizeof(u32)) {
+       3c: 04 00 c1 2c      sltiu    $1, $6, 0x4 <chksum_init+0x4> 3c: 
+04 00 c1 2c      sltiu    $1, $6, 0x4 <chksum_init+0x4>
+       40: 0a 00 20 10      beqz    $1, 0x6c <chksum_update+0x54> 40: 04 
+00 20 f8      bnezc    $1, 0x54 <chksum_update+0x3c>
+       44: 03 f8 c3 7c      dext    $3, $6, 0x0, 0x20 
+<chksum_update+0x8> ;     return le32_to_cpu(__get_unaligned_t(__le32, p));
+;     if (len & sizeof(u16)) { 44: 00 00 a3 8c      lw    $3, 0x0($5)
+       48: 02 00 61 30      andi    $1, $3, 0x2 <chksum_init+0x2> 
+;         CRC32(crc, value, w);
+       4c: 0c 00 20 f8      bnezc    $1, 0x80 <chksum_update+0x68>
+;     if (len & sizeof(u8)) { 48: 8f 00 62 7c      <unknown> crc32w    
+v0,v1,v0
+       50: 01 00 61 30      andi    $1, $3, 0x1 <chksum_init+0x1>
+       54: 02 00 20 d8      beqzc    $1, 0x60 <chksum_update+0x48> 
+;         len -= sizeof(u32);
+;         CRC32(crc, value, b); 4c: fc ff c6 24      addiu    $6, $6, 
+-0x4 <chksumc_digest+0xfffffffffffffd4c>
+       58: 00 00 a3 90      lbu    $3, 0x0($5) ;         p += sizeof(u32);
+50: 04 00 a5 64      daddiu    $5, $5, 0x4 <chksum_init+0x4>
+       5c: 0f 00 62 7c      <unknown> crc32b v0,v1,v0 ;     if (len & 
+sizeof(u16)) {
+54: 03 f8 c3 7c      dext    $3, $6, 0x0, 0x20 <chksum_update+0x8>
+;     ctx->crc = crc32_mips_le_hw(ctx->crc, data, length); 58: 02 00 61 
+30      andi    $1, $3, 0x2 <chksum_init+0x2>
+       60: 08 00 82 ac      sw    $2, 0x8($4) 5c: 03 00 20 d8      
+beqzc    $1, 0x6c <chksum_update+0x54>
+;     return 0; ;         CRC32(crc, value, h);
+       64: 09 00 e0 03      jr $ra 60: 00 00 a6 94      lhu    $6, 0x0($5)
+       68: 00 00 02 64      daddiu    $2, $zero, 0x0 <chksum_init>
+;     return le32_to_cpu(__get_unaligned_t(__le32, p)); 64: 4f 00 c2 
+7c      <unknown> crc32h    v0,a2,v0
+       6c: 00 00 a6 8c      lw    $6, 0x0($5)
+;         CRC32(crc, value, w); ;         p += sizeof(u16);
+       70: 8f 00 c2 7c      <unknown> crc32w v0,a2,v0 68: 02 00 a5 
+64      daddiu    $5, $5, 0x2 <chksum_init+0x2>
+;     if (len & sizeof(u16)) { ;     if (len & sizeof(u8)) {
+       74: 02 00 61 30      andi    $1, $3, 0x2 <chksum_init+0x2> 6c: 01 
+00 61 30      andi    $1, $3, 0x1 <chksum_init+0x1>
+       78: f5 ff 20 10      beqz    $1, 0x50 <chksum_update+0x38> 70: 02 
+00 20 d8      beqzc    $1, 0x7c <chksum_update+0x64>
+       7c: 04 00 a5 64      daddiu    $5, $5, 0x4 <chksum_init+0x4>
+;         CRC32(crc, value, h); ;         CRC32(crc, value, b);
+       80: 00 00 a6 94      lhu    $6, 0x0($5) 74: 00 00 a3 90      
+lbu    $3, 0x0($5)
+
+       84: 4f 00 c2 7c      <unknown> crc32h v0,a2,v0 78: 0f 00 62 
+7c      <unknown> crc32b    v0,v1,v0
+
+;     if (len & sizeof(u8)) { ;     ctx->crc = 
+crc32_mips_le_hw(ctx->crc, data, length);
+       88: 01 00 61 30      andi    $1, $3, 0x1 <chksum_init+0x1> 7c: 08 
+00 82 ac      sw    $2, 0x8($4)
+       8c: f4 ff 20 10      beqz    $1, 0x60 <chksum_update+0x48> ;     
+return 0;
+       90: 02 00 a5 64      daddiu    $5, $5, 0x2 <chksum_init+0x2> 80: 
+09 00 e0 03      jr    $ra
+       94: 00 00 00 08      j    0x0 <chksum_init> 84: 00 00 02 64      
+daddiu    $2, $zero, 0x0 <chksum_init>
 
 
---
-Best regards,
+In our testing, this assignment operation affects Clang's code expansion 
+and instruction reordering.
 
-Keguang Zhang
+This redundant assignment operation confuses Clang and prevents us from 
+obtaining optimized
+
+assembly code.
+
+
+I extracted the 'crc32_mips_le_hw()' function as a user-mode demo to 
+analyze the assembly code
+
+generated for it on MIPS64.
+
+Link: https://godbolt.org/z/r4dGbhTGf
+
+
+
+As you can see, regardless of the Clang or GCC version, this redundant 
+operation affects the generated
+
+assembly code.
+ >
+ > If it does make a difference, you should avoid doing ifdefs as they
+ > are more likely to cause build failures.  Instead do something like
+ >
+ >         if (!IS_ENABLED(CONFIG_64BIT))
+ >             len -= sizeof(u32);
+Okay, I'll send a Patch V2 to fix this and update the commit message 
+based on above.
+ >
+ >
+ > Cheers,
+
+-- 
+WangYuli <wangyuli@uniontech.com>
+
+
 
