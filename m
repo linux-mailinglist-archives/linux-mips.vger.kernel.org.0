@@ -1,135 +1,148 @@
-Return-Path: <linux-mips+bounces-4015-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4016-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 259AC91B42C
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Jun 2024 02:41:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83D3191B740
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Jun 2024 08:45:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3840B23837
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Jun 2024 00:41:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E5A8287852
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Jun 2024 06:45:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03AF24C74;
-	Fri, 28 Jun 2024 00:36:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06B0512FB37;
+	Fri, 28 Jun 2024 06:45:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="m9IzlACb";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="g63nJDkr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wXCQVvtF"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh2-smtp.messagingengine.com (fhigh2-smtp.messagingengine.com [103.168.172.153])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F44EBA2F;
-	Fri, 28 Jun 2024 00:36:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 136A584FAD
+	for <linux-mips@vger.kernel.org>; Fri, 28 Jun 2024 06:45:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719535009; cv=none; b=Vg0Pn4il1DBEb2WAf4PMOf4CdforOFRUuQNShPCi4JshzpeDMAQyPoX1ihq+a1VAnqOPqSI44eEpJB52NH4nDxgncinq95Kl4qUS2/VZ7K43Voj2ba3NoR6kZUTLTjCyIlINnNV86Z+TUDUu9/Fk8+oqjsTCbVpn0Uhtvz4ru5w=
+	t=1719557121; cv=none; b=qNoMFNYeuWmslFx+S2CYtV4hQGBW+JUq9txJ57MnVshCQYS/VZYXa/ifGiq4Lp3S/AlBz/v2Jehr7zoO6CeCFnUPt7WcIznndaFHdfElDyVyYZI6PXt39DnzgeltmpAAuN84RzGx8dBRMfQXIupHDKdPXV/yQlY6yFya/onh5VU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719535009; c=relaxed/simple;
-	bh=6FeNaEk983gv0oi71Hy3QUiWUXGuEt4Dg/zsaW6TMc4=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=tQpAIrfgBt9oWrQlftePojiAdVDhX1FtmpsyYXgSs296X6sOkfY+iHftmlsrAjqcAndewP8JjEicb7/Z0XgvdDEHU9mKMb0rN6RfKcJU1xZ85h7XS24zGFi8P3tysxTD3f/R77GiZOHUbokS5d+U5EPn8Za3g/ogUbe41Np5k7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=m9IzlACb; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=g63nJDkr; arc=none smtp.client-ip=103.168.172.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 8430411401FB;
-	Thu, 27 Jun 2024 20:36:47 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Thu, 27 Jun 2024 20:36:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1719535007;
-	 x=1719621407; bh=2bdVP6Gr0JVygxXiDLax6rFzl2pR37Qmj84xd4P8Oho=; b=
-	m9IzlACbMuuDyuSTbqV97luVEVuZHTIDifiTH/N3EGKGY0+mCi5y3HPWaCwopyH+
-	kU9AdMlxsoZkPYOHG80mMREV0eTNRpzsrlZMAibPtOkb/oezPvfd5d17Nwbnx/YC
-	2QJLHdAa64Cb8xQfvZPDYxdTCJdB8ezfG78K/Ki74HFL5SKHPxHZVAKTGnGdVDbF
-	cbzy+84wNG3V4E2kOMSYVOEn1VBiel6mBpbbnJSqgT9j8YXALh2zR6/h3RmSM7D4
-	pkX7Zb7xkHPaQUY8SOeeK47Jaig1Dvi8KPmiyppvBxPlboLz/qgxKElM1Rvk2LBv
-	f0VP5Paq9TQwXMm8m8/1cA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1719535007; x=
-	1719621407; bh=2bdVP6Gr0JVygxXiDLax6rFzl2pR37Qmj84xd4P8Oho=; b=g
-	63nJDkroaqPLD8/WPXAlKnNNyHV3TYWY6raPGS+bMX7Gav65IW9nXRRNCUudT8Do
-	i6pqlJ2EHPkt/FVWWPet/ee1REk5d7A/w5BrTTdTesp3KI1epwocWRrRVmnuJ6WI
-	JJ1U+bNK9RYZkOEnDGbsMvwqotZjHwO/wZKMXCKEt0UxKcxDTeSvLv6NjCJReKWi
-	jZw9rOpWpqTmNKPrd9e+0h2EatdhTaROdOTqM+PHrXCdHH1lPYk/+y0yLf/7D4Bj
-	N4o87p34ONhjrlS2gVGt3j/gySlWC8Zp/l/88j+2tRjeb8jXFuicTvdrNm4/1chH
-	jAP0zaolSYpxRHIXXRLwA==
-X-ME-Sender: <xms:nwV-ZliEB-HO-NZz2O5PqNQ_7PvgoM_dJYCuyjpsi3JEEVuOF5HWgw>
-    <xme:nwV-ZqCFMCrZTukMS4xRbQRUeetBU46rXQzJI6mIEN70QK4Fw5t-8at19WYJNPAZM
-    aMImF9s8P93oEeDzDQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrtdehgdefkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
-    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-    eqnecuggftrfgrthhtvghrnhepudefgeeftedugeehffdtheefgfevffelfefghefhjeeu
-    geevtefhudduvdeihefgnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrg
-    hilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:nwV-ZlH9lnXen6FcR7s1ODOqw9mQ_keF4fUlXgvSUwgFt6klCBs4iw>
-    <xmx:nwV-ZqQNcMJXV4FZ9E_ILHIMd25DJFR2h6NR0v0ZOikspPlMRToShw>
-    <xmx:nwV-Zizran0BpMamS7kOHoq66-XDBCL_GItsTYdn9Sbvz7X2Ai4fKA>
-    <xmx:nwV-Zg5GRuvFc6qVRCKatiHjgoyNbMBzgJ71eUCY3afsCQN6q1-BbA>
-    <xmx:nwV-Zsu7cilUp1bwcWw4rSPa_XEw3Jyr1_DfIzklmmQfMjRUtX5O4vBw>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 4004D36A0074; Thu, 27 Jun 2024 20:36:47 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-538-g1508afaa2-fm-20240616.001-g1508afaa
+	s=arc-20240116; t=1719557121; c=relaxed/simple;
+	bh=1LIMHyLJHkU5Pdd3kNxkaT+1GkvFT9KTRc7qGcJF3Ec=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CqYdRVBRqog7k3JSPdSrB72qtXg7qQ/iHtqle6hcOzXNKry7xKKQ+6vDCt7xUgzyGnjytnSW6m1GsNeQM2hKHVizosAotNpYngMpNARJ+i5XGEg77SVdxR0pPS2wB291SLz/t/9jT2VHG7Hc86DNE/p+yQla+8YCezlonXX7sTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wXCQVvtF; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2eaae2a6dc1so3011241fa.0
+        for <linux-mips@vger.kernel.org>; Thu, 27 Jun 2024 23:45:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1719557118; x=1720161918; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1LIMHyLJHkU5Pdd3kNxkaT+1GkvFT9KTRc7qGcJF3Ec=;
+        b=wXCQVvtFPqUR7I1RyjWA2St1Wunfyj27FdS5BVtZFjlnAlE+KoAdctvKLiIdii5qvd
+         3pPPH8pKbi5UeZACOrdFUPFGuKu94nfvmtAHbvUFDFKC7m6QhMHkeaqIM0MsampeIEjg
+         DrIOSNB3IpUyKScyhyWhDVhN3BgCWNRDPUyI3ErfsvBnLmJLa/1jwPQp1O5/DDEJREu8
+         I+eAWDaQsZfeYnd9KSxFhFrQH4ZFegrdKAWOj0kd5PM7wu1YdKhrmsFTDXBd9npvxFxW
+         35KAIsB5OloY7G2vdTBKIYDfbEaLfRKtB8bPq54f5EEkgAFdPoqD7zCU0WvSrzxLC4xP
+         A16Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719557118; x=1720161918;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1LIMHyLJHkU5Pdd3kNxkaT+1GkvFT9KTRc7qGcJF3Ec=;
+        b=vgANPGJTvRh+9ANaNISCV659TPEDR/JlIsbfMb2E0MMG2t7BHNH8V504/bQlkD9+Cb
+         MHXfng96+ZoL9rh/j0CL40Xmra90yF/dqvEM1/hMwbSNITk3K1K8pjyF+dKjZNzp6IgZ
+         Yi3f3Sn33fCx1sX4HhiDxQTIHM1nO5u+dAZV+uF0rUn4+lh111H31LYaGr+QfA3BjnZn
+         RYrnyDnYU8j3cVRwcuCX3rf+D97z9pTFYEsAqecb3EFOa6pRkUOJumlnF+4s7r2bA3Dl
+         JGAuV064GChjBQ3gI0Syxsd0I8eI8d3p8H1R2MFfSCfL+GDr4j1u2OhDVYYoWXltda/C
+         7lIw==
+X-Forwarded-Encrypted: i=1; AJvYcCXMgp0uB+2pa7VjYW5xSFhqskurstZ1uLRX4NqF0n0K9YFk3J3LEDpauNY5reI0s3ZmXmhzWn/R5G60GhipuDTgz+qY6vwdZMsh5g==
+X-Gm-Message-State: AOJu0Ywu/EDrBmeYW53Vz/QPkNg/Mv+/nBIoDTD3y1nQfr95BOdR50kr
+	GT1dWdR7QzGYV83eyWNRmbFW/V6/AcA5QtFrDQ1CVQxmU9KWSrtzQp3Jz2GPcqRYgsYMUeL//ot
+	Wm9JXDoMCOkq4dQCCdMTQIlFXYUe0HqYoofBn
+X-Google-Smtp-Source: AGHT+IFzoWsdn3M+XFfrkT8kZLzSfZp/lZeDCR97JMMrDEnf+uiFKANkVEhRvPu3Ts+wC5+Q+DppqxOk60nnma26g80=
+X-Received: by 2002:a05:6512:110f:b0:52c:df8e:a367 with SMTP id
+ 2adb3069b0e04-52cf4dafc54mr7327684e87.53.1719557117907; Thu, 27 Jun 2024
+ 23:45:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <bf198418-ecb4-4880-8eed-f0af77d18e1a@app.fastmail.com>
-In-Reply-To: <alpine.DEB.2.21.2406272046020.43454@angie.orcam.me.uk>
-References: <20240616-mips-mt-fixes-v1-0-83913e0e60fc@flygoat.com>
- <20240616-mips-mt-fixes-v1-3-83913e0e60fc@flygoat.com>
- <Zn0qG5tsMBYcSWW+@alpha.franken.de>
- <394042b6-37ef-4011-b799-454036d8bc34@app.fastmail.com>
- <alpine.DEB.2.21.2406272046020.43454@angie.orcam.me.uk>
-Date: Fri, 28 Jun 2024 01:36:12 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-kernel@vger.kernel.org,
- "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH fixes 3/4] MIPS: cps-vec: Replace MT instructions with macros
-Content-Type: text/plain;charset=utf-8
+References: <20240628003253.1694510-1-almasrymina@google.com>
+In-Reply-To: <20240628003253.1694510-1-almasrymina@google.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Thu, 27 Jun 2024 23:45:03 -0700
+Message-ID: <CAHS8izNTLc1NP13Y5irKOS47ZLOOjwfAjmRFY5pFATfZGZ30yg@mail.gmail.com>
+Subject: Re: [PATCH net-next v15 00/14] Device Memory TCP
+To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, Pavel Begunkov <asml.silence@gmail.com>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, daniel@ffwll.ch
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, David Wei <dw@davidwei.uk>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-
-
-=E5=9C=A82024=E5=B9=B46=E6=9C=8827=E6=97=A5=E5=85=AD=E6=9C=88 =E4=B8=8B=E5=
-=8D=888:51=EF=BC=8CMaciej W. Rozycki=E5=86=99=E9=81=93=EF=BC=9A
-> On Thu, 27 Jun 2024, Jiaxun Yang wrote:
+On Thu, Jun 27, 2024 at 5:32=E2=80=AFPM Mina Almasry <almasrymina@google.co=
+m> wrote:
 >
->> > how about simply enforcing the need for a correct toolchain instead
->> > of making the code ugly ?
->>=20
->> Unfortunately, MT for microMIPS which I'm trying to bring up is only =
-in
->> binutils master, it's not in any binutils release yet.
+> v15: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D865481=
+&state=3D*
+> =3D=3D=3D=3D
 >
->  It's not yet in binutils master either.  Has there been any actual ch=
-ip=20
-> taped out with this instruction subset supported?
-
-interAptiv derivative (with MIPS R5 and microMIPS) from CIP which is not=
- GA yet.
-
-Thanks
+> No material changes in this version, only a fix to linking against
+> libynl.a from the last version. Per Jakub's instructions I've pulled one
+> of his patches into this series, and now use the new libynl.a correctly,
+> I hope.
 >
->   Maciej
 
---=20
-- Jiaxun
+Gah, I forgot to carry a couple of Reviewed-by's from v14.
+
+Pavel Reviewed-by "net: add SO_DEVMEM_DONTNEED setsockopt to release RX fra=
+gs":
+https://lore.kernel.org/netdev/09bdd7e5-75ca-42d5-8e59-a8ec05da89c7@gmail.c=
+om/
+
+Pavel Reviewed-by "tcp: RX path for devmem TCP":
+https://lore.kernel.org/netdev/6524676c-fbc0-4ea0-b320-f605d34da007@gmail.c=
+om/
+
+Nikolay Reviewed-by "net: add SO_DEVMEM_DONTNEED setsockopt to release
+RX frags":
+https://lore.kernel.org/netdev/1d0483b9-13bc-426e-a57a-69044d5098c1@blackwa=
+ll.org/
+
+Daniel Acked-by "netdev: support binding dma-buf to netdevice":
+https://lore.kernel.org/netdev/ZnvM_gtscO7q9P2Y@phenom.ffwll.local/
+
+None of these patches changed much since v14, I just forgot to add the
+tags. Thank you very much for the reviews.
 
