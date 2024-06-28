@@ -1,228 +1,249 @@
-Return-Path: <linux-mips+bounces-4022-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4023-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E77C91C2F7
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Jun 2024 17:52:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29DA191C30E
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Jun 2024 18:00:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41FE4283129
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Jun 2024 15:52:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CDEF1C22931
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Jun 2024 16:00:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AD741C68A0;
-	Fri, 28 Jun 2024 15:52:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ABC11C8FBC;
+	Fri, 28 Jun 2024 16:00:35 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70731DFFB;
-	Fri, 28 Jun 2024 15:52:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.92.39.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF66DDC0;
+	Fri, 28 Jun 2024 16:00:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719589974; cv=none; b=YIfaA53G9lz054YJF1WsVG+VxTsQgl4Vnv4/7aV6hF5csRr1QP3oTCv3Tnip+g7S3OZh7FtWhOqKnASZ/AxQUfpNgHuHtEBqTY65hICV5QaeE2r7wLS374b56xvumHoDdFdprZQhsk5f/RYyMeaab4LRcLuQnqlahLhYvUN3P94=
+	t=1719590435; cv=none; b=g15qU1ncRqu9HLSMeB8Bq4lMg7do8NaQRXaLRbeGd8qZterk264MRqvrUygoffkHumovg5OLsvoOHZqcv+IkE4vyhEpamwiIdtv/VGvPdP7+mz43SVWvxODQJJ+AUqwALDQlfxRuM6qu48IftWaNjp+5vEe4kbqOIhHKkzJrKGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719589974; c=relaxed/simple;
-	bh=AESRoCtdfYIEKI2FzdomGfG8TR8mQBKd5L+uqnwzWp0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PRq2pPLfljC/yJa3at0gR1nqdOzZr1kUaHx34o+h6tYYKAz5atStKi7FzeJcY/ZzehRVMPO96lrtEUA9k5IowWP/F+e/mfuse7Jyyear+ExCScxqqiGHUi/C3ZPZhFkBU+UYXE9PfBeKgtikRhHwn4wPeTXaNqF7fOCd0DDF/Y4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; arc=none smtp.client-ip=54.92.39.34
+	s=arc-20240116; t=1719590435; c=relaxed/simple;
+	bh=I16cHu7mFs6qQmx0RxpZSGTwFbsiQK8QqOYTfldEXkc=;
+	h=From:To:Cc:Subject:Mime-Version:Content-Type:Date:Message-ID:
+	 References:In-Reply-To; b=p7FAPIav0ce1/sGWHEhCCEmwG6vYWm4hbUcZkj77vujdE7K5wyCsk4K/5P51RWPwm4HlDq3fr3inyeHevslaOLZxAxyyzeHN9iL/GMBgjPasjik72I/jzjGFUAl/wmnD+fwpOObjNxx6KtliuJ+Ss+gbprJSSa3FhrRMQTQvzFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; arc=none smtp.client-ip=54.243.244.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-X-QQ-mid: bizesmtpsz13t1719589914t2js4i
-X-QQ-Originating-IP: ge8KyYfF/y74egXHDOj1Cmc5ujh0vTQl+zJIQK3W50k=
-Received: from [10.20.53.89] ( [113.57.152.160])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 28 Jun 2024 23:51:53 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 14412566357318969333
-Message-ID: <CD5FFEE4BEA56308+0122a540-e098-4982-9bb1-110b449cbe02@uniontech.com>
-Date: Fri, 28 Jun 2024 23:51:53 +0800
+X-QQ-SSF: 00400000000000F0
+X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
+X-QQ-FEAT: D6RqbDSxuq7+ueXtfDh2EYCOo02DvdAOK8c0tyjxNRGShd1xe4eChPy8vxbgO
+	wawUlZPTQ/+tHIdqGnlJIIXNJw1flA2qTvXxk5kgQHY5KEHsplJDW1bGmKGxcHzq/IDGjTl
+	NB/OWjLP88tls9NJ8XoFDOcfErnK/1g8ax16lUsOeJrjhNfdJLdMkOFClP0LBtutIK4APv2
+	yJy+zJVSp/fh1E1D8tUpzArN6yA5EFpVaR6uYB6XRlIp4E0f2Q6XU+APxDJCFk/qcl5XI+S
+	jRMhU7guvw6XcrgpQYvWqPCEdSLqjaaQ68fRaDiOeQ9+MrbZDglKOVh4oSP9fjnfNnzgHFT
+	g8gkb7p6ugYxs90Py1/95aTKv8CkEwAMxR41sHWSyr1ME1ilhYpDRPn53gY8bK0Gtm141h6
+	mmzECxbZ1SxlaBXz9pFkgER2BSix3xzS
+X-QQ-BUSINESS-ORIGIN: 2
+X-QQ-Originating-IP: yRg7yP9Nc6jQnC0v+gFIyMxfHxWAyAtXtPLjFnkT3AI=
+X-QQ-STYLE: 
+X-QQ-mid: t5gz7a-2t1719590388t105468
+From: "=?utf-8?B?V2VudGFvIEd1YW4=?=" <guanwentao@uniontech.com>
+To: "=?utf-8?B?546L5pix5Yqb?=" <wangyuli@uniontech.com>, "=?utf-8?B?aGVyYmVydA==?=" <herbert@gondor.apana.org.au>
+Cc: "=?utf-8?B?bGludXgtY3J5cHRv?=" <linux-crypto@vger.kernel.org>, "=?utf-8?B?bGludXgtbWlwcw==?=" <linux-mips@vger.kernel.org>, "=?utf-8?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>, "=?utf-8?B?ZGF2ZW0=?=" <davem@davemloft.net>, "=?utf-8?B?dHNib2dlbmQ=?=" <tsbogend@alpha.franken.de>
+Subject: Re: [PATCH] MIPS: crypto: Clean up useless assignment operations
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] MIPS: crypto: Clean up useless assignment operations
-To: herbert@gondor.apana.org.au
-Cc: linux-crypto@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-kernel@vger.kernel.org, Guan Wentao <guanwentao@uniontech.com>,
- davem@davemloft.net, tsbogend@alpha.franken.de
+Mime-Version: 1.0
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: base64
+Date: Fri, 28 Jun 2024 23:59:47 +0800
+X-Priority: 3
+Message-ID: <tencent_2C74D4CA114C80E84F596135@qq.com>
+X-QQ-MIME: TCMime 1.0 by Tencent
+X-Mailer: QQMail 2.x
+X-QQ-Mailer: QQMail 2.x
 References: <1D248893502B75F5+20240628084117.84264-1-wangyuli@uniontech.com>
-From: WangYuli <wangyuli@uniontech.com>
-In-Reply-To: <1D248893502B75F5+20240628084117.84264-1-wangyuli@uniontech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+	<CD5FFEE4BEA56308+0122a540-e098-4982-9bb1-110b449cbe02@uniontech.com>
+In-Reply-To: <CD5FFEE4BEA56308+0122a540-e098-4982-9bb1-110b449cbe02@uniontech.com>
+X-QQ-ReplyHash: 3506655213
+X-BIZMAIL-ID: 4865640343501613317
 X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtpsz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+Received: from qq.com (unknown [127.0.0.1])
+	by smtp.qq.com (ESMTP) with SMTP
+	id ; Fri, 28 Jun 2024 23:59:50 +0800 (CST)
+Feedback-ID: t:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
 
-
-On 2024/6/28 18:12, Herbert Xu wrote:
- > On Fri, Jun 28, 2024 at 04:41:17PM +0800, WangYuli wrote:
- >> When entering the "len & sizeof(u32)" branch, len must be less than 8.
- >> So after one operation, len must be less than 4.
- >> At this time, "len -= sizeof(u32)" is not necessary for 64-bit CPUs.
- >>
- >> A similar issue has been solved at Loongarch.
- >>
- >> Link: 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v6.10-rc5&id=fea1c949f6ca5059e12de00d0483645debc5b206
- >> Signed-off-by: Guan Wentao <guanwentao@uniontech.com>
- >> Signed-off-by: WangYuli <wangyuli@uniontech.com>
- >> ---
- >>  arch/mips/crypto/crc32-mips.c | 4 ++++
- >>  1 file changed, 4 insertions(+)
- >>
- >> diff --git a/arch/mips/crypto/crc32-mips.c 
-b/arch/mips/crypto/crc32-mips.c
- >> index ec6d58008f8e..505d2d897849 100644
- >> --- a/arch/mips/crypto/crc32-mips.c
- >> +++ b/arch/mips/crypto/crc32-mips.c
- >> @@ -94,7 +94,9 @@ static u32 crc32_mips_le_hw(u32 crc_, const u8 *p, 
-unsigned int len)
- >>
- >>          CRC32(crc, value, w);
- >>          p += sizeof(u32);
- >> +#ifndef CONFIG_64BIT
- >>          len -= sizeof(u32);
- >> +#endif
- >
- > First of all, did you verify that this actually makes a difference?
- > Please post the actual assembly output with and without this patch.
-
-Sure.
-
-The left shows the assembly after applying this patch, while the right 
-shows the origin. ( Generated by Clang 17.0.6 )
-
-0000000000000018 <chksum_update>: 0000000000000018 <chksum_update>:
-;     ctx->crc = crc32_mips_le_hw(ctx->crc, data, length); ;     
-ctx->crc = crc32_mips_le_hw(ctx->crc, data, length);
-       18: 08 00 82 8c      lw    $2, 0x8($4) 18: 08 00 82 8c      lw    
-$2, 0x8($4)
-;     while (len >= sizeof(u64)) { ;     while (len >= sizeof(u64)) {
-       1c: 08 00 c1 2c      sltiu    $1, $6, 0x8 <chksum_init+0x8> 1c: 
-08 00 c1 2c      sltiu    $1, $6, 0x8 <chksum_init+0x8>
-       20: 06 00 20 f8      bnezc    $1, 0x3c <chksum_update+0x24> 20: 
-06 00 20 f8      bnezc    $1, 0x3c <chksum_update+0x24>
-;     return le64_to_cpu(__get_unaligned_t(__le64, p)); ;     return 
-le64_to_cpu(__get_unaligned_t(__le64, p));
-       24: 00 00 a3 dc      ld    $3, 0x0($5) 24: 00 00 a3 dc      ld    
-$3, 0x0($5)
-;         CRC32(crc, value, d); ;         CRC32(crc, value, d);
-       28: cf 00 62 7c      <unknown> crc32d v0,v1,v0 28: cf 00 62 
-7c      <unknown> crc32d    v0,v1,v0
-;         len -= sizeof(u64); ;         len -= sizeof(u64);
-       2c: f8 ff c6 24      addiu    $6, $6, -0x8 
-<chksumc_digest+0xfffffffffffffce0> 2c: f8 ff c6 24      addiu    $6, 
-$6, -0x8 <chksumc_digest+0xfffffffffffffd48>
-;     while (len >= sizeof(u64)) { ;     while (len >= sizeof(u64)) {
-       30: 08 00 c1 2c      sltiu    $1, $6, 0x8 <chksum_init+0x8> 30: 
-08 00 c1 2c      sltiu    $1, $6, 0x8 <chksum_init+0x8>
-       34: fb ff 20 10      beqz    $1, 0x24 <chksum_update+0xc> 34: fb 
-ff 20 10      beqz    $1, 0x24 <chksum_update+0xc>
-       38: 08 00 a5 64      daddiu    $5, $5, 0x8 <chksum_init+0x8> 38: 
-08 00 a5 64      daddiu    $5, $5, 0x8 <chksum_init+0x8>
-;     if (len & sizeof(u32)) { ;     if (len & sizeof(u32)) {
-       3c: 04 00 c1 2c      sltiu    $1, $6, 0x4 <chksum_init+0x4> 3c: 
-04 00 c1 2c      sltiu    $1, $6, 0x4 <chksum_init+0x4>
-       40: 0a 00 20 10      beqz    $1, 0x6c <chksum_update+0x54> 40: 04 
-00 20 f8      bnezc    $1, 0x54 <chksum_update+0x3c>
-       44: 03 f8 c3 7c      dext    $3, $6, 0x0, 0x20 
-<chksum_update+0x8> ;     return le32_to_cpu(__get_unaligned_t(__le32, p));
-;     if (len & sizeof(u16)) { 44: 00 00 a3 8c      lw    $3, 0x0($5)
-       48: 02 00 61 30      andi    $1, $3, 0x2 <chksum_init+0x2> 
-;         CRC32(crc, value, w);
-       4c: 0c 00 20 f8      bnezc    $1, 0x80 <chksum_update+0x68>
-;     if (len & sizeof(u8)) { 48: 8f 00 62 7c      <unknown> crc32w    
-v0,v1,v0
-       50: 01 00 61 30      andi    $1, $3, 0x1 <chksum_init+0x1>
-       54: 02 00 20 d8      beqzc    $1, 0x60 <chksum_update+0x48> 
-;         len -= sizeof(u32);
-;         CRC32(crc, value, b); 4c: fc ff c6 24      addiu    $6, $6, 
--0x4 <chksumc_digest+0xfffffffffffffd4c>
-       58: 00 00 a3 90      lbu    $3, 0x0($5) ;         p += sizeof(u32);
-50: 04 00 a5 64      daddiu    $5, $5, 0x4 <chksum_init+0x4>
-       5c: 0f 00 62 7c      <unknown> crc32b v0,v1,v0 ;     if (len & 
-sizeof(u16)) {
-54: 03 f8 c3 7c      dext    $3, $6, 0x0, 0x20 <chksum_update+0x8>
-;     ctx->crc = crc32_mips_le_hw(ctx->crc, data, length); 58: 02 00 61 
-30      andi    $1, $3, 0x2 <chksum_init+0x2>
-       60: 08 00 82 ac      sw    $2, 0x8($4) 5c: 03 00 20 d8      
-beqzc    $1, 0x6c <chksum_update+0x54>
-;     return 0; ;         CRC32(crc, value, h);
-       64: 09 00 e0 03      jr $ra 60: 00 00 a6 94      lhu    $6, 0x0($5)
-       68: 00 00 02 64      daddiu    $2, $zero, 0x0 <chksum_init>
-;     return le32_to_cpu(__get_unaligned_t(__le32, p)); 64: 4f 00 c2 
-7c      <unknown> crc32h    v0,a2,v0
-       6c: 00 00 a6 8c      lw    $6, 0x0($5)
-;         CRC32(crc, value, w); ;         p += sizeof(u16);
-       70: 8f 00 c2 7c      <unknown> crc32w v0,a2,v0 68: 02 00 a5 
-64      daddiu    $5, $5, 0x2 <chksum_init+0x2>
-;     if (len & sizeof(u16)) { ;     if (len & sizeof(u8)) {
-       74: 02 00 61 30      andi    $1, $3, 0x2 <chksum_init+0x2> 6c: 01 
-00 61 30      andi    $1, $3, 0x1 <chksum_init+0x1>
-       78: f5 ff 20 10      beqz    $1, 0x50 <chksum_update+0x38> 70: 02 
-00 20 d8      beqzc    $1, 0x7c <chksum_update+0x64>
-       7c: 04 00 a5 64      daddiu    $5, $5, 0x4 <chksum_init+0x4>
-;         CRC32(crc, value, h); ;         CRC32(crc, value, b);
-       80: 00 00 a6 94      lhu    $6, 0x0($5) 74: 00 00 a3 90      
-lbu    $3, 0x0($5)
-
-       84: 4f 00 c2 7c      <unknown> crc32h v0,a2,v0 78: 0f 00 62 
-7c      <unknown> crc32b    v0,v1,v0
-
-;     if (len & sizeof(u8)) { ;     ctx->crc = 
-crc32_mips_le_hw(ctx->crc, data, length);
-       88: 01 00 61 30      andi    $1, $3, 0x1 <chksum_init+0x1> 7c: 08 
-00 82 ac      sw    $2, 0x8($4)
-       8c: f4 ff 20 10      beqz    $1, 0x60 <chksum_update+0x48> ;     
-return 0;
-       90: 02 00 a5 64      daddiu    $5, $5, 0x2 <chksum_init+0x2> 80: 
-09 00 e0 03      jr    $ra
-       94: 00 00 00 08      j    0x0 <chksum_init> 84: 00 00 02 64      
-daddiu    $2, $zero, 0x0 <chksum_init>
-
-
-In our testing, this assignment operation affects Clang's code expansion 
-and instruction reordering.
-
-This redundant assignment operation confuses Clang and prevents us from 
-obtaining optimized
-
-assembly code.
-
-
-I extracted the 'crc32_mips_le_hw()' function as a user-mode demo to 
-analyze the assembly code
-
-generated for it on MIPS64.
-
-Link: https://godbolt.org/z/r4dGbhTGf
-
-
-
-As you can see, regardless of the Clang or GCC version, this redundant 
-operation affects the generated
-
-assembly code.
- >
- > If it does make a difference, you should avoid doing ifdefs as they
- > are more likely to cause build failures.  Instead do something like
- >
- >         if (!IS_ENABLED(CONFIG_64BIT))
- >             len -= sizeof(u32);
-Okay, I'll send a Patch V2 to fix this and update the commit message 
-based on above.
- >
- >
- > Cheers,
-
--- 
-WangYuli <wangyuli@uniontech.com>
-
+U29tZXRoaW5nIGxvb2tzIGRpcnR5IHdpdGggZm9sZGluZywgdGhlIG9yaWdpbiBkaWZmIGlz
+IGZvbGxvd2luZzoNCg0KMDAwMDAwMDAwMDAwMDAxOCA8Y2hrc3VtX3VwZGF0ZT46ICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMDAwMDAwMDAwMDAwMDAxOCA8
+Y2hrc3VtX3VwZGF0ZT46DQo7ICAgICBjdHgtPmNyYyA9IGNyYzMyX21pcHNfbGVfaHcoY3R4
+LT5jcmMsIGRhdGEsIGxlbmd0aCk7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgOyAgICAgY3R4LT5jcmMgPSBjcmMzMl9t
+aXBzX2xlX2h3KGN0eC0+Y3JjLCBkYXRhLCBsZW5ndGgpOw0KICAgICAgMTg6IDA4IDAwIDgy
+IDhjICAgICAgbHcgICAgJDIsIDB4OCgkNCkgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgMTg6IDA4IDAwIDgyIDhjICAgICAgbHcgICAg
+JDIsIDB4OCgkNCkNCjsgICAgIHdoaWxlIChsZW4gPj0gc2l6ZW9mKHU2NCkpIHsgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IDsgICAgIHdoaWxlIChsZW4gPj0gc2l6ZW9mKHU2NCkpIHsNCiAgICAgIDFjOiAwOCAwMCBj
+MSAyYyAgICAgIHNsdGl1ICAgICQxLCAkNiwgMHg4IDxjaGtzdW1faW5pdCsweDg+ICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAxYzogMDggMDAgYzEgMmMgICAgICBzbHRpdSAgICAkMSwgJDYsIDB4OCA8Y2hrc3Vt
+X2luaXQrMHg4Pg0KICAgICAgMjA6IDA2IDAwIDIwIGY4ICAgICAgYm5lemMgICAgJDEsIDB4
+M2MgPGNoa3N1bV91cGRhdGUrMHgyND4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAyMDogMDYgMDAgMjAgZjggICAgICBibmV6YyAg
+ICAkMSwgMHgzYyA8Y2hrc3VtX3VwZGF0ZSsweDI0Pg0KOyAgICAgcmV0dXJuIGxlNjRfdG9f
+Y3B1KF9fZ2V0X3VuYWxpZ25lZF90KF9fbGU2NCwgcCkpOyAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgOyAgICAgcmV0
+dXJuIGxlNjRfdG9fY3B1KF9fZ2V0X3VuYWxpZ25lZF90KF9fbGU2NCwgcCkpOw0KICAgICAg
+MjQ6IDAwIDAwIGEzIGRjICAgICAgbGQgICAgJDMsIDB4MCgkNSkgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDI0OiAwMCAwMCBhMyBk
+YyAgICAgIGxkICAgICQzLCAweDAoJDUpDQo7ICAgICAgICAgQ1JDMzIoY3JjLCB2YWx1ZSwg
+ZCk7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgOyAgICAgICAgIENSQzMyKGNyYywgdmFsdWUsIGQpOw0KICAg
+ICAgMjg6IGNmIDAwIDYyIDdjICAgICAgPHVua25vd24+IGNyYzMyZCAgICB2MCx2MSx2MCAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIDI4OiBjZiAwMCA2MiA3YyAgICAgIDx1bmtub3du
+PiBjcmMzMmQgICAgdjAsdjEsdjANCjsgICAgICAgICBsZW4gLT0gc2l6ZW9mKHU2NCk7ICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgOyAgICAgICAgIGxlbiAtPSBzaXplb2YodTY0KTsNCiAgICAg
+IDJjOiBmOCBmZiBjNiAyNCAgICAgIGFkZGl1ICAgICQ2LCAkNiwgLTB4OCA8Y2hrc3VtY19k
+aWdlc3QrMHhmZmZmZmZmZmZmZmZmY2UwPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgMmM6IGY4IGZmIGM2IDI0ICAgICAgYWRkaXUgICAgJDYsICQ2LCAtMHg4IDxjaGtzdW1j
+X2RpZ2VzdCsweGZmZmZmZmZmZmZmZmZkNDg+DQo7ICAgICB3aGlsZSAobGVuID49IHNpemVv
+Zih1NjQpKSB7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICA7ICAgICB3aGlsZSAobGVuID49IHNpemVvZih1NjQpKSB7DQog
+ICAgICAzMDogMDggMDAgYzEgMmMgICAgICBzbHRpdSAgICAkMSwgJDYsIDB4OCA8Y2hrc3Vt
+X2luaXQrMHg4PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAzMDogMDggMDAgYzEgMmMgICAgICBzbHRpdSAgICAkMSwg
+JDYsIDB4OCA8Y2hrc3VtX2luaXQrMHg4Pg0KICAgICAgMzQ6IGZiIGZmIDIwIDEwICAgICAg
+YmVxeiAgICAkMSwgMHgyNCA8Y2hrc3VtX3VwZGF0ZSsweGM+ICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAzNDogZmIgZmYg
+MjAgMTAgICAgICBiZXF6ICAgICQxLCAweDI0IDxjaGtzdW1fdXBkYXRlKzB4Yz4NCiAgICAg
+IDM4OiAwOCAwMCBhNSA2NCAgICAgIGRhZGRpdSAgICAkNSwgJDUsIDB4OCA8Y2hrc3VtX2lu
+aXQrMHg4PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAzODogMDggMDAgYTUgNjQgICAgICBkYWRkaXUgICAgJDUsICQ1LCAweDgg
+PGNoa3N1bV9pbml0KzB4OD4NCjsgICAgIGlmIChsZW4gJiBzaXplb2YodTMyKSkgeyAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIDsgICAgIGlmIChsZW4gJiBzaXplb2YodTMyKSkgew0KICAgICAgM2M6
+IDA0IDAwIGMxIDJjICAgICAgc2x0aXUgICAgJDEsICQ2LCAweDQgPGNoa3N1bV9pbml0KzB4
+ND4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgM2M6IDA0IDAwIGMxIDJjICAgICAgc2x0aXUgICAgJDEsICQ2LCAweDQg
+PGNoa3N1bV9pbml0KzB4ND4NCiAgICAgIDQwOiAwYSAwMCAyMCAxMCAgICAgIGJlcXogICAg
+JDEsIDB4NmMgPGNoa3N1bV91cGRhdGUrMHg1ND4gICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA0MDogMDQgMDAgMjAgZjggICAgICBi
+bmV6YyAgICAkMSwgMHg1NCA8Y2hrc3VtX3VwZGF0ZSsweDNjPg0KICAgICAgNDQ6IDAzIGY4
+IGMzIDdjICAgICAgZGV4dCAgICAkMywgJDYsIDB4MCwgMHgyMCA8Y2hrc3VtX3VwZGF0ZSsw
+eDg+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgOyAgICAgcmV0dXJu
+IGxlMzJfdG9fY3B1KF9fZ2V0X3VuYWxpZ25lZF90KF9fbGUzMiwgcCkpOw0KOyAgICAgaWYg
+KGxlbiAmIHNpemVvZih1MTYpKSB7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgNDQ6IDAwIDAw
+IGEzIDhjICAgICAgbHcgICAgJDMsIDB4MCgkNSkNCiAgICAgIDQ4OiAwMiAwMCA2MSAzMCAg
+ICAgIGFuZGkgICAgJDEsICQzLCAweDIgPGNoa3N1bV9pbml0KzB4Mj4gICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA7ICAgICAgICAg
+Q1JDMzIoY3JjLCB2YWx1ZSwgdyk7DQogICAgICA0YzogMGMgMDAgMjAgZjggICAgICBibmV6
+YyAgICAkMSwgMHg4MCA8Y2hrc3VtX3VwZGF0ZSsweDY4Pg0KOyAgICAgaWYgKGxlbiAmIHNp
+emVvZih1OCkpIHsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDQ4OiA4ZiAwMCA2MiA3YyAg
+ICAgIDx1bmtub3duPiBjcmMzMncgICAgdjAsdjEsdjANCiAgICAgIDUwOiAwMSAwMCA2MSAz
+MCAgICAgIGFuZGkgICAgJDEsICQzLCAweDEgPGNoa3N1bV9pbml0KzB4MT4NCiAgICAgIDU0
+OiAwMiAwMCAyMCBkOCAgICAgIGJlcXpjICAgICQxLCAweDYwIDxjaGtzdW1fdXBkYXRlKzB4
+NDg+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDsg
+ICAgICAgICBsZW4gLT0gc2l6ZW9mKHUzMik7DQo7ICAgICAgICAgQ1JDMzIoY3JjLCB2YWx1
+ZSwgYik7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgNGM6IGZjIGZmIGM2IDI0ICAgICAgYWRkaXUg
+ICAgJDYsICQ2LCAtMHg0IDxjaGtzdW1jX2RpZ2VzdCsweGZmZmZmZmZmZmZmZmZkNGM+DQog
+ICAgICA1ODogMDAgMDAgYTMgOTAgICAgICBsYnUgICAgJDMsIDB4MCgkNSkgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDsgICAgICAgICBwICs9IHNp
+emVvZih1MzIpOw0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDUwOiAwNCAwMCBhNSA2NCAgICAgIGRh
+ZGRpdSAgICAkNSwgJDUsIDB4NCA8Y2hrc3VtX2luaXQrMHg0Pg0KICAgICAgNWM6IDBmIDAw
+IDYyIDdjICAgICAgPHVua25vd24+IGNyYzMyYiAgICB2MCx2MSx2MCAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIDsgICAgIGlmIChsZW4gJiBzaXplb2YodTE2KSkgew0KICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIDU0OiAwMyBmOCBjMyA3YyAgICAgIGRleHQgICAgJDMsICQ2LCAweDAsIDB4MjAgPGNo
+a3N1bV91cGRhdGUrMHg4Pg0KOyAgICAgY3R4LT5jcmMgPSBjcmMzMl9taXBzX2xlX2h3KGN0
+eC0+Y3JjLCBkYXRhLCBsZW5ndGgpOyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA1ODogMDIgMDAgNjEgMzAgICAg
+ICBhbmRpICAgICQxLCAkMywgMHgyIDxjaGtzdW1faW5pdCsweDI+DQogICAgICA2MDogMDgg
+MDAgODIgYWMgICAgICBzdyAgICAkMiwgMHg4KCQ0KSAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgNWM6IDAzIDAwIDIwIGQ4ICAgICAgYmVx
+emMgICAgJDEsIDB4NmMgPGNoa3N1bV91cGRhdGUrMHg1ND4NCjsgICAgIHJldHVybiAwOyAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgOyAgICAgICAgIENS
+QzMyKGNyYywgdmFsdWUsIGgpOw0KICAgICAgNjQ6IDA5IDAwIGUwIDAzICAgICAganIgICAg
+JHJhICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgNjA6IDAwIDAwIGE2IDk0ICAgICAgbGh1ICAgICQ2LCAw
+eDAoJDUpDQogICAgICA2ODogMDAgMDAgMDIgNjQgICAgICBkYWRkaXUgICAgJDIsICR6ZXJv
+LCAweDAgPGNoa3N1bV9pbml0Pg0KOyAgICAgcmV0dXJuIGxlMzJfdG9fY3B1KF9fZ2V0X3Vu
+YWxpZ25lZF90KF9fbGUzMiwgcCkpOyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA2NDogNGYgMDAgYzIgN2Mg
+ICAgICA8dW5rbm93bj4gY3JjMzJoICAgIHYwLGEyLHYwDQogICAgICA2YzogMDAgMDAgYTYg
+OGMgICAgICBsdyAgICAkNiwgMHgwKCQ1KQ0KOyAgICAgICAgIENSQzMyKGNyYywgdmFsdWUs
+IHcpOyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgOyAgICAgICAgIHAgKz0gc2l6ZW9mKHUxNik7DQogICAgICA3
+MDogOGYgMDAgYzIgN2MgICAgICA8dW5rbm93bj4gY3JjMzJ3ICAgIHYwLGEyLHYwICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIDY4OiAwMiAwMCBhNSA2NCAgICAgIGRhZGRpdSAgICAkNSwg
+JDUsIDB4MiA8Y2hrc3VtX2luaXQrMHgyPg0KOyAgICAgaWYgKGxlbiAmIHNpemVvZih1MTYp
+KSB7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgOyAgICAgaWYgKGxlbiAmIHNpemVvZih1OCkpIHsNCiAg
+ICAgIDc0OiAwMiAwMCA2MSAzMCAgICAgIGFuZGkgICAgJDEsICQzLCAweDIgPGNoa3N1bV9p
+bml0KzB4Mj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICA2YzogMDEgMDAgNjEgMzAgICAgICBhbmRpICAgICQxLCAkMywg
+MHgxIDxjaGtzdW1faW5pdCsweDE+DQogICAgICA3ODogZjUgZmYgMjAgMTAgICAgICBiZXF6
+ICAgICQxLCAweDUwIDxjaGtzdW1fdXBkYXRlKzB4Mzg+ICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA3MDogMDIgMDAgMjAgZDgg
+ICAgICBiZXF6YyAgICAkMSwgMHg3YyA8Y2hrc3VtX3VwZGF0ZSsweDY0Pg0KICAgICAgN2M6
+IDA0IDAwIGE1IDY0ICAgICAgZGFkZGl1ICAgICQ1LCAkNSwgMHg0IDxjaGtzdW1faW5pdCsw
+eDQ+DQo7ICAgICAgICAgQ1JDMzIoY3JjLCB2YWx1ZSwgaCk7ICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgOyAg
+ICAgICAgIENSQzMyKGNyYywgdmFsdWUsIGIpOw0KICAgICAgODA6IDAwIDAwIGE2IDk0ICAg
+ICAgbGh1ICAgICQ2LCAweDAoJDUpICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIDc0OiAwMCAwMCBhMyA5MCAgICAgIGxidSAgICAkMywgMHgw
+KCQ1KQ0KDQogICAgICA4NDogNGYgMDAgYzIgN2MgICAgICA8dW5rbm93bj4gY3JjMzJoICAg
+IHYwLGEyLHYwICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA3ODogMGYgMDAgNjIgN2MgICAg
+ICA8dW5rbm93bj4gY3JjMzJiICAgIHYwLHYxLHYwDQoNCjsgICAgIGlmIChsZW4gJiBzaXpl
+b2YodTgpKSB7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICA7ICAgICBjdHgtPmNyYyA9IGNyYzMyX21p
+cHNfbGVfaHcoY3R4LT5jcmMsIGRhdGEsIGxlbmd0aCk7DQogICAgICA4ODogMDEgMDAgNjEg
+MzAgICAgICBhbmRpICAgICQxLCAkMywgMHgxIDxjaGtzdW1faW5pdCsweDE+ICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+N2M6IDA4IDAwIDgyIGFjICAgICAgc3cgICAgJDIsIDB4OCgkNCkNCiAgICAgIDhjOiBmNCBm
+ZiAyMCAxMCAgICAgIGJlcXogICAgJDEsIDB4NjAgPGNoa3N1bV91cGRhdGUrMHg0OD4gICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA7ICAg
+ICByZXR1cm4gMDsNCiAgICAgIDkwOiAwMiAwMCBhNSA2NCAgICAgIGRhZGRpdSAgICAkNSwg
+JDUsIDB4MiA8Y2hrc3VtX2luaXQrMHgyPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIDgwOiAwOSAwMCBlMCAwMyAgICAgIGpyICAg
+ICRyYQ0KICAgICAgOTQ6IDAwIDAwIDAwIDA4ICAgICAgaiAgICAweDAgPGNoa3N1bV9pbml0
+PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgODQ6IDAwIDAwIDAy
+IDY0ICAgICAgZGFkZGl1ICAgICQyLCAkemVybywgMHgwIDxjaGtzdW1faW5pdD4NCg0KR3Vh
+biBXZW50YW8=
 
 
