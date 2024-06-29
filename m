@@ -1,119 +1,175 @@
-Return-Path: <linux-mips+bounces-4034-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4035-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A035191CDA8
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Jun 2024 16:57:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBFDC91CE5F
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Jun 2024 19:46:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B38211C20F1F
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Jun 2024 14:57:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 27B7FB211A2
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Jun 2024 17:46:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6C1181ACB;
-	Sat, 29 Jun 2024 14:57:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 123E12B9DA;
+	Sat, 29 Jun 2024 17:46:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="E0gCzjp/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CWCGBKeh"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EE721D52D;
-	Sat, 29 Jun 2024 14:57:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3512F4C99;
+	Sat, 29 Jun 2024 17:46:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719673070; cv=none; b=dHdij/IsoUqNb5qls/1mSG222yP27nxNRc+UgMYxkpXKCLUrGk0I9DCLVwqBSOBM5+m9MjXOGbSHI3yGln0VOa0MDxV8bViaJ9e2Fjtcw0cdXAvQ9FvTI6uK+FwwZZk0orHRHWKcE8gUTOEIRa+lrzbMHbhtVXEOVYe9oe9ZCHA=
+	t=1719683197; cv=none; b=t1hhteSIB42jZMij9SJqXyAOcTKMy4vhKzVVhZ95foja9JgL+1uhmz3jlSdkXDxr3elAqvWLH/BpUJK+He48YZOtfQ6mcD2+86l/6gitZtCIeivbD5jGtz2H4JlivBFHxzIfPNYhCKWnPKwPe3jQromV6OukhJAt5HLkH2/9/jQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719673070; c=relaxed/simple;
-	bh=5KUqIH8oR9S8Oul/SubmquGzNQYNYip/VXcm9bSvXZI=;
+	s=arc-20240116; t=1719683197; c=relaxed/simple;
+	bh=dI9d3ZkEDcUi8OCXq+Czxr9kfoJgXIcUvNvNGQ0NXBI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UtwJr7yPK093xu/w7jmVfSwglB6rMua2jymTM24jUH2l3yuJHKfDuqN9BnIWvmnN7H/KRb0woAb3k8tirvhyxNhf3PJ1WyUyzqYlKsl8tq9CDLLMrJdmmTPjv2waptEK7Lu/tj0DZo0dboRp96t3Z38LV+t62FBLwj0y9E0FyOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=E0gCzjp/; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id E1A3640E0219;
-	Sat, 29 Jun 2024 14:57:45 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id jaKAkfwgC1lf; Sat, 29 Jun 2024 14:57:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1719673062; bh=eidaWZkQ9zYvGZvDZWYlfu8Wo1BVtlIeu2FB1QuEbwY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=E0gCzjp/3skB/ErRfxBOVZllAN4DK5yql8V+4ggu6UhPAPEaVDGZnZdLPHS3SNdMx
-	 JTWj2fITRlYa9BO0Zbz7kvZYvALscohUyukiWtlwRmJa0/KIJds3Bi46ZBTchuiRFn
-	 BHIJzVPjMYnZdCNca/X33kKqq/qt0DnwKD7EdGBRtw58lMJ8XwjJ8Ji5s+km0fhUH7
-	 L4VUMOE0cbY6FlUM90vMiXywEWVohK0WFrmi3AV3rPsJfaOmOw++GOZ3AXNNGKuVBa
-	 drrr67hn0k7tVfz4wQFZCI1xEPYGlHdTGj811aYt6/IIjNeEq37qz9v6RSK1meYyf4
-	 J2y7+KDewXmXKigV74wmde7/fAOm2AAzZiwazJAovONt8Hfxc8edP6Y7KqgeZG7wzM
-	 0TuSOlTxMw4+3PNiDadZZllYBI0TMmzgZ7H8ojqGkcHmoL79KoTJszuerghjZBKjc0
-	 qHkl3/mqhS2n4tb7r4/dLQWhDetJ3uzfps19bDn4+zpwd2OFa0Y1qaBvKASKj4vCSd
-	 jrFvn/RE89YJWZFjPfblETWIpaO7dWFXs+8Cf2nk9KMglVziYkzE19fQ0yWVKIASlM
-	 dSNm1nkyIDXXmVYOpiVye/F40ESyDmSOliIPVrtLKmH2pExHEcoKbGNWEeAHoXFntP
-	 U2FgEgJMCEGl9gqsU66PtVqA=
-Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DA09440E0027;
-	Sat, 29 Jun 2024 14:57:30 +0000 (UTC)
-Date: Sat, 29 Jun 2024 16:57:25 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc: Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Robert Richter <rric@kernel.org>,
-	Johannes Thumshirn <morbidrsa@gmail.com>,
-	Ralf Baechle <ralf@linux-mips.org>, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-	linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2] EDAC: add missing MODULE_DESCRIPTION() macros
-Message-ID: <20240629145725.GBZoAg1ZqBWQmJ2_FP@fat_crate.local>
-References: <20240617-md-arm64-drivers-edac-v2-1-6d6c5dd1e5da@quicinc.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=kRvzQ0gNMpP9bRjhbqWBSL0f6EzsEzGFTV8dMDR7v3lJ6WLyn3KOl/4eygyFMvkLfQ+9r8Bsk8J+cUcBfMwhsRk3FfzLHyPzbCEcDOCr4sPmmVzj0nk8tZvODVhnQkwnkwV+u7kpELBG8J2FqdQwmtMV09qB3OxiSX3SsQKUAUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CWCGBKeh; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1f9b523a15cso10996955ad.0;
+        Sat, 29 Jun 2024 10:46:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719683195; x=1720287995; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xJTuEAT8kFn/N38NgReiBC7u1W13u19d45QTb6wSxDI=;
+        b=CWCGBKehQ/GEOzPutmEbKRLEEmubx5jGEaFk0UxFkteX8rmIaIBL3/8r2vPi0yPKvX
+         HD8R/7bnTgpiiB++BVaJTdxLBZvWvmx9NqdcVjoKozhRzEBLypFJPOkXJA1O6ARU3x81
+         k30+JXQtvWf2imxLL+LpIAyeFysvJ6HtknlhbQbbaCICtHPOPuUS0YWVgIJXi4vp3dWa
+         yEykgrMvO63vL2h4nAc/AFpjCrMu+sfvqlsLnrPtGl+uz5D0uKTonh56Y6vsQWrLeWsZ
+         y0cNM20w9FSCnpY8K+YfP0lz3RH37TT3tkmmwpkZXBMEazaegb2gcLR0ztCZr/XsW+bM
+         LDpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719683195; x=1720287995;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xJTuEAT8kFn/N38NgReiBC7u1W13u19d45QTb6wSxDI=;
+        b=HegUrbEg/MHOoylF3VtmFoW5H8c7gegDLoIhapk7v6l/TBbdUGuIIUdarJxOzb+k+g
+         JTaDq2+APW8a6jUFpYsBdwWVVdhuZRfF+LbD5A7uFEji56YFdYGtptcf0ud4UPN7hLgm
+         A+45PAVX3E4kGAjO97TmosVnZHm5/l9DD8pNpxNBjmGF5HT/2w48LZ4Yh+D9PxbHAorH
+         PcYfAZBOIPVc+MMe7hdKlMTbeYJgvJ4nMvm6gBfv8V9OKSmCXeJ0dC83o4u/4WbNmcHV
+         FB7TOnsNqYZOsjBsilHLPCxuTafC3i0GWGTmBX/CfjunXG8fQ5hgXksa7FQJvzjnmQSK
+         i2gQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV5bjV3KbyreGQ+qfDAqQYiJY2w8Q2wY4BXlGH05fplOrQCJwDgpch92ZVkqMQKweIT0XTCbIK4z2aCshJZcfmzxwQE++58VrkhOdJMcSKtBtYhb4GRI1HY1Ml56BtRvCls4geGL9JZqlFgAY+z2CgvaG98fzfd/tNQZeUrNrE7Z5UqCwv8XxBw9iiNDR3GgyAmN3pyXruMEEKVN+jYWZRASrnIzSvM0GX/aniD1wRI5iqlYXHBa3p6z0OBKuul0OpIJviqRpb7SHGos3QqcgaOF1z6I54F9oOcD0oA3DI2nIBRccTZgqYwdc4EA2wGQvKNZVEz84mkZuQ/Du7KPrbD25Dzi+r1+fmQa0HcLJPBBxsDTvqoa911gosyAlx1yfjeSwCt+Kjir0eZ7CPlX0FScwM=
+X-Gm-Message-State: AOJu0Yw4X+dD4cfI0R1d8XVwTuEMbaK9p/Y/eh2LGfynXZ5ZuC6UXKBV
+	uGh8+ED9K9KDPKlDGwJ5KHt2Vf/CZnrRn2c4ESH7ws3yqKLy3DIL
+X-Google-Smtp-Source: AGHT+IGXRwOTNfWOpdGXl+28hO8NMkh0znjd2CrkAf/HqJ5kuBn+8boNjwtHpyuWIrNeZ3XB7V/gSQ==
+X-Received: by 2002:a17:902:ea0b:b0:1f6:3580:65c9 with SMTP id d9443c01a7336-1fadb4afc15mr29069525ad.26.1719683195282;
+        Sat, 29 Jun 2024 10:46:35 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac159a286sm34552615ad.282.2024.06.29.10.46.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Jun 2024 10:46:34 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sat, 29 Jun 2024 10:46:33 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org, Helge Deller <deller@gmx.de>,
+	linux-parisc@vger.kernel.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>, sparclinux@vger.kernel.org,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+	linuxppc-dev@lists.ozlabs.org, Brian Cain <bcain@quicinc.com>,
+	linux-hexagon@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+	linux-csky@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+	linux-s390@vger.kernel.org, Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	linux-sh@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	linux-fsdevel@vger.kernel.org, libc-alpha@sourceware.org,
+	musl@lists.openwall.com,
+	Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Subject: Re: [PATCH v2 06/13] parisc: use generic sys_fanotify_mark
+ implementation
+Message-ID: <a913c77e-1abb-409f-86b9-8805c1451988@roeck-us.net>
+References: <20240624163707.299494-1-arnd@kernel.org>
+ <20240624163707.299494-7-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240617-md-arm64-drivers-edac-v2-1-6d6c5dd1e5da@quicinc.com>
+In-Reply-To: <20240624163707.299494-7-arnd@kernel.org>
 
-On Mon, Jun 17, 2024 at 12:53:52PM -0700, Jeff Johnson wrote:
-> With ARCH=arm64, make allmodconfig && make W=1 C=1 reports:
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/edac/layerscape_edac_mod.o
+On Mon, Jun 24, 2024 at 06:37:04PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Add the missing invocation of the MODULE_DESCRIPTION() macro to all
-> files which have a MODULE_LICENSE().
+> The sys_fanotify_mark() syscall on parisc uses the reverse word order
+> for the two halves of the 64-bit argument compared to all syscalls on
+> all 32-bit architectures. As far as I can tell, the problem is that
+> the function arguments on parisc are sorted backwards (26, 25, 24, 23,
+> ...) compared to everyone else, so the calling conventions of using an
+> even/odd register pair in native word order result in the lower word
+> coming first in function arguments, matching the expected behavior
+> on little-endian architectures. The system call conventions however
+> ended up matching what the other 32-bit architectures do.
 > 
-> This includes mpc85xx_edac.c and four octeon_edac-*.c files which,
-> although they did not produce a warning with the arm64 allmodconfig
-> configuration, may cause this warning with other configurations.
+> A glibc cleanup in 2020 changed the userspace behavior in a way that
+> handles all architectures consistently, but this inadvertently broke
+> parisc32 by changing to the same method as everyone else.
 > 
-> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+> The change made it into glibc-2.35 and subsequently into debian 12
+> (bookworm), which is the latest stable release. This means we
+> need to choose between reverting the glibc change or changing the
+> kernel to match it again, but either hange will leave some systems
+> broken.
+> 
+> Pick the option that is more likely to help current and future
+> users and change the kernel to match current glibc. This also
+> means the behavior is now consistent across architectures, but
+> it breaks running new kernels with old glibc builds before 2.35.
+> 
+> Link: https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=d150181d73d9
+> Link: https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit/arch/parisc/kernel/sys_parisc.c?h=57b1dfbd5b4a39d
+> Cc: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+> Tested-by: Helge Deller <deller@gmx.de>
+> Acked-by: Helge Deller <deller@gmx.de>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
-> Changes in v2:
-> - Updated to fix all missing MODULE_DESCRIPTION() macros in drivers/edac
-> - Link to v1: https://lore.kernel.org/r/20240613-md-arm64-drivers-edac-v1-1-149a4f0f61bb@quicinc.com
-> - v1 subject: [PATCH] EDAC: layerscape: add missing MODULE_DESCRIPTION() macro
-> ---
->  drivers/edac/layerscape_edac.c | 1 +
->  drivers/edac/mpc85xx_edac.c    | 1 +
->  drivers/edac/octeon_edac-l2c.c | 1 +
->  drivers/edac/octeon_edac-lmc.c | 1 +
->  drivers/edac/octeon_edac-pc.c  | 1 +
->  drivers/edac/octeon_edac-pci.c | 1 +
->  6 files changed, 6 insertions(+)
+> I found this through code inspection, please double-check to make
+> sure I got the bug and the fix right.
+> 
 
-Applied, thanks.
+Building parisc:allmodconfig ... failed
+--------------
+Error log:
+In file included from fs/notify/fanotify/fanotify_user.c:14:
+include/linux/syscalls.h:248:25: error: conflicting types for 'sys_fanotify_mark'; have 'long int(int,  unsigned int,  u32,  u32,  int,  const char *)' {aka 'long int(int,  unsigned int,  unsigned int,  unsigned int,  int,  const char *)'}
+  248 |         asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))       \
+      |                         ^~~
+include/linux/syscalls.h:234:9: note: in expansion of macro '__SYSCALL_DEFINEx'
+  234 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+      |         ^~~~~~~~~~~~~~~~~
+include/linux/syscalls.h:228:36: note: in expansion of macro 'SYSCALL_DEFINEx'
+  228 | #define SYSCALL_DEFINE6(name, ...) SYSCALL_DEFINEx(6, _##name, __VA_ARGS__)
+      |                                    ^~~~~~~~~~~~~~~
+include/linux/syscalls.h:287:27: note: in expansion of macro 'SYSCALL_DEFINE6'
+  287 | #define SYSCALL32_DEFINE6 SYSCALL_DEFINE6
+      |                           ^~~~~~~~~~~~~~~
+fs/notify/fanotify/fanotify_user.c:1924:1: note: in expansion of macro 'SYSCALL32_DEFINE6'
+ 1924 | SYSCALL32_DEFINE6(fanotify_mark,
+      | ^~~~~~~~~~~~~~~~~
+include/linux/syscalls.h:862:17: note: previous declaration of 'sys_fanotify_mark' with type 'long int(int,  unsigned int,  u64,  int,  const char *)' {aka 'long int(int,  unsigned int,  long long unsigned int,  int,  const char *)'}
+  862 | asmlinkage long sys_fanotify_mark(int fanotify_fd, unsigned int flags,
+      |                 ^~~~~~~~~~~~~~~~~
+make[6]: [scripts/Makefile.build:244: fs/notify/fanotify/fanotify_user.o] Error 1 (ignored)
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Guenter
 
