@@ -1,73 +1,82 @@
-Return-Path: <linux-mips+bounces-4069-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4070-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEAED91E508
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Jul 2024 18:14:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BC3A91E514
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Jul 2024 18:15:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 457F4B21353
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Jul 2024 16:14:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9BA09B251EC
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Jul 2024 16:15:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A1D416D9B2;
-	Mon,  1 Jul 2024 16:14:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1003C16DC3D;
+	Mon,  1 Jul 2024 16:14:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QIvqEQ1a"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yZj4cOGS"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B073916D4FA;
-	Mon,  1 Jul 2024 16:14:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1368516DC3C
+	for <linux-mips@vger.kernel.org>; Mon,  1 Jul 2024 16:14:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719850452; cv=none; b=mNz+PFDfxUr9dypy4oz8O+PgyfHBXps/DY1B0UTLpyNp1JQ+i7+kcbKQ/UpY0GEEVlHV1PtPXGF0Gqdgl5Q2BbtAxlEoTfb1fCON1Khu0i0OaU8YTkx9njLAoTe2HFiuwJ77thrgbsyW7aobBZZGleW0P+UgZfLcVaItH6/fkvU=
+	t=1719850463; cv=none; b=mT3CRDPInpSv60W/hPqaT3crPaBGErtCfVdKmnElrtKCceFez91rmEgKIofmtvZtE399WE8Gg7Fun0Au6cp7FlleOJ6Em9p65WRIyMbRaWgyDVKlOHQUyyaJN2vVHRPDSYQ+2WEl9j7BX/FwYChg+4nt0JP/UdG/IzB+K3Yn1YE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719850452; c=relaxed/simple;
-	bh=+AQ7sBFYdyhgp+x+WWlZYAcTpu3FvubStwSJ9uOtJNI=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=Y8eNWLZVsnjKYejV9vcSQLzA0Md+wTaZC8KTgMGi1d+46unJahBosacyZovikb8885aC69J00HGgRxYWFuHnP+jGnChJo5/PfSHY3RR7dWd0GcSnKXpL0bfbvyBZn4Af6mUTb18/3qQ/IdALtkrf74tf7pzWnFn8u+kMeXmMnls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QIvqEQ1a; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2ebe6495aedso33616761fa.0;
-        Mon, 01 Jul 2024 09:14:10 -0700 (PDT)
+	s=arc-20240116; t=1719850463; c=relaxed/simple;
+	bh=0RU0GQGcEkH75BsHRkr45z+TTTqgKiPUKJEo3MLeH8M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=K0G6dsBdqTAeHGG0HmlWL9/wW7UBWCfEVDJ6FZeMeeZO6WToymfM/bG5bZBNleCn1x9x4njeN1tCp/U3pDS9UDGXQRayj6h7RtlEps8YtTp9GYVeqnN62rkd2d4pbSbjH14ypuCaRB6rwb2RPNPub1xtUms41EKN7ekPmd/3hyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yZj4cOGS; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4257d5fc9b7so12934465e9.2
+        for <linux-mips@vger.kernel.org>; Mon, 01 Jul 2024 09:14:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719850449; x=1720455249; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N9eJvY3noQUZfbyZhFkyxOik2OAqPtae0XwqIwzXsH8=;
-        b=QIvqEQ1acOGtKggqmvmdr7rehTqevl8Y3IGHCjxtHBRiVnu69KoGPnFgHZMpxru3DI
-         k6b2ouFBSCP+KnIU+T1pgtJRvSxY+pyt/dBw3yhHybSMKA9EgTNJ7kC0MsshEK5NdRUU
-         FeaTzhBxLz6RdlRbIUu7KwAuo63EOC94k5nncN98x9aO25pdTFxsDkTZCie9pCO28j/Y
-         Ikvh5LvHFSwbzQnYlAzHkUNSXua4hkDHM1JgvzZRe1QNHFT8d0cKBnqlPAmRWoGGLv3/
-         VXRCOCEZ8VX0BSM1hbN0hk6eDfA9hbMej+Xst3Xaq8rjzfMkyyCuqaBD9jx8rj9jz3VG
-         f2jg==
+        d=linaro.org; s=google; t=1719850459; x=1720455259; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qFC/haLZ9KzQj+xaIDgmhhZVWM9GxdpG2nMd31da2xM=;
+        b=yZj4cOGSzAyUtDGChoHBtg6/IZy0RzhHD20ryD8yGabS2YaCfRNT8wilMvLrcmh/m4
+         HGeITs6/ylht3qy9DipkZwfl4ruF52BNsYlw8HvPSD/U5Idp/Zni8oUC7yYwynpKe/AW
+         5arKwsuMvi4Z7jY05G2d3MZKC0QK1l7HLZ0t4oa1IWeBG7rYnQaXqLZiCXisG+qt+xrT
+         FzVmT4m9cS2e5i9HAaDBJBq91crpibDXcPoQdBfmiKGYUWMr0kNcumCM0e+YkOMvdjpn
+         5DSHXuSXID1uAVr6vbAlPYkM5So9YYAQoGMBOnsoylKyKUdV9qu8iYMM3umKfBIaope/
+         Oj+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719850449; x=1720455249;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
+        d=1e100.net; s=20230601; t=1719850459; x=1720455259;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N9eJvY3noQUZfbyZhFkyxOik2OAqPtae0XwqIwzXsH8=;
-        b=KWCwqbVYlyk+WkCU0BAqGLHLBOPYALCUwTGTIcI1Q51wI4T41rucleM6FLurRNRYKE
-         xcGU3WF3EX2G5n1vBneVjZ0svw8yO+IwcjKWi5ytv13VitD0hCsZSZnayMd+FyIEjV68
-         2xvkdFKRaxsm1UgK4Ou/0Io5mdDsCOtpHmAEhbXg8wfalmDHAT9MqEQpLbWcry03dX+B
-         7k4KIkgrjwnpFTuG1aJlslvNJ1eiR7FPfqg0nJxPnmV88FBcUSswgAnCcHWqr2UDVRkn
-         YVEgXkgIcpDgfKVEDmTm8skMD13zCyyc5wBCz46pyrTTrXWiCyy6liQYDsC32D+CU+C8
-         t2YA==
-X-Forwarded-Encrypted: i=1; AJvYcCV85YK4fNTy/TH3n7w4/d0GQvZwS2Z2/JXfkiFCkCvzrEd4Mrqr9brGTaONhAyV33mrR/2kboQr5dWeQJ44XseJYYBsbh0y5E+ed+UAZVbqcqWC00P5SWLaVREYcSu2VlCn2Zg3qc3msa3rCWeiSso2Db5Ukz4/RlbGBBC8HHfhPatnUeTeWSiP1NURBSZ7VqK3uG3Kow4yDUWnqKB9v7Rdu0ZDJ2JFLRS6oy+h0M5SBSGdkVLZsiwf+XJ0il0OQfTEZ6eI6ck5NVR8iCx/xvHkMDDQNVH3M1B2rsU5Xg8t
-X-Gm-Message-State: AOJu0Yx0M9qR+Jhan8JyvZ0ILUw9fzumsgN3orRfENoL/AQ3+b5WNAlC
-	Gc0NwzhJdI1eR+J4RRTQ7dWlGW6imCSVHiz3VpCgfWejPaRN6AwE
-X-Google-Smtp-Source: AGHT+IHHz/OamA1Ukx5sIFBlK+L0AmnL9jrrDHysPJKMb3Xyg4pOUjtzhB1j4PXHUjwphZM6xFX6sw==
-X-Received: by 2002:a2e:8558:0:b0:2ec:5382:2703 with SMTP id 38308e7fff4ca-2ee5e6f6972mr34830361fa.53.1719850448585;
-        Mon, 01 Jul 2024 09:14:08 -0700 (PDT)
-Received: from [192.168.1.105] ([178.176.75.203])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ee516803aesm14192571fa.79.2024.07.01.09.14.05
+        bh=qFC/haLZ9KzQj+xaIDgmhhZVWM9GxdpG2nMd31da2xM=;
+        b=hho3QWmJNJ5bjSU+tWdtJgYxRfo8L8nqZEBEdOzB8e3oOz+houvn89UqEkv6yTavvS
+         5ExakyE3w1TvkHdhcp16HmF44p5/+2GJNVriS+qvHjS9kwTte/kwmvZkPBXkbX/yFKQN
+         XktBolVgIEd3LUP8kKAidugkgzM41qRKesS4yXRT0hxDJAGY+qzMih1cFiI4/Ucf30XU
+         8iAOBQlHHNLpTXzSz41JKYrz0RH/TwwTD5G0LC2kb0riJOSzgLxZS1S6eLPY97gNi8V7
+         tTfNChDWUCjItibWO42AImOMjmYc3xiKz/LQIWYF22IZ1NybB+Fd+eDl1cGWMDs7yg5Z
+         IHWg==
+X-Forwarded-Encrypted: i=1; AJvYcCUpVw3oCLbKviQCadAOJfEqBbfg3o1vVBqAVIUj9EdjUfm2+7Kdka8IStjzQ5YjLjcDtUM0FVud8yb8gszp5Aq+Y7CejSecaIiA9w==
+X-Gm-Message-State: AOJu0YyCzRFGpLeyhQnhGxRMKRlr+p0ZAKyEF0+uD+iJtJ2pVJa1QVyK
+	TNsigb5UAkIAyL+iHOWgttNsqfx/CK8WWAlaw4Bf5AITQ3A/Ecddtt8S+7+dim0=
+X-Google-Smtp-Source: AGHT+IGRrPzTXHiPkwd8Me5LrECNfH4SPW4Xfceuvlm6k2ecNUC83zwkdEYq2h00D81su32yvfY2Qg==
+X-Received: by 2002:a05:600c:1c21:b0:424:addc:c7ae with SMTP id 5b1f17b1804b1-4257a02041emr46524535e9.28.1719850459405;
+        Mon, 01 Jul 2024 09:14:19 -0700 (PDT)
+Received: from [192.168.2.107] ([79.115.63.178])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4256b09a2bcsm158762215e9.36.2024.07.01.09.14.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Jul 2024 09:14:07 -0700 (PDT)
-Subject: Re: [PATCH 2/9] mtd: add mtd_is_master helper
+        Mon, 01 Jul 2024 09:14:19 -0700 (PDT)
+Message-ID: <07b701a9-7b52-45b7-8dba-1c25d77cbf15@linaro.org>
+Date: Mon, 1 Jul 2024 17:14:14 +0100
+Precedence: bulk
+X-Mailing-List: linux-mips@vger.kernel.org
+List-Id: <linux-mips.vger.kernel.org>
+List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/9] mtd: devices: add AT24 eeprom support
 To: Marco Felsch <m.felsch@pengutronix.de>,
  Miquel Raynal <miquel.raynal@bootlin.com>,
  Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
@@ -88,7 +97,7 @@ To: Marco Felsch <m.felsch@pengutronix.de>,
  Magnus Damm <magnus.damm@gmail.com>, Dinh Nguyen <dinguyen@kernel.org>,
  Thierry Reding <thierry.reding@gmail.com>,
  Jonathan Hunter <jonathanh@nvidia.com>,
- =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+ =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
  Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
  Christophe Leroy <christophe.leroy@csgroup.eu>,
  "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
@@ -102,49 +111,27 @@ Cc: linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
  linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org,
  loongarch@lists.linux.dev
 References: <20240701-b4-v6-10-topic-usbc-tcpci-v1-0-3fd5f4a193cc@pengutronix.de>
- <20240701-b4-v6-10-topic-usbc-tcpci-v1-2-3fd5f4a193cc@pengutronix.de>
-From: Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <b97bf565-bef5-fbc7-63c5-f174880ad9ab@gmail.com>
-Date: Mon, 1 Jul 2024 19:14:04 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-Precedence: bulk
-X-Mailing-List: linux-mips@vger.kernel.org
-List-Id: <linux-mips.vger.kernel.org>
-List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-In-Reply-To: <20240701-b4-v6-10-topic-usbc-tcpci-v1-2-3fd5f4a193cc@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
+ <20240701-b4-v6-10-topic-usbc-tcpci-v1-4-3fd5f4a193cc@pengutronix.de>
 Content-Language: en-US
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <20240701-b4-v6-10-topic-usbc-tcpci-v1-4-3fd5f4a193cc@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 7/1/24 4:53 PM, Marco Felsch wrote:
 
-> Provide a simple helper to make it easy to detect an master mtd device.
+
+On 7/1/24 2:53 PM, Marco Felsch wrote:
+> EEPROMs can become quite large nowadays (>=64K). Exposing such devices
+> as single device isn't always sufficient. There may be partitions which
+> require different access permissions. Also write access always need to
+> to verify the offset.
 > 
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> ---
->  include/linux/mtd/mtd.h | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/include/linux/mtd/mtd.h b/include/linux/mtd/mtd.h
-> index 8d10d9d2e830..bf3fc2ea7230 100644
-> --- a/include/linux/mtd/mtd.h
-> +++ b/include/linux/mtd/mtd.h
-> @@ -408,6 +408,11 @@ static inline struct mtd_info *mtd_get_master(struct mtd_info *mtd)
->  	return mtd;
->  }
->  
-> +static inline bool mtd_is_master(struct mtd_info *mtd)
-> +{
-> +	return mtd->parent ? false : true;
+> Port the current misc/eeprom/at24.c driver to the MTD framework since
+> EEPROMs are memory-technology devices and the framework already supports
 
-   Perhaps:
+I was under the impression that MTD devices are tightly coupled by erase
+blocks. But then we see MTD_NO_ERASE, so what are MTD devices after all?
 
-	return !mtd->parent;
-
-[...]
-
-MBR, Sergey
+> partitioning. This allow using of-paritions like we do for SPI-NOR
+> devices already:
 
