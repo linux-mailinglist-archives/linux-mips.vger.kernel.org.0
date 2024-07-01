@@ -1,41 +1,41 @@
-Return-Path: <linux-mips+bounces-4059-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4062-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C3B591E16D
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Jul 2024 15:56:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5218C91E173
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Jul 2024 15:57:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BD771C2207A
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Jul 2024 13:56:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A2384B24F3E
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Jul 2024 13:56:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D82116A392;
-	Mon,  1 Jul 2024 13:54:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C0F616939E;
+	Mon,  1 Jul 2024 13:54:25 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9842169367
-	for <linux-mips@vger.kernel.org>; Mon,  1 Jul 2024 13:54:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA3021684B5
+	for <linux-mips@vger.kernel.org>; Mon,  1 Jul 2024 13:54:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719842064; cv=none; b=oTRE1fCkm1yIefeHFZglzws1dVEa65B7ZCN4be7detMqdAoqJ2ByFU3LeekiLQ5vcwF82bMAeP1MY1pR8WABXJ6FDuv4MEcHk9Uh/Uj1K4JlQpInctW/2vmJVZlOUL/AaFMH1ycS2mFByMrxZu5edCM+S4vds9XhBE0rccllsOA=
+	t=1719842065; cv=none; b=Iey/0RKY9HhvE16zk1FOhR1TnrRqSvlmeRdBY0+z0aMW5WYXYq7JASBQnkPMdB71h3Gn07lDctigzCySFcuf1WvbjLxKZXcYgFfcwx2R41NUOXgMLKRz0uaCmOoL/GrCkEXlMUNC9jIvhSws35M6XAhe1R3j2MqdI0Ddile7eDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719842064; c=relaxed/simple;
-	bh=d1VqLgtNJ7N5InaRsqu3AvJq0Y06PnoD+deMUi+gLeY=;
+	s=arc-20240116; t=1719842065; c=relaxed/simple;
+	bh=Uzn7LDoOL9SlsZeIM68XzGKBB+r44Ge/qQ/yufBvw8U=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sDGprqSQYePdUjvRLJvXwNCQGl8KuVdl+r85UPzqlogE/j+7LHDd5v54C2Fhue67L9dsySqKaY1Sju5mKx0CXw+1ArG22EJjxIh9xQCT+XrRJVzPHaJBjxN+Lcqet3ver2CCzeloNQZLivrv+Kf+0uWfTPvPd4y+q3e0tGiQDGM=
+	 In-Reply-To:To:Cc; b=iJ+a0EHWGJlqkMp8IPmwsiXLfAT29WZYbbv9msqrkcAdK58TQVZpZEFXmCz4qDu4mH16/LjEAKM87rLwryVrSde/Tt8bDX7bjHikRNHxRM/m1kUtQMKupim8kE9u5G9Y8oKVO5R2Gvj4Wct1kqctQNZuPK5+q+BWo29vNN4/Oco=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <m.felsch@pengutronix.de>)
-	id 1sOHTX-0001LY-UP; Mon, 01 Jul 2024 15:53:47 +0200
+	id 1sOHTY-0001LY-20; Mon, 01 Jul 2024 15:53:48 +0200
 From: Marco Felsch <m.felsch@pengutronix.de>
-Date: Mon, 01 Jul 2024 15:53:47 +0200
-Subject: [PATCH 8/9] LoongArch: convert to MTD_EEPROM_AT24
+Date: Mon, 01 Jul 2024 15:53:48 +0200
+Subject: [PATCH 9/9] eeprom: at24: remove deprecated Kconfig symbol
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -44,7 +44,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240701-b4-v6-10-topic-usbc-tcpci-v1-8-3fd5f4a193cc@pengutronix.de>
+Message-Id: <20240701-b4-v6-10-topic-usbc-tcpci-v1-9-3fd5f4a193cc@pengutronix.de>
 References: <20240701-b4-v6-10-topic-usbc-tcpci-v1-0-3fd5f4a193cc@pengutronix.de>
 In-Reply-To: <20240701-b4-v6-10-topic-usbc-tcpci-v1-0-3fd5f4a193cc@pengutronix.de>
 To: Miquel Raynal <miquel.raynal@bootlin.com>, 
@@ -85,27 +85,32 @@ X-SA-Exim-Mail-From: m.felsch@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 
-The EEPROM_AT24 Kconfig symbol is marked as deprecated. Make use of the
-new Kconfig symbol to select the I2C EEPROM driver support.
+All kernel users are shifted to the new MTD_EEPROM_AT24 Kconfig symbol
+so we can drop the old one.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 ---
- arch/loongarch/configs/loongson3_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/misc/eeprom/Kconfig | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
-index b4252c357c8e..31daff75a01a 100644
---- a/arch/loongarch/configs/loongson3_defconfig
-+++ b/arch/loongarch/configs/loongson3_defconfig
-@@ -433,7 +433,7 @@ CONFIG_NVME_TARGET_LOOP=m
- CONFIG_NVME_TARGET_RDMA=m
- CONFIG_NVME_TARGET_FC=m
- CONFIG_NVME_TARGET_TCP=m
--CONFIG_EEPROM_AT24=m
-+CONFIG_MTD_EEPROM_AT24=m
- CONFIG_BLK_DEV_SD=y
- CONFIG_BLK_DEV_SR=y
- CONFIG_CHR_DEV_SG=y
+diff --git a/drivers/misc/eeprom/Kconfig b/drivers/misc/eeprom/Kconfig
+index 3a9aaec2f2c7..9e071cfdc6c6 100644
+--- a/drivers/misc/eeprom/Kconfig
++++ b/drivers/misc/eeprom/Kconfig
+@@ -1,13 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ menu "EEPROM support"
+ 
+-config EEPROM_AT24
+-	tristate "I2C EEPROMs / RAMs / ROMs from most vendors"
+-	select MTD_EEPROM_AT24
+-	help
+-	  Deprecated config option to get read/write support to most I2C
+-	  EEPROMs. Please use MTD_EEPROM_AT24 instead.
+-
+ config EEPROM_AT25
+ 	tristate "SPI EEPROMs (FRAMs) from most vendors"
+ 	depends on SPI && SYSFS
 
 -- 
 2.39.2
