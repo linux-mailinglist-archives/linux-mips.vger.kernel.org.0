@@ -1,41 +1,41 @@
-Return-Path: <linux-mips+bounces-4066-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4064-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C937291E17C
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Jul 2024 15:57:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5B3F91E174
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Jul 2024 15:57:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8409A2865C0
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Jul 2024 13:57:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FA67287996
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Jul 2024 13:57:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51BA016B3A7;
-	Mon,  1 Jul 2024 13:54:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1B3816A94C;
+	Mon,  1 Jul 2024 13:54:25 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C408D15FCE0
-	for <linux-mips@vger.kernel.org>; Mon,  1 Jul 2024 13:54:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E0DC169ACF
+	for <linux-mips@vger.kernel.org>; Mon,  1 Jul 2024 13:54:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719842067; cv=none; b=dou49nJPTrKMonEn1T8KH0oyqUun4UYTzhyHKqXZP2z0k0cHXTUhRIGOrNSXEnl7h4HmIyLtTyr3XNOjyrp2ERyaImVHAZA57Yo1b28jYnc3QNnJsmVM620Ho7P7uy7d4YRDO1v+paN7+kCTl8Pjjb7BRW+MBSo1xl3kLRiHbGU=
+	t=1719842065; cv=none; b=KjCRDKLCJXTDtbPlff+wF9DQh8Lo6tmJnvHQZzlCDKNNFecIjFfDKsUboPwU/G8zN0O2iuvWlhjHBaAeDotJn9SsYhbS7rvKI4gTed+bBsXzlzU1WJEFoieIJP/peYqj3Q8ytM88f9G7HeYFTjuic/M4WYAEX1IPmdB7ku9uO/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719842067; c=relaxed/simple;
-	bh=eGXy1OFvj3SosF7bnlGCLhzounuJ5ghZkNJ65LsPcFw=;
+	s=arc-20240116; t=1719842065; c=relaxed/simple;
+	bh=1Q1i5wCcFTnkICD2NVgYv4Xlr1IINMwtrYlUZrksTVM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Y35huFADk1mDfNTq05m2qPyf4s9YlUei38XO05hxZMyrV//UtAf+i3phmibLN9hRCC8b8YpZglr228oQNhgmYXXU4A16c+QtrwrN8Yasi7ENx5KpZD2/f+ebbGbuGXHxHeCWBeAc3rUpDSYTM78KFpjFzzXvWDBiBBAtzIYkrKg=
+	 In-Reply-To:To:Cc; b=GFvo6rZtTXi8CjXgXFUsiQJ0Amt9iCWf/fkrNpaBvaey5RRCo7Jtm6hEZ3R/SUpvEPwByb6g2xhdBjAdnf44uzElt+NR9xsHYl11cjbadsFV+Ipu1mKJ80belwZdVePNpFA08iohoKo3Tsh38MhjJiERzpKmQeR+Y3ztEFLLpFM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <m.felsch@pengutronix.de>)
-	id 1sOHTX-0001LY-MS; Mon, 01 Jul 2024 15:53:47 +0200
+	id 1sOHTX-0001LY-Qc; Mon, 01 Jul 2024 15:53:47 +0200
 From: Marco Felsch <m.felsch@pengutronix.de>
-Date: Mon, 01 Jul 2024 15:53:45 +0200
-Subject: [PATCH 6/9] powerpc: convert to MTD_EEPROM_AT24
+Date: Mon, 01 Jul 2024 15:53:46 +0200
+Subject: [PATCH 7/9] MIPS: configs: convert to MTD_EEPROM_AT24
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -44,7 +44,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240701-b4-v6-10-topic-usbc-tcpci-v1-6-3fd5f4a193cc@pengutronix.de>
+Message-Id: <20240701-b4-v6-10-topic-usbc-tcpci-v1-7-3fd5f4a193cc@pengutronix.de>
 References: <20240701-b4-v6-10-topic-usbc-tcpci-v1-0-3fd5f4a193cc@pengutronix.de>
 In-Reply-To: <20240701-b4-v6-10-topic-usbc-tcpci-v1-0-3fd5f4a193cc@pengutronix.de>
 To: Miquel Raynal <miquel.raynal@bootlin.com>, 
@@ -90,78 +90,36 @@ new Kconfig symbol to select the I2C EEPROM driver support.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 ---
- arch/powerpc/configs/44x/warp_defconfig | 2 +-
- arch/powerpc/configs/mpc512x_defconfig  | 2 +-
- arch/powerpc/configs/mpc5200_defconfig  | 2 +-
- arch/powerpc/configs/ppc6xx_defconfig   | 2 +-
- arch/powerpc/configs/skiroot_defconfig  | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+ arch/mips/configs/cavium_octeon_defconfig | 2 +-
+ arch/mips/configs/db1xxx_defconfig        | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/powerpc/configs/44x/warp_defconfig b/arch/powerpc/configs/44x/warp_defconfig
-index 20891c413149..d8cab860c9d9 100644
---- a/arch/powerpc/configs/44x/warp_defconfig
-+++ b/arch/powerpc/configs/44x/warp_defconfig
-@@ -36,7 +36,7 @@ CONFIG_MTD_RAW_NAND=y
- CONFIG_MTD_NAND_NDFC=y
- CONFIG_MTD_UBI=y
- CONFIG_BLK_DEV_RAM=y
--CONFIG_EEPROM_AT24=y
-+CONFIG_MTD_EEPROM_AT24=y
- CONFIG_SCSI=y
- CONFIG_BLK_DEV_SD=y
- CONFIG_SCSI_SPI_ATTRS=y
-diff --git a/arch/powerpc/configs/mpc512x_defconfig b/arch/powerpc/configs/mpc512x_defconfig
-index d24457bc5791..0a919a76cfb8 100644
---- a/arch/powerpc/configs/mpc512x_defconfig
-+++ b/arch/powerpc/configs/mpc512x_defconfig
-@@ -46,7 +46,7 @@ CONFIG_MTD_UBI=y
- CONFIG_BLK_DEV_RAM=y
- CONFIG_BLK_DEV_RAM_COUNT=1
- CONFIG_BLK_DEV_RAM_SIZE=8192
+diff --git a/arch/mips/configs/cavium_octeon_defconfig b/arch/mips/configs/cavium_octeon_defconfig
+index f523ee6f25bf..a5bb80a59c6e 100644
+--- a/arch/mips/configs/cavium_octeon_defconfig
++++ b/arch/mips/configs/cavium_octeon_defconfig
+@@ -50,7 +50,7 @@ CONFIG_MTD_CFI=y
+ CONFIG_MTD_CFI_AMDSTD=y
+ CONFIG_MTD_SLRAM=y
+ CONFIG_BLK_DEV_LOOP=y
 -CONFIG_EEPROM_AT24=y
 +CONFIG_MTD_EEPROM_AT24=y
  CONFIG_EEPROM_AT25=y
- CONFIG_SCSI=y
- # CONFIG_SCSI_PROC_FS is not set
-diff --git a/arch/powerpc/configs/mpc5200_defconfig b/arch/powerpc/configs/mpc5200_defconfig
-index c0fe5e76604a..8142836ef61a 100644
---- a/arch/powerpc/configs/mpc5200_defconfig
-+++ b/arch/powerpc/configs/mpc5200_defconfig
-@@ -38,7 +38,7 @@ CONFIG_MTD_UBI=m
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_RAM=y
- CONFIG_BLK_DEV_RAM_SIZE=32768
+ CONFIG_BLK_DEV_SD=y
+ CONFIG_ATA=y
+diff --git a/arch/mips/configs/db1xxx_defconfig b/arch/mips/configs/db1xxx_defconfig
+index b2d9253ff786..b1c1777df16c 100644
+--- a/arch/mips/configs/db1xxx_defconfig
++++ b/arch/mips/configs/db1xxx_defconfig
+@@ -95,7 +95,7 @@ CONFIG_MTD_NAND_ECC_SW_BCH=y
+ CONFIG_MTD_NAND_AU1550=y
+ CONFIG_MTD_NAND_PLATFORM=y
+ CONFIG_MTD_SPI_NOR=y
 -CONFIG_EEPROM_AT24=y
 +CONFIG_MTD_EEPROM_AT24=y
+ CONFIG_EEPROM_AT25=y
  CONFIG_BLK_DEV_SD=y
  CONFIG_CHR_DEV_SG=y
- CONFIG_ATA=y
-diff --git a/arch/powerpc/configs/ppc6xx_defconfig b/arch/powerpc/configs/ppc6xx_defconfig
-index 66c7b28d7450..5bca729a57c2 100644
---- a/arch/powerpc/configs/ppc6xx_defconfig
-+++ b/arch/powerpc/configs/ppc6xx_defconfig
-@@ -318,7 +318,7 @@ CONFIG_CDROM_PKTCDVD=m
- CONFIG_VIRTIO_BLK=m
- CONFIG_ENCLOSURE_SERVICES=m
- CONFIG_SENSORS_TSL2550=m
--CONFIG_EEPROM_AT24=m
-+CONFIG_MTD_EEPROM_AT24=m
- CONFIG_EEPROM_LEGACY=m
- CONFIG_EEPROM_MAX6875=m
- CONFIG_EEPROM_93CX6=m
-diff --git a/arch/powerpc/configs/skiroot_defconfig b/arch/powerpc/configs/skiroot_defconfig
-index 9d44e6630908..e9be7f217cea 100644
---- a/arch/powerpc/configs/skiroot_defconfig
-+++ b/arch/powerpc/configs/skiroot_defconfig
-@@ -77,7 +77,7 @@ CONFIG_BLK_DEV_RAM_SIZE=65536
- CONFIG_VIRTIO_BLK=m
- CONFIG_BLK_DEV_NVME=m
- CONFIG_NVME_MULTIPATH=y
--CONFIG_EEPROM_AT24=m
-+CONFIG_MTD_EEPROM_AT24=m
- # CONFIG_CXL is not set
- # CONFIG_OCXL is not set
- CONFIG_BLK_DEV_SD=m
 
 -- 
 2.39.2
