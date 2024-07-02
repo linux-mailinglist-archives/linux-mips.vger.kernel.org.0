@@ -1,124 +1,181 @@
-Return-Path: <linux-mips+bounces-4080-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4081-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62BB9923E96
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Jul 2024 15:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 352C8923F3C
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Jul 2024 15:42:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D87CB1F250E9
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Jul 2024 13:14:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A4B391F21AA9
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Jul 2024 13:42:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43BF419EEC0;
-	Tue,  2 Jul 2024 13:14:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CC77172BC8;
+	Tue,  2 Jul 2024 13:42:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P2e3SWN+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="krETZqZR"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 713DF19DF98
-	for <linux-mips@vger.kernel.org>; Tue,  2 Jul 2024 13:14:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1742EBA2D;
+	Tue,  2 Jul 2024 13:42:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719926082; cv=none; b=eiY5Egcwem6W76MO/CRq+UJcnVGBn+62R2T56CbUOduqxsrUNfvU3p+2RO7/22XMuFHxVf3BieUXINHxtb9ZjlNzV1KkLUqctL7QWgbfvhUqxwJWWFtlsEyjTNo4PVwgoJ0djVyRLX3aal3yrhwBNcuymeW3mCsAKcaE18Zv0qI=
+	t=1719927720; cv=none; b=VSd2e7WZ5dwDMwBpcHNKizCkR+MZJBDQG1h3g7Wkj0U5402efaJ0SuMLEqU3yQftHO3MK6NkfafNSchwcyIaUtxrupoH7/7T5BE0MGZQsDzv7FIKRZNlq8Xy5sxaL5fuTePyBmLMFau/NsqYAsC+NNKZqrkOSXeSXHVNci5Rud4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719926082; c=relaxed/simple;
-	bh=qcbSk1txeKGjtUgrI5TEa2OFa9eUbMFBvTxpismD3E0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FPgHDJNXH3Mf/sXIM1cWRz0eozcKt/omjZlPwSSgC+FN/i2c9G8eUMwI5TahwLh6nowsgI2k1nKvgKylnQon4xxJ1sPiBGLr7QTi5JUfyPU2/JC61S5D0PV4vTb9Q7f2JSIoynDBysTaJe4oXXBSRCKuIIO0WIIbyCcuJXslFIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=P2e3SWN+; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-57d119fddd9so21829a12.1
-        for <linux-mips@vger.kernel.org>; Tue, 02 Jul 2024 06:14:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1719926078; x=1720530878; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qcbSk1txeKGjtUgrI5TEa2OFa9eUbMFBvTxpismD3E0=;
-        b=P2e3SWN+yseDMp90p9VEzZHdkGUJX9Ld0Lj6dP8ekUsLe8WFMUvAkLLe78MDS5i4EN
-         tR404H/0eeBkXwqz6cEs0wa8kKW0z3UTY4UZ/Z2VHDf9iA94POb9ISGx+gxT15YkEzv/
-         WmZ3qHVASbx8qKTwDFYpM8WY0IUd7M0XZYIHHxmOLGp3HsBz1gJM+bvXXvIKLLEq51UY
-         UK2jscCD6GaFo29bpNziVw68wgEtOjjhlNCcjACm1kB3mVAzPq17QH7ewZq15jN4VR3Q
-         SxTV1baqz7uqrV15hW4+z0toLL/X1R4jw8Cgsc0bmvj2xTdgtrRgIRz5fH/9T2GwHcum
-         MWFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719926078; x=1720530878;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qcbSk1txeKGjtUgrI5TEa2OFa9eUbMFBvTxpismD3E0=;
-        b=vyXdKA0KsqZHOuc/Cbto3fV0Y7NnoqF8jporGA4a/7YmYC7BElYTk3Gub//8w6+7Wu
-         0QQjkq/wOJtFicxpNXRu2YkgmZ8SysTVG0bXTCZo9mlgWfqebywe01bK+7sKSBS4+qVI
-         gNwldiYL2F9qKttCPJKZKiN6I+0SuDuwDTsDtqrMATGyQuzaCZf99LmgbZQVhgDaeZul
-         1H1uPD7Cv1M2mHngXM86hQEX97u7plSLFT6U+qqVGKi/EPgcDWNOsbFeYz8arHkGj1SI
-         YpVlMkp8/LZ4rWXUi+lKKQLgufTz19DoCnjdo/U92o7Dz0d9xShjP3P781ZvROjwjgyz
-         iQmw==
-X-Forwarded-Encrypted: i=1; AJvYcCVVGY2wQ+WM34Hm9L0udJszXH5RL/7cvckh6R5yhpfACQF1GA4a2OanjmBI5nGP/wM0yx9cUtIm5n/k5QAhDO/DrK7YluKff22i2w==
-X-Gm-Message-State: AOJu0Yw5PxC1qeyL0hnHLkCUyFvcz2dquOhE6KeN0uqx1AxDan0FlW2u
-	c57vNJ0yOrbLluYKJlpdO8EGj3G/lX8rOIxHxV9bqb75k9v3DNTp6XaD+MIznX8pWcX2JUHPEq3
-	gt7dO/YCqCioarezAEhgF50jMu2qQ9z6+6+EC
-X-Google-Smtp-Source: AGHT+IERKkCVpVomNRYr8KNFI5e5JCBWRQ7HMLMgDv1aOW++vU+Fu31VZ6RrRqWEtIXBu1Sq7l+LYKSRxYEU9Pq/83U=
-X-Received: by 2002:a50:9308:0:b0:57d:32ff:73ef with SMTP id
- 4fb4d7f45d1cf-5872f79a720mr634350a12.6.1719926077342; Tue, 02 Jul 2024
- 06:14:37 -0700 (PDT)
+	s=arc-20240116; t=1719927720; c=relaxed/simple;
+	bh=xIoq5ERoFam9CoYgw94MfcDDBIP2EzSXozZdimkHqf4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=U7QjDOS/WxAMykYl9CUX0IEpZ9Ry0YloeAr3+7jjWvQuWp5c5ybaFn8f5CZTWKYewPrj158qXakirfu47a08w6rGZwCqeiVSh/ianUNbVwyT5Q/FWXhmfRfg6I9D9H9v0sN9fzYRbwCFuR1JSd3lRbCMFpDUsshdJrOwiL6mCLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=krETZqZR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBF12C116B1;
+	Tue,  2 Jul 2024 13:41:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719927719;
+	bh=xIoq5ERoFam9CoYgw94MfcDDBIP2EzSXozZdimkHqf4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=krETZqZRZTW0k1iXLzs/FxWIvDBiOf5o+FbJZkpGtilaCd7GZcjqyo6SomGAunMEB
+	 BUZlu7wccEG6kossKFkepABl2/j8Nsn7yh5jjmmGZM1zHjJ9xrqOuEtGVXyytIMsr2
+	 wG70VQbbYM2x2Z/V9Ig4oLAFMTqYBVlvAMt9/+Ln7Tq6kiinYWiEYV3FCbh+gW1XUs
+	 fS2rs45SRfaUC94gwzDWRVv91uNOx//oOHa5IBx4jkma5NwzrumUbaXnlnE+BGlD5D
+	 5wo+CtDPOBVAmhVS6Z9McL5acmawuElTWYvsSBGtPlNdIXCvftH0RegptVZxUnYM36
+	 rCuzSmxjJO+hA==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: Marco Felsch <m.felsch@pengutronix.de>,  Miquel Raynal
+ <miquel.raynal@bootlin.com>,  Richard Weinberger <richard@nod.at>,
+  Vignesh Raghavendra <vigneshr@ti.com>,  Arnd Bergmann <arnd@arndb.de>,
+  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,  Bartosz Golaszewski
+ <brgl@bgdev.pl>,  Russell King <linux@armlinux.org.uk>,  Joel Stanley
+ <joel@jms.id.au>,  Andrew Jeffery <andrew@codeconstruct.com.au>,  Nicolas
+ Ferre <nicolas.ferre@microchip.com>,  Alexandre Belloni
+ <alexandre.belloni@bootlin.com>,  Claudiu Beznea
+ <claudiu.beznea@tuxon.dev>,  Shawn Guo <shawnguo@kernel.org>,  Sascha
+ Hauer <s.hauer@pengutronix.de>,  Pengutronix Kernel Team
+ <kernel@pengutronix.de>,  Fabio Estevam <festevam@gmail.com>,  Vladimir
+ Zapolskiy <vz@mleia.com>,  Andrew Lunn <andrew@lunn.ch>,  Gregory Clement
+ <gregory.clement@bootlin.com>,  Sebastian Hesselbarth
+ <sebastian.hesselbarth@gmail.com>,  Tony Lindgren <tony@atomide.com>,
+  Geert Uytterhoeven <geert+renesas@glider.be>,  Magnus Damm
+ <magnus.damm@gmail.com>,  Dinh Nguyen <dinguyen@kernel.org>,  Thierry
+ Reding <thierry.reding@gmail.com>,  Jonathan Hunter
+ <jonathanh@nvidia.com>,  Jonathan =?utf-8?Q?Neusch=C3=A4fer?=
+ <j.neuschaefer@gmx.net>,
+  Michael Ellerman <mpe@ellerman.id.au>,  Nicholas Piggin
+ <npiggin@gmail.com>,  Christophe Leroy <christophe.leroy@csgroup.eu>,
+  "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,  Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>,  Huacai Chen <chenhuacai@kernel.org>,  WANG
+ Xuerui <kernel@xen0n.name>,  linux-mtd@lists.infradead.org,
+  linux-kernel@vger.kernel.org,  linux-i2c@vger.kernel.org,
+  linux-arm-kernel@lists.infradead.org,  linux-aspeed@lists.ozlabs.org,
+  imx@lists.linux.dev,  linux-omap@vger.kernel.org,
+  linux-renesas-soc@vger.kernel.org,  linux-tegra@vger.kernel.org,
+  openbmc@lists.ozlabs.org,  linuxppc-dev@lists.ozlabs.org,
+  linux-mips@vger.kernel.org,  loongarch@lists.linux.dev,  Maxime Ripard
+ <mripard@kernel.org>
+Subject: Re: [PATCH 4/9] mtd: devices: add AT24 eeprom support
+In-Reply-To: <07b701a9-7b52-45b7-8dba-1c25d77cbf15@linaro.org> (Tudor
+	Ambarus's message of "Mon, 1 Jul 2024 17:14:14 +0100")
+References: <20240701-b4-v6-10-topic-usbc-tcpci-v1-0-3fd5f4a193cc@pengutronix.de>
+	<20240701-b4-v6-10-topic-usbc-tcpci-v1-4-3fd5f4a193cc@pengutronix.de>
+	<07b701a9-7b52-45b7-8dba-1c25d77cbf15@linaro.org>
+Date: Tue, 02 Jul 2024 15:41:52 +0200
+Message-ID: <mafs0ikxnykpr.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240628003253.1694510-1-almasrymina@google.com> <20240628003253.1694510-9-almasrymina@google.com>
-In-Reply-To: <20240628003253.1694510-9-almasrymina@google.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Tue, 2 Jul 2024 15:14:22 +0200
-Message-ID: <CANn89iJ1ys-eNyM3BGQ1PuLKsbo+Kcj78wfoAtaFPygQdYawkg@mail.gmail.com>
-Subject: Re: [PATCH net-next v15 08/14] net: support non paged skb frags
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
-	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Fri, Jun 28, 2024 at 2:33=E2=80=AFAM Mina Almasry <almasrymina@google.co=
-m> wrote:
->
-> Make skb_frag_page() fail in the case where the frag is not backed
-> by a page, and fix its relevant callers to handle this case.
->
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
->
+On Mon, Jul 01 2024, Tudor Ambarus wrote:
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+> On 7/1/24 2:53 PM, Marco Felsch wrote:
+>> EEPROMs can become quite large nowadays (>=64K). Exposing such devices
+>> as single device isn't always sufficient. There may be partitions which
+>> require different access permissions. Also write access always need to
+>> to verify the offset.
+>> 
+>> Port the current misc/eeprom/at24.c driver to the MTD framework since
+>> EEPROMs are memory-technology devices and the framework already supports
+>
+> I was under the impression that MTD devices are tightly coupled by erase
+> blocks. But then we see MTD_NO_ERASE, so what are MTD devices after all?
+
+I was curious as well so I did some digging.
+
+The Kconfig help says:
+
+    Memory Technology Devices are flash, RAM and similar chips, often
+    used for solid state file systems on embedded devices [...]
+
+The FAQ on the MTD documentation [0] says:
+
+    Unix traditionally only knew block devices and character devices.
+    Character devices were things like keyboards or mice, that you could
+    read current data from, but couldn't be seek-ed and didn't have a size.
+    Block devices had a fixed size and could be seek-ed. They also happened
+    to be organized in blocks of multiple bytes, usually 512.
+
+    Flash doesn't match the description of either block or character
+    devices. They behave similar to block device, but have differences. For
+    example, block devices don't distinguish between write and erase
+    operations. Therefore, a special device type to match flash
+    characteristics was created: MTD.
+
+    So MTD is neither a block nor a char device. There are translations to
+    use them, as if they were. But those translations are nowhere near the
+    original, just like translated Chinese poems.
+
+And in the section below, it lists some properties of an MTD device:
+
+    - Consists of eraseblocks.
+    - Eraseblocks are larger (typically 128KiB).
+    - Maintains 3 main operations: read from eraseblock, write to
+      eraseblock, and erase eraseblock.
+    - Bad eraseblocks are not hidden and should be dealt with in
+      software.
+    - Eraseblocks wear-out and become bad and unusable after about 10^3
+      (for MLC NAND) - 10^5 (NOR, SLC NAND) erase cycles.
+
+This does support the assumption you had about MTD devices being tightly
+coupled with erase block. It also makes it quite clear that an EEPROM is
+not MTD -- since EEPROMs are byte-erasable.
+
+Of course, the existence of MTD_NO_ERASE nullifies a lot of
+these points. So it seems the subsystem has evolved. MTD_NO_ERASE was
+added by 92cbfdcc3661d ("[MTD] replace MTD_RAM with MTD_GENERIC_TYPE")
+in 2006, but this commit only adds the flag. The functionality of "not
+requiring an explicit erase" for RAM devices has existed since the start
+of the git history at least.
+
+I also found a thread from 2013 by Maxime Ripard (+Cc) suggesting adding
+EEPROMs to MTD [1]. The main purpose would have been unifying the EEPROM
+drivers under a single interface. I am not sure what came of it though,
+since I can't find any patches that followed up with the proposal.
+
+Overall, I'd say that while originally MTD was written with flash
+devices with erase blocks in mind, the subsystem seems to have evolved
+with time to include other types of devices.
+
+I don't see anything obviously wrong with adding EEPROMs to the type of
+devices in MTD as well. It doesn't seem to be too invasive to the
+subsystem (I do see some dubious code when skimming through the patches,
+but nothing unfixable). And the EEPROM drivers can get a common
+interface. The other option would be to create a separate subsystem for
+EEPROMs, but perhaps that would just lead to a bunch of code being
+duplicated.
+
+I'd like to hear if somebody thinks otherwise, and sees reasons to _not_
+do this.
+
+[0] http://www.linux-mtd.infradead.org/faq/general.html
+[1] https://lore.kernel.org/linux-mtd/20130705201118.GM2959@lukather/
+
+-- 
+Regards,
+Pratyush Yadav
 
