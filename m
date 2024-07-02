@@ -1,132 +1,146 @@
-Return-Path: <linux-mips+bounces-4084-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4085-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E520592403B
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Jul 2024 16:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 62047924049
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Jul 2024 16:17:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2206C1C2313C
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Jul 2024 14:15:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8714C1C20D1F
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Jul 2024 14:17:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 838F61B5827;
-	Tue,  2 Jul 2024 14:15:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E90561BA073;
+	Tue,  2 Jul 2024 14:17:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fp8a4ALq"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gbIIGpRK"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE4EBE7F;
-	Tue,  2 Jul 2024 14:15:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1AF219DFAB
+	for <linux-mips@vger.kernel.org>; Tue,  2 Jul 2024 14:17:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719929728; cv=none; b=EVuM2x8fWlzBaqrdr7980vIa0C0SBM/h71DPjDUCvYhwCoe7FQhqEPTj+c0Ks71bkGoi/cekXgmTVhImYm8iMi0OBXXWpMDXu76r/+elbfyqEpK5rjN0w9QgYS43+IkEfzi2e9FnzDK3Z37lYrD1KX5jwKi9ZcOeRPuDX09tWlU=
+	t=1719929831; cv=none; b=RwCiP7qEQooTrGQbjrZaMgbkhe/UJ8ScTYzxoJ6924rtbrRTsR7F8HxwmV3JX8232+vb9RB3BdShaDMkP1S64X6PXhnIWiY1dUBnPT9ieZKRTiYWGn9+rtDz7y8M4153FJfan7xLi/Y0ukhJkUbz9sUlCrZu4HhJUB7EsDfFRII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719929728; c=relaxed/simple;
-	bh=Yj29D4k1LcVn7Ks20rGXW4rvIpFaMTU+k2U6e4btBIQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Fj9aSrEkDNabohcwiJe42WRUU85G1LNk9lZbGbR7QWKwdr6/LDj1yw68v45cqzPJRIJYmXNfsWXd2rN8ugSG2h4xH5sKFtWx3QeC4EarI0839oLY+wa/dv1v0ayta8nxmOpHblerTWno7vBXFVBx7Jz37xWbDMNYEmbdbayc1kk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fp8a4ALq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE16EC116B1;
-	Tue,  2 Jul 2024 14:15:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719929727;
-	bh=Yj29D4k1LcVn7Ks20rGXW4rvIpFaMTU+k2U6e4btBIQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=fp8a4ALqKzJzQAFeAuZkwqCTvJuj0YtIUipMdlDd1rdkIFeKnzJXvTU3ZN0hz7K3I
-	 gdGUBWehue5RqVC5hGNOUvvuyOunqynlN5KMwgWGLsZkZ1bjI6ci4xj01PXjke6cF8
-	 p/8NbVcc0wZLJ+yL0JRUzNF2LdURmYzmHW6CDju7ahJGwtuuwL4Mzn+Aj/Z1wcz5bH
-	 oWLRk0GLRph+pRoW5289upyRK2T1BiUlNsysIDE7Lh88Pb71ZAoYouEyj8x2rrNUUH
-	 b1aKcrmm/8bQuL0VWowbIbLBntgCeNZ+kZbpWxKHVFdpLswkkGR7QKvlhrlM+MW3hn
-	 NrIInqs3S0POA==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Pratyush Yadav <pratyush@kernel.org>,  Tudor Ambarus
- <tudor.ambarus@linaro.org>,  Marco Felsch <m.felsch@pengutronix.de>,
-  Miquel Raynal <miquel.raynal@bootlin.com>,  Richard Weinberger
- <richard@nod.at>,  Vignesh Raghavendra <vigneshr@ti.com>,  Arnd Bergmann
- <arnd@arndb.de>,  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-  Bartosz Golaszewski <brgl@bgdev.pl>,  Russell King
- <linux@armlinux.org.uk>,  Joel Stanley <joel@jms.id.au>,  Andrew Jeffery
- <andrew@codeconstruct.com.au>,  Nicolas Ferre
- <nicolas.ferre@microchip.com>,  Alexandre Belloni
- <alexandre.belloni@bootlin.com>,  Claudiu Beznea
- <claudiu.beznea@tuxon.dev>,  Shawn Guo <shawnguo@kernel.org>,  Sascha
- Hauer <s.hauer@pengutronix.de>,  Pengutronix Kernel Team
- <kernel@pengutronix.de>,  Fabio Estevam <festevam@gmail.com>,  Vladimir
- Zapolskiy <vz@mleia.com>,  Andrew Lunn <andrew@lunn.ch>,  Gregory Clement
- <gregory.clement@bootlin.com>,  Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>,  Tony Lindgren <tony@atomide.com>,
-  Geert Uytterhoeven <geert+renesas@glider.be>,  Magnus Damm
- <magnus.damm@gmail.com>,  Dinh Nguyen <dinguyen@kernel.org>,  Thierry
- Reding <thierry.reding@gmail.com>,  Jonathan Hunter
- <jonathanh@nvidia.com>,  Jonathan =?utf-8?Q?Neusch=C3=A4fer?=
- <j.neuschaefer@gmx.net>,
-  Michael Ellerman <mpe@ellerman.id.au>,  Nicholas Piggin
- <npiggin@gmail.com>,  Christophe Leroy <christophe.leroy@csgroup.eu>,
-  "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,  Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>,  Huacai Chen <chenhuacai@kernel.org>,  WANG
- Xuerui <kernel@xen0n.name>,  linux-mtd@lists.infradead.org,
-  linux-kernel@vger.kernel.org,  linux-i2c@vger.kernel.org,
-  linux-arm-kernel@lists.infradead.org,  linux-aspeed@lists.ozlabs.org,
-  imx@lists.linux.dev,  linux-omap@vger.kernel.org,
-  linux-renesas-soc@vger.kernel.org,  linux-tegra@vger.kernel.org,
-  openbmc@lists.ozlabs.org,  linuxppc-dev@lists.ozlabs.org,
-  linux-mips@vger.kernel.org,  loongarch@lists.linux.dev
-Subject: Re: [PATCH 4/9] mtd: devices: add AT24 eeprom support
-In-Reply-To: <20240702-congenial-vigilant-boar-aeae44@houat> (Maxime Ripard's
-	message of "Tue, 2 Jul 2024 15:56:52 +0200")
-References: <20240701-b4-v6-10-topic-usbc-tcpci-v1-0-3fd5f4a193cc@pengutronix.de>
-	<20240701-b4-v6-10-topic-usbc-tcpci-v1-4-3fd5f4a193cc@pengutronix.de>
-	<07b701a9-7b52-45b7-8dba-1c25d77cbf15@linaro.org>
-	<mafs0ikxnykpr.fsf@kernel.org>
-	<20240702-congenial-vigilant-boar-aeae44@houat>
-Date: Tue, 02 Jul 2024 16:15:20 +0200
-Message-ID: <mafs0ed8byj5z.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1719929831; c=relaxed/simple;
+	bh=gnffRDgb6MkK9/ngZ6O/0GyrGhi5uTvKCK/HB1ItSAk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kqekteH3hwd1k3Ox6m0WBxloxcyFHQm0/bp6ru7ixJDGH4Q/1pcqU72iMT061YA5/zQH2PHzIWtAWiBjmVrj8MoZLbKbQeeLJe591oKvNe2e+sIkbHbsNVziU45Un8/vXQlyg6+qQks2gfKU/JTsUrjCJh6kMNQ9EUOyGyF2wtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gbIIGpRK; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-57d119fddd9so23230a12.1
+        for <linux-mips@vger.kernel.org>; Tue, 02 Jul 2024 07:17:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1719929828; x=1720534628; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3MsOJSlob7CKHdGlFCDO6udUL2K0h2Y2TJHmLjG41zo=;
+        b=gbIIGpRKQobLTmehAOpgfLcy95ZU/AByfs9kdBeYQ/n2KkzTfa/cXXnp4MusF1H8BX
+         N10qfXzyc9gq/LfGnU2Q55A1ZBI6rgezEmGprEgxZT9yr/tXnrloW0p2QLIG6T9XGoK4
+         zK4fzdfs3GbBMR9fhU2FpVhygr4L5pdWCcgNxgcJ9tD0ZXPndk2DlM7d5VFUHTL3ZlxK
+         CL8s+gWes1GXm/lFgHAX4DxefMh99qjJZSGMw22omRW0qlxUrLzlODvPHE5jTR6DVFVJ
+         hnKEq5lxgWg6S5nz1lIeX5veiASadMiAZpwwPNVlj9heAkxvqT4kO4bkNoTzppVR5b/N
+         JIFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719929828; x=1720534628;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3MsOJSlob7CKHdGlFCDO6udUL2K0h2Y2TJHmLjG41zo=;
+        b=AMFpymb7OkmxWd/MvEGDTPRUJBibMX+KzeJTPcNSqIYqN6CeTozgNPQLr/q8CEOdUh
+         AIuBMMYhNkMAz6whXa9ZrBxEeaUEK7bMyJusFo3TkCughRAqE41LYjOrYcnxULEpVx7S
+         LSt5VV/eDPGiOBsSkqBuBQh+QKKnxKr4hScVRXk3cmHxvUJNqlqtoLpB3lzfbO99ubnv
+         4apClF4nt7CugJVNov7URblVKonFmUMR14zTq3ksKSHTYKwASKM3/ogAxlNL0m4pvfj1
+         Uvhby5xHzmvSNMOLMaR1Did/M90HrRONLkqaYyFWGyOaAJsfDqIF2FO01ACGNadJPgbl
+         zPJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWAZhn4ZwQ3w0TM7w7xoK1bHQC7QZNm3yjkP1LqZcwRkR55YEs8aRT4GYSSmnUbUU1L3OoRUa80e9OQhUKR+i3gA+KyuTmhc0M7yA==
+X-Gm-Message-State: AOJu0YyZ/zelJxTFbfGKHqQS+kaYoixETtyBvZC+qfE+JrN0Ctjic7XY
+	mh1LV5VaafJOWoc0pw6ZPoEXk+8m8+flm8tH6nFWVMqJuoxwbEuPOOSHDUv26E+yivKSzdwxlvx
+	gzOqrQgts7QsFWiN2N6e9ATusjsgQPrftXQUK
+X-Google-Smtp-Source: AGHT+IHeie+CneGN1tFOl+YZGQ17cXdj2DR/Y+QNM3pfEb34aKGMstvK/sjFNw/KX6ZKxM2ZjhUuZFIwrJ3gR7SUsI4=
+X-Received: by 2002:a50:cd4c:0:b0:58b:dfaa:a5cd with SMTP id
+ 4fb4d7f45d1cf-58c64acd894mr588a12.2.1719929827849; Tue, 02 Jul 2024 07:17:07
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20240628003253.1694510-1-almasrymina@google.com> <20240628003253.1694510-11-almasrymina@google.com>
+In-Reply-To: <20240628003253.1694510-11-almasrymina@google.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Tue, 2 Jul 2024 16:16:56 +0200
+Message-ID: <CANn89iLuXtpbVf5TEYy7QVqosZVSuCSsCLw=3DsJBoPDkEzveA@mail.gmail.com>
+Subject: Re: [PATCH net-next v15 10/14] tcp: RX path for devmem TCP
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 02 2024, Maxime Ripard wrote:
-
-> On Tue, Jul 02, 2024 at 03:41:52PM GMT, Pratyush Yadav wrote:
->> On Mon, Jul 01 2024, Tudor Ambarus wrote:
->> 
->> > On 7/1/24 2:53 PM, Marco Felsch wrote:
->> >> EEPROMs can become quite large nowadays (>=64K). Exposing such devices
->> >> as single device isn't always sufficient. There may be partitions which
->> >> require different access permissions. Also write access always need to
->> >> to verify the offset.
->> >> 
->> >> Port the current misc/eeprom/at24.c driver to the MTD framework since
->> >> EEPROMs are memory-technology devices and the framework already supports
->> >
->> > I was under the impression that MTD devices are tightly coupled by erase
->> > blocks. But then we see MTD_NO_ERASE, so what are MTD devices after all?
->> 
->> I was curious as well so I did some digging.
->> 
-[...]
->> 
->> I also found a thread from 2013 by Maxime Ripard (+Cc) suggesting adding
->> EEPROMs to MTD [1]. The main purpose would have been unifying the EEPROM
->> drivers under a single interface. I am not sure what came of it though,
->> since I can't find any patches that followed up with the proposal.
+On Fri, Jun 28, 2024 at 2:33=E2=80=AFAM Mina Almasry <almasrymina@google.co=
+m> wrote:
 >
-> That discussion led to drivers/nvmem after I started to work on
-> some early prototype, and Srinivas took over that work.
+> In tcp_recvmsg_locked(), detect if the skb being received by the user
+> is a devmem skb. In this case - if the user provided the MSG_SOCK_DEVMEM
+> flag - pass it to tcp_recvmsg_devmem() for custom handling.
+>
+> tcp_recvmsg_devmem() copies any data in the skb header to the linear
+> buffer, and returns a cmsg to the user indicating the number of bytes
+> returned in the linear buffer.
+>
+> tcp_recvmsg_devmem() then loops over the unaccessible devmem skb frags,
+> and returns to the user a cmsg_devmem indicating the location of the
+> data in the dmabuf device memory. cmsg_devmem contains this information:
+>
+> 1. the offset into the dmabuf where the payload starts. 'frag_offset'.
+> 2. the size of the frag. 'frag_size'.
+> 3. an opaque token 'frag_token' to return to the kernel when the buffer
+> is to be released.
+>
+> The pages awaiting freeing are stored in the newly added
+> sk->sk_user_frags, and each page passed to userspace is get_page()'d.
+> This reference is dropped once the userspace indicates that it is
+> done reading this page.  All pages are released when the socket is
+> destroyed.
+>
+> Signed-off-by: Willem de Bruijn <willemb@google.com>
+> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
 
-So would you say it is better for EEPROM drivers to use nvmem instead of
-moving under MTD?
-
--- 
-Regards,
-Pratyush Yadav
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 
