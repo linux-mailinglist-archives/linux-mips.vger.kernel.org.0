@@ -1,126 +1,158 @@
-Return-Path: <linux-mips+bounces-4077-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4078-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E49F09239A0
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Jul 2024 11:19:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 365DF923A33
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Jul 2024 11:34:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6CC3283D1E
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Jul 2024 09:19:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 363631C21084
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Jul 2024 09:34:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17635155C90;
-	Tue,  2 Jul 2024 09:16:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A464E1552E3;
+	Tue,  2 Jul 2024 09:34:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZBQTEMyM"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38C7E158DBE
-	for <linux-mips@vger.kernel.org>; Tue,  2 Jul 2024 09:16:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205AE1534E1;
+	Tue,  2 Jul 2024 09:34:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719911801; cv=none; b=XPmIhd7l0x3yGCPOkzk0qPqlGFut+ZxgtjQWmHsMkutpsxZPFG5MyIKZXOiDSVaYPEabFlIwFCPQERqOGfcMpKTsRlfWAFGpJ+xmjeqtoUCiik9su1qFOZkob8e+/xBGVXw/SYEdy2jeQM3zMVl2vIOzS1FUinP7vBl8SI4IXRI=
+	t=1719912846; cv=none; b=aK+U8WYOuJ7GtRYCq5S4o+VurZ6BZGjzkExImn6D5EO++L/O4sgwUTwC4Qb/aNWTyd3NfajRaVX1p1bs0nkqZJrzFRWaSaXHjCUEDJ+fC+vf/I9bQz0TZcpYQUTUw7N0cABvlNzek2vmYHwXbxPlf5BrI72L6mW0PzOSrT1Xwsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719911801; c=relaxed/simple;
-	bh=4WZAZtnHKSDJYQ5TKJuVTZiOFTMVNAPKVK4zImRkS5k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ni6Yrahc/yWPs3xC4dEtYbSPwtotOUhcJzTquGHWoGazIRUOewCgAaT0SvaBYxO9yuYOA2Xir1IB72j3aj5K4BlvJw0tCYoi8rnO9Ichv0YchlUlkKDKWgt6dbM5oBMp1flJl0ElLDwxEcYmKaTMOp9YAhzl9NMxfXv/VI81QvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1sOZba-0004QR-Dq; Tue, 02 Jul 2024 11:15:18 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1sOZbW-006ZmA-Rx; Tue, 02 Jul 2024 11:15:14 +0200
-Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1sOZbW-00AOUX-2L;
-	Tue, 02 Jul 2024 11:15:14 +0200
-Date: Tue, 2 Jul 2024 11:15:14 +0200
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Russell King <linux@armlinux.org.uk>, Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Vladimir Zapolskiy <vz@mleia.com>, Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Tony Lindgren <tony@atomide.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>, linux-mtd@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-	imx@lists.linux.dev, linux-omap@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-	openbmc@lists.ozlabs.org, linuxppc-dev@lists.ozlabs.org,
-	linux-mips@vger.kernel.org, loongarch@lists.linux.dev
-Subject: Re: [PATCH 9/9] eeprom: at24: remove deprecated Kconfig symbol
-Message-ID: <20240702091514.jjdahaseml6fpnrz@pengutronix.de>
-References: <20240701-b4-v6-10-topic-usbc-tcpci-v1-0-3fd5f4a193cc@pengutronix.de>
- <20240701-b4-v6-10-topic-usbc-tcpci-v1-9-3fd5f4a193cc@pengutronix.de>
- <CAMRc=McP=K0jSD56JdCR9DPJmJN39Z74mjAo0qX2mEnTBN1GAA@mail.gmail.com>
+	s=arc-20240116; t=1719912846; c=relaxed/simple;
+	bh=OHn1ckY1ViIAHvmeaBhl4RVsY7dCnn6nSLzEnFbY7H4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZW/ZWAE8PWBDV7xBcy8wXiZnJUzv/DbGcknm/KLOtczYwYvt2GXZkbuToscH4e1X/la4o8fBdjbVywjk57Rr7CqRIe/KFvWreN07S7xPpPalQhFkTUU2Zo2rr+FI+7EKk0lvxHcqPLucJIHwHgL6RZ0r2DNcnaXDbAXVPy23WV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZBQTEMyM; arc=none smtp.client-ip=209.85.210.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-7021f23d699so534806a34.3;
+        Tue, 02 Jul 2024 02:34:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719912844; x=1720517644; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cWXvodTV40xpsQgD046diOP7NF2BEo3aGKT0Hy04vKs=;
+        b=ZBQTEMyMDKJbU7hV744Uytoc4LJt9baatO8fqoptKJc9Z6ro2IBfYXw7pgCyEjNVka
+         mQMYMgImdC78+P7u+yYC3VST6hxf3lUHmjA5Ro9iZ6MXzFz7rZmfjNoSQL2OcptYJ2Ra
+         m345jFhs+hq4sYbJlbDD13fdtYotW0j4Ikiwyshse+segDtvTmSJDVfP49YT4eX1ka8a
+         uRB/VehcZ7UFbpaWhvzQTmvKlLjMfiksmK+4AGW3AmATmJY962ZoEC01yl5U4F+rJpWb
+         WI1Lnm975IkRObQjQCT9XdKkysfd6wgwhYoZF2gY22Kf1imTKSuNbW1BtjrOfBJRJ1dm
+         zS+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719912844; x=1720517644;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cWXvodTV40xpsQgD046diOP7NF2BEo3aGKT0Hy04vKs=;
+        b=FMwbeWHAQLjLb1vH4tMak+t6Cb/IfZTUh4W+YH/h3baoGw7wiBN3U/NNief9mfwFab
+         bcEvJo8NdLa7aMrHSd8GS26JeV3aqK2clyMjfNUwFqfPLz0GlOCJs9eiq6imrAOM/2UL
+         pjw6W7naqQmwQ09zKOwcXW48VCUxuIPapghNZxc8QtuNMjWsLJcGPH4NkqN36q/UUNpO
+         wohXuF+kj6GVs6oZH1/O9BNZoIRfWX6JCqYDDyvSrZ+cU7Pn8sFjgNAwHfWpko0OMA1s
+         kmB/wkjzxDMvsPoLAZxBVx5C3Cb3f1gKVx+qnP05qyeLnBABUd8o8b15Mk3DM0DfkvsK
+         5hxg==
+X-Forwarded-Encrypted: i=1; AJvYcCXYuE2OThn+wRxZcttJaMU2LGuhuLsNf7hgO96g7843Q7e/QJqBVzdF3UnVtb0pInbhr1gCmJNYVAfQPJXw+mAXES49dfH5pGPO6VG+k38zEf+Kz8+LRpMtc//pQPgjpwDwmJW9fY4Ub4juKQTgT4vifcjcIpOWJFfX7Vvb/zSFhQ2cQrajr2ElHWRluwQ4uW2118Jt8Z5Qu1cNk0SyCs4WiHMIpH1PTPiQFaf/1VvpZ9pLMq/u9awn72PIqZthT5/wc/jplKmY/9oQqpEFVNrKmFz1UWVw3KPxzREmRQjraLNZYJpkF8NOjXFXrTYUhvr9piGwCWy8DK0dGVYCsf9SjgR4ZA0FoN7apwC+HJl4YmRM2QlMv3npTpowXJJ1fkLq+t8LTqqfCRskCOUF56mPwVD6TqVFYtWZKtgTRipJn84yYmv0XjYJTqq3b1HZYXl01y8+DhDXDPFLsEcuSAZJxs1im0xAuTQlVla1RA==
+X-Gm-Message-State: AOJu0YxGHUwcH6dyWfY+L6ZATyv8il+kySKOUoA1Fesao4R5WCL8JVBl
+	l+qs9paJIkBuDdraXFZIses39FBPR/+cn7wixwFlAd0dw45okRCKzNoMYAA5w3SmxTJrp1ayET+
+	IcFGpvnWL4Lb1bG3iF0gNu7lGCQQ=
+X-Google-Smtp-Source: AGHT+IEDzJCkSxic9thzD1A+qXwSy94/OFeuEZqEmxDLENKBg+0OkSwbEdt7g8VxaiGVVFbl4hnPJFDds9/ibJSVDwQ=
+X-Received: by 2002:a05:6870:56ab:b0:254:aae8:d822 with SMTP id
+ 586e51a60fabf-25db3432ec4mr7759858fac.26.1719912844128; Tue, 02 Jul 2024
+ 02:34:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMRc=McP=K0jSD56JdCR9DPJmJN39Z74mjAo0qX2mEnTBN1GAA@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+References: <20240628003253.1694510-1-almasrymina@google.com>
+ <20240628003253.1694510-3-almasrymina@google.com> <m27ce9cris.fsf@gmail.com> <CAHS8izNM8TjJ1DU+7gzq-0kH=tVeM6j-QsaKk=2FHNDF6RLwnA@mail.gmail.com>
+In-Reply-To: <CAHS8izNM8TjJ1DU+7gzq-0kH=tVeM6j-QsaKk=2FHNDF6RLwnA@mail.gmail.com>
+From: Donald Hunter <donald.hunter@gmail.com>
+Date: Tue, 2 Jul 2024 10:33:52 +0100
+Message-ID: <CAD4GDZznS=0xG+ms6bLKSwQFNTqxSqi8fdoNM97ymwcnqX3yhg@mail.gmail.com>
+Subject: Re: [PATCH net-next v15 02/14] net: netdev netlink api to bind
+ dma-buf to a net device
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>, Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
-
-On 24-07-02, Bartosz Golaszewski wrote:
-> On Mon, Jul 1, 2024 at 3:54 PM Marco Felsch <m.felsch@pengutronix.de> wrote:
+On Mon, 1 Jul 2024 at 20:05, Mina Almasry <almasrymina@google.com> wrote:
+>
+> On Fri, Jun 28, 2024 at 3:10=E2=80=AFAM Donald Hunter <donald.hunter@gmai=
+l.com> wrote:
 > >
-> > All kernel users are shifted to the new MTD_EEPROM_AT24 Kconfig symbol
-> > so we can drop the old one.
+> > Mina Almasry <almasrymina@google.com> writes:
+> > > +  -
+> > > +    name: bind-dmabuf
+> > > +    attributes:
+> > > +      -
+> > > +        name: ifindex
+> > > +        doc: netdev ifindex to bind the dma-buf to.
 > >
-> 
-> Nope, with this series arm64 still selects the old symbol.
+> > Minor nit:
+> >
+> > The series uses a mix of dmabuf and dma-buf but the doc additions
+> > (devmem.rst) consistently uses dmabuf. I think it would be helpful to b=
+e
+> > consistent here and say 'devmem dmabuf' in the docstring to highlight
+> > whos dmabuf it is and keep the generated netdev docs in alignment.
+>
+> To be honest, even the dmabuf docs mixes 'dma-buf' and 'dmabuf', to my ey=
+e:
+>
+> https://docs.kernel.org/driver-api/dma-buf.html
+>
+> I can edit these docs I'm adding so these are consistent.
+>
+> But on 'devmem dmabuf', not sure to be honest. Technically all dmabufs
+> are supported, even non-devmem ones. I'm not sure non-devmem dmabufs
+> are common at all, the only example I can think of is udmabuf whose
+> primary user is qemu and testing, so it's somewhat implied that the
+> dmabuf is devmem, and even if it isn't, it would be supported. I
+> prefer to keep the docs saying just 'dmabuf' as technically all are
+> supported. Maybe I should add a note about this somewhere in the
+> dedicated docs.
 
-sry. I must have forgotten to add the arm64 hunk :/ I also noticed one
-powerpc config which still select the old symbol. I will fix this in v2.
+That's a fair point. If you could mention it in the docs, that would be gre=
+at.
 
-Thank you,
-  Marco
-
-> 
-> Bart
-> 
+Thanks,
+Donald.
 
