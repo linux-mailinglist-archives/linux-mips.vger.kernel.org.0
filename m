@@ -1,110 +1,136 @@
-Return-Path: <linux-mips+bounces-4104-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4108-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61F959263D8
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Jul 2024 16:52:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D303F926494
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Jul 2024 17:13:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19108280F78
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Jul 2024 14:52:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AA151F23FC8
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Jul 2024 15:13:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7571717B401;
-	Wed,  3 Jul 2024 14:52:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="J6mfbvdE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EDEE181B8C;
+	Wed,  3 Jul 2024 15:13:08 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17384409;
-	Wed,  3 Jul 2024 14:52:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0D5F17FAD3;
+	Wed,  3 Jul 2024 15:13:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720018330; cv=none; b=CYJqV3SaVUMWidFjJCdWXBYlZ6mp7xICcOyAInW0xumB1GsUKwI88li5kkj4xjIb1t75SR2M1vqTY1/0UPbyJXQcQb4E5LjOUpq24+R2mnraZfVCB14nu1a509o6xUtCPgkVZpbzKui9Ui+lpaLnvIWLnHpZg8awx27V4CjTjYE=
+	t=1720019588; cv=none; b=o8P8gl6sXRJI2WmV+V7GSUpccirm3/bws/W3QBbz1j2+oM3LhYx4zw46VlVU1r2o5rAUMzsuoDj+cAVm9fgKg6bx4rLHaGYA7PH33YMnxir7cDcYC7VG8pmFRC3CNvCKWFCtnNwN93OyPptRw91BaLgri4vXYvrVMzjGuRqIzw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720018330; c=relaxed/simple;
-	bh=opuYPOBO3CpJ/UR87r0PwPENZCJ5lJ2kN2zlHDHZooc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=mrHGoO1AhQ623ubAnCvm83DAYbZxOUhNW+zhKC2l481wD++98ysOSWoKFZMWLDgqgebHMCmBgcrCj6wdonMA9FQqerMC+P6TUxFATbvvJRS3/8K9pscweJlK6sovdZGin+WG1D4DPTd6R938I0kOZJHhh1/7eTCZRtMMBZfTcvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=J6mfbvdE; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 72851240008;
-	Wed,  3 Jul 2024 14:52:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1720018326;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=opuYPOBO3CpJ/UR87r0PwPENZCJ5lJ2kN2zlHDHZooc=;
-	b=J6mfbvdEQcsGLS3MQ/y3pHy6zksWvA521a7dcQT+652pasbVLH3I7a8WdzbA5AwaYd7hIK
-	gu//wwGdPcqBgYvQpLSP5Mw4tDjWK9OF6wxGptBb+QhhGm1nCDvODbj1gjHOpmWb4kgBap
-	yN/gW2Ddu8sWw0uqQLrIK4HgKpH5Jjklwzk2/V9texg7lXB9TRy/nqDYlPKjSXNo9fz0SV
-	NPmUFQzKo1+1EzTTOAgqWBwVSSXMr0zFdXoLoy6ELWg57skFitEUDF2TiMOJ9LYKKv1ypV
-	MEZzSRFCwj23ChOLs4fVVw9CW1osH7vceBjXpU2+I1lGOi2RIW2HPt5eD7bv7g==
+	s=arc-20240116; t=1720019588; c=relaxed/simple;
+	bh=IgiR48qZckGes9RhJYBc+AaWGNnyeZUEyB3IhSIIVJQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=THDu8654+CkeXaxbafkf8VkRjzlhA5vRpXBbvCLLl085cDj2c9FodNIPdZ0j5KVO1ScHImnarhh2Gqt+FDAshz07vgqL+Xu+qk1zFst9t0UtWzDyZ5Jeza3Uarl1ZnmpNIVc6M06IVk/ML2ySyviLFIdWRHMjD7qsFYWl7VLgio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1sP1eq-0000BF-00; Wed, 03 Jul 2024 17:12:32 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 0BB0CC0120; Wed,  3 Jul 2024 17:03:45 +0200 (CEST)
+Date: Wed, 3 Jul 2024 17:03:45 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Serge Semin <fancer.lancer@gmail.com>,
+	Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/10] MIPS: smp: Manage IPI interrupts as percpu_devid
+ interrupts
+Message-ID: <ZoVoUabfZiiAXWKR@alpha.franken.de>
+References: <20240616-b4-mips-ipi-improvements-v1-0-e332687f1692@flygoat.com>
+ <20240616-b4-mips-ipi-improvements-v1-2-e332687f1692@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 03 Jul 2024 16:52:04 +0200
-Message-Id: <D2FZLXUX4HHW.1R8U2P6JBH758@bootlin.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH 0/3] MIPS: Add Mobileye EyeQ OLB system-controller
-Cc: "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski"
- <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>,
- <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, =?utf-8?q?Gr=C3=A9gory_Clement?=
- <gregory.clement@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-To: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-X-Mailer: aerc 0.17.0-0-g6ea74eb30457
-References: <20240628-mbly-mips-v1-0-f53f5e4c422b@bootlin.com>
- <ZoVhry8VFRx8x3w/@alpha.franken.de>
-In-Reply-To: <ZoVhry8VFRx8x3w/@alpha.franken.de>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240616-b4-mips-ipi-improvements-v1-2-e332687f1692@flygoat.com>
 
-Hello Thomas,
+On Sun, Jun 16, 2024 at 10:03:06PM +0100, Jiaxun Yang wrote:
+> IPI interrupts need to be enabled when a new CPU coming up.
+> 
+> Manage them as percpu_devid interrupts and invoke enable/disable
+> functions at appropriate time to perform enabling as required,
+> similar to what RISC-V and Arm doing.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  arch/mips/include/asm/ipi.h | 11 +++++++++++
+>  arch/mips/kernel/smp.c      | 26 ++++++++++++++++++++++++--
+>  2 files changed, 35 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/mips/include/asm/ipi.h b/arch/mips/include/asm/ipi.h
+> index df7a0ac4227a..88b507339f51 100644
+> --- a/arch/mips/include/asm/ipi.h
+> +++ b/arch/mips/include/asm/ipi.h
+> @@ -29,6 +29,17 @@ int mips_smp_ipi_allocate(const struct cpumask *mask);
+>   * Return 0 on success.
+>   */
+>  int mips_smp_ipi_free(const struct cpumask *mask);
+> +
+> +void mips_smp_ipi_enable(void);
+> +void mips_smp_ipi_disable(void);
+> +#else
+> +static inline void mips_smp_ipi_enable(void)
+> +{
+> +}
+> +
+> +static inline void mips_smp_ipi_disable(void)
+> +{
+> +}
+>  #endif /* CONFIG_GENERIC_IRQ_IPI */
+>  #endif /* CONFIG_SMP */
+>  #endif
+> diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
+> index a6cf6444533e..710644d47106 100644
+> --- a/arch/mips/kernel/smp.c
+> +++ b/arch/mips/kernel/smp.c
+> @@ -186,6 +186,7 @@ irq_handler_t ipi_handlers[IPI_MAX] __read_mostly = {
+>  };
+>  
+>  #ifdef CONFIG_GENERIC_IRQ_IPI
+> +static DEFINE_PER_CPU_READ_MOSTLY(int, ipi_dummy_dev);
+>  static int ipi_virqs[IPI_MAX] __ro_after_init;
+>  static struct irq_desc *ipi_desc[IPI_MAX] __read_mostly;
+>  
+> @@ -225,13 +226,29 @@ void mips_smp_send_ipi_mask(const struct cpumask *mask,
+>  	local_irq_restore(flags);
+>  }
+>  
+> +void mips_smp_ipi_enable(void)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < IPI_MAX; i++)
+> +		enable_percpu_irq(ipi_virqs[i], IRQ_TYPE_NONE);
+> +}
+> +
+> +void mips_smp_ipi_disable(void)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < IPI_MAX; i++)
+> +		disable_percpu_irq(ipi_virqs[i]);
+> +}
+> +
 
-On Wed Jul 3, 2024 at 4:35 PM CEST, Thomas Bogendoerfer wrote:
-> On Fri, Jun 28, 2024 at 06:11:49PM +0200, Th=C3=A9o Lebrun wrote:
-> > This is a new iteration on the Mobileye system-controller series [0].
-> > It has been split into separate series to facilitate merging.
-> >=20
-> > This series contains a dt-bindings defining the system-controller
-> > (called OLB) used on EyeQ5, EyeQ6L and EyeQ6H. It then modifies the
-> > EyeQ5 devicetree to exploit that system-controller.
->
-> just to be sure, this replaces the v3 series ? And it's the only
-> series, which should go through the MIPS tree ?
+there is no user of mips_smp_ipi_disable() (at least I didn't see one),
+so do we need this patch at all ? Just looking like ARM or RiscV isn't
+a justification for code churn.
 
-Sorry it was not clear enough. I confirm this replaces the V3.
-It is the only series that should go through the MIPS tree.
+Thomas.
 
-The remaining three series have had their V2 sent a few minutes ago.
-Each series contains the removal of the old dt-bindings and the three
-clk/reset/pinctrl drivers.
-
-https://lore.kernel.org/lkml/20240703-mbly-clk-v2-0-fe8c6199a579@bootlin.co=
-m/
-https://lore.kernel.org/lkml/20240703-mbly-reset-v2-0-3fe853d78139@bootlin.=
-com/
-https://lore.kernel.org/lkml/20240703-mbly-pinctrl-v2-0-eab5f69f1b01@bootli=
-n.com/
-
-Thanks,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
