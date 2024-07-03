@@ -1,186 +1,74 @@
-Return-Path: <linux-mips+bounces-4102-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4103-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38FEA925585
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Jul 2024 10:38:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09CCA9263AC
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Jul 2024 16:43:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B80C11F22625
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Jul 2024 08:38:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB70E282D46
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Jul 2024 14:43:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CD9413AD16;
-	Wed,  3 Jul 2024 08:38:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="dtd5+O6h";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mA6IRps7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E99317BB1F;
+	Wed,  3 Jul 2024 14:43:43 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from flow6-smtp.messagingengine.com (flow6-smtp.messagingengine.com [103.168.172.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6961413AA3B;
-	Wed,  3 Jul 2024 08:38:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.141
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 757FE17C9E8;
+	Wed,  3 Jul 2024 14:43:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719995902; cv=none; b=e7yQBVLjLleuIGN0Hhn7/+54IzcS34r4I1u/fy8t2VqW3aI62KK2Azu6DV7XytaWEddA6XiK+HldRKRONGiDU/1KPgO/CBjTM6nYjW6Rnw8n12m4kNgYB4BUBDeJp1CnLhzvKR8aYCxN9hVGWqzZeAXlf0xQQGHm3ZhLPGki9aE=
+	t=1720017823; cv=none; b=h1VYPEsM5tn5ipc8FUhCaQm+IU34EGM3rkb6HsbqsvLgmbCftT/1dbUPbSDtr9+e5LfZvCAqxS+PJejzTtsd1s1wFw1C+/NVryug13aD9OxdPy+oOewqj4DhLzI9kvIrnhqnfOjf+yhe4bwA7UJEOpqJ0VJBzCjIH5o19DsTImk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719995902; c=relaxed/simple;
-	bh=kEN36qs/hN/7g4ogG6sR5ZwQmmdGHlhVIyQnF3GlXTg=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=d4dOzLw4PhtJ91gcFfCzyXQ/Wx2gIXqJgIj/WZHmNORMAGfDcLiqTSDeYrAnxue+12PEA5TFSZTYUwrTBk6VvRx6dcKE6DVRoayX8qYbd5bJ/2Gb3QBhjnox3wgaMnMnRLAqFRc5TB36aLdb9vygddQznsI8NhUDMTEy14IcZ7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=dtd5+O6h; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=mA6IRps7; arc=none smtp.client-ip=103.168.172.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailflow.nyi.internal (Postfix) with ESMTP id 6371F200419;
-	Wed,  3 Jul 2024 04:38:19 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Wed, 03 Jul 2024 04:38:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1719995899;
-	 x=1720003099; bh=qrzUNwDDig8PtPt/24+oUO+QBT7a2qMALdmnmgk36jw=; b=
-	dtd5+O6hcUBXunGBgnD1/LHF+StS2fcf4jGJkdVOeBXe6gCrSyJ5wjuGO8vD+xnm
-	O0rGtJJE456g5NnUWWjzzX3oX8lXUIorA0ySEGizJAGNPfC23FLa57HUj6Jc9yXD
-	MdrRYJwgEHNUruJfqLv6GNLWvINxVwQlwptOD5alJcEeUrBcYtXWS5lioXBxj7YD
-	D4eZ4KC2TVNq9EuPJ9BCW+7IzSP+IP5md4LM4/dVVGCkJeTxB2yWFahAB/wAENtI
-	J0apcGJibNEJy4yR3U36156z71B70FCOOMxcYGQOcUYZBhyAfLyOn6pL7KT995gN
-	QAMiVNUvM1GJKITT2z5dbQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=ifd894703.fm2; t=
-	1719995899; x=1720003099; bh=qrzUNwDDig8PtPt/24+oUO+QBT7a2qMALdm
-	nmgk36jw=; b=mA6IRps7n/QbXGdFcxVi/7dLgy3eG83rMtuPiJLOGQFumNNvWwz
-	lV95cxJXwJUim5VRwXVIk9buDsAqetoYmrE/bN0/WiEPwdato/4pb1dwBv9U4aeK
-	6PcRfv3EsyRGbu+va2s3Zdod6g1/ouMWPscrMH2Z/MHEZ1J8VF+R5lvmo1bmJVUs
-	ucRSvO+cyviSBLWwJzfzvWVosJr+2O93biAMqaUPxSl7O4mxw8CMbp57DrNHLHW0
-	DODL6W9DPlLZWd+K+xHddYFck9+zILi2eU/tosTv46Mm7EYYA2atXCtWVxWWtJt6
-	vk15w1+bzBCDw/j2sPobNFUq3i+89sw923g==
-X-ME-Sender: <xms:-w2FZj_YrNVAqcUHORipSHGeQ_LOYf7vefE2fh4aD5mlBv0eTRpXtw>
-    <xme:-w2FZvvI6ogfD41lDBN73E-4y6ueoZXqHogljm7lvxnqmerI8WcpdWcaQTngMgN3-
-    T_MdSkanYA-XlL0Uuk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejgddthecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
-    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-    eqnecuggftrfgrthhtvghrnhepudefgeeftedugeehffdtheefgfevffelfefghefhjeeu
-    geevtefhudduvdeihefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:-w2FZhBtTSXdbjqlo-EqZGixlhgvI-Z4PmjNuNWSXydz3zS6m5TWbQ>
-    <xmx:-w2FZvc7lyGbefh0tdcV6xlSwAL23jMaSKrhbAymmaf8cFjTDFlD_Q>
-    <xmx:-w2FZoM2POOZZ-HvTk05iHLAP-OLeCC5AGD0G2eAHJPQ31gUTSZvxg>
-    <xmx:-w2FZhmERzXtfIUlKmGVL96tziP4Sh5dpua0Wp0MtCbsUUm7CwnKDw>
-    <xmx:-w2FZitGy9eRWM-3DxmUErbsb_SkpLfY2Vlu0pZwoo4Oi46pkegPUKGG>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 381AA36A0074; Wed,  3 Jul 2024 04:38:19 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-566-g3812ddbbc-fm-20240627.001-g3812ddbb
+	s=arc-20240116; t=1720017823; c=relaxed/simple;
+	bh=6i1GPb5W4C4z6CIP+KMnQBlUCdjbW33+ABJqX7Spv0M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mPdVrvRBIvbYsxzursj+C/+7I4wZtiNZD46FIv5jCDnWCUhgeYReYas/7Bde78ZTGOIpFqUBQ6V/zw/X+VuXUKLMxThAUBkHg/GcmKUW7ZMtWN+QgNOSbec5QGnxztQEAZ9DjY+N08iyaXo/holgc/4PGYbJvUVXlJ/Q/MbiyJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1sP1Cc-0008NK-00; Wed, 03 Jul 2024 16:43:22 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 3FE70C0120; Wed,  3 Jul 2024 16:35:27 +0200 (CEST)
+Date: Wed, 3 Jul 2024 16:35:27 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	=?iso-8859-1?Q?Gr=E9gory?= Clement <gregory.clement@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH 0/3] MIPS: Add Mobileye EyeQ OLB system-controller
+Message-ID: <ZoVhry8VFRx8x3w/@alpha.franken.de>
+References: <20240628-mbly-mips-v1-0-f53f5e4c422b@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <55bab585-6a3b-43c0-98da-0b325687e61f@app.fastmail.com>
-In-Reply-To: 
- <20240616-b4-mips-ipi-improvements-v1-0-e332687f1692@flygoat.com>
-References: <20240616-b4-mips-ipi-improvements-v1-0-e332687f1692@flygoat.com>
-Date: Wed, 03 Jul 2024 16:37:58 +0800
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Florian Fainelli" <florian.fainelli@broadcom.com>,
- "Broadcom internal kernel review list" <bcm-kernel-feedback-list@broadcom.com>,
- "Huacai Chen" <chenhuacai@kernel.org>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Serge Semin" <fancer.lancer@gmail.com>,
- "paulburton@kernel.org" <paulburton@kernel.org>
-Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/10] MIPS: IPI Improvements
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240628-mbly-mips-v1-0-f53f5e4c422b@bootlin.com>
 
+On Fri, Jun 28, 2024 at 06:11:49PM +0200, Théo Lebrun wrote:
+> This is a new iteration on the Mobileye system-controller series [0].
+> It has been split into separate series to facilitate merging.
+> 
+> This series contains a dt-bindings defining the system-controller
+> (called OLB) used on EyeQ5, EyeQ6L and EyeQ6H. It then modifies the
+> EyeQ5 devicetree to exploit that system-controller.
 
+just to be sure, this replaces the v3 series ? And it's the only
+series, which should go through the MIPS tree ?
 
-=E5=9C=A82024=E5=B9=B46=E6=9C=8817=E6=97=A5=E5=85=AD=E6=9C=88 =E4=B8=8A=E5=
-=8D=885:03=EF=BC=8CJiaxun Yang=E5=86=99=E9=81=93=EF=BC=9A
-> Hi all,
->
-> This series improved general handling to MIPS IPI interrupts, made
-> IPI numbers scalable, and switch to IPI-MUX for all GERNERIC_IPI
-> users on mux.
+Thomas.
 
-Ping :-)
-
->
-> It is a prerequisite for enabling IRQ_WORK for MIPS.
->
-> It has been tested on MIPS Boston I6500, malta SOC-It, Loongson-2K,
-> Cavium CN7130 (EdgeRouter 4), and an unannounced interaptiv UP MT
-> platform with EIC.
->
-> I don't really know broadcom platforms and SGI platforms well so
-> changes to those platforms are kept minimal (no functional change).
->
-> Please review.
-> Thanks
->
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
-> Jiaxun Yang (10):
->       MIPS: smp: Make IPI interrupts scalable
->       MIPS: smp: Manage IPI interrupts as percpu_devid interrupts
->       MIPS: smp: Provide platform IPI virq & domain hooks
->       MIPS: Move mips_smp_ipi_init call after prepare_cpus
->       MIPS: smp: Implement IPI stats
->       irqchip: irq-mips-gic: Switch to ipi_mux
->       MIPS: Implement get_mips_sw_int hook
->       MIPS: GIC: Implement get_sw_int hook
->       irqchip: irq-mips-cpu: Rework software IRQ handling flow
->       MIPS: smp-mt: Rework IPI functions
->
->  arch/mips/Kconfig                |   2 +
->  arch/mips/cavium-octeon/smp.c    | 109 +++++++-------------
->  arch/mips/generic/irq.c          |  15 +++
->  arch/mips/include/asm/ipi.h      |  71 +++++++++++++
->  arch/mips/include/asm/irq.h      |   1 +
->  arch/mips/include/asm/irq_cpu.h  |   3 +
->  arch/mips/include/asm/mips-gic.h |  10 ++
->  arch/mips/include/asm/smp-ops.h  |   8 +-
->  arch/mips/include/asm/smp.h      |  42 +++-----
->  arch/mips/kernel/irq.c           |  21 ++++
->  arch/mips/kernel/smp-bmips.c     |  43 ++++----
->  arch/mips/kernel/smp-cps.c       |   1 +
->  arch/mips/kernel/smp-mt.c        |  70 +++++++++++++
->  arch/mips/kernel/smp.c           | 216 ++++++++++++++++++++++++------=
----------
->  arch/mips/loongson64/smp.c       |  51 ++++-----
->  arch/mips/mm/c-octeon.c          |   2 +-
->  arch/mips/sgi-ip27/ip27-smp.c    |  15 +--
->  arch/mips/sgi-ip30/ip30-smp.c    |  15 +--
->  arch/mips/sibyte/bcm1480/smp.c   |  19 ++--
->  arch/mips/sibyte/sb1250/smp.c    |  13 +--
->  drivers/irqchip/Kconfig          |   2 +-
->  drivers/irqchip/irq-mips-cpu.c   | 180 +++++++++---------------------=
---
->  drivers/irqchip/irq-mips-gic.c   | 213 ++++++++++++++----------------=
---------
->  23 files changed, 594 insertions(+), 528 deletions(-)
-> ---
-> base-commit: a2a47d53ca1f74f60931487c27eeba3c17fb69c9
-> change-id: 20240616-b4-mips-ipi-improvements-f8c86b1dc677
->
-> Best regards,
-> --=20
-> Jiaxun Yang <jiaxun.yang@flygoat.com>
-
---=20
-- Jiaxun
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
