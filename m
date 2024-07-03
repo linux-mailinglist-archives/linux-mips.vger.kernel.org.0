@@ -1,107 +1,186 @@
-Return-Path: <linux-mips+bounces-4101-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4102-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69D1D9253C9
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Jul 2024 08:39:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38FEA925585
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Jul 2024 10:38:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25B60288658
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Jul 2024 06:39:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B80C11F22625
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Jul 2024 08:38:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA417130A4D;
-	Wed,  3 Jul 2024 06:39:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CD9413AD16;
+	Wed,  3 Jul 2024 08:38:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xI/6RlKa"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="dtd5+O6h";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mA6IRps7"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow6-smtp.messagingengine.com (flow6-smtp.messagingengine.com [103.168.172.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C9D132135
-	for <linux-mips@vger.kernel.org>; Wed,  3 Jul 2024 06:39:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6961413AA3B;
+	Wed,  3 Jul 2024 08:38:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719988780; cv=none; b=MJXIP8OnQ70UiXL3m/hYP33Q3otTzJt9lC8Z2GW6MVncz+MWS6kNBEiq/XOn6H7dTtD6nV/PJIF4m0x89fCQdEHJ4xfhaLzpAqikhepRXNoX8GgYeFuZjPug7qEYOYNHXfyaY5rzxjNImg+AoDn8UBIHQAt1vxSsSPxPjtey1V0=
+	t=1719995902; cv=none; b=e7yQBVLjLleuIGN0Hhn7/+54IzcS34r4I1u/fy8t2VqW3aI62KK2Azu6DV7XytaWEddA6XiK+HldRKRONGiDU/1KPgO/CBjTM6nYjW6Rnw8n12m4kNgYB4BUBDeJp1CnLhzvKR8aYCxN9hVGWqzZeAXlf0xQQGHm3ZhLPGki9aE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719988780; c=relaxed/simple;
-	bh=2gfJcP+dPdB8Ll2+BGwToOilKKAE5E2Ikpq/CZOFF+Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mOPm1zbsCREQZTmoP+BxF1W8LlDhOgPwfvAJlL4ondbhD3DdtVTifNpjMMr8Ao1EvQIOcB0sIAFvWrhj3jYrb4Ccq5Zg0cB2oXrIv0lXfWcy2S0uJPTK9gs7+/Ehdu6p4AqKVYlL6fic0iROAG8FBgBPhs/U4iiqM6bb3CXyHZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xI/6RlKa; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-52ce6c8db7bso7741652e87.1
-        for <linux-mips@vger.kernel.org>; Tue, 02 Jul 2024 23:39:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1719988777; x=1720593577; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2gfJcP+dPdB8Ll2+BGwToOilKKAE5E2Ikpq/CZOFF+Q=;
-        b=xI/6RlKaYz5tVsdTz/fuXKnHhRs0f/SUvnte34B7w1WIbzfVRho2oLHcsaYu1M4vRW
-         Tn3siMniupBYIgHjTLeN81hyWMoAOjpNxHRvmCjNxx1ipnGC5Ia7o6sRwcyFgd60Xn5M
-         cFXxK5QpuYI4ufGw5EsS7f9gu4z9R778xVWOZh/QnBDDT+B6s0qK+8F3bVizqd0K9gPZ
-         ySixqHO+wNgTKQBWEvTYKO7YGiKOlOtt4Pz4gnSPDC8f+VRrvxRi1qOcN5eXbX2EaHoP
-         fJgRmmkOd6Ak9e8VOZu16b371nlSuIag8YzB8/EdIuDI0aXTFwcmMwqZ8oI9hjL5+5ab
-         He1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719988777; x=1720593577;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2gfJcP+dPdB8Ll2+BGwToOilKKAE5E2Ikpq/CZOFF+Q=;
-        b=df7FNJStcLG4MNk2TMc0tavIuc1A2lDmOavTQ+gcOZDXseJe0WP00m7RV4xeclPo6O
-         22up3w1mWGfgyObvijH5o3/mz9B/7MLsRpyJnxnWFy+XqM725uXX8nikuLZgXfZk9fpN
-         SyjCupZ7mUjp7BcPNzVkP7q5vC1js1AjvykhT9V0dsZTy5UBb2zvPrSvRBqA60fvkI+s
-         /N2QP+gvgUFfjq0dMiJ7aFSqC5fcBSqZAIChQwWaTmtB5OJDcwNJOmwyH8jRbVrQMhwk
-         W/j2cEjhQlEFHLriGuOfeqzJJ7wytwyMk8RwEHewMLvr9Q8cfO04m1hPvlxQU/YzcxQA
-         WJcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUDTQmH27A2yjYWzZorCh97OmpTuc4WGr5E6ft4XlqwaxTFGxRvg5V3sA0wxJ3EiAY/Jw/ILh21HH9h3Ng/RlSUQJ69W2AkjVbmjw==
-X-Gm-Message-State: AOJu0YylaaAelcWqMQqVj+P8OMr1LGPpOnCRwnYWR5kq1EjfI8om2pG6
-	gcKkTpYU5YGNCWvJwG2oEi3/2XDtAIUqT/ftAT/x3O7qbetYLgfyWJQpkVGOzBgz/Pg5gIfB7Xf
-	Q3XkID8Gqd0vByvSmkGjUpUFX/hD5OjGiLehtTw==
-X-Google-Smtp-Source: AGHT+IHU9DUx6SzBnuSCLTwk5I/hgKcSP3g1gias5lVbToL50BaDFFU6mIr8rhEcT8TXJ5tdUX9Gl+FsVBvHtHEo4a8=
-X-Received: by 2002:a05:6512:3b88:b0:52c:7f42:32c9 with SMTP id
- 2adb3069b0e04-52e82752b89mr6919968e87.67.1719988777074; Tue, 02 Jul 2024
- 23:39:37 -0700 (PDT)
+	s=arc-20240116; t=1719995902; c=relaxed/simple;
+	bh=kEN36qs/hN/7g4ogG6sR5ZwQmmdGHlhVIyQnF3GlXTg=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=d4dOzLw4PhtJ91gcFfCzyXQ/Wx2gIXqJgIj/WZHmNORMAGfDcLiqTSDeYrAnxue+12PEA5TFSZTYUwrTBk6VvRx6dcKE6DVRoayX8qYbd5bJ/2Gb3QBhjnox3wgaMnMnRLAqFRc5TB36aLdb9vygddQznsI8NhUDMTEy14IcZ7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=dtd5+O6h; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=mA6IRps7; arc=none smtp.client-ip=103.168.172.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailflow.nyi.internal (Postfix) with ESMTP id 6371F200419;
+	Wed,  3 Jul 2024 04:38:19 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Wed, 03 Jul 2024 04:38:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1719995899;
+	 x=1720003099; bh=qrzUNwDDig8PtPt/24+oUO+QBT7a2qMALdmnmgk36jw=; b=
+	dtd5+O6hcUBXunGBgnD1/LHF+StS2fcf4jGJkdVOeBXe6gCrSyJ5wjuGO8vD+xnm
+	O0rGtJJE456g5NnUWWjzzX3oX8lXUIorA0ySEGizJAGNPfC23FLa57HUj6Jc9yXD
+	MdrRYJwgEHNUruJfqLv6GNLWvINxVwQlwptOD5alJcEeUrBcYtXWS5lioXBxj7YD
+	D4eZ4KC2TVNq9EuPJ9BCW+7IzSP+IP5md4LM4/dVVGCkJeTxB2yWFahAB/wAENtI
+	J0apcGJibNEJy4yR3U36156z71B70FCOOMxcYGQOcUYZBhyAfLyOn6pL7KT995gN
+	QAMiVNUvM1GJKITT2z5dbQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=ifd894703.fm2; t=
+	1719995899; x=1720003099; bh=qrzUNwDDig8PtPt/24+oUO+QBT7a2qMALdm
+	nmgk36jw=; b=mA6IRps7n/QbXGdFcxVi/7dLgy3eG83rMtuPiJLOGQFumNNvWwz
+	lV95cxJXwJUim5VRwXVIk9buDsAqetoYmrE/bN0/WiEPwdato/4pb1dwBv9U4aeK
+	6PcRfv3EsyRGbu+va2s3Zdod6g1/ouMWPscrMH2Z/MHEZ1J8VF+R5lvmo1bmJVUs
+	ucRSvO+cyviSBLWwJzfzvWVosJr+2O93biAMqaUPxSl7O4mxw8CMbp57DrNHLHW0
+	DODL6W9DPlLZWd+K+xHddYFck9+zILi2eU/tosTv46Mm7EYYA2atXCtWVxWWtJt6
+	vk15w1+bzBCDw/j2sPobNFUq3i+89sw923g==
+X-ME-Sender: <xms:-w2FZj_YrNVAqcUHORipSHGeQ_LOYf7vefE2fh4aD5mlBv0eTRpXtw>
+    <xme:-w2FZvvI6ogfD41lDBN73E-4y6ueoZXqHogljm7lvxnqmerI8WcpdWcaQTngMgN3-
+    T_MdSkanYA-XlL0Uuk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejgddthecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
+    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+    eqnecuggftrfgrthhtvghrnhepudefgeeftedugeehffdtheefgfevffelfefghefhjeeu
+    geevtefhudduvdeihefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:-w2FZhBtTSXdbjqlo-EqZGixlhgvI-Z4PmjNuNWSXydz3zS6m5TWbQ>
+    <xmx:-w2FZvc7lyGbefh0tdcV6xlSwAL23jMaSKrhbAymmaf8cFjTDFlD_Q>
+    <xmx:-w2FZoM2POOZZ-HvTk05iHLAP-OLeCC5AGD0G2eAHJPQ31gUTSZvxg>
+    <xmx:-w2FZhmERzXtfIUlKmGVL96tziP4Sh5dpua0Wp0MtCbsUUm7CwnKDw>
+    <xmx:-w2FZitGy9eRWM-3DxmUErbsb_SkpLfY2Vlu0pZwoo4Oi46pkegPUKGG>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 381AA36A0074; Wed,  3 Jul 2024 04:38:19 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-566-g3812ddbbc-fm-20240627.001-g3812ddbb
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ZoNAWoJ12DyApZ1s@google.com>
-In-Reply-To: <ZoNAWoJ12DyApZ1s@google.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 3 Jul 2024 08:39:25 +0200
-Message-ID: <CACRpkdbS8MDTZLwzM+OFso0-dYg6SwN1NV-tqPdD32HGs3o6qQ@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: Alchemy: switch to use software nodes for GPIOs
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Arnd Bergmann <arnd@arndb.de>, 
-	Martin Schiller <ms@dev.tdt.de>, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <55bab585-6a3b-43c0-98da-0b325687e61f@app.fastmail.com>
+In-Reply-To: 
+ <20240616-b4-mips-ipi-improvements-v1-0-e332687f1692@flygoat.com>
+References: <20240616-b4-mips-ipi-improvements-v1-0-e332687f1692@flygoat.com>
+Date: Wed, 03 Jul 2024 16:37:58 +0800
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Florian Fainelli" <florian.fainelli@broadcom.com>,
+ "Broadcom internal kernel review list" <bcm-kernel-feedback-list@broadcom.com>,
+ "Huacai Chen" <chenhuacai@kernel.org>,
+ "Thomas Gleixner" <tglx@linutronix.de>,
+ "Serge Semin" <fancer.lancer@gmail.com>,
+ "paulburton@kernel.org" <paulburton@kernel.org>
+Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/10] MIPS: IPI Improvements
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 2, 2024 at 1:48=E2=80=AFAM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
 
-> Switch to use software nodes/properties to describe GPIOs for the
-> ADS7846 touchscreen and the SPI controller (away from using GPIO lookup
-> tables). This allows removing use of ADS7846 platform data, which will
-> be going away.
+
+=E5=9C=A82024=E5=B9=B46=E6=9C=8817=E6=97=A5=E5=85=AD=E6=9C=88 =E4=B8=8A=E5=
+=8D=885:03=EF=BC=8CJiaxun Yang=E5=86=99=E9=81=93=EF=BC=9A
+> Hi all,
 >
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> This series improved general handling to MIPS IPI interrupts, made
+> IPI numbers scalable, and switch to IPI-MUX for all GERNERIC_IPI
+> users on mux.
+
+Ping :-)
+
+>
+> It is a prerequisite for enabling IRQ_WORK for MIPS.
+>
+> It has been tested on MIPS Boston I6500, malta SOC-It, Loongson-2K,
+> Cavium CN7130 (EdgeRouter 4), and an unannounced interaptiv UP MT
+> platform with EIC.
+>
+> I don't really know broadcom platforms and SGI platforms well so
+> changes to those platforms are kept minimal (no functional change).
+>
+> Please review.
+> Thanks
+>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > ---
+> Jiaxun Yang (10):
+>       MIPS: smp: Make IPI interrupts scalable
+>       MIPS: smp: Manage IPI interrupts as percpu_devid interrupts
+>       MIPS: smp: Provide platform IPI virq & domain hooks
+>       MIPS: Move mips_smp_ipi_init call after prepare_cpus
+>       MIPS: smp: Implement IPI stats
+>       irqchip: irq-mips-gic: Switch to ipi_mux
+>       MIPS: Implement get_mips_sw_int hook
+>       MIPS: GIC: Implement get_sw_int hook
+>       irqchip: irq-mips-cpu: Rework software IRQ handling flow
+>       MIPS: smp-mt: Rework IPI functions
 >
-> Compiled only, as I do not have access to the hardware. However I would
-> very much like to get rid of ads7846_platform_data from the
-> kernel/ads7846 driver, and this is one of the last 3 users of it.
+>  arch/mips/Kconfig                |   2 +
+>  arch/mips/cavium-octeon/smp.c    | 109 +++++++-------------
+>  arch/mips/generic/irq.c          |  15 +++
+>  arch/mips/include/asm/ipi.h      |  71 +++++++++++++
+>  arch/mips/include/asm/irq.h      |   1 +
+>  arch/mips/include/asm/irq_cpu.h  |   3 +
+>  arch/mips/include/asm/mips-gic.h |  10 ++
+>  arch/mips/include/asm/smp-ops.h  |   8 +-
+>  arch/mips/include/asm/smp.h      |  42 +++-----
+>  arch/mips/kernel/irq.c           |  21 ++++
+>  arch/mips/kernel/smp-bmips.c     |  43 ++++----
+>  arch/mips/kernel/smp-cps.c       |   1 +
+>  arch/mips/kernel/smp-mt.c        |  70 +++++++++++++
+>  arch/mips/kernel/smp.c           | 216 ++++++++++++++++++++++++------=
+---------
+>  arch/mips/loongson64/smp.c       |  51 ++++-----
+>  arch/mips/mm/c-octeon.c          |   2 +-
+>  arch/mips/sgi-ip27/ip27-smp.c    |  15 +--
+>  arch/mips/sgi-ip30/ip30-smp.c    |  15 +--
+>  arch/mips/sibyte/bcm1480/smp.c   |  19 ++--
+>  arch/mips/sibyte/sb1250/smp.c    |  13 +--
+>  drivers/irqchip/Kconfig          |   2 +-
+>  drivers/irqchip/irq-mips-cpu.c   | 180 +++++++++---------------------=
+--
+>  drivers/irqchip/irq-mips-gic.c   | 213 ++++++++++++++----------------=
+--------
+>  23 files changed, 594 insertions(+), 528 deletions(-)
+> ---
+> base-commit: a2a47d53ca1f74f60931487c27eeba3c17fb69c9
+> change-id: 20240616-b4-mips-ipi-improvements-f8c86b1dc677
+>
+> Best regards,
+> --=20
+> Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-I agree. The years of working on device properties is finally
-starting to pay off!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+--=20
+- Jiaxun
 
