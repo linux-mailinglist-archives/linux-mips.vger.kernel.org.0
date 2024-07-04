@@ -1,37 +1,37 @@
-Return-Path: <linux-mips+bounces-4135-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4134-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D3529276F7
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Jul 2024 15:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 85E7D9276F8
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Jul 2024 15:15:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 132901F24E8D
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Jul 2024 13:15:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 10F2D1F24EA6
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Jul 2024 13:15:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FAE927452;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FB3C1ABCCC;
 	Thu,  4 Jul 2024 13:15:16 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C1971ABCD6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C146191F69;
 	Thu,  4 Jul 2024 13:15:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720098916; cv=none; b=kPg/ucvxa6SoMGyLH5GlNBdS/yMYcCn6hwXyb3pf0kwTSb0RQZKaSsUL0KFx6TEhbkTNm2BaBuNKUQ9xE0syPzlnCcoMQ+35rjCqtxPKaGc2snWiIJfN3nn83gfMnRGXvQ4rlhujjhMnKiNTNCmRvLEl3QjhmBZ8JiAvFoOp2wc=
+	t=1720098916; cv=none; b=NOALWqR8T2boFwZUtAUfmIuT5Bn3VseXQd56vqXHxG/XSHmlFJwlHduaqOHBQphRpVk2hFHF/T7doGtFu8wbNLNY9rHza3mFFGgdonZbMosXIaQwye0bOpuxFAGpRT0ZwAwfU1c7EOTZtmTsvy7W2H1mspNB31dJArxcohpsVeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1720098916; c=relaxed/simple;
-	bh=Q/JhbQbqOX1FvIWnsq0qQq2hBFxOM73aUCyVvrP5e8k=;
+	bh=MFX7kZkRTYN9b0VDd+CSSOrsnZhZlsjPvngX0p0a8iU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bASa//scIYZqDTyy9BaLKCqyCGqA6b39FEexZLET5wrptDePG8VI15ySDWnay2MCqJbLcTco3CsMTuEMeTt9xkBql05NtvuoBc4lwkhO+YQi1D45jB+sJ+wURx2M5SHmwHgRw2zt7yM1MRY69/I+QqGo5MX9yuGMF/20IcVijXU=
+	 Content-Type:Content-Disposition:In-Reply-To; b=IWuj5b4ke/EM978jO7cE+X11GZG5RN+ZArmd60lrLzblh6csnnAzQOH45b/fhTbJQCyeGqn8Z5uevri6S5bLzMapvD6iT4dFRHF9e/FFP62g1Q0iN7Bab14vgzWDucYnFIa2omI7dufj8rwKRa5RSdj9sRCxkTpgSpW3NjrQWmY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1sPMIZ-0002xd-00; Thu, 04 Jul 2024 15:14:55 +0200
+	id 1sPMIZ-0002xf-00; Thu, 04 Jul 2024 15:14:55 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id EEE98C0120; Thu,  4 Jul 2024 15:05:21 +0200 (CEST)
-Date: Thu, 4 Jul 2024 15:05:21 +0200
+	id B8138C0120; Thu,  4 Jul 2024 15:14:38 +0200 (CEST)
+Date: Thu, 4 Jul 2024 15:14:38 +0200
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 To: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
@@ -42,13 +42,12 @@ Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
 	"paulburton@kernel.org" <paulburton@kernel.org>,
 	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/10] MIPS: smp: Manage IPI interrupts as percpu_devid
- interrupts
-Message-ID: <ZoaeEYdEmEBl6R7J@alpha.franken.de>
+Subject: Re: [PATCH 01/10] MIPS: smp: Make IPI interrupts scalable
+Message-ID: <ZoagPhyg9WFjc1b/@alpha.franken.de>
 References: <20240616-b4-mips-ipi-improvements-v1-0-e332687f1692@flygoat.com>
- <20240616-b4-mips-ipi-improvements-v1-2-e332687f1692@flygoat.com>
- <ZoVoUabfZiiAXWKR@alpha.franken.de>
- <fdedcd38-4688-4938-9184-2eaa5dedeb43@app.fastmail.com>
+ <20240616-b4-mips-ipi-improvements-v1-1-e332687f1692@flygoat.com>
+ <ZoVokcDYqZnuqd2X@alpha.franken.de>
+ <7a822a33-dd67-4827-bbd0-01e75e203951@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -58,27 +57,103 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <fdedcd38-4688-4938-9184-2eaa5dedeb43@app.fastmail.com>
+In-Reply-To: <7a822a33-dd67-4827-bbd0-01e75e203951@app.fastmail.com>
 
-On Thu, Jul 04, 2024 at 04:08:09AM +0800, Jiaxun Yang wrote:
+On Thu, Jul 04, 2024 at 04:15:21AM +0800, Jiaxun Yang wrote:
 > 
 > 
-> 在2024年7月3日七月 下午11:03，Thomas Bogendoerfer写道：
-> [...]
+> 在2024年7月3日七月 下午11:04，Thomas Bogendoerfer写道：
+> > On Sun, Jun 16, 2024 at 10:03:05PM +0100, Jiaxun Yang wrote:
+> >> Define enum ipi_message_type as other architectures did to
+> >> allow easy extension to number of IPI interrupts, fiddle
+> >> around platform IPI code to adopt to the new infra, add
+> >> extensive BUILD_BUG_ON on IPI numbers to ensure future
+> >> extensions won't break existing platforms.
+> >> 
+> >> IPI related stuff are pulled to asm/ipi.h to avoid include
+> >> linux/interrupt.h in asm/smp.h.
+> >> 
+> >> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> >> ---
+> >>  arch/mips/cavium-octeon/smp.c   | 109 ++++++++++++-----------------------
+> >>  arch/mips/include/asm/ipi.h     |  34 +++++++++++
+> >>  arch/mips/include/asm/smp-ops.h |   8 +--
+> >>  arch/mips/include/asm/smp.h     |  42 ++++++--------
+> >>  arch/mips/kernel/smp-bmips.c    |  43 +++++++-------
+> >>  arch/mips/kernel/smp-cps.c      |   1 +
+> >>  arch/mips/kernel/smp.c          | 124 ++++++++++++++++++++--------------------
+> >>  arch/mips/loongson64/smp.c      |  51 +++++++++--------
+> >>  arch/mips/mm/c-octeon.c         |   2 +-
+> >>  arch/mips/sgi-ip27/ip27-smp.c   |  15 +++--
+> >>  arch/mips/sgi-ip30/ip30-smp.c   |  15 +++--
+> >>  arch/mips/sibyte/bcm1480/smp.c  |  19 +++---
+> >>  arch/mips/sibyte/sb1250/smp.c   |  13 +++--
+> >>  13 files changed, 236 insertions(+), 240 deletions(-)
 > >
-> > there is no user of mips_smp_ipi_disable() (at least I didn't see one),
-> > so do we need this patch at all ? Just looking like ARM or RiscV isn't
-> > a justification for code churn.
+> > you are touching a lot of platforms, how many did you test ?
 > 
-> Hi Thomas,
+> As mentioned in cover letter:
 > 
-> The per-cpu enablement process is necessary for IPI_MUX and
-> my upcoming IPI driver.
+> ```
+> It has been tested on MIPS Boston I6500, malta SOC-It, Loongson-2K,
+> Cavium CN7130 (EdgeRouter 4), and an unannounced interaptiv UP MT
+> platform with EIC.
 > 
-> The disablement, I'm not really sure, maybe it's a good idea to call it at
-> platform's __cpu_disable to prevent spurious IPI after IRQ migration.
+> I don't really know broadcom platforms and SGI platforms well so
+> changes to those platforms are kept minimal (no functional change).
 
-don't add dead code, so drop mips_smp_ipi_disable() for now.
+I get a merge conflict in arch/mips/loongson64/smp.c and see following
+warnings:
+
+IP30 build:
+
+  CC      arch/mips/fw/arc/init.o
+In file included from /local/tbogendoerfer/korg/linux/arch/mips/fw/arc/init.c:15:
+/local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp-ops.h:23:40: error: ‘enum ipi_message_type’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+   23 |  void (*send_ipi_single)(int cpu, enum ipi_message_type op);
+      |                                        ^~~~~~~~~~~~~~~~
+/local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp-ops.h:24:57: error: ‘enum ipi_message_type’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+   24 |  void (*send_ipi_mask)(const struct cpumask *mask, enum ipi_message_type op);
+      |   
+
+/local/tbogendoerfer/korg/linux/arch/mips/kernel/smp.c: In function ‘smp_prepare_cpus’:
+/local/tbogendoerfer/korg/linux/arch/mips/kernel/smp.c:475:6: warning: unused variable ‘rc’ [-Wunused-variable]
+  475 |  int rc;
+
+/local/tbogendoerfer/korg/linux/arch/mips/include/asm/ipi.h:49:13: warning: ‘mips_smp_show_ipi_stats’ defined but not used [-Wunused-function]
+   49 | static void mips_smp_show_ipi_stats(struct seq_file *p, int prec)
+
+
+bcm1480 build:
+
+/local/tbogendoerfer/korg/linux/arch/mips/kernel/smp.c: In function ‘smp_prepare_cpus’:
+/local/tbogendoerfer/korg/linux/arch/mips/kernel/smp.c:475:6: warning: unused variable ‘rc’ [-Wunused-variable]
+  475 |  int rc;
+      |      ^~
+
+In file included from /local/tbogendoerfer/korg/linux/arch/mips/kernel/smp.c:34:
+At top level:
+/local/tbogendoerfer/korg/linux/arch/mips/include/asm/ipi.h:49:13: warning: ‘mips_smp_show_ipi_stats’ defined but not used [-Wunused-function]
+   49 | static void mips_smp_show_ipi_stats(struct seq_file *p, int prec)
+
+octeon build:
+
+/local/tbogendoerfer/korg/linux/arch/mips/cavium-octeon/smp.c:84:6: warning: no previous prototype for ‘octeon_send_ipi_single’ [-Wmissing-prototypes]
+   84 | void octeon_send_ipi_single(int cpu, enum ipi_message_type op)
+      |      ^~~~~~~~~~~~~~~~~~~~~~
+In file included from /local/tbogendoerfer/korg/linux/arch/mips/cavium-octeon/smp.c:20:
+/local/tbogendoerfer/korg/linux/arch/mips/include/asm/ipi.h:49:13: warning: ‘mips_smp_show_ipi_stats’ defined but not used [-Wunused-function]
+   49 | static void mips_smp_show_ipi_stats(struct seq_file *p, int prec)
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+ 
+/local/tbogendoerfer/korg/linux/arch/mips/kernel/smp.c: In function ‘smp_prepare_cpus’:
+/local/tbogendoerfer/korg/linux/arch/mips/kernel/smp.c:475:6: warning: unused variable ‘rc’ [-Wunused-variable]
+  475 |  int rc;
+
+/local/tbogendoerfer/korg/linux/arch/mips/include/asm/ipi.h:49:13: warning: ‘mips_smp_show_ipi_stats’ defined but not used [-Wunused-function]
+   49 | static void mips_smp_show_ipi_stats(struct seq_file *p, int prec)
+
+Please fix.
 
 Thomas.
 
