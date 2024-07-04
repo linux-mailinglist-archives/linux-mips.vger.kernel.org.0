@@ -1,70 +1,70 @@
-Return-Path: <linux-mips+bounces-4137-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4138-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22BCF927A2C
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Jul 2024 17:32:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E067927CB4
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Jul 2024 19:57:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 84F11B25832
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Jul 2024 15:32:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E51121F2463F
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Jul 2024 17:57:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 466411B3F25;
-	Thu,  4 Jul 2024 15:30:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 626C062171;
+	Thu,  4 Jul 2024 17:57:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mC3mZc4T"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X+qJ4lqz"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D66A1B3F18;
-	Thu,  4 Jul 2024 15:30:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 664CF39FC1;
+	Thu,  4 Jul 2024 17:57:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720107035; cv=none; b=Oxf/Zh7NifZsoZg9vv6OUlKQljpayQtbt/QSqnd4fLQlyMQkPHy/ZXxKt/IDMc2g59qY8p+d86TUygCGl1NYS6Y1VaHWI55pM3/CU7/CLIGvE8YqaHZnhFWTZKq8KHjCEuSt5UDNKX9HuYFWoqm5mME/Uf3IsgVpITe/GRyUsqo=
+	t=1720115835; cv=none; b=C5I2W/MCr/jv2wk3x9Z9ijkmBWaoHnFp6NzL6ApqDD9C3iQ0Inadkr+orHmhJNhfmPSrkP7pEeqgIiPsjqZG9MfUypHnoMe6wavSXRF6LeALMn7Kf9dPydV7pTZRUNffL5kh7oOqW662XyY/ptKgWBOaQkeSq1BK5ZAkdV7Ah1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720107035; c=relaxed/simple;
-	bh=j2GcriT/VxgWg4szRd9Pkb05CGhj3ItaZ89P8nYEWmM=;
+	s=arc-20240116; t=1720115835; c=relaxed/simple;
+	bh=em2+9v81jfkCr+sHI2TqSKe+25i7mx1g+7vDipuDZdk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oo6MYg8qblLfonkxnNCu6N0CdMoEGE2vWoQwRpoStcXiFvmO38yfGvj/kFT2zxz5Wxza2b5AWPPmBQ3O83HitGSTKmNK8b98xP/nTGfoeAv7c6VopmS6Z7fPMRD3e/tBffP77UgCKmHgl5fuvs0U7wo9qXU59GLoYxttGVyLw94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mC3mZc4T; arc=none smtp.client-ip=209.85.208.41
+	 To:Cc:Content-Type; b=l2Qe8+77HpcPFIp1P1h5ZKE9Z/sEageGKuXwOH9aWICdYl2AmiG3iTvGPZ3dpnjl4eg5ZaLXGOAuItKS5cZ9d72C6nXEBDyR35wybftlsP7LUprP5K/sgdLM7dCjFeWrn0WKqWoyyjKMc0XlvkrKIS/fenk1hp5ewi8LT3Bwhfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X+qJ4lqz; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-58ef19aa6b3so248970a12.1;
-        Thu, 04 Jul 2024 08:30:32 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a725041ad74so34264066b.3;
+        Thu, 04 Jul 2024 10:57:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720107031; x=1720711831; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1720115831; x=1720720631; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uSwZnqxpWej0+u9YwzFF6rBtGvZLPjnW92AVUoJT8F8=;
-        b=mC3mZc4TfRvKVDAk8wcMz1W16Y0eRt6mNRzDWtekIKBVlhbkwB1pz+uZ4axyKvJGH2
-         erpPFqs40RhLESqw0W2tWmWLBXDS9Pfql3izqQm7ylQ2SukfoBZP92YCdLrlP/wDnMTM
-         KuIs/BoDtnPLTn4LCT3IJtZ1NWfCs439ue3gVt1UUvzjBLW8qwoj75y3YxpG7iaagFP+
-         ij63kv17IQNNT29ITV+xIlHDurHaAcJQR9fyS14I+SEKclOUCfFdRof5bD0r33+OXw6F
-         a7Ye2r1RWztAB+TYiCVJuq8jteqgzlzjhkdDtZafzDWnD03vX2l8aNELYj2Ir2jlhwsn
-         +GjA==
+        bh=bdOzZnX58+GV0gn1qdGhM5tdqpEZkdc26pte1KuNfDA=;
+        b=X+qJ4lqz29wQmos0K2pzqdOLl77SFPeAd4qzBE+FHtDB6bUA+yc5i2zukxTyG+U0Ug
+         Y36QxLfmI0gujqhqn3Xgj86xhCEdI1NssgVIZWKhAtXSihWosXdlH3H2plcGRbZa8BuP
+         FX+Snm+zDkh0tD1UbYd0L9rmvkJahuIigy8sZk9IoezA0RcpoeV6/5xRUlqMPV47s1X4
+         Ctuja5D4fZW4FDNTusN5R49MXAf1H0NlOSG3EvUkoeH+2pPcA441DCd2zuPf/ewfnG4X
+         S0JOFc5I++F9dSiJN+VaWLGTOjWPsqKOecsRR8Yu3tU0LVrJeLYnJfscGQtsoNInSc44
+         nvtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720107031; x=1720711831;
+        d=1e100.net; s=20230601; t=1720115831; x=1720720631;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uSwZnqxpWej0+u9YwzFF6rBtGvZLPjnW92AVUoJT8F8=;
-        b=jU9cM339moqouWMiMLq8ZoRyxwysETkj4CRPcFCdW1ULFIoNlAMwek35jf8hHGsHTe
-         KIANv94V2GtY/+GCnz27SHsRCnGjqkbA2fIwMpFbVnHN/kgNKI+Gi9EHrtr9cZd2/BdC
-         IhyC+FTlM1mU64tQGduvkflQwimx8ffE0tPJzLjjz3zgEq0v9mymh4OUJTGn/eYYqmJE
-         HncGa65EecHDYyzK2SoCOyDjk3cu+Q6AoH0qhKoYSwz6cXfADHDVPkvLPmhIBche/WH0
-         UnOJtfDW/DABI9fEcEGjSCfLMBKOceFm5S8O7vMwI1e/iIolVQkulgkQfEM+cys6GM0F
-         unCA==
-X-Forwarded-Encrypted: i=1; AJvYcCVHMM7A66tb7tMmhl8Nxtm+TyACBEQet+WfmQF9tdi7mG3NvSRsLtGJxC1o4vD6sgk4i6CffvSO0/LRYRRYQ4Qn1n+cjunvN0t5+0Rlw5AbcerCg5rV1LBB8P9SeOzCneNNNPvUIeBm2SJM+LKnu6yCaEqWNc/MHv0dqQPUjSRiYmwkHw57klH7Pf4jCnrFnjQGWXT1WSRlqh9fSqH8fOi0cn50j2j9cUa2Co37d/fXbSoM9MVsq2X7Riw4SmtVj84JYyjJlFWlaxnuoM4vK19w48W+wgZuejWHRdq4ntpidpZxmt523ORzO+dTw1YvqsTTvUAlfOZ9RXq6a0b4FyVqfXMDYOVw3KG5kS9/UEyz9RHuVXihb1THftuAum5z8xm2C5/v8EO1xg3aZmNl+UHkKsw1+c11nL6bipBN1jOiPu6sx3TaMmHY+Rl8TxqF0mLMkd4Fr833lQjkscPdTX0NvKSsyg+eaNiyO60wtA==
-X-Gm-Message-State: AOJu0Yzu1j3+PU03IfKADGJhIKZdbLCZLe143SNM0FKifTmBrOAGqLNW
-	HiiWFemxS1nBg939ACgWHSk7aVsbPAVGOrMbSIATmazvBSSMxamSmDlR3wElkFoTA5K6pt0ogqn
-	n9SqrpNNh5nMk03lFN11fQ/uX5CY=
-X-Google-Smtp-Source: AGHT+IHoY2xMo6fT8IqjMMjJ/GvwXVBMRDoHcNkGaj5nt7hJV06IONAaQUKGC+5NMBKt5AONzoUyc2GS1FfdjfZJVNk=
-X-Received: by 2002:a05:6402:b29:b0:58c:3252:3ab8 with SMTP id
- 4fb4d7f45d1cf-58e5bd7d6f3mr1729511a12.37.1720107030590; Thu, 04 Jul 2024
- 08:30:30 -0700 (PDT)
+        bh=bdOzZnX58+GV0gn1qdGhM5tdqpEZkdc26pte1KuNfDA=;
+        b=dbcztIRQC8QnRR6Ul0gB86+cIPnHoCxqnn9T11MjL8m3cATaanSEN3yeh9bCMlRVdz
+         DBgkBU/V7SU6s7evILwuJes8UM8pgWKIL8VCxcBRvbFvA3/yVxQBBS993/I/5kw8tDRW
+         NANEL5tEa2g/gmVvetZ+WIHzrUDzUJZAtZ42eOKGeC+gGpmlysgIz8UVoXCX+AOujRaP
+         zpjz92GGjFoe3bY4rTVd6Q1gffXMuC0nHo+SFfIVrNr4kiTugnvx7A3vWKK8TFKhAa0D
+         b+HTSxykbh95qkAm/hAClgPyg3bCqGWvq+M9bcYBCowegJ8IxrJEAfRKhlgegqCuFrHY
+         3aSw==
+X-Forwarded-Encrypted: i=1; AJvYcCViH4+IflcWO9oTEZaBMPB84h7YvFj5yXYV4B3WsZPgtgRA3VJKx+2GEkP/gmb/2xGftVP0I+43Xq+O8LpM8Jy3mPVIEUFVXrtx5e1FOPg2PC0cp1xtw85pCPsa5Y9LsIY9WCclKc1cgr3JB+eqmEGvvSL0JyMbJdiprYFb1wo9EukwudFrYw3DlKZiMZV5jJdSVbfq9RUqBni7xNnFnmSezS+uPFCTZmNmpHO0HwbTGmI5j0J2Gm6LrNpTUdIsF4A6zfHRNwMBszyaOxbEMfirlznRmuzr681HVXGyrmu5bewZLdhAGOo7638grjRRi4bNO0zrUPWE+KmeZphrrYdeKyR1k75VBJAjyY0ykaSJQb6IiWNWiVfh/ARLYTUgRIhustFrTFR3QGT64CzNDAn2QRq69hzNrcvqPeaK7xU5bdaZWRoICih3FOQT/TMa52KmGhXxFirbNqbCKHnjkqSMeILnWGR15BYeu2UWAQ==
+X-Gm-Message-State: AOJu0YyUVxrr6UFert0xKOuvu8qTmRK6fhYvZKgAtKMsixF72MKL5Rrg
+	b4exhWkepjCQWhaXyFuYXYa/pKYQDkafjc6XFDbwTjIJzygG+kxDfXlS0z05kDRkc0bMyd6CuMK
+	O0uhouRSogUCoZVdfiARp/3NekdQ=
+X-Google-Smtp-Source: AGHT+IHq9EsieKUMhL+pliJNam8UFdmk8wjP+efYVxlla6Ealo/oblur3b9ZQ9qHTteJ5VRHdEgyfqJQZQ2Wgb+AvxI=
+X-Received: by 2002:a05:6402:354b:b0:57d:3df:f881 with SMTP id
+ 4fb4d7f45d1cf-58e5994de19mr2777264a12.3.1720115830207; Thu, 04 Jul 2024
+ 10:57:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -74,8 +74,8 @@ MIME-Version: 1.0
 References: <20240628003253.1694510-1-almasrymina@google.com> <20240628003253.1694510-4-almasrymina@google.com>
 In-Reply-To: <20240628003253.1694510-4-almasrymina@google.com>
 From: Taehee Yoo <ap420073@gmail.com>
-Date: Fri, 5 Jul 2024 00:30:19 +0900
-Message-ID: <CAMArcTXw9oZ9me8yzrAduM_6nziCQE+-aj46NS813tG7Gv=3_Q@mail.gmail.com>
+Date: Fri, 5 Jul 2024 02:56:58 +0900
+Message-ID: <CAMArcTUqqxam+BPwGExOFOLVi3t=dwA-5sSagKC5dndv07GDLQ@mail.gmail.com>
 Subject: Re: [PATCH net-next v15 03/14] netdev: support binding dma-buf to netdevice
 To: Mina Almasry <almasrymina@google.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
@@ -117,7 +117,6 @@ m> wrote:
 >
 
 Hi Mina,
-Thanks a lot for this work!
 
 > Add a netdev_dmabuf_binding struct which represents the
 > dma-buf-to-netdevice binding. The netlink API will bind the dma-buf to
@@ -596,10 +595,6 @@ ding)
 > +       if (rxq_idx >=3D dev->num_rx_queues)
 > +               return -ERANGE;
 > +
-
-I think it should be dev->real_num_rx_queues, not dev->num_rx_queues.
-And I think we need to check whether an interface is up somewhere here.
-
 > +       rxq =3D __netif_get_rx_queue(dev, rxq_idx);
 > +       if (rxq->mp_params.mp_priv)
 > +               return -EEXIST;
@@ -937,6 +932,196 @@ _FD]);
 >
 >
 
-Thanks a lot!
+I found several locking warnings while testing.
+
+[ 1135.125874] WARNING: CPU: 1 PID: 1644 at
+drivers/dma-buf/dma-buf.c:1123 dma_buf_map_attachment+0x164/0x2f0
+[ 1135.136255] Modules linked in: 8021q garp mrp xt_nat xt_tcpudp veth
+xt_conntrack nft_chain_nat xt_MASQUERADE nf_nat nf
+_conntrack_netlink nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4
+xfrm_user xt_addrtype nft_compat nf_tables br_netfilter bri
+dge stp llc qrtr crct10dif_pclmul overlay crc32_generic crc32_pclmul
+crc32c_intel ghash_clmulni_intel sha512_ssse3 sha256
+_ssse3 sha1_ssse3 xts amdgpu cts wmi_bmof aesni_intel amdxcp
+i2c_algo_bit crypto_simd drm_ttm_helper cryptd ttm drm_exec
+bnxt_en ionic gpu_sched drm_suballoc_helper drm_buddy ptp video
+drm_display_helper drm_kms_helper wmi cfg80211 drm drm_pa
+nel_orientation_quirks backlight nfnetlink bpf_preload ip_tables x_tables
+[ 1135.196164] CPU: 1 PID: 1644 Comm: ncdevmem Not tainted 6.10.0-rc5+
+#43 6e089cf25edb5a71cabb8ab97c9dfbf7e96b1a3a
+[ 1135.207060] Hardware name: ASUS System Product Name/PRIME Z690-P
+D4, BIOS 0603 11/01/2021
+[ 1135.215959] RIP: 0010:dma_buf_map_attachment+0x164/0x2f0
+[ 1135.221996] Code: ea 03 80 3c 02 00 0f 85 4e 01 00 00 49 8b bc 24
+b8 00 00 00 be ff ff ff ff 48 83 c7 70 e8 54 e6 e2 0
+0 85 c0 0f 85 32 ff ff ff <0f> 0b e9 2b ff ff ff 89 ee 48 89 df e8 6b
+f1 ff ff 48 85 c0 0f 84
+[ 1135.241464] RSP: 0018:ffff888224c2f5d0 EFLAGS: 00010246
+[ 1135.247409] RAX: 0000000000000000 RBX: ffff88821dcc65f0 RCX: 00000000000=
+00001
+[ 1135.255259] RDX: 0000000000000001 RSI: ffffffff86abed00 RDI: ffffffff86d=
+56be0
+[ 1135.263109] RBP: 0000000000000002 R08: 0000000000000001 R09: ffffed10449=
+85ea0
+[ 1135.270960] R10: 0000000000000001 R11: 0000000000000000 R12: ffff88812da=
+88400
+[ 1135.278808] R13: ffff88821dcc65f0 R14: ffff888224c2f838 R15: 00000000000=
+00005
+[ 1135.286650] FS: 00007fe9b77b4740(0000) GS:ffff88881b200000(0000)
+knlGS:0000000000000000
+[ 1135.295447] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1135.301912] CR2: 0000556a6a61f870 CR3: 00000001094a0000 CR4: 00000000007=
+506f0
+[ 1135.309893] PKRU: 55555554
+[ 1135.313321] Call Trace:
+[ 1135.316486] <TASK>
+[ 1135.319307] ? __warn+0xc8/0x2f0
+[ 1135.323290] ? dma_buf_map_attachment+0x164/0x2f0
+[ 1135.328907] ? report_bug+0x326/0x3c0
+[ 1135.333368] ? handle_bug+0x3c/0x70
+[ 1135.337568] ? exc_invalid_op+0x14/0x50
+[ 1135.342202] ? asm_exc_invalid_op+0x16/0x20
+[ 1135.347134] ? dma_buf_map_attachment+0x164/0x2f0
+[ 1135.352686] net_devmem_bind_dmabuf+0x2af/0xab0
+[ 1135.357940] ? __nla_validate_parse+0x109e/0x2830
+[ 1135.363430] netdev_nl_bind_rx_doit+0x26f/0xe00
+[ 1135.368675] ? __pfx___nla_validate_parse+0x10/0x10
+[ 1135.374333] ? __pfx_netdev_nl_bind_rx_doit+0x10/0x10
+[ 1135.380094] ? trace_kmalloc+0x2d/0xd0
+[ 1135.384637] ? __kmalloc_noprof+0x1f5/0x430 [ 1135.389539] ?
+__pfx_mark_lock.part.0+0x10/0x10
+[ 1135.394851] ? __nla_parse+0x22/0x30
+[ 1135.399139] ? genl_family_rcv_msg_attrs_parse.constprop.0+0x162/0x240
+[ 1135.406403] genl_family_rcv_msg_doit+0x1d4/0x2b0
+[ 1135.411872] ? __pfx_genl_family_rcv_msg_doit+0x10/0x10
+[ 1135.417892] genl_rcv_msg+0x3fb/0x6c0
+
+
+
+[ 1136.178258] WARNING: CPU: 1 PID: 1644 at
+drivers/dma-buf/dma-buf.c:1226 dma_buf_unmap_attachment+0x267/0x320
+[ 1136.188842] Modules linked in: 8021q garp mrp xt_nat xt_tcpudp veth
+xt_conntrack nft_chain_nat xt_MASQUERADE nf_nat nf
+_conntrack_netlink nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4
+xfrm_user xt_addrtype nft_compat nf_tables br_netfilter bri
+dge stp llc qrtr crct10dif_pclmul overlay crc32_generic crc32_pclmul
+crc32c_intel ghash_clmulni_intel sha512_ssse3 sha256
+_ssse3 sha1_ssse3 xts amdgpu cts wmi_bmof aesni_intel amdxcp
+i2c_algo_bit crypto_simd drm_ttm_helper cryptd ttm drm_exec
+bnxt_en ionic gpu_sched drm_suballoc_helper drm_buddy ptp video
+drm_display_helper drm_kms_helper wmi cfg80211 drm drm_pa
+nel_orientation_quirks backlight nfnetlink bpf_preload ip_tables x_tables
+[ 1136.248891] CPU: 1 PID: 1644 Comm: ncdevmem Tainted: G W
+6.10.0-rc5+ #43 6e089cf25edb5a71cabb8ab97c9dfbf7e96b1a3a
+[ 1136.261273] Hardware name: ASUS System Product Name/PRIME Z690-P
+D4, BIOS 0603 11/01/2021
+[ 1136.270266] RIP: 0010:dma_buf_unmap_attachment+0x267/0x320
+[ 1136.276468] Code: c1 ea 03 80 3c 02 00 0f 85 c1 00 00 00 48 8b bb
+b8 00 00 00 be ff ff ff ff 48 83 c7 70 e8 11 e1 e2 0
+0 85 c0 0f 85 42 fe ff ff <0f> 0b e9 3b fe ff ff 48 89 cf 4c 89 44 24
+10 e8 35 c8 21 ff 4c 8b
+[ 1136.295967] RSP: 0018:ffff888224c2fb78 EFLAGS: 00010246
+[ 1136.301930] RAX: 0000000000000000 RBX: ffff88812da88400 RCX: 00000000000=
+00001
+[ 1136.309804] RDX: 0000000000000001 RSI: ffffffff86abed00 RDI: ffffffff86d=
+56be0
+[ 1136.317810] RBP: ffff88810908e250 R08: 0000000000000001 R09: fffffbfff21=
+514d8
+[ 1136.325670] R10: 0000000000000001 R11: 0000000000000000 R12: ffff88821dc=
+c65f0
+[ 1136.333608] R13: 0000000000010000 R14: ffffed102265e337 R15: 1ffff110449=
+85f81
+[ 1136.341462] FS: 00007fe9b77b4740(0000) GS:ffff88881b200000(0000)
+knlGS:0000000000000000
+[ 1136.350278] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1136.356766] CR2: 000055dec9867ba0 CR3: 00000001094a0000 CR4: 00000000007=
+506f0
+[ 1136.364640] PKRU: 55555554
+[ 1136.368172] Call Trace:
+[ 1136.371373] <TASK>
+[ 1136.374275] ? __warn+0xc8/0x2f0
+[ 1136.378230] ? dma_buf_unmap_attachment+0x267/0x320
+[ 1136.383855] ? report_bug+0x326/0x3c0
+[ 1136.388324] ? handle_bug+0x3c/0x70
+[ 1136.392549] ? exc_invalid_op+0x14/0x50
+[ 1136.397126] ? asm_exc_invalid_op+0x16/0x20
+[ 1136.402126] ? dma_buf_unmap_attachment+0x267/0x320
+[ 1136.407727] ? dma_buf_unmap_attachment+0x25f/0x320
+[ 1136.413344] __net_devmem_dmabuf_binding_free+0x10a/0x220
+[ 1136.419728] net_devmem_unbind_dmabuf+0x349/0x440
+[ 1136.425146] ? __pfx_lock_release+0x10/0x10
+[ 1136.430080] ? __pfx_net_devmem_unbind_dmabuf+0x10/0x10
+[ 1136.436106] netdev_nl_sock_priv_destroy+0x72/0xc0
+[ 1136.441611] genl_release+0xed/0x190
+[ 1136.445921] ? __pfx_genl_release+0x10/0x10
+[ 1136.450823] ? mark_held_locks+0xa5/0xf0
+[ 1136.455490] ? __local_bh_enable_ip+0xa5/0x120
+[ 1136.460790] ? __pfx_genl_release+0x10/0x10
+[ 1136.465703] netlink_release+0x839/0x18f0
+
+
+
+[ 1135.709313] WARNING: CPU: 3 PID: 1644 at
+net/core/netdev_rx_queue.c:18 netdev_rx_queue_restart+0x3f4/0x5a0
+[ 1135.719686] Modules linked in: 8021q garp mrp xt_nat xt_tcpudp veth
+xt_conntrack nft_chain_nat xt_MASQUERADE nf_nat nf
+_conntrack_netlink nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4
+xfrm_user xt_addrtype nft_compat nf_tables br_netfilter bri
+dge stp llc qrtr crct10dif_pclmul overlay crc32_generic crc32_pclmul
+crc32c_intel ghash_clmulni_intel sha512_ssse3 sha256
+_ssse3 sha1_ssse3 xts amdgpu cts wmi_bmof aesni_intel amdxcp
+i2c_algo_bit crypto_simd drm_ttm_helper cryptd ttm drm_exec
+bnxt_en ionic gpu_sched drm_suballoc_helper drm_buddy ptp video
+drm_display_helper drm_kms_helper wmi cfg80211 drm drm_pa
+nel_orientation_quirks backlight nfnetlink bpf_preload ip_tables x_tables
+[ 1135.779526] CPU: 3 PID: 1644 Comm: ncdevmem Tainted: G W
+6.10.0-rc5+ #43 6e089cf25edb5a71cabb8ab97c9df
+bf7e96b1a3a
+[ 1135.791882] Hardware name: ASUS System Product Name/PRIME Z690-P
+D4, BIOS 0603 11/01/2021
+[ 1135.800781] RIP: 0010:netdev_rx_queue_restart+0x3f4/0x5a0
+[ 1135.806905] Code: d0 0f 1f 00 48 89 df e8 9a ce a9 fe 4c 89 f7 e8
+92 ce a9 fe 48 83 c4 08 44 89 e0 5b 5d 41 5c 41 5d 4
+1 5e 41 5f c3 cc cc cc cc <0f> 0b e9 05 fd ff ff 44 89 fe 48 c7 c7 80
+70 fc 86 e8 46 7c 38 fe
+[ 1135.826382] RSP: 0018:ffff888224c2fbb0 EFLAGS: 00010246
+[ 1135.832339] RAX: 0000000000000000 RBX: ffffffffc0bb5c80 RCX: ffffffff842=
+d81c3
+[ 1135.840185] RDX: 1ffffffff1e6fc44 RSI: 0000000000000008 RDI: ffffffff8f3=
+7e220
+[ 1135.848028] RBP: ffff88814b864000 R08: 0000000000000000 R09: fffffbfff1e=
+6fc44
+[ 1135.855875] R10: ffffffff8f37e227 R11: 0000000000000000 R12: ffff888224c=
+2fc28
+[ 1135.863716] R13: ffff88814b864be0 R14: ffffed102265e337 R15: 00000000000=
+00001
+[ 1135.871560] FS: 00007fe9b77b4740(0000) GS:ffff88881ba00000(0000)
+knlGS:0000000000000000
+[ 1135.880364] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1135.886824] CR2: 00007f5f22a21f50 CR3: 00000001094a0000 CR4: 00000000007=
+506f0
+[ 1135.894670] PKRU: 55555554
+[ 1135.898090] Call Trace:
+[ 1135.901255] <TASK>
+[ 1135.904073] ? __warn+0xc8/0x2f0
+[ 1135.908020] ? netdev_rx_queue_restart+0x3f4/0x5a0
+[ 1135.913524] ? report_bug+0x326/0x3c0
+[ 1135.917908] ? handle_bug+0x3c/0x70
+[ 1135.922112] ? exc_invalid_op+0x14/0x50
+[ 1135.926671] ? asm_exc_invalid_op+0x16/0x20
+[ 1135.931591] ? mutex_is_locked+0x13/0x50
+[ 1135.936238] ? netdev_rx_queue_restart+0x3f4/0x5a0
+[ 1135.941748] net_devmem_unbind_dmabuf+0x2a3/0x440
+[ 1135.947179] ? __pfx_lock_release+0x10/0x10
+[ 1135.952081] ? __pfx_net_devmem_unbind_dmabuf+0x10/0x10
+[ 1135.958040] netdev_nl_sock_priv_destroy+0x72/0xc0
+[ 1135.963561] genl_release+0xed/0x190
+[ 1135.967851] ? __pfx_genl_release+0x10/0x10
+[ 1135.972755] ? mark_held_locks+0xa5/0xf0
+[ 1135.977392] ? __local_bh_enable_ip+0xa5/0x120
+[ 1135.982561] ? __pfx_genl_release+0x10/0x10
+[ 1135.987464] netlink_release+0x839/0x18f0
+
+Thanks!
 Taehee Yoo
 
