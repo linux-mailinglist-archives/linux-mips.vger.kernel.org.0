@@ -1,88 +1,144 @@
-Return-Path: <linux-mips+bounces-4139-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4143-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCA0D927F10
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2024 00:36:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94D1A92802D
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2024 04:15:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 073671C21461
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Jul 2024 22:36:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 06DAEB22A13
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2024 02:15:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4685143721;
-	Thu,  4 Jul 2024 22:36:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91B3C1B950;
+	Fri,  5 Jul 2024 02:15:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="qW954NKA"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 448833F9C5;
-	Thu,  4 Jul 2024 22:36:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D28314292
+	for <linux-mips@vger.kernel.org>; Fri,  5 Jul 2024 02:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720132566; cv=none; b=SQ+qWn4wjGgBoXvnYEBSghlNAqfXkmhnWM/jWAe69KbRWKd1XOvOuE5N9d/swg1rWEe7PRmYPLjhQDtvnp9LoxfCyx70LKHglAhjxDbkpgW6In076FD7oo8VoY3nbA/NBpb5z82oKahnvs5CUXai96t9TicwXvMEZjS+uczNE9A=
+	t=1720145738; cv=none; b=c0iu7E2+9c8sozsesdQ0D1+r6M17xlSHGIbdxW3kuW+EaJ5kCQJXNmV7OBdx74dMwZPCkRthL7RfauteNONdRqqClHHzoa6MgDCHLaR0GZvCpnxRsNdlSIoW/CHGV5U2CFWD7SART/8eIyLP4btWFhVFOz+sBDmWEYqv6jWrbmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720132566; c=relaxed/simple;
-	bh=sjJcYABZyOR6FDEBheK8kNzPomh3KWnD6TI3P5yZdiY=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=OT2ZryGaSR8iLOeaLkCA1LqAvb0cjFm7cXj0qduAdJtBchicZ4sEdtw6/8jaRwa279UmnU6tRyloa+VrawdKR+py9CMYJMK4MT0qsFV6N9XLz+q25PXKmeC2nQFSYTCtrT9qiTxWFzXCX+1P/nlRKJ+doLOlRMkT8CrAJ7GvH3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 1E4CE92009C; Fri,  5 Jul 2024 00:36:02 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 147A992009B;
-	Thu,  4 Jul 2024 23:36:02 +0100 (BST)
-Date: Thu, 4 Jul 2024 23:36:02 +0100 (BST)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Florian Fainelli <florian.fainelli@broadcom.com>, 
-    Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
-    Huacai Chen <chenhuacai@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-    Serge Semin <fancer.lancer@gmail.com>, 
-    "paulburton@kernel.org" <paulburton@kernel.org>, 
-    "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
-    linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/10] MIPS: smp: Make IPI interrupts scalable
-In-Reply-To: <e54ec104-2e19-46da-8c3d-b6b7f620f563@app.fastmail.com>
-Message-ID: <alpine.DEB.2.21.2407042324300.38148@angie.orcam.me.uk>
-References: <20240616-b4-mips-ipi-improvements-v1-0-e332687f1692@flygoat.com> <20240616-b4-mips-ipi-improvements-v1-1-e332687f1692@flygoat.com> <ZoVokcDYqZnuqd2X@alpha.franken.de> <7a822a33-dd67-4827-bbd0-01e75e203951@app.fastmail.com>
- <alpine.DEB.2.21.2407032204331.38148@angie.orcam.me.uk> <e54ec104-2e19-46da-8c3d-b6b7f620f563@app.fastmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1720145738; c=relaxed/simple;
+	bh=Li9UJWF21WK2qgpZJmm/iekBICw81fetEoXerreNhcU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=outuk24aUrIFXG+87dKbr6GgGh+Ztp0agse/KLQdMNn9LD/tGzvUDW7vNiMdhRVcltJ49LJbcxlPrKFo6oTQadq5SE2GEahwGsHgTpZTwjIECo1PMIiFiruTwaknU3PcqN/tpsoi63nRcjEuh7vaZXGZyOpDmC/+ion/bmzoETI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=qW954NKA; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 17B8B2C0241;
+	Fri,  5 Jul 2024 14:15:27 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1720145727;
+	bh=oVuIFkUlXwNllfALTpSQH2TRhtGnRuLM5WxG/PFhMRc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=qW954NKAlY/KHn2uryDhtg+/3fgYAKKOuuJjeyCZ6ASBOZvBEc3jSosPm8gQuqkua
+	 dvF4kXKzjwSXpg/bUcGEqoyi5vr+bu5jfpWYTOAQNl4LHZ7XfvXInvBc08lVYz42cK
+	 2iRtTiLH7aShV/l/HHaf7CtPhEqNfVE6yNwQVlOep9G8j4PnaOpHDAExAaqM9FJNjB
+	 0UjdrkGlw3NL2AZsd5lVjKEqtM9FiY38LCqJB+VAFtBrBz1hC9SrVuvllbcXLHCnz4
+	 lmBajoqqqU5SMUKUYr0sM5Vg54SMaEbgQj5TYltZDhmGshUZ1OWImn93z93Ouma7iK
+	 r8CloPzcnoh9w==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B6687573e0001>; Fri, 05 Jul 2024 14:15:26 +1200
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id 73D2713ED5B;
+	Fri,  5 Jul 2024 14:15:26 +1200 (NZST)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+	id 6E007280930; Fri,  5 Jul 2024 14:15:26 +1200 (NZST)
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+To: tglx@linutronix.de,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	tsbogend@alpha.franken.de,
+	daniel.lezcano@linaro.org,
+	paulburton@kernel.org,
+	peterz@infradead.org,
+	mail@birger-koblitz.de,
+	bert@biot.com,
+	john@phrozen.org,
+	sander@svanheule.net
+Cc: linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	kabel@kernel.org,
+	ericwouds@gmail.com,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v4 0/9] mips: Support for RTL9302C
+Date: Fri,  5 Jul 2024 14:15:11 +1200
+Message-ID: <20240705021520.2737568-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=CvQccW4D c=1 sm=1 tr=0 ts=6687573e a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=4kmOji7k6h8A:10 a=cAq4xmbCUuwB6dAq1EgA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-On Thu, 4 Jul 2024, Jiaxun Yang wrote:
+This series adds basic support for the RTL9302C reference board. Currentl=
+y the
+focus is on the CPU block stuff. I hope to get around to the DSA switch d=
+river
+eventually but this is a small start that lets me boot a mainline kernel =
+on the
+board I have. I initialiy started with code from openwrt but have paired =
+it
+down to just the clocksource driver and devicetree.
 
-> >  SOC-it (or SOC-it 101 to be precise) is the name of a bus controller:
-> >
-> > System controller/revision =    MIPS SOC-it 101 OCP / 1.3   SDR-FW-4:1
-> >
-> > used across numerous platforms from the M4K core onwards, UP, MT, or MP.  
-> > I think it would make sense if you revealed the processor type instead.
-> 
-> Sure, sorry to be vague on the platform detail.
-> 
-> I actually tried on two Malta configurations, CoreFPGA6 interAptiv 2MPF (2 cores, 2 VPE, 4TC),
-> and CoreFPGA3 34Kc MT (2VPE 9TC).
+The first two patches in this series are fixing some complaints from make
+dtbs_check for some existing realtek dts files. They can be applied on th=
+eir
+own if desired.
 
- This is much better, thanks, and the choice of CPUs feels adequate.  The 
-mention of the 34K CPU brings fond memories too, as I was a member of the 
-development team for this design, very innovative at its time, and still 
-nowadays I believe.
+Chris Packham (9):
+  mips: dts: realtek: use "serial" instead of "uart" in node name
+  mips: dts: realtek: add device_type property to cpu node
+  dt-bindings: vendor-prefixes: Add Cameo Communications
+  dt-bindings: mips: realtek: Add rtl930x-soc compatible
+  dt-bindings: timer: Add schema for realtek,otto-timer
+  dt-bindings: interrupt-controller: realtek,rtl-intc: Add rtl9300-intc
+  clocksource: realtek: Add timer driver for rtl-otto platforms
+  mips: generic: add fdt fixup for Realtek reference board
+  mips: dts: realtek: Add RTL9302C board
 
-> >  Technically I could run it on my SB1250, but I'm too overloaded now to 
-> > commit to any timescale.  Sorry.
-> 
-> No worries, I'll try to fetch a BMIPS3000 SMP router to get Broadcom platform
-> undercover.
+ .../realtek,rtl-intc.yaml                     |  20 +-
+ .../devicetree/bindings/mips/realtek-rtl.yaml |   4 +
+ .../bindings/timer/realtek,otto-timer.yaml    |  63 ++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ arch/mips/boot/dts/realtek/Makefile           |   1 +
+ .../cameo-rtl9302c-2x-rtl8224-2xge.dts        |  73 +++++
+ arch/mips/boot/dts/realtek/rtl838x.dtsi       |   1 +
+ arch/mips/boot/dts/realtek/rtl83xx.dtsi       |   4 +-
+ arch/mips/boot/dts/realtek/rtl930x.dtsi       |  79 +++++
+ arch/mips/generic/Makefile                    |   1 +
+ arch/mips/generic/board-realtek.c             |  79 +++++
+ drivers/clocksource/Kconfig                   |  10 +
+ drivers/clocksource/Makefile                  |   1 +
+ drivers/clocksource/timer-rtl-otto.c          | 291 ++++++++++++++++++
+ include/linux/cpuhotplug.h                    |   1 +
+ 15 files changed, 627 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/timer/realtek,otto-=
+timer.yaml
+ create mode 100644 arch/mips/boot/dts/realtek/cameo-rtl9302c-2x-rtl8224-=
+2xge.dts
+ create mode 100644 arch/mips/boot/dts/realtek/rtl930x.dtsi
+ create mode 100644 arch/mips/generic/board-realtek.c
+ create mode 100644 drivers/clocksource/timer-rtl-otto.c
 
- But that's a completely different design from the SB-1 line, isn't it?
+--=20
+2.45.2
 
-  Maciej
 
