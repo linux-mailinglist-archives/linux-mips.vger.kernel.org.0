@@ -1,59 +1,59 @@
-Return-Path: <linux-mips+bounces-4149-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4147-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 494E092803F
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2024 04:16:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9760928038
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2024 04:16:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F92BB21189
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2024 02:16:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 080EB1C22810
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2024 02:16:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AECB013790F;
-	Fri,  5 Jul 2024 02:15:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 977E526AD3;
+	Fri,  5 Jul 2024 02:15:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="Kj7LJRyn"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="VYfVEWOU"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70673D55D
-	for <linux-mips@vger.kernel.org>; Fri,  5 Jul 2024 02:15:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6D891C6A0
+	for <linux-mips@vger.kernel.org>; Fri,  5 Jul 2024 02:15:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720145742; cv=none; b=bBzagWhBp68zi/AZPCJU126vX27FRDDNaFW/ZSUIYLwHNjhrtlCuKXxZlWLfOma8xwM8jeP6Clcf5tuPjTsyrtuKZPuNbtcIxKaRWqrVFNn31ICBLE0SJ5zegQBRvLboNk3TH5kQYEMzhQktjEV5dTdc9dqYaJk3qLCjbd40VaI=
+	t=1720145741; cv=none; b=D0elPhegsQBn7ucxVB0VdXwRyH1g/r3B93mKfYzZi+jf/NXIga429hIhAyb6+84BbTlWEEuCjgp8LqjPV2O/hwXj0yeToLyTqU9nY6943sB0c3uBKGOERTkugqL2Ftv/3yN8hyb3NlKegeQEzbpC2+z8WvEExjlEVxcKILF2JKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720145742; c=relaxed/simple;
-	bh=ljU6sRcs7sQuHTpD9/5+A8t80/9OARDwl6j8aTgrIpc=;
+	s=arc-20240116; t=1720145741; c=relaxed/simple;
+	bh=6HmDbBucMcf2zl1/gQP1TFXF+TWac2IiTp+biEMyMyQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fd/44RhXCYYM/Ce3S+MQ+UcZ7o9PyvxoiHI5x09VlXfZbNXs0ortcjRHzzhGWsY2iWRuaDQI9stEKE3lI0+1d5JzViLTuIxSSP+gD3tYs57O2ABidwlSZHNVKZlLemCnkeKz/JriD/Y6U33rrPPvwiGI9IH8/bXj4iK5CIriyp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=Kj7LJRyn; arc=none smtp.client-ip=202.36.163.20
+	 MIME-Version; b=ZmUTL6tohEz+RdG2/F+adV2paWrgJ2seSqlplHnQplvJGRJUN2fuRp0I/L8blbF/M3r817iyEeS9qfjkN4dfX4TyYGHiqrjmW/5jNQiNvNsdOdlcOU4vM3beP4fD1lGnCq+RAK0pXrzyBQ36Ubet+Q3bgUThJ6U6BTJ0/qpDHP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=VYfVEWOU; arc=none smtp.client-ip=202.36.163.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 0B1AD2C0C3E;
-	Fri,  5 Jul 2024 14:15:28 +1200 (NZST)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id DDCB72C0BA5;
+	Fri,  5 Jul 2024 14:15:27 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1720145728;
-	bh=adwuxCP0b2iJnp5YoKfId4BXKuJvpUjFFbukitvRfSg=;
+	s=mail181024; t=1720145727;
+	bh=OpiSNE+pGrnmvWVxJe9dW4AF0oPVsI3d6AdbWaZzcoc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Kj7LJRynW0OKdN3cy9AewJ1zWDtpQmmyygowmRfwLvYlaSjeCuHllpNBI5WFGyoLf
-	 WUI7TVx8819fbMlBo2JeLJYead2GUeYk25Xvr2U5fYvelMxUF0l3HmjQhWMplQL35+
-	 XgRWATrVgIxTA3jYxDYcyDbXzsgGkgnaRHsHjyM9V3fKjhLYmtS9wodLBI+iEg0R9z
-	 SxyfrZHve5yjrnQV04b2mAz+SR7CmpUFWPERcmEGVaPcXzCnRTby37W5AgI1G7SWpv
-	 eP6tHyKJBuQ/tZ5wplMCWMhaE7eKM2k3v8DQjVnAbD0syft2eE5lYGPvhyiwkBgiOp
-	 a7KvY/AjCptHA==
+	b=VYfVEWOUNPIjG6WiI/ypl5mylJ2nKUSCrvlkfa5DovLWPiB2pTnj4Sxw+x39kkzHa
+	 X2dYs3mMt2mkmYBkKVSGfjUDMr1t8s28FxNIoW9qSS4Wll25HDYoEpw5evmB7/qqHs
+	 rKfwJ6TXTbAN6hT34kA5xv0DbtivM0EjDCM8S+MP+zSOGYsosjJeyUUJ0WO7KQMCSe
+	 hJt2HGgIPHUEqVxfWqcMiMEBca5cpyRsAsDQTrqAAUskOCY9s+dBoJXYp/MQkQEkLy
+	 hdJxrMGEX0hN0x3Z3NmQGB5NbogQoSys0Rk1Hlm5lECl96Y+nvzv29JI597/Q5tZVy
+	 SySEPYQnHxzbg==
 Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B6687573e0006>; Fri, 05 Jul 2024 14:15:26 +1200
+	id <B6687573e0008>; Fri, 05 Jul 2024 14:15:26 +1200
 Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id 8C28813ED5B;
+	by pat.atlnz.lc (Postfix) with ESMTP id 90E5913EE52;
 	Fri,  5 Jul 2024 14:15:26 +1200 (NZST)
 Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id 896AC280930; Fri,  5 Jul 2024 14:15:26 +1200 (NZST)
+	id 8E268280930; Fri,  5 Jul 2024 14:15:26 +1200 (NZST)
 From: Chris Packham <chris.packham@alliedtelesis.co.nz>
 To: tglx@linutronix.de,
 	robh@kernel.org,
@@ -72,10 +72,11 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-mips@vger.kernel.org,
 	kabel@kernel.org,
 	ericwouds@gmail.com,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v4 6/9] dt-bindings: interrupt-controller: realtek,rtl-intc: Add rtl9300-intc
-Date: Fri,  5 Jul 2024 14:15:17 +1200
-Message-ID: <20240705021520.2737568-7-chris.packham@alliedtelesis.co.nz>
+	Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	Markus Stockhausen <markus.stockhausen@gmx.de>
+Subject: [PATCH v4 7/9] clocksource: realtek: Add timer driver for rtl-otto platforms
+Date: Fri,  5 Jul 2024 14:15:18 +1200
+Message-ID: <20240705021520.2737568-8-chris.packham@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240705021520.2737568-1-chris.packham@alliedtelesis.co.nz>
 References: <20240705021520.2737568-1-chris.packham@alliedtelesis.co.nz>
@@ -86,82 +87,413 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=CvQccW4D c=1 sm=1 tr=0 ts=6687573e a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=4kmOji7k6h8A:10 a=RxOWC8M5BiJtX5JSj5EA:9 a=3ZKOabzyN94A:10
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=CvQccW4D c=1 sm=1 tr=0 ts=6687573e a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=4kmOji7k6h8A:10 a=jU52IrjdAAAA:8 a=jdP34snFAAAA:8 a=lYcVSoeQvU4dK_rf-5cA:9 a=3ZKOabzyN94A:10 a=udjdHy_fWrGJRxLc5KTh:22 a=jlphF6vWLdwq7oh3TaWq:22
 X-SEG-SpamProfiler-Score: 0
 x-atlnz-ls: pat
 
-Add a compatible string for the interrupt controller found on the
-rtl930x SoCs. The interrupt controller has registers for VPE1 so these
-are added as a second reg cell.
+The timer/counter block on the Realtek SoCs provides up to 5 timers. It
+also includes a watchdog timer which is handled by the
+realtek_otto_wdt.c driver.
 
+One timer will be used per CPU as a local clock event generator. An
+additional timer will be used as an overal stable clocksource.
+
+Signed-off-by: Markus Stockhausen <markus.stockhausen@gmx.de>
+Signed-off-by: Sander Vanheule <sander@svanheule.net>
 Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 ---
 
 Notes:
+    This is derrived from openwrt[1],[2]. I've retained the original sign=
+off
+    and added my own.
+   =20
+    [1] https://git.openwrt.org/?p=3Dopenwrt/openwrt.git;a=3Dblob_plain;f=
+=3Dtarget/linux/realtek/files-5.15/drivers/clocksource/timer-rtl-otto.c;h=
+b=3DHEAD
+    [2] https://git.openwrt.org/?p=3Dopenwrt/openwrt.git;a=3Dblob_plain;f=
+=3Dtarget/linux/realtek/patches-5.15/302-clocksource-add-otto-driver.patc=
+h;hb=3DHEAD
+   =20
+    Changes in v4:
+    - Reword comment about watchdog timer
+    - Add includes for cpumask.h, io.h, jiffies.h and printk.h
+    - Remove unnecessary casts
     Changes in v3:
-    - Add reg::minItems where required
-    Changes in v3:
-    - Use items to describe the regs property
-    Changes in v2:
-    - Set reg:maxItems to 2 to allow for VPE1 registers on the rtl9300. A=
-dd
-      a condition to enforce the old limit on other SoCs.
-    - Connor and Krzysztof offered acks on v1 but I think the changes her=
-e
-      are big enough to void those.
+    - Remove unnecessary select COMMON_CLK
+    - Use %p when printing pointer
+    Changes in v2
+    - None
 
- .../realtek,rtl-intc.yaml                     | 20 ++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+ drivers/clocksource/Kconfig          |  10 +
+ drivers/clocksource/Makefile         |   1 +
+ drivers/clocksource/timer-rtl-otto.c | 291 +++++++++++++++++++++++++++
+ include/linux/cpuhotplug.h           |   1 +
+ 4 files changed, 303 insertions(+)
+ create mode 100644 drivers/clocksource/timer-rtl-otto.c
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/realt=
-ek,rtl-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller=
-/realtek,rtl-intc.yaml
-index fb5593724059..f36aaab73c01 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-=
-intc.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-=
-intc.yaml
-@@ -25,6 +25,7 @@ properties:
-       - items:
-           - enum:
-               - realtek,rtl8380-intc
-+              - realtek,rtl9300-intc
-           - const: realtek,rtl-intc
-       - const: realtek,rtl-intc
-         deprecated: true
-@@ -35,7 +36,10 @@ properties:
-     const: 1
+diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+index 34faa0320ece..70ba57210862 100644
+--- a/drivers/clocksource/Kconfig
++++ b/drivers/clocksource/Kconfig
+@@ -134,6 +134,16 @@ config RDA_TIMER
+ 	help
+ 	  Enables the support for the RDA Micro timer driver.
 =20
-   reg:
--    maxItems: 1
-+    minItems: 1
-+    items:
-+      - description: vpe0 registers
-+      - description: vpe1 registers
++config REALTEK_OTTO_TIMER
++	bool "Clocksource/timer for the Realtek Otto platform"
++	select TIMER_OF
++	help
++	  This driver adds support for the timers found in the Realtek RTL83xx
++	  and RTL93xx SoCs series. This includes chips such as RTL8380, RTL8381
++	  and RTL832, as well as chips from the RTL839x series, such as RTL8390
++	  RT8391, RTL8392, RTL8393 and RTL8396 and chips of the RTL930x series
++	  such as RTL9301, RTL9302 or RTL9303.
++
+ config SUN4I_TIMER
+ 	bool "Sun4i timer driver" if COMPILE_TEST
+ 	depends on HAS_IOMEM
+diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
+index 4bb856e4df55..22743785299e 100644
+--- a/drivers/clocksource/Makefile
++++ b/drivers/clocksource/Makefile
+@@ -59,6 +59,7 @@ obj-$(CONFIG_MILBEAUT_TIMER)	+=3D timer-milbeaut.o
+ obj-$(CONFIG_SPRD_TIMER)	+=3D timer-sprd.o
+ obj-$(CONFIG_NPCM7XX_TIMER)	+=3D timer-npcm7xx.o
+ obj-$(CONFIG_RDA_TIMER)		+=3D timer-rda.o
++obj-$(CONFIG_REALTEK_OTTO_TIMER)	+=3D timer-rtl-otto.o
 =20
-   interrupts:
-     minItems: 1
-@@ -71,6 +75,20 @@ allOf:
-     else:
-       required:
-         - interrupts
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: realtek,rtl9300-intc
-+    then:
-+      properties:
-+        reg:
-+          minItems: 1
-+          maxItems: 2
-+    else:
-+      properties:
-+        reg:
-+          maxItems: 1
-=20
- additionalProperties: false
-=20
+ obj-$(CONFIG_ARC_TIMERS)		+=3D arc_timer.o
+ obj-$(CONFIG_ARM_ARCH_TIMER)		+=3D arm_arch_timer.o
+diff --git a/drivers/clocksource/timer-rtl-otto.c b/drivers/clocksource/t=
+imer-rtl-otto.c
+new file mode 100644
+index 000000000000..8a3068b36e75
+--- /dev/null
++++ b/drivers/clocksource/timer-rtl-otto.c
+@@ -0,0 +1,291 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#define pr_fmt(fmt)	KBUILD_MODNAME ": " fmt
++
++#include <linux/clk.h>
++#include <linux/clockchips.h>
++#include <linux/cpu.h>
++#include <linux/cpuhotplug.h>
++#include <linux/cpumask.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/jiffies.h>
++#include <linux/printk.h>
++#include <linux/sched_clock.h>
++#include "timer-of.h"
++
++#define RTTM_DATA		0x0
++#define RTTM_CNT		0x4
++#define RTTM_CTRL		0x8
++#define RTTM_INT		0xc
++
++#define RTTM_CTRL_ENABLE	BIT(28)
++#define RTTM_INT_PENDING	BIT(16)
++#define RTTM_INT_ENABLE		BIT(20)
++
++/*
++ * The Otto platform provides multiple 28 bit timers/counters with the f=
+ollowing
++ * operating logic. If enabled the timer counts up. Per timer one can se=
+t a
++ * maximum counter value as an end marker. If end marker is reached the =
+timer
++ * fires an interrupt. If the timer "overflows" by reaching the end mark=
+er or
++ * by adding 1 to 0x0fffffff the counter is reset to 0. When this happen=
+s and
++ * the timer is in operating mode COUNTER it stops. In mode TIMER it wil=
+l
++ * continue to count up.
++ */
++#define RTTM_CTRL_COUNTER	0
++#define RTTM_CTRL_TIMER		BIT(24)
++
++#define RTTM_BIT_COUNT		28
++#define RTTM_MIN_DELTA		8
++#define RTTM_MAX_DELTA		CLOCKSOURCE_MASK(28)
++
++/*
++ * Timers are derived from the LXB clock frequency. Usually this is a fi=
+xed
++ * multiple of the 25 MHz oscillator. The 930X SOC is an exception from =
+that.
++ * Its LXB clock has only dividers and uses the switch PLL of 2.45 GHz a=
+s its
++ * base. The only meaningful frequencies we can achieve from that are 17=
+5.000
++ * MHz and 153.125 MHz. The greatest common divisor of all explained pos=
+sible
++ * speeds is 3125000. Pin the timers to this 3.125 MHz reference frequen=
+cy.
++ */
++#define RTTM_TICKS_PER_SEC	3125000
++
++struct rttm_cs {
++	struct timer_of		to;
++	struct clocksource	cs;
++};
++
++/* Simple internal register functions */
++static inline void rttm_set_counter(void __iomem *base, unsigned int cou=
+nter)
++{
++	iowrite32(counter, base + RTTM_CNT);
++}
++
++static inline unsigned int rttm_get_counter(void __iomem *base)
++{
++	return ioread32(base + RTTM_CNT);
++}
++
++static inline void rttm_set_period(void __iomem *base, unsigned int peri=
+od)
++{
++	iowrite32(period, base + RTTM_DATA);
++}
++
++static inline void rttm_disable_timer(void __iomem *base)
++{
++	iowrite32(0, base + RTTM_CTRL);
++}
++
++static inline void rttm_enable_timer(void __iomem *base, u32 mode, u32 d=
+ivisor)
++{
++	iowrite32(RTTM_CTRL_ENABLE | mode | divisor, base + RTTM_CTRL);
++}
++
++static inline void rttm_ack_irq(void __iomem *base)
++{
++	iowrite32(ioread32(base + RTTM_INT) | RTTM_INT_PENDING, base + RTTM_INT=
+);
++}
++
++static inline void rttm_enable_irq(void __iomem *base)
++{
++	iowrite32(RTTM_INT_ENABLE, base + RTTM_INT);
++}
++
++static inline void rttm_disable_irq(void __iomem *base)
++{
++	iowrite32(0, base + RTTM_INT);
++}
++
++/* Aggregated control functions for kernel clock framework */
++#define RTTM_DEBUG(base)			\
++	pr_debug("------------- %d %p\n",	\
++		 smp_processor_id(), base)
++
++static irqreturn_t rttm_timer_interrupt(int irq, void *dev_id)
++{
++	struct clock_event_device *clkevt =3D dev_id;
++	struct timer_of *to =3D to_timer_of(clkevt);
++
++	rttm_ack_irq(to->of_base.base);
++	RTTM_DEBUG(to->of_base.base);
++	clkevt->event_handler(clkevt);
++
++	return IRQ_HANDLED;
++}
++
++static void rttm_stop_timer(void __iomem *base)
++{
++	rttm_disable_timer(base);
++	rttm_ack_irq(base);
++}
++
++static void rttm_start_timer(struct timer_of *to, u32 mode)
++{
++	rttm_set_counter(to->of_base.base, 0);
++	rttm_enable_timer(to->of_base.base, mode, to->of_clk.rate / RTTM_TICKS_=
+PER_SEC);
++}
++
++static int rttm_next_event(unsigned long delta, struct clock_event_devic=
+e *clkevt)
++{
++	struct timer_of *to =3D to_timer_of(clkevt);
++
++	RTTM_DEBUG(to->of_base.base);
++	rttm_stop_timer(to->of_base.base);
++	rttm_set_period(to->of_base.base, delta);
++	rttm_start_timer(to, RTTM_CTRL_COUNTER);
++
++	return 0;
++}
++
++static int rttm_state_oneshot(struct clock_event_device *clkevt)
++{
++	struct timer_of *to =3D to_timer_of(clkevt);
++
++	RTTM_DEBUG(to->of_base.base);
++	rttm_stop_timer(to->of_base.base);
++	rttm_set_period(to->of_base.base, RTTM_TICKS_PER_SEC / HZ);
++	rttm_start_timer(to, RTTM_CTRL_COUNTER);
++
++	return 0;
++}
++
++static int rttm_state_periodic(struct clock_event_device *clkevt)
++{
++	struct timer_of *to =3D to_timer_of(clkevt);
++
++	RTTM_DEBUG(to->of_base.base);
++	rttm_stop_timer(to->of_base.base);
++	rttm_set_period(to->of_base.base, RTTM_TICKS_PER_SEC / HZ);
++	rttm_start_timer(to, RTTM_CTRL_TIMER);
++
++	return 0;
++}
++
++static int rttm_state_shutdown(struct clock_event_device *clkevt)
++{
++	struct timer_of *to =3D to_timer_of(clkevt);
++
++	RTTM_DEBUG(to->of_base.base);
++	rttm_stop_timer(to->of_base.base);
++
++	return 0;
++}
++
++static void rttm_setup_timer(void __iomem *base)
++{
++	RTTM_DEBUG(base);
++	rttm_stop_timer(base);
++	rttm_set_period(base, 0);
++}
++
++static u64 rttm_read_clocksource(struct clocksource *cs)
++{
++	struct rttm_cs *rcs =3D container_of(cs, struct rttm_cs, cs);
++
++	return rttm_get_counter(rcs->to.of_base.base);
++}
++
++/* Module initialization part. */
++static DEFINE_PER_CPU(struct timer_of, rttm_to) =3D {
++	.flags				=3D TIMER_OF_BASE | TIMER_OF_CLOCK | TIMER_OF_IRQ,
++	.of_irq =3D {
++		.flags			=3D IRQF_PERCPU | IRQF_TIMER,
++		.handler		=3D rttm_timer_interrupt,
++	},
++	.clkevt =3D {
++		.rating			=3D 400,
++		.features		=3D CLOCK_EVT_FEAT_PERIODIC | CLOCK_EVT_FEAT_ONESHOT,
++		.set_state_periodic	=3D rttm_state_periodic,
++		.set_state_shutdown	=3D rttm_state_shutdown,
++		.set_state_oneshot	=3D rttm_state_oneshot,
++		.set_next_event		=3D rttm_next_event
++	},
++};
++
++static int rttm_enable_clocksource(struct clocksource *cs)
++{
++	struct rttm_cs *rcs =3D container_of(cs, struct rttm_cs, cs);
++
++	rttm_disable_irq(rcs->to.of_base.base);
++	rttm_setup_timer(rcs->to.of_base.base);
++	rttm_enable_timer(rcs->to.of_base.base, RTTM_CTRL_TIMER,
++			  rcs->to.of_clk.rate / RTTM_TICKS_PER_SEC);
++
++	return 0;
++}
++
++struct rttm_cs rttm_cs =3D {
++	.to =3D {
++		.flags	=3D TIMER_OF_BASE | TIMER_OF_CLOCK,
++	},
++	.cs =3D {
++		.name	=3D "realtek_otto_timer",
++		.rating	=3D 400,
++		.mask	=3D CLOCKSOURCE_MASK(RTTM_BIT_COUNT),
++		.flags	=3D CLOCK_SOURCE_IS_CONTINUOUS,
++		.read	=3D rttm_read_clocksource,
++	}
++};
++
++static u64 notrace rttm_read_clock(void)
++{
++	return rttm_get_counter(rttm_cs.to.of_base.base);
++}
++
++static int rttm_cpu_starting(unsigned int cpu)
++{
++	struct timer_of *to =3D per_cpu_ptr(&rttm_to, cpu);
++
++	RTTM_DEBUG(to->of_base.base);
++	to->clkevt.cpumask =3D cpumask_of(cpu);
++	irq_force_affinity(to->of_irq.irq, to->clkevt.cpumask);
++	clockevents_config_and_register(&to->clkevt, RTTM_TICKS_PER_SEC,
++					RTTM_MIN_DELTA, RTTM_MAX_DELTA);
++	rttm_enable_irq(to->of_base.base);
++
++	return 0;
++}
++
++static int __init rttm_probe(struct device_node *np)
++{
++	unsigned int cpu, cpu_rollback;
++	struct timer_of *to;
++	unsigned int clkidx =3D num_possible_cpus();
++
++	/* Use the first n timers as per CPU clock event generators */
++	for_each_possible_cpu(cpu) {
++		to =3D per_cpu_ptr(&rttm_to, cpu);
++		to->of_irq.index =3D to->of_base.index =3D cpu;
++		if (timer_of_init(np, to)) {
++			pr_err("setup of timer %d failed\n", cpu);
++			goto rollback;
++		}
++		rttm_setup_timer(to->of_base.base);
++	}
++
++	/* Activate the n'th + 1 timer as a stable CPU clocksource. */
++	to =3D &rttm_cs.to;
++	to->of_base.index =3D clkidx;
++	timer_of_init(np, to);
++	if (rttm_cs.to.of_base.base && rttm_cs.to.of_clk.rate) {
++		rttm_enable_clocksource(&rttm_cs.cs);
++		clocksource_register_hz(&rttm_cs.cs, RTTM_TICKS_PER_SEC);
++		sched_clock_register(rttm_read_clock, RTTM_BIT_COUNT, RTTM_TICKS_PER_S=
+EC);
++	} else
++		pr_err(" setup of timer %d as clocksource failed", clkidx);
++
++	return cpuhp_setup_state(CPUHP_AP_REALTEK_TIMER_STARTING,
++				"timer/realtek:online",
++				rttm_cpu_starting, NULL);
++rollback:
++	pr_err("timer registration failed\n");
++	for_each_possible_cpu(cpu_rollback) {
++		if (cpu_rollback =3D=3D cpu)
++			break;
++		to =3D per_cpu_ptr(&rttm_to, cpu_rollback);
++		timer_of_cleanup(to);
++	}
++
++	return -EINVAL;
++}
++
++TIMER_OF_DECLARE(otto_timer, "realtek,otto-timer", rttm_probe);
+diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+index 7a5785f405b6..56b744dc1317 100644
+--- a/include/linux/cpuhotplug.h
++++ b/include/linux/cpuhotplug.h
+@@ -171,6 +171,7 @@ enum cpuhp_state {
+ 	CPUHP_AP_ARMADA_TIMER_STARTING,
+ 	CPUHP_AP_MIPS_GIC_TIMER_STARTING,
+ 	CPUHP_AP_ARC_TIMER_STARTING,
++	CPUHP_AP_REALTEK_TIMER_STARTING,
+ 	CPUHP_AP_RISCV_TIMER_STARTING,
+ 	CPUHP_AP_CLINT_TIMER_STARTING,
+ 	CPUHP_AP_CSKY_TIMER_STARTING,
 --=20
 2.45.2
 
