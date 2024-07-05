@@ -1,59 +1,59 @@
-Return-Path: <linux-mips+bounces-4146-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4149-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64DBE928037
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2024 04:16:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 494E092803F
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2024 04:16:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B1021F258BD
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2024 02:16:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F92BB21189
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2024 02:16:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 757BD171B0;
-	Fri,  5 Jul 2024 02:15:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AECB013790F;
+	Fri,  5 Jul 2024 02:15:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="xZtP//cR"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="Kj7LJRyn"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56AE726AD3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70673D55D
 	for <linux-mips@vger.kernel.org>; Fri,  5 Jul 2024 02:15:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720145741; cv=none; b=jWFXcSQLUK4t9U9R0eFzEdV460MRcBMFSs2UQwjKc83cODERECp4QY4BAMlG/PXdWGovdaNCOxBSHXTyPLaCcdU7DRDelWsxqqYPeywuyT0l54s2uWtIUvYkWI+WVMdCtUv58bmQ+tPXALVr0HfTgDigQdznhRWzrlcR4wPsbqk=
+	t=1720145742; cv=none; b=bBzagWhBp68zi/AZPCJU126vX27FRDDNaFW/ZSUIYLwHNjhrtlCuKXxZlWLfOma8xwM8jeP6Clcf5tuPjTsyrtuKZPuNbtcIxKaRWqrVFNn31ICBLE0SJ5zegQBRvLboNk3TH5kQYEMzhQktjEV5dTdc9dqYaJk3qLCjbd40VaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720145741; c=relaxed/simple;
-	bh=jpgEhqoiJLFt4eKeu2jNU/GRvW96hmqCQ8VpTR6L5hI=;
+	s=arc-20240116; t=1720145742; c=relaxed/simple;
+	bh=ljU6sRcs7sQuHTpD9/5+A8t80/9OARDwl6j8aTgrIpc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=giIaHF2ditX9uUP1O0p4ZEkD+nNQAxeoESsLrhiberl7WrzWAu56PIcpp/9yzIwowwSvIZs5oeEvd/7IIVz3rvJTMGL8BUvBbLmpjB4H/IS8KX4BkghAnXzPFCnlOVb8S9A+4H/66CppekrwHo8NV33KRSFK70xOOfhAQmvScg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=xZtP//cR; arc=none smtp.client-ip=202.36.163.20
+	 MIME-Version; b=fd/44RhXCYYM/Ce3S+MQ+UcZ7o9PyvxoiHI5x09VlXfZbNXs0ortcjRHzzhGWsY2iWRuaDQI9stEKE3lI0+1d5JzViLTuIxSSP+gD3tYs57O2ABidwlSZHNVKZlLemCnkeKz/JriD/Y6U33rrPPvwiGI9IH8/bXj4iK5CIriyp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=Kj7LJRyn; arc=none smtp.client-ip=202.36.163.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id DF87A2C0BEC;
-	Fri,  5 Jul 2024 14:15:27 +1200 (NZST)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 0B1AD2C0C3E;
+	Fri,  5 Jul 2024 14:15:28 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1720145727;
-	bh=0C+q9xo0SRant1J/cPVKZrZxM7tdjJdasqObpEK8TGo=;
+	s=mail181024; t=1720145728;
+	bh=adwuxCP0b2iJnp5YoKfId4BXKuJvpUjFFbukitvRfSg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=xZtP//cRmUJtA+oJtwM7afSCZRLtf25Di1aXC4Tcw1KP579lrNIK3HN/1voZWK/Bg
-	 qFVmZx/og8YojiDIys+SEkov1VZsrV9yftD6TuJwk3tXiCilv8sQlJJnWrRR+GB++e
-	 rZlncm0h2Pqzj8nN6e82hThGUIoliJRT4GVma7dHioRnqPIiP4eKHwG6CLtAmNL0QU
-	 12zgLejRvdwUaiZu1aqltxOCygmf3c6gxf4QoAepqOugrzaARrNbhUwQYWwkHw3alR
-	 t7JwxwyWZ+H26vgwuX9x295h/AwUSVXrH3p7wcRQ1o5SQl+pw7S3MA8nQyUcnos/hv
-	 K1RTC+w/ZrNoQ==
+	b=Kj7LJRynW0OKdN3cy9AewJ1zWDtpQmmyygowmRfwLvYlaSjeCuHllpNBI5WFGyoLf
+	 WUI7TVx8819fbMlBo2JeLJYead2GUeYk25Xvr2U5fYvelMxUF0l3HmjQhWMplQL35+
+	 XgRWATrVgIxTA3jYxDYcyDbXzsgGkgnaRHsHjyM9V3fKjhLYmtS9wodLBI+iEg0R9z
+	 SxyfrZHve5yjrnQV04b2mAz+SR7CmpUFWPERcmEGVaPcXzCnRTby37W5AgI1G7SWpv
+	 eP6tHyKJBuQ/tZ5wplMCWMhaE7eKM2k3v8DQjVnAbD0syft2eE5lYGPvhyiwkBgiOp
+	 a7KvY/AjCptHA==
 Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B6687573e0007>; Fri, 05 Jul 2024 14:15:26 +1200
+	id <B6687573e0006>; Fri, 05 Jul 2024 14:15:26 +1200
 Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id 879FA13EE9C;
+	by pat.atlnz.lc (Postfix) with ESMTP id 8C28813ED5B;
 	Fri,  5 Jul 2024 14:15:26 +1200 (NZST)
 Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id 84D13280930; Fri,  5 Jul 2024 14:15:26 +1200 (NZST)
+	id 896AC280930; Fri,  5 Jul 2024 14:15:26 +1200 (NZST)
 From: Chris Packham <chris.packham@alliedtelesis.co.nz>
 To: tglx@linutronix.de,
 	robh@kernel.org,
@@ -73,9 +73,9 @@ Cc: linux-kernel@vger.kernel.org,
 	kabel@kernel.org,
 	ericwouds@gmail.com,
 	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v4 5/9] dt-bindings: timer: Add schema for realtek,otto-timer
-Date: Fri,  5 Jul 2024 14:15:16 +1200
-Message-ID: <20240705021520.2737568-6-chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v4 6/9] dt-bindings: interrupt-controller: realtek,rtl-intc: Add rtl9300-intc
+Date: Fri,  5 Jul 2024 14:15:17 +1200
+Message-ID: <20240705021520.2737568-7-chris.packham@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240705021520.2737568-1-chris.packham@alliedtelesis.co.nz>
 References: <20240705021520.2737568-1-chris.packham@alliedtelesis.co.nz>
@@ -86,104 +86,82 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=CvQccW4D c=1 sm=1 tr=0 ts=6687573e a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=4kmOji7k6h8A:10 a=KKAkSRfTAAAA:8 a=gEfo2CItAAAA:8 a=2AJCWd3gv_sDiQv9-YsA:9 a=3ZKOabzyN94A:10 a=cvBusfyB2V15izCimMoJ:22 a=sptkURWiP4Gy88Gu7hUp:22
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=CvQccW4D c=1 sm=1 tr=0 ts=6687573e a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=4kmOji7k6h8A:10 a=RxOWC8M5BiJtX5JSj5EA:9 a=3ZKOabzyN94A:10
 X-SEG-SpamProfiler-Score: 0
 x-atlnz-ls: pat
 
-Add the devicetree schema for the realtek,otto-timer present on a number
-of Realtek SoCs.
+Add a compatible string for the interrupt controller found on the
+rtl930x SoCs. The interrupt controller has registers for VPE1 so these
+are added as a second reg cell.
 
 Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
 
 Notes:
-    Changes in v4:
-    - Add r-by from Krzysztof
     Changes in v3:
-    - Use items to describe regs and interrupt properties
-    - Remove minItems condition
+    - Add reg::minItems where required
+    Changes in v3:
+    - Use items to describe the regs property
     Changes in v2:
-    - Use specific compatible (rtl9302-timer instead of rtl930x-timer)
-    - Remove unnecessary label
-    - Remove unused irq flags (interrupt controller is one-cell)
-    - Set minItems for reg and interrupts based on compatible
+    - Set reg:maxItems to 2 to allow for VPE1 registers on the rtl9300. A=
+dd
+      a condition to enforce the old limit on other SoCs.
+    - Connor and Krzysztof offered acks on v1 but I think the changes her=
+e
+      are big enough to void those.
 
- .../bindings/timer/realtek,otto-timer.yaml    | 63 +++++++++++++++++++
- 1 file changed, 63 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/timer/realtek,otto-=
-timer.yaml
+ .../realtek,rtl-intc.yaml                     | 20 ++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/timer/realtek,otto-timer.y=
-aml b/Documentation/devicetree/bindings/timer/realtek,otto-timer.yaml
-new file mode 100644
-index 000000000000..7b6ec2c69484
---- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/realtek,otto-timer.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/timer/realtek,otto-timer.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Realtek Otto SoCs Timer/Counter
-+
-+description:
-+  Realtek SoCs support a number of timers/counters. These are used
-+  as a per CPU clock event generator and an overall CPU clocksource.
-+
-+maintainers:
-+  - Chris Packham <chris.packham@alliedtelesis.co.nz>
-+
-+properties:
-+  $nodename:
-+    pattern: "^timer@[0-9a-f]+$"
-+
-+  compatible:
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/realt=
+ek,rtl-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller=
+/realtek,rtl-intc.yaml
+index fb5593724059..f36aaab73c01 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-=
+intc.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-=
+intc.yaml
+@@ -25,6 +25,7 @@ properties:
+       - items:
+           - enum:
+               - realtek,rtl8380-intc
++              - realtek,rtl9300-intc
+           - const: realtek,rtl-intc
+       - const: realtek,rtl-intc
+         deprecated: true
+@@ -35,7 +36,10 @@ properties:
+     const: 1
+=20
+   reg:
+-    maxItems: 1
++    minItems: 1
 +    items:
-+      - enum:
-+          - realtek,rtl9302-timer
-+      - const: realtek,otto-timer
-+
-+  reg:
-+    items:
-+      - description: timer0 registers
-+      - description: timer1 registers
-+      - description: timer2 registers
-+      - description: timer3 registers
-+      - description: timer4 registers
-+
-+  clocks:
-+    maxItems: 1
-+
-+  interrupts:
-+    items:
-+      - description: timer0 interrupt
-+      - description: timer1 interrupt
-+      - description: timer2 interrupt
-+      - description: timer3 interrupt
-+      - description: timer4 interrupt
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    timer@3200 {
-+      compatible =3D "realtek,rtl9302-timer", "realtek,otto-timer";
-+      reg =3D <0x3200 0x10>, <0x3210 0x10>, <0x3220 0x10>,
-+            <0x3230 0x10>, <0x3240 0x10>;
-+
-+      interrupt-parent =3D <&intc>;
-+      interrupts =3D <7>, <8>, <9>, <10>, <11>;
-+      clocks =3D <&lx_clk>;
-+    };
++      - description: vpe0 registers
++      - description: vpe1 registers
+=20
+   interrupts:
+     minItems: 1
+@@ -71,6 +75,20 @@ allOf:
+     else:
+       required:
+         - interrupts
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: realtek,rtl9300-intc
++    then:
++      properties:
++        reg:
++          minItems: 1
++          maxItems: 2
++    else:
++      properties:
++        reg:
++          maxItems: 1
+=20
+ additionalProperties: false
+=20
 --=20
 2.45.2
 
