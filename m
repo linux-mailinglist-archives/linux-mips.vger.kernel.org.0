@@ -1,190 +1,134 @@
-Return-Path: <linux-mips+bounces-4150-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4151-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B16B928236
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2024 08:41:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 400E992833A
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2024 09:55:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E8F51C2146C
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2024 06:41:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF10C28718F
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2024 07:55:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D931913C810;
-	Fri,  5 Jul 2024 06:41:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CF3813A412;
+	Fri,  5 Jul 2024 07:54:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="htQMBLJM"
+	dkim=pass (2048-bit key) header.d=atmark-techno.com header.i=@atmark-techno.com header.b="hed19GzU";
+	dkim=pass (2048-bit key) header.d=atmark-techno.com header.i=@atmark-techno.com header.b="aHya3fCO"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gw2.atmark-techno.com (gw2.atmark-techno.com [35.74.137.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A853B17995;
-	Fri,  5 Jul 2024 06:41:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868491448C6
+	for <linux-mips@vger.kernel.org>; Fri,  5 Jul 2024 07:54:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.74.137.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720161705; cv=none; b=egbwMe6uOTknmtGQa/1yjOPCg5AN5Sy1RtW7SISaQEHGkiAoGp3cUjDZ49obZP40vk1vMTY/jYxXYAT3H+qFVSp/D6W8rDY5gLV7+dImZPOW0Q5zmDIHIjxG+HHl/wosZg+73zW7fjpwh3Qr4T5Jjd5AnfQcBqAyXf3fGOL/nog=
+	t=1720166098; cv=none; b=BrmhontZ3NksbdbnmMpE7TFvRwnctumUnfC8nBmnMmPNNgNQtivSSRybVMFya/pjdVqJQbh7w2PJlXBzhQb62WbYlDOL25AhakIKuL6TC91gRwPCQk45l+3cQgLz2mOgi9XY+XzGRdN9ond/V3VC3Pf0gIADvTc7dMyGNtVuZpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720161705; c=relaxed/simple;
-	bh=IUNDAaCN5RHJlIMvrJJ5nvZomQN3XaAt+G7STwUCXwY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mH6hIJWfIWMOyLKlEJKfMUHxuouzyyyN29iytVkfyrbpOGZ31K32sS8h3eCNVSWvoHzakkD8Dn5B2h3uMdUrwBrNFR1DyFnEYO8bQ/CxKcG8t2+L4V1eXqnHp6XupXYfh5PDrfz6EMPzyBWi+xrr+vjVtq8fikjvb0vbzDLpvgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=htQMBLJM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 266DDC116B1;
-	Fri,  5 Jul 2024 06:41:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720161705;
-	bh=IUNDAaCN5RHJlIMvrJJ5nvZomQN3XaAt+G7STwUCXwY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=htQMBLJM7RU5dV0veSrOFZwnspPSrkqz/8DuVxPZ/7CmyHwYlpMlNOONcLIuWnhOj
-	 o+qTmRCM6wrvRi2Q2UfOVomLwfLDgPtiqxb1LxegPMVHClcc29fpIXmp3QX+Vy/ym/
-	 23xANj6HF9Yf5rKLrOPx0+f8U599oz2winrUJ0x9YpUqNNAMam0eFrXMauyCHMvtaY
-	 6z9h538ew6W9rnX1+NFkWs0eBlVs5nIMGSgiNS/sa9hsdZ1mQsYku6zPFzEwqyg9dD
-	 AyYDJzMfwQQ+IL3V99pZXgVRmKUkXiKBnl7rZ8fx+XoYKx5rkk9sM8C8olgCi45G1n
-	 53jAAAsRDd/Ww==
-Message-ID: <10a1cf5c-8e35-487c-b236-48cedbfefa8f@kernel.org>
-Date: Fri, 5 Jul 2024 08:41:36 +0200
+	s=arc-20240116; t=1720166098; c=relaxed/simple;
+	bh=Zcn/Nzvief9hDSm9R3roNLbz8nhgsBIFBjts3uENqUA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=t3d+ANyBhciDrLRJdhNzvS75fj6GZl/lL+KmoxsRjF8XaOXy6ad2wQ5VVHPMer1p/Vja6+zQuSH4H29e3mWm/Nb0IeigN3vFKEu4bM2aP9AbqCKHhfDmkxbs8ei4D7QfqKGiP1xtLu5lMV3QuZCncky5/45Ak9rF8Ty4LVRJZCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=atmark-techno.com; spf=pass smtp.mailfrom=atmark-techno.com; dkim=pass (2048-bit key) header.d=atmark-techno.com header.i=@atmark-techno.com header.b=hed19GzU; dkim=pass (2048-bit key) header.d=atmark-techno.com header.i=@atmark-techno.com header.b=aHya3fCO; arc=none smtp.client-ip=35.74.137.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=atmark-techno.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atmark-techno.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=atmark-techno.com;
+	s=gw2_bookworm; t=1720165738;
+	bh=Zcn/Nzvief9hDSm9R3roNLbz8nhgsBIFBjts3uENqUA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=hed19GzUhUKmqfZsEZylBqRhJ61R0T8VA/vZaEAn39+PgKmzPpTt/Q8ppNVSwf3zC
+	 yuvya6qAoZ5bhHyzVqV/RPkNCqEpkwfreUZ26SZAoBzhH+UJYtRTgxXG7s/yar9nNC
+	 S6exc8Urhle9yL1cCd8JA+SOwhh/IED/xwNhYc+pyCcOYO9vBEm/xm5Iv6n7muX4NX
+	 3vWNpi6XhauFuCqFVvy7diFcuFFeswWNnOMgCw0Cys6rYuNuNkM5pcR2WXgWT5E/US
+	 LJqD/9CpN3Fo5q/AcEZvbavN9W/1StMnAw58nJJX9Gxk8CjOACVl1gx5qWAtfGU9y6
+	 rneHXoaeiGuKg==
+Received: from gw2.atmark-techno.com (localhost [127.0.0.1])
+	by gw2.atmark-techno.com (Postfix) with ESMTP id 30954971
+	for <linux-mips@vger.kernel.org>; Fri,  5 Jul 2024 16:48:58 +0900 (JST)
+Authentication-Results: gw2.atmark-techno.com;
+	dkim=pass (2048-bit key; unprotected) header.d=atmark-techno.com header.i=@atmark-techno.com header.a=rsa-sha256 header.s=google header.b=aHya3fCO;
+	dkim-atps=neutral
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com [209.85.161.72])
+	by gw2.atmark-techno.com (Postfix) with ESMTPS id AD9EB837
+	for <linux-mips@vger.kernel.org>; Fri,  5 Jul 2024 16:48:57 +0900 (JST)
+Received: by mail-oo1-f72.google.com with SMTP id 006d021491bc7-5c413717bd4so1188098eaf.1
+        for <linux-mips@vger.kernel.org>; Fri, 05 Jul 2024 00:48:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atmark-techno.com; s=google; t=1720165736; x=1720770536; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MxuoJkWGHRJwetZg4ul9+B1wriVthDVUa7T5nkwMGhI=;
+        b=aHya3fCOHJI770GjykCWs3NGOQhbV6OVCG+XD+ltz//zbtAqenNHqU21GkTzSuHoNc
+         E7auSQeXZ5FQ5ENb6asThYNJKWjDE2a5fusO228w5HaK+YRt2NHTqRECuFktUhIr3+ew
+         sV6bzCxwU1Sxye47uzyAlpt3BgDYs0pLr7BhbgG6iZOxrdnXFYAj28ncYitUyODxwjbS
+         mpeiEmpTditD9fe8tqkNeW4zNpYNgGUIOkP9jOmlm9isA4CX2VZeqSi5hKXYODYkTh1Y
+         358TJm7ZAoWMCTYnpnXB9IN9Zyv7vyR8o9IO3CjR2oQREj0/RydbcRDlj2NKJVhh9u0B
+         JJXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720165736; x=1720770536;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MxuoJkWGHRJwetZg4ul9+B1wriVthDVUa7T5nkwMGhI=;
+        b=p9dRNOHUXvhu+BdD9ZNReVtn1iSLkO42t8q8cINUE6NN4AyS5eyqAqkbfcErh43VBo
+         Ph0NoLAV+x+oa7ePbA1g9B3bs1h3x6DJuFbMSK9dfKgedF5z3WjfvUfyj/t46bVawP/B
+         7YeTDmNgjO2mi6ELqM5NmRPadhFbMqIKCsRtUVmpbctST1tN06P/De8GIIPABaZfD2wH
+         rZ2fJF0GIyRCrgfZwWgnhE3u3rWj0L3wvrq8t/m0RWrkedqC6eaxB5Onz6Bbvv4Uc3jJ
+         uDUV1wCo4ud2LAuuMbqmXsVmx2v8tPqPX8z95eY4vIMTU+DL7rFeFwuolNU2XwfB6437
+         CtgA==
+X-Forwarded-Encrypted: i=1; AJvYcCUCVbzs87WjGtFp/HXllMmoh8Unfkla5XAfO/DMD4JJ6TyKq8xiilmLjH9FwqN5iGXKqRVcJadWff/dlA3VY6xXUdOULQ96mK9F6Q==
+X-Gm-Message-State: AOJu0Yz8sXndKIX4vOX6WgE2tGb0gzOUhADhQ2zBETm5lu5URH7iw4xY
+	LVj0psRdfmNJmfq3Tm8dpeHQ4PEu/j9o84SVptcZss0gQOLuwFkKNQnqU9h49hHe4m5CqIVpjUS
+	lVB3Nuhly+zxMXShDDo3WMZtVtvCiMCtCVqAFfNSgibg6tp+XSfSwRTu9+2w3
+X-Received: by 2002:a05:6358:88b:b0:1a6:3016:1ed1 with SMTP id e5c5f4694b2df-1aa98c91efbmr363980155d.27.1720165736374;
+        Fri, 05 Jul 2024 00:48:56 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFE5s3uc9pyQVZG0Iv0PjBELyaYmcSwHMDmZ7dZ7QPbAPFWUW3qf344zw9phzABBwv0qcny/w==
+X-Received: by 2002:a05:6358:88b:b0:1a6:3016:1ed1 with SMTP id e5c5f4694b2df-1aa98c91efbmr363978955d.27.1720165736013;
+        Fri, 05 Jul 2024 00:48:56 -0700 (PDT)
+Received: from pc-0182.atmarktech (162.198.187.35.bc.googleusercontent.com. [35.187.198.162])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-72c6d400fadsm10578206a12.91.2024.07.05.00.48.55
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 05 Jul 2024 00:48:55 -0700 (PDT)
+Received: from [::1] (helo=pc-0182.atmark.tech)
+	by pc-0182.atmarktech with esmtp (Exim 4.96)
+	(envelope-from <dominique.martinet@atmark-techno.com>)
+	id 1sPdgc-00FBmu-02;
+	Fri, 05 Jul 2024 16:48:54 +0900
+From: Dominique Martinet <dominique.martinet@atmark-techno.com>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Songyang Li <leesongyang@outlook.com>
+Cc: Dominique Martinet <dominique.martinet@atmark-techno.com>,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: Octeron: remove source file executable bit
+Date: Fri,  5 Jul 2024 16:48:30 +0900
+Message-Id: <20240705074831.3620158-1-dominique.martinet@atmark-techno.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 6/9] dt-bindings: interrupt-controller:
- realtek,rtl-intc: Add rtl9300-intc
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>, tglx@linutronix.de,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- tsbogend@alpha.franken.de, daniel.lezcano@linaro.org, paulburton@kernel.org,
- peterz@infradead.org, mail@birger-koblitz.de, bert@biot.com,
- john@phrozen.org, sander@svanheule.net
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-mips@vger.kernel.org, kabel@kernel.org, ericwouds@gmail.com
-References: <20240705021520.2737568-1-chris.packham@alliedtelesis.co.nz>
- <20240705021520.2737568-7-chris.packham@alliedtelesis.co.nz>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240705021520.2737568-7-chris.packham@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 05/07/2024 04:15, Chris Packham wrote:
-> Add a compatible string for the interrupt controller found on the
-> rtl930x SoCs. The interrupt controller has registers for VPE1 so these
-> are added as a second reg cell.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> 
-> Notes:
->     Changes in v3:
->     - Add reg::minItems where required
->     Changes in v3:
->     - Use items to describe the regs property
->     Changes in v2:
->     - Set reg:maxItems to 2 to allow for VPE1 registers on the rtl9300. Add
->       a condition to enforce the old limit on other SoCs.
->     - Connor and Krzysztof offered acks on v1 but I think the changes here
->       are big enough to void those.
-> 
->  .../realtek,rtl-intc.yaml                     | 20 ++++++++++++++++++-
->  1 file changed, 19 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
-> index fb5593724059..f36aaab73c01 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/realtek,rtl-intc.yaml
-> @@ -25,6 +25,7 @@ properties:
->        - items:
->            - enum:
->                - realtek,rtl8380-intc
-> +              - realtek,rtl9300-intc
->            - const: realtek,rtl-intc
->        - const: realtek,rtl-intc
->          deprecated: true
-> @@ -35,7 +36,10 @@ properties:
->      const: 1
->  
->    reg:
-> -    maxItems: 1
-> +    minItems: 1
-> +    items:
-> +      - description: vpe0 registers
-> +      - description: vpe1 registers
->  
->    interrupts:
->      minItems: 1
-> @@ -71,6 +75,20 @@ allOf:
->      else:
->        required:
->          - interrupts
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: realtek,rtl9300-intc
-> +    then:
-> +      properties:
-> +        reg:
-> +          minItems: 1
+This does not matter the least, but there is no other .[ch] file in the
+repo that is executable, so clean this up.
 
-Hm? Why?
+Fixes: 29b83a64df3b ("MIPS: Octeon: Add PCIe link status check")
+Signed-off-by: Dominique Martinet <dominique.martinet@atmark-techno.com>
+---
+(Noticed this when reviewing the latest stable release, as the mode
+change line stood out in my viewer)
 
-<form letter>
-This is a friendly reminder during the review process.
+ arch/mips/pci/pcie-octeon.c | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ mode change 100755 => 100644 arch/mips/pci/pcie-octeon.c
 
-It seems my or other reviewer's previous comments were not fully
-addressed. Maybe the feedback got lost between the quotes, maybe you
-just forgot to apply it. Please go back to the previous discussion and
-either implement all requested changes or keep discussing them.
+diff --git a/arch/mips/pci/pcie-octeon.c b/arch/mips/pci/pcie-octeon.c
+old mode 100755
+new mode 100644
+-- 
+2.39.2
 
-Thank you.
-</form letter>
-
-> +          maxItems: 2
-Best regards,
-Krzysztof
 
 
