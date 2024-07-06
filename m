@@ -1,44 +1,83 @@
-Return-Path: <linux-mips+bounces-4178-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4180-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 698EF9293CD
-	for <lists+linux-mips@lfdr.de>; Sat,  6 Jul 2024 15:34:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0156B929546
+	for <lists+linux-mips@lfdr.de>; Sat,  6 Jul 2024 23:47:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F2FA4B216FC
-	for <lists+linux-mips@lfdr.de>; Sat,  6 Jul 2024 13:34:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D7541F21675
+	for <lists+linux-mips@lfdr.de>; Sat,  6 Jul 2024 21:47:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC51D757EA;
-	Sat,  6 Jul 2024 13:34:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAF7F381C8;
+	Sat,  6 Jul 2024 21:47:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XwvJdHhh"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A182200CB;
-	Sat,  6 Jul 2024 13:34:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36293208BC;
+	Sat,  6 Jul 2024 21:47:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720272886; cv=none; b=BDIf44PCIjlX6hEzppRZxZRNfAky6NCxKaaAzANkvCuN5Fp+XuOUI6uDM85L/7CajuB6xW3ZhCnqWt/7PVfEL5oJXF8iR1uHsBQQJUHrAXaUPqp6NXeSBDx+IhEhtR62k3GlMSpa3YiXs1XQuUX01nRlSZ+Xj0tz+Sf0//5Vf5A=
+	t=1720302441; cv=none; b=gg/Un9CSCtUPB3IHWYtL+5u09epj9Q5zQRP2Dg1pn6IJUjPVFZvH04E3kGjRydiQQ4e/5iVY5o3/WY55Jj17m9hzmJ1jrAuHo6dCDdgs3wlMcm0u5NPZX5jj/bmpBQn9YsM0vFhwAx30enC6AznyJfjtYQz9U718BTSaoEEpM9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720272886; c=relaxed/simple;
-	bh=G3ZZmX0QyqTzLDykjYjnvyZQxhMoFAkIDvFb0p7hRds=;
+	s=arc-20240116; t=1720302441; c=relaxed/simple;
+	bh=b7tz0BzPgTkRKIfhOuHJPntfjh/mfDWtZRGrng30wSo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f0npPR9Z3jwTyxeP83ZIRvfCWdXLGxgyVVkFb+R8lGDQGjqipsaeFJuyUlxBbr3azerIbh7/q7Fw1wbWS+IFWnYL0kKzSdydJwxS6giOG/jXdI8yvB1bcE2cVJCHaFCZwC/5X8XwDjZu2AHIdNSSdmDHHzSTxypyzHHaeAqb6pE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1sQ5YN-0004a8-00; Sat, 06 Jul 2024 15:34:15 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 06526C0120; Sat,  6 Jul 2024 15:33:53 +0200 (CEST)
-Date: Sat, 6 Jul 2024 15:33:52 +0200
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] MIPS: config: Add ip30_defconfig
-Message-ID: <ZolHwLu0u0aQY81I@alpha.franken.de>
-References: <20240706-config-refresh-v1-0-5dba0064cf08@flygoat.com>
- <20240706-config-refresh-v1-4-5dba0064cf08@flygoat.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=cra0uamKcgrYD+LuGquNkkUnsZxqE6NmW7UVeTjhnbfoPf6rnfCN/5tr4/9OYIwTEG8AuHDLeWgt+PeHPUCAK6AwYZJ171hBlwUlP9ulK2W8sIjJAN36i12AzRk0z2G3kQFpnqCx040ylh/3deoP7JkWFNMG9THJnXkdX9lPXJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XwvJdHhh; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720302440; x=1751838440;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=b7tz0BzPgTkRKIfhOuHJPntfjh/mfDWtZRGrng30wSo=;
+  b=XwvJdHhhnM2isTWidrzQzc7Fxnh/ibccR2plAog0FJltVlAHwRt+y0vQ
+   EQhQb0xRwwAVhT20Abv5sFN6dPDpRT69X2Obo2tufp9I2+LSj0NvOuu+2
+   17UXEXCX7GBM9gudQiKoECyV0mCc11ulHd7E8NhMT9FC3i828QzMVWTsq
+   s0ZmMBdJxk2dM5Oe4I1EyYvGuUU01/8SPgXBl0UcMB1BKR/GLy5X9sUnN
+   Uk5kzL0FCcpI09gDWBkJNmhy7vBAOlgj8WZoKcEC3ECk0incHordMtL7F
+   4TIyJcWfADbIhLEPZi3bCRFxVD03yUZleLbAmv7uy2BX+oqpCNfplivdp
+   g==;
+X-CSE-ConnectionGUID: 8fGhTqJUTiqCNqTJK/2eoA==
+X-CSE-MsgGUID: lVn9R/cvR5+e4YHAxLxheA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11125"; a="40054726"
+X-IronPort-AV: E=Sophos;i="6.09,188,1716274800"; 
+   d="scan'208";a="40054726"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2024 14:47:18 -0700
+X-CSE-ConnectionGUID: x56BgKGcSFybPQ0nCuyziw==
+X-CSE-MsgGUID: mqcrBhS1RU6JCAqk8hd6QQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,188,1716274800"; 
+   d="scan'208";a="51981673"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 06 Jul 2024 14:47:15 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sQDFQ-000UJK-1x;
+	Sat, 06 Jul 2024 21:47:12 +0000
+Date: Sun, 7 Jul 2024 05:46:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Serge Semin <fancer.lancer@gmail.com>,
+	Paul Burton <paulburton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH v2 05/10] MIPS: smp: Implement IPI stats
+Message-ID: <202407070535.1mCAxzdO-lkp@intel.com>
+References: <20240705-b4-mips-ipi-improvements-v2-5-2d50b56268e8@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -47,181 +86,70 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240706-config-refresh-v1-4-5dba0064cf08@flygoat.com>
+In-Reply-To: <20240705-b4-mips-ipi-improvements-v2-5-2d50b56268e8@flygoat.com>
 
-On Sat, Jul 06, 2024 at 01:08:01PM +0800, Jiaxun Yang wrote:
-> Add ip30_defconfig derived from ip27_defconfig to ensure this
-> target is build tested by various kernel testing projects.
+Hi Jiaxun,
 
-thank you for doing this.
+kernel test robot noticed the following build warnings:
 
-> +CONFIG_CFG80211=m
-> +CONFIG_MAC80211=m
-> +CONFIG_RFKILL=m
+[auto build test WARNING on 0b58e108042b0ed28a71cd7edf5175999955b233]
 
-no wifi
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiaxun-Yang/MIPS-smp-Make-IPI-interrupts-scalable/20240706-040839
+base:   0b58e108042b0ed28a71cd7edf5175999955b233
+patch link:    https://lore.kernel.org/r/20240705-b4-mips-ipi-improvements-v2-5-2d50b56268e8%40flygoat.com
+patch subject: [PATCH v2 05/10] MIPS: smp: Implement IPI stats
+config: mips-rb532_defconfig (https://download.01.org/0day-ci/archive/20240707/202407070535.1mCAxzdO-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240707/202407070535.1mCAxzdO-lkp@intel.com/reproduce)
 
-> +# CONFIG_VGA_ARB is not set
-> +CONFIG_BLK_DEV_LOOP=y
-> +CONFIG_CDROM_PKTCDVD=m
-> +CONFIG_ATA_OVER_ETH=m
-> +CONFIG_SCSI=y
-> +CONFIG_BLK_DEV_SD=y
-> +CONFIG_CHR_DEV_ST=y
-> +CONFIG_BLK_DEV_SR=m
-> +CONFIG_CHR_DEV_SG=m
-> +CONFIG_CHR_DEV_SCH=m
-> +CONFIG_SCSI_CONSTANTS=y
-> +CONFIG_SCSI_LOGGING=y
-> +CONFIG_SCSI_SCAN_ASYNC=y
-> +CONFIG_SCSI_SPI_ATTRS=y
-> +CONFIG_SCSI_FC_ATTRS=y
-> +CONFIG_SCSI_CXGB3_ISCSI=m
-> +CONFIG_SCSI_BNX2_ISCSI=m
-> +CONFIG_BE2ISCSI=m
-> +CONFIG_SCSI_HPSA=m
-> +CONFIG_SCSI_3W_SAS=m
-> +CONFIG_SCSI_AIC94XX=m
-> +# CONFIG_AIC94XX_DEBUG is not set
-> +CONFIG_SCSI_MVSAS=m
-> +# CONFIG_SCSI_MVSAS_DEBUG is not set
-> +CONFIG_SCSI_MPT2SAS=m
-> +CONFIG_LIBFC=m
-> +CONFIG_SCSI_QLOGIC_1280=y
-> +CONFIG_SCSI_PMCRAID=m
-> +CONFIG_SCSI_BFA_FC=m
-> +CONFIG_SCSI_DH=y
-> +CONFIG_SCSI_DH_RDAC=m
-> +CONFIG_SCSI_DH_HP_SW=m
-> +CONFIG_SCSI_DH_EMC=m
-> +CONFIG_SCSI_DH_ALUA=m
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407070535.1mCAxzdO-lkp@intel.com/
 
-for SCSI only QLOGIC_1280 should be enough
+All warnings (new ones prefixed by >>):
 
-> +CONFIG_ATL2=m
-> +CONFIG_ATL1E=m
-> +CONFIG_ATL1C=m
-> +CONFIG_B44=m
-> +CONFIG_BNX2X=m
-> +CONFIG_ENIC=m
-> +CONFIG_DNET=m
-> +CONFIG_BE2NET=m
-> +CONFIG_E1000E=m
-> +CONFIG_IGB=m
-> +CONFIG_IGBVF=m
-> +CONFIG_IXGBE=m
-> +CONFIG_JME=m
-> +CONFIG_MLX4_EN=m
-> +# CONFIG_MLX4_DEBUG is not set
-> +CONFIG_KS8851_MLL=m
-> +CONFIG_AX88796=m
-> +CONFIG_AX88796_93CX6=y
-> +CONFIG_ETHOC=m
-> +CONFIG_QLA3XXX=m
-> +CONFIG_NETXEN_NIC=m
-> +CONFIG_SFC=m
-> +CONFIG_SMC91X=m
-> +CONFIG_SMSC911X=m
-> +CONFIG_NIU=m
-> +CONFIG_TEHUTI=m
-> +CONFIG_VIA_VELOCITY=m
-> +CONFIG_PHYLIB=y
-> +CONFIG_CICADA_PHY=m
-> +CONFIG_DAVICOM_PHY=m
-> +CONFIG_ICPLUS_PHY=m
-> +CONFIG_LXT_PHY=m
-> +CONFIG_LSI_ET1011C_PHY=m
-> +CONFIG_MARVELL_PHY=m
-> +CONFIG_NATIONAL_PHY=m
-> +CONFIG_QSEMI_PHY=m
-> +CONFIG_REALTEK_PHY=m
-> +CONFIG_SMSC_PHY=m
-> +CONFIG_STE10XP=m
-> +CONFIG_VITESSE_PHY=m
-> +CONFIG_ADM8211=m
+   In file included from arch/mips/kernel/irq.c:17:
+   In file included from include/linux/mm.h:2229:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from arch/mips/kernel/irq.c:29:
+>> arch/mips/include/asm/ipi.h:54:6: warning: no previous prototype for function 'mips_smp_ipi_set_virq_range' [-Wmissing-prototypes]
+      54 | void mips_smp_ipi_set_virq_range(int virq, int nr)
+         |      ^
+   arch/mips/include/asm/ipi.h:54:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      54 | void mips_smp_ipi_set_virq_range(int virq, int nr)
+         | ^
+         | static 
+>> arch/mips/include/asm/ipi.h:58:6: warning: no previous prototype for function 'mips_smp_ipi_set_irqdomain' [-Wmissing-prototypes]
+      58 | void mips_smp_ipi_set_irqdomain(struct irq_domain *d)
+         |      ^
+   arch/mips/include/asm/ipi.h:58:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      58 | void mips_smp_ipi_set_irqdomain(struct irq_domain *d)
+         | ^
+         | static 
+   3 warnings generated.
 
-for wired ethernet IOC3, TG3, ACENIC. The first comes on motherboards,
-the other two are common card. Everything else non 64bit will simply
-not work.
 
-> +CONFIG_ATH5K=m
-> +CONFIG_ATH9K=m
-> +CONFIG_B43=m
-> +CONFIG_B43LEGACY=m
-> +# CONFIG_B43LEGACY_DEBUG is not set
-> +CONFIG_IPW2100=m
-> +CONFIG_IPW2100_MONITOR=y
-> +CONFIG_IPW2100_DEBUG=y
-> +CONFIG_IPW2200=m
-> +CONFIG_IPW2200_MONITOR=y
-> +CONFIG_IPW2200_PROMISCUOUS=y
-> +CONFIG_IPW2200_QOS=y
-> +CONFIG_IPW2200_DEBUG=y
-> +CONFIG_IWLWIFI=m
-> +CONFIG_P54_COMMON=m
-> +CONFIG_P54_PCI=m
-> +CONFIG_LIBERTAS_THINFIRM=m
-> +CONFIG_MWL8K=m
-> +CONFIG_RT2X00=m
-> +CONFIG_RT2400PCI=m
-> +CONFIG_RT2500PCI=m
-> +CONFIG_RT61PCI=m
-> +CONFIG_RT2800PCI=m
-> +CONFIG_RTL8180=m
-> +CONFIG_WL1251=m
-> +CONFIG_WL12XX=m
+vim +/mips_smp_ipi_set_virq_range +54 arch/mips/include/asm/ipi.h
 
-placing WIFI cards into a IP30 would be challengin ;-) Better drop
-it
-
-> +# CONFIG_INPUT is not set
-
-there are keyboard and mouse on IP30, so enabling it would make sense
-
-> +CONFIG_SERIO_LIBPS2=m
-> +CONFIG_SERIO_RAW=m
-> +CONFIG_SERIO_ALTERA_PS2=m
-> +# CONFIG_VT is not set
-> +CONFIG_SERIAL_8250=y
-> +CONFIG_SERIAL_8250_CONSOLE=y
-> +CONFIG_SERIAL_8250_EXTENDED=y
-> +CONFIG_SERIAL_8250_MANY_PORTS=y
-> +CONFIG_SERIAL_8250_SHARE_IRQ=y
-> +CONFIG_NOZOMI=m
-> +CONFIG_HW_RANDOM_TIMERIOMEM=m
-> +CONFIG_I2C_CHARDEV=m
-> +CONFIG_I2C_ALI1535=m
-> +CONFIG_I2C_ALI1563=m
-> +CONFIG_I2C_ALI15X3=m
-> +CONFIG_I2C_AMD756=m
-> +CONFIG_I2C_AMD8111=m
-> +CONFIG_I2C_I801=m
-> +CONFIG_I2C_ISCH=m
-> +CONFIG_I2C_PIIX4=m
-> +CONFIG_I2C_NFORCE2=m
-> +CONFIG_I2C_SIS5595=m
-> +CONFIG_I2C_SIS630=m
-> +CONFIG_I2C_SIS96X=m
-> +CONFIG_I2C_VIA=m
-> +CONFIG_I2C_VIAPRO=m
-> +CONFIG_I2C_OCORES=m
-> +CONFIG_I2C_PCA_PLATFORM=m
-> +CONFIG_I2C_SIMTEC=m
-> +CONFIG_I2C_TAOS_EVM=m
-> +CONFIG_I2C_STUB=m
-
-there is no i2c in IP30
-
-important pieces missing:
-
-CONFIG_SGI_IOC3_ETH=y
-CONFIG_SERIO_SGI_IOC3=y
-CONFIG_SERIAL_8250_IOC3=y
-CONFIG_SGI_MFD_IOC3=y
-
-Thomas.
+42d789a89e6b90 Jiaxun Yang 2024-07-05  48  
+42d789a89e6b90 Jiaxun Yang 2024-07-05  49  static inline void mips_smp_show_ipi_stats(struct seq_file *p, int prec)
+42d789a89e6b90 Jiaxun Yang 2024-07-05  50  {
+42d789a89e6b90 Jiaxun Yang 2024-07-05  51  }
+b7a65e07e35cdf Jiaxun Yang 2024-07-05  52  #endif /* CONFIG_GENERIC_IRQ_IPI */
+877ae81debcbb0 Jiaxun Yang 2024-07-05  53  #else
+877ae81debcbb0 Jiaxun Yang 2024-07-05 @54  void mips_smp_ipi_set_virq_range(int virq, int nr)
+877ae81debcbb0 Jiaxun Yang 2024-07-05  55  {
+877ae81debcbb0 Jiaxun Yang 2024-07-05  56  }
+877ae81debcbb0 Jiaxun Yang 2024-07-05  57  
+877ae81debcbb0 Jiaxun Yang 2024-07-05 @58  void mips_smp_ipi_set_irqdomain(struct irq_domain *d)
+877ae81debcbb0 Jiaxun Yang 2024-07-05  59  {
+877ae81debcbb0 Jiaxun Yang 2024-07-05  60  }
+877ae81debcbb0 Jiaxun Yang 2024-07-05  61  
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
