@@ -1,90 +1,89 @@
-Return-Path: <linux-mips+bounces-4170-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4171-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC06192910A
-	for <lists+linux-mips@lfdr.de>; Sat,  6 Jul 2024 07:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F9C492910C
+	for <lists+linux-mips@lfdr.de>; Sat,  6 Jul 2024 07:08:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 921311F2317E
-	for <lists+linux-mips@lfdr.de>; Sat,  6 Jul 2024 05:08:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C327D1F2313C
+	for <lists+linux-mips@lfdr.de>; Sat,  6 Jul 2024 05:08:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 403BA1C2A3;
-	Sat,  6 Jul 2024 05:08:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96A5C134B1;
+	Sat,  6 Jul 2024 05:08:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="K0VS1o7n";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="fZ9ckMv6"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="AzRDpwsr";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ZSAxjBOD"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh3-smtp.messagingengine.com (fhigh3-smtp.messagingengine.com [103.168.172.154])
+Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 921E31804F;
-	Sat,  6 Jul 2024 05:08:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1CDF1C6B4;
+	Sat,  6 Jul 2024 05:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720242498; cv=none; b=aAP1ezVgWlq3o54OEgh9POR1m9rjTM3JJBbfjH9uzDkEQOK4qWtPyiUCbwvAh8u9YkZE5eYQq3R4oHLPE8I5JkhOOWAw3Tnb2m0ezSCTyaw7kIqP2FjLS0vKG4IZ/Y0p2VqQwLCabCcv4DYLPUaCptVpqc7x0FjJ8jYHqmwEMw8=
+	t=1720242500; cv=none; b=u0HyxjxkmGrCYKWX9dm2s2DVbA9/RDm3k5aZeuFRHhvBYmY+AbmOkMZEOlRgcniRIJcBHWHDMKt7tPvHe1lr/YeMK+FmD6K8MxAw7FdDZTNVNCf8Wa+5sBFpuigs8ttcyZfZKczP+5MYhjkEd+6fjQVt9ScB6UkeN6LEZW0ZxuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720242498; c=relaxed/simple;
-	bh=JGMKoHIRkhbQYv2lRCzoXdcWP5dT/oaY45kO1+E+CX8=;
+	s=arc-20240116; t=1720242500; c=relaxed/simple;
+	bh=KlG0Vj2AFM95CNMxky8X5ftkACwun3YwOt82GeoC2rY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=o4N22grAcY/+tQcFjaPPXdDI90xMy3NFPxCejMkSzzwBD8WL36h2WbWQnJIQyXuyaoYic/0NhqvQKmIUybvRfit+/abgBipbj4jRxvG5oSsVGRWBoCPVK7Y4JbpYIUyiJjYrrJMFhCsZWXyas720IumqAmhCOvoxT/SFvUMg+ms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=K0VS1o7n; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=fZ9ckMv6; arc=none smtp.client-ip=103.168.172.154
+	 In-Reply-To:To:Cc; b=adj1m+X9Qb26E4CflFBB/OqP2MrVWuOhl4A2b5l14ZvtYlofSt+m7xGyeHslc4qb2ypE+mnVWujrTePkJSj6b5UBxWpErbc6MsRvm9/wfHg+Yvdu6KKXS9Frnap8tf80UwyuKSxdFYdyHx7tGj15/UGQ/RkcDJUGcVIJq9xawtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=AzRDpwsr; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ZSAxjBOD; arc=none smtp.client-ip=103.168.172.150
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 99F4D1140323;
-	Sat,  6 Jul 2024 01:08:15 -0400 (EDT)
+	by mailfout.nyi.internal (Postfix) with ESMTP id 2F45F1380597;
+	Sat,  6 Jul 2024 01:08:18 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sat, 06 Jul 2024 01:08:15 -0400
+  by compute5.internal (MEProxy); Sat, 06 Jul 2024 01:08:18 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1720242495;
-	 x=1720328895; bh=d1sLsHiAW3GaaORUwOo1HmqqzMrjYajC3KR2rpSU5MQ=; b=
-	K0VS1o7nKdh8NPi2nqNpGAHkusq2zY/6AtnysRMXVJYoB++nWCfbAb05Fb2VsB1J
-	/Abhso6u5yp2NLojXdkGCBHLUcp0wVbN/Bi89mszzD8DWCHYTCM0DP5i5OktMkk+
-	qfwgXCZDQG4V75S8HdKgnJWPuZEDvmQIGd9JZ7Wv+Q4Ue1o1O1/FtI5fF6Qh1br8
-	3ZZR0pmnb4VgNbP94FQn4FGuvymmtF8aJ3jx5wSPmQZg/CHwdqkh15A9cOiRIhlm
-	gUOswOq5cYOacDHOSqbouY/CPt+jKEIBFCB0bBaqJHvkOlzeVPfnwLYK73QvibjQ
-	HdAkZsouDZHSApqWD2ZNwg==
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1720242498;
+	 x=1720328898; bh=X5NZ+Z32WoLdkpp294XqkIltG9BK9UJKdewzPzHLrnE=; b=
+	AzRDpwsrA7f0RObStx4OEPEJYgJwua6VqkyCB8B95LJ2cSLJr+s/rNryICccd3Ae
+	WH2466e76dM1eMKjcR1bZNZOKQwq51FAxY3aE9XIVZW+Oahl/mjgCi2M1ftsoq+p
+	Vekn0S+rRSA14sgKq+uXooWKbPJD31rIs6MBTEjZCPK+pRiMoD60f8GkHBjX6pkQ
+	dm5ZLILnAnCkjAk7kiys8UVR95nnNkAgFYkhRbYSQ5gE0x3ZJ3M28i9NxWX4zZSe
+	StUavENnLJhQvwYdJldiT35P+2KTQ20SNmfE/WKsSHeo0LXWdTb9Rh0iflWqmlIf
+	hLIPk5kURRyRM6Eol3VOBQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1720242495; x=
-	1720328895; bh=d1sLsHiAW3GaaORUwOo1HmqqzMrjYajC3KR2rpSU5MQ=; b=f
-	Z9ckMv6uwrc/ZZIii6W0bC1PC8Ztmo7YoTBBVil3hKMRZy2rqDqk/ux8hXF6LsRx
-	/XBAi7IdtlpFjV95xPU9p3qeT7cGSOn69EoHE71oLoTWsSB0qQzHUnW/lF3b/l8x
-	MSwfU5RJ21IgDnkCjNli6IbUMuSixACal5aJdqRUX3kwbaG0agMAkm6sZ/NgnzkF
-	oPlbLQUuzvPgy5425t+xNR0gjgVr5MwSO1WTR9mshpNvCgddMzmDYPWb3csbN2zr
-	8QuJEj3XglM4mvXAYGbPdMShD5f8zBtCQ53EBNDbeYqsfd68DvQQ8OGYdqNedoiq
-	QrcQmXXwsjOdM7omMMl9A==
-X-ME-Sender: <xms:P9GIZnWJNafgZfF806EhsDauTDkPdlfSpyg1qq4MtexVYZm1_f5S2w>
-    <xme:P9GIZvnAHMF1OVwDv4jOJbTnAvMwiv84vjnQR9dsDhZ1AhZfHJ6JQnZmk-pqfsvtk
-    Ti-4hcxsadXp_WLUd0>
-X-ME-Received: <xmr:P9GIZjY4itnNPSOfgsW31gAKcBKw3lALPwyFcUp6zH41fPE1n8ws6BkLzfWocMlhp68>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1720242498; x=
+	1720328898; bh=X5NZ+Z32WoLdkpp294XqkIltG9BK9UJKdewzPzHLrnE=; b=Z
+	SAxjBOD8M6+DLk8FXfF89TWXhRLxBSR/gcVyIheImBemJ9eslIE4JNVNFQWs6Xzp
+	xuyqF0NgBryZT80RUNrCmmQ6ZZVAyrxo4AL0CxpcgJQP+kpNAGYc6fZFcM2WBSgR
+	SjMhAccljST+jVcO8FSHEu84NRJSPptT1X/STcnK6Qlqie+xsYJjcKyEn4tvdHvp
+	adUXzR0TqQw44jbW6ohs1EF+4NKyqyBnOS7akmal6botqgIubyPeLdv8KJ6VtVev
+	4VOd+z7uRcTC3kcw25BWe9UDdxzxLpjz+/jFq/7EL8GE4A6DGEWMEKkjJ3AruQUW
+	vZ9s0XkINQ3LnDPI2C82w==
+X-ME-Sender: <xms:QdGIZmr6o9koBQVzWPaZRsk3R4hB8TcOwNRH9VDeqVWboj-812VD7Q>
+    <xme:QdGIZkr3egvh5dVDNU7j-kKOeUYORB1ypETu-RXE4He5VVHSVX4ivcAz_nD-4XrWY
+    G1pcJyuRrbVvmTo38M>
+X-ME-Received: <xmr:QdGIZrMeIHna9lKp5DPqSDSuwCVHEx3wk0lqFkMzbi5jziEVnXTN_f9lQqXwOdrtLdc>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvddvgdeltdcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomheplfhirgig
     uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpefgleegfeekgeeggeeifeethfejjefhuddvleelheetveektdeh
-    geeghefhffegteenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrh
-    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghes
-    fhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:P9GIZiXfBblIz_qBcWXglEtwtu7aQK9MiLOPxWluppzQ6nGCnFQ3aQ>
-    <xmx:P9GIZhkFWxbCuQp9ODUKYRJfv5wo51IRkQ6GfBRVVFCYDM0lQRcQrw>
-    <xmx:P9GIZvc9SC3wkiyuEyv27g3vOt0A_vaTZmEwDnMCYuQQgc9MFPhfzg>
-    <xmx:P9GIZrHdv_N403Xu_BepvYH0pMAdCBkydky_72cXQBoexOoZOx-5iQ>
-    <xmx:P9GIZqAR8-RpYXrDGqPhcp65jejxx3tZc0RngbVC2ENfwH2wk80j7Z4a>
+    ggtffrrghtthgvrhhnpedvkeeihfefveekueevteefleffkeegudeghfdtuddugefhueev
+    geffgedukeejleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:QdGIZl5QKToGsDKZ1ExOCPHWUFd-eLsQkgh5Qfa0hCGAoedrof5plA>
+    <xmx:QtGIZl5wt7hbK1GfUEqD8FnL9IqSePHKiNcQ_UErNkxsE6h4OQA_AQ>
+    <xmx:QtGIZljonRARNGWKmBgHR_93RNQk9xQI1jbAhTyLdMsuSzzX0FBcQg>
+    <xmx:QtGIZv6OuOWBLujfSr3gj2cpPY74ldPdQhYYf5DsASXE2I1jxDRF5g>
+    <xmx:QtGIZo2_Qf9Am1KDRJR0B52Hy2m0bfD07AcXerDWYunT8nDsefFCcXxY>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 6 Jul 2024 01:08:13 -0400 (EDT)
+ 6 Jul 2024 01:08:15 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Sat, 06 Jul 2024 13:07:59 +0800
-Subject: [PATCH 2/4] MIPS: config: generic: Add board-litex
+Date: Sat, 06 Jul 2024 13:08:00 +0800
+Subject: [PATCH 3/4] MIPS: config: lemote2f: Regenerate defconfig
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -93,53 +92,180 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240706-config-refresh-v1-2-5dba0064cf08@flygoat.com>
+Message-Id: <20240706-config-refresh-v1-3-5dba0064cf08@flygoat.com>
 References: <20240706-config-refresh-v1-0-5dba0064cf08@flygoat.com>
 In-Reply-To: <20240706-config-refresh-v1-0-5dba0064cf08@flygoat.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Jiaxun Yang <jiaxun.yang@flygoat.com>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1059;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4122;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=JGMKoHIRkhbQYv2lRCzoXdcWP5dT/oaY45kO1+E+CX8=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhrSOixYRvr0MbScfGBnFRDHfbdw3R/KRAWPjJHVrebNNY
- ktvtQt1lLIwiHExyIopsoQIKPVtaLy44PqDrD8wc1iZQIYwcHEKwET6KxgZmh65p+9OZNisorLI
- fBavCyvH628v5FRTDqmpJ5X9MmSSZGR4GrxQb//GiPLr8g/1YsQtVm+Y121xRcdL86PS3f0dC+P
- 5AQ==
+ bh=KlG0Vj2AFM95CNMxky8X5ftkACwun3YwOt82GeoC2rY=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrSOixatKVy7/1YnprN2t39myvu3NsJFdb4ok9Psac1uH
+ ysnLl3SUcrCIMbFICumyBIioNS3ofHigusPsv7AzGFlAhnCwMUpABMJe8zIsCLv78NihxXdHoxa
+ 6/+1xbeJy7wO7F0QY698N2pto8HCq4wMCx97mi44/vG56CutXqNpqh1PTx1Wc67Y3rRZc+OHBU3
+ /+QA=
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-The LiteX framework provides a convenient and efficient infrastructure
-to create FPGA Cores/SoCs.
+Regenerate defconfig to include some drivers that are used
+by this platform, including sm712fb, simplefb, rtl8187.
 
-We have implemented LiteX support for a couple of opensource MIPS
-CPU cores including microAptiv UP from MIPS, GS232 from Loongson,
-and CDIM from CQU.
-
-For this platform, devicetree is generated by litex python scripts
-so there is no devicetree addition necessary.
-
-Link: https://github.com/enjoy-digital/litex/pull/1990
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/configs/generic/board-litex.config | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/mips/configs/lemote2f_defconfig | 54 +++++++++++++++---------------------
+ 1 file changed, 23 insertions(+), 31 deletions(-)
 
-diff --git a/arch/mips/configs/generic/board-litex.config b/arch/mips/configs/generic/board-litex.config
-new file mode 100644
-index 000000000000..f372d0647bfc
---- /dev/null
-+++ b/arch/mips/configs/generic/board-litex.config
-@@ -0,0 +1,8 @@
-+CONFIG_LITEX_LITEETH=y
-+CONFIG_SERIAL_LITEUART=y
-+CONFIG_SERIAL_LITEUART_CONSOLE=y
-+CONFIG_MMC=y
-+CONFIG_MMC_LITEX=y
-+CONFIG_LITEX_SOC_CONTROLLER=y
-+CONFIG_USB_OHCI_HCD=y
-+CONFIG_USB_OHCI_HCD_PLATFORM=y
+diff --git a/arch/mips/configs/lemote2f_defconfig b/arch/mips/configs/lemote2f_defconfig
+index 3389e6e885d9..71d6340497c9 100644
+--- a/arch/mips/configs/lemote2f_defconfig
++++ b/arch/mips/configs/lemote2f_defconfig
+@@ -12,15 +12,14 @@ CONFIG_LOG_BUF_SHIFT=15
+ CONFIG_BLK_DEV_INITRD=y
+ CONFIG_EXPERT=y
+ CONFIG_PROFILING=y
++CONFIG_KEXEC=y
+ CONFIG_MACH_LOONGSON2EF=y
+ CONFIG_LEMOTE_MACH2F=y
+-CONFIG_KEXEC=y
+-# CONFIG_SECCOMP is not set
+-CONFIG_PCI=y
+ CONFIG_MIPS32_O32=y
+ CONFIG_MIPS32_N32=y
+ CONFIG_HIBERNATION=y
+ CONFIG_PM_STD_PARTITION="/dev/hda3"
++# CONFIG_SECCOMP is not set
+ CONFIG_MODULES=y
+ CONFIG_MODULE_UNLOAD=y
+ CONFIG_MODVERSIONS=y
+@@ -68,10 +67,10 @@ CONFIG_BT_HIDP=m
+ CONFIG_BT_HCIBTUSB=m
+ CONFIG_BT_HCIBFUSB=m
+ CONFIG_BT_HCIVHCI=m
+-CONFIG_CFG80211=m
+-CONFIG_MAC80211=m
++CONFIG_CFG80211=y
++CONFIG_MAC80211=y
+ CONFIG_MAC80211_LEDS=y
+-CONFIG_RFKILL=m
++CONFIG_RFKILL=y
+ CONFIG_RFKILL_INPUT=y
+ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_BLK_DEV_RAM=y
+@@ -83,13 +82,10 @@ CONFIG_ATA=y
+ CONFIG_PATA_AMD=y
+ CONFIG_MD=y
+ CONFIG_BLK_DEV_MD=m
+-CONFIG_MD_LINEAR=m
+ CONFIG_MD_RAID0=m
+ CONFIG_MD_RAID1=m
+ CONFIG_MD_RAID10=m
+ CONFIG_MD_RAID456=m
+-CONFIG_MD_MULTIPATH=m
+-CONFIG_MD_FAULTY=m
+ CONFIG_BLK_DEV_DM=m
+ CONFIG_DM_DEBUG=y
+ CONFIG_DM_CRYPT=m
+@@ -112,6 +108,10 @@ CONFIG_8139TOO=y
+ CONFIG_R8169=y
+ CONFIG_USB_USBNET=m
+ CONFIG_USB_NET_CDC_EEM=m
++CONFIG_RTL8180=m
++CONFIG_RTL8187=y
++CONFIG_RTL_CARDS=m
++CONFIG_RTL8XXXU=m
+ CONFIG_INPUT_EVDEV=y
+ # CONFIG_MOUSE_PS2_ALPS is not set
+ # CONFIG_MOUSE_PS2_LOGIPS2PP is not set
+@@ -119,27 +119,27 @@ CONFIG_INPUT_EVDEV=y
+ CONFIG_MOUSE_APPLETOUCH=m
+ # CONFIG_SERIO_SERPORT is not set
+ CONFIG_LEGACY_PTY_COUNT=16
+-CONFIG_SERIAL_NONSTANDARD=y
+ CONFIG_SERIAL_8250=m
+ # CONFIG_SERIAL_8250_PCI is not set
+ CONFIG_SERIAL_8250_NR_UARTS=16
+ CONFIG_SERIAL_8250_EXTENDED=y
+ CONFIG_SERIAL_8250_MANY_PORTS=y
+ CONFIG_SERIAL_8250_FOURPORT=y
++CONFIG_SERIAL_NONSTANDARD=y
+ CONFIG_HW_RANDOM=y
+ CONFIG_GPIO_LOONGSON=y
+ CONFIG_THERMAL=y
+ CONFIG_MEDIA_SUPPORT=m
+ CONFIG_FB=y
+-CONFIG_FIRMWARE_EDID=y
+-CONFIG_FB_MODE_HELPERS=y
+-CONFIG_FB_TILEBLITTING=y
+ CONFIG_FB_SIS=y
+ CONFIG_FB_SIS_300=y
+ CONFIG_FB_SIS_315=y
+-# CONFIG_LCD_CLASS_DEVICE is not set
++CONFIG_FB_SIMPLE=y
++CONFIG_FB_SM712=y
++CONFIG_FIRMWARE_EDID=y
++CONFIG_FB_MODE_HELPERS=y
++CONFIG_FB_TILEBLITTING=y
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+-# CONFIG_VGA_CONSOLE is not set
+ CONFIG_FRAMEBUFFER_CONSOLE=y
+ CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
+ CONFIG_LOGO=y
+@@ -238,7 +238,6 @@ CONFIG_BTRFS_FS=m
+ CONFIG_QUOTA=y
+ CONFIG_QFMT_V2=m
+ CONFIG_AUTOFS_FS=m
+-CONFIG_NETFS_SUPPORT=m
+ CONFIG_FSCACHE=y
+ CONFIG_CACHEFILES=m
+ CONFIG_ISO9660_FS=m
+@@ -247,7 +246,6 @@ CONFIG_ZISOFS=y
+ CONFIG_MSDOS_FS=m
+ CONFIG_VFAT_FS=m
+ CONFIG_NTFS_FS=m
+-CONFIG_NTFS_RW=y
+ CONFIG_PROC_KCORE=y
+ CONFIG_TMPFS=y
+ CONFIG_CRAMFS=m
+@@ -299,29 +297,23 @@ CONFIG_NLS_KOI8_R=m
+ CONFIG_NLS_KOI8_U=m
+ CONFIG_NLS_UTF8=y
+ CONFIG_CRYPTO_CRYPTD=m
+-CONFIG_CRYPTO_AUTHENC=m
+ CONFIG_CRYPTO_TEST=m
+-CONFIG_CRYPTO_LRW=m
+-CONFIG_CRYPTO_PCBC=m
+-CONFIG_CRYPTO_XTS=m
+-CONFIG_CRYPTO_XCBC=m
+-CONFIG_CRYPTO_MICHAEL_MIC=m
+-CONFIG_CRYPTO_RMD160=m
+-CONFIG_CRYPTO_SHA1=m
+-CONFIG_CRYPTO_WP512=m
+-CONFIG_CRYPTO_ANUBIS=m
+ CONFIG_CRYPTO_BLOWFISH=m
+ CONFIG_CRYPTO_CAMELLIA=m
+ CONFIG_CRYPTO_CAST5=m
+ CONFIG_CRYPTO_CAST6=m
+ CONFIG_CRYPTO_FCRYPT=m
+-CONFIG_CRYPTO_KHAZAD=m
+-CONFIG_CRYPTO_SEED=m
+ CONFIG_CRYPTO_SERPENT=m
+-CONFIG_CRYPTO_TEA=m
+ CONFIG_CRYPTO_TWOFISH=m
++CONFIG_CRYPTO_LRW=m
++CONFIG_CRYPTO_PCBC=m
++CONFIG_CRYPTO_XTS=m
++CONFIG_CRYPTO_MICHAEL_MIC=m
++CONFIG_CRYPTO_RMD160=m
++CONFIG_CRYPTO_SHA1=m
++CONFIG_CRYPTO_WP512=m
++CONFIG_CRYPTO_XCBC=m
+ CONFIG_CRYPTO_DEFLATE=m
+-CONFIG_CRYPTO_LZO=m
+ CONFIG_FONTS=y
+ CONFIG_FONT_8x8=y
+ CONFIG_FONT_6x11=y
 
 -- 
 2.45.2
