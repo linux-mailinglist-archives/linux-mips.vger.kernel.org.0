@@ -1,126 +1,124 @@
-Return-Path: <linux-mips+bounces-4186-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4187-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96EFA92A128
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Jul 2024 13:28:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F12BA92A2DA
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Jul 2024 14:36:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 35395B26725
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Jul 2024 11:28:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A7985283ED7
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Jul 2024 12:36:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 175C37D07E;
-	Mon,  8 Jul 2024 11:28:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83FE578C9A;
+	Mon,  8 Jul 2024 12:36:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="sE6/guWb"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DKZMfkKI"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from aposti.net (aposti.net [89.234.176.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD726BFB0;
-	Mon,  8 Jul 2024 11:28:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.234.176.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E79C3FB94;
+	Mon,  8 Jul 2024 12:36:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720438104; cv=none; b=V6aezDSqTBheiJJvXpdOZ/qi5Gri+paDx5d7d2g1fAuOYMGt3g+TQSAdCB5KBzbYf79xk/mnsZhum5pedq1KtPo1v2ldp/Hl1jqprlJdFsjRDLgHu1Yaufsvywll4Tj1ytN18XGH0EM3fOyMlDlGa0b0PCSuu5TcoiGjWczv/uk=
+	t=1720442203; cv=none; b=W7hDYQqiBg80f/Piyb4Q2Wm2ybCIHuCeWZUQhZtVBo2QHx83tMs6cmo2ns2n6VXCZWySlzTZrc9SIP/r/SeF40/JPtvyuhw4MJySu1337ePi4VwvyWc9rVLQNnTTNFmWi0U+U9D+PCbFnwY+yx27b4wY6bejtzAJ6pXvhmCBe7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720438104; c=relaxed/simple;
-	bh=GPu8iit/eGR640jFWQy/tZFiqa691QaPlWTCDmj98s8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=OviIvAK3vCJC3KxNixpM6gd+m7HpwLwQB2OwJB+8oJ52Rdld1GUuP7S2c9zubLC7Zv6khp3QSDtqN3kV8v9z6wEwOaLsXSmzXPmEVpCkDYQboZHRX8iZTlpA53VrgmX/bLKGYveFD7cAXJI27ZrF3DoqhhDGZ7lPOcWbRtao6iA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=sE6/guWb; arc=none smtp.client-ip=89.234.176.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-	s=mail; t=1720437632;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=5DUgHHV1DHrfVnhwy+rGR+NJuOY7BK+4EjrTbzeDMNM=;
-	b=sE6/guWb+aA+nu5tgIHHek3kA7IxPFNBH1Q/nR7X1AIX1Tn6A7bMhPHaG1kfLHEUdPNtbz
-	+uBVRQBCvTLEjjAK2ogPk3WhuEXuoq7OtyRbAYmMCm3RD5DnHxUEtOFmlZdPFbXOO+qFYY
-	oB/OEQJhW4xs2eSo8x8l4RBQzFf9qH0=
-Message-ID: <566c018d5d413bfa29800a26360c6175024f7fa3.camel@crapouillou.net>
-Subject: Re: [PATCH v2 24/60] i2c: jz4780: reword according to newest
- specification
-From: Paul Cercueil <paul@crapouillou.net>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	linux-i2c@vger.kernel.org
-Cc: Andi Shyti <andi.shyti@kernel.org>, linux-mips@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Date: Mon, 08 Jul 2024 13:20:30 +0200
-In-Reply-To: <20240706112116.24543-25-wsa+renesas@sang-engineering.com>
-References: <20240706112116.24543-1-wsa+renesas@sang-engineering.com>
-	 <20240706112116.24543-25-wsa+renesas@sang-engineering.com>
-Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
- keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZM
- LQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5Uz
- FZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtN
- z8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe
- +rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY
- 3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr
- 1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f
- 33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIP
- dlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET
- 4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7U
- rf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KF
- lBwgAhlGy6nqP7O3u7q23hRW5AQ0EXQqFwQEIAMo+MgvYHsyjX3Ja4Oolg1Txzm8woj30ch2nACFC
- qaO0R/1kLj2VVeLrDyQUOlXx9PD6IQI4M8wy8m0sR4wV2p/g/paw7k65cjzYYLh+FdLNyO7IWYXnd
- JO+wDPi3aK/YKUYepqlP+QsmaHNYNdXEQDRKqNfJg8t0f5rfzp9ryxd1tCnbV+tG8VHQWiZXNqN70
- 62DygSNXFUfQ0vZ3J2D4oAcIAEXTymRQ2+hr3Hf7I61KMHWeSkCvCG2decTYsHlw5Erix/jYWqVOt
- X0roOOLqWkqpQQJWtU+biWrAksmFmCp5fXIg1Nlg39v21xCXBGxJkxyTYuhdWyu1yDQ+LSIUAEQEA
- AYkBNgQYAQoAIBYhBNdHYd8OeCBwpMuVxnPua9InSr1BBQJdCoXBAhsMAAoJEHPua9InSr1B4wsH/
- Az767YCT0FSsMNt1jkkdLCBi7nY0GTW+PLP1a4zvVqFMo/vD6uz1ZflVTUAEvcTi3VHYZrlgjcxmc
- Gu239oruqUS8Qy/xgZBp9KF0NTWQSl1iBfVbIU5VV1vHS6r77W5x0qXgfvAUWOH4gmN3MnF01SH2z
- McLiaUGF+mcwl15rHbjnT3Nu2399aSE6cep86igfCAyFUOXjYEGlJy+c6UyT+DUylpjQg0nl8MlZ/
- 7Whg2fAU9+FALIbQYQzGlT4c71SibR9T741jnegHhlmV4WXXUD6roFt54t0MSAFSVxzG8mLcSjR2c
- LUJ3NIPXixYUSEn3tQhfZj07xIIjWxAYZo=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1720442203; c=relaxed/simple;
+	bh=NWykdaXYXVK8+pVTG2FcuH3+VmdY5P2EdQq6iunNcAU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nPB/g9ieLjx4XOQIRUGruLb0fUq4a93PeBR3O5wQ6+kbObsEbfUQeL0YSD7VaBevzo/scHzEm3OAPeDt+Vbac8oy1qCfHp2K5uRv479oVfS0jJCoK0Pcrq4SVfGPdqzMqsGeC2zelWqzCsKbr6DQflUgAgRTCSMjmAu1Xv8V3I8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DKZMfkKI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7941DC116B1;
+	Mon,  8 Jul 2024 12:36:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1720442202;
+	bh=NWykdaXYXVK8+pVTG2FcuH3+VmdY5P2EdQq6iunNcAU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DKZMfkKIXat/MJn9ga5gS/rsVeC2r2ZMW8uFMmaqQIl+gLWharsERyViDu7MkjJqB
+	 uEsU2ZvMMPoPD7Wi8sQlOhPfXsuuZiUmUaBWJ4myyoAXnhNXDznzOgoG+aF9fltUSM
+	 OfglVx4gPfaSj3wbzvJWKLDE0rvD+T2frLBxNhd4=
+Date: Mon, 8 Jul 2024 14:36:39 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: WangYuli <wangyuli@uniontech.com>
+Cc: stable@vger.kernel.org, sashal@kernel.org, ast@kernel.org,
+	keescook@chromium.org, linux-hardening@vger.kernel.org,
+	christophe.leroy@csgroup.eu, catalin.marinas@arm.com,
+	song@kernel.org, puranjay12@gmail.com, daniel@iogearbox.net,
+	andrii@kernel.org, martin.lau@linux.dev, yonghong.song@linux.dev,
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+	haoluo@google.com, jolsa@kernel.org, illusionist.neo@gmail.com,
+	linux@armlinux.org.uk, bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	chenhuacai@kernel.org, kernel@xen0n.name, loongarch@lists.linux.dev,
+	johan.almbladh@anyfinetworks.com, paulburton@kernel.org,
+	tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
+	deller@gmx.de, linux-parisc@vger.kernel.org, iii@linux.ibm.com,
+	hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+	borntraeger@linux.ibm.com, svens@linux.ibm.com,
+	linux-s390@vger.kernel.org, davem@davemloft.net,
+	sparclinux@vger.kernel.org, kuba@kernel.org, hawk@kernel.org,
+	netdev@vger.kernel.org, dsahern@kernel.org, tglx@linutronix.de,
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, guanwentao@uniontech.com,
+	baimingcong@uniontech.com
+Subject: Re: [PATCH] Revert "bpf: Take return from set_memory_rox() into
+ account with bpf_jit_binary_lock_ro()" for linux-6.6.37
+Message-ID: <2024070815-udder-charging-7f75@gregkh>
+References: <5A29E00D83AB84E3+20240706031101.637601-1-wangyuli@uniontech.com>
+ <2024070631-unrivaled-fever-8548@gregkh>
+ <B7E3B29557B78CB1+afadbaa6-987e-4db4-96b5-4e4d5465c37b@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <B7E3B29557B78CB1+afadbaa6-987e-4db4-96b5-4e4d5465c37b@uniontech.com>
 
-Hi Wolfram,
+On Sun, Jul 07, 2024 at 03:34:15PM +0800, WangYuli wrote:
+> 
+> On 2024/7/6 17:30, Greg KH wrote:
+> > This makes it sound like you are reverting this because of a build
+> > error, which is not the case here, right?  Isn't this because of the
+> > powerpc issue reported here:
+> > 	https://lore.kernel.org/r/20240705203413.wbv2nw3747vjeibk@altlinux.org
+> > ?
+> 
+> No, it only occurs on ARM64 architecture. The reason is that before being
+> modified, the function
+> 
+> bpf_jit_binary_lock_ro() in arch/arm64/net/bpf_jit_comp.c +1651
+> 
+> was introduced with __must_check, which is defined as
+> __attribute__((__warn_unused_result__)).
+> 
+> 
+> However, at this point, calling bpf_jit_binary_lock_ro(header)
+> coincidentally results in an unused-result
+> 
+> warning.
 
-Le samedi 06 juillet 2024 =C3=A0 13:20 +0200, Wolfram Sang a =C3=A9crit=C2=
-=A0:
-> Change the wording of this driver wrt. the newest I2C v7 and SMBus
-> 3.2
-> specifications and replace "master/slave" with more appropriate
-> terms.
->=20
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Ok, thanks, but why is no one else seeing this in their testing?
 
-Acked-by: Paul Cercueil <paul@crapouillou.net>
+> > If not, why not just backport the single missing arm64 commit,
+> 
+> Upstream commit 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory
+> management") is part of
+> 
+> a larger change that involves multiple commits. It's not an isolated commit.
+> 
+> 
+> We could certainly backport all of them to solve this problem, but it's not
+> the simplest solution.
 
-Cheers,
--Paul
+reverting the change feels wrong in that you will still have the bug
+present that it was trying to solve, right?  If so, can you then provide
+a working version?
 
-> ---
-> =C2=A0drivers/i2c/busses/i2c-jz4780.c | 4 ++--
-> =C2=A01 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-jz4780.c
-> b/drivers/i2c/busses/i2c-jz4780.c
-> index 7951891d6b97..4aafdfab6305 100644
-> --- a/drivers/i2c/busses/i2c-jz4780.c
-> +++ b/drivers/i2c/busses/i2c-jz4780.c
-> @@ -730,8 +730,8 @@ static u32 jz4780_i2c_functionality(struct
-> i2c_adapter *adap)
-> =C2=A0}
-> =C2=A0
-> =C2=A0static const struct i2c_algorithm jz4780_i2c_algorithm =3D {
-> -	.master_xfer	=3D jz4780_i2c_xfer,
-> -	.functionality	=3D jz4780_i2c_functionality,
-> +	.xfer =3D jz4780_i2c_xfer,
-> +	.functionality =3D jz4780_i2c_functionality,
-> =C2=A0};
-> =C2=A0
-> =C2=A0static const struct ingenic_i2c_config jz4780_i2c_config =3D {
+thanks,
 
+greg k-h
 
