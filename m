@@ -1,75 +1,74 @@
-Return-Path: <linux-mips+bounces-4189-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4190-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA87E92A76C
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Jul 2024 18:36:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDB5F92A77C
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Jul 2024 18:41:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 34169B20C23
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Jul 2024 16:36:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79DE0281CC8
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Jul 2024 16:41:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 549BD146A77;
-	Mon,  8 Jul 2024 16:36:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C35AA146A63;
+	Mon,  8 Jul 2024 16:40:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WNRjkqbl"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QPQDRduS"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D6D8145FED
-	for <linux-mips@vger.kernel.org>; Mon,  8 Jul 2024 16:36:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB13A143881
+	for <linux-mips@vger.kernel.org>; Mon,  8 Jul 2024 16:40:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720456574; cv=none; b=fMCaVqbzHXXA/UHmPJbXVBzZxAXQUoNeVPX4VxjY6VDhaC58bgEeqnWWwYUrtjLm86KqCMMGQzpAiBTEKLCCNjLBLOdtIhRxjmq6r4WLCP2xcwXqvdfhevYM2RkC4zXs+iyF9ayg7hn8h3vJlra9ljudQyInN0t05EsmIblSvJk=
+	t=1720456856; cv=none; b=LePV0zMc/c4aMPYPJfIFFO6Te53uob3ml1AP3kelrPJJRAHkQ17qgxv4fLxhepsyQFd790SXR7nvycfX302OotnQzoK6L7Y0LzP0E2nDNgtk7AvGWifcnuNJS+WpcDtVONBD96bCLLoAXOUTQfYJpVrdvZNaPcISEU91Pu3Dk3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720456574; c=relaxed/simple;
-	bh=kF79k4M0wfI5NybhocxG/V7HbuwRgXY/PbwykoiZ0u4=;
+	s=arc-20240116; t=1720456856; c=relaxed/simple;
+	bh=NMY7IXINjFtBIuRr/zxt90U+bZTuOpMWeifpxOkmw3k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NapL4CKC8a9TgmmNYufvuvFv5D9zQKVD8GjWWnIHU5wSYkwMh4f704y9SWMpvBkN29obg17lGL9nz470DedhqbmyKF/I7HpzCwFEgrM8R0xmdfBq4ryi4yg2T5bOh88hXvGi+FgsaNqLyUuqHLg7mSKZAEYz4YUDSzjJkVB8sMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WNRjkqbl; arc=none smtp.client-ip=209.85.208.181
+	 In-Reply-To:Content-Type; b=MOxowbr9+yTt3d0hA6nvP/wBOsU3VMTjsgeaYQjA33J21D4N1xsh4TfgOXa2xnZEttMVCRpMMbXB11CnP5D3PgW1st8biUGn1CC3ziVxnBshn2ciSbsB+DrkKFATB2cVCHrLwdt4aeWZ1viTZEeZb7TTSeJ+FY1bQQUYIUIl8Is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QPQDRduS; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2eea8ea8bb0so20145771fa.1
-        for <linux-mips@vger.kernel.org>; Mon, 08 Jul 2024 09:36:10 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4266bb98b4aso7946745e9.3
+        for <linux-mips@vger.kernel.org>; Mon, 08 Jul 2024 09:40:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720456569; x=1721061369; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1720456852; x=1721061652; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QXr0BWZGWxSKsJl1B6BOaJ9LQX+PHNjm3zoOsNxl8ZY=;
-        b=WNRjkqbloxri6luzKllXA5AfQc2ky71ytz6BqIkRQk96rqQG8aW5AeOcwXWA1G580x
-         4KmMK0RygLZK463xytq8u9eVTEjv9FkSV1nXd7yHorchpyMAkh8nsj7ysZIdYFbRh02u
-         uvg7DpyYAwiDhQgZa40yHx97o5+OC8yrxwERODd81iDXIYoRP51cW5MLuzZuKONz/4AX
-         wmYUqmn4Sqh0jWijlKsngzCecWEi5hXnUG+pRKD8C0ygEqiFYCRtVLb5irzRkGpYa5tq
-         y95Gt5nY5s7YxxalWjJ6UVhhs9bcP6NzcZMu6ur87JlrcZyKQ7vgrdYs1SmjvgsMqa71
-         DjoA==
+        bh=94KAr4ELE0QjzDMH+V3YBSBrsKILCzYBksersdMzaIM=;
+        b=QPQDRduSancfLKhnP4chtl/sGXPdEPtaBHPm6R73mDK2WKhs5u9gd5UV6yCR1vFoTv
+         BuB7/dXp+bP6Jr2Guf1+adk/FEcn7k1VWHqugrB2elr4ww+FnFCZ4LVmZ4Q2ditIoJuK
+         mSvkgXvfLTjJLaSYLgQk0MsG0K6VzySsDSsx1cTViL3lsmJtAkIMg/7uitLS0phaeKt+
+         kJn/miZmRvA+OOcdRYgfWg2gyq1BvLjl9Bz5RTniSOYi5OeyTOV2r+lIyAfhV3YipTZo
+         4z7gpo2scLcf9+AaQjgVdeXzpISkZ9H2duDpjxsqIsRCxU0TsuX9ejvoTVsTx7LYOyUg
+         C2Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720456569; x=1721061369;
+        d=1e100.net; s=20230601; t=1720456852; x=1721061652;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QXr0BWZGWxSKsJl1B6BOaJ9LQX+PHNjm3zoOsNxl8ZY=;
-        b=p+42Be+ueyZsFNZh0u2xS4WYh+WHyMAO+qOKH7GYaCt4tcC9ST57Dc89dJbVyXq4RH
-         4gguquJ06lC4xRMUBpivRzJm8MH+ZEhRnkiwPlAkjBtowWRBdlX9hGHttF65qzrJiSYM
-         JPilKIWk+rWnIjngfUcvXPJk7xaDEI0DvH4WcSyL2pnQAdABGyYCemqJVu1R5f2gjkjc
-         yQ1GkSqJLgKwLcMhWutULlgw8Ma3jfzeDSiBLBltr3L9V/IheCHEkaj88VHrsNKPAeNU
-         /+0YuIDWh530BEWvEWk3EX/oy3OLtMjpz8ycAv8xZYbMRz3gPZXwvolIKqLv5Q1aGULI
-         D2tA==
-X-Forwarded-Encrypted: i=1; AJvYcCVEAwmGYAFqK6ZSIKI4/Q13EQMmRFaKjGzJpch0+5w6enjuVGbGfYhWTKcrwaDYCShkbe7fW9qSs6dk4G5C8gCh/goWQAlpd7sslg==
-X-Gm-Message-State: AOJu0YzTnfQo0q+w73WmHldNXvv2a+dTtp9MYgdGcGB/njp3y/tQKXn0
-	nfE+WNb7blayNtuFfhiMAAZPwTTonDUtUTbaGfJVJEd76iwCoX9sei6MixpIUHgheTW4K7VLYqD
-	Y
-X-Google-Smtp-Source: AGHT+IFwhURRS94WBKV1QcWHN4yHD3pCaXhUL3ZA3yoqhHrsgcoWidzDCWKI/z1AIwjXQyKRTVK+EA==
-X-Received: by 2002:a2e:a792:0:b0:2ec:4f0c:36f9 with SMTP id 38308e7fff4ca-2eeb3169f11mr2339051fa.36.1720456569321;
-        Mon, 08 Jul 2024 09:36:09 -0700 (PDT)
+        bh=94KAr4ELE0QjzDMH+V3YBSBrsKILCzYBksersdMzaIM=;
+        b=Ybqgyct//pAOm2mwPm5e/OZl5tolMgT9MW/1+56fDo2V+tqFsQtliZOnGRdxpk/nIY
+         vQlmcMdP/Ikn8eImucVt2WlcBYHyCtC3d8L+xydwmKdz47YROT+vzKd/w5KtIGqD1OBy
+         7ZemcleFDa3R1zy0T/dhWROlNomKST/CLBDsROKlj46NXDNXkBSzYp8C1bO23lkYGzdU
+         ccSl9pCamoZVZFdKSfyin+UKM38HpidVzRi2nCWrndWAiOtnY5M+Ev0FmuFVrrxyn8Ae
+         FS35zeN5nOSX6NWNM1HXQiobAEcD3lYn7m88h5M8DDT4rh7lU0MRn3d0ickxJFJ26Hba
+         CniA==
+X-Forwarded-Encrypted: i=1; AJvYcCWRPcb+OPFwTSPIIdXrvjKOyxwRCGhZI/SL/C41PiKBXnt1N87tlSfLN+01u96mIsl0qnmd8y1NLt7Gr/CvQWKSC9fN5FLEHo1tqg==
+X-Gm-Message-State: AOJu0YxPvzfMBQLBwBk2kxvYFYvxBsh5wMfs29TSC3i7fYXKicobQDiE
+	1CshTc4B3eMVbAd/joyxsZpdhOTouDI35L7AHtdK7wbSLH06ZEONlW7IOT5l/Yw=
+X-Google-Smtp-Source: AGHT+IGs6bQ7nWrRNkbA7g34usxnJIV4s3YfBwqStJkvqaMPUVvz/yZhmMFC7Sllw6GqcdmCDXqyFQ==
+X-Received: by 2002:a05:600c:22d4:b0:425:81bd:e5ee with SMTP id 5b1f17b1804b1-426707d07c5mr1322845e9.16.1720456852193;
+        Mon, 08 Jul 2024 09:40:52 -0700 (PDT)
 Received: from ?IPV6:2a05:6e02:1041:c10:cf24:cce:17df:12ab? ([2a05:6e02:1041:c10:cf24:cce:17df:12ab])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4266f6f5f51sm5021515e9.25.2024.07.08.09.36.08
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4266f6f20c0sm5077845e9.20.2024.07.08.09.40.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Jul 2024 09:36:08 -0700 (PDT)
-Message-ID: <bf4a45e9-4ed3-4d3b-bb96-add20a71b04c@linaro.org>
-Date: Mon, 8 Jul 2024 18:36:07 +0200
+        Mon, 08 Jul 2024 09:40:51 -0700 (PDT)
+Message-ID: <b2c8b349-4834-4b67-a970-c0aaaca9489d@linaro.org>
+Date: Mon, 8 Jul 2024 18:40:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -77,51 +76,66 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 07/14] clocksource: mips-gic-timer: Always use cluster
- 0 counter as clocksource
-To: Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Aleksandar Rikalo <arikalo@gmail.com>, Chao-ying Fu <cfu@wavecomp.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>, Greg Ungerer <gerg@kernel.org>,
- Hauke Mehrtens <hauke@hauke-m.de>,
- Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
- Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
- Paul Burton <paulburton@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Serge Semin <fancer.lancer@gmail.com>, Thomas Gleixner <tglx@linutronix.de>,
- Tiezhu Yang <yangtiezhu@loongson.cn>
-References: <20240511104341.151550-1-aleksandar.rikalo@syrmia.com>
- <20240511104341.151550-8-aleksandar.rikalo@syrmia.com>
+Subject: Re: [PATCH v2 0/7] MIPS: clocksource cumulative enhancements
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Serge Semin <fancer.lancer@gmail.com>,
+ Thomas Gleixner <tglx@linutronix.de>, "Maciej W. Rozycki"
+ <macro@orcam.me.uk>, linux-mips@vger.kernel.org,
+ linux-kernel@vger.kernel.org, =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?=
+ <philmd@linaro.org>
+References: <20240612-mips-clks-v2-0-a57e6f49f3db@flygoat.com>
+ <ZoVtHkn1HuRy4SDw@alpha.franken.de>
 Content-Language: en-US
 From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20240511104341.151550-8-aleksandar.rikalo@syrmia.com>
+In-Reply-To: <ZoVtHkn1HuRy4SDw@alpha.franken.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 11/05/2024 12:43, Aleksandar Rikalo wrote:
-> From: Paul Burton <paulburton@kernel.org>
+On 03/07/2024 17:24, Thomas Bogendoerfer wrote:
+> On Wed, Jun 12, 2024 at 09:54:27AM +0100, Jiaxun Yang wrote:
+>> Hi all,
+>>
+>> This series combined many enhancements for MIPS clocksource subsystems,
+>> It improved r4k count synchronisation process, clock source rating for
+>> selection, sched_clock eligibility and so on.
+>>
+>> It seems fixed random RCU stall issue on Loongson 3A4000 multi-node
+>> system and some boot failures on QEMU.
+>>
+>> Please review.
+>>
+>> Thanks
+>>
+>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>> ---
+>> Changes in v2:
+>> - Fix number of zeros in rating computation (Maciej)
+>> - Only select HAVE_UNSTABLE_SCHED_CLOCK for SMP (Maciej)
+>> - Link to v1: https://lore.kernel.org/r/20240511-mips-clks-v1-0-ddb4a10ee9f9@flygoat.com
+>>
+>> ---
+>> Jiaxun Yang (7):
+>>        MIPS: csrc-r4k: Refine rating computation
+>>        MIPS: csrc-r4k: Apply verification clocksource flags
+>>        MIPS: csrc-r4k: Select HAVE_UNSTABLE_SCHED_CLOCK if SMP && 64BIT
+>>        MIPS: csrc-r4k: Don't register as sched_clock if unfit
+>>        MIPS: sync-r4k: Rework based on x86 tsc_sync
 > 
-> In a multi-cluster MIPS system we have multiple GICs - one in each
-> cluster - each of which has its own independent counter. The counters in
-> each GIC are not synchronised in any way, so they can drift relative to
-> one another through the lifetime of the system. This is problematic for
-> a clocksource which ought to be global.
+> applied these patches to mips-next.
 > 
-> Avoid problems by always accessing cluster 0's counter, using
-> cross-cluster register access. This adds overhead so we only do so on
-> systems where we actually have CPUs present in multiple clusters.
-> For now, be extra conservative and don't use gic counter for vdso or
-> sched_clock in this case.
+>>        clocksource: mips-gic-timer: Refine rating computation
+>>        clocksource: mips-gic-timer: Correct sched_clock width
 > 
-> Signed-off-by: Paul Burton <paulburton@kernel.org>
-> Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
-> Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
-> Signed-off-by: Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>
-> ---
+> looks like the remaining patches don't have any dependency to the other
+> five patches, so they could just go via clocksource tree. BTW it would
+> be good to split series in such cases.
 
-Applied patch 7 and 8
+Applied patches 6 and 7
 
 Thanks
+
+   -- Daniel
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
