@@ -1,102 +1,117 @@
-Return-Path: <linux-mips+bounces-4192-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4193-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F042A92AB33
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Jul 2024 23:30:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D335692ABFF
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jul 2024 00:23:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E5F3282B66
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Jul 2024 21:30:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A37B1F2271E
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Jul 2024 22:23:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B15B44C93;
-	Mon,  8 Jul 2024 21:30:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DAB44778C;
+	Mon,  8 Jul 2024 22:23:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="OdJ3PfWK"
+	dkim=pass (2048-bit key) header.d=hauke-m.de header.i=@hauke-m.de header.b="ow4JxeAb"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E281EB44
-	for <linux-mips@vger.kernel.org>; Mon,  8 Jul 2024 21:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4401F3CF63
+	for <linux-mips@vger.kernel.org>; Mon,  8 Jul 2024 22:23:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720474238; cv=none; b=p9o8Vm9vEQotJwfp3SxzVqQ7tfH62B8EA/Hqorr7Xs6WEaUCWlyyi/PFM+rWtIBi+axIidp1pGJBtpB/1bbkNd45psCIo8pFBKRyMCOfWzHdpOOtkI4MeDJJeRiKjNiJX3pUEMFkR6a4lx5sOCQfHgEzOCS+W/VPSEID8mlbyZM=
+	t=1720477397; cv=none; b=GjAYdNuqeIlDZacANyUYl3A0S1SUqnWX/aFVn2fkoPM8XZHS87F0xBbItPXmZDH156CM4h2lsPUD/pLvndARBIHqiQrJ9hf2lwN7Vz+ENEvCI23iryK4EwJLrvc/HbqDPyeGyttt7AeDk50UUDi21SyJ4h8UdSTdCz9iUZpta6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720474238; c=relaxed/simple;
-	bh=eQR5axUpTAdGh9syX9YUqZPQl6EhiJyQH6XlvMUkHNE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P/p/77HEX/HY+vBJULbHUGJlSYYFzqpg7ael9GM0g9M5HwSppvaJ+ck9WXGy9ToPBcvC4HxS1jRTZCyzkHtUZlGf/V5xFVApRPxkfKT8uwAbLqM45zSJ95pDVRSJqE/DxlDF440xEUS9bUW1rKhQ7rzxNKstx0KhROhcpW3c00U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=OdJ3PfWK; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	s=arc-20240116; t=1720477397; c=relaxed/simple;
+	bh=w7GVU3jQtPWn54kfYlBwHvTgn8HBxzw9q+dWqc+KuGs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DyHL0jGpoCNekgZkrTbrAwgNK4EF1CbSgGGOVQOowwyGncFc/TsWgMO2Sl0fOQ7sgAyQlba8/XRGKSaIfdA4cy8BRCprdeRVbqIFWiosOembTcPbnwFJFDFc1GrtvNtQrkn3c5vIRJ8xFw0z/qemNvizwuV0bCL5q084BDdMXLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hauke-m.de; spf=pass smtp.mailfrom=hauke-m.de; dkim=pass (2048-bit key) header.d=hauke-m.de header.i=@hauke-m.de header.b=ow4JxeAb; arc=none smtp.client-ip=80.241.56.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hauke-m.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hauke-m.de
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 00E792C0372;
-	Tue,  9 Jul 2024 09:30:28 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1720474228;
-	bh=RdE/nXV2kkfEKNFCcw4XTrJ6VmXMy27pCPDHgOnLEqY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OdJ3PfWKPlnMKIHv8b4OgjJ19wTkHCvagYzJdMCIf3EMKSrwkVHSUyB4EsHZXZsit
-	 EbRseEv8Ib0wk8zhkQg4XZMbvWM25diLSHNowtbuiSm0no8kddgL4CdP6qY2HGEBie
-	 hcRIcgXxSTbn+aNWGk6gnAWLtcr9kzzshgLA1IzMdcgaFrCkODpRlYWUMLz5KBAm0M
-	 Xas1GKUc7XbmzW/jokf1jjbd6nROmVOY7qFkA9yIvbXpfwB1pePChyo0NFDr8PlFmQ
-	 njRaN01OCSCzYeTl68ZX/b1oHuaN4MBf7siIuhDzsGi8nbaCm9lLzT3197Y0Q+SQpv
-	 8SpoCft1lRDrg==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B668c5a730000>; Tue, 09 Jul 2024 09:30:27 +1200
-Received: from [10.33.22.30] (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id CBF8113ED5A;
-	Tue,  9 Jul 2024 09:30:27 +1200 (NZST)
-Message-ID: <6b4d33cd-35b5-4f34-8ef5-14fb34b2ceaf@alliedtelesis.co.nz>
-Date: Tue, 9 Jul 2024 09:30:27 +1200
+	(No client certificate requested)
+	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4WHzCf323mz9sZh;
+	Tue,  9 Jul 2024 00:23:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hauke-m.de; s=MBO0001;
+	t=1720477390;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=EILI7mEluGNyoj/hN2Yk9vAClY8q2rkGMUNtshQSy6I=;
+	b=ow4JxeAbpT67xkV9T+LlDsiZrkg0j1gciX6l4hsD7eAtql6/bx1NwdjTPqaoiovzZY9n5k
+	YB+QDBOo1fDABA4KuRNNgjMBCZiIOyWQNZ+3y0/P0wf10Q0PKP9RBMR+Ga+LIC1NM7i4mC
+	nswO4n2Qh7tmQw7LrYjjB8Eg3ACsBgXL6R7gflRRxYAkZA5b+rLTwo4/2sLRYIoyXUHbNk
+	9vRrPBmAx8W+v+4xLwSniZYB1Gv5rfCQUXu7qVsCqMYvBd8yeUCBB7xDsr3Foj+WnBLqDN
+	Z+BxIpeiDSJABWQ3FomyHrz504ZL7s4ueObGoWRD8/uq5e5iVF9LSON3C48JEQ==
+From: Hauke Mehrtens <hauke@hauke-m.de>
+To: john@phrozen.org,
+	tsbogend@alpha.franken.de
+Cc: robh@kernel.org,
+	linux-mips@vger.kernel.org,
+	Hauke Mehrtens <hauke@hauke-m.de>
+Subject: [PATCH] MIPS: lantiq: improve USB initialization
+Date: Tue,  9 Jul 2024 00:23:04 +0200
+Message-ID: <20240708222304.2728412-1-hauke@hauke-m.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH v4 7/9] clocksource: realtek: Add timer driver for
- rtl-otto platforms
-To: Daniel Lezcano <daniel.lezcano@linaro.org>, tglx@linutronix.de,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- tsbogend@alpha.franken.de, paulburton@kernel.org, peterz@infradead.org,
- mail@birger-koblitz.de, bert@biot.com, john@phrozen.org, sander@svanheule.net
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-mips@vger.kernel.org, kabel@kernel.org, ericwouds@gmail.com,
- Markus Stockhausen <markus.stockhausen@gmx.de>
-References: <20240705021520.2737568-1-chris.packham@alliedtelesis.co.nz>
- <20240705021520.2737568-8-chris.packham@alliedtelesis.co.nz>
- <1bd8c455-567c-4523-8d8e-0e7cbc8210fd@linaro.org>
-Content-Language: en-US
-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <1bd8c455-567c-4523-8d8e-0e7cbc8210fd@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=CvQccW4D c=1 sm=1 tr=0 ts=668c5a73 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=4kmOji7k6h8A:10 a=PgAc0EJtaM13PuN1H-gA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+Content-Transfer-Encoding: 8bit
 
-Hi Daniel,
+This adds code to initialize the USB controller and PHY also on Danube,
+Amazon SE and AR10. This code is based on the Vendor driver from
+different UGW versions and compared to the hardware documentation.
 
-On 8/07/24 21:53, Daniel Lezcano wrote:
-> On 05/07/2024 04:15, Chris Packham wrote:
->> The timer/counter block on the Realtek SoCs provides up to 5 timers. It
->> also includes a watchdog timer which is handled by the
->> realtek_otto_wdt.c driver.
->>
->> One timer will be used per CPU as a local clock event generator. An
->> additional timer will be used as an overal stable clocksource.
->
-> Does the mips arch have a local timer per cpu timer and a broadcast 
-> timer already integrated in the GIC ?
+This patch is included in OpenWrt for many years.
 
-I'm far from an expert but as best I can tell no. This SoC doesn't use 
-the mti,gic it uses realtek,rtl-intc instead.
+Signed-off-by: Hauke Mehrtens <hauke@hauke-m.de>
+---
+ arch/mips/lantiq/xway/sysctrl.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/arch/mips/lantiq/xway/sysctrl.c b/arch/mips/lantiq/xway/sysctrl.c
+index 3ed078225222..5a75283d17f1 100644
+--- a/arch/mips/lantiq/xway/sysctrl.c
++++ b/arch/mips/lantiq/xway/sysctrl.c
+@@ -247,6 +247,25 @@ static void pmu_disable(struct clk *clk)
+ 		pr_warn("deactivating PMU module failed!");
+ }
+ 
++static void usb_set_clock(void)
++{
++	unsigned int val = ltq_cgu_r32(ifccr);
++
++	if (of_machine_is_compatible("lantiq,ar10") ||
++	    of_machine_is_compatible("lantiq,grx390")) {
++		val &= ~0x03; /* XTAL divided by 3 */
++	} else if (of_machine_is_compatible("lantiq,ar9") ||
++		   of_machine_is_compatible("lantiq,vr9")) {
++		/* TODO: this depends on the XTAL frequency */
++		val |= 0x03; /* XTAL divided by 3 */
++	} else if (of_machine_is_compatible("lantiq,ase")) {
++		val |= 0x20; /* from XTAL */
++	} else if (of_machine_is_compatible("lantiq,danube")) {
++		val |= 0x30; /* 12 MHz, generated from 36 MHz */
++	}
++	ltq_cgu_w32(val, ifccr);
++}
++
+ /* the pci enable helper */
+ static int pci_enable(struct clk *clk)
+ {
+@@ -588,4 +607,5 @@ void __init ltq_soc_init(void)
+ 		clkdev_add_pmu("1e116000.mei", "dfe", 1, 0, PMU_DFE);
+ 		clkdev_add_pmu("1e100400.serial", NULL, 1, 0, PMU_ASC0);
+ 	}
++	usb_set_clock();
+ }
+-- 
+2.45.2
 
 
