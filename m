@@ -1,147 +1,217 @@
-Return-Path: <linux-mips+bounces-4190-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4191-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDB5F92A77C
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Jul 2024 18:41:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD17B92AA58
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Jul 2024 22:08:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79DE0281CC8
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Jul 2024 16:41:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ECBA6B213FC
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Jul 2024 20:08:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C35AA146A63;
-	Mon,  8 Jul 2024 16:40:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DBC73BB47;
+	Mon,  8 Jul 2024 20:08:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QPQDRduS"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Nvt70lDq"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB13A143881
-	for <linux-mips@vger.kernel.org>; Mon,  8 Jul 2024 16:40:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B06B22334
+	for <linux-mips@vger.kernel.org>; Mon,  8 Jul 2024 20:08:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720456856; cv=none; b=LePV0zMc/c4aMPYPJfIFFO6Te53uob3ml1AP3kelrPJJRAHkQ17qgxv4fLxhepsyQFd790SXR7nvycfX302OotnQzoK6L7Y0LzP0E2nDNgtk7AvGWifcnuNJS+WpcDtVONBD96bCLLoAXOUTQfYJpVrdvZNaPcISEU91Pu3Dk3o=
+	t=1720469300; cv=none; b=mmt7PCl69a8Y/4khRPBNKr/6wwuts8hC1hicAfyhVNu+EPdiuWdfsK7Klx232t1w9ugqKFbc/srlIdOj/7R7XJlgsPbqHlcpaxU7kuSqwFxR77BrKjbuuL2phKl46ry44/mB7w+z6FCgupCjN4o947iuKLanbP0Vnz0tpBzF3SU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720456856; c=relaxed/simple;
-	bh=NMY7IXINjFtBIuRr/zxt90U+bZTuOpMWeifpxOkmw3k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MOxowbr9+yTt3d0hA6nvP/wBOsU3VMTjsgeaYQjA33J21D4N1xsh4TfgOXa2xnZEttMVCRpMMbXB11CnP5D3PgW1st8biUGn1CC3ziVxnBshn2ciSbsB+DrkKFATB2cVCHrLwdt4aeWZ1viTZEeZb7TTSeJ+FY1bQQUYIUIl8Is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QPQDRduS; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4266bb98b4aso7946745e9.3
-        for <linux-mips@vger.kernel.org>; Mon, 08 Jul 2024 09:40:53 -0700 (PDT)
+	s=arc-20240116; t=1720469300; c=relaxed/simple;
+	bh=ZRZU9TG8IKJPir335kv6uvmf5/6XvlnF0lVWn7S/s+4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lmXtTDAgfQCn3ZCZylUHpG4V1vMePhArfiTAZMvbKONzGPYgcnZifbRd3SmjU/g0Aqyy6J2NP1xtJu8sskc6D3XtURN3d0QfuEW7939lC9nAg3gbzTcKxl2hIpmFUx4PB04ppTH0+KpZGMKzKiQM7B5y5O0dNFItuH/nVXFVEYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Nvt70lDq; arc=none smtp.client-ip=209.85.219.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6b5f128b18bso18941416d6.0
+        for <linux-mips@vger.kernel.org>; Mon, 08 Jul 2024 13:08:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720456852; x=1721061652; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=94KAr4ELE0QjzDMH+V3YBSBrsKILCzYBksersdMzaIM=;
-        b=QPQDRduSancfLKhnP4chtl/sGXPdEPtaBHPm6R73mDK2WKhs5u9gd5UV6yCR1vFoTv
-         BuB7/dXp+bP6Jr2Guf1+adk/FEcn7k1VWHqugrB2elr4ww+FnFCZ4LVmZ4Q2ditIoJuK
-         mSvkgXvfLTjJLaSYLgQk0MsG0K6VzySsDSsx1cTViL3lsmJtAkIMg/7uitLS0phaeKt+
-         kJn/miZmRvA+OOcdRYgfWg2gyq1BvLjl9Bz5RTniSOYi5OeyTOV2r+lIyAfhV3YipTZo
-         4z7gpo2scLcf9+AaQjgVdeXzpISkZ9H2duDpjxsqIsRCxU0TsuX9ejvoTVsTx7LYOyUg
-         C2Fg==
+        d=google.com; s=20230601; t=1720469297; x=1721074097; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ef8kYUavZDQKnlAolqYPRC/e9sM3ztTKFUbqIbLKTok=;
+        b=Nvt70lDqisNpfwC9Q3U8CpMPR/mXlio5gK5xUUEULro9iTsTMaVhWouG0PNbjJ764Z
+         XmuqOmW4OjLY/v8ncqtpAZLDqReczDacqRUd29wMBjK/Pl4UMDLOac/fYtgDxnPuoJuk
+         IvS6KFzrbX1CnMTF0cH7coo7IaDMyw1XZt115Qc3Z1r/aqwK4LbCLyhPxSQ+MKzH0BRY
+         su7qtvbvu/b/Gm6/C3zgPrrezPL6pUG/2KhsGXdSNhifEyjUHDw42lqBmvOsllSmGx37
+         m7jNmIPpAZLTMJS3tYsSuWUEADMiOD8uidBdDgUGHbJGi7yFwJGzzteXip+0OASqNo2g
+         7E3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720456852; x=1721061652;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=94KAr4ELE0QjzDMH+V3YBSBrsKILCzYBksersdMzaIM=;
-        b=Ybqgyct//pAOm2mwPm5e/OZl5tolMgT9MW/1+56fDo2V+tqFsQtliZOnGRdxpk/nIY
-         vQlmcMdP/Ikn8eImucVt2WlcBYHyCtC3d8L+xydwmKdz47YROT+vzKd/w5KtIGqD1OBy
-         7ZemcleFDa3R1zy0T/dhWROlNomKST/CLBDsROKlj46NXDNXkBSzYp8C1bO23lkYGzdU
-         ccSl9pCamoZVZFdKSfyin+UKM38HpidVzRi2nCWrndWAiOtnY5M+Ev0FmuFVrrxyn8Ae
-         FS35zeN5nOSX6NWNM1HXQiobAEcD3lYn7m88h5M8DDT4rh7lU0MRn3d0ickxJFJ26Hba
-         CniA==
-X-Forwarded-Encrypted: i=1; AJvYcCWRPcb+OPFwTSPIIdXrvjKOyxwRCGhZI/SL/C41PiKBXnt1N87tlSfLN+01u96mIsl0qnmd8y1NLt7Gr/CvQWKSC9fN5FLEHo1tqg==
-X-Gm-Message-State: AOJu0YxPvzfMBQLBwBk2kxvYFYvxBsh5wMfs29TSC3i7fYXKicobQDiE
-	1CshTc4B3eMVbAd/joyxsZpdhOTouDI35L7AHtdK7wbSLH06ZEONlW7IOT5l/Yw=
-X-Google-Smtp-Source: AGHT+IGs6bQ7nWrRNkbA7g34usxnJIV4s3YfBwqStJkvqaMPUVvz/yZhmMFC7Sllw6GqcdmCDXqyFQ==
-X-Received: by 2002:a05:600c:22d4:b0:425:81bd:e5ee with SMTP id 5b1f17b1804b1-426707d07c5mr1322845e9.16.1720456852193;
-        Mon, 08 Jul 2024 09:40:52 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:cf24:cce:17df:12ab? ([2a05:6e02:1041:c10:cf24:cce:17df:12ab])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4266f6f20c0sm5077845e9.20.2024.07.08.09.40.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Jul 2024 09:40:51 -0700 (PDT)
-Message-ID: <b2c8b349-4834-4b67-a970-c0aaaca9489d@linaro.org>
-Date: Mon, 8 Jul 2024 18:40:51 +0200
+        d=1e100.net; s=20230601; t=1720469297; x=1721074097;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ef8kYUavZDQKnlAolqYPRC/e9sM3ztTKFUbqIbLKTok=;
+        b=vAzRX2j5vY1kSk8npBakxzBKVecN2Mpu82gKPYtcYdwecfMjjK6mStke1WFT3ZRA+w
+         eo8PeIAhEprFwnHfvJostHAhXBsgj9hMnwQm9qfKD+y+yWDnY4J1FcIuB/ZQz/RGmKNU
+         lDkgKXAG+OsL+mzgAree99Ovj2C4Jk4IKRhou43TZYgqyaRVZzpPEU/TLrnBfEadvrGk
+         7LIa2CsBbUyIXlqyY8qHtCPWjD0dDRJpFA1sFF9HvA0JyHhvRstzw6iy84eqzWNTbtAR
+         oi8+xOHrGJzPQZoX222It+u43+azZsOYu+wEUGuShHLeIGxpJCsZINbs9W7pDp2cp7GF
+         NhBA==
+X-Forwarded-Encrypted: i=1; AJvYcCXKsD2xfVP1RElH/Ds7vL7GoIzgP/trXfS7mPIWfo+AK4qsRpCXkjvjgwtWs3UEB+z6Bodf7nBwGVssWpyU72djYhcDK6JkHvmK4g==
+X-Gm-Message-State: AOJu0Yxb554lVePft+qlI7UArGhVdufDmOkBv70G4YSpDZgrhyboU8Fz
+	5oM3bT+qZ4ZmrliO9zFw0Of58apZVZsIo9BYAYs5sIFTTtNgOeq7b4CrhQLFA8OvJZWwa36Ogko
+	k9mLNeinuwGkfFu8qH6KWSQhQxiwdZuVwOnaI
+X-Google-Smtp-Source: AGHT+IHB+Sby5xb3KQY4fJme46cOICuiSOSK7oxUno8JfmvAwWNnn3nyYgyDJgtIcLGc/wIzDrQoP+07XuveT6i0qf0=
+X-Received: by 2002:a05:6214:c44:b0:6b4:b179:8eeb with SMTP id
+ 6a1803df08f44-6b61c230e3fmr8398346d6.63.1720469296819; Mon, 08 Jul 2024
+ 13:08:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/7] MIPS: clocksource cumulative enhancements
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Serge Semin <fancer.lancer@gmail.com>,
- Thomas Gleixner <tglx@linutronix.de>, "Maciej W. Rozycki"
- <macro@orcam.me.uk>, linux-mips@vger.kernel.org,
- linux-kernel@vger.kernel.org, =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?=
- <philmd@linaro.org>
-References: <20240612-mips-clks-v2-0-a57e6f49f3db@flygoat.com>
- <ZoVtHkn1HuRy4SDw@alpha.franken.de>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <ZoVtHkn1HuRy4SDw@alpha.franken.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240628003253.1694510-1-almasrymina@google.com>
+ <20240628003253.1694510-4-almasrymina@google.com> <CAMArcTUqqxam+BPwGExOFOLVi3t=dwA-5sSagKC5dndv07GDLQ@mail.gmail.com>
+In-Reply-To: <CAMArcTUqqxam+BPwGExOFOLVi3t=dwA-5sSagKC5dndv07GDLQ@mail.gmail.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Mon, 8 Jul 2024 13:08:01 -0700
+Message-ID: <CAHS8izNS5jZjPfc-sARbHV7mzqzH+UhHfAtCTKRRTfSAdhY4Cw@mail.gmail.com>
+Subject: Re: [PATCH net-next v15 03/14] netdev: support binding dma-buf to netdevice
+To: Taehee Yoo <ap420073@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 03/07/2024 17:24, Thomas Bogendoerfer wrote:
-> On Wed, Jun 12, 2024 at 09:54:27AM +0100, Jiaxun Yang wrote:
->> Hi all,
->>
->> This series combined many enhancements for MIPS clocksource subsystems,
->> It improved r4k count synchronisation process, clock source rating for
->> selection, sched_clock eligibility and so on.
->>
->> It seems fixed random RCU stall issue on Loongson 3A4000 multi-node
->> system and some boot failures on QEMU.
->>
->> Please review.
->>
->> Thanks
->>
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->> ---
->> Changes in v2:
->> - Fix number of zeros in rating computation (Maciej)
->> - Only select HAVE_UNSTABLE_SCHED_CLOCK for SMP (Maciej)
->> - Link to v1: https://lore.kernel.org/r/20240511-mips-clks-v1-0-ddb4a10ee9f9@flygoat.com
->>
->> ---
->> Jiaxun Yang (7):
->>        MIPS: csrc-r4k: Refine rating computation
->>        MIPS: csrc-r4k: Apply verification clocksource flags
->>        MIPS: csrc-r4k: Select HAVE_UNSTABLE_SCHED_CLOCK if SMP && 64BIT
->>        MIPS: csrc-r4k: Don't register as sched_clock if unfit
->>        MIPS: sync-r4k: Rework based on x86 tsc_sync
-> 
-> applied these patches to mips-next.
-> 
->>        clocksource: mips-gic-timer: Refine rating computation
->>        clocksource: mips-gic-timer: Correct sched_clock width
-> 
-> looks like the remaining patches don't have any dependency to the other
-> five patches, so they could just go via clocksource tree. BTW it would
-> be good to split series in such cases.
+On Thu, Jul 4, 2024 at 10:57=E2=80=AFAM Taehee Yoo <ap420073@gmail.com> wro=
+te:
+>
+> I found several locking warnings while testing.
+>
 
-Applied patches 6 and 7
+Thanks for Testing Taehee! And sorry for the late reply. I was off for
+a couple of days. With some minor tweaks to my test setup I was able
+to reproduce and fix all 3 warnings.
 
-Thanks
+> [ 1135.125874] WARNING: CPU: 1 PID: 1644 at
+> drivers/dma-buf/dma-buf.c:1123 dma_buf_map_attachment+0x164/0x2f0
+...
+> [ 1136.178258] WARNING: CPU: 1 PID: 1644 at
+> drivers/dma-buf/dma-buf.c:1226 dma_buf_unmap_attachment+0x267/0x320
 
-   -- Daniel
+Both of these are warnings that dma->resv is not locked when calling
+dma_buf_[un]map_attachment(). As far as I can tell so far, this can be
+resolved by using the unlocked versions:
+dma_buf_[un]map_attachment_unlocked() which is correct here for this
+static importer.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+...
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> [ 1135.709313] WARNING: CPU: 3 PID: 1644 at
+> net/core/netdev_rx_queue.c:18 netdev_rx_queue_restart+0x3f4/0x5a0
 
+This is due to rtnl_lock() actually not being acquired in the unbind
+path, when the netlink socket is closed. Sorry about that. This is
+fixed by obtaining rtnl_lock() in the unbind path.
+
+With the fixes below all the warnings disappear. I'm planning to
+squash them to the next version. Let me know if those don't work for
+you. Thanks!
+
+diff --git a/net/core/devmem.c b/net/core/devmem.c
+index e52bca1a55c7c..a6ef1485b80f2 100644
+--- a/net/core/devmem.c
++++ b/net/core/devmem.c
+@@ -46,8 +46,8 @@ void __net_devmem_dmabuf_binding_free(struct
+net_devmem_dmabuf_binding *binding)
+                  size, avail))
+                gen_pool_destroy(binding->chunk_pool);
+
+-       dma_buf_unmap_attachment(binding->attachment, binding->sgt,
+-                                DMA_FROM_DEVICE);
++       dma_buf_unmap_attachment_unlocked(binding->attachment, binding->sgt=
+,
++                                         DMA_FROM_DEVICE);
+        dma_buf_detach(binding->dmabuf, binding->attachment);
+        dma_buf_put(binding->dmabuf);
+        xa_destroy(&binding->bound_rxqs);
+@@ -157,8 +157,8 @@ struct net_devmem_dmabuf_binding
+*net_devmem_bind_dmabuf(struct net_device *dev,
+                goto err_free_id;
+        }
+
+-       binding->sgt =3D
+-               dma_buf_map_attachment(binding->attachment, DMA_FROM_DEVICE=
+);
++       binding->sgt =3D dma_buf_map_attachment_unlocked(binding->attachmen=
+t,
++                                                      DMA_FROM_DEVICE);
+        if (IS_ERR(binding->sgt)) {
+                err =3D PTR_ERR(binding->sgt);
+                goto err_detach;
+@@ -225,8 +225,8 @@ struct net_devmem_dmabuf_binding
+*net_devmem_bind_dmabuf(struct net_device *dev,
+                                net_devmem_dmabuf_free_chunk_owner, NULL);
+        gen_pool_destroy(binding->chunk_pool);
+ err_unmap:
+-       dma_buf_unmap_attachment(binding->attachment, binding->sgt,
+-                                DMA_FROM_DEVICE);
++       dma_buf_unmap_attachment_unlocked(binding->attachment, binding->sgt=
+,
++                                         DMA_FROM_DEVICE);
+ err_detach:
+        dma_buf_detach(dmabuf, binding->attachment);
+ err_free_id:
+diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+index 4b16b3ad2ec5b..33bb20c143997 100644
+--- a/net/core/netdev-genl.c
++++ b/net/core/netdev-genl.c
+@@ -861,6 +861,9 @@ void netdev_nl_sock_priv_destroy(struct list_head *priv=
+)
+        struct net_devmem_dmabuf_binding *binding;
+        struct net_devmem_dmabuf_binding *temp;
+
+-       list_for_each_entry_safe(binding, temp, priv, list)
++       list_for_each_entry_safe(binding, temp, priv, list) {
++               rtnl_lock();
+                net_devmem_unbind_dmabuf(binding);
++               rtnl_unlock();
++       }
+ }
+
+
+
+--
+Thanks,
+Mina
 
