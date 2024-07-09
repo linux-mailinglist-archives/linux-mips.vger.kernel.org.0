@@ -1,173 +1,159 @@
-Return-Path: <linux-mips+bounces-4214-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4215-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90D8F92BEE5
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jul 2024 17:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7926A92C2B9
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jul 2024 19:44:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E3DD1F218D8
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jul 2024 15:56:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2EB921F26D55
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jul 2024 17:44:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB57719D89D;
-	Tue,  9 Jul 2024 15:56:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F81C17B043;
+	Tue,  9 Jul 2024 17:44:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MM4sPECc"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ewCWYayD"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23796158A0D
-	for <linux-mips@vger.kernel.org>; Tue,  9 Jul 2024 15:55:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 582FA1B86F6
+	for <linux-mips@vger.kernel.org>; Tue,  9 Jul 2024 17:44:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720540561; cv=none; b=Wltlb1hBZXUQLpN7skYg2AchnVLVFdXLC66KKUaHBixvg4TCO3d6W8/ErSCG5rhsR2S2QUT0698IjQXDc5BDDer8Kq8ejkGR6MRscQSSFsq5z3jV18qi91t9XCG9Vb2GIyXj+6rvQ+3VeBpNYuvMwUjpWfnjProvwImb2/Wd6VM=
+	t=1720547074; cv=none; b=V2tr+P9T8D5VwOwe/kkvkUNNGVOey9tMS0nwqW2lKZImxwfvbjL4UZe2hv9PwY/RTioHHouvFD05anDWbH4zS1N3DTSv/mRySDr6suNbcWgX+5IvRVJyuNXTy3y/e6O49Q8kNE35rI1ABUgmxa5jHPZLQFrVTUJDn/mptb947YI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720540561; c=relaxed/simple;
-	bh=XEnjqKzZBzYWAQR9CwjdJSaL+DHE3+UQikxNM+smtTQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LLJgGtUqmz53lLg2Hfb4e4EpJTVExYrrwdciS2Jke0XXN/OAqTtSXb+d01cppwtZZw4BWktHcz2pfHakBaBb5Nyn6bkAVA7uEMaeim/iBJds+8dfyam92GnuZKSFHDSzX+51Qk9ASMcXZ80z5BaJ8a4hF4ZaNV/IVT4eRpvvXh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MM4sPECc; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-52e9b9fb3dcso6373749e87.1
-        for <linux-mips@vger.kernel.org>; Tue, 09 Jul 2024 08:55:59 -0700 (PDT)
+	s=arc-20240116; t=1720547074; c=relaxed/simple;
+	bh=aAZTQ+YpAmM8VeJ2gdCT0fdALP/HckVt+0zF9zwIYKM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CnwOrvgQqLbbxYsdzIrTra5HiDvW0vXxej22c4P+o/5zE2ku+TyceuoS7ErCeB1WZNQgtaHt7mH88EFTqrAEKbxyHld0+iHdCVicBweqBvTYSVabaePTW9n87zB2fgwK/gLQO3FAjNsPtXfp/ypRx34QJNaNn8slvbfGKbTQJYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ewCWYayD; arc=none smtp.client-ip=209.85.219.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6b5f2ac0fb9so23990636d6.2
+        for <linux-mips@vger.kernel.org>; Tue, 09 Jul 2024 10:44:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720540558; x=1721145358; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Kb8hNs2hghjQ2m4soHqnNroceNfOKpKVZ1P76gG8ZLw=;
-        b=MM4sPECc3Q/+kbq8qNTfJVV2w4OGZ5DgKEB48s9rK/QLvtZwiyqUhWfZa+oKRdjWJ8
-         GJqNI67GZxu/aamk/CfDIbAm+lcl5Sv3FZybtdqmH9iUC18kQhnJAtXvhUJrAy103Z7L
-         pN5LxqtMx/LXj/haAEAe2tH5j9PoOD43SQ/2JCymqX9bMDZkVBEnm/dCMdwmS3AMDacM
-         Qsi2MKZlvrhvpj08A+9OUllvjf9VRjlJK4hxipDI1qhv6K2OjYvhllIIE0WNQxesjZg5
-         IENLkZ9pRDz2PyVkumS+nLUF3xtyNkSqyWHzfaKJDQ8ir2QUjVzpbMYrxFFkr7ttYEZL
-         xERw==
+        d=google.com; s=20230601; t=1720547071; x=1721151871; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aAZTQ+YpAmM8VeJ2gdCT0fdALP/HckVt+0zF9zwIYKM=;
+        b=ewCWYayDHVUQdeU7eo2bk/WEAaCcmScYF5VGMzYJUNAEQIDrbdFRnBatWQWtFxwVeN
+         dbU9TtoCuHjCskHM7K6E3cikXg840iI3fIc1GdPIjyEmdqsOorJb9au7N62m6+cL1V06
+         das8EpWHOh5cWQCzX2BzZRLDb+qFqumYiZWj2rJLiIx39U5/FJoyBQ0Fsv2tMon6l9r8
+         e9tDwkMGjXGga07LvbQGEIK5lDW6EU8IX8I2ma5niR0188M3D0Y0hswlzKoW6OF0C+Jg
+         qVUOuYrfQbb5lsxNwOG1C3loL+HLND7P+o+dAPoWt9cq6+QcyHCN40Wsb8AQdRbdKnQp
+         Uztw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720540558; x=1721145358;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kb8hNs2hghjQ2m4soHqnNroceNfOKpKVZ1P76gG8ZLw=;
-        b=WTqx6hQ5+E1hrKRX0nMFPn2eVinn7i0EnebQJb9rV0K/Ziy86YZxwFFt9Y2WZ2X/NM
-         HG0Ehgbu48FEnVvL+jj2qhzH5Gty1Z6GOLcEo6VI+aeguDWBa5XmBI/7l72vg5F7+X+m
-         Uom94hKqy4PTlKmgaiPLhlwg7iRF2ZT8L7Q8FuEi2t/yut0xIFAl0zB+yXyr8ks4j55j
-         3uONZu959CbRHJXWEPx8cVQiwsE29PTuL/Yn2UiB2tGAU95GDj1fhNUM0sXb9TRUppk0
-         508fZ4CnBa6wQORMgry3//caAORooUVKw7fjTR7eNRQFsMhQYf2sh3xTFXmuMolcAEQ0
-         xwRw==
-X-Forwarded-Encrypted: i=1; AJvYcCXCjDwp8Lwq+mzqZDeRHZ00neXVguuSrW041p9sQgNSPSPKTdW5JrJbrVt65XHbFj2RQJC4HXNQ9HfIOVOAfEy72shCunW/poxJBQ==
-X-Gm-Message-State: AOJu0YwAcMLmbO5/Xv9T0XTLNpbhZxbfxZPq/iYdVtUB7UmR/7j1bkd4
-	202L8u8CW1u1g6eqoOJCLnbxOM5bQ1TjIzdBETRZy2H9Zprk0D43UMeCx7Vo3m4=
-X-Google-Smtp-Source: AGHT+IG4bemecMAsKEDijoZ6HieHROjC0kyQfAlSqxupPftR6S/IFNAB3A7X4FibcRnKEA197tCEBQ==
-X-Received: by 2002:a05:6512:1051:b0:52b:c0b1:ab9e with SMTP id 2adb3069b0e04-52eb999124fmr1787618e87.5.1720540558327;
-        Tue, 09 Jul 2024 08:55:58 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:cf24:cce:17df:12ab? ([2a05:6e02:1041:c10:cf24:cce:17df:12ab])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4266f6f5a32sm46822925e9.24.2024.07.09.08.55.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jul 2024 08:55:57 -0700 (PDT)
-Message-ID: <6806bceb-33c9-4417-aa99-f34dd325d24f@linaro.org>
-Date: Tue, 9 Jul 2024 17:55:57 +0200
+        d=1e100.net; s=20230601; t=1720547071; x=1721151871;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aAZTQ+YpAmM8VeJ2gdCT0fdALP/HckVt+0zF9zwIYKM=;
+        b=iqc3hXWLJTAoSgdpzay1ZwuRD76El2KzGaos2JLre7prLkuBONVR+xHk8gXWBwRxV8
+         W7yDMvYv6dttoTdTIc6Oz6xq7HmRgCfsiKtsU3u8cMp1e4PX/+9a5Wv5AG7nePDv0Z1/
+         42AFe5hFw2s9SG3+x/VVgX4dfWlgVZuPotUs0wYMaaiHAduuXtSsqBIILNdKRJkGx7i3
+         pKls4yQzaQUZYp/mAKGsiHRQPkj16OPHlL8cHDttq6XWHq55RCVrPATkXQvYsX39UN/9
+         8/FuVqWTYFjhQdMiAiVZ91P5uOI2J3aT+LRKIadVdHX8Yq++WuTmM5iQIgV0yOu3Q8IE
+         d3kA==
+X-Forwarded-Encrypted: i=1; AJvYcCX43iLGoEQUfRdihwnb71k8i0Dl/mGrwtUOUcgYeePtBrRtop7+QIwPdMAzFYYCItSl/IR1YWOsO7ibCTvAP89z+8HyjqBiddffWw==
+X-Gm-Message-State: AOJu0Ywe8760PRRVT+0u8pQYXkD+dNJANDbfTMGaO6ZoF0TNsBIouFjU
+	0+9Vv7iWsM2Ae1ofY7Hz53wngw3T1YmcaTbKHc0XDRusVDNTuuXCtpjbkBMfy82ijEP7zx1fbdG
+	Wz1FWZIha/vkbS6NiN8T0eBN1keZSxu682DEw
+X-Google-Smtp-Source: AGHT+IH16U57va8G1AYAXy2voaQ3uaav9TjEwbgydjk5ADdt1gmfzeqqJI7aDLdE+wjZ6VeQ0SWzZOZUCWRm4uKL9HM=
+X-Received: by 2002:a05:6214:c23:b0:6b5:752e:a33a with SMTP id
+ 6a1803df08f44-6b61c212bf8mr38578236d6.57.1720547071067; Tue, 09 Jul 2024
+ 10:44:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 7/9] clocksource: realtek: Add timer driver for
- rtl-otto platforms
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>, tglx@linutronix.de,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- tsbogend@alpha.franken.de, paulburton@kernel.org, peterz@infradead.org,
- mail@birger-koblitz.de, bert@biot.com, john@phrozen.org, sander@svanheule.net
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-mips@vger.kernel.org, kabel@kernel.org, ericwouds@gmail.com,
- Markus Stockhausen <markus.stockhausen@gmx.de>
-References: <20240705021520.2737568-1-chris.packham@alliedtelesis.co.nz>
- <20240705021520.2737568-8-chris.packham@alliedtelesis.co.nz>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20240705021520.2737568-8-chris.packham@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240628003253.1694510-1-almasrymina@google.com>
+ <20240628003253.1694510-4-almasrymina@google.com> <CAMArcTUqqxam+BPwGExOFOLVi3t=dwA-5sSagKC5dndv07GDLQ@mail.gmail.com>
+ <CAHS8izNS5jZjPfc-sARbHV7mzqzH+UhHfAtCTKRRTfSAdhY4Cw@mail.gmail.com> <CAMArcTUdCxOBYGF3vpbq=eBvqZfnc44KBaQTN7H-wqdUxZdziw@mail.gmail.com>
+In-Reply-To: <CAMArcTUdCxOBYGF3vpbq=eBvqZfnc44KBaQTN7H-wqdUxZdziw@mail.gmail.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Tue, 9 Jul 2024 10:44:16 -0700
+Message-ID: <CAHS8izNgaqC--GGE2xd85QB=utUnOHmioCsDd1TNxJWKemaD_g@mail.gmail.com>
+Subject: Re: [PATCH net-next v15 03/14] netdev: support binding dma-buf to netdevice
+To: Taehee Yoo <ap420073@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 05/07/2024 04:15, Chris Packham wrote:
-> The timer/counter block on the Realtek SoCs provides up to 5 timers. It
-> also includes a watchdog timer which is handled by the
-> realtek_otto_wdt.c driver.
-> 
-> One timer will be used per CPU as a local clock event generator. An
-> additional timer will be used as an overal stable clocksource.
-> 
-> Signed-off-by: Markus Stockhausen <markus.stockhausen@gmx.de>
-> Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> 
-> Notes:
->      This is derrived from openwrt[1],[2]. I've retained the original signoff
->      and added my own.
->      
->      [1] https://git.openwrt.org/?p=openwrt/openwrt.git;a=blob_plain;f=target/linux/realtek/files-5.15/drivers/clocksource/timer-rtl-otto.c;hb=HEAD
->      [2] https://git.openwrt.org/?p=openwrt/openwrt.git;a=blob_plain;f=target/linux/realtek/patches-5.15/302-clocksource-add-otto-driver.patch;hb=HEAD
->      
->      Changes in v4:
->      - Reword comment about watchdog timer
->      - Add includes for cpumask.h, io.h, jiffies.h and printk.h
->      - Remove unnecessary casts
->      Changes in v3:
->      - Remove unnecessary select COMMON_CLK
->      - Use %p when printing pointer
->      Changes in v2
->      - None
-> 
->   drivers/clocksource/Kconfig          |  10 +
->   drivers/clocksource/Makefile         |   1 +
->   drivers/clocksource/timer-rtl-otto.c | 291 +++++++++++++++++++++++++++
->   include/linux/cpuhotplug.h           |   1 +
->   4 files changed, 303 insertions(+)
->   create mode 100644 drivers/clocksource/timer-rtl-otto.c
-> 
-> diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
-> index 34faa0320ece..70ba57210862 100644
-> --- a/drivers/clocksource/Kconfig
-> +++ b/drivers/clocksource/Kconfig
-> @@ -134,6 +134,16 @@ config RDA_TIMER
->   	help
->   	  Enables the support for the RDA Micro timer driver.
->   
-> +config REALTEK_OTTO_TIMER
-> +	bool "Clocksource/timer for the Realtek Otto platform"
-> +	select TIMER_OF
-> +	help
-> +	  This driver adds support for the timers found in the Realtek RTL83xx
-> +	  and RTL93xx SoCs series. This includes chips such as RTL8380, RTL8381
-> +	  and RTL832, as well as chips from the RTL839x series, such as RTL8390
-> +	  RT8391, RTL8392, RTL8393 and RTL8396 and chips of the RTL930x series
-> +	  such as RTL9301, RTL9302 or RTL9303.
-
-Please make this option silent and selected by the platform. You can 
-refer to the different options in the Kconfig.
-
-eg.
-
-config REALTEK_OTTO_TIMER
-	bool "Clocksource/timer for the Realtek Otto platform" if COMPILE_TEST
-
+On Tue, Jul 9, 2024 at 8:37=E2=80=AFAM Taehee Yoo <ap420073@gmail.com> wrot=
+e:
+>
 ...
+> And I found another bug.
+>
+> [ 236.625141] BUG: KASAN: slab-use-after-free in
+> net_devmem_unbind_dmabuf+0x364/0x440
+...
+> Reproducer:
+> ./ncdevmem -f <interface name> -l -p 5201 -v 7 -t 0 -q 2 &
+> sleep 10
+> modprobe -rv bnxt_en
+> killall ncdevmem
+>
+> I think it's a devmemTCP core bug so this issue would be reproduced
+> with other drivers.
+>
 
-The rest of the code looks fine to me. Thanks for commenting your code.
+Thanks again for testing Taehee. I haven't looked into reproducing yet
+but the issue seems obvious from the repro and the trace. What happens
+is that when we bind an rxq we add it to bound_rxq_list, and then when
+we unbind we access the rxq in the list, without checking if it's
+still alive. With your sequence, the rxq is freed before the unbind
+happens, I think, so we hit a use-after-free.
 
-   -- Daniel
+The fix, I think, should be simple, we need to remember to remove the
+rxq from bound_rxq_list as it is deallocated so there is no access
+after free.
 
+Btw, I have all the rest of the feedback addressed (including netlink
+introspection) and I was in the process of rebasing and build-testing
+a new version, to try to get in before net-next closes if at all
+possible. I don't think I'll be able to fix this particular issue in
+time, but I should be able to submit a fix targeting the net tree
+during the merged window, if that's OK. If folks feel this issue is
+blocking, please let me know so I don't send another version before
+net-next reopens.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+--=20
+Thanks,
+Mina
 
