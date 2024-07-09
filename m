@@ -1,134 +1,172 @@
-Return-Path: <linux-mips+bounces-4194-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4195-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CFE692ACA5
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jul 2024 01:49:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16B6C92ADEC
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jul 2024 03:48:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE91DB2280E
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Jul 2024 23:49:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BFCFA282F78
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jul 2024 01:48:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91B311534FD;
-	Mon,  8 Jul 2024 23:49:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 577C12772A;
+	Tue,  9 Jul 2024 01:48:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="S2NKIXNJ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mvP2IR0C"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout1-smtp.messagingengine.com (fout1-smtp.messagingengine.com [103.168.172.144])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF37B14F9E9
-	for <linux-mips@vger.kernel.org>; Mon,  8 Jul 2024 23:49:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53C5A4A05;
+	Tue,  9 Jul 2024 01:48:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720482546; cv=none; b=MdkhKZOcmCCxh5Mp/2TTUJ2wKyR3x98XWqd75iqjEt3H2Et2/VZhFxTU0CLxgMx8UQHl9tV/zquPiGDt27mLyNuff3tPBqAUeZFqUt7csChlJYi/ghWx4707PQLDJtHX2SdYKyBhGnPYUewEw4tMildfANagpzg/j/N4IobCH1E=
+	t=1720489698; cv=none; b=ECPJfA6KLGvD6VeRnlQuOKSW+BmajRpNdwxHDKGGZW7lYYe96CUeBx4D/42WgI/SjrjpNmj3ZTgePnw/bbxen/fcwgItbFBvbBQYDTOjllfKajdNIBkjh3KxgqARVP5WL21tXVZhMPRIXcZyJvTHUCwX1dqpaTQQXLiYNsS6+w0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720482546; c=relaxed/simple;
-	bh=585OTXLduml4b44q7SgXj9FJO/8XEJO2jUdcjWdYPno=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=XW9Ejj1kRRXPmWfO4r2mXph27G7lgj6UNbsI11yR32s4FIoyLc12rxx4sOI+04DozG2Ut3GgQxfFPc7vjeSH6fO+SB8QPyx/C31tsqtzsuPdgJMgVo1H4i8vW9WMbaiYS9zvon9Q92DVrHF1/a2ZIu7VH3WQMWYgDQg01HR3LfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=baylibre.com; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2c2dee9d9cfso2593147a91.3
-        for <linux-mips@vger.kernel.org>; Mon, 08 Jul 2024 16:49:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720482543; x=1721087343;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KTCvURDHt1Ehhy2ogJ4G2eNRAbN+TU2XGb1d5J/SBYc=;
-        b=D5+aiwbBPu2Ff/TsT3tgunL+WcxeuXDyGQ7LQV4Mh2aVFTHttM4rmjPBnVU0h4Vw/q
-         eEs8bwXHIb2wTeRKjLlAT0CgsMum+oR6nfzlDOLyfefklbG+JJHqfzmXnN2BETrW6YsV
-         w2vyg/9IySSXyz5zdkn42rdpJ/t0eG4tAvmOY2b8Iv0ei2NYeHm7cwFMu2ElQgPLRAPN
-         cwzp4JoZ2Au0KcYZX7eEWixIWZdIoLOAnmkD2R4U7JYq1KemOFConCfk9ez3AKhRiddl
-         KTw3bBsKiEu4LB4fGZPrNvKXqt+hIk2s8dX6hJ3FlRiWz7or32XPjW8fgZ0maph8v2Ei
-         OFwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW6WXKGsi+zHLogEPme+Hhlg3+tKtfw1UR3lCxx+LaxfskGGb1LmD2x8f8n+aC6fvKyo5YCDVEhOmaybPtxso/e3g4C2YALS8AZFw==
-X-Gm-Message-State: AOJu0Yw5kDLetgJjuQLFUKuTQeOVYBFinzIudeXMyy1lK76eYq9Onojz
-	o71ur8XNnkWLe5KutvsImeXaHDBO2llUTbJIa1a69fIbKRXFveoSkPd00z48lWY=
-X-Google-Smtp-Source: AGHT+IF2sRCcp1Qt2ncA7/dcBS7eQVYhbuVP4CESqTDlDqz8AWSIBYQ0ftySS6HXoODFEfyN2bXeTQ==
-X-Received: by 2002:a17:90a:a10d:b0:2c4:dfa6:df00 with SMTP id 98e67ed59e1d1-2ca35be0661mr981011a91.8.1720482542878;
-        Mon, 08 Jul 2024 16:49:02 -0700 (PDT)
-Received: from localhost (97-126-77-189.tukw.qwest.net. [97.126.77.189])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ca344c399csm596679a91.5.2024.07.08.16.49.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jul 2024 16:49:02 -0700 (PDT)
-From: Kevin Hilman <khilman@kernel.org>
-To: Celeste Liu <coelacanthushex@gmail.com>, Heinrich Schuchardt
- <heinrich.schuchardt@canonical.com>, Anup Patel <anup@brainfault.org>, Guo
- Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@rivosinc.com>, Paul
- Walmsley <paul.walmsley@sifive.com>, Huacai Chen <chenhuacai@kernel.org>,
- WANG Xuerui <kernel@xen0n.name>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, Vladimir Kondratiev
- <vladimir.kondratiev@mobileye.com>, Gregory CLEMENT
- <gregory.clement@bootlin.com>, =?utf-8?Q?Th=C3=A9o?= Lebrun
- <theo.lebrun@bootlin.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin
- <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>,
- "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>, Sven Joachim
- <svenjoac@gmx.de>, Yoshinori Sato <ysato@users.sourceforge.jp>, Rich
- Felker <dalias@libc.org>, John Paul Adrian Glaubitz
- <glaubitz@physik.fu-berlin.de>, Russell King <linux@armlinux.org.uk>,
- Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, Broadcom
- internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Tony
- Lindgren <tony@atomide.com>, Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>, Arnd Bergmann <arnd@arndb.de>,
- Mykola Lysenko <mykolal@fb.com>, linux-riscv@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org,
- linux-rpi-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
- linux-tegra@vger.kernel.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-sh@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, Lennart Poettering <lennart@poettering.net>,
- Icenowy Zheng <uwu@icenowy.me>, Celeste Liu <CoelacanthusHex@gmail.com>
-Subject: Re: [PATCH 6/6] arm: defconfig: drop RT_GROUP_SCHED=y from
- bcm2855/tegra/omap2plus
-In-Reply-To: <20240530111947.549474-14-CoelacanthusHex@gmail.com>
-References: <20240530111947.549474-8-CoelacanthusHex@gmail.com>
- <20240530111947.549474-14-CoelacanthusHex@gmail.com>
-Date: Mon, 08 Jul 2024 16:49:01 -0700
-Message-ID: <7hv81f78cy.fsf@baylibre.com>
+	s=arc-20240116; t=1720489698; c=relaxed/simple;
+	bh=tWmMORJjkXCPhgGExjKNNSz+oKMKLdgNLeVQ3Sypff0=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=D0G5y2B32o/R4ydTDBmH/YndrVlhwtpTUpBKU5JpZVHCPSPV/ebDcn/Urj976Uxw5cT/5oZ2+gTK1CHdIK8qnZ8MGY2VtBHbY7h/yeK1mrq+ZhT56e3wZFz3qDWWY2QW/Z5DQ2iu3jf4iO7rp9uLtO/1oV4F8Hsanutuy6SYj9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=S2NKIXNJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=mvP2IR0C; arc=none smtp.client-ip=103.168.172.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 6435B13817D3;
+	Mon,  8 Jul 2024 21:48:15 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Mon, 08 Jul 2024 21:48:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1720489695;
+	 x=1720576095; bh=KkoNZKgLSWOB21EpAw1j1tTKaSMp7ExFBUBl+fhzi0I=; b=
+	S2NKIXNJyjfsNkzHO/EDM6aWSXH11uAM00bZi/qcPXZ2gtir/NTkHoZq8ybAqbn+
+	6YhWgjYBCfVj/29f4ekDjz1Yro1WkrBZ8GjsPOHHJ745yQqCedElPL0YskPPO8Og
+	8qpEUuigArTkYNFQOvIjjYWWbHiC0l4TAsX5NS0PBFq/mTLxXQdj8fwP6WtaTek+
+	MRRm2MAUCOQyCL3eHl+BFQr8NxQKqOBwObVNrWIZHP78nD3gquRhdWsl47SDMDVS
+	gENCAcQOnE/OQOO0zo02kEKdOv+5aWMYNhL0tT8JLtnuwS1u5bUXYmOtK5Vbcjwz
+	E8ct9m1FZ7sBDS5flEK88w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1720489695; x=
+	1720576095; bh=KkoNZKgLSWOB21EpAw1j1tTKaSMp7ExFBUBl+fhzi0I=; b=m
+	vP2IR0CLXIv9Y6x4/gu6NeBCYo4HvVtIN5Qlo106nFp7D4dYt1eO1SJ29uCfH+xK
+	O7M7Z+7m6T4XjORyxkmEQYUJq6wnO+4Y3iaCLJqw9/WU0xlbVkR+Nrs7VTSSt1q3
+	xS92Kucj9b8jngTH+HxsM/F0p+sA+baqFFLhWaTY3JXQlRnjJdVgxhnkLZh6dNct
+	r0eFjb37Miou/z329cWt3dJa6G7zhkJnpoe3QqA2L1uIjNwchXcjR4uos/9AwOeY
+	HWut7+jucj+4sgW5jcurSFr2GjZasbKI6EoJF7+BVvGZ32i25sfj3AQmgX97pZOF
+	H7W3Q98BhtT4rvr3nZ46w==
+X-ME-Sender: <xms:3ZaMZrItiO-vUTfSzUwhZPZfqf0N0uA13Gg9EGw5CBE2SYPnoQrJww>
+    <xme:3ZaMZvJ8Fxp_3dkOxdDLBMOMdE8MGKyVx2ClJA3KpnENfBLQPTAgtg0CIfU0Fz5Zp
+    6WiMwAuCGT-QNEW9rw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekgdehtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
+    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+    eqnecuggftrfgrthhtvghrnhepfeeggedvkeelvdfgleeglefhvefhleefieduvedvjefg
+    keehvdevffdvkeevuddunecuffhomhgrihhnpehlihhnrghrohdrohhrghdpfhgrtggvsg
+    hoohhkrdgtohhmpdhtfihithhtvghrrdgtohhmnecuvehluhhsthgvrhfuihiivgeptden
+    ucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrth
+    drtghomh
+X-ME-Proxy: <xmx:3ZaMZjv3uTjufo49l53P4g8kzF5mu9KjRZgUw7EU--C5_9XRG1DX6A>
+    <xmx:3ZaMZkaylJRCMAqjFcWfeNg4M6An4dfvXkWujrwjVb4IPe_t_27cLg>
+    <xmx:3ZaMZiaQRiQiAFSr_9Q1i3KRupH705c9sRuCn-NFq3ONTkpG95eDlw>
+    <xmx:3ZaMZoAgfC8qqYkZlyq2G4tn3qFHfJcLqphDZ1c1pl9vhJfJYsYtSQ>
+    <xmx:35aMZiJ8-JbYH-uxoPd-FOdcj6DOTvkGHKbq4uydWLUopZIsYJ_cs12U>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id E7A2636A0074; Mon,  8 Jul 2024 21:48:12 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Message-Id: <8b133053-247f-414b-9c01-e0e5291e347d@app.fastmail.com>
+In-Reply-To: <bf4a45e9-4ed3-4d3b-bb96-add20a71b04c@linaro.org>
+References: <20240511104341.151550-1-aleksandar.rikalo@syrmia.com>
+ <20240511104341.151550-8-aleksandar.rikalo@syrmia.com>
+ <bf4a45e9-4ed3-4d3b-bb96-add20a71b04c@linaro.org>
+Date: Tue, 09 Jul 2024 09:47:52 +0800
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+ "Aleksandar Rikalo" <aleksandar.rikalo@syrmia.com>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+Cc: "Aleksandar Rikalo" <arikalo@gmail.com>,
+ "Chao-ying Fu" <cfu@wavecomp.com>,
+ "Geert Uytterhoeven" <geert@linux-m68k.org>,
+ "Greg Ungerer" <gerg@kernel.org>, "Hauke Mehrtens" <hauke@hauke-m.de>,
+ "Ilya Lipnitskiy" <ilya.lipnitskiy@gmail.com>, linux-kernel@vger.kernel.org,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ "Marc Zyngier" <maz@kernel.org>,
+ "paulburton@kernel.org" <paulburton@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Serge Semin" <fancer.lancer@gmail.com>,
+ "Thomas Gleixner" <tglx@linutronix.de>,
+ "Tiezhu Yang" <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v4 07/14] clocksource: mips-gic-timer: Always use cluster 0 counter
+ as clocksource
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Celeste Liu <coelacanthushex@gmail.com> writes:
 
-> Commit 673ce00c5d6c ("ARM: omap2plus_defconfig: Add support for distros
-> with systemd") said it's because of recommendation from systemd. But
-> systemd changed their recommendation later.[1]
->
-> For cgroup v1, if turned on, and there's any cgroup in the "cpu" hierarchy it
-> needs an RT budget assigned, otherwise the processes in it will not be able to
-> get RT at all. The problem with RT group scheduling is that it requires the
-> budget assigned but there's no way we could assign a default budget, since the
-> values to assign are both upper and lower time limits, are absolute, and need to
-> be sum up to < 1 for each individal cgroup. That means we cannot really come up
-> with values that would work by default in the general case.[2]
->
-> For cgroup v2, it's almost unusable as well. If it turned on, the cpu controller
-> can only be enabled when all RT processes are in the root cgroup. But it will
-> lose the benefits of cgroup v2 if all RT process were placed in the same cgroup.
->
-> Red Hat, Gentoo, Arch Linux and Debian all disable it. systemd also doesn't
-> support it.
->
-> [1]: https://github.com/systemd/systemd/commit/f4e74be1856b3ac058acbf1be321c31d5299f69f
-> [2]: https://bugzilla.redhat.com/show_bug.cgi?id=1229700
->
-> Signed-off-by: Celeste Liu <CoelacanthusHex@gmail.com>
-> ---
->  arch/arm/configs/bcm2835_defconfig   | 1 -
->  arch/arm/configs/omap2plus_defconfig | 1 -
->  arch/arm/configs/tegra_defconfig     | 1 -
 
-For omap2plus_defconfig:
+=E5=9C=A82024=E5=B9=B47=E6=9C=889=E6=97=A5=E4=B8=83=E6=9C=88 =E4=B8=8A=E5=
+=8D=8812:36=EF=BC=8CDaniel Lezcano=E5=86=99=E9=81=93=EF=BC=9A
+> On 11/05/2024 12:43, Aleksandar Rikalo wrote:
+>> From: Paul Burton <paulburton@kernel.org>
+>>=20
+>> In a multi-cluster MIPS system we have multiple GICs - one in each
+>> cluster - each of which has its own independent counter. The counters=
+ in
+>> each GIC are not synchronised in any way, so they can drift relative =
+to
+>> one another through the lifetime of the system. This is problematic f=
+or
+>> a clocksource which ought to be global.
+>>=20
+>> Avoid problems by always accessing cluster 0's counter, using
+>> cross-cluster register access. This adds overhead so we only do so on
+>> systems where we actually have CPUs present in multiple clusters.
+>> For now, be extra conservative and don't use gic counter for vdso or
+>> sched_clock in this case.
+>>=20
+>> Signed-off-by: Paul Burton <paulburton@kernel.org>
+>> Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
+>> Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
+>> Signed-off-by: Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>
+>> ---
+>
+> Applied patch 7 and 8
 
-Acked-by: Kevin Hilman <khilman@baylibre.com>
+I think it won't compile without patch 1 being applid.
 
+Thomas, do you mind to apply patch 1 for now? Given that it's just some =
+extra
+function definitions.
+
+Thanks
+- Jiaxun
+
+>
+> Thanks
+>
+> --=20
+> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for=
+ ARM SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
+
+--=20
+- Jiaxun
 
