@@ -1,244 +1,184 @@
-Return-Path: <linux-mips+bounces-4204-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4205-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FE7892B412
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jul 2024 11:40:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD74C92B43A
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jul 2024 11:43:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D65BEB22BAC
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jul 2024 09:40:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0C511C21FBA
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jul 2024 09:43:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 067441553A1;
-	Tue,  9 Jul 2024 09:39:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC89915539D;
+	Tue,  9 Jul 2024 09:43:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="A0xAch9H"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pS12M/hF"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96FAD13C687;
-	Tue,  9 Jul 2024 09:39:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D5415534D;
+	Tue,  9 Jul 2024 09:43:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720517998; cv=none; b=T/wttiRPwAEtjYoMUCUknUEpnATYiMyhRXHjnVA3SKXaFyN1zGKuJUcf94eqooDuoMIXk8A+ByyblB/NnoAHizz/MqzdLQoPJduAI7ZktB36ABK2fLjXvO9KTNsJ4rYrIy00MteHMbFdkvC35xsxWfLsVqSIG6TsIUv3IWZ4K7I=
+	t=1720518192; cv=none; b=Tbd6w/9fSNdSwg6Jz8VSg96E1yofs0zXMD/LraWqwQt9x2H1lEC+V9mTpDBhU01fn0600RWDHqnotmBvL8QDLAbOgXEyaoQn0gCoAydj762dlpCweQX3b5eHJjp2EwAl+kptOEqzanbNuCCGWuzLc2nuzCZB0WGRAMeitasGiaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720517998; c=relaxed/simple;
-	bh=YLLKXO9LQyBdruxsLrFG2iexGd+6cQarJN2FYHNbX38=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MXoHrfhRdf1RRmaNFgrH+vd13uxYrPZ+mjZ/PYX8+ghTUtO7L90URrBEvVlEXdzGy3VAxdHFgm27aBxyCpRW9141fZILeS2raySdkj+9Xvof4P0Qe1VtQfv/CumNNsFxVj6TPLILzmMnBny9odSa/6z2/huE5l6xSegY5znhJGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=A0xAch9H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F152AC3277B;
-	Tue,  9 Jul 2024 09:39:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1720517998;
-	bh=YLLKXO9LQyBdruxsLrFG2iexGd+6cQarJN2FYHNbX38=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=A0xAch9HsB+cVsJef7JG/fDYr42ZEaIKrFRNruViCD5ylCrIiteelaBz2b8FedJ8p
-	 NipKOtQN5ToBUmNA6d4AsMNKBDv6T8ZDJGIx2sKFmG2iihW9J6R2wC2cVhXT7+JMPV
-	 2J4gVGdws9ioh2PbFbGo4yczJ+mRLATvUN1CTBKU=
-Date: Tue, 9 Jul 2024 11:39:54 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: LEROY Christophe <christophe.leroy2@cs-soprasteria.com>
-Cc: WangYuli <wangyuli@uniontech.com>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>,
-	"sashal@kernel.org" <sashal@kernel.org>,
-	"ast@kernel.org" <ast@kernel.org>,
-	"keescook@chromium.org" <keescook@chromium.org>,
-	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"song@kernel.org" <song@kernel.org>,
-	"puranjay12@gmail.com" <puranjay12@gmail.com>,
-	"daniel@iogearbox.net" <daniel@iogearbox.net>,
-	"andrii@kernel.org" <andrii@kernel.org>,
-	"martin.lau@linux.dev" <martin.lau@linux.dev>,
-	"yonghong.song@linux.dev" <yonghong.song@linux.dev>,
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-	"kpsingh@kernel.org" <kpsingh@kernel.org>,
-	"sdf@google.com" <sdf@google.com>,
-	"haoluo@google.com" <haoluo@google.com>,
-	"jolsa@kernel.org" <jolsa@kernel.org>,
-	"illusionist.neo@gmail.com" <illusionist.neo@gmail.com>,
-	"linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-	"kernel@xen0n.name" <kernel@xen0n.name>,
-	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-	"johan.almbladh@anyfinetworks.com" <johan.almbladh@anyfinetworks.com>,
-	"paulburton@kernel.org" <paulburton@kernel.org>,
-	"tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-	"deller@gmx.de" <deller@gmx.de>,
-	"linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-	"iii@linux.ibm.com" <iii@linux.ibm.com>,
-	"hca@linux.ibm.com" <hca@linux.ibm.com>,
-	"gor@linux.ibm.com" <gor@linux.ibm.com>,
-	"agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-	"borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-	"svens@linux.ibm.com" <svens@linux.ibm.com>,
-	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-	"davem@davemloft.net" <davem@davemloft.net>,
-	"sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-	"kuba@kernel.org" <kuba@kernel.org>,
-	"hawk@kernel.org" <hawk@kernel.org>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"dsahern@kernel.org" <dsahern@kernel.org>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-	"guanwentao@uniontech.com" <guanwentao@uniontech.com>,
-	"baimingcong@uniontech.com" <baimingcong@uniontech.com>
-Subject: Re: [PATCH] Revert "bpf: Take return from set_memory_rox() into
- account with bpf_jit_binary_lock_ro()" for linux-6.6.37
-Message-ID: <2024070953-sepia-protozoan-86a0@gregkh>
-References: <5A29E00D83AB84E3+20240706031101.637601-1-wangyuli@uniontech.com>
- <2024070631-unrivaled-fever-8548@gregkh>
- <B7E3B29557B78CB1+afadbaa6-987e-4db4-96b5-4e4d5465c37b@uniontech.com>
- <2024070815-udder-charging-7f75@gregkh>
- <a1dac525-4e6d-4d28-87ee-63723abbafad@cs-soprasteria.com>
- <2024070908-glade-granny-1137@gregkh>
- <4d07cfa3-031c-45f4-aec1-9f0a54dd22b2@cs-soprasteria.com>
+	s=arc-20240116; t=1720518192; c=relaxed/simple;
+	bh=Z0HcHq7yzl+7AelddnrRR87bt+aU2j10VpepG5UbVu4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QiIvcl/KpeNm9lruFLKb7tmg/xYQRtik47v1Jh1DKMPp2Rj87zK5Lm/Im0TFsXN/vvQ9QqCwiU6VOcHmG+o82smL97vjmK6BOD/Y1TMkrZLHdiEGyZKiC4kAyMOH8YHtBE2kwehQ+TN7HofP/6r3uJNvBcDBrWrXBcrCSgQ4U/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pS12M/hF; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 896761BF20E;
+	Tue,  9 Jul 2024 09:43:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1720518188;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WVMmtSjwlNQmVjxtUeUdR3iKhz4W+lQLl2pkn1Xk12k=;
+	b=pS12M/hFFtUvUahs26E5vD/JZJjIQ8CmyPf5kCaaSJzFbR3RDeMCaG4WkQ18U83Kje7Xfl
+	AyN919sqdbsVTsmreQhwHSygXqgRJ0kdPQ5zjcJUGtxlT4Ho9p8ijdF8YfTeIO6HFDK7eO
+	9ZWZUOd5wpLbo4/rkrKRN8+RnXilQYghyruJzJG1B0By1AlkPDEswaoM56ChbKqR9xzmtO
+	jhtQebyqSJwnet2P69DvwaCq24fYzhp/MVzppGLvK1eJdhxGBanp5/LzDMV65mb+L+itk6
+	lQKaVcgNUEyq8U3sZF8TqV+3RTbRtu+1Gi6vNNP28kc9H4uebjsO4mk9Ei94yg==
+Date: Tue, 9 Jul 2024 11:43:02 +0200
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Marco Felsch <m.felsch@pengutronix.de>
+Cc: Maxime Ripard <mripard@kernel.org>, Pratyush Yadav
+ <pratyush@kernel.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, Richard
+ Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, Arnd
+ Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Russell King <linux@armlinux.org.uk>,
+ Joel Stanley <joel@jms.id.au>, Andrew Jeffery
+ <andrew@codeconstruct.com.au>, Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea
+ <claudiu.beznea@tuxon.dev>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer
+ <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, Vladimir Zapolskiy <vz@mleia.com>,
+ Andrew Lunn <andrew@lunn.ch>, Gregory Clement
+ <gregory.clement@bootlin.com>, Sebastian Hesselbarth
+ <sebastian.hesselbarth@gmail.com>, Tony Lindgren <tony@atomide.com>, Geert
+ Uytterhoeven <geert+renesas@glider.be>, Magnus Damm
+ <magnus.damm@gmail.com>, Dinh Nguyen <dinguyen@kernel.org>, Thierry Reding
+ <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>,
+ Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>, Michael
+ Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>, "Naveen N. Rao"
+ <naveen.n.rao@linux.ibm.com>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>, Huacai Chen <chenhuacai@kernel.org>, WANG
+ Xuerui <kernel@xen0n.name>, linux-mtd@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+ imx@lists.linux.dev, linux-omap@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+ openbmc@lists.ozlabs.org, linuxppc-dev@lists.ozlabs.org,
+ linux-mips@vger.kernel.org, loongarch@lists.linux.dev
+Subject: Re: [PATCH 4/9] mtd: devices: add AT24 eeprom support
+Message-ID: <20240709114302.3c604ef3@xps-13>
+In-Reply-To: <20240709092214.omr7ccphdzdk7z7j@pengutronix.de>
+References: <20240701-b4-v6-10-topic-usbc-tcpci-v1-0-3fd5f4a193cc@pengutronix.de>
+	<20240701-b4-v6-10-topic-usbc-tcpci-v1-4-3fd5f4a193cc@pengutronix.de>
+	<07b701a9-7b52-45b7-8dba-1c25d77cbf15@linaro.org>
+	<mafs0ikxnykpr.fsf@kernel.org>
+	<20240702-congenial-vigilant-boar-aeae44@houat>
+	<mafs0ed8byj5z.fsf@kernel.org>
+	<20240702-mighty-brilliant-eel-b0d9fa@houat>
+	<20240708084440.70186564@xps-13>
+	<20240709092214.omr7ccphdzdk7z7j@pengutronix.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4d07cfa3-031c-45f4-aec1-9f0a54dd22b2@cs-soprasteria.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
 
-On Tue, Jul 09, 2024 at 09:24:54AM +0000, LEROY Christophe wrote:
-> 
-> 
-> Le 09/07/2024 à 11:15, Greg KH a écrit :
-> > On Mon, Jul 08, 2024 at 03:12:55PM +0000, LEROY Christophe wrote:
-> >>
-> >>
-> >> Le 08/07/2024 à 14:36, Greg KH a écrit :
-> >>> On Sun, Jul 07, 2024 at 03:34:15PM +0800, WangYuli wrote:
-> >>>>
-> >>>> On 2024/7/6 17:30, Greg KH wrote:
-> >>>>> This makes it sound like you are reverting this because of a build
-> >>>>> error, which is not the case here, right?  Isn't this because of the
-> >>>>> powerpc issue reported here:
-> >>>>>      https://lore.kernel.org/r/20240705203413.wbv2nw3747vjeibk@altlinux.org
-> >>>>> ?
-> >>>>
-> >>>> No, it only occurs on ARM64 architecture. The reason is that before being
-> >>>> modified, the function
-> >>>>
-> >>>> bpf_jit_binary_lock_ro() in arch/arm64/net/bpf_jit_comp.c +1651
-> >>>>
-> >>>> was introduced with __must_check, which is defined as
-> >>>> __attribute__((__warn_unused_result__)).
-> >>>>
-> >>>>
-> >>>> However, at this point, calling bpf_jit_binary_lock_ro(header)
-> >>>> coincidentally results in an unused-result
-> >>>>
-> >>>> warning.
-> >>>
-> >>> Ok, thanks, but why is no one else seeing this in their testing?
-> >>
-> >> Probably the configs used by robots do not activate BPF JIT ?
-> >>
-> >>>
-> >>>>> If not, why not just backport the single missing arm64 commit,
-> >>>>
-> >>>> Upstream commit 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory
-> >>>> management") is part of
-> >>>>
-> >>>> a larger change that involves multiple commits. It's not an isolated commit.
-> >>>>
-> >>>>
-> >>>> We could certainly backport all of them to solve this problem, buthas it's not
-> >>>> the simplest solution.
-> >>>
-> >>> reverting the change feels wrong in that you will still have the bug
-> >>> present that it was trying to solve, right?  If so, can you then provide
-> >>> a working version?
-> >>
-> >> Indeed, by reverting the change you "punish" all architectures because
-> >> arm64 hasn't properly been backported, is it fair ?
-> >>
-> >> In fact, when I implemented commit e60adf513275 ("bpf: Take return from
-> >> set_memory_rox() into account with bpf_jit_binary_lock_ro()"), we had
-> >> the following users for function bpf_jit_binary_lock_ro() :
-> >>
-> >> $ git grep bpf_jit_binary_lock_ro e60adf513275~
-> >> e60adf513275~:arch/arm/net/bpf_jit_32.c:
-> >> bpf_jit_binary_lock_ro(header);
-> >> e60adf513275~:arch/loongarch/net/bpf_jit.c:
-> >> bpf_jit_binary_lock_ro(header);
-> >> e60adf513275~:arch/mips/net/bpf_jit_comp.c:
-> >> bpf_jit_binary_lock_ro(header);
-> >> e60adf513275~:arch/parisc/net/bpf_jit_core.c:
-> >> bpf_jit_binary_lock_ro(jit_data->header);
-> >> e60adf513275~:arch/s390/net/bpf_jit_comp.c:
-> >> bpf_jit_binary_lock_ro(header);
-> >> e60adf513275~:arch/sparc/net/bpf_jit_comp_64.c:
-> >> bpf_jit_binary_lock_ro(header);
-> >> e60adf513275~:arch/x86/net/bpf_jit_comp32.c:
-> >> bpf_jit_binary_lock_ro(header);
-> >> e60adf513275~:include/linux/filter.h:static inline void
-> >> bpf_jit_binary_lock_ro(struct bpf_binary_header *hdr)
-> >>
-> >> But when commit 08f6c05feb1d ("bpf: Take return from set_memory_rox()
-> >> into account with bpf_jit_binary_lock_ro()") was applied, we had one
-> >> more user which is arm64:
-> >>
-> >> $ git grep bpf_jit_binary_lock_ro 08f6c05feb1d~
-> >> 08f6c05feb1d~:arch/arm/net/bpf_jit_32.c:
-> >> bpf_jit_binary_lock_ro(header);
-> >> 08f6c05feb1d~:arch/arm64/net/bpf_jit_comp.c:
-> >> bpf_jit_binary_lock_ro(header);
-> >> 08f6c05feb1d~:arch/loongarch/net/bpf_jit.c:
-> >> bpf_jit_binary_lock_ro(header);
-> >> 08f6c05feb1d~:arch/mips/net/bpf_jit_comp.c:
-> >> bpf_jit_binary_lock_ro(header);
-> >> 08f6c05feb1d~:arch/parisc/net/bpf_jit_core.c:
-> >> bpf_jit_binary_lock_ro(jit_data->header);
-> >> 08f6c05feb1d~:arch/s390/net/bpf_jit_comp.c:
-> >> bpf_jit_binary_lock_ro(header);
-> >> 08f6c05feb1d~:arch/sparc/net/bpf_jit_comp_64.c:
-> >> bpf_jit_binary_lock_ro(header);
-> >> 08f6c05feb1d~:arch/x86/net/bpf_jit_comp32.c:
-> >> bpf_jit_binary_lock_ro(header);
-> >> 08f6c05feb1d~:include/linux/filter.h:static inline void
-> >> bpf_jit_binary_lock_ro(struct bpf_binary_header *hdr)
-> >>
-> >> Therefore, commit 08f6c05feb1d should have included a backport for arm64.
-> >>
-> >> So yes, I agree with Greg, the correct fix should be to backport to
-> >> ARM64 the changes done on other architectures in order to properly
-> >> handle return of set_memory_rox() in bpf_jit_binary_lock_ro().
-> >
-> > Ok, but it looks like due to this series, the powerpc tree is crashing
-> > at the first bpf load, so something went wrong.  Let me go revert these
-> > 4 patches for now, and then I will be glad to queue them up if you can
-> > provide a working series for all arches.
-> >
-> 
-> Fair enough, indeed I think for powerpc it probably also relies on more
-> changes, so both ARM and POWERPC need a carefull backport.
-> 
-> I can look at it, but can you tell why it was decided to apply that
-> commit on stable at the first place ? Is there a particular need ?
+Hi Marco,
 
-Based on the changelog text itself, it fixes an issue and was flagged as
-something to be backported.
+> > > > >> I also found a thread from 2013 by Maxime Ripard (+Cc) suggestin=
+g adding
+> > > > >> EEPROMs to MTD [1]. The main purpose would have been unifying th=
+e EEPROM
+> > > > >> drivers under a single interface. I am not sure what came of it =
+though,
+> > > > >> since I can't find any patches that followed up with the proposa=
+l.   =20
+> > > > >
+> > > > > That discussion led to drivers/nvmem after I started to work on
+> > > > > some early prototype, and Srinivas took over that work.   =20
+> > > >=20
+> > > > So would you say it is better for EEPROM drivers to use nvmem inste=
+ad of
+> > > > moving under MTD?   =20
+> > >=20
+> > > I thought so at the time, but that was more than 10y ago, and I have
+> > > followed neither nvmem nor MTD since so I don't really have an opinion
+> > > there.
+> > >=20
+> > > It looks like drivers/misc/eeprom/at24.c has support for nvmem though,
+> > > and MTD can be used as an nvmem provider too, so it's not clear to me
+> > > why we would want to create yet another variant.
+> > >=20
+> > > But again, you shouldn't really ask me in the first place :)
+> > >=20
+> > > I'm sure Miquel, Srinivas, and surely others, are much more relevant =
+to
+> > > answer that question. =20
+> >=20
+> > More relevant, I doubt, but just a feeling: EEPROMs have their own
+> > subsystem now, NVMEM, which, as Maxime said, was initially written for
+> > that very specific case. EEPROMs don't have the complexity of MTD
+> > devices, and thus pulling the whole MTD subsystem just for getting
+> > partitions seems counter intuitive to me. You can definitely "split"
+> > EEPROM devices with NVMEM as well anyway. =20
+>=20
+> I asked for feedback on my RFC [1] and all I got was to merge both
+> drivers into one and make the driver backward compatible, which I did by
+> this commit.
 
-If this isn't needed in 6.6.y, then no worries at all, we can just drop
-them and be happy :)
+I'm sorry for not bringing this earlier.
 
-thanks,
+> > Overall I think the idea of getting rid of these misc/ drivers is goes
+> > into the right direction, but registering directly into NVMEM makes
+> > more sense IMO. =20
+>=20
+> So you propose to have two places for the partition handling (one for
+> MTD and one for NVMEM) instead of one and moving the code into NVMEM
+> directly?
 
-greg k-h
+Why two places for the partitions handling? Just one, in NVMEM. Also
+usually EEPROMs don't require very advanced partitioning schemes,
+unlike flashes (which are the most common MTD devices today).
+
+> That doesn't sound right to me either. Also I don't get the
+> point why EEPROMs can't be handled by the MTD layer?
+
+They can, but should they? Just compile the two layers and observe
+the size difference. MTD is complex and old, carries a lot of history,
+and the user interface is also not straightforward because you need to
+handle pages, blocks, erases, bitflips, ECC stats, OOB bytes and
+positions, two OTP areas... None of that exists in the EEPROM world. So
+why would you want to register into MTD and pull a huge subsystem while
+there is a much more recent, simpler and way lighter subsystem fitting
+much better your device?
+
+> The layer already
+> supports devices of type MTD_RAM which are very simple and don't require
+> an erase-op at least I don't see one.
+
+MTD_RAM has been there forever, probably for "bad" reasons. BTW there
+has been an attempt at removing it which was reverted in _2006_ and then
+felt into the cracks:
+21c8db9eff95 ("[MTD] Restore MTD_ROM and MTD_RAM types")
+
+Thanks,
+Miqu=C3=A8l
 
