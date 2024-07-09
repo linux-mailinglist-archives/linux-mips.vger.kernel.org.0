@@ -1,97 +1,225 @@
-Return-Path: <linux-mips+bounces-4197-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4201-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C2B492B2B6
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jul 2024 10:56:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5078D92B366
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jul 2024 11:16:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CDD511C21985
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Jul 2024 08:56:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8B8D282FB9
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Jul 2024 09:16:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EFCB15358A;
-	Tue,  9 Jul 2024 08:55:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F29C914D2A2;
+	Tue,  9 Jul 2024 09:16:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="b5CS9d8E"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCDB014E2D9;
-	Tue,  9 Jul 2024 08:55:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CED81DA2F;
+	Tue,  9 Jul 2024 09:16:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720515356; cv=none; b=czrYWvoEYu30wlm9FNYCwhyntxoex8hr765WwBIkXssupByiE2KdaU2qFJjxswTHAwKsJ2wJ29Uu5eIKDt+KfixSa1JQnsYVt5SETy88XjV7XCDpeBuShXYQL7xmhsZjPs0MCx0zvkofMPU68T9F1wpHFV8bhGKYnXq0xXIgIJI=
+	t=1720516560; cv=none; b=o46AuTjU/Oh2+A7B8xHMywvUTEh6lIxPcf6buc8eA1b+UWAgk3i94jb7bL0SvHuviHiq+q4yg2LTkw58Zrf4jOiEjgELNURKxioXlXegFK9Z/24bGlZXv7W3c2qx5YvvtqaFcWr3Qb+OwM5Hf8lCEjW/tfA+wyNSXd0kPEC9KxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720515356; c=relaxed/simple;
-	bh=oVjVFSnFCha3efjxmv3xh62Kiit5wNco299Vz9gRcDU=;
+	s=arc-20240116; t=1720516560; c=relaxed/simple;
+	bh=hK2QUQoSLsKZsz2jegmGiISGgACqpgV+13IffX5u+qA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=glgJBAlTIubOzzc7MmlpERUE1n1X+4bzwXkph31wYN2XaTBN8Fnmysf3QzuDhXITm0yQvhbWakR1obJop5u0MZv3thRHxSbbYBG0hBfUXH0dIV5DYjDJxV/GL/i1DMKlsoRZr61s4KZukaxTQq9vgPQUGqqk5jRfnJRO38mLpP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1sR6dK-0000Pq-00; Tue, 09 Jul 2024 10:55:34 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id C567EC0411; Tue,  9 Jul 2024 10:55:21 +0200 (CEST)
-Date: Tue, 9 Jul 2024 10:55:21 +0200
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>,
-	Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	 Content-Type:Content-Disposition:In-Reply-To; b=Hpmhwe9C7pKFype5pMQ3KhGNl+0+F0MqfREeyOD+KduE8idQ3v7UnEEBpGkJ/USUsh04/IenZrDxOqkXoPr6jB97EVzTP+1kG/SjO4XwoJMB6AqYUVIFhw/YflpcyOJ1qKZZrUZTlzAFBELz3L0fNJTaiN/L5CyzI8xVS1G/wk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=b5CS9d8E; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E023C3277B;
+	Tue,  9 Jul 2024 09:15:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1720516560;
+	bh=hK2QUQoSLsKZsz2jegmGiISGgACqpgV+13IffX5u+qA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=b5CS9d8EmjYuSh4Oeec2RjoRUGGvRd0pLtlX6LmRJt4hCd5HbYeEb7JcMhMOETUiL
+	 nJGOijZI7omuHyu+1Qf35faihpB0P+eHXoiC/u41ezJKQHr3qA2gW9sxBtTIXizM63
+	 z1FgzWNtkl38ekbRw1GjxAc4UY7Jz4/WW8/AIhfs=
+Date: Tue, 9 Jul 2024 11:15:57 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: LEROY Christophe <christophe.leroy2@cs-soprasteria.com>
+Cc: WangYuli <wangyuli@uniontech.com>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>,
+	"sashal@kernel.org" <sashal@kernel.org>,
+	"ast@kernel.org" <ast@kernel.org>,
+	"keescook@chromium.org" <keescook@chromium.org>,
+	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"song@kernel.org" <song@kernel.org>,
+	"puranjay12@gmail.com" <puranjay12@gmail.com>,
+	"daniel@iogearbox.net" <daniel@iogearbox.net>,
+	"andrii@kernel.org" <andrii@kernel.org>,
+	"martin.lau@linux.dev" <martin.lau@linux.dev>,
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>,
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+	"kpsingh@kernel.org" <kpsingh@kernel.org>,
+	"sdf@google.com" <sdf@google.com>,
+	"haoluo@google.com" <haoluo@google.com>,
+	"jolsa@kernel.org" <jolsa@kernel.org>,
+	"illusionist.neo@gmail.com" <illusionist.neo@gmail.com>,
+	"linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+	"kernel@xen0n.name" <kernel@xen0n.name>,
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+	"johan.almbladh@anyfinetworks.com" <johan.almbladh@anyfinetworks.com>,
+	"paulburton@kernel.org" <paulburton@kernel.org>,
+	"tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
 	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-	Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
-Subject: Re: [PATCH v3] MIPS: Implement ieee754 NAN2008 emulation mode
-Message-ID: <Zoz6+YmUk7CBsNFw@alpha.franken.de>
-References: <20240612-mips_ieee754_emul-v3-1-2c21b450abdb@flygoat.com>
- <Zn1FuxNw2CUttzdg@alpha.franken.de>
- <9cc26415-9cbc-47fa-a132-7d8c000874a4@app.fastmail.com>
- <alpine.DEB.2.21.2406272053180.43454@angie.orcam.me.uk>
- <fbd421a6-cf37-49ab-bdbe-6128a7cae8be@app.fastmail.com>
+	"deller@gmx.de" <deller@gmx.de>,
+	"linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+	"iii@linux.ibm.com" <iii@linux.ibm.com>,
+	"hca@linux.ibm.com" <hca@linux.ibm.com>,
+	"gor@linux.ibm.com" <gor@linux.ibm.com>,
+	"agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+	"borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+	"svens@linux.ibm.com" <svens@linux.ibm.com>,
+	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+	"davem@davemloft.net" <davem@davemloft.net>,
+	"sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+	"kuba@kernel.org" <kuba@kernel.org>,
+	"hawk@kernel.org" <hawk@kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"dsahern@kernel.org" <dsahern@kernel.org>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"bp@alien8.de" <bp@alien8.de>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+	"guanwentao@uniontech.com" <guanwentao@uniontech.com>,
+	"baimingcong@uniontech.com" <baimingcong@uniontech.com>
+Subject: Re: [PATCH] Revert "bpf: Take return from set_memory_rox() into
+ account with bpf_jit_binary_lock_ro()" for linux-6.6.37
+Message-ID: <2024070908-glade-granny-1137@gregkh>
+References: <5A29E00D83AB84E3+20240706031101.637601-1-wangyuli@uniontech.com>
+ <2024070631-unrivaled-fever-8548@gregkh>
+ <B7E3B29557B78CB1+afadbaa6-987e-4db4-96b5-4e4d5465c37b@uniontech.com>
+ <2024070815-udder-charging-7f75@gregkh>
+ <a1dac525-4e6d-4d28-87ee-63723abbafad@cs-soprasteria.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <fbd421a6-cf37-49ab-bdbe-6128a7cae8be@app.fastmail.com>
+In-Reply-To: <a1dac525-4e6d-4d28-87ee-63723abbafad@cs-soprasteria.com>
 
-On Fri, Jun 28, 2024 at 01:33:06AM +0100, Jiaxun Yang wrote:
+On Mon, Jul 08, 2024 at 03:12:55PM +0000, LEROY Christophe wrote:
 > 
 > 
-> 在2024年6月27日六月 下午8:54，Maciej W. Rozycki写道：
-> > On Thu, 27 Jun 2024, Jiaxun Yang wrote:
+> Le 08/07/2024 � 14:36, Greg KH a �crit :
+> > On Sun, Jul 07, 2024 at 03:34:15PM +0800, WangYuli wrote:
+> >>
+> >> On 2024/7/6 17:30, Greg KH wrote:
+> >>> This makes it sound like you are reverting this because of a build
+> >>> error, which is not the case here, right?  Isn't this because of the
+> >>> powerpc issue reported here:
+> >>>     https://lore.kernel.org/r/20240705203413.wbv2nw3747vjeibk@altlinux.org
+> >>> ?
+> >>
+> >> No, it only occurs on ARM64 architecture. The reason is that before being
+> >> modified, the function
+> >>
+> >> bpf_jit_binary_lock_ro() in arch/arm64/net/bpf_jit_comp.c +1651
+> >>
+> >> was introduced with __must_check, which is defined as
+> >> __attribute__((__warn_unused_result__)).
+> >>
+> >>
+> >> However, at this point, calling bpf_jit_binary_lock_ro(header)
+> >> coincidentally results in an unused-result
+> >>
+> >> warning.
 > >
-> >> >> @@ -318,6 +318,10 @@ void mips_set_personality_nan(struct arch_elf_state *state)
-> >> >>  	t->thread.fpu.fcr31 = c->fpu_csr31;
-> >> >>  	switch (state->nan_2008) {
-> >> >>  	case 0:
-> >> >> +		if (!(c->fpu_msk31 & FPU_CSR_NAN2008))
-> >> >> +			t->thread.fpu.fcr31 &= ~FPU_CSR_NAN2008;
-> >> >> +		if (!(c->fpu_msk31 & FPU_CSR_ABS2008))
-> >> >> +			t->thread.fpu.fcr31 &= ~FPU_CSR_ABS2008;
-> >> >
-> >> > why is this needed?
-> >> 
-> >> Because t->thread.fpu.fcr31 comes from c->fpu_csr31, in this case we the default
-> >> value of c->fpu_csr31 is read from hardware and we don't know what would that be.
+> > Ok, thanks, but why is no one else seeing this in their testing?
+> 
+> Probably the configs used by robots do not activate BPF JIT ?
+> 
 > >
-> >  But it has always been like this.  What has changed with your patch that 
-> > you need to mask the bit out now?
+> >>> If not, why not just backport the single missing arm64 commit,
+> >>
+> >> Upstream commit 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory
+> >> management") is part of
+> >>
+> >> a larger change that involves multiple commits. It's not an isolated commit.
+> >>
+> >>
+> >> We could certainly backport all of them to solve this problem, buthas it's not
+> >> the simplest solution.
+> >
+> > reverting the change feels wrong in that you will still have the bug
+> > present that it was trying to solve, right?  If so, can you then provide
+> > a working version?
 > 
-> After this patch kernel's copy of t->thread.fpu.fcr31 can disagree with hardware.
-> When disagree happens, we trigger emulation.
+> Indeed, by reverting the change you "punish" all architectures because
+> arm64 hasn't properly been backported, is it fair ?
 > 
-> Before that patch for nan legacy binary running on nan2008 CPU t->thread.fpu.fcr31
-> will still be nan2008 (for ieee754=relaxed) so that's not relevant.
+> In fact, when I implemented commit e60adf513275 ("bpf: Take return from
+> set_memory_rox() into account with bpf_jit_binary_lock_ro()"), we had
+> the following users for function bpf_jit_binary_lock_ro() :
+> 
+> $ git grep bpf_jit_binary_lock_ro e60adf513275~
+> e60adf513275~:arch/arm/net/bpf_jit_32.c:
+> bpf_jit_binary_lock_ro(header);
+> e60adf513275~:arch/loongarch/net/bpf_jit.c:
+> bpf_jit_binary_lock_ro(header);
+> e60adf513275~:arch/mips/net/bpf_jit_comp.c:
+> bpf_jit_binary_lock_ro(header);
+> e60adf513275~:arch/parisc/net/bpf_jit_core.c:
+> bpf_jit_binary_lock_ro(jit_data->header);
+> e60adf513275~:arch/s390/net/bpf_jit_comp.c:
+> bpf_jit_binary_lock_ro(header);
+> e60adf513275~:arch/sparc/net/bpf_jit_comp_64.c:
+> bpf_jit_binary_lock_ro(header);
+> e60adf513275~:arch/x86/net/bpf_jit_comp32.c:
+> bpf_jit_binary_lock_ro(header);
+> e60adf513275~:include/linux/filter.h:static inline void
+> bpf_jit_binary_lock_ro(struct bpf_binary_header *hdr)
+> 
+> But when commit 08f6c05feb1d ("bpf: Take return from set_memory_rox()
+> into account with bpf_jit_binary_lock_ro()") was applied, we had one
+> more user which is arm64:
+> 
+> $ git grep bpf_jit_binary_lock_ro 08f6c05feb1d~
+> 08f6c05feb1d~:arch/arm/net/bpf_jit_32.c:
+> bpf_jit_binary_lock_ro(header);
+> 08f6c05feb1d~:arch/arm64/net/bpf_jit_comp.c:
+> bpf_jit_binary_lock_ro(header);
+> 08f6c05feb1d~:arch/loongarch/net/bpf_jit.c:
+> bpf_jit_binary_lock_ro(header);
+> 08f6c05feb1d~:arch/mips/net/bpf_jit_comp.c:
+> bpf_jit_binary_lock_ro(header);
+> 08f6c05feb1d~:arch/parisc/net/bpf_jit_core.c:
+> bpf_jit_binary_lock_ro(jit_data->header);
+> 08f6c05feb1d~:arch/s390/net/bpf_jit_comp.c:
+> bpf_jit_binary_lock_ro(header);
+> 08f6c05feb1d~:arch/sparc/net/bpf_jit_comp_64.c:
+> bpf_jit_binary_lock_ro(header);
+> 08f6c05feb1d~:arch/x86/net/bpf_jit_comp32.c:
+> bpf_jit_binary_lock_ro(header);
+> 08f6c05feb1d~:include/linux/filter.h:static inline void
+> bpf_jit_binary_lock_ro(struct bpf_binary_header *hdr)
+> 
+> Therefore, commit 08f6c05feb1d should have included a backport for arm64.
+> 
+> So yes, I agree with Greg, the correct fix should be to backport to
+> ARM64 the changes done on other architectures in order to properly
+> handle return of set_memory_rox() in bpf_jit_binary_lock_ro().
 
-I'm considering to apply your patch, how much testing/verification did
-this patch see ? Do have some test binaries ?
+Ok, but it looks like due to this series, the powerpc tree is crashing
+at the first bpf load, so something went wrong.  Let me go revert these
+4 patches for now, and then I will be glad to queue them up if you can
+provide a working series for all arches.
 
-Thomas.
+thanks,
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+greg k-h
 
