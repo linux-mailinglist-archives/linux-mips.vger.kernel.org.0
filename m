@@ -1,59 +1,59 @@
-Return-Path: <linux-mips+bounces-4240-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4237-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9974A92C9E1
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 06:37:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 322CA92C9DB
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 06:36:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85EFA285372
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 04:37:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A22891F23564
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 04:36:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 010DE83A07;
-	Wed, 10 Jul 2024 04:35:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E305824AF;
+	Wed, 10 Jul 2024 04:35:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="gNtfPJul"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="Jah4YT0p"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433315E091
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55AA233986
 	for <linux-mips@vger.kernel.org>; Wed, 10 Jul 2024 04:35:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720586146; cv=none; b=eF+p6h3QsbOQJ2AFEst9mjsLJyJsYdRxA7JJRJOrU7leedLLV7cbiykQBNXZLsSea9z4kuv/pzplILXH3BIocgiLPutdMsriZD7czeIhXFup0cJhFunkDwD74Rh6jilf+DqIzBeZqXcoZ7Eb1HR9T057f5lNksV6lZw/oX7z6sQ=
+	t=1720586146; cv=none; b=SWFXiJ+w6OYzcgoUB5EzlWtI7P9cqxepCg99rk4ebhBBdE8bYb5Bcpz05bt9GqA2fgxnbpwPMwkXmSD+OZuAa71xY7tIuHa8XEz8geNcDOjDUuO9A2D5Y48V8JwQewy7JrENq/gwj/PAH2DkctQetD1Z0dL34egCXkFaIqsppAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1720586146; c=relaxed/simple;
-	bh=TAbVqThQrI+FRJVrWVBoG3lIJAbFFQi3Y/j0nP6IIo0=;
+	bh=hRZzGjrt0hquIi3POY55JN8Q3hPxvvZ0ojrAk6LeAVk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZFQiqefHlr7bKjjw73giOaBXHsiU5SGTV/CqAqrAMba5Uo11BfepNcplfkidcdiBCAVt8c4H/njNChO4JduwQ2Y6wQGi/C2CoRCQz8AdPXwMAIiqhTJchHgJlC9ipOpruNiSw0JJmqSttmlLUm7QzphDkqXQBv+h544oyOX1aQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=gNtfPJul; arc=none smtp.client-ip=202.36.163.20
+	 MIME-Version; b=bds+aovCcMj2o3A9gCAQca993xEop4d0xuyt6oAvA5nWtDtHo8MF9djZi78YzUxDWdZv2QjU4p7+s6EoiT3q1Uo3fdljRkcwOMdeDEWBur3258Hks2TFLLAn1nmBT/GUM3UH/17fiB1QgG0kpXaXJK1OZkqG3r3Y+YMO0lAtwoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=Jah4YT0p; arc=none smtp.client-ip=202.36.163.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 142A22C0CD8;
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 1ED622C0CFC;
 	Wed, 10 Jul 2024 16:35:31 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
 	s=mail181024; t=1720586131;
-	bh=v3fEqQjFBBKSpKQPNqtEGR0npdEdDxQZS48tOrTFB44=;
+	bh=WTZKQA+YIenNM6vFmAZK99aqBjDZ/vJ4/ScqR97QI0Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gNtfPJul5m+1A6YwSISxve+3Zo/O/zQwyLGU3YaBhlBS15v3MM4iIP5qLqwjWkvnh
-	 GP4/RJlt01A4nvESqR1fYDRzib1fJ94Qy0tRCp/3dSDDr74/pzVrfhilJWgwUffp6+
-	 xKarw2OAFyJSPci7ox/FjhnhkJLg62Ye3yY878d5wVyBWfDz8l+GFjomN1hCc5SCWt
-	 s62N4gcoxE54uBPLHgVBW9rPcm7sb9VcopJfqNfci0trY/kjqG0RSIRby2bQCZML+S
-	 rxaUXeTdZx8SzYPpKU45LQyw4LqIpDFxeX5dwDng7VNyvlXbFPto7yBBWBjFP0ajuh
-	 FJT9lL+RIa8Kg==
+	b=Jah4YT0pVpD5yQXRu+xPqS4mwUYlpquaTQjAkRUdLf+FlU6DRMXXQHoHA/I56NJTX
+	 MaF2U66CVm91cFAdrC3BDfHQWnZzGD477VLq/VsLm2uCFz/J1sjAYZ/BQl2O4cjkeR
+	 Tq4Dti9IB6QEbld7IusCRR8bOmQ8IGwso9ITYEfyKaelutOziyaMHMpXnPZ8x6BfYo
+	 4Xq4sj1qhCJnlLeo5tHfB/Y6agVIQpIQLXOfXPi78FgmmX5eTGI5THD72eRmt3b01K
+	 lVA/uBJTEjFpaDWjPZm4hOV5PvSBwEUNc8evptVFcwsx3J91oKBVlvD6+Sx+UkXrek
+	 XtRNVsW1AsC5Q==
 Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B668e0f920009>; Wed, 10 Jul 2024 16:35:30 +1200
+	id <B668e0f92000a>; Wed, 10 Jul 2024 16:35:30 +1200
 Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id 27AFD13EE85;
+	by pat.atlnz.lc (Postfix) with ESMTP id 2C61013EE8E;
 	Wed, 10 Jul 2024 16:35:30 +1200 (NZST)
 Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id 2572A28206C; Wed, 10 Jul 2024 16:35:30 +1200 (NZST)
+	id 2A17A28206C; Wed, 10 Jul 2024 16:35:30 +1200 (NZST)
 From: Chris Packham <chris.packham@alliedtelesis.co.nz>
 To: tglx@linutronix.de,
 	robh@kernel.org,
@@ -73,9 +73,9 @@ Cc: linux-kernel@vger.kernel.org,
 	kabel@kernel.org,
 	ericwouds@gmail.com,
 	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v5 09/10] mips: generic: add fdt fixup for Realtek reference board
-Date: Wed, 10 Jul 2024 16:35:23 +1200
-Message-ID: <20240710043524.1535151-10-chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v5 10/10] mips: dts: realtek: Add RTL9302C board
+Date: Wed, 10 Jul 2024 16:35:24 +1200
+Message-ID: <20240710043524.1535151-11-chris.packham@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240710043524.1535151-1-chris.packham@alliedtelesis.co.nz>
 References: <20240710043524.1535151-1-chris.packham@alliedtelesis.co.nz>
@@ -86,146 +86,218 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=CvQccW4D c=1 sm=1 tr=0 ts=668e0f92 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=4kmOji7k6h8A:10 a=x-EMvBfK1kxHbq4Brr4A:9 a=3ZKOabzyN94A:10
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=CvQccW4D c=1 sm=1 tr=0 ts=668e0f92 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=4kmOji7k6h8A:10 a=FkagyKZCYwirPjr5IuAA:9 a=3ZKOabzyN94A:10
 X-SEG-SpamProfiler-Score: 0
 x-atlnz-ls: pat
 
-The bootloader used on the Realtek RTL9302C boards is an ancient vendor
-fork of U-Boot that doesn't understand device trees. So to run a modern
-kernel it is necessary use one of the APPENDED_DTB options.
+Add support for the RTL9302 SoC and the RTL9302C_2xRTL8224_2XGE
+reference board.
 
-When appending the DTB the inintrd information, if present, needs to be
-inserted into the /chosen device tree node. The bootloader provides the
-initrd start/size via the firmware environment. Add a fdt fixup that
-will update the device tree with the initrd information.
+The RTL930x family of SoCs are Realtek switches with an embedded MIPS
+core (800MHz 34Kc). Most of the peripherals are similar to the RTL838x
+SoC and can make use of many existing drivers.
+
+Add in full DSA switch support is still a work in progress.
 
 Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 ---
 
 Notes:
     Changes in v5:
-    - None
+    - Use same mtd partition names as Realtek reference software
     Changes in v4:
-    - use correct compatible string
-    - include printk.h
-    - remove unnecessary include of of_address.h
-    - put realtek_of_match entry on one line
-    - one piece of feedback not addressed is whether this fixup is requir=
-ed
-      on more platforms. I don't have a supply of other mips platforms to=
- check
-      so I can't confirm. It should be relatively easy to move
-      realtek_add_initrd() to a more generic place, boards could then opt=
- in
-      to it with the existing apply_mips_fdt_fixups() mechanism.
-    Changes in v3:
     - None
+    Changes in v3:
+    - Use full board name
     Changes in v2:
-    - update compatible string
+    - Use specific compatibles instead of rtl930x
+    - Remove unnecessary irq flags (interrupt controller is one-cell)
+    - Remove earlycon
+    - Name clocks as recommended in dt schema
 
- arch/mips/generic/Makefile        |  1 +
- arch/mips/generic/board-realtek.c | 79 +++++++++++++++++++++++++++++++
- 2 files changed, 80 insertions(+)
- create mode 100644 arch/mips/generic/board-realtek.c
+ arch/mips/boot/dts/realtek/Makefile           |  1 +
+ .../cameo-rtl9302c-2x-rtl8224-2xge.dts        | 73 +++++++++++++++++
+ arch/mips/boot/dts/realtek/rtl930x.dtsi       | 79 +++++++++++++++++++
+ 3 files changed, 153 insertions(+)
+ create mode 100644 arch/mips/boot/dts/realtek/cameo-rtl9302c-2x-rtl8224-=
+2xge.dts
+ create mode 100644 arch/mips/boot/dts/realtek/rtl930x.dtsi
 
-diff --git a/arch/mips/generic/Makefile b/arch/mips/generic/Makefile
-index 56011d738441..ea0e4ad5e600 100644
---- a/arch/mips/generic/Makefile
-+++ b/arch/mips/generic/Makefile
-@@ -13,3 +13,4 @@ obj-$(CONFIG_LEGACY_BOARD_SEAD3)	+=3D board-sead3.o
- obj-$(CONFIG_LEGACY_BOARD_OCELOT)	+=3D board-ocelot.o
- obj-$(CONFIG_MACH_INGENIC)			+=3D board-ingenic.o
- obj-$(CONFIG_VIRT_BOARD_RANCHU)		+=3D board-ranchu.o
-+obj-$(CONFIG_MACH_REALTEK_RTL)		+=3D board-realtek.o
-diff --git a/arch/mips/generic/board-realtek.c b/arch/mips/generic/board-=
-realtek.c
+diff --git a/arch/mips/boot/dts/realtek/Makefile b/arch/mips/boot/dts/rea=
+ltek/Makefile
+index fba4e93187a6..d2709798763f 100644
+--- a/arch/mips/boot/dts/realtek/Makefile
++++ b/arch/mips/boot/dts/realtek/Makefile
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0
+ dtb-y	+=3D cisco_sg220-26.dtb
++dtb-y	+=3D cameo-rtl9302c-2x-rtl8224-2xge.dtb
+diff --git a/arch/mips/boot/dts/realtek/cameo-rtl9302c-2x-rtl8224-2xge.dt=
+s b/arch/mips/boot/dts/realtek/cameo-rtl9302c-2x-rtl8224-2xge.dts
 new file mode 100644
-index 000000000000..9cce6103d24e
+index 000000000000..77d2566545f2
 --- /dev/null
-+++ b/arch/mips/generic/board-realtek.c
++++ b/arch/mips/boot/dts/realtek/cameo-rtl9302c-2x-rtl8224-2xge.dts
+@@ -0,0 +1,73 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/dts-v1/;
++
++#include "rtl930x.dtsi"
++
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/leds/common.h>
++#include <dt-bindings/thermal/thermal.h>
++
++/ {
++	compatible =3D "cameo,rtl9302c-2x-rtl8224-2xge", "realtek,rtl9302-soc";
++	model =3D "RTL9302C Development Board";
++
++	memory@0 {
++		device_type =3D "memory";
++		reg =3D <0x0 0x8000000>;
++	};
++
++	chosen {
++		stdout-path =3D "serial0:115200n8";
++	};
++};
++
++&uart0 {
++	status =3D "okay";
++};
++
++&spi0 {
++	status =3D "okay";
++	flash@0 {
++		compatible =3D "jedec,spi-nor";
++		reg =3D <0>;
++		spi-max-frequency =3D <10000000>;
++
++		partitions {
++			compatible =3D "fixed-partitions";
++			#address-cells =3D <1>;
++			#size-cells =3D <1>;
++
++			partition@0 {
++				label =3D "LOADER";
++				reg =3D <0x0 0xe0000>;
++				read-only;
++			};
++			partition@e0000 {
++				label =3D "BDINFO";
++				reg =3D <0xe0000 0x10000>;
++			};
++			partition@f0000 {
++				label =3D "SYSINFO";
++				reg =3D <0xf0000 0x10000>;
++				read-only;
++			};
++			partition@100000 {
++				label =3D "JFFS2 CFG";
++				reg =3D <0x100000 0x100000>;
++			};
++			partition@200000 {
++				label =3D "JFFS2 LOG";
++				reg =3D <0x200000 0x100000>;
++			};
++			partition@300000 {
++				label =3D "RUNTIME";
++				reg =3D <0x300000 0xe80000>;
++			};
++			partition@1180000 {
++				label =3D "RUNTIME2";
++				reg =3D <0x1180000 0xe80000>;
++			};
++		};
++	};
++};
+diff --git a/arch/mips/boot/dts/realtek/rtl930x.dtsi b/arch/mips/boot/dts=
+/realtek/rtl930x.dtsi
+new file mode 100644
+index 000000000000..f271940f82be
+--- /dev/null
++++ b/arch/mips/boot/dts/realtek/rtl930x.dtsi
 @@ -0,0 +1,79 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2024 Allied Telesis
-+ */
++// SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
 +
-+#include <linux/errno.h>
-+#include <linux/libfdt.h>
-+#include <linux/printk.h>
-+#include <linux/types.h>
++#include "rtl83xx.dtsi"
 +
-+#include <asm/fw/fw.h>
-+#include <asm/machine.h>
++/ {
++	compatible =3D "realtek,rtl9302-soc";
 +
-+static __init int realtek_add_initrd(void *fdt)
-+{
-+	int node, err;
-+	u32 start, size;
++	cpus {
++		#address-cells =3D <1>;
++		#size-cells =3D <0>;
 +
-+	node =3D fdt_path_offset(fdt, "/chosen");
-+	if (node < 0) {
-+		pr_err("/chosen node not found\n");
-+		return -ENOENT;
-+	}
++		cpu@0 {
++			device_type =3D "cpu";
++			compatible =3D "mips,mips34Kc";
++			reg =3D <0>;
++			clocks =3D <&baseclk 0>;
++			clock-names =3D "cpu";
++		};
++	};
 +
-+	start =3D fw_getenvl("initrd_start");
-+	size =3D fw_getenvl("initrd_size");
++	baseclk: clock-800mhz {
++		compatible =3D "fixed-clock";
++		#clock-cells =3D <0>;
++		clock-frequency =3D <800000000>;
++	};
 +
-+	if (start =3D=3D 0 && size =3D=3D 0)
-+		return 0;
-+
-+	pr_info("Adding initrd info from environment\n");
-+
-+	err =3D fdt_setprop_u32(fdt, node, "linux,initrd-start", start);
-+	if (err) {
-+		pr_err("unable to set initrd-start: %d\n", err);
-+		return err;
-+	}
-+
-+	err =3D fdt_setprop_u32(fdt, node, "linux,initrd-end", start + size);
-+	if (err) {
-+		pr_err("unable to set initrd-end: %d\n", err);
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct mips_fdt_fixup realtek_fdt_fixups[] __initconst =3D =
-{
-+	{ realtek_add_initrd, "add initrd" },
-+	{},
++	lx_clk: clock-175mhz {
++		compatible =3D "fixed-clock";
++		#clock-cells =3D <0>;
++		clock-frequency  =3D <175000000>;
++	};
 +};
 +
-+static __init const void *realtek_fixup_fdt(const void *fdt, const void =
-*match_data)
-+{
-+	static unsigned char fdt_buf[16 << 10] __initdata;
-+	int err;
++&soc {
++	intc: interrupt-controller@3000 {
++		compatible =3D "realtek,rtl9300-intc", "realtek,rtl-intc";
++		reg =3D <0x3000 0x18>, <0x3018 0x18>;
++		interrupt-controller;
++		#interrupt-cells =3D <1>;
 +
-+	if (fdt_check_header(fdt))
-+		panic("Corrupt DT");
++		interrupt-parent =3D <&cpuintc>;
++		interrupts =3D <2>, <3>, <4>, <5>, <6>, <7>;
++	};
 +
-+	fw_init_cmdline();
++	spi0: spi@1200 {
++		compatible =3D "realtek,rtl8380-spi";
++		reg =3D <0x1200 0x100>;
 +
-+	err =3D apply_mips_fdt_fixups(fdt_buf, sizeof(fdt_buf), fdt, realtek_fd=
-t_fixups);
-+	if (err)
-+		panic("Unable to fixup FDT: %d", err);
++		#address-cells =3D <1>;
++		#size-cells =3D <0>;
++	};
 +
-+	return fdt_buf;
++	timer0: timer@3200 {
++		compatible =3D "realtek,rtl9302-timer", "realtek,otto-timer";
++		reg =3D <0x3200 0x10>, <0x3210 0x10>, <0x3220 0x10>,
++		    <0x3230 0x10>, <0x3240 0x10>;
 +
-+}
-+
-+static const struct of_device_id realtek_of_match[] __initconst =3D {
-+	{ .compatible =3D "realtek,rtl9302-soc" },
-+	{}
++		interrupt-parent =3D <&intc>;
++		interrupts =3D <7>, <8>, <9>, <10>, <11>;
++		clocks =3D <&lx_clk>;
++	};
 +};
 +
-+MIPS_MACHINE(realtek) =3D {
-+	.matches =3D realtek_of_match,
-+	.fixup_fdt =3D realtek_fixup_fdt,
++&uart0 {
++	/delete-property/ clock-frequency;
++	clocks =3D <&lx_clk>;
++
++	interrupt-parent =3D <&intc>;
++	interrupts =3D <30>;
 +};
++
++&uart1 {
++	/delete-property/ clock-frequency;
++	clocks =3D <&lx_clk>;
++
++	interrupt-parent =3D <&intc>;
++	interrupts =3D <31>;
++};
++
 --=20
 2.45.2
 
