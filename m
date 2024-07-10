@@ -1,70 +1,70 @@
-Return-Path: <linux-mips+bounces-4263-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4264-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88C5F92DC07
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 00:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A28992DCC6
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 01:42:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 165231F2613C
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 22:45:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C95D11F265BB
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 23:42:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEE9A14A605;
-	Wed, 10 Jul 2024 22:45:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19B30158D82;
+	Wed, 10 Jul 2024 23:42:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tdjJ17+5"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dWrM/6qT"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC230143740
-	for <linux-mips@vger.kernel.org>; Wed, 10 Jul 2024 22:45:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B497515886C
+	for <linux-mips@vger.kernel.org>; Wed, 10 Jul 2024 23:42:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720651537; cv=none; b=jZBj9t1uOsTBCV056q0Dv6sOCMnh0z4hOFXUWcban8IrKcTy4GqkaD17NazfYQd1qqv0zXrlrrBMnWe1GVEnHBWaUlZZMIdeBYnKEaVeDx0tDQbpx8361dq5HZAo2Hx6neBbNTiox94QKciYXWKwsgZy8USr9rBPI5/jMf61aI0=
+	t=1720654940; cv=none; b=Phr3lgOWml9OUxArr3E0Ixqy8E2Khs9BoJHVfPYFZBHMeekkr/ffvG3lWRxHzB6gBWT6EvDKMHBP0slFkN+mRqTv3xyoTW/9XDbDm8RvDKG6fasiLB2kt+9Gj6IfFdqojo87zrsk8jXRkArqbZ6h8L1RtkkZH2cCXfaC8l54qPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720651537; c=relaxed/simple;
-	bh=zEZ4qa1KY5W/ArZqfvSqtxOP5I0qkz6xjUA5gKFEtjE=;
+	s=arc-20240116; t=1720654940; c=relaxed/simple;
+	bh=WmCXshM9BwamSUxd01N4bO9J01nXQuiD7Ah98aEMfxw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=c5+z2FWcqZoVZnvEeDRDhgssXI40AqGT/dZYtTgH8+It76Dkccr63NthGAvpSQ9knHVGjtqX8Pm3PuwWNQyYK9hATXouE64F6h2vnp9G/TbSiHRWxYS8iouWT2xJEz9q1Rd9uQGvyq8PWw4VuMbUHsllaQueiTulxKnkdqlUWqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tdjJ17+5; arc=none smtp.client-ip=209.85.160.170
+	 To:Cc:Content-Type; b=uivR/Yf1TJZda5PxXD/Ib47dNgIU0fcchhzZGyQUEOeUMUgOT3Ai5PWcajDOc/pMvYel3Fa2gY+2BDo7HNBxxilQpLowB1qR7E+mamOVarWb1nQhn5Y+1Eql7zUJhqc48c4JIHy05Zf+7Lj8bkicbC/XV/16jWSb9wp02Ze4Hb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dWrM/6qT; arc=none smtp.client-ip=209.85.219.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-447e1eb0117so1155001cf.3
-        for <linux-mips@vger.kernel.org>; Wed, 10 Jul 2024 15:45:35 -0700 (PDT)
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6b5d3113168so2040896d6.2
+        for <linux-mips@vger.kernel.org>; Wed, 10 Jul 2024 16:42:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1720651535; x=1721256335; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1720654936; x=1721259736; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ewitibS3zX+WzUTqst3po2B/GkvecNeXUFCMiBjweyg=;
-        b=tdjJ17+5BiKAbEvFm/bTZZzzeiiuS2bzDiid0gXaBYsG5QBdfjBTyZ10S1L+z9OmfJ
-         i2b8kliyvcF2mUD5KyQmAplFOedGO69LhmT6jJWy0JP68Z7LqfmLCFJojtm7G1D6xahE
-         BGELmK27tCIRvjRszqt74+slO+hb0WcuzSCNTbmccmZrVUxtZ8NzK7VoL7+HjIQ6V1ws
-         9maAlusmQ8tdmc4g2j152mq/GNfVm37aQb4hCFbmvL6lnexAPE1M4CtbZry8Xy9j+Gg8
-         9kNGJvyZ6yZsJV9OfllYLEj+k3aADj7IaE3Fs50CuDe6z1ztPvz33gASo+aPVafropCy
-         jrxA==
+        bh=xw22ZH4c8gyTKnFajh7vcYEJsOdrHlsxvg9OLt0kZtA=;
+        b=dWrM/6qT8jNEjecjc9s08cKSX4h+fb6bTc35XK4KJuziyKO+fD/7CbRZJ4UwApGsfl
+         1W71iFYoXZAhm3NUXU7xD7Et5TuKbhgYB9RICTMsmQqsulI9HWNXvdCZHwLpiCf52//6
+         G0IPDLquKspE/p1oSvCYSjr7fUwxb4l6eRxqgiHh75JUIw5D2hPSiYm8K+UJe5eH7SRd
+         /dF+ZtLkEny2rN/U/siaCZX8u0XTToiPx05I65KGy53ugYyndbw8ILn+iDK4dSayMnmE
+         xi0fKa2ZiL0jp2pJtdOoi+Vg+Muzkoc1dZnbx7V4UDdtpTsUIEoFy1CaPVb9D9iyk86J
+         c36A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720651535; x=1721256335;
+        d=1e100.net; s=20230601; t=1720654936; x=1721259736;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ewitibS3zX+WzUTqst3po2B/GkvecNeXUFCMiBjweyg=;
-        b=uPASboIGvJFG5Ru6gWDbMMrqrkVYv9b/QduW6cLKZ4tKFPeVjayIVzdT/votP2UGLz
-         PxNchpOJgDuqa5zFYtXhfKjv1EAEPoXXcO+q15g/w11Of2qMolxhjZ6qMnf7EwvnpCqM
-         GeFoiR03aPuMIVBNoZfBTsC/HWQotfdf+R3yYdBDjLp6g2oR7g+jCZl/lGdW3oAuDPDL
-         re6S/ZuQ/bfpwO08ebEKnRV4ccJpZPnZoTRHS/s6WkfBMd5pzt51/pESi0mUhneP1NTY
-         O3gqU0paFFGQy8ukYRa22yYA9gsWyhFFTc/hGu7oxTBUlyyv+c9M6D5D+5MYZE7VvZy3
-         W50g==
-X-Forwarded-Encrypted: i=1; AJvYcCWgICIjiabYNNzWHo9dppdqpznQxt5HTjkqk5XhGg4ZsvZTxcptz/dWim7yqoTYaE7X4jnhmZ3m5JUAGpSqhEvIGiEwsHIsaPzBmg==
-X-Gm-Message-State: AOJu0YwMx+E91yhlIWnwU3EDAhgOfrL2Uh5U7Lwju6e/2SEC0tCZ7Cic
-	tb1BnEiax2VVVOn5KvvCrIGEyHxhlSq6mVAoJbrLTpPCr7xbHoFhegP0n0PvwxEYcuMsX8MY92f
-	SGz7jqQ3Vi5jMNyWgAr+n31eZEjwB29yxMFDn
-X-Google-Smtp-Source: AGHT+IF5eUrWI3iGBloyaIenGjn6niXEyyaOV4S/5O4aymX7e6kogYU+UbBk/KI5YYE/pmMB4biArqXH6clq6XINtH0=
-X-Received: by 2002:ad4:5c68:0:b0:6b5:d9ef:d576 with SMTP id
- 6a1803df08f44-6b61bc80440mr73134066d6.12.1720651534418; Wed, 10 Jul 2024
- 15:45:34 -0700 (PDT)
+        bh=xw22ZH4c8gyTKnFajh7vcYEJsOdrHlsxvg9OLt0kZtA=;
+        b=WdT+eOfP+CKneKbxySrwSmXybOFig4qCi7AmqWknMicNZLVGz4i/Lhs6Mv84KKLxLE
+         hFdb4clWMA7e/LXxbjZ33FM34zpWaU6/AvWsdHULpwsZfHQUkkD1nPwbgnykh0JUtTwP
+         Yigqnj3+xv/adB2Z95K2S1UZFADsZZZxsOycBXkXF+CVrmzScabCQrYGSMJ40TPNK2sE
+         9FN2E+GbEZRswj7Vemqxcd5OHqmZ8qAeCCwsdJQ8yitdpIRaPj6XxRmQ9KqXDScr7iWS
+         ONw6dwz5p/Z/wINX6I9leO3YgWJUTU/aMrbgUJ+GDJPy7D+ARQl+2j9+8GRlO5e6K5YA
+         XVIw==
+X-Forwarded-Encrypted: i=1; AJvYcCXYCFt3FXeVwuNatHwBEZ+6S3/28MNZ83DMLgf0Wua9nJ81IwEpiVv4sGWXCNchKeZoZWmvLvVx7V4Akf4TQ1AzkJuxuL5OvUYCQA==
+X-Gm-Message-State: AOJu0YzwWlc7rN98sA3Qida9QK3LqyQ61Kb3oPjBFc5c9V02gX4aJ5jN
+	TIhRxrCF3HyrIl+ZifTi+YF62wqT2tPC5Q5PSfzujIsQ8hxMNGzpa/Fku6mSRKuRIFVVGguF2mz
+	nltIYaM2L9EF/M8rOLY5JM4ve0t19c8e/X3Va
+X-Google-Smtp-Source: AGHT+IGOLOQ6K3/3da49V2eHyCz+KQjRCyIEiAYnB4b8F1iCu2D4bkJxhlzGFfxvSjmRGC6gzv7EI1OWCLflWXtCr4A=
+X-Received: by 2002:a05:6214:20e2:b0:6b5:9c9c:7baf with SMTP id
+ 6a1803df08f44-6b61bca896amr97392016d6.23.1720654936406; Wed, 10 Jul 2024
+ 16:42:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -72,13 +72,12 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240710001749.1388631-1-almasrymina@google.com>
- <20240710001749.1388631-5-almasrymina@google.com> <20240710093624.26d22f02@kernel.org>
- <CAHS8izOoM3YfcQorLJXL4H+t2OL+oJ4fPP5ZBJRhnH5AxsUqfQ@mail.gmail.com> <20240710125533.7a14bbe7@kernel.org>
-In-Reply-To: <20240710125533.7a14bbe7@kernel.org>
+ <20240710001749.1388631-6-almasrymina@google.com> <20240710094900.0f808684@kernel.org>
+In-Reply-To: <20240710094900.0f808684@kernel.org>
 From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 10 Jul 2024 15:45:19 -0700
-Message-ID: <CAHS8izMhTKndLEYrCyNK5WcUHQB6iXefr1=TcxKNxd+ghJGp0w@mail.gmail.com>
-Subject: Re: [PATCH net-next v16 04/13] netdev: netdevice devmem allocator
+Date: Wed, 10 Jul 2024 16:42:04 -0700
+Message-ID: <CAHS8izPTqsNQnQWKpDPTxULTFL4vr4k6j9Zw8TQzJVDBMXWMaA@mail.gmail.com>
+Subject: Re: [PATCH net-next v16 05/13] page_pool: devmem support
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
@@ -104,82 +103,60 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
 	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
 	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
-	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, linux-mm@kvack.org, 
+	Matthew Wilcox <willy@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 10, 2024 at 12:55=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> w=
-rote:
+On Wed, Jul 10, 2024 at 9:49=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
 >
-> On Wed, 10 Jul 2024 12:29:58 -0700 Mina Almasry wrote:
-> > On Wed, Jul 10, 2024 at 9:37=E2=80=AFAM Jakub Kicinski <kuba@kernel.org=
-> wrote:
-> > > On Wed, 10 Jul 2024 00:17:37 +0000 Mina Almasry wrote:
-> > > > +     net_devmem_dmabuf_binding_get(binding);
-> > >
-> > > Why does every iov need to hold a ref? pp holds a ref and does its ow=
-n
-> > > accounting, so it won't disappear unless all the pages are returned.
-> >
-> > I guess it doesn't really need to, but this is the design/approach I
-> > went with, and I actually prefer it a bit. The design is borrowed from
-> > how struct dev_pagemap does this, IIRC. Every page allocated from the
-> > pgmap holds a reference to the pgmap to ensure the pgmap doesn't go
-> > away while some page that originated from it is out in the wild, and
-> > similarly I did so in the binding here.
+> On Wed, 10 Jul 2024 00:17:38 +0000 Mina Almasry wrote:
+> > +static inline struct net_iov *__netmem_clear_lsb(netmem_ref netmem)
+> > +{
+> > +     return (struct net_iov *)((__force unsigned long)netmem & ~NET_IO=
+V);
+> > +}
+> > +
+> > +static inline unsigned long netmem_get_pp_magic(netmem_ref netmem)
+> > +{
+> > +     return __netmem_clear_lsb(netmem)->pp_magic;
+> > +}
+> > +
+> > +static inline void netmem_or_pp_magic(netmem_ref netmem, unsigned long=
+ pp_magic)
+> > +{
+> > +     __netmem_clear_lsb(netmem)->pp_magic |=3D pp_magic;
+> > +}
+> > +
+> > +static inline void netmem_clear_pp_magic(netmem_ref netmem)
+> > +{
+> > +     __netmem_clear_lsb(netmem)->pp_magic =3D 0;
+> > +}
+> > +
+> > +static inline struct page_pool *netmem_get_pp(netmem_ref netmem)
+> > +{
+> > +     return __netmem_clear_lsb(netmem)->pp;
+> > +}
+> > +
+> > +static inline void netmem_set_pp(netmem_ref netmem, struct page_pool *=
+pool)
+> > +{
+> > +     __netmem_clear_lsb(netmem)->pp =3D pool;
+> > +}
 >
-> Oh, you napi_pp_put_page() on the other end! I can see how that could
-> be fine.
->
-> > We could assume that the page_pool is accounting iovs for us, but that
-> > is not always true, right? page_pool_return_page() disconnects a
-> > netmem from the page_pool and AFAIU the page_pool can go away while
-> > there is such a netmem still in use in the net stack. Currently this
-> > can't happen with iovs because I currently don't support non-pp
-> > refcounting for iovs (so they're always recyclable), but you have a
-> > comment on the other patch asking why that works; depending on how we
-> > converge on that conversation, the details of how the pp refcounting
-> > could change.
->
-> Even then - we could take the ref as the page "leaks" out of the pool,
-> rather than doing it on the fast path, right? Or just BUG_ON() 'cause
-> that reference ain't coming back ;)
->
+> Why is all this stuff in the main header? It's really low level.
+> Please put helpers which are only used by the core in a header
+> under net/core/, like net/core/dev.h
 
-OK, I'll see how the conversation on the other thread converges
-vis-a-vis net_iov refcounting happens, and then look at if I can avoid
-the binding_get/put per page in that framework.
+Sorry none of those are only used by net/core/*. Pretty much all of
+these are used by include/net/page_pool/helpers.h, and some have
+callers in net/core/devmem.c or net/core/skbuff.c
 
-> > It's nice to know that the binding refcounting will work regardless of
-> > the details of how the pp refcounting works. IMHO having the binding
-> > rely on the pp refcounting to ensure all the iovs are freed introduces
-> > some fragility.
-> >
-> > Additionally IMO the net_devmem_dmabuf_binding_get/put aren't so
-> > expensive to want to optimize out, right? The allocation is a slow
-> > path anyway and the fast path recycles netmem.
->
-> Yes, I should have read patch 10. I think it's avoidable :) but with
-> recycling it can indeed perform just fine (do you happen to have
-> recycling rate stats from prod runs?)
+Would you like me to move these pp specific looking ones to
+include/net/page_pool/netmem.h or something similar?
 
-I don't to be honest. For a couple of reasons, one is that gcloud VMs
-where we mainly use this, these stats are private to the VM and is not
-something I can query widly. I only get access to the data when shared
-with bug reports on specific issues.
-
-In our internal test runs, I do not monitor the recycling rate to be
-honest, as that is fine as long as the recycling is fast enough to
-find available memory for incoming data. What I do look at very
-closely is the allocation failure rate. That is when GVE tries to
-alloc a new devmem but it's out of devmem (which would likely be due
-to recycling not happening fast enough). The stat is `page_alloc_fail`
-in ethtool -S for us and it's one of the first things I check when
-things go wrong. It hasn't been the root cause for any of our issues
-in reality.
-
---
+--=20
 Thanks,
 Mina
 
