@@ -1,46 +1,95 @@
-Return-Path: <linux-mips+bounces-4243-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4244-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCD5492CC17
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 09:41:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E573092CCAD
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 10:17:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDA921C2060E
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 07:41:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1D5C2813E4
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 08:17:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34A0E83CD7;
-	Wed, 10 Jul 2024 07:41:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B042B83A17;
+	Wed, 10 Jul 2024 08:17:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="Fk1q5DKi";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="cerv/Z1O"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32842824BC;
-	Wed, 10 Jul 2024 07:40:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from fout4-smtp.messagingengine.com (fout4-smtp.messagingengine.com [103.168.172.147])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A45812B9DD;
+	Wed, 10 Jul 2024 08:16:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720597261; cv=none; b=jT/H8Iy8FKQ5s22o0uJ2th6qZPolcPugt+oLqebWItl0duaGphEjD+j/eJL/OUjXlVtKDsDMFWEP8y05VhEorK6ohmpTNO/dYoR1+FLA2jEQvrjLekbXNBIJtCiW2O+61OfRtazZZCgdOl+tFCTxWVmkbLMHTW/Ic8jdXuFVf8U=
+	t=1720599420; cv=none; b=FC2ncxwXsm9NrWnHXeZxEEAlkuaDRfX+bgKNxiU3OxX2QE3gSj82DQUItEdxZrKIyKbrceLlIddQByTeSPK8DORvsglebzH74OZjOKPW+OdqRYBVQuuYLaENkMJbS1VrBXRGoBN7lHHp4MAgQJHjFx98kLkHFID0Z2cbaHiaydE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720597261; c=relaxed/simple;
-	bh=ic/doOQaVCqp0tFw78Ip2mj0kPGzk2er21GSUClPl3Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r2hKFGQNAYY69XvDIYK/hjNO0CgwL5haLJX8fCeffuOiAsOjTTH0r2pm+l/dTepE1c2XsdV9zXKLbfrviX4c29NzA01vtm3W0wMyw2DF1cWSXPvFdfUaet7C4KONvorQgZNenbe0Vz+yp/CxCjhrr9PSN2Cy0ONegNSfMsbfdRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1sRRwG-0003DV-00; Wed, 10 Jul 2024 09:40:32 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 6ED58C0120; Wed, 10 Jul 2024 09:36:13 +0200 (CEST)
-Date: Wed, 10 Jul 2024 09:36:13 +0200
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>,
-	Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-	Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
-Subject: Re: [PATCH v3] MIPS: Implement ieee754 NAN2008 emulation mode
-Message-ID: <Zo457UgAkhbAgm2R@alpha.franken.de>
+	s=arc-20240116; t=1720599420; c=relaxed/simple;
+	bh=YVOYrOUdAG0yCyezEv5KVfhsqpixj5PK7ckXenYiwtg=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=PrJ9dPzo9vHP8WIySyiKzapzaHsxdMrybFetCu51LQRjWofYUl4wZ2xIWQ9z0gqA4ESLfFUFXsfXep81qII3lgyKFcCYB8tqqXFtILDGS37hs4hkwYh/uRmLDjhbBTb30CJ60f6GdPV00ow2VH4uZDYIXzPKR6tmU0T+GJF4ilQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=Fk1q5DKi; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=cerv/Z1O; arc=none smtp.client-ip=103.168.172.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailfout.nyi.internal (Postfix) with ESMTP id B1896138178F;
+	Wed, 10 Jul 2024 04:16:57 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Wed, 10 Jul 2024 04:16:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1720599417;
+	 x=1720685817; bh=s22kjwU0cnfVL2BKVRlgz6gXF5KilH6UEmuBEYcBH14=; b=
+	Fk1q5DKiVtzKnKcgnlSzFriMCEb4xL7w1eF3Gr3XJuagS5fVRC96gX42yhuvRp/w
+	GoENRMJCgHTnVe8uo95W++q5YqK4DJLUt2PbNBxgGaJfp45/YbNvdMzfIm53HtCs
+	Tj82aT7KzUQxPlSSLEJ7mAiqvT2yB98UbqxIInfNYUuOu4VvXCqQ23zL4E/l5uXc
+	7fNICtD5jWTsHfx2xvcen5LfZZytN4fAY6JCszO3C4M0f0rOh5hL5/8d0+AsZgXF
+	Buq0kJzNeKrQja8Gs5ushz9PbPfygCVx7Im4mnVUScA43dY7OWVEjag/iIewTTqB
+	pOZusW4YnzQ5vgpPn96H6A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1720599417; x=
+	1720685817; bh=s22kjwU0cnfVL2BKVRlgz6gXF5KilH6UEmuBEYcBH14=; b=c
+	erv/Z1OAPp6buK2OAt2vjGDXXPDNVFWARqxi7dgydzEqS7le/jNeZ3XDsMgiUlq9
+	j3NM4C2fisfFq43RI+gU7LJGPlKrqxZP4zOk8lGLhvuExhBhDVfN7y+wLQcv2U8/
+	ojhqt0mh37YBYmKgRWEj66nSPFlFW40tDPUgUzjM8EbAabI4sWQqwrDDtX4bk7BI
+	0nZfNcIvoPK8tpylTwhYRAaFNglESqRlQPYDBex3uve+xnxuUMX3l4a0CVOJn2K8
+	eyUfbGLOzmUMlwT19ZBOTH1ERfo//U8YC4c5u3Q/0UUfsvz5EaTbouaTD7omp5HE
+	f5+UtAmtlMm+skX4HTiFw==
+X-ME-Sender: <xms:eEOOZtfhpZiBB14QptCu22J8yZNbal8KovHP_wDko2s3f8sKkjGvOQ>
+    <xme:eEOOZrNusvN_AjDmAHBaG4122RMuwlB1i3gcYKlfKi5qZZRZ2Dm0GSEFXKpSncq-X
+    gItnv0uIB8z-pOVQ_M>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrfedugddtvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
+    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+    eqnecuggftrfgrthhtvghrnhepudefgeeftedugeehffdtheefgfevffelfefghefhjeeu
+    geevtefhudduvdeihefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:eEOOZmhM0lCKo1OPg0O6lBxYisCsc4SKVR1NpyDbzq7q76v4EkFmYg>
+    <xmx:eEOOZm9k8z7UHDkRqxxCN1lqc0axKiJxKhFKPzHQ_qQlZAidY4TXDw>
+    <xmx:eEOOZptBdY4kiPlmdhQInpAJ-BGC5GdKbvRvvqILKlI2xRCbuy7CFg>
+    <xmx:eEOOZlHNqGaQ4IWOBGXDFN7f7vQRHKXwql8iO_4j3hKaJnpPigcpOw>
+    <xmx:eUOOZthqu65b2LCHo3qynGBJZu3NNkS_xgsia4mENwi9bdJMV_ubx7vd>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 8F49D36A0075; Wed, 10 Jul 2024 04:16:56 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
+Precedence: bulk
+X-Mailing-List: linux-mips@vger.kernel.org
+List-Id: <linux-mips.vger.kernel.org>
+List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <daf23c57-9058-479c-aab1-c9d9d172edc0@app.fastmail.com>
+In-Reply-To: <Zo457UgAkhbAgm2R@alpha.franken.de>
 References: <20240612-mips_ieee754_emul-v3-1-2c21b450abdb@flygoat.com>
  <Zn1FuxNw2CUttzdg@alpha.franken.de>
  <9cc26415-9cbc-47fa-a132-7d8c000874a4@app.fastmail.com>
@@ -48,61 +97,44 @@ References: <20240612-mips_ieee754_emul-v3-1-2c21b450abdb@flygoat.com>
  <fbd421a6-cf37-49ab-bdbe-6128a7cae8be@app.fastmail.com>
  <Zoz6+YmUk7CBsNFw@alpha.franken.de>
  <7797a7b2-1bb2-4c45-b65d-678f685dfa3d@app.fastmail.com>
-Precedence: bulk
-X-Mailing-List: linux-mips@vger.kernel.org
-List-Id: <linux-mips.vger.kernel.org>
-List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7797a7b2-1bb2-4c45-b65d-678f685dfa3d@app.fastmail.com>
+ <Zo457UgAkhbAgm2R@alpha.franken.de>
+Date: Wed, 10 Jul 2024 16:16:35 +0800
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>,
+ "Jonathan Corbet" <corbet@lwn.net>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+Subject: Re: [PATCH v3] MIPS: Implement ieee754 NAN2008 emulation mode
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 10, 2024 at 01:34:41PM +0800, Jiaxun Yang wrote:
-> 
-> 
-> 在2024年7月9日七月 下午4:55，Thomas Bogendoerfer写道：
-> > On Fri, Jun 28, 2024 at 01:33:06AM +0100, Jiaxun Yang wrote:
-> >> 
-> >> 
-> >> 在2024年6月27日六月 下午8:54，Maciej W. Rozycki写道：
-> >> > On Thu, 27 Jun 2024, Jiaxun Yang wrote:
-> >> >
-> >> >> >> @@ -318,6 +318,10 @@ void mips_set_personality_nan(struct arch_elf_state *state)
-> >> >> >>  	t->thread.fpu.fcr31 = c->fpu_csr31;
-> >> >> >>  	switch (state->nan_2008) {
-> >> >> >>  	case 0:
-> >> >> >> +		if (!(c->fpu_msk31 & FPU_CSR_NAN2008))
-> >> >> >> +			t->thread.fpu.fcr31 &= ~FPU_CSR_NAN2008;
-> >> >> >> +		if (!(c->fpu_msk31 & FPU_CSR_ABS2008))
-> >> >> >> +			t->thread.fpu.fcr31 &= ~FPU_CSR_ABS2008;
-> >> >> >
-> >> >> > why is this needed?
-> >> >> 
-> >> >> Because t->thread.fpu.fcr31 comes from c->fpu_csr31, in this case we the default
-> >> >> value of c->fpu_csr31 is read from hardware and we don't know what would that be.
-> >> >
-> >> >  But it has always been like this.  What has changed with your patch that 
-> >> > you need to mask the bit out now?
-> >> 
-> >> After this patch kernel's copy of t->thread.fpu.fcr31 can disagree with hardware.
-> >> When disagree happens, we trigger emulation.
-> >> 
-> >> Before that patch for nan legacy binary running on nan2008 CPU t->thread.fpu.fcr31
-> >> will still be nan2008 (for ieee754=relaxed) so that's not relevant.
-> >
-> > I'm considering to apply your patch, how much testing/verification did
-> > this patch see ? Do have some test binaries ?
-> 
-> It has been tested against Debian rootfs. There is no need to test againt special binary,
-> but you need NaN2008 hardware such as Loongson 3A4000.
 
-that's just one case, what about NaN2008 binaries on a legacy MIPS CPU ?
 
-Thomas.
+=E5=9C=A82024=E5=B9=B47=E6=9C=8810=E6=97=A5=E4=B8=83=E6=9C=88 =E4=B8=8B=E5=
+=8D=883:36=EF=BC=8CThomas Bogendoerfer=E5=86=99=E9=81=93=EF=BC=9A
+[...]
+>> It has been tested against Debian rootfs. There is no need to test ag=
+aint special binary,
+>> but you need NaN2008 hardware such as Loongson 3A4000.
+>
+> that's just one case, what about NaN2008 binaries on a legacy MIPS CPU=
+ ?
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Never checked that, as we don't have any NaN2008 distro.
+
+Will try and report.
+
+>
+> Thomas.
+>
+> --=20
+> Crap can work. Given enough thrust pigs will fly, but it's not necessa=
+rily a
+> good idea.                                                [ RFC1925, 2=
+.3 ]
+
+--=20
+- Jiaxun
 
