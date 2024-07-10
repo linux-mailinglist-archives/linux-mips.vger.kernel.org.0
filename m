@@ -1,59 +1,59 @@
-Return-Path: <linux-mips+bounces-4233-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4232-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 726BA92C9CA
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3506292C9C9
 	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 06:35:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DD25284651
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 04:35:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A7123B22634
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 04:35:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 165E44F8A0;
-	Wed, 10 Jul 2024 04:35:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC6374F1E2;
+	Wed, 10 Jul 2024 04:35:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="UyMvdLxo"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="b3GbfSsR"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F80482D8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42AD6482CD
 	for <linux-mips@vger.kernel.org>; Wed, 10 Jul 2024 04:35:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720586142; cv=none; b=lbARTs+qj8PNoN9FacqYpgGOKTqTnT+z81kww5WBEwybeEfK4w767OyLgYRaeHUcTLbC9JFZbtqroBrjbv5R6fvVzTbHga80v6Oo9EmfKRlBcFzmKL/NJmljlRg/gRGn9xgjguhmiObR1d9mmG8/lAKJuLjQh9Wlmyof6wBaCAo=
+	t=1720586141; cv=none; b=eIHvJshVntgOQ0/IinW6LXi8NzIZYZUZMaYl4Tzp4omafq9aaRCIPkqj/+2icv2VB0R//PeC5rzfpvuBmdK9PGLLt3ouqMFP4yJ6tMN79fRYPg1aFmD5V+bticefL6BJztSHznjYhKEfXlmloLQbEUVg6RvRByuaYPr/ClnXvig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720586142; c=relaxed/simple;
-	bh=8iUshweou2+JPAzV7dML+X+xGFNFc5W/FkwnZPDJzjk=;
+	s=arc-20240116; t=1720586141; c=relaxed/simple;
+	bh=bivDCxqnhGmdAOv0M7NTE3VhwmnpVCOIC7+U0rnBqrU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Gv/lfLnH09DedaqON8Yo2h1B9CD/rzSIuXiubCoImbvJZrS3nslu8hWErL5fYhiZ4O/OWmXAfR8ooopzLfvb9USqXOV8/lg54cBW4t68+mfLfNfk7SxmonYj+hyHu2QiKW/72O9ROAbveGMeRiTfNBpUYMx0hxSFpXnriI+QeiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=UyMvdLxo; arc=none smtp.client-ip=202.36.163.20
+	 MIME-Version; b=HYJTR2y27u/uQAWhEIttluBteIbvpIIXo3WoChdYcJy16PaX+jpHvspcEL5fHQIhsOH6JbSe/rkrPQ4t5cNofuUMuXwZBqAZCio1ryB/W9AdGthxTawKoZhsH5DGfmovPSl2O4RqxUalfmlmr9su/vG98XKSzho3cE/Tii8FLTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=b3GbfSsR; arc=none smtp.client-ip=202.36.163.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id C6A262C0ADD;
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id CE5EE2C0BA5;
 	Wed, 10 Jul 2024 16:35:30 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
 	s=mail181024; t=1720586130;
-	bh=0D0OJOD/c5JSxNJ0xWZ0yNlHTKLPrrkMHOBvpZf3s6c=;
+	bh=B+MHJ0FovgFTC5RrFAm+yxAZW0k7wMvGFaaUpE1DdBg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UyMvdLxoD0P79xECPs8HL1v16xzPH4iLKSHZMfeQ8njtRXZN9vFknP1sN6mTkN13w
-	 6s/s80krNOsqTMRFURKyMbimrkzXLSsaRylAlkkby1qJtR6X95DkmZXUJidFFtlDtq
-	 WT5o9PgYoC48v78o8305/EO5qTwQCzBQhqf/jYP4EZq8Ge0kspHjMZutWFge6vKIVw
-	 KRNYNTTQv43pn40hCbGd+z1lTKYcFA2FQm5ZpkKW02wo4LdUU7GSCZTnYgvc1SYXr0
-	 VrVi8XdMT+9Ha4hx5Mgw8RF1doO6lNc/vgJLmATlrhl57sO8ppuHXa8YltcEgX0EYU
-	 8FFBIgKvKff7g==
+	b=b3GbfSsRo1V7XajPb0L6PWGfXxmByWRPXZBJoIlxyus0flXz5OSrF9S7uylDjKnlQ
+	 nOChbdLVX6weq//WGmJHtRJ+5opCzrWiRjJVvCRnoYNY51gA5IJTnW3yjTihRX2lgx
+	 ZW9BT+rHroVqrHAAggzl3vxf3vUP+5UjVxe+CJG3QvD3XszGbzhEgyJ+dKJ3/B+Yah
+	 78MO6To8P/3EinlAySOmgyHsPgHUzmKMT7bv6a3qBghDUw3yK3DHKGFXdjhso6f26q
+	 MIyTrWiqRWzs6to7suYoplBfHxb1Re2rx/EXvw3pI16+3QC2lTy3PYdNc6Q8CPGkHU
+	 ecIbXlWzW90Ag==
 Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B668e0f920003>; Wed, 10 Jul 2024 16:35:30 +1200
+	id <B668e0f920004>; Wed, 10 Jul 2024 16:35:30 +1200
 Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id 0BB9213EE87;
+	by pat.atlnz.lc (Postfix) with ESMTP id 10D7413EE2B;
 	Wed, 10 Jul 2024 16:35:30 +1200 (NZST)
 Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id 0976928206C; Wed, 10 Jul 2024 16:35:30 +1200 (NZST)
+	id 0E05028206C; Wed, 10 Jul 2024 16:35:30 +1200 (NZST)
 From: Chris Packham <chris.packham@alliedtelesis.co.nz>
 To: tglx@linutronix.de,
 	robh@kernel.org,
@@ -73,9 +73,9 @@ Cc: linux-kernel@vger.kernel.org,
 	kabel@kernel.org,
 	ericwouds@gmail.com,
 	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v5 03/10] dt-bindings: vendor-prefixes: Add Cameo Communications
-Date: Wed, 10 Jul 2024 16:35:17 +1200
-Message-ID: <20240710043524.1535151-4-chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v5 04/10] dt-bindings: mips: realtek: Add rtl930x-soc compatible
+Date: Wed, 10 Jul 2024 16:35:18 +1200
+Message-ID: <20240710043524.1535151-5-chris.packham@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240710043524.1535151-1-chris.packham@alliedtelesis.co.nz>
 References: <20240710043524.1535151-1-chris.packham@alliedtelesis.co.nz>
@@ -86,41 +86,51 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=CvQccW4D c=1 sm=1 tr=0 ts=668e0f92 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=4kmOji7k6h8A:10 a=9AoCKF9XAAAA:8 a=KKAkSRfTAAAA:8 a=L4MHaItcyTsGJ2lxC4sA:9 a=3ZKOabzyN94A:10 a=zuUzDCw_FVeVL6jMbh0G:22 a=cvBusfyB2V15izCimMoJ:22
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=CvQccW4D c=1 sm=1 tr=0 ts=668e0f92 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=4kmOji7k6h8A:10 a=KKAkSRfTAAAA:8 a=NHmAL4TRMSeL2PaLwp8A:9 a=3ZKOabzyN94A:10 a=cvBusfyB2V15izCimMoJ:22
 X-SEG-SpamProfiler-Score: 0
 x-atlnz-ls: pat
 
-Add entry for Cameo Communications (https://www.cameo.com.tw/)
+Add the rtl9302 SoC and the Cameo RTL9302C_2xRTL8224_2XGE reference
+board to the list of Realtek compatible strings.
 
 Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
 
 Notes:
     Changes in v5:
     - None
     Changes in v4:
-    - Add ack from Krzysztof
+    - Add r-by from Krzysztof
     Changes in v3:
-    - new
+    - Use full board name
+    - I've decided to stick with rtl9302-soc to disambiguate it from what=
+ I
+      eventually plan to add as rtl9302-switch which is in the same packa=
+ge
+      but are separate dies.
+    Changes in v2:
+    - Use specific compatible for rtl9302-soc
+    - Fix to allow correct board, soc compatible
 
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/mips/realtek-rtl.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Doc=
-umentation/devicetree/bindings/vendor-prefixes.yaml
-index fbf47f0bacf1..67550f0dd189 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -246,6 +246,8 @@ patternProperties:
-     description: CALAO Systems SAS
-   "^calxeda,.*":
-     description: Calxeda
-+  "^cameo,.*":
-+    description: Cameo Communications, Inc
-   "^canaan,.*":
-     description: Canaan, Inc.
-   "^caninos,.*":
+diff --git a/Documentation/devicetree/bindings/mips/realtek-rtl.yaml b/Do=
+cumentation/devicetree/bindings/mips/realtek-rtl.yaml
+index f8ac309d2994..d337655bfbf8 100644
+--- a/Documentation/devicetree/bindings/mips/realtek-rtl.yaml
++++ b/Documentation/devicetree/bindings/mips/realtek-rtl.yaml
+@@ -20,5 +20,9 @@ properties:
+           - enum:
+               - cisco,sg220-26
+           - const: realtek,rtl8382-soc
++      - items:
++          - enum:
++              - cameo,rtl9302c-2x-rtl8224-2xge
++          - const: realtek,rtl9302-soc
+=20
+ additionalProperties: true
 --=20
 2.45.2
 
