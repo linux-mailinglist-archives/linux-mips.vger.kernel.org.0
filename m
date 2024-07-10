@@ -1,141 +1,108 @@
-Return-Path: <linux-mips+bounces-4242-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4243-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D6E992CAF1
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 08:23:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCD5492CC17
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 09:41:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB09D1F2213F
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 06:23:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDA921C2060E
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 07:41:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1606B6214D;
-	Wed, 10 Jul 2024 06:23:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MFd1WkVz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34A0E83CD7;
+	Wed, 10 Jul 2024 07:41:01 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com [209.85.217.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36DFC6EB4A
-	for <linux-mips@vger.kernel.org>; Wed, 10 Jul 2024 06:23:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.46
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32842824BC;
+	Wed, 10 Jul 2024 07:40:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720592621; cv=none; b=aeLrDcaNCSBi9ZZYOqyLy+VRaHl9g3oP+sC5NS4h2hVh8B4rMwtVkvPf60pZAviTJPvjPXuJ7qypcXUfBQUS30Aicrk0/JiGwrC7hG3mbyxvS7r7K6uWp3pzBLemMfk4h0jKoVPQhPQQvvec+ELdA0fcUOvEC0peTM4xa5n7q0M=
+	t=1720597261; cv=none; b=jT/H8Iy8FKQ5s22o0uJ2th6qZPolcPugt+oLqebWItl0duaGphEjD+j/eJL/OUjXlVtKDsDMFWEP8y05VhEorK6ohmpTNO/dYoR1+FLA2jEQvrjLekbXNBIJtCiW2O+61OfRtazZZCgdOl+tFCTxWVmkbLMHTW/Ic8jdXuFVf8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720592621; c=relaxed/simple;
-	bh=Vh2PxRkX6tPQ21qX4H/N8GPRCj89j3ozdiQOdbkgRcU=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=crQMl3XhBi1LDVKh8Bc9CErp6EdjRYJ4NX7Xomt8F56yGse0vCWwWhMWCjZ8IiZKTgvKHxC9PDhCM2ttc6Mgo45CGm7GH2q8pup1YvyXcQZTLnXWCuFCKEhFzf9oL2NeLkaoBqTYYbwc/FVGDrgwnUYLS/XOSRZzapu8jeOEG7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MFd1WkVz; arc=none smtp.client-ip=209.85.217.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-48ffceb3fdaso1820450137.0
-        for <linux-mips@vger.kernel.org>; Tue, 09 Jul 2024 23:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720592618; x=1721197418; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=rfO/tubJkRWNsflDwLIYJeDnbtKjZsGMZyxTOtYX+yQ=;
-        b=MFd1WkVzRL3huC4Mc1CQJiSA5Fko0AaapOI6/24TKwagSD6PKkjgKM90gBjIW353zO
-         vTRH/8rTRi4Sy5Cxe0FGTZyrMkM9OhkPgA5SoMey/J5c73UXPzq00wAR9/8XqKsRlrtf
-         NlnLKLn4ZqikWRhVtQQ2c8j/IazkIpKgx0WdmlqNhah9G6wk9QdSKqmXPePkMZMNaXtk
-         xnQRMT6G4SXLEtZQfvnX74HmHNh3qkVyrbPkzmJI7ZI8ge+yfQ9VjGDuooRRr0Tatp0p
-         Ow2JYU7V4a68CPQ+y6in76UUtv8CtdXoH7h4vX683sFqHkgULRFDZP/jpniaw0MShTaO
-         ZgWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720592618; x=1721197418;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rfO/tubJkRWNsflDwLIYJeDnbtKjZsGMZyxTOtYX+yQ=;
-        b=msV0Chm4a7a4kaMJEavQEaC263sPxRMtDIjRWPZd829XI2W4eHp0pgrB5vsj5+kRy6
-         vrD6SVQW3a+aPl+TrF3m4RSbtxidye3a5kSpwBw6bwQMYrxUISNBNM2PoT82kWM0lk0q
-         E0lnYBJ5EfEqALCAlOgWpXUwfWtQzWh0ls0+rpIE9/A+yMX5UyAppv3tayLro1pAkW4I
-         Cq8AIqZO/pbwu5/uRo/+3hzJfcwajx67k8rRaSJTqr+Lkhcdn4IhR8S7oy8mdZz05iF+
-         CFuOSP4WjUmYEtsCQTkMdOIDkgo0XVDpNs9azQEO6uxCM35TEOEDjeACzgRxoVm5bL5B
-         1HxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVEyLiZetP6CKlM17AjSnMwyf9Y9N/7zxXQ465W/pY7Bc59htg4pMGqall+e6uiyZh5E4Cef2LNGtZacEigeFqnCmKnJYvqPqOuyQ==
-X-Gm-Message-State: AOJu0YxvqMKJqrK5bZLyO2GqoAHcPkQjiPyU3UAwDzb1h7GuGSjTm/Dk
-	vpsO0HpotSXQ5vsAqbfTgiM3LiqUIgS3aG3Ac2fBqmbKMMY5sRchTwbxqXg9OI3VqLLRKPA9NV4
-	YuxNJvYThhJMCLGRFamVR/VSVyUaA3yf9lUjxlA==
-X-Google-Smtp-Source: AGHT+IHHBbLJpcxImsi97rq9EoasWijE1hp+uHEFhkSG2ol4YRtSD65QsSk4l3zo4kM3na3TwQ5YhMfh0rPcDkFpGiM=
-X-Received: by 2002:a05:6102:26d1:b0:48f:6581:c16c with SMTP id
- ada2fe7eead31-490320f2e96mr4920436137.6.1720592617827; Tue, 09 Jul 2024
- 23:23:37 -0700 (PDT)
+	s=arc-20240116; t=1720597261; c=relaxed/simple;
+	bh=ic/doOQaVCqp0tFw78Ip2mj0kPGzk2er21GSUClPl3Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r2hKFGQNAYY69XvDIYK/hjNO0CgwL5haLJX8fCeffuOiAsOjTTH0r2pm+l/dTepE1c2XsdV9zXKLbfrviX4c29NzA01vtm3W0wMyw2DF1cWSXPvFdfUaet7C4KONvorQgZNenbe0Vz+yp/CxCjhrr9PSN2Cy0ONegNSfMsbfdRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1sRRwG-0003DV-00; Wed, 10 Jul 2024 09:40:32 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 6ED58C0120; Wed, 10 Jul 2024 09:36:13 +0200 (CEST)
+Date: Wed, 10 Jul 2024 09:36:13 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>,
+	Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+	Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
+Subject: Re: [PATCH v3] MIPS: Implement ieee754 NAN2008 emulation mode
+Message-ID: <Zo457UgAkhbAgm2R@alpha.franken.de>
+References: <20240612-mips_ieee754_emul-v3-1-2c21b450abdb@flygoat.com>
+ <Zn1FuxNw2CUttzdg@alpha.franken.de>
+ <9cc26415-9cbc-47fa-a132-7d8c000874a4@app.fastmail.com>
+ <alpine.DEB.2.21.2406272053180.43454@angie.orcam.me.uk>
+ <fbd421a6-cf37-49ab-bdbe-6128a7cae8be@app.fastmail.com>
+ <Zoz6+YmUk7CBsNFw@alpha.franken.de>
+ <7797a7b2-1bb2-4c45-b65d-678f685dfa3d@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Wed, 10 Jul 2024 11:53:26 +0530
-Message-ID: <CA+G9fYsptR8VoPA0TBV0qeCy7TX2EHyD4v-EMsVbomeS5yVSLg@mail.gmail.com>
-Subject: mips-gic-timer.c:180:11: error: call to undeclared function 'read_gic_redir_counter'
-To: open list <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org, 
-	lkft-triage@lists.linaro.org
-Cc: Thomas Gleixner <tglx@linutronix.de>, Serge Semin <Sergey.Semin@baikalelectronics.ru>, 
-	Serge Semin <fancer.lancer@gmail.com>, Daniel Lezcano <daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7797a7b2-1bb2-4c45-b65d-678f685dfa3d@app.fastmail.com>
 
-The arch mips builds failed on Linux next-20240709 tag due to below
-build warnings / errors [1] with clang-18 and gcc-12 / gcc-8.
+On Wed, Jul 10, 2024 at 01:34:41PM +0800, Jiaxun Yang wrote:
+> 
+> 
+> 在2024年7月9日七月 下午4:55，Thomas Bogendoerfer写道：
+> > On Fri, Jun 28, 2024 at 01:33:06AM +0100, Jiaxun Yang wrote:
+> >> 
+> >> 
+> >> 在2024年6月27日六月 下午8:54，Maciej W. Rozycki写道：
+> >> > On Thu, 27 Jun 2024, Jiaxun Yang wrote:
+> >> >
+> >> >> >> @@ -318,6 +318,10 @@ void mips_set_personality_nan(struct arch_elf_state *state)
+> >> >> >>  	t->thread.fpu.fcr31 = c->fpu_csr31;
+> >> >> >>  	switch (state->nan_2008) {
+> >> >> >>  	case 0:
+> >> >> >> +		if (!(c->fpu_msk31 & FPU_CSR_NAN2008))
+> >> >> >> +			t->thread.fpu.fcr31 &= ~FPU_CSR_NAN2008;
+> >> >> >> +		if (!(c->fpu_msk31 & FPU_CSR_ABS2008))
+> >> >> >> +			t->thread.fpu.fcr31 &= ~FPU_CSR_ABS2008;
+> >> >> >
+> >> >> > why is this needed?
+> >> >> 
+> >> >> Because t->thread.fpu.fcr31 comes from c->fpu_csr31, in this case we the default
+> >> >> value of c->fpu_csr31 is read from hardware and we don't know what would that be.
+> >> >
+> >> >  But it has always been like this.  What has changed with your patch that 
+> >> > you need to mask the bit out now?
+> >> 
+> >> After this patch kernel's copy of t->thread.fpu.fcr31 can disagree with hardware.
+> >> When disagree happens, we trigger emulation.
+> >> 
+> >> Before that patch for nan legacy binary running on nan2008 CPU t->thread.fpu.fcr31
+> >> will still be nan2008 (for ieee754=relaxed) so that's not relevant.
+> >
+> > I'm considering to apply your patch, how much testing/verification did
+> > this patch see ? Do have some test binaries ?
+> 
+> It has been tested against Debian rootfs. There is no need to test againt special binary,
+> but you need NaN2008 hardware such as Loongson 3A4000.
 
-This is started from Linux next-20240709.
-  GOOD: next-20240703
-  BAD: next-20240709
+that's just one case, what about NaN2008 binaries on a legacy MIPS CPU ?
 
-Build details,
--------
-kernel: 6.10.0-rc7
-git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-git_ref: master
-git_sha: 82d01fe6ee52086035b201cfa1410a3b04384257
-git_describe: next-20240709
-Test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240709
+Thomas.
 
-Regressions (compared to build next-20240703)
-------------------------------------------------------------------------
-
-mips:
-  build:
-    * clang-18-allnoconfig
-    * clang-nightly-defconfig
-    * gcc-8-allnoconfig
-    * gcc-12-malta_defconfig
-    * clang-18-tinyconfig
-    * gcc-12-defconfig
-    * clang-nightly-allnoconfig
-    * gcc-12-tinyconfig
-    * gcc-8-malta_defconfig
-    * gcc-12-allnoconfig
-    * clang-18-defconfig
-    * gcc-8-tinyconfig
-    * clang-nightly-tinyconfig
-    * gcc-8-defconfig
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Build warnings / errors [2]:
----------
-drivers/clocksource/mips-gic-timer.c:180:11: error: call to undeclared
-function 'read_gic_redir_counter'; ISO C99 and later do not support
-implicit function declarations [-Wimplicit-function-declaration]
-  180 |                 count = read_gic_redir_counter();
-      |                         ^
-drivers/clocksource/mips-gic-timer.c:184:7: error: call to undeclared
-function 'read_gic_redir_counter_32h'; ISO C99 and later do not
-support implicit function declarations
-[-Wimplicit-function-declaration]
-  184 |         hi = read_gic_redir_counter_32h();
-      |              ^
-
-Links:
-----
-[1] https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240709/testrun/24543079/suite/build/test/clang-18-defconfig/log
-[2] https://storage.tuxsuite.com/public/linaro/lkft/builds/2j0Ox1y8pT9eOUt60DNHQZjFjD1/
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
