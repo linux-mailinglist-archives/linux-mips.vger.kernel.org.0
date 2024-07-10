@@ -1,304 +1,171 @@
-Return-Path: <linux-mips+bounces-4237-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4241-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 322CA92C9DB
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 06:36:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AE8492CA2A
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 07:35:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A22891F23564
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 04:36:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 160A71F23A22
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Jul 2024 05:35:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E305824AF;
-	Wed, 10 Jul 2024 04:35:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E2BF23776;
+	Wed, 10 Jul 2024 05:35:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="Jah4YT0p"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="BOuR7eIt";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LQ7vjsm4"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from fhigh7-smtp.messagingengine.com (fhigh7-smtp.messagingengine.com [103.168.172.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55AA233986
-	for <linux-mips@vger.kernel.org>; Wed, 10 Jul 2024 04:35:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 000643C39;
+	Wed, 10 Jul 2024 05:35:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720586146; cv=none; b=SWFXiJ+w6OYzcgoUB5EzlWtI7P9cqxepCg99rk4ebhBBdE8bYb5Bcpz05bt9GqA2fgxnbpwPMwkXmSD+OZuAa71xY7tIuHa8XEz8geNcDOjDUuO9A2D5Y48V8JwQewy7JrENq/gwj/PAH2DkctQetD1Z0dL34egCXkFaIqsppAU=
+	t=1720589708; cv=none; b=sepG/Jj9W4zBNklx36KtrOM00UlowfuhFiGwk2ncxfnjHkn/tul8EGPAS7b1dYneqLFOU96Byu2npb/BXS2S2YzJIFbQVslvyZ2h1RmkSqr0lsgRxrXldXyj/qcX/YlxlfkLPlaTRc8ehBt0AKYRrd+OxdZ7soTCEwBYxYhomHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720586146; c=relaxed/simple;
-	bh=hRZzGjrt0hquIi3POY55JN8Q3hPxvvZ0ojrAk6LeAVk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bds+aovCcMj2o3A9gCAQca993xEop4d0xuyt6oAvA5nWtDtHo8MF9djZi78YzUxDWdZv2QjU4p7+s6EoiT3q1Uo3fdljRkcwOMdeDEWBur3258Hks2TFLLAn1nmBT/GUM3UH/17fiB1QgG0kpXaXJK1OZkqG3r3Y+YMO0lAtwoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=Jah4YT0p; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 1ED622C0CFC;
-	Wed, 10 Jul 2024 16:35:31 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1720586131;
-	bh=WTZKQA+YIenNM6vFmAZK99aqBjDZ/vJ4/ScqR97QI0Y=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Jah4YT0pVpD5yQXRu+xPqS4mwUYlpquaTQjAkRUdLf+FlU6DRMXXQHoHA/I56NJTX
-	 MaF2U66CVm91cFAdrC3BDfHQWnZzGD477VLq/VsLm2uCFz/J1sjAYZ/BQl2O4cjkeR
-	 Tq4Dti9IB6QEbld7IusCRR8bOmQ8IGwso9ITYEfyKaelutOziyaMHMpXnPZ8x6BfYo
-	 4Xq4sj1qhCJnlLeo5tHfB/Y6agVIQpIQLXOfXPi78FgmmX5eTGI5THD72eRmt3b01K
-	 lVA/uBJTEjFpaDWjPZm4hOV5PvSBwEUNc8evptVFcwsx3J91oKBVlvD6+Sx+UkXrek
-	 XtRNVsW1AsC5Q==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B668e0f92000a>; Wed, 10 Jul 2024 16:35:30 +1200
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id 2C61013EE8E;
-	Wed, 10 Jul 2024 16:35:30 +1200 (NZST)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id 2A17A28206C; Wed, 10 Jul 2024 16:35:30 +1200 (NZST)
-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-To: tglx@linutronix.de,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	tsbogend@alpha.franken.de,
-	daniel.lezcano@linaro.org,
-	paulburton@kernel.org,
-	peterz@infradead.org,
-	mail@birger-koblitz.de,
-	bert@biot.com,
-	john@phrozen.org,
-	sander@svanheule.net
-Cc: linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	kabel@kernel.org,
-	ericwouds@gmail.com,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v5 10/10] mips: dts: realtek: Add RTL9302C board
-Date: Wed, 10 Jul 2024 16:35:24 +1200
-Message-ID: <20240710043524.1535151-11-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240710043524.1535151-1-chris.packham@alliedtelesis.co.nz>
-References: <20240710043524.1535151-1-chris.packham@alliedtelesis.co.nz>
+	s=arc-20240116; t=1720589708; c=relaxed/simple;
+	bh=QXMPRFLJqx9eEPxxL/pvEzKwGFD/HcszEzESwh8ZfjQ=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=EoTtxLYass5OEVzMDOTc0bE+5BTTyTUkfVRYa/9pa0gX8nyNr/wiGXSrEmDoRB8eWsV0Lhy14UMlf9G9dcqm1BRbJPdS6Ird63mHMJ7Sf3qjisdC6lat3U5VEaPD6C+X1G1LQWVi4mc4o6m2NNGTTX3F9lP1ZJGO69CS8urKwkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=BOuR7eIt; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LQ7vjsm4; arc=none smtp.client-ip=103.168.172.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id 0AC9F1142294;
+	Wed, 10 Jul 2024 01:35:05 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute3.internal (MEProxy); Wed, 10 Jul 2024 01:35:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1720589705;
+	 x=1720676105; bh=8YEThCembZnXJ9a0a7ch1VR3k4BKk0tw4+eg8GHnp2E=; b=
+	BOuR7eItaatlyjnB53RLOrlZ9fGBrUqOUgpbQ9X9hu70wQdWps2Hs9UVDdGPs8X5
+	1s1uBoULdR/ZnR155nLuzKP9vPrAGzUvmQbPSOaU1ZQGLv/gKKsrw7qIXqP4ibaI
+	xU/p55w9qnPSKOVO7LcNCEwUnEZPr0QqfVQLKJVug7vniW7pQObvteq6VArMjsrW
+	qHu/EJKrt+UHV/DtTXhutT3rwS09wKOXDpdq/54z1XhRTXwjfPdunKAnRiIzG2ts
+	8FSLkhA+5ep04xalSlBcf6O259T+ON8j8laMcWuLkYqcYzBAsHl6MlGD6/A1A9he
+	1BWalRviofagwMDuhz4Jxg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1720589705; x=
+	1720676105; bh=8YEThCembZnXJ9a0a7ch1VR3k4BKk0tw4+eg8GHnp2E=; b=L
+	Q7vjsm4y69ywf/hgOTIHWRMG/Qg4SqopC0tm9YkE22ZTWHt0jMsavBVAbuyxBmUk
+	M+yRj3QcA8WWHnGHIs7Jkn7xeM3Yata4rUrRffJ2KjsgvcNsQzdP/YLppKfTeJ/l
+	0OmqNcq5jr0y0WymdEW+zLdxwWOuwaZo/AYi4yGutRUfujxLVXwSJsdICPvc9WBD
+	4S84VEUDPHiv2UAnwW/aAPbVg7k0ViIbTTQ3+1LjTjCbG/IzeM39HQUvkZcJgySr
+	QIo3A6nDLPjoNHC++So/McSiu706iAFy8/oY/r4vJmBmH3vcIXdUhb9X3Q0EanHT
+	qamVOVAbGC1lRqQ/amwSw==
+X-ME-Sender: <xms:hx2OZlK2PBYiN8xMNCZNpHXHfzsMNjRfwuC59yCTkGMa1BUbE4GF0Q>
+    <xme:hx2OZhJpNXv7uO3oeZfVuw0ymQ1nJqbwRMdo6Vphpr7X-SR_y9Pqn-K4JQ2FwnJr_
+    M2DUt5JmwidC_bEqRQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrfedtgdelkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
+    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+    eqnecuggftrfgrthhtvghrnhepudefgeeftedugeehffdtheefgfevffelfefghefhjeeu
+    geevtefhudduvdeihefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:hx2OZttAHOK7c9yzlyf5AcM5SMO7wCVteKuUSosc3VKw9CUlXne_og>
+    <xmx:hx2OZmbLE6H1gP7FxgB94c3QZcqTnKoYXyVEW55ynUfQfbj4L1s7dA>
+    <xmx:hx2OZsYCd5C4EPf4ahvKrKK5kRMlwLaX7ME6Rpdp9iIG9-gQiXGqfQ>
+    <xmx:hx2OZqCumDJ_9xKyolwNH0PKJwF5ESz0hQZ8vQaC8GPl7tp1uUyNJg>
+    <xmx:iR2OZhNUbCdXD_3OWJHdkOnBOzrm4tTqqbuxjhS1sOjj38fnvwvjOrMr>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 294F336A0075; Wed, 10 Jul 2024 01:35:03 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <7797a7b2-1bb2-4c45-b65d-678f685dfa3d@app.fastmail.com>
+In-Reply-To: <Zoz6+YmUk7CBsNFw@alpha.franken.de>
+References: <20240612-mips_ieee754_emul-v3-1-2c21b450abdb@flygoat.com>
+ <Zn1FuxNw2CUttzdg@alpha.franken.de>
+ <9cc26415-9cbc-47fa-a132-7d8c000874a4@app.fastmail.com>
+ <alpine.DEB.2.21.2406272053180.43454@angie.orcam.me.uk>
+ <fbd421a6-cf37-49ab-bdbe-6128a7cae8be@app.fastmail.com>
+ <Zoz6+YmUk7CBsNFw@alpha.franken.de>
+Date: Wed, 10 Jul 2024 13:34:41 +0800
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>,
+ "Jonathan Corbet" <corbet@lwn.net>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+Subject: Re: [PATCH v3] MIPS: Implement ieee754 NAN2008 emulation mode
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=CvQccW4D c=1 sm=1 tr=0 ts=668e0f92 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=4kmOji7k6h8A:10 a=FkagyKZCYwirPjr5IuAA:9 a=3ZKOabzyN94A:10
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
 
-Add support for the RTL9302 SoC and the RTL9302C_2xRTL8224_2XGE
-reference board.
 
-The RTL930x family of SoCs are Realtek switches with an embedded MIPS
-core (800MHz 34Kc). Most of the peripherals are similar to the RTL838x
-SoC and can make use of many existing drivers.
 
-Add in full DSA switch support is still a work in progress.
+=E5=9C=A82024=E5=B9=B47=E6=9C=889=E6=97=A5=E4=B8=83=E6=9C=88 =E4=B8=8B=E5=
+=8D=884:55=EF=BC=8CThomas Bogendoerfer=E5=86=99=E9=81=93=EF=BC=9A
+> On Fri, Jun 28, 2024 at 01:33:06AM +0100, Jiaxun Yang wrote:
+>>=20
+>>=20
+>> =E5=9C=A82024=E5=B9=B46=E6=9C=8827=E6=97=A5=E5=85=AD=E6=9C=88 =E4=B8=8B=
+=E5=8D=888:54=EF=BC=8CMaciej W. Rozycki=E5=86=99=E9=81=93=EF=BC=9A
+>> > On Thu, 27 Jun 2024, Jiaxun Yang wrote:
+>> >
+>> >> >> @@ -318,6 +318,10 @@ void mips_set_personality_nan(struct arch_=
+elf_state *state)
+>> >> >>  	t->thread.fpu.fcr31 =3D c->fpu_csr31;
+>> >> >>  	switch (state->nan_2008) {
+>> >> >>  	case 0:
+>> >> >> +		if (!(c->fpu_msk31 & FPU_CSR_NAN2008))
+>> >> >> +			t->thread.fpu.fcr31 &=3D ~FPU_CSR_NAN2008;
+>> >> >> +		if (!(c->fpu_msk31 & FPU_CSR_ABS2008))
+>> >> >> +			t->thread.fpu.fcr31 &=3D ~FPU_CSR_ABS2008;
+>> >> >
+>> >> > why is this needed?
+>> >>=20
+>> >> Because t->thread.fpu.fcr31 comes from c->fpu_csr31, in this case =
+we the default
+>> >> value of c->fpu_csr31 is read from hardware and we don't know what=
+ would that be.
+>> >
+>> >  But it has always been like this.  What has changed with your patc=
+h that=20
+>> > you need to mask the bit out now?
+>>=20
+>> After this patch kernel's copy of t->thread.fpu.fcr31 can disagree wi=
+th hardware.
+>> When disagree happens, we trigger emulation.
+>>=20
+>> Before that patch for nan legacy binary running on nan2008 CPU t->thr=
+ead.fpu.fcr31
+>> will still be nan2008 (for ieee754=3Drelaxed) so that's not relevant.
+>
+> I'm considering to apply your patch, how much testing/verification did
+> this patch see ? Do have some test binaries ?
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
+It has been tested against Debian rootfs. There is no need to test again=
+t special binary,
+but you need NaN2008 hardware such as Loongson 3A4000.
 
-Notes:
-    Changes in v5:
-    - Use same mtd partition names as Realtek reference software
-    Changes in v4:
-    - None
-    Changes in v3:
-    - Use full board name
-    Changes in v2:
-    - Use specific compatibles instead of rtl930x
-    - Remove unnecessary irq flags (interrupt controller is one-cell)
-    - Remove earlycon
-    - Name clocks as recommended in dt schema
+Thanks
+- Jiaxun
+>
+> Thomas.
+>
+> --=20
+> Crap can work. Given enough thrust pigs will fly, but it's not necessa=
+rily a
+> good idea.                                                [ RFC1925, 2=
+.3 ]
 
- arch/mips/boot/dts/realtek/Makefile           |  1 +
- .../cameo-rtl9302c-2x-rtl8224-2xge.dts        | 73 +++++++++++++++++
- arch/mips/boot/dts/realtek/rtl930x.dtsi       | 79 +++++++++++++++++++
- 3 files changed, 153 insertions(+)
- create mode 100644 arch/mips/boot/dts/realtek/cameo-rtl9302c-2x-rtl8224-=
-2xge.dts
- create mode 100644 arch/mips/boot/dts/realtek/rtl930x.dtsi
-
-diff --git a/arch/mips/boot/dts/realtek/Makefile b/arch/mips/boot/dts/rea=
-ltek/Makefile
-index fba4e93187a6..d2709798763f 100644
---- a/arch/mips/boot/dts/realtek/Makefile
-+++ b/arch/mips/boot/dts/realtek/Makefile
-@@ -1,2 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0
- dtb-y	+=3D cisco_sg220-26.dtb
-+dtb-y	+=3D cameo-rtl9302c-2x-rtl8224-2xge.dtb
-diff --git a/arch/mips/boot/dts/realtek/cameo-rtl9302c-2x-rtl8224-2xge.dt=
-s b/arch/mips/boot/dts/realtek/cameo-rtl9302c-2x-rtl8224-2xge.dts
-new file mode 100644
-index 000000000000..77d2566545f2
---- /dev/null
-+++ b/arch/mips/boot/dts/realtek/cameo-rtl9302c-2x-rtl8224-2xge.dts
-@@ -0,0 +1,73 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/dts-v1/;
-+
-+#include "rtl930x.dtsi"
-+
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/thermal/thermal.h>
-+
-+/ {
-+	compatible =3D "cameo,rtl9302c-2x-rtl8224-2xge", "realtek,rtl9302-soc";
-+	model =3D "RTL9302C Development Board";
-+
-+	memory@0 {
-+		device_type =3D "memory";
-+		reg =3D <0x0 0x8000000>;
-+	};
-+
-+	chosen {
-+		stdout-path =3D "serial0:115200n8";
-+	};
-+};
-+
-+&uart0 {
-+	status =3D "okay";
-+};
-+
-+&spi0 {
-+	status =3D "okay";
-+	flash@0 {
-+		compatible =3D "jedec,spi-nor";
-+		reg =3D <0>;
-+		spi-max-frequency =3D <10000000>;
-+
-+		partitions {
-+			compatible =3D "fixed-partitions";
-+			#address-cells =3D <1>;
-+			#size-cells =3D <1>;
-+
-+			partition@0 {
-+				label =3D "LOADER";
-+				reg =3D <0x0 0xe0000>;
-+				read-only;
-+			};
-+			partition@e0000 {
-+				label =3D "BDINFO";
-+				reg =3D <0xe0000 0x10000>;
-+			};
-+			partition@f0000 {
-+				label =3D "SYSINFO";
-+				reg =3D <0xf0000 0x10000>;
-+				read-only;
-+			};
-+			partition@100000 {
-+				label =3D "JFFS2 CFG";
-+				reg =3D <0x100000 0x100000>;
-+			};
-+			partition@200000 {
-+				label =3D "JFFS2 LOG";
-+				reg =3D <0x200000 0x100000>;
-+			};
-+			partition@300000 {
-+				label =3D "RUNTIME";
-+				reg =3D <0x300000 0xe80000>;
-+			};
-+			partition@1180000 {
-+				label =3D "RUNTIME2";
-+				reg =3D <0x1180000 0xe80000>;
-+			};
-+		};
-+	};
-+};
-diff --git a/arch/mips/boot/dts/realtek/rtl930x.dtsi b/arch/mips/boot/dts=
-/realtek/rtl930x.dtsi
-new file mode 100644
-index 000000000000..f271940f82be
---- /dev/null
-+++ b/arch/mips/boot/dts/realtek/rtl930x.dtsi
-@@ -0,0 +1,79 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
-+
-+#include "rtl83xx.dtsi"
-+
-+/ {
-+	compatible =3D "realtek,rtl9302-soc";
-+
-+	cpus {
-+		#address-cells =3D <1>;
-+		#size-cells =3D <0>;
-+
-+		cpu@0 {
-+			device_type =3D "cpu";
-+			compatible =3D "mips,mips34Kc";
-+			reg =3D <0>;
-+			clocks =3D <&baseclk 0>;
-+			clock-names =3D "cpu";
-+		};
-+	};
-+
-+	baseclk: clock-800mhz {
-+		compatible =3D "fixed-clock";
-+		#clock-cells =3D <0>;
-+		clock-frequency =3D <800000000>;
-+	};
-+
-+	lx_clk: clock-175mhz {
-+		compatible =3D "fixed-clock";
-+		#clock-cells =3D <0>;
-+		clock-frequency  =3D <175000000>;
-+	};
-+};
-+
-+&soc {
-+	intc: interrupt-controller@3000 {
-+		compatible =3D "realtek,rtl9300-intc", "realtek,rtl-intc";
-+		reg =3D <0x3000 0x18>, <0x3018 0x18>;
-+		interrupt-controller;
-+		#interrupt-cells =3D <1>;
-+
-+		interrupt-parent =3D <&cpuintc>;
-+		interrupts =3D <2>, <3>, <4>, <5>, <6>, <7>;
-+	};
-+
-+	spi0: spi@1200 {
-+		compatible =3D "realtek,rtl8380-spi";
-+		reg =3D <0x1200 0x100>;
-+
-+		#address-cells =3D <1>;
-+		#size-cells =3D <0>;
-+	};
-+
-+	timer0: timer@3200 {
-+		compatible =3D "realtek,rtl9302-timer", "realtek,otto-timer";
-+		reg =3D <0x3200 0x10>, <0x3210 0x10>, <0x3220 0x10>,
-+		    <0x3230 0x10>, <0x3240 0x10>;
-+
-+		interrupt-parent =3D <&intc>;
-+		interrupts =3D <7>, <8>, <9>, <10>, <11>;
-+		clocks =3D <&lx_clk>;
-+	};
-+};
-+
-+&uart0 {
-+	/delete-property/ clock-frequency;
-+	clocks =3D <&lx_clk>;
-+
-+	interrupt-parent =3D <&intc>;
-+	interrupts =3D <30>;
-+};
-+
-+&uart1 {
-+	/delete-property/ clock-frequency;
-+	clocks =3D <&lx_clk>;
-+
-+	interrupt-parent =3D <&intc>;
-+	interrupts =3D <31>;
-+};
-+
 --=20
-2.45.2
-
+- Jiaxun
 
