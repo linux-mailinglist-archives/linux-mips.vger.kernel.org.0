@@ -1,72 +1,72 @@
-Return-Path: <linux-mips+bounces-4273-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4274-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5852592E229
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 10:27:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3423492E22B
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 10:27:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B670284D8F
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 08:27:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDF9D284CFB
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 08:27:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7C5315575B;
-	Thu, 11 Jul 2024 08:27:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F0AD156968;
+	Thu, 11 Jul 2024 08:27:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="anA296jV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ARpZTf85"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC3F2153581;
-	Thu, 11 Jul 2024 08:27:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FE58155A47;
+	Thu, 11 Jul 2024 08:27:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720686427; cv=none; b=BXpqJBCtB8tKLKQeOTjOE/bUcZUKI5PsgrL/Cvw7JO30MP8bQv3THh5VTVudhKITZB4/P6Q6LAq5o+2Bjpj/9deLEYbDmTyOhgk67OUlldb2Hbq7wbKgPIUVeX9Ev78L2sm69hhQ2sQlDm2HJwEM9Jk+M4SQbi03goHPEg+6XhE=
+	t=1720686430; cv=none; b=NXWslGwdpa9yr0RMMcYW+wCgP7CWNSYUrgH7eFvG47bIA3X5BWNS7Nv/rfzcKoS5ERDM9pD05+IPo+KBQOjfPb3lhjVgpNB75hUr1dUI9Kz/aTEtVmUW7L1pIqHNxeAJ5l7IsW8pn6uoxgAyrI9TNIWqH93sMkDHReYRCJ3CYj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720686427; c=relaxed/simple;
-	bh=YqXfpzlrn+tQ5pRH/5JSmt1daHU/VeJILheS7aM7wuo=;
+	s=arc-20240116; t=1720686430; c=relaxed/simple;
+	bh=lRP8PrGqJ+uo9Zp6g0Qm8qLkDotTHxE60FSRnQlZCsM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=RETTNeTSXCZPShDLhq4u0Z5iIA4mo/wgpqPShNRNqwJkRwHmK4x6/sulGMS/0jjsjFNG5KTa2NfccqPTQjfpjfy4603+tcElzc5w8CUqo0mNvEdB2ovdW80iJwuAJwiybBLAnxQhMHq9b9FafJWudg15fb/COo6qkEaOxrkZoJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=anA296jV; arc=none smtp.client-ip=209.85.221.48
+	 MIME-Version; b=rhAShUnmIvlDPuyWji9HCgtlxt0DXDqeYNUYd6f2pb5FoCh6E5bLoi/XQ4FFT1TEGV8UZdfIbAlIsCAxoRRhdc6SGTZHxg8zaJjpS4jBipoENnL77i9bATFYGAr77q5m5n7SWH8vBJFAGqkVAd/dVJHCXfVPC2qzfil8qpZtNIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ARpZTf85; arc=none smtp.client-ip=209.85.208.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-367e50f71bbso454690f8f.2;
-        Thu, 11 Jul 2024 01:27:05 -0700 (PDT)
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2eec7e431d9so6496331fa.2;
+        Thu, 11 Jul 2024 01:27:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720686424; x=1721291224; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1720686426; x=1721291226; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SoGjIyylq/2U1UdDbKKzqWV3owFDbnfS+xDpWv/w24A=;
-        b=anA296jVbphQTINDJ5o6T0LKaF20n8I8FxWIWxdzcfaSTEqBd4aKU4XYAZhBYkZbjE
-         d2Hqv5EPHcinPFu83CUSK8ea62Z1juRwS7vYQoqYFRRTJrzgRT6/MdMS2uYoj48FqRwI
-         R0Ys3Ldlcxf1iFMAqf4/ITA4Z5VnRDl3GyQ9XP7+43NT3JfadQqRMN6JCk1uyb7uwWIy
-         0HE4jGLt4e+zoibzDwsPGFwcP/UwDMw5J7HAlNGJGyRbFgTHkVio2FwBp4Yd8zmxYxGf
-         Esig8Wt/9pvNnaTuZI5w9YXQFyJ63hJkNC2HXGPa3+iA++VlzeIJE1CZhSnO1AfEcPzH
-         etdg==
+        bh=ReifRjJ+F7L7a0QBvncSYAOaGaiMv8UukF6KYGpSd/w=;
+        b=ARpZTf85SKLKvne4AzMZ9UTfuEJEw4VV46YIzy7QpwUbjRXac7O1tvvF07XNxxx5bm
+         vRCb8U/fxLA7mgB6w7v5MYeIPSczklM0zcBEvFdyMACBz0/5DV77vj058SmVuz+QIPiQ
+         ek7gNoVsLeJ5y8AA4SEUHcWO+tfeJeYh6lkno7T2FukZbUzRL88TyI89uzrs4SC9fkZl
+         v3KATvJC58IYvGQ7cLEWgcbiO+E76TKY+2Lf7FSWtmFT/ONpYuCKJaJLToxwdr9uRxMB
+         YXq9Jni+os8bQCyYm+nsyAE8TL5TnTHX3y3TwFCDC5H93TjWLfqgQdPSwx3I1XEVD6Kk
+         nIAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720686424; x=1721291224;
+        d=1e100.net; s=20230601; t=1720686426; x=1721291226;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SoGjIyylq/2U1UdDbKKzqWV3owFDbnfS+xDpWv/w24A=;
-        b=BlhHrCZXgjcUK+9/phZvFq5kdjWvXnlqjrsZQspoD/tU5C1jFQ2ti10vvgBG6qSeFm
-         aBJoWI6c0vNkuoe9E5ILaZbdlXmnFHJEMFjKRJ8lPkN1ZMR5KtxqQ3auX7NfegqqVB+D
-         sjP8WWUB1Iii6gb/QMhBV416I7h+Vh5jU2slBeGoKn7zP2ktAF2kDQ0k/J121wJynOfj
-         87Jozm7GoPaIUeyAPEy7sUv7FIMejTJeUsa5XJySXe7jXKO8hJ1Ot2y4+SU01Gdcrl6Y
-         /0OvlLrzpasLJe/02PMSId9a2mGF8fJoXvxQe73NunyDXv5UtoRl3xyhKJ7hLcgXoTfD
-         GAwA==
-X-Forwarded-Encrypted: i=1; AJvYcCWz5oQoKjrhzjXNGxaJPqgdNuapZFTvC+aGdrixTpWMEm3WunL8ow6l3+5BGf0GQ4MjbjxQLfslWXAiwsn6gKGNAShjh6x2VO/AzPMM22jfKBpCmL1r6CNJT6srJKwx4k+TEpAwnUM9Ow==
-X-Gm-Message-State: AOJu0YzzrcOa7bb3mCwMncqiWu3P+KSDwo33ZFzVDoRRTirFxgsQOtwv
-	U9WWVtLoUmgSlGAs6tFFtw/mS6zn/UJbKjiG0xi3pCFX0zdfbc/w
-X-Google-Smtp-Source: AGHT+IEm9yPJ1zLNIjg4u8xmCjz1g5S1kD7ahImT+qOHrp/AXsNNUzk/WyBwfj6wEUjb5sqFrfNgpg==
-X-Received: by 2002:a5d:470a:0:b0:35f:d57:6e3f with SMTP id ffacd0b85a97d-367cea96613mr4931059f8f.31.1720686424057;
-        Thu, 11 Jul 2024 01:27:04 -0700 (PDT)
+        bh=ReifRjJ+F7L7a0QBvncSYAOaGaiMv8UukF6KYGpSd/w=;
+        b=F9gBAfMk1WAhcCjK6qUknjOP3wnfD5mnvu3IvNauQzuMft/2ew8fsA7/9LmtYdLW6b
+         +kf4JxA8UFqFTc70FFX796tFNE8bU6AhjLozDw3OutR8XncZ/LG0AalnZJeC1q4oZmE+
+         xpfUGVYpUyyuOV+WvI+Fhl4M8X41snQOukUXShlbLVG239UAODeaNS3h2Nnx8v8KRW0N
+         ZhNHWkDszwl817bUt7+gcOWfqOz5dfr8oQm89GoEAauulTevgWiQ6lChIa/DBT5SkTef
+         2AZi3yq3GSUqF6kLSKHfo1Xz+z/Mae2fq7MkhKBdagPJuX2ynjnXrV3aoQI3hbwoZBRq
+         T+BQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVWywWTgDKd7T2MzakEm8eOZE85+SM7zCFMBTCwABqidxC5afGS0ZCOVcAavLMVa1putuUDrj2v/Z5PifebAw5R7DN6Q40S9IcKYzZp3lmcVe5a4E1Qes4SQJWjB/d7ZWy61ykn/4CnCw==
+X-Gm-Message-State: AOJu0YyZCnp5tsNorCs4Qj20r0fJRhntVcBkgKTDwBsZDbqwkNu1PYMy
+	lVqR8Ot8IdgCvA6vTTR4gKLwRqzeX0juwKqYh3M+r74q1AbBvLZn
+X-Google-Smtp-Source: AGHT+IE85Ukum8VZjJ8MbuTew4337izeAeArigurhDA/mX33JddC/tDb/b11mpGLgtyMhoyaVk+Qzg==
+X-Received: by 2002:a2e:a7d0:0:b0:2ee:8a88:b060 with SMTP id 38308e7fff4ca-2eeb3191ab3mr62260971fa.53.1720686426174;
+        Thu, 11 Jul 2024 01:27:06 -0700 (PDT)
 Received: from localhost.localdomain ([79.175.114.8])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-367cde84712sm7134283f8f.33.2024.07.11.01.27.02
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-367cde84712sm7134283f8f.33.2024.07.11.01.27.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jul 2024 01:27:03 -0700 (PDT)
+        Thu, 11 Jul 2024 01:27:05 -0700 (PDT)
 From: Aleksandar Rikalo <arikalo@gmail.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>,
@@ -85,9 +85,9 @@ Cc: Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>,
 	Serge Semin <fancer.lancer@gmail.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: [PATCH v5 02/11] MIPS: GIC: Generate redirect block accessors
-Date: Thu, 11 Jul 2024 10:26:47 +0200
-Message-Id: <20240711082656.1889440-3-arikalo@gmail.com>
+Subject: [PATCH v5 03/11] irqchip/mips-gic: Introduce for_each_online_cpu_gic()
+Date: Thu, 11 Jul 2024 10:26:48 +0200
+Message-Id: <20240711082656.1889440-4-arikalo@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240711082656.1889440-1-arikalo@gmail.com>
 References: <20240711082656.1889440-1-arikalo@gmail.com>
@@ -101,155 +101,135 @@ Content-Transfer-Encoding: 8bit
 
 From: Paul Burton <paulburton@kernel.org>
 
-With CM 3.5 the "core-other" register block evolves into the "redirect"
-register block, which is capable of accessing not only the core local
-registers of other cores but also the shared/global registers of other
-clusters.
+Parts of code in the MIPS GIC driver operate on the GIC local register
+block for each online CPU, accessing each via the GIC's other/redirect
+register block.
 
-This patch generates accessor functions for shared/global registers
-accessed via the redirect block, with "redir_" inserted after "gic_" in
-their names. For example the accessor function:
+Abstract the process of iterating over online CPUs & configuring the
+other/redirect region to access their registers through a new
+for_each_online_cpu_gic() macro.
 
-  read_gic_config()
-
-...accesses the GIC_CONFIG register of the GIC in the local cluster.
-With this patch a new function:
-
-  read_gic_redir_config()
-
-...is added which accesses the GIC_CONFIG register of the GIC in
-whichever cluster the GCR_CL_REDIRECT register is configured to access.
-
-This mirrors the similar redirect block accessors already provided for
-the CM & CPC.
-
-Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Signed-off-by: Paul Burton <paulburton@kernel.org>
 Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
 Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
 Signed-off-by: Aleksandar Rikalo <arikalo@gmail.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Tested-by: Serge Semin <fancer.lancer@gmail.com>
 ---
- arch/mips/include/asm/mips-gic.h | 50 ++++++++++++++++++++++----------
- 1 file changed, 34 insertions(+), 16 deletions(-)
+ drivers/irqchip/irq-mips-gic.c | 59 +++++++++++++++++++++++-----------
+ 1 file changed, 41 insertions(+), 18 deletions(-)
 
-diff --git a/arch/mips/include/asm/mips-gic.h b/arch/mips/include/asm/mips-gic.h
-index 084cac1c5ea2..fd9da5e3beaa 100644
---- a/arch/mips/include/asm/mips-gic.h
-+++ b/arch/mips/include/asm/mips-gic.h
-@@ -28,11 +28,13 @@ extern void __iomem *mips_gic_base;
+diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
+index 76253e864f23..6c7a7d2f0438 100644
+--- a/drivers/irqchip/irq-mips-gic.c
++++ b/drivers/irqchip/irq-mips-gic.c
+@@ -66,6 +66,44 @@ static struct gic_all_vpes_chip_data {
+ 	bool	mask;
+ } gic_all_vpes_chip_data[GIC_NUM_LOCAL_INTRS];
  
- /* For read-only shared registers */
- #define GIC_ACCESSOR_RO(sz, off, name)					\
--	CPS_ACCESSOR_RO(gic, sz, MIPS_GIC_SHARED_OFS + off, name)
-+	CPS_ACCESSOR_RO(gic, sz, MIPS_GIC_SHARED_OFS + off, name)	\
-+	CPS_ACCESSOR_RO(gic, sz, MIPS_GIC_REDIR_OFS + off, redir_##name)
++static int __gic_with_next_online_cpu(int prev)
++{
++	unsigned int cpu;
++
++	/* Discover the next online CPU */
++	cpu = cpumask_next(prev, cpu_online_mask);
++
++	/* If there isn't one, we're done */
++	if (cpu >= nr_cpu_ids)
++		return cpu;
++
++	/*
++	 * Move the access lock to the next CPU's GIC local register block.
++	 *
++	 * Set GIC_VL_OTHER. Since the caller holds gic_lock nothing can
++	 * clobber the written value.
++	 */
++	write_gic_vl_other(mips_cm_vp_id(cpu));
++
++	return cpu;
++}
++
++/**
++ * for_each_online_cpu_gic() - Iterate over online CPUs, access local registers
++ * @cpu: An integer variable to hold the current CPU number
++ * @gic_lock: A pointer to raw spin lock used as a guard
++ *
++ * Iterate over online CPUs & configure the other/redirect register region to
++ * access each CPUs GIC local register block, which can be accessed from the
++ * loop body using read_gic_vo_*() or write_gic_vo_*() accessor functions or
++ * their derivatives.
++ */
++#define for_each_online_cpu_gic(cpu, gic_lock)		\
++	guard(raw_spinlock_irqsave)(gic_lock);		\
++	for ((cpu) = __gic_with_next_online_cpu(-1);	\
++	     (cpu) < nr_cpu_ids;			\
++	     (cpu) = __gic_with_next_online_cpu(cpu))
++
+ static void gic_clear_pcpu_masks(unsigned int intr)
+ {
+ 	unsigned int i;
+@@ -350,37 +388,27 @@ static struct irq_chip gic_local_irq_controller = {
+ static void gic_mask_local_irq_all_vpes(struct irq_data *d)
+ {
+ 	struct gic_all_vpes_chip_data *cd;
+-	unsigned long flags;
+ 	int intr, cpu;
  
- /* For read-write shared registers */
- #define GIC_ACCESSOR_RW(sz, off, name)					\
--	CPS_ACCESSOR_RW(gic, sz, MIPS_GIC_SHARED_OFS + off, name)
-+	CPS_ACCESSOR_RW(gic, sz, MIPS_GIC_SHARED_OFS + off, name)	\
-+	CPS_ACCESSOR_RW(gic, sz, MIPS_GIC_REDIR_OFS + off, redir_##name)
+ 	intr = GIC_HWIRQ_TO_LOCAL(d->hwirq);
+ 	cd = irq_data_get_irq_chip_data(d);
+ 	cd->mask = false;
  
- /* For read-only local registers */
- #define GIC_VX_ACCESSOR_RO(sz, off, name)				\
-@@ -45,7 +47,7 @@ extern void __iomem *mips_gic_base;
- 	CPS_ACCESSOR_RW(gic, sz, MIPS_GIC_REDIR_OFS + off, vo_##name)
- 
- /* For read-only shared per-interrupt registers */
--#define GIC_ACCESSOR_RO_INTR_REG(sz, off, stride, name)			\
-+#define _GIC_ACCESSOR_RO_INTR_REG(sz, off, stride, name)		\
- static inline void __iomem *addr_gic_##name(unsigned int intr)		\
- {									\
- 	return mips_gic_base + (off) + (intr * (stride));		\
-@@ -58,8 +60,8 @@ static inline unsigned int read_gic_##name(unsigned int intr)		\
+-	raw_spin_lock_irqsave(&gic_lock, flags);
+-	for_each_online_cpu(cpu) {
+-		write_gic_vl_other(mips_cm_vp_id(cpu));
++	for_each_online_cpu_gic(cpu, &gic_lock)
+ 		write_gic_vo_rmask(BIT(intr));
+-	}
+-	raw_spin_unlock_irqrestore(&gic_lock, flags);
  }
  
- /* For read-write shared per-interrupt registers */
--#define GIC_ACCESSOR_RW_INTR_REG(sz, off, stride, name)			\
--	GIC_ACCESSOR_RO_INTR_REG(sz, off, stride, name)			\
-+#define _GIC_ACCESSOR_RW_INTR_REG(sz, off, stride, name)		\
-+	_GIC_ACCESSOR_RO_INTR_REG(sz, off, stride, name)		\
- 									\
- static inline void write_gic_##name(unsigned int intr,			\
- 				    unsigned int val)			\
-@@ -68,22 +70,30 @@ static inline void write_gic_##name(unsigned int intr,			\
- 	__raw_writel(val, addr_gic_##name(intr));			\
+ static void gic_unmask_local_irq_all_vpes(struct irq_data *d)
+ {
+ 	struct gic_all_vpes_chip_data *cd;
+-	unsigned long flags;
+ 	int intr, cpu;
+ 
+ 	intr = GIC_HWIRQ_TO_LOCAL(d->hwirq);
+ 	cd = irq_data_get_irq_chip_data(d);
+ 	cd->mask = true;
+ 
+-	raw_spin_lock_irqsave(&gic_lock, flags);
+-	for_each_online_cpu(cpu) {
+-		write_gic_vl_other(mips_cm_vp_id(cpu));
++	for_each_online_cpu_gic(cpu, &gic_lock)
+ 		write_gic_vo_smask(BIT(intr));
+-	}
+-	raw_spin_unlock_irqrestore(&gic_lock, flags);
  }
  
-+#define GIC_ACCESSOR_RO_INTR_REG(sz, off, stride, name)			\
-+	_GIC_ACCESSOR_RO_INTR_REG(sz, off, stride, name)		\
-+	_GIC_ACCESSOR_RO_INTR_REG(sz, MIPS_GIC_REDIR_OFS + off, stride, redir_##name)
-+
-+#define GIC_ACCESSOR_RW_INTR_REG(sz, off, stride, name)			\
-+	_GIC_ACCESSOR_RW_INTR_REG(sz, off, stride, name)		\
-+	_GIC_ACCESSOR_RW_INTR_REG(sz, MIPS_GIC_REDIR_OFS + off, stride, redir_##name)
-+
- /* For read-only local per-interrupt registers */
- #define GIC_VX_ACCESSOR_RO_INTR_REG(sz, off, stride, name)		\
--	GIC_ACCESSOR_RO_INTR_REG(sz, MIPS_GIC_LOCAL_OFS + off,		\
-+	_GIC_ACCESSOR_RO_INTR_REG(sz, MIPS_GIC_LOCAL_OFS + off,		\
- 				 stride, vl_##name)			\
--	GIC_ACCESSOR_RO_INTR_REG(sz, MIPS_GIC_REDIR_OFS + off,		\
-+	_GIC_ACCESSOR_RO_INTR_REG(sz, MIPS_GIC_REDIR_OFS + off,		\
- 				 stride, vo_##name)
+ static void gic_all_vpes_irq_cpu_online(void)
+@@ -469,7 +497,6 @@ static int gic_irq_domain_map(struct irq_domain *d, unsigned int virq,
+ 			      irq_hw_number_t hwirq)
+ {
+ 	struct gic_all_vpes_chip_data *cd;
+-	unsigned long flags;
+ 	unsigned int intr;
+ 	int err, cpu;
+ 	u32 map;
+@@ -533,12 +560,8 @@ static int gic_irq_domain_map(struct irq_domain *d, unsigned int virq,
+ 	if (!gic_local_irq_is_routable(intr))
+ 		return -EPERM;
  
- /* For read-write local per-interrupt registers */
- #define GIC_VX_ACCESSOR_RW_INTR_REG(sz, off, stride, name)		\
--	GIC_ACCESSOR_RW_INTR_REG(sz, MIPS_GIC_LOCAL_OFS + off,		\
-+	_GIC_ACCESSOR_RW_INTR_REG(sz, MIPS_GIC_LOCAL_OFS + off,		\
- 				 stride, vl_##name)			\
--	GIC_ACCESSOR_RW_INTR_REG(sz, MIPS_GIC_REDIR_OFS + off,		\
-+	_GIC_ACCESSOR_RW_INTR_REG(sz, MIPS_GIC_REDIR_OFS + off,		\
- 				 stride, vo_##name)
+-	raw_spin_lock_irqsave(&gic_lock, flags);
+-	for_each_online_cpu(cpu) {
+-		write_gic_vl_other(mips_cm_vp_id(cpu));
++	for_each_online_cpu_gic(cpu, &gic_lock)
+ 		write_gic_vo_map(mips_gic_vx_map_reg(intr), map);
+-	}
+-	raw_spin_unlock_irqrestore(&gic_lock, flags);
  
- /* For read-only shared bit-per-interrupt registers */
--#define GIC_ACCESSOR_RO_INTR_BIT(off, name)				\
-+#define _GIC_ACCESSOR_RO_INTR_BIT(off, name)				\
- static inline void __iomem *addr_gic_##name(void)			\
- {									\
- 	return mips_gic_base + (off);					\
-@@ -106,8 +116,8 @@ static inline unsigned int read_gic_##name(unsigned int intr)		\
+ 	return 0;
  }
- 
- /* For read-write shared bit-per-interrupt registers */
--#define GIC_ACCESSOR_RW_INTR_BIT(off, name)				\
--	GIC_ACCESSOR_RO_INTR_BIT(off, name)				\
-+#define _GIC_ACCESSOR_RW_INTR_BIT(off, name)				\
-+	_GIC_ACCESSOR_RO_INTR_BIT(off, name)				\
- 									\
- static inline void write_gic_##name(unsigned int intr)			\
- {									\
-@@ -146,6 +156,14 @@ static inline void change_gic_##name(unsigned int intr,			\
- 	}								\
- }
- 
-+#define GIC_ACCESSOR_RO_INTR_BIT(off, name)				\
-+	_GIC_ACCESSOR_RO_INTR_BIT(off, name)				\
-+	_GIC_ACCESSOR_RO_INTR_BIT(MIPS_GIC_REDIR_OFS + off, redir_##name)
-+
-+#define GIC_ACCESSOR_RW_INTR_BIT(off, name)				\
-+	_GIC_ACCESSOR_RW_INTR_BIT(off, name)				\
-+	_GIC_ACCESSOR_RW_INTR_BIT(MIPS_GIC_REDIR_OFS + off, redir_##name)
-+
- /* For read-only local bit-per-interrupt registers */
- #define GIC_VX_ACCESSOR_RO_INTR_BIT(sz, off, name)			\
- 	GIC_ACCESSOR_RO_INTR_BIT(sz, MIPS_GIC_LOCAL_OFS + off,		\
-@@ -155,10 +173,10 @@ static inline void change_gic_##name(unsigned int intr,			\
- 
- /* For read-write local bit-per-interrupt registers */
- #define GIC_VX_ACCESSOR_RW_INTR_BIT(sz, off, name)			\
--	GIC_ACCESSOR_RW_INTR_BIT(sz, MIPS_GIC_LOCAL_OFS + off,		\
--				 vl_##name)				\
--	GIC_ACCESSOR_RW_INTR_BIT(sz, MIPS_GIC_REDIR_OFS + off,		\
--				 vo_##name)
-+	_GIC_ACCESSOR_RW_INTR_BIT(sz, MIPS_GIC_LOCAL_OFS + off,		\
-+				  vl_##name)				\
-+	_GIC_ACCESSOR_RW_INTR_BIT(sz, MIPS_GIC_REDIR_OFS + off,		\
-+				  vo_##name)
- 
- /* GIC_SH_CONFIG - Information about the GIC configuration */
- GIC_ACCESSOR_RW(32, 0x000, config)
 -- 
 2.25.1
 
