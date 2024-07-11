@@ -1,89 +1,156 @@
-Return-Path: <linux-mips+bounces-4283-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4284-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA02C92E46A
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 12:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A33FB92E531
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 12:56:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 862781F22B5D
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 10:22:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C99A1F22C1B
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 10:56:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A45415885E;
-	Thu, 11 Jul 2024 10:21:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D8E5158D7B;
+	Thu, 11 Jul 2024 10:55:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="afjNT8fB"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0159157A59;
-	Thu, 11 Jul 2024 10:20:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18843155C8F;
+	Thu, 11 Jul 2024 10:55:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720693263; cv=none; b=cY9JxxhDzBYqajFD5qgdPTWff/eOoIaX9KO/Df7JkegFa7UC4l7bDVxNFiv4kgrcC14yjTeCie04bS5+jkYsQ3ETzOjsgAprmzVtdVqS/3zdhOKIICQT7Yp64dDQFoZxAT7+q8KMTupUgJ/WOQfp6T+3JYY6ZGJUlO1DvcjcCAM=
+	t=1720695355; cv=none; b=BWRvecGNvGRiSteuc3LQTstz6Ta53x7imgbhArghGE5x4UsMIsINQNL6dQN25aKMyJzHxu3yDi80OEK+g3Nuf/vba80dQ3yYqYI2jOg7gUf6DU9aAniscuRTNOwXy+UQ2FxlaggFzqu0WPPT/gCGvdA9O6zdoMG8W8nVbNtDq7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720693263; c=relaxed/simple;
-	bh=hncl9QviZuWKAdztx7PuMEvcvja4nPPgccko85HZQ6o=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=sfAlwGbwTkEAzjV2QALz3st0T+4Az4b7cRymuhdrAwogF3wLIgJEgJqqNB7fVaDXJ7GNuAsD1PQpHezb+9RYXmKEMrSlc0BnfYuLn3QQwSAd2U5F9lO5/kLZCBrs0l2SYZpIGTkkPHv1SQAVTGEhgxkMDc4RoQKcyiRhITesVw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 8ADB392009C; Thu, 11 Jul 2024 12:20:51 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 84DCB92009B;
-	Thu, 11 Jul 2024 11:20:51 +0100 (BST)
-Date: Thu, 11 Jul 2024 11:20:51 +0100 (BST)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org, 
-    linux-kernel@vger.kernel.org, 
-    "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
-    =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Subject: Re: [PATCH v3] MIPS: Implement ieee754 NAN2008 emulation mode
-In-Reply-To: <a8741e38-837b-4fbb-8656-1e6d50bdfcc0@app.fastmail.com>
-Message-ID: <alpine.DEB.2.21.2407110315170.38148@angie.orcam.me.uk>
-References: <20240612-mips_ieee754_emul-v3-1-2c21b450abdb@flygoat.com> <Zn1FuxNw2CUttzdg@alpha.franken.de> <9cc26415-9cbc-47fa-a132-7d8c000874a4@app.fastmail.com> <alpine.DEB.2.21.2406272053180.43454@angie.orcam.me.uk> <fbd421a6-cf37-49ab-bdbe-6128a7cae8be@app.fastmail.com>
- <Zoz6+YmUk7CBsNFw@alpha.franken.de> <7797a7b2-1bb2-4c45-b65d-678f685dfa3d@app.fastmail.com> <Zo457UgAkhbAgm2R@alpha.franken.de> <alpine.DEB.2.21.2407101015120.38148@angie.orcam.me.uk> <a8741e38-837b-4fbb-8656-1e6d50bdfcc0@app.fastmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1720695355; c=relaxed/simple;
+	bh=HwivC1YSyiPpQ5PwufJY8pxz6NX1ZCCTtPty8vus00c=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KMb4vN4bxiZRBfwekc4a8tEHIu8HCBq8IHdtDoaogP9cgfxNIPBx0PWQuiNbGGuIsYHlNzO3kobMmPhO07cCIYJlqhH/YbyMxD+thxiUi5/woncSD57Eyh7RV1h3TYzILdpyREvnJBnxRTHALm+Tvact6c/kjYlzksNNIbrqt+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=afjNT8fB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9937AC116B1;
+	Thu, 11 Jul 2024 10:55:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720695354;
+	bh=HwivC1YSyiPpQ5PwufJY8pxz6NX1ZCCTtPty8vus00c=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=afjNT8fB3zUOrdezvdow7e/Gmoa9sAkV8Re+lgNOhlo8naFYNYF3elo7ltW7HNi+q
+	 lN6zwZ1/5GIk7iVS1Rq0JZRtvw2IyXY6WnRi5O3q7HiFAR3JVG4ca3tnMJ+feQ/GVr
+	 WZdyUINN4gfEWUWd2wI8oh/5Y713rQT5VipByrl895aVy/1ddnlVPSjeU7TevFsMHu
+	 7R9eSldvRPvCBIwTlYb3/en4BZgvm0xOHgHgRdcwbdEB3fElj8aP6ums4Waad7nQsv
+	 1h/Uw+ymwnHjzv7i03Cw+exCpWDVkLpG0NA0bpmA2aYzM0rK4Yv85xpDxfRlBRyOsQ
+	 qZAinA3pQ/ETA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87715C3DA41;
+	Thu, 11 Jul 2024 10:55:54 +0000 (UTC)
+From: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>
+Subject: [PATCH RESEND v9 0/2] Add support for Loongson1 APB DMA
+Date: Thu, 11 Jul 2024 18:55:36 +0800
+Message-Id: <20240711-loongson1-dma-v9-0-5ce8b5e85a56@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+To: Keguang Zhang <keguang.zhang@gmail.com>, Vinod Koul <vkoul@kernel.org>, 
+ Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Conor Dooley <conor.dooley@microchip.com>, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1720695351; l=2719;
+ i=keguang.zhang@gmail.com; s=20231129; h=from:subject:message-id;
+ bh=HwivC1YSyiPpQ5PwufJY8pxz6NX1ZCCTtPty8vus00c=;
+ b=QyBxFrcnMjDaxOUrz7fmfRhMp+ZFmKh4f5TgsKWUwSDt4UQMt4kT+iskDLYQKaRyjP1g3rZEz
+ DfHCQxLL2PjDjMps93gf5zb1jhmrhpNB7234spPWRWOmmYB/WOoD1G3
+X-Developer-Key: i=keguang.zhang@gmail.com; a=ed25519;
+ pk=FMKGj/JgKll/MgClpNZ3frIIogsh5e5r8CeW2mr+WLs=
+X-Endpoint-Received: by B4 Relay for keguang.zhang@gmail.com/20231129 with
+ auth_id=102
+X-Original-From: Keguang Zhang <keguang.zhang@gmail.com>
+Reply-To: keguang.zhang@gmail.com
 
-On Thu, 11 Jul 2024, Jiaxun Yang wrote:
+Add the driver and dt-binding document for Loongson1 APB DMA.
 
-> >> that's just one case, what about NaN2008 binaries on a legacy MIPS CPU ?
-> >
-> >  It would be good to check with hard-float QEMU configured for writable 
-> > FCSR.NAN2008 (which is one way original code was verified) that things 
-> > have not regressed.  And also what happens if once our emulation has 
-> > triggered for the unsupported FCSR.NAN2008 mode, an attempt is made to 
-> > flip the mode bit via ptrace(2), e.g. under GDB, which I reckon our 
-> > emulation permits for non-legacy CPUs (and which I think should not be 
-> > allowed under the new setting).
-> 
-> PTrace is working as expected (reflects emulated value).
+---
+Changes in v9:
+- Fix all the errors and warnings when building with W=1 and C=1
+- Link to v8: https://lore.kernel.org/r/20240607-loongson1-dma-v8-0-f9992d257250@gmail.com
 
- Yes, sure for reads, but how about *writing* to the bit?
+Changes in v8:
+- Change 'interrupts' property to an items list
+- Link to v7: https://lore.kernel.org/r/20240329-loongson1-dma-v7-0-37db58608de5@gmail.com
 
-> The actual switchable NaN hardware (M5150, P5600) uses a dedicated Config7
-> bit rather than writable FCSR.NAN2008 to control NaN2008 mode. This is undocumented
-> and not present on some RTL releases. FCSR.NAN2008 is R/O as per The MIPS32 Instruction
-> Set Manual. This renders the purposed test pointless.
+Changes in v7:
+- Change the comptible to 'loongson,ls1*-apbdma' (suggested by Huacai Chen)
+- Update the title and description part accordingly
+- Rename the file to loongson,ls1b-apbdma.yaml
+- Add a compatible string for LS1A
+- Delete minItems of 'interrupts'
+- Change patterns of 'interrupt-names' to const
+- Rename the file to loongson1-apb-dma.c to keep the consistency
+- Update Kconfig and Makefile accordingly
+- Link to v6: https://lore.kernel.org/r/20240316-loongson1-dma-v6-0-90de2c3cc928@gmail.com
 
- Yes, for R6 and arguably R5, but not for R3.  Architecture specification 
-revisions 3.50 through 5.02 define FCSR.NAN2008 (and also FCSR.ABS2008) as 
-either R/O or R/W, at the implementer's discretion, so it is a conforming 
-implementation to have these bits writable and our FPU emulator reflects 
-it.  I won't go into the details here as to why the later revisions of the 
-specification have been restricted to the R/O implementation only.
+Changes in v6:
+- Change the compatible to the fallback
+- Implement .device_prep_dma_cyclic for Loongson1 sound driver,
+- as well as .device_pause and .device_resume.
+- Set the limitation LS1X_DMA_MAX_DESC and put all descriptors
+- into one page to save memory
+- Move dma_pool_zalloc() into ls1x_dma_alloc_desc()
+- Drop dma_slave_config structure
+- Use .remove_new instead of .remove
+- Use KBUILD_MODNAME for the driver name
+- Improve the debug information
+- Some minor fixes
 
- NB architecture specification revisions 3.50 through 5.01 also have the 
-FCSR.MAC2008 bit defined, removed altogether later on.
+Changes in v5:
+- Add the dt-binding document
+- Add DT support
+- Use DT information instead of platform data
+- Use chan_id of struct dma_chan instead of own id
+- Use of_dma_xlate_by_chan_id() instead of ls1x_dma_filter()
+- Update the author information to my official name
 
-  Maciej
+Changes in v4:
+- Use dma_slave_map to find the proper channel.
+- Explicitly call devm_request_irq() and tasklet_kill().
+- Fix namespace issue.
+- Some minor fixes and cleanups.
+
+Changes in v3:
+- Rename ls1x_dma_filter_fn to ls1x_dma_filter.
+
+Changes in v2:
+- Change the config from 'DMA_LOONGSON1' to 'LOONGSON1_DMA',
+- and rearrange it in alphabetical order in Kconfig and Makefile.
+- Fix comment style.
+
+---
+Keguang Zhang (2):
+      dt-bindings: dma: Add Loongson-1 APB DMA
+      dmaengine: Loongson1: Add Loongson-1 APB DMA driver
+
+ .../bindings/dma/loongson,ls1b-apbdma.yaml         |  67 +++
+ drivers/dma/Kconfig                                |   9 +
+ drivers/dma/Makefile                               |   1 +
+ drivers/dma/loongson1-apb-dma.c                    | 665 +++++++++++++++++++++
+ 4 files changed, 742 insertions(+)
+---
+base-commit: d35b2284e966c0bef3e2182a5c5ea02177dd32e4
+change-id: 20231120-loongson1-dma-163afe5708b9
+
+Best regards,
+-- 
+Keguang Zhang <keguang.zhang@gmail.com>
+
+
 
