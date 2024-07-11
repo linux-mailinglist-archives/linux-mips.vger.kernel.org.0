@@ -1,72 +1,72 @@
-Return-Path: <linux-mips+bounces-4272-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4273-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F83F92E227
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 10:27:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5852592E229
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 10:27:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D48D1C22C08
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 08:27:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B670284D8F
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 08:27:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2819E1552E7;
-	Thu, 11 Jul 2024 08:27:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7C5315575B;
+	Thu, 11 Jul 2024 08:27:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GsowhUB0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="anA296jV"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4224F1514D1;
-	Thu, 11 Jul 2024 08:27:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC3F2153581;
+	Thu, 11 Jul 2024 08:27:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720686426; cv=none; b=FtttdWHqbc/HUuQ1YoypOGAI2jN7uW9e18VGuLVeW0zgHaPSzRuYzQBYt3BvkUviQsIUmGTnKIXxybYH/mXhhAyvtdHAAWJxnivOx8tkpYHA8Xux9vvvfdzfzJ4U7AtTAh6ZYPfp735I6Fez+CcXCjfUG8Qmrzj+VC/43Hq8J/A=
+	t=1720686427; cv=none; b=BXpqJBCtB8tKLKQeOTjOE/bUcZUKI5PsgrL/Cvw7JO30MP8bQv3THh5VTVudhKITZB4/P6Q6LAq5o+2Bjpj/9deLEYbDmTyOhgk67OUlldb2Hbq7wbKgPIUVeX9Ev78L2sm69hhQ2sQlDm2HJwEM9Jk+M4SQbi03goHPEg+6XhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720686426; c=relaxed/simple;
-	bh=UjTUvT0oPIWScfHNdgXV79JFsNdQ0sqOip6ZjRaNG8w=;
+	s=arc-20240116; t=1720686427; c=relaxed/simple;
+	bh=YqXfpzlrn+tQ5pRH/5JSmt1daHU/VeJILheS7aM7wuo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=jkyCC7fx5zIpyiuFeYqDQwvZbhI1qX+N6Ki5FYamBkJsmqFhiCe2PYa5tm6uBkE07SVlX/S4UjDvxdDRZfcV+dzF5qvkClFyWeB19NcEjeJCktum0nQM6fKx5yMIKA4M6fO8M7x8XTTWLoeoThfP+v9/lfzFvYV4si2h9JA1Ufc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GsowhUB0; arc=none smtp.client-ip=209.85.221.43
+	 MIME-Version; b=RETTNeTSXCZPShDLhq4u0Z5iIA4mo/wgpqPShNRNqwJkRwHmK4x6/sulGMS/0jjsjFNG5KTa2NfccqPTQjfpjfy4603+tcElzc5w8CUqo0mNvEdB2ovdW80iJwuAJwiybBLAnxQhMHq9b9FafJWudg15fb/COo6qkEaOxrkZoJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=anA296jV; arc=none smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-36796bbf687so272545f8f.0;
-        Thu, 11 Jul 2024 01:27:03 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-367e50f71bbso454690f8f.2;
+        Thu, 11 Jul 2024 01:27:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720686422; x=1721291222; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1720686424; x=1721291224; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CbtJeURzuXzMSUVq6dwyLPsKk+tyXx3nczbjfITmnRo=;
-        b=GsowhUB0foHrtkIF3DhjYblkGCtB4d2fBOHPERaH0ibxGnXDyu2VcIIe2jAx3jPtFM
-         WOXMoTXyVtTjXoc0A3WTh00jAoupQB3TCLqbNOG6pKJ70XThbktNJLeBasPGCIrlcZmR
-         VwqdvGvLh0IHxBlRy7fldqasSMypvYrYHpOpUGpAqhcH3TAMxXZKjGTGaW92pulMUcm+
-         tVaT4SF0xcoItkDK0zRl1OeXipyXHy5rNMou77QM31fFm0psUMk+R1OBJOzBa1cnyDfY
-         QFX/sTWq5DIeMg7t0MsFG+SgqZ1B33gCF8x5XWEvN908AOaeh4jJSz+xjwqk292kdQP2
-         YyNA==
+        bh=SoGjIyylq/2U1UdDbKKzqWV3owFDbnfS+xDpWv/w24A=;
+        b=anA296jVbphQTINDJ5o6T0LKaF20n8I8FxWIWxdzcfaSTEqBd4aKU4XYAZhBYkZbjE
+         d2Hqv5EPHcinPFu83CUSK8ea62Z1juRwS7vYQoqYFRRTJrzgRT6/MdMS2uYoj48FqRwI
+         R0Ys3Ldlcxf1iFMAqf4/ITA4Z5VnRDl3GyQ9XP7+43NT3JfadQqRMN6JCk1uyb7uwWIy
+         0HE4jGLt4e+zoibzDwsPGFwcP/UwDMw5J7HAlNGJGyRbFgTHkVio2FwBp4Yd8zmxYxGf
+         Esig8Wt/9pvNnaTuZI5w9YXQFyJ63hJkNC2HXGPa3+iA++VlzeIJE1CZhSnO1AfEcPzH
+         etdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720686422; x=1721291222;
+        d=1e100.net; s=20230601; t=1720686424; x=1721291224;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CbtJeURzuXzMSUVq6dwyLPsKk+tyXx3nczbjfITmnRo=;
-        b=V+afthasqWJgjKD8wWN0LhzWbG0B8U4TFJar9nzGrgWkUIyJyKwQtpM35GEEHGaQnH
-         SxZBLxTrq5AB9mifDoA+1MrXfrLawUBvFh6ANPnfwEEyrDRSzOcLzamAZyBrk1/9Uw5z
-         i++gvaxz5ZIO5R3nI9Tp/IJ0gJXX8poMg6vFg34ZQYPE/ijbo0iPEgMePAYBb56u9cT0
-         KcXMBxpsabV5FJpo+0fhcmA3yUWriwfI/CzOWdYywB6YPOErq7Q56HwubCpvOgJ5pX/L
-         JfavW6KOzzzoNBoy4rnzCOpPP+nqD6fGuJ5fUpf19soS39rS6VjZmiqLwjsKIgYNQhB2
-         e21g==
-X-Forwarded-Encrypted: i=1; AJvYcCW5xx3dxxN1YrQh36NIc+LeKG2Yli0NuvR2rKnY34luzqf0AyG9O88tf9oW16Zwrs0OYp2oqFfNT9SJucuHQMntPX2Jcl1wSpfta9gcHIRD+NJGDi/oruI1DIaMfNJQi254GS1VGQ/++g==
-X-Gm-Message-State: AOJu0YzVYOxAS3NSWOm1Dtn5UrFSUEAr3cQ9S95aYBPsjIfBMzUYL1h6
-	JQ7SKNTGp0RRWx+0vsQ+JcS9cLmzKy6OfRwuKIkKKY9ydIRKVygM
-X-Google-Smtp-Source: AGHT+IGRg+Owi/W3sasP/VODbkqgQBx34vKrV1FtkjaI5HVpD7Y+fzuRtSgGnCAui9tmXD6iY31ylw==
-X-Received: by 2002:adf:f204:0:b0:367:8a3a:3fd7 with SMTP id ffacd0b85a97d-367cea8fa23mr5750432f8f.33.1720686422183;
-        Thu, 11 Jul 2024 01:27:02 -0700 (PDT)
+        bh=SoGjIyylq/2U1UdDbKKzqWV3owFDbnfS+xDpWv/w24A=;
+        b=BlhHrCZXgjcUK+9/phZvFq5kdjWvXnlqjrsZQspoD/tU5C1jFQ2ti10vvgBG6qSeFm
+         aBJoWI6c0vNkuoe9E5ILaZbdlXmnFHJEMFjKRJ8lPkN1ZMR5KtxqQ3auX7NfegqqVB+D
+         sjP8WWUB1Iii6gb/QMhBV416I7h+Vh5jU2slBeGoKn7zP2ktAF2kDQ0k/J121wJynOfj
+         87Jozm7GoPaIUeyAPEy7sUv7FIMejTJeUsa5XJySXe7jXKO8hJ1Ot2y4+SU01Gdcrl6Y
+         /0OvlLrzpasLJe/02PMSId9a2mGF8fJoXvxQe73NunyDXv5UtoRl3xyhKJ7hLcgXoTfD
+         GAwA==
+X-Forwarded-Encrypted: i=1; AJvYcCWz5oQoKjrhzjXNGxaJPqgdNuapZFTvC+aGdrixTpWMEm3WunL8ow6l3+5BGf0GQ4MjbjxQLfslWXAiwsn6gKGNAShjh6x2VO/AzPMM22jfKBpCmL1r6CNJT6srJKwx4k+TEpAwnUM9Ow==
+X-Gm-Message-State: AOJu0YzzrcOa7bb3mCwMncqiWu3P+KSDwo33ZFzVDoRRTirFxgsQOtwv
+	U9WWVtLoUmgSlGAs6tFFtw/mS6zn/UJbKjiG0xi3pCFX0zdfbc/w
+X-Google-Smtp-Source: AGHT+IEm9yPJ1zLNIjg4u8xmCjz1g5S1kD7ahImT+qOHrp/AXsNNUzk/WyBwfj6wEUjb5sqFrfNgpg==
+X-Received: by 2002:a5d:470a:0:b0:35f:d57:6e3f with SMTP id ffacd0b85a97d-367cea96613mr4931059f8f.31.1720686424057;
+        Thu, 11 Jul 2024 01:27:04 -0700 (PDT)
 Received: from localhost.localdomain ([79.175.114.8])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-367cde84712sm7134283f8f.33.2024.07.11.01.27.00
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-367cde84712sm7134283f8f.33.2024.07.11.01.27.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jul 2024 01:27:01 -0700 (PDT)
+        Thu, 11 Jul 2024 01:27:03 -0700 (PDT)
 From: Aleksandar Rikalo <arikalo@gmail.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>,
@@ -85,9 +85,9 @@ Cc: Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>,
 	Serge Semin <fancer.lancer@gmail.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: [PATCH v5 01/11] MIPS: CPS: Add a couple of multi-cluster utility functions
-Date: Thu, 11 Jul 2024 10:26:46 +0200
-Message-Id: <20240711082656.1889440-2-arikalo@gmail.com>
+Subject: [PATCH v5 02/11] MIPS: GIC: Generate redirect block accessors
+Date: Thu, 11 Jul 2024 10:26:47 +0200
+Message-Id: <20240711082656.1889440-3-arikalo@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240711082656.1889440-1-arikalo@gmail.com>
 References: <20240711082656.1889440-1-arikalo@gmail.com>
@@ -101,137 +101,155 @@ Content-Transfer-Encoding: 8bit
 
 From: Paul Burton <paulburton@kernel.org>
 
-This patch introduces a couple of utility functions which help later
-patches with introducing support for multi-cluster systems.
+With CM 3.5 the "core-other" register block evolves into the "redirect"
+register block, which is capable of accessing not only the core local
+registers of other cores but also the shared/global registers of other
+clusters.
 
- - mips_cps_multicluster_cpus() allows its caller to determine whether
-   the system includes CPUs spread across multiple clusters. This is
-   useful because in some cases behaviour can be more optimal taking
-   this knowledge into account. The means by which we check this is
-   dependent upon the way we probe CPUs & assign their numbers, so
-   keeping this knowledge confined here in arch/mips/ seems appropriate.
+This patch generates accessor functions for shared/global registers
+accessed via the redirect block, with "redir_" inserted after "gic_" in
+their names. For example the accessor function:
 
- - mips_cps_first_online_in_cluster() allows its caller to determine
-   whether it is running upon the first CPU online within its cluster.
-   This information is useful in cases where some cluster-wide
-   configuration may need to occur, but should not be repeated if
-   another CPU in the cluster is already online. Similarly to the above
-   this is determined based upon knowledge of CPU numbering so it makes
-   sense to keep that knowledge in arch/mips/. The function is defined
-   in mips-cm.c rather than in asm/mips-cps.h in order to allow us to
-   use asm/cpu-info.h & linux/smp.h without encountering an include
-   nightmare.
+  read_gic_config()
 
+...accesses the GIC_CONFIG register of the GIC in the local cluster.
+With this patch a new function:
+
+  read_gic_redir_config()
+
+...is added which accesses the GIC_CONFIG register of the GIC in
+whichever cluster the GCR_CL_REDIRECT register is configured to access.
+
+This mirrors the similar redirect block accessors already provided for
+the CM & CPC.
+
+Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Signed-off-by: Paul Burton <paulburton@kernel.org>
 Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
 Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
 Signed-off-by: Aleksandar Rikalo <arikalo@gmail.com>
 Tested-by: Serge Semin <fancer.lancer@gmail.com>
 ---
- arch/mips/include/asm/mips-cps.h | 39 ++++++++++++++++++++++++++++++++
- arch/mips/kernel/mips-cm.c       | 37 ++++++++++++++++++++++++++++++
- 2 files changed, 76 insertions(+)
+ arch/mips/include/asm/mips-gic.h | 50 ++++++++++++++++++++++----------
+ 1 file changed, 34 insertions(+), 16 deletions(-)
 
-diff --git a/arch/mips/include/asm/mips-cps.h b/arch/mips/include/asm/mips-cps.h
-index c077e8d100f5..917009b80e69 100644
---- a/arch/mips/include/asm/mips-cps.h
-+++ b/arch/mips/include/asm/mips-cps.h
-@@ -8,6 +8,7 @@
- #define __MIPS_ASM_MIPS_CPS_H__
+diff --git a/arch/mips/include/asm/mips-gic.h b/arch/mips/include/asm/mips-gic.h
+index 084cac1c5ea2..fd9da5e3beaa 100644
+--- a/arch/mips/include/asm/mips-gic.h
++++ b/arch/mips/include/asm/mips-gic.h
+@@ -28,11 +28,13 @@ extern void __iomem *mips_gic_base;
  
- #include <linux/bitfield.h>
-+#include <linux/cpumask.h>
- #include <linux/io.h>
- #include <linux/types.h>
+ /* For read-only shared registers */
+ #define GIC_ACCESSOR_RO(sz, off, name)					\
+-	CPS_ACCESSOR_RO(gic, sz, MIPS_GIC_SHARED_OFS + off, name)
++	CPS_ACCESSOR_RO(gic, sz, MIPS_GIC_SHARED_OFS + off, name)	\
++	CPS_ACCESSOR_RO(gic, sz, MIPS_GIC_REDIR_OFS + off, redir_##name)
  
-@@ -228,4 +229,42 @@ static inline unsigned int mips_cps_numvps(unsigned int cluster, unsigned int co
- 	return FIELD_GET(CM_GCR_Cx_CONFIG_PVPE, cfg + 1);
+ /* For read-write shared registers */
+ #define GIC_ACCESSOR_RW(sz, off, name)					\
+-	CPS_ACCESSOR_RW(gic, sz, MIPS_GIC_SHARED_OFS + off, name)
++	CPS_ACCESSOR_RW(gic, sz, MIPS_GIC_SHARED_OFS + off, name)	\
++	CPS_ACCESSOR_RW(gic, sz, MIPS_GIC_REDIR_OFS + off, redir_##name)
+ 
+ /* For read-only local registers */
+ #define GIC_VX_ACCESSOR_RO(sz, off, name)				\
+@@ -45,7 +47,7 @@ extern void __iomem *mips_gic_base;
+ 	CPS_ACCESSOR_RW(gic, sz, MIPS_GIC_REDIR_OFS + off, vo_##name)
+ 
+ /* For read-only shared per-interrupt registers */
+-#define GIC_ACCESSOR_RO_INTR_REG(sz, off, stride, name)			\
++#define _GIC_ACCESSOR_RO_INTR_REG(sz, off, stride, name)		\
+ static inline void __iomem *addr_gic_##name(unsigned int intr)		\
+ {									\
+ 	return mips_gic_base + (off) + (intr * (stride));		\
+@@ -58,8 +60,8 @@ static inline unsigned int read_gic_##name(unsigned int intr)		\
  }
  
-+/**
-+ * mips_cps_multicluster_cpus() - Detect whether CPUs are in multiple clusters
-+ *
-+ * Determine whether the system includes CPUs in multiple clusters - ie.
-+ * whether we can treat the system as single or multi-cluster as far as CPUs
-+ * are concerned. Note that this is slightly different to simply checking
-+ * whether multiple clusters are present - it is possible for there to be
-+ * clusters which contain no CPUs, which this function will effectively ignore.
-+ *
-+ * Returns true if CPUs are spread across multiple clusters, else false.
-+ */
-+static inline bool mips_cps_multicluster_cpus(void)
-+{
-+	unsigned int first_cl, last_cl;
-+
-+	/*
-+	 * CPUs are numbered sequentially by cluster - ie. CPUs 0..X will be in
-+	 * cluster 0, CPUs X+1..Y in cluster 1, CPUs Y+1..Z in cluster 2 etc.
-+	 *
-+	 * Thus we can detect multiple clusters trivially by checking whether
-+	 * the first & last CPUs belong to the same cluster.
-+	 */
-+	first_cl = cpu_cluster(&boot_cpu_data);
-+	last_cl = cpu_cluster(&cpu_data[nr_cpu_ids - 1]);
-+	return first_cl != last_cl;
-+}
-+
-+/**
-+ * mips_cps_first_online_in_cluster() - Detect if CPU is first online in cluster
-+ *
-+ * Determine whether the local CPU is the first to be brought online in its
-+ * cluster - that is, whether there are any other online CPUs in the local
-+ * cluster.
-+ *
-+ * Returns true if this CPU is first online, else false.
-+ */
-+extern unsigned int mips_cps_first_online_in_cluster(void);
-+
- #endif /* __MIPS_ASM_MIPS_CPS_H__ */
-diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
-index 3a115fab5573..3eb2cfb893e1 100644
---- a/arch/mips/kernel/mips-cm.c
-+++ b/arch/mips/kernel/mips-cm.c
-@@ -512,3 +512,40 @@ void mips_cm_error_report(void)
- 	/* reprime cause register */
- 	write_gcr_error_cause(cm_error);
+ /* For read-write shared per-interrupt registers */
+-#define GIC_ACCESSOR_RW_INTR_REG(sz, off, stride, name)			\
+-	GIC_ACCESSOR_RO_INTR_REG(sz, off, stride, name)			\
++#define _GIC_ACCESSOR_RW_INTR_REG(sz, off, stride, name)		\
++	_GIC_ACCESSOR_RO_INTR_REG(sz, off, stride, name)		\
+ 									\
+ static inline void write_gic_##name(unsigned int intr,			\
+ 				    unsigned int val)			\
+@@ -68,22 +70,30 @@ static inline void write_gic_##name(unsigned int intr,			\
+ 	__raw_writel(val, addr_gic_##name(intr));			\
  }
+ 
++#define GIC_ACCESSOR_RO_INTR_REG(sz, off, stride, name)			\
++	_GIC_ACCESSOR_RO_INTR_REG(sz, off, stride, name)		\
++	_GIC_ACCESSOR_RO_INTR_REG(sz, MIPS_GIC_REDIR_OFS + off, stride, redir_##name)
 +
-+unsigned int mips_cps_first_online_in_cluster(void)
-+{
-+	unsigned int local_cl;
-+	int i;
++#define GIC_ACCESSOR_RW_INTR_REG(sz, off, stride, name)			\
++	_GIC_ACCESSOR_RW_INTR_REG(sz, off, stride, name)		\
++	_GIC_ACCESSOR_RW_INTR_REG(sz, MIPS_GIC_REDIR_OFS + off, stride, redir_##name)
 +
-+	local_cl = cpu_cluster(&current_cpu_data);
+ /* For read-only local per-interrupt registers */
+ #define GIC_VX_ACCESSOR_RO_INTR_REG(sz, off, stride, name)		\
+-	GIC_ACCESSOR_RO_INTR_REG(sz, MIPS_GIC_LOCAL_OFS + off,		\
++	_GIC_ACCESSOR_RO_INTR_REG(sz, MIPS_GIC_LOCAL_OFS + off,		\
+ 				 stride, vl_##name)			\
+-	GIC_ACCESSOR_RO_INTR_REG(sz, MIPS_GIC_REDIR_OFS + off,		\
++	_GIC_ACCESSOR_RO_INTR_REG(sz, MIPS_GIC_REDIR_OFS + off,		\
+ 				 stride, vo_##name)
+ 
+ /* For read-write local per-interrupt registers */
+ #define GIC_VX_ACCESSOR_RW_INTR_REG(sz, off, stride, name)		\
+-	GIC_ACCESSOR_RW_INTR_REG(sz, MIPS_GIC_LOCAL_OFS + off,		\
++	_GIC_ACCESSOR_RW_INTR_REG(sz, MIPS_GIC_LOCAL_OFS + off,		\
+ 				 stride, vl_##name)			\
+-	GIC_ACCESSOR_RW_INTR_REG(sz, MIPS_GIC_REDIR_OFS + off,		\
++	_GIC_ACCESSOR_RW_INTR_REG(sz, MIPS_GIC_REDIR_OFS + off,		\
+ 				 stride, vo_##name)
+ 
+ /* For read-only shared bit-per-interrupt registers */
+-#define GIC_ACCESSOR_RO_INTR_BIT(off, name)				\
++#define _GIC_ACCESSOR_RO_INTR_BIT(off, name)				\
+ static inline void __iomem *addr_gic_##name(void)			\
+ {									\
+ 	return mips_gic_base + (off);					\
+@@ -106,8 +116,8 @@ static inline unsigned int read_gic_##name(unsigned int intr)		\
+ }
+ 
+ /* For read-write shared bit-per-interrupt registers */
+-#define GIC_ACCESSOR_RW_INTR_BIT(off, name)				\
+-	GIC_ACCESSOR_RO_INTR_BIT(off, name)				\
++#define _GIC_ACCESSOR_RW_INTR_BIT(off, name)				\
++	_GIC_ACCESSOR_RO_INTR_BIT(off, name)				\
+ 									\
+ static inline void write_gic_##name(unsigned int intr)			\
+ {									\
+@@ -146,6 +156,14 @@ static inline void change_gic_##name(unsigned int intr,			\
+ 	}								\
+ }
+ 
++#define GIC_ACCESSOR_RO_INTR_BIT(off, name)				\
++	_GIC_ACCESSOR_RO_INTR_BIT(off, name)				\
++	_GIC_ACCESSOR_RO_INTR_BIT(MIPS_GIC_REDIR_OFS + off, redir_##name)
 +
-+	/*
-+	 * We rely upon knowledge that CPUs are numbered sequentially by
-+	 * cluster - ie. CPUs 0..X will be in cluster 0, CPUs X+1..Y in cluster
-+	 * 1, CPUs Y+1..Z in cluster 2 etc. This means that CPUs in the same
-+	 * cluster will immediately precede or follow one another.
-+	 *
-+	 * First we scan backwards, until we find an online CPU in the cluster
-+	 * or we move on to another cluster.
-+	 */
-+	for (i = smp_processor_id() - 1; i >= 0; i--) {
-+		if (cpu_cluster(&cpu_data[i]) != local_cl)
-+			break;
-+		if (!cpu_online(i))
-+			continue;
-+		return false;
-+	}
++#define GIC_ACCESSOR_RW_INTR_BIT(off, name)				\
++	_GIC_ACCESSOR_RW_INTR_BIT(off, name)				\
++	_GIC_ACCESSOR_RW_INTR_BIT(MIPS_GIC_REDIR_OFS + off, redir_##name)
 +
-+	/* Then do the same for higher numbered CPUs */
-+	for (i = smp_processor_id() + 1; i < nr_cpu_ids; i++) {
-+		if (cpu_cluster(&cpu_data[i]) != local_cl)
-+			break;
-+		if (!cpu_online(i))
-+			continue;
-+		return false;
-+	}
-+
-+	/* We found no online CPUs in the local cluster */
-+	return true;
-+}
+ /* For read-only local bit-per-interrupt registers */
+ #define GIC_VX_ACCESSOR_RO_INTR_BIT(sz, off, name)			\
+ 	GIC_ACCESSOR_RO_INTR_BIT(sz, MIPS_GIC_LOCAL_OFS + off,		\
+@@ -155,10 +173,10 @@ static inline void change_gic_##name(unsigned int intr,			\
+ 
+ /* For read-write local bit-per-interrupt registers */
+ #define GIC_VX_ACCESSOR_RW_INTR_BIT(sz, off, name)			\
+-	GIC_ACCESSOR_RW_INTR_BIT(sz, MIPS_GIC_LOCAL_OFS + off,		\
+-				 vl_##name)				\
+-	GIC_ACCESSOR_RW_INTR_BIT(sz, MIPS_GIC_REDIR_OFS + off,		\
+-				 vo_##name)
++	_GIC_ACCESSOR_RW_INTR_BIT(sz, MIPS_GIC_LOCAL_OFS + off,		\
++				  vl_##name)				\
++	_GIC_ACCESSOR_RW_INTR_BIT(sz, MIPS_GIC_REDIR_OFS + off,		\
++				  vo_##name)
+ 
+ /* GIC_SH_CONFIG - Information about the GIC configuration */
+ GIC_ACCESSOR_RW(32, 0x000, config)
 -- 
 2.25.1
 
