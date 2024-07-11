@@ -1,162 +1,158 @@
-Return-Path: <linux-mips+bounces-4270-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4271-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25B0392DE28
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 03:53:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3F3B92E225
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 10:27:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A43DA1F218BE
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 01:53:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DAC7A1C22BB4
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 08:27:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B744D8BFC;
-	Thu, 11 Jul 2024 01:53:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B2C21509AC;
+	Thu, 11 Jul 2024 08:27:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="bIzmUleh";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IrUfFWem"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S5NjDIWo"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh3-smtp.messagingengine.com (fhigh3-smtp.messagingengine.com [103.168.172.154])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3E058801;
-	Thu, 11 Jul 2024 01:53:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D65E150992;
+	Thu, 11 Jul 2024 08:27:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720662834; cv=none; b=Ba5x5lFSlW7PZHMMVyqUGGvu4TFcckt8TcsvhZeHZY+Pb6GNs0gh1+9xApLOU+zyYagNDcrlc46b9lGmEc5R7G0vOaQ85uIxRSMqbvqM7yemwCdmvxnDXIN9kPvBdrM8l4fFcOVSRBYbfMLbYFWxZP79VD/Tg6eg9FH10PJ4fiU=
+	t=1720686424; cv=none; b=OR9ZfSdjFUdrEhnywYkXWQ6Ry/OqU12VO7rbPGMUtQcwK/3WWpXRBjd2t3eAmNxpnzrPZzotP+g6/bU8LxhRgB+0WT3gM++BD53FIQKBxL95d33RM7Df+rgx7MJaxF2Qk03+GO7KqUC0CS99/LGcul8Psmqy+MTIujSO/EVe71g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720662834; c=relaxed/simple;
-	bh=V0su/2TVwxm7ML1o7WKw5VLN0Yqb3uJ2r3KKs/Mko04=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=RwyQK9Y9ZvMM1UnvTFnKIPhTePQqVRc2C4x3Z6I6r8IkusdNZqaYUe/NMOdNJrIOZj8XZ3oae8aGhEy0hOU8xDJEkwXT2vtWPAI5Ras5hLaKW5oLi0UHT20QTnDSNJgzAYoQy72Pu4XVMGwxtXu2uSFQyB8cPa/g3c2y+Kx8AWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=bIzmUleh; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IrUfFWem; arc=none smtp.client-ip=103.168.172.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 240B81140C0B;
-	Wed, 10 Jul 2024 21:53:52 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Wed, 10 Jul 2024 21:53:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1720662832;
-	 x=1720749232; bh=blYGdh72QWxBvqFvSyMrnSkviyCQU3tEmPuUaU4E6Tc=; b=
-	bIzmUleh48on1QgxG+ZuzhrpJAeYJ/kbOcUPCiGo4dIAf5rnMxS2iseRZ6MDsMJk
-	i52NmQXfJHFeihqlghPgG9etJvRfCJxyW9PyRNTirvvb9UDPZvHB6BldDeVkemsz
-	f1g07ids4dd5gAd6grKGiQrb/T6cbY/gzQt/5D31Cv/g5nC4Y1tuW2ngojv+Kv7/
-	WWOLUeJvhWcGnzSkKmXrjRCTRNMp0e4bbXCspQ5wPxY+5njtQYvn0Ed/WEx5eYLy
-	mDDYZaRm+Ty6l7EkMCzX5nBB1/7s39KckghwW9p31DqGyUXd2NiZ2NYUQMzMkZ5+
-	MtBWqhV5vN0Ek12DE8N1eQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1720662832; x=
-	1720749232; bh=blYGdh72QWxBvqFvSyMrnSkviyCQU3tEmPuUaU4E6Tc=; b=I
-	rUfFWem8XnqFRRqjqo/UDmUFkDnDNxf3jzyOUWLE06VIqceIOobQEFdf52OXGoS7
-	g1/Ip/IJw51aONCKCT/jHPC9zx/GvNKu2ZLI/cWlml2ipNtEvFWVbupYx29X0pWp
-	OUrRyPWy+PSrB76iy5sIriOlCSpIa0z8x0tWlMhrsBrVt+lF8WOVX4ZFPlgACvMz
-	kKsmdyRi0L3Mjk/i/nYyYHn1tO5KGxPzVGqaBR8L8bolY6ukTuJ68dyXdMLBA3wM
-	vCgiLkV1rQ6T+37sanPEXxeCnlx6dsKkqxZUCeO4Cf4GUGC5AuC/yGgtEm1/E4xP
-	qMM1oZjyZzyombBBuXssQ==
-X-ME-Sender: <xms:LjuPZsHoNiCaX2K7bdug5uYm-7FMWD8pyc0FabfSifBRdaSHisu8Eg>
-    <xme:LjuPZlWcYETmflykB6ZZRJNh5BoPHe3sA2DfDNo60O3gBzzj8uqG2sdcLpdi7wLY9
-    4kN6KGNQ_5n2XcMHX0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrfeefgdehfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
-    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-    eqnecuggftrfgrthhtvghrnhepudefgeeftedugeehffdtheefgfevffelfefghefhjeeu
-    geevtefhudduvdeihefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:LzuPZmJGU7Xj4JwVgAsOMedQx2RGSk1eLkCNiCpX7A3UX4NZwnOL_w>
-    <xmx:LzuPZuFv7ChyOVk8h10Bkt9MhLlUDQZUSw0lHOdoUdcSPAj1Yckl2A>
-    <xmx:LzuPZiWN31a3zsnRpU_SRQA6lcsjqzrsB24DXwz6PbYoWCPRkr4JiA>
-    <xmx:LzuPZhPzAIvZmpSw7CVR44Bvq2FmVzpF1Lm_nAkaJYZu_Rx0Cf1Q3Q>
-    <xmx:MDuPZkIApB6PeRPf7sMNFo96_LJpq-_AIPoUQswEwMCbzEI1B-iM94SG>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id DE20E36A0074; Wed, 10 Jul 2024 21:53:50 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
+	s=arc-20240116; t=1720686424; c=relaxed/simple;
+	bh=hHvgA1N6OD+v1hXn+85G/CpUfntPyTBTaK5FuOJj6+8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=PC6o7deWMEKjJXCiXKktvx8Y6KBJ6oLDd6LKdI6KWvH9LWUA/jymOh5aZsR7Rt2M3AMxARpaTz6WUHjl25N+1qUkH37vYaHkp9rRwmNpOsXTpdVSt51Q92KZBlHWPKU0ohiwQHr71kX4724TZclk7wIB9G24zGiGI9+OjYWmQfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S5NjDIWo; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-367975543a8so311834f8f.3;
+        Thu, 11 Jul 2024 01:27:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720686421; x=1721291221; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9kwgDJL2f7tRH6grjtf3qqUGG9T9HojThLpab76Ix9A=;
+        b=S5NjDIWohXLEPVT3OB+Y4Lof+WhMTHnBODIrj6mDkck6QITYaqMLQBFwjDQo9i5FbA
+         nnz9FRPlhcyp3qjwIvwJEaA/6DlpbEiX1kClVt/xGCVua0s+/335z0YAY8akDArFwZE+
+         e2kdUoXLp2B3qbTc/WhAhIjObZJXF5vWg2WUjVlYpvhUCzpvbXAukhYPt8W+efMF8Hre
+         GD158Kp+0pqk7CANYmFUQMvsARARV/KN1+6pZmLX3jAj8s4MLOKMagGYolCyUM63+FWY
+         8mCKsrK7RZUrxpMiPIhnb5o1yZY4gL9CijZHwdiF5EBZkzJzEtOO19JdedScK9580Xj5
+         4iLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720686421; x=1721291221;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9kwgDJL2f7tRH6grjtf3qqUGG9T9HojThLpab76Ix9A=;
+        b=P7D4Ieg3Tk2hBiuzAuWjLwsuCKY6oJmdKNC9WbfU0GtXPP4y8rVpnPemajfvA6wShQ
+         xkq/gh63yqqsbZFRfrK1Z5Xhj0E1iFnEm9yhHfF0jyjIB1h5VGJYx65JGGjSiWbkfFY2
+         cope5uXnFy7LqT58l0vk48TFIrqs39Kplq9SefUNrQ2oHxb+zP+2pXtN3WAE3p8M3HBl
+         sQ3WpHXX4Us/9IUbVdrcX6Wks8LO8BRIaZTZvhFLvEUtZ5vJC2j8HbOZu1tILLRA0r9B
+         3ExSvBy1s8anj/HObC8LKLf70/TeOkeZisHgHHREHP3zwf7P5kkVTHUT57JyRn94dutv
+         NoyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX7q2Ip8ZIALkC6l9VNFvqwvtWa6wF27A7xu2SJzWSCbYa6sb3b9iKeGg4o2fkcZ5YoCFzCIeEF7PJ+ZLTM/td3vfCDEwW549lOmTokVw6uIUXwfqFam8GvUlJtIVKbw7ZVR1TB4htt5Q==
+X-Gm-Message-State: AOJu0Yyoc3FuggQFXiSejA9lOTY/UeLz3TQtAyzIPxbGfswrEpCVUVva
+	qFnrisvmcVKiozRhJUM85TfwRfEX0LXmsqeWnqpW1sWYDEEtICiM
+X-Google-Smtp-Source: AGHT+IEKrCSaZSXIgceFsCqDZIpSspHR4/RiWP0Q2xKkDi9Les/DviDve3Ny/qirrAqQD3I359zraA==
+X-Received: by 2002:a05:6000:156a:b0:364:aafb:6020 with SMTP id ffacd0b85a97d-367cea46790mr6259869f8f.14.1720686420394;
+        Thu, 11 Jul 2024 01:27:00 -0700 (PDT)
+Received: from localhost.localdomain ([79.175.114.8])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-367cde84712sm7134283f8f.33.2024.07.11.01.26.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jul 2024 01:26:59 -0700 (PDT)
+From: Aleksandar Rikalo <arikalo@gmail.com>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>,
+	Chao-ying Fu <cfu@wavecomp.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Greg Ungerer <gerg@kernel.org>,
+	Hauke Mehrtens <hauke@hauke-m.de>,
+	Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Marc Zyngier <maz@kernel.org>,
+	Paul Burton <paulburton@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Serge Semin <fancer.lancer@gmail.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: [PATCH v5 00/11] MIPS: Support I6500 multi-cluster configuration
+Date: Thu, 11 Jul 2024 10:26:45 +0200
+Message-Id: <20240711082656.1889440-1-arikalo@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <a8741e38-837b-4fbb-8656-1e6d50bdfcc0@app.fastmail.com>
-In-Reply-To: <alpine.DEB.2.21.2407101015120.38148@angie.orcam.me.uk>
-References: <20240612-mips_ieee754_emul-v3-1-2c21b450abdb@flygoat.com>
- <Zn1FuxNw2CUttzdg@alpha.franken.de>
- <9cc26415-9cbc-47fa-a132-7d8c000874a4@app.fastmail.com>
- <alpine.DEB.2.21.2406272053180.43454@angie.orcam.me.uk>
- <fbd421a6-cf37-49ab-bdbe-6128a7cae8be@app.fastmail.com>
- <Zoz6+YmUk7CBsNFw@alpha.franken.de>
- <7797a7b2-1bb2-4c45-b65d-678f685dfa3d@app.fastmail.com>
- <Zo457UgAkhbAgm2R@alpha.franken.de>
- <alpine.DEB.2.21.2407101015120.38148@angie.orcam.me.uk>
-Date: Thu, 11 Jul 2024 09:53:30 +0800
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc: "Jonathan Corbet" <corbet@lwn.net>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Subject: Re: [PATCH v3] MIPS: Implement ieee754 NAN2008 emulation mode
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Taken from Paul Burton MIPS repo with minor changes from Chao-ying Fu.
+Tested with 64r6el_defconfig on Boston board in 2 cluster/2 VPU and
+1 cluster/4 VPU configurations.
 
+v5:
+ - Drop FDC related changes (patches 12, 13, and 14).
+ - Apply changes suggested by Thomas Gleixner (patches 3 and 4).
+ - Add #include <linux/cpumask.h> to patch 1, suggested by Thomas Bogendoerfer.
+ - Add Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org> for the patch 08/11.
+ - Add Tested-by: Serge Semin <fancer.lancer@gmail.com> for the entire series.
+ - Correct some commit messages.
 
-=E5=9C=A82024=E5=B9=B47=E6=9C=8810=E6=97=A5=E4=B8=83=E6=9C=88 =E4=B8=8B=E5=
-=8D=885:21=EF=BC=8CMaciej W. Rozycki=E5=86=99=E9=81=93=EF=BC=9A
-> On Wed, 10 Jul 2024, Thomas Bogendoerfer wrote:
->
->> > > I'm considering to apply your patch, how much testing/verificatio=
-n did
->> > > this patch see ? Do have some test binaries ?
->> >=20
->> > It has been tested against Debian rootfs. There is no need to test =
-againt special binary,
->> > but you need NaN2008 hardware such as Loongson 3A4000.
->>=20
->> that's just one case, what about NaN2008 binaries on a legacy MIPS CP=
-U ?
->
->  It would be good to check with hard-float QEMU configured for writabl=
-e=20
-> FCSR.NAN2008 (which is one way original code was verified) that things=20
-> have not regressed.  And also what happens if once our emulation has=20
-> triggered for the unsupported FCSR.NAN2008 mode, an attempt is made to=20
-> flip the mode bit via ptrace(2), e.g. under GDB, which I reckon our=20
-> emulation permits for non-legacy CPUs (and which I think should not be=20
-> allowed under the new setting).
+v4:
+ - Re-base onto the master branch, with no functionality impact.
+ - Refactor MIPS FDC driver in the context of multicluster support.
 
-PTrace is working as expected (reflects emulated value).
+v3:
+ - Add Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com> for the patch 02/12.
+ - Add the changes requested by Marc Zyngier for the 3/12 patch.
+ - Remove the patch 11/12 (a consequence of a discussion between Jiaxun Yang
+   and Marc Zyngier.
+ - Re-base onto the master branch, with no functionality impact.
 
-The actual switchable NaN hardware (M5150, P5600) uses a dedicated Confi=
-g7
-bit rather than writable FCSR.NAN2008 to control NaN2008 mode. This is u=
-ndocumented
-and not present on some RTL releases. FCSR.NAN2008 is R/O as per The MIP=
-S32 Instruction
-Set Manual. This renders the purposed test pointless.
+v2:
+ - Apply correct Signed-off-by to avoid confusion.
 
-That being said, I'll catch some time later to test behaviour with purpo=
-sed QEMU modification
-but I think it's good to go now.=20
+Chao-ying Fu (1):
+  irqchip/mips-gic: Setup defaults in each cluster
 
-Thanks
-- Jiaxun
+Paul Burton (10):
+  MIPS: CPS: Add a couple of multi-cluster utility functions
+  MIPS: GIC: Generate redirect block accessors
+  irqchip/mips-gic: Introduce for_each_online_cpu_gic()
+  irqchip/mips-gic: Support multi-cluster in for_each_online_cpu_gic()
+  irqchip/mips-gic: Multi-cluster support
+  clocksource: mips-gic-timer: Always use cluster 0 counter as
+    clocksource
+  clocksource: mips-gic-timer: Enable counter when CPUs start
+  MIPS: pm-cps: Use per-CPU variables as per-CPU, not per-core
+  MIPS: CPS: Introduce struct cluster_boot_config
+  MIPS: CPS: Boot CPUs in secondary clusters
 
->
->   Maciej
+ arch/mips/include/asm/mips-cm.h      |  18 ++
+ arch/mips/include/asm/mips-cps.h     |  39 ++++
+ arch/mips/include/asm/mips-gic.h     |  50 +++--
+ arch/mips/include/asm/smp-cps.h      |   7 +-
+ arch/mips/kernel/asm-offsets.c       |   3 +
+ arch/mips/kernel/cps-vec.S           |  19 +-
+ arch/mips/kernel/mips-cm.c           |  41 +++-
+ arch/mips/kernel/pm-cps.c            |  35 ++--
+ arch/mips/kernel/smp-cps.c           | 288 ++++++++++++++++++++++-----
+ drivers/clocksource/mips-gic-timer.c |  45 ++++-
+ drivers/irqchip/Kconfig              |   1 +
+ drivers/irqchip/irq-mips-gic.c       | 257 ++++++++++++++++++++----
+ 12 files changed, 670 insertions(+), 133 deletions(-)
 
---=20
-- Jiaxun
+-- 
+2.25.1
+
 
