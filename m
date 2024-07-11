@@ -1,72 +1,72 @@
-Return-Path: <linux-mips+bounces-4278-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4279-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B3C792E233
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 10:28:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 214B492E235
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 10:28:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C666A2843F6
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 08:28:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA6E01F247BE
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2024 08:28:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2DBB158878;
-	Thu, 11 Jul 2024 08:27:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7DB3158D79;
+	Thu, 11 Jul 2024 08:27:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TjTXTT1A"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZLyZzj+Q"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5D9158851;
-	Thu, 11 Jul 2024 08:27:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 232561534E1;
+	Thu, 11 Jul 2024 08:27:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720686437; cv=none; b=gPgPp+hAr3ADA2tp8GlZSuhnzd4+VRirQ6S8oP9K0UKWypH9Ymwlp0sIy8+97xIjpADyKhZa7fK0RGsOtDfmqp7ugga+IaXhG0MVDzz6AuvxYNUOaBNMCrQ6BFJsrPtwC/qS+N4mn40P7zOKhjO2aeUxam5zmT0xVXIdlF3sVZ8=
+	t=1720686439; cv=none; b=P6bHBGQFMsLcPHmLuf2Qe9IydNNtfhoGDSmX1TYtQbpPGIfmyGwjodrW92CHzeeTX/9Jsd3TZB98wjVdd6BCqloVZOgQoqObOKpaV9MJ1O+XL/H4YI2InZF22FP/hxm+PHt9qb1Nn1hmQeOD0xTuvb9EkLWdW0gyDLpwGrhGaqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720686437; c=relaxed/simple;
-	bh=fwpzYPPCUgCelrVVCDuVaqDelwUZQ6NMXtjgABaLPEc=;
+	s=arc-20240116; t=1720686439; c=relaxed/simple;
+	bh=BWru3gbDwB+xSMlpt5VLhdUAAVAvJvSrq4mELPxfulU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uAY+Lswvjp+RO8p09l6nL0uYKrzeJ+ui7Uk9YaZ3iCO7eoCo8qydIwd3D4eIxg2w4+DVJBSJjes/BxhQVesR0KLk/Z6VomENghTmbTDwXWO3knSknTYZDgsP/jnrgoH/hnKLATKDUvt6MH9KzEHzVmrvi3DolRYw74oPoSxVWk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TjTXTT1A; arc=none smtp.client-ip=209.85.221.50
+	 MIME-Version:Content-Type; b=k+hZxbGtHqrMja+qwlz2pLm4da2N+JXaLCdKjo38wJBVGHEP9S4fBugH/y4MwqYoWHbTD4vmSo7JEmEoK2XbQ76KwOSE8CD/lrFbzI+3MBAejnUfdjOZ/M2xU4I7TaIzKtKPiF1RYlNMoKJaLBqlPExbEXJbkkb8BR3BHnwWH5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZLyZzj+Q; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3678f36f154so296545f8f.2;
-        Thu, 11 Jul 2024 01:27:15 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3678aa359b7so1048532f8f.1;
+        Thu, 11 Jul 2024 01:27:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720686434; x=1721291234; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1720686436; x=1721291236; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/Eq5L/3x6rW9mJ9PUBft1DoFSqkQM9o69ITIfWtFGDU=;
-        b=TjTXTT1AJ3UVHmH9XWAkLM111IOFx/iaLVNItXRaq8duVjlmrxM0FtLp9b8MxHiRte
-         gc35Mdfo91sRnCUcaQmEwJVXJrGT0+5Uka37VYlwL53dLVhGXQSGSREcgcnbYFvDaHg3
-         MbO1zT3wtrB/my4cj1220zRKSSmgZ3Mlj4vygmBU8bWK/RqDOnHlKKKNNqmabiKInmfe
-         Nxo4uTsIhG6c7IZZCGkDJaaf9mLTIh4HUyPlMLb4/v+io/XHgbC+jTPgUYlnz7YxGJqX
-         Hp17ewiHwC/3aNaHpxLnIqBLYE/2zqadjbcf7bGJoGqGdxxDJBsUd9wuDY2MVTZS9SxX
-         vehQ==
+        bh=QCY8yakOgFx6ixafaMq4NF6KqoNRvoG64yc9U8LV1IM=;
+        b=ZLyZzj+QGam2kYwwTxi2dkSaMTHQY7nHWMDRSxyTzJ/Wb/Y58vCWS8IePByspDzqsC
+         xyWJkLuGq7qY7hVFz3PJ4yN906eA1HQz5Rx/xT3v4dI8IOEoqgkZkNODghp3Yv6mWCdh
+         tffCTYlGBvhv6HVmIrgR6dTby5IcvMX5aa9mZq6WW2z1CKga3qXlKMF9pLYp0/uhLBI1
+         kU4kZeY/R8rpPrkxKJii30Zund+iGmarKUiKcGehPkW7XUvjPiucXPoaFwHsV3oNSEFg
+         Njswls/bgvg6Nxp+Bg3aVP9/VXEp+eiEn2zAf0uIMZJLAdFN3WSbtyukiBo4WUGHp1AH
+         7sdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720686434; x=1721291234;
+        d=1e100.net; s=20230601; t=1720686436; x=1721291236;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/Eq5L/3x6rW9mJ9PUBft1DoFSqkQM9o69ITIfWtFGDU=;
-        b=djmFrJ01Z6Sqv2zHsqu0EFf3NjsLPtyefxAFWyVhrad8KFwNRma3rJJ55YR+03tS9x
-         QqT2SZqoFgqdbuaHk0ptE/5MLeEG5cI3cIkjfUk453xuOKQiDG8gXMqiAv9CbvjliQbH
-         tOvH+LGg+KP5Fl+pnjQM/3znXLfdnJ/Zr8F4w8yXX5eKLKbxdZO3j5rtLJqc4ih9jim/
-         ZLseKI50RWcrDMoUTX9eY9v3dkIuiJWADfsAclXOAgM4RM+1kmPWYXP9F1OQ/8Sjerdc
-         rr5E+BXr2alJ3ERRdEWwaC4GiI+dQU2y4Z5+/+wpOGR53W2oClNfZDCaLZiCMUKAVT7T
-         VQVg==
-X-Forwarded-Encrypted: i=1; AJvYcCUkNTnwMCtMZyWgy8XY3VCN1vHJ3aS8wjO4/nynslRIOX9p1rn5DCiZ2sULuiELokXYq9euA1HJlh7LLKMcsbh1BfQYjea8uZHpI7FbVj+UBU9sMUuMIn+AWlsJO/o6vmzf9Vc9NdlrnA==
-X-Gm-Message-State: AOJu0YwzBSMKyjvkvd5HHq9DFIu5VvR7kqQ6X6tI5x6HmMDT6j0OOQ71
-	3V8X50mZrVN4yVzX1AlkNlGX7m3mR0IwXnuTeJmoF2qYzHEMBr+O7m6mVzvt
-X-Google-Smtp-Source: AGHT+IFKtYUq1wOQolR8qmRQpgxvK8oXDtrlAIQLNh8NRbYRPc10lApqKQE8h9TOYq9fNCwdb2sXqA==
-X-Received: by 2002:adf:f0cb:0:b0:367:9634:f103 with SMTP id ffacd0b85a97d-367ceadc8c2mr4468334f8f.64.1720686434405;
-        Thu, 11 Jul 2024 01:27:14 -0700 (PDT)
+        bh=QCY8yakOgFx6ixafaMq4NF6KqoNRvoG64yc9U8LV1IM=;
+        b=rLzumfULtfqq6NHt9gCdqBAoGjC46MBRHyevhB1gsmRUCfCuJzJdag3mUxjFvSt0iG
+         9xZdPEeJuUndemR/EMcx3KJrI9cEb9sT6Ze/mr+05yh25lc+J4p5emKA3z4ei5KFNRad
+         rhap/qR6r8WLpf+6MX503lvkaIpzo+6LZu9rVPH7KKyN8QydWAQo6W9FzZKiPfPAgUXF
+         h7j7P1diBwFRKXqAlWEMFe5hErGOa7ZGKrrqSELRtrpARn7qL9jZAD/PP6Lu1TF2btzW
+         t2rGufhvt5s7fNtkWbhXzLOMCh6hSZkr2wJxL1nAVXbeFFm/LcorYbxBB/JGgmoQGRi3
+         6slg==
+X-Forwarded-Encrypted: i=1; AJvYcCXsgHz54TAEuFbYdLCNOEw8Go15pW+dIQ9m8TI/rm8lhM2HRhMlQvXfDOg5Qy9WL1psYspSf55Daj8sAAiudBQPWVWZFL+53kDNihOFQ0DMNiEMjrxMfpEqxSmcUlFROQ6An1AZo0g7Kw==
+X-Gm-Message-State: AOJu0Yz5HGNNIt/NCrv1Lrey0xkwSeRuKAV/I/UAAUIvtmOH31srhPRe
+	FHcyxoIKB0dywzwH9ipCHpXQnfz8bF6ENi6Q7cMNQSfkdaGznT//
+X-Google-Smtp-Source: AGHT+IEjSYEEaX48FshcXj6CxYudxam3VGcC/uxrHOKGP4C6F0fyeI+wv5B6A6KMEDqcGR/KY0ulgw==
+X-Received: by 2002:a5d:42c9:0:b0:367:3282:a258 with SMTP id ffacd0b85a97d-367f717057emr704191f8f.18.1720686436374;
+        Thu, 11 Jul 2024 01:27:16 -0700 (PDT)
 Received: from localhost.localdomain ([79.175.114.8])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-367cde84712sm7134283f8f.33.2024.07.11.01.27.12
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-367cde84712sm7134283f8f.33.2024.07.11.01.27.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jul 2024 01:27:13 -0700 (PDT)
+        Thu, 11 Jul 2024 01:27:15 -0700 (PDT)
 From: Aleksandar Rikalo <arikalo@gmail.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>,
@@ -85,9 +85,9 @@ Cc: Aleksandar Rikalo <aleksandar.rikalo@syrmia.com>,
 	Serge Semin <fancer.lancer@gmail.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: [PATCH v5 07/11] clocksource: mips-gic-timer: Always use cluster 0 counter as clocksource
-Date: Thu, 11 Jul 2024 10:26:52 +0200
-Message-Id: <20240711082656.1889440-8-arikalo@gmail.com>
+Subject: [PATCH v5 08/11] clocksource: mips-gic-timer: Enable counter when CPUs start
+Date: Thu, 11 Jul 2024 10:26:53 +0200
+Message-Id: <20240711082656.1889440-9-arikalo@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240711082656.1889440-1-arikalo@gmail.com>
 References: <20240711082656.1889440-1-arikalo@gmail.com>
@@ -97,93 +97,60 @@ List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Paul Burton <paulburton@kernel.org>
 
-In a multi-cluster MIPS system, there are multiple GICs - one in each
-cluster - each of which has its independent counter. The counters in
-each GIC are not synchronized in any way, so they can drift relative
-to one another through the lifetime of the system. This is problematic
-for a clock source which ought to be global.
+In multi-cluster MIPS I6500 systems there is a GIC in each cluster,
+each with its own counter. When a cluster powers up the counter will
+be stopped, with the COUNTSTOP bit set in the GIC_CONFIG register.
 
-Avoid problems by always accessing cluster 0's counter, using
-cross-cluster register access. This adds overhead so it is applied only
-on multi-cluster systems.
+In single cluster systems, it has been fine to clear COUNTSTOP once
+in gic_clocksource_of_init() to start the counter. In multi-cluster
+systems, this will only have started the counter in the boot cluster,
+and any CPUs in other clusters will find their counter stopped which
+will break the GIC clock_event_device.
+
+Resolve this by having CPUs clear the COUNTSTOP bit when they come
+online, using the existing gic_starting_cpu() CPU hotplug callback. This
+will allow CPUs in secondary clusters to ensure that the cluster's GIC
+counter is running as expected.
 
 Signed-off-by: Paul Burton <paulburton@kernel.org>
 Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
 Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
 Signed-off-by: Aleksandar Rikalo <arikalo@gmail.com>
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 Tested-by: Serge Semin <fancer.lancer@gmail.com>
 ---
- drivers/clocksource/mips-gic-timer.c | 39 +++++++++++++++++++++++++++-
- 1 file changed, 38 insertions(+), 1 deletion(-)
+ drivers/clocksource/mips-gic-timer.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/clocksource/mips-gic-timer.c b/drivers/clocksource/mips-gic-timer.c
-index b3ae38f36720..ebf308916fb1 100644
+index ebf308916fb1..4d7659c119e1 100644
 --- a/drivers/clocksource/mips-gic-timer.c
 +++ b/drivers/clocksource/mips-gic-timer.c
-@@ -165,6 +165,37 @@ static u64 gic_hpt_read(struct clocksource *cs)
- 	return gic_read_count();
+@@ -114,6 +114,9 @@ static void gic_update_frequency(void *data)
+ 
+ static int gic_starting_cpu(unsigned int cpu)
+ {
++	/* Ensure the GIC counter is running */
++	clear_gic_config(GIC_CONFIG_COUNTSTOP);
++
+ 	gic_clockevent_cpu_init(cpu, this_cpu_ptr(&gic_clockevent_device));
+ 	return 0;
  }
+@@ -284,9 +287,6 @@ static int __init gic_clocksource_of_init(struct device_node *node)
+ 			pr_warn("Unable to register clock notifier\n");
+ 	}
  
-+static u64 gic_hpt_read_multicluster(struct clocksource *cs)
-+{
-+	unsigned int hi, hi2, lo;
-+	u64 count;
-+
-+	mips_cm_lock_other(0, 0, 0, CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
-+
-+	if (mips_cm_is64) {
-+		count = read_gic_redir_counter();
-+		goto out;
-+	}
-+
-+	hi = read_gic_redir_counter_32h();
-+	while (true) {
-+		lo = read_gic_redir_counter_32l();
-+
-+		/* If hi didn't change then lo didn't wrap & we're done */
-+		hi2 = read_gic_redir_counter_32h();
-+		if (hi2 == hi)
-+			break;
-+
-+		/* Otherwise, repeat with the latest hi value */
-+		hi = hi2;
-+	}
-+
-+	count = (((u64)hi) << 32) + lo;
-+out:
-+	mips_cm_unlock_other();
-+	return count;
-+}
-+
- static struct clocksource gic_clocksource = {
- 	.name			= "GIC",
- 	.read			= gic_hpt_read,
-@@ -199,6 +230,11 @@ static int __init __gic_clocksource_init(void)
- 	/* Calculate a somewhat reasonable rating value. */
- 	gic_clocksource.rating = 200 + gic_frequency / 10000000;
- 
-+	if (mips_cps_multicluster_cpus()) {
-+		gic_clocksource.read = &gic_hpt_read_multicluster;
-+		gic_clocksource.vdso_clock_mode = VDSO_CLOCKMODE_NONE;
-+	}
-+
- 	ret = clocksource_register_hz(&gic_clocksource, gic_frequency);
- 	if (ret < 0)
- 		pr_warn("Unable to register clocksource\n");
-@@ -257,7 +293,8 @@ static int __init gic_clocksource_of_init(struct device_node *node)
- 	 * stable CPU frequency or on the platforms with CM3 and CPU frequency
- 	 * change performed by the CPC core clocks divider.
- 	 */
--	if (mips_cm_revision() >= CM_REV_CM3 || !IS_ENABLED(CONFIG_CPU_FREQ)) {
-+	if ((mips_cm_revision() >= CM_REV_CM3 || !IS_ENABLED(CONFIG_CPU_FREQ)) &&
-+	     !mips_cps_multicluster_cpus()) {
- 		sched_clock_register(mips_cm_is64 ?
- 				     gic_read_count_64 : gic_read_count_2x32,
- 				     64, gic_frequency);
+-	/* And finally start the counter */
+-	clear_gic_config(GIC_CONFIG_COUNTSTOP);
+-
+ 	/*
+ 	 * It's safe to use the MIPS GIC timer as a sched clock source only if
+ 	 * its ticks are stable, which is true on either the platforms with
 -- 
 2.25.1
 
