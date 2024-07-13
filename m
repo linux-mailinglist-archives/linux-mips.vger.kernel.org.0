@@ -1,152 +1,177 @@
-Return-Path: <linux-mips+bounces-4307-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4308-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BCDE930437
-	for <lists+linux-mips@lfdr.de>; Sat, 13 Jul 2024 09:09:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A64D7930756
+	for <lists+linux-mips@lfdr.de>; Sat, 13 Jul 2024 23:11:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A86BEB2302B
-	for <lists+linux-mips@lfdr.de>; Sat, 13 Jul 2024 07:09:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D05F21C20D4A
+	for <lists+linux-mips@lfdr.de>; Sat, 13 Jul 2024 21:11:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8905282FE;
-	Sat, 13 Jul 2024 07:09:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D9C71448D8;
+	Sat, 13 Jul 2024 21:11:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XXhYp/jk"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32395200A3;
-	Sat, 13 Jul 2024 07:09:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 560D413C838;
+	Sat, 13 Jul 2024 21:11:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720854560; cv=none; b=r11oombKy61tVMg25iur3xgXoa6YZw+oacf9uwa09rz4DHgYnmenTVggJPlaohsSiOdMOJ4ETV2GAa/9HwxAmq/1LT7sDwykLQjCMR+5Y/wp0+4o0yIycEq4OzGtJpfSo2F5u95TAgcnJwujY+FRJi6Gj4R3ELbNoT7Lb58y2Y4=
+	t=1720905112; cv=none; b=UmR6945R3F/XUACgWKgrE6bMOPSFVPsgtyHeu8TRR4vSrVEnyhovrMTVU3lSX3QRHbAub9cgEE3deI1hFQDTCJA3lJfRsV1nAFyDhoFQ0XRvjZAajGNX+gBdEuTiAcsXD5e15fGWZOmAWOAsCBrXrtC7tNSz8W4hJkquIsaXd0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720854560; c=relaxed/simple;
-	bh=9cGeujZtX2c/zEf05hq/l7o1WBt5GJFv+9LPfky90p8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eIfjdTGACYuvOmFTBla0rJwhQuw8Ytj/bkmEbmysMpKGdPQQ27wtb++61dlaC88eDCnQ8LZe7Bw3oEgUMESSny47x04id4e/+wELSNFN2pn+OteBrIgXzaV2dGf0lZ/MvuPOJJUq430/MWVU9ni9wz6HrUSM9A2R5iNZVxwq73o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4WLfhZ1Ccnz9sSb;
-	Sat, 13 Jul 2024 09:09:02 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rBAPNnN2erdv; Sat, 13 Jul 2024 09:09:02 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4WLfhY68WVz9sSS;
-	Sat, 13 Jul 2024 09:09:01 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id BCB5C8B764;
-	Sat, 13 Jul 2024 09:09:01 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id U1NlTXZ3sw-T; Sat, 13 Jul 2024 09:09:01 +0200 (CEST)
-Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.233.195])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id B6F798B76C;
-	Sat, 13 Jul 2024 09:09:00 +0200 (CEST)
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org,
-	linux-arch@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org,
-	Peter Xu <peterx@redhat.com>
-Subject: [PATCH v3 5/5] mm: Add p{g/4}d_leaf() in asm-generic/pgtable-nop{4/u}d.h
-Date: Sat, 13 Jul 2024 09:08:27 +0200
-Message-ID: <7b6f39f3cc9823e0a058b27f50ad4f47b2e10979.1720854135.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <c81566e5df160587de50f9095d0ec377114fdba8.1720854135.git.christophe.leroy@csgroup.eu>
-References: <c81566e5df160587de50f9095d0ec377114fdba8.1720854135.git.christophe.leroy@csgroup.eu>
+	s=arc-20240116; t=1720905112; c=relaxed/simple;
+	bh=oaFByJPL12+FUprAqJYDqhzErP7nO44Id9JmB2tyyXM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G0mod2eymE9oxFl+vP8y1Dh2QchxyrF4gTkY6snyEo3UjqDzSPKKhBGY8NopV7bGmOeRCt8qSxbTfE6gPS5J6AQYiKjciPjmoPfBEsMVEl8WBi+gR6N6m91Kjpt/7FUSMl/3JDeQVTHZm1a3c9/0NwSzD8+Hd0vHtpWjtq+s1eA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XXhYp/jk; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720905110; x=1752441110;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oaFByJPL12+FUprAqJYDqhzErP7nO44Id9JmB2tyyXM=;
+  b=XXhYp/jkrAsXdtF8sCK0N9p7kA9P1SeSqH1j7kso9D2ljyViUdR9NMGX
+   8TT/JlSn1XhQQ18EvR/R/Xvss3utZ5eCcaXweji8+2TyLsgy8pwg33jaL
+   ThX1KFHK7Lqf2+CLOX+1t+Jye90HnmGy4tHRLr86KZhyfAaqTw3gFD2zF
+   EYxbCcSa99V9hWB5Myk7Ca45NWa+1huvPxAxrtrwaFrep/OR7eaaR6Cbn
+   qCg6LVI5UA5H/EtbfPLWbVVr1fOxu7DKycB9jzIutXuMoHXeU2dFfqpIX
+   rZSFrZrpj05U+FSA+53TN3Wb78yaMD2MEgLXBWLPtD1xsRr+der+9qGqu
+   w==;
+X-CSE-ConnectionGUID: OxayXOuVQCqghM2G8oXdXQ==
+X-CSE-MsgGUID: dS4b9Sm+T+K7+rteeWXmtg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11132"; a="18456490"
+X-IronPort-AV: E=Sophos;i="6.09,206,1716274800"; 
+   d="scan'208";a="18456490"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2024 14:11:49 -0700
+X-CSE-ConnectionGUID: WzhOHMcnS0euBvTBoE/FTA==
+X-CSE-MsgGUID: rvDBRUFGThm1yHvQDCddyw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,206,1716274800"; 
+   d="scan'208";a="54173404"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 13 Jul 2024 14:11:46 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sSk1v-000ckQ-2f;
+	Sat, 13 Jul 2024 21:11:43 +0000
+Date: Sun, 14 Jul 2024 05:11:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>,
+	Keguang Zhang <keguang.zhang@gmail.com>,
+	Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-mips@vger.kernel.org,
+	dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH RESEND v9 2/2] dmaengine: Loongson1: Add Loongson-1 APB
+ DMA driver
+Message-ID: <202407140536.iIizeGVy-lkp@intel.com>
+References: <20240711-loongson1-dma-v9-2-5ce8b5e85a56@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1720854504; l=2504; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=9cGeujZtX2c/zEf05hq/l7o1WBt5GJFv+9LPfky90p8=; b=MN2/woF7LqGhnWnq57H61zGqJsMcmtZviZwr/m6VoCoVv5XepEx+34tqeLFna5lL+rtgkoHC6 84JnWQ04MY8AFTasVOBH1guX6oXN81IRpiabqc6NIYejAVLsU1O2E4y
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240711-loongson1-dma-v9-2-5ce8b5e85a56@gmail.com>
 
-Commit 2c8a81dc0cc5 ("riscv/mm: fix two page table check related
-issues") added pud_leaf() in include/asm-generic/pgtable-nopmd.h
+Hi Keguang,
 
-Do the same for p4d_leaf() and pgd_leaf() to avoid getting them
-erroneously defined by architectures that do not implement the
-related page level.
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Reviewed-by: Peter Xu <peterx@redhat.com>
----
-v2: Added pXd_leaf macro as well in asm-generic/pgtable-nopXd.h to cohabit with the fallback
----
- include/asm-generic/pgtable-nop4d.h | 2 ++
- include/asm-generic/pgtable-nopmd.h | 1 +
- include/asm-generic/pgtable-nopud.h | 2 ++
- 3 files changed, 5 insertions(+)
+[auto build test WARNING on d35b2284e966c0bef3e2182a5c5ea02177dd32e4]
 
-diff --git a/include/asm-generic/pgtable-nop4d.h b/include/asm-generic/pgtable-nop4d.h
-index 03b7dae47dd4..ed7ba008469f 100644
---- a/include/asm-generic/pgtable-nop4d.h
-+++ b/include/asm-generic/pgtable-nop4d.h
-@@ -21,6 +21,8 @@ typedef struct { pgd_t pgd; } p4d_t;
- static inline int pgd_none(pgd_t pgd)		{ return 0; }
- static inline int pgd_bad(pgd_t pgd)		{ return 0; }
- static inline int pgd_present(pgd_t pgd)	{ return 1; }
-+static inline int pgd_leaf(pgd_t pgd)		{ return 0; }
-+#define pgd_leaf pgd_leaf
- static inline void pgd_clear(pgd_t *pgd)	{ }
- #define p4d_ERROR(p4d)				(pgd_ERROR((p4d).pgd))
- 
-diff --git a/include/asm-generic/pgtable-nopmd.h b/include/asm-generic/pgtable-nopmd.h
-index b01349a312fa..e178ace2e23e 100644
---- a/include/asm-generic/pgtable-nopmd.h
-+++ b/include/asm-generic/pgtable-nopmd.h
-@@ -31,6 +31,7 @@ static inline int pud_none(pud_t pud)		{ return 0; }
- static inline int pud_bad(pud_t pud)		{ return 0; }
- static inline int pud_present(pud_t pud)	{ return 1; }
- static inline int pud_leaf(pud_t pud)		{ return 0; }
-+#define pud_leaf pud_leaf
- static inline void pud_clear(pud_t *pud)	{ }
- #define pmd_ERROR(pmd)				(pud_ERROR((pmd).pud))
- 
-diff --git a/include/asm-generic/pgtable-nopud.h b/include/asm-generic/pgtable-nopud.h
-index eb70c6d7ceff..655dfebea91c 100644
---- a/include/asm-generic/pgtable-nopud.h
-+++ b/include/asm-generic/pgtable-nopud.h
-@@ -28,6 +28,8 @@ typedef struct { p4d_t p4d; } pud_t;
- static inline int p4d_none(p4d_t p4d)		{ return 0; }
- static inline int p4d_bad(p4d_t p4d)		{ return 0; }
- static inline int p4d_present(p4d_t p4d)	{ return 1; }
-+static inline int p4d_leaf(p4d_t p4d)		{ return 0; }
-+#define p4d_leaf p4d_leaf
- static inline void p4d_clear(p4d_t *p4d)	{ }
- #define pud_ERROR(pud)				(p4d_ERROR((pud).p4d))
- 
+url:    https://github.com/intel-lab-lkp/linux/commits/Keguang-Zhang-via-B4-Relay/dt-bindings-dma-Add-Loongson-1-APB-DMA/20240711-191657
+base:   d35b2284e966c0bef3e2182a5c5ea02177dd32e4
+patch link:    https://lore.kernel.org/r/20240711-loongson1-dma-v9-2-5ce8b5e85a56%40gmail.com
+patch subject: [PATCH RESEND v9 2/2] dmaengine: Loongson1: Add Loongson-1 APB DMA driver
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20240714/202407140536.iIizeGVy-lkp@intel.com/config)
+compiler: gcc-13 (Ubuntu 13.2.0-4ubuntu3) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240714/202407140536.iIizeGVy-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407140536.iIizeGVy-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/printk.h:598,
+                    from include/asm-generic/bug.h:22,
+                    from arch/x86/include/asm/bug.h:87,
+                    from include/linux/bug.h:5,
+                    from include/linux/fortify-string.h:6,
+                    from include/linux/string.h:374,
+                    from include/linux/scatterlist.h:5,
+                    from include/linux/dmapool.h:14,
+                    from drivers/dma/loongson1-apb-dma.c:8:
+   drivers/dma/loongson1-apb-dma.c: In function 'ls1x_dma_start':
+>> drivers/dma/loongson1-apb-dma.c:137:34: warning: format '%x' expects argument of type 'unsigned int', but argument 5 has type 'dma_addr_t' {aka 'long long unsigned int'} [-Wformat=]
+     137 |         dev_dbg(chan2dev(dchan), "cookie=%d, starting hwdesc=%x\n",
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:29: note: in definition of macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:250:9: note: in expansion of macro '_dynamic_func_call_cls'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:273:9: note: in expansion of macro '_dynamic_func_call'
+     273 |         _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:165:9: note: in expansion of macro 'dynamic_dev_dbg'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:165:30: note: in expansion of macro 'dev_fmt'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                              ^~~~~~~
+   drivers/dma/loongson1-apb-dma.c:137:9: note: in expansion of macro 'dev_dbg'
+     137 |         dev_dbg(chan2dev(dchan), "cookie=%d, starting hwdesc=%x\n",
+         |         ^~~~~~~
+   drivers/dma/loongson1-apb-dma.c:137:63: note: format string is defined here
+     137 |         dev_dbg(chan2dev(dchan), "cookie=%d, starting hwdesc=%x\n",
+         |                                                              ~^
+         |                                                               |
+         |                                                               unsigned int
+         |                                                              %llx
+
+
+vim +137 drivers/dma/loongson1-apb-dma.c
+
+   130	
+   131	static inline int ls1x_dma_start(struct ls1x_dma_chan *chan,
+   132					 dma_addr_t *hwdesc_phys)
+   133	{
+   134		struct dma_chan *dchan = &chan->vchan.chan;
+   135		int val, ret;
+   136	
+ > 137		dev_dbg(chan2dev(dchan), "cookie=%d, starting hwdesc=%x\n",
+   138			dchan->cookie, *hwdesc_phys);
+   139	
+   140		val = *hwdesc_phys & DMA_ADDR_MASK;
+   141		val |= DMA_START;
+   142		val |= dchan->chan_id;
+   143		chan_writel(chan, DMA_CTRL, val);
+   144		ret = readl_poll_timeout(chan->reg_base + DMA_CTRL, val,
+   145					 !(val & DMA_START), 0, 3000);
+   146		if (ret)
+   147			dev_err(chan2dev(dchan), "failed to start DMA\n");
+   148	
+   149		return ret;
+   150	}
+   151	
+
 -- 
-2.44.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
