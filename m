@@ -1,117 +1,138 @@
-Return-Path: <linux-mips+bounces-4302-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4303-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 223AA92FA1B
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Jul 2024 14:23:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99B4393042C
+	for <lists+linux-mips@lfdr.de>; Sat, 13 Jul 2024 09:09:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCBD71F224AD
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Jul 2024 12:23:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41B541F2286C
+	for <lists+linux-mips@lfdr.de>; Sat, 13 Jul 2024 07:09:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 919F716DC1A;
-	Fri, 12 Jul 2024 12:23:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73FD120309;
+	Sat, 13 Jul 2024 07:09:03 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C255115A4B3;
-	Fri, 12 Jul 2024 12:22:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2144F1BDCF;
+	Sat, 13 Jul 2024 07:08:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720786981; cv=none; b=UYpo1qff8PRA40Im00LnBJENvFnQLMaQrIAYzYNAucxkT7Rlv/ZzYHChbpSoVn+05ds5FznLbhyvT4m1MDXZJJtByLd2cuZusDdvGKU+y2K3EutM73yzLFPDC/JxpkGNGbM9MKbF9KfXjFHd72btfQUH9JSQ5UcRleFwp9rdaxc=
+	t=1720854543; cv=none; b=N2XS53Jrjx6VVDw9SIUS9jFNAllZ8c31rmV5dJvZHfaBP42CEt1M3/zI17Hzk/uDggbCT9EQKp/QcYmMsgby8boqPHAdfkMbccAmMB2IqoHmepQ+Aon+llfuD43NR47wApv/3y2Lcy2yMy5c/sLfG/M4yim9m7Wp7VIhd2YLtu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720786981; c=relaxed/simple;
-	bh=E53mlU8u+G+uQ+BwkpZ8gR+rC2y5bBtGOSyYYdppZ14=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=QU7LS9pDcZLL+B2sDe7iHclVqPATQTDGSuoymF9HtBJtc2syCkM+OkvDUrrVbDrMjtMZqIWOF9mmyzmt0XvHdm0oWu2GsS6Zh7s8OtfHgTm7s6h13swJ/jAJC30fr+qTi8qIr995Iu+DVWIuuJDXNoQvtDZ8Hmj3gSUbsobiGcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 828BE92009C; Fri, 12 Jul 2024 14:22:49 +0200 (CEST)
+	s=arc-20240116; t=1720854543; c=relaxed/simple;
+	bh=y0Q0luenHNPv9ogArfuKYJRJke4ovBOGzKAKuOGFQ5s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hCenKU6G+xM4iiPANOYQfRbAWKnEv4w5aHtz9Dgwcu7KewB/f+6fy3W4h+OBJwPFGYETQKUPWaujKrJojd/J3z2K8YxgBXNrIDsNmK7fKdBCuQyi7vLkOciXkq1X5/z18fSxt8IFmi/MtX6iSsCfRPlj4vCdYKDS/UiHVUuL8xI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4WLfhT746xz9sST;
+	Sat, 13 Jul 2024 09:08:57 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EcLfv5DIvfXK; Sat, 13 Jul 2024 09:08:57 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4WLfhT68YXz9sSS;
+	Sat, 13 Jul 2024 09:08:57 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 7C1C892009B;
-	Fri, 12 Jul 2024 13:22:49 +0100 (BST)
-Date: Fri, 12 Jul 2024 13:22:49 +0100 (BST)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org, 
-    linux-kernel@vger.kernel.org, 
-    "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
-    =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Subject: Re: [PATCH v3] MIPS: Implement ieee754 NAN2008 emulation mode
-In-Reply-To: <de07ff44-41ee-4158-b629-90a1835bd9cb@app.fastmail.com>
-Message-ID: <alpine.DEB.2.21.2407121250350.38148@angie.orcam.me.uk>
-References: <20240612-mips_ieee754_emul-v3-1-2c21b450abdb@flygoat.com> <Zn1FuxNw2CUttzdg@alpha.franken.de> <9cc26415-9cbc-47fa-a132-7d8c000874a4@app.fastmail.com> <alpine.DEB.2.21.2406272053180.43454@angie.orcam.me.uk> <fbd421a6-cf37-49ab-bdbe-6128a7cae8be@app.fastmail.com>
- <Zoz6+YmUk7CBsNFw@alpha.franken.de> <7797a7b2-1bb2-4c45-b65d-678f685dfa3d@app.fastmail.com> <Zo457UgAkhbAgm2R@alpha.franken.de> <alpine.DEB.2.21.2407101015120.38148@angie.orcam.me.uk> <a8741e38-837b-4fbb-8656-1e6d50bdfcc0@app.fastmail.com>
- <alpine.DEB.2.21.2407110315170.38148@angie.orcam.me.uk> <de07ff44-41ee-4158-b629-90a1835bd9cb@app.fastmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id BFAF98B76C;
+	Sat, 13 Jul 2024 09:08:57 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id Ht0A52iiwZyr; Sat, 13 Jul 2024 09:08:57 +0200 (CEST)
+Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.233.195])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id B32A58B764;
+	Sat, 13 Jul 2024 09:08:56 +0200 (CEST)
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
+	linux-arch@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org,
+	Oscar Salvador <osalvador@suse.de>,
+	Peter Xu <peterx@redhat.com>
+Subject: [PATCH v3 1/5] arch/x86: Drop own definition of pgd,p4d_leaf
+Date: Sat, 13 Jul 2024 09:08:23 +0200
+Message-ID: <c81566e5df160587de50f9095d0ec377114fdba8.1720854135.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1720854504; l=1436; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=jETqTIBrbMCiSKtThDBVuiOakjqQZl9LJXDhA4Uy90Y=; b=j42rjo6o36t5FwwD7Ik5HJFIbBLA/oCUlT32r6QXUQT1OdEHDQG6EX/TeG2Jo+q73BQzLaMAy OGmrGbcVS1wAtLcieRc2n/Q4O9B0lUFj2TyovGgx73fb20ZcQs3cJV8
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
 
-On Fri, 12 Jul 2024, Jiaxun Yang wrote:
+From: Oscar Salvador <osalvador@suse.de>
 
-> >> >  It would be good to check with hard-float QEMU configured for writable 
-> >> > FCSR.NAN2008 (which is one way original code was verified) that things 
-> >> > have not regressed.  And also what happens if once our emulation has 
-> >> > triggered for the unsupported FCSR.NAN2008 mode, an attempt is made to 
-> >> > flip the mode bit via ptrace(2), e.g. under GDB, which I reckon our 
-> >> > emulation permits for non-legacy CPUs (and which I think should not be 
-> >> > allowed under the new setting).
-> >> 
-> >> PTrace is working as expected (reflects emulated value).
-> >
-> >  Yes, sure for reads, but how about *writing* to the bit?
-> 
-> Tested flipping nan2008 bits with ieee754=emulated with ptrace, it works on some extent.
-> (flipping the bit to unsupported value immediately triggered emulation).
+We provide generic definitions of pXd_leaf in pgtable.h when the arch
+do not define their own, where the generic pXd_leaf always return false.
 
- What about the other way round?
+Although x86 defines {pgd,p4d}_leaf, they end up being a no-op, so drop them
+and make them fallback to the generic one.
 
- Anyway I think we need to prevent it from happening, matching runtime 
-behaviour, i.e. if the program itself cannot flip FCSR.NAN2008 via CTC1, 
-then ptrace(2) must not either.  And the same for the emulator in the 
-"ieee754=emulated" mode (but not for the emulator modes where the flipping 
-is currently permitted), as it would be a one-way switch.
+Signed-off-by: Oscar Salvador <osalvador@suse.de>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Reviewed-by: Peter Xu <peterx@redhat.com>
+---
+ arch/x86/include/asm/pgtable.h | 10 ----------
+ 1 file changed, 10 deletions(-)
 
- In other words we need to be consistent and the NaN mode of operation has 
-to be strapped in "ieee754=emulated" mode according to ELF file header's 
-EF_MIPS_NAN2008 bit for the duration of execution of a given program.
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index 65b8e5bb902c..772f778bac06 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -252,13 +252,6 @@ static inline unsigned long pgd_pfn(pgd_t pgd)
+ 	return (pgd_val(pgd) & PTE_PFN_MASK) >> PAGE_SHIFT;
+ }
+ 
+-#define p4d_leaf p4d_leaf
+-static inline bool p4d_leaf(p4d_t p4d)
+-{
+-	/* No 512 GiB pages yet */
+-	return 0;
+-}
+-
+ #define pte_page(pte)	pfn_to_page(pte_pfn(pte))
+ 
+ #define pmd_leaf pmd_leaf
+@@ -1396,9 +1389,6 @@ static inline bool pgdp_maps_userspace(void *__ptr)
+ 	return (((ptr & ~PAGE_MASK) / sizeof(pgd_t)) < PGD_KERNEL_START);
+ }
+ 
+-#define pgd_leaf	pgd_leaf
+-static inline bool pgd_leaf(pgd_t pgd) { return false; }
+-
+ #ifdef CONFIG_MITIGATION_PAGE_TABLE_ISOLATION
+ /*
+  * All top-level MITIGATION_PAGE_TABLE_ISOLATION page tables are order-1 pages
+-- 
+2.44.0
 
- Likewise FCSR.ABS2008.
-
-> >> The actual switchable NaN hardware (M5150, P5600) uses a dedicated Config7
-> >> bit rather than writable FCSR.NAN2008 to control NaN2008 mode. This is undocumented
-> >> and not present on some RTL releases. FCSR.NAN2008 is R/O as per The MIPS32 Instruction
-> >> Set Manual. This renders the purposed test pointless.
-> >
-> >  Yes, for R6 and arguably R5, but not for R3.  Architecture specification 
-> > revisions 3.50 through 5.02 define FCSR.NAN2008 (and also FCSR.ABS2008) as 
-> > either R/O or R/W, at the implementer's discretion, so it is a conforming 
-> > implementation to have these bits writable and our FPU emulator reflects 
-> > it.  I won't go into the details here as to why the later revisions of the 
-> > specification have been restricted to the R/O implementation only.
-> >
-> >  NB architecture specification revisions 3.50 through 5.01 also have the 
-> > FCSR.MAC2008 bit defined, removed altogether later on.
-> 
-> Thanks for the information, I don't have access to those manuals so I was unaware
-> of that. R/W NAN2008 is prohibited by AVP as well.
-
- There is a mention in revision history at the end of the current document 
-anyway, which in this case is perhaps more informative than individual 
-documents themselves.
-
-> I briefly tested NaN2008 distro on QEMU modified with r/w NaN2008 bits in ieee754=
-> strict mode, it seems working fine.
-
- Good.
-
-  Maciej
 
