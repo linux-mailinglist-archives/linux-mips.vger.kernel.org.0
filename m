@@ -1,182 +1,141 @@
-Return-Path: <linux-mips+bounces-4309-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4310-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5DF3930809
-	for <lists+linux-mips@lfdr.de>; Sun, 14 Jul 2024 01:26:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1050F93084A
+	for <lists+linux-mips@lfdr.de>; Sun, 14 Jul 2024 04:21:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 702F128151B
-	for <lists+linux-mips@lfdr.de>; Sat, 13 Jul 2024 23:26:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0B911F217C6
+	for <lists+linux-mips@lfdr.de>; Sun, 14 Jul 2024 02:21:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34F65156679;
-	Sat, 13 Jul 2024 23:25:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1342453AD;
+	Sun, 14 Jul 2024 02:21:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XIfAGHsU"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="c+Vtxv5+";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="B7P76t59"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from fout3-smtp.messagingengine.com (fout3-smtp.messagingengine.com [103.168.172.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9EE313E88B;
-	Sat, 13 Jul 2024 23:25:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F04072F5E;
+	Sun, 14 Jul 2024 02:21:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720913157; cv=none; b=lDgfdF1zUz7YpkRUjgs62ER50SltoUXgPDbsCmqvQRgbJSkYLpzEGDD8vg8sQtXCNl8fUOAXqnpkZdta+nsia/HCep262AlgwBqGY70W0eXbHMFsglrl893gqczntJkgiaCHkGpvhX5AguCJ1FDrTafqoD8P4UMlTi5kaQWIeno=
+	t=1720923673; cv=none; b=actruiMjfsd0CZGj9OWrS6YnmCM70GriE+KLtcKZLXVzS0sAbT9mZNbTl9FF7U3wLxHNR6LgRQv/sO3lxhnYGpMS5VieySm/E6m/Di5VvKvZqKx4RXOfByoh+2oGTHSjbZn8stZQc2Df7Yx8jjg8KkWSbPX2+ZJUMSDGYUrvmic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720913157; c=relaxed/simple;
-	bh=PImxgGKyVk7kPOsf77JMkli5keQyd7AsTSM8XarLkFI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GuWkZZ5Mz5wBfOJucIayYxOi3NOR1ThuZJe5iXpYRtUXOqhzbwV0dT76jWRsxZ9BZgT7z0YnPeWzhdWDTNLB/8b0C7qVxpsxJrCwqxEozTgq90/Q7GlDaEQ9+riQ7QZF0KPtmO5fi3nhiIcssnXxF3SGrIJeyuN52c8f8RIntnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XIfAGHsU; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720913155; x=1752449155;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PImxgGKyVk7kPOsf77JMkli5keQyd7AsTSM8XarLkFI=;
-  b=XIfAGHsUlR8Jk2873iNuk3zlEoa4PxNcEnQSQh4fkIOi4s24ha5n3ups
-   YFXTaZlGuP1lj4YljrVJ85Vy2Ih86B30KnmPw3ltnxPJ79EX6xQQtIS+r
-   5n40GoKUIW2Qn4/qFXEpK+3H/JhIg1GY0OPcpz3oOcnhfkyvpFoldjNfQ
-   GOC2WA1+sbXJr3KYR8oZpewbsNJo3emM3Dcyzhg0fqQnl2nxOy4FpAkSb
-   X2yKsjRRmX/ihka0qFF/EHUmLmAzXK/3P+WVN0NRkZFnAUFS49IwB7uwI
-   zDZPvUGay3LtF1EmfxX273Ut9HEcs1Rctiv3ZnNsqMLwijSjd7+SCpui6
-   g==;
-X-CSE-ConnectionGUID: wR5tpD9CR7KadXasfrftuA==
-X-CSE-MsgGUID: RxE7AoNYT0eIOi8K2mLXzw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11132"; a="22143508"
-X-IronPort-AV: E=Sophos;i="6.09,207,1716274800"; 
-   d="scan'208";a="22143508"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2024 16:25:54 -0700
-X-CSE-ConnectionGUID: 31244haTR72HJOvqgTZu5A==
-X-CSE-MsgGUID: IWY47mOpS06iLoo7usBlFA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,207,1716274800"; 
-   d="scan'208";a="54434821"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 13 Jul 2024 16:25:51 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sSm7g-000cqQ-1k;
-	Sat, 13 Jul 2024 23:25:48 +0000
-Date: Sun, 14 Jul 2024 07:24:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>,
-	Keguang Zhang <keguang.zhang@gmail.com>,
-	Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-mips@vger.kernel.org, dmaengine@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH RESEND v9 2/2] dmaengine: Loongson1: Add Loongson-1 APB
- DMA driver
-Message-ID: <202407140701.jQbPNAYb-lkp@intel.com>
-References: <20240711-loongson1-dma-v9-2-5ce8b5e85a56@gmail.com>
+	s=arc-20240116; t=1720923673; c=relaxed/simple;
+	bh=fzSBnCd1jBDbangdb3noGLEnh+X3cellPhnMXgCpir0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=qgobg1K2RJ24RrOfD8cCYSKVWa1UjCq8vI1+enm6x3+56/IbfuP8P0BAW6KhKCta9WVM8bxPPPPspxkWod+2Abtai/Zx6Ub5g59vMzKXpNeekLL/t7IBmW/yggTs79Okhh6Jhpl8ijctfXl+7PG1dEIIWTUvG5aNUr4wfg0BcWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=c+Vtxv5+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=B7P76t59; arc=none smtp.client-ip=103.168.172.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id CF4091386D18;
+	Sat, 13 Jul 2024 22:21:08 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sat, 13 Jul 2024 22:21:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm3; t=1720923668; x=1721010068; bh=cm
+	RgUJiwdx/VSnm+HObbdA5hg7lgmjkUpJyksqlIBTI=; b=c+Vtxv5+ewLG5xrpGh
+	tLCSLXdt2x/k94jUIyB9TFSrRUtuMf5Ll3xuCZnNRxrlX/zg2d4GB/kzA4lUcnsc
+	RRHMLkoeirKqc/6FfrA6GTy/hiGsJF8TT+tzow1GHlxJxaUdTyA2qUc41VIDv9IF
+	ps1KCkxb5mJoTThc/flETSNtgDThK12qRAISuabfJlDz/+LuJm/4Tjs+wN6fOefy
+	zX6jLv4QRqtb8wfhZW4oZMpfsbmEXTLF1SljiI3u4oRvhez3MQ8J1bFG8NZXUlw7
+	VqaJQYgoMDNrMEy/fdO+pZCtRsTllpnZQjx9xCxCR5UaCtzzernzEnvwUcGdu0fL
+	5HSw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm2; t=1720923668; x=1721010068; bh=cmRgUJiwdx/VS
+	nm+HObbdA5hg7lgmjkUpJyksqlIBTI=; b=B7P76t59V9Se3E0lC8vtw/4cANTaw
+	txSBNrFqrqxnpUVgopj2mOJs9fMxtJ+LstGu45PnWG7AnxnRc7eXYT/y/Mk5Zr4l
+	l/LhgwSxKPkz/MRJbF8O4clwTRkmJyxIk02NWS4U3AyRu/MASoN7GuNeeDjqJKOY
+	vtir7d7m5t8VCQm6GL7fLMB7ujiDH57eMj9p+CQkoHDjsQgOc9MFExRs0kFn5gB8
+	LYwmOX+t7KohJRA7tHRlT/fM4Rmca/J1sVlOBqWanoEBxKVYWWW8hut5HerENWVS
+	RZkbWu+NSvE2/y5ZGGp05pGVOzysjwgmG1hHGF+SKmcLOGCHPMo3lgLSg==
+X-ME-Sender: <xms:EzaTZjMNmFN1mh2boGYo07NBAp52FOfdq4XpIkVLiCT1n946vdE4_g>
+    <xme:EzaTZt-Mk-BlroHxEikhFeM7s2qmVTabOjQtl3vK676JR0oyxPaY20DOvUhWWhGY8
+    SlH1H90KlvVBaeshyc>
+X-ME-Received: <xmr:EzaTZiStV2YUfDoeU63CmaBtc8P_517oDPvXbH5L0JTGxVx4wZWTMufBnC1wWw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrfeelgdehlecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhufffkfggtgfgvfevofesthejredtredtjeenucfhrhhomheplfhirgiguhhn
+    ucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenucggtf
+    frrghtthgvrhhnpefgveffjeetgeejfeelgfekteelkefhuefggedvueeujeekjeetkeek
+    vdffffefudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhl
+    hihgohgrthdrtghomh
+X-ME-Proxy: <xmx:EzaTZnt89nLcUVAsxsB9gta3p3OGs8X9mv30l5D6FjHEdKKdfeEfHg>
+    <xmx:EzaTZrdGcQ6fqtA0yHt81HtTiXJopsWvdfAz6h7RpXk-pcrodQ5mpw>
+    <xmx:EzaTZj0iXk8Nmb0vUCbUH6tsXaRc1UXZiQPFc0lutuwJNqsOg6KYQA>
+    <xmx:EzaTZn_zsEawwQHmk7Wvbd8Jx3Mqvh5RtOVvRVqjRcuXofv4Y76dNw>
+    <xmx:FDaTZi7TV2vgfVYsrjxyNH7Tgo8v8qFR9fSegXjkYq0wGvr4uENpJE8I>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 13 Jul 2024 22:21:05 -0400 (EDT)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 0/4] MIPS: Refresh some configs
+Date: Sun, 14 Jul 2024 10:20:46 +0800
+Message-Id: <20240714-config-refresh-v2-0-33f1649b2efc@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240711-loongson1-dma-v9-2-5ce8b5e85a56@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAP41k2YC/3WMywrCMBBFf6XM2sg09oUr/0O6qMlMM6CJJKVYS
+ v7d2L3Lcy/n7JAoCiW4VjtEWiVJ8AX0qQLjJj+TElsYNOoGe+yUCZ5lVpE4UnKKax56a/nStRq
+ K9C6HfI7gfSzsJC0hbkd/rX/r39RaK1StfUyIXWMYhxs/tzlMy9mEF4w55y9gZYiyrgAAAA==
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=976;
+ i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
+ bh=fzSBnCd1jBDbangdb3noGLEnh+X3cellPhnMXgCpir0=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTJZgJJTf/PfU4Luvbxn/8dtru7TkwNzmrXal0kM23Gp
+ NumB1r7OkpZGMS4GGTFFFlCBJT6NjReXHD9QdYfmDmsTCBDGLg4BWAiq/8w/M/TuuYgpqUQqL3i
+ s0oIk8jJi9P47PnP/JnEvLnhfdez9ZIM/5R3zd8981vcW70eaR+J0Dd5L4tmhfRdLp/FffLhgrI
+ 5xtwA
+X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
+ fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-Hi Keguang,
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-kernel test robot noticed the following build warnings:
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+Changes in v2:
+- Fix typo
+- Improve IP30 config (thomas)
+- Link to v1: https://lore.kernel.org/r/20240706-config-refresh-v1-0-5dba0064cf08@flygoat.com
 
-[auto build test WARNING on d35b2284e966c0bef3e2182a5c5ea02177dd32e4]
+---
+Jiaxun Yang (4):
+      MIPS: config: Enable MSA and virtualization for MIPS64R6
+      MIPS: config: generic: Add board-litex
+      MIPS: config: lemote2f: Regenerate defconfig
+      MIPS: config: Add ip30_defconfig
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Keguang-Zhang-via-B4-Relay/dt-bindings-dma-Add-Loongson-1-APB-DMA/20240711-191657
-base:   d35b2284e966c0bef3e2182a5c5ea02177dd32e4
-patch link:    https://lore.kernel.org/r/20240711-loongson1-dma-v9-2-5ce8b5e85a56%40gmail.com
-patch subject: [PATCH RESEND v9 2/2] dmaengine: Loongson1: Add Loongson-1 APB DMA driver
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240714/202407140701.jQbPNAYb-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240714/202407140701.jQbPNAYb-lkp@intel.com/reproduce)
+ arch/mips/configs/generic/64r6.config        |   2 +
+ arch/mips/configs/generic/board-litex.config |   8 ++
+ arch/mips/configs/ip30_defconfig             | 183 +++++++++++++++++++++++++++
+ arch/mips/configs/lemote2f_defconfig         |  54 ++++----
+ 4 files changed, 216 insertions(+), 31 deletions(-)
+---
+base-commit: 0b58e108042b0ed28a71cd7edf5175999955b233
+change-id: 20240706-config-refresh-f1f87ddf3652
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407140701.jQbPNAYb-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/dma/loongson1-apb-dma.c:138:18: warning: format specifies type 'unsigned int' but the argument has type 'dma_addr_t' (aka 'unsigned long long') [-Wformat]
-     137 |         dev_dbg(chan2dev(dchan), "cookie=%d, starting hwdesc=%x\n",
-         |                                                              ~~
-         |                                                              %llx
-     138 |                 dchan->cookie, *hwdesc_phys);
-         |                                ^~~~~~~~~~~~
-   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
-     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                      ~~~     ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:274:19: note: expanded from macro 'dynamic_dev_dbg'
-     274 |                            dev, fmt, ##__VA_ARGS__)
-         |                                 ~~~    ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
-     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |                                                                  ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
-     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
-     224 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
->> drivers/dma/loongson1-apb-dma.c:338:53: warning: format specifies type 'int' but the argument has type 'size_t' (aka 'unsigned long') [-Wformat]
-     338 |                 "buf_len=%d period_len=%zu flags=0x%lx dir=%s\n", buf_len,
-         |                          ~~                                       ^~~~~~~
-         |                          %zu
-   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
-     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                      ~~~     ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:274:19: note: expanded from macro 'dynamic_dev_dbg'
-     274 |                            dev, fmt, ##__VA_ARGS__)
-         |                                 ~~~    ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
-     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |                                                                  ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
-     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
-     224 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
-   2 warnings generated.
-
-
-vim +138 drivers/dma/loongson1-apb-dma.c
-
-   130	
-   131	static inline int ls1x_dma_start(struct ls1x_dma_chan *chan,
-   132					 dma_addr_t *hwdesc_phys)
-   133	{
-   134		struct dma_chan *dchan = &chan->vchan.chan;
-   135		int val, ret;
-   136	
-   137		dev_dbg(chan2dev(dchan), "cookie=%d, starting hwdesc=%x\n",
- > 138			dchan->cookie, *hwdesc_phys);
-   139	
-   140		val = *hwdesc_phys & DMA_ADDR_MASK;
-   141		val |= DMA_START;
-   142		val |= dchan->chan_id;
-   143		chan_writel(chan, DMA_CTRL, val);
-   144		ret = readl_poll_timeout(chan->reg_base + DMA_CTRL, val,
-   145					 !(val & DMA_START), 0, 3000);
-   146		if (ret)
-   147			dev_err(chan2dev(dchan), "failed to start DMA\n");
-   148	
-   149		return ret;
-   150	}
-   151	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Jiaxun Yang <jiaxun.yang@flygoat.com>
+
 
