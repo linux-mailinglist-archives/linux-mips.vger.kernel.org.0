@@ -1,89 +1,90 @@
-Return-Path: <linux-mips+bounces-4310-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4311-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1050F93084A
-	for <lists+linux-mips@lfdr.de>; Sun, 14 Jul 2024 04:21:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9385D93084C
+	for <lists+linux-mips@lfdr.de>; Sun, 14 Jul 2024 04:21:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0B911F217C6
-	for <lists+linux-mips@lfdr.de>; Sun, 14 Jul 2024 02:21:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D4484B21A0A
+	for <lists+linux-mips@lfdr.de>; Sun, 14 Jul 2024 02:21:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1342453AD;
-	Sun, 14 Jul 2024 02:21:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AB38BE4D;
+	Sun, 14 Jul 2024 02:21:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="c+Vtxv5+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="B7P76t59"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="TajlTtWY";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="BPE/OYpI"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from fout3-smtp.messagingengine.com (fout3-smtp.messagingengine.com [103.168.172.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F04072F5E;
-	Sun, 14 Jul 2024 02:21:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 543D779D3;
+	Sun, 14 Jul 2024 02:21:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720923673; cv=none; b=actruiMjfsd0CZGj9OWrS6YnmCM70GriE+KLtcKZLXVzS0sAbT9mZNbTl9FF7U3wLxHNR6LgRQv/sO3lxhnYGpMS5VieySm/E6m/Di5VvKvZqKx4RXOfByoh+2oGTHSjbZn8stZQc2Df7Yx8jjg8KkWSbPX2+ZJUMSDGYUrvmic=
+	t=1720923675; cv=none; b=NUEd34GovJ1ZXFwoQstuCBVYyO9CTdY3R3iYaUlzzpkVJf/wZ8AYxykH1o1OdQE8fRzrl+ARvIwGSqau1F1GlSZxSnuBkvFB2VfiyixZHWOgfl1PBbeKb/Dsl5Vdv4B0TjZx/Qtb4E2j5SvH0pxwtHirk9WXaL6HanEsnfKd3vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720923673; c=relaxed/simple;
-	bh=fzSBnCd1jBDbangdb3noGLEnh+X3cellPhnMXgCpir0=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=qgobg1K2RJ24RrOfD8cCYSKVWa1UjCq8vI1+enm6x3+56/IbfuP8P0BAW6KhKCta9WVM8bxPPPPspxkWod+2Abtai/Zx6Ub5g59vMzKXpNeekLL/t7IBmW/yggTs79Okhh6Jhpl8ijctfXl+7PG1dEIIWTUvG5aNUr4wfg0BcWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=c+Vtxv5+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=B7P76t59; arc=none smtp.client-ip=103.168.172.146
+	s=arc-20240116; t=1720923675; c=relaxed/simple;
+	bh=8Zz1gtQOM14FxkVL02pEqH05+satoREqDWGz74XJ3DQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=t3UY8mYn+tYmnQR9ZN+f4hpc3p8r8dAzxGnXFJsEBl06u/z5enKnnfXJsiSTVwN2kFtiwCfW8pWufndG0ge14iOK+JkYMb3pBBMlF1VHr024JDIXutChe/pFOtdAn16JFbbrZswRHrdiFQnZGsuey4UEttRiv/M1dwDAesLmMS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=TajlTtWY; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=BPE/OYpI; arc=none smtp.client-ip=103.168.172.146
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.nyi.internal (Postfix) with ESMTP id CF4091386D18;
-	Sat, 13 Jul 2024 22:21:08 -0400 (EDT)
+	by mailfout.nyi.internal (Postfix) with ESMTP id 650E313804C5;
+	Sat, 13 Jul 2024 22:21:12 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sat, 13 Jul 2024 22:21:08 -0400
+  by compute5.internal (MEProxy); Sat, 13 Jul 2024 22:21:12 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm3; t=1720923668; x=1721010068; bh=cm
-	RgUJiwdx/VSnm+HObbdA5hg7lgmjkUpJyksqlIBTI=; b=c+Vtxv5+ewLG5xrpGh
-	tLCSLXdt2x/k94jUIyB9TFSrRUtuMf5Ll3xuCZnNRxrlX/zg2d4GB/kzA4lUcnsc
-	RRHMLkoeirKqc/6FfrA6GTy/hiGsJF8TT+tzow1GHlxJxaUdTyA2qUc41VIDv9IF
-	ps1KCkxb5mJoTThc/flETSNtgDThK12qRAISuabfJlDz/+LuJm/4Tjs+wN6fOefy
-	zX6jLv4QRqtb8wfhZW4oZMpfsbmEXTLF1SljiI3u4oRvhez3MQ8J1bFG8NZXUlw7
-	VqaJQYgoMDNrMEy/fdO+pZCtRsTllpnZQjx9xCxCR5UaCtzzernzEnvwUcGdu0fL
-	5HSw==
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1720923672;
+	 x=1721010072; bh=MPVth0DwNASTAUSFrhdnn3CEQXBZhSKrHxGpLm802CA=; b=
+	TajlTtWYAME0DWK2Lzg0rmcxXa8bjv3O9flpzUnD1PGo0rxfXNaqjMur1+22Fp0g
+	xCBWoi/jWWKBsUL+yJR0U5OCDT4G+zQUGcvbfY5BQI4zc0Vb5XeRV2X32RG2wsNM
+	H6A7arSzWITP52sBX28cKySsLIKqP4DdwVD1M+Ds6bYUj1tO6gWa7OlCZtErEgrv
+	kFRJaB0CVCGZdDHitdTpXtZ2kg5Zh2mLxVw0kpwZd3/QpcMxNXeZmI1bjRb7QVpE
+	+WsGtveKKPrehh+MWnT4aEW7LyhVCDaWybl9rtrSTqeN6i+zf6ouXRy6vEFfK7d0
+	1GwtU6VHjEou7Rj4lnpQcQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1720923668; x=1721010068; bh=cmRgUJiwdx/VS
-	nm+HObbdA5hg7lgmjkUpJyksqlIBTI=; b=B7P76t59V9Se3E0lC8vtw/4cANTaw
-	txSBNrFqrqxnpUVgopj2mOJs9fMxtJ+LstGu45PnWG7AnxnRc7eXYT/y/Mk5Zr4l
-	l/LhgwSxKPkz/MRJbF8O4clwTRkmJyxIk02NWS4U3AyRu/MASoN7GuNeeDjqJKOY
-	vtir7d7m5t8VCQm6GL7fLMB7ujiDH57eMj9p+CQkoHDjsQgOc9MFExRs0kFn5gB8
-	LYwmOX+t7KohJRA7tHRlT/fM4Rmca/J1sVlOBqWanoEBxKVYWWW8hut5HerENWVS
-	RZkbWu+NSvE2/y5ZGGp05pGVOzysjwgmG1hHGF+SKmcLOGCHPMo3lgLSg==
-X-ME-Sender: <xms:EzaTZjMNmFN1mh2boGYo07NBAp52FOfdq4XpIkVLiCT1n946vdE4_g>
-    <xme:EzaTZt-Mk-BlroHxEikhFeM7s2qmVTabOjQtl3vK676JR0oyxPaY20DOvUhWWhGY8
-    SlH1H90KlvVBaeshyc>
-X-ME-Received: <xmr:EzaTZiStV2YUfDoeU63CmaBtc8P_517oDPvXbH5L0JTGxVx4wZWTMufBnC1wWw>
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1720923672; x=
+	1721010072; bh=MPVth0DwNASTAUSFrhdnn3CEQXBZhSKrHxGpLm802CA=; b=B
+	PE/OYpIeFmX7nrUh+kuFJpw8Vurm27PKLDCf8S64wUi7zrQL5uXAPCNhM6qAjnO3
+	xn39hSE246JpkFgSno7595R1yukdlYvE6tyyNBS4NUGLa3AWQeTNZoFOs9BcwgDe
+	p0y4Umt6jOecRM2y9CdvJBLZXlEgjOLx4rD/8Fy/1tEtd6TpECvNXncpfq5BkR1g
+	GGhwY85A44i2HHZjm9U9RieqHHrN1sm5ba2yztiG3XxiK3R0YHAPtxqqOkrObnQs
+	FTWemubaKIM/7C8pF+wrH/3jvSXVvZtkRAVxevuSNT4MwP0RjnXhYLOlsYBt0OQT
+	frwozD5kQK8RMOEkzeJNg==
+X-ME-Sender: <xms:FzaTZvZD3-uomkyL6kXVdhRbewbPBNs-nDKjh4J4kkd7mnVnvqcwEA>
+    <xme:FzaTZuYP3UdCjWwfSNyhTBNRf2yy7G8TguVLvBUFEzpOnbXBYghxi10g_6GtE6Jpl
+    Q7Vgs4hGnJxyNswPQA>
+X-ME-Received: <xmr:FzaTZh_B0EgH3mt3oZqqj15aZW62IicR9G1WzfrZilbYIRXkvCedAg3WiLawPA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrfeelgdehlecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhufffkfggtgfgvfevofesthejredtredtjeenucfhrhhomheplfhirgiguhhn
-    ucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenucggtf
-    frrghtthgvrhhnpefgveffjeetgeejfeelgfekteelkefhuefggedvueeujeekjeetkeek
-    vdffffefudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhl
-    hihgohgrthdrtghomh
-X-ME-Proxy: <xmx:EzaTZnt89nLcUVAsxsB9gta3p3OGs8X9mv30l5D6FjHEdKKdfeEfHg>
-    <xmx:EzaTZrdGcQ6fqtA0yHt81HtTiXJopsWvdfAz6h7RpXk-pcrodQ5mpw>
-    <xmx:EzaTZj0iXk8Nmb0vUCbUH6tsXaRc1UXZiQPFc0lutuwJNqsOg6KYQA>
-    <xmx:EzaTZn_zsEawwQHmk7Wvbd8Jx3Mqvh5RtOVvRVqjRcuXofv4Y76dNw>
-    <xmx:FDaTZi7TV2vgfVYsrjxyNH7Tgo8v8qFR9fSegXjkYq0wGvr4uENpJE8I>
+    fjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpedvkeeihfefveekueevteefleffkeegudeghfdtuddugefhueev
+    geffgedukeejleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:FzaTZlqA2702ADCXShyGIBOdaC0qfH6czvqjL1T9ZANMCXWtLbg07g>
+    <xmx:FzaTZqpGAqfSTnxE86EpTdG-ypwgcj4CYtOSCMV3F-Q4cnBHrYlTTw>
+    <xmx:FzaTZrRuEzkhzXai_BnHPmGLTFM9rEc6Nh8Iu904T1X__5cxdD_Gzw>
+    <xmx:FzaTZipsSVsKLDfPlMWLrv3p6sDzKNR9vFTF2tbT8O09LcCqBCNNHA>
+    <xmx:GDaTZjmWqGvxjg8LJhVxslUuPEps8SMqXbxjzVjEzXrEvT6FMhzVGPHr>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 13 Jul 2024 22:21:05 -0400 (EDT)
+ 13 Jul 2024 22:21:09 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v2 0/4] MIPS: Refresh some configs
-Date: Sun, 14 Jul 2024 10:20:46 +0800
-Message-Id: <20240714-config-refresh-v2-0-33f1649b2efc@flygoat.com>
+Date: Sun, 14 Jul 2024 10:20:47 +0800
+Subject: [PATCH v2 1/4] MIPS: config: Enable MSA and virtualization for
+ MIPS64R6
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -92,50 +93,44 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAP41k2YC/3WMywrCMBBFf6XM2sg09oUr/0O6qMlMM6CJJKVYS
- v7d2L3Lcy/n7JAoCiW4VjtEWiVJ8AX0qQLjJj+TElsYNOoGe+yUCZ5lVpE4UnKKax56a/nStRq
- K9C6HfI7gfSzsJC0hbkd/rX/r39RaK1StfUyIXWMYhxs/tzlMy9mEF4w55y9gZYiyrgAAAA==
+Message-Id: <20240714-config-refresh-v2-1-33f1649b2efc@flygoat.com>
+References: <20240714-config-refresh-v2-0-33f1649b2efc@flygoat.com>
+In-Reply-To: <20240714-config-refresh-v2-0-33f1649b2efc@flygoat.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Jiaxun Yang <jiaxun.yang@flygoat.com>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=976;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=645;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=fzSBnCd1jBDbangdb3noGLEnh+X3cellPhnMXgCpir0=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTJZgJJTf/PfU4Luvbxn/8dtru7TkwNzmrXal0kM23Gp
- NumB1r7OkpZGMS4GGTFFFlCBJT6NjReXHD9QdYfmDmsTCBDGLg4BWAiq/8w/M/TuuYgpqUQqL3i
- s0oIk8jJi9P47PnP/JnEvLnhfdez9ZIM/5R3zd8981vcW70eaR+J0Dd5L4tmhfRdLp/FffLhgrI
- 5xtwA
+ bh=8Zz1gtQOM14FxkVL02pEqH05+satoREqDWGz74XJ3DQ=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTJZgJCbLctTn52umF2aHVQt9dbPyszxf8VmZqL/KVl9
+ rtsM/rdUcrCIMbFICumyBIioNS3ofHigusPsv7AzGFlAhnCwMUpABNJfsPwT6fn/f0LxgyBgkzR
+ k0/MsRWKn7hGpf9T2NKclwdiFzMs9mVkuPrz0naPWwJdQdcbbWt+t/asXzpD1lHHl2/S102b3h6
+ o5QcA
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+All MIPS64R6 cores so far supports MSA and vz, so it makes sense
+to enable them in 64R6 default config.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
-Changes in v2:
-- Fix typo
-- Improve IP30 config (thomas)
-- Link to v1: https://lore.kernel.org/r/20240706-config-refresh-v1-0-5dba0064cf08@flygoat.com
+ arch/mips/configs/generic/64r6.config | 2 ++
+ 1 file changed, 2 insertions(+)
 
----
-Jiaxun Yang (4):
-      MIPS: config: Enable MSA and virtualization for MIPS64R6
-      MIPS: config: generic: Add board-litex
-      MIPS: config: lemote2f: Regenerate defconfig
-      MIPS: config: Add ip30_defconfig
+diff --git a/arch/mips/configs/generic/64r6.config b/arch/mips/configs/generic/64r6.config
+index 5dd8e8503e34..63b4e95f303d 100644
+--- a/arch/mips/configs/generic/64r6.config
++++ b/arch/mips/configs/generic/64r6.config
+@@ -3,4 +3,6 @@ CONFIG_64BIT=y
+ CONFIG_MIPS32_O32=y
+ CONFIG_MIPS32_N32=y
+ 
++CONFIG_CPU_HAS_MSA=y
+ CONFIG_CRYPTO_CRC32_MIPS=y
++CONFIG_VIRTUALIZATION=y
 
- arch/mips/configs/generic/64r6.config        |   2 +
- arch/mips/configs/generic/board-litex.config |   8 ++
- arch/mips/configs/ip30_defconfig             | 183 +++++++++++++++++++++++++++
- arch/mips/configs/lemote2f_defconfig         |  54 ++++----
- 4 files changed, 216 insertions(+), 31 deletions(-)
----
-base-commit: 0b58e108042b0ed28a71cd7edf5175999955b233
-change-id: 20240706-config-refresh-f1f87ddf3652
-
-Best regards,
 -- 
-Jiaxun Yang <jiaxun.yang@flygoat.com>
+2.45.2
 
 
