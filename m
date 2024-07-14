@@ -1,89 +1,89 @@
-Return-Path: <linux-mips+bounces-4313-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4314-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D43F930850
-	for <lists+linux-mips@lfdr.de>; Sun, 14 Jul 2024 04:22:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B409930852
+	for <lists+linux-mips@lfdr.de>; Sun, 14 Jul 2024 04:22:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6ED9BB20512
-	for <lists+linux-mips@lfdr.de>; Sun, 14 Jul 2024 02:21:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF0651F219E3
+	for <lists+linux-mips@lfdr.de>; Sun, 14 Jul 2024 02:22:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A1C079E5;
-	Sun, 14 Jul 2024 02:21:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07DA8BA2B;
+	Sun, 14 Jul 2024 02:21:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="ZeZfERHz";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="nKKC3hVm"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="JxTPxSMc";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="hPAuQOVm"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from fout3-smtp.messagingengine.com (fout3-smtp.messagingengine.com [103.168.172.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 950F711CB8;
-	Sun, 14 Jul 2024 02:21:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 532EF14F62;
+	Sun, 14 Jul 2024 02:21:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720923682; cv=none; b=TdDN6Od4SAZBZ8QdThQ3GF+7hZS7dHdTsTQmFGEpArTgWw4S++r0gKXHsKTMrrlEZhS6WnuGfvyDYgCH7VC8J1mhmNYRkj72TWBqgvxjTEXd9hkJW3afpuLT0QwacBj/bFotCTqFe6gZtZ13VjFLrQcgJhLugdH/gvblqfg61Is=
+	t=1720923685; cv=none; b=iCMdrX20qnh87dSU4CILF0u3AKob/z/pJ8hkpf/3Hc8rkMKIqcKsAtm/E10SLoiU9vhoWH/B/2pzTr4EveV5uWSTQd1AtpHj/sklqXzQxFcHLODQh6RKDrrKao/3c3CFnvTW6KUICf5bM/b146HDOBxcKcBXIoyHCLJ5Tns62yo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720923682; c=relaxed/simple;
-	bh=KlG0Vj2AFM95CNMxky8X5ftkACwun3YwOt82GeoC2rY=;
+	s=arc-20240116; t=1720923685; c=relaxed/simple;
+	bh=9w/gXhSH8cTFJ9WkyG+QUL+daKuNKx2bqEPIbSMtBhA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ntfsl8m1Ayss2yUEEG24tCNBCvqJaeCOjR0vjFarWGkyJiRGd+mD1h4fmHedfqHooVfzxisv2iRGmVC45hdRXRoxrcoCxy8h5MyzoW3Bsk07DrunrsAXNwGE/sCvaAp123FiRv3ETMbsaxUZJHB6MbXTU+IUbr9Nv/tkkW0ay3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=ZeZfERHz; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=nKKC3hVm; arc=none smtp.client-ip=103.168.172.146
+	 In-Reply-To:To:Cc; b=ac8i4uhSuTGPzxR9G9o+vI39ozaqQhP5oy0AfnVWvhHPtdfOF6p3QYHLbzFYHg/MTnKx2fciyx2wb3zFu0aePKMf19YdA8FSOM6QYvzbIfoiImR22zWu6IY3wYobW72nb3XH9v+zTj+U9NVo4vSop/RdQrfHeR2P8ggD+WnL6MA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=JxTPxSMc; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=hPAuQOVm; arc=none smtp.client-ip=103.168.172.146
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.nyi.internal (Postfix) with ESMTP id D8E2A1381118;
-	Sat, 13 Jul 2024 22:21:19 -0400 (EDT)
+	by mailfout.nyi.internal (Postfix) with ESMTP id 6EAFB1381118;
+	Sat, 13 Jul 2024 22:21:23 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sat, 13 Jul 2024 22:21:19 -0400
+  by compute5.internal (MEProxy); Sat, 13 Jul 2024 22:21:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1720923679;
-	 x=1721010079; bh=X5NZ+Z32WoLdkpp294XqkIltG9BK9UJKdewzPzHLrnE=; b=
-	ZeZfERHzbxPp8vOMBMBUAVaaMYfyGZVu71vQ4ZtKHN+ea0XphXNpu8ziohEWQ1ej
-	z3u4rpuX/UWL32Yas7C963bqZOpjovJjTuht/v+dXHL982G18ndnvWJYlISDUQC3
-	m4szLXCC7qf9wI7Al20ZuZT5D5C/IdycY0s8qG3nJBx8MM4d9A0NsKu1JugKNtUM
-	Ru8BCF2ecPu0LiJIcICSusloCtf3IG+CBZvKAZLarqmwJDOJt4TiE8ooNDgMAfuX
-	uJnYx5pSSB3L7prm56HyXbivkrtMJL0G42+s0kGJ009vxNNJXrbJ4BFqppv6SL6a
-	BwTUyTnJPk7lyGDpcnz0QA==
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1720923683;
+	 x=1721010083; bh=KNlSjJnk5kGhwjk8nWMjqJ0zIonLYzftkxU3Tv1pcg0=; b=
+	JxTPxSMcnzjFsyCG7OUEu1QilhjTHWkpjgGnPxVpNj/qL3zeYayxMyrHzeJyHTZk
+	wj9WDrbRWYxiATc7DH21XyE1PV7UAJceegRwU4b5XLaPRGOUM773UpkvPSCjjqV+
+	+1mvukyw0v7cE+ikNhwFZkhAeJj2iAR6VTQUPQv4wBm1e5XkNGYFPHcFFnIJ1UbG
+	RCE4cWP71djaTSp2yH8aQdANkVor+yuri2fQjUIl1Vk0N0yedGjlpVRkM3RokTw1
+	3SBpJPXARz8Z0B79ru37OSOgQWTjJyJR4l/q1pEBykdbTMHOYqqo7lKbkUgY05rL
+	F0V3yeBr+YoXwB4SJuksPg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1720923679; x=
-	1721010079; bh=X5NZ+Z32WoLdkpp294XqkIltG9BK9UJKdewzPzHLrnE=; b=n
-	KKC3hVmuqfMX0TjG4+GHcnySA2zp/oRc6qietkp/08XKlnXA4iULOXcXlBefj9V9
-	9XXgjMGFnplPVqfmRILAyxVL7uvPi5zyomJuILLMb+yIMxoMG9Cztsoz0wfX9fet
-	TSZwXOTKUoW5H6KdN4LYk/XPYk5demgDGdNhTpYetkuEEWVkBOsYSm+2czOY/0gE
-	gUXR1LHvCggKdsFIsPQW/XBpidWboZF99bZD0OQbDbRtxpV2LMPdxFFb1oT4g4OG
-	qB8quglpJq3/N7Rq3z1ZNIApGXR+FosSe+AixhyQ/0KY1VeCUOUBx7FC0fyBsfdS
-	PWakqozjf3zXwUSulljLw==
-X-ME-Sender: <xms:HjaTZlsE5q4f6ysrr9J59ZP3I8p4p2xbdXEwiXzW-_g5UumbqMGBcQ>
-    <xme:HjaTZue4s1XeEW7-v4kuyWvtb1cVzL_lLgj_oUuw6wqTlMjTSWNiGa45V7ZNEBbPe
-    lgk6mXmdOyMmnHqnCU>
-X-ME-Received: <xmr:HjaTZoyc-bM-8RxjgPj0msXRslzjI-PfZFJAduNjirMKXP1rZxTHNX3ZY3BtJg>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1720923683; x=
+	1721010083; bh=KNlSjJnk5kGhwjk8nWMjqJ0zIonLYzftkxU3Tv1pcg0=; b=h
+	PAuQOVm0O9GuJ+aB5NJhi6z6cC2e57Jek+jhg6vPzaqEguJTEIERcnKPQnxjhZZG
+	AFDHpwNyYk4vY8vn9vjriDENCHWnjmMGsItRuweBNSd6KrJv1zAvKUr9/AU+Pkmq
+	HaY/DAYsGQ1C7SL6K3yMlHBusy2DQ2HHRSOrnRJ9IOgBmNiQk3E0nANC6Okaa7j+
+	sk2bwlsBQLw/kISQXTm4oSBsSI5lJT61Ykc9IuPi++s6acHy1U/cYrTSTtwIQZj1
+	mJloflMqoYUyKyuTDpjpIKjzVcWDYRX0e1VdF01ojSvQOwaAhLtwhkXlSkzVANvs
+	eRwlskbWCQPYce1sXrF+w==
+X-ME-Sender: <xms:IjaTZjcziRo5aSgG3DgyeqyYbqBLQL3YtqZPsVekxH72c_9lMpoMBA>
+    <xme:IjaTZpNUGMG-s8mizZY8XS1788Qjy9r2pKqMrsTX8acdKyPHf9XNfI9IcuQq4rO49
+    CgNvIR_HAjDeVhSxHo>
+X-ME-Received: <xmr:IjaTZshsPHzhn3vztJNoHYCa8_cWr8zaUlkUpFcFwpW8XOTkHQmWeM_8PTQmsw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrfeelgdehlecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomheplfhirgig
     uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
     ggtffrrghtthgvrhhnpedvkeeihfefveekueevteefleffkeegudeghfdtuddugefhueev
-    geffgedukeejleenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfh
+    geffgedukeejleenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhepmhgrihhlfh
     hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:HjaTZsPb4OFWjraeA6vaZQYtM99g19WTowTlVXsJwDo-X3astIWytw>
-    <xmx:HjaTZl-INiC2CqwRTZ4a18EUL0tjBqbaHcXV56xF_Aj7wjInflkGYA>
-    <xmx:HjaTZsUGOFAcizr0XPVZR5KS3uIllM_66J8gCwDSDK_IiNq2nQcPKg>
-    <xmx:HjaTZmdxKQTjCU5kbATIgXD3ORS29sFZ-x3HZWQDlOfn9aEZqeM_gg>
-    <xmx:HzaTZhYmm_j8kpH0EtUZ6-xVKpMozD3yqAM2oOTDZMYJ4m1AQE1maZnl>
+X-ME-Proxy: <xmx:IjaTZk9tuSzc10EzQJLEXIiH4q8-cen6tej-Acr-GMJYVP1O-neQdA>
+    <xmx:IjaTZvtIQCbOrZmbVP5gDYopvEvBsV1bOytaOA-eB5xN1eGiG55aog>
+    <xmx:IjaTZjExO32rDYdOU7GV44tOOHD28P40izohds4XAlqgSZinOvghaQ>
+    <xmx:IjaTZmOJL8ocpNOsGe2W18U9rsLc7ynY2QrTKxQbcsS2eTaqoeOG-A>
+    <xmx:IzaTZpLBtUOpU4JrDqy210k8-qUgTCEMi4CZCUsd__1H-8Nj3Vpr6FeH>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 13 Jul 2024 22:21:16 -0400 (EDT)
+ 13 Jul 2024 22:21:20 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Sun, 14 Jul 2024 10:20:49 +0800
-Subject: [PATCH v2 3/4] MIPS: config: lemote2f: Regenerate defconfig
+Date: Sun, 14 Jul 2024 10:20:50 +0800
+Subject: [PATCH v2 4/4] MIPS: config: Add ip30_defconfig
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -92,180 +92,222 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240714-config-refresh-v2-3-33f1649b2efc@flygoat.com>
+Message-Id: <20240714-config-refresh-v2-4-33f1649b2efc@flygoat.com>
 References: <20240714-config-refresh-v2-0-33f1649b2efc@flygoat.com>
 In-Reply-To: <20240714-config-refresh-v2-0-33f1649b2efc@flygoat.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Jiaxun Yang <jiaxun.yang@flygoat.com>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4122;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4870;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=KlG0Vj2AFM95CNMxky8X5ftkACwun3YwOt82GeoC2rY=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTJZgKvd+oVPDis/f/LhZmZb2p+7kz58zlNan7n/Tdaa
- 56s2DxLtKOUhUGMi0FWTJElRECpb0PjxQXXH2T9gZnDygQyhIGLUwAmYuTLyLDaVPHL9b0bbym+
- 0lc/vil6M/9O+RXaTiWi6kse/pOaW2jDyNCoPMGBb539lJ0x/XfEd7Zt47unazehirNCoGjrKYl
- lzTwA
+ bh=9w/gXhSH8cTFJ9WkyG+QUL+daKuNKx2bqEPIbSMtBhA=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTJZoLK8Rn5DrMrn7CLvTCU/Mfb2yv/613Bw4PsD75N6
+ 4+u/CTUUcrCIMbFICumyBIioNS3ofHigusPsv7AzGFlAhnCwMUpABPZpMbI8OefbK9Ul5Vi24Gj
+ C7x19m9Iur7A+GZVqH96IBPbacdUMUaG8/OmdAX5fTwZFbR+6w/HLfG6IW5v1eeufRyf6a7ZlMn
+ KAgA=
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-Regenerate defconfig to include some drivers that are used
-by this platform, including sm712fb, simplefb, rtl8187.
+Add ip30_defconfig derived from ip27_defconfig to ensure this
+target is build tested by various kernel testing projects.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/configs/lemote2f_defconfig | 54 +++++++++++++++---------------------
- 1 file changed, 23 insertions(+), 31 deletions(-)
+v2: Update remove WiFi stuff and include IOC3 stuff
+---
+ arch/mips/configs/ip30_defconfig | 183 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 183 insertions(+)
 
-diff --git a/arch/mips/configs/lemote2f_defconfig b/arch/mips/configs/lemote2f_defconfig
-index 3389e6e885d9..71d6340497c9 100644
---- a/arch/mips/configs/lemote2f_defconfig
-+++ b/arch/mips/configs/lemote2f_defconfig
-@@ -12,15 +12,14 @@ CONFIG_LOG_BUF_SHIFT=15
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_EXPERT=y
- CONFIG_PROFILING=y
-+CONFIG_KEXEC=y
- CONFIG_MACH_LOONGSON2EF=y
- CONFIG_LEMOTE_MACH2F=y
--CONFIG_KEXEC=y
--# CONFIG_SECCOMP is not set
--CONFIG_PCI=y
- CONFIG_MIPS32_O32=y
- CONFIG_MIPS32_N32=y
- CONFIG_HIBERNATION=y
- CONFIG_PM_STD_PARTITION="/dev/hda3"
-+# CONFIG_SECCOMP is not set
- CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
- CONFIG_MODVERSIONS=y
-@@ -68,10 +67,10 @@ CONFIG_BT_HIDP=m
- CONFIG_BT_HCIBTUSB=m
- CONFIG_BT_HCIBFUSB=m
- CONFIG_BT_HCIVHCI=m
--CONFIG_CFG80211=m
--CONFIG_MAC80211=m
-+CONFIG_CFG80211=y
-+CONFIG_MAC80211=y
- CONFIG_MAC80211_LEDS=y
--CONFIG_RFKILL=m
-+CONFIG_RFKILL=y
- CONFIG_RFKILL_INPUT=y
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_RAM=y
-@@ -83,13 +82,10 @@ CONFIG_ATA=y
- CONFIG_PATA_AMD=y
- CONFIG_MD=y
- CONFIG_BLK_DEV_MD=m
--CONFIG_MD_LINEAR=m
- CONFIG_MD_RAID0=m
- CONFIG_MD_RAID1=m
- CONFIG_MD_RAID10=m
- CONFIG_MD_RAID456=m
--CONFIG_MD_MULTIPATH=m
--CONFIG_MD_FAULTY=m
- CONFIG_BLK_DEV_DM=m
- CONFIG_DM_DEBUG=y
- CONFIG_DM_CRYPT=m
-@@ -112,6 +108,10 @@ CONFIG_8139TOO=y
- CONFIG_R8169=y
- CONFIG_USB_USBNET=m
- CONFIG_USB_NET_CDC_EEM=m
-+CONFIG_RTL8180=m
-+CONFIG_RTL8187=y
-+CONFIG_RTL_CARDS=m
-+CONFIG_RTL8XXXU=m
- CONFIG_INPUT_EVDEV=y
- # CONFIG_MOUSE_PS2_ALPS is not set
- # CONFIG_MOUSE_PS2_LOGIPS2PP is not set
-@@ -119,27 +119,27 @@ CONFIG_INPUT_EVDEV=y
- CONFIG_MOUSE_APPLETOUCH=m
- # CONFIG_SERIO_SERPORT is not set
- CONFIG_LEGACY_PTY_COUNT=16
--CONFIG_SERIAL_NONSTANDARD=y
- CONFIG_SERIAL_8250=m
- # CONFIG_SERIAL_8250_PCI is not set
- CONFIG_SERIAL_8250_NR_UARTS=16
- CONFIG_SERIAL_8250_EXTENDED=y
- CONFIG_SERIAL_8250_MANY_PORTS=y
- CONFIG_SERIAL_8250_FOURPORT=y
-+CONFIG_SERIAL_NONSTANDARD=y
- CONFIG_HW_RANDOM=y
- CONFIG_GPIO_LOONGSON=y
- CONFIG_THERMAL=y
- CONFIG_MEDIA_SUPPORT=m
- CONFIG_FB=y
--CONFIG_FIRMWARE_EDID=y
--CONFIG_FB_MODE_HELPERS=y
--CONFIG_FB_TILEBLITTING=y
- CONFIG_FB_SIS=y
- CONFIG_FB_SIS_300=y
- CONFIG_FB_SIS_315=y
--# CONFIG_LCD_CLASS_DEVICE is not set
-+CONFIG_FB_SIMPLE=y
-+CONFIG_FB_SM712=y
-+CONFIG_FIRMWARE_EDID=y
-+CONFIG_FB_MODE_HELPERS=y
-+CONFIG_FB_TILEBLITTING=y
- CONFIG_BACKLIGHT_CLASS_DEVICE=y
--# CONFIG_VGA_CONSOLE is not set
- CONFIG_FRAMEBUFFER_CONSOLE=y
- CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
- CONFIG_LOGO=y
-@@ -238,7 +238,6 @@ CONFIG_BTRFS_FS=m
- CONFIG_QUOTA=y
- CONFIG_QFMT_V2=m
- CONFIG_AUTOFS_FS=m
--CONFIG_NETFS_SUPPORT=m
- CONFIG_FSCACHE=y
- CONFIG_CACHEFILES=m
- CONFIG_ISO9660_FS=m
-@@ -247,7 +246,6 @@ CONFIG_ZISOFS=y
- CONFIG_MSDOS_FS=m
- CONFIG_VFAT_FS=m
- CONFIG_NTFS_FS=m
--CONFIG_NTFS_RW=y
- CONFIG_PROC_KCORE=y
- CONFIG_TMPFS=y
- CONFIG_CRAMFS=m
-@@ -299,29 +297,23 @@ CONFIG_NLS_KOI8_R=m
- CONFIG_NLS_KOI8_U=m
- CONFIG_NLS_UTF8=y
- CONFIG_CRYPTO_CRYPTD=m
--CONFIG_CRYPTO_AUTHENC=m
- CONFIG_CRYPTO_TEST=m
--CONFIG_CRYPTO_LRW=m
--CONFIG_CRYPTO_PCBC=m
--CONFIG_CRYPTO_XTS=m
--CONFIG_CRYPTO_XCBC=m
--CONFIG_CRYPTO_MICHAEL_MIC=m
--CONFIG_CRYPTO_RMD160=m
--CONFIG_CRYPTO_SHA1=m
--CONFIG_CRYPTO_WP512=m
--CONFIG_CRYPTO_ANUBIS=m
- CONFIG_CRYPTO_BLOWFISH=m
- CONFIG_CRYPTO_CAMELLIA=m
- CONFIG_CRYPTO_CAST5=m
- CONFIG_CRYPTO_CAST6=m
- CONFIG_CRYPTO_FCRYPT=m
--CONFIG_CRYPTO_KHAZAD=m
--CONFIG_CRYPTO_SEED=m
- CONFIG_CRYPTO_SERPENT=m
--CONFIG_CRYPTO_TEA=m
- CONFIG_CRYPTO_TWOFISH=m
+diff --git a/arch/mips/configs/ip30_defconfig b/arch/mips/configs/ip30_defconfig
+new file mode 100644
+index 000000000000..178d61645cea
+--- /dev/null
++++ b/arch/mips/configs/ip30_defconfig
+@@ -0,0 +1,183 @@
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_IKCONFIG=y
++CONFIG_IKCONFIG_PROC=y
++CONFIG_LOG_BUF_SHIFT=15
++CONFIG_CGROUPS=y
++CONFIG_CPUSETS=y
++CONFIG_RELAY=y
++CONFIG_EXPERT=y
++CONFIG_SGI_IP30=y
++CONFIG_SMP=y
++CONFIG_NR_CPUS=2
++CONFIG_HZ_1000=y
++CONFIG_MIPS32_O32=y
++CONFIG_MIPS32_N32=y
++CONFIG_PM=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_MODULE_SRCVERSION_ALL=y
++CONFIG_PARTITION_ADVANCED=y
++CONFIG_SGI_PARTITION=y
++CONFIG_DEFAULT_MMAP_MIN_ADDR=65536
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_XFRM_USER=m
++CONFIG_XFRM_STATISTICS=y
++CONFIG_NET_KEY=y
++CONFIG_NET_KEY_MIGRATE=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_PNP=y
++CONFIG_TCP_MD5SIG=y
++CONFIG_IPV6_ROUTER_PREF=y
++CONFIG_IPV6_ROUTE_INFO=y
++CONFIG_IPV6_OPTIMISTIC_DAD=y
++CONFIG_INET6_AH=m
++CONFIG_INET6_ESP=m
++CONFIG_INET6_IPCOMP=m
++CONFIG_IPV6_MIP6=m
++CONFIG_IPV6_SIT=m
++CONFIG_IPV6_SIT_6RD=y
++CONFIG_IPV6_TUNNEL=m
++CONFIG_IPV6_MULTIPLE_TABLES=y
++CONFIG_IPV6_SUBTREES=y
++CONFIG_IPV6_MROUTE=y
++CONFIG_IPV6_PIMSM_V2=y
++CONFIG_NETWORK_SECMARK=y
++CONFIG_NET_SCHED=y
++CONFIG_NET_SCH_HTB=m
++CONFIG_NET_SCH_HFSC=m
++CONFIG_NET_SCH_PRIO=m
++CONFIG_NET_SCH_MULTIQ=y
++CONFIG_NET_SCH_RED=m
++CONFIG_NET_SCH_SFQ=m
++CONFIG_NET_SCH_TEQL=m
++CONFIG_NET_SCH_TBF=m
++CONFIG_NET_SCH_GRED=m
++CONFIG_NET_SCH_NETEM=m
++CONFIG_NET_SCH_INGRESS=m
++CONFIG_NET_CLS_BASIC=m
++CONFIG_NET_CLS_ROUTE4=m
++CONFIG_NET_CLS_FW=m
++CONFIG_NET_CLS_U32=m
++CONFIG_CLS_U32_MARK=y
++CONFIG_NET_CLS_FLOW=m
++CONFIG_NET_CLS_CGROUP=y
++CONFIG_NET_CLS_ACT=y
++CONFIG_NET_ACT_POLICE=y
++CONFIG_NET_ACT_GACT=m
++CONFIG_GACT_PROB=y
++CONFIG_NET_ACT_MIRRED=m
++CONFIG_NET_ACT_NAT=m
++CONFIG_NET_ACT_PEDIT=m
++CONFIG_NET_ACT_SKBEDIT=m
++# CONFIG_VGA_ARB is not set
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_CDROM_PKTCDVD=m
++CONFIG_ATA_OVER_ETH=m
++CONFIG_SCSI=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_CHR_DEV_ST=y
++CONFIG_BLK_DEV_SR=m
++CONFIG_CHR_DEV_SG=m
++CONFIG_CHR_DEV_SCH=m
++CONFIG_SCSI_CONSTANTS=y
++CONFIG_SCSI_LOGGING=y
++CONFIG_SCSI_SCAN_ASYNC=y
++CONFIG_SCSI_SPI_ATTRS=y
++CONFIG_SCSI_FC_ATTRS=y
++CONFIG_LIBFC=m
++CONFIG_SCSI_QLOGIC_1280=y
++CONFIG_SCSI_BFA_FC=m
++CONFIG_SCSI_DH=y
++CONFIG_SCSI_DH_RDAC=m
++CONFIG_SCSI_DH_HP_SW=m
++CONFIG_SCSI_DH_EMC=m
++CONFIG_SCSI_DH_ALUA=m
++CONFIG_MD=y
++CONFIG_BLK_DEV_MD=y
++CONFIG_MD_RAID0=y
++CONFIG_MD_RAID1=y
++CONFIG_MD_RAID10=m
++CONFIG_MD_RAID456=y
++CONFIG_BLK_DEV_DM=m
++CONFIG_DM_CRYPT=m
++CONFIG_DM_SNAPSHOT=m
++CONFIG_DM_MIRROR=m
++CONFIG_DM_LOG_USERSPACE=m
++CONFIG_DM_ZERO=m
++CONFIG_DM_MULTIPATH=m
++CONFIG_DM_MULTIPATH_QL=m
++CONFIG_DM_MULTIPATH_ST=m
++CONFIG_DM_UEVENT=y
++CONFIG_NETDEVICES=y
++CONFIG_SGI_IOC3_ETH=y
++CONFIG_INPUT_SPARSEKMAP=y
++CONFIG_INPUT_MATRIXKMAP=y
++CONFIG_INPUT_EVDEV=y
++CONFIG_SERIO_SGI_IOC3=y
++CONFIG_SERIO_RAW=m
++CONFIG_SERIO_ALTERA_PS2=m
++# CONFIG_VT is not set
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_SERIAL_8250_MANY_PORTS=y
++CONFIG_SERIAL_8250_IOC3=y
++CONFIG_NOZOMI=m
++CONFIG_HW_RANDOM_TIMERIOMEM=m
++# CONFIG_PTP_1588_CLOCK is not set
++# CONFIG_HWMON is not set
++CONFIG_THERMAL=y
++CONFIG_SGI_MFD_IOC3=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_M48T35=y
++CONFIG_UIO=y
++CONFIG_UIO_AEC=m
++CONFIG_UIO_SERCOS3=m
++CONFIG_UIO_PCI_GENERIC=m
++CONFIG_EXT2_FS=y
++CONFIG_EXT2_FS_XATTR=y
++CONFIG_EXT2_FS_POSIX_ACL=y
++CONFIG_EXT2_FS_SECURITY=y
++CONFIG_EXT3_FS=y
++CONFIG_EXT3_FS_POSIX_ACL=y
++CONFIG_EXT3_FS_SECURITY=y
++CONFIG_XFS_FS=m
++CONFIG_XFS_QUOTA=y
++CONFIG_XFS_POSIX_ACL=y
++CONFIG_BTRFS_FS=m
++CONFIG_BTRFS_FS_POSIX_ACL=y
++CONFIG_QUOTA_NETLINK_INTERFACE=y
++CONFIG_FUSE_FS=m
++CONFIG_CUSE=m
++CONFIG_PROC_KCORE=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_SQUASHFS=m
++CONFIG_OMFS_FS=m
++CONFIG_NFS_FS=y
++CONFIG_SECURITYFS=y
++CONFIG_CRYPTO_CRYPTD=m
++CONFIG_CRYPTO_BLOWFISH=m
++CONFIG_CRYPTO_CAMELLIA=m
++CONFIG_CRYPTO_CAST5=m
++CONFIG_CRYPTO_CAST6=m
++CONFIG_CRYPTO_FCRYPT=m
++CONFIG_CRYPTO_SERPENT=m
++CONFIG_CRYPTO_TWOFISH=m
++CONFIG_CRYPTO_CTS=m
 +CONFIG_CRYPTO_LRW=m
 +CONFIG_CRYPTO_PCBC=m
 +CONFIG_CRYPTO_XTS=m
-+CONFIG_CRYPTO_MICHAEL_MIC=m
++CONFIG_CRYPTO_HMAC=y
++CONFIG_CRYPTO_MD4=m
 +CONFIG_CRYPTO_RMD160=m
-+CONFIG_CRYPTO_SHA1=m
++CONFIG_CRYPTO_VMAC=m
 +CONFIG_CRYPTO_WP512=m
 +CONFIG_CRYPTO_XCBC=m
- CONFIG_CRYPTO_DEFLATE=m
--CONFIG_CRYPTO_LZO=m
- CONFIG_FONTS=y
- CONFIG_FONT_8x8=y
- CONFIG_FONT_6x11=y
++CONFIG_CRYPTO_LZO=m
++CONFIG_CRC_T10DIF=m
 
 -- 
 2.45.2
