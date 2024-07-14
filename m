@@ -1,89 +1,87 @@
-Return-Path: <linux-mips+bounces-4314-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4315-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B409930852
-	for <lists+linux-mips@lfdr.de>; Sun, 14 Jul 2024 04:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E364A930858
+	for <lists+linux-mips@lfdr.de>; Sun, 14 Jul 2024 04:41:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF0651F219E3
-	for <lists+linux-mips@lfdr.de>; Sun, 14 Jul 2024 02:22:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B88E1F2154F
+	for <lists+linux-mips@lfdr.de>; Sun, 14 Jul 2024 02:41:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07DA8BA2B;
-	Sun, 14 Jul 2024 02:21:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EABCF8F5C;
+	Sun, 14 Jul 2024 02:41:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="JxTPxSMc";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="hPAuQOVm"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="Map/egI4";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ZnjeeUbS"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout3-smtp.messagingengine.com (fout3-smtp.messagingengine.com [103.168.172.146])
+Received: from fhigh8-smtp.messagingengine.com (fhigh8-smtp.messagingengine.com [103.168.172.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 532EF14F62;
-	Sun, 14 Jul 2024 02:21:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4889479CE;
+	Sun, 14 Jul 2024 02:41:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720923685; cv=none; b=iCMdrX20qnh87dSU4CILF0u3AKob/z/pJ8hkpf/3Hc8rkMKIqcKsAtm/E10SLoiU9vhoWH/B/2pzTr4EveV5uWSTQd1AtpHj/sklqXzQxFcHLODQh6RKDrrKao/3c3CFnvTW6KUICf5bM/b146HDOBxcKcBXIoyHCLJ5Tns62yo=
+	t=1720924875; cv=none; b=swQFW9Wz385qTHxLFkcVd4REUedgcnfRMZPQRXSo/Kfiys10ApPe9uSAia+NdXb5Xp/dNPnBdRXJwXF8U2lqQaVtMNZUYtrMv9WUAGDxy3V8LrahvmTmpCInpgG/C6xpJ5QVAiETawPYawB8TErjXVC/cuMgK3fF8CDGQU2Rrko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720923685; c=relaxed/simple;
-	bh=9w/gXhSH8cTFJ9WkyG+QUL+daKuNKx2bqEPIbSMtBhA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ac8i4uhSuTGPzxR9G9o+vI39ozaqQhP5oy0AfnVWvhHPtdfOF6p3QYHLbzFYHg/MTnKx2fciyx2wb3zFu0aePKMf19YdA8FSOM6QYvzbIfoiImR22zWu6IY3wYobW72nb3XH9v+zTj+U9NVo4vSop/RdQrfHeR2P8ggD+WnL6MA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=JxTPxSMc; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=hPAuQOVm; arc=none smtp.client-ip=103.168.172.146
+	s=arc-20240116; t=1720924875; c=relaxed/simple;
+	bh=+BMX64LMqIy0Yju1SylS95nPoAjrSTts7QMuygG+Spc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=bDG5+DmsR+b6nn/m6Ly7rn1YlSWF6a4No24/A4WWY8h85ZHWzeO/DFwGoObe2mLN7rRoxZYvmTTJUd4M1CJI97q9x2vDeM7yJOhNzUPN/gor2RmmiXB4R7D6kmQjr3C/E9HYtJE3ZbMpetr6qjhojfdVE4BH7PJzsznFWqRKVy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=Map/egI4; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ZnjeeUbS; arc=none smtp.client-ip=103.168.172.159
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 6EAFB1381118;
-	Sat, 13 Jul 2024 22:21:23 -0400 (EDT)
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id 5007F11400DB;
+	Sat, 13 Jul 2024 22:41:13 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sat, 13 Jul 2024 22:21:23 -0400
+  by compute5.internal (MEProxy); Sat, 13 Jul 2024 22:41:13 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1720923683;
-	 x=1721010083; bh=KNlSjJnk5kGhwjk8nWMjqJ0zIonLYzftkxU3Tv1pcg0=; b=
-	JxTPxSMcnzjFsyCG7OUEu1QilhjTHWkpjgGnPxVpNj/qL3zeYayxMyrHzeJyHTZk
-	wj9WDrbRWYxiATc7DH21XyE1PV7UAJceegRwU4b5XLaPRGOUM773UpkvPSCjjqV+
-	+1mvukyw0v7cE+ikNhwFZkhAeJj2iAR6VTQUPQv4wBm1e5XkNGYFPHcFFnIJ1UbG
-	RCE4cWP71djaTSp2yH8aQdANkVor+yuri2fQjUIl1Vk0N0yedGjlpVRkM3RokTw1
-	3SBpJPXARz8Z0B79ru37OSOgQWTjJyJR4l/q1pEBykdbTMHOYqqo7lKbkUgY05rL
-	F0V3yeBr+YoXwB4SJuksPg==
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm3; t=1720924873; x=1721011273; bh=xn
+	qUZ7ptKpNpUMU0XCyTUpnBsFgodd+EgetEiyr0qeo=; b=Map/egI4wUvRso32AA
+	LzcQB+NTDwlb0cc/Bpdt8z7gHyRg+bqyw+uuW5cKqlNlD1db0nRBSMmDkOjofLn3
+	PxkHV7ymYBscgCfL/qsfuWLO5oCTTC+pEfyjiqByVd4jIx4QivJkRG0eFWQWwk+v
+	QDDUz9D9+8KuMPsVqWPfPuNP/56UamVW6B5jJKfTen5ng5YSmbyPy/eMzsL5t8ru
+	lzb0BR8w2C5Shny8E5QznIgeXB68JvUkgfcmH+OiWGcjhY00xwB1tDwXpxt7dSWy
+	7DnFutegnjt7JJq4iay5bweTHnKTDBLf/ewPH81YfQLmunNF8pCqbEy9aQq6kjhR
+	5nsQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1720923683; x=
-	1721010083; bh=KNlSjJnk5kGhwjk8nWMjqJ0zIonLYzftkxU3Tv1pcg0=; b=h
-	PAuQOVm0O9GuJ+aB5NJhi6z6cC2e57Jek+jhg6vPzaqEguJTEIERcnKPQnxjhZZG
-	AFDHpwNyYk4vY8vn9vjriDENCHWnjmMGsItRuweBNSd6KrJv1zAvKUr9/AU+Pkmq
-	HaY/DAYsGQ1C7SL6K3yMlHBusy2DQ2HHRSOrnRJ9IOgBmNiQk3E0nANC6Okaa7j+
-	sk2bwlsBQLw/kISQXTm4oSBsSI5lJT61Ykc9IuPi++s6acHy1U/cYrTSTtwIQZj1
-	mJloflMqoYUyKyuTDpjpIKjzVcWDYRX0e1VdF01ojSvQOwaAhLtwhkXlSkzVANvs
-	eRwlskbWCQPYce1sXrF+w==
-X-ME-Sender: <xms:IjaTZjcziRo5aSgG3DgyeqyYbqBLQL3YtqZPsVekxH72c_9lMpoMBA>
-    <xme:IjaTZpNUGMG-s8mizZY8XS1788Qjy9r2pKqMrsTX8acdKyPHf9XNfI9IcuQq4rO49
-    CgNvIR_HAjDeVhSxHo>
-X-ME-Received: <xmr:IjaTZshsPHzhn3vztJNoHYCa8_cWr8zaUlkUpFcFwpW8XOTkHQmWeM_8PTQmsw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrfeelgdehlecutefuodetggdotefrodftvf
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm2; t=1720924873; x=1721011273; bh=xnqUZ7ptKpNpU
+	MU0XCyTUpnBsFgodd+EgetEiyr0qeo=; b=ZnjeeUbSie/WaVHq4YmIo+SlseDAH
+	MJMOhIeeAUxUUDDK0USDwerp3ORyFnR4+bb9zCHFWagBt/c0L6Ok8yZhjhXl8sEJ
+	w5RW+LyatraADw5TX0B+DTyG5g866O3MzdVh8h/tDHyTxlXUCdCqLXvVUuki4Cjr
+	9uADKk3O2f+5sqocAeK8MPAqEl/BawgCVPCiwtw4IsiiatE/9i/PHQmgzKU2ou4J
+	wDejKEla1iQXMM8xAsyk/4QRP3rK+rqmZF7kXNi/oOS7l9/KYwFJsrj04J16n/aT
+	4lkT+isjJ5NeF/ER8wufCpE2BafNZzTvYinFEeDrWa2lbY3N/CE4RUFiA==
+X-ME-Sender: <xms:yDqTZnKu2b6FFdvNxaOk7aMNmIMe_WFHB4eSolMdNIzfH1vcK9tnsA>
+    <xme:yDqTZrLOd8r7fGTRZlTXtfPmKqZo-ual81klNhh-Rfm-AcQWmdecAeL8lf3k2dlby
+    a8VSNMMmz7rBK_4fi4>
+X-ME-Received: <xmr:yDqTZvtFL7g8-QauEXiVKJmONTMDzRMQkPGUjon5zmaSp9lzpnvsDS_0mClgMw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrfeelgdeifecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomheplfhirgig
-    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpedvkeeihfefveekueevteefleffkeegudeghfdtuddugefhueev
-    geffgedukeejleenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:IjaTZk9tuSzc10EzQJLEXIiH4q8-cen6tej-Acr-GMJYVP1O-neQdA>
-    <xmx:IjaTZvtIQCbOrZmbVP5gDYopvEvBsV1bOytaOA-eB5xN1eGiG55aog>
-    <xmx:IjaTZjExO32rDYdOU7GV44tOOHD28P40izohds4XAlqgSZinOvghaQ>
-    <xmx:IjaTZmOJL8ocpNOsGe2W18U9rsLc7ynY2QrTKxQbcsS2eTaqoeOG-A>
-    <xmx:IzaTZpLBtUOpU4JrDqy210k8-qUgTCEMi4CZCUsd__1H-8Nj3Vpr6FeH>
+    fjughrpefhfffugggtgffkvfevofesthejredtredtjeenucfhrhhomheplfhirgiguhhn
+    ucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenucggtf
+    frrghtthgvrhhnpeffteeugeektdfgjeevuedvgffhgedtvdfghedugefhgeehteeuudeh
+    udevjeethfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:yDqTZga6R1fn5LwwmHfe8Iynd9G7jBMwSNygpPsUG1D17_DuoD-PRg>
+    <xmx:yDqTZuZcd4gQdDBBST630SkfSVMsBFNNshdIkvCyDOJWVcIbXsCvlA>
+    <xmx:yDqTZkDON_E5o_nl0E-hQZZ9Gruh-bxl2QWnLOaFgHTPNFBw7Qc27w>
+    <xmx:yDqTZsbire2SfMnUiGvo6zqky8rgoQN6RXpH4AtXddutZf4odwFGCQ>
+    <xmx:yTqTZlzsxvZtQJS8VsbxLNpVhqqpuYt0Tj5byMy7WmlbFUcycAvygQQM>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 13 Jul 2024 22:21:20 -0400 (EDT)
+ 13 Jul 2024 22:41:09 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Sun, 14 Jul 2024 10:20:50 +0800
-Subject: [PATCH v2 4/4] MIPS: config: Add ip30_defconfig
+Date: Sun, 14 Jul 2024 10:41:05 +0800
+Subject: [PATCH] MIPS: Loongson64: Switch to SYNC_R4K
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -92,224 +90,148 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240714-config-refresh-v2-4-33f1649b2efc@flygoat.com>
-References: <20240714-config-refresh-v2-0-33f1649b2efc@flygoat.com>
-In-Reply-To: <20240714-config-refresh-v2-0-33f1649b2efc@flygoat.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Message-Id: <20240714-loongson64-cevt-r4k-v1-1-98afed7260aa@flygoat.com>
+X-B4-Tracking: v=1; b=H4sIAMA6k2YC/x3MTQqAIBBA4avErBuwGPq7SrQwnWwoNDQiiO6et
+ PwW7z2QOAonGIoHIl+SJPiMqizArNo7RrHZUKuaVFsR7iF4l4JvCA1fJ0bakOeWLGnbd2Qgl0f
+ kRe7/Ok7v+wE9a/iSZQAAAA==
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Huacai Chen <chenhuacai@kernel.org>
 Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Jiaxun Yang <jiaxun.yang@flygoat.com>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4870;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3712;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=9w/gXhSH8cTFJ9WkyG+QUL+daKuNKx2bqEPIbSMtBhA=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTJZoLK8Rn5DrMrn7CLvTCU/Mfb2yv/613Bw4PsD75N6
- 4+u/CTUUcrCIMbFICumyBIioNS3ofHigusPsv7AzGFlAhnCwMUpABPZpMbI8OefbK9Ul5Vi24Gj
- C7x19m9Iur7A+GZVqH96IBPbacdUMUaG8/OmdAX5fTwZFbR+6w/HLfG6IW5v1eeufRyf6a7ZlMn
- KAgA=
+ bh=+BMX64LMqIy0Yju1SylS95nPoAjrSTts7QMuygG+Spc=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTJVkd7zltMkbIqOLC29dCT2Z1/+F5WNfycEOlsr+ZRs
+ ijlRv/bjlIWBjEuBlkxRZYQAaW+DY0XF1x/kPUHZg4rE8gQBi5OAZhIsBQjwzX1Z+WslauZIxPU
+ PvRf5548zfnMQTOx6u6Zlyp8kre8EmH4n+cfbXFdwoGpuEmWPfjJc9mPSbl9Bqq7XIR5traL9Bp
+ zAwA=
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-Add ip30_defconfig derived from ip27_defconfig to ensure this
-target is build tested by various kernel testing projects.
+Nowadays SYNC_R4K is performing better than Loongson64's
+custom sync mechanism.
+
+Switch to SYNC_R4K to improve performance and reduce code
+duplication.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
-v2: Update remove WiFi stuff and include IOC3 stuff
+Last minute for 6.11 :-)
 ---
- arch/mips/configs/ip30_defconfig | 183 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 183 insertions(+)
+ arch/mips/Kconfig           |  1 +
+ arch/mips/include/asm/smp.h |  1 -
+ arch/mips/loongson64/smp.c  | 35 ++---------------------------------
+ 3 files changed, 3 insertions(+), 34 deletions(-)
 
-diff --git a/arch/mips/configs/ip30_defconfig b/arch/mips/configs/ip30_defconfig
-new file mode 100644
-index 000000000000..178d61645cea
---- /dev/null
-+++ b/arch/mips/configs/ip30_defconfig
-@@ -0,0 +1,183 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
-+CONFIG_NO_HZ=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_LOG_BUF_SHIFT=15
-+CONFIG_CGROUPS=y
-+CONFIG_CPUSETS=y
-+CONFIG_RELAY=y
-+CONFIG_EXPERT=y
-+CONFIG_SGI_IP30=y
-+CONFIG_SMP=y
-+CONFIG_NR_CPUS=2
-+CONFIG_HZ_1000=y
-+CONFIG_MIPS32_O32=y
-+CONFIG_MIPS32_N32=y
-+CONFIG_PM=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_MODULE_SRCVERSION_ALL=y
-+CONFIG_PARTITION_ADVANCED=y
-+CONFIG_SGI_PARTITION=y
-+CONFIG_DEFAULT_MMAP_MIN_ADDR=65536
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_XFRM_USER=m
-+CONFIG_XFRM_STATISTICS=y
-+CONFIG_NET_KEY=y
-+CONFIG_NET_KEY_MIGRATE=y
-+CONFIG_INET=y
-+CONFIG_IP_MULTICAST=y
-+CONFIG_IP_PNP=y
-+CONFIG_TCP_MD5SIG=y
-+CONFIG_IPV6_ROUTER_PREF=y
-+CONFIG_IPV6_ROUTE_INFO=y
-+CONFIG_IPV6_OPTIMISTIC_DAD=y
-+CONFIG_INET6_AH=m
-+CONFIG_INET6_ESP=m
-+CONFIG_INET6_IPCOMP=m
-+CONFIG_IPV6_MIP6=m
-+CONFIG_IPV6_SIT=m
-+CONFIG_IPV6_SIT_6RD=y
-+CONFIG_IPV6_TUNNEL=m
-+CONFIG_IPV6_MULTIPLE_TABLES=y
-+CONFIG_IPV6_SUBTREES=y
-+CONFIG_IPV6_MROUTE=y
-+CONFIG_IPV6_PIMSM_V2=y
-+CONFIG_NETWORK_SECMARK=y
-+CONFIG_NET_SCHED=y
-+CONFIG_NET_SCH_HTB=m
-+CONFIG_NET_SCH_HFSC=m
-+CONFIG_NET_SCH_PRIO=m
-+CONFIG_NET_SCH_MULTIQ=y
-+CONFIG_NET_SCH_RED=m
-+CONFIG_NET_SCH_SFQ=m
-+CONFIG_NET_SCH_TEQL=m
-+CONFIG_NET_SCH_TBF=m
-+CONFIG_NET_SCH_GRED=m
-+CONFIG_NET_SCH_NETEM=m
-+CONFIG_NET_SCH_INGRESS=m
-+CONFIG_NET_CLS_BASIC=m
-+CONFIG_NET_CLS_ROUTE4=m
-+CONFIG_NET_CLS_FW=m
-+CONFIG_NET_CLS_U32=m
-+CONFIG_CLS_U32_MARK=y
-+CONFIG_NET_CLS_FLOW=m
-+CONFIG_NET_CLS_CGROUP=y
-+CONFIG_NET_CLS_ACT=y
-+CONFIG_NET_ACT_POLICE=y
-+CONFIG_NET_ACT_GACT=m
-+CONFIG_GACT_PROB=y
-+CONFIG_NET_ACT_MIRRED=m
-+CONFIG_NET_ACT_NAT=m
-+CONFIG_NET_ACT_PEDIT=m
-+CONFIG_NET_ACT_SKBEDIT=m
-+# CONFIG_VGA_ARB is not set
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_CDROM_PKTCDVD=m
-+CONFIG_ATA_OVER_ETH=m
-+CONFIG_SCSI=y
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_CHR_DEV_ST=y
-+CONFIG_BLK_DEV_SR=m
-+CONFIG_CHR_DEV_SG=m
-+CONFIG_CHR_DEV_SCH=m
-+CONFIG_SCSI_CONSTANTS=y
-+CONFIG_SCSI_LOGGING=y
-+CONFIG_SCSI_SCAN_ASYNC=y
-+CONFIG_SCSI_SPI_ATTRS=y
-+CONFIG_SCSI_FC_ATTRS=y
-+CONFIG_LIBFC=m
-+CONFIG_SCSI_QLOGIC_1280=y
-+CONFIG_SCSI_BFA_FC=m
-+CONFIG_SCSI_DH=y
-+CONFIG_SCSI_DH_RDAC=m
-+CONFIG_SCSI_DH_HP_SW=m
-+CONFIG_SCSI_DH_EMC=m
-+CONFIG_SCSI_DH_ALUA=m
-+CONFIG_MD=y
-+CONFIG_BLK_DEV_MD=y
-+CONFIG_MD_RAID0=y
-+CONFIG_MD_RAID1=y
-+CONFIG_MD_RAID10=m
-+CONFIG_MD_RAID456=y
-+CONFIG_BLK_DEV_DM=m
-+CONFIG_DM_CRYPT=m
-+CONFIG_DM_SNAPSHOT=m
-+CONFIG_DM_MIRROR=m
-+CONFIG_DM_LOG_USERSPACE=m
-+CONFIG_DM_ZERO=m
-+CONFIG_DM_MULTIPATH=m
-+CONFIG_DM_MULTIPATH_QL=m
-+CONFIG_DM_MULTIPATH_ST=m
-+CONFIG_DM_UEVENT=y
-+CONFIG_NETDEVICES=y
-+CONFIG_SGI_IOC3_ETH=y
-+CONFIG_INPUT_SPARSEKMAP=y
-+CONFIG_INPUT_MATRIXKMAP=y
-+CONFIG_INPUT_EVDEV=y
-+CONFIG_SERIO_SGI_IOC3=y
-+CONFIG_SERIO_RAW=m
-+CONFIG_SERIO_ALTERA_PS2=m
-+# CONFIG_VT is not set
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_8250_MANY_PORTS=y
-+CONFIG_SERIAL_8250_IOC3=y
-+CONFIG_NOZOMI=m
-+CONFIG_HW_RANDOM_TIMERIOMEM=m
-+# CONFIG_PTP_1588_CLOCK is not set
-+# CONFIG_HWMON is not set
-+CONFIG_THERMAL=y
-+CONFIG_SGI_MFD_IOC3=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_RTC_DRV_M48T35=y
-+CONFIG_UIO=y
-+CONFIG_UIO_AEC=m
-+CONFIG_UIO_SERCOS3=m
-+CONFIG_UIO_PCI_GENERIC=m
-+CONFIG_EXT2_FS=y
-+CONFIG_EXT2_FS_XATTR=y
-+CONFIG_EXT2_FS_POSIX_ACL=y
-+CONFIG_EXT2_FS_SECURITY=y
-+CONFIG_EXT3_FS=y
-+CONFIG_EXT3_FS_POSIX_ACL=y
-+CONFIG_EXT3_FS_SECURITY=y
-+CONFIG_XFS_FS=m
-+CONFIG_XFS_QUOTA=y
-+CONFIG_XFS_POSIX_ACL=y
-+CONFIG_BTRFS_FS=m
-+CONFIG_BTRFS_FS_POSIX_ACL=y
-+CONFIG_QUOTA_NETLINK_INTERFACE=y
-+CONFIG_FUSE_FS=m
-+CONFIG_CUSE=m
-+CONFIG_PROC_KCORE=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+CONFIG_SQUASHFS=m
-+CONFIG_OMFS_FS=m
-+CONFIG_NFS_FS=y
-+CONFIG_SECURITYFS=y
-+CONFIG_CRYPTO_CRYPTD=m
-+CONFIG_CRYPTO_BLOWFISH=m
-+CONFIG_CRYPTO_CAMELLIA=m
-+CONFIG_CRYPTO_CAST5=m
-+CONFIG_CRYPTO_CAST6=m
-+CONFIG_CRYPTO_FCRYPT=m
-+CONFIG_CRYPTO_SERPENT=m
-+CONFIG_CRYPTO_TWOFISH=m
-+CONFIG_CRYPTO_CTS=m
-+CONFIG_CRYPTO_LRW=m
-+CONFIG_CRYPTO_PCBC=m
-+CONFIG_CRYPTO_XTS=m
-+CONFIG_CRYPTO_HMAC=y
-+CONFIG_CRYPTO_MD4=m
-+CONFIG_CRYPTO_RMD160=m
-+CONFIG_CRYPTO_VMAC=m
-+CONFIG_CRYPTO_WP512=m
-+CONFIG_CRYPTO_XCBC=m
-+CONFIG_CRYPTO_LZO=m
-+CONFIG_CRC_T10DIF=m
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 1236ea122061..e163059dd4d3 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -478,6 +478,7 @@ config MACH_LOONGSON64
+ 	select BOARD_SCACHE
+ 	select CSRC_R4K
+ 	select CEVT_R4K
++	select SYNC_R4K
+ 	select FORCE_PCI
+ 	select ISA
+ 	select I8259
+diff --git a/arch/mips/include/asm/smp.h b/arch/mips/include/asm/smp.h
+index bc2c240f414b..2427d76f953f 100644
+--- a/arch/mips/include/asm/smp.h
++++ b/arch/mips/include/asm/smp.h
+@@ -50,7 +50,6 @@ extern int __cpu_logical_map[NR_CPUS];
+ #define SMP_CALL_FUNCTION	0x2
+ /* Octeon - Tell another core to flush its icache */
+ #define SMP_ICACHE_FLUSH	0x4
+-#define SMP_ASK_C0COUNT		0x8
+ 
+ /* Mask of CPUs which are currently definitely operating coherently */
+ extern cpumask_t cpu_coherent_mask;
+diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
+index 66d049cdcf14..147acd972a07 100644
+--- a/arch/mips/loongson64/smp.c
++++ b/arch/mips/loongson64/smp.c
+@@ -33,7 +33,6 @@ static void __iomem *ipi_clear0_regs[16];
+ static void __iomem *ipi_status0_regs[16];
+ static void __iomem *ipi_en0_regs[16];
+ static void __iomem *ipi_mailbox_buf[16];
+-static uint32_t core0_c0count[NR_CPUS];
+ 
+ static u32 (*ipi_read_clear)(int cpu);
+ static void (*ipi_write_action)(int cpu, u32 action);
+@@ -382,11 +381,10 @@ loongson3_send_ipi_mask(const struct cpumask *mask, unsigned int action)
+ 		ipi_write_action(cpu_logical_map(i), (u32)action);
+ }
+ 
+-
+ static irqreturn_t loongson3_ipi_interrupt(int irq, void *dev_id)
+ {
+-	int i, cpu = smp_processor_id();
+-	unsigned int action, c0count;
++	int cpu = smp_processor_id();
++	unsigned int action;
+ 
+ 	action = ipi_read_clear(cpu);
+ 
+@@ -399,26 +397,14 @@ static irqreturn_t loongson3_ipi_interrupt(int irq, void *dev_id)
+ 		irq_exit();
+ 	}
+ 
+-	if (action & SMP_ASK_C0COUNT) {
+-		BUG_ON(cpu != 0);
+-		c0count = read_c0_count();
+-		c0count = c0count ? c0count : 1;
+-		for (i = 1; i < nr_cpu_ids; i++)
+-			core0_c0count[i] = c0count;
+-		nudge_writes(); /* Let others see the result ASAP */
+-	}
+-
+ 	return IRQ_HANDLED;
+ }
+ 
+-#define MAX_LOOPS 800
+ /*
+  * SMP init and finish on secondary CPUs
+  */
+ static void loongson3_init_secondary(void)
+ {
+-	int i;
+-	uint32_t initcount;
+ 	unsigned int cpu = smp_processor_id();
+ 	unsigned int imask = STATUSF_IP7 | STATUSF_IP6 |
+ 			     STATUSF_IP3 | STATUSF_IP2;
+@@ -432,23 +418,6 @@ static void loongson3_init_secondary(void)
+ 		     cpu_logical_map(cpu) % loongson_sysconf.cores_per_package);
+ 	cpu_data[cpu].package =
+ 		cpu_logical_map(cpu) / loongson_sysconf.cores_per_package;
+-
+-	i = 0;
+-	core0_c0count[cpu] = 0;
+-	loongson3_send_ipi_single(0, SMP_ASK_C0COUNT);
+-	while (!core0_c0count[cpu]) {
+-		i++;
+-		cpu_relax();
+-	}
+-
+-	if (i > MAX_LOOPS)
+-		i = MAX_LOOPS;
+-	if (cpu_data[cpu].package)
+-		initcount = core0_c0count[cpu] + i;
+-	else /* Local access is faster for loops */
+-		initcount = core0_c0count[cpu] + i/2;
+-
+-	write_c0_count(initcount);
+ }
+ 
+ static void loongson3_smp_finish(void)
 
+---
+base-commit: 0b58e108042b0ed28a71cd7edf5175999955b233
+change-id: 20240714-loongson64-cevt-r4k-eb74d4ad984c
+
+Best regards,
 -- 
-2.45.2
+Jiaxun Yang <jiaxun.yang@flygoat.com>
 
 
