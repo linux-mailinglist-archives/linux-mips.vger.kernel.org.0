@@ -1,188 +1,209 @@
-Return-Path: <linux-mips+bounces-4320-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4321-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C5ED930862
-	for <lists+linux-mips@lfdr.de>; Sun, 14 Jul 2024 05:11:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9741A930E00
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jul 2024 08:33:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 558041C20A6B
-	for <lists+linux-mips@lfdr.de>; Sun, 14 Jul 2024 03:11:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 509932814EE
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jul 2024 06:33:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BDD0AD22;
-	Sun, 14 Jul 2024 03:11:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E6031836D8;
+	Mon, 15 Jul 2024 06:33:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="ji30Ivo4";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VIQpOrsM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="C+e9SV/K"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout4-smtp.messagingengine.com (fout4-smtp.messagingengine.com [103.168.172.147])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B03B479CE;
-	Sun, 14 Jul 2024 03:11:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E86B126287
+	for <linux-mips@vger.kernel.org>; Mon, 15 Jul 2024 06:33:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720926689; cv=none; b=A8FtRUQQflvYvB+WBqOdHBWhcDu+CbADiv/UUiX6PCH6qf//zMvEkw7EvsiEsZU51cDYcnrEKyH933AZ3uFGDJTnchyohiI8hraQCvtBDKbgTmKax5UUCo4I7nRp2kzcnlYqxZzcjlLWxI4Xg7sSy0D2UddFF8hNj2HvfhOpat4=
+	t=1721025197; cv=none; b=jeE+mgsjWvRxTIw9TsMKRSVHOsIQsUO5FMzOAyljj2ttBHa6SQAQRk/9cHaobBp1f4nl8n/eXcjU3bl0EnHi/ezKLFcsloN9FSAJJ9jAfnc2XcKZUsV0jIBOYjG10tqAKaxgwJlYaaFnzeFhqfbiisBoiXOuc4imkMW/T2UwQ/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720926689; c=relaxed/simple;
-	bh=Jyjq6nFRwsJdx48+ghcEPTzJSgOHAotmQjFAMAumrco=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=qr/X8qaSQt6qocNNbFgTCWcbZqg/68mm58XvwMDdkz0rG3Hg8RnSADMOwr3LiedY+PLFhwxIP8TV0wQOWtUjvaMOZWB0XIZzjrdjGGid+ikHp5VcJU9mR1ZQd8QqFqLQgkdDevDSuAejUBaghbK/oc97TKvly75Ho04EiDxKUaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=ji30Ivo4; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VIQpOrsM; arc=none smtp.client-ip=103.168.172.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailfout.nyi.internal (Postfix) with ESMTP id C210413818DC;
-	Sat, 13 Jul 2024 23:11:26 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Sat, 13 Jul 2024 23:11:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1720926686;
-	 x=1721013086; bh=3Yjj2RLF0TMgeq12zZcqwE6jYJkecT8tUCcWjNExOnA=; b=
-	ji30Ivo4k6urXKZHnJUqAaN5rYX+cckz9UBOL9iQ4bwiATW0Q0AouNI/JFdfExxh
-	+XONhxsA6/qMZnQCGtErz2JHycsySlZ+1x8tGQCtYmzJUBqLd1qXF7Gn/FcCBnfs
-	M+b/nqAhhwWhCFHD9mQI/uapWIknrRGCv/RFTIpkDXqeQfi6MZ5Iamp+iSpqMBhQ
-	xTuj5dMDaM8vAeyiFyEBld6wTtFRIytJX65YrDv6Qj7NRmyIa6GR97MpI/AHd3xl
-	Ks8bguBa4CYJu5uHsRj3SmXxVzUhMbk2hf/yuj2IKdiDMJA91ma88yc5K0xntoC5
-	diEc5zCIP424eoDK5OIeZw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1720926686; x=
-	1721013086; bh=3Yjj2RLF0TMgeq12zZcqwE6jYJkecT8tUCcWjNExOnA=; b=V
-	IQpOrsMAAQSLS093IYW+w1vq91JbEgnFiH3s7olYjNXj8mLM30ba1wW1kEjXehFP
-	qbrPBgqCQIQfo6Ma/c8MRrgqihj/dYJmEoYjxhkw9c47Tejq3dB4OKm/mmwlLX+a
-	DzexDic4yJaoxCtKYE885sqd7WAIuDhqzXf+tWKphyLzlh7HhfX7dXD6v/JZYoHm
-	LovxPi1UN7MMNYEn/87RIW7ENIJLoL09E5K+cBPYAz8QubPHY+PPGM5WceH2qbsN
-	eSyq9d6XVuiqWwa9CoUmjIvlFi5FYyiSDjda56jS24xS6m3Q+uNw5VxKZ+FmVHHN
-	cEAAzFaTe/1Gn3nxzqyaw==
-X-ME-Sender: <xms:3UGTZoPhAnLB-3uqFuT4YmCNLwVYt5SpaBS-_0uiao5XwIuqlGdO1Q>
-    <xme:3UGTZu_Sj-j8KsV6EyL0jND612xK-oIdBWMmCXp5xAbCQsKGI1aY3NyomaoMbJkyp
-    ZHAY3H8PUsGkUyY0i4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrfeelgdeilecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
-    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-    eqnecuggftrfgrthhtvghrnhepudefgeeftedugeehffdtheefgfevffelfefghefhjeeu
-    geevtefhudduvdeihefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:3UGTZvThc-qOURldFued4C0CiZuOPk6dTK9Ea1T8XVTAiGZ0s8UbmQ>
-    <xmx:3UGTZgvZKxpyzVn2oeh_23Q4K-G78S-u3VDl6-tdMKyha3gMpubTgQ>
-    <xmx:3UGTZgcQE2Yl9sfWZ-rVvPhcoamp2Eta_rVlofgyw5j77iUOZ_xgmA>
-    <xmx:3UGTZk253u-wKVbh5JfDL0dMc-A0grpgO1Ln4QDguGCxP-Gcwvtb8Q>
-    <xmx:3kGTZoStR_N3aEmhHxaSSPa4of7XC9hB2GyIl6S8czokFsb2h2uGd2f1>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 4480736A0074; Sat, 13 Jul 2024 23:11:25 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
+	s=arc-20240116; t=1721025197; c=relaxed/simple;
+	bh=Kf60wOnocntCYjHw62V/2EfBf+1HRmYhh2TPix7OkEw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=TwnjuD8sxlc06WtEUqGGX4wtZMo0dd0a31B6d2VIkmmtXLCXgy8TL3bY7yiDgDY1UfUugXQ3JYKwTpymjNxwQ0n4kwr536qJJYYgTk1Np03Nz7D47NK8kn/ryJIt41U88x3ZwS2EhDTCTbNjTL0hnwIIhfzNKS74MJtXrKjyNhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=C+e9SV/K; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-52e9c6b5a62so4072274e87.0
+        for <linux-mips@vger.kernel.org>; Sun, 14 Jul 2024 23:33:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1721025194; x=1721629994; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YgUa5kzPxeKRnm4gmgQB+wDns4r7Lup1w0YNsdAWOCs=;
+        b=C+e9SV/KSQANIpOV/kkuMMx41bsZq3RK9BRfBQEYM2DrBJ/mM+w03aZ5i/IvDhOAZF
+         tnefRdHRh3lOikjpxxpE4uXZ+AqqAPH5XWz8U+GsJiqfNwDrF/9Svzr/xz/xQMw9eLmt
+         kJ6DKAt+zkBLMLSLWTHmj70bg3FmR+l3A7fXlOeNjyzibGkvMN0hUJOb4hvFIyHn7aKT
+         6bOedCRkHzxwDO5SHPbgCjUUTzJp+mr01o4LUbLNtGlgzZKnUapg1DmRZTTPyfJ3BO3s
+         HhBIS02Fxg0FlnEJzFe2+rR2tY2k12Hw+a27FUaZDj03Nu/cP3pW5Z+yC8zO/wJDTIht
+         6LXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721025194; x=1721629994;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YgUa5kzPxeKRnm4gmgQB+wDns4r7Lup1w0YNsdAWOCs=;
+        b=q3VT7Igb5v4OcYpmrIMXaU9oamOsF8cB4lmY5Ag8/WuowrFFN2W1ilVEdf4+aodJ7y
+         yOretZzuvLpvMgXHyZsBWXuNxsD2s8Sb+5E90HAEOASTEQy7EYTUGkrVcKmc5J9NMlLa
+         DFF2dqh/wEYZaMi+QdTHmyTyRyYVKhkaIfthVF86IKrrutdVirH97dAGDv8e7QuH77Pp
+         XO1KsZWNTEDuS9RA4maPdLO5irXY6nBB5KsqrK5HDKCxpuHZwigdq+lETbjYksFYGUck
+         oUmBfI90yjP3jaDl7YZn0qonzJMcOjuEGrhH1CtXvSvRa6RsDzwTErBtVDAF4NkInENQ
+         GByA==
+X-Forwarded-Encrypted: i=1; AJvYcCXsDtf4Uq68cAdGjb+uGesE4d49615AX91Ja6R0MgoYffEpnDkokZJjwNjvSIUrrNNoPZFGDQ33JZYxNNWQszbSkXCl4rpc1WryyA==
+X-Gm-Message-State: AOJu0YxKezg9qQGE+tpoKOmAYLneP5TFGPTfRbPWeFP8keJ6wR4UhL91
+	RYd3tUynvyoScsQspS2mCVV7iXkU9JRioKyvAajSb142gfCo8hubrxOxX3C9v9Q=
+X-Google-Smtp-Source: AGHT+IF0VjTw1K6MhesN5YsTG+trLH2ksTK9vmpMlTq0f2CRXPdu0k2mF7HtB+KTdSOIvOdGMqJLuQ==
+X-Received: by 2002:a05:6512:b86:b0:52e:9ebe:7325 with SMTP id 2adb3069b0e04-52eb99a3299mr12878900e87.31.1721025194058;
+        Sun, 14 Jul 2024 23:33:14 -0700 (PDT)
+Received: from umbar.lan ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ed24e188esm743543e87.47.2024.07.14.23.33.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Jul 2024 23:33:13 -0700 (PDT)
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [PATCH v4 0/5] drm: fix two issues related to HDMI Connector
+ implementation
+Date: Mon, 15 Jul 2024 09:33:00 +0300
+Message-Id: <20240715-drm-bridge-connector-fix-hdmi-reset-v4-0-61e6417cfd99@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <dad7b36f-2e37-44db-939e-cdb454875e2a@app.fastmail.com>
-In-Reply-To: <alpine.DEB.2.21.2407121250350.38148@angie.orcam.me.uk>
-References: <20240612-mips_ieee754_emul-v3-1-2c21b450abdb@flygoat.com>
- <Zn1FuxNw2CUttzdg@alpha.franken.de>
- <9cc26415-9cbc-47fa-a132-7d8c000874a4@app.fastmail.com>
- <alpine.DEB.2.21.2406272053180.43454@angie.orcam.me.uk>
- <fbd421a6-cf37-49ab-bdbe-6128a7cae8be@app.fastmail.com>
- <Zoz6+YmUk7CBsNFw@alpha.franken.de>
- <7797a7b2-1bb2-4c45-b65d-678f685dfa3d@app.fastmail.com>
- <Zo457UgAkhbAgm2R@alpha.franken.de>
- <alpine.DEB.2.21.2407101015120.38148@angie.orcam.me.uk>
- <a8741e38-837b-4fbb-8656-1e6d50bdfcc0@app.fastmail.com>
- <alpine.DEB.2.21.2407110315170.38148@angie.orcam.me.uk>
- <de07ff44-41ee-4158-b629-90a1835bd9cb@app.fastmail.com>
- <alpine.DEB.2.21.2407121250350.38148@angie.orcam.me.uk>
-Date: Sun, 14 Jul 2024 11:11:05 +0800
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Jonathan Corbet" <corbet@lwn.net>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Subject: Re: [PATCH v3] MIPS: Implement ieee754 NAN2008 emulation mode
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJzClGYC/53NTW4CMQwF4KugrDFKnEBnWPUeFYuQGMYSJMgZj
+ UBo7o5hU1Vs2i6ff753N42EqZnt4m6EJm5ci4awXJg0xHIk4KzZoMVgN+ghyxn2wlk3qZZCaaw
+ CB77CkM8MQo1GsIm6TTzYtY/RqHQR0otXy9dO88BNv26v0sk9p3/zJwcWgqO+60NOmdLniUuUu
+ qpyNM+CCf+BoqLdurc5hN5hojfUf6MfFn+HekUd7i15hyHF8AOd5/kBpZf9poEBAAA=
+To: Andrzej Hajda <andrzej.hajda@intel.com>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+ Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+ Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>, 
+ Lucas Stach <l.stach@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, Paul Cercueil <paul@crapouillou.net>, 
+ Anitha Chrisanthus <anitha.chrisanthus@intel.com>, 
+ Edmund Dea <edmund.j.dea@intel.com>, 
+ Chun-Kuang Hu <chunkuang.hu@kernel.org>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, Kevin Hilman <khilman@baylibre.com>, 
+ Jerome Brunet <jbrunet@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ Sean Paul <sean@poorly.run>, Marijn Suijten <marijn.suijten@somainline.org>, 
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
+ Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>, 
+ Biju Das <biju.das.jz@bp.renesas.com>, 
+ Geert Uytterhoeven <geert+renesas@glider.be>, 
+ Sandy Huang <hjc@rock-chips.com>, 
+ =?utf-8?q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
+ Andy Yan <andy.yan@rock-chips.com>, 
+ Thierry Reding <thierry.reding@gmail.com>, 
+ Mikko Perttunen <mperttunen@nvidia.com>, 
+ Jonathan Hunter <jonathanh@nvidia.com>, Jyri Sarha <jyri.sarha@iki.fi>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Rob Clark <robdclark@gmail.com>, 
+ Abhinav Kumar <quic_abhinavk@quicinc.com>, 
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+ dri-devel@lists.freedesktop.org, igt-dev@lists.freedesktop.org, 
+ freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org, 
+ linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
+ linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+ linux-tegra@vger.kernel.org
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3388;
+ i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
+ bh=Kf60wOnocntCYjHw62V/2EfBf+1HRmYhh2TPix7OkEw=;
+ b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBmlMKocUnfYLehIHLnhjn/YpzPQGYcZbZYpR1xe
+ NasM4c80MmJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZpTCqAAKCRCLPIo+Aiko
+ 1dVwCAColXJjF6PCrF5MkX7SZctjCE45P3YoT+ofdNiLLdzra1QLPkG11tWvr7FNxQeMooIwBT+
+ kPIgczU7r6aCEZtetqb8KHb9z0qxQkWjU0eAGVpVvL5QXP5J8e0C4/q4LA7eoxyn8I3hXMZMYY1
+ 1+3RFgC6uMKkxY7ZHe2nRRaE1IOaTUthxnHohXBP9esLDcSucShFO+ZMuSXJxbMJ62O7BNVyHBR
+ 7tJLeqX9nlI9mm5oHN760QaIXr6dVJHjgzhHvwojU+t8LcFQd55Ft/cqHbwMHYPx/Bb6AZhRken
+ J51R8XlcTuMH6ZsPIjlQUcKK6Fo+sdudAprTi/uDXGJ1I8us
+X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
+ fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
 
+Running IGT tests on Qualcomm Dragonboard820c uncovered two issues with
+the HDMI Connector implementation and with its integration into the
+drm_bridge_connector. Fix those issues.
 
+Note, I'm not fully satisfied with the drm_bridge_connector move. Maybe
+it's better to add drm_bridge_funcs::connector_reset() and call it from
+__drm_atomic_helper_connector_reset().
 
-=E5=9C=A82024=E5=B9=B47=E6=9C=8812=E6=97=A5=E4=B8=83=E6=9C=88 =E4=B8=8B=E5=
-=8D=888:22=EF=BC=8CMaciej W. Rozycki=E5=86=99=E9=81=93=EF=BC=9A
-> On Fri, 12 Jul 2024, Jiaxun Yang wrote:
->
->> >> >  It would be good to check with hard-float QEMU configured for w=
-ritable=20
->> >> > FCSR.NAN2008 (which is one way original code was verified) that =
-things=20
->> >> > have not regressed.  And also what happens if once our emulation=
- has=20
->> >> > triggered for the unsupported FCSR.NAN2008 mode, an attempt is m=
-ade to=20
->> >> > flip the mode bit via ptrace(2), e.g. under GDB, which I reckon =
-our=20
->> >> > emulation permits for non-legacy CPUs (and which I think should =
-not be=20
->> >> > allowed under the new setting).
->> >>=20
->> >> PTrace is working as expected (reflects emulated value).
->> >
->> >  Yes, sure for reads, but how about *writing* to the bit?
->>=20
->> Tested flipping nan2008 bits with ieee754=3Demulated with ptrace, it =
-works on some extent.
->> (flipping the bit to unsupported value immediately triggered emulatio=
-n).
->
->  What about the other way round?
+Depends on https://lore.kernel.org/dri-devel/20240704-panel-sw43408-fix-v6-1-3ea1c94bbb9b@linaro.org
 
-It works on both side (NaN2008 binary with ptrace flipped back to legacy=
- and legacy flipped
-back to NaN2008).
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+Changes in v4:
+- Fixed DRM_MODE_PROP_IMMUTABLE to use MUST in the single-value clause (Maxime)
+- Rebased on top of DRM_DSC_HELPERS patch
+- Removed 'depends on DRM_DISPLAY_HELPER' (Maxime)
+- Link to v3: https://lore.kernel.org/r/20240702-drm-bridge-connector-fix-hdmi-reset-v3-0-12b0e3124ca4@linaro.org
 
->
->  Anyway I think we need to prevent it from happening, matching runtime=20
-> behaviour, i.e. if the program itself cannot flip FCSR.NAN2008 via CTC=
-1,=20
-> then ptrace(2) must not either.  And the same for the emulator in the=20
-> "ieee754=3Demulated" mode (but not for the emulator modes where the fl=
-ipping=20
-> is currently permitted), as it would be a one-way switch.
+Changes in v3:
+- Document the DRM_MODE_PROP_IMMUTABLE requirements currently exposed
+  only via IGT tests (Maxime).
+- Move drm_bridge_connector to drm_display_helper.
+- Link to v2: https://lore.kernel.org/r/20240623-drm-bridge-connector-fix-hdmi-reset-v2-0-8590d44912ce@linaro.org
 
-It is out of the scope of this patch I think. Maybe we need a prctl to s=
-et NaN2008 status.
+Changes in v2:
+- Actually pass the flags to drm_property_create_range().
+- Link to v1: https://lore.kernel.org/r/20240623-drm-bridge-connector-fix-hdmi-reset-v1-0-41e9894dcdec@linaro.org
 
-We are unable to prevent user applications write NAN2008 bits for the "s=
-witchable
-QEMU" as well. So I'd perfer leave it as is, and let this feature go int=
-o 6.11 so people
-can start to use it.
+---
+Dmitry Baryshkov (5):
+      drm/display: stop depending on DRM_DISPLAY_HELPER
+      drm/drm_property: require DRM_MODE_PROP_IMMUTABLE for single-value props
+      drm/connector: automatically set immutable flag for max_bpc property
+      drm/bridge-connector: move to DRM_DISPLAY_HELPER module
+      drm/bridge-connector: reset the HDMI connector state
 
-This is actually a request from Debian MIPS team so they can get glibc t=
-ests run on
-mismatched NaN hardware.
+ MAINTAINERS                                        |  2 +-
+ drivers/gpu/drm/Makefile                           |  1 -
+ drivers/gpu/drm/bridge/Kconfig                     |  1 +
+ drivers/gpu/drm/display/Kconfig                    | 25 ++++++++++++----------
+ drivers/gpu/drm/display/Makefile                   |  2 ++
+ .../gpu/drm/{ => display}/drm_bridge_connector.c   | 13 ++++++++++-
+ drivers/gpu/drm/drm_connector.c                    |  7 +++++-
+ drivers/gpu/drm/imx/dcss/Kconfig                   |  2 ++
+ drivers/gpu/drm/imx/lcdc/Kconfig                   |  2 ++
+ drivers/gpu/drm/ingenic/Kconfig                    |  2 ++
+ drivers/gpu/drm/kmb/Kconfig                        |  2 ++
+ drivers/gpu/drm/mediatek/Kconfig                   |  2 ++
+ drivers/gpu/drm/meson/Kconfig                      |  2 ++
+ drivers/gpu/drm/msm/Kconfig                        |  1 +
+ drivers/gpu/drm/omapdrm/Kconfig                    |  2 ++
+ drivers/gpu/drm/renesas/rcar-du/Kconfig            |  2 ++
+ drivers/gpu/drm/renesas/rz-du/Kconfig              |  2 ++
+ drivers/gpu/drm/renesas/shmobile/Kconfig           |  2 ++
+ drivers/gpu/drm/rockchip/Kconfig                   |  4 ++++
+ drivers/gpu/drm/tegra/Kconfig                      |  1 +
+ drivers/gpu/drm/tidss/Kconfig                      |  2 ++
+ drivers/gpu/drm/xlnx/Kconfig                       |  1 +
+ include/drm/drm_property.h                         |  3 +++
+ 23 files changed, 68 insertions(+), 15 deletions(-)
+---
+base-commit: cfbc154f11aaa32b4b2887323e4372390648046d
+change-id: 20240623-drm-bridge-connector-fix-hdmi-reset-0ce86af053aa
 
-Thanks
->
->  In other words we need to be consistent and the NaN mode of operation=
- has=20
-> to be strapped in "ieee754=3Demulated" mode according to ELF file head=
-er's=20
-> EF_MIPS_NAN2008 bit for the duration of execution of a given program.
->
->  Likewise FCSR.ABS2008.
->
-[...]
---=20
-- Jiaxun
+Best regards,
+-- 
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
 
