@@ -1,246 +1,115 @@
-Return-Path: <linux-mips+bounces-4329-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4330-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FD45930E64
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jul 2024 09:00:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FAC09313D4
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jul 2024 14:15:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B01E51F21591
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jul 2024 07:00:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0ADA41F20F26
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jul 2024 12:15:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC7FD1448EA;
-	Mon, 15 Jul 2024 07:00:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="Mg0+ZpU+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Eotl3kMq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37E8B188CDA;
+	Mon, 15 Jul 2024 12:15:24 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout5-smtp.messagingengine.com (fout5-smtp.messagingengine.com [103.168.172.148])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97ACA4C9A;
-	Mon, 15 Jul 2024 07:00:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C35E513B295;
+	Mon, 15 Jul 2024 12:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721026843; cv=none; b=DqNEQ+7Z1g6aHeu2wc9+Fbg2xtzo6HVcvs9wKBFQuJMT5UbhWwYu3VZW9roTCFOQxMQX8hfiifWbw1+57bYxXgj3qw+sik05CChoMrbUGcJyi5NRk6X3duTGuv1EwDqr/uFEkXB87q3al5hRkTb3Jia7FtZhNacx0DPxvwY2TJw=
+	t=1721045724; cv=none; b=LLVNvk1BqHNLubNjdf/cCl/l0NpOXk9C6pAOcL/6CrDRklpqEki205g67Rvnag34M52+Q0jxKmw0UOXz1BWz0HJbDdHEy3o0w6Y9iS/x/D9kMfeN7uWyhmsOpxlIYiZmgREa562S9+SihYU9VzHwpXPpNiunBa8mFTOaF9RgCDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721026843; c=relaxed/simple;
-	bh=l7GZ2gPkO34+k+8ASxE1jMvE5omSYiSss8FhtVBDznk=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=ni+NShZTxncv/5x6+vEdCLLONd3zK5D7fWlz7BLKZ0cAygrGE6Si/pBqbHKkOSSB0kuzf67EjQP3ZfDjpbncpheJbzH7RHskTfhkkLfuHgHomeyfd+0FbYlP5jt+duzABbHMv20hh/VFKrIC+moyVMWgFKhUuDeNtYqh4SMlUcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=Mg0+ZpU+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Eotl3kMq; arc=none smtp.client-ip=103.168.172.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailfout.nyi.internal (Postfix) with ESMTP id B91E81388DE7;
-	Mon, 15 Jul 2024 03:00:40 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Mon, 15 Jul 2024 03:00:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1721026840;
-	 x=1721113240; bh=ChojkAX+i4Qp70UrJjFUh3pj/D7HmhsPYjxWPA6xENs=; b=
-	Mg0+ZpU+JhwSwrzMx9FTztDKAjagitjtmrxJyoPGlN59gRkV+yj/f+1DtxxvmkO/
-	kOq27EBOeMpf39DxNSg2frDGgUXuIdDk6/QescCj0ye72KIkFgZPHA4wF2PnL9xr
-	tHNWQkaFlETLe5q0hHwGalKgVzOGJDoX10w49ADqPfFoe6UsvGwBIoOs7q6LZGaY
-	2+TbmETr+6Aw5sPt4kAykNEuHPp99F4Vp3PuFhvZMDaatAhzu+ghKTcdwCpbk85W
-	Blv7gfSPVydUj8+HAfes2zFnCi84xjQsisrBfpB5PEQPBs9ZHSXFwdBecT41WQtA
-	nWqhBgH9M4pHePnE8puyvw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1721026840; x=
-	1721113240; bh=ChojkAX+i4Qp70UrJjFUh3pj/D7HmhsPYjxWPA6xENs=; b=E
-	otl3kMqPrINtQXWNeZw2CfTnC9AdnMtYl6bCIppW3TcXsPavLCHPw1UFly6L2uO6
-	pWWl0NHvMTo9w/DWa47qsJ8/AVPPRZeShYgQSKMn3auV02zVbjwJRi+xVF0wopd5
-	X28xtSQIZ4JiYgd2x8qtc4zhyTCgEiOatt4o6pc1Vu7AQoiSzKblEHbQKDK8MgIY
-	ItlppRJk1i+CpxgFvPClblSYgJLoZCNOcYUjNeJXEj3h470LSMYSf6bDLEWapD6v
-	Rm4r8vRv1mdEeXmfJs6WF0NrtyouoHEJjxnXeTHX651tIJ3CFOuZ/kmpbZTyQMBA
-	fryR/Syqhvs6NcJqeVY2Q==
-X-ME-Sender: <xms:F8mUZkLaNU50OWgTDILgxqexhY9psCLRioIa2AWFqL46ZaO-Rm1YCg>
-    <xme:F8mUZkJW02dhT_vjmqUBU8iUJkjUTENwNk_KlWDeFKKF02kbjEDsH8VKCmnuUVFQC
-    sETGXNPC-aJwUZ9KCY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrgedugdduudejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
-    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpeekleevffehtdeigfekfefhffdtudffvdeuvedtffet
-    heeuiefhgfetleekleekjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdih
-    rghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:F8mUZktes8w_960q2FNwzkMKFL1y6mywqv5VasrKfroTJ4oxgub0ag>
-    <xmx:F8mUZhb0HYv5Yl_lALCiDiGXILCvmEFaugEELelLNfzeLhUc6EPmUw>
-    <xmx:F8mUZrZ1mHmeGgkOC9iOgLE58IpvOQBOqlT0r1PFbPTjC3EueudPgA>
-    <xmx:F8mUZtA-Wpiuybv0-Syzgfve1pw10VRmqjia_43i8tJtdjn2Qa0OnA>
-    <xmx:GMmUZpClPRiwZC6jS_zN6BQoeZhkjOdiZ30vZrTPqUMVl0Go89xzy1mw>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 6998B36A0074; Mon, 15 Jul 2024 03:00:39 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
+	s=arc-20240116; t=1721045724; c=relaxed/simple;
+	bh=Yv1FXgC8K277VcLGgKR1E3bX/WLiJjyURUvSGP89N7o=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=en0Mty3m711fLQDfPqAJqLJ1GQseHFcpMYwl4hXjI76qhkHD8yzmnuEmYaq3hPv56ynDYWNHp40qRew0nHs5BG38DxrxJ1qKjOKlyKIQ5syFg8PbCP3Czwq/6QDN9Y8UrGGkFbzWaTcoV9L11y66tuk+S3Z5udH3wasgW2SyAcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 10DC592009E; Mon, 15 Jul 2024 14:15:13 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 02E3692009D;
+	Mon, 15 Jul 2024 13:15:12 +0100 (BST)
+Date: Mon, 15 Jul 2024 13:15:12 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org, 
+    linux-kernel@vger.kernel.org, 
+    "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
+    =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+Subject: Re: [PATCH v3] MIPS: Implement ieee754 NAN2008 emulation mode
+In-Reply-To: <dad7b36f-2e37-44db-939e-cdb454875e2a@app.fastmail.com>
+Message-ID: <alpine.DEB.2.21.2407150225310.58077@angie.orcam.me.uk>
+References: <20240612-mips_ieee754_emul-v3-1-2c21b450abdb@flygoat.com> <Zn1FuxNw2CUttzdg@alpha.franken.de> <9cc26415-9cbc-47fa-a132-7d8c000874a4@app.fastmail.com> <alpine.DEB.2.21.2406272053180.43454@angie.orcam.me.uk> <fbd421a6-cf37-49ab-bdbe-6128a7cae8be@app.fastmail.com>
+ <Zoz6+YmUk7CBsNFw@alpha.franken.de> <7797a7b2-1bb2-4c45-b65d-678f685dfa3d@app.fastmail.com> <Zo457UgAkhbAgm2R@alpha.franken.de> <alpine.DEB.2.21.2407101015120.38148@angie.orcam.me.uk> <a8741e38-837b-4fbb-8656-1e6d50bdfcc0@app.fastmail.com>
+ <alpine.DEB.2.21.2407110315170.38148@angie.orcam.me.uk> <de07ff44-41ee-4158-b629-90a1835bd9cb@app.fastmail.com> <alpine.DEB.2.21.2407121250350.38148@angie.orcam.me.uk> <dad7b36f-2e37-44db-939e-cdb454875e2a@app.fastmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b1a53515-068a-4f70-87a9-44b77d02d1d5@app.fastmail.com>
-In-Reply-To: 
- <CAAhV-H5Um5HhbmcB1Se=Qeh2OOAeP34BAx+sNtLKge_pePiuiQ@mail.gmail.com>
-References: <20240711-loongson1-dma-v9-0-5ce8b5e85a56@gmail.com>
- <CAAhV-H5OOXguNTvywykyJk3_ydyDiSnpc-kvERRiYggBt441tw@mail.gmail.com>
- <CAJhJPsXC-z+TS=qrXUT=iF_6-b5x-cr9EvcJNrmSL--RV6xVsQ@mail.gmail.com>
- <CAAhV-H5Um5HhbmcB1Se=Qeh2OOAeP34BAx+sNtLKge_pePiuiQ@mail.gmail.com>
-Date: Mon, 15 Jul 2024 15:00:19 +0800
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Huacai Chen" <chenhuacai@kernel.org>,
- "Kelvin Cheung" <keguang.zhang@gmail.com>
-Cc: "Vinod Koul" <vkoul@kernel.org>, "Rob Herring" <robh@kernel.org>,
- "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
- "Conor Dooley" <conor+dt@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, "Conor Dooley" <conor.dooley@microchip.com>
-Subject: Re: [PATCH RESEND v9 0/2] Add support for Loongson1 APB DMA
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
 
+On Sun, 14 Jul 2024, Jiaxun Yang wrote:
 
+> >> >  Yes, sure for reads, but how about *writing* to the bit?
+> >> 
+> >> Tested flipping nan2008 bits with ieee754=emulated with ptrace, it works on some extent.
+> >> (flipping the bit to unsupported value immediately triggered emulation).
+> >
+> >  What about the other way round?
+> 
+> It works on both side (NaN2008 binary with ptrace flipped back to legacy and legacy flipped
+> back to NaN2008).
 
-=E5=9C=A82024=E5=B9=B47=E6=9C=8815=E6=97=A5=E4=B8=83=E6=9C=88 =E4=B8=8B=E5=
-=8D=882:39=EF=BC=8CHuacai Chen=E5=86=99=E9=81=93=EF=BC=9A
-[...]
->
->> You said that you've accepted my suggestion, which means you recognize
->> 'loongson' as the better name for the drivers.
-> No, I don't think so, this is just a compromise to keep consistency.
+ So this is clearly wrong for this scenario.
 
-Folks, can we settle on this topic?
+> >  Anyway I think we need to prevent it from happening, matching runtime 
+> > behaviour, i.e. if the program itself cannot flip FCSR.NAN2008 via CTC1, 
+> > then ptrace(2) must not either.  And the same for the emulator in the 
+> > "ieee754=emulated" mode (but not for the emulator modes where the flipping 
+> > is currently permitted), as it would be a one-way switch.
+> 
+> It is out of the scope of this patch I think. Maybe we need a prctl to 
+> set NaN2008 status.
 
-Is this naming really important? As long as people can read actual chip =
-name from
-kernel code & documents, I think both are acceptable.
+ I don't know what prctl(2) has to do with this.  If you don't implement 
+this part, then your change will cause Linux to behave inconsistently and 
+therefore I'll have to NAK it.
 
-I suggest let this patch go as is. And if anyone want to unify the namin=
-g, they can
-propose a treewide patch.
+ It's not much to do anyway, as I have prepared `ptrace_setfcr31' already 
+to handle masking correctly, so all you have to do is to set the mask as 
+required for the right thing to happen.  I shouldn't have needed to point 
+you at it though, as that code is easy to find.
 
-Otherwise, we are going nowhere.
+> We are unable to prevent user applications write NAN2008 bits for the "switchable
+> QEMU" as well. So I'd perfer leave it as is, and let this feature go into 6.11 so people
+> can start to use it.
 
-Thanks
--  Jiaxun
+ This doesn't matter either, as your change only addresses the case where 
+FCSR.NAN2008 isn't writable anyway, which is the sole reason you want to 
+switch between native hard float support and emulation, doesn't it?
 
->
->
->
-> Huacai
->
->> Moreover, Loongson1 and Loongson2 belong to different SoC series.
->> To be honest, I can't see why Loongson1 APB DMA should give up this
->> intuitive and comprehensible naming.
->> Thanks for your review!
->> >
->> > Huacai
->> >
->> > On Thu, Jul 11, 2024 at 6:57=E2=80=AFPM Keguang Zhang via B4 Relay
->> > <devnull+keguang.zhang.gmail.com@kernel.org> wrote:
->> > >
->> > > Add the driver and dt-binding document for Loongson1 APB DMA.
->> > >
->> > > ---
->> > > Changes in v9:
->> > > - Fix all the errors and warnings when building with W=3D1 and C=3D1
->> > > - Link to v8: https://lore.kernel.org/r/20240607-loongson1-dma-v8=
--0-f9992d257250@gmail.com
->> > >
->> > > Changes in v8:
->> > > - Change 'interrupts' property to an items list
->> > > - Link to v7: https://lore.kernel.org/r/20240329-loongson1-dma-v7=
--0-37db58608de5@gmail.com
->> > >
->> > > Changes in v7:
->> > > - Change the comptible to 'loongson,ls1*-apbdma' (suggested by Hu=
-acai Chen)
->> > > - Update the title and description part accordingly
->> > > - Rename the file to loongson,ls1b-apbdma.yaml
->> > > - Add a compatible string for LS1A
->> > > - Delete minItems of 'interrupts'
->> > > - Change patterns of 'interrupt-names' to const
->> > > - Rename the file to loongson1-apb-dma.c to keep the consistency
->> > > - Update Kconfig and Makefile accordingly
->> > > - Link to v6: https://lore.kernel.org/r/20240316-loongson1-dma-v6=
--0-90de2c3cc928@gmail.com
->> > >
->> > > Changes in v6:
->> > > - Change the compatible to the fallback
->> > > - Implement .device_prep_dma_cyclic for Loongson1 sound driver,
->> > > - as well as .device_pause and .device_resume.
->> > > - Set the limitation LS1X_DMA_MAX_DESC and put all descriptors
->> > > - into one page to save memory
->> > > - Move dma_pool_zalloc() into ls1x_dma_alloc_desc()
->> > > - Drop dma_slave_config structure
->> > > - Use .remove_new instead of .remove
->> > > - Use KBUILD_MODNAME for the driver name
->> > > - Improve the debug information
->> > > - Some minor fixes
->> > >
->> > > Changes in v5:
->> > > - Add the dt-binding document
->> > > - Add DT support
->> > > - Use DT information instead of platform data
->> > > - Use chan_id of struct dma_chan instead of own id
->> > > - Use of_dma_xlate_by_chan_id() instead of ls1x_dma_filter()
->> > > - Update the author information to my official name
->> > >
->> > > Changes in v4:
->> > > - Use dma_slave_map to find the proper channel.
->> > > - Explicitly call devm_request_irq() and tasklet_kill().
->> > > - Fix namespace issue.
->> > > - Some minor fixes and cleanups.
->> > >
->> > > Changes in v3:
->> > > - Rename ls1x_dma_filter_fn to ls1x_dma_filter.
->> > >
->> > > Changes in v2:
->> > > - Change the config from 'DMA_LOONGSON1' to 'LOONGSON1_DMA',
->> > > - and rearrange it in alphabetical order in Kconfig and Makefile.
->> > > - Fix comment style.
->> > >
->> > > ---
->> > > Keguang Zhang (2):
->> > >       dt-bindings: dma: Add Loongson-1 APB DMA
->> > >       dmaengine: Loongson1: Add Loongson-1 APB DMA driver
->> > >
->> > >  .../bindings/dma/loongson,ls1b-apbdma.yaml         |  67 +++
->> > >  drivers/dma/Kconfig                                |   9 +
->> > >  drivers/dma/Makefile                               |   1 +
->> > >  drivers/dma/loongson1-apb-dma.c                    | 665 +++++++=
-++++++++++++++
->> > >  4 files changed, 742 insertions(+)
->> > > ---
->> > > base-commit: d35b2284e966c0bef3e2182a5c5ea02177dd32e4
->> > > change-id: 20231120-loongson1-dma-163afe5708b9
->> > >
->> > > Best regards,
->> > > --
->> > > Keguang Zhang <keguang.zhang@gmail.com>
->> > >
->> > >
->> > >
->>
->>
->>
->> --
->> Best regards,
->>
->> Keguang Zhang
+ In fact where FCSR.NAN2008 is writable your new mode has to be equivalent
+to "ieee754=strict", because then there is no need to trigger emulation 
+for either NaN mode.  Please do verify that this is the case.
 
---=20
-- Jiaxun
+> This is actually a request from Debian MIPS team so they can get glibc tests run on
+> mismatched NaN hardware.
+
+ That doesn't matter for us here (and I have a bad suspicion anyway), but 
+the Debian team is of course free to do what they want here, the GNU GPL 
+applies.
+
+ And also they can always use the "nofpu" kernel parameter to run their 
+verification.  I used it for mine back at ImgTec before 2008 NaN hardware 
+was available, also to verify emulation, which I wrote too.  Perhaps that 
+is also the right solution for Debian actually?
+
+  Maciej
 
