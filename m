@@ -1,201 +1,215 @@
-Return-Path: <linux-mips+bounces-4326-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4327-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEC91930E25
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jul 2024 08:34:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC6D1930E2F
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jul 2024 08:39:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 490061F217FB
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jul 2024 06:34:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73A52281560
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jul 2024 06:39:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 313D91849F1;
-	Mon, 15 Jul 2024 06:33:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BF0E18307B;
+	Mon, 15 Jul 2024 06:39:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oOVXCOnv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="grH9VhVE"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1674183097
-	for <linux-mips@vger.kernel.org>; Mon, 15 Jul 2024 06:33:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E789013A89C;
+	Mon, 15 Jul 2024 06:39:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721025204; cv=none; b=bAqvJSgbww1/3oKvS2fFH4jQyVFslkGkiQ+7yuXfy39Q6lpIZYjEZe+np0XF8mjcCFdJn3yvkQHQ6fXoYl1eV8Xu8s8vvNPylh7BCCu9E3x71mR/gnKFEdmAF9aoMAnQWAuwLYZpCLQnQrCcRoNNW92plnv2lF3lQ9JD4hNP30E=
+	t=1721025564; cv=none; b=DJ5VIH6Wg/2V6m4rOwyyaVDPSDpuCa1g9UGpXfAm3hKf0TnfVr6hGWTey4srdHZZcRBtL+y1OzltkT3asTAqj1k+jxY6iylJjIa/hhli7p9+8Zgt262ZAONrflSk1QtbZm0ViMXr+JY1TiIzn7FVHWutZSiH4NxFQ/b7n1DrgPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721025204; c=relaxed/simple;
-	bh=RSj/GL8gZoJdjbJyGkKZjzhqoxsZ6wLfYZiTk6CBwIc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gQuBtEQL0Ed/YFAQ1/yGuhc2qFovw/4hVEciPiMZzcaEzS4Ms7R7ksmWRisWEBSuDlkHjP9VXcoeG1Rj16+0Rtymroec+U0OArec2eGY+fKuP/7EI1b1/ZGjOYvlbIiUztTv7nnJIL8niMVpkIJiURJEofwt5b5YAGFs78J1iqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oOVXCOnv; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-52e9944764fso4581466e87.3
-        for <linux-mips@vger.kernel.org>; Sun, 14 Jul 2024 23:33:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1721025199; x=1721629999; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cowQ2MZs44p/k7+ocTvDEJFCYMvt/Fw411UD/yRIuZk=;
-        b=oOVXCOnvly3CsPC/YUEjTxCI7dPrrRw9R4nfNIqpobXxlYG+nALW+LBuHP8dc6ZiGt
-         +xY1YVapTMZoQcFUQIn9f9JVEg4FKz23PU+/bAvj8n2U9d4rqHYHltYq7Bf/kxzDKxZh
-         GaZq3vxq8c5rv+npDtqcDfpW0dm2KYO27eaPYh7p7PSl/Wbs5EhGQlajuTWyudXmv9VZ
-         0wbaGgO7f0bbVmPo25FSCvTj7EOFr+7whQPT+omPKWtrxGKTkc9+JXVJqjjDCsizToV0
-         assGIbZF+Ju2NAQQGnM4JjFWfGK7trp2B09miGDjB5Twc1Dp9mVlCQGTWpuUFb3kVHLZ
-         pu6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721025199; x=1721629999;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cowQ2MZs44p/k7+ocTvDEJFCYMvt/Fw411UD/yRIuZk=;
-        b=jDdnjOVVg3J1gzMH9fqVYwTZ+N9FndvS+ywvZtQIvFCvtpYkTGpgHcFf2HtubzaMF5
-         bS9SCLrflVsaRwSSkXIqYyxJAhEmQylDvUfz2aFdEziwZlQhbhMnnHBWdqnFBPlWxF99
-         xoW4GLGb1OtInqwjH5EbmgWq+ZMvMz/YwfhgHa4TwCmr/F+eUi87mtCrfQUqEL0s4VZn
-         4Uslf9D0Fi5TATcfwNtYKJIbB44oJuoRxsklnRB0ESWzALM8MKuNUewPcxyQJxo1t4mC
-         9smU9x+KDR5snsstsWXAA+vXa4PN63cC4sciqTdcWWrCydMqdxQ5GCTc8/ytH26zVTU5
-         L3Kw==
-X-Forwarded-Encrypted: i=1; AJvYcCUqGpB/Bgy4jTe9dKnydInRcvoCx420hXIJtyYRG9iNc3xSWgTcGPgekReBVcRGvKJMQ5zsSVw1HcKmmQ2zQ9joKd4cww84+Bgfyw==
-X-Gm-Message-State: AOJu0YzccdCDB9600ipY5dHVredGLSZSd9WuaQmOM0bV9gVE7sZQb6S5
-	+7weJCNIH21VZKWwDielnd3i9a4Y34dEt4EfxnCkhPDV8LvQ9dA9+LTnWMJOMds=
-X-Google-Smtp-Source: AGHT+IHap4bfADCMMdp+9/m6hrqUOR1BGeplBSV1y4IBIjYw8gKprZmmugJo1TIVKbdLpOyzSTxWyQ==
-X-Received: by 2002:a05:6512:789:b0:52e:954d:3594 with SMTP id 2adb3069b0e04-52eb99cafa9mr9724397e87.52.1721025199105;
-        Sun, 14 Jul 2024 23:33:19 -0700 (PDT)
-Received: from umbar.lan ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ed24e188esm743543e87.47.2024.07.14.23.33.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Jul 2024 23:33:18 -0700 (PDT)
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Mon, 15 Jul 2024 09:33:05 +0300
-Subject: [PATCH v4 5/5] drm/bridge-connector: reset the HDMI connector
- state
+	s=arc-20240116; t=1721025564; c=relaxed/simple;
+	bh=ue63PD+WH1lgrlPIZa8Y+VSW6ci4bkPtwOr0znH5a1w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ogkVc5g9FDVbgTCAsdBCf+MSh95zIVdA80gZAe3ERqex/2fODuvnWBY2aaPAmbMioVZH00nRhwEKLd8RmcpVwCDy2RTa8ZMQtNO7sJ25b9N24foft86GEenRWS/uO6dprBc3Ol/XnJi6QnExrvNe2DdfaTjtdOG4pLkRTAU7Uc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=grH9VhVE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AE17C4AF0F;
+	Mon, 15 Jul 2024 06:39:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721025563;
+	bh=ue63PD+WH1lgrlPIZa8Y+VSW6ci4bkPtwOr0znH5a1w=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=grH9VhVER5hrr8fRYCZnWSIpyKuyTe+5J5UcDUFHtd4gf1jOpsHvqDP8HV3B/8pWZ
+	 c/g7SEDgEFWj2KkflFfT+19mCRVWt0OZ4lbqmuAfZj0gaoPuPW8Fxp2PraXh4y2wwy
+	 cv1HO0XVw/vwkTGHYuJlU2m+DO0nGUORL0EVT4hknl7DwX+h0AnjYSr9djRACCBvtF
+	 b2iz0s5YUJcJYW+/RcCwG7wpipAuQ6Lmm+k+o1qoNA/pl2zkAB11g4IXmTK0uuoyrc
+	 E1VsiQmozrPrMjLw1r9QiYKf5XxsFaUCe45qDm1cGv9J/CGbSjDNlNv5MfKXt+M1KD
+	 sYchGa6RVi+Pg==
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a7979c3ffb1so232033666b.2;
+        Sun, 14 Jul 2024 23:39:23 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUSn1OjLxdaBLcEl82hApysSbKM1dAPPm28SOhP1v6b1FIj8iic8z2oO71GouXZVBH1kQbySbFToHUJ4BPCakhKTL42mD84JpAneFcit1fwke7YwSeCTM+vfAzllMBtc51fARZs7fPhiTsgv/H7sdulzrfVfFQ2r+TKiC4QuO+LLccfl2huD2gPNFQGObK0Y9SsAwNyW0LNvQTX7tD0LwU=
+X-Gm-Message-State: AOJu0Yyp69yBNEQNdcMnbeZI+nndarfeyPZW93Jy6HQdkIT1s40W0VKT
+	aDBqujV3CVXqqTFlaurK2ImSnYrdT+bGXoA+OPT6h8DcmzwHXydFtpyDuIchFZZAGN2ujYvN5bz
+	90tBOkyIEo14VKdPD40zKvobxHZU=
+X-Google-Smtp-Source: AGHT+IH2afvBMorpe8R4SLEsYoeUFbK9UHI5/G4ctIqHVHC1u91eh0R/gjYIBZbJ9cXDaFCVPedBryinNyCj8beDIjk=
+X-Received: by 2002:a05:6402:2684:b0:58b:b617:eee6 with SMTP id
+ 4fb4d7f45d1cf-594bcba83e2mr17226269a12.36.1721025561941; Sun, 14 Jul 2024
+ 23:39:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240715-drm-bridge-connector-fix-hdmi-reset-v4-5-61e6417cfd99@linaro.org>
-References: <20240715-drm-bridge-connector-fix-hdmi-reset-v4-0-61e6417cfd99@linaro.org>
-In-Reply-To: <20240715-drm-bridge-connector-fix-hdmi-reset-v4-0-61e6417cfd99@linaro.org>
-To: Andrzej Hajda <andrzej.hajda@intel.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
- Dave Stevenson <dave.stevenson@raspberrypi.com>, 
- Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>, 
- Lucas Stach <l.stach@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, Paul Cercueil <paul@crapouillou.net>, 
- Anitha Chrisanthus <anitha.chrisanthus@intel.com>, 
- Edmund Dea <edmund.j.dea@intel.com>, 
- Chun-Kuang Hu <chunkuang.hu@kernel.org>, 
- Philipp Zabel <p.zabel@pengutronix.de>, Kevin Hilman <khilman@baylibre.com>, 
- Jerome Brunet <jbrunet@baylibre.com>, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
- Sean Paul <sean@poorly.run>, Marijn Suijten <marijn.suijten@somainline.org>, 
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
- Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>, 
- Biju Das <biju.das.jz@bp.renesas.com>, 
- Geert Uytterhoeven <geert+renesas@glider.be>, 
- Sandy Huang <hjc@rock-chips.com>, 
- =?utf-8?q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
- Andy Yan <andy.yan@rock-chips.com>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Mikko Perttunen <mperttunen@nvidia.com>, 
- Jonathan Hunter <jonathanh@nvidia.com>, Jyri Sarha <jyri.sarha@iki.fi>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Rob Clark <robdclark@gmail.com>, 
- Abhinav Kumar <quic_abhinavk@quicinc.com>, 
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
- dri-devel@lists.freedesktop.org, igt-dev@lists.freedesktop.org, 
- freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
- linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org, 
- linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
- linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
- linux-tegra@vger.kernel.org
-X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2305;
- i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
- bh=RSj/GL8gZoJdjbJyGkKZjzhqoxsZ6wLfYZiTk6CBwIc=;
- b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBmlMKpemzG8GiCsYpbPT9S1Ojj9SgO+0jwg1X5y
- 9EPZPxXbKOJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZpTCqQAKCRCLPIo+Aiko
- 1RfqCACEDU19Qkxz5DVPRYkK7fDdQdzCC7Ex3ixU9rJztEg0cYygQQ7/N1TTSfpbHd/6dnXTQqr
- 1EgcPH6TE+tH9eXXMheeF1OS/bhTuKARxi2wWkdHQUGUtyMj8mcHkHdrusMxtne+ZhGO/FIJ2xq
- Rbf1R+hLTh4esRtay58HxYpazr137omA9Gw8f5vvDWH+/fN0hvMicz3Eg/9i+0frpzphu+S7qVc
- FVZeAPpLqP6gaJGOvTRZRx1keGxL2vn+faVwbgsOyaVmNQjvZ71zl4YXnlV8oqwC/teMLyW6umJ
- AqBRzDQGS3iL3PzsMCTRPynE0PUtU41rhweY1t1X4Nq8Idxh
-X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
- fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
+References: <20240711-loongson1-dma-v9-0-5ce8b5e85a56@gmail.com>
+ <CAAhV-H5OOXguNTvywykyJk3_ydyDiSnpc-kvERRiYggBt441tw@mail.gmail.com> <CAJhJPsXC-z+TS=qrXUT=iF_6-b5x-cr9EvcJNrmSL--RV6xVsQ@mail.gmail.com>
+In-Reply-To: <CAJhJPsXC-z+TS=qrXUT=iF_6-b5x-cr9EvcJNrmSL--RV6xVsQ@mail.gmail.com>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Mon, 15 Jul 2024 14:39:09 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5Um5HhbmcB1Se=Qeh2OOAeP34BAx+sNtLKge_pePiuiQ@mail.gmail.com>
+Message-ID: <CAAhV-H5Um5HhbmcB1Se=Qeh2OOAeP34BAx+sNtLKge_pePiuiQ@mail.gmail.com>
+Subject: Re: [PATCH RESEND v9 0/2] Add support for Loongson1 APB DMA
+To: Keguang Zhang <keguang.zhang@gmail.com>
+Cc: Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Conor Dooley <conor.dooley@microchip.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On HDMI connectors which use drm_bridge_connector and DRM_BRIDGE_OP_HDMI
-IGT chokes on the max_bpc property in several kms_properties tests due
-to the drm_bridge_connector failing to reset HDMI-related
-properties.
+On Fri, Jul 12, 2024 at 2:23=E2=80=AFPM Keguang Zhang <keguang.zhang@gmail.=
+com> wrote:
+>
+> On Fri, Jul 12, 2024 at 12:22=E2=80=AFPM Huacai Chen <chenhuacai@kernel.o=
+rg> wrote:
+> >
+> > Hi, Keguang,
+> >
+> > I accept your suggestion about the cpufreq driver naming, and now it
+> > is upstream:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?=
+h=3Dcpufreq/arm/linux-next&id=3Dccf51454145bffd98e31cdbe54a4262473c609e2
+> >
+> > I still hope you can accept my suggestion about the dma driver naming.
+> >
+> > I know you hope me rename LS2X_APB_DMA to LOONGSON2_APB_DMA, but as I
+> > said before, renaming an existing Kconfig option will break config
+> > files.
+> >
+> > See an example:
+> > Commit a50a3f4b6a313dc76912bd4ad3b8b4f4b4 introduce PREEMPT_RT and
+> > rename PREEMPT to PREEMPT_LL, but then commit
+> > b8d3349803ba34afda429e87a837fd95a9 rename it back because of config
+> > files broken.
+> >
+> Hi Huacai,
+> I understand the breaking issue of the Kconfig option, so you can keep
+> LS2X_APB_DMA.
+LS2X_APB_DMA with loongson2-apb-dma.c? Even if I accept this, can you
+accept LS1X_APB_DMA with loongson1-apb-dma.c?
 
-Call __drm_atomic_helper_connector_hdmi_reset() if the
-drm_bridge_connector has bridge_hdmi.
+> You said that you've accepted my suggestion, which means you recognize
+> 'loongson' as the better name for the drivers.
+No, I don't think so, this is just a compromise to keep consistency.
 
-It is impossible to call this function from HDMI bridges, none of the
-bridge callbacks correspond to the drm_connector_funcs::reset().
 
-Fixes: 6b4468b0c6ba ("drm/bridge-connector: implement glue code for HDMI connector")
-Reviewed-by: Maxime Ripard <mripard@kernel.org>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/gpu/drm/display/Kconfig                |  1 +
- drivers/gpu/drm/display/drm_bridge_connector.c | 13 ++++++++++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/display/Kconfig b/drivers/gpu/drm/display/Kconfig
-index 8c174ceb0c4d..3763649ba251 100644
---- a/drivers/gpu/drm/display/Kconfig
-+++ b/drivers/gpu/drm/display/Kconfig
-@@ -15,6 +15,7 @@ if DRM_DISPLAY_HELPER
- 
- config DRM_BRIDGE_CONNECTOR
- 	bool
-+	select DRM_DISPLAY_HDMI_STATE_HELPER
- 	help
- 	  DRM connector implementation terminating DRM bridge chains.
- 
-diff --git a/drivers/gpu/drm/display/drm_bridge_connector.c b/drivers/gpu/drm/display/drm_bridge_connector.c
-index 0869b663f17e..7ebb35438459 100644
---- a/drivers/gpu/drm/display/drm_bridge_connector.c
-+++ b/drivers/gpu/drm/display/drm_bridge_connector.c
-@@ -216,8 +216,19 @@ static void drm_bridge_connector_debugfs_init(struct drm_connector *connector,
- 	}
- }
- 
-+static void drm_bridge_connector_reset(struct drm_connector *connector)
-+{
-+	struct drm_bridge_connector *bridge_connector =
-+		to_drm_bridge_connector(connector);
-+
-+	drm_atomic_helper_connector_reset(connector);
-+	if (bridge_connector->bridge_hdmi)
-+		__drm_atomic_helper_connector_hdmi_reset(connector,
-+							 connector->state);
-+}
-+
- static const struct drm_connector_funcs drm_bridge_connector_funcs = {
--	.reset = drm_atomic_helper_connector_reset,
-+	.reset = drm_bridge_connector_reset,
- 	.detect = drm_bridge_connector_detect,
- 	.fill_modes = drm_helper_probe_single_connector_modes,
- 	.atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
+Huacai
 
--- 
-2.39.2
-
+> Moreover, Loongson1 and Loongson2 belong to different SoC series.
+> To be honest, I can't see why Loongson1 APB DMA should give up this
+> intuitive and comprehensible naming.
+> Thanks for your review!
+> >
+> > Huacai
+> >
+> > On Thu, Jul 11, 2024 at 6:57=E2=80=AFPM Keguang Zhang via B4 Relay
+> > <devnull+keguang.zhang.gmail.com@kernel.org> wrote:
+> > >
+> > > Add the driver and dt-binding document for Loongson1 APB DMA.
+> > >
+> > > ---
+> > > Changes in v9:
+> > > - Fix all the errors and warnings when building with W=3D1 and C=3D1
+> > > - Link to v8: https://lore.kernel.org/r/20240607-loongson1-dma-v8-0-f=
+9992d257250@gmail.com
+> > >
+> > > Changes in v8:
+> > > - Change 'interrupts' property to an items list
+> > > - Link to v7: https://lore.kernel.org/r/20240329-loongson1-dma-v7-0-3=
+7db58608de5@gmail.com
+> > >
+> > > Changes in v7:
+> > > - Change the comptible to 'loongson,ls1*-apbdma' (suggested by Huacai=
+ Chen)
+> > > - Update the title and description part accordingly
+> > > - Rename the file to loongson,ls1b-apbdma.yaml
+> > > - Add a compatible string for LS1A
+> > > - Delete minItems of 'interrupts'
+> > > - Change patterns of 'interrupt-names' to const
+> > > - Rename the file to loongson1-apb-dma.c to keep the consistency
+> > > - Update Kconfig and Makefile accordingly
+> > > - Link to v6: https://lore.kernel.org/r/20240316-loongson1-dma-v6-0-9=
+0de2c3cc928@gmail.com
+> > >
+> > > Changes in v6:
+> > > - Change the compatible to the fallback
+> > > - Implement .device_prep_dma_cyclic for Loongson1 sound driver,
+> > > - as well as .device_pause and .device_resume.
+> > > - Set the limitation LS1X_DMA_MAX_DESC and put all descriptors
+> > > - into one page to save memory
+> > > - Move dma_pool_zalloc() into ls1x_dma_alloc_desc()
+> > > - Drop dma_slave_config structure
+> > > - Use .remove_new instead of .remove
+> > > - Use KBUILD_MODNAME for the driver name
+> > > - Improve the debug information
+> > > - Some minor fixes
+> > >
+> > > Changes in v5:
+> > > - Add the dt-binding document
+> > > - Add DT support
+> > > - Use DT information instead of platform data
+> > > - Use chan_id of struct dma_chan instead of own id
+> > > - Use of_dma_xlate_by_chan_id() instead of ls1x_dma_filter()
+> > > - Update the author information to my official name
+> > >
+> > > Changes in v4:
+> > > - Use dma_slave_map to find the proper channel.
+> > > - Explicitly call devm_request_irq() and tasklet_kill().
+> > > - Fix namespace issue.
+> > > - Some minor fixes and cleanups.
+> > >
+> > > Changes in v3:
+> > > - Rename ls1x_dma_filter_fn to ls1x_dma_filter.
+> > >
+> > > Changes in v2:
+> > > - Change the config from 'DMA_LOONGSON1' to 'LOONGSON1_DMA',
+> > > - and rearrange it in alphabetical order in Kconfig and Makefile.
+> > > - Fix comment style.
+> > >
+> > > ---
+> > > Keguang Zhang (2):
+> > >       dt-bindings: dma: Add Loongson-1 APB DMA
+> > >       dmaengine: Loongson1: Add Loongson-1 APB DMA driver
+> > >
+> > >  .../bindings/dma/loongson,ls1b-apbdma.yaml         |  67 +++
+> > >  drivers/dma/Kconfig                                |   9 +
+> > >  drivers/dma/Makefile                               |   1 +
+> > >  drivers/dma/loongson1-apb-dma.c                    | 665 +++++++++++=
+++++++++++
+> > >  4 files changed, 742 insertions(+)
+> > > ---
+> > > base-commit: d35b2284e966c0bef3e2182a5c5ea02177dd32e4
+> > > change-id: 20231120-loongson1-dma-163afe5708b9
+> > >
+> > > Best regards,
+> > > --
+> > > Keguang Zhang <keguang.zhang@gmail.com>
+> > >
+> > >
+> > >
+>
+>
+>
+> --
+> Best regards,
+>
+> Keguang Zhang
 
