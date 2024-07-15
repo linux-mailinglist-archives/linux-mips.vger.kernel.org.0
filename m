@@ -1,75 +1,75 @@
-Return-Path: <linux-mips+bounces-4321-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4323-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9741A930E00
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jul 2024 08:33:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BBF8930E13
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jul 2024 08:33:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 509932814EE
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jul 2024 06:33:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A543C1F2129D
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jul 2024 06:33:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E6031836D8;
-	Mon, 15 Jul 2024 06:33:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87528184115;
+	Mon, 15 Jul 2024 06:33:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="C+e9SV/K"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sSmvU2fG"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E86B126287
-	for <linux-mips@vger.kernel.org>; Mon, 15 Jul 2024 06:33:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE68183097
+	for <linux-mips@vger.kernel.org>; Mon, 15 Jul 2024 06:33:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721025197; cv=none; b=jeE+mgsjWvRxTIw9TsMKRSVHOsIQsUO5FMzOAyljj2ttBHa6SQAQRk/9cHaobBp1f4nl8n/eXcjU3bl0EnHi/ezKLFcsloN9FSAJJ9jAfnc2XcKZUsV0jIBOYjG10tqAKaxgwJlYaaFnzeFhqfbiisBoiXOuc4imkMW/T2UwQ/U=
+	t=1721025200; cv=none; b=keTT1sStyh4WQ5YsRec4iQKTnhzyryvWhjs8Xq8nJLOY9CT0oKl+BWjdbsmudJz+FgfWLc6y1jEQSVgQzGHKvdeehK1S4BLcGLrXsJgTEkjmqGXk/zSzY5jtbSFLpHPSt+N6GgFurzGMb1SzHYxjUseBrkTt9iqJhAC0xMwll3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721025197; c=relaxed/simple;
-	bh=Kf60wOnocntCYjHw62V/2EfBf+1HRmYhh2TPix7OkEw=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=TwnjuD8sxlc06WtEUqGGX4wtZMo0dd0a31B6d2VIkmmtXLCXgy8TL3bY7yiDgDY1UfUugXQ3JYKwTpymjNxwQ0n4kwr536qJJYYgTk1Np03Nz7D47NK8kn/ryJIt41U88x3ZwS2EhDTCTbNjTL0hnwIIhfzNKS74MJtXrKjyNhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=C+e9SV/K; arc=none smtp.client-ip=209.85.167.52
+	s=arc-20240116; t=1721025200; c=relaxed/simple;
+	bh=eQJ3hRch4PVpnxcgcIs2vVrHHBN8kCt55Lg1+zlGYoo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=mO2YHwUmKRnaSwjEHaI3Uqb2uqyMRTqip9Ij5e6+qUlmkAiP9/akRaR/dquop9E8RioF8YTc+b3SNwhJIUXtv78gM8CzGCmdEVH4EG3C0dxH63jv2Sk6BuBSm2f/SzlF4ewF2YXtaJzB9P/iH5QnB49kiuyOuSfZe6r51dRi7EY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sSmvU2fG; arc=none smtp.client-ip=209.85.167.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-52e9c6b5a62so4072274e87.0
-        for <linux-mips@vger.kernel.org>; Sun, 14 Jul 2024 23:33:15 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-52ed9b802ceso275722e87.3
+        for <linux-mips@vger.kernel.org>; Sun, 14 Jul 2024 23:33:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1721025194; x=1721629994; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YgUa5kzPxeKRnm4gmgQB+wDns4r7Lup1w0YNsdAWOCs=;
-        b=C+e9SV/KSQANIpOV/kkuMMx41bsZq3RK9BRfBQEYM2DrBJ/mM+w03aZ5i/IvDhOAZF
-         tnefRdHRh3lOikjpxxpE4uXZ+AqqAPH5XWz8U+GsJiqfNwDrF/9Svzr/xz/xQMw9eLmt
-         kJ6DKAt+zkBLMLSLWTHmj70bg3FmR+l3A7fXlOeNjyzibGkvMN0hUJOb4hvFIyHn7aKT
-         6bOedCRkHzxwDO5SHPbgCjUUTzJp+mr01o4LUbLNtGlgzZKnUapg1DmRZTTPyfJ3BO3s
-         HhBIS02Fxg0FlnEJzFe2+rR2tY2k12Hw+a27FUaZDj03Nu/cP3pW5Z+yC8zO/wJDTIht
-         6LXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721025194; x=1721629994;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1721025195; x=1721629995; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YgUa5kzPxeKRnm4gmgQB+wDns4r7Lup1w0YNsdAWOCs=;
-        b=q3VT7Igb5v4OcYpmrIMXaU9oamOsF8cB4lmY5Ag8/WuowrFFN2W1ilVEdf4+aodJ7y
-         yOretZzuvLpvMgXHyZsBWXuNxsD2s8Sb+5E90HAEOASTEQy7EYTUGkrVcKmc5J9NMlLa
-         DFF2dqh/wEYZaMi+QdTHmyTyRyYVKhkaIfthVF86IKrrutdVirH97dAGDv8e7QuH77Pp
-         XO1KsZWNTEDuS9RA4maPdLO5irXY6nBB5KsqrK5HDKCxpuHZwigdq+lETbjYksFYGUck
-         oUmBfI90yjP3jaDl7YZn0qonzJMcOjuEGrhH1CtXvSvRa6RsDzwTErBtVDAF4NkInENQ
-         GByA==
-X-Forwarded-Encrypted: i=1; AJvYcCXsDtf4Uq68cAdGjb+uGesE4d49615AX91Ja6R0MgoYffEpnDkokZJjwNjvSIUrrNNoPZFGDQ33JZYxNNWQszbSkXCl4rpc1WryyA==
-X-Gm-Message-State: AOJu0YxKezg9qQGE+tpoKOmAYLneP5TFGPTfRbPWeFP8keJ6wR4UhL91
-	RYd3tUynvyoScsQspS2mCVV7iXkU9JRioKyvAajSb142gfCo8hubrxOxX3C9v9Q=
-X-Google-Smtp-Source: AGHT+IF0VjTw1K6MhesN5YsTG+trLH2ksTK9vmpMlTq0f2CRXPdu0k2mF7HtB+KTdSOIvOdGMqJLuQ==
-X-Received: by 2002:a05:6512:b86:b0:52e:9ebe:7325 with SMTP id 2adb3069b0e04-52eb99a3299mr12878900e87.31.1721025194058;
-        Sun, 14 Jul 2024 23:33:14 -0700 (PDT)
+        bh=zW4Dkbs/DpuJ5jOJGFiWuBbUi352hxlJAviTa72dXa8=;
+        b=sSmvU2fGovHWpRBTxXACCoYBikjEHP9MSyyV1OY3mqC2n5YQ/fbPs5pYkDza+79WN9
+         dpPDkUs7sVSJ1ryPHafi1BdnocDZyYUFmrqSCFEF5QfC6l+TV8KdMQSsNvT3hMoThEyt
+         z/WuP2fww+nmIDevqTqCH6ait2hDbA0LooOy+CbAeH/HbW0ovBgZsntP/km3E0QcRioR
+         97xbR75TZiNVtDJeUgdXH1R6kUgj0lhnZteJ9CaM9CLHAxTTehUONMiRbhZNREppwfrm
+         DL+mdpFzd8czrM1ELTQysaMx4tY5GM6YG682e0Nbju856xPlJkRlqQ5xk67GAefknddd
+         lTBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721025195; x=1721629995;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zW4Dkbs/DpuJ5jOJGFiWuBbUi352hxlJAviTa72dXa8=;
+        b=GvmsYRxU0x+cA5rpXgeUHDQ6YKXsXHpPZe9kW4pwCSstoFiyaWueAEU0v59hD51+no
+         xTIXbqMV7tsleQ7coNBY7bTZg4trcckqJytn/aOMe2jnbWozWjqR/Sbs9PX9SrS1a8d2
+         yndhEfLQd3Jyx7qNIIMOLWufhSYpvdS585tStD/nPf6D9uohT2IAXmzdHU5ULAPGe9h7
+         djk6B92dXsLNCkSMHiXzhOW5lbZVSao+U+QgZYzox4JMdNvyT7Vg3UTSsL4bEPvx5dio
+         i59hJlAmQCHjpHSxPYeYVP2PoipSRE8mjbAqHCZrb5lNyxQfOJD3H2wAdiU44YkhoI0s
+         N4/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWIQnZbaYbfcvfNljdYv3+tVH80LNhCTD49JMap76ul6OoAaRHfyv7Etkr+wrxdNda+DmsyczjE+b2xYmTIAt/UBpLiKT0L81HFHQ==
+X-Gm-Message-State: AOJu0YxU9WNwr0YNizLf+HYN4AwnUe6qfbL1NjfqJBEFfKxqRNHBFS2y
+	K1Zw5rS1/6oUVV+/XtRAo9pnu+AFjMpJX/5pbkKJiYaruC7ClOA+McisFJ8CDO8=
+X-Google-Smtp-Source: AGHT+IHT4xz2WdhLKgSzBOFGajWmbSWMHs5k5m2atVJlXqSvlJsy3hyS+kPlM6QSPNXfSrtWv1LNGg==
+X-Received: by 2002:ac2:41da:0:b0:52c:90b6:170f with SMTP id 2adb3069b0e04-52eb99a0e7emr11020892e87.29.1721025195187;
+        Sun, 14 Jul 2024 23:33:15 -0700 (PDT)
 Received: from umbar.lan ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ed24e188esm743543e87.47.2024.07.14.23.33.13
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ed24e188esm743543e87.47.2024.07.14.23.33.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Jul 2024 23:33:13 -0700 (PDT)
+        Sun, 14 Jul 2024 23:33:14 -0700 (PDT)
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH v4 0/5] drm: fix two issues related to HDMI Connector
- implementation
-Date: Mon, 15 Jul 2024 09:33:00 +0300
-Message-Id: <20240715-drm-bridge-connector-fix-hdmi-reset-v4-0-61e6417cfd99@linaro.org>
+Date: Mon, 15 Jul 2024 09:33:01 +0300
+Subject: [PATCH v4 1/5] drm/display: stop depending on DRM_DISPLAY_HELPER
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -78,10 +78,9 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAJzClGYC/53NTW4CMQwF4KugrDFKnEBnWPUeFYuQGMYSJMgZj
- UBo7o5hU1Vs2i6ff753N42EqZnt4m6EJm5ci4awXJg0xHIk4KzZoMVgN+ghyxn2wlk3qZZCaaw
- CB77CkM8MQo1GsIm6TTzYtY/RqHQR0otXy9dO88BNv26v0sk9p3/zJwcWgqO+60NOmdLniUuUu
- qpyNM+CCf+BoqLdurc5hN5hojfUf6MfFn+HekUd7i15hyHF8AOd5/kBpZf9poEBAAA=
+Message-Id: <20240715-drm-bridge-connector-fix-hdmi-reset-v4-1-61e6417cfd99@linaro.org>
+References: <20240715-drm-bridge-connector-fix-hdmi-reset-v4-0-61e6417cfd99@linaro.org>
+In-Reply-To: <20240715-drm-bridge-connector-fix-hdmi-reset-v4-0-61e6417cfd99@linaro.org>
 To: Andrzej Hajda <andrzej.hajda@intel.com>, 
  Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
  Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
@@ -125,85 +124,112 @@ Cc: Rob Clark <robdclark@gmail.com>,
  linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
  linux-tegra@vger.kernel.org
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3388;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2696;
  i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
- bh=Kf60wOnocntCYjHw62V/2EfBf+1HRmYhh2TPix7OkEw=;
- b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBmlMKocUnfYLehIHLnhjn/YpzPQGYcZbZYpR1xe
- NasM4c80MmJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZpTCqAAKCRCLPIo+Aiko
- 1dVwCAColXJjF6PCrF5MkX7SZctjCE45P3YoT+ofdNiLLdzra1QLPkG11tWvr7FNxQeMooIwBT+
- kPIgczU7r6aCEZtetqb8KHb9z0qxQkWjU0eAGVpVvL5QXP5J8e0C4/q4LA7eoxyn8I3hXMZMYY1
- 1+3RFgC6uMKkxY7ZHe2nRRaE1IOaTUthxnHohXBP9esLDcSucShFO+ZMuSXJxbMJ62O7BNVyHBR
- 7tJLeqX9nlI9mm5oHN760QaIXr6dVJHjgzhHvwojU+t8LcFQd55Ft/cqHbwMHYPx/Bb6AZhRken
- J51R8XlcTuMH6ZsPIjlQUcKK6Fo+sdudAprTi/uDXGJ1I8us
+ bh=eQJ3hRch4PVpnxcgcIs2vVrHHBN8kCt55Lg1+zlGYoo=;
+ b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBmlMKouj4z7T/shiz6BaAt6p7GIaGUsCT7QSQ3+
+ htjgKfZW+aJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZpTCqAAKCRCLPIo+Aiko
+ 1fbaB/9HucxwZ9XXPDZRoDro66r9wo860mrSEB1fXkutEFrGC+zz13rgdDbGHIAnd9uv8iJQ+eZ
+ FnHusEklODaV6JVOBxry88xtNubs2YKCDCryw4tsCNUJYHXtqBVrqFKiiEgV1fVPr24ZnOES7Px
+ Ef31DsPrCnhXzvJAcgn+EE6UnjT0qx1Dz+nQGStxm+6YqKFaq65IMQDATwngmZiTJO6wMQzT85Y
+ E0pyIkvXXAP2khDqrLtpUkroiEy+rITOfqGW43AggLIZgaaB3hI8mzpqjQor1sFYzMyqCtn11OD
+ 0TKL0KUECMJb2hfkYtMQg3IX8xjnSc79S3gqxbWQwws7xLIS
 X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
  fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
 
-Running IGT tests on Qualcomm Dragonboard820c uncovered two issues with
-the HDMI Connector implementation and with its integration into the
-drm_bridge_connector. Fix those issues.
+Kconfig symbols should not declare dependency on DRM_DISPLAY_HELPER.
+Move all parts of DRM_DISPLAY_HELPER to an if DRM_DISPLAY_HELPER block.
 
-Note, I'm not fully satisfied with the drm_bridge_connector move. Maybe
-it's better to add drm_bridge_funcs::connector_reset() and call it from
-__drm_atomic_helper_connector_reset().
+It is not possible to make those symbols select DRM_DISPLAY_HELPER
+because of the link issues when a part of the helper is selected to be
+built-in, while other part is selected to be as module. In such a case
+the modular part doesn't get built at all, leading to undefined symbols.
 
-Depends on https://lore.kernel.org/dri-devel/20240704-panel-sw43408-fix-v6-1-3ea1c94bbb9b@linaro.org
+The only viable alternative is to split drm_display_helper.ko into
+several small modules, each of them having their own dependencies.
 
+Suggested-by: Maxime Ripard <mripard@kernel.org>
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
-Changes in v4:
-- Fixed DRM_MODE_PROP_IMMUTABLE to use MUST in the single-value clause (Maxime)
-- Rebased on top of DRM_DSC_HELPERS patch
-- Removed 'depends on DRM_DISPLAY_HELPER' (Maxime)
-- Link to v3: https://lore.kernel.org/r/20240702-drm-bridge-connector-fix-hdmi-reset-v3-0-12b0e3124ca4@linaro.org
+ drivers/gpu/drm/display/Kconfig | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
 
-Changes in v3:
-- Document the DRM_MODE_PROP_IMMUTABLE requirements currently exposed
-  only via IGT tests (Maxime).
-- Move drm_bridge_connector to drm_display_helper.
-- Link to v2: https://lore.kernel.org/r/20240623-drm-bridge-connector-fix-hdmi-reset-v2-0-8590d44912ce@linaro.org
+diff --git a/drivers/gpu/drm/display/Kconfig b/drivers/gpu/drm/display/Kconfig
+index a2e42014ffe0..9c2da1e48b75 100644
+--- a/drivers/gpu/drm/display/Kconfig
++++ b/drivers/gpu/drm/display/Kconfig
+@@ -1,19 +1,20 @@
+ # SPDX-License-Identifier: MIT
+ 
++config DRM_DISPLAY_DP_AUX_BUS
++	tristate
++	depends on DRM
++	depends on OF || COMPILE_TEST
++
+ config DRM_DISPLAY_HELPER
+ 	tristate
+ 	depends on DRM
+ 	help
+ 	  DRM helpers for display adapters.
+ 
+-config DRM_DISPLAY_DP_AUX_BUS
+-	tristate
+-	depends on DRM
+-	depends on OF || COMPILE_TEST
++if DRM_DISPLAY_HELPER
+ 
+ config DRM_DISPLAY_DP_AUX_CEC
+ 	bool "Enable DisplayPort CEC-Tunneling-over-AUX HDMI support"
+-	depends on DRM && DRM_DISPLAY_HELPER
+ 	select DRM_DISPLAY_DP_HELPER
+ 	select CEC_CORE
+ 	help
+@@ -25,7 +26,6 @@ config DRM_DISPLAY_DP_AUX_CEC
+ 
+ config DRM_DISPLAY_DP_AUX_CHARDEV
+ 	bool "DRM DP AUX Interface"
+-	depends on DRM && DRM_DISPLAY_HELPER
+ 	select DRM_DISPLAY_DP_HELPER
+ 	help
+ 	  Choose this option to enable a /dev/drm_dp_auxN node that allows to
+@@ -34,7 +34,6 @@ config DRM_DISPLAY_DP_AUX_CHARDEV
+ 
+ config DRM_DISPLAY_DP_HELPER
+ 	bool
+-	depends on DRM_DISPLAY_HELPER
+ 	help
+ 	  DRM display helpers for DisplayPort.
+ 
+@@ -61,25 +60,23 @@ config DRM_DISPLAY_DP_TUNNEL_STATE_DEBUG
+ 
+ config DRM_DISPLAY_DSC_HELPER
+ 	bool
+-	depends on DRM_DISPLAY_HELPER
+ 	help
+ 	  DRM display helpers for VESA DSC (used by DSI and DisplayPort).
+ 
+ config DRM_DISPLAY_HDCP_HELPER
+ 	bool
+-	depends on DRM_DISPLAY_HELPER
+ 	help
+ 	  DRM display helpers for HDCP.
+ 
+ config DRM_DISPLAY_HDMI_HELPER
+ 	bool
+-	depends on DRM_DISPLAY_HELPER
+ 	help
+ 	  DRM display helpers for HDMI.
+ 
+ config DRM_DISPLAY_HDMI_STATE_HELPER
+ 	bool
+-	depends on DRM_DISPLAY_HELPER
+ 	select DRM_DISPLAY_HDMI_HELPER
+ 	help
+ 	  DRM KMS state helpers for HDMI.
++
++endif # DRM_DISPLAY_HELPER
 
-Changes in v2:
-- Actually pass the flags to drm_property_create_range().
-- Link to v1: https://lore.kernel.org/r/20240623-drm-bridge-connector-fix-hdmi-reset-v1-0-41e9894dcdec@linaro.org
-
----
-Dmitry Baryshkov (5):
-      drm/display: stop depending on DRM_DISPLAY_HELPER
-      drm/drm_property: require DRM_MODE_PROP_IMMUTABLE for single-value props
-      drm/connector: automatically set immutable flag for max_bpc property
-      drm/bridge-connector: move to DRM_DISPLAY_HELPER module
-      drm/bridge-connector: reset the HDMI connector state
-
- MAINTAINERS                                        |  2 +-
- drivers/gpu/drm/Makefile                           |  1 -
- drivers/gpu/drm/bridge/Kconfig                     |  1 +
- drivers/gpu/drm/display/Kconfig                    | 25 ++++++++++++----------
- drivers/gpu/drm/display/Makefile                   |  2 ++
- .../gpu/drm/{ => display}/drm_bridge_connector.c   | 13 ++++++++++-
- drivers/gpu/drm/drm_connector.c                    |  7 +++++-
- drivers/gpu/drm/imx/dcss/Kconfig                   |  2 ++
- drivers/gpu/drm/imx/lcdc/Kconfig                   |  2 ++
- drivers/gpu/drm/ingenic/Kconfig                    |  2 ++
- drivers/gpu/drm/kmb/Kconfig                        |  2 ++
- drivers/gpu/drm/mediatek/Kconfig                   |  2 ++
- drivers/gpu/drm/meson/Kconfig                      |  2 ++
- drivers/gpu/drm/msm/Kconfig                        |  1 +
- drivers/gpu/drm/omapdrm/Kconfig                    |  2 ++
- drivers/gpu/drm/renesas/rcar-du/Kconfig            |  2 ++
- drivers/gpu/drm/renesas/rz-du/Kconfig              |  2 ++
- drivers/gpu/drm/renesas/shmobile/Kconfig           |  2 ++
- drivers/gpu/drm/rockchip/Kconfig                   |  4 ++++
- drivers/gpu/drm/tegra/Kconfig                      |  1 +
- drivers/gpu/drm/tidss/Kconfig                      |  2 ++
- drivers/gpu/drm/xlnx/Kconfig                       |  1 +
- include/drm/drm_property.h                         |  3 +++
- 23 files changed, 68 insertions(+), 15 deletions(-)
----
-base-commit: cfbc154f11aaa32b4b2887323e4372390648046d
-change-id: 20240623-drm-bridge-connector-fix-hdmi-reset-0ce86af053aa
-
-Best regards,
 -- 
-Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+2.39.2
 
 
