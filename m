@@ -1,49 +1,74 @@
-Return-Path: <linux-mips+bounces-4362-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4363-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3163933DD2
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Jul 2024 15:42:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19CEF933E13
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Jul 2024 15:57:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D7EB1C22C16
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Jul 2024 13:42:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C5631C20E38
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Jul 2024 13:57:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71BF9180A6E;
-	Wed, 17 Jul 2024 13:42:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EA5C180A7B;
+	Wed, 17 Jul 2024 13:57:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pbvj/YA1"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rHSiBx0O"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 341ED180A60;
-	Wed, 17 Jul 2024 13:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEB82180A67
+	for <linux-mips@vger.kernel.org>; Wed, 17 Jul 2024 13:57:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721223769; cv=none; b=nH4Ds2aKv2Bdq37RH1XsB6PrB9ITLmkgBZkTIE4DY2dR2ydfzLIz7sI0cyHbK/1+bMbxCHfszckW928eCWSyOWwYniY5Sly7Fvxa4otvE2qvgtqcD15KGoYda1BiybtKDiUaRrR5q4iBM+dc2DyX2EWdkyIkna4zGpiEZbdQiM4=
+	t=1721224654; cv=none; b=PvbI6x3ZVHfp6V4tszIwgwVfRrYysKbv96Dz7Mx2Rhqh8mk3ZqfxtIe1pPIZVK8aLJ1PjtgMrDUx+2xAR+lRAfwHLnJr3kLbRFum3dOG/p9VoN6u0YARRycobWjksxj0FvBL3CcvTACsRfJoT74NqQE1pvPSZCpLfs0VwpvGR7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721223769; c=relaxed/simple;
-	bh=b6M2u0O/VcQWX4e8CRgM/0cmwdYjHB7jwSQO7Cq366U=;
+	s=arc-20240116; t=1721224654; c=relaxed/simple;
+	bh=mj9lyALcWaNJFJX7S4WRviV1aZ7NNgMIecZZbWmCzDE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mDtSeqXCDYSKoxsl3wUaGmGrFtH2MwvcaMHaTLDvFfowpBzIFXl6okcZd/N29AMq8SwpFunjKvvZaFH2U8GN5idcf6ae9ULbt7BEKBcsOwOQAi5SsciHT4wrlxkbNEs3mYcp4hRzxDjHs+Az+t/mV/aImYcBubjFuqjAG33ZYew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pbvj/YA1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87E96C32782;
-	Wed, 17 Jul 2024 13:42:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721223769;
-	bh=b6M2u0O/VcQWX4e8CRgM/0cmwdYjHB7jwSQO7Cq366U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pbvj/YA1Gs/hjRDC0IXr3+tRYix4k2pKaNUcxopwUOt2F3ENxPAeCd7DoRcMp7O0B
-	 UtRs91T42G/Tgpa0EcWDxZUv+lc0rM4ypbkFy3zjVSDe8hbjRV8lOGcgAAws7/rWT2
-	 hMWfV99wFXGsid9gYH9JPJe+Gwp7nsq2+Ti798NJ4mv4beRMWBtHXM07O8c+D1ncb5
-	 3Na3BkeEPeVECGuoDdhPLJch/+W5um8v4lCcvbzDZnLj51nlSj0p8xOEqgfiFUbvG+
-	 3zkYm6sbagImtoDSlJXsv9/nR27VdgbTGY8ixgsZkEWeJB/1U5WF01yc3llYodPJSe
-	 LpWYqd26vKK/g==
-Date: Wed, 17 Jul 2024 15:42:46 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=NhAJMn2pznmlunmaNltkGx9qDwSjb2a4CnfETxlSscaV8/CL8yatV3073vkxEpTchTre4mbuDg8VeOMlaoxM8+7QYjMgP9W/bXte5fGI2Xgy9kpDTJLl3q3i/OnrRPyt70be5u71icIYQHXiddkeCt569UIIgBr6PgIZeti70CM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rHSiBx0O; arc=none smtp.client-ip=209.85.208.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2ee910d6a9eso7602971fa.1
+        for <linux-mips@vger.kernel.org>; Wed, 17 Jul 2024 06:57:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1721224650; x=1721829450; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mHJbV+bzx4RI8mDOQI+N5X7vHq/DAFW5fyNCzOVzMjI=;
+        b=rHSiBx0OIORI/pywKENisnriB3hhEZiqmkqnvH4KBDvI6WF1I1gVvE8GyHLgBuGPMo
+         TcaoMKFQwULywOYZi5MyxVrkSQMkiRk2tDvQb1ZJT3Klkna7HgIH7yw1HHfCCytqdPje
+         2xQTuLtsOWXd+859ZVNRpfdmcN7GRrSv/6f4iIWubpW8QFM0rbQFfCqxOHg1sG937CXv
+         uDNCOSmllQ+I7gXTiUwolLedTqcUNcuiuOyLGheh5NB4xshbtKR+S1fW65kJfaXJipZ8
+         GsIed3neHP4A2e5mCU3+m2srBL5xxLAzi+fnxDKSYmEfjdggMuTawJLLWa7E9268bmS1
+         pN0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721224650; x=1721829450;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mHJbV+bzx4RI8mDOQI+N5X7vHq/DAFW5fyNCzOVzMjI=;
+        b=QwNXbNyop9VWnqjcJglC3XICA5UUn8k2EQKsYalo8siEn9MpWe9c1kQ67H99o9RkUq
+         atVMpDfTItJXnH+KB5d/T2D4fxapBSJsFAalRRGNTYdhJElsXWh/13n8gfHMi5/2s6W3
+         /mSP3fPVMowwzyhIbK/Z0cuxPhpQ8C53dsN+qRdN7kh7C/XQFapIpmc34k+thUlE0CGz
+         O4oa1Aoux1O3O7agOD3wA0OwMoSxuu9ComZbUGXO/dAkAhAkU26C0QIdFRmAeKGxSrYI
+         /WaejOOE9vCdZRTk0rWLpt+3GvBvjI7bICdwCngY2JxRvL3m+oiuUauahx9kPwMO5fXL
+         9qEw==
+X-Forwarded-Encrypted: i=1; AJvYcCVJM8EqOwXYEKLJy9gVYmqN7rDICDXLmse50mtaeXZJz+hZN5xHmmWtGVe4COGJT3wPJV1/8hwDA46Z0vdTewrDCSy/ppGKmWN86A==
+X-Gm-Message-State: AOJu0Yzufq1JfrrJByeUJHPU37jehV8vhE+VDJLm36eLo866cilYMEBS
+	2ICPPmoPNfgiKqe3/mNJTEQmLYGLg5pVeFJBp+k0UKJqRMfjH8Vat2vtGvaaHis=
+X-Google-Smtp-Source: AGHT+IG7iDrtCuBBKWvQaoQQbv/0kaeeUtziuz9N7l7vX5y+JvpROqU3u5NL1wFj8j7PpznoM4x7Ww==
+X-Received: by 2002:a05:651c:2213:b0:2ec:1df4:589b with SMTP id 38308e7fff4ca-2eefcd61dd7mr7308201fa.1.1721224648985;
+        Wed, 17 Jul 2024 06:57:28 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2eee19148adsm14501371fa.100.2024.07.17.06.57.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jul 2024 06:57:28 -0700 (PDT)
+Date: Wed, 17 Jul 2024 16:57:26 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Maxime Ripard <mripard@kernel.org>
 Cc: Andrzej Hajda <andrzej.hajda@intel.com>, 
 	Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
 	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, 
@@ -72,63 +97,48 @@ Cc: Andrzej Hajda <andrzej.hajda@intel.com>,
 	linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org
 Subject: Re: [PATCH v4 2/5] drm/drm_property: require DRM_MODE_PROP_IMMUTABLE
  for single-value props
-Message-ID: <20240717-bouncy-horned-mamba-5691b8@houat>
+Message-ID: <gbcunf7zmafn5z76mrlgldmsy74s7e6jacv53mgpym2l75uq6h@talxrisbufsw>
 References: <20240715-drm-bridge-connector-fix-hdmi-reset-v4-0-61e6417cfd99@linaro.org>
  <20240715-drm-bridge-connector-fix-hdmi-reset-v4-2-61e6417cfd99@linaro.org>
+ <20240717-bouncy-horned-mamba-5691b8@houat>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6ldj6ctz25xj6y7b"
-Content-Disposition: inline
-In-Reply-To: <20240715-drm-bridge-connector-fix-hdmi-reset-v4-2-61e6417cfd99@linaro.org>
-
-
---6ldj6ctz25xj6y7b
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240717-bouncy-horned-mamba-5691b8@houat>
 
-Hi,
+On Wed, Jul 17, 2024 at 03:42:46PM GMT, Maxime Ripard wrote:
+> Hi,
+> 
+> On Mon, Jul 15, 2024 at 09:33:02AM GMT, Dmitry Baryshkov wrote:
+> > Document that DRM_MODE_PROP_IMMUTABLE must be set for the properties
+> > that are immutable by definition - e.g. ranges with min == max or enums
+> > with a single value. This matches the behaviour of the IGT tests, see
+> > kms_properties.c / validate_range_prop(), validate_enum_prop(),
+> > validate_bitmask_prop().
+> > 
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> 
+> We had a discussion yesterday about it on IRC with Sima, Simon and
+> Xaver.
+> 
+> https://oftc.irclog.whitequark.org/dri-devel/2024-07-16#33374622;
+> 
+> The conclusion was that it would create an inconsistency between drivers
+> on whether a given property is immutable or not, which will lead to more
+> troubles for userspace.
+> 
+> It's not clear why Ville added that check in the first place, so the
+> best course of action is to remove the IGT test and get the discussion
+> started there.
 
-On Mon, Jul 15, 2024 at 09:33:02AM GMT, Dmitry Baryshkov wrote:
-> Document that DRM_MODE_PROP_IMMUTABLE must be set for the properties
-> that are immutable by definition - e.g. ranges with min =3D=3D max or enu=
-ms
-> with a single value. This matches the behaviour of the IGT tests, see
-> kms_properties.c / validate_range_prop(), validate_enum_prop(),
-> validate_bitmask_prop().
->=20
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Ack, I'll work on removing those tests later today.
 
-We had a discussion yesterday about it on IRC with Sima, Simon and
-Xaver.
-
-https://oftc.irclog.whitequark.org/dri-devel/2024-07-16#33374622;
-
-The conclusion was that it would create an inconsistency between drivers
-on whether a given property is immutable or not, which will lead to more
-troubles for userspace.
-
-It's not clear why Ville added that check in the first place, so the
-best course of action is to remove the IGT test and get the discussion
-started there.
-
-Maxime
-
---6ldj6ctz25xj6y7b
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZpfKVgAKCRDj7w1vZxhR
-xYH7AQD8w8myEhco9CqAfjh20D1tXY/mlB+W4/bdaby3K0NuIQD/cGVo42JNkoo/
-jCNbgBRkiSwOXLi0a+whYQOE0kxTmwY=
-=bR0t
------END PGP SIGNATURE-----
-
---6ldj6ctz25xj6y7b--
+-- 
+With best wishes
+Dmitry
 
