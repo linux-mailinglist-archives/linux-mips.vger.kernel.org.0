@@ -1,144 +1,183 @@
-Return-Path: <linux-mips+bounces-4363-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4364-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19CEF933E13
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Jul 2024 15:57:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67FC7933E45
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Jul 2024 16:20:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C5631C20E38
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Jul 2024 13:57:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 91C2DB2119A
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Jul 2024 14:20:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EA5C180A7B;
-	Wed, 17 Jul 2024 13:57:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7A7D180A6C;
+	Wed, 17 Jul 2024 14:20:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rHSiBx0O"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="R9BkCuK+";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qy7CO/Wf"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh4-smtp.messagingengine.com (fhigh4-smtp.messagingengine.com [103.168.172.155])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEB82180A67
-	for <linux-mips@vger.kernel.org>; Wed, 17 Jul 2024 13:57:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB38F2D61B;
+	Wed, 17 Jul 2024 14:20:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721224654; cv=none; b=PvbI6x3ZVHfp6V4tszIwgwVfRrYysKbv96Dz7Mx2Rhqh8mk3ZqfxtIe1pPIZVK8aLJ1PjtgMrDUx+2xAR+lRAfwHLnJr3kLbRFum3dOG/p9VoN6u0YARRycobWjksxj0FvBL3CcvTACsRfJoT74NqQE1pvPSZCpLfs0VwpvGR7c=
+	t=1721226027; cv=none; b=kUONse85Stt/2WcX6TdKYadFSrjYNVGgWUpLvz7w6WsY7PYRzEgIHrhN8n4Gu5Nl/9VvYwWFqyCg7NeLjv5GsQsRM5oGq96K/ZL3n/QGP8niKiOGJb+Q2IFab3oMkbudyrLH4Ec7++PIjdesX2FRUKZaynViCU0aE0tEHimadp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721224654; c=relaxed/simple;
-	bh=mj9lyALcWaNJFJX7S4WRviV1aZ7NNgMIecZZbWmCzDE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NhAJMn2pznmlunmaNltkGx9qDwSjb2a4CnfETxlSscaV8/CL8yatV3073vkxEpTchTre4mbuDg8VeOMlaoxM8+7QYjMgP9W/bXte5fGI2Xgy9kpDTJLl3q3i/OnrRPyt70be5u71icIYQHXiddkeCt569UIIgBr6PgIZeti70CM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rHSiBx0O; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2ee910d6a9eso7602971fa.1
-        for <linux-mips@vger.kernel.org>; Wed, 17 Jul 2024 06:57:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1721224650; x=1721829450; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mHJbV+bzx4RI8mDOQI+N5X7vHq/DAFW5fyNCzOVzMjI=;
-        b=rHSiBx0OIORI/pywKENisnriB3hhEZiqmkqnvH4KBDvI6WF1I1gVvE8GyHLgBuGPMo
-         TcaoMKFQwULywOYZi5MyxVrkSQMkiRk2tDvQb1ZJT3Klkna7HgIH7yw1HHfCCytqdPje
-         2xQTuLtsOWXd+859ZVNRpfdmcN7GRrSv/6f4iIWubpW8QFM0rbQFfCqxOHg1sG937CXv
-         uDNCOSmllQ+I7gXTiUwolLedTqcUNcuiuOyLGheh5NB4xshbtKR+S1fW65kJfaXJipZ8
-         GsIed3neHP4A2e5mCU3+m2srBL5xxLAzi+fnxDKSYmEfjdggMuTawJLLWa7E9268bmS1
-         pN0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721224650; x=1721829450;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mHJbV+bzx4RI8mDOQI+N5X7vHq/DAFW5fyNCzOVzMjI=;
-        b=QwNXbNyop9VWnqjcJglC3XICA5UUn8k2EQKsYalo8siEn9MpWe9c1kQ67H99o9RkUq
-         atVMpDfTItJXnH+KB5d/T2D4fxapBSJsFAalRRGNTYdhJElsXWh/13n8gfHMi5/2s6W3
-         /mSP3fPVMowwzyhIbK/Z0cuxPhpQ8C53dsN+qRdN7kh7C/XQFapIpmc34k+thUlE0CGz
-         O4oa1Aoux1O3O7agOD3wA0OwMoSxuu9ComZbUGXO/dAkAhAkU26C0QIdFRmAeKGxSrYI
-         /WaejOOE9vCdZRTk0rWLpt+3GvBvjI7bICdwCngY2JxRvL3m+oiuUauahx9kPwMO5fXL
-         9qEw==
-X-Forwarded-Encrypted: i=1; AJvYcCVJM8EqOwXYEKLJy9gVYmqN7rDICDXLmse50mtaeXZJz+hZN5xHmmWtGVe4COGJT3wPJV1/8hwDA46Z0vdTewrDCSy/ppGKmWN86A==
-X-Gm-Message-State: AOJu0Yzufq1JfrrJByeUJHPU37jehV8vhE+VDJLm36eLo866cilYMEBS
-	2ICPPmoPNfgiKqe3/mNJTEQmLYGLg5pVeFJBp+k0UKJqRMfjH8Vat2vtGvaaHis=
-X-Google-Smtp-Source: AGHT+IG7iDrtCuBBKWvQaoQQbv/0kaeeUtziuz9N7l7vX5y+JvpROqU3u5NL1wFj8j7PpznoM4x7Ww==
-X-Received: by 2002:a05:651c:2213:b0:2ec:1df4:589b with SMTP id 38308e7fff4ca-2eefcd61dd7mr7308201fa.1.1721224648985;
-        Wed, 17 Jul 2024 06:57:28 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2eee19148adsm14501371fa.100.2024.07.17.06.57.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jul 2024 06:57:28 -0700 (PDT)
-Date: Wed, 17 Jul 2024 16:57:26 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Dave Stevenson <dave.stevenson@raspberrypi.com>, 
-	Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>, Lucas Stach <l.stach@pengutronix.de>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Paul Cercueil <paul@crapouillou.net>, Anitha Chrisanthus <anitha.chrisanthus@intel.com>, 
-	Edmund Dea <edmund.j.dea@intel.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Kevin Hilman <khilman@baylibre.com>, 
-	Jerome Brunet <jbrunet@baylibre.com>, Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
-	Sean Paul <sean@poorly.run>, Marijn Suijten <marijn.suijten@somainline.org>, 
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>, 
-	Biju Das <biju.das.jz@bp.renesas.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Sandy Huang <hjc@rock-chips.com>, Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>, 
-	Andy Yan <andy.yan@rock-chips.com>, Thierry Reding <thierry.reding@gmail.com>, 
-	Mikko Perttunen <mperttunen@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Jyri Sarha <jyri.sarha@iki.fi>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Rob Clark <robdclark@gmail.com>, 
-	Abhinav Kumar <quic_abhinavk@quicinc.com>, dri-devel@lists.freedesktop.org, igt-dev@lists.freedesktop.org, 
-	freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org, 
-	linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v4 2/5] drm/drm_property: require DRM_MODE_PROP_IMMUTABLE
- for single-value props
-Message-ID: <gbcunf7zmafn5z76mrlgldmsy74s7e6jacv53mgpym2l75uq6h@talxrisbufsw>
-References: <20240715-drm-bridge-connector-fix-hdmi-reset-v4-0-61e6417cfd99@linaro.org>
- <20240715-drm-bridge-connector-fix-hdmi-reset-v4-2-61e6417cfd99@linaro.org>
- <20240717-bouncy-horned-mamba-5691b8@houat>
+	s=arc-20240116; t=1721226027; c=relaxed/simple;
+	bh=5nbCBW4oJ/ogJooKQCfqvSA1sAQdk3JiwN9/HrQmGuI=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=I6SZMQHxBC5p1Eooh8Pac5q9Cn5EqNKqBdDRK8KTd3dJu5C3fjz3yENxH8vhsk1k459GxFYtHhM/rYj05ww5h95OsixvCyDT5dztQFVoViA07/PeE01ZDw9cRdDPt5hd27soliEh5q8UyNhTtk0CBsRGXrmxwsGYts15p3KNuZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=R9BkCuK+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qy7CO/Wf; arc=none smtp.client-ip=103.168.172.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id D7749114010F;
+	Wed, 17 Jul 2024 10:20:23 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute4.internal (MEProxy); Wed, 17 Jul 2024 10:20:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1721226023;
+	 x=1721312423; bh=5nbCBW4oJ/ogJooKQCfqvSA1sAQdk3JiwN9/HrQmGuI=; b=
+	R9BkCuK+4L4Yhj3OD+PedvswLbb/7Zkt+bFvvGNfk723OwEUliYLbrfqEyM3fDV9
+	N0W8+7CR4kwY7tv4VRh8FT5km9NZQ8LNGnSmj0PTUyv0yBsnTAN82OIsks7gtmZl
+	cebaAVLHeeDZ8TAv+13S4HrbVelLCKN3OD5OHui4I2xJzpqhu+rlKUrORDvoHJKB
+	hSUspxBvJAEidKIZpCCBgJOywHJqR145nO17Mt2GUIyTN69KY+WMDnFM0AMUHIMO
+	IPXuWxsV/ziPkG8lUWrI8nHywgLKXu103xICKh0jiBmVIkQRkarZ6UWx+BnbcmY2
+	4U2bflb/aiLUhig/vwWcTQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1721226023; x=
+	1721312423; bh=5nbCBW4oJ/ogJooKQCfqvSA1sAQdk3JiwN9/HrQmGuI=; b=q
+	y7CO/WfBsjp4/g8CZYUK+FXGkHu7vtx3keyVj1U+OF9ykGcNjrzDmGnpqQ5SDUvD
+	6jsm6Qhi2WxM0NoVO9SPsuOi1MDfV7Oq6GQNvHj7zOGb4lERi+SKffqObY7w+GEc
+	j6NiWyer6h6nYIhoEwLgVXoIQePRYC53jgggoIB/7vm2S/J0553KyygiTN51Ieft
+	dByOBG+nG5jCTvdJ6ZCJaYFVsoCrZEvJYJIAvmP67PKbn7FcBgvxYT5LSQv8uHUT
+	VkP4b+bwOUC8Dai2HltIZMmbUjsMoKnhn4o+pB6C01T2D5rxnmY73rEYOcC7QBZa
+	OTNz3UW8yOGQmN2bl106g==
+X-ME-Sender: <xms:JtOXZvGoX87VSPXAZB-G1U7qMIFXP3yiPHdlFgTrybljkWFf__-5Ig>
+    <xme:JtOXZsWQpdR0VcAhv3aq7_Ie3W1PzAI1xCzHQ0wGYUTpGBawRlizV1i4Sj4mjUuHY
+    N6jGODhy7Y5e2tR4_8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrgeeigdejudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
+    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+    eqnecuggftrfgrthhtvghrnhepudefgeeftedugeehffdtheefgfevffelfefghefhjeeu
+    geevtefhudduvdeihefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:JtOXZhL6i40ovn7u1_v48LVlJCc1R8m3r1TdQ4IyscPC42xGn2PUDA>
+    <xmx:JtOXZtERwXDoFpjbCdvvfxcYUjTpo-UrL4IBco6jvJxyKwE4wqfuzw>
+    <xmx:JtOXZlUgJl-dfCMOEb244sBAj3Ko4f7PMlmQTwbdx87IfXIT77VOyg>
+    <xmx:JtOXZoO-iskq-pt_8s7U4VaYhavCWIwA6ifKthfHLOZ7fFXiKIrX5Q>
+    <xmx:J9OXZgN4qfO0mRFpyA0wkax7bM-iybfVAFsadqQAxknCeSs0EUj6Z-DK>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 8E52E36A0074; Wed, 17 Jul 2024 10:20:22 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240717-bouncy-horned-mamba-5691b8@houat>
+Message-Id: <84d2591b-4336-453f-bcb2-a7c47df0574c@app.fastmail.com>
+In-Reply-To: 
+ <CAAhV-H6aaAu=0eyEp8am8A+SSj53+CGp7DrCYCxkNZScBd74BQ@mail.gmail.com>
+References: <20240711-loongson1-dma-v9-0-5ce8b5e85a56@gmail.com>
+ <CAAhV-H5OOXguNTvywykyJk3_ydyDiSnpc-kvERRiYggBt441tw@mail.gmail.com>
+ <CAJhJPsXC-z+TS=qrXUT=iF_6-b5x-cr9EvcJNrmSL--RV6xVsQ@mail.gmail.com>
+ <CAAhV-H5Um5HhbmcB1Se=Qeh2OOAeP34BAx+sNtLKge_pePiuiQ@mail.gmail.com>
+ <b1a53515-068a-4f70-87a9-44b77d02d1d5@app.fastmail.com>
+ <CAAhV-H5cDiwAWBgXx8fBohZMocfup3rbe-XjDjEzsLAUB+1BUQ@mail.gmail.com>
+ <54d9edd5-377e-4d9a-956f-8f2ba49d4295@app.fastmail.com>
+ <CAAhV-H6aaAu=0eyEp8am8A+SSj53+CGp7DrCYCxkNZScBd74BQ@mail.gmail.com>
+Date: Wed, 17 Jul 2024 22:20:01 +0800
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Huacai Chen" <chenhuacai@kernel.org>
+Cc: "Kelvin Cheung" <keguang.zhang@gmail.com>,
+ "Vinod Koul" <vkoul@kernel.org>, "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+ "Conor Dooley" <conor+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, "Conor Dooley" <conor.dooley@microchip.com>
+Subject: Re: [PATCH RESEND v9 0/2] Add support for Loongson1 APB DMA
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 17, 2024 at 03:42:46PM GMT, Maxime Ripard wrote:
-> Hi,
-> 
-> On Mon, Jul 15, 2024 at 09:33:02AM GMT, Dmitry Baryshkov wrote:
-> > Document that DRM_MODE_PROP_IMMUTABLE must be set for the properties
-> > that are immutable by definition - e.g. ranges with min == max or enums
-> > with a single value. This matches the behaviour of the IGT tests, see
-> > kms_properties.c / validate_range_prop(), validate_enum_prop(),
-> > validate_bitmask_prop().
-> > 
-> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> 
-> We had a discussion yesterday about it on IRC with Sima, Simon and
-> Xaver.
-> 
-> https://oftc.irclog.whitequark.org/dri-devel/2024-07-16#33374622;
-> 
-> The conclusion was that it would create an inconsistency between drivers
-> on whether a given property is immutable or not, which will lead to more
-> troubles for userspace.
-> 
-> It's not clear why Ville added that check in the first place, so the
-> best course of action is to remove the IGT test and get the discussion
-> started there.
 
-Ack, I'll work on removing those tests later today.
 
--- 
-With best wishes
-Dmitry
+=E5=9C=A82024=E5=B9=B47=E6=9C=8817=E6=97=A5=E4=B8=83=E6=9C=88 =E4=B8=8B=E5=
+=8D=889:06=EF=BC=8CHuacai Chen=E5=86=99=E9=81=93=EF=BC=9A
+> On Tue, Jul 16, 2024 at 9:12=E2=80=AFPM Jiaxun Yang <jiaxun.yang@flygo=
+at.com> wrote:
+>>
+>>
+>>
+>> =E5=9C=A82024=E5=B9=B47=E6=9C=8816=E6=97=A5=E4=B8=83=E6=9C=88 =E4=B8=8B=
+=E5=8D=885:40=EF=BC=8CHuacai Chen=E5=86=99=E9=81=93=EF=BC=9A
+>> > On Mon, Jul 15, 2024 at 3:00=E2=80=AFPM Jiaxun Yang <jiaxun.yang@fl=
+ygoat.com> wrote:
+>> >>
+>> >>
+>> >>
+>> >> =E5=9C=A82024=E5=B9=B47=E6=9C=8815=E6=97=A5=E4=B8=83=E6=9C=88 =E4=B8=
+=8B=E5=8D=882:39=EF=BC=8CHuacai Chen=E5=86=99=E9=81=93=EF=BC=9A
+>> >> [...]
+>> >> >
+>> >> >> You said that you've accepted my suggestion, which means you re=
+cognize
+>> >> >> 'loongson' as the better name for the drivers.
+>> >> > No, I don't think so, this is just a compromise to keep consiste=
+ncy.
+>> >>
+>> >> Folks, can we settle on this topic?
+>> >>
+>> >> Is this naming really important? As long as people can read actual=
+ chip name from
+>> >> kernel code & documents, I think both are acceptable.
+>> >>
+>> >> I suggest let this patch go as is. And if anyone want to unify the=
+ naming, they can
+>> >> propose a treewide patch.
+>> > Renaming still breaks config files.
+>>
+>> This is trival with treewide sed :-)
+> Please read the commit message of b8d3349803ba34afda429e87a837fd95a ca=
+refully.
+
+We don't have 114 defconfigs don't we?
+
+Those symbols are not frequently specified by down stream users either.
+
+I think Keguang had tried his best on resolving all reasonable comments.
+
+Naming is a matter of preference after all, I think we should give Kegua=
+ng some respect
+here.
+
+Thanks
+- Jiaxun
+
+>
+> Huacai
+>
+>>
+>> Thanks
+>> - Jiaxun
+>>
+>> --
+>> - Jiaxun
+
+--=20
+- Jiaxun
 
