@@ -1,199 +1,249 @@
-Return-Path: <linux-mips+bounces-4370-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4371-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E856F934889
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jul 2024 09:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A34BC9348FA
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jul 2024 09:35:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62515282AF2
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jul 2024 07:06:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A9A32842D6
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jul 2024 07:35:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6827374C1B;
-	Thu, 18 Jul 2024 07:05:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBDE274058;
+	Thu, 18 Jul 2024 07:34:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kUgbLYcY"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="cKoR0Q5q";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qOcJ8VT/"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout2-smtp.messagingengine.com (fout2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1630874058;
-	Thu, 18 Jul 2024 07:05:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2CAB55886;
+	Thu, 18 Jul 2024 07:34:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721286358; cv=none; b=FvHe2v8sP6Y/Tl7c2rJt90rBErMZ+mXSfrMbxrfNTfGQV1fsFzXfXXXJaP3vFIYa6w2FZjRZd47DmWfkdFbeNXG0/ytz/WaoBtdNRzizB4V2cTHiFwyay8K9XZjzgXEGFKsIW1AmHfmtg+4puiGwE2MG8YQ3NwCg4ILx9jN9fTA=
+	t=1721288094; cv=none; b=DX+qOtmA6k2EL/KU1yYJ74MK5LWymem5eJQNXXJy5ykHan7oINyWAsQmRRfyCNuwsQf5AXpc/p/bNmuF5F0CGcNMrq+lhFndX8K43NxjTETHh2vvVm8J7rimWwttmTYrNJlk16ODIeh3Pts3+mAkiOuK1YhkdxTu5oupIpwWJ6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721286358; c=relaxed/simple;
-	bh=whHsob4RS5v2GdrWHkkMKcRLrbELb7YOdJDyppVzr6A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K23DeYFKovNpaD5mEMyu/CsQUGz3nTVXnlCQvS8EUZzVdlp278HW17owub9cJmIOtaMXi7A6evYrKaleGaz3EkTPXXC9DGVa4wq4EHJppAbw7nFhvfjwG3GXqZ1AFPUFnSxLKe1V3aFKGWDJbKyy/7FJON9I9HWzVQk28RJQ26E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kUgbLYcY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD529C116B1;
-	Thu, 18 Jul 2024 07:05:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721286357;
-	bh=whHsob4RS5v2GdrWHkkMKcRLrbELb7YOdJDyppVzr6A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kUgbLYcYkFi+yM5DNGWYkc6mZnNnUffrZs2ftic6RoJlQJ7E8d8XWB5uF1VxaloMN
-	 2pI7IBqElMjV0qmk4el5sVZlUVx1UwdD/P/sQY2CWDd738D2psQymoIvRySGsgmXuk
-	 ZUck602iq5YkHci1Vyu9rFtlsvRJpdSEkMm+v+2VIQWc/AzrdgqrSUiCL4vEDXKVee
-	 8A9PZCK5pqB7fQmK9zQfZYL2C8lRMzESmGfyxSOLFBGVMQZpNwRh+NK+wlWHkdZfdM
-	 jaUarx/bIXxsaGX38yt2XwW4s4VTuawsNrk9K8J+JTbrZLoL9aVyqQB8FzZnTP9IQn
-	 +gP4pgv5FiIEw==
-Date: Thu, 18 Jul 2024 10:02:52 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: David Hildenbrand <david@redhat.com>
-Cc: linux-kernel@vger.kernel.org,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vasily Gorbik <gor@linux.ibm.com>, Will Deacon <will@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org,
-	nvdimm@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org
-Subject: Re: [PATCH 05/17] arch, mm: pull out allocation of NODE_DATA to
- generic code
-Message-ID: <Zpi-HAb7EBxrZBtK@kernel.org>
-References: <20240716111346.3676969-1-rppt@kernel.org>
- <20240716111346.3676969-6-rppt@kernel.org>
- <220da8ed-337a-4b1e-badf-2bff1d36e6c3@redhat.com>
+	s=arc-20240116; t=1721288094; c=relaxed/simple;
+	bh=JVkht1qZnDP6g6HGVT2/BKn0/OqsW09NZSc/8nVhE/8=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=QeRN/nalnKvf2nZ9j5LGsk/BnP4/qwerVZ8F55Drh78c1zS02tN7aBukBfvUviUXivWnGuC2M4mkFwQ1qfW61kEeJE/+qCl4r7sUkWk2AOfNa57MljpoXeDb90utsd8/ZknF5pBBVx24N0AVhC2/JKEwq0x8tIDjbnT/Ly4Bm60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=cKoR0Q5q; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qOcJ8VT/; arc=none smtp.client-ip=103.168.172.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+	by mailfout.nyi.internal (Postfix) with ESMTP id CFBC913802C9;
+	Thu, 18 Jul 2024 03:34:51 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute1.internal (MEProxy); Thu, 18 Jul 2024 03:34:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1721288091;
+	 x=1721374491; bh=FJF+1LemGg91SooO0HjNNjauHiI7Fh3BqdTtr1TiD3o=; b=
+	cKoR0Q5qunqzFDWh8FOnLL3NBAMpgH2vzXhi65Ey9tqsPeCoZZ7NTCG3oIgaCH4i
+	xeR0vFb5m8m8JZcVP26Y7C+irapT1hnUdfnrwNtQpMp+pD0/wMNLnZRVFnBWECgR
+	+8Mg25LiHc92N3pwTIVb0Wqu/nbrcSvabK6QFa6YMFxmNSS29Q+iXDQmEnF+LQR1
+	TjtoThwr86ztgjFaiDnG5cyHXkz1xifrWSNPEXZxGaO9YRPVlvKGzPXHqkYzC2XM
+	nQLQCLTo5g/6eZfKtMJF0u0tFfiB+HUi7URtPCHMDMZUrRU/I17+7wfw+3lEY8lA
+	Jj8a6haTim0ls4vA1MrBLA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1721288091; x=
+	1721374491; bh=FJF+1LemGg91SooO0HjNNjauHiI7Fh3BqdTtr1TiD3o=; b=q
+	OcJ8VT/+7WL5YcldfPq42DcqDiwksCfnSpt7uhZ7CLAl5xUlaUyB0g73ZtXjtCgE
+	G8S50Jk75ajf9BnBOlwYigjSvYTVnAN6zCFKMqjKHSlkph0t1xjoDIZ5GeOtsC0c
+	4aqqHxiuYwhu/65tQ35t+zCCz+h2rSe9y9g380vYuhcP1jR+yNKQeZRJrCm1x1DS
+	XPgatu7qu2RnwwXj0ZTzPobHQ0IRxuwlQ7lFwX64GeH3JHXtjHZvF0nA+nTt2gBG
+	McPL5w/vqTIFMNS3R1x/2bg0tiI291N707xWkvS1S5rlEEg5l2wk7WE+Nv9HNCLx
+	da4KtV3KmlBEACxf/P2Og==
+X-ME-Sender: <xms:msWYZl7t7JtZytLhJJBKKNDwQDuFshRFcZz21-MHF1PuiiY1lUtRxw>
+    <xme:msWYZi6hwd8pmGbjYYeVAa6RJbpsAf0M47tS2fFW8yYeRYwSnhPSVH_Mt6oqwavn3
+    9LKF8Xjq4fhss762q0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrgeekgdduvdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
+    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
+    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:msWYZsdMCa5F1_uuIKKyei-0jpUnZVnLiPX4nyzbePfWUd-qgowJ7w>
+    <xmx:msWYZuLmRxPCIqxRrk_mLV3nz5h-nskJTqd8mI_yj05eO-fvmsb0Cg>
+    <xmx:msWYZpIeqN-_J6cv4hbZnVVnvbBfeEDEGC5z-biLLAF3YyuK-45_yQ>
+    <xmx:msWYZnzMipEdgqp0SfxX6kXu5BhvM9_KHUNsx2buRVKkobtzsPUoUw>
+    <xmx:m8WYZp3FeW_Sy3NFp5HM7BP0M0VhF3QKWYNUWfQKI_LVgfArZzlYUxAz>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 353EC36A0074; Thu, 18 Jul 2024 03:34:50 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <220da8ed-337a-4b1e-badf-2bff1d36e6c3@redhat.com>
+Message-Id: <e68b7f44-8a3c-4963-8d95-be8747bf9a61@app.fastmail.com>
+In-Reply-To: <20240714-loongson64-cevt-r4k-v1-1-98afed7260aa@flygoat.com>
+References: <20240714-loongson64-cevt-r4k-v1-1-98afed7260aa@flygoat.com>
+Date: Thu, 18 Jul 2024 15:34:30 +0800
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Huacai Chen" <chenhuacai@kernel.org>
+Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Loongson64: Switch to SYNC_R4K
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 17, 2024 at 04:42:48PM +0200, David Hildenbrand wrote:
-> On 16.07.24 13:13, Mike Rapoport wrote:
-> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> > 
-> > Architectures that support NUMA duplicate the code that allocates
-> > NODE_DATA on the node-local memory with slight variations in reporting
-> > of the addresses where the memory was allocated.
-> > 
-> > Use x86 version as the basis for the generic alloc_node_data() function
-> > and call this function in architecture specific numa initialization.
-> > 
-> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> > ---
-> 
-> [...]
-> 
-> > diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
-> > index 9208eaadf690..909f6cec3a26 100644
-> > --- a/arch/mips/loongson64/numa.c
-> > +++ b/arch/mips/loongson64/numa.c
-> > @@ -81,12 +81,8 @@ static void __init init_topology_matrix(void)
-> >   static void __init node_mem_init(unsigned int node)
-> >   {
-> > -	struct pglist_data *nd;
-> >   	unsigned long node_addrspace_offset;
-> >   	unsigned long start_pfn, end_pfn;
-> > -	unsigned long nd_pa;
-> > -	int tnid;
-> > -	const size_t nd_size = roundup(sizeof(pg_data_t), SMP_CACHE_BYTES);
-> 
-> One interesting change is that we now always round up to full pages on
-> architectures where we previously rounded up to SMP_CACHE_BYTES.
 
-On my workstation struct pglist_data take 174400, cachelines: 2725, members: 43 */
- 
-> I assume we don't really expect a significant growth in memory consumption
-> that we care about, especially because most systems with many nodes also
-> have  quite some memory around.
 
-With Debian kernel configuration for 6.5 struct pglist data takes 174400
-bytes so the increase here is below 1%.
+=E5=9C=A82024=E5=B9=B47=E6=9C=8814=E6=97=A5=E4=B8=83=E6=9C=88 =E4=B8=8A=E5=
+=8D=8810:41=EF=BC=8CJiaxun Yang=E5=86=99=E9=81=93=EF=BC=9A
+> Nowadays SYNC_R4K is performing better than Loongson64's
+> custom sync mechanism.
+>
+> Switch to SYNC_R4K to improve performance and reduce code
+> duplication.
+>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+> Last minute for 6.11 :-)
 
-For NUMA systems with a lot of nodes that shouldn't be a problem.
+Hi Thomas,
 
-> > -/* Allocate NODE_DATA for a node on the local memory */
-> > -static void __init alloc_node_data(int nid)
-> > -{
-> > -	const size_t nd_size = roundup(sizeof(pg_data_t), PAGE_SIZE);
-> > -	u64 nd_pa;
-> > -	void *nd;
-> > -	int tnid;
-> > -
-> > -	/*
-> > -	 * Allocate node data.  Try node-local memory and then any node.
-> > -	 * Never allocate in DMA zone.
-> > -	 */
-> > -	nd_pa = memblock_phys_alloc_try_nid(nd_size, SMP_CACHE_BYTES, nid);
-> > -	if (!nd_pa) {
-> > -		pr_err("Cannot find %zu bytes in any node (initial node: %d)\n",
-> > -		       nd_size, nid);
-> > -		return;
-> > -	}
-> > -	nd = __va(nd_pa);
-> > -
-> > -	/* report and initialize */
-> > -	printk(KERN_INFO "NODE_DATA(%d) allocated [mem %#010Lx-%#010Lx]\n", nid,
-> > -	       nd_pa, nd_pa + nd_size - 1);
-> > -	tnid = early_pfn_to_nid(nd_pa >> PAGE_SHIFT);
-> > -	if (tnid != nid)
-> > -		printk(KERN_INFO "    NODE_DATA(%d) on node %d\n", nid, tnid);
-> > -
-> > -	node_data[nid] = nd;
-> > -	memset(NODE_DATA(nid), 0, sizeof(pg_data_t));
-> > -
-> > -	node_set_online(nid);
-> > -}
-> > -
-> >   /**
-> >    * numa_cleanup_meminfo - Cleanup a numa_meminfo
-> >    * @mi: numa_meminfo to clean up
-> > @@ -571,6 +538,7 @@ static int __init numa_register_memblks(struct numa_meminfo *mi)
-> >   			continue;
-> >   		alloc_node_data(nid);
-> > +		node_set_online(nid);
-> >   	}
-> 
-> I can spot that we only remove a single node_set_online() call from x86.
-> 
-> What about all the other architectures? Will there be any change in behavior
-> for them? Or do we simply set the nodes online later once more?
+Could you please apply this to 6.11 PR, or 6.11 fixes?
 
-On x86 node_set_online() was a part of alloc_node_data() and I moved it
-outside so it's called right after alloc_node_data(). On other
-architectures the allocation didn't include that call, so there should be
-no difference there.
- 
-> -- 
-> Cheers,
-> 
-> David / dhildenb
-> 
-> 
+This is technically a left over of previous clock source series, and it =
+does help
+on preventing random RCU stall for multi-node Loongson-3 systems.
 
--- 
-Sincerely yours,
-Mike.
+Thanks
+- Jiaxun
+
+> ---
+>  arch/mips/Kconfig           |  1 +
+>  arch/mips/include/asm/smp.h |  1 -
+>  arch/mips/loongson64/smp.c  | 35 ++---------------------------------
+>  3 files changed, 3 insertions(+), 34 deletions(-)
+>
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 1236ea122061..e163059dd4d3 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -478,6 +478,7 @@ config MACH_LOONGSON64
+>  	select BOARD_SCACHE
+>  	select CSRC_R4K
+>  	select CEVT_R4K
+> +	select SYNC_R4K
+>  	select FORCE_PCI
+>  	select ISA
+>  	select I8259
+> diff --git a/arch/mips/include/asm/smp.h b/arch/mips/include/asm/smp.h
+> index bc2c240f414b..2427d76f953f 100644
+> --- a/arch/mips/include/asm/smp.h
+> +++ b/arch/mips/include/asm/smp.h
+> @@ -50,7 +50,6 @@ extern int __cpu_logical_map[NR_CPUS];
+>  #define SMP_CALL_FUNCTION	0x2
+>  /* Octeon - Tell another core to flush its icache */
+>  #define SMP_ICACHE_FLUSH	0x4
+> -#define SMP_ASK_C0COUNT		0x8
+>=20
+>  /* Mask of CPUs which are currently definitely operating coherently */
+>  extern cpumask_t cpu_coherent_mask;
+> diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
+> index 66d049cdcf14..147acd972a07 100644
+> --- a/arch/mips/loongson64/smp.c
+> +++ b/arch/mips/loongson64/smp.c
+> @@ -33,7 +33,6 @@ static void __iomem *ipi_clear0_regs[16];
+>  static void __iomem *ipi_status0_regs[16];
+>  static void __iomem *ipi_en0_regs[16];
+>  static void __iomem *ipi_mailbox_buf[16];
+> -static uint32_t core0_c0count[NR_CPUS];
+>=20
+>  static u32 (*ipi_read_clear)(int cpu);
+>  static void (*ipi_write_action)(int cpu, u32 action);
+> @@ -382,11 +381,10 @@ loongson3_send_ipi_mask(const struct cpumask=20
+> *mask, unsigned int action)
+>  		ipi_write_action(cpu_logical_map(i), (u32)action);
+>  }
+>=20
+> -
+>  static irqreturn_t loongson3_ipi_interrupt(int irq, void *dev_id)
+>  {
+> -	int i, cpu =3D smp_processor_id();
+> -	unsigned int action, c0count;
+> +	int cpu =3D smp_processor_id();
+> +	unsigned int action;
+>=20
+>  	action =3D ipi_read_clear(cpu);
+>=20
+> @@ -399,26 +397,14 @@ static irqreturn_t loongson3_ipi_interrupt(int=20
+> irq, void *dev_id)
+>  		irq_exit();
+>  	}
+>=20
+> -	if (action & SMP_ASK_C0COUNT) {
+> -		BUG_ON(cpu !=3D 0);
+> -		c0count =3D read_c0_count();
+> -		c0count =3D c0count ? c0count : 1;
+> -		for (i =3D 1; i < nr_cpu_ids; i++)
+> -			core0_c0count[i] =3D c0count;
+> -		nudge_writes(); /* Let others see the result ASAP */
+> -	}
+> -
+>  	return IRQ_HANDLED;
+>  }
+>=20
+> -#define MAX_LOOPS 800
+>  /*
+>   * SMP init and finish on secondary CPUs
+>   */
+>  static void loongson3_init_secondary(void)
+>  {
+> -	int i;
+> -	uint32_t initcount;
+>  	unsigned int cpu =3D smp_processor_id();
+>  	unsigned int imask =3D STATUSF_IP7 | STATUSF_IP6 |
+>  			     STATUSF_IP3 | STATUSF_IP2;
+> @@ -432,23 +418,6 @@ static void loongson3_init_secondary(void)
+>  		     cpu_logical_map(cpu) % loongson_sysconf.cores_per_package);
+>  	cpu_data[cpu].package =3D
+>  		cpu_logical_map(cpu) / loongson_sysconf.cores_per_package;
+> -
+> -	i =3D 0;
+> -	core0_c0count[cpu] =3D 0;
+> -	loongson3_send_ipi_single(0, SMP_ASK_C0COUNT);
+> -	while (!core0_c0count[cpu]) {
+> -		i++;
+> -		cpu_relax();
+> -	}
+> -
+> -	if (i > MAX_LOOPS)
+> -		i =3D MAX_LOOPS;
+> -	if (cpu_data[cpu].package)
+> -		initcount =3D core0_c0count[cpu] + i;
+> -	else /* Local access is faster for loops */
+> -		initcount =3D core0_c0count[cpu] + i/2;
+> -
+> -	write_c0_count(initcount);
+>  }
+>=20
+>  static void loongson3_smp_finish(void)
+>
+> ---
+> base-commit: 0b58e108042b0ed28a71cd7edf5175999955b233
+> change-id: 20240714-loongson64-cevt-r4k-eb74d4ad984c
+>
+> Best regards,
+> --=20
+> Jiaxun Yang <jiaxun.yang@flygoat.com>
+
+--=20
+- Jiaxun
 
