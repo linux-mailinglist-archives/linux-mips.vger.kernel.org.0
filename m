@@ -1,267 +1,137 @@
-Return-Path: <linux-mips+bounces-4404-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4405-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7830E93802A
-	for <lists+linux-mips@lfdr.de>; Sat, 20 Jul 2024 11:18:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3845D9380AC
+	for <lists+linux-mips@lfdr.de>; Sat, 20 Jul 2024 12:27:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB64AB2112B
-	for <lists+linux-mips@lfdr.de>; Sat, 20 Jul 2024 09:18:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EEBEF2816B9
+	for <lists+linux-mips@lfdr.de>; Sat, 20 Jul 2024 10:27:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34E8422F14;
-	Sat, 20 Jul 2024 09:18:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F33F7C086;
+	Sat, 20 Jul 2024 10:27:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OSOw1h0I"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5650140847;
-	Sat, 20 Jul 2024 09:18:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B7303D6D;
+	Sat, 20 Jul 2024 10:27:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721467111; cv=none; b=qrRV1Q96B1n0DM7nVyb/jGcYIHLUdXLH/BULAS9K7ErTD/KZF2tg8ZFeyxIXA3C+EwfkigJeF4Pb99nx2ykDi26Qf0FE1rGUBf7NMMwH92wORroVbXVFONrERxVPtfKqK/Bw1etMX7D3qO/XxJbAZJwQStnHLoFe9iA5PP0gBC8=
+	t=1721471236; cv=none; b=KeEj6LBdcBUji8tOWwDGC+HnpcoLwETSPGyhLuPdqYqRP55ZaAfGYqtSw+eoIR38Ve69zYFI5gdBjORrU/dQYRLJSnc06sruVKMQUmmnPzeyzx9xfKmSIcxwEs1AEwp+WdFNEYleTIoRAlmwgTG8vrAK7N3C6nLbuebrcGuLG44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721467111; c=relaxed/simple;
-	bh=RPwyQbwqvRgBP+VveXrsTKNEFUjAr7zvvqPcMpNTUSc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=PmOZhyakC8IDOPgqnCVOjBo2/CQ+Zmbo/Aa891OzyzeseNpGfhPJeLigfqXY9/XzUa8Dv0gCXUuaE5p0WFhBG9Vr2mIwRzsiOtBWMJa3eTqafbZ+WiPR47C/OASt31hmmmv5ILm0Vakk8Jh0NMwMB6KOvBmLCg10w887Qc72Aec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1sV6EJ-0005Xm-00; Sat, 20 Jul 2024 11:18:15 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 7903CC0814; Sat, 20 Jul 2024 11:18:03 +0200 (CEST)
-Date: Sat, 20 Jul 2024 11:18:03 +0200
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: torvalds@linux-foundation.org
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS changes for v6.11
-Message-ID: <ZpuAyzljTBjd6a7g@alpha.franken.de>
+	s=arc-20240116; t=1721471236; c=relaxed/simple;
+	bh=dVNVV+LbgZSpehO8np8DsTOCzJGiWq4UJOrsJg2zgCA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F7UJT3+YJHRBadBmJcGbxPtXBzDYKUZD0uSg9G+yQ4XUkqpsn9zZu5yFW/vnDdSefb+djQqsjadkrbfV5ZgFajA4TQQL+fouN3xDawy2Pd0kOPpRPgAfbr8noqq73LliFmJ+ZU2v31f0l4GrEFrivnGcL246VKshFSIr0YA1f18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OSOw1h0I; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F39A7C2BD10;
+	Sat, 20 Jul 2024 10:27:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721471235;
+	bh=dVNVV+LbgZSpehO8np8DsTOCzJGiWq4UJOrsJg2zgCA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OSOw1h0Ig/Sxo42NZVxgWqDg7PApDQPKQu7IqHtWulHzO5DZIoZUQKCkyr/Imoxko
+	 Lntuo9YYc0lQcsGc+PRntWL+4q6xGqYrJQGqSwrQ2zZ1CtZ6MvlYyVAEJlaBtunrNO
+	 F2DuSLx1QB9fjEK101QysRMhcJp+/gGJQsWj4+tgA87UM1Qqi7MiDFaIy33Yfgv/7x
+	 VV0gk0bbejGKCDskyj6Yq3aWY4qrq3jL+EZ+nUCUWS3c3DH2vL/WRIeqbcd+hCBosA
+	 QTOgUg+IY8NEEcUIVy6GfU3iS+hehOwAyUj7zAH7+pI+6MP+NYXBi6cf1MEyU9Ri4P
+	 as0dGwXRHcDEg==
+Date: Sat, 20 Jul 2024 13:24:06 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: David Hildenbrand <david@redhat.com>
+Cc: linux-kernel@vger.kernel.org,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vasily Gorbik <gor@linux.ibm.com>, Will Deacon <will@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org,
+	nvdimm@lists.linux.dev, devicetree@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org
+Subject: Re: [PATCH 05/17] arch, mm: pull out allocation of NODE_DATA to
+ generic code
+Message-ID: <ZpuQRgmrp-4deiur@kernel.org>
+References: <20240716111346.3676969-1-rppt@kernel.org>
+ <20240716111346.3676969-6-rppt@kernel.org>
+ <220da8ed-337a-4b1e-badf-2bff1d36e6c3@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <220da8ed-337a-4b1e-badf-2bff1d36e6c3@redhat.com>
 
-The following changes since commit 0d5679a0aae2d8cda72169452c32e5cb88a7ab33:
+On Wed, Jul 17, 2024 at 04:42:48PM +0200, David Hildenbrand wrote:
+> On 16.07.24 13:13, Mike Rapoport wrote:
+> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > 
+> > Architectures that support NUMA duplicate the code that allocates
+> > NODE_DATA on the node-local memory with slight variations in reporting
+> > of the addresses where the memory was allocated.
+> > 
+> > Use x86 version as the basis for the generic alloc_node_data() function
+> > and call this function in architecture specific numa initialization.
+> > 
+> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> > ---
+> 
+> [...]
+> 
+> > diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
+> > index 9208eaadf690..909f6cec3a26 100644
+> > --- a/arch/mips/loongson64/numa.c
+> > +++ b/arch/mips/loongson64/numa.c
+> > @@ -81,12 +81,8 @@ static void __init init_topology_matrix(void)
+> >   static void __init node_mem_init(unsigned int node)
+> >   {
+> > -	struct pglist_data *nd;
+> >   	unsigned long node_addrspace_offset;
+> >   	unsigned long start_pfn, end_pfn;
+> > -	unsigned long nd_pa;
+> > -	int tnid;
+> > -	const size_t nd_size = roundup(sizeof(pg_data_t), SMP_CACHE_BYTES);
+> 
+> One interesting change is that we now always round up to full pages on
+> architectures where we previously rounded up to SMP_CACHE_BYTES.
 
-  mips: fix compat_sys_lseek syscall (2024-06-21 10:16:34 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.11
-
-for you to fetch changes up to bb2d63500b5c8fd1ea425caffe2d44c931fefc6b:
-
-  MIPS: config: Add ip30_defconfig (2024-07-15 18:17:34 +0200)
-
-----------------------------------------------------------------
-- added support for Realtek RTL9302C
-- added support for Mobileye EyeQ6H
-- added support for Mobileye EyeQ OLB system controller
-- improved r4k clocksource
-- added mode for emulating ieee754 NAN2008
-- rework for BMIPS CBR address handling
-- fixes for Loongson 2K1000
-- defconfig updates
-- cleanups and fixes
-
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      MIPS: Alchemy: Switch to use kmemdup_array()
-
-Celeste Liu (1):
-      mips: defconfig: drop RT_GROUP_SCHED=y from generic/db1xxx/eyeq5
-
-Chris Packham (8):
-      mips: dts: realtek: use "serial" instead of "uart" in node name
-      mips: dts: realtek: add device_type property to cpu node
-      dt-bindings: vendor-prefixes: Add Cameo Communications
-      dt-bindings: mips: realtek: Add rtl930x-soc compatible
-      dt-bindings: interrupt-controller: realtek,rtl-intc: Add rtl9300-intc
-      mips: select REALTEK_OTTO_TIMER for Realtek platforms
-      mips: generic: add fdt fixup for Realtek reference board
-      mips: dts: realtek: Add RTL9302C board
-
-Christian Marangi (3):
-      mips: bmips: rework and cache CBR addr handling
-      dt-bindings: mips: brcm: Document brcm,bmips-cbr-reg property
-      mips: bmips: setup: make CBR address configurable
-
-Daniel González Cabanelas (1):
-      mips: bmips: enable RAC on BMIPS4350
-
-Dmitry Torokhov (1):
-      MIPS: Alchemy: switch to use software nodes for GPIOs
-
-Dominique Martinet (1):
-      MIPS: Octeron: remove source file executable bit
-
-Genjian Zhang (2):
-      MIPS: sgi-ip22: Add prototypes for several functions to header
-      MIPS: ip22-gio: Make ip22_gio_set_64bit() and ip22_gio_init() static
-
-Gregory CLEMENT (3):
-      dt-bindings: mips: Add bindings for a new Mobileye SoC EyeQ6H
-      MIPS: mobileye: Add EyeQ6H device tree
-      MIPS: mobileye: Add EyeQ6H support
-
-Hauke Mehrtens (1):
-      MIPS: lantiq: improve USB initialization
-
-Jeff Johnson (1):
-      crypto: mips/poly1305 - add missing MODULE_DESCRIPTION() macro
-
-Jiaxun Yang (29):
-      MIPS: asm/pm.h: Use platform agnostic macros
-      MIPS: select CPU_PM with SUSPEND
-      MIPS: Loongson64: Implement PM suspend for LEFI firmware
-      MIPS: kvm: Declare prototype for kvm_init_loongson_ipi
-      MIPS: Loongson64: Include bootinfo.h in dma.c
-      MIPS: Loongson64: DTS: Fix msi node for ls7a
-      MIPS: Loongson64: DTS: Fix PCIe port nodes for ls7a
-      MIPS: ip30: ip30-console: Add missing include
-      MIPS: Loongson64: Remove memory node for builtin-dtb
-      MIPS: dts: loongson: Fix liointc IRQ polarity
-      MIPS: dts: loongson: Fix ls2k1000-rtc interrupt
-      MIPS: dts: loongson: Fix GMAC phy node
-      MIPS: dts: loongson: Add ISA node
-      MIPS: Loongson64: Test register availability before use
-      platform: mips: cpu_hwmon: Disable driver on unsupported hardware
-      MIPS: Loongson64: reset: Prioritise firmware service
-      MIPS: Loongson64: sleeper: Pass ra and sp as arguments
-      MIPS: Loongson64: env: Hook up Loongsson-2K
-      MIPS: csrc-r4k: Refine rating computation
-      MIPS: csrc-r4k: Apply verification clocksource flags
-      MIPS: csrc-r4k: Select HAVE_UNSTABLE_SCHED_CLOCK if SMP && 64BIT
-      MIPS: csrc-r4k: Don't register as sched_clock if unfit
-      MIPS: sync-r4k: Rework based on x86 tsc_sync
-      MIPS: Implement ieee754 NAN2008 emulation mode
-      MIPS: Fix fallback march for SB1
-      MIPS: config: Enable MSA and virtualization for MIPS64R6
-      MIPS: config: generic: Add board-litex
-      MIPS: config: lemote2f: Regenerate defconfig
-      MIPS: config: Add ip30_defconfig
-
-Maxime Ripard (1):
-      mips: configs: ci20: Enable DRM_DW_HDMI
-
-Paul Burton (2):
-      MIPS: CPS: Add a couple of multi-cluster utility functions
-      MIPS: GIC: Generate redirect block accessors
-
-Thomas Bogendoerfer (1):
-      Merge branch 'mips-fixes' into mips-next
-
-Théo Lebrun (3):
-      dt-bindings: soc: mobileye: add EyeQ OLB system controller
-      MIPS: mobileye: eyeq5: add OLB system-controller node
-      MAINTAINERS: Mobileye: add OLB drivers and dt-bindings
-
- Documentation/admin-guide/kernel-parameters.txt    |   4 +-
- .../interrupt-controller/realtek,rtl-intc.yaml     |  20 +-
- .../devicetree/bindings/mips/brcm/soc.yaml         |  24 ++
- .../devicetree/bindings/mips/mobileye.yaml         |   5 +
- .../devicetree/bindings/mips/realtek-rtl.yaml      |   4 +
- .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  | 374 +++++++++++++++++++++
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- MAINTAINERS                                        |   5 +
- arch/mips/Kbuild.platforms                         |   2 +-
- arch/mips/Kconfig                                  |  11 +-
- arch/mips/Makefile                                 |   2 +-
- arch/mips/alchemy/common/platform.c                |   8 +-
- arch/mips/alchemy/devboards/db1000.c               |  80 ++---
- arch/mips/bcm47xx/prom.c                           |   3 +
- arch/mips/bcm47xx/setup.c                          |   8 +
- arch/mips/bcm63xx/prom.c                           |   3 +
- arch/mips/bcm63xx/setup.c                          |   8 +
- arch/mips/bmips/dma.c                              |   2 +-
- arch/mips/bmips/setup.c                            |  35 +-
- arch/mips/boot/dts/Makefile                        |   2 +-
- arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi | 102 +++---
- .../boot/dts/loongson/loongson64g_4core_ls7a.dts   |   1 +
- arch/mips/boot/dts/mobileye/Makefile               |   1 +
- .../{eyeq5-fixed-clocks.dtsi => eyeq5-clocks.dtsi} |  54 +--
- arch/mips/boot/dts/mobileye/eyeq5-pins.dtsi        | 125 +++++++
- arch/mips/boot/dts/mobileye/eyeq5.dtsi             |  22 +-
- arch/mips/boot/dts/mobileye/eyeq6h-epm6.dts        |  22 ++
- .../boot/dts/mobileye/eyeq6h-fixed-clocks.dtsi     |  52 +++
- arch/mips/boot/dts/mobileye/eyeq6h-pins.dtsi       |  88 +++++
- arch/mips/boot/dts/mobileye/eyeq6h.dtsi            |  98 ++++++
- arch/mips/boot/dts/realtek/Makefile                |   1 +
- .../dts/realtek/cameo-rtl9302c-2x-rtl8224-2xge.dts |  73 ++++
- arch/mips/boot/dts/realtek/rtl838x.dtsi            |   1 +
- arch/mips/boot/dts/realtek/rtl83xx.dtsi            |   4 +-
- arch/mips/boot/dts/realtek/rtl930x.dtsi            |  79 +++++
- arch/mips/configs/ci20_defconfig                   |   1 +
- arch/mips/configs/db1xxx_defconfig                 |   1 -
- arch/mips/configs/eyeq5_defconfig                  |   2 +-
- arch/mips/configs/eyeq6_defconfig                  | 111 ++++++
- arch/mips/configs/generic/64r6.config              |   2 +
- arch/mips/configs/generic/board-litex.config       |   8 +
- arch/mips/configs/generic_defconfig                |   1 -
- arch/mips/configs/ip30_defconfig                   | 183 ++++++++++
- arch/mips/configs/lemote2f_defconfig               |  54 ++-
- arch/mips/crypto/poly1305-glue.c                   |   1 +
- arch/mips/generic/Makefile                         |   1 +
- arch/mips/generic/board-realtek.c                  |  79 +++++
- arch/mips/include/asm/bmips.h                      |   1 +
- arch/mips/include/asm/fpu.h                        |  15 +
- arch/mips/include/asm/mach-loongson64/boot_param.h |   2 +
- arch/mips/include/asm/mips-cps.h                   |  39 +++
- arch/mips/include/asm/mips-gic.h                   |  50 ++-
- arch/mips/include/asm/pm.h                         |  22 +-
- arch/mips/include/asm/r4k-timer.h                  |   5 -
- arch/mips/include/asm/sgi/ip22.h                   |   3 +
- arch/mips/kernel/csrc-r4k.c                        |  24 +-
- arch/mips/kernel/elf.c                             |   4 +
- arch/mips/kernel/fpu-probe.c                       |   9 +-
- arch/mips/kernel/mips-cm.c                         |  37 ++
- arch/mips/kernel/smp-bmips.c                       |  22 +-
- arch/mips/kernel/smp.c                             |   2 -
- arch/mips/kernel/sync-r4k.c                        | 281 +++++++++++-----
- arch/mips/kvm/interrupt.h                          |   4 +
- arch/mips/kvm/loongson_ipi.c                       |   2 +
- arch/mips/kvm/mips.c                               |   2 -
- arch/mips/lantiq/xway/sysctrl.c                    |  20 ++
- arch/mips/loongson64/Makefile                      |   2 +-
- arch/mips/loongson64/dma.c                         |   1 +
- arch/mips/loongson64/env.c                         |   8 +
- arch/mips/loongson64/pm.c                          |  88 +----
- arch/mips/loongson64/reset.c                       |  38 +--
- arch/mips/loongson64/sleeper.S                     |  21 ++
- arch/mips/loongson64/smp.c                         |  23 +-
- arch/mips/mobileye/Kconfig                         |  26 ++
- arch/mips/mobileye/Platform                        |   1 +
- arch/mips/pci/pcie-octeon.c                        |   0
- arch/mips/sgi-ip22/ip22-gio.c                      |   4 +-
- arch/mips/sgi-ip22/ip22-int.c                      |   2 -
- arch/mips/sgi-ip22/ip22-setup.c                    |   2 -
- arch/mips/sgi-ip30/ip30-console.c                  |   1 +
- drivers/platform/mips/cpu_hwmon.c                  |   3 +
- 81 files changed, 2141 insertions(+), 392 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml
- rename arch/mips/boot/dts/mobileye/{eyeq5-fixed-clocks.dtsi => eyeq5-clocks.dtsi} (88%)
- create mode 100644 arch/mips/boot/dts/mobileye/eyeq5-pins.dtsi
- create mode 100644 arch/mips/boot/dts/mobileye/eyeq6h-epm6.dts
- create mode 100644 arch/mips/boot/dts/mobileye/eyeq6h-fixed-clocks.dtsi
- create mode 100644 arch/mips/boot/dts/mobileye/eyeq6h-pins.dtsi
- create mode 100644 arch/mips/boot/dts/mobileye/eyeq6h.dtsi
- create mode 100644 arch/mips/boot/dts/realtek/cameo-rtl9302c-2x-rtl8224-2xge.dts
- create mode 100644 arch/mips/boot/dts/realtek/rtl930x.dtsi
- create mode 100644 arch/mips/configs/eyeq6_defconfig
- create mode 100644 arch/mips/configs/generic/board-litex.config
- create mode 100644 arch/mips/configs/ip30_defconfig
- create mode 100644 arch/mips/generic/board-realtek.c
- create mode 100644 arch/mips/loongson64/sleeper.S
- create mode 100644 arch/mips/mobileye/Kconfig
- mode change 100755 => 100644 arch/mips/pci/pcie-octeon.c
+I did some git archaeology and it seems that round up to full pages on x86
+backdates to bootmem era when allocation granularity was PAGE_SIZE anyway.
+I'm going to change that to SMP_CACHE_BYTES in v2.
+ 
+> I assume we don't really expect a significant growth in memory consumption
+> that we care about, especially because most systems with many nodes also
+> have  quite some memory around.
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Sincerely yours,
+Mike.
 
