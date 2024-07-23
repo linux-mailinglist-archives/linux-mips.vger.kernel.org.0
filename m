@@ -1,197 +1,111 @@
-Return-Path: <linux-mips+bounces-4424-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4425-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13B8393985E
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Jul 2024 04:43:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CB2F93986D
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Jul 2024 04:53:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94B531F2267F
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Jul 2024 02:43:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5DBB71C2199D
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Jul 2024 02:53:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AB76137748;
-	Tue, 23 Jul 2024 02:43:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2696713A402;
+	Tue, 23 Jul 2024 02:53:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="Ditt9l6Z";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="h840+DoC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lJ0PDWT9"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh6-smtp.messagingengine.com (fhigh6-smtp.messagingengine.com [103.168.172.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B258B3D6A;
-	Tue, 23 Jul 2024 02:43:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15662F32;
+	Tue, 23 Jul 2024 02:53:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721702598; cv=none; b=P3Jv3tZ809ou0dbaAFhh9dPOjHbIt7PUW1gw010BcHyvCZQZBR8zF35WkJtDvt4suuE1YFpKSQ1fKLVdp2i6QY6Ht1/50kb/81ySgTRk0fgM41zRVU4tpFSbP19qeJInHhEoBSLXqN75Zeg6iIanGzmTtleEZpkrElz7G+I7vDE=
+	t=1721703235; cv=none; b=rojOfhUZtoA/HNzADtoxAgfIEv1zsVFslnty+fVykXrlOkCBc24M6mP2PW0yeC9FQfaVOW+xs6N0ASIo87pt0tgY7aVf8Z9i56JjRMlgMCOipzdgryl/iPmzdTXyqsMrZ4larzBgI71oBVaYUD82L/8U7u3zkprqfzEpftFUMZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721702598; c=relaxed/simple;
-	bh=tsV3zyvW0uWJzFfdL6s7/c5IYEyzwvVZHiL6dZ7wtjc=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=KccTQ5L29aCYoG3Isedf9DH+Hh+ga/vUZG4xC95NAg1502LiKGhl2mqEd7+JzsCs4jxmsq46njhxaratmGx1Pc5DffkFGv66XXcA+skdzPsJqOxZ1qF0IlRsk47Qvv+Y7HTljKraVMFQQpJtMzAQAsGNTQ6zLWl/3gDsGZF//8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=Ditt9l6Z; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=h840+DoC; arc=none smtp.client-ip=103.168.172.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id B1B2111400D7;
-	Mon, 22 Jul 2024 22:43:14 -0400 (EDT)
-Received: from wimap26 ([10.202.2.86])
-  by compute5.internal (MEProxy); Mon, 22 Jul 2024 22:43:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1721702594;
-	 x=1721788994; bh=LSmySmI5qAd8Vu3NRH9uiUbqkvTERI94Q9FZeFbuDOY=; b=
-	Ditt9l6ZLji/wbeQORCFE+CPO41I+E1vqACKJMKEHOFdzY2kS8lrk/ddXVqqv/0m
-	HE1+vGbujgz5x+6hbii51pX0pZGADKksTR/kQ3USea9MJ2edsLdJwqFfLdvOHUtk
-	/nfKdVMM5lYMWUZ1p6xQ/vOa25mbttaLsQK+W9J0nA2pAI14RkszHaLgQzv+50hI
-	yDAESR/VTb2KO68Fb2r/qox0W6zSkkZB6pr9jDSps0s4+8y8vuYhMMLKwHwVTmxL
-	/5QZGZAexf+K+Fk4Siiup+ADmVDHZwPTEmkLSdsjSQvMfeb1K5MqdUckgwuM1LW3
-	7oY9iw0cZdWUS06AufR+7Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1721702594; x=
-	1721788994; bh=LSmySmI5qAd8Vu3NRH9uiUbqkvTERI94Q9FZeFbuDOY=; b=h
-	840+DoC+QM7TuaR0rf1JW/YoNnHTPCd8X1J8j5jZDqmKcin6AM5ih3IRPP6finGj
-	TxTw3L/R7HvtznpE7K6F0Yqcpk0R5StiQBIL6ZaFXZR0oWxKsmFpOjZPQUWShchr
-	Qt9c6nmQcb8QYcCcZxX4m5w0i+5D4pvy0za984GNBBHN7F8F7twgMhSQqQIwTD9k
-	yCFcNSkg6bVYtOmcVoWc0CMgm2PB2jeeNBFfWh2Ndlaz9d60FPdzPE4QiS7l7CDE
-	InSlTBz1VkN2dat4geL6SxYXjxJncC16Y/4LYhQlLitMN7qaQBepUBQwtHyQ8PEz
-	NeZxZv6/OL+tkFQi1WqBA==
-X-ME-Sender: <xms:whifZlZfTJIMvaibMt4TytLT5iOa21KRndmAlU3YGRttsraG_snnTw>
-    <xme:whifZsb3aac_9Fnxs8K7IT6W1JInBEWcHQaqkISXtF2R_qxin_r7jOmkH_ljgWNfo
-    v97PdbrQcQy7p6pFpM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrheekgdeifecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
-    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-    eqnecuggftrfgrthhtvghrnhepkeelveffhedtiefgkeefhffftdduffdvueevtdffteeh
-    ueeihffgteelkeelkeejnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhush
-    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigr
-    nhhgsehflhihghhorghtrdgtohhmpdhnsggprhgtphhtthhopedt
-X-ME-Proxy: <xmx:whifZn-7opLfyemJwMqkUFeyzYDMV4MpCJCMGD6Q7OfGavBuv6_lpA>
-    <xmx:whifZjpbteNoNAYFa9kaDwRbk7FePsuR-liYPwXtIuaK-7x9AW6p6g>
-    <xmx:whifZgq46YWpkcOcgn1MJHb7b2CJCiQKs7lpmVBtu7juvL4nS4gq5A>
-    <xmx:whifZpT0-tUFz161nDjyetBPaA7NWRIPeEDxqBBGC6y2IcNiMyI3Dg>
-    <xmx:whifZseBA04qOdw6KWbkGaZD67horxaPPMoX1_-t4QS9djR2X7xkMchY>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 3600519C0069; Mon, 22 Jul 2024 22:43:14 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-582-g5a02f8850-fm-20240719.002-g5a02f885
+	s=arc-20240116; t=1721703235; c=relaxed/simple;
+	bh=mGtWKysuUWTpJmO0vGq+fr7tw12kxzMkz57MGDuNNVw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qleBOZtxw1ICKk3638xHSvPOkvoe5rpFSlE3cZhmFc0i7VdObUKjhQQH5XFkDw9Pc5ybInMgX3T7j3WF+XgeAwZEY+RDZFFwcmOL9t5+3GMl10yhtmTGZ2ysf6tBYa8mMhtrMzE0EngpU5UwfNPKGOn/p6EC/2O6Tz7/k/0rLHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lJ0PDWT9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A823C4AF0E;
+	Tue, 23 Jul 2024 02:53:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721703234;
+	bh=mGtWKysuUWTpJmO0vGq+fr7tw12kxzMkz57MGDuNNVw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=lJ0PDWT9WJnhDCJyPkEbZGh7LdWvb0/AYuM7v3I0LRGP4eQKKFDGG1DNEzLhMf6+r
+	 UZDQpCKHdRm88bhKYan8uVMwqelVDa/d1/WUC4aEDLMHJI2lmeS5WRopXZXTq0RUc2
+	 FDmHfHTMBq6N8RU+Mf5Biz4mOmxzAf19rEKZfu2uXyJuOGJUQzysydWx3lqRjWp7wV
+	 5SEVh95w29U7wgL2rDyIzybUcOnjdfi19mvx0uwwcIS8U+72WUgWdBwbw725kYVSUF
+	 ATYx0zF3bUlr1FZjo34WnkJWRHInkmiAd3EnVHhhah0o0/ltSN3ddcgUCYbCneEPFn
+	 Eff8TwvMPhqQg==
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5a1c49632deso4465856a12.2;
+        Mon, 22 Jul 2024 19:53:54 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVjJ2HC0pL+rBXNoonIMSsGGUtXjfog6W1n/Qi0z+Sf8wsNFgDjowhwuNj39y1z3X53cUBhRArj9FFzW6emAz14L5+6ST+vzwQgr6iPRwS4QVOsh0p7QKfkWhfJlIKnzwtaCRzMb98o5w==
+X-Gm-Message-State: AOJu0YzyrTts7W+obeo8N2FjQy/fSwekYghGWO++02n+2tlr/u23c4kh
+	NxS05yWHOlTaYnQUuOfcmywl8w690FotuSpi6XQMVNDyhcPiyoJmz7R5nzIbi1AB5wmRgTQ+ODY
+	9cuTzJbQ8upN66FLpxgCLgPnv3lI=
+X-Google-Smtp-Source: AGHT+IHIhw7+SWNwrgCM4TUPmphBy1vlVAh0ebdtuMkoTGohzqzDCvWDAqZluZI9pPDAaMBXs7IYAk7gEvqgTpVbGbY=
+X-Received: by 2002:a05:6402:520d:b0:58f:748f:9dca with SMTP id
+ 4fb4d7f45d1cf-5a477694f25mr6433188a12.1.1721703233086; Mon, 22 Jul 2024
+ 19:53:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <e6d7001c-f852-4e35-a440-57bc5c1e6c60@app.fastmail.com>
-In-Reply-To: <20240722-smp_i6500-v2-1-3101459cba29@bootlin.com>
-References: <20240722-smp_i6500-v2-1-3101459cba29@bootlin.com>
-Date: Tue, 23 Jul 2024 10:42:40 +0800
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Gregory CLEMENT" <gregory.clement@bootlin.com>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "paulburton@kernel.org" <paulburton@kernel.org>
-Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-kernel@vger.kernel.org,
- =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
- "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
- "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2] MIPS: SMP-CPS: Fix address for GCR_ACCESS register for CM3 and
- later
-Content-Type: text/plain;charset=utf-8
+References: <20240714-loongson64-cevt-r4k-v1-1-98afed7260aa@flygoat.com>
+ <e68b7f44-8a3c-4963-8d95-be8747bf9a61@app.fastmail.com> <ZplQxmWwujQkBU5w@alpha.franken.de>
+In-Reply-To: <ZplQxmWwujQkBU5w@alpha.franken.de>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Tue, 23 Jul 2024 10:53:40 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5gosuRFU8y1uLP6RmAGG9FTMK7ezhBuzeT9i5mkY8C=A@mail.gmail.com>
+Message-ID: <CAAhV-H5gosuRFU8y1uLP6RmAGG9FTMK7ezhBuzeT9i5mkY8C=A@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: Loongson64: Switch to SYNC_R4K
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
+Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
 
-
-=E5=9C=A82024=E5=B9=B47=E6=9C=8822=E6=97=A5=E4=B8=83=E6=9C=88 =E4=B8=8B=E5=
-=8D=889:15=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
-> When the CM block migrated from CM2.5 to CM3.0, the address offset for
-> the Global CSR Access Privilege register was modified. We saw this in
-> the "MIPS64 I6500 Multiprocessing System Programmer's Guide," it is
-> stated that "the Global CSR Access Privilege register is located at
-> offset 0x0120" in section 5.4. It is at least the same for I6400.
+On Fri, Jul 19, 2024 at 1:29=E2=80=AFAM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
 >
-> This fix allows to use the VP cores in SMP mode if the reset values
-> were modified by the bootloader.
+> On Thu, Jul 18, 2024 at 03:34:30PM +0800, Jiaxun Yang wrote:
+> >
+> >
+> > =E5=9C=A82024=E5=B9=B47=E6=9C=8814=E6=97=A5=E4=B8=83=E6=9C=88 =E4=B8=8A=
+=E5=8D=8810:41=EF=BC=8CJiaxun Yang=E5=86=99=E9=81=93=EF=BC=9A
+> > > Nowadays SYNC_R4K is performing better than Loongson64's
+> > > custom sync mechanism.
+> > >
+> > > Switch to SYNC_R4K to improve performance and reduce code
+> > > duplication.
+> > >
+> > > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > > ---
+> > > Last minute for 6.11 :-)
+> >
+> > Hi Thomas,
+> >
+> > Could you please apply this to 6.11 PR, or 6.11 fixes?
+> >
+> > This is technically a left over of previous clock source series, and it=
+ does help
+> > on preventing random RCU stall for multi-node Loongson-3 systems.
 >
-> Based on the work of Vladimir Kondratiev
-> <vladimir.kondratiev@mobileye.com> and the feedback from Jiaxun Yang
-> <jiaxun.yang@flygoat.com>.
+> if Huacai is ok with it, I'll add it to a second PR for 6.11.
 >
-> Fixes: 197e89e0984a ("MIPS: mips-cm: Implement mips_cm_revision")
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-
-Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-
-Thanks for getting it corrected!
-This patch is ideal for fixes tree.
-
-Thanks
-- Jiaxun
-
-> ---
-> Changes in v2:
-> - Based the detection on the CM version and not on a single CPU version
-> - Renamed the macro accordingly
-> - Link to v1:=20
-> https://lore.kernel.org/r/20240719-smp_i6500-v1-1-8738e67d4802@bootlin=
-.com
-> ---
->  arch/mips/include/asm/mips-cm.h | 4 ++++
->  arch/mips/kernel/smp-cps.c      | 5 ++++-
->  2 files changed, 8 insertions(+), 1 deletion(-)
+> Thomas.
 >
-> diff --git a/arch/mips/include/asm/mips-cm.h b/arch/mips/include/asm/m=
-ips-cm.h
-> index 3d9efc802e36..10e96b119c36 100644
-> --- a/arch/mips/include/asm/mips-cm.h
-> +++ b/arch/mips/include/asm/mips-cm.h
-> @@ -240,6 +240,10 @@ GCR_ACCESSOR_RO(32, 0x0d0, gic_status)
->  GCR_ACCESSOR_RO(32, 0x0f0, cpc_status)
->  #define CM_GCR_CPC_STATUS_EX			BIT(0)
->=20
-> +/* GCR_ACCESS - Controls core/IOCU access to GCRs */
-> +GCR_ACCESSOR_RW(32, 0x120, access_cm3)
-> +#define CM_GCR_ACCESS_ACCESSEN			GENMASK(7, 0)
-> +
->  /* GCR_L2_CONFIG - Indicates L2 cache configuration when Config5.L2C=3D=
-1=20
-> */
->  GCR_ACCESSOR_RW(32, 0x130, l2_config)
->  #define CM_GCR_L2_CONFIG_BYPASS			BIT(20)
-> diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-> index e074138ffd7f..05174aa9881c 100644
-> --- a/arch/mips/kernel/smp-cps.c
-> +++ b/arch/mips/kernel/smp-cps.c
-> @@ -325,7 +325,10 @@ static void boot_core(unsigned int core, unsigned=20
-> int vpe_id)
->  	write_gcr_co_reset_ext_base(CM_GCR_Cx_RESET_EXT_BASE_UEB);
->=20
->  	/* Ensure the core can access the GCRs */
-> -	set_gcr_access(1 << core);
-> +	if (mips_cm_revision() < CM_REV_CM3)
-> +		set_gcr_access(1 << core);
-> +	else
-> +		set_gcr_access_cm3(1 << core);
->=20
->  	if (mips_cpc_present()) {
->  		/* Reset the core */
->
-> ---
-> base-commit: 9298d51eb3af24f88b211087eb698399f9efa439
-> change-id: 20240719-smp_i6500-8cb233878c41
->
-> Best regards,
-> --=20
-> Gregory CLEMENT <gregory.clement@bootlin.com>
-
---=20
-- Jiaxun
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
+y a
+> good idea.                                                [ RFC1925, 2.3 =
+]
 
