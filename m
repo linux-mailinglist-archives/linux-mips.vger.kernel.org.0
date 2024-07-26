@@ -1,72 +1,72 @@
-Return-Path: <linux-mips+bounces-4479-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4480-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 824D993DB56
-	for <lists+linux-mips@lfdr.de>; Sat, 27 Jul 2024 01:55:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3374A93DB59
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Jul 2024 01:56:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 385D1284228
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jul 2024 23:55:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C34FEB21675
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jul 2024 23:56:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F54E15B0F4;
-	Fri, 26 Jul 2024 23:52:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7281415CD75;
+	Fri, 26 Jul 2024 23:53:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZoCQUIfK"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nu6YJ8ah"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C537B15AAC2
-	for <linux-mips@vger.kernel.org>; Fri, 26 Jul 2024 23:52:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C409115B14C
+	for <linux-mips@vger.kernel.org>; Fri, 26 Jul 2024 23:52:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722037978; cv=none; b=fx+vSZZCuIpz5Rg/XZf5uSAsv9aKAR5ssXrfuBwHUTFeztzrKTdkuJnUmgU27iYz2rOGiJl0lAimrdMdb3SSxNf1iPwTFZuUDqBf6eWX4Fh3dIhftN7OFBQKWTsNAYMBPZe6GxTrEeYjo6UefXmXlC2sWt0m8tzsIfs8WlwovVI=
+	t=1722037980; cv=none; b=Ta/WoMB8LX5ocD7wa2fTuxTlhHzYlRYF+KVlkiwrsxln8xcdv0twVVcZmXmVwAzD5nSULTPo2ka6wgd7FKE8YWEdrat9lC2aAEnZ1W4aKUY9Rar1q0qHm+wbAxexQnT3a5mTYvlXEpcgPVIKA+2/RfXnOIHXADxvOIh5Xmi7iTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722037978; c=relaxed/simple;
-	bh=P7WAicOgvpnFP/OgYcMHNilB3cYbvZdOfqdCkUi/Hw0=;
+	s=arc-20240116; t=1722037980; c=relaxed/simple;
+	bh=eYPpE7SnzshOjYhzmXkcsAp87ERqXcDPZzZJ9L8u3ZE=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=l1OrTyNippORgr8+C/NHkIQvF61XYk3FXKMJGV/kYPnAppLiHQSeGt/1oYYqg6PnA/18tp3YU0TRvNe43ILtjpBrRsAzWsfCOhzHHWW0qjmY3PBFMyfFEj1ayi+iTqFcOzF22qpll3OhEp/IIGj+7eXgxU2E7ED9vshlGtH3Ysg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZoCQUIfK; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=CbCWT1aivE6RcBY9o9ysljWDQE1QNu7B0Yo7cjTzyaCr3LvdDD+VjahY+T9W4Ws0u20QCQdV0AZl4Y3gvuTeoVtefIzTQ70D2ZyqodvcGUINFhaTQbC2FGu5xXzuzATteFuQSxcEKtXvewXJP8vjdSTqVzrgW75YuxzoctI+NQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nu6YJ8ah; arc=none smtp.client-ip=209.85.219.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-66480c1a6b5so7085557b3.1
-        for <linux-mips@vger.kernel.org>; Fri, 26 Jul 2024 16:52:56 -0700 (PDT)
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e0b329ba782so408343276.2
+        for <linux-mips@vger.kernel.org>; Fri, 26 Jul 2024 16:52:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722037976; x=1722642776; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1722037978; x=1722642778; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=fmU/HR7p0h2R7XRsIfqUXhH6E22vlxrvSMQX4VgE/mU=;
-        b=ZoCQUIfKoT5CuQK+9e2sZZYfCl+zAGIhLpWtYo0VRAfH3J3+yp/9TvzFqTSR15kTYL
-         bjEJZsnNxVoB8J2D8dPbhQPNeiYbnBJNzr7eoHuTSyp/lrVg5jRBZmPlttDbVa48B4PJ
-         W7NBRkNGcYHMxszPj1n5EZ+Jggmu+VPGjPd7Ttp/3pSJrpXJI0+mbJYIo9DA9igvKs/w
-         A++fMhrDKhRlWqiU7uv+yxjhugmcpHWv1DxwkjTkFV8rTa9J52UCIWmP4ZNFsR+z+XGa
-         rntZmjontxSN9+i5vGnBVOpYU/JvPWdjs8KVWoC6Hr8ukP8uFZy87wokVAI7RtIVs7mU
-         MBgQ==
+        bh=e1uaEfwlbucR9PkkwcUB/hlZrD43F2tYkTCYXf9cR5U=;
+        b=nu6YJ8ahAfVxD3gSiVkVf2rbA0LtCA3av8e+T60YGtz4ztjNWZ8o5aOSn93X3kfAJk
+         TR6hbY+cYWxFUpzhRMkajkVViLQLXFMuUroBPWdzyD4BobLFbl+lCSS4kc/61Ht55hjT
+         QHqcGn0HcJ4pqbNqTOUjzzLvzaYCGlTYrnRjRAunLCg7NwZJ7fBiXIm382qdJMeehnIY
+         P/30SKbgqTT4gaiecwWTPkVJIvAgLRYbxMGyFF/ocj/uexD5bqU2p/3/3nIsoaw6nBWc
+         jDYN4AB7laan4qpa/AvdHPoOPeMXGa5FPcJ/c6kYtpfuAwHuJ+kiPwFceYlcGe6RS1SR
+         yehw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722037976; x=1722642776;
+        d=1e100.net; s=20230601; t=1722037978; x=1722642778;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=fmU/HR7p0h2R7XRsIfqUXhH6E22vlxrvSMQX4VgE/mU=;
-        b=m5MNdj6FjgAP2RC0e/q+WpQhVEvwY5wg7hA9oxw8QgkWYn40Tqj4uac7lTBnRe7WRE
-         CkKmW4Ve+PogTRs8mFEKBz8P940eWEg+jLRSkubbti3RRsaTM653w1uV8TF6rC8sm9yW
-         uOekxE5bXyudExScmLF6Tp9hQ556SZY9od4gpoModWQ0Atzy8IpJzLy8FM4WMiq13KWF
-         0RWTxlIllRuhpQNUnAngxPV7kUpuu8BuCH39DZCQkVLGYsfxeEMTtNry0CSOTeR2uMYb
-         uyvMFjQM/3BNxyyhOI70mHKK2sQE1MH5qHiV4bOTAPHevfd7tGfU+bmT0DhWdfHQJURP
-         gDEw==
-X-Forwarded-Encrypted: i=1; AJvYcCVYsELyMCg50f8tf/Py49b7qf9klyqd+Bukk4AZ6P2QZMPkxw5ujdnOYqHBH/d3d1aUJybMnytEa6HcDCj9Dylh/OIoB+WH8pYBkg==
-X-Gm-Message-State: AOJu0YwQTbgFVfMwVL6LUZDuxaiGfVtbPRomczJgJ5SSHEGrufM+HLpQ
-	zGgsxnOU9C4DVXwmhNYmUzsg0aedEr+kXB6nIIviq/oelevBcYsLIdCK88Ha8zFOvB7HzY4CBPC
-	CKQ==
-X-Google-Smtp-Source: AGHT+IEZeCODu/YeM5d/iOhxGxPVHISuly+z8I6+5BlUeuWOyJE5t2wqwhMJ9ApQGl0yAUOujG/KjtPFVv0=
+        bh=e1uaEfwlbucR9PkkwcUB/hlZrD43F2tYkTCYXf9cR5U=;
+        b=pjzJT8LxdT4Ys4kvrRz/vViZPRhTpsRlKbyWH/ya9DAVKVGlOV8lxmbMcmg3qh9NDs
+         xxALHvT5UbtYTCKERw8/8TRbisacbvcEcApco0bQBLgLgqS0TQNe+GwgajsOKoCAEQMK
+         4oWg17R9IRjnqM9CBlCGUjEAdbZBS2c6aSlzEMIB6UduiTz+56mviHmEHFyeSK3Mkbir
+         kmvE/YP/lvp76zSHulJgwfB4YvdHeVIhyQAEqaPH+AGaD/rOLfsGyjRUjMjNtqiGliDw
+         yyTwTAyus5Ibkg6PXnCoEBghSgUSm7hm1udj2+gJKgfA6LeQ6LDxY4OjZPFfpZF6M60i
+         qnkA==
+X-Forwarded-Encrypted: i=1; AJvYcCVNCfT5rrUAhIKA7n3NGAyN6sTe/PI4HQOuu+E4qtCfsmAbO0KEExGSOCosH991XwyrhBe2sDuxoCXKi7uFDnGcjEGdmBZCh+HMhw==
+X-Gm-Message-State: AOJu0YyZg5wc8el4CdBZW/OimopPEZftuZZxGWSRvz2CeGELxQRPMRS0
+	Kynex8JLXAjZFuC7MyLwRmbx+E/XeWqIguGGevuqa/xltHbZawumPtqOe3atsOAiHlXCogXsuyB
+	1Dw==
+X-Google-Smtp-Source: AGHT+IG4XdyN3FgjZWItv/Lgg5QEKJKUQifoplgps87wy/mf6q3lv4u9rcIn8zN490p0nZ8TWmWhP2C2xyU=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:ad14:0:b0:62f:f535:f41 with SMTP id
- 00721157ae682-67a0abd4d1fmr288247b3.9.1722037976008; Fri, 26 Jul 2024
- 16:52:56 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6902:1081:b0:e0b:1407:e357 with SMTP id
+ 3f1490d57ef6-e0b543f0dc9mr70203276.3.1722037977844; Fri, 26 Jul 2024 16:52:57
+ -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date: Fri, 26 Jul 2024 16:51:18 -0700
+Date: Fri, 26 Jul 2024 16:51:19 -0700
 In-Reply-To: <20240726235234.228822-1-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -76,9 +76,9 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240726235234.228822-1-seanjc@google.com>
 X-Mailer: git-send-email 2.46.0.rc1.232.g9752f9e123-goog
-Message-ID: <20240726235234.228822-10-seanjc@google.com>
-Subject: [PATCH v12 09/84] KVM: x86/mmu: Don't force flush if SPTE update
- clears Accessed bit
+Message-ID: <20240726235234.228822-11-seanjc@google.com>
+Subject: [PATCH v12 10/84] KVM: x86/mmu: Use gfn_to_page_many_atomic() when
+ prefetching indirect PTEs
 From: Sean Christopherson <seanjc@google.com>
 To: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
 	Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
@@ -95,78 +95,50 @@ Cc: kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	David Matlack <dmatlack@google.com>, David Stevens <stevensd@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 
-Don't force a TLB flush if mmu_spte_update() clears Accessed bit, as
-access tracking tolerates false negatives, as evidenced by the
-mmu_notifier hooks that explicit test and age SPTEs without doing a TLB
-flush.
+Use gfn_to_page_many_atomic() instead of gfn_to_pfn_memslot_atomic() when
+prefetching indirect PTEs (direct_pte_prefetch_many() already uses the
+"to page" APIS).  Functionally, the two are subtly equivalent, as the "to
+pfn" API short-circuits hva_to_pfn() if hva_to_pfn_fast() fails, i.e. is
+just a wrapper for get_user_page_fast_only()/get_user_pages_fast_only().
 
-In practice, this is very nearly a nop.  spte_write_protect() and
-spte_clear_dirty() never clear the Accessed bit.  make_spte() always
-sets the Accessed bit for !prefetch scenarios.  FNAME(sync_spte) only sets
-SPTE if the protection bits are changing, i.e. if a flush will be needed
-regardless of the Accessed bits.  And FNAME(pte_prefetch) sets SPTE if and
-only if the old SPTE is !PRESENT.
-
-That leaves kvm_arch_async_page_ready() as the one path that will generate
-a !ACCESSED SPTE *and* overwrite a PRESENT SPTE.  And that's very arguably
-a bug, as clobbering a valid SPTE in that case is nonsensical.
+Switching to the "to page" API will allow dropping the @atomic parameter
+from the entire hva_to_pfn() callchain.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c | 31 +++++++++----------------------
- 1 file changed, 9 insertions(+), 22 deletions(-)
+ arch/x86/kvm/mmu/paging_tmpl.h | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 58b70328b20c..b7642f1f993f 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -518,37 +518,24 @@ static u64 mmu_spte_update_no_track(u64 *sptep, u64 new_spte)
-  * TLBs must be flushed. Otherwise rmap_write_protect will find a read-only
-  * spte, even though the writable spte might be cached on a CPU's TLB.
-  *
-+ * Remote TLBs also need to be flushed if the Dirty bit is cleared, as false
-+ * negatives are not acceptable, e.g. if KVM is using D-bit based PML on VMX.
-+ *
-+ * Don't flush if the Accessed bit is cleared, as access tracking tolerates
-+ * false negatives, and the one path that does care about TLB flushes,
-+ * kvm_mmu_notifier_clear_flush_young(), uses mmu_spte_update_no_track().
-+ *
-  * Returns true if the TLB needs to be flushed
-  */
- static bool mmu_spte_update(u64 *sptep, u64 new_spte)
+diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+index ef0b3b213e5b..6b215a932158 100644
+--- a/arch/x86/kvm/mmu/paging_tmpl.h
++++ b/arch/x86/kvm/mmu/paging_tmpl.h
+@@ -535,8 +535,8 @@ FNAME(prefetch_gpte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
  {
--	bool flush = false;
- 	u64 old_spte = mmu_spte_update_no_track(sptep, new_spte);
+ 	struct kvm_memory_slot *slot;
+ 	unsigned pte_access;
++	struct page *page;
+ 	gfn_t gfn;
+-	kvm_pfn_t pfn;
  
- 	if (!is_shadow_present_pte(old_spte))
+ 	if (FNAME(prefetch_invalid_gpte)(vcpu, sp, spte, gpte))
+ 		return false;
+@@ -549,12 +549,11 @@ FNAME(prefetch_gpte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+ 	if (!slot)
  		return false;
  
--	/*
--	 * For the spte updated out of mmu-lock is safe, since
--	 * we always atomically update it, see the comments in
--	 * spte_has_volatile_bits().
--	 */
--	if (is_mmu_writable_spte(old_spte) &&
--	      !is_writable_pte(new_spte))
--		flush = true;
--
--	/*
--	 * Flush TLB when accessed/dirty states are changed in the page tables,
--	 * to guarantee consistency between TLB and page tables.
--	 */
--
--	if (is_accessed_spte(old_spte) && !is_accessed_spte(new_spte))
--		flush = true;
--
--	if (is_dirty_spte(old_spte) && !is_dirty_spte(new_spte))
--		flush = true;
--
--	return flush;
-+	return (is_mmu_writable_spte(old_spte) && !is_writable_pte(new_spte)) ||
-+	       (is_dirty_spte(old_spte) && !is_dirty_spte(new_spte));
+-	pfn = gfn_to_pfn_memslot_atomic(slot, gfn);
+-	if (is_error_pfn(pfn))
++	if (gfn_to_page_many_atomic(slot, gfn, &page, 1) != 1)
+ 		return false;
+ 
+-	mmu_set_spte(vcpu, slot, spte, pte_access, gfn, pfn, NULL);
+-	kvm_release_pfn_clean(pfn);
++	mmu_set_spte(vcpu, slot, spte, pte_access, gfn, page_to_pfn(page), NULL);
++	kvm_release_page_clean(page);
+ 	return true;
  }
  
- /*
 -- 
 2.46.0.rc1.232.g9752f9e123-goog
 
