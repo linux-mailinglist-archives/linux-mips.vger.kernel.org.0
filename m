@@ -1,863 +1,333 @@
-Return-Path: <linux-mips+bounces-4467-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4470-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 330ED93D3AE
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jul 2024 15:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A68F593DB35
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Jul 2024 01:52:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B67B22837F9
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jul 2024 13:07:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63EAF284164
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jul 2024 23:52:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7703317B50E;
-	Fri, 26 Jul 2024 13:07:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00F421514EF;
+	Fri, 26 Jul 2024 23:52:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EFD7hbJw"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oh62CaBW"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E02542070;
-	Fri, 26 Jul 2024 13:07:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA85F14A609
+	for <linux-mips@vger.kernel.org>; Fri, 26 Jul 2024 23:52:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721999252; cv=none; b=pvZaxxmNLz/JgCKtE3TQD521x/DtuXAn2D9BMXXsrOXZfSQd+zDewjywImAD7M9M+uyY++pt1bx1bQt5ZXEu54qVkbV15l6WrUHbjeKQw01+w+XPQiUaDa+5udt80cCvXvZLFUtbZlJ6ExhN/XPAosTHIWLnzuVQ/knGXsacmDU=
+	t=1722037960; cv=none; b=OoURjbQIeGL6QNsokrrHei/ZBS7fibh3aaIj7ezDsbQYkQCElwBGZnffPQ4xsAxBakd7SqD0FcnzZzVG99CYYZVI3XU78ZLFhFhHgu/e3/JL/Kuy6Se0RF5sS9vcU+upHvGiAGWiUGtA1BOwlIOQAgt60blzvXDyBlPIiNqI6Dc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721999252; c=relaxed/simple;
-	bh=b5t70qrAysiBqfJCuMd7Fh/BB+qLyuv4odmASlTZ/Ws=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hqkoIkk+4WIvO49FgkNzPYsyirotcmBvBZMUaHwR8G/Yf5GhARryx/z6bJksfzhl++4EMgeMc23vpG2yMCvNDYJ/SCjmY3HSsoSMx3rL2BFQFPc6N+KQXN1eIF4v4Fv/2WYTUWyVWULh+Ou1lE+DSfagfzSnHHkbQNkeE8dugOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EFD7hbJw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 16732C4AF0B;
-	Fri, 26 Jul 2024 13:07:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721999252;
-	bh=b5t70qrAysiBqfJCuMd7Fh/BB+qLyuv4odmASlTZ/Ws=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=EFD7hbJw+ZHFoU9leRW74Yzz3cUZqmX1UCMrx02ltGBNpX8xzr3hBoRSVVb+sKv2R
-	 7/FpAtYQq/il4F/55hn7KBl/48oyvPj8Cnb+EYmIYLnwhT1uFlVJzgsb1f/f1pv4go
-	 +OHAgXA39ZFektM4gLI0DIOukFHPNtbE9HIuZyKGDNd4qgylO/CjSPM0f1s4qQovTz
-	 JykmH/7fojtyFWMHo3E0k+WL99KK4uaUo/wAcaTZgZ+huQgCFkMl4nhnVCvzq4f9ND
-	 LSjWF8OHexLOOkSOK2U4XAGpQznE2m1QJ0/AAQB3K6quErKwox+gkLbQQT6Ov5u9ZX
-	 PnLZ2rg3RLIeQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06F37C3DA70;
-	Fri, 26 Jul 2024 13:07:32 +0000 (UTC)
-From: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>
-Date: Fri, 26 Jul 2024 21:06:50 +0800
-Subject: [PATCH v10 2/2] dmaengine: Loongson1: Add Loongson-1 APB DMA
- driver
+	s=arc-20240116; t=1722037960; c=relaxed/simple;
+	bh=avyK+sgjip8mGDKx+P8MZVPI7apOzI37V6tcFp859Fg=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=byjDoKiZxzzhdCPPs6qG+BK+eAT4VHMD2XNfhruVZ9NsRkx01besP9tdqKC7m5z6Gh0ch+mYd7y+an8ImoNFBVJpQA/J7Hb3uIOlI7H4g2Z/EZTkUHChuIHzUASrinaL5QGBNwTrHKgpCGrlvZMlvTryfZ4j91CZk8E7jP8ZWc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oh62CaBW; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e0b2ca961ebso497037276.0
+        for <linux-mips@vger.kernel.org>; Fri, 26 Jul 2024 16:52:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1722037958; x=1722642758; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GlsoNmguYxHdPLcIEUjx1oIy+wRnU4Jxi7Q36OcxhEA=;
+        b=oh62CaBWzR8LPMwmURBQor56FazwRpq5CGSoLr1AB2X3oO48eLboyC5/cyNmMgfaaq
+         WzrXtp3a0miTs0anW96EtZEpgX2jMQ+OBuXcv1lOMdFxy64I4brSh2gTnhj4I4qdpsfK
+         4I0gtLx/WWKcyvzfmJ9S5ibAqUVtbwPotgKpI397gH1vgdkTs0C6O9ObeRT1kJQ0pXvT
+         wpxGe2U0IIOlSWBRMJ3/8z832wKOlCIkicMs01ia4CUJfYBarsLwIwybv+boptccAnNh
+         nYL6xTEAFiGld/0irtn6IZe9s3TdHvkKZZPfi+WZZRx2S96TuhC3NY+kvL3MTTEMhdrc
+         BKZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722037958; x=1722642758;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GlsoNmguYxHdPLcIEUjx1oIy+wRnU4Jxi7Q36OcxhEA=;
+        b=RZIruwGY1d3ld8yiazAOw9p+3oOyGet5rlHpFU8jTV8v2Se8iCUpnC9iV8WkZlj/JT
+         RDzh1/nLqDFHhmBfCLtp7vQdxvWzQtkL+P/KaTV5HHex6MwAohhgCBcpQ6j9vDQI/bZM
+         YKElhhfycjapI4AfTPVFunrN7i0LnyOaDk04PFAWfxO65+JJQ4bFOeqL3XWHyu+U/3Ak
+         A0STCXiKf46E1TS2WrGjb8sPwWTWk67d4AKOE6+x9GTZFy+gb/nd6DuYKjMFtAgiO/hj
+         qz5xyoe1aCS138e5Tvfd5F6xzvmfqIWsgg0Thg1uo0woWOtubv4PA+xCuAjw4fxWmVS8
+         gwmA==
+X-Forwarded-Encrypted: i=1; AJvYcCXpy/rWiW0BVaFGichQ0OWUB4n6E1npsXH6T4+sjbfWVltw6boniV+f68imUpp5J2Mjk9qPFC8sezRo46UsYpKPf7xOI5kGDHMBDw==
+X-Gm-Message-State: AOJu0YxSoY9tg2Po2lRswtb7KakWxTgVIExBvuvgsBbJeG1NW/jib3OQ
+	h149ZDBMq3oaQswys9qXXFurBOxOPTSpkeHUNYMd+jQB/OVWALPXwWsTyHQkvMjddHAItjinKl2
+	McQ==
+X-Google-Smtp-Source: AGHT+IFCH1oh4Y8/oiPAKKZDfTSrq8OctuCbDjHGO9FWuVz/aIwZKKAQhyg1yG69wkiF5914XVtW9HUBfXk=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:1005:b0:e0b:f93:fe8c with SMTP id
+ 3f1490d57ef6-e0b5427fa67mr79730276.0.1722037957798; Fri, 26 Jul 2024 16:52:37
+ -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date: Fri, 26 Jul 2024 16:51:09 -0700
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240726-loongson1-dma-v10-2-31bf095a6fa6@gmail.com>
-References: <20240726-loongson1-dma-v10-0-31bf095a6fa6@gmail.com>
-In-Reply-To: <20240726-loongson1-dma-v10-0-31bf095a6fa6@gmail.com>
-To: Keguang Zhang <keguang.zhang@gmail.com>, Vinod Koul <vkoul@kernel.org>, 
- Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc: linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Jiaxun Yang <jiaxun.yang@flygoat.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1721999250; l=22145;
- i=keguang.zhang@gmail.com; s=20231129; h=from:subject:message-id;
- bh=UeihO/Qh5DlqwuAYMwU95WoRUAcqnTPC8GHkJzI9SJE=;
- b=xnAQa2hXVVGHQrC7qnNVB315JfQIherbtV+KG95StnHv7wnjEMyPE0lY/5swKzr3RX9pXJ7za
- TTEHY3anWMSCNQCkHq7BRRtQWr91tMcAtCyw7c+kUqKN/jcARy0R++H
-X-Developer-Key: i=keguang.zhang@gmail.com; a=ed25519;
- pk=FMKGj/JgKll/MgClpNZ3frIIogsh5e5r8CeW2mr+WLs=
-X-Endpoint-Received: by B4 Relay for keguang.zhang@gmail.com/20231129 with
- auth_id=102
-X-Original-From: Keguang Zhang <keguang.zhang@gmail.com>
-Reply-To: keguang.zhang@gmail.com
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.46.0.rc1.232.g9752f9e123-goog
+Message-ID: <20240726235234.228822-1-seanjc@google.com>
+Subject: [PATCH v12 00/84] KVM: Stop grabbing references to PFNMAP'd pages
+From: Sean Christopherson <seanjc@google.com>
+To: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
+	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Anup Patel <anup@brainfault.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
+	Sean Christopherson <seanjc@google.com>
+Cc: kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	David Matlack <dmatlack@google.com>, David Stevens <stevensd@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Keguang Zhang <keguang.zhang@gmail.com>
+arm64 folks, the first two patches are bug fixes, but I have very low
+confidence that they are correct and/or desirable.  If they are more or
+less correct, I can post them separately if that'd make life easier.  I
+included them here to avoid conflicts, and because I'm pretty sure how
+KVM deals with MTE tags vs. dirty logging will impact what APIs KVM needs
+to provide to arch code.
 
-This patch adds APB DMA driver for Loongson-1 SoCs.
+On to the series...  The TL;DR is that I would like to get input on two
+things:
 
-Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
----
-Changes in v10:
-- Implement the hwdescs by link list to eliminate the limitation of the desc number.
-- Add the prefix 'LS1X_' for all registers and their bits.
-- Drop the macros: chan_readl() and chan_writel().
-- Use %pad for printing a dma_addr_t type.
-- Some minor fixes.
+ 1. Marking folios dirty/accessed only on the intial stage-2 page fault
+ 2. The new APIs for faulting, prefetching, and doing "lookups" on pfns
 
-Changes in v9:
-- Fix all the errors and warnings when building with W=1 and C=1
+This is (spiritually) v12 of David Steven's series to play nice with pfns
+that are "valid", i.e. have a struct page, but are not refcounted.  Whereas
+David's series only (mostly) fixed things for x86, this series goes for
+broke and completely eliminates KVM's long-standing (and heinous) behavior
+of essentially guessing which pfns are refcounted pages (see
+kvm_pfn_to_refcounted_page()).
 
-Changes in v8:
-- None
+Getting there requires "fixing" arch code that isn't obviously broken.
+Specifically, to get rid of kvm_pfn_to_refcounted_page(), KVM needs to
+stop marking pages/folios dirty/accessed based solely on the pfn that's
+stored in KVM's stage-2 page tables.  In v11, KVM x86 did this by tagging
+SPTEs with a flag (using a software-available bit).
 
-Changes in v7:
-- Change the comptible to 'loongson,ls1*-apbdma'
-- Update Kconfig and Makefile accordingly
-- Rename the file to loongson1-apb-dma.c to keep the consistency
+But that isn't a viable option for some flavors of x86 (we're out of
+software-available bits), and more importantly I've convinced myself[*]
+that marking folios _dirty_ after SPTEs have been installed is completely
+unnecessary, and that marking folios accessed is likewise unnecessary for
+real world workloads (and if this is a sticking point, I have ideas on
+how to handle it more gracefully; more at the bottom).
 
-Changes in v6:
-- Implement .device_prep_dma_cyclic for Loongson1 audio driver,
-  as well as .device_pause and .device_resume.
-- Set the limitation LS1X_DMA_MAX_DESC and put all descriptors
-  into one page to save memory
-- Move dma_pool_zalloc() into ls1x_dma_alloc_desc()
-- Drop dma_slave_config structure
-- Use .remove_new instead of .remove
-- Use KBUILD_MODNAME for the driver name
-- Improve the debug information
+So, instead of tracking which SPTEs correspond to refcounted pages, v12
+simply removes all of the code that operates on "struct page" based on
+the pfn in stage-2 PTEs.  This is the back ~40-50% of the series.  Most
+of the patches are relevatively uninteresting from a code perspective,
+it's the concept itself (of not marking folios dirty/accessed from SPTEs)
+that needs discussion.
 
-Changes in v5:
-- Add DT support
-- Use DT data instead of platform data
-- Use chan_id of struct dma_chan instead of own id
-- Use of_dma_xlate_by_chan_id() instead of ls1x_dma_filter()
-- Update the author information to my official name
+For x86 in particular, which sets accessed/dirty status when that info
+would be "lost", e.g. when SPTEs are zapped or KVM clears the dirty flag
+in a SPTE, foregoing the updates provides very measurable performance
+improvements for related operations.  E.g. when clearing dirty bits as
+part of dirty logging, and zapping SPTEs to reconstitue huge pages when
+disabling dirty logging.
 
-Changes in v4:
-- Use dma_slave_map to find the proper channel.
-- Explicitly call devm_request_irq() and tasklet_kill().
-- Fix namespace issue.
-- Some minor fixes and cleanups.
+The other big change from v11 is that I opted to go with dedicated,
+specific, and hopefully descriptive APIs to wrap kvm_follow_pfn() instead
+of expose the "inner" helper to arch code.  In part because I still don't
+love kvm_follow_pfn(), and fewer callers means its easier to change if/when
+someone comes up with a better name.  But also because I think/hope that
+having dedicated APIs will make it easier for arch developers to understand
+what is the right/preferred way to do certain operations.  E.g. so that all
+architectures use the same core flow for handling stage-2 page faults.
+Long term, I would love to standardize that code even more, but this series
+is already waaaay too big.
 
-Changes in v3:
-- Rename ls1x_dma_filter_fn to ls1x_dma_filter.
+Along the way, I also discovered that several of the inputs to hva_to_pfn()
+(and it's myriad wrappers) could be removed.  E.g. the rather weirdly named
+@atomic flag can be removed by deduplicating x86's prefetching code.
 
-Changes in v2:
-- Change the config from 'DMA_LOONGSON1' to 'LOONGSON1_DMA',
-- and rearrange it in alphabetical order in Kconfig and Makefile.
-- Fix comment style.
----
- drivers/dma/Kconfig             |   9 +
- drivers/dma/Makefile            |   1 +
- drivers/dma/loongson1-apb-dma.c | 675 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 685 insertions(+)
+As for capturing accessed information on zapped SPTEs, e.g. to prevent
+losing accessed information because NUMA balancing mucks with things, my
+thought is that arch code can preserve the accessed information in SPTEs
+that are unmapped/zapped because protections were modified, e.g. so that
+LRU-initiated aging can still collect information.  I'm not at all
+convinced that this is necessary outside of tests that care about exact
+counts, e.g. KVM selftests, but I'll post an RFC KVM x86 series to get
+the conversation started.
 
-diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
-index cc0a62c34861..4a1912744c45 100644
---- a/drivers/dma/Kconfig
-+++ b/drivers/dma/Kconfig
-@@ -369,6 +369,15 @@ config K3_DMA
- 	  Support the DMA engine for Hisilicon K3 platform
- 	  devices.
- 
-+config LOONGSON1_APB_DMA
-+	tristate "Loongson1 APB DMA support"
-+	depends on MACH_LOONGSON32 || COMPILE_TEST
-+	select DMA_ENGINE
-+	select DMA_VIRTUAL_CHANNELS
-+	help
-+	  This selects support for the APB DMA controller in Loongson1 SoCs,
-+	  which is required by Loongson1 NAND and audio support.
-+
- config LPC18XX_DMAMUX
- 	bool "NXP LPC18xx/43xx DMA MUX for PL080"
- 	depends on ARCH_LPC18XX || COMPILE_TEST
-diff --git a/drivers/dma/Makefile b/drivers/dma/Makefile
-index 374ea98faf43..c3180f4800a6 100644
---- a/drivers/dma/Makefile
-+++ b/drivers/dma/Makefile
-@@ -49,6 +49,7 @@ obj-$(CONFIG_INTEL_IDMA64) += idma64.o
- obj-$(CONFIG_INTEL_IOATDMA) += ioat/
- obj-y += idxd/
- obj-$(CONFIG_K3_DMA) += k3dma.o
-+obj-$(CONFIG_LOONGSON1_APB_DMA) += loongson1-apb-dma.o
- obj-$(CONFIG_LPC18XX_DMAMUX) += lpc18xx-dmamux.o
- obj-$(CONFIG_LS2X_APB_DMA) += ls2x-apb-dma.o
- obj-$(CONFIG_MILBEAUT_HDMAC) += milbeaut-hdmac.o
-diff --git a/drivers/dma/loongson1-apb-dma.c b/drivers/dma/loongson1-apb-dma.c
-new file mode 100644
-index 000000000000..f5674f0255cb
---- /dev/null
-+++ b/drivers/dma/loongson1-apb-dma.c
-@@ -0,0 +1,675 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Driver for Loongson-1 APB DMA Controller
-+ *
-+ * Copyright (C) 2015-2024 Keguang Zhang <keguang.zhang@gmail.com>
-+ */
-+
-+#include <linux/dmapool.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/iopoll.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_dma.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+
-+#include "dmaengine.h"
-+#include "virt-dma.h"
-+
-+/* Loongson-1 DMA Control Register */
-+#define LS1X_DMA_CTRL		0x0
-+
-+/* DMA Control Register Bits */
-+#define LS1X_DMA_STOP		BIT(4)
-+#define LS1X_DMA_START		BIT(3)
-+#define LS1X_DMA_ASK_VALID	BIT(2)
-+
-+#define LS1X_DMA_ADDR_MASK	GENMASK(31, 6)
-+
-+/* DMA Next Field Bits */
-+#define LS1X_DMA_NEXT_VALID	BIT(0)
-+
-+/* DMA Command Field Bits */
-+#define LS1X_DMA_RAM2DEV	BIT(12)
-+#define LS1X_DMA_INT		BIT(1)
-+#define LS1X_DMA_INT_MASK	BIT(0)
-+
-+#define LS1X_DMA_MAX_CHANNELS	3
-+#define LS1X_DMA_LLI_ALIGNMENT	(~LS1X_DMA_ADDR_MASK + 1)
-+
-+enum ls1x_dmadesc_offsets {
-+	LS1X_DMADESC_NEXT = 0,
-+	LS1X_DMADESC_SADDR,
-+	LS1X_DMADESC_DADDR,
-+	LS1X_DMADESC_LENGTH,
-+	LS1X_DMADESC_STRIDE,
-+	LS1X_DMADESC_CYCLES,
-+	LS1X_DMADESC_CMD,
-+	LS1X_DMADESC_SIZE
-+};
-+
-+struct ls1x_dma_lli {
-+	unsigned int hw[LS1X_DMADESC_SIZE];
-+	dma_addr_t phys;
-+	struct list_head node;
-+} __aligned(LS1X_DMA_LLI_ALIGNMENT);
-+
-+struct ls1x_dma_desc {
-+	struct virt_dma_desc vdesc;
-+	struct list_head lli_list;
-+};
-+
-+struct ls1x_dma_chan {
-+	struct virt_dma_chan vchan;
-+	struct dma_pool *lli_pool;
-+	phys_addr_t src_addr;
-+	phys_addr_t dst_addr;
-+	enum dma_slave_buswidth src_addr_width;
-+	enum dma_slave_buswidth dst_addr_width;
-+	unsigned int bus_width;
-+	bool is_cyclic;
-+
-+	void __iomem *reg_base;
-+	int irq;
-+
-+	struct ls1x_dma_lli *curr_lli;
-+};
-+
-+struct ls1x_dma {
-+	struct dma_device ddev;
-+	void __iomem *reg_base;
-+
-+	unsigned int nr_chans;
-+	struct ls1x_dma_chan chan[];
-+};
-+
-+#define to_ls1x_dma_chan(dchan)		\
-+	container_of(dchan, struct ls1x_dma_chan, vchan.chan)
-+
-+#define to_ls1x_dma_desc(vd)		\
-+	container_of(vd, struct ls1x_dma_desc, vdesc)
-+
-+static inline struct device *chan2dev(struct dma_chan *chan)
-+{
-+	return &chan->dev->device;
-+}
-+
-+static inline int ls1x_dma_query(struct ls1x_dma_chan *chan,
-+				 dma_addr_t *lli_phys)
-+{
-+	struct dma_chan *dchan = &chan->vchan.chan;
-+	int val, ret;
-+
-+	val = *lli_phys & LS1X_DMA_ADDR_MASK;
-+	val |= LS1X_DMA_ASK_VALID;
-+	val |= dchan->chan_id;
-+	writel(val, chan->reg_base + LS1X_DMA_CTRL);
-+	ret = readl_poll_timeout_atomic(chan->reg_base + LS1X_DMA_CTRL, val,
-+					!(val & LS1X_DMA_ASK_VALID), 0, 3000);
-+	if (ret)
-+		dev_err(chan2dev(dchan), "failed to query DMA\n");
-+
-+	return ret;
-+}
-+
-+static inline int ls1x_dma_start(struct ls1x_dma_chan *chan,
-+				 dma_addr_t *lli_phys)
-+{
-+	struct dma_chan *dchan = &chan->vchan.chan;
-+	int val, ret;
-+
-+	val = *lli_phys & LS1X_DMA_ADDR_MASK;
-+	val |= LS1X_DMA_START;
-+	val |= dchan->chan_id;
-+	writel(val, chan->reg_base + LS1X_DMA_CTRL);
-+	ret = readl_poll_timeout(chan->reg_base + LS1X_DMA_CTRL, val,
-+				 !(val & LS1X_DMA_START), 0, 3000);
-+	if (!ret)
-+		dev_dbg(chan2dev(dchan), "start DMA with lli_phys=%pad\n",
-+			lli_phys);
-+	else
-+		dev_err(chan2dev(dchan), "failed to start DMA\n");
-+
-+	return ret;
-+}
-+
-+static inline void ls1x_dma_stop(struct ls1x_dma_chan *chan)
-+{
-+	int val = readl(chan->reg_base + LS1X_DMA_CTRL);
-+
-+	writel(val | LS1X_DMA_STOP, chan->reg_base + LS1X_DMA_CTRL);
-+}
-+
-+static void ls1x_dma_free_chan_resources(struct dma_chan *dchan)
-+{
-+	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
-+
-+	dma_free_coherent(chan2dev(dchan), sizeof(struct ls1x_dma_lli),
-+			  chan->curr_lli, chan->curr_lli->phys);
-+	vchan_free_chan_resources(&chan->vchan);
-+	dma_pool_destroy(chan->lli_pool);
-+	chan->lli_pool = NULL;
-+}
-+
-+static int ls1x_dma_alloc_chan_resources(struct dma_chan *dchan)
-+{
-+	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
-+	dma_addr_t phys;
-+
-+	chan->lli_pool = dma_pool_create(dma_chan_name(dchan), chan2dev(dchan),
-+					 sizeof(struct ls1x_dma_lli),
-+					 __alignof__(struct ls1x_dma_lli), 0);
-+	if (!chan->lli_pool)
-+		return -ENOMEM;
-+
-+	/* allocate memory for querying the current lli */
-+	dma_set_coherent_mask(chan2dev(dchan), DMA_BIT_MASK(32));
-+	chan->curr_lli = dma_alloc_coherent(chan2dev(dchan),
-+					    sizeof(struct ls1x_dma_lli), &phys,
-+					    GFP_KERNEL);
-+	if (!chan->curr_lli) {
-+		dma_pool_destroy(chan->lli_pool);
-+		return -ENOMEM;
-+	}
-+	chan->curr_lli->phys = phys;
-+
-+	return 0;
-+}
-+
-+static inline void ls1x_dma_free_lli(struct ls1x_dma_chan *chan,
-+				     struct ls1x_dma_lli *lli)
-+{
-+	list_del(&lli->node);
-+	dma_pool_free(chan->lli_pool, lli, lli->phys);
-+}
-+
-+static int ls1x_dma_alloc_llis(struct dma_chan *dchan,
-+			       struct ls1x_dma_desc *desc,
-+			       struct scatterlist *sgl, unsigned int sg_len,
-+			       enum dma_transfer_direction dir, bool is_cyclic)
-+{
-+	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
-+	struct ls1x_dma_lli *lli, *prev = NULL, *first = NULL;
-+	struct list_head *pos = NULL;
-+	struct scatterlist *sg;
-+	unsigned int dev_addr, cmd, i;
-+
-+	switch (dir) {
-+	case DMA_MEM_TO_DEV:
-+		dev_addr = chan->dst_addr;
-+		chan->bus_width = chan->dst_addr_width;
-+		cmd = LS1X_DMA_RAM2DEV | LS1X_DMA_INT;
-+		break;
-+	case DMA_DEV_TO_MEM:
-+		dev_addr = chan->src_addr;
-+		chan->bus_width = chan->src_addr_width;
-+		cmd = LS1X_DMA_INT;
-+		break;
-+	default:
-+		dev_err(chan2dev(dchan), "unsupported DMA direction: %s\n",
-+			dmaengine_get_direction_text(dir));
-+		return -EINVAL;
-+	}
-+
-+	for_each_sg(sgl, sg, sg_len, i) {
-+		dma_addr_t buf_addr = sg_dma_address(sg);
-+		size_t buf_len = sg_dma_len(sg);
-+		dma_addr_t phys;
-+
-+		if (!is_dma_copy_aligned(dchan->device, buf_addr, 0, buf_len)) {
-+			dev_err(chan2dev(dchan), "buffer is not aligned\n");
-+			return -EINVAL;
-+		}
-+
-+		/* allocate HW descriptors */
-+		lli = dma_pool_zalloc(chan->lli_pool, GFP_NOWAIT, &phys);
-+		if (!lli) {
-+			dev_err(chan2dev(dchan), "failed to alloc lli %u\n", i);
-+			return -ENOMEM;
-+		}
-+
-+		/* setup HW descriptors */
-+		lli->phys = phys;
-+		lli->hw[LS1X_DMADESC_SADDR] = buf_addr;
-+		lli->hw[LS1X_DMADESC_DADDR] = dev_addr;
-+		lli->hw[LS1X_DMADESC_LENGTH] = buf_len / chan->bus_width;
-+		lli->hw[LS1X_DMADESC_STRIDE] = 0;
-+		lli->hw[LS1X_DMADESC_CYCLES] = 1;
-+		lli->hw[LS1X_DMADESC_CMD] = cmd;
-+
-+		if (prev)
-+			prev->hw[LS1X_DMADESC_NEXT] =
-+			    lli->phys | LS1X_DMA_NEXT_VALID;
-+		prev = lli;
-+
-+		if (!first)
-+			first = lli;
-+
-+		list_add_tail(&lli->node, &desc->lli_list);
-+	}
-+
-+	if (is_cyclic) {
-+		lli->hw[LS1X_DMADESC_NEXT] = first->phys | LS1X_DMA_NEXT_VALID;
-+		chan->is_cyclic = is_cyclic;
-+	}
-+
-+	list_for_each(pos, &desc->lli_list) {
-+		lli = list_entry(pos, struct ls1x_dma_lli, node);
-+		print_hex_dump_debug("LLI: ", DUMP_PREFIX_OFFSET, 16, 4,
-+				     lli, sizeof(*lli), false);
-+	}
-+
-+	return 0;
-+}
-+
-+static void ls1x_dma_free_desc(struct virt_dma_desc *vdesc)
-+{
-+	struct ls1x_dma_desc *desc = to_ls1x_dma_desc(vdesc);
-+	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(vdesc->tx.chan);
-+	struct ls1x_dma_lli *lli, *_lli;
-+
-+	list_for_each_entry_safe(lli, _lli, &desc->lli_list, node)
-+		ls1x_dma_free_lli(chan, lli);
-+
-+	kfree(desc);
-+}
-+
-+static struct ls1x_dma_desc *ls1x_dma_alloc_desc(void)
-+{
-+	struct ls1x_dma_desc *desc;
-+
-+	desc = kzalloc(sizeof(*desc), GFP_NOWAIT);
-+	if (!desc)
-+		return NULL;
-+
-+	INIT_LIST_HEAD(&desc->lli_list);
-+
-+	return desc;
-+}
-+
-+static struct dma_async_tx_descriptor *
-+ls1x_dma_prep_slave_sg(struct dma_chan *dchan, struct scatterlist *sgl,
-+		       unsigned int sg_len, enum dma_transfer_direction dir,
-+		       unsigned long flags, void *context)
-+{
-+	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
-+	struct ls1x_dma_desc *desc;
-+
-+	dev_dbg(chan2dev(dchan), "sg_len=%u flags=0x%lx dir=%s\n",
-+		sg_len, flags, dmaengine_get_direction_text(dir));
-+
-+	desc = ls1x_dma_alloc_desc();
-+	if (!desc)
-+		return NULL;
-+
-+	if (ls1x_dma_alloc_llis(dchan, desc, sgl, sg_len, dir, false)) {
-+		ls1x_dma_free_desc(&desc->vdesc);
-+		return NULL;
-+	}
-+
-+	return vchan_tx_prep(&chan->vchan, &desc->vdesc, flags);
-+}
-+
-+static struct dma_async_tx_descriptor *
-+ls1x_dma_prep_dma_cyclic(struct dma_chan *dchan, dma_addr_t buf_addr,
-+			 size_t buf_len, size_t period_len,
-+			 enum dma_transfer_direction dir, unsigned long flags)
-+{
-+	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
-+	struct ls1x_dma_desc *desc;
-+	struct scatterlist *sgl;
-+	unsigned int sg_len;
-+	unsigned int i;
-+	int ret;
-+
-+	dev_dbg(chan2dev(dchan),
-+		"buf_len=%zu period_len=%zu flags=0x%lx dir=%s\n",
-+		buf_len, period_len, flags, dmaengine_get_direction_text(dir));
-+
-+	desc = ls1x_dma_alloc_desc();
-+	if (!desc)
-+		return NULL;
-+
-+	/* allocate the scatterlist */
-+	sg_len = buf_len / period_len;
-+	sgl = kmalloc_array(sg_len, sizeof(*sgl), GFP_NOWAIT);
-+	if (!sgl)
-+		return NULL;
-+
-+	sg_init_table(sgl, sg_len);
-+	for (i = 0; i < sg_len; ++i) {
-+		sg_set_page(&sgl[i], pfn_to_page(PFN_DOWN(buf_addr)),
-+			    period_len, offset_in_page(buf_addr));
-+		sg_dma_address(&sgl[i]) = buf_addr;
-+		sg_dma_len(&sgl[i]) = period_len;
-+		buf_addr += period_len;
-+	}
-+
-+	ret = ls1x_dma_alloc_llis(dchan, desc, sgl, sg_len, dir, true);
-+	kfree(sgl);
-+	if (ret) {
-+		ls1x_dma_free_desc(&desc->vdesc);
-+		return NULL;
-+	}
-+
-+	return vchan_tx_prep(&chan->vchan, &desc->vdesc, flags);
-+}
-+
-+static int ls1x_dma_slave_config(struct dma_chan *dchan,
-+				 struct dma_slave_config *config)
-+{
-+	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
-+
-+	chan->src_addr = config->src_addr;
-+	chan->src_addr_width = config->src_addr_width;
-+	chan->dst_addr = config->dst_addr;
-+	chan->dst_addr_width = config->dst_addr_width;
-+
-+	return 0;
-+}
-+
-+static int ls1x_dma_pause(struct dma_chan *dchan)
-+{
-+	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
-+	unsigned long flags;
-+	int ret;
-+
-+	spin_lock_irqsave(&chan->vchan.lock, flags);
-+	/* save the current lli */
-+	ret = ls1x_dma_query(chan, &chan->curr_lli->phys);
-+	if (!ret)
-+		ls1x_dma_stop(chan);
-+	spin_unlock_irqrestore(&chan->vchan.lock, flags);
-+
-+	return ret;
-+}
-+
-+static int ls1x_dma_resume(struct dma_chan *dchan)
-+{
-+	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
-+	unsigned long flags;
-+	int ret;
-+
-+	spin_lock_irqsave(&chan->vchan.lock, flags);
-+	ret = ls1x_dma_start(chan, &chan->curr_lli->phys);
-+	spin_unlock_irqrestore(&chan->vchan.lock, flags);
-+
-+	return ret;
-+}
-+
-+static int ls1x_dma_terminate_all(struct dma_chan *dchan)
-+{
-+	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
-+	struct virt_dma_desc *vdesc;
-+	unsigned long flags;
-+	LIST_HEAD(head);
-+
-+	spin_lock_irqsave(&chan->vchan.lock, flags);
-+	ls1x_dma_stop(chan);
-+	vdesc = vchan_next_desc(&chan->vchan);
-+	if (vdesc)
-+		vchan_terminate_vdesc(vdesc);
-+	vchan_get_all_descriptors(&chan->vchan, &head);
-+	spin_unlock_irqrestore(&chan->vchan.lock, flags);
-+
-+	vchan_dma_desc_free_list(&chan->vchan, &head);
-+
-+	return 0;
-+}
-+
-+static enum dma_status ls1x_dma_tx_status(struct dma_chan *dchan,
-+					  dma_cookie_t cookie,
-+					  struct dma_tx_state *state)
-+{
-+	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
-+	struct virt_dma_desc *vdesc;
-+	unsigned long flags;
-+	enum dma_status status;
-+	size_t bytes = 0;
-+
-+	status = dma_cookie_status(dchan, cookie, state);
-+	if (status == DMA_COMPLETE)
-+		return status;
-+
-+	spin_lock_irqsave(&chan->vchan.lock, flags);
-+
-+	vdesc = vchan_find_desc(&chan->vchan, cookie);
-+	if (vdesc) {
-+		struct ls1x_dma_desc *desc = to_ls1x_dma_desc(vdesc);
-+		struct ls1x_dma_lli *lli;
-+		dma_addr_t next_phys;
-+
-+		/* get the current lli */
-+		if (ls1x_dma_query(chan, &chan->curr_lli->phys)) {
-+			spin_unlock_irqrestore(&chan->vchan.lock, flags);
-+			return status;
-+		}
-+		next_phys = chan->curr_lli->hw[LS1X_DMADESC_NEXT];
-+
-+		/* locate the current lli */
-+		list_for_each_entry(lli, &desc->lli_list, node)
-+			if (lli->hw[LS1X_DMADESC_NEXT] == next_phys)
-+				break;
-+
-+		dev_dbg(chan2dev(dchan), "current lli_phys=%pad", &lli->phys);
-+
-+		/* count the residues */
-+		list_for_each_entry_from(lli, &desc->lli_list, node)
-+			bytes += lli->hw[LS1X_DMADESC_LENGTH] * chan->bus_width;
-+	}
-+
-+	spin_unlock_irqrestore(&chan->vchan.lock, flags);
-+
-+	dma_set_residue(state, bytes);
-+
-+	return status;
-+}
-+
-+static void ls1x_dma_issue_pending(struct dma_chan *dchan)
-+{
-+	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
-+	struct virt_dma_desc *vdesc;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&chan->vchan.lock, flags);
-+
-+	if (vchan_issue_pending(&chan->vchan)) {
-+		vdesc = vchan_next_desc(&chan->vchan);
-+		if (vdesc) {
-+			struct ls1x_dma_desc *desc = to_ls1x_dma_desc(vdesc);
-+			struct ls1x_dma_lli *lli;
-+
-+			lli = list_first_entry(&desc->lli_list,
-+					       struct ls1x_dma_lli, node);
-+			ls1x_dma_start(chan, &lli->phys);
-+		}
-+	}
-+
-+	spin_unlock_irqrestore(&chan->vchan.lock, flags);
-+}
-+
-+static irqreturn_t ls1x_dma_irq_handler(int irq, void *data)
-+{
-+	struct ls1x_dma_chan *chan = data;
-+	struct dma_chan *dchan = &chan->vchan.chan;
-+	struct virt_dma_desc *vdesc;
-+
-+	spin_lock(&chan->vchan.lock);
-+
-+	vdesc = vchan_next_desc(&chan->vchan);
-+	if (!vdesc) {
-+		spin_unlock(&chan->vchan.lock);
-+		dev_warn(chan2dev(dchan),
-+			 "IRQ %d with no active descriptor on channel %d\n",
-+			 irq, dchan->chan_id);
-+		return IRQ_NONE;
-+	}
-+
-+	if (chan->is_cyclic) {
-+		vchan_cyclic_callback(vdesc);
-+	} else {
-+		list_del(&vdesc->node);
-+		vchan_cookie_complete(vdesc);
-+	}
-+
-+	spin_unlock(&chan->vchan.lock);
-+
-+	dev_dbg(chan2dev(dchan), "DMA IRQ %d on channel %d\n", irq,
-+		dchan->chan_id);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int ls1x_dma_chan_probe(struct platform_device *pdev,
-+			       struct ls1x_dma *dma, int chan_id)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct ls1x_dma_chan *chan = &dma->chan[chan_id];
-+	char pdev_irqname[4];
-+	char *irqname;
-+	int ret;
-+
-+	sprintf(pdev_irqname, "ch%u", chan_id);
-+	chan->irq = platform_get_irq_byname(pdev, pdev_irqname);
-+	if (chan->irq < 0)
-+		return -ENODEV;
-+
-+	irqname = devm_kasprintf(dev, GFP_KERNEL, "%s:%s",
-+				 dev_name(dev), pdev_irqname);
-+	if (!irqname)
-+		return -ENOMEM;
-+
-+	ret = devm_request_irq(dev, chan->irq, ls1x_dma_irq_handler,
-+			       IRQF_SHARED, irqname, chan);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to request IRQ %u\n",
-+				     chan->irq);
-+
-+	chan->reg_base = dma->reg_base;
-+	chan->vchan.desc_free = ls1x_dma_free_desc;
-+	vchan_init(&chan->vchan, &dma->ddev);
-+	dev_info(dev, "%s (irq %d) initialized\n", pdev_irqname, chan->irq);
-+
-+	return 0;
-+}
-+
-+static void ls1x_dma_chan_remove(struct ls1x_dma *dma, int chan_id)
-+{
-+	struct device *dev = dma->ddev.dev;
-+	struct ls1x_dma_chan *chan = &dma->chan[chan_id];
-+
-+	devm_free_irq(dev, chan->irq, chan);
-+	list_del(&chan->vchan.chan.device_node);
-+	tasklet_kill(&chan->vchan.task);
-+}
-+
-+static int ls1x_dma_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct dma_device *ddev;
-+	struct ls1x_dma *dma;
-+	int nr_chans, ret, i;
-+
-+	nr_chans = platform_irq_count(pdev);
-+	if (nr_chans <= 0)
-+		return nr_chans;
-+	if (nr_chans > LS1X_DMA_MAX_CHANNELS)
-+		return dev_err_probe(dev, -EINVAL,
-+				     "nr_chans=%d exceeds the maximum\n",
-+				     nr_chans);
-+
-+	dma = devm_kzalloc(dev, struct_size(dma, chan, nr_chans), GFP_KERNEL);
-+	if (!dma)
-+		return -ENOMEM;
-+
-+	/* initialize DMA device */
-+	dma->reg_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(dma->reg_base))
-+		return PTR_ERR(dma->reg_base);
-+
-+	ddev = &dma->ddev;
-+	ddev->dev = dev;
-+	ddev->copy_align = DMAENGINE_ALIGN_4_BYTES;
-+	ddev->src_addr_widths = BIT(DMA_SLAVE_BUSWIDTH_1_BYTE) |
-+				BIT(DMA_SLAVE_BUSWIDTH_2_BYTES) |
-+				BIT(DMA_SLAVE_BUSWIDTH_4_BYTES);
-+	ddev->dst_addr_widths = BIT(DMA_SLAVE_BUSWIDTH_1_BYTE) |
-+				BIT(DMA_SLAVE_BUSWIDTH_2_BYTES) |
-+				BIT(DMA_SLAVE_BUSWIDTH_4_BYTES);
-+	ddev->directions = BIT(DMA_DEV_TO_MEM) | BIT(DMA_MEM_TO_DEV);
-+	ddev->residue_granularity = DMA_RESIDUE_GRANULARITY_SEGMENT;
-+	ddev->device_alloc_chan_resources = ls1x_dma_alloc_chan_resources;
-+	ddev->device_free_chan_resources = ls1x_dma_free_chan_resources;
-+	ddev->device_prep_slave_sg = ls1x_dma_prep_slave_sg;
-+	ddev->device_prep_dma_cyclic = ls1x_dma_prep_dma_cyclic;
-+	ddev->device_config = ls1x_dma_slave_config;
-+	ddev->device_pause = ls1x_dma_pause;
-+	ddev->device_resume = ls1x_dma_resume;
-+	ddev->device_terminate_all = ls1x_dma_terminate_all;
-+	ddev->device_tx_status = ls1x_dma_tx_status;
-+	ddev->device_issue_pending = ls1x_dma_issue_pending;
-+
-+	dma_cap_set(DMA_SLAVE, ddev->cap_mask);
-+	INIT_LIST_HEAD(&ddev->channels);
-+
-+	/* initialize DMA channels */
-+	for (i = 0; i < nr_chans; i++) {
-+		ret = ls1x_dma_chan_probe(pdev, dma, i);
-+		if (ret)
-+			return ret;
-+	}
-+	dma->nr_chans = nr_chans;
-+
-+	ret = dmaenginem_async_device_register(ddev);
-+	if (ret) {
-+		dev_err(dev, "failed to register DMA device! %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = of_dma_controller_register(dev->of_node, of_dma_xlate_by_chan_id,
-+					 ddev);
-+	if (ret) {
-+		dev_err(dev, "failed to register DMA controller! %d\n", ret);
-+		return ret;
-+	}
-+
-+	platform_set_drvdata(pdev, dma);
-+	dev_info(dev, "Loongson1 DMA driver registered\n");
-+
-+	return 0;
-+}
-+
-+static void ls1x_dma_remove(struct platform_device *pdev)
-+{
-+	struct ls1x_dma *dma = platform_get_drvdata(pdev);
-+	int i;
-+
-+	of_dma_controller_free(pdev->dev.of_node);
-+
-+	for (i = 0; i < dma->nr_chans; i++)
-+		ls1x_dma_chan_remove(dma, i);
-+}
-+
-+static const struct of_device_id ls1x_dma_match[] = {
-+	{ .compatible = "loongson,ls1b-apbdma" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, ls1x_dma_match);
-+
-+static struct platform_driver ls1x_dma_driver = {
-+	.probe = ls1x_dma_probe,
-+	.remove_new = ls1x_dma_remove,
-+	.driver = {
-+		.name = KBUILD_MODNAME,
-+		.of_match_table = ls1x_dma_match,
-+	},
-+};
-+
-+module_platform_driver(ls1x_dma_driver);
-+
-+MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
-+MODULE_DESCRIPTION("Loongson-1 APB DMA Controller driver");
-+MODULE_LICENSE("GPL");
+Note, I'm purposefully not capturing the delta from v11=>v12, because
+there is zero chance I will get everything, and while this is a spiritual
+successor to David's v11, in practice it's like 98% new code.
 
+[*] https://lore.kernel.org/all/20240320005024.3216282-1-seanjc@google.com
+
+David Stevens (3):
+  KVM: Replace "async" pointer in gfn=>pfn with "no_wait" and error code
+  KVM: Introduce kvm_follow_pfn() to eventually replace "gfn_to_pfn"
+    APIs
+  KVM: Migrate kvm_vcpu_map() to kvm_follow_pfn()
+
+Sean Christopherson (81):
+  KVM: arm64: Release pfn, i.e. put page, if copying MTE tags hits
+    ZONE_DEVICE
+  KVM: arm64: Disallow copying MTE to guest memory while KVM is dirty
+    logging
+  KVM: Drop KVM_ERR_PTR_BAD_PAGE and instead return NULL to indicate an
+    error
+  KVM: Allow calling kvm_release_page_{clean,dirty}() on a NULL page
+    pointer
+  KVM: Add kvm_release_page_unused() API to put pages that KVM never
+    consumes
+  KVM: x86/mmu: Skip the "try unsync" path iff the old SPTE was a leaf
+    SPTE
+  KVM: x86/mmu: Mark folio dirty when creating SPTE, not when
+    zapping/modifying
+  KVM: x86/mmu: Mark page/folio accessed only when zapping leaf SPTEs
+  KVM: x86/mmu: Don't force flush if SPTE update clears Accessed bit
+  KVM: x86/mmu: Use gfn_to_page_many_atomic() when prefetching indirect
+    PTEs
+  KVM: Rename gfn_to_page_many_atomic() to kvm_prefetch_pages()
+  KVM: Drop @atomic param from gfn=>pfn and hva=>pfn APIs
+  KVM: Annotate that all paths in hva_to_pfn() might sleep
+  KVM: x86/mmu: Drop kvm_page_fault.hva, i.e. don't track intermediate
+    hva
+  KVM: Drop unused "hva" pointer from __gfn_to_pfn_memslot()
+  KVM: Remove pointless sanity check on @map param to kvm_vcpu_(un)map()
+  KVM: Explicitly initialize all fields at the start of kvm_vcpu_map()
+  KVM: Use NULL for struct page pointer to indicate mremapped memory
+  KVM: nVMX: Rely on kvm_vcpu_unmap() to track validity of eVMCS mapping
+  KVM: nVMX: Drop pointless msr_bitmap_map field from struct nested_vmx
+  KVM: nVMX: Add helper to put (unmap) vmcs12 pages
+  KVM: Use plain "struct page" pointer instead of single-entry array
+  KVM: Provide refcounted page as output field in struct kvm_follow_pfn
+  KVM: Move kvm_{set,release}_page_{clean,dirty}() helpers up in
+    kvm_main.c
+  KVM: pfncache: Precisely track refcounted pages
+  KVM: Pin (as in FOLL_PIN) pages during kvm_vcpu_map()
+  KVM: nVMX: Mark vmcs12's APIC access page dirty when unmapping
+  KVM: Pass in write/dirty to kvm_vcpu_map(), not kvm_vcpu_unmap()
+  KVM: Get writable mapping for __kvm_vcpu_map() only when necessary
+  KVM: Disallow direct access (w/o mmu_notifier) to unpinned pfn by
+    default
+  KVM: Add a helper to lookup a pfn without grabbing a reference
+  KVM: x86: Use kvm_lookup_pfn() to check if retrying #PF is useful
+  KVM: x86: Use kvm_lookup_pfn() to check if APIC access page was
+    installed
+  KVM: x86/mmu: Add "mmu" prefix fault-in helpers to free up generic
+    names
+  KVM: x86/mmu: Put direct prefetched pages via kvm_release_page_clean()
+  KVM: x86/mmu: Add common helper to handle prefetching SPTEs
+  KVM: x86/mmu: Add helper to "finish" handling a guest page fault
+  KVM: x86/mmu: Mark pages/folios dirty at the origin of make_spte()
+  KVM: Move declarations of memslot accessors up in kvm_host.h
+  KVM: Add kvm_faultin_pfn() to specifically service guest page faults
+  KVM: x86/mmu: Convert page fault paths to kvm_faultin_pfn()
+  KVM: guest_memfd: Provide "struct page" as output from
+    kvm_gmem_get_pfn()
+  KVM: x86/mmu: Put refcounted pages instead of blindly releasing pfns
+  KVM: x86/mmu: Don't mark unused faultin pages as accessed
+  KVM: Move x86's API to release a faultin page to common KVM
+  KVM: VMX: Hold mmu_lock until page is released when updating APIC
+    access page
+  KVM: VMX: Use __kvm_faultin_page() to get APIC access page/pfn
+  KVM: PPC: e500: Mark "struct page" dirty in kvmppc_e500_shadow_map()
+  KVM: PPC: e500: Mark "struct page" pfn accessed before dropping
+    mmu_lock
+  KVM: PPC: e500: Use __kvm_faultin_pfn() to handle page faults
+  KVM: arm64: Mark "struct page" pfns accessed/dirty before dropping
+    mmu_lock
+  KVM: arm64: Use __kvm_faultin_pfn() to handle memory aborts
+  KVM: RISC-V: Mark "struct page" pfns dirty iff a stage-2 PTE is
+    installed
+  KVM: RISC-V: Mark "struct page" pfns accessed before dropping mmu_lock
+  KVM: RISC-V: Use kvm_faultin_pfn() when mapping pfns into the guest
+  KVM: PPC: Use __kvm_faultin_pfn() to handle page faults on Book3s HV
+  KVM: PPC: Use __kvm_faultin_pfn() to handle page faults on Book3s
+    Radix
+  KVM: PPC: Drop unused @kvm_ro param from
+    kvmppc_book3s_instantiate_page()
+  KVM: PPC: Book3S: Mark "struct page" pfns dirty/accessed after
+    installing PTE
+  KVM: PPC: Use kvm_faultin_pfn() to handle page faults on Book3s PR
+  KVM: LoongArch: Mark "struct page" pfns dirty only in "slow" page
+    fault path
+  KVM: LoongArch: Mark "struct page" pfns accessed only in "slow" page
+    fault path
+  KVM: LoongArch: Mark "struct page" pfn accessed before dropping
+    mmu_lock
+  KVM: LoongArch: Use kvm_faultin_pfn() to map pfns into the guest
+  KVM: MIPS: Mark "struct page" pfns dirty only in "slow" page fault
+    path
+  KVM: MIPS: Mark "struct page" pfns accessed only in "slow" page fault
+    path
+  KVM: MIPS: Mark "struct page" pfns accessed prior to dropping mmu_lock
+  KVM: MIPS: Use kvm_faultin_pfn() to map pfns into the guest
+  KVM: PPC: Remove extra get_page() to fix page refcount leak
+  KVM: PPC: Use kvm_vcpu_map() to map guest memory to patch dcbz
+    instructions
+  KVM: Convert gfn_to_page() to use kvm_follow_pfn()
+  KVM: Add support for read-only usage of gfn_to_page()
+  KVM: arm64: Use __gfn_to_page() when copying MTE tags to/from
+    userspace
+  KVM: PPC: Explicitly require struct page memory for Ultravisor sharing
+  KVM: Drop gfn_to_pfn() APIs now that all users are gone
+  KVM: s390: Use kvm_release_page_dirty() to unpin "struct page" memory
+  KVM: Make kvm_follow_pfn.refcounted_page a required field
+  KVM: x86/mmu: Don't mark "struct page" accessed when zapping SPTEs
+  KVM: arm64: Don't mark "struct page" accessed when making SPTE young
+  KVM: Drop APIs that manipulate "struct page" via pfns
+  KVM: Don't grab reference on VM_MIXEDMAP pfns that have a "struct
+    page"
+
+ Documentation/virt/kvm/locking.rst     |  80 ++--
+ arch/arm64/include/asm/kvm_pgtable.h   |   4 +-
+ arch/arm64/kvm/guest.c                 |  25 +-
+ arch/arm64/kvm/hyp/pgtable.c           |   7 +-
+ arch/arm64/kvm/mmu.c                   |  21 +-
+ arch/loongarch/kvm/mmu.c               |  40 +-
+ arch/mips/kvm/mmu.c                    |  26 +-
+ arch/powerpc/include/asm/kvm_book3s.h  |   4 +-
+ arch/powerpc/kvm/book3s.c              |   7 +-
+ arch/powerpc/kvm/book3s_32_mmu_host.c  |   7 +-
+ arch/powerpc/kvm/book3s_64_mmu_host.c  |  12 +-
+ arch/powerpc/kvm/book3s_64_mmu_hv.c    |  25 +-
+ arch/powerpc/kvm/book3s_64_mmu_radix.c |  35 +-
+ arch/powerpc/kvm/book3s_hv_nested.c    |   4 +-
+ arch/powerpc/kvm/book3s_hv_uvmem.c     |  25 +-
+ arch/powerpc/kvm/book3s_pr.c           |  14 +-
+ arch/powerpc/kvm/book3s_xive_native.c  |   2 +-
+ arch/powerpc/kvm/e500_mmu_host.c       |  19 +-
+ arch/riscv/kvm/mmu.c                   |   9 +-
+ arch/s390/kvm/vsie.c                   |   4 +-
+ arch/x86/kvm/lapic.c                   |  15 +-
+ arch/x86/kvm/mmu/mmu.c                 | 191 ++++----
+ arch/x86/kvm/mmu/mmu_internal.h        |   5 +-
+ arch/x86/kvm/mmu/paging_tmpl.h         |  29 +-
+ arch/x86/kvm/mmu/spte.c                |  23 +-
+ arch/x86/kvm/mmu/tdp_mmu.c             |  16 -
+ arch/x86/kvm/svm/nested.c              |   4 +-
+ arch/x86/kvm/svm/sev.c                 |  12 +-
+ arch/x86/kvm/svm/svm.c                 |   8 +-
+ arch/x86/kvm/vmx/nested.c              |  42 +-
+ arch/x86/kvm/vmx/vmx.c                 |  28 +-
+ arch/x86/kvm/vmx/vmx.h                 |   2 -
+ arch/x86/kvm/x86.c                     |  16 +-
+ include/linux/kvm_host.h               | 124 +++--
+ virt/kvm/guest_memfd.c                 |  19 +-
+ virt/kvm/kvm_main.c                    | 603 ++++++++++---------------
+ virt/kvm/kvm_mm.h                      |  36 +-
+ virt/kvm/pfncache.c                    |  20 +-
+ 38 files changed, 698 insertions(+), 865 deletions(-)
+
+
+base-commit: 332d2c1d713e232e163386c35a3ba0c1b90df83f
 -- 
-2.43.0
-
+2.46.0.rc1.232.g9752f9e123-goog
 
 
