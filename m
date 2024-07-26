@@ -1,171 +1,169 @@
-Return-Path: <linux-mips+bounces-4466-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4468-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C74B493D083
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jul 2024 11:40:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD4CF93D3B2
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jul 2024 15:07:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E4D61F22268
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jul 2024 09:40:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7694E1F2453C
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jul 2024 13:07:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2E53178379;
-	Fri, 26 Jul 2024 09:40:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4EDE17BB05;
+	Fri, 26 Jul 2024 13:07:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="erbBnHVt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YGeRQpfs"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A1B41A286;
-	Fri, 26 Jul 2024 09:40:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A158176AB4;
+	Fri, 26 Jul 2024 13:07:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721986831; cv=none; b=cSKIVcGjEuOI9NDHxWdnPFSYJGadddiqw0Bw/0X10KKNQXsK+T586XWkmjViHLQBi75JLWTcx9H8jD/kPQa1zuF3d+av7WhxwGg7eOxlMiDVNHR1rTzuAL+3Qb/YC/yfXZCT/5G/nII3OjHukfkaWkPJm2ERsBsTgwytbSaoGUY=
+	t=1721999252; cv=none; b=iDPiGupF0/9nNsDOpiHuHAuR9dtd4CRbxVMAMYOC0Iiquk/1BLX/uhlv+z2hcrB6OgNKFtsKBySk3jP4qP3tNXB3C17yMQ8qIRDAnwwJfmvQ6396MgYq0jzYSsrEDj62m6VwJtKUZBKMRUFyMA8p49i/6H6GK17w/QKFEVIdZEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721986831; c=relaxed/simple;
-	bh=/W5kbKWSvcsVRYIH6lNhUURaeOalcNxprGj7xwqXc8w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EBFRF6w5Vc95asL3rDHbR9IyvGpyJW8RyLF4m8jvJfeiZ9TbNfkxFXhNTkEgyb2EfbKzOkhe8itvQ8yDnIc34LaRSjJTPpRK1uaaclvpze6DmYhMZ1ytM4j6x22UoK01mD6eCTSao2XH4fzP6WxwehwuZW3EQQVd+ba9Yh5W9zg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=erbBnHVt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9535FC32782;
-	Fri, 26 Jul 2024 09:40:17 +0000 (UTC)
+	s=arc-20240116; t=1721999252; c=relaxed/simple;
+	bh=o2zx3o5hVHzdjVgk8ltvnYkXMU43duXbPFt5gvBbsu0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=SkC07hCh/sukM2hjPmGtGflUD2P1BCl8E21C4ITsSXI9IWIIafb4XHmnQT58Z3ByxDUi5WEKhk1c82PtKXZAWc9r7uYI1NXmu2zDJffTVwyGeeCOwqRMkl6jYk1FJP+vshBKJqkUin3wnJp1zWQXRNHDSngGBX6JHWbFu6ZVZAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YGeRQpfs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EAC30C32782;
+	Fri, 26 Jul 2024 13:07:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721986830;
-	bh=/W5kbKWSvcsVRYIH6lNhUURaeOalcNxprGj7xwqXc8w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=erbBnHVtheMUAGs7sb6st1OpVR9FaIVHYj78yec90OKFphlkSZV5k/wAOzf9v7bHw
-	 qD/B4sk/oLODwsgv3p0XiErsiTqRDrNBJUfunPPt2ly/fcLhz146SfXfrJeznvLkZe
-	 U5MzHL6oELYwecQ5CE2FRGA7zc5ak6Om4kOHFE+xDor4Bpwaxj+6BMtxs9zpKRb0zj
-	 t0frO2fOt1mK8tuZJlZLn78/gGZpvARM3U+4DMaFSKK7j8fCZBwVSU2h9+v0uuhWmf
-	 doJp2N540bOFVoqeMi8DgOk/gCs4xM/TGYVOkNqWaGGBNobmAGDB5q2iYuCtHTHaiN
-	 kQwqqR1cv6trg==
-Date: Fri, 26 Jul 2024 12:40:03 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Zi Yan <ziy@nvidia.com>
-Cc: linux-kernel@vger.kernel.org,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	David Hildenbrand <david@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vasily Gorbik <gor@linux.ibm.com>, Will Deacon <will@kernel.org>,
-	devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-cxl@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev, nvdimm@lists.linux.dev,
-	sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v2 00/25] mm: introduce numa_memblks
-Message-ID: <ZqNu8zwjhiTkbpIB@kernel.org>
-References: <20240723064156.4009477-1-rppt@kernel.org>
- <1D474894-F8AC-427B-8F90-5A6808E77CC5@nvidia.com>
- <6336C276-113E-4D93-A09E-13420A6438D8@nvidia.com>
- <231F6DF6-96C8-4149-92CF-4FC03C9FE357@nvidia.com>
+	s=k20201202; t=1721999252;
+	bh=o2zx3o5hVHzdjVgk8ltvnYkXMU43duXbPFt5gvBbsu0=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=YGeRQpfsDTurlNnk2XQ6cYuuthXJgBHCIzN803835Kh86B4c3gUl0CewljvoPa7K/
+	 aaJGkKy6WpGNSxOuIaFA6AwL+sN+aUVG4NvSgREhGw3sEhirxovIBIWpSDHM3DczNX
+	 CTdaqoOBXLvdc0abzoA3J1V4yCGl6yYkolqel4/vRCpvtpcLV/yFdiJScqfxtxuCkR
+	 ubuYIKabgg6mRtDpvBw6XV7MEfiPJxiaPVvT/xnjVMZQPYVFHahhNQ469oIPJKpzz5
+	 bMDmiRlYskRzf8Km6uyuuYQQvuRq3PMEFkRRBATg0ohuCTyXXvJ+OOqSwyEPRcNpx2
+	 OZJpmPlAw8oOw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD822C3DA49;
+	Fri, 26 Jul 2024 13:07:31 +0000 (UTC)
+From: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>
+Subject: [PATCH v10 0/2] Add support for Loongson1 APB DMA
+Date: Fri, 26 Jul 2024 21:06:48 +0800
+Message-Id: <20240726-loongson1-dma-v10-0-31bf095a6fa6@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <231F6DF6-96C8-4149-92CF-4FC03C9FE357@nvidia.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGifo2YC/13OTU7DMBAF4KtUXuPIM67/WHEPxCK1J4lFEyO7R
+ ECVu+N0AZGXM9L33ruzQjlSYc+nO8u0xhLTUg8QTyfmp34ZicdQHwwFSgAU/JrSMpa0AA9zz0H
+ LfiBlhL04Vs1HpiF+PQJf3+o95DTz25Sp/0sRDi0gOCU7hWctLAf+TuNnLet+9sqXce7jtfNp3
+ hOnWG4pfz8WrnrP3VPOQoJutqyaC+5EIPTS+9pyCNq3rOag0bXaVC1NuChbNwVSrbb/WgvTalv
+ 14JzDgMqgEq12Bw2y1a5qDRYG9CaQp6Petu0XRxnnsacBAAA=
+To: Keguang Zhang <keguang.zhang@gmail.com>, Vinod Koul <vkoul@kernel.org>, 
+ Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Conor Dooley <conor.dooley@microchip.com>, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1721999250; l=3092;
+ i=keguang.zhang@gmail.com; s=20231129; h=from:subject:message-id;
+ bh=o2zx3o5hVHzdjVgk8ltvnYkXMU43duXbPFt5gvBbsu0=;
+ b=T6wAI6PvcFTCfefJZNNBmUR4tLx2a1DrXnbf/80aDFRgQIvyjh438gbtDn8sSvUFJ37/vpbLh
+ YNjMOHuEFnQA+xmq6Vkk0O1gZKsq/oO1u/u1DNwwQhGD0EdoiIHSRjF
+X-Developer-Key: i=keguang.zhang@gmail.com; a=ed25519;
+ pk=FMKGj/JgKll/MgClpNZ3frIIogsh5e5r8CeW2mr+WLs=
+X-Endpoint-Received: by B4 Relay for keguang.zhang@gmail.com/20231129 with
+ auth_id=102
+X-Original-From: Keguang Zhang <keguang.zhang@gmail.com>
+Reply-To: keguang.zhang@gmail.com
 
-On Wed, Jul 24, 2024 at 10:48:42PM -0400, Zi Yan wrote:
-> On 24 Jul 2024, at 20:35, Zi Yan wrote:
-> > On 24 Jul 2024, at 18:44, Zi Yan wrote:
-> >>
-> >> Hi,
-> >>
-> >> I have tested this series on both x86_64 and arm64. It works fine on x86_64.
-> >> All numa=fake= options work as they did before the series.
-> >>
-> >> But I am not able to boot the kernel (no printout at all) on arm64 VM
-> >> (Mac mini M1 VMWare). By git bisecting, arch_numa: switch over to numa_memblks
-> >> is the first patch causing the boot failure. I see the warning:
-> >>
-> >> WARNING: modpost: vmlinux: section mismatch in reference: numa_add_cpu+0x1c (section: .text) -> early_cpu_to_node (section: .init.text)
-> >>
-> >> I am not sure if it is red herring or not, since changing early_cpu_to_node
-> >> to cpu_to_node in numa_add_cpu() from mm/numa_emulation.c did get rid of the
-> >> warning, but the system still failed to boot.
-> >>
-> >> Please note that you need binutils 2.40 to build the arm64 kernel, since there
-> >> is a bug(https://sourceware.org/bugzilla/show_bug.cgi?id=31924) in 2.42 preventing
-> >> arm64 kernel from booting as well.
-> >>
-> >> My config is attached.
-> >
-> > I get more info after adding earlycon to the boot option.
-> > pgdat is NULL, causing issues when free_area_init_node() is dereferencing
-> > it at first WARN_ON.
-> >
-> > FYI, my build is this series on top of v6.10 instead of the base commit,
-> > where the series applies cleanly on top v6.10.
-> 
-> OK, the issue comes from that my arm64 VM has no ACPI but x86_64 VM has it,
-> thus on arm64 VM numa_init(arch_acpi_numa_ini) failed in arch_numa_init()
-> and the code falls back to numa_init(dummy_numa_init). In dummy_numa_init(),
-> before patch 23 "arch_numa: switch over to numa_memblks", numa_add_memblk()
-> from drivers/base/arch_numa.c is called on arm64, which unconditionally
-> set 0 to numa_nodes_parsed. This is missing in the x86 version of
-> numa_add_memblk(), which is now used by all arch. By adding the patch
-> below, my arm64 kernel boots in the VM.
-> 
-> 
-> diff --git a/drivers/base/arch_numa.c b/drivers/base/arch_numa.c
-> index 806550239d08..354f15b8d9b7 100644
-> --- a/drivers/base/arch_numa.c
-> +++ b/drivers/base/arch_numa.c
-> @@ -279,6 +279,7 @@ static int __init dummy_numa_init(void)
->                 pr_err("NUMA init failed\n");
->                 return ret;
->         }
-> +       node_set(0, numa_nodes_parsed);
-> 
->         numa_off = true;
->         return 0;
-> 
-> 
-> Feel free to add
-> 
-> Tested-by: Zi Yan <ziy@nvidia.com> # for x86_64 and arm64
-> 
-> after you incorporate the fix.
+Add the driver and dt-binding document for Loongson1 APB DMA.
 
-Thanks a lot for testing, debugging and fixing! 
-> 
-> --
-> Best Regards,
-> Yan, Zi
+---
+Changes in v10:
+- Implement the hwdescs by link list to eliminate the limitation of the desc number.
+- Add the prefix 'LS1X_' for all registers and their bits.
+- Drop the macros: chan_readl() and chan_writel().
+- Use %pad for printing a dma_addr_t type.
+- Some minor fixes.
+- Link to v9: https://lore.kernel.org/r/20240613-loongson1-dma-v9-0-6181f2c7dece@gmail.com
 
+Changes in v9:
+- Fix all the errors and warnings when building with W=1 and C=1
+- Link to v8: https://lore.kernel.org/r/20240607-loongson1-dma-v8-0-f9992d257250@gmail.com
 
+Changes in v8:
+- Change 'interrupts' property to an items list
+- Link to v7: https://lore.kernel.org/r/20240329-loongson1-dma-v7-0-37db58608de5@gmail.com
 
+Changes in v7:
+- Change the comptible to 'loongson,ls1*-apbdma' (suggested by Huacai Chen)
+- Update the title and description part accordingly
+- Rename the file to loongson,ls1b-apbdma.yaml
+- Add a compatible string for LS1A
+- Delete minItems of 'interrupts'
+- Change patterns of 'interrupt-names' to const
+- Rename the file to loongson1-apb-dma.c to keep the consistency
+- Update Kconfig and Makefile accordingly
+- Link to v6: https://lore.kernel.org/r/20240316-loongson1-dma-v6-0-90de2c3cc928@gmail.com
+
+Changes in v6:
+- Change the compatible to the fallback
+- Implement .device_prep_dma_cyclic for Loongson1 sound driver,
+  as well as .device_pause and .device_resume.
+- Set the limitation LS1X_DMA_MAX_DESC and put all descriptors
+  into one page to save memory
+- Move dma_pool_zalloc() into ls1x_dma_alloc_desc()
+- Drop dma_slave_config structure
+- Use .remove_new instead of .remove
+- Use KBUILD_MODNAME for the driver name
+- Improve the debug information
+- Some minor fixes
+
+Changes in v5:
+- Add the dt-binding document
+- Add DT support
+- Use DT information instead of platform data
+- Use chan_id of struct dma_chan instead of own id
+- Use of_dma_xlate_by_chan_id() instead of ls1x_dma_filter()
+- Update the author information to my official name
+
+Changes in v4:
+- Use dma_slave_map to find the proper channel.
+- Explicitly call devm_request_irq() and tasklet_kill().
+- Fix namespace issue.
+- Some minor fixes and cleanups.
+
+Changes in v3:
+- Rename ls1x_dma_filter_fn to ls1x_dma_filter.
+
+Changes in v2:
+- Change the config from 'DMA_LOONGSON1' to 'LOONGSON1_DMA',
+- and rearrange it in alphabetical order in Kconfig and Makefile.
+- Fix comment style.
+
+---
+Keguang Zhang (2):
+      dt-bindings: dma: Add Loongson-1 APB DMA
+      dmaengine: Loongson1: Add Loongson-1 APB DMA driver
+
+ .../bindings/dma/loongson,ls1b-apbdma.yaml         |  67 ++
+ drivers/dma/Kconfig                                |   9 +
+ drivers/dma/Makefile                               |   1 +
+ drivers/dma/loongson1-apb-dma.c                    | 675 +++++++++++++++++++++
+ 4 files changed, 752 insertions(+)
+---
+base-commit: 668d33c9ff922c4590c58754ab064aaf53c387dd
+change-id: 20231120-loongson1-dma-163afe5708b9
+
+Best regards,
 -- 
-Sincerely yours,
-Mike.
+Keguang Zhang <keguang.zhang@gmail.com>
+
+
 
