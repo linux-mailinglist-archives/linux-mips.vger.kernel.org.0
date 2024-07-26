@@ -1,72 +1,72 @@
-Return-Path: <linux-mips+bounces-4493-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4494-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD10E93DB8B
-	for <lists+linux-mips@lfdr.de>; Sat, 27 Jul 2024 02:00:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1850793DB8E
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Jul 2024 02:01:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 09FF11C2364E
-	for <lists+linux-mips@lfdr.de>; Sat, 27 Jul 2024 00:00:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2C9A1F2200E
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Jul 2024 00:01:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C83A155337;
-	Fri, 26 Jul 2024 23:53:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F93F17D35D;
+	Fri, 26 Jul 2024 23:53:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wdW9ZL3g"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a9LYv9ah"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C252D17A580
-	for <linux-mips@vger.kernel.org>; Fri, 26 Jul 2024 23:53:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A86617CA06
+	for <linux-mips@vger.kernel.org>; Fri, 26 Jul 2024 23:53:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722038007; cv=none; b=Hb3mg9sKfBA0HTtZCdOjVjuByim2UrUiBBbxPQ6eErd238nxs6x6//UTmBfTEWV8Hw5bFfynyh65nGr6qp9Q/Y3MrVnMELT8GNisWZpzP1t/rOpgTSi8FbLtuTks5Ao4BOgslG7pZAaLx2itEk72hA12H5Ue1LXXKg4aq+DLM2w=
+	t=1722038009; cv=none; b=N8882pTkHXQ8aRI6z/RqI+eJX7+DK7WwYzddXphTW9GPHQe8h1J/Fcvx4QBTLyM2v9IL4X9SACqQaB0K8RgzNo9snfB+P6nyw4DnYdCsRJNUAyYJs8+dOTXJHfMJjl38wd8/hSprxHoJWy5tq961SOF5+iTKqCjmFm7fojoMH30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722038007; c=relaxed/simple;
-	bh=hTCJS839o2gRLTMMefhng3YEMkDWbv7HNmHQt1L2Wh0=;
+	s=arc-20240116; t=1722038009; c=relaxed/simple;
+	bh=9OmPm/sXETts377Es3w8PthSdVQhTvxkXBBvmqGH6tM=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=N7SVhv0zp9P+txmvgNLVA+aJkab1uPbtQ1ybnioMbV+hvghmEei15WaLnZnYk6tDaPC7qyYvLcgbMYa4VdepQeCNlfaB2pCZvFmscd85ezcaTnT8HcupeL3OX1Xp3Duy7uZjUBsUEF3uNvpnkGqIDDfB6mRBSJycCXEYLKuAxQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wdW9ZL3g; arc=none smtp.client-ip=209.85.219.202
+	 To:Cc:Content-Type; b=jIjD8LmVYsTHIg6XJuPK7ldQeO1+0iLKBTgPryW0cwtslMX1nxz72ZaUZlC801SgiasgUxIKySBnliLOSCnYYesioZI5WUbWgTpzV/Syc8EV8EQa0D5G8itBgjtgMb3sRGDh96Gt4GfIj4RuWlCLuopACrua5mPc6pgW6vGTR50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=a9LYv9ah; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e0b3742b309so433401276.1
-        for <linux-mips@vger.kernel.org>; Fri, 26 Jul 2024 16:53:25 -0700 (PDT)
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-1fc6db23c74so11322355ad.0
+        for <linux-mips@vger.kernel.org>; Fri, 26 Jul 2024 16:53:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722038005; x=1722642805; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1722038007; x=1722642807; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=xlV4Qu7sFx9TmbqoV45yeLGjyM3cIO8KzptAxLEtfNk=;
-        b=wdW9ZL3gef1d/Bn2y90XBdXSoI3mt8rx5Ebty0Vs51AUyh03zbJohgowbTiAEmwNFd
-         AJ1DHrUwaCJG7pjqP7Y4Isouc2Ntq/zRUfC4HbWryGny3FFIIQ43O4IOJo4vDv+0/oFa
-         BPjXWcm+2wqjvbDpS7XTJbbhAwia6Md5xdBa0VdDjHKvTxsDCSutFLf8twi5AYcNari5
-         TYwWYS/rupun/ETbDvq0vgRlikOypL1tBmC42QgWiM8OLoIjQtGcApvMQQ0sFi7PrNK3
-         uzs/QLxd90RrH/HcuHB3I4xkGx4shBUd/A8NbLr4rAxVuTzJPBTHwi+wOUMnTGMUGVpn
-         CJ1Q==
+        bh=Cx2uwWro3wQxHPvpUbBfNMOIaJj2wri0zL/P/0Je2BI=;
+        b=a9LYv9ahUKNguAIrLC+P9UGnfpNradvP7gE7mDVQGSIaN6mjWghn8/6jZVmlvnfTz0
+         VnDgKUOGIBBRlGJtzSRYkO/lrCe7duHbM8jP3axHe9E5Lx4CqIAHND0lsu3aqeBvcMy9
+         GE79k4XChY+pk5afhZlbSlOYKufhLkP26NVLaVM261WGihZpDbr8VfeI1pSLyT3gmhJS
+         cw1yf4f41muqIuOuvtTqfkIERmnYsWBKBShnKcLaPBDHOmdI4rZ7tJvqg7q6UDOKMDCD
+         CGOxMFvYkAadoTeXWT9SYRd+8I2n/j3zD1vF0MrCxgjcvTThg1Evoqq0YCUVF3oBf+YB
+         vd9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722038005; x=1722642805;
+        d=1e100.net; s=20230601; t=1722038007; x=1722642807;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xlV4Qu7sFx9TmbqoV45yeLGjyM3cIO8KzptAxLEtfNk=;
-        b=n4nWyMWQckVtHnElF+5unZ0uKzRkOeLDlmUNl74O9BsEtMV0bUfSJeZDtEPeX98ckj
-         rkYP0EhUT/6YP0/ZnAShEEyUvFFV3rz5Wph9ba54EOabxGFozvGczSLbrQPs12x8JxK0
-         4xXKFiKfYhtC+fNjPYhEvYkZsADjed1ePu/Z2GxLAZv5w5X18yMh7EnV6kPTeN5tC9Up
-         CsD43yi/UmWEOE/ZynZ7czZsCchi70kD5eeo4IWnWXpGV+VIYe7yzb8DZlWwCC3xOCsz
-         XTA6uKAvNUq/dA0R/hDK3xjnC6WvVHf8uqxBJZpbe/UPOgS9nmlDG4SR9UESccYrDUVK
-         uGsA==
-X-Forwarded-Encrypted: i=1; AJvYcCUUsZIuv62eOiB+yTc6rCpLGEQXGgGpHQWpt8g9yGVzXIZM9jjTidBOmXLsFQHcgj2epZ6cHV39k1DfCx4oMORFMo3W9Hy9D/uU6Q==
-X-Gm-Message-State: AOJu0YydybE5VKEyf3TYLYbZz+4dPqgXj09ERlY+bEuolzCPYQ5PAmZy
-	pAfnbDAAfebw0Ycbc9h0/b5icx9rARu9oz4ZunbjnkWBP3eT2xPNsJJujk3EbLRqqn/BKh8RslF
-	qgQ==
-X-Google-Smtp-Source: AGHT+IGzjee8SmO1Sa/b53YWKn3FsBJYizAY4tObHxd1ZNVi3RptE5IxRlqmItgGIGNjjqk15j+5giHmBC8=
+        bh=Cx2uwWro3wQxHPvpUbBfNMOIaJj2wri0zL/P/0Je2BI=;
+        b=X0gTLvP6gsB6znfkMVazvkGYIxU3p/glvjRFHp1aY+t/KLA564rmEGFNEIBwBEvGKl
+         xSLWQ6Fh0qtUFTzyPLablsF3a7UZJNobRNF33bkRkMu1UFpVo8jYZ6zO05c8k5BD4Q2u
+         T72PwgcJ3R8ad8uWqR9xaldJXj8iEKCxQ2J4VtE6aCxpJ0nfkp4Lx9aTix4cwVzpCU46
+         Ag2dhELhgD9qPiZoBCwz4RnetyJENUInCbzF4yhviwetKt8JUDooLpN7VuOHW1+0q+og
+         OojBDG4eJGqy5gwAMIsHX1Xg35t9dq3p+IdaNJ+ij2nU5MlRYsRMUcjaeFC10DAaUueR
+         UROA==
+X-Forwarded-Encrypted: i=1; AJvYcCUvNCYLDcKeuvUOT0a99rp8me5VnVOkQ7RA4j4ZfzU+L6VtJc6yYQrsGBsOeMKq4+RnOHKn9SbcJ9PJKkMmK2nLG+gTp8sC0k7kJQ==
+X-Gm-Message-State: AOJu0YzVm9e1cFcnTx5z6S/pyRILlV2P2sVABcNgviavZtnulAS9LnMH
+	EBRaHLjUrzrjrb6nHzWZbLxmxxs9xePOuhAdFKALGFVg/1ewgSGDMp9PPHPe7h7GMHBABII2e4U
+	wDQ==
+X-Google-Smtp-Source: AGHT+IFyTmAdCKGjl4Efd/ur3Lgpr5WGUo8BVtVPeI74QsMUPNsZhPnU9qRmgrxg08u1lYU5BCnREsvFCzc=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a5b:8d2:0:b0:e03:53a4:1a7 with SMTP id
- 3f1490d57ef6-e0b5454c840mr15153276.10.1722038004800; Fri, 26 Jul 2024
- 16:53:24 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:903:41ce:b0:1fa:acf0:72d6 with SMTP id
+ d9443c01a7336-1ff0483372emr764645ad.3.1722038007284; Fri, 26 Jul 2024
+ 16:53:27 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date: Fri, 26 Jul 2024 16:51:32 -0700
+Date: Fri, 26 Jul 2024 16:51:33 -0700
 In-Reply-To: <20240726235234.228822-1-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -76,8 +76,9 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240726235234.228822-1-seanjc@google.com>
 X-Mailer: git-send-email 2.46.0.rc1.232.g9752f9e123-goog
-Message-ID: <20240726235234.228822-24-seanjc@google.com>
-Subject: [PATCH v12 23/84] KVM: nVMX: Add helper to put (unmap) vmcs12 pages
+Message-ID: <20240726235234.228822-25-seanjc@google.com>
+Subject: [PATCH v12 24/84] KVM: Use plain "struct page" pointer instead of
+ single-entry array
 From: Sean Christopherson <seanjc@google.com>
 To: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
 	Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
@@ -94,73 +95,41 @@ Cc: kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	David Matlack <dmatlack@google.com>, David Stevens <stevensd@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 
-Add a helper to dedup unmapping the vmcs12 pages.  This will reduce the
-amount of churn when a future patch refactors the kvm_vcpu_unmap() API.
+Use a single pointer instead of a single-entry array for the struct page
+pointer in hva_to_pfn_fast().  Using an array makes the code unnecessarily
+annoying to read and update.
 
 No functional change intended.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/nested.c | 32 ++++++++++++++++++--------------
- 1 file changed, 18 insertions(+), 14 deletions(-)
+ virt/kvm/kvm_main.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 372d005e09e7..8d05d1d9f544 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -314,6 +314,21 @@ static void vmx_switch_vmcs(struct kvm_vcpu *vcpu, struct loaded_vmcs *vmcs)
- 	vcpu->arch.regs_dirty = 0;
- }
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 3d717a131906..8e83d3f043f1 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -2763,7 +2763,7 @@ static inline int check_user_page_hwpoison(unsigned long addr)
+  */
+ static bool hva_to_pfn_fast(struct kvm_follow_pfn *kfp, kvm_pfn_t *pfn)
+ {
+-	struct page *page[1];
++	struct page *page;
  
-+static void nested_put_vmcs12_pages(struct kvm_vcpu *vcpu)
-+{
-+	struct vcpu_vmx *vmx = to_vmx(vcpu);
-+
-+	/*
-+	 * Unpin physical memory we referred to in the vmcs02.  The APIC access
-+	 * page's backing page (yeah, confusing) shouldn't actually be accessed,
-+	 * and if it is written, the contents are irrelevant.
-+	 */
-+	kvm_vcpu_unmap(vcpu, &vmx->nested.apic_access_page_map, false);
-+	kvm_vcpu_unmap(vcpu, &vmx->nested.virtual_apic_map, true);
-+	kvm_vcpu_unmap(vcpu, &vmx->nested.pi_desc_map, true);
-+	vmx->nested.pi_desc = NULL;
-+}
-+
- /*
-  * Free whatever needs to be freed from vmx->nested when L1 goes down, or
-  * just stops using VMX.
-@@ -346,15 +361,8 @@ static void free_nested(struct kvm_vcpu *vcpu)
- 	vmx->nested.cached_vmcs12 = NULL;
- 	kfree(vmx->nested.cached_shadow_vmcs12);
- 	vmx->nested.cached_shadow_vmcs12 = NULL;
--	/*
--	 * Unpin physical memory we referred to in the vmcs02.  The APIC access
--	 * page's backing page (yeah, confusing) shouldn't actually be accessed,
--	 * and if it is written, the contents are irrelevant.
--	 */
--	kvm_vcpu_unmap(vcpu, &vmx->nested.apic_access_page_map, false);
--	kvm_vcpu_unmap(vcpu, &vmx->nested.virtual_apic_map, true);
--	kvm_vcpu_unmap(vcpu, &vmx->nested.pi_desc_map, true);
--	vmx->nested.pi_desc = NULL;
-+
-+	nested_put_vmcs12_pages(vcpu);
+ 	/*
+ 	 * Fast pin a writable pfn only if it is a write fault request
+@@ -2773,8 +2773,8 @@ static bool hva_to_pfn_fast(struct kvm_follow_pfn *kfp, kvm_pfn_t *pfn)
+ 	if (!((kfp->flags & FOLL_WRITE) || kfp->map_writable))
+ 		return false;
  
- 	kvm_mmu_free_roots(vcpu->kvm, &vcpu->arch.guest_mmu, KVM_MMU_ROOTS_ALL);
- 
-@@ -4942,11 +4950,7 @@ void nested_vmx_vmexit(struct kvm_vcpu *vcpu, u32 vm_exit_reason,
- 		vmx_update_cpu_dirty_logging(vcpu);
- 	}
- 
--	/* Unpin physical memory we referred to in vmcs02 */
--	kvm_vcpu_unmap(vcpu, &vmx->nested.apic_access_page_map, false);
--	kvm_vcpu_unmap(vcpu, &vmx->nested.virtual_apic_map, true);
--	kvm_vcpu_unmap(vcpu, &vmx->nested.pi_desc_map, true);
--	vmx->nested.pi_desc = NULL;
-+	nested_put_vmcs12_pages(vcpu);
- 
- 	if (vmx->nested.reload_vmcs01_apic_access_page) {
- 		vmx->nested.reload_vmcs01_apic_access_page = false;
+-	if (get_user_page_fast_only(kfp->hva, FOLL_WRITE, page)) {
+-		*pfn = page_to_pfn(page[0]);
++	if (get_user_page_fast_only(kfp->hva, FOLL_WRITE, &page)) {
++		*pfn = page_to_pfn(page);
+ 		if (kfp->map_writable)
+ 			*kfp->map_writable = true;
+ 		return true;
 -- 
 2.46.0.rc1.232.g9752f9e123-goog
 
