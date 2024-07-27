@@ -1,223 +1,133 @@
-Return-Path: <linux-mips+bounces-4554-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4555-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2521B93DC62
-	for <lists+linux-mips@lfdr.de>; Sat, 27 Jul 2024 02:20:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDB8793E0AC
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Jul 2024 21:11:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D100E28335C
-	for <lists+linux-mips@lfdr.de>; Sat, 27 Jul 2024 00:20:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 859CBB2141E
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Jul 2024 19:11:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65FEC192B9E;
-	Fri, 26 Jul 2024 23:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D943A187332;
+	Sat, 27 Jul 2024 19:11:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vyrftBCa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QGqh6HkN"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B17E6192B80
-	for <linux-mips@vger.kernel.org>; Fri, 26 Jul 2024 23:55:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C57580C09;
+	Sat, 27 Jul 2024 19:11:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722038134; cv=none; b=Qb/idBn9vXHSRRzrQDTMtLaGBOpxbVlunQUjARW1SabzqMldzUDhw7Z7U+ZOk1+niPywi/KlG0Ywbe7GR86KCf/gLJw09dx5eGvnsUdy267XuXVmTnGPM4Kcjzg82InXFOxZYDmjw3RAWktWKo6UvdK7fvbfs/CHCF1gXuzKVw0=
+	t=1722107502; cv=none; b=Wz0qPvUBxgsFLGST39sQMQp3b83MDIvVJkU7R6BJke5KLAQhMK1ai+UuQWwOX5f2Q460S3akb2CFaZyAdirIncuzPM+Hc/E7zvkj/6Oz+zN6M896yRHcgt5bhrzseFwLvuCtg6lgCk/YWfRUKca1OSIj5KGaZbrMcaeqCwlnlWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722038134; c=relaxed/simple;
-	bh=Q7iFhysn4W1WfxP0+7u3aZ05Q3iDxPLY40ZQrSBaHTY=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ZZ0hy8WSKcnHvRn2aMmbr0P4aRwScgY7FJgkRsirO6LJDHbVzdDYbjF81aGsVs7OiRpEofPzrZaIo1+m1R476ynAgCe5oaUwrweeXJsWECOGLxcO9nM3Pb7iKUtXZjfG8NCy+YKm6U85UYtWkxIbdkoGKiuMKKO/KbcZcfWU/+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vyrftBCa; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-70ecd589debso374032b3a.2
-        for <linux-mips@vger.kernel.org>; Fri, 26 Jul 2024 16:55:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722038132; x=1722642932; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=diuq/5OTzA7KvKsX4AEile2HlGAF4SgNWi1szy67iaM=;
-        b=vyrftBCazLCBTorKThPCCA2XcqVV1jd+UtiELnRrdvvYJJWSY3Lex+i6jT5AwgGmZL
-         f5MclMvki2EQF1UzYitjYBPe66FMuopo8LLCjbH99N/Iwh3ExW/2BKGJNmjRjO8HouAy
-         /P7tvLvRGyBcHL28FfaZVMG7wWPrm9A5LzW4H+SaxRsuWbt21euPKvWfa3F1cfFFfEkp
-         NuEkdNnRePIgXShKpxnx6DCes8gZdjn9RQf7QzqCCcx1dEgZijoDyyln/7oaC5zqDX77
-         yktLpqHPVFLkOP5OYp3pNqLkXYuMLKCgYY+HkXp4rOqUw7IArPyszHXqIsnEStzKcyle
-         F24A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722038132; x=1722642932;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=diuq/5OTzA7KvKsX4AEile2HlGAF4SgNWi1szy67iaM=;
-        b=L/hHEkgcCxgMn6opPg6PhEZz6qhybduonTsnlFi58+miHN+FfE2DhB23/SCBMVnACp
-         1cjC04dZFIDQUmY3cJTTIe9auFLRAkldjEyYBiPoaiFY5V2AQK9QHO0Xn6F1j4xNW0v0
-         uSYkcHM1AEWwxSzWtjEBuxRb2DoCINinrJDZf1LwO8XqMkXXUrxYUvPT7od1SX/5ltAV
-         E1a5gDAPAcTO/rkK7G4/gJ5yLMrus/qY2mC0964qQd0RHVVOLYBDTCkV9LTzj0a+BjF4
-         mTlqygvwugCgDVKhmP/3NXfeMJ3+IrDXwAqJi3sKJdb+1D8L6N66lCzZ+pjf5Vs2Mg/8
-         +rLg==
-X-Forwarded-Encrypted: i=1; AJvYcCW5Infoje+YGc0wLyhTz2iYdzdf4y0SlDRd96ttq6vnxSQaCdVnarBhcAknSNY343puAVJThskoKwyTiKPAv2U2RmJEuEjhjM8yCQ==
-X-Gm-Message-State: AOJu0Yw4cFEu8OGzJ7glyTxiQo66SUwlrEw2hCgm7www7xnnpbUJ0cZC
-	baPzj4VpUVmCOmW/5T4ASSkSd/r2uM74tQmovm/i55vHJT2JwsDF9A1c3mov4+0H+502GjPYXyi
-	w7w==
-X-Google-Smtp-Source: AGHT+IHhZHDOMBimQWMolk5T4YvfOEDeWobwSpVEA59XfGWHoVcD5oY/zbLuHzkbg8Phg0CxGQdxohIyYms=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:66e5:b0:70d:27ca:96b8 with SMTP id
- d2e1a72fcca58-70ece926ad1mr25428b3a.0.1722038131828; Fri, 26 Jul 2024
- 16:55:31 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date: Fri, 26 Jul 2024 16:52:33 -0700
-In-Reply-To: <20240726235234.228822-1-seanjc@google.com>
+	s=arc-20240116; t=1722107502; c=relaxed/simple;
+	bh=M8mrct+fcXWf4dQP4IR3e4KiOgK+DHB5K7VgHM1qCDM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TuxIBcqyPCBwvmWEy5XkpkPrLeg+Lix+w6zUoodxUkXFVWW/x6/WhrLc29hnHYHOIWMb7fgIi2KgzH7FQ47evlhc6q51SV7otxgmvb2huh7pwJ0kzqdSW8FN1CrcitrnI2SeJFuhCE+IuVi9EJ4hn/dCYcCyVwpdwOLuPS4Kkic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QGqh6HkN; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722107500; x=1753643500;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=M8mrct+fcXWf4dQP4IR3e4KiOgK+DHB5K7VgHM1qCDM=;
+  b=QGqh6HkNaLLN6pwjbKizC3hee9tPHzyCIJY2Ejh0RrUMJmgp3uguS9c+
+   XxBBr4ltNUMUB0gYkX3K9owYvSRKBR1z9emzGTlXu0PiBpGaBv0OTS+za
+   HDKGLHpMNdHK6Txsxpek6fwG8BbtXAhpui8G6AUUg1/7Pj7MKCZUfRKo4
+   wRxtK9UU6Modgse+4bDYnAhulFBixAd80rHuK+e6+kPiwNB455GiFvCsv
+   CPo/bNhXp4hhKMmSGO9XSeKD/FuDMioxoD/qorhBcmNhJ/ZNNZw6w4mrG
+   KuOShxYussF0W2bGWINGMM4IptX3b/LkghuyA6kAerp5N2oJgPy5IxxIt
+   Q==;
+X-CSE-ConnectionGUID: rD8YJziURpCzS8cVtIjoOw==
+X-CSE-MsgGUID: uW4GXKzASl2YiIHga0qfIw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11146"; a="23737250"
+X-IronPort-AV: E=Sophos;i="6.09,242,1716274800"; 
+   d="scan'208";a="23737250"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2024 12:11:39 -0700
+X-CSE-ConnectionGUID: 2Ao0g3xGS8qfccCuivH2mA==
+X-CSE-MsgGUID: QhoqwShcSuSMVXNuVVxAXA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,242,1716274800"; 
+   d="scan'208";a="76793712"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 27 Jul 2024 12:11:37 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sXmpK-000qAq-1F;
+	Sat, 27 Jul 2024 19:11:34 +0000
+Date: Sun, 28 Jul 2024 03:11:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>,
+	Keguang Zhang <keguang.zhang@gmail.com>,
+	Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-mips@vger.kernel.org, dmaengine@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH v10 2/2] dmaengine: Loongson1: Add Loongson-1 APB DMA
+ driver
+Message-ID: <202407280250.YTVHsCYs-lkp@intel.com>
+References: <20240726-loongson1-dma-v10-2-31bf095a6fa6@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240726235234.228822-1-seanjc@google.com>
-X-Mailer: git-send-email 2.46.0.rc1.232.g9752f9e123-goog
-Message-ID: <20240726235234.228822-85-seanjc@google.com>
-Subject: [PATCH v12 84/84] KVM: Don't grab reference on VM_MIXEDMAP pfns that
- have a "struct page"
-From: Sean Christopherson <seanjc@google.com>
-To: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
-	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Anup Patel <anup@brainfault.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
-	Sean Christopherson <seanjc@google.com>
-Cc: kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	David Matlack <dmatlack@google.com>, David Stevens <stevensd@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240726-loongson1-dma-v10-2-31bf095a6fa6@gmail.com>
 
-Now that KVM no longer relies on an ugly heuristic to find its struct page
-references, i.e. now that KVM can't get false positives on VM_MIXEDMAP
-pfns, remove KVM's hack to elevate the refcount for pfns that happen to
-have a valid struct page.  In addition to removing a long-standing wart
-in KVM, this allows KVM to map non-refcounted struct page memory into the
-guest, e.g. for exposing GPU TTM buffers to KVM guests.
+Hi Keguang,
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- include/linux/kvm_host.h |  3 --
- virt/kvm/kvm_main.c      | 75 ++--------------------------------------
- 2 files changed, 2 insertions(+), 76 deletions(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 87d61f16a449..d4513ffaf2e1 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -1702,9 +1702,6 @@ void kvm_arch_sync_events(struct kvm *kvm);
- 
- int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu);
- 
--struct page *kvm_pfn_to_refcounted_page(kvm_pfn_t pfn);
--bool kvm_is_zone_device_page(struct page *page);
--
- struct kvm_irq_ack_notifier {
- 	struct hlist_node link;
- 	unsigned gsi;
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 8b85e1130a63..e279140f2425 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -160,52 +160,6 @@ __weak void kvm_arch_guest_memory_reclaimed(struct kvm *kvm)
- {
- }
- 
--bool kvm_is_zone_device_page(struct page *page)
--{
--	/*
--	 * The metadata used by is_zone_device_page() to determine whether or
--	 * not a page is ZONE_DEVICE is guaranteed to be valid if and only if
--	 * the device has been pinned, e.g. by get_user_pages().  WARN if the
--	 * page_count() is zero to help detect bad usage of this helper.
--	 */
--	if (WARN_ON_ONCE(!page_count(page)))
--		return false;
--
--	return is_zone_device_page(page);
--}
--
--/*
-- * Returns a 'struct page' if the pfn is "valid" and backed by a refcounted
-- * page, NULL otherwise.  Note, the list of refcounted PG_reserved page types
-- * is likely incomplete, it has been compiled purely through people wanting to
-- * back guest with a certain type of memory and encountering issues.
-- */
--struct page *kvm_pfn_to_refcounted_page(kvm_pfn_t pfn)
--{
--	struct page *page;
--
--	if (!pfn_valid(pfn))
--		return NULL;
--
--	page = pfn_to_page(pfn);
--	if (!PageReserved(page))
--		return page;
--
--	/* The ZERO_PAGE(s) is marked PG_reserved, but is refcounted. */
--	if (is_zero_pfn(pfn))
--		return page;
--
--	/*
--	 * ZONE_DEVICE pages currently set PG_reserved, but from a refcounting
--	 * perspective they are "normal" pages, albeit with slightly different
--	 * usage rules.
--	 */
--	if (kvm_is_zone_device_page(page))
--		return page;
--
--	return NULL;
--}
--
- /*
-  * Switches to specified vcpu, until a matching vcpu_put()
-  */
-@@ -2814,35 +2768,10 @@ static kvm_pfn_t kvm_resolve_pfn(struct kvm_follow_pfn *kfp, struct page *page,
- 	if (kfp->map_writable)
- 		*kfp->map_writable = writable;
- 
--	/*
--	 * FIXME: Remove this once KVM no longer blindly calls put_page() on
--	 *	  every pfn that points at a struct page.
--	 *
--	 * Get a reference for follow_pte() pfns if they happen to point at a
--	 * struct page, as KVM will ultimately call kvm_release_pfn_clean() on
--	 * the returned pfn, i.e. KVM expects to have a reference.
--	 *
--	 * Certain IO or PFNMAP mappings can be backed with valid struct pages,
--	 * but be allocated without refcounting, e.g. tail pages of
--	 * non-compound higher order allocations.  Grabbing and putting a
--	 * reference to such pages would cause KVM to prematurely free a page
--	 * it doesn't own (KVM gets and puts the one and only reference).
--	 * Don't allow those pages until the FIXME is resolved.
--	 *
--	 * Don't grab a reference for pins, callers that pin pages are required
--	 * to check refcounted_page, i.e. must not blindly release the pfn.
--	 */
--	if (pte) {
-+	if (pte)
- 		pfn = pte_pfn(*pte);
--
--		if (!kfp->pin) {
--			page = kvm_pfn_to_refcounted_page(pfn);
--			if (page && !get_page_unless_zero(page))
--				return KVM_PFN_ERR_FAULT;
--		}
--	} else {
-+	else
- 		pfn = page_to_pfn(page);
--	}
- 
- 	*kfp->refcounted_page = page;
- 
+[auto build test ERROR on 668d33c9ff922c4590c58754ab064aaf53c387dd]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Keguang-Zhang-via-B4-Relay/dt-bindings-dma-Add-Loongson-1-APB-DMA/20240726-212659
+base:   668d33c9ff922c4590c58754ab064aaf53c387dd
+patch link:    https://lore.kernel.org/r/20240726-loongson1-dma-v10-2-31bf095a6fa6%40gmail.com
+patch subject: [PATCH v10 2/2] dmaengine: Loongson1: Add Loongson-1 APB DMA driver
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240728/202407280250.YTVHsCYs-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240728/202407280250.YTVHsCYs-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407280250.YTVHsCYs-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/dma/loongson1-apb-dma.c:58:3: error: requested alignment must be 4294967296 bytes or smaller
+      58 | } __aligned(LS1X_DMA_LLI_ALIGNMENT);
+         |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_attributes.h:33:56: note: expanded from macro '__aligned'
+      33 | #define __aligned(x)                    __attribute__((__aligned__(x)))
+         |                                                        ^           ~
+   1 error generated.
+
+
+vim +58 drivers/dma/loongson1-apb-dma.c
+
+    53	
+    54	struct ls1x_dma_lli {
+    55		unsigned int hw[LS1X_DMADESC_SIZE];
+    56		dma_addr_t phys;
+    57		struct list_head node;
+  > 58	} __aligned(LS1X_DMA_LLI_ALIGNMENT);
+    59	
+
 -- 
-2.46.0.rc1.232.g9752f9e123-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
