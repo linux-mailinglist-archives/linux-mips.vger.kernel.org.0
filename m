@@ -1,133 +1,132 @@
-Return-Path: <linux-mips+bounces-4569-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4570-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1103993F22B
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jul 2024 12:08:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C281C93F5F5
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jul 2024 14:56:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FF291C21738
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jul 2024 10:08:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77D9328247E
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jul 2024 12:56:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 884211411DF;
-	Mon, 29 Jul 2024 10:08:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E834149C54;
+	Mon, 29 Jul 2024 12:56:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cH/nuxBN"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A242978C63;
-	Mon, 29 Jul 2024 10:08:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEE01148FE1;
+	Mon, 29 Jul 2024 12:56:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722247683; cv=none; b=YArqHhvNT9m7Z1OkMjKzvlsQDnq63VAxSkid1P4HtfUg78ry5LUlY/v7eWiVZFIFCjxSFzmW/WZN90t7Nv4iQ8aDduRn4h11oayFqOEos/SBIqXczEDSdU8Cwb03WqHSXA/dbdTA4I6ZF2x1b5bfX3Ioh37INnVq3RUuNZmS5/g=
+	t=1722257764; cv=none; b=op1USOD/K/02nUjtCAyLeHnuR/CJEKDWVKj6IeMgmUbDmtFkJGdXoQNi4ZgL+5oeOvdz7WDrUwuaVfWMwtxnPNL/AkMnD67he3RS2ot4PJI+jcvdBUZYrBUKBFs4HezvjClfdQCe/uyOrPze9zEPRk9gSJAQhW/LtKZWNedwtj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722247683; c=relaxed/simple;
-	bh=0Tuyx2oDUruZZ6uxuzgbNaLiuh970dbec3fFyh+TDOM=;
+	s=arc-20240116; t=1722257764; c=relaxed/simple;
+	bh=yp8Y9Dip8DSGCmHHwje5HV5mtF25REE/X+2S8lF6exw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hd2kkqvc3zwL0N88c3xdW++HGQzE165OTvi2fslj/0xItcob/92qOO7hvcS0oyxs+qBMLqjgwiqEId7ZSIxHFCv74+O0vZDjXnwnpzXo1qYZSoHShhRsvsbRAIOMw+Ug8IloJ+HEfZQDZehfmdYrYrxf2RRNfmJR/AK2fb8NkRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	 To:Cc:Content-Type; b=EPLmOPBrevrjGBvPn2zlw3Y/uLDv6n2kUTNkSnL7g9HB4FSyRs6W1tK5IT8sUTKpZtsfDS5Wn5CEmSa9xbbXEsT/VJNUe03CanojYan+mxHLBAdXrc28HGX9mdsDbZWGD7MzU5k/OzqB0/2MtoA1TPZL6KIGyDLci7jfR8NVDas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cH/nuxBN; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-66a1842b452so12816527b3.3;
-        Mon, 29 Jul 2024 03:08:01 -0700 (PDT)
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2f0dfdc9e16so39987351fa.2;
+        Mon, 29 Jul 2024 05:56:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722257761; x=1722862561; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k+SHx7NLarzUQJttZx/UL50p3XbT43LUQzIyvyMh5qc=;
+        b=cH/nuxBNmwpm1f7b9NNuTT4BAZ9LOotD18TI/zGU8S49oiAAQdLyIyzFuFLTCfovuD
+         /NWmrbGI5VAFt3Z/aUdKpWyeEFuJSHDsbzW7sDSU3wx5Ad2mINIQBmVC5zAt4TrT2GaC
+         6rCGfLIRNzIe5c1Wzvng4LVKOco7tvrFMQMhFEA4YIXKTcHKK05fUVKM++OjeZktgA8d
+         Yr48y1LADcDK1y6e2+1WZs+JTK1oXwq1/MJCWWq8xlGBf4qD4UJJs49hGM9o4GUNqMgN
+         spG8lDpA7XIQjO5o16Xt5qpf2pL6Wmg/RDqzBG7OtX4txArSaQ+DkEVy8NvsDTaqB6kz
+         9DbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722247680; x=1722852480;
+        d=1e100.net; s=20230601; t=1722257761; x=1722862561;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jwTfVYSGl0qov4UkTwnmIUGjC6ZGnXwHCwIWbd4QwcU=;
-        b=n2yE8Fd7AatJR97GcdM/s5N4WzI7eG4qIXN7W9VkJjgNeaZYZR3ifvz/7cwtXdQro7
-         WtIGyLdzR4s3/etYoCHGwGpwBTupIPTTlNvaoHfdx8wfIVoI3sLcpwAhRq6o//7JrUZG
-         Zv19vhz/oE4g0tm4B4Xgx9+BsZVxARLcvScq4jdkyzws/xYHP3OmBW+5bGrswNQpmSDl
-         87fGvaRIQpttmuxsFMf7dnxA1xICmUkK52km32Qmdau6rL4gIDwV7xHXV/HpbZ38oWvs
-         OttWSmubbKwwmQmucIO62+VlOCSjCgQez3+Q1olv3yhhoXD2nikgFwgWZfiRUhRiFkKq
-         YbiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX733nCqTYGy5SY5baNpVqIWnI25OOsE6pT5Qw0nFPJ0lc8MClONyusvZ11r1ptBBtb+EQr+6jgcaYL13OxTWLq7CoXLt2EvOFxK7XRuBvksEwTN9il+//FHF9aJYFVn21qn+zrJ2hkfOKsDKpQhdpUR5A1e7OdFmmgqtY06bW2RMr0vgm/ReacFbcoAADKcd4TiV+UPxoT5CndsevcDPGv3M+RvO01v1dKIGvg2CvNrBfZXabarIw4aDiKOw==
-X-Gm-Message-State: AOJu0YwMUnpeo3QZaSOeU6CAxjhBPheLRmLFYJ8kozym10X2BQTdFqwK
-	I5/APySoHgyDnkGblk2653Kr0MKfYvMHH5AWP8u+H4bDLSkAZK+nACQG4e06
-X-Google-Smtp-Source: AGHT+IHuGIFdF4MYQWkuPVYvjNmXA34CxX7/h08kyuYp4PshcrVBeg1jQOj218EjBLyE+qiDy9jP7Q==
-X-Received: by 2002:a05:690c:6892:b0:64a:7040:2d8e with SMTP id 00721157ae682-67a0978408emr86609937b3.33.1722247679623;
-        Mon, 29 Jul 2024 03:07:59 -0700 (PDT)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6756b024a32sm19886107b3.97.2024.07.29.03.07.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jul 2024 03:07:58 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-65faa0614dbso19023387b3.2;
-        Mon, 29 Jul 2024 03:07:58 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUcnm/9IO1kqhZRdCVjnJC2nzipnZmsCp0x2VIwIAShY6LgfbU2x52hDtoQR4mi2bJwt29dg2g3VBko+fLQNuIsPPXN6bOdRRIBhq57Xaq07zN9tMRD3a85xzWrTt4QdriTDVPsNfhOOLtqSdBaNqAjh6iL7PXy703Or00vVH1rIyicl+FZDQVVArT9Mvlcl+vezXhNcv/TTFScYu79pCFJb1TQZw2h3k4wt+S87lzJkJjlkN1CAuzR1LgPiQ==
-X-Received: by 2002:a05:690c:6203:b0:664:7b3d:a53f with SMTP id
- 00721157ae682-67a0a7fba7cmr91084297b3.45.1722247678607; Mon, 29 Jul 2024
- 03:07:58 -0700 (PDT)
+        bh=k+SHx7NLarzUQJttZx/UL50p3XbT43LUQzIyvyMh5qc=;
+        b=FED+VIQ33xtoThO2zTHT6NuPv6YGqD/1nz3pYR8pYwBXrKpnx/IQEGARBadUuwHUla
+         Ukq+Q2Nd8vRygCK2pv+WGS9bZc4qI4WOBzVHlJ+FVliUbAsBIgdG20TFEFtfKnyECvBC
+         NtZVhoC0EB/LinNLNU19sWxHD7l+fAGEmVx+9iSX+fndx9ALD4gjCztCz0qJNDAlvqrH
+         oSokljRWPNVWjzKPMRqxjPIf3ulOTbMapRjPPji9dVZ08pANCnbBiRAtaqp26kuYKUFK
+         oJX0yIkkFB27HVPLFkDzCemJAfhRoqJ4Y1zHs53tNN/unj7rsfGnK1/83gfBCQ2nHAbr
+         ie0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXkp0YCRRrbcchXl3dJmSmv+LhqY53UyOrzXNWSyNiyGDMXJTUEmP9rxSyLImCyyXKaOx1gy4hIFP4aDSrl9z6m7i+PUbXSLjFOuKDfgFL8FlYWWtWzDCAJflfmGf25I2U1SuHa0fPAFmO5hQR/hc/KmnwSboXEkNYrMW4YM/bkx3roqCg=
+X-Gm-Message-State: AOJu0YzD9gfrlvwChP8mwrrCgx8i6r6dg5aJpNPugiLfwviqK6PL36QO
+	NwUTM+qO3xDrgl4XG69P7uAwr15yfwysdIyRClN3HHPwuivwk/bKnoj7TnPJ85m6vULcQ2y66Ur
+	lApbDKKqkdQ790A20SS98qYv3Ia4=
+X-Google-Smtp-Source: AGHT+IFx/JAJN6hMd2OA7VlWKt2ZMfRpaXKwoXE5AXkNHXjAt/8Vn3UBgg+/SdvA9YVDCyRXZkJUyfyKstWkcGE9bGE=
+X-Received: by 2002:a2e:a314:0:b0:2ef:20ae:d113 with SMTP id
+ 38308e7fff4ca-2f12ee5abf3mr46470491fa.40.1722257760588; Mon, 29 Jul 2024
+ 05:56:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAHk-=wiyNokz0d3b=GRORij=mGvwoYHy=+bv6m2Hu_VqNdg66g@mail.gmail.com>
- <20240729092807.2235937-1-geert@linux-m68k.org> <bd4e9928-17b3-9257-8ba7-6b7f9bbb639a@linux-m68k.org>
- <502ee081-8e09-422a-a1f9-be40aeaa84fb@app.fastmail.com>
-In-Reply-To: <502ee081-8e09-422a-a1f9-be40aeaa84fb@app.fastmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 29 Jul 2024 12:07:46 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUUepTM9v7Oyakv6XQg9iw7t08ggGX=K90zRXxm4Ffpjg@mail.gmail.com>
-Message-ID: <CAMuHMdUUepTM9v7Oyakv6XQg9iw7t08ggGX=K90zRXxm4Ffpjg@mail.gmail.com>
-Subject: Re: Build regressions/improvements in v6.11-rc1
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-kernel@vger.kernel.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-mips@vger.kernel.org, 
-	dm-devel@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
-	linux-btrfs@vger.kernel.org, intel-xe@lists.freedesktop.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-hexagon@vger.kernel.org
+References: <20240726-loongson1-dma-v10-2-31bf095a6fa6@gmail.com> <624be618-1a1a-422c-85e9-be3e1d182adf@web.de>
+In-Reply-To: <624be618-1a1a-422c-85e9-be3e1d182adf@web.de>
+From: Keguang Zhang <keguang.zhang@gmail.com>
+Date: Mon, 29 Jul 2024 20:55:24 +0800
+Message-ID: <CAJhJPsUb4KibbFtPJ3-byrsB2Yv82eGczkcysNrJjJ7WiYYhxQ@mail.gmail.com>
+Subject: Re: [PATCH v10 2/2] dmaengine: Loongson1: Add Loongson-1 APB DMA driver
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: dmaengine@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-mips@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, 
+	Jiaxun Yang <jiaxun.yang@flygoat.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Arnd,
-
-On Mon, Jul 29, 2024 at 11:55=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrot=
-e:
-> On Mon, Jul 29, 2024, at 11:35, Geert Uytterhoeven wrote:
-> >>  + /kisskb/src/kernel/fork.c: error: #warning clone3() entry point is =
-missing, please fix [-Werror=3Dcpp]:  =3D> 3072:2
-> >
-> > sh4-gcc13/se{7619,7750}_defconfig
-> > sh4-gcc13/sh-all{mod,no,yes}config
-> > sh4-gcc13/sh-defconfig
-> > sparc64-gcc5/sparc-allnoconfig
-> > sparc64-gcc{5,13}/sparc32_defconfig
-> > sparc64-gcc{5,13}/sparc64-{allno,def}config
-> > sparc64-gcc13/sparc-all{mod,no}config
-> > sparc64-gcc13/sparc64-allmodconfig
+On Sun, Jul 28, 2024 at 5:40=E2=80=AFPM Markus Elfring <Markus.Elfring@web.=
+de> wrote:
 >
-> Hexagon and NIOS2 as well, but this is expected. I really just
-> moved the warning into the actual implementation, the warning
-> is the same as before. hexagon and sh look like they should be
-> trivial, it's just that nobody seems to care. I'm sure the
-> patches were posted before and never applied.
+> > This patch adds =E2=80=A6
 >
-> sparc and nios2 do need some real work to write and test
-> the wrappers.
+> See also:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/D=
+ocumentation/process/submitting-patches.rst?h=3Dv6.10#n94
 >
-> It does look like CONFIG_WERROR did not fail the build before
-> 505d66d1abfb ("clone3: drop __ARCH_WANT_SYS_CLONE3 macro")
-> as it probably was intended.
+Will drop "This patch".
+>
+> =E2=80=A6
+> > +++ b/drivers/dma/loongson1-apb-dma.c
+> > @@ -0,0 +1,675 @@
+> =E2=80=A6
+> > +static int ls1x_dma_resume(struct dma_chan *dchan)
+> > +{
+> =E2=80=A6
+> > +     spin_lock_irqsave(&chan->vchan.lock, flags);
+> > +     ret =3D ls1x_dma_start(chan, &chan->curr_lli->phys);
+> > +     spin_unlock_irqrestore(&chan->vchan.lock, flags);
+> > +
+> > +     return ret;
+> > +}
+> =E2=80=A6
+>
+> Under which circumstances would you become interested to apply a statemen=
+t
+> like =E2=80=9Cguard(spinlock_irqsave)(&chan->vchan.lock);=E2=80=9D?
+> https://elixir.bootlin.com/linux/v6.10.2/source/include/linux/spinlock.h#=
+L574
+>
+Will switch to guard() and scoped_guard().
+Thanks!
 
-Indeed. The actual regression is that this turned into a fatal error
-with -Werror.
+> Regards,
+> Markus
 
-Gr{oetje,eeting}s,
 
-                        Geert
 
 --=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+Best regards,
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Keguang Zhang
 
