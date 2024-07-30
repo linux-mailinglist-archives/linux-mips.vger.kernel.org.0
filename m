@@ -1,55 +1,81 @@
-Return-Path: <linux-mips+bounces-4587-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4588-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34761940BD2
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2024 10:39:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FEC5940C97
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2024 10:58:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5786A1C23E8E
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2024 08:39:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 09F981F227AB
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2024 08:58:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C149E1922E5;
-	Tue, 30 Jul 2024 08:39:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81DB1194087;
+	Tue, 30 Jul 2024 08:58:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="iBhmIlEu"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KBRrCz0z"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mout.web.de (mout.web.de [217.72.192.78])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3A8156C4B;
-	Tue, 30 Jul 2024 08:39:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C467519308C
+	for <linux-mips@vger.kernel.org>; Tue, 30 Jul 2024 08:58:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722328770; cv=none; b=RzAZJaqEENxI4qkLNIxlWPllEwuxudL8Kkmu9bTgzDr0awsWB6ndx3eSsV5LAor78AxQVGfVPkvjkVpxZvaC8aYFfl1yyIuuTztLX65ip3/1xv+GW8NdlAF8pXAH2IXNI/zUCKk/c3eDPOU4XSVYQFbnHffRgqJV5MFkypN47ew=
+	t=1722329884; cv=none; b=d9kOAh0jdcdGisiB3wLmwNsf8iDqDRFU43uAP3Vlp+obxaBCTBVhm9I0fAmUEEQB8gFo8Rfmo6w2PPfXFmBr7/XuQm9FisIB2C0u7Dma+htBVe6CHJmdtER10olV1NWzC3u7vihPV0MNVL3Vlk5furfv4SSGc1JgxxtxgsxAx98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722328770; c=relaxed/simple;
-	bh=07fx0OcCY32v0SirWQHDNSZfPG7HMF4hAqbJnMhyg3s=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=doaUhOprRAe6U8YQwCTdBJQwJbWw9dLJU7RBmP68ZdyLXzzOzPNT9M1raD3mNIuv+cF7+d/BcMrV+1wq5T8hKILBNJ6KknE68eHe3LlFgU2Sxsf3blqqOB59WLoUA6hlwdVhuzZeHa1kXBePQxAvtH6MCw3VAMexAe3hKYpzT9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=iBhmIlEu; arc=none smtp.client-ip=217.72.192.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1722328685; x=1722933485; i=markus.elfring@web.de;
-	bh=07fx0OcCY32v0SirWQHDNSZfPG7HMF4hAqbJnMhyg3s=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=iBhmIlEu1DTEhbIId4CW/iiPJylb+jiOQ9na/RS5h69bGT/imWvKAbYeaJ6pivjz
-	 JMnQXpy3cOlHf6p3bxFw2uqBaGPOuz17LrdoEApiGvMmHL9F2kIIYCb9ueGy62+tI
-	 Z412cOhJGP5xxEr98kCfPNdYFjVPufN30A6OcLhTRbHeOoqDpZ30cxm7YBR3nSSWl
-	 8w95ukxErNzkX2hWTvH3N3Q/O+9nRoQJ+CINjbJQKXo8kr7CjpakPcjmpI9mTGMkm
-	 t7htz1r1rdr1c1sSbkVKfGHWXeJSssKDwuuEu3A8VxxvqEIW9YncbE1WpCLHOz/i4
-	 zpVozzeWA1xcB3gjBw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.90.95]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MKMA1-1sq6tO21QF-00MgS1; Tue, 30
- Jul 2024 10:38:05 +0200
-Message-ID: <5d3c74da-7d44-4b88-8961-60f21f84f0ac@web.de>
-Date: Tue, 30 Jul 2024 10:37:56 +0200
+	s=arc-20240116; t=1722329884; c=relaxed/simple;
+	bh=UOn93hUpu6nETBc80RJAdFaC1UNmh5dFpSEiFmnvSVI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UPy87i0XN+Y2Bnkk2is9kFh5bQVGzKoQ12R+1Ok6zvMq3JszErrtt7vLLwhP8bN5eF0P/ZtcIVFcACD65tnxCyA6lNd0FyC4ij6aqrBF8uvh5Qqi1QDypRwmlVB2yK86bIiQnSBAcxjcMsGpJmXEyelOwvHauhRCSTnMex9ghjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KBRrCz0z; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1722329881;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=ZpZjVsHvHCj8FzxVeFJOZEzA3scYhLR2Ib5TteBtfAg=;
+	b=KBRrCz0zOtVzNNRjfM/kTmnO01ui/3uWFXR5wT/Ez/tfRi0XDULz9d48rpYEx5BvUISUET
+	Q/SmwHWDY9SCic0gIG6qftZK/Lgt2iGV5pepDrX7sOrrG3a2dqxqoe+BrZDF+qIaBjpcY9
+	9PA7AWNOn//0RqVlBb0UhI+SD2WW3c0=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-681-5c2rJIwNPKCtcRba9Diltg-1; Tue, 30 Jul 2024 04:57:59 -0400
+X-MC-Unique: 5c2rJIwNPKCtcRba9Diltg-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-a7a9c275447so286188766b.3
+        for <linux-mips@vger.kernel.org>; Tue, 30 Jul 2024 01:57:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722329878; x=1722934678;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZpZjVsHvHCj8FzxVeFJOZEzA3scYhLR2Ib5TteBtfAg=;
+        b=Fs9TOfKLIB6FeSIQXFDkb2lmTt4jzMQmFjjvMgWb9h4p92/MgZScXPvzbXnc9kl9vP
+         CWLACYcPMZ8tZyjmW+Yif2NQasTYMn88iFSlo3cOopt7B92vD78S75BeP8y5N0vmOKVF
+         2Ssbodi6sWh4DgTwZ5Wfy0zouY3z+QUYUtmCn6dnsKJqgU6V5Wku238sRpJuNrBL5+QD
+         pufng7uq+9EGZpU4CFybsm6Nfvc7lEm0F2m4bh25lSCIv+inbtK1/xVYPigMCyzbxIaN
+         B9rP5rtfvTGBlXMCLpeIjiLhm6E5U3odt3EEnqBTEaLS59AtCcodr8ZtzB0xjAdFZbJb
+         gQqA==
+X-Forwarded-Encrypted: i=1; AJvYcCXqrQgevXxagY5ykz9VS/RCX6JLu802G8lL6do2oy9BdnsQCWURZJ1rlfdtledZguqNE/D5zUN4GUW6zu4/0kze3woietglg+wYdA==
+X-Gm-Message-State: AOJu0YzVAI3f2EGjpYYx2rOb54UU3npMoUD7U6jV/aJ1r68VtInTX9kb
+	0ilT+PxMm6qkf896shO037p4sgWfN6VNLiMd+VDeBXWMnSqRpzxLP8gz9vwDhJzgsXGV1XXnacr
+	bGHkNzepx26oB7SloUmtEEk74wa+tiueZnW4xWD5dkCNlboCffPQkC2m6378=
+X-Received: by 2002:a17:907:3f1f:b0:a7a:c106:3647 with SMTP id a640c23a62f3a-a7d401861c0mr815519966b.58.1722329878625;
+        Tue, 30 Jul 2024 01:57:58 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFO2B6RyDZT6FnZIzF9nSeY5BVBQwIsgCkX4qd602jC/+1nmH3bvjS4vKWDGNBFOCLTdQ0vMQ==
+X-Received: by 2002:a17:907:3f1f:b0:a7a:c106:3647 with SMTP id a640c23a62f3a-a7d401861c0mr815518266b.58.1722329878201;
+        Tue, 30 Jul 2024 01:57:58 -0700 (PDT)
+Received: from [192.168.10.47] ([151.95.101.29])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a7acad411a6sm609184766b.117.2024.07.30.01.57.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Jul 2024 01:57:57 -0700 (PDT)
+Message-ID: <e425ac5e-6ca2-463e-879c-acb7d231ab72@redhat.com>
+Date: Tue, 30 Jul 2024 10:57:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -57,84 +83,169 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Daniel Vetter <daniel.vetter@ffwll.ch>,
- Kaiyuan Zhang <kaiyuanz@google.com>, Mina Almasry <almasrymina@google.com>,
- Pavel Begunkov <asml.silence@gmail.com>,
- Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-Cc: LKML <linux-kernel@vger.kernel.org>, Andreas Larsson
- <andreas@gaisler.com>, Arnd Bergmann <arnd@arndb.de>,
- Bagas Sanjaya <bagasdotme@gmail.com>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Christoph Hellwig <hch@infradead.org>, David Ahern <dsahern@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, David Wei <dw@davidwei.uk>,
- Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>, Helge Deller <deller@gmx.de>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Jakub Kicinski
- <kuba@kernel.org>,
- "James E. J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Jeroen de Borst <jeroendb@google.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Matt Turner <mattst88@gmail.com>, Nikolay Aleksandrov <razor@blackwall.org>,
- Paolo Abeni <pabeni@redhat.com>,
- Praveen Kaligineedi <pkaligineedi@google.com>,
- Richard Henderson <richard.henderson@linaro.org>,
- Shailend Chand <shailend@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Shuah Khan <shuah@kernel.org>,
- Steffen Klassert <steffen.klassert@secunet.com>,
- Steven Rostedt <rostedt@goodmis.org>, Sumit Semwal
- <sumit.semwal@linaro.org>, Taehee Yoo <ap420073@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Yunsheng Lin <linyunsheng@huawei.com>
-References: <20240730022623.98909-4-almasrymina@google.com>
-Subject: Re: [PATCH net-next v17 03/14] netdev: support binding dma-buf to
- netdevice
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240730022623.98909-4-almasrymina@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:3zASUQdt0WnRJJo2JsH8HgMCSLLJrSOm6wxlRg1HbHDrGJYPFAR
- 4UrI46t5fFnsIQP5D20a4Q4/ar+Qe149EAafa7XhskHQN56xyU9dWXWOdOe9cqX+BeVMF3I
- 8WFhpDkIxnYHJeZdnRHZDAN3teiQz55j6x07IL1LXqdRPVKwtTq1AIEwtRutuGvYx2Pn/lI
- 6wer7tct5AinmIXcBPXRw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:pHmLyOskFkY=;I7pCl1VILl5yztEF5uEKXmycDP5
- HNg30ml4ujtQp8hDTQ3k68nNJHnulVh43c1GvXrokXoDUhvvfoxNn12GmkZ+HgPxu8P5cN86n
- HjOpfP8/MmUIpzxPlAqq3wxO4BHOXC7nCoou7XGF6loLekm4A+xubNt9riTQyV1qFBcyB94i1
- 9nkx3l/0I3vtPPF6IXAuFeSgWGNbnMAc5yBzRdvhRx4NgMckDkjJvObOV+sApUE4abxW5IdYc
- buKUkVmNMowUtx9d8ohNyHP5l0MvM+BrMJ+U6i6NSpHCcHyN+Db4gk/km/Nfpyxzicq+cw9kM
- dbUuFQy20IeEzlt0JBmJTvh3npkouDOC8d+ppHNvGFDc2VX95QZiP8oAV1KqYVeet622rengR
- 3AtZYxLW2HL9cJRJdGCFiSSoh2Ma1PdedqtRTNQE8x65ul4oZ5zC5oC7GI0KrfC2lDBmt7U9H
- d3quaXmP5M08fs3HGNmDo2dJT4Mof8Rvu8b/1zeyNdFkx2ISKEqxruq9cgOvPVDOzWnM6q1hQ
- j/Oo//f3eoHLmD9gSZJlyPqNPXnEofdZIoAkzr1NHrrLlxHQQCxQg4K2Ctyi0eEOGrXaAGGMW
- U86dnhPzR1dN3MoSlZwMFv+d+ur6MNAU2LFwQiVgsiYO2r4PdA6g2/epD6XWGMZzsV3xD1bW9
- ezFK4C0vxtvaDH0C0PO+CEdfJXWpA6ElBZbDAsD0DefszWZDdZo0DdR8nfhg96M442XbukoWM
- HqCWkB1S51RK5OLQqCoLFxLM1/As4Y1LHCojxd9Oj8S237g0l+yUpVWT2ul1az/vHGJE2iOpx
- VrU7WYLZwjqQf3tDPMnChwHw==
+Subject: Re: [PATCH v12 41/84] KVM: x86/mmu: Mark pages/folios dirty at the
+ origin of make_spte()
+To: Sean Christopherson <seanjc@google.com>, Marc Zyngier <maz@kernel.org>,
+ Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao
+ <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>,
+ Huacai Chen <chenhuacai@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>,
+ Anup Patel <anup@brainfault.org>, Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Janosch Frank <frankja@linux.ibm.com>,
+ Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc: kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ kvmarm@lists.linux.dev, loongarch@lists.linux.dev,
+ linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+ David Stevens <stevensd@chromium.org>
+References: <20240726235234.228822-1-seanjc@google.com>
+ <20240726235234.228822-42-seanjc@google.com>
+From: Paolo Bonzini <pbonzini@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=pbonzini@redhat.com; keydata=
+ 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
+In-Reply-To: <20240726235234.228822-42-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-=E2=80=A6
-> +++ b/include/net/devmem.h
-> @@ -0,0 +1,115 @@
-=E2=80=A6
-> +#ifndef _NET_DEVMEM_H
-> +#define _NET_DEVMEM_H
-=E2=80=A6
+On 7/27/24 01:51, Sean Christopherson wrote:
+> Move the marking of folios dirty from make_spte() out to its callers,
+> which have access to the _struct page_, not just the underlying pfn.
+> Once all architectures follow suit, this will allow removing KVM's ugly
+> hack where KVM elevates the refcount of VM_MIXEDMAP pfns that happen to
+> be struct page memory.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>   arch/x86/kvm/mmu/mmu.c         | 29 +++++++++++++++++++++++++++--
+>   arch/x86/kvm/mmu/paging_tmpl.h |  5 +++++
+>   arch/x86/kvm/mmu/spte.c        | 11 -----------
+>   3 files changed, 32 insertions(+), 13 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 1cdd67707461..7e7b855ce1e1 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -2918,7 +2918,16 @@ static bool kvm_mmu_prefetch_sptes(struct kvm_vcpu *vcpu, gfn_t gfn, u64 *sptep,
+>   	for (i = 0; i < nr_pages; i++, gfn++, sptep++) {
+>   		mmu_set_spte(vcpu, slot, sptep, access, gfn,
+>   			     page_to_pfn(pages[i]), NULL);
+> -		kvm_release_page_clean(pages[i]);
+> +
+> +		/*
+> +		 * KVM always prefetches writable pages from the primary MMU,
+> +		 * and KVM can make its SPTE writable in the fast page, without
 
-I suggest to omit leading underscores from such identifiers.
-https://wiki.sei.cmu.edu/confluence/display/c/DCL37-C.+Do+not+declare+or+d=
-efine+a+reserved+identifier
+"with a fast page fault"
 
-Regards,
-Markus
+Paolo
+
+> +		 * notifying the primary MMU.  Mark pages/folios dirty now to
+> +		 * ensure file data is written back if it ends up being written
+> +		 * by the guest.  Because KVM's prefetching GUPs writable PTEs,
+> +		 * the probability of unnecessary writeback is extremely low.
+> +		 */
+> +		kvm_release_page_dirty(pages[i]);
+>   	}
+>   
+>   	return true;
+> @@ -4314,7 +4323,23 @@ static u8 kvm_max_private_mapping_level(struct kvm *kvm, kvm_pfn_t pfn,
+>   static void kvm_mmu_finish_page_fault(struct kvm_vcpu *vcpu,
+>   				      struct kvm_page_fault *fault, int r)
+>   {
+> -	kvm_release_pfn_clean(fault->pfn);
+> +	lockdep_assert_once(lockdep_is_held(&vcpu->kvm->mmu_lock) ||
+> +			    r == RET_PF_RETRY);
+> +
+> +	/*
+> +	 * If the page that KVM got from the *primary MMU* is writable, and KVM
+> +	 * installed or reused a SPTE, mark the page/folio dirty.  Note, this
+> +	 * may mark a folio dirty even if KVM created a read-only SPTE, e.g. if
+> +	 * the GFN is write-protected.  Folios can't be safely marked dirty
+> +	 * outside of mmu_lock as doing so could race with writeback on the
+> +	 * folio.  As a result, KVM can't mark folios dirty in the fast page
+> +	 * fault handler, and so KVM must (somewhat) speculatively mark the
+> +	 * folio dirty if KVM could locklessly make the SPTE writable.
+> +	 */
+> +	if (!fault->map_writable || r == RET_PF_RETRY)
+> +		kvm_release_pfn_clean(fault->pfn);
+> +	else
+> +		kvm_release_pfn_dirty(fault->pfn);
+>   }
+>   
+>   static int kvm_mmu_faultin_pfn_private(struct kvm_vcpu *vcpu,
+> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+> index b6897916c76b..2e2d87a925ac 100644
+> --- a/arch/x86/kvm/mmu/paging_tmpl.h
+> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
+> @@ -953,6 +953,11 @@ static int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int
+>   		  spte_to_pfn(spte), spte, true, false,
+>   		  host_writable, &spte);
+>   
+> +	/*
+> +	 * There is no need to mark the pfn dirty, as the new protections must
+> +	 * be a subset of the old protections, i.e. synchronizing a SPTE cannot
+> +	 * change the SPTE from read-only to writable.
+> +	 */
+>   	return mmu_spte_update(sptep, spte);
+>   }
+>   
+> diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
+> index 9b8795bd2f04..2c5650390d3b 100644
+> --- a/arch/x86/kvm/mmu/spte.c
+> +++ b/arch/x86/kvm/mmu/spte.c
+> @@ -277,17 +277,6 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+>   		mark_page_dirty_in_slot(vcpu->kvm, slot, gfn);
+>   	}
+>   
+> -	/*
+> -	 * If the page that KVM got from the primary MMU is writable, i.e. if
+> -	 * it's host-writable, mark the page/folio dirty.  As alluded to above,
+> -	 * folios can't be safely marked dirty in the fast page fault handler,
+> -	 * and so KVM must (somewhat) speculatively mark the folio dirty even
+> -	 * though it isn't guaranteed to be written as KVM won't mark the folio
+> -	 * dirty if/when the SPTE is made writable.
+> -	 */
+> -	if (host_writable)
+> -		kvm_set_pfn_dirty(pfn);
+> -
+>   	*new_spte = spte;
+>   	return wrprot;
+>   }
+
 
