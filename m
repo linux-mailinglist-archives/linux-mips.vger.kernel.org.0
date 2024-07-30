@@ -1,82 +1,82 @@
-Return-Path: <linux-mips+bounces-4595-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4596-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA193942068
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2024 21:15:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88310942132
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2024 22:01:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 074D81C2122F
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2024 19:15:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DACE1F2553A
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2024 20:01:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ECE2189B97;
-	Tue, 30 Jul 2024 19:15:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6E841AA3E2;
+	Tue, 30 Jul 2024 20:00:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S5ZTCDgP"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YGQ6Sro+"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC531AA3F1
-	for <linux-mips@vger.kernel.org>; Tue, 30 Jul 2024 19:15:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CC5C18CBF8
+	for <linux-mips@vger.kernel.org>; Tue, 30 Jul 2024 20:00:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722366942; cv=none; b=scjHNwy8pkoA0Ss+Bf/SNgqCy++oayise/9N8+Kk/V4tPcuF4SlCA4llXxygirGcgVTkUJ37WwSJeYGoSRH9YfRhq9c5PvADZfBnedrMLC5QkmMoxM2lhYGHC0vfU4BRxR8xk2xsJA7BjjbL7Mr2SoTpULbJAcufsM3FvNCziag=
+	t=1722369653; cv=none; b=f9Q469onYAC40ekpnGVUsLbkPkOwkted4eU1ymX6DlnIO9KchrYKGNnKqk1UgK/FDfPTUdLjO3bXqGFcsJNk0jwc6+xti7H6vjlHQEMlMNsuLDUwQEyhxVudWY0cHb34p4hJYgy+Gs0B5F66z09fOJC60GURYer4KVAAzPozoe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722366942; c=relaxed/simple;
-	bh=PETnK4VwC/UhIxIqGvXyjWJId5AWW0Ewo3pA8BJW22I=;
+	s=arc-20240116; t=1722369653; c=relaxed/simple;
+	bh=Sm9YliIBseVNdVtXfF6wU54oboHpFF3iBhE8X9in9r4=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=C4WZXvxdSY0ETwECti6X0sQFZIJwu44efI+2SFKeNOkr/6fcCxuwEcY/KQxmnjVtr6Qs24qC1tF08GcLpKBs5zYuC0euxB9fMd+Df4bgNBIyOc7swaSmC4UdqjaCOcnZfEPxl5ws5elyuVrSI5ny3D18aU0Ca7LHeKoRETJAaNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S5ZTCDgP; arc=none smtp.client-ip=209.85.219.202
+	 To:Cc:Content-Type; b=qdNyCsWP5ly2tJkQ7tA96p1IeXRH7ZR3ld1VXsDF8erMphf+l6clzVh9fieHi2pb27CyOhktAI6MDjh1a1Zil5D7U18xNoNnvR7iLiPWoOJLN8eOytFo+OsmzGm/n2pczwmUGUBmqi2oeJNBMrg3AR+xqdK9xxZ7n933ZX9M7yc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YGQ6Sro+; arc=none smtp.client-ip=209.85.215.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e0b3d35ccfbso5498890276.3
-        for <linux-mips@vger.kernel.org>; Tue, 30 Jul 2024 12:15:40 -0700 (PDT)
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-721d20a0807so5080748a12.1
+        for <linux-mips@vger.kernel.org>; Tue, 30 Jul 2024 13:00:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722366940; x=1722971740; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1722369651; x=1722974451; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8ISzuCdCQ1ApBdrb/imzREuT+CY1/CgtGbhMTtqRUAc=;
-        b=S5ZTCDgPsH6EKImwBd5iINDaD2hRZ61tabcEsa/6THUwe2NbZb6lIISjl+EW4bwZg7
-         ffTtnwZouu8/On3aKf0QeOsxZNCFwo8jL1PlEC4KrzkmNnQFR0WER0F9UZSOc2ie6UK5
-         OqL8G9sUbLeSyidEaobP36gOyNsklBHEz2O7wg69/ddSlftGVAzWqeFb9HMgn776KgEY
-         uYJPdGsBIbMkZojbYYvHotZbiaCZXUe86s10FnStjPFaLGLoAT+gdNJveYK+B7PRMf/5
-         lRMvbCnLKfSTKrmVdzwDwUkxvx5bgP92m8lZ89i3/MpNsl+GK7wahITBTwCEO5yQvGTW
-         gOpg==
+        bh=T1b0dd+u4QtRKmjCQ1fWaclUboiBOp5PBFZF+RqiWy8=;
+        b=YGQ6Sro+JlS75Jcs5Glq0mA6Fjof9EetpnArPZqMi3brBlwbX3/13pn/E7ftqvq1dE
+         Z1Ow3kKecRFDO2zWvVDkeVPRjXo54Di2flPIM+Pp/u6iuNjpj2eaGRmYx5KJAt0CGoQN
+         kj3ncsccSYT/L064wske3OgY3RE+/wfKzGb4DRHxzF5xadVELUA2oJRxKWA6e8bdv8wW
+         JNlTI9fRGHS+OnxREc35TSZl7/5HgJM4Xm4IWTS45v2ucZFOg1LnyTOeXe8pk1RqMtjF
+         d1yOWOUICOKbMeJx9b6xvj9w2SHek6TM6QIGlZFrQnQ6ymvR9+JRt4yhc1w2Yg+UafXL
+         R1WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722366940; x=1722971740;
+        d=1e100.net; s=20230601; t=1722369651; x=1722974451;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8ISzuCdCQ1ApBdrb/imzREuT+CY1/CgtGbhMTtqRUAc=;
-        b=aacdux+8uZ6m+cWlz0kzQa1oZf80EWHHme+YP/2WzblaWnJQKSXHczLcoNa3VzSl/t
-         sMhIHNG2eZjAnkvttCzWrlCIAN1j0ERj+W1SAOZyY3gXt+SIntb9z6tnYey3lNp0elEF
-         nKgTkHUtY/KiWkN7joaCTy7mb+7YctXQKcqYT9TZFtqAys27faiAT1w9FnfR56pLliG8
-         HCsEqoj7JW38LJXK9wwhTnX4M5yrEx2cdh6002EpydpK3Jfx+LqHvMxQYj/t2vIYB+nf
-         9wR6+Dw/SxptgYK1IXO9Y6b5xC0BYr4clMeNacLZD5xF9AiXWD/ce4ZofwTYSgVO+w/V
-         TX3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU27JnRz1K/P1y4Vy/SOx4OkgsoY/odB7PI2N7dpafOz6quv27am6TWhNAKlVxfE9dNKTrTJ69v3lYf6yHeAQmqTCiAX8ZlTT8+RQ==
-X-Gm-Message-State: AOJu0Yyz/xuYo00CMYu7WjYkdJOzHHBu5ebiyntqCtsX3yiYkp8pZBsg
-	4ZfIds5/gXgvGsQ7J6KFFlwYiKwWZ0x0OcLDpdixyd0ysWEP2C8d/TMozfD5si/yeQb5gDMeZlr
-	MfA==
-X-Google-Smtp-Source: AGHT+IG9SmfuMb4gtd0Ao4BPZkLVByP1qx5TNQuKOL4wYDlOLmXqkqaZZiuA2JFi0z3WenSC5NZXiGCdyNk=
+        bh=T1b0dd+u4QtRKmjCQ1fWaclUboiBOp5PBFZF+RqiWy8=;
+        b=CigJ8vHFaWjXlb09yols5e0OVUHfFGiYwzdtKVjTxNK/0N2CMZPoVi4vs3cNaHoo4l
+         Yd3WGDprYJTTOB9cpQpmHaXKWlo/erKSYJwd3ghI9Pmt0MGIxw2MoBl2S+EimsQEOzFG
+         o289Ejseivec8H5clp9ZI096YRzQ+/kubP1N0eDSWkPhAyTx0jbVkjK6pezxpaVzOUQW
+         9G9s938sXI1uNa0S2Y2hB5xSUwLIvxGXf/T2efoR/7yNPMXMfOV+thBHa6UFcNPC9KJM
+         lIkGH3zl6cyvNAMHN9kWAXqDa3W0l+/Q6eMF1wj9sJ5u57dIJreXbUJYVBuSskRR4Jxm
+         pBlg==
+X-Forwarded-Encrypted: i=1; AJvYcCV8GTOF9ZCLM5q5IXrbFtZ17qS0QNcgEy1jTyExgz5HbdZAXzJUBVzir+5EAKydJo6anFyJ3lbLeu1hWMWijEAtiqRj58kOjWs0pw==
+X-Gm-Message-State: AOJu0Yzk9MivE9Q7NmF5aaq/OUo9vyZ/lSDy42m38BJG0GSbTLcqPyHO
+	ShCMlBg/P/efvrw/OtoGLKByRP1//Wk83tR+SSeiIu6EpX1qjemxZsJo1EE2gA4AOQWRRVuFJhE
+	Naw==
+X-Google-Smtp-Source: AGHT+IFIpN0t9CwDntyaqKmkPJ5cyx3sfG1IwNUw2ka0n2i9gazwPDbMR7YOpYtas1d8Mj8EPxP4qtxT2wA=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:2b8f:b0:e03:59e2:e82 with SMTP id
- 3f1490d57ef6-e0b545a3f3dmr19046276.10.1722366939560; Tue, 30 Jul 2024
- 12:15:39 -0700 (PDT)
-Date: Tue, 30 Jul 2024 12:15:38 -0700
-In-Reply-To: <96df1dd5-cc31-4e84-84fd-ea75b4800be8@redhat.com>
+ (user=seanjc job=sendgmr) by 2002:a05:6a02:5a3:b0:6bc:b210:c1dd with SMTP id
+ 41be03b00d2f7-7ac8fd2ec71mr34114a12.8.1722369651264; Tue, 30 Jul 2024
+ 13:00:51 -0700 (PDT)
+Date: Tue, 30 Jul 2024 13:00:49 -0700
+In-Reply-To: <2da6b57e-d5c2-4016-b89b-d51700eeb845@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20240726235234.228822-1-seanjc@google.com> <20240726235234.228822-49-seanjc@google.com>
- <96df1dd5-cc31-4e84-84fd-ea75b4800be8@redhat.com>
-Message-ID: <Zqk72jP1c8N0Pn1O@google.com>
-Subject: Re: [PATCH v12 48/84] KVM: Move x86's API to release a faultin page
- to common KVM
+References: <20240726235234.228822-1-seanjc@google.com> <20240726235234.228822-46-seanjc@google.com>
+ <2da6b57e-d5c2-4016-b89b-d51700eeb845@redhat.com>
+Message-ID: <ZqlGcaESdxw5vzl8@google.com>
+Subject: Re: [PATCH v12 45/84] KVM: guest_memfd: Provide "struct page" as
+ output from kvm_gmem_get_pfn()
 From: Sean Christopherson <seanjc@google.com>
 To: Paolo Bonzini <pbonzini@redhat.com>
 Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
@@ -95,55 +95,44 @@ Content-Type: text/plain; charset="us-ascii"
 
 On Tue, Jul 30, 2024, Paolo Bonzini wrote:
 > On 7/27/24 01:51, Sean Christopherson wrote:
-> > Move KVM x86's helper that "finishes" the faultin process to common KVM
-> > so that the logic can be shared across all architectures.  Note, not all
-> > architectures implement a fast page fault path, but the gist of the
-> > comment applies to all architectures.
-> > 
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >   arch/x86/kvm/mmu/mmu.c   | 24 ++----------------------
-> >   include/linux/kvm_host.h | 26 ++++++++++++++++++++++++++
-> >   2 files changed, 28 insertions(+), 22 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 95beb50748fc..2a0cfa225c8d 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -4323,28 +4323,8 @@ static u8 kvm_max_private_mapping_level(struct kvm *kvm, kvm_pfn_t pfn,
-> >   static void kvm_mmu_finish_page_fault(struct kvm_vcpu *vcpu,
-> >   				      struct kvm_page_fault *fault, int r)
-> >   {
-> > -	lockdep_assert_once(lockdep_is_held(&vcpu->kvm->mmu_lock) ||
-> > -			    r == RET_PF_RETRY);
-> > -
-> > -	if (!fault->refcounted_page)
-> > -		return;
-> > -
-> > -	/*
-> > -	 * If the page that KVM got from the *primary MMU* is writable, and KVM
-> > -	 * installed or reused a SPTE, mark the page/folio dirty.  Note, this
-> > -	 * may mark a folio dirty even if KVM created a read-only SPTE, e.g. if
-> > -	 * the GFN is write-protected.  Folios can't be safely marked dirty
-> > -	 * outside of mmu_lock as doing so could race with writeback on the
-> > -	 * folio.  As a result, KVM can't mark folios dirty in the fast page
-> > -	 * fault handler, and so KVM must (somewhat) speculatively mark the
-> > -	 * folio dirty if KVM could locklessly make the SPTE writable.
-> > -	 */
-> > -	if (r == RET_PF_RETRY)
-> > -		kvm_release_page_unused(fault->refcounted_page);
-> > -	else if (!fault->map_writable)
-> > -		kvm_release_page_clean(fault->refcounted_page);
-> > -	else
-> > -		kvm_release_page_dirty(fault->refcounted_page);
-> > +	kvm_release_faultin_page(vcpu->kvm, fault->refcounted_page,
-> > +				 r == RET_PF_RETRY, fault->map_writable);
+> > Provide the "struct page" associated with a guest_memfd pfn as an output
+> > from __kvm_gmem_get_pfn() so that KVM guest page fault handlers can
+>        ^^^^^^^^^^^^^^^^^^^^
 > 
-> Does it make sense to move RET_PF_* to common code, and avoid a bool
-> argument here?
+> Just "kvm_gmem_get_pfn()".
+> 
+> > directly put the page instead of having to rely on
+> > kvm_pfn_to_refcounted_page().
+> 
+> This will conflict with my series, where I'm introducing
+> folio_file_pfn() and using it here:
+> > -	page = folio_file_page(folio, index);
+> > +	*page = folio_file_page(folio, index);
+> > -	*pfn = page_to_pfn(page);
+> > +	*pfn = page_to_pfn(*page);
+> >   	if (max_order)
+> >   		*max_order = 0;
+> 
+> That said, I think it's better to turn kvm_gmem_get_pfn() into
+> kvm_gmem_get_page() here, and pull the page_to_pfn() or page_to_phys()
+> to the caller as applicable.  This highlights that the caller always
+> gets a refcounted page with guest_memfd.
 
-After this series, probably?  Especially if/when we make "struct kvm_page_fault"
-a common structure and converge all arch code.  In this series, definitely not,
-as it would require even more patches to convert other architectures, and it's
-not clear that it would be a net win, at least not without even more massaging.
+I have mixed feelings on this.
+
+On one hand, it's silly/confusing to return a pfn+page pair and thus imply that
+guest_memfd can return a pfn without a page.
+
+On the other hand, if guest_memfd does ever serve pfns without a struct page,
+it could be quite painful to unwind all of the arch arch code we'll accrue that
+assumes guest_memfd only ever returns a refcounted page (as evidenced by this
+series).
+
+The probability of guest_memfd not having struct page for mapped pfns is likely
+very low, but at the same time, providing a pfn+page pair doesn't cost us much.
+And if it turns out that not having struct page is nonsensical, deferring the
+kvm_gmem_get_pfn() => kvm_gmem_get_page() conversion could be annoying, but highly
+unlikely to be painful since it should be 100% mechanical.  Whereas reverting back
+to kvm_gmem_get_pfn() if we make the wrong decision now could mean doing surgery
+on a pile of arch code.
 
