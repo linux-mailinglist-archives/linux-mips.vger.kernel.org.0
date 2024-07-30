@@ -1,180 +1,149 @@
-Return-Path: <linux-mips+bounces-4594-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4595-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CE8594112F
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2024 13:52:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA193942068
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2024 21:15:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2273A284E2A
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2024 11:52:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 074D81C2122F
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2024 19:15:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2049919B5AC;
-	Tue, 30 Jul 2024 11:52:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ECE2189B97;
+	Tue, 30 Jul 2024 19:15:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Hf5X5npP"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S5ZTCDgP"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A8B197549
-	for <linux-mips@vger.kernel.org>; Tue, 30 Jul 2024 11:52:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC531AA3F1
+	for <linux-mips@vger.kernel.org>; Tue, 30 Jul 2024 19:15:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722340344; cv=none; b=bxI8r1Vbtva9pb+IFJ0Zyp4kEUTnYsP+ALW4oIU7SnT82kFkywJ6B2YYfUfTL6x42HnSjPQQWHnLA8eaWe8+ZpYAUai7je1GxyoP7BSVTzgxRia4SLYsZ28lXll4jKPE452uD6BUkXVIpRTcxLWel1mExqKQZ//yIgRt4ziwjQI=
+	t=1722366942; cv=none; b=scjHNwy8pkoA0Ss+Bf/SNgqCy++oayise/9N8+Kk/V4tPcuF4SlCA4llXxygirGcgVTkUJ37WwSJeYGoSRH9YfRhq9c5PvADZfBnedrMLC5QkmMoxM2lhYGHC0vfU4BRxR8xk2xsJA7BjjbL7Mr2SoTpULbJAcufsM3FvNCziag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722340344; c=relaxed/simple;
-	bh=i5pqEBAzsxZVYdIgCz2pQRWHOKq/9I2sY7ExiVSJ1S0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dx8/O9hY3MYpYB1KILFDQ0Uf308jaI09f7xUg0KwPJikC1xOWau/ydAll41EP3/7nWBcMpVxg18yI3Ixv/LA4f0fTSwXwqvsdD0hGSvaB3ksoiH+c+8LWQDDmPNdfgHI8gmRs/lQgNJYJziy90rqLNB9c8M8y39g4AugE4rJDCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Hf5X5npP; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1722340341;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=kBFBIKd1rJgOI9YcivSLfU1/eAHX+x0Dw4M+NCBYe5U=;
-	b=Hf5X5npPCSB3TJunaCO7/yEglHaWSbpLOg7or/hkRqXSVOyYZtkyK6hgC1QIR1Kbxl8Vqh
-	TAmCGanWbuTWf/HB4k3YG4ySXy0RM62Cu7nTnqsSuEzg/YyaEz/ndYnKnuOsKhnvfwY/CH
-	HR23bPkVSPAn+IKNNdhRtEu0J5XT5X0=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-486-SHq1_BYLPgep9lXsEnRvnA-1; Tue, 30 Jul 2024 07:52:19 -0400
-X-MC-Unique: SHq1_BYLPgep9lXsEnRvnA-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-57c93227bbeso4392013a12.3
-        for <linux-mips@vger.kernel.org>; Tue, 30 Jul 2024 04:52:19 -0700 (PDT)
+	s=arc-20240116; t=1722366942; c=relaxed/simple;
+	bh=PETnK4VwC/UhIxIqGvXyjWJId5AWW0Ewo3pA8BJW22I=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=C4WZXvxdSY0ETwECti6X0sQFZIJwu44efI+2SFKeNOkr/6fcCxuwEcY/KQxmnjVtr6Qs24qC1tF08GcLpKBs5zYuC0euxB9fMd+Df4bgNBIyOc7swaSmC4UdqjaCOcnZfEPxl5ws5elyuVrSI5ny3D18aU0Ca7LHeKoRETJAaNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S5ZTCDgP; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e0b3d35ccfbso5498890276.3
+        for <linux-mips@vger.kernel.org>; Tue, 30 Jul 2024 12:15:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1722366940; x=1722971740; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8ISzuCdCQ1ApBdrb/imzREuT+CY1/CgtGbhMTtqRUAc=;
+        b=S5ZTCDgPsH6EKImwBd5iINDaD2hRZ61tabcEsa/6THUwe2NbZb6lIISjl+EW4bwZg7
+         ffTtnwZouu8/On3aKf0QeOsxZNCFwo8jL1PlEC4KrzkmNnQFR0WER0F9UZSOc2ie6UK5
+         OqL8G9sUbLeSyidEaobP36gOyNsklBHEz2O7wg69/ddSlftGVAzWqeFb9HMgn776KgEY
+         uYJPdGsBIbMkZojbYYvHotZbiaCZXUe86s10FnStjPFaLGLoAT+gdNJveYK+B7PRMf/5
+         lRMvbCnLKfSTKrmVdzwDwUkxvx5bgP92m8lZ89i3/MpNsl+GK7wahITBTwCEO5yQvGTW
+         gOpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722340338; x=1722945138;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kBFBIKd1rJgOI9YcivSLfU1/eAHX+x0Dw4M+NCBYe5U=;
-        b=YJIUWDU0y1adfy/fdexPTA8diiME0JvX9eWrYEj+43b2P2EOY/DuwmjajF4PApznM+
-         vdNaYUo0DV/4SJeXxQrQed+S2924Rg1PiqQNCeGY5MfA9Y4M4OXnohYVG1kfHpFvwjn+
-         IdQmg5f3Oiz1sAmIVLRGrDJEIYkaC1Fn2Hst7tspPDfFbcYiEXkbgF60eczyElD4ydYl
-         012VfeZp8R3L2lgX7yXtQA1DM62rSrLA0umcvHmPsBMG61H/ODa86B+nxtrcZxamk7RN
-         E2t9ZDtYsNsQrmXTsYNfQXCPq16ddAz3gEJmQjT4Yp+lZfwG5sEwuQqer0bFcIcxUZd1
-         PdWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVfmnM0scFmZbDDGvvy/abzm7Nb04l8cfu2e23fkb2IAPg43oEuPpGQ9L8U7fzYe3iT9kJmX4AJzUrE7v58y7paMoPsjMc62oGGRg==
-X-Gm-Message-State: AOJu0YyxeUq1h6AGa02eFwaYD0sHyOoVz9xVGfUAVk/DMe0uyO2b4qhU
-	k8/yEPuBzIJYzEsizCehuRp7f7ht4Q95jojDYmWeddjfoLav7kjT91vna+MlGPfzi4GehIMDDGH
-	zMBdmNGfjY1vU25NfN5WahsGgcPI34pqeOMJPvqFjRLNntOHj6hKr8cQRlgA=
-X-Received: by 2002:a50:d742:0:b0:5a1:6c50:a35 with SMTP id 4fb4d7f45d1cf-5b022b8cd30mr5926684a12.37.1722340338220;
-        Tue, 30 Jul 2024 04:52:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGBJKwuTl3GcCc5YuDbeqMD1zDkMcs4VmkJUQMAj6w6PoPQ2QTlBUJ4IvJ66qrB4FTpUDSGzA==
-X-Received: by 2002:a50:d742:0:b0:5a1:6c50:a35 with SMTP id 4fb4d7f45d1cf-5b022b8cd30mr5926669a12.37.1722340337692;
-        Tue, 30 Jul 2024 04:52:17 -0700 (PDT)
-Received: from [192.168.10.47] ([151.95.101.29])
-        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5b0044c72d4sm5211327a12.70.2024.07.30.04.52.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jul 2024 04:52:17 -0700 (PDT)
-Message-ID: <419ea6ce-83ca-413e-936c-1935e2c51497@redhat.com>
-Date: Tue, 30 Jul 2024 13:52:15 +0200
+        d=1e100.net; s=20230601; t=1722366940; x=1722971740;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8ISzuCdCQ1ApBdrb/imzREuT+CY1/CgtGbhMTtqRUAc=;
+        b=aacdux+8uZ6m+cWlz0kzQa1oZf80EWHHme+YP/2WzblaWnJQKSXHczLcoNa3VzSl/t
+         sMhIHNG2eZjAnkvttCzWrlCIAN1j0ERj+W1SAOZyY3gXt+SIntb9z6tnYey3lNp0elEF
+         nKgTkHUtY/KiWkN7joaCTy7mb+7YctXQKcqYT9TZFtqAys27faiAT1w9FnfR56pLliG8
+         HCsEqoj7JW38LJXK9wwhTnX4M5yrEx2cdh6002EpydpK3Jfx+LqHvMxQYj/t2vIYB+nf
+         9wR6+Dw/SxptgYK1IXO9Y6b5xC0BYr4clMeNacLZD5xF9AiXWD/ce4ZofwTYSgVO+w/V
+         TX3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU27JnRz1K/P1y4Vy/SOx4OkgsoY/odB7PI2N7dpafOz6quv27am6TWhNAKlVxfE9dNKTrTJ69v3lYf6yHeAQmqTCiAX8ZlTT8+RQ==
+X-Gm-Message-State: AOJu0Yyz/xuYo00CMYu7WjYkdJOzHHBu5ebiyntqCtsX3yiYkp8pZBsg
+	4ZfIds5/gXgvGsQ7J6KFFlwYiKwWZ0x0OcLDpdixyd0ysWEP2C8d/TMozfD5si/yeQb5gDMeZlr
+	MfA==
+X-Google-Smtp-Source: AGHT+IG9SmfuMb4gtd0Ao4BPZkLVByP1qx5TNQuKOL4wYDlOLmXqkqaZZiuA2JFi0z3WenSC5NZXiGCdyNk=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:2b8f:b0:e03:59e2:e82 with SMTP id
+ 3f1490d57ef6-e0b545a3f3dmr19046276.10.1722366939560; Tue, 30 Jul 2024
+ 12:15:39 -0700 (PDT)
+Date: Tue, 30 Jul 2024 12:15:38 -0700
+In-Reply-To: <96df1dd5-cc31-4e84-84fd-ea75b4800be8@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 00/84] KVM: Stop grabbing references to PFNMAP'd pages
-To: Sean Christopherson <seanjc@google.com>, Marc Zyngier <maz@kernel.org>,
- Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao
- <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>,
- Huacai Chen <chenhuacai@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>,
- Anup Patel <anup@brainfault.org>, Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Janosch Frank <frankja@linux.ibm.com>,
- Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc: kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- kvmarm@lists.linux.dev, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
- David Stevens <stevensd@chromium.org>
-References: <20240726235234.228822-1-seanjc@google.com>
-From: Paolo Bonzini <pbonzini@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=pbonzini@redhat.com; keydata=
- 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
-In-Reply-To: <20240726235234.228822-1-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20240726235234.228822-1-seanjc@google.com> <20240726235234.228822-49-seanjc@google.com>
+ <96df1dd5-cc31-4e84-84fd-ea75b4800be8@redhat.com>
+Message-ID: <Zqk72jP1c8N0Pn1O@google.com>
+Subject: Re: [PATCH v12 48/84] KVM: Move x86's API to release a faultin page
+ to common KVM
+From: Sean Christopherson <seanjc@google.com>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
+	Huacai Chen <chenhuacai@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Anup Patel <anup@brainfault.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	David Matlack <dmatlack@google.com>, David Stevens <stevensd@chromium.org>
+Content-Type: text/plain; charset="us-ascii"
 
-On 7/27/24 01:51, Sean Christopherson wrote:
-> arm64 folks, the first two patches are bug fixes, but I have very low
-> confidence that they are correct and/or desirable.  If they are more or
-> less correct, I can post them separately if that'd make life easier.  I
-> included them here to avoid conflicts, and because I'm pretty sure how
-> KVM deals with MTE tags vs. dirty logging will impact what APIs KVM needs
-> to provide to arch code.
+On Tue, Jul 30, 2024, Paolo Bonzini wrote:
+> On 7/27/24 01:51, Sean Christopherson wrote:
+> > Move KVM x86's helper that "finishes" the faultin process to common KVM
+> > so that the logic can be shared across all architectures.  Note, not all
+> > architectures implement a fast page fault path, but the gist of the
+> > comment applies to all architectures.
+> > 
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >   arch/x86/kvm/mmu/mmu.c   | 24 ++----------------------
+> >   include/linux/kvm_host.h | 26 ++++++++++++++++++++++++++
+> >   2 files changed, 28 insertions(+), 22 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index 95beb50748fc..2a0cfa225c8d 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -4323,28 +4323,8 @@ static u8 kvm_max_private_mapping_level(struct kvm *kvm, kvm_pfn_t pfn,
+> >   static void kvm_mmu_finish_page_fault(struct kvm_vcpu *vcpu,
+> >   				      struct kvm_page_fault *fault, int r)
+> >   {
+> > -	lockdep_assert_once(lockdep_is_held(&vcpu->kvm->mmu_lock) ||
+> > -			    r == RET_PF_RETRY);
+> > -
+> > -	if (!fault->refcounted_page)
+> > -		return;
+> > -
+> > -	/*
+> > -	 * If the page that KVM got from the *primary MMU* is writable, and KVM
+> > -	 * installed or reused a SPTE, mark the page/folio dirty.  Note, this
+> > -	 * may mark a folio dirty even if KVM created a read-only SPTE, e.g. if
+> > -	 * the GFN is write-protected.  Folios can't be safely marked dirty
+> > -	 * outside of mmu_lock as doing so could race with writeback on the
+> > -	 * folio.  As a result, KVM can't mark folios dirty in the fast page
+> > -	 * fault handler, and so KVM must (somewhat) speculatively mark the
+> > -	 * folio dirty if KVM could locklessly make the SPTE writable.
+> > -	 */
+> > -	if (r == RET_PF_RETRY)
+> > -		kvm_release_page_unused(fault->refcounted_page);
+> > -	else if (!fault->map_writable)
+> > -		kvm_release_page_clean(fault->refcounted_page);
+> > -	else
+> > -		kvm_release_page_dirty(fault->refcounted_page);
+> > +	kvm_release_faultin_page(vcpu->kvm, fault->refcounted_page,
+> > +				 r == RET_PF_RETRY, fault->map_writable);
 > 
-> On to the series...  The TL;DR is that I would like to get input on two
-> things:
-> 
->   1. Marking folios dirty/accessed only on the intial stage-2 page fault
->   2. The new APIs for faulting, prefetching, and doing "lookups" on pfns
+> Does it make sense to move RET_PF_* to common code, and avoid a bool
+> argument here?
 
-Wow!
-
-Splitting out prefetching makes a lot of sense, as it's the only one 
-with npages > 1 and it doesn't need all the complexity of hva_to_pfn().
-
-I've left a comment on the lookup API, which is probably the only one 
-that can be simplified further.
-
-The faulting API looks good as a first iteration.  Code-wise, 
-kvm_resolve_pfn() is probably unnecessary at the end of the series but I 
-can see why you had to restrain yourself and declare it done. :)
-
-An interesting evolution of the API could be to pass a struct 
-kvm_follow_pfn pointer to {,__}kvm_faultin_pfn() and __gfn_to_page() 
-(the "constructors"); and on the other side to 
-kvm_release_faultin_page() and kvm_release_page_*().  The struct 
-kvm_follow_pfn could be embedded in the (x86) kvm_page_fault and 
-(generic) kvm_host_map structs.  But certainly not as part of this 
-already huge work.
-
-Paolo
-
+After this series, probably?  Especially if/when we make "struct kvm_page_fault"
+a common structure and converge all arch code.  In this series, definitely not,
+as it would require even more patches to convert other architectures, and it's
+not clear that it would be a net win, at least not without even more massaging.
 
