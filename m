@@ -1,70 +1,70 @@
-Return-Path: <linux-mips+bounces-4576-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4575-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E6519404D4
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2024 04:28:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E39A9404CD
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2024 04:28:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 520581C210D2
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2024 02:28:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 434BF2828D5
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2024 02:28:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7226F16B3B7;
-	Tue, 30 Jul 2024 02:26:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA5736EB5B;
+	Tue, 30 Jul 2024 02:26:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TAcAkG5M"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IMDsJUwK"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D6611552E7
-	for <linux-mips@vger.kernel.org>; Tue, 30 Jul 2024 02:26:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210EF16132B
+	for <linux-mips@vger.kernel.org>; Tue, 30 Jul 2024 02:26:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722306404; cv=none; b=eqTSJxWtjMepoZeVsRu0OP4LHjOmjYl+vRyxMtzsi2Szm1YJCKV8uOCaTsscNXcROsZo0TiSQ28n4IdXgxz9T019Vc6qhHsIzyvsZD+WpiZ40SOaUaeeez3mPlEzxlsUpjdvW1lKoeRBZDMjXjqkrszZU+eHsVjbSQwQphAn7dI=
+	t=1722306403; cv=none; b=uWfmptV2QsX9woyQP5JIYGp/q2LZ2tLwLzkavvWqasZSJo5tDtnl92oW0STHAKUilJUvEcctcn2Pz5n2KA3XwuDlRg7TkwwffcBeVZtL9TSUb9P/m7gAVFJlFHE8mcVfIsx0jupCUHLBEm7hvec5ph5WyryirgQ7NgZrHLCS7lo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722306404; c=relaxed/simple;
-	bh=dNmQtYy68N/SLiUBNq045aQrib8pOh18k72EvrDuAAE=;
+	s=arc-20240116; t=1722306403; c=relaxed/simple;
+	bh=EujhD2n1Ke7lPZKkibOLBAZurseJRlXkSsBCc47I7oE=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=J1SpL8XttJTcgVU6tPAWkRDOGP6KwkcSF4qCQSMF9yw/uFt8Km6fFeGr2HTivtpJw/NRQDSUVrNOwbL3uvdDe44vg4gBkpQj58d+AhyULjE9pxAtsFbZF3RjnEbauSu3lXA8Zbxm369nUn+W3ZuI8eRLOeKHEUIqqcA4BForRiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TAcAkG5M; arc=none smtp.client-ip=209.85.214.202
+	 To:Cc:Content-Type; b=nZHJJRIrE1X6xFY2VzGVg5gGQ5l9KelPw+Eh+oZ33cu8eSk4Fh5/U4TpkL1BVFRhTnA6lc1nNABU/NwGaEcz1Eynbx92MHfenu+Z2+OqPgWl++jgsgoHQFBeMLijcO3Aqhz8PRHeETNFAdoZdapkF9pKoaAD/aSk5Kgz0vWqbgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IMDsJUwK; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-1fed6fe8002so26865515ad.2
-        for <linux-mips@vger.kernel.org>; Mon, 29 Jul 2024 19:26:37 -0700 (PDT)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-66af35f84a3so86272717b3.1
+        for <linux-mips@vger.kernel.org>; Mon, 29 Jul 2024 19:26:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722306397; x=1722911197; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1722306398; x=1722911198; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8cpgk7A1Ci0fLZZgBR1RDLKJO/LQnlu3QBndF/2loSU=;
-        b=TAcAkG5Mn7Twf2Fv5G0iXo5JzEEbl7akVcbftdXwLTvkEgDoGcLP5hl0ComRENaINK
-         o3V4RvuFsQ4STu5yzfB8uoQhzUEZOQKr2NpGASL/5md181+2a1Q6g3eo9YRiFzv7Rp1l
-         xoXyoMP+d4io2AYVuQ1oNMjuRqgVCK+z/SpFUs7eyYkr7+L5v6bd1TP6PLap/q+66kvg
-         EwL4AIxy4BVYQjQ5EO0v/2ybA5cIJcJqXmks3pptO9sDmh6gsjuNtGrVE9v356m32RPT
-         +xz8vSrXIYcemR6v0Wr8/+ZMmwIoyiN3yPyD6R5jQiuYbuC0AxtablzQaKrqzlZy2s64
-         BlqA==
+        bh=qpjJDC2/7eGvs2TUXo8T6/AXlUgH8srqN9C/rVg09l8=;
+        b=IMDsJUwKVGL1LKeXesdgNv138J0NM5gmlOVlb1jRRsdJdJmP+n80epkmZLDx9ZxlVJ
+         BwaINy3SAVEQQkc6noTnuFqUnRtvruDcCQk20g57fxHFbVdx4Z1+ZKWWcxSIrccufl8I
+         aYs7ZxqdhZPtN0KBzsfiQupTTaCdBwUNhyDvPu9j2VkRgF9zPbVVIPORJRiniyA8eNuj
+         pceUr/DqLBVI5ZjqvKUKkm2ArZKMIAom3pHPC+AZ8bt+i0N3tYdALRaYvK75bQ4vHDFa
+         N6/fAbIqULStWLJRxdQQ5pWUIqJMTOxLE/TiUTOPpb2n14NevwwUk+ZBrgjtxnVQKJ+z
+         W7mQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722306397; x=1722911197;
+        d=1e100.net; s=20230601; t=1722306398; x=1722911198;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8cpgk7A1Ci0fLZZgBR1RDLKJO/LQnlu3QBndF/2loSU=;
-        b=pKuG20RUx4rZuR9wvWRMYQQ2Gfep4VEhAczeArZceN3H5T4WiqaUTXdbUzZNbhT9D9
-         I79SvTm3OliXvRbOsVY1jLM7WYqDZGFILWENlzmsdroC5PGGlcboKGKFnpdHxAot+zDK
-         P7dvU65Od2bpxOCTFg6/hQLzR466XyTCF3ZxFQwkZxiq3K7h1oNkk0Tz+UOI1q+MzPVx
-         tbIiQzP2zmjdZo/Rg+8Dd/1wU3JIBZo8YYrQXXJGShqfep74mpi2RQpQY2yONL5i4FbN
-         Rij6beBZTI7MiF7P+LGxOC5a0l6RKBA0jOpHChDi2DO5E65aCEGf9G3JdghUnJUpWSD5
-         SrCw==
-X-Forwarded-Encrypted: i=1; AJvYcCX7kOW5HMOE8sTwFsr8gFe3RPDq8q3K3xokMu8T5l1G4Br7WNVkIzt5Dju2L/7HavROuQvMlE4pwyH4lsNDOCFyWGT+G6gZiZezYw==
-X-Gm-Message-State: AOJu0Yz1mLnDtrGnFMpCRhkRZiikhXvi1Q+9LYAM2DnljDmagfKxE/9k
-	G1jGE5NMyvBn0uIOM20P8MqOXR6aCS+QeTTamcKUuGgph6tApQUOj11e+VEAylxTO4pRnYGSVvx
-	qc/YcWYMuyS82jXPL5RJ9AQ==
-X-Google-Smtp-Source: AGHT+IFUJSMorXRhdXYvyK6tSmZn4zMz3HIyw1VyM+jL6c8F5EfQ4VozIOl2s1shRCqIeczmwAPxygQeJAkoT8ZZyA==
+        bh=qpjJDC2/7eGvs2TUXo8T6/AXlUgH8srqN9C/rVg09l8=;
+        b=iB4rLIowd97aZjelBQahKVEkhppf8/I7PnP5t3MN9Aap1FCIufu+6ReIK6le9/AhtN
+         ANGedsSPTj+gSi5XR6uwOZ3/jm+BOlFPDMNhxvJ6ftny6lpBIsSio30I4+y1ya5L9ZbF
+         oqBqNLVz5dtd6gigq8uc5fuue4veX9qFhk/c38NgVEQyJUJe4abbOvJbZcwDE4wVj/Mm
+         vWyy6RF5PAkUFujTSH2KRcYVkOij8x9VBFP8fHW+T/pY71Kbj2Lr37GSVDT1d96GjFVi
+         RMRWNZh15vwiPKzBfjxGPMq0nMMGcoH1ZHcmWIx2nTnAKyA4og4nf6ubqE8irsmgvgnn
+         dkMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV1xyLzlXzvVKLyrWOCAhMYPvHtJebGM6q2UplUXnFO6oFEya6pf4y+F1yRDw/QzGiiUQybbPjeO4RZpoMCIyvfMkcYZdpUl2Z58g==
+X-Gm-Message-State: AOJu0YzDUPTnMM2PjaWCKo1o8m0dZ7d9sAMe2JDzztpfJc4NjJMS9Xt5
+	1vDMnoEpN279kYaVNKctz0KwAsDTKwb8N23knkG+q/6aIQLCXRAbGi3tgjVC2ZrqkAoKAH/XF80
+	mX4pIgSPK5TK9GLVkKJaLNA==
+X-Google-Smtp-Source: AGHT+IHxQctUGKYgd5oy7kYkF4T9KZlsamRVSF7Lno+W8mdbELZDi6ZWUht6vp6IR2OIsIspamJFWs+eE7Qt6tSYEw==
 X-Received: from almasrymina.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4bc5])
- (user=almasrymina job=sendgmr) by 2002:a17:903:1d2:b0:1fa:fc15:c513 with SMTP
- id d9443c01a7336-1ff04872d65mr4166475ad.9.1722306396807; Mon, 29 Jul 2024
- 19:26:36 -0700 (PDT)
-Date: Tue, 30 Jul 2024 02:26:08 +0000
+ (user=almasrymina job=sendgmr) by 2002:a05:6902:154d:b0:e03:589b:cbe1 with
+ SMTP id 3f1490d57ef6-e0b545431eamr671930276.7.1722306398655; Mon, 29 Jul 2024
+ 19:26:38 -0700 (PDT)
+Date: Tue, 30 Jul 2024 02:26:09 +0000
 In-Reply-To: <20240730022623.98909-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240730022623.98909-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.46.0.rc1.232.g9752f9e123-goog
-Message-ID: <20240730022623.98909-5-almasrymina@google.com>
-Subject: [PATCH net-next v17 04/14] netdev: netdevice devmem allocator
+Message-ID: <20240730022623.98909-6-almasrymina@google.com>
+Subject: [PATCH net-next v17 05/14] page_pool: move dmaddr helpers to .c file
 From: Mina Almasry <almasrymina@google.com>
 To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
@@ -102,168 +102,110 @@ Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.ne
 	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
 	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
 	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
-	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Implement netdev devmem allocator. The allocator takes a given struct
-netdev_dmabuf_binding as input and allocates net_iov from that
-binding.
+These helpers are used for setup and init of buffers, and their
+implementation need not be static inline in the header file.
 
-The allocation simply delegates to the binding's genpool for the
-allocation logic and wraps the returned memory region in a net_iov
-struct.
+Moving the implementation to the .c file allows us to hide netmem
+implementation details in internal header files rather than the public
+file.
 
-Signed-off-by: Willem de Bruijn <willemb@google.com>
-Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
 Signed-off-by: Mina Almasry <almasrymina@google.com>
-Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
 
 ---
+ include/net/page_pool/helpers.h | 30 ++----------------------------
+ net/core/page_pool.c            | 31 +++++++++++++++++++++++++++++++
+ 2 files changed, 33 insertions(+), 28 deletions(-)
 
-v17:
-- Don't acquire a binding ref for every allocation (Jakub).
-
-v11:
-- Fix extraneous inline directive (Paolo)
-
-v8:
-- Rename netdev_dmabuf_binding -> net_devmem_dmabuf_binding to avoid
-  patch-by-patch build error.
-- Move niov->pp_magic/pp/pp_ref_counter usage to later patch to avoid
-  patch-by-patch build error.
-
-v7:
-- netdev_ -> net_devmem_* naming (Yunsheng).
-
-v6:
-- Add comment on net_iov_dma_addr to explain why we don't use
-  niov->dma_addr (Pavel)
-- Refactor new functions into net/core/devmem.c (Pavel)
-
-v1:
-- Rename devmem -> dmabuf (David).
-
----
- include/net/devmem.h | 13 +++++++++++++
- include/net/netmem.h | 18 ++++++++++++++++++
- net/core/devmem.c    | 40 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 71 insertions(+)
-
-diff --git a/include/net/devmem.h b/include/net/devmem.h
-index c7bd6a0a6b9e9..2e7cc46d4d3ca 100644
---- a/include/net/devmem.h
-+++ b/include/net/devmem.h
-@@ -69,7 +69,20 @@ void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding);
- int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
- 				    struct net_devmem_dmabuf_binding *binding);
- void dev_dmabuf_uninstall(struct net_device *dev);
-+struct net_iov *
-+net_devmem_alloc_dmabuf(struct net_devmem_dmabuf_binding *binding);
-+void net_devmem_free_dmabuf(struct net_iov *ppiov);
- #else
-+static inline struct net_iov *
-+net_devmem_alloc_dmabuf(struct net_devmem_dmabuf_binding *binding)
-+{
-+	return NULL;
-+}
-+
-+static inline void net_devmem_free_dmabuf(struct net_iov *ppiov)
-+{
-+}
-+
- static inline void
- __net_devmem_dmabuf_binding_free(struct net_devmem_dmabuf_binding *binding)
- {
-diff --git a/include/net/netmem.h b/include/net/netmem.h
-index 41e96c2f94b5c..664df8325ece5 100644
---- a/include/net/netmem.h
-+++ b/include/net/netmem.h
-@@ -14,8 +14,26 @@
+diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
+index 2b43a893c619d..8f27ecc00bb16 100644
+--- a/include/net/page_pool/helpers.h
++++ b/include/net/page_pool/helpers.h
+@@ -399,17 +399,7 @@ static inline void page_pool_free_va(struct page_pool *pool, void *va,
+ 	page_pool_put_page(pool, virt_to_head_page(va), -1, allow_direct);
+ }
  
- struct net_iov {
- 	struct dmabuf_genpool_chunk_owner *owner;
-+	unsigned long dma_addr;
- };
- 
-+static inline struct dmabuf_genpool_chunk_owner *
-+net_iov_owner(const struct net_iov *niov)
-+{
-+	return niov->owner;
-+}
-+
-+static inline unsigned int net_iov_idx(const struct net_iov *niov)
-+{
-+	return niov - net_iov_owner(niov)->niovs;
-+}
-+
-+static inline struct net_devmem_dmabuf_binding *
-+net_iov_binding(const struct net_iov *niov)
-+{
-+	return net_iov_owner(niov)->binding;
-+}
-+
- /* netmem */
+-static inline dma_addr_t page_pool_get_dma_addr_netmem(netmem_ref netmem)
+-{
+-	struct page *page = netmem_to_page(netmem);
+-
+-	dma_addr_t ret = page->dma_addr;
+-
+-	if (PAGE_POOL_32BIT_ARCH_WITH_64BIT_DMA)
+-		ret <<= PAGE_SHIFT;
+-
+-	return ret;
+-}
++dma_addr_t page_pool_get_dma_addr_netmem(netmem_ref netmem);
  
  /**
-diff --git a/net/core/devmem.c b/net/core/devmem.c
-index 9a357235bde8f..3f73d0bda023f 100644
---- a/net/core/devmem.c
-+++ b/net/core/devmem.c
-@@ -32,6 +32,14 @@ static void net_devmem_dmabuf_free_chunk_owner(struct gen_pool *genpool,
- 	kfree(owner);
+  * page_pool_get_dma_addr() - Retrieve the stored DMA address.
+@@ -423,23 +413,7 @@ static inline dma_addr_t page_pool_get_dma_addr(const struct page *page)
+ 	return page_pool_get_dma_addr_netmem(page_to_netmem((struct page *)page));
  }
  
-+static dma_addr_t net_devmem_get_dma_addr(const struct net_iov *niov)
-+{
-+	struct dmabuf_genpool_chunk_owner *owner = net_iov_owner(niov);
-+
-+	return owner->base_dma_addr +
-+	       ((dma_addr_t)net_iov_idx(niov) << PAGE_SHIFT);
-+}
-+
- void __net_devmem_dmabuf_binding_free(struct net_devmem_dmabuf_binding *binding)
- {
- 	size_t size, avail;
-@@ -54,6 +62,38 @@ void __net_devmem_dmabuf_binding_free(struct net_devmem_dmabuf_binding *binding)
- 	kfree(binding);
+-static inline bool page_pool_set_dma_addr_netmem(netmem_ref netmem,
+-						 dma_addr_t addr)
+-{
+-	struct page *page = netmem_to_page(netmem);
+-
+-	if (PAGE_POOL_32BIT_ARCH_WITH_64BIT_DMA) {
+-		page->dma_addr = addr >> PAGE_SHIFT;
+-
+-		/* We assume page alignment to shave off bottom bits,
+-		 * if this "compression" doesn't work we need to drop.
+-		 */
+-		return addr != (dma_addr_t)page->dma_addr << PAGE_SHIFT;
+-	}
+-
+-	page->dma_addr = addr;
+-	return false;
+-}
++bool page_pool_set_dma_addr_netmem(netmem_ref netmem, dma_addr_t addr);
+ 
+ /**
+  * page_pool_dma_sync_for_cpu - sync Rx page for CPU after it's written by HW
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index 2abe6e919224d..a032f731d4146 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -1099,3 +1099,34 @@ void page_pool_update_nid(struct page_pool *pool, int new_nid)
+ 	}
  }
- 
-+struct net_iov *
-+net_devmem_alloc_dmabuf(struct net_devmem_dmabuf_binding *binding)
+ EXPORT_SYMBOL(page_pool_update_nid);
++
++dma_addr_t page_pool_get_dma_addr_netmem(netmem_ref netmem)
 +{
-+	struct dmabuf_genpool_chunk_owner *owner;
-+	unsigned long dma_addr;
-+	struct net_iov *niov;
-+	ssize_t offset;
-+	ssize_t index;
++	struct page *page = netmem_to_page(netmem);
 +
-+	dma_addr = gen_pool_alloc_owner(binding->chunk_pool, PAGE_SIZE,
-+					(void **)&owner);
-+	if (!dma_addr)
-+		return NULL;
++	dma_addr_t ret = page->dma_addr;
 +
-+	offset = dma_addr - owner->base_dma_addr;
-+	index = offset / PAGE_SIZE;
-+	niov = &owner->niovs[index];
++	if (PAGE_POOL_32BIT_ARCH_WITH_64BIT_DMA)
++		ret <<= PAGE_SHIFT;
 +
-+	niov->dma_addr = 0;
-+
-+	return niov;
++	return ret;
 +}
++EXPORT_SYMBOL(page_pool_get_dma_addr_netmem);
 +
-+void net_devmem_free_dmabuf(struct net_iov *niov)
++bool page_pool_set_dma_addr_netmem(netmem_ref netmem, dma_addr_t addr)
 +{
-+	struct net_devmem_dmabuf_binding *binding = net_iov_binding(niov);
-+	unsigned long dma_addr = net_devmem_get_dma_addr(niov);
++	struct page *page = netmem_to_page(netmem);
 +
-+	if (gen_pool_has_addr(binding->chunk_pool, dma_addr, PAGE_SIZE))
-+		gen_pool_free(binding->chunk_pool, dma_addr, PAGE_SIZE);
++	if (PAGE_POOL_32BIT_ARCH_WITH_64BIT_DMA) {
++		page->dma_addr = addr >> PAGE_SHIFT;
++
++		/* We assume page alignment to shave off bottom bits,
++		 * if this "compression" doesn't work we need to drop.
++		 */
++		return addr != (dma_addr_t)page->dma_addr << PAGE_SHIFT;
++	}
++
++	page->dma_addr = addr;
++	return false;
 +}
-+
- /* Protected by rtnl_lock() */
- static DEFINE_XARRAY_FLAGS(net_devmem_dmabuf_bindings, XA_FLAGS_ALLOC1);
- 
++EXPORT_SYMBOL(page_pool_set_dma_addr_netmem);
 -- 
 2.46.0.rc1.232.g9752f9e123-goog
 
