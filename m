@@ -1,143 +1,156 @@
-Return-Path: <linux-mips+bounces-4609-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4610-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A6BA943728
-	for <lists+linux-mips@lfdr.de>; Wed, 31 Jul 2024 22:36:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDB099437AF
+	for <lists+linux-mips@lfdr.de>; Wed, 31 Jul 2024 23:19:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C77431F22A8C
-	for <lists+linux-mips@lfdr.de>; Wed, 31 Jul 2024 20:36:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F14161C21BBC
+	for <lists+linux-mips@lfdr.de>; Wed, 31 Jul 2024 21:19:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F988160860;
-	Wed, 31 Jul 2024 20:36:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FA9416C869;
+	Wed, 31 Jul 2024 21:19:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WeyhuXd7"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="G5AOJVde"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CD914F9C4
-	for <linux-mips@vger.kernel.org>; Wed, 31 Jul 2024 20:36:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E43E1662E4
+	for <linux-mips@vger.kernel.org>; Wed, 31 Jul 2024 21:19:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722458189; cv=none; b=LlHkVWjH6Y23WM00l9zt0wE2EibeEF1RLP1jMkOpqqMQpIcj/9iU7cPVhgfjSbBK6Qt8EyY/FOaUq/3+yaW5riccKeWz0YrSCu5BgS08X3+4jD7h/SzhIlxNZGpduSz4mmqLOHJK1Ct6qyxMFZ1KZR+mrb6DNRUcBdlfP59k5Jw=
+	t=1722460771; cv=none; b=PsVIHAfMsaIVaWpXaMOwsLsHAaYY0tCbDugHQf2urbyvaIl2+IgfnaxeBEbGsQHvhCJdwtHP9FNqitTfwogy9hAW19T0Ljlr10sffyxNLObFFVjZFD4gto7M1yBdLUAOoiq4u7N3q2+OQ5kXmFRHExst5rdN3lDS+WqdANq0Alo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722458189; c=relaxed/simple;
-	bh=z1aLVeNoBym3Qjn/r9ThqGkDG4AOjTwKh0lTuQS/B+0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=gkj/4Res8kV9+mxm2wSw1qV4uMG41ANRZXNErHgkrIo/kyGqyeUkSYOGCYbfYF3XNs3NiF8T08lRWcDFsvazg7c+PDuf7Fv+R11dj0RdzTWgfezx7t4DeBBes1NbdHQAhZvVruaHDbc02PNpENN5jZuLthIergDvj9r2NC1YS/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WeyhuXd7; arc=none smtp.client-ip=209.85.128.202
+	s=arc-20240116; t=1722460771; c=relaxed/simple;
+	bh=dEiu0hhQh0Jy26qjQV9Cqq27juU/IGB072cpo+oEEG0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TcZSaEc9UM2xcMA/++96tx1hptj/VYy+nHzWGjwY/iTJs9zxx10dvqxlPG8/UoFoe0sukaWVY0ee8IOaIjQRFhKTqtQwhxcPGrHlEMXv0CLwG534rcATK/HJcufEH++R8EljS6j8Rxz5JJZ4i9PH9vjiyoYr1jC8EcpaCpxFTpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=G5AOJVde; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-664aa55c690so124095567b3.2
-        for <linux-mips@vger.kernel.org>; Wed, 31 Jul 2024 13:36:27 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-368712acb8dso2874144f8f.2
+        for <linux-mips@vger.kernel.org>; Wed, 31 Jul 2024 14:19:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722458186; x=1723062986; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Kd/mYHbPzOSIwsUM5m5UMPqJkKyWoklOLcVSOqbILGs=;
-        b=WeyhuXd7I/9HsccEAdIat5gekMhyyetArz33y71PyOc1qGoQJ6ZwTwBU03VoYXUnjD
-         nleVvSHuWKdvCA3G7jTW+JyMb9C8y1Cqbm6qVrQshdRN5ZLI/gBd6RMO81liQzZstVYW
-         bfIMboSjdr0bh9YSPItGecdUGm+i01vFy5gNWEn0w0xs4c+z9FTe19ekN+/YwDyMTYrr
-         dIa7LEg8wKXE3iDFHkisRRFDSpV74+q8hahraJeruURji5PC1E9eVja5XUcycN+yD+MK
-         6OT5iaX53wAvq9jSvmzfrAAdqXPgADCq50O7SFCAyFR+mpH8ndIPYZuW9/woaDSIR6N7
-         HblA==
+        d=google.com; s=20230601; t=1722460767; x=1723065567; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dEiu0hhQh0Jy26qjQV9Cqq27juU/IGB072cpo+oEEG0=;
+        b=G5AOJVdeww95s7Qb7CjW1AIB44U8JoB3hsMVjtKEas3JXf1vwCfGamISn0W9Aq/kdy
+         yNL1Zqv/cr4RhFQKyRJmPJ6INVWA7HaLN4BA3TPWJOgIpZunPibJa8lDt4dea35PXJMa
+         WJnXVfFa8qRDUEOjUhndXkLLFeV3WIfifKMKBtqyAQTnivbTT+brnZBgFMNZdAo8vEjt
+         AHpE8w7Pa18w2XjTHFuKm63OtcCWPoxDqHBhXedIrvxFQBDm2ZqArJ12gP+H0TWV+pTi
+         hMTXlVceo15PAg4VK22DsRHYu0TuNLhY74kcM8C3XJhIyn3vkFywG3eHmMbwTKrnO4Hh
+         vx9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722458186; x=1723062986;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Kd/mYHbPzOSIwsUM5m5UMPqJkKyWoklOLcVSOqbILGs=;
-        b=A1gPCZXSId78bOV7qdsN4Z3K4LNinYeNxPW5PoLJNnXeF0n8ibFqrifQLiZoaDjtTk
-         nxKj2lNkKGJv52bEUBb3vMLk7vDsh/coPVOp3yg+lCVIt8DEIpNXpypkO5gap9B3WjR+
-         fZppj0Fb/V1WI/Vhgn6qH97wL4Pikx+2tw31pjFWlwQvrfthULJpQ99U9RdhK7wesyjB
-         c0ZgrnukJ3mLqq22JFmPWUTwNkOBzZQ6yCoSrjE7mXOExjqbMX2cjlp+HItNi/vt5U/X
-         ik6qIJpZf30WdWeZjgX/SgXSeGWeOR1VDWVVbvmVxhqz3lE0OTm4nadrq96PbMj+3lFS
-         JxHw==
-X-Forwarded-Encrypted: i=1; AJvYcCVSG5PcSDUK9YuQUb78rUHqraxjLE8Shu2hQ5FxdVULjOKsoFWK8YUB9elWQY95J4d9EJvxVxJlz6DzU8yNhpm81+zVUDhYpXfYqw==
-X-Gm-Message-State: AOJu0YxO9B+J8u8DsrDn293wI0TV2lUVQgXaYx/66N9A4mPdNwne9BIn
-	yoOsQaNmJAOPZ2qM3qiUZ10j7FGWpwIFzKqlQq9oGK/HlXrssqaxdbqyl5nSXqzjWQESO7Ajq7h
-	2mA==
-X-Google-Smtp-Source: AGHT+IH0DRpeCdEjd5+EVXte2iiNPB7q7dTvECq86U0Z8nMo4fguKYduL9RXt42ZsXAM2SH8mq6gA4JZJ0k=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:18d2:b0:e0b:bf20:4ff8 with SMTP id
- 3f1490d57ef6-e0bccf7b434mr932276.0.1722458186501; Wed, 31 Jul 2024 13:36:26
- -0700 (PDT)
-Date: Wed, 31 Jul 2024 13:36:25 -0700
-In-Reply-To: <87a5hxfs3d.fsf@draig.linaro.org>
+        d=1e100.net; s=20230601; t=1722460767; x=1723065567;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dEiu0hhQh0Jy26qjQV9Cqq27juU/IGB072cpo+oEEG0=;
+        b=Fj8CBhA9h2PZoSfkG4pRmjVPPCQ9grey0294PH6nqCYxXHQlgICeOfc9Ec898swAWT
+         zU6OilSqKv9mf6DAZiD6bI9yDPdZ88j6GcPTaLwAUJHONC7BQ3ZIrfX7sQwlsSIw4VFd
+         cIpGXYu2bPlok99rPUoMRSubHcmf0z0Gj57cZijB0yH1NOqs1rOcxYK0iD3Dzaj+Lyxx
+         0nEPr4RIW7ZSEStg6Vak2h/8EUSypF1YMsyftJrhh7HbnYlUUd3gC6BbF6vPI7r0AKdE
+         ZIeVfsvm75y/ckdIjvvdTJWOkYnsD7uOciHq5zXSdzj0Y8aoWQ8kqsBzIlTYnkAbLzXD
+         XarA==
+X-Forwarded-Encrypted: i=1; AJvYcCX5lomKkFl1JcmwfnYk1Z7xeLhqWExNVAZ45xm8YXCS/KMQ+VZ64YDbNVX4yM6fITPAeCsQPR3dYzLsNBvlVEPj5DdF+V5kc17F1g==
+X-Gm-Message-State: AOJu0Yxd/BKLkp490FMSnzArsfdk2QGTZbMeRQyoZharCxXQW4/3DorY
+	L0h5xzSdl1CxAQBStSNPfj+oJ9IrqbuvKfSnzhQjXeGWVM1S6K7wn63beuElhyON5OHijReIdV/
+	T3j1RUbMuAqaxC+xizYIuLn/VDilPUMbn6bot
+X-Google-Smtp-Source: AGHT+IGCGvp/48H8qaH6fLYg7SPbNiiWFxJtKT/J7GEsXh7PoxMKp+lvuqPbXyBiSW9seEuLTTgslLee6nJ92gY4vjU=
+X-Received: by 2002:a5d:4483:0:b0:368:6d75:1bde with SMTP id
+ ffacd0b85a97d-36baacdd8aamr351815f8f.15.1722460767120; Wed, 31 Jul 2024
+ 14:19:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240726235234.228822-1-seanjc@google.com> <20240726235234.228822-2-seanjc@google.com>
- <87a5hxfs3d.fsf@draig.linaro.org>
-Message-ID: <ZqqgSW1Z07aBGwQh@google.com>
-Subject: Re: [PATCH v12 01/84] KVM: arm64: Release pfn, i.e. put page, if
- copying MTE tags hits ZONE_DEVICE
-From: Sean Christopherson <seanjc@google.com>
-To: "Alex =?utf-8?Q?Benn=C3=A9e?=" <alex.bennee@linaro.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
-	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Anup Patel <anup@brainfault.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	David Matlack <dmatlack@google.com>, David Stevens <stevensd@chromium.org>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+References: <20240730022623.98909-1-almasrymina@google.com>
+ <20240730022623.98909-2-almasrymina@google.com> <1722327259.5659568-1-xuanzhuo@linux.alibaba.com>
+In-Reply-To: <1722327259.5659568-1-xuanzhuo@linux.alibaba.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Wed, 31 Jul 2024 17:19:11 -0400
+Message-ID: <CAHS8izMZQLsBWPXWiqPwaQHfupKc5VAuxW+6kpWmzi-vw8JEWQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v17 01/14] netdev: add netdev_rx_queue_restart()
+To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 31, 2024, Alex Benn=C3=A9e wrote:
-> Sean Christopherson <seanjc@google.com> writes:
->=20
-> > Put the page reference acquired by gfn_to_pfn_prot() if
-> > kvm_vm_ioctl_mte_copy_tags() runs into ZONE_DEVICE memory.  KVM's less-
-> > than-stellar heuristics for dealing with pfn-mapped memory means that K=
-VM
-> > can get a page reference to ZONE_DEVICE memory.
-> >
-> > Fixes: f0376edb1ddc ("KVM: arm64: Add ioctl to fetch/store tags in a gu=
-est")
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >  arch/arm64/kvm/guest.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
-> > index 11098eb7eb44..e1f0ff08836a 100644
-> > --- a/arch/arm64/kvm/guest.c
-> > +++ b/arch/arm64/kvm/guest.c
-> > @@ -1059,6 +1059,7 @@ int kvm_vm_ioctl_mte_copy_tags(struct kvm *kvm,
-> >  		page =3D pfn_to_online_page(pfn);
-> >  		if (!page) {
-> >  			/* Reject ZONE_DEVICE memory */
-> > +			kvm_release_pfn_clean(pfn);
->=20
-> I guess this gets renamed later in the series.
->=20
-> However my main comment is does lack of page always mean a ZONE_DEVICE?
+On Tue, Jul 30, 2024 at 4:17=E2=80=AFAM Xuan Zhuo <xuanzhuo@linux.alibaba.c=
+om> wrote:
+>
+> On Tue, 30 Jul 2024 02:26:05 +0000, Mina Almasry <almasrymina@google.com>=
+ wrote:
+> > Add netdev_rx_queue_restart() function to netdev_rx_queue.h
+>
+>
+> Can you say more? As far as I understand, we just release the buffer
+> submitted to the rx ring and get a new page pool.
+>
 
-Nope.
+Yes, I just noticed that this commit message is underwritten. I'll add
+more color. Maybe something like;
 
-> Looking at pfn_to_online_page() I see a bunch of other checks first. Why
-> isn't it that functions responsibility to clean up after itself if its
-> returning NULLs?
+=3D=3D=3D=3D
+Add netdev_rx_queue_restart(), which resets an rx queue using the
+queue API recently merged[1].
 
-pfn_to_online_page() is more strict than gfn_to_pfn_prot().  At least in th=
-eory,
-gfn_to_pfn_prot() could return a pfn that has an associated "struct page", =
-with
-a reference held to said page.  But for that same pfn, pfn_to_online_page()=
- could
-return NULL, in which case KVM needs to put the reference it acquired via
-gfn_to_pfn_prot().
+The queue API was merged to enable the core net stack reset individual
+rx queues to actuate changes in the rx queue's configuration. In later
+patches in this series, we will use netdev_rx_queue_restart() to reset
+rx queues after binding or unbinding dmabuf configuration, which will
+cause reallocation of the page_pool to repopulate its memory using the
+new configuration.
+
+[1] https://lore.kernel.org/netdev/20240430231420.699177-1-shailend@google.=
+com/T/
+=3D=3D=3D=3D
+
+> But I personally feel that the interface here is a bit too complicated. I=
+n
+> particular, we also need to copy the rx struct memory, which means it is =
+a
+> dangerous operation for many pointers.
+>
+
+Understood, but the complication is necessary based on previous
+discussions. Jakub requests that we must allocate memory for a new rx
+queues before bringing down the existing queue, to guard against the
+interface remaining down on ENOMEM error.
+
+Btw, I notice the series was marked as changes requested; the only
+feedback I got was this one and the incorrect netmem_priv.h header.
+I'll fix and repost. It's just slightly weird because both v16 and v17
+are marked as changes requested in patchwork.
 
