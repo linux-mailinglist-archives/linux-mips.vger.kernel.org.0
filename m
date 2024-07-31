@@ -1,81 +1,81 @@
-Return-Path: <linux-mips+bounces-4605-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4606-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D083942BBD
-	for <lists+linux-mips@lfdr.de>; Wed, 31 Jul 2024 12:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 96603942BD0
+	for <lists+linux-mips@lfdr.de>; Wed, 31 Jul 2024 12:18:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7F1B285412
-	for <lists+linux-mips@lfdr.de>; Wed, 31 Jul 2024 10:12:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4ADAE281C4D
+	for <lists+linux-mips@lfdr.de>; Wed, 31 Jul 2024 10:18:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E11CA1AB516;
-	Wed, 31 Jul 2024 10:12:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D74501AB53E;
+	Wed, 31 Jul 2024 10:18:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C3Va1Mnk"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VUuZdw6/"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6488C1A8C17
-	for <linux-mips@vger.kernel.org>; Wed, 31 Jul 2024 10:12:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633741CF93
+	for <linux-mips@vger.kernel.org>; Wed, 31 Jul 2024 10:18:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722420764; cv=none; b=QdgSIZoNiE8IWQXUse3QJ//47BmaHcf6Pu0k7bfZ5QLCpnzJMjHFXPsGgLAL7gloUOUNKK65bipRCKlO8JVcEVz3yyKTM8lvx7uYW1fWafkgJMgeTS34FOQo7Rz+tMQidsTtjfDlh/CZ9Cbyc9Yw7pV1pANw8Ex3jRJBfGIYEQM=
+	t=1722421106; cv=none; b=IBnhKd38AoWdw4Gj7beAV24AyvaompcBI3sNScozLMh92zY9Cn72iWG/QsF1a1x0r3Pj20X9E2sVfwWhY3q68Pf405upzWoGUzhJXNzRKwD0XLtMZiJs6JIcU1UFn4BTuhSTZMPHfiFMPPxKjOFM1ifGE3+SGiut0pUkifPuwOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722420764; c=relaxed/simple;
-	bh=yfS7leuz4MtF3tluYvWC4+0Ie6a/fa+MMjIPKi6ChBo=;
+	s=arc-20240116; t=1722421106; c=relaxed/simple;
+	bh=+PrbklTeRiXOHSRdGh97gn5y602otpyl/4PgxVx+Rds=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uiMp4gADtgdXY+L++n3JE1DPmVGxQghiLgu/Ckd4wmTDYcJvcBKwUQITwqDDgyCTs4ycUF8pvXq7FyUXR/elWGTM/SNFbeq9+LpfEF78yXMdvhiFlLK8gPNEg5am644IHdZMmHbZVGyNV3NNim4ylQgPGBa/j6Lsken2AQrUiDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C3Va1Mnk; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=p7yjnFemLrspV+aTxNQVUQ6FyAMyo5mkco+6XLtWYcsruaDSitLnWXYuctoKED2pPoxQdIJIeqj/mDmvXld0wN6Lv7ub6UHdvO/5tAo+bTbg7CMB2AaqAnHe1ClTAprCwIM6qqDU/eTZ5R2HvLYDi8UO7IuXT9j2TVMHZwzhNtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VUuZdw6/; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1722420762;
+	s=mimecast20190719; t=1722421104;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=Bn9tfbIdSVCZqAMkxg8q5HTQiaczDdPE94ihy0l7iSo=;
-	b=C3Va1MnkBdXaIxQ0qq3ggChElcvaJWJqQxRxk5dLLutRjNGSsj7yDzN6fnNbCcZUCZLhZN
-	pSwQXFhVG+ybclYzGXA0CL2Ps1zU1BFZL7844cu9ccdVcTTTd1HXPliAfL6FxuvhWWrZWg
-	LJDVT/RpSceF1bm4ZVPG8MNjDuIUSU8=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=+NI98OckWfv6J2NFyowBM8d76asTvKwKn+KYX73y9eY=;
+	b=VUuZdw6/Y93ZwOMch8ZN7EfJ5GSBCZGC212Ac4zvv/knKXqpky7Lyf2c//b2P5ppoRoPQA
+	1FeVotoOckWMnOxyfrmHaOVnfOskMSWjxMHGKNR+k94VB+31e5Cug0BIUQsw9QCD4LSTvN
+	qaTiGZ/EcaAY4T/dZ8RHRLb47mwoAGw=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-556-JHl3toX7PBeBY7UDlCLSxQ-1; Wed, 31 Jul 2024 06:12:41 -0400
-X-MC-Unique: JHl3toX7PBeBY7UDlCLSxQ-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a7d2d414949so433512566b.0
-        for <linux-mips@vger.kernel.org>; Wed, 31 Jul 2024 03:12:41 -0700 (PDT)
+ us-mta-216-LDv3udgTPru_b7MDWUUuGA-1; Wed, 31 Jul 2024 06:18:22 -0400
+X-MC-Unique: LDv3udgTPru_b7MDWUUuGA-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-a7ab4817f34so481913866b.2
+        for <linux-mips@vger.kernel.org>; Wed, 31 Jul 2024 03:18:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722420760; x=1723025560;
+        d=1e100.net; s=20230601; t=1722421101; x=1723025901;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Bn9tfbIdSVCZqAMkxg8q5HTQiaczDdPE94ihy0l7iSo=;
-        b=mCcBafCTOZaYtnNDZYYGEqgqW2MTHUuTGCQZZKybImHssm09ZpzCE++Mnk3TbZSf1U
-         cB1rP0KEpROdumrr1XuskE4ziucq+cUrwpnzP3x7YPFdxd6rhNDL0OTVjYkBSRMclx82
-         P5cshau2qqVoMr+lkHPoiZ8zOPR1EYh36FAtmrUrSnyENtxeSA/xFhRVTVniD05lkDFn
-         6GKkuAECo7fUR7789IVR9Jh+TyE/q2I/zccX1Rh+KSVe18Aub/96PsCn1L7gG4ijRh11
-         7igDgMRnXRct6iFpoNmLtjD/0lFVKig/maqk4OYOZVejjXXMRaZjG2X1Zbzp0ZGFPunj
-         vhqg==
-X-Forwarded-Encrypted: i=1; AJvYcCWcL+2QnP3zEm8Pa+wxb4sdqH9zQqKGf/rx/9Wl/LnrkfmVoreEFfStk7a5iFpD1UcWr2FVlZPwiCmgpy5Y3/EU8F06J3mBNYPTxA==
-X-Gm-Message-State: AOJu0YxWP7BS0Yu4fzB5wyZURMbLPReOaUrQZHILxwRODTB+cRr1ABFg
-	fScdNW/5Z1EPuki657erUA6qxjWdb4+Um3tEzsiIz0ilapn3LGCkVq+cKpMtVBzjqyFi4f9EvUG
-	A+UoGLKLesH9IOejqGwa5oAQDpyJVqB6sh76XFvI5cmsu4KznJXBd7ieyBNw=
-X-Received: by 2002:a17:906:d26a:b0:a7a:c256:3c5 with SMTP id a640c23a62f3a-a7d40161c68mr868867266b.46.1722420759952;
-        Wed, 31 Jul 2024 03:12:39 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG5PK2N6SVlp21V74v51wpDQW38LtkY7BoBaQqhGgHQsZ4igHg8AC/1gwfVPPR89SMfLALrEQ==
-X-Received: by 2002:a17:906:d26a:b0:a7a:c256:3c5 with SMTP id a640c23a62f3a-a7d40161c68mr868863766b.46.1722420759395;
-        Wed, 31 Jul 2024 03:12:39 -0700 (PDT)
+        bh=+NI98OckWfv6J2NFyowBM8d76asTvKwKn+KYX73y9eY=;
+        b=OoSdVBU3yd4CAtw219RUaWVoO+9Q23L3JewKuuc1bGfQq3rco0sixn3+K1GmH+Dy0F
+         H+qllkTexKOzCTFe4poTNfxsbNZuklU4H0/CQloQv+Jwvi8yacETgrWQFbCPASVpIvyp
+         dzz5g9voqJwsf7IRV6QkqbJqQLJQwd5hbmZ9AzvrBVmQu7d/tkgdRD/siGIAQRVbvWJE
+         TqhNJSKB2L3YgLcp5gVyk31FkHnaW101NRcehvCnbAB8OLgIhx9wnCYyCX4i8LS8zYDb
+         aJGvl02vUtp91n1eqUb+9a6iMz3YHMQZIMwXh6KkOVmxKtssQCIkACZspRNJsSAxB1NT
+         Macw==
+X-Forwarded-Encrypted: i=1; AJvYcCX8jrE7vYv7ztCl1EF5ZAIGSAXysGb6/uEufVRXMzyzG5wSgF7myAEJNaGICAS7O9xwjF5h4xoyDINhI9CmBNDmH+6UedWBynjOUQ==
+X-Gm-Message-State: AOJu0YxRBeAzLG+EFHX6KuUmXIUyHCQis3xO/cCSGbgGcr9eswJSdp9E
+	FkBbYyPKi6aU5EAJEwiIkEt55qArMBNv8NrSocZ+GaWgc1/vhDN0Gp1OY7xj0thyomKzw7HdRx4
+	LAFcjUxtnWlq8NeQaKbjtWSlI3GmeRtdgUAjLsDsmS2ag0cDPtwpl6ihzbqc=
+X-Received: by 2002:a17:907:3faa:b0:a7a:9f0f:ab2c with SMTP id a640c23a62f3a-a7d40087cdamr1036564266b.29.1722421100741;
+        Wed, 31 Jul 2024 03:18:20 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFbiyRYwcc7mzxbNr2j9CKiWLwtYHnw4iXERZ6Q+gmmNAwBwkH3zd03419QU5BCHgaYtt01lw==
+X-Received: by 2002:a17:907:3faa:b0:a7a:9f0f:ab2c with SMTP id a640c23a62f3a-a7d40087cdamr1036561866b.29.1722421100197;
+        Wed, 31 Jul 2024 03:18:20 -0700 (PDT)
 Received: from [192.168.10.81] ([151.95.101.29])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a7acad41164sm746659566b.102.2024.07.31.03.12.37
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a7acab52d51sm750409766b.79.2024.07.31.03.18.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Jul 2024 03:12:38 -0700 (PDT)
-Message-ID: <10429875-b9a1-4454-b54a-1c3be5630771@redhat.com>
-Date: Wed, 31 Jul 2024 12:12:37 +0200
+        Wed, 31 Jul 2024 03:18:19 -0700 (PDT)
+Message-ID: <a76a83de-5dfd-495b-904a-878e1483e5f6@redhat.com>
+Date: Wed, 31 Jul 2024 12:18:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -83,8 +83,8 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 45/84] KVM: guest_memfd: Provide "struct page" as
- output from kvm_gmem_get_pfn()
+Subject: Re: [PATCH v12 48/84] KVM: Move x86's API to release a faultin page
+ to common KVM
 To: Sean Christopherson <seanjc@google.com>
 Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
  Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>,
@@ -100,9 +100,9 @@ Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
  linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
  David Matlack <dmatlack@google.com>, David Stevens <stevensd@chromium.org>
 References: <20240726235234.228822-1-seanjc@google.com>
- <20240726235234.228822-46-seanjc@google.com>
- <2da6b57e-d5c2-4016-b89b-d51700eeb845@redhat.com>
- <ZqlGcaESdxw5vzl8@google.com>
+ <20240726235234.228822-49-seanjc@google.com>
+ <96df1dd5-cc31-4e84-84fd-ea75b4800be8@redhat.com>
+ <Zqk72jP1c8N0Pn1O@google.com>
 From: Paolo Bonzini <pbonzini@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=pbonzini@redhat.com; keydata=
@@ -140,22 +140,21 @@ Autocrypt: addr=pbonzini@redhat.com; keydata=
  JBrdmNZSQDz0iKmSrx8xkoXYfA3bgtFN8WJH2xgFL28XnqY4M6dLhJwV3z08tPSRqYFm4NMP
  dRsn0/7oymhneL8RthIvjDDQ5ktUjMe8LtHr70OZE/TT88qvEdhiIVUogHdo4qBrk41+gGQh
  b906Dudw5YhTJFU3nC6bbF2nrLlB4C/XSiH76ZvqzV0Z/cAMBo5NF/w=
-In-Reply-To: <ZqlGcaESdxw5vzl8@google.com>
+In-Reply-To: <Zqk72jP1c8N0Pn1O@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/30/24 22:00, Sean Christopherson wrote:
-> The probability of guest_memfd not having struct page for mapped pfns is likely
-> very low, but at the same time, providing a pfn+page pair doesn't cost us much.
-> And if it turns out that not having struct page is nonsensical, deferring the
-> kvm_gmem_get_pfn() => kvm_gmem_get_page() conversion could be annoying, but highly
-> unlikely to be painful since it should be 100% mechanical.  Whereas reverting back
-> to kvm_gmem_get_pfn() if we make the wrong decision now could mean doing surgery
-> on a pile of arch code.
+On 7/30/24 21:15, Sean Christopherson wrote:
+>> Does it make sense to move RET_PF_* to common code, and avoid a bool
+>> argument here?
+> After this series, probably?  Especially if/when we make "struct kvm_page_fault"
+> a common structure and converge all arch code.  In this series, definitely not,
+> as it would require even more patches to convert other architectures, and it's
+> not clear that it would be a net win, at least not without even more massaging.
 
-Ok, fair enough.  The conflict resolution is trivial either way (I also 
-checked the TDX series and miraculously it has only one conflict which 
-is also trivial).
+It does not seem to be hard, but I agree that all the other 
+architectures right now use 0/-errno in the callers of 
+kvm_release_faultin_page().
 
 Paolo
 
