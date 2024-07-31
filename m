@@ -1,81 +1,81 @@
-Return-Path: <linux-mips+bounces-4603-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4604-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D41C9942B3F
-	for <lists+linux-mips@lfdr.de>; Wed, 31 Jul 2024 11:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A2626942BB7
+	for <lists+linux-mips@lfdr.de>; Wed, 31 Jul 2024 12:12:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4558BB235FD
-	for <lists+linux-mips@lfdr.de>; Wed, 31 Jul 2024 09:51:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DBA88B22C4B
+	for <lists+linux-mips@lfdr.de>; Wed, 31 Jul 2024 10:11:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 614941AB534;
-	Wed, 31 Jul 2024 09:50:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EAEE1AB534;
+	Wed, 31 Jul 2024 10:11:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KrEy5xBV"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VniCP4ZN"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C2E1AB520
-	for <linux-mips@vger.kernel.org>; Wed, 31 Jul 2024 09:50:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C92941AAE22
+	for <linux-mips@vger.kernel.org>; Wed, 31 Jul 2024 10:11:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722419447; cv=none; b=h7QqLRipMtL/UonXEGb0l95t5Tj9pMJnzoehbzl4iU0sP871m6kwS+YlNTWVLPupBEkIyJTYhxmZw9ZmtlBlxINkDeHIDSSkipW3ZmCm3A1dKxpRXeW2qY1gefg1St9JkB2kOHp17a9on21msWIyINA94lRoQS6MCVikk0CWZfE=
+	t=1722420685; cv=none; b=do6keKhBRGHtUCxMip9y2ULF+6oMRaUltmIQETaXJQlVTEe3/+8M1K1khWDz4rLWqhAUvlHOPWwcZpKXoSzvw20Al0qHBFP0tJMbWqqypJ3L5M4mqOdXZ6Z6jH3bdRTy9B6fYDiPS9aUYJXDBGSKDnZ5gdVl72Ev4hA4pqy1sz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722419447; c=relaxed/simple;
-	bh=XTrejJ34wyqTmqzJGqmoE5EbaZZYWrCKbhJX3mWbjW0=;
+	s=arc-20240116; t=1722420685; c=relaxed/simple;
+	bh=Sq9n6KW2L62PoNaPgAhcSBQ095yaepbtslyXd5S+u84=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o8EgfjHKBDcJcEP0tVhycQWb5aq5xbT4J6NSgJxuSJGusySas4mHeVFl78iHgI3OiBcX6PgPqFsqG43E5CN5/J0dRkDZYn3DvpNvSHQlFJURB2deodYMsPFn9T+Si2UvocEPSHeL9ymN7tIsuHG5U+QxcOGGK38PguI6KI8iimY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KrEy5xBV; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=jpKoUhJf4R8o7dOxaIIH70apgs5qWdAPAQ6qQ0JHp32tcuWY2fp0KMOVrJrcV3reSAbYkknOJdTFohf0I9C1en6Hr0s95M9G+F3QCO+OxfoBCKEGNmggtmoEoSxAmIo+XyfrjP7NN7MHvdbjSoU2tIskRpADOhe+VOC6xRKERiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VniCP4ZN; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1722419444;
+	s=mimecast20190719; t=1722420682;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=kF8YsGqLWNT4+a8R4w4P9MUEGEAYWYiYSABna27uXpU=;
-	b=KrEy5xBVc1iGF2PVOY7dITK1PYtisicQgOaKSayL34SW7TgJ27MZDD7csgG0vXDCoIV4lP
-	XDevCAOVyoCv7zJYenootvNrJFekg08VPCUcOwVk5HetdAL1xAdx/5306f55E8Cpo0cFe5
-	6YT1V7vpeNo/sA63WDaazWkq43GtuRs=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=tVOY32nDLXc6iJSQkl0LgklBYr2OAHTjSvree4scyEk=;
+	b=VniCP4ZNwErRrbyjKp30rItzUtd28UUNLiAhX7U5EYvz08PSwqBimcIBmQWiUJ6nyb1UXa
+	hsN13xib7/B3LF4osYsx/q680kVrJC4WaXDTZ+hUszrLSNyC6FUuwIOY9Ft2/BY7+9FWum
+	qJCFId/1lxXoJmI58Yv11VVu6SmeZtM=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-543-Qln2fYOfNZWFolSGYSqYQA-1; Wed, 31 Jul 2024 05:50:41 -0400
-X-MC-Unique: Qln2fYOfNZWFolSGYSqYQA-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a7a8281dba5so435812366b.3
-        for <linux-mips@vger.kernel.org>; Wed, 31 Jul 2024 02:50:41 -0700 (PDT)
+ us-mta-45-6LLqniREMhS6m9I3M0rg3w-1; Wed, 31 Jul 2024 06:11:21 -0400
+X-MC-Unique: 6LLqniREMhS6m9I3M0rg3w-1
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-5a45054aa03so2097813a12.3
+        for <linux-mips@vger.kernel.org>; Wed, 31 Jul 2024 03:11:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722419440; x=1723024240;
+        d=1e100.net; s=20230601; t=1722420680; x=1723025480;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kF8YsGqLWNT4+a8R4w4P9MUEGEAYWYiYSABna27uXpU=;
-        b=Wtk76LmSNeUZlyhzayu5ojID6IVHJH9EG3ltXq/5ij3kg7zltFNGBxPw7AXR1+JCFH
-         7awIV9FaZi1tlgKwDWMG3bgrGgkLzt/xJOslzRNXcEjyO3KUrLXf6kNXC2QdNK3/WYz1
-         0Ng3vfqtTPxLTLhLk1DVJ/PBL17j0KEFQEDKnAjgSqM7VgL76tCIdiUS+zyfhPCsVbHL
-         AiicWGjY4Ja50QKvMCGw/FMB/5dNJokaeZU2WMPEzZGC3cJBwQzLrvSHzyqVv11q1spl
-         jyFVPQQDgtsVZlWZ3FrrYsTFPuDQikLEJSVeK56p4U/OMG/QjM6mqmbzrKye/Dzadg2d
-         zHLw==
-X-Forwarded-Encrypted: i=1; AJvYcCUeqTUgQwRB1uheT2GXmKn8C82a7wi8LUH5Cd1TllKTWD3LpAIZOnQOBK4Co4Qq0Rfl2L/X9oGdAAdrbb5E9ADssZcv85yJfZu3hw==
-X-Gm-Message-State: AOJu0Yx8Y8Yl9Jie+eznYXKmwmhS/zeEnutnGzilZhV55jWHbkbTjgoJ
-	iHAhRaV1wmaxWjWXhWHWaOLsAbxGH+UcsTaE+l2le9ffPk0ECDzuooUXWrzBqwDojUcPTyZci9D
-	tnYYpp8XbR05uAf6EMoRV0i5DFci5KHoWOHGOVXomMByc9gqQVbtjSU1B2vI=
-X-Received: by 2002:a17:907:94cb:b0:a7a:bece:6223 with SMTP id a640c23a62f3a-a7d3ff7b8e4mr1064730866b.6.1722419440611;
-        Wed, 31 Jul 2024 02:50:40 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHm0sw2f7Q/hSxPLtTI3KYQw5uCrmW/NKDuI5rQ7HlgfsjazxGbnWK3KS2H8Xhx5SNKvtVQug==
-X-Received: by 2002:a17:907:94cb:b0:a7a:bece:6223 with SMTP id a640c23a62f3a-a7d3ff7b8e4mr1064728266b.6.1722419440130;
-        Wed, 31 Jul 2024 02:50:40 -0700 (PDT)
+        bh=tVOY32nDLXc6iJSQkl0LgklBYr2OAHTjSvree4scyEk=;
+        b=c7j7LsQkTu3cbeEOnXNVju+156fwp351BIj7tb1ALXt6fRwUV8ijzatjOJDFLUJeMH
+         iN9qg0VUO0qaW6Ueq1+zNotRiO/bjna19+pWsonTBw1DYeM8uiAkOD2lGiono+I44emz
+         1f92HODgdLf20qYNVJQYClW6i/Y7ithmqZu+Z7ei036n8ZYs2P9otuTEnWBv/B5/SieL
+         b3rH2j8p2ezbidnURarfwojj8UlWOqn0O9lypaOZNb2AaKZFA1Xjvx8XqRKC/T+/0VKA
+         dGlfu/PzaTqfx2sQpc4FQxjmEcT3NupqO8eHnki1VUs5Yax6PhiHIQk+WeepVMsB00pv
+         dlXw==
+X-Forwarded-Encrypted: i=1; AJvYcCUFeE3inl5gDkjrod00hmJjCReoBZ8LPpmx+8TrrQUk6qhOogh0CFzpZxTz8+pcI6WOa69bok74uPruwCXa1qryIh07bwLCZ3+ALg==
+X-Gm-Message-State: AOJu0Yzd8IFwGB6BL2T+Wz8eyCNhLiXVdd0XSSHSrhmKSQK0hboBd2tR
+	htUMHYJcVNkVb4e3cdjt3PLGEUVBufOzii+BzQFvnF8m2n8AWFXS8Tq0GqmAuEtZmfpHcS4f67w
+	eiX7zEL4tiaeYkfPtkrHMakVzskABq8VIQUss2Gsxm0xRmXKU4PoEiB2H/x0=
+X-Received: by 2002:a05:6402:1e93:b0:5a2:97d7:c728 with SMTP id 4fb4d7f45d1cf-5b01d84be21mr14060524a12.0.1722420680266;
+        Wed, 31 Jul 2024 03:11:20 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG5ltltaZS4FNkIqSYTQjIEvClgTY8vCephyRSRLNCT8UhCNDO85YiJ57LsvbZOjsbL8Hv0Cg==
+X-Received: by 2002:a05:6402:1e93:b0:5a2:97d7:c728 with SMTP id 4fb4d7f45d1cf-5b01d84be21mr14060501a12.0.1722420679761;
+        Wed, 31 Jul 2024 03:11:19 -0700 (PDT)
 Received: from [192.168.10.81] ([151.95.101.29])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a7acad93105sm746255566b.167.2024.07.31.02.50.38
+        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5af3ad32a9bsm7111674a12.53.2024.07.31.03.11.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Jul 2024 02:50:39 -0700 (PDT)
-Message-ID: <57ba7e1d-0121-4d71-89b8-c61c476ca724@redhat.com>
-Date: Wed, 31 Jul 2024 11:50:38 +0200
+        Wed, 31 Jul 2024 03:11:19 -0700 (PDT)
+Message-ID: <a0418ced-260b-4b14-9124-c94ce46a0944@redhat.com>
+Date: Wed, 31 Jul 2024 12:11:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -83,8 +83,8 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 84/84] KVM: Don't grab reference on VM_MIXEDMAP pfns
- that have a "struct page"
+Subject: Re: [PATCH v12 34/84] KVM: Add a helper to lookup a pfn without
+ grabbing a reference
 To: Sean Christopherson <seanjc@google.com>
 Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
  Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>,
@@ -100,9 +100,9 @@ Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
  linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
  David Matlack <dmatlack@google.com>, David Stevens <stevensd@chromium.org>
 References: <20240726235234.228822-1-seanjc@google.com>
- <20240726235234.228822-85-seanjc@google.com>
- <992c4a07-fb84-42d8-93b3-96fb3a12c8e0@redhat.com>
- <ZqlLWl0R1p41CS0O@google.com>
+ <20240726235234.228822-35-seanjc@google.com>
+ <63c41e25-2523-4397-96b4-557394281443@redhat.com>
+ <ZqlJxJyOdsR206Zc@google.com>
 From: Paolo Bonzini <pbonzini@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=pbonzini@redhat.com; keydata=
@@ -140,38 +140,43 @@ Autocrypt: addr=pbonzini@redhat.com; keydata=
  JBrdmNZSQDz0iKmSrx8xkoXYfA3bgtFN8WJH2xgFL28XnqY4M6dLhJwV3z08tPSRqYFm4NMP
  dRsn0/7oymhneL8RthIvjDDQ5ktUjMe8LtHr70OZE/TT88qvEdhiIVUogHdo4qBrk41+gGQh
  b906Dudw5YhTJFU3nC6bbF2nrLlB4C/XSiH76ZvqzV0Z/cAMBo5NF/w=
-In-Reply-To: <ZqlLWl0R1p41CS0O@google.com>
+In-Reply-To: <ZqlJxJyOdsR206Zc@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/30/24 22:21, Sean Christopherson wrote:
+On 7/30/24 22:15, Sean Christopherson wrote:
 > On Tue, Jul 30, 2024, Paolo Bonzini wrote:
->> On 7/27/24 01:52, Sean Christopherson wrote:
->>> Now that KVM no longer relies on an ugly heuristic to find its struct page
->>> references, i.e. now that KVM can't get false positives on VM_MIXEDMAP
->>> pfns, remove KVM's hack to elevate the refcount for pfns that happen to
->>> have a valid struct page.  In addition to removing a long-standing wart
->>> in KVM, this allows KVM to map non-refcounted struct page memory into the
->>> guest, e.g. for exposing GPU TTM buffers to KVM guests.
+>> On 7/27/24 01:51, Sean Christopherson wrote:
+>>> Add a kvm_follow_pfn() wrapper, kvm_lookup_pfn(), to allow looking up a
+>>> gfn=>pfn mapping without the caller getting a reference to any underlying
+>>> page.  The API will be used in flows that want to know if a gfn points at
+>>> a valid pfn, but don't actually need to do anything with the pfn.
 >>
->> Feel free to leave it to me for later, but there are more cleanups that
->> can be made, given how simple kvm_resolve_pfn() is now:
+>> Can you rename the function kvm_gfn_has_pfn(), or kvm_gfn_can_be_mapped(),
+>> and make it return a bool?
 > 
-> I'll revisit kvm_resolve_pfn(), Maxim also wasn't a fan of a similar helper that
-> existed in v11.
-
-FWIW kvm_resolve_pfn() is totally fine as an intermediate step.  Just 
-food for thought for possible follow-ups.
-
->> Also, check_user_page_hwpoison() should not be needed anymore, probably
->> not since commit 234b239bea39 ("kvm: Faults which trigger IO release the
->> mmap_sem", 2014-09-24) removed get_user_pages_fast() from hva_to_pfn_slow().
+> Heh, sure.  I initially planned on having it return a bool, but I couldn't figure
+> out a name, mainly because the kernel's pfn_valid() makes things like
+> kvm_gfn_has_valid_pfn() confusing/misleading :-(
 > 
-> Ha, I *knew* this sounded familiar.  Past me apparently came to the same
-> conclusion[*], though I wrongly suspected a memory leak and promptly forgot to
-> ever send a patch.  I'll tack one on this time around.
+>> (As an aside, I wonder if reexecute_instruction() could just use
+>> kvm_is_error_hva(kvm_vcpu_gfn_to_hva(vcpu, gpa_to_gfn(gpa)) instead of going
+>> all the way to a pfn.  But it's ok to be more restrictive).
+> 
+> Heh #2, I wondered the same thing.  I think it would work?  Verifying that there's
+> a usable pfn also protects against retrying an access that hit -EHWPOISON, but I'm
+> prety sure that would require a rare race, and I don't think it could result in
+> the guest being put into an infinite loop.
 
-As you prefer.
+Indeed, and even the check in kvm_alloc_apic_access_page() is totally 
+useless.  The page can go away at any time between the call and 
+vmx_set_apic_access_page_addr() or, for AMD, the #NPF on 
+APIC_DEFAULT_PHYS_BASE.
+
+Yes, it's verifying that the system isn't under extreme memory pressure, 
+but in practice a 4K get_user_pages is never going to fail, it's just 
+going to cause something else to be swapped.  I'd just get rid of both 
+of them, so there's no need for kvm_lookup_pfn().
 
 Paolo
 
