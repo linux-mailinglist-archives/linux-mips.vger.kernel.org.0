@@ -1,173 +1,172 @@
-Return-Path: <linux-mips+bounces-4656-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4657-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8A9D944E43
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Aug 2024 16:43:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85D4C9451AC
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Aug 2024 19:44:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DD58282BD0
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Aug 2024 14:43:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B41A71C22C6E
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Aug 2024 17:44:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0174F1A57EE;
-	Thu,  1 Aug 2024 14:43:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YYE9UY03"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0B711B9B41;
+	Thu,  1 Aug 2024 17:44:18 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C832A1A57E6
-	for <linux-mips@vger.kernel.org>; Thu,  1 Aug 2024 14:43:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8331B32D9;
+	Thu,  1 Aug 2024 17:44:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722523397; cv=none; b=JjJmOg4sg3aPVYRrzKk6YcBx9Bn99J4rxjX2K7LG8pMShYWSHWvYAnLUPUp4kEDzTN0HgQnVqkznZhsEO56umWsY1IeJC6ffsgoPLhyBwXco/CWh1OwKln/Z5lC4nQzE/bZvlnG66jeiDN2RAUeAkspcF0u7lWeX0nqqNuiskeo=
+	t=1722534258; cv=none; b=N7E0Zw8SHltXT7EIc0IOO1NnbjIntXvbCFz+oIaJT+qQHO/QEwYM+WvRSLo9BO8dMhWCjDYETA7SvLTBOl8amsRwp88ryWonuEULOenyXzXwgLPFi9OxwYBSPOT2334H35YpSu1PDE10Ximu3cyL3Xhinr+A9veDWZNvsRkys/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722523397; c=relaxed/simple;
-	bh=IsY6cT/EMNbdEHxsGGmKU2yom71VQGN3eoqzlVoDRMA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Vojookl6i9yIjjI082PvGRI5yX0QXi/C2NvxzlKTImBAC3ifwsFiWqQjghKGV5fEfgbWzRKCQGQyiRFL8j6d4RVDDn+uHIMiS6CNeM8p1n+YpwjjK5Tili0VHFyRlGr2r7y/wTN+1HDihEMRNKwoldV2wtw3D0U+U9GuEj4RWBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YYE9UY03; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-66619cb2d3eso151048827b3.2
-        for <linux-mips@vger.kernel.org>; Thu, 01 Aug 2024 07:43:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722523395; x=1723128195; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9BUCK9RfTKafiexBRvCEwFw2qC43V57hNjDHfumiy08=;
-        b=YYE9UY03WQXLd7HA54lXGldbJlRGM4DHY9ytzkq4PbfGlKR42ibEuz87xtMFFZxHbl
-         dTe65TWt75K5mHOpMYT8GsgFIgcDKPpmDJej+dLWm5ivKhrXPHHXaeI5AwnvZsgKSChl
-         NZEJXzP+qB8kPr/XOXBHOPRosXOGbxov/d7IA3RpYPJusxC5GoFEvNgz+Fan8bibhFt9
-         BKT1oqtQKqGSY8rKJGpitLat4IsYrtnM/AFpM6l2Amoz1UEbdIngFmUcKsdfq3abrBbq
-         eaLWPZmIYHo3iOfrKjFuVqbaj+Bk3FyfpWZ24fLk04K7zlFigQlD0H3Wa1JqFEMVcOjR
-         oglg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722523395; x=1723128195;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9BUCK9RfTKafiexBRvCEwFw2qC43V57hNjDHfumiy08=;
-        b=rFbHG6Y9kmUlMAmzilCI9v23LDkK6oPv2bat2UZ0+iNCYk72C3/Iqf8WG8sfJvG2wP
-         jm8KbwYU+1sPxTKycz/W93F6gAamBA+EAp2T5xa+34cLRcV+GaKS8MTTR1Of7mdo+I26
-         XdMF16jy6HC8pAg/RRu06nE++X01OUTU+vlmGxsiPp/nddrq3ajiHsiFiUS0d9gMa89E
-         bolcYhxsGMyIoCtEQTaHql8esr8I58wBfG/yRaW60Pem4UgZK/6Q9QVUF5v7nhF8f/QK
-         cdZJLFng5+iYIOYwGV+d5H3sfwF9pNrXab4rB8neB9T3vMzbHaHPOejuLQW6CXXzypEf
-         xkzA==
-X-Forwarded-Encrypted: i=1; AJvYcCV2LrHD/mr87gUFUd2HMEHEktMuq1oP3nw8BuFwJJRBN9RdiBcEl373VCzQRX14fuO6sn42Ndg56RpXsqaj2s8ZWbvtRnWB+qnmDw==
-X-Gm-Message-State: AOJu0YzVQImddXy0FJofdCjUmjjfJcyF9QIvMQOrjaA/1kz7/33W2NLK
-	QDvBnCbkHsmfnQmoUWpUVfEcbU9jfbzGur3KZ37IgtaLNklc2wLc1umCwHX7fxPbSvKSCOlvtwQ
-	a+A==
-X-Google-Smtp-Source: AGHT+IHkE7Ce/eHqXIIWUhOrz6iZ7wUAM+0kNmbjyrQoG1wEe6+vtvmxZ2gwjb9N0RAQKGaJuDaT2daG0VE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:1104:b0:e0b:b6f3:85 with SMTP id
- 3f1490d57ef6-e0bde2f0105mr658276.2.1722523394843; Thu, 01 Aug 2024 07:43:14
- -0700 (PDT)
-Date: Thu, 1 Aug 2024 07:43:13 -0700
-In-Reply-To: <87wml0egzo.fsf@draig.linaro.org>
+	s=arc-20240116; t=1722534258; c=relaxed/simple;
+	bh=wRdCTzlDewZSbPkP8IJ71BjVzwzJ/uMan6/8YvZafK8=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uWaegQw3HQxW+sowcYs7B+EJSOUpgfrm95UiRtkid0mgUW6lMrADUZ0eMPEFE6KH+nNzhZ4pJG/ThJ+VSLVgi402JTuv5O3yCL72bfoGGqfYKMw0ZhfLPVB5B1c/ol4kXMSAUlbGfcA9baGbXlEw3J1U4ywBo3oZzgMb0/75bU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4WZbqf2c9cz6K6MB;
+	Fri,  2 Aug 2024 01:41:34 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 6C75C1400F4;
+	Fri,  2 Aug 2024 01:44:10 +0800 (CST)
+Received: from localhost (10.203.177.66) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 1 Aug
+ 2024 18:44:09 +0100
+Date: Thu, 1 Aug 2024 18:44:08 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Mike Rapoport <rppt@kernel.org>
+CC: <linux-kernel@vger.kernel.org>, Alexander Gordeev
+	<agordeev@linux.ibm.com>, Andreas Larsson <andreas@gaisler.com>, "Andrew
+ Morton" <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, "Borislav
+ Petkov" <bp@alien8.de>, Catalin Marinas <catalin.marinas@arm.com>, Christophe
+ Leroy <christophe.leroy@csgroup.eu>, Dan Williams <dan.j.williams@intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, David Hildenbrand
+	<david@redhat.com>, "David S. Miller" <davem@davemloft.net>, Davidlohr Bueso
+	<dave@stgolabs.net>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, Heiko
+ Carstens <hca@linux.ibm.com>, Huacai Chen <chenhuacai@kernel.org>, Ingo
+ Molnar <mingo@redhat.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>, "John Paul
+ Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>, Jonathan Corbet
+	<corbet@lwn.net>, Michael Ellerman <mpe@ellerman.id.au>, Palmer Dabbelt
+	<palmer@dabbelt.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring
+	<robh@kernel.org>, Samuel Holland <samuel.holland@sifive.com>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner
+	<tglx@linutronix.de>, "Vasily Gorbik" <gor@linux.ibm.com>, Will Deacon
+	<will@kernel.org>, Zi Yan <ziy@nvidia.com>, <devicetree@vger.kernel.org>,
+	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-cxl@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+	<linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
+	<linux-s390@vger.kernel.org>, <linux-sh@vger.kernel.org>,
+	<linuxppc-dev@lists.ozlabs.org>, <loongarch@lists.linux.dev>,
+	<nvdimm@lists.linux.dev>, <sparclinux@vger.kernel.org>, <x86@kernel.org>
+Subject: Re: [PATCH v3 02/26] MIPS: sgi-ip27: make NODE_DATA() the same as
+ on all other architectures
+Message-ID: <20240801184408.00002e8b@Huawei.com>
+In-Reply-To: <20240801060826.559858-3-rppt@kernel.org>
+References: <20240801060826.559858-1-rppt@kernel.org>
+	<20240801060826.559858-3-rppt@kernel.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240726235234.228822-1-seanjc@google.com> <20240726235234.228822-6-seanjc@google.com>
- <87wml0egzo.fsf@draig.linaro.org>
-Message-ID: <ZqufAYyVOa9M1z76@google.com>
-Subject: Re: [PATCH v12 05/84] KVM: Add kvm_release_page_unused() API to put
- pages that KVM never consumes
-From: Sean Christopherson <seanjc@google.com>
-To: "Alex =?utf-8?Q?Benn=C3=A9e?=" <alex.bennee@linaro.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
-	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Anup Patel <anup@brainfault.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	David Matlack <dmatlack@google.com>, David Stevens <stevensd@chromium.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Thu, Aug 01, 2024, Alex Benn=C3=A9e wrote:
-> Sean Christopherson <seanjc@google.com> writes:
->=20
-> > Add an API to release an unused page, i.e. to put a page without markin=
-g
-> > it accessed or dirty.  The API will be used when KVM faults-in a page b=
-ut
-> > bails before installing the guest mapping (and other similar flows).
-> >
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >  include/linux/kvm_host.h | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> >
-> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > index 3d9617d1de41..c5d39a337aa3 100644
-> > --- a/include/linux/kvm_host.h
-> > +++ b/include/linux/kvm_host.h
-> > @@ -1201,6 +1201,15 @@ unsigned long gfn_to_hva_prot(struct kvm *kvm, g=
-fn_t gfn, bool *writable);
-> >  unsigned long gfn_to_hva_memslot(struct kvm_memory_slot *slot, gfn_t g=
-fn);
-> >  unsigned long gfn_to_hva_memslot_prot(struct kvm_memory_slot *slot, gf=
-n_t gfn,
-> >  				      bool *writable);
-> > +
-> > +static inline void kvm_release_page_unused(struct page *page)
-> > +{
-> > +	if (!page)
-> > +		return;
-> > +
-> > +	put_page(page);
-> > +}
->=20
-> I guess it's unfamiliarity with the mm layout but I was trying to find
-> where the get_pages come from to see the full pattern of allocate and
-> return. I guess somewhere in the depths of hva_to_pfn() from
-> hva_to_pfn_retry()?
+On Thu,  1 Aug 2024 09:08:02 +0300
+Mike Rapoport <rppt@kernel.org> wrote:
 
-If successful, get_user_page_fast_only() and get_user_pages_unlocked() grab=
- a
-reference on behalf of the caller.
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> sgi-ip27 is the only system that defines NODE_DATA() differently than
+> the rest of NUMA machines.
+> 
+> Add node_data array of struct pglist pointers that will point to
+> __node_data[node]->pglist and redefine NODE_DATA() to use node_data
+> array.
+> 
+> This will allow pulling declaration of node_data to the generic mm code
+> in the next commit.
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+After staring for a while at the use made of the other part
+of the __node_data I think what you have in this an the next
+two patches is fine.
 
-As of this patch, hva_to_pfn_remapped() also grabs a reference to pages tha=
-t
-appear to be refcounted, which is the underlying wart this series aims to f=
-ix.
-In KVM's early days, it _only_ supported GUP, i.e. if KVM got a pfn, that p=
-fn
-was (a) backed by struct page and (b) KVM had a reference to said page.  Th=
-at
-led to the current mess, as KVM didn't get reworked to properly track pages=
- vs.
-pfns when support for VM_MIXEDMAP was added.
+I'm far from convinced it was correct before though as
+arch_refresh_node_data() called on offline nodes in free_area_init()
+would have replaced __node_data with an allocation of
+size pg_data_t but the hub_data(), visible below, is after that.
+Maybe hub_data() as never called for offline nodes, but
+I couldn't establish that.
 
-	/*
-	 * Get a reference here because callers of *hva_to_pfn* and
-	 * *gfn_to_pfn* ultimately call kvm_release_pfn_clean on the
-	 * returned pfn.  This is only needed if the VMA has VM_MIXEDMAP
-	 * set, but the kvm_try_get_pfn/kvm_release_pfn_clean pair will
-	 * simply do nothing for reserved pfns.
-	 *
-	 * Whoever called remap_pfn_range is also going to call e.g.
-	 * unmap_mapping_range before the underlying pages are freed,
-	 * causing a call to our MMU notifier.
-	 *
-	 * Certain IO or PFNMAP mappings can be backed with valid
-	 * struct pages, but be allocated without refcounting e.g.,
-	 * tail pages of non-compound higher order allocations, which
-	 * would then underflow the refcount when the caller does the
-	 * required put_page. Don't allow those pages here.
-	 */
-	if (!kvm_try_get_pfn(pfn))
-		r =3D -EFAULT;
+After these patches the arch_refresh_node_data() generic
+version will only be replacing the pointer in node_data
+leaving the hub_data where it was in the first place and
+thus is fine.
+
+So with that in mind (and it could be completely wrong ;)
+
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+
+
+> ---
+>  arch/mips/include/asm/mach-ip27/mmzone.h | 5 ++++-
+>  arch/mips/sgi-ip27/ip27-memory.c         | 5 ++++-
+>  2 files changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/mips/include/asm/mach-ip27/mmzone.h b/arch/mips/include/asm/mach-ip27/mmzone.h
+> index 08c36e50a860..629c3f290203 100644
+> --- a/arch/mips/include/asm/mach-ip27/mmzone.h
+> +++ b/arch/mips/include/asm/mach-ip27/mmzone.h
+> @@ -22,7 +22,10 @@ struct node_data {
+>  
+>  extern struct node_data *__node_data[];
+>  
+> -#define NODE_DATA(n)		(&__node_data[(n)]->pglist)
+>  #define hub_data(n)		(&__node_data[(n)]->hub)
+>  
+> +extern struct pglist_data *node_data[];
+> +
+> +#define NODE_DATA(nid)		(node_data[nid])
+> +
+>  #endif /* _ASM_MACH_MMZONE_H */
+> diff --git a/arch/mips/sgi-ip27/ip27-memory.c b/arch/mips/sgi-ip27/ip27-memory.c
+> index b8ca94cfb4fe..c30ef6958b97 100644
+> --- a/arch/mips/sgi-ip27/ip27-memory.c
+> +++ b/arch/mips/sgi-ip27/ip27-memory.c
+> @@ -34,8 +34,10 @@
+>  #define SLOT_PFNSHIFT		(SLOT_SHIFT - PAGE_SHIFT)
+>  #define PFN_NASIDSHFT		(NASID_SHFT - PAGE_SHIFT)
+>  
+> -struct node_data *__node_data[MAX_NUMNODES];
+> +struct pglist_data *node_data[MAX_NUMNODES];
+> +EXPORT_SYMBOL(node_data);
+>  
+> +struct node_data *__node_data[MAX_NUMNODES];
+>  EXPORT_SYMBOL(__node_data);
+>  
+>  static u64 gen_region_mask(void)
+> @@ -361,6 +363,7 @@ static void __init node_mem_init(nasid_t node)
+>  	 */
+>  	__node_data[node] = __va(slot_freepfn << PAGE_SHIFT);
+>  	memset(__node_data[node], 0, PAGE_SIZE);
+> +	node_data[node] = &__node_data[node]->pglist;
+>  
+>  	NODE_DATA(node)->node_start_pfn = start_pfn;
+>  	NODE_DATA(node)->node_spanned_pages = end_pfn - start_pfn;
+
 
