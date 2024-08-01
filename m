@@ -1,81 +1,81 @@
-Return-Path: <linux-mips+bounces-4654-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4655-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30B5F944BBD
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Aug 2024 14:53:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56882944CCB
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Aug 2024 15:13:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 799CAB24A64
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Aug 2024 12:53:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2EF0285EF8
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Aug 2024 13:13:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6CBA1A01CD;
-	Thu,  1 Aug 2024 12:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 619441A4896;
+	Thu,  1 Aug 2024 13:06:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jOosIZBZ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OEgKXxpd"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC7A158A2C
-	for <linux-mips@vger.kernel.org>; Thu,  1 Aug 2024 12:53:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C71F3189B98
+	for <linux-mips@vger.kernel.org>; Thu,  1 Aug 2024 13:06:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722516804; cv=none; b=tJuT/EJezn9siyAvObYvYohoU2l08GsO3zL7/o3JCyc3Z8ItpSawLVpwJ87ZPqc7wsdBPBQQqFo3+GBQCe/iOp2NfHAoHkYP0NtZhTw/X7roamZ18Gxt0bQ4PxodN0UE+yHq7mggefbByOm0rxQDjgHglvdzJmRd9ky8Jco6G+M=
+	t=1722517562; cv=none; b=gUxzxVQ8LGKilCZSFnPpruV7gwLxvAsn8UTByN9ooUBMKQR1RM/SYbVKuAIXb9j3h2bxfOGN9r2io3nBL78qJyouGSRRkFEEsyzc8XckBTTcrEXbl/pxqR67i91UjV8/+9wg8vGKHpdY4fiZPBe39W1GBMvn2wgdjrLkzVWIoVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722516804; c=relaxed/simple;
-	bh=RSXa3QrdosMXek03Kn5TJUgAyt9Pgt8CEW3Dz2q5d6k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JlhmfdVdXW7KiqaHV/dXTvAvvCzgwwvJWSSgb95CcOnYQuKflcUvK+vPDyPnCA1Kyh64DApZ/ncTOnbUoj+CeCKG6DPCCnZnjb7++EYK02SEa9YYXm/Ven1xD/qP5SU0+P4LKwG4ZWbfLMZRLYqNqiTdnJtHk0zCiZ0Yy5zpxAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jOosIZBZ; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1722517562; c=relaxed/simple;
+	bh=dMF81oEXFQQ/iabpVQPMzLroYQXe2b3ZlwqJv82n/wY=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=KduL6DPpjkSu6/QPW2h1qR20Oe5Uzd2DZnUQ+a6A2+tAFcr9Ljp2rQCZkEhRNgkRHeMed/g4ED0hWGTOtv84whZyfB+95wCj3Tf1qKtVyXhm2pTz/ULayVEeQPtzRI+ZmzJ686IK1IMy5Dd2fg459b406/U8epBLNs7GZergu0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OEgKXxpd; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1722516802;
+	s=mimecast20190719; t=1722517559;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=tY3FTh7vOTxS/LhqhyyExp9r4gGoOfraF1glml6en7Q=;
-	b=jOosIZBZGQTA8l+OiWKwMzhLzigshAK/nV9vhCJNY/NLT+TUtL17ZBj/F3NF9l/AwjmWEf
-	GUH75fVn67N9cKzCJr1tlEBt1K3OsgR3HRXIaxs+6kcv3fNr2TPBNL83AsyU+YefTh/4dk
-	wE5TFOLGG11KwpjnLCCQOfzUIxcdkEw=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=iX/3tIvoxeSLnt+NdQSfgM25JA1znfQTVzpC9no38a8=;
+	b=OEgKXxpdy6qA9PQX7qWy5RP3vDHxfdyL+bK82gN+C/IV0IfY103zl9IJupAaclfylmuF14
+	6kXpIfVtPuINXU9QqnxAXMQqL9O4njVLkHtbikk3t4RKMrg5GvoGe/F2LdUa2tsRgMdqR4
+	Yv+o18mFkSXSXg1qlL/l16bvE435sjI=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-528-fQAUlN6WNXO8X6wMH-zV5Q-1; Thu, 01 Aug 2024 08:53:20 -0400
-X-MC-Unique: fQAUlN6WNXO8X6wMH-zV5Q-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-367962f0cb0so3308290f8f.1
-        for <linux-mips@vger.kernel.org>; Thu, 01 Aug 2024 05:53:20 -0700 (PDT)
+ us-mta-332-fatCKLnSNCmsEMOxvkcBKg-1; Thu, 01 Aug 2024 09:05:58 -0400
+X-MC-Unique: fatCKLnSNCmsEMOxvkcBKg-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-42809eb7b99so11970475e9.0
+        for <linux-mips@vger.kernel.org>; Thu, 01 Aug 2024 06:05:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722516799; x=1723121599;
+        d=1e100.net; s=20230601; t=1722517557; x=1723122357;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
+         :content-language:references:cc:to:from:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=tY3FTh7vOTxS/LhqhyyExp9r4gGoOfraF1glml6en7Q=;
-        b=mFwvKrShaN3cxyJ2gkhn1iBVpvfV5sCOhXdzSuKkExIr10bLn13DGI8vediMbNSh3D
-         yiMD8iE8u08kHbY7UfQ1GgqOeLwifD6Zj2lhTdxEn1qTu6hCawMGGQyEWnA2cPTi83x3
-         8KCdktmln+mjT2TImttToWkODHVlKSe9gt6Oftr1pMLawXmkgRj0+Z8hpC4iiO7ZPhVI
-         sqDXbp4+8uuEjPn0iKcemiPPO2mJUL9o88FDZNGWYqTdtrqsevvM/O2nvSfdOJWc3Rqo
-         rPEOdCV2phxBw36z8rQqQ0N5uMaDHar6j4+bdAc9Q0xKZo0Gk2JdrlMOxpOWtPs2nqyX
-         pS9w==
-X-Forwarded-Encrypted: i=1; AJvYcCWJGuGEMtwWUYMo3ZVEz/QlRixriHXkIdA5VVGk7FgxJ5UR2UBJ+lyqe7+/X7VoeHV2K2lnXEE7U1FbUkxYkjx5tUAYfRw5XVEKsg==
-X-Gm-Message-State: AOJu0YwW8TyDabPPyEfxhj118vQyuwx2sCdDT64vEJbiokWmWirFX0w9
-	9qbGspbzzup3w3fE5BzKw6wxZpg/UNoWdkV5tHZ+NKDLhr80tDKkFm71jm7+JKa3iIdHPtbnPZi
-	nDhfhOX/hKC2Xrsgo8x+fTA3Y285u5UyzXfhf4a6Uo90CtDAnzmM6olOUvMY=
-X-Received: by 2002:adf:ed11:0:b0:364:8568:f843 with SMTP id ffacd0b85a97d-36baaf46ff3mr1747180f8f.59.1722516799372;
-        Thu, 01 Aug 2024 05:53:19 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEXkQzuiBajNhJVSP5UhLjv2gX0jPjX0Kpt2L7st5acq9l3/tBwA4i709DCI0A4Sa8f6WF5tw==
-X-Received: by 2002:adf:ed11:0:b0:364:8568:f843 with SMTP id ffacd0b85a97d-36baaf46ff3mr1747154f8f.59.1722516798788;
-        Thu, 01 Aug 2024 05:53:18 -0700 (PDT)
+        bh=iX/3tIvoxeSLnt+NdQSfgM25JA1znfQTVzpC9no38a8=;
+        b=fUJL6EvPNHukEnOLNaC3R5QNptP7EEifDdhnQG7KqX+VvSO5K1u/594MsLCUz+v/nT
+         Ut5S+WOaGGeU0ADTlAufcq8U4h2lH1jWMkbKWq5gRMjvCZMlug55sRkHUFHrnIGOIK74
+         3FsmpMbYF1I/PqnGt4hxnnRGdB8qi7ChwyRQT2e2TSFf3k0g4tJe9cqREV5SiqyIQC/9
+         gMNqCBBRxnCNLyNIP0FsCVzW8VFDyVkixfE1FEr28BAKF4WLN30jzwxw7UarHpr3IYzT
+         8HpBEbVpL3FgeX3KQWtmWfwemwDJWjywvWK0fk9EzqY4DbJCnStTtTRiRQJBSTZIm/GL
+         EARA==
+X-Forwarded-Encrypted: i=1; AJvYcCU0aAGDujR7oPQtGpR00/5Vmxmf5ZA4BAHzMKZ5zkAozMhr/ArkqckBcbl5odJPiMs/EBZ2IvwH7S9+svlEbXFNIkCU0sfY4rcrzQ==
+X-Gm-Message-State: AOJu0YwFVrvApcn00dbM6oJYcNJDzXPHCAxeEI85nSO2Z0froKp1Zb6o
+	i7lLVSNAT3HsLtUI7yKEjZzgGvaAvDYtV4XNH//XLqsLG6FAbS0Fuo20zzdiLKIbS5jdLW5Wvuf
+	WgWgSksi32Ux9AbmopVxDWhuG+/4g/sVSRmO5gW5JfUmcqxeLZb5JJ/qSi4I=
+X-Received: by 2002:a05:600c:46cd:b0:424:8743:86b4 with SMTP id 5b1f17b1804b1-428e4713f62mr14522505e9.6.1722517557367;
+        Thu, 01 Aug 2024 06:05:57 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFECvW28n36dZHShXm0cKkJbtFTgF6/BuzcdnrjZeQVIa1Jdj69JYR8jefmTxcdnchFqcS3Xw==
+X-Received: by 2002:a05:600c:46cd:b0:424:8743:86b4 with SMTP id 5b1f17b1804b1-428e4713f62mr14522025e9.6.1722517556809;
+        Thu, 01 Aug 2024 06:05:56 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c707:5c00:e650:bcd7:e2a0:54fe? (p200300cbc7075c00e650bcd7e2a054fe.dip0.t-ipconnect.de. [2003:cb:c707:5c00:e650:bcd7:e2a0:54fe])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36b36858197sm19818391f8f.68.2024.08.01.05.53.17
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4282baa9071sm57779005e9.13.2024.08.01.06.05.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Aug 2024 05:53:18 -0700 (PDT)
-Message-ID: <bffe178c-bd97-4945-898e-97ba203f503e@redhat.com>
-Date: Thu, 1 Aug 2024 14:53:15 +0200
+        Thu, 01 Aug 2024 06:05:56 -0700 (PDT)
+Message-ID: <2a74db22-f2a4-4a14-8091-1e56962a6fa8@redhat.com>
+Date: Thu, 1 Aug 2024 15:05:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -84,6 +84,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 0/1] mm: introduce MADV_DEMOTE/MADV_PROMOTE
+From: David Hildenbrand <david@redhat.com>
 To: Zhangrenze <zhang.renze@h3c.com>, "linux-mm@kvack.org"
  <linux-mm@kvack.org>,
  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
@@ -105,7 +106,7 @@ Cc: "arnd@arndb.de" <arnd@arndb.de>,
  "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
  Jiaoxupo <jiaoxupo@h3c.com>, Zhouhaofan <zhou.haofan@h3c.com>
 References: <3a5785661e1b4f3381046aa5e808854c@h3c.com>
-From: David Hildenbrand <david@redhat.com>
+ <bffe178c-bd97-4945-898e-97ba203f503e@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -152,160 +153,19 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <3a5785661e1b4f3381046aa5e808854c@h3c.com>
+In-Reply-To: <bffe178c-bd97-4945-898e-97ba203f503e@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 01.08.24 11:57, Zhangrenze wrote:
->>> Sure, here's the Scalable Tiered Memory Control (STMC)
->>>
->>> **Background**
->>>
->>> In the era when artificial intelligence, big data analytics, and
->>> machine learning have become mainstream research topics and
->>> application scenarios, the demand for high-capacity and high-
->>> bandwidth memory in computers has become increasingly important.
->>> The emergence of CXL (Compute Express Link) provides the
->>> possibility of high-capacity memory. Although CXL TYPE3 devices
->>> can provide large memory capacities, their access speed is lower
->>> than traditional DRAM due to hardware architecture limitations.
->>>
->>> To enjoy the large capacity brought by CXL memory while minimizing
->>> the impact of high latency, Linux has introduced the Tiered Memory
->>> architecture. In the Tiered Memory architecture, CXL memory is
->>> treated as an independent, slower NUMA NODE, while DRAM is
->>> considered as a relatively faster NUMA NODE. Applications allocate
->>> memory from the local node, and Tiered Memory, leveraging memory
->>> reclamation and NUMA Balancing mechanisms, can transparently demote
->>> physical pages not recently accessed by user processes to the slower
->>> CXL NUMA NODE. However, when user processes re-access the demoted
->>> memory, the Tiered Memory mechanism will, based on certain logic,
->>> decide whether to promote the demoted physical pages back to the
->>> fast NUMA NODE. If the promotion is successful, the memory accessed
->>> by the user process will reside in DRAM; otherwise, it will reside in
->>> the CXL NODE. Through the Tiered Memory mechanism, Linux balances
->>> betweenlarge memory capacity and latency, striving to maintain an
->>> equilibrium for applications.
->>>
->>> **Problem**
->>> Although Tiered Memory strives to balance between large capacity and
->>> latency, specific scenarios can lead to the following issues:
->>>
->>>     1. In scenarios requiring massive computations, if data is heavily
->>>        stored in CXL slow memory and Tiered Memory cannot promptly
->>>        promote this memory to fast DRAM, it will significantly impact
->>>        program performance.
->>>     2. Similar to the scenario described in point 1, if Tiered Memory
->>>        decides to promote these physical pages to fast DRAM NODE, but
->>>        due to limitations in the DRAM NODE promote ratio, these physical
->>>        pages cannot be promoted. Consequently, the program will keep
->>>        running in slow memory.
->>>     3. After an application finishes computing on a large block of fast
->>>        memory, it may not immediately re-access it. Hence, this memory
->>>        can only wait for the memory reclamation mechanism to demote it.
->>>     4. Similar to the scenario described in point 3, if the demotion
->>>        speed is slow, these cold pages will occupy the promotion
->>>        resources, preventing some eligible slow pages from being
->>>        immediately promoted, severely affecting application efficiency.
->>>
->>> **Solution**
->>> We propose the **Scalable Tiered Memory Control (STMC)** mechanism,
->>> which delegates the authority of promoting and demoting memory to the
->>> application. The principle is simple, as follows:
->>>
->>>     1. When an application is preparing for computation, it can promote
->>>        the memory it needs to use or ensure the memory resides on a fast
->>>        NODE.
->>>     2. When an application will not use the memory shortly, it can
->>>        immediately demote the memory to slow memory, freeing up valuable
->>>        promotion resources.
->>>
->>> STMC mechanism is implemented through the madvise system call, providing
->>> two new advice options: MADV_DEMOTE and MADV_PROMOTE. MADV_DEMOTE
->>> advises demote the physical memory to the node where slow memory
->>> resides; this advice only fails if there is no free physical memory on
->>> the slow memory node. MADV_PROMOTE advises retaining the physical memory
->>> in the fast memory; this advice only fails if there are no promotion
->>> slots available on the fast memory node. Benefits brought by STMC
->>> include:
->>>
->>>     1. The STMC mechanism is a variant of on-demand memory management
->>>        designed to let applications enjoy fast memory as much as possible,
->>>        while actively demoting to slow memory when not in use, thus
->>>        freeing up promotion slots for the NODE and allowing it to run in
->>>        an optimized Tiered Memory environment.
->>>     2. The STMC mechanism better balances large capacity and latency.
->>>
->>> **Shortcomings of STMC**
->>> The STMC mechanism requires the caller to manage memory demotion and
->>> promotion. If the memory is not promptly demoting after an promotion,
->>> it may cause issues similar to memory leaks
->> Ehm, that sounds scary. Can you elaborate what's happening here and why
->> it is "similar to memory leaks"?
->>
->>
->> Can you also point out why migrate_pages() is not suitable? I would
->> assume demote/promote is in essence simply migrating memory between nodes.
->>
->> -- 
->> Cheers,
->>
->> David / dhildenb
->>
+>> 4. MADV_DEMOTE and MADV_PROMOTE provide a better balance between capacity
+>>      and latency. They allow hot pages that need promoting to be promoted
+>>      smoothly and pages that need demoting to be demoted immediately. This
+>>      helps tiered memory systems to operate more rationally.
 > 
-> Thank you for the response. Below are my points of view. If there are any
-> mistakes, I appreciate your understanding:
-> 
-> 1. In a tiered memory system, fast nodes and slow nodes act as two common
->     memory pools. The system has a certain ratio limit for promotion. For
->     example, a NODE may stipulate that when the available memory is less
->     than 1GB or 1/4 of the node's memory, promotion are prohibited. If we
->     use migrate_pages at this point, it will unrestrictedly promote slow
->     pages to fast memory, which may prevent other processes’ pages that
->     should have been promoted from being promoted. This is what I mean by
->     occupying promotion resources.
-> 2. As described in point 1, if we use MADV_PROMOTE to temporarily promote
->     a batch of pages and do not demote them immediately after usage, it
->     will occupy many promotion resources. Other hot pages that need promote
->     will not be able to get promote, which will impact the performance of
->     certain processes.
+> Can you summarize why something similar could not be provided by a
+> library that builds up on existing functionality, such as migrate_pages?
 
-So, you mean, applications can actively consume "fast memory" and 
-"steal" it from other applications? I assume that's what you meant with 
-"memory leak".
-
-I would really suggest to *not* call this "similar to memory leaks", in 
-your own favor ;)
-
-> 3. MADV_DEMOTE and MADV_PROMOTE only rely on madvise, while migrate_pages
->     depends on libnuma.
-
-Well, you can trivially call that systemcall also without libnuma ;) So 
-that shouldn't really make a difference and is rather something that can 
-be solved in user space.
-
-> 4. MADV_DEMOTE and MADV_PROMOTE provide a better balance between capacity
->     and latency. They allow hot pages that need promoting to be promoted
->     smoothly and pages that need demoting to be demoted immediately. This
->     helps tiered memory systems to operate more rationally.
-
-Can you summarize why something similar could not be provided by a 
-library that builds up on existing functionality, such as migrate_pages? 
-It could easily take a look at memory stats to reason whether a 
-promotion/demotion makes sense (your example above with the memory 
-distribution).
-
- From the patch itself I read
-
-"MADV_DEMOTE can mark a range of memory pages as cold
-pages and immediately demote them to slow memory. MADV_PROMOTE can mark
-a range of memory pages as hot pages and immediately promote them to
-fast memory"
-
-which sounds to me like migrate_pages / MADV_COLD might be able to 
-achieve something similar.
-
-What's the biggest difference that MADV_DEMOTE|MADV_PROMOTE can do better?
+Sorry, I actually wanted to refer to "move_pages", not "migrate_pages".
 
 -- 
 Cheers,
