@@ -1,158 +1,144 @@
-Return-Path: <linux-mips+bounces-4660-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4661-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68FC294522F
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Aug 2024 19:50:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDB9994527D
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Aug 2024 20:01:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15C1B285523
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Aug 2024 17:50:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 231CE1C20F13
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Aug 2024 18:01:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 794671BB686;
-	Thu,  1 Aug 2024 17:47:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 005B6145352;
+	Thu,  1 Aug 2024 18:01:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GiWQMw0D"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4237C1B4C2A;
-	Thu,  1 Aug 2024 17:47:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6587D143747
+	for <linux-mips@vger.kernel.org>; Thu,  1 Aug 2024 18:01:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722534465; cv=none; b=C1Tb0JJRaxIYOiFVkvxB6csO/NtZSuTd8XAnmG1bEI6fj6ADVORkotV9P3uvR6PsqGFy1i479uXmHnp/yknVQ8pKTdtA/Y405GTn3ffQ2UDKYfGaF4ChcXsfSvKPY+h3qwS4mKnGD+/yF1ytraynxSiQvkye9HtixZxmzx37b+4=
+	t=1722535294; cv=none; b=fBHD+1Mf8OXTVa7f3aPq/x9rZZ6CsALV9JCivnBiIcYtA63rp+wo18dh6QK+qINEu67KeKCPuSFtz5+WNhp1xhH0sDT1eJxRz7Ep9XhpHtR3+tqmKERCItOzSEFOL9DYe3vzzBjF7jF38I3v0/r58vJDmTQuai+heI3KkMpVGO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722534465; c=relaxed/simple;
-	bh=QjDENAGyYUfkxISJ55CXGA0nu5yApMiihtQuD/xC0eQ=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FhjFoqAfZXPTbMOq4AS355s959Eev0/lJruJ5XRJdTf60fdkUB72y8NMTHgyyO5n4bPmYOJzKal2z7aJyBOxCfjAbyUxadG0jRboNtytrZzBy665q+KAW+intcaSDqjAH6Ym9SNDtIHh/tlkctTPNWTVslVEDYW35VrBGqoei1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4WZbvg4GP6z6K91N;
-	Fri,  2 Aug 2024 01:45:03 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id DD56C140B55;
-	Fri,  2 Aug 2024 01:47:39 +0800 (CST)
-Received: from localhost (10.203.177.66) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 1 Aug
- 2024 18:47:38 +0100
-Date: Thu, 1 Aug 2024 18:47:38 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Mike Rapoport <rppt@kernel.org>
-CC: <linux-kernel@vger.kernel.org>, Alexander Gordeev
-	<agordeev@linux.ibm.com>, Andreas Larsson <andreas@gaisler.com>, "Andrew
- Morton" <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, "Borislav
- Petkov" <bp@alien8.de>, Catalin Marinas <catalin.marinas@arm.com>, Christophe
- Leroy <christophe.leroy@csgroup.eu>, Dan Williams <dan.j.williams@intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, David Hildenbrand
-	<david@redhat.com>, "David S. Miller" <davem@davemloft.net>, Davidlohr Bueso
-	<dave@stgolabs.net>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, Heiko
- Carstens <hca@linux.ibm.com>, Huacai Chen <chenhuacai@kernel.org>, Ingo
- Molnar <mingo@redhat.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>, "John Paul
- Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>, Jonathan Corbet
-	<corbet@lwn.net>, Michael Ellerman <mpe@ellerman.id.au>, Palmer Dabbelt
-	<palmer@dabbelt.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring
-	<robh@kernel.org>, Samuel Holland <samuel.holland@sifive.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner
-	<tglx@linutronix.de>, "Vasily Gorbik" <gor@linux.ibm.com>, Will Deacon
-	<will@kernel.org>, Zi Yan <ziy@nvidia.com>, <devicetree@vger.kernel.org>,
-	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-cxl@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-mips@vger.kernel.org>,
-	<linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
-	<linux-s390@vger.kernel.org>, <linux-sh@vger.kernel.org>,
-	<linuxppc-dev@lists.ozlabs.org>, <loongarch@lists.linux.dev>,
-	<nvdimm@lists.linux.dev>, <sparclinux@vger.kernel.org>, <x86@kernel.org>
-Subject: Re: [PATCH v3 06/26] MIPS: loongson64: drop
- HAVE_ARCH_NODEDATA_EXTENSION
-Message-ID: <20240801184738.00003e6e@Huawei.com>
-In-Reply-To: <20240801060826.559858-7-rppt@kernel.org>
-References: <20240801060826.559858-1-rppt@kernel.org>
-	<20240801060826.559858-7-rppt@kernel.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1722535294; c=relaxed/simple;
+	bh=B4USJ3DcoEtC2grgJaNeehMjrX/R6yyLoOz0nwuEw9c=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=sCYzOOq/lWYxSdUt5TRv0M2ysvO2DKO3vlqFQCM9iHpoJ5fPOivT+CTm38PM+dSmhYzQXhsQydlmc/ul9DM8haOAtVNov2q5DiSnnfFKzkUyrQk+SwK0n8L/xOnaGaz6fCuoOpS2IqKIojrzlzEur2c+hiXBzK6B+FLXpmJnlUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GiWQMw0D; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-7163489149fso7121676a12.3
+        for <linux-mips@vger.kernel.org>; Thu, 01 Aug 2024 11:01:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1722535292; x=1723140092; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xl2Pju3NY9Fnm1xajnPNr4ZOFDET+sfv7XV8JXyIerc=;
+        b=GiWQMw0D++CU3TjETx4tWGapTpULxvaI7JV6Y8bd9exHIvcVe2KloKaCc3sl+3L6Tr
+         whnLzZIhzEez/vMO/EbpvHmq2wAgGJ4BG7oR6m6qaFWee2Z3VYCc2MgzVvBjWx0iICfw
+         nZJ2uXfG1mZU5NCb98GEcsgaV5BQ1TqtHNsVSOT2VTUCyt4pZ1J7vd37da6yjBlA3a/L
+         mU0Uxp+3lg8sOhDEfbThyyiskc0dco8Lp+UcfcgVENf11NBLbyPVCLIYm3d+74/+wk1+
+         szSkSkwBii8fJgyIYuhcHHQLyaXYegcbx8WIUKUe7Q1/CPGjkNJdQheQCVyL4TGy5rZS
+         6CPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722535292; x=1723140092;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xl2Pju3NY9Fnm1xajnPNr4ZOFDET+sfv7XV8JXyIerc=;
+        b=JAKMqHJpcvVwbJD3fQoZKcWmNAIbQHjPrMuV2m/5ZKKQA74xD1thxRUuBkOfJpwvXT
+         Z+Vc+nxcjf3hPX/wfTOu6TDg5gZOCfs0eQ9Pk8PEgsN9xauAQGqehHRIr48AGOVMqiHc
+         0f2fYKmT7k4Sci9wZJZxtaXGC2CTLb0Jzq6WxItKI2s2HBspTLfGrIQBfICdJFXvMUJy
+         eLqo2iqgS/eQtvxIinG7mV3FgzasLUEITzyUK/tD5pr6q4K/8B+ZAeyKpAkWQj1u4T4L
+         DZ6Fzeo3E8pW2V+/ZvgER2mZ9HsE09dqRcDv8oh6nxY8bk1tunVrpXQqySHW3VCHfGRG
+         UZUA==
+X-Forwarded-Encrypted: i=1; AJvYcCUzZBeaeknIgd1+QBkSbtIXahK4nMDiXCGzIWMs4FySmHFmGtaqnDEAjad2d2GRF1xFqyeqCap1prbiEgcP9plbmVI6jbhY+ObZ0w==
+X-Gm-Message-State: AOJu0YxOWEgSA4mVpPXodYNJZGYPnpPHJeGarW3b9+IYEUBMa1IaFSAl
+	/gUif7jnp7EzL6onD638r+7eeGDhf3G9kDYgN4GQ0z1XRQjXPgshlsARyIsAdFXH8MuNiOb7nWz
+	X2w==
+X-Google-Smtp-Source: AGHT+IF64U8Ib+bNIe3iPxoSzJOvvilQGXPjPZq7Y/8acNPwlcg0hACHnvmYPGnFv3dx9aufX4l27GJDySU=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a65:6252:0:b0:75a:b299:85b6 with SMTP id
+ 41be03b00d2f7-7b74669c7b3mr1534a12.2.1722535291408; Thu, 01 Aug 2024 11:01:31
+ -0700 (PDT)
+Date: Thu, 1 Aug 2024 11:01:30 -0700
+In-Reply-To: <yq5aikwku25o.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Mime-Version: 1.0
+References: <20240726235234.228822-1-seanjc@google.com> <20240726235234.228822-3-seanjc@google.com>
+ <yq5aikwku25o.fsf@kernel.org>
+Message-ID: <ZqvNekQAjs-SN-se@google.com>
+Subject: Re: [PATCH v12 02/84] KVM: arm64: Disallow copying MTE to guest
+ memory while KVM is dirty logging
+From: Sean Christopherson <seanjc@google.com>
+To: "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
+	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Anup Patel <anup@brainfault.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	David Matlack <dmatlack@google.com>, David Stevens <stevensd@chromium.org>
+Content-Type: text/plain; charset="us-ascii"
 
-On Thu,  1 Aug 2024 09:08:06 +0300
-Mike Rapoport <rppt@kernel.org> wrote:
-
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+On Thu, Aug 01, 2024, Aneesh Kumar K.V wrote:
+> Sean Christopherson <seanjc@google.com> writes:
 > 
-> Commit f8f9f21c7848 ("MIPS: Fix build error for loongson64 and
-> sgi-ip27") added HAVE_ARCH_NODEDATA_EXTENSION to loongson64 to silence a
-> compilation error that happened because loongson64 didn't define array
-> of pg_data_t as node_data like most other architectures did.
+> > Disallow copying MTE tags to guest memory while KVM is dirty logging, as
+> > writing guest memory without marking the gfn as dirty in the memslot could
+> > result in userspace failing to migrate the updated page.  Ideally (maybe?),
+> > KVM would simply mark the gfn as dirty, but there is no vCPU to work with,
+> > and presumably the only use case for copy MTE tags _to_ the guest is when
+> > restoring state on the target.
+> >
+> > Fixes: f0376edb1ddc ("KVM: arm64: Add ioctl to fetch/store tags in a guest")
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >  arch/arm64/kvm/guest.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
+> > index e1f0ff08836a..962f985977c2 100644
+> > --- a/arch/arm64/kvm/guest.c
+> > +++ b/arch/arm64/kvm/guest.c
+> > @@ -1045,6 +1045,11 @@ int kvm_vm_ioctl_mte_copy_tags(struct kvm *kvm,
+> >  
+> >  	mutex_lock(&kvm->slots_lock);
+> >  
+> > +	if (write && atomic_read(&kvm->nr_memslots_dirty_logging)) {
+> > +		ret = -EBUSY;
+> > +		goto out;
+> > +	}
+> > +
+> >
 > 
-> After rename of __node_data to node_data arch_alloc_nodedata() and
-> HAVE_ARCH_NODEDATA_EXTENSION can be dropped from loongson64.
-> 
-> Since it was the only user of HAVE_ARCH_NODEDATA_EXTENSION config option
-> also remove this option from arch/mips/Kconfig.
-> 
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> is this equivalent to kvm_follow_pfn() with kfp->pin = 1 ?
 
-These are as you say now identical to the generic form, so
-don't need a special version for any reason I can see.
+No, gfn_to_pfn_prot() == FOLL_GET, kfp->pin == FOLL_PIN.  But that's not really
+relevant.
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Should all those pin request fail if kvm->nr_memslots_dirty_logging != 0? 
 
+No, the conflict with dirty logging is specifically that this code doesn't invoke
+mark_page_dirty().  And it can't easily do that, because there's no loaded ("running")
+vCPU, i.e. doing so would trip this WARN:
 
-> ---
->  arch/mips/Kconfig           |  4 ----
->  arch/mips/loongson64/numa.c | 10 ----------
->  2 files changed, 14 deletions(-)
-> 
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index ea5f3c3c31f6..43da6d596e2b 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -502,7 +502,6 @@ config MACH_LOONGSON64
->  	select USE_OF
->  	select BUILTIN_DTB
->  	select PCI_HOST_GENERIC
-> -	select HAVE_ARCH_NODEDATA_EXTENSION if NUMA
->  	help
->  	  This enables the support of Loongson-2/3 family of machines.
->  
-> @@ -2612,9 +2611,6 @@ config NUMA
->  config SYS_SUPPORTS_NUMA
->  	bool
->  
-> -config HAVE_ARCH_NODEDATA_EXTENSION
-> -	bool
-> -
->  config RELOCATABLE
->  	bool "Relocatable kernel"
->  	depends on SYS_SUPPORTS_RELOCATABLE
-> diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
-> index b50ce28d2741..64fcfaa885b6 100644
-> --- a/arch/mips/loongson64/numa.c
-> +++ b/arch/mips/loongson64/numa.c
-> @@ -198,13 +198,3 @@ void __init prom_init_numa_memory(void)
->  	pr_info("CP0_PageGrain: CP0 5.1 (0x%x)\n", read_c0_pagegrain());
->  	prom_meminit();
->  }
-> -
-> -pg_data_t * __init arch_alloc_nodedata(int nid)
-> -{
-> -	return memblock_alloc(sizeof(pg_data_t), SMP_CACHE_BYTES);
-> -}
-> -
-> -void arch_refresh_nodedata(int nid, pg_data_t *pgdat)
-> -{
-> -	node_data[nid] = pgdat;
-> -}
+#ifdef CONFIG_HAVE_KVM_DIRTY_RING
+	if (WARN_ON_ONCE(vcpu && vcpu->kvm != kvm))
+		return;
 
+	WARN_ON_ONCE(!vcpu && !kvm_arch_allow_write_without_running_vcpu(kvm)); <====
+#endif
 
