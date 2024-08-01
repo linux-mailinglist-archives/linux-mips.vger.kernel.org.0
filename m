@@ -1,1066 +1,315 @@
-Return-Path: <linux-mips+bounces-4653-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4654-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ECC59449C2
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Aug 2024 12:54:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30B5F944BBD
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Aug 2024 14:53:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B605286EF7
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Aug 2024 10:54:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 799CAB24A64
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Aug 2024 12:53:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F141184536;
-	Thu,  1 Aug 2024 10:54:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6CBA1A01CD;
+	Thu,  1 Aug 2024 12:53:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CwdIYpU6"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jOosIZBZ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90D391332A1;
-	Thu,  1 Aug 2024 10:54:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC7A158A2C
+	for <linux-mips@vger.kernel.org>; Thu,  1 Aug 2024 12:53:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722509659; cv=none; b=JlMHPb5KMbLWMMUxOD805ihiWrgxISKQ+GXl2ilnLhnb04NryzfOGMCyv3uSC/cDcwc3NxViYGY0KotL1s0yakx9czlfqV1f1vSV0/4Qwml8CCQi2z/QUCRXFNPGCOGG3S6GhGc1JNB3lWC6fe/J9QfaEvq+1bbZ8IJp6vVM7H8=
+	t=1722516804; cv=none; b=tJuT/EJezn9siyAvObYvYohoU2l08GsO3zL7/o3JCyc3Z8ItpSawLVpwJ87ZPqc7wsdBPBQQqFo3+GBQCe/iOp2NfHAoHkYP0NtZhTw/X7roamZ18Gxt0bQ4PxodN0UE+yHq7mggefbByOm0rxQDjgHglvdzJmRd9ky8Jco6G+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722509659; c=relaxed/simple;
-	bh=YjmxhB3oxwRvrW80Ez4gcGxVeqbKKWcZslWsg7KD/s8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YAHuWRqXt0EHgS/8bK32891j90oxZhxGBaLSdxfhfokcFC5+MMdS1ZYBZ2LD5i72x/WXed/5yaIcEdHX7d7YJ62JHmoFhY8N/klauRgwSu4jPrH8P+cBFwzXqZGsUQbBC857AsGx2ESuGfsvROr8ieVtutIb8SZY1kjvhJ9rzT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CwdIYpU6; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5a108354819so10066585a12.0;
-        Thu, 01 Aug 2024 03:54:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722509655; x=1723114455; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DwxNtEathvlLU1w5L7uXWcjiGlnHScsd5e3+FaULlRI=;
-        b=CwdIYpU6FoCjtm1M+QjR53l7G7k+omSw8EnysolvkTaeePLzBuCKSkiHJ46WSOS259
-         Hmq2q1d+HBO2e6NVjUY23lzFxFQZrTFDqB9WYG6qt4FZlNGMp6f/fp/Qwko8RH+pKPPR
-         0SDjkEXuHWSa9RtCCjUz9AscBKSWR8UF/dQfxuCgD/gzVvJf1wQeCl/x3HMtaQ+4i/O1
-         At80YTa0Nc0QhRND9AUfEumpej/OV2CdBcS5Vd1nPIaBOeGH72Nu6W4rwawS8vfRb6Hx
-         phDDApUoAQ3bicKSLMYRpg46P07PWkQsetdlTWoKyw0aQmUYHLL8W5vJKI7cG/UznFWj
-         StlA==
+	s=arc-20240116; t=1722516804; c=relaxed/simple;
+	bh=RSXa3QrdosMXek03Kn5TJUgAyt9Pgt8CEW3Dz2q5d6k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JlhmfdVdXW7KiqaHV/dXTvAvvCzgwwvJWSSgb95CcOnYQuKflcUvK+vPDyPnCA1Kyh64DApZ/ncTOnbUoj+CeCKG6DPCCnZnjb7++EYK02SEa9YYXm/Ven1xD/qP5SU0+P4LKwG4ZWbfLMZRLYqNqiTdnJtHk0zCiZ0Yy5zpxAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jOosIZBZ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1722516802;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=tY3FTh7vOTxS/LhqhyyExp9r4gGoOfraF1glml6en7Q=;
+	b=jOosIZBZGQTA8l+OiWKwMzhLzigshAK/nV9vhCJNY/NLT+TUtL17ZBj/F3NF9l/AwjmWEf
+	GUH75fVn67N9cKzCJr1tlEBt1K3OsgR3HRXIaxs+6kcv3fNr2TPBNL83AsyU+YefTh/4dk
+	wE5TFOLGG11KwpjnLCCQOfzUIxcdkEw=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-528-fQAUlN6WNXO8X6wMH-zV5Q-1; Thu, 01 Aug 2024 08:53:20 -0400
+X-MC-Unique: fQAUlN6WNXO8X6wMH-zV5Q-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-367962f0cb0so3308290f8f.1
+        for <linux-mips@vger.kernel.org>; Thu, 01 Aug 2024 05:53:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722509655; x=1723114455;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DwxNtEathvlLU1w5L7uXWcjiGlnHScsd5e3+FaULlRI=;
-        b=peGoAqofg/4LEB435+VNEgSwWYqEB4TctLH+/WEYl1h/gVRubdveg4Iv75mcX8fVxg
-         9Qw3sNREK7G9fFPofuPXQxKbmwBS0wA/Et6Go8i9UXOi1d2S91DTCZByrE8kMDBy4EJp
-         e/+yKoLC4gjokZdtYOF55jJjllKi+uKC44mXbTe9gNYxn92rwPuTh/oEg0JKqJ9PZ3lp
-         Dliz4Ns3IRwG+9wNpgUWPd+y/HkHIfOv8fu6q7UxId7Z7Q2tQiR+Zg0ZROq6u62yyb/l
-         Dqj7cNF6lxi6Gxm5pqDv0cLVlxkWjHjybkqqouPtfKTtvrY6pprM1+FHZWJpTRndXdww
-         RSIg==
-X-Forwarded-Encrypted: i=1; AJvYcCUV6fwaP+U+hmju4A4UC9ZvbPHGAweclK+AEtAmYwDQi4hSZDbuAdoS+KcX0xw/d1HWrSQk+kCAsWvr@vger.kernel.org, AJvYcCV11PfXD5PflSrT+6kT3QVePW5GBx+mCOTiQyhBLgjQqWxP9/YC74/OhVAKuMQQLqXa06xgTgP+4g2s4A==@vger.kernel.org, AJvYcCWPTqPLF/iDOdqHT5kgPHkXvMvNPIKKoUvGEX9t2S10jBh5WUmIATn1k24G/t7laCAF+239qnKThfRAcIwc@vger.kernel.org
-X-Gm-Message-State: AOJu0YyANO5QRZetKMrBN6x4OURU/X5odIz+0rYQkwdPqcNSAe/F7Sv1
-	CuvwsqDeR8cswbSy0tAOQ5Caqu6DQEwZTbfO9RKKow5rhLgFpeAslVgXZfg01qK2WuHVDqamC9H
-	ghOoLzVw/dYVejDagrMsU4iu/wyM=
-X-Google-Smtp-Source: AGHT+IEeGda8Tzu4whOaFqlyDbTZNpRq/nApLIqcgkq1tzN9cjwPQm/4ZzMr0J/AHyOA5L9L6yO+IIsdfLOGjrK2UPg=
-X-Received: by 2002:aa7:da4d:0:b0:5a2:8802:8e10 with SMTP id
- 4fb4d7f45d1cf-5b6fe72a922mr1190122a12.8.1722509654456; Thu, 01 Aug 2024
- 03:54:14 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1722516799; x=1723121599;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tY3FTh7vOTxS/LhqhyyExp9r4gGoOfraF1glml6en7Q=;
+        b=mFwvKrShaN3cxyJ2gkhn1iBVpvfV5sCOhXdzSuKkExIr10bLn13DGI8vediMbNSh3D
+         yiMD8iE8u08kHbY7UfQ1GgqOeLwifD6Zj2lhTdxEn1qTu6hCawMGGQyEWnA2cPTi83x3
+         8KCdktmln+mjT2TImttToWkODHVlKSe9gt6Oftr1pMLawXmkgRj0+Z8hpC4iiO7ZPhVI
+         sqDXbp4+8uuEjPn0iKcemiPPO2mJUL9o88FDZNGWYqTdtrqsevvM/O2nvSfdOJWc3Rqo
+         rPEOdCV2phxBw36z8rQqQ0N5uMaDHar6j4+bdAc9Q0xKZo0Gk2JdrlMOxpOWtPs2nqyX
+         pS9w==
+X-Forwarded-Encrypted: i=1; AJvYcCWJGuGEMtwWUYMo3ZVEz/QlRixriHXkIdA5VVGk7FgxJ5UR2UBJ+lyqe7+/X7VoeHV2K2lnXEE7U1FbUkxYkjx5tUAYfRw5XVEKsg==
+X-Gm-Message-State: AOJu0YwW8TyDabPPyEfxhj118vQyuwx2sCdDT64vEJbiokWmWirFX0w9
+	9qbGspbzzup3w3fE5BzKw6wxZpg/UNoWdkV5tHZ+NKDLhr80tDKkFm71jm7+JKa3iIdHPtbnPZi
+	nDhfhOX/hKC2Xrsgo8x+fTA3Y285u5UyzXfhf4a6Uo90CtDAnzmM6olOUvMY=
+X-Received: by 2002:adf:ed11:0:b0:364:8568:f843 with SMTP id ffacd0b85a97d-36baaf46ff3mr1747180f8f.59.1722516799372;
+        Thu, 01 Aug 2024 05:53:19 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEXkQzuiBajNhJVSP5UhLjv2gX0jPjX0Kpt2L7st5acq9l3/tBwA4i709DCI0A4Sa8f6WF5tw==
+X-Received: by 2002:adf:ed11:0:b0:364:8568:f843 with SMTP id ffacd0b85a97d-36baaf46ff3mr1747154f8f.59.1722516798788;
+        Thu, 01 Aug 2024 05:53:18 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:5c00:e650:bcd7:e2a0:54fe? (p200300cbc7075c00e650bcd7e2a054fe.dip0.t-ipconnect.de. [2003:cb:c707:5c00:e650:bcd7:e2a0:54fe])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36b36858197sm19818391f8f.68.2024.08.01.05.53.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Aug 2024 05:53:18 -0700 (PDT)
+Message-ID: <bffe178c-bd97-4945-898e-97ba203f503e@redhat.com>
+Date: Thu, 1 Aug 2024 14:53:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240430-loongson1-nand-v7-0-60787c314fa4@gmail.com>
- <20240430-loongson1-nand-v7-3-60787c314fa4@gmail.com> <20240506095938.4a910adc@xps-13>
-In-Reply-To: <20240506095938.4a910adc@xps-13>
-From: Keguang Zhang <keguang.zhang@gmail.com>
-Date: Thu, 1 Aug 2024 18:53:37 +0800
-Message-ID: <CAJhJPsUfRpkK6sNuHR0tNfr24bnv8HhJc6FQ0W+_=WeRouhzJQ@mail.gmail.com>
-Subject: Re: [PATCH v7 3/3] mtd: rawnand: Add Loongson-1 NAND Controller driver
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>, 
-	Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-mips@vger.kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/1] mm: introduce MADV_DEMOTE/MADV_PROMOTE
+To: Zhangrenze <zhang.renze@h3c.com>, "linux-mm@kvack.org"
+ <linux-mm@kvack.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Cc: "arnd@arndb.de" <arnd@arndb.de>,
+ "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+ "chris@zankel.net" <chris@zankel.net>,
+ "jcmvbkbc@gmail.com" <jcmvbkbc@gmail.com>,
+ "James.Bottomley@HansenPartnership.com"
+ <James.Bottomley@HansenPartnership.com>, "deller@gmx.de" <deller@gmx.de>,
+ "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+ "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+ "rdunlap@infradead.org" <rdunlap@infradead.org>,
+ "bhelgaas@google.com" <bhelgaas@google.com>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ "richard.henderson@linaro.org" <richard.henderson@linaro.org>,
+ "ink@jurassic.park.msu.ru" <ink@jurassic.park.msu.ru>,
+ "mattst88@gmail.com" <mattst88@gmail.com>,
+ "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+ Jiaoxupo <jiaoxupo@h3c.com>, Zhouhaofan <zhou.haofan@h3c.com>
+References: <3a5785661e1b4f3381046aa5e808854c@h3c.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <3a5785661e1b4f3381046aa5e808854c@h3c.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, May 6, 2024 at 3:59=E2=80=AFPM Miquel Raynal <miquel.raynal@bootlin=
-.com> wrote:
->
-> Hi,
->
-> devnull+keguang.zhang.gmail.com@kernel.org wrote on Tue, 30 Apr 2024
-> 19:11:12 +0800:
->
-> > From: Keguang Zhang <keguang.zhang@gmail.com>
-> >
-> > This patch adds NAND Controller driver for Loongson-1 SoCs.
-> >
-> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > ---
-> > Changes in v7:
-> > - Rename the dependency to LOONGSON1_APB_DMA
-> >
-> > Changes in v6:
-> > - Amend Kconfig
-> > - Add DT support
-> > - Use DT data instead of platform data
-> > - Remove MAX_ID_SIZE
-> > - Remove case NAND_OP_CMD_INSTR in ls1x_nand_set_controller()
-> > - Move ECC configuration to ls1x_nand_attach_chip()
-> > - Rename variable "nand" to "ls1x"
-> > - Rename variable "nc" to "nfc"
-> > - Some minor fixes
-> > - Link to v5: https://lore.kernel.org/all/20210520224213.7907-1-keguang=
-.zhang@gmail.com
-> >
-> > Changes in v5:
-> > - Update the driver to fit the raw NAND framework.
-> > - Implement exec_op() instead of legacy cmdfunc().
-> > - Use dma_request_chan() instead of dma_request_channel().
-> > - Some minor fixes and cleanups.
-> >
-> > Changes in v4:
-> > - Retrieve the controller from nand_hw_control.
-> >
-> > Changes in v3:
-> > - Replace __raw_readl/__raw_writel with readl/writel.
-> > - Split ls1x_nand into two structures:
-> > ls1x_nand_chip and ls1x_nand_controller.
-> >
-> > Changes in v2:
-> > - Modify the dependency in Kconfig due to the changes of DMA module.
-> > ---
-> >  drivers/mtd/nand/raw/Kconfig          |   7 +
-> >  drivers/mtd/nand/raw/Makefile         |   1 +
-> >  drivers/mtd/nand/raw/loongson1_nand.c | 748 ++++++++++++++++++++++++++=
-++++++++
-> >  3 files changed, 756 insertions(+)
-> >
-> > diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfi=
-g
-> > index cbf8ae85e1ae..822bb7a2cea9 100644
-> > --- a/drivers/mtd/nand/raw/Kconfig
-> > +++ b/drivers/mtd/nand/raw/Kconfig
-> > @@ -449,6 +449,13 @@ config MTD_NAND_RENESAS
-> >         Enables support for the NAND controller found on Renesas R-Car
-> >         Gen3 and RZ/N1 SoC families.
-> >
-> > +config MTD_NAND_LOONGSON1
-> > +     tristate "Loongson1 NAND controller"
-> > +     depends on LOONGSON1_APB_DMA || COMPILE_TEST
-> > +     select REGMAP_MMIO
-> > +     help
-> > +       Enables support for NAND controller on Loongson1 SoCs.
-> > +
-> >  comment "Misc"
-> >
-> >  config MTD_SM_COMMON
-> > diff --git a/drivers/mtd/nand/raw/Makefile b/drivers/mtd/nand/raw/Makef=
-ile
-> > index 25120a4afada..b3c65cab819c 100644
-> > --- a/drivers/mtd/nand/raw/Makefile
-> > +++ b/drivers/mtd/nand/raw/Makefile
-> > @@ -57,6 +57,7 @@ obj-$(CONFIG_MTD_NAND_INTEL_LGM)    +=3D intel-nand-c=
-ontroller.o
-> >  obj-$(CONFIG_MTD_NAND_ROCKCHIP)              +=3D rockchip-nand-contro=
-ller.o
-> >  obj-$(CONFIG_MTD_NAND_PL35X)         +=3D pl35x-nand-controller.o
-> >  obj-$(CONFIG_MTD_NAND_RENESAS)               +=3D renesas-nand-control=
-ler.o
-> > +obj-$(CONFIG_MTD_NAND_LOONGSON1)     +=3D loongson1_nand.o
-> >
-> >  nand-objs :=3D nand_base.o nand_legacy.o nand_bbt.o nand_timings.o nan=
-d_ids.o
-> >  nand-objs +=3D nand_onfi.o
-> > diff --git a/drivers/mtd/nand/raw/loongson1_nand.c b/drivers/mtd/nand/r=
-aw/loongson1_nand.c
-> > new file mode 100644
-> > index 000000000000..d0f66a81ba0b
-> > --- /dev/null
-> > +++ b/drivers/mtd/nand/raw/loongson1_nand.c
-> > @@ -0,0 +1,748 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +/*
-> > + * NAND Controller Driver for Loongson-1 SoC
-> > + *
-> > + * Copyright (C) 2015-2024 Keguang Zhang <keguang.zhang@gmail.com>
-> > + */
-> > +
-> > +#include <linux/kernel.h>
-> > +#include <linux/module.h>
-> > +#include <linux/dmaengine.h>
-> > +#include <linux/dma-mapping.h>
-> > +#include <linux/iopoll.h>
-> > +#include <linux/mtd/mtd.h>
-> > +#include <linux/mtd/rawnand.h>
-> > +#include <linux/of.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/regmap.h>
-> > +#include <linux/sizes.h>
-> > +
-> > +/* Loongson-1 NAND Controller Registers */
-> > +#define NAND_CMD             0x0
-> > +#define NAND_ADDR1           0x4
-> > +#define NAND_ADDR2           0x8
-> > +#define NAND_TIMING          0xc
-> > +#define NAND_IDL             0x10
-> > +#define NAND_IDH_STATUS              0x14
-> > +#define NAND_PARAM           0x18
-> > +#define NAND_OP_NUM          0x1c
-> > +#define MAX_DUMP_REGS                0x20
-> > +
-> > +#define NAND_DMA_ADDR                0x40
-> > +
-> > +/* NAND Command Register Bits */
-> > +#define OP_DONE                      BIT(10)
-> > +#define OP_SPARE             BIT(9)
-> > +#define OP_MAIN                      BIT(8)
-> > +#define CMD_STATUS           BIT(7)
-> > +#define CMD_RESET            BIT(6)
-> > +#define CMD_READID           BIT(5)
-> > +#define BLOCKS_ERASE         BIT(4)
-> > +#define CMD_ERASE            BIT(3)
-> > +#define CMD_WRITE            BIT(2)
-> > +#define CMD_READ             BIT(1)
-> > +#define CMD_VALID            BIT(0)
->
-> Please add a common suffix to all your definitions and functions (LSN_,
-> LSN1_, LOONGSON_, whatever)
->
-Will do.
+On 01.08.24 11:57, Zhangrenze wrote:
+>>> Sure, here's the Scalable Tiered Memory Control (STMC)
+>>>
+>>> **Background**
+>>>
+>>> In the era when artificial intelligence, big data analytics, and
+>>> machine learning have become mainstream research topics and
+>>> application scenarios, the demand for high-capacity and high-
+>>> bandwidth memory in computers has become increasingly important.
+>>> The emergence of CXL (Compute Express Link) provides the
+>>> possibility of high-capacity memory. Although CXL TYPE3 devices
+>>> can provide large memory capacities, their access speed is lower
+>>> than traditional DRAM due to hardware architecture limitations.
+>>>
+>>> To enjoy the large capacity brought by CXL memory while minimizing
+>>> the impact of high latency, Linux has introduced the Tiered Memory
+>>> architecture. In the Tiered Memory architecture, CXL memory is
+>>> treated as an independent, slower NUMA NODE, while DRAM is
+>>> considered as a relatively faster NUMA NODE. Applications allocate
+>>> memory from the local node, and Tiered Memory, leveraging memory
+>>> reclamation and NUMA Balancing mechanisms, can transparently demote
+>>> physical pages not recently accessed by user processes to the slower
+>>> CXL NUMA NODE. However, when user processes re-access the demoted
+>>> memory, the Tiered Memory mechanism will, based on certain logic,
+>>> decide whether to promote the demoted physical pages back to the
+>>> fast NUMA NODE. If the promotion is successful, the memory accessed
+>>> by the user process will reside in DRAM; otherwise, it will reside in
+>>> the CXL NODE. Through the Tiered Memory mechanism, Linux balances
+>>> betweenlarge memory capacity and latency, striving to maintain an
+>>> equilibrium for applications.
+>>>
+>>> **Problem**
+>>> Although Tiered Memory strives to balance between large capacity and
+>>> latency, specific scenarios can lead to the following issues:
+>>>
+>>>     1. In scenarios requiring massive computations, if data is heavily
+>>>        stored in CXL slow memory and Tiered Memory cannot promptly
+>>>        promote this memory to fast DRAM, it will significantly impact
+>>>        program performance.
+>>>     2. Similar to the scenario described in point 1, if Tiered Memory
+>>>        decides to promote these physical pages to fast DRAM NODE, but
+>>>        due to limitations in the DRAM NODE promote ratio, these physical
+>>>        pages cannot be promoted. Consequently, the program will keep
+>>>        running in slow memory.
+>>>     3. After an application finishes computing on a large block of fast
+>>>        memory, it may not immediately re-access it. Hence, this memory
+>>>        can only wait for the memory reclamation mechanism to demote it.
+>>>     4. Similar to the scenario described in point 3, if the demotion
+>>>        speed is slow, these cold pages will occupy the promotion
+>>>        resources, preventing some eligible slow pages from being
+>>>        immediately promoted, severely affecting application efficiency.
+>>>
+>>> **Solution**
+>>> We propose the **Scalable Tiered Memory Control (STMC)** mechanism,
+>>> which delegates the authority of promoting and demoting memory to the
+>>> application. The principle is simple, as follows:
+>>>
+>>>     1. When an application is preparing for computation, it can promote
+>>>        the memory it needs to use or ensure the memory resides on a fast
+>>>        NODE.
+>>>     2. When an application will not use the memory shortly, it can
+>>>        immediately demote the memory to slow memory, freeing up valuable
+>>>        promotion resources.
+>>>
+>>> STMC mechanism is implemented through the madvise system call, providing
+>>> two new advice options: MADV_DEMOTE and MADV_PROMOTE. MADV_DEMOTE
+>>> advises demote the physical memory to the node where slow memory
+>>> resides; this advice only fails if there is no free physical memory on
+>>> the slow memory node. MADV_PROMOTE advises retaining the physical memory
+>>> in the fast memory; this advice only fails if there are no promotion
+>>> slots available on the fast memory node. Benefits brought by STMC
+>>> include:
+>>>
+>>>     1. The STMC mechanism is a variant of on-demand memory management
+>>>        designed to let applications enjoy fast memory as much as possible,
+>>>        while actively demoting to slow memory when not in use, thus
+>>>        freeing up promotion slots for the NODE and allowing it to run in
+>>>        an optimized Tiered Memory environment.
+>>>     2. The STMC mechanism better balances large capacity and latency.
+>>>
+>>> **Shortcomings of STMC**
+>>> The STMC mechanism requires the caller to manage memory demotion and
+>>> promotion. If the memory is not promptly demoting after an promotion,
+>>> it may cause issues similar to memory leaks
+>> Ehm, that sounds scary. Can you elaborate what's happening here and why
+>> it is "similar to memory leaks"?
+>>
+>>
+>> Can you also point out why migrate_pages() is not suitable? I would
+>> assume demote/promote is in essence simply migrating memory between nodes.
+>>
+>> -- 
+>> Cheers,
+>>
+>> David / dhildenb
+>>
+> 
+> Thank you for the response. Below are my points of view. If there are any
+> mistakes, I appreciate your understanding:
+> 
+> 1. In a tiered memory system, fast nodes and slow nodes act as two common
+>     memory pools. The system has a certain ratio limit for promotion. For
+>     example, a NODE may stipulate that when the available memory is less
+>     than 1GB or 1/4 of the node's memory, promotion are prohibited. If we
+>     use migrate_pages at this point, it will unrestrictedly promote slow
+>     pages to fast memory, which may prevent other processes’ pages that
+>     should have been promoted from being promoted. This is what I mean by
+>     occupying promotion resources.
+> 2. As described in point 1, if we use MADV_PROMOTE to temporarily promote
+>     a batch of pages and do not demote them immediately after usage, it
+>     will occupy many promotion resources. Other hot pages that need promote
+>     will not be able to get promote, which will impact the performance of
+>     certain processes.
 
-> > +
-> > +#define MAX_ADDR_CYC         5U
-> > +
-> > +#define WAIT_CYCLE_MASK              GENMASK(7, 0)
-> > +#define HOLD_CYCLE_MASK              GENMASK(15, 8)
-> > +#define CELL_SIZE_MASK               GENMASK(11, 8)
-> > +
-> > +#define BITS_PER_WORD                (4 * BITS_PER_BYTE)
-> > +
-> > +/* macros for registers read/write */
-> > +#define nand_readl(nfc, off)         \
-> > +     readl((nfc)->reg_base + (off))
-> > +
-> > +#define nand_writel(nfc, off, val)   \
-> > +     writel((val), (nfc)->reg_base + (off))
-> > +
-> > +struct ls1x_nfc_data {
-> > +     unsigned int status_field;
-> > +     unsigned int op_scope_field;
-> > +     unsigned int hold_cycle;
-> > +     unsigned int wait_cycle;
-> > +     void (*parse_address)(struct nand_chip *chip, const u8 *addrs,
-> > +                           unsigned int naddrs, int cmd);
-> > +};
-> > +
-> > +struct ls1x_nfc {
-> > +     void __iomem *reg_base;
-> > +     struct regmap *regmap;
-> > +     const struct ls1x_nfc_data *data;
-> > +     __le32 addr1_reg;
-> > +     __le32 addr2_reg;
-> > +
-> > +     char *buf;
-> > +     unsigned int len;
-> > +     unsigned int rdy_timeout;
-> > +
-> > +     /* DMA Engine stuff */
-> > +     struct dma_chan *dma_chan;
-> > +     dma_cookie_t dma_cookie;
-> > +     struct completion dma_complete;
-> > +};
-> > +
-> > +struct ls1x_nand {
-> > +     struct device *dev;
-> > +     struct nand_chip chip;
-> > +     struct nand_controller controller;
-> > +     struct ls1x_nfc nfc;
-> > +};
-> > +
-> > +static const struct regmap_config ls1x_nand_regmap_config =3D {
-> > +     .reg_bits =3D 32,
-> > +     .val_bits =3D 32,
-> > +     .reg_stride =3D 4,
-> > +};
-> > +
-> > +static inline void ls1b_nand_parse_address(struct nand_chip *chip,
-> > +                                        const u8 *addrs,
-> > +                                        unsigned int naddrs, int cmd)
-> > +{
-> > +     struct ls1x_nand *ls1x =3D nand_get_controller_data(chip);
-> > +     struct ls1x_nfc *nfc =3D &ls1x->nfc;
-> > +     unsigned int page_shift =3D chip->page_shift + 1;
-> > +     int i;
-> > +
-> > +     nfc->addr1_reg =3D 0;
-> > +     nfc->addr2_reg =3D 0;
-> > +
-> > +     if (cmd =3D=3D CMD_ERASE) {
-> > +             page_shift =3D chip->page_shift;
-> > +
-> > +             for (i =3D 0; i < min(MAX_ADDR_CYC - 2, naddrs); i++)
-> > +                     nfc->addr1_reg |=3D
-> > +                         (u32)addrs[i] << (page_shift + BITS_PER_BYTE =
-* i);
-> > +             if (i =3D=3D MAX_ADDR_CYC - 2)
-> > +                     nfc->addr2_reg |=3D
-> > +                         (u32)addrs[i] >> (BITS_PER_WORD - page_shift =
--
-> > +                                           BITS_PER_BYTE * (i - 1));
-> > +
-> > +             return;
-> > +     }
->
-> I don't see the point in having this if, can you try to make it a
-> single generic logic? Same below.
->
-Will improve the logic.
+So, you mean, applications can actively consume "fast memory" and 
+"steal" it from other applications? I assume that's what you meant with 
+"memory leak".
 
-> > +
-> > +     for (i =3D 0; i < min(2U, naddrs); i++)
-> > +             nfc->addr1_reg |=3D (u32)addrs[i] << BITS_PER_BYTE * i;
-> > +     for (i =3D 2; i < min(MAX_ADDR_CYC, naddrs); i++)
-> > +             nfc->addr1_reg |=3D
-> > +                 (u32)addrs[i] << (page_shift + BITS_PER_BYTE * (i - 2=
-));
-> > +     if (i =3D=3D MAX_ADDR_CYC)
-> > +             nfc->addr2_reg |=3D
-> > +                 (u32)addrs[i] >> (BITS_PER_WORD - page_shift -
-> > +                                   BITS_PER_BYTE * (i - 1));
-> > +}
-> > +
-> > +static inline void ls1c_nand_parse_address(struct nand_chip *chip,
-> > +                                        const u8 *addrs,
-> > +                                        unsigned int naddrs, int cmd)
-> > +{
-> > +     struct ls1x_nand *ls1x =3D nand_get_controller_data(chip);
-> > +     struct ls1x_nfc *nfc =3D &ls1x->nfc;
-> > +     int i;
-> > +
-> > +     nfc->addr1_reg =3D 0;
-> > +     nfc->addr2_reg =3D 0;
-> > +
-> > +     if (cmd =3D=3D CMD_ERASE) {
-> > +             for (i =3D 0; i < min(MAX_ADDR_CYC, naddrs); i++)
-> > +                     nfc->addr2_reg |=3D (u32)addrs[i] << BITS_PER_BYT=
-E * i;
-> > +
-> > +             return;
-> > +     }
-> > +
-> > +     for (i =3D 0; i < min(MAX_ADDR_CYC, naddrs); i++) {
-> > +             if (i < 2)
-> > +                     nfc->addr1_reg |=3D (u32)addrs[i] << BITS_PER_BYT=
-E * i;
-> > +             else
-> > +                     nfc->addr2_reg |=3D
-> > +                         (u32)addrs[i] << BITS_PER_BYTE * (i - 2);
-> > +     }
-> > +}
-> > +
-> > +static int ls1x_nand_set_controller(struct nand_chip *chip,
->
-> The function name is misleading
->
-Will improve the naming.
+I would really suggest to *not* call this "similar to memory leaks", in 
+your own favor ;)
 
-> > +                                 const struct nand_subop *subop, int c=
-md)
-> > +{
-> > +     struct ls1x_nand *ls1x =3D nand_get_controller_data(chip);
-> > +     struct ls1x_nfc *nfc =3D &ls1x->nfc;
-> > +     unsigned int op_id;
-> > +
-> > +     nfc->buf =3D NULL;
-> > +     nfc->len =3D 0;
-> > +     nfc->rdy_timeout =3D 0;
-> > +
-> > +     for (op_id =3D 0; op_id < subop->ninstrs; op_id++) {
-> > +             const struct nand_op_instr *instr =3D &subop->instrs[op_i=
-d];
-> > +             unsigned int offset, naddrs;
-> > +             const u8 *addrs;
-> > +
-> > +             switch (instr->type) {
-> > +             case NAND_OP_ADDR_INSTR:
-> > +                     offset =3D nand_subop_get_addr_start_off(subop, o=
-p_id);
-> > +                     naddrs =3D nand_subop_get_num_addr_cyc(subop, op_=
-id);
-> > +                     addrs =3D &instr->ctx.addr.addrs[offset];
+> 3. MADV_DEMOTE and MADV_PROMOTE only rely on madvise, while migrate_pages
+>     depends on libnuma.
 
-> > +
-> > +                     nfc->data->parse_address(chip, addrs, naddrs, cmd=
-);
-> > +                     /* set NAND address */
-> > +                     nand_writel(nfc, NAND_ADDR1, nfc->addr1_reg);
-> > +                     nand_writel(nfc, NAND_ADDR2, nfc->addr2_reg);
-> > +                     break;
-> > +             case NAND_OP_DATA_IN_INSTR:
-> > +             case NAND_OP_DATA_OUT_INSTR:
-> > +                     offset =3D nand_subop_get_data_start_off(subop, o=
-p_id);
-> > +                     nfc->len =3D nand_subop_get_data_len(subop, op_id=
-);
-> > +                     if (instr->type =3D=3D NAND_OP_DATA_IN_INSTR)
-> > +                             nfc->buf =3D
-> > +                                 (void *)instr->ctx.data.buf.in + offs=
-et;
-> > +                     else if (instr->type =3D=3D NAND_OP_DATA_OUT_INST=
-R)
-> > +                             nfc->buf =3D
-> > +                                 (void *)instr->ctx.data.buf.out + off=
-set;
->
-> The buf pointer feels clunky. You don't know for how long the buffer
-> you point to will be valid, please don't do that.
->
-The buf pointer is used for DMA transfer afterwards.
-I referred to other drivers, and they used the same approach.
-https://elixir.bootlin.com/linux/v6.8.9/source/drivers/mtd/nand/raw/arasan-=
-nand-controller.c#L647
-https://elixir.bootlin.com/linux/v6.8.9/source/drivers/mtd/nand/raw/rockchi=
-p-nand-controller.c#L366
+Well, you can trivially call that systemcall also without libnuma ;) So 
+that shouldn't really make a difference and is rather something that can 
+be solved in user space.
 
-> > +
-> > +                     if (cmd & (CMD_READID | CMD_STATUS))
-> > +                             break;
-> > +
-> > +                     if (!IS_ALIGNED((u32)nfc->buf, chip->buf_align)) =
-{
-> > +                             dev_err(ls1x->dev,
-> > +                                     "nfc->buf %px is not aligned!\n",
-> > +                                     nfc->buf);
-> > +                             return -EOPNOTSUPP;
-> > +                     } else if (!IS_ALIGNED(nfc->len, chip->buf_align)=
-) {
-> > +                             dev_err(ls1x->dev,
-> > +                                     "nfc->len %u is not aligned!\n",
-> > +                                     nfc->len);
-> > +                             return -EOPNOTSUPP;
-> > +                     }
-> > +
-> > +                     /* set NAND data length */
-> > +                     nand_writel(nfc, NAND_OP_NUM, nfc->len);
-> > +
-> > +                     if (nfc->data->op_scope_field) {
-> > +                             int op_scope =3D nfc->len << ffs(nfc->dat=
-a->op_scope_field);
-> > +
-> > +                             regmap_update_bits(nfc->regmap, NAND_PARA=
-M,
-> > +                                                nfc->data->op_scope_fi=
-eld,
-> > +                                                op_scope);
-> > +                     }
-> > +
-> > +                     break;
-> > +             case NAND_OP_WAITRDY_INSTR:
-> > +                     nfc->rdy_timeout =3D instr->ctx.waitrdy.timeout_m=
-s;
-> > +                     break;
-> > +             default:
-> > +                     break;
-> > +             }
-> > +     }
-> > +
-> > +     /* set NAND erase block count */
-> > +     if (cmd & CMD_ERASE)
-> > +             nand_writel(nfc, NAND_OP_NUM, 1);
-> > +     /* set NAND operation region */
-> > +     if (nfc->buf && nfc->len)
-> > +             cmd |=3D OP_SPARE | OP_MAIN;
-> > +
-> > +     /* set NAND command */
-> > +     nand_writel(nfc, NAND_CMD, cmd);
-> > +     /* Trigger operation */
-> > +     regmap_write_bits(nfc->regmap, NAND_CMD, CMD_VALID, CMD_VALID);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static void ls1x_nand_dma_callback(void *data)
-> > +{
-> > +     struct ls1x_nand *ls1x =3D (struct ls1x_nand *)data;
-> > +     struct ls1x_nfc *nfc =3D &ls1x->nfc;
-> > +     enum dma_status status;
-> > +
-> > +     status =3D dmaengine_tx_status(nfc->dma_chan, nfc->dma_cookie, NU=
-LL);
-> > +     if (likely(status =3D=3D DMA_COMPLETE))
-> > +             dev_dbg(ls1x->dev, "DMA complete with cookie=3D%d\n",
-> > +                     nfc->dma_cookie);
-> > +     else
-> > +             dev_err(ls1x->dev, "DMA error with cookie=3D%d\n",
-> > +                     nfc->dma_cookie);
-> > +
-> > +     complete(&nfc->dma_complete);
-> > +}
-> > +
-> > +static int ls1x_nand_dma_transfer(struct ls1x_nand *ls1x, bool is_writ=
-e)
-> > +{
-> > +     struct ls1x_nfc *nfc =3D &ls1x->nfc;
-> > +     struct dma_chan *chan =3D nfc->dma_chan;
-> > +     struct dma_async_tx_descriptor *desc;
-> > +     enum dma_data_direction data_dir =3D
-> > +         is_write ? DMA_TO_DEVICE : DMA_FROM_DEVICE;
-> > +     enum dma_transfer_direction xfer_dir =3D
-> > +         is_write ? DMA_MEM_TO_DEV : DMA_DEV_TO_MEM;
-> > +     dma_addr_t dma_addr;
-> > +     int ret;
-> > +
-> > +     dma_addr =3D dma_map_single(chan->device->dev, nfc->buf, nfc->len=
-,
-> > +                               data_dir);
-> > +     if (dma_mapping_error(chan->device->dev, dma_addr)) {
-> > +             dev_err(ls1x->dev, "failed to map DMA buffer!\n");
-> > +             return -ENXIO;
-> > +     }
-> > +
-> > +     desc =3D dmaengine_prep_slave_single(chan, dma_addr, nfc->len, xf=
-er_dir,
-> > +                                        DMA_PREP_INTERRUPT);
-> > +     if (!desc) {
-> > +             dev_err(ls1x->dev, "failed to prepare DMA descriptor!\n")=
-;
-> > +             ret =3D PTR_ERR(desc);
-> > +             goto err;
-> > +     }
-> > +     desc->callback =3D ls1x_nand_dma_callback;
-> > +     desc->callback_param =3D ls1x;
-> > +
-> > +     nfc->dma_cookie =3D dmaengine_submit(desc);
-> > +     ret =3D dma_submit_error(nfc->dma_cookie);
-> > +     if (ret) {
-> > +             dev_err(ls1x->dev, "failed to submit DMA descriptor!\n");
-> > +             goto err;
-> > +     }
-> > +
-> > +     dev_dbg(ls1x->dev, "issue DMA with cookie=3D%d\n", nfc->dma_cooki=
-e);
-> > +     dma_async_issue_pending(chan);
-> > +
-> > +     ret =3D wait_for_completion_timeout(&nfc->dma_complete,
-> > +                                       msecs_to_jiffies(nfc->rdy_timeo=
-ut));
-> > +     if (ret <=3D 0) {
-> > +             dev_err(ls1x->dev, "DMA timeout!%u\n", nfc->rdy_timeout);
-> > +             dmaengine_terminate_all(chan);
-> > +             ret =3D -EIO;
-> > +     }
-> > +     ret =3D 0;
-> > +err:
-> > +     dma_unmap_single(chan->device->dev, dma_addr, nfc->len, data_dir)=
-;
-> > +
-> > +     return ret;
-> > +}
-> > +
-> > +static inline int ls1x_nand_wait_for_op_done(struct ls1x_nfc *nfc)
-> > +{
-> > +     unsigned int val;
-> > +     int ret =3D 0;
-> > +
-> > +     /* Wait for operation done */
-> > +     if (nfc->rdy_timeout)
-> > +             ret =3D regmap_read_poll_timeout(nfc->regmap, NAND_CMD, v=
-al,
-> > +                                            val & OP_DONE, 0,
-> > +                                            nfc->rdy_timeout * 1000);
-> > +
-> > +     return ret;
-> > +}
-> > +
-> > +static int ls1x_nand_reset_exec(struct nand_chip *chip,
-> > +                             const struct nand_subop *subop)
-> > +{
-> > +     struct ls1x_nand *ls1x =3D nand_get_controller_data(chip);
-> > +     struct ls1x_nfc *nfc =3D &ls1x->nfc;
-> > +     int ret;
-> > +
-> > +     ls1x_nand_set_controller(chip, subop, CMD_RESET);
-> > +
-> > +     ret =3D ls1x_nand_wait_for_op_done(nfc);
-> > +     if (ret)
-> > +             dev_err(ls1x->dev, "CMD_RESET failed! %d\n", ret);
-> > +
-> > +     return ret;
-> > +}
-> > +
-> > +static int ls1x_nand_read_id_exec(struct nand_chip *chip,
-> > +                               const struct nand_subop *subop)
-> > +{
-> > +     struct ls1x_nand *ls1x =3D nand_get_controller_data(chip);
-> > +     struct ls1x_nfc *nfc =3D &ls1x->nfc;
-> > +     long long idl =3D 0;
-> > +     int i, ret;
-> > +
-> > +     ls1x_nand_set_controller(chip, subop, CMD_READID);
-> > +
-> > +     ret =3D ls1x_nand_wait_for_op_done(nfc);
-> > +     if (ret) {
-> > +             dev_err(ls1x->dev, "CMD_READID failed! %d\n", ret);
-> > +             print_hex_dump_debug("REG: ", DUMP_PREFIX_OFFSET, 16, 4,
-> > +                                  nfc->reg_base, MAX_DUMP_REGS, false)=
-;
-> > +             return ret;
-> > +     }
-> > +
-> > +     idl =3D __be32_to_cpu(nand_readl(nfc, NAND_IDL));
-> > +     memset(nfc->buf, 0x0, nfc->len);
-> > +
-> > +     for (i =3D 0; i < nfc->len; i++) {
-> > +             if (i > 0)
-> > +                     nfc->buf[i] =3D (char)(idl >> (i - 1) * BITS_PER_=
-BYTE);
-> > +             else
-> > +                     nfc->buf[i] =3D (char)nand_readl(nfc, NAND_IDH_ST=
-ATUS);
-> > +     }
-> > +
-> > +     return ret;
-> > +}
-> > +
-> > +static int ls1x_nand_erase_exec(struct nand_chip *chip,
-> > +                             const struct nand_subop *subop)
-> > +{
-> > +     struct ls1x_nand *ls1x =3D nand_get_controller_data(chip);
-> > +     struct ls1x_nfc *nfc =3D &ls1x->nfc;
-> > +     int ret;
-> > +
-> > +     ls1x_nand_set_controller(chip, subop, CMD_ERASE);
->
-> No, you don't know what the command is gonna be, so if your controller
-> forces the command opcodes, you need to go through this:
->
-> https://elixir.bootlin.com/linux/v6.8.9/source/drivers/mtd/nand/raw/arasa=
-n-nand-controller.c#L819
-> and
-> https://elixir.bootlin.com/linux/v6.8.9/source/drivers/mtd/nand/raw/arasa=
-n-nand-controller.c#L940
->
-Will change the command forcing to op cmd mapping and add check_op()
-accordingly.
+> 4. MADV_DEMOTE and MADV_PROMOTE provide a better balance between capacity
+>     and latency. They allow hot pages that need promoting to be promoted
+>     smoothly and pages that need demoting to be demoted immediately. This
+>     helps tiered memory systems to operate more rationally.
 
-> > +
-> > +     ret =3D ls1x_nand_wait_for_op_done(nfc);
-> > +     if (ret) {
-> > +             dev_err(ls1x->dev, "CMD_ERASE failed! %d\n", ret);
-> > +             print_hex_dump_debug("REG: ", DUMP_PREFIX_OFFSET, 16, 4,
-> > +                                  nfc->reg_base, MAX_DUMP_REGS, false)=
-;
-> > +     }
-> > +
-> > +     return ret;
-> > +}
-> > +
-> > +static int ls1x_nand_read_exec(struct nand_chip *chip,
-> > +                            const struct nand_subop *subop)
-> > +{
-> > +     struct ls1x_nand *ls1x =3D nand_get_controller_data(chip);
-> > +     struct ls1x_nfc *nfc =3D &ls1x->nfc;
-> > +     bool is_write =3D false;
-> > +     int ret;
-> > +
-> > +     ls1x_nand_set_controller(chip, subop, CMD_READ);
-> > +
-> > +     ret =3D ls1x_nand_dma_transfer(ls1x, is_write);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     ret =3D ls1x_nand_wait_for_op_done(nfc);
-> > +     if (ret) {
-> > +             dev_err(ls1x->dev, "CMD_READ failed! %d\n", ret);
-> > +             print_hex_dump_debug("REG: ", DUMP_PREFIX_OFFSET, 16, 4,
-> > +                                  nfc->reg_base, MAX_DUMP_REGS, false)=
-;
-> > +     }
-> > +
-> > +     return ret;
-> > +}
-> > +
-> > +static int ls1x_nand_write_exec(struct nand_chip *chip,
-> > +                             const struct nand_subop *subop)
-> > +{
-> > +     struct ls1x_nand *ls1x =3D nand_get_controller_data(chip);
-> > +     struct ls1x_nfc *nfc =3D &ls1x->nfc;
-> > +     bool is_write =3D true;
-> > +     int ret;
-> > +
-> > +     ls1x_nand_set_controller(chip, subop, CMD_WRITE);
-> > +
-> > +     ret =3D ls1x_nand_dma_transfer(ls1x, is_write);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     ret =3D ls1x_nand_wait_for_op_done(nfc);
-> > +     if (ret) {
-> > +             dev_err(ls1x->dev, "CMD_WRITE failed! %d\n", ret);
-> > +             print_hex_dump_debug("REG: ", DUMP_PREFIX_OFFSET, 16, 4,
-> > +                                  nfc->reg_base, MAX_DUMP_REGS, false)=
-;
-> > +     }
-> > +
-> > +     return ret;
-> > +}
-> > +
-> > +static int ls1x_nand_read_status_exec(struct nand_chip *chip,
-> > +                                   const struct nand_subop *subop)
-> > +{
-> > +     struct ls1x_nand *ls1x =3D nand_get_controller_data(chip);
-> > +     struct ls1x_nfc *nfc =3D &ls1x->nfc;
-> > +     int val, ret;
-> > +
-> > +     ls1x_nand_set_controller(chip, subop, CMD_STATUS);
-> > +
-> > +     ret =3D ls1x_nand_wait_for_op_done(nfc);
-> > +     if (ret) {
-> > +             dev_err(ls1x->dev, "CMD_STATUS failed! %d\n", ret);
-> > +             return ret;
-> > +     }
-> > +
-> > +     val =3D nand_readl(nfc, NAND_IDH_STATUS) & ~nfc->data->status_fie=
-ld;
-> > +     nfc->buf[0] =3D val << ffs(nfc->data->status_field);
-> > +
-> > +     return ret;
-> > +}
-> > +
-> > +static const struct nand_op_parser ls1x_nand_op_parser =3D NAND_OP_PAR=
-SER(
-> > +     NAND_OP_PARSER_PATTERN(
-> > +             ls1x_nand_reset_exec,
-> > +             NAND_OP_PARSER_PAT_CMD_ELEM(false),
-> > +             NAND_OP_PARSER_PAT_WAITRDY_ELEM(false)),
-> > +     NAND_OP_PARSER_PATTERN(
-> > +             ls1x_nand_read_id_exec,
-> > +             NAND_OP_PARSER_PAT_CMD_ELEM(false),
-> > +             NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDR_CYC),
-> > +             NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 8)),
-> > +     NAND_OP_PARSER_PATTERN(
-> > +             ls1x_nand_erase_exec,
-> > +             NAND_OP_PARSER_PAT_CMD_ELEM(false),
-> > +             NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDR_CYC),
-> > +             NAND_OP_PARSER_PAT_CMD_ELEM(false),
-> > +             NAND_OP_PARSER_PAT_WAITRDY_ELEM(false)),
-> > +     NAND_OP_PARSER_PATTERN(
-> > +             ls1x_nand_read_exec,
-> > +             NAND_OP_PARSER_PAT_CMD_ELEM(false),
-> > +             NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDR_CYC),
-> > +             NAND_OP_PARSER_PAT_CMD_ELEM(false),
-> > +             NAND_OP_PARSER_PAT_WAITRDY_ELEM(true),
-> > +             NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 0)),
-> > +     NAND_OP_PARSER_PATTERN(
-> > +             ls1x_nand_write_exec,
-> > +             NAND_OP_PARSER_PAT_CMD_ELEM(false),
-> > +             NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDR_CYC),
-> > +             NAND_OP_PARSER_PAT_DATA_OUT_ELEM(false, 0),
-> > +             NAND_OP_PARSER_PAT_CMD_ELEM(false),
-> > +             NAND_OP_PARSER_PAT_WAITRDY_ELEM(true)),
-> > +     NAND_OP_PARSER_PATTERN(
-> > +             ls1x_nand_read_status_exec,
-> > +             NAND_OP_PARSER_PAT_CMD_ELEM(false),
-> > +             NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 1)),
-> > +     );
-> > +
-> > +static int ls1x_nand_exec_op(struct nand_chip *chip,
-> > +                          const struct nand_operation *op, bool check_=
-only)
-> > +{
-> > +     return nand_op_parser_exec_op(chip, &ls1x_nand_op_parser, op,
-> > +                                   check_only);
-> > +}
-> > +
-> > +static int ls1x_nand_attach_chip(struct nand_chip *chip)
-> > +{
-> > +     struct ls1x_nand *ls1x =3D nand_get_controller_data(chip);
-> > +     struct ls1x_nfc *nfc =3D &ls1x->nfc;
-> > +     u64 chipsize =3D nanddev_target_size(&chip->base);
-> > +     int cell_size =3D 0;
-> > +
-> > +     switch (chipsize) {
-> > +     case SZ_128M:
-> > +             cell_size =3D 0x0;
-> > +             break;
-> > +     case SZ_256M:
-> > +             cell_size =3D 0x1;
-> > +             break;
-> > +     case SZ_512M:
-> > +             cell_size =3D 0x2;
-> > +             break;
-> > +     case SZ_1G:
-> > +             cell_size =3D 0x3;
-> > +             break;
-> > +     case SZ_2G:
-> > +             cell_size =3D 0x4;
-> > +             break;
-> > +     case SZ_4G:
-> > +             cell_size =3D 0x5;
-> > +             break;
-> > +     case (SZ_2G * SZ_4G):   /* 8G */
-> > +             cell_size =3D 0x6;
-> > +             break;
-> > +     case (SZ_4G * SZ_4G):   /* 16G */
->
-> Why not SZ_8G and SZ_16G?
->
-Will do.
+Can you summarize why something similar could not be provided by a 
+library that builds up on existing functionality, such as migrate_pages? 
+It could easily take a look at memory stats to reason whether a 
+promotion/demotion makes sense (your example above with the memory 
+distribution).
 
-> > +             cell_size =3D 0x7;
-> > +             break;
-> > +     default:
-> > +             dev_err(ls1x->dev, "unsupported chip size: %llu MB\n",
-> > +                     chipsize);
->
-> You should error out.
->
-Will do.
+ From the patch itself I read
 
-> > +             break;
-> > +     }
-> > +
-> > +     /* Set cell size */
-> > +     regmap_update_bits(nfc->regmap, NAND_PARAM, CELL_SIZE_MASK,
-> > +                        FIELD_PREP(CELL_SIZE_MASK, cell_size));
-> > +
-> > +     regmap_update_bits(nfc->regmap, NAND_TIMING, HOLD_CYCLE_MASK,
-> > +                        FIELD_PREP(HOLD_CYCLE_MASK, nfc->data->hold_cy=
-cle));
-> > +     regmap_update_bits(nfc->regmap, NAND_TIMING, WAIT_CYCLE_MASK,
-> > +                        FIELD_PREP(WAIT_CYCLE_MASK, nfc->data->wait_cy=
-cle));
-> > +
-> > +     chip->ecc.read_page_raw =3D nand_monolithic_read_page_raw;
-> > +     chip->ecc.write_page_raw =3D nand_monolithic_write_page_raw;
->
-> I need to further understand this, see other thread.
->
-Will drop NAND_MONOLITHIC_READ and implement subpage read instead.
+"MADV_DEMOTE can mark a range of memory pages as cold
+pages and immediately demote them to slow memory. MADV_PROMOTE can mark
+a range of memory pages as hot pages and immediately promote them to
+fast memory"
 
-> > +     chip->options |=3D NAND_MONOLITHIC_READ;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct nand_controller_ops ls1x_nfc_ops =3D {
-> > +     .exec_op =3D ls1x_nand_exec_op,
-> > +     .attach_chip =3D ls1x_nand_attach_chip,
-> > +};
-> > +
-> > +static void ls1x_nand_controller_cleanup(struct ls1x_nand *ls1x)
-> > +{
-> > +     if (ls1x->nfc.dma_chan)
-> > +             dma_release_channel(ls1x->nfc.dma_chan);
-> > +}
-> > +
-> > +static int ls1x_nand_controller_init(struct ls1x_nand *ls1x,
-> > +                                  struct platform_device *pdev)
-> > +{
-> > +     struct ls1x_nfc *nfc =3D &ls1x->nfc;
-> > +     struct dma_slave_config cfg;
-> > +     int ret;
-> > +
-> > +     nfc->reg_base =3D devm_platform_ioremap_resource(pdev, 0);
-> > +     if (IS_ERR(nfc->reg_base))
-> > +             return PTR_ERR(nfc->reg_base);
+which sounds to me like migrate_pages / MADV_COLD might be able to 
+achieve something similar.
 
-> > +
-> > +     nfc->regmap =3D devm_regmap_init_mmio(ls1x->dev, nfc->reg_base,
-> > +                                         &ls1x_nand_regmap_config);
-> > +     if (IS_ERR(nfc->regmap))
-> > +             return dev_err_probe(ls1x->dev, PTR_ERR(nfc->regmap),
-> > +                                  "failed to init regmap\n");
-> > +
-> > +     nfc->dma_chan =3D dma_request_chan(ls1x->dev, "rxtx");
-> > +     if (IS_ERR(nfc->dma_chan))
-> > +             return dev_err_probe(ls1x->dev, PTR_ERR(nfc->dma_chan),
-> > +                                  "failed to request DMA channel\n");
-> > +     dev_info(ls1x->dev, "got %s for %s access\n",
-> > +              dma_chan_name(nfc->dma_chan), dev_name(ls1x->dev));
->
-> Might be lowered to debug maybe?
->
-Will do.
+What's the biggest difference that MADV_DEMOTE|MADV_PROMOTE can do better?
 
-> > +
-> > +     cfg.src_addr =3D CPHYSADDR(nfc->reg_base + NAND_DMA_ADDR);
-> > +     cfg.src_addr_width =3D DMA_SLAVE_BUSWIDTH_4_BYTES;
-> > +     cfg.dst_addr =3D CPHYSADDR(nfc->reg_base + NAND_DMA_ADDR);
->
-> Doesn't feel right. That shall be a dma_addr_t, not a virtual pointer.
->
-Will define a macro for the DMA_ADDR.
+-- 
+Cheers,
 
-> > +     cfg.dst_addr_width =3D DMA_SLAVE_BUSWIDTH_4_BYTES;
-> > +
-> > +     ret =3D dmaengine_slave_config(nfc->dma_chan, &cfg);
-> > +     if (ret) {
-> > +             dev_err(ls1x->dev, "failed to config DMA channel\n");
-> > +             dma_release_channel(nfc->dma_chan);
-> > +             return ret;
-> > +     }
-> > +
-> > +     init_completion(&nfc->dma_complete);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int ls1x_nand_chip_init(struct ls1x_nand *ls1x)
-> > +{
-> > +     int nchips =3D of_get_child_count(ls1x->dev->of_node);
-> > +     struct device_node *chip_np;
-> > +     struct nand_chip *chip =3D &ls1x->chip;
-> > +     struct mtd_info *mtd =3D nand_to_mtd(chip);
-> > +     int ret =3D 0;
-> > +
-> > +     if (nchips !=3D 1)
-> > +             return dev_err_probe(ls1x->dev, -EINVAL,
-> > +                                  "Currently one NAND chip supported\n=
-");
-> > +
-> > +     chip_np =3D of_get_next_child(ls1x->dev->of_node, NULL);
-> > +     if (!chip_np)
-> > +             return dev_err_probe(ls1x->dev, -ENODEV,
-> > +                                  "failed to get child node for NAND c=
-hip\n");
-> > +
-> > +     chip->controller =3D &ls1x->controller;
-> > +     chip->options =3D NAND_NO_SUBPAGE_WRITE | NAND_USES_DMA | NAND_BR=
-OKEN_XD;
-> > +     chip->buf_align =3D 4;
-> > +     nand_set_controller_data(chip, ls1x);
-> > +     nand_set_flash_node(chip, chip_np);
-> > +
-> > +     mtd->dev.parent =3D ls1x->dev;
-> > +     mtd->name =3D "ls1x-nand";
-> > +     mtd->owner =3D THIS_MODULE;
-> > +
-> > +     ret =3D nand_scan(chip, 1);
-> > +     if (ret) {
-> > +             of_node_put(chip_np);
-> > +             return ret;
-> > +     }
-> > +
-> > +     ret =3D mtd_device_register(mtd, NULL, 0);
-> > +     if (ret) {
-> > +             dev_err(ls1x->dev, "failed to register MTD device! %d\n",=
- ret);
-> > +             nand_cleanup(chip);
-> > +             of_node_put(chip_np);
-> > +     }
-> > +
-> > +     return ret;
-> > +}
-> > +
-> > +static int ls1x_nand_probe(struct platform_device *pdev)
-> > +{
-> > +     struct device *dev =3D &pdev->dev;
-> > +     const struct ls1x_nfc_data *data;
-> > +     struct ls1x_nand *ls1x;
-> > +     int ret;
-> > +
-> > +     data =3D of_device_get_match_data(&pdev->dev);
-> > +     if (!data)
-> > +             return -ENODEV;
-> > +
-> > +     ls1x =3D devm_kzalloc(dev, sizeof(*ls1x), GFP_KERNEL);
-> > +     if (!ls1x)
-> > +             return -ENOMEM;
-> > +
-> > +     ls1x->nfc.data =3D data;
-> > +     ls1x->dev =3D dev;
-> > +     ls1x->controller.ops =3D &ls1x_nfc_ops;
-> > +     nand_controller_init(&ls1x->controller);
->
-> It would feel more natural to perform the init and then add the ops.
->
-Will do.
+David / dhildenb
 
-> > +
-> > +     ret =3D ls1x_nand_controller_init(ls1x, pdev);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     ret =3D ls1x_nand_chip_init(ls1x);
-> > +     if (ret)
-> > +             goto err;
-> > +
-> > +     platform_set_drvdata(pdev, ls1x);
-> > +
-> > +     return 0;
-> > +err:
-> > +     ls1x_nand_controller_cleanup(ls1x);
-> > +     return ret;
-> > +}
-> > +
-> > +static int ls1x_nand_remove(struct platform_device *pdev)
-> > +{
-> > +     struct ls1x_nand *ls1x =3D platform_get_drvdata(pdev);
-> > +     struct nand_chip *chip =3D &ls1x->chip;
-> > +     int ret;
-> > +
-> > +     ret =3D mtd_device_unregister(nand_to_mtd(chip));
-> > +     WARN_ON(ret);
-> > +     nand_cleanup(chip);
-> > +     ls1x_nand_controller_cleanup(ls1x);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct ls1x_nfc_data ls1b_nfc_data =3D {
-> > +     .status_field =3D GENMASK(15, 8),
-> > +     .hold_cycle =3D 0x2,
-> > +     .wait_cycle =3D 0xc,
-> > +     .parse_address =3D ls1b_nand_parse_address,
-> > +};
-> > +
-> > +static const struct ls1x_nfc_data ls1c_nfc_data =3D {
-> > +     .status_field =3D GENMASK(23, 16),
-> > +     .op_scope_field =3D GENMASK(29, 16),
-> > +     .hold_cycle =3D 0x2,
-> > +     .wait_cycle =3D 0xc,
-> > +     .parse_address =3D ls1c_nand_parse_address,
-> > +};
-> > +
-> > +static const struct of_device_id ls1x_nfc_match[] =3D {
-> > +     { .compatible =3D "loongson,ls1b-nfc", .data =3D &ls1b_nfc_data }=
-,
-> > +     { .compatible =3D "loongson,ls1c-nfc", .data =3D &ls1c_nfc_data }=
-,
-> > +     { /* sentinel */ }
-> > +};
-> > +MODULE_DEVICE_TABLE(of, ls1x_nfc_match);
-> > +
-> > +static struct platform_driver ls1x_nand_driver =3D {
-> > +     .probe  =3D ls1x_nand_probe,
-> > +     .remove =3D ls1x_nand_remove,
-> > +     .driver =3D {
-> > +             .name   =3D KBUILD_MODNAME,
-> > +             .of_match_table =3D ls1x_nfc_match,
-> > +     },
-> > +};
-> > +
-> > +module_platform_driver(ls1x_nand_driver);
-> > +
-> > +MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
-> > +MODULE_DESCRIPTION("Loongson-1 NAND Controller driver");
-> > +MODULE_LICENSE("GPL");
-> >
->
->
-> Thanks,
-> Miqu=C3=A8l
-
-Thanks for your review!
-
---
-Best regards,
-
-Keguang Zhang
 
