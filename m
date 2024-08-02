@@ -1,207 +1,188 @@
-Return-Path: <linux-mips+bounces-4669-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4670-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A9C2945B72
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Aug 2024 11:49:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E926945B81
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Aug 2024 11:53:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8A305B20D0E
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Aug 2024 09:49:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40E7D1C2175B
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Aug 2024 09:53:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CE341DB449;
-	Fri,  2 Aug 2024 09:49:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 433361DB429;
+	Fri,  2 Aug 2024 09:53:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sl+Imx3P"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1986B1DAC65;
-	Fri,  2 Aug 2024 09:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A4A21DB420;
+	Fri,  2 Aug 2024 09:53:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722592172; cv=none; b=D9wWN/FsAzaKPb5scFTI+bakvck1iRYCDL7uF2H8N/ttNQjus3gD8zpzzHB+KmtPw7fLVkL4DHKGkj+5ckLtUfWN0bTpdZWoCzMBHXQMazPM/7WQPRyAV58xF1DRwXr2rW+xW735nG9WICW1mPazDbEvaxGL/A7LPLdbTz+Ctec=
+	t=1722592418; cv=none; b=GVTzEy/qXpVqJ+cuNeclwO3RpmMNQDAi8404nghMc3wWnTek0SGPwObYUxpOpkM3IJvG44K+Q6s7AgiIxEEYXYnCMaParE7W69TukatWl2WOF0aKIuI1mCmUJiQjdWaAS+QaZmq5eOa2hMGyyzXPf3kYoPanBonHW2QRlJAun60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722592172; c=relaxed/simple;
-	bh=V6rv7TGpmKX1umA5P31mK46zzcAigO8h1m0IHBWCnyE=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BnQKWjHgYBWIMQYS5djQ0Dmxf2vrtOMWJQ/bDZ4fKK+Aj99nyTn9PFAavj27ZmFDoyYvMiEQ79GGCmKoIej2AyL1xhS4bHKnXEWQsmZkbXZDB+LMdfbG4CAzdU7NHS/FJljz/lLqufbND3rJIi0qC6bKTYaefTqphey3A5vj6RY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Wb1G048mKz6K610;
-	Fri,  2 Aug 2024 17:47:20 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 129BE140A08;
-	Fri,  2 Aug 2024 17:49:24 +0800 (CST)
-Received: from localhost (10.203.177.66) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 2 Aug
- 2024 10:49:23 +0100
-Date: Fri, 2 Aug 2024 10:49:22 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Mike Rapoport <rppt@kernel.org>
-CC: <linux-kernel@vger.kernel.org>, Alexander Gordeev
-	<agordeev@linux.ibm.com>, Andreas Larsson <andreas@gaisler.com>, "Andrew
- Morton" <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, "Borislav
- Petkov" <bp@alien8.de>, Catalin Marinas <catalin.marinas@arm.com>, Christophe
- Leroy <christophe.leroy@csgroup.eu>, Dan Williams <dan.j.williams@intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, David Hildenbrand
-	<david@redhat.com>, "David S. Miller" <davem@davemloft.net>, Davidlohr Bueso
-	<dave@stgolabs.net>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, Heiko
- Carstens <hca@linux.ibm.com>, Huacai Chen <chenhuacai@kernel.org>, Ingo
- Molnar <mingo@redhat.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>, "John Paul
- Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>, Jonathan Corbet
-	<corbet@lwn.net>, Michael Ellerman <mpe@ellerman.id.au>, Palmer Dabbelt
-	<palmer@dabbelt.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring
-	<robh@kernel.org>, Samuel Holland <samuel.holland@sifive.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner
-	<tglx@linutronix.de>, "Vasily Gorbik" <gor@linux.ibm.com>, Will Deacon
-	<will@kernel.org>, Zi Yan <ziy@nvidia.com>, <devicetree@vger.kernel.org>,
-	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-cxl@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-mips@vger.kernel.org>,
-	<linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
-	<linux-s390@vger.kernel.org>, <linux-sh@vger.kernel.org>,
-	<linuxppc-dev@lists.ozlabs.org>, <loongarch@lists.linux.dev>,
-	<nvdimm@lists.linux.dev>, <sparclinux@vger.kernel.org>, <x86@kernel.org>
-Subject: Re: [PATCH v3 07/26] mm: drop CONFIG_HAVE_ARCH_NODEDATA_EXTENSION
-Message-ID: <20240802104922.000051a0@Huawei.com>
-In-Reply-To: <20240801060826.559858-8-rppt@kernel.org>
-References: <20240801060826.559858-1-rppt@kernel.org>
-	<20240801060826.559858-8-rppt@kernel.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1722592418; c=relaxed/simple;
+	bh=5RvnCkZ0f1ayRqEQOxie5tQpkKjmPmBFSqlVw4+5+r8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EDrGVfcOJW6wub1p5zCc882a4kRi6VDNdMJLaO7vGXzf3xV0CRJepZlgP23pqTEaNU1WlYLEc+O3uOvq79YYj9bHy7NdF2Mt1k8sg1kpT1tnpiH4/knPtdgUCs3eVqjwuiaJqamQbbySKiI5/DkQpQVGc5QwdciA3PrrFrP82u0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sl+Imx3P; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2f035ae0fe0so91884341fa.3;
+        Fri, 02 Aug 2024 02:53:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722592414; x=1723197214; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/Tb6hNqed3D3MjkcK+637mlvJhN7REA1/kHYwr9JxhE=;
+        b=Sl+Imx3PlvARmD18H/7P4PYb+Gd/dnE92yXIiE32YjH9MkdqHp/nRVbVXZn05uH5Ju
+         kEuHh9VIR33vH6RY+3Eg8XDLn80rAMN9eef5RaEU5urR/bV9cHqeZoP1uH8hHFMRGGxl
+         AhgqizHXHDLIiHGw0yJ6DbG+AAHQf+ErTwcg5w5hdET/MjJNgtLaLF9MUujDEFeob4W5
+         tQzo3nkC0YxoM1JtPVBD7E8HpxbULR3OC7ojELomJ0DBax9OaWxc5/DXZ1gmBwXGVh6c
+         y/3TCQsSQN4t00qIT0c/GWgtX51yT7QMAUKOLz1cm8+kMJRCvCezwnWR59BX3NR08kSU
+         RjKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722592414; x=1723197214;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/Tb6hNqed3D3MjkcK+637mlvJhN7REA1/kHYwr9JxhE=;
+        b=DNdejBGO4JobfRbJ/2HGQWHm9qpAKMIKiKj4Vf3tcm4s9B4zycMMXuudU0SWt0Iqga
+         MdurYMNSYyUtoWEeXcnN4DfevRkbJ8hf0unY4l1D3kHX8RPWLRHfj1dnBFHsEFodBBb2
+         FESYWHa4LnVDhzIvNUNppqKGz4b0mHmi8BraWFPiaTUzdqMqnfr4LqiBLSPHf3kTyIyE
+         xnapxinSsWc1bzDPl1FzQpZ3Jd+UGpdSE4Bm6mbuGuHoKk3OxVqv7QSJMX1OyCykQEeR
+         hH4eMCpq7BvvFsElvWeGXSHBtAWK7QdQvNAhFaFSFi0goTcOMhJVIf2GT32aiDv05iFK
+         F7Fw==
+X-Forwarded-Encrypted: i=1; AJvYcCWBoZTqUfaFAJEeVhLPE3EopFYAEvHcZzYsSOB0cd2sSQoM7QoTTBxmrndjyDb6Ii0E+i1sH70BVa8sEtSAS1II3f+wijR9qSx6DSbW1wvm72I4LZsTBBmaglLkVfk4+2b5XI8rXpkqnw==
+X-Gm-Message-State: AOJu0Yxur0OB6Fy9wE2euI4Ri/izF54c4mEqp2A36LVw6er7L0wMTNHI
+	nrgsNcE8Fw8LWKtED43KdaBGdpUcB54cx+hPdALp0tThQ1tOvibP
+X-Google-Smtp-Source: AGHT+IGIJa4lEFO4v8BJthZbIlTXCR9ztB/aZbScUnLAX3MagCa18fvttKtAKb4h7EmhveTwMuCBPw==
+X-Received: by 2002:a2e:9e15:0:b0:2ef:2dac:9076 with SMTP id 38308e7fff4ca-2f15aa95dbcmr19378721fa.11.1722592414004;
+        Fri, 02 Aug 2024 02:53:34 -0700 (PDT)
+Received: from mobilestation ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2f15e273818sm1222841fa.130.2024.08.02.02.53.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Aug 2024 02:53:33 -0700 (PDT)
+Date: Fri, 2 Aug 2024 12:53:30 +0300
+From: Serge Semin <fancer.lancer@gmail.com>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Thomas Gleixner <tglx@linutronix.de>, Andrew Morton <akpm@linux-foundation.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Kelvin Cheung <keguang.zhang@gmail.com>, 
+	Gregory CLEMENT <gregory.clement@bootlin.com>, =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>, 
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+	Huacai Chen <chenhuacai@kernel.org>, "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC] MIPS: smp: Sleeping func called from start_secondary()
+Message-ID: <utfmb7mxm6emxditrq7fwalatnhszzcztu4gnqs5mf44umvfwa@k4i7gamaj5mw>
+References: <6szkkqxpsw26zajwysdrwplpjvhl5abpnmxgu2xuj3dkzjnvsf@4daqrz4mf44k>
+ <8d875eb0-d236-46f3-a417-08bff3c0087d@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8d875eb0-d236-46f3-a417-08bff3c0087d@app.fastmail.com>
 
-On Thu,  1 Aug 2024 09:08:07 +0300
-Mike Rapoport <rppt@kernel.org> wrote:
+Hi Jiaxun
 
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+On Fri, Aug 02, 2024 at 05:43:45PM +0800, Jiaxun Yang wrote:
 > 
-> There are no users of HAVE_ARCH_NODEDATA_EXTENSION left, so
-> arch_alloc_nodedata() and arch_refresh_nodedata() are not needed
-> anymore.
 > 
-> Replace the call to arch_alloc_nodedata() in free_area_init() with
-> memblock_alloc(), remove arch_refresh_nodedata() and cleanup
-> include/linux/memory_hotplug.h from the associated ifdefery.
+> 在2024年8月2日八月 下午4:45，Serge Semin写道：
+> > Hi folks,
+> >
+> > To debug some another problem I recently enabled the
+> > CONFIG_DEBUG_ATOMIC_SLEEP config for my SoC based on the 2xP5600 cores
+> > with MIPS GIC as IRQ-controller. That caused the next BUG backtrace
+> > started being printed to the system log during the device boot-up:
 > 
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> Tested-by: Zi Yan <ziy@nvidia.com> # for x86_64 and arm64
-
-Hi Mike, 
-
-This has an accidental (I assume) functional change and if
-you have an initially offline node it all goes wrong.
-
-
-> ---
->  include/linux/memory_hotplug.h | 48 ----------------------------------
->  mm/mm_init.c                   |  3 +--
->  2 files changed, 1 insertion(+), 50 deletions(-)
+> Hi Serge,
 > 
-> diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
-> index ebe876930e78..b27ddce5d324 100644
-> --- a/include/linux/memory_hotplug.h
-> +++ b/include/linux/memory_hotplug.h
-> @@ -16,54 +16,6 @@ struct resource;
->  struct vmem_altmap;
->  struct dev_pagemap;
->  
-> -#ifdef CONFIG_HAVE_ARCH_NODEDATA_EXTENSION
-> -/*
-> - * For supporting node-hotadd, we have to allocate a new pgdat.
-> - *
-> - * If an arch has generic style NODE_DATA(),
-> - * node_data[nid] = kzalloc() works well. But it depends on the architecture.
-> - *
-> - * In general, generic_alloc_nodedata() is used.
-> - *
-> - */
-> -extern pg_data_t *arch_alloc_nodedata(int nid);
-> -extern void arch_refresh_nodedata(int nid, pg_data_t *pgdat);
-> -
-> -#else /* CONFIG_HAVE_ARCH_NODEDATA_EXTENSION */
-> -
-> -#define arch_alloc_nodedata(nid)	generic_alloc_nodedata(nid)
-> -
-> -#ifdef CONFIG_NUMA
-> -/*
-> - * XXX: node aware allocation can't work well to get new node's memory at this time.
-> - *	Because, pgdat for the new node is not allocated/initialized yet itself.
-> - *	To use new node's memory, more consideration will be necessary.
-> - */
-> -#define generic_alloc_nodedata(nid)				\
-> -({								\
-> -	memblock_alloc(sizeof(*pgdat), SMP_CACHE_BYTES);	\
-> -})
-> -
-> -extern pg_data_t *node_data[];
-> -static inline void arch_refresh_nodedata(int nid, pg_data_t *pgdat)
-> -{
-> -	node_data[nid] = pgdat;
-> -}
-> -
-> -#else /* !CONFIG_NUMA */
-> -
-> -/* never called */
-> -static inline pg_data_t *generic_alloc_nodedata(int nid)
-> -{
-> -	BUG();
-> -	return NULL;
-> -}
-> -static inline void arch_refresh_nodedata(int nid, pg_data_t *pgdat)
-> -{
-> -}
-> -#endif /* CONFIG_NUMA */
-> -#endif /* CONFIG_HAVE_ARCH_NODEDATA_EXTENSION */
-> -
->  #ifdef CONFIG_MEMORY_HOTPLUG
->  struct page *pfn_to_online_page(unsigned long pfn);
->  
-> diff --git a/mm/mm_init.c b/mm/mm_init.c
-> index 75c3bd42799b..bcc2f2dd8021 100644
-> --- a/mm/mm_init.c
-> +++ b/mm/mm_init.c
-> @@ -1838,11 +1838,10 @@ void __init free_area_init(unsigned long *max_zone_pfn)
->  
->  		if (!node_online(nid)) {
->  			/* Allocator not initialized yet */
-> -			pgdat = arch_alloc_nodedata(nid);
-> +			pgdat = memblock_alloc(sizeof(*pgdat), SMP_CACHE_BYTES);
->  			if (!pgdat)
->  				panic("Cannot allocate %zuB for node %d.\n",
->  				       sizeof(*pgdat), nid);
-> -			arch_refresh_nodedata(nid, pgdat);
+> Thanks for reporting the problem!
+> 
+> I actually have a patch lying around somewhere to convert cevt-r4k to use CPUHP
+> interface and avoid requesting interrupt on secondary CPUs.
+> 
+> Will post after getting more platform tests.
 
-This allocates pgdat but never sets node_data[nid] to it
-and promptly leaks it on the line below. 
+Great! Thanks. I'll test it out upon submission.
 
-Just to sanity check this I spun up a qemu machine with no memory
-initially present on some nodes and it went boom as you'd expect.
+* Although I doubt that such (presumably) complicated change might be
+considered as a backportable fix. But at least it shall fix the problem for the
+mainline kernel.
 
-I tested with addition of
-			NODE_DATA(nid) = pgdat;
-and it all seems to work as expected.
+Thanks,
+-Serge(y)
 
-Jonathan
-
-
-
->  		}
->  
->  		pgdat = NODE_DATA(nid);
-
-
+> 
+> Thanks
+> - Jiaxun
+> 
+> >
+> > [    0.118053] BUG: sleeping function called from invalid context at 
+> > kernel/locking/mutex.c:283
+> > [    0.118062] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 
+> > 0, name: swapper/1
+> > [    0.118069] preempt_count: 1, expected: 0
+> > [    0.118074] RCU nest depth: 0, expected: 0
+> > [    0.118078] Preemption disabled at:
+> > [    0.118082] [<80105040>] arch_dup_task_struct+0x20/0x118
+> > [    0.118116] CPU: 1 UID: 0 PID: 0 Comm: swapper/1 Not tainted 
+> > 6.11.0-rc1-bt1-00312-gca6f9469050c-dirty #2460
+> > [    0.118134] Stack : 816d0000 801b89bc 81870000 00000004 a02d0c08 
+> > 00000000 84ae7dcc 801b84c0
+> > [    0.118167]         00000000 00000002 00000000 00000000 00000000 
+> > 00000001 84ae7d70 84aaf200
+> > [    0.118195]         00000000 00000000 81115acc 00000000 00000059 
+> > 84ae7bec 00000000 00000000
+> > [    0.118222]         00000000 ffffffff ffffffea 00000020 816d0000 
+> > 00000000 81115acc 00000002
+> > [    0.118250]         00000000 04240021 a02d0c08 00000000 00000000 
+> > 00000000 30400000 ac24242a
+> > [    0.118277]         ...
+> > [    0.118286] Call Trace:
+> > [    0.118289] [<8010af2c>] show_stack+0x88/0x120
+> > [    0.118309] [<80f09dfc>] dump_stack_lvl+0x78/0xb0
+> > [    0.118323] [<801778d0>] __might_resched+0x190/0x1f0
+> > [    0.118349] [<80f10f80>] mutex_lock+0x20/0x74
+> > [    0.118365] [<801c8590>] irq_create_mapping_affinity+0x48/0x104
+> > [    0.118390] [<801121ec>] r4k_clockevent_init+0x58/0x38c
+> > [    0.118402] [<80116658>] start_secondary+0x34/0x134
+> > [    0.118411] [<80f0b1e4>] smp_bootstrap+0x68/0x98
+> > [    0.118424] 
+> >
+> > I managed to investigate the problem a bit and the reason turned out to be
+> > in the irq_create_mapping() method eventually invoked in the framework of the
+> > secondary CPU start-up procedure. The more detailed calls chain is:
+> > start_secondary()
+> > +-> mips_clockevent_init()
+> >     +-> r4k_clockevent_init()
+> >         +-> get_c0_compare_int()
+> >             +-> gic_get_c0_compare_int()
+> >                 +-> irq_create_mapping()
+> >                     +-> irq_create_mapping_affinity()
+> >                         +-> mutex_lock()
+> >                             +-> might_sleep()
+> >                                 +-> might_resched()
+> >                                     +-> __might_resched()
+> >                                         +-> Print the log above
+> >
+> > I currently lack of free time for further investigation in an attempt to
+> > find a reasonable solution. So here is just a report and a short summary
+> > of the problem. Should you have any idea of how to fix the problem I'll be
+> > very glad to test it out on a short notice.
+> >
+> > -Serge(y)
+> 
+> -- 
+> - Jiaxun
 
