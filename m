@@ -1,45 +1,45 @@
-Return-Path: <linux-mips+bounces-4685-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4686-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B6B2945F0C
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Aug 2024 16:01:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17DFD945FE2
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Aug 2024 17:08:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5CE831C2124E
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Aug 2024 14:01:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CBBA1C21AC2
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Aug 2024 15:08:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B7961E3CC1;
-	Fri,  2 Aug 2024 14:01:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 152782139C9;
+	Fri,  2 Aug 2024 15:08:02 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 922605258;
-	Fri,  2 Aug 2024 14:01:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01E4B1E2898;
+	Fri,  2 Aug 2024 15:07:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722607308; cv=none; b=IfJmRtiCcDL31t9Ae8KmMcLncU2QXlBGzh88yAv4Bx8G1bJxfi0CKfdJWKGAOHXx8MCZfQCyuCLn+r4YwJrlJviNHTADMaKCnaN7IBdTBVpiBS5xk7/ILjNbFRfsOXDVkumTeazCm2KDoTzPQ+gvhXz72pjXlIN/ZHDRcgs8NSI=
+	t=1722611281; cv=none; b=O+b/lJgGjLN42u1j04EgVTRsZ0G31d6WVivu66yrVDpEoW6SxMkZ2ESTUyTjGXn2ciTpqbFlQQJUMRXINWDUcEuZvN0D9peGPoLfgwmoK415CNjibJY+gMS/7ZdILagyQzDnnpb+z7UPzLfZD8vqYQEsBd0xrAA4PXms5g9NAQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722607308; c=relaxed/simple;
-	bh=u3ZMg2xsS0PphcV5AO/Z+wTJuTNi8Zl3B3cTy1JUA/o=;
+	s=arc-20240116; t=1722611281; c=relaxed/simple;
+	bh=dE2tw65wybbwVSofl+zPz2Gn5VirG4tlVL3m+9Ybn1I=;
 	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=h6TWylVm1/V6t2fLyvEmTUCuLGjw2XqyMlK+0eH98mxe2kDQK2lKKJbo98d76jiav99ggA4LthF6+0jKWwQ9Hesmy0ztiiF/c1gdeEb5MDFxTWWWyQWq//AKUSOb2fotq/sMVbAAYjdK1Pp1q9EcLc1/QP9bv1lRj/F3bsFzkYw=
+	 MIME-Version:Content-Type; b=jOv49mfUkXohkt0/AAKvl+glIdaDt8sqOE0iss/veqj51wU9918JU0lMTxbP9ySGzNiU+SZTWXlSQ0uuRwCXyptWnBNXge7+ItrqbhY3nfJECiKDj6W6l5cJDaY0ectREStA94pmw+xzFqXftSlPnD22VlnM0lf8f+2ld1AOKRA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Wb6rS3QPSz6K6ln;
-	Fri,  2 Aug 2024 21:59:04 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Wb8JQ56Vvz6K6RP;
+	Fri,  2 Aug 2024 23:04:54 +0800 (CST)
 Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 429D2140A86;
-	Fri,  2 Aug 2024 22:01:43 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 959BE140A08;
+	Fri,  2 Aug 2024 23:07:33 +0800 (CST)
 Received: from localhost (10.203.177.66) by lhrpeml500005.china.huawei.com
  (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 2 Aug
- 2024 15:01:42 +0100
-Date: Fri, 2 Aug 2024 15:01:41 +0100
+ 2024 16:07:32 +0100
+Date: Fri, 2 Aug 2024 16:07:31 +0100
 From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 To: Mike Rapoport <rppt@kernel.org>
 CC: <linux-kernel@vger.kernel.org>, Alexander Gordeev
@@ -66,12 +66,11 @@ CC: <linux-kernel@vger.kernel.org>, Alexander Gordeev
 	<linux-s390@vger.kernel.org>, <linux-sh@vger.kernel.org>,
 	<linuxppc-dev@lists.ozlabs.org>, <loongarch@lists.linux.dev>,
 	<nvdimm@lists.linux.dev>, <sparclinux@vger.kernel.org>, <x86@kernel.org>
-Subject: Re: [PATCH v3 23/26] of, numa: return -EINVAL when no numa-node-id
- is found
-Message-ID: <20240802150141.00002143@Huawei.com>
-In-Reply-To: <20240801060826.559858-24-rppt@kernel.org>
+Subject: Re: [PATCH v3 24/26] arch_numa: switch over to numa_memblks
+Message-ID: <20240802160731.00005f79@Huawei.com>
+In-Reply-To: <20240801060826.559858-25-rppt@kernel.org>
 References: <20240801060826.559858-1-rppt@kernel.org>
-	<20240801060826.559858-24-rppt@kernel.org>
+	<20240801060826.559858-25-rppt@kernel.org>
 Organization: Huawei Technologies Research and Development (UK) Ltd.
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
@@ -82,28 +81,28 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
  lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Thu,  1 Aug 2024 09:08:23 +0300
+On Thu,  1 Aug 2024 09:08:24 +0300
 Mike Rapoport <rppt@kernel.org> wrote:
 
 > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> Currently of_numa_parse_memory_nodes() returns 0 if no "memory" node in
-> device tree contains "numa-node-id" property. This makes of_numa_init()
-> to return "success" despite no NUMA nodes were actually parsed and set
-> up.
+> Until now arch_numa was directly translating firmware NUMA information
+> to memblock.
 > 
-> arch_numa workarounds this by returning an error if numa_nodes_parsed is
-> empty.
+> Using numa_memblks as an intermediate step has a few advantages:
+> * alignment with more battle tested x86 implementation
+> * availability of NUMA emulation
+> * maintaining node information for not yet populated memory
 > 
-> numa_memblks however would WARN() in such case and since it will be used
-> by arch_numa shortly, such warning is not desirable.
-> 
-> Make sure of_numa_init() returns -EINVAL when no NUMA node information
-> was found in the device tree.
+> Replace current functionality related to numa_add_memblk() and
+> __node_distance() with the implementation based on numa_memblks and add
+> functions required by numa_emulation.
 > 
 > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Tested-by: Zi Yan <ziy@nvidia.com> # for x86_64 and arm64
+
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
