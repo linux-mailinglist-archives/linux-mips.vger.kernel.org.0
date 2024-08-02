@@ -1,125 +1,158 @@
-Return-Path: <linux-mips+bounces-4682-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4683-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A392D945CFC
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Aug 2024 13:12:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DF5F945D10
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Aug 2024 13:16:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4FF21C21D64
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Aug 2024 11:12:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 354FEB217DE
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Aug 2024 11:16:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1D1A1E2111;
-	Fri,  2 Aug 2024 11:12:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8060D1DE868;
+	Fri,  2 Aug 2024 11:16:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fwoudIRm"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0FB11DF69E;
-	Fri,  2 Aug 2024 11:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A230134B6
+	for <linux-mips@vger.kernel.org>; Fri,  2 Aug 2024 11:16:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722597158; cv=none; b=gD+NgfWZGOGK7pfidB3pksiuuTDGD/cVhw9L8U4nta9jGlP7sB/9OXwp2l4XxKdZ0wuAFn4AMCuBZbOPII4GGJeWy9wXIe41rtQx1ZJ0CFcH9BIoHz4MA1p16rYKDp/NPFS534b4eY6IixgQXVKfKJ6eDjYEQh/w+wp+Tq7WSZo=
+	t=1722597377; cv=none; b=cvi87uCZZRwiH78WnmXxxawuU4Fkdy3kYHGgdCrG0jV1ZbFLUGDxrDU8XZ/Q/uGNFJzwDpmpza8T/PqoRlYiL96qXjVkxS7XJsnQYH3xXx1GoRunjhxwsPvTfQDRAH1nLV4D+UvYn4j/VlaMtZUHtRPVeJGd3P7vyqW9UU1IavQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722597158; c=relaxed/simple;
-	bh=sZaRN/2lR+IgV7LzrT7WKBZTUGm5JqCUNXvVErr8xfE=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=edg7jZeSd0m4OBjba1w6ynTQElU1Hu1c5uJSIDUNxpTHcNn1S5lAJIa612rEatNx/3A2hzURqb6DTlYsCfk/CXh/RUs5qgVZuybtInDQxFqAGeJGtTb4iHdP1T9pAQ58dy1eOwWZAwLblfHxbV3T1SDN1o7xgL1NF7GT9W/3coQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Wb35J7183z6K9Db;
-	Fri,  2 Aug 2024 19:09:56 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 5BD1D140A08;
-	Fri,  2 Aug 2024 19:12:34 +0800 (CST)
-Received: from localhost (10.203.177.66) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 2 Aug
- 2024 12:12:33 +0100
-Date: Fri, 2 Aug 2024 12:12:32 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Mike Rapoport <rppt@kernel.org>
-CC: <linux-kernel@vger.kernel.org>, Alexander Gordeev
-	<agordeev@linux.ibm.com>, Andreas Larsson <andreas@gaisler.com>, "Andrew
- Morton" <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, "Borislav
- Petkov" <bp@alien8.de>, Catalin Marinas <catalin.marinas@arm.com>, Christophe
- Leroy <christophe.leroy@csgroup.eu>, Dan Williams <dan.j.williams@intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, David Hildenbrand
-	<david@redhat.com>, "David S. Miller" <davem@davemloft.net>, Davidlohr Bueso
-	<dave@stgolabs.net>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, Heiko
- Carstens <hca@linux.ibm.com>, Huacai Chen <chenhuacai@kernel.org>, Ingo
- Molnar <mingo@redhat.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>, "John Paul
- Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>, Jonathan Corbet
-	<corbet@lwn.net>, Michael Ellerman <mpe@ellerman.id.au>, Palmer Dabbelt
-	<palmer@dabbelt.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring
-	<robh@kernel.org>, Samuel Holland <samuel.holland@sifive.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner
-	<tglx@linutronix.de>, "Vasily Gorbik" <gor@linux.ibm.com>, Will Deacon
-	<will@kernel.org>, Zi Yan <ziy@nvidia.com>, <devicetree@vger.kernel.org>,
-	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-cxl@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-mips@vger.kernel.org>,
-	<linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
-	<linux-s390@vger.kernel.org>, <linux-sh@vger.kernel.org>,
-	<linuxppc-dev@lists.ozlabs.org>, <loongarch@lists.linux.dev>,
-	<nvdimm@lists.linux.dev>, <sparclinux@vger.kernel.org>, <x86@kernel.org>
-Subject: Re: [PATCH v3 22/26] mm: numa_memblks: use
- memblock_{start,end}_of_DRAM() when sanitizing meminfo
-Message-ID: <20240802121232.00005b2c@Huawei.com>
-In-Reply-To: <20240801060826.559858-23-rppt@kernel.org>
-References: <20240801060826.559858-1-rppt@kernel.org>
-	<20240801060826.559858-23-rppt@kernel.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1722597377; c=relaxed/simple;
+	bh=5/L0Yc2Z+AOSOKZw3/Dotf6pZ+cloK9IZVwKZGtH7AE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=bWH36oY8TjlAgG5WpDxidzN3jWnvZeIidbTwSFby89m3Jm+qk1wYz/hUu++5y+moXv8i2obWgNzHmcn2Dyv8m2OUuXg8DIurvWGP1KwhehN9fX7UivneZKGjOqi7MFI0ymLPmjT2WBb7LkshxsKkh/ABjSr+ws7kEZ1XlVlcZ+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fwoudIRm; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a7ac469e4c4so562080166b.0
+        for <linux-mips@vger.kernel.org>; Fri, 02 Aug 2024 04:16:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1722597373; x=1723202173; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h+a+YbUYnYp2O9o3vDX++ZHVr+zNy81A/L7Ak8HFY0M=;
+        b=fwoudIRmwyCZlvfZAYP55lQcN+bde7o08iQUsXGJ/fUVJ1Tf4MSd9mmhuHU3dSCrX0
+         W3Tau751iP6vRYFZW9yxiV609CXOQ6fzoqnmowcurzv2TWw5tHNLy2Z8r7bsYH/CJG93
+         gi4+fx4KAfHEf4ahly+/x1/RHo+wyHG7H64Pv8TUj17ZApMqNMra+oGnF0xbwewFXfT2
+         tPi1FLl4/+XJhnn81LdxSTjN/SsAK0UbQP5WpGHja82rTztj2E8wE7jAzP5h3xvb57vQ
+         WDCK6fWMywgyF6T5pFcJycbxuICu9UO7uz+hhfBKlzsZTpJHt1WEfpJWzdUSmZdlD0Lv
+         6szw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722597373; x=1723202173;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=h+a+YbUYnYp2O9o3vDX++ZHVr+zNy81A/L7Ak8HFY0M=;
+        b=AC0/VC9RBZ9EHzEGL3irgG9ks29h/29n+989mFw+Vr5BAEVj1W2HzWzqTXUAJgYlpf
+         k6lwFso+QexiKErGyI8/uKaXhfd+7DsHNYlL8nuyjBCHpIuqC61KlN/5nOkmfq0kuE5N
+         pX9Fe5TSE/rV5DKQdTAWXYFJZUIcfbH38AWHOmEr+WQn6Mqu631WgnqCrh+Y5wN+pwsr
+         V9oPk9jcLml8c2xTsgLeVKnUm1d9fXm3F73gPLkR78sIBecqoDt/JMnkrPKo7KBPXIhD
+         IYAygrxx7NVoVuwFI89HP/3AdEXtH6FOsEUPmTUQjdokF6QiKErc9H9QntpoZhlo0eWb
+         uBnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX77pFhd9316QSv2WsOZ2PmANtkIChPKvoyxN+0Mb6BUkp3kC9FNpP4yGU4gsLpchahVplTkXkuHws4DVYEcRxlg3lMPykR0moA4g==
+X-Gm-Message-State: AOJu0YxaBXPEk6xwn9P7vI/GHOs6Q93Y606FQLGlW6kKU8t2WrNCfFes
+	o3EvVm7L10fU4mQ82Gz1bygpbsjhiVjl2FAAfyuYeNSV6xgrA1zA4viSWutM6Z8=
+X-Google-Smtp-Source: AGHT+IHUr2+eigMQMyKiFV2SC/+LcUpbtIeuSXGg+vhEQqD67tJuIK6amWVCFT4RRO+CzEGYIGxtXA==
+X-Received: by 2002:a17:907:25c5:b0:a7a:acae:340b with SMTP id a640c23a62f3a-a7dc628bf8fmr256404766b.31.1722597372903;
+        Fri, 02 Aug 2024 04:16:12 -0700 (PDT)
+Received: from draig.lan ([85.9.250.243])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7dc9bcb19csm87224666b.42.2024.08.02.04.16.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Aug 2024 04:16:08 -0700 (PDT)
+Received: from draig (localhost [IPv6:::1])
+	by draig.lan (Postfix) with ESMTP id 91DEE5F8A9;
+	Fri,  2 Aug 2024 12:16:04 +0100 (BST)
+From: =?utf-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>,  Marc Zyngier <maz@kernel.org>,
+  Oliver Upton <oliver.upton@linux.dev>,  Tianrui Zhao
+ <zhaotianrui@loongson.cn>,  Bibo Mao <maobibo@loongson.cn>,  Huacai Chen
+ <chenhuacai@kernel.org>,  Michael Ellerman <mpe@ellerman.id.au>,  Anup
+ Patel <anup@brainfault.org>,  Paul Walmsley <paul.walmsley@sifive.com>,
+  Palmer Dabbelt <palmer@dabbelt.com>,  Albert Ou <aou@eecs.berkeley.edu>,
+  Christian Borntraeger <borntraeger@linux.ibm.com>,  Janosch Frank
+ <frankja@linux.ibm.com>,  Claudio Imbrenda <imbrenda@linux.ibm.com>,
+  kvm@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
+  kvmarm@lists.linux.dev,  loongarch@lists.linux.dev,
+  linux-mips@vger.kernel.org,  linuxppc-dev@lists.ozlabs.org,
+  kvm-riscv@lists.infradead.org,  linux-riscv@lists.infradead.org,
+  linux-kernel@vger.kernel.org,  David Matlack <dmatlack@google.com>,
+  David Stevens <stevensd@chromium.org>
+Subject: Re: [PATCH v12 11/84] KVM: Rename gfn_to_page_many_atomic() to
+ kvm_prefetch_pages()
+In-Reply-To: <20240726235234.228822-12-seanjc@google.com> (Sean
+	Christopherson's message of "Fri, 26 Jul 2024 16:51:20 -0700")
+References: <20240726235234.228822-1-seanjc@google.com>
+	<20240726235234.228822-12-seanjc@google.com>
+Date: Fri, 02 Aug 2024 12:16:04 +0100
+Message-ID: <87frrncgzv.fsf@draig.linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu,  1 Aug 2024 09:08:22 +0300
-Mike Rapoport <rppt@kernel.org> wrote:
+Sean Christopherson <seanjc@google.com> writes:
 
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> numa_cleanup_meminfo() moves blocks outside system RAM to
-> numa_reserved_meminfo and it uses 0 and PFN_PHYS(max_pfn) to determine
-> the memory boundaries.
-> 
-> Replace the memory range boundaries with more portable
-> memblock_start_of_DRAM() and memblock_end_of_DRAM().
-> 
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> Tested-by: Zi Yan <ziy@nvidia.com> # for x86_64 and arm64
-Makes sense
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Rename gfn_to_page_many_atomic() to kvm_prefetch_pages() to try and
+> communicate its true purpose, as the "atomic" aspect is essentially a
+> side effect of the fact that x86 uses the API while holding mmu_lock.
 
+It's never too late to start adding some kdoc annotations to a function
+and renaming a kvm_host API call seems like a good time to do it.
+
+> E.g. even if mmu_lock weren't held, KVM wouldn't want to fault-in pages,
+> as the goal is to opportunistically grab surrounding pages that have
+> already been accessed and/or dirtied by the host, and to do so quickly.
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->  mm/numa_memblks.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/numa_memblks.c b/mm/numa_memblks.c
-> index e97665a5e8ce..e4358ad92233 100644
-> --- a/mm/numa_memblks.c
-> +++ b/mm/numa_memblks.c
-> @@ -212,8 +212,8 @@ int __init numa_add_memblk(int nid, u64 start, u64 end)
->   */
->  int __init numa_cleanup_meminfo(struct numa_meminfo *mi)
->  {
-> -	const u64 low = 0;
-> -	const u64 high = PFN_PHYS(max_pfn);
-> +	const u64 low = memblock_start_of_DRAM();
-> +	const u64 high = memblock_end_of_DRAM();
->  	int i, j, k;
->  
->  	/* first, trim all entries */
+<snip>
 
+/**
+ * kvm_prefetch_pages() - opportunistically grab previously accessed pages
+ * @slot: which @kvm_memory_slot the pages are in
+ * @gfn: guest frame
+ * @pages: array to receives page pointers
+ * @nr_pages: number of pages
+ *
+ * Returns the number of pages actually mapped.
+ */
+
+?
+
+>=20=20
+> -int gfn_to_page_many_atomic(struct kvm_memory_slot *slot, gfn_t gfn,
+> -			    struct page **pages, int nr_pages)
+> +int kvm_prefetch_pages(struct kvm_memory_slot *slot, gfn_t gfn,
+> +		       struct page **pages, int nr_pages)
+>  {
+>  	unsigned long addr;
+>  	gfn_t entry =3D 0;
+> @@ -3075,7 +3075,7 @@ int gfn_to_page_many_atomic(struct kvm_memory_slot =
+*slot, gfn_t gfn,
+>=20=20
+>  	return get_user_pages_fast_only(addr, nr_pages, FOLL_WRITE, pages);
+>  }
+> -EXPORT_SYMBOL_GPL(gfn_to_page_many_atomic);
+> +EXPORT_SYMBOL_GPL(kvm_prefetch_pages);
+>=20=20
+>  /*
+>   * Do not use this helper unless you are absolutely certain the gfn _mus=
+t_ be
+
+--=20
+Alex Benn=C3=A9e
+Virtualisation Tech Lead @ Linaro
 
