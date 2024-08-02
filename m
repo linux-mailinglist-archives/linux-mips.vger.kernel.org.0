@@ -1,108 +1,119 @@
-Return-Path: <linux-mips+bounces-4674-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4676-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B6E8945C7A
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Aug 2024 12:52:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 100BB945CBD
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Aug 2024 13:03:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A9FF1C21E35
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Aug 2024 10:52:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BEA77285797
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Aug 2024 11:03:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B4201DF666;
-	Fri,  2 Aug 2024 10:52:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7E5F1E210B;
+	Fri,  2 Aug 2024 11:03:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gYn7FH84"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CD71DE874;
-	Fri,  2 Aug 2024 10:52:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCAAA1DF67B
+	for <linux-mips@vger.kernel.org>; Fri,  2 Aug 2024 11:03:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722595930; cv=none; b=hZ6h7gfuRtzvF3CUyj1/3VkH2FGz5z8fUPZXnyWQ7FK/n8EWuZn2GP4YvT7htmiHiJrTnuCl8w6/alb1jWrhXsB3hc1ROdFRSymdJ12oV0/JrAVACby5E8FoxSAgXtNSSSmhQ7zfuvP0T+aymC0PtLg9dd16/GEIQWWT4V653l4=
+	t=1722596597; cv=none; b=RsP0vfNqDYE5IlObpDX6/zK95gpKipsTTzVX+GJQZr7/xigSvXjDs6kP3MpnIrazI1yPFnQRTDCuG59WHx2QuWtzSTt9HhaL1WthcJ+fVha+d3emamQ2QOyjHgxpSwcCE95AlKDxIRYdLvh7tV2bffxF3s/hQgdw3e32L/kNkg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722595930; c=relaxed/simple;
-	bh=bAT/IJwOHrfw7n2LLlcEClCNvL38OyP9kJx0WhPDtjk=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ki844pFGcDm3VEDPL0/XjSWYWvCGJBnzGjSkop34RdkDa4eVo4jq563g39+csOEvnM2Otok9uCnLtLt5Qu/XXS49j+CGZeR97Qgi/VIu8l+UlHSDNvFVtrZznfGOwyi0oU2GvLflNFvPRRvH4tdqFbe5jSaVt97tETXeDuykoVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Wb2df5M0xz6K606;
-	Fri,  2 Aug 2024 18:49:26 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 1DD6D1400D9;
-	Fri,  2 Aug 2024 18:52:05 +0800 (CST)
-Received: from localhost (10.203.177.66) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 2 Aug
- 2024 11:52:04 +0100
-Date: Fri, 2 Aug 2024 11:52:03 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Mike Rapoport <rppt@kernel.org>
-CC: <linux-kernel@vger.kernel.org>, Alexander Gordeev
-	<agordeev@linux.ibm.com>, Andreas Larsson <andreas@gaisler.com>, "Andrew
- Morton" <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, "Borislav
- Petkov" <bp@alien8.de>, Catalin Marinas <catalin.marinas@arm.com>, Christophe
- Leroy <christophe.leroy@csgroup.eu>, Dan Williams <dan.j.williams@intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, David Hildenbrand
-	<david@redhat.com>, "David S. Miller" <davem@davemloft.net>, Davidlohr Bueso
-	<dave@stgolabs.net>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, Heiko
- Carstens <hca@linux.ibm.com>, Huacai Chen <chenhuacai@kernel.org>, Ingo
- Molnar <mingo@redhat.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>, "John Paul
- Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>, Jonathan Corbet
-	<corbet@lwn.net>, Michael Ellerman <mpe@ellerman.id.au>, Palmer Dabbelt
-	<palmer@dabbelt.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring
-	<robh@kernel.org>, Samuel Holland <samuel.holland@sifive.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner
-	<tglx@linutronix.de>, "Vasily Gorbik" <gor@linux.ibm.com>, Will Deacon
-	<will@kernel.org>, Zi Yan <ziy@nvidia.com>, <devicetree@vger.kernel.org>,
-	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-cxl@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-mips@vger.kernel.org>,
-	<linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
-	<linux-s390@vger.kernel.org>, <linux-sh@vger.kernel.org>,
-	<linuxppc-dev@lists.ozlabs.org>, <loongarch@lists.linux.dev>,
-	<nvdimm@lists.linux.dev>, <sparclinux@vger.kernel.org>, <x86@kernel.org>
-Subject: Re: [PATCH v3 18/26] mm: move numa_distance and related code from
- x86 to numa_memblks
-Message-ID: <20240802115203.0000062a@Huawei.com>
-In-Reply-To: <20240801060826.559858-19-rppt@kernel.org>
-References: <20240801060826.559858-1-rppt@kernel.org>
-	<20240801060826.559858-19-rppt@kernel.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1722596597; c=relaxed/simple;
+	bh=f7XccJFQ+QycCZFwHexROwL6oGOM5nxC8z9cehuDsO8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=j6hKqK6Xn6Pdg68VUtS42Jo4yZOlSX7k7i5nTjp/G62Zjhss4D6Bxv8ovLEfpjfpJp6StrSK2pZBY0VsFZD/YRYmN8m+n/MZD/s9kiW91I3OunDzi95TR0h+U2GikxvjZwZYLp6D8rggZlxy5W+VHmIpW8zhC0VNN6kRRbLuj68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gYn7FH84; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a7abe5aa9d5so912059566b.1
+        for <linux-mips@vger.kernel.org>; Fri, 02 Aug 2024 04:03:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1722596593; x=1723201393; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f7XccJFQ+QycCZFwHexROwL6oGOM5nxC8z9cehuDsO8=;
+        b=gYn7FH843NJAf4QDXl8odZop6k2I5+dh+FqYxirPuCKtEz4R0FxPXoaYfipO8vpst2
+         MXmDeZ3fKtc88eSGc33VW25WevG+7/u7PNIJjgFQc3CLhspa1y/kl75Vl4NHBIp3JNWe
+         U24wKf9Km5OCrQE13K1FBuAZOVd/xPdAksG+QA+gg3c/d8SeDda/WVTIO59qeChyFfAN
+         OwtFzfj0o6fzHBTEzecDPlmO1J0YsOMvTINTpPPP3Lt2UpZuebsd6Ckzj3dpRYPG4o2e
+         mErnONmBKNV79TB5IWueRsD0TQTZcO8j/FsVSOaxDMD3teaqIJaDuF0Ajyyb7OE/a6mv
+         T0qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722596593; x=1723201393;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=f7XccJFQ+QycCZFwHexROwL6oGOM5nxC8z9cehuDsO8=;
+        b=CV405T7Rf+RnzpbMB4Uex75+JzI3HxyMxqUxPh/pN/kxIu+iYljPqPBnM1WKYOiTex
+         af/vnPTPsAFmMwMQfjnXkagBYPTEgqHJxkxl+8gxthGWePD/4bX0fyht5AwL2nhQ6UqG
+         UboZowknJA+R/1cyZumHWqJ9R3s2uEerCPZiMjBtIiJTr1rCd6LgjhhPOvtGEGH2Ptzo
+         TQUlxkro0wZrqiX3tflT+NyywibuDnj4kQ7u920I+7PX/F1VBK71eUCCydOhopZyIx8U
+         Eldl7jEpQbTvvnXqWw5PGWR/Pt7sYXEPf42jb2NkBR8ltbe5z3b2shAlyO4QLo0WigJG
+         VOgw==
+X-Forwarded-Encrypted: i=1; AJvYcCXgosdL7AdjQ+DNAUiHdyrm6XgMEfoG/HXXnbkmHV34ipHTylUALkOUQq+k0X1OPBy2A5cmTZ1WBi6SNK32eH9JkSzUnFPtAvD90Q==
+X-Gm-Message-State: AOJu0YyB1HuwIE4BxPvX13j0IzYCziLszzKwAgU6P9iM4U7HHoC9inUL
+	MuKohAGLKUsS1rM8IwzAu51eN+pkh9a8XtNLzh71A1WYyc/JtNOKlk5hIUmcSHk=
+X-Google-Smtp-Source: AGHT+IFGQonexgpZjGUwl51oIYY4w2W/jqJ1zQyOCpk3kJFGs8T5j8dynyIwmzMmmRUPMHGi6NWZlQ==
+X-Received: by 2002:a17:907:7f24:b0:a7d:a29e:5c41 with SMTP id a640c23a62f3a-a7dc5029a1dmr251865166b.40.1722596592689;
+        Fri, 02 Aug 2024 04:03:12 -0700 (PDT)
+Received: from draig.lan ([85.9.250.243])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7dc9e8676fsm84603966b.164.2024.08.02.04.03.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Aug 2024 04:03:12 -0700 (PDT)
+Received: from draig (localhost [IPv6:::1])
+	by draig.lan (Postfix) with ESMTP id 24FEC5F8A9;
+	Fri,  2 Aug 2024 12:03:11 +0100 (BST)
+From: =?utf-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>,  Marc Zyngier <maz@kernel.org>,
+  Oliver Upton <oliver.upton@linux.dev>,  Tianrui Zhao
+ <zhaotianrui@loongson.cn>,  Bibo Mao <maobibo@loongson.cn>,  Huacai Chen
+ <chenhuacai@kernel.org>,  Michael Ellerman <mpe@ellerman.id.au>,  Anup
+ Patel <anup@brainfault.org>,  Paul Walmsley <paul.walmsley@sifive.com>,
+  Palmer Dabbelt <palmer@dabbelt.com>,  Albert Ou <aou@eecs.berkeley.edu>,
+  Christian Borntraeger <borntraeger@linux.ibm.com>,  Janosch Frank
+ <frankja@linux.ibm.com>,  Claudio Imbrenda <imbrenda@linux.ibm.com>,
+  kvm@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
+  kvmarm@lists.linux.dev,  loongarch@lists.linux.dev,
+  linux-mips@vger.kernel.org,  linuxppc-dev@lists.ozlabs.org,
+  kvm-riscv@lists.infradead.org,  linux-riscv@lists.infradead.org,
+  linux-kernel@vger.kernel.org,  David Matlack <dmatlack@google.com>,
+  David Stevens <stevensd@chromium.org>
+Subject: Re: [PATCH v12 83/84] KVM: Drop APIs that manipulate "struct page"
+ via pfns
+In-Reply-To: <20240726235234.228822-84-seanjc@google.com> (Sean
+	Christopherson's message of "Fri, 26 Jul 2024 16:52:32 -0700")
+References: <20240726235234.228822-1-seanjc@google.com>
+	<20240726235234.228822-84-seanjc@google.com>
+Date: Fri, 02 Aug 2024 12:03:11 +0100
+Message-ID: <87jzgzchlc.fsf@draig.linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu,  1 Aug 2024 09:08:18 +0300
-Mike Rapoport <rppt@kernel.org> wrote:
+Sean Christopherson <seanjc@google.com> writes:
 
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> Move code dealing with numa_distance array from arch/x86 to
-> mm/numa_memblks.c
-> 
-> This code will be later reused by arch_numa.
-> 
-> No functional changes.
-> 
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> Tested-by: Zi Yan <ziy@nvidia.com> # for x86_64 and arm64
+> Remove all kvm_{release,set}_pfn_*() APIs not that all users are gone.
 
-As you say, simple code move and I'll cope with the confusion
-of stuff that isn't numa_memblk in that file given the
-convenience.
+now?
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Otherwise:
+
+Reviewed-by: Alex Benn=C3=A9e <alex.bennee@linaro.org>
+
+--=20
+Alex Benn=C3=A9e
+Virtualisation Tech Lead @ Linaro
 
