@@ -1,231 +1,162 @@
-Return-Path: <linux-mips+bounces-4694-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4695-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC1FD946F7F
-	for <lists+linux-mips@lfdr.de>; Sun,  4 Aug 2024 17:11:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C61A94747B
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2024 06:59:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6894B2811B7
-	for <lists+linux-mips@lfdr.de>; Sun,  4 Aug 2024 15:11:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B64EB20C9C
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2024 04:59:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BBC769DFF;
-	Sun,  4 Aug 2024 15:11:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3D3413F43B;
+	Mon,  5 Aug 2024 04:59:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mgTRFYPb"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61EF93FBB2;
-	Sun,  4 Aug 2024 15:11:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EBB213D50E;
+	Mon,  5 Aug 2024 04:59:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722784281; cv=none; b=ASDArnY6S9I5wRRXcvS9LjdrTEquWWmwrrG2ZP3NWK17KForUMumfS+DtFPtbjIMZ8KLDpNy1OZY65lZGjFNyeIMMbV1RVV2EQKt1W7H1CswxaFrvcDOLRAnsHaogpqM7ux1H4friEO0d1I13NYYqOdYlfnE/agp1hSwl56pYCo=
+	t=1722833990; cv=none; b=GxQgNTQPueO2RADyvq7fNuWxwoJLdHlquejQ0KB1wqhKHls8+pzGelUBQECDnP22LUjj5KmO31sh/LGD/MGRQnno48+Q4ArR13GDoEpsKtK7CsDza0YaLSfqPoybtXuhEXL0IuraAsGCJqyHgzMkMW4ggTTDtDxLy1mmKwrNV8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722784281; c=relaxed/simple;
-	bh=iGfh6DBKAHksxUBLVKs70Sh77nshqua2Pd6TDFL2Kes=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tOIXHeHdyvH0HjnivXLxFORgs6eR8Vtt4hWMnbV4jxidlhiBP6wv1EPhT0kt+A7jeCSgJqzDjTRUdbPCpGki0luGuvcl8FCpgY0gZMKuesTpZMA/veix9pFHMgG1kcmzSQNqi3jK5cWRtPSQLbPFNr8fgnkYDPO7ZLcdGZ/4iMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4WcNJB6tQWz6K5Vy;
-	Sun,  4 Aug 2024 23:08:58 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id B33CF140A35;
-	Sun,  4 Aug 2024 23:11:09 +0800 (CST)
-Received: from localhost (10.195.244.131) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Sun, 4 Aug
- 2024 16:11:08 +0100
-Date: Sun, 4 Aug 2024 16:11:19 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Mike Rapoport <rppt@kernel.org>
-CC: Andrew Morton <akpm@linux-foundation.org>, <linux-kernel@vger.kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>, Andreas Larsson
-	<andreas@gaisler.com>, Arnd Bergmann <arnd@arndb.de>, Borislav Petkov
-	<bp@alien8.de>, Catalin Marinas <catalin.marinas@arm.com>, Christophe Leroy
-	<christophe.leroy@csgroup.eu>, Dan Williams <dan.j.williams@intel.com>, Dave
- Hansen <dave.hansen@linux.intel.com>, David Hildenbrand <david@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>, "Davidlohr Bueso"
-	<dave@stgolabs.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Heiko
- Carstens <hca@linux.ibm.com>, Huacai Chen <chenhuacai@kernel.org>, Ingo
- Molnar <mingo@redhat.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>, "John Paul
- Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>, Jonathan Corbet
-	<corbet@lwn.net>, Michael Ellerman <mpe@ellerman.id.au>, Palmer Dabbelt
-	<palmer@dabbelt.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring
-	<robh@kernel.org>, Samuel Holland <samuel.holland@sifive.com>, "Thomas
- Bogendoerfer" <tsbogend@alpha.franken.de>, Thomas Gleixner
-	<tglx@linutronix.de>, Vasily Gorbik <gor@linux.ibm.com>, Will Deacon
-	<will@kernel.org>, Zi Yan <ziy@nvidia.com>, <devicetree@vger.kernel.org>,
-	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-cxl@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-mips@vger.kernel.org>,
-	<linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
-	<linux-s390@vger.kernel.org>, <linux-sh@vger.kernel.org>,
-	<linuxppc-dev@lists.ozlabs.org>, <loongarch@lists.linux.dev>,
-	<nvdimm@lists.linux.dev>, <sparclinux@vger.kernel.org>, <x86@kernel.org>
-Subject: Re: [PATCH v3 07/26] mm: drop CONFIG_HAVE_ARCH_NODEDATA_EXTENSION
-Message-ID: <20240804161119.00003a02@Huawei.com>
-In-Reply-To: <Zq8sn5iD1iOmYrss@kernel.org>
-References: <20240801060826.559858-1-rppt@kernel.org>
-	<20240801060826.559858-8-rppt@kernel.org>
-	<20240802104922.000051a0@Huawei.com>
-	<20240803115813.809f808f1afbe9f9feaae129@linux-foundation.org>
-	<Zq8sn5iD1iOmYrss@kernel.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1722833990; c=relaxed/simple;
+	bh=OZ0x4CPR21u7kQqc2YahNoI50X1qL/GI/Bd9yBTu6G0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Uvw6M51pWoD4FZ5BTfSHeQO5vh0InfRyY+zDERN0+IEZ6BkqI0TSkmzAxUIUsxU/vDNHVAQrl8ZK8zZxsTU4VsX1PPJgFApW0EUi6NQugQgUqf/CISFUxz6e/ORHvHhGTtZUN7SiWliXoP4gVKL85phGzGJ1M21ZsbVQZUYBNhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mgTRFYPb; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722833989; x=1754369989;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OZ0x4CPR21u7kQqc2YahNoI50X1qL/GI/Bd9yBTu6G0=;
+  b=mgTRFYPbav14qmvktAs94Frd8zskvi4DEVW3ickHeMHkQxH1OfLAG70M
+   Pau+cIeebZGL7bltq74wW4eXEWIxNvmVqWnCv9Bk205LZtr8i96jVeogJ
+   j2fOpAGu9xdvgCsuD3VbfhPsZc+SXyMPjq6kmzYrOtd/4C4tLLOwBIxXb
+   AwRtccvLFMQtAYbMNJOb26EiacrsFkL/xnbrDCowpqIWL6EZ2jdf8YE8l
+   6Vp4E/dbAntHpy01bKJSFAVL2KIhfN7UHntrinvFLz0MnLWR+IaZRylYd
+   yff47qiwlnBZ1XTD0MwuSPffAueWYCKi7myqxUM8SRfwhLZLTybrjN+in
+   A==;
+X-CSE-ConnectionGUID: fEAFV6nZTbaZQHaAXN+eNA==
+X-CSE-MsgGUID: FIQe1zL2Rki1BeZUGajgoA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11154"; a="20930651"
+X-IronPort-AV: E=Sophos;i="6.09,263,1716274800"; 
+   d="scan'208";a="20930651"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2024 21:59:48 -0700
+X-CSE-ConnectionGUID: Eye9zMIKRuipOV9VFKj7FQ==
+X-CSE-MsgGUID: AAUJR3eJT9OkleRqwjSRGQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,263,1716274800"; 
+   d="scan'208";a="86988225"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 04 Aug 2024 21:59:45 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sapos-0001js-1a;
+	Mon, 05 Aug 2024 04:59:42 +0000
+Date: Mon, 5 Aug 2024 12:58:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>,
+	Keguang Zhang <keguang.zhang@gmail.com>,
+	Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-mips@vger.kernel.org,
+	dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH v11 2/2] dmaengine: Loongson1: Add Loongson-1 APB DMA
+ driver
+Message-ID: <202408051242.8kGK28W7-lkp@intel.com>
+References: <20240802-loongson1-dma-v11-2-85392357d4e0@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240802-loongson1-dma-v11-2-85392357d4e0@gmail.com>
 
-On Sun, 4 Aug 2024 10:24:15 +0300
-Mike Rapoport <rppt@kernel.org> wrote:
+Hi Keguang,
 
-> On Sat, Aug 03, 2024 at 11:58:13AM -0700, Andrew Morton wrote:
-> > On Fri, 2 Aug 2024 10:49:22 +0100 Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
-> >   
-> > > > --- a/mm/mm_init.c
-> > > > +++ b/mm/mm_init.c
-> > > > @@ -1838,11 +1838,10 @@ void __init free_area_init(unsigned long *max_zone_pfn)
-> > > >  
-> > > >  		if (!node_online(nid)) {
-> > > >  			/* Allocator not initialized yet */
-> > > > -			pgdat = arch_alloc_nodedata(nid);
-> > > > +			pgdat = memblock_alloc(sizeof(*pgdat), SMP_CACHE_BYTES);
-> > > >  			if (!pgdat)
-> > > >  				panic("Cannot allocate %zuB for node %d.\n",
-> > > >  				       sizeof(*pgdat), nid);
-> > > > -			arch_refresh_nodedata(nid, pgdat);  
-> > > 
-> > > This allocates pgdat but never sets node_data[nid] to it
-> > > and promptly leaks it on the line below. 
-> > > 
-> > > Just to sanity check this I spun up a qemu machine with no memory
-> > > initially present on some nodes and it went boom as you'd expect.
-> > > 
-> > > I tested with addition of
-> > > 			NODE_DATA(nid) = pgdat;
-> > > and it all seems to work as expected.  
-> > 
-> > Thanks, I added that.  It blew up on x86_64 allnoconfig because
-> > node_data[] (and hence NODE_DATA()) isn't an lvalue when CONFIG_NUMA=n.
-> > 
-> > I'll put some #ifdef CONFIG_NUMAs in there for now but
-> > 
-> > a) NODE_DATA() is upper-case. Implies "constant".  Shouldn't be assigned to.
-> > 
-> > b) NODE_DATA() should be non-lvalue when CONFIG_NUMA=y also.  But no,
-> >    we insist on implementing things in cpp instead of in C.  
-> 
-> This looks like a candidate for a separate tree-wide cleanup.
->  
-> > c) In fact assigning to anything which ends in "()" is nuts.  Please
-> >    clean up my tempfix.
-> > 
-> > c) Mike, generally I'm wondering if there's a bunch of code here
-> >    which isn't needed on CONFIG_NUMA=n.  Please check all of this for
-> >    unneeded bloatiness.  
-> 
-> I believe the patch addresses your concerns, just with this the commit log
-> needs update. Instead of 
-> 
->     Replace the call to arch_alloc_nodedata() in free_area_init() with
->     memblock_alloc(), remove arch_refresh_nodedata() and cleanup
->     include/linux/memory_hotplug.h from the associated ifdefery.
-> 
-> it should be
-> 
->     Replace the call to arch_alloc_nodedata() in free_area_init() with a
->     new helper alloc_offline_node_data(), remove arch_refresh_nodedata()
->     and cleanup include/linux/memory_hotplug.h from the associated
->     ifdefery.
-> 
-> I can send an updated patch if you prefer.
-This solution looks good to me - except for a Freudian typo that means it won't
-compile :)
+kernel test robot noticed the following build warnings:
 
-Jonathan
+[auto build test WARNING on 048d8cb65cde9fe7534eb4440bcfddcf406bb49c]
 
-> 
-> diff --git a/include/linux/numa.h b/include/linux/numa.h
-> index 3b12d8ca0afd..5a749fd67f39 100644
-> --- a/include/linux/numa.h
-> +++ b/include/linux/numa.h
-> @@ -34,6 +34,7 @@ extern struct pglist_data *node_data[];
->  #define NODE_DATA(nid)	(node_data[nid])
->  
->  void __init alloc_node_data(int nid);
-> +void __init alloc_offline_node_data(int nit);
->  
->  /* Generic implementation available */
->  int numa_nearest_node(int node, unsigned int state);
-> @@ -62,6 +63,8 @@ static inline int phys_to_target_node(u64 start)
->  {
->  	return 0;
->  }
-> +
-> +static inline void alloc_offline_node_data(int nit) {}
-nid
->  #endif
->  
->  #define numa_map_to_online_node(node) numa_nearest_node(node, N_ONLINE)
-> diff --git a/mm/mm_init.c b/mm/mm_init.c
-> index bcc2f2dd8021..2785be04e7bb 100644
-> --- a/mm/mm_init.c
-> +++ b/mm/mm_init.c
-> @@ -1836,13 +1836,8 @@ void __init free_area_init(unsigned long *max_zone_pfn)
->  	for_each_node(nid) {
->  		pg_data_t *pgdat;
->  
-> -		if (!node_online(nid)) {
-> -			/* Allocator not initialized yet */
-> -			pgdat = memblock_alloc(sizeof(*pgdat), SMP_CACHE_BYTES);
-> -			if (!pgdat)
-> -				panic("Cannot allocate %zuB for node %d.\n",
-> -				       sizeof(*pgdat), nid);
-> -		}
-> +		if (!node_online(nid))
-> +			alloc_offline_node_data(nid);
->  
->  		pgdat = NODE_DATA(nid);
->  		free_area_init_node(nid);
-> diff --git a/mm/numa.c b/mm/numa.c
-> index da27eb151dc5..07e486a977c7 100644
-> --- a/mm/numa.c
-> +++ b/mm/numa.c
-> @@ -34,6 +34,18 @@ void __init alloc_node_data(int nid)
->  	memset(NODE_DATA(nid), 0, sizeof(pg_data_t));
->  }
->  
-> +void __init alloc_offline_node_data(int nit)
+url:    https://github.com/intel-lab-lkp/linux/commits/Keguang-Zhang-via-B4-Relay/dt-bindings-dma-Add-Loongson-1-APB-DMA/20240803-111220
+base:   048d8cb65cde9fe7534eb4440bcfddcf406bb49c
+patch link:    https://lore.kernel.org/r/20240802-loongson1-dma-v11-2-85392357d4e0%40gmail.com
+patch subject: [PATCH v11 2/2] dmaengine: Loongson1: Add Loongson-1 APB DMA driver
+config: sparc64-randconfig-r063-20240804 (https://download.01.org/0day-ci/archive/20240805/202408051242.8kGK28W7-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 14.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240805/202408051242.8kGK28W7-lkp@intel.com/reproduce)
 
-nid
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408051242.8kGK28W7-lkp@intel.com/
 
-> +{
-> +	pg_data_t *pgdat;
-> +
-> +	pgdat = memblock_alloc(sizeof(*pgdat), SMP_CACHE_BYTES);
-> +	if (!pgdat)
-> +		panic("Cannot allocate %zuB for node %d.\n",
-> +		      sizeof(*pgdat), nid);
-> +
-> +	node_data[nid] = pgdat;
-> +}
-> +
->  /* Stub functions: */
->  
->  #ifndef memory_add_physaddr_to_nid
-> 
->  
-> 
+All warnings (new ones prefixed by >>):
 
+   drivers/dma/loongson1-apb-dma.c: In function 'ls1x_dma_chan_probe':
+>> drivers/dma/loongson1-apb-dma.c:520:34: warning: '%u' directive writing between 1 and 10 bytes into a region of size 2 [-Wformat-overflow=]
+     520 |         sprintf(pdev_irqname, "ch%u", chan_id);
+         |                                  ^~
+   drivers/dma/loongson1-apb-dma.c:520:31: note: directive argument in the range [0, 2147483646]
+     520 |         sprintf(pdev_irqname, "ch%u", chan_id);
+         |                               ^~~~~~
+   drivers/dma/loongson1-apb-dma.c:520:9: note: 'sprintf' output between 4 and 13 bytes into a destination of size 4
+     520 |         sprintf(pdev_irqname, "ch%u", chan_id);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +520 drivers/dma/loongson1-apb-dma.c
+
+   510	
+   511	static int ls1x_dma_chan_probe(struct platform_device *pdev,
+   512				       struct ls1x_dma *dma, int chan_id)
+   513	{
+   514		struct device *dev = &pdev->dev;
+   515		struct ls1x_dma_chan *chan = &dma->chan[chan_id];
+   516		char pdev_irqname[4];
+   517		char *irqname;
+   518		int ret;
+   519	
+ > 520		sprintf(pdev_irqname, "ch%u", chan_id);
+   521		chan->irq = platform_get_irq_byname(pdev, pdev_irqname);
+   522		if (chan->irq < 0)
+   523			return -ENODEV;
+   524	
+   525		irqname = devm_kasprintf(dev, GFP_KERNEL, "%s:%s",
+   526					 dev_name(dev), pdev_irqname);
+   527		if (!irqname)
+   528			return -ENOMEM;
+   529	
+   530		ret = devm_request_irq(dev, chan->irq, ls1x_dma_irq_handler,
+   531				       IRQF_SHARED, irqname, chan);
+   532		if (ret)
+   533			return dev_err_probe(dev, ret, "failed to request IRQ %u\n",
+   534					     chan->irq);
+   535	
+   536		chan->reg_base = dma->reg_base;
+   537		chan->vchan.desc_free = ls1x_dma_free_desc;
+   538		vchan_init(&chan->vchan, &dma->ddev);
+   539		dev_info(dev, "%s (irq %d) initialized\n", pdev_irqname, chan->irq);
+   540	
+   541		return 0;
+   542	}
+   543	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
