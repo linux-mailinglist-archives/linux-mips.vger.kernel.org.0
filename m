@@ -1,314 +1,144 @@
-Return-Path: <linux-mips+bounces-4723-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4725-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5851D9484BC
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2024 23:30:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9193F948549
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2024 00:09:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF40B280A62
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2024 21:30:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 471841F2355C
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2024 22:09:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE220177982;
-	Mon,  5 Aug 2024 21:26:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4696116D9DC;
+	Mon,  5 Aug 2024 22:09:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AHHJcXQc"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="n2S1Pfro"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 176FF178373
-	for <linux-mips@vger.kernel.org>; Mon,  5 Aug 2024 21:26:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B926816D4C1
+	for <linux-mips@vger.kernel.org>; Mon,  5 Aug 2024 22:09:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722893172; cv=none; b=oZd3C9PLqsJtxr/skKetziVp2tImFc0bBmaoWoOnpaFwGJOhl2K5UL5txZ4v+4Q3RhcQzz+M8J0qO3xPN8C7JiGVNFR2PePEgMCcFJqALGAMPKoivdntF0VN3YnlD0e4QqdYkm+KfFUK/qtWQc38vlNLsqGI8CuEhDBokU6YsCs=
+	t=1722895765; cv=none; b=H3WHc5+f8d9bKDeifXiTINVEBjKha/HxhFGfk7OxEcLv+Ly0h25pkbP8EKfbUPt2eYJSsKEXtvQPq0FlmHbMwHIwomiOM2jfK74ay0TxKM7nGNUs1VHzSAMxU+4noWMl2ocuU86h0orl6HteFLmDGQnaeKv0FmtJFNbE73tpdp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722893172; c=relaxed/simple;
-	bh=wF0fKAubblsstfScosCTiCqfX0FmE1CGehpsgu/r8P4=;
+	s=arc-20240116; t=1722895765; c=relaxed/simple;
+	bh=dmDvoV7DR66fW1rp/kKa2yAHHnKdcTd2T9VoWrRsnCs=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=kzQuYvp+jfhUUJDYtq54vUTihZQxCRyAEo9Z/HvQLyoVmQZNyb1rM1OZKOPH8ZxAu+YLuKSQPE+WEkAvNPRupv505wkhLQ+gU1CE0a/QlhLezQaWKllz50hOQHJn1djC5PvScPeSPPgQNTh5wN6Afth0U0KRFY3xmaXCNtI46nM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AHHJcXQc; arc=none smtp.client-ip=209.85.219.201
+	 To:Cc:Content-Type; b=tbAKN6W1UyfHSrRaUJ/M+55Tl/LQcij+9uqU365H7K0FmoI8Of4pkZXHb4x3yKesJdydzCG9z6GjFtgcmUkn928UaG9C7b15dQLDbIW8xECWjV9Pk8ekRyrN8tD0AwvLPNcV1sN4tS3TaOw90qJZW2hISSnfml2nUQA2XDpeBSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=n2S1Pfro; arc=none smtp.client-ip=209.85.210.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e03b3f48c65so17893505276.0
-        for <linux-mips@vger.kernel.org>; Mon, 05 Aug 2024 14:26:08 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-70f0a00eb16so4570572b3a.1
+        for <linux-mips@vger.kernel.org>; Mon, 05 Aug 2024 15:09:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722893165; x=1723497965; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1722895763; x=1723500563; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cxnbg2gRYn4LeOU4CWxMJeU8Zw6y6eLxEpOcLvaAmUQ=;
-        b=AHHJcXQcfzYRr84xfpL23YyO8y0aBq9VOM6rpm7OC60LGpAK5ojftsG7fJe//dTGIk
-         1NPtd8MLF0lrf74DFM8M9xIBX/v74C+7bOcYWjsNdNhd9VFvpAHex+oL+02WhBBx9mZl
-         K3/3Gw7rQoENakVqn2wIMct34acL6EtCAdK9ZgtaEne6jhltkHpiT/vAc4WHVxRPn14p
-         2t//0xtNyUlSjN/cBkDaA7NRA1x+4mZU3QTQK6aTq1zB4XMT1gboV/O29A5CRhly0CUi
-         VtjNdrHi4dh8vUAnVgOkGtlxaDE7DFWVt4BYreM5Atml6n4tBLWkWGZPHESUmNBuEHw6
-         kbhA==
+        bh=C2PiU8MTrEuvmn4oJRZEcNoPreaY/lLc5L+V0JuLroE=;
+        b=n2S1Pfroj5GXc+AKmy97SqSqzhAatmtf6hSTbALfmWnl9FxJKmiV1UCBwSGSfwf8oN
+         Zi9T6k66nDLL4H6wo9mFdf57vAhKbwYdnNHWTuMWYQz21ys2LETaeQ0wnqzAPVU7HXGk
+         oGCOEcmJjmjnLRDJKSQF6RuoaOt5VvLien3b4rVqpBmK0hnKXY9XBzeN/7q8f6RYAf9L
+         JKIzyUcKEZ5OJMcnhpRplUpEaJNMON8BUmhP126Sqr2k9Asmac+7h0ZA+vLQSDy8U9R2
+         meRUTX0uq/MK/7IxffkTHph07HsMKzoEgpQ1FpV3OB8yL2kT5AzL67wlxHwLdPXoG8Qy
+         cujQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722893165; x=1723497965;
+        d=1e100.net; s=20230601; t=1722895763; x=1723500563;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cxnbg2gRYn4LeOU4CWxMJeU8Zw6y6eLxEpOcLvaAmUQ=;
-        b=p/sa6hrRrAy55gUqmTaBolLF2lQ0NCvhwZJnHnx+68aF08/O33YjR1yvP32ElVWJGc
-         uczN6yqDLp2VF7o+6YJY2dbgHISypRKtNJ608sgpwWNuZCVU2Ogv9wfxd4gRUNz2ejC8
-         UBLI1yNoadWbTVXPxSGgz2rY8Sxu5jZ62Gb1FwwLFKJLcrcIidBQ0VGkvV1DJ8y3U8sV
-         6IkF7S3mPNAVoGGreTpBA7uh9raQrbn+n0Y12MQKpaLNmG6OT9ezGvvzWDDrMpkvL5w7
-         V5wT2P7/smvO+n9ZVKOF/SFoCf3ZDIuFChPZsY1I4Ana65i9rjuqBtuOPjh36uJQ/x4e
-         9yKw==
-X-Forwarded-Encrypted: i=1; AJvYcCV0lsqGfwdB/pFYQr7EQlOneXk4EKveypHw8+Zz+9C8/skN4c7BAehgsKZ5nPFYZ1O4Y3wfvNuJqL7Wr6sVR8gQTFTxuE5pHHFZyA==
-X-Gm-Message-State: AOJu0Yz6Q5nPWx7WkfolJNpNY/EXbtx6zTeGb29d5z6NqqIg+yrPFCb5
-	E6/iOy3xSV6tTWM67piEe4iJ7xq+R98mLkggX/l5hwNs5EX0I5FZz0TYraNlVPZAtjUrq5fRYQu
-	PhkWevnrc/TJQjcm+mo2eAA==
-X-Google-Smtp-Source: AGHT+IEkV1ijZAyYSziEgd67bBu7N/m6t8dv5aDI4jnUJKJrhZLw43w9JbplBfPvmPwI4UYOjtdz9TFDbsSiP2Xw0w==
-X-Received: from almasrymina.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4bc5])
- (user=almasrymina job=sendgmr) by 2002:a05:6902:2483:b0:e03:a0b2:f73 with
- SMTP id 3f1490d57ef6-e0bde2f3cdbmr108795276.6.1722893164768; Mon, 05 Aug 2024
- 14:26:04 -0700 (PDT)
-Date: Mon,  5 Aug 2024 21:25:27 +0000
-In-Reply-To: <20240805212536.2172174-1-almasrymina@google.com>
+        bh=C2PiU8MTrEuvmn4oJRZEcNoPreaY/lLc5L+V0JuLroE=;
+        b=f3Tpl6182LNWV8wv6OpjODkuzqMIKv3rlKPdwbkkWTTJQ+VwoqSH+0q/MeJ9c62a+Z
+         SJik5+Vdv3mcmBcjCOupTPFWkIDCEDv2S7dgNVSiH2JAHYxZSx4QuNsmn52SXNHqf2Fo
+         LvKBZD0K18Hjo7GnbZHmJ/YkSvpmxBoG8LTH/3NBYk9Ta0yrjnwF5Ufg4XE4x43aaBfP
+         KFZNz6CyM39PrNK8rX+qUqa9WOMcw1SfSKqYraTmyOBVFQrbu787aZvslhf95HCFxU13
+         XEVu20ljBSwfc25tXd6UYlqnxov4Ka4Daw9OWibh+3v/Tmk7iSjLI+xnUOLf8eg5t/eg
+         BjpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVRvq6mLjPSqeGtCws0mIno73p6EMr+k9i4slv20tmYkh1pIj5Y65/L0DYycvKHZiP4xQ0Mjf/FY66yq8ewj0V4k3w13C1nNxZuvQ==
+X-Gm-Message-State: AOJu0Yx9s7xZ26EoNK10PMbBOrmOBzdhjojw+SQI+FvTdo5V7QndXZLx
+	Bkwy15DGWDAfa8XTVU9dIH6VwsPdVt5fcGVMFJO7aebDS5Qjf+/RwJO+pFCbwd9mhhp3w3CR3cr
+	Sgg==
+X-Google-Smtp-Source: AGHT+IFHGqnQ2aZELEsNF/YUFUu/OdaSqANvJ2o5+KNT08fnEczrxRkzi5g08NacDnyiiIzp3YSr6oxKzK4=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:6f0e:b0:710:4d08:e41f with SMTP id
+ d2e1a72fcca58-7106d08296emr87588b3a.4.1722895762937; Mon, 05 Aug 2024
+ 15:09:22 -0700 (PDT)
+Date: Mon, 5 Aug 2024 15:09:21 -0700
+In-Reply-To: <yq5a5xsftna9.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20240805212536.2172174-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.46.0.rc2.264.g509ed76dc8-goog
-Message-ID: <20240805212536.2172174-15-almasrymina@google.com>
-Subject: [PATCH net-next v18 14/14] netdev: add dmabuf introspection
-From: Mina Almasry <almasrymina@google.com>
-To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org
-Cc: Mina Almasry <almasrymina@google.com>, Donald Hunter <donald.hunter@gmail.com>, 
-	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, 
-	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
-	Christoph Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-Content-Type: text/plain; charset="UTF-8"
+References: <20240726235234.228822-1-seanjc@google.com> <20240726235234.228822-3-seanjc@google.com>
+ <yq5aikwku25o.fsf@kernel.org> <ZqvNekQAjs-SN-se@google.com> <yq5a5xsftna9.fsf@kernel.org>
+Message-ID: <ZrFNkSU4-0Hli7JC@google.com>
+Subject: Re: [PATCH v12 02/84] KVM: arm64: Disallow copying MTE to guest
+ memory while KVM is dirty logging
+From: Sean Christopherson <seanjc@google.com>
+To: "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
+	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Anup Patel <anup@brainfault.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	David Matlack <dmatlack@google.com>, David Stevens <stevensd@chromium.org>
+Content-Type: text/plain; charset="us-ascii"
 
-Add dmabuf information to page_pool stats:
+On Mon, Aug 05, 2024, Aneesh Kumar K.V wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> 
+> > On Thu, Aug 01, 2024, Aneesh Kumar K.V wrote:
+> >> Sean Christopherson <seanjc@google.com> writes:
+> >> 
+> >> > Disallow copying MTE tags to guest memory while KVM is dirty logging, as
+> >> > writing guest memory without marking the gfn as dirty in the memslot could
+> >> > result in userspace failing to migrate the updated page.  Ideally (maybe?),
+> >> > KVM would simply mark the gfn as dirty, but there is no vCPU to work with,
+> >> > and presumably the only use case for copy MTE tags _to_ the guest is when
+> >> > restoring state on the target.
+> >> >
+> >> > Fixes: f0376edb1ddc ("KVM: arm64: Add ioctl to fetch/store tags in a guest")
+> >> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> >> > ---
+> >> >  arch/arm64/kvm/guest.c | 5 +++++
+> >> >  1 file changed, 5 insertions(+)
+> >> >
+> >> > diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
+> >> > index e1f0ff08836a..962f985977c2 100644
+> >> > --- a/arch/arm64/kvm/guest.c
+> >> > +++ b/arch/arm64/kvm/guest.c
+> >> > @@ -1045,6 +1045,11 @@ int kvm_vm_ioctl_mte_copy_tags(struct kvm *kvm,
+> >> >  
+> >> >  	mutex_lock(&kvm->slots_lock);
+> >> >  
+> >> > +	if (write && atomic_read(&kvm->nr_memslots_dirty_logging)) {
+> >> > +		ret = -EBUSY;
+> >> > +		goto out;
+> >> > +	}
+> >> > +
+> >> >
+> >> 
+> >> is this equivalent to kvm_follow_pfn() with kfp->pin = 1 ?
+> >
+> > No, gfn_to_pfn_prot() == FOLL_GET, kfp->pin == FOLL_PIN.  But that's not really
+> > relevant.
+> 
+> What I meant was, should we consider mte_copy_tags_from_user() as one
+> that update the page contents (even though it is updating tags) and
+> use kvm_follow_pfn() with kfp->pin = 1 instead?
 
-$ ./cli.py --spec ../netlink/specs/netdev.yaml --dump page-pool-get
-...
- {'dmabuf': 10,
-  'id': 456,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 455,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 454,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 453,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 452,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 451,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 450,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 449,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
+Yes, that's my understanding as well.  However, this series is already ludicruosly
+long, and I don't have the ability to test the affected code, so rather than blindly
+churn more arch code, I opted to add a FIXME in patch 76 instead.
 
-And queue stats:
-
-$ ./cli.py --spec ../netlink/specs/netdev.yaml --dump queue-get
-...
-{'dmabuf': 10, 'id': 8, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 9, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 10, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 11, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 12, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 13, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 14, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 15, 'ifindex': 3, 'type': 'rx'},
-
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Mina Almasry <almasrymina@google.com>
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
-
----
- Documentation/netlink/specs/netdev.yaml | 10 ++++++++++
- include/uapi/linux/netdev.h             |  2 ++
- net/core/netdev-genl.c                  | 10 ++++++++++
- net/core/page_pool_user.c               |  4 ++++
- tools/include/uapi/linux/netdev.h       |  2 ++
- 5 files changed, 28 insertions(+)
-
-diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-index 0c747530c275e..08412c279297b 100644
---- a/Documentation/netlink/specs/netdev.yaml
-+++ b/Documentation/netlink/specs/netdev.yaml
-@@ -167,6 +167,10 @@ attribute-sets:
-           "re-attached", they are just waiting to disappear.
-           Attribute is absent if Page Pool has not been detached, and
-           can still be used to allocate new memory.
-+      -
-+        name: dmabuf
-+        doc: ID of the dmabuf this page-pool is attached to.
-+        type: u32
-   -
-     name: page-pool-info
-     subset-of: page-pool
-@@ -268,6 +272,10 @@ attribute-sets:
-         name: napi-id
-         doc: ID of the NAPI instance which services this queue.
-         type: u32
-+      -
-+        name: dmabuf
-+        doc: ID of the dmabuf attached to this queue, if any.
-+        type: u32
- 
-   -
-     name: qstats
-@@ -543,6 +551,7 @@ operations:
-             - inflight
-             - inflight-mem
-             - detach-time
-+            - dmabuf
-       dump:
-         reply: *pp-reply
-       config-cond: page-pool
-@@ -607,6 +616,7 @@ operations:
-             - type
-             - napi-id
-             - ifindex
-+            - dmabuf
-       dump:
-         request:
-           attributes:
-diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
-index 91bf3ecc5f1d9..7c308f04e7a06 100644
---- a/include/uapi/linux/netdev.h
-+++ b/include/uapi/linux/netdev.h
-@@ -93,6 +93,7 @@ enum {
- 	NETDEV_A_PAGE_POOL_INFLIGHT,
- 	NETDEV_A_PAGE_POOL_INFLIGHT_MEM,
- 	NETDEV_A_PAGE_POOL_DETACH_TIME,
-+	NETDEV_A_PAGE_POOL_DMABUF,
- 
- 	__NETDEV_A_PAGE_POOL_MAX,
- 	NETDEV_A_PAGE_POOL_MAX = (__NETDEV_A_PAGE_POOL_MAX - 1)
-@@ -131,6 +132,7 @@ enum {
- 	NETDEV_A_QUEUE_IFINDEX,
- 	NETDEV_A_QUEUE_TYPE,
- 	NETDEV_A_QUEUE_NAPI_ID,
-+	NETDEV_A_QUEUE_DMABUF,
- 
- 	__NETDEV_A_QUEUE_MAX,
- 	NETDEV_A_QUEUE_MAX = (__NETDEV_A_QUEUE_MAX - 1)
-diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-index bd54cf50b658a..e944fd56c6b8e 100644
---- a/net/core/netdev-genl.c
-+++ b/net/core/netdev-genl.c
-@@ -293,6 +293,7 @@ static int
- netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 			 u32 q_idx, u32 q_type, const struct genl_info *info)
- {
-+	struct net_devmem_dmabuf_binding *binding;
- 	struct netdev_rx_queue *rxq;
- 	struct netdev_queue *txq;
- 	void *hdr;
-@@ -312,6 +313,15 @@ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 		if (rxq->napi && nla_put_u32(rsp, NETDEV_A_QUEUE_NAPI_ID,
- 					     rxq->napi->napi_id))
- 			goto nla_put_failure;
-+
-+		binding = (struct net_devmem_dmabuf_binding *)
-+				  rxq->mp_params.mp_priv;
-+		if (binding) {
-+			if (nla_put_u32(rsp, NETDEV_A_QUEUE_DMABUF,
-+					binding->id))
-+				goto nla_put_failure;
-+		}
-+
- 		break;
- 	case NETDEV_QUEUE_TYPE_TX:
- 		txq = netdev_get_tx_queue(netdev, q_idx);
-diff --git a/net/core/page_pool_user.c b/net/core/page_pool_user.c
-index 3a3277ba167b1..ca13363aea343 100644
---- a/net/core/page_pool_user.c
-+++ b/net/core/page_pool_user.c
-@@ -212,6 +212,7 @@ static int
- page_pool_nl_fill(struct sk_buff *rsp, const struct page_pool *pool,
- 		  const struct genl_info *info)
- {
-+	struct net_devmem_dmabuf_binding *binding = pool->mp_priv;
- 	size_t inflight, refsz;
- 	void *hdr;
- 
-@@ -241,6 +242,9 @@ page_pool_nl_fill(struct sk_buff *rsp, const struct page_pool *pool,
- 			 pool->user.detach_time))
- 		goto err_cancel;
- 
-+	if (binding && nla_put_u32(rsp, NETDEV_A_PAGE_POOL_DMABUF, binding->id))
-+		goto err_cancel;
-+
- 	genlmsg_end(rsp, hdr);
- 
- 	return 0;
-diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
-index 91bf3ecc5f1d9..7c308f04e7a06 100644
---- a/tools/include/uapi/linux/netdev.h
-+++ b/tools/include/uapi/linux/netdev.h
-@@ -93,6 +93,7 @@ enum {
- 	NETDEV_A_PAGE_POOL_INFLIGHT,
- 	NETDEV_A_PAGE_POOL_INFLIGHT_MEM,
- 	NETDEV_A_PAGE_POOL_DETACH_TIME,
-+	NETDEV_A_PAGE_POOL_DMABUF,
- 
- 	__NETDEV_A_PAGE_POOL_MAX,
- 	NETDEV_A_PAGE_POOL_MAX = (__NETDEV_A_PAGE_POOL_MAX - 1)
-@@ -131,6 +132,7 @@ enum {
- 	NETDEV_A_QUEUE_IFINDEX,
- 	NETDEV_A_QUEUE_TYPE,
- 	NETDEV_A_QUEUE_NAPI_ID,
-+	NETDEV_A_QUEUE_DMABUF,
- 
- 	__NETDEV_A_QUEUE_MAX,
- 	NETDEV_A_QUEUE_MAX = (__NETDEV_A_QUEUE_MAX - 1)
--- 
-2.46.0.rc2.264.g509ed76dc8-goog
-
+https://lore.kernel.org/all/20240726235234.228822-76-seanjc@google.com
 
