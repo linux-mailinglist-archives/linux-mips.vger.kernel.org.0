@@ -1,162 +1,131 @@
-Return-Path: <linux-mips+bounces-4695-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4696-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C61A94747B
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2024 06:59:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E7D894766C
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2024 09:57:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B64EB20C9C
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2024 04:59:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D06721C20DD5
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2024 07:57:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3D3413F43B;
-	Mon,  5 Aug 2024 04:59:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CF6914A634;
+	Mon,  5 Aug 2024 07:57:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mgTRFYPb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UBQwR8Dv"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EBB213D50E;
-	Mon,  5 Aug 2024 04:59:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4619D149C68;
+	Mon,  5 Aug 2024 07:57:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722833990; cv=none; b=GxQgNTQPueO2RADyvq7fNuWxwoJLdHlquejQ0KB1wqhKHls8+pzGelUBQECDnP22LUjj5KmO31sh/LGD/MGRQnno48+Q4ArR13GDoEpsKtK7CsDza0YaLSfqPoybtXuhEXL0IuraAsGCJqyHgzMkMW4ggTTDtDxLy1mmKwrNV8o=
+	t=1722844651; cv=none; b=qvigliiJ9beQjhqRpbYq9Qgp4ogpu9AuZjRKLBM9/kGhB172/WfQRVY1QCdw4cxUBai/DEpJ202nYqX+W3okxd41Oa6Mn1RWuUG9LUd4nhsmQBCGhP9iYyQfVD/UVS/4wPckXAnk6qnNEqo/p1H7DUWTTSZev9lcxDwB2LrN3NA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722833990; c=relaxed/simple;
-	bh=OZ0x4CPR21u7kQqc2YahNoI50X1qL/GI/Bd9yBTu6G0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Uvw6M51pWoD4FZ5BTfSHeQO5vh0InfRyY+zDERN0+IEZ6BkqI0TSkmzAxUIUsxU/vDNHVAQrl8ZK8zZxsTU4VsX1PPJgFApW0EUi6NQugQgUqf/CISFUxz6e/ORHvHhGTtZUN7SiWliXoP4gVKL85phGzGJ1M21ZsbVQZUYBNhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mgTRFYPb; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722833989; x=1754369989;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OZ0x4CPR21u7kQqc2YahNoI50X1qL/GI/Bd9yBTu6G0=;
-  b=mgTRFYPbav14qmvktAs94Frd8zskvi4DEVW3ickHeMHkQxH1OfLAG70M
-   Pau+cIeebZGL7bltq74wW4eXEWIxNvmVqWnCv9Bk205LZtr8i96jVeogJ
-   j2fOpAGu9xdvgCsuD3VbfhPsZc+SXyMPjq6kmzYrOtd/4C4tLLOwBIxXb
-   AwRtccvLFMQtAYbMNJOb26EiacrsFkL/xnbrDCowpqIWL6EZ2jdf8YE8l
-   6Vp4E/dbAntHpy01bKJSFAVL2KIhfN7UHntrinvFLz0MnLWR+IaZRylYd
-   yff47qiwlnBZ1XTD0MwuSPffAueWYCKi7myqxUM8SRfwhLZLTybrjN+in
-   A==;
-X-CSE-ConnectionGUID: fEAFV6nZTbaZQHaAXN+eNA==
-X-CSE-MsgGUID: FIQe1zL2Rki1BeZUGajgoA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11154"; a="20930651"
-X-IronPort-AV: E=Sophos;i="6.09,263,1716274800"; 
-   d="scan'208";a="20930651"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2024 21:59:48 -0700
-X-CSE-ConnectionGUID: Eye9zMIKRuipOV9VFKj7FQ==
-X-CSE-MsgGUID: AAUJR3eJT9OkleRqwjSRGQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,263,1716274800"; 
-   d="scan'208";a="86988225"
-Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 04 Aug 2024 21:59:45 -0700
-Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sapos-0001js-1a;
-	Mon, 05 Aug 2024 04:59:42 +0000
-Date: Mon, 5 Aug 2024 12:58:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>,
-	Keguang Zhang <keguang.zhang@gmail.com>,
-	Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-mips@vger.kernel.org,
-	dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH v11 2/2] dmaengine: Loongson1: Add Loongson-1 APB DMA
- driver
-Message-ID: <202408051242.8kGK28W7-lkp@intel.com>
-References: <20240802-loongson1-dma-v11-2-85392357d4e0@gmail.com>
+	s=arc-20240116; t=1722844651; c=relaxed/simple;
+	bh=Geket5xHj+rV/lTGgYhI+mobx7QxgrRmSJGYSEDRkpk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Y54TeAirpMelSVU1oSi7HNK07/FqLHF4NUTPp4bVQqznk/EcKOsJIEik67eN55jdGyz6kxvKNFxSzkuiQnhTmHGx6GI43/YjcQroiVBrrH/PnKH+PaesdBpe/cH7hRt8zxGu+/iJQn9RTdZ4k3sbGxULkGODVvkg0UQmmwncCow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UBQwR8Dv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59266C32782;
+	Mon,  5 Aug 2024 07:57:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722844650;
+	bh=Geket5xHj+rV/lTGgYhI+mobx7QxgrRmSJGYSEDRkpk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=UBQwR8Dv5k7JtkeG4laWC2Xs0oOnozRLy+3hVYnDYQn2Ed5eCrDNKiqSjdoXT4acx
+	 1hPdTL4JDstUhQJJ7lCM7YYqnV4Qh1m6C+CK460q8siGoQwJJKzkWsjMOX4qcfmelz
+	 A6Yt57Xlk92ABmDDhigDShW3vM0pnXKBZJdZWOrnwttmRyqlw3hP4oeUm/b5LanIcX
+	 fVlLRwpf9c9nuW6b7SobjiC6lu0VN8iuGUvVZHCooHxsAnFt7ePn4zwuEV1kg+BLX4
+	 tQQRPbEFjC/HMt7oQ6FPHcOxgz1D3ofgxyEIT69W/KjqEASCYIB1LwhYcesfg0NZf1
+	 asOwN60f4YLIQ==
+X-Mailer: emacs 31.0.50 (via feedmail 11-beta-1 I)
+From: Aneesh Kumar K.V <aneesh.kumar@kernel.org>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Tianrui Zhao <zhaotianrui@loongson.cn>,
+	Bibo Mao <maobibo@loongson.cn>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Anup Patel <anup@brainfault.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Janosch Frank <frankja@linux.ibm.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	David Matlack <dmatlack@google.com>,
+	David Stevens <stevensd@chromium.org>
+Subject: Re: [PATCH v12 02/84] KVM: arm64: Disallow copying MTE to guest
+ memory while KVM is dirty logging
+In-Reply-To: <ZqvNekQAjs-SN-se@google.com>
+References: <20240726235234.228822-1-seanjc@google.com>
+ <20240726235234.228822-3-seanjc@google.com> <yq5aikwku25o.fsf@kernel.org>
+ <ZqvNekQAjs-SN-se@google.com>
+Date: Mon, 05 Aug 2024 13:27:18 +0530
+Message-ID: <yq5a5xsftna9.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240802-loongson1-dma-v11-2-85392357d4e0@gmail.com>
+Content-Type: text/plain
 
-Hi Keguang,
+Sean Christopherson <seanjc@google.com> writes:
 
-kernel test robot noticed the following build warnings:
+> On Thu, Aug 01, 2024, Aneesh Kumar K.V wrote:
+>> Sean Christopherson <seanjc@google.com> writes:
+>> 
+>> > Disallow copying MTE tags to guest memory while KVM is dirty logging, as
+>> > writing guest memory without marking the gfn as dirty in the memslot could
+>> > result in userspace failing to migrate the updated page.  Ideally (maybe?),
+>> > KVM would simply mark the gfn as dirty, but there is no vCPU to work with,
+>> > and presumably the only use case for copy MTE tags _to_ the guest is when
+>> > restoring state on the target.
+>> >
+>> > Fixes: f0376edb1ddc ("KVM: arm64: Add ioctl to fetch/store tags in a guest")
+>> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+>> > ---
+>> >  arch/arm64/kvm/guest.c | 5 +++++
+>> >  1 file changed, 5 insertions(+)
+>> >
+>> > diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
+>> > index e1f0ff08836a..962f985977c2 100644
+>> > --- a/arch/arm64/kvm/guest.c
+>> > +++ b/arch/arm64/kvm/guest.c
+>> > @@ -1045,6 +1045,11 @@ int kvm_vm_ioctl_mte_copy_tags(struct kvm *kvm,
+>> >  
+>> >  	mutex_lock(&kvm->slots_lock);
+>> >  
+>> > +	if (write && atomic_read(&kvm->nr_memslots_dirty_logging)) {
+>> > +		ret = -EBUSY;
+>> > +		goto out;
+>> > +	}
+>> > +
+>> >
+>> 
+>> is this equivalent to kvm_follow_pfn() with kfp->pin = 1 ?
+>
+> No, gfn_to_pfn_prot() == FOLL_GET, kfp->pin == FOLL_PIN.  But that's not really
+> relevant.
+>
 
-[auto build test WARNING on 048d8cb65cde9fe7534eb4440bcfddcf406bb49c]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Keguang-Zhang-via-B4-Relay/dt-bindings-dma-Add-Loongson-1-APB-DMA/20240803-111220
-base:   048d8cb65cde9fe7534eb4440bcfddcf406bb49c
-patch link:    https://lore.kernel.org/r/20240802-loongson1-dma-v11-2-85392357d4e0%40gmail.com
-patch subject: [PATCH v11 2/2] dmaengine: Loongson1: Add Loongson-1 APB DMA driver
-config: sparc64-randconfig-r063-20240804 (https://download.01.org/0day-ci/archive/20240805/202408051242.8kGK28W7-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240805/202408051242.8kGK28W7-lkp@intel.com/reproduce)
+What I meant was, should we consider mte_copy_tags_from_user() as one
+that update the page contents (even though it is updating tags) and
+use kvm_follow_pfn() with kfp->pin = 1 instead?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408051242.8kGK28W7-lkp@intel.com/
+Is my understanding correct in that, if we want to look up a pfn/page
+from gfn with the intent of updating the page contents, we should use
+kfp->pin == 1? 
 
-All warnings (new ones prefixed by >>):
-
-   drivers/dma/loongson1-apb-dma.c: In function 'ls1x_dma_chan_probe':
->> drivers/dma/loongson1-apb-dma.c:520:34: warning: '%u' directive writing between 1 and 10 bytes into a region of size 2 [-Wformat-overflow=]
-     520 |         sprintf(pdev_irqname, "ch%u", chan_id);
-         |                                  ^~
-   drivers/dma/loongson1-apb-dma.c:520:31: note: directive argument in the range [0, 2147483646]
-     520 |         sprintf(pdev_irqname, "ch%u", chan_id);
-         |                               ^~~~~~
-   drivers/dma/loongson1-apb-dma.c:520:9: note: 'sprintf' output between 4 and 13 bytes into a destination of size 4
-     520 |         sprintf(pdev_irqname, "ch%u", chan_id);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +520 drivers/dma/loongson1-apb-dma.c
-
-   510	
-   511	static int ls1x_dma_chan_probe(struct platform_device *pdev,
-   512				       struct ls1x_dma *dma, int chan_id)
-   513	{
-   514		struct device *dev = &pdev->dev;
-   515		struct ls1x_dma_chan *chan = &dma->chan[chan_id];
-   516		char pdev_irqname[4];
-   517		char *irqname;
-   518		int ret;
-   519	
- > 520		sprintf(pdev_irqname, "ch%u", chan_id);
-   521		chan->irq = platform_get_irq_byname(pdev, pdev_irqname);
-   522		if (chan->irq < 0)
-   523			return -ENODEV;
-   524	
-   525		irqname = devm_kasprintf(dev, GFP_KERNEL, "%s:%s",
-   526					 dev_name(dev), pdev_irqname);
-   527		if (!irqname)
-   528			return -ENOMEM;
-   529	
-   530		ret = devm_request_irq(dev, chan->irq, ls1x_dma_irq_handler,
-   531				       IRQF_SHARED, irqname, chan);
-   532		if (ret)
-   533			return dev_err_probe(dev, ret, "failed to request IRQ %u\n",
-   534					     chan->irq);
-   535	
-   536		chan->reg_base = dma->reg_base;
-   537		chan->vchan.desc_free = ls1x_dma_free_desc;
-   538		vchan_init(&chan->vchan, &dma->ddev);
-   539		dev_info(dev, "%s (irq %d) initialized\n", pdev_irqname, chan->irq);
-   540	
-   541		return 0;
-   542	}
-   543	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-aneesh
 
