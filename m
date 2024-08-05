@@ -1,144 +1,224 @@
-Return-Path: <linux-mips+bounces-4725-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4726-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9193F948549
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2024 00:09:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FF739485DE
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2024 01:23:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 471841F2355C
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2024 22:09:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62DEA1C20D90
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2024 23:23:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4696116D9DC;
-	Mon,  5 Aug 2024 22:09:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C94D916DECF;
+	Mon,  5 Aug 2024 23:22:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="n2S1Pfro"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="32NCmuD8"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B926816D4C1
-	for <linux-mips@vger.kernel.org>; Mon,  5 Aug 2024 22:09:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FFA117279C
+	for <linux-mips@vger.kernel.org>; Mon,  5 Aug 2024 23:22:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722895765; cv=none; b=H3WHc5+f8d9bKDeifXiTINVEBjKha/HxhFGfk7OxEcLv+Ly0h25pkbP8EKfbUPt2eYJSsKEXtvQPq0FlmHbMwHIwomiOM2jfK74ay0TxKM7nGNUs1VHzSAMxU+4noWMl2ocuU86h0orl6HteFLmDGQnaeKv0FmtJFNbE73tpdp0=
+	t=1722900178; cv=none; b=VJCNPcHFv36ZnfcP0tYn2wOr4TK11NYC9Nr/StZNTtosgJ6wsweqvQpDDOCp8qU4EKhUOSWxhj8GgIvX1IFwogUrrafgJlfO8Zs7M0/cyiyTMUG+uF7hmlxgQ2VszSiW1gTT+ugj/WQ35uOL+iwmsTCyORszW/RetpbJoLjjImY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722895765; c=relaxed/simple;
-	bh=dmDvoV7DR66fW1rp/kKa2yAHHnKdcTd2T9VoWrRsnCs=;
+	s=arc-20240116; t=1722900178; c=relaxed/simple;
+	bh=lnV0jTwl7I7N5aiPuuu9PVE+w5Wngmq6yvhGhBmjrvk=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=tbAKN6W1UyfHSrRaUJ/M+55Tl/LQcij+9uqU365H7K0FmoI8Of4pkZXHb4x3yKesJdydzCG9z6GjFtgcmUkn928UaG9C7b15dQLDbIW8xECWjV9Pk8ekRyrN8tD0AwvLPNcV1sN4tS3TaOw90qJZW2hISSnfml2nUQA2XDpeBSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=n2S1Pfro; arc=none smtp.client-ip=209.85.210.201
+	 To:Cc:Content-Type; b=OZIJ/daU1WIWxbSSfHGr/9zN/7yakSH/jB6EfEdcC5dpFYPo/+oe48xXpzMnfYrlRoddsMh/WuvzhQfue9vIJYULCGXy5PrIdFbwidvrpV+dfxfMhLWOYMpZS1KQe7bxPXCyhoZQol/mq7JIBW5JH7RVfRjFiaeS1cOvoQs8n3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=32NCmuD8; arc=none smtp.client-ip=209.85.215.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-70f0a00eb16so4570572b3a.1
-        for <linux-mips@vger.kernel.org>; Mon, 05 Aug 2024 15:09:23 -0700 (PDT)
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-7278c31e2acso240876a12.1
+        for <linux-mips@vger.kernel.org>; Mon, 05 Aug 2024 16:22:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722895763; x=1723500563; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=C2PiU8MTrEuvmn4oJRZEcNoPreaY/lLc5L+V0JuLroE=;
-        b=n2S1Pfroj5GXc+AKmy97SqSqzhAatmtf6hSTbALfmWnl9FxJKmiV1UCBwSGSfwf8oN
-         Zi9T6k66nDLL4H6wo9mFdf57vAhKbwYdnNHWTuMWYQz21ys2LETaeQ0wnqzAPVU7HXGk
-         oGCOEcmJjmjnLRDJKSQF6RuoaOt5VvLien3b4rVqpBmK0hnKXY9XBzeN/7q8f6RYAf9L
-         JKIzyUcKEZ5OJMcnhpRplUpEaJNMON8BUmhP126Sqr2k9Asmac+7h0ZA+vLQSDy8U9R2
-         meRUTX0uq/MK/7IxffkTHph07HsMKzoEgpQ1FpV3OB8yL2kT5AzL67wlxHwLdPXoG8Qy
-         cujQ==
+        d=google.com; s=20230601; t=1722900176; x=1723504976; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZqhT0BfYtdHqe5JEJY1dxcglZN0X6+UEhtDWxpbx9R0=;
+        b=32NCmuD8CzxaRu0EAuIB/YabCPfXM9MBQV4ZwR9kBRmAlZbRQlVjZgADtjsG4SWqwS
+         WyNVthiO1u9maIqyHD16BS7ysUeifrJNgZn9z0cIQvlRAyUJkhXnguBDvxa1w4DboWIP
+         ihaDKSW/dgEn0hqMeqHpTt5fyuL5K2egK0HdfBM0sZ2ICtgXvtgdGLX12QXryLmT7bi5
+         +UA6gsOvj0sgikEH0pvU5vnoAL1jO3wUrJpfe7V+vO8PFnNa5E9/ZdFX6O4DDw4Rp+mi
+         V3U/juSSYsKjnPn3eUTZQLNKWAbbFPFnqLSw6QU+snw2HiLfjvx9iEFJ+NfFdCgZ8q8o
+         4BpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722895763; x=1723500563;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C2PiU8MTrEuvmn4oJRZEcNoPreaY/lLc5L+V0JuLroE=;
-        b=f3Tpl6182LNWV8wv6OpjODkuzqMIKv3rlKPdwbkkWTTJQ+VwoqSH+0q/MeJ9c62a+Z
-         SJik5+Vdv3mcmBcjCOupTPFWkIDCEDv2S7dgNVSiH2JAHYxZSx4QuNsmn52SXNHqf2Fo
-         LvKBZD0K18Hjo7GnbZHmJ/YkSvpmxBoG8LTH/3NBYk9Ta0yrjnwF5Ufg4XE4x43aaBfP
-         KFZNz6CyM39PrNK8rX+qUqa9WOMcw1SfSKqYraTmyOBVFQrbu787aZvslhf95HCFxU13
-         XEVu20ljBSwfc25tXd6UYlqnxov4Ka4Daw9OWibh+3v/Tmk7iSjLI+xnUOLf8eg5t/eg
-         BjpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVRvq6mLjPSqeGtCws0mIno73p6EMr+k9i4slv20tmYkh1pIj5Y65/L0DYycvKHZiP4xQ0Mjf/FY66yq8ewj0V4k3w13C1nNxZuvQ==
-X-Gm-Message-State: AOJu0Yx9s7xZ26EoNK10PMbBOrmOBzdhjojw+SQI+FvTdo5V7QndXZLx
-	Bkwy15DGWDAfa8XTVU9dIH6VwsPdVt5fcGVMFJO7aebDS5Qjf+/RwJO+pFCbwd9mhhp3w3CR3cr
-	Sgg==
-X-Google-Smtp-Source: AGHT+IFHGqnQ2aZELEsNF/YUFUu/OdaSqANvJ2o5+KNT08fnEczrxRkzi5g08NacDnyiiIzp3YSr6oxKzK4=
+        d=1e100.net; s=20230601; t=1722900176; x=1723504976;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZqhT0BfYtdHqe5JEJY1dxcglZN0X6+UEhtDWxpbx9R0=;
+        b=Iwyc5g+SXv0MucGUCrq1Vwh4mWe2Tv6TTknjjGL7bFm1APxazTMMjOTk78h/j0VZuc
+         BsB1An4aBbq3FVHJQCTOCuvMsZbmzXR5CgheqLvmQ8LNplztBsEqYxoDOWtc0uUdhfd9
+         nljnYa1a7r5a68BJcSY55XgF5sKNIxzNIf0XT359xxou9+LeQUJgiUefkrkzpTJ2Q6JT
+         SAQZ3cxK8p6Nr1FQTovuRTr8kPYjEfQebPB2HVFX7Yxkl22eOuKF/Jcte5giCitBSNow
+         zFUj3sOu0VAmYrf8xJ9UQPtes8qN9fLTmhmlOikgOpODppliFsIGWWv/2OsuIQxzTLGE
+         XEjA==
+X-Forwarded-Encrypted: i=1; AJvYcCWo8SWyZ580Omojxa4mWdq4ONA54Qo+/Y0A1kyLTUeLjc2qRVavXoJrP9GriPbObknrfLLCzrlbeCkLePB0g5FDdQvJ2gFaM9FM1A==
+X-Gm-Message-State: AOJu0Yz+Ph755p6h6nZLyHsIPUEQD7Z/R/OfWfEr1KGlcNONsCVvK11x
+	ZPpOETbkcA18bpNGXiLP9mUYfdar93Z+y+1dRFod6khm/JmDMYt70XjromBQKHmXxnR82aD7CCd
+	kXg==
+X-Google-Smtp-Source: AGHT+IFnC2s9xgJUYrQamoHpNNjMdfjnR6jKC7U3Po3pJ/hHYZ7yn8m2xqR/ZVZ53CGLeUu13/uKbBw5g2Q=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:6f0e:b0:710:4d08:e41f with SMTP id
- d2e1a72fcca58-7106d08296emr87588b3a.4.1722895762937; Mon, 05 Aug 2024
- 15:09:22 -0700 (PDT)
-Date: Mon, 5 Aug 2024 15:09:21 -0700
-In-Reply-To: <yq5a5xsftna9.fsf@kernel.org>
+ (user=seanjc job=sendgmr) by 2002:a17:902:dacd:b0:1fb:325d:2b62 with SMTP id
+ d9443c01a7336-1ff57464ba5mr9382545ad.10.1722900176428; Mon, 05 Aug 2024
+ 16:22:56 -0700 (PDT)
+Date: Mon, 5 Aug 2024 16:22:54 -0700
+In-Reply-To: <345d89c1-4f31-6b49-2cd4-a0696210fa7c@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20240726235234.228822-1-seanjc@google.com> <20240726235234.228822-3-seanjc@google.com>
- <yq5aikwku25o.fsf@kernel.org> <ZqvNekQAjs-SN-se@google.com> <yq5a5xsftna9.fsf@kernel.org>
-Message-ID: <ZrFNkSU4-0Hli7JC@google.com>
-Subject: Re: [PATCH v12 02/84] KVM: arm64: Disallow copying MTE to guest
- memory while KVM is dirty logging
+References: <20240726235234.228822-1-seanjc@google.com> <20240726235234.228822-65-seanjc@google.com>
+ <a039b758-d4e3-3798-806f-25bceb2f33a5@loongson.cn> <Zq00OYowF5kc9QFE@google.com>
+ <345d89c1-4f31-6b49-2cd4-a0696210fa7c@loongson.cn>
+Message-ID: <ZrFezgVbCI3DRQH3@google.com>
+Subject: Re: [PATCH v12 64/84] KVM: LoongArch: Mark "struct page" pfns dirty
+ only in "slow" page fault path
 From: Sean Christopherson <seanjc@google.com>
-To: "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
+To: maobibo <maobibo@loongson.cn>
 Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
 	Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
-	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Anup Patel <anup@brainfault.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org, 
+	Huacai Chen <chenhuacai@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Anup Patel <anup@brainfault.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org, 
 	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
 	loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
 	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
 	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
 	David Matlack <dmatlack@google.com>, David Stevens <stevensd@chromium.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 05, 2024, Aneesh Kumar K.V wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> 
-> > On Thu, Aug 01, 2024, Aneesh Kumar K.V wrote:
-> >> Sean Christopherson <seanjc@google.com> writes:
-> >> 
-> >> > Disallow copying MTE tags to guest memory while KVM is dirty logging, as
-> >> > writing guest memory without marking the gfn as dirty in the memslot could
-> >> > result in userspace failing to migrate the updated page.  Ideally (maybe?),
-> >> > KVM would simply mark the gfn as dirty, but there is no vCPU to work with,
-> >> > and presumably the only use case for copy MTE tags _to_ the guest is when
-> >> > restoring state on the target.
-> >> >
-> >> > Fixes: f0376edb1ddc ("KVM: arm64: Add ioctl to fetch/store tags in a guest")
-> >> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> >> > ---
-> >> >  arch/arm64/kvm/guest.c | 5 +++++
-> >> >  1 file changed, 5 insertions(+)
-> >> >
-> >> > diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
-> >> > index e1f0ff08836a..962f985977c2 100644
-> >> > --- a/arch/arm64/kvm/guest.c
-> >> > +++ b/arch/arm64/kvm/guest.c
-> >> > @@ -1045,6 +1045,11 @@ int kvm_vm_ioctl_mte_copy_tags(struct kvm *kvm,
-> >> >  
-> >> >  	mutex_lock(&kvm->slots_lock);
-> >> >  
-> >> > +	if (write && atomic_read(&kvm->nr_memslots_dirty_logging)) {
-> >> > +		ret = -EBUSY;
-> >> > +		goto out;
-> >> > +	}
-> >> > +
-> >> >
-> >> 
-> >> is this equivalent to kvm_follow_pfn() with kfp->pin = 1 ?
-> >
-> > No, gfn_to_pfn_prot() == FOLL_GET, kfp->pin == FOLL_PIN.  But that's not really
-> > relevant.
-> 
-> What I meant was, should we consider mte_copy_tags_from_user() as one
-> that update the page contents (even though it is updating tags) and
-> use kvm_follow_pfn() with kfp->pin = 1 instead?
+On Sat, Aug 03, 2024, maobibo wrote:
+> On 2024/8/3 =E4=B8=8A=E5=8D=883:32, Sean Christopherson wrote:
+> > On Fri, Aug 02, 2024, maobibo wrote:
+> > > On 2024/7/27 =E4=B8=8A=E5=8D=887:52, Sean Christopherson wrote:
+> > > > Mark pages/folios dirty only the slow page fault path, i.e. only wh=
+en
+> > > > mmu_lock is held and the operation is mmu_notifier-protected, as ma=
+rking a
+> > > > page/folio dirty after it has been written back can make some files=
+ystems
+> > > > unhappy (backing KVM guests will such filesystem files is uncommon,=
+ and
+> > > > the race is minuscule, hence the lack of complaints).
+> > > >=20
+> > > > See the link below for details.
+> > > >=20
+> > > > Link: https://lore.kernel.org/all/cover.1683044162.git.lstoakes@gma=
+il.com
+> > > > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > > > ---
+> > > >    arch/loongarch/kvm/mmu.c | 18 ++++++++++--------
+> > > >    1 file changed, 10 insertions(+), 8 deletions(-)
+> > > >=20
+> > > > diff --git a/arch/loongarch/kvm/mmu.c b/arch/loongarch/kvm/mmu.c
+> > > > index 2634a9e8d82c..364dd35e0557 100644
+> > > > --- a/arch/loongarch/kvm/mmu.c
+> > > > +++ b/arch/loongarch/kvm/mmu.c
+> > > > @@ -608,13 +608,13 @@ static int kvm_map_page_fast(struct kvm_vcpu =
+*vcpu, unsigned long gpa, bool writ
+> > > >    		if (kvm_pte_young(changed))
+> > > >    			kvm_set_pfn_accessed(pfn);
+> > > > -		if (kvm_pte_dirty(changed)) {
+> > > > -			mark_page_dirty(kvm, gfn);
+> > > > -			kvm_set_pfn_dirty(pfn);
+> > > > -		}
+> > > >    		if (page)
+> > > >    			put_page(page);
+> > > >    	}
+> > > > +
+> > > > +	if (kvm_pte_dirty(changed))
+> > > > +		mark_page_dirty(kvm, gfn);
+> > > > +
+> > > >    	return ret;
+> > > >    out:
+> > > >    	spin_unlock(&kvm->mmu_lock);
+> > > > @@ -915,12 +915,14 @@ static int kvm_map_page(struct kvm_vcpu *vcpu=
+, unsigned long gpa, bool write)
+> > > >    	else
+> > > >    		++kvm->stat.pages;
+> > > >    	kvm_set_pte(ptep, new_pte);
+> > > > -	spin_unlock(&kvm->mmu_lock);
+> > > > -	if (prot_bits & _PAGE_DIRTY) {
+> > > > -		mark_page_dirty_in_slot(kvm, memslot, gfn);
+> > > > +	if (writeable)
+> > > Is it better to use write or (prot_bits & _PAGE_DIRTY) here?  writabl=
+e is
+> > > pte permission from function hva_to_pfn_slow(), write is fault action=
+.
+> >=20
+> > Marking folios dirty in the slow/full path basically necessitates marki=
+ng the
+> > folio dirty if KVM creates a writable SPTE, as KVM won't mark the folio=
+ dirty
+> > if/when _PAGE_DIRTY is set.
+> >=20
+> > Practically speaking, I'm 99.9% certain it doesn't matter.  The folio i=
+s marked
+> > dirty by core MM when the folio is made writable, and cleaning the foli=
+o triggers
+> > an mmu_notifier invalidation.  I.e. if the page is mapped writable in K=
+VM's
+> yes, it is. Thanks for the explanation. kvm_set_pfn_dirty() can be put on=
+ly
+> in slow page fault path. I only concern with fault type, read fault type =
+can
+> set pte entry writable however not _PAGE_DIRTY at stage-2 mmu table.
+>=20
+> > stage-2 PTEs, then its folio has already been marked dirty.
+> Considering one condition although I do not know whether it exists actual=
+ly.
+> user mode VMM writes the folio with hva address firstly, then VCPU thread
+> *reads* the folio. With primary mmu table, pte entry is writable and
+> _PAGE_DIRTY is set, with secondary mmu table(state-2 PTE table), it is
+> pte_none since the filio is accessed at first time, so there will be slow
+> page fault path for stage-2 mmu page table filling.
+>=20
+> Since it is read fault, stage-2 PTE will be created with _PAGE_WRITE(comi=
+ng
+> from function hva_to_pfn_slow()), however _PAGE_DIRTY is not set. Do we n=
+eed
+> call kvm_set_pfn_dirty() at this situation?
 
-Yes, that's my understanding as well.  However, this series is already ludicruosly
-long, and I don't have the ability to test the affected code, so rather than blindly
-churn more arch code, I opted to add a FIXME in patch 76 instead.
+If KVM doesn't mark the folio dirty when the stage-2 _PAGE_DIRTY flag is se=
+t,
+i.e. as proposed in this series, then yes, KVM needs to call kvm_set_pfn_di=
+rty()
+even though the VM hasn't (yet) written to the memory.  In practice, KVM ca=
+lling
+kvm_set_pfn_dirty() is redundant the majority of the time, as the stage-1 P=
+TE
+will have _PAGE_DIRTY set, and that will get propagated to the folio when t=
+he
+primary MMU does anything relevant with the PTE.  And for file systems that=
+ care
+about writeback, odds are very good that the folio was marked dirty even ea=
+rlier,
+when MM invoked vm_operations_struct.page_mkwrite().
 
-https://lore.kernel.org/all/20240726235234.228822-76-seanjc@google.com
+The reason I am pushing to have all architectures mark pages/folios dirty i=
+n the
+slow page fault path is that a false positive (marking a folio dirty withou=
+t the
+folio ever being written in _any_ context since the last pte_mkclean()) is =
+rare,
+and at worst results an unnecessary writeback.  On the other hand, marking =
+folios
+dirty in fast page fault handlers (or anywhere else that isn't protected by
+mmu_notifiers) is technically unsafe.
+
+In other words, the intent is to sacrifice accuracy to improve stability/ro=
+bustness,
+because the vast majority of time the loss in accuracy has no effect, and t=
+he worst
+case scenario is that the kernel does I/O that wasn't necessary.
 
