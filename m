@@ -1,62 +1,89 @@
-Return-Path: <linux-mips+bounces-4700-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4701-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14ECA947F7F
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2024 18:40:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0277D948023
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2024 19:17:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C47E328455F
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2024 16:40:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 311781C2228C
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2024 17:17:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 980E415C14F;
-	Mon,  5 Aug 2024 16:40:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A044615E5B8;
+	Mon,  5 Aug 2024 17:17:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SChB3d5J"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z7q/lW63"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5833C3E479;
-	Mon,  5 Aug 2024 16:40:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD9D2C684;
+	Mon,  5 Aug 2024 17:17:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722876013; cv=none; b=cxPCkVGf0xFA/Nkq+kAYBmLmC31O0WweeftCLML4pUWoSO6oCBnjgoCe+N7buNDozdgXIYxBPPQVGuQ1eKfw6JUPpnsIAWEg6bCNia4WrvClEBcJvGvVWzzIzSU/KaZSXRobLF9el1Nm5C8BwGtsJ5U6DVVpdfPsrQNozwDQT1s=
+	t=1722878260; cv=none; b=I5czU5lgfJeItm1sdUPEHk75g5NILwgvGeBs60LyJCZLdAADTti/MwXJ6+fWAAv3MT9gM3NfJ8i+p0ydzC4FNuQi45dZeoIFtSipbsXmFg5PVW75IW7QVywsUYJR5g7z7rhsoehrg6HrXaj7tM3gwEnipYWCz6OK5iYkhd3V2RM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722876013; c=relaxed/simple;
-	bh=iOLUluY5An/v5NUsmhvgSEoNjYlEKm9MqBVeCIp+V5E=;
+	s=arc-20240116; t=1722878260; c=relaxed/simple;
+	bh=xUiHKiiFB+eGRf4/0vdH6U+v/YkOQHoLKaT521lWFxI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kufm0ctr3XTbzrF19WLCkACOfJ8/XznIdLwvqSE3ImjY05403IuWv75FX0ThT0OMBgO5DA8wu3dtVdQBKcDTWBLcIKb+5fJl0C/tHhjN0lqb/MTsDnHg29M2HbGgcM6Y2s0uFPIgSITyjjFPZIgEZt3CVEF8xA70fLmCT7LHq2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SChB3d5J; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3050AC32782;
-	Mon,  5 Aug 2024 16:40:11 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=D6fonsPxPoEW1w3NbypP1JGml4NY44fBfEzA9w4WOi9HJwnHAx6jpjf1iA/8hXIiLeH7vDZv0y3LkVBAJqYIuCNFQQs9dxVfYEWfrpLJHCg0D1svymfbkT1DgVSsGqMwI8lSqP64kU4tcMbR3TZAe0+PNtJenJzLXSF3sEQT53A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z7q/lW63; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A951C32782;
+	Mon,  5 Aug 2024 17:17:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722876013;
-	bh=iOLUluY5An/v5NUsmhvgSEoNjYlEKm9MqBVeCIp+V5E=;
+	s=k20201202; t=1722878259;
+	bh=xUiHKiiFB+eGRf4/0vdH6U+v/YkOQHoLKaT521lWFxI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SChB3d5J9h4l8uw17ZrW5gk7a9QaS3yzKU0RZ9RfahroRTz7qfv9HGwLK+b5mD0Sc
-	 Ox6+wFqtDhtUvS+JO6JNL2vw/TBUXrH8g8hqqFzJBFRBNq40ih1hpRmo7j739yaZ3e
-	 o6Bln0tIoJ6iGQMrTuqkIOMdvM0hNiamlNivhHnjZ7ewg6k0X64XFPAArADbReXC6C
-	 TZZThGp1y+mJ/6iNzAkimRC06/PqcbfOMlCaHbJ0mFZ1oOkK9lWLd2pButThIG9w9b
-	 8nckuSMcUXw8LLSc/GSBAWbgMuV/BAH4nKOEDIwPeWVCf0Z+np74xWfYbUrmKNPjw6
-	 EvbZjRSDiZh9A==
-Date: Mon, 5 Aug 2024 22:10:08 +0530
-From: Vinod Koul <vkoul@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>,
-	Keguang Zhang <keguang.zhang@gmail.com>,
+	b=Z7q/lW639aowtINXwVebTG+OLoxrXof+zBNSeR/8WY86B+624ZIuqcPJ12uz6WAq3
+	 TOktvjQuFO3Psh/zSZk6bupzno8UjNgzGdjWYsGzuDHPa53tI5UwJrFUIiEWAMkla2
+	 aZhopzXWwqHlnm+KETHsoZ8cxcOCV/ES/RMeaNClV0U/lI74zaSa7QLz8oGGmPM5b+
+	 WVRXAQQqToAOAcGGygHFeY2KPxgU/pB39IDAe0i7d4FyqehFfReXcy3JQ8TWWNvwl/
+	 YnEvZ6i15oUR+XxxozKV+u9zlrKVedpz+W1ReJtnBjYdPuNzzekfqSWqwV+cKpPHX5
+	 XzWc8YkjVKQSQ==
+Date: Mon, 5 Aug 2024 20:15:22 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: linux-kernel@vger.kernel.org,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Hildenbrand <david@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
 	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, oe-kbuild-all@lists.linux.dev,
-	linux-mips@vger.kernel.org, dmaengine@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH v11 2/2] dmaengine: Loongson1: Add Loongson-1 APB DMA
- driver
-Message-ID: <ZrEAaB_I1S2vM2EE@matsya>
-References: <20240802-loongson1-dma-v11-2-85392357d4e0@gmail.com>
- <202408051242.8kGK28W7-lkp@intel.com>
+	Samuel Holland <samuel.holland@sifive.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vasily Gorbik <gor@linux.ibm.com>, Will Deacon <will@kernel.org>,
+	Zi Yan <ziy@nvidia.com>, devicetree@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-cxl@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	nvdimm@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v3 09/26] arch, mm: pull out allocation of NODE_DATA to
+ generic code
+Message-ID: <ZrEIqogZ4UJJY0c2@kernel.org>
+References: <20240801060826.559858-1-rppt@kernel.org>
+ <20240801060826.559858-10-rppt@kernel.org>
+ <20240802105527.00005240@Huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -65,43 +92,62 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202408051242.8kGK28W7-lkp@intel.com>
+In-Reply-To: <20240802105527.00005240@Huawei.com>
 
-On 05-08-24, 12:58, kernel test robot wrote:
-> Hi Keguang,
+On Fri, Aug 02, 2024 at 10:55:27AM +0100, Jonathan Cameron wrote:
+> On Thu,  1 Aug 2024 09:08:09 +0300
+> Mike Rapoport <rppt@kernel.org> wrote:
 > 
-> kernel test robot noticed the following build warnings:
+> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > 
+> > Architectures that support NUMA duplicate the code that allocates
+> > NODE_DATA on the node-local memory with slight variations in reporting
+> > of the addresses where the memory was allocated.
+> > 
+> > Use x86 version as the basis for the generic alloc_node_data() function
+> > and call this function in architecture specific numa initialization.
+> > 
+> > Round up node data size to SMP_CACHE_BYTES rather than to PAGE_SIZE like
+> > x86 used to do since the bootmem era when allocation granularity was
+> > PAGE_SIZE anyway.
+> > 
+> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> > Acked-by: David Hildenbrand <david@redhat.com>
+> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > Tested-by: Zi Yan <ziy@nvidia.com> # for x86_64 and arm64
 > 
-> [auto build test WARNING on 048d8cb65cde9fe7534eb4440bcfddcf406bb49c]
+> One comment unrelated to this patch set as such, just made
+> more obvious by it.
 > 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Keguang-Zhang-via-B4-Relay/dt-bindings-dma-Add-Loongson-1-APB-DMA/20240803-111220
-> base:   048d8cb65cde9fe7534eb4440bcfddcf406bb49c
-> patch link:    https://lore.kernel.org/r/20240802-loongson1-dma-v11-2-85392357d4e0%40gmail.com
-> patch subject: [PATCH v11 2/2] dmaengine: Loongson1: Add Loongson-1 APB DMA driver
-> config: sparc64-randconfig-r063-20240804 (https://download.01.org/0day-ci/archive/20240805/202408051242.8kGK28W7-lkp@intel.com/config)
-> compiler: sparc64-linux-gcc (GCC) 14.1.0
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240805/202408051242.8kGK28W7-lkp@intel.com/reproduce)
+> > diff --git a/arch/powerpc/mm/numa.c b/arch/powerpc/mm/numa.c
+> > index 0744a9a2944b..3c1da08304d0 100644
+> > --- a/arch/powerpc/mm/numa.c
+> > +++ b/arch/powerpc/mm/numa.c
+> > @@ -1093,27 +1093,9 @@ void __init dump_numa_cpu_topology(void)
+> >  static void __init setup_node_data(int nid, u64 start_pfn, u64 end_pfn)
+> >  {
+> >  	u64 spanned_pages = end_pfn - start_pfn;
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202408051242.8kGK28W7-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    drivers/dma/loongson1-apb-dma.c: In function 'ls1x_dma_chan_probe':
-> >> drivers/dma/loongson1-apb-dma.c:520:34: warning: '%u' directive writing between 1 and 10 bytes into a region of size 2 [-Wformat-overflow=]
->      520 |         sprintf(pdev_irqname, "ch%u", chan_id);
->          |                                  ^~
->    drivers/dma/loongson1-apb-dma.c:520:31: note: directive argument in the range [0, 2147483646]
->      520 |         sprintf(pdev_irqname, "ch%u", chan_id);
->          |                               ^~~~~~
->    drivers/dma/loongson1-apb-dma.c:520:9: note: 'sprintf' output between 4 and 13 bytes into a destination of size 4
->      520 |         sprintf(pdev_irqname, "ch%u", chan_id);
->          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> Trivial, but might as well squash this local variable into the
+> single place it's used.
+ 
 
-Pls fix these warnings!
+> > -	const size_t nd_size = roundup(sizeof(pg_data_t), SMP_CACHE_BYTES);
+
+...
+
+> > +
+> > +	alloc_node_data(nid);
+> > +
+> >  	NODE_DATA(nid)->node_id = nid;
+> >  	NODE_DATA(nid)->node_start_pfn = start_pfn;
+> >  	NODE_DATA(nid)->node_spanned_pages = spanned_pages;
+
+These are actually overridden later in free_area_init(), it would make
+sense to audit all arch-specific node setup functions and clean them up a
+bit.
 
 -- 
-~Vinod
+Sincerely yours,
+Mike.
 
