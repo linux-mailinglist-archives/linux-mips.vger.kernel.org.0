@@ -1,131 +1,144 @@
-Return-Path: <linux-mips+bounces-4696-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4697-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E7D894766C
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2024 09:57:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C5FE947AAD
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2024 13:55:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D06721C20DD5
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2024 07:57:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DB011F22256
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2024 11:55:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CF6914A634;
-	Mon,  5 Aug 2024 07:57:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E944156F2A;
+	Mon,  5 Aug 2024 11:55:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UBQwR8Dv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IGVGbFgq"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4619D149C68;
-	Mon,  5 Aug 2024 07:57:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B3AB15575D
+	for <linux-mips@vger.kernel.org>; Mon,  5 Aug 2024 11:55:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722844651; cv=none; b=qvigliiJ9beQjhqRpbYq9Qgp4ogpu9AuZjRKLBM9/kGhB172/WfQRVY1QCdw4cxUBai/DEpJ202nYqX+W3okxd41Oa6Mn1RWuUG9LUd4nhsmQBCGhP9iYyQfVD/UVS/4wPckXAnk6qnNEqo/p1H7DUWTTSZev9lcxDwB2LrN3NA=
+	t=1722858927; cv=none; b=ky8Ehkb9muooAXlJF1oy7/HoF97czLsAp7zNJYuIgk11Dt0Ci0sPo21hgeu/k/xGOq3Ws5EyPOzDs3jjBGRx2IC71AnLu0AZKpzQSNduBtYt/5q57HYUTHTe97tl8OZrGTiRN951BTS/aWLUrKqkgieioX+2Y0bhaoICRqMPfJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722844651; c=relaxed/simple;
-	bh=Geket5xHj+rV/lTGgYhI+mobx7QxgrRmSJGYSEDRkpk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Y54TeAirpMelSVU1oSi7HNK07/FqLHF4NUTPp4bVQqznk/EcKOsJIEik67eN55jdGyz6kxvKNFxSzkuiQnhTmHGx6GI43/YjcQroiVBrrH/PnKH+PaesdBpe/cH7hRt8zxGu+/iJQn9RTdZ4k3sbGxULkGODVvkg0UQmmwncCow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UBQwR8Dv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59266C32782;
-	Mon,  5 Aug 2024 07:57:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722844650;
-	bh=Geket5xHj+rV/lTGgYhI+mobx7QxgrRmSJGYSEDRkpk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=UBQwR8Dv5k7JtkeG4laWC2Xs0oOnozRLy+3hVYnDYQn2Ed5eCrDNKiqSjdoXT4acx
-	 1hPdTL4JDstUhQJJ7lCM7YYqnV4Qh1m6C+CK460q8siGoQwJJKzkWsjMOX4qcfmelz
-	 A6Yt57Xlk92ABmDDhigDShW3vM0pnXKBZJdZWOrnwttmRyqlw3hP4oeUm/b5LanIcX
-	 fVlLRwpf9c9nuW6b7SobjiC6lu0VN8iuGUvVZHCooHxsAnFt7ePn4zwuEV1kg+BLX4
-	 tQQRPbEFjC/HMt7oQ6FPHcOxgz1D3ofgxyEIT69W/KjqEASCYIB1LwhYcesfg0NZf1
-	 asOwN60f4YLIQ==
-X-Mailer: emacs 31.0.50 (via feedmail 11-beta-1 I)
-From: Aneesh Kumar K.V <aneesh.kumar@kernel.org>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Tianrui Zhao <zhaotianrui@loongson.cn>,
-	Bibo Mao <maobibo@loongson.cn>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Anup Patel <anup@brainfault.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	David Matlack <dmatlack@google.com>,
-	David Stevens <stevensd@chromium.org>
-Subject: Re: [PATCH v12 02/84] KVM: arm64: Disallow copying MTE to guest
- memory while KVM is dirty logging
-In-Reply-To: <ZqvNekQAjs-SN-se@google.com>
-References: <20240726235234.228822-1-seanjc@google.com>
- <20240726235234.228822-3-seanjc@google.com> <yq5aikwku25o.fsf@kernel.org>
- <ZqvNekQAjs-SN-se@google.com>
-Date: Mon, 05 Aug 2024 13:27:18 +0530
-Message-ID: <yq5a5xsftna9.fsf@kernel.org>
+	s=arc-20240116; t=1722858927; c=relaxed/simple;
+	bh=NBlOdXOH/biQ36ezF/zn2d+VM69yWNQCH492iT5+/fI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MwPiDnoNSS/xmJAls03cVwngkX05f7PLFXbM66Ivpg5dg3sJA+rZKxLmMaift0rBx8562Cnw7jYCz2EVctyolvRRDdv0DeNylysA37M0BY6n2lG9CVunkLPQWzmS7+bS3nlM0JzcjAPjKON4xUUf7OZNZH1o//das7T86rxC8co=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IGVGbFgq; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-52efc89dbedso12341836e87.3
+        for <linux-mips@vger.kernel.org>; Mon, 05 Aug 2024 04:55:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722858923; x=1723463723; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=u/OdbEbQ9htqQD+JqhHkWH/SthAorUF4PW8PhhCTCvc=;
+        b=IGVGbFgqarV2tmACcSCX6GDSHw4J8NUW2X6fwOmBJxHPPEHZB+BMLi/ERRXRpazeGe
+         BFiSKGasp9Q0jH8JaWdUFEayTq9ePd3NlFVDy/7S3bTMe0ziangnnwSK43LLWmHtYQGX
+         kScEPLk6RPVKCc3SW+/YflLRpYR17rN5tRRRhw06L+gCbBy+kmk4kgLv2x0A8IGqVtac
+         WwWwVu8bD0LPAxFPxev2f/uBCmBPCqpntM/lc6FtKcUp0fb4q+EIY3aYW18uNtchqZr6
+         LRF+8X14Ikmb0urhY6/A9IcFMP/sZFgF4pJ1B7lJeYOPrOxusXp+CyzhDW5BGVm0Ok5V
+         OXHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722858923; x=1723463723;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u/OdbEbQ9htqQD+JqhHkWH/SthAorUF4PW8PhhCTCvc=;
+        b=cJNkL69wlK/Dpovj/yliIvjw9s7EeytaEsbHNVz4zv8CY4bgS9h1KfPcnxTiq9J/QC
+         LmTXGP2ClFK3zY8el+bnx+MKTUgnrhHQMgqt1PC7jAZorfpQ4128dtS66JXKIKvvH8uz
+         vqFluHGDl8xJ62li4QRlPHUM7LfBeB7coXJCMxYPlPkDd3iwRqh6xihLZr1O4fE6gOKs
+         jJMlCGkoRtEcOL3VT+upJBffxgGdvqonBeVwJOSfwfIzoXLELTCml2Q+UNFR55LcJH/I
+         RA0wLnCdjRIDotyHD76qIB5UO2ww97Tu+BAt/5SMkYSBN9b6TZrslAa5+F6W3rs2AeKN
+         CD1Q==
+X-Gm-Message-State: AOJu0YyH2Qe9Yun4tI7o9SC7yiipQCoJ13al7cawxFMsKvZWNWePaolw
+	FfbIEsQ+8URjqwr5Hu3nXWPja8xygRPbByeh0EuHnEMBEWj4ANmACOgSbg==
+X-Google-Smtp-Source: AGHT+IHtPb7Ah5uSLo9JHEJttAchOAITbLk/K+XTGrjxi726ppqtQq2YqPEI5zp5BMH0n68nn3vreQ==
+X-Received: by 2002:ac2:4e0d:0:b0:52c:896f:930d with SMTP id 2adb3069b0e04-530bb3b18a7mr8117369e87.57.1722858922829;
+        Mon, 05 Aug 2024 04:55:22 -0700 (PDT)
+Received: from mobilestation ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-530bba10f27sm1114653e87.111.2024.08.05.04.55.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Aug 2024 04:55:22 -0700 (PDT)
+Date: Mon, 5 Aug 2024 14:55:19 +0300
+From: Serge Semin <fancer.lancer@gmail.com>
+To: Gaosheng Cui <cuigaosheng1@huawei.com>
+Cc: linux-mips@vger.kernel.org
+Subject: Re: [PATCH -next] bus: bt1-apb: Add missing clk_disable_unprepare in
+ bt1_apb_request_clk
+Message-ID: <eas5l7ave5oipwnebewmbky3basphjnobutvqlkn6svnkju22f@xdkpqbuisonh>
+References: <20240803065231.342695-1-cuigaosheng1@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240803065231.342695-1-cuigaosheng1@huawei.com>
 
-Sean Christopherson <seanjc@google.com> writes:
+Hi Gaosheng
 
-> On Thu, Aug 01, 2024, Aneesh Kumar K.V wrote:
->> Sean Christopherson <seanjc@google.com> writes:
->> 
->> > Disallow copying MTE tags to guest memory while KVM is dirty logging, as
->> > writing guest memory without marking the gfn as dirty in the memslot could
->> > result in userspace failing to migrate the updated page.  Ideally (maybe?),
->> > KVM would simply mark the gfn as dirty, but there is no vCPU to work with,
->> > and presumably the only use case for copy MTE tags _to_ the guest is when
->> > restoring state on the target.
->> >
->> > Fixes: f0376edb1ddc ("KVM: arm64: Add ioctl to fetch/store tags in a guest")
->> > Signed-off-by: Sean Christopherson <seanjc@google.com>
->> > ---
->> >  arch/arm64/kvm/guest.c | 5 +++++
->> >  1 file changed, 5 insertions(+)
->> >
->> > diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
->> > index e1f0ff08836a..962f985977c2 100644
->> > --- a/arch/arm64/kvm/guest.c
->> > +++ b/arch/arm64/kvm/guest.c
->> > @@ -1045,6 +1045,11 @@ int kvm_vm_ioctl_mte_copy_tags(struct kvm *kvm,
->> >  
->> >  	mutex_lock(&kvm->slots_lock);
->> >  
->> > +	if (write && atomic_read(&kvm->nr_memslots_dirty_logging)) {
->> > +		ret = -EBUSY;
->> > +		goto out;
->> > +	}
->> > +
->> >
->> 
->> is this equivalent to kvm_follow_pfn() with kfp->pin = 1 ?
->
-> No, gfn_to_pfn_prot() == FOLL_GET, kfp->pin == FOLL_PIN.  But that's not really
-> relevant.
->
+On Sat, Aug 03, 2024 at 02:52:31PM +0800, Gaosheng Cui wrote:
+> Add the missing clk_disable_unprepare() before return in
+> bt1_apb_request_clk().
+> 
+> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+> ---
+>  drivers/bus/bt1-apb.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/bus/bt1-apb.c b/drivers/bus/bt1-apb.c
+> index 595fb22b73e0..244f03988545 100644
+> --- a/drivers/bus/bt1-apb.c
+> +++ b/drivers/bus/bt1-apb.c
+> @@ -210,12 +210,14 @@ static int bt1_apb_request_clk(struct bt1_apb *apb)
 
+Thanks for the patch, but it's fully redundant.
 
-What I meant was, should we consider mte_copy_tags_from_user() as one
-that update the page contents (even though it is updating tags) and
-use kvm_follow_pfn() with kfp->pin = 1 instead?
+>  	ret = devm_add_action_or_reset(apb->dev, bt1_apb_disable_clk, apb);
 
-Is my understanding correct in that, if we want to look up a pfn/page
-from gfn with the intent of updating the page contents, we should use
-kfp->pin == 1? 
+Please see the __devm_add_action_or_reset() method semantics. It
+executes the passed "action" in case if the add-action procedure
+fails.
 
--aneesh
+>  	if (ret) {
+>  		dev_err(apb->dev, "Can't add APB EHB clocks disable action\n");
+> +		clk_disable_unprepare(apb->pclk);
+>  		return ret;
+>  	}
+>  
+>  	apb->rate = clk_get_rate(apb->pclk);
+>  	if (!apb->rate) {
+>  		dev_err(apb->dev, "Invalid clock rate\n");
+> +		clk_disable_unprepare(apb->pclk);
+
+If the rate getting fails for some reason, then the action registered above
+will be called in the framework of all the device-managed cleanups
+executed for the probe() method.
+
+So to speak there is no need in the change suggested by you here.
+
+But what could be done is the devm_clk_get(), clk_prepare_enable() and
+devm_add_action_or_reset() calls replacement with a single
+devm_clk_get_enabled() invocation. That simplification will also cause
+the bt1_apb_disable_clk() method removal.
+
+A similar change can be applied to the bt1_axi_request_clk() method
+in the drivers/bus/bt1-axi.c driver.
+
+-Serge(y)
+
+>  		return -EINVAL;
+>  	}
+>  
+> -- 
+> 2.25.1
+> 
 
