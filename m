@@ -1,195 +1,147 @@
-Return-Path: <linux-mips+bounces-4763-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4764-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B630594917F
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2024 15:31:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A86EB94941D
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2024 17:04:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6BB17285EA6
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2024 13:31:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57EDA1F25823
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2024 15:04:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EA271D2F7B;
-	Tue,  6 Aug 2024 13:29:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 928611EA0D1;
+	Tue,  6 Aug 2024 15:04:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b/P8CMlN"
+	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="d52Gp4QX"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A5E1D3620
-	for <linux-mips@vger.kernel.org>; Tue,  6 Aug 2024 13:29:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEFA31E7A5A
+	for <linux-mips@vger.kernel.org>; Tue,  6 Aug 2024 15:04:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722950949; cv=none; b=TeGn0ipvu6Sy+Kh9Qy9Hmp56DslH0l11Dz+/YQCBiPVr4eU3vj8ZEf0H5wQWBMVzz28uhYx6qG/XfYLx6jXPM/Sq16R7yRTeqQ3sHEmk7DAc8QuWJFxnWwPUjzAHDXKCpufWFrrXm5SDXkJal6qUrM/jVKTJASLRZ9ssWNHF2W0=
+	t=1722956654; cv=none; b=NaHfUwYSHwqBY9XuaQK9J9utJvUm5JK0IYYbBpK3c+6AJnAVguTxvViN7j8KVAyIGFggiY9YNqz54J8tX0PJHg+HiTjEYd4x78p3X014TcLfETCkAJQz1VTtZCIfCPxfWNCqmcblfsZE+sE7gFnq3yiV+E6NQUp/rHC6aRkn7Rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722950949; c=relaxed/simple;
-	bh=4NJ/yhkOnp0DgwZlQ2ar1giYsnoU0BxjF1CUE59RMzM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bOJUoZSDJxtw7iwNUrmGnFg7Z3ZfAmhciSsN7JkDKH5UdPSiklrHqkMsBME124FnkDLFAT63B4wRb1cCOsYBFtng51nxuBlhs5AGov4PlQRmB8LG7i5KKlhh1XALzt9j/tBcSDbZ5nyZzYsGYyzKrnzIk+/dC7TYSlz4DhcOE5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=b/P8CMlN; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1722950946;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=mg8j1NdkC4QyJoy5NjpxqHT8Z7jh1Oox1ZezxJBmykE=;
-	b=b/P8CMlNUkpb9rwNLv+lI28z/vQPWrRCCWnyOwBfMgIkNxm4ePCGLWh4ghNzgEuvIOe+x6
-	lG7iqgLxDOgf8MYdenssMo/pC+NQvCDOOC+GqoSHxLa+WENuFj4x0jTAA7SCSFJ05jhVxH
-	e1/BZ06/JmDY/vUZnaNAvIzezJLI1sw=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-41-FD5FnV4oO22e0PjUj3eo1g-1; Tue, 06 Aug 2024 09:29:04 -0400
-X-MC-Unique: FD5FnV4oO22e0PjUj3eo1g-1
-Received: by mail-lj1-f199.google.com with SMTP id 38308e7fff4ca-2ef23ec8dceso6714401fa.0
-        for <linux-mips@vger.kernel.org>; Tue, 06 Aug 2024 06:29:04 -0700 (PDT)
+	s=arc-20240116; t=1722956654; c=relaxed/simple;
+	bh=Ojp+5mgXIeLmoaOntdYobjdPsSlf5Jv2i52l1FMoU8o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PE9K+o7OpknP9CGK52/Kk+kpr7H9jSZ2zuXkYhW1nq2CnnNROXgi/PpYCQ6Mqj7kq4dCYt5wyPdzsAlFqCSgXf5WRSxZIMqabMqZz6xXw6+Kp2RukptxNMGM8Qlzenr4u0fpZOthRwwpSRKd6V6NvhE3m+vs90Cgg6ba5bde3Yw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=d52Gp4QX; arc=none smtp.client-ip=209.85.166.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
+Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-396e2d21812so3157805ab.2
+        for <linux-mips@vger.kernel.org>; Tue, 06 Aug 2024 08:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1722956651; x=1723561451; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5nqpVJEa3gF+vLMgvdD8twTbWevyBd39Y3ES27W51MM=;
+        b=d52Gp4QXL5N0z7YA2EbMkiYnHuAeE5d8Q02SLVXmq4IS5IBSYyJa3nAVrhpMDbjWxo
+         V/9jVDDd3xhdG8LsCLLAirk39wLC9scuXwlr1CdL9e1h1pymuXg4oDWK0ZOV+DuHQV07
+         t3Yug0INszErMVCyPOACtxZo59yAidEqBQOjorFizlXE76A1+gniwNpNH/ilWHdNvMlh
+         e6RYjdiQgVvMT408J/D0c8GCbJD0ObhBknuCtzcWcLsWxFPme21PGj9SiIxItFhqMbw/
+         nL+dBwH+irjs9/FeyRq6l8S57zaaDqPQFjg+dvpDkPfuRXOi1XlsAf0lRG/FMvsepiF2
+         5U0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722950943; x=1723555743;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=mg8j1NdkC4QyJoy5NjpxqHT8Z7jh1Oox1ZezxJBmykE=;
-        b=IVkDKQHR82iVkgW/MoPolF7wVJaik3H6lZwcEbTAvIdPCUyrBjblIFYi7MWgFSvAAb
-         dnJHKWUB+n6nZE4qyddPa5zmP/gXuEsKatF1gn3PdVvaIrfntkt+tr9xKdVyhA+rn9V+
-         PLW3/2VyDCTaMy2sEkXxcqpOmALyx7SAiXoT55h4yVZCbzPfB/6jAHGa0dXXyB6cIe0G
-         FYyLcwAn8WRmJ/7NntZXtN7fHjnXVo7ZDmDkYixpCtklTrBYmGiA/4dTtNNbfAtjyzGe
-         Yq8FsTYK0yw0b20cIQoOxdzGaKw9uVC4pbMI3DT6ARnIMp7e186Zki9VZW6sFi6kGTbj
-         ObJg==
-X-Forwarded-Encrypted: i=1; AJvYcCW610R+sOEU5s2OvCeW84Cl1NbxUGJ89ifZFB55JL9ca+DeXjmsLJYYdGAGQY8RU/ORh30TH8fSckH2rsBysRWo85W5hWbO4vT0bg==
-X-Gm-Message-State: AOJu0YxbRvgOUfYSexeV6COb2Ut68BthXHYkHNUzyvCogy+BvRbouo5/
-	OREcX+zaHDyf/Zq6gpDNY++LdZRwzWVOTUfAetc+a3EDwR6ly44ZtJ8Gf8oi6fJpdXaUzlvjjRP
-	OkgCjMkFFNGeR2qn9FWeI4ycO3kpcteuUfpoWUS5ZLCmSzjpsQAOQxy6Gx+E=
-X-Received: by 2002:a2e:8696:0:b0:2ef:228a:1b86 with SMTP id 38308e7fff4ca-2f15aabd05fmr96389231fa.21.1722950943102;
-        Tue, 06 Aug 2024 06:29:03 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEUAkkY1eODz2H49AhHbcgbZMYiCb05Jg7YJ0JX+yoRtVdCbp9tatU0EHzUBQRP+lyJ7u1OEA==
-X-Received: by 2002:a2e:8696:0:b0:2ef:228a:1b86 with SMTP id 38308e7fff4ca-2f15aabd05fmr96388601fa.21.1722950942503;
-        Tue, 06 Aug 2024 06:29:02 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c73f:8500:f83c:3602:5300:88af? (p200300cbc73f8500f83c3602530088af.dip0.t-ipconnect.de. [2003:cb:c73f:8500:f83c:3602:5300:88af])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-428e6e9cd4esm180274335e9.44.2024.08.06.06.29.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Aug 2024 06:29:02 -0700 (PDT)
-Message-ID: <87ca4550-ed4d-4373-8d4c-3f89ac03df91@redhat.com>
-Date: Tue, 6 Aug 2024 15:28:59 +0200
+        d=1e100.net; s=20230601; t=1722956651; x=1723561451;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5nqpVJEa3gF+vLMgvdD8twTbWevyBd39Y3ES27W51MM=;
+        b=oh2nAfyqhSgVWrOZcfB//TouTpAN0iGZ87k3ZIy++Ti3Rp8vpq9nQm4DSypORX4QHP
+         QMiIqF60lIOWTHleVwiY2Ti9g4Yjj0udBSCnKKK4RNZdcx7ojXx1YkyqdMIh/BU1+fBb
+         jymnqbDyujhlufPUngv7J/1/m1D71ZwrjxdIBPRmI2Vpwz0LetmK4v48AAQqc+fEml+u
+         Cty+0ZXI9l5erUZK6eH8GgWeZMBhV2aSicsNlayF2wYzLTIFffOV2shIYT0uK/YxKvBm
+         j6SdkUFEBz34HRMO/Y6glciiLjg02w71TxbptZcndHi4FTdXsDu3M9qeyVecOhMUrOhB
+         F1Ag==
+X-Forwarded-Encrypted: i=1; AJvYcCW4rmEAuL9ae3XFfPowHcLFcQs3qzO1F37huRKgj7VTUeChiQn1FFCKx+aEQu8sWQNUk/1AXKzn76dOTGKPgFo7wYdBk/jvQBVuQQ==
+X-Gm-Message-State: AOJu0Yz+glIIL6cf2QJiIbeV/SDB2tag1bJpGaH4mBTwSSs7lEZJGt7p
+	d2mrggVOd9caLDQUxSHLKGdANHg2P9QTZE7CEhJC7YG6eXJl2n6ooefTA6NqMDTr2OhlD6uKgGN
+	L/fppyXxdAY9cV4eflKKEYY4NWkyqBBAq0zF4Lw==
+X-Google-Smtp-Source: AGHT+IE5dkU8O3hsRzTzR3mqE211YMexCU92LD+ZH2mO65SVdE7w+UZ8Equ/sKTPvXFYaRtJg+9DX/UprpD7ulXsS18=
+X-Received: by 2002:a92:d64d:0:b0:397:d9a9:8769 with SMTP id
+ e9e14a558f8ab-39b1fc37fe5mr152610645ab.24.1722956650868; Tue, 06 Aug 2024
+ 08:04:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 24/26] arch_numa: switch over to numa_memblks
-To: Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
- Andreas Larsson <andreas@gaisler.com>,
- Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>,
- Borislav Petkov <bp@alien8.de>, Catalin Marinas <catalin.marinas@arm.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Dan Williams <dan.j.williams@intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- "David S. Miller" <davem@davemloft.net>, Davidlohr Bueso
- <dave@stgolabs.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Heiko Carstens <hca@linux.ibm.com>, Huacai Chen <chenhuacai@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Jonathan Cameron <jonathan.cameron@huawei.com>,
- Jonathan Corbet <corbet@lwn.net>, Michael Ellerman <mpe@ellerman.id.au>,
- Palmer Dabbelt <palmer@dabbelt.com>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Rob Herring <robh@kernel.org>,
- Samuel Holland <samuel.holland@sifive.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Thomas Gleixner <tglx@linutronix.de>, Vasily Gorbik <gor@linux.ibm.com>,
- Will Deacon <will@kernel.org>, Zi Yan <ziy@nvidia.com>,
- devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-cxl@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-mm@kvack.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-sh@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- loongarch@lists.linux.dev, nvdimm@lists.linux.dev,
- sparclinux@vger.kernel.org, x86@kernel.org
-References: <20240801060826.559858-1-rppt@kernel.org>
- <20240801060826.559858-25-rppt@kernel.org>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <20240801060826.559858-25-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240726235234.228822-1-seanjc@google.com> <20240726235234.228822-57-seanjc@google.com>
+In-Reply-To: <20240726235234.228822-57-seanjc@google.com>
+From: Anup Patel <anup@brainfault.org>
+Date: Tue, 6 Aug 2024 20:33:59 +0530
+Message-ID: <CAAhSdy1DvkU_C2jmtA1SBNfjp1gxu_6RhFKbf-hkhSNQeTXwwA@mail.gmail.com>
+Subject: Re: [PATCH v12 56/84] KVM: RISC-V: Mark "struct page" pfns dirty iff
+ a stage-2 PTE is installed
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
+	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	David Matlack <dmatlack@google.com>, David Stevens <stevensd@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 01.08.24 08:08, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> Until now arch_numa was directly translating firmware NUMA information
-> to memblock.
-> 
-> Using numa_memblks as an intermediate step has a few advantages:
-> * alignment with more battle tested x86 implementation
-> * availability of NUMA emulation
-> * maintaining node information for not yet populated memory
-> 
-> Replace current functionality related to numa_add_memblk() and
-> __node_distance() with the implementation based on numa_memblks and add
-> functions required by numa_emulation.
-> 
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> Tested-by: Zi Yan <ziy@nvidia.com> # for x86_64 and arm64
+On Sat, Jul 27, 2024 at 5:24=E2=80=AFAM Sean Christopherson <seanjc@google.=
+com> wrote:
+>
+> Don't mark pages dirty if KVM bails from the page fault handler without
+> installing a stage-2 mapping, i.e. if the page is guaranteed to not be
+> written by the guest.
+>
+> In addition to being a (very) minor fix, this paves the way for convertin=
+g
+> RISC-V to use kvm_release_faultin_page().
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+
+For KVM RISC-V:
+Acked-by: Anup Patel <anup@brainfault.org>
+
+Regards,
+Anup
+
+
 > ---
-
-Acked-by: David Hildenbrand <david@redhat.com>
-
--- 
-Cheers,
-
-David / dhildenb
-
+>  arch/riscv/kvm/mmu.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+> index b63650f9b966..06aa5a0d056d 100644
+> --- a/arch/riscv/kvm/mmu.c
+> +++ b/arch/riscv/kvm/mmu.c
+> @@ -669,7 +669,6 @@ int kvm_riscv_gstage_map(struct kvm_vcpu *vcpu,
+>                 goto out_unlock;
+>
+>         if (writable) {
+> -               kvm_set_pfn_dirty(hfn);
+>                 mark_page_dirty(kvm, gfn);
+>                 ret =3D gstage_map_page(kvm, pcache, gpa, hfn << PAGE_SHI=
+FT,
+>                                       vma_pagesize, false, true);
+> @@ -682,6 +681,9 @@ int kvm_riscv_gstage_map(struct kvm_vcpu *vcpu,
+>                 kvm_err("Failed to map in G-stage\n");
+>
+>  out_unlock:
+> +       if ((!ret || ret =3D=3D -EEXIST) && writable)
+> +               kvm_set_pfn_dirty(hfn);
+> +
+>         spin_unlock(&kvm->mmu_lock);
+>         kvm_set_pfn_accessed(hfn);
+>         kvm_release_pfn_clean(hfn);
+> --
+> 2.46.0.rc1.232.g9752f9e123-goog
+>
 
