@@ -1,156 +1,172 @@
-Return-Path: <linux-mips+bounces-4737-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4738-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AE4C9489D2
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2024 09:11:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9877A948B3C
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2024 10:25:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5DFA91C2230E
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2024 07:11:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 244CA1F22C8A
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2024 08:25:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33C62166F35;
-	Tue,  6 Aug 2024 07:11:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E24961BD01C;
+	Tue,  6 Aug 2024 08:25:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="aLC7wrbu"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tYPRa2kB"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6801C165F08;
-	Tue,  6 Aug 2024 07:11:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 199601BD011
+	for <linux-mips@vger.kernel.org>; Tue,  6 Aug 2024 08:25:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722928289; cv=none; b=QFgLB4SHdvVNqSR1aoWk7ap+uoF1BBb+WVECraaqvmJqzn49rfLwfkJj6Y4zW8WcRHl0ydZHk+Wq6aWLKMV37z0iT35J3hT2Z6w87o+PvyzJ+EQ0+3tAcNG3Irg5xFdxr2xDpVsuHOiEtv12jl87vARzVrZINHJsf09xbQeG1bI=
+	t=1722932724; cv=none; b=nfcTIkj0PY3+8TiR8/Eje/DLj2rfGg1lrNiPb+pGCnM/lIdNIUP7f7Q0RcyUP4n2jpSJq2qfllI6inV3YHpQevM4J2dslh9oUrA1n3MbQZ9V8kLMK41iZx58CcGLfMMjT5BmjaCDW22794IdbHwOkqtuOTix9y4e4ZDJgfMqzko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722928289; c=relaxed/simple;
-	bh=7HePuyoWPygVPxh4qKr24Yod2wxAsQz31TbzWEQpLRQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bCPHua2SW85CCcYg73datwMjbM2HOssSC0l2FUnJzHmw6Q6J92DxDxL8aAX1fPVQLB4wMheE+eVeEIrpshAhF0vzpcoHz9PwAmf+px6K3lYlLnnho3Z53SnQZB5tfXCdRuZe/HvMIQ38j3sF6KfLD+Vmrv5L/SmuvXjwtXoPWCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=aLC7wrbu; arc=none smtp.client-ip=212.227.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1722928283; x=1723533083; i=markus.elfring@web.de;
-	bh=7HePuyoWPygVPxh4qKr24Yod2wxAsQz31TbzWEQpLRQ=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=aLC7wrbugvHbc7JitVGK+UbcVshwtENRbS63MrtuGO+FdCGD2lnXqmw9CP9GnaeC
-	 TFfrydT8yJue9bUo/wS8AtmAk6nut6jcbgQIBqgITOjiRRLa3VB1qGG0JiIl4CYsR
-	 CkEQXMkLNvcXuDaYsPfRyyJZTDNY6Srf0tSU0Q3anf3BEVehnreZ+oVlvm7JJAl5g
-	 4nC0KYEBxKRytoI1WgG+epHzc7IVXjXLUweerikYV6Bjs16L/pZuhHC0tOthxGXfY
-	 SkQboLneSY9dYwF4taCPUoAcJcTqxWmK357OMq33GxwfPee2lBJx6wmYhg27NInOU
-	 L1ATh6GHpOYXVQoftw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.90.95]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MbTL1-1s3oIK0Nk9-00mINb; Tue, 06
- Aug 2024 09:04:09 +0200
-Message-ID: <9aad36fe-cd4c-4ce5-b4d8-6c8619d10c46@web.de>
-Date: Tue, 6 Aug 2024 09:03:33 +0200
+	s=arc-20240116; t=1722932724; c=relaxed/simple;
+	bh=k7zHAEEEUxyRomVtvnM2viO2YFKTnrtBHjiLIBw6Z38=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uPxa1Rfo4eji1SFrkRo6dXGkZHseV29lvHoZEWrGVveaDwJ///2u6mZOvBOyM6sYKp4c0maqKuc/+4b/CRQKoVCWQ6JIR/bysCVz3lyTFg9XxD9vKHOKzhylP73TSjh/KDQCZXZd1fJIMl1m/TubaU2rxbPZiyImArmUhAJUaTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tYPRa2kB; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-368313809a4so3707655f8f.0
+        for <linux-mips@vger.kernel.org>; Tue, 06 Aug 2024 01:25:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1722932721; x=1723537521; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mJJmve+UBZqWHPzqvXAkYx9wHC1+4s/jebXaeWpKSm4=;
+        b=tYPRa2kB2odRm+MJ+l681PUDuyo3bcqu/eESNFU6taVOoHz5LAYAbhSqCGA8033Jla
+         RqREqsEUfdIM0PbEM4MqsH5VsBeZnroBOHpCPFBxo/IUuFxB86M1shxBXmpHfaNN6fKI
+         PqnjUs/RJSgDq8LaSoYAWSuCfg97pnKHR2ZLa/kTQozXbSTxGgTM5Z+Dntypd0s0dWDr
+         EpcTrBH0lcgsKJg92ZjF8X8uK6ir6HAW1qo2NPmqGAD0GCSrlZbs9SAt9ObiH3ezsV6T
+         YfqlquUFL/j3pLhEP8GPsOzmlMJ49JAeNPFBT+ZPJYIsK0HBlIgIq6Xo3F7erZXDW3GR
+         GNiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722932721; x=1723537521;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mJJmve+UBZqWHPzqvXAkYx9wHC1+4s/jebXaeWpKSm4=;
+        b=OYYTU7JcytjtI4t2hgG0TJDaSETKnwthhhsTGorhjJPliBX+yDvxCsyYIb9XIq+L87
+         qDhkLQUmWu1qokx3h4ElSzYDalW/a1qapUxwKvFidsTeSWdJpgzX9KRydyuOiywMfkK5
+         FD8xIGKVFL/l6nuN6XkrgeSH22d+lQle/dn3PaCTtIluqDfpSGnLFisFGKe3NmMoxUmw
+         Hv+HI2//S0k+pd9wfCfMDagzgHHMSCnJ0kOQuFnWRmlYelf71J1+nUg2LVXPVW+jiZJu
+         y4gCXaK0BM0nlP3pN/yEnXg3QKCFCS9nbkvhIS91BvT7KBjnQtxj7ikELol4Dbz2rA42
+         Vs0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUmmQxe8w5lh9Z/is8oWrjpgBPo7UafPBtPLjDZG0ynmyzQfZ4CU5vgzZrUo/Dh2T7QfOtJkMV6gI0i7lvDR7cOcLuE8/lR8REWqw==
+X-Gm-Message-State: AOJu0YyJq7RXI5SHBoLSDjuF92tkishjuJCWKqfNALvxonZZClGZLZY2
+	GM27DO15pBojV9sWO5IE3z5WIcf/e3qxU2y+BPioXvo8vMCqhZbL9ypqv8aBH1S9nPdR2sEhXUU
+	aINIEN/Excj0H0XD5jFE33wfICX2dAJuNx717
+X-Google-Smtp-Source: AGHT+IEuJVBQVgvvzdKoA/IljQMVSQQCy4ILUfIi4PfR2IcPP3crNOUdNiIGa90I2U+SlhluocGZ2/3ZifLac4nEAJY=
+X-Received: by 2002:a05:6000:1151:b0:362:2af4:43cc with SMTP id
+ ffacd0b85a97d-36bbbe5be99mr9354068f8f.19.1722932721184; Tue, 06 Aug 2024
+ 01:25:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v17 03/14] netdev: support binding dma-buf to
- netdevice
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>,
- Kaiyuan Zhang <kaiyuanz@google.com>, Pavel Begunkov
- <asml.silence@gmail.com>, Willem de Bruijn <willemb@google.com>,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- LKML <linux-kernel@vger.kernel.org>, Andreas Larsson <andreas@gaisler.com>,
- Arnd Bergmann <arnd@arndb.de>, Bagas Sanjaya <bagasdotme@gmail.com>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Christoph Hellwig <hch@infradead.org>, David Ahern <dsahern@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, David Wei <dw@davidwei.uk>,
- Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>, Helge Deller <deller@gmx.de>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Jakub Kicinski
- <kuba@kernel.org>,
- "James E. J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Jeroen de Borst <jeroendb@google.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Matt Turner <mattst88@gmail.com>, Nikolay Aleksandrov <razor@blackwall.org>,
- Paolo Abeni <pabeni@redhat.com>,
- Praveen Kaligineedi <pkaligineedi@google.com>,
- Richard Henderson <richard.henderson@linaro.org>,
- Shailend Chand <shailend@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Shuah Khan <shuah@kernel.org>,
- Steffen Klassert <steffen.klassert@secunet.com>,
- Steven Rostedt <rostedt@goodmis.org>, Sumit Semwal
- <sumit.semwal@linaro.org>, Taehee Yoo <ap420073@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Yunsheng Lin <linyunsheng@huawei.com>
-References: <20240730022623.98909-4-almasrymina@google.com>
- <5d3c74da-7d44-4b88-8961-60f21f84f0ac@web.de>
- <CAHS8izPxfCv1VMFBK1FahGTjVmUSSfrabgY5y6V+XtaszoHQ4w@mail.gmail.com>
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <CAHS8izPxfCv1VMFBK1FahGTjVmUSSfrabgY5y6V+XtaszoHQ4w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ud03T+VJ0WQWkNGa/SuDGe/nuF0sGbh6xFVs6sj7mBpoHZmEK9m
- /g8pgN0ga+9LIF+xkm8yuxipRI1qpxk9O/iv4my6GHrRWDZdHWWggRKyAqliCerii6f6rsb
- 4m+YAthbpuAnnWrnfbwf6MXbKNd/W6OA+m2MMbRtZr+OncP4jJnp6T9Z97ykCCWrjKOacd6
- hZrRGnLMzDmwJNYA5qgFQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:zPsCc1lrsyU=;Y7DEz/vBBmk+SeE6JgoellZvOuX
- kcZRuFvCRXoAHvpu4L73XmcVhTOHNgehO96ILvjt1EA+Yfwm+WDObNm8eksbv1ELbJYKHqYuz
- C40nciD9oSUI3qebeUWhWAWNw7O1ZrFCxPEqgZbaIkIgGvz/ZvU+Edr2+r3atRNSYhdojMJGs
- qWNCXPBNGKklLG5YXjAmVynAryjZPyB4DRUWZuWuUZbVGnrzr/dfLX/m4iZiFVpuknIlxfLaS
- xWcqEOkcpgXpzyLmDKyCj2LOpicZIF8SfFwd5XFuIKa3K66sjfL+BkUlwpxAv7IpIijQA5uFB
- NMsuhO3BGbozyiyAPZ7SxPzrj+NoB+HSLSdffc9wC8m9fIO9zlY+RDpLSBXtfaqoSFdlE8Az+
- LQ4ucimoajT41/N7wv7fvsZri+AdA955Db3MF3Dd+TUWIr4dx5BdvpTc9KN8qH8s4Z3U6YKrq
- A6ohigBF8yZiYbPlA7HiLOZaWbX3o6tzjjX0bezEBmpfmnPEa63AfPvVSwsUGK8N2420+lMCV
- g1jPz/Et77QWGhKdme4mxWFmIYMlkhE4IVdnOfRmy2yYk28FC16LtnfwsXRLH+TzXHEznXqv+
- 1OteD/9c2ul0sK2Y4eVn7vXLx2oN9+dzooNND404WbnJfqoRnLeEAdhrRHOc6IBP8m3r252jT
- e9hstn4baSSLD5NLSETphdL/3gwE897NmkuQvEGSR36s5Wk5yJSaRRiWtAHAZFN9pzMnJzQRn
- MySFB0ZEJi/ForUpyXH7UsRV8W2zYGkuWK9oriuaNLDHkUvpbnFnBefK38oMRYALjMqQRa8IU
- qJ0sxMyEwM1fCeDOojdWCPwQ==
+References: <20240726235234.228822-1-seanjc@google.com> <20240726235234.228822-55-seanjc@google.com>
+ <ZrFfgzRbiqT-Zi2O@linux.dev>
+In-Reply-To: <ZrFfgzRbiqT-Zi2O@linux.dev>
+From: Fuad Tabba <tabba@google.com>
+Date: Tue, 6 Aug 2024 09:24:43 +0100
+Message-ID: <CA+EHjTxZwDOeC94Y1otxcp-mcwUZA=TpQp4pav-E8Xvb2MA64Q@mail.gmail.com>
+Subject: Re: [PATCH v12 54/84] KVM: arm64: Mark "struct page" pfns
+ accessed/dirty before dropping mmu_lock
+To: Oliver Upton <oliver.upton@linux.dev>
+Cc: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Marc Zyngier <maz@kernel.org>, Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
+	Huacai Chen <chenhuacai@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Anup Patel <anup@brainfault.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	David Matlack <dmatlack@google.com>, David Stevens <stevensd@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 
->> =E2=80=A6
->>> +++ b/include/net/devmem.h
->>> @@ -0,0 +1,115 @@
->> =E2=80=A6
->>> +#ifndef _NET_DEVMEM_H
->>> +#define _NET_DEVMEM_H
->> =E2=80=A6
->>
->> I suggest to omit leading underscores from such identifiers.
->> https://wiki.sei.cmu.edu/confluence/display/c/DCL37-C.+Do+not+declare+o=
-r+define+a+reserved+identifier
->>
+Hi Oliver,
+
+On Tue, 6 Aug 2024 at 00:26, Oliver Upton <oliver.upton@linux.dev> wrote:
 >
-> I was gonna apply this change, but I ack'd existing files and I find
-> that all of them include leading underscores, including some very
-> recently added files like net/core/page_pool_priv.h.
+> [+cc Fuad]
 >
-> I would prefer to stick to existing conventions if that's OK, unless
-> there is widespread agreement to the contrary.
+> Fuad, you mentioned in commit 9c30fc615daa ("KVM: arm64: Move setting
+> the page as dirty out of the critical section") that restructuring
+> around the MMU lock was helpful for reuse (presumably for pKVM), but I
+> lack the context there.
 
-Under which circumstances would you become interested to reduce developmen=
-t risks
-also according to undefined behaviour?
-https://wiki.sei.cmu.edu/confluence/display/c/CC.+Undefined+Behavior#CC.Un=
-definedBehavior-ub_106
+That was for some refactoring I'd done later on for mem_aborts in
+pKVM. That said, I didn't know at the time that there might be a race
+with some filesystems. I'll keep this in mind for the pKVM code we
+have for now, and when upstreaming.
 
-Regards,
-Markus
+Thanks,
+/fuad
+
+> On Fri, Jul 26, 2024 at 04:52:03PM -0700, Sean Christopherson wrote:
+> > Mark pages/folios accessed+dirty prior to dropping mmu_lock, as marking a
+> > page/folio dirty after it has been written back can make some filesystems
+> > unhappy (backing KVM guests will such filesystem files is uncommon, and
+>
+> typo: s/will/with/
+>
+> > the race is minuscule, hence the lack of complaints).  See the link below
+> > for details.
+> >
+> > This will also allow converting arm64 to kvm_release_faultin_page(), which
+> > requires that mmu_lock be held (for the aforementioned reason).
+> >
+> > Link: https://lore.kernel.org/all/cover.1683044162.git.lstoakes@gmail.com
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >  arch/arm64/kvm/mmu.c | 10 ++++++----
+> >  1 file changed, 6 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> > index 22ee37360c4e..ce13c3d884d5 100644
+> > --- a/arch/arm64/kvm/mmu.c
+> > +++ b/arch/arm64/kvm/mmu.c
+> > @@ -1685,15 +1685,17 @@ static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
+> >       }
+> >
+> >  out_unlock:
+> > +     if (writable && !ret)
+> > +             kvm_set_pfn_dirty(pfn);
+>
+> I'm guessing you meant kvm_release_pfn_dirty() here, because this leaks
+> a reference.
+>
+> > +     else
+> > +             kvm_release_pfn_clean(pfn);
+> > +
+> >       read_unlock(&kvm->mmu_lock);
+> >
+> >       /* Mark the page dirty only if the fault is handled successfully */
+> > -     if (writable && !ret) {
+> > -             kvm_set_pfn_dirty(pfn);
+> > +     if (writable && !ret)
+> >               mark_page_dirty_in_slot(kvm, memslot, gfn);
+> > -     }
+> >
+> > -     kvm_release_pfn_clean(pfn);
+> >       return ret != -EAGAIN ? ret : 0;
+> >  }
+> >
+> > --
+> > 2.46.0.rc1.232.g9752f9e123-goog
+> >
+>
+> --
+> Thanks,
+> Oliver
+>
 
