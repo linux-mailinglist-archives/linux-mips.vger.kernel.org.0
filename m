@@ -1,169 +1,245 @@
-Return-Path: <linux-mips+bounces-4770-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4771-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F17899498B0
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2024 21:56:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E910A94993E
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2024 22:37:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC659283221
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2024 19:56:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4B768B25B1F
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2024 20:37:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E9B2156F5D;
-	Tue,  6 Aug 2024 19:56:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E6F615B137;
+	Tue,  6 Aug 2024 20:37:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LzyNQVb9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X8YxGWgP"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C419D155351;
-	Tue,  6 Aug 2024 19:56:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA03440875;
+	Tue,  6 Aug 2024 20:37:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722974175; cv=none; b=nb7S5xKGAzhpeiB41Tl4PYbkraPH9oYd5AiI56BqwGPGtt2+2R12fD8p9EOD3j21Lysnm0NMy1DLNqihZQLEVCrZHjUOhVkEmfmA0UhH9gJdTIY9F4etC9MJV+YDw2tDe6dV6BAc4KJLoFXSqpfXsSwc8OqxSGagfyoRqjsN7Gk=
+	t=1722976642; cv=none; b=e1UywqPh5Z+jweJs3fYBe26pJ/IfwukLn/m9ckGASEOM3LOI2fFlfHMY5HZ1YszePqpsS7xp5hjwfGYoA9OQAaz8a6/QUi97zpYr0e8cG3uL/922elDOQkdXYw4wGxe3QKRiB9DqYgn/oWmcpxFxOclUHHDa4mUGIPrMYg7bW7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722974175; c=relaxed/simple;
-	bh=1cb0R2KeOB4slldNjw57NpRZHh2ObyAzyGPArx+3mS8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N2rjpOUHvb4P6ljl43KJ1qXLojmq9HvNgEfJrUCm4HPPGJeo3U+pqGgTTeKGKFBcZk5gTFjVUyZwA4imqINb7zwEm/zOh29VNBZlNWJW0VGQpf2H8AmhrDKXvFNnI9B7c1xELVKKMTEcLGCaXKU3llTs/l27R5zCVFPIzqpuSrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LzyNQVb9; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-52efd8807aaso1637000e87.3;
-        Tue, 06 Aug 2024 12:56:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722974172; x=1723578972; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0lyz4ipeJgMy3VfY+GLdQlwpvsGVHWth9zowEA3zHrk=;
-        b=LzyNQVb9uToraRTK0d35HpGaj+8u51xGiMT5DBQ6UA6cS1VzDZAU8K4/cCrk3LAJO6
-         2skWxzfvYZw3Dtqod9aqgoWlfH1qhvGBpSUztMSaLdtEdHMN77qOfNhHxFJ2qKxIS7WT
-         cayHGiUtGQM56tkwgsqsfiD8l0h/9FKzc2awmXZgOesdwUH9yYSmyM5Snx5NzQ1aqcQ2
-         Cgxu3Zvjsz/Bv17e/cXpNqmRQVMla/NnJAgTkamrsP7M5ltDRxgdOTePdJhJTocI1tuq
-         E4ZiNhMjYLg9ujWxnSA3c3WZviTGWa2O7qtxfdcnpunQSJrNdGZs3Ga8F2sHvMgj5V4Y
-         vqhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722974172; x=1723578972;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0lyz4ipeJgMy3VfY+GLdQlwpvsGVHWth9zowEA3zHrk=;
-        b=LPOni5+TreB4lTMk1YIualezaWZcldxnuk5vP+h26S7LuYB4Fy7P7nhP8g1P+gvDun
-         L7If1CiKgiV6l9R1Sy9Ehh1yF5Yt/vuBwhE442OMEg02GwffMFqlJbXv8OiXGOXp9kT0
-         VQKAoCS/yxydenYeGA0pvuHA3zpdbt22RMWATqqOTtfN1hPOE0Le4boAyZd08szVeAZ0
-         4R0BkG8CnB9sEDckYU12cSTXLDpnJsAK/Lit7QTvnxf9QBwtifVvfeRZ6xaSqsrlh+dq
-         CROWoyVDERQuOGrSmU9gGz4vRLQ7A3bCHtmkD+Wr2tkeyCWcmKeWebi2O2dk+66ACPR/
-         qCtQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXPGiitVs7i/Hj4orWNNkGwVOxtdrgYHsyso8Chi7IfYBKJIDRBiPWJ5GeqOvBdkeY2Tw6PFzQLubN1oubrKYzk6nrDYyQWjzT3Hu4ghDIUNzGc+X3rVepERQ2k5CkRebdjeDvJ9QOyj1jSWhrtXx6I6gyx4wvoAPFEYGtJ9m0UuNvIt1s=
-X-Gm-Message-State: AOJu0YyojqPDblVz4HrNVkUy0s4XzV5vZzml8X7/lwx/BmAQWbE+X9Ec
-	BzvOXkC1nFWUUyR+4yRoNP25pO+QP6VK/qpGEPUvsahh3cJLQoIdoWIIKxa6
-X-Google-Smtp-Source: AGHT+IFDhVY770CCDtO0PGQv9l9zjATLUFHFY4HFugzwfVUkuc8BWi2VxQ7ANxWoMU6NZBltp5gq7w==
-X-Received: by 2002:a05:6512:234c:b0:52f:c24b:1767 with SMTP id 2adb3069b0e04-530bb391c54mr11399878e87.19.1722974171469;
-        Tue, 06 Aug 2024 12:56:11 -0700 (PDT)
-Received: from mobilestation ([178.176.56.174])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-530bba1102bsm1584039e87.97.2024.08.06.12.56.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Aug 2024 12:56:11 -0700 (PDT)
-Date: Tue, 6 Aug 2024 22:56:08 +0300
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Paul Burton <paulburton@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 5/6] dt-bindings: mips: Document mti,mips-cm
-Message-ID: <hupbp2e5phpfvlnbqwbqxhssidyda5p247map437h4mcnbeynw@akf2fuq3jpy3>
-References: <20240612-cm_probe-v2-0-a5b55440563c@flygoat.com>
- <20240612-cm_probe-v2-5-a5b55440563c@flygoat.com>
+	s=arc-20240116; t=1722976642; c=relaxed/simple;
+	bh=g7QmdLe9IFWfz7C77+mSFv4ErgmVpHHeVChQmimHYG8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=vEkR2Sih9hN6YqOQJbx3rNxW2RwuyeGL+6UAKwT7b9PkKvDpFV8FtRNM2N+B9FdB/S7+8WORFnPHGop5IOtyMZ7ukzXFfEbjrSL/rYMElPBMOam3iJvmVON2y9AbaXSV6AdxiNwTjboaPQY4+/dciggFe0imMTNhZHLGLbZsr4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X8YxGWgP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2EDAC32786;
+	Tue,  6 Aug 2024 20:37:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722976642;
+	bh=g7QmdLe9IFWfz7C77+mSFv4ErgmVpHHeVChQmimHYG8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=X8YxGWgP2UMFZzmnwxFTZacJCBIWbq/z7d+2P/PY9Q5HIpRaRo5UUK629pTV5bU+K
+	 L3ODKR2S5C8Cly3RBZpnOtbw5A5RD74DNc4Aj4LRaY63F5SOWYn6WNAABfQVNaoSB4
+	 FnE3lOClziNlgKZEPEYmJBdLpHfq+tGNeTW7non+xpfZ8H3Lr3TTodHiZ+fYNm7oFa
+	 r005iJn+WbIbLd0BIb+hBF88OkmE45EdIBQjJcPcfRT2D2o5UiOYQ/EiQLGXjGO1tH
+	 AfKdXhSddmFMc8kSMXFn4WyrWcVQtGQCNAtdpP2AnK1qNaK4TzeqntlXV0d0ds42aS
+	 r3Mb4dSi5D2ZA==
+Date: Tue, 6 Aug 2024 13:37:18 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet
+ <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, Ivan
+ Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+ <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
+ Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
+ de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Sumit Semwal <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
+ <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
+ Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
+ Taehee Yoo <ap420073@gmail.com>, Pavel Begunkov <asml.silence@gmail.com>,
+ David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
+ <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
+ <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, Kaiyuan
+ Zhang <kaiyuanz@google.com>, Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: Re: [PATCH net-next v18 03/14] netdev: support binding dma-buf to
+ netdevice
+Message-ID: <20240806133718.71a53a4f@kernel.org>
+In-Reply-To: <20240805212536.2172174-4-almasrymina@google.com>
+References: <20240805212536.2172174-1-almasrymina@google.com>
+	<20240805212536.2172174-4-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240612-cm_probe-v2-5-a5b55440563c@flygoat.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jun 12, 2024 at 11:08:57AM +0100, Jiaxun Yang wrote:
-> Add devicetree binding documentation for MIPS Coherence Manager.
-> 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
-> v2:
->  - Better wording for register desc
->  - cm -> coherency-manager
->  - schema matches compatible
-> ---
->  .../devicetree/bindings/mips/mti,mips-cm.yaml      | 38 ++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml b/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
-> new file mode 100644
-> index 000000000000..9f500804737d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
-> @@ -0,0 +1,38 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mips/mti,mips-cm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MIPS Coherence Manager
-> +
-> +description: |
-> +  Defines a location of the MIPS Coherence Manager registers.
-> +
-> +maintainers:
-> +  - Jiaxun Yang <jiaxun.yang@flygoat.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: mti,mips-cm
-> +
+On Mon,  5 Aug 2024 21:25:16 +0000 Mina Almasry wrote:
+> +/* Protected by rtnl_lock() */
+> +static DEFINE_XARRAY_FLAGS(net_devmem_dmabuf_bindings, XA_FLAGS_ALLOC1);
 
-> +  reg:
-> +    description:
-> +      Base address and size of an unoccupied region in system's MMIO address
-> +      space, which will be used to map the MIPS CM global control registers
-> +      block. It is conventionally decided by the system integrator.
-> +    maxItems: 1
+nit: global variable declarations before any code
 
-Could you please extend the reg array to containing two values: gcr and
-l2sync? The later is the L2-cache-only sync region which can be
-customized by the CM means.
-
-It's better to define the reg-names property too, so the node would
-look like this:
-
-        cm2: cm2@1fbf8000 {
-                compatible = "mti,mips-cm";
-                reg = <0 0x1fbf8000 0 0x8000>,
-                      <0 0x1fbf0000 0 0x1000>;
-                reg-names = "gcr", "l2sync";
-        };
-
--Serge(y)
-
+> +void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
+> +{
+> +	struct netdev_rx_queue *rxq;
+> +	unsigned long xa_idx;
+> +	unsigned int rxq_idx;
 > +
-> +required:
-> +  - compatible
-> +  - reg
+> +	if (binding->list.next)
+> +		list_del(&binding->list);
 > +
-> +additionalProperties: false
+> +	xa_for_each(&binding->bound_rxqs, xa_idx, rxq) {
+> +		if (rxq->mp_params.mp_priv == binding) {
+> +			rxq->mp_params.mp_priv = NULL;
 > +
-> +examples:
-> +  - |
-> +    coherency-manager@1fbf8000 {
-> +      compatible = "mti,mips-cm";
-> +      reg = <0x1bde8000 0x8000>;
-> +    };
-> +...
-> 
-> -- 
-> 2.43.0
-> 
+> +			rxq_idx = get_netdev_rx_queue_index(rxq);
+> +
+> +			netdev_rx_queue_restart(binding->dev, rxq_idx);
+
+Throw in a WARN_ON() around this, hopefully we'll get to addressing it
+later..
+
+> +		}
+> +	}
+> +
+> +	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
+> +
+> +	net_devmem_dmabuf_binding_put(binding);
+> +}
+> +
+> +int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
+> +				    struct net_devmem_dmabuf_binding *binding)
+> +{
+> +	struct netdev_rx_queue *rxq;
+> +	u32 xa_idx;
+> +	int err;
+> +
+> +	if (rxq_idx >= dev->real_num_rx_queues)
+> +		return -ERANGE;
+
+If we prevent binding to an inactive queue we should also prevent
+deactivation.
+
+Please take a look at the (two?) callers of
+ethtool_get_max_rxnfc_channel() and ethtool_get_max_rxfh_channel().
+Wrap those into a new function for reading max active channel, and
+take mp binds into account as well (send the refactor separately 
+from the series to avoid making it longer).
+
+> +	rxq = __netif_get_rx_queue(dev, rxq_idx);
+> +	if (rxq->mp_params.mp_priv)
+> +		return -EEXIST;
+> +
+> +	err = xa_alloc(&binding->bound_rxqs, &xa_idx, rxq, xa_limit_32b,
+> +		       GFP_KERNEL);
+> +	if (err)
+> +		return err;
+> +
+> +	rxq->mp_params.mp_priv = binding;
+> +
+> +	err = netdev_rx_queue_restart(dev, rxq_idx);
+> +	if (err)
+> +		goto err_xa_erase;
+> +
+> +	return 0;
+> +
+> +err_xa_erase:
+> +	rxq->mp_params.mp_priv = NULL;
+> +	xa_erase(&binding->bound_rxqs, xa_idx);
+> +
+> +	return err;
+> +}
+
+> +void dev_dmabuf_uninstall(struct net_device *dev)
+> +{
+> +	unsigned int i, count = dev->num_rx_queues;
+
+nit: why stash the value of num_rx_queues ?
+
+> +	struct net_devmem_dmabuf_binding *binding;
+> +	struct netdev_rx_queue *rxq;
+> +	unsigned long xa_idx;
+> +
+> +	for (i = 0; i < count; i++) {
+> +		binding = dev->_rx[i].mp_params.mp_priv;
+> +		if (binding)
+> +			xa_for_each(&binding->bound_rxqs, xa_idx, rxq)
+> +				if (rxq == &dev->_rx[i])
+> +					xa_erase(&binding->bound_rxqs, xa_idx);
+
+nit: Please use "continue", this is too deeply indented
+
+> +	nla_for_each_attr_type(attr, NETDEV_A_DMABUF_QUEUES,
+> +			       genlmsg_data(info->genlhdr),
+> +			       genlmsg_len(info->genlhdr), rem) {
+> +		err = nla_parse_nested(
+> +			tb, ARRAY_SIZE(netdev_queue_id_nl_policy) - 1, attr,
+> +			netdev_queue_id_nl_policy, info->extack);
+> +		if (err < 0)
+> +			goto err_unbind;
+> +
+> +		rxq_idx = nla_get_u32(tb[NETDEV_A_QUEUE_ID]);
+
+How do we know this attribute is present?  NL_REQ_ATTR_CHECK()
+
+> +		err = net_devmem_bind_dmabuf_to_queue(netdev, rxq_idx, binding);
+> +		if (err)
+> +			goto err_unbind;
+> +	}
+> +
+> +	list_add(&binding->list, sock_binding_list);
+> +
+> +	nla_put_u32(rsp, NETDEV_A_DMABUF_ID, binding->id);
+> +	genlmsg_end(rsp, hdr);
+> +
+> +	rtnl_unlock();
+
+nit: for symmetry you should also unlock after list_add(),
+     netlink msg alloc and prep are before rtnl_lock()
+
+> +	return genlmsg_reply(rsp, info);
+> +
+> +err_unbind:
+> +	net_devmem_unbind_dmabuf(binding);
+> +err_unlock:
+> +	rtnl_unlock();
+> +err_genlmsg_free:
+> +	nlmsg_free(rsp);
+> +	return err;
+>  }
+
+> +void netdev_nl_sock_priv_init(struct list_head *priv)
+> +{
+> +	INIT_LIST_HEAD(priv);
+> +}
+> +
+> +void netdev_nl_sock_priv_destroy(struct list_head *priv)
+> +{
+> +	struct net_devmem_dmabuf_binding *binding;
+> +	struct net_devmem_dmabuf_binding *temp;
+> +
+> +	list_for_each_entry_safe(binding, temp, priv, list) {
+> +		rtnl_lock();
+> +		net_devmem_unbind_dmabuf(binding);
+> +		rtnl_unlock();
+> +	}
+> +}
+
+nit: move these before the subsys_initcall.. and what it calls
 
