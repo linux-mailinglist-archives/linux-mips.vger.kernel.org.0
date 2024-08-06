@@ -1,151 +1,158 @@
-Return-Path: <linux-mips+bounces-4732-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4733-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84466948747
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2024 04:08:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75327948835
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2024 06:09:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C77D02842EE
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2024 02:07:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 984981C21E8E
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2024 04:09:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F89EB665;
-	Tue,  6 Aug 2024 02:07:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABCCF1B9B54;
+	Tue,  6 Aug 2024 04:09:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HSWMUM63"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YdPEdUlc"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A447AAD5B;
-	Tue,  6 Aug 2024 02:07:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6A0213BC11;
+	Tue,  6 Aug 2024 04:09:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722910075; cv=none; b=AwDMC1hdLqrW0i2aH1vy1dDE0jQvye0D1zOYe6WW3kS565nIMAn7EvirYLV7ZKKo8tUslL+EtmLysXcoM1vX0wlootSZxa2PeKo72iOg+uo8P5WRDDPCFe4yNF3iWtEhihWqQQjn9t5ZJeTVtvHmN/vOJQvhf9947z0pe10fnnU=
+	t=1722917352; cv=none; b=LBzKhsL+R4hEYG8ZbBVrlOtQwILdbF1NEEnY8lIvCQkGtx+qm/TE9w/xZCEj6muBR2L1ccpDgeGsvNHAh7dByzGYacS5Ebt3wltpWvKzpy1A3CGY/zqWbkuaSSMkZs3liiBsHOq0MarGEgPMan0ngqXAuKyP/DEULO6hI0aKVc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722910075; c=relaxed/simple;
-	bh=jt59FQqSI9OmpBDvj+W6jJgmftz6aU0OfR2v5brJ7QA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DaeUTE/+sWcB7pqGD4IZz0N6L3rgtYq8Dwz6Q/I54R/pmmqAdbBU6/8Yw/wffVM/lQpeBGKcE0gY+TyGy/rhvJMHIMYE6nJUDhw6j/Pzi7AdjXniel40GgBkT3awOzOOQKVeW8zIjyhphVZyVfhQ4r/PTQb75D9O2rUcxnJJIHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HSWMUM63; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1722917352; c=relaxed/simple;
+	bh=8l9WnyWHzi8Tzt2NAJoVsNu9wvQFDPty8PnCSIbrSrw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VG8RFD8KletzA9eYXBGRav5WlZmYfQ7bhnWMdEaiG4fnqLGYylFnVdAkyBrvWoKStKInWhsGcJ5SrUtmI4L4KzwoEZfd3o4jsdOXXBVNeBjEz/TbaUxHDzkWoLSh8G7AklOfVLxmrFtnCNzJsL222CiWFjqLECPgebveUCOawCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YdPEdUlc; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5af6a1afa63so305581a12.0;
-        Mon, 05 Aug 2024 19:07:53 -0700 (PDT)
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1fc56fd4de1so3054745ad.0;
+        Mon, 05 Aug 2024 21:09:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722910072; x=1723514872; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zH0hbgsnu6T52bt7D2n0S9Ogopg+qvghTIRm+AHbkMs=;
-        b=HSWMUM63wnDcG39TIghtb+zPOQWxrIi4XpcJjoB2eKiOJSOe6qENf1LUIuwL05J5KI
-         qEpz6BJ+inThRBqh/d4IV4Qi/TYrHoYN8C7YaKYj3isvGM9c8eWuTnaSzzBQytnnWder
-         500WEh5vNzYo1Mnk9TH0NmHQ3uOW91xAsZJp1jcxdNvLsqKji/3Y6ZJ8TKSLN3d/6p7I
-         YqR8Km8rsNgS5cLrKL2vzAAwjR5dgpDa++jrYz7QbM7cEjFd1zqmkrkZEJBsx2saBr4l
-         FB221ssDiFMZYp3uUZnXnBPKr3ZYWnMtYJGzkH2xvs6ACnf/A04qkSlmz/isgXB8ufWv
-         mrew==
+        d=gmail.com; s=20230601; t=1722917350; x=1723522150; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x4VUlslBVhfHHLrCBxi8o+FcHDhYgsZSGNYD1GG8x6Y=;
+        b=YdPEdUlcWTSyOku+kWdlF1yPCr8CYE67/KQpFWJ2ZiLbSB/EW3y/7+pQW1M4r/jDhZ
+         g/Wu1dcos+n1KXHw1SESFEfpuO0SgjipbMsJpMSxjwG0+lXgIcB0mOD9DlaILHcJjr7C
+         iewTEVQm+U+Wls79AsKnvjXMga3/6lVwNWsJSQFQlzVFz5DHPmxXUtoixEsXLZeJ1rMh
+         uqbWhexG3gI0n1ox/N6Ijh6JRgwSB1f+ltbMdiJqLyc0QuaK0pZgUGmE5CVnNnUacskn
+         3Yq6yeAOQengF70xG9+1llQlkeGcbVeGsCKWWoI7oM7HkTArclu9G8KHH7eEauuFGU7G
+         +X4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722910072; x=1723514872;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1722917350; x=1723522150;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zH0hbgsnu6T52bt7D2n0S9Ogopg+qvghTIRm+AHbkMs=;
-        b=an/nJABF4tVURYLNZKyAxhZFwNwFnk86++umnRcf8BH74csk8xAKfw31AZuf2RXjZr
-         gvOXD4eOvNquuAHor8n/kKNcjMOK2fOmOyGFHUlm0mRAe67AZc5cBIP5LTf53Co/Vcra
-         OE7YhvnAeC1nzq2V7OVEjlCdceILDz8KPCVKbC3F/7SfbQD3WrxDy9Bf/rtHBcJHRMVT
-         AI7LBbf0Z/l2NXfrjqDu6ePU9B9/+txGUSmg8PorhLefsAXylQiE5Z8n/Kmjwzc5qM7C
-         bDzw+T9r4jjpQOOrwEZNou+xITlIRE9RfOXnJK0ku+hJEQj+YpcS+X0dW6mBarJEtGOL
-         xKtw==
-X-Forwarded-Encrypted: i=1; AJvYcCWtNoNDN0fMLy/mY3NVE10i4y8RqIrb46RxSspfX3q9K7I9jhvw8BKxysfJxZ8x/I84w1oua+K8Exm/uq2UZ63h3kavV02TYLhHyU4M0PQPxBlVLwganml8ambSQjENrNjFDJbyfMvrEHFU2W9JrxIC7rMlzDYtHaaVF9sJPMmpzRGmPoPD7cz33s7XkL7lRZ4WMO29okIvcp4+FziqETY=
-X-Gm-Message-State: AOJu0Yye772b3rgfRKEp/9cMiJYFwBGNmaJwSR5ObVrVPzaVbwyBOo9v
-	w1Kf7/iLV+ykiboy8dbJIMnnG3bWWsT5AQdN4GttsxEA+gycqgG0ffhc5F/0ZgU62vJ/UvgITY0
-	Q2ngRZUD5xJPq+CHFbGXsUJP13dc=
-X-Google-Smtp-Source: AGHT+IH8KdNlkin5gZxqjz6qSZjvvOQo2DyRfKySRIFg4fZEIJZgYjqB5SipRayRcG+D3+kKWg+MU4QoRN3B4OC72vs=
-X-Received: by 2002:aa7:cf09:0:b0:5a2:5bd2:ca50 with SMTP id
- 4fb4d7f45d1cf-5b7f5413badmr9781655a12.25.1722910071747; Mon, 05 Aug 2024
- 19:07:51 -0700 (PDT)
+        bh=x4VUlslBVhfHHLrCBxi8o+FcHDhYgsZSGNYD1GG8x6Y=;
+        b=kbt6wWsff1qGxzqeBBnf1RdDEBak8r/+HUVmsPqRpnoTYJA65Ujg1VAr2EvvoOoHaf
+         wjIZXUCm/peSWMMGC9inYd1Hr5i90fqeOQqfCdSdFk5kbtFc65XTeOwGyRLcP8JRJWuH
+         B/Xp+S7VDsfEnunojWVJh5xxyKHG0PYtAdUR9fpdL1xXuzFs+WojA2HEcFyCVa38nq+O
+         VSBdCs5CPSbABB9ncR2Yf7s8TtTasNzrxvD+3pxL6BMod6MVQCFt30WbKWF0wq1v2h4x
+         smxTH771g3+XrPZh4/f/5TVEd07rZtglZJaMXQvwow0kD8bBrF+UC4lV+S2Kjq4GKrEL
+         uMNg==
+X-Forwarded-Encrypted: i=1; AJvYcCXFglxtQHSjoHc+f+xS7/43hb2OjAtYwV08LmFT6GBMpCj3QDi6O2m4ZByA5BRLwMWpBYDwpApH8rwlHGjUMgMQPsyRioYaBXv02jxLwaPEyW1tVCIpbaV/65svbgbYtwMv9uR5CqGdYQ==
+X-Gm-Message-State: AOJu0Yy9bjVd6yKUj4PLDXajE+9QwH13O8mtUkBsNY1Blimj1C4yeTSV
+	0E3zJd4qoNv0PQlDdcWAj66GRKc46qcLM4iHZ/fWQibv66iz76WE
+X-Google-Smtp-Source: AGHT+IFExs2RIs/XzdpTCp3D3iQlVgyKXYU5xoO0Dq2vz4Ya0KViBzrT/A8gGW7SM3h8jNPfJLSrfg==
+X-Received: by 2002:a17:902:f641:b0:1fb:7654:4a40 with SMTP id d9443c01a7336-1ff57bc159bmr224509635ad.14.1722917349895;
+        Mon, 05 Aug 2024 21:09:09 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ff58f2a159sm76770955ad.3.2024.08.05.21.09.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Aug 2024 21:09:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 5 Aug 2024 21:09:07 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Serge Semin <fancer.lancer@gmail.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"Maciej W. Rozycki" <macro@orcam.me.uk>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/7] MIPS: csrc-r4k: Apply verification clocksource
+ flags
+Message-ID: <fbe92f1c-3c08-4b46-9d7a-e098ac1656a8@roeck-us.net>
+References: <20240612-mips-clks-v2-0-a57e6f49f3db@flygoat.com>
+ <20240612-mips-clks-v2-2-a57e6f49f3db@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240802-loongson1-dma-v11-2-85392357d4e0@gmail.com>
- <202408051242.8kGK28W7-lkp@intel.com> <ZrEAaB_I1S2vM2EE@matsya>
-In-Reply-To: <ZrEAaB_I1S2vM2EE@matsya>
-From: Keguang Zhang <keguang.zhang@gmail.com>
-Date: Tue, 6 Aug 2024 10:07:15 +0800
-Message-ID: <CAJhJPsX16-=HfDMWuYAPSuXL246Sn_L=j1=i+zpUPNK1mED8zA@mail.gmail.com>
-Subject: Re: [PATCH v11 2/2] dmaengine: Loongson1: Add Loongson-1 APB DMA driver
-To: Vinod Koul <vkoul@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, 
-	Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Conor Dooley <conor+dt@kernel.org>, oe-kbuild-all@lists.linux.dev, 
-	linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240612-mips-clks-v2-2-a57e6f49f3db@flygoat.com>
 
-On Tue, Aug 6, 2024 at 12:40=E2=80=AFAM Vinod Koul <vkoul@kernel.org> wrote=
-:
->
-> On 05-08-24, 12:58, kernel test robot wrote:
-> > Hi Keguang,
-> >
-> > kernel test robot noticed the following build warnings:
-> >
-> > [auto build test WARNING on 048d8cb65cde9fe7534eb4440bcfddcf406bb49c]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Keguang-Zhang-vi=
-a-B4-Relay/dt-bindings-dma-Add-Loongson-1-APB-DMA/20240803-111220
-> > base:   048d8cb65cde9fe7534eb4440bcfddcf406bb49c
-> > patch link:    https://lore.kernel.org/r/20240802-loongson1-dma-v11-2-8=
-5392357d4e0%40gmail.com
-> > patch subject: [PATCH v11 2/2] dmaengine: Loongson1: Add Loongson-1 APB=
- DMA driver
-> > config: sparc64-randconfig-r063-20240804 (https://download.01.org/0day-=
-ci/archive/20240805/202408051242.8kGK28W7-lkp@intel.com/config)
-> > compiler: sparc64-linux-gcc (GCC) 14.1.0
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20240805/202408051242.8kGK28W7-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202408051242.8kGK28W7-l=
-kp@intel.com/
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> >    drivers/dma/loongson1-apb-dma.c: In function 'ls1x_dma_chan_probe':
-> > >> drivers/dma/loongson1-apb-dma.c:520:34: warning: '%u' directive writ=
-ing between 1 and 10 bytes into a region of size 2 [-Wformat-overflow=3D]
-> >      520 |         sprintf(pdev_irqname, "ch%u", chan_id);
-> >          |                                  ^~
-> >    drivers/dma/loongson1-apb-dma.c:520:31: note: directive argument in =
-the range [0, 2147483646]
-> >      520 |         sprintf(pdev_irqname, "ch%u", chan_id);
-> >          |                               ^~~~~~
-> >    drivers/dma/loongson1-apb-dma.c:520:9: note: 'sprintf' output betwee=
-n 4 and 13 bytes into a destination of size 4
-> >      520 |         sprintf(pdev_irqname, "ch%u", chan_id);
-> >          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> Pls fix these warnings!
->
-Sorry for these warnings.
-Will fix them ASAP.
-Thanks!
-> --
-> ~Vinod
+Hi,
 
+On Wed, Jun 12, 2024 at 09:54:29AM +0100, Jiaxun Yang wrote:
+> CP0 counter suffers from various problems like SMP sync,
+> behaviour on wait.
+> 
+> Set CLOCK_SOURCE_MUST_VERIFY and CLOCK_SOURCE_VERIFY_PERCPU,
+> as what x86 did to TSC, to let kernel test it before use.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
+With this patch in the mainline kernel, about one in five qemu
+boot attempts with e1000 Ethernet controller fail to activate
+the network interface (specifically, the dhcp client is unable to
+get an IP address for the interface). Bisect log is attached below.
 
---=20
-Best regards,
+For reference, here is an example command line.
 
-Keguang Zhang
+qemu-system-mips64 -kernel vmlinux -M malta -cpu 5KEc \
+	-initrd rootfs-n32.cpio \
+	-device e1000,netdev=net0 -netdev user,id=net0 \
+	-vga cirrus -no-reboot -m 256 \
+	--append "rdinit=/sbin/init mem=256M console=ttyS0 console=tty " \
+	-nographic
+
+Reverting this patch fixes the probem.
+
+Thanks,
+Guenter
+
+---
+# bad: [de9c2c66ad8e787abec7c9d7eff4f8c3cdd28aed] Linux 6.11-rc2
+# good: [0c3836482481200ead7b416ca80c68a29cfdaabd] Linux 6.10
+git bisect start 'HEAD' 'v6.10'
+# good: [280e36f0d5b997173d014c07484c03a7f7750668] nsfs: use cleanup guard
+git bisect good 280e36f0d5b997173d014c07484c03a7f7750668
+# good: [a4f9285520584977127946a22eab2adfbc87d1bf] Merge tag 'clk-for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux
+git bisect good a4f9285520584977127946a22eab2adfbc87d1bf
+# bad: [8e313211f7d46d42b6aa7601b972fe89dcc4a076] Merge tag 'pinctrl-v6.11-1' of git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl
+git bisect bad 8e313211f7d46d42b6aa7601b972fe89dcc4a076
+# good: [acc5965b9ff8a1889f5b51466562896d59c6e1b9] Merge tag 'char-misc-6.11-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc
+git bisect good acc5965b9ff8a1889f5b51466562896d59c6e1b9
+# bad: [d2be38b9a5514dbc7dc0c96a2a7f619fcddce00d] Merge tag 'mips_6.11' of git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux
+git bisect bad d2be38b9a5514dbc7dc0c96a2a7f619fcddce00d
+# good: [45659274e60864f9acabba844468e405362bdc8c] Merge branch 'pci/misc'
+git bisect good 45659274e60864f9acabba844468e405362bdc8c
+# good: [8e5c0abfa02d85b9cd2419567ad2d73ed8fe4b74] Merge tag 'input-for-v6.11-rc0' of git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input
+git bisect good 8e5c0abfa02d85b9cd2419567ad2d73ed8fe4b74
+# good: [3c3ff7be9729959699eb6cbc7fd7303566d74069] Merge tag 'powerpc-6.11-1' of git://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux
+git bisect good 3c3ff7be9729959699eb6cbc7fd7303566d74069
+# good: [3de96d810ffd712b7ad2bd764c1390fac2436551] dt-bindings: mips: brcm: Document brcm,bmips-cbr-reg property
+git bisect good 3de96d810ffd712b7ad2bd764c1390fac2436551
+# bad: [9c7a86c935074525f24cc20e78a7d5150e4600e3] MIPS: lantiq: improve USB initialization
+git bisect bad 9c7a86c935074525f24cc20e78a7d5150e4600e3
+# bad: [580724fce27f2b71b3e4d58bbe6d83b671929b33] MIPS: sync-r4k: Rework based on x86 tsc_sync
+git bisect bad 580724fce27f2b71b3e4d58bbe6d83b671929b33
+# good: [c171186c177970d3ec22dd814f2693f1f7fc1e7d] MIPS: csrc-r4k: Refine rating computation
+git bisect good c171186c177970d3ec22dd814f2693f1f7fc1e7d
+# bad: [426fa8e4fe7bb914b5977cbce453a9926bf5b2e6] MIPS: csrc-r4k: Select HAVE_UNSTABLE_SCHED_CLOCK if SMP && 64BIT
+git bisect bad 426fa8e4fe7bb914b5977cbce453a9926bf5b2e6
+# bad: [7190401fc56fb5f02ee3d04476778ab000bbaf32] MIPS: csrc-r4k: Apply verification clocksource flags
+git bisect bad 7190401fc56fb5f02ee3d04476778ab000bbaf32
+# first bad commit: [7190401fc56fb5f02ee3d04476778ab000bbaf32] MIPS: csrc-r4k: Apply verification clocksource flags
 
