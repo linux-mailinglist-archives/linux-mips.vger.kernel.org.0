@@ -1,60 +1,89 @@
-Return-Path: <linux-mips+bounces-4804-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4805-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E078A94ADEE
-	for <lists+linux-mips@lfdr.de>; Wed,  7 Aug 2024 18:21:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A09B294AF89
+	for <lists+linux-mips@lfdr.de>; Wed,  7 Aug 2024 20:20:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 19ACF1C21176
-	for <lists+linux-mips@lfdr.de>; Wed,  7 Aug 2024 16:21:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E74728121F
+	for <lists+linux-mips@lfdr.de>; Wed,  7 Aug 2024 18:20:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8A5213213A;
-	Wed,  7 Aug 2024 16:21:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADF7913E028;
+	Wed,  7 Aug 2024 18:20:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fs+rYBQU"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABDCE82877;
-	Wed,  7 Aug 2024 16:21:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9C5762DF;
+	Wed,  7 Aug 2024 18:20:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723047694; cv=none; b=mmkgjV4aX7349hZ/mBPxYkoJ2zbd63C++1KPae5Iwa+D/n4AROJiA6pzJQOF66/kaRclyxFqXsEVHZNgalK+To2N8DpVsXrPQrWUv/XLDugvOEnLjGTyqZf/WDOUWkirw/dqA/qeKcfwwRE+q4dChnZZ5XcMHWk8D3y35I7XFTw=
+	t=1723054849; cv=none; b=UzexHyj+6+DG7Cw+bCAieqBXowPBKTUN3YqiCgcA+K7qS874GrFGccgp0Exc5VvwMbhStHR/zEPbPxwLVku0fRIaM6p8F7GfUix39ehMXHF6RpL7gT4+cCzOSkVUaUfzU96tT2Dfn3dmT8GQyccA3gWSVZDHXLb5yWqgZSATBfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723047694; c=relaxed/simple;
-	bh=/QJ5VFSjKpMLHmOJsztpGK8KSxLg9wchOl64nmQ6D4k=;
+	s=arc-20240116; t=1723054849; c=relaxed/simple;
+	bh=iPtiZxg9mYFfVaMP/wI1h2AEAZxcZhi354BsRK7OzkQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pZo6yrQWETh7q0Ufe4pmBFAIhCegoZtt3oXKiOIm9upA4qIYeMQ6v60NI3JWiobu7Hakm66w+u0eQ/OOUTwY6LG+Dnntu75epgsJraij741S6dRWXHS0EnlbjmK9vmckeSuZVJE+KzZlJXPfkBQLcXknPK8E+jejp3ihMPMLYBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D649C32781;
-	Wed,  7 Aug 2024 16:21:29 +0000 (UTC)
-Date: Wed, 7 Aug 2024 17:21:27 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Tianrui Zhao <zhaotianrui@loongson.cn>,
-	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=aSiA9tLcvFL6wUaIhRVs5gEyH9nQ+1kiyb0Ae51o3bIv00t3YqhBcz4yr2IxdcgQUAtBnnTC0Nftc7OEqP6dexE6jsuWtJbtoQL3dlffGr5KYgSyFQfFhSfuNFdryzx2lNafJFvXxzv2cnrCwOisbgjU2UbskOMlUzi/ogevkzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fs+rYBQU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF468C32781;
+	Wed,  7 Aug 2024 18:20:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723054848;
+	bh=iPtiZxg9mYFfVaMP/wI1h2AEAZxcZhi354BsRK7OzkQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fs+rYBQUVp7T/qbPiJP5M3yDB/6MQZbtGhaQKvRjA1Mevvpi2N6URXoVm6Iu+rs/H
+	 5E96EIlDL0oiovI1UalP4pGMxvee6uDYhAHWeNICYCTEurK07w5XNnYjIp7hBBtH+o
+	 BuYSL8/k1GjAORViJw9J27QcUbojhI3Ae/34xWNzZpQoCHqR1I22VHBnMk5CVvZxw6
+	 SS54CnDP9bArj1yivpeOI0pLAxkinjxlqbL5z/NWC2FfzasiBT9xJGfZMh2KPtgniu
+	 UwqU0smfhLaXdoDIRZ0Xs8jOb5KYUUdKDjJmyRdFpd/cLCPX7dVpAIbbnapWdyqlxn
+	 +oDN4u6kRqxgA==
+Date: Wed, 7 Aug 2024 21:18:24 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-kernel@vger.kernel.org,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Borislav Petkov <bp@alien8.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Hildenbrand <david@redhat.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Jonathan Corbet <corbet@lwn.net>,
 	Michael Ellerman <mpe@ellerman.id.au>,
-	Anup Patel <anup@brainfault.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	David Matlack <dmatlack@google.com>,
-	David Stevens <stevensd@chromium.org>
-Subject: Re: [PATCH v12 02/84] KVM: arm64: Disallow copying MTE to guest
- memory while KVM is dirty logging
-Message-ID: <ZrOfB8bOdSJVcWFr@arm.com>
-References: <20240726235234.228822-1-seanjc@google.com>
- <20240726235234.228822-3-seanjc@google.com>
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vasily Gorbik <gor@linux.ibm.com>, Will Deacon <will@kernel.org>,
+	Zi Yan <ziy@nvidia.com>, devicetree@vger.kernel.org,
+	linux-acpi@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-cxl@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	nvdimm@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v4 24/26] arch_numa: switch over to numa_memblks
+Message-ID: <ZrO6cExVz1He_yPn@kernel.org>
+References: <20240807064110.1003856-1-rppt@kernel.org>
+ <20240807064110.1003856-25-rppt@kernel.org>
+ <1befc540-8904-4c23-b0e6-e2c556fe22b9@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -63,38 +92,78 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240726235234.228822-3-seanjc@google.com>
+In-Reply-To: <1befc540-8904-4c23-b0e6-e2c556fe22b9@app.fastmail.com>
 
-On Fri, Jul 26, 2024 at 04:51:11PM -0700, Sean Christopherson wrote:
-> Disallow copying MTE tags to guest memory while KVM is dirty logging, as
-> writing guest memory without marking the gfn as dirty in the memslot could
-> result in userspace failing to migrate the updated page.  Ideally (maybe?),
-> KVM would simply mark the gfn as dirty, but there is no vCPU to work with,
-> and presumably the only use case for copy MTE tags _to_ the guest is when
-> restoring state on the target.
+On Wed, Aug 07, 2024 at 08:58:37AM +0200, Arnd Bergmann wrote:
+> On Wed, Aug 7, 2024, at 08:41, Mike Rapoport wrote:
+> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> >
+> > Until now arch_numa was directly translating firmware NUMA information
+> > to memblock.
 > 
-> Fixes: f0376edb1ddc ("KVM: arm64: Add ioctl to fetch/store tags in a guest")
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/arm64/kvm/guest.c | 5 +++++
->  1 file changed, 5 insertions(+)
+> I get a link time warning from this:
 > 
-> diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
-> index e1f0ff08836a..962f985977c2 100644
-> --- a/arch/arm64/kvm/guest.c
-> +++ b/arch/arm64/kvm/guest.c
-> @@ -1045,6 +1045,11 @@ int kvm_vm_ioctl_mte_copy_tags(struct kvm *kvm,
->  
->  	mutex_lock(&kvm->slots_lock);
->  
-> +	if (write && atomic_read(&kvm->nr_memslots_dirty_logging)) {
-> +		ret = -EBUSY;
-> +		goto out;
-> +	}
+>     WARNING: modpost: vmlinux: section mismatch in reference: numa_set_cpumask+0x24 (section: .text.unlikely) -> early_cpu_to_node (section: .init.text)
 
-There are ways to actually log the page dirtying but I don't think
-it's worth it. AFAICT, reading the tags still works and that's what's
-used during migration (on the VM where dirty tracking takes place).
+I didn't see this neither in my build tests nor in kbuild reports :/
+ 
+> > @@ -142,7 +144,7 @@ void __init early_map_cpu_to_node(unsigned int cpu, int nid)
+> >  unsigned long __per_cpu_offset[NR_CPUS] __read_mostly;
+> >  EXPORT_SYMBOL(__per_cpu_offset);
+> > 
+> > -int __init early_cpu_to_node(int cpu)
+> > +int early_cpu_to_node(int cpu)
+> >  {
+> >  	return cpu_to_node_map[cpu];
+> >  }
+> 
+> early_cpu_to_node() can no longer be __init here
+> 
+> > +#endif /* CONFIG_NUMA_EMU */
+> > diff --git a/include/asm-generic/numa.h b/include/asm-generic/numa.h
+> > index c32e0cf23c90..c2b046d1fd82 100644
+> > --- a/include/asm-generic/numa.h
+> > +++ b/include/asm-generic/numa.h
+> > @@ -32,8 +32,6 @@ static inline const struct cpumask *cpumask_of_node(int node)
+> > 
+> >  void __init arch_numa_init(void);
+> >  int __init numa_add_memblk(int nodeid, u64 start, u64 end);
+> > -void __init numa_set_distance(int from, int to, int distance);
+> > -void __init numa_free_distance(void);
+> >  void __init early_map_cpu_to_node(unsigned int cpu, int nid);
+> >  int __init early_cpu_to_node(int cpu);
+> >  void numa_store_cpu_info(unsigned int cpu);
+> 
+> but is still declared as __init in the header, so it is
+> still put in that section and discarded after boot.
 
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+I believe this should fix it
+
+diff --git a/include/asm-generic/numa.h b/include/asm-generic/numa.h
+index c2b046d1fd82..e063d6487f66 100644
+--- a/include/asm-generic/numa.h
++++ b/include/asm-generic/numa.h
+@@ -33,7 +33,7 @@ static inline const struct cpumask *cpumask_of_node(int node)
+ void __init arch_numa_init(void);
+ int __init numa_add_memblk(int nodeid, u64 start, u64 end);
+ void __init early_map_cpu_to_node(unsigned int cpu, int nid);
+-int __init early_cpu_to_node(int cpu);
++int early_cpu_to_node(int cpu);
+ void numa_store_cpu_info(unsigned int cpu);
+ void numa_add_cpu(unsigned int cpu);
+ void numa_remove_cpu(unsigned int cpu);
+ 
+> I was confused by this at first, since the 'early' name
+> seems to imply that you shouldn't call it once the system
+> is up, but now you do.
+
+I agree that this is confusing, but that's what x86 does and numa_emulation
+uses.
+ 
+>      Arnd
+> 
+
+-- 
+Sincerely yours,
+Mike.
 
