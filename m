@@ -1,195 +1,115 @@
-Return-Path: <linux-mips+bounces-4807-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4808-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4E8F94B7F6
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Aug 2024 09:36:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30ABE94BA1E
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Aug 2024 11:54:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 881951C243EF
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Aug 2024 07:36:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46A091C20B18
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Aug 2024 09:54:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F1CE1891A8;
-	Thu,  8 Aug 2024 07:35:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="hVx2Exae";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="RC+EEX+O"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61666187850;
+	Thu,  8 Aug 2024 09:54:33 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh8-smtp.messagingengine.com (fhigh8-smtp.messagingengine.com [103.168.172.159])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E27C188CB0;
-	Thu,  8 Aug 2024 07:35:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10263146A93;
+	Thu,  8 Aug 2024 09:54:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723102559; cv=none; b=c3IrqTifhdcW57Sio08H1Rxp0SrfLFgS5VJNDvehgPEK/d/hAMp027mYQZismkvfFoBITSsAqYxncHYD2jZ53877zaKNEr1UbhHpajCgcouu7miIkZtsaLdp3ObhC2nLWTtaUgY/xDRsTDkM6rjCIf37Rr3/GmjZ5nF2ylBdKOY=
+	t=1723110873; cv=none; b=HnUGzx9Y+4Fsejnqv23h4bDsFisSxseTuZfA/p4DwlTRiiuMByH92uiFbAaaSoOljm2ypRZcniFKy7JanesevDwSd1qm7lGWMXsflJOH4Fxp01z4FWJ09p2it+zzt6p6F9P5+tbuiWAEr8587T2W0C+2t5frN6ra6LyuuqVPurE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723102559; c=relaxed/simple;
-	bh=L6+YeIn/Vp1pbx3yet9x4syQyFrDr8NrjU/GSzGYsuc=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=bsTSnHdfVH07t9cwuILM/8xXRZKrIEmc5UglJS6S0IdnJhex82WwWUGvTq9L19LqGQ3LmHjTK5OLj8zHusu+HI0lfCn6cEMIUV0ZMowTUvkPs7Es/cvfbm5c2szGO/mLRFjkKoTRogRDut5RVsJLs/fuojhRT8ktKHNuXHLHEzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=hVx2Exae; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=RC+EEX+O; arc=none smtp.client-ip=103.168.172.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 84E171151BEF;
-	Thu,  8 Aug 2024 03:35:56 -0400 (EDT)
-Received: from wimap26 ([10.202.2.86])
-  by compute5.internal (MEProxy); Thu, 08 Aug 2024 03:35:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1723102556;
-	 x=1723188956; bh=fMFJm5IlFxBmEa62YMJEhbiKsIZQqiP31Px8V8AfdNY=; b=
-	hVx2ExaejuSrIfGHB0X94CrBVfdkmsna7NDUz0c/QmuxRhZRxcHT2G54tYhw8XwD
-	DAozKrOTgwEwcuiDp6xOUonyCN87fG2/itoNWCFmstTy1g0JTZoBEDXRUE8JYS7c
-	SRVInd1ZbKwfPjHkxlIRr863cZuwDfgfqF+jXmbuOrgF74KAn8Gx+IBTgdzwN8+V
-	prDWnEUskXOcmWcbJRH8nRFHPCX/higE9lFraUxHPbNEECZX2Rtp9ISiW5G2kCVA
-	9aSBWmqtit3131ogn6s8wr9QDlSQBmFRkMs9nnu/Sht8StIKfkNllPFqsOD+LVUc
-	BvfQ17hMlLTjOmiv30Hz1A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1723102556; x=
-	1723188956; bh=fMFJm5IlFxBmEa62YMJEhbiKsIZQqiP31Px8V8AfdNY=; b=R
-	C+EEX+OBxAIDeqhr/KFfs+qCOQ23Q26BLOtA9xOS7swUsL33Db10vcgrKpg7mjk4
-	4a40Li1H/CuYw5kCPnhI3aZSknYCgDBlTOaOL7lgupzAKz+uXuGJV3E+q+U2sVJ9
-	7qMR5po+Sx3da4bd0W923GPoJ8qxgOJT4E7jTN9YWgss2KIz40eDKrwqhFLI5pLL
-	wl42zqfFM16SW5LWvsgoiCutIPIzKGmcpDlW+E3EpDQ4PNOsPrr9a5gh26jD0uFT
-	RtU9DS8Glt+h24t17/+FRHPcVgDG1tY2S3VOAvBI3kuR8Pc2A1yBz9gNfJNdUXkt
-	KS43A0svI2/1TV4/np4Cw==
-X-ME-Sender: <xms:W3W0ZkAQ_ohYCHduJH5FpYMFViVW5NfzXx68QX427308HoZgQHIi5Q>
-    <xme:W3W0ZmiHvFnA4z-yDWSsVMJN16n1wKNFqNEflIPWK31ztvPodgglsbQRyeEOHPmq2
-    Nd_iF0ElrVaPeBesjs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrledugdduvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
-    necuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfh
-    hlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepfeeuueehudffkeeihefhgeeh
-    veefffdugefhffeuffdvheeggeefkeefffeivdegnecuffhomhgrihhnpehkvghrnhgvlh
-    htvghsthhsrdhorhhgpdhrohgvtghkqdhushdrnhgvthenucevlhhushhtvghrufhiiigv
-    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihgh
-    horghtrdgtohhmpdhnsggprhgtphhtthhopeelpdhmohguvgepshhmthhpohhuthdprhgt
-    phhtthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpth
-    htohepfhgrnhgtvghrrdhlrghntggvrhesghhmrghilhdrtghomhdprhgtphhtthhopegu
-    rghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtohepthhglh
-    igsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtoheprhgvghhrvghsshhiohhnshes
-    lhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehmrggtrhhosehorhgtrghmrd
-    hmvgdruhhkpdhrtghpthhtoheplhhinhhugiesrhhovggtkhdquhhsrdhnvghtpdhrtghp
-    thhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtoheplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:W3W0ZnlvLZIrKzF05cUbaXeRQUIpRV0_hRv6olwl7l6eEpnKf8jA1A>
-    <xmx:W3W0ZqyY7gUxPb1YXZULdV-vUPwAqAbEjQq9MSHyZ4keb6-67k3Y_Q>
-    <xmx:W3W0ZpRNlQaKNW4285SaRxbCxoy5r2NL21aWOkh1kstto4oVJYs6uQ>
-    <xmx:W3W0Zlacm04dElUYnSJknRTeBMXNN65OKEzKSK9AuHdiK0NQfHOvxA>
-    <xmx:XHW0ZkEo65KxlfY4YidS9vjfsDBWqWJ-m6NkB9UCHgwcBt2Sk2OFvulw>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id B8A5619C0079; Thu,  8 Aug 2024 03:35:55 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1723110873; c=relaxed/simple;
+	bh=PbFKdQioBXqrCR8IhPsvdeiSsqZdtgzRJibcfIc0ipk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M3i12vyK7iFx2RXOLNFURxRiA2lR6+2HX0oUpSFE7195SLlh+VXqGN2JL9+Pc1983uVsyjNevXNm3qB4pBMKEVxYxMxL5ANr880UidNK2hf/HMZ1lDnVeRr++R4xiwnU1MiLKcbvP72ueosRNeaSaCRraRt0TKxp1Bg5gpFzGvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E8C0DA7;
+	Thu,  8 Aug 2024 02:54:55 -0700 (PDT)
+Received: from [10.1.26.21] (e122027.cambridge.arm.com [10.1.26.21])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 632F73F6A8;
+	Thu,  8 Aug 2024 02:54:23 -0700 (PDT)
+Message-ID: <34468ff8-2159-4adb-b680-c6048eecee80@arm.com>
+Date: Thu, 8 Aug 2024 10:54:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 08 Aug 2024 08:35:35 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Guenter Roeck" <linux@roeck-us.net>
-Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Serge Semin" <fancer.lancer@gmail.com>,
- "Daniel Lezcano" <daniel.lezcano@linaro.org>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Maciej W. Rozycki" <macro@orcam.me.uk>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-kernel@vger.kernel.org, regressions@lists.linux.dev
-Message-Id: <8d3abbdb-7574-486f-82dd-4213b806a6d8@app.fastmail.com>
-In-Reply-To: <900ae60e-84f8-4300-87e7-7f35d16ad439@roeck-us.net>
-References: <20240612-mips-clks-v2-0-a57e6f49f3db@flygoat.com>
- <20240612-mips-clks-v2-2-a57e6f49f3db@flygoat.com>
- <fbe92f1c-3c08-4b46-9d7a-e098ac1656a8@roeck-us.net>
- <97ad6c99-ca4e-463b-aee0-9a7e9455fea3@app.fastmail.com>
- <62e8056b-6a6c-42d1-89f6-7306bb2a528b@roeck-us.net>
- <900ae60e-84f8-4300-87e7-7f35d16ad439@roeck-us.net>
-Subject: Re: [PATCH v2 2/7] MIPS: csrc-r4k: Apply verification clocksource flags
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v12 01/84] KVM: arm64: Release pfn, i.e. put page, if
+ copying MTE tags hits ZONE_DEVICE
+To: Catalin Marinas <catalin.marinas@arm.com>,
+ Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+ Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao
+ <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>,
+ Huacai Chen <chenhuacai@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>,
+ Anup Patel <anup@brainfault.org>, Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Janosch Frank <frankja@linux.ibm.com>,
+ Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+ loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ David Matlack <dmatlack@google.com>, David Stevens <stevensd@chromium.org>
+References: <20240726235234.228822-1-seanjc@google.com>
+ <20240726235234.228822-2-seanjc@google.com> <ZrOBg70pCnv7PHyK@arm.com>
+From: Steven Price <steven.price@arm.com>
+Content-Language: en-GB
+In-Reply-To: <ZrOBg70pCnv7PHyK@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 07/08/2024 15:15, Catalin Marinas wrote:
+> On Fri, Jul 26, 2024 at 04:51:10PM -0700, Sean Christopherson wrote:
+>> Put the page reference acquired by gfn_to_pfn_prot() if
+>> kvm_vm_ioctl_mte_copy_tags() runs into ZONE_DEVICE memory.  KVM's less-
+>> than-stellar heuristics for dealing with pfn-mapped memory means that KVM
+>> can get a page reference to ZONE_DEVICE memory.
+>>
+>> Fixes: f0376edb1ddc ("KVM: arm64: Add ioctl to fetch/store tags in a guest")
+>> Signed-off-by: Sean Christopherson <seanjc@google.com>
+>> ---
+>>  arch/arm64/kvm/guest.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
+>> index 11098eb7eb44..e1f0ff08836a 100644
+>> --- a/arch/arm64/kvm/guest.c
+>> +++ b/arch/arm64/kvm/guest.c
+>> @@ -1059,6 +1059,7 @@ int kvm_vm_ioctl_mte_copy_tags(struct kvm *kvm,
+>>  		page = pfn_to_online_page(pfn);
+>>  		if (!page) {
+>>  			/* Reject ZONE_DEVICE memory */
+>> +			kvm_release_pfn_clean(pfn);
+>>  			ret = -EFAULT;
+>>  			goto out;
+>>  		}
+> 
+> This patch makes sense irrespective of whether the above pfn is a
+> ZONE_DEVICE or not. gfn_to_pfn_prot() increased the page refcount via
+> GUP, so it must be released before bailing out of this loop.
+> 
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> 
 
+Yep, as Catalin says, this is an 'obviously' correct fix - the reference
+needs releasing before bailing out. The comment there is perhaps
+misleading - it's not just ZONE_DEVICE memory that will be rejected, but
+this is the case that was in my mind when I wrote it. Although clearly I
+wasn't thinking hard enough when writing the code in the first place... ;)
 
-=E5=9C=A82024=E5=B9=B48=E6=9C=886=E6=97=A5=E5=85=AB=E6=9C=88 =E4=B8=8B=E5=
-=8D=884:06=EF=BC=8CGuenter Roeck=E5=86=99=E9=81=93=EF=BC=9A
-> On 8/5/24 22:13, Guenter Roeck wrote:
->> On 8/5/24 22:06, Jiaxun Yang wrote:
->>>
->>>
->>> =E5=9C=A82024=E5=B9=B48=E6=9C=886=E6=97=A5=E5=85=AB=E6=9C=88 =E4=B8=8B=
-=E5=8D=8812:09=EF=BC=8CGuenter Roeck=E5=86=99=E9=81=93=EF=BC=9A
->>>> Hi,
->>>>
->>>> On Wed, Jun 12, 2024 at 09:54:29AM +0100, Jiaxun Yang wrote:
->>>>> CP0 counter suffers from various problems like SMP sync,
->>>>> behaviour on wait.
->>>>>
->>>>> Set CLOCK_SOURCE_MUST_VERIFY and CLOCK_SOURCE_VERIFY_PERCPU,
->>>>> as what x86 did to TSC, to let kernel test it before use.
->>>>>
->>>>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->>>
->>> Hi Guenter,
->>>
->>> Thanks for the report, it makes no sense to me though....
->>>
->>> I can't reproduce it with QEMU git master, do you mind specifying yo=
-ur QEMU
->>> version for me? Also is it possible to have a copy of dmesg when fai=
-lure happens.
->>>
->>=20
->> I currently use v9.0.2. I'll try with some other versions tomorrow.
->> A complete log is at
->> https://kerneltests.org/builders/qemu-mips64-master/builds/241/steps/=
-qemubuildcommand/logs/stdio
->>=20
->> Are you trying to instantiate an e1000 (or a variant of it) ? So far
->> I have only seen the problem with that controller. There is no specif=
-ic
->> error message, the network interface just doesn't get an IP address.
->>=20
->
-> I am able to reproduce the problem with qemu 6.2.0 (Debian build).
-> http://server.roeck-us.net/qemu/mips64/ should have everything needed =
-to
-> reproduce it. "repeat.sh" repeats the test until it fails.
+Reviewed-by: Steven Price <steven.price@arm.com>
 
-Thanks for the info, I'm able to reproduce that. It can be reproduced fa=
-ster
-on system with lower CPU performance.
+Thanks,
 
-So the actual failure is:
-
-clocksource: timekeeping watchdog on CPU0: Marking clocksource 'MIPS' as=
- unstable because the skew is too large:
-clocksource:                       'jiffies' wd_nsec: 500000000 wd_now: =
-ffff8bde wd_last: ffff8bac mask: ffffffff
-clocksource:                       'MIPS' cs_nsec: 940634468 cs_now: 310=
-181c4 cs_last: 28090a09 mask: ffffffff
-clocksource:                       Clocksource 'MIPS' skewed 440634468 n=
-s (440 ms) over watchdog 'jiffies' interval of 500000000 ns (500 ms)
-clocksource:                       'MIPS' is current clocksource.
-
-Jiffies is not an ideal clocksource as watchdog base, really....
-I guess clocksource selection process needs to be improved, let me think=
- about it.
-
->
-> Hope this helps,
-> Guenter
-
---=20
-- Jiaxun
+Steve
 
