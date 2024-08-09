@@ -1,153 +1,185 @@
-Return-Path: <linux-mips+bounces-4820-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4821-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF3AD94CBBF
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Aug 2024 09:56:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BDB794CE9F
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Aug 2024 12:31:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B0F8B2167A
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Aug 2024 07:56:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BCC49282CA3
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Aug 2024 10:31:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 836D218CBE2;
-	Fri,  9 Aug 2024 07:56:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53805191F89;
+	Fri,  9 Aug 2024 10:31:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iWy7JWX6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CD8tFFN6"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 013EA1552EB;
-	Fri,  9 Aug 2024 07:56:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2616DBA41;
+	Fri,  9 Aug 2024 10:31:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723190188; cv=none; b=q/icM8tm/GJw5AQmaxamY0zCZ+d7puypdEBlXsVnmGXFm3qgU5ZumjLFz44PqwyjmMTts65fVHiepjd5mgB4OvprVL9Xbqg6UGtfnychHv6wEotwSsI5FGXuHlKrGb3dxBSoT3pDDzqkrkXajJuGpWY8Rev4RoEnA81aK3mRo3w=
+	t=1723199498; cv=none; b=st5/4CdDCJedm2YGnL37hx+lrRoHuNO6FveVHV/PSMbGEDP4qsDFovF6I2c+sYLEwJdyHKnTnpvgII9FoXiPojCaT5u40rDWYPeCdm4uEtQzpOqLAVcdKfP/aeM5LZZm7Hrm1LJSDQXVcX5KXJdFwTYnO1An45VKwtdFs/BBDHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723190188; c=relaxed/simple;
-	bh=WciictBvnZZognJdSB//Vkpj36Vtrbm418N+k4gXKM8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lue6vbwtS3HJzRZ4DDuQJNKtEil0h6h4lG6IFkP1B5hZIGG8ikUOuuF5Kcihcvq2LJABgU2zkSn7SqbHzVyIsJVSGrB0gMVkoRhgO4qxg5JpAJ98rXp/4ZTYvfg+2Q4hTsM6NO+bTCsHgTb5IFuX9QdMpXBrbmjngJBHjJfFHqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iWy7JWX6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 952AFC4AF0D;
-	Fri,  9 Aug 2024 07:56:17 +0000 (UTC)
+	s=arc-20240116; t=1723199498; c=relaxed/simple;
+	bh=Pyn9R7CbJk7AzCg1pklE2Ub+hkwoAnfgt2o4mUVn1Vk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=mhLBspRbjT43zhiWtkLhDe4XqcCT7DI7eyEEBtkHfCu5hwzcxBF0NouUM4+0EJeUG21NYODgZJ3bucT2M2bRllqeTVS44ZqKBYAFBEls/TgLbnVuHGdTPXNkNVHEUm4wkRBBh+/MeXuJ4rM4HZgmpjtJmc4JKmR0xtHpJ3LNr3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CD8tFFN6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9DC01C32782;
+	Fri,  9 Aug 2024 10:31:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723190187;
-	bh=WciictBvnZZognJdSB//Vkpj36Vtrbm418N+k4gXKM8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iWy7JWX63DlQVy2d0mNGhQfP+E5wTH7yt+zLcJ0XE+/2H7ya+xPuYTTvng2lSdR0P
-	 fY3FcxC8uU8GMeAkyI60nvRDENoJPGv+KO8RJqpQagYElLNKgByK/OFTroSX355YCs
-	 LkPyVbDTwM5NLcPamf6V9UY8mS/5OHdlCJ1Bf0Wrzy8CzH4nnoBsnommLbSLYVYa0S
-	 vit/eTqSx1gLR+UhLsyyqz5moCQu5XrPJ2lKHYZlMNpbvAKOB2UKpjpb3hjS9c0GG8
-	 efszcgVI6ngSguWbXJ9ztgvoCk8mZPBFojeGqb+x30Hdvr6lK6GLQBG40LF/KOtnNT
-	 rWCJ8B29HDgmg==
-Date: Fri, 9 Aug 2024 08:56:15 +0100
-From: Simon Horman <horms@kernel.org>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: Markus Elfring <Markus.Elfring@web.de>,
-	Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
-	Kaiyuan Zhang <kaiyuanz@google.com>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Willem de Bruijn <willemb@google.com>, linux-alpha@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Arnd Bergmann <arnd@arndb.de>, Bagas Sanjaya <bagasdotme@gmail.com>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	David Ahern <dsahern@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>, David Wei <dw@davidwei.uk>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Helge Deller <deller@gmx.de>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"James E. J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Matt Turner <mattst88@gmail.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Shailend Chand <shailend@google.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Taehee Yoo <ap420073@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Yunsheng Lin <linyunsheng@huawei.com>
-Subject: Re: [PATCH net-next v17 03/14] netdev: support binding dma-buf to
- netdevice
-Message-ID: <20240809075615.GD3075665@kernel.org>
-References: <20240730022623.98909-4-almasrymina@google.com>
- <5d3c74da-7d44-4b88-8961-60f21f84f0ac@web.de>
- <CAHS8izPxfCv1VMFBK1FahGTjVmUSSfrabgY5y6V+XtaszoHQ4w@mail.gmail.com>
- <9aad36fe-cd4c-4ce5-b4d8-6c8619d10c46@web.de>
- <66b2198686b91_3206cf29453@willemb.c.googlers.com.notmuch>
+	s=k20201202; t=1723199497;
+	bh=Pyn9R7CbJk7AzCg1pklE2Ub+hkwoAnfgt2o4mUVn1Vk=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=CD8tFFN6LHhrM2NTgk7YtGS/7v28M7++MeGWSrBbfHhbOs7ekHy7a3aD/kurb9sPP
+	 ZB6zYgs/gw4r6F07CC2jb4OFymVmPGgxYYePxegI+tmPcqJjCAdRfb5yKI0POOgxNO
+	 UYpy5gy8wEoux5S/V8A6qvYVNX7Yg5cSPJkl67itGNsqADXV/gfI2HDcR7gE3Gp/cG
+	 grX/fSHmbZy3EnxhVf5UhCyYY+jO8xsriyI695SvDgAIPDAQldFwcxN9ikhx238dDL
+	 HrazhnJMSXtM3PfZInjNVHxoOtT4Cxp2DklHUO7om94qHgxgmhzKtdLsO54e0WEVZ3
+	 KDmwXHFCTgZ6Q==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 898DAC3DA4A;
+	Fri,  9 Aug 2024 10:31:37 +0000 (UTC)
+From: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>
+Subject: [PATCH v12 0/2] Add support for Loongson1 APB DMA
+Date: Fri, 09 Aug 2024 18:30:57 +0800
+Message-Id: <20240809-loongson1-dma-v12-0-d9469a4a6b85@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <66b2198686b91_3206cf29453@willemb.c.googlers.com.notmuch>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOHvtWYC/2XPTU7DMBAF4KtUWeNqZlz/seIeiIVrj1OLJkZJi
+ YCqd8fpghZ3OZa+957P3cxT5rl73py7iZc85zLWA+lp04WDH3sWOdaHjoAkIoE4ljL2cxlRxME
+ L1NInVgbs3nXVfEyc8tc18PWt3mkqgzgdJvZ/KeDIIqFTcqtop8EKFO/cf9ay7c9a+dIPPh+3o
+ Qxr4iHPpzJ9Xxcues1dU3YgUTdbFi1AOIhMQYZQW+6C1i2LudPkWm2qlibula2bIqtW25vWYFp
+ tq07OOYqkDClotbvTKFvtqtZoMVEwkQO3GuHGDT18HGHdjvsETnmdvH7wePMW6MFj9VZJR1KZu
+ ON/6y+Xyy/5SKoLJwIAAA==
+To: Keguang Zhang <keguang.zhang@gmail.com>, Vinod Koul <vkoul@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Conor Dooley <conor.dooley@microchip.com>, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1723199495; l=3921;
+ i=keguang.zhang@gmail.com; s=20231129; h=from:subject:message-id;
+ bh=Pyn9R7CbJk7AzCg1pklE2Ub+hkwoAnfgt2o4mUVn1Vk=;
+ b=y23OmK3eYx48ro7Gjodr0rifohygfq4gBEa5U9XhQFBKIN3fjy5zJ6PtyYCqK6BE827HWNxqh
+ FRD+loTt6c6DWn0sVu7mcehRF80/YCEI6g2yJCH+SBrAmVBSo3tx55n
+X-Developer-Key: i=keguang.zhang@gmail.com; a=ed25519;
+ pk=FMKGj/JgKll/MgClpNZ3frIIogsh5e5r8CeW2mr+WLs=
+X-Endpoint-Received: by B4 Relay for keguang.zhang@gmail.com/20231129 with
+ auth_id=102
+X-Original-From: Keguang Zhang <keguang.zhang@gmail.com>
+Reply-To: keguang.zhang@gmail.com
 
-On Tue, Aug 06, 2024 at 08:39:34AM -0400, Willem de Bruijn wrote:
-> Markus Elfring wrote:
-> > >> …
-> > >>> +++ b/include/net/devmem.h
-> > >>> @@ -0,0 +1,115 @@
-> > >> …
-> > >>> +#ifndef _NET_DEVMEM_H
-> > >>> +#define _NET_DEVMEM_H
-> > >> …
-> > >>
-> > >> I suggest to omit leading underscores from such identifiers.
-> > >> https://wiki.sei.cmu.edu/confluence/display/c/DCL37-C.+Do+not+declare+or+define+a+reserved+identifier
-> > >>
-> > >
-> > > I was gonna apply this change, but I ack'd existing files and I find
-> > > that all of them include leading underscores, including some very
-> > > recently added files like net/core/page_pool_priv.h.
-> > >
-> > > I would prefer to stick to existing conventions if that's OK, unless
-> > > there is widespread agreement to the contrary.
-> > 
-> > Under which circumstances would you become interested to reduce development risks
-> > also according to undefined behaviour?
-> > https://wiki.sei.cmu.edu/confluence/display/c/CC.+Undefined+Behavior#CC.UndefinedBehavior-ub_106
-> 
-> This series is following established practice in kernel networking.
-> 
-> If that conflicts with a C standard, then perhaps that needs to be
-> resolved project wide.
-> 
-> Forcing an individual feature to diverge just brings inconsistency.
-> That said, this appears to be inconsistent already.
-> 
-> Main question is whether this is worth respinning a series already at
-> v17 with no more fundamental feedback.
+Add the driver and dt-binding document for Loongson1 APB DMA.
 
-No, from my point of view, it is not.
+Changes in v12:
+- Delete superfluous blank lines in the examples section.
+- Move the call to devm_request_irq() into ls1x_dma_alloc_chan_resources()
+  to use dma_chan_name() as a parameter.
+- Move the call to devm_free_irq() into ls1x_dma_free_chan_resources() accordingly.
+- Rename ls1x_dma_alloc_llis() to ls1x_dma_prep_lli().
+- Merge ls1x_dma_free_lli() into ls1x_dma_free_desc().
+- Add ls1x_dma_synchronize().
+- Fix the error handling of ls1x_dma_probe().
+- Some minor fixes and improvements.
+- Link to v11: https://lore.kernel.org/r/20240802-loongson1-dma-v11-0-85392357d4e0@gmail.com
 
-This really is a trivial and somewhat subjective mater.
-I don't think it should hold up a substantial piece of work.
+Changes in v11:
+- Use guard notation to acquire the spinlock.
+- Fix the build error of LS1X_DMA_LLI_ALIGNMENT.
+- Some minor fixes.
+- Link to v10: https://lore.kernel.org/r/20240726-loongson1-dma-v10-0-31bf095a6fa6@gmail.com
+
+Changes in v10:
+- Implement the hwdescs by link list to eliminate the limitation of the desc number.
+- Add the prefix 'LS1X_' for all registers and their bits.
+- Drop the macros: chan_readl() and chan_writel().
+- Use %pad for printing a dma_addr_t type.
+- Some minor fixes.
+- Link to v9: https://lore.kernel.org/r/20240613-loongson1-dma-v9-0-6181f2c7dece@gmail.com
+
+Changes in v9:
+- Fix all the errors and warnings when building with W=1 and C=1
+- Link to v8: https://lore.kernel.org/r/20240607-loongson1-dma-v8-0-f9992d257250@gmail.com
+
+Changes in v8:
+- Change 'interrupts' property to an items list
+- Link to v7: https://lore.kernel.org/r/20240329-loongson1-dma-v7-0-37db58608de5@gmail.com
+
+Changes in v7:
+- Change the comptible to 'loongson,ls1*-apbdma' (suggested by Huacai Chen)
+- Update the title and description part accordingly
+- Rename the file to loongson,ls1b-apbdma.yaml
+- Add a compatible string for LS1A
+- Delete minItems of 'interrupts'
+- Change patterns of 'interrupt-names' to const
+- Rename the file to loongson1-apb-dma.c to keep the consistency
+- Update Kconfig and Makefile accordingly
+- Link to v6: https://lore.kernel.org/r/20240316-loongson1-dma-v6-0-90de2c3cc928@gmail.com
+
+Changes in v6:
+- Change the compatible to the fallback
+- Implement .device_prep_dma_cyclic for Loongson1 sound driver,
+  as well as .device_pause and .device_resume.
+- Set the limitation LS1X_DMA_MAX_DESC and put all descriptors
+  into one page to save memory
+- Move dma_pool_zalloc() into ls1x_dma_alloc_desc()
+- Drop dma_slave_config structure
+- Use .remove_new instead of .remove
+- Use KBUILD_MODNAME for the driver name
+- Improve the debug information
+- Some minor fixes
+
+Changes in v5:
+- Add the dt-binding document
+- Add DT support
+- Use DT information instead of platform data
+- Use chan_id of struct dma_chan instead of own id
+- Use of_dma_xlate_by_chan_id() instead of ls1x_dma_filter()
+- Update the author information to my official name
+
+Changes in v4:
+- Use dma_slave_map to find the proper channel.
+- Explicitly call devm_request_irq() and tasklet_kill().
+- Fix namespace issue.
+- Some minor fixes and cleanups.
+
+Changes in v3:
+- Rename ls1x_dma_filter_fn to ls1x_dma_filter.
+
+Changes in v2:
+- Change the config from 'DMA_LOONGSON1' to 'LOONGSON1_DMA',
+- and rearrange it in alphabetical order in Kconfig and Makefile.
+- Fix comment style.
+
+---
+Keguang Zhang (2):
+      dt-bindings: dma: Add Loongson-1 APB DMA
+      dmaengine: Loongson1: Add Loongson-1 APB DMA driver
+
+ .../bindings/dma/loongson,ls1b-apbdma.yaml         |  65 ++
+ drivers/dma/Kconfig                                |   9 +
+ drivers/dma/Makefile                               |   1 +
+ drivers/dma/loongson1-apb-dma.c                    | 660 +++++++++++++++++++++
+ 4 files changed, 735 insertions(+)
+---
+base-commit: 61c01d2e181adfba02fe09764f9fca1de2be0dbe
+change-id: 20231120-loongson1-dma-163afe5708b9
+
+Best regards,
+-- 
+Keguang Zhang <keguang.zhang@gmail.com>
+
+
 
