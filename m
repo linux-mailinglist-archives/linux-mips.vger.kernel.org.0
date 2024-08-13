@@ -1,170 +1,185 @@
-Return-Path: <linux-mips+bounces-4874-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4875-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0C9B9500B7
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Aug 2024 11:04:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B16B9501D6
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Aug 2024 11:59:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97FEA1F230A4
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Aug 2024 09:04:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F2A61C20F37
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Aug 2024 09:59:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4C8517C235;
-	Tue, 13 Aug 2024 09:03:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BE3F18733C;
+	Tue, 13 Aug 2024 09:59:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uY3Czher"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="KfxwyPzR";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="iuwB9IF/"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh6-smtp.messagingengine.com (fhigh6-smtp.messagingengine.com [103.168.172.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 548D117CA12
-	for <linux-mips@vger.kernel.org>; Tue, 13 Aug 2024 09:03:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F4313BADF;
+	Tue, 13 Aug 2024 09:59:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723539828; cv=none; b=CJEkPBm1Z4IQMOY5p3tH35nu6dQgjsAYXLCbl6s/i5G+QEEngI3nJ92w+N9+zs1y+gtYdJsM2SZfrC1lxIE634P4JwRB878WoiOKd5EaEEw4QaMFmlKybzGjKKV6qPSpS8kXLu4+crgL77PQuWjkyzhaaWsh+5Q7pXHGwe9ZYpg=
+	t=1723543153; cv=none; b=WUGdL2ZgN9ZwAVeP7W4efkXNw1hcbtYtDtaphtXhNm3zGAd7HwZY8F5qkRSvD8RDK5eLvBRaD/MpatHIihgYlkwHxnS6k+7kJlQR82yNg3ckW5UtBoOIwZG77IWMORi7nieWjg6iatfJ4h6fk8Uic4mdeNvxGGm2qO87j8bA2ZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723539828; c=relaxed/simple;
-	bh=OFLmnkChNt3TrBDQB3OchS9v9nydUBdhsCvm9Qr0paQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dlFj7juiTT/6hHoCRVN7TkSV3ue5t3+9BOQyfS36ylRkhEkOEnp7bC0Rqq9eQKfYQ4B/638+W8kNc66gKWIKUs1AmHPXuEyUE+QXBsKrrwxHnDO74CuS2PQmdmYZzI1opiVGWn5aHmPhwHgixTY+v6O38FZz2B2r+iTWNuAJFIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uY3Czher; arc=none smtp.client-ip=209.85.217.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-4929fd67c7bso1676977137.0
-        for <linux-mips@vger.kernel.org>; Tue, 13 Aug 2024 02:03:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1723539825; x=1724144625; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MqfnVnhHsKTNIdZ3g99elQ8N0kSquMZj93pvaOSIp0U=;
-        b=uY3CzherVSUXaUL2L45nDDjUe851uSDwoUak+sWbM5SLZgqZu0RzWakWib6600bcM3
-         nkpN48NnEKFdKHNu45FDUJ+iB/gabNPMokNHB4mnqALGdAwZ3ybYGg6whRFoVc9NBxZW
-         U1SkhkP4aChDRMPRkgx8vXA+ZlnLtATO+602voSTI274QqM7RicCA6o3qPCI+mW0gOB9
-         y+K0HPR/eBxpYqeHyFh6JP/dbTfsAN//pojGBDgYuWYY8y4FA/tPQh+K1e2yh39e3RSp
-         NiRMGNuOEyiuVZmbB7CHeVf5LcFuLYiHjUtvhEDA4gf4pNEQxoUNr8DV9kVgMMw88MOS
-         ZbOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723539825; x=1724144625;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MqfnVnhHsKTNIdZ3g99elQ8N0kSquMZj93pvaOSIp0U=;
-        b=L2f7hNHE9NT3FTddn68y+8wtI6YFV7KFqrPWkpAdlex/DLggYEzOAToSowGhf9CBbb
-         HeZ8V84jNG6xkbGYCMXOuTANogfFCTaqwS29nhe0doC+/ywuKeY260In7M8SN8a19SoU
-         kSgGgHPYnSYMS1NK+G9DNusko3Hi0/6b93ZLiq/xFpBaoBsOQPm1t1t+48Rg00XXsJg7
-         9iQqTqIjcO5/e8U9YN1E3Nous2873Wp+xBcBFRdNksgqCxDR3uT6FS79HKR5gPI9hl7V
-         7SS9cyH4E0BquELesfBDHcn8QuZP+YznElRyIJFK+oI/JbCNqqxoT2vCJcdk11CufIwm
-         0gsA==
-X-Forwarded-Encrypted: i=1; AJvYcCWr8Dsw5jIYt1a4zgD0+UXv2PA3gz6pm6DiaqvMVOwfSjMovITt4ZrmuVAdALLBWbMsIIFr1O3wZk03Tt/LIEqrKDq8jFnw2zhpjQ==
-X-Gm-Message-State: AOJu0Yx0HFjuiZz/FrajevfupGWOfxA1G20RYDMoK8d4miQj9nUbr15m
-	DLcIabqpph3t31AJLCieCcoP+z16wUTAnC4c2n9fQqoYYQDnTiQGoNJSmyZ3hT5eAeTL9JJ7Z//
-	kHzJT1kB2ZM/10jIAKzhmWsxVZ+xeJO95qybM
-X-Google-Smtp-Source: AGHT+IEDjVBWF1MtU621r7c9KTxxkpXecwmSkiD37eYz3ttGuDqjz8Aa65UHLyu0qffTTOccInI+PGwQjjCKHuK8rFw=
-X-Received: by 2002:a05:6102:3e94:b0:48f:a858:2b52 with SMTP id
- ada2fe7eead31-49743b56abemr3993740137.29.1723539824928; Tue, 13 Aug 2024
- 02:03:44 -0700 (PDT)
+	s=arc-20240116; t=1723543153; c=relaxed/simple;
+	bh=Yg+SvLnKDfc6IhCsYzXH5LG+1D5ljKI1al26FDrP2Co=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=s2JsN1xjYPYV5PoOqFUHdu4WsNazNM8HgaUSXqu0r7g4JVGI7dtugtjMYz7e4FxLzG8qoG1/t6w+5Z/fZP9aAX4+ZVmp23lKZE+7+YVLvwilV2+ezrU8p4F3XupJNgZj0XI6ckekRk+wq85ckjhadilo1xeBgkpTnrVpbDImL8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=KfxwyPzR; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=iuwB9IF/; arc=none smtp.client-ip=103.168.172.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from phl-compute-08.internal (phl-compute-08.nyi.internal [10.202.2.48])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id 8147E11519A2;
+	Tue, 13 Aug 2024 05:59:10 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-08.internal (MEProxy); Tue, 13 Aug 2024 05:59:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm1; t=1723543150; x=1723629550; bh=6Q
+	d4aztaFlRmvO0r2D6tqPKDXCbzC6+wHcCsX84k054=; b=KfxwyPzR+JP8HaDhik
+	Oh8b+ZHmBoNYtVwDEgQDWtBVy36LeCpcHv9PJK8vPyCUeRfINEpdCcxh3hEHEhLN
+	XHDIj1bhNcuYfVIgwJKzr4ptmAvY/le9llj85LfXoxP2HVGc1I+qGlCZUkJy15jw
+	UvbNpQ7MoylRrl3cnxwGqEzhiRc1Um96UqAvg61l+DKMMtDoj5OhzPYxPizwe3Dk
+	wpOmTXEATH9WL33Bh1eTWiEDyEfH2GlhJz+yrPG4txzPsvZfpk83oKn9MrjDgVsZ
+	Kp/lD2xG/UFnOKO5xNRbmBatPvgPMAsKsmvBrB7sGOmz/mvn5R0a+XqmuQeWlF6F
+	n6cQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1723543150; x=1723629550; bh=6Qd4aztaFlRmv
+	O0r2D6tqPKDXCbzC6+wHcCsX84k054=; b=iuwB9IF/aYgR7T/wVNOdFkJzbBSa7
+	PKX7dCJD8Ei9pg/XIZePdt9Gu4w+MyrrNqvC9HxB37tA2x/xmh9AnKLuDSDQG1Px
+	6oqxPDFFkjFHHpRc2TRKOs3tlr553cBkINTmsm0J8BZMdNJYM8FU4tsU10xxk0Vi
+	65tpuSPTGiStjFex6G+QdrXYIyVbuv2dMxCUrtGka/FjvF/y6sv0HxvwkAk+rWmp
+	CJcfHPC51PvP5TMkcYit6UBSR/5LoCTL7rlTcp3HPj2Ea+RU/5ntu05Au9JTuinf
+	vu5f5qEoz25FnfKYwfalNe+gzWm+Z7agwRdb/VGyaFG32CIX8TtYG5s3A==
+X-ME-Sender: <xms:bi67ZpSRgJg11ezP0ninKcS5TrT07V9ZSyDUiAVL5-Y4wQ113LkUfw>
+    <xme:bi67ZiwQ70VJ5smF7eeDhtsMVBVRAg1QcU6KClPtvk7dYcuzzyKGgWpFY36F-Ht4V
+    umpQjEuZZMohLnH4rY>
+X-ME-Received: <xmr:bi67Zu3CQZfkDFVfnPsAlumOcqr3KTZSTMRn_31aLvcREc1kXIRtgp682mnG1xborg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddruddtvddgvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhephfffufggtgfgkffvvefosehtjeertdertdejnecu
+    hfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomheqnecuggftrfgrthhtvghrnhephfffgeejgfejieeugffgudegvdekffev
+    geeuteetgeejveeiteeivedvffehlefgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrgh
+    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgr
+    gihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhnsggprhgtphhtthhopeehpdhmoh
+    guvgepshhmthhpohhuthdprhgtphhtthhopehjihgrgihunhdrhigrnhhgsehflhihghho
+    rghtrdgtohhmpdhrtghpthhtohepfhgrnhgtvghrrdhlrghntggvrhesghhmrghilhdrtg
+    homhdprhgtphhtthhopehlihhnuhigqdhmihhpshesvhhgvghrrdhkvghrnhgvlhdrohhr
+    ghdprhgtphhtthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpd
+    hrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:bi67ZhBZgPkBJgU86CNZ490PKUtIKWVa5uLt3eyXlUBo3uEcilqZBA>
+    <xmx:bi67ZigQrsJtaz15ges34xJCP-EzpZbRtcPSKKHq1El1ZcVOSjTzHA>
+    <xmx:bi67ZlptZ1y2kJJ9JVFdLtotrTteF53R43A6xrmuU7pTGzUDhbo62w>
+    <xmx:bi67Ztj83ZHSK_xHLyN4KZ4oluVYIf7ciqEJ0SGKzKPGMIaOFr_yrQ>
+    <xmx:bi67ZkZ9Bf8N8CUFsBqnJP3toQNjD2fzHsPO1f10g2IeTx_RLRfDczzx>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 13 Aug 2024 05:59:09 -0400 (EDT)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Date: Tue, 13 Aug 2024 10:59:08 +0100
+Subject: [PATCH] MIPS: cevt-r4k: Don't call get_c0_compare_int if timer irq
+ is installed
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240805212536.2172174-1-almasrymina@google.com>
- <20240805212536.2172174-8-almasrymina@google.com> <20240806135924.5bb65ec7@kernel.org>
- <CAHS8izOA80dxpB9rzOwv7Oe_1w4A7vo5S3c3=uCES8TSnjyzpg@mail.gmail.com>
- <20240808192410.37a49724@kernel.org> <CAHS8izMH4UhD+UDYqMjt9d=gu-wpGPQBLyewzVrCWRyoVtQcgA@mail.gmail.com>
- <fc6a8f0a-cdb4-4705-a08f-7033ef15213e@gmail.com> <20240809205236.77c959b0@kernel.org>
- <CAHS8izOXwZS-8sfvn3DuT1XWhjc--7-ZLjr8rMn1XHr5F+ckbA@mail.gmail.com>
- <48f3a61f-9e04-4755-b50c-8fae6e6112eb@gmail.com> <20240812105732.5d2845e4@kernel.org>
- <7e2ffe62-032a-4c5e-953b-b7117ab076be@gmail.com> <71260e3c-dee4-4bf0-b257-cdabd8cff3f1@gmail.com>
- <20240812171548.509ca539@kernel.org> <CAHS8izPyGwe_i4eNemW+A+MgMVHqJ0fdp=+-ju2ynqgc0mb_Ow@mail.gmail.com>
-In-Reply-To: <CAHS8izPyGwe_i4eNemW+A+MgMVHqJ0fdp=+-ju2ynqgc0mb_Ow@mail.gmail.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 13 Aug 2024 05:03:33 -0400
-Message-ID: <CAHS8izM=d9pe0V3BWAY_gguNGymdc4DSFAz0DWyCMoGX6QVhDw@mail.gmail.com>
-Subject: Re: [PATCH net-next v18 07/14] memory-provider: dmabuf devmem memory provider
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Pavel Begunkov <asml.silence@gmail.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	Donald Hunter <donald.hunter@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, David Wei <dw@davidwei.uk>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Kaiyuan Zhang <kaiyuanz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240813-get_c0_compare_int-v1-1-a0a1b007d736@flygoat.com>
+X-B4-Tracking: v=1; b=H4sIAGsuu2YC/x3MTQqAIBBA4avIrBP8qbCuEiFiU80iFY0IorsnL
+ b/Few8UzIQFRvZAxosKxVAhGwZ+d2FDTks1KKFaYaTiG57WC+vjkVxGS+HkfT/oznTaaWGghin
+ jSvc/neb3/QC9pHSyZAAAAA==
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Serge Semin <fancer.lancer@gmail.com>, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2142;
+ i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
+ bh=Yg+SvLnKDfc6IhCsYzXH5LG+1D5ljKI1al26FDrP2Co=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTdermBTFofi+0NFs+MnXj2kdj+ndVP68vX7uHbV5yey
+ G011dayo5SFQYyLQVZMkSVEQKlvQ+PFBdcfZP2BmcPKBDKEgYtTACbikM3wV7px++enLJOd94r0
+ pHvJf8s83fx+5f1mj5gruTs8NQzO7GZkeH7l4o7JV21vt+2QaazqPX/6XLDky86kRR0y5i7R01Y
+ IcAAA
+X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
+ fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-On Tue, Aug 13, 2024 at 4:39=E2=80=AFAM Mina Almasry <almasrymina@google.co=
-m> wrote:
->
-> On Mon, Aug 12, 2024 at 8:15=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> =
-wrote:
-> > BTW, Mina, the core should probably also check that XDP isn't installed
-> > before / while the netmem is bound to a queue.
->
-> Sorry if noob question, but what is the proper check for this? I tried
-> adding this to net_devmem_bind_dmabuf_to_queue():
->
-> if (xdp_rxq_info_is_reg(&rxq->xdp_rxq))
->                  return -EEXIST;
->
-> But quickly found out that in  netif_alloc_rx_queues() we initialize
-> all the rxq->xdp_rxq to state REGISTERED regardless whether xdp is
-> installed or not, so this check actually fails.
->
-> Worthy of note is that GVE holds an instance of xdp_rxq_info in
-> gve_rx_ring, and seems to use that for its xdp information, not the
-> one that hangs off of netdev_rx_queue in core.
->
+This avoids warning:
 
-To elaborate further, in order to disable binding dmabuf and XDP on
-the same rx queue for GVE, AFAIT the check would need to be inside of
-GVE. Inside of GVE I'd check if gve_priv->xdp_prog is installed, and
-check if the gve_rx_ring->xdp_info is registered. If so, then the rx
-queue is XDP enabled, and should not be bound to dmabuf. I think that
-would work.
+[    0.118053] BUG: sleeping function called from invalid context at kernel/locking/mutex.c:283
 
-At the moment I can't think of a check inside of core that would be
-compatible with GVE, but above you clearly are specifically asking for
-a check in core. Any pointers to what you have in mind would be
-appreciated here, but I'll try to take a deeper look.
+Caused by get_c0_compare_int on secondary CPU.
 
-> Additionally, my understanding of XDP is limited, but why do we want
-> to disable it? My understanding is that XDP is a kernel bypass that
-> hands the data directly to userspace. In theory at least there should
-> be no issue binding dmabuf to a queue, then getting the data in the
-> queue via an XDP program instead of via TCP sockets or io uring. Is
-> there some fundamental reason why dmabuf and XDP are incompatible?
->
-> --
-> Thanks,
-> Mina
+We also skipped saving IRQ number to struct clock_event_device *cd as
+it's never used by clockevent core, as per comments it's only meant
+for "non CPU local devices".
 
+Reported-by: Serge Semin <fancer.lancer@gmail.com>
+Closes: https://lore.kernel.org/linux-mips/6szkkqxpsw26zajwysdrwplpjvhl5abpnmxgu2xuj3dkzjnvsf@4daqrz4mf44k/
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+ arch/mips/kernel/cevt-r4k.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
+diff --git a/arch/mips/kernel/cevt-r4k.c b/arch/mips/kernel/cevt-r4k.c
+index 368e8475870f..5f6e9e2ebbdb 100644
+--- a/arch/mips/kernel/cevt-r4k.c
++++ b/arch/mips/kernel/cevt-r4k.c
+@@ -303,13 +303,6 @@ int r4k_clockevent_init(void)
+ 	if (!c0_compare_int_usable())
+ 		return -ENXIO;
+ 
+-	/*
+-	 * With vectored interrupts things are getting platform specific.
+-	 * get_c0_compare_int is a hook to allow a platform to return the
+-	 * interrupt number of its liking.
+-	 */
+-	irq = get_c0_compare_int();
+-
+ 	cd = &per_cpu(mips_clockevent_device, cpu);
+ 
+ 	cd->name		= "MIPS";
+@@ -320,7 +313,6 @@ int r4k_clockevent_init(void)
+ 	min_delta		= calculate_min_delta();
+ 
+ 	cd->rating		= 300;
+-	cd->irq			= irq;
+ 	cd->cpumask		= cpumask_of(cpu);
+ 	cd->set_next_event	= mips_next_event;
+ 	cd->event_handler	= mips_event_handler;
+@@ -332,6 +324,13 @@ int r4k_clockevent_init(void)
+ 
+ 	cp0_timer_irq_installed = 1;
+ 
++	/*
++	 * With vectored interrupts things are getting platform specific.
++	 * get_c0_compare_int is a hook to allow a platform to return the
++	 * interrupt number of its liking.
++	 */
++	irq = get_c0_compare_int();
++
+ 	if (request_irq(irq, c0_compare_interrupt, flags, "timer",
+ 			c0_compare_interrupt))
+ 		pr_err("Failed to request irq %d (timer)\n", irq);
 
---=20
-Thanks,
-Mina
+---
+base-commit: 9e6869691724b12e1f43655eeedc35fade38120c
+change-id: 20240812-get_c0_compare_int-66935853a308
+
+Best regards,
+-- 
+Jiaxun Yang <jiaxun.yang@flygoat.com>
+
 
