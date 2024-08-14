@@ -1,311 +1,289 @@
-Return-Path: <linux-mips+bounces-4892-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4894-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2231950EEC
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Aug 2024 23:17:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1CAE9518E0
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Aug 2024 12:34:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6B232843B7
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Aug 2024 21:17:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE4581C20B3F
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Aug 2024 10:34:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7D251AED4D;
-	Tue, 13 Aug 2024 21:13:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Uo3f19j/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AD5E1684A6;
+	Wed, 14 Aug 2024 10:34:33 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2293C1AE850
-	for <linux-mips@vger.kernel.org>; Tue, 13 Aug 2024 21:13:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854573D552
+	for <linux-mips@vger.kernel.org>; Wed, 14 Aug 2024 10:34:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723583631; cv=none; b=RqZea8EXsWpo6vRB85YUZ6xOyPeLqo6QxSPLDiFcRl856NqBZawvbni67LGCSKZg2vNomytnMDbRy3njZELID5fnAgdDboRYwXXoZTys8M7e28qsHmlJQrFGvhhCbMYpCZ+jisxrqKFKjnEXKXL5t5M9SZ2U4ePLgdfQNQa4Gl4=
+	t=1723631673; cv=none; b=fCZypgMzuWxlvGvo8qKClg1sPHX3eoq4xO4AYJedXMmovtojun5WDmUgVLY6EonePCH3T6TW4Psuia6IyJVU8v/taaDJZCWsCGKSa4iFwOv84uDV4c2SO066Bo9Hg+avrNt/9bGOIBRNgbpJGfFmt6NgUvtwA8orESEESWqXE/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723583631; c=relaxed/simple;
-	bh=e4G5JvNaur+zqHlm2owDRW9K+aQAG/77haI5TcQ7l1w=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=YmjnkeRZyQyKgpA85doEPXBcbfeydCcKSqM4vxdUkNZFRro+WiL0MneATy5TBS/Z7u0oFE5oTvAE4ZxXOfnnBR5LAS6+j63VWK7cGhms2xJ1H32aQZj/7TolGrh/fwqKMCi351UUwQ4EnkHkW1JJ8Z0IQBW3pZQ7DTStuniRyy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Uo3f19j/; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-66b3b4415c7so128289217b3.0
-        for <linux-mips@vger.kernel.org>; Tue, 13 Aug 2024 14:13:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1723583625; x=1724188425; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=vVCV87jZy8PxhPLAls7YmMLOhmnFqtjE+KOvYzSFbII=;
-        b=Uo3f19j/2YevWTLyJx+U4ptOWemBHxZhbHNlUldnIxzQqWpv8YNqeUtBICQn07gDIj
-         jPciVtfD9AqyGvWJRPB9P796PF13EKIrIby3FiIkYo0dvQPIPu/vdUouljFTXgpSccZt
-         BRYt/xLhYPpCeFM9SF+xMf8Lir/HKgefOOWRZw1Dzs0hfD0IVLs6Yl8QshETJCLOOeL7
-         NUX22F693WMmIYW3QnH5IJDIkh9EoffIYxeHosKk3dvIvGIvlEJnzX2N/+ZVgZWzXZXb
-         5ByP0EPKuVbsX7wToIKmrYCfRI800EmOWvd80L32e8v1A+A8bgp8XX8DaG79Pk4y2459
-         ovDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723583625; x=1724188425;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vVCV87jZy8PxhPLAls7YmMLOhmnFqtjE+KOvYzSFbII=;
-        b=vNnPvtGqshWBd0e7g2Qzo/02sdcfOZmvaxtRDsicx8Gv90plEPp7klhnDHuM9ZpF3k
-         E6jctRRAgB5+fhg8Fj2+mJwTykFHGB6fgI51e/HX3I2zfrHvu/KKPBZFOhJjDGHPubKn
-         tqv2xm4+XTDWrIVqxLFs91Lrue3s6DmqACkqc5pNpcn3KJhkmyhpeu95WpE73d01wF8v
-         41C2BOYDoZM0CKKEpXvxze2Q3qJX/1kcWp34+e3ZfgGhDMeIQyWpAJZv431iCSzm1/Vl
-         0Pu7lajGjtzlpN471q+rA2AfN9RfL5i+qr7Y8hbbuc5WVcZuzZbqXhmR+CiEEgtTY/6L
-         uqHA==
-X-Forwarded-Encrypted: i=1; AJvYcCU281K3YasOVfTUxKR9vtXsjmT1eH9EfNtqkK7s/JG73UfbxDdnmn9gw16a7AO7R4F+krS0ToasVg9g@vger.kernel.org
-X-Gm-Message-State: AOJu0Yywnj4q2A6itOlxgj16B7ggXpVobKl4oG78HrG6umWa3yCzgylZ
-	fWLpsiWAR6x01pqzlpGer/JDq0l0RsBYFCXQu3v+FcoCcZ+oo4cn5WsDUgxhF8Y1AtlodO7ISIu
-	UDTpBjBQyuutmTjtb3zvPmQ==
-X-Google-Smtp-Source: AGHT+IEUS873qk8VJeJaElarGm2oSh0h5cRThNQuqxPVzKK1sq1PaPCKqLN7RDPePKRRnOoG+C0KKCx0gcyeGVu8jA==
-X-Received: from almasrymina.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4bc5])
- (user=almasrymina job=sendgmr) by 2002:a81:e80a:0:b0:62c:f6fd:5401 with SMTP
- id 00721157ae682-6ac99fa910bmr65837b3.6.1723583624619; Tue, 13 Aug 2024
- 14:13:44 -0700 (PDT)
-Date: Tue, 13 Aug 2024 21:13:15 +0000
+	s=arc-20240116; t=1723631673; c=relaxed/simple;
+	bh=noCSEt5iKpYhRhtjwNDbOVzuTww+Sdhl93PXjJcQVBQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qsmfSmuDTh0GMxh8XNHmyeJiHK4Y2Ir4H8+Ty3AAkT0rdkwWcwW1o9qbwbfoeQ+OWp6qPoTXeU7H7o/bHUow7Ktae0bXvqFZOhD2Mqx/B0dRSzCz5igbEwc60WqZXGCvQQSbrc4GeTOzQGtADMjzlqbbey+Igvd/CWdbxwRm6Mg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.17])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4WkPgG2ftXz1HG8X
+	for <linux-mips@vger.kernel.org>; Wed, 14 Aug 2024 18:31:22 +0800 (CST)
+Received: from kwepemd200011.china.huawei.com (unknown [7.221.188.251])
+	by mail.maildlp.com (Postfix) with ESMTPS id B35091A0188
+	for <linux-mips@vger.kernel.org>; Wed, 14 Aug 2024 18:34:26 +0800 (CST)
+Received: from cgs.huawei.com (10.244.148.83) by
+ kwepemd200011.china.huawei.com (7.221.188.251) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.34; Wed, 14 Aug 2024 18:34:26 +0800
+From: Gaosheng Cui <cuigaosheng1@huawei.com>
+To: <tsbogend@alpha.franken.de>, <cuigaosheng1@huawei.com>
+CC: <linux-mips@vger.kernel.org>
+Subject: [PATCH -next] MIPS: Octeon: Remove unused codes of cvmx_fpa_shutdown_pool()
+Date: Wed, 14 Aug 2024 18:34:25 +0800
+Message-ID: <20240814103425.2051117-1-cuigaosheng1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.46.0.76.ge559c4bf1a-goog
-Message-ID: <20240813211317.3381180-14-almasrymina@google.com>
-Subject: [PATCH net-next v19 13/13] netdev: add dmabuf introspection
-From: Mina Almasry <almasrymina@google.com>
-To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org
-Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
-	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
-	Christoph Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemd200011.china.huawei.com (7.221.188.251)
 
-Add dmabuf information to page_pool stats:
+The cvmx_fpa_shutdown_pool() has been removed since
+commit a03822ea5df6 ("MIPS: OCTEON: Remove some unused files."),
+the declaration and cvmx_ipd_free_ptr would not be used,so remove
+them.
 
-$ ./cli.py --spec ../netlink/specs/netdev.yaml --dump page-pool-get
-...
- {'dmabuf': 10,
-  'id': 456,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 455,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 454,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 453,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 452,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 451,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 450,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 449,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
-
-And queue stats:
-
-$ ./cli.py --spec ../netlink/specs/netdev.yaml --dump queue-get
-...
-{'dmabuf': 10, 'id': 8, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 9, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 10, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 11, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 12, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 13, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 14, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 15, 'ifindex': 3, 'type': 'rx'},
-
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Mina Almasry <almasrymina@google.com>
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
-
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
 ---
- Documentation/netlink/specs/netdev.yaml | 10 ++++++++++
- include/uapi/linux/netdev.h             |  2 ++
- net/core/netdev-genl.c                  | 10 ++++++++++
- net/core/page_pool_user.c               |  4 ++++
- tools/include/uapi/linux/netdev.h       |  2 ++
- 5 files changed, 28 insertions(+)
+ arch/mips/include/asm/octeon/cvmx-fpa.h |  13 --
+ arch/mips/include/asm/octeon/cvmx-ipd.h | 183 ------------------------
+ 2 files changed, 196 deletions(-)
 
-diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-index 0c747530c275..08412c279297 100644
---- a/Documentation/netlink/specs/netdev.yaml
-+++ b/Documentation/netlink/specs/netdev.yaml
-@@ -167,6 +167,10 @@ attribute-sets:
-           "re-attached", they are just waiting to disappear.
-           Attribute is absent if Page Pool has not been detached, and
-           can still be used to allocate new memory.
-+      -
-+        name: dmabuf
-+        doc: ID of the dmabuf this page-pool is attached to.
-+        type: u32
-   -
-     name: page-pool-info
-     subset-of: page-pool
-@@ -268,6 +272,10 @@ attribute-sets:
-         name: napi-id
-         doc: ID of the NAPI instance which services this queue.
-         type: u32
-+      -
-+        name: dmabuf
-+        doc: ID of the dmabuf attached to this queue, if any.
-+        type: u32
+diff --git a/arch/mips/include/asm/octeon/cvmx-fpa.h b/arch/mips/include/asm/octeon/cvmx-fpa.h
+index f6dfcca97f19..68736b3f6114 100644
+--- a/arch/mips/include/asm/octeon/cvmx-fpa.h
++++ b/arch/mips/include/asm/octeon/cvmx-fpa.h
+@@ -263,19 +263,6 @@ static inline void cvmx_fpa_free(void *ptr, uint64_t pool,
+ 	cvmx_write_io(newptr.u64, num_cache_lines);
+ }
  
-   -
-     name: qstats
-@@ -543,6 +551,7 @@ operations:
-             - inflight
-             - inflight-mem
-             - detach-time
-+            - dmabuf
-       dump:
-         reply: *pp-reply
-       config-cond: page-pool
-@@ -607,6 +616,7 @@ operations:
-             - type
-             - napi-id
-             - ifindex
-+            - dmabuf
-       dump:
-         request:
-           attributes:
-diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
-index 91bf3ecc5f1d..7c308f04e7a0 100644
---- a/include/uapi/linux/netdev.h
-+++ b/include/uapi/linux/netdev.h
-@@ -93,6 +93,7 @@ enum {
- 	NETDEV_A_PAGE_POOL_INFLIGHT,
- 	NETDEV_A_PAGE_POOL_INFLIGHT_MEM,
- 	NETDEV_A_PAGE_POOL_DETACH_TIME,
-+	NETDEV_A_PAGE_POOL_DMABUF,
+-/**
+- * Shutdown a Memory pool and validate that it had all of
+- * the buffers originally placed in it. This should only be
+- * called by one processor after all hardware has finished
+- * using the pool.
+- *
+- * @pool:   Pool to shutdown
+- * Returns Zero on success
+- *	   - Positive is count of missing buffers
+- *	   - Negative is too many buffers or corrupted pointers
+- */
+-extern uint64_t cvmx_fpa_shutdown_pool(uint64_t pool);
+-
+ /**
+  * Get the size of blocks controlled by the pool
+  * This is resolved to a constant at compile time.
+diff --git a/arch/mips/include/asm/octeon/cvmx-ipd.h b/arch/mips/include/asm/octeon/cvmx-ipd.h
+index adab7b54c3b4..ac720042036e 100644
+--- a/arch/mips/include/asm/octeon/cvmx-ipd.h
++++ b/arch/mips/include/asm/octeon/cvmx-ipd.h
+@@ -153,187 +153,4 @@ static inline void cvmx_ipd_disable(void)
+ 	cvmx_write_csr(CVMX_IPD_CTL_STATUS, ipd_reg.u64);
+ }
  
- 	__NETDEV_A_PAGE_POOL_MAX,
- 	NETDEV_A_PAGE_POOL_MAX = (__NETDEV_A_PAGE_POOL_MAX - 1)
-@@ -131,6 +132,7 @@ enum {
- 	NETDEV_A_QUEUE_IFINDEX,
- 	NETDEV_A_QUEUE_TYPE,
- 	NETDEV_A_QUEUE_NAPI_ID,
-+	NETDEV_A_QUEUE_DMABUF,
- 
- 	__NETDEV_A_QUEUE_MAX,
- 	NETDEV_A_QUEUE_MAX = (__NETDEV_A_QUEUE_MAX - 1)
-diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-index 88017ee22d2f..56b7790607b1 100644
---- a/net/core/netdev-genl.c
-+++ b/net/core/netdev-genl.c
-@@ -293,6 +293,7 @@ static int
- netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 			 u32 q_idx, u32 q_type, const struct genl_info *info)
- {
-+	struct net_devmem_dmabuf_binding *binding;
- 	struct netdev_rx_queue *rxq;
- 	struct netdev_queue *txq;
- 	void *hdr;
-@@ -312,6 +313,15 @@ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 		if (rxq->napi && nla_put_u32(rsp, NETDEV_A_QUEUE_NAPI_ID,
- 					     rxq->napi->napi_id))
- 			goto nla_put_failure;
-+
-+		binding = (struct net_devmem_dmabuf_binding *)
-+				  rxq->mp_params.mp_priv;
-+		if (binding) {
-+			if (nla_put_u32(rsp, NETDEV_A_QUEUE_DMABUF,
-+					binding->id))
-+				goto nla_put_failure;
-+		}
-+
- 		break;
- 	case NETDEV_QUEUE_TYPE_TX:
- 		txq = netdev_get_tx_queue(netdev, q_idx);
-diff --git a/net/core/page_pool_user.c b/net/core/page_pool_user.c
-index cbc54ee4f670..4e18db82450e 100644
---- a/net/core/page_pool_user.c
-+++ b/net/core/page_pool_user.c
-@@ -212,6 +212,7 @@ static int
- page_pool_nl_fill(struct sk_buff *rsp, const struct page_pool *pool,
- 		  const struct genl_info *info)
- {
-+	struct net_devmem_dmabuf_binding *binding = pool->mp_priv;
- 	size_t inflight, refsz;
- 	void *hdr;
- 
-@@ -241,6 +242,9 @@ page_pool_nl_fill(struct sk_buff *rsp, const struct page_pool *pool,
- 			 pool->user.detach_time))
- 		goto err_cancel;
- 
-+	if (binding && nla_put_u32(rsp, NETDEV_A_PAGE_POOL_DMABUF, binding->id))
-+		goto err_cancel;
-+
- 	genlmsg_end(rsp, hdr);
- 
- 	return 0;
-diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
-index 91bf3ecc5f1d..7c308f04e7a0 100644
---- a/tools/include/uapi/linux/netdev.h
-+++ b/tools/include/uapi/linux/netdev.h
-@@ -93,6 +93,7 @@ enum {
- 	NETDEV_A_PAGE_POOL_INFLIGHT,
- 	NETDEV_A_PAGE_POOL_INFLIGHT_MEM,
- 	NETDEV_A_PAGE_POOL_DETACH_TIME,
-+	NETDEV_A_PAGE_POOL_DMABUF,
- 
- 	__NETDEV_A_PAGE_POOL_MAX,
- 	NETDEV_A_PAGE_POOL_MAX = (__NETDEV_A_PAGE_POOL_MAX - 1)
-@@ -131,6 +132,7 @@ enum {
- 	NETDEV_A_QUEUE_IFINDEX,
- 	NETDEV_A_QUEUE_TYPE,
- 	NETDEV_A_QUEUE_NAPI_ID,
-+	NETDEV_A_QUEUE_DMABUF,
- 
- 	__NETDEV_A_QUEUE_MAX,
- 	NETDEV_A_QUEUE_MAX = (__NETDEV_A_QUEUE_MAX - 1)
+-/**
+- * Supportive function for cvmx_fpa_shutdown_pool.
+- */
+-static inline void cvmx_ipd_free_ptr(void)
+-{
+-	/* Only CN38XXp{1,2} cannot read pointer out of the IPD */
+-	if (!OCTEON_IS_MODEL(OCTEON_CN38XX_PASS1)
+-	    && !OCTEON_IS_MODEL(OCTEON_CN38XX_PASS2)) {
+-		int no_wptr = 0;
+-		union cvmx_ipd_ptr_count ipd_ptr_count;
+-		ipd_ptr_count.u64 = cvmx_read_csr(CVMX_IPD_PTR_COUNT);
+-
+-		/* Handle Work Queue Entry in cn56xx and cn52xx */
+-		if (octeon_has_feature(OCTEON_FEATURE_NO_WPTR)) {
+-			union cvmx_ipd_ctl_status ipd_ctl_status;
+-			ipd_ctl_status.u64 = cvmx_read_csr(CVMX_IPD_CTL_STATUS);
+-			if (ipd_ctl_status.s.no_wptr)
+-				no_wptr = 1;
+-		}
+-
+-		/* Free the prefetched WQE */
+-		if (ipd_ptr_count.s.wqev_cnt) {
+-			union cvmx_ipd_wqe_ptr_valid ipd_wqe_ptr_valid;
+-			ipd_wqe_ptr_valid.u64 =
+-			    cvmx_read_csr(CVMX_IPD_WQE_PTR_VALID);
+-			if (no_wptr)
+-				cvmx_fpa_free(cvmx_phys_to_ptr
+-					      ((uint64_t) ipd_wqe_ptr_valid.s.
+-					       ptr << 7), CVMX_FPA_PACKET_POOL,
+-					      0);
+-			else
+-				cvmx_fpa_free(cvmx_phys_to_ptr
+-					      ((uint64_t) ipd_wqe_ptr_valid.s.
+-					       ptr << 7), CVMX_FPA_WQE_POOL, 0);
+-		}
+-
+-		/* Free all WQE in the fifo */
+-		if (ipd_ptr_count.s.wqe_pcnt) {
+-			int i;
+-			union cvmx_ipd_pwp_ptr_fifo_ctl ipd_pwp_ptr_fifo_ctl;
+-			ipd_pwp_ptr_fifo_ctl.u64 =
+-			    cvmx_read_csr(CVMX_IPD_PWP_PTR_FIFO_CTL);
+-			for (i = 0; i < ipd_ptr_count.s.wqe_pcnt; i++) {
+-				ipd_pwp_ptr_fifo_ctl.s.cena = 0;
+-				ipd_pwp_ptr_fifo_ctl.s.raddr =
+-				    ipd_pwp_ptr_fifo_ctl.s.max_cnts +
+-				    (ipd_pwp_ptr_fifo_ctl.s.wraddr +
+-				     i) % ipd_pwp_ptr_fifo_ctl.s.max_cnts;
+-				cvmx_write_csr(CVMX_IPD_PWP_PTR_FIFO_CTL,
+-					       ipd_pwp_ptr_fifo_ctl.u64);
+-				ipd_pwp_ptr_fifo_ctl.u64 =
+-				    cvmx_read_csr(CVMX_IPD_PWP_PTR_FIFO_CTL);
+-				if (no_wptr)
+-					cvmx_fpa_free(cvmx_phys_to_ptr
+-						      ((uint64_t)
+-						       ipd_pwp_ptr_fifo_ctl.s.
+-						       ptr << 7),
+-						      CVMX_FPA_PACKET_POOL, 0);
+-				else
+-					cvmx_fpa_free(cvmx_phys_to_ptr
+-						      ((uint64_t)
+-						       ipd_pwp_ptr_fifo_ctl.s.
+-						       ptr << 7),
+-						      CVMX_FPA_WQE_POOL, 0);
+-			}
+-			ipd_pwp_ptr_fifo_ctl.s.cena = 1;
+-			cvmx_write_csr(CVMX_IPD_PWP_PTR_FIFO_CTL,
+-				       ipd_pwp_ptr_fifo_ctl.u64);
+-		}
+-
+-		/* Free the prefetched packet */
+-		if (ipd_ptr_count.s.pktv_cnt) {
+-			union cvmx_ipd_pkt_ptr_valid ipd_pkt_ptr_valid;
+-			ipd_pkt_ptr_valid.u64 =
+-			    cvmx_read_csr(CVMX_IPD_PKT_PTR_VALID);
+-			cvmx_fpa_free(cvmx_phys_to_ptr
+-				      (ipd_pkt_ptr_valid.s.ptr << 7),
+-				      CVMX_FPA_PACKET_POOL, 0);
+-		}
+-
+-		/* Free the per port prefetched packets */
+-		if (1) {
+-			int i;
+-			union cvmx_ipd_prc_port_ptr_fifo_ctl
+-			    ipd_prc_port_ptr_fifo_ctl;
+-			ipd_prc_port_ptr_fifo_ctl.u64 =
+-			    cvmx_read_csr(CVMX_IPD_PRC_PORT_PTR_FIFO_CTL);
+-
+-			for (i = 0; i < ipd_prc_port_ptr_fifo_ctl.s.max_pkt;
+-			     i++) {
+-				ipd_prc_port_ptr_fifo_ctl.s.cena = 0;
+-				ipd_prc_port_ptr_fifo_ctl.s.raddr =
+-				    i % ipd_prc_port_ptr_fifo_ctl.s.max_pkt;
+-				cvmx_write_csr(CVMX_IPD_PRC_PORT_PTR_FIFO_CTL,
+-					       ipd_prc_port_ptr_fifo_ctl.u64);
+-				ipd_prc_port_ptr_fifo_ctl.u64 =
+-				    cvmx_read_csr
+-				    (CVMX_IPD_PRC_PORT_PTR_FIFO_CTL);
+-				cvmx_fpa_free(cvmx_phys_to_ptr
+-					      ((uint64_t)
+-					       ipd_prc_port_ptr_fifo_ctl.s.
+-					       ptr << 7), CVMX_FPA_PACKET_POOL,
+-					      0);
+-			}
+-			ipd_prc_port_ptr_fifo_ctl.s.cena = 1;
+-			cvmx_write_csr(CVMX_IPD_PRC_PORT_PTR_FIFO_CTL,
+-				       ipd_prc_port_ptr_fifo_ctl.u64);
+-		}
+-
+-		/* Free all packets in the holding fifo */
+-		if (ipd_ptr_count.s.pfif_cnt) {
+-			int i;
+-			union cvmx_ipd_prc_hold_ptr_fifo_ctl
+-			    ipd_prc_hold_ptr_fifo_ctl;
+-
+-			ipd_prc_hold_ptr_fifo_ctl.u64 =
+-			    cvmx_read_csr(CVMX_IPD_PRC_HOLD_PTR_FIFO_CTL);
+-
+-			for (i = 0; i < ipd_ptr_count.s.pfif_cnt; i++) {
+-				ipd_prc_hold_ptr_fifo_ctl.s.cena = 0;
+-				ipd_prc_hold_ptr_fifo_ctl.s.raddr =
+-				    (ipd_prc_hold_ptr_fifo_ctl.s.praddr +
+-				     i) % ipd_prc_hold_ptr_fifo_ctl.s.max_pkt;
+-				cvmx_write_csr(CVMX_IPD_PRC_HOLD_PTR_FIFO_CTL,
+-					       ipd_prc_hold_ptr_fifo_ctl.u64);
+-				ipd_prc_hold_ptr_fifo_ctl.u64 =
+-				    cvmx_read_csr
+-				    (CVMX_IPD_PRC_HOLD_PTR_FIFO_CTL);
+-				cvmx_fpa_free(cvmx_phys_to_ptr
+-					      ((uint64_t)
+-					       ipd_prc_hold_ptr_fifo_ctl.s.
+-					       ptr << 7), CVMX_FPA_PACKET_POOL,
+-					      0);
+-			}
+-			ipd_prc_hold_ptr_fifo_ctl.s.cena = 1;
+-			cvmx_write_csr(CVMX_IPD_PRC_HOLD_PTR_FIFO_CTL,
+-				       ipd_prc_hold_ptr_fifo_ctl.u64);
+-		}
+-
+-		/* Free all packets in the fifo */
+-		if (ipd_ptr_count.s.pkt_pcnt) {
+-			int i;
+-			union cvmx_ipd_pwp_ptr_fifo_ctl ipd_pwp_ptr_fifo_ctl;
+-			ipd_pwp_ptr_fifo_ctl.u64 =
+-			    cvmx_read_csr(CVMX_IPD_PWP_PTR_FIFO_CTL);
+-
+-			for (i = 0; i < ipd_ptr_count.s.pkt_pcnt; i++) {
+-				ipd_pwp_ptr_fifo_ctl.s.cena = 0;
+-				ipd_pwp_ptr_fifo_ctl.s.raddr =
+-				    (ipd_pwp_ptr_fifo_ctl.s.praddr +
+-				     i) % ipd_pwp_ptr_fifo_ctl.s.max_cnts;
+-				cvmx_write_csr(CVMX_IPD_PWP_PTR_FIFO_CTL,
+-					       ipd_pwp_ptr_fifo_ctl.u64);
+-				ipd_pwp_ptr_fifo_ctl.u64 =
+-				    cvmx_read_csr(CVMX_IPD_PWP_PTR_FIFO_CTL);
+-				cvmx_fpa_free(cvmx_phys_to_ptr
+-					      ((uint64_t) ipd_pwp_ptr_fifo_ctl.
+-					       s.ptr << 7),
+-					      CVMX_FPA_PACKET_POOL, 0);
+-			}
+-			ipd_pwp_ptr_fifo_ctl.s.cena = 1;
+-			cvmx_write_csr(CVMX_IPD_PWP_PTR_FIFO_CTL,
+-				       ipd_pwp_ptr_fifo_ctl.u64);
+-		}
+-
+-		/* Reset the IPD to get all buffers out of it */
+-		{
+-			union cvmx_ipd_ctl_status ipd_ctl_status;
+-			ipd_ctl_status.u64 = cvmx_read_csr(CVMX_IPD_CTL_STATUS);
+-			ipd_ctl_status.s.reset = 1;
+-			cvmx_write_csr(CVMX_IPD_CTL_STATUS, ipd_ctl_status.u64);
+-		}
+-
+-		/* Reset the PIP */
+-		{
+-			union cvmx_pip_sft_rst pip_sft_rst;
+-			pip_sft_rst.u64 = cvmx_read_csr(CVMX_PIP_SFT_RST);
+-			pip_sft_rst.s.rst = 1;
+-			cvmx_write_csr(CVMX_PIP_SFT_RST, pip_sft_rst.u64);
+-		}
+-	}
+-}
+-
+ #endif /*  __CVMX_IPD_H__ */
 -- 
-2.46.0.76.ge559c4bf1a-goog
+2.25.1
 
 
