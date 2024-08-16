@@ -1,117 +1,170 @@
-Return-Path: <linux-mips+bounces-4919-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4920-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E731F954DE1
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Aug 2024 17:36:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BA1C9551C6
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Aug 2024 22:19:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9926E282988
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Aug 2024 15:36:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED02DB22258
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Aug 2024 20:19:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 209D91BDAB5;
-	Fri, 16 Aug 2024 15:35:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E348B1C379B;
+	Fri, 16 Aug 2024 20:18:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bKSTGrm8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dwuw5OBs"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51CA1BDA94;
-	Fri, 16 Aug 2024 15:35:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC379137747;
+	Fri, 16 Aug 2024 20:18:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723822514; cv=none; b=q8vdHNDbEtIVp/Jle4ZR6+Qb0Q2g4qgWqA1nO4BCiOQUoiu3YE5CiN/NvmxC+l19eHqfkNLfS68Wyz9ROfQo4DzeyRACsH72BHFtT/z1uUsxNW6pVdEYh29cOUq+gwpxW4G5FApEprUi1lSiw6iAMo0nPyjk1i7jTRrePYT1TO4=
+	t=1723839536; cv=none; b=iCQYE0tcs2RmEKwGRRyDirogcIB7uCf1gVmPui6yj5rjj+DGh9jgSySm8mricywZdQHJDkWq4EsfX12VsOBFlDZ25DKyKndxyy41FGzxm9rl1KXfk5N2h17xWx4Q8g/r3cPpZmzIhlRDDB8a9Vr4H2tU2+TTxBapMBA1DdK7Cqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723822514; c=relaxed/simple;
-	bh=Q18cNSCViMkznglQB7U8THt2jlE6uRjEx/JSrUARwzc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QfDIvowUn708IFttF9aIWWLZhB9jvsVT9fLhFMcle1MI9fav49grmqhGIY13TsYQQUXajDVB8SCq4Nc9KOIPTPoNt26ucXVjL+EQNFzQT1k+iFGvUeaLAz3s+DGK9P3YCe54ZAB1SKCrBv5pM/aJz7JRsXRJ3TR81a04RtUVp10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bKSTGrm8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41C32C32782;
-	Fri, 16 Aug 2024 15:35:11 +0000 (UTC)
+	s=arc-20240116; t=1723839536; c=relaxed/simple;
+	bh=7o0QpYyR6WCcVBZa39lqMIGPmqBnk3rj+kLrqFXcxDU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IfMjB9pcAUcLowcajGILIo84OE/5yQ/K3k1Tz8/G2/me75Epha09V4DBTYjXxNayMzyHB8fgPGJU2jLGhiqD/2wHutD/BVP9qpr1laxAi3mxwEUNnCFQYUBmxyDYUKUcudsLbKGm53UlQDz5F4JkcLP5W2RkZIOztgRaDrOz0Vk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dwuw5OBs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DE64C4AF0C;
+	Fri, 16 Aug 2024 20:18:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723822513;
-	bh=Q18cNSCViMkznglQB7U8THt2jlE6uRjEx/JSrUARwzc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=bKSTGrm8LaF2gwztx+/6SinSoy24s5gR4CldYRBEkiNOSwgcpm7hLvrrK2gtq0Pvx
-	 hMOv7Np2xjcElkjbz06G6kxT1paCcuIl6tgDnhA1FReWgEk0VrJIV5VnmY28VW+uM3
-	 rZACO8v+MYhjqas3sNB0o4umHsNfCDqpROl01Mt/tH5odX/nLSTCmpnMqAFo9lHFii
-	 7gaHt6gXGlFMnEUaVC739Sgm/hKhGjvNlG4yZPxcjScZu7DwFyzYVs8aZxgV2ToxjC
-	 MflEhOxEm/9blSXnL7eNEt3U0O1uRbAir3rluhSYsWuh/JjkeQLFqL1D7S/NCKi2I7
-	 8SQyYhQ0iAcDw==
-Date: Fri, 16 Aug 2024 08:35:10 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Pavel Begunkov <asml.silence@gmail.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>, Richard Henderson
- <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
- Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
- <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
- Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
- de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Sumit
- Semwal <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
- <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
- Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>, David Wei <dw@davidwei.uk>, Jason
- Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, Shailend
- Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
- Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-Subject: Re: [PATCH net-next v19 06/13] memory-provider: dmabuf devmem
- memory provider
-Message-ID: <20240816083510.3386fb10@kernel.org>
-In-Reply-To: <CAHS8izO9LDM9rLVnJPgp6QXb4YLW5+3ziGOHTqScy-SKOLejYA@mail.gmail.com>
-References: <20240813211317.3381180-7-almasrymina@google.com>
-	<de7daf80-a2e4-4451-b666-2a67ccc3649e@gmail.com>
-	<CAHS8izPMC+XhXKbJOQ3ymizyKuARSOv_cO_xO+q1EG4zoy6Gig@mail.gmail.com>
-	<31640ff4-25a6-4115-85e6-82092ce57393@gmail.com>
-	<20240815182245.2b5e3f44@kernel.org>
-	<CAHS8izO9LDM9rLVnJPgp6QXb4YLW5+3ziGOHTqScy-SKOLejYA@mail.gmail.com>
+	s=k20201202; t=1723839536;
+	bh=7o0QpYyR6WCcVBZa39lqMIGPmqBnk3rj+kLrqFXcxDU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Dwuw5OBsYcOdZ9QcwFSqqa+YtaFEFhDaO0x/1ylQQW2LTkbjDIewJL30bMsE4f//m
+	 18CK/N6+TzmzxH4XsRPBltfWntUIDfGFEdOkJrEd+NFufIBSOFcQmzUrBjckxwyW87
+	 +p0TBonGxOFzu/sR9DZVuxdusdnQrF1FU47t4WTuzgo1hirNWUkdKv0GlyRDy6RpoG
+	 3pA4ZXM+xePE9uqgIUzv0mkJjXig9wlJAlakUitmXMUvx1+4t81cp6kRQmyUhzOs1z
+	 HBqXNJdo3+/DUXhfO4siuuzHkOi7bA//PPRWqdblEa9lodp+TY/lhzZ1QzhEk9MMSz
+	 pzOD4llJSpkKg==
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-52f025ab3a7so3185862e87.2;
+        Fri, 16 Aug 2024 13:18:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVEpiS4pQIbjOg3sBQhqb03eEkVVvhsiPtuEdY4c3Ff9C4+QhGSljfVKXC5wQeYk6kmxGc1WgdchzpYXFXfKEh3YrCkSNYB8TMDlqtZoTCau7vm9jSt8SA/A+PinQdXqIMZRc9vGVRXKQ==
+X-Gm-Message-State: AOJu0Yzy4nWi6+/5daSZtCc68kpfBOeXZsWpq5Z1TcuZ9rJM8YFjbCCQ
+	sQN8bVQMcM4fq5PSrJmY2Wmvuomk5oGiG3it5wGPVZtTDCLPDJxLPx1OT6IoHUoh/a4TcbPEOac
+	esZVaQ1T/9s+pZ6JxbBa+bsk6nQ==
+X-Google-Smtp-Source: AGHT+IHmyRZ4clxGPJquhu23wu/3UXIx0sRx/uOqLud9h9oe+/y36kFFb69u57DKWH7vH6u9ARgZ9iqQUCozE+a2iDo=
+X-Received: by 2002:a05:6512:3b95:b0:52e:7444:162e with SMTP id
+ 2adb3069b0e04-5332e07fb8dmr303150e87.55.1723839534429; Fri, 16 Aug 2024
+ 13:18:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20240816124957.130017-2-ajones@ventanamicro.com>
+In-Reply-To: <20240816124957.130017-2-ajones@ventanamicro.com>
+From: Rob Herring <robh@kernel.org>
+Date: Fri, 16 Aug 2024 14:18:41 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+0fXJarCjLA1ZYOiHbM_qn3dtG00Xz+Z8qGCg8Wu=dgA@mail.gmail.com>
+Message-ID: <CAL_Jsq+0fXJarCjLA1ZYOiHbM_qn3dtG00Xz+Z8qGCg8Wu=dgA@mail.gmail.com>
+Subject: Re: [PATCH v2] of/irq: Support #msi-cells=<0> in of_msi_get_domain
+To: Andrew Jones <ajones@ventanamicro.com>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org, maz@kernel.org, 
+	mark.rutland@arm.com, saravanak@google.com, paul.walmsley@sifive.com, 
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, 
+	Anup Patel <apatel@ventanamicro.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 16 Aug 2024 08:20:44 -0400 Mina Almasry wrote:
-> > I'd keep the current check with a WARN_ON_ONCE(), tho.
-> > Given the absence of tests driver developers can use.
-> > Especially those who _aren't_ supporting the feature.
-> 
-> Yes what I have locally is the driver setting
-> netdev_rx_queue->unreadable_netmem_supported when header split is
-> turned on, and additionally a WARN_ON_ONCE around the check in core. I
-> was about to send that when I read your email. I'm hoping we don't
-> have to go through the scope creep of adding configuration via the
-> queue API, which I think is a very significant undertaking.
+On Fri, Aug 16, 2024 at 6:50=E2=80=AFAM Andrew Jones <ajones@ventanamicro.c=
+om> wrote:
+>
+> An 'msi-parent' property with a single entry and no accompanying
+> '#msi-cells' property is considered the legacy definition as opposed
+> to its definition after being expanded with commit 126b16e2ad98
+> ("Docs: dt: add generic MSI bindings"). However, the legacy
+> definition is completely compatible with the current definition and,
+> since of_phandle_iterator_next() tolerates missing and present-but-
+> zero *cells properties since commit e42ee61017f5 ("of: Let
+> of_for_each_phandle fallback to non-negative cell_count"), there's no
+> need anymore to special case the legacy definition in
+> of_msi_get_domain().
+>
+> Indeed, special casing has turned out to be harmful, because, as of
+> commit 7c025238b47a ("dt-bindings: irqchip: Describe the IMX MU block
+> as a MSI controller"), MSI controller DT bindings have started
+> specifying '#msi-cells' as a required property (even when the value
+> must be zero) as an effort to make the bindings more explicit. But,
+> since the special casing of 'msi-parent' only uses the existence of
+> '#msi-cells' for its heuristic, and not whether or not it's also
+> nonzero, the legacy path is not taken. Furthermore, the path to
+> support the new, broader definition isn't taken either since that
+> path has been restricted to the platform-msi bus.
+>
+> But, neither the definition of 'msi-parent' nor the definition of
+> '#msi-cells' is platform-msi-specific (the platform-msi bus was just
+> the first bus that needed '#msi-cells'), so remove both the special
+> casing and the restriction. The code removal also requires changing
+> to of_parse_phandle_with_optional_args() in order to ensure the
+> legacy (but compatible) use of 'msi-parent' remains supported. This
+> not only simplifies the code but also resolves an issue with PCI
+> devices finding their MSI controllers on riscv, as the riscv,imsics
+> binding requires '#msi-cells=3D<0>'.
+>
+> Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+> ---
+> v2:
+>  - switch to of_parse_phandle_with_optional_args() to ensure the
+>    absence of #msi-cells means count=3D0
+>
+>  drivers/of/irq.c | 37 +++++++++++--------------------------
+>  1 file changed, 11 insertions(+), 26 deletions(-)
+>
+> diff --git a/drivers/of/irq.c b/drivers/of/irq.c
+> index c94203ce65bb..690df4b71ab9 100644
+> --- a/drivers/of/irq.c
+> +++ b/drivers/of/irq.c
+> @@ -709,8 +709,7 @@ struct irq_domain *of_msi_map_get_device_domain(struc=
+t device *dev, u32 id,
+>   * @np: device node for @dev
+>   * @token: bus type for this domain
+>   *
+> - * Parse the msi-parent property (both the simple and the complex
+> - * versions), and returns the corresponding MSI domain.
+> + * Parse the msi-parent property and returns the corresponding MSI domai=
+n.
+>   *
+>   * Returns: the MSI domain for this device (or NULL on failure).
+>   */
+> @@ -718,33 +717,19 @@ struct irq_domain *of_msi_get_domain(struct device =
+*dev,
+>                                      struct device_node *np,
+>                                      enum irq_domain_bus_token token)
+>  {
+> -       struct device_node *msi_np;
+> +       struct of_phandle_args args;
+>         struct irq_domain *d;
+> +       int index =3D 0;
+>
+> -       /* Check for a single msi-parent property */
+> -       msi_np =3D of_parse_phandle(np, "msi-parent", 0);
+> -       if (msi_np && !of_property_read_bool(msi_np, "#msi-cells")) {
+> -               d =3D irq_find_matching_host(msi_np, token);
+> -               if (!d)
+> -                       of_node_put(msi_np);
+> -               return d;
+> -       }
+> -
+> -       if (token =3D=3D DOMAIN_BUS_PLATFORM_MSI) {
+> -               /* Check for the complex msi-parent version */
+> -               struct of_phandle_args args;
+> -               int index =3D 0;
+> +       while (!of_parse_phandle_with_optional_args(np, "msi-parent",
+> +                                                   "#msi-cells",
+> +                                                   index, &args)) {
 
-I don't like adding more and more transient stuff to netdev_rx_queue.
-It's one thing if we create a temporary solution in the core, which
-we can easily redo later. It's another altogether when we expect drivers
-to keep some bit up to date across all the reconfiguration paths they
-have. Just to then got an replace that with another API.
+I guess you just maintained essentially what was here, but
+of_for_each_phandle() should work here. It's a bit more efficient too
+because of_parse_phandle_with_optional_args() is implemented using
+of_for_each_phandle().
 
-If the post-check works let's go with that for now.
+Rob
 
