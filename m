@@ -1,202 +1,186 @@
-Return-Path: <linux-mips+bounces-4913-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4914-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EF379546E2
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Aug 2024 12:45:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF2FB954826
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Aug 2024 13:40:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54A1A1C229FC
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Aug 2024 10:45:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D46B21C22D0F
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Aug 2024 11:40:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E2D6194C73;
-	Fri, 16 Aug 2024 10:45:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09BE61990A5;
+	Fri, 16 Aug 2024 11:40:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="sFzt+JB5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="t3b428J7"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A08AD198838
-	for <linux-mips@vger.kernel.org>; Fri, 16 Aug 2024 10:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6AD514D703
+	for <linux-mips@vger.kernel.org>; Fri, 16 Aug 2024 11:40:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723805107; cv=none; b=VN2m47lBV1rdf5wJNOrhnwSWeHXPEVtutiEJMC/siet5ijNRsS/Fhxph1S7rB3Jr4WKSJJUPVmOLbz9n+bV3faJ4J+HxjMJIN7+RrbcYL2O3pssYDwanD2LWUguqYuPZs2JeO5XTraIgkeE1uCdfZb8A4buSwymXAmlPOq9QEJw=
+	t=1723808418; cv=none; b=KuoFHFkDcIJTTr4myEQ77p5OehuY0KVD9jKoAVyeuXiRCGz3RdbE5XCoGTpcWLYKkSlaEIxLv+DH9Zk1Q00WOLLo/eLkQZ5igzQofg4Rn8ReTriyNxkqDBwK3oB2yn7io3qMjMVQPcFviyEjZRjxV46wu7mMgfsyHYKomsHfCOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723805107; c=relaxed/simple;
-	bh=TuI+3JNN/KVJjGPeIeWqNHx4YCm3oM0eyYi9XN8BW70=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nfiyCqs1ZX3G7KDyYLroQBfWARtDU8i6+iRdWU4C//auX8rltCqOdM7ekwKcMTUuLKPLOxr5/hNUBAS4hKYajko/nFlrsIEKiJntak1VhgEi+cFk/qGHF5Vws+u+kAmiGGGsZowOF8Mj3TqQ8DdJj4KvHwxqqmalPFmmKJ8MDpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=sFzt+JB5; arc=none smtp.client-ip=209.85.166.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
-Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-39834949e42so6967825ab.1
-        for <linux-mips@vger.kernel.org>; Fri, 16 Aug 2024 03:45:05 -0700 (PDT)
+	s=arc-20240116; t=1723808418; c=relaxed/simple;
+	bh=gWSWXupF8qbhNBhPCMEWh0SCBnROGwWuZr6WAsFBu1M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KjXKXKfTgDSFxYbpsuTVmY1x3g4cJqG3BLDdTlfhc6ETq0nYawuInURBWRLtZOV0GTmdFFq9ko00qY7vMU+FYeOH2MFbzcqu+l0YMxJu02RerituN++rgQXweskO8ywziM7gkPDM7b/ieh2TPK6u/EBGXvIipDyukf2m2JKVGas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=t3b428J7; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-429da8b5feaso18890255e9.2
+        for <linux-mips@vger.kernel.org>; Fri, 16 Aug 2024 04:40:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1723805105; x=1724409905; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BQ76OrJ+D6EglboDmRkksAWPF9+ReWU1C7wwydHo8w8=;
-        b=sFzt+JB5dOy/z6wotrdK40bk0nTjIwec9kRqhIvAHWT8YL4YOxHYx+VXuEuUYy6Pyj
-         4wbrkngvQLViFABtEa2FaBEci0eYQka/jTrAlLdy09l13bifEmIMSCZDopW5Ns0+Sj1k
-         PDO2nEQ34iQ8/bPpN3kvf7GyEnC8ucRPodtyZb+EFMZnNgCStMGZvqm+spcfIYAZmnIj
-         SpYX+SSkS6AaeooJAbc6BTME7y25/8CowLwEIT/Mt2qW6cf0vJR880KuBlEmpaAqWyUv
-         LggzE49BQtlmeJ/c6Zy2sbvhhncHUde2Zd13LU8CLI0egWbFJEzL6k5Mu+IbjGL87sPv
-         Gcbw==
+        d=linaro.org; s=google; t=1723808415; x=1724413215; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q79J3wtYEmpzRYRYYxMWeIZD6zPAB3a4xO+VLbVzfCY=;
+        b=t3b428J7DJevzCUCMLthnHEyaTa5S0/T0aGNmiia1ayGOY6vx8uL3u1zWjCwcNC4Iq
+         Cw2miCMtHn+HGxMcyzhdOXU1qJtuee53oPxM02ucI4Sj+r755+LlyCczuoQ6b/WN5oJz
+         IZqTt7DMuc/PM3Gw9n/wpiRBwSRuiT8e25GtqvVqCMcQKuXAbxMxO0xm17dy8eaDSnxB
+         NoUx/J7h16DR+d/mcxSjyz1Wa8WO3fkdpfvK/InTNqaotXvmq4xIgB0NjE3cJjp84gAE
+         JZTBGw/8qeOL8Rtv+IsGWekr1pZROPS/jcrCHpXYcyTZ5fUDJ2U36rTDyH31Nv64PDs0
+         IQgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723805105; x=1724409905;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BQ76OrJ+D6EglboDmRkksAWPF9+ReWU1C7wwydHo8w8=;
-        b=AAXZi8SNcJcyUYoxhiUCv0apoI2iiKFr46Zf6KiTZiAtaDxQ5hiZOPGFzuSku/Ii42
-         Gb2OChLIq/RrYy0c8MNbglP3pg91JMuB4blwPToS8EKlEORZhj4bvMXQRuvUYbPF9hWc
-         RezOW0uRlYHgemqEvoc0CAnH1shBHsei+dtivPIac1kjw4h3Oq4sL/LCrUIIcvwDs+ve
-         DfgqGNTQ9OyFeZnAhBQl+HFlivG0MU6Q8o7aotE1JeIq6HJHFV87DDVW8jcy4CtvKXHQ
-         th2J1PILgHMWB+RTaOa+iqyAj3yETuLljOpkwKwxRAlC7NFcJoCVLJ1R2KU3+94kOnTC
-         FVkA==
-X-Forwarded-Encrypted: i=1; AJvYcCUxb/FhIbBwYGyhaQfrShSNNWldkeavkVJMtCcbtuTbxj2I2/neJKxU0Lpd65Wsyz2IQIu8dMbKQXuXu1VK7vH8iWt3ETENfpcHkA==
-X-Gm-Message-State: AOJu0YxbEbIudV9PTH9VWuKIEcMB58Qp5mGHCfQwlBIDivFJnFTg/Bur
-	vw1uG0+mc/uCYbbyM8bVLuGa7ihrK+7IAWLSBcVPefN7RD9/ISBmlFV5LnyRi0oJ2pAJrKWG/LU
-	xAzcKWB0oOG68Pw49PiVLkxMwTJPjvpXgV1H9jw==
-X-Google-Smtp-Source: AGHT+IGOY2wZxg3oQyKstZDxzeAo3jAK3M41BK/FipMiQ0FhdiHyS6sxut/JjEf5JetJ4eJZeTSIb18KGPl1+eyfyBU=
-X-Received: by 2002:a05:6e02:13a6:b0:39a:ea20:bf7f with SMTP id
- e9e14a558f8ab-39d26d791ccmr34640735ab.25.1723805104686; Fri, 16 Aug 2024
- 03:45:04 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1723808415; x=1724413215;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q79J3wtYEmpzRYRYYxMWeIZD6zPAB3a4xO+VLbVzfCY=;
+        b=L5R2VK3uFI37USEdJEDQMjFL/FxCOPsbYnorDAuNhkbogh7eNb6FUu+uPtiBE3IWIi
+         xJgIl6g16lIzncewiVP+QJ+fovg5X6lUeO1hiCuqYAuZmCJYeeEiX7H0xzAxutUjzNUH
+         CKcqBpvLLS95uQtqgmIUKAjY6xkrV1U02mplDASoy3C+F9JDVxYOkHYQT7jRIkpK6cPh
+         Rqy/EoS+xaIsPE17pd8+FHwwljtfPEf1ZBfHcDo4xETPdxnpv9NBt8sd3+QYdBX8a7VV
+         vCPDe3INJrRSEdEjMEZ8OuIE2ncW6sJ4E+PRMpmESZCpnb2F2o0zgO/0XsD6VPKW5XFv
+         Gbbg==
+X-Gm-Message-State: AOJu0Yx4lApgoOd2RS0+Y4mfSedj06JgvzAAML5Rqe1KdnQXme1kDiyO
+	6V9wxc6c4A8IxVk0yJRG/St3zvS42xWB8ZpAfeYnOFafemHrq5oyWUDJC/xqiAk=
+X-Google-Smtp-Source: AGHT+IGYxbX58YT33BLeLe7F4PoGo9PsEnINz7wZt46kqnS8JZ/+w5JuqR7qPtfenZGo7q3WWFUHkg==
+X-Received: by 2002:a05:600c:1d94:b0:428:15b0:c8dd with SMTP id 5b1f17b1804b1-429ed7b78cemr26073325e9.20.1723808414930;
+        Fri, 16 Aug 2024 04:40:14 -0700 (PDT)
+Received: from [192.168.220.175] (143.red-88-28-5.dynamicip.rima-tde.net. [88.28.5.143])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429eeadfafbsm16189825e9.47.2024.08.16.04.40.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Aug 2024 04:40:14 -0700 (PDT)
+Message-ID: <a9ccd0cd-82ee-4e31-9815-f8f3871b30c8@linaro.org>
+Date: Fri, 16 Aug 2024 13:40:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240816095520.96348-2-ajones@ventanamicro.com>
-In-Reply-To: <20240816095520.96348-2-ajones@ventanamicro.com>
-From: Anup Patel <anup@brainfault.org>
-Date: Fri, 16 Aug 2024 16:14:52 +0530
-Message-ID: <CAAhSdy0wxpDXoUmGyuQOeMfNCubdp9_iYdBOSN=EcweG1nkwwg@mail.gmail.com>
-Subject: Re: [PATCH] of/irq: Support #msi-cells=<0> in of_msi_get_domain
-To: Andrew Jones <ajones@ventanamicro.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org, maz@kernel.org, 
-	mark.rutland@arm.com, robh@kernel.org, saravanak@google.com, 
-	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
-	Anup Patel <apatel@ventanamicro.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] MIPS: cevt-r4k: Don't call get_c0_compare_int if timer
+ irq is installed
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Serge Semin <fancer.lancer@gmail.com>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>
+References: <20240813-get_c0_compare_int-v1-1-a0a1b007d736@flygoat.com>
+Content-Language: en-US
+From: =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+In-Reply-To: <20240813-get_c0_compare_int-v1-1-a0a1b007d736@flygoat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Aug 16, 2024 at 3:25=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
-om> wrote:
->
-> An 'msi-parent' property with a single entry and no accompanying
-> '#msi-cells' property is considered the legacy definition as opposed
-> to its definition after being expanded with commit 126b16e2ad98
-> ("Docs: dt: add generic MSI bindings"). However, the legacy
-> definition is completely compatible with the current definition and,
-> since of_phandle_iterator_next() tolerates missing and present-but-
-> zero *cells properties since commit e42ee61017f5 ("of: Let
-> of_for_each_phandle fallback to non-negative cell_count"), there's no
-> need anymore to special case the legacy definition in
-> of_msi_get_domain().
->
-> Indeed, special casing has turned out to be harmful, because, as of
-> commit 7c025238b47a ("dt-bindings: irqchip: Describe the IMX MU block
-> as a MSI controller"), MSI controller DT bindings have started
-> specifying '#msi-cells' as a required property (even when the value
-> must be zero) as an effort to make the bindings more explicit. But,
-> since the special casing of 'msi-parent' only uses the existence of
-> '#msi-cells' for its heuristic, and not whether or not it's also
-> nonzero, the legacy path is not taken. Furthermore, the path to
-> support the new, broader definition isn't taken either since that
-> path has been restricted to the platform-msi bus.
->
-> But, neither the definition of 'msi-parent' nor the definition of
-> '#msi-cells' is platform-msi-specific (the platform-msi bus was just
-> the first bus that needed '#msi-cells'), so remove both the special
-> casing and the restriction. This not only simplifies the code but
-> also resolves an issue with PCI devices finding their MSI controllers
-> on riscv, as the riscv,imsics binding requires '#msi-cells=3D<0>'.
->
-> Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+Hi Jiaxun,
+
++Daniel/Thomas for CLOCKEVENTS
+
+On 13/8/24 11:59, Jiaxun Yang wrote:
+> This avoids warning:
+> 
+> [    0.118053] BUG: sleeping function called from invalid context at kernel/locking/mutex.c:283
+> 
+> Caused by get_c0_compare_int on secondary CPU.
+> 
+> We also skipped saving IRQ number to struct clock_event_device *cd as
+> it's never used by clockevent core, as per comments it's only meant
+> for "non CPU local devices".
+> 
+> Reported-by: Serge Semin <fancer.lancer@gmail.com>
+> Closes: https://lore.kernel.org/linux-mips/6szkkqxpsw26zajwysdrwplpjvhl5abpnmxgu2xuj3dkzjnvsf@4daqrz4mf44k/
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > ---
->  drivers/of/irq.c | 37 +++++++++++--------------------------
->  1 file changed, 11 insertions(+), 26 deletions(-)
->
-> diff --git a/drivers/of/irq.c b/drivers/of/irq.c
-> index c94203ce65bb..026b52c8ee63 100644
-> --- a/drivers/of/irq.c
-> +++ b/drivers/of/irq.c
-> @@ -709,8 +709,7 @@ struct irq_domain *of_msi_map_get_device_domain(struc=
-t device *dev, u32 id,
->   * @np: device node for @dev
->   * @token: bus type for this domain
->   *
-> - * Parse the msi-parent property (both the simple and the complex
-> - * versions), and returns the corresponding MSI domain.
-> + * Parse the msi-parent property and returns the corresponding MSI domai=
-n.
->   *
->   * Returns: the MSI domain for this device (or NULL on failure).
->   */
-> @@ -718,33 +717,19 @@ struct irq_domain *of_msi_get_domain(struct device =
-*dev,
->                                      struct device_node *np,
->                                      enum irq_domain_bus_token token)
->  {
-> -       struct device_node *msi_np;
-> +       struct of_phandle_args args;
->         struct irq_domain *d;
-> +       int index =3D 0;
->
-> -       /* Check for a single msi-parent property */
-> -       msi_np =3D of_parse_phandle(np, "msi-parent", 0);
-> -       if (msi_np && !of_property_read_bool(msi_np, "#msi-cells")) {
-> -               d =3D irq_find_matching_host(msi_np, token);
-> -               if (!d)
-> -                       of_node_put(msi_np);
-> -               return d;
-> -       }
-
-Dropping this special case of single msi-parent property breaks
-RISC-V KVM guest created using KVMTOOl with AIA available
-on the host.
-
-Let's not drop this special case.
-
+>   arch/mips/kernel/cevt-r4k.c | 15 +++++++--------
+>   1 file changed, 7 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/mips/kernel/cevt-r4k.c b/arch/mips/kernel/cevt-r4k.c
+> index 368e8475870f..5f6e9e2ebbdb 100644
+> --- a/arch/mips/kernel/cevt-r4k.c
+> +++ b/arch/mips/kernel/cevt-r4k.c
+> @@ -303,13 +303,6 @@ int r4k_clockevent_init(void)
+>   	if (!c0_compare_int_usable())
+>   		return -ENXIO;
+>   
+> -	/*
+> -	 * With vectored interrupts things are getting platform specific.
+> -	 * get_c0_compare_int is a hook to allow a platform to return the
+> -	 * interrupt number of its liking.
+> -	 */
+> -	irq = get_c0_compare_int();
 > -
-> -       if (token =3D=3D DOMAIN_BUS_PLATFORM_MSI) {
-> -               /* Check for the complex msi-parent version */
-> -               struct of_phandle_args args;
-> -               int index =3D 0;
-> +       while (!of_parse_phandle_with_args(np, "msi-parent",
-> +                                          "#msi-cells",
-> +                                          index, &args)) {
-> +               d =3D irq_find_matching_host(args.np, token);
-> +               if (d)
-> +                       return d;
->
-> -               while (!of_parse_phandle_with_args(np, "msi-parent",
-> -                                                  "#msi-cells",
-> -                                                  index, &args)) {
-> -                       d =3D irq_find_matching_host(args.np, token);
-> -                       if (d)
-> -                               return d;
-> -
-> -                       of_node_put(args.np);
-> -                       index++;
-> -               }
-> +               of_node_put(args.np);
-> +               index++;
->         }
->
->         return NULL;
-> --
-> 2.45.2
->
->
+>   	cd = &per_cpu(mips_clockevent_device, cpu);
+>   
+>   	cd->name		= "MIPS";
+> @@ -320,7 +313,6 @@ int r4k_clockevent_init(void)
+>   	min_delta		= calculate_min_delta();
+>   
+>   	cd->rating		= 300;
+> -	cd->irq			= irq;
 
-Regards,
-Anup
+What should be the unset value is not clear, clock_event_device::irq
+is an int, described in <linux/clockchips.h> as:
+
+   @irq:          IRQ number (only for non CPU local devices)
+
+Most arch clocks set irq > 0 or don't set it.
+
+Core code / drivers check for irq != -1, irq != 0 or irq >= 0:
+
+kernel/time/tick-common.c-295-  if (newdev->irq >= 0 && 
+!irq_can_set_affinity(newdev->irq))
+kernel/time/tick-common.c-296-          return false;
+drivers/clocksource/exynos_mct.c-479-           if (evt->irq == -1)
+drivers/clocksource/exynos_mct.c-480-                   return -EIO;
+drivers/clocksource/timer-ti-dm-systimer.c-562- if (!dev->irq)
+drivers/clocksource/timer-ti-dm-systimer.c-563-         return -ENXIO;
+
+Using -1 for unset value seems reasonable, but since most don't set
+this default value, I guess that's OK to do the same.
+
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+
+>   	cd->cpumask		= cpumask_of(cpu);
+>   	cd->set_next_event	= mips_next_event;
+>   	cd->event_handler	= mips_event_handler;
+> @@ -332,6 +324,13 @@ int r4k_clockevent_init(void)
+>   
+>   	cp0_timer_irq_installed = 1;
+>   
+> +	/*
+> +	 * With vectored interrupts things are getting platform specific.
+> +	 * get_c0_compare_int is a hook to allow a platform to return the
+> +	 * interrupt number of its liking.
+> +	 */
+> +	irq = get_c0_compare_int();
+> +
+>   	if (request_irq(irq, c0_compare_interrupt, flags, "timer",
+>   			c0_compare_interrupt))
+>   		pr_err("Failed to request irq %d (timer)\n", irq);
+> 
+> ---
+> base-commit: 9e6869691724b12e1f43655eeedc35fade38120c
+> change-id: 20240812-get_c0_compare_int-66935853a308
+> 
+> Best regards,
+
 
