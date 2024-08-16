@@ -1,178 +1,190 @@
-Return-Path: <linux-mips+bounces-4911-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4912-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B590F953EDF
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Aug 2024 03:23:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A537A954643
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Aug 2024 11:55:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E6C9B2446B
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Aug 2024 01:22:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44C2028205B
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Aug 2024 09:55:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DDB21E4A2;
-	Fri, 16 Aug 2024 01:22:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3729316F260;
+	Fri, 16 Aug 2024 09:55:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TcPBNpDC"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="oWxzGh7Q"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C37ED2BCFF;
-	Fri, 16 Aug 2024 01:22:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A7C36C
+	for <linux-mips@vger.kernel.org>; Fri, 16 Aug 2024 09:55:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723771370; cv=none; b=HHliaLykvjS5QHln6rT75b1KHsOpJJP2q8e6aqOrydJoQ/vNHZCS9x+9GSiJi6et39DAB/zouVTGGuU3NKzJ2cfpfxPtliwdOviG54D4kgoRQv2Rqx0ldcATxsU6nYmf1fAXNWYIgT0BbO7Jjf3C8PTyJFoaIqQdK2lZ3B57+ZE=
+	t=1723802127; cv=none; b=Xc3ofQ2xnoROPDWW3GRHyJXGsqwqmIuWO8D96Vgp8p9N7QKraY8CB6crRGcrxMtAdnvoJNg+pPCJkDEbPDV88I7whwYRXaiSa8OBcneebBGO14yJ+tx9Rcay8oADkqagjR7j4TxfMYARGitfcKHgOpqjZ+xza3fGUuKW0kWI7MI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723771370; c=relaxed/simple;
-	bh=IkxgNU5lZE6GtoPPMNJU9i4n15FLyHYKT67mAHsJDsU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jjXxlA+OcErznBVhV1xxC/pcFs0oBTNVMuFhQQVR89PC29oO7Tm6didaOPDcV/wikNf2pxWyrk/0wkZwXbWNfzcwWO8vluFEGbPsX1MlI1b2sLE/rkTDuFi163eWPHdeEbq1WCEDRpVZlJs4X8mawfGF/5hY2muFK7BFmzdef0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TcPBNpDC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C07B2C4AF09;
-	Fri, 16 Aug 2024 01:22:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723771369;
-	bh=IkxgNU5lZE6GtoPPMNJU9i4n15FLyHYKT67mAHsJDsU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=TcPBNpDCRFXY8kGxpg2OnRKk1wK1Dnq5Nh134fk9HH+HXrxS9P35iW+jorPaKYS1N
-	 xAMygGZ/o8VttaAfDJ73kbiQunXv00m488MEt5zFzKx0LmQ+yM91SMEj/TOTfvHriW
-	 5gsmMzKyX4hCr0NdhJXl+6EFrUUTMZlDnL9mk+hbDY69YRrM4P0eypdGanoGEqyjwW
-	 VnKH4FrMCPyOazttbwCRLeHANRE3uJJckxjidvB49sZn2byX+9sHs42dntssCrTNqq
-	 kbYFHxD1BHqZoc/Cao/daL6ihfXWV1GKXL7xuhyFlGg+FRagNIGfP4rt1DbGZ2ks8D
-	 3C5SoToFZwuJg==
-Date: Thu, 15 Aug 2024 18:22:45 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>, Richard Henderson
- <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
- Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
- <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
- Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
- de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Sumit
- Semwal <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
- <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
- Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>, David Wei <dw@davidwei.uk>, Jason
- Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, Shailend
- Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
- Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-Subject: Re: [PATCH net-next v19 06/13] memory-provider: dmabuf devmem
- memory provider
-Message-ID: <20240815182245.2b5e3f44@kernel.org>
-In-Reply-To: <31640ff4-25a6-4115-85e6-82092ce57393@gmail.com>
-References: <20240813211317.3381180-7-almasrymina@google.com>
-	<de7daf80-a2e4-4451-b666-2a67ccc3649e@gmail.com>
-	<CAHS8izPMC+XhXKbJOQ3ymizyKuARSOv_cO_xO+q1EG4zoy6Gig@mail.gmail.com>
-	<31640ff4-25a6-4115-85e6-82092ce57393@gmail.com>
+	s=arc-20240116; t=1723802127; c=relaxed/simple;
+	bh=CC1JIfHvIBAl36w46sBXVBsGIZ5We62PJWHtJs+O8t8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qQUnGe2GWimLG48IxXtaQPpxVkRZ4g/VB0sNAFNgURotGXqwDtE6lM21RTi/10OesFFxQChuFez/mKHKtxO1hfGdLRPESjtHr+LrzFuoAQYdvQPyn5mr+/ZFbBb6In1mxtQezo2uiw61QcDsopviCjEy4XoyDX5B4cqb6XQm19M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=oWxzGh7Q; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a7d89bb07e7so208792266b.3
+        for <linux-mips@vger.kernel.org>; Fri, 16 Aug 2024 02:55:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1723802123; x=1724406923; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RoIvLUfwtlErHQHB2ji6smKiDqBoIASWBt1x369LS4I=;
+        b=oWxzGh7Q2J+AKFn64fUlu68dzqhqHS92gaHzGbt3+ih2SU4eRqAL5cYzGJbf29CvlK
+         /NedYSeFCxIbT/alrOzwP50VDrpFOFESRMWzUDDyfcnjEras1QPeIBLYU6jMVkE8hL2T
+         QQv6Nf9bx5XhCjr42EseRc5l8uzfere65XwZ+MH/SFrNNZJduUXbCn9lTMo+glIERa+E
+         zbXh60IbjHk5E6oWPuJH6OKyG+rCaCjZfjHk/5CMy/NkxBd5q/dyA8FSs5px4GyddJLX
+         4A5PTKzJ1rgrVUnJTRYnmxKIHp7vJc+phEFE6+bPCvW752LAG36BJEnxjSD6EFRe8Dq7
+         3GSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723802123; x=1724406923;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RoIvLUfwtlErHQHB2ji6smKiDqBoIASWBt1x369LS4I=;
+        b=Q1V1x6VO4fHAOOijTOe0Z3pWU6N+x/nUkVSJQvbhPs9G63UKa3oDKkFA7yj37vaNuN
+         JIBud4QsEMF7MkuMs8wealfMCnWUDFeuzLhiP8Ip7qiMcRe1kNiA3sWqR01nEbBIVnaV
+         aFPEvqxXCdCAoLNsz3XXM31R3S94irlluLaklmkRePYcDlyhSqEBv/awjdK6ei7YzIJb
+         Iz3kU/LejlnG9IWxKOwjw6Wt/rU5dLhmCiGmih0I0LOhgzdVHZQ7iP3l7Q+IOQeySBi5
+         34Q04XhPXO/neVmOwCZNSZuNWsSV2Wu5RaAvfMkjqjWlPhMUFyIjaau/a90k6go8q7im
+         NLTg==
+X-Forwarded-Encrypted: i=1; AJvYcCXw1Q8KDggVsCWLnIFPzEjo20V4T8NxBFHAeH+YNLNoD0ld7+g+90Jcodpw+1XfURnQW1jma4jJqtHn@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywvuv6U9AeSRIVhlLy+NSz1g3m61W4BTTLU+TILd+z9Cza/omAZ
+	MeTWCHg8G8Nrc/VEtY8XY0QL44XQ+wg13EnvakFWO+L/vQmLTu0N50bOnMC2nnI=
+X-Google-Smtp-Source: AGHT+IEWEn1buqzvrPyI+YLyXqKvY0yYQVZ2BQACp/XQgrDhUOxKmz7wrTINSfs3M48T6a9DY2iabw==
+X-Received: by 2002:a17:907:2d10:b0:a7a:a3f7:389f with SMTP id a640c23a62f3a-a8392a49534mr149316266b.66.1723802122185;
+        Fri, 16 Aug 2024 02:55:22 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8383935807sm228603466b.134.2024.08.16.02.55.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Aug 2024 02:55:21 -0700 (PDT)
+From: Andrew Jones <ajones@ventanamicro.com>
+To: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org
+Cc: maz@kernel.org,
+	mark.rutland@arm.com,
+	robh@kernel.org,
+	saravanak@google.com,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH] of/irq: Support #msi-cells=<0> in of_msi_get_domain
+Date: Fri, 16 Aug 2024 11:55:21 +0200
+Message-ID: <20240816095520.96348-2-ajones@ventanamicro.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Wed, 14 Aug 2024 17:32:53 +0100 Pavel Begunkov wrote:
-> > This is where I get a bit confused. Jakub did mention that it is
-> > desirable for core to verify that the driver did the right thing,
-> > instead of trusting that a driver did the right thing without
-> > verifying. Relying on a flag from the driver opens the door for the
-> > driver to say "I support this" but actually not create the mp
-> > page_pool. In my mind the explicit check is superior to getting
-> > feedback from the driver.  
-> 
-> You can apply the same argument to anything, but not like
-> after each for example ->ndo_start_xmit we dig into the
-> interface's pending queue to make sure it was actually queued.
-> 
-> And even if you check that there is a page pool, the driver
-> can just create an empty pool that it'll never use. There
-> are always ways to make it wrong.
-> 
-> Yes, there is a difference, and I'm not against it as a
-> WARN_ON_ONCE after failing it in a more explicit way.
-> 
-> Jakub might have a different opinion on how it should look
-> like, and we can clarify on that, but I do believe it's a
-> confusing interface that can be easily made better.
+An 'msi-parent' property with a single entry and no accompanying
+'#msi-cells' property is considered the legacy definition as opposed
+to its definition after being expanded with commit 126b16e2ad98
+("Docs: dt: add generic MSI bindings"). However, the legacy
+definition is completely compatible with the current definition and,
+since of_phandle_iterator_next() tolerates missing and present-but-
+zero *cells properties since commit e42ee61017f5 ("of: Let
+of_for_each_phandle fallback to non-negative cell_count"), there's no
+need anymore to special case the legacy definition in
+of_msi_get_domain().
 
-My queue API RFC patches had configuration arguments, not sure if this
-is the right version but you'll get the idea:
-https://github.com/kuba-moo/linux/blob/qcfg/include/net/netdev_cfg.h#L43-L50
-This way we can _tell_ the driver what the config should be. That part
-got lost somewhere along the way, because perhaps in its embryonic form
-it doesn't make sense.
+Indeed, special casing has turned out to be harmful, because, as of
+commit 7c025238b47a ("dt-bindings: irqchip: Describe the IMX MU block
+as a MSI controller"), MSI controller DT bindings have started
+specifying '#msi-cells' as a required property (even when the value
+must be zero) as an effort to make the bindings more explicit. But,
+since the special casing of 'msi-parent' only uses the existence of
+'#msi-cells' for its heuristic, and not whether or not it's also
+nonzero, the legacy path is not taken. Furthermore, the path to
+support the new, broader definition isn't taken either since that
+path has been restricted to the platform-msi bus.
 
-We can bring it back, add HDS with threshold of 0, to it, and a bit for
-non-readable memory. On top of that "capability bits" in struct
-netdev_queue_mgmt_ops to mark that the driver pays attention to particular
-fields of the config.
+But, neither the definition of 'msi-parent' nor the definition of
+'#msi-cells' is platform-msi-specific (the platform-msi bus was just
+the first bus that needed '#msi-cells'), so remove both the special
+casing and the restriction. This not only simplifies the code but
+also resolves an issue with PCI devices finding their MSI controllers
+on riscv, as the riscv,imsics binding requires '#msi-cells=<0>'.
 
-Not sure if it should block the series, but that'd be the way I'd do it
-(for now?)
+Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+---
+ drivers/of/irq.c | 37 +++++++++++--------------------------
+ 1 file changed, 11 insertions(+), 26 deletions(-)
 
-I'd keep the current check with a WARN_ON_ONCE(), tho.
-Given the absence of tests driver developers can use.
-Especially those who _aren't_ supporting the feature.
-
-> > and cons to each approach; I don't see a showstopping reason to go
-> > with one over the other.
-> >   
-> >> And page_pool_check_memory_provider() is not that straightforward,
-> >> it doesn't walk through pools of a queue.  
-> > 
-> > Right, we don't save the pp of a queue, only a netdev. The outer loop
-> > checks all the pps of the netdev to find one with the correct binding,
-> > and the inner loop checks that this binding is attached to the correct
-> > queue.  
-> 
-> That's the thing, I doubt about the second part.
-> 
-> net_devmem_bind_dmabuf_to_queue() {
-> 	err = xa_alloc(&binding->bound_rxqs, &xa_idx, rxq);
-> 	if (err)
-> 		return err;
-> 
-> 	netdev_rx_queue_restart();
-> 
-> 	// page_pool_check_memory_provider
-> 	...
-> 	xa_for_each(&binding->bound_rxqs, xa_idx, binding_rxq) {
-> 		if (rxq == binding_rxq)
-> 			return success;
-> }
-> 
-> Can't b4 the patches for some reason, but that's the highlight
-> from the patchset, correct me if I'm wrong. That xa_for_each
-> check is always true because you put the queue in there right
-> before it, and I don't that anyone could've erased it.
-> 
-> The problem here is that it seems the ->bound_rxqs state doesn't
-> depend on what page pools were actually created and with what mp.
-
-FWIW I don't understand the point of walking the xa either.
-Just check the queue number of the pp you found matches,
-page pool params are saved in the page pool. No?
+diff --git a/drivers/of/irq.c b/drivers/of/irq.c
+index c94203ce65bb..026b52c8ee63 100644
+--- a/drivers/of/irq.c
++++ b/drivers/of/irq.c
+@@ -709,8 +709,7 @@ struct irq_domain *of_msi_map_get_device_domain(struct device *dev, u32 id,
+  * @np: device node for @dev
+  * @token: bus type for this domain
+  *
+- * Parse the msi-parent property (both the simple and the complex
+- * versions), and returns the corresponding MSI domain.
++ * Parse the msi-parent property and returns the corresponding MSI domain.
+  *
+  * Returns: the MSI domain for this device (or NULL on failure).
+  */
+@@ -718,33 +717,19 @@ struct irq_domain *of_msi_get_domain(struct device *dev,
+ 				     struct device_node *np,
+ 				     enum irq_domain_bus_token token)
+ {
+-	struct device_node *msi_np;
++	struct of_phandle_args args;
+ 	struct irq_domain *d;
++	int index = 0;
+ 
+-	/* Check for a single msi-parent property */
+-	msi_np = of_parse_phandle(np, "msi-parent", 0);
+-	if (msi_np && !of_property_read_bool(msi_np, "#msi-cells")) {
+-		d = irq_find_matching_host(msi_np, token);
+-		if (!d)
+-			of_node_put(msi_np);
+-		return d;
+-	}
+-
+-	if (token == DOMAIN_BUS_PLATFORM_MSI) {
+-		/* Check for the complex msi-parent version */
+-		struct of_phandle_args args;
+-		int index = 0;
++	while (!of_parse_phandle_with_args(np, "msi-parent",
++					   "#msi-cells",
++					   index, &args)) {
++		d = irq_find_matching_host(args.np, token);
++		if (d)
++			return d;
+ 
+-		while (!of_parse_phandle_with_args(np, "msi-parent",
+-						   "#msi-cells",
+-						   index, &args)) {
+-			d = irq_find_matching_host(args.np, token);
+-			if (d)
+-				return d;
+-
+-			of_node_put(args.np);
+-			index++;
+-		}
++		of_node_put(args.np);
++		index++;
+ 	}
+ 
+ 	return NULL;
+-- 
+2.45.2
 
 
