@@ -1,233 +1,197 @@
-Return-Path: <linux-mips+bounces-4916-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4917-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 948F795489C
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Aug 2024 14:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A53A895491D
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Aug 2024 14:50:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B28E21C22E62
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Aug 2024 12:21:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B4B3B1C2403C
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Aug 2024 12:50:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF52312D1EA;
-	Fri, 16 Aug 2024 12:21:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A6941B14F6;
+	Fri, 16 Aug 2024 12:50:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vepJIgQv"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="hnhVzKov"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85C3C1A01CF
-	for <linux-mips@vger.kernel.org>; Fri, 16 Aug 2024 12:20:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45431191F84
+	for <linux-mips@vger.kernel.org>; Fri, 16 Aug 2024 12:50:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723810860; cv=none; b=VbsnHmAXKBxB3Ks3GULaBbXczioFNVWEmd7+eC4f851AN16UvnpImsV8yvcqVHj5/qbIBBkOjMJA6c7JjIlCDWhh5mFmKxgYtbJMdzhG4S/KhxeNHiSBK08mqO19yQcJlzh9i3/Q7esJiH9zcgXO0jtV5ID2hBdJQCHqUZvmEcM=
+	t=1723812603; cv=none; b=ekyEup64UL3WgJFNXHOHwMFg6HHrNakpv5FsgPOsBQh0hs0vAs1gkptvfNRLtrlyQ0oV8PNNMYKEjY1eZbwe+rYe8ix0qfY59B1omBsJjr+bRSyu0jSet58SRJ3nluYRxMOhKQkSnMPec4bmYNJvCcHD/a6aTephXYthwjEDaYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723810860; c=relaxed/simple;
-	bh=uDHRwF0otXkj+agrQEA0lwHEUq1GTb5X3dySo2OqWmA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i1Vsg9p70T//TdeNm2RxqX65kcLC2FXKFTQmA6smHuc00KzC0ug1BZMh66yYxJv/EN3u1aDudvxDrjDVvDafgG61VJTvYWHFqRCoLZHK1e4FnwDgDy1IGS0Ejw+dvO8bW0JmqtfE5m8OQ2Ma6N5d0SIIt3vq3DBKXM2MjXMItgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vepJIgQv; arc=none smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6bd777e6623so10217106d6.3
-        for <linux-mips@vger.kernel.org>; Fri, 16 Aug 2024 05:20:58 -0700 (PDT)
+	s=arc-20240116; t=1723812603; c=relaxed/simple;
+	bh=K37drQFBcQe/KPuccp1cUx2OgiWzM+wcBntWujhb3wY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HABhj5X+N2PWqooBhHMg0eeO0E6DEBLNt8O/1yk2Pd6+6RvVJipiJw8NQa4W39v3eqVbiZo8Xhy89CMu3T9R3d/Xi2TNf7/rqQNe0xFa3zOogs/TSbsubA3fXeOmMkQ7ynen6ZO1vNNDPrZzGjWyGQDK8SmWsbZrpHBAkYGT6Xg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=hnhVzKov; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3687ea0521cso1246189f8f.1
+        for <linux-mips@vger.kernel.org>; Fri, 16 Aug 2024 05:50:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1723810857; x=1724415657; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=60gFb7YBVOLPqGwy/Oc6xhCaH/QA9b9t6B6yBp4eA0s=;
-        b=vepJIgQvm2wUGg7wPKHnb+cadQKMpOzbWijLOw8Y601NGnc5kVVQQPvwKuFuHmO9dT
-         MJgiqk3ifseVfRq/1H89bggOm/n7pq2Mm8dmsp81hGSa5WPe8joH83P6y+SfpVSL5VCH
-         lZLxAXq0w4X5pjPxczK8MnzECXq4GfetXQZQfQsE1q5cckXfkWtkW5TRvbSxcOYtVr4U
-         /ROBZ3uaTofnbmaov+YziEU4mN5Jx1qhndecyk+dDXswFTYJQF2zRTdUbbakad1/rIsM
-         DwzU5Muj2HTFtxM1/A66Nbfr3az4ejPZ29MAKl9DO+8SgPw7kWqtxMFRF8n5JpvPCqFk
-         yYhw==
+        d=ventanamicro.com; s=google; t=1723812599; x=1724417399; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ke0AjxBAncE489wmYzkh+nSMUTPo+pIzRMAmnYnwJNQ=;
+        b=hnhVzKovzynDoQAun++O/2psFXoxwrfmAL6FguXikmJuDNYs3SQ9zWNdJcJrKlR1DR
+         sctpHAV4oWUVezB+H+qUsieJ3NuUbTcnl/Aq+11aYks95YMgQ4U2xA5i0OtjgONG6D2r
+         C00jzf3q4d0kVc4AIxX+fUP1j51qkshg5prgMOvzyLMOt3qOsOfq2baQA8vguhwBoxFW
+         pGBuh9L6WKiZ4Cx0Iufjn//tAFzjeWgzufatyFg07Nm4ckgGfj+gENjcn3tE82YUgu5E
+         ZkRPL8yFQvjCOb/2xM9cCXdV6K6pe9ck1VhlS/9F3T5kXDuoZDo1i7NgAXDaIfMQq4nJ
+         uF3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723810857; x=1724415657;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=60gFb7YBVOLPqGwy/Oc6xhCaH/QA9b9t6B6yBp4eA0s=;
-        b=Zb6qNZN2A9BGEiu+7tLcFMr++7MIXuD34QmG0LKfc4uWExL5qQpDu0hcVtcehF1l3Z
-         RtSvNZecbq1zr/qhHQZ0AXd4znh1iPLtOjXAfLSVRPqtQ7cG2ma/ktcbXNFSVUpxvFKD
-         cM/MmRW5vocvi4/62E672e6GQ8UwX9N77uuJXacYtUlE7uuWdDeG8su+0MUrVYT0Sj8K
-         X8iWXRjkyUpJw1udKm1F7tt5a5aKTYik1FPwJ9OAPJeX6eHXorwwIfd6eWP+Hyki5HO2
-         HQocaB4ivMZs0QsCJILQeYD+k2cREuEAIzLt5j1LWIjR9RAuA1Au8vMXZctffLvIygNb
-         lLlA==
-X-Forwarded-Encrypted: i=1; AJvYcCWIUgtxWu1/Yp0+LLMQjhyguJEvbBzF5drnJu08qUUSZkvA1BUpxtDE6mU5LSjNDg2iWjnw8/NfJClUSYXI+bU0pamDutNhjYr5OA==
-X-Gm-Message-State: AOJu0Yz+Qu115P4sgHULZJth0YEzaOaOqQ2/cF+z4hfKK9ak1a61r0uY
-	b+a+lz2vBXp0x4FtWXSn+Ga5w2jRrVwwE0M3+uyYwE0eq5JuDe+nlxt9Y5feY4Yg7iW9zVb/5q0
-	AkShf2jntmLWlWvGV5g7GL6ha+DEcd/N93IpC
-X-Google-Smtp-Source: AGHT+IGZmdSIKsIbNLMCWhDr7siS0fg53Dzm3mUEgRlOmZUGtYHuIW2VVl49SrIQcFwsu42Q03aJr/PwI9drpzidh7Q=
-X-Received: by 2002:a05:6214:5713:b0:6bf:7c34:e419 with SMTP id
- 6a1803df08f44-6bf7cdcb101mr38991616d6.5.1723810857192; Fri, 16 Aug 2024
- 05:20:57 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1723812599; x=1724417399;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ke0AjxBAncE489wmYzkh+nSMUTPo+pIzRMAmnYnwJNQ=;
+        b=U7JQVIZJO6lz6bpw71wjJ8t8Qy9f6pwWJCRSzYhIlmY/HdqdQ52mCO/ysK4AjuxmiJ
+         sWvAOpoKDwx2FMnT5hiDT3mbY/T8lRTme0HzHgMI9bFAdOX2NMYDp+0E24rFE5Sked2p
+         rINL7pgYl0LsshGqW417Ak3T+LblxVMcl1OqnrmYCdLw3YSQt/QKME3QvT7ugrb/acxO
+         PHdjYsafVUtwbarY2IvSB5VAxwEJtgAfcomVLEWWYtAQRYJLGM0BhpVeeH22TkAheb8s
+         CV18sQulQQ0090QnrBrYPom+kxrF/Xbg8jT7bBhGyA5oILtmkwolF1XILzhXxKZXdNQr
+         LIVA==
+X-Forwarded-Encrypted: i=1; AJvYcCUeSIjEdxPzFd1mj4xCFms29XAubC3FgmI0WqeM5BX8gmyGcwAgHNZxDagTH2Ghy25UdYk/rk4yS74Z@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmsP4sPwwFCvuby0N5jVwL1fQRgxJSD2gGKxFDLJBbGm3O8/sk
+	vaeumhjL1RFrGhrrJQ4nQ444eVZ1EYW++WIsNtH3wMvwMxdGqo7x7xjtFADblmk=
+X-Google-Smtp-Source: AGHT+IGM4LtUkED1FVNx+BEXnUbZCpfDI0OMEbuSoUR17hoiKqSTIP6vlmoZg/GiQAQSJ3CnFpyexA==
+X-Received: by 2002:adf:e907:0:b0:371:8e24:1191 with SMTP id ffacd0b85a97d-371946a4455mr2184543f8f.53.1723812598913;
+        Fri, 16 Aug 2024 05:49:58 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-371898aa393sm3570531f8f.90.2024.08.16.05.49.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Aug 2024 05:49:58 -0700 (PDT)
+From: Andrew Jones <ajones@ventanamicro.com>
+To: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org
+Cc: maz@kernel.org,
+	mark.rutland@arm.com,
+	robh@kernel.org,
+	saravanak@google.com,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH v2] of/irq: Support #msi-cells=<0> in of_msi_get_domain
+Date: Fri, 16 Aug 2024 14:49:58 +0200
+Message-ID: <20240816124957.130017-2-ajones@ventanamicro.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240813211317.3381180-7-almasrymina@google.com>
- <de7daf80-a2e4-4451-b666-2a67ccc3649e@gmail.com> <CAHS8izPMC+XhXKbJOQ3ymizyKuARSOv_cO_xO+q1EG4zoy6Gig@mail.gmail.com>
- <31640ff4-25a6-4115-85e6-82092ce57393@gmail.com> <20240815182245.2b5e3f44@kernel.org>
-In-Reply-To: <20240815182245.2b5e3f44@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 16 Aug 2024 08:20:44 -0400
-Message-ID: <CAHS8izO9LDM9rLVnJPgp6QXb4YLW5+3ziGOHTqScy-SKOLejYA@mail.gmail.com>
-Subject: Re: [PATCH net-next v19 06/13] memory-provider: dmabuf devmem memory provider
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Pavel Begunkov <asml.silence@gmail.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, David Wei <dw@davidwei.uk>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Kaiyuan Zhang <kaiyuanz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 15, 2024 at 9:22=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> On Wed, 14 Aug 2024 17:32:53 +0100 Pavel Begunkov wrote:
-> > > This is where I get a bit confused. Jakub did mention that it is
-> > > desirable for core to verify that the driver did the right thing,
-> > > instead of trusting that a driver did the right thing without
-> > > verifying. Relying on a flag from the driver opens the door for the
-> > > driver to say "I support this" but actually not create the mp
-> > > page_pool. In my mind the explicit check is superior to getting
-> > > feedback from the driver.
-> >
-> > You can apply the same argument to anything, but not like
-> > after each for example ->ndo_start_xmit we dig into the
-> > interface's pending queue to make sure it was actually queued.
-> >
-> > And even if you check that there is a page pool, the driver
-> > can just create an empty pool that it'll never use. There
-> > are always ways to make it wrong.
-> >
-> > Yes, there is a difference, and I'm not against it as a
-> > WARN_ON_ONCE after failing it in a more explicit way.
-> >
-> > Jakub might have a different opinion on how it should look
-> > like, and we can clarify on that, but I do believe it's a
-> > confusing interface that can be easily made better.
->
-> My queue API RFC patches had configuration arguments, not sure if this
-> is the right version but you'll get the idea:
-> https://github.com/kuba-moo/linux/blob/qcfg/include/net/netdev_cfg.h#L43-=
-L50
-> This way we can _tell_ the driver what the config should be. That part
-> got lost somewhere along the way, because perhaps in its embryonic form
-> it doesn't make sense.
->
-> We can bring it back, add HDS with threshold of 0, to it, and a bit for
-> non-readable memory. On top of that "capability bits" in struct
-> netdev_queue_mgmt_ops to mark that the driver pays attention to particula=
-r
-> fields of the config.
->
-> Not sure if it should block the series, but that'd be the way I'd do it
-> (for now?)
->
+An 'msi-parent' property with a single entry and no accompanying
+'#msi-cells' property is considered the legacy definition as opposed
+to its definition after being expanded with commit 126b16e2ad98
+("Docs: dt: add generic MSI bindings"). However, the legacy
+definition is completely compatible with the current definition and,
+since of_phandle_iterator_next() tolerates missing and present-but-
+zero *cells properties since commit e42ee61017f5 ("of: Let
+of_for_each_phandle fallback to non-negative cell_count"), there's no
+need anymore to special case the legacy definition in
+of_msi_get_domain().
 
-I'm not sure I want to go into a rabbit hole of adding configuration
-via the queue API, blocking this series . We had discussed this months
-back and figured that it's a significant undertaking on its own. I'm
-not sure GVE has HDS threshold capability for example, and I'm also
-not sure how to coexist header split negotiability via the queue API
-when an ethtool API exists alongside it. I think this is worthy of
-separating in its own follow up series.
+Indeed, special casing has turned out to be harmful, because, as of
+commit 7c025238b47a ("dt-bindings: irqchip: Describe the IMX MU block
+as a MSI controller"), MSI controller DT bindings have started
+specifying '#msi-cells' as a required property (even when the value
+must be zero) as an effort to make the bindings more explicit. But,
+since the special casing of 'msi-parent' only uses the existence of
+'#msi-cells' for its heuristic, and not whether or not it's also
+nonzero, the legacy path is not taken. Furthermore, the path to
+support the new, broader definition isn't taken either since that
+path has been restricted to the platform-msi bus.
 
-For now detecting that the driver was able to create the page_pool
-with the correct memory provider in core should be sufficient. Also
-asking the driver to set a
-netdev_rx_queue->unreadable_netmem_supported flag should also be
-sufficient. I've implemented both locally and they work well.
+But, neither the definition of 'msi-parent' nor the definition of
+'#msi-cells' is platform-msi-specific (the platform-msi bus was just
+the first bus that needed '#msi-cells'), so remove both the special
+casing and the restriction. The code removal also requires changing
+to of_parse_phandle_with_optional_args() in order to ensure the
+legacy (but compatible) use of 'msi-parent' remains supported. This
+not only simplifies the code but also resolves an issue with PCI
+devices finding their MSI controllers on riscv, as the riscv,imsics
+binding requires '#msi-cells=<0>'.
 
-> I'd keep the current check with a WARN_ON_ONCE(), tho.
-> Given the absence of tests driver developers can use.
-> Especially those who _aren't_ supporting the feature.
->
+Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+---
+v2:
+ - switch to of_parse_phandle_with_optional_args() to ensure the
+   absence of #msi-cells means count=0
 
-Yes what I have locally is the driver setting
-netdev_rx_queue->unreadable_netmem_supported when header split is
-turned on, and additionally a WARN_ON_ONCE around the check in core. I
-was about to send that when I read your email. I'm hoping we don't
-have to go through the scope creep of adding configuration via the
-queue API, which I think is a very significant undertaking.
+ drivers/of/irq.c | 37 +++++++++++--------------------------
+ 1 file changed, 11 insertions(+), 26 deletions(-)
 
-> > > and cons to each approach; I don't see a showstopping reason to go
-> > > with one over the other.
-> > >
-> > >> And page_pool_check_memory_provider() is not that straightforward,
-> > >> it doesn't walk through pools of a queue.
-> > >
-> > > Right, we don't save the pp of a queue, only a netdev. The outer loop
-> > > checks all the pps of the netdev to find one with the correct binding=
-,
-> > > and the inner loop checks that this binding is attached to the correc=
-t
-> > > queue.
-> >
-> > That's the thing, I doubt about the second part.
-> >
-> > net_devmem_bind_dmabuf_to_queue() {
-> >       err =3D xa_alloc(&binding->bound_rxqs, &xa_idx, rxq);
-> >       if (err)
-> >               return err;
-> >
-> >       netdev_rx_queue_restart();
-> >
-> >       // page_pool_check_memory_provider
-> >       ...
-> >       xa_for_each(&binding->bound_rxqs, xa_idx, binding_rxq) {
-> >               if (rxq =3D=3D binding_rxq)
-> >                       return success;
-> > }
-> >
-> > Can't b4 the patches for some reason, but that's the highlight
-> > from the patchset, correct me if I'm wrong. That xa_for_each
-> > check is always true because you put the queue in there right
-> > before it, and I don't that anyone could've erased it.
-> >
-> > The problem here is that it seems the ->bound_rxqs state doesn't
-> > depend on what page pools were actually created and with what mp.
->
-> FWIW I don't understand the point of walking the xa either.
-> Just check the queue number of the pp you found matches,
-> page pool params are saved in the page pool. No?
->
+diff --git a/drivers/of/irq.c b/drivers/of/irq.c
+index c94203ce65bb..690df4b71ab9 100644
+--- a/drivers/of/irq.c
++++ b/drivers/of/irq.c
+@@ -709,8 +709,7 @@ struct irq_domain *of_msi_map_get_device_domain(struct device *dev, u32 id,
+  * @np: device node for @dev
+  * @token: bus type for this domain
+  *
+- * Parse the msi-parent property (both the simple and the complex
+- * versions), and returns the corresponding MSI domain.
++ * Parse the msi-parent property and returns the corresponding MSI domain.
+  *
+  * Returns: the MSI domain for this device (or NULL on failure).
+  */
+@@ -718,33 +717,19 @@ struct irq_domain *of_msi_get_domain(struct device *dev,
+ 				     struct device_node *np,
+ 				     enum irq_domain_bus_token token)
+ {
+-	struct device_node *msi_np;
++	struct of_phandle_args args;
+ 	struct irq_domain *d;
++	int index = 0;
+ 
+-	/* Check for a single msi-parent property */
+-	msi_np = of_parse_phandle(np, "msi-parent", 0);
+-	if (msi_np && !of_property_read_bool(msi_np, "#msi-cells")) {
+-		d = irq_find_matching_host(msi_np, token);
+-		if (!d)
+-			of_node_put(msi_np);
+-		return d;
+-	}
+-
+-	if (token == DOMAIN_BUS_PLATFORM_MSI) {
+-		/* Check for the complex msi-parent version */
+-		struct of_phandle_args args;
+-		int index = 0;
++	while (!of_parse_phandle_with_optional_args(np, "msi-parent",
++						    "#msi-cells",
++						    index, &args)) {
++		d = irq_find_matching_host(args.np, token);
++		if (d)
++			return d;
+ 
+-		while (!of_parse_phandle_with_args(np, "msi-parent",
+-						   "#msi-cells",
+-						   index, &args)) {
+-			d = irq_find_matching_host(args.np, token);
+-			if (d)
+-				return d;
+-
+-			of_node_put(args.np);
+-			index++;
+-		}
++		of_node_put(args.np);
++		index++;
+ 	}
+ 
+ 	return NULL;
+-- 
+2.45.2
 
-Yes, I changed this check to check pool->p.queue, and it works fine.
-
---=20
-Thanks,
-Mina
 
