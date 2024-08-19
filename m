@@ -1,80 +1,90 @@
-Return-Path: <linux-mips+bounces-4949-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-4950-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B62299568B3
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Aug 2024 12:43:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C38D395696D
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Aug 2024 13:36:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 548A5B22D21
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Aug 2024 10:42:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 781691F2286B
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Aug 2024 11:36:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B74D11607BD;
-	Mon, 19 Aug 2024 10:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7022C166F11;
+	Mon, 19 Aug 2024 11:36:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JqvG0/va"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l9+Rccfe"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5EC915F323;
-	Mon, 19 Aug 2024 10:42:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EA851607A4;
+	Mon, 19 Aug 2024 11:36:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724064172; cv=none; b=t++Ao4fxMl1bgneUF0IXGdTK+PkUi/um0MKjIg+WhA1DNqaHr/V53ZSRz015YDDLtHj2aCOYg1q00uYQbE2KqR9L3YyrAxxX/ug+zJpRwpzEjsseFP0m4j7S7uhXSE1XdpZ73l3OCspszhWY16emD5lH1mOH1DP/Fd34bbsHFH8=
+	t=1724067398; cv=none; b=R5Lxq8vMVc9Xu2JRihYjVgqfNaUvBxKsLSKp2wPh8tCx+Lvu2IqPoaFGZgSz+BWpyEowXH4nowxKSkQHlX7hkHhtCHp3DLpppzOIl+hdxem/qj0gavvwXcbh5nE8p0e07Xxdb6rYMo9UceeyxdLAq0y3KhNtlNeSZovnhPlvHDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724064172; c=relaxed/simple;
-	bh=oIaCox6bIms0FlesGQEQV7cxexdJ9wY8BmeMBWUVSTg=;
+	s=arc-20240116; t=1724067398; c=relaxed/simple;
+	bh=nh8Z1vzVZlI6E1oIQz7WWu2CltCui8IJxxLoORpEgOQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zx7OhMYWteIeKF30QLtrNAGo2cep7ddIHaMmMsRYzTwXJsb+/bOZgfBbMl7YKRSo44mnEu4CRsXgqSHStibUJp5CqW9wQYnQ5QdZHWC84Za7H0h5Sxr+nrf6xzYdlbwlkYnY97i+i5MU+NcNaCY5YWyivG9f1b0P/ygujcHvYDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JqvG0/va; arc=none smtp.client-ip=209.85.208.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=rvrcC9xz6+qaoeh4bzzV99z/iYKj+QIuFo7ucDf8Wo9whDRZoDNaHgF9QNbbl+JZiFUelQon2iuixzTusXJsyXwoDW9HtLMYv1p34FPVWvWtFtmUIRAcMLIj7Y3iG5INbwNuqxhTAyd3zD50t+ZBFt4w2OLN/wEGaKTqSflO7+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l9+Rccfe; arc=none smtp.client-ip=209.85.167.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2f15790b472so52268721fa.0;
-        Mon, 19 Aug 2024 03:42:50 -0700 (PDT)
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-52f0277daa5so5396013e87.0;
+        Mon, 19 Aug 2024 04:36:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724064169; x=1724668969; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1724067395; x=1724672195; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=URtxqs+sTJ/MixcFV35CJtFCUUWKl+ehBEcTOR3I+mE=;
-        b=JqvG0/vaU7D2eJIp5UNS5T9e2ALHuSBWDLus16Yb4A7NPtnhWP9UvKvyJlX23CcPwM
-         Wenm0+/kXCzS0AbVYMANkVZj4svSyp89jb2LCBWTBnjzAitsrSSa+d4Fcut3/4TvcFHX
-         4D7AyNW5FVM6FHzUpl8JnuhSrvkQbTLtJIumGoSAAGt2xW0Ib+XbficHAgTssUXayAWK
-         FxZ6gHz3cjHkbcINyYSqAYikNPZZr2h3PVvqxR7fuwIJMqpHSEne5W7OmwglCIeSWhPR
-         w2P+wSbMHiI1ua7z2QxgCoXAxyHOqZ8UYAhkAn34HFboNc24/j/fp9hkHQ1Hm9XRUWy2
-         3F7A==
+        bh=78zmWX1R2MuUu3oiZjb6yXmGNi5evk9tkG6fthqDCQk=;
+        b=l9+Rccfe89R96NwGARk+6hNtXPrjhVj18YFIqYnu8wE52R9rx0IzVyN8n8qyEet2Hs
+         TIdzbzXCyKlX+3/m4XXTiWcwktZBYqVnwVSNP5ikIPPsUNdXOB3H5SkBJWMlh6BaWDgq
+         TmMdGDQllgcFsju+xO+Xu2TFQnXDNCpuijBXs39x8IWh4bu8j32B7MIetrEQDPD0+o11
+         Nt3Yn2gcorllIqdAXIsUgt0pcnwuuVz/XRwdb+xd8LPcrxuN0crUbb7J2PuKURSkBJGc
+         UZ7u/53amzZurbNPP7Zbt4+1uYgGuSZP8yuksgVJH35N2HlQ/n48EMFF0fwgshnCKSzc
+         Dmcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724064169; x=1724668969;
+        d=1e100.net; s=20230601; t=1724067395; x=1724672195;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=URtxqs+sTJ/MixcFV35CJtFCUUWKl+ehBEcTOR3I+mE=;
-        b=TApdA9+zSzUFTbOle82RfvTiC7bBu2E1M5WoIspr8NkKy1Z2vOjPZcXi/wya3C/aPD
-         YUncYNBw2+VdsQ9isWFull9qs1uAhqRnY4R9wzab13ue33vcxLtRkDV2a89j2TSelmog
-         R+PEHFhiCFdpj+Ej0+ue39v5GY8mWX/j9m1nGzpmn72T4gJBCM8YrO5Zucel0JCq5wIB
-         9WXGw4x+ihdd3HkeY2GBIHpREH1WOFS9sLS8nZgj74FQ0uFLYZwApFHXKMzEO5mTVurn
-         CnmQj6/kprh6qNwfoNf1E9stxUQ6IhXhf/s1Hrpe+RRCP2PQWrHQQkGIDq3MQFdV4aS+
-         xxmg==
-X-Forwarded-Encrypted: i=1; AJvYcCWeMLhhBsIUO/ne/8mwCYzyIY4I9k39CpMTpDNtnfAb49X9rIJOlaVwkGB96dd7WekBG8zaDvQFc5+To8uF0BmVf1AZ8eKk+PBMC+TsiTlz3Zn5WBsAiq+OtYpBGqn21ycrnisoc62Gsg==
-X-Gm-Message-State: AOJu0YwnhjOQKyqAHj1nZrzGM97wG/RADfK3vXryc9HL7OgLc4TlgavM
-	n0gSYOcCgRVgRZ/zfdB69gcQUK0hu4ttolcx0FfSAz2a68d+Rwve
-X-Google-Smtp-Source: AGHT+IEYIdpLj9BzzbNsUHrNVZZZb01mFRKU4uASUS1l4Ib/srnfOvu5RgJ59mE+CmHulDDsFrl5uA==
-X-Received: by 2002:a2e:81a:0:b0:2ec:6639:120a with SMTP id 38308e7fff4ca-2f3be578690mr67491071fa.10.1724064168467;
-        Mon, 19 Aug 2024 03:42:48 -0700 (PDT)
+        bh=78zmWX1R2MuUu3oiZjb6yXmGNi5evk9tkG6fthqDCQk=;
+        b=Wmgpc8QQhKPRah01hrJorKLrQTGEikl4PBr/o4wgtvnkXU62S+NmwAfYInMEBg7vew
+         veiRxX6tbBXhjv4SLFtpxuJa4oxEI0vYYllaZuwlMk07MUd6b7fuEXYTbrV/PMyqRv+N
+         cbGBBNGpc7oxdNS2lEAFKZPfDOrHJTzxL0IeKGidmykw9oXd3eNAHcmuTnM6BJyToCgo
+         onValorlvO5a5DKaSRHNaH0dDppWTzjvYtpHdw+433/jeNa869d2+f9ugcyss/Xnbnj8
+         lr/V/zPhjMf8TrURyRz0lKZvvnmjcf41KotPhSVFNLidGN4O3Eu7ZmiPWhvuzDMPknQy
+         N22Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUD6BM6cTJytl6yjVWy9m6tFiTVo5UGzOoXY2oU2xotqcbdhmlboSlUOM0skAlu9DaEHglFsyeqGazj@vger.kernel.org, AJvYcCVNkigaAGYIu1zeRvHK4Gc2yV8wfcS/ywndc4YfCEPe2s2rgtrsd5zdlFWXdDnp9L5UkFKL15GPG5Oe1w==@vger.kernel.org, AJvYcCVxHVV09OacCLqlcitusW4foZXsc2xxs5Movq0AHLfUyUJVIGNwzsfPQWCGbg5UjlFhFgfoZh/Nv4n+@vger.kernel.org, AJvYcCWALp9EeaIPCIoPRmCWd7uSgXBSqiTlgrQb3CTksoQ0GZygFM31mLDLeIZIP1U7ysoRpe9mhG5OcpCyUNrF@vger.kernel.org, AJvYcCXPkvjVM5pjipm833DI/+AIYR5PR9H3EHrXSw3/DJs1DEtRSrPSieXE3wJs2Vi7XflGtVNTrEdTkjWpoz1Evq8tdPw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOucpzm1REeqOlUKnr96lop/Gg3i6OVgZEzsc/St00EAbg29hb
+	ep72ujhrCC3UtTFislvWZq1J6WgCIli32GT6SNRua3bbnTA7VdsE
+X-Google-Smtp-Source: AGHT+IGke4g9LG82CUNKo1MIdeBQBLiC7DEdwsR4e5fBnnlRlr1KhhwfUBeUlTP2WItRZy2ABzDO0w==
+X-Received: by 2002:a05:6512:1096:b0:530:daaa:271c with SMTP id 2adb3069b0e04-5331c6a1a7bmr7372071e87.16.1724067394331;
+        Mon, 19 Aug 2024 04:36:34 -0700 (PDT)
 Received: from mobilestation ([178.176.56.174])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2f3b746cd25sm15071701fa.9.2024.08.19.03.42.47
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5330d3afc45sm1469525e87.44.2024.08.19.04.36.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Aug 2024 03:42:48 -0700 (PDT)
-Date: Mon, 19 Aug 2024 13:42:45 +0300
+        Mon, 19 Aug 2024 04:36:33 -0700 (PDT)
+Date: Mon, 19 Aug 2024 14:36:31 +0300
 From: Serge Semin <fancer.lancer@gmail.com>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: cevt-r4k: Don't call get_c0_compare_int if timer
- irq is installed
-Message-ID: <cfjhzqiurzhony75oi6owkifzrvtqj32wfizry5ntqrqborah5@v6qgmujo25va>
-References: <20240813-get_c0_compare_int-v1-1-a0a1b007d736@flygoat.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Charles Keepax <ckeepax@opensource.cirrus.com>, Richard Fitzgerald <rf@opensource.cirrus.com>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Heiko Stuebner <heiko@sntech.de>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Magnus Damm <magnus.damm@gmail.com>, patches@opensource.cirrus.com, 
+	Elaine Zhang <zhangqing@rock-chips.com>, Gabriel Fernandez <gabriel.fernandez@foss.st.com>, 
+	linux-mips@vger.kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+	linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH 1/5] dt-bindings: clock: baikal,bt1-ccu-div: add
+ top-level constraints
+Message-ID: <iszw753okcfn6nximo3rovz7plbeo6yrcaoai7mb7x5blmiilw@kean47lp6ipv>
+References: <20240818173014.122073-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -83,83 +93,45 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240813-get_c0_compare_int-v1-1-a0a1b007d736@flygoat.com>
+In-Reply-To: <20240818173014.122073-1-krzysztof.kozlowski@linaro.org>
 
-Hi Jiaxun
-
-On Tue, Aug 13, 2024 at 10:59:08AM +0100, Jiaxun Yang wrote:
-> This avoids warning:
+On Sun, Aug 18, 2024 at 07:30:10PM +0200, Krzysztof Kozlowski wrote:
+> Properties with variable number of items per each device are expected to
+> have widest constraints in top-level "properties:" block and further
+> customized (narrowed) in "if:then:".  Add missing top-level constraints
+> for clocks and clock-names.
 > 
-> [    0.118053] BUG: sleeping function called from invalid context at kernel/locking/mutex.c:283
-> 
-> Caused by get_c0_compare_int on secondary CPU.
-> 
-> We also skipped saving IRQ number to struct clock_event_device *cd as
-> it's never used by clockevent core, as per comments it's only meant
-> for "non CPU local devices".
-> 
-> Reported-by: Serge Semin <fancer.lancer@gmail.com>
-> Closes: https://lore.kernel.org/linux-mips/6szkkqxpsw26zajwysdrwplpjvhl5abpnmxgu2xuj3dkzjnvsf@4daqrz4mf44k/
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-
-The solution works well for me. Thanks!
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
-Tested-by: Serge Semin <fancer.lancer@gmail.com>
 
 -Serge(y)
 
 > ---
->  arch/mips/kernel/cevt-r4k.c | 15 +++++++--------
->  1 file changed, 7 insertions(+), 8 deletions(-)
+>  .../devicetree/bindings/clock/baikal,bt1-ccu-div.yaml     | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
 > 
-> diff --git a/arch/mips/kernel/cevt-r4k.c b/arch/mips/kernel/cevt-r4k.c
-> index 368e8475870f..5f6e9e2ebbdb 100644
-> --- a/arch/mips/kernel/cevt-r4k.c
-> +++ b/arch/mips/kernel/cevt-r4k.c
-> @@ -303,13 +303,6 @@ int r4k_clockevent_init(void)
->  	if (!c0_compare_int_usable())
->  		return -ENXIO;
+> diff --git a/Documentation/devicetree/bindings/clock/baikal,bt1-ccu-div.yaml b/Documentation/devicetree/bindings/clock/baikal,bt1-ccu-div.yaml
+> index bd4cefbb1244..30252c95700c 100644
+> --- a/Documentation/devicetree/bindings/clock/baikal,bt1-ccu-div.yaml
+> +++ b/Documentation/devicetree/bindings/clock/baikal,bt1-ccu-div.yaml
+> @@ -134,9 +134,13 @@ properties:
+>    "#reset-cells":
+>      const: 1
 >  
-> -	/*
-> -	 * With vectored interrupts things are getting platform specific.
-> -	 * get_c0_compare_int is a hook to allow a platform to return the
-> -	 * interrupt number of its liking.
-> -	 */
-> -	irq = get_c0_compare_int();
-> -
->  	cd = &per_cpu(mips_clockevent_device, cpu);
+> -  clocks: true
+> +  clocks:
+> +    minItems: 3
+> +    maxItems: 4
 >  
->  	cd->name		= "MIPS";
-> @@ -320,7 +313,6 @@ int r4k_clockevent_init(void)
->  	min_delta		= calculate_min_delta();
+> -  clock-names: true
+> +  clock-names:
+> +    minItems: 3
+> +    maxItems: 4
 >  
->  	cd->rating		= 300;
-> -	cd->irq			= irq;
->  	cd->cpumask		= cpumask_of(cpu);
->  	cd->set_next_event	= mips_next_event;
->  	cd->event_handler	= mips_event_handler;
-> @@ -332,6 +324,13 @@ int r4k_clockevent_init(void)
+>  additionalProperties: false
 >  
->  	cp0_timer_irq_installed = 1;
->  
-> +	/*
-> +	 * With vectored interrupts things are getting platform specific.
-> +	 * get_c0_compare_int is a hook to allow a platform to return the
-> +	 * interrupt number of its liking.
-> +	 */
-> +	irq = get_c0_compare_int();
-> +
->  	if (request_irq(irq, c0_compare_interrupt, flags, "timer",
->  			c0_compare_interrupt))
->  		pr_err("Failed to request irq %d (timer)\n", irq);
-> 
-> ---
-> base-commit: 9e6869691724b12e1f43655eeedc35fade38120c
-> change-id: 20240812-get_c0_compare_int-66935853a308
-> 
-> Best regards,
 > -- 
-> Jiaxun Yang <jiaxun.yang@flygoat.com>
+> 2.43.0
 > 
 
