@@ -1,117 +1,142 @@
-Return-Path: <linux-mips+bounces-5025-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5026-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C96CD95B84E
-	for <lists+linux-mips@lfdr.de>; Thu, 22 Aug 2024 16:25:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6208895B87D
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Aug 2024 16:33:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F31871C23AE5
-	for <lists+linux-mips@lfdr.de>; Thu, 22 Aug 2024 14:25:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 148A61F21CC6
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Aug 2024 14:33:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D12051CBE94;
-	Thu, 22 Aug 2024 14:25:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B34241CC167;
+	Thu, 22 Aug 2024 14:33:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mzydcEVw"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="MmE2IZpm"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9904E1CB336;
-	Thu, 22 Aug 2024 14:25:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCDF11CC170;
+	Thu, 22 Aug 2024 14:33:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724336702; cv=none; b=SMyYH3cFqRaG/fJXaP06HzmG4r74S6VM0AmeypdB5b5QMo8K7yXpVZyfMoGhKPbnP4UsPrqIdxiFUxHttMGfC/jeBVEu9JhCVgmwbiQSDVYk6YUvomcrwQwrWl1JRamFbPzVoEIsGkghqaqcC0Yt/MKDff0hFSNTEcaDpYbmv0A=
+	t=1724337204; cv=none; b=NbujshkLVxrtN12jV0Gjn4dvL17++eDdV8642IAXilzIZHaEONhiFEcUrmIR+4pwRGMTNOil1DW8ijywMD7yMTxUbgg8WXk0hGqXDMu8wTknWLUDIHuv6IbwbJuP96gjamShc3KKn9ggsiy5QhJyv2kY9e7Wda7jkCNf/tfhaWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724336702; c=relaxed/simple;
-	bh=//vs0/j3dL5aitkeEHYmbgKTgUS1rli4/RnXiCWDaiI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=G8XhvBUopgg8DX0+XDFS5Sc+PoZYk+rycOF7rAHx/0eKnjCPC/F9cPS6xR++ZzMxMcxZaX0AgtgvLqYhQ6Vs0PtKdq9F9PIc4KyeifMNMXd4KWq4LcMtd1fRbhjIS755k7WLlaca1qDmOLKd0gP9lSZZDynwz80LwgdsxgZMdPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mzydcEVw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28C97C32782;
-	Thu, 22 Aug 2024 14:25:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724336702;
-	bh=//vs0/j3dL5aitkeEHYmbgKTgUS1rli4/RnXiCWDaiI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mzydcEVwqkNhOKyJ5orBT6Sxiv1o3CueKVoCZOlKhB05hbfqLL4sRKMuFCWl3Pw6u
-	 RRseBCTvZyCyCoLYr0nNUMCuPOOIVvq5vPvNsK+Sq4f9+d1ZOsnRLFCwa/7/Svz+7U
-	 UnNdivfK/+izhZv/9R4l2xx7bS71Lmmcj0fMTebbQaShjAZYSIeCBaUWBYmh0HwFMH
-	 h0axtuuZBYajoYjtLRupBGNS0Cz7je99YbSxJY/5mRCFAyAQefFTDdwQgGNA25wZEk
-	 z2NtC8y+9AZo4jIXZD72NHp9laSWfTbJqAhMdUge6Qe1Srqq43pkpMpq2NO5+/NSVR
-	 Morx7oLq2+asg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1sh8kF-005yRg-MG;
-	Thu, 22 Aug 2024 15:24:59 +0100
-From: Marc Zyngier <maz@kernel.org>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Tianrui Zhao <zhaotianrui@loongson.cn>,
-	Bibo Mao <maobibo@loongson.cn>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Anup Patel <anup@brainfault.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	Sean Christopherson <seanjc@google.com>
-Cc: kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	kvm-riscv@lists.infradead.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	David Matlack <dmatlack@google.com>,
-	David Stevens <stevensd@chromium.org>
-Subject: Re: (subset) [PATCH v12 02/84] KVM: arm64: Disallow copying MTE to guest memory while KVM is dirty logging
-Date: Thu, 22 Aug 2024 15:24:54 +0100
-Message-Id: <172433664068.3702537.15170661496841359831.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240726235234.228822-3-seanjc@google.com>
-References: <20240726235234.228822-1-seanjc@google.com> <20240726235234.228822-3-seanjc@google.com>
+	s=arc-20240116; t=1724337204; c=relaxed/simple;
+	bh=ul7PizNZdzC7kUZvz7lhJEslbAa1y6aQFceRLhnnaPw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kOtCMSsT0/KxDgZle3Ply6fhEk7zmBSDV1BxsMeEC1G2XJ+ap3EoJblRk3ehPGlOGaIdqN5PkYP9wtuFOO3i5o7LoCnLqdkoK7AT92INXk2OutniGipNA6NLh9g0kW6Uarmjm4XWlXWX9LfHizACDRmUrrK+DcSn8e/tH8SVgDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=MmE2IZpm; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D6BBF1C0002;
+	Thu, 22 Aug 2024 14:33:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1724337199;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=28KjxeZ01+p9nDVnGtXx9KfJaHBczSdiwVjl2vmbphI=;
+	b=MmE2IZpmpKFJ4A+9lsXAKU6W/E6Whvpbyy4BTW/u9jMcZ/kVKNoKCfgBmi6FUpl9ngeq2T
+	jY4JhCs28GxODWc7Ckqrhcu9ZytXED4ifDTkMbDd+4INaZ9enWDSxSfPNhlqy/Xmfv5w9X
+	aIXpRI0K3ER1hNzFuCfUbPGXnGLY/nMTaI0chcba5QUSnTcnEeN0SH/GSHVIJ1A9b3mjo0
+	gnPZOYtCJ+fuTZm7aIiPfHP1iKEYzuI6rEUSb5d52Ugs37TTubxvW1Pk36T5hkKzmoRE26
+	sQMCRp4IUvgBMPgmPEnOyQtwlHW4Y7tmuo/RCjTgySkhgK9eJhmohngZfX0Xvw==
+Date: Thu, 22 Aug 2024 16:33:16 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Richard GENOUD <richard.genoud@bootlin.com>,
+	Lei Liu <liulei.rjpt@vivo.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Patrice Chotard <patrice.chotard@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Andi Shyti <andi.shyti@linux.intel.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	John Ogness <john.ogness@linutronix.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Jeff Johnson <quic_jjohnson@quicinc.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Valentin Caron <valentin.caron@foss.st.com>,
+	Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+	Erwan Le Ray <erwan.leray@foss.st.com>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+	linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-actions@lists.infradead.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	opensource.kernel@vivo.com
+Subject: Re: [PATCH 4/8] tty: atmel_serial: Use devm_clk_get_enabled() helpers
+Message-ID: <202408221433165841f563@mail.local>
+References: <20240822033924.32397-1-liulei.rjpt@vivo.com>
+ <20240822033924.32397-5-liulei.rjpt@vivo.com>
+ <c54434e3-1fb8-4491-b24f-2167786fe84c@bootlin.com>
+ <Zsc-ZNg_S8uT9gpR@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: pbonzini@redhat.com, oliver.upton@linux.dev, zhaotianrui@loongson.cn, maobibo@loongson.cn, chenhuacai@kernel.org, mpe@ellerman.id.au, anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, borntraeger@linux.ibm.com, frankja@linux.ibm.com, imbrenda@linux.ibm.com, seanjc@google.com, kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, loongarch@lists.linux.dev, linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, dmatlack@google.com, stevensd@chromium.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+In-Reply-To: <Zsc-ZNg_S8uT9gpR@smile.fi.intel.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Fri, 26 Jul 2024 16:51:11 -0700, Sean Christopherson wrote:
-> Disallow copying MTE tags to guest memory while KVM is dirty logging, as
-> writing guest memory without marking the gfn as dirty in the memslot could
-> result in userspace failing to migrate the updated page.  Ideally (maybe?),
-> KVM would simply mark the gfn as dirty, but there is no vCPU to work with,
-> and presumably the only use case for copy MTE tags _to_ the guest is when
-> restoring state on the target.
+On 22/08/2024 16:34:28+0300, Andy Shevchenko wrote:
+> On Thu, Aug 22, 2024 at 03:28:40PM +0200, Richard GENOUD wrote:
+> > Le 22/08/2024 à 05:39, Lei Liu a écrit :
+> > > The devm_clk_get_enabled() helpers:
+> > >      - call devm_clk_get()
+> > >      - call clk_prepare_enable() and register what is needed in order to
+> > >       call clk_disable_unprepare() when needed, as a managed resource.
+> > > 
+> > > This simplifies the code and avoids calls to clk_disable_unprepare().
 > 
-> [...]
+> ...
+> 
+> > >   	 * The peripheral clock can now safely be disabled till the port
+> > >   	 * is used
+> > >   	 */
+> > > -	clk_disable_unprepare(atmel_port->clk);
+> > > -
+> > Why removing this ?
+> > This is not an error path.
+> 
+> Good point, I wouldn't apply this patch as well as a few others in this series
+> due to this reason.
+> 
+> Instead it might make sense to add a comment on top of devm_clk_get() to
+> explain why _enabled() variant is *not* used.
 
-Applied to next, thanks!
+Or maybe stop doing brainded conversions to new APIs.
 
-[02/84] KVM: arm64: Disallow copying MTE to guest memory while KVM is dirty logging
-        commit: e0b7de4fd18c47ebd47ec0dd1af6503d4071b943
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
 
-Cheers,
-
-	M.
 -- 
-Without deviation from the norm, progress is not possible.
-
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
