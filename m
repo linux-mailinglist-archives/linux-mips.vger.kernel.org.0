@@ -1,57 +1,57 @@
-Return-Path: <linux-mips+bounces-5049-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5050-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A17A95D60F
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Aug 2024 21:28:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C89595D621
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Aug 2024 21:38:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D0391C21F90
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Aug 2024 19:28:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A06A71C2185E
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Aug 2024 19:38:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 077C4192B80;
-	Fri, 23 Aug 2024 19:27:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E4BB1925A2;
+	Fri, 23 Aug 2024 19:37:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gzujiRRv";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Z2gKkeTy"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="4sKgN5KW";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="+TpWoHjI"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49EEB1925B2;
-	Fri, 23 Aug 2024 19:27:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F36194141;
+	Fri, 23 Aug 2024 19:37:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724441266; cv=none; b=nhM/tp/sHolVH4gpHkYAx61+tDmE/TduLaLBNHYlJp9s0OO9BOYFl4fzEMe9en1DJDQ3MmNEDVBAkmNaXTJxig97NEUBWZsl/kUkX8BiMdAug8nt/1zLKQwn1+L0p+wqFeb4Ho53GTfszOF96neilaQ3yPQnpRV6VavvpU9nUGQ=
+	t=1724441833; cv=none; b=kW8IKGl07nY8uPkHc9i02UWSk1KiDhGNC8JNcq3Dij9zgzVS1UmC6soIXN/6LA9h0Fbx+qCnae2uVny/Ti6NovtrHo7h/181Z4Jvw7oNH0VZ8+J/DRy1Z80OkHJcf5Tr8fWAsjKMuZm0JJQq0ixX8qLwvovtCN0j+P70mYGagtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724441266; c=relaxed/simple;
-	bh=FNeJZYLGwT2A7uyk5Z2+0SQp6gyz7tpSCoQ/Sk2SzyM=;
+	s=arc-20240116; t=1724441833; c=relaxed/simple;
+	bh=tDGUKTFFDz+eQxsRkH4HW2hZZRnnBbdQ4HgH8QC1MN8=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=i+vnvrgiYu/c7helMEHxGvtGtSkQWb0zkboODv/tsOFxNcl8GkFJbPMKTnejS3bUgYKUikJPnIxUX01196j6G99apLcJGq0zw0I4s9bQF1ybPJRumvUmZEjcuU8baQ4X/caDnrTqgFbNiSy/LodjNXQOzUKJx8vijS6BbXH4W/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gzujiRRv; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Z2gKkeTy; arc=none smtp.client-ip=193.142.43.55
+	 MIME-Version:Content-Type; b=erqGCjd1BP8o3PBOIG3M/Dln1lRGii3R7o3WQWKwdX+3u+M73YLnlsmrYkc6p3duCKkTzJWhy7QYlPsVrUciq0kyjE3QQDsNRmyydrYVCgYIbeO1/1Zts4BoSPLZRjMeSkzbWMh3ENgeRUDCs2lXgYQyZg0p+qNA5If1FDZP0Rs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=4sKgN5KW; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=+TpWoHjI; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1724441263;
+	s=2020; t=1724441830;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FVwQ8yy+ZNQu400/0UssKLrhuRYQVJBlCPFsI9UuKdA=;
-	b=gzujiRRv6tlmJEjOMPMU8RUPrOwJtMsaHlBhQZQb//LyIUXStgnpDTc+po7XLuIMK3G/ek
-	cP7jL8foKNym0jloGZSxzZRwMUHzqJzY16T0iEo1/OD/+H/zG38fOE9Cl70WKahr0hRF5/
-	QiOK4KhoukEeT3MH76b7LtlhOJYUYTSFGWUvdIVcUPL7HImsaKjW35D8atEZBDdsRqzdOw
-	E6hgk/XCllRKdhBhrn37khzHqEJlH8/CIxjFtJ/1mHt/4u3Wm6Ye6RglPeRvSZj5nWKIUU
-	yDhydgD2E6Z5QvMUHQQ7BPJj/r5unqEKmJCCzVAiVRYLH4CoRAxH9zA5PkAYRQ==
+	bh=tMNEXEy8LYfPeU3VbzTfPdg4TGW9cMVuwbChRPo7i7I=;
+	b=4sKgN5KWiNBncsCtsH6uSpXyjbo6eqenis78E4xLBjhXODaAck6vSCWKpuTlq6Ho8Ggv1s
+	pPaK221WKIj4MyIXZ8OR/sPGaoFZ5+/2tQOUxzNlI+SU5HBX0e1B68GJ9jkp+bHJxMwDLY
+	K+8gv94qKrVAJdmFcg9wf40gKzjLCi2NSS8CXHXYIMRubcPMKaqgSfWVs3Hkf5WCRBNey/
+	MlJAFZ67u+0u7t65sipXt5nqD/0bEWbBrRn/9Cw6NguaKId3J40kRVm4Dvc7XJGNieXPmP
+	dd6O1pfM84ujh86SkfhWH2wiqIYZy5E12OrvTK2Q3SobR93bpNsWrOaOqHJ9hA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1724441263;
+	s=2020e; t=1724441830;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FVwQ8yy+ZNQu400/0UssKLrhuRYQVJBlCPFsI9UuKdA=;
-	b=Z2gKkeTyAdo5ie5jBQuEr2KXlEQwDmc4NjNXULEYOjNO9GEumKPPcEm7w+GCsT+9P5AJyV
-	Ww1o0sN8i1kMJjBg==
+	bh=tMNEXEy8LYfPeU3VbzTfPdg4TGW9cMVuwbChRPo7i7I=;
+	b=+TpWoHjIka6H4IBx57soiRDpswa7rWr7Oi/TIDSP5GZyGTGP1vs27aOqGRkURYye7dFDp3
+	QqB8CB/Y8wDq4bBw==
 To: Jiaxun Yang <jiaxun.yang@flygoat.com>, Thomas Bogendoerfer
  <tsbogend@alpha.franken.de>, Florian Fainelli
  <florian.fainelli@broadcom.com>, Broadcom internal kernel review list
@@ -60,12 +60,13 @@ To: Jiaxun Yang <jiaxun.yang@flygoat.com>, Thomas Bogendoerfer
  Burton <paulburton@kernel.org>
 Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, Jiaxun Yang
  <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH v3 06/10] irqchip: irq-mips-gic: Switch to ipi_mux
-In-Reply-To: <20240810-b4-mips-ipi-improvements-v3-6-1224fd7c4096@flygoat.com>
+Subject: Re: [PATCH v3 09/10] irqchip: irq-mips-cpu: Rework software IRQ
+ handling flow
+In-Reply-To: <20240810-b4-mips-ipi-improvements-v3-9-1224fd7c4096@flygoat.com>
 References: <20240810-b4-mips-ipi-improvements-v3-0-1224fd7c4096@flygoat.com>
- <20240810-b4-mips-ipi-improvements-v3-6-1224fd7c4096@flygoat.com>
-Date: Fri, 23 Aug 2024 21:27:43 +0200
-Message-ID: <871q2fghu8.ffs@tglx>
+ <20240810-b4-mips-ipi-improvements-v3-9-1224fd7c4096@flygoat.com>
+Date: Fri, 23 Aug 2024 21:37:09 +0200
+Message-ID: <87y14nf2u2.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -76,89 +77,94 @@ Content-Type: text/plain
 
 On Sat, Aug 10 2024 at 13:39, Jiaxun Yang wrote:
 
-The interrupt subsystem uses irqchip/irq....: as prefix.
+Please fix the subsystem prefix.
 
-> Use ipi_mux to implement IPI interrupts instead of
-> allocating vector for each individual IPI messages.
+> Remove unnecessary irq_chip hooks for software interrupts,
+> and don't mask them in ack hook to match kernel's expectation
+> on handling flow.
 
-  allocating separate vectors for ... IPI message.
+What's that expectation? You fail to explain why the current code is not
+matching them.
 
-> This can reduce number of reserved GIC shared vectors,
+> Create a irq_chip for regular (non-MT) mode software interrupts
+> so they will be acked as well.
 
-Can? Does it or does it not?
+I'm failing to understand what this is about due to the lack of
+information above.
 
-Also: the number
-
-> which is a huge problem on MSI enabled GIC systems.
->
-> It also allowed us to easily expand number of IPIs.
-
-s/allowed us/allows/           the number
-
->  int gic_get_c0_compare_int(void)
->  {
->  	if (!gic_local_irq_is_routable(GIC_LOCAL_INT_TIMER))
-> @@ -181,6 +176,11 @@ static void gic_mask_irq(struct irq_data *d)
->  	unsigned int intr = GIC_HWIRQ_TO_SHARED(d->hwirq);
->  
->  	write_gic_rmask(intr);
+> -static struct irq_chip mips_cpu_irq_controller = {
+> +static unsigned int mips_sw_irq_startup(struct irq_data *d)
+> +{
+> +	clear_c0_cause(C_SW0 << d->hwirq);
+> +	back_to_back_c0_hazard();
+> +	unmask_mips_irq(d);
+> +	return 0;
+> +}
 > +
-> +#ifdef CONFIG_GENERIC_IRQ_IPI
-> +	if (test_bit(intr, ipi_resrv))
-> +		return;
+> +static void mips_sw_irq_ack(struct irq_data *d)
+> +{
+> +	clear_c0_cause(C_SW0 << d->hwirq);
+> +	back_to_back_c0_hazard();
+> +}
+
+Please move these functions to the place which actually requires them,
+i.e. after the cpu controller struct and before the new one.
+
+> +
+> +static const struct irq_chip mips_cpu_irq_controller = {
+>  	.name		= "MIPS",
+>  	.irq_ack	= mask_mips_irq,
+>  	.irq_mask	= mask_mips_irq,
+> @@ -60,11 +74,19 @@ static struct irq_chip mips_cpu_irq_controller = {
+>  	.irq_enable	= unmask_mips_irq,
+>  };
+>  
+> +static const struct irq_chip mips_cpu_sw_irq_controller = {
+> +	.name		= "MIPS",
+> +	.irq_startup	= mips_sw_irq_startup,
+> +	.irq_ack	= mips_sw_irq_ack,
+> +	.irq_mask	= mask_mips_irq,
+> +	.irq_unmask	= unmask_mips_irq,
+> +};
+
+  
+>  asmlinkage void __weak plat_irq_dispatch(void)
+>  {
+> @@ -152,11 +170,14 @@ asmlinkage void __weak plat_irq_dispatch(void)
+>  static int mips_cpu_intc_map(struct irq_domain *d, unsigned int irq,
+>  			     irq_hw_number_t hw)
+>  {
+> -	struct irq_chip *chip;
+> +	const struct irq_chip *chip;
+>  
+> -	if (hw < 2 && cpu_has_mipsmt) {
+> -		/* Software interrupts are used for MT/CMT IPI */
+> -		chip = &mips_mt_cpu_irq_controller;
+> +	if (hw < 2) {
+> +		chip = &mips_cpu_sw_irq_controller;
+> +#ifdef CONFIG_MIPS_MT
+> +		if (cpu_has_mipsmt)
+> +			chip = &mips_mt_cpu_irq_controller;
 > +#endif
 
-Can you please wrap this into a inline function so that you don't have
-to sprinkle all these #ifdefs into the code?
+Please move this into a helper function:
 
-#ifdef CONFIG_GENERIC_IRQ_IPI
-static inline bool gic_is_reserved(unsigned int intr)
+#ifdef CONFIG_MIPS_MT
+static inline const struct irq_chip *mips_get_cpu_irqchip(void)
 {
-        return test_bit(intr, ipi_resrv);
+        return cpu_has_mipsmt ? &mips_mt_cpu_sw_irq_controller : &mips_cpu_sw_irq_controller;
 }
 #else
-static inline bool gic_is_reserved(unsigned int intr) { return false; }
+#define 
+static inline const struct irq_chip *mips_get_cpu_irqchip(void)
+{
+        return &mips_cpu_sw_irq_controller;
+}
 #endif
 
 Hmm?
 
-> +static int gic_ipi_mux_init(struct device_node *node, struct irq_domain *d)
->  {
-> -	struct irq_domain *gic_ipi_domain;
-> -	unsigned int v[2], num_ipis;
-> -
-> -	gic_ipi_domain = irq_domain_add_hierarchy(gic_irq_domain,
-> -						  IRQ_DOMAIN_FLAG_IPI_PER_CPU,
-> -						  GIC_NUM_LOCAL_INTRS + gic_shared_intrs,
-> -						  node, &gic_ipi_domain_ops, NULL);
-> -	if (!gic_ipi_domain) {
-> -		pr_err("Failed to add IPI domain");
-> -		return -ENXIO;
-> -	}
-> -
-> -	irq_domain_update_bus_token(gic_ipi_domain, DOMAIN_BUS_IPI);
-> +	unsigned int i, v[2], num_ipis;
-> +	int ipi_virq, cpu = 0;
->  
->  	if (node &&
->  	    !of_property_read_u32_array(node, "mti,reserved-ipi-vectors", v, 2)) {
-
-Please use the full 100 characters width here and get rid of the line break.
-
->  		bitmap_set(ipi_resrv, v[0], v[1]);
->  	} else {
->  		/*
-> -		 * Reserve 2 interrupts per possible CPU/VP for use as IPIs,
-> -		 * meeting the requirements of arch/mips SMP.
-> +		 * Reserve 1 interrupts per possible CPU/VP for use as IPIs
->  		 */
-> -		num_ipis = 2 * num_possible_cpus();
-> +		num_ipis = num_possible_cpus();
->  		bitmap_set(ipi_resrv, gic_shared_intrs - num_ipis, num_ipis);
->  	}
-
 Thanks,
 
         tglx
-
 
