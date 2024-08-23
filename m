@@ -1,161 +1,117 @@
-Return-Path: <linux-mips+bounces-5039-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5040-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED71095C8C1
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Aug 2024 11:03:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE6A295CB67
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Aug 2024 13:33:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A392D1F22FAA
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Aug 2024 09:03:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 52B7CB2342A
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Aug 2024 11:33:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78C83149002;
-	Fri, 23 Aug 2024 09:03:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XjVJUxWe"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A399187347;
+	Fri, 23 Aug 2024 11:33:22 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AED693BBC2;
-	Fri, 23 Aug 2024 09:03:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62550469D;
+	Fri, 23 Aug 2024 11:33:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724403799; cv=none; b=l6scpfLktKoFGmfHvQs3SeLU89Iru0pQDfZ62Ey6m4lWJmSLVgPkTA8pa40Qj5+1pNk6KrBVr0UH77/fsH8SX9oZ+H0jJm2ImtoHoeyu1WXbXWcZEFejp21B/qNCaX3+O1j5CB/4vhBhE5R4IlHJP6DvkhrneCSY1HbmCvKpR9U=
+	t=1724412802; cv=none; b=V4wa0ECjdIexNXCfGo0IJ9Vs/h9r/0RFzcM7dIHEtcLqwXGLP7pm9u4SCnRcUhACOg60nuPMHX9i96iLlz09YAAiY5jZCwHlrRxSghuF5PknFYbifcATOAv8tKSihzhU1zKCMV+gPgu6LSlx+0BY161y8FDUD0SSfEWqL7eloP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724403799; c=relaxed/simple;
-	bh=JHDgA+4K5kD+rffO0jaMEN4JBC+WFniX5fi10n/AL/Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VfxKyCvQCdVxxX1IjtBzaZpgnRK3Nb4QAycnuEJGWVHolHRXYA3BbiAmyPAq+QJHxiCml7hLJ+KzA+erLnMV1FfrcMxs8shhyxKMQFoyZE5s04vltF/UVA1nBvvvMFrDCZu5ePITYBq5DuQ8LGlOnTdXRAG7RTbEA6MqTV+hvDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XjVJUxWe; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1724412802; c=relaxed/simple;
+	bh=MYWc08SH5BecBkhgukAeB7AhxRAa8T75qBYSHugkffk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TCOrXsp9BtNLD5KEBIe+k9iSnLNp/4cSmWlzSvcQ+QNr4koEYTYZKr/ptcwXJ4jsxwiIW6MAuqc8LxKfATBByk1Hom8Glh+4nCpJh5+u1SeShsNtms44yG1BseEDl37JuiVELTIOmcmLwwlVXqvDa4JqYpMENvT+aJAPyxX3+v8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-534366c194fso1019614e87.0;
-        Fri, 23 Aug 2024 02:03:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724403796; x=1725008596; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=j9c1tkF/XpnwvcmWn+8tq3/kdf2/yWHcwXLK2di0RT8=;
-        b=XjVJUxWe5+IfsvirXEJ8JOadCK+bKmgjit/Jk/5WBgaIxROf0dwSHz9jZzhl9IjHdB
-         aUoxeCCmKZ9E9M4PdCbGJSTxV+IbNbuyetxZa5awOx0B/YhdIbrjq8ikWH1Cv/UTrrW6
-         3bfWXGb91ZUtL3GkaH012YllPPQLWcwdgcIz7nGFckC7hEuWibtyLrNnBOBbfTErTNTO
-         F5hneP+luiX27SVOQSh1cukXrC3D0g+wofJVuR45xvgpGln4Ae18Ck+QVumxR+tIc7s9
-         fGlX2vGKRz4zwAp0xrUSGDEgWqNHm7eeEhRlEutJFzXNN5YA4XJQyLzoD6huKXgvJh78
-         7oIw==
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e0875f1e9edso1810295276.1;
+        Fri, 23 Aug 2024 04:33:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724403796; x=1725008596;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j9c1tkF/XpnwvcmWn+8tq3/kdf2/yWHcwXLK2di0RT8=;
-        b=auqHoUCWKMGbWwZZ4t5K7J7t99T7V9klWpNLDzzrw4mIl9jpt9jtzhHrq74SBtZBUQ
-         65FNEyZ0aBAsFW5UZrUjSxpey54LdtbLG+f+fMR1Ca93c0p3yBaBaA00uHFLZN65tMBW
-         dQY7SPDpiZtTGqFDw1uN+01esn+vNp+crhNDS2ytwEAb0d+hG5gKlttNAjDw4YU5960+
-         Q2jZrDHHIAiiCIRGSrY2LDQREIZudR/DJN0OiDQ5TOlJmMPQtogyoJ6iqXZcgiQsoli6
-         Tlw4143PLZgzNFMauFsf5b5UOYdVW3euqijiOMdKEf3Fdh3EJCAQ2ppRP8dmNX+16h9u
-         r0YQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUoLwlwdn89Gzghu/Ax3g2YG7Eh0HFtM3Pjd5CLd1ROaxqEQ1kotPiD86jp50+tpUa3BTZ4W+Iz3uhu@vger.kernel.org
-X-Gm-Message-State: AOJu0YysKin0/xGSY7L5kAytTuKO713500oHSIGpkEj+YQCKeORj+ogP
-	TuDMT7MVk6xBLkHJj+Eqv3R9izYfShNRh2Yh7AvZyk53mSV4IzJG
-X-Google-Smtp-Source: AGHT+IEzMgnzvuDtvKwH1FcXDvIMzBd41fH+RB89hLqrrq/bYljJuXimLmkHYsYZvYuKj2Ul0JATMA==
-X-Received: by 2002:a05:6512:2812:b0:52c:d645:eda7 with SMTP id 2adb3069b0e04-53438778b5fmr918689e87.18.1724403794937;
-        Fri, 23 Aug 2024 02:03:14 -0700 (PDT)
-Received: from mobilestation ([178.176.56.174])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5334ea361d4sm490050e87.67.2024.08.23.02.03.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Aug 2024 02:03:14 -0700 (PDT)
-Date: Fri, 23 Aug 2024 12:03:12 +0300
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Wu Bo <bo.wu@vivo.com>
-Cc: linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
-	Wu Bo <wubo.oduw@gmail.com>
-Subject: Re: [PATCH] bus: bt1-axi: change to use devm_clk_get_enabled()
- helpers
-Message-ID: <h6azhlugyd5vx7pwrdjg2my7h2gj4uadkv4e535y32or7r3jwi@7vo7wum5lo5r>
-References: <20240823023103.1984437-1-bo.wu@vivo.com>
- <jwspy5qbmtkl32wngiv7cgypy7sox3zeqks3wkqsuqra6vx7p2@3xg2rbc3lxp5>
+        d=1e100.net; s=20230601; t=1724412799; x=1725017599;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LMEH/Ww3lGUsG6S84gzaZZHFTkxZjOmIG5r+YsgcND4=;
+        b=CABLwoeBiAEhrSsmgWzxWs8uwawnz/z3X1RXbVZgQsY7qd3rwmHrMYSc6AgyYDe4/r
+         eB8HDrHJiLiXcUKj9qfpipe8bg95MSCLuNNasceRi1ch9/bf9jYj9xitqXjZAf7/XBpb
+         W61hCVwMckFS15NZOn/8lG6byxPOT5GVidjQ8u3nf/SxkKpK4tm42U5LUSsFzLjBZrkT
+         tTrceHN76rDKoLYadBznX6AfdZZOKrLcfupaKc/f43D3drkjgoPQr1Uq1fTYXiQjD0ru
+         EhWfAkvIkxN9g1Z025SW100syd7ZNLHmNsec7/ouauL1C+IcGIj2CRrvjtQhQye9/i+B
+         +mVA==
+X-Forwarded-Encrypted: i=1; AJvYcCU/obGXmEMuj4fI5jsqN7KheN1PWYmMjRykI/ZBbPhQjdZnY3LkTmTDmZu8+t0MogWnd3A9ZKN4J68f@vger.kernel.org, AJvYcCUtrh3Z6XGg2F7imVVKG58xvCppLxM2+Tr7nbmnBhWObkEEC9YJq27EC2oSQALDf685oa2KPqNDWwSB@vger.kernel.org, AJvYcCVYjlIy3S/v6SWG9VdXaJVjSaKgHxmCmNNKgtw9lJ0SEtOzVuSBV/bkmsXIJ0JTN/jp+YRZ2rb+srGkayTD1F5IF1M=@vger.kernel.org, AJvYcCW4wQGeq/QA+CvDenKJSrwOvY+B2nQhAgKs8L1o5qac28cTkBtXLXagZsJm3M+AsqIjc+qkrNvVh/CdfQZA@vger.kernel.org, AJvYcCWuTLOy0UwJXCs+ANqwBL16CLZ6CNFNa6zjWnpVViZb3gPIUgLCnv3ZKp+LDDGIIhmPOwJZJrIwSxqD1A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQIX2AuKxWo4nVhsT/721s44ULwpBDplrv47dR5bMcvboIGd86
+	Ddqyl8wKKbwn17hNEaC9lDoWdS16xqGJtuEuvgrD1ZkA21SB1E1NqlAXbZza
+X-Google-Smtp-Source: AGHT+IEnZxUkU1g7JsD5zCnGFlJC5Gwv34A5kNnddRdT9jR6pu8gQlX3tvTFffTaYjpIbUZT1CgGgQ==
+X-Received: by 2002:a05:6902:2409:b0:e0b:d6ff:45a8 with SMTP id 3f1490d57ef6-e17a83d6786mr2049715276.20.1724412799126;
+        Fri, 23 Aug 2024 04:33:19 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e178e4b42ccsm621392276.31.2024.08.23.04.33.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Aug 2024 04:33:19 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-69483a97848so18964377b3.2;
+        Fri, 23 Aug 2024 04:33:19 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU6IujzqH1IT581S0u59uh5xQ2hK1r8+BnDI3CEMTuSngCXlywV3cNIxe+H6J5D/A+c/zjAOP3kmS3NQA==@vger.kernel.org, AJvYcCUovwZVtITfDADWGPiKDD1mAlQ/jspEbMdidbVxY6rM2W2+xz9kEeFSRIZ548LeLWO2uoW8TOAToQjqPT4FU2kbw+M=@vger.kernel.org, AJvYcCWcJAZBNYV+3KyFZi2C+1mW5abvKuJ+LrhMvdvmbhT7xXD3jgSQL+qjK+3erX2Ie8Gb+j5hLeb165ng@vger.kernel.org, AJvYcCWcP/bbrGYYDxaU5tqmxHTHAFNNCgRZ5Clbt7UUK5gnUbGi6fynwVo8HTYpsFJKUxx4pX2XDF1q3hwz@vger.kernel.org, AJvYcCWj4UAdkaW6OHjqk4/qWet9p8CxPl+PFMQ1CLdVM2ZkL+0tZSBj1cPDjstguQ7kPi9feFFgmi0HNn0915Ul@vger.kernel.org
+X-Received: by 2002:a05:690c:2845:b0:6c1:699f:cf8 with SMTP id
+ 00721157ae682-6c625e27412mr19164117b3.14.1724412798745; Fri, 23 Aug 2024
+ 04:33:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <jwspy5qbmtkl32wngiv7cgypy7sox3zeqks3wkqsuqra6vx7p2@3xg2rbc3lxp5>
+References: <20240818173014.122073-1-krzysztof.kozlowski@linaro.org> <20240818173014.122073-3-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20240818173014.122073-3-krzysztof.kozlowski@linaro.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 23 Aug 2024 13:33:06 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXT2r8mTOye5S4JKZbXcBmavwrP96oe5aVnORm8UUqONA@mail.gmail.com>
+Message-ID: <CAMuHMdXT2r8mTOye5S4JKZbXcBmavwrP96oe5aVnORm8UUqONA@mail.gmail.com>
+Subject: Re: [PATCH 3/5] dt-bindings: clock: renesas,cpg-clocks: add top-level constraints
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Serge Semin <fancer.lancer@gmail.com>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Charles Keepax <ckeepax@opensource.cirrus.com>, 
+	Richard Fitzgerald <rf@opensource.cirrus.com>, Heiko Stuebner <heiko@sntech.de>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Magnus Damm <magnus.damm@gmail.com>, patches@opensource.cirrus.com, 
+	Elaine Zhang <zhangqing@rock-chips.com>, 
+	Gabriel Fernandez <gabriel.fernandez@foss.st.com>, linux-mips@vger.kernel.org, 
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+	linux-stm32@st-md-mailman.stormreply.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 23, 2024 at 11:56:55AM +0300, Serge Semin wrote:
-> Hi Wu
-> 
-> On Thu, Aug 22, 2024 at 08:31:03PM -0600, Wu Bo wrote:
-> > Make the code cleaner and avoid call clk_disable_unprepare()
-> > 
-> > Signed-off-by: Wu Bo <bo.wu@vivo.com>
-> 
-> Awesome! Thanks.
-> 
-> Acked-by: Serge Semin <fancer.lancer@gmail.com>
-> 
-> Could you also apply the same change to drivers/bus/bt1-apb.c ?
+On Sun, Aug 18, 2024 at 7:30=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> Properties with variable number of items per each device are expected to
+> have widest constraints in top-level "properties:" block and further
+> customized (narrowed) in "if:then:".  Add missing top-level constraints
+> for clocks and clock-output-names.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Grrr, too fast. Please see my further note.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-clk for v6.12.
 
-> 
-> -Serge(y)
-> 
-> > ---
-> >  drivers/bus/bt1-axi.c | 19 +------------------
-> >  1 file changed, 1 insertion(+), 18 deletions(-)
-> > 
-> > diff --git a/drivers/bus/bt1-axi.c b/drivers/bus/bt1-axi.c
-> > index 4007e7322cf2..b0baae49aca6 100644
-> > --- a/drivers/bus/bt1-axi.c
-> > +++ b/drivers/bus/bt1-axi.c
-> > @@ -146,32 +146,15 @@ static int bt1_axi_request_rst(struct bt1_axi *axi)
-> >  	return ret;
-> >  }
-> >  
-> > -static void bt1_axi_disable_clk(void *data)
-> > -{
-> > -	struct bt1_axi *axi = data;
-> > -
-> > -	clk_disable_unprepare(axi->aclk);
-> > -}
-> > -
-> >  static int bt1_axi_request_clk(struct bt1_axi *axi)
-> >  {
+Gr{oetje,eeting}s,
 
-> >  	int ret;
-> >  
-> > -	axi->aclk = devm_clk_get(axi->dev, "aclk");
-> > +	axi->aclk = devm_clk_get_enabled(axi->dev, "aclk");
-> >  	if (IS_ERR(axi->aclk))
-> >  		return dev_err_probe(axi->dev, PTR_ERR(axi->aclk),
-> >  				     "Couldn't get AXI Interconnect clock\n");
-> >  
-> > -	ret = clk_prepare_enable(axi->aclk);
-> > -	if (ret) {
-> > -		dev_err(axi->dev, "Couldn't enable the AXI clock\n");
-> > -		return ret;
-> > -	}
-> > -
-> > -	ret = devm_add_action_or_reset(axi->dev, bt1_axi_disable_clk, axi);
-> > -	if (ret)
-> > -		dev_err(axi->dev, "Can't add AXI clock disable action\n");
-> > -
-> >  	return ret;
+                        Geert
 
-This will lead to the undefined value returned. Please drop the "ret"
-variable and just return 0 in the last statement. After that feel free
-to add my Ab-tag.
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
--Serge(y)
-
-> >  }
-> >  
-> > -- 
-> > 2.25.1
-> > 
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
