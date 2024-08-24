@@ -1,136 +1,117 @@
-Return-Path: <linux-mips+bounces-5056-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5057-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B5B495DD3F
-	for <lists+linux-mips@lfdr.de>; Sat, 24 Aug 2024 11:52:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED7F995DEA0
+	for <lists+linux-mips@lfdr.de>; Sat, 24 Aug 2024 16:56:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB69B28365D
-	for <lists+linux-mips@lfdr.de>; Sat, 24 Aug 2024 09:52:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 971B81F21D39
+	for <lists+linux-mips@lfdr.de>; Sat, 24 Aug 2024 14:56:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0333154C04;
-	Sat, 24 Aug 2024 09:52:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26AFF17A5B4;
+	Sat, 24 Aug 2024 14:56:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="5CKi7v7e";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DdO+oGL2"
+	dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b="by51OAYF"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh1-smtp.messagingengine.com (fhigh1-smtp.messagingengine.com [103.168.172.152])
+Received: from dilbert.mork.no (dilbert.mork.no [65.108.154.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF85014EC59;
-	Sat, 24 Aug 2024 09:52:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5257B1714DA;
+	Sat, 24 Aug 2024 14:56:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.108.154.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724493168; cv=none; b=mtNEl1ybVrpQ6G03MuoqBagDUlbts4fvu6rMO0TSba/74mVsPDlmJ9NuvizU76pNx8mK24Sc30sMOABeN78XRgmdVgIHWoQcTvBiIBPjyTxXjfP4xZt+qVzkiC9i85r9/7cmzGzlgf/bLS0PT0kHhpb6/ZgnnA2smVeWz8+N4v0=
+	t=1724511400; cv=none; b=ps/GJ277IAONRCMfHGQRaUh1+L+NqkXFXIjohtIKUKo682rdQOYW3HMtt7D0knEwg15l374C5E8MkIWdlWkRwQjNf15XTQKdukslrCRgkQ4c4o31+Uf1XtKjWr7hyfJwdCCNnFgK7nX2o3xzGPbbBVjK62/4GJ3uBZjyIUg2DpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724493168; c=relaxed/simple;
-	bh=lH+AZmFBMSxbaY7E/WSy35ajqxoT4915UmQQKp/g1ck=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=S/fJLNPWSmCkHUaky/u4lllfp2w6A4pRiYF7ElwV1DGA4SnGfHWHfT9uIhggfjv/CDB6Lug9TW5HKnHGiQBTUsmnRnQDJC73+p+5C0MCbmLVE383rZFpApxftqNxA6Fo25z34iHcdg+Rv08Inp86+laxVXDIVmyvKMWNGHob9og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=5CKi7v7e; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DdO+oGL2; arc=none smtp.client-ip=103.168.172.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-05.internal (phl-compute-05.nyi.internal [10.202.2.45])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id C6237115208B;
-	Sat, 24 Aug 2024 05:52:45 -0400 (EDT)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-05.internal (MEProxy); Sat, 24 Aug 2024 05:52:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1724493165;
-	 x=1724579565; bh=lH+AZmFBMSxbaY7E/WSy35ajqxoT4915UmQQKp/g1ck=; b=
-	5CKi7v7eybOhaomKbbzXugtBswr/MWv9csonYK9j9CI97FdRH9I6tfbHakPfknfn
-	OooXSnooZmVIV/F/Zv8jLx8p0nLH+YDByp6AUnyJQCuQlwgxvvNtglV4jfrh5f/E
-	1bAw1lafsKSj3kBc9a7Bt4nrYfYaK5yhBz1mSAasgN5DQ+snyVIURIEOaSLiOIUQ
-	ACUi8iK1ErexgqkQjpGUDpU4uj1I365q57xW05UUgUfTSbglbw+9J3eXxCGD4dDA
-	CHXOCm1FNJfyVAB734pJQLJqczqadlwP1LOHlw2HX4L9H/yqR6NazzzAzq4Vho8G
-	Wx5H0on9j6N7ydqEe8m8rA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1724493165; x=
-	1724579565; bh=lH+AZmFBMSxbaY7E/WSy35ajqxoT4915UmQQKp/g1ck=; b=D
-	dO+oGL2yzQ4IDDSDo/nKrrjyI4jKN5QNvDqigHw9d3wJXZcItZ7+1TZelYrkG9WC
-	8NEEevvI4myuZ8Anz44olgXMFG2xTPTLARFH0zB9vOON9Fw+1rJUubzxJg7oOjAG
-	w5B7bKGs/oYs7bORe54ashjjWqIFQN6so9WhtIykOa8fwbNEbnhzlgbusuFMSllZ
-	SQsEvCegqB9huQZnl24ej81Cu1V0YTODYRtE8/Faet1yi9abI/XkMcFUse7K0M5i
-	0jlrQ2h0DlMt2nSBgu3SWkJbUzmaKQkTR87hP+07uItXOYZXLh/IZ93b6ij5kGjX
-	PLrjdyPn/VfTiLNGKOBNw==
-X-ME-Sender: <xms:ba3JZodPNb-622dhZaDSdWN8MQDcNCXzz-v8xU-Eq1EBOextHrF_SA>
-    <xme:ba3JZqNCkPnTy3mgXwrNden2Xup__MI91A9VxFS28Q4hfbnGrpeOt8hSBE7c3gUxy
-    viq_a_inIVbs8A2Ncs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddruddvgedgvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
-    necuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfh
-    hlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepjeehfeduvddtgffgvdffkeet
-    hefhlefgvdevvdekuefffeekheehgeevhfevteejnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgr
-    thdrtghomhdpnhgspghrtghpthhtohepledpmhhouggvpehsmhhtphhouhhtpdhrtghpth
-    htohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthho
-    pegstghmqdhkvghrnhgvlhdqfhgvvggusggrtghkqdhlihhsthessghrohgruggtohhmrd
-    gtohhmpdhrtghpthhtohepfhhlohhrihgrnhdrfhgrihhnvghllhhisegsrhhorggutgho
-    mhdrtghomhdprhgtphhtthhopehfrghntggvrhdrlhgrnhgtvghrsehgmhgrihhlrdgtoh
-    hmpdhrtghpthhtoheptghhvghnhhhurggtrghisehkvghrnhgvlhdrohhrghdprhgtphht
-    thhopehprghulhgsuhhrthhonheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhglh
-    igsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghl
-    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhiphhsse
-    hvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:ba3JZpgp750SS50fl8d2q_4a0P--Xv-O_0kL99DjanJXiqXKN_rQxA>
-    <xmx:ba3JZt-xNou0N_wHS8nms-XjPjqkJnFBONgqQKHcYhs334SOYrk6Bw>
-    <xmx:ba3JZkva7wF1zYnEi2Aso2kaQ-XhYkHNI3qXyuLmFOz6dJ7BZuTNuA>
-    <xmx:ba3JZkHwSRlhWJPmhbB1uXii8yPK_BWNCITFk66uakEEV0-2sW8MzQ>
-    <xmx:ba3JZiComwim-YrTzqYHD80nfdEYDjYaCGEgEIUCgqlNVLtt7ZXE0npt>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 300C51C20064; Sat, 24 Aug 2024 05:52:45 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1724511400; c=relaxed/simple;
+	bh=KnjeP6vwYigDLYTJd5twaAha0YX82Wvm0lMe7Iqakjk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=sdwFcvPF+DXg2/gzc1AOGkax7DhtpTcLW9U0kQn7ElmEgdMIcM/IAKsGvCpTCxHxCils8MBbv5VSUT+bfSxy4ZhUIRhug3jgFvo5kYjnS8b8Bh5CdjTnhOkZqeSRrTCTkqPsFUFRmyBoL63lE6nc147Jihl+rHCj/FsxJT0Gt40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mork.no; spf=pass smtp.mailfrom=miraculix.mork.no; dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b=by51OAYF; arc=none smtp.client-ip=65.108.154.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mork.no
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=miraculix.mork.no
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:10da:6900:0:0:0:1])
+	(authenticated bits=0)
+	by dilbert.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 47OEfaq23717667
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+	Sat, 24 Aug 2024 15:41:37 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+	t=1724510496; bh=n3Pt+wchlafO18tsiqz0oH+0puGudvk0SfFT3Jbisac=;
+	h=From:To:Cc:Subject:Date:Message-Id:From;
+	b=by51OAYFUGm8fVCo6TwX9TpeJMOORdHyk41/w6kysPhbr42P5pEOf3i14DPhcwiCd
+	 TBlNVI1fKYo5OMdOzhTBuFjyLybm9KfOQ4lQKS+mBEWBImgWL3eOzQYQOq/5F32uKI
+	 TuYwQUF9Uker7Pf98Av09orr/AwA1691Q5Ymw8dU=
+Received: from miraculix.mork.no ([IPv6:2a01:799:10da:690a:d43d:737:5289:b66f])
+	(authenticated bits=0)
+	by canardo.dyn.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 47OEfZNw1964325
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+	Sat, 24 Aug 2024 16:41:35 +0200
+Received: (nullmailer pid 1464847 invoked by uid 1000);
+	Sat, 24 Aug 2024 14:41:34 -0000
+From: =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: "Steven J . Hill" <Steven.Hill@imgtec.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>, stable@vger.kernel.org
+Subject: [PATCH] MIPS: fw: Gracefully handle unknown firmware protocols
+Date: Sat, 24 Aug 2024 16:41:33 +0200
+Message-Id: <20240824144133.1464835-1-bjorn@mork.no>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Sat, 24 Aug 2024 10:52:24 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Thomas Gleixner" <tglx@linutronix.de>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Florian Fainelli" <florian.fainelli@broadcom.com>,
- "Broadcom internal kernel review list" <bcm-kernel-feedback-list@broadcom.com>,
- "Huacai Chen" <chenhuacai@kernel.org>,
- "Serge Semin" <fancer.lancer@gmail.com>,
- "paulburton@kernel.org" <paulburton@kernel.org>
-Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-kernel@vger.kernel.org
-Message-Id: <802e542a-234e-456e-87e6-391375068fc7@app.fastmail.com>
-In-Reply-To: <87y14nf2u2.ffs@tglx>
-References: <20240810-b4-mips-ipi-improvements-v3-0-1224fd7c4096@flygoat.com>
- <20240810-b4-mips-ipi-improvements-v3-9-1224fd7c4096@flygoat.com>
- <87y14nf2u2.ffs@tglx>
-Subject: Re: [PATCH v3 09/10] irqchip: irq-mips-cpu: Rework software IRQ handling flow
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 1.0.5 at canardo
+X-Virus-Status: Clean
 
+Boards based on the same SoC family can use different boot loaders.
+These may pass numeric arguments which we erroneously interpret as
+command line or environment pointers. Such errors will cause boot
+to halt at an early stage since commit 056a68cea01e ("mips: allow
+firmware to pass RNG seed to kernel").
 
+One known example of this issue is a HPE switch using a BootWare
+boot loader.  It was found to pass these arguments to the kernel:
 
-=E5=9C=A82024=E5=B9=B48=E6=9C=8823=E6=97=A5=E5=85=AB=E6=9C=88 =E4=B8=8B=E5=
-=8D=888:37=EF=BC=8CThomas Gleixner=E5=86=99=E9=81=93=EF=BC=9A
-> On Sat, Aug 10 2024 at 13:39, Jiaxun Yang wrote:
->
-> Please fix the subsystem prefix.
->
+  0x00020000 0x00060000 0xfffdffff 0x0000416c
 
-Sorry, what do you ment by subsystem prefix?
+We can avoid hanging by validating that both passed pointers are in
+KSEG1 as expected.
 
-Thanks
-- Jiaxun
+Cc: stable@vger.kernel.org
+Fixes: 14aecdd41921 ("MIPS: FW: Add environment variable processing.")
+Signed-off-by: Bjørn Mork <bjorn@mork.no>
+---
+ arch/mips/fw/lib/cmdline.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---=20
-- Jiaxun
+diff --git a/arch/mips/fw/lib/cmdline.c b/arch/mips/fw/lib/cmdline.c
+index 892765b742bb..51238c4f9455 100644
+--- a/arch/mips/fw/lib/cmdline.c
++++ b/arch/mips/fw/lib/cmdline.c
+@@ -22,7 +22,7 @@ void __init fw_init_cmdline(void)
+ 	int i;
+ 
+ 	/* Validate command line parameters. */
+-	if ((fw_arg0 >= CKSEG0) || (fw_arg1 < CKSEG0)) {
++	if (fw_arg0 >= CKSEG0 || fw_arg1 < CKSEG0 || fw_arg1 >= CKSEG2) {
+ 		fw_argc = 0;
+ 		_fw_argv = NULL;
+ 	} else {
+@@ -31,7 +31,7 @@ void __init fw_init_cmdline(void)
+ 	}
+ 
+ 	/* Validate environment pointer. */
+-	if (fw_arg2 < CKSEG0)
++	if (fw_arg2 < CKSEG0 || fw_arg2 >= CKSEG2)
+ 		_fw_envp = NULL;
+ 	else
+ 		_fw_envp = (int *)fw_arg2;
+-- 
+2.39.2
+
 
