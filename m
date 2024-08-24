@@ -1,479 +1,184 @@
-Return-Path: <linux-mips+bounces-5053-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5054-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA78895DB66
-	for <lists+linux-mips@lfdr.de>; Sat, 24 Aug 2024 05:58:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 888E695DC8D
+	for <lists+linux-mips@lfdr.de>; Sat, 24 Aug 2024 09:34:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F795B245F2
-	for <lists+linux-mips@lfdr.de>; Sat, 24 Aug 2024 03:58:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BCE852845E1
+	for <lists+linux-mips@lfdr.de>; Sat, 24 Aug 2024 07:34:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E0423CF6A;
-	Sat, 24 Aug 2024 03:58:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFDB714D702;
+	Sat, 24 Aug 2024 07:33:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="K+23zVXw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BwXI2gRf"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 594F629422;
-	Sat, 24 Aug 2024 03:58:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A60C1527A7;
+	Sat, 24 Aug 2024 07:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724471905; cv=none; b=AzA+zjdBjlQuionRFLplSL3JUBK7ytwphMcpkDBQT3Um8PSx+woiVaqspRZPHXzcSe+z3NsrothQ2My93923Qu9l8YZ5hq99rBnAPzeUOoTOX8cHU2J587q6x+4TFrYPY+3VskOU1t1U9TVkhEs2A3el0Auj6nLNQW3RZHW34+s=
+	t=1724484825; cv=none; b=dpJ0D60BlpuVkfEogv4qpV3ec1jmvHXqm4mfiZccbUuuhGWBaRkg9MOaoIobXAOsl3vu2P29ngBzU8skh4phwFX49La6B7qvG7/PO5peWDyNnetKjeJZEwwy8N9vCq5m2OM12zwthKCx6OSruppzYEbHSNDzhK60zh4KI3Bc9Ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724471905; c=relaxed/simple;
-	bh=Hrf10Arjq4pLCud0ixy17NkBzE/nUzM9vD9NIa57OPs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dAi3ztVdaXQv+p4VtpaKzRAXX1O3vjn76PEYh5f5eaxpF/IHwg9Ov1T7iZrgkTFkcEoECjigfWk90GDDt8icP161G1H7W/HKE8K5+BUynTrZ9ILJ5KCC2NL7PTG9K3WZQbutuwBYYr+5ANHVSFrbaBGiOBm/60U6deYy8dMdNmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=K+23zVXw; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
-	:Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=re3UFKaS3rXfUjdG/ONg9ql30vWSuwopB5zeQTi4LOU=; b=K+23zVXwp+w4tnnfTCyrAQTWzl
-	2LQiB6ClhNs8AgvLs1TlIfQGWtOFTiV6mlFbwv/l+E1OqTHiMUWPiQylcFabmaCJiwSDvGIiZ1Rtb
-	eb20G2jNMBhSp7snrjbupIfdAwr9vy4O2qX+Lnyi8/Bdnt4VP+k1M5N3ee1bCcLxusNCpHd8bwE5c
-	SQ2lA8DGV3DQ9qyjm0MY3TsI8zjZ99vj1dQCqXlyumyOaaSQu/bF1uGtQpwG5cafHr2BhcOoGWyyo
-	6HqSXEahoKI5jebrWs9HWiiLxlMagMe6UbXHB4YVsI6+/lm4AKDfMmeXByanG5g1+RQnufR7c8Sed
-	7cZhlYqA==;
-Received: from 2a02-8389-2341-5b80-7457-864c-9b77-b751.cable.dynamic.v6.surfer.at ([2a02:8389:2341:5b80:7457:864c:9b77:b751] helo=localhost)
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1shhuw-00000001ONa-03dM;
-	Sat, 24 Aug 2024 03:58:22 +0000
-From: Christoph Hellwig <hch@lst.de>
-To: iommu@lists.linux.dev
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Bingbu Cao <bingbu.cao@intel.com>,
-	"Michael S . Tsirkin " <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	linux-alpha@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	virtualization@lists.linux.dev,
-	xen-devel@lists.xenproject.org
-Subject: [PATCH] dma-mapping: clear mark DMA ops as an architecture feature
-Date: Sat, 24 Aug 2024 05:57:58 +0200
-Message-ID: <20240824035817.1163502-2-hch@lst.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240824035817.1163502-1-hch@lst.de>
-References: <20240824035817.1163502-1-hch@lst.de>
+	s=arc-20240116; t=1724484825; c=relaxed/simple;
+	bh=EcYyVNOicmYEOAbzRdp5bWeN40hV/0zddQMp+f+6Pp0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=vDymIG2Rb9eg3TTpC/OWkOT//sLv5fZTFjDqmm9PJcVx/tkROLGdpD9BuVHqckqJrqpFblWn8mmFabKF84qJ2on+bxhDohJDnsjjJyW09VkB3jMB1VbQMFgrDLLXaw7wHNQqDHyBnIMYJ8kv2FeGVOOxUem0VmaILy+M4AqSxII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BwXI2gRf; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7142a93ea9cso2084250b3a.3;
+        Sat, 24 Aug 2024 00:33:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724484823; x=1725089623; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=roY7ejJDsm7RbtW8+wK6NY3B77JXn1SsTq2WjfTzyc0=;
+        b=BwXI2gRfJRfvna9ig2Zlef+JUsTxPONoXhqY7cBKJCqZqFRTra51Gq6ivPXDfC5XWr
+         BbFj2JikQz9+1RO1UZKyODNduecbwZcvQj2ZLE85Ei7czjGE3Tm3bTQK4Rq+rLABCAAb
+         5TB0SyynvTURadyNfVhWs8CiWKxc+jKZ+MeNueIp7pg4zIu30t79h/wQlKSZKF4P7PC0
+         q4N6g9LZylEp4KMNjZvR/OJ3hhnr9KT4u1YNw1qaQjvY9AUH2Ddx1nkWMez/VgEbTJv1
+         B73sL2ZEYwRL3o+CkPCJ5nWw8HkUjKbcM2AGKpeh33Xz1jNg7zjgWcHlskajSKAU/aVQ
+         cFig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724484823; x=1725089623;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=roY7ejJDsm7RbtW8+wK6NY3B77JXn1SsTq2WjfTzyc0=;
+        b=sP0/IqY2qw7iBittGDSrKmhGuCSnpkQ4GpeTuCRNLEd+enoM/3VsWy/EZcvtB2hD/h
+         Q1Ch0dqilk1AwuQ2thELk3eKfE2S4oAkVsZoWh1iPlS84feQYRLm53s3WF8fnzl/KJB7
+         uO5GCxGQpSjmYxuy1cgc8gZlkuM4SLzrNRltDXpV/GvbYrnhbVmzs1rtNF2KUNrzLu11
+         JOAFinaqFxPAl/0vjPjWMU75PnQJQAh16a74Q+QLorFRreL4x9PfzRXfar/EF0unOGld
+         uEfj7goHc+2gx+olgSU4OgyjjsQs7wru7SkSLpPl3j7t9M51ko5Ygve6leBcLLg1R2VT
+         RdiA==
+X-Forwarded-Encrypted: i=1; AJvYcCULtlHfE4tB33MurF9NC3hcCbHYKQWjrl2KGCRYqCrrpA5kokrgPViqibhxMFNMn93QGonDABxhQ6qP@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQ/G5FvA5l4heMLgQODMK9MySeCjSdo4ZHpHbFDN8pN/hiA4mN
+	f+g4883V5EVA/t4UNgh4cunvM3uL+XPuu4YpYceFvCWuFOcSvUo4xsFDhyZMV1/YxLwIa99JTWW
+	H1jxv+9C6mzKybqToXtrYS0sUQ3rajA4F
+X-Google-Smtp-Source: AGHT+IGcSTpz30UDcYZDmmZXLCLJsqhJQOXCrdTdv96nQxMY3XHrgti9kb/xZTgYicbcgSf1NQPdZM0lDfphuhQyIx8=
+X-Received: by 2002:a05:6a20:cf90:b0:1c6:fb2a:4696 with SMTP id
+ adf61e73a8af0-1cc89d6bac4mr5243457637.19.1724484823302; Sat, 24 Aug 2024
+ 00:33:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <CAEwRq=qhHBh5jKdLGb1r2Qem0jia=xcVdevihYfjdrLSYiZuiA@mail.gmail.com>
+In-Reply-To: <CAEwRq=qhHBh5jKdLGb1r2Qem0jia=xcVdevihYfjdrLSYiZuiA@mail.gmail.com>
+From: Vincent Legoll <vincent.legoll@gmail.com>
+Date: Sat, 24 Aug 2024 07:33:31 +0000
+Message-ID: <CAEwRq=on1DUHwjkBxNzS7UfRrpQT=k2C943ZrjK7NJDHxijZkA@mail.gmail.com>
+Subject: Fwd: [RFC} arm architecture board/feature deprecation timeline
+To: Linux Kernel ML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-DMA ops are a helper for architectures and not for drivers to override
-the DMA implementation.  Unfortunately driver authors keep ignoring
-this.  Make this more clear by renaming the symbol to ARCH_DMA_OPS,
-have the three drivers overriding it depend on that.  They should
-probably also be marked broken, but we can give them a bit of a grace
-period for that.
+I screwed up the first message, HTML email from gmail.
+So I hope this time it will be good.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- arch/Kconfig                         |  9 +++++++++
- arch/alpha/Kconfig                   |  2 +-
- arch/arm/Kconfig                     |  2 +-
- arch/arm64/Kconfig                   |  1 +
- arch/mips/Kconfig                    |  2 +-
- arch/parisc/Kconfig                  |  2 +-
- arch/powerpc/Kconfig                 |  2 +-
- arch/s390/Kconfig                    |  2 +-
- arch/sparc/Kconfig                   |  2 +-
- arch/x86/Kconfig                     |  2 +-
- drivers/macintosh/macio_asic.c       |  4 ++--
- drivers/media/pci/intel/ipu6/Kconfig |  7 ++++++-
- drivers/vdpa/Kconfig                 | 14 ++++++++++++--
- drivers/xen/Kconfig                  |  4 ++--
- include/linux/device.h               |  2 +-
- include/linux/dma-map-ops.h          |  6 +++---
- kernel/dma/Kconfig                   |  9 ++-------
- kernel/dma/Makefile                  |  2 +-
- 18 files changed, 47 insertions(+), 27 deletions(-)
+FYI: I replaced the various ARM MLs with linux-mips, and
+removed the personal addresses, because they already
+received the screw-up.
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 975dd22a2dbd22..6abd0f1c1d833e 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -17,6 +17,15 @@ config CPU_MITIGATIONS
- 	def_bool y
- endif
- 
-+#
-+# Selected by architectures that need custom DMA operations for e.g. legacy
-+# IOMMUs not handled by dma-iommu.  Drivers must never select this symbol.
-+#
-+config ARCH_DMA_OPS
-+	depends on HAS_DMA
-+	select DMA_OPS_HELPERS
-+	bool
-+
- menu "General architecture-dependent options"
- 
- config ARCH_HAS_SUBPAGE_FAULTS
-diff --git a/arch/alpha/Kconfig b/arch/alpha/Kconfig
-index 50ff06d5b799c9..c6d716d8bdd095 100644
---- a/arch/alpha/Kconfig
-+++ b/arch/alpha/Kconfig
-@@ -3,13 +3,13 @@ config ALPHA
- 	bool
- 	default y
- 	select ARCH_32BIT_USTAT_F_TINODE
-+	select ARCH_DMA_OPS if PCI
- 	select ARCH_HAS_CURRENT_STACK_POINTER
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_MIGHT_HAVE_PC_SERIO
- 	select ARCH_NO_PREEMPT
- 	select ARCH_NO_SG_CHAIN
- 	select ARCH_USE_CMPXCHG_LOCKREF
--	select DMA_OPS if PCI
- 	select FORCE_PCI
- 	select PCI_DOMAINS if PCI
- 	select PCI_SYSCALL if PCI
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 54b2bb817a7fc0..a823fd14d65987 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -10,6 +10,7 @@ config ARM
- 	select ARCH_HAS_CURRENT_STACK_POINTER
- 	select ARCH_HAS_DEBUG_VIRTUAL if MMU
- 	select ARCH_HAS_DMA_ALLOC if MMU
-+	select ARCH_DMA_OPS
- 	select ARCH_HAS_DMA_WRITE_COMBINE if !ARM_DMA_MEM_BUFFERABLE
- 	select ARCH_HAS_ELF_RANDOMIZE
- 	select ARCH_HAS_FORTIFY_SOURCE
-@@ -54,7 +55,6 @@ config ARM
- 	select DCACHE_WORD_ACCESS if HAVE_EFFICIENT_UNALIGNED_ACCESS
- 	select DMA_DECLARE_COHERENT
- 	select DMA_GLOBAL_POOL if !MMU
--	select DMA_OPS
- 	select DMA_NONCOHERENT_MMAP if MMU
- 	select EDAC_SUPPORT
- 	select EDAC_ATOMIC_SCRUB
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index a2f8ff354ca670..ce1650ceb5b596 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -15,6 +15,7 @@ config ARM64
- 	select ARCH_BINFMT_ELF_EXTRA_PHDRS
- 	select ARCH_BINFMT_ELF_STATE
- 	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
-+	select ARCH_DMA_OPS if XEN
- 	select ARCH_ENABLE_HUGEPAGE_MIGRATION if HUGETLB_PAGE && MIGRATION
- 	select ARCH_ENABLE_MEMORY_HOTPLUG
- 	select ARCH_ENABLE_MEMORY_HOTREMOVE
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 60077e57693563..3b5a1aef1e9bc0 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -391,9 +391,9 @@ config MACH_JAZZ
- 	bool "Jazz family of machines"
- 	select ARC_MEMORY
- 	select ARC_PROMLIB
-+	select ARCH_DMA_OPS
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_MIGHT_HAVE_PC_SERIO
--	select DMA_OPS
- 	select FW_ARC
- 	select FW_ARC32
- 	select ARCH_MAY_HAVE_PC_FDC
-diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
-index b0a2ac3ba91610..c77f9de3e8cc1b 100644
---- a/arch/parisc/Kconfig
-+++ b/arch/parisc/Kconfig
-@@ -3,6 +3,7 @@ config PARISC
- 	def_bool y
- 	select ALTERNATE_USER_ADDRESS_SPACE
- 	select ARCH_32BIT_OFF_T if !64BIT
-+	select ARCH_DMA_OPS
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select HAVE_FUNCTION_TRACER
- 	select HAVE_FUNCTION_GRAPH_TRACER
-@@ -23,7 +24,6 @@ config PARISC
- 	select ARCH_HAS_CACHE_LINE_SIZE
- 	select ARCH_HAS_DEBUG_VM_PGTABLE
- 	select HAVE_RELIABLE_STACKTRACE
--	select DMA_OPS
- 	select RTC_CLASS
- 	select RTC_DRV_GENERIC
- 	select INIT_ALL_POSSIBLE
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index d7b09b064a8ac5..50c33aca1959a5 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -124,6 +124,7 @@ config PPC
- 	select ARCH_32BIT_OFF_T if PPC32
- 	select ARCH_DISABLE_KASAN_INLINE	if PPC_RADIX_MMU
- 	select ARCH_DMA_DEFAULT_COHERENT	if !NOT_COHERENT_CACHE
-+	select ARCH_DMA_OPS			if PPC64
- 	select ARCH_ENABLE_MEMORY_HOTPLUG
- 	select ARCH_ENABLE_MEMORY_HOTREMOVE
- 	select ARCH_HAS_COPY_MC			if PPC64
-@@ -185,7 +186,6 @@ config PPC
- 	select CPUMASK_OFFSTACK			if NR_CPUS >= 8192
- 	select DCACHE_WORD_ACCESS		if PPC64 && CPU_LITTLE_ENDIAN
- 	select DMA_OPS_BYPASS			if PPC64
--	select DMA_OPS				if PPC64
- 	select DYNAMIC_FTRACE			if FUNCTION_TRACER
- 	select EDAC_ATOMIC_SCRUB
- 	select EDAC_SUPPORT
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index a822f952f64a9c..1de639f1e50dc3 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -62,6 +62,7 @@ config S390
- 	select ARCH_32BIT_USTAT_F_TINODE
- 	select ARCH_BINFMT_ELF_STATE
- 	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
-+	select ARCH_DMA_OPS if PCI
- 	select ARCH_ENABLE_MEMORY_HOTPLUG if SPARSEMEM
- 	select ARCH_ENABLE_MEMORY_HOTREMOVE
- 	select ARCH_ENABLE_SPLIT_PMD_PTLOCK if PGTABLE_LEVELS > 2
-@@ -137,7 +138,6 @@ config S390
- 	select BUILDTIME_TABLE_SORT
- 	select CLONE_BACKWARDS2
- 	select DCACHE_WORD_ACCESS if !KMSAN
--	select DMA_OPS if PCI
- 	select DYNAMIC_FTRACE if FUNCTION_TRACER
- 	select FUNCTION_ALIGNMENT_8B if CC_IS_GCC
- 	select FUNCTION_ALIGNMENT_16B if !CC_IS_GCC
-diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-index 11bf9d312318c6..ba9fd67c5c5327 100644
---- a/arch/sparc/Kconfig
-+++ b/arch/sparc/Kconfig
-@@ -13,10 +13,10 @@ config 64BIT
- config SPARC
- 	bool
- 	default y
-+	select ARCH_DMA_OPS
- 	select ARCH_HAS_CPU_CACHE_ALIASING
- 	select ARCH_MIGHT_HAVE_PC_PARPORT if SPARC64 && PCI
- 	select ARCH_MIGHT_HAVE_PC_SERIO
--	select DMA_OPS
- 	select OF
- 	select OF_PROMTREE
- 	select HAVE_ASM_MODVERSIONS
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 007bab9f2a0e39..c105c822da0559 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -65,6 +65,7 @@ config X86
- 	select ARCH_CLOCKSOURCE_INIT
- 	select ARCH_CONFIGURES_CPU_MITIGATIONS
- 	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
-+	select ARCH_DMA_OPS if GART_IOMMU || XEN
- 	select ARCH_ENABLE_HUGEPAGE_MIGRATION if X86_64 && HUGETLB_PAGE && MIGRATION
- 	select ARCH_ENABLE_MEMORY_HOTPLUG if X86_64
- 	select ARCH_ENABLE_MEMORY_HOTREMOVE if MEMORY_HOTPLUG
-@@ -943,7 +944,6 @@ config DMI
- 
- config GART_IOMMU
- 	bool "Old AMD GART IOMMU support"
--	select DMA_OPS
- 	select IOMMU_HELPER
- 	select SWIOTLB
- 	depends on X86_64 && PCI && AMD_NB
-diff --git a/drivers/macintosh/macio_asic.c b/drivers/macintosh/macio_asic.c
-index 13626205530d36..e217e6e7b2a4d0 100644
---- a/drivers/macintosh/macio_asic.c
-+++ b/drivers/macintosh/macio_asic.c
-@@ -387,7 +387,7 @@ static struct macio_dev * macio_add_one_device(struct macio_chip *chip,
- 	dma_set_max_seg_size(&dev->ofdev.dev, 65536);
- 	dma_set_seg_boundary(&dev->ofdev.dev, 0xffffffff);
- 
--#if defined(CONFIG_PCI) && defined(CONFIG_DMA_OPS)
-+#if defined(CONFIG_PCI) && defined(CONFIG_ARCH_DMA_OPS)
- 	/* Set the DMA ops to the ones from the PCI device, this could be
- 	 * fishy if we didn't know that on PowerMac it's always direct ops
- 	 * or iommu ops that will work fine
-@@ -396,7 +396,7 @@ static struct macio_dev * macio_add_one_device(struct macio_chip *chip,
- 	 */
- 	dev->ofdev.dev.archdata = chip->lbus.pdev->dev.archdata;
- 	dev->ofdev.dev.dma_ops = chip->lbus.pdev->dev.dma_ops;
--#endif /* CONFIG_PCI && CONFIG_DMA_OPS */
-+#endif /* CONFIG_PCI && CONFIG_ARCH_DMA_OPS */
- 
- #ifdef DEBUG
- 	printk("preparing mdev @%p, ofdev @%p, dev @%p, kobj @%p\n",
-diff --git a/drivers/media/pci/intel/ipu6/Kconfig b/drivers/media/pci/intel/ipu6/Kconfig
-index 40e20f0aa5ae5d..0885d8f07a4d81 100644
---- a/drivers/media/pci/intel/ipu6/Kconfig
-+++ b/drivers/media/pci/intel/ipu6/Kconfig
-@@ -4,8 +4,13 @@ config VIDEO_INTEL_IPU6
- 	depends on VIDEO_DEV
- 	depends on X86 && X86_64 && HAS_DMA
- 	depends on IPU_BRIDGE || !IPU_BRIDGE
-+	#
-+	# This driver incorrectly tries to override the dma_ops.  It should
-+	# never have done that, but for now keep it working on architectures
-+	# that use dma ops
-+	#
-+	depends on ARCH_DMA_OPS
- 	select AUXILIARY_BUS
--	select DMA_OPS
- 	select IOMMU_IOVA
- 	select VIDEO_V4L2_SUBDEV_API
- 	select MEDIA_CONTROLLER
-diff --git a/drivers/vdpa/Kconfig b/drivers/vdpa/Kconfig
-index 5265d09fc1c409..1ce9ca50c848e3 100644
---- a/drivers/vdpa/Kconfig
-+++ b/drivers/vdpa/Kconfig
-@@ -12,7 +12,12 @@ if VDPA
- config VDPA_SIM
- 	tristate "vDPA device simulator core"
- 	depends on RUNTIME_TESTING_MENU && HAS_DMA
--	select DMA_OPS
-+	#
-+	# This driver incorrectly tries to override the dma_ops.  It should
-+	# never have done that, but for now keep it working on architectures
-+	# that use dma ops
-+	#
-+	depends on ARCH_DMA_OPS
- 	select VHOST_RING
- 	select IOMMU_IOVA
- 	help
-@@ -36,7 +41,12 @@ config VDPA_SIM_BLOCK
- config VDPA_USER
- 	tristate "VDUSE (vDPA Device in Userspace) support"
- 	depends on EVENTFD && MMU && HAS_DMA
--	select DMA_OPS
-+	#
-+	# This driver incorrectly tries to override the dma_ops.  It should
-+	# never have done that, but for now keep it working on architectures
-+	# that use dma ops
-+	#
-+	depends on ARCH_DMA_OPS
- 	select VHOST_IOTLB
- 	select IOMMU_IOVA
- 	help
-diff --git a/drivers/xen/Kconfig b/drivers/xen/Kconfig
-index d5989871dd5de3..a9c825974d3a31 100644
---- a/drivers/xen/Kconfig
-+++ b/drivers/xen/Kconfig
-@@ -178,7 +178,7 @@ config XEN_GRANT_DMA_ALLOC
- config SWIOTLB_XEN
- 	def_bool y
- 	depends on XEN_PV || ARM || ARM64
--	select DMA_OPS
-+	depends on ARCH_DMA_OPS
- 	select SWIOTLB
- 
- config XEN_PCI_STUB
-@@ -348,11 +348,11 @@ config XEN_GRANT_DMA_IOMMU
- 
- config XEN_GRANT_DMA_OPS
- 	bool
--	select DMA_OPS
- 
- config XEN_VIRTIO
- 	bool "Xen virtio support"
- 	depends on VIRTIO
-+	depends on ARCH_DMA_OPS
- 	select XEN_GRANT_DMA_OPS
- 	select XEN_GRANT_DMA_IOMMU if OF
- 	help
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 1c5280d28bc389..b25003d02c2b1f 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -750,7 +750,7 @@ struct device {
- 	struct dev_pin_info	*pins;
- #endif
- 	struct dev_msi_info	msi;
--#ifdef CONFIG_DMA_OPS
-+#ifdef CONFIG_ARCH_DMA_OPS
- 	const struct dma_map_ops *dma_ops;
- #endif
- 	u64		*dma_mask;	/* dma mask (if dma'able device) */
-diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
-index 077b15c93bb8ff..f4de2a4a355d44 100644
---- a/include/linux/dma-map-ops.h
-+++ b/include/linux/dma-map-ops.h
-@@ -75,7 +75,7 @@ struct dma_map_ops {
- 	unsigned long (*get_merge_boundary)(struct device *dev);
- };
- 
--#ifdef CONFIG_DMA_OPS
-+#ifdef CONFIG_ARCH_DMA_OPS
- #include <asm/dma-mapping.h>
- 
- static inline const struct dma_map_ops *get_dma_ops(struct device *dev)
-@@ -90,7 +90,7 @@ static inline void set_dma_ops(struct device *dev,
- {
- 	dev->dma_ops = dma_ops;
- }
--#else /* CONFIG_DMA_OPS */
-+#else /* CONFIG_ARCH_DMA_OPS */
- static inline const struct dma_map_ops *get_dma_ops(struct device *dev)
- {
- 	return NULL;
-@@ -99,7 +99,7 @@ static inline void set_dma_ops(struct device *dev,
- 			       const struct dma_map_ops *dma_ops)
- {
- }
--#endif /* CONFIG_DMA_OPS */
-+#endif /* CONFIG_ARCH_DMA_OPS */
- 
- #ifdef CONFIG_DMA_CMA
- extern struct cma *dma_contiguous_default_area;
-diff --git a/kernel/dma/Kconfig b/kernel/dma/Kconfig
-index 21bae17008368a..6849675d8fcd08 100644
---- a/kernel/dma/Kconfig
-+++ b/kernel/dma/Kconfig
-@@ -11,11 +11,6 @@ config HAS_DMA
- config DMA_OPS_HELPERS
- 	bool
- 
--config DMA_OPS
--	depends on HAS_DMA
--	select DMA_OPS_HELPERS
--	bool
--
- #
- # IOMMU drivers that can bypass the IOMMU code and optionally use the direct
- # mapping fast path should select this option and set the dma_ops_bypass
-@@ -113,8 +108,8 @@ config DMA_BOUNCE_UNALIGNED_KMALLOC
- 
- config DMA_NEED_SYNC
- 	def_bool ARCH_HAS_SYNC_DMA_FOR_DEVICE || ARCH_HAS_SYNC_DMA_FOR_CPU || \
--		 ARCH_HAS_SYNC_DMA_FOR_CPU_ALL || DMA_API_DEBUG || DMA_OPS || \
--		 SWIOTLB
-+		 ARCH_HAS_SYNC_DMA_FOR_CPU_ALL || DMA_API_DEBUG || \
-+		 ARCH_DMA_OPS || SWIOTLB
- 
- config DMA_RESTRICTED_POOL
- 	bool "DMA Restricted Pool"
-diff --git a/kernel/dma/Makefile b/kernel/dma/Makefile
-index 2e6e933cf7f3fb..f479b59002cb30 100644
---- a/kernel/dma/Makefile
-+++ b/kernel/dma/Makefile
-@@ -2,7 +2,7 @@
- 
- obj-$(CONFIG_HAS_DMA)			+= mapping.o direct.o
- obj-$(CONFIG_DMA_OPS_HELPERS)		+= ops_helpers.o
--obj-$(CONFIG_DMA_OPS)			+= dummy.o
-+obj-$(CONFIG_ARCH_DMA_OPS)		+= dummy.o
- obj-$(CONFIG_DMA_CMA)			+= contiguous.o
- obj-$(CONFIG_DMA_DECLARE_COHERENT)	+= coherent.o
- obj-$(CONFIG_DMA_API_DEBUG)		+= debug.o
+Hello,
+
+> == Kernel features ==
+> [...]
+> === Highmem ===
+>
+> Most Arm machines are fine without highmem support and can
+> use something like CONFIG_VMSPLIT_2GB to address up to 2GB
+> of physical memory. Machines larger than only popped up
+> around the time of the Cortex-A15 in 2012 and for the most
+> part got replaced by 64-bit chips within a short time.
+> In addition, there are also a handful of Cortex-A9 and
+> Marvell CPU based machines that have either more than 2GB
+> of RAM or a very sparse memory map that requires highmem
+> support.
+>
+> Linus Walleij has done some work towards being able to use
+> up to 4GB of RAM with LPAE (Cortex-A7/A15 and later)
+> machines, which I think still needs to be finished before
+> we can remove support for highmem.
+>
+> === Sparsemem ===
+>
+> There is a new discussion about removing support for
+> traditional sparsemem support, see
+> https://lwn.net/Articles/974517/.
+>
+> This also relates to machines that currently need highmem
+> support in order to use all of their RAM even if the
+> total size would fit into the lowmem area, e.g. on
+> Renesas R-Car SoCs. In theory it should  be possible to
+> move the indirection layer from __page_to_pfn() to
+> __pfn_to_phys() and support discontiguous lowmem
+> that way, but I don't think anyone is working on that,
+> and I don't know if that addresses the concerns with
+> today's sparsemem implementation.
+
+It looks like the highmem feature is deemed for removal.
+
+I am investigating the loss of some available RAM on a GnuBee PC1 board.
+
+An highmem-enabled kernel can access a 64MB chunk of RAM that a
+no-highmem can't. The board has 512 MB.
+
+That's more than 10% on a RAM-poor NAS-oriented board, probably worth
+the hassle to get it back.
+
+I built & flashed a current OpenWRT snapshot, without any modifications,
+wich gave the following output:
+
+dmesg-owrt-6.6.45-custom-nomodifs: Linux version 6.6.45
+(builder@buildhost) (mipsel-openwrt-linux-musl-gcc (OpenWrt GCC 13.3.0
+r27140-ccc06f6716) 13.3.0, GNU ld (GNU Binutils) 2.42) #0 SMP Tue Aug
+13 10:22:33 2024
+dmesg-owrt-6.6.45-custom-nomodifs: Early memory node ranges
+dmesg-owrt-6.6.45-custom-nomodifs:   node   0: [mem
+0x0000000000000000-0x000000001bffffff]
+dmesg-owrt-6.6.45-custom-nomodifs:   node   0: [mem
+0x0000000020000000-0x0000000023ffffff]
+dmesg-owrt-6.6.45-custom-nomodifs: Initmem setup node 0 [mem
+0x0000000000000000-0x0000000023ffffff]
+dmesg-owrt-6.6.45-custom-nomodifs: On node 0, zone Normal: 16384 pages
+in unavailable ranges
+dmesg-owrt-6.6.45-custom-nomodifs: Memory: 441424K/458752K available
+(8180K kernel code, 636K rwdata, 1756K rodata, 1256K init, 227K bss,
+17328K reserved, 0K cma-reserved)
+
+And then after adding CONFIG_HIGHMEM=y
+
+dmesg-owrt-6.6.45-custom-highmem: Linux version 6.6.45
+(builder@buildhost) (mipsel-openwrt-linux-musl-gcc (OpenWrt GCC 13.3.0
+r27140-ccc06f6716) 13.3.0, GNU ld (GNU Binutils) 2.42) #0 SMP Tue Aug
+13 10:22:33 2024
+dmesg-owrt-6.6.45-custom-highmem:   HighMem  [mem
+0x0000000020000000-0x0000000023ffffff]
+dmesg-owrt-6.6.45-custom-highmem: Early memory node ranges
+dmesg-owrt-6.6.45-custom-highmem:   node   0: [mem
+0x0000000000000000-0x000000001bffffff]
+dmesg-owrt-6.6.45-custom-highmem:   node   0: [mem
+0x0000000020000000-0x0000000023ffffff]
+dmesg-owrt-6.6.45-custom-highmem: Initmem setup node 0 [mem
+0x0000000000000000-0x0000000023ffffff]
+dmesg-owrt-6.6.45-custom-highmem: On node 0, zone HighMem: 16384 pages
+in unavailable ranges
+dmesg-owrt-6.6.45-custom-highmem: Memory: 506352K/524288K available
+(8187K kernel code, 637K rwdata, 1756K rodata, 1248K init, 251K bss,
+17936K reserved, 0K cma-reserved, 65536K highmem)
+
+The lost RAM is back usable.
+
+Is there an alternative to CONFIG_HIGHMEM to use that RAM chunk ?
+
+Thanks
+
 -- 
-2.43.0
-
+Vincent Legoll
 
