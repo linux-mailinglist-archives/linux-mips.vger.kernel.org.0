@@ -1,79 +1,95 @@
-Return-Path: <linux-mips+bounces-5051-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5052-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 237B495DAA5
-	for <lists+linux-mips@lfdr.de>; Sat, 24 Aug 2024 04:26:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B3C495DB5A
+	for <lists+linux-mips@lfdr.de>; Sat, 24 Aug 2024 05:58:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFF31282D77
-	for <lists+linux-mips@lfdr.de>; Sat, 24 Aug 2024 02:26:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E34A2B23562
+	for <lists+linux-mips@lfdr.de>; Sat, 24 Aug 2024 03:58:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFF7B29422;
-	Sat, 24 Aug 2024 02:26:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FFA538DD8;
+	Sat, 24 Aug 2024 03:58:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QZu+564Y"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ibODa9lL"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87C2428683;
-	Sat, 24 Aug 2024 02:26:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 220B5AD5B;
+	Sat, 24 Aug 2024 03:58:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724466407; cv=none; b=Uo5tIgwXyJEOH3IbEHvCVzHmCAQDp6fWL16bczXzni134mXZTADLLLy25JOlZ69NIxl+KK87g9ZAa6zzo9ONeerjgZiBF7Ryf5wMrHQdWg9a044PxqWt9ljj7KRJweTcJJ8ZkHlDXnisS5TcaMO5+Ne+gNawMndnJ7JMqko5AH8=
+	t=1724471904; cv=none; b=mmm9v2LrxPlUCXh8QmSTPi4gOdIkCyYEnQJjWotPlkj8268ATWGWrD2xNUU/4hVWvQ54sy2HuVVqvzMwgc0a1oprPXPYT3VTdiFpmfpz86NVO5NSmRcavolHjhWK25epQOFTbHODNDEPLh1/tJGzySVf0ceM4puIqh27C47OIgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724466407; c=relaxed/simple;
-	bh=KnwCacuCVW/RLuv5iqzNWLhBKOElg/QYXiY63cbGBe0=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=HvvaQumvsIgs2PCn6fN5RcFO/tXU+1BHbJFcYBAlh/9UOCQ1aC5tr0lpKV6U13KxZ1VBRc8QHAwLMSHxDkE1rdGYPOLxbYvFjX7N8arE8/XzjpkogCFgEl2gLZRpZd/g50zVeV7Wt5nRgc+xZ1Zgbi9CKvLkQMmxGqF1ZzFqGu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QZu+564Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DE38C32786;
-	Sat, 24 Aug 2024 02:26:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724466407;
-	bh=KnwCacuCVW/RLuv5iqzNWLhBKOElg/QYXiY63cbGBe0=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=QZu+564YSMIDilf/rPsRwP9HdVXJ6H7920NB6tc+A6axLC84UUHvF5pNRvmVy94Fg
-	 tnvA1NXcpygXW50kidmfWjIu0wa3nhKloY2TxkAwS5hJa0xb1k6d7q6D3XGaoLvpYU
-	 TG3jSN4uCBW9hF5/2XI0YCdSD3C3tfrAPEt/itHKR5+3hecfuXABgiCur7zNojrEMx
-	 dv06tPnoqriEI8GFA332dAVRguVgrOGQ+PxZneznNozhbl0ih5y+GQgP3HOhUJm81i
-	 mD37vvEYa+RMR5ebIVIvl4CYfWpoXMPr2IjEIdv1HcfKa1GrE5M+sEAWMgyqtZGr2D
-	 n9ZodagyE5uBg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33D3839EF647;
-	Sat, 24 Aug 2024 02:26:48 +0000 (UTC)
-Subject: Re: [GIT PULL] MIPS fixes for V6.11
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <ZsjdfYhJ2F/JIsFT@alpha.franken.de>
-References: <ZsjdfYhJ2F/JIsFT@alpha.franken.de>
-X-PR-Tracked-List-Id: <linux-mips.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZsjdfYhJ2F/JIsFT@alpha.franken.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.11_1
-X-PR-Tracked-Commit-Id: 50f2b98dc83de7809a5c5bf0ccf9af2e75c37c13
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 5bd6cf00740765c47b5684e2d75ac90d3371659a
-Message-Id: <172446640703.3135457.3325292441600019008.pr-tracker-bot@kernel.org>
-Date: Sat, 24 Aug 2024 02:26:47 +0000
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: torvalds@linux-foundation.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+	s=arc-20240116; t=1724471904; c=relaxed/simple;
+	bh=Clh9AkGSwfDfUvvLJoxosPbut7uF7iTtgQ3zxQUr6Og=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Rc6vJmSscuYCzYnqqgSMszH9rraTYuBSVm2DVHDOr45qdE2v8Hr/wnXALc8rncza9QwHaOJTrzhx49YuqJb1KWYvRgpQ8vhJ4tZeDPMTY75Q/CF+QlqmUv4dIT2EAscu1KcC3SkDx62axkdamU6JyIf4bT9FooIj6G08e0zjD0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ibODa9lL; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=Q2nYRi9U4a8itDtDq9LNnEMZ/Twd4vEjX9CTeiWFtZk=; b=ibODa9lL5q7uggEbw2OOQZkuOl
+	gdhQY0r9D/9beDb+Bd4qmVTCvwI+QiMjo95/+tPj+4V9U7F5hRFToRdX4k4DvPYHu1OLEHcIx+etT
+	KIlSwzlSzvMKbYOerqEj9me07yLSDIeP/0/bbrlY9qqah4ekXhqi/eYjBvvldU6VljO5zLO6djC2Z
+	2yksa1axP4sCcbZUGAWwKgEmbBGoAFPkoBoCxdpgqo5+6g1QWpb94Ilm4RmYcg8FZcggX2U6K6Sfe
+	cGdem+9zPaemNy7/Cr0ZBWXuCzcsmrGl8tEN+ptWMeKG1q46THZ+VeovOI19ardMWa1DQRk/ZtOsI
+	ioZS20vQ==;
+Received: from 2a02-8389-2341-5b80-7457-864c-9b77-b751.cable.dynamic.v6.surfer.at ([2a02:8389:2341:5b80:7457:864c:9b77:b751] helo=localhost)
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1shhut-00000001ON7-0bmD;
+	Sat, 24 Aug 2024 03:58:20 +0000
+From: Christoph Hellwig <hch@lst.de>
+To: iommu@lists.linux.dev
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Bingbu Cao <bingbu.cao@intel.com>,
+	"Michael S . Tsirkin " <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	linux-alpha@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	xen-devel@lists.xenproject.org
+Subject: clearly mark DMA_OPS support as an architecture feasture
+Date: Sat, 24 Aug 2024 05:57:57 +0200
+Message-ID: <20240824035817.1163502-1-hch@lst.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-The pull request you sent on Fri, 23 Aug 2024 21:05:33 +0200:
+Hi all,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.11_1
+we've had a long standing problems where drivers try to hook into the
+DMA_OPS mechanisms to override them for something that is not DMA, or
+to introduce additional dispatching.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/5bd6cf00740765c47b5684e2d75ac90d3371659a
+Now that we are not using DMA_OPS support for dma-iommu and can build
+kernels without DMA_OPS support on many common setups this becomes even
+more problematic.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+This series renames the option to ARCH_DMA_OPS and adds very explicit
+comment to not use it in drivers.  The ipu6 and vdpa_sim/user drivers
+that abuse the mechanism are made to depend on the option instead of
+selecting it with a big comment, but I expect this to be fixed rather
+sooner than later (I know the ipu6 maintainers are on it based on a
+previous discussion).
 
