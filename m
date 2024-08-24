@@ -1,112 +1,136 @@
-Return-Path: <linux-mips+bounces-5055-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5056-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19AB495DCC7
-	for <lists+linux-mips@lfdr.de>; Sat, 24 Aug 2024 09:58:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B5B495DD3F
+	for <lists+linux-mips@lfdr.de>; Sat, 24 Aug 2024 11:52:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 461FF1C217F6
-	for <lists+linux-mips@lfdr.de>; Sat, 24 Aug 2024 07:58:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB69B28365D
+	for <lists+linux-mips@lfdr.de>; Sat, 24 Aug 2024 09:52:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07591154C04;
-	Sat, 24 Aug 2024 07:58:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0333154C04;
+	Sat, 24 Aug 2024 09:52:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H132KVz3"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="5CKi7v7e";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DdO+oGL2"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from fhigh1-smtp.messagingengine.com (fhigh1-smtp.messagingengine.com [103.168.172.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B12E154BFC;
-	Sat, 24 Aug 2024 07:58:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF85014EC59;
+	Sat, 24 Aug 2024 09:52:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724486299; cv=none; b=aPHdWO+5ppoUPOWFYcnJfb14X2ZNg/TmlnO1/qGX1NkNl6y3Tjs/URXKVWufVpi4Q5citdu1giIDdNYUmYQgbpMfHbeZ/HAogPx54mcjpEq1Vw8bEwyoaJEuOrDd3cYJaAd/dGMOERLHR5s0eeyvQGbcJpVIkrPNxkR2Ee8JeF8=
+	t=1724493168; cv=none; b=mtNEl1ybVrpQ6G03MuoqBagDUlbts4fvu6rMO0TSba/74mVsPDlmJ9NuvizU76pNx8mK24Sc30sMOABeN78XRgmdVgIHWoQcTvBiIBPjyTxXjfP4xZt+qVzkiC9i85r9/7cmzGzlgf/bLS0PT0kHhpb6/ZgnnA2smVeWz8+N4v0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724486299; c=relaxed/simple;
-	bh=+MuJabAXZNXC3PzKmb+ctuTHQcVD5uw07JOm0cukiHM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GWySvhytFi2+aDwpTVnYgDYPKOCxc+f/qtu6Oi3l3B2485PhAEfytvZyCAfWeqKLOw+XPhgbQs1o5rZxIlVnMYPatwOdtZ/o3bc+GIkwKvuypocesqojWEiKObFJ71IJNVjb+qBS/qUpbhh0qX7rxNNTsslrd0m+QwYaoItzw1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H132KVz3; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724486297; x=1756022297;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+MuJabAXZNXC3PzKmb+ctuTHQcVD5uw07JOm0cukiHM=;
-  b=H132KVz304XJPf6ReChbID2w1YHRPvxytq0WbDqu4uhidZZSlva4Y4LE
-   pZHl3AGTuAOiweWSGhZDA8IwlbzEoHnXnbMCKukZ/q+5k+rMv9h4gy7Gg
-   lrqNpj8eCrMpC8dgLkyHv94gHXIDAlxwso32cgk3S50h615I0K86g9G+X
-   XmZ+8gxO+63cIdmweFZi0vKY6B783NQbpEeCRiefFnAOryPtfqs9e+VOq
-   tOFi5hsQh2mndrvZc3hgde+agJNmsp977DN6vvWI/rA4Ptt1uBBfTnLlN
-   s4+sWi9vLViQhAOyXzNqIWOYRX9YsZ/Oa0iCAQG3P43fJn22Am1fVQk6v
-   A==;
-X-CSE-ConnectionGUID: vT64KyRhQaW9P0Xy6FbYoQ==
-X-CSE-MsgGUID: atC8vKnuQf2trx1B+MFIWg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11173"; a="23126429"
-X-IronPort-AV: E=Sophos;i="6.10,172,1719903600"; 
-   d="scan'208";a="23126429"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2024 00:58:17 -0700
-X-CSE-ConnectionGUID: xNO1WY6SQfimIDbJMyQklA==
-X-CSE-MsgGUID: Re7yuOLNQLu2fGkmVM310w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,172,1719903600"; 
-   d="scan'208";a="99531438"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2024 00:58:12 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id AF4D411F95D;
-	Sat, 24 Aug 2024 10:58:07 +0300 (EEST)
-Date: Sat, 24 Aug 2024 07:58:07 +0000
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Christoph Hellwig <hch@lst.de>
-Cc: iommu@lists.linux.dev, Marek Szyprowski <m.szyprowski@samsung.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Bingbu Cao <bingbu.cao@intel.com>,
-	"Michael S . Tsirkin " <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-media@vger.kernel.org,
-	virtualization@lists.linux.dev, xen-devel@lists.xenproject.org
-Subject: Re: [PATCH] dma-mapping: clear mark DMA ops as an architecture
- feature
-Message-ID: <ZsmSj6ZBZqBtjALU@kekkonen.localdomain>
-References: <20240824035817.1163502-1-hch@lst.de>
- <20240824035817.1163502-2-hch@lst.de>
+	s=arc-20240116; t=1724493168; c=relaxed/simple;
+	bh=lH+AZmFBMSxbaY7E/WSy35ajqxoT4915UmQQKp/g1ck=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=S/fJLNPWSmCkHUaky/u4lllfp2w6A4pRiYF7ElwV1DGA4SnGfHWHfT9uIhggfjv/CDB6Lug9TW5HKnHGiQBTUsmnRnQDJC73+p+5C0MCbmLVE383rZFpApxftqNxA6Fo25z34iHcdg+Rv08Inp86+laxVXDIVmyvKMWNGHob9og=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=5CKi7v7e; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DdO+oGL2; arc=none smtp.client-ip=103.168.172.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from phl-compute-05.internal (phl-compute-05.nyi.internal [10.202.2.45])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id C6237115208B;
+	Sat, 24 Aug 2024 05:52:45 -0400 (EDT)
+Received: from phl-imap-12 ([10.202.2.86])
+  by phl-compute-05.internal (MEProxy); Sat, 24 Aug 2024 05:52:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1724493165;
+	 x=1724579565; bh=lH+AZmFBMSxbaY7E/WSy35ajqxoT4915UmQQKp/g1ck=; b=
+	5CKi7v7eybOhaomKbbzXugtBswr/MWv9csonYK9j9CI97FdRH9I6tfbHakPfknfn
+	OooXSnooZmVIV/F/Zv8jLx8p0nLH+YDByp6AUnyJQCuQlwgxvvNtglV4jfrh5f/E
+	1bAw1lafsKSj3kBc9a7Bt4nrYfYaK5yhBz1mSAasgN5DQ+snyVIURIEOaSLiOIUQ
+	ACUi8iK1ErexgqkQjpGUDpU4uj1I365q57xW05UUgUfTSbglbw+9J3eXxCGD4dDA
+	CHXOCm1FNJfyVAB734pJQLJqczqadlwP1LOHlw2HX4L9H/yqR6NazzzAzq4Vho8G
+	Wx5H0on9j6N7ydqEe8m8rA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1724493165; x=
+	1724579565; bh=lH+AZmFBMSxbaY7E/WSy35ajqxoT4915UmQQKp/g1ck=; b=D
+	dO+oGL2yzQ4IDDSDo/nKrrjyI4jKN5QNvDqigHw9d3wJXZcItZ7+1TZelYrkG9WC
+	8NEEevvI4myuZ8Anz44olgXMFG2xTPTLARFH0zB9vOON9Fw+1rJUubzxJg7oOjAG
+	w5B7bKGs/oYs7bORe54ashjjWqIFQN6so9WhtIykOa8fwbNEbnhzlgbusuFMSllZ
+	SQsEvCegqB9huQZnl24ej81Cu1V0YTODYRtE8/Faet1yi9abI/XkMcFUse7K0M5i
+	0jlrQ2h0DlMt2nSBgu3SWkJbUzmaKQkTR87hP+07uItXOYZXLh/IZ93b6ij5kGjX
+	PLrjdyPn/VfTiLNGKOBNw==
+X-ME-Sender: <xms:ba3JZodPNb-622dhZaDSdWN8MQDcNCXzz-v8xU-Eq1EBOextHrF_SA>
+    <xme:ba3JZqNCkPnTy3mgXwrNden2Xup__MI91A9VxFS28Q4hfbnGrpeOt8hSBE7c3gUxy
+    viq_a_inIVbs8A2Ncs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddruddvgedgvddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
+    necuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfh
+    hlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepjeehfeduvddtgffgvdffkeet
+    hefhlefgvdevvdekuefffeekheehgeevhfevteejnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgr
+    thdrtghomhdpnhgspghrtghpthhtohepledpmhhouggvpehsmhhtphhouhhtpdhrtghpth
+    htohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthho
+    pegstghmqdhkvghrnhgvlhdqfhgvvggusggrtghkqdhlihhsthessghrohgruggtohhmrd
+    gtohhmpdhrtghpthhtohepfhhlohhrihgrnhdrfhgrihhnvghllhhisegsrhhorggutgho
+    mhdrtghomhdprhgtphhtthhopehfrghntggvrhdrlhgrnhgtvghrsehgmhgrihhlrdgtoh
+    hmpdhrtghpthhtoheptghhvghnhhhurggtrghisehkvghrnhgvlhdrohhrghdprhgtphht
+    thhopehprghulhgsuhhrthhonheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhglh
+    igsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghl
+    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhiphhsse
+    hvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:ba3JZpgp750SS50fl8d2q_4a0P--Xv-O_0kL99DjanJXiqXKN_rQxA>
+    <xmx:ba3JZt-xNou0N_wHS8nms-XjPjqkJnFBONgqQKHcYhs334SOYrk6Bw>
+    <xmx:ba3JZkva7wF1zYnEi2Aso2kaQ-XhYkHNI3qXyuLmFOz6dJ7BZuTNuA>
+    <xmx:ba3JZkHwSRlhWJPmhbB1uXii8yPK_BWNCITFk66uakEEV0-2sW8MzQ>
+    <xmx:ba3JZiComwim-YrTzqYHD80nfdEYDjYaCGEgEIUCgqlNVLtt7ZXE0npt>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 300C51C20064; Sat, 24 Aug 2024 05:52:45 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240824035817.1163502-2-hch@lst.de>
+Date: Sat, 24 Aug 2024 10:52:24 +0100
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Thomas Gleixner" <tglx@linutronix.de>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Florian Fainelli" <florian.fainelli@broadcom.com>,
+ "Broadcom internal kernel review list" <bcm-kernel-feedback-list@broadcom.com>,
+ "Huacai Chen" <chenhuacai@kernel.org>,
+ "Serge Semin" <fancer.lancer@gmail.com>,
+ "paulburton@kernel.org" <paulburton@kernel.org>
+Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org
+Message-Id: <802e542a-234e-456e-87e6-391375068fc7@app.fastmail.com>
+In-Reply-To: <87y14nf2u2.ffs@tglx>
+References: <20240810-b4-mips-ipi-improvements-v3-0-1224fd7c4096@flygoat.com>
+ <20240810-b4-mips-ipi-improvements-v3-9-1224fd7c4096@flygoat.com>
+ <87y14nf2u2.ffs@tglx>
+Subject: Re: [PATCH v3 09/10] irqchip: irq-mips-cpu: Rework software IRQ handling flow
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Christoph,
 
-On Sat, Aug 24, 2024 at 05:57:58AM +0200, Christoph Hellwig wrote:
-> DMA ops are a helper for architectures and not for drivers to override
-> the DMA implementation.  Unfortunately driver authors keep ignoring
-> this.  Make this more clear by renaming the symbol to ARCH_DMA_OPS,
-> have the three drivers overriding it depend on that.  They should
-> probably also be marked broken, but we can give them a bit of a grace
-> period for that.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com> # for IPU6
+=E5=9C=A82024=E5=B9=B48=E6=9C=8823=E6=97=A5=E5=85=AB=E6=9C=88 =E4=B8=8B=E5=
+=8D=888:37=EF=BC=8CThomas Gleixner=E5=86=99=E9=81=93=EF=BC=9A
+> On Sat, Aug 10 2024 at 13:39, Jiaxun Yang wrote:
+>
+> Please fix the subsystem prefix.
+>
 
-We'll address this for IPU6 but I can't give a timeline for that right now.
+Sorry, what do you ment by subsystem prefix?
 
--- 
-Kind regards,
+Thanks
+- Jiaxun
 
-Sakari Ailus
+--=20
+- Jiaxun
 
