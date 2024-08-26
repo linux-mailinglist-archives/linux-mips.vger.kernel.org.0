@@ -1,151 +1,129 @@
-Return-Path: <linux-mips+bounces-5097-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5098-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A75CD95EC65
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Aug 2024 10:53:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C96A995ECA8
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Aug 2024 11:06:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9B891C212B0
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Aug 2024 08:53:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FC771F21083
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Aug 2024 09:06:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ECBA82D7F;
-	Mon, 26 Aug 2024 08:53:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22FC713A26B;
+	Mon, 26 Aug 2024 09:06:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b="DWXzhIlM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ayWo4hMk"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from dilbert.mork.no (dilbert.mork.no [65.108.154.246])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E1F286A8;
-	Mon, 26 Aug 2024 08:52:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.108.154.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5683984047
+	for <linux-mips@vger.kernel.org>; Mon, 26 Aug 2024 09:06:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724662381; cv=none; b=VEywyoLKWEmO8t7Y0T8Nr5ILNKRLKqr/r4N1wp/sBo/X1b6OOjKocwUdxC+/OiKtciTOoq0TYH5QYaFAC0IETC9iOfKojhR7pgPZM7uN0vDczuOgOFMEGk4rZ0a5J3SB7AVLwPm6mv2FNJVCHxwRzlYemeUJe6VXVlwdz8tqCrY=
+	t=1724663163; cv=none; b=gvBOEbvtaatRzq9toE+APSDZSHabTvzI9qRnvuTX5nsk3cTm6ILrwIICnoiMxfbDgUbpGm5e/xp1i/+7/DNNLEGN9rCiREoWvGbMw2AnjQnHVJIxfslP1lSuw9cfXP/LAg5a10euIwD/b7S8tnocrpEPbgCdWLDratkx1bQyAzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724662381; c=relaxed/simple;
-	bh=bpIxq9NrCbXHQ9xPNW9tXjBkteCqJ1McbEbD661SmJA=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=Nk9NClzX536iH+xXL4wAVeTh1F87ivXe7x/3+aZ4wpmwJl4L7H0sMFQ/KduC/22TWvNJijl6YLMGf/DwouAHJdcUbgMsB10r5xufk67BXppewYReefaaasE3noLrRj+rqxDBJxk4Cpae1CVouYVlyZWdtv71EIUq+BZIoXigrHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mork.no; spf=pass smtp.mailfrom=miraculix.mork.no; dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b=DWXzhIlM; arc=none smtp.client-ip=65.108.154.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mork.no
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=miraculix.mork.no
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:10da:6900:0:0:0:1])
-	(authenticated bits=0)
-	by dilbert.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 47Q8qaPw3895640
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-	Mon, 26 Aug 2024 09:52:38 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-	t=1724662356; bh=T9Q3iY+bAR2dVrgAcNBgedK8JUDZWWxI1K8yXbLI9hY=;
-	h=From:To:Cc:Subject:References:Date:Message-ID:From;
-	b=DWXzhIlMXVwunwVJX9vkCXJ7TN0grgE3yZ2PEAzq5vDK6KKfz7AkvxutBX97gul8M
-	 1FZuZcy9lB8ou/zndcu7og6SstHPXe7cPK5lmzxgcEvnxJ1aJGPBuSCbC1mZgrVe1y
-	 BP/wZBp9deeAwjr+KXIvCjzrhpODE2sWGZ5dGcKM=
-Received: from miraculix.mork.no ([IPv6:2a01:799:10da:690a:d43d:737:5289:b66f])
-	(authenticated bits=0)
-	by canardo.dyn.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 47Q8qaxU2415343
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-	Mon, 26 Aug 2024 10:52:36 +0200
-Received: (nullmailer pid 1588942 invoked by uid 1000);
-	Mon, 26 Aug 2024 08:52:36 -0000
-From: =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: fw: Gracefully handle unknown firmware protocols
-Organization: m
-References: <20240824144133.1464835-1-bjorn@mork.no>
-	<7f0602dc-8a47-46cb-a12f-09afc082b48f@app.fastmail.com>
-	<87o75gy85b.fsf@miraculix.mork.no>
-	<alpine.DEB.2.21.2408251612500.30766@angie.orcam.me.uk>
-	<87jzg4y57g.fsf@miraculix.mork.no>
-	<alpine.DEB.2.21.2408252029130.30766@angie.orcam.me.uk>
-Date: Mon, 26 Aug 2024 10:52:36 +0200
-In-Reply-To: <alpine.DEB.2.21.2408252029130.30766@angie.orcam.me.uk> (Maciej
-	W. Rozycki's message of "Sun, 25 Aug 2024 20:59:26 +0100 (BST)")
-Message-ID: <87cylvy8bv.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+	s=arc-20240116; t=1724663163; c=relaxed/simple;
+	bh=qW8EijmVm1rza+kNNB97HdDBr7sQU1x4Yvhm4lOhCX4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XkNIp4wZuKGrTAS0ABWgj/SlPkKjsXB8zeDmFXdH679jrbBK8r4Onj6lWE1D0ILR5Tn10YjPze/y11dghaI3yumgvBiKoRuLAbojEjEIb5+Nx3g/dErHtRmnT2/+q173FacAp3+XLHvp0fCLxvXud/ThG30UM2e20sl2uompyb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ayWo4hMk; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-53345604960so4317926e87.3
+        for <linux-mips@vger.kernel.org>; Mon, 26 Aug 2024 02:06:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1724663159; x=1725267959; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qW8EijmVm1rza+kNNB97HdDBr7sQU1x4Yvhm4lOhCX4=;
+        b=ayWo4hMk78fDPJG1y0DRcbXNx1kerwKllexBp1J0WdfUrBzF05Ne7jio2EPujnEkPM
+         5CkWiLjz0Uzodhy1ujjMlWPvzReQ1sMFjPkfJ9Yg54HV94BRW5UtMaLQt3UhK9w0N9Wv
+         VvuztZ7S3S3iHp1ULFiRj8yU8tczmMjzdqmYAiP1ra9nNqNi8o4gjdrb4jk3QaU9rtJO
+         c70rnmt59lBRMb+TLx3JXzD7vAIprWZBSPVbVmG0fc3HoiU3jXjHGBHwyx++WBIlIYy3
+         MhGGoph/Agb+xGyXpmRf2u1Qx106JoUdext/FG7iey21gJWXC78SHKy3YlLr86B+JkIT
+         8cBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724663159; x=1725267959;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qW8EijmVm1rza+kNNB97HdDBr7sQU1x4Yvhm4lOhCX4=;
+        b=CgvVk9akThT1/NB49xhoP/PXz5ITpKTWuW/jm2tokBVXeTSuBvGh0XOeYo2iGDtWi8
+         oMrRRVjW26oYMG4Zj9LYaEofGEfrXx5Jq4nvyfvN0eSutNZ/wNVEBhftvVOO0nG4KtpL
+         55QVWAHHTJzTl6+qHfBcL2Ej1XY0u6WrstTlb3oHNZs+VtFppsomAvgrgEEw+vT0eX/A
+         vur6U1j0rKZJC0VUstuNLyjN1vX518tzPs73oaWdj+xsvadfTa3pM0mKwmsngjGSZzac
+         QskFhNc+VSzfbM2AfYLmfPT4PP3jJh20fYK1z/Qm9ze3v8AreOE4+avRD+dU0Wrt83lQ
+         rg0A==
+X-Forwarded-Encrypted: i=1; AJvYcCWnA+XzRsXkangJTExNZdt736YvufWpHrEB2ehJKwUcNc8C54EnhfwjWRX+Qc8LUccCi8QuxyE5NJ6s@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyrov2ZQVuWy/hHKLolAnvUhQ2N3lofS/tBd2qpzPFgG791R+E/
+	S61PSAcEFM7rqo0ftE0Y34i84mBBL15h8+ZBsaHGkEtE811KvulUNZ6reRaFpVSXYopGOojZlUN
+	Iy16Ec17QhD5y6em8V8yViwRrwvcCSuJm57hElQ==
+X-Google-Smtp-Source: AGHT+IF/3IUNaHnmorHMH5XepQP0dhFxmpJOrgPR3PtJ3vmSYH5kfLJ8JW9NGorL05eVqsfIP8s7xNubchE9N82j2mw=
+X-Received: by 2002:a05:6512:3987:b0:533:4e2b:62fd with SMTP id
+ 2adb3069b0e04-53438773badmr5857030e87.18.1724663159221; Mon, 26 Aug 2024
+ 02:05:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <CAEwRq=qhHBh5jKdLGb1r2Qem0jia=xcVdevihYfjdrLSYiZuiA@mail.gmail.com>
+In-Reply-To: <CAEwRq=qhHBh5jKdLGb1r2Qem0jia=xcVdevihYfjdrLSYiZuiA@mail.gmail.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Mon, 26 Aug 2024 11:05:48 +0200
+Message-ID: <CACRpkdZFQSN_t-Vx7xOXq0aF6Vf-XvsZKGF6yNMn7_dCeaZi_w@mail.gmail.com>
+Subject: Re: [RFC} arm architecture board/feature deprecation timeline
+To: Vincent Legoll <vincent.legoll@gmail.com>
+Cc: arnd@arndb.de, aaro.koskinen@iki.fi, alexandre.torgue@foss.st.com, 
+	Andrew Lunn <andrew@lunn.ch>, broonie@kernel.org, dmitry.torokhov@gmail.com, 
+	gregory.clement@bootlin.com, jeremy@jeremypeper.com, jmkrzyszt@gmail.com, 
+	kristoffer.ericson@gmail.com, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Linux Kernel ML <linux-kernel@vger.kernel.org>, 
+	Russell King - ARM Linux <linux@armlinux.org.uk>, Nicolas Pitre <nico@fluxnic.net>, nikita.shubin@maquefel.me, 
+	ramanara@nvidia.com, richard.earnshaw@arm.com, richard.sandiford@arm.com, 
+	robert.jarzmik@free.fr, sebastian.hesselbarth@gmail.com, tony@atomide.com, 
+	linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 1.0.5 at canardo
-X-Virus-Status: Clean
 
-"Maciej W. Rozycki" <macro@orcam.me.uk> writes:
+On Fri, Aug 23, 2024 at 10:47=E2=80=AFPM Vincent Legoll
+<vincent.legoll@gmail.com> wrote:
 
-> Even those that do use the function have a choice to override the default=
-=20
-> handler by setting CONFIG_HAVE_PLAT_FW_INIT_CMDLINE.  Perhaps it's what=20
-> you need to do for your platform too.
+> It looks like the highmem feature is deemed for removal.
+>
+> I am investigating the loss of some available RAM on a GnuBee PC1 board.
+>
+> An highmem-enabled kernel can access a 64MB chunk of RAM that a
+> no-highmem can't. The board has 512 MB.
+>
+> That's more than 10% on a RAM-poor NAS-oriented board, probably worth
+> the hassle to get it back.
+>
+> I built & flashed a current OpenWRT snapshot, without any modifications,
+> wich gave the following output:
+(...)
+> The lost RAM is back usable.
+>
+> Is there an alternative to CONFIG_HIGHMEM to use that RAM chunk ?
 
-Considered that, but this problem isn't directly platform-related, is
-it?  Many of the firmware implementations are multi-platform. And they
-support many of the same platforms.
+Userspace can still use it right?
 
-My concrete eample showed up on the "realtek" (rtl838x and rtl93xx SoCs)
-platform in OpenWrt, where a large number of boards from assorted
-vendors are currently supported. The current implementation works fine
-for most of them because they using U-Boot. But it failed in what I
-consider the ugliest way possible (no ooops, no error message, just
-hanging) on the boards from HPE because they use Bootware.
+The approach we are taking on ARM32 (despite it's.... really hard) is
+to try to create
+separate address spaces for the kernel and userspace so that in kernel cont=
+ext
+the kernel can use 4GB of memory as it wants without the restriction of use=
+rpace
+taking up the low addresses.
 
-FWIW, there is also a vendor using BootBase for pretty much the same
-hardware.  But that's still unsupported in OpenWrt for various reasons.
+This looks easy until you run into some kernel assumptions about memory bei=
+ng
+in a linear map at all times. Which I am wrestling with.
 
-So yes, this could be worked around by having a platform specific
-fw_init_cmdline().  Or even another out-of-tree OpenWrt specific patch.
-But whatever the solution is, it can't drop the U-Boot support since
-most of the boards actually use U-Boot.  Which is why I believe it's
-much better to solve this problem at the root, for the benefit of
-everyone else.
-
-But of course, if necessary it would be possible to build X kernels with
-dfferent fw_init_cmdline() implementations to support the same hardware
-booted from X different boot firmwares.
-
->  It's clear to me that this mess has to be cleaned up.  Not all kinds of=
-=20
-> firmware permit the setting of arbitrary environment variables (or ones=20
-> that survive a reboot) though.
-
-Yes.  And I believe it can be solved by improving the pointer validation
-that's already there.  All we need is to reject argument values passed
-by other firmwares.
-
-But it's probably better to create an inline valid_fw_arg(() or similar
-function as proposed by Jiaxun, allowing the XKPHYS range too on 64 bit
-systems.
-
-If necessary we can improve further by adding an alignment requirement,
-which was a proposal that came up in the OpenWrt discussions.
-
-Another option is to connect the validation of all 4 arguments.  There
-is for example no reason to interpret the Bootware fw_arg2 value as an
-enviroment pointer after we've already rejected fw_arg1 as cmdline.
-
-It's also possible to validate command line argument pointers and
-environment variable pointers (except for alignment, I guess?), refusing
-anything which ends ut pointing outsde KSEG1 or XKPHYS.
-
-How complicated you want this is all a matter of taste IMHO.  I tried to
-make this a simple solution matching the current "forgiving"
-implementation.
-
-Another improvement would be a pr_info() dumping the fw_argX values. It
-would make it possible to understand why the code is hanging when the
-firmware does something unexpected. I don't think pr_debug() helps much
-in this particular case.
-
-
-
-Bj=C3=B8rn
+Yours,
+Linus Walleij
 
