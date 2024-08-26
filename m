@@ -1,195 +1,148 @@
-Return-Path: <linux-mips+bounces-5109-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5110-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80A3895F477
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Aug 2024 16:55:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99AE095F813
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Aug 2024 19:28:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4EEC1C21E1C
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Aug 2024 14:55:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC2F41C2235E
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Aug 2024 17:28:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7AFB18D65B;
-	Mon, 26 Aug 2024 14:55:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Zpa4kyQE";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Tkw2AwR3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DD0A198A19;
+	Mon, 26 Aug 2024 17:28:38 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh2-smtp.messagingengine.com (fhigh2-smtp.messagingengine.com [103.168.172.153])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96BAB187FEA;
-	Mon, 26 Aug 2024 14:55:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2BD164A;
+	Mon, 26 Aug 2024 17:28:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724684149; cv=none; b=Ki6DY8owjkPDhw3y3SOxyn1+gWyJxaOKENwOysy8o1I/WZPHv3te2frOYuUvKlj1fvWDzWZ+qWdGR6NuRUe0AFEOObzHU694UWuYgM5lqSdncUVMHi3z2vYXdU06rM4uGh3+WuXLnZ9GPt547zCtgWaENmWAIbF6hiTh/X6vnEw=
+	t=1724693317; cv=none; b=kW0KnR2yGbattM2zbt/D7lrKbmyHY8FKUvUxmEqicafr0YYvqDQCg9D414VzArW5UAoLgcB85yjsB2YIhMBQ9pj5kxMpYsPt5fEWuo2jLrW8xIt6EgAUCDbnx/nhLM6uMzclxBa08s1WtOo7xkusS2z0qgAtqBJpktgAoZiOaWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724684149; c=relaxed/simple;
-	bh=9TmelYC8tZt7bqVAgPpovFGJQmmwFDIQHX9vuuZAA/c=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=pIUAx5fJja2M/NE0Y+/qubxQvABbaXI7p9FzHH4Do2TK/Dd4FbxDRsgIHKHzrynOTf11S/WrKQGo0zUFpEQCElcLqaBfDxT/MmgHPgMqc76WjKxrYHTW2WjxKnqxgZ773SjB2Q7C87pIDggniU81rfbeJXC1y4fjtw5LZjjVHl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Zpa4kyQE; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Tkw2AwR3; arc=none smtp.client-ip=103.168.172.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.nyi.internal [10.202.2.44])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id A32EF1151BCA;
-	Mon, 26 Aug 2024 10:55:46 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-04.internal (MEProxy); Mon, 26 Aug 2024 10:55:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1724684146;
-	 x=1724770546; bh=VV6gKj4YduBLQtRVd/Kk7xoggepydH0ei745eofrJ7E=; b=
-	Zpa4kyQEJ805NEduAU83jyc7GMUA+Y+ldVwizTC85ioNuLt3fWY3L8E3AmO/kTmz
-	+pwThBu7g4AInV27Md+7jOyaTODvJZbPPMn3uPY4LuFJFSLP2ibFdAd9JAcXHRaa
-	GfCmbkVbzgdN/ooNwcdk2JflOy8alDWRpZgXaIbUe3dL92mA5X0xtnuMjGlyzfzO
-	VpadDH8bX5XXfRm3nNkxYBTGNrLV3wLeKxNsaNRAW9vnGEpsBMBYVfxDPwcYx6O8
-	v91JJLq7tFf/VSeaMOQOctWemyxRqsv/saTSckfZX4VTQ17SNEGCicNjQ3xH46C3
-	4hVwf5BzeMdwE2K9z9hRcA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1724684146; x=
-	1724770546; bh=VV6gKj4YduBLQtRVd/Kk7xoggepydH0ei745eofrJ7E=; b=T
-	kw2AwR36VE1SGKUlrwKqhGIRYKKZrvNEGGCG118B5d4fKO51cMsOEImheufzRjI0
-	okqkowkbFS5IgU9RVteZvgMP2k+pjdXSDC2NZ/1cmg2vxvuyPJ6HYGOmSIPxYhvH
-	Yzl6o+0oCpXhuNcygm9oMuxKGvA/d/ybxJEGG8CGCleJYnrKb8KRh0j5ZVV9s4gd
-	3IqJUAqlBuZMk5rjKJP1q73LP2DoSarK7+NjWXYMAhRN0ve/JGl2nvkmCmK8v+Bc
-	G6h+wn5j89nH+ODYnEveyu3c/7OgcuXSOMf7biAT92VIgzwZYS8T9wlswvbmyb6z
-	epo5ldwLwlMxbvIiJNSNA==
-X-ME-Sender: <xms:cZfMZk2crJgdTC21vojKPPTfG-SUAmfbTSDvF-zoXp6CVvFPLJkY7g>
-    <xme:cZfMZvHW3TrZ8MMBTm_qs1Il09ZttTtJw0WCoW4lV8Lq1K3NuMWnGMdjATZcaxsnI
-    33G7tqlLA9k8vxjj20>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddruddvkedgkeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhepteefudehvedutdeugfeuveffleduheehfeehffeu
-    jeduledvheeivdffleffjedtnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlh
-    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghr
-    nhgusgdruggvpdhnsggprhgtphhtthhopedvfedpmhhouggvpehsmhhtphhouhhtpdhrtg
-    hpthhtoheprhhitghhrghrugdrvggrrhhnshhhrgifsegrrhhmrdgtohhmpdhrtghpthht
-    oheprhhitghhrghrugdrshgrnhguihhfohhrugesrghrmhdrtghomhdprhgtphhtthhope
-    hlihhnuhigsegrrhhmlhhinhhugidrohhrghdruhhkpdhrtghpthhtohepthhonhihsegr
-    thhomhhiuggvrdgtohhmpdhrtghpthhtohepghhrvghgohhrhidrtghlvghmvghnthessg
-    hoohhtlhhinhdrtghomhdprhgtphhtthhopehnihgtohesfhhluhignhhitgdrnhgvthdp
-    rhgtphhtthhopegrlhgvgigrnhgurhgvrdhtohhrghhuvgesfhhoshhsrdhsthdrtghomh
-    dprhgtphhtthhopehrohgsvghrthdrjhgrrhiimhhikhesfhhrvggvrdhfrhdprhgtphht
-    thhopegumhhithhrhidrthhorhhokhhhohhvsehgmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:cZfMZs5iHXtcIzuW_BSliI_HvreDayTF3XbPOQ1YrZ6yxubahMj6uQ>
-    <xmx:cZfMZt2RE9GsrgHPm4NifQtfzw0BCGPHR81VTG9cNpULzvRkWIlqeQ>
-    <xmx:cZfMZnFtYfS_kMFrEbTilUi0sKmWqnO5w4uO0X5tfI-FhQ43jiEkMQ>
-    <xmx:cZfMZm-74figysDp8LvB0pYnvqAN93YjeLxJOKIFZTRRvzLYjDU4iA>
-    <xmx:cpfMZg3hbmwnlL4P2euk13kcaUf_a3x_ySsZE_9Tilz1SVyx_9gPXSnF>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 32B31222006F; Mon, 26 Aug 2024 10:55:45 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1724693317; c=relaxed/simple;
+	bh=Ah1MYcJfpVaPDZCj/MgYPfBVJo43ln+VDcKQfM/BWW0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=F0vJuB4enMf3kzX5w92GGjgpsS14IY3U78m1dP1LqdjuRTbkrmE7/1p6+62IWa4VSSS9IXuOm/ij9PxvLfDGCDYIOreZRpO9VqbJ8l7adlo09mkcJdQ+bEByMEFVsKuXzHUdV5LrCmwNVmGObV8zg6akptUVLJ+lZkfWB04lDGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0E6AC8B7B5;
+	Mon, 26 Aug 2024 17:28:29 +0000 (UTC)
+Date: Mon, 26 Aug 2024 13:29:09 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Andreas Larsson
+ <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann
+ <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>, Brian Cain
+ <bcain@quicinc.com>, Catalin Marinas <catalin.marinas@arm.com>, Christoph
+ Hellwig <hch@infradead.org>, Christophe Leroy
+ <christophe.leroy@csgroup.eu>, Dave Hansen <dave.hansen@linux.intel.com>,
+ Dinh Nguyen <dinguyen@kernel.org>, Geert Uytterhoeven
+ <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, Helge Deller
+ <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar
+ <mingo@redhat.com>, Johannes Berg <johannes@sipsolutions.net>, John Paul
+ Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Kent Overstreet
+ <kent.overstreet@linux.dev>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Luis Chamberlain <mcgrof@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Matt Turner <mattst88@gmail.com>,
+ Max Filippov <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>,
+ Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>,
+ Richard Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>,
+ Song Liu <song@kernel.org>, Stafford Horne <shorne@gmail.com>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner
+ <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>, Vineet Gupta
+ <vgupta@kernel.org>, Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+ linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+ linux-mm@kvack.org, linux-modules@vger.kernel.org,
+ linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+ linux-snps-arc@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
+ linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+ loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v2 5/8] ftrace: Add swap_func to ftrace_process_locs()
+Message-ID: <20240826132909.306b08fc@gandalf.local.home>
+In-Reply-To: <20240826065532.2618273-6-rppt@kernel.org>
+References: <20240826065532.2618273-1-rppt@kernel.org>
+	<20240826065532.2618273-6-rppt@kernel.org>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 26 Aug 2024 16:55:23 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Walleij" <linus.walleij@linaro.org>,
- "Vincent Legoll" <vincent.legoll@gmail.com>
-Cc: "Aaro Koskinen" <aaro.koskinen@iki.fi>,
- "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
- "Andrew Lunn" <andrew@lunn.ch>, "Mark Brown" <broonie@kernel.org>,
- "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
- "Gregory Clement" <gregory.clement@bootlin.com>,
- "Jeremy J. Peper" <jeremy@jeremypeper.com>,
- "Janusz Krzysztofik" <jmkrzyszt@gmail.com>,
- "Kristoffer Ericson" <kristoffer.ericson@gmail.com>,
- "Krzysztof Kozlowski" <krzk@kernel.org>,
- "Linux Kernel ML" <linux-kernel@vger.kernel.org>,
- "Russell King" <linux@armlinux.org.uk>, "Nicolas Pitre" <nico@fluxnic.net>,
- "Nikita Shubin" <nikita.shubin@maquefel.me>,
- "Ramana Radhakrishnan" <ramanara@nvidia.com>,
- "Richard Earnshaw" <richard.earnshaw@arm.com>,
- "Richard Sandiford" <richard.sandiford@arm.com>,
- "Robert Jarzmik" <robert.jarzmik@free.fr>,
- "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>,
- "Tony Lindgren" <tony@atomide.com>, linux-mips@vger.kernel.org
-Message-Id: <35680bf8-d4f0-4b7a-b358-f71eb39e2a94@app.fastmail.com>
-In-Reply-To: 
- <CACRpkdZFQSN_t-Vx7xOXq0aF6Vf-XvsZKGF6yNMn7_dCeaZi_w@mail.gmail.com>
-References: 
- <CAEwRq=qhHBh5jKdLGb1r2Qem0jia=xcVdevihYfjdrLSYiZuiA@mail.gmail.com>
- <CACRpkdZFQSN_t-Vx7xOXq0aF6Vf-XvsZKGF6yNMn7_dCeaZi_w@mail.gmail.com>
-Subject: Re: [RFC} arm architecture board/feature deprecation timeline
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Aug 26, 2024, at 11:05, Linus Walleij wrote:
-> On Fri, Aug 23, 2024 at 10:47=E2=80=AFPM Vincent Legoll
-> <vincent.legoll@gmail.com> wrote:
->
->> It looks like the highmem feature is deemed for removal.
->>
->> I am investigating the loss of some available RAM on a GnuBee PC1 boa=
-rd.
->>
->> An highmem-enabled kernel can access a 64MB chunk of RAM that a
->> no-highmem can't. The board has 512 MB.
+On Mon, 26 Aug 2024 09:55:29 +0300
+Mike Rapoport <rppt@kernel.org> wrote:
 
-There have been problems in the past with configurations that have a lot
-less highmem than lowmem, since there is codce that assumes that
-lowmem is scarce but highmem is not.
+> From: Song Liu <song@kernel.org>
+> 
+> ftrace_process_locs sorts module mcount, which is inside RO memory. Add a
+> ftrace_swap_func so that archs can use RO-memory-poke function to do the
+> sorting.
 
-This means your configuration may have more RAM available when highmem
-is enabled, but still runs into out-of-memory or other problems more
-than without highmem.
+Can you add the above as a comment above the ftrace_swap_func() function?
 
-What you see is certainly unrelated to me mentioning that we may remove
-highmem support from the kernel altogether in the future, but it's
-possible that OpenWRT turned it off because things work better
-without it.=20
+Thanks,
 
-https://github.com/openwrt/openwrt/issues/13151 may explain
-what ios going on here.
+-- Steve
 
->> That's more than 10% on a RAM-poor NAS-oriented board, probably worth
->> the hassle to get it back.
->>
->> I built & flashed a current OpenWRT snapshot, without any modificatio=
-ns,
->> wich gave the following output:
-> (...)
->> The lost RAM is back usable.
->>
->> Is there an alternative to CONFIG_HIGHMEM to use that RAM chunk ?
->
-> Userspace can still use it right?
->
-> The approach we are taking on ARM32 (despite it's.... really hard) is
-> to try to create
-> separate address spaces for the kernel and userspace so that in kernel=
- context
-> the kernel can use 4GB of memory as it wants without the restriction o=
-f userpace
-> taking up the low addresses.
->
-> This looks easy until you run into some kernel assumptions about memor=
-y being
-> in a linear map at all times. Which I am wrestling with.
+> 
+> Signed-off-by: Song Liu <song@kernel.org>
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> ---
+>  include/linux/ftrace.h |  2 ++
+>  kernel/trace/ftrace.c  | 13 ++++++++++++-
+>  2 files changed, 14 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+> index fd5e84d0ec47..b794dcb7cae8 100644
+> --- a/include/linux/ftrace.h
+> +++ b/include/linux/ftrace.h
+> @@ -1188,4 +1188,6 @@ unsigned long arch_syscall_addr(int nr);
+>  
+>  #endif /* CONFIG_FTRACE_SYSCALLS */
+>  
+> +void ftrace_swap_func(void *a, void *b, int n);
+> +
+>  #endif /* _LINUX_FTRACE_H */
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index 4c28dd177ca6..9829979f3a46 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -6989,6 +6989,17 @@ static void test_is_sorted(unsigned long *start,
+> unsigned long count) }
+>  #endif
+>  
+> +void __weak ftrace_swap_func(void *a, void *b, int n)
+> +{
+> +	unsigned long t;
+> +
+> +	WARN_ON_ONCE(n != sizeof(t));
+> +
+> +	t = *((unsigned long *)a);
+> +	*(unsigned long *)a = *(unsigned long *)b;
+> +	*(unsigned long *)b = t;
+> +}
+> +
+>  static int ftrace_process_locs(struct module *mod,
+>  			       unsigned long *start,
+>  			       unsigned long *end)
+> @@ -7016,7 +7027,7 @@ static int ftrace_process_locs(struct module *mod,
+>  	 */
+>  	if (!IS_ENABLED(CONFIG_BUILDTIME_MCOUNT_SORT) || mod) {
+>  		sort(start, count, sizeof(*start),
+> -		     ftrace_cmp_ips, NULL);
+> +		     ftrace_cmp_ips, ftrace_swap_func);
+>  	} else {
+>  		test_is_sorted(start, count);
+>  	}
 
-MIPS32 is a bit special here since it has segments with a fixed mapped, =
-so
-the linear map is always at a fixed virtual address and at most 512MB in
-size, where most other architectures can make it e.g. 2GB by changing
-CONFIG_VMPSPLIT.
-
-CONFIG_CPU_MIPS32_3_5_EVA should allow doing this on MIPS as well,
-but I think the 1004K core in this specific (MT7621) SoC is  little too
-old to support that feature.
-
-      Arnda
 
