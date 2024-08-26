@@ -1,116 +1,64 @@
-Return-Path: <linux-mips+bounces-5094-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5095-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65D1095E9C0
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Aug 2024 08:59:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FAC395EAA1
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Aug 2024 09:36:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98D751C21570
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Aug 2024 06:59:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2260287314
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Aug 2024 07:36:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D49C9136E21;
-	Mon, 26 Aug 2024 06:57:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED5F0131E4B;
+	Mon, 26 Aug 2024 07:36:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u9brm9ff"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="UssJl6wd"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B06512DD90;
-	Mon, 26 Aug 2024 06:57:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2BC8129A74;
+	Mon, 26 Aug 2024 07:36:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.22.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724655476; cv=none; b=YMkLpCxXPavIHKu/ycHjQFEI6uKwWVY+JHFxUjL6rQ3ciFcl1EnQcUlcSZR9R1bnhNGmr6ZG+MzNmFnIBq66/kT8Apz+Gq0LT8T7Rhb+NHzNxCcxzTl+Qr3uG9qf0R1RxhLfJORXqvdCsGhDt6RuI/fim37aKaQoO6pO1v5dG5c=
+	t=1724657770; cv=none; b=Lxe+fTvKnMbN3B5EeWWeiKEqw729miqGb0EOX/cFPTphEmq+f5GuA4qPTSa4JASKlwqBEB6aMKjGaeVkUf0BvF7UtbfolV40LJ5DIMupUp6bFSbZ7RAYAASqYc5HFdAGmwnUytas/fiD0rUdpNyh7rf7DzLkFUYHCqNopmcrmMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724655476; c=relaxed/simple;
-	bh=l7egSUNcilONf7gTBq0Hjl37ut+S55vwboWjXSdFWe0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kunc9VoxvlwS7MLqhnAYX+KLDgH1Fdu/yMHgDRe/aegAuOuu7bLsThdCWpycdo9b0PK7O0+hEEwBvJZuSKRPXAJBZ2+01ckfb8G/G+yOIMgFIByn5onF+gVX/v4GCt7NcHie4CCWtqtA29ODq4nBILD3jskA4bdugQmn7pwyNUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u9brm9ff; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F0D5C567EB;
-	Mon, 26 Aug 2024 06:57:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724655475;
-	bh=l7egSUNcilONf7gTBq0Hjl37ut+S55vwboWjXSdFWe0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=u9brm9ffBKJJy0lQBqVUmOtRsmRW1o2mBFKA4EhD7/nH8h2gv+M7lKVr7gSQptliB
-	 hbOarsMop4k9H3WwY7Yn4SDp1vUrBJIaGRD3L7h2LyBRLq6p3w2M+aMtu5fF8yUiOT
-	 JzgM/Mh7LerNq33JfGbB0R6dXwMiZvlBUPNF03eoh1GhN4IuDSdJxnUg45kUvxXE/S
-	 I1P3qHXaDeHHHmN8Cm9t03nsqNN6vCskEjl1NxrPzvke5fbuCG5/WnwkhujA6NhoOt
-	 p9raTRTUjWPVS0MKDT5Lhfx819pdvVyaXynnIIS3xdhWfXB7iG8JbUVNzrCj5nDxC0
-	 KwcaUZEBkiEAw==
-From: Mike Rapoport <rppt@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>,
-	Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>,
-	Mike Rapoport <rppt@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>,
-	Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
+	s=arc-20240116; t=1724657770; c=relaxed/simple;
+	bh=gvY8AH4a88MP1lz2m4OgJjyz6KDbapZwsTzDMYuixg4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=q9e6f2b3jHBoAH8BpIvMHkHVknrXEDoBEKzh4pEzKhMVQSYALa6l3BR6Z/8N+97rFlIZ1Ye/kM6XUsvrACGrVjcKvfo+fxvW8prd31fqSImTI7l8yosWlSJtmbgqvBn6aMpcOxWj/HEMovetPnfs4nPx0vdXulDiDBBwwqJlCik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=UssJl6wd; arc=none smtp.client-ip=54.207.22.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1724657731;
+	bh=BHo9Isz2T8wnA4FQQqg3YttItu9Af8Lpgwwo2oZ48CY=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=UssJl6wdqsO8BmTIvBZeUKUjMZvAScE+J1fpkkKhc3KcYBXE1CLidqQaYCrrXC6dJ
+	 PxuIkgljjw98g6O3oIZH08/UNoDEf73Tt0zFkcinUs9ps/1izE8eogjm7jxtTTHMHc
+	 jA81Dhwu6qBchNh7DA0oIizcMSBHyj4+SewSbpjw=
+X-QQ-mid: bizesmtpsz1t1724657724t649sll
+X-QQ-Originating-IP: uwki6QKLS7//uyngcBsEu/Z1SrjmGyWbJZ5KjC6R5NM=
+Received: from localhost.localdomain ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Mon, 26 Aug 2024 15:35:22 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 16075421044122579621
+From: WangYuli <wangyuli@uniontech.com>
+To: herbert@gondor.apana.org.au,
+	davem@davemloft.net,
+	tsbogend@alpha.franken.de
+Cc: linux-crypto@vger.kernel.org,
 	linux-mips@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-modules@vger.kernel.org,
-	linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org,
-	x86@kernel.org
-Subject: [PATCH v2 8/8] x86/module: enable ROX caches for module text
-Date: Mon, 26 Aug 2024 09:55:32 +0300
-Message-ID: <20240826065532.2618273-9-rppt@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240826065532.2618273-1-rppt@kernel.org>
-References: <20240826065532.2618273-1-rppt@kernel.org>
+	linux-kernel@vger.kernel.org,
+	WangYuli <wangyuli@uniontech.com>,
+	"Maciej W . Rozycki" <macro@orcam.me.uk>,
+	Guan Wentao <guanwentao@uniontech.com>
+Subject: [PATCH v2] MIPS: crypto: Clean up useless assignment operations
+Date: Mon, 26 Aug 2024 15:35:18 +0800
+Message-ID: <E77DE576D872065A+20240826073518.812454-1-wangyuli@uniontech.com>
+X-Mailer: git-send-email 2.43.4
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -118,63 +66,112 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpsz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
 
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+When entering the "len & sizeof(u32)" branch, len must be less than 8.
+So after one operation, len must be less than 4.
+At this time, "len -= sizeof(u32)" is not necessary for 64-bit CPUs.
 
-Enable execmem's cache of PMD_SIZE'ed pages mapped as ROX for module
-text allocations.
+After that, replace `while' loops with equivalent `for' to make the
+code structure a little bit better by the way.
 
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Suggested-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Link: https://lore.kernel.org/all/alpine.DEB.2.21.2406281713040.43454@angie.orcam.me.uk/
+Signed-off-by: Guan Wentao <guanwentao@uniontech.com>
+Signed-off-by: WangYuli <wangyuli@uniontech.com>
 ---
- arch/x86/mm/init.c | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+ arch/mips/crypto/crc32-mips.c | 27 +++++++--------------------
+ 1 file changed, 7 insertions(+), 20 deletions(-)
 
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index eb503f53c319..a0ec99fb9385 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -1053,6 +1053,15 @@ unsigned long arch_max_swapfile_size(void)
- #ifdef CONFIG_EXECMEM
- static struct execmem_info execmem_info __ro_after_init;
- 
-+static void execmem_fill_trapping_insns(void *ptr, size_t size, bool writeable)
-+{
-+	/* fill memory with INT3 instructions */
-+	if (writeable)
-+		memset(ptr, INT3_INSN_OPCODE, size);
-+	else
-+		text_poke_set(ptr, INT3_INSN_OPCODE, size);
-+}
-+
- struct execmem_info __init *execmem_arch_setup(void)
+diff --git a/arch/mips/crypto/crc32-mips.c b/arch/mips/crypto/crc32-mips.c
+index ec6d58008f8e..3a80b7576ec3 100644
+--- a/arch/mips/crypto/crc32-mips.c
++++ b/arch/mips/crypto/crc32-mips.c
+@@ -77,36 +77,29 @@ static u32 crc32_mips_le_hw(u32 crc_, const u8 *p, unsigned int len)
  {
- 	unsigned long start, offset = 0;
-@@ -1063,8 +1072,23 @@ struct execmem_info __init *execmem_arch_setup(void)
- 	start = MODULES_VADDR + offset;
+ 	u32 crc = crc_;
  
- 	execmem_info = (struct execmem_info){
-+		.fill_trapping_insns = execmem_fill_trapping_insns,
- 		.ranges = {
--			[EXECMEM_DEFAULT] = {
-+			[EXECMEM_MODULE_TEXT] = {
-+				.flags	= EXECMEM_KASAN_SHADOW | EXECMEM_ROX_CACHE,
-+				.start	= start,
-+				.end	= MODULES_END,
-+				.pgprot	= PAGE_KERNEL_ROX,
-+				.alignment = MODULE_ALIGN,
-+			},
-+			[EXECMEM_KPROBES ... EXECMEM_BPF] = {
-+				.flags	= EXECMEM_KASAN_SHADOW,
-+				.start	= start,
-+				.end	= MODULES_END,
-+				.pgprot	= PAGE_KERNEL,
-+				.alignment = MODULE_ALIGN,
-+			},
-+			[EXECMEM_MODULE_DATA] = {
- 				.flags	= EXECMEM_KASAN_SHADOW,
- 				.start	= start,
- 				.end	= MODULES_END,
+-#ifdef CONFIG_64BIT
+-	while (len >= sizeof(u64)) {
++#if IS_ENABLED(CONFIG_64BIT)
++	for (; len >= sizeof(u64); p += sizeof(u64), len -= sizeof(u64)) {
+ 		u64 value = get_unaligned_le64(p);
+-
+ 		CRC32(crc, value, d);
+-		p += sizeof(u64);
+-		len -= sizeof(u64);
+ 	}
+ 
+ 	if (len & sizeof(u32)) {
+ #else /* !CONFIG_64BIT */
+-	while (len >= sizeof(u32)) {
++	for (; len >= sizeof(u32); len -= sizeof(u32)) {
+ #endif
+ 		u32 value = get_unaligned_le32(p);
+-
+ 		CRC32(crc, value, w);
+ 		p += sizeof(u32);
+-		len -= sizeof(u32);
+ 	}
+ 
+ 	if (len & sizeof(u16)) {
+ 		u16 value = get_unaligned_le16(p);
+-
+ 		CRC32(crc, value, h);
+ 		p += sizeof(u16);
+ 	}
+ 
+ 	if (len & sizeof(u8)) {
+ 		u8 value = *p++;
+-
+ 		CRC32(crc, value, b);
+ 	}
+ 
+@@ -117,38 +110,32 @@ static u32 crc32c_mips_le_hw(u32 crc_, const u8 *p, unsigned int len)
+ {
+ 	u32 crc = crc_;
+ 
+-#ifdef CONFIG_64BIT
+-	while (len >= sizeof(u64)) {
++#if IS_ENABLED(CONFIG_64BIT)
++	for (; len >= sizeof(u64); p += sizeof(u64), len -= sizeof(u64)) {
+ 		u64 value = get_unaligned_le64(p);
+-
+ 		CRC32C(crc, value, d);
+-		p += sizeof(u64);
+-		len -= sizeof(u64);
+ 	}
+ 
+ 	if (len & sizeof(u32)) {
+ #else /* !CONFIG_64BIT */
+-	while (len >= sizeof(u32)) {
++	for (; len >= sizeof(u32); len -= sizeof(u32)) {
+ #endif
+ 		u32 value = get_unaligned_le32(p);
+-
+ 		CRC32C(crc, value, w);
+ 		p += sizeof(u32);
+-		len -= sizeof(u32);
+ 	}
+ 
+ 	if (len & sizeof(u16)) {
+ 		u16 value = get_unaligned_le16(p);
+-
+ 		CRC32C(crc, value, h);
+ 		p += sizeof(u16);
+ 	}
+ 
+ 	if (len & sizeof(u8)) {
+ 		u8 value = *p++;
+-
+ 		CRC32C(crc, value, b);
+ 	}
++
+ 	return crc;
+ }
+ 
 -- 
-2.43.0
+2.43.4
 
 
