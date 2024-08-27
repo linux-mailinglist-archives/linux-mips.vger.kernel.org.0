@@ -1,113 +1,188 @@
-Return-Path: <linux-mips+bounces-5118-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5119-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93AC496020C
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Aug 2024 08:40:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0B7E9604F6
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Aug 2024 10:55:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AFC21F20582
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Aug 2024 06:40:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C31831C22787
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Aug 2024 08:55:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0CB513FD83;
-	Tue, 27 Aug 2024 06:39:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE96C19A296;
+	Tue, 27 Aug 2024 08:55:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DusVZnZ7"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4363413D53F;
-	Tue, 27 Aug 2024 06:39:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58188158DD0;
+	Tue, 27 Aug 2024 08:55:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724740761; cv=none; b=g4+7ttij1v34V1Op4GErryVAOiQbKlmRKMnil8PdiB0psTkmTQTDtWp9hMs7bfhYBVVp/6wuxZ/2d3rW9ZcCgJZprGpK9iRxG9tKlujIH7XZeaW5ymoTp/Wj+Jj1KlUTtxTpFxJorjWInFsdtuNCgcCNQpKgd0lc0Iq4hWvXQIE=
+	t=1724748945; cv=none; b=bLyEsNYT8WeLcukQ5W+0k58/kim9tIPhGIssieGFgBjDgndmcdCVx+ZBvjqA2+dosRdy8ryr1CoFfr3Qb3xKHtab7WuLBYb5dgto36HhoxjfgYTAhFkXjcRKuLGnU3wrLcS1RzSy1RVxoKfUC0LtlEak2epeUdHnzCC3T84a5oY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724740761; c=relaxed/simple;
-	bh=kw+SmGbNgU/Y7Ultd3TRCIDvjLA02UIU6oeUdCnjbAA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AbfwJO/xSJjmWWFJsRA+8OJkN3CM4yBNPsnQsC+2AvstVhncRhAWSSdlzH64pBoR+23BuLy0Ps93NVU1h3bsl6YaS8cfZvOtvXu1ajwdFPfIfzr68raA5csW8+mNUz/rZqpMaFghJLXOGezajCVXxALyy/vAvDU1Dwk7R9CsAfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6cf6d1a2148so9492207b3.3;
-        Mon, 26 Aug 2024 23:39:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724740757; x=1725345557;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KGZ1SOA396NzpzsyvzdR1JE9oP9KWAqRS+PYDvwpUmk=;
-        b=Eh2N57MfpCJ6FHeqmS1F2iYZT10xwKkmNScxYBF6HIz7ZlOwdPjE/zkb9ihfmSqYck
-         pRs3QxW1XFm/Hc5ouhHRoErYi+/kFh5LzqH0e6A6NE2BstMt7uW3yDriWAxYrWL0IbOq
-         n5ihXn0X++zmXfZs8CqfSFu7xVeDzA71xryt9X1/n69ssL97aKxOICuLglV/KWBL+toN
-         IRMCHIX7VKb3n++C1X5iHW5P7hvyNRvPXiSYMB0A3He+45Z7HExY+MmY8DEZv4pXzKMH
-         qsHEuWi+tWV0JyvaM9hv5BaVmVTu/1l1yJVDYbudlWh2lTDo+eaeF/w45mLqj+xaPvOK
-         D+2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUA8mL3YhccSfr7ZtpI/Qx5A46aWXqDU6dmsjKFdDSgHB+5e25BrHpviIwMqtiTCFHJnrmgXH183z0p5Q==@vger.kernel.org, AJvYcCUrE5x4R36WpNqA61atf9CB3UuwWaQiN7KJV0IqJXsy71q41VI0fg6a7sZmF2SPqe0nPQ3JclHDkZo=@vger.kernel.org, AJvYcCWGHUqbcW0RwlCSE1BkFmPwtFKdvZCKTE/i4b5GVlTDGgrzfJZb+OqXeJkvyFrttNKKg6rA++RUiuzjeN5cwVVtAO4=@vger.kernel.org, AJvYcCXNB1Z304FD0d63sevP2xmHxDRVHyy+qU5L/AedHGQoSg6VHrzdHIPoeTiVo7Vznbr2CGsxR4GopvpmVSSg@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjDb1blniTuChc4S/DJY2D7IlL1WBcEdv+O6qlmqHYkIMCqlz7
-	A3pT9YTWMiRFbf8KFtpewqZJygQS0DK2A94GzpO/97/FLdxZZ5mfaYsXMsnB
-X-Google-Smtp-Source: AGHT+IGSGJGo9EYq8UwOLeR7HNY9lgHHLu6aRq0fNm2UcjnllzrOncfhlYU6EHq/THHLlb3MnG6e6w==
-X-Received: by 2002:a05:690c:4b08:b0:6be:2044:935b with SMTP id 00721157ae682-6cfba8726cdmr23225287b3.25.1724740756855;
-        Mon, 26 Aug 2024 23:39:16 -0700 (PDT)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6c39d3a9df2sm17952847b3.103.2024.08.26.23.39.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Aug 2024 23:39:16 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6b59a67ba12so46965687b3.1;
-        Mon, 26 Aug 2024 23:39:16 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVZD2ht3JNYB5HhrWvZiAlUhFYX0xtOsCdep2+ndvcuhDxEM1RXNqhR8Q4lJz30Liio/5erlZFTAcsCvyj4@vger.kernel.org, AJvYcCWTfEX2caGBQhaak5S5nwP9ZkArjgFCPl6NIcBRL/lMNLva/HbMXxvbNhGFjJsaFX1ddRzXUZAyJUl2g9JNmnWDpEk=@vger.kernel.org, AJvYcCWrU+3GwFK7c2Awsjs7Z+1bLuvXEM6O9U/+VGMPbcVBgCQMUWTohTWjA68+5E8u55Au2c7y+AleFel7xA==@vger.kernel.org, AJvYcCWvWL0yHs97szEltq9fek56tEzqfe03XplHjPzvRt0b5f1PFxvXCw+439mTcwBAelryr54VgY97PaI=@vger.kernel.org
-X-Received: by 2002:a05:690c:38b:b0:6c7:a120:e10f with SMTP id
- 00721157ae682-6cfbbbd4c68mr20021307b3.29.1724740755948; Mon, 26 Aug 2024
- 23:39:15 -0700 (PDT)
+	s=arc-20240116; t=1724748945; c=relaxed/simple;
+	bh=WLyDwKrTLwxUKO9wLuHMkEx2eqbtMQG2RDk7GrJYDXs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oW+yXMNYQLA8jsdJv8q+4imlY13EYHDB43Pi/YHEqiPG0tfwost9HmHi9gToLX3rOliQ49yvvdc1sLeVJnek25rOgrvDA3/hH5iYjH1dJ+jRDb4w9I2hLG/S6S47Z+71FPe/IJmHo0mt47b7lYNGEiVVzOXnRRgo84P4UjHV6aw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DusVZnZ7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E362BC8B7A5;
+	Tue, 27 Aug 2024 08:55:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724748944;
+	bh=WLyDwKrTLwxUKO9wLuHMkEx2eqbtMQG2RDk7GrJYDXs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DusVZnZ7wV2iULh/1avLL75JPrhMhQlBqoECiJtic0bUtwgwuIxQeD5hzgO3OPkyS
+	 dpl+eK1bBgzJJ35WOwwwbfdgq1YQrY2eHAEWUAKnv8OixY+PRJYPtQH9Uh4KDOOHgD
+	 2/VI5iJPwBhdC5LsFDFX73FW+2wIcx/umVi6Bv43EvELDrk40xPn4mIuDGkezsnKRA
+	 xbs+ZNNQqQDTYUIePAvIqd1K0l/VrmBAarQw0NUQwiKK+jAlMR+ifUUyK+I6EB0ATl
+	 0IqZzSdRMeIajz+pVDlkeyPLq3GoGX7ttE4pCEa3ZuqwGkXktl0F6ooJc0ev3A8Yxa
+	 2+SfAAZCXhU+Q==
+Date: Tue, 27 Aug 2024 11:52:55 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Bruno Faccini <bfaccini@nvidia.com>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Hildenbrand <david@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vasily Gorbik <gor@linux.ibm.com>, Will Deacon <will@kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+	"linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+	"nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+	"sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+	"x86@kernel.org" <x86@kernel.org>, Zi Yan <ziy@nvidia.com>
+Subject: Re: [PATCH v4 24/26] arch_numa: switch over to numa_memblks
+Message-ID: <Zs2T5wkSYO9MGcab@kernel.org>
+References: <MW4PR12MB72616723E1A090E315681FF6A38B2@MW4PR12MB7261.namprd12.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240827034841.4121-1-rongqianfeng@vivo.com> <20240827034841.4121-2-rongqianfeng@vivo.com>
-In-Reply-To: <20240827034841.4121-2-rongqianfeng@vivo.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 27 Aug 2024 08:39:03 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWNJJ6q88MA+bgimmYVLyO6gp7MomLkhNRwLTLdMkkFYQ@mail.gmail.com>
-Message-ID: <CAMuHMdWNJJ6q88MA+bgimmYVLyO6gp7MomLkhNRwLTLdMkkFYQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] i2c: emev2: Use devm_clk_get_enabled() helpers
-To: Rong Qianfeng <rongqianfeng@vivo.com>
-Cc: andriy.shevchenko@intel.com, biju.das.jz@bp.renesas.com, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Paul Cercueil <paul@crapouillou.net>, linux-renesas-soc@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mips@vger.kernel.org, opensource.kernel@vivo.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MW4PR12MB72616723E1A090E315681FF6A38B2@MW4PR12MB7261.namprd12.prod.outlook.com>
 
-On Tue, Aug 27, 2024 at 5:49=E2=80=AFAM Rong Qianfeng <rongqianfeng@vivo.co=
-m> wrote:
-> The devm_clk_get_enabled() helpers:
->     - call devm_clk_get()
->     - call clk_prepare_enable() and register what is needed in order to
->      call clk_disable_unprepare() when needed, as a managed resource.
->
-> This simplifies the code and avoids the calls to clk_disable_unprepare().
->
-> While at it, no need to save clk pointer, drop sclk from struct
-> em_i2c_device.
->
-> Signed-off-by: Rong Qianfeng <rongqianfeng@vivo.com>
+Hi,
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On Mon, Aug 26, 2024 at 06:17:22PM +0000, Bruno Faccini wrote:
+> > On 7 Aug 2024, at 2:41, Mike Rapoport wrote:
+> > 
+> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > 
+> > Until now arch_numa was directly translating firmware NUMA information
+> > to memblock.
+> > 
+> > Using numa_memblks as an intermediate step has a few advantages:
+> > * alignment with more battle tested x86 implementation
+> > * availability of NUMA emulation
+> > * maintaining node information for not yet populated memory
+> > 
+> > Adjust a few places in numa_memblks to compile with 32-bit phys_addr_t
+> > and replace current functionality related to numa_add_memblk() and
+> > __node_distance() in arch_numa with the implementation based on
+> > numa_memblks and add functions required by numa_emulation.
+> > 
+> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> > Tested-by: Zi Yan <ziy@nvidia.com> # for x86_64 and arm64
+> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > Tested-by: Jonathan Cameron <Jonathan.Cameron@huawei.com> [arm64 + CXL via
+> > QEMU]
+> > Acked-by: Dan Williams <dan.j.williams@intel.com>
+> > Acked-by: David Hildenbrand <david@redhat.com>
+> > ---
+> >   drivers/base/Kconfig       |   1 +
+> >   drivers/base/arch_numa.c   | 201 +++++++++++--------------------------
+> >   include/asm-generic/numa.h |   6 +-
+> >   mm/numa_memblks.c          |  17 ++--
+> >   4 files changed, 75 insertions(+), 150 deletions(-)
+> >  
+> > <snip>
+> > 
+> > +
+> > +u64 __init numa_emu_dma_end(void)
+> > +{
+> > +             return PFN_PHYS(memblock_start_of_DRAM() + SZ_4G);
+> > +}
+> > +
+> 
+> PFN_PHYS() translation is unnecessary here, as
+> memblock_start_of_DRAM() + SZ_4G is already a
+> memory size.
+> 
+> This should fix it:
+>  
+> diff --git a/drivers/base/arch_numa.c b/drivers/base/arch_numa.c
+> index 8d49893c0e94..e18701676426 100644
+> --- a/drivers/base/arch_numa.c
+> +++ b/drivers/base/arch_numa.c
+> @@ -346,7 +346,7 @@ void __init numa_emu_update_cpu_to_node(int
+> *emu_nid_to_phys,
+> 
+> u64 __init numa_emu_dma_end(void)
+> {
+> -              return PFN_PHYS(memblock_start_of_DRAM() + SZ_4G);
+> +             return memblock_start_of_DRAM() + SZ_4G;
+> }
+> 
+> void debug_cpumask_set_cpu(unsigned int cpu, int node, bool enable)
 
-Gr{oetje,eeting}s,
+Right, I've missed that. Thanks for the fix!
 
-                        Geert
+Andrew, can you please apply this (with fixed formatting)
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+diff --git a/drivers/base/arch_numa.c b/drivers/base/arch_numa.c
+index 8d49893c0e94..e18701676426 100644
+--- a/drivers/base/arch_numa.c
++++ b/drivers/base/arch_numa.c
+@@ -346,7 +346,7 @@ void __init numa_emu_update_cpu_to_node(int *emu_nid_to_phys,
+ 
+ u64 __init numa_emu_dma_end(void)
+ {
+-	return PFN_PHYS(memblock_start_of_DRAM() + SZ_4G);
++	return memblock_start_of_DRAM() + SZ_4G;
+ }
+ 
+ void debug_cpumask_set_cpu(unsigned int cpu, int node, bool enable)
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+-- 
+Sincerely yours,
+Mike.
 
