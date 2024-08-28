@@ -1,224 +1,154 @@
-Return-Path: <linux-mips+bounces-5152-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5153-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D039A96204F
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 09:06:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D65FC9620D6
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 09:23:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F04901C21439
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 07:06:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88B0328532F
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 07:23:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8259F159596;
-	Wed, 28 Aug 2024 07:06:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F07915B570;
+	Wed, 28 Aug 2024 07:20:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iXiG2zT1"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6D5B158524;
-	Wed, 28 Aug 2024 07:06:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B54A415B13C
+	for <linux-mips@vger.kernel.org>; Wed, 28 Aug 2024 07:20:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724828771; cv=none; b=f7CfbtZZQRprAC/GYL0IWU6cO95xocD3+h9B0nyix+TVwrSC7H8hhpBsmcFM1oZefKGNAPmUPXHRj6qUk4qqqcaGLuGnxzJ02KAO3D42Rlirgp9MbiBshOvnGGhHhSHSri6hTD3pEl5HQznn1o6L6bV1Ma3AxmSMJA0TQ9J8rqw=
+	t=1724829640; cv=none; b=BUd1lXVmuQPIh1QCTAQlniDN6EmJ0VlSCtfiuRd8S3zVxRH5YS9syESF3zrPXsXhjYIH1wB1fkG97YK5Fo0s+/4xJvk8B8T+oHqdHmz5ZGKMMp4HxvCcdgtejOM3S3hGdG7kX1S6eoW1eVUj8icJBXQus5tPKFRLeOE0ulKVzes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724828771; c=relaxed/simple;
-	bh=Unnar+DNJSX+QG8uYqeEe63Eu0xTKLVIO8iZd6HyRTw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pga40vNFadCTFe2aEa68RsokOWCeCfMqtmiS2cwtSOvyUr3uaVgWXhqNz3du/GjPJSq97QoFMS0vp2FxZjEvkHf2gDJ6zW/H3yu074+vd2TQw1G4g0tQrBOEQ8l1amuGtE/5EeH3ClDN2TO6LRhRrolOv5IuCb8AlsPDDgF6RO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.2.5.213])
-	by gateway (Coremail) with SMTP id _____8DxOJpezM5m6HsiAA--.32536S3;
-	Wed, 28 Aug 2024 15:06:06 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.2.5.213])
-	by front1 (Coremail) with SMTP id qMiowMCxB2ZbzM5m5UglAA--.2269S4;
-	Wed, 28 Aug 2024 15:06:04 +0800 (CST)
-From: Bibo Mao <maobibo@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Jianmin Lv <lvjianmin@loongson.cn>
-Cc: WANG Xuerui <kernel@xen0n.name>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org
-Subject: [RFC v2 2/2] irqchip/loongson-eiointc: Add multiple interrupt pin routing support
-Date: Wed, 28 Aug 2024 15:06:03 +0800
-Message-Id: <20240828070603.3518753-3-maobibo@loongson.cn>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20240828070603.3518753-1-maobibo@loongson.cn>
-References: <20240828070603.3518753-1-maobibo@loongson.cn>
+	s=arc-20240116; t=1724829640; c=relaxed/simple;
+	bh=hY0rdkFxlOJ73INaytL9GxG6uDuQeptdtje3tcWXF+U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PgGWlITnFmqpjjdJpaayDmKI72xJ4V+tuVqL0n+bFdiDaPAXXKFeKDodtc3Uv+GGsrLPK7WiUSjYappxrmkjFTOu/RZ0tvGsd/0JGZHwqXy2yQ0o2OaHJ+U113Wyw1g8EI4W1JhnvpYjGdmlreKEnJqj6bZvAXIV5yXwgtV1KRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iXiG2zT1; arc=none smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-4518d9fa2f4so190561cf.0
+        for <linux-mips@vger.kernel.org>; Wed, 28 Aug 2024 00:20:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1724829636; x=1725434436; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WaKkxTlZTeNsK8i9Bxn3PWY1aY/BLsT89GdUnPxSzCs=;
+        b=iXiG2zT1LZYmRlQ14gRZynyy8LwteaYwvbXkKGk5hnY0hWAZjMr8whQjsAqKYp6nIP
+         XLnbQMYBrYHBNu2sGcwa411HH/mMlVF0VBicIn18IOgiBOcMj7TzkZBN5rg7K/Yp9zac
+         R4aJXx9G57xEL9LbZaFy70W55jvCQSwc1bpuGqMWGM3uz93nKfBiK3V6jDEh2jPTaxEM
+         ohJQqGdPdB4R2lsc7JjJsg2tfPWD/feF/rI2J35mNcyrE53PQxNmaeKZ+1xv3hFDVUjb
+         cdTv7zi2Ctk8Iohq3E3vtTNIz1joqkAMQVGFaQBTDLqcJ+jeTne9UjwOa8Bge8CxHv3Z
+         0R5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724829636; x=1725434436;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WaKkxTlZTeNsK8i9Bxn3PWY1aY/BLsT89GdUnPxSzCs=;
+        b=RBYVtCaHwcD33r9NUOY52YqUM0LU1nEPZo4eg1UhJZIHdpmTaaHkZ96zmYc0PRiW4x
+         W2T7hm2b55iUaDoOgwbZdBULbdhESNVsbx3Tpfy7wTBOQg5/Dx3gZ9I8VQRVk96AXaF1
+         FKqPf4JVKSeRL+pgJulyaPn4GNqts9vdUOGwprALXm07a8UG646VtQsRoFzg/7INtSmL
+         4EmiOcgk1kanE82Qu4a0wm8xpOgjhI0CLN0RsWtnr9CdmbeYkW1icqB6KX2Rki+1cm8F
+         dSYUt9eQswcIKqDIMDke/WDZI1hDX8M298Dq5r22kiOwJt33iUaBTvcuF8zQdYps+T9H
+         9tDA==
+X-Forwarded-Encrypted: i=1; AJvYcCWHOj6U4e2mCPijx96mLkEygC3RnPMMnqaAqSuuwINhvgAPUCr3wTS9zM0HEj6NP5ZAb2YQuMxyEh06@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXU6p4hPsPE5It5ofwpceR3/Za7SJBa+9hYrtC7O1F7M3079pE
+	bw7FQDIxbgrMMCXyf09z8zpWQD5VS67gKtpqKM3FijBeToYUvNlRgdOcJd2g5bBpW+jgxUf6co2
+	c7gYjFbMWaVGm+5TK02/zXR/hiTic26eWGrwW
+X-Google-Smtp-Source: AGHT+IHyMD+4xnusQLwuQ5h6kBQmR1VYMf6lXqEwBGB2U8vCgE7ervQyk/rNIf69lWKuYbdIUKJLj3Yofx+zROPan7c=
+X-Received: by 2002:a05:622a:1211:b0:451:cd18:84c3 with SMTP id
+ d75a77b69052e-4566cb29dc2mr2435821cf.12.1724829636084; Wed, 28 Aug 2024
+ 00:20:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowMCxB2ZbzM5m5UglAA--.2269S4
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-	ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-	nUUI43ZEXa7xR_UUUUUUUUU==
+References: <20240825041511.324452-1-almasrymina@google.com>
+ <20240825041511.324452-5-almasrymina@google.com> <20240827191519.5464a0b2@kernel.org>
+In-Reply-To: <20240827191519.5464a0b2@kernel.org>
+From: Mina Almasry <almasrymina@google.com>
+Date: Wed, 28 Aug 2024 00:20:23 -0700
+Message-ID: <CAHS8izP8T5Xj97M7efecBmCrG9z8E0PYTxWCYZ0ym0hv13-DKg@mail.gmail.com>
+Subject: Re: [PATCH net-next v22 04/13] netdev: netdevice devmem allocator
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
+	Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
+	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Eiointc interrupt controller support 256 interrupt vectors at most,
-and irq handler gets interrupt status from base register group
-EIOINTC_REG_ISR plus specific offset. It needs to read register group
-EIOINTC_REG_ISR four times to get all 256 interrupt vectors status.
+On Tue, Aug 27, 2024 at 7:15=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
+>
+> On Sun, 25 Aug 2024 04:15:02 +0000 Mina Almasry wrote:
+> > +void net_devmem_free_dmabuf(struct net_iov *niov)
+> > +{
+> > +     struct net_devmem_dmabuf_binding *binding =3D net_iov_binding(nio=
+v);
+> > +     unsigned long dma_addr =3D net_devmem_get_dma_addr(niov);
+> > +
+> > +     if (gen_pool_has_addr(binding->chunk_pool, dma_addr, PAGE_SIZE))
+> > +             gen_pool_free(binding->chunk_pool, dma_addr, PAGE_SIZE);
+>
+> Is the check necessary for correctness? Should it perhaps be a WARN
+> under DEBUG_NET instead? The rest LGTM:
+>
 
-Eiointc registers including EIOINTC_REG_ISR is software emulated for
-VMs, there will be VM-exits when accessing eiointc registers. Here one
-method is introduced so that eiointc interrupt controller can route
-to different cpu interrupt pins for every 64 interrupt vectors. So
-irq handler needs read only relative 64 interrupt vector, it  reduces
-VM-exits.
+Not really necessary for correctness per se, but if we try to free a
+dma_addr that is not in a gen_pool (due to some other bug in the
+code), then gen_pool_free ends up BUG_ON, crashing the kernel.
 
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
- drivers/irqchip/irq-loongson-eiointc.c | 72 ++++++++++++++++++++++----
- 1 file changed, 63 insertions(+), 9 deletions(-)
+Arguably gen_pool_free should not BUG_ON, but I think that's an old
+API, and existing call sites have worked around the BUG_ON by doing a
+gen_pool_has_addr check like I do here, for example kernel/dma/pool.c.
+So I did not seek to change this established behavior.
 
-diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
-index e9ec63d85ee8..c6bcb6625e6d 100644
---- a/drivers/irqchip/irq-loongson-eiointc.c
-+++ b/drivers/irqchip/irq-loongson-eiointc.c
-@@ -30,11 +30,20 @@
- #define VEC_REG_IDX(irq_id)	((irq_id) / VEC_COUNT_PER_REG)
- #define VEC_REG_BIT(irq_id)     ((irq_id) % VEC_COUNT_PER_REG)
- #define EIOINTC_ALL_ENABLE	0xffffffff
-+#define EIOINTC_ROUTE_MULTIPLE_IP	BIT(0)
- 
- #define MAX_EIO_NODES		(NR_CPUS / CORES_PER_EIO_NODE)
- 
- static int nr_pics;
- 
-+struct eiointc_priv;
-+struct eiointc_ip_route {
-+	struct eiointc_priv	*priv;
-+	/* Routed destination IP offset */
-+	int			start;
-+	int			end;
-+};
-+
- struct eiointc_priv {
- 	u32			node;
- 	u32			vec_count;
-@@ -43,6 +52,8 @@ struct eiointc_priv {
- 	struct fwnode_handle	*domain_handle;
- 	struct irq_domain	*eiointc_domain;
- 	int			parent_hwirq;
-+	int			flags;
-+	struct eiointc_ip_route route_info[4];
- };
- 
- static struct eiointc_priv *eiointc_priv[MAX_IO_PICS];
-@@ -145,12 +156,20 @@ static int eiointc_router_init(unsigned int cpu)
- 	uint32_t data;
- 	uint32_t node = cpu_to_eio_node(cpu);
- 	int index = eiointc_index(node);
-+	int hwirq, mask;
- 
- 	if (index < 0) {
- 		pr_err("Error: invalid nodemap!\n");
- 		return -1;
- 	}
- 
-+	/* Enable cpu interrupt pin routed from eiointc */
-+	hwirq = eiointc_priv[index]->parent_hwirq;
-+	mask = BIT(hwirq);
-+	if (eiointc_priv[index]->flags & EIOINTC_ROUTE_MULTIPLE_IP)
-+		mask |= BIT(hwirq + 1) | BIT(hwirq + 2) | BIT(hwirq + 3);
-+	set_csr_ecfg(mask);
-+
- 	if ((cpu_logical_map(cpu) % CORES_PER_EIO_NODE) == 0) {
- 		eiointc_enable();
- 
-@@ -161,12 +180,23 @@ static int eiointc_router_init(unsigned int cpu)
- 
- 		for (i = 0; i < eiointc_priv[0]->vec_count / 32 / 4; i++) {
- 			/*
--			 * Route to interrupt pin, using offset minus INT_HWI0
--			 * Offset 0 means IP0 and so on
--			 * Every 32 vector routing to one interrupt pin
-+			 * Route to interrupt pin, minus INT_HWI0 as offset
-+			 * Offset 0 means IP0 and so on, every 32 vector
-+			 * routing to one interrupt pin
-+			 *
-+			 * If flags is set with EIOINTC_ROUTE_MULTIPLE_IP,
-+			 * every 64 vector routes to different consecutive
-+			 * IPs, otherwise all vector routes to the same IP
- 			 */
--			bit = BIT(eiointc_priv[index]->parent_hwirq - INT_HWI0);
--			data = bit | (bit << 8) | (bit << 16) | (bit << 24);
-+			if (eiointc_priv[index]->flags & EIOINTC_ROUTE_MULTIPLE_IP) {
-+				bit = BIT(hwirq++ - INT_HWI0);
-+				data = bit | (bit << 8);
-+				bit = BIT(hwirq++ - INT_HWI0);
-+				data |= (bit << 16) | (bit << 24);
-+			} else	{
-+				bit = BIT(hwirq - INT_HWI0);
-+				data = bit | (bit << 8) | (bit << 16) | (bit << 24);
-+			}
- 			iocsr_write32(data, EIOINTC_REG_IPMAP + i * 4);
- 		}
- 
-@@ -197,11 +227,18 @@ static void eiointc_irq_dispatch(struct irq_desc *desc)
- 	u64 pending;
- 	bool handled = false;
- 	struct irq_chip *chip = irq_desc_get_chip(desc);
--	struct eiointc_priv *priv = irq_desc_get_handler_data(desc);
-+	struct eiointc_ip_route *info = irq_desc_get_handler_data(desc);
- 
- 	chained_irq_enter(chip, desc);
- 
--	for (i = 0; i < eiointc_priv[0]->vec_count / VEC_COUNT_PER_REG; i++) {
-+	/*
-+	 * If EIOINTC_ROUTE_MULTIPLE_IP is set, every 64 interrupt vectors in
-+	 * eiointc interrupt controller routes to different cpu interrupt pins
-+	 *
-+	 * Every cpu interrupt pin has its own irq handler, it is ok to
-+	 * read ISR for these 64 interrupt vectors rather than all vectors
-+	 */
-+	for (i = info->start; i < info->end; i++) {
- 		pending = iocsr_read64(EIOINTC_REG_ISR + (i << 3));
- 
- 		/* Skip handling if pending bitmap is zero */
-@@ -214,7 +251,7 @@ static void eiointc_irq_dispatch(struct irq_desc *desc)
- 			int bit = __ffs(pending);
- 			int irq = bit + VEC_COUNT_PER_REG * i;
- 
--			generic_handle_domain_irq(priv->eiointc_domain, irq);
-+			generic_handle_domain_irq(info->priv->eiointc_domain, irq);
- 			pending &= ~BIT(bit);
- 			handled = true;
- 		}
-@@ -397,8 +434,25 @@ static int __init eiointc_init(struct eiointc_priv *priv, int parent_irq,
- 	}
- 
- 	eiointc_priv[nr_pics++] = priv;
-+	if (cpu_has_hypervisor) {
-+		priv->parent_hwirq = INT_HWI0;
-+		for (i = 0; i < priv->vec_count / VEC_COUNT_PER_REG; i++) {
-+			priv->route_info[i].start  = priv->parent_hwirq - INT_HWI0 + i;
-+			priv->route_info[i].end    = priv->route_info[i].start + 1;
-+			priv->route_info[i].priv   = priv;
-+			parent_irq = get_percpu_irq(priv->parent_hwirq + i);
-+			irq_set_chained_handler_and_data(parent_irq, eiointc_irq_dispatch,
-+								&priv->route_info[i]);
-+		}
-+		priv->flags |= EIOINTC_ROUTE_MULTIPLE_IP;
-+	} else {
-+		priv->route_info[0].start  = 0;
-+		priv->route_info[0].end    = priv->vec_count / VEC_COUNT_PER_REG;
-+		priv->route_info[0].priv   = priv;
-+		irq_set_chained_handler_and_data(parent_irq, eiointc_irq_dispatch,
-+							&priv->route_info[0]);
-+	}
- 	eiointc_router_init(0);
--	irq_set_chained_handler_and_data(parent_irq, eiointc_irq_dispatch, priv);
- 
- 	if (nr_pics == 1) {
- 		register_syscore_ops(&eiointc_syscore_ops);
--- 
-2.39.3
+I think WARN seems fine to me, but maybe not under DEBUG_NET. I don't
+want production code crashing due to this error, if it's OK with you.
 
+Unless I hear otherwise I'll add a WARN without debug here.
+
+> Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+>
+
+Thanks!
+
+--=20
+Thanks,
+Mina
 
