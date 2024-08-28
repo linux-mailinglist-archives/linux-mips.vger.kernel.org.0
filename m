@@ -1,54 +1,56 @@
-Return-Path: <linux-mips+bounces-5148-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5149-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51431961FB2
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 08:26:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75B1A961FDE
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 08:35:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05B9D1F25A8E
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 06:26:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CBADBB212B7
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 06:35:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF201553BC;
-	Wed, 28 Aug 2024 06:26:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="H9fF3GHs"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11E311552FA;
+	Wed, 28 Aug 2024 06:34:59 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 229D914D43D;
-	Wed, 28 Aug 2024 06:26:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17B9D13210D;
+	Wed, 28 Aug 2024 06:34:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724826394; cv=none; b=R/fGls2Vo0/IdFaphQgaZetaQNoKmlKEmf2zsyQcDBI/ItF7tML6XxuvccSeJ9gAUVD8JpCnPTxYR8RDa25xD2eMvQGE8lZSFXnEbD8dfaG6QKbf2VB3L9QmZJ/b0BGVfiw6/L/4US8WJaCdI0FR2puWeMsLmJORy1pRregaK3k=
+	t=1724826899; cv=none; b=GxShJE0DlYwNLtwmFodxP4HSxE+3RTibgg2l2NtlFaHuNI7TX76LRk1OLQsxeOuyEQQ/Tq+NBXa7yNzOJQEOe14QXeXrZBkPKxnxHYlnvGS91IS/aL2w/29A7629Lq0zx2G+NWWPiu3vqgzBZntz2azuY8c8FoiFc4rn7swH08E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724826394; c=relaxed/simple;
-	bh=MJRKJbSOVk7d7dB2I76yTOVq5DldaOqtebinMXA5JHc=;
+	s=arc-20240116; t=1724826899; c=relaxed/simple;
+	bh=aWGAxpMZHWrJ/BUyhvBfXZeExfTSMuVVk0d9vk2wP/M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hFwGk7oP7TXm4XLC5ckXxatcDUYawlKm5L8vdQ3VscV30XFqCVtmexSGUmAQqUD0vuHG/MwF1JaQrOjU6lth4ZM3qBJvkFMoT9OkF1Z+5QW5cdUtn1YP3POcoYt2d8ljPeRpZtvHqUXDVKAa0DBhPLvYfd8m/7Hl+cd0TleOShk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=pass (1024-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=H9fF3GHs; arc=none smtp.client-ip=94.231.106.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
+	 In-Reply-To:Content-Type; b=ADFHgNZFK9yvNiLr7CqHjh65k0u00I7bX5+0MLQ3kgYXkjGu8CNr86RXS3B69R+ECbcEf9yoAn79JzJhvExL70RjRIZbqF6BEnLvBLdKQ5pcpQ+2wNbvGpXUe57S+YDz5Q7fR3bI1Bf5x1Zzyt8FQ+N/2JByum13B1D86c+UCt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4Wtvlv5gSRz9sRs;
+	Wed, 28 Aug 2024 08:34:51 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6jPb3ZkzpTtP; Wed, 28 Aug 2024 08:34:51 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4Wtvlt44Xsz9sRy;
+	Wed, 28 Aug 2024 08:34:50 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp.simply.com (Simply.com) with ESMTP id 4WtvSD4CTtz1FXRy;
-	Wed, 28 Aug 2024 08:21:16 +0200 (CEST)
-Received: from [192.168.0.25] (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by smtp.simply.com (Simply.com) with ESMTPSA id 4WtvSC6CZ0z1DPkN;
-	Wed, 28 Aug 2024 08:21:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
-	s=unoeuro; t=1724826076;
-	bh=MZjaRsFFki5Bx5B5FHnglUd9d4H7fBDSxyu2jHiKATQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=H9fF3GHsObx42DQlccYjWkCaI8H7IjrygcJqC6jNaK4z0Z18apld5cXSgQVOUCs01
-	 KKScBf0M+KhxqxD5GBoovtvU90uovoSytFCOkAnhgzKqOSnS+qVrnNytVlHc49wNmn
-	 MMSVwYK7ONDpeF3VHN8cIXWAeIenPfu7ecQ0hXO8=
-Message-ID: <12a0f286-3114-4dac-8b75-3a638d9c8635@gaisler.com>
-Date: Wed, 28 Aug 2024 08:21:14 +0200
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 72A688B77E;
+	Wed, 28 Aug 2024 08:34:50 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id vzIG7P3XR8ze; Wed, 28 Aug 2024 08:34:50 +0200 (CEST)
+Received: from [172.25.230.108] (unknown [172.25.230.108])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id C02CD8B764;
+	Wed, 28 Aug 2024 08:34:49 +0200 (CEST)
+Message-ID: <a43c52c6-c1ac-4ef3-b511-08f0459bddad@csgroup.eu>
+Date: Wed, 28 Aug 2024 08:34:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -56,57 +58,112 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] dma-mapping: clearly mark DMA ops as an architecture
- feature
-To: Christoph Hellwig <hch@lst.de>, iommu@lists.linux.dev
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
- Robin Murphy <robin.murphy@arm.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>,
- Bingbu Cao <bingbu.cao@intel.com>, "Michael S . Tsirkin" <mst@redhat.com>,
- Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-media@vger.kernel.org,
- virtualization@lists.linux.dev, xen-devel@lists.xenproject.org,
- Thomas Gleixner <tglx@linutronix.de>
-References: <20240828061104.1925127-1-hch@lst.de>
- <20240828061104.1925127-3-hch@lst.de>
-Content-Language: en-US
-From: Andreas Larsson <andreas@gaisler.com>
-In-Reply-To: <20240828061104.1925127-3-hch@lst.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 07/16] powerpc: mm: Support MAP_BELOW_HINT
+To: Charlie Jenkins <charlie@rivosinc.com>, Arnd Bergmann <arnd@arndb.de>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Muchun Song <muchun.song@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ Russell King <linux@armlinux.org.uk>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Alexander Gordeev <agordeev@linux.ibm.com>,
+ Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>,
+ Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ "David S. Miller" <davem@davemloft.net>,
+ Andreas Larsson <andreas@gaisler.com>, Shuah Khan <shuah@kernel.org>,
+ Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Palmer Dabbelt <palmer@rivosinc.com>, linux-riscv@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+ linux-mm@kvack.org, loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+ linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20240827-patches-below_hint_mmap-v1-0-46ff2eb9022d@rivosinc.com>
+ <20240827-patches-below_hint_mmap-v1-7-46ff2eb9022d@rivosinc.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20240827-patches-below_hint_mmap-v1-7-46ff2eb9022d@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 2024-08-28 08:10, Christoph Hellwig wrote:
-> --- a/drivers/xen/Kconfig
-> +++ b/drivers/xen/Kconfig
-> @@ -177,8 +177,8 @@ config XEN_GRANT_DMA_ALLOC
->  
->  config SWIOTLB_XEN
->  	def_bool y
-> +	depends on ARCH_DMA_OPS
+Hi Charlie,
 
-Rename to ARCH_HAS_DMA_OPS in v2 is missing here
+Le 28/08/2024 à 07:49, Charlie Jenkins a écrit :
+> Add support for MAP_BELOW_HINT to arch_get_mmap_base() and
+> arch_get_mmap_end().
+> 
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> ---
+>   arch/powerpc/include/asm/task_size_64.h | 36 +++++++++++++++++++++++++++------
+>   1 file changed, 30 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/powerpc/include/asm/task_size_64.h b/arch/powerpc/include/asm/task_size_64.h
+> index 239b363841aa..a37a5a81365d 100644
+> --- a/arch/powerpc/include/asm/task_size_64.h
+> +++ b/arch/powerpc/include/asm/task_size_64.h
+> @@ -72,12 +72,36 @@
+>   #define STACK_TOP_MAX TASK_SIZE_USER64
+>   #define STACK_TOP (is_32bit_task() ? STACK_TOP_USER32 : STACK_TOP_USER64)
+>   
+> -#define arch_get_mmap_base(addr, len, base, flags) \
+> -	(((addr) > DEFAULT_MAP_WINDOW) ? (base) + TASK_SIZE - DEFAULT_MAP_WINDOW : (base))
+> +#define arch_get_mmap_base(addr, len, base, flags)					\
 
->  	depends on XEN_PV || ARM || ARM64
-> -	select DMA_OPS
->  	select SWIOTLB
->  
->  config XEN_PCI_STUB
-> @@ -348,10 +348,10 @@ config XEN_GRANT_DMA_IOMMU
->  
->  config XEN_GRANT_DMA_OPS
->  	bool
-> -	select DMA_OPS
->  
->  config XEN_VIRTIO
->  	bool "Xen virtio support"
-> +	depends on ARCH_DMA_OPS
+This macro looks quite big for a macro, can it be a static inline 
+function instead ? Same for the other macro below.
 
-and here.
+> +({											\
+> +	unsigned long mmap_base;							\
+> +	typeof(flags) _flags = (flags);							\
+> +	typeof(addr) _addr = (addr);							\
+> +	typeof(base) _base = (base);							\
+> +	typeof(len) _len = (len);							\
+> +	unsigned long rnd_gap = DEFAULT_MAP_WINDOW - (_base);				\
+> +	if (_flags & MAP_BELOW_HINT && _addr != 0 && ((_addr + _len) > BIT(VA_BITS - 1)))\
+> +		mmap_base = (_addr + _len) - rnd_gap;					\
+> +	else										\
+> +		mmap_end = ((_addr > DEFAULT_MAP_WINDOW) ?				\
+> +				_base + TASK_SIZE - DEFAULT_MAP_WINDOW :		\
+> +				_base);							\
+> +	mmap_end;									\
 
-Cheers,
-Andreas
+mmap_end doesn't exist, did you mean mmap_base ?
 
+> +})
+>   
+> -#define arch_get_mmap_end(addr, len, flags) \
+> -	(((addr) > DEFAULT_MAP_WINDOW) || \
+> -	 (((flags) & MAP_FIXED) && ((addr) + (len) > DEFAULT_MAP_WINDOW)) ? TASK_SIZE : \
+> -									    DEFAULT_MAP_WINDOW)
+> +#define arch_get_mmap_end(addr, len, flags)							\
+> +({												\
+> +	unsigned long mmap_end;									\
+> +	typeof(flags) _flags = (flags);								\
+> +	typeof(addr) _addr = (addr);								\
+> +	typeof(len) _len = (len);								\
+> +	if (_flags & MAP_BELOW_HINT && _addr != 0 && ((_addr + _len) > BIT(VA_BITS - 1)))	\
+> +		mmap_end = (_addr + _len);							\
+> +	else											\
+> +		mmap_end = (((_addr) > DEFAULT_MAP_WINDOW) ||					\
+> +				(((_flags) & MAP_FIXED) && ((_addr) + (_len) > DEFAULT_MAP_WINDOW))\
+> +				? TASK_SIZE : DEFAULT_MAP_WINDOW)				\
+> +	mmap_end;										\
+> +})
+>   
+>   #endif /* _ASM_POWERPC_TASK_SIZE_64_H */
+> 
 
