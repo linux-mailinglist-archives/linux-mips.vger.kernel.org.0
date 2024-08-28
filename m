@@ -1,120 +1,100 @@
-Return-Path: <linux-mips+bounces-5126-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5127-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09037961C11
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 04:24:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14D01961CAE
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 05:05:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4B7ECB230E3
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 02:24:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7D2A28535C
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 03:05:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C47269D2B;
-	Wed, 28 Aug 2024 02:24:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 220BA13C3D6;
+	Wed, 28 Aug 2024 03:04:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b9Bmt1JR"
+	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="Tzxk7EE4"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from xry111.site (xry111.site [89.208.246.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF74481B3;
-	Wed, 28 Aug 2024 02:24:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67921142621;
+	Wed, 28 Aug 2024 03:04:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724811875; cv=none; b=U8N+6m44nYBDymuCksiX2gGrS/veRxwo+sIsFI+w34CAr7NoOm6HGtwJQMLnx85/n4lEMykJy4081/jTgez4R5FQuyYfij+YlSNg3bWMszRzMFN3m9Ovqbwr7Eje9LK6ndEzkn9GbW4dkRItM7tqcfMfCUqR79Amn1C15KJeEo8=
+	t=1724814290; cv=none; b=suOfZKqQyZIA9afvTVWhBKB6W7Q4jgAXun30RvZd12tYcUOTXEhfsYXoivN3iCxtj5xo+SaWqu9eXbNos/RMAxjRkjVr5QqOOvJRLHFnuyAEqHkE96YJXd5uOuWs4U0vB4YjGuQ1ZxaiPoVKUMNuV4EWjE0WMR8tpomDk35dsgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724811875; c=relaxed/simple;
-	bh=tbhzQ1da3mBVV060Og29QANn1s4vz5Vd4ovZ/NNJcUg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=u5aEUoWvDmUqMs0c9BmJSCKrEw+/wJAr7ybcv8sT+gvqIQKl9lsaDWM9uv5QiqmW0ZIm/DuwNNPw3IBHY+5s4uggJx4wNcUdkHrCVgIa2ITWA7PiQ6E5lg+bpWScRzmL2nWCUogKSgh2eZKnjnnKRlXxYc+CcIfyphh1JrstlV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b9Bmt1JR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E784C4FEE9;
-	Wed, 28 Aug 2024 02:24:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724811874;
-	bh=tbhzQ1da3mBVV060Og29QANn1s4vz5Vd4ovZ/NNJcUg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=b9Bmt1JRKFBCrnIFqkRTsrtV2UxALLlwq9vjsa8mb6ADifsmdWpQkF6hV/RYp8vQA
-	 KnlrsUZWHHrZTtadELynyygYzNgxIL5XjiYXqvsDF4WjDbVNdoVWcjeJP/CMV5jE+5
-	 zHY1WzE7dhEgfg1nYdKdE+Kss/9anIAQAvEtqTsmXn5d1UFI9SFv6kPJc99SCMRNQM
-	 e5zmbEEJvj2B7cIjhKHtljG3nSZ00UtlbSdrVtBkmpzbQotM4l2h2mL+SWEBBmpQt7
-	 JSmguwlN4ydS894ghDp569iFgNhfAjPbkNp3FHOMAwrnt4gmuwMvVn9FUd04rX88Ko
-	 f0IMC8yARB4lw==
-Date: Tue, 27 Aug 2024 19:24:31 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet
- <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, Ivan
- Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
- <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
- Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
- de Bruijn <willemdebruijn.kernel@gmail.com>, "=?UTF-8?B?QmrDtnJuIFTDtnBl?=
- =?UTF-8?B?bA==?=" <bjorn@kernel.org>, Magnus Karlsson
- <magnus.karlsson@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>,
- Sumit Semwal <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
- <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
- Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
- <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
- <pkaligineedi@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
- Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>, linux-mm@kvack.org, Matthew Wilcox
- <willy@infradead.org>
-Subject: Re: [PATCH net-next v22 05/13] page_pool: devmem support
-Message-ID: <20240827192431.7145b06e@kernel.org>
-In-Reply-To: <20240825041511.324452-6-almasrymina@google.com>
-References: <20240825041511.324452-1-almasrymina@google.com>
-	<20240825041511.324452-6-almasrymina@google.com>
+	s=arc-20240116; t=1724814290; c=relaxed/simple;
+	bh=lz0Wl6tXkfl8pfna/ISrsfq89jz1pL2rKhpWawBA1/c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jmE991O1js2cwOQdnbD7BhEHZ3wI/sx9JoxbYYE5CokZE1PD5FR4OlrllFlw153w627BaMvVnu9IyEWM4rGI37SYJuKwmldI2xVCV4wVtAz8tYRGsgnBOSDQPtxkKdmZDtchmnjOImKpqWWcvBgY+iERP05iM25g62pwTQHhpgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=Tzxk7EE4; arc=none smtp.client-ip=89.208.246.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+	s=default; t=1724814286;
+	bh=lz0Wl6tXkfl8pfna/ISrsfq89jz1pL2rKhpWawBA1/c=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Tzxk7EE4SjJ059ZJn7YicbwJYV2R/ycSQo4u9H1EIsbEDEmDq2GlmC4IoLePVXwxV
+	 36oEAOhYGckxB/kwLb2RNmbuoytSWUKS9ya5tiRYwdkeKjZ4aRr0oGBNkU5ydlPHGy
+	 2B+7hp9aVNbpB9kWwJpQDA30Lv7VyxRkEu4WUXIk=
+Received: from stargazer.. (unknown [IPv6:240e:358:11b0:4f00:dc73:854d:832e:3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-384) server-digest SHA384)
+	(Client did not present a certificate)
+	(Authenticated sender: xry111@xry111.site)
+	by xry111.site (Postfix) with ESMTPSA id BF0F36656F;
+	Tue, 27 Aug 2024 23:04:43 -0400 (EDT)
+From: Xi Ruoyao <xry111@xry111.site>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Xi Ruoyao <xry111@xry111.site>
+Subject: [PATCH] mips: Remove posix_types.h include from sigcontext.h
+Date: Wed, 28 Aug 2024 11:04:14 +0800
+Message-ID: <20240828030413.143930-2-xry111@xry111.site>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Sun, 25 Aug 2024 04:15:03 +0000 Mina Almasry wrote:
-> +	/* Assume net_iov are on the preferred node without actually
-> +	 * checking...
-> +	 *
-> +	 * This check is only used to check for recycling memory in the page
-> +	 * pool's fast paths. Currently the only implementation of net_iov
-> +	 * is dmabuf device memory. It's a deliberate decision by the user to
-> +	 * bind a certain dmabuf to a certain netdev, and the netdev rx queue
-> +	 * would not be able to reallocate memory from another dmabuf that
-> +	 * exists on the preferred node, so, this check doesn't make much sense
-> +	 * in this case. Assume all net_iovs can be recycled for now.
-> +	 */
+Nothing in sigcontext.h seems to require anything from
+linux/posix_types.h.
 
-This is probably a bit too verbose, and we shouldn't talk about dmabuf
-specifically:
+It seems only a relict: in a Linux 2.6.11-rc2 patch [1] the
+linux/types.h include was unexplainedly changed to a linux/posix_types.h
+include.  I can only assume it was just an error.  Finally headers_check
+complained "found __[us]{8,16,32,64} type without #include
+<linux/types.h>" and commit ae612fb05b0f ("headers_check fix: mips,
+sigcontext.h") added back the linux/types.h include, but it didn't
+remove the posix_types.h include.
 
-	/* NUMA node preference only makes sense if we're allocating
-	 * system memory. Memory providers (which give us net_iovs)
-	 * choose for us.
-	 */
+Remove it now.
 
-Some of the code moves could be a separate patch, but either way:
+[1]:https://kernel.org/pub/linux/kernel/people/akpm/patches/2.6/2.6.11-rc2/2.6.11-rc2-mm2/broken-out/mips-generic-mips-updates.patch
 
-Acked-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+---
+ arch/mips/include/uapi/asm/sigcontext.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/mips/include/uapi/asm/sigcontext.h b/arch/mips/include/uapi/asm/sigcontext.h
+index d0a540e88bb4..d10afd13ee5b 100644
+--- a/arch/mips/include/uapi/asm/sigcontext.h
++++ b/arch/mips/include/uapi/asm/sigcontext.h
+@@ -56,7 +56,6 @@ struct sigcontext {
+ 
+ #if _MIPS_SIM == _MIPS_SIM_ABI64 || _MIPS_SIM == _MIPS_SIM_NABI32
+ 
+-#include <linux/posix_types.h>
+ /*
+  * Keep this struct definition in sync with the sigcontext fragment
+  * in arch/mips/kernel/asm-offsets.c
+-- 
+2.46.0
+
 
