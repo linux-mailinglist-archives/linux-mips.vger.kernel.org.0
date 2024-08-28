@@ -1,188 +1,101 @@
-Return-Path: <linux-mips+bounces-5144-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5145-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81CCE961EE5
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 07:54:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F1C0961F1B
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 08:11:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CDDC1B213C2
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 05:54:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFC6028477C
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 06:11:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1D7015FA8F;
-	Wed, 28 Aug 2024 05:50:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 564501553B3;
+	Wed, 28 Aug 2024 06:11:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="sxDFGbVG"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="DachNt1c"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A440A15EFA0
-	for <linux-mips@vger.kernel.org>; Wed, 28 Aug 2024 05:50:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2B89154BEB;
+	Wed, 28 Aug 2024 06:11:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724824223; cv=none; b=kbrzg4cPRTnEAoPjpOrB1pvoeNhr3xcOiuepECP+RVcTsjPznAGeGUgv3IaG+ZRnFK9gCE2EnsY1rUl0j8JMpiL9RRSYAj8Q7p6Se6JQ5Ad3CbmDWWCoMiFOQwE1YVKOrdUSm3V17DduXElGF9Mg6ECQ+x7AOEp7urmQmJgqMFk=
+	t=1724825474; cv=none; b=OOh3lQ2G88eN+xYQgj8HCLJVEWmz3zoVOFscsRvQ94i4dd48I2YpDiFf6jB4ZAhOpxYbr8qAaO+h8Tqd7+S+ThgDJ40obkJDQOs3eJlHTrhIzVU6HftMf6OTklerlu27O53oqpb5FKRgC5VbBBNDELlt/V8eDQjeu5LiDo4NS5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724824223; c=relaxed/simple;
-	bh=bFLw7L4BlwG3KLICmNgvPIAvf1/5Sm3GeWEQAkx1eJA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eH81IzL28JfQ2rGQqMs6eJn8FXLFz5nTWg9uOGxXul3xgRyCkW6VXrjDQfZZlNRuzQ02Jg0vc+82CH9WHxrnpcU2wzShzuPLf4+8mw/GoOaIcWQpo/X+sgs27gkD20byJ3RWMmx9Xs0GSrZ+GwxoSnJfyxVAH7L/dG7PPp5SHDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=sxDFGbVG; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2021c08b95cso2125745ad.0
-        for <linux-mips@vger.kernel.org>; Tue, 27 Aug 2024 22:50:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1724824221; x=1725429021; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n1bnpMYTna27bSqlaeNn9zMkLMdTuL1lgzvNhNTdiTs=;
-        b=sxDFGbVGjoz0x7IjUj+0+lr/jueiOzguOCsO9ZcVBLFlrqxx6t5LqRwtT0W+HYL7sK
-         fbsyxy6Wmao623MRZ5O9KbFsLvl549QiOue33YER2YeTYwgESZe6vk3DPekCtbRqvXz4
-         VS1hIcYPDSDHv6LzWmvXvYsgNVRnZ8mXg+tWj0BGX1RA41O8hN4d5VeOreNdbPYaEcIu
-         PJU4cJrbRhvhwaan7rl3lCJ6UW8aFGjW8lt2wJwIElP1ZK0lwB9uXng4KQrOuusm+Dtb
-         Aq4AWx/H9WJ+e6aUo/lp6Sigd535qnZtiEdanT7dgnUbMKoa/MbwY2abJqE0B+v9QwOC
-         LRHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724824221; x=1725429021;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n1bnpMYTna27bSqlaeNn9zMkLMdTuL1lgzvNhNTdiTs=;
-        b=DxAlWpXXqR9MMT83pf4DXVDT07jmhC150oOLgkuSLvXeAplCUqcWMme/Ni3RkJnRMQ
-         ugrBm1xYfJiU9UgmMAQepjjYQ5hD4tv/44TH489WBiTtFiVfujb3EWjPtWcdX/eHMx2m
-         fOFYbrZcyAWmlSo7CMB7lr/Q0pmeDkAVYwOeWYbeEFh4XtZ+6t3ySl3jxIVCbH04aiWp
-         RqK7m6vRm6gDzKZ0t1AlMOrjQD/NOsZ8h/WZlkEWXie1k7/qxqetgPScl3KxtwhZCHli
-         ZrNEcmdu8ddl8RhLPMy9ecAaBBBr4GqoBDJ4P80Rhu1kd7cLSr6JYFm8rIAcOHtwhkYl
-         iNCw==
-X-Forwarded-Encrypted: i=1; AJvYcCXi8WxbN0qIoUE0cmXEhXSiGnCNaONqPO0e9tnLQAYU/s2j7kYKhJD90v3SBMkjbZZmo0YORvXwjZul@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeAqVbWjF1QP5uJ5RfUVo1xE5Lr0ROiA/tGfjin9W1cpIbeOFg
-	ZXrbFt3U0oc26Qf+Hi+kPWRcA52tjmEhQPu54U/iW3Vdmb3C7P1Xfud0AyVYDk4=
-X-Google-Smtp-Source: AGHT+IGQeeMMIWRhlzvEY447u73v0bcDYqggMB4NKbY4CT7iyrW8LbpZG4Gsc+7GkkDRX2iCA5iJHw==
-X-Received: by 2002:a17:903:35d0:b0:1fc:41c0:7a82 with SMTP id d9443c01a7336-204f9912733mr19656305ad.0.1724824220864;
-        Tue, 27 Aug 2024 22:50:20 -0700 (PDT)
-Received: from charlie.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-203855df0c4sm92092495ad.157.2024.08.27.22.50.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Aug 2024 22:50:20 -0700 (PDT)
-From: Charlie Jenkins <charlie@rivosinc.com>
-Date: Tue, 27 Aug 2024 22:49:22 -0700
-Subject: [PATCH 16/16] selftests/mm: Create MAP_BELOW_HINT test
+	s=arc-20240116; t=1724825474; c=relaxed/simple;
+	bh=V6pyX/V9WzOPOgZXoGWZlDs9X15kC2OZmru0k2I4WI4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=k75l84nfPaum7HSTQ9imQWt2O+Y3Xm/uv5JxxArJpLBHEQNgBuj+uR5OPpC6r3dwkyS4veIADSh/UlJwpauZVrwJN3MrlgKBzNWCgltj0sp60XXkNwFyQpKz1sX6JQF+nx9RO1AGKhD/E3HfToS9NEhGxHRaMj7sIJ9aBgfrPu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=DachNt1c; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=3ciW+jDJYrdLJiK7yrXhNzVEL4ig56HUYUk4VOvh/z0=; b=DachNt1cx+ujVHKXHJfhguYPcC
+	9aAqfBoRuTD2BycDnkoq2+XVJgduR0jUZafb+wHb4B+tRHNCEo+SGOrtcsQvZMydA7tNGInWBQs5w
+	69FOaQMwVwWuo6pPJtsi2BcUec+73lr/fSkNmYLKWVNWI7lSQZKrpLFPAp9IcRtasZAYiQf8cOkxO
+	tni42Ic2e8NqYRy7ZadXs2xugccm0Zfp5fifHQ9pwwtZOGq968HzDTabeQWV+VtZubJN2NukZ+srM
+	m7lxrEC4huwPqB6G7d3uGQA+7nAvrJsZgB3gE8FZFou6JBOpJJHKhnTlWsvD8OBG21HfoKRWJ0AQk
+	brwIO41g==;
+Received: from [2001:4bb8:2dc:a2cd:2ccf:8fbe:8ab4:c9db] (helo=localhost)
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sjBtc-0000000E1uI-0svg;
+	Wed, 28 Aug 2024 06:11:08 +0000
+From: Christoph Hellwig <hch@lst.de>
+To: iommu@lists.linux.dev
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Bingbu Cao <bingbu.cao@intel.com>,
+	"Michael S . Tsirkin " <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	linux-alpha@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	xen-devel@lists.xenproject.org
+Subject: clearly mark DMA_OPS support as an architecture feature v2
+Date: Wed, 28 Aug 2024 09:10:27 +0300
+Message-ID: <20240828061104.1925127-1-hch@lst.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240827-patches-below_hint_mmap-v1-16-46ff2eb9022d@rivosinc.com>
-References: <20240827-patches-below_hint_mmap-v1-0-46ff2eb9022d@rivosinc.com>
-In-Reply-To: <20240827-patches-below_hint_mmap-v1-0-46ff2eb9022d@rivosinc.com>
-To: Arnd Bergmann <arnd@arndb.de>, Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Naveen N Rao <naveen@kernel.org>, Muchun Song <muchun.song@linux.dev>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
- Vlastimil Babka <vbabka@suse.cz>, 
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
- Russell King <linux@armlinux.org.uk>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- Helge Deller <deller@gmx.de>, Alexander Gordeev <agordeev@linux.ibm.com>, 
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>, 
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Sven Schnelle <svens@linux.ibm.com>, 
- Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
- "David S. Miller" <davem@davemloft.net>, 
- Andreas Larsson <andreas@gaisler.com>, Shuah Khan <shuah@kernel.org>, 
- Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Palmer Dabbelt <palmer@rivosinc.com>, linux-riscv@lists.infradead.org, 
- linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
- linux-mm@kvack.org, loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
- linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org, 
- linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Charlie Jenkins <charlie@rivosinc.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1906; i=charlie@rivosinc.com;
- h=from:subject:message-id; bh=bFLw7L4BlwG3KLICmNgvPIAvf1/5Sm3GeWEQAkx1eJA=;
- b=owGbwMvMwCHWx5hUnlvL8Y3xtFoSQ9q5XYnPPfbbPo8yeWL66+yxo/N6BS8nd1/7qNQhsOWpf
- 3tQ+KzTHaUsDGIcDLJiiiw81xqYW+/olx0VLZsAM4eVCWQIAxenAEzkdAYjwwau79apS3QeSJmm
- 67cdPe+1+9TsAsXmhc0Xrt4+G6VRe5aR4ekEGZPT2yyYhB/f/i4QYfZn696jodpGS1YWP+X48/d
- dEQMA
-X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
- fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-Add a selftest for MAP_BELOW_HINT that maps until it runs out of space
-below the hint address.
+Hi all,
 
-Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
----
- tools/testing/selftests/mm/Makefile         |  1 +
- tools/testing/selftests/mm/map_below_hint.c | 29 +++++++++++++++++++++++++++++
- 2 files changed, 30 insertions(+)
+we've had a long standing problems where drivers try to hook into the
+DMA_OPS mechanisms to override them for something that is not DMA, or
+to introduce additional dispatching.
 
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index cfad627e8d94..4e2de85267b5 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -50,6 +50,7 @@ TEST_GEN_FILES += hugepage-shm
- TEST_GEN_FILES += hugepage-vmemmap
- TEST_GEN_FILES += khugepaged
- TEST_GEN_FILES += madv_populate
-+TEST_GEN_FILES += map_below_hint
- TEST_GEN_FILES += map_fixed_noreplace
- TEST_GEN_FILES += map_hugetlb
- TEST_GEN_FILES += map_populate
-diff --git a/tools/testing/selftests/mm/map_below_hint.c b/tools/testing/selftests/mm/map_below_hint.c
-new file mode 100644
-index 000000000000..305274c5af49
---- /dev/null
-+++ b/tools/testing/selftests/mm/map_below_hint.c
-@@ -0,0 +1,29 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Test the MAP_BELOW_HINT mmap flag.
-+ */
-+#include <sys/mman.h>
-+#include "../kselftest.h"
-+
-+#define ADDR 0x1000000UL
-+#define LENGTH (ADDR / 100)
-+
-+#define MAP_BELOW_HINT	  0x8000000	/* Not defined in all libc */
-+
-+/*
-+ * Map memory with MAP_BELOW_HINT until no memory left. Ensure that all returned
-+ * addresses are below the hint.
-+ */
-+int main(int argc, char **argv)
-+{
-+	void *addr;
-+
-+	do {
-+		addr = mmap((void *)ADDR, LENGTH, MAP_ANONYMOUS, MAP_BELOW_HINT, -1, 0);
-+	} while (addr == MAP_FAILED && (unsigned long)addr <= ADDR);
-+
-+	if (addr != MAP_FAILED && (unsigned long)addr > ADDR)
-+		ksft_exit_fail_msg("mmap returned address above hint with MAP_BELOW_HINT\n");
-+
-+	ksft_test_result_pass("MAP_BELOW_HINT works\n");
-+}
+Now that we are not using DMA_OPS support for dma-iommu and can build
+kernels without DMA_OPS support on many common setups this becomes even
+more problematic.
 
--- 
-2.45.0
+This series renames the option to ARCH_HAS_DMA_OPS and adds very explicit
+comment to not use it in drivers.  The ipu6 and vdpa_sim/user drivers
+that abuse the mechanism are made to depend on the option instead of
+selecting it with a big comment, but I expect this to be fixed rather
+sooner than later (I know the ipu6 maintainers are on it based on a
+previous discussion).
 
+Changes since v1:
+ - s/ARCH_DMA_OPS/ARCH_HAS_DMA_OPS/g
+ - spelling fixes
+ - vdpa_sim actually doesn't need dma ops these days, add a prep patch
+   to remove the dependency
 
