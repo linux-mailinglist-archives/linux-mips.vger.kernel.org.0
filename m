@@ -1,376 +1,156 @@
-Return-Path: <linux-mips+bounces-5172-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5173-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FF1A96340A
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 23:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FA82963477
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2024 00:15:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 023841F23810
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 21:40:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 531B01F241EF
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 22:15:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B73FE1AC896;
-	Wed, 28 Aug 2024 21:40:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED0231AB51F;
+	Wed, 28 Aug 2024 22:15:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="amFX/hSM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XiKJsJp6"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8EA15ADB3
-	for <linux-mips@vger.kernel.org>; Wed, 28 Aug 2024 21:40:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 344B916190C;
+	Wed, 28 Aug 2024 22:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724881204; cv=none; b=AtKvNUbl9YqHDEYpdubkCwfmzqzUEon+ZZ22Da6WEMuWHB4mphJPpjwq0cYBfJFeIDFlfSqE1hO1jR/wId5xdtDcqSciodq3uo/zaSb3/K1XX4RYLJOkP7l8FFBCm4lzH2Q9W+V6GcQvJrD0da/57rI2RmGqfhd6wJR5DR77V1w=
+	t=1724883335; cv=none; b=eVNDHU/yzfmnsfzw4Nn+j20mPo5YnCkshSCjOyt9CkRUPO4DN0dBhPPcJIkK3Jud1L91JzyNdi7erhMyeJ4OJaTk7bZqpRwvHO2mTzPyL/VqTQ55cheLG5xC/GyizcDccMcvE5mAgFM1/6+w3wYjNNmpkxSdEYkZpdoyE3aXuGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724881204; c=relaxed/simple;
-	bh=PjNUGL92xmeOpwvBaXbghjKwroCzTSHxKfeh9WaJjJQ=;
+	s=arc-20240116; t=1724883335; c=relaxed/simple;
+	bh=rhqvIMABotZZ07l2KzLn+tbXSguZ4R0dYkRhD/WDKKo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dMWMwee+LJGU6ZChL5JkD/jdHKNfblDc/M6A2U09sI+eLs9relN4zPA5NECfVBgudsilzYLvctPhvu3WTR+cvb6jGUOWtXS6HgSZzGDVxE8yRDqy9yQzYihrxKuSDiYDwLvg01QnrvsCv9s+2jOWjq0L2qleaosESqEw5mBNPWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=amFX/hSM; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-71430e7eaf8so4269b3a.1
-        for <linux-mips@vger.kernel.org>; Wed, 28 Aug 2024 14:40:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1724881200; x=1725486000; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XeNJBfO0ja/8g6kzTOhNFElQs2waKVPJgdUV/DsW4nc=;
-        b=amFX/hSMwzctKsrQXye8xYNlWnipNgOW50TOLc6MMF66891EjQaMhV65yx06kfBoQJ
-         Jop9MVWNe7+VNnS6uMiJ7Du5ihefkq9SHnyJtXM+83F4zDtV1XnR5iIwisC47dySVayf
-         el4AK3Fve8+FOfyvas1KQgN7erNlh0asqs/QWom/BbhI+GyMVUSFP9hahbWsqTtEZ0Uw
-         5BghwlWtUAfJZ8LhcONb0ufsarkm+/v55gY7cZV1HUXyk8wfr2oqf5hAH6aqzJtWRNtb
-         EJRnvtnaYykpmYG4cWRvyRay4ksiN6+85TFQmRf4Ken3oQfjXx+TMXQLg2QTcvsxVIsp
-         lqKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724881200; x=1725486000;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XeNJBfO0ja/8g6kzTOhNFElQs2waKVPJgdUV/DsW4nc=;
-        b=mAJIZvpFjOeKb9Z/Sugn4SfK97yi88Ms0MoOeNbs+D/Hzcr8mKW0mc6AOKDMUtcYBj
-         mjlr1HI3uS7UOUgnXr8s3FMjhgtsOtedghtt+XGnR7Qb3GgBvQOrHww4hv2+3BeJgRt7
-         cYDL/sjahb4U6S8rOQOfq3FiMUP1PH5QqxN38U5bPxCLBcsj3k8MIMgKQnd/2TWZQy9T
-         Rl2zlNc26qnn4rJC8S5Z/eAyL98/92PMFbR2hfg4xJxEJdnE8LoHvSHPpDFUdzpn2bVo
-         XNmZDzBx6WimhBPzB28tR2epJYmeGW/VxzwRwnf28EKyKsUoKUPfc84NxCA4FbefntbH
-         HZQA==
-X-Forwarded-Encrypted: i=1; AJvYcCVNO+CMqP0cuHnsW6l1R6LxTKhVE8G3NlJHHkGIurxDbi8B4r0TaXaUR2iAt5xyCEg3rrl/uEa12xim@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyI4+MlazxQLvo2w4m4plee7m6bMe5n8oAkGLOhoEwWWTx6Ga+
-	iuUOoHqdYDh8fctqb4HuXncAE28jnp6S8BvsaLBEBi4iyn3ZDdprha7hhU6A9lM=
-X-Google-Smtp-Source: AGHT+IFaC7yLAKucAQ+jfC2ojeS1SzrNuL0Qf0TeCvZ+3dsJBG9fozmVtsZvCPOeq6REFPvrFRD1LQ==
-X-Received: by 2002:a05:6a00:2e87:b0:714:2ba6:e5c9 with SMTP id d2e1a72fcca58-715dfaf1fddmr1045535b3a.7.1724881200137;
-        Wed, 28 Aug 2024 14:40:00 -0700 (PDT)
-Received: from ghost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7cd9ac98286sm9939173a12.5.2024.08.28.14.39.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2024 14:39:59 -0700 (PDT)
-Date: Wed, 28 Aug 2024 14:39:55 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Russell King <linux@armlinux.org.uk>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Palmer Dabbelt <palmer@rivosinc.com>,
-	linux-riscv@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-	linux-mm@kvack.org, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 00/16] mm: Introduce MAP_BELOW_HINT
-Message-ID: <Zs+ZK6Q2U9dm19yR@ghost>
-References: <20240827-patches-below_hint_mmap-v1-0-46ff2eb9022d@rivosinc.com>
- <dbqqojpvqodfxavt4fxugoj3a2ppk5b4b3sp77qsmbg33sc2em@fhjccbxaihrh>
- <Zs+Ppk0ANaUah7p9@ghost>
+	 Content-Type:Content-Disposition:In-Reply-To; b=oEN3XQ+GJGcO2HYDlOgw4LNBc0v3/QeEQGXG7Php1RRTpAbT2NMUdNvbQ/TZNwXPrAAxjps73fe4LcUnhz+z4lK3v2pSFFpPRb496NG4s1Euqj7/E6dPoCgTbqjp697q6zdWYkgQkOr4Tko3aQMwLhzQ57JYyr1o9lFfScBfm8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XiKJsJp6; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724883334; x=1756419334;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=rhqvIMABotZZ07l2KzLn+tbXSguZ4R0dYkRhD/WDKKo=;
+  b=XiKJsJp60wGTS/QXw7eR6bmtLyProeMeFMgYZEXE3LyVjAlfKX1ZQ7wd
+   aNA9/9HpXMNrmwCw9VWtwxDGkG7nRmXMCJ7hgdBZ4JQEuqZ0XCDAirsnc
+   7gpEFwMY/44iHp827isH7ycmD9tmHHxnIS00YZjix9mnRhCuuGg3GWkkY
+   lAvzj5BvQkVs/3i7GmiBDsoCDW/te0/w0LA6YFG/VWDoyZzSEfVVClnB9
+   NrdQlbSJu07+fmfjN565A8UpyD9YUJkJ+5QL9DpHTAHVEjov9PFsjz+f6
+   wbCFJv4sdgGFF1x+TCby23NYgypC6LEM3dB2/Qv+kToIpCLmvN90AbfuU
+   A==;
+X-CSE-ConnectionGUID: r1NtxDE3QvOpK1oRtbdrWw==
+X-CSE-MsgGUID: 2ooDiRhiR/Kl0CjGR9+kdg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11178"; a="27321119"
+X-IronPort-AV: E=Sophos;i="6.10,184,1719903600"; 
+   d="scan'208";a="27321119"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2024 15:15:34 -0700
+X-CSE-ConnectionGUID: cQDv9/OjQS+GuMl4oxhG9Q==
+X-CSE-MsgGUID: bib1Qo2iS7y9iPYIH5Wg3A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,184,1719903600"; 
+   d="scan'208";a="67516172"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 28 Aug 2024 15:15:32 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sjQwr-000LPC-2I;
+	Wed, 28 Aug 2024 22:15:29 +0000
+Date: Thu, 29 Aug 2024 06:15:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: oe-kbuild-all@lists.linux.dev,
+	"Steven J . Hill" <Steven.Hill@imgtec.com>,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	=?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] MIPS: fw: Gracefully handle unknown firmware protocols
+Message-ID: <202408290501.kTATRaBZ-lkp@intel.com>
+References: <20240824144133.1464835-1-bjorn@mork.no>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Zs+Ppk0ANaUah7p9@ghost>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240824144133.1464835-1-bjorn@mork.no>
 
-On Wed, Aug 28, 2024 at 01:59:18PM -0700, Charlie Jenkins wrote:
-> On Wed, Aug 28, 2024 at 02:31:42PM -0400, Liam R. Howlett wrote:
-> > * Charlie Jenkins <charlie@rivosinc.com> [240828 01:49]:
-> > > Some applications rely on placing data in free bits addresses allocated
-> > > by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
-> > > address returned by mmap to be less than the maximum address space,
-> > > unless the hint address is greater than this value.
-> > 
-> > Wait, what arch(s) allows for greater than the max?  The passed hint
-> > should be where we start searching, but we go to the lower limit then
-> > start at the hint and search up (or vice-versa on the directions).
-> > 
-> 
-> I worded this awkwardly. On arm64 there is a page-table boundary at 48
-> bits and at 52 bits. On x86 the boundaries are at 48 bits and 57 bits.
-> The max value mmap is able to return on arm64 is 48 bits if the hint
-> address uses 48 bits or less, even if the architecture supports 5-level
-> paging and thus addresses can be 52 bits. Applications can opt-in to
-> using up to 52-bits in an address by using a hint address greater than
-> 48 bits. x86 has the same behavior but with 57 bits instead of 52.
-> 
-> This reason this exists is because some applications arbitrarily replace
-> bits in virtual addresses with data with an assumption that the address
-> will not be using any of the bits above bit 48 in the virtual address.
-> As hardware with larger address spaces was released, x86 decided to
-> build safety guards into the kernel to allow the applications that made
-> these assumptions to continue to work on this different hardware.
-> 
-> This causes all application that use a hint address to silently be
-> restricted to 48-bit addresses. The goal of this flag is to have a way
-> for applications to explicitly request how many bits they want mmap to
-> use.
-> 
-> > I don't understand how unmapping works on a higher address; we would
-> > fail to free it on termination of the application.
-> > 
-> > Also, there are archs that map outside of the VMAs, which are freed by
-> > freeing from the prev->vm_end to next->vm_start, so I don't understand
-> > what that looks like in this reality as well.
-> > 
-> > > 
-> > > On arm64 this barrier is at 52 bits and on x86 it is at 56 bits. This
-> > > flag allows applications a way to specify exactly how many bits they
-> > > want to be left unused by mmap. This eliminates the need for
-> > > applications to know the page table hierarchy of the system to be able
-> > > to reason which addresses mmap will be allowed to return.
-> > 
-> > But, why do they need to know today?  We have a limit for this don't we?
-> 
-> The limit is different for different architectures. On x86 the limit is
-> 57 bits, and on arm64 it is 52 bits. So in the theoretical case that an
-> application requires 10 bits free in a virtual address, the application
-> would always work on arm64 regardless of the hint address, but on x86 if
-> the hint address is greater than 48 bits then the application will not
-> work.
-> 
-> The goal of this flag is to have consistent and tunable behavior of
-> mmap() when it is desired to ensure that mmap() only returns addresses
-> that use some number of bits.
-> 
-> > 
-> > Also, these upper limits are how some archs use the upper bits that you
-> > are trying to use.
-> > 
-> 
-> It does not eliminate the existing behavior of the architectures to
-> place this upper limits, it instead provides a way to have consistent
-> behavior across all architectures.
-> 
-> > > 
-> > > ---
-> > > riscv made this feature of mmap returning addresses less than the hint
-> > > address the default behavior. This was in contrast to the implementation
-> > > of x86/arm64 that have a single boundary at the 5-level page table
-> > > region. However this restriction proved too great -- the reduced
-> > > address space when using a hint address was too small.
-> > 
-> > Yes, the hint is used to group things close together so it would
-> > literally be random chance on if you have enough room or not (aslr and
-> > all).
-> > 
-> > > 
-> > > A patch for riscv [1] reverts the behavior that broke userspace. This
-> > > series serves to make this feature available to all architectures.
-> > 
-> > I don't fully understand this statement, you say it broke userspace so
-> > now you are porting it to everyone?  This reads as if you are braking
-> > the userspace on all architectures :)
-> 
-> It was the default for mmap on riscv. The difference here is that it is now
-> enabled by a flag instead. Instead of making the flag specific to riscv,
-> I figured that other architectures might find it useful as well.
-> 
-> > 
-> > If you fail to find room below, then your application fails as there is
-> > no way to get the upper bits you need.  It would be better to fix this
-> > in userspace - if your application is returned too high an address, then
-> > free it and exit because it's going to fail anyways.
-> > 
-> 
-> This flag is trying to define an API that is more robust than the
-> current behavior on that x86 and arm64 which implicitly restricts mmap()
-> addresses to 48 bits. A solution could be to just write in the docs that
-> mmap() will always exhaust all addresses below the hint address before
-> returning an address that is above the hint address. However a flag that
-> defines this behavior seems more intuitive.
-> 
-> > > 
-> > > I have only tested on riscv and x86.
-> > 
-> > This should be an RFC then.
-> 
-> Fair enough.
-> 
-> > 
-> > > There is a tremendous amount of
-> > > duplicated code in mmap so the implementations across architectures I
-> > > believe should be mostly consistent. I added this feature to all
-> > > architectures that implement either
-> > > arch_get_mmap_end()/arch_get_mmap_base() or
-> > > arch_get_unmapped_area_topdown()/arch_get_unmapped_area(). I also added
-> > > it to the default behavior for arch_get_mmap_end()/arch_get_mmap_base().
-> > 
-> > Way too much duplicate code.  We should be figuring out how to make this
-> > all work with the same code.
-> > 
-> > This is going to make the cloned code problem worse.
-> 
-> That would require standardizing every architecture with the generic
-> mmap() framework that arm64 has developed. That is far outside the scope
-> of this patch, but would be a great area to research for each of the
-> architectures that do not use the generic framework.
+Hi Bjørn,
 
-Thinking about this again, I could drop support for all architectures
-that do not implement arch_get_mmap_base()/arch_get_mmap_end().
+kernel test robot noticed the following build errors:
 
-> 
-> - Charlie
-> 
-> > 
-> > > 
-> > > Link: https://lore.kernel.org/lkml/20240826-riscv_mmap-v1-2-cd8962afe47f@rivosinc.com/T/ [1]
-> > > 
-> > > To: Arnd Bergmann <arnd@arndb.de>
-> > > To: Paul Walmsley <paul.walmsley@sifive.com>
-> > > To: Palmer Dabbelt <palmer@dabbelt.com>
-> > > To: Albert Ou <aou@eecs.berkeley.edu>
-> > > To: Catalin Marinas <catalin.marinas@arm.com>
-> > > To: Will Deacon <will@kernel.org>
-> > > To: Michael Ellerman <mpe@ellerman.id.au>
-> > > To: Nicholas Piggin <npiggin@gmail.com>
-> > > To: Christophe Leroy <christophe.leroy@csgroup.eu>
-> > > To: Naveen N Rao <naveen@kernel.org>
-> > > To: Muchun Song <muchun.song@linux.dev>
-> > > To: Andrew Morton <akpm@linux-foundation.org>
-> > > To: Liam R. Howlett <Liam.Howlett@oracle.com>
-> > > To: Vlastimil Babka <vbabka@suse.cz>
-> > > To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> > > To: Thomas Gleixner <tglx@linutronix.de>
-> > > To: Ingo Molnar <mingo@redhat.com>
-> > > To: Borislav Petkov <bp@alien8.de>
-> > > To: Dave Hansen <dave.hansen@linux.intel.com>
-> > > To: x86@kernel.org
-> > > To: H. Peter Anvin <hpa@zytor.com>
-> > > To: Huacai Chen <chenhuacai@kernel.org>
-> > > To: WANG Xuerui <kernel@xen0n.name>
-> > > To: Russell King <linux@armlinux.org.uk>
-> > > To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > > To: James E.J. Bottomley <James.Bottomley@HansenPartnership.com>
-> > > To: Helge Deller <deller@gmx.de>
-> > > To: Alexander Gordeev <agordeev@linux.ibm.com>
-> > > To: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-> > > To: Heiko Carstens <hca@linux.ibm.com>
-> > > To: Vasily Gorbik <gor@linux.ibm.com>
-> > > To: Christian Borntraeger <borntraeger@linux.ibm.com>
-> > > To: Sven Schnelle <svens@linux.ibm.com>
-> > > To: Yoshinori Sato <ysato@users.sourceforge.jp>
-> > > To: Rich Felker <dalias@libc.org>
-> > > To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> > > To: David S. Miller <davem@davemloft.net>
-> > > To: Andreas Larsson <andreas@gaisler.com>
-> > > To: Shuah Khan <shuah@kernel.org>
-> > > To: Alexandre Ghiti <alexghiti@rivosinc.com>
-> > > Cc: linux-arch@vger.kernel.org
-> > > Cc: linux-kernel@vger.kernel.org
-> > > Cc: Palmer Dabbelt <palmer@rivosinc.com>
-> > > Cc: linux-riscv@lists.infradead.org
-> > > Cc: linux-arm-kernel@lists.infradead.org
-> > > Cc: linuxppc-dev@lists.ozlabs.org
-> > > Cc: linux-mm@kvack.org
-> > > Cc: loongarch@lists.linux.dev
-> > > Cc: linux-mips@vger.kernel.org
-> > > Cc: linux-parisc@vger.kernel.org
-> > > Cc: linux-s390@vger.kernel.org
-> > > Cc: linux-sh@vger.kernel.org
-> > > Cc: sparclinux@vger.kernel.org
-> > > Cc: linux-kselftest@vger.kernel.org
-> > > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> > > 
-> > > ---
-> > > Charlie Jenkins (16):
-> > >       mm: Add MAP_BELOW_HINT
-> > >       riscv: mm: Do not restrict mmap address based on hint
-> > >       mm: Add flag and len param to arch_get_mmap_base()
-> > >       mm: Add generic MAP_BELOW_HINT
-> > >       riscv: mm: Support MAP_BELOW_HINT
-> > >       arm64: mm: Support MAP_BELOW_HINT
-> > >       powerpc: mm: Support MAP_BELOW_HINT
-> > >       x86: mm: Support MAP_BELOW_HINT
-> > >       loongarch: mm: Support MAP_BELOW_HINT
-> > >       arm: mm: Support MAP_BELOW_HINT
-> > >       mips: mm: Support MAP_BELOW_HINT
-> > >       parisc: mm: Support MAP_BELOW_HINT
-> > >       s390: mm: Support MAP_BELOW_HINT
-> > >       sh: mm: Support MAP_BELOW_HINT
-> > >       sparc: mm: Support MAP_BELOW_HINT
-> > >       selftests/mm: Create MAP_BELOW_HINT test
-> > > 
-> > >  arch/arm/mm/mmap.c                           | 10 ++++++++
-> > >  arch/arm64/include/asm/processor.h           | 34 ++++++++++++++++++++++----
-> > >  arch/loongarch/mm/mmap.c                     | 11 +++++++++
-> > >  arch/mips/mm/mmap.c                          |  9 +++++++
-> > >  arch/parisc/include/uapi/asm/mman.h          |  1 +
-> > >  arch/parisc/kernel/sys_parisc.c              |  9 +++++++
-> > >  arch/powerpc/include/asm/task_size_64.h      | 36 +++++++++++++++++++++++-----
-> > >  arch/riscv/include/asm/processor.h           | 32 -------------------------
-> > >  arch/s390/mm/mmap.c                          | 10 ++++++++
-> > >  arch/sh/mm/mmap.c                            | 10 ++++++++
-> > >  arch/sparc/kernel/sys_sparc_64.c             |  8 +++++++
-> > >  arch/x86/kernel/sys_x86_64.c                 | 25 ++++++++++++++++---
-> > >  fs/hugetlbfs/inode.c                         |  2 +-
-> > >  include/linux/sched/mm.h                     | 34 ++++++++++++++++++++++++--
-> > >  include/uapi/asm-generic/mman-common.h       |  1 +
-> > >  mm/mmap.c                                    |  2 +-
-> > >  tools/arch/parisc/include/uapi/asm/mman.h    |  1 +
-> > >  tools/include/uapi/asm-generic/mman-common.h |  1 +
-> > >  tools/testing/selftests/mm/Makefile          |  1 +
-> > >  tools/testing/selftests/mm/map_below_hint.c  | 29 ++++++++++++++++++++++
-> > >  20 files changed, 216 insertions(+), 50 deletions(-)
-> > > ---
-> > > base-commit: 5be63fc19fcaa4c236b307420483578a56986a37
-> > > change-id: 20240827-patches-below_hint_mmap-b13d79ae1c55
-> > > -- 
-> > > - Charlie
-> > > 
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.11-rc5 next-20240828]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bj-rn-Mork/MIPS-fw-Gracefully-handle-unknown-firmware-protocols/20240826-170643
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240824144133.1464835-1-bjorn%40mork.no
+patch subject: [PATCH] MIPS: fw: Gracefully handle unknown firmware protocols
+config: mips-bigsur_defconfig (https://download.01.org/0day-ci/archive/20240829/202408290501.kTATRaBZ-lkp@intel.com/config)
+compiler: mips64-linux-gcc (GCC) 14.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240829/202408290501.kTATRaBZ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408290501.kTATRaBZ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   arch/mips/fw/lib/cmdline.c: In function 'fw_init_cmdline':
+>> arch/mips/fw/lib/cmdline.c:25:65: error: 'CKSEG2' undeclared (first use in this function); did you mean 'CKSEG0'?
+      25 |         if (fw_arg0 >= CKSEG0 || fw_arg1 < CKSEG0 || fw_arg1 >= CKSEG2) {
+         |                                                                 ^~~~~~
+         |                                                                 CKSEG0
+   arch/mips/fw/lib/cmdline.c:25:65: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +25 arch/mips/fw/lib/cmdline.c
+
+    18	
+    19	#ifndef CONFIG_HAVE_PLAT_FW_INIT_CMDLINE
+    20	void __init fw_init_cmdline(void)
+    21	{
+    22		int i;
+    23	
+    24		/* Validate command line parameters. */
+  > 25		if (fw_arg0 >= CKSEG0 || fw_arg1 < CKSEG0 || fw_arg1 >= CKSEG2) {
+    26			fw_argc = 0;
+    27			_fw_argv = NULL;
+    28		} else {
+    29			fw_argc = (fw_arg0 & 0x0000ffff);
+    30			_fw_argv = (int *)fw_arg1;
+    31		}
+    32	
+    33		/* Validate environment pointer. */
+    34		if (fw_arg2 < CKSEG0 || fw_arg2 >= CKSEG2)
+    35			_fw_envp = NULL;
+    36		else
+    37			_fw_envp = (int *)fw_arg2;
+    38	
+    39		for (i = 1; i < fw_argc; i++) {
+    40			strlcat(arcs_cmdline, fw_argv(i), COMMAND_LINE_SIZE);
+    41			if (i < (fw_argc - 1))
+    42				strlcat(arcs_cmdline, " ", COMMAND_LINE_SIZE);
+    43		}
+    44	}
+    45	#endif
+    46	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
