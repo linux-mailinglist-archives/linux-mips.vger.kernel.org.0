@@ -1,49 +1,50 @@
-Return-Path: <linux-mips+bounces-5145-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5146-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F1C0961F1B
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 08:11:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 662BC961F29
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 08:11:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFC6028477C
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 06:11:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E8665B21638
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2024 06:11:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 564501553B3;
-	Wed, 28 Aug 2024 06:11:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38BD9156C78;
+	Wed, 28 Aug 2024 06:11:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="DachNt1c"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="G6ceizxa"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2B89154BEB;
-	Wed, 28 Aug 2024 06:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43111552FA;
+	Wed, 28 Aug 2024 06:11:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724825474; cv=none; b=OOh3lQ2G88eN+xYQgj8HCLJVEWmz3zoVOFscsRvQ94i4dd48I2YpDiFf6jB4ZAhOpxYbr8qAaO+h8Tqd7+S+ThgDJ40obkJDQOs3eJlHTrhIzVU6HftMf6OTklerlu27O53oqpb5FKRgC5VbBBNDELlt/V8eDQjeu5LiDo4NS5k=
+	t=1724825476; cv=none; b=D37BnZGKBo+RdM0aiqvdYEGFcNOW3O2BmOrZCXTUA+zpGPo/UNdchirVuxpNLRSyRmhraFanGfuZeK65/zLLdMDA2zEgUiXCX6aIc14iFTDow0p7ZdkJ2eSbuGPC2H46nmxNhxOg5QVAUnh/MFZ3/FccVgDL3Q83l2vP7xROTD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724825474; c=relaxed/simple;
-	bh=V6pyX/V9WzOPOgZXoGWZlDs9X15kC2OZmru0k2I4WI4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=k75l84nfPaum7HSTQ9imQWt2O+Y3Xm/uv5JxxArJpLBHEQNgBuj+uR5OPpC6r3dwkyS4veIADSh/UlJwpauZVrwJN3MrlgKBzNWCgltj0sp60XXkNwFyQpKz1sX6JQF+nx9RO1AGKhD/E3HfToS9NEhGxHRaMj7sIJ9aBgfrPu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=DachNt1c; arc=none smtp.client-ip=198.137.202.133
+	s=arc-20240116; t=1724825476; c=relaxed/simple;
+	bh=Y0HsE+O4qpOirqGA3+fEen483vhSvhiow81p85kx0vA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nriduswEhV4ulFJEUgoeCq6tOD1YYxgbh/lk1GpnukQnhsmDK/GcCseP+zr4QHgO8sHNkhocH4Qih1qxAeMrvrjvoQcRCUGL9WtZb/mqa9zoSoazvIkBYE9kyIFPlXLovHuHJlaA3bs1x/fKZdlRXnByZ1Yhp5S8PB04B/rywBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=G6ceizxa; arc=none smtp.client-ip=198.137.202.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=3ciW+jDJYrdLJiK7yrXhNzVEL4ig56HUYUk4VOvh/z0=; b=DachNt1cx+ujVHKXHJfhguYPcC
-	9aAqfBoRuTD2BycDnkoq2+XVJgduR0jUZafb+wHb4B+tRHNCEo+SGOrtcsQvZMydA7tNGInWBQs5w
-	69FOaQMwVwWuo6pPJtsi2BcUec+73lr/fSkNmYLKWVNWI7lSQZKrpLFPAp9IcRtasZAYiQf8cOkxO
-	tni42Ic2e8NqYRy7ZadXs2xugccm0Zfp5fifHQ9pwwtZOGq968HzDTabeQWV+VtZubJN2NukZ+srM
-	m7lxrEC4huwPqB6G7d3uGQA+7nAvrJsZgB3gE8FZFou6JBOpJJHKhnTlWsvD8OBG21HfoKRWJ0AQk
-	brwIO41g==;
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
+	:Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=xXPvEjkN13oRSPiD1VpIsI6lICkEOhwDSVN6M4ebF3M=; b=G6ceizxaxo/5YPTjysre3RE3P5
+	r6theemKFI6tHVBOtljvn4KkqxAS2QAOgq2kFNqL/qSweoZ78GG5roeidLnOxQYaFwBGFSvMgjIxT
+	Nd3VjlhZeAlYoMTPJ/A+LgEVZKiJo8/6vpC94GKnxo/yeszqxNmOI2uH+gYkKm6wByymb+IQbHgRs
+	lDgiPm0CITsg8ivicn6DOIMDexltTWRjLyX7eFt13Mh7KXkquOY+RUG+jycl2hgcaS99zex+kd+o9
+	eIbY6ta0tPyXUDbcb5Au2QNiyOxW5yX9stCLkEzWH5+UibAoch+LaUcS6z8gLwS5pfwAXC+wswjoI
+	AbBwVQ3w==;
 Received: from [2001:4bb8:2dc:a2cd:2ccf:8fbe:8ab4:c9db] (helo=localhost)
 	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sjBtc-0000000E1uI-0svg;
-	Wed, 28 Aug 2024 06:11:08 +0000
+	id 1sjBtg-0000000E1uh-0axG;
+	Wed, 28 Aug 2024 06:11:13 +0000
 From: Christoph Hellwig <hch@lst.de>
 To: iommu@lists.linux.dev
 Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
@@ -63,10 +64,12 @@ Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
 	linux-media@vger.kernel.org,
 	virtualization@lists.linux.dev,
 	xen-devel@lists.xenproject.org
-Subject: clearly mark DMA_OPS support as an architecture feature v2
-Date: Wed, 28 Aug 2024 09:10:27 +0300
-Message-ID: <20240828061104.1925127-1-hch@lst.de>
+Subject: [PATCH 1/2] vdpa_sim: don't select DMA_OPS
+Date: Wed, 28 Aug 2024 09:10:28 +0300
+Message-ID: <20240828061104.1925127-2-hch@lst.de>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240828061104.1925127-1-hch@lst.de>
+References: <20240828061104.1925127-1-hch@lst.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -76,26 +79,30 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-Hi all,
+vdpa_sim has been fixed to not override the dma_map_ops in commit
+6c3d329e6486 ("vdpa_sim: get rid of DMA ops"), so don't select the
+symbol and don't depend on HAS_DMA.
 
-we've had a long standing problems where drivers try to hook into the
-DMA_OPS mechanisms to override them for something that is not DMA, or
-to introduce additional dispatching.
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ drivers/vdpa/Kconfig | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Now that we are not using DMA_OPS support for dma-iommu and can build
-kernels without DMA_OPS support on many common setups this becomes even
-more problematic.
+diff --git a/drivers/vdpa/Kconfig b/drivers/vdpa/Kconfig
+index 5265d09fc1c409..b08de3b7706109 100644
+--- a/drivers/vdpa/Kconfig
++++ b/drivers/vdpa/Kconfig
+@@ -11,8 +11,7 @@ if VDPA
+ 
+ config VDPA_SIM
+ 	tristate "vDPA device simulator core"
+-	depends on RUNTIME_TESTING_MENU && HAS_DMA
+-	select DMA_OPS
++	depends on RUNTIME_TESTING_MENU
+ 	select VHOST_RING
+ 	select IOMMU_IOVA
+ 	help
+-- 
+2.43.0
 
-This series renames the option to ARCH_HAS_DMA_OPS and adds very explicit
-comment to not use it in drivers.  The ipu6 and vdpa_sim/user drivers
-that abuse the mechanism are made to depend on the option instead of
-selecting it with a big comment, but I expect this to be fixed rather
-sooner than later (I know the ipu6 maintainers are on it based on a
-previous discussion).
-
-Changes since v1:
- - s/ARCH_DMA_OPS/ARCH_HAS_DMA_OPS/g
- - spelling fixes
- - vdpa_sim actually doesn't need dma ops these days, add a prep patch
-   to remove the dependency
 
