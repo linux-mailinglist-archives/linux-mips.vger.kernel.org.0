@@ -1,61 +1,58 @@
-Return-Path: <linux-mips+bounces-5216-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5217-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1498E964CC1
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2024 19:30:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C030F964CCC
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2024 19:31:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C4531C226C7
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2024 17:30:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 608901F2153A
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2024 17:31:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E25221494BD;
-	Thu, 29 Aug 2024 17:30:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A46391B86C2;
+	Thu, 29 Aug 2024 17:30:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XukKEq6r"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="obPObq/J"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF5640870;
-	Thu, 29 Aug 2024 17:30:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7260D1B6555;
+	Thu, 29 Aug 2024 17:30:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724952627; cv=none; b=iB74GBGERT9QfZK9M99vNOrjEP6kk/nhvcPwfpdLBJC7NAt2B7O+JJ3WeXkmBNduEQXYasMnSK8lDtTkRgajHmnIxlu2kAuetqzzEA+5TOM3GRIhO9YHhwa+lcvbJfzeO3G8FyOSJ2Faecm1FQigPdQeRnu7pKmtdpToSWEFb2M=
+	t=1724952636; cv=none; b=hwolLB2AvY+ublYz4UiD3ymTB6WdO4EnaIc0h/YpWg2aWyLNGjynWPoUVZLXSVC5Laz7ascnSeTlY1cEdLC73U5h/DlZlUfJKjjw5F7/9ya8WNc+zSMggLwuhiopulKoPXTQyMU04BCCiOclbLiqqrpqSpFcp2z4EuqF1hve2NU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724952627; c=relaxed/simple;
-	bh=kWuFHoupUeoLMSNjGVbiL4lpeHmH38kYHoBuArnwaN0=;
+	s=arc-20240116; t=1724952636; c=relaxed/simple;
+	bh=FuOYrMqzK3XVlcDAmkKGGdPoD9Y9wjiTxYxK9E0bH6s=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=m+N5VvOkUSLg5jRkSWa8jNPsWgBiphluAKYl9x5ejCuVtGYXkdwvQPJPl8o8Gocn0JiY2Zv38LUV29WZS+3Z5H1L+56iROctAfo6BoFCGHnNWcJTd76SoNwj9Cw8EKlKkpY+RsxgTvWK8HN7EuLhAKJ51jpmLs/yQy0DSkZglIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XukKEq6r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40616C4CEC5;
-	Thu, 29 Aug 2024 17:30:24 +0000 (UTC)
+	 MIME-Version:Content-Type; b=T/OYSGRfo8yWTDS6oK6l+Kvdy1R4+BupGdSm/2VjtJ//kX885rm3X+T5FnZaAu1OpGUGPJESJqzfk1+hW0D1LDYKfHmU6tYtdPyn86K7gOAjMUew+m+J0PWkh8CvhjW5SIQq/MLol3JrCJjQZetDffA/3m1eKJOUfPmxiBQT+bY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=obPObq/J; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72709C4CEC7;
+	Thu, 29 Aug 2024 17:30:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724952627;
-	bh=kWuFHoupUeoLMSNjGVbiL4lpeHmH38kYHoBuArnwaN0=;
+	s=k20201202; t=1724952636;
+	bh=FuOYrMqzK3XVlcDAmkKGGdPoD9Y9wjiTxYxK9E0bH6s=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=XukKEq6rmbwer+gAM2hmk7PLHsNHFve0Qwe270Q5CSsT7IXjwB8BJved+AhZtpNgZ
-	 tAgxvr4SeWS2yfqRBj9dSsMFEZcd90OiBqQJZEJu5Vm3v7r1cKhRrEcFOyXcgQaYml
-	 cMhsneue2jS/4xeO8PHk7UWD7fme7sdsIG1YPVHzqDVBwfUkt/hzUK9ocPvIsdaReW
-	 PGCn+UsOT/cAqOsx5f07vahH8fhM+KOacZ0Rxiucs3DY2BNTDgizahi/6yuU4bEWm2
-	 CTMwRdFzsrthPc0+nV9EFO8eh8VBeEC08143R/XY6FOEdCBTkNbklmXoxpWNIjhGnf
-	 QA8X4Fa6wxQKg==
+	b=obPObq/JD+VgVe6nh4DT5lIsFwjOQhE1RADGad2eKRqcKkRm7gOprPfGE1cbUKm3S
+	 nMtdnfobxt0pPWtIrTAiP8CixFiBcQXTlRqaks6o/qJWQn7GbzhkBgBuasGuEb42jL
+	 tpebzXbDgFSSROSJug4xGMVOS4eTwxJHAnP3dxZvdosXZmkt+bRpcfwmKZXkcalLT9
+	 Rx/4foMGtj3pga/OM38xZdsLVUfGIgHP8u7/5APWcNBMCI7G1DEdUAhbNdXOwAvOLC
+	 1rtPNJ26IVAz8Unh9TXgRTVbNPMHwLP6khQ0T/SiLWMeoIa3iqxe4Uaurn5JWmoh+y
+	 CfcD8u/xCWbrw==
 From: Vinod Koul <vkoul@kernel.org>
-To: Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Keguang Zhang <keguang.zhang@gmail.com>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Keguang Zhang <keguang.zhang@gmail.com>
 Cc: linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Conor Dooley <conor.dooley@microchip.com>, 
  Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20240607-loongson1-dma-v8-0-f9992d257250@gmail.com>
-References: <20240607-loongson1-dma-v8-0-f9992d257250@gmail.com>
-Subject: Re: [PATCH v8 0/2] Add support for Loongson1 APB DMA
-Message-Id: <172495262390.385951.6697848658942844877.b4-ty@kernel.org>
-Date: Thu, 29 Aug 2024 23:00:23 +0530
+In-Reply-To: <20240809-loongson1-dma-v12-0-d9469a4a6b85@gmail.com>
+References: <20240809-loongson1-dma-v12-0-d9469a4a6b85@gmail.com>
+Subject: Re: [PATCH v12 0/2] Add support for Loongson1 APB DMA
+Message-Id: <172495263311.385951.8113964072819506950.b4-ty@kernel.org>
+Date: Thu, 29 Aug 2024 23:00:33 +0530
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -67,23 +64,20 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13.0
 
 
-On Fri, 07 Jun 2024 20:12:22 +0800, Keguang Zhang wrote:
+On Fri, 09 Aug 2024 18:30:57 +0800, Keguang Zhang wrote:
 > Add the driver and dt-binding document for Loongson1 APB DMA.
 > 
-> Changes in v8:
-> - Change 'interrupts' property to an items list
-> - Link to v7: https://lore.kernel.org/r/20240329-loongson1-dma-v7-0-37db58608de5@gmail.com
-> 
-> Changes in v7:
-> - Change the comptible to 'loongson,ls1*-apbdma' (suggested by Huacai Chen)
-> - Update the title and description part accordingly
-> - Rename the file to loongson,ls1b-apbdma.yaml
-> - Add a compatible string for LS1A
-> - Delete minItems of 'interrupts'
-> - Change patterns of 'interrupt-names' to const
-> - Rename the file to loongson1-apb-dma.c to keep the consistency
-> - Update Kconfig and Makefile accordingly
-> - Link to v6: https://lore.kernel.org/r/20240316-loongson1-dma-v6-0-90de2c3cc928@gmail.com
+> Changes in v12:
+> - Delete superfluous blank lines in the examples section.
+> - Move the call to devm_request_irq() into ls1x_dma_alloc_chan_resources()
+>   to use dma_chan_name() as a parameter.
+> - Move the call to devm_free_irq() into ls1x_dma_free_chan_resources() accordingly.
+> - Rename ls1x_dma_alloc_llis() to ls1x_dma_prep_lli().
+> - Merge ls1x_dma_free_lli() into ls1x_dma_free_desc().
+> - Add ls1x_dma_synchronize().
+> - Fix the error handling of ls1x_dma_probe().
+> - Some minor fixes and improvements.
+> - Link to v11: https://lore.kernel.org/r/20240802-loongson1-dma-v11-0-85392357d4e0@gmail.com
 > 
 > [...]
 
