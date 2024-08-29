@@ -1,193 +1,301 @@
-Return-Path: <linux-mips+bounces-5218-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5220-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E4CF964CE6
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2024 19:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BDC5E964F1B
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2024 21:38:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7263A1C228BD
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2024 17:33:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2D671C22EE5
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2024 19:38:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 034831B78FB;
-	Thu, 29 Aug 2024 17:33:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 434391BA892;
+	Thu, 29 Aug 2024 19:38:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="qyZUgth2"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="nAK3X7AE";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="B9SPjI+T"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3CB1B4C58
-	for <linux-mips@vger.kernel.org>; Thu, 29 Aug 2024 17:33:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724952811; cv=none; b=iDQdTMxdcLRvTML9v3D73u6BH4jho0ta9WqmFWYeW7vKwYXBW+BiBXfcvs9FNoH4acn7e5nWw8pSIb5fDK4kty4Dug0WnEboi+icA4Dq+aOyjuX6l1ojpkyF/leJF4KBA5iW8WUCD4fwKLZx1BwtA8IG4HXQIfySJ7NlBVpQBSU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724952811; c=relaxed/simple;
-	bh=xq019WSbU/+BH2MTqfSQdLA7OMmY7hhfvIXVLV7r5gw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vsdu8Vcsbqxm5I92AZJ2wbQ7kn3rpT6eiuH93e+/pddyTaiwD9ezgQZ38IMk8pO3LsXzp+J7kJuSf24dQmBDm5xzu/BrHQVoojphJVyPyWj7U44Ans+hzjt0CNGRsNKpOYO3yE23BnNxXR8zF1S4w+b3bVsiefWr+UNQOY4MQN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=qyZUgth2; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-7ae3d7222d4so627497a12.3
-        for <linux-mips@vger.kernel.org>; Thu, 29 Aug 2024 10:33:29 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 541391BA882;
+	Thu, 29 Aug 2024 19:38:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724960315; cv=fail; b=MLvR/ieIQuYWWoWxev4c7Y7/yrwoqvfXCxe/mWL8ZlFAYothqh/L7WAmQjtZVUm6JClfcDZ0OS4pc6xT8E4LTMZrgVceLGmUktDf/nBblF3kfYxz+oN2D2rt+EJ2Y0rRka50RZMkmKybnyyuehpAk8vNH3ORo8wJyD6F5XMzKj8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724960315; c=relaxed/simple;
+	bh=9v5RD/RzQ9ldiDfs5XuHJVkwrN0OdZzpXrNgvWBnJo4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=atMi8mhSrm12yw/sufKE8iUaa7OXofso3f/Ru78MUxRyUQtdPr8n1KCLBSS3HFJKOqG7tEC1Zb0xBOkarITER1Zk08jId1z1EN0SbAcEIY09SkNj6ZDwXec4oYUpnWmYlq5iJdzJpXkjN6GS8koMpTZ3+cJwBQ8P4o/rgBHmgUA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=nAK3X7AE; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=B9SPjI+T; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47TIQVw6007780;
+	Thu, 29 Aug 2024 19:36:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
+	date:from:to:cc:subject:message-id:references:content-type
+	:in-reply-to:mime-version; s=corp-2023-11-20; bh=A4bF0tv21Lzyl5Y
+	EqZ91Xd9AD3HPBJOSyeHvQ0gLRuo=; b=nAK3X7AE9VTEcBQMc5rql9m7Zrbjlav
+	w9Zn2iXpHrlMdGvmIzQta8+gUjvg8As+u8tisHUruVWIdJWtfJ5a844AmgeTSAqa
+	jCa5+6SptE5HVH8wGYcq+R7Iy0BfZEMnXZpwAGFNuc4HrYtDuv/2HhMpouqoNSZJ
+	fTLnJg7jIsscFfXQoeWMeXkV/0M8gwKaXMcFoxVA2AQxnzbT2FFFSSVh76FmOQHJ
+	YkACAVa7S7FWdXAeEWdX5D1+r66YezCOweNP1+nkAsuYxqGZu2tdrStWVQjIzmZS
+	dlc8rfkAOy9Y18kkYSpWFUpQOU6On6jgwT5qvofsvtRWGmqPQa+CUhg==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 419pukn0gk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 29 Aug 2024 19:36:53 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 47TIkn0H009921;
+	Thu, 29 Aug 2024 19:36:52 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 41894r6349-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 29 Aug 2024 19:36:52 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Z314/sfozdeL+S3V/5EXtelQg+c7U21rBZhmWlxgNANsYGC+eOG5zqboPHDANiqihKoifEuxCYosxCujSY/tYNjZUAv8uSQdtktSRuLexWxXnIFpNa1vRCwKAVKkE6yhGfOH9iMBsWhErQLTpja43paogqspeE0YCtrnpTdXcCZRziRvxSQ4m4P/fThPpeD2owlPKdVflOwhS91hBMgJnUDhkuS4KhThywdqNzxbKgGrCubxgAFzm2TIXIDBqERuoyx2zu/HDK/whcyu/e7jTuvkiVlPs/VXZK/8+i8IejC2fVvh8Vf8OPPhvHZ63WTUyTHv1S9iUfeLLLBNOhZBMw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=A4bF0tv21Lzyl5YEqZ91Xd9AD3HPBJOSyeHvQ0gLRuo=;
+ b=M2UnAd270KhjFvMnH64Qeoo9X4rozztuRsG1BIvG2ZalBD2d8qZcogpYoOzwcQsfUzOvNHawTc9MAxUH0MuI8W/x7b/CZ2cl15Cq01+FcnhGIgPWuKpeRTwqHfDpwnrgDMeLiAnnEy2VFI38M4CWf+MRVOStyHJzhktDRWvscFKmcCoyfoOfFSrBMXM3duu//6XUU6VnvfpW5wsqki93XlobG04NqKm8fbDDkrPJM4lhiGTEFiLsGKzpTXwm44aC6893NkMV/qERCSREfNgM68r+KGXPru1ihMmC9yXv4sz/gv+MeANLAQKPPNHvfiKVpfRdPsYQTiAhiGFA1Czhpw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1724952809; x=1725557609; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ShOV+xhv6/I7AhDzzz24YoQnvepxBGugrDU9V6pmXjY=;
-        b=qyZUgth2dly3nMWS8qXjdxaDbdECPTmlyUQ1VrybCYw6A8/eT0YKVOMybRt52K2AlX
-         8fDy5AD1LmEYw3+rVhuawDZyraBlZMCKUuIZWZ1Mjd+iiXKpLY444eIQd4U/19Tzm93A
-         I2cQQD8YXKzH6pNUBmQDDqYgKWKU91aMJXmc+R3wxL/d4XYTu/ftEzmRHERrZpSYsc+H
-         4EqHFdhj0G0TI2LzKEwdxqHIhYmd3s4BEh1k9xoLa506EIBuDgaXrMTe9FcOIZe1EFF/
-         slCQ789BQWSVmH3nkHR2t5U+6SkwFEAN3v1PDl/JfywwsWmea+FgjeveM3ZpSjDHpcJH
-         U5rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724952809; x=1725557609;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ShOV+xhv6/I7AhDzzz24YoQnvepxBGugrDU9V6pmXjY=;
-        b=VPDxf/Ff/OxfiQFQuHHXqLVp63v2FafXaoJ89aYHT4wUvEfBw0hagsqZURF0Yv3oNV
-         GGov+4pTUoalDTyZoBTcENqwibwEz38Grb9xXPFY8HJqDXD8IxwcpZUZb9+cnXwXZo0a
-         QZYc6jPJiM19to3K++alBQyYkDOIvWWH0RRou6Ab+GY9Ze5gWyvXmCZXYMHQc32+ke0j
-         j6loEoMtrPewx5/CjnLYys+c0DGGkvNAH3N8RcdtZJb0c9lLX2ibl8SntbYIZ5+pP6zW
-         aWCBH9tWYXkRvzYc9qkoHwZAnVck2gZ7sLwLdMnA2BiHAZs5dK/YZc91Kt/4RWzEur5C
-         yheg==
-X-Forwarded-Encrypted: i=1; AJvYcCXHtqRuu3zPYbAaJrxkPFeQloPs9mJzXtaLfuOBwGeHJyfWLXj/u7Z8NWkm6Iq82XTlqhAUZ9iQh9Or@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSEuyD1Vu/AzXcgJPQW5K84VxpB5LSOoCP5aBien/IP3TZEdlt
-	DXyz/9oa1OWoGL0ouHg5rP3LBi7D45pN2MSRngdOplKdne/a3oS/h0aRKv0DqvM=
-X-Google-Smtp-Source: AGHT+IEMMPSZiUHtBfNuQb92KkzHdlzWvSIVDrDVVbnqmIDING28StXdegl4Q9VHUGwvTGBDq12VFQ==
-X-Received: by 2002:a17:90b:524a:b0:2d3:90e1:41c7 with SMTP id 98e67ed59e1d1-2d85638414emr3575500a91.31.1724952808963;
-        Thu, 29 Aug 2024 10:33:28 -0700 (PDT)
-Received: from ghost ([2601:647:6700:64d0:c81:fe51:78cb:fc02])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d85b0fdf44sm1949050a91.6.2024.08.29.10.33.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2024 10:33:28 -0700 (PDT)
-Date: Thu, 29 Aug 2024 10:33:22 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Michal Hocko <mhocko@suse.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Shuah Khan <shuah@kernel.org>, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-mm@kvack.org,
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=A4bF0tv21Lzyl5YEqZ91Xd9AD3HPBJOSyeHvQ0gLRuo=;
+ b=B9SPjI+T3LmS6dEjS3s5gix7Vrsc39XUrgJwxIJhm6Fyry44pwN5Q72KVSVv/c60d2LbrV7OEfmzuNJjiUWg31dA/PU8fttHwS0N2iL0CeEQSjL/NsYJyYIC3PQgGJfAOvhfrNWW4d3Ips4kcTVNt7+1/FMvb8GQwdjHHLtTVLU=
+Received: from DS0PR10MB7933.namprd10.prod.outlook.com (2603:10b6:8:1b8::15)
+ by PH7PR10MB6105.namprd10.prod.outlook.com (2603:10b6:510:1fb::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.20; Thu, 29 Aug
+ 2024 19:36:48 +0000
+Received: from DS0PR10MB7933.namprd10.prod.outlook.com
+ ([fe80::2561:85b0:ae8f:9490]) by DS0PR10MB7933.namprd10.prod.outlook.com
+ ([fe80::2561:85b0:ae8f:9490%3]) with mapi id 15.20.7918.019; Thu, 29 Aug 2024
+ 19:36:48 +0000
+Date: Thu, 29 Aug 2024 15:36:43 -0400
+From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Charlie Jenkins <charlie@rivosinc.com>, Arnd Bergmann <arnd@arndb.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Naveen N Rao <naveen@kernel.org>, Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andreas Larsson <andreas@gaisler.com>, Shuah Khan <shuah@kernel.org>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        linux-riscv@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 00/16] mm: Introduce MAP_BELOW_HINT
+Message-ID: <pzxlpwxbrs3pali53bogsorwebi45ayqivxmpeagrhvdh7zt4u@ybsa2vnkze7v>
+Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Dave Hansen <dave.hansen@intel.com>, Charlie Jenkins <charlie@rivosinc.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
+	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Vlastimil Babka <vbabka@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+	Russell King <linux@armlinux.org.uk>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Gerald Schaefer <gerald.schaefer@linux.ibm.com>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Shuah Khan <shuah@kernel.org>, 
+	Alexandre Ghiti <alexghiti@rivosinc.com>, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Palmer Dabbelt <palmer@rivosinc.com>, linux-riscv@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org, 
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC v2 0/4] mm: Introduce MAP_BELOW_HINT
-Message-ID: <ZtCw4vgonbJzV1xs@ghost>
-References: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
- <ZtAxwJFH_hAh1BPG@tiehlicka>
+References: <20240827-patches-below_hint_mmap-v1-0-46ff2eb9022d@rivosinc.com>
+ <fd1b8016-e73d-4535-9c67-579ab994351f@intel.com>
+ <Zs+FYbII0ewwdisg@ghost>
+ <4219f619-4b32-40bc-85b8-cb11d76fde98@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4219f619-4b32-40bc-85b8-cb11d76fde98@intel.com>
+User-Agent: NeoMutt/20240425
+X-ClientProxiedBy: YT4P288CA0041.CANP288.PROD.OUTLOOK.COM
+ (2603:10b6:b01:d3::22) To DS0PR10MB7933.namprd10.prod.outlook.com
+ (2603:10b6:8:1b8::15)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZtAxwJFH_hAh1BPG@tiehlicka>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR10MB7933:EE_|PH7PR10MB6105:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9e7e7223-ff91-4d5a-67e7-08dcc861ec4b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|366016|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?8lvxFLTrJHtqzCQ6aCAPAvZ/2z4P0ry/7ebdrKgbsNzj92Sy+7OtLZWHKz8I?=
+ =?us-ascii?Q?If728pyRmCLEmG1h2RSGBIkqqiM879fFPtxP0VE6ug4aqBfJTjkxXkDZN7T3?=
+ =?us-ascii?Q?TywXkGKNrMuVapTEA3RwaH2Us1W1BuIToM4HABtu9Qc180DAo+1WmVXPmfwk?=
+ =?us-ascii?Q?o6lQoh4BLw0thv4v7pOoJX27htETDzobGm8NLHxJ5LC3e6BuPcewx8p+96YZ?=
+ =?us-ascii?Q?iQZvy13jazntuipmndCAiw32rj/O9IEPEPzboUaSWQ7/YCh5eU6RPBrTUWtM?=
+ =?us-ascii?Q?wK7bfB9/Fm6e6w8579uut1fAJaycfO93exRcypNq+g4sDPa8xjnu6NVhKQOD?=
+ =?us-ascii?Q?AsQ2UfJ8BiU94GPdRtGm3k2HB710UkIw2HpNVu2D5oqKBJXj8aIDTpJ8T625?=
+ =?us-ascii?Q?Q1jZs7zcwIUr1BXVn96HZFoejKKagfsqCe8rWrcbkltilOMb914FOiQ5pyVk?=
+ =?us-ascii?Q?2ouurqu8FiC68rfLNVpA6W7LM0HGMd/jFSpa3FZRebtUWlD8p7zqAlZyD9JM?=
+ =?us-ascii?Q?Y0Lz8F6uJG6sx4k/gDPZevFti+nVj2wEnzXArNnCwzSUUJ4Vf+IazZeSBafG?=
+ =?us-ascii?Q?9yxXz+kNmNSwND0rDW3IumNAN5iTllW4l2ZRzv1bcpgjQMHIL26Z4WXdV8jr?=
+ =?us-ascii?Q?+mmkIfe0BWfbl7kjtbgcurmeUEhozhO+G9PaUZoPEI2/Vj1FhjEF75gbQjZy?=
+ =?us-ascii?Q?SWfqRSOhZebdHO3wzA8ne6ydZS+e8HeJHIMGr9uMgv/xMBuN0hz4qMi0D7Pm?=
+ =?us-ascii?Q?igAl9oe0aty3pzkSxCM78e3dhfOssBNIlFdtwBkA+GBP5T/sqpmHnhqF/hbJ?=
+ =?us-ascii?Q?XbnYF/w4rH4EOSSAvWAeahQCkp+KSNOfx1YveolJtoNND9HUDFS9vRYqF0bg?=
+ =?us-ascii?Q?J6rq5ZYAReTY5d3exrwqG5c79TgfatkGrg3NwOiSGd5FulExUqGIRON04Xj4?=
+ =?us-ascii?Q?Jbz0ZSwv6xXu8fPWNvxCjWPEpfroWeGlMXqu+uGr9TQs6dYhtCH0Zdfear4x?=
+ =?us-ascii?Q?RLQEUqvPQ6fyvpe7Yiv3Oj5UNAGzywZAOX9OH2WDCC07nF8wpCjzeqtmkxmc?=
+ =?us-ascii?Q?flCoO/QMT364rj4ImeFwFB5LJ0w1iPKH/tNz51tGuYF30f1RftSajmq5A/mu?=
+ =?us-ascii?Q?v3cC34zSzpPllAuEN4os3llQHkkQ1HbNwkmDubTJwdjw8b4AlrBUHIfiw+ar?=
+ =?us-ascii?Q?wcI2zIvfdu9mhQEVOjyxdcM7IceURUuOnSsFOyTXXmcH850wx0ZF7qqBckSq?=
+ =?us-ascii?Q?qd4BjxkRz/DXX3hBOCU4aG3u9+CsDtoCXTQfIzuAidzRrZHdlACzAWG4cH8s?=
+ =?us-ascii?Q?xDak57DTnKW0WkgpMBlT8k7zR9npRsxDA8eVz+DHcAKORw=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB7933.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?fdGr47NrTHD62dOMwXA1Xgr+hAR/R7pctSGTug+Qc32Y/62AAiE0HWnGi1AO?=
+ =?us-ascii?Q?TFKbTvI7J/3iYD1VctjSFh2GM3zLfAd2+LkmJXdDFVbI7tMBJSrRY8hQ6DCA?=
+ =?us-ascii?Q?3mMGTEo7pH8mk97L7R/NMYkoN+zRh7Z2MgJxn/pVFivfPu6xD+Z8CdP85BXv?=
+ =?us-ascii?Q?ORa7za35AaRZvKsBh9WFAevGmAAmnVs5m420KLuUr5Z2qRVrwAqiAYd5jmOO?=
+ =?us-ascii?Q?piJujbCr8R+k8Pv7SlkxuUvss5eFW4h7mnumSfbYoEa3BQvHJnVA+DbjD1G5?=
+ =?us-ascii?Q?XFU4W81QOzeMrHxfqEGNDBmTl8OI2y8oFBVyJ7BHeLU6FB7feiMwWnBWK7l4?=
+ =?us-ascii?Q?KYm4JJR/tZNGo5Ahoy+YTrlDV/Hf/VHwqiLtQEIMEJ5eieAlTaWfdsvzIsPM?=
+ =?us-ascii?Q?rC30U370ONyLWW8GW6ZcLKQ7vwJFH07ytTH6cLLEFqy1EKb6GLyip753h4+S?=
+ =?us-ascii?Q?mGG7e1YTiExVLcbildpxYUbRH1EmEydlKNXL1FWpQCYmelfHgMLzyL6ySFAh?=
+ =?us-ascii?Q?YI18f7wNZrJVgxcBsRCcJIBOBwNu3rfBFvAQbXF9BrMSlOqOmCgTv4XkL/jT?=
+ =?us-ascii?Q?qDxF2Q6ZIv1m+rla1DvokXjctzYpxKhd9wC7AVVGkdzJTDk6rYGQ3HiE+67u?=
+ =?us-ascii?Q?dRRAo3Xno52WYDnA1kNrSkF4k7z03KRuFtWql6kDMr5zwfvf/ImgOwhSSJ+N?=
+ =?us-ascii?Q?/LBaUIcBTNnYgA1owni3G6jslnjj3J5NkTW9J/AvnRjVUClBsHiNCoaMdyql?=
+ =?us-ascii?Q?WmmondBUTxd3vpKGe8dXLCAjdMv34b3D5ruONaasFcsG3QpFoDGx1FJRRH75?=
+ =?us-ascii?Q?0n5wy/saHMgMTDa2hXxuZGsWDB9ABwKZHCuMqp38sLIBAHPtBNBaIxfWjLiV?=
+ =?us-ascii?Q?BQd6MMTSsJK+TKHL9Z8Ry/7jcw0xlG2wyVSK1ijVtuGMzCwBJIczIsPC0UwK?=
+ =?us-ascii?Q?uAlmW2uQO1+GdcRvSDcQIexFFmeRi2JvYUSh7p2E6m2Xp4H3ymePS6OCf7Ui?=
+ =?us-ascii?Q?vaQafVi41keJzhSEaQryAqz4H1MXfeN/KYxRVA4LJo+NqPSnxJK8g98iT9IT?=
+ =?us-ascii?Q?nDfu18Y8vKMNGSKU1i11gbrboL3z8SSz/iA6j4y+mhnOc8U0Kb1W5BMwu/TM?=
+ =?us-ascii?Q?Yj5jzECZT/3mT813k0Kp2lbq7VyNOFx6rYFbxeg0w+kuZ5xZG1eANp0TIfTB?=
+ =?us-ascii?Q?IhscvTdYszngRVJ8jglhughgMFAPRily3Uj8uaylOskSe+PD47crfeXW3mAf?=
+ =?us-ascii?Q?1s7Pzpg5nf/98ykQnZPvJ55Hd3R6ZwLwbt1cTm+ddeBDwYuQpeVsxP3qEN1t?=
+ =?us-ascii?Q?GpwwUzXbKlCsHZ/0BqgYZ6MseqjIVwBrTIKrilDNDiHy0rZ4TpMIAUAKjo7g?=
+ =?us-ascii?Q?REzhaCzoRPdSj1w1bRvxWex5HM19ea6Fpguz8mdpfmv22zKSWVf+g7CYJLCa?=
+ =?us-ascii?Q?KYuccCCI5QSJkU6sI2CSFGOgoLUInkN+/0752KOi6jEC0N9ycBteJ+DXF1em?=
+ =?us-ascii?Q?fScjbahJpVNEpSjAGml10424NGjxYyll9kcvOrTQcGIvWHxkZzl+9YoPJ8w0?=
+ =?us-ascii?Q?I8fP458oGXAlJ2hafpl0St9xpevFqSzHlL4QJYwh?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	Fx66r49Mb+PAL/WF2CfWk6JTRRMMKwINLbs265Pl961EGCyp77qCy5tlR+jFM+oVoTbReGCZIiHrE41h6a/DQgcD5D9y6hTVtFNVzjFkID3PE9Lki1XrnNxuDVtP4qWAegKrCxuIKpZthlCB2D6wnoHiBwjc7Zry2rL5E2MIJm6la1sfyMTAUCEz4XLrqUrNut1NN2ANCYxbE1udM4LfNMmJf/DNMlj81XHkTXLvY+9cRzkC7CHmtImjnez2MKMvHTpHL7yH8wFnV0rTWzzOXRv9+e+y6uabB7nSawqzMME+L5+9FeNQ0sM26ukXEZcOe05jHNhzBYNNlnH9u+w4gDjOfF9vxESe/yB4KmLGGk+JrwHaSWxx94XERwbBZwXjK485r7m0uRwI0MEcRDFdXTV01Ra/ZCEpTnoooXSaKXLrEoMiVdj0aHNY9DHvZzM8O2iZQLGRAmM0VeJFSo7dZZWuhmysUAZ0EaBkRJSZx4PC0OoWgFS8jQkxYSGyMC1jZHzNWGAjiQk2vsJkN/2M8ToGia4YYcwvuZN3f2D6FmTxfmLaU8aLY3ysDVO+FOr3Y6nqr1+qFy6GR5v6/+XUUunhiJK/om+nAhjy/p/H8Fw=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e7e7223-ff91-4d5a-67e7-08dcc861ec4b
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB7933.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2024 19:36:48.3737
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CHrtnWZ7ePK0OQcBUG9CutynZTBMqZD9bftB2fyZHjoT0inZWx07kwe6kiH3B9owkp66y7v7EPeEIH8PY8MarA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6105
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-29_06,2024-08-29_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0 spamscore=0
+ mlxlogscore=946 adultscore=0 suspectscore=0 phishscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2407110000
+ definitions=main-2408290138
+X-Proofpoint-GUID: y1FxsZT38_CsZows4z6A-o-mW95F1XX9
+X-Proofpoint-ORIG-GUID: y1FxsZT38_CsZows4z6A-o-mW95F1XX9
 
-On Thu, Aug 29, 2024 at 10:30:56AM +0200, Michal Hocko wrote:
-> On Thu 29-08-24 00:15:57, Charlie Jenkins wrote:
-> > Some applications rely on placing data in free bits addresses allocated
-> > by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
-> > address returned by mmap to be less than the 48-bit address space,
-> > unless the hint address uses more than 47 bits (the 48th bit is reserved
-> > for the kernel address space).
-> > 
-> > The riscv architecture needs a way to similarly restrict the virtual
-> > address space. On the riscv port of OpenJDK an error is thrown if
-> > attempted to run on the 57-bit address space, called sv57 [1].  golang
-> > has a comment that sv57 support is not complete, but there are some
-> > workarounds to get it to mostly work [2].
-> > 
-> > These applications work on x86 because x86 does an implicit 47-bit
-> > restriction of mmap() address that contain a hint address that is less
-> > than 48 bits.
-> > 
-> > Instead of implicitly restricting the address space on riscv (or any
-> > current/future architecture), a flag would allow users to opt-in to this
-> > behavior rather than opt-out as is done on other architectures. This is
-> > desirable because it is a small class of applications that do pointer
-> > masking.
+* Dave Hansen <dave.hansen@intel.com> [240829 12:54]:
+> On 8/28/24 13:15, Charlie Jenkins wrote:
+> > A way to restrict mmap() to return LAM compliant addresses in an entire
+> > address space also doesn't have to be mutually exclusive with this flag.
+> > This flag allows for the greatest degree of control from applications.
+> > I don't believe there is additionally performance saving that could be
+> > achieved by having this be on a per address space basis.
 > 
-> IIRC this has been discussed at length when 5-level page tables support
-> has been proposed for x86. Sorry I do not have a link handy but lore
-> should help you. Linus was not really convinced and in the end vetoed it
-> and prefer that those few applications that benefit from greater address
-> space would do that explicitly than other way around.
+> I agree with you in general.  The MAP_BELOW_HINT _is_ the most flexible.
+>  But it's also rather complicated.
 
-I believe I found the conversation you were referring to. Ingo Molnar
-recommended a flag similar to what I have proposed [1]. Catalin
-recommended to make 52-bit opt-in on arm64 [2]. Dave Hansen brought up
-MPX [3].
+There is a (seldom used?) feature of mmap_min_addr, it seems like we
+could have an mmap_max_addr.  Would something like that work for your
+use case?  Perhaps it would be less intrusive to do something in this
+way?  I haven't looked at it in depth and this affects all address
+spaces as well (new allocations only).
 
-However these conversations are tangential to what I am proposing. arm64
-and x86 decided to have the default address space be 48 bits. However
-this was done on a per-architecture basis with no way for applications
-to have guarantees between architectures. Even this behavior to restrict
-to 48 bits does not even appear in the man pages, so would require
-reading the kernel source code to understand that this feature is
-available. Then to opt-in to larger address spaces, applications have to
-know to provide a hint address that is greater than 47 bits, mmap() will
-then return an address that contains up to 56 bits on x86 and 52 bits on
-arm64. This difference of 4 bits causes inconsistency and is part of the
-problem I am trying to solve with this flag.
+There is a note on mmap_min_addr about applications that require the
+lower addresses, would this mean we'll now have a note about upper
+limits?
 
-I am not proposing to change x86 and arm64 away from using their opt-out
-feature, I am instead proposing a standard ABI for applications that
-need some guarantees of the bits used in pointers.
+I really don't understand why you need this at all, to be honest.  If
+you know the upper limit you could just MAP_FIXED map a huge guard at
+the top of your address space then do whatever you want with those bits.
 
-- Charlie
-
-Link: https://lore.kernel.org/lkml/20161209050130.GC2595@gmail.com/ [1]
-Link: https://lore.kernel.org/lkml/20161209105120.GA3705@e104818-lin.cambridge.arm.com/
-[2]
-Link:
-https://lore.kernel.org/lkml/a2f86495-b55f-fda0-40d2-242c45d3c1f3@intel.com/
-[3]
+This will create an entry in the vma tree that no one else will be able
+to use, and you can do this in any process you want, for as many bits as
+you want.
 
 > 
-> -- 
-> Michal Hocko
-> SUSE Labs
+> My _hope_ would be that a per-address-space property could share at
+> least some infrastructure with what x86/LAM and arm/TBI do to the
+> address space.  Basically put the restrictions in place for purely
+> software reasons instead of the mostly hardware reasons for LAM/TBI.
+> 
+> Lorenzo also raised some very valid points about a having a generic
+> address-restriction ABI.  I'm certainly not discounting those concerns.
+> It's not something that can be done lightly.
+
+Yes, I am concerned about supporting this (probably forever) and dancing
+around special code that may cause issues, perhaps on an arch that few
+have for testing.  I already have so many qemu images for testing, some
+of which no longer have valid install media - and basically none of them
+use the same code in this area (or have special cases already).  I think
+you understand what we are dealing with considering your comments in
+your cover letter.
+
+Thanks,
+Liam
 
