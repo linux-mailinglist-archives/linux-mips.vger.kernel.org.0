@@ -1,266 +1,102 @@
-Return-Path: <linux-mips+bounces-5215-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5216-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3151964C84
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2024 19:03:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1498E964CC1
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2024 19:30:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 540C81F2240F
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2024 17:03:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C4531C226C7
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2024 17:30:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 802861B78FB;
-	Thu, 29 Aug 2024 17:00:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E25221494BD;
+	Thu, 29 Aug 2024 17:30:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="prPHO91H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XukKEq6r"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D088A1B5ECA
-	for <linux-mips@vger.kernel.org>; Thu, 29 Aug 2024 17:00:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF5640870;
+	Thu, 29 Aug 2024 17:30:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724950852; cv=none; b=Eg7vwth9kkbNRlX+gXbtcqqh2Ke3J1rbkynsj+VT0LryCtMhdD3Da5ElfmDf3JuGripK9cfSeFWeMqZ7jfHnlv3/mWyTyMSnIvGNpApvmMiBSu00Lhqfq4nZF3qYC7Ro1HVdG1PjCt7QyipNqN3bP6x2EzUlYMRVlcjnVoOExAs=
+	t=1724952627; cv=none; b=iB74GBGERT9QfZK9M99vNOrjEP6kk/nhvcPwfpdLBJC7NAt2B7O+JJ3WeXkmBNduEQXYasMnSK8lDtTkRgajHmnIxlu2kAuetqzzEA+5TOM3GRIhO9YHhwa+lcvbJfzeO3G8FyOSJ2Faecm1FQigPdQeRnu7pKmtdpToSWEFb2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724950852; c=relaxed/simple;
-	bh=r39iS0mZmeesAN8mRRVPFX8IPK5tuUvZAQuloWJvpeY=;
-	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID; b=qE1p7A76IUBAku90WcwkeiT78zxyxk2q5D9rnhw6eDZcP4RChnzLQccqqEGWVBnxDfwNaKuBvg5fgtPkj0TfKzvD4mwZmGMjomzCm+E9blV3YOHfoGT3jZ53hyvMQPq1hdXcpyCYuEaSf1UzENUQwX2oSVADcGep+F25nUGcWVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=prPHO91H; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7142e002aceso759287b3a.2
-        for <linux-mips@vger.kernel.org>; Thu, 29 Aug 2024 10:00:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1724950847; x=1725555647; darn=vger.kernel.org;
-        h=message-id:to:from:cc:in-reply-to:subject:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=v6yVeKIAZdNlCjwxHunt8GrVJ/ApsEacIVWq6Y0ogzc=;
-        b=prPHO91HSOADrr0+kq1K3EW7V4m4kl9hSOqwXlAafDmUTelXdjybDUTlZbkiN7OVvN
-         xcsMEQYJtQKmAe5ue2qfht7+JihW/zuooKT+bZzFgXecRpQyoyfPOA0r910tsIvcCe8P
-         eW6BiwPE/NlP4s+EbJr/Se93Ez0FltvnHkzKdYniKxQESxLgegL2vrkH1toRHSV6WrJe
-         KuVieK0r1hNlauuOjMruyaNzBN/POjtgWpeSOWp6ZTo8VIT5bRaAbjYMDrnv/vEuJQBY
-         S62YQ/K3K1OPYL1ioTcwjZQ075ho3OZfAJU3dgSAWyhj+9kFwdA4RVW90DIZLApOnSD9
-         P/HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724950847; x=1725555647;
-        h=message-id:to:from:cc:in-reply-to:subject:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v6yVeKIAZdNlCjwxHunt8GrVJ/ApsEacIVWq6Y0ogzc=;
-        b=O+voLMRnoefUTpfNFMTLR6q1UWtFUGXQt2XiPLAWH+TL3Pre8LhDzxaMGa40ESPfwZ
-         ZaubwwCSEFmFZMrLJmMjSaIRWwBzWHQ160f45m/0xk5/LU0Z4Ao6DzOm4uASQ1tc/Fcw
-         rB2+dc5qvdIzD0JAtnvTBXSvJoQPxoSKCLuW0Xpj2goh9yrdoioqvP8rGrc6Z2kvKk3r
-         hfSCNEOteYFuAQ+MmxI510ll4AdQorAo/LBw4Gd9pc6uuP/rjua8KCT0bXqTK/1I9/jn
-         buyaafkN53iw7l44s4OiwNNUAAnEzRYHGsfTW2+BOaDt/TqPX2wgFXimLPKtf8C4lncT
-         QQFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWV9nxJOXTYSWXXjIsg2zBZFICch2aqDV67+C5o0ThRtunpBy+uVCyMeSwmL3wAnNeacasGorLMDak+@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2p/OA7m0kqwPBZPbW6ev4HWEhJt0V8LGsWrlLRutAl1vLhEu7
-	Nf18Wd5gJvYVRFD/6NnJSBrxWv26nwqwo20p70CqopEsuNoK4FL7IxfaxuHYaho=
-X-Google-Smtp-Source: AGHT+IH3f6jrHjn3UecOjnnTSh7f1mjtosaBnqcvhiQTmwoBq2WfcZwsjSYUQZNm8240zpeF9tE3wA==
-X-Received: by 2002:a05:6a00:91a0:b0:70d:2b1b:a37f with SMTP id d2e1a72fcca58-715dfc22895mr4520173b3a.24.1724950846693;
-        Thu, 29 Aug 2024 10:00:46 -0700 (PDT)
-Received: from localhost ([192.184.165.199])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7d22e77438dsm1466259a12.27.2024.08.29.10.00.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2024 10:00:45 -0700 (PDT)
-Date: Thu, 29 Aug 2024 10:00:45 -0700 (PDT)
-X-Google-Original-Date: Thu, 29 Aug 2024 10:00:42 PDT (-0700)
-Subject:     Re: [PATCH RFC v2 0/4] mm: Introduce MAP_BELOW_HINT
-In-Reply-To: <a048515e-f6e4-4d77-920b-6742529f3ca4@suse.cz>
-CC: Charlie Jenkins <charlie@rivosinc.com>, Arnd Bergmann <arnd@arndb.de>,
-  Richard Henderson <richard.henderson@linaro.org>, ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
-  linux@armlinux.org.uk, guoren@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
-  tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com, deller@gmx.de, mpe@ellerman.id.au,
-  npiggin@gmail.com, christophe.leroy@csgroup.eu, naveen@kernel.org, agordeev@linux.ibm.com,
-  gerald.schaefer@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com, borntraeger@linux.ibm.com,
-  svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org, glaubitz@physik.fu-berlin.de,
-  davem@davemloft.net, andreas@gaisler.com, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-  dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, luto@kernel.org, peterz@infradead.org,
-  muchun.song@linux.dev, akpm@linux-foundation.org, Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com,
-  shuah@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>, linux-arch@vger.kernel.org,
-  linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-  linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
-  linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-  linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-mm@kvack.org,
-  linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: vbabka@suse.cz
-Message-ID: <mhng-77a89c0b-bfdf-4a6f-bb6e-cee3ff1efbc6@palmer-ri-x1c9>
+	s=arc-20240116; t=1724952627; c=relaxed/simple;
+	bh=kWuFHoupUeoLMSNjGVbiL4lpeHmH38kYHoBuArnwaN0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=m+N5VvOkUSLg5jRkSWa8jNPsWgBiphluAKYl9x5ejCuVtGYXkdwvQPJPl8o8Gocn0JiY2Zv38LUV29WZS+3Z5H1L+56iROctAfo6BoFCGHnNWcJTd76SoNwj9Cw8EKlKkpY+RsxgTvWK8HN7EuLhAKJ51jpmLs/yQy0DSkZglIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XukKEq6r; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40616C4CEC5;
+	Thu, 29 Aug 2024 17:30:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724952627;
+	bh=kWuFHoupUeoLMSNjGVbiL4lpeHmH38kYHoBuArnwaN0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=XukKEq6rmbwer+gAM2hmk7PLHsNHFve0Qwe270Q5CSsT7IXjwB8BJved+AhZtpNgZ
+	 tAgxvr4SeWS2yfqRBj9dSsMFEZcd90OiBqQJZEJu5Vm3v7r1cKhRrEcFOyXcgQaYml
+	 cMhsneue2jS/4xeO8PHk7UWD7fme7sdsIG1YPVHzqDVBwfUkt/hzUK9ocPvIsdaReW
+	 PGCn+UsOT/cAqOsx5f07vahH8fhM+KOacZ0Rxiucs3DY2BNTDgizahi/6yuU4bEWm2
+	 CTMwRdFzsrthPc0+nV9EFO8eh8VBeEC08143R/XY6FOEdCBTkNbklmXoxpWNIjhGnf
+	 QA8X4Fa6wxQKg==
+From: Vinod Koul <vkoul@kernel.org>
+To: Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Keguang Zhang <keguang.zhang@gmail.com>
+Cc: linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Conor Dooley <conor.dooley@microchip.com>, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20240607-loongson1-dma-v8-0-f9992d257250@gmail.com>
+References: <20240607-loongson1-dma-v8-0-f9992d257250@gmail.com>
+Subject: Re: [PATCH v8 0/2] Add support for Loongson1 APB DMA
+Message-Id: <172495262390.385951.6697848658942844877.b4-ty@kernel.org>
+Date: Thu, 29 Aug 2024 23:00:23 +0530
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
 
-On Thu, 29 Aug 2024 02:02:34 PDT (-0700), vbabka@suse.cz wrote:
-> Such a large recipient list and no linux-api. CC'd, please include it on
-> future postings.
->
-> On 8/29/24 09:15, Charlie Jenkins wrote:
->> Some applications rely on placing data in free bits addresses allocated
->> by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
->> address returned by mmap to be less than the 48-bit address space,
->> unless the hint address uses more than 47 bits (the 48th bit is reserved
->> for the kernel address space).
->>
->> The riscv architecture needs a way to similarly restrict the virtual
->> address space. On the riscv port of OpenJDK an error is thrown if
->> attempted to run on the 57-bit address space, called sv57 [1].  golang
->> has a comment that sv57 support is not complete, but there are some
->> workarounds to get it to mostly work [2].
->>
->> These applications work on x86 because x86 does an implicit 47-bit
->> restriction of mmap() address that contain a hint address that is less
->> than 48 bits.
->>
->> Instead of implicitly restricting the address space on riscv (or any
->> current/future architecture), a flag would allow users to opt-in to this
->> behavior rather than opt-out as is done on other architectures. This is
->> desirable because it is a small class of applications that do pointer
->> masking.
->
-> I doubt it's desirable to have different behavior depending on architecture.
-> Also you could say it's a small class of applications that need more than 47
-> bits.
 
-We're sort of stuck with the architeture-depending behavior here: for 
-the first few years RISC-V only had 39-bit VAs, so the defato uABI ended 
-up being that userspace can ignore way more bits.  While 48 bits might 
-be enough for everyone, 39 doesn't seem to be -- or at least IIRC when 
-we tried restricting the default to that, we broke stuff.  There's also 
-some other wrinkles like arbitrary bit boundaries in pointer masking and 
-vendor-specific paging formats, but at some point we just end up down a 
-rabbit hole of insanity there...
+On Fri, 07 Jun 2024 20:12:22 +0800, Keguang Zhang wrote:
+> Add the driver and dt-binding document for Loongson1 APB DMA.
+> 
+> Changes in v8:
+> - Change 'interrupts' property to an items list
+> - Link to v7: https://lore.kernel.org/r/20240329-loongson1-dma-v7-0-37db58608de5@gmail.com
+> 
+> Changes in v7:
+> - Change the comptible to 'loongson,ls1*-apbdma' (suggested by Huacai Chen)
+> - Update the title and description part accordingly
+> - Rename the file to loongson,ls1b-apbdma.yaml
+> - Add a compatible string for LS1A
+> - Delete minItems of 'interrupts'
+> - Change patterns of 'interrupt-names' to const
+> - Rename the file to loongson1-apb-dma.c to keep the consistency
+> - Update Kconfig and Makefile accordingly
+> - Link to v6: https://lore.kernel.org/r/20240316-loongson1-dma-v6-0-90de2c3cc928@gmail.com
+> 
+> [...]
 
-FWIW, I think that userspace depending on just tossing some VA bits 
-because some kernels happened to never allocate from them is just 
-broken, but it seems like other ports worked around the 48->57 bit 
-transition and we're trying to do something similar for 39->48 (and that 
-works with 49->57, as we'll have to deal with that eventually).
+Applied, thanks!
 
-So that's basically how we ended up with this sort of thing: trying to 
-do something similar without a flag broke userspace because we were 
-trying to jam too much into the hints.  I couldn't really figure out a 
-way to satisfy all the userspace constraints by just implicitly 
-retrofitting behavior based on the hints, so we figured having an 
-explicit flag to control the behavior would be the sanest way to go.
+[1/2] dt-bindings: dma: Add Loongson-1 APB DMA
+      commit: 7ea270bb93e4ce165bb4f834c29c05e9815b6ca8
+[2/2] dmaengine: Loongson1: Add Loongson-1 APB DMA driver
+      commit: e06c432312148ddb550ec55b004e32671657ea23
 
-That said: I'm not opposed to just saying "depending on 39-bit VAs is 
-broken" and just forcing people to fix it.
+Best regards,
+-- 
+~Vinod
 
->> This flag will also allow seemless compatibility between all
->> architectures, so applications like Go and OpenJDK that use bits in a
->> virtual address can request the exact number of bits they need in a
->> generic way. The flag can be checked inside of vm_unmapped_area() so
->> that this flag does not have to be handled individually by each
->> architecture.
->>
->> Link:
->> https://github.com/openjdk/jdk/blob/f080b4bb8a75284db1b6037f8c00ef3b1ef1add1/src/hotspot/cpu/riscv/vm_version_riscv.cpp#L79
->> [1]
->> Link:
->> https://github.com/golang/go/blob/9e8ea567c838574a0f14538c0bbbd83c3215aa55/src/runtime/tagptr_64bit.go#L47
->> [2]
->>
->> To: Arnd Bergmann <arnd@arndb.de>
->> To: Richard Henderson <richard.henderson@linaro.org>
->> To: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
->> To: Matt Turner <mattst88@gmail.com>
->> To: Vineet Gupta <vgupta@kernel.org>
->> To: Russell King <linux@armlinux.org.uk>
->> To: Guo Ren <guoren@kernel.org>
->> To: Huacai Chen <chenhuacai@kernel.org>
->> To: WANG Xuerui <kernel@xen0n.name>
->> To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
->> To: James E.J. Bottomley <James.Bottomley@HansenPartnership.com>
->> To: Helge Deller <deller@gmx.de>
->> To: Michael Ellerman <mpe@ellerman.id.au>
->> To: Nicholas Piggin <npiggin@gmail.com>
->> To: Christophe Leroy <christophe.leroy@csgroup.eu>
->> To: Naveen N Rao <naveen@kernel.org>
->> To: Alexander Gordeev <agordeev@linux.ibm.com>
->> To: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
->> To: Heiko Carstens <hca@linux.ibm.com>
->> To: Vasily Gorbik <gor@linux.ibm.com>
->> To: Christian Borntraeger <borntraeger@linux.ibm.com>
->> To: Sven Schnelle <svens@linux.ibm.com>
->> To: Yoshinori Sato <ysato@users.sourceforge.jp>
->> To: Rich Felker <dalias@libc.org>
->> To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
->> To: David S. Miller <davem@davemloft.net>
->> To: Andreas Larsson <andreas@gaisler.com>
->> To: Thomas Gleixner <tglx@linutronix.de>
->> To: Ingo Molnar <mingo@redhat.com>
->> To: Borislav Petkov <bp@alien8.de>
->> To: Dave Hansen <dave.hansen@linux.intel.com>
->> To: x86@kernel.org
->> To: H. Peter Anvin <hpa@zytor.com>
->> To: Andy Lutomirski <luto@kernel.org>
->> To: Peter Zijlstra <peterz@infradead.org>
->> To: Muchun Song <muchun.song@linux.dev>
->> To: Andrew Morton <akpm@linux-foundation.org>
->> To: Liam R. Howlett <Liam.Howlett@oracle.com>
->> To: Vlastimil Babka <vbabka@suse.cz>
->> To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
->> To: Shuah Khan <shuah@kernel.org>
->> Cc: linux-arch@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> Cc: linux-alpha@vger.kernel.org
->> Cc: linux-snps-arc@lists.infradead.org
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: linux-csky@vger.kernel.org
->> Cc: loongarch@lists.linux.dev
->> Cc: linux-mips@vger.kernel.org
->> Cc: linux-parisc@vger.kernel.org
->> Cc: linuxppc-dev@lists.ozlabs.org
->> Cc: linux-s390@vger.kernel.org
->> Cc: linux-sh@vger.kernel.org
->> Cc: sparclinux@vger.kernel.org
->> Cc: linux-mm@kvack.org
->> Cc: linux-kselftest@vger.kernel.org
->> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
->>
->> Changes in v2:
->> - Added much greater detail to cover letter
->> - Removed all code that touched architecture specific code and was able
->>   to factor this out into all generic functions, except for flags that
->>   needed to be added to vm_unmapped_area_info
->> - Made this an RFC since I have only tested it on riscv and x86
->> - Link to v1: https://lore.kernel.org/r/20240827-patches-below_hint_mmap-v1-0-46ff2eb9022d@rivosinc.com
->>
->> ---
->> Charlie Jenkins (4):
->>       mm: Add MAP_BELOW_HINT
->>       mm: Add hint and mmap_flags to struct vm_unmapped_area_info
->>       mm: Support MAP_BELOW_HINT in vm_unmapped_area()
->>       selftests/mm: Create MAP_BELOW_HINT test
->>
->>  arch/alpha/kernel/osf_sys.c                  |  2 ++
->>  arch/arc/mm/mmap.c                           |  3 +++
->>  arch/arm/mm/mmap.c                           |  7 ++++++
->>  arch/csky/abiv1/mmap.c                       |  3 +++
->>  arch/loongarch/mm/mmap.c                     |  3 +++
->>  arch/mips/mm/mmap.c                          |  3 +++
->>  arch/parisc/kernel/sys_parisc.c              |  3 +++
->>  arch/powerpc/mm/book3s64/slice.c             |  7 ++++++
->>  arch/s390/mm/hugetlbpage.c                   |  4 ++++
->>  arch/s390/mm/mmap.c                          |  6 ++++++
->>  arch/sh/mm/mmap.c                            |  6 ++++++
->>  arch/sparc/kernel/sys_sparc_32.c             |  3 +++
->>  arch/sparc/kernel/sys_sparc_64.c             |  6 ++++++
->>  arch/sparc/mm/hugetlbpage.c                  |  4 ++++
->>  arch/x86/kernel/sys_x86_64.c                 |  6 ++++++
->>  arch/x86/mm/hugetlbpage.c                    |  4 ++++
->>  fs/hugetlbfs/inode.c                         |  4 ++++
->>  include/linux/mm.h                           |  2 ++
->>  include/uapi/asm-generic/mman-common.h       |  1 +
->>  mm/mmap.c                                    |  9 ++++++++
->>  tools/include/uapi/asm-generic/mman-common.h |  1 +
->>  tools/testing/selftests/mm/Makefile          |  1 +
->>  tools/testing/selftests/mm/map_below_hint.c  | 32 ++++++++++++++++++++++++++++
->>  23 files changed, 120 insertions(+)
->> ---
->> base-commit: 5be63fc19fcaa4c236b307420483578a56986a37
->> change-id: 20240827-patches-below_hint_mmap-b13d79ae1c55
+
 
