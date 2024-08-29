@@ -1,301 +1,108 @@
-Return-Path: <linux-mips+bounces-5211-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5212-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44C42963F63
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2024 11:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BDAB3964054
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2024 11:37:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8C62BB2315A
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2024 09:02:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 56421B256C8
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2024 09:37:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 322BA189F41;
-	Thu, 29 Aug 2024 09:02:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E47B18D620;
+	Thu, 29 Aug 2024 09:37:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="cWz55Bm4"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B2322EF2;
-	Thu, 29 Aug 2024 09:02:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 699D818E76B;
+	Thu, 29 Aug 2024 09:37:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724922160; cv=none; b=ng5JsWbkUU2lSjhgwRAhXhEanMspjjYoMW8jgW8nb/tV3Odll0M3INZLeJFA7+NQdfvf18P70if3LEwf32T1ASvhUQN2HR2M0sj7qV3TMWhDgKeENmTnWwLnTilfLmSo33BNA+t+zuv5jnkWH5QyNO3aQ0SdzaW/dthFHWfW9Sk=
+	t=1724924226; cv=none; b=umy+bBlYiD54sd37mGye/xOU6jBImTMhg5ivnjEkVpSYddFEUtcp8AWJtjds851fFHmCJFeMjWqkOZ8wYfR/9kxUThf4CoJ5M0n9A66ktjRN3g9Rd/5dcLXk06PQEZJxFkibP/cEKLldQJ6jjYPCu9IQcynW86VfeUGay35jkbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724922160; c=relaxed/simple;
-	bh=+MKsWCF+E+V4m3IR+Rb8qmmn/eijzficdzxFL1XCJMs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ipOhgfdRmHCVYR2uR35L6cn28GsfFObup3xV9mSEZhU95AiiLForbwvFyK8voygVhefwN+mwS6MyiMfobtiIgzz2tncDdV1i3QZ2kGq7viHabvXum6rX0bjR/0aSeKAP2ag50iwpeBG1d5WsiajiafizFBggvVpbWlQUmlJV1dw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 1E9091FD0D;
-	Thu, 29 Aug 2024 09:02:36 +0000 (UTC)
-Authentication-Results: smtp-out2.suse.de;
-	none
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9616A13408;
-	Thu, 29 Aug 2024 09:02:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id +r5PJCs50GZ4agAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Thu, 29 Aug 2024 09:02:35 +0000
-Message-ID: <a048515e-f6e4-4d77-920b-6742529f3ca4@suse.cz>
-Date: Thu, 29 Aug 2024 11:02:34 +0200
+	s=arc-20240116; t=1724924226; c=relaxed/simple;
+	bh=c8/tk7ME/v3aIAukzMKnWe7ZhTpA+2uAjbdEdQVWFuc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BtDY5f1NTHTOHZkGU9BTToTCe3tzhjjvFaP7tfv8NE1aXFCK2UIu/0NzOcjPisDzLVhFMAetWDkIkpTxl5Ie4lVAh7yz9pM3qPPldnU90aVGp/M5dolcH8+Hm/cUxogxTI9TOAcacOVC+sAW3D+KK5TcJ+yMucq2+j7FGfZUGzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=cWz55Bm4; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=OpJRCqvJUgPhUkiazewk4fbcOXCM86KxZfljMMe7Uig=; b=cWz55Bm4M9U8thKk6gSuu/A07u
+	w2RVOJ013+1Kl+2mN92amgwPyNv6DoHWbFMmIxsZBP6gZ4J1uvArpAd5fypGxjzlVNfTWiTna0BCC
+	cFnGoL60SdlGm94Z5GnX561yMyUMBLbfsjazgIVAEGx7lKSqwOd9hNYmXilpmnXwhlPEifqkmOjqG
+	cDB/5kyeq8xDoIoGzOijhl3Qh/M6oTn1YtFqLsVAtCdW1SF4ZdqJ9EVPYIiE1xDkUMBBocuqQHAbw
+	Otlg+VZvaNgdisNklffp57T4hSRYt5ksZ+v6jxy85IHGmMDfMRpI/OduwFB1Dwt7AQArmEHL7PKGe
+	4kQJjWWQ==;
+Received: from i5e861916.versanet.de ([94.134.25.22] helo=phil.lan)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1sjbaI-0002nq-3Y; Thu, 29 Aug 2024 11:36:54 +0200
+From: Heiko Stuebner <heiko@sntech.de>
+To: Elaine Zhang <zhangqing@rock-chips.com>,
+	devicetree@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Richard Fitzgerald <rf@opensource.cirrus.com>,
+	patches@opensource.cirrus.com,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-stm32@st-md-mailman.stormreply.com,
+	Serge Semin <fancer.lancer@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Charles Keepax <ckeepax@opensource.cirrus.com>,
+	linux-kernel@vger.kernel.org,
+	Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+	linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Michael Turquette <mturquette@baylibre.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	linux-rockchip@lists.infradead.org,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Heiko Stuebner <heiko@sntech.de>
+Subject: Re: (subset) [PATCH 1/5] dt-bindings: clock: baikal,bt1-ccu-div: add top-level constraints
+Date: Thu, 29 Aug 2024 11:36:49 +0200
+Message-ID: <172492351369.1695089.4051009745081865137.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240818173014.122073-1-krzysztof.kozlowski@linaro.org>
+References: <20240818173014.122073-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v2 0/4] mm: Introduce MAP_BELOW_HINT
-Content-Language: en-US
-To: Charlie Jenkins <charlie@rivosinc.com>, Arnd Bergmann <arnd@arndb.de>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
- Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
- Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Naveen N Rao <naveen@kernel.org>, Alexander Gordeev
- <agordeev@linux.ibm.com>, Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>,
- Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- "David S. Miller" <davem@davemloft.net>,
- Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Shuah Khan <shuah@kernel.org>,
- Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, Linux API <linux-api@vger.kernel.org>
-References: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- EP+ylKVEKb0Q2A==
-In-Reply-To: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.00 / 50.00];
-	REPLY(-4.00)[]
-X-Spam-Score: -4.00
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: 1E9091FD0D
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Such a large recipient list and no linux-api. CC'd, please include it on
-future postings.
+On Sun, 18 Aug 2024 19:30:10 +0200, Krzysztof Kozlowski wrote:
+> Properties with variable number of items per each device are expected to
+> have widest constraints in top-level "properties:" block and further
+> customized (narrowed) in "if:then:".  Add missing top-level constraints
+> for clocks and clock-names.
+> 
+> 
 
-On 8/29/24 09:15, Charlie Jenkins wrote:
-> Some applications rely on placing data in free bits addresses allocated
-> by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
-> address returned by mmap to be less than the 48-bit address space,
-> unless the hint address uses more than 47 bits (the 48th bit is reserved
-> for the kernel address space).
-> 
-> The riscv architecture needs a way to similarly restrict the virtual
-> address space. On the riscv port of OpenJDK an error is thrown if
-> attempted to run on the 57-bit address space, called sv57 [1].  golang
-> has a comment that sv57 support is not complete, but there are some
-> workarounds to get it to mostly work [2].
-> 
-> These applications work on x86 because x86 does an implicit 47-bit
-> restriction of mmap() address that contain a hint address that is less
-> than 48 bits.
-> 
-> Instead of implicitly restricting the address space on riscv (or any
-> current/future architecture), a flag would allow users to opt-in to this
-> behavior rather than opt-out as is done on other architectures. This is
-> desirable because it is a small class of applications that do pointer
-> masking.
+Applied, thanks!
 
-I doubt it's desirable to have different behavior depending on architecture.
-Also you could say it's a small class of applications that need more than 47
-bits.
+[4/5] dt-bindings: clock: rockchip,rk3588-cru: drop unneeded assigned-clocks
+      commit: 3529dc29fe65672ad9aeab9499fee901d0010901
 
-> This flag will also allow seemless compatibility between all
-> architectures, so applications like Go and OpenJDK that use bits in a
-> virtual address can request the exact number of bits they need in a
-> generic way. The flag can be checked inside of vm_unmapped_area() so
-> that this flag does not have to be handled individually by each
-> architecture. 
-> 
-> Link:
-> https://github.com/openjdk/jdk/blob/f080b4bb8a75284db1b6037f8c00ef3b1ef1add1/src/hotspot/cpu/riscv/vm_version_riscv.cpp#L79
-> [1]
-> Link:
-> https://github.com/golang/go/blob/9e8ea567c838574a0f14538c0bbbd83c3215aa55/src/runtime/tagptr_64bit.go#L47
-> [2]
-> 
-> To: Arnd Bergmann <arnd@arndb.de>
-> To: Richard Henderson <richard.henderson@linaro.org>
-> To: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-> To: Matt Turner <mattst88@gmail.com>
-> To: Vineet Gupta <vgupta@kernel.org>
-> To: Russell King <linux@armlinux.org.uk>
-> To: Guo Ren <guoren@kernel.org>
-> To: Huacai Chen <chenhuacai@kernel.org>
-> To: WANG Xuerui <kernel@xen0n.name>
-> To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> To: James E.J. Bottomley <James.Bottomley@HansenPartnership.com>
-> To: Helge Deller <deller@gmx.de>
-> To: Michael Ellerman <mpe@ellerman.id.au>
-> To: Nicholas Piggin <npiggin@gmail.com>
-> To: Christophe Leroy <christophe.leroy@csgroup.eu>
-> To: Naveen N Rao <naveen@kernel.org>
-> To: Alexander Gordeev <agordeev@linux.ibm.com>
-> To: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-> To: Heiko Carstens <hca@linux.ibm.com>
-> To: Vasily Gorbik <gor@linux.ibm.com>
-> To: Christian Borntraeger <borntraeger@linux.ibm.com>
-> To: Sven Schnelle <svens@linux.ibm.com>
-> To: Yoshinori Sato <ysato@users.sourceforge.jp>
-> To: Rich Felker <dalias@libc.org>
-> To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> To: David S. Miller <davem@davemloft.net>
-> To: Andreas Larsson <andreas@gaisler.com>
-> To: Thomas Gleixner <tglx@linutronix.de>
-> To: Ingo Molnar <mingo@redhat.com>
-> To: Borislav Petkov <bp@alien8.de>
-> To: Dave Hansen <dave.hansen@linux.intel.com>
-> To: x86@kernel.org
-> To: H. Peter Anvin <hpa@zytor.com>
-> To: Andy Lutomirski <luto@kernel.org>
-> To: Peter Zijlstra <peterz@infradead.org>
-> To: Muchun Song <muchun.song@linux.dev>
-> To: Andrew Morton <akpm@linux-foundation.org>
-> To: Liam R. Howlett <Liam.Howlett@oracle.com>
-> To: Vlastimil Babka <vbabka@suse.cz>
-> To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> To: Shuah Khan <shuah@kernel.org>
-> Cc: linux-arch@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-alpha@vger.kernel.org
-> Cc: linux-snps-arc@lists.infradead.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-csky@vger.kernel.org
-> Cc: loongarch@lists.linux.dev
-> Cc: linux-mips@vger.kernel.org
-> Cc: linux-parisc@vger.kernel.org
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Cc: linux-s390@vger.kernel.org
-> Cc: linux-sh@vger.kernel.org
-> Cc: sparclinux@vger.kernel.org
-> Cc: linux-mm@kvack.org
-> Cc: linux-kselftest@vger.kernel.org
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> 
-> Changes in v2:
-> - Added much greater detail to cover letter
-> - Removed all code that touched architecture specific code and was able
->   to factor this out into all generic functions, except for flags that
->   needed to be added to vm_unmapped_area_info
-> - Made this an RFC since I have only tested it on riscv and x86
-> - Link to v1: https://lore.kernel.org/r/20240827-patches-below_hint_mmap-v1-0-46ff2eb9022d@rivosinc.com
-> 
-> ---
-> Charlie Jenkins (4):
->       mm: Add MAP_BELOW_HINT
->       mm: Add hint and mmap_flags to struct vm_unmapped_area_info
->       mm: Support MAP_BELOW_HINT in vm_unmapped_area()
->       selftests/mm: Create MAP_BELOW_HINT test
-> 
->  arch/alpha/kernel/osf_sys.c                  |  2 ++
->  arch/arc/mm/mmap.c                           |  3 +++
->  arch/arm/mm/mmap.c                           |  7 ++++++
->  arch/csky/abiv1/mmap.c                       |  3 +++
->  arch/loongarch/mm/mmap.c                     |  3 +++
->  arch/mips/mm/mmap.c                          |  3 +++
->  arch/parisc/kernel/sys_parisc.c              |  3 +++
->  arch/powerpc/mm/book3s64/slice.c             |  7 ++++++
->  arch/s390/mm/hugetlbpage.c                   |  4 ++++
->  arch/s390/mm/mmap.c                          |  6 ++++++
->  arch/sh/mm/mmap.c                            |  6 ++++++
->  arch/sparc/kernel/sys_sparc_32.c             |  3 +++
->  arch/sparc/kernel/sys_sparc_64.c             |  6 ++++++
->  arch/sparc/mm/hugetlbpage.c                  |  4 ++++
->  arch/x86/kernel/sys_x86_64.c                 |  6 ++++++
->  arch/x86/mm/hugetlbpage.c                    |  4 ++++
->  fs/hugetlbfs/inode.c                         |  4 ++++
->  include/linux/mm.h                           |  2 ++
->  include/uapi/asm-generic/mman-common.h       |  1 +
->  mm/mmap.c                                    |  9 ++++++++
->  tools/include/uapi/asm-generic/mman-common.h |  1 +
->  tools/testing/selftests/mm/Makefile          |  1 +
->  tools/testing/selftests/mm/map_below_hint.c  | 32 ++++++++++++++++++++++++++++
->  23 files changed, 120 insertions(+)
-> ---
-> base-commit: 5be63fc19fcaa4c236b307420483578a56986a37
-> change-id: 20240827-patches-below_hint_mmap-b13d79ae1c55
-
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>
 
