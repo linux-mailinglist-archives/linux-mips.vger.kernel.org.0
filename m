@@ -1,178 +1,133 @@
-Return-Path: <linux-mips+bounces-5234-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5235-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B07FF965495
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Aug 2024 03:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F788965548
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Aug 2024 04:34:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E781B214A8
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Aug 2024 01:16:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8516DB217D5
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Aug 2024 02:34:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC0303A8D2;
-	Fri, 30 Aug 2024 01:16:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2494A45008;
+	Fri, 30 Aug 2024 02:34:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="zcPwA0pI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MqTsl9jB"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8925C1803E
-	for <linux-mips@vger.kernel.org>; Fri, 30 Aug 2024 01:16:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75DCA1D1315;
+	Fri, 30 Aug 2024 02:34:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724980610; cv=none; b=Qdj6rCn/3/MRkAujZwdOPxSdpbZ8OedPx/WFrvIiWa+lozIaEraf8V+cw88j1ngO44gul5RZr77Cu6SrstN7Mnz9Y3qWZ/rAmgOX466GOEGNkCEgee1MUd7YVPcguNQ1BDeuHUWc/tyKQwfWHAGZL734Vi9/D0TqR/31dcfZSpM=
+	t=1724985270; cv=none; b=fBfJuwL3tW+IQULllC+ZSUewybQtp90ypOy8vnVpQQhGLmnkxo4RLc9SeJcLfsH2QdJlnw06yyRtvtT0d5CsoohYxjFELSZdyvAS+DpXYl2z2zrlDnRpZKy4YRq4CPkicJHJlUStgVZshTvRtheLDtSRPCUBxSeevmK6pxJNp+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724980610; c=relaxed/simple;
-	bh=O19E6wddJJJyBiqtf0WyxrT1W9vHMvm3yZWRAq+bKOY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RPWinoYrBFTYVLW5ormbt77/PzDBs9qeqGigkT6H7m5weI8ogDhEiq7C2lPgyedMoMyT9ZSEnyDnH6oeOMF0D+8rnPQZyViuTLAzbDLWCuuuhlwb/qNW8L99d3jANxGVvEGDxk6ApsCS1/lS+ESZvcaGS3xgViYgz4ieTbITjQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=zcPwA0pI; arc=none smtp.client-ip=209.85.161.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5dc93fa5639so783357eaf.1
-        for <linux-mips@vger.kernel.org>; Thu, 29 Aug 2024 18:16:48 -0700 (PDT)
+	s=arc-20240116; t=1724985270; c=relaxed/simple;
+	bh=LOof/t2NUWiTeBa2AsgWfvL+WqDqQ6X+dghfFyiWXTI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=F+QwXQUL0f74LJMKHquoh1tH8i+ZOIydkzJy4zTj/Rr3yoLlhynp7W+f7dvdYe+PHtpqMQnXb1nv9hvf2yTfbT4ykW2K7B0NRpm/Fve53RF2hMjK+lAZCQX+M5anlyA+oibAKHMqjrBwqa/Ee6+y/u+mqCf1Xm3PKpcLp99TLkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MqTsl9jB; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5c218866849so1614546a12.0;
+        Thu, 29 Aug 2024 19:34:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1724980607; x=1725585407; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y7xDP+Z9ioGU1Ej/VigLqskETGN0WUiHvrKI/4LF5a8=;
-        b=zcPwA0pI1JOYsbqNU6qtwBgt/4McnzBmyecKC4MD+ACS4JL5RsS5qEKa8op1uuDlDl
-         SIR6xsH8GOhtOgqyY/JQ8deNkVzcpKF5EthRrLJKTvScF2RAczkat7aCYxWKyY7oQSDT
-         GwYts+f22EZRYHqu1DNhQeaQcoE+2MdNoHnEldQxGw6WFyybXpbhfcS6+EtB4tgFI8QC
-         ksayiSR8WbEASb0467Mu4luHzy3Q3Sk11xrnV6tMbw7PnTgmCTfNSWXEn7aJHMAma0kV
-         sP3qEhmRzGMD8ZeIHqCMSfmNbcsZpkxzyKA3LL99Y7lokGw13CLsC5jClAKgrHKdq32l
-         Nb+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724980608; x=1725585408;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1724985267; x=1725590067; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Y7xDP+Z9ioGU1Ej/VigLqskETGN0WUiHvrKI/4LF5a8=;
-        b=SF7p7gk7xIYITB3tKXqO92SdqQBNfW425Vy79tw/R1HEgGpX8+ERFRjDDJBjwWdj8a
-         m3457JRUO0O6Dwc6jBGDSa+dKtcFfyIqlRrXm3fFM/jrbLhXYIGHpoGmSkh5m4pduNCv
-         0IMxRdlMYiVrt54uSkEhQ9oUN9XAWXOnLOFeM8Hqscv1NPJzYwSu+FIOBAdDTPBX+HmX
-         dI/lsWHCg5ocpZJ3HRP1WV+5zhHEQbTx+JKYtl1HOwgh4fnU3pEDH9qHyAz/msAN44s+
-         /XiJvQjvq+YneSUn3F0Yv8+8fuyIucUfLLAwY+f4Gi6UwQv/v3ctpjf3QEoOMbjj3UBN
-         CO1g==
-X-Forwarded-Encrypted: i=1; AJvYcCUxfuL+0KAip+SZMSu4E2YpjAH0Ht5/rb3r0QUxvX56BNtCLuNh+gdZDJjzl4KsO/SDumk4o4zVLkIX@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCoKMjqsJbuPIb93HE/YE9hFpyk+PstKoDwoqWkructcJykP+q
-	ZYeZq7Dd8CWJ5YrvVsR3rYSiAbMu4umTVQqbOpqAnIfWrcl6mfNq26PZwKta5U4=
-X-Google-Smtp-Source: AGHT+IH958S4ePdwDnUiHubyspadJoOLZkUZCeioopGjkAA0KkZUXlfkSz3mG+kkmopghBfnyH6A6g==
-X-Received: by 2002:a05:6358:2803:b0:1ac:f109:e248 with SMTP id e5c5f4694b2df-1b603c00435mr551866655d.2.1724980607523;
-        Thu, 29 Aug 2024 18:16:47 -0700 (PDT)
-Received: from ghost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-715e55a5961sm1734132b3a.63.2024.08.29.18.16.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2024 18:16:46 -0700 (PDT)
-Date: Thu, 29 Aug 2024 18:16:42 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Shuah Khan <shuah@kernel.org>, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC v2 1/4] mm: Add MAP_BELOW_HINT
-Message-ID: <ZtEdevUWzplteQWv@ghost>
-References: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
- <20240829-patches-below_hint_mmap-v2-1-638a28d9eae0@rivosinc.com>
- <87mskvenum.fsf@mail.lhotse>
+        bh=h8Ad0vhCQH1uXxmJFwkA6/WDAbjLvvOwQmA263Zu0vg=;
+        b=MqTsl9jB22+wLsu8CWlHTeTdVqWUdDxjg1ois4E/Lba2haGI+4rR00c0d+KR5DBtQf
+         NkBJdq5JxDo4AtqXNGN20fI5wlePDBVl71EX7lEBn3MDaJ2bTWZr5QhSKLu3GhbuBm1i
+         Q+ipM0I7zOUxiyS5idubYhSSVTXKD5NkTQ+tlXTgjjIPsZMgfI9yLLyf4+4EeJ5wlD9T
+         czSa3phJBwNFqacdthAvMACwvafhz4EVrM9rQmEdL2vfC3WxNeyxfK61LSalmWnyJOY0
+         ZiiitQdbTWtxnlxvSyzDzFjiCok0nO8gd9Dn8jIR8mVVlmjjop7MYsfO7/DjfVKuNNch
+         VcMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724985267; x=1725590067;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=h8Ad0vhCQH1uXxmJFwkA6/WDAbjLvvOwQmA263Zu0vg=;
+        b=Ku2r8MqpNEoJx9FuYizdU2smTfSa/EKGKN1FyAeDPMQA7rYtTRRFDQ37BOVISz6Cjf
+         O2Kwf02cbQ9XieIcUnPU1nXuLLM8s9AEvx2bB3iLGGueORbtOUAif4E6jiV6sMWa+ChS
+         bQdE/BhMwSuOEegXQfPs4fGq2tVzlEJuCcRurkzRr6RleVImS5aqCjgsdm10upzgKod0
+         E40OhBBafUCduNPrRrN1gGgQvhokP/bTmqbJc3dAtGqqYkyT72oo2D3I+z1gx6LJyykF
+         Pio8WfiSY3Jd5ntzbp9B8uwgQnAC7LXWNs/iO67Ag7/GogSkmHCxBGv0G8WCdKpG0ia7
+         VoDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU/+rKLGCGCHST40bQKQQb3fO3WHI7i5a1qcIRe2Kp7OHnMEKyd9H9erZIMYc884ecUZyKVO7hbqUMRnfoi@vger.kernel.org, AJvYcCUv+1QlSmKsXPs0O/bcC+R2Qcqf8tSwcwhxD1f58nt30ErYsX0dnKNVO5IFs+fk9FPgdasLEPcuA9RC@vger.kernel.org, AJvYcCVUMoLFAdC5mpAylzKKq2CkRbPJdVIRcfxLarvUVLILkjYSFxRxCBhwTEEnh3J+QCTd2l981pKCqemo@vger.kernel.org, AJvYcCX/Bb6qoRsOrQZwiLZP4cwLy05iVIhDJBuSS1npoAq/KEFxx816QB+HvHDHEXAgaGsGN5PPO9zkGi5Jpg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YygAqk6RFzKVf8l/E3+yvJFFNQvDW7fxJZlFb6KFeZ2wWhjD6Dz
+	uC8z4thxonXvdggdAXjCaPmNERdUap70K5/GO6eLUgcRr2pgBh7GX9Gt0HVGGagc5FhRIlsy2TW
+	FsirAUY1v7VBf7K4C2XfB9uvJJn0=
+X-Google-Smtp-Source: AGHT+IFQrNg75kF7kiJPUlYxIIiKf55yBoI6UVMLJgvVyo5i04fsIpAbiwR+z3ZW+wSuT9d0rrkbPaENP1uLevEziZQ=
+X-Received: by 2002:a05:6402:3201:b0:5be:e01c:6b5f with SMTP id
+ 4fb4d7f45d1cf-5c21ed9feb2mr4182113a12.33.1724985266036; Thu, 29 Aug 2024
+ 19:34:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mskvenum.fsf@mail.lhotse>
+References: <20240809-loongson1-dma-v12-0-d9469a4a6b85@gmail.com> <172495263311.385951.8113964072819506950.b4-ty@kernel.org>
+In-Reply-To: <172495263311.385951.8113964072819506950.b4-ty@kernel.org>
+From: Keguang Zhang <keguang.zhang@gmail.com>
+Date: Fri, 30 Aug 2024 10:33:49 +0800
+Message-ID: <CAJhJPsVVSCnhS0dMXu-e0XTc-eHounx9RX7MZnCogJx-tBRerw@mail.gmail.com>
+Subject: Re: [PATCH v12 0/2] Add support for Loongson1 APB DMA
+To: Vinod Koul <vkoul@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Conor Dooley <conor.dooley@microchip.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 29, 2024 at 06:26:41PM +1000, Michael Ellerman wrote:
-> Charlie Jenkins <charlie@rivosinc.com> writes:
-> > Some applications rely on placing data in free bits addresses allocated
-> > by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
-> > address returned by mmap to be less than the 48-bit address space,
-> > unless the hint address uses more than 47 bits (the 48th bit is reserved
-> > for the kernel address space).
+On Fri, Aug 30, 2024 at 1:30=E2=80=AFAM Vinod Koul <vkoul@kernel.org> wrote=
+:
+>
+>
+> On Fri, 09 Aug 2024 18:30:57 +0800, Keguang Zhang wrote:
+> > Add the driver and dt-binding document for Loongson1 APB DMA.
 > >
-> > To make this behavior explicit and more versatile across all
-> > architectures, define a mmap flag that allows users to define an
-> > arbitrary upper limit on addresses returned by mmap.
+> > Changes in v12:
+> > - Delete superfluous blank lines in the examples section.
+> > - Move the call to devm_request_irq() into ls1x_dma_alloc_chan_resource=
+s()
+> >   to use dma_chan_name() as a parameter.
+> > - Move the call to devm_free_irq() into ls1x_dma_free_chan_resources() =
+accordingly.
+> > - Rename ls1x_dma_alloc_llis() to ls1x_dma_prep_lli().
+> > - Merge ls1x_dma_free_lli() into ls1x_dma_free_desc().
+> > - Add ls1x_dma_synchronize().
+> > - Fix the error handling of ls1x_dma_probe().
+> > - Some minor fixes and improvements.
+> > - Link to v11: https://lore.kernel.org/r/20240802-loongson1-dma-v11-0-8=
+5392357d4e0@gmail.com
 > >
-> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> > ---
-> >  include/uapi/asm-generic/mman-common.h       | 1 +
-> >  tools/include/uapi/asm-generic/mman-common.h | 1 +
->   
-> You're not meant to update the headers in tools/ directly. There's a
-> mail somewhere from acme somewhere describing the proper process, but
-> the tldr is leave it up to him.
+> > [...]
+>
+> Applied, thanks!
+>
+Great!
+Thanks very much!
 
-Oh okay, thank you.
+> [1/2] dt-bindings: dma: Add Loongson-1 APB DMA
+>       commit: 7ea270bb93e4ce165bb4f834c29c05e9815b6ca8
+> [2/2] dmaengine: Loongson1: Add Loongson-1 APB DMA driver
+>       commit: e06c432312148ddb550ec55b004e32671657ea23
+>
+> Best regards,
+> --
+> ~Vinod
+>
+>
 
-> 
-> > diff --git a/include/uapi/asm-generic/mman-common.h b/include/uapi/asm-generic/mman-common.h
-> > index 6ce1f1ceb432..03ac13d9aa37 100644
-> > --- a/include/uapi/asm-generic/mman-common.h
-> > +++ b/include/uapi/asm-generic/mman-common.h
-> > @@ -32,6 +32,7 @@
-> >  
-> >  #define MAP_UNINITIALIZED 0x4000000	/* For anonymous mmap, memory could be
-> >  					 * uninitialized */
-> > +#define MAP_BELOW_HINT	  0x8000000	/* give out address that is below (inclusive) hint address */
-> 
-> IMHO the API would be clearer if this actually forced the address to be
-> below the hint. That's what the flag name implies after all.
-> 
-> It would also mean the application doesn't need to take into account the
-> length of the mapping when passing the hint.
-> 
-> cheers
 
-That's a good point. The reason I did it this way was to allow mmap the
-possibility of returning the same address as the hint. If it must be
-strictly less than the hint then the hint address can never be returned.
-Maybe that doesn't matter though.
+--=20
+Best regards,
 
-- Charlie
-
+Keguang Zhang
 
