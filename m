@@ -1,258 +1,153 @@
-Return-Path: <linux-mips+bounces-5246-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5247-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D4A096567A
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Aug 2024 06:39:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54D4796570B
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Aug 2024 07:41:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C63F0B234BE
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Aug 2024 04:39:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F3881C22A1B
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Aug 2024 05:41:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3872216D317;
-	Fri, 30 Aug 2024 04:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFA941509A8;
+	Fri, 30 Aug 2024 05:41:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MeXxu3Mb"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mzuDB1rY"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA9B16BE12
-	for <linux-mips@vger.kernel.org>; Fri, 30 Aug 2024 04:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749CE1509B0
+	for <linux-mips@vger.kernel.org>; Fri, 30 Aug 2024 05:41:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724992587; cv=none; b=HoHXIBPkPG5sOaT15zZKTJFq8HY1m+E9XWhqBMwBqJzRU9Kv3yncitZArPF02CFi6ssPjbjM+QIR5ZjOxiUX7j/BNz5/rgbXGXlNmXCloeecrbbjCAt149BzzoKRguAK2ciZHvK+nRhqXYJ/F78A14CDOT9Sx6k7qb7Yd6npeRc=
+	t=1724996494; cv=none; b=rtO/HDfEP+cvR2bFsJBCFThLp9fHq3Z+s+oSz8B4osa2hQWQpodVIOUJh7xZ7SZJHV75PWBI9WKJDPtc55HDs3Z7UAq15O8swsuJU/T4CdYESEGMoQQhOznYiK+E3qCDU9m+GwG1MBBv69xj4ssKbfb/cvYkAilvzDpWIZtZygQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724992587; c=relaxed/simple;
-	bh=f8gTFb2B6g+nTdEPEoEjRizoL0QZCxVbzC4A0L6M8Vc=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=TO1KsvXZrt1paoazcyemkfjM9KWgWBNh0SOTQ/FX68PJQ1PJmSfCoSjOSpPm46qrX22JpzJK+7wihIu0kOqLjS3Tf4iOGyOi8hNW8NlptVwQspesiSbOTfDHMwadY0GpHJkIcs9gnEMbjfaHViEf9drmI9uFwSUnnoKwJYrOsqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MeXxu3Mb; arc=none smtp.client-ip=209.85.214.201
+	s=arc-20240116; t=1724996494; c=relaxed/simple;
+	bh=sw/z0V7t62DQd/qzCRru7G5IMJTzCRndRN+lm9ctM2E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YTw1SbxnhZ9r68Ju+h5fI/5H/buoGTLGzq7l3E643lDkkKpSh6SKkoHIypj9BS0RgxaNsYmiwAylQ4koQTYGKn5RArPhgggiB64jNnVh5xFGwPy6TuyF3EJPGDKHevrjr29Izv4RzmrdEa26cS6S7QNkjpfW5FI/jgU3MOkir+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mzuDB1rY; arc=none smtp.client-ip=209.85.160.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-20206086d92so14639145ad.2
-        for <linux-mips@vger.kernel.org>; Thu, 29 Aug 2024 21:36:25 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4567fe32141so217481cf.0
+        for <linux-mips@vger.kernel.org>; Thu, 29 Aug 2024 22:41:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724992585; x=1725597385; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=ifnPkNWOuuY4EYgQ8TsiC+nc4mt99+bHFrgN10JBfbg=;
-        b=MeXxu3Mb7yA9R9ZgDcoHbh3Na+WLUKC9rGjSUbwhjoq+NDWtLuSjVKBCIf/cUfyaUj
-         jWgXuG+Zjlf8XeXB9Gx3rnTjxk3KQxX5Qx+KXnRBfqYZ74IXomtuiDDQSmdbLLo+4BiU
-         6G4cIk3LL1tUBlHiX4BkrA+MJYsSwF3F9e5L/cK2ygaTwdMGgKND17hEcO0VDnUYMfvc
-         X0PFbg3uVVK6HQWusc7KI5GAUXhjnk50khfS3oy6EUkrwXczytLN//PvARukHShRQseu
-         Jhjjc88E1d9LqG2ti9IvzNP2/IZXthcy0569qSJbFaRo3kn9sMqpw6e9UFRtzX9+Oo8R
-         T7Uw==
+        d=google.com; s=20230601; t=1724996491; x=1725601291; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fGeAe2VvLt867O6PJvkuLBlyvjINITixvnm768ff9FY=;
+        b=mzuDB1rYWDyPjZzvdX79WUt2S6rBiqFOtJAmdGK5qkwibD266jlpF2ukdux+pwTHrA
+         igSeLo8xdS6RHMHxckeZBY5j+BECFTrueAM8NoF+fNX1bCJewdx4eLfcL3g5Sv7EFINz
+         29Cy7yftlxEReyl7svsdeDc2jqhndKdN0qlPa5y35yDmdKDafvURbkhfFsFDn+/SCCuI
+         yK1/578XwWSP4rBkeZBZt7q2MRBtYIrxc+y23/CMbJYRhR/z/7h6KtAuBWUqay4Q/G4/
+         bFfuYvt5W8KIHEFweRFzxO9BinqJ8XTLALfFCAHLd36EMJ2I6pS0HZHyQVv79YIohtA8
+         kCoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724992585; x=1725597385;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ifnPkNWOuuY4EYgQ8TsiC+nc4mt99+bHFrgN10JBfbg=;
-        b=Gac9Oxk3QU83dBSUZq9Q1QqTyt59HzDU8QdoGmDmx4ZWbZHQsqloVmL1CKigTNg4Cn
-         8d6XQxNRm9DL+i2nwo4AVaDPoo7CBV0tNuXlK48NYsflnYgIM1qiQdNyWeSIP2xKYNfp
-         s0hyw0QDtuQSuseQFf/wu2a2yNzCtxEohopXROhtaRQwRUXuSMArySkgty81lzWapSEq
-         95WO/h2OiCe/sSKm5mumfPJyR2a2zb64yBJykbpcsAmRizfiCjM81BGJ4JXHJhvYmKQn
-         9CosTzP5IpjaEuBHckAthNODUDKgjVbvWPvS1rKtoRIZ9l5Y/vOz8Z0CEM13qJz+0lD0
-         Bbsg==
-X-Forwarded-Encrypted: i=1; AJvYcCWeuBmXX7+xPhfGXVO3+sZxcxgE8R3k7++ysapCesBSZGzE5yKZVLDjgU1qO8M9IS89Ql5TXXH3O71N@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyq0nGxcy3uoNYfy0JZWw0r8Fsc2AO/punLhJJCh4s+Eh0LUzme
-	trtF45p6HqXfEdVVaSN+YRT8LcPZv9a057SE5C/3vGCAugG7ecK8taU94+MEI9GsZEh3xVYAwws
-	9wQ==
-X-Google-Smtp-Source: AGHT+IFbr9dMQrR+mXp/rGgRu95zX7CYqRN/pGYBvf5wJW9KzwkznUNDOT/XrC79C9bzXvvgnK+ABsLgkRI=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:2310:b0:202:3bed:1dab with SMTP id
- d9443c01a7336-20527a4fdc0mr46745ad.6.1724992584767; Thu, 29 Aug 2024 21:36:24
- -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date: Thu, 29 Aug 2024 21:36:00 -0700
-In-Reply-To: <20240830043600.127750-1-seanjc@google.com>
+        d=1e100.net; s=20230601; t=1724996491; x=1725601291;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fGeAe2VvLt867O6PJvkuLBlyvjINITixvnm768ff9FY=;
+        b=UgFhK4Ejh9G4dW0Z1fXr+cyiZ2kogUA7Sy4J1RiTFtpA89VeiTdTLmbqL4no0XyWOF
+         a62nhNmTxW2xYzGAyLgEN43RxRnb63Wn7yAR6cUzlNj0hAVyINq1+3JycRUBtqdlrKl4
+         Mt1+i9bkMAkO/fTH5Vd4qUD6YiRvisOvrEwGWpXKdaNvhdBZN1f2pTtxTGHkWbnN2nVa
+         YoqGHV+2Q97sRFqIpgDU0qyIrekiBYfBItoSfng/OO1Xf6O3pyoOI6LuQHMkNVk84ie7
+         R58gGoHG0eEyZif4IT09Ztqt4DGEbOnbDA6BY86ZdhcCjBYeP+XIYMyflkDrC+AGKt6h
+         CO1g==
+X-Forwarded-Encrypted: i=1; AJvYcCU7YfLhRjM2wdIPmmNRNv/Z0CpJ808yd8MdxIoVO2GUIa5VfvdE8rjjGT5KhTvTD+SSBG7zSmqXL/P3@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjqemjyCV1OxJhKewM2Qtm87efhLYMU7GocdKwJMCwXpjiWDTS
+	C2WAY1N+Jg542HAEAoDBNJXPf6vbxaSghNTfPWR0s7f7sATmYRbq61ww2gjxVBdtbAM9xaL+gR6
+	s9Y9qOCWquAVij11VturqFW7g2lzk2ftYBWx4jcLciqjASmCDUCQF174=
+X-Google-Smtp-Source: AGHT+IFJ5dSdgHloFb1Pn4hIJolGDXJPa0ot44BqfHuQJyxrQVYkduwL7EuLxMx9wUjPI6We8cpcbnMVMN++0hRnKxw=
+X-Received: by 2002:a05:622a:1a9a:b0:453:56e7:c62b with SMTP id
+ d75a77b69052e-4568a9fb7edmr1721641cf.12.1724996491072; Thu, 29 Aug 2024
+ 22:41:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240830043600.127750-1-seanjc@google.com>
-X-Mailer: git-send-email 2.46.0.469.g59c65b2a67-goog
-Message-ID: <20240830043600.127750-11-seanjc@google.com>
-Subject: [PATCH v4 10/10] KVM: x86: Register "emergency disable" callbacks
- when virt is enabled
-From: Sean Christopherson <seanjc@google.com>
-To: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
-	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
-	Anup Patel <anup@brainfault.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Sean Christopherson <seanjc@google.com>
-Cc: kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Chao Gao <chao.gao@intel.com>, 
-	Kai Huang <kai.huang@intel.com>, Farrah Chen <farrah.chen@intel.com>
+MIME-Version: 1.0
+References: <20240829060126.2792671-1-almasrymina@google.com>
+ <20240829060126.2792671-4-almasrymina@google.com> <20240829140824.555d016c@kernel.org>
+ <e6df00ec-2c52-489e-a510-b69db7e9dbf9@linux.dev>
+In-Reply-To: <e6df00ec-2c52-489e-a510-b69db7e9dbf9@linux.dev>
+From: Mina Almasry <almasrymina@google.com>
+Date: Thu, 29 Aug 2024 22:41:17 -0700
+Message-ID: <CAHS8izOy26r0uoWdASgmBCENNS6cDjHpkp+AHhOaKVkZR1LZqQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v23 03/13] netdev: support binding dma-buf to netdevice
+To: Vadim Fedorenko <vadim.fedorenko@linux.dev>
+Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
+	Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
+	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>, 
+	Daniel Vetter <daniel.vetter@ffwll.ch>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Register the "disable virtualization in an emergency" callback just
-before KVM enables virtualization in hardware, as there is no functional
-need to keep the callbacks registered while KVM happens to be loaded, but
-is inactive, i.e. if KVM hasn't enabled virtualization.
+On Thu, Aug 29, 2024 at 2:24=E2=80=AFPM Vadim Fedorenko
+<vadim.fedorenko@linux.dev> wrote:
+>
+> On 29/08/2024 22:08, Jakub Kicinski wrote:
+> > On Thu, 29 Aug 2024 06:01:16 +0000 Mina Almasry wrote:
+> >> +    err =3D genlmsg_reply(rsp, info);
+> >> +    if (err)
+> >> +            goto err_unbind;
+> >> +
+> >>      return 0;
+> >> +
+> >> +err_unbind:
+> >
+> > rtnl_lock()
+>
+> There are 2 places with goto err_unbind, and one is under the lock,
+> additional label (or rearrange of the last check) is needed..
+>
 
-Note, unregistering the callback every time the last VM is destroyed could
-have measurable latency due to the synchronize_rcu() needed to ensure all
-references to the callback are dropped before KVM is unloaded.  But the
-latency should be a small fraction of the total latency of disabling
-virtualization across all CPUs, and userspace can set enable_virt_at_load
-to completely eliminate the runtime overhead.
+Thank you, I think the right fix here is to reacquire rtnl_lock before
+the `goto err_unbind;`, since err_unbind expects rtnl to be locked at
+this point.
 
-Add a pointer in kvm_x86_ops to allow vendor code to provide its callback.
-There is no reason to force vendor code to do the registration, and either
-way KVM would need a new kvm_x86_ops hook.
+This could introduce a weird edge case where we drop rtnl_lock, then
+find out genlmsg_reply failed, then reacquire rtnl_lock to do the
+cleanup. I can't think of anything that would horribly break if we do
+that, but I may be missing something. In theory we could race with a
+dmabuf unbind call happening in parallel.
 
-Suggested-by: Kai Huang <kai.huang@intel.com>
-Reviewed-by: Chao Gao <chao.gao@intel.com>
-Reviewed-by: Kai Huang <kai.huang@intel.com>
-Acked-by: Kai Huang <kai.huang@intel.com>
-Tested-by: Farrah Chen <farrah.chen@intel.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/include/asm/kvm_host.h |  3 +++
- arch/x86/kvm/svm/svm.c          |  5 +----
- arch/x86/kvm/vmx/main.c         |  2 ++
- arch/x86/kvm/vmx/vmx.c          |  6 +-----
- arch/x86/kvm/vmx/x86_ops.h      |  1 +
- arch/x86/kvm/x86.c              | 10 ++++++++++
- 6 files changed, 18 insertions(+), 9 deletions(-)
+If we can't reacquire rtnl_lock to do the cleanup, I think I need to
+revert back to doing genlmsg_reply inside of rtnl_lock, and dropping
+the lock before we return from the function.
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index cb3b5f107c6e..aa9eea61a092 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -36,6 +36,7 @@
- #include <asm/kvm_page_track.h>
- #include <asm/kvm_vcpu_regs.h>
- #include <asm/hyperv-tlfs.h>
-+#include <asm/reboot.h>
- 
- #define __KVM_HAVE_ARCH_VCPU_DEBUGFS
- 
-@@ -1631,6 +1632,8 @@ struct kvm_x86_ops {
- 
- 	int (*enable_virtualization_cpu)(void);
- 	void (*disable_virtualization_cpu)(void);
-+	cpu_emergency_virt_cb *emergency_disable_virtualization_cpu;
-+
- 	void (*hardware_unsetup)(void);
- 	bool (*has_emulated_msr)(struct kvm *kvm, u32 index);
- 	void (*vcpu_after_set_cpuid)(struct kvm_vcpu *vcpu);
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index a9adbe10c12e..9a0506ef87df 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4982,6 +4982,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
- 	.hardware_unsetup = svm_hardware_unsetup,
- 	.enable_virtualization_cpu = svm_enable_virtualization_cpu,
- 	.disable_virtualization_cpu = svm_disable_virtualization_cpu,
-+	.emergency_disable_virtualization_cpu = svm_emergency_disable_virtualization_cpu,
- 	.has_emulated_msr = svm_has_emulated_msr,
- 
- 	.vcpu_create = svm_vcpu_create,
-@@ -5410,8 +5411,6 @@ static struct kvm_x86_init_ops svm_init_ops __initdata = {
- static void __svm_exit(void)
- {
- 	kvm_x86_vendor_exit();
--
--	cpu_emergency_unregister_virt_callback(svm_emergency_disable_virtualization_cpu);
- }
- 
- static int __init svm_init(void)
-@@ -5427,8 +5426,6 @@ static int __init svm_init(void)
- 	if (r)
- 		return r;
- 
--	cpu_emergency_register_virt_callback(svm_emergency_disable_virtualization_cpu);
--
- 	/*
- 	 * Common KVM initialization _must_ come last, after this, /dev/kvm is
- 	 * exposed to userspace!
-diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-index 4a5bf92edccf..7e2e78a14257 100644
---- a/arch/x86/kvm/vmx/main.c
-+++ b/arch/x86/kvm/vmx/main.c
-@@ -25,6 +25,8 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
- 
- 	.enable_virtualization_cpu = vmx_enable_virtualization_cpu,
- 	.disable_virtualization_cpu = vmx_disable_virtualization_cpu,
-+	.emergency_disable_virtualization_cpu = vmx_emergency_disable_virtualization_cpu,
-+
- 	.has_emulated_msr = vmx_has_emulated_msr,
- 
- 	.vm_size = sizeof(struct kvm_vmx),
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index cf7d937bfd2c..89682832dded 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -755,7 +755,7 @@ static int kvm_cpu_vmxoff(void)
- 	return -EIO;
- }
- 
--static void vmx_emergency_disable_virtualization_cpu(void)
-+void vmx_emergency_disable_virtualization_cpu(void)
- {
- 	int cpu = raw_smp_processor_id();
- 	struct loaded_vmcs *v;
-@@ -8584,8 +8584,6 @@ static void __vmx_exit(void)
- {
- 	allow_smaller_maxphyaddr = false;
- 
--	cpu_emergency_unregister_virt_callback(vmx_emergency_disable_virtualization_cpu);
--
- 	vmx_cleanup_l1d_flush();
- }
- 
-@@ -8632,8 +8630,6 @@ static int __init vmx_init(void)
- 		pi_init_cpu(cpu);
- 	}
- 
--	cpu_emergency_register_virt_callback(vmx_emergency_disable_virtualization_cpu);
--
- 	vmx_check_vmcs12_offsets();
- 
- 	/*
-diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
-index 205692c43a8e..b6a7cfc6ae31 100644
---- a/arch/x86/kvm/vmx/x86_ops.h
-+++ b/arch/x86/kvm/vmx/x86_ops.h
-@@ -15,6 +15,7 @@ void vmx_hardware_unsetup(void);
- int vmx_check_processor_compat(void);
- int vmx_enable_virtualization_cpu(void);
- void vmx_disable_virtualization_cpu(void);
-+void vmx_emergency_disable_virtualization_cpu(void);
- int vmx_vm_init(struct kvm *kvm);
- void vmx_vm_destroy(struct kvm *kvm);
- int vmx_vcpu_precreate(struct kvm *kvm);
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 431358167fa8..f72e5d89e942 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -12512,6 +12512,16 @@ void kvm_vcpu_deliver_sipi_vector(struct kvm_vcpu *vcpu, u8 vector)
- }
- EXPORT_SYMBOL_GPL(kvm_vcpu_deliver_sipi_vector);
- 
-+void kvm_arch_enable_virtualization(void)
-+{
-+	cpu_emergency_register_virt_callback(kvm_x86_ops.emergency_disable_virtualization_cpu);
-+}
-+
-+void kvm_arch_disable_virtualization(void)
-+{
-+	cpu_emergency_unregister_virt_callback(kvm_x86_ops.emergency_disable_virtualization_cpu);
-+}
-+
- int kvm_arch_enable_virtualization_cpu(void)
- {
- 	struct kvm *kvm;
--- 
-2.46.0.469.g59c65b2a67-goog
-
+--=20
+Thanks,
+Mina
 
