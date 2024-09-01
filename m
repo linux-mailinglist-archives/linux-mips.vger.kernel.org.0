@@ -1,70 +1,70 @@
-Return-Path: <linux-mips+bounces-5275-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5276-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE490967828
-	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2024 18:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 282EF9678AC
+	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2024 18:34:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 83D0D1F21997
-	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2024 16:28:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3E461F2123C
+	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2024 16:34:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D078B181B88;
-	Sun,  1 Sep 2024 16:28:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4232317DFFC;
+	Sun,  1 Sep 2024 16:34:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W62HUtk0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IcauwPsS"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655B028387;
-	Sun,  1 Sep 2024 16:28:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D0C1C68C;
+	Sun,  1 Sep 2024 16:34:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725208113; cv=none; b=oBoycV6R3Djo2sn+4MdHZafSTN3CSvf7zdamPB/nAVO7R7Wz9SbCngEp4RIJr8gAV1mus4kWnStE2XmWpT3VE4Gs49mzcPSaHKZHjViRr6B1dYsaH14BgQ082ThdRz3+MAvVnc9vYsODjCFj40FrlYlTaBf1Kg8clSjDruZ05CU=
+	t=1725208462; cv=none; b=ImHCBkZTwiYV2w9PzTYpxNoNCoIVssnCc6IZl88zbw+zb2dLx4HPuEu6jckAcZhNL4mhtFCAtQNAl/i1DbdV1E7wInXkWAz12ij1E1jYesm/8JIQb0JrzPT8Lwc+J9R0Ykk7dKt8Bbcc9+7n1TuG+A/eZtHydv2tbJNlJU03fa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725208113; c=relaxed/simple;
-	bh=4MtfHKuq/+UgpLDUC71roRztQ1MKn8y5DcemB7IM/oQ=;
+	s=arc-20240116; t=1725208462; c=relaxed/simple;
+	bh=LfOHCToqCJQpzCFvErXcUgw6uiFYg4xX8oDJA6tq5S4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AcOHrAFAWOqF1HtYK6j8BO8ua5Yyyhvr54s6GkWBDdLObeoSDDf39HmSd34Cj2MBNISHIQvUceKVjXcjLeTmspK87Xfb06SgGJ60H6jYp3i0zFb1LVIdFHeKALd/B6iRXHmIT81yViAwWex0TWFBnKApnV/MSKBcgFG90SYJfp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W62HUtk0; arc=none smtp.client-ip=209.85.210.42
+	 To:Cc:Content-Type; b=ifnG4KwYSr7PAJt9SC8r9ue/+vHctugzquCd1oYzx6ZsnrvN9AvVPiW1PhZUZJH+aQMFrhEiFnEQYJdMt5UPjtbdMivsfJXs9NkAY3sP2TYipasc7HEigoyuFbt+BjBr78pbMu5+9aln705MPLp1MGZKsz86BBYgBJvCQCTfPA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IcauwPsS; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-70f5cd2fa39so2439511a34.0;
-        Sun, 01 Sep 2024 09:28:32 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-71433cba1b7so2440424b3a.0;
+        Sun, 01 Sep 2024 09:34:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725208111; x=1725812911; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1725208460; x=1725813260; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4MtfHKuq/+UgpLDUC71roRztQ1MKn8y5DcemB7IM/oQ=;
-        b=W62HUtk0qteL1m/tYZgDD1awuTxIiIqNBk7A80MLFqDAJvgfEBypCHmnsFzc8Gtfzn
-         wV+0msvp5jnPJWaQZx25xM0z0mB4MhzlaKfbEhEeCYZj73S4TSxofYiH9e/ZesmaGOGt
-         LYlAQ71WIpj1pUG7sQa6Ho1LNXVakcuFW6bEBNwO58FIL/wveFQUlwYsz7bj4vxyjFDv
-         mKTAO+NoIrllnN1rQTsSLTgdoZNsxxGaH+V7ospAVi6HKvUKe4Bk25RUpVDnbscg55Qf
-         R3ofYWG9wrEkCKX4toqwRBvHtBuQInox51g6lTfU8VaBqywthtKGWZFSSyXTIsmEde3o
-         6WGQ==
+        bh=LfOHCToqCJQpzCFvErXcUgw6uiFYg4xX8oDJA6tq5S4=;
+        b=IcauwPsSYMzRgq0sR96HywY1DsQEFtuXP19/UloAL31eAhXdDE7BK+NzXQ9LKleBTV
+         GaQfVqNdDcJ8Gvphewf56u6xXlINOtVHfUCuomIOb94ao38slYhsueBoGnpMWhZYtuEk
+         uXMWm8XpDLxUUkVeyxvgJlGL6rr3VU+pdQW27/62bsRzCh56BIIBy/ow994xPj147ADq
+         DUCLN2ejA8wRfl+lGB+syqWbofCEmAYlrMdohGyWQjzo2z3UTIJMyqZ6UeNn0pBRSSwR
+         6fGjXR3Qnq9VFIY6cAxX7Y7+2DEqagYfplfOjBdjYJE+akpBUwY714FlqUjGaitwAETb
+         05Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725208111; x=1725812911;
+        d=1e100.net; s=20230601; t=1725208460; x=1725813260;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4MtfHKuq/+UgpLDUC71roRztQ1MKn8y5DcemB7IM/oQ=;
-        b=nH/jwbpxrze/g3q+8w5MlDlMHSU1CbWKT3Jjq8bq1YIZ3Iec595ZtPj57bXEzZsheg
-         Q4TMBpk14mDsdsseR/fMNOA6dR9hURTz6WawhtnmEApUNmfFsJoxwjnHQwd9nRnBSTSk
-         feP8ct+Ja2tIuEAMKlzt2cs09K734EFnPijNc5xRh4AKX2zS2iSuugms0X2RttRx/om1
-         27yKKuPwflPaQ2X1RvhkoPFFh7Rn6R9YH37JGYimo6YoL0PCn5SDVixNoe1v03k6uabk
-         ojV/oFQmfoiAEaT+ZPv4X5N2gIsGjAXo/EoFuE83/OWbOB0hh1pxs3qt2BRQN/dl9Qsb
-         V85g==
-X-Forwarded-Encrypted: i=1; AJvYcCWgVfrzeCyKHhgc11A2w7Az473tTlvKzyzC/Z+biRfV4rhWPRXE0YYU9rBBbL6CPoxIPeNMt+MHa7Ge4bQ=@vger.kernel.org, AJvYcCWgb0ATEqWmm5B/3OIrggYJz1oXem0PWdpst3+AuSnvPblk8wDhbNUNVIaObp2ZdpA4m9vhDmxxzk8tgg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yylx0HeAwa1npEmLPjLM++fraGw2BBrmIq3JZ28VdyL5pSKJlEK
-	NiFyV+BxZgGK/HpcJnZsVBkz8Ea8uSEeCKBGyVWcaN+ZVlQVDtzG/EA9il9EDawQpWbHzyHUkf+
-	23HYKDZiDOQeQweqKoFBelvcCnHQ=
-X-Google-Smtp-Source: AGHT+IEQfj03uznQOgOoBoDTBGTT/mQBYdI5mTPwk6+iuz/Osa9kwYcahL7M/xN+cMmlXsGL+0KbCwY4D83hR/EuykI=
-X-Received: by 2002:a05:6358:52cd:b0:1b1:acd5:dd98 with SMTP id
- e5c5f4694b2df-1b7ef64ec0cmr798348655d.7.1725208111259; Sun, 01 Sep 2024
- 09:28:31 -0700 (PDT)
+        bh=LfOHCToqCJQpzCFvErXcUgw6uiFYg4xX8oDJA6tq5S4=;
+        b=nB3UgVwlYmd+cDrXpL3erm5t4J0twfWoCzdW+R5dvaEbre/5rwhlJ5hgayhxrgyHxk
+         Fn7Qf46upwyR256RUoMsf501jdWs2SJroEidomdLGFT96VSz8kwal0OaKhcaJuprBV4l
+         iCh3I5xAWj91wkX0hAv7NXzJ3oJzo4vPal8ciG89sjcbfApIh/K/Xr+Re+FKZXNBY1Sb
+         yq+E+OhFySdchF68ke/RhRukqNWdvsMWjIcTKRtJODWypM/VHdJHqaZnrVK0Lf9uHkt8
+         cZ0TY4b//i/sKzA1Etywy5YIUC0pXF8w0S1y8W9mh8JyZPX5mPuwh/LrKw4rm54NP4UL
+         SoVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUyYKlaPrtqwbCQe0//JJH4/zRUlMdQhDPnCsdEN4F5aLxWBi0jQslzXxA7qePOqmavGYUEhtEZBF0aQqI=@vger.kernel.org, AJvYcCXvaZCc5+ZpuDk/guB8cupx4ccEHbJ4JlidmZAaivVD9Rtk3BSzK2ypT5xaUj1t5GNI59KjaEHGnoT47A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+gE7zqs7VUo+rYC4m1yjx3BarJHqY10qGOp5DreU+tLNObdTO
+	FFmvyBeD97qPPrVcScx4MmjouC9krHf7zSObJMBtcG/aXqu3h0h+RsLyZks8PZknVCm4xfZDMBB
+	j2VXlrFws2p87yZytI4LLKGCXpKs=
+X-Google-Smtp-Source: AGHT+IF+YjIJUgZgTKVl/F6xoWlrij8Mno8NSN3vwjD6SW/WMix5BukBuDBnXmP02x+pPxQYkgnoJqql1xVKS6m/E40=
+X-Received: by 2002:a05:6a21:3a44:b0:1c4:a49b:403 with SMTP id
+ adf61e73a8af0-1cece5e24c1mr4431330637.46.1725208459923; Sun, 01 Sep 2024
+ 09:34:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -72,36 +72,47 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <CAEwRq=qhHBh5jKdLGb1r2Qem0jia=xcVdevihYfjdrLSYiZuiA@mail.gmail.com>
- <CACRpkdZFQSN_t-Vx7xOXq0aF6Vf-XvsZKGF6yNMn7_dCeaZi_w@mail.gmail.com>
-In-Reply-To: <CACRpkdZFQSN_t-Vx7xOXq0aF6Vf-XvsZKGF6yNMn7_dCeaZi_w@mail.gmail.com>
+ <CACRpkdZFQSN_t-Vx7xOXq0aF6Vf-XvsZKGF6yNMn7_dCeaZi_w@mail.gmail.com> <35680bf8-d4f0-4b7a-b358-f71eb39e2a94@app.fastmail.com>
+In-Reply-To: <35680bf8-d4f0-4b7a-b358-f71eb39e2a94@app.fastmail.com>
 From: Vincent Legoll <vincent.legoll@gmail.com>
-Date: Sun, 1 Sep 2024 16:28:19 +0000
-Message-ID: <CAEwRq=p+=hBq3oP5u-Z=i2Qo6vwjagvf9wbPFzydO9nFuqixTw@mail.gmail.com>
+Date: Sun, 1 Sep 2024 16:34:09 +0000
+Message-ID: <CAEwRq=qNqbXRPCqd-ukW9q1uNNJL9x42dBk0pHMEB_VCoV4W2w@mail.gmail.com>
 Subject: Re: [RFC} arm architecture board/feature deprecation timeline
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: arnd@arndb.de, aaro.koskinen@iki.fi, alexandre.torgue@foss.st.com, 
-	Andrew Lunn <andrew@lunn.ch>, broonie@kernel.org, dmitry.torokhov@gmail.com, 
-	gregory.clement@bootlin.com, jeremy@jeremypeper.com, jmkrzyszt@gmail.com, 
-	kristoffer.ericson@gmail.com, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Linux Kernel ML <linux-kernel@vger.kernel.org>, 
-	Russell King - ARM Linux <linux@armlinux.org.uk>, Nicolas Pitre <nico@fluxnic.net>, nikita.shubin@maquefel.me, 
-	ramanara@nvidia.com, richard.earnshaw@arm.com, richard.sandiford@arm.com, 
-	robert.jarzmik@free.fr, sebastian.hesselbarth@gmail.com, tony@atomide.com, 
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Linus Walleij <linus.walleij@linaro.org>, Aaro Koskinen <aaro.koskinen@iki.fi>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Mark Brown <broonie@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Gregory Clement <gregory.clement@bootlin.com>, "Jeremy J. Peper" <jeremy@jeremypeper.com>, 
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>, Kristoffer Ericson <kristoffer.ericson@gmail.com>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Linux Kernel ML <linux-kernel@vger.kernel.org>, 
+	Russell King <linux@armlinux.org.uk>, Nicolas Pitre <nico@fluxnic.net>, 
+	Nikita Shubin <nikita.shubin@maquefel.me>, Ramana Radhakrishnan <ramanara@nvidia.com>, 
+	Richard Earnshaw <richard.earnshaw@arm.com>, Richard Sandiford <richard.sandiford@arm.com>, 
+	Robert Jarzmik <robert.jarzmik@free.fr>, 
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Tony Lindgren <tony@atomide.com>, 
 	linux-mips@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+Hello Arnd,
 
-On Mon, Aug 26, 2024 at 9:06=E2=80=AFAM Linus Walleij <linus.walleij@linaro=
-.org> wrote:
-> Userspace can still use it right?
+On Mon, Aug 26, 2024 at 2:55=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
+:
+> What you see is certainly unrelated to me mentioning that we may remove
+> highmem support from the kernel altogether in the future, but it's
+> possible that OpenWRT turned it off because things work better
+> without it.
+>
+> https://github.com/openwrt/openwrt/issues/13151 may explain
+> what ios going on here.
 
-Nope, it's made inaccessible.
+Thanks a lot for that hint, indeed there is a solution, which does not rely
+on `CONFIG_HIGHMEM=3Dy`, linked from this issue.
 
-But I've found another workaround, thanks to Arnd's answer.
+Just setting `HIGHMEM_START` made space available for that 64MB
+RAM chunk.
 
-Cheers
+Thanks
 
 --=20
 Vincent Legoll
