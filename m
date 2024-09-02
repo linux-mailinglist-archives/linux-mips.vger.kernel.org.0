@@ -1,121 +1,169 @@
-Return-Path: <linux-mips+bounces-5284-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5285-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01719968388
-	for <lists+linux-mips@lfdr.de>; Mon,  2 Sep 2024 11:47:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A15EA968AF9
+	for <lists+linux-mips@lfdr.de>; Mon,  2 Sep 2024 17:28:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3291C1C220E1
-	for <lists+linux-mips@lfdr.de>; Mon,  2 Sep 2024 09:47:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13B17B225AC
+	for <lists+linux-mips@lfdr.de>; Mon,  2 Sep 2024 15:28:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43982187847;
-	Mon,  2 Sep 2024 09:47:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EE401A263D;
+	Mon,  2 Sep 2024 15:26:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="sGNONg8S"
+	dkim=pass (2048-bit key) header.d=osandov-com.20230601.gappssmtp.com header.i=@osandov-com.20230601.gappssmtp.com header.b="aLtRauBH"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A990815C15E
-	for <linux-mips@vger.kernel.org>; Mon,  2 Sep 2024 09:47:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 057641A262C
+	for <linux-mips@vger.kernel.org>; Mon,  2 Sep 2024 15:26:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725270454; cv=none; b=qz9XPARDPaCbMc44ZR4w1iLHI5p5gAtFbh8aWnKXmO8AgWJLgheNU5o48lSAUtAW8tas314e6nHhcIYgu04bv8YIvpwnrFRzHuFgK3sOzwjvm2hX8wMJ0mji82uDchi7lGKEvMrbExOtYocRyXWoyNYf2DDR1K4XquYEEHj0BCc=
+	t=1725290778; cv=none; b=o1CKFndqahSwC4nZYMH0hZH3VFTo6+qFtG8RUoJCHfLjrzrJjuu0zH31vv4SMswWSeqVRS2El9/f9+CBnrGg5XJR171RtITPCtItEwEBjHIi8fYGoSNYLgsPlMoKTrIIrO7HMCx2uTYvaaaue9AC92uMDE14x28RInnq4va6U8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725270454; c=relaxed/simple;
-	bh=DuNScSLrncJcXkhhqd3wrDOHlNlSW0sDryQ2PyBZ5u4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hNYr25GmtRDF6NwL0Blj8x5rv0yMLi7EasQ07rhP4S/j11KEuDbshZfopszJpFawWZCCU/BgDfJjXO1X/CX2dqgEapBvwYfYm4L9cyX+su9YxR+17FJEAc2D46UmULVHByrj8ihTwwYeeKQuIc8FkyqxFuBuaDFJf9CPohU38SI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=sGNONg8S; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-42bac9469e8so33582565e9.3
-        for <linux-mips@vger.kernel.org>; Mon, 02 Sep 2024 02:47:32 -0700 (PDT)
+	s=arc-20240116; t=1725290778; c=relaxed/simple;
+	bh=mdB6GDxg3I3eGF//Wyea67XTwdwtlijxajgQ92wG6d4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lR+UCO2JP5xRPkGqXPRrniskbjMsqEFqXfsMhJ565xbvJ9MZPyoE95vDtmrY1sN9SKAY4R6/j9z+TCbTErSP8mTsqUdwRIy4nU4Cu6Sp82596RPmn4IhzAxWUBgV9K5vignwxnZhHTMRIWmQzRfl7eqQ3om+CFhPbTzAYY/VoBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=osandov.com; spf=none smtp.mailfrom=osandov.com; dkim=pass (2048-bit key) header.d=osandov-com.20230601.gappssmtp.com header.i=@osandov-com.20230601.gappssmtp.com header.b=aLtRauBH; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=osandov.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=osandov.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2022fea51fdso6079005ad.0
+        for <linux-mips@vger.kernel.org>; Mon, 02 Sep 2024 08:26:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1725270451; x=1725875251; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S3AEK0nNq+mUfvcaAEZ4EXWlK/uF5ptTVbDmVXUeQRg=;
-        b=sGNONg8Sh9iJ7Ptc2m+q7t6mcgCAUk7wEUZXeoboj4WhL26Q2AidZlD1sv7IFvwV4x
-         l9pEoK/k5YiTWvyYf+hkUBUiB1St5VZ/76+2oUcHIOXZiDnJGJ9lsmzLgQAM0t17M7xB
-         qcT2dp5k3AONFdCFJDkDI/hfuKMUIUgUcB1/RD4bN+A0mhJLiCUfm2IjtM7x/ekVT0uX
-         Amuan1q5AXVWYT/AjhlcfXP3oGl3yCWheR6yqY2CpbTD8XMTegtTIeC4l/fmEFipaTbN
-         mzYdPsqND/KHSuQ4x+UzmEUJher8Vap4TkKB4y7e/u+dZ9D0mtUzxBmdiraBngvQNfkV
-         M/Yg==
+        d=osandov-com.20230601.gappssmtp.com; s=20230601; t=1725290776; x=1725895576; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=mQrdUk9Qs95YbYxvkhvXPIF077+rLJVqqSG6sH4DY10=;
+        b=aLtRauBHycUX+ED4G1vz6Cnt9aJaAHcqKkdjjCT5XGqLQdqirY4WT8mdT18HwrxNk/
+         UVticMtx58yxZGA0UleFGgzvDxeOxPpr36lNEpNU8BYW0+Gkpmgm6yUkGEpoWeKijxFP
+         5B7Jkm159ryDpNt01XQZz+tSZKbsE+3/QLVlIn+5m26xUME/DgPKpWLFkdcXmfugeM90
+         Z2WPkmRGQVdlrbPjaJFIqVWOLft+ViRbAoVlx9gzILGsrf3HirDl+ZbRjpxwDUCen8SQ
+         8RS5ckdQmScHg8EFxYrbovGTnmwfJcdE/dtGXUweD+iGCW3+mZycJWYGsZSY9fDJ3EVd
+         cd4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725270451; x=1725875251;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S3AEK0nNq+mUfvcaAEZ4EXWlK/uF5ptTVbDmVXUeQRg=;
-        b=ejcaqsfU50WiK5h0WAUxhv2UqoRNqo0ExLMlwJWXYaecj4nZ1AI67PIb6h5fmwnftQ
-         hfXpmH1tEqTQ+20XIYrqfRZmEEtG4s+w3A1LtfVjqXF1O2NQSauUXde62G41/PBMoMp1
-         q1hiYAijmsm3YrAAWTRvVFBjurfSZI2oqEYL8rH4hPLVLmeowbxW82k34Tc/i0g0Oa62
-         BpcIBJRC3RxIGMNoXLd1LmqgllmdS97lSxx/q2W9CbkkBc4f3taHzoPLFhazPLBCH3wb
-         xCsvb92jlkb2L3gqHXH4qDJgwvucV25hGZRUymTpLjsoKkwFKro4GaW8j6LUjdbJPUnU
-         5Gtg==
-X-Forwarded-Encrypted: i=1; AJvYcCUA5mhTEgqgMfEN/OR1yYi6qg92Efdr6qAbEFa5cEZip/X5dz1EvqCrxdjgDf0CvPdz2r3LTkS7g+/4@vger.kernel.org
-X-Gm-Message-State: AOJu0YzgOAxhgQXVrTesxIMc6jfSC+D3OAZl4Mr9cnmiKRNO51G6DeBC
-	tLXIqNltdSCI8kIceSETYFnUFAQWXm6JK9y4oBQDQcAMQx5jBGL3QCAxJYjO5/0=
-X-Google-Smtp-Source: AGHT+IEE10T3SSREzGD+1MNWdnESsXC2FVE58tgjhk7q/xipxWIqUGIS5v57Sr/r85ctuKxUZXBzww==
-X-Received: by 2002:a05:600c:1d18:b0:426:6ee7:c05a with SMTP id 5b1f17b1804b1-42c82f5324cmr25804605e9.15.1725270450396;
-        Mon, 02 Sep 2024 02:47:30 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:b496:9e67:73c9:9f5a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42ba63abea3sm168346355e9.28.2024.09.02.02.47.29
+        d=1e100.net; s=20230601; t=1725290776; x=1725895576;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mQrdUk9Qs95YbYxvkhvXPIF077+rLJVqqSG6sH4DY10=;
+        b=o1lg0FgqpEl/1JxdqgLnmot5Dj6txjuYb/AFQoLZ8Y+Rkp0iy4mYmybagVi/+XHqkW
+         x3mIUWMfG1Kl/FkrDEqYSsMu2Ac7/2vW9eEI7vmuoV4cFKFZ9k0cN6DSigQPcrj3QgnH
+         zVONiJmpS1taCLi86CqKS1fS/AB6yc7ucGVEYrqVb9HHhN9aPWo8Kn8bKX6e3/X1gJIp
+         KN1bnUwLJcujyKg+X4nzaaI4H/0+7p7bUzbIRYOIih1G8pDqMyyMowayv6m5tvcng5xa
+         B1nExJBzub4guWwrQW04gLggzEN8LD2nQ08LTGYpFDfBlddRU/wyTROEUNHwCShCQ0ZJ
+         qdNw==
+X-Forwarded-Encrypted: i=1; AJvYcCVUOxsq88B9Tj3bSmroJyX8LPExgHDlwD7iTWeMCQkADlui4diEeCUndobTQzYCuY8lX/MbgqGUT/ZH@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/fuAhw5C1tn+IrCsTtwTAaFMsZ+MJLqV0LX7pa1PXCf2QNte6
+	rE4wGRhuTqy7ereQZlg+cJ9pT/KRIAYuN0/ab+7+P0ZP2uoDFFUC6vVhwOqw1kc=
+X-Google-Smtp-Source: AGHT+IEIj7UpxJT8a0mIACuZXNoTi9evmUotnGeb8wHYPTVQQPCrd38PWufROqKQIhaL5lvUsVlKgg==
+X-Received: by 2002:a17:902:e549:b0:205:8948:3578 with SMTP id d9443c01a7336-20589483694mr10763885ad.2.1725290776144;
+        Mon, 02 Sep 2024 08:26:16 -0700 (PDT)
+Received: from telecaster ([2601:602:8980:9170::901f])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-205152d04a3sm67470855ad.110.2024.09.02.08.26.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Sep 2024 02:47:30 -0700 (PDT)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: Linus Walleij <linus.walleij@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Hartley Sweeten <hsweeten@visionengravers.com>,
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH v1 0/2] gpiolib:legacy: Kill GPIOF_DIR_* and GPIOF_INIT_*
-Date: Mon,  2 Sep 2024 11:47:28 +0200
-Message-ID: <172527044560.21269.8413918138283838054.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240828142554.2424189-1-andriy.shevchenko@linux.intel.com>
-References: <20240828142554.2424189-1-andriy.shevchenko@linux.intel.com>
+        Mon, 02 Sep 2024 08:26:14 -0700 (PDT)
+Date: Mon, 2 Sep 2024 08:26:13 -0700
+From: Omar Sandoval <osandov@osandov.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>, linux-mm@kvack.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Christoph Hellwig <hch@lst.de>, x86@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-um@lists.infradead.org, kernel-team@fb.com
+Subject: Re: [PATCH 0/2] mm: make copy_to_kernel_nofault() not fault on user
+ addresses
+Message-ID: <ZtXZFc9kZAUMD4e0@telecaster>
+References: <cover.1725223574.git.osandov@fb.com>
+ <5fa50d78-6764-4f99-87b3-7bd7edbeea5a@csgroup.eu>
+ <ZtVbrM4rQsGFJo_t@telecaster>
+ <861d448c-ce1d-4b74-87eb-9b211dfebbb1@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <861d448c-ce1d-4b74-87eb-9b211dfebbb1@redhat.com>
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-
-
-On Wed, 28 Aug 2024 17:23:56 +0300, Andy Shevchenko wrote:
-> Shrink the legacy API and definition surface by killing the (internal)
-> definitions. This, in particular, will fix a couple of drivers that took
-> it wrong.
+On Mon, Sep 02, 2024 at 10:56:27AM +0200, David Hildenbrand wrote:
+> On 02.09.24 08:31, Omar Sandoval wrote:
+> > On Mon, Sep 02, 2024 at 08:19:33AM +0200, Christophe Leroy wrote:
+> > > 
+> > > 
+> > > Le 02/09/2024 à 07:31, Omar Sandoval a écrit :
+> > > > [Vous ne recevez pas souvent de courriers de osandov@osandov.com. Découvrez pourquoi ceci est important à https://aka.ms/LearnAboutSenderIdentification ]
+> > > > 
+> > > > From: Omar Sandoval <osandov@fb.com>
+> > > > 
+> > > > Hi,
+> > > > 
+> > > > I hit a case where copy_to_kernel_nofault() will fault (lol): if the
+> > > > destination address is in userspace and x86 Supervisor Mode Access
+> > > > Prevention is enabled. Patch 2 has the details and the fix. Patch 1
+> > > > renames a helper function so that its use in patch 2 makes more sense.
+> > > > If the rename is too intrusive, I can drop it.
+> > > 
+> > > The name of the function is "copy_to_kernel". If the destination is a user
+> > > address, it is not a copy to kernel but a copy to user and you already have
+> > > the function copy_to_user() for that. copy_to_user() properly handles SMAP.
+> > 
+> > I'm not trying to copy to user. I am (well, KDB is) trying to copy to an
+> > arbitrary address, and I want it to return an error instead of crashing
+> > if the address is not a valid kernel address. As far as I can tell, that
+> > is the whole point of copy_to_kernel_nofault().
 > 
-> This is assumed to go via BPIOLIB tree as this is quite small series and
-> most of the changes related to it.
+> The thing is that you (well, KDB) triggers something that would be
+> considered a real BUG when triggered from "ordinary" (non-debugging) code.
+
+If that's the case, then it's a really weird inconsistency that it's OK
+to call copy_from_kernel_nofault() with an invalid address but a bug to
+call copy_to_kernel_nofault() on the same address. Again, isn't the
+whole point of these functions to fail gracefully instead of crashing on
+invalid addresses? (Modulo the offline and hwpoison cases you mention
+for /proc/kcore.)
+
+> But now I am confused: "if the destination address is in userspace" does not
+> really make sense in the context of KDB, no?
 > 
-> [...]
+>   [15]kdb> mm 0 1234
+>   [   94.652476] BUG: kernel NULL pointer dereference, address:
+> 0000000000000000
+> 
+> Why is address 0 in "user space"? "Which" user space?
 
-Applied, thanks!
+Sure, it's not really user space, but it's below TASK_SIZE_MAX, so
+things like handle_page_fault() and fault_in_kernel_space() treat it as
+if it were a user address. I could
+s/userspace address/address that is less than TASK_SIZE_MAX or is_vsyscall_vaddr(address)/.
 
-[1/2] gpiolib: legacy: Kill GPIOF_INIT_* definitions
-      commit: 4b2b0a2ce8153d65d0829e45e73bf6acdc291344
-[2/2] gpiolib: legacy: Kill GPIOF_DIR_* definitions
-      commit: 8c045ca534d03bab1ce4b4de49d29a36276a1e35
+> Isn't the problem here that KDB lets you blindly write to any non-existing
+> memory address?
+> 
+> 
+> Likely it should do some proper filtering like we do in fs/proc/kcore.c:
+> 
+> Take a look at the KCORE_RAM case where we make sure the page exists, is
+> online and may be accessed. Only then, we trigger a
+> copy_from_kernel_nofault(). Note that the KCORE_USER is a corner case only
+> for some special thingies on x86 (vsyscall), and can be ignored for our case
+> here.
 
-Best regards,
--- 
-Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Sure, it would be better to harden KDB against all of these special
+cases. But you can break things in all sorts of fun ways with a
+debugger, anyways. The point of this patch is that it's nonsense that a
+function named copy_to_kernel_nofault() does indeed fault in a trivial
+case like address < TASK_SIZE_MAX.
+
+Thanks,
+Omar
 
