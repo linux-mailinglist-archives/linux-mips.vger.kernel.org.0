@@ -1,126 +1,94 @@
-Return-Path: <linux-mips+bounces-5314-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5315-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA93496A9B4
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 23:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A44CE96A9BD
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 23:09:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FCFB281832
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 21:08:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 636DC285F25
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 21:09:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E5B0126BFB;
-	Tue,  3 Sep 2024 20:57:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F7F41D7998;
+	Tue,  3 Sep 2024 21:01:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UqWzmMFh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="figUKZY/"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3A35126BE2;
-	Tue,  3 Sep 2024 20:57:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 639631D7987;
+	Tue,  3 Sep 2024 21:01:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725397058; cv=none; b=ek51yhLEEAidHk+xn2kBcgw8hMnIY3OlQdbZp51J5PxVR7uB811HURXs13lDEznkOf0h31LJIw/5VFM4zfqKn1OYmgiqUdZUtJ7kTzXWi3kaFFplsuEXXk1B41L4a4JFoqaFLKaKyecuMb1YzAj89uYgnRYmkkQOo3OEEBBIUGg=
+	t=1725397318; cv=none; b=tVRokt6RjvcZEQ7f1XSBOT0Jq6TJ9KAc1ETnZBA7CKxMLjKnC/XFl1sikqvVeYasyNCqHRAWSwk2vkaUDgOhifR8+nZmTw5rSH1Ne8VTSBIamftTNDXHL6opfEkZ1TPc3RWXcahKR3cVRHi7ObKSUfDKK9YIJknsIRktbNtlPpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725397058; c=relaxed/simple;
-	bh=cjHxtsQ8zjzZhe7UJXgyGFidJuQT14w6eaGx7r1eCSo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pVsS2RkbzT8R7I9mxI7Rdqvk/xVmh1R+7E2lOblXUaR+7HwgRU2TAgbifK/q9bgVYsyja4hwZZvb2u8O0Lbr31vT++BgHePftSbap6Crxb814AZmgBIgWn7eG1neo3ClZYxviBd/dmv/ZnRhqh3PWPXfF3EfBIXEeoff9+gBMlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UqWzmMFh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC048C4CEC4;
-	Tue,  3 Sep 2024 20:57:34 +0000 (UTC)
+	s=arc-20240116; t=1725397318; c=relaxed/simple;
+	bh=YlgYWrov2J1Ssj0+EKTW9v1CpfXqfqZj60bm9Xzp8gA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LfH6jNWEhNcnuYelEimPq99emCf+7zco7tYi4HdDCJgrAYArJdqrhHo537bZ8zlIT9yoaTT2ViVw5Bte8YndWNd8vs/KrQnwMqfVdiT4qszle0l7z+eQHh7flSzMrXin1Z3kL4ng70v9vn578Hmggy81i3NZlHe1wCZaAPoRAaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=figUKZY/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD49DC4CEC4;
+	Tue,  3 Sep 2024 21:01:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725397057;
-	bh=cjHxtsQ8zjzZhe7UJXgyGFidJuQT14w6eaGx7r1eCSo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=UqWzmMFhPjIcEmGSRWqicfkG7opLjLFdfYbRLzJWYFZ56XS7lYB9xcUh/tAK3MWCF
-	 zDa5EiZgxmrrxEB9dshySBAWiE1sVqjaFCpFnlapq1quju9r2IHPF+qmSeUX0WbiQn
-	 LiOwEXFHf+nY2EQsXvzyksEyVPeH6gWkEjhV2wAlQC01I9w09b09qQHf5RWLFwlHiD
-	 HdeqtNF/1SS1CUjF0ku4mDPRtBSErvO8mjACuRJO55HZ3saLUM/hsBDo7Jerg7a5By
-	 zHYy4UpKL92L/xxZX0nq7CUx8WRaZpfCX5FtRDCLvzYWtx5wL4aBAoDpKHnfx4D6S/
-	 /TvRrf9UwftRA==
-Date: Tue, 3 Sep 2024 13:57:33 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet
- <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, Ivan
- Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
- <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
- Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
- de Bruijn <willemdebruijn.kernel@gmail.com>, "=?UTF-8?B?QmrDtnJuIFTDtnBl?=
- =?UTF-8?B?bA==?=" <bjorn@kernel.org>, Magnus Karlsson
- <magnus.karlsson@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>,
- Sumit Semwal <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
- <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
- Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
- <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
- <pkaligineedi@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
- Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>, Willem de Bruijn <willemb@google.com>,
- Kaiyuan Zhang <kaiyuanz@google.com>, Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: Re: [PATCH net-next v24 03/13] netdev: support binding dma-buf to
- netdevice
-Message-ID: <20240903135733.53a83ce6@kernel.org>
-In-Reply-To: <20240831004313.3713467-4-almasrymina@google.com>
-References: <20240831004313.3713467-1-almasrymina@google.com>
-	<20240831004313.3713467-4-almasrymina@google.com>
+	s=k20201202; t=1725397317;
+	bh=YlgYWrov2J1Ssj0+EKTW9v1CpfXqfqZj60bm9Xzp8gA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=figUKZY/IW8+qj7UyVP2DYHB0tHl/V0Pgl7XXGOIlJCbEkzSModtPUp0dan0N5Myq
+	 Q7rk+ptZvZZSVnYv3dSL3VCISr8aMuhGm92zZCxaA6oLTVHLOgWQWGPCWuqrB+VVUK
+	 YbjcW2ZsfYoYx9vadxljtW++8Rmn7juctFToFEUFzLwpfx8pADCMx2XMQWif7Rp10D
+	 516BJHWIOMlx/QI7FXzzITM5Hb6YmryY8/YcMj9jdcv02+EkIGTa+uiwEtOpJXdhuG
+	 sms353NOhmcFQ8tdzyfUcKzEVhO51qCmV4Zc+Ed1Nl6edZeevKQKcJn4WhY4yXh4TU
+	 fH+9xY7y2v5zA==
+Date: Tue, 3 Sep 2024 23:01:54 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	Jan Dabros <jsd@semihalf.com>, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, 
+	Dinh Nguyen <dinguyen@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Jiawen Wu <jiawenwu@trustnetic.com>, Mengyuan Lou <mengyuanlou@net-swift.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, UNGLinuxDriver@microchip.com, linux-mips@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-snps-arc@lists.infradead.org
+Subject: Re: [PATCH v2 0/7] i2c: designware: Group all DesignWare drivers
+ under a single option
+Message-ID: <3phynd24wmymhqugikbdwdzoa6vlzxwv5a6n6bk4446atbf7nu@c2kb766j3pcc>
+References: <20240903142506.3444628-1-heikki.krogerus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240903142506.3444628-1-heikki.krogerus@linux.intel.com>
 
-On Sat, 31 Aug 2024 00:43:03 +0000 Mina Almasry wrote:
-> Add a netdev_dmabuf_binding struct which represents the
-> dma-buf-to-netdevice binding. The netlink API will bind the dma-buf to
-> rx queues on the netdevice. On the binding, the dma_buf_attach
-> & dma_buf_map_attachment will occur. The entries in the sg_table from
-> mapping will be inserted into a genpool to make it ready
-> for allocation.
-> 
-> The chunks in the genpool are owned by a dmabuf_chunk_owner struct which
-> holds the dma-buf offset of the base of the chunk and the dma_addr of
-> the chunk. Both are needed to use allocations that come from this chunk.
-> 
-> We create a new type that represents an allocation from the genpool:
-> net_iov. We setup the net_iov allocation size in the
-> genpool to PAGE_SIZE for simplicity: to match the PAGE_SIZE normally
-> allocated by the page pool and given to the drivers.
-> 
-> The user can unbind the dmabuf from the netdevice by closing the netlink
-> socket that established the binding. We do this so that the binding is
-> automatically unbound even if the userspace process crashes.
-> 
-> The binding and unbinding leaves an indicator in struct netdev_rx_queue
-> that the given queue is bound, and the binding is actuated by resetting
-> the rx queue using the queue API.
-> 
-> The netdev_dmabuf_binding struct is refcounted, and releases its
-> resources only when all the refs are released.
+Hi Jarkko, Andy,
 
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+...
+
+> Heikki Krogerus (7):
+>   ARC: configs: enable I2C_DESIGNWARE_CORE with I2C_DESIGNWARE_PLATFORM
+>   ARM: configs: enable I2C_DESIGNWARE_CORE with I2C_DESIGNWARE_PLATFORM
+>   arm64: defconfig: enable I2C_DESIGNWARE_CORE with
+>     I2C_DESIGNWARE_PLATFORM
+>   mips: configs: enable I2C_DESIGNWARE_CORE with I2C_DESIGNWARE_PLATFORM
+>   RISC-V: configs: enable I2C_DESIGNWARE_CORE with
+>     I2C_DESIGNWARE_PLATFORM
+>   net: txgbe: Fix I2C Kconfig dependencies
+>   i2c: designware: Group all DesignWare drivers under a single option
+
+I believe you know this code already, do you mind giving it an
+ack?
+
+Thanks,
+Andi
 
