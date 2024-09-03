@@ -1,83 +1,82 @@
-Return-Path: <linux-mips+bounces-5305-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5306-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2D6496A596
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 19:44:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D51C696A59A
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 19:44:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E6A4B20F23
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 17:44:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E5AB1F212E9
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 17:44:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB2CB18EFC8;
-	Tue,  3 Sep 2024 17:44:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B32F718EFF0;
+	Tue,  3 Sep 2024 17:44:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cMhGilmf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hyT0sV5q"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82DF018BC3A;
-	Tue,  3 Sep 2024 17:43:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4355918E349;
+	Tue,  3 Sep 2024 17:44:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725385440; cv=none; b=BBvj8KwdlTsIb0D0bgQC+o+QgTB3P7Uabrmjp+cO4ceYEgmwZEt3iiGI6iDN/p5zHDsHrAvFBcXDKJrgIVgcOlWeXy/+zrzJG6NbLI90xtSiDSLXyWcc6+KzG+lylUYYkHsIoFdfTytFO3FAVxw4dyVdGveOV2ag01/oa7crLuo=
+	t=1725385463; cv=none; b=W0ELhHfGOX2HnRSqYDlzPkWWRv+WFodTdN4/82HIZc8nHI04VWxhQJYfw2mkvaA1puNVi9pa3D+beWklYVHO3CoUZSJKknx6a/K9+/HRmT3wJhKzMMukdUj9RzvL3ijmwSfGAmet5zQDYogX0yPuLpjoj5YvuRkE77k64fuiUP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725385440; c=relaxed/simple;
-	bh=gi+yu/z+/Fjxnn4wuJ/sFP88katAdvUnvWOv4IPfnOI=;
+	s=arc-20240116; t=1725385463; c=relaxed/simple;
+	bh=DzpwJQwOT3F0kC0YR4xC7AP8eabN0PyPAbZ0DqFkPfA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HhSRSe81BEMC6uFjY09TQiPltz5/D+HLSM2XV/G9AHqUSdXJUFeDqaXIALUAoCzjqWjmivCmGjYkVhBss9eySBpLu2kfe23/Ta7+x9LtZC4HpJU7TRXrJH+5Pky1/ZXoiKtIF9F4A0qYpvbSji37yNExOFE6PUdB146loZoJ8is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cMhGilmf; arc=none smtp.client-ip=209.85.210.179
+	 To:Cc:Content-Type; b=lSyZ3WMDy4B/gqYRKLqcHOWcvEv68ltdbgsUm/IT86oyWYmhtbfHcIg3rlg/5UHfr3aB6jucYP8vC/TsYdvMCI/GecM6od3ll7qES73FIi3z4nYHio00GvlUhvEDnIf4l6yC/mItxgMs1OZ+2W70W7aKFvr1rGZZAT1gHvoqboM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hyT0sV5q; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-71447da79e1so308364b3a.0;
-        Tue, 03 Sep 2024 10:43:59 -0700 (PDT)
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-71420e66ecfso448198b3a.0;
+        Tue, 03 Sep 2024 10:44:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725385439; x=1725990239; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1725385462; x=1725990262; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gi+yu/z+/Fjxnn4wuJ/sFP88katAdvUnvWOv4IPfnOI=;
-        b=cMhGilmfpAT7xH2nI8o3HIdkUvaEMzWYMd5cTPoMEHWysp9x3HBJY2bRuwfkucyNGP
-         Iwe7TlGK8ws/o6vocV6hH98eX/3nl8FnHR1DnmiROf2zPD1k+cY0+wVs1ro07DQF3Miu
-         gaFtfi4JAx4d+joSAQ/rS7FjMlzNTchsmz4wujlX4Rq3x8z3Y75T6p3UOwstKiYRGUn0
-         hfacwPP84WHfziF1A25EZCajPVTZi2UrKXmHhus7OmscLPn7D4vfLfIUmWsOu5vu0eqA
-         oWJxgHFfFwE3QZAsmXZqsIEjrqI6Th4YM4yYiYrP8RqLBc0ay2VXZAIEE0f2F77LU655
-         SJ5Q==
+        bh=DzpwJQwOT3F0kC0YR4xC7AP8eabN0PyPAbZ0DqFkPfA=;
+        b=hyT0sV5qgZde0nI7ZfSGeCVNQ0dgwvKmWO8Rgmfr43z0xAqY8K86fnOioSK7Rhb9q1
+         bS8+vG9uo8HBYQYCjCMHX/cMW4rfuo2YfEofaR2uxhCH43pwaixUGOjEyig4XMl6vHJw
+         3l4xQIOQPQAMAVSVGG344UQ+rqr1Egxtpo2KSlOAfL0obCdSa9dh9ZQZoRsCvhOSDG7X
+         //28GY/YVolDix3yaQluMItsZuv7wqfY9MtBLRgCQpKIpXngKYkkPquTOA4yt7nHbdG8
+         4To1c8FKaHMftsyp6E7s/tYrFEqvsAZFFIF84dTl8soKutHFUzLFEXkc1oF2AU+I+LJT
+         DwxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725385439; x=1725990239;
+        d=1e100.net; s=20230601; t=1725385462; x=1725990262;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gi+yu/z+/Fjxnn4wuJ/sFP88katAdvUnvWOv4IPfnOI=;
-        b=jv+APQHGwUFa2dh7ecxbCYM+y5EgcL+hJLWX5+JBMzJmg2/FpGJtoBGd1CmROu1kvI
-         YhD56oE/VP6ihay4CFHI/HcZrowNvMLue3pkWbOguy2wEgbGSzlX2fdGPbU8LM11HLS/
-         0ySeYlcX0nnwcJ7ILWAibI9TPW9Jlqp2ev3XjC727+UbuKiOW3oEe9VL3yyhYTnO6fCM
-         14nsSy/bAPs7nDSJayN7QxKmPSv4rdrAUMpmPjhZf4Vv8DrD0zQrC9/Q3dtvtAn8jsuc
-         7DSIslYB51+iRIHDRDCGlpkP6DcEFhZFHLzOYaFDQwyoh5lQIM/Vv1gyK0YTkO2mXdnA
-         wwTA==
-X-Forwarded-Encrypted: i=1; AJvYcCUim2GC69A6uNH0JT1kOIkTZ+jNrWoEyqx1dQSq5Vh7K8jMUl880ymLhNuJRaWTgs9wy9yiIAgloFH6Qg==@vger.kernel.org, AJvYcCUv17qgK1AvXuiXwpMf0sJuVBzdu1uT9Btbd2IRXH21PAwJPmbC+IldKWzTiElypqijYb0lQc7Sg8fI/f/U@vger.kernel.org, AJvYcCV7zgU5mYWQNv2tU2Wq20sTCA3PnwCBwsdnvJoFx5MpRmzPlrX6pcIyhxakCcvQGdpKax6/UrY/775SRcGZ@vger.kernel.org, AJvYcCWiPHiHtfe1CY9opo423ZwrFGbwh0EnMS2Srjx1Plhwgsd5UveX/QE4ThEDTRE02XLFwhJjavS3QTO1f4Ee5Fc=@vger.kernel.org, AJvYcCWt8ldtxEYwVXLT3u6OO3/H2znzFUtnXEUu/qen79nPlTQswmsmp3jfQbk9v55aRnURTKh1iFStkSvTBNOLCig0Mul+@vger.kernel.org, AJvYcCX/N12mxD01RpWJRkPMA/p42MA6YfKwqDeWcvImmHS/g8ZKI+kr2UwJe70wy706zE+qrzup2XFRe+4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsSTfNopYOE79JaIXggC28ODkHr+9W4SCkqZsNaOHQRNZbrksZ
-	Xs7UzqBLLT34FznTslb4U/ZsNtqjK5oW+UxMHy1GHUWBB7Pjjftd3ITV4XzXJ92DxjkKxKJ6rvA
-	Sq4DzozNRsbtGvUEsnfhz9MsSOFQ=
-X-Google-Smtp-Source: AGHT+IGOit+pKE1XEmbe1GmHAZjGSQFBSI/2mJn7mS7tx95JcJrV9hAXdxD2z8nbCI3vzg90VuXd/BAf95vimO+HTSw=
-X-Received: by 2002:a05:6a20:c513:b0:1ce:f7fe:83ba with SMTP id
- adf61e73a8af0-1cef7fe848cmr1647514637.4.1725385438739; Tue, 03 Sep 2024
- 10:43:58 -0700 (PDT)
+        bh=DzpwJQwOT3F0kC0YR4xC7AP8eabN0PyPAbZ0DqFkPfA=;
+        b=NnW6EzHrvZnKk7OmhGi4QFbCCRYYE4DYuC9JFqi8zVLakrThNRVVH8HMJYiyNrmQGq
+         waXgWGHUSkcRPBGp/3RXkCT/4CosgUY4JnvTRCBiPqh0CvspRmsjr9Hq+/P8MGRdE5KG
+         99vAJbZTThyy4XSq0l5uHYUf6TM3c7lax0X4L0YNJtownnHeyVeEIlpfT29KxU6jOefC
+         hjB4b6awWu23NBxLy1L3Xge01G3GtDBTq6VlGVCRCQXZWOcAxe0ferEDZ9DyoZcLXw/L
+         o5nPp7PCWUSsvv1bb+1jZAe4yjcDO6PPBCmjFdHrPGStCoPNVQXWKTzn04zMnMbhU3ju
+         afMw==
+X-Forwarded-Encrypted: i=1; AJvYcCVzH1chRqYwzuBbwQ2c7U6k/ycw0N8zmN0Niudzcxp5cpeEP1978eW8vQLX5tiGMvgw0g5UGgwOPf19RDWs73JfOp5a@vger.kernel.org, AJvYcCWCBawhL4eEEDbwRbjFVUU0yg97Xf03CFjzyIlKCEvJZMankICHt1fBqZelIMMeFiLNX7RhfiagV9E=@vger.kernel.org, AJvYcCWH6TyaHgpAsuBnfCKHWIwnZKOSIjosT32gQwjGkt/b05hE08BkbSluvV/1xXhmu7qHKUSFx7LWKvjD5Vsh@vger.kernel.org, AJvYcCWm0/CgFFU+AeDxqpngsN5cJOa+XEiLUZl5llN3ZTIqODkkcK2PpRj322//T+itw3L12oD7BUsBf4YOVZd1aFM=@vger.kernel.org, AJvYcCWvUqUkApCohKWethdAD40M1gbbW6/nCMSnQPupih2/mgpUpQ0RdP4SpSX/Bk6tEq5vMMpWVgZM00dCS2uQ@vger.kernel.org, AJvYcCXNzsovo7TkIDUrk0lGPgTvxG4KTW25atBU/iFKoYiUcrgz4asAxdZazOEaFp540IVul+jsNiMSj11l8g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrTdYPFgJZ4k7M5XM16J1c+o+j6mZkHAVF/f3A351/pgpZOoFa
+	ZHLJgu2VMOHh8Z3h8oTBkEWJELP/FNg2WEPyO6jvCrNsogcGBWJXd3HaidOocW0QbuDm4YSa8RT
+	rKIEALwAeKwAlZrB6JP/ZUbbFJlY=
+X-Google-Smtp-Source: AGHT+IEr2msm5yg48J8o10JFNcKqa18Qf0QpuKetck9mzQgqKhHQ/7Pg+OEHdxchtehB6dyn3bXmyxfB4BSsSfVqxbo=
+X-Received: by 2002:a05:6a00:1816:b0:70e:acd0:d8b6 with SMTP id
+ d2e1a72fcca58-71730458903mr8460968b3a.0.1725385461577; Tue, 03 Sep 2024
+ 10:44:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240903-mips-rust-v1-0-0fdf0b2fd58f@flygoat.com> <20240903-mips-rust-v1-2-0fdf0b2fd58f@flygoat.com>
-In-Reply-To: <20240903-mips-rust-v1-2-0fdf0b2fd58f@flygoat.com>
+References: <20240903-mips-rust-v1-0-0fdf0b2fd58f@flygoat.com> <20240903-mips-rust-v1-3-0fdf0b2fd58f@flygoat.com>
+In-Reply-To: <20240903-mips-rust-v1-3-0fdf0b2fd58f@flygoat.com>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 3 Sep 2024 19:43:46 +0200
-Message-ID: <CANiq72mKZukJ+V_fXtvfBxN-WVBBOr1pZJ3iKrWgagTrJC4pdg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] MIPS: Rename mips_instruction type to workaround
- bindgen issue
+Date: Tue, 3 Sep 2024 19:44:08 +0200
+Message-ID: <CANiq72=z1yJm-B_ie=GfueOF1qksaSD9txgFU1YQo2tZx0qQPg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] rust: Enable for MIPS
 To: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
 	Nicolas Schier <nicolas@fjasle.eu>, Richard Weinberger <richard@nod.at>, 
@@ -103,14 +102,17 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Sep 3, 2024 at 7:15=E2=80=AFPM Jiaxun Yang <jiaxun.yang@flygoat.com=
 > wrote:
 >
-> We have a union and a type both named after mips_instruction,
-> rust bindgen is not happy with this kind of naming alias.
+> We don't use builtin target as there is no sutiable baremetal
+> target for us that can cover all ISA variants supported by kernel.
 
-For this sort of thing, you may be able to add it to the block list at
-`rust/bindgen_parameters`, so that you don't need to change any C
-code.
+Since we should try to go away from using `target.json`: what was not
+possible to enable via e.g. `-Ctarget-features` or other flags? i.e. I
+see the `+mips*` features there in the supported list, and from a
+quick test the data layout also seems to match, but I assume I missed
+something.
 
-I hope that helps!
+If it is not possible, then we should definitely ping upstream Rust about i=
+t. :)
 
 Cheers,
 Miguel
