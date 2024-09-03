@@ -1,180 +1,123 @@
-Return-Path: <linux-mips+bounces-5303-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5304-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABFEB96A54F
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 19:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 20BC296A590
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 19:43:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63BD1285A65
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 17:18:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2A4C2858C5
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 17:43:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCD9818DF78;
-	Tue,  3 Sep 2024 17:18:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF23C18EFDC;
+	Tue,  3 Sep 2024 17:43:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EUZMtyXH"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191E51420DD;
-	Tue,  3 Sep 2024 17:18:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B0A418BC3A;
+	Tue,  3 Sep 2024 17:43:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725383917; cv=none; b=q85UdUcYglCvJ1EiQaBXdE4juMKTXCUABEZzVNrxs1J/sT5PsOrGLxX3GxF7LOryIvGHqzGTSosI3bax96v7zxrSzox+SoJu0mqGdHiAzPzW0fVL9LHUOUxHwd1m/evW8gxlJSXo0wddTMQ7iiTWKHwjzCtprqbkqF8CMnoIXKY=
+	t=1725385414; cv=none; b=dl3oFkLheX6d8ty6LQvvbJ5QrO/m+CzUVifQXQq0IE8swU8PnwOGo5wuLcbuK2miSM3J34uvdNdOGiIP3RBpp5hnf+geSzcmzvLOzy05wpIlnme+ORBFIr/xUlY6AAxud07dn6LrkfvCCoUNm/czb1fmO+Xt3x9+w+uIp1v3m+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725383917; c=relaxed/simple;
-	bh=rAT/16lEXiR/FQGCf8mH61WrxLJvKpfnUCw3JXbOKlk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aMYZvRwPzKbHvQjy+LnWLJRw7iHRHbfsE5FzHqr9nQsWPh1U6xRR1yoeeI/3q4uyx3Hua+1CdN5JNDqVSewh5TbiqTgXWzIAC4Ke4bK9goeW2rxnvPQOqpFw50ctPwt/5ER6bui/RRLjIGlStf2NoV4yn2enL9hmm63EBN1Qn4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4Wyslp6shpz9sSC;
-	Tue,  3 Sep 2024 19:18:30 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hEi4N-oS1BVW; Tue,  3 Sep 2024 19:18:30 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4Wysln4fbCz9sSH;
-	Tue,  3 Sep 2024 19:18:29 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 7E91E8B779;
-	Tue,  3 Sep 2024 19:18:29 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id pxEcRzUEidZI; Tue,  3 Sep 2024 19:18:29 +0200 (CEST)
-Received: from [192.168.234.228] (unknown [192.168.234.228])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 3CEB98B774;
-	Tue,  3 Sep 2024 19:18:27 +0200 (CEST)
-Message-ID: <6b07c48d-656f-4e42-bfa7-0ecead72a7b8@csgroup.eu>
-Date: Tue, 3 Sep 2024 19:18:26 +0200
+	s=arc-20240116; t=1725385414; c=relaxed/simple;
+	bh=W2NvEDiPMdCRkIQi/U2zn9qbgZ8I+Gm2PHbpakhn09U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kKXtO+qA+hG3e0rLHZFwk6XtjB025IEbEmd7uzvVN6geYMAx6M9HH0S4iArUTWAJUOTUlxadvwwbeNQ/AC8x5O6+i3BDjBKPDKpJiaCCgvzZE5ac8ubr1ODM4+qMlF6Or6Z3dWYx+vaBEUoKkMGEkI1KX+Slg59tRFwdLOKR/0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EUZMtyXH; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2d88a8c66b7so136645a91.1;
+        Tue, 03 Sep 2024 10:43:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725385412; x=1725990212; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fy49/AVvXvkuJP3eSVDqTTRc5F7gppOTJPxMN+eltxo=;
+        b=EUZMtyXHxLNyclRiA3d6JyyAUj3NQkKYFDZTdFrHjPPrLVAYYdSHOFc1CDnp1b3VIA
+         rHkXxyPOcQisqmV7wVpluHjOV31BCOLnlsdT30pv1+tSeowdChXTz74NG4gOWDAa/4kE
+         XHRocy+Y9UvfaDVUEBi9WHzoqx/FuYLHn4bGE03GykvpzVR/ehzXjFf6Sf5PuJali+HZ
+         UYTAK/ZFwY5ZgZAsZuxkRzXq+U41EjFcvomq8Sl0P2yKqsI2VAtdINN+kXxd7QI9QUCF
+         U0lOIpK+caMWRY+2BzMotyqikquTuQEnY56xswE81EydxikwxXFLtQ2iyDkQGzfZDi6r
+         gEzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725385412; x=1725990212;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fy49/AVvXvkuJP3eSVDqTTRc5F7gppOTJPxMN+eltxo=;
+        b=dM0XGOWR0vfKp1IVjuvlRBmzECzhLBTWPFkyWwVjRBjpXJLdc8RR81gkIh+gQX9Swa
+         Tf/7nfUgGIzl0ueVGSGgBNGKEcM+rRuef8m2kEZLRulOEnuRk7j5f7M6/atLji6iVVqB
+         rMdVj79o3lWli6nzu2oIkpj75tSw9ylRjtWb/Z4CEnXMa/yZPfhU9WmlfGPYzdkJ2yMg
+         zmDPuzl50eooGdPid20fPm+8VpV8TtZ+nlQ+ZycIge9uIEI7DhjEXxaHKEj9U2Mvxegv
+         loYniRnGFz441uKdFWEw86JXr7NVIFEWMXj7Vf/gcFsgQeFiOp03YHJXz1IvKRd5w5C1
+         AXsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUZ1Xhj3dVsvR0IeGikxwYwlUpVhUWTeceO2MaGrNw3NbQeLDAC0o24/HcUMcry9i/L2RMLroD0jDNmrvZYvXpES8eT@vger.kernel.org, AJvYcCV8QwmfEcaf9iCBTY6Afas8l+5g/cgY84RAtsJXDH2Ewt1vnOPz6NCUCMuRYr9pFYDXpriPGN9miUvJQJtd@vger.kernel.org, AJvYcCV8bxrt58GhQCQcepo0fzSDR1LXNyNMQSIEOLtNBRQkcvbxa3DM/Piq8O6d/HwTSRSSS0EB9bJ7k93yh23qpgQ=@vger.kernel.org, AJvYcCVO8j6ZSxlXgeIFm5IllkCizCaYwGt7YsEr5ld/+fFcTjatzF+4uEQgNJCr0IaFomo4FvVHHGiR+47W9OWV@vger.kernel.org, AJvYcCW2ZfUcDKeBfHL9fgWiONaoVypcVkdnAaVIJej4N+INOrE/mAsHzESsAyYlbx3LAzvdxA0oKEYGrtA=@vger.kernel.org, AJvYcCXi6Ef8pGtilB6RD0pQktgvKpDbJOR/YMcS+lXHr4uSvxEbhY2hoKPq6266WUD7Omn9VUgoC2KatMQdmg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZYIaerTbdX0xT6qW8mLQBTd1DBTIQK/iW1MN9st6icBhvndxF
+	EBvQclrmJHWx8Qc1YprP+dn9I7M8Jcj2o/CpgqOLNvhX+8C82vT8I7zErgP1lmYL34Kfuwo6fMP
+	WJRcaNjCltzmap2wQjJVqfolv9/c=
+X-Google-Smtp-Source: AGHT+IEqKH0OWriiC8wInpcf2ZECoytsMPUwBDofLFkYfPN9ogN181tpD7iUm1gfTEwa1l2o3VI73EHRfYV1D0wWJPU=
+X-Received: by 2002:a17:90a:ba93:b0:2d8:ca39:5972 with SMTP id
+ 98e67ed59e1d1-2d8ca3991a8mr4648735a91.1.1725385412437; Tue, 03 Sep 2024
+ 10:43:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v2 2/4] mm: Add hint and mmap_flags to struct
- vm_unmapped_area_info
-To: Charlie Jenkins <charlie@rivosinc.com>, Arnd Bergmann <arnd@arndb.de>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
- Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
- Nicholas Piggin <npiggin@gmail.com>, Naveen N Rao <naveen@kernel.org>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>,
- Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- "David S. Miller" <davem@davemloft.net>,
- Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
- <vbabka@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-References: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
- <20240829-patches-below_hint_mmap-v2-2-638a28d9eae0@rivosinc.com>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <20240829-patches-below_hint_mmap-v2-2-638a28d9eae0@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240903-mips-rust-v1-0-0fdf0b2fd58f@flygoat.com> <20240903-mips-rust-v1-1-0fdf0b2fd58f@flygoat.com>
+In-Reply-To: <20240903-mips-rust-v1-1-0fdf0b2fd58f@flygoat.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 3 Sep 2024 19:43:19 +0200
+Message-ID: <CANiq72kx+aJXJCGPv6PazCQ7BnSDN56WyVFj=6e0FNRYqunSfw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] rust: Introduce HAVE_GENERATE_RUST_TARGET config option
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Richard Weinberger <richard@nod.at>, 
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>, Johannes Berg <johannes@sipsolutions.net>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>, 
+	Yanteng Si <siyanteng@loongson.cn>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-um@lists.infradead.org, 
+	rust-for-linux@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Charlie,
-
-Le 29/08/2024 à 09:15, Charlie Jenkins a écrit :
-> The hint address and mmap_flags are necessary to determine if
-> MAP_BELOW_HINT requirements are satisfied.
-> 
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> ---
->   arch/alpha/kernel/osf_sys.c      | 2 ++
->   arch/arc/mm/mmap.c               | 3 +++
->   arch/arm/mm/mmap.c               | 7 +++++++
->   arch/csky/abiv1/mmap.c           | 3 +++
->   arch/loongarch/mm/mmap.c         | 3 +++
->   arch/mips/mm/mmap.c              | 3 +++
->   arch/parisc/kernel/sys_parisc.c  | 3 +++
->   arch/powerpc/mm/book3s64/slice.c | 7 +++++++
->   arch/s390/mm/hugetlbpage.c       | 4 ++++
->   arch/s390/mm/mmap.c              | 6 ++++++
->   arch/sh/mm/mmap.c                | 6 ++++++
->   arch/sparc/kernel/sys_sparc_32.c | 3 +++
->   arch/sparc/kernel/sys_sparc_64.c | 6 ++++++
->   arch/sparc/mm/hugetlbpage.c      | 4 ++++
->   arch/x86/kernel/sys_x86_64.c     | 6 ++++++
->   arch/x86/mm/hugetlbpage.c        | 4 ++++
->   fs/hugetlbfs/inode.c             | 4 ++++
->   include/linux/mm.h               | 2 ++
->   mm/mmap.c                        | 6 ++++++
->   19 files changed, 82 insertions(+)
-> 
-
->   
-> diff --git a/arch/powerpc/mm/book3s64/slice.c b/arch/powerpc/mm/book3s64/slice.c
-> index ef3ce37f1bb3..f0e2550af6d0 100644
-> --- a/arch/powerpc/mm/book3s64/slice.c
-> +++ b/arch/powerpc/mm/book3s64/slice.c
-> @@ -286,6 +286,10 @@ static unsigned long slice_find_area_bottomup(struct mm_struct *mm,
->   		.length = len,
->   		.align_mask = PAGE_MASK & ((1ul << pshift) - 1),
->   	};
+On Tue, Sep 3, 2024 at 7:15=E2=80=AFPM Jiaxun Yang <jiaxun.yang@flygoat.com=
+> wrote:
+>
 > +
-> +	info.hint = addr;
-> +	info.mmap_flags = flags;
-> +
->   	/*
->   	 * Check till the allow max value for this mmap request
->   	 */
-> @@ -331,6 +335,9 @@ static unsigned long slice_find_area_topdown(struct mm_struct *mm,
->   	};
->   	unsigned long min_addr = max(PAGE_SIZE, mmap_min_addr);
->   
-> +	info.hint = addr;
-> +	info.mmap_flags = flags;
-> +
->   	/*
->   	 * If we are trying to allocate above DEFAULT_MAP_WINDOW
->   	 * Add the different to the mmap_base.
 
-ppc64_defconfig:
+Spurious line?
 
-   CC      arch/powerpc/mm/book3s64/slice.o
-arch/powerpc/mm/book3s64/slice.c: In function 'slice_find_area_bottomup':
-arch/powerpc/mm/book3s64/slice.c:291:27: error: 'flags' undeclared 
-(first use in this function)
-   291 |         info.mmap_flags = flags;
-       |                           ^~~~~
-arch/powerpc/mm/book3s64/slice.c:291:27: note: each undeclared 
-identifier is reported only once for each function it appears in
-arch/powerpc/mm/book3s64/slice.c: In function 'slice_find_area_topdown':
-arch/powerpc/mm/book3s64/slice.c:339:27: error: 'flags' undeclared 
-(first use in this function)
-   339 |         info.mmap_flags = flags;
-       |                           ^~~~~
-make[5]: *** [scripts/Makefile.build:244: 
-arch/powerpc/mm/book3s64/slice.o] Error 1
+> +config HAVE_GENERATE_RUST_TARGET
+> +       bool
+> +       depends on HAVE_RUST
+> +       help
+> +         This symbol should be selected by an architecture if it
+> +         supports generating Rust target files with
+> +         scripts/generate_rust_target.rs.
+
+It should be more like "if it needs" rather than "if it supports",
+i.e. the `target.json` is something that should be avoided if
+possible, since the goal is to avoid depending on it in the future.
+
+Cheers,
+Miguel
 
