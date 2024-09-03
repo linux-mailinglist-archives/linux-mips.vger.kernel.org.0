@@ -1,109 +1,156 @@
-Return-Path: <linux-mips+bounces-5296-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5297-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CAAE969952
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 11:40:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A8DC96A05A
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 16:25:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CDB311C23BCC
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 09:40:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC1CB28472B
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 14:25:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FECD1A0BFD;
-	Tue,  3 Sep 2024 09:39:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 466DC78C60;
+	Tue,  3 Sep 2024 14:25:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Hh5kBEjO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CleTK0i1"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5F41A0BEA
-	for <linux-mips@vger.kernel.org>; Tue,  3 Sep 2024 09:39:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F7B57581A;
+	Tue,  3 Sep 2024 14:25:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725356390; cv=none; b=MMmHaRpEdnhGztMgDY4P5jEHw52Ha/IqNOYNCZ2ZGqsEgR1gojZaA9WKqYu8HcW4WHcLj0D6wEz0lBYuGtqCoYJltzJllVgbPfOAajwe3yU1py8cNVezH5bsuPp9Lqrd1vnWuAX+B9JhITc66SwOjeJJFo8XBhjOtxI+faiHn7Y=
+	t=1725373517; cv=none; b=CZ/HeLu91iutTiu1Bvl1bYbo3+LVI0W5s+WfNj4MXcoeYC0rj6iH08PqWcaZnttbi3zzSPjf4LH/krgl6xILlFQTPS7axEdO3j1uVjgCJARq9CwMG0otuEo47Lx4iDR2E5s+crJj2GAyAgsqBPZ25rHcDRF9E/vp5AMInuXc6dg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725356390; c=relaxed/simple;
-	bh=pE3Mr0PnS9xl+CUiCEH2hxI4fWM92/vwv+iNfIiq4l8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oRqOHV0GfKxn5cnn7QdC7LRMOVfZWEwC7jY4pFWuxGVxS5mL3Kx/3fvp/X/VuosUtWUsQyiwLhZQ0S/rhXApaXIHXaZLRng769u3bpIfJx4IgNepMKrORWjWPz9wOAFJ7/y/r8LdmvCGs5GCxmewvWckMcBOXK/Xa8rsUA9aeg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Hh5kBEjO; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1725356387;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cIxA/7+yR2jXA4ieeKPuD5EUL5lArHR8csGiCMl6eW4=;
-	b=Hh5kBEjOrdKZk3kRJinPc6wdUa5u6DXLTuWECSxYMTKrHHUGqSFrQ2EZzMzn9n3jPjSkDp
-	GC6ifzE63Y1thpL3mpxcPpx/fxnMhjD+tQ5mrxZr3Pk0X0fXkFZ29JbgHWf97tb3WJzpaF
-	VBc2DqBSZXXc3dJ3AutwG9VxR12KmZ0=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-208-fOi5Z3NjNuaTGLF66xMs2w-1; Tue, 03 Sep 2024 05:39:46 -0400
-X-MC-Unique: fOi5Z3NjNuaTGLF66xMs2w-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-374c301db60so1478216f8f.2
-        for <linux-mips@vger.kernel.org>; Tue, 03 Sep 2024 02:39:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725356385; x=1725961185;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cIxA/7+yR2jXA4ieeKPuD5EUL5lArHR8csGiCMl6eW4=;
-        b=j5XDTltatcsCELDHH8cZwsrGYL6Gs9v/pxiijji/SKGX3HFTuPBjM6zEI5RaX7j0hN
-         n38r3LFFSIMMVSrwX01w/5nXmfjMU82wcSL42kX2DBfVOV3YTU16JLdYg/IODgv95M9a
-         vspaY7CPH/elyWPNp71BEJ8s7zRnqrBYA/qrdTUgx/pkmsmCWtbwJAxhN8mWz1ERTS1A
-         jh2xIfY/Tm6dwU/sVcw7aU8IxmE9Q0zZBYmfMcQ/U4V4y1WuVv58C6wmmOv2221aeDTa
-         krJTDZvYhxXCzxEDxBHaiviuZlKjZLoGj1gYdvgRa12ZRgOcQRe6sMgStBy5iWglw8kL
-         krxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWSsrDAQFrlej9FJOd0sPNq0KLDfQM8MoEnqzB0cgpVwS2uPcsZCFAU7v3wKXoQ5QXIQmTssE0eyIHj@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlcDV79CLDRt87xDZnkNGPwjy0UA078bF8wmwyukNxX+Xhz7c+
-	kJJvcxyk13VZdx+ebYdye6eCHu1rAGPBnGMNjTT1dgrtRctt41yimP5Uh1VH96f5WK2+zNnSBzC
-	iG2U1GuWY3rTLTJu+m570P+u9Tc0U72IEFkwL1V0SVk6yT580XKQy9vepyCQ=
-X-Received: by 2002:a05:600c:1f90:b0:429:dc88:7e65 with SMTP id 5b1f17b1804b1-42bb02ecb7emr124596475e9.12.1725356385064;
-        Tue, 03 Sep 2024 02:39:45 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEx9ZT+cp/JOzMdJ0eMMwlRMn2QkU5Mi38V0c6sZIqJTMhc/MD50iSbcQF046e0ymvaKlJlng==
-X-Received: by 2002:a05:600c:1f90:b0:429:dc88:7e65 with SMTP id 5b1f17b1804b1-42bb02ecb7emr124595995e9.12.1725356384137;
-        Tue, 03 Sep 2024 02:39:44 -0700 (PDT)
-Received: from redhat.com ([2a0d:6fc7:441:95c6:9977:c577:f3d1:99e1])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42bb6df0f41sm164222235e9.19.2024.09.03.02.39.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Sep 2024 02:39:43 -0700 (PDT)
-Date: Tue, 3 Sep 2024 05:39:39 -0400
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: Christoph Hellwig <hch@lst.de>
-Cc: iommu@lists.linux.dev, Marek Szyprowski <m.szyprowski@samsung.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Bingbu Cao <bingbu.cao@intel.com>, Jason Wang <jasowang@redhat.com>,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-media@vger.kernel.org, virtualization@lists.linux.dev,
-	xen-devel@lists.xenproject.org
-Subject: Re: clearly mark DMA_OPS support as an architecture feature v2
-Message-ID: <20240903053917-mutt-send-email-mst@kernel.org>
-References: <20240828061104.1925127-1-hch@lst.de>
- <20240903072744.GA2082@lst.de>
+	s=arc-20240116; t=1725373517; c=relaxed/simple;
+	bh=8oF38+wcTyCFFLJNltFe9UX5N5NexPR+hPC1BNLasBQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SfDfIgHte1kDPJyjutcng91fhjtLjPDDBdd6A5T6f7mCZmeB44yk5DzTvlGErOJN26JiLYLT+DLxKpu4iMVu3SRY3w4343k3NW8YIRM4rQUdGn57vCgCtEueVCFVvH+wFkRI4yVFSbnPS5b86wkX0kwhe3l/59dHYkVVJ7YSIKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CleTK0i1; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725373515; x=1756909515;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8oF38+wcTyCFFLJNltFe9UX5N5NexPR+hPC1BNLasBQ=;
+  b=CleTK0i1pwGISF7KsbHEH/bGdmO51AvQNELxQ5AL0XaJFJd1GTIbIByn
+   CtFhQzWUpmUG43tGhulsoAjEcOjEV+Jrc8fE9kenpnuV/VSciYMTV/HNI
+   c5NnNyPig5iORBFc/KirsxhIkzvmur/6m6Ce2AiRgveoEly6U90ftLiod
+   v+1BuLCZv8kjdcG/n3GOyeObOIdd2/zZzD0U8LCbHmP9fL0HIawg5TXGo
+   sUz58gvBj7rvFhcVA7X0Q44sn3W9Tz/Bf691NNoBKJHR+cpJG7Ze7UCaa
+   lEzfvMgyLQXPg5O4VVvGY/1rnz/xel8d5yX7OrgayXJw/l5nTbS2S1lSp
+   g==;
+X-CSE-ConnectionGUID: O5lyGBRKQMCfAxlmyXSdwQ==
+X-CSE-MsgGUID: 9pW7PLqHRCyvZnkmhAwMNg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11184"; a="23541263"
+X-IronPort-AV: E=Sophos;i="6.10,199,1719903600"; 
+   d="scan'208";a="23541263"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2024 07:25:14 -0700
+X-CSE-ConnectionGUID: rb+5gYZhQFG9CNAs2BREDQ==
+X-CSE-MsgGUID: 3n4/huujQW21hYevl0+/+A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,199,1719903600"; 
+   d="scan'208";a="65658762"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by orviesa008.jf.intel.com with ESMTP; 03 Sep 2024 07:25:07 -0700
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Andi Shyti <andi.shyti@kernel.org>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Jiawen Wu <jiawenwu@trustnetic.com>,
+	Mengyuan Lou <mengyuanlou@net-swift.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	UNGLinuxDriver@microchip.com,
+	linux-mips@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-snps-arc@lists.infradead.org
+Subject: [PATCH v2 0/7] i2c: designware: Group all DesignWare drivers under a single option
+Date: Tue,  3 Sep 2024 17:24:59 +0300
+Message-ID: <20240903142506.3444628-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240903072744.GA2082@lst.de>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 03, 2024 at 09:27:44AM +0200, Christoph Hellwig wrote:
-> I've pulled this into the dma-mapping for-next tree, although I'd
-> love to see one of the vdpa maintainers look over patch 1.  I'm
-> pretty sure it's correct, but a confirmation would be good.
+Hi guys,
 
-Missed patch 1, I was wondering why I'm CC'd. Looks good, thanks.
+This is a proposal for Kconfig improvement regarding the Synopsys
+DesignWare I2C adapter driver.
+
+Changes since v1:
+
+There was one driver that selects I2C_DESIGNWARE_PLATFORM in its
+Kconfig which causes an error because I2C_DESIGNWARE_CORE is not
+selected.
+
+The drivers Kconfig I'm proposing that we fix by using "depends on"
+instead of "select". There are also a number of defconfigs that enable
+I2C_DESIGNWARE_PLATFORM that now need to enable I2C_DESIGNWARE_CORE.
+
+The original patch:
+https://lore.kernel.org/linux-i2c/20240830111222.2131172-1-heikki.krogerus@linux.intel.com/
+
+thanks,
+
+Heikki Krogerus (7):
+  ARC: configs: enable I2C_DESIGNWARE_CORE with I2C_DESIGNWARE_PLATFORM
+  ARM: configs: enable I2C_DESIGNWARE_CORE with I2C_DESIGNWARE_PLATFORM
+  arm64: defconfig: enable I2C_DESIGNWARE_CORE with
+    I2C_DESIGNWARE_PLATFORM
+  mips: configs: enable I2C_DESIGNWARE_CORE with I2C_DESIGNWARE_PLATFORM
+  RISC-V: configs: enable I2C_DESIGNWARE_CORE with
+    I2C_DESIGNWARE_PLATFORM
+  net: txgbe: Fix I2C Kconfig dependencies
+  i2c: designware: Group all DesignWare drivers under a single option
+
+ arch/arc/configs/axs101_defconfig             |  1 +
+ arch/arc/configs/axs103_defconfig             |  1 +
+ arch/arc/configs/axs103_smp_defconfig         |  1 +
+ arch/arc/configs/tb10x_defconfig              |  1 +
+ arch/arm/configs/hisi_defconfig               |  1 +
+ arch/arm/configs/multi_v7_defconfig           |  1 +
+ arch/arm/configs/pxa_defconfig                |  1 +
+ arch/arm/configs/socfpga_defconfig            |  1 +
+ arch/arm/configs/spear13xx_defconfig          |  1 +
+ arch/arm/configs/spear3xx_defconfig           |  1 +
+ arch/arm/configs/spear6xx_defconfig           |  1 +
+ arch/arm64/configs/defconfig                  |  1 +
+ arch/mips/configs/generic/board-ocelot.config |  1 +
+ arch/riscv/configs/defconfig                  |  1 +
+ arch/riscv/configs/nommu_k210_defconfig       |  1 +
+ .../riscv/configs/nommu_k210_sdcard_defconfig |  1 +
+ drivers/i2c/busses/Kconfig                    | 29 ++++++++++++-------
+ drivers/net/ethernet/wangxun/Kconfig          |  3 +-
+ 18 files changed, 35 insertions(+), 13 deletions(-)
+
+-- 
+2.45.2
 
 
