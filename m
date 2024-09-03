@@ -1,104 +1,149 @@
-Return-Path: <linux-mips+bounces-5310-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5311-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF41996A5FF
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 19:58:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D56B96A64C
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 20:17:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15A3E1C212A8
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 17:58:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 054CE1F23C7D
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 18:17:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C363D18F2DA;
-	Tue,  3 Sep 2024 17:58:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2415C19047C;
+	Tue,  3 Sep 2024 18:17:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="ySxNEsvV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ka7gwTor"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 032BD22F11;
-	Tue,  3 Sep 2024 17:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A259618BB89;
+	Tue,  3 Sep 2024 18:17:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725386290; cv=none; b=uPZI87/0LH2NUEqqbnsSggMSxer8dMooDTTAW0DA1uS2om4cY75NBi5AIP6l+S3IQgUDg8Bx75dNcfMqDJWZkx/nouqFk7hq/NIGOLNNJfE/RGSjWBU9vXQRbAQvcDWeBFJGDLCtM6TfvXGXLFf82Fc6w14dKPkW2isBTOqaN5s=
+	t=1725387439; cv=none; b=TgvS+tsq0GaUN3PvbzLwZzxs4Gr2vqnjFNC34xlCnZAeo6b471rs4HSpZMXV/z5i0wAmKDtEu+GIv99FTQdpxUhMDY/WpKILgguekjFw5RQ1VqSd4ShxZw1dBjWVnPvOUwBjZgbGYcUFfIHO3Sd2A8LLfJRCuOYVrMZdTMbSVpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725386290; c=relaxed/simple;
-	bh=u8j2kWJdK0EeKzN4AXVT6Du9D/Kibugx0Xb60H3LWpo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=S+1JISBUsJf3w9kBKxtGjO6LE6RgjTKcrBMQfsNFM4KmU5amWAxoui0lRWmWvvQKVRYuHW060YZOLr3iyM4bnBsdldIRGQPg5pWZikzAvF2xAuuSpWGVSwkw1D/gSSnzd55mIYZv+q7UCnr4V8Yb+elVMqFdNsRk9A28KX/F3go=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=ySxNEsvV; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=IAESczAqoTkqwd1sElm2y6U2dzgfrcTnXqQTQycwhtw=;
-	t=1725386289; x=1726595889; b=ySxNEsvV1jpF4z8YVdISeGjRSRW+R+vRFyjwpbjNIzJ5Mvq
-	zp0z+XLLHRrzXNZtaVR866mGPHDGgaJYhDA3Xx+7eOsr60z38iUR4LSvtVfxh+16S4VIrkAAvGg2N
-	hFcvfZadJgvbExtfHuPhSghgrvar0hgI+8h8tLKKrBrnyQLUYjcbPgMAE6rbeUK2BcInpWJgf2r5A
-	up6mqJjKEsFhn/VzTN/3F5CCVDn01gdRcP9D8gjoFu40MFAK0JiJhMh2+vSZDbv89G8Olyvv5U948
-	vCJGJV6awP3Ni7tHoU451oNrAw4Mbdcq16qpcZmoc4XPjqtfX6uweD9s9TS+GNew==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.97)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1slXmU-00000002un7-3JPR;
-	Tue, 03 Sep 2024 19:57:31 +0200
-Message-ID: <a163db239ffe31fbe1921f8b0bfdcfa47fd355f0.camel@sipsolutions.net>
-Subject: Re: [PATCH 1/3] rust: Introduce HAVE_GENERATE_RUST_TARGET config
- option
-From: Johannes Berg <johannes@sipsolutions.net>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>, Masahiro Yamada
- <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas
- Schier <nicolas@fjasle.eu>, Richard Weinberger <richard@nod.at>, Anton
- Ivanov <anton.ivanov@cambridgegreys.com>, Thomas Gleixner
- <tglx@linutronix.de>,  Ingo Molnar <mingo@redhat.com>, Borislav Petkov
- <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,  x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Miguel Ojeda <ojeda@kernel.org>,  Alex
- Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
- =?ISO-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin
- <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, Alice
- Ryhl <aliceryhl@google.com>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, Steven Rostedt <rostedt@goodmis.org>, Masami
- Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Jonathan Corbet <corbet@lwn.net>,  Alex Shi <alexs@kernel.org>, Yanteng Si
- <siyanteng@loongson.cn>, Nick Desaulniers <ndesaulniers@google.com>, Bill
- Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-um@lists.infradead.org, rust-for-linux@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, llvm@lists.linux.dev
-Date: Tue, 03 Sep 2024 19:57:29 +0200
-In-Reply-To: <20240903-mips-rust-v1-1-0fdf0b2fd58f@flygoat.com>
-References: <20240903-mips-rust-v1-0-0fdf0b2fd58f@flygoat.com>
-	 <20240903-mips-rust-v1-1-0fdf0b2fd58f@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+	s=arc-20240116; t=1725387439; c=relaxed/simple;
+	bh=72SwK870brWuO+1H7M3ZgRnMKAN3mk5VB6H1CyKczVk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=glfAPuT0mStrDuJdUktejeWm46u/JYnYuhFBU57Jw96pabtztcncZQfXCAVOzj8nPuPoM5nhevEPHmkVZ5aS1hFMHh3JnjwHTF2pEzQM5MaRnU+fOM/bWaKwMkZYwcwtwnnVMo/AWBeyctQTFD9nErAbvx4wnBXYJXbSTu4LGD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ka7gwTor; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2d88ec20283so200492a91.0;
+        Tue, 03 Sep 2024 11:17:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725387437; x=1725992237; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iCRq6ERVuiYfqPwMIYcT8lbPZnFxke33M5BuFbK5HIg=;
+        b=Ka7gwTorlj2Fywai5mXwRlCuNaBaQpElz5O7QEltvWMQST6AbpJiLilfaSNDNHM1aN
+         D0HSUWrtH87B1HypBmwIqfYvFN0yCQPunRXAIGhzqiSy7/1Nyb+tdgrX+8YtTUfGr27G
+         IuK6KsBCJUXYScM1PIdxXqfSrJQ2dKeJbdqFXirIEC7fXCozaqAQaWzmo0skQS2i0dzv
+         v7vASJJtJDYbZ8TMxlQ9EjJ6XqM7qMJNJ0VqIFEKYLqfxHIOIFD8cpKvw59JDNbuCzO6
+         S8E9jjwhkt2YPW8/S20kxjLqZ9ZjJEvbiq6FqF66x9JU2EW6rkK+QwEmGbw5hKn6CHmN
+         phQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725387437; x=1725992237;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iCRq6ERVuiYfqPwMIYcT8lbPZnFxke33M5BuFbK5HIg=;
+        b=LJB7t2Rp3xKiwmPI3s6JPjbqbIPNYK+7UHuyVymVwkhjK13VTf3YkGYUrTO5ofVQ5L
+         fKu7FQlAsqLQ96JlVVOX9XKe8DOQRyhNFiM4o+VYpXR5wy+YyJ2V6AStfGg2rdQCSy8W
+         zKBAZwPejK61s07wS/Y3MuCBuUrjV8jpwTSJK2EYiSiytiCjtBOGoEC7himHVf9enfDG
+         zdQIJajAZCCFGlPaZ6Zp1g2+gGppz6ltmubN3q8O8IRF4CeIT4ZHVeIda5pL7kj4SW7D
+         ThZdd0//1cA1M8qwAhjWDg9GtP0/QHE+YbH9jjXOLERXDxFTEgRM5padN74K3yzcrexG
+         +Cng==
+X-Forwarded-Encrypted: i=1; AJvYcCU3GgEYeeoNbYT7NZ0bx8Mf9O+x6ZyDwyGNVlWUt8yU2X0AAiVBW0qo6SIDa4DDGaS5t0C3nqigg5M=@vger.kernel.org, AJvYcCVR3IXzzdrMYSQeKu5DPzdPUDyJfzL35Il2WZYZ0B/WrOu2oMe/CiDtiO4K9S4SYmvrqcKsa/VojcPL3oNt@vger.kernel.org, AJvYcCVcA+hq1dGgbUvB+C2/TQmzYEtp1uO3OaXmaMBlrdVPc//bnDuO7Apr+diDgMMWEZLgqAZf9IldRMawDu8m79o=@vger.kernel.org, AJvYcCWtohUHE1ZGkpYoG2DN2sazcIV7GFtJ1Lms1RtLZeCqkDXUu+KTQMa8JncO/BfoapCK4c8m5baW7+92MQ==@vger.kernel.org, AJvYcCXB8xVeRc0bc+Mb8EUL2ik19xbn8xAQBuuWzHGNaeGitqQygODXrw/CcjDDQDcJhWAiGAmswmU3/OhBv5YtCxnAPnrz@vger.kernel.org, AJvYcCXmzAXEFNDrmVjnvS8mKPMb6G2KM+iB3669EymwovNkqva1d4nT4EKwCp7JzflBvQISKBh/AYmK6mgdJZys@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjVfFmsCMPXZwPsRtCIHkc4vXeitMKzfm2JwDgj+7hRIWiaZTf
+	nAxRgA2dMQeu2IdhBpbjmcmX0CGDRHckWQpyeEFobyqv6wfc7RQ/eTbMdgdS8HqDTlb0GwN5cIA
+	5AhrEAo0UVsN+ntEZYK0abdwNE2k=
+X-Google-Smtp-Source: AGHT+IG32aDLtHKi6AhxBeXK5jquJ2AWi/0PseceBjRwkozuKShq4rru0SzsbIiSg4LmaHN2BLYJYbySTLJ6lDehrcs=
+X-Received: by 2002:a17:90a:ee8f:b0:2da:5aa5:5d5b with SMTP id
+ 98e67ed59e1d1-2da5aa560f4mr2043322a91.3.1725387436834; Tue, 03 Sep 2024
+ 11:17:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+References: <20240903-mips-rust-v1-0-0fdf0b2fd58f@flygoat.com>
+ <20240903-mips-rust-v1-3-0fdf0b2fd58f@flygoat.com> <CANiq72=z1yJm-B_ie=GfueOF1qksaSD9txgFU1YQo2tZx0qQPg@mail.gmail.com>
+ <d9591a84-9a0f-4046-9b2a-437061f6882b@app.fastmail.com>
+In-Reply-To: <d9591a84-9a0f-4046-9b2a-437061f6882b@app.fastmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 3 Sep 2024 20:17:04 +0200
+Message-ID: <CANiq72m5iFcqRU_qdUCZkoV8ayPhtQQq3TTEDRUYfMEsnNqTDg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] rust: Enable for MIPS
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Richard Weinberger <richard@nod.at>, 
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>, Johannes Berg <johannes@sipsolutions.net>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>, 
+	Yanteng Si <siyanteng@loongson.cn>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-um@lists.infradead.org, 
+	rust-for-linux@vger.kernel.org, 
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2024-09-03 at 18:14 +0100, Jiaxun Yang wrote:
->=20
-> --- a/arch/um/Kconfig
-> +++ b/arch/um/Kconfig
-> @@ -32,6 +32,7 @@ config UML
->  	select TTY # Needed for line.c
->  	select HAVE_ARCH_VMAP_STACK
->  	select HAVE_RUST
-> +	select HAVE_GENERATE_RUST_TARGET if X86_32 || X86_64
->=20
+On Tue, Sep 3, 2024 at 7:53=E2=80=AFPM Jiaxun Yang <jiaxun.yang@flygoat.com=
+> wrote:
+>
+> Thanks for your review!
 
-There are no other sub-arches support for UML, I don't see much point in
-adding the dependency here.
+You're welcome!
 
-johannes
+> Triples defined for MIPS bare-metal target is surprisingly lacking, we do=
+ have
+> little-endian 32-bit bare-metal target mipsel-unknown-none but big-endian=
+ and
+> 64 bit variants are missing.
+
+Hmm... Sorry if this may be too naive, since I have no expertise on
+MIPS, but I see some triples that match the LLVM ones you specify in
+the patch:
+
+    rustc --print target-list | grep mips
+
+> Also, those triples all assumed +mips32r2 as baseline ISA, but kernel act=
+ually needs
+> some other ISA variant features.
+
+I guess you mean you are getting the warning about the
+unknown/unstable feature passed to the backend? i.e. `rustc` knows
+about those LLVM ones and forwards them when enabled via
+`-Ctarget-feature` (with a warning):
+
+    rustc --target mips64-unknown-linux-gnuabi64 --print target-features
+
+So they would need to be added to the list at [1] (or targeted flags create=
+d).
+
+Until those do not emit a warning, it is fine using the `target.json`,
+but I wanted to understand if there is something else you may need,
+since we will need to eventually avoid the `target.json`, so it is
+best asking upstream as soon as possible.
+
+Thanks!
+
+[1] https://github.com/rust-lang/rust/blob/d6c8169c186ab16a3404cd0d08666740=
+18e8a19e/compiler/rustc_target/src/target_features.rs#L368
+
+Cheers,
+Miguel
 
