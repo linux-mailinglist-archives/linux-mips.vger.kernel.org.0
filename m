@@ -1,66 +1,130 @@
-Return-Path: <linux-mips+bounces-5292-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5293-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEC7D96955D
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 09:28:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 574EF9696DA
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 10:19:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8865E1F2495D
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 07:28:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 88D671C237FA
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2024 08:19:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01EAF1D6C4A;
-	Tue,  3 Sep 2024 07:27:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31FFC1D67AC;
+	Tue,  3 Sep 2024 08:18:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="olU2tuWX"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6BFE1D6DD5;
-	Tue,  3 Sep 2024 07:27:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB9DB205E15;
+	Tue,  3 Sep 2024 08:18:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725348473; cv=none; b=j/fpkH4jlU7wQsXvFJCZVzuUURWtgHd3SLXvoc9J2I7TiKmNRoPP9FQnuLOVqsRUkwpI5bAKy9jrTqQgPhU1/yrZQ7uR3YRFHS06xN7qem40doyyIoWUtQQ1tgEkyniuEgOVv2JPcq0xoBiDDfoZtBs1YG21+QIlOkZjhwAT7MI=
+	t=1725351536; cv=none; b=JVhlpVKEqH5ZxtJDTxeSffrV4ggNKoSNvUynSC3xffMrqx3zBsjvy5lRKj+ejTAOTgc+YUFV+nNYnKCCaUHufZXAq5BX99BWUbvE3H4fPf0ve2jEaAIGewCmp8tQ/+KWL0Yn4g2F8zN10oFG9jliu/QSu2vUCWPEKjwx6x69ENM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725348473; c=relaxed/simple;
-	bh=aeaA2a5vzKDuxVbiVuifdH1E1Rnyj25ZBVitW+tRHbc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XH/7fyvuxvU4XVB703vit/MzIGJ+yCGEejaD8Ge8E75bIhxGjH8hlg9RAminiZuXNxiD//ANoDUqqiV6NU4c3O7VgC6BdMVHSFUoK/g1qQfRdQXtULdO0wLLoaF/IBPdlcK9K9+n4IWfktrEv7k7hD1hCh7/OcDavJ0JH4wUgbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id C1D91227A8E; Tue,  3 Sep 2024 09:27:44 +0200 (CEST)
-Date: Tue, 3 Sep 2024 09:27:44 +0200
-From: Christoph Hellwig <hch@lst.de>
-To: iommu@lists.linux.dev
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Bingbu Cao <bingbu.cao@intel.com>,
-	"Michael S . Tsirkin " <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-media@vger.kernel.org,
-	virtualization@lists.linux.dev, xen-devel@lists.xenproject.org
-Subject: Re: clearly mark DMA_OPS support as an architecture feature v2
-Message-ID: <20240903072744.GA2082@lst.de>
-References: <20240828061104.1925127-1-hch@lst.de>
+	s=arc-20240116; t=1725351536; c=relaxed/simple;
+	bh=g7ymmQH2esDD1HmWV3+1wWNSYvcNjH8kYis73gaYP5I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KrlI8np6Hr3MBFctJE1YDoqe4s1V+swHOGmNXqpmXxvp1m3TmQDnHOYpZFHP9zic30sgq0mOLzS0ELq+ptKjtUQ9EPBk2jv5PC9QZgKksaMs6PPeuZW3aizWWkgOzTUtb6d2eAz7AtfIRM57zXOeTQHltGzt84IdLYjUuKW2Kp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=olU2tuWX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CA55C4CEC4;
+	Tue,  3 Sep 2024 08:18:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725351535;
+	bh=g7ymmQH2esDD1HmWV3+1wWNSYvcNjH8kYis73gaYP5I=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=olU2tuWXIpJl+vvUtyzzy74giwBPEJKRv8ViT1WDop+wVwLYcWCzt7Fu1FzdP6aOQ
+	 omZ2kda/DoqTHYh3BkIvuTszwSh13Y9pVP4iFGHuElNuBYCZ8Vz6ReM5BwFxRINaD0
+	 iQYhbM7oWAy2epdsGIzsk2p8ejaUfgj+rLveyEhczMqXf8oEfXlZcAUcHKEtTVa7Mj
+	 7s1O+Bgz3RyrHOYTi2tc5gAPrI9OHgf4jYH859LrRxIeVK2YmYyLP60IwNE/VmSLvy
+	 B6zB3xZ8LTxG5NxuO3KX4cOo45+Q1C3iSPJW0YEaPc51JXE6yIaGfAnbACwSfrOjjx
+	 yiZn+bVCzwblw==
+From: Maxime Ripard <mripard@kernel.org>
+To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+	Lucas Stach <l.stach@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
+	Edmund Dea <edmund.j.dea@intel.com>,
+	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Rob Clark <robdclark@gmail.com>,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	Sean Paul <sean@poorly.run>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Sandy Huang <hjc@rock-chips.com>,
+	=?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Mikko Perttunen <mperttunen@nvidia.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Jyri Sarha <jyri.sarha@iki.fi>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Maxime Ripard <mripard@kernel.org>,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	linux-amlogic@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org,
+	freedreno@lists.freedesktop.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v5 0/3] drm: fix two issues related to HDMI Connector implementation
+Date: Tue,  3 Sep 2024 10:18:50 +0200
+Message-ID: <172535151881.1826612.11747911526055879779.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240903-drm-bridge-connector-fix-hdmi-reset-v5-0-daebde6d9857@linaro.org>
+References: <20240903-drm-bridge-connector-fix-hdmi-reset-v5-0-daebde6d9857@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240828061104.1925127-1-hch@lst.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-I've pulled this into the dma-mapping for-next tree, although I'd
-love to see one of the vdpa maintainers look over patch 1.  I'm
-pretty sure it's correct, but a confirmation would be good.
+On Tue, 03 Sep 2024 05:01:55 +0300, Dmitry Baryshkov wrote:
+> Running IGT tests on Qualcomm Dragonboard820c uncovered two issues with
+> the HDMI Connector implementation and with its integration into the
+> drm_bridge_connector. Fix those issues.
+> 
+> Note, I'm not fully satisfied with the drm_bridge_connector move. Maybe
+> it's better to add drm_bridge_funcs::connector_reset() and call it from
+> __drm_atomic_helper_connector_reset().
+> 
+> [...]
 
+Applied to misc/kernel.git (drm-misc-fixes).
+
+Thanks!
+Maxime
 
