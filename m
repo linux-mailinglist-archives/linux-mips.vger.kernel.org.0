@@ -1,49 +1,50 @@
-Return-Path: <linux-mips+bounces-5335-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5336-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4853596C4CA
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 19:04:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6481D96C4D5
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 19:04:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC3551F26239
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 17:04:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8FCE7B23821
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 17:04:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C6611E1320;
-	Wed,  4 Sep 2024 17:04:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CB9E1E0B99;
+	Wed,  4 Sep 2024 17:04:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F1QsO8bB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XMng1+N5"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29AA11E00B6;
-	Wed,  4 Sep 2024 17:04:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DBFC1E0B86;
+	Wed,  4 Sep 2024 17:04:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725469449; cv=none; b=M8x8rZfCyO2NM3D+6Bjos+GkqNO0ACjEp3GixdWvncdnmNw9sEYqeeaSBUh7nCvuG381VfKq4u06Vas9cEsHazMNpzJD6s/PH1v0J2TclR9DVl3xAl/ZddX13yNZhCNrDEJaXdfFeCnMDKI2Kwo+LRppO6XT35XZ+qzq18SegGE=
+	t=1725469459; cv=none; b=W+p7WJ1O3bz4E/W0RCv5D/IEQDRDZJ9OODBaLFs7DjTuD2AiH+mBXCU73qNYTMxsACa0M3Ajfd42f2QcMyzHISSY9qH+gk/UieX7qsDXGazcZ9DF1EHNsv0qbn9a8w28wjAoKqdIlUUW83sf9o7Rt0h5BLuVGWMhctleE9nJcYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725469449; c=relaxed/simple;
-	bh=68K3QvD0tkKZDAR0UpFpD5XCk8KfcxipD1vhxu8hMF4=;
+	s=arc-20240116; t=1725469459; c=relaxed/simple;
+	bh=6l7d6i2Hr/t16H3e0PM6ntsqOX0xtByvRrAFpx2RPdc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qX0KOXwK+RBRzH5d2QKIrajVSaXAFYJ/SD9RrxEG+memDIlr+V28bTX8cs+/VSe0Tu6MixcLgMPjGCX7QA/e0TXDG8QnsCQHaG/iOqKZb4Ia8ISZrSJHvm2ozdRU9qaoQyLy2Fei9gevqqFD/jtntl98YwUmxBgo0UPo98xKn8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F1QsO8bB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1404DC4CEC6;
-	Wed,  4 Sep 2024 17:03:58 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=kESPip5BobWZIhi9sdTWSUOLp0o3/V7ELFNUx8a3i7S4lx6VE9ILANOyBUCfsP0xt+IBslYSwVHKKuOm8hEYvtKdmwepAGKHd0aq/8Aao8j9ZNZxc4NqXYgeXOjUOpBlZDGKRe+INadF43Acih7pUdSG2lK171zZcdSkPfkM4Ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XMng1+N5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E2ECC4CECB;
+	Wed,  4 Sep 2024 17:04:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725469448;
-	bh=68K3QvD0tkKZDAR0UpFpD5XCk8KfcxipD1vhxu8hMF4=;
+	s=k20201202; t=1725469458;
+	bh=6l7d6i2Hr/t16H3e0PM6ntsqOX0xtByvRrAFpx2RPdc=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=F1QsO8bBJsx0AmPMFiW+aZLLp30OJ6WLUYtazU9cKiD6dYSxRrM5367mxKhnrYiYR
-	 85yB8fFfMOjKTBpSlO8MxTRyv/+24AMKHEZNs759hHseiBj/tQt8LtzNo3gCqV7zJC
-	 uQh2rfX5CP6fSwpG+0wWFMriyE1+Q3TPMGbaKlm0vf/W8yTi6YtQEtz57I1nH30eGI
-	 uk1925ANdluBVwDdwvc2Uf445CgIHw/GtnY5jubFmpPqI82baUpZ0luZINbPivJThF
-	 /Qam2M175ofqQE8+/UGiTVrujbpbV7dCEBmi8Bo0pRE+eOwh3Yh5xEtK4CuLi+kg5V
-	 YjDq5wP3d56DQ==
+	b=XMng1+N5KmI2Uyam4ahGOmJ7SA6LJYTXKVjx7qG8VnUZ/zUuGhRBCUkXKze2d/h2W
+	 qvk9lXkZAy6Y05LO0D8t2nFprSfQ7TcDWzQJu8SE80qNBE+/r6k3g83BIKWOzMfOt/
+	 Dvpd5qWmKHpFvZ2SytdtRA/ewzxfCdXGeHxRiiWyHN4p2CWQTl0lHTEU4UgysXWzN2
+	 eTOvyqyDhTsz/6ctIBuFArpRcUT1qm+ZYrAJVgsZe+irs/+81QH88lWveZJX5wrZrg
+	 OTOm7mY8GpWO9fbBe5Sz+TeGAp/qLFj/uFen9cZ5SvcQauQXuNRCmgGBYLVs1L2zqm
+	 CIGueYv9nSccQ==
 From: Mark Brown <broonie@kernel.org>
-Date: Wed, 04 Sep 2024 17:58:00 +0100
-Subject: [PATCH v2 2/3] mm: Pass vm_flags to generic_get_unmapped_area()
+Date: Wed, 04 Sep 2024 17:58:01 +0100
+Subject: [PATCH v2 3/3] mm: Care about shadow stack guard gap when getting
+ an unmapped area
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240904-mm-generic-shadow-stack-guard-v2-2-a46b8b6dc0ed@kernel.org>
+Message-Id: <20240904-mm-generic-shadow-stack-guard-v2-3-a46b8b6dc0ed@kernel.org>
 References: <20240904-mm-generic-shadow-stack-guard-v2-0-a46b8b6dc0ed@kernel.org>
 In-Reply-To: <20240904-mm-generic-shadow-stack-guard-v2-0-a46b8b6dc0ed@kernel.org>
 To: Richard Henderson <richard.henderson@linaro.org>, 
@@ -89,120 +90,87 @@ Cc: linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
  linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
  linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-mm@kvack.org, 
- "Liam R. Howlett" <Liam.Howlett@Oracle.com>, 
+ Rick Edgecombe <rick.p.edgecombe@intel.com>, 
  Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-99b12
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4205; i=broonie@kernel.org;
- h=from:subject:message-id; bh=68K3QvD0tkKZDAR0UpFpD5XCk8KfcxipD1vhxu8hMF4=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBm2JLomVTv4ECj2BO6KAA82Rg2LfwONZpcDKcZ/rOe
- Hb8SxguJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZtiS6AAKCRAk1otyXVSH0NQyB/
- 9kxVcf9SZZ8gEenXIUM2v+Sc6WxUmySDKe8lr2m+hILlbK4d90FD7dZLYCCDeqEkNNrGh6dxpDiVEV
- hgDmQdrZolUYW4Y/p0jjVeCPzreQXwXMZ8W7N1D5N/l3wwkb+vqQ2RrrMKJvOtbhi0bp2xlKOK1YUk
- Xa2D8ExFcS60FeUbuVMhU7VgyzPwDG2vup548nR3kM6HbkaB9mUGdYgfOtvd53NRTyvp0fcvcw/+v1
- p7p/kh7y4x1kYmGXa2Fhb2LKN3b8Jefvr2v8QIwR+T8VtgPWj4GQAuO+p7ai3SjpR3X5Rsd6NwJmYS
- YFA9nPiuXiHzme8MHUHh0LCDrrUpLW
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2551; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=6l7d6i2Hr/t16H3e0PM6ntsqOX0xtByvRrAFpx2RPdc=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBm2JLp8oAy9lYwTYiPgligR57zoDd7L+at5nOq93BI
+ UyufcpKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZtiS6QAKCRAk1otyXVSH0OADB/
+ 0ch6Ppo1cUyP74KOdaZaA30djq+AGYfXlBTOUWViXVC9fGK3bpaqsBB0Cfo7Fu6OsGVc21oO0/yUH1
+ YrAVYn6NPOHjgywpcI1TnkgqUaxfBOur+h4alPeKfO22P8IGuFmDQWUyfu/9w5PhhvsetXQF8HjY3+
+ VA0L3qH2XKq516PsycNgfFI7aYDz9EL8tCzzuTsMp8jhgeTHcVNNcxzbWDDBDU5qQBsU5P9IwQfOAx
+ OuEH/w/+Xqho79dLxhqBNChGpSjBv7foaNTf0PLA9gi1zV9CAxhWJ6oVaByM60hUmP9mC93njCQXlg
+ DUm9swJvc4113Ub/xAIxFMCk0q1OCk
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-In preparation for using vm_flags to ensure guard pages for shadow stacks
-supply them as an argument to generic_get_unmapped_area(). The only user
-outside of the core code is the PowerPC book3s64 implementation which is
-trivially wrapping the generic implementation in the radix_enabled() case.
+As covered in the commit log for c44357c2e76b ("x86/mm: care about shadow
+stack guard gap during placement") our current mmap() implementation does
+not take care to ensure that a new mapping isn't placed with existing
+mappings inside it's own guard gaps. This is particularly important for
+shadow stacks since if two shadow stacks end up getting placed adjacent to
+each other then they can overflow into each other which weakens the
+protection offered by the feature.
 
-No functional changes.
+On x86 there is a custom arch_get_unmapped_area() which was updated by the
+above commit to cover this case by specifying a start_gap for allocations
+with VM_SHADOW_STACK. Both arm64 and RISC-V have equivalent features and
+use the generic implementation of arch_get_unmapped_area() so let's make
+the equivalent change there so they also don't get shadow stack pages
+placed without guard pages. x86 uses a single page guard, this is also
+sufficient for arm64 where we either do single word pops and pushes or
+unconstrained writes.
 
+Architectures which do not have this feature will define VM_SHADOW_STACK
+to VM_NONE and hence be unaffected.
+
+Suggested-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Acked-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Reviewed-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
-Acked-by: Michael Ellerman <mpe@ellerman.id.au>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/powerpc/mm/book3s64/slice.c |  4 ++--
- include/linux/sched/mm.h         |  4 ++--
- mm/mmap.c                        | 10 ++++++----
- 3 files changed, 10 insertions(+), 8 deletions(-)
+ mm/mmap.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/arch/powerpc/mm/book3s64/slice.c b/arch/powerpc/mm/book3s64/slice.c
-index ada6bf896ef8..87307d0fc3b8 100644
---- a/arch/powerpc/mm/book3s64/slice.c
-+++ b/arch/powerpc/mm/book3s64/slice.c
-@@ -641,7 +641,7 @@ unsigned long arch_get_unmapped_area(struct file *filp,
- 				     vm_flags_t vm_flags)
- {
- 	if (radix_enabled())
--		return generic_get_unmapped_area(filp, addr, len, pgoff, flags);
-+		return generic_get_unmapped_area(filp, addr, len, pgoff, flags, vm_flags);
- 
- 	return slice_get_unmapped_area(addr, len, flags,
- 				       mm_ctx_user_psize(&current->mm->context), 0);
-@@ -655,7 +655,7 @@ unsigned long arch_get_unmapped_area_topdown(struct file *filp,
- 					     vm_flags_t vm_flags)
- {
- 	if (radix_enabled())
--		return generic_get_unmapped_area_topdown(filp, addr0, len, pgoff, flags);
-+		return generic_get_unmapped_area_topdown(filp, addr0, len, pgoff, flags, vm_flags);
- 
- 	return slice_get_unmapped_area(addr0, len, flags,
- 				       mm_ctx_user_psize(&current->mm->context), 1);
-diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
-index c4d34abc45d4..07bb8d4181d7 100644
---- a/include/linux/sched/mm.h
-+++ b/include/linux/sched/mm.h
-@@ -204,11 +204,11 @@ unsigned long mm_get_unmapped_area_vmflags(struct mm_struct *mm,
- unsigned long
- generic_get_unmapped_area(struct file *filp, unsigned long addr,
- 			  unsigned long len, unsigned long pgoff,
--			  unsigned long flags);
-+			  unsigned long flags, vm_flags_t vm_flags);
- unsigned long
- generic_get_unmapped_area_topdown(struct file *filp, unsigned long addr,
- 				  unsigned long len, unsigned long pgoff,
--				  unsigned long flags);
-+				  unsigned long flags, vm_flags_t vm_flags);
- #else
- static inline void arch_pick_mmap_layout(struct mm_struct *mm,
- 					 struct rlimit *rlim_stack) {}
 diff --git a/mm/mmap.c b/mm/mmap.c
-index 7528146f886f..b06ba847c96e 100644
+index b06ba847c96e..050c5ae2f80f 100644
 --- a/mm/mmap.c
 +++ b/mm/mmap.c
-@@ -1789,7 +1789,7 @@ unsigned long vm_unmapped_area(struct vm_unmapped_area_info *info)
- unsigned long
- generic_get_unmapped_area(struct file *filp, unsigned long addr,
- 			  unsigned long len, unsigned long pgoff,
--			  unsigned long flags)
-+			  unsigned long flags, vm_flags_t vm_flags)
- {
- 	struct mm_struct *mm = current->mm;
- 	struct vm_area_struct *vma, *prev;
-@@ -1823,7 +1823,8 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
- 		       unsigned long len, unsigned long pgoff,
- 		       unsigned long flags, vm_flags_t vm_flags)
- {
--	return generic_get_unmapped_area(filp, addr, len, pgoff, flags);
-+	return generic_get_unmapped_area(filp, addr, len, pgoff, flags,
-+					 vm_flags);
+@@ -1753,6 +1753,18 @@ static unsigned long unmapped_area_topdown(struct vm_unmapped_area_info *info)
+ 	return gap;
  }
- #endif
  
-@@ -1834,7 +1835,7 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
- unsigned long
- generic_get_unmapped_area_topdown(struct file *filp, unsigned long addr,
- 				  unsigned long len, unsigned long pgoff,
--				  unsigned long flags)
-+				  unsigned long flags, vm_flags_t vm_flags)
- {
- 	struct vm_area_struct *vma, *prev;
- 	struct mm_struct *mm = current->mm;
-@@ -1887,7 +1888,8 @@ arch_get_unmapped_area_topdown(struct file *filp, unsigned long addr,
- 			       unsigned long len, unsigned long pgoff,
- 			       unsigned long flags, vm_flags_t vm_flags)
- {
--	return generic_get_unmapped_area_topdown(filp, addr, len, pgoff, flags);
-+	return generic_get_unmapped_area_topdown(filp, addr, len, pgoff, flags,
-+						 vm_flags);
++/*
++ * Determine if the allocation needs to ensure that there is no
++ * existing mapping within it's guard gaps, for use as start_gap.
++ */
++static inline unsigned long stack_guard_placement(vm_flags_t vm_flags)
++{
++	if (vm_flags & VM_SHADOW_STACK)
++		return PAGE_SIZE;
++
++	return 0;
++}
++
+ /*
+  * Search for an unmapped address range.
+  *
+@@ -1814,6 +1826,7 @@ generic_get_unmapped_area(struct file *filp, unsigned long addr,
+ 	info.length = len;
+ 	info.low_limit = mm->mmap_base;
+ 	info.high_limit = mmap_end;
++	info.start_gap = stack_guard_placement(vm_flags);
+ 	return vm_unmapped_area(&info);
  }
- #endif
  
+@@ -1863,6 +1876,7 @@ generic_get_unmapped_area_topdown(struct file *filp, unsigned long addr,
+ 	info.length = len;
+ 	info.low_limit = PAGE_SIZE;
+ 	info.high_limit = arch_get_mmap_base(addr, mm->mmap_base);
++	info.start_gap = stack_guard_placement(vm_flags);
+ 	addr = vm_unmapped_area(&info);
+ 
+ 	/*
 
 -- 
 2.39.2
