@@ -1,123 +1,376 @@
-Return-Path: <linux-mips+bounces-5322-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5323-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0911696AE89
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 04:26:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9AE296B244
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 09:01:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B02B1C23715
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 02:26:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE4AF1C20327
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 07:01:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06AD23839C;
-	Wed,  4 Sep 2024 02:26:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB61114600D;
+	Wed,  4 Sep 2024 07:01:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C0OFcP9m"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="lE0LMpjq"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A647BE49;
-	Wed,  4 Sep 2024 02:26:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1C6145FE8;
+	Wed,  4 Sep 2024 07:00:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725416785; cv=none; b=CqGlwhINudVa1UhS82VLNar9HOSDGde/ovdNdPvYL5rvrlM19Do0nbc1nEx8KN/2NwTuRD9WoJSnGEENrT+7D4f5LGpRmgjBpPRJXXqGHBzWFV8MjQxJ6Q2RWcT9WUlsNuxpB5U4zRCNFeZZh+PJVWydx8BREYTI3ofXIyYrcco=
+	t=1725433260; cv=none; b=GX2lZWW9YPi/kGBQn/zEeMWblsFlD03XsgNv9xnHGiB+BNhh4JdtR0sc8eUwOCGmFrki43PD8E6+NzpNq2CgFMFoJYMWH5rmKD1UyM3yZZOkVb+Ky9hW1SkAV1kuyyoqLgcZiaGw1IQgrVQe29QiPsWJ/W12TBnal3ZPMAHGD7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725416785; c=relaxed/simple;
-	bh=fGqcaUGD7w63fzDnkRodwcT5MdyQ1hCOZd4iEMWLs8M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gk6H5BN1oDwb5ZofKlJTdIrQH5cMtGEPGmcbGSGyETJNOkPLzeBT4eJOpuEN5hkasX6ST0GGeM+N+GXW+82okYnwW63l3FZ7fXqz27QAomRfNRbrz85+V+2pTvCZmFoi1QETbpHK8wIOeh3S+5MUR8pb1RAphlyZGfNlrlG5MbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C0OFcP9m; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-374c4d4f219so2080714f8f.1;
-        Tue, 03 Sep 2024 19:26:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725416782; x=1726021582; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FSBdS1j11Zy+2xCDBIJ9EylWTf0s1FdTfmv9gHVQNOg=;
-        b=C0OFcP9mCOzkX3TBmuAN/mKGTnTdTA9NcCdidYBx+np5RhrEFrKu33SlXSY0Hz+e56
-         YEYfdUnOPtvt4JakE82Irlns8Yn8QaECSsQH3PsRM60WvJ0wcDY9VvNdF2POLxRKZtMq
-         yZ7P61QtFpOBXsBfuArvfDSAxAMp/xYDD38fXzSJ7bQBY4igJFFZ5btKFsZj0s++gy+z
-         5QmfiTjvyTuFAKQWhp2wXNeaZhY3ANW7cJWeHp4Y35fetPbBoGz7utXrIitt7bc/2g4U
-         s+r6dbWAceqp6l3cUbPhpqjV3B0yjaO6vYX5Gq4avnyBeolfipgwzHAWVus/Rg+aHzfz
-         eE7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725416782; x=1726021582;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FSBdS1j11Zy+2xCDBIJ9EylWTf0s1FdTfmv9gHVQNOg=;
-        b=O0KhuvGf7mekzkMWaq07HIkqEEVNTgOLeIK5zwA54YUj5d29gKfxm2ZeGHgYMXzhZW
-         nUoWIlgeoTGLpTYNzhViadTaB6IwZyDw9L8CNIpufvbdk31VLbAUMMK63Fpv0ZDnSL5a
-         cgAAs19P8/MhzWsYqFWpqtzY8FexuH7jWLSzdS3MO8eVPZB+1eLbPnl4kEuuZpfHCGo1
-         xuKRQYKjK+CxWR7sP6izq1Gobo7rMB+kbntRpbl7Jyus7R27GnyPVdOvE7Xfn7htCBgf
-         c/i/4u2RmN/wudKiTvat1rWLfUnP0RMZyESn+X3czGqyVAzRB7l+M/KsWhdibldS4+pd
-         PuMA==
-X-Forwarded-Encrypted: i=1; AJvYcCUbi90L9DDIw3ReZRdOzcE6kKe+GBzBQ0BlpTabaQjEGaRQOnBfS9ViZU0UYSBcN3hJALrDVcpkXluyTQ==@vger.kernel.org, AJvYcCVUVuOyba1hcrg0kJYcPhqXYI4dSuF6O2JPQzAWRbtKBlGUiAnrf0K/MmFC3TFoqSlpoYBD3ZLWyPfA2tq/Slu+@vger.kernel.org, AJvYcCW0gLvU5TD8dO1VbzQDZpQ/H7Z1U9V1lg9OfLZ2WvuSb1JwVOi9rG/9Au1a4M26jp/+EtK0Ptg6gjk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+JsKVJGgWAuHRUlDcakhfFWR3HnWIhdQbTgz1VcBMES9R1QAL
-	Qsd9fR4Qk9S5yBSjoJf4x3m+xyD2H0BsHj+WgJ4lL7vbr7Kqm6yvjhiVTqIbYTLcBgXHabA8HUa
-	NHGn13lOlAUsKo4eBBI1abkloJTE=
-X-Google-Smtp-Source: AGHT+IGhzYhL4tArFqipUAT+kGGdRT0RgYSWXwyvMi268koMsgcW5NLg9Ennz8x3rZhCa17/E99QMWrsaKEDcAY6vBM=
-X-Received: by 2002:a5d:59a4:0:b0:368:75:2702 with SMTP id ffacd0b85a97d-374ecc6774bmr4935282f8f.13.1725416781590;
- Tue, 03 Sep 2024 19:26:21 -0700 (PDT)
+	s=arc-20240116; t=1725433260; c=relaxed/simple;
+	bh=XhRyrIUnx0vcUn1794mXXJ04+1nZfUPFAUbgPQOeGlc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=otyW1gyE2cLZPn2BuBYAA1nhZdNRbzS/3utEdPzXelqhaGhWiiyVXEOafWTlqQQMBV7BDzhi3uFFMnCX96e1I8XexX7iADcwgiV6Ic5nUFUaUIqwCFcvz4ad7p3MsYMWw4JqcwjH0SvJ7YjIxKc34F5pTjBNS/zdOouL+fS10FY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=lE0LMpjq; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4846HBfX016570;
+	Wed, 4 Sep 2024 06:59:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
+	:to:cc:subject:date:message-id:in-reply-to:references
+	:mime-version:content-transfer-encoding; s=pp1; bh=folkEIJqstNzu
+	7lwREFA/To2vbOIgoI9Y7HXfVt2L+U=; b=lE0LMpjqff+1mmFkHrSz4fklZ5X+5
+	iBqjQRbetoP8n+C+7ngNmnp+awphLL0vlg84xB25xHnDJ2f66lwui/k2DAtlNNg/
+	P91ynPjf8WHxkt5Z7IRFm+5IAkLz7u+ADKaknng+M/flQ6Dr+T+2PLif7E3UNOv1
+	IfzQ+CrYh88BCVLi1OL88XCywOiH6Cs2Vnt2XZ+scTsDa7YYPYmQ1psJ7KcN0tmY
+	o5EpEgn16MpCatVoZWMrwUl1CCpujfbpbX839/a05o5v3dleyO2mQ9yJZBh38WaL
+	FXFHPty7ghqYDiPxbGrYtFxyhRW8hF451vjRrMOsjpOuKux3F5cSMfYHw==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41btp9hn91-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 04 Sep 2024 06:59:24 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4846xNXk004735;
+	Wed, 4 Sep 2024 06:59:23 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41btp9hn8r-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 04 Sep 2024 06:59:23 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 48430pfD000413;
+	Wed, 4 Sep 2024 06:59:21 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 41cdgupq5e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 04 Sep 2024 06:59:21 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4846xHm534931168
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 4 Sep 2024 06:59:18 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CC49C20043;
+	Wed,  4 Sep 2024 06:59:17 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A500320040;
+	Wed,  4 Sep 2024 06:59:17 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Wed,  4 Sep 2024 06:59:17 +0000 (GMT)
+Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55390)
+	id 7AC54E0297; Wed,  4 Sep 2024 08:59:17 +0200 (CEST)
+From: Sven Schnelle <svens@linux.ibm.com>
+To: Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Naveen N Rao <naveen@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andreas Larsson <andreas@gaisler.com>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
+Subject: [PATCH 1/7] tracing: add ftrace_regs to function_graph_enter()
+Date: Wed,  4 Sep 2024 08:58:55 +0200
+Message-ID: <20240904065908.1009086-2-svens@linux.ibm.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240904065908.1009086-1-svens@linux.ibm.com>
+References: <20240904065908.1009086-1-svens@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240904014803.2034939-1-lihongbo22@huawei.com>
-In-Reply-To: <20240904014803.2034939-1-lihongbo22@huawei.com>
-From: Keguang Zhang <keguang.zhang@gmail.com>
-Date: Wed, 4 Sep 2024 10:25:45 +0800
-Message-ID: <CAJhJPsV75K=yawL-vV1MHbXNZssB3sphPjN4gPZN3EbASgzG4A@mail.gmail.com>
-Subject: Re: [PATCH -next] dmaengine: Loongson1: Annotate struct ls1x_dma_chan
- with __counted_by()
-To: Hongbo Li <lihongbo22@huawei.com>
-Cc: vkoul@kernel.org, kees@kernel.org, gustavoars@kernel.org, 
-	linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 4SIE32AwU4OcPAwAEJmTo-vtL9wXompT
+X-Proofpoint-ORIG-GUID: 562DU-xMxw4EVrNelRokSilhcXaDg0Dm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-04_04,2024-09-03_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 lowpriorityscore=0 phishscore=0 impostorscore=0 spamscore=0
+ malwarescore=0 mlxlogscore=861 adultscore=0 mlxscore=0 suspectscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2409040049
 
-On Wed, Sep 4, 2024 at 9:39=E2=80=AFAM Hongbo Li <lihongbo22@huawei.com> wr=
-ote:
->
-> Add the __counted_by compiler attribute to the flexible array member
-> entries to improve access bounds-checking via CONFIG_UBSAN_BOUNDS and
-> CONFIG_FORTIFY_SOURCE.
->
-> Signed-off-by: Hongbo Li <lihongbo22@huawei.com>
-> ---
->  drivers/dma/loongson1-apb-dma.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/dma/loongson1-apb-dma.c b/drivers/dma/loongson1-apb-=
-dma.c
-> index ca43c67a8203..be0dbda84dd2 100644
-> --- a/drivers/dma/loongson1-apb-dma.c
-> +++ b/drivers/dma/loongson1-apb-dma.c
-> @@ -78,7 +78,7 @@ struct ls1x_dma_chan {
->  struct ls1x_dma {
->         struct dma_device ddev;
->         unsigned int nr_chans;
-> -       struct ls1x_dma_chan chan[];
-> +       struct ls1x_dma_chan chan[] __counted_by(nr_chans);
->  };
->
->  static irqreturn_t ls1x_dma_irq_handler(int irq, void *data);
-> --
-> 2.34.1
->
+Will be used later for showing function arguments in the function
+graph tracer.
 
-Reviewed-by: Keguang Zhang <keguang.zhang@gmail.com>
+Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+---
+ arch/arm/kernel/ftrace.c           | 2 +-
+ arch/arm64/kernel/ftrace.c         | 2 +-
+ arch/csky/kernel/ftrace.c          | 2 +-
+ arch/loongarch/kernel/ftrace.c     | 2 +-
+ arch/loongarch/kernel/ftrace_dyn.c | 2 +-
+ arch/microblaze/kernel/ftrace.c    | 2 +-
+ arch/mips/kernel/ftrace.c          | 2 +-
+ arch/parisc/kernel/ftrace.c        | 2 +-
+ arch/powerpc/kernel/trace/ftrace.c | 2 +-
+ arch/riscv/kernel/ftrace.c         | 2 +-
+ arch/s390/kernel/ftrace.c          | 2 +-
+ arch/sh/kernel/ftrace.c            | 2 +-
+ arch/sparc/kernel/ftrace.c         | 2 +-
+ arch/x86/kernel/ftrace.c           | 2 +-
+ include/linux/ftrace.h             | 3 ++-
+ kernel/trace/fgraph.c              | 3 ++-
+ 16 files changed, 18 insertions(+), 16 deletions(-)
 
---=20
-Best regards,
+diff --git a/arch/arm/kernel/ftrace.c b/arch/arm/kernel/ftrace.c
+index e61591f33a6c..1f8802439e34 100644
+--- a/arch/arm/kernel/ftrace.c
++++ b/arch/arm/kernel/ftrace.c
+@@ -267,7 +267,7 @@ void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
+ 	old = *parent;
+ 	*parent = return_hooker;
+ 
+-	if (function_graph_enter(old, self_addr, frame_pointer, NULL))
++	if (function_graph_enter(old, self_addr, frame_pointer, NULL, NULL))
+ 		*parent = old;
+ }
+ 
+diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
+index a650f5e11fc5..686fbebb0432 100644
+--- a/arch/arm64/kernel/ftrace.c
++++ b/arch/arm64/kernel/ftrace.c
+@@ -472,7 +472,7 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
+ 	old = *parent;
+ 
+ 	if (!function_graph_enter(old, self_addr, frame_pointer,
+-	    (void *)frame_pointer)) {
++	    (void *)frame_pointer, NULL)) {
+ 		*parent = return_hooker;
+ 	}
+ }
+diff --git a/arch/csky/kernel/ftrace.c b/arch/csky/kernel/ftrace.c
+index 50bfcf129078..c12af268c1cb 100644
+--- a/arch/csky/kernel/ftrace.c
++++ b/arch/csky/kernel/ftrace.c
+@@ -156,7 +156,7 @@ void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
+ 	old = *parent;
+ 
+ 	if (!function_graph_enter(old, self_addr,
+-			*(unsigned long *)frame_pointer, parent)) {
++			*(unsigned long *)frame_pointer, parent, NULL)) {
+ 		/*
+ 		 * For csky-gcc function has sub-call:
+ 		 * subi	sp,	sp, 8
+diff --git a/arch/loongarch/kernel/ftrace.c b/arch/loongarch/kernel/ftrace.c
+index 8c3ec1bc7aad..43d908b01718 100644
+--- a/arch/loongarch/kernel/ftrace.c
++++ b/arch/loongarch/kernel/ftrace.c
+@@ -61,7 +61,7 @@ void prepare_ftrace_return(unsigned long self_addr,
+ 	if (ftrace_get_parent_ra_addr(self_addr, &ra_off))
+ 		goto out;
+ 
+-	if (!function_graph_enter(old, self_addr, 0, NULL))
++	if (!function_graph_enter(old, self_addr, 0, NULL, NULL))
+ 		*(unsigned long *)(callsite_sp + ra_off) = return_hooker;
+ 
+ 	return;
+diff --git a/arch/loongarch/kernel/ftrace_dyn.c b/arch/loongarch/kernel/ftrace_dyn.c
+index bff058317062..eab16231d09d 100644
+--- a/arch/loongarch/kernel/ftrace_dyn.c
++++ b/arch/loongarch/kernel/ftrace_dyn.c
+@@ -233,7 +233,7 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent)
+ 
+ 	old = *parent;
+ 
+-	if (!function_graph_enter(old, self_addr, 0, parent))
++	if (!function_graph_enter(old, self_addr, 0, parent, NULL))
+ 		*parent = return_hooker;
+ }
+ 
+diff --git a/arch/microblaze/kernel/ftrace.c b/arch/microblaze/kernel/ftrace.c
+index 188749d62709..009800d7e54f 100644
+--- a/arch/microblaze/kernel/ftrace.c
++++ b/arch/microblaze/kernel/ftrace.c
+@@ -62,7 +62,7 @@ void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr)
+ 		return;
+ 	}
+ 
+-	if (function_graph_enter(old, self_addr, 0, NULL))
++	if (function_graph_enter(old, self_addr, 0, NULL, NULL))
+ 		*parent = old;
+ }
+ #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
+diff --git a/arch/mips/kernel/ftrace.c b/arch/mips/kernel/ftrace.c
+index 8c401e42301c..65f29de35a59 100644
+--- a/arch/mips/kernel/ftrace.c
++++ b/arch/mips/kernel/ftrace.c
+@@ -362,7 +362,7 @@ void prepare_ftrace_return(unsigned long *parent_ra_addr, unsigned long self_ra,
+ 	insns = core_kernel_text(self_ra) ? 2 : MCOUNT_OFFSET_INSNS + 1;
+ 	self_ra -= (MCOUNT_INSN_SIZE * insns);
+ 
+-	if (function_graph_enter(old_parent_ra, self_ra, fp, NULL))
++	if (function_graph_enter(old_parent_ra, self_ra, fp, NULL, NULL))
+ 		*parent_ra_addr = old_parent_ra;
+ 	return;
+ out:
+diff --git a/arch/parisc/kernel/ftrace.c b/arch/parisc/kernel/ftrace.c
+index c91f9c2e61ed..c8d926f057a6 100644
+--- a/arch/parisc/kernel/ftrace.c
++++ b/arch/parisc/kernel/ftrace.c
+@@ -45,7 +45,7 @@ static void __hot prepare_ftrace_return(unsigned long *parent,
+ 
+ 	old = *parent;
+ 
+-	if (!function_graph_enter(old, self_addr, 0, NULL))
++	if (!function_graph_enter(old, self_addr, 0, NULL, NULL))
+ 		/* activate parisc_return_to_handler() as return point */
+ 		*parent = (unsigned long) &parisc_return_to_handler;
+ }
+diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace/ftrace.c
+index d8d6b4fd9a14..8a24d6eabb64 100644
+--- a/arch/powerpc/kernel/trace/ftrace.c
++++ b/arch/powerpc/kernel/trace/ftrace.c
+@@ -434,7 +434,7 @@ void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+ 	if (bit < 0)
+ 		goto out;
+ 
+-	if (!function_graph_enter(parent_ip, ip, 0, (unsigned long *)sp))
++	if (!function_graph_enter(parent_ip, ip, 0, (unsigned long *)sp, NULL))
+ 		parent_ip = ppc_function_entry(return_to_handler);
+ 
+ 	ftrace_test_recursion_unlock(bit);
+diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
+index 4b95c574fd04..b45985265b29 100644
+--- a/arch/riscv/kernel/ftrace.c
++++ b/arch/riscv/kernel/ftrace.c
+@@ -205,7 +205,7 @@ void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
+ 	 */
+ 	old = *parent;
+ 
+-	if (!function_graph_enter(old, self_addr, frame_pointer, parent))
++	if (!function_graph_enter(old, self_addr, frame_pointer, parent, NULL))
+ 		*parent = return_hooker;
+ }
+ 
+diff --git a/arch/s390/kernel/ftrace.c b/arch/s390/kernel/ftrace.c
+index 0b6e62d1d8b8..cf9ee90ae216 100644
+--- a/arch/s390/kernel/ftrace.c
++++ b/arch/s390/kernel/ftrace.c
+@@ -273,7 +273,7 @@ unsigned long prepare_ftrace_return(unsigned long ra, unsigned long sp,
+ 	if (unlikely(atomic_read(&current->tracing_graph_pause)))
+ 		goto out;
+ 	ip -= MCOUNT_INSN_SIZE;
+-	if (!function_graph_enter(ra, ip, 0, (void *) sp))
++	if (!function_graph_enter(ra, ip, 0, (void *) sp, NULL))
+ 		ra = (unsigned long) return_to_handler;
+ out:
+ 	return ra;
+diff --git a/arch/sh/kernel/ftrace.c b/arch/sh/kernel/ftrace.c
+index 930001bb8c6a..a9a0a1238214 100644
+--- a/arch/sh/kernel/ftrace.c
++++ b/arch/sh/kernel/ftrace.c
+@@ -359,7 +359,7 @@ void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr)
+ 		return;
+ 	}
+ 
+-	if (function_graph_enter(old, self_addr, 0, NULL))
++	if (function_graph_enter(old, self_addr, 0, NULL, NULL))
+ 		__raw_writel(old, parent);
+ }
+ #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
+diff --git a/arch/sparc/kernel/ftrace.c b/arch/sparc/kernel/ftrace.c
+index eaead3da8e03..9ad77a2d9bc4 100644
+--- a/arch/sparc/kernel/ftrace.c
++++ b/arch/sparc/kernel/ftrace.c
+@@ -125,7 +125,7 @@ unsigned long prepare_ftrace_return(unsigned long parent,
+ 	if (unlikely(atomic_read(&current->tracing_graph_pause)))
+ 		return parent + 8UL;
+ 
+-	if (function_graph_enter(parent, self_addr, frame_pointer, NULL))
++	if (function_graph_enter(parent, self_addr, frame_pointer, NULL, NULL))
+ 		return parent + 8UL;
+ 
+ 	return return_hooker;
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index 8da0e66ca22d..b325f7e7e39a 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -637,7 +637,7 @@ void prepare_ftrace_return(unsigned long ip, unsigned long *parent,
+ 	if (bit < 0)
+ 		return;
+ 
+-	if (!function_graph_enter(*parent, ip, frame_pointer, parent))
++	if (!function_graph_enter(*parent, ip, frame_pointer, parent, NULL))
+ 		*parent = return_hooker;
+ 
+ 	ftrace_test_recursion_unlock(bit);
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index fd5e84d0ec47..56d91041ecd2 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -1083,7 +1083,8 @@ extern void return_to_handler(void);
+ 
+ extern int
+ function_graph_enter(unsigned long ret, unsigned long func,
+-		     unsigned long frame_pointer, unsigned long *retp);
++		     unsigned long frame_pointer, unsigned long *retp,
++		     struct ftrace_regs *fregs);
+ 
+ struct ftrace_ret_stack *
+ ftrace_graph_get_ret_stack(struct task_struct *task, int skip);
+diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
+index d1d5ea2d0a1b..fa62ebfa0711 100644
+--- a/kernel/trace/fgraph.c
++++ b/kernel/trace/fgraph.c
+@@ -613,7 +613,8 @@ ftrace_push_return_trace(unsigned long ret, unsigned long func,
+ 
+ /* If the caller does not use ftrace, call this function. */
+ int function_graph_enter(unsigned long ret, unsigned long func,
+-			 unsigned long frame_pointer, unsigned long *retp)
++			 unsigned long frame_pointer, unsigned long *retp,
++			struct ftrace_regs *fregs)
+ {
+ 	struct ftrace_graph_ent trace;
+ 	unsigned long bitmap = 0;
+-- 
+2.43.0
 
-Keguang Zhang
 
