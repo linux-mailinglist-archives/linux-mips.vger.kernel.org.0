@@ -1,376 +1,191 @@
-Return-Path: <linux-mips+bounces-5323-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5324-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9AE296B244
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 09:01:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4B5896B306
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 09:38:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE4AF1C20327
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 07:01:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7ADA6282372
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 07:38:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB61114600D;
-	Wed,  4 Sep 2024 07:01:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9906B146A79;
+	Wed,  4 Sep 2024 07:38:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="lE0LMpjq"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="rfNHq06S";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="BiFOEq1s"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from fout8-smtp.messagingengine.com (fout8-smtp.messagingengine.com [103.168.172.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1C6145FE8;
-	Wed,  4 Sep 2024 07:00:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B90CA14659C;
+	Wed,  4 Sep 2024 07:38:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725433260; cv=none; b=GX2lZWW9YPi/kGBQn/zEeMWblsFlD03XsgNv9xnHGiB+BNhh4JdtR0sc8eUwOCGmFrki43PD8E6+NzpNq2CgFMFoJYMWH5rmKD1UyM3yZZOkVb+Ky9hW1SkAV1kuyyoqLgcZiaGw1IQgrVQe29QiPsWJ/W12TBnal3ZPMAHGD7I=
+	t=1725435509; cv=none; b=FDYdh3eSf3QPKKhzAruijVNNtB8cc5d0aiAYg8BcpNWLmo6DYLy1J5HsQCiWDs76dyoL8vpKDcvUCBxu3nJcCb30IpGF5ltHYZ3xvDotm5SDPBLhT/1tV5PoegGseJm7nR/LNk5Y8cMOFc1nZUhPiYrppC7Y/FBE/Dg4uw+k6LU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725433260; c=relaxed/simple;
-	bh=XhRyrIUnx0vcUn1794mXXJ04+1nZfUPFAUbgPQOeGlc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=otyW1gyE2cLZPn2BuBYAA1nhZdNRbzS/3utEdPzXelqhaGhWiiyVXEOafWTlqQQMBV7BDzhi3uFFMnCX96e1I8XexX7iADcwgiV6Ic5nUFUaUIqwCFcvz4ad7p3MsYMWw4JqcwjH0SvJ7YjIxKc34F5pTjBNS/zdOouL+fS10FY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=lE0LMpjq; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4846HBfX016570;
-	Wed, 4 Sep 2024 06:59:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
-	:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding; s=pp1; bh=folkEIJqstNzu
-	7lwREFA/To2vbOIgoI9Y7HXfVt2L+U=; b=lE0LMpjqff+1mmFkHrSz4fklZ5X+5
-	iBqjQRbetoP8n+C+7ngNmnp+awphLL0vlg84xB25xHnDJ2f66lwui/k2DAtlNNg/
-	P91ynPjf8WHxkt5Z7IRFm+5IAkLz7u+ADKaknng+M/flQ6Dr+T+2PLif7E3UNOv1
-	IfzQ+CrYh88BCVLi1OL88XCywOiH6Cs2Vnt2XZ+scTsDa7YYPYmQ1psJ7KcN0tmY
-	o5EpEgn16MpCatVoZWMrwUl1CCpujfbpbX839/a05o5v3dleyO2mQ9yJZBh38WaL
-	FXFHPty7ghqYDiPxbGrYtFxyhRW8hF451vjRrMOsjpOuKux3F5cSMfYHw==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41btp9hn91-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 04 Sep 2024 06:59:24 +0000 (GMT)
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4846xNXk004735;
-	Wed, 4 Sep 2024 06:59:23 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41btp9hn8r-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 04 Sep 2024 06:59:23 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 48430pfD000413;
-	Wed, 4 Sep 2024 06:59:21 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 41cdgupq5e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 04 Sep 2024 06:59:21 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4846xHm534931168
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 4 Sep 2024 06:59:18 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CC49C20043;
-	Wed,  4 Sep 2024 06:59:17 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A500320040;
-	Wed,  4 Sep 2024 06:59:17 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Wed,  4 Sep 2024 06:59:17 +0000 (GMT)
-Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55390)
-	id 7AC54E0297; Wed,  4 Sep 2024 08:59:17 +0200 (CEST)
-From: Sven Schnelle <svens@linux.ibm.com>
-To: Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Naveen N Rao <naveen@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andreas Larsson <andreas@gaisler.com>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
-Subject: [PATCH 1/7] tracing: add ftrace_regs to function_graph_enter()
-Date: Wed,  4 Sep 2024 08:58:55 +0200
-Message-ID: <20240904065908.1009086-2-svens@linux.ibm.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240904065908.1009086-1-svens@linux.ibm.com>
-References: <20240904065908.1009086-1-svens@linux.ibm.com>
+	s=arc-20240116; t=1725435509; c=relaxed/simple;
+	bh=sz6ZXnptgCPAXnQbA/qYwtmPVRCJO0RfwwN0oTEtnVE=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=MyFLEMH8RJc7DVnProzw3BT7FSOGNuGXAa+vAPgUKSKPNU3YqXyzxnccFpBIsCtyHjt1xlNC29MyfzhOXBzcVNUsoF7rVkyLgV8um0hDafb+O4A28oN3SgtVS3jEM4+AKYViMON1vqGZSdmXiuEM/yfhwYJfl+u9/jCY8zfQFZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=rfNHq06S; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=BiFOEq1s; arc=none smtp.client-ip=103.168.172.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id CA46F138017F;
+	Wed,  4 Sep 2024 03:38:26 -0400 (EDT)
+Received: from phl-imap-12 ([10.202.2.86])
+  by phl-compute-05.internal (MEProxy); Wed, 04 Sep 2024 03:38:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1725435506;
+	 x=1725521906; bh=sz6ZXnptgCPAXnQbA/qYwtmPVRCJO0RfwwN0oTEtnVE=; b=
+	rfNHq06S+/FbiJrjcoOAISVrJY1dv8k4g+acB71qeIe0yoy8tEYuiuX6duhHot0X
+	pnl4Iv+jSo1NbgXY27Sm6bOV4qZGIbsxcYq1KA6O7qp3Gv/QXwLbfO8thQJHWS3Q
+	4cLKRt7uqNAaIKrt2TBz5bcums1IZHW3zWq2AysZvWT1FXBRMTYO6Ug7R8MAVuoB
+	3rWV9jPuGkruOmjZMEU/e+2OAMc/GE9oK8kvjNfq6TMiuw5V9pqid8KdfeXQEG0s
+	Y1tdgKvxCvK0hle8lBgZUObKDBQqSNtQDQJN6p+CK2QxAVMDWch6RSMqs0CL2BEM
+	99k/hnes1guZnUoy8uSlpw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725435506; x=
+	1725521906; bh=sz6ZXnptgCPAXnQbA/qYwtmPVRCJO0RfwwN0oTEtnVE=; b=B
+	iFOEq1sVqpbBj1w9LMAEZgDjMzrAxYO5IHVpeDFFhntFPf128oUA/18aSRhUV9lt
+	SjTwO1VpWlAVLcHFnIK53Uh65HRATfjliGXh4mjrwEVBt7ypXoKoq7z6ztq4VmKS
+	j9oWFRgn4sfUWeeZbX7j/P4W3nU0xEzcO4z3m0NAdClE47/ikZ0WlI1KHqSqrgiy
+	STUHs83TLL2fjm39nos9JCPme3s5LawmO/KM9/Q2AQZakvZ67FNHsfftPHcObHoz
+	MmaLCMTA2TfvqKjTLC+pmp68EZbbIoTFXuDQWfGlk09BUpDTn4jOwgURKst5b4IF
+	p5c/y86CfrkJwoV8fqdTg==
+X-ME-Sender: <xms:cA7YZpsfXod5rMH1QTlm0kTIPWxJqwPiszVY5eBC46ewJFhh3iw5CQ>
+    <xme:cA7YZifTUghUpf-WKUM0pFh-ulBKmpAalims9KaeyULKphrFiIFxxqcDgax3OHQUi
+    ywmBY4QNB45dm8KCc0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehiedguddvtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthhqredtredt
+    jeenucfhrhhomhepfdflihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgse
+    hflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeevueffteefkeehhfdthfel
+    feffjedvffekgfeiuedugeekgeejvedtffeiledtueenucffohhmrghinhepghhithhhuh
+    gsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhho
+    mhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomhdpnhgspghrtghpthhtoh
+    epgedtpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegsphesrghlihgvnhekrdgu
+    vgdprhgtphhtthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpd
+    hrtghpthhtohepmhgrrhhkrdhruhhtlhgrnhgusegrrhhmrdgtohhmpdhrtghpthhtohep
+    rghnthhonhdrihhvrghnohhvsegtrghmsghrihgughgvghhrvgihshdrtghomhdprhgtph
+    htthhopehnihgtohhlrghssehfjhgrshhlvgdrvghupdhrtghpthhtohepghgrrhihsehg
+    rghrhihguhhordhnvghtpdhrtghpthhtoheprghlvgigrdhgrgihnhhorhesghhmrghilh
+    drtghomhdprhgtphhtthhopegsohhquhhnrdhfvghnghesghhmrghilhdrtghomhdprhgt
+    phhtthhopehmihhguhgvlhdrohhjvggurgdrshgrnhguohhnihhssehgmhgrihhlrdgtoh
+    hm
+X-ME-Proxy: <xmx:cA7YZsxJTWa516B1amj6UWURaphYpQG7A_CZANJjeHUVSV9pyNfcWg>
+    <xmx:cA7YZgMgKTSMs2eNfwkAsPGl3QfC0ElKD-WFY0SQxWw9BMzetozcJQ>
+    <xmx:cA7YZp8XTYFkwebvCNZsdfsBNO62gvaU4g82IG_p09N7BGZtG4pzAA>
+    <xmx:cA7YZgWFhnrDB95x5DNuYD5ky5Bo6vtbXwU8siGEdfpJ0b4-IAyzCQ>
+    <xmx:cg7YZu8KItrX9IUQjFOMUxdHGLKL6ymyzV556PeKCfMCW0g4shDq4p8v>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 680AD1C207BB; Wed,  4 Sep 2024 03:38:24 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4SIE32AwU4OcPAwAEJmTo-vtL9wXompT
-X-Proofpoint-ORIG-GUID: 562DU-xMxw4EVrNelRokSilhcXaDg0Dm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-04_04,2024-09-03_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 lowpriorityscore=0 phishscore=0 impostorscore=0 spamscore=0
- malwarescore=0 mlxlogscore=861 adultscore=0 mlxscore=0 suspectscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2409040049
+Date: Wed, 04 Sep 2024 08:38:04 +0100
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com>
+Cc: "Masahiro Yamada" <masahiroy@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nicolas Schier" <nicolas@fjasle.eu>,
+ "Richard Weinberger" <richard@nod.at>,
+ "Anton Ivanov" <anton.ivanov@cambridgegreys.com>,
+ "Johannes Berg" <johannes@sipsolutions.net>,
+ "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
+ "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, "Miguel Ojeda" <ojeda@kernel.org>,
+ "Alex Gaynor" <alex.gaynor@gmail.com>,
+ "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+ "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ "Benno Lossin" <benno.lossin@proton.me>,
+ "Andreas Hindborg" <a.hindborg@samsung.com>,
+ "Alice Ryhl" <aliceryhl@google.com>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Mark Rutland" <mark.rutland@arm.com>,
+ "Jonathan Corbet" <corbet@lwn.net>, "Alex Shi" <alexs@kernel.org>,
+ "Yanteng Si" <siyanteng@loongson.cn>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+ rust-for-linux@vger.kernel.org,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ llvm@lists.linux.dev
+Message-Id: <a6959bc0-f0bb-425b-b3b1-3123d3b809b5@app.fastmail.com>
+In-Reply-To: 
+ <CANiq72mvTTgyTjDCWBz_kOdY1f4gopAtWxyC4P4c+Lr0YVkzLA@mail.gmail.com>
+References: <20240903-mips-rust-v1-0-0fdf0b2fd58f@flygoat.com>
+ <20240903-mips-rust-v1-3-0fdf0b2fd58f@flygoat.com>
+ <CANiq72=z1yJm-B_ie=GfueOF1qksaSD9txgFU1YQo2tZx0qQPg@mail.gmail.com>
+ <d9591a84-9a0f-4046-9b2a-437061f6882b@app.fastmail.com>
+ <CANiq72m5iFcqRU_qdUCZkoV8ayPhtQQq3TTEDRUYfMEsnNqTDg@mail.gmail.com>
+ <6f6f04d7-55b3-4714-9bcd-cb4e1ae6c86a@app.fastmail.com>
+ <CANiq72mvTTgyTjDCWBz_kOdY1f4gopAtWxyC4P4c+Lr0YVkzLA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] rust: Enable for MIPS
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Will be used later for showing function arguments in the function
-graph tracer.
 
-Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
----
- arch/arm/kernel/ftrace.c           | 2 +-
- arch/arm64/kernel/ftrace.c         | 2 +-
- arch/csky/kernel/ftrace.c          | 2 +-
- arch/loongarch/kernel/ftrace.c     | 2 +-
- arch/loongarch/kernel/ftrace_dyn.c | 2 +-
- arch/microblaze/kernel/ftrace.c    | 2 +-
- arch/mips/kernel/ftrace.c          | 2 +-
- arch/parisc/kernel/ftrace.c        | 2 +-
- arch/powerpc/kernel/trace/ftrace.c | 2 +-
- arch/riscv/kernel/ftrace.c         | 2 +-
- arch/s390/kernel/ftrace.c          | 2 +-
- arch/sh/kernel/ftrace.c            | 2 +-
- arch/sparc/kernel/ftrace.c         | 2 +-
- arch/x86/kernel/ftrace.c           | 2 +-
- include/linux/ftrace.h             | 3 ++-
- kernel/trace/fgraph.c              | 3 ++-
- 16 files changed, 18 insertions(+), 16 deletions(-)
 
-diff --git a/arch/arm/kernel/ftrace.c b/arch/arm/kernel/ftrace.c
-index e61591f33a6c..1f8802439e34 100644
---- a/arch/arm/kernel/ftrace.c
-+++ b/arch/arm/kernel/ftrace.c
-@@ -267,7 +267,7 @@ void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
- 	old = *parent;
- 	*parent = return_hooker;
- 
--	if (function_graph_enter(old, self_addr, frame_pointer, NULL))
-+	if (function_graph_enter(old, self_addr, frame_pointer, NULL, NULL))
- 		*parent = old;
- }
- 
-diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-index a650f5e11fc5..686fbebb0432 100644
---- a/arch/arm64/kernel/ftrace.c
-+++ b/arch/arm64/kernel/ftrace.c
-@@ -472,7 +472,7 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
- 	old = *parent;
- 
- 	if (!function_graph_enter(old, self_addr, frame_pointer,
--	    (void *)frame_pointer)) {
-+	    (void *)frame_pointer, NULL)) {
- 		*parent = return_hooker;
- 	}
- }
-diff --git a/arch/csky/kernel/ftrace.c b/arch/csky/kernel/ftrace.c
-index 50bfcf129078..c12af268c1cb 100644
---- a/arch/csky/kernel/ftrace.c
-+++ b/arch/csky/kernel/ftrace.c
-@@ -156,7 +156,7 @@ void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
- 	old = *parent;
- 
- 	if (!function_graph_enter(old, self_addr,
--			*(unsigned long *)frame_pointer, parent)) {
-+			*(unsigned long *)frame_pointer, parent, NULL)) {
- 		/*
- 		 * For csky-gcc function has sub-call:
- 		 * subi	sp,	sp, 8
-diff --git a/arch/loongarch/kernel/ftrace.c b/arch/loongarch/kernel/ftrace.c
-index 8c3ec1bc7aad..43d908b01718 100644
---- a/arch/loongarch/kernel/ftrace.c
-+++ b/arch/loongarch/kernel/ftrace.c
-@@ -61,7 +61,7 @@ void prepare_ftrace_return(unsigned long self_addr,
- 	if (ftrace_get_parent_ra_addr(self_addr, &ra_off))
- 		goto out;
- 
--	if (!function_graph_enter(old, self_addr, 0, NULL))
-+	if (!function_graph_enter(old, self_addr, 0, NULL, NULL))
- 		*(unsigned long *)(callsite_sp + ra_off) = return_hooker;
- 
- 	return;
-diff --git a/arch/loongarch/kernel/ftrace_dyn.c b/arch/loongarch/kernel/ftrace_dyn.c
-index bff058317062..eab16231d09d 100644
---- a/arch/loongarch/kernel/ftrace_dyn.c
-+++ b/arch/loongarch/kernel/ftrace_dyn.c
-@@ -233,7 +233,7 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent)
- 
- 	old = *parent;
- 
--	if (!function_graph_enter(old, self_addr, 0, parent))
-+	if (!function_graph_enter(old, self_addr, 0, parent, NULL))
- 		*parent = return_hooker;
- }
- 
-diff --git a/arch/microblaze/kernel/ftrace.c b/arch/microblaze/kernel/ftrace.c
-index 188749d62709..009800d7e54f 100644
---- a/arch/microblaze/kernel/ftrace.c
-+++ b/arch/microblaze/kernel/ftrace.c
-@@ -62,7 +62,7 @@ void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr)
- 		return;
- 	}
- 
--	if (function_graph_enter(old, self_addr, 0, NULL))
-+	if (function_graph_enter(old, self_addr, 0, NULL, NULL))
- 		*parent = old;
- }
- #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
-diff --git a/arch/mips/kernel/ftrace.c b/arch/mips/kernel/ftrace.c
-index 8c401e42301c..65f29de35a59 100644
---- a/arch/mips/kernel/ftrace.c
-+++ b/arch/mips/kernel/ftrace.c
-@@ -362,7 +362,7 @@ void prepare_ftrace_return(unsigned long *parent_ra_addr, unsigned long self_ra,
- 	insns = core_kernel_text(self_ra) ? 2 : MCOUNT_OFFSET_INSNS + 1;
- 	self_ra -= (MCOUNT_INSN_SIZE * insns);
- 
--	if (function_graph_enter(old_parent_ra, self_ra, fp, NULL))
-+	if (function_graph_enter(old_parent_ra, self_ra, fp, NULL, NULL))
- 		*parent_ra_addr = old_parent_ra;
- 	return;
- out:
-diff --git a/arch/parisc/kernel/ftrace.c b/arch/parisc/kernel/ftrace.c
-index c91f9c2e61ed..c8d926f057a6 100644
---- a/arch/parisc/kernel/ftrace.c
-+++ b/arch/parisc/kernel/ftrace.c
-@@ -45,7 +45,7 @@ static void __hot prepare_ftrace_return(unsigned long *parent,
- 
- 	old = *parent;
- 
--	if (!function_graph_enter(old, self_addr, 0, NULL))
-+	if (!function_graph_enter(old, self_addr, 0, NULL, NULL))
- 		/* activate parisc_return_to_handler() as return point */
- 		*parent = (unsigned long) &parisc_return_to_handler;
- }
-diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace/ftrace.c
-index d8d6b4fd9a14..8a24d6eabb64 100644
---- a/arch/powerpc/kernel/trace/ftrace.c
-+++ b/arch/powerpc/kernel/trace/ftrace.c
-@@ -434,7 +434,7 @@ void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
- 	if (bit < 0)
- 		goto out;
- 
--	if (!function_graph_enter(parent_ip, ip, 0, (unsigned long *)sp))
-+	if (!function_graph_enter(parent_ip, ip, 0, (unsigned long *)sp, NULL))
- 		parent_ip = ppc_function_entry(return_to_handler);
- 
- 	ftrace_test_recursion_unlock(bit);
-diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
-index 4b95c574fd04..b45985265b29 100644
---- a/arch/riscv/kernel/ftrace.c
-+++ b/arch/riscv/kernel/ftrace.c
-@@ -205,7 +205,7 @@ void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
- 	 */
- 	old = *parent;
- 
--	if (!function_graph_enter(old, self_addr, frame_pointer, parent))
-+	if (!function_graph_enter(old, self_addr, frame_pointer, parent, NULL))
- 		*parent = return_hooker;
- }
- 
-diff --git a/arch/s390/kernel/ftrace.c b/arch/s390/kernel/ftrace.c
-index 0b6e62d1d8b8..cf9ee90ae216 100644
---- a/arch/s390/kernel/ftrace.c
-+++ b/arch/s390/kernel/ftrace.c
-@@ -273,7 +273,7 @@ unsigned long prepare_ftrace_return(unsigned long ra, unsigned long sp,
- 	if (unlikely(atomic_read(&current->tracing_graph_pause)))
- 		goto out;
- 	ip -= MCOUNT_INSN_SIZE;
--	if (!function_graph_enter(ra, ip, 0, (void *) sp))
-+	if (!function_graph_enter(ra, ip, 0, (void *) sp, NULL))
- 		ra = (unsigned long) return_to_handler;
- out:
- 	return ra;
-diff --git a/arch/sh/kernel/ftrace.c b/arch/sh/kernel/ftrace.c
-index 930001bb8c6a..a9a0a1238214 100644
---- a/arch/sh/kernel/ftrace.c
-+++ b/arch/sh/kernel/ftrace.c
-@@ -359,7 +359,7 @@ void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr)
- 		return;
- 	}
- 
--	if (function_graph_enter(old, self_addr, 0, NULL))
-+	if (function_graph_enter(old, self_addr, 0, NULL, NULL))
- 		__raw_writel(old, parent);
- }
- #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
-diff --git a/arch/sparc/kernel/ftrace.c b/arch/sparc/kernel/ftrace.c
-index eaead3da8e03..9ad77a2d9bc4 100644
---- a/arch/sparc/kernel/ftrace.c
-+++ b/arch/sparc/kernel/ftrace.c
-@@ -125,7 +125,7 @@ unsigned long prepare_ftrace_return(unsigned long parent,
- 	if (unlikely(atomic_read(&current->tracing_graph_pause)))
- 		return parent + 8UL;
- 
--	if (function_graph_enter(parent, self_addr, frame_pointer, NULL))
-+	if (function_graph_enter(parent, self_addr, frame_pointer, NULL, NULL))
- 		return parent + 8UL;
- 
- 	return return_hooker;
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index 8da0e66ca22d..b325f7e7e39a 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -637,7 +637,7 @@ void prepare_ftrace_return(unsigned long ip, unsigned long *parent,
- 	if (bit < 0)
- 		return;
- 
--	if (!function_graph_enter(*parent, ip, frame_pointer, parent))
-+	if (!function_graph_enter(*parent, ip, frame_pointer, parent, NULL))
- 		*parent = return_hooker;
- 
- 	ftrace_test_recursion_unlock(bit);
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index fd5e84d0ec47..56d91041ecd2 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -1083,7 +1083,8 @@ extern void return_to_handler(void);
- 
- extern int
- function_graph_enter(unsigned long ret, unsigned long func,
--		     unsigned long frame_pointer, unsigned long *retp);
-+		     unsigned long frame_pointer, unsigned long *retp,
-+		     struct ftrace_regs *fregs);
- 
- struct ftrace_ret_stack *
- ftrace_graph_get_ret_stack(struct task_struct *task, int skip);
-diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
-index d1d5ea2d0a1b..fa62ebfa0711 100644
---- a/kernel/trace/fgraph.c
-+++ b/kernel/trace/fgraph.c
-@@ -613,7 +613,8 @@ ftrace_push_return_trace(unsigned long ret, unsigned long func,
- 
- /* If the caller does not use ftrace, call this function. */
- int function_graph_enter(unsigned long ret, unsigned long func,
--			 unsigned long frame_pointer, unsigned long *retp)
-+			 unsigned long frame_pointer, unsigned long *retp,
-+			struct ftrace_regs *fregs)
- {
- 	struct ftrace_graph_ent trace;
- 	unsigned long bitmap = 0;
--- 
-2.43.0
+=E5=9C=A82024=E5=B9=B49=E6=9C=883=E6=97=A5=E4=B9=9D=E6=9C=88 =E4=B8=8B=E5=
+=8D=888:01=EF=BC=8CMiguel Ojeda=E5=86=99=E9=81=93=EF=BC=9A
+> On Tue, Sep 3, 2024 at 8:32=E2=80=AFPM Jiaxun Yang <jiaxun.yang@flygoa=
+t.com> wrote:
+>>
+>> Ahh thanks for the elaboration.
+>
+> You're welcome!
+>
+>> However, kernel supports many ISA variants that are not defined by an=
+y rust target
+>> triple, I'm not really sure if it's appropriate to define them all in=
+ upstream.
+>
+> They need to be in upstream Rust somehow, because upstream Rust does
+> not want to stabilize `target.json` since it is too tied to LLVM (as
+> far as we have been told). Whether that is via `-Ctarget-feature`, or a
+> new `-Cglobal-target-feature`, or specific flags like `-Zfixed-x18`
+> (originally `-Ctarget-feature=3D+reserve-x18`), or (many) new target
+> triples for different combinations, or something else, it depends on
+> the case and what upstream Rust wants to do.
+>
+> That is why we should tell them what is needed, ideally in a new issue
+> in upstream Rust, and link it in
+> https://github.com/Rust-for-Linux/linux/issues/355 (please see that
+> list for similar examples).
 
+Seems like this topic is covered by an existing issue
+
+Reported at:
+https://github.com/rust-embedded/wg/issues/792#issuecomment-2328133517
+
+Thanks!
+>
+> I hope that explains a bit more the context.
+>
+> Cheers,
+> Miguel
+
+--=20
+- Jiaxun
 
