@@ -1,86 +1,123 @@
-Return-Path: <linux-mips+bounces-5320-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5321-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CDB496ADFE
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 03:39:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8630096AE6A
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 04:07:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BAED1C24550
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 01:39:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 311131F258EA
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 02:07:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4F3010A12;
-	Wed,  4 Sep 2024 01:39:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45D7C5C96;
+	Wed,  4 Sep 2024 02:07:03 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA888F9D6;
-	Wed,  4 Sep 2024 01:39:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6D98D529;
+	Wed,  4 Sep 2024 02:06:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725413977; cv=none; b=LFADtbbtARMohx1oK+GhDbs/6+aMCd96lopbJJGbbEcWB+xl9btwMpIfUKgBpme4ry31FDu15vGmRT1nakzWddobanBvhYCaQp0uA0iL4l5BQeog/IPiCRVWiJxQOz4YivlkZDKFsmumLtaZUMKo4lNIyD4crHr7l7EPL++o840=
+	t=1725415623; cv=none; b=Upc8wP+RhSbKZmKPvyL+uGhtoXROwF44kftgzVuItME1xcswdSOIxmkpRHuahN7sUcKaOwWQYqkaJjUmx25IiawRLsomLmHqUuyFOe8b4amy6t9w5L/xpjJr18rFj8HL3ZaQhnopp/77dOrIIqd4m0sQ4TdUbIsjt5oaGdvrHrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725413977; c=relaxed/simple;
-	bh=Vl2Jueui8WuuV+afnam8Z9S1LDufVv4JxtLtkZA8wBc=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oFkE/iltL156QF8xn45p3GDH0oIvLqHjqNo6nbhozq7RS3bFat4FmNs+cnb+M76zyn2kGMb1Fy3FP3fKtr7Hr08vpTUMN+2HuO6VM/YY5cZsUG11S1kzV3YcmZynUdXvjgL54h7xSg+lUnw+/P3Cq/MwIU88xl8CdhVtq3AWrRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Wz4rp3GPVz1P7qM;
-	Wed,  4 Sep 2024 09:38:34 +0800 (CST)
-Received: from dggpeml500022.china.huawei.com (unknown [7.185.36.66])
-	by mail.maildlp.com (Postfix) with ESMTPS id 344F71800A0;
-	Wed,  4 Sep 2024 09:39:31 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by dggpeml500022.china.huawei.com
- (7.185.36.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 4 Sep
- 2024 09:39:30 +0800
-From: Hongbo Li <lihongbo22@huawei.com>
-To: <keguang.zhang@gmail.com>, <vkoul@kernel.org>, <kees@kernel.org>,
-	<gustavoars@kernel.org>
-CC: <linux-mips@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-	<linux-hardening@vger.kernel.org>, <lihongbo22@huawei.com>
-Subject: [PATCH -next] dmaengine: Loongson1: Annotate struct ls1x_dma_chan with __counted_by()
-Date: Wed, 4 Sep 2024 09:48:03 +0800
-Message-ID: <20240904014803.2034939-1-lihongbo22@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1725415623; c=relaxed/simple;
+	bh=JC8MiXJaFqF3kCo3iEayFC+jKeFykQ/oiq2zOeUzQ/c=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=F6v8Z8GEQ/zo7c4TxY9mFPFVGymVdwbrlYCyzKZDtsXGgdW8nbIfjf4QxciMw3GKdiUclemrQkQFE2OUxKD2en00pl0MxVXlmMcAKbSptwPxTVdwkDfJrVoiSXBcadDl/wlq1Umyda0UnEUU/W7XbMxkj1+5JB+gRqx8ToXd5As=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 1715392009D; Wed,  4 Sep 2024 04:06:52 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 151F692009C;
+	Wed,  4 Sep 2024 03:06:52 +0100 (BST)
+Date: Wed, 4 Sep 2024 03:06:52 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Xi Ruoyao <xry111@xry111.site>
+cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org, 
+    linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mips: Remove posix_types.h include from sigcontext.h
+In-Reply-To: <20240828030413.143930-2-xry111@xry111.site>
+Message-ID: <alpine.DEB.2.21.2409040229030.1802@angie.orcam.me.uk>
+References: <20240828030413.143930-2-xry111@xry111.site>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500022.china.huawei.com (7.185.36.66)
+Content-Type: text/plain; charset=US-ASCII
 
-Add the __counted_by compiler attribute to the flexible array member
-entries to improve access bounds-checking via CONFIG_UBSAN_BOUNDS and
-CONFIG_FORTIFY_SOURCE.
+On Wed, 28 Aug 2024, Xi Ruoyao wrote:
 
-Signed-off-by: Hongbo Li <lihongbo22@huawei.com>
----
- drivers/dma/loongson1-apb-dma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> It seems only a relict: in a Linux 2.6.11-rc2 patch [1] the
+> linux/types.h include was unexplainedly changed to a linux/posix_types.h
+> include.  I can only assume it was just an error.  Finally headers_check
+> complained "found __[us]{8,16,32,64} type without #include
+> <linux/types.h>" and commit ae612fb05b0f ("headers_check fix: mips,
+> sigcontext.h") added back the linux/types.h include, but it didn't
+> remove the posix_types.h include.
 
-diff --git a/drivers/dma/loongson1-apb-dma.c b/drivers/dma/loongson1-apb-dma.c
-index ca43c67a8203..be0dbda84dd2 100644
---- a/drivers/dma/loongson1-apb-dma.c
-+++ b/drivers/dma/loongson1-apb-dma.c
-@@ -78,7 +78,7 @@ struct ls1x_dma_chan {
- struct ls1x_dma {
- 	struct dma_device ddev;
- 	unsigned int nr_chans;
--	struct ls1x_dma_chan chan[];
-+	struct ls1x_dma_chan chan[] __counted_by(nr_chans);
+ The original LMO change was this:
+
+commit 1dc129df74a76ee16593c9220c3f7289ee627d03
+Author: Ralf Baechle <ralf@linux-mips.org>
+Date:   Sat Dec 18 01:09:29 2004 +0000
+
+    Don't pull <linux/types.h> into userspace.
+
+diff --git a/include/asm-mips/sigcontext.h b/include/asm-mips/sigcontext.h
+index 844879d63b77..18939e84b6f2 100644
+--- a/include/asm-mips/sigcontext.h
++++ b/include/asm-mips/sigcontext.h
+@@ -41,8 +41,6 @@ struct sigcontext {
+                                                                                 
+ #if _MIPS_SIM == _MIPS_SIM_ABI64 || _MIPS_SIM == _MIPS_SIM_NABI32
+ 
+-#include <linux/types.h>
+-
+ /*
+  * Keep this struct definition in sync with the sigcontext fragment
+  * in arch/mips/tools/offset.c
+@@ -66,6 +64,9 @@ struct sigcontext {
  };
  
- static irqreturn_t ls1x_dma_irq_handler(int irq, void *data);
--- 
-2.34.1
+ #ifdef __KERNEL__
++
++#include <linux/posix_types.h>
++
+ struct sigcontext32 {
+ 	__u32	sc_regmask;		/* Unused */
+ 	__u32	sc_status;
 
+so not without explanation and clearly to address a userland compilation 
+issue.  It seems that the original directive should have just been moved 
+into the __KERNEL__ part without changing the file included though.
+
+ So commit ae612fb05b0f was wrong too in that it should have just changed 
+the directive in place rather than adding #include <linux/types.h> at the 
+top, as it just brought the issue back that commit 1dc129df74a7 attempted 
+to address.
+
+ Meanwhile there was commit 269dd2b2526d, which messed things up further, 
+as it should have used `unsigned long long' rather than `__u64' as the 
+64-bit type (and leave `unsigned int' intact), so commit ae612fb05b0f 
+couldn't actually have done a better fix without correcting commit 
+269dd2b2526d first.
+
+ We have since developed UAPI headers, so the issue of the userland use of 
+<linux/types.h> has gone, but still I think we ought to clean up the mess 
+in this header by switching back to standard ISO C `unsigned long long' 
+and `unsigned int' types for members of 64-bit `struct sigcontext', and 
+then the inclusion of <linux/types.h> can go too.
+
+ That written I think your change makes sense by itself, but I suggest 
+that you update the description and summarise the findings given here.  
+I'm not sure if a copy of the LMO repo is available online at this time 
+though.
+
+  Maciej
 
