@@ -1,63 +1,100 @@
-Return-Path: <linux-mips+bounces-5329-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5330-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DA1196BCF7
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 14:49:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 253FC96C1B5
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 17:04:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E92D11F24C19
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 12:49:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 581F81C202CA
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 15:04:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 975651D9D6A;
-	Wed,  4 Sep 2024 12:49:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62CA21DC19B;
+	Wed,  4 Sep 2024 15:04:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="S5+mYHi0"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8073B1D9345;
-	Wed,  4 Sep 2024 12:49:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C538A1DCB0A
+	for <linux-mips@vger.kernel.org>; Wed,  4 Sep 2024 15:04:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725454177; cv=none; b=MVswvyVtALKAh2wGNNlKYeFHdR883gthfbG1b3n4uN5acXalk3ZDPbeKi6AUWru7cdeba4vqjwa2FZKwj/XTQzxvhff1tVL8pH/HBPOJuDGAI3HoXzsmczJTuwnrbeMzYbjM4t958namusbbg1rzS6TNZvE3JRXr/dsmDoog1SY=
+	t=1725462245; cv=none; b=q5UXoxzTlYtx+fo/2x6IXbvz9PKSCwMFAgRNmJY8cdeLC+a+IIQ7RrvaV8cfF5cN497sAsTZyp0gkqdr5zdZhpckmlbKVFcB5j9E5p9nVRqNNUeYo7nSkS8f2XLTIfeP6bSUXBZo6Lk0BZ2ONPFWKNsG/kHf9teptf2s0xH7FPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725454177; c=relaxed/simple;
-	bh=HSvC+r3Qqvoa3KHlQWgwoyU4FCgKHXca4J/TMcTX0U8=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=TcYHt1LduQQKn/SaVlLAdz3i7gmSNBqLrjWUO51E7I2ei4xrBScUM/Y7B13v5bOB6u0+iJqhRzvatJxCXWoVSY+ESZCtBuakU6CGQ6ElIMcOxqpnAfRX3c56LN1KIuHl5vSUfRhhJDJCS59373Anp5gi6mWEKaflj11bFqWBT68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 92E0892009C; Wed,  4 Sep 2024 14:49:32 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 8D88C92009B;
-	Wed,  4 Sep 2024 13:49:32 +0100 (BST)
-Date: Wed, 4 Sep 2024 13:49:32 +0100 (BST)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Xi Ruoyao <xry111@xry111.site>
-cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org, 
-    linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mips: Remove posix_types.h include from sigcontext.h
-In-Reply-To: <f47376d9dfc174fc6eeb29ee45c67413ecc1feb6.camel@xry111.site>
-Message-ID: <alpine.DEB.2.21.2409041348170.1802@angie.orcam.me.uk>
-References: <20240828030413.143930-2-xry111@xry111.site>  <alpine.DEB.2.21.2409040229030.1802@angie.orcam.me.uk> <f47376d9dfc174fc6eeb29ee45c67413ecc1feb6.camel@xry111.site>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1725462245; c=relaxed/simple;
+	bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=aPapEvBVAckmD664fShDIP4e4qLkWXoBmAWs2VrJa2/J6dI2fvVtrugwOXD/8RzS4jmg1pfPOt758lcmIboMu848OdC8GYc7jSY3jU0zefjMCYAQMJ/vVv9IL+MfDX6xD36jQJ5Cu65lKI2eJ5bO/eGXQ6ykeL8bjWVlygK5Ssg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=S5+mYHi0; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1725462242;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+	b=S5+mYHi0gAnKAwUPBsKyHLd9TH6JqY4EyfcL9AcM//ZhWGFO6OY4M3ZkEG3FjCMZv+vWTy
+	IFSlVB1xwZjlOTFkUdVN+ET6HFEO/WJ8TsZ8UOK1cSweNP7sRN4Ke/1c3KF49jhku/pnLd
+	BCJzsoHRWsRLS8mwHOe6BshkLBiBo58=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-633-BCdAfi9BNyOJcJCcVTiTfA-1; Wed,
+ 04 Sep 2024 11:03:57 -0400
+X-MC-Unique: BCdAfi9BNyOJcJCcVTiTfA-1
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AC6E219560BD;
+	Wed,  4 Sep 2024 15:03:52 +0000 (UTC)
+Received: from virtlab1023.lab.eng.rdu2.redhat.com (virtlab1023.lab.eng.rdu2.redhat.com [10.8.1.187])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C2A273000239;
+	Wed,  4 Sep 2024 15:03:47 +0000 (UTC)
+From: Paolo Bonzini <pbonzini@redhat.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Tianrui Zhao <zhaotianrui@loongson.cn>,
+	Bibo Mao <maobibo@loongson.cn>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Anup Patel <anup@brainfault.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Chao Gao <chao.gao@intel.com>,
+	Kai Huang <kai.huang@intel.com>,
+	Farrah Chen <farrah.chen@intel.com>
+Subject: Re: [PATCH v4 00/10] KVM: Register cpuhp/syscore callbacks when enabling virt
+Date: Wed,  4 Sep 2024 11:03:44 -0400
+Message-ID: <20240904150344.177870-1-pbonzini@redhat.com>
+In-Reply-To: <20240830043600.127750-1-seanjc@google.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Wed, 4 Sep 2024, Xi Ruoyao wrote:
+Queued, thanks.
 
-> Yes, I just mean *changing* the include file is not explained and it
-> seems an error.  I'm not familiar with ancient kernels but AFAIK for
-> using __u32 etc. we should use linux/types.h since Linux 1.2.
+Paolo
 
- As I say the use of __u32, etc. is not needed here in the first place.
 
-  Maciej
 
