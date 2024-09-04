@@ -1,172 +1,176 @@
-Return-Path: <linux-mips+bounces-5337-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5338-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D4B396CAA0
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2024 00:56:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E943896CAFF
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2024 01:48:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B15F3287987
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 22:56:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 23A32B25500
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2024 23:48:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 036DC1714D8;
-	Wed,  4 Sep 2024 22:56:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEF9F17BEA7;
+	Wed,  4 Sep 2024 23:48:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=osandov-com.20230601.gappssmtp.com header.i=@osandov-com.20230601.gappssmtp.com header.b="ECsPNRE/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RT2v4k9z"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9FD15B56E
-	for <linux-mips@vger.kernel.org>; Wed,  4 Sep 2024 22:56:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D9F7154458;
+	Wed,  4 Sep 2024 23:48:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725490569; cv=none; b=u5Vbzdw1US6lHtmNhtv1t/7JuM/6KOlwS7Vuo6aUSLlxJfODJTIC7S4F86In11OyAaSfrTc2TY6jDlYL6kNeLjsqu+VJAh3Ilc1IYlR/O55MLgepOPxSNRIELsQGuw25UjMU/+Wy6hrLpr66NGJRFsEqXzM6pzb9yQ8HsoNeGug=
+	t=1725493692; cv=none; b=TPRoqQ2EqYj+Sfo/Ar1uCcFofi9hE8NrJzjISmaPqO22KoX30c56Vp5WY/aUoi4+S+0wKZzG5KdiBK09H/xN3jsesXeDq2PQvRWyIWN1rXaMvGmUB6aDHuc1XQ9LrfpB8UPyoIAd8dmXa+RiCKFBSU1j/av7D/qHUrACTrXZQk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725490569; c=relaxed/simple;
-	bh=szdO1vb9faSGYA2Jc6crUSmefcYSz1qzFB4PGRjDfLI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jmBJ3d2xSPKTxahhXy/VFAOrc2gJr+VhvFpKMxgHbpqWRfIItSInzld7n3VNS6y57M6tUln0FoBfRfMmjvAexUQRkl4jStrbGbuGbRe+UpN7AtJETkdWWm4snlrrqC/pjpu+qPrfk9HPe2/zOj1XvhqX3EI/fVl5avM5GYe6Uw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=osandov.com; spf=none smtp.mailfrom=osandov.com; dkim=pass (2048-bit key) header.d=osandov-com.20230601.gappssmtp.com header.i=@osandov-com.20230601.gappssmtp.com header.b=ECsPNRE/; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=osandov.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=osandov.com
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7d50ac2e3f8so22362a12.2
-        for <linux-mips@vger.kernel.org>; Wed, 04 Sep 2024 15:56:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=osandov-com.20230601.gappssmtp.com; s=20230601; t=1725490568; x=1726095368; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=35/vvYnjYcTahPnX2Ak6JC2o1aEV4aWjtE37kGrVzrs=;
-        b=ECsPNRE/8hQBTF+pxD/HcZGtcGCuYJhWLC3JL/GO5t9dx8wU0Vf8TgAIlJrZL02lA7
-         Gp/0Gj+ZPjJu7nHPYn7cmlKOqCaIpRqb4LS9zChNvYrndQTPvygI2DN8hTNCgaefCJRs
-         ILx7j4HVo2DMUlMWt6VLRVl59tpWrOWuerxFRIwsodZTU9tuNDvU9fmj8AZ6cbOiT4IE
-         8HJXp50UF+MiFqUhX0rrPaIEfo39D+hxA3NgC+VS+nX686EcGcb6gNqReiEBJxLLk9vw
-         +/8xef0zDRn/WlLlWgIWsF/rO+LOxyO5isdEu6jM/CU+mLOInGvFO6SBaNRVAqLsJpwx
-         c2DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725490568; x=1726095368;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=35/vvYnjYcTahPnX2Ak6JC2o1aEV4aWjtE37kGrVzrs=;
-        b=uefWA97FWwRR/Sp5dDkGqI5luPWmg3sZHIHr2AqGY16v7vTKWxQFXYAB+2E46NJoJ4
-         Nlv+FBBALMAFiDobqrPFam6JUOo78OHWtaeXyD0ujbHfDom8AGmDA+qcLXhno2QWVNwZ
-         fVNVKU0UmPTdLSd/HuV1SGBshmwCnZDdK7gBZNzNsA3/FfGF7bDvk8RIu4ZASJEanyNN
-         rwFnSo1JJf/aKyg9ZoxtexcmGinfNowiAT9b/d3M6Rkr6wwWDvHvWr6LbZeFaP6WWx7N
-         igB2FIieO7g4u9q/0jTsHAf/ccqh2dOl4JdyGqQlO9/agkpV52FiBCRZHvE8mogM2PVh
-         aWDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU3gQY/8/NPDwwYa6/fVw8I1ZzH9m15Xcz4o/wAAPg9FbGWXKMrkmG4JslfZRJPykXqNsj8wZHt82ps@vger.kernel.org
-X-Gm-Message-State: AOJu0YztoC/VfgfwFTwov+VXBvWep9aBXJFdLUFda699fXt6P2P+0BEk
-	KyY7kVnK037xhrkFnq70WxtVXUUlphHu36djvSSHmX71zqlhGNCoe4poP+g3qbs=
-X-Google-Smtp-Source: AGHT+IGJMJTzWYcjGTZbRrQ6IDaoYzbHR/wGLI0wH+MKCl8eX8iKTnn29gVdjQTwsOFAi2AC/JBGeg==
-X-Received: by 2002:a17:902:f545:b0:206:b618:1d8f with SMTP id d9443c01a7336-206b6182580mr23287495ad.11.1725490567622;
-        Wed, 04 Sep 2024 15:56:07 -0700 (PDT)
-Received: from telecaster.dhcp.thefacebook.com ([2620:10d:c090:500::4:761e])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-206ae9525cbsm18305395ad.99.2024.09.04.15.56.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Sep 2024 15:56:07 -0700 (PDT)
-Date: Wed, 4 Sep 2024 15:56:04 -0700
-From: Omar Sandoval <osandov@osandov.com>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-	Benjamin Gray <bgray@linux.ibm.com>,
-	"Christopher M. Riedl" <cmr@bluescreens.de>,
-	Christoph Hellwig <hch@lst.de>, x86@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-um@lists.infradead.org, kernel-team@fb.com
-Subject: Re: [PATCH 2/2] mm: make copy_to_kernel_nofault() not fault on user
- addresses
-Message-ID: <ZtjlhFbeFZtxzmTb@telecaster.dhcp.thefacebook.com>
-References: <cover.1725223574.git.osandov@fb.com>
- <f0e171cbae576758d9387cee374dd65088e75b07.1725223574.git.osandov@fb.com>
- <64e74f4d-948d-442e-9810-69907915401c@csgroup.eu>
+	s=arc-20240116; t=1725493692; c=relaxed/simple;
+	bh=CYB/GfmJdrDKFu/H7+2VE0eaf6pWF3nzHTyM2uXXS0s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=B++P/tl8//q/htnsOyReYEBW3ZNvRQ3tbH3vofybBdWnQ2WMeltI7PWPQiFQgzjxovUMa5K+LvtGdc+dQfogRed/8vgVtGIS8qk/8fkdyftSzXylGSrJgg8EpmnOeiRciaVt8V9v35zzvqPW4jVfUq+6HUGOBiw+P7ycANv0X7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RT2v4k9z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D43CFC4CEC2;
+	Wed,  4 Sep 2024 23:48:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725493692;
+	bh=CYB/GfmJdrDKFu/H7+2VE0eaf6pWF3nzHTyM2uXXS0s=;
+	h=From:To:Cc:Subject:Date:From;
+	b=RT2v4k9zK9bwOPUoGHeKemzwjs6HcZHc9uadsz+sT47ccy03nMcEiNemuV+05QDFD
+	 cTGu9bQ62Oro11VYbqFHWEpAJJhNwON0Eaa6SeJzAiV8VCPU4DA/9F4+ZwcbTuq7UT
+	 JUpFO+Nh3cyVgUPV0sbAu7UEw7FAQ7DdwzXz72CtdnR2ehJPACjPq7LZ25gw82amWi
+	 PEaHSf0ORFQBXRBlLYpi9V74RRnBI7oJ1VbspaHEbvtaPePfwUkKzjTKiFg5by4im1
+	 xCG6hJb09f5Zr7/O10dE5gp7qaNG2hInuCTgD9Ol0mQ9N6vOfbd6rv97gmBNnCwRfy
+	 nq95NYW9Qa1+A==
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: linux-kbuild@vger.kernel.org
+Cc: linux-arch@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Michal Simek <monstr@monstr.eu>,
+	Rob Herring <robh@kernel.org>,
+	devicetree@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH 00/15] kbuild: refactor DTB build rules, introduce a generic built-in boot DTB support
+Date: Thu,  5 Sep 2024 08:47:36 +0900
+Message-ID: <20240904234803.698424-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <64e74f4d-948d-442e-9810-69907915401c@csgroup.eu>
 
-On Wed, Sep 04, 2024 at 09:50:56AM +0200, Christophe Leroy wrote:
-> Hi,
-> 
-> Le 02/09/2024 à 07:31, Omar Sandoval a écrit :
-> > [Vous ne recevez pas souvent de courriers de osandov@osandov.com. Découvrez pourquoi ceci est important à https://aka.ms/LearnAboutSenderIdentification ]
-> > 
-> > From: Omar Sandoval <osandov@fb.com>
-> > 
-> > I found that on x86, copy_to_kernel_nofault() still faults on addresses
-> > outside of the kernel address range (including NULL):
-> > 
-> >    # echo ttyS0 > /sys/module/kgdboc/parameters/kgdboc
-> >    # echo g > /proc/sysrq-trigger
-> >    ...
-> >    [15]kdb> mm 0 1234
-> >    [   94.652476] BUG: kernel NULL pointer dereference, address: 0000000000000000
-> ...
-> > 
-> > Note that copy_to_kernel_nofault() uses pagefault_disable(), but it
-> > still faults. This is because with Supervisor Mode Access Prevention
-> > (SMAP) enabled, do_user_addr_fault() Oopses on a fault for a user
-> > address from kernel space _before_ checking faulthandler_disabled().
-> > 
-> > copy_from_kernel_nofault() avoids this by checking that the address is
-> > in the kernel before doing the actual memory access. Do the same in
-> > copy_to_kernel_nofault() so that we get an error as expected:
-> > 
-> >    # echo ttyS0 > /sys/module/kgdboc/parameters/kgdboc
-> >    # echo g > /proc/sysrq-trigger
-> >    ...
-> >    [17]kdb> mm 0 1234
-> >    kdb_putarea_size: Bad address 0x0
-> >    diag: -21: Invalid address
-> > 
-> > Signed-off-by: Omar Sandoval <osandov@fb.com>
-> > ---
-> >   mm/maccess.c | 3 +++
-> >   1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/mm/maccess.c b/mm/maccess.c
-> > index 72e9c03ea37f..d67dee51a1cc 100644
-> > --- a/mm/maccess.c
-> > +++ b/mm/maccess.c
-> > @@ -61,6 +61,9 @@ long copy_to_kernel_nofault(void *dst, const void *src, size_t size)
-> >          if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS))
-> >                  align = (unsigned long)dst | (unsigned long)src;
-> > 
-> > +       if (!copy_kernel_nofault_allowed(dst, size))
-> > +               return -ERANGE;
-> > +
-> >          pagefault_disable();
-> >          if (!(align & 7))
-> >                  copy_to_kernel_nofault_loop(dst, src, size, u64, Efault);
-> > --
-> > 2.46.0
-> > 
-> 
-> This patch leads to the following errors on ppc64le_defconfig:
-> 
-> [    2.423930][    T1] Running code patching self-tests ...
-> [    2.428912][    T1] code-patching: test failed at line 395
-> [    2.429085][    T1] code-patching: test failed at line 398
-> [    2.429561][    T1] code-patching: test failed at line 432
-> [    2.429679][    T1] code-patching: test failed at line 435
-> 
-> This seems to be linked to commit c28c15b6d28a ("powerpc/code-patching: Use
-> temporary mm for Radix MMU"), copy_from_kernel_nofault_allowed() returns
-> false for the patching area.
 
-Thanks for testing. This patch isn't worth the trouble, so we can drop
-it.
+01 and 02 are kbuild cleanups.
+03 and 04 parepare to wrap boot DTBs in scripts/Makefile.vmlinux.
 
-Thanks,
-Omar
+My plan is to 05-13 to each arch ML in the next cycle, but they are included
+in this patch set so that reviewers can understand what will happen in
+the future.
+
+
+
+Masahiro Yamada (15):
+  kbuild: add intermediate targets for Flex/Bison in
+    scripts/Makefile.host
+  kbuild: split device tree build rules into scripts/Makefile.dtbs
+  kbuild: move non-boot builtin DTBs to .init.rodata section
+  kbuild: add generic support for built-in boot DTBs
+  MIPS: migrate to generic rule for built-in DTBs
+  riscv: migrate to the generic rule for built-in DTB
+  LoongArch:  migrate to the generic rule for built-in DTB
+  ARC: migrate to the generic rule for built-in DTB
+  openrisc: migrate to the generic rule for built-in DTB
+  xtensa: migrate to the generic rule for built-in DTB
+  nios2: migrate to the generic rule for built-in DTB
+  sh: migrate to the generic rule for built-in DTB
+  microblaze: migrate to the generic rule for built-in DTB
+  kbuild: rename CONFIG_GENERIC_BUILTIN_DTB to CONFIG_BUILTIN_DTB
+  kbuild: use .init.rodata section unconditionally for cmd_wrap_S_dtb
+
+ Makefile                                      |   7 +-
+ arch/arc/Kconfig                              |   7 +-
+ arch/arc/Makefile                             |   3 -
+ arch/arc/boot/dts/Makefile                    |   9 +-
+ arch/arc/configs/axs101_defconfig             |   2 +-
+ arch/arc/configs/axs103_defconfig             |   2 +-
+ arch/arc/configs/axs103_smp_defconfig         |   2 +-
+ arch/arc/configs/haps_hs_defconfig            |   2 +-
+ arch/arc/configs/haps_hs_smp_defconfig        |   2 +-
+ arch/arc/configs/hsdk_defconfig               |   2 +-
+ arch/arc/configs/nsim_700_defconfig           |   2 +-
+ arch/arc/configs/nsimosci_defconfig           |   2 +-
+ arch/arc/configs/nsimosci_hs_defconfig        |   2 +-
+ arch/arc/configs/nsimosci_hs_smp_defconfig    |   2 +-
+ arch/arc/configs/tb10x_defconfig              |   2 +-
+ arch/arc/configs/vdk_hs38_defconfig           |   2 +-
+ arch/arc/configs/vdk_hs38_smp_defconfig       |   2 +-
+ arch/loongarch/Kbuild                         |   1 -
+ arch/loongarch/boot/dts/Makefile              |   2 -
+ arch/microblaze/Kbuild                        |   1 -
+ arch/microblaze/Kconfig                       |   5 +
+ arch/microblaze/boot/dts/Makefile             |   5 -
+ arch/microblaze/boot/dts/linked_dtb.S         |   2 -
+ arch/microblaze/kernel/vmlinux.lds.S          |   2 +-
+ arch/mips/Kconfig                             |   1 +
+ arch/mips/Makefile                            |   3 -
+ arch/mips/boot/dts/Makefile                   |   2 -
+ arch/mips/boot/dts/brcm/Makefile              |   2 -
+ arch/mips/boot/dts/cavium-octeon/Makefile     |   2 -
+ arch/mips/boot/dts/ingenic/Makefile           |   2 -
+ arch/mips/boot/dts/lantiq/Makefile            |   2 -
+ arch/mips/boot/dts/loongson/Makefile          |   2 -
+ arch/mips/boot/dts/mscc/Makefile              |   3 -
+ arch/mips/boot/dts/mti/Makefile               |   2 -
+ arch/mips/boot/dts/pic32/Makefile             |   2 -
+ arch/mips/boot/dts/ralink/Makefile            |   2 -
+ arch/nios2/Kbuild                             |   2 +-
+ arch/nios2/boot/dts/Makefile                  |   4 +-
+ arch/nios2/kernel/prom.c                      |   2 +-
+ arch/nios2/platform/Kconfig.platform          |  10 +-
+ arch/openrisc/Kbuild                          |   1 -
+ arch/openrisc/Kconfig                         |   3 +-
+ arch/openrisc/boot/dts/Makefile               |   2 +-
+ arch/openrisc/configs/or1klitex_defconfig     |   2 +-
+ arch/openrisc/configs/or1ksim_defconfig       |   2 +-
+ arch/openrisc/configs/simple_smp_defconfig    |   2 +-
+ arch/riscv/Kbuild                             |   1 -
+ arch/riscv/Kconfig                            |   2 +-
+ arch/riscv/boot/dts/Makefile                  |   2 -
+ arch/riscv/configs/nommu_k210_defconfig       |   2 +-
+ .../riscv/configs/nommu_k210_sdcard_defconfig |   2 +-
+ arch/sh/Kbuild                                |   1 -
+ arch/sh/Kconfig                               |   6 +-
+ arch/sh/boot/dts/Makefile                     |   2 +-
+ arch/sh/kernel/setup.c                        |   4 +-
+ arch/xtensa/Kbuild                            |   2 +-
+ arch/xtensa/Kconfig                           |   3 +-
+ arch/xtensa/boot/dts/Makefile                 |   2 +-
+ arch/xtensa/configs/audio_kc705_defconfig     |   2 +-
+ arch/xtensa/configs/cadence_csp_defconfig     |   2 +-
+ arch/xtensa/configs/generic_kc705_defconfig   |   2 +-
+ arch/xtensa/configs/nommu_kc705_defconfig     |   2 +-
+ arch/xtensa/configs/smp_lx200_defconfig       |   2 +-
+ arch/xtensa/configs/virt_defconfig            |   2 +-
+ arch/xtensa/configs/xip_kc705_defconfig       |   2 +-
+ drivers/of/Kconfig                            |   6 +
+ drivers/of/fdt.c                              |   2 +-
+ drivers/of/unittest.c                         |   6 +-
+ scripts/Makefile.build                        |  58 +++----
+ scripts/Makefile.dtbs                         | 142 ++++++++++++++++++
+ scripts/Makefile.host                         |   5 +
+ scripts/Makefile.lib                          | 115 --------------
+ scripts/Makefile.vmlinux                      |  44 ++++++
+ scripts/link-vmlinux.sh                       |   4 +
+ 74 files changed, 294 insertions(+), 256 deletions(-)
+ delete mode 100644 arch/microblaze/boot/dts/linked_dtb.S
+ create mode 100644 scripts/Makefile.dtbs
+
+-- 
+2.43.0
+
 
