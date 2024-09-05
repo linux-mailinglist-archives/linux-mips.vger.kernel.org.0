@@ -1,293 +1,87 @@
-Return-Path: <linux-mips+bounces-5360-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5361-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F2AC96DA6C
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2024 15:34:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 938BA96DA97
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2024 15:44:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C0071F267A5
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2024 13:34:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DCA61F22BD8
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2024 13:44:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 092FD19DFB6;
-	Thu,  5 Sep 2024 13:33:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B301B19D897;
+	Thu,  5 Sep 2024 13:44:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="DUFu6lhN";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="hCRduZd0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uIVMffKc"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout3-smtp.messagingengine.com (fout3-smtp.messagingengine.com [103.168.172.146])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F7F19D884;
-	Thu,  5 Sep 2024 13:33:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A9B419925B;
+	Thu,  5 Sep 2024 13:44:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725543213; cv=none; b=F6xeRMu9iZ6lwLlx4HEvlRFjczPxn21BIdenmNh0zIsKgTT5mr3ITx6RQvmtpEWi14rXJLAd0ojjzFqYWqfWJB2i8UCSOG/JNuwfmWldkQVkn0NA715XdSfbOGrt0sr5pPLJziif8lgY5lkHyGiSn3B8c6vEhG4JJw+AtXznV3Y=
+	t=1725543872; cv=none; b=ZeYXJW6NXZ1UyNZFWvg9wzEDD8xCV9AkgMLBaE4M7jJI6ZKcDp6Rs0snKV6I7qHmx9/veNUVsuh0OOBuMI9uTVOb4mtw9kh7n46wx9qDzD6AW4Oxmd8+1McEAXgRwdkGpfjrCsvBXtfkcN0AQESrx6Xy067WD5JBhAiq7ccHzMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725543213; c=relaxed/simple;
-	bh=dVkj/exm1KSiU0b/0TGp9u+BBn+LGdFz9eAdIeMiN8A=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hj4Tjc+1JK6hx8TySB4BIZyKDFy6ltUcsVuyhMDtRdfEHP+uAg/OCIGTfwuO/zdB6JKFeKKvczX09dtgprkbvly139dXIgcov03wO8Twqzbs+UFcij4qWDoOaIhPZcWVEGixxzeaZAc6JKVYgflp7WHxh+QPLdOGTw9oUihmKEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=DUFu6lhN; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=hCRduZd0; arc=none smtp.client-ip=103.168.172.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
-	by mailfout.phl.internal (Postfix) with ESMTP id 8E231138026D;
-	Thu,  5 Sep 2024 09:33:31 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-02.internal (MEProxy); Thu, 05 Sep 2024 09:33:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1725543211;
-	 x=1725629611; bh=z2B0F8060umJHdopRQNGtZEBNjqM4wVRBCzxrvcUhSw=; b=
-	DUFu6lhN0qGUhUYatTxIHgIP6kNGLyzy1blThsogwkg/3YJpEEBIwCKMlq7I0x1Z
-	oNoQpZ7ZheO+hVtlcv1fYCYq0CtsOuy+HKefI8MWS0ZeJaelN7SuOW8O6ZUXrlJt
-	uU4qjMH6EuOul/uAKLiSvEeJkShmOkA9Jwwy5p5M8Yfz+uWlTrRBo53fEH9KXY40
-	0yZ8ycmK43QeHVOIt6J3CqM05Ukl9bQwSMsHXMWXLdv9hq7IJunrKt8nVwKIE3DC
-	72Br4R32cdWaCV0zXCznxc+4/lCjeg6gjLTlIKzV6RrV9Gr4lm3Z+PX45ocQkjOy
-	gcwLmR3WuFRHE21bU32Ccw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725543211; x=
-	1725629611; bh=z2B0F8060umJHdopRQNGtZEBNjqM4wVRBCzxrvcUhSw=; b=h
-	CRduZd0GkqMWAd0FuBYs1gHD3z8D+TUxc1eo7fMCVsiIYH3kObPBA/342p5kcXg9
-	GxyRnK1t0guZHd7ZQo3Piq60+XURaNkjhXRwue3GC1TftadQbqdPLOdBMqc8r+H1
-	jn3e3/jAR/HKeqwpz5wqlAhRDiTw8ey7B33eHHw9GLZjYB3397AgnhERzjZ95wjI
-	TPzwx2CbDmQR45ldUA8hCNeuRkHLP8qudFe7IFqWE22Sb53Kr/UVw3L2tMB+BYzs
-	K+bU/hx8BZfGXIbONG2oJj4BQljaPFU/pqrMIrd+khsmwZq1Kze1Ph5WKIxnvkfI
-	fd//X7b4hXlRN0BZQ0hUA==
-X-ME-Sender: <xms:K7PZZikKuo4dBB9dwPUZk80GPVNUM3Zvo_WEJlipLLW0vdx7xKKPIQ>
-    <xme:K7PZZp1FGR5i7xRiXcWunZ-3fIAK0OGYYWNQmPAeFcO42mDdrcHBKDGcjS3gyAoJf
-    nhJgsy3BRbVoSOV6-k>
-X-ME-Received: <xmr:K7PZZgoKas-EFPjTj6M2xizcnuAFOIOEgq-HxZV-La4ZM9Wzo8NIm0CNfS7AAZcF4Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehledgieehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtkeertdertdej
-    necuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhi
-    hgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepledutdeigeehvdegkedvudevffdt
-    hedttddtjeevuddtgfektdekgfdtgedtieevnecuffhomhgrihhnpehgihhthhhusgdrtg
-    homhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehj
-    ihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhnsggprhgtphhtthhopeegtd
-    dpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepnhguvghsrghulhhnihgvrhhssehg
-    ohhoghhlvgdrtghomhdprhgtphhtthhopehmihhnghhosehrvgguhhgrthdrtghomhdprh
-    gtphhtthhopehrohhsthgvughtsehgohhoughmihhsrdhorhhgpdhrtghpthhtohepmhhh
-    ihhrrghmrghtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrrdhhihhnuggsohhrgh
-    esshgrmhhsuhhnghdrtghomhdprhgtphhtthhopegsjhhorhhnfegpghhhsehprhhothho
-    nhhmrghilhdrtghomhdprhgtphhtthhopeigkeeisehkvghrnhgvlhdrohhrghdprhgtph
-    htthhopeifvggushhonhgrfhesghhmrghilhdrtghomhdprhgtphhtthhopehlihhnuhig
-    qdhmihhpshesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:K7PZZmmuRsdvqfTkmRryL-SDkL3pNEWsJoFpaoneO3Qet3U9AWJMvA>
-    <xmx:K7PZZg1d2myNx9xVVoFzDWf_ZFLSYvoPZl-Vq7FoDLyn0B-enpRdbw>
-    <xmx:K7PZZtvodRceTSBHOW1A5rJfgMLO7_6byu6CKbSfLqTyr4rLQYf54Q>
-    <xmx:K7PZZsV46vKg8iGkmtpIP5NYFvd4GbSUI3YZoAKgjBiaCmNlJ0EKvg>
-    <xmx:K7PZZppfaojp8iFBlAPZHohDQMbFXKzobUe2qMIZfC1yh3KPpusjNJvt>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 5 Sep 2024 09:33:27 -0400 (EDT)
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Thu, 05 Sep 2024 14:33:07 +0100
-Subject: [PATCH v2 3/3] rust: Enable for MIPS
+	s=arc-20240116; t=1725543872; c=relaxed/simple;
+	bh=b9acX5IhkohSbskqXXvGeItLmD2/cfBjvS2Wfhcu7XM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IwLj1OPqk+p8eJugqALldeKyexpH2ncpwjc72/+LNZV82fgA2WBPj0CnOc+sqMzpR7NOM4VJGlPDTBsoNMR8GspOVfzDIcCMKToJ/Iuh5XVDg45oBAnmFnBX1mWgnXVEr/LjVttG38Z+VLORamWGqhHVXX7xmgIOt2pTI9quXe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uIVMffKc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2709C4CEC3;
+	Thu,  5 Sep 2024 13:44:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725543870;
+	bh=b9acX5IhkohSbskqXXvGeItLmD2/cfBjvS2Wfhcu7XM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uIVMffKcqsMxDOvKmpQ/o52EIXtFaMD2p2GliETZD9N0Dk4ATVa7h8aY7R3arCYMp
+	 6PEOjR1bq/MdcLyU9jcyTwzMWMRPlsX+J/UIMUYK7RKvPwFssxhdY4iVx2DY4c0Z7s
+	 uue4s4wk1gtXDdxkJet5ojFq8gd9VObkCdj0dTyHH57NfvWZ5V2GcbYjNN4Zn+06uQ
+	 EzMbC3xKlj7V45GE7t/TPviuOx7NkOFlIil6D3lPT+VE0ZjrR6uPchXtQ0cvPHDUyH
+	 wdIw6zQPG6/KSBHdFcAAp18fvvQcsOIsAXX2GSUbcoLchhW8ng4EhXQUVAUZ21rsoH
+	 CzGYdGtYtvYfQ==
+Date: Thu, 5 Sep 2024 08:44:28 -0500
+From: Rob Herring <robh@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Michal Simek <monstr@monstr.eu>, devicetree@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	Dinh Nguyen <dinguyen@kernel.org>
+Subject: Re: [PATCH 02/15] kbuild: split device tree build rules into
+ scripts/Makefile.dtbs
+Message-ID: <20240905134428.GA1517132-robh@kernel.org>
+References: <20240904234803.698424-1-masahiroy@kernel.org>
+ <20240904234803.698424-3-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240905-mips-rust-v2-3-409d66819418@flygoat.com>
-References: <20240905-mips-rust-v2-0-409d66819418@flygoat.com>
-In-Reply-To: <20240905-mips-rust-v2-0-409d66819418@flygoat.com>
-To: Masahiro Yamada <masahiroy@kernel.org>,
-  Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nicolas@fjasle.eu>,  Richard Weinberger <richard@nod.at>,
-  Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-  Johannes Berg <johannes@sipsolutions.net>,
-  Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-  Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>,  x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>,  Miguel Ojeda <ojeda@kernel.org>,
- Alex Gaynor <alex.gaynor@gmail.com>,
-  Wedson Almeida Filho <wedsonaf@gmail.com>,
-  Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-  =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-  Benno Lossin <benno.lossin@proton.me>,
-  Andreas Hindborg <a.hindborg@samsung.com>,
-  Alice Ryhl <aliceryhl@google.com>,
-  Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-  Steven Rostedt <rostedt@goodmis.org>,
-  Masami Hiramatsu <mhiramat@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,  Jonathan Corbet <corbet@lwn.net>,
- Alex Shi <alexs@kernel.org>,  Yanteng Si <siyanteng@loongson.cn>,
-  Nick Desaulniers <ndesaulniers@google.com>,
-  Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-um@lists.infradead.org, rust-for-linux@vger.kernel.org, 
- linux-mips@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, llvm@lists.linux.dev, 
- Jiaxun Yang <jiaxun.yang@flygoat.com>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5800;
- i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=dVkj/exm1KSiU0b/0TGp9u+BBn+LGdFz9eAdIeMiN8A=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhrSbm8Xny0wpaS6zMgrh3PNl5YuLz+8Zsv5d7N0mF9oho
- p24+WxwRykLgxgXg6yYIkuIgFLfhsaLC64/yPoDM4eVCWQIAxenAExEIJaRoe9RxA3OG0se3WJ6
- lOPL4i1dUTfX6Kdsc/8qDvWVAusyXjAydDeeWrP5vHfo5tqXnse38Po/+p/++EsJD/+NDq7tRj0
- H+AE=
-X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
- fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240904234803.698424-3-masahiroy@kernel.org>
 
-Enable rust for linux by implement generate_rust_target.rs
-and select relevant Kconfig options.
+On Thu, Sep 05, 2024 at 08:47:38AM +0900, Masahiro Yamada wrote:
+> scripts/Makefile.lib is included not only from scripts/Makefile.build
+> but also from scripts/Makefile.{modfinal,package,vmlinux,vmlinux_o},
+> where DT build rules are not required.
+> 
+> Split the DT build rules out to scripts/Makefile.dtbs, and include it
+> only when necessary.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+> 
+>  drivers/of/fdt.c       |   2 +-
+>  drivers/of/unittest.c  |   4 +-
+>  scripts/Makefile.build |  25 +++-----
+>  scripts/Makefile.dtbs  | 142 +++++++++++++++++++++++++++++++++++++++++
+>  scripts/Makefile.lib   | 115 ---------------------------------
+>  5 files changed, 153 insertions(+), 135 deletions(-)
+>  create mode 100644 scripts/Makefile.dtbs
 
-We don't use builtin target as there is no sutiable baremetal
-target for us that can cover all ISA variants supported by kernel.
-
-Link: https://github.com/Rust-for-Linux/linux/issues/107
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
-v2:
-	- Add micromips flags
-	- Sync issues with upstream
----
- Documentation/rust/arch-support.rst                |  1 +
- .../translations/zh_CN/rust/arch-support.rst       |  1 +
- arch/mips/Kconfig                                  |  2 +
- scripts/generate_rust_target.rs                    | 68 ++++++++++++++++++++++
- 4 files changed, 72 insertions(+)
-
-diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arch-support.rst
-index 750ff371570a..ab6c0ae5a407 100644
---- a/Documentation/rust/arch-support.rst
-+++ b/Documentation/rust/arch-support.rst
-@@ -17,6 +17,7 @@ Architecture   Level of support  Constraints
- =============  ================  ==============================================
- ``arm64``      Maintained        Little Endian only.
- ``loongarch``  Maintained        \-
-+``mips``       Maintained        \-
- ``riscv``      Maintained        ``riscv64`` only.
- ``um``         Maintained        \-
- ``x86``        Maintained        ``x86_64`` only.
-diff --git a/Documentation/translations/zh_CN/rust/arch-support.rst b/Documentation/translations/zh_CN/rust/arch-support.rst
-index abd708d48f82..1eaa6c3297ac 100644
---- a/Documentation/translations/zh_CN/rust/arch-support.rst
-+++ b/Documentation/translations/zh_CN/rust/arch-support.rst
-@@ -21,6 +21,7 @@
- =============  ================  ==============================================
- ``arm64``      Maintained        只有小端序
- ``loongarch``  Maintained        \-
-+``mips``       Maintained        \-
- ``riscv``      Maintained        只有 ``riscv64``
- ``um``         Maintained        只有 ``x86_64``
- ``x86``        Maintained        只有 ``x86_64``
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 43da6d596e2b..a91f0a4fd8e9 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -90,6 +90,8 @@ config MIPS
- 	select HAVE_PERF_USER_STACK_DUMP
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_RSEQ
-+	select HAVE_RUST
-+	select HAVE_GENERATE_RUST_TARGET
- 	select HAVE_SPARSE_SYSCALL_NR
- 	select HAVE_STACKPROTECTOR
- 	select HAVE_SYSCALL_TRACEPOINTS
-diff --git a/scripts/generate_rust_target.rs b/scripts/generate_rust_target.rs
-index 863720777313..bbdf8a4dd169 100644
---- a/scripts/generate_rust_target.rs
-+++ b/scripts/generate_rust_target.rs
-@@ -141,6 +141,13 @@ fn has(&self, option: &str) -> bool {
-         let option = "CONFIG_".to_owned() + option;
-         self.0.contains_key(&option)
-     }
-+
-+    /// Returns the value of the option in the configuration.
-+    /// The argument must be passed without the `CONFIG_` prefix.
-+    fn get(&self, option: &str) -> Option<&String> {
-+        let option = "CONFIG_".to_owned() + option;
-+        self.0.get(&option)
-+    }
- }
- 
- fn main() {
-@@ -203,6 +210,67 @@ fn main() {
-         ts.push("target-pointer-width", "32");
-     } else if cfg.has("LOONGARCH") {
-         panic!("loongarch uses the builtin rustc loongarch64-unknown-none-softfloat target");
-+    } else if cfg.has("MIPS") {
-+        let mut features = "+soft-float,+noabicalls".to_string();
-+
-+        if cfg.has("CPU_MICROMIPS") {
-+            features += ",+micromips";
-+        }
-+
-+        if cfg.has("64BIT") {
-+            ts.push("arch", "mips64");
-+            ts.push("abi", "abi64");
-+            cfg.get("TARGET_ISA_REV").map(|isa_rev| {
-+                let feature = match isa_rev.as_str() {
-+                    "1" => ",+mips64",
-+                    "2" => ",+mips64r2",
-+                    "5" => ",+mips64r5",
-+                    "6" => ",+mips64r6",
-+                    _ => ",+mips3",
-+                };
-+                features += feature;
-+            });
-+
-+            ts.push("features", features);
-+            if cfg.has("CPU_BIG_ENDIAN") {
-+                ts.push(
-+                    "data-layout",
-+                    "E-m:e-i8:8:32-i16:16:32-i64:64-n32:64-S128",
-+                );
-+                ts.push("llvm-target", "mips64-unknown-linux-gnuabi64");
-+            } else {
-+                ts.push(
-+                    "data-layout",
-+                    "e-m:e-i8:8:32-i16:16:32-i64:64-n32:64-S128",
-+                );
-+                ts.push("llvm-target", "mips64el-unknown-linux-gnuabi64");
-+            }
-+            ts.push("target-pointer-width", "64");
-+        } else {
-+            ts.push("arch", "mips");
-+            cfg.get("TARGET_ISA_REV").map(|isa_rev| {
-+                let feature = match isa_rev.as_str() {
-+                    "1" => ",+mips32",
-+                    "2" => ",+mips32r2",
-+                    "5" => ",+mips32r5",
-+                    "6" => ",+mips32r6",
-+                    _ => ",+mips2",
-+                };
-+                features += feature;
-+            });
-+
-+            ts.push("features", features);
-+            if cfg.has("CPU_BIG_ENDIAN") {
-+                ts.push("data-layout",
-+                        "E-m:m-p:32:32-i8:8:32-i16:16:32-i64:64-n32-S64");
-+                ts.push("llvm-target", "mips-unknown-linux-gnu");
-+            } else {
-+                ts.push("data-layout",
-+                        "e-m:m-p:32:32-i8:8:32-i16:16:32-i64:64-n32-S64");
-+                ts.push("llvm-target", "mipsel-unknown-linux-gnu");
-+            }
-+            ts.push("target-pointer-width", "32");
-+        }
-     } else {
-         panic!("Unsupported architecture");
-     }
-
--- 
-2.46.0
-
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
