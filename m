@@ -1,177 +1,101 @@
-Return-Path: <linux-mips+bounces-5372-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5373-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67ED096E863
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2024 05:47:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 919C496E994
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2024 07:57:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2286E2868B7
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2024 03:47:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD9691C232FA
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2024 05:57:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EC673FEC;
-	Fri,  6 Sep 2024 03:47:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1479C1386B3;
+	Fri,  6 Sep 2024 05:57:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="g4scRZWa"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="FuEMpuD8"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D21F738DE0;
-	Fri,  6 Sep 2024 03:47:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.129
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B65BA1384BF;
+	Fri,  6 Sep 2024 05:57:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725594428; cv=none; b=kFsEBNW94Qv5d7g9hA72mIk9KRFsjBYZBtVBgjl7/wqiQo0w67tY2HOc9X0HlTQocCYtdA6ufKClWVQSTbJ+asYgzSk4AkuBGJu8rz/bg5EouwPDTB/maJsYWpvWINwziNmggxGk/Qb8qRlWROJ7RZJMF1TDc6PeGktNIavJJfE=
+	t=1725602238; cv=none; b=mc5Un4xI0X9Ux+UxT5S74uYGBCzlIPZxzFJ7iCgWyiT5IZB/rRfkyILGp9QWKPSybzKN2c4Un5zOx4W5ErC71A9vOaKM8YxeJS4TTVlXfI6/U6yBtknOfMlGPBM3i959LhZVot8cfTK1SzGaE6AunvDcexcW1YtpQW5aHKI8LlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725594428; c=relaxed/simple;
-	bh=gvY8AH4a88MP1lz2m4OgJjyz6KDbapZwsTzDMYuixg4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Y4GdmUNcsb088/Jh1HeBQm2FWdl9N4d8P9DPLY6i1HJ+1yJNzTWGFePtj6Gl8CFYsJQmnm7fk8EI3oY9lzpYHTZFq0Ubwi8CCVRGUfeDXJHW4GD+IRXZQSoxPZq6JV1KvKPc0cYi1kWhzA3E6P6ePf3yIBoqrfIBmf4SqsAGgSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=g4scRZWa; arc=none smtp.client-ip=54.204.34.129
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1725594380;
-	bh=BHo9Isz2T8wnA4FQQqg3YttItu9Af8Lpgwwo2oZ48CY=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=g4scRZWawW7IHe+xqpM2KulTnkm2i6wNfOONB8yF/RRu+hB5EpNcQE61RKRzOT/Ta
-	 6U4aZpzfsQ79BkUnFAgwHA1erZE/MptI5PgJCEntC09KH3VLyMdpGcSp6hn6tzn4CG
-	 Hl0We5VnzWnMExj165JhpxEG5tJFxD6RaVnfxpbg=
-X-QQ-mid: bizesmtp90t1725594372tauikl58
-X-QQ-Originating-IP: +xTdcMwz1y4V1nr4HP4Mev0zaP4TBymkPMdR552yAxM=
-Received: from localhost.localdomain ( [113.57.152.160])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 06 Sep 2024 11:46:10 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 2951222773783350106
-From: WangYuli <wangyuli@uniontech.com>
-To: herbert@gondor.apana.org.au,
-	davem@davemloft.net,
-	tsbogend@alpha.franken.de
-Cc: linux-crypto@vger.kernel.org,
-	linux-mips@vger.kernel.org,
+	s=arc-20240116; t=1725602238; c=relaxed/simple;
+	bh=JiIKD8F/N5Luztkt4Z4RRd8OKL1IUvleco+3UGGCm8g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dDMSOH4FBEo4eMApauBlSpEVfjEJTGh/2KEa2KxvQqsZOPLc6vlgpS1bdRg/iWqmE0m7Cjs2Jnw1KmV9ypR668zy0jMMRR22u/R0qg+/4anpCudhdPtxC41XZT5nagr37jUabiWqmCChbULdMgPIpyXLPkmhcVpc4kMT6Ki4Adw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=FuEMpuD8; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=iHtxda7iJpHqgGjWQcxPMHTYgcUuxhaS1NQzCQw7Tg4=; b=FuEMpuD8+iVpqKY5eXeXpU3ib6
+	A0Idydtmlbaghv96iib7B1pRv5Kgj7TYuYwDN01u2IsL9+unUP2kaU6oLiva9Agjb6DYQ71RJD9vq
+	X3rLIg7WI/gfdTDG/cedGjk8dn3676y71Z6DzAGHPa23najs/N4KHyor8jGHXwmtykg2RvYfwtojT
+	bioHv5Qrz5IJO3fpK78/5NIzpx4ZUXMoYXS/kkJK6vDXMYoJ2n4aqF7Lw18u/yrJkUKHL4ssYY75U
+	/cITWkwhly1lbLIAHJ9i0fVyF2qThS2LuAc2bIMDYII3TC1y5K310blkOWgauIc1UTtk7/1ztmpVZ
+	hGUTdaNQ==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1smRnu-000VT4-04;
+	Fri, 06 Sep 2024 13:56:56 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 06 Sep 2024 13:56:55 +0800
+Date: Fri, 6 Sep 2024 13:56:55 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: WangYuli <wangyuli@uniontech.com>
+Cc: davem@davemloft.net, tsbogend@alpha.franken.de,
+	linux-crypto@vger.kernel.org, linux-mips@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	WangYuli <wangyuli@uniontech.com>,
 	"Maciej W . Rozycki" <macro@orcam.me.uk>,
 	Guan Wentao <guanwentao@uniontech.com>
-Subject: [RESEND. PATCH v2] MIPS: crypto: Clean up useless assignment operations
-Date: Fri,  6 Sep 2024 11:46:05 +0800
-Message-ID: <AB62DAB2DB1B854E+20240906034605.359512-1-wangyuli@uniontech.com>
-X-Mailer: git-send-email 2.43.4
+Subject: Re: [RESEND. PATCH v2] MIPS: crypto: Clean up useless assignment
+ operations
+Message-ID: <ZtqZpzMH_qMQqzyc@gondor.apana.org.au>
+References: <AB62DAB2DB1B854E+20240906034605.359512-1-wangyuli@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AB62DAB2DB1B854E+20240906034605.359512-1-wangyuli@uniontech.com>
 
-When entering the "len & sizeof(u32)" branch, len must be less than 8.
-So after one operation, len must be less than 4.
-At this time, "len -= sizeof(u32)" is not necessary for 64-bit CPUs.
+On Fri, Sep 06, 2024 at 11:46:05AM +0800, WangYuli wrote:
+>
+> diff --git a/arch/mips/crypto/crc32-mips.c b/arch/mips/crypto/crc32-mips.c
+> index ec6d58008f8e..3a80b7576ec3 100644
+> --- a/arch/mips/crypto/crc32-mips.c
+> +++ b/arch/mips/crypto/crc32-mips.c
+> @@ -77,36 +77,29 @@ static u32 crc32_mips_le_hw(u32 crc_, const u8 *p, unsigned int len)
+>  {
+>  	u32 crc = crc_;
+>  
+> -#ifdef CONFIG_64BIT
+> -	while (len >= sizeof(u64)) {
+> +#if IS_ENABLED(CONFIG_64BIT)
 
-After that, replace `while' loops with equivalent `for' to make the
-code structure a little bit better by the way.
+That's not how we normally use IS_ENABLED.  The point of having
+it is so that you can embed it into the C code directly, i.e.:
 
-Suggested-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Link: https://lore.kernel.org/all/alpine.DEB.2.21.2406281713040.43454@angie.orcam.me.uk/
-Signed-off-by: Guan Wentao <guanwentao@uniontech.com>
-Signed-off-by: WangYuli <wangyuli@uniontech.com>
----
- arch/mips/crypto/crc32-mips.c | 27 +++++++--------------------
- 1 file changed, 7 insertions(+), 20 deletions(-)
+	if (IS_ENABLED(CONFIG_64BIT))
 
-diff --git a/arch/mips/crypto/crc32-mips.c b/arch/mips/crypto/crc32-mips.c
-index ec6d58008f8e..3a80b7576ec3 100644
---- a/arch/mips/crypto/crc32-mips.c
-+++ b/arch/mips/crypto/crc32-mips.c
-@@ -77,36 +77,29 @@ static u32 crc32_mips_le_hw(u32 crc_, const u8 *p, unsigned int len)
- {
- 	u32 crc = crc_;
- 
--#ifdef CONFIG_64BIT
--	while (len >= sizeof(u64)) {
-+#if IS_ENABLED(CONFIG_64BIT)
-+	for (; len >= sizeof(u64); p += sizeof(u64), len -= sizeof(u64)) {
- 		u64 value = get_unaligned_le64(p);
--
- 		CRC32(crc, value, d);
--		p += sizeof(u64);
--		len -= sizeof(u64);
- 	}
- 
- 	if (len & sizeof(u32)) {
- #else /* !CONFIG_64BIT */
--	while (len >= sizeof(u32)) {
-+	for (; len >= sizeof(u32); len -= sizeof(u32)) {
- #endif
- 		u32 value = get_unaligned_le32(p);
--
- 		CRC32(crc, value, w);
- 		p += sizeof(u32);
--		len -= sizeof(u32);
- 	}
- 
- 	if (len & sizeof(u16)) {
- 		u16 value = get_unaligned_le16(p);
--
- 		CRC32(crc, value, h);
- 		p += sizeof(u16);
- 	}
- 
- 	if (len & sizeof(u8)) {
- 		u8 value = *p++;
--
- 		CRC32(crc, value, b);
- 	}
- 
-@@ -117,38 +110,32 @@ static u32 crc32c_mips_le_hw(u32 crc_, const u8 *p, unsigned int len)
- {
- 	u32 crc = crc_;
- 
--#ifdef CONFIG_64BIT
--	while (len >= sizeof(u64)) {
-+#if IS_ENABLED(CONFIG_64BIT)
-+	for (; len >= sizeof(u64); p += sizeof(u64), len -= sizeof(u64)) {
- 		u64 value = get_unaligned_le64(p);
--
- 		CRC32C(crc, value, d);
--		p += sizeof(u64);
--		len -= sizeof(u64);
- 	}
- 
- 	if (len & sizeof(u32)) {
- #else /* !CONFIG_64BIT */
--	while (len >= sizeof(u32)) {
-+	for (; len >= sizeof(u32); len -= sizeof(u32)) {
- #endif
- 		u32 value = get_unaligned_le32(p);
--
- 		CRC32C(crc, value, w);
- 		p += sizeof(u32);
--		len -= sizeof(u32);
- 	}
- 
- 	if (len & sizeof(u16)) {
- 		u16 value = get_unaligned_le16(p);
--
- 		CRC32C(crc, value, h);
- 		p += sizeof(u16);
- 	}
- 
- 	if (len & sizeof(u8)) {
- 		u8 value = *p++;
--
- 		CRC32C(crc, value, b);
- 	}
-+
- 	return crc;
- }
- 
+Please also refrain from making unrelated changes like removing
+blank lines in the same patch as it makes it more difficult to
+see what you're actually changing.
+
+Cheers,
 -- 
-2.43.4
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
