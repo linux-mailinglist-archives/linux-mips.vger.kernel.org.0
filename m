@@ -1,269 +1,177 @@
-Return-Path: <linux-mips+bounces-5371-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5372-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACD5196E76D
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2024 03:57:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67ED096E863
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2024 05:47:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F945B221CB
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2024 01:57:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2286E2868B7
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2024 03:47:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D6DE1EB3D;
-	Fri,  6 Sep 2024 01:57:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EC673FEC;
+	Fri,  6 Sep 2024 03:47:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="as6MXblP"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="g4scRZWa"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0647D1BDE6;
-	Fri,  6 Sep 2024 01:57:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D21F738DE0;
+	Fri,  6 Sep 2024 03:47:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725587836; cv=none; b=puIb3ksZNQ0D/cB24JlYvEUp/t0G/VAvwkAqul/VBX2n2mBGX/nz1Mh2CGHhp2QxfNH153lCknJDWhObfvqMiSGhIwlmHf7/Zxjw1V2P8rzxHpaVZ4bEDAnkab/IqoQLaY67q2VFV9m6qVDxEzu4Jd+Y90k4MUqEYDbO0dLff/A=
+	t=1725594428; cv=none; b=kFsEBNW94Qv5d7g9hA72mIk9KRFsjBYZBtVBgjl7/wqiQo0w67tY2HOc9X0HlTQocCYtdA6ufKClWVQSTbJ+asYgzSk4AkuBGJu8rz/bg5EouwPDTB/maJsYWpvWINwziNmggxGk/Qb8qRlWROJ7RZJMF1TDc6PeGktNIavJJfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725587836; c=relaxed/simple;
-	bh=8GSouxZA15dzrjJlHlKZLXCIMbilzZC4xgwf3qtb3bE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=koMJfnEJqqiSl6JVy8d+kvF6i6dpan23RH3pJi5tZ5BBlo60fgZr8eJqb05LfzVIGyWf7TN0DUV/Cs37hBYYllZS99k/R663L01coQ2//ZMEJGTunUSXcdmFvffC83Cn9JpCkJKcOp5lHAjf+WMZju8yp+R6kKUt5UJVjdOGvbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=as6MXblP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8298CC4CEC5;
-	Fri,  6 Sep 2024 01:57:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725587835;
-	bh=8GSouxZA15dzrjJlHlKZLXCIMbilzZC4xgwf3qtb3bE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=as6MXblP0yNOMTRazIuivP5C+O+n+8YswubSIkUSW8DgCoMr8L1pcRGcUP3568lm+
-	 a3X/gifiDx/o2kwjtcC+MhtkCsM0aXpYUIcAbfU+EednoSPbuFKmTXEHyS+EF61B3W
-	 tFhjXrguURs2eDdL9daoche4qvwDCxGED9GOC9ULUCdffXbzFNtx7COa0r6joJ561I
-	 wQNIIdqQ6Had7RDDPjofRp5qIqwthJe7jK/Nw1gFQAwem9ph9kFC4XkzhhcqM2iUdU
-	 tXAWMtoCmaJEd0QcEQJAz5o10sbBqVBoi9ILhg6+NpZrWQLM2L4k7Bt9bDLyImvDo9
-	 GrRZmZmGVJmJg==
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-53436e04447so1264061e87.1;
-        Thu, 05 Sep 2024 18:57:15 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUWSr35u8+BxUQlRqR4VKJ5dyGmiSzqqhzbY0ggS4BupzQOjZHWPXgcumEqIbDqrGVFK4oR8rrUXR3lSg==@vger.kernel.org, AJvYcCUjwfyBcISTinXoip/y5RP9iQSGFoOgU1b5VUmU0QII1WhbBBd2lT0nhNC97R4B+tYLL8vKh5VC/w3O@vger.kernel.org, AJvYcCVQgXPdepP0OYOgBX90YFL/9qcYXlTr/7/zIwFHtg4Qna9jzgVQnoyNIxrdYW8aPmJoNbYSTXJfYPg1udMNERs=@vger.kernel.org, AJvYcCXSt6gyg4DCSwFjF3SGsDNX9vgStDibEKwVtgIE5Hei+SW0D2iiLkkpN42L3boP/ah+Qggu0cPts1hSFw==@vger.kernel.org, AJvYcCXlVb6JTIcFexEQvXJjhfkWNfe5A8jOcBtBZlukCZrGvn3flhTZbH5z39+h/Umk7zV5u+iM9NoupPFIR11+@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzwr53nDmwpI0f2eZfiUwnGo5jzSvDToMCYXp09e/wxhXbqp9nv
-	+DTehJ/xEMc8HGlaYX6us5H5LHcc0tFwYY+SB0dzlm95mv6GisRRGZ1bYBOMTiOKPNfCZLu79/a
-	UlteuWSHSKCLpLxQBt6lYchxSDws=
-X-Google-Smtp-Source: AGHT+IEyHAyF5odK5wNGdrU91US5ikWBw7iV5drivufpH4J1DDqUMcH1u85P5o28YcdYFP088Ih/883620s0jcsYKJA=
-X-Received: by 2002:a05:6512:2806:b0:52f:1b08:d2d8 with SMTP id
- 2adb3069b0e04-53657dbb114mr374742e87.7.1725587834140; Thu, 05 Sep 2024
- 18:57:14 -0700 (PDT)
+	s=arc-20240116; t=1725594428; c=relaxed/simple;
+	bh=gvY8AH4a88MP1lz2m4OgJjyz6KDbapZwsTzDMYuixg4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Y4GdmUNcsb088/Jh1HeBQm2FWdl9N4d8P9DPLY6i1HJ+1yJNzTWGFePtj6Gl8CFYsJQmnm7fk8EI3oY9lzpYHTZFq0Ubwi8CCVRGUfeDXJHW4GD+IRXZQSoxPZq6JV1KvKPc0cYi1kWhzA3E6P6ePf3yIBoqrfIBmf4SqsAGgSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=g4scRZWa; arc=none smtp.client-ip=54.204.34.129
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1725594380;
+	bh=BHo9Isz2T8wnA4FQQqg3YttItu9Af8Lpgwwo2oZ48CY=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=g4scRZWawW7IHe+xqpM2KulTnkm2i6wNfOONB8yF/RRu+hB5EpNcQE61RKRzOT/Ta
+	 6U4aZpzfsQ79BkUnFAgwHA1erZE/MptI5PgJCEntC09KH3VLyMdpGcSp6hn6tzn4CG
+	 Hl0We5VnzWnMExj165JhpxEG5tJFxD6RaVnfxpbg=
+X-QQ-mid: bizesmtp90t1725594372tauikl58
+X-QQ-Originating-IP: +xTdcMwz1y4V1nr4HP4Mev0zaP4TBymkPMdR552yAxM=
+Received: from localhost.localdomain ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 06 Sep 2024 11:46:10 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 2951222773783350106
+From: WangYuli <wangyuli@uniontech.com>
+To: herbert@gondor.apana.org.au,
+	davem@davemloft.net,
+	tsbogend@alpha.franken.de
+Cc: linux-crypto@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	WangYuli <wangyuli@uniontech.com>,
+	"Maciej W . Rozycki" <macro@orcam.me.uk>,
+	Guan Wentao <guanwentao@uniontech.com>
+Subject: [RESEND. PATCH v2] MIPS: crypto: Clean up useless assignment operations
+Date: Fri,  6 Sep 2024 11:46:05 +0800
+Message-ID: <AB62DAB2DB1B854E+20240906034605.359512-1-wangyuli@uniontech.com>
+X-Mailer: git-send-email 2.43.4
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240904234803.698424-1-masahiroy@kernel.org> <20240904234803.698424-5-masahiroy@kernel.org>
- <20240905141723.GC1517132-robh@kernel.org>
-In-Reply-To: <20240905141723.GC1517132-robh@kernel.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 6 Sep 2024 10:56:37 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASRtTDkVC7rBz6EEsu64LykMVRqyDODUCycGD1deLC9pw@mail.gmail.com>
-Message-ID: <CAK7LNASRtTDkVC7rBz6EEsu64LykMVRqyDODUCycGD1deLC9pw@mail.gmail.com>
-Subject: Re: [PATCH 04/15] kbuild: add generic support for built-in boot DTBs
-To: Rob Herring <robh@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Michal Simek <monstr@monstr.eu>, devicetree@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
 
-On Thu, Sep 5, 2024 at 11:17=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
-:
->
-> On Thu, Sep 05, 2024 at 08:47:40AM +0900, Masahiro Yamada wrote:
-> > Some architectures embed boot DTBs in vmlinux. A potential issue for
-> > these architectures is a race condition during parallel builds because
-> > Kbuild descends into arch/*/boot/dts/ twice.
-> >
-> > One build thread is initiated by the 'dtbs' target, which is a
-> > prerequisite of the 'all' target in the top-level Makefile:
-> >
-> >   ifdef CONFIG_OF_EARLY_FLATTREE
-> >   all: dtbs
-> >   endif
-> >
-> > For architectures that support the embedded boot dtb, arch/*/boot/dts/
-> > is visited also during the ordinary directory traversal in order to
-> > build obj-y objects that wrap DTBs.
-> >
-> > Since these build threads are unaware of each other, they can run
-> > simultaneously during parallel builds.
-> >
-> > This commit introduces a generic build rule to scripts/Makefile.vmlinux
-> > to support embedded boot DTBs in a race-free way. Architectures that
-> > want to use this rule need to select CONFIG_GENERIC_BUILTIN_DTB.
-> >
-> > After the migration, Makefiles under arch/*/boot/dts/ will be visited
-> > only once to build only *.dtb files.
-> >
-> > This change also aims to unify the CONFIG options used for embedded DTB=
-s
-> > support. Currently, different architectures use different CONFIG option=
-s
-> > for the same purposes.
-> >
-> > The CONFIG options are unified as follows:
-> >
-> >  - CONFIG_GENERIC_BUILTIN_DTB
-> >
-> >    This enables the generic rule for embedded boot DTBs. This will be
-> >    renamed to CONFIG_BUILTIN_DTB after all architectures migrate to the
-> >    generic rule.
-> >
-> >  - CONFIG_BUILTIN_DTB_NAME
-> >
-> >    This specifies the path to the embedded DTB.
-> >    (relative to arch/*/boot/dts/)
-> >
-> >  - CONFIG_BUILTIN_DTB_ALL
-> >
-> >    If this is enabled, all DTB files compiled under arch/*/boot/dts/ ar=
-e
-> >    embedded into vmlinux. Only used by MIPS.
->
-> I started to do this a long time ago, but then decided we didn't want to
-> encourage this feature. IMO it should only be for legacy bootloaders or
-> development/debug. And really, appended DTB is more flexible for the
-> legacy bootloader case.
+When entering the "len & sizeof(u32)" branch, len must be less than 8.
+So after one operation, len must be less than 4.
+At this time, "len -= sizeof(u32)" is not necessary for 64-bit CPUs.
 
+After that, replace `while' loops with equivalent `for' to make the
+code structure a little bit better by the way.
 
-I learned CONFIG_ARM_APPENDED_DTB today.
+Suggested-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Link: https://lore.kernel.org/all/alpine.DEB.2.21.2406281713040.43454@angie.orcam.me.uk/
+Signed-off-by: Guan Wentao <guanwentao@uniontech.com>
+Signed-off-by: WangYuli <wangyuli@uniontech.com>
+---
+ arch/mips/crypto/crc32-mips.c | 27 +++++++--------------------
+ 1 file changed, 7 insertions(+), 20 deletions(-)
 
+diff --git a/arch/mips/crypto/crc32-mips.c b/arch/mips/crypto/crc32-mips.c
+index ec6d58008f8e..3a80b7576ec3 100644
+--- a/arch/mips/crypto/crc32-mips.c
++++ b/arch/mips/crypto/crc32-mips.c
+@@ -77,36 +77,29 @@ static u32 crc32_mips_le_hw(u32 crc_, const u8 *p, unsigned int len)
+ {
+ 	u32 crc = crc_;
+ 
+-#ifdef CONFIG_64BIT
+-	while (len >= sizeof(u64)) {
++#if IS_ENABLED(CONFIG_64BIT)
++	for (; len >= sizeof(u64); p += sizeof(u64), len -= sizeof(u64)) {
+ 		u64 value = get_unaligned_le64(p);
+-
+ 		CRC32(crc, value, d);
+-		p += sizeof(u64);
+-		len -= sizeof(u64);
+ 	}
+ 
+ 	if (len & sizeof(u32)) {
+ #else /* !CONFIG_64BIT */
+-	while (len >= sizeof(u32)) {
++	for (; len >= sizeof(u32); len -= sizeof(u32)) {
+ #endif
+ 		u32 value = get_unaligned_le32(p);
+-
+ 		CRC32(crc, value, w);
+ 		p += sizeof(u32);
+-		len -= sizeof(u32);
+ 	}
+ 
+ 	if (len & sizeof(u16)) {
+ 		u16 value = get_unaligned_le16(p);
+-
+ 		CRC32(crc, value, h);
+ 		p += sizeof(u16);
+ 	}
+ 
+ 	if (len & sizeof(u8)) {
+ 		u8 value = *p++;
+-
+ 		CRC32(crc, value, b);
+ 	}
+ 
+@@ -117,38 +110,32 @@ static u32 crc32c_mips_le_hw(u32 crc_, const u8 *p, unsigned int len)
+ {
+ 	u32 crc = crc_;
+ 
+-#ifdef CONFIG_64BIT
+-	while (len >= sizeof(u64)) {
++#if IS_ENABLED(CONFIG_64BIT)
++	for (; len >= sizeof(u64); p += sizeof(u64), len -= sizeof(u64)) {
+ 		u64 value = get_unaligned_le64(p);
+-
+ 		CRC32C(crc, value, d);
+-		p += sizeof(u64);
+-		len -= sizeof(u64);
+ 	}
+ 
+ 	if (len & sizeof(u32)) {
+ #else /* !CONFIG_64BIT */
+-	while (len >= sizeof(u32)) {
++	for (; len >= sizeof(u32); len -= sizeof(u32)) {
+ #endif
+ 		u32 value = get_unaligned_le32(p);
+-
+ 		CRC32C(crc, value, w);
+ 		p += sizeof(u32);
+-		len -= sizeof(u32);
+ 	}
+ 
+ 	if (len & sizeof(u16)) {
+ 		u16 value = get_unaligned_le16(p);
+-
+ 		CRC32C(crc, value, h);
+ 		p += sizeof(u16);
+ 	}
+ 
+ 	if (len & sizeof(u8)) {
+ 		u8 value = *p++;
+-
+ 		CRC32C(crc, value, b);
+ 	}
++
+ 	return crc;
+ }
+ 
+-- 
+2.43.4
 
-
-> In hindsight, a common config would have been easier to limit new
-> arches...
->
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
-> >
-> >  Makefile                 |  7 ++++++-
-> >  drivers/of/Kconfig       |  6 ++++++
-> >  scripts/Makefile.vmlinux | 44 ++++++++++++++++++++++++++++++++++++++++
-> >  scripts/link-vmlinux.sh  |  4 ++++
-> >  4 files changed, 60 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index 145112bf281a..1c765c12ab9e 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1417,6 +1417,10 @@ ifdef CONFIG_OF_EARLY_FLATTREE
-> >  all: dtbs
-> >  endif
-> >
-> > +ifdef CONFIG_GENERIC_BUILTIN_DTB
-> > +vmlinux: dtbs
-> > +endif
-> > +
-> >  endif
-> >
-> >  PHONY +=3D scripts_dtc
-> > @@ -1483,7 +1487,8 @@ endif # CONFIG_MODULES
-> >  CLEAN_FILES +=3D vmlinux.symvers modules-only.symvers \
-> >              modules.builtin modules.builtin.modinfo modules.nsdeps \
-> >              compile_commands.json rust/test \
-> > -            rust-project.json .vmlinux.objs .vmlinux.export.c
-> > +            rust-project.json .vmlinux.objs .vmlinux.export.c \
-> > +               .builtin-dtbs-list .builtin-dtb.S
-> >
-> >  # Directories & files removed with 'make mrproper'
-> >  MRPROPER_FILES +=3D include/config include/generated          \
-> > diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
-> > index dd726c7056bf..5142e7d7fef8 100644
-> > --- a/drivers/of/Kconfig
-> > +++ b/drivers/of/Kconfig
-> > @@ -2,6 +2,12 @@
-> >  config DTC
-> >       bool
-> >
-> > +config GENERIC_BUILTIN_DTB
-> > +     bool
->
-> So that we don't add new architectures to this, I would like something
-> like:
->
-> # Do not add new architectures to this list
-> depends on MIPS || RISCV || MICROBLAZE ...
->
-> Yes, it's kind of odd since the arch selects the option...
->
-> For sure, we don't want this option on arm64. For that, I can rely on
-> Will and Catalin rejecting a select, but on some new arch I can't.
->
-> > +
-> > +config BUILTIN_DTB_ALL
-> > +     bool
->
-> Can this be limited to MIPS?
-
-
-I am fine with hard-coded "depends on"
-if this feature is discouraged.
-
-
-
-
-> > +
-> >  menuconfig OF
-> >       bool "Device Tree and Open Firmware support"
-> >       help
-> > diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
-> > index 5ceecbed31eb..4626b472da49 100644
-> > --- a/scripts/Makefile.vmlinux
-> > +++ b/scripts/Makefile.vmlinux
-> > @@ -17,6 +17,50 @@ quiet_cmd_cc_o_c =3D CC      $@
-> >  %.o: %.c FORCE
-> >       $(call if_changed_dep,cc_o_c)
-> >
-> > +quiet_cmd_as_o_S =3D AS      $@
-> > +      cmd_as_o_S =3D $(CC) $(a_flags) -c -o $@ $<
-> > +
-> > +%.o: %.S FORCE
-> > +     $(call if_changed_dep,as_o_S)
-> > +
-> > +# Built-in dtb
-> > +# --------------------------------------------------------------------=
--------
-> > +
-> > +quiet_cmd_wrap_dtbs =3D WRAP    $@
-> > +      cmd_wrap_dtbs =3D {                                             =
-         \
-> > +     echo '\#include <asm-generic/vmlinux.lds.h>';                   \
-> > +     echo '.section .dtb.init.rodata,"a"';                           \
-> > +     while read dtb; do                                              \
-> > +             symbase=3D__dtb_$$(basename -s .dtb "$${dtb}" | tr - _); =
- \
-> > +             echo '.balign STRUCT_ALIGNMENT';                        \
->
-> Is this always guaranteed to be at least 8 bytes? That's the required
-> alignment for dtbs and assumed by libfdt.
-
-
-I think so.
-
-
-include/asm-generic/vmlinux.lds.h defines it as 32.
-
-
-We can loosen the alignment to 8, but for safety,
-I just copied this from scripts/Makefile.lib
-because 32-byte alignment is what we do now.
-
-
-
-
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
 
