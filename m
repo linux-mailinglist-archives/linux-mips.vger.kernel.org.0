@@ -1,214 +1,186 @@
-Return-Path: <linux-mips+bounces-5369-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5370-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEFAF96E4D0
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2024 23:16:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4740896E6D7
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2024 02:28:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E1311F24880
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2024 21:16:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 264BDB22F8B
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2024 00:27:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 180D8194C69;
-	Thu,  5 Sep 2024 21:16:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0744CDDC3;
+	Fri,  6 Sep 2024 00:27:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="KRtbqZ34"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rOwVxMUD"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 090F71B12C7
-	for <linux-mips@vger.kernel.org>; Thu,  5 Sep 2024 21:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD53711CA0;
+	Fri,  6 Sep 2024 00:27:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725570982; cv=none; b=BwWAbdenoDr5jnGGfK4sVGT7BxabEYrFKw2GWG1XdNGFNxSPJtd991qeEL3sFlgggmzIvKa2gwL25fPc92F+OfMEFFG8hmDRmJrGjSlLalr2irmH1DihXOi5FRb4VXimJ638InyH8WdIiWx7aa+aOLstWu3A8dBZWoIFtg4tjNA=
+	t=1725582472; cv=none; b=H1Zlz56OMFhosKJRflU+IAjMOHLGWRAKlLjKpgJN4pJMQcyDm5jDDkmgB5LoTd38CUEdS2B+TQ3qgPsgfcTfobwyO9UnhZ0izL5ppBUqiBX75uUQOr28lcuqPPCjBHcyzGpsfQjARWOtqDOpxhKz5tqf47s6fG3ZVZ4EWjyacY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725570982; c=relaxed/simple;
-	bh=v+6JyaTNEum7sQVRfCLlZa2h0GjRhYNybjctqPTjXjI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=knqn7kmbR36e//w+6piXGbSbjzT6WD3qZvKN7xR0LQFm6jyvVOLF1N5Memfiktg2Q5PqNmALrf/r3EjDBKnfU4YYNWzGjvZBUKVdl86RsFqH/I3YarOOMIUwY0MHXJdiW0mFup/wbOKN/rpM5bLqTHULMNfpqsLiSzPntDwy/Ao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=KRtbqZ34; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-7c6aee8e8daso997190a12.0
-        for <linux-mips@vger.kernel.org>; Thu, 05 Sep 2024 14:16:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1725570979; x=1726175779; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BC+wwN1fePLvWLzJkRJwUgtVdOqgdkSuyAR2hC6nLRw=;
-        b=KRtbqZ348/BYDeSXaw6rSlS5k2zXiAMIjzgBEeEP4dracgdhRjL501rYq2KzvMc4ol
-         oVaLvqQdJaPg7ZYy3p720p7SwjXIDvOdyqPNoj4AKMDMihujaa27sWgHa+P68nBIrYKJ
-         8ZoBHU7gSnjWsl6XHUMTiAXXLam0Bwer+P3eUH5Ne4dIouK6XN00aqvD72skHJ6fWB+j
-         /ZXFOC2aThFAkkuzfuQb7aXIEXGYERAZna5R+stF3HpGJ3zUSZSjy3+ekGJpuFDto751
-         iU5ZIfZbepk9HiTLSMmYkIt1Qe2cGA0aaHt8PyrxBYbQgyTkfzEJw4OVAdA5KqLHPn33
-         rJyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725570979; x=1726175779;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BC+wwN1fePLvWLzJkRJwUgtVdOqgdkSuyAR2hC6nLRw=;
-        b=p8l1B9ivan7SCJZAxYEDQx581P3+DsGQd4TAOmOszTHPwKnAQ63ktVTHS/vkienbge
-         W7oj/a/Wp6xVWsITiCrpDZzE6brpmKzZnawUmsRhAuqo5prCuqkf7PrF0JDFGflfTzXd
-         WNETDezN71YYhqHnsdNb+cQtIWia7RAu4x94WeNi07rzcrEA8LGyJVeCU7e7XDVhOf02
-         UH+biAxDDcZBpzSKdZEETksHagQYnaf5L+dtzl8TRvgv9DllL3xIrNCAHe/hMbKlITR9
-         035pq5RP6oQkcWy3JH6yk+fPLGvp5qd9jmCU9fnOzpXxo+riZiX5UOoYrPP0YONo/rYf
-         RAUg==
-X-Forwarded-Encrypted: i=1; AJvYcCVcH0APbpuk1NRuygEZmNMfSb7hwejtJIllO0E/uZR7vQchhpFwnsdFAsw6EHGxOGcKpktGinCYiJwH@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyh+JcVpjYtJngap9LdXFfyKACSWvX1f3l6TX2EB3x2HNuaw2Qu
-	0FNKP1SkrGgDicqR/NoRqpTP4Y9jJ8dnfA4l+XsC5hMh6EXOiCMmiWzzUwgrhnw=
-X-Google-Smtp-Source: AGHT+IEZNTxfv2Eh4MhBvC/nCmC/+9uGBr1mJ2SunSW5zA4oMdQE9dzvz6pYsZBAUp5dcakacvTYeg==
-X-Received: by 2002:a05:6a20:6f08:b0:1c6:a680:ef3d with SMTP id adf61e73a8af0-1cf1d13329emr317665637.28.1725570979059;
-        Thu, 05 Sep 2024 14:16:19 -0700 (PDT)
-Received: from charlie.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7d4fbda7abesm3775746a12.61.2024.09.05.14.16.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2024 14:16:18 -0700 (PDT)
-From: Charlie Jenkins <charlie@rivosinc.com>
-Date: Thu, 05 Sep 2024 14:15:52 -0700
-Subject: [PATCH RFC v3 2/2] selftests/mm: Create ADDR_LIMIT_47BIT test
+	s=arc-20240116; t=1725582472; c=relaxed/simple;
+	bh=K6wrMA4NMaFGP3Sp4vPuMOOJ9z42CsYsjU+yH0k9ZpI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fPcebXaHVrWzJLv+seXy56sYciXc3bZ/sNxDsjIubeXhAnOMwLx5ckZ11R8uSAS20t4Q0rfzgXI/IFJaeASu4psk1fi5vGM6q0X5w3IT80cNpBWP466nrP76GlZyDFh/aCEA2JmAdIh7F+PfNHlJK/OZwhoNMJPdoXCqDLFlC0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rOwVxMUD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D0E1C4CEC3;
+	Fri,  6 Sep 2024 00:27:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725582472;
+	bh=K6wrMA4NMaFGP3Sp4vPuMOOJ9z42CsYsjU+yH0k9ZpI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=rOwVxMUDAoXw5SklKVcoMdydUgoE4tk0T3VLu7rhVnOSII9MTQcVpt3Mq6X4bZb7v
+	 kPPu+HWw2WxGF6UXBpC1fYcQJutF4XD3aOFuan5GSAy529cwBq5zVYnkR+4D5IKnOO
+	 e9MkFI1cRjZ6hUGQyqoPDKY0lZYN6sc8x/WafGh1wdi1HeK6e7LjylwpwqyIXvG0kQ
+	 6RVVoymO+D6WddBCPvgSzjuK609lqstj+BXismhUT9t4LjLH+N83RdD+7DM0sJckxD
+	 S5+vrNVSBlDc23DA3kJYxXe44ac1DgPer1vZCDMOehUT7w7r4NZGHb405u28pWxdTX
+	 6jYGs3ZXqn7kA==
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2f3fea6a0a9so13492721fa.0;
+        Thu, 05 Sep 2024 17:27:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUt8xl16IemRnq1Qbx5vm1/bL5WufGwQ7aEvbpCgx2SKbzWUlk1XHql9WnExx4oKQp/92naiPZrkLtl4w==@vger.kernel.org, AJvYcCVe7prjHu/DOJkKOQCqkHKAoBHIpxc98UA4f0PWlRAxkQZIdIIDdj5RIPXIp5udvvCLDNs169OhR/0fljbpZEw=@vger.kernel.org, AJvYcCVh4w85pFU+o5Ci/0/W93YzYCgygdzOp6Kjm0wdQicFJlMOwXahNLBOQSWk+aAYRnEd3OUHlADz1uK+@vger.kernel.org, AJvYcCWfDMwFf2ZAeJ48Hc7jmOD01/WYJ2Hxo8kmsuJynC7q3Bf3CYa/SYvZTf79cD4o7D9fkQZPJJLGi7t/8syc@vger.kernel.org, AJvYcCWwYARhhnWq17GGFnjgpDwccmPq/GlNlDS6J3pAk9jkiCrB8NFNkTl8YYEMq70WcGIxIcjRlmAGwN7g6g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAzh53mDklLi6ijIq+3Tegk/ctDAyjsxseroSBMy9Q7e5vev8s
+	V1jI+l+iig2D5O9svf5Zf+OLGICxn9yQf5kZPJD0Hkec81shcGt+k4JofAYPKNxHiMGxc8bPVZ1
+	EC3Pw2V75sYJ7pszKd+QiLNTxe+I=
+X-Google-Smtp-Source: AGHT+IECEJXsJFKh8FBdQC2eV1kk62AdTyv6v0z/HVmN55+fHGg4x6UhGG8hEo+Rv28CTDwPO53RFRQNS5OnAybvF2s=
+X-Received: by 2002:a05:651c:545:b0:2f5:66a:627 with SMTP id
+ 38308e7fff4ca-2f657a9793emr24818091fa.0.1725582471070; Thu, 05 Sep 2024
+ 17:27:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240905-patches-below_hint_mmap-v3-2-3cd5564efbbb@rivosinc.com>
-References: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
-In-Reply-To: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
-To: Arnd Bergmann <arnd@arndb.de>, 
- Richard Henderson <richard.henderson@linaro.org>, 
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
- Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>, 
- Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>, 
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>, 
- Nicholas Piggin <npiggin@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Naveen N Rao <naveen@kernel.org>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>, 
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Sven Schnelle <svens@linux.ibm.com>, 
- Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
- "David S. Miller" <davem@davemloft.net>, 
- Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner <tglx@linutronix.de>, 
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
- "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, 
- Peter Zijlstra <peterz@infradead.org>, Muchun Song <muchun.song@linux.dev>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
- Vlastimil Babka <vbabka@suse.cz>, 
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Shuah Khan <shuah@kernel.org>, 
- Christoph Hellwig <hch@infradead.org>, Michal Hocko <mhocko@suse.com>, 
- "Kirill A. Shutemov" <kirill@shutemov.name>, 
- Chris Torek <chris.torek@gmail.com>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
- loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
- sparclinux@vger.kernel.org, linux-mm@kvack.org, 
- linux-kselftest@vger.kernel.org, linux-abi-devel@lists.sourceforge.net, 
- Charlie Jenkins <charlie@rivosinc.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2582; i=charlie@rivosinc.com;
- h=from:subject:message-id; bh=v+6JyaTNEum7sQVRfCLlZa2h0GjRhYNybjctqPTjXjI=;
- b=owGbwMvMwCHWx5hUnlvL8Y3xtFoSQ9ot+RkaGxaJ/61aKCWQFuW4/RLXZ/ZytuJlXCePW/lm/
- BEMfPmgo5SFQYyDQVZMkYXnWgNz6x39sqOiZRNg5rAygQxh4OIUgIl8VmJkmJ40y3j9/d1mFyvf
- My3sVpqs+9/6YNER2ftWy07b31r7azfDfzfJmfzFLLNYSxYW7GExLQoUvbVs9j2GHob0FXfdby4
- 9wwcA
-X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
- fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
+References: <20240904234803.698424-1-masahiroy@kernel.org> <20240904234803.698424-15-masahiroy@kernel.org>
+ <20240905143850.GD1517132-robh@kernel.org>
+In-Reply-To: <20240905143850.GD1517132-robh@kernel.org>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Fri, 6 Sep 2024 09:27:13 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASbhsgMyo--WrvLaUyaJQdAFrpS48L_E=T1MVgvZhB4Bw@mail.gmail.com>
+Message-ID: <CAK7LNASbhsgMyo--WrvLaUyaJQdAFrpS48L_E=T1MVgvZhB4Bw@mail.gmail.com>
+Subject: Re: [PATCH 14/15] kbuild: rename CONFIG_GENERIC_BUILTIN_DTB to CONFIG_BUILTIN_DTB
+To: Rob Herring <robh@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Michal Simek <monstr@monstr.eu>, devicetree@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-openrisc@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add a selftest for the ADDR_LIMIT_47BIT personality flag that mmaps
-until it runs out of space and ensures no addresses are allocated above
-47 bits.
+On Thu, Sep 5, 2024 at 11:38=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
+:
+>
+> On Thu, Sep 05, 2024 at 08:47:50AM +0900, Masahiro Yamada wrote:
+> > Now that all architectures have migrated to the generic built-in
+> > DTB support, the GENERIC_ prefix is no longer necessary.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  Makefile                             | 2 +-
+> >  arch/arc/Kconfig                     | 2 +-
+> >  arch/loongarch/Kconfig               | 1 -
+> >  arch/microblaze/Kconfig              | 2 +-
+> >  arch/mips/Kconfig                    | 1 -
+> >  arch/nios2/platform/Kconfig.platform | 1 -
+> >  arch/openrisc/Kconfig                | 2 +-
+> >  arch/riscv/Kconfig                   | 1 -
+> >  arch/sh/Kconfig                      | 1 -
+> >  arch/xtensa/Kconfig                  | 2 +-
+> >  drivers/of/Kconfig                   | 2 +-
+> >  scripts/Makefile.vmlinux             | 2 +-
+> >  scripts/link-vmlinux.sh              | 2 +-
+> >  13 files changed, 8 insertions(+), 13 deletions(-)
+>
+> > diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> > index e1d3e5fb6fd2..70f169210b52 100644
+> > --- a/arch/loongarch/Kconfig
+> > +++ b/arch/loongarch/Kconfig
+> > @@ -388,7 +388,6 @@ endchoice
+> >  config BUILTIN_DTB
+> >       bool "Enable built-in dtb in kernel"
+> >       depends on OF
+> > -     select GENERIC_BUILTIN_DTB
+> >       help
+> >         Some existing systems do not provide a canonical device tree to
+> >         the kernel at boot time. Let's provide a device tree table in t=
+he
+>
+> > diff --git a/arch/nios2/platform/Kconfig.platform b/arch/nios2/platform=
+/Kconfig.platform
+> > index c75cadd92388..5f0cf551b5ca 100644
+> > --- a/arch/nios2/platform/Kconfig.platform
+> > +++ b/arch/nios2/platform/Kconfig.platform
+> > @@ -38,7 +38,6 @@ config NIOS2_DTB_PHYS_ADDR
+> >  config BUILTIN_DTB
+> >       bool "Compile and link device tree into kernel image"
+> >       depends on !COMPILE_TEST
+> > -     select GENERIC_BUILTIN_DTB
+>
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -1110,7 +1110,6 @@ config RISCV_ISA_FALLBACK
+> >  config BUILTIN_DTB
+> >       bool "Built-in device tree"
+> >       depends on OF && NONPORTABLE
+>
+> Humm, maybe this NONPORTABLE option could be common and used to
+> accomplish what I want here...
 
-Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
----
- tools/testing/selftests/mm/.gitignore              |  1 +
- tools/testing/selftests/mm/Makefile                |  1 +
- tools/testing/selftests/mm/map_47bit_personality.c | 34 ++++++++++++++++++++++
- 3 files changed, 36 insertions(+)
 
-diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-index da030b43e43b..918ef05e180d 100644
---- a/tools/testing/selftests/mm/.gitignore
-+++ b/tools/testing/selftests/mm/.gitignore
-@@ -32,6 +32,7 @@ mlock-random-test
- virtual_address_range
- gup_test
- va_128TBswitch
-+map_47bit_personality
- map_fixed_noreplace
- write_to_hugetlbfs
- hmm-tests
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index cfad627e8d94..2e95fd545409 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -50,6 +50,7 @@ TEST_GEN_FILES += hugepage-shm
- TEST_GEN_FILES += hugepage-vmemmap
- TEST_GEN_FILES += khugepaged
- TEST_GEN_FILES += madv_populate
-+TEST_GEN_FILES += map_47bit_personality
- TEST_GEN_FILES += map_fixed_noreplace
- TEST_GEN_FILES += map_hugetlb
- TEST_GEN_FILES += map_populate
-diff --git a/tools/testing/selftests/mm/map_47bit_personality.c b/tools/testing/selftests/mm/map_47bit_personality.c
-new file mode 100644
-index 000000000000..453412990c21
---- /dev/null
-+++ b/tools/testing/selftests/mm/map_47bit_personality.c
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Test the ADDR_LIMIT_47BIT personality flag.
-+ */
-+#include <sys/syscall.h>
-+#include <sys/mman.h>
-+#include <errno.h>
-+#include "../kselftest.h"
-+
-+#define LENGTH (100000000)
-+
-+#define ADDR_LIMIT_47BIT	0x10000000
-+#define BIT47			1UL << 47
-+
-+/*
-+ * Map memory with ADDR_LIMIT_47BIT until no memory left. Ensure that all returned
-+ * addresses are below 47 bits.
-+ */
-+int main(int argc, char **argv)
-+{
-+	void *addr;
-+
-+	syscall(__NR_personality, ADDR_LIMIT_47BIT);
-+
-+	do {
-+		addr = mmap(0, LENGTH, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	} while (addr != MAP_FAILED && (unsigned long)addr < BIT47);
-+
-+	if (errno == ENOMEM)
-+		ksft_test_result_pass("ADDR_LIMIT_47BIT works\n");
-+	else
-+		ksft_test_result_fail("mmap returned address above 47 bits with ADDR_LIMIT_47BIT with addr: %p and err: %s\n",
-+				      addr, strerror(errno));
-+}
 
--- 
-2.45.0
+I do not know how this can prevent new architectures from enabling
+BUILTIN_DTB.
 
+New architectures can select BUILTIN_DTB together with NONPORTABLE.
+
+
+
+> > -     select GENERIC_BUILTIN_DTB
+>
+> > diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
+> > index 3b772378773f..b09019cd87d4 100644
+> > --- a/arch/sh/Kconfig
+> > +++ b/arch/sh/Kconfig
+> > @@ -648,7 +648,6 @@ config BUILTIN_DTB
+> >       bool "Use builtin DTB"
+> >       default n
+> >       depends on SH_DEVICE_TREE
+> > -     select GENERIC_BUILTIN_DTB
+>
+> > diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
+> > index 5142e7d7fef8..53a227ca3a3c 100644
+> > --- a/drivers/of/Kconfig
+> > +++ b/drivers/of/Kconfig
+> > @@ -2,7 +2,7 @@
+> >  config DTC
+> >       bool
+> >
+> > -config GENERIC_BUILTIN_DTB
+> > +config BUILTIN_DTB
+> >       bool
+>
+> I'm confused. We can't have the same config option twice, can we?
+
+
+We can.
+
+
+Documentation/kbuild/kconfig-language.rst says:
+
+  A config option can be defined multiple times with the same
+  name, but every definition can have only a single input prompt and the
+  type must not conflict.
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
 
