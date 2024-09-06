@@ -1,218 +1,135 @@
-Return-Path: <linux-mips+bounces-5387-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5388-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B21796F08A
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2024 11:56:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E80296F359
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2024 13:44:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 997011C21619
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2024 09:56:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E75928692E
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2024 11:44:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C84791C9DEA;
-	Fri,  6 Sep 2024 09:56:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="JRZJEoBD";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YbuZKsYy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5AC11CBE83;
+	Fri,  6 Sep 2024 11:43:56 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout8-smtp.messagingengine.com (fout8-smtp.messagingengine.com [103.168.172.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758A413CFB6;
-	Fri,  6 Sep 2024 09:56:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A041CB33E;
+	Fri,  6 Sep 2024 11:43:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725616566; cv=none; b=adBUzLjbZZeW4/TorWldShE0AjYxHXER0lBCG9NYYgmass1qVzJ+Rb/2pos9U0ALG8Bdxfx5F8cki6lk62KWugaz1cW6HWVm+4LJuY79dth/lsKut/0sCqPAGExsh7mfocgpl1w6RVPvjsPb6QpubEwVQ13CyaUSV6MqWszjOd0=
+	t=1725623036; cv=none; b=BIV2S24x1CoKvzaDJ0Oi4QynN0eCgLgo5sqLBMB4lKol4rWM95bnwBI4IxUlKQQWrzUOg9r46CUerC/ZNoDgBXkXUBeIqB4SZhLj8Pmt9KVJOPagr5z5AFbEHt0Cq85cwEdePNwj0OtfxG+7m9Z8xMrUimIy/SK8gvgzSLN+fgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725616566; c=relaxed/simple;
-	bh=gUUvPOjWWjObJ8l/tpxlAMuAowT/tNkWWi/REiyptbc=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=g0RveAz/cGOgC8/UW8yjyFAgo8Efh462/9MSCcVwKExO2O+Z1p2NG98PVi9JD5GQ0tAhzSYmKf8kGbW4Y++ON3tnvFMiJXrfdoKA4AI0ASWoaclM1c8vwzOFD18jKzyAlOsZhuGGXx2y7O5uZ8JGjgyb3DH3zSYOUYv3tutxCL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=JRZJEoBD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YbuZKsYy; arc=none smtp.client-ip=103.168.172.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfout.phl.internal (Postfix) with ESMTP id 8D7481380406;
-	Fri,  6 Sep 2024 05:56:03 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Fri, 06 Sep 2024 05:56:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1725616563;
-	 x=1725702963; bh=spCdL3tE0yzwRJuzWoP/dh86M1NxHAaaOfguj/M3bzI=; b=
-	JRZJEoBD7E03AtrbWnWmR/E4Bky06zQyVOaqEDrYtzVCYUtVqqML6vpNkpePZvmu
-	LkDh6ZKUYFxJIhFekagPIpis+EvEHIBr/7jMAKJCx4Mp0eFXfjOxw4omuLvqxgqq
-	yopa3r5GTd6Dz3crswRx7hsJ7t/FqRvEwoY6w6ScKbyAV1eQttm8AKxhpPqlNYjU
-	9JD/6Z9/Sox2d8GPcqjQb3jreF0sJhqOjKP6b8Q9pi23HKr0G3Q2i9oKPk62DsQi
-	bnERniHGyUEeY9laCvDrkugc4NYwfP/OCnL8b9dt+urZV20UCu5ikrb+SDJqWKSB
-	6zYPX7cpruqXL/kbX7r6Sg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725616563; x=
-	1725702963; bh=spCdL3tE0yzwRJuzWoP/dh86M1NxHAaaOfguj/M3bzI=; b=Y
-	buZKsYyDBXnvApXrykY/L9TZDdHeKiS5BvrOg1KjB4lbLjI+Pz1jBrWfjCBGz7b6
-	QXoSEn7Sp5lgP8KIwTf+hpIAuN6xMt+Dud9rMLf9h9nNfQXz+kLEj1T1fYuiKkDn
-	xo2M7cYQuagF0gPBh4D2qe1Wm8EMnc4zc2xpnH+h3RJCYoBoNbhpLVM7n2DrBQve
-	nOJIj1atr+y+akqlq99cnqMu0Y1Z41cYcQ6TazzWs/WDPHXiYWR3Qw9WjMENBVX2
-	iUJ0akO/5txv9gEcf9lT9E+LbAUOH02gMaeLaylnY6s67cj7xFzlL+qqk6Ct/Ig/
-	6GGTCcVbscbDGcLe6hjUA==
-X-ME-Sender: <xms:s9HaZg6T99twwNpEAUrg5EMam6_B2aHEhP2d_0uPbtGSUObGn3qT3Q>
-    <xme:s9HaZh5NZhMxeB34qIKrdxYW9sIdBeQtetUXCpcOF3KjfuOVbQCtzH8LOB7VyjGqv
-    BZtDrk_Wx610_rXHfA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeiuddgvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdeg
-    jedvfeehtdeggeevheefleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepuddu
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvg
-    hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgtshhkhiesvhhgvghr
-    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvg
-    hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshht
-    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhiphhsse
-    hvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphgrrhhishgt
-    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqshefledtse
-    hvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqshhhsehvghgv
-    rhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhprghrtghlihhnuhigsehvghgvrh
-    drkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:s9HaZvch4D5vjjeEUW8mCIns9gzXdDSCUK38eMYIOGz553WMOPB-_A>
-    <xmx:s9HaZlLMieryUgKfA90cp4bUrWxNAVkU-wPsVZ-4KCgHhrZXR664VQ>
-    <xmx:s9HaZkJvGV5rxrgidiv5v1AmF2Mr8SvDBii6qhVDEiQ_2ikC_UI0NQ>
-    <xmx:s9HaZmxHiDjy7TaPbAFN7scjDMfoVG7YWIlY3lLlwksDsPAwcRm4GA>
-    <xmx:s9HaZhBWotF2O5UX0Guk6WHI5NDPU9Edg2euSCzo2MFXf-Zyq83idrXt>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id E5FF5222006F; Fri,  6 Sep 2024 05:56:02 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1725623036; c=relaxed/simple;
+	bh=i5Vj6pTtqAFcekgqdft2a7YaCzfD36iQZL5KAInZPtA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e+CLoLxfdcUJacooRDfKkXx+HC3//KklOx+ovesDoCFmHXW9CnLcPHN5+n6fgzChtDbfaGKIUcEiR77IlVgKhsAw2iw5VFP5f63qyOyh8IVaf8lyQalQPUP4Rj51A1IaRTr3I9YTzZrQKF7eA+zvgJjHSHjGjVXWL9EM94P9bPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFE75C4CEC4;
+	Fri,  6 Sep 2024 11:43:46 +0000 (UTC)
+Date: Fri, 6 Sep 2024 12:43:44 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: guoren <guoren@kernel.org>, Charlie Jenkins <charlie@rivosinc.com>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S . Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	shuah <shuah@kernel.org>, Christoph Hellwig <hch@infradead.org>,
+	Michal Hocko <mhocko@suse.com>,
+	"Kirill A. Shutemov" <kirill@shutemov.name>,
+	Chris Torek <chris.torek@gmail.com>,
+	Linux-Arch <linux-arch@vger.kernel.org>,
+	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-abi-devel@lists.sourceforge.net
+Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
+ 47 bits
+Message-ID: <Ztrq8PBLJ3QuFJz7@arm.com>
+References: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
+ <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
+ <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
+ <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
+ <f23b18c6-1856-4b59-9ba3-59809b425c81@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 06 Sep 2024 09:55:42 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: guoren <guoren@kernel.org>
-Cc: "Charlie Jenkins" <charlie@rivosinc.com>,
- "Richard Henderson" <richard.henderson@linaro.org>,
- "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
- "Matt Turner" <mattst88@gmail.com>, "Vineet Gupta" <vgupta@kernel.org>,
- "Russell King" <linux@armlinux.org.uk>,
- "Huacai Chen" <chenhuacai@kernel.org>, "WANG Xuerui" <kernel@xen0n.name>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Helge Deller" <deller@gmx.de>, "Michael Ellerman" <mpe@ellerman.id.au>,
- "Nicholas Piggin" <npiggin@gmail.com>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Naveen N Rao" <naveen@kernel.org>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>,
- "Gerald Schaefer" <gerald.schaefer@linux.ibm.com>,
- "Heiko Carstens" <hca@linux.ibm.com>,
- "Vasily Gorbik" <gor@linux.ibm.com>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>,
- "Sven Schnelle" <svens@linux.ibm.com>,
- "Yoshinori Sato" <ysato@users.sourceforge.jp>,
- "Rich Felker" <dalias@libc.org>,
- "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
- "David S . Miller" <davem@davemloft.net>,
- "Andreas Larsson" <andreas@gaisler.com>,
- "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, "Andy Lutomirski" <luto@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Muchun Song" <muchun.song@linux.dev>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- "Vlastimil Babka" <vbabka@suse.cz>,
- "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>, shuah <shuah@kernel.org>,
- "Christoph Hellwig" <hch@infradead.org>,
- "Michal Hocko" <mhocko@suse.com>,
- "Kirill A. Shutemov" <kirill@shutemov.name>,
- "Chris Torek" <chris.torek@gmail.com>,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org,
- "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
- loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-abi-devel@lists.sourceforge.net
-Message-Id: <f23b18c6-1856-4b59-9ba3-59809b425c81@app.fastmail.com>
-In-Reply-To: 
- <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
-References: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
- <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
- <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
- <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
-Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to 47 bits
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f23b18c6-1856-4b59-9ba3-59809b425c81@app.fastmail.com>
 
-On Fri, Sep 6, 2024, at 09:14, Guo Ren wrote:
-> On Fri, Sep 6, 2024 at 3:18=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> w=
-rote:
->>
->> It's also unclear to me how we want this flag to interact with
->> the existing logic in arch_get_mmap_end(), which attempts to
->> limit the default mapping to a 47-bit address space already.
->
-> To optimize RISC-V progress, I recommend:
->
-> Step 1: Approve the patch.
-> Step 2: Update Go and OpenJDK's RISC-V backend to utilize it.
-> Step 3: Wait approximately several iterations for Go & OpenJDK
-> Step 4: Remove the 47-bit constraint in arch_get_mmap_end()
+On Fri, Sep 06, 2024 at 09:55:42AM +0000, Arnd Bergmann wrote:
+> On Fri, Sep 6, 2024, at 09:14, Guo Ren wrote:
+> > On Fri, Sep 6, 2024 at 3:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> >> It's also unclear to me how we want this flag to interact with
+> >> the existing logic in arch_get_mmap_end(), which attempts to
+> >> limit the default mapping to a 47-bit address space already.
+> >
+> > To optimize RISC-V progress, I recommend:
+> >
+> > Step 1: Approve the patch.
+> > Step 2: Update Go and OpenJDK's RISC-V backend to utilize it.
+> > Step 3: Wait approximately several iterations for Go & OpenJDK
+> > Step 4: Remove the 47-bit constraint in arch_get_mmap_end()
+> 
+> I really want to first see a plausible explanation about why
+> RISC-V can't just implement this using a 47-bit DEFAULT_MAP_WINDOW
+> like all the other major architectures (x86, arm64, powerpc64),
 
-I really want to first see a plausible explanation about why
-RISC-V can't just implement this using a 47-bit DEFAULT_MAP_WINDOW
-like all the other major architectures (x86, arm64, powerpc64),
-e.g. something like the patch below (untested, probably slightly
-wrong but show illustrate my point).
+FWIW arm64 actually limits DEFAULT_MAP_WINDOW to 48-bit in the default
+configuration. We end up with a 47-bit with 16K pages but for a
+different reason that has to do with LPA2 support (I doubt we need this
+for the user mapping but we need to untangle some of the macros there;
+that's for a separate discussion).
 
-     Arnd
+That said, we haven't encountered any user space problems with a 48-bit
+DEFAULT_MAP_WINDOW. So I also think RISC-V should follow a similar
+approach (47 or 48 bit default limit). Better to have some ABI
+consistency between architectures. One can still ask for addresses above
+this default limit via mmap().
 
-diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm=
-/processor.h
-index 8702b8721a27..de9863be1efd 100644
---- a/arch/riscv/include/asm/processor.h
-+++ b/arch/riscv/include/asm/processor.h
-@@ -20,17 +20,8 @@
-  * mmap_end < addr, being mmap_end the top of that address space.
-  * See Documentation/arch/riscv/vm-layout.rst for more details.
-  */
--#define arch_get_mmap_end(addr, len, flags)			\
--({								\
--	unsigned long mmap_end;					\
--	typeof(addr) _addr =3D (addr);				\
--	if ((_addr) =3D=3D 0 || is_compat_task() ||			\
--	    ((_addr + len) > BIT(VA_BITS - 1)))			\
--		mmap_end =3D STACK_TOP_MAX;			\
--	else							\
--		mmap_end =3D (_addr + len);			\
--	mmap_end;						\
--})
-+#define arch_get_mmap_end(addr, len, flags) \
-+		(((addr) > DEFAULT_MAP_WINDOW) ? TASK_SIZE : DEFAULT_MAP_WINDOW)
-=20
- #define arch_get_mmap_base(addr, base)				\
- ({								\
-@@ -47,7 +38,7 @@
- })
-=20
- #ifdef CONFIG_64BIT
--#define DEFAULT_MAP_WINDOW     (UL(1) << (MMAP_VA_BITS - 1))
-+#define DEFAULT_MAP_WINDOW     (is_compat_task() ? (UL(1) << (MMAP_VA_B=
-ITS - 1)) : TASK_SIZE_32)
- #define STACK_TOP_MAX          TASK_SIZE_64
- #else
- #define DEFAULT_MAP_WINDOW     TASK_SIZE
+-- 
+Catalin
 
