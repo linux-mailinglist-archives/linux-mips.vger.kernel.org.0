@@ -1,151 +1,176 @@
-Return-Path: <linux-mips+bounces-5390-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5391-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D1139700E9
-	for <lists+linux-mips@lfdr.de>; Sat,  7 Sep 2024 10:33:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDA67970191
+	for <lists+linux-mips@lfdr.de>; Sat,  7 Sep 2024 12:17:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 547111C21A4F
-	for <lists+linux-mips@lfdr.de>; Sat,  7 Sep 2024 08:33:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C7D0284F36
+	for <lists+linux-mips@lfdr.de>; Sat,  7 Sep 2024 10:17:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 749A91487D1;
-	Sat,  7 Sep 2024 08:33:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E65B156F4A;
+	Sat,  7 Sep 2024 10:17:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cnlLb71x"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="BwPdePv7";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ax7CXzye"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh3-smtp.messagingengine.com (fhigh3-smtp.messagingengine.com [103.168.172.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BF7E134BD;
-	Sat,  7 Sep 2024 08:33:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6714BBE6C;
+	Sat,  7 Sep 2024 10:17:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725698001; cv=none; b=t6JeNEWNn588sch5m3ADLPJNR/8FYgVEvyLI2nKLYAfpEeCvCuuWDBXtBSE481NyKVKh0/eZrLGE7P30PntT1DxVmnl5+m41ZDjeKs0HzIyxgLl7rPf7uEzyMqkzX2yFTNUOAofnqyTmT+n/YjzUZNrmCP8BY4IYFNtFK7oj+JQ=
+	t=1725704231; cv=none; b=p1Q0GbckF65+cFqn6jay6Jt+FfK8kappBh+fYywM0Mu3m6b1wHS4pHfQcK8nQWp9ytbKJm9gpXGkDGzSZTxXFHTkWYzrisuwXvWLr8R4igKrFnmESc4Wrr/UHwT30TdXtN+wci7O+UA4oRIJKWx/OpHIMAlbpoq/RtV3mWagv9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725698001; c=relaxed/simple;
-	bh=u+uX1McwKP5BK8XQmU+PXHl98+FoSw3Bcucds2dN+dQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SxRf4eFXT2Xery0SzmavANNRfortkwsu75ZFT3p/S6ICOwtQxLi6IRkaCk+MCMkDn605X4qbHxfVTUlmABU1govAXr4fDrebGz7s/gbzjMAEQYBORtxet9O5P4z6fstv7weUXYMegEPsRlQxcIZ693ZeQE9OLQgsf9J3N/oa31A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cnlLb71x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2336C4AF09;
-	Sat,  7 Sep 2024 08:33:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725698001;
-	bh=u+uX1McwKP5BK8XQmU+PXHl98+FoSw3Bcucds2dN+dQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=cnlLb71xCoe+LwDSKHLu+SAFDTXAZTH/hmvRuLNA50FuPFpQKiyYhfaxxqqqNhONf
-	 /538MrEoA/xrfbDEPNIvFWKTCYrLMmrMi5VrLdjlUVlsQNkj0R8hATfkFiwMXfTJ1+
-	 lOI62A81KIJ8WIJvBwf8NyGKhkR+Qhgh9EICXinHmefcNYp+rf1iR3U0E3EYHSG4+Z
-	 sVaKDLE7o+zVIqp88HIQcLN0fT+8lw61EnzcGOTu87EjcEKttssbC286D0VRc4Kvzc
-	 3E6gAYYOdAhCCUsi8pbwD5mA8w75lFyUPAEL7cse7H+LyPmkmFJLAu64JXCPbLTP6H
-	 e+mGjam/r8JWQ==
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5c3d8d3ebbdso3666868a12.0;
-        Sat, 07 Sep 2024 01:33:20 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUy+2CkdXqhQrmiM3WoAV5n1nutGPFozQEZppt7OvvzCX1QCIBuBcI5yaOeXyaxd4CImXfHMBYmCZNG6Q==@vger.kernel.org, AJvYcCXXQBc15gxpdk/0tkmapV9UcpQg1celUp8ilRY4VzkpK37JkBLIMgNL4osznqoYZTvfLFdWLVUpp08YOK8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTfEZubHe1YdfeJz3/+DqKOC/sqgzA+TRHyiaIrlIAVt3ByXpi
-	yyCVak/459ib4yjdIt/F0JGfIkAWYLX6sBeAIwJfyGaaqHZsCDkFhjMfaSg2UrXOU1DsARm/mUV
-	dwANTT6edTcd/17yvMfUoqmS2ECY=
-X-Google-Smtp-Source: AGHT+IFsZizcv4SWg/uc4wlWEYG5dAogoRVM+IMfx6S10F6ncEDAhujg1s1ypzSz68Wq2OEYPS2U6E3IM7nuU3g2JxE=
-X-Received: by 2002:a05:6402:5208:b0:5c2:2b1f:f75a with SMTP id
- 4fb4d7f45d1cf-5c3c1f87bf5mr14240990a12.11.1725697999525; Sat, 07 Sep 2024
- 01:33:19 -0700 (PDT)
+	s=arc-20240116; t=1725704231; c=relaxed/simple;
+	bh=+DyY6GPIk1WDZOgKzGI2dYuz/zLq3vDNhNWL4C4Q6BI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=d8SV4PZ12oS41GOGtEurB9cehcqeB4gRTLDpmmdbhqAH4Ql1zBCIbGcFsZ1E0Rx4nE6o42cfHMM2Aci0+0JRaSjSVu4K4sBosYtyOCn0gc1yOP9ABe+Dhs72N3O3O9kc9lQRgJYlSZ3r/floobKsMGgC5NC/VZFKd/Wpo+kf2cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=BwPdePv7; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ax7CXzye; arc=none smtp.client-ip=103.168.172.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 8A2C811402A0;
+	Sat,  7 Sep 2024 06:17:08 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-12.internal (MEProxy); Sat, 07 Sep 2024 06:17:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm2; t=1725704228; x=1725790628; bh=kn
+	sOpxEIaN0Ug/xUNvc2yVG6bIyAL1Mxw0s6/CJBbA4=; b=BwPdePv7XO6vWf0jsF
+	9aJCZN9kuiGrMCQLVO+4XqVIQloRRlxqnuDSrkiCmTFfVaGF96bcgn6tcRSwjXGH
+	0zlhQFEHgbUalDFYrgii8NgufSWaunfJ8ozfIs59C4HW2OUXenTU9DTnpYqDx7SJ
+	pqIkn6GsRRVofN1bnXkK/xbPO9+NaFarLJNWrXpFJdMPBmBgW9dcis5MQggucLSW
+	72MYrqVjlDV/P7mHYVtWW+yZs9KmhvzOa/tnq/EIMAKUT/bfAT/r2AM+h6CrlWuh
+	DDVP9g9H91B466Qc44uqYW8IrD+bnjS/GwMmvoMjcTzoyXM25vGYvS/idklgK9E/
+	0hmg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; t=1725704228; x=1725790628; bh=knsOpxEIaN0Ug
+	/xUNvc2yVG6bIyAL1Mxw0s6/CJBbA4=; b=ax7CXzyeoZF45TpMrxsT1NoxhVWUB
+	9PxUWMFOEURaHGqZ9SCQY8/JU+VO0GfGs7SRrDUka/tHfqeEdHkJaY43QkLqOGk0
+	JmX58i8odqi+4UYQzrgPNKKgMcN3eYISHmpgNcGraN53JbPn1DK2V8sXS0Ad4lMk
+	erP5kyg3aeAZG2wNpQW/h0kqxYJSnIjGqHsgM/Jc26AI631GKSamJCuFnMSypScz
+	yv5+9CQFkSergdZOxpnmysMhbNHetRncFZb+BZiaiTqsxBd+nbp3vTq2JQx7WLrh
+	7jTXoi1L49M1RSmso23jzwJLJz6A8xf5D4b87ISVM9aR6vrEm9Y5jVVsw==
+X-ME-Sender: <xms:IyjcZno79q8cs2MloaS4eCszndO-7EfEGzCdBKSvoZwxus4u65FBVw>
+    <xme:IyjcZhoLtQ1G04uisPdvBnoAqPtpsImC26fSG8GlgzRgjtMxdVIhNYGMEW-ZePPmt
+    zUO4iFe4azhkyuwOCA>
+X-ME-Received: <xmr:IyjcZkNuZz2hFVvcNJsMkSjmYvhjP9kQLj7FS8yQFhFf0D6XXqT93rAP6QOdRcwE9PU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeifedgvdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecu
+    hfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomheqnecuggftrfgrthhtvghrnhepudffffffhfeuheevhffgleevkeeugeet
+    feegieeijeehfeekheekveduveeigeeunecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtgho
+    mhdpnhgspghrtghpthhtohepuddvpdhmohguvgepshhmthhpohhuthdprhgtphhtthhope
+    hkvhhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhglhigsehlihhn
+    uhhtrhhonhhigidruggvpdhrtghpthhtoheptghhvghnhhhurggtrghisehkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehvihhrvghshhdrkhhumhgrrheslhhinhgrrhhordhorhhg
+    pdhrtghpthhtoheplhhoohhnghgrrhgthheslhhishhtshdrlhhinhhugidruggvvhdprh
+    gtphhtthhopehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhrtghpthht
+    ohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthhope
+    hkvghrnhgvlhesgigvnhdtnhdrnhgrmhgvpdhrtghpthhtoheplhhinhhugidqmhhiphhs
+    sehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:IyjcZq6QwRbxzgiwuZebXckyYZj6fEd7GDek9J2KRhmrLGEw0GlHvg>
+    <xmx:IyjcZm6yEhlct0TDm7j7D2vJTw7K84ICVvYhjbeHpWmQ2LvBU1zFAQ>
+    <xmx:IyjcZihpk9v8wVpC2zgZ44WtDqImDb6En3rtp8wn7zD4fflxPe-BWw>
+    <xmx:IyjcZo5HuwFEKifXJAP7wIVbs_Q50zo_jnbVqTcdUiw93zD3Gy4QaQ>
+    <xmx:JCjcZmxHIDq7uMXzwxa8h81IPQrPAsm-8kKMxs8ilKkmdX8Ukx1zlKHC>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 7 Sep 2024 06:17:06 -0400 (EDT)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH 0/5] LoongArch, MIPS: Unify Loongson IOCSR handling
+Date: Sat, 07 Sep 2024 11:17:02 +0100
+Message-Id: <20240907-iocsr-v1-0-0c99b3334444@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240907082720.452148-1-maobibo@loongson.cn>
-In-Reply-To: <20240907082720.452148-1-maobibo@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Sat, 7 Sep 2024 16:33:07 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4miZqRDWw5SkfdJJRxuV_4obnqLWHc6zdgGC09xE5rRw@mail.gmail.com>
-Message-ID: <CAAhV-H4miZqRDWw5SkfdJJRxuV_4obnqLWHc6zdgGC09xE5rRw@mail.gmail.com>
-Subject: Re: [PATCH] smp: Mark smp_prepare_boot_cpu() __init
-To: Bibo Mao <maobibo@loongson.cn>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Thomas Gleixner <tglx@linutronix.de>, Naveen N Rao <naveen@kernel.org>, loongarch@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAB4o3GYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDSwMz3cz85OIiXQsjSwNzUxNTC1NDQyWg2oKi1LTMCrA50bG1tQBNTQW
+ LVwAAAA==
+To: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, 
+ Thomas Gleixner <tglx@linutronix.de>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-mips@vger.kernel.org, kvm@vger.kernel.org, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2101;
+ i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
+ bh=+DyY6GPIk1WDZOgKzGI2dYuz/zLq3vDNhNWL4C4Q6BI=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrQ7Gkrn9jH/iw5jLnoV3va4f/eGC6b5TysXi13q+eZbr
+ nb33dd5HaUsDGJcDLJiiiwhAkp9GxovLrj+IOsPzBxWJpAhDFycAjCRqFxGhidxOu+mfRMQdvNi
+ 61/b1HCROahz2u9FlS/X2i7afyWQbwLDP6XHq/VvNk6x8TTKuP/C5U3hVlnBz2VXznlLfao7VWl
+ 7nxEA
+X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
+ fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+Hi folks,
 
-On Sat, Sep 7, 2024 at 4:27=E2=80=AFPM Bibo Mao <maobibo@loongson.cn> wrote=
-:
->
-> Function smp_prepare_boot_cpu() is only called at boot stage, here
-> mark it as __init.
->
-> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
-> ---
->  arch/loongarch/kernel/smp.c | 2 +-
->  arch/mips/kernel/smp.c      | 2 +-
->  arch/powerpc/kernel/smp.c   | 2 +-
->  include/linux/smp.h         | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
-> index ca405ab86aae..be2655c4c414 100644
-> --- a/arch/loongarch/kernel/smp.c
-> +++ b/arch/loongarch/kernel/smp.c
-> @@ -476,7 +476,7 @@ core_initcall(ipi_pm_init);
->  #endif
->
->  /* Preload SMP state for boot cpu */
-> -void smp_prepare_boot_cpu(void)
-> +void __init smp_prepare_boot_cpu(void)
->  {
->         unsigned int cpu, node, rr_node;
->
-> diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
-> index 0362fc5df7b0..39e193cad2b9 100644
-> --- a/arch/mips/kernel/smp.c
-> +++ b/arch/mips/kernel/smp.c
-> @@ -439,7 +439,7 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
->  }
->
->  /* preload SMP state for boot cpu */
-> -void smp_prepare_boot_cpu(void)
-> +void __init smp_prepare_boot_cpu(void)
->  {
->         if (mp_ops->prepare_boot_cpu)
->                 mp_ops->prepare_boot_cpu();
-> diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
-> index 46e6d2cd7a2d..4ab9b8cee77a 100644
-> --- a/arch/powerpc/kernel/smp.c
-> +++ b/arch/powerpc/kernel/smp.c
-> @@ -1166,7 +1166,7 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
->         cpu_smt_set_num_threads(num_threads, threads_per_core);
->  }
->
-> -void smp_prepare_boot_cpu(void)
-> +void __init smp_prepare_boot_cpu(void)
->  {
->         BUG_ON(smp_processor_id() !=3D boot_cpuid);
->  #ifdef CONFIG_PPC64
-> diff --git a/include/linux/smp.h b/include/linux/smp.h
-> index fcd61dfe2af3..6a0813c905d0 100644
-> --- a/include/linux/smp.h
-> +++ b/include/linux/smp.h
-> @@ -109,7 +109,7 @@ static inline void on_each_cpu_cond(smp_cond_func_t c=
-ond_func,
->   * Architecture specific boot CPU setup.  Defined as empty weak function=
- in
->   * init/main.c. Architectures can override it.
->   */
-> -void smp_prepare_boot_cpu(void);
-> +void __init smp_prepare_boot_cpu(void);
->
->  #ifdef CONFIG_SMP
->
->
-> base-commit: b31c4492884252a8360f312a0ac2049349ddf603
-> --
-> 2.39.3
->
+This series unfied LoongArch and MIPS's IOCSR functions and
+macros so they will expose same interface to arch-indenpendent
+drivers.
+
+This can reduce code deuplication, and also help my unifed IPI driver
+and MIPS extio driver effort.
+
+This is touching many sub-systems in once so might be hard to merge.
+
+Huacai, can you apply first three patch via loongarch-next tree.
+For last two patch maybe better merge them via a second PR after
+all subsystem PRs merged.
+
+Please review.
+Thanks
+
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+Jiaxun Yang (5):
+      LoongArch: Rename cpu_has_csr as cpu_has_iocsr
+      LoongArch: Probe more CPU features from CPUCFG
+      LoongArch: cpu-probe: Move IOCSR probing out of cpu_probe_common
+      LoongArch: Extract IOCSR definitions to standalone header
+      MIPS: Loongson64: Use shared IOCSR header
+
+ MAINTAINERS                                        |   1 +
+ arch/loongarch/include/asm/cpu-features.h          |   2 +-
+ arch/loongarch/include/asm/cpu.h                   |   4 +-
+ arch/loongarch/include/asm/loongarch.h             |  90 ----------------
+ arch/loongarch/kernel/cpu-probe.c                  | 111 ++++++++++++--------
+ arch/loongarch/kernel/relocate_kernel.S            |   5 +-
+ arch/loongarch/kernel/smp.c                        |  23 +++--
+ .../include/asm/mach-loongson64/loongson_regs.h    |  58 +++--------
+ arch/mips/kvm/vz.c                                 |   2 +-
+ arch/mips/loongson64/smp.c                         |  44 ++++----
+ drivers/cpufreq/loongson3_cpufreq.c                |  10 +-
+ drivers/irqchip/irq-loongarch-avec.c               |   5 +-
+ drivers/irqchip/irq-loongson-eiointc.c             |   5 +-
+ drivers/platform/mips/cpu_hwmon.c                  |   7 +-
+ include/linux/loongson/iocsr.h                     | 113 +++++++++++++++++++++
+ 15 files changed, 256 insertions(+), 224 deletions(-)
+---
+base-commit: 9aaeb87ce1e966169a57f53a02ba05b30880ffb8
+change-id: 20240906-iocsr-829075458511
+
+Best regards,
+-- 
+Jiaxun Yang <jiaxun.yang@flygoat.com>
+
 
