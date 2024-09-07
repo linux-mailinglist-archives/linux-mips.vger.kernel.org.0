@@ -1,135 +1,132 @@
-Return-Path: <linux-mips+bounces-5388-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5389-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E80296F359
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2024 13:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CDE609700E0
+	for <lists+linux-mips@lfdr.de>; Sat,  7 Sep 2024 10:27:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E75928692E
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2024 11:44:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8AB4B2842BD
+	for <lists+linux-mips@lfdr.de>; Sat,  7 Sep 2024 08:27:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5AC11CBE83;
-	Fri,  6 Sep 2024 11:43:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA2C514AD22;
+	Sat,  7 Sep 2024 08:27:27 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A041CB33E;
-	Fri,  6 Sep 2024 11:43:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 265711B85DC;
+	Sat,  7 Sep 2024 08:27:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725623036; cv=none; b=BIV2S24x1CoKvzaDJ0Oi4QynN0eCgLgo5sqLBMB4lKol4rWM95bnwBI4IxUlKQQWrzUOg9r46CUerC/ZNoDgBXkXUBeIqB4SZhLj8Pmt9KVJOPagr5z5AFbEHt0Cq85cwEdePNwj0OtfxG+7m9Z8xMrUimIy/SK8gvgzSLN+fgg=
+	t=1725697647; cv=none; b=ojW0QIwWTrMUi1gCB7tl5LVOcNMHf33ANyhgIqTFqUW+l6nvY7xpK3pEwec9HNn92ccih96CkMsqOAe3Wh9n3jAIk4YcpdCAOoNJA2ud8B2O1K9Pq6U7lju4WiudGhQVSX/xQmbkOn1lxvuyxkF5F1HoLDf8ID3ypqlGiGM/zlE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725623036; c=relaxed/simple;
-	bh=i5Vj6pTtqAFcekgqdft2a7YaCzfD36iQZL5KAInZPtA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e+CLoLxfdcUJacooRDfKkXx+HC3//KklOx+ovesDoCFmHXW9CnLcPHN5+n6fgzChtDbfaGKIUcEiR77IlVgKhsAw2iw5VFP5f63qyOyh8IVaf8lyQalQPUP4Rj51A1IaRTr3I9YTzZrQKF7eA+zvgJjHSHjGjVXWL9EM94P9bPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFE75C4CEC4;
-	Fri,  6 Sep 2024 11:43:46 +0000 (UTC)
-Date: Fri, 6 Sep 2024 12:43:44 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: guoren <guoren@kernel.org>, Charlie Jenkins <charlie@rivosinc.com>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
+	s=arc-20240116; t=1725697647; c=relaxed/simple;
+	bh=i+dsDE/I0D1lKf66AAYYx0gu5rFBsU18yAz5QAfMXdc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SVKBLAd+b5sxWSK3F2nWv4ukRG6+Tue9HOkrWUYVwAOLjZ2JOBqsWEVcfTM+RIE56RhIWW88Tg+8D+arDqAYIz2OlZgpqFl0GnfNdaq1rLiv6QDjUMdKsvhOLpVIkuLm8hEuCdG5OgnjppNus+5WBtxg+Yokj9bn96UIDP7Nav0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.2.5.213])
+	by gateway (Coremail) with SMTP id _____8Bx++lpDtxmxxMBAA--.2755S3;
+	Sat, 07 Sep 2024 16:27:21 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.2.5.213])
+	by front1 (Coremail) with SMTP id qMiowMDxcNZoDtxmd+0AAA--.5018S2;
+	Sat, 07 Sep 2024 16:27:21 +0800 (CST)
+From: Bibo Mao <maobibo@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	Michael Ellerman <mpe@ellerman.id.au>,
 	Nicholas Piggin <npiggin@gmail.com>,
 	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S . Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	shuah <shuah@kernel.org>, Christoph Hellwig <hch@infradead.org>,
-	Michal Hocko <mhocko@suse.com>,
-	"Kirill A. Shutemov" <kirill@shutemov.name>,
-	Chris Torek <chris.torek@gmail.com>,
-	Linux-Arch <linux-arch@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-abi-devel@lists.sourceforge.net
-Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
- 47 bits
-Message-ID: <Ztrq8PBLJ3QuFJz7@arm.com>
-References: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
- <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
- <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
- <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
- <f23b18c6-1856-4b59-9ba3-59809b425c81@app.fastmail.com>
+	Thomas Gleixner <tglx@linutronix.de>
+Cc: Naveen N Rao <naveen@kernel.org>,
+	loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] smp: Mark smp_prepare_boot_cpu() __init
+Date: Sat,  7 Sep 2024 16:27:20 +0800
+Message-Id: <20240907082720.452148-1-maobibo@loongson.cn>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <f23b18c6-1856-4b59-9ba3-59809b425c81@app.fastmail.com>
+X-CM-TRANSID:qMiowMDxcNZoDtxmd+0AAA--.5018S2
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+	nUUI43ZEXa7xR_UUUUUUUUU==
 
-On Fri, Sep 06, 2024 at 09:55:42AM +0000, Arnd Bergmann wrote:
-> On Fri, Sep 6, 2024, at 09:14, Guo Ren wrote:
-> > On Fri, Sep 6, 2024 at 3:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >> It's also unclear to me how we want this flag to interact with
-> >> the existing logic in arch_get_mmap_end(), which attempts to
-> >> limit the default mapping to a 47-bit address space already.
-> >
-> > To optimize RISC-V progress, I recommend:
-> >
-> > Step 1: Approve the patch.
-> > Step 2: Update Go and OpenJDK's RISC-V backend to utilize it.
-> > Step 3: Wait approximately several iterations for Go & OpenJDK
-> > Step 4: Remove the 47-bit constraint in arch_get_mmap_end()
-> 
-> I really want to first see a plausible explanation about why
-> RISC-V can't just implement this using a 47-bit DEFAULT_MAP_WINDOW
-> like all the other major architectures (x86, arm64, powerpc64),
+Function smp_prepare_boot_cpu() is only called at boot stage, here
+mark it as __init.
 
-FWIW arm64 actually limits DEFAULT_MAP_WINDOW to 48-bit in the default
-configuration. We end up with a 47-bit with 16K pages but for a
-different reason that has to do with LPA2 support (I doubt we need this
-for the user mapping but we need to untangle some of the macros there;
-that's for a separate discussion).
+Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+---
+ arch/loongarch/kernel/smp.c | 2 +-
+ arch/mips/kernel/smp.c      | 2 +-
+ arch/powerpc/kernel/smp.c   | 2 +-
+ include/linux/smp.h         | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-That said, we haven't encountered any user space problems with a 48-bit
-DEFAULT_MAP_WINDOW. So I also think RISC-V should follow a similar
-approach (47 or 48 bit default limit). Better to have some ABI
-consistency between architectures. One can still ask for addresses above
-this default limit via mmap().
+diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+index ca405ab86aae..be2655c4c414 100644
+--- a/arch/loongarch/kernel/smp.c
++++ b/arch/loongarch/kernel/smp.c
+@@ -476,7 +476,7 @@ core_initcall(ipi_pm_init);
+ #endif
+ 
+ /* Preload SMP state for boot cpu */
+-void smp_prepare_boot_cpu(void)
++void __init smp_prepare_boot_cpu(void)
+ {
+ 	unsigned int cpu, node, rr_node;
+ 
+diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
+index 0362fc5df7b0..39e193cad2b9 100644
+--- a/arch/mips/kernel/smp.c
++++ b/arch/mips/kernel/smp.c
+@@ -439,7 +439,7 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
+ }
+ 
+ /* preload SMP state for boot cpu */
+-void smp_prepare_boot_cpu(void)
++void __init smp_prepare_boot_cpu(void)
+ {
+ 	if (mp_ops->prepare_boot_cpu)
+ 		mp_ops->prepare_boot_cpu();
+diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
+index 46e6d2cd7a2d..4ab9b8cee77a 100644
+--- a/arch/powerpc/kernel/smp.c
++++ b/arch/powerpc/kernel/smp.c
+@@ -1166,7 +1166,7 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
+ 	cpu_smt_set_num_threads(num_threads, threads_per_core);
+ }
+ 
+-void smp_prepare_boot_cpu(void)
++void __init smp_prepare_boot_cpu(void)
+ {
+ 	BUG_ON(smp_processor_id() != boot_cpuid);
+ #ifdef CONFIG_PPC64
+diff --git a/include/linux/smp.h b/include/linux/smp.h
+index fcd61dfe2af3..6a0813c905d0 100644
+--- a/include/linux/smp.h
++++ b/include/linux/smp.h
+@@ -109,7 +109,7 @@ static inline void on_each_cpu_cond(smp_cond_func_t cond_func,
+  * Architecture specific boot CPU setup.  Defined as empty weak function in
+  * init/main.c. Architectures can override it.
+  */
+-void smp_prepare_boot_cpu(void);
++void __init smp_prepare_boot_cpu(void);
+ 
+ #ifdef CONFIG_SMP
+ 
 
+base-commit: b31c4492884252a8360f312a0ac2049349ddf603
 -- 
-Catalin
+2.39.3
+
 
