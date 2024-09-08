@@ -1,77 +1,77 @@
-Return-Path: <linux-mips+bounces-5424-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5425-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A1F197067A
-	for <lists+linux-mips@lfdr.de>; Sun,  8 Sep 2024 12:21:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFF0797067C
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Sep 2024 12:22:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7801E1C20EB1
-	for <lists+linux-mips@lfdr.de>; Sun,  8 Sep 2024 10:21:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3FFC3B21A78
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Sep 2024 10:22:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA2E4156668;
-	Sun,  8 Sep 2024 10:20:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BB7415853D;
+	Sun,  8 Sep 2024 10:20:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="V/heohLR";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="irVLNjke"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="I3gn1k9Y";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kz1AetKV"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout6-smtp.messagingengine.com (fout6-smtp.messagingengine.com [103.168.172.149])
+Received: from fhigh2-smtp.messagingengine.com (fhigh2-smtp.messagingengine.com [103.168.172.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C0AC1537DD;
-	Sun,  8 Sep 2024 10:20:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5AA7155332;
+	Sun,  8 Sep 2024 10:20:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725790831; cv=none; b=ZpRYRzUYy+pzKqkkvpGb5xXluVFS+LdJHUk8HK6uksZamfQ5p91NOfaZWMPDpSsRGmpcsawKcS8xPu9wdJBNq+lULkq/Ewo18MLu+m2Wr3pQrkeStdwQDJUmppmorjGWTnhd04FhSe4Z2po6GQ2DhDDZpnyInwt0IZ4do4x7aEA=
+	t=1725790833; cv=none; b=BWvw2LHtg+Xlv23tF8Y9WSgMGBWDZcHOcPtsG7riyjBDBsADzSicpIBB9RctnquB3fdL9oIDT71fEuq+KwdLJ6p3TGckBCVykpPn7Hrfp4l5YSVriEYC0jsEHNkc0AHYrJH9lKLBeB5sPqWVBhb/nMB7y6uALK+Z+45qjdkHjfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725790831; c=relaxed/simple;
-	bh=6W7V7EEEomFvzx7zP87p4zVKfdbX/dpvLnCVn/vqrn4=;
+	s=arc-20240116; t=1725790833; c=relaxed/simple;
+	bh=sW7dt3s4ypU+bzTb8JNQf1YyDVUNZthZ4SG4UK5zlgg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EikhkWRUuPPF56ZHleqzdCHSp2SaM0XmoXS7+S/iCwgSNaQ8gXBPU5fDBSeNrLHxtw7VbRkoKkd+NXreq7WNaWmP3M7hCp0b7pdCqBB5XaZrXiEMQ5FzLGcrzwM+F49Xz3ZMhT8Xo8ci6aMZzg8Jabz+tKKdv/wwiLmYkMiTSJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=V/heohLR; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=irVLNjke; arc=none smtp.client-ip=103.168.172.149
+	 In-Reply-To:To:Cc; b=CUZQDKA1LcXO06/Cs26sftIt3JY1m4MHPUVmxF/vC1h2O79cOf9oh53fwP2qn1tC6/yp/6lhxyqYV6LL/LBIbjDkmi4VzcaKo/Oybybmq8ZVStecmxsjrgrhrVpYJfZ9QcoCz5CFhUSmOhm88rZYwhRQJEeg0nU9QzhT/Pxz6M0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=I3gn1k9Y; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kz1AetKV; arc=none smtp.client-ip=103.168.172.153
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
-	by mailfout.phl.internal (Postfix) with ESMTP id 89DD813802F0;
-	Sun,  8 Sep 2024 06:20:29 -0400 (EDT)
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 06BE8114025A;
+	Sun,  8 Sep 2024 06:20:31 -0400 (EDT)
 Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Sun, 08 Sep 2024 06:20:29 -0400
+  by phl-compute-10.internal (MEProxy); Sun, 08 Sep 2024 06:20:31 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1725790829;
-	 x=1725877229; bh=E2c5mVns5PcirEWPdUpAMQUUGnSXml2150Qh3uYfD1M=; b=
-	V/heohLRtrGIRROqKpTrXxXBBezlaycunjd/5tsu4THdffQd6e+r8N8/O+y8XAJD
-	XJdzIj1pdU98nhDK0+ZatKGlvDOH7ECl3aTrojv/LIHb2q1eij2rB5LqBzNDLUfn
-	nnW7deriGQ9HtlAjRttVJRqWt+C+t8O9SdrY2ZLyj4fGFlubmQyB+IaWV1YJGPUt
-	KJVZBJfTRueZR6Tsy7X6RbuRVGbWsHiNbs/Z9ZwbIHeDWj63KKtP6A2WbKHIewhY
-	bXU8nAx0KzwKQUU/R37YCoV+1y7VeQvlLIwjAssswzXk8pX5lWSgev/lBr1YYAaH
-	OPgKNUM6G3uVPYIoX6R8fA==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1725790831;
+	 x=1725877231; bh=mvAFV+13e/DGT0Lo7yK48N1Jeu4Lld264/pVi4DAEA4=; b=
+	I3gn1k9Yr2a8rOJdbfl4S4FK1cnAzxZGY0PCyvbN8y3seCLDE3MJps0IcvjGZjQ3
+	oUDy4MRDxOiZg9zXAzYXi+12urFPTPPU59LqSGZ6RHiOtoncuM1OzNwh3cSsR0xM
+	4HM4Svfs/ZQKGoTIc90RdshbabRvnhB1pilqJFpWXtCHva7e/FuYnv+G7zfKpsQj
+	0T9tmKTS7jOfTcaS1Cgvjtr7440eYRg7p8RY1jI6E3jvk649avhBcQTqJFuMKIw6
+	IBhuSZcn7CA8HPUKJr2B3aXPm1DRcBRRdIuxL8qCZS1PHqNf6DzzKXJ4Iu3Hd6F2
+	447S4rByJb0jrCtjbDuEEA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725790829; x=
-	1725877229; bh=E2c5mVns5PcirEWPdUpAMQUUGnSXml2150Qh3uYfD1M=; b=i
-	rVLNjke5VOSagr0hgPJ/uy50G/RqRa/+boZqvE0HUzsuYJtgnCd26p8/kOtof39z
-	w0G1HAMgiKXgTy7/xrW2IcGnRWBZdI1rydEgL4WX8dFFvPt4R0pvzXrxc7GfKdh/
-	3rApPwZr9UyFeJ/y/MtLj/kFIVubllqFMA+VYiUbLOtlUnvqYrlFb3Vyw38c0coY
-	uPxgpsyFovPSO9G2jvhpkG6yGzruWg7V3PFcnfcLdrHi7eWUNDIMfOxGBFZKkGSB
-	B+fRt4IhjSwIavV71ClPw7a9CuxIe09htNHCQxLhbbK/R4TaHHxV4rTgtYn1MaD4
-	DsAGlt3VIAGdRGox/G7BQ==
-X-ME-Sender: <xms:bXrdZoYGP4GDwnJKH49SyXr9dZO_lHspumGKkWNKkj8YX3foMG1aNQ>
-    <xme:bXrdZjZHMCekv3M9Tww7PbDg0xVRzmOCQAiKTcBkEjaaBogV_1r6ekkpH_vO9lw1Q
-    1-mWiLI9m704mns27w>
-X-ME-Received: <xmr:bXrdZi8usYBVdH4qy_tCwST6wyh1KnMKsHCJ1U4mGz_hKxAYo6PTEvq_Bia0YhG1Xh8>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725790831; x=
+	1725877231; bh=mvAFV+13e/DGT0Lo7yK48N1Jeu4Lld264/pVi4DAEA4=; b=k
+	z1AetKVuUosMss9XCAY/HSyn5xW+So5DBihOTHcLsNsKVawILizo5MEGPgyrzaP1
+	0ZTgn01wlW+sxR5roq68kpdDhJZpY/cTIOcJxnx6tBRxEPBwwNbHA3NdwTuwQMcW
+	FoxVub+1bZBJ0QLEUPsD/WO9rmDAYjn7FNeEjH+5pc27CqbHOVjz6vxZAGWluDJ5
+	PXNJF0zcwjKxJgTU3LjGcgaOJIJKsWHHGhODqGR5dV5aO3JJFVIl+VHJKRXXKId5
+	/Ax5oTCz/GqsinYLGNdKklXWxJ2l4MTaiEdDTG25h6eVN6f34c3VZhkTe0QRbzzw
+	3CF2vVmlrwv/woGnjPK1A==
+X-ME-Sender: <xms:bnrdZo6chIhxZEV5rffcSd_oCe3zX2B_JCKSDba3bGQB0wyVxb7K1g>
+    <xme:bnrdZp5Y_AMHFi8EaDFePUE5dcWtrucvwaT5uBBfISyFDogVQqQDbghLrPXhRjjTM
+    5d-QY7bqbVhuoDSI0c>
+X-ME-Received: <xmr:bnrdZncHGBf73otkbzYzNB7vPWlyTgzyb-CK83YOzkjM2702u9z2_ZmxU4IZYZxn6co>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeihedgvdejucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
     rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
     htshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdej
     necuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhi
     hgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepvdekiefhfeevkeeuveetfeelffek
-    gedugefhtdduudeghfeuveegffegudekjeelnecuvehluhhsthgvrhfuihiivgepudenuc
+    gedugefhtdduudeghfeuveegffegudekjeelnecuvehluhhsthgvrhfuihiivgeptdenuc
     frrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdr
     tghomhdpnhgspghrtghpthhtohepuddtpdhmohguvgepshhmthhpohhuthdprhgtphhtth
     hopehfrghntggvrhdrlhgrnhgtvghrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepjhhi
@@ -83,17 +83,18 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeihedgvdejucetufdoteggod
     hlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtohepsggtmhdqkhgvrhhnvghlqdhf
     vggvuggsrggtkhdqlhhishhtsegsrhhorggutghomhdrtghomhdprhgtphhtthhopegthh
     gvnhhhuhgrtggriheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:bXrdZipQJpVEvzDaBIwcd6Q-ek_1aPf5KbZ1O9SZQiMJCkDLOJykqw>
-    <xmx:bXrdZjqiUXxun3wXhW-fOrXLwTu4TU2tOqUk5hjdMJpJhBtm0JD-PQ>
-    <xmx:bXrdZgTL4KD17o9GfrtpMoMwtm9CB87tarsive7uQL6AaQTWHVyK5Q>
-    <xmx:bXrdZjqaaYitJsaPuwhth8aVhxsjqG0_o2DwGH4w9p5D8DyT3hw8gQ>
-    <xmx:bXrdZgg3rQY_fWJllGJ1hdZVmdKSYafjkJP7MKfGtxQCe7p0RZeCAsfg>
+X-ME-Proxy: <xmx:bnrdZtKDh8SXnKqRgCwz9qA2KCug3K2mUYJIGFegB3sNcWyO4Ng0xQ>
+    <xmx:bnrdZsKQ_UspEzCbbd1KuBXZGbX24fTQeipKabNOpmABILRDdI03Ow>
+    <xmx:bnrdZuyKw1qD2UeTrGKGN31OgKP97PgQ5N36pcA1o_g_aLdGjLNjLA>
+    <xmx:bnrdZgLAP4AJdCfSBJMSpD31oyLeI4_88HXP3TO5xFojfu0aMlCuDg>
+    <xmx:b3rdZpDX0S5EPd668Ddvzk-9hXQ1d15tCq-UtVbnPSKkKM1Wq2s3rSGU>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 8 Sep 2024 06:20:28 -0400 (EDT)
+ 8 Sep 2024 06:20:29 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Sun, 08 Sep 2024 11:20:19 +0100
-Subject: [PATCH v5 08/10] MIPS: GIC: Implement get_sw_int hook
+Date: Sun, 08 Sep 2024 11:20:20 +0100
+Subject: [PATCH v5 09/10] irqchip/irq-mips-cpu: Rework software IRQ
+ handling flow
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -102,7 +103,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240908-b4-mips-ipi-improvements-v5-8-be8617dd2e53@flygoat.com>
+Message-Id: <20240908-b4-mips-ipi-improvements-v5-9-be8617dd2e53@flygoat.com>
 References: <20240908-b4-mips-ipi-improvements-v5-0-be8617dd2e53@flygoat.com>
 In-Reply-To: <20240908-b4-mips-ipi-improvements-v5-0-be8617dd2e53@flygoat.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
@@ -113,103 +114,164 @@ To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Jiaxun Yang <jiaxun.yang@flygoat.com>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2526;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4377;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=6W7V7EEEomFvzx7zP87p4zVKfdbX/dpvLnCVn/vqrn4=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhrS7VQnX5rIHP/HczHez01DC89VRP+t/L7r1HlcnB5RYh
- CVEpDh1lLIwiHExyIopsoQIKPVtaLy44PqDrD8wc1iZQIYwcHEKwET4TjH8j9kuxrzN70YzS8vT
- zRIeS9fEBc2seHokwuqOSsHBWw//VzIyvFJjOLH57cFVTeaFZZOlRF6ZcyrH9N1dulB1zTeuZHN
- WFgA=
+ bh=sW7dt3s4ypU+bzTb8JNQf1YyDVUNZthZ4SG4UK5zlgg=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrS7VQlZRgHVcot3Pn/uahTb88xzX4N+uGajcuOJR82Xl
+ sZqiPp0lLIwiHExyIopsoQIKPVtaLy44PqDrD8wc1iZQIYwcHEKwEQ8PBgZtvUfs9E4IbTVJeKW
+ WPNDBQWGgk07Jbue8Tq+bt8tqOXbxchwgu3KCd83UpW5Hrp7r653/tf5TjitmsmuZ/9VPXGmfdm
+ cAA==
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-SW0 and SW1 interrupts are routed through GIC in EIC
-mode, implement get_sw_int hook for GIC and generic platform
-to create IRQ mapping for SW0 and SW1 in such mode.
+Remove unnecessary irq_mask_ack, irq_eoi, irq_disable, irq_enable
+irq_chip hooks for software interrupts, as they are simple edge
+triggered IRQs and there is no need for those duplicated callbacks.
+
+Don't mask IRQ in mips_mt_cpu_irq_ack, that is not expected for
+edge IRQ handling flow.
+
+Create a irq_chip for regular (non-MT) mode software interrupts,
+as they are edge triggered IRQs thus need startup/ack callbacks
+as well.
 
 Tested-by: Serge Semin <fancer.lancer@gmail.com>
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/generic/irq.c          | 15 +++++++++++++++
- arch/mips/include/asm/mips-gic.h | 10 ++++++++++
- drivers/irqchip/irq-mips-gic.c   | 15 +++++++++++++++
- 3 files changed, 40 insertions(+)
+v4:
+	- Reword commit message
+	- Style fixes
+---
+ drivers/irqchip/irq-mips-cpu.c | 68 +++++++++++++++++++++++++++++-------------
+ 1 file changed, 48 insertions(+), 20 deletions(-)
 
-diff --git a/arch/mips/generic/irq.c b/arch/mips/generic/irq.c
-index 933119262943..bc3599a76014 100644
---- a/arch/mips/generic/irq.c
-+++ b/arch/mips/generic/irq.c
-@@ -11,6 +11,7 @@
- #include <linux/types.h>
- 
- #include <asm/irq.h>
-+#include <asm/irq_cpu.h>
- #include <asm/mips-cps.h>
- #include <asm/time.h>
- 
-@@ -59,3 +60,17 @@ unsigned int get_c0_compare_int(void)
- 
- 	return mips_cpu_timer_irq;
+diff --git a/drivers/irqchip/irq-mips-cpu.c b/drivers/irqchip/irq-mips-cpu.c
+index 7b3501485d95..b2318e915d88 100644
+--- a/drivers/irqchip/irq-mips-cpu.c
++++ b/drivers/irqchip/irq-mips-cpu.c
+@@ -49,7 +49,7 @@ static inline void mask_mips_irq(struct irq_data *d)
+ 	irq_disable_hazard();
  }
-+
-+int get_mips_sw_int(int hwint)
+ 
+-static struct irq_chip mips_cpu_irq_controller = {
++static const struct irq_chip mips_cpu_irq_controller = {
+ 	.name		= "MIPS",
+ 	.irq_ack	= mask_mips_irq,
+ 	.irq_mask	= mask_mips_irq,
+@@ -60,11 +60,33 @@ static struct irq_chip mips_cpu_irq_controller = {
+ 	.irq_enable	= unmask_mips_irq,
+ };
+ 
++static unsigned int mips_sw_irq_startup(struct irq_data *d)
 +{
-+	int mips_sw_int_irq;
-+
-+	if (mips_gic_present())
-+		mips_sw_int_irq = gic_get_sw_int(hwint);
-+	else if (cpu_has_veic)
-+		panic("Unimplemented!");
-+	else
-+		mips_sw_int_irq = mips_cpu_get_sw_int(hwint);
-+
-+	return mips_sw_int_irq;
++	clear_c0_cause(C_SW0 << d->hwirq);
++	back_to_back_c0_hazard();
++	unmask_mips_irq(d);
++	return 0;
 +}
-diff --git a/arch/mips/include/asm/mips-gic.h b/arch/mips/include/asm/mips-gic.h
-index fd9da5e3beaa..3e9d1b252500 100644
---- a/arch/mips/include/asm/mips-gic.h
-+++ b/arch/mips/include/asm/mips-gic.h
-@@ -388,4 +388,14 @@ extern int gic_get_c0_perfcount_int(void);
++
++static void mips_sw_irq_ack(struct irq_data *d)
++{
++	clear_c0_cause(C_SW0 << d->hwirq);
++	back_to_back_c0_hazard();
++}
++
++static const struct irq_chip mips_cpu_sw_irq_controller = {
++	.name		= "MIPS",
++	.irq_startup	= mips_sw_irq_startup,
++	.irq_ack	= mips_sw_irq_ack,
++	.irq_mask	= mask_mips_irq,
++	.irq_unmask	= unmask_mips_irq,
++};
++
++#ifdef CONFIG_MIPS_MT
+ /*
+  * Basically the same as above but taking care of all the MT stuff
   */
- extern int gic_get_c0_fdc_int(void);
+-
+-static unsigned int mips_mt_cpu_irq_startup(struct irq_data *d)
++static unsigned int mips_mt_sw_irq_startup(struct irq_data *d)
+ {
+ 	unsigned int vpflags = dvpe();
  
-+/**
-+ * gic_get_sw_int() - Return software interrupt virq
-+ *
-+ * Determine the virq number to use for SWINT0 or SWINT1 interrupts,
-+ * which may be routed via the GIC.
-+ *
-+ * Returns the virq number or a negative error number.
-+ */
-+extern int gic_get_sw_int(int hwirq);
+@@ -76,14 +98,14 @@ static unsigned int mips_mt_cpu_irq_startup(struct irq_data *d)
+ 
+ /*
+  * While we ack the interrupt interrupts are disabled and thus we don't need
+- * to deal with concurrency issues.  Same for mips_cpu_irq_end.
++ * to deal with concurrency issues.
+  */
+-static void mips_mt_cpu_irq_ack(struct irq_data *d)
++static void mips_mt_sw_irq_ack(struct irq_data *d)
+ {
+ 	unsigned int vpflags = dvpe();
 +
- #endif /* __MIPS_ASM_MIPS_CPS_H__ */
-diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
-index 4c36e10ee2d3..7fa567677c00 100644
---- a/drivers/irqchip/irq-mips-gic.c
-+++ b/drivers/irqchip/irq-mips-gic.c
-@@ -152,6 +152,21 @@ int gic_get_c0_fdc_int(void)
- 				  GIC_LOCAL_TO_HWIRQ(GIC_LOCAL_INT_FDC));
+ 	clear_c0_cause(C_SW0 << d->hwirq);
+ 	evpe(vpflags);
+-	mask_mips_irq(d);
  }
  
-+int gic_get_sw_int(int hwint)
-+{
-+	int local_irq;
-+
-+	WARN_ON(hwint > 1);
-+
-+	local_irq = GIC_LOCAL_INT_SWINT0 + hwint;
-+
-+	if (!gic_local_irq_is_routable(local_irq))
-+		return MIPS_CPU_IRQ_BASE + hwint;
-+
-+	return irq_create_mapping(gic_irq_domain,
-+				  GIC_LOCAL_TO_HWIRQ(local_irq));
-+}
-+
- static void gic_handle_shared_int(bool chained)
+ #ifdef CONFIG_GENERIC_IRQ_IPI
+@@ -108,21 +130,17 @@ static void mips_mt_send_ipi(struct irq_data *d, unsigned int cpu)
+ }
+ 
+ #endif /* CONFIG_GENERIC_IRQ_IPI */
+-
+-static struct irq_chip mips_mt_cpu_irq_controller = {
++static const struct irq_chip mips_mt_cpu_sw_irq_controller = {
+ 	.name		= "MIPS",
+-	.irq_startup	= mips_mt_cpu_irq_startup,
+-	.irq_ack	= mips_mt_cpu_irq_ack,
++	.irq_startup	= mips_mt_sw_irq_startup,
++	.irq_ack	= mips_mt_sw_irq_ack,
+ 	.irq_mask	= mask_mips_irq,
+-	.irq_mask_ack	= mips_mt_cpu_irq_ack,
+ 	.irq_unmask	= unmask_mips_irq,
+-	.irq_eoi	= unmask_mips_irq,
+-	.irq_disable	= mask_mips_irq,
+-	.irq_enable	= unmask_mips_irq,
+ #ifdef CONFIG_GENERIC_IRQ_IPI
+ 	.ipi_send_single = mips_mt_send_ipi,
+ #endif
+ };
++#endif
+ 
+ asmlinkage void __weak plat_irq_dispatch(void)
  {
- 	unsigned int intr;
+@@ -149,17 +167,27 @@ asmlinkage void __weak plat_irq_dispatch(void)
+ 	}
+ }
+ 
++#ifdef CONFIG_MIPS_MT
++static inline const struct irq_chip *mips_cpu_get_sw_irqchip(void)
++{
++	return cpu_has_mipsmt ? &mips_mt_cpu_sw_irq_controller : &mips_cpu_sw_irq_controller;
++}
++#else
++static inline const struct irq_chip *mips_cpu_get_sw_irqchip(void)
++{
++	return &mips_cpu_sw_irq_controller;
++}
++#endif
++
+ static int mips_cpu_intc_map(struct irq_domain *d, unsigned int irq,
+ 			     irq_hw_number_t hw)
+ {
+-	struct irq_chip *chip;
++	const struct irq_chip *chip;
+ 
+-	if (hw < 2 && cpu_has_mipsmt) {
+-		/* Software interrupts are used for MT/CMT IPI */
+-		chip = &mips_mt_cpu_irq_controller;
+-	} else {
++	if (hw < 2)
++		chip = mips_cpu_get_sw_irqchip();
++	else
+ 		chip = &mips_cpu_irq_controller;
+-	}
+ 
+ 	if (cpu_has_vint)
+ 		set_vi_handler(hw, plat_irq_dispatch);
 
 -- 
 2.46.0
