@@ -1,121 +1,146 @@
-Return-Path: <linux-mips+bounces-5411-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5412-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E83E9703F1
-	for <lists+linux-mips@lfdr.de>; Sat,  7 Sep 2024 21:36:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A52329704D9
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Sep 2024 04:38:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C58C9282F20
-	for <lists+linux-mips@lfdr.de>; Sat,  7 Sep 2024 19:36:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 621D5B21674
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Sep 2024 02:38:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DEC11662E8;
-	Sat,  7 Sep 2024 19:36:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67AA318C22;
+	Sun,  8 Sep 2024 02:38:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="jZ7KeRDW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pfw+5l2G"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D18165EFA
-	for <linux-mips@vger.kernel.org>; Sat,  7 Sep 2024 19:36:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 265EBD272;
+	Sun,  8 Sep 2024 02:38:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725737805; cv=none; b=aSeCPg58KG+JMHMRZjVklFsrY+KSCtq2H5G0D+8jssF9YYvQMCjyBt8FLDxum6Av1Sj6XTQh//FSaZCpCRizpkhBlZPJbRUIIMjJWRwFTnjyOyb2Xg6vmKcKDQBkLir+Rik1HP2u0O330gAqbQZ7l+favSxBPFcJNBWbHt4j0sY=
+	t=1725763095; cv=none; b=J1B4XnTLRI1QaeUJFBdG+l2MN2s5FX1HWw7Tzdt1A6W6v8evO98jVx7tcC6gGRnGWyD4s+qDuw11h8Lbp2IrlUv6+Rz+f2phu1kGFQ6Dx6qyDRBKNb8g7ClgaQS+/57FRdKxUxo4pyPijO5INBaxGFSPl9fhjsnxtm0uM1SYjVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725737805; c=relaxed/simple;
-	bh=diq//ypwFpciLVOeg5yN2zfMUy+DDfDmYoj1id8kWHc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mKfRzl4mlYnTPWjzfS7a94yMLd+sejD6LSHmdULdSB3ru2tggkrbE7kwu1wsM5HuyemanoYl0MVANm3G5qcJnmFcwhlkfF0daFCAfMoi5YwtOACCoMhd3QvyhSGINQXQGyqQnicbo1UZif7loa888XB3htIyyJd7Ok4kPCUxLAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=jZ7KeRDW; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=ftmI
-	51XeY5SayZ7K9um85kpUIGa3z77Fyu2HJa1sqPQ=; b=jZ7KeRDW4lUedqNBLJR7
-	3yMfDiAwVEM9fmUcg6YiCIk+SO0/fkez5cBdVl6SAJ0e003lPPekRMZ++8pQbm/R
-	/HBo75oSZ7Dm+AvjEZwjY2mXKcKjyx//kgfZpkXoiG60iypEb9JrJvgCQyYl8E93
-	NYYukWi/46aQcgHXGNqZuSzVKQDjXzh7cTG7ymWveKTOuYx9IY4g3jrI5j/gy2D5
-	t0Zn5C6fiextcLNWIylAU6t+svjzXl0Mut230o3cH+YU+FYQ8l2QKLongufhNsmU
-	aq+lnGex715eYRM3IVCAY/Z8spy7QIAjqXng9pV8StmuEJ4Pu0DhQExAmYfjHuqJ
-	dQ==
-Received: (qmail 1597171 invoked from network); 7 Sep 2024 21:36:37 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 7 Sep 2024 21:36:37 +0200
-X-UD-Smtp-Session: l3s3148p1@fJlhpIwhXJYujnvu
-Date: Sat, 7 Sep 2024 21:36:36 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Rong Qianfeng <rongqianfeng@vivo.com>
-Cc: andriy.shevchenko@intel.com, biju.das.jz@bp.renesas.com,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Paul Cercueil <paul@crapouillou.net>,
-	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-	opensource.kernel@vivo.com
-Subject: Re: [PATCH v4 1/3] i2c: emev2: Use devm_clk_get_enabled() helpers
-Message-ID: <ZtyrRLojI8GNiEj0@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Rong Qianfeng <rongqianfeng@vivo.com>, andriy.shevchenko@intel.com,
-	biju.das.jz@bp.renesas.com, Andi Shyti <andi.shyti@kernel.org>,
-	Paul Cercueil <paul@crapouillou.net>,
-	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-	opensource.kernel@vivo.com
-References: <20240827034841.4121-1-rongqianfeng@vivo.com>
- <20240827034841.4121-2-rongqianfeng@vivo.com>
+	s=arc-20240116; t=1725763095; c=relaxed/simple;
+	bh=QRLowZOK063HZ8aCZ32C9grtYQV6cWDgqk9akduwUjM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=t9aCuWhxlH3sXXXFruvj8lEfBTsURpdl1O+k5tZShAQAhh7uhQYqZNHW0nVALO0q5UFZ72YlJa6MgTILsf/CU9grXtTKZLRevCoftjU+v9TUwO1IBfliubzWtmSKf6L4TTQkvp0xv7NgnJTM0U5ESA8UiFplsEE+HaVsDobGoYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pfw+5l2G; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9025DC4CEC4;
+	Sun,  8 Sep 2024 02:38:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725763094;
+	bh=QRLowZOK063HZ8aCZ32C9grtYQV6cWDgqk9akduwUjM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Pfw+5l2GeOPPyWuqs9BNFXOTTj16lFZ+PFrQ7ZYtTaKeFaG6WOxJVE41svVzhXrsb
+	 Kb7OJYTghOJhm3QNvduiPXCV8EwtBRMdUMtBuuNI2MwGo7afpIO0DPxR8zgpOIiIro
+	 PjyQ+sNJJXYoce07yxsvDnsn0bxispffHGywP3unKsCVYH+a3Y4nkPFHwzV0talOa9
+	 I/9P30awNAU5XSN5a18O3OQ2wBAeAcvUkyuAxAUvnzz6YuUWsWfyD1c6RGAAY6fxvH
+	 WKZHWo/tJqUHHb2QRh6E1LHqjyZBRW54zLARr5V3j6TxZ2//YDzMoPH7v4eSRnJFmw
+	 CKFzqP2TvWVSg==
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5c3d209da98so4954048a12.1;
+        Sat, 07 Sep 2024 19:38:14 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUyNEjgKoaKPvDM/b1VRtDmAs7dVLQ4I4205k1GNa3X3XDVgSCgDWDyEkojxzQwSXSznQc=@vger.kernel.org, AJvYcCV1qnh6Mcw3+drUk0c+Y5vNzlBMY/VnNWaPvG1sGRmXQKbqsk+ZoxcSPtEZVWQi6l53G5dNmhqAEps=@vger.kernel.org, AJvYcCWdfjrp8MS9PVbePg38q/HXWBRDl5MO31Hy5Lhg7ziMOF8AtnGK7/lQnQWuumN443by02PYBPJSvBDvYDa9@vger.kernel.org, AJvYcCXyNE0ISy70+MepMk+asXopEJ9OOOl1q1mRzoYGZ+AdjzWTqMCcszMcaE8z2FrNe49nHCFO407ccWY3yw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwV31/OHLNHA6R9R5xY0UxVmNw4fU9Ma7h7UzxprFHBBc52U7g5
+	3OM+YqUCCIu+l35qpCCJGfi/C71dx1ZmLoaKHeNoAeZR+2a+Jaw5HUJ0fNM+UuwOoRA2ZDxncHZ
+	RXFjH6qxhgwCNVwW0boPUrP+eckU=
+X-Google-Smtp-Source: AGHT+IGrmEb6wjce45DDeIXQI62sW6ehBa4TumudW+Xqf5CX2GvNkX+QBM4cqNClCBuXL95+M0TaZ+7xljM4dw9T+wE=
+X-Received: by 2002:a05:6402:3549:b0:5c2:5f31:8888 with SMTP id
+ 4fb4d7f45d1cf-5c3c1f9cbd4mr13982347a12.15.1725763093152; Sat, 07 Sep 2024
+ 19:38:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zQo77BMXTDa4nVkc"
-Content-Disposition: inline
-In-Reply-To: <20240827034841.4121-2-rongqianfeng@vivo.com>
-
-
---zQo77BMXTDa4nVkc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240907-iocsr-v1-0-0c99b3334444@flygoat.com> <20240907-iocsr-v1-1-0c99b3334444@flygoat.com>
+In-Reply-To: <20240907-iocsr-v1-1-0c99b3334444@flygoat.com>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sun, 8 Sep 2024 10:38:07 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H64tf8=XekeBKwR3w65ofjUrbgeqPngNxiT-11EHMKwdA@mail.gmail.com>
+Message-ID: <CAAhV-H64tf8=XekeBKwR3w65ofjUrbgeqPngNxiT-11EHMKwdA@mail.gmail.com>
+Subject: Re: [PATCH 1/5] LoongArch: Rename cpu_has_csr as cpu_has_iocsr
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: WANG Xuerui <kernel@xen0n.name>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, loongarch@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-mips@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 27, 2024 at 11:48:39AM +0800, Rong Qianfeng wrote:
-> The devm_clk_get_enabled() helpers:
->     - call devm_clk_get()
->     - call clk_prepare_enable() and register what is needed in order to
->      call clk_disable_unprepare() when needed, as a managed resource.
->=20
-> This simplifies the code and avoids the calls to clk_disable_unprepare().
->=20
-> While at it, no need to save clk pointer, drop sclk from struct
-> em_i2c_device.
->=20
-> Signed-off-by: Rong Qianfeng <rongqianfeng@vivo.com>
+Hi, Jiaxun,
 
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On Sat, Sep 7, 2024 at 6:17=E2=80=AFPM Jiaxun Yang <jiaxun.yang@flygoat.com=
+> wrote:
+>
+> It meant to be IOCSR as CSR is not optional for LoongArch.
+Keep the CSR definition and add IOCSR definition after it, OK? This
+also means the 1st patch can be dropped.
 
+And it is just OK to change the values after CPU_FEATURE_CSR, because
+they are only for internal use.
 
---zQo77BMXTDa4nVkc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmbcq0AACgkQFA3kzBSg
-KbZZDRAAqpH+N1/D/nIYiSriyH3t4x3bAo19j269qgknU9HxkhD5orC618cheUhS
-vi2v/4U63GraIoGKMfelq6BSXWzozNotp5SF4+LVQP2D2Xc94sc1YAT7nPMGUniK
-AqVcb1eXrx99PEGU/hBVPu9DXXgOYM+8eK/xte0ASWlvishO6gKY3NqUhFxsF57G
-24oSEOXk4yHQgYXBbZ0jt1+H9THOdMWCJ5VyvOVK0Rt2P9hk/XJSyHxlRHyU29nd
-yQM46rWf0MMyG/qmZ5fJT8bCHJnAVpfLJUQlilLpH5w4pQ6uK/O3D+SKhIJn7Jwu
-gGFD9ztMvvHbgBDU2TBO3yOf3xuh+P/ZcFSXOu9xCWycHa17U6wpnFQw940kYnR1
-yP0uJTnWIJj3bwdHWiLFnctMS/3i7LODFNIk6uWUUxAyLMG8fBCkAPWSwcK0jEjJ
-Ej1G6f7AHZTBxO4oXa57Ydo03cV2IIH7C6k86C0bTuwouhnf5oUK1AU2TTm9hNWx
-abkuiEPotIXDe+sZK76C8XbGh1ViPn7xcYLM7RZe2iapQcs4gwulEEhtBSU4gjDK
-aTpNdxVqByMvIh8kGEA3V05Mot0JdUNRpOa1uQH36hmdIKjEAU35oa45ZN5n+7kE
-bg3gIqvXIJCc3P5FLFMvgrmj7CZ98RSs+CFOdbMADaWzID6yuuQ=
-=xVsd
------END PGP SIGNATURE-----
-
---zQo77BMXTDa4nVkc--
+Huacai
+>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  arch/loongarch/include/asm/cpu-features.h | 2 +-
+>  arch/loongarch/include/asm/cpu.h          | 2 +-
+>  arch/loongarch/kernel/cpu-probe.c         | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/loongarch/include/asm/cpu-features.h b/arch/loongarch/i=
+nclude/asm/cpu-features.h
+> index 16a716f88a5c..0190ed28a647 100644
+> --- a/arch/loongarch/include/asm/cpu-features.h
+> +++ b/arch/loongarch/include/asm/cpu-features.h
+> @@ -50,7 +50,7 @@
+>  #define cpu_has_lbt_arm                cpu_opt(LOONGARCH_CPU_LBT_ARM)
+>  #define cpu_has_lbt_mips       cpu_opt(LOONGARCH_CPU_LBT_MIPS)
+>  #define cpu_has_lbt            (cpu_has_lbt_x86|cpu_has_lbt_arm|cpu_has_=
+lbt_mips)
+> -#define cpu_has_csr            cpu_opt(LOONGARCH_CPU_CSR)
+> +#define cpu_has_iocsr          cpu_opt(LOONGARCH_CPU_IOCSR)
+>  #define cpu_has_tlb            cpu_opt(LOONGARCH_CPU_TLB)
+>  #define cpu_has_watch          cpu_opt(LOONGARCH_CPU_WATCH)
+>  #define cpu_has_vint           cpu_opt(LOONGARCH_CPU_VINT)
+> diff --git a/arch/loongarch/include/asm/cpu.h b/arch/loongarch/include/as=
+m/cpu.h
+> index 843f9c4ec980..7c44f4ede3a2 100644
+> --- a/arch/loongarch/include/asm/cpu.h
+> +++ b/arch/loongarch/include/asm/cpu.h
+> @@ -115,7 +115,7 @@ enum cpu_type_enum {
+>  #define LOONGARCH_CPU_LBT_ARM          BIT_ULL(CPU_FEATURE_LBT_ARM)
+>  #define LOONGARCH_CPU_LBT_MIPS         BIT_ULL(CPU_FEATURE_LBT_MIPS)
+>  #define LOONGARCH_CPU_TLB              BIT_ULL(CPU_FEATURE_TLB)
+> -#define LOONGARCH_CPU_CSR              BIT_ULL(CPU_FEATURE_CSR)
+> +#define LOONGARCH_CPU_IOCSR            BIT_ULL(CPU_FEATURE_IOCSR)
+>  #define LOONGARCH_CPU_WATCH            BIT_ULL(CPU_FEATURE_WATCH)
+>  #define LOONGARCH_CPU_VINT             BIT_ULL(CPU_FEATURE_VINT)
+>  #define LOONGARCH_CPU_CSRIPI           BIT_ULL(CPU_FEATURE_CSRIPI)
+> diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cp=
+u-probe.c
+> index 14f0449f5452..4446616d497c 100644
+> --- a/arch/loongarch/kernel/cpu-probe.c
+> +++ b/arch/loongarch/kernel/cpu-probe.c
+> @@ -91,7 +91,7 @@ static void cpu_probe_common(struct cpuinfo_loongarch *=
+c)
+>         unsigned int config;
+>         unsigned long asid_mask;
+>
+> -       c->options =3D LOONGARCH_CPU_CPUCFG | LOONGARCH_CPU_CSR |
+> +       c->options =3D LOONGARCH_CPU_CPUCFG | LOONGARCH_CPU_IOCSR |
+>                      LOONGARCH_CPU_TLB | LOONGARCH_CPU_VINT | LOONGARCH_C=
+PU_WATCH;
+>
+>         elf_hwcap =3D HWCAP_LOONGARCH_CPUCFG;
+>
+> --
+> 2.46.0
+>
 
