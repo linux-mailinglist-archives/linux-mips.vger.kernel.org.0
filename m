@@ -1,77 +1,77 @@
-Return-Path: <linux-mips+bounces-5425-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5426-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFF0797067C
-	for <lists+linux-mips@lfdr.de>; Sun,  8 Sep 2024 12:22:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF8D097067E
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Sep 2024 12:22:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3FFC3B21A78
-	for <lists+linux-mips@lfdr.de>; Sun,  8 Sep 2024 10:22:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DE901F22283
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Sep 2024 10:22:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BB7415853D;
-	Sun,  8 Sep 2024 10:20:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4356A1598EC;
+	Sun,  8 Sep 2024 10:20:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="I3gn1k9Y";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kz1AetKV"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="ODZhHOUO";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="TJOoquHY"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh2-smtp.messagingengine.com (fhigh2-smtp.messagingengine.com [103.168.172.153])
+Received: from fout6-smtp.messagingengine.com (fout6-smtp.messagingengine.com [103.168.172.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5AA7155332;
-	Sun,  8 Sep 2024 10:20:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63A3615852A;
+	Sun,  8 Sep 2024 10:20:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725790833; cv=none; b=BWvw2LHtg+Xlv23tF8Y9WSgMGBWDZcHOcPtsG7riyjBDBsADzSicpIBB9RctnquB3fdL9oIDT71fEuq+KwdLJ6p3TGckBCVykpPn7Hrfp4l5YSVriEYC0jsEHNkc0AHYrJH9lKLBeB5sPqWVBhb/nMB7y6uALK+Z+45qjdkHjfs=
+	t=1725790835; cv=none; b=eTPn//vqDNmbQzhGLU5mWB3okYucmCr3bf0zFp2Ls/tqlsT4eqFe0PYJfpPYRw79prrgnvZcwvRKsCl0sgeJiw/RREjdBbT/+09LRHa+kepNgUcl4F+DhXjtOYO73WfHa/nSjOek/nbqs27EMU1TMIE4ZkxAgYzObXb1pmuxzso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725790833; c=relaxed/simple;
-	bh=sW7dt3s4ypU+bzTb8JNQf1YyDVUNZthZ4SG4UK5zlgg=;
+	s=arc-20240116; t=1725790835; c=relaxed/simple;
+	bh=QflEulZxDbALP4BwUnO0lInSsOEZWkiydNgutNPqiVE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=CUZQDKA1LcXO06/Cs26sftIt3JY1m4MHPUVmxF/vC1h2O79cOf9oh53fwP2qn1tC6/yp/6lhxyqYV6LL/LBIbjDkmi4VzcaKo/Oybybmq8ZVStecmxsjrgrhrVpYJfZ9QcoCz5CFhUSmOhm88rZYwhRQJEeg0nU9QzhT/Pxz6M0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=I3gn1k9Y; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kz1AetKV; arc=none smtp.client-ip=103.168.172.153
+	 In-Reply-To:To:Cc; b=YgaL+yrtoEaVHXSERLFlkxvqrOel88MeJIK+KS4gDLgo5hkYrCggt/0M5/XQGIrZvwoPoc+RFQoNbhXBRr6rZf/ZEaO/P2gC0VwEq8/ejQsLz67me8sj518hmzVl+hZ/N6/nnhXd+HOvA5fZsf9d0IBQuRu4qBkFabwycCBGDMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=ODZhHOUO; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=TJOoquHY; arc=none smtp.client-ip=103.168.172.149
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 06BE8114025A;
-	Sun,  8 Sep 2024 06:20:31 -0400 (EDT)
+Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
+	by mailfout.phl.internal (Postfix) with ESMTP id 7A46D13802F0;
+	Sun,  8 Sep 2024 06:20:32 -0400 (EDT)
 Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-10.internal (MEProxy); Sun, 08 Sep 2024 06:20:31 -0400
+  by phl-compute-12.internal (MEProxy); Sun, 08 Sep 2024 06:20:32 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1725790831;
-	 x=1725877231; bh=mvAFV+13e/DGT0Lo7yK48N1Jeu4Lld264/pVi4DAEA4=; b=
-	I3gn1k9Yr2a8rOJdbfl4S4FK1cnAzxZGY0PCyvbN8y3seCLDE3MJps0IcvjGZjQ3
-	oUDy4MRDxOiZg9zXAzYXi+12urFPTPPU59LqSGZ6RHiOtoncuM1OzNwh3cSsR0xM
-	4HM4Svfs/ZQKGoTIc90RdshbabRvnhB1pilqJFpWXtCHva7e/FuYnv+G7zfKpsQj
-	0T9tmKTS7jOfTcaS1Cgvjtr7440eYRg7p8RY1jI6E3jvk649avhBcQTqJFuMKIw6
-	IBhuSZcn7CA8HPUKJr2B3aXPm1DRcBRRdIuxL8qCZS1PHqNf6DzzKXJ4Iu3Hd6F2
-	447S4rByJb0jrCtjbDuEEA==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1725790832;
+	 x=1725877232; bh=uAaFfewWahm8VsR4u05m4mtA0BI9YTR+WwDXfl07VMk=; b=
+	ODZhHOUOF14+22GwGdlPlC4mvVMZUjMV6xDjD3PDQ7+DxZrP0So28a9gD/lP0Xer
+	2P9rmbMopgiSxRKSJLfYy/Av7dqHgg8Q49Eb1hrdBfsc6hr4VJrmy/dnvtD1BnmJ
+	rtpL0HLpKRx8ihx/izpDpwdoyNWfMuuSMEkNvzlRemIsdD4Q5JUWNiQ5A23n+pDn
+	PeqYdN0XTs+WPOYgXFMdQ9fju+hLmK5nNtVPe9cDydJzywbZHY9s4QKmVlB6wi/x
+	ixRFd5Pb/8kOgliyGWyxfcWbLtfKn7tsZXTuTR2i0u1S5WSDNg9AfqfcBxNH2YAK
+	0zEcybm8BtHW8wFHrcpRpQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725790831; x=
-	1725877231; bh=mvAFV+13e/DGT0Lo7yK48N1Jeu4Lld264/pVi4DAEA4=; b=k
-	z1AetKVuUosMss9XCAY/HSyn5xW+So5DBihOTHcLsNsKVawILizo5MEGPgyrzaP1
-	0ZTgn01wlW+sxR5roq68kpdDhJZpY/cTIOcJxnx6tBRxEPBwwNbHA3NdwTuwQMcW
-	FoxVub+1bZBJ0QLEUPsD/WO9rmDAYjn7FNeEjH+5pc27CqbHOVjz6vxZAGWluDJ5
-	PXNJF0zcwjKxJgTU3LjGcgaOJIJKsWHHGhODqGR5dV5aO3JJFVIl+VHJKRXXKId5
-	/Ax5oTCz/GqsinYLGNdKklXWxJ2l4MTaiEdDTG25h6eVN6f34c3VZhkTe0QRbzzw
-	3CF2vVmlrwv/woGnjPK1A==
-X-ME-Sender: <xms:bnrdZo6chIhxZEV5rffcSd_oCe3zX2B_JCKSDba3bGQB0wyVxb7K1g>
-    <xme:bnrdZp5Y_AMHFi8EaDFePUE5dcWtrucvwaT5uBBfISyFDogVQqQDbghLrPXhRjjTM
-    5d-QY7bqbVhuoDSI0c>
-X-ME-Received: <xmr:bnrdZncHGBf73otkbzYzNB7vPWlyTgzyb-CK83YOzkjM2702u9z2_ZmxU4IZYZxn6co>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeihedgvdejucetufdoteggodetrfdotf
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725790832; x=
+	1725877232; bh=uAaFfewWahm8VsR4u05m4mtA0BI9YTR+WwDXfl07VMk=; b=T
+	JOoquHY6fQqBsm8xWBqPIfjogxar6+r16WLmFR9ovI2UO8LkcfoJ8jcdF2WTobb2
+	HS+gYv93lXp+opnnHCI4W/w+/r43USxduCWo+2A4F8qvf7sbO6bswBn54mSjiFsk
+	SCKp3GfBCWrj4TqW9DBybjgeGgzk9TDkBX91nry11Ejq064RKqfP4+RFee7QQlFO
+	2mhJgR5A9Cdhe+4YajaU1DbzpLKhw3NFALHydo3AO/+OO9UxR04CNP3Vxw19fEo6
+	QOlZTE8vOuuOBC85t6iFD0NtTSLKPJ0T5Jpv0NG6kN2hTMhlXl0QdYwoXXS5h3D1
+	Wsl9zIs4VMvgikZnW0/qA==
+X-ME-Sender: <xms:cHrdZksENxbC9aKlsL63WXKXkO21OTQIzc1_bclBbm6ojCfcQerL4Q>
+    <xme:cHrdZhdSYipWWu3H2fCk5c8YJo6ImM_rqkVxTt_FmXCNBAPVqvMV96A58gpv1b8H_
+    2wkyHZ7l7UWou8ctfI>
+X-ME-Received: <xmr:cHrdZvz1MfhepF0UPGFQJ_Q47wAONVts22k7HoxKcP-Cm2NwFTJWCAQ7uiA6-JVNE-o>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeihedgvdeiucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
     rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
     htshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdej
     necuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhi
     hgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepvdekiefhfeevkeeuveetfeelffek
-    gedugefhtdduudeghfeuveegffegudekjeelnecuvehluhhsthgvrhfuihiivgeptdenuc
+    gedugefhtdduudeghfeuveegffegudekjeelnecuvehluhhsthgvrhfuihiivgepvdenuc
     frrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdr
     tghomhdpnhgspghrtghpthhtohepuddtpdhmohguvgepshhmthhpohhuthdprhgtphhtth
     hopehfrghntggvrhdrlhgrnhgtvghrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepjhhi
@@ -83,18 +83,17 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeihedgvdejucetufdoteggod
     hlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtohepsggtmhdqkhgvrhhnvghlqdhf
     vggvuggsrggtkhdqlhhishhtsegsrhhorggutghomhdrtghomhdprhgtphhtthhopegthh
     gvnhhhuhgrtggriheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:bnrdZtKDh8SXnKqRgCwz9qA2KCug3K2mUYJIGFegB3sNcWyO4Ng0xQ>
-    <xmx:bnrdZsKQ_UspEzCbbd1KuBXZGbX24fTQeipKabNOpmABILRDdI03Ow>
-    <xmx:bnrdZuyKw1qD2UeTrGKGN31OgKP97PgQ5N36pcA1o_g_aLdGjLNjLA>
-    <xmx:bnrdZgLAP4AJdCfSBJMSpD31oyLeI4_88HXP3TO5xFojfu0aMlCuDg>
-    <xmx:b3rdZpDX0S5EPd668Ddvzk-9hXQ1d15tCq-UtVbnPSKkKM1Wq2s3rSGU>
+X-ME-Proxy: <xmx:cHrdZnOQeSGHLR1qdVk9HGeew5txB8RUO52mGjc72WQpY-bwr7uS2g>
+    <xmx:cHrdZk-X0ZimlWAb_FrgwIURmE3sV9wdAgtp3XgJv6bula5Rh4lC4w>
+    <xmx:cHrdZvUC6d7PWOvCdTxejyaQ3farIC9oe8-O5tjVPYVAQiGPQR2GZQ>
+    <xmx:cHrdZtfxV-TlF2eNvpVwnzht7bgkWpYsNlOyJ7p5uMcO2IX0NbauOA>
+    <xmx:cHrdZl2bmDAcBIQDNOJ4W9IEJHgv4BdEmFqhztHn1e8WlKjJ92BCZkct>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 8 Sep 2024 06:20:29 -0400 (EDT)
+ 8 Sep 2024 06:20:31 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Sun, 08 Sep 2024 11:20:20 +0100
-Subject: [PATCH v5 09/10] irqchip/irq-mips-cpu: Rework software IRQ
- handling flow
+Date: Sun, 08 Sep 2024 11:20:21 +0100
+Subject: [PATCH v5 10/10] MIPS: smp-mt: Rework IPI functions
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -103,7 +102,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240908-b4-mips-ipi-improvements-v5-9-be8617dd2e53@flygoat.com>
+Message-Id: <20240908-b4-mips-ipi-improvements-v5-10-be8617dd2e53@flygoat.com>
 References: <20240908-b4-mips-ipi-improvements-v5-0-be8617dd2e53@flygoat.com>
 In-Reply-To: <20240908-b4-mips-ipi-improvements-v5-0-be8617dd2e53@flygoat.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
@@ -114,164 +113,338 @@ To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Jiaxun Yang <jiaxun.yang@flygoat.com>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4377;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8920;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=sW7dt3s4ypU+bzTb8JNQf1YyDVUNZthZ4SG4UK5zlgg=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhrS7VQlZRgHVcot3Pn/uahTb88xzX4N+uGajcuOJR82Xl
- sZqiPp0lLIwiHExyIopsoQIKPVtaLy44PqDrD8wc1iZQIYwcHEKwEQ8PBgZtvUfs9E4IbTVJeKW
- WPNDBQWGgk07Jbue8Tq+bt8tqOXbxchwgu3KCd83UpW5Hrp7r653/tf5TjitmsmuZ/9VPXGmfdm
- cAA==
+ bh=QflEulZxDbALP4BwUnO0lInSsOEZWkiydNgutNPqiVE=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrS7VQlW19v+FrJJbXgv/fiWbrNBlKfAMaYag6j4M/bsw
+ RevC0/tKGVhEONikBVTZAkRUOrb0HhxwfUHWX9g5rAygQxh4OIUgIl4HmJkmDzDSSODb7ead9kP
+ G42WG8JPl6izvp3OufCCnXSd4rlTBgz/q9SnF5z9LFEXriIpLZbNdXJto9cdzyX6MmenCaVsWcj
+ ECQA=
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-Remove unnecessary irq_mask_ack, irq_eoi, irq_disable, irq_enable
-irq_chip hooks for software interrupts, as they are simple edge
-triggered IRQs and there is no need for those duplicated callbacks.
+Move smp IRQ code from irq-mips-cpu to smp-mt as IPI is
+not really relavant to CPU intc. In VEIC mode we can have
+irq-mips-cpu not registered and SW interrupts comes from
+EIC controllers.
 
-Don't mask IRQ in mips_mt_cpu_irq_ack, that is not expected for
-edge IRQ handling flow.
-
-Create a irq_chip for regular (non-MT) mode software interrupts,
-as they are edge triggered IRQs thus need startup/ack callbacks
-as well.
+Implement IPI with ipi-mux to allow easy extension to number
+of IPIs.
 
 Tested-by: Serge Semin <fancer.lancer@gmail.com>
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
-v4:
-	- Reword commit message
-	- Style fixes
----
- drivers/irqchip/irq-mips-cpu.c | 68 +++++++++++++++++++++++++++++-------------
- 1 file changed, 48 insertions(+), 20 deletions(-)
+ arch/mips/Kconfig              |   2 +
+ arch/mips/kernel/smp-mt.c      |  70 +++++++++++++++++++++++
+ drivers/irqchip/Kconfig        |   1 -
+ drivers/irqchip/irq-mips-cpu.c | 124 +----------------------------------------
+ 4 files changed, 74 insertions(+), 123 deletions(-)
 
-diff --git a/drivers/irqchip/irq-mips-cpu.c b/drivers/irqchip/irq-mips-cpu.c
-index 7b3501485d95..b2318e915d88 100644
---- a/drivers/irqchip/irq-mips-cpu.c
-+++ b/drivers/irqchip/irq-mips-cpu.c
-@@ -49,7 +49,7 @@ static inline void mask_mips_irq(struct irq_data *d)
- 	irq_disable_hazard();
- }
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 43da6d596e2b..08ef79093916 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -2189,6 +2189,8 @@ config MIPS_MT_SMP
+ 	depends on SYS_SUPPORTS_MULTITHREADING && !CPU_MICROMIPS
+ 	select CPU_MIPSR2_IRQ_VI
+ 	select CPU_MIPSR2_IRQ_EI
++	select GENERIC_IRQ_IPI
++	select GENERIC_IRQ_IPI_MUX
+ 	select SYNC_R4K
+ 	select MIPS_MT
+ 	select SMP
+diff --git a/arch/mips/kernel/smp-mt.c b/arch/mips/kernel/smp-mt.c
+index 7729cc733421..2f00077dbf07 100644
+--- a/arch/mips/kernel/smp-mt.c
++++ b/arch/mips/kernel/smp-mt.c
+@@ -10,6 +10,10 @@
+ #include <linux/sched.h>
+ #include <linux/cpumask.h>
+ #include <linux/interrupt.h>
++#include <linux/irq.h>
++#include <linux/irqchip.h>
++#include <linux/irqchip/chained_irq.h>
++#include <linux/irqdomain.h>
+ #include <linux/compiler.h>
+ #include <linux/sched/task_stack.h>
+ #include <linux/smp.h>
+@@ -19,6 +23,7 @@
+ #include <asm/cpu.h>
+ #include <asm/processor.h>
+ #include <asm/hardirq.h>
++#include <asm/ipi.h>
+ #include <asm/mmu_context.h>
+ #include <asm/time.h>
+ #include <asm/mipsregs.h>
+@@ -26,6 +31,65 @@
+ #include <asm/mips_mt.h>
+ #include <asm/mips-cps.h>
  
--static struct irq_chip mips_cpu_irq_controller = {
-+static const struct irq_chip mips_cpu_irq_controller = {
- 	.name		= "MIPS",
- 	.irq_ack	= mask_mips_irq,
- 	.irq_mask	= mask_mips_irq,
-@@ -60,11 +60,33 @@ static struct irq_chip mips_cpu_irq_controller = {
- 	.irq_enable	= unmask_mips_irq,
- };
- 
-+static unsigned int mips_sw_irq_startup(struct irq_data *d)
++static int vsmp_sw0_virq __ro_after_init;
++
++static void smvp_handle_ipi_irq(struct irq_desc *desc)
 +{
-+	clear_c0_cause(C_SW0 << d->hwirq);
-+	back_to_back_c0_hazard();
-+	unmask_mips_irq(d);
++	struct irq_chip *chip = irq_desc_get_chip(desc);
++
++	chained_irq_enter(chip, desc);
++
++	/* irq-mips-cpu would ack for us, but EIC drivers won't */
++	if (cpu_has_veic) {
++		unsigned int vpflags = dvpe();
++
++		clear_c0_cause(C_SW0);
++		evpe(vpflags);
++	}
++	ipi_mux_process();
++
++	chained_irq_exit(chip, desc);
++}
++
++static void smvp_ipi_send(unsigned int cpu)
++{
++	unsigned long flags;
++	int vpflags;
++
++	local_irq_save(flags);
++
++	/* We can only send IPIs to VPEs within the local core */
++	WARN_ON(!cpus_are_siblings(smp_processor_id(), cpu));
++	vpflags = dvpe();
++	settc(cpu_vpe_id(&cpu_data[cpu]));
++	write_vpe_c0_status(read_vpe_c0_status() | C_SW0);
++	write_vpe_c0_cause(read_vpe_c0_cause() | C_SW0);
++	evpe(vpflags);
++
++	local_irq_restore(flags);
++}
++
++static int __init vsmp_ipi_init(void)
++{
++	int sw0_virq, mux_virq;
++
++	/* SW0 Interrupt for IPI */
++	sw0_virq = get_mips_sw_int(0);
++	if (!sw0_virq)
++		return -EINVAL;
++
++	mux_virq = ipi_mux_create(IPI_MAX, smvp_ipi_send);
++	if (!mux_virq)
++		return -EINVAL;
++
++	irq_set_percpu_devid(sw0_virq);
++	irq_set_chained_handler(sw0_virq, smvp_handle_ipi_irq);
++	mips_smp_ipi_set_virq_range(mux_virq, IPI_MAX);
++	vsmp_sw0_virq = sw0_virq;
++
 +	return 0;
 +}
 +
-+static void mips_sw_irq_ack(struct irq_data *d)
-+{
-+	clear_c0_cause(C_SW0 << d->hwirq);
-+	back_to_back_c0_hazard();
-+}
-+
-+static const struct irq_chip mips_cpu_sw_irq_controller = {
-+	.name		= "MIPS",
-+	.irq_startup	= mips_sw_irq_startup,
-+	.irq_ack	= mips_sw_irq_ack,
-+	.irq_mask	= mask_mips_irq,
-+	.irq_unmask	= unmask_mips_irq,
-+};
-+
-+#ifdef CONFIG_MIPS_MT
- /*
-  * Basically the same as above but taking care of all the MT stuff
-  */
--
--static unsigned int mips_mt_cpu_irq_startup(struct irq_data *d)
-+static unsigned int mips_mt_sw_irq_startup(struct irq_data *d)
+ static void __init smvp_copy_vpe_config(void)
  {
- 	unsigned int vpflags = dvpe();
+ 	write_vpe_c0_status(
+@@ -123,6 +187,8 @@ static void vsmp_smp_finish(void)
+ 	/* CDFIXME: remove this? */
+ 	write_c0_compare(read_c0_count() + (8* mips_hpt_frequency/HZ));
  
-@@ -76,14 +98,14 @@ static unsigned int mips_mt_cpu_irq_startup(struct irq_data *d)
- 
- /*
-  * While we ack the interrupt interrupts are disabled and thus we don't need
-- * to deal with concurrency issues.  Same for mips_cpu_irq_end.
-+ * to deal with concurrency issues.
-  */
--static void mips_mt_cpu_irq_ack(struct irq_data *d)
-+static void mips_mt_sw_irq_ack(struct irq_data *d)
- {
- 	unsigned int vpflags = dvpe();
++	enable_percpu_irq(vsmp_sw0_virq, IRQ_TYPE_NONE);
 +
- 	clear_c0_cause(C_SW0 << d->hwirq);
+ #ifdef CONFIG_MIPS_MT_FPAFF
+ 	/* If we have an FPU, enroll ourselves in the FPU-full mask */
+ 	if (cpu_has_fpu)
+@@ -226,7 +292,11 @@ static void __init vsmp_smp_setup(void)
+ 
+ static void __init vsmp_prepare_cpus(unsigned int max_cpus)
+ {
++	int rc;
++
+ 	mips_mt_set_cpuoptions();
++	rc = vsmp_ipi_init();
++	WARN_ON(rc);
+ }
+ 
+ const struct plat_smp_ops vsmp_smp_ops = {
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index 763070be0088..786ed8a6b719 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -192,7 +192,6 @@ config MADERA_IRQ
+ config IRQ_MIPS_CPU
+ 	bool
+ 	select GENERIC_IRQ_CHIP
+-	select GENERIC_IRQ_IPI if SMP && SYS_SUPPORTS_MULTITHREADING
+ 	select IRQ_DOMAIN
+ 	select GENERIC_IRQ_EFFECTIVE_AFF_MASK if SMP
+ 
+diff --git a/drivers/irqchip/irq-mips-cpu.c b/drivers/irqchip/irq-mips-cpu.c
+index b2318e915d88..ec6999b5e73f 100644
+--- a/drivers/irqchip/irq-mips-cpu.c
++++ b/drivers/irqchip/irq-mips-cpu.c
+@@ -34,8 +34,7 @@
+ #include <asm/mipsmtregs.h>
+ #include <asm/setup.h>
+ 
+-static struct irq_domain *irq_domain;
+-static struct irq_domain *ipi_domain;
++static struct irq_domain *irq_domain __read_mostly;
+ 
+ static inline void unmask_mips_irq(struct irq_data *d)
+ {
+@@ -108,37 +107,12 @@ static void mips_mt_sw_irq_ack(struct irq_data *d)
  	evpe(vpflags);
--	mask_mips_irq(d);
  }
  
- #ifdef CONFIG_GENERIC_IRQ_IPI
-@@ -108,21 +130,17 @@ static void mips_mt_send_ipi(struct irq_data *d, unsigned int cpu)
- }
- 
- #endif /* CONFIG_GENERIC_IRQ_IPI */
+-#ifdef CONFIG_GENERIC_IRQ_IPI
 -
--static struct irq_chip mips_mt_cpu_irq_controller = {
-+static const struct irq_chip mips_mt_cpu_sw_irq_controller = {
+-static void mips_mt_send_ipi(struct irq_data *d, unsigned int cpu)
+-{
+-	irq_hw_number_t hwirq = irqd_to_hwirq(d);
+-	unsigned long flags;
+-	int vpflags;
+-
+-	local_irq_save(flags);
+-
+-	/* We can only send IPIs to VPEs within the local core */
+-	WARN_ON(!cpus_are_siblings(smp_processor_id(), cpu));
+-
+-	vpflags = dvpe();
+-	settc(cpu_vpe_id(&cpu_data[cpu]));
+-	write_vpe_c0_cause(read_vpe_c0_cause() | (C_SW0 << hwirq));
+-	evpe(vpflags);
+-
+-	local_irq_restore(flags);
+-}
+-
+-#endif /* CONFIG_GENERIC_IRQ_IPI */
+ static const struct irq_chip mips_mt_cpu_sw_irq_controller = {
  	.name		= "MIPS",
--	.irq_startup	= mips_mt_cpu_irq_startup,
--	.irq_ack	= mips_mt_cpu_irq_ack,
-+	.irq_startup	= mips_mt_sw_irq_startup,
-+	.irq_ack	= mips_mt_sw_irq_ack,
+ 	.irq_startup	= mips_mt_sw_irq_startup,
+ 	.irq_ack	= mips_mt_sw_irq_ack,
  	.irq_mask	= mask_mips_irq,
--	.irq_mask_ack	= mips_mt_cpu_irq_ack,
  	.irq_unmask	= unmask_mips_irq,
--	.irq_eoi	= unmask_mips_irq,
--	.irq_disable	= mask_mips_irq,
--	.irq_enable	= unmask_mips_irq,
- #ifdef CONFIG_GENERIC_IRQ_IPI
- 	.ipi_send_single = mips_mt_send_ipi,
- #endif
+-#ifdef CONFIG_GENERIC_IRQ_IPI
+-	.ipi_send_single = mips_mt_send_ipi,
+-#endif
  };
-+#endif
+ #endif
  
- asmlinkage void __weak plat_irq_dispatch(void)
- {
-@@ -149,17 +167,27 @@ asmlinkage void __weak plat_irq_dispatch(void)
+@@ -154,15 +128,8 @@ asmlinkage void __weak plat_irq_dispatch(void)
+ 
+ 	pending >>= CAUSEB_IP;
+ 	while (pending) {
+-		struct irq_domain *d;
+-
+ 		irq = fls(pending) - 1;
+-		if (IS_ENABLED(CONFIG_GENERIC_IRQ_IPI) && irq < 2)
+-			d = ipi_domain;
+-		else
+-			d = irq_domain;
+-
+-		do_domain_IRQ(d, irq);
++		do_domain_IRQ(irq_domain, irq);
+ 		pending &= ~BIT(irq);
  	}
  }
+@@ -202,86 +169,6 @@ static const struct irq_domain_ops mips_cpu_intc_irq_domain_ops = {
+ 	.xlate = irq_domain_xlate_onecell,
+ };
  
-+#ifdef CONFIG_MIPS_MT
-+static inline const struct irq_chip *mips_cpu_get_sw_irqchip(void)
-+{
-+	return cpu_has_mipsmt ? &mips_mt_cpu_sw_irq_controller : &mips_cpu_sw_irq_controller;
-+}
-+#else
-+static inline const struct irq_chip *mips_cpu_get_sw_irqchip(void)
-+{
-+	return &mips_cpu_sw_irq_controller;
-+}
-+#endif
-+
- static int mips_cpu_intc_map(struct irq_domain *d, unsigned int irq,
- 			     irq_hw_number_t hw)
- {
--	struct irq_chip *chip;
-+	const struct irq_chip *chip;
- 
--	if (hw < 2 && cpu_has_mipsmt) {
--		/* Software interrupts are used for MT/CMT IPI */
--		chip = &mips_mt_cpu_irq_controller;
--	} else {
-+	if (hw < 2)
-+		chip = mips_cpu_get_sw_irqchip();
-+	else
- 		chip = &mips_cpu_irq_controller;
+-#ifdef CONFIG_GENERIC_IRQ_IPI
+-
+-struct cpu_ipi_domain_state {
+-	DECLARE_BITMAP(allocated, 2);
+-};
+-
+-static int mips_cpu_ipi_alloc(struct irq_domain *domain, unsigned int virq,
+-			      unsigned int nr_irqs, void *arg)
+-{
+-	struct cpu_ipi_domain_state *state = domain->host_data;
+-	unsigned int i, hwirq;
+-	int ret;
+-
+-	for (i = 0; i < nr_irqs; i++) {
+-		hwirq = find_first_zero_bit(state->allocated, 2);
+-		if (hwirq == 2)
+-			return -EBUSY;
+-		bitmap_set(state->allocated, hwirq, 1);
+-
+-		ret = irq_domain_set_hwirq_and_chip(domain, virq + i, hwirq,
+-						    &mips_mt_cpu_irq_controller,
+-						    NULL);
+-		if (ret)
+-			return ret;
+-
+-		ret = irq_domain_set_hwirq_and_chip(domain->parent, virq + i, hwirq,
+-						    &mips_mt_cpu_irq_controller,
+-						    NULL);
+-
+-		if (ret)
+-			return ret;
+-
+-		ret = irq_set_irq_type(virq + i, IRQ_TYPE_LEVEL_HIGH);
+-		if (ret)
+-			return ret;
 -	}
+-
+-	return 0;
+-}
+-
+-static int mips_cpu_ipi_match(struct irq_domain *d, struct device_node *node,
+-			      enum irq_domain_bus_token bus_token)
+-{
+-	bool is_ipi;
+-
+-	switch (bus_token) {
+-	case DOMAIN_BUS_IPI:
+-		is_ipi = d->bus_token == bus_token;
+-		return (!node || (to_of_node(d->fwnode) == node)) && is_ipi;
+-	default:
+-		return 0;
+-	}
+-}
+-
+-static const struct irq_domain_ops mips_cpu_ipi_chip_ops = {
+-	.alloc	= mips_cpu_ipi_alloc,
+-	.match	= mips_cpu_ipi_match,
+-};
+-
+-static void mips_cpu_register_ipi_domain(struct device_node *of_node)
+-{
+-	struct cpu_ipi_domain_state *ipi_domain_state;
+-
+-	ipi_domain_state = kzalloc(sizeof(*ipi_domain_state), GFP_KERNEL);
+-	ipi_domain = irq_domain_add_hierarchy(irq_domain,
+-					      IRQ_DOMAIN_FLAG_IPI_SINGLE,
+-					      2, of_node,
+-					      &mips_cpu_ipi_chip_ops,
+-					      ipi_domain_state);
+-	if (!ipi_domain)
+-		panic("Failed to add MIPS CPU IPI domain");
+-	irq_domain_update_bus_token(ipi_domain, DOMAIN_BUS_IPI);
+-}
+-
+-#else /* !CONFIG_GENERIC_IRQ_IPI */
+-
+-static inline void mips_cpu_register_ipi_domain(struct device_node *of_node) {}
+-
+-#endif /* !CONFIG_GENERIC_IRQ_IPI */
+-
+ int mips_cpu_get_sw_int(int hwint)
+ {
+ 	/* Only 0 and 1 for SW INT */
+@@ -304,13 +191,6 @@ static void __init __mips_cpu_irq_init(struct device_node *of_node)
+ 					   NULL);
+ 	if (!irq_domain)
+ 		panic("Failed to add irqdomain for MIPS CPU");
+-
+-	/*
+-	 * Only proceed to register the software interrupt IPI implementation
+-	 * for CPUs which implement the MIPS MT (multi-threading) ASE.
+-	 */
+-	if (cpu_has_mipsmt)
+-		mips_cpu_register_ipi_domain(of_node);
+ }
  
- 	if (cpu_has_vint)
- 		set_vi_handler(hw, plat_irq_dispatch);
+ void __init mips_cpu_irq_init(void)
 
 -- 
 2.46.0
