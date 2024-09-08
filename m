@@ -1,211 +1,99 @@
-Return-Path: <linux-mips+bounces-5431-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5432-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 651419708D2
-	for <lists+linux-mips@lfdr.de>; Sun,  8 Sep 2024 18:57:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E58379709C4
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Sep 2024 22:43:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C4311C20C00
-	for <lists+linux-mips@lfdr.de>; Sun,  8 Sep 2024 16:57:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 938E0282AFF
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Sep 2024 20:43:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C4E516F909;
-	Sun,  8 Sep 2024 16:57:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aUgEmSEz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93FB6178CE4;
+	Sun,  8 Sep 2024 20:43:13 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DDB2535D8;
-	Sun,  8 Sep 2024 16:57:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C0B0175D4C;
+	Sun,  8 Sep 2024 20:43:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725814652; cv=none; b=bZbiaCaHlPFcrASVm+RY8m/9lYmSupCZfDEtVXFRlIa50VaEjX7ej+VgNG6OOinuWfWnXQYErPfIjSEqCQR4RLfx+IhsOzJUTY1togKFnK/saS6StknC5hBQCPyvvqO2NeAYaxq+V7667V8U3BoIUGhFx+LaksPEzGGb5OxJAV0=
+	t=1725828193; cv=none; b=RUG+FA8pGqz4fLgnGzlIOhn6QSaHW0kL4aAxgNaFolJHv+u1095hU0zeZmQ7bec72w9EGsx+oj4Pz8WPGnazgg/fG1nsDOdekj3flOnRBiY8D3z+vjI+vL2C5ZG2GKiUjMrHamWCSzO5JNJUQxSysQAuCyxoJGH9pMhk5kPMMtg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725814652; c=relaxed/simple;
-	bh=gFpZpGEkhVcZmvpYlYMlw1TLTYXTJ+SJ6Et27zpaRkE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EnwjEeFg4742/6sxw5zNC7+oaZ/QPx5JOy+qulJVodvNjBoJtxjvzjHBYRQVGDgOmO4eifqr9FfevXHWBhYcf8TM0XHV74zgZko1HBZzxNoI9LEbBhcpmrXEmr+8BITAbWVAfuXmstTTpKjRaYpvj7EMe22yE4PCjIbq9vax+yw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aUgEmSEz; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725814650; x=1757350650;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gFpZpGEkhVcZmvpYlYMlw1TLTYXTJ+SJ6Et27zpaRkE=;
-  b=aUgEmSEzJE4GXILroVxNErvHC+02J+WAcGLKHwNdVOWyoWvkEh4qCwza
-   GRvWXgsQVZbJDt3rG7mq+1/Hq2A4XzfXqEH3BWXyLVBJVK1nousJZbY/2
-   02zYcFNJn90FGMOyKg4mpepIjzG2HHExQ3JpZLdfdrsHCenyk4SSe4+D3
-   GFQQMHBzpAyoZAMvaXRetaGzVmEc+C6bmhZA/6bGyVHykiK0rSkjj65Hm
-   kTrQAJd8LTJcmy8vekeDobdlmFT1LtL30M9AFIc6F3DZwUVnJaz76IF69
-   55Asqf3CEEgx2TwEh6vHWEKCx0L/+aEsxcVJ7Koqzc4ZfRZDpx/ZU2hM/
-   w==;
-X-CSE-ConnectionGUID: gBceiOG9SmWjic5eILwIVA==
-X-CSE-MsgGUID: hqzjjl4xSx2Mj37XcBBL3Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="24006791"
-X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
-   d="scan'208";a="24006791"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2024 09:57:29 -0700
-X-CSE-ConnectionGUID: /aVMb7qWTuSucpJIB32DwA==
-X-CSE-MsgGUID: 0EMBbu5/TJGp7yLL1NeXfA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
-   d="scan'208";a="67173237"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 08 Sep 2024 09:57:26 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1snLE3-000Dk7-2l;
-	Sun, 08 Sep 2024 16:57:23 +0000
-Date: Mon, 9 Sep 2024 00:56:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: oe-kbuild-all@lists.linux.dev, loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH 4/5] LoongArch: Extract IOCSR definitions to standalone
- header
-Message-ID: <202409090054.D3vEaTqr-lkp@intel.com>
-References: <20240907-iocsr-v1-4-0c99b3334444@flygoat.com>
+	s=arc-20240116; t=1725828193; c=relaxed/simple;
+	bh=f90I9bwSj2dxzrEciXcFScy+CumS9+bcyiuMt83JQhA=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=ur4HbL2YTEUvSvNqF88fAjo/jXP7cUxwD1uh2ziIgqGFLTIQ0bCnpLrDqKDZinFxoyYa1rukIGez4f9dK5hpCYsdsdceNisIuaf9KaLMkoRWa6w8lvmXG195dReqiOVWVQOUs7N48OZUD+XGqyLDbRaynwKgQ3s4VAq0jATHGV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 96E4792009C; Sun,  8 Sep 2024 22:43:02 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 8806B92009B;
+	Sun,  8 Sep 2024 21:43:02 +0100 (BST)
+Date: Sun, 8 Sep 2024 21:43:02 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+cc: Masahiro Yamada <masahiroy@kernel.org>, 
+    Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+    Richard Weinberger <richard@nod.at>, 
+    Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
+    Johannes Berg <johannes@sipsolutions.net>, 
+    Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+    Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+    x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+    Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+    Wedson Almeida Filho <wedsonaf@gmail.com>, 
+    Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+    =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+    Benno Lossin <benno.lossin@proton.me>, 
+    Andreas Hindborg <a.hindborg@samsung.com>, 
+    Alice Ryhl <aliceryhl@google.com>, 
+    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    Steven Rostedt <rostedt@goodmis.org>, 
+    Masami Hiramatsu <mhiramat@kernel.org>, 
+    Mark Rutland <mark.rutland@arm.com>, Jonathan Corbet <corbet@lwn.net>, 
+    Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>, 
+    Nick Desaulniers <ndesaulniers@google.com>, 
+    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+    linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+    linux-um@lists.infradead.org, rust-for-linux@vger.kernel.org, 
+    linux-mips@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+    linux-doc@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 3/3] rust: Enable for MIPS
+In-Reply-To: <20240905-mips-rust-v2-3-409d66819418@flygoat.com>
+Message-ID: <alpine.DEB.2.21.2409082138160.60835@angie.orcam.me.uk>
+References: <20240905-mips-rust-v2-0-409d66819418@flygoat.com> <20240905-mips-rust-v2-3-409d66819418@flygoat.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240907-iocsr-v1-4-0c99b3334444@flygoat.com>
+Content-Type: text/plain; charset=US-ASCII
 
-Hi Jiaxun,
+On Thu, 5 Sep 2024, Jiaxun Yang wrote:
 
-kernel test robot noticed the following build errors:
+> diff --git a/scripts/generate_rust_target.rs b/scripts/generate_rust_target.rs
+> index 863720777313..bbdf8a4dd169 100644
+> --- a/scripts/generate_rust_target.rs
+> +++ b/scripts/generate_rust_target.rs
+[...]
+> +        } else {
+> +            ts.push("arch", "mips");
+> +            cfg.get("TARGET_ISA_REV").map(|isa_rev| {
+> +                let feature = match isa_rev.as_str() {
+> +                    "1" => ",+mips32",
+> +                    "2" => ",+mips32r2",
+> +                    "5" => ",+mips32r5",
+> +                    "6" => ",+mips32r6",
+> +                    _ => ",+mips2",
 
-[auto build test ERROR on 9aaeb87ce1e966169a57f53a02ba05b30880ffb8]
+ What's the consequence of using `mips2' rather than `mips1' here?  How 
+about other ISA revisions, e.g. `mips4' (that also applies to the 64BIT 
+leg)?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiaxun-Yang/LoongArch-Rename-cpu_has_csr-as-cpu_has_iocsr/20240907-181959
-base:   9aaeb87ce1e966169a57f53a02ba05b30880ffb8
-patch link:    https://lore.kernel.org/r/20240907-iocsr-v1-4-0c99b3334444%40flygoat.com
-patch subject: [PATCH 4/5] LoongArch: Extract IOCSR definitions to standalone header
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20240909/202409090054.D3vEaTqr-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240909/202409090054.D3vEaTqr-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409090054.D3vEaTqr-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/loongarch/include/asm/cpu-info.h:11,
-                    from arch/loongarch/include/asm/processor.h:13,
-                    from arch/loongarch/include/asm/thread_info.h:15,
-                    from include/linux/thread_info.h:60,
-                    from include/asm-generic/current.h:6,
-                    from ./arch/loongarch/include/generated/asm/current.h:1,
-                    from include/linux/mutex.h:14,
-                    from include/linux/notifier.h:14,
-                    from include/linux/clk.h:14,
-                    from include/linux/cpufreq.h:11,
-                    from drivers/cpufreq/loongson3_cpufreq.c:10:
-   drivers/cpufreq/loongson3_cpufreq.c: In function 'do_service_request':
->> drivers/cpufreq/loongson3_cpufreq.c:185:35: error: 'LOONGSON_IOCSR_SMCMBX' undeclared (first use in this function)
-     185 |         last.value = iocsr_read32(LOONGSON_IOCSR_SMCMBX);
-         |                                   ^~~~~~~~~~~~~~~~~~~~~
-   drivers/cpufreq/loongson3_cpufreq.c:185:22: note: in expansion of macro 'iocsr_read32'
-     185 |         last.value = iocsr_read32(LOONGSON_IOCSR_SMCMBX);
-         |                      ^~~~~~~~~~~~
-   drivers/cpufreq/loongson3_cpufreq.c:185:35: note: each undeclared identifier is reported only once for each function it appears in
-     185 |         last.value = iocsr_read32(LOONGSON_IOCSR_SMCMBX);
-         |                                   ^~~~~~~~~~~~~~~~~~~~~
-   drivers/cpufreq/loongson3_cpufreq.c:185:22: note: in expansion of macro 'iocsr_read32'
-     185 |         last.value = iocsr_read32(LOONGSON_IOCSR_SMCMBX);
-         |                      ^~~~~~~~~~~~
->> drivers/cpufreq/loongson3_cpufreq.c:199:36: error: 'LOONGSON_IOCSR_MISC_FUNC' undeclared (first use in this function)
-     199 |         iocsr_write32(iocsr_read32(LOONGSON_IOCSR_MISC_FUNC) | IOCSR_MISC_FUNC_SOFT_INT,
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~
-   arch/loongarch/include/asm/loongarch.h:187:45: note: in definition of macro 'iocsr_write32'
-     187 | #define iocsr_write32(val, reg) __iocsrwr_w(val, reg)
-         |                                             ^~~
-   drivers/cpufreq/loongson3_cpufreq.c:199:23: note: in expansion of macro 'iocsr_read32'
-     199 |         iocsr_write32(iocsr_read32(LOONGSON_IOCSR_MISC_FUNC) | IOCSR_MISC_FUNC_SOFT_INT,
-         |                       ^~~~~~~~~~~~
->> drivers/cpufreq/loongson3_cpufreq.c:199:64: error: 'IOCSR_MISC_FUNC_SOFT_INT' undeclared (first use in this function)
-     199 |         iocsr_write32(iocsr_read32(LOONGSON_IOCSR_MISC_FUNC) | IOCSR_MISC_FUNC_SOFT_INT,
-         |                                                                ^~~~~~~~~~~~~~~~~~~~~~~~
-   arch/loongarch/include/asm/loongarch.h:187:45: note: in definition of macro 'iocsr_write32'
-     187 | #define iocsr_write32(val, reg) __iocsrwr_w(val, reg)
-         |                                             ^~~
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for OMAP2PLUS_MBOX
-   Depends on [n]: MAILBOX [=y] && (ARCH_OMAP2PLUS || ARCH_K3)
-   Selected by [m]:
-   - TI_K3_M4_REMOTEPROC [=m] && REMOTEPROC [=y] && (ARCH_K3 || COMPILE_TEST [=y])
-
-
-vim +/LOONGSON_IOCSR_SMCMBX +185 drivers/cpufreq/loongson3_cpufreq.c
-
-   175	
-   176	static inline int do_service_request(u32 id, u32 info, u32 cmd, u32 val, u32 extra)
-   177	{
-   178		int retries;
-   179		unsigned int cpu = raw_smp_processor_id();
-   180		unsigned int package = cpu_data[cpu].package;
-   181		union smc_message msg, last;
-   182	
-   183		mutex_lock(&cpufreq_mutex[package]);
-   184	
- > 185		last.value = iocsr_read32(LOONGSON_IOCSR_SMCMBX);
-   186		if (!last.complete) {
-   187			mutex_unlock(&cpufreq_mutex[package]);
-   188			return -EPERM;
-   189		}
-   190	
-   191		msg.id		= id;
-   192		msg.info	= info;
-   193		msg.cmd		= cmd;
-   194		msg.val		= val;
-   195		msg.extra	= extra;
-   196		msg.complete	= 0;
-   197	
-   198		iocsr_write32(msg.value, LOONGSON_IOCSR_SMCMBX);
- > 199		iocsr_write32(iocsr_read32(LOONGSON_IOCSR_MISC_FUNC) | IOCSR_MISC_FUNC_SOFT_INT,
-   200			      LOONGSON_IOCSR_MISC_FUNC);
-   201	
-   202		for (retries = 0; retries < 10000; retries++) {
-   203			msg.value = iocsr_read32(LOONGSON_IOCSR_SMCMBX);
-   204			if (msg.complete)
-   205				break;
-   206	
-   207			usleep_range(8, 12);
-   208		}
-   209	
-   210		if (!msg.complete || msg.cmd != CMD_OK) {
-   211			mutex_unlock(&cpufreq_mutex[package]);
-   212			return -EPERM;
-   213		}
-   214	
-   215		mutex_unlock(&cpufreq_mutex[package]);
-   216	
-   217		return msg.val;
-   218	}
-   219	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+  Maciej
 
