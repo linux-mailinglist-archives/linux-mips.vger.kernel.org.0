@@ -1,99 +1,193 @@
-Return-Path: <linux-mips+bounces-5432-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5433-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E58379709C4
-	for <lists+linux-mips@lfdr.de>; Sun,  8 Sep 2024 22:43:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E856970AC5
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Sep 2024 02:21:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 938E0282AFF
-	for <lists+linux-mips@lfdr.de>; Sun,  8 Sep 2024 20:43:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 77CB8B211F7
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Sep 2024 00:21:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93FB6178CE4;
-	Sun,  8 Sep 2024 20:43:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25175E545;
+	Mon,  9 Sep 2024 00:21:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="L1Phm7wG"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C0B0175D4C;
-	Sun,  8 Sep 2024 20:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2FED4A23
+	for <linux-mips@vger.kernel.org>; Mon,  9 Sep 2024 00:21:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725828193; cv=none; b=RUG+FA8pGqz4fLgnGzlIOhn6QSaHW0kL4aAxgNaFolJHv+u1095hU0zeZmQ7bec72w9EGsx+oj4Pz8WPGnazgg/fG1nsDOdekj3flOnRBiY8D3z+vjI+vL2C5ZG2GKiUjMrHamWCSzO5JNJUQxSysQAuCyxoJGH9pMhk5kPMMtg=
+	t=1725841300; cv=none; b=AoXcVA7+RnszDp8AsF2BHIlJgpubJ/D77PD6+f5aSkDv6rSmoTuEeQ1ovQLkehqGY2NVegt2w6m4z9tqU/7W41ZtHlADob5vc+T1WzrK1Fy32cJl7WyJVlheiB93FXFau4HIdFJ3Buc2IiC83wP7Ii+kWkvzO42PlBXdYBx7Nwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725828193; c=relaxed/simple;
-	bh=f90I9bwSj2dxzrEciXcFScy+CumS9+bcyiuMt83JQhA=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=ur4HbL2YTEUvSvNqF88fAjo/jXP7cUxwD1uh2ziIgqGFLTIQ0bCnpLrDqKDZinFxoyYa1rukIGez4f9dK5hpCYsdsdceNisIuaf9KaLMkoRWa6w8lvmXG195dReqiOVWVQOUs7N48OZUD+XGqyLDbRaynwKgQ3s4VAq0jATHGV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 96E4792009C; Sun,  8 Sep 2024 22:43:02 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 8806B92009B;
-	Sun,  8 Sep 2024 21:43:02 +0100 (BST)
-Date: Sun, 8 Sep 2024 21:43:02 +0100 (BST)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-cc: Masahiro Yamada <masahiroy@kernel.org>, 
-    Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-    Richard Weinberger <richard@nod.at>, 
-    Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-    Johannes Berg <johannes@sipsolutions.net>, 
-    Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-    Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-    x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-    Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-    Wedson Almeida Filho <wedsonaf@gmail.com>, 
-    Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-    =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-    Benno Lossin <benno.lossin@proton.me>, 
-    Andreas Hindborg <a.hindborg@samsung.com>, 
-    Alice Ryhl <aliceryhl@google.com>, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Steven Rostedt <rostedt@goodmis.org>, 
-    Masami Hiramatsu <mhiramat@kernel.org>, 
-    Mark Rutland <mark.rutland@arm.com>, Jonathan Corbet <corbet@lwn.net>, 
-    Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>, 
-    Nick Desaulniers <ndesaulniers@google.com>, 
-    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-    linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-    linux-um@lists.infradead.org, rust-for-linux@vger.kernel.org, 
-    linux-mips@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-    linux-doc@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 3/3] rust: Enable for MIPS
-In-Reply-To: <20240905-mips-rust-v2-3-409d66819418@flygoat.com>
-Message-ID: <alpine.DEB.2.21.2409082138160.60835@angie.orcam.me.uk>
-References: <20240905-mips-rust-v2-0-409d66819418@flygoat.com> <20240905-mips-rust-v2-3-409d66819418@flygoat.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1725841300; c=relaxed/simple;
+	bh=KVZMNnMYMnNRh9XEUd/AbAsrshEQNXgSkDB5lDD5qq8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YbaCV+DB/mkEog2AEHTYdtU9B1ovOGjmfVHjCxVCvQoUkl+IjoBpkfbPOo+masIXUuG3wq5btQlmznfJoQYEaqAVy4bMMXFQgs3YjSk5HP2/wkUzr/F/dakMVcohv0siG4OPQpP1I2ee5yPvcTj3VZ3pzF3EvHJZC7vkbDpK2mQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=L1Phm7wG; arc=none smtp.client-ip=209.85.160.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-4581cec6079so317071cf.0
+        for <linux-mips@vger.kernel.org>; Sun, 08 Sep 2024 17:21:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1725841296; x=1726446096; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+M1qVooEyNPT1gAAftfRiR4Q5Ah3XuHi08JSkLTfyCg=;
+        b=L1Phm7wGMuZuJebhYKnd+JQyBUyE9C1zk1fQHdZNxb97P8m+M+PxEraXZjvXXUAMxN
+         YgeLRp+lFQS66t9ESCBstlYEggoxa0L1O/PC+UpZxl6L665n3Rv4OnKWpcbaTlaXpWf0
+         9c/7mIYxN3/DmAJu6trHAsXv8hyRFuuFoFHjV/iJGToGgpxTbH2z/J2T93C6Ekh9D9Xw
+         mKakVQhQm860axVGd1VHj7SIRv/pB5vXfMZqrzwpugZo5E1rbuACJ0d/qs9z36lc0gC4
+         v+H5OuBq9pX20rpRn3oES5ryQ4nnoL4jusdt9JjBhzBLJ3hxIViJUR2dmGv04meKCtBN
+         ye6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725841296; x=1726446096;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+M1qVooEyNPT1gAAftfRiR4Q5Ah3XuHi08JSkLTfyCg=;
+        b=ijPQ128h/c6Y+5gBdDaRdXlnjOsq3fDlvb/6+xveZZ/ydnQewWXrRXux77KJlwKl2q
+         3Msx5zzBMFTkgnU30JNuGms7F17PDmQ84KzftMWdaHmmZQu05NjzJwSwLZUuPlxBCcDU
+         pbm/Ho83O+72heqLCzybqoYE2qX4xMuCGQ8867pqicx2t6AsqRQroQ862RlamItwg1w1
+         v+5E+hJgL8LmL4AvJYpDCeXgkKt3s11wfGGIEGq8oqr8Wyra4H5B0dUyjahaBRbWzVj/
+         EhjcU7NgH7zhvBfWHtzlmodIKMwYeHy9RIvmryx9AbgPX9OkeggePIetQE+omla/GoT6
+         GeHg==
+X-Forwarded-Encrypted: i=1; AJvYcCU1AT8530RA7b/EqhnBXgs8CrfqbyTcsz9AWmESuz89kNT/3/o+8U/gUXqQr/4oSyplybusbqogiso0@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1MfPYb6VAeEqxCxbAfY32g1QKAuGRMmZkj79N5AXvD3esXi3P
+	5eSAXbEGXceVnxD4SuDdNSMHevKVb/sJI2ngwFFKz7q0Zo5CdQRf4tXFxWP/uIiOEzx2li70viC
+	cH5K3a9naLxnQNShp+kVIXsNi2EgfTRmjoJdy
+X-Google-Smtp-Source: AGHT+IHeebo47LrVuqQNlmWSroknDWyh0p2+ySnmSfFMd++vvWmH0RLig1T8xF/sYDtVArFYD/iKIyTthz+4Y2vdWxE=
+X-Received: by 2002:ac8:5714:0:b0:456:796b:2fe5 with SMTP id
+ d75a77b69052e-4582147fdcamr3000151cf.9.1725841295262; Sun, 08 Sep 2024
+ 17:21:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20240831004313.3713467-1-almasrymina@google.com>
+ <20240831004313.3713467-7-almasrymina@google.com> <20240903141948.269e22bb@kernel.org>
+In-Reply-To: <20240903141948.269e22bb@kernel.org>
+From: Mina Almasry <almasrymina@google.com>
+Date: Sun, 8 Sep 2024 17:21:23 -0700
+Message-ID: <CAHS8izN_6_0VUWJzyXZ60kDjvGpdJv1a=-6mGOURapHdfHbcMQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v24 06/13] memory-provider: dmabuf devmem memory provider
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
+	Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
+	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 5 Sep 2024, Jiaxun Yang wrote:
+On Tue, Sep 3, 2024 at 2:19=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wro=
+te:
+>
+> On Sat, 31 Aug 2024 00:43:06 +0000 Mina Almasry wrote:
+> > diff --git a/include/net/mp_dmabuf_devmem.h b/include/net/mp_dmabuf_dev=
+mem.h
+> > new file mode 100644
+> > index 000000000000..6d1cf2a77f6b
+> > --- /dev/null
+> > +++ b/include/net/mp_dmabuf_devmem.h
+>
+> this header can live under net/core/ like netmem_priv.h right?
+> devmem internals should be of no interest outside of core networking.
+>
 
-> diff --git a/scripts/generate_rust_target.rs b/scripts/generate_rust_target.rs
-> index 863720777313..bbdf8a4dd169 100644
-> --- a/scripts/generate_rust_target.rs
-> +++ b/scripts/generate_rust_target.rs
-[...]
-> +        } else {
-> +            ts.push("arch", "mips");
-> +            cfg.get("TARGET_ISA_REV").map(|isa_rev| {
-> +                let feature = match isa_rev.as_str() {
-> +                    "1" => ",+mips32",
-> +                    "2" => ",+mips32r2",
-> +                    "5" => ",+mips32r5",
-> +                    "6" => ",+mips32r6",
-> +                    _ => ",+mips2",
+Yes, those can be moved under net/core trivially. done.
 
- What's the consequence of using `mips2' rather than `mips1' here?  How 
-about other ISA revisions, e.g. `mips4' (that also applies to the 64BIT 
-leg)?
+> In fact the same is true for include/net/devmem.h ?
+>
 
-  Maciej
+This turned out to be possible, but with a minor moving around of some
+helpers. Basically netmem.h included devmem.h to get access to some
+devmem internals for some of the net_iov helpers specific to devmem.
+Moving these helpers to devmem.h enabled me to keep
+include/net/netmem.h but put devmem.h under net/core. Now netmem.h
+doesn't need to include devmem.h. I think this is an improvement.
+
+> > +static inline netmem_ref mp_dmabuf_devmem_alloc_netmems(struct page_po=
+ol *pool,
+> > +                                                     gfp_t gfp)
+>
+> Please break the lines after the return type if the line gets long:
+>
+> static inline netmem_ref
+> mp_dmabuf_devmem_alloc_netmems(struct page_pool *pool, gfp_t gfp)
+>
+> Please fix where you can (at least where it cases going over 80 chars)
+>
+
+FWIW I use a formatting tool (clang-format) which seems to prefer
+breaking in between the args, but I'll fix this manually and wherever
+else I notice.
+
+> >       struct_group_tagged(page_pool_params_slow, slow,
+> >               struct net_device *netdev;
+> > +             struct netdev_rx_queue *queue;
+>
+> Why set a pointer? It should work but drivers don't usually deal with
+> netdev_rx_queue struct directly. struct xdp_rxq_info takes an integer
+> queue id, and it serves a somewhat similar function.
+>
+> Keep in mind that there will be more drivers than core code, so
+> convenience for them matters more.
+>
+
+Makes sense.
+
+> > +bool mp_dmabuf_devmem_release_page(struct page_pool *pool, netmem_ref =
+netmem)
+> > +{
+> > +     if (WARN_ON_ONCE(!netmem_is_net_iov(netmem)))
+> > +             return false;
+> > +
+> > +     if (WARN_ON_ONCE(atomic_long_read(netmem_get_pp_ref_count_ref(net=
+mem)) !=3D
+> > +                  1))
+>
+> something needs factoring out here, to make this line shorter, please..
+> either netmem -> net_iov conversion or at least reading of the ref
+> count?
+>
+
+Ah, sorry I think you pointed this out earlier and I missed applying
+it. Should be done in the next iteration.
+
+--
+Thanks,
+Mina
 
