@@ -1,81 +1,102 @@
-Return-Path: <linux-mips+bounces-5465-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5466-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89D3597131B
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Sep 2024 11:16:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20CE89713AF
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Sep 2024 11:31:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C04C1F24508
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Sep 2024 09:16:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B28AB22E60
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Sep 2024 09:31:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AF801B2ECD;
-	Mon,  9 Sep 2024 09:16:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 845831B372D;
+	Mon,  9 Sep 2024 09:29:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V3O91yJF"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="PHcK1SUW"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBAEB1B2514;
-	Mon,  9 Sep 2024 09:16:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAFF81B3746;
+	Mon,  9 Sep 2024 09:29:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725873404; cv=none; b=k36OQFOLr9f/BoxAKXg75VMHN5YiMhIgTXbY52OPY8v8C3xZiHen19RgcqjLyHRxV83DOr3IyGy8ShMDXX05WUoYEKuPb5C5XIsP09qCrPF/2KduaecpEwSd8ISq7BQ1gsBwSJCJiefyXiNOfxV3x+k2gzdm8tdqiADUjJaKzzA=
+	t=1725874169; cv=none; b=WcOLWEuwg0a6QAf3zz0UlvHiZ+qdW5I6lCO4hz8GaBkw0mJ9N3+3HlcBxPA5Ii+WnIbLXpQglI05WD3OyaCDq7bu7MuJcZWJU4AAu5phKSbtnnlZw7Dho6TZUg8S+hstQsfKMzW4FmeJbYribKkHhT2vwGoHTkAosLSQ3mGqLSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725873404; c=relaxed/simple;
-	bh=wjUZq5eoFguMsvAKAhsl2BUFabxRCU1j+kKbwJn1ifY=;
+	s=arc-20240116; t=1725874169; c=relaxed/simple;
+	bh=o/hjh/Sq8hcMxZEgqMKb/vs7eiHDdZcNb8ZaB2phBzU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QxMImlo1W9CDB1FxFOAWIQXVoqeXTp48tqehGC6GmeG7/rM1Er4oSImDtM1iJKL7egVH7lKOLEwJIecFDJO7OlaKIE26uZGyfpRr2L/DoanT0ehH34+wwMg3qP69s8MXenif1SUJUVdmqEjGD8RbB7I5YYCqKD9vG877OBdly1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V3O91yJF; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725873402; x=1757409402;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wjUZq5eoFguMsvAKAhsl2BUFabxRCU1j+kKbwJn1ifY=;
-  b=V3O91yJFHQDx06zz0T4ItEUGzrrFbWljVqP/7gg0eMVUgziLYi84Hkxj
-   /Vj3/p4h9oOioEjge64UMwV/4u+wUEFuK4/cI4jaxExeLJ+hwsZiM7qF9
-   1Ra6mmw1JhjBu7ekwHjI3YI5tNr6pHY5lOP1JFoLM3qOkigshCqzrHLJg
-   MltqykAne5HJOb8LUXin9wmb/FsanfFvC2jhUmS8uWuZj0OkYDLZzTbY5
-   hvnCtPlMlNKr4JP+DyMmkeA/PHKwv+G/E4YVDIusRYDtlcaSU5kN6ZVES
-   /MMNLcLvUDfLBZ7wfzwJGdD04FGEo8TjwOIZDTdJxnDJEmpz5TxbPsam5
-   Q==;
-X-CSE-ConnectionGUID: zAEJWMSSQKWFHuE6irmU2A==
-X-CSE-MsgGUID: +uomp7oFQGeDb8WzwTBxqw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="42036565"
-X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
-   d="scan'208";a="42036565"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 02:16:36 -0700
-X-CSE-ConnectionGUID: JSXdFJ3LSkGARy1PxNojig==
-X-CSE-MsgGUID: YA27vvciRo+Ma5L1Plrn6Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
-   d="scan'208";a="67352252"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 02:16:33 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1snaVa-00000006jKt-2UfC;
-	Mon, 09 Sep 2024 12:16:30 +0300
-Date: Mon, 9 Sep 2024 12:16:30 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Rong Qianfeng <rongqianfeng@vivo.com>, biju.das.jz@bp.renesas.com,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-	opensource.kernel@vivo.com
-Subject: Re: [PATCH v4 3/3] i2c: jz4780: Use dev_err_probe()
-Message-ID: <Zt687oWU3I1B-pDI@smile.fi.intel.com>
-References: <20240827034841.4121-1-rongqianfeng@vivo.com>
- <20240827034841.4121-4-rongqianfeng@vivo.com>
- <aqigucchbgq2tblnu7gdkpiw35ezqbmgbl6a5ptzzezngnihsi@iny4xyzkjyz4>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lrc7wTJwsmYRsW13+ElWV9jlZH3sFd9lxBcRGC0FC4JcAVd0YLqPV3qCsQB79DdbvSAvxrPdSSVUZNA4RQQ2czdCEs65Iy5GXV39jKjnkBD3MFMFJk/AcTMEGiRue340lp/JnO74Lo9SWKMEZUhB9eoyu2FvwdDKu/ypA/GwcIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=PHcK1SUW; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=f16Hum48X2/PRv+OYRnrqWvXhbLKUUXP4MBg4DPZdlQ=; b=PHcK1SUWaNK+mGL/l3LU81VEdD
+	D9nBb1lF9fC+k5KduxINliKCuQNtwOV9r3VV7JhDFojWrMZqtjtzwsWQR7ymjqHMdZK4/Tzo1krQG
+	l72L0TWbRaFKsNxIJEvL02K4akN/vihdxELVqTsQPMZh102jhI0PE6Yrqkpm+R5bTxUWvCjPykmtq
+	WlbddJH0odsLTU/9pMOdxn+PkTNa49n7N5ZvM4UD0maObK3Zd9qj9kNJXbjqHQeNmT1JTuolvrtNi
+	Vpta2pPXprvf8lrp/xLulCdRHeE9tzU/AQ/jRdr1yi09xwhjfkgynp4ly+k7LQoKGQqGefX9PFflQ
+	rxIuTYAw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1snai3-0000000AlXM-0txX;
+	Mon, 09 Sep 2024 09:29:24 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 80F5330047C; Mon,  9 Sep 2024 11:29:23 +0200 (CEST)
+Date: Mon, 9 Sep 2024 11:29:23 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v3 6/8] x86/module: perpare module loading for ROX
+ allocations of text
+Message-ID: <20240909092923.GB4723@noisy.programming.kicks-ass.net>
+References: <20240909064730.3290724-1-rppt@kernel.org>
+ <20240909064730.3290724-7-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -84,34 +105,28 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aqigucchbgq2tblnu7gdkpiw35ezqbmgbl6a5ptzzezngnihsi@iny4xyzkjyz4>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20240909064730.3290724-7-rppt@kernel.org>
 
-On Mon, Sep 09, 2024 at 10:23:30AM +0200, Andi Shyti wrote:
-> On Tue, Aug 27, 2024 at 11:48:41AM GMT, Rong Qianfeng wrote:
+On Mon, Sep 09, 2024 at 09:47:28AM +0300, Mike Rapoport wrote:
+> diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+> index 8da0e66ca22d..563d9a890ce2 100644
+> --- a/arch/x86/kernel/ftrace.c
+> +++ b/arch/x86/kernel/ftrace.c
 
-...
+> @@ -654,4 +656,15 @@ void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+>  }
+>  #endif
+>  
+> +void ftrace_swap_func(void *a, void *b, int n)
+> +{
+> +	unsigned long t;
+> +
+> +	WARN_ON_ONCE(n != sizeof(t));
+> +
+> +	t = *((unsigned long *)a);
+> +	text_poke_copy(a, b, sizeof(t));
+> +	text_poke_copy(b, &t, sizeof(t));
+> +}
 
-> > +	struct device *dev = &pdev->dev;
-> 
-> I'm not a big fan of this change. There is not much gain in
-> polluting git bisect in order to shorten pdev->dev to a single
-> dev.
-> 
-> However, I like the /dev_err/dev_err_probe/.
-> 
-> I will take the first two patches from this series, but I will
-> leave this if anyone else has a stronger opinion. If you want,
-> you can send just this one patch with just the dev_err_probe()
-> change.
-
-Usually I combined this with conversion to dev_err_probe() et al.
-so it makes new lines a bit shorter and hence readability a bit better.
-On its own it's indeed questionable change.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+This is insane, just force BUILDTIME_MCOUNT_SORT
 
