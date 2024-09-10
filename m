@@ -1,127 +1,114 @@
-Return-Path: <linux-mips+bounces-5523-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5524-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47A5A974587
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Sep 2024 00:17:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A0849745F8
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Sep 2024 00:28:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 711B81C21034
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2024 22:17:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 39D0A287A63
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2024 22:28:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F17B51AC8AF;
-	Tue, 10 Sep 2024 22:16:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i3V39Y7X"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F6141ABED0;
+	Tue, 10 Sep 2024 22:28:28 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628861AC421;
-	Tue, 10 Sep 2024 22:16:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0EBD1A3BAF;
+	Tue, 10 Sep 2024 22:28:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726006589; cv=none; b=Yn98ULtLpn7bGqf0yjCU9JKRBq2QQGjEHQhATdUFTNgdY4ZTEKHrY8OvRQLtoK9ApwNwjz2VXl1m0RfsxGeWDF/0/148Qv1scgOf5xrBoAVweBmlVEXr0Dgoso0psLObNszEVJkHRXi4uM5msv92GwdrCVkgETUdPl3jRQhnPCY=
+	t=1726007308; cv=none; b=Uch7/nWFycpWVMVMqaJ8ip+W/pImMRHmbV1nO/90GV1fpt0gopDfRKR8FTfLREkl77B46XQ+yudgpRMVMLXKAl4MN3P2qxtlHGdSj5H0Z8hO3smJmmr3XOzOBcYkP77iZ9tBWzGlNOHBIb8643EfUfmfTrze2Oi/BhT0Hg67gZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726006589; c=relaxed/simple;
-	bh=QSttr2JhMVXlGbE1Qo9deB59dtCrXed0BMMThrUfqGo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TEqBHhh4YAh9sUFQCRDJKwI54vYVPXf/Xs/go467WPC7PgBe4bs7/6Dfs6Q9MLVQIUL3w7ZqvjeWmhHIS9ti4hWYarT9zxwAOYuzoSuV54PZEwAwizx6U2tlkIspuhA18QEb5u8doU5nHw5U5u/MoYKSsSdFViCghTlQjy6pDgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i3V39Y7X; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5365c512b00so1674166e87.3;
-        Tue, 10 Sep 2024 15:16:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726006586; x=1726611386; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pdYjqVV7NoPt38X5VJbQiOeKKRdU/zmfKbbwAgjGMD4=;
-        b=i3V39Y7Xlb6vVqHaR3TiMtTT3WLmhzbwFQisYNwtTbyvPFdErUaLgsGAwgKhXzasKk
-         3/KBLLmtxSDUHU0i7wRKnlchB5CZ6TwFU8n4ySXH0bKncksWvvS/OWAa7MgBtgMSM4+h
-         zCm6PekK4WKEH0bwjsoNBdul2bGJriMwVn9MPeZoRK/voYkH70Y2NTC0D/+W9VBi94cU
-         DglN9NwxDZ9DukXzM1BpG9o9UOpkCfF/BFcfAcFQlH0NK5kr27kucADh+SG42Uae22ll
-         Uvl+0kj3tpVq9SwWWpzYdblYtKqSFrZXuHI2B0uCsE3SdByhfh/r5VjZOATO7ST1Orjz
-         9MCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726006586; x=1726611386;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pdYjqVV7NoPt38X5VJbQiOeKKRdU/zmfKbbwAgjGMD4=;
-        b=IOZMDp/Wc7gIzw6C7dmHfn4+D6oznFeN4PcUufSN06QqNz7Mo/9mNmiw/GAdcGSJ54
-         EaiTFJv+dih8NWhItdMQgaToT2UJtpfzT3SZGD2n23JMNJq8wEOmzP5Nh7i51AEdLw8T
-         oo2nNm3rxwrJ8qOZLI3G6FIHjg9uduZFfiAXWQagUxBDGnZayVJS6+VpRT6fUQDc7XKk
-         R2FuLsg7gMbMZksQPxSS1gAk7pPtCWKUgoBUD5COY+vcTc5PXUscsq0BJnOGlqvN/hv9
-         uEecwbzafpbOn1qvKc2bTBqHFyyzJrpfSdjUj5ZeI6ps+ZiBFpHj3TtCgKuA6mwOkdQx
-         iYqA==
-X-Forwarded-Encrypted: i=1; AJvYcCUfQN4o4h5k8wK+VW9FioGd2L/zVLsQV+JSVMYwuVOgTVUbAo4Wf3qFLP33KghWpDbrGrMxNEb76jud+g==@vger.kernel.org, AJvYcCUuQewCOWh0xUIzO/6+tBxeY1lNX1LpDlqR+ed21SdQEw+qjOJWWE3fRyck55pJtTS7PHCXG70bG0mU@vger.kernel.org, AJvYcCXi5bCLG9PCDfmCw1MXOUNeX5tTDW2/nMMW8q5GTZEpbH9pBsld+yZPwBL9VzNKN6umJ6AjgSYCfGN+3JRK@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmEz5yoahsxSe6PFfclXGbhHOr7R+yDIvMshkeZnegsdvomqSH
-	vZ+PtGK/U8GvJw3kZa3OZoUTqzOd1gkeaLwWeeGsF+p1EtZPCd6uFEpvhg==
-X-Google-Smtp-Source: AGHT+IFi8j9h2IbdF01Mf3JPAdHvgT6Od37WiOHHGnHsZL6o612hM2YVY1L0w1nCJu/s9yHUJTuYBQ==
-X-Received: by 2002:a05:6512:ba8:b0:52f:cffd:39f9 with SMTP id 2adb3069b0e04-53673b5f86bmr663836e87.24.1726006585737;
-        Tue, 10 Sep 2024 15:16:25 -0700 (PDT)
-Received: from mobilestation ([95.79.225.241])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5365f870ae3sm1371572e87.106.2024.09.10.15.16.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Sep 2024 15:16:25 -0700 (PDT)
-Date: Wed, 11 Sep 2024 01:16:23 +0300
-From: Serge Semin <fancer.lancer@gmail.com>
+	s=arc-20240116; t=1726007308; c=relaxed/simple;
+	bh=m6bZTfRafhQeKF0FHn4HDoue1BzzxhJP3n0bqBSUuiY=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=hUnQvMMADoHdedtl5lvRg8jWRdfmgUPTPNljPCPaQEypZO2U5sZJjjUPhoRSIBzHzB5bOt0EkBk0t0+KJQb0cVn14cCiu3UxquraNB8oeawsTRnkLszK+/Z0ZaH9EAwJgYOT1wmjLY5gZHZT354UNhjYeMBlEiRBV36TETzJzGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 24E6892009C; Wed, 11 Sep 2024 00:28:18 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 1E05C92009B;
+	Tue, 10 Sep 2024 23:28:18 +0100 (BST)
+Date: Tue, 10 Sep 2024 23:28:18 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
 To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"paulburton@kernel.org" <paulburton@kernel.org>, "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] MIPS: cm: Probe GCR address from DeviceTree
-Message-ID: <6oouxspgntbmn5upinbp63x5x52wluk4vg4s3oe3m7wgtk3le5@ua7dup5lkeaa>
-References: <20240612-cm_probe-v2-0-a5b55440563c@flygoat.com>
- <20240612-cm_probe-v2-6-a5b55440563c@flygoat.com>
- <ekvyyq3vzdbyi5suf4irfixyprvtko7rpkffwpc267kiex4ex2@lpu3ctysuviw>
- <79acb1b1-9c1c-4a58-91a5-5dbb286717ec@app.fastmail.com>
- <7j6cc5i4z4nwg73fowjz756eblnesglqm72jveygqfxngw26mc@sdy6xxomo3qe>
- <b4d57581-bad7-4f6f-8d6f-733f1a5d33ba@app.fastmail.com>
+cc: Masahiro Yamada <masahiroy@kernel.org>, 
+    Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+    Richard Weinberger <richard@nod.at>, 
+    Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
+    Johannes Berg <johannes@sipsolutions.net>, 
+    Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+    Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+    x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+    Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+    Wedson Almeida Filho <wedsonaf@gmail.com>, 
+    Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+    =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+    Benno Lossin <benno.lossin@proton.me>, 
+    Andreas Hindborg <a.hindborg@samsung.com>, 
+    Alice Ryhl <aliceryhl@google.com>, 
+    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    Steven Rostedt <rostedt@goodmis.org>, 
+    Masami Hiramatsu <mhiramat@kernel.org>, 
+    Mark Rutland <mark.rutland@arm.com>, Jonathan Corbet <corbet@lwn.net>, 
+    Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>, 
+    Nick Desaulniers <ndesaulniers@google.com>, 
+    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+    linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+    linux-um@lists.infradead.org, rust-for-linux@vger.kernel.org, 
+    "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
+    linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+    llvm@lists.linux.dev
+Subject: Re: [PATCH v2 3/3] rust: Enable for MIPS
+In-Reply-To: <54ce7574-43fd-40ee-9ae9-dd72283d1040@app.fastmail.com>
+Message-ID: <alpine.DEB.2.21.2409102318270.60835@angie.orcam.me.uk>
+References: <20240905-mips-rust-v2-0-409d66819418@flygoat.com> <20240905-mips-rust-v2-3-409d66819418@flygoat.com> <alpine.DEB.2.21.2409082138160.60835@angie.orcam.me.uk> <035ccfe5-c368-4cd9-8e0d-34e0e355cb05@app.fastmail.com> <alpine.DEB.2.21.2409101643210.60835@angie.orcam.me.uk>
+ <54ce7574-43fd-40ee-9ae9-dd72283d1040@app.fastmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b4d57581-bad7-4f6f-8d6f-733f1a5d33ba@app.fastmail.com>
+Content-Type: text/plain; charset=US-ASCII
 
-On Tue, Sep 10, 2024 at 09:48:10PM +0100, Jiaxun Yang wrote:
-> 
-> 
-> 在2024年9月10日九月 下午9:07，Serge Semin写道：
-> [...]
-> > Both MIPS P5600 and P6600 databooks define the GCR_BASE field as
-> > optionally R/W:
+On Tue, 10 Sep 2024, Jiaxun Yang wrote:
+
+> >> We have no good way to tell ISA reversion prior to R1 just from Kconfig TARGET_ISA_REV,
+> >> valid numbers for TARGET_ISA_REV are only 1, 2, 5, 6 from Kconfig.
 > >
-> > GCR_BASE 31:15 This field sets the base address of the 32KB          R or R/W
-> >                GCR block of the P5600 MPS.                           (IP Config-
-> >                This register has a fixed value after reset if         uration)
-> >                configured as Read-Only (an IP Configuration Option).
+> >  This approach doesn't work for some MIPS architecture processor configs 
+> > anyway, e.g. what ISA revision will CPU_P5600 imply here?
+> 
+> TARGET_ISA_REV will be set to 5 for CPU_P5600 (CPU_MIPSR5 will default to y
+> on CPU_P5600, and CPU_MIPSR5 sets TARGET_ISA_REV to 5). 
 > >
+> >  However if there's a need (and previously there wasn't), then I think it 
+> > can be sorted in a straightforward way.  We have just a bunch of CPU_* 
+> > settings and we can define corresponding ISA_* settings to select, e.g. 
+> > ISA_MIPS1, ISA_MIPS3, ISA_MIPS32_R1, ISA_MIPS64_R6, and so on, based on 
+> > information extracted from per-CPU_* `-march=' compilation flags from 
+> > arch/mips/Makefile (possibly combined with ISA data obtained from 
+> > GCC/binutils for said flags).
+> >
+> >  It could be a bit tedious to write, but not a big challenge really, just 
+> > mechanical work.
 > 
+> TARGET_ISA_REV is guaranteed to be aligned with CPU's supported ISA for now,
+> so I see no reason to invent another set of symbols....
 
-> Thanks for the pointer, I traced code history and it seems like MIPS decided
-> to not expose this functionality at some point, but documents were not updated.
+ Ah, OK then, I missed these bits, thanks for pointing them out.
 
-Got it. Thanks for clarification.
+ So we only need to define CPU_MIPS1, CPU_MIPS3, and CPU_MIPS4 settings
+(we have no support for any MIPS II CPU; there was the R6000 only at that 
+ISA level, exeedingly rare and unreliable) analogously to and along with 
+the existing CPU_MIPSR1, CPU_MIPSR2, etc., which is even simpler.  They 
+can then be used accordingly for TARGET_ISA_REV == 0, either directly or 
+perhaps via an additional TARGET_LEGACY_ISA_REV setting.
 
-> 
-> Maybe I should add a read back check here.
-
-The check is already implemented in the mips_cm_probe() method. Just
-10 lines below the mips_cm_phys_base() method call.
-
--Serge(y)
-
-> 
-> Thanks
-> -- 
-> - Jiaxun
+  Maciej
 
