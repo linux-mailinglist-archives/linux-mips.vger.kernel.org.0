@@ -1,209 +1,181 @@
-Return-Path: <linux-mips+bounces-5491-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5492-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23353972DC3
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2024 11:35:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42874972E9E
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2024 11:45:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98E451F24B2F
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2024 09:35:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 006C3283C84
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2024 09:45:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA868189903;
-	Tue, 10 Sep 2024 09:35:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1AED19049B;
+	Tue, 10 Sep 2024 09:43:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AAIFUnbk"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="UMFN3vB1";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="fO06+uFg"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh7-smtp.messagingengine.com (fhigh7-smtp.messagingengine.com [103.168.172.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81EAD188CB3;
-	Tue, 10 Sep 2024 09:35:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A997187325;
+	Tue, 10 Sep 2024 09:43:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725960945; cv=none; b=rMpLiTimLmC27XYZC/7yZQfh3MvAU6lWQ7eRzMncxhBQ5T5vQjuZTi29Qwpa6bxXstm09azv8FKgj+SVdVlq1NTdFRoERglQbXFBGI6qQ8UXeoTUH/E9fNflLTYWsh/6pnrcYDRkYhRdCTASQpaeAn7FxZsiUqTEUl8wQ3N/IUI=
+	t=1725961429; cv=none; b=jnqQZqwAurxLw1jGCBifzgpjbdoI3tr0rjKlizbYESZhuBzddo64gWsJj/opI02IGLJsmjiiFBMe1FVSPvfQCAU+3+qpUNSCw7NeYM/EtzYMYg3/SyBpNL2dwOatv5BLKEwe0/LakgOkjAB0nl7lOu5NpKG3ahUEGgqRenBp/qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725960945; c=relaxed/simple;
-	bh=TBCYlvMv+CXUZRevJVyM0lQA/IZ4ZH4AmMprMHtYvlw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CE/zUfMdhbvyJbO4z1aam/++cpBpVnOSixAaDyxdwcxsi6peIR3IzHQBNgK54UK0pYRvnqDghDSdx4kIJl6kbUIxhIvAUmFOR0B8KQ9c/GwMJBTaaXbWt2AvIrM86zgcKEAIbunU7icrt6OjtyflsnasGi3+9jNT0JWYhg7Xiv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AAIFUnbk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25545C4CECF;
-	Tue, 10 Sep 2024 09:35:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725960945;
-	bh=TBCYlvMv+CXUZRevJVyM0lQA/IZ4ZH4AmMprMHtYvlw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=AAIFUnbkEFTcQpSLieFiYjCtb2IxBMyXzOXGIdn9U2FRcJ8A+jQnl9/HvcZopeLrR
-	 DYMRztJ3Gagf/QFSeAEGf1H6ytJhBqy8Cc+w8ioxpjas2VLD6v6a6StyiUQN6+ymaU
-	 gACQTT5dM2T+6ejfsvw8ock+PQ4FueCsXFekx8kvxEN5ckO6VNrkYK4v4jT9PwQuYu
-	 zAlwi4uBBYFi21BYgVSAkWFJQdhfgWpcvsL0/yYcfD0lGpru8VgYIplUM6mAFnB/Nu
-	 CJPV2gtm35Uf3GxiJ2bNnSURUzKjpxH42jrbsmwLKTbjXx5qM4RPMebcz7djbUvYEu
-	 FmjohxuyEBxjg==
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-53653ff0251so6283157e87.0;
-        Tue, 10 Sep 2024 02:35:45 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUpFodMlvYbrkbjCsJEwE7uImN746D4JfWAC3Hvempel1nPXnHEoJMuL+ae/O9190InGuQvImZ6pKlbvg==@vger.kernel.org, AJvYcCVuQP/FjPkOXPUi7bL2PEO0AYfKcTayy8+ZIKJa/2DpFgNlBeop4k+Bqg0F/RR2wAm+/9t5nJDq0OYW22aKskY=@vger.kernel.org, AJvYcCVwOrrvSXV2WgJ1qmrJtpAaXMNxKkejKMAVI2V8+4U9tJE/0Z+HiTLozLcs2+1RpA2sdN85NUROaRJx7w==@vger.kernel.org, AJvYcCVx+j71HJyeo5+E11gVBsCTG5h4JQWYopvl0IoxjkZWZcbnyYDp8EI6lIeBiOSpPSNXLvKX0g+0/nIGGqr8@vger.kernel.org, AJvYcCXtVeZWB1XCUuOLjoY5Egvmyf2JBL6n1AQCUGNF/jrpuVum0fVGVO1Z68OrH04TvMgVRn207iLAIIum@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6unjGZm4smkjzkkkWFr0bSRpx84Oa2aVcqTbXlhluxSc5I7NQ
-	T4GtzaBimwUrcGuTzeWdA+I+CoiKjt+mFENldjOijLEdPmXjCIAL3brzEqabMjvs0ytMdCvi22r
-	seWFLPv3DVO8aq9RZPEP9t40vThY=
-X-Google-Smtp-Source: AGHT+IENtsmQg68T2Ng35CvFqHD8v1uFN5MIvWFG7psrbL/gymy/jagJsarSBmqhnENe7SHnrN02zL4FzfCwY+63Hyw=
-X-Received: by 2002:a05:6512:2514:b0:536:5827:8778 with SMTP id
- 2adb3069b0e04-536588130d9mr9715058e87.53.1725960943742; Tue, 10 Sep 2024
- 02:35:43 -0700 (PDT)
+	s=arc-20240116; t=1725961429; c=relaxed/simple;
+	bh=ui5wGhZUCRW5coT6WzLnjYhzoLrsRPWbFebz2dyA0FQ=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=aNh34MVkhKB45xiAijh1nStKkQ73qQSWdTB1Im+bRJZhiqcRfsPSpoP55DmI0+FCQxP6NTlFBzhNDr/HxYVdMMEk1p9WBdJ34ccB0Ot34JomspmHF4Tvg3RzkQxKwzHd0FPx7TmElHaOnNh+FC0E65vBNvzzGfKLCLP7HSKPz2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=UMFN3vB1; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=fO06+uFg; arc=none smtp.client-ip=103.168.172.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 2D7B31140308;
+	Tue, 10 Sep 2024 05:43:46 -0400 (EDT)
+Received: from phl-imap-12 ([10.202.2.86])
+  by phl-compute-09.internal (MEProxy); Tue, 10 Sep 2024 05:43:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1725961426;
+	 x=1726047826; bh=RC2tu5Bk5p0RtLEbaxphGTYXY7K+igsvyvD5mhKmwX4=; b=
+	UMFN3vB1AQgxsh0w6VCKvqeKUzD8vaVVANYxejW+Zkg6/LhB1LvVR4EbNvmneNSV
+	t1StvkhfHeR4G6+CVIodF2hxjsc0gpI94j+yNiC8P+LMBKkfkRfiPDcYmWO/KZOf
+	HJSp4H8QymPIf5ahNRSiRO200y6xDYj2rcFPNdW3s+fUhobslprCO0Kul6RflsVY
+	Fv/TaAgPP/YyBk+EFOsB6ZAZO1ue3LDmotfJDk2F0+X+9guxWdPtZ1L3cm8+Ze3z
+	iFBezWhxYyZNRZcfDufen9agrKXQhppH5zu63tR2Y2lBRM/6i5qwuglpifm5RoGX
+	MDUS0AojiSl332ktQEs2IA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725961426; x=
+	1726047826; bh=RC2tu5Bk5p0RtLEbaxphGTYXY7K+igsvyvD5mhKmwX4=; b=f
+	O06+uFgJcNn994vqXf0joOlqM3mpq1FLsm0AEbABgKhiXjMd6/S6ViavexP0lAQ5
+	ITSL+MIqV+/yFkM2zyJGkPB1GdAmgU8W2b2nGG8f/QdgOg7DxJ0YaWjdVvhyYfZr
+	BXmxN1uYeckml1yrgUBKbJsa1Jmf1FDp8dSDcVWNEafhIpMuwSk71hh9Imkhw1rG
+	7Z8169MVIRYv5SM7jSvRU65XVYzpjVX4RGxVuhyWdGsme47l059e9XSTHAqe8WQL
+	pwBxd9EcXh6i1GLYcw68CukctT0dhQcJ3yzv/ZZQkphNN1Gjj9FiMwT5HNOHLU2/
+	Exh9Lv8z9HD+k9m8J9zEw==
+X-ME-Sender: <xms:0RTgZsNMtsu55CVV8aFbrOSxAh3lHJcroREJDMKEJDIaBHtFmeCTvw>
+    <xme:0RTgZi_9T6tv56AP2PAiyHG1Y4bQPy5TT6VoKzDMsofb0153q7R_AEm35_8XT1fkf
+    VXFR_p6xpaFGlx3gMM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeiledgudekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
+    necuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfh
+    hlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepffekveettdeuveefhfekhfdu
+    gfegteejffejudeuheeujefgleduveekuddtueehnecuffhomhgrihhnpehkvghrnhgvlh
+    drohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhm
+    pehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhnsggprhgtphhtthhope
+    egpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtshgsohhgvghnugesrghlphhh
+    rgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtohepmhgrtghrohesohhrtggrmhdrmhgvrd
+    hukhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdr
+    ohhrghdprhgtphhtthhopehlihhnuhigqdhmihhpshesvhhgvghrrdhkvghrnhgvlhdroh
+    hrgh
+X-ME-Proxy: <xmx:0hTgZjRfO--eqHjLJBMkkOEhPYv4-rOi_wJC6h78f3MXrDPzfEMmhA>
+    <xmx:0hTgZkuto1SqVjj9TSmlBTauR7KFK703kUTOi6fOJhHfku7JSU55rQ>
+    <xmx:0hTgZkfvyR7NMljYQAmOC3ib6vHnD5C7MIgC4wpmgEaBJT1byGTSNA>
+    <xmx:0hTgZo1HTzFBi6cMlZoEusiLPKrH4g8tMPGcwT5Rb2WW51ZmRUOJbw>
+    <xmx:0hTgZs4xsmiBfQ_ZjR_lGt0eluSnh3vUTY2T3OEgEiuzUnJqIeH82H9h>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id DF0CB1C20065; Tue, 10 Sep 2024 05:43:45 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240904234803.698424-1-masahiroy@kernel.org> <20240904234803.698424-5-masahiroy@kernel.org>
- <20240905141723.GC1517132-robh@kernel.org>
-In-Reply-To: <20240905141723.GC1517132-robh@kernel.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 10 Sep 2024 18:35:06 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQnMn5fUbREnDx4XKVy9ssxVEaaZQsMtCb2a2KPZP=y=g@mail.gmail.com>
-Message-ID: <CAK7LNAQnMn5fUbREnDx4XKVy9ssxVEaaZQsMtCb2a2KPZP=y=g@mail.gmail.com>
-Subject: Re: [PATCH 04/15] kbuild: add generic support for built-in boot DTBs
-To: Rob Herring <robh@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Michal Simek <monstr@monstr.eu>, devicetree@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Date: Tue, 10 Sep 2024 10:43:23 +0100
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org
+Message-Id: <b4833f82-9e7e-4667-994b-c444ef935a9f@app.fastmail.com>
+In-Reply-To: <alpine.DEB.2.21.2409092259110.60835@angie.orcam.me.uk>
+References: <20240908-mips-chore-v1-0-9239c783f233@flygoat.com>
+ <20240908-mips-chore-v1-2-9239c783f233@flygoat.com>
+ <alpine.DEB.2.21.2409092259110.60835@angie.orcam.me.uk>
+Subject: Re: [PATCH 2/2] MIPS: kprobes: Massage previous delay slot detection
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 5, 2024 at 11:17=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
-:
+
+
+=E5=9C=A82024=E5=B9=B49=E6=9C=889=E6=97=A5=E4=B9=9D=E6=9C=88 =E4=B8=8B=E5=
+=8D=8811:02=EF=BC=8CMaciej W. Rozycki=E5=86=99=E9=81=93=EF=BC=9A
+> On Sun, 8 Sep 2024, Jiaxun Yang wrote:
 >
-> On Thu, Sep 05, 2024 at 08:47:40AM +0900, Masahiro Yamada wrote:
-> > Some architectures embed boot DTBs in vmlinux. A potential issue for
-> > these architectures is a race condition during parallel builds because
-> > Kbuild descends into arch/*/boot/dts/ twice.
-> >
-> > One build thread is initiated by the 'dtbs' target, which is a
-> > prerequisite of the 'all' target in the top-level Makefile:
-> >
-> >   ifdef CONFIG_OF_EARLY_FLATTREE
-> >   all: dtbs
-> >   endif
-> >
-> > For architectures that support the embedded boot dtb, arch/*/boot/dts/
-> > is visited also during the ordinary directory traversal in order to
-> > build obj-y objects that wrap DTBs.
-> >
-> > Since these build threads are unaware of each other, they can run
-> > simultaneously during parallel builds.
-> >
-> > This commit introduces a generic build rule to scripts/Makefile.vmlinux
-> > to support embedded boot DTBs in a race-free way. Architectures that
-> > want to use this rule need to select CONFIG_GENERIC_BUILTIN_DTB.
-> >
-> > After the migration, Makefiles under arch/*/boot/dts/ will be visited
-> > only once to build only *.dtb files.
-> >
-> > This change also aims to unify the CONFIG options used for embedded DTB=
-s
-> > support. Currently, different architectures use different CONFIG option=
-s
-> > for the same purposes.
-> >
-> > The CONFIG options are unified as follows:
-> >
-> >  - CONFIG_GENERIC_BUILTIN_DTB
-> >
-> >    This enables the generic rule for embedded boot DTBs. This will be
-> >    renamed to CONFIG_BUILTIN_DTB after all architectures migrate to the
-> >    generic rule.
-> >
-> >  - CONFIG_BUILTIN_DTB_NAME
-> >
-> >    This specifies the path to the embedded DTB.
-> >    (relative to arch/*/boot/dts/)
-> >
-> >  - CONFIG_BUILTIN_DTB_ALL
-> >
-> >    If this is enabled, all DTB files compiled under arch/*/boot/dts/ ar=
-e
-> >    embedded into vmlinux. Only used by MIPS.
+>> Expand the if condition into cascaded ifs to make code
+>> readable.
 >
-> I started to do this a long time ago, but then decided we didn't want to
-> encourage this feature. IMO it should only be for legacy bootloaders or
-> development/debug. And really, appended DTB is more flexible for the
-> legacy bootloader case.
+>  Apart from broken formatting what's making original code unreadable?
+
+For me it's confusing because wired layout, cascaded ifs are clearly
+easier to format and has clear intention.
+
 >
-> In hindsight, a common config would have been easier to limit new
-> arches...
+>> Also use sizeof(union mips_instruction) instead of
+>> sizeof(mips_instruction) to match the code context.
 >
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
-> >
-> >  Makefile                 |  7 ++++++-
-> >  drivers/of/Kconfig       |  6 ++++++
-> >  scripts/Makefile.vmlinux | 44 ++++++++++++++++++++++++++++++++++++++++
-> >  scripts/link-vmlinux.sh  |  4 ++++
-> >  4 files changed, 60 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index 145112bf281a..1c765c12ab9e 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1417,6 +1417,10 @@ ifdef CONFIG_OF_EARLY_FLATTREE
-> >  all: dtbs
-> >  endif
-> >
-> > +ifdef CONFIG_GENERIC_BUILTIN_DTB
-> > +vmlinux: dtbs
-> > +endif
-> > +
-> >  endif
-> >
-> >  PHONY +=3D scripts_dtc
-> > @@ -1483,7 +1487,8 @@ endif # CONFIG_MODULES
-> >  CLEAN_FILES +=3D vmlinux.symvers modules-only.symvers \
-> >              modules.builtin modules.builtin.modinfo modules.nsdeps \
-> >              compile_commands.json rust/test \
-> > -            rust-project.json .vmlinux.objs .vmlinux.export.c
-> > +            rust-project.json .vmlinux.objs .vmlinux.export.c \
-> > +               .builtin-dtbs-list .builtin-dtb.S
-> >
-> >  # Directories & files removed with 'make mrproper'
-> >  MRPROPER_FILES +=3D include/config include/generated          \
-> > diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
-> > index dd726c7056bf..5142e7d7fef8 100644
-> > --- a/drivers/of/Kconfig
-> > +++ b/drivers/of/Kconfig
-> > @@ -2,6 +2,12 @@
-> >  config DTC
-> >       bool
-> >
-> > +config GENERIC_BUILTIN_DTB
-> > +     bool
+>  That has to be a separate change.
+
+Given that it's a tiny style change as well, it makes sense to combine
+into same patch.
+
 >
-> So that we don't add new architectures to this, I would like something
-> like:
+>> diff --git a/arch/mips/kernel/kprobes.c b/arch/mips/kernel/kprobes.c
+>> index dc39f5b3fb83..96139adefad2 100644
+>> --- a/arch/mips/kernel/kprobes.c
+>> +++ b/arch/mips/kernel/kprobes.c
+>> @@ -89,12 +89,12 @@ int arch_prepare_kprobe(struct kprobe *p)
+>>  		goto out;
+>>  	}
+>> =20
+>> -	if (copy_from_kernel_nofault(&prev_insn, p->addr - 1,
+>> -			sizeof(mips_instruction)) =3D=3D 0 &&
+>> -	    insn_has_delayslot(prev_insn)) {
+>> -		pr_notice("Kprobes for branch delayslot are not supported\n");
+>> -		ret =3D -EINVAL;
+>> -		goto out;
+>> +	if (!copy_from_kernel_nofault(&prev_insn, p->addr - 1, sizeof(union=
+ mips_instruction))) {
 >
-> # Do not add new architectures to this list
-> depends on MIPS || RISCV || MICROBLAZE ...
+>  Overlong line.
+
+Nowadays, check-patch.pl is happy with 100 column line.
+
+I used 100 column line in many subsystems and never receive any complain=
+t.
+
+>
+>> +		if (insn_has_delayslot(prev_insn)) {
+>> +			pr_notice("Kprobes for branch delayslot are not supported\n");
+>
+>  This now overruns 80 columns making code *less* readable.
+
+I don't really agree, we are not in VGA display era any more, see Linus's
+arguments on removal of 80 columns [1] and why long line are more readab=
+le [2].
 
 
-This will not work after 14/15 is applied.
+[1]: https://lore.kernel.org/lkml/CAHk-=3Dwj3iGQqjpvc+gf6+C29Jo4COj6OQQF=
+zdY0h5qvYKTdCow@mail.gmail.com/
+[2]: https://lore.kernel.org/lkml/CAHk-=3DwjR0H3+2ba0UUWwoYzYBH0GX9yTf5d=
+j2MZyo0xvyzvJnA@mail.gmail.com/
 
-
-For example, if arch/arm/Kconfig has
-
-
-config BUILTIN_DTB
-      bool "enable BUILTIN_DTB"
-
-
-No warning is displayed.
-
-
-
+Thanks
+>
+>   Maciej
 
 --=20
-Best Regards
-Masahiro Yamada
+- Jiaxun
 
