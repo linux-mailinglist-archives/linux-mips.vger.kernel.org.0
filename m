@@ -1,143 +1,189 @@
-Return-Path: <linux-mips+bounces-5520-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5521-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1D9E974446
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2024 22:48:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D36E974449
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2024 22:48:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20A341C24F98
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2024 20:48:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DEB4428309D
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2024 20:48:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 758C01A706B;
-	Tue, 10 Sep 2024 20:48:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A0E01A706B;
+	Tue, 10 Sep 2024 20:48:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="V80WHTY1";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EUSSzi1l"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="xlVM01KE"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh6-smtp.messagingengine.com (fhigh6-smtp.messagingengine.com [103.168.172.157])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DCD117622D;
-	Tue, 10 Sep 2024 20:48:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC201A4E93
+	for <linux-mips@vger.kernel.org>; Tue, 10 Sep 2024 20:48:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726001315; cv=none; b=sqxvUcsj1Z9wL2pJnQPvEFCBKyculTSgzO3zxLrR7k4KyrNRlIMgg4p13XgB1EK+8EiLCody+nY55iDSm8SyPXPehsT5rJ7gJdZ0cWvjcC5a7dqGOtf4EHcCcd0sdLNbRQ2yDp/UBlppX2YeuVJggipcuWTLY6kHB9RsCMRWCrI=
+	t=1726001329; cv=none; b=CHkrPnwfLAZpBZvYI5wp3FOd1NZK3IM+YeR0YioEkyk87uc9izBLW2Bhuymf3asUeRBQpKmuM0LZIfMbdYOfv4bHROvMmDzF1iPMwACmfuolC+VkJbylhHoUokgAJcH34zeN5PJ+qvWhtARHRXjZCevxjpoLBz5FZoCCF0F/fCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726001315; c=relaxed/simple;
-	bh=20i2BlGHksN1/Dhy94tEpQoj1jiq9Zdq3Zo3/6OVMJY=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=W6sdmazOqGGQO7timiAmc7Qk9wc+WPrY0emwMhAGIrs6WmoVxrJvi+w/gzz0uZnKjaskXMy3kLkI+LjHfxAJ1aQ+zTjGMPVzMC//WYjr6COB77MJZSTR67OaGMz4vVVB8JhUAW21ydhTQTn6LgpddDOhoJQIFr4vvOSiUlUQNNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=V80WHTY1; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=EUSSzi1l; arc=none smtp.client-ip=103.168.172.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id A4C4C114019D;
-	Tue, 10 Sep 2024 16:48:30 -0400 (EDT)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-09.internal (MEProxy); Tue, 10 Sep 2024 16:48:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1726001310;
-	 x=1726087710; bh=YaNm0bZcNn4debMmAvI7bJ5MdsYn7nFEWpGpIsKSWOY=; b=
-	V80WHTY1EEo9pCOyEgYS0nsGJoaGDcqivPbyEQUYpQhH6VF1C6eQXgAzS6F+8ucT
-	TiWNuB9ZOtVGtmrhC9xVY5okEsxH7Hnsz0M+02wScoVQa2ymFYlDg+/edHZD1bpi
-	IYZqH0Ql+WIzK25EQdxTzmfRfcnelIGUKV5zTtU4vLlrm4Q4Gc9p5jt7jlsw3lPv
-	XSgnZZSy7fyay+UXd2rOwF2XR2/avwL3GDtwxoToK31bDCmYGwPeqYEBsDT8MWh1
-	VolPA8Xm5cHkIgJRfOTqfQ0YkSmS31GYXjBgVHYAZy0m8chOvJ9GHjx1q+GQUWYX
-	aJV6ecV9WMqYLK/v2PH3NQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726001310; x=
-	1726087710; bh=YaNm0bZcNn4debMmAvI7bJ5MdsYn7nFEWpGpIsKSWOY=; b=E
-	USSzi1l7A/SnNU+Slls4Lx0kPYBNndr7+QPk0GNxCXKPahNj4mhy28Gmqc5kTGpN
-	aenRe9Grf7OyegmCWKi474y/VjWnAUrjeN7lgIotfU7lFai5nQbmF7i/SGtpGVx8
-	tt9zG5MofpQ+ces1nShSXqy5VZx0mbx/VVQQLBt9/ISUNztynlh/fqoM9toReyXn
-	fVyNWjXHRUP3MqNLXbKKsrERuKucRakRU63n55YQSJweuhYM1+8pQ8qHG0ew1IIj
-	wp+6A1cmMf6/qXQjX/A1r1L+Rd+sWYahJJNo9+U1OmaLaJcl4R6s9E4EQwsBiOGP
-	IrXSTd2DUuYXM0LGS/Yzg==
-X-ME-Sender: <xms:nrDgZkquvb0yXsuQ6EXxIE-1LxXk6ByZG9uEoT3re5CJf3EAwsYs_g>
-    <xme:nrDgZqrNh1Q8HeVDe23HwKa0MHfOmPvTqOSu4qdvBaN2IFm8worWCHEaZ6Cp8NcYH
-    GFYfHqV4z3ZCNSqUWI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeiledgudeggecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthhqredtredt
-    jeenucfhrhhomhepfdflihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgse
-    hflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeejheefuddvtdfggfdvffek
-    teehhfelgfdvvedvkeeuffefkeehheegvefhveetjeenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghho
-    rghtrdgtohhmpdhnsggprhgtphhtthhopeeipdhmohguvgepshhmthhpohhuthdprhgtph
-    htthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthht
-    ohepfhgrnhgtvghrrdhlrghntggvrhesghhmrghilhdrtghomhdprhgtphhtthhopehprg
-    hulhgsuhhrthhonheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggvvhhitggvthhr
-    vggvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrh
-    hnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhi
-    phhssehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:nrDgZpOlsfye0NaTNDzRbr1kyCnwXk0bqmse2lkkAYItWV9v7h8ZVA>
-    <xmx:nrDgZr79zJT9-_lgffXagPwkaoRbnIvSWvlG03qVZQ2NjiN0TGXC2g>
-    <xmx:nrDgZj6CrHJp_h52tcvdRXKISJm7EtlBxAGbsh9Yl6PU0IoBiGbU8A>
-    <xmx:nrDgZrjEhSZBoGZfnS_g-MLQQmkTLjK3a7UrccK1U-w3kAEcYESctw>
-    <xmx:nrDgZpRijhTpI9kzV6RbJxtrlrHuNC698S4Tdfv28edUqQd9nQBubPcN>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 35CED1C20065; Tue, 10 Sep 2024 16:48:30 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1726001329; c=relaxed/simple;
+	bh=YURRXtuiegh8uv6meZyub27sJV4yJDfMCrsCkDc3eR4=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=CU/9lANbdPbHbf6H2x6ZEG/5cqXU9H/euwyZbYwo7KZkFIsNzg1gAMG7w7dGhlTPsQGMzkm/38TqpPiqrlveOyoNJs+a4rDP5nxLBu4+yGJQCMmqvSASR6lYQ4zH3LwAM8JmSCWsQK44vWGccW+hiz4jqn/nTiHFl8MNdFZmebM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=xlVM01KE; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id DB9BD2C02D1;
+	Wed, 11 Sep 2024 08:48:44 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1726001324;
+	bh=EMKKZV86j5ufyd38DQrH2gKBadCOZTutNczIGvDuUkA=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=xlVM01KEPB0XdpbElf6QWER/k9GiGY7pNC2r/6ZSDFwULjKYFBV8ZEl8vRqZuzg8l
+	 qT2BXJVzvtEDAmjZl5gVis8kXS6yihn9pyfhcC/te8l6di5u3J66hJRDH2f8WBsBSq
+	 3HcKSL0d9xhO80LOqnidL79SfJtGVR9Zeu0RLFRpONaAqBX2LwZ+qPM5GKm0DAFA1W
+	 HYkW2QMnV4rmKMte4wXuH3l3t0FxxN3+VNIOylnTDVu8VG0n0DL/ZZ13vtytyMkdlY
+	 HYdG5DeN7usB9yNTDzoylxZF87G3Qig+kauMPvnc5Unis4qkV63IP69O5615v0WLyf
+	 msUrCquodpJDg==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B66e0b0ac0000>; Wed, 11 Sep 2024 08:48:44 +1200
+Received: from [10.33.22.30] (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id C4B2F13ED8D;
+	Wed, 11 Sep 2024 08:48:44 +1200 (NZST)
+Message-ID: <c7d4f87b-f3d4-4853-9960-e7faa560ce34@alliedtelesis.co.nz>
+Date: Wed, 11 Sep 2024 08:48:44 +1200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 10 Sep 2024 21:48:10 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Serge Semin" <fancer.lancer@gmail.com>
-Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "paulburton@kernel.org" <paulburton@kernel.org>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Message-Id: <b4d57581-bad7-4f6f-8d6f-733f1a5d33ba@app.fastmail.com>
-In-Reply-To: 
- <7j6cc5i4z4nwg73fowjz756eblnesglqm72jveygqfxngw26mc@sdy6xxomo3qe>
-References: <20240612-cm_probe-v2-0-a5b55440563c@flygoat.com>
- <20240612-cm_probe-v2-6-a5b55440563c@flygoat.com>
- <ekvyyq3vzdbyi5suf4irfixyprvtko7rpkffwpc267kiex4ex2@lpu3ctysuviw>
- <79acb1b1-9c1c-4a58-91a5-5dbb286717ec@app.fastmail.com>
- <7j6cc5i4z4nwg73fowjz756eblnesglqm72jveygqfxngw26mc@sdy6xxomo3qe>
-Subject: Re: [PATCH v2 6/6] MIPS: cm: Probe GCR address from DeviceTree
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH 1/2] dt-bindings: mfd: Add Realtek switch
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ tsbogend@alpha.franken.de, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+References: <20240909014707.2003091-1-chris.packham@alliedtelesis.co.nz>
+ <20240909014707.2003091-2-chris.packham@alliedtelesis.co.nz>
+ <63sbuzij27crjxv6d6qjblv55al5zk4ivsah4ji2kvddhbua57@xo4vt2tqs5cn>
+ <01656780-0a90-4c7b-bedf-2e45992cd16c@alliedtelesis.co.nz>
+ <469efcd0-148c-4a71-b315-043ac59df838@kernel.org>
+Content-Language: en-US
+In-Reply-To: <469efcd0-148c-4a71-b315-043ac59df838@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=KIj5D0Fo c=1 sm=1 tr=0 ts=66e0b0ac a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=EaEq8P2WXUwA:10 a=62ntRvTiAAAA:8 a=gEfo2CItAAAA:8 a=ZXfZcMmdroSEQ_jOwVoA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=pToNdpNmrtiFLRE6bQ9Z:22 a=sptkURWiP4Gy88Gu7hUp:22
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
+Hi Krzysztof,
 
+(sorry, re-sending as plain text)
 
-=E5=9C=A82024=E5=B9=B49=E6=9C=8810=E6=97=A5=E4=B9=9D=E6=9C=88 =E4=B8=8B=E5=
-=8D=889:07=EF=BC=8CSerge Semin=E5=86=99=E9=81=93=EF=BC=9A
-[...]
-> Both MIPS P5600 and P6600 databooks define the GCR_BASE field as
-> optionally R/W:
+On 10/09/24 19:26, Krzysztof Kozlowski wrote:
+> On 09/09/2024 22:36, Chris Packham wrote:
+>> Hi Krzysztof,
+>>
+>> On 9/09/24 18:38, Krzysztof Kozlowski wrote:
+>>> On Mon, Sep 09, 2024 at 01:47:06PM +1200, Chris Packham wrote:
+>>>> Add device tree schema for the Realtek switch. Currently the only
+>>>> supported feature is the syscon-reboot which is needed to be able to
+>>>> reboot the board.
+>>>>
+>>>> Signed-off-by: Chris Packham<chris.packham@alliedtelesis.co.nz>
+>>>> ---
+>>>>    .../bindings/mfd/realtek,switch.yaml          | 50 +++++++++++++++++++
+>>>>    1 file changed, 50 insertions(+)
+>>>>    create mode 100644 Documentation/devicetree/bindings/mfd/realtek,switch.yaml
+>>> Use compatible as filename.
+>> My hope was eventually that this would support multiple Realtek
+>> switches. But sure for now at least I can name it after the one in front
+>> of me.
+> This might never happen, so unless you document more models now, I
+> strongly suggest using compatible as filename.
+Agreed.
+>>>> diff --git a/Documentation/devicetree/bindings/mfd/realtek,switch.yaml b/Documentation/devicetree/bindings/mfd/realtek,switch.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..84b57f87bd3a
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/mfd/realtek,switch.yaml
+>>>> @@ -0,0 +1,50 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id:http://scanmail.trustwave.com/?c=20988&d=s_Tf5n4B2HBkm1hFlKUTA3UKwK2Jg2EPHeQMRCQHXQ&u=http%3a%2f%2fdevicetree%2eorg%2fschemas%2fmfd%2frealtek%2cswitch%2eyaml%23
+>>>> +$schema:http://scanmail.trustwave.com/?c=20988&d=s_Tf5n4B2HBkm1hFlKUTA3UKwK2Jg2EPHbEEFSRQXw&u=http%3a%2f%2fdevicetree%2eorg%2fmeta-schemas%2fcore%2eyaml%23
+>>>> +
+>>>> +title: Realtek Switch with Internal CPU
+>>> What sort of Switch? Like network switch? Then this should be placed in
+>>> respective net (or deeper, e.g. net/dsa/) directory.
+>> Yes network switch. But this is one of those all in one chips that has a
+>> CPU, network switch and various peripherals. MFD seemed appropriate.
+> There is no such device as MFD. MFD is a Linux framework.
+
+What I meant was the RTL9302 is a similar class of device to the 
+mscc,ocelot which has a binding in 
+Documentation/devicetree/bindings/mfd/mscc,ocelot.yaml. If it's a case 
+of that being historical baggage then 
+Documentation/devicetree/bindings/mips/ might be appropriate for the SoC 
+type properties and Documentation/devicetree/bindings/net/ for the 
+switch portion.
+
+>>> Maintainers go here. See example-schema.
+>> Ack.
+>>
+>>>> +
+>>>> +description:
+>>>> +  The RTL9302 ethernet switch has an internal CPU. The switch is a multi-port
+>>>> +  networking switch that supports many interfaces. Additionally, the device can
+>>>> +  support MDIO, SPI and I2C busses.
+>>> I don't get why syscon node is called switch. This looks incomplete or
+>>> you used description from some other device.
+>> Yes I did take a lot of inspiration from the mscc,ocelot. I am working
+>> on more support for the switch and some of the other peripherals so I
+>> figured I'd word it towards that end goal. If you prefer I could word
+>> this more towards the one function (reboot) that is supported right now.
+> Your commit msg is not explaining here much. And "Currently the only
+> supported" feels like a driver description. We expect bindings to be
+> complete. It's fine to bring partial description of hardware, but this
+> should be explained in the commit msg and entire binding should be still
+> created to accommodate that full description.
 >
-> GCR_BASE 31:15 This field sets the base address of the 32KB          R=
- or R/W
->                GCR block of the P5600 MPS.                           (=
-IP Config-
->                This register has a fixed value after reset if         =
-uration)
->                configured as Read-Only (an IP Configuration Option).
+> However such complex devices like Ocelot should be described fully so we
+> can easily see how you organize entire binding.
+
+I can definitely do a better job of explaining myself in the commit 
+message. Right now I just want to have a working reboot.
+
+I'm not really using the "realtek,rtl9302c-switch" compatible for 
+anything but I gather using a "syscon" node without a more specific 
+compatible is frowned upon (please tell me if I'm wrong). In terms of 
+the binding should I just make the description something terse like "The 
+RTL9302 ethernet switch has an internal CPU. Some peripherals are 
+accessed via a common register block".
+
+>>> But if this is DSA, then you miss dsa ref and dsa-related properties.
+>> So far I'm resisting DSA. The usage of the RTL9300 as a SoC+Switch
+>> doesn't really lend itself to the DSA architecture (there is a external
+>> CPU mode that would). I think eventually we'd end up with something like
+>> the mscc,oscelot where both switchdev and DSA usage is supported. There
+>> would be some properties (e.g. port/phy arrangement) that apply to both
+>> uses.
+> This feels ok, although you really should create complete binding here.
+
+This is a bit of a chicken and egg thing. I don't want to commit to a 
+binding until I have more code to back it up, but of course I don't want 
+to spend a bunch of time writing code for a binding that then needs to 
+change when that binding is reviewed.
+
+>> I have got a (kind of) working proof of concept switchdev driver which
+>> has some of the support you've mentioned. It's not really ready so I
+>> didn't include the dt-binding for that stuff in this patch.
+> Best regards,
+> Krzysztof
 >
-
-Thanks for the pointer, I traced code history and it seems like MIPS dec=
-ided
-to not expose this functionality at some point, but documents were not u=
-pdated.
-
-Maybe I should add a read back check here.
-
-Thanks
---=20
-- Jiaxun
 
