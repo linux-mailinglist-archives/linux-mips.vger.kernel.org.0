@@ -1,181 +1,169 @@
-Return-Path: <linux-mips+bounces-5492-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5493-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42874972E9E
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2024 11:45:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 820A897352B
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2024 12:46:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 006C3283C84
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2024 09:45:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31B2F1F25ED4
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2024 10:46:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1AED19049B;
-	Tue, 10 Sep 2024 09:43:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="UMFN3vB1";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="fO06+uFg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16297190674;
+	Tue, 10 Sep 2024 10:44:59 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh7-smtp.messagingengine.com (fhigh7-smtp.messagingengine.com [103.168.172.158])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A997187325;
-	Tue, 10 Sep 2024 09:43:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F07BA46444;
+	Tue, 10 Sep 2024 10:44:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725961429; cv=none; b=jnqQZqwAurxLw1jGCBifzgpjbdoI3tr0rjKlizbYESZhuBzddo64gWsJj/opI02IGLJsmjiiFBMe1FVSPvfQCAU+3+qpUNSCw7NeYM/EtzYMYg3/SyBpNL2dwOatv5BLKEwe0/LakgOkjAB0nl7lOu5NpKG3ahUEGgqRenBp/qg=
+	t=1725965098; cv=none; b=f6eTPSoq/hD6tfkwTr1X7WCnDipoHQWfdmtV7+ue9txRJ+QnQf3uo93r7tUpxrI4PYsH1hndNlHs+GI47cKtRuychri0Mi4xDzhMTF301PZghgPEOegMqdia3WsFAk/wzMcIIf95OsOw5cTrLe23TmRepmvVrOPaaKUrXc7qRRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725961429; c=relaxed/simple;
-	bh=ui5wGhZUCRW5coT6WzLnjYhzoLrsRPWbFebz2dyA0FQ=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=aNh34MVkhKB45xiAijh1nStKkQ73qQSWdTB1Im+bRJZhiqcRfsPSpoP55DmI0+FCQxP6NTlFBzhNDr/HxYVdMMEk1p9WBdJ34ccB0Ot34JomspmHF4Tvg3RzkQxKwzHd0FPx7TmElHaOnNh+FC0E65vBNvzzGfKLCLP7HSKPz2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=UMFN3vB1; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=fO06+uFg; arc=none smtp.client-ip=103.168.172.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 2D7B31140308;
-	Tue, 10 Sep 2024 05:43:46 -0400 (EDT)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-09.internal (MEProxy); Tue, 10 Sep 2024 05:43:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1725961426;
-	 x=1726047826; bh=RC2tu5Bk5p0RtLEbaxphGTYXY7K+igsvyvD5mhKmwX4=; b=
-	UMFN3vB1AQgxsh0w6VCKvqeKUzD8vaVVANYxejW+Zkg6/LhB1LvVR4EbNvmneNSV
-	t1StvkhfHeR4G6+CVIodF2hxjsc0gpI94j+yNiC8P+LMBKkfkRfiPDcYmWO/KZOf
-	HJSp4H8QymPIf5ahNRSiRO200y6xDYj2rcFPNdW3s+fUhobslprCO0Kul6RflsVY
-	Fv/TaAgPP/YyBk+EFOsB6ZAZO1ue3LDmotfJDk2F0+X+9guxWdPtZ1L3cm8+Ze3z
-	iFBezWhxYyZNRZcfDufen9agrKXQhppH5zu63tR2Y2lBRM/6i5qwuglpifm5RoGX
-	MDUS0AojiSl332ktQEs2IA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725961426; x=
-	1726047826; bh=RC2tu5Bk5p0RtLEbaxphGTYXY7K+igsvyvD5mhKmwX4=; b=f
-	O06+uFgJcNn994vqXf0joOlqM3mpq1FLsm0AEbABgKhiXjMd6/S6ViavexP0lAQ5
-	ITSL+MIqV+/yFkM2zyJGkPB1GdAmgU8W2b2nGG8f/QdgOg7DxJ0YaWjdVvhyYfZr
-	BXmxN1uYeckml1yrgUBKbJsa1Jmf1FDp8dSDcVWNEafhIpMuwSk71hh9Imkhw1rG
-	7Z8169MVIRYv5SM7jSvRU65XVYzpjVX4RGxVuhyWdGsme47l059e9XSTHAqe8WQL
-	pwBxd9EcXh6i1GLYcw68CukctT0dhQcJ3yzv/ZZQkphNN1Gjj9FiMwT5HNOHLU2/
-	Exh9Lv8z9HD+k9m8J9zEw==
-X-ME-Sender: <xms:0RTgZsNMtsu55CVV8aFbrOSxAh3lHJcroREJDMKEJDIaBHtFmeCTvw>
-    <xme:0RTgZi_9T6tv56AP2PAiyHG1Y4bQPy5TT6VoKzDMsofb0153q7R_AEm35_8XT1fkf
-    VXFR_p6xpaFGlx3gMM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeiledgudekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
-    necuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfh
-    hlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepffekveettdeuveefhfekhfdu
-    gfegteejffejudeuheeujefgleduveekuddtueehnecuffhomhgrihhnpehkvghrnhgvlh
-    drohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhm
-    pehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhnsggprhgtphhtthhope
-    egpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtshgsohhgvghnugesrghlphhh
-    rgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtohepmhgrtghrohesohhrtggrmhdrmhgvrd
-    hukhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopehlihhnuhigqdhmihhpshesvhhgvghrrdhkvghrnhgvlhdroh
-    hrgh
-X-ME-Proxy: <xmx:0hTgZjRfO--eqHjLJBMkkOEhPYv4-rOi_wJC6h78f3MXrDPzfEMmhA>
-    <xmx:0hTgZkuto1SqVjj9TSmlBTauR7KFK703kUTOi6fOJhHfku7JSU55rQ>
-    <xmx:0hTgZkfvyR7NMljYQAmOC3ib6vHnD5C7MIgC4wpmgEaBJT1byGTSNA>
-    <xmx:0hTgZo1HTzFBi6cMlZoEusiLPKrH4g8tMPGcwT5Rb2WW51ZmRUOJbw>
-    <xmx:0hTgZs4xsmiBfQ_ZjR_lGt0eluSnh3vUTY2T3OEgEiuzUnJqIeH82H9h>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id DF0CB1C20065; Tue, 10 Sep 2024 05:43:45 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1725965098; c=relaxed/simple;
+	bh=F8sISKqp3IEU8uMytKNoaGuZbOEzp2sNMpq+JwuhFk0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=bXaAl3vj0bYxyro30eMtw23Q5OWsK/b1uKsFlOFf+WftW4NJvViiEWPyAybVOrJU3g6MyjGOm086QRoGxKKThnYzjQ98U+JiCKwNuhxgZ91PhspCZHdp4g1WqdM8iOvv8oDwKe66DTNAbvU+uHqR9pG66wKYbB36O8MhK7G52Fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.234])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4X30gr3F0jz2Dc4S;
+	Tue, 10 Sep 2024 18:44:24 +0800 (CST)
+Received: from dggpemf200006.china.huawei.com (unknown [7.185.36.61])
+	by mail.maildlp.com (Postfix) with ESMTPS id 7AD5E1402E0;
+	Tue, 10 Sep 2024 18:44:52 +0800 (CST)
+Received: from [10.67.120.129] (10.67.120.129) by
+ dggpemf200006.china.huawei.com (7.185.36.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 10 Sep 2024 18:44:51 +0800
+Message-ID: <95e6c282-1e4f-458b-9e40-9b626d64b3bd@huawei.com>
+Date: Tue, 10 Sep 2024 18:44:51 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 10 Sep 2024 10:43:23 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-kernel@vger.kernel.org
-Message-Id: <b4833f82-9e7e-4667-994b-c444ef935a9f@app.fastmail.com>
-In-Reply-To: <alpine.DEB.2.21.2409092259110.60835@angie.orcam.me.uk>
-References: <20240908-mips-chore-v1-0-9239c783f233@flygoat.com>
- <20240908-mips-chore-v1-2-9239c783f233@flygoat.com>
- <alpine.DEB.2.21.2409092259110.60835@angie.orcam.me.uk>
-Subject: Re: [PATCH 2/2] MIPS: kprobes: Massage previous delay slot detection
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v25 00/13] Device Memory TCP
+To: Mina Almasry <almasrymina@google.com>
+CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-alpha@vger.kernel.org>,
+	<linux-mips@vger.kernel.org>, <linux-parisc@vger.kernel.org>,
+	<sparclinux@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-media@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan
+ Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+	<James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+	<hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+	<arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert Xu
+	<herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem de
+ Bruijn <willemdebruijn.kernel@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+	<bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, Maciej
+ Fijalkowski <maciej.fijalkowski@intel.com>, Jonathan Lemon
+	<jonathan.lemon@gmail.com>, Shuah Khan <shuah@kernel.org>, Alexei Starovoitov
+	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+	<john.fastabend@gmail.com>, Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, Pavel Begunkov
+	<asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe
+	<jgg@ziepe.ca>, Shailend Chand <shailend@google.com>, Harshitha Ramamurthy
+	<hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de
+ Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>
+References: <20240909054318.1809580-1-almasrymina@google.com>
+ <42c202e6-8c4c-494f-8c28-17d66ed75880@huawei.com>
+ <CAHS8izMX+9F1NngbPx6w7ikKR9TgPvm+jMwZ8168NJYhFC7sVQ@mail.gmail.com>
+Content-Language: en-US
+From: Yunsheng Lin <linyunsheng@huawei.com>
+In-Reply-To: <CAHS8izMX+9F1NngbPx6w7ikKR9TgPvm+jMwZ8168NJYhFC7sVQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemf200006.china.huawei.com (7.185.36.61)
 
+On 2024/9/10 0:54, Mina Almasry wrote:
+> On Mon, Sep 9, 2024 at 4:21 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
+>>
+>> On 2024/9/9 13:43, Mina Almasry wrote:
+>>
+>>>
+>>> Perf - page-pool benchmark:
+>>> ---------------------------
+>>>
+>>> bench_page_pool_simple.ko tests with and without these changes:
+>>> https://pastebin.com/raw/ncHDwAbn
+>>>
+>>> AFAIK the number that really matters in the perf tests is the
+>>> 'tasklet_page_pool01_fast_path Per elem'. This one measures at about 8
+>>> cycles without the changes but there is some 1 cycle noise in some
+>>> results.
+>>>
+>>> With the patches this regresses to 9 cycles with the changes but there
+>>> is 1 cycle noise occasionally running this test repeatedly.
+>>>
+>>> Lastly I tried disable the static_branch_unlikely() in
+>>> netmem_is_net_iov() check. To my surprise disabling the
+>>> static_branch_unlikely() check reduces the fast path back to 8 cycles,
+>>> but the 1 cycle noise remains.
+>>
+>> Sorry for the late report, as I was adding a testing page_pool ko basing
+>> on [1] to avoid introducing performance regression when fixing the bug in
+>> [2].
+>> I used it to test the performance impact of devmem patchset for page_pool
+>> too, it seems there might be some noticable performance impact quite stably
+>> for the below testcases, about 5%~16% performance degradation as below in
+>> the arm64 system:
+>>
+> 
+> Correct me if I'm wrong here, but on the surface here it seems that
+> you're re-reporting a known issue. Consensus seems to be that it's a
+> non-issue.
+> 
+> In v6 I reported that the bench_page_pool_simple.ko test reports a 1
+> cycle regression with these patches, from 8->9 cycles. That is roughly
+> consistent with the 5-15% you're reporting.
 
+From the description above in the cover letter, I thought the performance
+data using the out of tree testing ko is not stable enough to justify the
+performance impact.
 
-=E5=9C=A82024=E5=B9=B49=E6=9C=889=E6=97=A5=E4=B9=9D=E6=9C=88 =E4=B8=8B=E5=
-=8D=8811:02=EF=BC=8CMaciej W. Rozycki=E5=86=99=E9=81=93=EF=BC=9A
-> On Sun, 8 Sep 2024, Jiaxun Yang wrote:
->
->> Expand the if condition into cascaded ifs to make code
->> readable.
->
->  Apart from broken formatting what's making original code unreadable?
+> 
+> I root caused the reason for the regression to be the
+> netmem_is_net_iov() check in the fast path. I removed this regression
+> in v7 (see the change log) by conditionally compiling the check in
+> that function.
+> 
+> In v8, Pavel/Jens/David pushed back on the ifdef check. See this
+> entire thread, but in particular this response from Jens:
 
-For me it's confusing because wired layout, cascaded ifs are clearly
-easier to format and has clear intention.
+It seemed the main objection is about how to enable this feature
+for the io_uring?
 
->
->> Also use sizeof(union mips_instruction) instead of
->> sizeof(mips_instruction) to match the code context.
->
->  That has to be a separate change.
+And it seemed that you had added the CONFIG_NET_DEVMEM for this
+devmem thing, why not use it for that?
 
-Given that it's a tiny style change as well, it makes sense to combine
-into same patch.
+> 
+> https://lore.kernel.org/lkml/11f52113-7b67-4b45-ba1d-29b070050cec@kernel.dk/
+> 
+> Seems consensus that it's 'not really worth it in this scenario'.
 
->
->> diff --git a/arch/mips/kernel/kprobes.c b/arch/mips/kernel/kprobes.c
->> index dc39f5b3fb83..96139adefad2 100644
->> --- a/arch/mips/kernel/kprobes.c
->> +++ b/arch/mips/kernel/kprobes.c
->> @@ -89,12 +89,12 @@ int arch_prepare_kprobe(struct kprobe *p)
->>  		goto out;
->>  	}
->> =20
->> -	if (copy_from_kernel_nofault(&prev_insn, p->addr - 1,
->> -			sizeof(mips_instruction)) =3D=3D 0 &&
->> -	    insn_has_delayslot(prev_insn)) {
->> -		pr_notice("Kprobes for branch delayslot are not supported\n");
->> -		ret =3D -EINVAL;
->> -		goto out;
->> +	if (!copy_from_kernel_nofault(&prev_insn, p->addr - 1, sizeof(union=
- mips_instruction))) {
->
->  Overlong line.
+I was only reading through the above thread, it didn't seemed to
+reach to consensus as Jesper pointed out the performance impact
+for the XDP DROP case in the same thread.
 
-Nowadays, check-patch.pl is happy with 100 column line.
+https://lore.kernel.org/lkml/779b9542-4170-483a-af54-ca0dd471f774@kernel.org/
 
-I used 100 column line in many subsystems and never receive any complain=
-t.
-
->
->> +		if (insn_has_delayslot(prev_insn)) {
->> +			pr_notice("Kprobes for branch delayslot are not supported\n");
->
->  This now overruns 80 columns making code *less* readable.
-
-I don't really agree, we are not in VGA display era any more, see Linus's
-arguments on removal of 80 columns [1] and why long line are more readab=
-le [2].
-
-
-[1]: https://lore.kernel.org/lkml/CAHk-=3Dwj3iGQqjpvc+gf6+C29Jo4COj6OQQF=
-zdY0h5qvYKTdCow@mail.gmail.com/
-[2]: https://lore.kernel.org/lkml/CAHk-=3DwjR0H3+2ba0UUWwoYzYBH0GX9yTf5d=
-j2MZyo0xvyzvJnA@mail.gmail.com/
-
-Thanks
->
->   Maciej
-
---=20
-- Jiaxun
+> 
 
