@@ -1,166 +1,189 @@
-Return-Path: <linux-mips+bounces-5532-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5533-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21131975A3E
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Sep 2024 20:21:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C08E1975FC4
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2024 05:34:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 44D7C1C21532
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Sep 2024 18:21:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F3E681C22939
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2024 03:34:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E38E1B1509;
-	Wed, 11 Sep 2024 18:21:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C17F01684A5;
+	Thu, 12 Sep 2024 03:34:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="BqkP8XKs"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AEFE19EEC8;
-	Wed, 11 Sep 2024 18:21:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1808F14B97E;
+	Thu, 12 Sep 2024 03:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.34.216
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726078900; cv=none; b=ADxxuzWT9kup5+yhfqr9bgy7WdBQdJg57MMADQ11vdPc8Sst1N2lMRHpBJcsn0+JQq55oD6sKqHCdtig5ePBU92NQwMjHv4Lpg9STS+e0grMY25piFwuZCXZYAnJ6ITAmRPKbwOtzguP6lI/QWpqNj1B42kYks1MTlPX61hc/TU=
+	t=1726112068; cv=none; b=mA1QFDIQ/IsJhqX/5PIHDZYCldlPNj0SanKZ8L7b7tasZz1hBsceMEEhQ5T1AZu+l9rcUfIb44SO9Fc2xZLcxQiGY24SsIgusOrybY2Le+7lmQ1Ucs5oWk7Frw4ddJgAUGC6r7vTTiibDPUIhiOANUlpequk83VyR+boDXynmS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726078900; c=relaxed/simple;
-	bh=2cZas4SimbOELK54ILhf2k9/V2LxmAALpH5ubeNMXEs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kP/hclgiLFbxRWj91GNSHxe6sYCCLMux96HnYWTDvZ9NcocJKq5MrCWckIlfIN0+rhF6hZS2dNmpTyqSvL0GYdB/cUnozR6jSj1UIKg5oqxS3nCZlLjqPEGY6+EDB0qqzgw+lUkRDPPDYV6pzJKLGTkQBD/HD3VtyscqUWQhlGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AB7BC4CEC0;
-	Wed, 11 Sep 2024 18:21:30 +0000 (UTC)
-Date: Wed, 11 Sep 2024 19:21:27 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Arnd Bergmann <arnd@arndb.de>, guoren <guoren@kernel.org>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S . Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	shuah <shuah@kernel.org>, Christoph Hellwig <hch@infradead.org>,
-	Michal Hocko <mhocko@suse.com>,
-	"Kirill A. Shutemov" <kirill@shutemov.name>,
-	Chris Torek <chris.torek@gmail.com>,
-	Linux-Arch <linux-arch@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-abi-devel@lists.sourceforge.net
-Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
- 47 bits
-Message-ID: <ZuHfp0_tAQhaymdy@arm.com>
-References: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
- <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
- <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
- <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
- <f23b18c6-1856-4b59-9ba3-59809b425c81@app.fastmail.com>
- <Ztrq8PBLJ3QuFJz7@arm.com>
- <oshwto46wbbgneiayj63umllyozm3c4267rvpszqzaopwnt2l7@6mxl5vydtons>
- <ZuDoExckq21fePoe@ghost>
+	s=arc-20240116; t=1726112068; c=relaxed/simple;
+	bh=0/GAUh9+vr5dSsV/KCoFiCdKVPCmYu2BnbiNLdKPFs0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qo3K6R1HSEEQcXvQW8IrwYOKEXV90hY7b3KyIEVW+7iZc72zYS0I2KmjRjv/8m+1CBJiFI2TaUWk0VbK8MUGgPn2dekoaVsfFwbAag/3LJfuKiyUlfcxRaRjKVttYpjpxOdWOXO1zVnHVvFOl9NLFtt313s/8F8EVMGqnqX29Kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=BqkP8XKs; arc=none smtp.client-ip=54.206.34.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1726112061;
+	bh=5mzqLfW7T+9KCT/Eu0R8VmSjmBF0RsE3ZlF9EWCDd+E=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=BqkP8XKsPlR7MmHI94Lpc/LIRCw8+mqE4mWPZxfReC3rKTqMnVPBFR0XHZz267uMO
+	 xXzFZrDOVF/xISeplGY9C08EWm8owLXtl3t+1xHcSzv8BZ4BD79fGFNR9OvqQ9+X/o
+	 38Vv9IZkwVxKA47EGiWsbtoVb3+hmpWPIYz+iy7g=
+X-QQ-mid: bizesmtpsz9t1726112053t4mo9ll
+X-QQ-Originating-IP: eroRLnBsJwYsmxRfJ05VprIAIJkhrn2Or2wu0Py9MYE=
+Received: from localhost.localdomain ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 12 Sep 2024 11:34:11 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 11165061773754836062
+From: WangYuli <wangyuli@uniontech.com>
+To: herbert@gondor.apana.org.au,
+	davem@davemloft.net,
+	tsbogend@alpha.franken.de
+Cc: linux-crypto@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	marcin.nowakowski@mips.com,
+	jhogan@kernel.org,
+	ralf@linux-mips.org,
+	linux-mips@linux-mips.org,
+	ebiggers@google.com,
+	guanwentao@uniontech.com,
+	zhanjun@uniontech.com,
+	WangYuli <wangyuli@uniontech.com>,
+	"Maciej W . Rozycki" <macro@orcam.me.uk>
+Subject: [RESEND. PATCH v3] MIPS: crypto: Clean up useless assignment operations
+Date: Thu, 12 Sep 2024 11:34:03 +0800
+Message-ID: <98B4759B69BED4D1+20240912033403.1944625-1-wangyuli@uniontech.com>
+X-Mailer: git-send-email 2.43.4
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZuDoExckq21fePoe@ghost>
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpsz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
 
-On Tue, Sep 10, 2024 at 05:45:07PM -0700, Charlie Jenkins wrote:
-> On Tue, Sep 10, 2024 at 03:08:14PM -0400, Liam R. Howlett wrote:
-> > * Catalin Marinas <catalin.marinas@arm.com> [240906 07:44]:
-> > > On Fri, Sep 06, 2024 at 09:55:42AM +0000, Arnd Bergmann wrote:
-> > > > On Fri, Sep 6, 2024, at 09:14, Guo Ren wrote:
-> > > > > On Fri, Sep 6, 2024 at 3:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > > > >> It's also unclear to me how we want this flag to interact with
-> > > > >> the existing logic in arch_get_mmap_end(), which attempts to
-> > > > >> limit the default mapping to a 47-bit address space already.
-> > > > >
-> > > > > To optimize RISC-V progress, I recommend:
-> > > > >
-> > > > > Step 1: Approve the patch.
-> > > > > Step 2: Update Go and OpenJDK's RISC-V backend to utilize it.
-> > > > > Step 3: Wait approximately several iterations for Go & OpenJDK
-> > > > > Step 4: Remove the 47-bit constraint in arch_get_mmap_end()
+When entering the "len & sizeof(u32)" branch, len must be less than 8.
+So after one operation, len must be less than 4.
+At this time, "len -= sizeof(u32)" is not necessary for 64-bit CPUs.
 
-Point 4 is an ABI change. What guarantees that there isn't still
-software out there that relies on the old behaviour?
+After that, replace `while' loops with equivalent `for' to make the
+code structure a little bit better by the way.
 
-> > > > I really want to first see a plausible explanation about why
-> > > > RISC-V can't just implement this using a 47-bit DEFAULT_MAP_WINDOW
-> > > > like all the other major architectures (x86, arm64, powerpc64),
-> > > 
-> > > FWIW arm64 actually limits DEFAULT_MAP_WINDOW to 48-bit in the default
-> > > configuration. We end up with a 47-bit with 16K pages but for a
-> > > different reason that has to do with LPA2 support (I doubt we need this
-> > > for the user mapping but we need to untangle some of the macros there;
-> > > that's for a separate discussion).
-> > > 
-> > > That said, we haven't encountered any user space problems with a 48-bit
-> > > DEFAULT_MAP_WINDOW. So I also think RISC-V should follow a similar
-> > > approach (47 or 48 bit default limit). Better to have some ABI
-> > > consistency between architectures. One can still ask for addresses above
-> > > this default limit via mmap().
-> > 
-> > I think that is best as well.
-> > 
-> > Can we please just do what x86 and arm64 does?
-> 
-> I responded to Arnd in the other thread, but I am still not convinced
-> that the solution that x86 and arm64 have selected is the best solution.
-> The solution of defaulting to 47 bits does allow applications the
-> ability to get addresses that are below 47 bits. However, due to
-> differences across architectures it doesn't seem possible to have all
-> architectures default to the same value. Additionally, this flag will be
-> able to help users avoid potential bugs where a hint address is passed
-> that causes upper bits of a VA to be used.
+Suggested-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Link: https://lore.kernel.org/all/alpine.DEB.2.21.2406281713040.43454@angie.orcam.me.uk/
+Suggested-by: Herbert Xu <herbert@gondor.apana.org.au>
+Link: https://lore.kernel.org/all/ZtqZpzMH_qMQqzyc@gondor.apana.org.au/
+Signed-off-by: Guan Wentao <guanwentao@uniontech.com>
+Signed-off-by: WangYuli <wangyuli@uniontech.com>
+---
+ arch/mips/crypto/crc32-mips.c | 70 ++++++++++++++++++-----------------
+ 1 file changed, 37 insertions(+), 33 deletions(-)
 
-The reason we added this limit on arm64 is that we noticed programs
-using the top 8 bits of a 64-bit pointer for additional information.
-IIRC, it wasn't even openJDK but some JavaScript JIT. We could have
-taught those programs of a new flag but since we couldn't tell how many
-are out there, it was the safest to default to a smaller limit and opt
-in to the higher one. Such opt-in is via mmap() but if you prefer a
-prctl() flag, that's fine by me as well (though I think this should be
-opt-in to higher addresses rather than opt-out of the higher addresses).
-
+diff --git a/arch/mips/crypto/crc32-mips.c b/arch/mips/crypto/crc32-mips.c
+index ec6d58008f8e..2a59b85f88aa 100644
+--- a/arch/mips/crypto/crc32-mips.c
++++ b/arch/mips/crypto/crc32-mips.c
+@@ -77,24 +77,26 @@ static u32 crc32_mips_le_hw(u32 crc_, const u8 *p, unsigned int len)
+ {
+ 	u32 crc = crc_;
+ 
+-#ifdef CONFIG_64BIT
+-	while (len >= sizeof(u64)) {
+-		u64 value = get_unaligned_le64(p);
+-
+-		CRC32(crc, value, d);
+-		p += sizeof(u64);
+-		len -= sizeof(u64);
+-	}
+-
+-	if (len & sizeof(u32)) {
+-#else /* !CONFIG_64BIT */
+-	while (len >= sizeof(u32)) {
+-#endif
+-		u32 value = get_unaligned_le32(p);
+-
+-		CRC32(crc, value, w);
+-		p += sizeof(u32);
+-		len -= sizeof(u32);
++	if (IS_ENABLED(CONFIG_64BIT)) {
++		for (; len >= sizeof(u64); p += sizeof(u64), len -= sizeof(u64)) {
++			u64 value = get_unaligned_le64(p);
++
++			CRC32(crc, value, d);
++		}
++
++		if (len & sizeof(u32)) {
++			u32 value = get_unaligned_le32(p);
++
++			CRC32(crc, value, w);
++			p += sizeof(u32);
++		}
++	} else {
++		for (; len >= sizeof(u32); len -= sizeof(u32)) {
++			u32 value = get_unaligned_le32(p);
++
++			CRC32(crc, value, w);
++			p += sizeof(u32);
++		}
+ 	}
+ 
+ 	if (len & sizeof(u16)) {
+@@ -117,24 +119,26 @@ static u32 crc32c_mips_le_hw(u32 crc_, const u8 *p, unsigned int len)
+ {
+ 	u32 crc = crc_;
+ 
+-#ifdef CONFIG_64BIT
+-	while (len >= sizeof(u64)) {
+-		u64 value = get_unaligned_le64(p);
++	if (IS_ENABLED(CONFIG_64BIT)) {
++		for (; len >= sizeof(u64); p += sizeof(u64), len -= sizeof(u64)) {
++			u64 value = get_unaligned_le64(p);
+ 
+-		CRC32C(crc, value, d);
+-		p += sizeof(u64);
+-		len -= sizeof(u64);
+-	}
++			CRC32(crc, value, d);
++		}
+ 
+-	if (len & sizeof(u32)) {
+-#else /* !CONFIG_64BIT */
+-	while (len >= sizeof(u32)) {
+-#endif
+-		u32 value = get_unaligned_le32(p);
++		if (len & sizeof(u32)) {
++			u32 value = get_unaligned_le32(p);
++
++			CRC32(crc, value, w);
++			p += sizeof(u32);
++		}
++	} else {
++		for (; len >= sizeof(u32); len -= sizeof(u32)) {
++			u32 value = get_unaligned_le32(p);
+ 
+-		CRC32C(crc, value, w);
+-		p += sizeof(u32);
+-		len -= sizeof(u32);
++			CRC32(crc, value, w);
++			p += sizeof(u32);
++		}
+ 	}
+ 
+ 	if (len & sizeof(u16)) {
 -- 
-Catalin
+2.43.4
+
 
