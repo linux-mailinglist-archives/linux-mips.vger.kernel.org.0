@@ -1,182 +1,158 @@
-Return-Path: <linux-mips+bounces-5538-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5539-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D042F976161
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2024 08:20:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11E40976598
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2024 11:31:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E4541C22848
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2024 06:20:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8DDDFB23DDD
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2024 09:31:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26CF918A6C7;
-	Thu, 12 Sep 2024 06:20:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DED2195962;
+	Thu, 12 Sep 2024 09:30:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="f7ImMjz5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mIxLwDtt"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A052D7B8
-	for <linux-mips@vger.kernel.org>; Thu, 12 Sep 2024 06:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B3818FDD8;
+	Thu, 12 Sep 2024 09:30:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726122044; cv=none; b=rBp8TV7R7S4bezgPqK/IE0oi7PrMegzBqC7+zzo1jejfwGgSwsnOL+42y8ygwa8eLl4kYSpbrNzFw5VtVYKyWeSTXYel1/jo7AEyC9olY2qPz/WLcrPgvcFrg3L2rL3pct0njbxHxpnVyh6hGiGGPph5CRrHBIXsFT0YbTAKg1I=
+	t=1726133458; cv=none; b=Oo+KmUjiK11U/O6G7vQhYiMCLqH2h/lJFxZabppPCHcajj267lQrPOxxXlVNpjxjHFPDfmHJRDFKkUnJFDAETldIfoFLBNNxR/dn+3vtHrrMJiypQ5MYPz4CJy8cz6gynSapBNh8QsbNeIqYjoC4N/VtWwKoU0TqEXdmxe3HqbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726122044; c=relaxed/simple;
-	bh=2F6IKkpv/Qwlr7Q/6xNHbyfy5PQ3xNesTPaXOFDb4UY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LwjFN3Ipgz2M2eQGI37XJvijCD4hEVfXwYcBqZm01Lzj3xZfjPwHdK2qNBrXPb888yC/JAHcMRtPeCf2M+Wr6CWu2oD4S+kft9fGcWQ5pu/WyUNaAPceozTdiVhUcLE0CLuCV1T8urJxRGBGzGhNacvu+fuxyrcXXn3Lw96O22I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=f7ImMjz5; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-20543fdb7acso4986245ad.1
-        for <linux-mips@vger.kernel.org>; Wed, 11 Sep 2024 23:20:42 -0700 (PDT)
+	s=arc-20240116; t=1726133458; c=relaxed/simple;
+	bh=75c0JWzLzPHdmAeuquabsf38JsqcZl6sGMXOC/sjHgo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=sckdxDUf35sgyYDQHFnYYgsIyyvpnuM3W0lJX83aNtk/DytkjB4yDuGLrXYcUJCFITw0LISpHJdluekIkmJVm6NgyLsEDhiStkMsnV4+N8EOyr3m7lk4IpnwyEG5Y226aQXrfFhQ7bf1TqU2YibqEGZzQbkbYOeagks7QcOX0rs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mIxLwDtt; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-42cb7a2e4d6so6033385e9.0;
+        Thu, 12 Sep 2024 02:30:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1726122042; x=1726726842; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4MH+VWCTNjiA22bJ+vIa1h0/NxuAZxX6cpAlaipl1hg=;
-        b=f7ImMjz5nD3GVetxCwMWoMX0kbIS4lvT7rEllYmLdT1KxiOENjPfwGS0uGx1s49aoE
-         e+S6xHj/IwKOfMTOWQabXZVX65tJFPq0fLcBDOfXfsFJhwEvgMvrUr9UlGXPbcb7Lay4
-         Gi/IQ6rnGZ8UYdmka+oBZwvNaR+WwIpIymqItrNmjNailKIQdWCBeH89j2wDY3mlS/wx
-         FvHk8yCVj+VYIQSt+IwVrm0VnCz09SHus+F7QpDCtn0bPIzDT+K5kwUg6cnCIkY1VOMH
-         97dX+cVLAMHx/6gRUewjaflWeYX++hO2+QEGMn2rXsKqWiltX77adLjzFL/QhUylIYvo
-         MahA==
+        d=gmail.com; s=20230601; t=1726133454; x=1726738254; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gwD8SDtMDuYN59ioTbpBQfDFiemRVDz9PeV0tYn0Y9o=;
+        b=mIxLwDttpaw8Ge7Gxl96LbHbi6TjJ1o8SKNPeXciKudejXXbHj+0nkZz72ERr9ePiQ
+         O2afziririSEy6iOk52IElEt3EpXlQ9ShBX0lI0Mr18P6p87Z9g8CBfXgUrK+Jrsh+Kv
+         AELYmevWn04gztsew59X1dwuwa3uPLVaCsULIbbby2NitQoRUQvyIRLlJiVFO4G5vfD6
+         Qk4TzZZk7FiCajWWhHECR33rrvUCRaEWnSuLNWOPW/Hng9m5NEc3PUxH9maQrSEqJfUr
+         prJFfr1gi5V/TuAvvj8Y9kmGARSAW5AlbmuR3Br+RxjtodLB1SSIfx8pPLm6e29Qkkkq
+         egZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726122042; x=1726726842;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4MH+VWCTNjiA22bJ+vIa1h0/NxuAZxX6cpAlaipl1hg=;
-        b=liFB8n25rG0x+87N0PtFkoe9Cl0yHE+NjXn7KcXGHi4WnhOOHdFvUMf5DjaK1Q1hv9
-         7quKix6bPMBZ6ryPWukH6/a6yyLesQIKlyPX5dpau3F3OVyBsPA+zOwi9seEaK+wcEHI
-         kSIYTkVi0nc+AMZKFTMPEJwQqzCaayMR8LgZEaTiZLhIpCL4KRUZwhv77qy+fOfhrYE1
-         NpeqWYDVsuu1y++0jHx2dwaEnhvkoLfrVw7oFHt+rXpBBB2sL5WNu1IlGuR+mmFTuJZT
-         RuMyzKBdmzxkTLzE66phy5EwZ6txUwMCsXwLIw6mBmlx8B7xqq+97IZZfgKHEcL48TuX
-         6EyA==
-X-Forwarded-Encrypted: i=1; AJvYcCVgsGSqibsV0vGA/zuKKsd+LVg6OczPy95vM+oTJlZlW30aZ57O6HgQ/9hQU1lBMI40sfYNuWprt3yW@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlkC5io6d/PL141L59kz9U2c0z1gA2R5uPrtuJO6Ff9IaQcxSO
-	PlBpo09qBlG8rPv9X1gj+Rdw2KQOkMyKpo2s/mtWjYrbKcGRCT/QwiQ3CevBxdA=
-X-Google-Smtp-Source: AGHT+IEU0tdlu4WO+IdyYZyQDbQui3iM6ZAtkm5A4CWh7CFo7CMKirqsrpvUAjbSGnQEOy1Vcb5RUw==
-X-Received: by 2002:a17:903:191:b0:206:aa2e:6d1f with SMTP id d9443c01a7336-2076e423272mr22083755ad.46.1726122041553;
-        Wed, 11 Sep 2024 23:20:41 -0700 (PDT)
-Received: from ghost ([2601:647:6700:64d0:7acc:9910:2c1d:4e65])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2076afdd82asm8286105ad.129.2024.09.11.23.20.37
+        d=1e100.net; s=20230601; t=1726133454; x=1726738254;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gwD8SDtMDuYN59ioTbpBQfDFiemRVDz9PeV0tYn0Y9o=;
+        b=LuJ3VLDNBLmAJnq1QYZOmoLbLIPuEkGSRJuYSXC1hhtbyOpcO49uCviEJpGlY3L/wx
+         NfDwOJZzx6AwE84R3ysO03LQrcY4hNCBTAsXv4qsgLVfdPS63xkp5hOfAtLLq+tuokbR
+         AV0NzXUwbiFERy5yA1k/KPJtoZ7cvMd5u4XKTSawjMVjR7BkCuer4CKU9+UVz4zXsSYT
+         jB3Dl97uY/bBbMsNS6iOMOShAgVqih4jiBuTQfO57gYXxhtL4fGe+IAiX+eRAnpiftbo
+         0BYIjQ/UMLhPAmcxTmrbI02ZTtjt3+HnDHSBIN4TM9mPoED/wWVC1ZnPl89WyHhb5y2c
+         CwLA==
+X-Forwarded-Encrypted: i=1; AJvYcCUYQCT1MJxbbdn42ZcB2Bm2B4J6h+qU+d3fiOwz6y0li/9NYsjnfWEmFgYdiHK9yn/s8X5IJ/P+fOOF4K4=@vger.kernel.org, AJvYcCXiWgkNA+vWAbeSZu2cSZBdnatn20+LrQqoQ1xsadD4ZeHvDoQad9/GlKaMzW8yCTd6GD6K+tsRbCso3Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIBfsj/3SdAV2zvBcggZk7uI24ldiJWmyofJz7oouCgq8oGfUR
+	LdS+kuJYd6PfxWrIc6G1in1jR8LeDGygphSvj6C0icAGmVq7+mIW
+X-Google-Smtp-Source: AGHT+IGT2Ij+VvI4m03GiMl+vozD/+bImoF9oyvXkaxyAqilMzAQyuAFsTr8JmVJUGhgywr5aXBvtA==
+X-Received: by 2002:a05:600c:5121:b0:42c:b377:3f5f with SMTP id 5b1f17b1804b1-42cdb547e96mr17839175e9.14.1726133454508;
+        Thu, 12 Sep 2024 02:30:54 -0700 (PDT)
+Received: from localhost.localdomain ([212.200.182.192])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42cc137556esm76688225e9.1.2024.09.12.02.30.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Sep 2024 23:20:40 -0700 (PDT)
-Date: Wed, 11 Sep 2024 23:20:35 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+        Thu, 12 Sep 2024 02:30:54 -0700 (PDT)
+From: Aleksandar Rikalo <arikalo@gmail.com>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Aleksandar Rikalo <arikalo@gmail.com>,
+	Chao-ying Fu <cfu@wavecomp.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Greg Ungerer <gerg@kernel.org>,
+	Hauke Mehrtens <hauke@hauke-m.de>,
+	Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Marc Zyngier <maz@kernel.org>,
+	Paul Burton <paulburton@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Christoph Hellwig <hch@infradead.org>,
-	Michal Hocko <mhocko@suse.com>,
-	"Kirill A. Shutemov" <kirill@shutemov.name>,
-	Chris Torek <chris.torek@gmail.com>, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-abi-devel@lists.sourceforge.net
-Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
- 47 bits
-Message-ID: <ZuKIMz7U8rDrq8jA@ghost>
-References: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
- <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
- <87zfol468z.fsf@mail.lhotse>
- <Zt9HboH/PmPlRPmH@ghost>
- <1aca8e4c-1c12-4624-a689-147ff60b75d6@csgroup.eu>
- <CAMuHMdURgy6NPthHhfOv_h=C_gw2hEpnGQ7iBGoDE=ZazUPRHA@mail.gmail.com>
- <8734m6s428.fsf@mail.lhotse>
+	Serge Semin <fancer.lancer@gmail.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: [PATCH v6 0/9] MIPS: Support I6500 multi-cluster configuration
+Date: Thu, 12 Sep 2024 11:30:42 +0200
+Message-Id: <20240912093051.452172-1-arikalo@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <8734m6s428.fsf@mail.lhotse>
 
-On Wed, Sep 11, 2024 at 11:38:55PM +1000, Michael Ellerman wrote:
-> Geert Uytterhoeven <geert@linux-m68k.org> writes:
-> > Hi Christophe,
-> >
-> > On Tue, Sep 10, 2024 at 11:21 AM Christophe Leroy
-> > <christophe.leroy@csgroup.eu> wrote:
-> >> >>> diff --git a/include/uapi/linux/personality.h b/include/uapi/linux/personality.h
-> >> >>> index 49796b7756af..cd3b8c154d9b 100644
-> >> >>> --- a/include/uapi/linux/personality.h
-> >> >>> +++ b/include/uapi/linux/personality.h
-> >> >>> @@ -22,6 +22,7 @@ enum {
-> >> >>>     WHOLE_SECONDS =         0x2000000,
-> >> >>>     STICKY_TIMEOUTS =       0x4000000,
-> >> >>>     ADDR_LIMIT_3GB =        0x8000000,
-> >> >>> +   ADDR_LIMIT_47BIT =      0x10000000,
-> >> >>>   };
-> >> >>
-> >> >> I wonder if ADDR_LIMIT_128T would be clearer?
-> >> >>
-> >> >
-> >> > I don't follow, what does 128T represent?
-> >>
-> >> 128T is 128 Terabytes, that's the maximum size achievable with a 47BIT
-> >> address, that naming would be more consistant with the ADDR_LIMIT_3GB
-> >> just above that means a 3 Gigabytes limit.
-> >
-> > Hence ADDR_LIMIT_128TB?
-> 
-> Yes it should be 128TB. Typo by me.
-> 
-> cheers
+Taken from Paul Burton MIPS repo with minor changes from Chao-ying Fu.
+Tested with 64r6el_defconfig on Boston board in 2 cluster/2 VPU and
+1 cluster/4 VPU configurations.
 
-47BIT was selected because the usecase for this flag is for applications
-that want to store data in the upper bits of a virtual address space. In
-this case, how large the virtual address space is irrelevant, and only
-the number of bits that are being used, and hence the number of bits
-that are free.
+v6:
+ - Re-base onto the master branch, with no functionality impact.
+ - Correct the issue reported by the kernel test robot.
 
-- Charlie
+v5:
+ - Drop FDC related changes (patches 12, 13, and 14).
+ - Apply changes suggested by Thomas Gleixner (patches 3 and 4).
+ - Add #include <linux/cpumask.h> to patch 1, suggested by Thomas Bogendoerfer.
+ - Add Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org> for the patch 08/11.
+ - Add Tested-by: Serge Semin <fancer.lancer@gmail.com> for the entire series.
+ - Correct some commit messages.
+
+v4:
+ - Re-base onto the master branch, with no functionality impact.
+ - Refactor MIPS FDC driver in the context of multicluster support.
+
+v3:
+ - Add Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com> for the patch 02/12.
+ - Add the changes requested by Marc Zyngier for the 3/12 patch.
+ - Remove the patch 11/12 (a consequence of a discussion between Jiaxun Yang
+   and Marc Zyngier.
+ - Re-base onto the master branch, with no functionality impact.
+
+v2:
+ - Apply correct Signed-off-by to avoid confusion.
+
+Chao-ying Fu (1):
+  irqchip/mips-gic: Setup defaults in each cluster
+
+Paul Burton (8):
+  irqchip/mips-gic: Introduce for_each_online_cpu_gic()
+  irqchip/mips-gic: Support multi-cluster in for_each_online_cpu_gic()
+  irqchip/mips-gic: Multi-cluster support
+  clocksource: mips-gic-timer: Always use cluster 0 counter as
+    clocksource
+  clocksource: mips-gic-timer: Enable counter when CPUs start
+  MIPS: pm-cps: Use per-CPU variables as per-CPU, not per-core
+  MIPS: CPS: Introduce struct cluster_boot_config
+  MIPS: CPS: Boot CPUs in secondary clusters
+
+ arch/mips/include/asm/mips-cm.h      |  18 ++
+ arch/mips/include/asm/smp-cps.h      |   7 +-
+ arch/mips/kernel/asm-offsets.c       |   3 +
+ arch/mips/kernel/cps-vec.S           |  19 +-
+ arch/mips/kernel/mips-cm.c           |   4 +-
+ arch/mips/kernel/pm-cps.c            |  35 ++--
+ arch/mips/kernel/smp-cps.c           | 285 ++++++++++++++++++++++-----
+ drivers/clocksource/mips-gic-timer.c |  45 ++++-
+ drivers/irqchip/Kconfig              |   1 +
+ drivers/irqchip/irq-mips-gic.c       | 257 ++++++++++++++++++++----
+ 10 files changed, 560 insertions(+), 114 deletions(-)
+
+-- 
+2.25.1
 
 
