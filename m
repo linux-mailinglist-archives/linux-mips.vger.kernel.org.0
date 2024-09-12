@@ -1,137 +1,186 @@
-Return-Path: <linux-mips+bounces-5535-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5536-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E86D976006
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2024 06:40:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF4369760F9
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2024 08:07:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 059961F239A0
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2024 04:40:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F24091C22E22
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2024 06:07:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E7D41885A2;
-	Thu, 12 Sep 2024 04:40:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8296B18BB8C;
+	Thu, 12 Sep 2024 06:06:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f9a/ZSq5"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="sHsSO+rK"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73AF26AC1;
-	Thu, 12 Sep 2024 04:40:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D31D18890A
+	for <linux-mips@vger.kernel.org>; Thu, 12 Sep 2024 06:06:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726116040; cv=none; b=XVaeMHH1LmFeCUWgn7TEkzgj0CxulECW6acPr0UtB0jGWIR4uLfNqhM+HfhIJzSdEeY5xt/i+aBkBlp2Vnbfh9I2jVny3Aw3eNkutKioBfyQ1r2gKXQC93DnNK7S8pKTud+udG+uj16h2spz//pVlzC2oqVkIrqV3sX6J6NpqkI=
+	t=1726121215; cv=none; b=H/EFZE/54IZjUoWiZOkXPOhM/7Ccn6R73UxFZ8yvPlGFKOLWO6iiDbMmPaWtoOFtG+Rd/8Ig9p8QVjTaoiBho1MDmOWJkewquUz85AnIy8/apn//15yFOUQ+IdRPs1Etz5gR2QfeIkBkY9hEPQKNPFo6h9F0UZcAIo1bhGt+NL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726116040; c=relaxed/simple;
-	bh=atZ4KPNKSjb83Uge3zpflsYcUJEL/us60I8XWzukpe0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=UWDVL6KbFt/8F6TKkHEL3e2YBaXpJyIGtQRatymZd1qsy8IiDE/xsooS4ueSdC0R4epLSNNHCPw09iseRz+SxBTJaYK6xy4tu/d0lzRNNed2VLj5Tzfs4jwZa6CiDRnJSOD+0yh9doPqxl1NbS1R8s+u1a8iFnR1zTxhyt9/Xtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f9a/ZSq5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 771B7C4CEC4;
-	Thu, 12 Sep 2024 04:40:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726116039;
-	bh=atZ4KPNKSjb83Uge3zpflsYcUJEL/us60I8XWzukpe0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=f9a/ZSq5MjAJpdiUDHoVavctM5HOoilo2YhcN45JiEfgJYuD+evoGy3GTwFy3dWNK
-	 MCcZexV/mRsbKVhAIikQXE7layOfhJ3sIvPU5XZi6xuLqnLkHkdE/Qx+MQdf+g1ZYB
-	 gce1dGWnviJLx6aL4O8iqydw5+DCEJVlzFx2Q4DVfqfcYtCglZ0a3zjxo4FLA5531c
-	 BDOtc/uZ1bzZ/QMAIY/iMLCh/H1rCZm7mMteXHfen+24mVBLqbsIC2bNyatAA+Kt/j
-	 RB4GjdEViDywOWSDVtOg00irITukuSvO9eccISaYhdBZr0Vmo/BFTcf9+Idkdg7vhE
-	 pfG55SGZsz4KA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE1073806656;
-	Thu, 12 Sep 2024 04:40:41 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1726121215; c=relaxed/simple;
+	bh=8VMhfxsEEjCM7EFz4nzoCAQ/THTIdB3CL+j9lCXOfzo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Hc4CNdG9tYoVB9aLW/VsxSwdlKrvX4BGWTcz4bsFzz3z+XuQmhgQfEOJnEsidx15OdqnxKlZ886GXLl7NVQ3WKa9qaKSP6FcvI3gDNzhLcBOjmIUpD8sXnh34t43ikY8PRAYnzuCzylNVC2yguKNe79yEC6IBhvhsknsNDcd4UA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=sHsSO+rK; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-201d5af11a4so7202435ad.3
+        for <linux-mips@vger.kernel.org>; Wed, 11 Sep 2024 23:06:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1726121213; x=1726726013; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UDJaA5Y9npfkWPEOnJeHdGlQ/o0X1HQ/Q2gtdhbnZuk=;
+        b=sHsSO+rK7CTiNGyLTpsJZ39HJF79f/aHJJY9TFeKQaIer2XQuta/PiHqq58T+rt3Jd
+         PqCrT7qQ6QT9I1BL5oTM2QD/le3wRhD6eh8fhsORmer2nTrR3TA+ollYTPqY6Ywmm1iy
+         QoxaayWksxyI8fzzi2PCtgKWfsWqUf8DmJC0EZ4AOsQJkAC00mzAiD61s7IjA2UEjPit
+         GQ6WqXF/KPmM+AcBcWOBNv5lAZq1gX4K0SxuWudQrjeYu5hVoomTBSq7NOwHRVlLYNmo
+         QjX7Vl6fcshxwc4DTahTqtQuQtXNzVB1NvRH0jX8qZPe8+0/4QFrZB3HQ0EAM8ZS/TZA
+         3HCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726121213; x=1726726013;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UDJaA5Y9npfkWPEOnJeHdGlQ/o0X1HQ/Q2gtdhbnZuk=;
+        b=HrvYrQjkRO//Hc+qQrUSTvcoWmOXjmq/iwJtvNIbClr/qF137mJhREsCgpJzmldZa+
+         khKZjCK9Gf9Yxhg+MyJ0jl0eawsM0T1bXjdWnINyvpN8z+v00tgZw240vzu2Q0f/WlPH
+         /xPI6dXCHuYRNyHZfJ3x3gwu0XOi4IQNGFjORkLv4mcuDf1TEiTRgvflmUsZztIWm6gJ
+         7bpIy2ZcGPNtmg0ThNnyLcEwcJp8vKOB84l3u/GdCdAtM5J6A+IG2lpi3SFcRFIEpx/D
+         mNjVUatwgmlZ01+q9UaeR8MFXOD0TQTsFstOexZdu8qD31j04xalu5o1T3dsQXzUMAQ5
+         5jmw==
+X-Forwarded-Encrypted: i=1; AJvYcCWhze/Oj+9wa0qGXpqosxzHnqayGNe36NThKx2Wm7Xot8Y836DQ9QKrlBE9/2NsGTmjV5HooQqvNC2H@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCxVt2flc5SCq/16nSv+ow0uHL8zEMpBIB3J8EimyBbpX3inJt
+	Z9l8NF34PSo77WcvidCEsR5tSYAMvfrB5PbPhl6uyCgxj9dQtRxLcyK484+P04Y=
+X-Google-Smtp-Source: AGHT+IGKXy/6JapHeAVjChHUI6qH3tbjA0GPIxSDVxSa+LImRNXpcKvZ6AKB4gkH/Tg4GRKQ5PFIHQ==
+X-Received: by 2002:a17:902:d2ca:b0:206:c2f4:afb7 with SMTP id d9443c01a7336-2076e36db8cmr23914475ad.26.1726121212752;
+        Wed, 11 Sep 2024 23:06:52 -0700 (PDT)
+Received: from ghost ([2601:647:6700:64d0:7acc:9910:2c1d:4e65])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2076b01a39esm8052185ad.287.2024.09.11.23.06.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Sep 2024 23:06:52 -0700 (PDT)
+Date: Wed, 11 Sep 2024 23:06:46 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	guoren <guoren@kernel.org>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S . Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	shuah <shuah@kernel.org>, Christoph Hellwig <hch@infradead.org>,
+	Michal Hocko <mhocko@suse.com>,
+	"Kirill A. Shutemov" <kirill@shutemov.name>,
+	Chris Torek <chris.torek@gmail.com>,
+	Linux-Arch <linux-arch@vger.kernel.org>,
+	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-abi-devel@lists.sourceforge.net
+Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
+ 47 bits
+Message-ID: <ZuKE9nnNGR/5fHh/@ghost>
+References: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
+ <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
+ <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
+ <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
+ <f23b18c6-1856-4b59-9ba3-59809b425c81@app.fastmail.com>
+ <Ztrq8PBLJ3QuFJz7@arm.com>
+ <oshwto46wbbgneiayj63umllyozm3c4267rvpszqzaopwnt2l7@6mxl5vydtons>
+ <ZuDoExckq21fePoe@ghost>
+ <8130e50c-01e2-45c3-a516-45f5499311f2@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v26 00/13] Device Memory TCP
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <172611604053.1162260.14936560637203902304.git-patchwork-notify@kernel.org>
-Date: Thu, 12 Sep 2024 04:40:40 +0000
-References: <20240910171458.219195-1-almasrymina@google.com>
-In-Reply-To: <20240910171458.219195-1-almasrymina@google.com>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, donald.hunter@gmail.com, corbet@lwn.net,
- richard.henderson@linaro.org, ink@jurassic.park.msu.ru, mattst88@gmail.com,
- tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
- deller@gmx.de, andreas@gaisler.com, hawk@kernel.org,
- ilias.apalodimas@linaro.org, rostedt@goodmis.org, mhiramat@kernel.org,
- mathieu.desnoyers@efficios.com, arnd@arndb.de, steffen.klassert@secunet.com,
- herbert@gondor.apana.org.au, dsahern@kernel.org,
- willemdebruijn.kernel@gmail.com, bjorn@kernel.org, magnus.karlsson@intel.com,
- maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, shuah@kernel.org,
- ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- sumit.semwal@linaro.org, christian.koenig@amd.com, asml.silence@gmail.com,
- dw@davidwei.uk, jgg@ziepe.ca, linyunsheng@huawei.com, shailend@google.com,
- hramamurthy@google.com, shakeel.butt@linux.dev, jeroendb@google.com,
- pkaligineedi@google.com, bagasdotme@gmail.com, hch@infradead.org,
- razor@blackwall.org, ap420073@gmail.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8130e50c-01e2-45c3-a516-45f5499311f2@app.fastmail.com>
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 10 Sep 2024 17:14:44 +0000 you wrote:
-> v26: https://patchwork.kernel.org/project/netdevbpf/list/?series=888227&state=*
-> ====
+On Wed, Sep 11, 2024 at 07:25:08AM +0000, Arnd Bergmann wrote:
+> On Wed, Sep 11, 2024, at 00:45, Charlie Jenkins wrote:
+> > On Tue, Sep 10, 2024 at 03:08:14PM -0400, Liam R. Howlett wrote:
+> >
+> > I responded to Arnd in the other thread, but I am still not convinced
+> > that the solution that x86 and arm64 have selected is the best solution.
+> > The solution of defaulting to 47 bits does allow applications the
+> > ability to get addresses that are below 47 bits. However, due to
+> > differences across architectures it doesn't seem possible to have all
+> > architectures default to the same value. Additionally, this flag will be
+> > able to help users avoid potential bugs where a hint address is passed
+> > that causes upper bits of a VA to be used.
+> >
+> > The other issue I have with this is that if there is not a hint address
+> > specified to be greater than 47 bits on x86, then mmap() may return an
+> > address that is greater than 47-bits. The documentation in
+> > Documentation/arch/x86/x86_64/5level-paging.rst says:
+> >
+> > "If hint address set above 47-bit, but MAP_FIXED is not specified, we try
+> > to look for unmapped area by specified address. If it's already
+> > occupied, we look for unmapped area in *full* address space, rather than
+> > from 47-bit window."
 > 
-> No major changes. Only applied Reviewed-by tags from Jakub and addressed
-> reported nits.
+> This is also in the commit message of b569bab78d8d ("x86/mm: Prepare
+> to expose larger address space to userspace"), which introduced it.
+> However, I don't actually see the fallback to the full address space,
+> instead the actual behavior seems to be the same as arm64.
 > 
-> v25: https://patchwork.kernel.org/project/netdevbpf/list/?series=885396&state=*
-> ===
+> Am I missing something in the x86 implementation, or do we just
+> need to update the documentation?
 > 
-> [...]
+>       Arnd
 
-Here is the summary with links:
-  - [net-next,v26,01/13] netdev: add netdev_rx_queue_restart()
-    https://git.kernel.org/netdev/net-next/c/7c88f86576f3
-  - [net-next,v26,02/13] net: netdev netlink api to bind dma-buf to a net device
-    https://git.kernel.org/netdev/net-next/c/3efd7ab46d0a
-  - [net-next,v26,03/13] netdev: support binding dma-buf to netdevice
-    https://git.kernel.org/netdev/net-next/c/170aafe35cb9
-  - [net-next,v26,04/13] netdev: netdevice devmem allocator
-    https://git.kernel.org/netdev/net-next/c/28c5c74eeaa0
-  - [net-next,v26,05/13] page_pool: devmem support
-    https://git.kernel.org/netdev/net-next/c/8ab79ed50cf1
-  - [net-next,v26,06/13] memory-provider: dmabuf devmem memory provider
-    https://git.kernel.org/netdev/net-next/c/0f9214046893
-  - [net-next,v26,07/13] net: support non paged skb frags
-    https://git.kernel.org/netdev/net-next/c/9f6b619edf2e
-  - [net-next,v26,08/13] net: add support for skbs with unreadable frags
-    https://git.kernel.org/netdev/net-next/c/65249feb6b3d
-  - [net-next,v26,09/13] tcp: RX path for devmem TCP
-    https://git.kernel.org/netdev/net-next/c/8f0b3cc9a4c1
-  - [net-next,v26,10/13] net: add SO_DEVMEM_DONTNEED setsockopt to release RX frags
-    https://git.kernel.org/netdev/net-next/c/678f6e28b5f6
-  - [net-next,v26,11/13] net: add devmem TCP documentation
-    https://git.kernel.org/netdev/net-next/c/09d1db26b5e5
-  - [net-next,v26,12/13] selftests: add ncdevmem, netcat for devmem TCP
-    https://git.kernel.org/netdev/net-next/c/85585b4bc8d8
-  - [net-next,v26,13/13] netdev: add dmabuf introspection
-    https://git.kernel.org/netdev/net-next/c/d0caf9876a1c
+Yeah I guess it is incorrect documentation then? It seems more
+reasonable to me to have a hint address fall back onto the larger
+address space because otherwise the "hint" address can cause allocations
+to fail even if there is space above the 47-bit limit. This is another
+reason I wanted to avoid having this default behavior on riscv, to not
+have this abuse of the hint address.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+- Charlie
 
 
