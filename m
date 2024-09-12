@@ -1,72 +1,72 @@
-Return-Path: <linux-mips+bounces-5543-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5544-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 504C09765AA
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2024 11:32:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1F529765AC
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2024 11:32:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 75B501C22FBB
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2024 09:32:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 387B5B23268
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2024 09:32:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 625571A0BE6;
-	Thu, 12 Sep 2024 09:31:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C6BD1A0BEF;
+	Thu, 12 Sep 2024 09:31:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VhB29QNG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TdWFrpiC"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DA1319E980;
-	Thu, 12 Sep 2024 09:31:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC00F1A0BDA;
+	Thu, 12 Sep 2024 09:31:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726133467; cv=none; b=C6F4FlPDonYeL6VKf2O5B6waPYOESZtJlU4OrJSoQtfgDPWPAs7qG3tAmWBQ2ZeGYEDGWOtF43Sw/6zsa0+9HAy3sS8DXDPjf2Twsoqy3nljxNR41ChBfWXGTFPtF9AMjLbWv7Cg7wL7WKHg0zmq59BhC11Wo1QLnziw5YCtSzE=
+	t=1726133468; cv=none; b=fnb8PbU/RZubHCZbcYGTkK0vDu7mXo/RXunpGJvR86Kuu6PvfsBMnLToEB0B4scx/f63WPdEI0qJsM6jdafXchBAfj0V3lj5wBS9/HUDqYxKzHOHxHLTwNm8hBNtPttxbUdoh39Qfb5Ev/qDzkmi52f3ghcNE9ZS29vvYenMiN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726133467; c=relaxed/simple;
-	bh=PO79bYcd199TIcgNt4JG/l2bdfqzjFs867BX4VVkyFs=;
+	s=arc-20240116; t=1726133468; c=relaxed/simple;
+	bh=KyjNq/4JWqFWorsEqD2UphoVO/zOCfofXlli3znYEhs=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=a23G002op3iv1LMJD4UQIwLSu+gPKxgLaq66F6djGhd1me+NSvppVMucs9Fh9QD49UG2QyKpTdqQ2hKTnN9tvNcNABPkdxdsJLTbHy9nsh6gBzZPMFcER2hHbdteHc/N/bQMNcoQf6aQIO9khn3CcmqoslCzZNLHz/j/Uipvjos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VhB29QNG; arc=none smtp.client-ip=209.85.167.47
+	 MIME-Version; b=RQlQ/CQuga1DAKelGjph8e/yr6O+cGgyEyhIFjyMVZgAI+pBxVk8Sw+wY9xoCPl+ddvyFHzWFkH0kPhKPAwtVHOyOSEmcRc+UpPTJNfRFUq19EYwvwhJFfGXi9QyVDmmQR8Fx2K1sCzysvalwQWpecCzvzsNc0pS3+1QiWN7ZsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TdWFrpiC; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5365c060f47so848402e87.2;
-        Thu, 12 Sep 2024 02:31:04 -0700 (PDT)
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-42cb5b3c57eso6572695e9.2;
+        Thu, 12 Sep 2024 02:31:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726133463; x=1726738263; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1726133465; x=1726738265; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rqX7walQ5/+iLe+3Z9+N8PEDe2lYoBurgkuCUvd7CsE=;
-        b=VhB29QNG7NECSbaL++6ESsX3orxlB0yj4DoOUZ9g1RYorjueW/UrcmWyTsQnJuXSIJ
-         M2Em329at35X3xFA+jQQ8KqlMXMkH4GZISRaZoHqEFQNbs7+DZEz6KV2CIF12ZIGaupw
-         UGGlZXF2Z8BTUSbFswKH3rhdC7yI2YL7K+lwjxOG+rePWktJpMlV/pQ+3lRjxnnmuGLm
-         rMknAdVK8LvDs7seQ2wkE1ra30ESD2B+j2qbWvL3QSJUpJSLb5PxBsq8u+TOVweJwAvH
-         P9Pgzxd9FbA61rxTU+/7WqXtmK0wdW3YARIceBsiA2N0wC4TrABaZiuAdc+p4ocOf+0V
-         T8MA==
+        bh=F4c0vwBBm2GJGPzUzcwaUmJw/5o8B/sn9ihY/AAAuUE=;
+        b=TdWFrpiC40y2mEVCdbNUJ2C7nmwkhORQdv3wd3/9t7yqFQl/v2D47aSiWGLrBBKj5K
+         GasFQm6BKj+2iRWYBY60LfSGahFlYJku9qRBUe6eVm551l9eDO2Kth53MElMOsy0Ua8A
+         dXHh62yhT9KpbHnsxNKZegTG3aCIBTUvNOuMpcQF/mNHChud1MZIXWsH2+uCmMukcesy
+         3aexF06tWT3nkv2Wia0G7PWiJZbTJGjFkRE+GL8mYf7lBT40C6fvQEJnOti3u8k/A7LA
+         mMjS0fEQfOGs2cWM0TrBsW8Jjm3ztLKj/pBK7c0kaVpgKfM0wkt/kUAZYIoczIz4fEbB
+         wKjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726133463; x=1726738263;
+        d=1e100.net; s=20230601; t=1726133465; x=1726738265;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rqX7walQ5/+iLe+3Z9+N8PEDe2lYoBurgkuCUvd7CsE=;
-        b=qqqfvCdKSWJ+8E5h1ELaN+uZQAUjlilf0W8aj0/UOSOHrF2F1vYYZjnzokECsgsTkg
-         59Dp30ZKvI0z0yLyFA6qBfv6cifcMmyZzGqV1ucEhW3RfeOpOxMaf3YyrpUGXmdjASIM
-         7NJt4QST7938ZhWy/ySmkIFJQf2oNkIYm3502HTreVWDmGLZxKyhiqeNv8WoRdLMX3tH
-         rwXytpqrp4HMMSYA8gpfq7ot5rhhoAWDjAC0MGVfaKviyh+eG5BVPfZ5bLeJs+AaKWH0
-         vPdlHlTzOh2x+ftyRHZWOa+DxSkJS5WzFKpEXozbFhZDpgMvC7XOl5Koi5afpmDa/X7V
-         JSSw==
-X-Forwarded-Encrypted: i=1; AJvYcCVZaqAICJphBP1edWMRs+s3rDsbN4+gvU8LQiEIbBqlsGBN56D66EozSJdEd3ca60QH7e/h5DFpP5OOBw==@vger.kernel.org, AJvYcCWxReRlwzDy3b6OTmrckPv1iAzprXCDZHKqpyL6ryfU6C6vOGz0jmjwa+roOGFUF98XsrHs5vDJC+vBPCk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVqzL1se6rhoWFJZiOGFNdhEm7WADfHgQL6sUY1fvVnAOtAfxi
-	6gSC6b3OSC7NWfiwPxVUONDZuDs8ANyJXaRYanNGjMmJHxnV/NPY3kQS2aNN
-X-Google-Smtp-Source: AGHT+IELpaCvWg5K+/2T4Hs360SDbVvV4cCVqC3TqDIPxCzm1aFeTy1YacXeA1PeeERX6CW9NHwjmA==
-X-Received: by 2002:a05:6512:239d:b0:531:4c6d:b8ef with SMTP id 2adb3069b0e04-53678fb74c7mr1284830e87.6.1726133462986;
-        Thu, 12 Sep 2024 02:31:02 -0700 (PDT)
+        bh=F4c0vwBBm2GJGPzUzcwaUmJw/5o8B/sn9ihY/AAAuUE=;
+        b=uuCLxz3z3NWlydtw9QK/m2ptZGkPcR7f1Gw57VYXwCDUe4v1etm4Pn4qS29tOnSMsw
+         k46H9go/YFtSWfNbiYcumbeAWeDYE+vRH+9V185MBT32Kuy+QSMyZ7UlUhHFzaI8pYjx
+         aywGmNTMFABY0X4IFVVcldTUUKj4BYqEOQ6C6ccWkt9uj+MHJV+u2TepVxQLwFWbr0EB
+         cmMfPzrRQxk0tHBOJN4UPwDZ9mnGGO4DlYOPvPcxW6MFLFK/9LGTelJihkjZNZ5nqQR9
+         BKok0mRUYdIdhvWD79QCOMCUdUfPzfSjk8dmME7qphgCj8X69FJn76mLdMTKf2xbJ77X
+         fvKA==
+X-Forwarded-Encrypted: i=1; AJvYcCVQNAh4TNXaoxllog/eQcTTzmjVk1KxO0T7v/ULuYSrbbGZTZ0yt+L90T+9qq1J6reZB7ndK+A00tPcHRY=@vger.kernel.org, AJvYcCX0nb/io019T2Mrz8j1AV13jUWrq7JC/U4Q0Pf2DLbYxFSN6QL5PPGHN1KcuQQ7RDBJtWDxd97tmHaEeg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwivrD9Z1a5MnZLsANEP87+w+X3zf8DUzpZ/h968IhHeLZgaBO6
+	U6rwe2wR96Kk82T/8TLDXW4YzVbex50QjWBO1oppknPWe0XWi6aT
+X-Google-Smtp-Source: AGHT+IETxzB6XSkf03aqTR6MKpcJw3H5lcYHSpTvlgNQRQGSeEtIMbH3IuLg90T5YLsmvSfxPCGrkA==
+X-Received: by 2002:a05:600c:190d:b0:42c:ae4e:a990 with SMTP id 5b1f17b1804b1-42cdb5928f1mr14721225e9.35.1726133464911;
+        Thu, 12 Sep 2024 02:31:04 -0700 (PDT)
 Received: from localhost.localdomain ([212.200.182.192])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42cc137556esm76688225e9.1.2024.09.12.02.31.01
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42cc137556esm76688225e9.1.2024.09.12.02.31.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Sep 2024 02:31:02 -0700 (PDT)
+        Thu, 12 Sep 2024 02:31:04 -0700 (PDT)
 From: Aleksandar Rikalo <arikalo@gmail.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: Aleksandar Rikalo <arikalo@gmail.com>,
@@ -85,9 +85,9 @@ Cc: Aleksandar Rikalo <arikalo@gmail.com>,
 	Serge Semin <fancer.lancer@gmail.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: [PATCH v6 4/9] irqchip/mips-gic: Multi-cluster support
-Date: Thu, 12 Sep 2024 11:30:46 +0200
-Message-Id: <20240912093051.452172-5-arikalo@gmail.com>
+Subject: [PATCH v6 5/9] clocksource: mips-gic-timer: Always use cluster 0 counter as clocksource
+Date: Thu, 12 Sep 2024 11:30:47 +0200
+Message-Id: <20240912093051.452172-6-arikalo@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240912093051.452172-1-arikalo@gmail.com>
 References: <20240912093051.452172-1-arikalo@gmail.com>
@@ -101,58 +101,15 @@ Content-Transfer-Encoding: 8bit
 
 From: Paul Burton <paulburton@kernel.org>
 
-The MIPS I6500 CPU & CM (Coherence Manager) 3.5 introduce the concept of
-multiple clusters to the system. In these systems, each cluster contains
-its own GIC, so the GIC isn't truly global any longer. Access to
-registers in the GICs of remote clusters is possible using a redirect
-register block much like the redirect register blocks provided by the
-CM & CPC, and configured through the same GCR_REDIRECT register that
-mips_cm_lock_other() abstraction builds upon.
+In a multi-cluster MIPS system, there are multiple GICs - one in each
+cluster - each of which has its independent counter. The counters in
+each GIC are not synchronized in any way, so they can drift relative
+to one another through the lifetime of the system. This is problematic
+for a clock source which ought to be global.
 
-It is expected that external interrupts are connected identically on all
-clusters. That is, if there is a device providing an interrupt connected
-to GIC interrupt pin 0 then it should be connected to pin 0 of every GIC
-in the system. For the most part, the GIC can be treated as though it is
-still truly global, so long as interrupts in the cluster are configured
-properly.
-
-This patch introduces support for such multi-cluster systems in the
-MIPS GIC irqchip driver. A newly introduced gic_irq_lock_cluster()
-function allows:
-
-  1) Configure access to a GIC in a remote cluster via the redirect
-     register block, using mips_cm_lock_other().
-
-Or:
-
-  2) Detect that the interrupt in question is affine to the local
-     cluster and plain old GIC register access to the GIC in the
-     local cluster should be used.
-
-It is possible to access the local cluster's GIC registers via the
-redirect block, but keeping the special case for them is both good for
-performance (because we avoid the locking & indirection overhead of
-using the redirect block) and necessary to maintain compatibility with
-systems using CM revisions prior to 3.5 which don't support the redirect
-block.
-
-The gic_irq_lock_cluster() function relies upon an IRQs effective
-affinity in order to discover which cluster the IRQ is affine to. In
-order to track this & allow it to be updated at an appropriate point
-during gic_set_affinity() we select the generic support for effective
-affinity using CONFIG_GENERIC_IRQ_EFFECTIVE_AFF_MASK.
-
-gic_set_affinity() is the one function which gains much complexity. It
-now deconfigures routing to any VP(E), ie. CPU, on the old cluster when
-moving affinity to a new cluster.
-
-gic_shared_irq_domain_map() moves its update of the IRQs effective
-affinity to before its use of gic_irq_lock_cluster(), to ensure that
-operation is on the cluster the IRQ is affine to.
-
-The remaining changes are straightforward use of the
-gic_irq_lock_cluster() function to select between local cluster & remote
-cluster code-paths when configuring interrupts.
+Avoid problems by always accessing cluster 0's counter, using
+cross-cluster register access. This adds overhead so it is applied only
+on multi-cluster systems.
 
 Signed-off-by: Paul Burton <paulburton@kernel.org>
 Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
@@ -160,262 +117,73 @@ Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
 Signed-off-by: Aleksandar Rikalo <arikalo@gmail.com>
 Tested-by: Serge Semin <fancer.lancer@gmail.com>
 ---
- drivers/irqchip/Kconfig        |   1 +
- drivers/irqchip/irq-mips-gic.c | 161 +++++++++++++++++++++++++++++----
- 2 files changed, 143 insertions(+), 19 deletions(-)
+ drivers/clocksource/mips-gic-timer.c | 39 +++++++++++++++++++++++++++-
+ 1 file changed, 38 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index d078bdc48c38..455e512d5f45 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -345,6 +345,7 @@ config KEYSTONE_IRQ
+diff --git a/drivers/clocksource/mips-gic-timer.c b/drivers/clocksource/mips-gic-timer.c
+index 110347707ff9..7907b740497a 100644
+--- a/drivers/clocksource/mips-gic-timer.c
++++ b/drivers/clocksource/mips-gic-timer.c
+@@ -166,6 +166,37 @@ static u64 gic_hpt_read(struct clocksource *cs)
+ 	return gic_read_count();
+ }
  
- config MIPS_GIC
- 	bool
-+	select GENERIC_IRQ_EFFECTIVE_AFF_MASK
- 	select GENERIC_IRQ_IPI if SMP
- 	select IRQ_DOMAIN_HIERARCHY
- 	select MIPS_CM
-diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
-index d93a076620c7..f42f69bbd6fb 100644
---- a/drivers/irqchip/irq-mips-gic.c
-+++ b/drivers/irqchip/irq-mips-gic.c
-@@ -111,6 +111,41 @@ static inline void gic_unlock_cluster(void)
- 	     gic_unlock_cluster(),			\
- 	     (cpu) = __gic_with_next_online_cpu(cpu))
- 
-+/**
-+ * gic_irq_lock_cluster() - Lock redirect block access to IRQ's cluster
-+ * @d: struct irq_data corresponding to the interrupt we're interested in
-+ *
-+ * Locks redirect register block access to the global register block of the GIC
-+ * within the remote cluster that the IRQ corresponding to @d is affine to,
-+ * returning true when this redirect block setup & locking has been performed.
-+ *
-+ * If @d is affine to the local cluster then no locking is performed and this
-+ * function will return false, indicating to the caller that it should access
-+ * the local clusters registers without the overhead of indirection through the
-+ * redirect block.
-+ *
-+ * In summary, if this function returns true then the caller should access GIC
-+ * registers using redirect register block accessors & then call
-+ * mips_cm_unlock_other() when done. If this function returns false then the
-+ * caller should trivially access GIC registers in the local cluster.
-+ *
-+ * Returns true if locking performed, else false.
-+ */
-+static bool gic_irq_lock_cluster(struct irq_data *d)
++static u64 gic_hpt_read_multicluster(struct clocksource *cs)
 +{
-+	unsigned int cpu, cl;
++	unsigned int hi, hi2, lo;
++	u64 count;
 +
-+	cpu = cpumask_first(irq_data_get_effective_affinity_mask(d));
-+	BUG_ON(cpu >= NR_CPUS);
++	mips_cm_lock_other(0, 0, 0, CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
 +
-+	cl = cpu_cluster(&cpu_data[cpu]);
-+	if (cl == cpu_cluster(&current_cpu_data))
-+		return false;
++	if (mips_cm_is64) {
++		count = read_gic_redir_counter();
++		goto out;
++	}
 +
-+	mips_cm_lock_other(cl, 0, 0, CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
-+	return true;
++	hi = read_gic_redir_counter_32h();
++	while (true) {
++		lo = read_gic_redir_counter_32l();
++
++		/* If hi didn't change then lo didn't wrap & we're done */
++		hi2 = read_gic_redir_counter_32h();
++		if (hi2 == hi)
++			break;
++
++		/* Otherwise, repeat with the latest hi value */
++		hi = hi2;
++	}
++
++	count = (((u64)hi) << 32) + lo;
++out:
++	mips_cm_unlock_other();
++	return count;
 +}
 +
- static void gic_clear_pcpu_masks(unsigned int intr)
- {
- 	unsigned int i;
-@@ -157,7 +192,12 @@ static void gic_send_ipi(struct irq_data *d, unsigned int cpu)
- {
- 	irq_hw_number_t hwirq = GIC_HWIRQ_TO_SHARED(irqd_to_hwirq(d));
+ static struct clocksource gic_clocksource = {
+ 	.name			= "GIC",
+ 	.read			= gic_hpt_read,
+@@ -203,6 +234,11 @@ static int __init __gic_clocksource_init(void)
+ 		gic_clocksource.rating = 200;
+ 	gic_clocksource.rating += clamp(gic_frequency / 10000000, 0, 99);
  
--	write_gic_wedge(GIC_WEDGE_RW | hwirq);
-+	if (gic_irq_lock_cluster(d)) {
-+		write_gic_redir_wedge(GIC_WEDGE_RW | hwirq);
-+		mips_cm_unlock_other();
-+	} else {
-+		write_gic_wedge(GIC_WEDGE_RW | hwirq);
-+	}
- }
- 
- int gic_get_c0_compare_int(void)
-@@ -225,7 +265,13 @@ static void gic_mask_irq(struct irq_data *d)
- {
- 	unsigned int intr = GIC_HWIRQ_TO_SHARED(d->hwirq);
- 
--	write_gic_rmask(intr);
-+	if (gic_irq_lock_cluster(d)) {
-+		write_gic_redir_rmask(intr);
-+		mips_cm_unlock_other();
-+	} else {
-+		write_gic_rmask(intr);
++	if (mips_cps_multicluster_cpus()) {
++		gic_clocksource.read = &gic_hpt_read_multicluster;
++		gic_clocksource.vdso_clock_mode = VDSO_CLOCKMODE_NONE;
 +	}
 +
- 	gic_clear_pcpu_masks(intr);
- }
- 
-@@ -234,7 +280,12 @@ static void gic_unmask_irq(struct irq_data *d)
- 	unsigned int intr = GIC_HWIRQ_TO_SHARED(d->hwirq);
- 	unsigned int cpu;
- 
--	write_gic_smask(intr);
-+	if (gic_irq_lock_cluster(d)) {
-+		write_gic_redir_smask(intr);
-+		mips_cm_unlock_other();
-+	} else {
-+		write_gic_smask(intr);
-+	}
- 
- 	gic_clear_pcpu_masks(intr);
- 	cpu = cpumask_first(irq_data_get_effective_affinity_mask(d));
-@@ -245,7 +296,12 @@ static void gic_ack_irq(struct irq_data *d)
- {
- 	unsigned int irq = GIC_HWIRQ_TO_SHARED(d->hwirq);
- 
--	write_gic_wedge(irq);
-+	if (gic_irq_lock_cluster(d)) {
-+		write_gic_redir_wedge(irq);
-+		mips_cm_unlock_other();
-+	} else {
-+		write_gic_wedge(irq);
-+	}
- }
- 
- static int gic_set_type(struct irq_data *d, unsigned int type)
-@@ -285,9 +341,16 @@ static int gic_set_type(struct irq_data *d, unsigned int type)
- 		break;
- 	}
- 
--	change_gic_pol(irq, pol);
--	change_gic_trig(irq, trig);
--	change_gic_dual(irq, dual);
-+	if (gic_irq_lock_cluster(d)) {
-+		change_gic_redir_pol(irq, pol);
-+		change_gic_redir_trig(irq, trig);
-+		change_gic_redir_dual(irq, dual);
-+		mips_cm_unlock_other();
-+	} else {
-+		change_gic_pol(irq, pol);
-+		change_gic_trig(irq, trig);
-+		change_gic_dual(irq, dual);
-+	}
- 
- 	if (trig == GIC_TRIG_EDGE)
- 		irq_set_chip_handler_name_locked(d, &gic_edge_irq_controller,
-@@ -305,25 +368,72 @@ static int gic_set_affinity(struct irq_data *d, const struct cpumask *cpumask,
- 			    bool force)
- {
- 	unsigned int irq = GIC_HWIRQ_TO_SHARED(d->hwirq);
-+	unsigned int cpu, cl, old_cpu, old_cl;
- 	unsigned long flags;
--	unsigned int cpu;
- 
-+	/*
-+	 * The GIC specifies that we can only route an interrupt to one VP(E),
-+	 * ie. CPU in Linux parlance, at a time. Therefore we always route to
-+	 * the first online CPU in the mask.
-+	 */
- 	cpu = cpumask_first_and(cpumask, cpu_online_mask);
- 	if (cpu >= NR_CPUS)
- 		return -EINVAL;
- 
--	/* Assumption : cpumask refers to a single CPU */
--	raw_spin_lock_irqsave(&gic_lock, flags);
-+	old_cpu = cpumask_first(irq_data_get_effective_affinity_mask(d));
-+	old_cl = cpu_cluster(&cpu_data[old_cpu]);
-+	cl = cpu_cluster(&cpu_data[cpu]);
- 
--	/* Re-route this IRQ */
--	write_gic_map_vp(irq, BIT(mips_cm_vp_id(cpu)));
-+	raw_spin_lock_irqsave(&gic_lock, flags);
- 
--	/* Update the pcpu_masks */
--	gic_clear_pcpu_masks(irq);
--	if (read_gic_mask(irq))
--		set_bit(irq, per_cpu_ptr(pcpu_masks, cpu));
-+	/*
-+	 * If we're moving affinity between clusters, stop routing the
-+	 * interrupt to any VP(E) in the old cluster.
-+	 */
-+	if (cl != old_cl) {
-+		if (gic_irq_lock_cluster(d)) {
-+			write_gic_redir_map_vp(irq, 0);
-+			mips_cm_unlock_other();
-+		} else {
-+			write_gic_map_vp(irq, 0);
-+		}
-+	}
- 
-+	/*
-+	 * Update effective affinity - after this gic_irq_lock_cluster() will
-+	 * begin operating on the new cluster.
-+	 */
- 	irq_data_update_effective_affinity(d, cpumask_of(cpu));
-+
-+	/*
-+	 * If we're moving affinity between clusters, configure the interrupt
-+	 * trigger type in the new cluster.
-+	 */
-+	if (cl != old_cl)
-+		gic_set_type(d, irqd_get_trigger_type(d));
-+
-+	/* Route the interrupt to its new VP(E) */
-+	if (gic_irq_lock_cluster(d)) {
-+		write_gic_redir_map_pin(irq,
-+					GIC_MAP_PIN_MAP_TO_PIN | gic_cpu_pin);
-+		write_gic_redir_map_vp(irq, BIT(mips_cm_vp_id(cpu)));
-+
-+		/* Update the pcpu_masks */
-+		gic_clear_pcpu_masks(irq);
-+		if (read_gic_redir_mask(irq))
-+			set_bit(irq, per_cpu_ptr(pcpu_masks, cpu));
-+
-+		mips_cm_unlock_other();
-+	} else {
-+		write_gic_map_pin(irq, GIC_MAP_PIN_MAP_TO_PIN | gic_cpu_pin);
-+		write_gic_map_vp(irq, BIT(mips_cm_vp_id(cpu)));
-+
-+		/* Update the pcpu_masks */
-+		gic_clear_pcpu_masks(irq);
-+		if (read_gic_mask(irq))
-+			set_bit(irq, per_cpu_ptr(pcpu_masks, cpu));
-+	}
-+
- 	raw_spin_unlock_irqrestore(&gic_lock, flags);
- 
- 	return IRQ_SET_MASK_OK;
-@@ -471,11 +581,21 @@ static int gic_shared_irq_domain_map(struct irq_domain *d, unsigned int virq,
- 	unsigned long flags;
- 
- 	data = irq_get_irq_data(virq);
-+	irq_data_update_effective_affinity(data, cpumask_of(cpu));
- 
- 	raw_spin_lock_irqsave(&gic_lock, flags);
--	write_gic_map_pin(intr, GIC_MAP_PIN_MAP_TO_PIN | gic_cpu_pin);
--	write_gic_map_vp(intr, BIT(mips_cm_vp_id(cpu)));
--	irq_data_update_effective_affinity(data, cpumask_of(cpu));
-+
-+	/* Route the interrupt to its VP(E) */
-+	if (gic_irq_lock_cluster(data)) {
-+		write_gic_redir_map_pin(intr,
-+					GIC_MAP_PIN_MAP_TO_PIN | gic_cpu_pin);
-+		write_gic_redir_map_vp(intr, BIT(mips_cm_vp_id(cpu)));
-+		mips_cm_unlock_other();
-+	} else {
-+		write_gic_map_pin(intr, GIC_MAP_PIN_MAP_TO_PIN | gic_cpu_pin);
-+		write_gic_map_vp(intr, BIT(mips_cm_vp_id(cpu)));
-+	}
-+
- 	raw_spin_unlock_irqrestore(&gic_lock, flags);
- 
- 	return 0;
-@@ -651,6 +771,9 @@ static int gic_ipi_domain_alloc(struct irq_domain *d, unsigned int virq,
- 		if (ret)
- 			goto error;
- 
-+		/* Set affinity to cpu.  */
-+		irq_data_update_effective_affinity(irq_get_irq_data(virq + i),
-+						   cpumask_of(cpu));
- 		ret = irq_set_irq_type(virq + i, IRQ_TYPE_EDGE_RISING);
- 		if (ret)
- 			goto error;
+ 	ret = clocksource_register_hz(&gic_clocksource, gic_frequency);
+ 	if (ret < 0)
+ 		pr_warn("Unable to register clocksource\n");
+@@ -261,7 +297,8 @@ static int __init gic_clocksource_of_init(struct device_node *node)
+ 	 * stable CPU frequency or on the platforms with CM3 and CPU frequency
+ 	 * change performed by the CPC core clocks divider.
+ 	 */
+-	if (mips_cm_revision() >= CM_REV_CM3 || !IS_ENABLED(CONFIG_CPU_FREQ)) {
++	if ((mips_cm_revision() >= CM_REV_CM3 || !IS_ENABLED(CONFIG_CPU_FREQ)) &&
++	     !mips_cps_multicluster_cpus()) {
+ 		sched_clock_register(mips_cm_is64 ?
+ 				     gic_read_count_64 : gic_read_count_2x32,
+ 				     gic_count_width, gic_frequency);
 -- 
 2.25.1
 
