@@ -1,95 +1,227 @@
-Return-Path: <linux-mips+bounces-5568-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5569-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 383A5977DA4
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2024 12:36:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F26BC978322
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2024 17:01:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EEBAC282CF0
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2024 10:36:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C49192818FC
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2024 15:00:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E7771DA31C;
-	Fri, 13 Sep 2024 10:31:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD9F11EB44;
+	Fri, 13 Sep 2024 15:00:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="BYSQ3SOd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YAJMkQFc"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E16341DA315;
-	Fri, 13 Sep 2024 10:31:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C42728366;
+	Fri, 13 Sep 2024 15:00:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726223506; cv=none; b=Q5nJ3ptZuw15tykwGUAu3/xuOs4jEJmuqIj3WOtzxaBO657LmREazB7qMCKZy/8Xnlmoo1PtfS60YrvtJTnxIvWIMrYZGmWUmPQEU1ji1u+w+UWaM6pcFOodk1YrxqYPe1tsp38Ltx2e1/nkOFxFL3/AU+7FuWxy/3blghvY8hY=
+	t=1726239656; cv=none; b=sUKX2K7Dpzqa/W3KGt2R/KXYqSn3fCI6UMijHIen9hj7Vhkq6oHD9chYicPGpna+A1GcuGxBaaWJM/DO+VH77ziFKalEYfHGlBxoWz1NxflOnV9HUCksCBHblHnXIHQDGmpf6mbu+NzvT7jRdv+c83zcY+kyZzil8mrq4JgwFGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726223506; c=relaxed/simple;
-	bh=VfzE/e2GMEtPTTZi9MH2kcW1v2jCUX3uz2k1aSyFJXo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qz4/KLGRsu/8oe0mZm5C2zjONOmiALckEi8/EuLdAZY9NWvy4kXpVOCvrsJK+5tC97ID/nIhzCmzn7q68T6HrsUmfdB1yKFVYDxzm+uQcdrT2H8QuFd/12rzxZUAgDaHi3rBjHGKCX9NtX8/wMUEc3WsYYvcPfXNmsr2RygK0Gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=BYSQ3SOd; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=qfM276FFMSEBEC/xP0ee+Dgn5beownuGHgkpyoSLAoo=; b=BYSQ3SOd6Sa93tQbj3PDkeRHkl
-	L/NRovthGKy1EATKEO/54B/9+Js/EX02aRqMDVdfHdEhxvoygJ9FfLPSS8CHQ3u4JPHuf0FwYkGJx
-	LniDdpyV3tcLFJ3eohrRc5sYC6iMmnOzlpLA32ex7mP/pJ1j4kqFz+lx+serFvoSo/DfEiPfgfH8V
-	SLBTguXusIFvAOreAkiTWppUnVwjHKY4COQ4TFUrvqqqXJtdJhyUr/ffc+p2jq+MePBgY3GLEocno
-	+ZEucPRsGfiDJE2QAxqGMeirAFKKnXfGKuU9ow88RjBZhflDI+SQo82IxfNjmDJYo5FDNHX2tnMhw
-	a+OUvtTg==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1sp3QY-002Dw7-2S;
-	Fri, 13 Sep 2024 18:31:37 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 13 Sep 2024 18:31:36 +0800
-Date: Fri, 13 Sep 2024 18:31:36 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: WangYuli <wangyuli@uniontech.com>
-Cc: davem@davemloft.net, tsbogend@alpha.franken.de,
-	linux-crypto@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"Maciej W . Rozycki" <macro@orcam.me.uk>,
-	Guan Wentao <guanwentao@uniontech.com>
-Subject: Re: [PATCH v3] MIPS: crypto: Clean up useless assignment operations
-Message-ID: <ZuQUiK8-elOhoiX0@gondor.apana.org.au>
-References: <C4F76EB9DD3AEFEB+20240906064002.404538-1-wangyuli@uniontech.com>
+	s=arc-20240116; t=1726239656; c=relaxed/simple;
+	bh=BA0ANnltDBBfuoBltj9aaFdaXEL//Iks38XJnB02U/g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=co7cmp9Uu7WupKwSJaX6VxtjpoYw4H0P0ZNW5kprOfFR6Eo/5yoCYsQtsiB0hOm+5ff8UvkTig6mE+lPtTZRwfpA9JyVBHZUiC2u7h/UUFPYpFb1k9xCj+S6TaXnUIRiCUiktbwdvTjxXGWIEJHhsqKVCC4yKI5MopNfb50WT1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YAJMkQFc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E81CBC4CEDB;
+	Fri, 13 Sep 2024 15:00:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726239656;
+	bh=BA0ANnltDBBfuoBltj9aaFdaXEL//Iks38XJnB02U/g=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=YAJMkQFcS9yQrD3CD9uf2YDAnPedZRu2sdG3Uq7zy8+8g4fHsdnaV9YMu/zLJ/1tj
+	 EDiCdYnV0pGG/cGSGCoqzc1yz3NAQwdRBBLRfL0AaT5mhRSd5SqOtQjToavlsk96bb
+	 oKdYkALvWRv8THfAoHVYOAKmMboDnCW5qhSOfsTXSAkiRSZcMGaGh7XxCBtwPbd5yo
+	 iYcY5nqsZThg8+lFTkl4wHHIxP84VsBur9fkHWLMiLx+uY355fMP3Bd0gFRq3KpUT4
+	 TIJSScKe0wBqYY1i+xFQfTmvYKL4lkyD4Paj6wDyvXKCliGwP8nsVtdZV47PWrdook
+	 qWRlseRXwzJPA==
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2f759688444so20775241fa.1;
+        Fri, 13 Sep 2024 08:00:55 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCULir8RU8+P9W/UUHicJGDrkLQQQZokBhHGLCgoRNfZP5TViqAqbSAXmiHiCpE3I4KmoIht3k9rS+Siils=@vger.kernel.org, AJvYcCUw1AyxawrWxc/j7v03nO2ad+l8y8OsrCz5pbPc/VzKwI9EJJmUUtSCFw0eA/l6pJGyb5/cDl5DKnQ=@vger.kernel.org, AJvYcCUxvSkjTNBJJDMNVxAvXbjdUHZ/3Nt+B2q46ZDB04fOYwaKARUBkey1NT4qRYE9nxdmslUPtXBA1/HAyspyqQ==@vger.kernel.org, AJvYcCVdAG1QR7P19Qz6OOO+svTOKlqL+qfFD5IncHKX6ncPJbq3+KSig5TlZG63fEGm4XAcPKOk0F/jiJxTrA==@vger.kernel.org, AJvYcCVtsDg+0MZeHZXjkKJB5t4vEgnbgBgcaPpdxY0ymQIWPxqZZrQFJbmrMc3znAsWgGxYQLbhegaDEB2DqCfD@vger.kernel.org, AJvYcCWDfqc+xc5hMcP3JG9ctERZe79q8aNyXVE+E5pCvWB6KlMThkVtFs6UlosHUd/t1hU19VNmxptRYCVDkFsxW/X0eFcr@vger.kernel.org, AJvYcCWGtaY1eP2j7izTOEJFsnrMSzpYhaPwr0exKMiB5O+/mq76CXmOgUZrjpuOASxh6x3VE9HbMkNCD04D+lUd@vger.kernel.org, AJvYcCXcxpURX017fZYRq9h+F8GTJvPfaCx7MZElPErCIf64gAItKFh63Cs2rLul+y7fgZ/ocONgNGudDyNUv3S5G8Q=@vger.kernel.org, AJvYcCXfiy1yV18uLg4r+FuZM20TQHKTVUAaAE0RKHt/zmpwyWmOGY0zCJSxp68VCO3nyNEoMSEpB4mG0K+msQ==@vger.kernel.org, AJvY
+ cCXk2/tlXIAd3IMCDQYvMLnknHPNku9g3pNxzJ9w0sAAw/5/winZpdHmdwqfzRJ2WZiakDZYLL+WjFLOVs2zAw==@vger.kernel.org, AJvYcCXlfdVgjN27YkAH2elz+3KHzyWh9zIYQyR1021lTaYvwcmrngYb4QAxxoL68i57hLLldJARGZIYJ+OUhA==@vger.kernel.org, AJvYcCXtJH5o/uZ+9iGulxzcMyKL/DTTv+fLQUgrVZrR4ONsJetKnUkp/9U3yVe/rIK7yPgKy/gbycUfKwTMZQ==@vger.kernel.org, AJvYcCXutrGseycTn/cGyeHK5TPzQZ/a3JPOl811M6oAlencO81EUw8g2O1/Z6+kdY+Jd+mE5kQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmKtUy3CnOCc7qGHJ4H+Fk8HiVo4sszEh3tjAp6mLuMyCeG757
+	p10UIAD88ar0TpjeZDZmqeFbJMqDiIYc+Mc/p65ZtHPq05vDROGYbZDZFwUdm23eNAfLJ10hUuL
+	Ge96rXQf6wDtaqAEFP4xJCU8WZmY=
+X-Google-Smtp-Source: AGHT+IEIp2MygUsW5Tc1gnqrEXhSi4Y5LfaJ7pDs2t1FcVSY61BEs2pVKMYAU/+O+nJIsawLe6NqpBRTPpsi7cWLSzQ=
+X-Received: by 2002:a05:651c:1a0c:b0:2f0:1e0a:4696 with SMTP id
+ 38308e7fff4ca-2f787dabe7emr39035411fa.7.1726239653924; Fri, 13 Sep 2024
+ 08:00:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <C4F76EB9DD3AEFEB+20240906064002.404538-1-wangyuli@uniontech.com>
+References: <20240909064730.3290724-1-rppt@kernel.org> <20240909064730.3290724-8-rppt@kernel.org>
+In-Reply-To: <20240909064730.3290724-8-rppt@kernel.org>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Fri, 13 Sep 2024 17:00:42 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXG_Z=7B_eDAk3vhtDjfcnka3AoSKNzvFQDzpvYY2EyVfg@mail.gmail.com>
+Message-ID: <CAMj1kXG_Z=7B_eDAk3vhtDjfcnka3AoSKNzvFQDzpvYY2EyVfg@mail.gmail.com>
+Subject: Re: [PATCH v3 7/8] execmem: add support for cache of large ROX pages
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Andreas Larsson <andreas@gaisler.com>, 
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>, 
+	Brian Cain <bcain@quicinc.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Christoph Hellwig <hch@infradead.org>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Dinh Nguyen <dinguyen@kernel.org>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>, 
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Richard Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>, 
+	Stafford Horne <shorne@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
+	Uladzislau Rezki <urezki@gmail.com>, Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>, 
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
+	linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-mm@kvack.org, linux-modules@vger.kernel.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-trace-kernel@vger.kernel.org, 
+	linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+	loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Sep 06, 2024 at 02:40:02PM +0800, WangYuli wrote:
-> When entering the "len & sizeof(u32)" branch, len must be less than 8.
-> So after one operation, len must be less than 4.
-> At this time, "len -= sizeof(u32)" is not necessary for 64-bit CPUs.
-> 
-> After that, replace `while' loops with equivalent `for' to make the
-> code structure a little bit better by the way.
-> 
-> Suggested-by: Maciej W. Rozycki <macro@orcam.me.uk>
-> Link: https://lore.kernel.org/all/alpine.DEB.2.21.2406281713040.43454@angie.orcam.me.uk/
-> Suggested-by: Herbert Xu <herbert@gondor.apana.org.au>
-> Link: https://lore.kernel.org/all/ZtqZpzMH_qMQqzyc@gondor.apana.org.au/
-> Signed-off-by: Guan Wentao <guanwentao@uniontech.com>
-> Signed-off-by: WangYuli <wangyuli@uniontech.com>
+Hi Mike,
+
+On Mon, 9 Sept 2024 at 08:51, Mike Rapoport <rppt@kernel.org> wrote:
+>
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+>
+> Using large pages to map text areas reduces iTLB pressure and improves
+> performance.
+>
+> Extend execmem_alloc() with an ability to use huge pages with ROX
+> permissions as a cache for smaller allocations.
+>
+> To populate the cache, a writable large page is allocated from vmalloc with
+> VM_ALLOW_HUGE_VMAP, filled with invalid instructions and then remapped as
+> ROX.
+>
+> Portions of that large page are handed out to execmem_alloc() callers
+> without any changes to the permissions.
+>
+> When the memory is freed with execmem_free() it is invalidated again so
+> that it won't contain stale instructions.
+>
+> The cache is enabled when an architecture sets EXECMEM_ROX_CACHE flag in
+> definition of an execmem_range.
+>
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 > ---
->  arch/mips/crypto/crc32-mips.c | 70 ++++++++++++++++++-----------------
->  1 file changed, 37 insertions(+), 33 deletions(-)
+>  include/linux/execmem.h |   2 +
+>  mm/execmem.c            | 289 +++++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 286 insertions(+), 5 deletions(-)
+>
+> diff --git a/include/linux/execmem.h b/include/linux/execmem.h
+> index dfdf19f8a5e8..7436aa547818 100644
+> --- a/include/linux/execmem.h
+> +++ b/include/linux/execmem.h
+> @@ -77,12 +77,14 @@ struct execmem_range {
+>
+>  /**
+>   * struct execmem_info - architecture parameters for code allocations
+> + * @fill_trapping_insns: set memory to contain instructions that will trap
+>   * @ranges: array of parameter sets defining architecture specific
+>   * parameters for executable memory allocations. The ranges that are not
+>   * explicitly initialized by an architecture use parameters defined for
+>   * @EXECMEM_DEFAULT.
+>   */
+>  struct execmem_info {
+> +       void (*fill_trapping_insns)(void *ptr, size_t size, bool writable);
+>         struct execmem_range    ranges[EXECMEM_TYPE_MAX];
+>  };
+>
+> diff --git a/mm/execmem.c b/mm/execmem.c
+> index 0f6691e9ffe6..f547c1f3c93d 100644
+> --- a/mm/execmem.c
+> +++ b/mm/execmem.c
+> @@ -7,28 +7,88 @@
+>   */
+>
+>  #include <linux/mm.h>
+> +#include <linux/mutex.h>
+>  #include <linux/vmalloc.h>
+>  #include <linux/execmem.h>
+> +#include <linux/maple_tree.h>
+>  #include <linux/moduleloader.h>
+>  #include <linux/text-patching.h>
+>
+> +#include <asm/tlbflush.h>
+> +
+> +#include "internal.h"
+> +
+>  static struct execmem_info *execmem_info __ro_after_init;
+>  static struct execmem_info default_execmem_info __ro_after_init;
+>
+> -static void *__execmem_alloc(struct execmem_range *range, size_t size)
+> +#ifdef CONFIG_MMU
+> +struct execmem_cache {
+> +       struct mutex mutex;
+> +       struct maple_tree busy_areas;
+> +       struct maple_tree free_areas;
+> +};
+> +
+> +static struct execmem_cache execmem_cache = {
+> +       .mutex = __MUTEX_INITIALIZER(execmem_cache.mutex),
+> +       .busy_areas = MTREE_INIT_EXT(busy_areas, MT_FLAGS_LOCK_EXTERN,
+> +                                    execmem_cache.mutex),
+> +       .free_areas = MTREE_INIT_EXT(free_areas, MT_FLAGS_LOCK_EXTERN,
+> +                                    execmem_cache.mutex),
+> +};
+> +
+> +static void execmem_cache_clean(struct work_struct *work)
+> +{
+> +       struct maple_tree *free_areas = &execmem_cache.free_areas;
+> +       struct mutex *mutex = &execmem_cache.mutex;
+> +       MA_STATE(mas, free_areas, 0, ULONG_MAX);
+> +       void *area;
+> +
+> +       mutex_lock(mutex);
+> +       mas_for_each(&mas, area, ULONG_MAX) {
+> +               size_t size;
+> +
+> +               if (!xa_is_value(area))
+> +                       continue;
+> +
+> +               size = xa_to_value(area);
+> +
+> +               if (IS_ALIGNED(size, PMD_SIZE) &&
+> +                   IS_ALIGNED(mas.index, PMD_SIZE)) {
+> +                       void *ptr = (void *)mas.index;
+> +
+> +                       mas_erase(&mas);
+> +                       vfree(ptr);
+> +               }
+> +       }
+> +       mutex_unlock(mutex);
+> +}
+> +
+> +static DECLARE_WORK(execmem_cache_clean_work, execmem_cache_clean);
+> +
+> +static void execmem_fill_trapping_insns(void *ptr, size_t size, bool writable)
+> +{
+> +       if (execmem_info->fill_trapping_insns)
+> +               execmem_info->fill_trapping_insns(ptr, size, writable);
+> +       else
+> +               memset(ptr, 0, size);
 
-Patch applied.  Thanks.
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Does this really have to be a function pointer with a runtime check?
+
+This could just be a __weak definition, with the arch providing an
+override if the memset() is not appropriate.
 
