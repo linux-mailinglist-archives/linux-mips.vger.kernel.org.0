@@ -1,99 +1,64 @@
-Return-Path: <linux-mips+bounces-5567-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5568-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED9DD977D2F
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2024 12:21:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 383A5977DA4
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2024 12:36:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 089921C21585
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2024 10:21:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EEBAC282CF0
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2024 10:36:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48FDC1C244C;
-	Fri, 13 Sep 2024 10:21:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E7771DA31C;
+	Fri, 13 Sep 2024 10:31:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="BYSQ3SOd"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED231272A6;
-	Fri, 13 Sep 2024 10:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E16341DA315;
+	Fri, 13 Sep 2024 10:31:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726222879; cv=none; b=PPCsOLG0bGf3SmJzeHGl0EHFKFBP1l0LaIms/MiBCsbwPYRIed7EX0yEcczzyuSPvRAMPQ1nwctIKnvXDSHXQjEJG1QVd9JXz/i/3CMx/ac61dU4SKx1RcgeQc6vP8I/Gso11iVoQQooqXDZQNY8BLM0jP9JWcan+7YnROghbKk=
+	t=1726223506; cv=none; b=Q5nJ3ptZuw15tykwGUAu3/xuOs4jEJmuqIj3WOtzxaBO657LmREazB7qMCKZy/8Xnlmoo1PtfS60YrvtJTnxIvWIMrYZGmWUmPQEU1ji1u+w+UWaM6pcFOodk1YrxqYPe1tsp38Ltx2e1/nkOFxFL3/AU+7FuWxy/3blghvY8hY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726222879; c=relaxed/simple;
-	bh=1FyR0o40y1aNgEI0i4ySUV9pFjo0kEOqPL5Kw87FMt0=;
+	s=arc-20240116; t=1726223506; c=relaxed/simple;
+	bh=VfzE/e2GMEtPTTZi9MH2kcW1v2jCUX3uz2k1aSyFJXo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O3AjOOQj5/CUE9922HsNlj+oJJo+n+HCIuSipDYG4QN8nzNFTl9bNTeTMj6JXlmZU5WfNXUjR4Jrnn8mbhCfPt0XbwHERZEvXglYQWhtEhQ1K/qX+HTSthInPhomLXXB+o9Vsf7/y7fVd/dH+XQxSUODV1o6tc2gklwzKAy6AIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFE3CC4CEC0;
-	Fri, 13 Sep 2024 10:21:08 +0000 (UTC)
-Date: Fri, 13 Sep 2024 11:21:06 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Arnd Bergmann <arnd@arndb.de>, guoren <guoren@kernel.org>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S . Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	shuah <shuah@kernel.org>, Christoph Hellwig <hch@infradead.org>,
-	Michal Hocko <mhocko@suse.com>,
-	"Kirill A. Shutemov" <kirill@shutemov.name>,
-	Chris Torek <chris.torek@gmail.com>,
-	Linux-Arch <linux-arch@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-abi-devel@lists.sourceforge.net
-Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
- 47 bits
-Message-ID: <ZuQSEn3rFVnIrbRH@arm.com>
-References: <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
- <f23b18c6-1856-4b59-9ba3-59809b425c81@app.fastmail.com>
- <Ztrq8PBLJ3QuFJz7@arm.com>
- <oshwto46wbbgneiayj63umllyozm3c4267rvpszqzaopwnt2l7@6mxl5vydtons>
- <ZuDoExckq21fePoe@ghost>
- <ZuHfp0_tAQhaymdy@arm.com>
- <ZuKHpFB+uWuJe2xm@ghost>
- <ZuLIPZId9aHcAY2j@arm.com>
- <ZuNaD+zAXiAulc0n@ghost>
- <ZuQPF7Gbcqzq0U6N@arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qz4/KLGRsu/8oe0mZm5C2zjONOmiALckEi8/EuLdAZY9NWvy4kXpVOCvrsJK+5tC97ID/nIhzCmzn7q68T6HrsUmfdB1yKFVYDxzm+uQcdrT2H8QuFd/12rzxZUAgDaHi3rBjHGKCX9NtX8/wMUEc3WsYYvcPfXNmsr2RygK0Gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=BYSQ3SOd; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=qfM276FFMSEBEC/xP0ee+Dgn5beownuGHgkpyoSLAoo=; b=BYSQ3SOd6Sa93tQbj3PDkeRHkl
+	L/NRovthGKy1EATKEO/54B/9+Js/EX02aRqMDVdfHdEhxvoygJ9FfLPSS8CHQ3u4JPHuf0FwYkGJx
+	LniDdpyV3tcLFJ3eohrRc5sYC6iMmnOzlpLA32ex7mP/pJ1j4kqFz+lx+serFvoSo/DfEiPfgfH8V
+	SLBTguXusIFvAOreAkiTWppUnVwjHKY4COQ4TFUrvqqqXJtdJhyUr/ffc+p2jq+MePBgY3GLEocno
+	+ZEucPRsGfiDJE2QAxqGMeirAFKKnXfGKuU9ow88RjBZhflDI+SQo82IxfNjmDJYo5FDNHX2tnMhw
+	a+OUvtTg==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1sp3QY-002Dw7-2S;
+	Fri, 13 Sep 2024 18:31:37 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 13 Sep 2024 18:31:36 +0800
+Date: Fri, 13 Sep 2024 18:31:36 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: WangYuli <wangyuli@uniontech.com>
+Cc: davem@davemloft.net, tsbogend@alpha.franken.de,
+	linux-crypto@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Maciej W . Rozycki" <macro@orcam.me.uk>,
+	Guan Wentao <guanwentao@uniontech.com>
+Subject: Re: [PATCH v3] MIPS: crypto: Clean up useless assignment operations
+Message-ID: <ZuQUiK8-elOhoiX0@gondor.apana.org.au>
+References: <C4F76EB9DD3AEFEB+20240906064002.404538-1-wangyuli@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -102,27 +67,29 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZuQPF7Gbcqzq0U6N@arm.com>
+In-Reply-To: <C4F76EB9DD3AEFEB+20240906064002.404538-1-wangyuli@uniontech.com>
 
-On Fri, Sep 13, 2024 at 11:08:23AM +0100, Catalin Marinas wrote:
-> On Thu, Sep 12, 2024 at 02:15:59PM -0700, Charlie Jenkins wrote:
-> > On Thu, Sep 12, 2024 at 11:53:49AM +0100, Catalin Marinas wrote:
-> > > On Wed, Sep 11, 2024 at 11:18:12PM -0700, Charlie Jenkins wrote:
-> > > > Opting-in to the higher address space is reasonable. However, it is not
-> > > > my preference, because the purpose of this flag is to ensure that
-> > > > allocations do not exceed 47-bits, so it is a clearer ABI to have the
-> > > > applications that want this guarantee to be the ones setting the flag,
-> > > > rather than the applications that want the higher bits setting the flag.
-[...]
-> Anyway, the prctl() can go both ways, either expanding or limiting the
-> default address space. So I'd be fine with such interface.
+On Fri, Sep 06, 2024 at 02:40:02PM +0800, WangYuli wrote:
+> When entering the "len & sizeof(u32)" branch, len must be less than 8.
+> So after one operation, len must be less than 4.
+> At this time, "len -= sizeof(u32)" is not necessary for 64-bit CPUs.
+> 
+> After that, replace `while' loops with equivalent `for' to make the
+> code structure a little bit better by the way.
+> 
+> Suggested-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> Link: https://lore.kernel.org/all/alpine.DEB.2.21.2406281713040.43454@angie.orcam.me.uk/
+> Suggested-by: Herbert Xu <herbert@gondor.apana.org.au>
+> Link: https://lore.kernel.org/all/ZtqZpzMH_qMQqzyc@gondor.apana.org.au/
+> Signed-off-by: Guan Wentao <guanwentao@uniontech.com>
+> Signed-off-by: WangYuli <wangyuli@uniontech.com>
+> ---
+>  arch/mips/crypto/crc32-mips.c | 70 ++++++++++++++++++-----------------
+>  1 file changed, 37 insertions(+), 33 deletions(-)
 
-Ah, I just realised (while reading Lorenzo's reply) that we can't really
-restrict the space via a prctl() as we have the main thread stack
-already allocated by the kernel before the user code starts. You may
-need to limit this stack as well, not just the later heap allocations
-(anonymous mmap()).
-
+Patch applied.  Thanks.
 -- 
-Catalin
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
