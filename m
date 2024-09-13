@@ -1,227 +1,193 @@
-Return-Path: <linux-mips+bounces-5569-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5570-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F26BC978322
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2024 17:01:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE4C69789C8
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2024 22:16:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C49192818FC
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2024 15:00:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0575A1C21377
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2024 20:16:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD9F11EB44;
-	Fri, 13 Sep 2024 15:00:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21FC614830F;
+	Fri, 13 Sep 2024 20:15:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YAJMkQFc"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="NclhStDM"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C42728366;
-	Fri, 13 Sep 2024 15:00:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02E54148308
+	for <linux-mips@vger.kernel.org>; Fri, 13 Sep 2024 20:15:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726239656; cv=none; b=sUKX2K7Dpzqa/W3KGt2R/KXYqSn3fCI6UMijHIen9hj7Vhkq6oHD9chYicPGpna+A1GcuGxBaaWJM/DO+VH77ziFKalEYfHGlBxoWz1NxflOnV9HUCksCBHblHnXIHQDGmpf6mbu+NzvT7jRdv+c83zcY+kyZzil8mrq4JgwFGQ=
+	t=1726258546; cv=none; b=qYpNXVRzG4jwnezVoVUzQHCIxepOtbfbaiXHkLZP0FCo5Pun/CUeMAjA9e6s6q/8nqOPQm5uMbRbM2HQWVwAxZk/aDWBlG8ljDxsCgXGNWXwFWr2pHyse6m6Th7s1TvoUqWqfgCmgdPfjiyryPxeo4RpqRYQvLCAh6HoBJyLoN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726239656; c=relaxed/simple;
-	bh=BA0ANnltDBBfuoBltj9aaFdaXEL//Iks38XJnB02U/g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=co7cmp9Uu7WupKwSJaX6VxtjpoYw4H0P0ZNW5kprOfFR6Eo/5yoCYsQtsiB0hOm+5ff8UvkTig6mE+lPtTZRwfpA9JyVBHZUiC2u7h/UUFPYpFb1k9xCj+S6TaXnUIRiCUiktbwdvTjxXGWIEJHhsqKVCC4yKI5MopNfb50WT1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YAJMkQFc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E81CBC4CEDB;
-	Fri, 13 Sep 2024 15:00:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726239656;
-	bh=BA0ANnltDBBfuoBltj9aaFdaXEL//Iks38XJnB02U/g=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YAJMkQFcS9yQrD3CD9uf2YDAnPedZRu2sdG3Uq7zy8+8g4fHsdnaV9YMu/zLJ/1tj
-	 EDiCdYnV0pGG/cGSGCoqzc1yz3NAQwdRBBLRfL0AaT5mhRSd5SqOtQjToavlsk96bb
-	 oKdYkALvWRv8THfAoHVYOAKmMboDnCW5qhSOfsTXSAkiRSZcMGaGh7XxCBtwPbd5yo
-	 iYcY5nqsZThg8+lFTkl4wHHIxP84VsBur9fkHWLMiLx+uY355fMP3Bd0gFRq3KpUT4
-	 TIJSScKe0wBqYY1i+xFQfTmvYKL4lkyD4Paj6wDyvXKCliGwP8nsVtdZV47PWrdook
-	 qWRlseRXwzJPA==
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2f759688444so20775241fa.1;
-        Fri, 13 Sep 2024 08:00:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCULir8RU8+P9W/UUHicJGDrkLQQQZokBhHGLCgoRNfZP5TViqAqbSAXmiHiCpE3I4KmoIht3k9rS+Siils=@vger.kernel.org, AJvYcCUw1AyxawrWxc/j7v03nO2ad+l8y8OsrCz5pbPc/VzKwI9EJJmUUtSCFw0eA/l6pJGyb5/cDl5DKnQ=@vger.kernel.org, AJvYcCUxvSkjTNBJJDMNVxAvXbjdUHZ/3Nt+B2q46ZDB04fOYwaKARUBkey1NT4qRYE9nxdmslUPtXBA1/HAyspyqQ==@vger.kernel.org, AJvYcCVdAG1QR7P19Qz6OOO+svTOKlqL+qfFD5IncHKX6ncPJbq3+KSig5TlZG63fEGm4XAcPKOk0F/jiJxTrA==@vger.kernel.org, AJvYcCVtsDg+0MZeHZXjkKJB5t4vEgnbgBgcaPpdxY0ymQIWPxqZZrQFJbmrMc3znAsWgGxYQLbhegaDEB2DqCfD@vger.kernel.org, AJvYcCWDfqc+xc5hMcP3JG9ctERZe79q8aNyXVE+E5pCvWB6KlMThkVtFs6UlosHUd/t1hU19VNmxptRYCVDkFsxW/X0eFcr@vger.kernel.org, AJvYcCWGtaY1eP2j7izTOEJFsnrMSzpYhaPwr0exKMiB5O+/mq76CXmOgUZrjpuOASxh6x3VE9HbMkNCD04D+lUd@vger.kernel.org, AJvYcCXcxpURX017fZYRq9h+F8GTJvPfaCx7MZElPErCIf64gAItKFh63Cs2rLul+y7fgZ/ocONgNGudDyNUv3S5G8Q=@vger.kernel.org, AJvYcCXfiy1yV18uLg4r+FuZM20TQHKTVUAaAE0RKHt/zmpwyWmOGY0zCJSxp68VCO3nyNEoMSEpB4mG0K+msQ==@vger.kernel.org, AJvY
- cCXk2/tlXIAd3IMCDQYvMLnknHPNku9g3pNxzJ9w0sAAw/5/winZpdHmdwqfzRJ2WZiakDZYLL+WjFLOVs2zAw==@vger.kernel.org, AJvYcCXlfdVgjN27YkAH2elz+3KHzyWh9zIYQyR1021lTaYvwcmrngYb4QAxxoL68i57hLLldJARGZIYJ+OUhA==@vger.kernel.org, AJvYcCXtJH5o/uZ+9iGulxzcMyKL/DTTv+fLQUgrVZrR4ONsJetKnUkp/9U3yVe/rIK7yPgKy/gbycUfKwTMZQ==@vger.kernel.org, AJvYcCXutrGseycTn/cGyeHK5TPzQZ/a3JPOl811M6oAlencO81EUw8g2O1/Z6+kdY+Jd+mE5kQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmKtUy3CnOCc7qGHJ4H+Fk8HiVo4sszEh3tjAp6mLuMyCeG757
-	p10UIAD88ar0TpjeZDZmqeFbJMqDiIYc+Mc/p65ZtHPq05vDROGYbZDZFwUdm23eNAfLJ10hUuL
-	Ge96rXQf6wDtaqAEFP4xJCU8WZmY=
-X-Google-Smtp-Source: AGHT+IEIp2MygUsW5Tc1gnqrEXhSi4Y5LfaJ7pDs2t1FcVSY61BEs2pVKMYAU/+O+nJIsawLe6NqpBRTPpsi7cWLSzQ=
-X-Received: by 2002:a05:651c:1a0c:b0:2f0:1e0a:4696 with SMTP id
- 38308e7fff4ca-2f787dabe7emr39035411fa.7.1726239653924; Fri, 13 Sep 2024
- 08:00:53 -0700 (PDT)
+	s=arc-20240116; t=1726258546; c=relaxed/simple;
+	bh=wfj+NyO2O/69MLo77jEarnaBvuUhTtqSf9r0p1hDvRY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YiZMqUdKVGQvHgIUL0JbMpY9Js4OfssYPmZzOMrM2LOf1OO3q1ioV31h1TAxC4DVRzpoXSxRf+seJVHGvrLZQHWJkJaJZOcumCGw2Hav0GILrX/pPUj/q/K/lht0PRp83L8YPT/2td63ukxA8Hotl84nCjeOvcov2vnaJexfdZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=NclhStDM; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2068a7c9286so14624485ad.1
+        for <linux-mips@vger.kernel.org>; Fri, 13 Sep 2024 13:15:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1726258542; x=1726863342; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=w1FIyAVC28uVndIDT9MHoNGdB/uDnM+DRyhrjJeTBk0=;
+        b=NclhStDMADg+8rXY3zMnZpgklTfAa14ssn3kbwcunDGIz8h6cP2BZtmssaHCmo+XOJ
+         afFH5gBp913WPHfI2fXDd/ETRIKFQ2E+mhYvWTOvQlNDtgWxTG/luQK68hxQAeRIi0Yp
+         3pLKyaSHb3rzRtbDj2Jhk8wgo81Y3Sg0bzWuQ6FR0l9TD95Esg0P/FPoBQwntMo27yP1
+         upGpiwNQurnnkLkQpHmNZaTtbC0Pfyuwny6dPEuUbkIOzqlsayMfGeVb5jjH/nCu8+Cx
+         Kw35OleCdW3SI017ABWPNVRfPB5EWupJtrF2RjuRb7jru2tnCpndmJ1x9Y1EOLLYXcHw
+         il8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726258542; x=1726863342;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w1FIyAVC28uVndIDT9MHoNGdB/uDnM+DRyhrjJeTBk0=;
+        b=A905UkNwiFPQTcRedQW/hY0oiERv/ekCsj6ESVJCAy0P4FgcT0cmn6f+1zcjvtSwlw
+         riIQcbcF0FX4+sgxzDHkroWeXx1sHaQStn/E0OYbiwlIyhO9o/R1QFUOn/moP3jDasXA
+         UnRuIrkiFsBXGUdWjX7wWegTcUDjAyaLdHbuH7NNxQX29XVkQxF78SeiCmnUek1OxmWW
+         bEsxvRM2dn7nRavNC0YsR+xkAejAsqWrN1uhJukhIH141P3blJx0mP2By1Ox/FIg1oo1
+         6VqAqvKwKcVcRwzU3PrWwcJvEH1i+5i6/FKm0GS2EmCy0AiEdyfeB18jqPPDKCpDu4VU
+         lCQw==
+X-Forwarded-Encrypted: i=1; AJvYcCUYse7xd1swC/7djE9tnnSBmEhxDAADTYwWoPEvECSWwI3XnP6cUjcPa9xzHVUw5mXyluqbKwPyhdIK@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/+woIjcKniMuhWSY5fOmeFKX8NsHP6p61cizoV2C6hkFYaeZw
+	igmRyeon1oia1iV4iDlpMFj77EzXIwmdZLfn1k3kbyQdFqr+bv0DrMvQ5rvQyw0=
+X-Google-Smtp-Source: AGHT+IF+aNQZr3gdahRoQqk9W7f54mB5JjUQKc3RHBzDdb3qrFRnfek72JEtbqkZMIR2o3KSJzgpeA==
+X-Received: by 2002:a17:902:dad1:b0:205:8407:6321 with SMTP id d9443c01a7336-20781b4740dmr63844425ad.9.1726258541784;
+        Fri, 13 Sep 2024 13:15:41 -0700 (PDT)
+Received: from ghost ([50.145.13.30])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-207945db10csm315195ad.53.2024.09.13.13.15.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Sep 2024 13:15:41 -0700 (PDT)
+Date: Fri, 13 Sep 2024 13:15:35 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Arnd Bergmann <arnd@arndb.de>, guoren <guoren@kernel.org>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S . Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	shuah <shuah@kernel.org>, Christoph Hellwig <hch@infradead.org>,
+	Michal Hocko <mhocko@suse.com>,
+	"Kirill A. Shutemov" <kirill@shutemov.name>,
+	Chris Torek <chris.torek@gmail.com>,
+	Linux-Arch <linux-arch@vger.kernel.org>,
+	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-abi-devel@lists.sourceforge.net
+Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
+ 47 bits
+Message-ID: <ZuSdZ2bi1JvLJVYe@ghost>
+References: <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
+ <f23b18c6-1856-4b59-9ba3-59809b425c81@app.fastmail.com>
+ <Ztrq8PBLJ3QuFJz7@arm.com>
+ <oshwto46wbbgneiayj63umllyozm3c4267rvpszqzaopwnt2l7@6mxl5vydtons>
+ <ZuDoExckq21fePoe@ghost>
+ <ZuHfp0_tAQhaymdy@arm.com>
+ <ZuKHpFB+uWuJe2xm@ghost>
+ <ZuLIPZId9aHcAY2j@arm.com>
+ <ZuNaD+zAXiAulc0n@ghost>
+ <ZuQPF7Gbcqzq0U6N@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240909064730.3290724-1-rppt@kernel.org> <20240909064730.3290724-8-rppt@kernel.org>
-In-Reply-To: <20240909064730.3290724-8-rppt@kernel.org>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Fri, 13 Sep 2024 17:00:42 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXG_Z=7B_eDAk3vhtDjfcnka3AoSKNzvFQDzpvYY2EyVfg@mail.gmail.com>
-Message-ID: <CAMj1kXG_Z=7B_eDAk3vhtDjfcnka3AoSKNzvFQDzpvYY2EyVfg@mail.gmail.com>
-Subject: Re: [PATCH v3 7/8] execmem: add support for cache of large ROX pages
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Andreas Larsson <andreas@gaisler.com>, 
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>, 
-	Brian Cain <bcain@quicinc.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Christoph Hellwig <hch@infradead.org>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Dinh Nguyen <dinguyen@kernel.org>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>, 
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Kent Overstreet <kent.overstreet@linux.dev>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Richard Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>, 
-	Stafford Horne <shorne@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	Uladzislau Rezki <urezki@gmail.com>, Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>, 
-	bpf@vger.kernel.org, linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
-	linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-mm@kvack.org, linux-modules@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-trace-kernel@vger.kernel.org, 
-	linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
-	loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZuQPF7Gbcqzq0U6N@arm.com>
 
-Hi Mike,
+On Fri, Sep 13, 2024 at 11:08:23AM +0100, Catalin Marinas wrote:
+> On Thu, Sep 12, 2024 at 02:15:59PM -0700, Charlie Jenkins wrote:
+> > On Thu, Sep 12, 2024 at 11:53:49AM +0100, Catalin Marinas wrote:
+> > > On Wed, Sep 11, 2024 at 11:18:12PM -0700, Charlie Jenkins wrote:
+> > > > Opting-in to the higher address space is reasonable. However, it is not
+> > > > my preference, because the purpose of this flag is to ensure that
+> > > > allocations do not exceed 47-bits, so it is a clearer ABI to have the
+> > > > applications that want this guarantee to be the ones setting the flag,
+> > > > rather than the applications that want the higher bits setting the flag.
+> > > 
+> > > Yes, this would be ideal. Unfortunately those applications don't know
+> > > they need to set a flag in order to work.
+> > 
+> > It's not a regression, the applications never worked (on platforms that
+> > do not have this default). The 47-bit default would allow applications
+> > that didn't work to start working at the cost of a non-ideal ABI. That
+> > doesn't seem like a reasonable tradeoff to me.  If applications want to
+> > run on new hardware that has different requirements, shouldn't they be
+> > required to update rather than expect the kernel will solve their
+> > problems for them?
+> 
+> That's a valid point but it depends on the application and how much you
+> want to spend updating user-space. OpenJDK is fine, if you need a JIT
+> you'll have to add support for that architecture anyway. But others are
+> arch-agnostic, you just recompile to your target. It's not an ABI
+> problem, more of an API one.
 
-On Mon, 9 Sept 2024 at 08:51, Mike Rapoport <rppt@kernel.org> wrote:
->
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
->
-> Using large pages to map text areas reduces iTLB pressure and improves
-> performance.
->
-> Extend execmem_alloc() with an ability to use huge pages with ROX
-> permissions as a cache for smaller allocations.
->
-> To populate the cache, a writable large page is allocated from vmalloc with
-> VM_ALLOW_HUGE_VMAP, filled with invalid instructions and then remapped as
-> ROX.
->
-> Portions of that large page are handed out to execmem_alloc() callers
-> without any changes to the permissions.
->
-> When the memory is freed with execmem_free() it is invalidated again so
-> that it won't contain stale instructions.
->
-> The cache is enabled when an architecture sets EXECMEM_ROX_CACHE flag in
-> definition of an execmem_range.
->
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> ---
->  include/linux/execmem.h |   2 +
->  mm/execmem.c            | 289 +++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 286 insertions(+), 5 deletions(-)
->
-> diff --git a/include/linux/execmem.h b/include/linux/execmem.h
-> index dfdf19f8a5e8..7436aa547818 100644
-> --- a/include/linux/execmem.h
-> +++ b/include/linux/execmem.h
-> @@ -77,12 +77,14 @@ struct execmem_range {
->
->  /**
->   * struct execmem_info - architecture parameters for code allocations
-> + * @fill_trapping_insns: set memory to contain instructions that will trap
->   * @ranges: array of parameter sets defining architecture specific
->   * parameters for executable memory allocations. The ranges that are not
->   * explicitly initialized by an architecture use parameters defined for
->   * @EXECMEM_DEFAULT.
->   */
->  struct execmem_info {
-> +       void (*fill_trapping_insns)(void *ptr, size_t size, bool writable);
->         struct execmem_range    ranges[EXECMEM_TYPE_MAX];
->  };
->
-> diff --git a/mm/execmem.c b/mm/execmem.c
-> index 0f6691e9ffe6..f547c1f3c93d 100644
-> --- a/mm/execmem.c
-> +++ b/mm/execmem.c
-> @@ -7,28 +7,88 @@
->   */
->
->  #include <linux/mm.h>
-> +#include <linux/mutex.h>
->  #include <linux/vmalloc.h>
->  #include <linux/execmem.h>
-> +#include <linux/maple_tree.h>
->  #include <linux/moduleloader.h>
->  #include <linux/text-patching.h>
->
-> +#include <asm/tlbflush.h>
-> +
-> +#include "internal.h"
-> +
->  static struct execmem_info *execmem_info __ro_after_init;
->  static struct execmem_info default_execmem_info __ro_after_init;
->
-> -static void *__execmem_alloc(struct execmem_range *range, size_t size)
-> +#ifdef CONFIG_MMU
-> +struct execmem_cache {
-> +       struct mutex mutex;
-> +       struct maple_tree busy_areas;
-> +       struct maple_tree free_areas;
-> +};
-> +
-> +static struct execmem_cache execmem_cache = {
-> +       .mutex = __MUTEX_INITIALIZER(execmem_cache.mutex),
-> +       .busy_areas = MTREE_INIT_EXT(busy_areas, MT_FLAGS_LOCK_EXTERN,
-> +                                    execmem_cache.mutex),
-> +       .free_areas = MTREE_INIT_EXT(free_areas, MT_FLAGS_LOCK_EXTERN,
-> +                                    execmem_cache.mutex),
-> +};
-> +
-> +static void execmem_cache_clean(struct work_struct *work)
-> +{
-> +       struct maple_tree *free_areas = &execmem_cache.free_areas;
-> +       struct mutex *mutex = &execmem_cache.mutex;
-> +       MA_STATE(mas, free_areas, 0, ULONG_MAX);
-> +       void *area;
-> +
-> +       mutex_lock(mutex);
-> +       mas_for_each(&mas, area, ULONG_MAX) {
-> +               size_t size;
-> +
-> +               if (!xa_is_value(area))
-> +                       continue;
-> +
-> +               size = xa_to_value(area);
-> +
-> +               if (IS_ALIGNED(size, PMD_SIZE) &&
-> +                   IS_ALIGNED(mas.index, PMD_SIZE)) {
-> +                       void *ptr = (void *)mas.index;
-> +
-> +                       mas_erase(&mas);
-> +                       vfree(ptr);
-> +               }
-> +       }
-> +       mutex_unlock(mutex);
-> +}
-> +
-> +static DECLARE_WORK(execmem_cache_clean_work, execmem_cache_clean);
-> +
-> +static void execmem_fill_trapping_insns(void *ptr, size_t size, bool writable)
-> +{
-> +       if (execmem_info->fill_trapping_insns)
-> +               execmem_info->fill_trapping_insns(ptr, size, writable);
-> +       else
-> +               memset(ptr, 0, size);
+The arch-agnosticism is my hope with this personality flag, it can be
+added arch-agnostic userspace code and allow the application to work
+everywhere, but it does have the downside of requiring that change to
+user-space code.
 
-Does this really have to be a function pointer with a runtime check?
+> 
+> The x86 case (and powerpc/arm64) was different, the 47-bit worked for a
+> long time before expanding it. So it made a lot of sense to keep the
+> same default.
 
-This could just be a __weak definition, with the arch providing an
-override if the memset() is not appropriate.
+Yes it is very reasonable that this solution was selected for those
+architectures since the support for higher address spaces evolved in the
+manner that it did!
+
+- Charlie
+
+> 
+> Anyway, the prctl() can go both ways, either expanding or limiting the
+> default address space. So I'd be fine with such interface.
+> 
+> -- 
+> Catalin
 
