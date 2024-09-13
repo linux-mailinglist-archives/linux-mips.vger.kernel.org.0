@@ -1,446 +1,279 @@
-Return-Path: <linux-mips+bounces-5574-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5576-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC592978A02
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2024 22:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 45B0C978A5E
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2024 23:04:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 047AF1C22E90
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2024 20:33:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 640A81C222C3
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2024 21:04:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C15516F858;
-	Fri, 13 Sep 2024 20:33:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F4F414F9EE;
+	Fri, 13 Sep 2024 21:04:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="f3p75sk2";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WJmLZp/3"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="mGJQhVia"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout6-smtp.messagingengine.com (fout6-smtp.messagingengine.com [103.168.172.149])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 553F616BE1C;
-	Fri, 13 Sep 2024 20:33:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B55E148FF9
+	for <linux-mips@vger.kernel.org>; Fri, 13 Sep 2024 21:04:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726259582; cv=none; b=nf/RfJtnabWbCt55ofnIvEII0k16GlnJzINaBrEW+VQXpETBACQUC12YBL/OZMGIpAHPb4WoM3vJElT0NKdKYsl+G376DbyJl0Z0hLa1JUIiA2zPCrHMV67WmohOx8y/CtXBB7KIsdqI3o6An1/7NeUVIti0LMTdMP4XqbFqoDQ=
+	t=1726261455; cv=none; b=g1lroIn5gx7y7UXwtUphLZgqiawJAU5u6+v0krrtZ2aLv5S7rBxgUPYgdqk3MTPyOkxRnKGHs6PwTuzEOwMBmZYAVi59ICBtj4wjZDhMnMuKq6FUw3O85MXoEBgBQP7t+VKJ8ZVhlFkbq3vKL1CIhxNxwWwt455fUD7ZxEsSHsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726259582; c=relaxed/simple;
-	bh=QR4DGLMUsuXkjf1A1LS7CFLwhFvqzfkt5ophtTS3Iko=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TWWIqO8sEI3WSNzI6fs5/Siq/LJu0tsCQIZePl+5AikmgHS4tVxlS/5DZKRf942eajq2QeR9aFM6iIwUIWEW0FzF4qPX6fS/qXT1Gq/ZoKxBPlqdvazRdJ+IWXFFQrX3WBoxMIl9S6pwuzho0fwEjaTkrsoib22C92srq+Kjuvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=f3p75sk2; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=WJmLZp/3; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfout.phl.internal (Postfix) with ESMTP id 8364413803C6;
-	Fri, 13 Sep 2024 16:32:59 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Fri, 13 Sep 2024 16:32:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1726259579;
-	 x=1726345979; bh=5yZhMf1etdNhnGTjDvT1Dwa0rJtLOxEPY0uZSbNmmL4=; b=
-	f3p75sk2Kb/jxmV8o9K/xLUM6lPpIhcsK9Y8cj25Q0k1SgZC4FuJMQK3YDSFRjr5
-	w4uBnUO2NToGZJhdsUg66oXRY6gWwCcrubdTkDGYqsiCes0hWVsMIyCQAmS3sGSm
-	l8oIY1iZknDCG0LSorek5zO1syqSOcxUbXYGRLd/Q3VfcDpNY3ijytgcIeveWFUo
-	Be9cEbIPtYh87rIg/dLMKvM3uzFU8n7zLLwBFYajcsDN0TKPJGY6umBIdOgaNJLE
-	D0Bkuf0kmid3Qxp8CJ3I0fs4G7BSqyzVixVVxjl5J4w+k1A7mB12TZfazbGismwy
-	Qiit4qbHLpFJmOj0Sih/Ag==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726259579; x=
-	1726345979; bh=5yZhMf1etdNhnGTjDvT1Dwa0rJtLOxEPY0uZSbNmmL4=; b=W
-	JmLZp/3CrIGOwNNk0q1OB+GIDYJhuZeqUG6aXBu+YA1sl7g2LbIk0OCAdnmAp9oR
-	fdO0amiLCqyw/bFSBakPmREfpwE3tmEbtGFJWLhRBaWbaHsLZpfyifWYrbhmC1LH
-	LmNGn7vTsXYdpbFdLt+4tFpOAW/vVnWunSJ17Fj944+A+m5sbXNkji+XYF5bewMD
-	Mc/fPIUe360q8E9m4TvScXKzYVU/vZmK/goBZgOiX7Bb24YuNrqbRecZBOCP1L+c
-	7elrfgcn5pv/mgtCOt+0aNYCt0RKxp3HCwKD3z1ZbyaBS3IjN28kOy+m4dkzjG6V
-	wTn4+WnZ5Opcrp2IneE4g==
-X-ME-Sender: <xms:e6HkZjdBl2jZywSZL8R3DBrkrHfG2l3IeWFtw-DnkUfmb0nwTZlkUA>
-    <xme:e6HkZpNKqIX3higvLoIO7gZJhzP5vXLAoVRC3oYxGe1cPMWEhMcvDqOtdlZTA_48h
-    fGCysZPlJJmdfEZoco>
-X-ME-Received: <xmr:e6HkZsgqjExnIqqPPSRlQGwnyEfaAKDlfqW1o0poybtaWDZxJ3k9zm2WVlKp9fmMv6M>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejkedgvdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdej
-    necuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhi
-    hgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepvdekiefhfeevkeeuveetfeelffek
-    gedugefhtdduudeghfeuveegffegudekjeelnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdr
-    tghomhdpnhgspghrtghpthhtohepuddvpdhmohguvgepshhmthhpohhuthdprhgtphhtth
-    hopegthhgvnhhhuhgrtggriheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhvmhes
-    vhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmihhpshesvh
-    hgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehvihhrvghshhdrkhhumhgrrhes
-    lhhinhgrrhhordhorhhgpdhrtghpthhtohepjhhirgiguhhnrdihrghnghesfhhlhihgoh
-    grthdrtghomhdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopehkvghrnhgvlhesgigvnhdtnhdrnhgrmhgvpdhrtghpthhtoh
-    eprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghr
-    nhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:e6HkZk9TYas-PwBmnKO3G0-3SKNklcXSlK4L7912NJpg5PTl3XBAkw>
-    <xmx:e6HkZvs2YfQc2AK0xzYtLXPZg4Z_wIKU8J8PhrQCq5ZuZ5c_BuikXQ>
-    <xmx:e6HkZjGHFD8rp8YnTt-CT9ms2aHNOiMsqd8Vgdh4B_qcNUuUC63yQg>
-    <xmx:e6HkZmMn_d6ak3YVPQcNrKuRTlaRZJ9kICWM3o2GNv0xOC_-mUaAsA>
-    <xmx:e6HkZoHGHTg3m17tffBXN6C7SWn_yi9_lHmXXsYJaqhmIL6RW6opc_oG>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 13 Sep 2024 16:32:51 -0400 (EDT)
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Fri, 13 Sep 2024 21:32:07 +0100
-Subject: [PATCH v3 4/4] MIPS: Loongson64: Use shared IOCSR header
+	s=arc-20240116; t=1726261455; c=relaxed/simple;
+	bh=UTbmMbiOdPh2p8MAam907C+8IKVqjc0gQ8Sb2U1VqF0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mn2n54pDHm9ObPSS8yE5RYCRhYhoCOe1DLBMSo9/jn+BcJVoXfXrrLPas5TD/SgQZEl7UVedKEwZx5at4y4nqeS6BxDhnRd+adPgdYgZK/xfIAgjPjW6LN2kyqpA33SzmMZ7OsZJsdeYJNKUcoryh9tu9T9OQ5swKhzi/aK8e78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=mGJQhVia; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2068acc8a4fso13331665ad.1
+        for <linux-mips@vger.kernel.org>; Fri, 13 Sep 2024 14:04:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1726261452; x=1726866252; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=pGN098PfFZ1p39RZKtno/bb1iGOxyKkQDSILC8HyAbs=;
+        b=mGJQhViaeBP8boO4Z3ZlrGQg2Ou1nzmYaw9yb7rukospMvx2utfJB3ZJC/iHXR1zY5
+         OHHUQ7APm78lvjgaMAUf8nqLxbwPfkCE6Z5e7ZNILJdFYZ+iil46N6YJi7qrukHgrCj/
+         52MTbKyKy529xeaqzrRTzLPQwJPpgli/uI+0fNxnWN+NS2DfW/BXySToSEAivdhd/b1E
+         0bhUlMQ9VwSyt4VT3AbPh30kaAP0/NOhpzlX6MgqnmsEjeE/PQpON963yaauaSMSSEog
+         9Z7w+mZFQjHElQBLBsbH+wO7gdp/BUvodGBjrviEku9NhDQC1RpY/imscbGB4lWvqiQI
+         Jydg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726261452; x=1726866252;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pGN098PfFZ1p39RZKtno/bb1iGOxyKkQDSILC8HyAbs=;
+        b=Asb8d67773zLns1Cz0gpndTzacbvagZmnimjt8XMEt52WJ+E6kOrgWZ/J3tBnErnWH
+         9JZTtq2wpe8saTNSgQLBKG7ksjmWN8mjy5i2+D1KPND5GojYfPoAPEJ6TUzrthbZBflq
+         JCsgyEYlptIHYtfhgAbHmuKieW6IWGfegGt0MVo/n1mSDexojnwEn8jO8McdgooMBt+K
+         rTETfkshGHXnfygPK6SRskZI2tJ5cgZvEbAyDKL+qczTaKbjdIW6JNZ0RZcvPN8kd4la
+         Xl0jN+ws0xUiFujlSLCmPVjpIsaZpBZoqpCRy/Re8IZcKY5to31rQ+uSkvNhlOfcMKEE
+         UEjw==
+X-Forwarded-Encrypted: i=1; AJvYcCXJ6M8/aUP5NQ5KrD04NxgXcXJHItBQBLmF2LCc8uEGySjC4F7FVxiJOdTRgYUyqjyG9SijUsTZirql@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJF4E2hG+00tQDBzQ2M7oUD6FrAycUWhsh+27lBQOmBX9+uWQt
+	s/7OX8C5BMjBfUgv6MqG45bSptq+j8JZ0zmPq/VCy6KEdbrG0mULAlW68HzwXmQ=
+X-Google-Smtp-Source: AGHT+IHQy68+7/4em5wfAX0phJQ7a7VsNC8xlp5lvUp2N1zpKPOlth6aUECbhTSHxYBYBN7icOc/wA==
+X-Received: by 2002:a17:902:f54f:b0:207:457f:b8a6 with SMTP id d9443c01a7336-2078262ccc1mr54571405ad.12.1726261452005;
+        Fri, 13 Sep 2024 14:04:12 -0700 (PDT)
+Received: from ghost ([50.145.13.30])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-207945da8c9sm608475ad.17.2024.09.13.14.04.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Sep 2024 14:04:11 -0700 (PDT)
+Date: Fri, 13 Sep 2024 14:04:06 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Arnd Bergmann <arnd@arndb.de>, guoren <guoren@kernel.org>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S . Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Vlastimil Babka <vbabka@suse.cz>, shuah <shuah@kernel.org>,
+	Christoph Hellwig <hch@infradead.org>,
+	Michal Hocko <mhocko@suse.com>,
+	"Kirill A. Shutemov" <kirill@shutemov.name>,
+	Chris Torek <chris.torek@gmail.com>,
+	Linux-Arch <linux-arch@vger.kernel.org>,
+	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-abi-devel@lists.sourceforge.net
+Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
+ 47 bits
+Message-ID: <ZuSoxh5U3Kj1XgGq@ghost>
+References: <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
+ <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
+ <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
+ <f23b18c6-1856-4b59-9ba3-59809b425c81@app.fastmail.com>
+ <Ztrq8PBLJ3QuFJz7@arm.com>
+ <oshwto46wbbgneiayj63umllyozm3c4267rvpszqzaopwnt2l7@6mxl5vydtons>
+ <ZuDoExckq21fePoe@ghost>
+ <ZuHfp0_tAQhaymdy@arm.com>
+ <ZuKHpFB+uWuJe2xm@ghost>
+ <d873a994-4efa-4d3a-bdae-5d9a3eff29f2@lucifer.local>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240913-iocsr-v3-4-81a57f60350d@flygoat.com>
-References: <20240913-iocsr-v3-0-81a57f60350d@flygoat.com>
-In-Reply-To: <20240913-iocsr-v3-0-81a57f60350d@flygoat.com>
-To: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, 
- Thomas Gleixner <tglx@linutronix.de>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-mips@vger.kernel.org, kvm@vger.kernel.org, 
- Jiaxun Yang <jiaxun.yang@flygoat.com>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10190;
- i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=QR4DGLMUsuXkjf1A1LS7CFLwhFvqzfkt5ophtTS3Iko=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhrQnC6P/O6s9UKzm2WQ3e9rm57PWl2XYsyQr71i1dgGjq
- YLnk1DbjlIWBjEuBlkxRZYQAaW+DY0XF1x/kPUHZg4rE8gQBi5OAZjIuhSGv4IevN9rN4uL1TRG
- hM35omJ576dNmvFklwdhSwJ+aF683c7IMLfgyeKzVybP01m26VHfXVGHbEbGZXaf/mxfvcZAvs3
- YhwEA
-X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
- fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d873a994-4efa-4d3a-bdae-5d9a3eff29f2@lucifer.local>
 
-MIPS and LoongArch Loongson CPUs are sharing definition of
-IOCSR registers, so it makes sense to use the same header
-as well.
+On Fri, Sep 13, 2024 at 08:41:34AM +0100, Lorenzo Stoakes wrote:
+> On Wed, Sep 11, 2024 at 11:18:12PM GMT, Charlie Jenkins wrote:
+> > On Wed, Sep 11, 2024 at 07:21:27PM +0100, Catalin Marinas wrote:
+> > > On Tue, Sep 10, 2024 at 05:45:07PM -0700, Charlie Jenkins wrote:
+> > > > On Tue, Sep 10, 2024 at 03:08:14PM -0400, Liam R. Howlett wrote:
+> > > > > * Catalin Marinas <catalin.marinas@arm.com> [240906 07:44]:
+> > > > > > On Fri, Sep 06, 2024 at 09:55:42AM +0000, Arnd Bergmann wrote:
+> > > > > > > On Fri, Sep 6, 2024, at 09:14, Guo Ren wrote:
+> > > > > > > > On Fri, Sep 6, 2024 at 3:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > > > > > >> It's also unclear to me how we want this flag to interact with
+> > > > > > > >> the existing logic in arch_get_mmap_end(), which attempts to
+> > > > > > > >> limit the default mapping to a 47-bit address space already.
+> > > > > > > >
+> > > > > > > > To optimize RISC-V progress, I recommend:
+> > > > > > > >
+> > > > > > > > Step 1: Approve the patch.
+> > > > > > > > Step 2: Update Go and OpenJDK's RISC-V backend to utilize it.
+> > > > > > > > Step 3: Wait approximately several iterations for Go & OpenJDK
+> > > > > > > > Step 4: Remove the 47-bit constraint in arch_get_mmap_end()
+> > >
+> > > Point 4 is an ABI change. What guarantees that there isn't still
+> > > software out there that relies on the old behaviour?
+> >
+> > Yeah I don't think it would be desirable to remove the 47 bit
+> > constraint in architectures that already have it.
+> >
+> > >
+> > > > > > > I really want to first see a plausible explanation about why
+> > > > > > > RISC-V can't just implement this using a 47-bit DEFAULT_MAP_WINDOW
+> > > > > > > like all the other major architectures (x86, arm64, powerpc64),
+> > > > > >
+> > > > > > FWIW arm64 actually limits DEFAULT_MAP_WINDOW to 48-bit in the default
+> > > > > > configuration. We end up with a 47-bit with 16K pages but for a
+> > > > > > different reason that has to do with LPA2 support (I doubt we need this
+> > > > > > for the user mapping but we need to untangle some of the macros there;
+> > > > > > that's for a separate discussion).
+> > > > > >
+> > > > > > That said, we haven't encountered any user space problems with a 48-bit
+> > > > > > DEFAULT_MAP_WINDOW. So I also think RISC-V should follow a similar
+> > > > > > approach (47 or 48 bit default limit). Better to have some ABI
+> > > > > > consistency between architectures. One can still ask for addresses above
+> > > > > > this default limit via mmap().
+> > > > >
+> > > > > I think that is best as well.
+> > > > >
+> > > > > Can we please just do what x86 and arm64 does?
+> > > >
+> > > > I responded to Arnd in the other thread, but I am still not convinced
+> > > > that the solution that x86 and arm64 have selected is the best solution.
+> > > > The solution of defaulting to 47 bits does allow applications the
+> > > > ability to get addresses that are below 47 bits. However, due to
+> > > > differences across architectures it doesn't seem possible to have all
+> > > > architectures default to the same value. Additionally, this flag will be
+> > > > able to help users avoid potential bugs where a hint address is passed
+> > > > that causes upper bits of a VA to be used.
+> > >
+> > > The reason we added this limit on arm64 is that we noticed programs
+> > > using the top 8 bits of a 64-bit pointer for additional information.
+> > > IIRC, it wasn't even openJDK but some JavaScript JIT. We could have
+> > > taught those programs of a new flag but since we couldn't tell how many
+> > > are out there, it was the safest to default to a smaller limit and opt
+> > > in to the higher one. Such opt-in is via mmap() but if you prefer a
+> > > prctl() flag, that's fine by me as well (though I think this should be
+> > > opt-in to higher addresses rather than opt-out of the higher addresses).
+> >
+> > The mmap() flag was used in previous versions but was decided against
+> > because this feature is more useful if it is process-wide. A
+> > personality() flag was chosen instead of a prctl() flag because there
+> > existed other flags in personality() that were similar. I am tempted to
+> > use prctl() however because then we could have an additional arg to
+> > select the exact number of bits that should be reserved (rather than
+> > being fixed at 47 bits).
+> 
+> I am very much not in favour of a prctl(), it would require us to add state
+> limiting the address space and the timing of it becomes critical. Then we
+> have the same issue we do with the other proposals as to - what happens if
+> this is too low?
+> 
+> What is 'too low' varies by architecture, and for 32-bit architectures
+> could get quite... problematic.
+> 
+> And again, wha is the RoI here - we introducing maintenance burden and edge
+> cases vs. the x86 solution in order to... accommodate things that need more
+> than 128 TiB of address space? A problem that does not appear to exist in
+> reality?
+> 
+> I suggested the personality approach as the least impactful compromise way
+> of this series working, but I think after what Arnd has said (and please
+> forgive me if I've missed further discussion have been dipping in and out
+> of this!) - adapting risc v to the approach we take elsewhere seems the
+> most sensible solution to me.
+>
+> This remains something we can revisit in future if this turns out to be
+> egregious.
+>
 
-Align function names in loongson_regs.h with it's loongarch
-equivalent and fix up macro names everywhere.
+I appreciate Arnd's comments, but I do not think that making 47-bit the
+default is the best solution for riscv. On riscv, support for 48-bit
+address spaces was merged in 5.17 and support for 57-bit address spaces
+was merged in 5.18 without changing the default addresses provided by
+mmap(). It could be argued that this was a mistake, however since at the
+time there didn't exist hardware with larger address spaces it wasn't an
+issue. The applications that existed at the time that relied on the
+smaller address spaces have not been able to move to larger address
+spaces. Making a 47-bit user-space address space default solves the
+problem, but that is not arch agnostic, and can't be since of the
+varying differences in page table sizes across architectures, which is
+the other part of the problem I am trying to solve.
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- .../include/asm/mach-loongson64/loongson_regs.h    | 58 ++++++----------------
- arch/mips/kvm/vz.c                                 |  2 +-
- arch/mips/loongson64/smp.c                         | 44 ++++++++--------
- drivers/platform/mips/cpu_hwmon.c                  |  7 ++-
- include/linux/loongson/iocsr.h                     |  5 +-
- 5 files changed, 46 insertions(+), 70 deletions(-)
+> >
+> > Opting-in to the higher address space is reasonable. However, it is not
+> > my preference, because the purpose of this flag is to ensure that
+> > allocations do not exceed 47-bits, so it is a clearer ABI to have the
+> > applications that want this guarantee to be the ones setting the flag,
+> > rather than the applications that want the higher bits setting the flag.
+> 
+> Perfect is the enemy of the good :) and an idealised solution may not end
+> up being something everybody can agree on.
 
-diff --git a/arch/mips/include/asm/mach-loongson64/loongson_regs.h b/arch/mips/include/asm/mach-loongson64/loongson_regs.h
-index fec767507604..d8af16796dbe 100644
---- a/arch/mips/include/asm/mach-loongson64/loongson_regs.h
-+++ b/arch/mips/include/asm/mach-loongson64/loongson_regs.h
-@@ -5,12 +5,13 @@
- #ifndef _LOONGSON_REGS_H_
- #define _LOONGSON_REGS_H_
- 
--#include <linux/types.h>
- #include <linux/bits.h>
-+#include <linux/types.h>
- 
- #include <asm/mipsregs.h>
- #include <asm/cpu.h>
- 
-+#ifndef __ASSEMBLY__
- static inline bool cpu_has_cfg(void)
- {
- 	return ((read_c0_prid() & PRID_IMP_MASK) == PRID_IMP_LOONGSON_64G);
-@@ -33,6 +34,7 @@ static inline u32 read_cpucfg(u32 reg)
- 		);
- 	return __res;
- }
-+#endif
- 
- /* Bit Domains for CFG registers */
- #define LOONGSON_CFG0	0x0
-@@ -131,6 +133,7 @@ static inline u32 read_cpucfg(u32 reg)
- #define LOONGSON_CFG7_GCCAEQRP	BIT(0)
- #define LOONGSON_CFG7_UCAWINP	BIT(1)
- 
-+#ifndef __ASSEMBLY__
- static inline bool cpu_has_csr(void)
- {
- 	if (cpu_has_cfg())
-@@ -139,7 +142,10 @@ static inline bool cpu_has_csr(void)
- 	return false;
- }
- 
--static inline u32 csr_readl(u32 reg)
-+#define cpu_has_iocsr()	cpu_has_csr()
-+
-+/* For MIPS/Loongson IOCSR and Core CSR are accessed same way */
-+static inline u32 csr_read32(u32 reg)
- {
- 	u32 __res;
- 
-@@ -158,7 +164,7 @@ static inline u32 csr_readl(u32 reg)
- 	return __res;
- }
- 
--static inline u64 csr_readq(u32 reg)
-+static inline u64 csr_read64(u32 reg)
- {
- 	u64 __res;
- 
-@@ -177,7 +183,7 @@ static inline u64 csr_readq(u32 reg)
- 	return __res;
- }
- 
--static inline void csr_writel(u32 val, u32 reg)
-+static inline void csr_write32(u32 val, u32 reg)
- {
- 	/* WRCSR reg, val */
- 	__asm__ __volatile__(
-@@ -193,7 +199,7 @@ static inline void csr_writel(u32 val, u32 reg)
- 		);
- }
- 
--static inline void csr_writeq(u64 val, u32 reg)
-+static inline void csr_write64(u64 val, u32 reg)
- {
- 	/* DWRCSR reg, val */
- 	__asm__ __volatile__(
-@@ -209,43 +215,10 @@ static inline void csr_writeq(u64 val, u32 reg)
- 		);
- }
- 
--/* Public CSR Register can also be accessed with regular addresses */
--#define CSR_PUBLIC_MMIO_BASE 0x1fe00000
--
--#define MMIO_CSR(x)		(void *)TO_UNCAC(CSR_PUBLIC_MMIO_BASE + x)
--
--#define LOONGSON_CSR_FEATURES	0x8
--#define LOONGSON_CSRF_TEMP	BIT(0)
--#define LOONGSON_CSRF_NODECNT	BIT(1)
--#define LOONGSON_CSRF_MSI	BIT(2)
--#define LOONGSON_CSRF_EXTIOI	BIT(3)
--#define LOONGSON_CSRF_IPI	BIT(4)
--#define LOONGSON_CSRF_FREQ	BIT(5)
--
--#define LOONGSON_CSR_VENDOR	0x10 /* Vendor name string, should be "Loongson" */
--#define LOONGSON_CSR_CPUNAME	0x20 /* Processor name string */
--#define LOONGSON_CSR_NODECNT	0x408
--#define LOONGSON_CSR_CPUTEMP	0x428
--
--/* PerCore CSR, only accessible by local cores */
--#define LOONGSON_CSR_IPI_STATUS	0x1000
--#define LOONGSON_CSR_IPI_EN	0x1004
--#define LOONGSON_CSR_IPI_SET	0x1008
--#define LOONGSON_CSR_IPI_CLEAR	0x100c
--#define LOONGSON_CSR_IPI_SEND	0x1040
--#define CSR_IPI_SEND_IP_SHIFT	0
--#define CSR_IPI_SEND_CPU_SHIFT	16
--#define CSR_IPI_SEND_BLOCK	BIT(31)
--
--#define LOONGSON_CSR_MAIL_BUF0		0x1020
--#define LOONGSON_CSR_MAIL_SEND		0x1048
--#define CSR_MAIL_SEND_BLOCK		BIT_ULL(31)
--#define CSR_MAIL_SEND_BOX_LOW(box)	(box << 1)
--#define CSR_MAIL_SEND_BOX_HIGH(box)	((box << 1) + 1)
--#define CSR_MAIL_SEND_BOX_SHIFT		2
--#define CSR_MAIL_SEND_CPU_SHIFT		16
--#define CSR_MAIL_SEND_BUF_SHIFT		32
--#define CSR_MAIL_SEND_H32_MASK		0xFFFFFFFF00000000ULL
-+#define iocsr_read32(reg)	csr_read32(reg)
-+#define iocsr_read64(reg)	csr_read64(reg)
-+#define iocsr_write32(val, reg)	csr_write32(val, reg)
-+#define iocsr_write64(val, reg)	csr_write64(val, reg)
- 
- static inline u64 drdtime(void)
- {
-@@ -264,5 +237,6 @@ static inline u64 drdtime(void)
- 		);
- 	return val;
- }
-+#endif
- 
- #endif
-diff --git a/arch/mips/kvm/vz.c b/arch/mips/kvm/vz.c
-index 99d5a71e4300..4964c1922b23 100644
---- a/arch/mips/kvm/vz.c
-+++ b/arch/mips/kvm/vz.c
-@@ -2977,7 +2977,7 @@ static int kvm_vz_hardware_enable(void)
- #ifdef CONFIG_CPU_LOONGSON64
- 	/* Control guest CCA attribute */
- 	if (cpu_has_csr())
--		csr_writel(csr_readl(0xffffffec) | 0x1, 0xffffffec);
-+		csr_write32(csr_read32(0xffffffec) | 0x1, 0xffffffec);
- #endif
- 
- 	return 0;
-diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
-index 147acd972a07..0cf03377edf0 100644
---- a/arch/mips/loongson64/smp.c
-+++ b/arch/mips/loongson64/smp.c
-@@ -7,6 +7,7 @@
- #include <irq.h>
- #include <linux/init.h>
- #include <linux/cpu.h>
-+#include <linux/loongson/iocsr.h>
- #include <linux/sched.h>
- #include <linux/sched/hotplug.h>
- #include <linux/sched/task_stack.h>
-@@ -19,7 +20,6 @@
- #include <asm/tlbflush.h>
- #include <asm/cacheflush.h>
- #include <loongson.h>
--#include <loongson_regs.h>
- #include <workarounds.h>
- 
- #include "smp.h"
-@@ -45,19 +45,19 @@ static void csr_mail_send(uint64_t data, int cpu, int mailbox)
- {
- 	uint64_t val;
- 
--	/* send high 32 bits */
--	val = CSR_MAIL_SEND_BLOCK;
--	val |= (CSR_MAIL_SEND_BOX_HIGH(mailbox) << CSR_MAIL_SEND_BOX_SHIFT);
--	val |= (cpu << CSR_MAIL_SEND_CPU_SHIFT);
--	val |= (data & CSR_MAIL_SEND_H32_MASK);
--	csr_writeq(val, LOONGSON_CSR_MAIL_SEND);
--
--	/* send low 32 bits */
--	val = CSR_MAIL_SEND_BLOCK;
--	val |= (CSR_MAIL_SEND_BOX_LOW(mailbox) << CSR_MAIL_SEND_BOX_SHIFT);
--	val |= (cpu << CSR_MAIL_SEND_CPU_SHIFT);
--	val |= (data << CSR_MAIL_SEND_BUF_SHIFT);
--	csr_writeq(val, LOONGSON_CSR_MAIL_SEND);
-+	/* Send high 32 bits */
-+	val = IOCSR_MBUF_SEND_BLOCKING;
-+	val |= (IOCSR_MBUF_SEND_BOX_HI(mailbox) << IOCSR_MBUF_SEND_BOX_SHIFT);
-+	val |= (cpu << IOCSR_MBUF_SEND_CPU_SHIFT);
-+	val |= (data & IOCSR_MBUF_SEND_H32_MASK);
-+	iocsr_write64(val, LOONGSON_IOCSR_MBUF_SEND);
-+
-+	/* Send low 32 bits */
-+	val = IOCSR_MBUF_SEND_BLOCKING;
-+	val |= (IOCSR_MBUF_SEND_BOX_LO(mailbox) << IOCSR_MBUF_SEND_BOX_SHIFT);
-+	val |= (cpu << IOCSR_MBUF_SEND_CPU_SHIFT);
-+	val |= (data << IOCSR_MBUF_SEND_BUF_SHIFT);
-+	iocsr_write64(val, LOONGSON_IOCSR_MBUF_SEND);
- };
- 
- static u32 csr_ipi_read_clear(int cpu)
-@@ -65,9 +65,9 @@ static u32 csr_ipi_read_clear(int cpu)
- 	u32 action;
- 
- 	/* Load the ipi register to figure out what we're supposed to do */
--	action = csr_readl(LOONGSON_CSR_IPI_STATUS);
-+	action = iocsr_read32(LOONGSON_IOCSR_IPI_STATUS);
- 	/* Clear the ipi register to clear the interrupt */
--	csr_writel(action, LOONGSON_CSR_IPI_CLEAR);
-+	iocsr_write32(action, LOONGSON_IOCSR_IPI_CLEAR);
- 
- 	return action;
- }
-@@ -77,22 +77,22 @@ static void csr_ipi_write_action(int cpu, u32 action)
- 	unsigned int irq = 0;
- 
- 	while ((irq = ffs(action))) {
--		uint32_t val = CSR_IPI_SEND_BLOCK;
-+		uint32_t val = IOCSR_IPI_SEND_BLOCKING;
- 		val |= (irq - 1);
--		val |= (cpu << CSR_IPI_SEND_CPU_SHIFT);
--		csr_writel(val, LOONGSON_CSR_IPI_SEND);
-+		val |= (cpu << IOCSR_IPI_SEND_CPU_SHIFT);
-+		iocsr_write32(val, LOONGSON_IOCSR_IPI_SEND);
- 		action &= ~BIT(irq - 1);
- 	}
- }
- 
- static void csr_ipi_write_enable(int cpu)
- {
--	csr_writel(0xffffffff, LOONGSON_CSR_IPI_EN);
-+	iocsr_write32(0xffffffff, LOONGSON_IOCSR_IPI_EN);
- }
- 
- static void csr_ipi_clear_buf(int cpu)
- {
--	csr_writeq(0, LOONGSON_CSR_MAIL_BUF0);
-+	iocsr_write64(0, LOONGSON_IOCSR_MBUF0);
- }
- 
- static void csr_ipi_write_buf(int cpu, struct task_struct *idle)
-@@ -169,7 +169,7 @@ static void legacy_ipi_write_buf(int cpu, struct task_struct *idle)
- 
- static void csr_ipi_probe(void)
- {
--	if (cpu_has_csr() && csr_readl(LOONGSON_CSR_FEATURES) & LOONGSON_CSRF_IPI) {
-+	if (cpu_has_iocsr() && iocsr_read32(LOONGSON_IOCSR_FEATURES) & IOCSRF_CSRIPI) {
- 		ipi_read_clear = csr_ipi_read_clear;
- 		ipi_write_action = csr_ipi_write_action;
- 		ipi_write_enable = csr_ipi_write_enable;
-diff --git a/drivers/platform/mips/cpu_hwmon.c b/drivers/platform/mips/cpu_hwmon.c
-index 2ac2f31090f9..9b0b39a39d13 100644
---- a/drivers/platform/mips/cpu_hwmon.c
-+++ b/drivers/platform/mips/cpu_hwmon.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- #include <linux/err.h>
-+#include <linux/loongson/iocsr.h>
- #include <linux/module.h>
- #include <linux/reboot.h>
- #include <linux/jiffies.h>
-@@ -9,7 +10,6 @@
- #include <loongson.h>
- #include <boot_param.h>
- #include <loongson_hwmon.h>
--#include <loongson_regs.h>
- 
- static int csr_temp_enable;
- 
-@@ -24,7 +24,7 @@ int loongson3_cpu_temp(int cpu)
- 	u32 reg, prid_rev;
- 
- 	if (csr_temp_enable) {
--		reg = (csr_readl(LOONGSON_CSR_CPUTEMP) & 0xff);
-+		reg = (iocsr_read32(LOONGSON_IOCSR_CPUTEMP) & 0xff);
- 		goto out;
- 	}
- 
-@@ -136,8 +136,7 @@ static int __init loongson_hwmon_init(void)
- 	pr_info("Loongson Hwmon Enter...\n");
- 
- 	if (cpu_has_csr())
--		csr_temp_enable = csr_readl(LOONGSON_CSR_FEATURES) &
--				  LOONGSON_CSRF_TEMP;
-+		csr_temp_enable = iocsr_read32(LOONGSON_IOCSR_FEATURES) & IOCSRF_TEMP;
- 
- 	if (!csr_temp_enable && !loongson_chiptemp[0])
- 		return -ENODEV;
-diff --git a/include/linux/loongson/iocsr.h b/include/linux/loongson/iocsr.h
-index 6654a904bcbe..15e70e6e132e 100644
---- a/include/linux/loongson/iocsr.h
-+++ b/include/linux/loongson/iocsr.h
-@@ -10,9 +10,12 @@
- #include <linux/bits.h>
- #include <linux/types.h>
- 
--#ifdef CONFIG_LOONGARCH
-+#if defined(CONFIG_LOONGARCH)
- #include <asm/loongarch.h>
- #endif
-+#if defined(CONFIG_MIPS) && defined(CONFIG_MACH_LOONGSON64)
-+#include <loongson_regs.h>
-+#endif
- 
- #define LOONGSON_IOCSR_FEATURES	0x8
- #define  IOCSRF_TEMP			BIT_ULL(0)
+Yes you are totally right! Although this is not my ideal solution, it
+sufficiently accomplishes the goal so I think it is reasonable to
+implement this as a personality flag.
 
--- 
-2.46.0
-
+> 
+> >
+> > - Charlie
+> >
+> > >
+> > > --
+> > > Catalin
+> >
+> >
+> >
 
