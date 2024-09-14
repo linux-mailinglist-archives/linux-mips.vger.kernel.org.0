@@ -1,279 +1,609 @@
-Return-Path: <linux-mips+bounces-5576-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5577-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45B0C978A5E
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2024 23:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 111B8978F48
+	for <lists+linux-mips@lfdr.de>; Sat, 14 Sep 2024 10:56:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 640A81C222C3
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2024 21:04:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35DDE1C21C89
+	for <lists+linux-mips@lfdr.de>; Sat, 14 Sep 2024 08:56:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F4F414F9EE;
-	Fri, 13 Sep 2024 21:04:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="mGJQhVia"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34C97148304;
+	Sat, 14 Sep 2024 08:56:50 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B55E148FF9
-	for <linux-mips@vger.kernel.org>; Fri, 13 Sep 2024 21:04:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B90A310E9;
+	Sat, 14 Sep 2024 08:56:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726261455; cv=none; b=g1lroIn5gx7y7UXwtUphLZgqiawJAU5u6+v0krrtZ2aLv5S7rBxgUPYgdqk3MTPyOkxRnKGHs6PwTuzEOwMBmZYAVi59ICBtj4wjZDhMnMuKq6FUw3O85MXoEBgBQP7t+VKJ8ZVhlFkbq3vKL1CIhxNxwWwt455fUD7ZxEsSHsc=
+	t=1726304210; cv=none; b=pH8V8Vd3ykJLXA5aEZa3KweJQH8JOXJ6EYjn1KXMVZ2D7j85w/Z7KmPgvgUjHDgWon83J4/7ws2UVuTm6+BHo0sytFGvuCOvjL/VPdkPzTaK/aBufsvf9Q4att3Tqteqh1RUEe2Rd8u7aZSI1I0EbjvOfdIkg02VAaYZQ515JqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726261455; c=relaxed/simple;
-	bh=UTbmMbiOdPh2p8MAam907C+8IKVqjc0gQ8Sb2U1VqF0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mn2n54pDHm9ObPSS8yE5RYCRhYhoCOe1DLBMSo9/jn+BcJVoXfXrrLPas5TD/SgQZEl7UVedKEwZx5at4y4nqeS6BxDhnRd+adPgdYgZK/xfIAgjPjW6LN2kyqpA33SzmMZ7OsZJsdeYJNKUcoryh9tu9T9OQ5swKhzi/aK8e78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=mGJQhVia; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2068acc8a4fso13331665ad.1
-        for <linux-mips@vger.kernel.org>; Fri, 13 Sep 2024 14:04:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1726261452; x=1726866252; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pGN098PfFZ1p39RZKtno/bb1iGOxyKkQDSILC8HyAbs=;
-        b=mGJQhViaeBP8boO4Z3ZlrGQg2Ou1nzmYaw9yb7rukospMvx2utfJB3ZJC/iHXR1zY5
-         OHHUQ7APm78lvjgaMAUf8nqLxbwPfkCE6Z5e7ZNILJdFYZ+iil46N6YJi7qrukHgrCj/
-         52MTbKyKy529xeaqzrRTzLPQwJPpgli/uI+0fNxnWN+NS2DfW/BXySToSEAivdhd/b1E
-         0bhUlMQ9VwSyt4VT3AbPh30kaAP0/NOhpzlX6MgqnmsEjeE/PQpON963yaauaSMSSEog
-         9Z7w+mZFQjHElQBLBsbH+wO7gdp/BUvodGBjrviEku9NhDQC1RpY/imscbGB4lWvqiQI
-         Jydg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726261452; x=1726866252;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pGN098PfFZ1p39RZKtno/bb1iGOxyKkQDSILC8HyAbs=;
-        b=Asb8d67773zLns1Cz0gpndTzacbvagZmnimjt8XMEt52WJ+E6kOrgWZ/J3tBnErnWH
-         9JZTtq2wpe8saTNSgQLBKG7ksjmWN8mjy5i2+D1KPND5GojYfPoAPEJ6TUzrthbZBflq
-         JCsgyEYlptIHYtfhgAbHmuKieW6IWGfegGt0MVo/n1mSDexojnwEn8jO8McdgooMBt+K
-         rTETfkshGHXnfygPK6SRskZI2tJ5cgZvEbAyDKL+qczTaKbjdIW6JNZ0RZcvPN8kd4la
-         Xl0jN+ws0xUiFujlSLCmPVjpIsaZpBZoqpCRy/Re8IZcKY5to31rQ+uSkvNhlOfcMKEE
-         UEjw==
-X-Forwarded-Encrypted: i=1; AJvYcCXJ6M8/aUP5NQ5KrD04NxgXcXJHItBQBLmF2LCc8uEGySjC4F7FVxiJOdTRgYUyqjyG9SijUsTZirql@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJF4E2hG+00tQDBzQ2M7oUD6FrAycUWhsh+27lBQOmBX9+uWQt
-	s/7OX8C5BMjBfUgv6MqG45bSptq+j8JZ0zmPq/VCy6KEdbrG0mULAlW68HzwXmQ=
-X-Google-Smtp-Source: AGHT+IHQy68+7/4em5wfAX0phJQ7a7VsNC8xlp5lvUp2N1zpKPOlth6aUECbhTSHxYBYBN7icOc/wA==
-X-Received: by 2002:a17:902:f54f:b0:207:457f:b8a6 with SMTP id d9443c01a7336-2078262ccc1mr54571405ad.12.1726261452005;
-        Fri, 13 Sep 2024 14:04:12 -0700 (PDT)
-Received: from ghost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-207945da8c9sm608475ad.17.2024.09.13.14.04.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Sep 2024 14:04:11 -0700 (PDT)
-Date: Fri, 13 Sep 2024 14:04:06 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Arnd Bergmann <arnd@arndb.de>, guoren <guoren@kernel.org>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S . Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@suse.cz>, shuah <shuah@kernel.org>,
-	Christoph Hellwig <hch@infradead.org>,
-	Michal Hocko <mhocko@suse.com>,
-	"Kirill A. Shutemov" <kirill@shutemov.name>,
-	Chris Torek <chris.torek@gmail.com>,
-	Linux-Arch <linux-arch@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-abi-devel@lists.sourceforge.net
-Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
- 47 bits
-Message-ID: <ZuSoxh5U3Kj1XgGq@ghost>
-References: <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
- <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
- <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
- <f23b18c6-1856-4b59-9ba3-59809b425c81@app.fastmail.com>
- <Ztrq8PBLJ3QuFJz7@arm.com>
- <oshwto46wbbgneiayj63umllyozm3c4267rvpszqzaopwnt2l7@6mxl5vydtons>
- <ZuDoExckq21fePoe@ghost>
- <ZuHfp0_tAQhaymdy@arm.com>
- <ZuKHpFB+uWuJe2xm@ghost>
- <d873a994-4efa-4d3a-bdae-5d9a3eff29f2@lucifer.local>
+	s=arc-20240116; t=1726304210; c=relaxed/simple;
+	bh=g3Fk1Psf82pq5xnjzHbT39MQdtOMJLff6D6Cc6nuZDc=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=OKpUz/RdrPOttIuU7CCB/cVJA54vekogzZNkxkURTxqaKE32vBB1ksIa5a3+GVC8+ClA9ec0jEykxu19K4XI0KhG38bZLr0epJOLCuwcreIgH1cODNBpsp2pbjXWjGFyVXtkWhYJ3Y3UVMwH2j9TsVr3oybfXinG97p9pBOgdfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.62])
+	by gateway (Coremail) with SMTP id _____8Bx++nKT+Vms9oHAA--.18060S3;
+	Sat, 14 Sep 2024 16:56:42 +0800 (CST)
+Received: from [10.20.42.62] (unknown [10.20.42.62])
+	by front1 (Coremail) with SMTP id qMiowMCxrtfJT+VmMbUGAA--.37972S3;
+	Sat, 14 Sep 2024 16:56:41 +0800 (CST)
+Subject: Re: [PATCH v3 3/4] LoongArch: Extract IOCSR definitions to standalone
+ header
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>, Huacai Chen
+ <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner
+ <tglx@linutronix.de>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-mips@vger.kernel.org, kvm@vger.kernel.org
+References: <20240913-iocsr-v3-0-81a57f60350d@flygoat.com>
+ <20240913-iocsr-v3-3-81a57f60350d@flygoat.com>
+From: maobibo <maobibo@loongson.cn>
+Message-ID: <147e72c9-8177-9c03-8baf-df7362143cd6@loongson.cn>
+Date: Sat, 14 Sep 2024 16:56:40 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <20240913-iocsr-v3-3-81a57f60350d@flygoat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <d873a994-4efa-4d3a-bdae-5d9a3eff29f2@lucifer.local>
+X-CM-TRANSID:qMiowMCxrtfJT+VmMbUGAA--.37972S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj9fXoWfXw4UZFy5ZFyUuFWkCFykZwc_yoW8ZF1kCo
+	W0qayftr48Aw47Zw1Yq3yqvFWUJrykArs8AanxAa97JrW7JF1DKFW5ta42vry3tayYvrZr
+	Ca9FgFWkJa9avas8l-sFpf9Il3svdjkaLaAFLSUrUUUU0b8apTn2vfkv8UJUUUU8wcxFpf
+	9Il3svdxBIdaVrn0xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3
+	UjIYCTnIWjp_UUUOn7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI
+	8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
+	Y2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14
+	v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
+	wI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
+	xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
+	JF0_Jw1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
+	xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
+	I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrV
+	AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
+	c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267
+	AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_
+	Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8uc_3
+	UUUUU==
 
-On Fri, Sep 13, 2024 at 08:41:34AM +0100, Lorenzo Stoakes wrote:
-> On Wed, Sep 11, 2024 at 11:18:12PM GMT, Charlie Jenkins wrote:
-> > On Wed, Sep 11, 2024 at 07:21:27PM +0100, Catalin Marinas wrote:
-> > > On Tue, Sep 10, 2024 at 05:45:07PM -0700, Charlie Jenkins wrote:
-> > > > On Tue, Sep 10, 2024 at 03:08:14PM -0400, Liam R. Howlett wrote:
-> > > > > * Catalin Marinas <catalin.marinas@arm.com> [240906 07:44]:
-> > > > > > On Fri, Sep 06, 2024 at 09:55:42AM +0000, Arnd Bergmann wrote:
-> > > > > > > On Fri, Sep 6, 2024, at 09:14, Guo Ren wrote:
-> > > > > > > > On Fri, Sep 6, 2024 at 3:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > > > > > > >> It's also unclear to me how we want this flag to interact with
-> > > > > > > >> the existing logic in arch_get_mmap_end(), which attempts to
-> > > > > > > >> limit the default mapping to a 47-bit address space already.
-> > > > > > > >
-> > > > > > > > To optimize RISC-V progress, I recommend:
-> > > > > > > >
-> > > > > > > > Step 1: Approve the patch.
-> > > > > > > > Step 2: Update Go and OpenJDK's RISC-V backend to utilize it.
-> > > > > > > > Step 3: Wait approximately several iterations for Go & OpenJDK
-> > > > > > > > Step 4: Remove the 47-bit constraint in arch_get_mmap_end()
-> > >
-> > > Point 4 is an ABI change. What guarantees that there isn't still
-> > > software out there that relies on the old behaviour?
-> >
-> > Yeah I don't think it would be desirable to remove the 47 bit
-> > constraint in architectures that already have it.
-> >
-> > >
-> > > > > > > I really want to first see a plausible explanation about why
-> > > > > > > RISC-V can't just implement this using a 47-bit DEFAULT_MAP_WINDOW
-> > > > > > > like all the other major architectures (x86, arm64, powerpc64),
-> > > > > >
-> > > > > > FWIW arm64 actually limits DEFAULT_MAP_WINDOW to 48-bit in the default
-> > > > > > configuration. We end up with a 47-bit with 16K pages but for a
-> > > > > > different reason that has to do with LPA2 support (I doubt we need this
-> > > > > > for the user mapping but we need to untangle some of the macros there;
-> > > > > > that's for a separate discussion).
-> > > > > >
-> > > > > > That said, we haven't encountered any user space problems with a 48-bit
-> > > > > > DEFAULT_MAP_WINDOW. So I also think RISC-V should follow a similar
-> > > > > > approach (47 or 48 bit default limit). Better to have some ABI
-> > > > > > consistency between architectures. One can still ask for addresses above
-> > > > > > this default limit via mmap().
-> > > > >
-> > > > > I think that is best as well.
-> > > > >
-> > > > > Can we please just do what x86 and arm64 does?
-> > > >
-> > > > I responded to Arnd in the other thread, but I am still not convinced
-> > > > that the solution that x86 and arm64 have selected is the best solution.
-> > > > The solution of defaulting to 47 bits does allow applications the
-> > > > ability to get addresses that are below 47 bits. However, due to
-> > > > differences across architectures it doesn't seem possible to have all
-> > > > architectures default to the same value. Additionally, this flag will be
-> > > > able to help users avoid potential bugs where a hint address is passed
-> > > > that causes upper bits of a VA to be used.
-> > >
-> > > The reason we added this limit on arm64 is that we noticed programs
-> > > using the top 8 bits of a 64-bit pointer for additional information.
-> > > IIRC, it wasn't even openJDK but some JavaScript JIT. We could have
-> > > taught those programs of a new flag but since we couldn't tell how many
-> > > are out there, it was the safest to default to a smaller limit and opt
-> > > in to the higher one. Such opt-in is via mmap() but if you prefer a
-> > > prctl() flag, that's fine by me as well (though I think this should be
-> > > opt-in to higher addresses rather than opt-out of the higher addresses).
-> >
-> > The mmap() flag was used in previous versions but was decided against
-> > because this feature is more useful if it is process-wide. A
-> > personality() flag was chosen instead of a prctl() flag because there
-> > existed other flags in personality() that were similar. I am tempted to
-> > use prctl() however because then we could have an additional arg to
-> > select the exact number of bits that should be reserved (rather than
-> > being fixed at 47 bits).
-> 
-> I am very much not in favour of a prctl(), it would require us to add state
-> limiting the address space and the timing of it becomes critical. Then we
-> have the same issue we do with the other proposals as to - what happens if
-> this is too low?
-> 
-> What is 'too low' varies by architecture, and for 32-bit architectures
-> could get quite... problematic.
-> 
-> And again, wha is the RoI here - we introducing maintenance burden and edge
-> cases vs. the x86 solution in order to... accommodate things that need more
-> than 128 TiB of address space? A problem that does not appear to exist in
-> reality?
-> 
-> I suggested the personality approach as the least impactful compromise way
-> of this series working, but I think after what Arnd has said (and please
-> forgive me if I've missed further discussion have been dipping in and out
-> of this!) - adapting risc v to the approach we take elsewhere seems the
-> most sensible solution to me.
->
-> This remains something we can revisit in future if this turns out to be
-> egregious.
->
+Hi jiaxun,
 
-I appreciate Arnd's comments, but I do not think that making 47-bit the
-default is the best solution for riscv. On riscv, support for 48-bit
-address spaces was merged in 5.17 and support for 57-bit address spaces
-was merged in 5.18 without changing the default addresses provided by
-mmap(). It could be argued that this was a mistake, however since at the
-time there didn't exist hardware with larger address spaces it wasn't an
-issue. The applications that existed at the time that relied on the
-smaller address spaces have not been able to move to larger address
-spaces. Making a 47-bit user-space address space default solves the
-problem, but that is not arch agnostic, and can't be since of the
-varying differences in page table sizes across architectures, which is
-the other part of the problem I am trying to solve.
+On 2024/9/14 上午4:32, Jiaxun Yang wrote:
+> As IOCSR is not a part of architecture specification, it is not
+> really appropriate to define those stuff in loongarch.h.
+IOCSR address is somewhat strange compared with generic mmio bus,
+neither fdt nor acpi does not support IOCSR address space. I do not know 
+the future about IOCSR, since I do not know the advantage of it compared 
+to MMIO address space, except it can only  be accessed in supervisor mode.
 
-> >
-> > Opting-in to the higher address space is reasonable. However, it is not
-> > my preference, because the purpose of this flag is to ensure that
-> > allocations do not exceed 47-bits, so it is a clearer ABI to have the
-> > applications that want this guarantee to be the ones setting the flag,
-> > rather than the applications that want the higher bits setting the flag.
+Sharing the same code with multiple architecture is welcome.
 > 
-> Perfect is the enemy of the good :) and an idealised solution may not end
-> up being something everybody can agree on.
-
-Yes you are totally right! Although this is not my ideal solution, it
-sufficiently accomplishes the goal so I think it is reasonable to
-implement this as a personality flag.
-
+> Extract those definitions to include/linux/loongson/iocsr.h, so
+> that they can be shared with MIPS based Loongson systems as well.
 > 
-> >
-> > - Charlie
-> >
-> > >
-> > > --
-> > > Catalin
-> >
-> >
-> >
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>   MAINTAINERS                             |   1 +
+>   arch/loongarch/include/asm/loongarch.h  |  90 --------------------------
+>   arch/loongarch/kernel/cpu-probe.c       |   7 +-
+>   arch/loongarch/kernel/relocate_kernel.S |   5 +-
+>   arch/loongarch/kernel/smp.c             |  23 +++----
+>   drivers/cpufreq/loongson3_cpufreq.c     |  11 ++--
+>   drivers/irqchip/irq-loongarch-avec.c    |   5 +-
+>   drivers/irqchip/irq-loongson-eiointc.c  |   5 +-
+>   include/linux/loongson/iocsr.h          | 110 ++++++++++++++++++++++++++++++++
+>   9 files changed, 142 insertions(+), 115 deletions(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 0a3d9e17295a..f0f4c427e9a3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -13305,6 +13305,7 @@ F:	Documentation/translations/zh_CN/arch/loongarch/
+>   F:	arch/loongarch/
+>   F:	drivers/*/*loongarch*
+>   F:	drivers/cpufreq/loongson3_cpufreq.c
+> +F:	include/linux/loongson
+>   
+>   LOONGSON GPIO DRIVER
+>   M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+> diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
+> index 23af28f00c3c..4ac228230720 100644
+> --- a/arch/loongarch/include/asm/loongarch.h
+> +++ b/arch/loongarch/include/asm/loongarch.h
+> @@ -1048,84 +1048,6 @@
+>   
+>   #define ESTATF_IP		0x00003fff
+>   
+> -#define LOONGARCH_IOCSR_FEATURES	0x8
+> -#define  IOCSRF_TEMP			BIT_ULL(0)
+> -#define  IOCSRF_NODECNT			BIT_ULL(1)
+> -#define  IOCSRF_MSI			BIT_ULL(2)
+> -#define  IOCSRF_EXTIOI			BIT_ULL(3)
+> -#define  IOCSRF_CSRIPI			BIT_ULL(4)
+> -#define  IOCSRF_FREQCSR			BIT_ULL(5)
+> -#define  IOCSRF_FREQSCALE		BIT_ULL(6)
+> -#define  IOCSRF_DVFSV1			BIT_ULL(7)
+> -#define  IOCSRF_EIODECODE		BIT_ULL(9)
+> -#define  IOCSRF_FLATMODE		BIT_ULL(10)
+> -#define  IOCSRF_VM			BIT_ULL(11)
+> -#define  IOCSRF_AVEC			BIT_ULL(15)
+> -
+> -#define LOONGARCH_IOCSR_VENDOR		0x10
+> -
+> -#define LOONGARCH_IOCSR_CPUNAME		0x20
+> -
+> -#define LOONGARCH_IOCSR_NODECNT		0x408
+> -
+> -#define LOONGARCH_IOCSR_MISC_FUNC	0x420
+> -#define  IOCSR_MISC_FUNC_SOFT_INT	BIT_ULL(10)
+> -#define  IOCSR_MISC_FUNC_TIMER_RESET	BIT_ULL(21)
+> -#define  IOCSR_MISC_FUNC_EXT_IOI_EN	BIT_ULL(48)
+> -#define  IOCSR_MISC_FUNC_AVEC_EN	BIT_ULL(51)
+> -
+> -#define LOONGARCH_IOCSR_CPUTEMP		0x428
+> -
+> -#define LOONGARCH_IOCSR_SMCMBX		0x51c
+> -
+> -/* PerCore CSR, only accessible by local cores */
+> -#define LOONGARCH_IOCSR_IPI_STATUS	0x1000
+> -#define LOONGARCH_IOCSR_IPI_EN		0x1004
+> -#define LOONGARCH_IOCSR_IPI_SET		0x1008
+> -#define LOONGARCH_IOCSR_IPI_CLEAR	0x100c
+> -#define LOONGARCH_IOCSR_MBUF0		0x1020
+> -#define LOONGARCH_IOCSR_MBUF1		0x1028
+> -#define LOONGARCH_IOCSR_MBUF2		0x1030
+> -#define LOONGARCH_IOCSR_MBUF3		0x1038
+> -
+> -#define LOONGARCH_IOCSR_IPI_SEND	0x1040
+> -#define  IOCSR_IPI_SEND_IP_SHIFT	0
+> -#define  IOCSR_IPI_SEND_CPU_SHIFT	16
+> -#define  IOCSR_IPI_SEND_BLOCKING	BIT(31)
+> -
+> -#define LOONGARCH_IOCSR_MBUF_SEND	0x1048
+> -#define  IOCSR_MBUF_SEND_BLOCKING	BIT_ULL(31)
+> -#define  IOCSR_MBUF_SEND_BOX_SHIFT	2
+> -#define  IOCSR_MBUF_SEND_BOX_LO(box)	(box << 1)
+> -#define  IOCSR_MBUF_SEND_BOX_HI(box)	((box << 1) + 1)
+> -#define  IOCSR_MBUF_SEND_CPU_SHIFT	16
+> -#define  IOCSR_MBUF_SEND_BUF_SHIFT	32
+> -#define  IOCSR_MBUF_SEND_H32_MASK	0xFFFFFFFF00000000ULL
+> -
+> -#define LOONGARCH_IOCSR_ANY_SEND	0x1158
+> -#define  IOCSR_ANY_SEND_BLOCKING	BIT_ULL(31)
+> -#define  IOCSR_ANY_SEND_CPU_SHIFT	16
+> -#define  IOCSR_ANY_SEND_MASK_SHIFT	27
+> -#define  IOCSR_ANY_SEND_BUF_SHIFT	32
+> -#define  IOCSR_ANY_SEND_H32_MASK	0xFFFFFFFF00000000ULL
+> -
+> -/* Register offset and bit definition for CSR access */
+> -#define LOONGARCH_IOCSR_TIMER_CFG       0x1060
+> -#define LOONGARCH_IOCSR_TIMER_TICK      0x1070
+> -#define  IOCSR_TIMER_CFG_RESERVED       (_ULCAST_(1) << 63)
+> -#define  IOCSR_TIMER_CFG_PERIODIC       (_ULCAST_(1) << 62)
+> -#define  IOCSR_TIMER_CFG_EN             (_ULCAST_(1) << 61)
+> -#define  IOCSR_TIMER_MASK		0x0ffffffffffffULL
+> -#define  IOCSR_TIMER_INITVAL_RST        (_ULCAST_(0xffff) << 48)
+> -
+> -#define LOONGARCH_IOCSR_EXTIOI_NODEMAP_BASE	0x14a0
+> -#define LOONGARCH_IOCSR_EXTIOI_IPMAP_BASE	0x14c0
+> -#define LOONGARCH_IOCSR_EXTIOI_EN_BASE		0x1600
+> -#define LOONGARCH_IOCSR_EXTIOI_BOUNCE_BASE	0x1680
+> -#define LOONGARCH_IOCSR_EXTIOI_ISR_BASE		0x1800
+> -#define LOONGARCH_IOCSR_EXTIOI_ROUTE_BASE	0x1c00
+> -#define IOCSR_EXTIOI_VECTOR_NUM			256
+> -
+>   #ifndef __ASSEMBLY__
+>   
+>   static __always_inline u64 drdtime(void)
+> @@ -1145,18 +1067,6 @@ static inline unsigned int get_csr_cpuid(void)
+>   	return csr_read32(LOONGARCH_CSR_CPUID);
+>   }
+>   
+> -static inline void csr_any_send(unsigned int addr, unsigned int data,
+> -				unsigned int data_mask, unsigned int cpu)
+> -{
+> -	uint64_t val = 0;
+> -
+> -	val = IOCSR_ANY_SEND_BLOCKING | addr;
+> -	val |= (cpu << IOCSR_ANY_SEND_CPU_SHIFT);
+> -	val |= (data_mask << IOCSR_ANY_SEND_MASK_SHIFT);
+> -	val |= ((uint64_t)data << IOCSR_ANY_SEND_BUF_SHIFT);
+> -	iocsr_write64(val, LOONGARCH_IOCSR_ANY_SEND);
+> -}
+> -
+>   static inline unsigned int read_csr_excode(void)
+>   {
+>   	return (csr_read32(LOONGARCH_CSR_ESTAT) & CSR_ESTAT_EXC) >> CSR_ESTAT_EXC_SHIFT;
+> diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
+> index 8a868a10df9c..07b68f93ccdc 100644
+> --- a/arch/loongarch/kernel/cpu-probe.c
+> +++ b/arch/loongarch/kernel/cpu-probe.c
+> @@ -6,6 +6,7 @@
+>    */
+>   #include <linux/init.h>
+>   #include <linux/kernel.h>
+> +#include <linux/loongson/iocsr.h>
+>   #include <linux/ptrace.h>
+>   #include <linux/smp.h>
+>   #include <linux/stddef.h>
+> @@ -267,13 +268,13 @@ static inline void cpu_probe_loongson(struct cpuinfo_loongarch *c, unsigned int
+>   	if (!(c->options & LOONGARCH_CPU_IOCSR))
+>   		return;
+>   
+> -	*vendor = iocsr_read64(LOONGARCH_IOCSR_VENDOR);
+> -	*cpuname = iocsr_read64(LOONGARCH_IOCSR_CPUNAME);
+> +	*vendor = iocsr_read64(LOONGSON_IOCSR_VENDOR);
+> +	*cpuname = iocsr_read64(LOONGSON_IOCSR_CPUNAME);
+>   
+>   	if (!__cpu_full_name[cpu])
+>   		__cpu_full_name[cpu] = cpu_full_name;
+>   
+> -	config = iocsr_read32(LOONGARCH_IOCSR_FEATURES);
+> +	config = iocsr_read32(LOONGSON_IOCSR_FEATURES);
+>   	if (config & IOCSRF_CSRIPI)
+>   		c->options |= LOONGARCH_CPU_CSRIPI;
+>   	if (config & IOCSRF_EXTIOI)
+> diff --git a/arch/loongarch/kernel/relocate_kernel.S b/arch/loongarch/kernel/relocate_kernel.S
+> index 84e6de2fd973..ce40ba6b5975 100644
+> --- a/arch/loongarch/kernel/relocate_kernel.S
+> +++ b/arch/loongarch/kernel/relocate_kernel.S
+> @@ -5,6 +5,7 @@
+>    * Copyright (C) 2022 Loongson Technology Corporation Limited
+>    */
+>   
+> +#include <linux/loongson/iocsr.h>
+>   #include <linux/kexec.h>
+>   
+>   #include <asm/asm.h>
+> @@ -88,14 +89,14 @@ SYM_CODE_END(relocate_new_kernel)
+>   #ifdef CONFIG_SMP
+>   /*
+>    * Other CPUs should wait until code is relocated and
+> - * then start at the entry point from LOONGARCH_IOCSR_MBUF0.
+> + * then start at the entry point from LOONGSON_IOCSR_MBUF0.
+>    */
+>   SYM_CODE_START(kexec_smp_wait)
+>   	UNWIND_HINT_UNDEFINED
+>   1:	li.w		t0, 0x100			/* wait for init loop */
+>   2:	addi.w		t0, t0, -1			/* limit mailbox access */
+>   	bnez		t0, 2b
+> -	li.w		t1, LOONGARCH_IOCSR_MBUF0
+> +	li.w		t1, LOONGSON_IOCSR_MBUF0
+>   	iocsrrd.w	s0, t1				/* check PC as an indicator */
+>   	beqz		s0, 1b
+>   	iocsrrd.d	s0, t1				/* get PC via mailbox */
+> diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+> index 4adbbef3450a..120865985376 100644
+> --- a/arch/loongarch/kernel/smp.c
+> +++ b/arch/loongarch/kernel/smp.c
+> @@ -14,6 +14,7 @@
+>   #include <linux/init.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/irq_work.h>
+> +#include <linux/loongson/iocsr.h>
+>   #include <linux/profile.h>
+>   #include <linux/seq_file.h>
+>   #include <linux/smp.h>
+> @@ -164,14 +165,14 @@ static void csr_mail_send(uint64_t data, int cpu, int mailbox)
+>   	val |= (IOCSR_MBUF_SEND_BOX_HI(mailbox) << IOCSR_MBUF_SEND_BOX_SHIFT);
+>   	val |= (cpu << IOCSR_MBUF_SEND_CPU_SHIFT);
+>   	val |= (data & IOCSR_MBUF_SEND_H32_MASK);
+> -	iocsr_write64(val, LOONGARCH_IOCSR_MBUF_SEND);
+> +	iocsr_write64(val, LOONGSON_IOCSR_MBUF_SEND);
+>   
+>   	/* Send low 32 bits */
+>   	val = IOCSR_MBUF_SEND_BLOCKING;
+>   	val |= (IOCSR_MBUF_SEND_BOX_LO(mailbox) << IOCSR_MBUF_SEND_BOX_SHIFT);
+>   	val |= (cpu << IOCSR_MBUF_SEND_CPU_SHIFT);
+>   	val |= (data << IOCSR_MBUF_SEND_BUF_SHIFT);
+> -	iocsr_write64(val, LOONGARCH_IOCSR_MBUF_SEND);
+> +	iocsr_write64(val, LOONGSON_IOCSR_MBUF_SEND);
+>   };
+>   
+>   static u32 ipi_read_clear(int cpu)
+> @@ -179,9 +180,9 @@ static u32 ipi_read_clear(int cpu)
+>   	u32 action;
+>   
+>   	/* Load the ipi register to figure out what we're supposed to do */
+> -	action = iocsr_read32(LOONGARCH_IOCSR_IPI_STATUS);
+> +	action = iocsr_read32(LOONGSON_IOCSR_IPI_STATUS);
+>   	/* Clear the ipi register to clear the interrupt */
+> -	iocsr_write32(action, LOONGARCH_IOCSR_IPI_CLEAR);
+> +	iocsr_write32(action, LOONGSON_IOCSR_IPI_CLEAR);
+>   	wbflush();
+>   
+>   	return action;
+> @@ -193,7 +194,7 @@ static void ipi_write_action(int cpu, u32 action)
+>   
+>   	val = IOCSR_IPI_SEND_BLOCKING | action;
+>   	val |= (cpu << IOCSR_IPI_SEND_CPU_SHIFT);
+> -	iocsr_write32(val, LOONGARCH_IOCSR_IPI_SEND);
+> +	iocsr_write32(val, LOONGSON_IOCSR_IPI_SEND);
+>   }
+>   
+>   static void loongson_send_ipi_single(int cpu, unsigned int action)
+> @@ -322,7 +323,7 @@ void __init loongson_smp_setup(void)
+>   	cpu_data[0].package = cpu_logical_map(0) / loongson_sysconf.cores_per_package;
+>   
+>   	pv_ipi_init();
+> -	iocsr_write32(0xffffffff, LOONGARCH_IOCSR_IPI_EN);
+> +	iocsr_write32(0xffffffff, LOONGSON_IOCSR_IPI_EN);
+>   	pr_info("Detected %i available CPU(s)\n", loongson_sysconf.nr_cpus);
+>   }
+>   
+> @@ -370,7 +371,7 @@ void loongson_init_secondary(void)
+>   
+>   	change_csr_ecfg(ECFG0_IM, imask);
+>   
+> -	iocsr_write32(0xffffffff, LOONGARCH_IOCSR_IPI_EN);
+> +	iocsr_write32(0xffffffff, LOONGSON_IOCSR_IPI_EN);
+>   
+>   #ifdef CONFIG_NUMA
+>   	numa_add_cpu(cpu);
+> @@ -385,7 +386,7 @@ void loongson_init_secondary(void)
+>   void loongson_smp_finish(void)
+>   {
+>   	local_irq_enable();
+> -	iocsr_write64(0, LOONGARCH_IOCSR_MBUF0);
+> +	iocsr_write64(0, LOONGSON_IOCSR_MBUF0);
+>   	pr_info("CPU#%d finished\n", smp_processor_id());
+>   }
+>   
+> @@ -435,12 +436,12 @@ void __noreturn arch_cpu_idle_dead(void)
+>   	__smp_mb();
+>   	do {
+>   		__asm__ __volatile__("idle 0\n\t");
+> -		addr = iocsr_read64(LOONGARCH_IOCSR_MBUF0);
+> +		addr = iocsr_read64(LOONGSON_IOCSR_MBUF0);
+>   	} while (addr == 0);
+>   
+>   	local_irq_disable();
+>   	init_fn = (void *)TO_CACHE(addr);
+> -	iocsr_write32(0xffffffff, LOONGARCH_IOCSR_IPI_CLEAR);
+> +	iocsr_write32(0xffffffff, LOONGSON_IOCSR_IPI_CLEAR);
+>   
+>   	init_fn();
+>   	BUG();
+> @@ -460,7 +461,7 @@ static int loongson_ipi_suspend(void)
+>   
+>   static void loongson_ipi_resume(void)
+>   {
+> -	iocsr_write32(0xffffffff, LOONGARCH_IOCSR_IPI_EN);
+> +	iocsr_write32(0xffffffff, LOONGSON_IOCSR_IPI_EN);
+>   }
+>   
+>   static struct syscore_ops loongson_ipi_syscore_ops = {
+> diff --git a/drivers/cpufreq/loongson3_cpufreq.c b/drivers/cpufreq/loongson3_cpufreq.c
+> index 6b5e6798d9a2..11d5f1ba3040 100644
+> --- a/drivers/cpufreq/loongson3_cpufreq.c
+> +++ b/drivers/cpufreq/loongson3_cpufreq.c
+> @@ -10,6 +10,7 @@
+>   #include <linux/cpufreq.h>
+>   #include <linux/delay.h>
+>   #include <linux/module.h>
+> +#include <linux/loongson/iocsr.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/units.h>
+>   
+> @@ -182,7 +183,7 @@ static inline int do_service_request(u32 id, u32 info, u32 cmd, u32 val, u32 ext
+>   
+>   	mutex_lock(&cpufreq_mutex[package]);
+>   
+> -	last.value = iocsr_read32(LOONGARCH_IOCSR_SMCMBX);
+> +	last.value = iocsr_read32(LOONGSON_IOCSR_SMCMBX);
+>   	if (!last.complete) {
+>   		mutex_unlock(&cpufreq_mutex[package]);
+>   		return -EPERM;
+> @@ -195,12 +196,12 @@ static inline int do_service_request(u32 id, u32 info, u32 cmd, u32 val, u32 ext
+>   	msg.extra	= extra;
+>   	msg.complete	= 0;
+>   
+> -	iocsr_write32(msg.value, LOONGARCH_IOCSR_SMCMBX);
+> -	iocsr_write32(iocsr_read32(LOONGARCH_IOCSR_MISC_FUNC) | IOCSR_MISC_FUNC_SOFT_INT,
+> -		      LOONGARCH_IOCSR_MISC_FUNC);
+> +	iocsr_write32(msg.value, LOONGSON_IOCSR_SMCMBX);
+> +	iocsr_write32(iocsr_read32(LOONGSON_IOCSR_MISC_FUNC) | IOCSR_MISC_FUNC_SOFT_INT,
+> +		      LOONGSON_IOCSR_MISC_FUNC);
+>   
+>   	for (retries = 0; retries < 10000; retries++) {
+> -		msg.value = iocsr_read32(LOONGARCH_IOCSR_SMCMBX);
+> +		msg.value = iocsr_read32(LOONGSON_IOCSR_SMCMBX);
+>   		if (msg.complete)
+>   			break;
+>   
+> diff --git a/drivers/irqchip/irq-loongarch-avec.c b/drivers/irqchip/irq-loongarch-avec.c
+> index 0f6e465dd309..2452c6cc0aa1 100644
+> --- a/drivers/irqchip/irq-loongarch-avec.c
+> +++ b/drivers/irqchip/irq-loongarch-avec.c
+> @@ -10,6 +10,7 @@
+>   #include <linux/irqchip.h>
+>   #include <linux/irqchip/chained_irq.h>
+>   #include <linux/irqdomain.h>
+> +#include <linux/loongson/iocsr.h>
+>   #include <linux/kernel.h>
+>   #include <linux/msi.h>
+>   #include <linux/radix-tree.h>
+> @@ -378,9 +379,9 @@ static int __init avecintc_init(struct irq_domain *parent)
+>   				  "irqchip/loongarch/avecintc:starting",
+>   				  avecintc_cpu_online, avecintc_cpu_offline);
+>   #endif
+> -	value = iocsr_read64(LOONGARCH_IOCSR_MISC_FUNC);
+> +	value = iocsr_read64(LOONGSON_IOCSR_MISC_FUNC);
+>   	value |= IOCSR_MISC_FUNC_AVEC_EN;
+> -	iocsr_write64(value, LOONGARCH_IOCSR_MISC_FUNC);
+> +	iocsr_write64(value, LOONGSON_IOCSR_MISC_FUNC);
+>   
+>   	return ret;
+>   
+> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
+> index e24db71a8783..6e81bf27914f 100644
+> --- a/drivers/irqchip/irq-loongson-eiointc.c
+> +++ b/drivers/irqchip/irq-loongson-eiointc.c
+> @@ -13,6 +13,7 @@
+>   #include <linux/irqchip.h>
+>   #include <linux/irqdomain.h>
+>   #include <linux/irqchip/chained_irq.h>
+> +#include <linux/loongson/iocsr.h>
+>   #include <linux/kernel.h>
+>   #include <linux/syscore_ops.h>
+>   #include <asm/numa.h>
+> @@ -52,9 +53,9 @@ static void eiointc_enable(void)
+>   {
+>   	uint64_t misc;
+>   
+> -	misc = iocsr_read64(LOONGARCH_IOCSR_MISC_FUNC);
+> +	misc = iocsr_read64(LOONGSON_IOCSR_MISC_FUNC);
+>   	misc |= IOCSR_MISC_FUNC_EXT_IOI_EN;
+> -	iocsr_write64(misc, LOONGARCH_IOCSR_MISC_FUNC);
+> +	iocsr_write64(misc, LOONGSON_IOCSR_MISC_FUNC);
+>   }
+>   
+>   static int cpu_to_eio_node(int cpu)
+> diff --git a/include/linux/loongson/iocsr.h b/include/linux/loongson/iocsr.h
+> new file mode 100644
+> index 000000000000..6654a904bcbe
+> --- /dev/null
+> +++ b/include/linux/loongson/iocsr.h
+> @@ -0,0 +1,110 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + * Copyright (C) 2024, Jiaxun Yang <jiaxun.yang@flygoat.com>
+> + */
+> +
+> +#ifndef _LOONGSON_IOCSR_H
+> +#define _LOONGSON_IOCSR_H
+> +
+> +#include <linux/bits.h>
+> +#include <linux/types.h>
+> +
+> +#ifdef CONFIG_LOONGARCH
+> +#include <asm/loongarch.h>
+> +#endif
+> +
+> +#define LOONGSON_IOCSR_FEATURES	0x8
+> +#define  IOCSRF_TEMP			BIT_ULL(0)
+> +#define  IOCSRF_NODECNT			BIT_ULL(1)
+> +#define  IOCSRF_MSI			BIT_ULL(2)
+> +#define  IOCSRF_EXTIOI			BIT_ULL(3)
+> +#define  IOCSRF_CSRIPI			BIT_ULL(4)
+> +#define  IOCSRF_FREQCSR			BIT_ULL(5)
+> +#define  IOCSRF_FREQSCALE		BIT_ULL(6)
+> +#define  IOCSRF_DVFSV1			BIT_ULL(7)
+> +#define  IOCSRF_EIODECODE		BIT_ULL(9)
+> +#define  IOCSRF_FLATMODE		BIT_ULL(10)
+> +#define  IOCSRF_VM			BIT_ULL(11)
+> +#define  IOCSRF_AVEC			BIT_ULL(15)
+Is these definiton the same between Loongson3 mips and LoongArch machine 
+such as IOCSRF_FLATMODE/IOCSRF_AVEC?
+
+> +
+> +#define LOONGSON_IOCSR_VENDOR		0x10
+> +
+> +#define LOONGSON_IOCSR_CPUNAME		0x20
+> +
+> +#define LOONGSON_IOCSR_NODECNT		0x408
+> +
+> +#define LOONGSON_IOCSR_MISC_FUNC	0x420
+> +#define  IOCSR_MISC_FUNC_SOFT_INT	BIT_ULL(10)
+> +#define  IOCSR_MISC_FUNC_TIMER_RESET	BIT_ULL(21)
+> +#define  IOCSR_MISC_FUNC_EXT_IOI_EN	BIT_ULL(48)
+> +#define  IOCSR_MISC_FUNC_AVEC_EN	BIT_ULL(51)
+> +
+> +#define LOONGSON_IOCSR_CPUTEMP		0x428
+> +
+> +#define LOONGSON_IOCSR_SMCMBX		0x51c
+> +
+> +/* PerCore CSR, only accessible by local cores */
+> +#define LOONGSON_IOCSR_IPI_STATUS	0x1000
+> +#define LOONGSON_IOCSR_IPI_EN		0x1004
+> +#define LOONGSON_IOCSR_IPI_SET		0x1008
+> +#define LOONGSON_IOCSR_IPI_CLEAR	0x100c
+> +#define LOONGSON_IOCSR_MBUF0		0x1020
+> +#define LOONGSON_IOCSR_MBUF1		0x1028
+> +#define LOONGSON_IOCSR_MBUF2		0x1030
+> +#define LOONGSON_IOCSR_MBUF3		0x1038
+It seems that it is only used with arch/loongarch/kernel/smp.c,
+and file smp.c is arch specific. No generic driver uses this.
+
+> +
+> +#define LOONGSON_IOCSR_IPI_SEND	0x1040
+> +#define  IOCSR_IPI_SEND_IP_SHIFT	0
+> +#define  IOCSR_IPI_SEND_CPU_SHIFT	16
+> +#define  IOCSR_IPI_SEND_BLOCKING	BIT(31)
+> +
+> +#define LOONGSON_IOCSR_MBUF_SEND	0x1048
+> +#define  IOCSR_MBUF_SEND_BLOCKING	BIT_ULL(31)
+> +#define  IOCSR_MBUF_SEND_BOX_SHIFT	2
+> +#define  IOCSR_MBUF_SEND_BOX_LO(box)	(box << 1)
+> +#define  IOCSR_MBUF_SEND_BOX_HI(box)	((box << 1) + 1)
+> +#define  IOCSR_MBUF_SEND_CPU_SHIFT	16
+> +#define  IOCSR_MBUF_SEND_BUF_SHIFT	32
+> +#define  IOCSR_MBUF_SEND_H32_MASK	0xFFFFFFFF00000000ULL
+> +
+> +#define LOONGSON_IOCSR_ANY_SEND	0x1158
+> +#define  IOCSR_ANY_SEND_BLOCKING	BIT_ULL(31)
+> +#define  IOCSR_ANY_SEND_CPU_SHIFT	16
+> +#define  IOCSR_ANY_SEND_MASK_SHIFT	27
+> +#define  IOCSR_ANY_SEND_BUF_SHIFT	32
+> +#define  IOCSR_ANY_SEND_H32_MASK	0xFFFFFFFF00000000ULL
+> +
+> +/* Register offset and bit definition for CSR access */
+> +#define LOONGSON_IOCSR_TIMER_CFG       0x1060
+> +#define LOONGSON_IOCSR_TIMER_TICK      0x1070
+> +#define  IOCSR_TIMER_CFG_RESERVED       (_ULCAST_(1) << 63)
+> +#define  IOCSR_TIMER_CFG_PERIODIC       (_ULCAST_(1) << 62)
+> +#define  IOCSR_TIMER_CFG_EN             (_ULCAST_(1) << 61)
+> +#define  IOCSR_TIMER_MASK		0x0ffffffffffffULL
+> +#define  IOCSR_TIMER_INITVAL_RST        (_ULCAST_(0xffff) << 48)
+I do not find any use about IOCSR_TIMER macro, which does ip driver use 
+this?
+
+> +
+> +#define LOONGSON_IOCSR_EXTIOI_NODEMAP_BASE	0x14a0
+> +#define LOONGSON_IOCSR_EXTIOI_IPMAP_BASE	0x14c0
+> +#define LOONGSON_IOCSR_EXTIOI_EN_BASE		0x1600
+> +#define LOONGSON_IOCSR_EXTIOI_BOUNCE_BASE	0x1680
+> +#define LOONGSON_IOCSR_EXTIOI_ISR_BASE		0x1800
+> +#define LOONGSON_IOCSR_EXTIOI_ROUTE_BASE	0x1c00
+> +#define IOCSR_EXTIOI_VECTOR_NUM			256
+Is it better to define these macro in common header file or in extioi 
+driver?  It seems that only extioi use it.
+
+Regards
+Bibo Mao
+
+> +
+> +#ifndef __ASSEMBLY__
+> +static inline void csr_any_send(unsigned int addr, unsigned int data,
+> +				unsigned int data_mask, unsigned int cpu)
+> +{
+> +	uint64_t val = 0;
+> +
+> +	val = IOCSR_ANY_SEND_BLOCKING | addr;
+> +	val |= (cpu << IOCSR_ANY_SEND_CPU_SHIFT);
+> +	val |= (data_mask << IOCSR_ANY_SEND_MASK_SHIFT);
+> +	val |= ((uint64_t)data << IOCSR_ANY_SEND_BUF_SHIFT);
+> +	iocsr_write64(val, LOONGSON_IOCSR_ANY_SEND);
+> +}
+> +#endif
+> +
+> +#endif
+> +
+> 
+
 
