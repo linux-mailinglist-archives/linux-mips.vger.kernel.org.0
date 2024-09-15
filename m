@@ -1,225 +1,135 @@
-Return-Path: <linux-mips+bounces-5578-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5579-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67A86978FF5
-	for <lists+linux-mips@lfdr.de>; Sat, 14 Sep 2024 12:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 254C39796E6
+	for <lists+linux-mips@lfdr.de>; Sun, 15 Sep 2024 15:51:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B413DB20BE3
-	for <lists+linux-mips@lfdr.de>; Sat, 14 Sep 2024 10:28:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8B66B212EB
+	for <lists+linux-mips@lfdr.de>; Sun, 15 Sep 2024 13:51:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 239E41CEE83;
-	Sat, 14 Sep 2024 10:28:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B6C91C6F44;
+	Sun, 15 Sep 2024 13:51:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="ZTVwrOwg";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kFl6aUv0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DRkIar9R"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE87139CE9;
-	Sat, 14 Sep 2024 10:28:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C3914286;
+	Sun, 15 Sep 2024 13:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726309697; cv=none; b=mGuZuGN71oMTu2vCbxm9/a24BQHyse4Ero+1XMUbINwddbVFendQavwqhYWqtPh/UaMji4ILQ0NjQmE+DU20qLswkQ8jdodV2zObTjBeZwyRBp+hgArBJT0R9nZqP/j47eRjBHn9I1XgDe27OYsdq9HFg+QHnjR/EPrtaQn+n4Y=
+	t=1726408307; cv=none; b=l25oO3nSugrL4w2e8KRuJzjSDagayyv4pArfoylr8SXYNWOgCVvr/dUWsROBmkUOBbzBjHCaAmlVSyfO5ccPYqJ1NLl7uqoalE+j1SVLxYGUvh4zzcp6H7pu4C/uRXAu5tLyo2994tceLb5Kx7Mo3ynSGpOBwqw3m8IZaQfH1MA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726309697; c=relaxed/simple;
-	bh=CCWTWrL1CydY3BbMjeEC6jRmI5josYSow3PV8jabXok=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=JSbYmJe9GSJIij+mWAzA7qTOdtIF8hfOkK1UwZw8HP9PlAnCQIltuHjcEDzj0CaSQ0WaLSuOFM5F0k4xQEw9YuyhN6Dly2JMiyuIuyGhukjk+4ULMT4+/RRtWCJVeqWnpGW1/q6vvQCRbacHwJkWARBK/mXZwx8r7I3IWAyku98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=ZTVwrOwg; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kFl6aUv0; arc=none smtp.client-ip=103.168.172.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
-	by mailfout.phl.internal (Postfix) with ESMTP id B95F4138035C;
-	Sat, 14 Sep 2024 06:28:13 -0400 (EDT)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-09.internal (MEProxy); Sat, 14 Sep 2024 06:28:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1726309693;
-	 x=1726396093; bh=danSfcBwMUd//FTPPuU989iGYB86QAvoXE8dOeG4wXc=; b=
-	ZTVwrOwgqQj1oaNZ6vQsYLGEDIiMibXeMKUibdQr/F9UGUGEkyhPXVjTmeBQEi8R
-	WWkBXXKDVgyJRnqAF8yiFLqYAoayqJbDWkZH9O73nmGNa+bluHUZcSLZU0q5fjPD
-	DXC0G4YmHInw5FQ9Ziy6lv/Twxp//jxJh+Y2bvBnEoS7KtgJZYURRe/n1xS3qrx1
-	aQMhwlQs2HTrQO23RtaBo++CMosTYhTlljtsc/+uyUsdvk0QDfqqn5WMM9ntYtjZ
-	0pC3w0R6nXuLix9dpKv7IATtCHZ87UYv+g+g+L+dW8OnkV0ndMI5n0fziIwtI8XI
-	iLaVNAwZntxag4oC3/HI/w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726309693; x=
-	1726396093; bh=danSfcBwMUd//FTPPuU989iGYB86QAvoXE8dOeG4wXc=; b=k
-	Fl6aUv0OJNzQxZLZ/e/zWD3Kj75p/b2EuAMu4Rwaa08/g+Wep+AWD94xhAa3mMcP
-	nGCIonKLiW5/vCzfrCkZCKnkEzRM4XIixuRolWC7Zhv+IrnKhOC1j5WLYKjRjzGR
-	xTcgZoWz3W/CuZZ4E6VLYU+6+FmrGN7eao8NZh4aCu0c5jmXhoQSMTEwdoDVA52L
-	wY+mUpA5thnT+9HzlkEU3f6oJV90whfbSbp6bk69jNnJKxyrWBl7R3ETm577w2W/
-	OoAirIDOmhbTr3QosTnd2AVSQ+hWevSBv4LKT5aTHBagxY9yAzgGv4/GgmGHDhjV
-	ObHaAyBLnV477dcwQsn/g==
-X-ME-Sender: <xms:PGXlZp69WOKZC4OhV9RaLoXqsomDZPaYzdpB_Ua5a0RYOfFIWaNffQ>
-    <xme:PGXlZm7MwjPvquLh8fLVJHoSzjUQ3PS-R8kuS5aJG2eUfSG_2C8gnoBGmy5mtDmEi
-    RDFyeqQ12cE0y2rw90>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudektddgfedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
-    necuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfh
-    hlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepveeuffetfeekhefhtdfhleef
-    ffejvdffkefgieeuudegkeegjeevtdffieeltdeunecuffhomhgrihhnpehgihhthhhusg
-    drtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhm
-    pehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhnsggprhgtphhtthhope
-    duvddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepthhssghoghgvnhgusegrlhhp
-    hhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthhopegthhgvnhhhuhgrtggriheskhgvrh
-    hnvghlrdhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgt
-    phhtthhopehvihhrvghshhdrkhhumhgrrheslhhinhgrrhhordhorhhgpdhrtghpthhtoh
-    epthhglhigsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtoheplhhoohhnghgrrhgt
-    hheslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehmrghosghisghosehloh
-    honhhgshhonhdrtghnpdhrtghpthhtohepkhhvmhesvhhgvghrrdhkvghrnhgvlhdrohhr
-    ghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdroh
-    hrgh
-X-ME-Proxy: <xmx:PGXlZgc3ZN7_Pjo63NJkLxrPCUkqa6z_LrJy4zvDJ1NSfJVIJ9H7hw>
-    <xmx:PGXlZiIkc8u6wH2xMrn61miU9lfUdbhj6Vs8mFjuEGeg9JTWoOaubQ>
-    <xmx:PGXlZtKyGBpNJCoYIqkeG0h_cbVN2FKf7WoElEw0Fy8tfCzncvGxdQ>
-    <xmx:PGXlZrxrq8NpE_QddsrbFkvwIduad_oqokN9lgvWr6kHl0_yCJEeRQ>
-    <xmx:PWXlZnzlI5XCaFmxr3Io9Glca9KA9BwlajY3wj45qQPC5tlsl5rM06iV>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 4D1671C20065; Sat, 14 Sep 2024 06:28:12 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1726408307; c=relaxed/simple;
+	bh=q7WJquAI08+CAD5lP6bdNehob9Dq1wPKxQPjeFRtiiI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rcnXow0D86xKJDLQFT7GN7xZvlyF4TJg5Y6ilnHy2FZbX8T72QS0DVTHPUNAni0VoaCwpXv6t6dXOMOd+Nxk/VHg8n+PRJ7GlwXKvRI8bejnK+W4qKLEHMR8bAUzXa5KzHXDJ5BkA5Zn4ErnysMN7aCKHY2PVumxjZyfzCnNOr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DRkIar9R; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 666C4C4CEC3;
+	Sun, 15 Sep 2024 13:51:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726408306;
+	bh=q7WJquAI08+CAD5lP6bdNehob9Dq1wPKxQPjeFRtiiI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DRkIar9RFkBNG39Lg4VF36+C0l1NwYSaEE09Z1SxGxc6M4S+jx9O3QiS3XE0iEOXa
+	 dugg4+gux8cHvhMy415EwhG2oqeI29OZXErerIPWPPLxGdjDxioHvmSB5SFgMR8cmZ
+	 GF890/YHKLL0YWKx3z2y3nIavnufDvUSXph8DwoVC1aciO37Nuj9Dl/4U3xgMBW1Vr
+	 QqbWqbJwbZ+B8JLq+POjgebhgVzaYSVrG+oX+aypioA+ScnFYEAUCNxQIIMCRKMIR8
+	 1d75vfMvgyrvMLYGrv0O59GREHzSdXP1f5IYJf2XBPq1KtNNCfQ4hdGzn/h6TRc0iB
+	 7g69hrbWPmj5g==
+Date: Sun, 15 Sep 2024 16:48:27 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v3 7/8] execmem: add support for cache of large ROX pages
+Message-ID: <Zublq4tR0q7lvicK@kernel.org>
+References: <20240909064730.3290724-1-rppt@kernel.org>
+ <20240909064730.3290724-8-rppt@kernel.org>
+ <CAMj1kXG_Z=7B_eDAk3vhtDjfcnka3AoSKNzvFQDzpvYY2EyVfg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Sat, 14 Sep 2024 11:27:44 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Bibo Mao" <maobibo@loongson.cn>, "Huacai Chen" <chenhuacai@kernel.org>,
- "Xuerui Wang" <kernel@xen0n.name>, "Rafael J. Wysocki" <rafael@kernel.org>,
- "Viresh Kumar" <viresh.kumar@linaro.org>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- kvm@vger.kernel.org
-Message-Id: <5e29630b-36ec-4f9e-a7d8-d8afa29150d1@app.fastmail.com>
-In-Reply-To: <147e72c9-8177-9c03-8baf-df7362143cd6@loongson.cn>
-References: <20240913-iocsr-v3-0-81a57f60350d@flygoat.com>
- <20240913-iocsr-v3-3-81a57f60350d@flygoat.com>
- <147e72c9-8177-9c03-8baf-df7362143cd6@loongson.cn>
-Subject: Re: [PATCH v3 3/4] LoongArch: Extract IOCSR definitions to standalone header
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXG_Z=7B_eDAk3vhtDjfcnka3AoSKNzvFQDzpvYY2EyVfg@mail.gmail.com>
 
+Hi Ard,
 
+On Fri, Sep 13, 2024 at 05:00:42PM +0200, Ard Biesheuvel wrote:
+> Hi Mike,
+> 
+> On Mon, 9 Sept 2024 at 08:51, Mike Rapoport <rppt@kernel.org> wrote:
 
-=E5=9C=A82024=E5=B9=B49=E6=9C=8814=E6=97=A5=E4=B9=9D=E6=9C=88 =E4=B8=8A=E5=
-=8D=889:56=EF=BC=8Cmaobibo=E5=86=99=E9=81=93=EF=BC=9A
-> Hi jiaxun,
-Hi Bibo,
+...
 
-Thanks for your comments.
+> > +static void execmem_fill_trapping_insns(void *ptr, size_t size, bool writable)
+> > +{
+> > +       if (execmem_info->fill_trapping_insns)
+> > +               execmem_info->fill_trapping_insns(ptr, size, writable);
+> > +       else
+> > +               memset(ptr, 0, size);
+> 
+> Does this really have to be a function pointer with a runtime check?
+> 
+> This could just be a __weak definition, with the arch providing an
+> override if the memset() is not appropriate.
 
-[...]
->> +
->> +#define LOONGSON_IOCSR_FEATURES	0x8
->> +#define  IOCSRF_TEMP			BIT_ULL(0)
->> +#define  IOCSRF_NODECNT			BIT_ULL(1)
->> +#define  IOCSRF_MSI			BIT_ULL(2)
->> +#define  IOCSRF_EXTIOI			BIT_ULL(3)
->> +#define  IOCSRF_CSRIPI			BIT_ULL(4)
->> +#define  IOCSRF_FREQCSR			BIT_ULL(5)
->> +#define  IOCSRF_FREQSCALE		BIT_ULL(6)
->> +#define  IOCSRF_DVFSV1			BIT_ULL(7)
->> +#define  IOCSRF_EIODECODE		BIT_ULL(9)
->> +#define  IOCSRF_FLATMODE		BIT_ULL(10)
->> +#define  IOCSRF_VM			BIT_ULL(11)
->> +#define  IOCSRF_AVEC			BIT_ULL(15)
-> Is these definiton the same between Loongson3 mips and LoongArch machi=
-ne=20
-> such as IOCSRF_FLATMODE/IOCSRF_AVEC?
+I prefer to keep this a method in execmem_info rather that have a __weak
+definition that architectures can override.
 
-Those bits are only defined on LoongArch based loongson3, and will be ze=
-ro
-on MIPS loongson3 systems. Zero means hardware doesn't have such feature,
-this is still semantically correct.
+This is not on the hot path, so I don't think a runtime check here would
+matter. Still, I can fill in a default with memset at init time.
 
-Given that there will be no more future MIPS loongson3 it makes sense to
-just define them in common header.
-
->
-[...]
->> +
->> +/* PerCore CSR, only accessible by local cores */
->> +#define LOONGSON_IOCSR_IPI_STATUS	0x1000
->> +#define LOONGSON_IOCSR_IPI_EN		0x1004
->> +#define LOONGSON_IOCSR_IPI_SET		0x1008
->> +#define LOONGSON_IOCSR_IPI_CLEAR	0x100c
->> +#define LOONGSON_IOCSR_MBUF0		0x1020
->> +#define LOONGSON_IOCSR_MBUF1		0x1028
->> +#define LOONGSON_IOCSR_MBUF2		0x1030
->> +#define LOONGSON_IOCSR_MBUF3		0x1038
-> It seems that it is only used with arch/loongarch/kernel/smp.c,
-> and file smp.c is arch specific. No generic driver uses this.
-
-Yes, but arch/mips/loongson64/smp.c are using those bits as well,
-and will be converted in next patch.
-
-Just FYI, I'm now trying to implement a common SMP IPI driver for
-MIPS/LoongArch Loongson chips, there is a preview [1].
-
->
->> +
-[...]
->> +
->> +/* Register offset and bit definition for CSR access */
->> +#define LOONGSON_IOCSR_TIMER_CFG       0x1060
->> +#define LOONGSON_IOCSR_TIMER_TICK      0x1070
->> +#define  IOCSR_TIMER_CFG_RESERVED       (_ULCAST_(1) << 63)
->> +#define  IOCSR_TIMER_CFG_PERIODIC       (_ULCAST_(1) << 62)
->> +#define  IOCSR_TIMER_CFG_EN             (_ULCAST_(1) << 61)
->> +#define  IOCSR_TIMER_MASK		0x0ffffffffffffULL
->> +#define  IOCSR_TIMER_INITVAL_RST        (_ULCAST_(0xffff) << 48)
-> I do not find any use about IOCSR_TIMER macro, which does ip driver us=
-e=20
-> this?
-
-So IOCSR timer is obsoleted by LoongArch's architecture timer, but still
-present on at least 3A5000 for compatibility reason. We may write a driv=
-er
-for it at some point.
-
-It is common practice that hardware headers contains those bits that are=
- not used
-by drivers yet to serve as a document to the hardware.
-
->
->> +
->> +#define LOONGSON_IOCSR_EXTIOI_NODEMAP_BASE	0x14a0
->> +#define LOONGSON_IOCSR_EXTIOI_IPMAP_BASE	0x14c0
->> +#define LOONGSON_IOCSR_EXTIOI_EN_BASE		0x1600
->> +#define LOONGSON_IOCSR_EXTIOI_BOUNCE_BASE	0x1680
->> +#define LOONGSON_IOCSR_EXTIOI_ISR_BASE		0x1800
->> +#define LOONGSON_IOCSR_EXTIOI_ROUTE_BASE	0x1c00
->> +#define IOCSR_EXTIOI_VECTOR_NUM			256
-> Is it better to define these macro in common header file or in extioi=20
-> driver?  It seems that only extioi use it.
-
-Maybe :-) This is a little bit out of scope of this series but I can try
-later.
-
-Thanks
-[...]
-
-[1]: https://github.com/FlyGoat/linux/commit/0a5ee611529d359b4d22eaae22c=
-2b9835c63c63f
-
---=20
-- Jiaxun
+-- 
+Sincerely yours,
+Mike.
 
