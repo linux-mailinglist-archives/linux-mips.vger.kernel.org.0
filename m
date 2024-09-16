@@ -1,135 +1,79 @@
-Return-Path: <linux-mips+bounces-5579-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5580-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 254C39796E6
-	for <lists+linux-mips@lfdr.de>; Sun, 15 Sep 2024 15:51:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15D1E979A89
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Sep 2024 07:00:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8B66B212EB
-	for <lists+linux-mips@lfdr.de>; Sun, 15 Sep 2024 13:51:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3E9C284357
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Sep 2024 05:00:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B6C91C6F44;
-	Sun, 15 Sep 2024 13:51:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E77B4DA00;
+	Mon, 16 Sep 2024 05:00:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DRkIar9R"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S0rNesVC"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C3914286;
-	Sun, 15 Sep 2024 13:51:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3B72D032;
+	Mon, 16 Sep 2024 05:00:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726408307; cv=none; b=l25oO3nSugrL4w2e8KRuJzjSDagayyv4pArfoylr8SXYNWOgCVvr/dUWsROBmkUOBbzBjHCaAmlVSyfO5ccPYqJ1NLl7uqoalE+j1SVLxYGUvh4zzcp6H7pu4C/uRXAu5tLyo2994tceLb5Kx7Mo3ynSGpOBwqw3m8IZaQfH1MA=
+	t=1726462813; cv=none; b=eAcX2u+hUIIZCzrzTlQ6b4Pe5zHDCo9XJI2fDhzHT6A6d/jwPB8TFFzCJsGIof7zlnbbMBqi6w3/R6HyqlZNEoLsXkrDTOEEmCN+3JAczRBNMnaz9rbaqAX80vMD1g3J8o1iwZN+kazazJxvvQH8voNu1alXs3vhqH/n4diPmEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726408307; c=relaxed/simple;
-	bh=q7WJquAI08+CAD5lP6bdNehob9Dq1wPKxQPjeFRtiiI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rcnXow0D86xKJDLQFT7GN7xZvlyF4TJg5Y6ilnHy2FZbX8T72QS0DVTHPUNAni0VoaCwpXv6t6dXOMOd+Nxk/VHg8n+PRJ7GlwXKvRI8bejnK+W4qKLEHMR8bAUzXa5KzHXDJ5BkA5Zn4ErnysMN7aCKHY2PVumxjZyfzCnNOr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DRkIar9R; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 666C4C4CEC3;
-	Sun, 15 Sep 2024 13:51:28 +0000 (UTC)
+	s=arc-20240116; t=1726462813; c=relaxed/simple;
+	bh=EU/LfaHmFYZiJ3Mx65EjFCGs70rhsyNyAishEETuuuY=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=O5CFaiGmjg69DvXuJjG8nd4ORDxFvfn6wly0Sm273FoVFVPcIMPvvXWxv52fFEsLEsvKtIYHvTZOE0yxcHQKORyYrPF0ZYSoIhhe9H6IUUnVR0z40EP3dxRU2nRiMmRzrPF5jt9tOHRz4W+ViIhr/5jo/VBBw0dt3d+YLPS/KHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S0rNesVC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AB33C4CEC4;
+	Mon, 16 Sep 2024 05:00:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726408306;
-	bh=q7WJquAI08+CAD5lP6bdNehob9Dq1wPKxQPjeFRtiiI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DRkIar9RFkBNG39Lg4VF36+C0l1NwYSaEE09Z1SxGxc6M4S+jx9O3QiS3XE0iEOXa
-	 dugg4+gux8cHvhMy415EwhG2oqeI29OZXErerIPWPPLxGdjDxioHvmSB5SFgMR8cmZ
-	 GF890/YHKLL0YWKx3z2y3nIavnufDvUSXph8DwoVC1aciO37Nuj9Dl/4U3xgMBW1Vr
-	 QqbWqbJwbZ+B8JLq+POjgebhgVzaYSVrG+oX+aypioA+ScnFYEAUCNxQIIMCRKMIR8
-	 1d75vfMvgyrvMLYGrv0O59GREHzSdXP1f5IYJf2XBPq1KtNNCfQ4hdGzn/h6TRc0iB
-	 7g69hrbWPmj5g==
-Date: Sun, 15 Sep 2024 16:48:27 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v3 7/8] execmem: add support for cache of large ROX pages
-Message-ID: <Zublq4tR0q7lvicK@kernel.org>
-References: <20240909064730.3290724-1-rppt@kernel.org>
- <20240909064730.3290724-8-rppt@kernel.org>
- <CAMj1kXG_Z=7B_eDAk3vhtDjfcnka3AoSKNzvFQDzpvYY2EyVfg@mail.gmail.com>
+	s=k20201202; t=1726462812;
+	bh=EU/LfaHmFYZiJ3Mx65EjFCGs70rhsyNyAishEETuuuY=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=S0rNesVCcllruY2sR2/AXe3jzsIqboSZENw0Y5YYPEhW1GEH6HxQPRGdSkqQgPEr7
+	 tWKd+bPFqzDNEKrdQ8Jvko3I+pSqfueXrac/Q2FJcbIgrSXfQ1/+YArSDShlB1HcFk
+	 YYph/GOycJTTP2Bn9zRHja/xjUbGu0l1MPT4YI1I+Qek1Rh8ld3STM/w5q3zP8lEHw
+	 O/+zJP+w/l6x027SQrA0Xv9DENevcBMFx04zVBzkMy+VzyhulEXWxWdWPURZ2e6VlU
+	 ai2e73IXE9vdNkaf/Cf3pfT3XVJsCAHn6SCjxgWVWej5XV4DCjrkndiQPCmDHFb5KH
+	 KfcEtX9mupdfg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 357723809A80;
+	Mon, 16 Sep 2024 05:00:15 +0000 (UTC)
+Subject: Re: [GIT PULL] MIPS changes for v6.12
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <ZuK6YZHRIcriY+Ys@alpha.franken.de>
+References: <ZuK6YZHRIcriY+Ys@alpha.franken.de>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZuK6YZHRIcriY+Ys@alpha.franken.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.12
+X-PR-Tracked-Commit-Id: 439667fb943cfea46d7bde5c7b29c89efec3cbc7
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 8617d7d6298f54dfef4038281863270b5864fe83
+Message-Id: <172646281384.3240541.10857831593021387407.pr-tracker-bot@kernel.org>
+Date: Mon, 16 Sep 2024 05:00:13 +0000
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: torvalds@linux-foundation.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXG_Z=7B_eDAk3vhtDjfcnka3AoSKNzvFQDzpvYY2EyVfg@mail.gmail.com>
 
-Hi Ard,
+The pull request you sent on Thu, 12 Sep 2024 11:54:41 +0200:
 
-On Fri, Sep 13, 2024 at 05:00:42PM +0200, Ard Biesheuvel wrote:
-> Hi Mike,
-> 
-> On Mon, 9 Sept 2024 at 08:51, Mike Rapoport <rppt@kernel.org> wrote:
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.12
 
-...
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/8617d7d6298f54dfef4038281863270b5864fe83
 
-> > +static void execmem_fill_trapping_insns(void *ptr, size_t size, bool writable)
-> > +{
-> > +       if (execmem_info->fill_trapping_insns)
-> > +               execmem_info->fill_trapping_insns(ptr, size, writable);
-> > +       else
-> > +               memset(ptr, 0, size);
-> 
-> Does this really have to be a function pointer with a runtime check?
-> 
-> This could just be a __weak definition, with the arch providing an
-> override if the memset() is not appropriate.
-
-I prefer to keep this a method in execmem_info rather that have a __weak
-definition that architectures can override.
-
-This is not on the hot path, so I don't think a runtime check here would
-matter. Still, I can fill in a default with memset at init time.
+Thank you!
 
 -- 
-Sincerely yours,
-Mike.
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
