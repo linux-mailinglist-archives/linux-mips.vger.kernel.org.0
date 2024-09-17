@@ -1,79 +1,117 @@
-Return-Path: <linux-mips+bounces-5580-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5582-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15D1E979A89
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Sep 2024 07:00:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39D5197B61E
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Sep 2024 01:29:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3E9C284357
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Sep 2024 05:00:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F32062832F1
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Sep 2024 23:29:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E77B4DA00;
-	Mon, 16 Sep 2024 05:00:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63006192B89;
+	Tue, 17 Sep 2024 23:29:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S0rNesVC"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="afUDE771"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3B72D032;
-	Mon, 16 Sep 2024 05:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02FD918BC03
+	for <linux-mips@vger.kernel.org>; Tue, 17 Sep 2024 23:29:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726462813; cv=none; b=eAcX2u+hUIIZCzrzTlQ6b4Pe5zHDCo9XJI2fDhzHT6A6d/jwPB8TFFzCJsGIof7zlnbbMBqi6w3/R6HyqlZNEoLsXkrDTOEEmCN+3JAczRBNMnaz9rbaqAX80vMD1g3J8o1iwZN+kazazJxvvQH8voNu1alXs3vhqH/n4diPmEE=
+	t=1726615788; cv=none; b=HhU8ZWZl1UgmH8ASmemuQUkCdfQ1Q78GpDM2LzpyUB0+eo9WFny2ZE7mnxTD44f7vekIbautgmVWShe8wv5fzjveNVJ4Povcw/qeRik5h9smoP3XKSAMl1jmAd1gsAE0Ph5CESQAN20T8bSsw1B4U2EC2i+n7IynR5jh+JFfNh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726462813; c=relaxed/simple;
-	bh=EU/LfaHmFYZiJ3Mx65EjFCGs70rhsyNyAishEETuuuY=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=O5CFaiGmjg69DvXuJjG8nd4ORDxFvfn6wly0Sm273FoVFVPcIMPvvXWxv52fFEsLEsvKtIYHvTZOE0yxcHQKORyYrPF0ZYSoIhhe9H6IUUnVR0z40EP3dxRU2nRiMmRzrPF5jt9tOHRz4W+ViIhr/5jo/VBBw0dt3d+YLPS/KHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S0rNesVC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AB33C4CEC4;
-	Mon, 16 Sep 2024 05:00:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726462812;
-	bh=EU/LfaHmFYZiJ3Mx65EjFCGs70rhsyNyAishEETuuuY=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=S0rNesVCcllruY2sR2/AXe3jzsIqboSZENw0Y5YYPEhW1GEH6HxQPRGdSkqQgPEr7
-	 tWKd+bPFqzDNEKrdQ8Jvko3I+pSqfueXrac/Q2FJcbIgrSXfQ1/+YArSDShlB1HcFk
-	 YYph/GOycJTTP2Bn9zRHja/xjUbGu0l1MPT4YI1I+Qek1Rh8ld3STM/w5q3zP8lEHw
-	 O/+zJP+w/l6x027SQrA0Xv9DENevcBMFx04zVBzkMy+VzyhulEXWxWdWPURZ2e6VlU
-	 ai2e73IXE9vdNkaf/Cf3pfT3XVJsCAHn6SCjxgWVWej5XV4DCjrkndiQPCmDHFb5KH
-	 KfcEtX9mupdfg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 357723809A80;
-	Mon, 16 Sep 2024 05:00:15 +0000 (UTC)
-Subject: Re: [GIT PULL] MIPS changes for v6.12
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <ZuK6YZHRIcriY+Ys@alpha.franken.de>
-References: <ZuK6YZHRIcriY+Ys@alpha.franken.de>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZuK6YZHRIcriY+Ys@alpha.franken.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.12
-X-PR-Tracked-Commit-Id: 439667fb943cfea46d7bde5c7b29c89efec3cbc7
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 8617d7d6298f54dfef4038281863270b5864fe83
-Message-Id: <172646281384.3240541.10857831593021387407.pr-tracker-bot@kernel.org>
-Date: Mon, 16 Sep 2024 05:00:13 +0000
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: torvalds@linux-foundation.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+	s=arc-20240116; t=1726615788; c=relaxed/simple;
+	bh=lh8NXlWYHkzkQBkbBSmavOc/t+XvaQZppmvfRiEh7vo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sjJYkwb4wGO4AkIoUqSDHjm5ZSG9sZDkshc0sfchyJZO/Qr6aulkiDMCGGosSLUJn+oN73Jk+PK3qR8RjOt/sQdIpKEqhkAFeGKy1/vzY82wiCm4D3j/aNdKLScQMNlLZP8QNc5DJ53ZXdyeCf7i8wBanHeW2Fo/IVgBqaUgdCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=afUDE771; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id C886B2C03CA;
+	Wed, 18 Sep 2024 11:29:36 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1726615776;
+	bh=G5WX0lUDSv4/vDoftqM2mFslRvVzWTPMc8qIUnjkrcM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=afUDE771AEAUfM3xEpWtjDLPulE1RCrlPwRtdVuQv0kFC03U8ITJMk9iBk/bSVjQI
+	 5nyhDyhGc5oLdWYJoEzLhtG3HG3vPpfUHdelOeb6Tf767tKTkASRCc0fSGO4I6WtC0
+	 SbfCnyyviyEb45J9HLcKxyQVIyW83g4Y7gHvsBawWcAUWAhMsU45P2I6qVUsVDB1SL
+	 WG5Tm0qfEzvS/17qkwRuSB/poGTqNiNNhULfSWSfsk1yr62JA+9+CqFBhaHOgv3jVc
+	 p9bI3tzZnUuCjo+UosMMAoUtmZ8KDUNdIgWDe/BE66sTrrGWcIE1vZlrXMkSSgws7T
+	 HqITfia135Mtg==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B66ea10e00000>; Wed, 18 Sep 2024 11:29:36 +1200
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id 79C9A13ED56;
+	Wed, 18 Sep 2024 11:29:36 +1200 (NZST)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+	id 73BDF280B62; Wed, 18 Sep 2024 11:29:36 +1200 (NZST)
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+To: andi.shyti@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	tsbogend@alpha.franken.de
+Cc: linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH 0/5] i2c: RTL9300 support
+Date: Wed, 18 Sep 2024 11:29:27 +1200
+Message-ID: <20240917232932.3641992-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.46.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=Id0kWnqa c=1 sm=1 tr=0 ts=66ea10e0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=EaEq8P2WXUwA:10 a=VwQbUJbxAAAA:8 a=NLm23PoBcGNys7Jou4AA:9 a=3ZKOabzyN94A:10
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-The pull request you sent on Thu, 12 Sep 2024 11:54:41 +0200:
+This builds on top of my in-flight series that adds the syscon node for t=
+he
+switch block[1]. The I2C controllers are part of that block of registers.=
+ The
+controller driver is adapted from openwrt, the multiplexing support is ad=
+ded by
+me and differs from the openwrt implementation.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.12
+[1] - https://lore.kernel.org/lkml/20240913024948.1317786-1-chris.packham=
+@alliedtelesis.co.nz/
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/8617d7d6298f54dfef4038281863270b5864fe83
+Chris Packham (5):
+  dt-bindings: i2c: Add RTL9300 I2C controller
+  i2c: Add driver for the RTL9300 I2C controller
+  mips: dts: realtek: Add I2C controllers
+  dt-bindings: i2c: Add RTL9300 I2C multiplexer
+  i2c: rtl9300: Add multiplexing support
 
-Thank you!
+ .../bindings/i2c/realtek,rtl9300-i2c-mux.yaml |  82 +++
+ .../bindings/i2c/realtek,rtl9300-i2c.yaml     |  73 +++
+ MAINTAINERS                                   |   8 +
+ arch/mips/boot/dts/realtek/rtl930x.dtsi       |  18 +
+ drivers/i2c/busses/Kconfig                    |  10 +
+ drivers/i2c/busses/Makefile                   |   1 +
+ drivers/i2c/busses/i2c-rtl9300.c              | 543 ++++++++++++++++++
+ 7 files changed, 735 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/realtek,rtl9300=
+-i2c-mux.yaml
+ create mode 100644 Documentation/devicetree/bindings/i2c/realtek,rtl9300=
+-i2c.yaml
+ create mode 100644 drivers/i2c/busses/i2c-rtl9300.c
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+--=20
+2.46.1
+
 
