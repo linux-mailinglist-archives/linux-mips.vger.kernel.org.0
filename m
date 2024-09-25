@@ -1,88 +1,83 @@
-Return-Path: <linux-mips+bounces-5654-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5655-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C22098667D
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Sep 2024 20:44:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2626C9867EF
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Sep 2024 23:06:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4FE7AB23C22
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Sep 2024 18:44:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D92FA285022
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Sep 2024 21:06:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 013851422D4;
-	Wed, 25 Sep 2024 18:44:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FFAB14AD24;
+	Wed, 25 Sep 2024 21:06:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZDBKK1FP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ty4V85so"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BF3713E02A;
-	Wed, 25 Sep 2024 18:44:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE5613E02E;
+	Wed, 25 Sep 2024 21:06:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727289875; cv=none; b=H3F8iWU4ZXrqQhQsmgf3qVpLcslE3V48crsSgxfPnmxDi90dLG8IgNdGzcny6McOZ3PpeXCBpG7HpOywi13bMiy6aDE8/N2zVLiCTkcLyEX6LL4NC6C8iylijbtC7vCL/IK9H+SCYBMUG3i50YxZhRLZwxzP1p1Wp7ERM+Tg9JU=
+	t=1727298403; cv=none; b=NRAkC7Q0cFUSMBnTaOOyIIledD9Iag0DlewbsJ2HStO5SYJ8YtctSc7JlEcXvsYLlrEncpOQaP9idUrd6uZcV38lHKHOWjvXYPNqT0Dty3WfU/XLddkyPf9IhZI6xf3drcr/iZK4ch3keNPOJjhK2wYDBOHoYIeyZOgkjCp/dfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727289875; c=relaxed/simple;
-	bh=ADO07XGKECGoynsWKnh252VX1qxyGAY2oQQkRjwl08A=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=tN1p8D/IsXBPnutkyKwyd7LC1wDeGNd1KASzkZQpvgpAhp3eqjHlGzlkSwVLKcacw4mNStIqsHPSNzZikMZMzQEnYMTnITOOEQqI3mhGZ9o+EzCEXmXwLH4gJvIt8fSDYuPYEa17YQBt2P5o5U2cNRkGjlw1gNJduL5U6ef4/GA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZDBKK1FP; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5367ae52a01so195187e87.3;
-        Wed, 25 Sep 2024 11:44:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727289872; x=1727894672; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oanfMXUWAS3rE5D3kJe0C7yPK8rPOqfisEZTGKiqOnY=;
-        b=ZDBKK1FPgJ0X6E+1V45j6PFYEWN2U4SGkMpJfFl/22z2lMsw1ywf8TCv9OnqkgFWdK
-         g1AOuQPfmlcBm6PotiDNSnHIkEWYP71AYzxMKMyiZMztShI6dqG64gbDOAaomLDXJVUf
-         q7/2fXSLGeqaJ4zG0jjZ7IsKc9mKGNMJLojojQKV8W+HkOOuiMAKzwX1Hzf0hDrW5s95
-         rmPh4KfQIxwSQ5hWvvhTrXcfgwU+9hd9WGCyYxfJtpkLRpdbMt56mOVbbrg9HBDJmydi
-         m1sarTgiaOqvxP2hUH9KnRapD9E5u6F6VfIK3Dq5z5OTM22bvdMsgTKyRaMP4wLXtyKv
-         gwhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727289872; x=1727894672;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oanfMXUWAS3rE5D3kJe0C7yPK8rPOqfisEZTGKiqOnY=;
-        b=bjJSL/xUFMiO1DxiWYzYR1MGv9yAiofNqE+g6CcrN3SMV5MyOxFyVvbvIMpkJjHaL5
-         wuAWzKvxs8WBd0khJEUU2kGcdiHLZ0bnUy04kt2YCKOTZZGPqujTvPoTC+0miBBEOcng
-         V9yrsxbsnkFtW6Um7S5jeQg3FIdYcW9pAG7hw7ujo1lvGkasj1yNfTtbmCeZ9bCRtbss
-         NrMIVeuMqwfQREOishc7jf9+8js4q+bmloGQeNbL9zp7uRRUfuSUZdg8gTj6PoDcakA/
-         5doHQ99QMvfoGfiChRLFP/QbV2LM0ir0ZfZQpqf5raUrLeJHmfgH+AUCCUWQ4Hr/R8D4
-         dmUw==
-X-Forwarded-Encrypted: i=1; AJvYcCWQB/sHpc3jCoWQ6HGdXdhf2q+DsoK/nAkE7oAVE9fQHebmYt/4jPpD8xB9e7qeTgPl86GvX7zLoTPMZzo=@vger.kernel.org, AJvYcCXpA5RYi+kTyi304rh56n0t6EKqIvbBeGvo0iBgqold8f0ezBeVqAsD3jezsJ8AqrYxnsTEpLkm2k0OSQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKZUe6XxS/eFsffgY0cZPtokjv7tQ2zweMwhDWqp1Z1BUBMXnD
-	5dTgkHlbQ58g69LDc24GWAqoejFEEYrOz0W8nooZE3KSsY+U0fl5
-X-Google-Smtp-Source: AGHT+IFDbT2q7R32g3Mp6m4Xb0XAxjQP3JACgEHc46fVQ3G3BsTq7fibxzTmqS73ZTofna/7+v8AZA==
-X-Received: by 2002:a05:6512:68c:b0:533:4820:275a with SMTP id 2adb3069b0e04-538775678fcmr2311661e87.52.1727289872088;
-        Wed, 25 Sep 2024 11:44:32 -0700 (PDT)
-Received: from KILLINGMACHINE.itotolink.net ([46.188.27.115])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-537a8640a63sm588747e87.156.2024.09.25.11.44.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Sep 2024 11:44:30 -0700 (PDT)
-From: Sergey Matsievskiy <matsievskiysv@gmail.com>
-To: tglx@linutronix.de
-Cc: maz@kernel.org,
-	alexandre.belloni@bootlin.com,
-	gregory.clement@bootlin.com,
-	lars.povlsen@microchip.com,
-	UNGLinuxDriver@microchip.com,
-	linux-mips@vger.kernel.org,
+	s=arc-20240116; t=1727298403; c=relaxed/simple;
+	bh=ov11DCW5fbfEkeXbc3N4tknYqvWLCe6U3JzkfrFWpkU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sMlh/Df+xbZb7LfQOkzBeQayWqBDRBZNvJEiIHtV+JelViyEsdy5+fgtSp60qc6h1ONx468d+CC2762ukDUUb1Xw1AdJOIa54JXgJweANz2oDz6usOPUp672SXX5gz1YPEbgIGAVGl3MTuDJzCXjRj4SPs65KytjiPo+rnl22so=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ty4V85so; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B07B6C4CEC3;
+	Wed, 25 Sep 2024 21:06:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727298402;
+	bh=ov11DCW5fbfEkeXbc3N4tknYqvWLCe6U3JzkfrFWpkU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Ty4V85soYpqEM8sUDM/PovDueJXmKYgUPZM3jqIVSWscNGO92pmJEBZ1JtV6lKwJu
+	 /VNXVBsrBStlI+XfgvZYiro5DKkIxm1ox9IPT+JTFsrByJ7QQm6NjYBoXUBQxPCXLS
+	 dj5bSZq++t5pObMmZdgm5I9UMfcwcKwUA1wBFgahGj4alaWxqRSwAUTR4/2d034XBs
+	 WfH5LoTr3+nivVv/e+fjWSSrGa4mL16ZuTIMzAQvCXJOw//669VS4xztlBK2UwzGsJ
+	 AJOAs+o3b2GwT7zi/iHnQ4PcfCPCbxIqmRkrUIFZPDrXPvg7ncTbC16FbQwGAeeU/r
+	 TTlUE0B/JK86A==
+From: Arnd Bergmann <arnd@kernel.org>
+To: linux-mm@kvack.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Christoph Hellwig <hch@lst.de>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	David Hildenbrand <david@redhat.com>,
+	Greg Ungerer <gerg@linux-m68k.org>,
+	Helge Deller <deller@gmx.de>,
+	Kees Cook <kees@kernel.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Matt Turner <mattst88@gmail.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Hocko <mhocko@suse.com>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Vladimir Murzin <vladimir.murzin@arm.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	linux-stm32@st-md-mailman.stormreply.com,
 	linux-kernel@vger.kernel.org,
-	Sergey Matsievskiy <matsievskiysv@gmail.com>
-Subject: [PATCH 2/2] irqchip/ocelot: Comment sticky register clearing code
-Date: Wed, 25 Sep 2024 21:44:16 +0300
-Message-Id: <20240925184416.54204-3-matsievskiysv@gmail.com>
+	linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-arch@vger.kernel.org
+Subject: [PATCH 0/5] asm-generic: clean up asm/mman.h
+Date: Wed, 25 Sep 2024 21:06:10 +0000
+Message-Id: <20240925210615.2572360-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240925184416.54204-1-matsievskiysv@gmail.com>
-References: <20240925184416.54204-1-matsievskiysv@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -91,31 +86,76 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add comment to the sticky register clearing code.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Signed-off-by: Sergey Matsievskiy <matsievskiysv@gmail.com>
----
- drivers/irqchip/irq-mscc-ocelot.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+While thinking about the changes to linux/mman.h in
+https://lore.kernel.org/all/20240923141943.133551-1-vincenzo.frascino@arm.com/
+I ended up trying to clean up the duplicate definitions in order to
+better see what's in there, and then I found a clash between two MAP_* flags.
 
-diff --git a/drivers/irqchip/irq-mscc-ocelot.c b/drivers/irqchip/irq-mscc-ocelot.c
-index c19ab379e8c5..3dc745b14caf 100644
---- a/drivers/irqchip/irq-mscc-ocelot.c
-+++ b/drivers/irqchip/irq-mscc-ocelot.c
-@@ -84,6 +84,12 @@ static void ocelot_irq_unmask(struct irq_data *data)
- 	u32 val;
- 
- 	irq_gc_lock(gc);
-+	/*
-+	 * Clear sticky bits for edge mode interrupts.
-+	 * Serval has only one trigger register replication, but the adjacent
-+	 * register is always read as zero, so there's no need to handle this
-+	 * case separately.
-+	 */
- 	val = irq_reg_readl(gc, ICPU_CFG_INTR_INTR_TRIGGER(p, 0)) |
- 		irq_reg_readl(gc, ICPU_CFG_INTR_INTR_TRIGGER(p, 1));
- 	if (!(val & mask))
+Here is my current state, lightly tested. Please have a look at
+the last patch in particular.
+
+     Arnd
+
+Arnd Bergmann (5):
+  asm-generic: cosmetic updates to uapi/asm/mman.h
+  asm-generic: move MAP_* flags from mman-common.h to mman.h
+  asm-generic: use asm-generic/mman-common.h on mips and xtensa
+  asm-generic: use asm-generic/mman-common.h on parisc and alpha
+  [RFC] mm: Remove MAP_UNINITIALIZED support
+
+ Documentation/admin-guide/mm/nommu-mmap.rst | 10 +--
+ arch/alpha/include/uapi/asm/mman.h          | 93 ++++++-------------
+ arch/mips/include/uapi/asm/mman.h           | 95 +++-----------------
+ arch/parisc/include/uapi/asm/mman.h         | 79 ++++-------------
+ arch/powerpc/include/uapi/asm/mman.h        | 11 +++
+ arch/sh/configs/rsk7264_defconfig           |  1 -
+ arch/sparc/include/uapi/asm/mman.h          | 12 +++
+ arch/xtensa/include/uapi/asm/mman.h         | 98 +++------------------
+ fs/binfmt_elf_fdpic.c                       |  3 +-
+ include/linux/mman.h                        |  4 -
+ include/uapi/asm-generic/mman-common.h      | 31 +++----
+ include/uapi/asm-generic/mman.h             | 17 ++++
+ include/uapi/linux/mman.h                   |  5 ++
+ mm/Kconfig                                  | 22 -----
+ mm/nommu.c                                  |  4 +-
+ 15 files changed, 125 insertions(+), 360 deletions(-)
+
 -- 
 2.39.2
+
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Andreas Larsson <andreas@gaisler.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Damien Le Moal <dlemoal@kernel.org>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Greg Ungerer <gerg@linux-m68k.org>
+Cc: Helge Deller <deller@gmx.de>
+Cc: Kees Cook <kees@kernel.org>
+Cc: Liam R. Howlett <Liam.Howlett@oracle.com> 
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Richard Henderson <richard.henderson@linaro.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Vladimir Murzin <vladimir.murzin@arm.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-mm@kvack.org
+Cc: linux-arch@vger.kernel.org
 
 
