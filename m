@@ -1,57 +1,61 @@
-Return-Path: <linux-mips+bounces-5674-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5675-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 885E9986CA6
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Sep 2024 08:37:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2610986DF1
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Sep 2024 09:46:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B3CC91C212E9
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Sep 2024 06:37:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 592B21F22DAE
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Sep 2024 07:46:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A060188A32;
-	Thu, 26 Sep 2024 06:37:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF10F1925A2;
+	Thu, 26 Sep 2024 07:46:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="blmOmNvh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hZ3qH6lF"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC5911AAC4;
-	Thu, 26 Sep 2024 06:37:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E79518FDA6;
+	Thu, 26 Sep 2024 07:46:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727332667; cv=none; b=DI/sTaB+TwaDKiRcciNhse4avey5ccAYMgD3tQ3UoW17yPrSVKREJ8fF4baE4fCBvRe87CT5phr5C/xtPb6LfdFRprpMRnVlrY447LeXsFlPLMROID0vQKIBO/eVR3tG3JrskPeWA4B4UVGSRzz0P+cDcUyv4poTln0zhPyajkE=
+	t=1727336760; cv=none; b=gOAd82Vik6vF4r+yQjl9xDV8L1IvtDjnYgTy6TDziMGbDlLIytdp98Nj7656UuSMde+4axN6RYkGbwBJyXYPi7r1n+E4MqyQBl7uL4XEq0Aq6EMmJoGy7AAMFauT5elBHyV76BS25FAr8bn200vicf2FQGGVobIhSCbrzTuum9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727332667; c=relaxed/simple;
-	bh=wOx3VDnN+2V5jk81bW4SKY4gtNi3PB26Lkiz+mCXQvc=;
+	s=arc-20240116; t=1727336760; c=relaxed/simple;
+	bh=7BD1DRr3dEN2fGhGJbApcotfC5pMbfC3fKHmayjAYZg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZkkWy8V2p/Ve2JKVPZB3KZoV4Gvk7QIAyHmssvoaEfhd0WhBAcK/48sbZLOAE52qAB2KKW8vQC0E9S/Ke5juinhbyc0GCCIupUOd7JK/cpNBSY1/Js33FCtrRaJghZKGSBwe7cyPnuYoJF3Il+f0kmIUsefKomsoauy3dJbnFQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=blmOmNvh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 073FAC4CEC5;
-	Thu, 26 Sep 2024 06:37:44 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Hsykh9SpwZiX3N8emBQQjoHgZx4ranucr5zN4oJrpZi+5RWFx0lrhiScLWrIa+jrMKOCcyelg1hZLg+Ho8anGA+9yUk5tH2xtufcv2fh3bIsSw1Im4Vg32z3CcjOi9oIUpPtAZbPY7E2J5tgPt5gI2CllX6VEq9mpwLlaQkQ+ZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hZ3qH6lF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5A36C4CEC5;
+	Thu, 26 Sep 2024 07:45:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727332665;
-	bh=wOx3VDnN+2V5jk81bW4SKY4gtNi3PB26Lkiz+mCXQvc=;
+	s=k20201202; t=1727336760;
+	bh=7BD1DRr3dEN2fGhGJbApcotfC5pMbfC3fKHmayjAYZg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=blmOmNvhW6JmOiLUqwznaWXbNMXydDDV0n2TTTvP+qr5zFslhYUrZ9VazPfTNYUrG
-	 y/2QDRYPB/zoPYX3igZYY02ezQfrljlrw3u7zfVt7Hj1DJcsTqntprfWzc1LXReYlU
-	 YoEZq1Ht1F24fty55RN6q6RY9NpgsW13jRVWq/rn5q0gwiP8MsDvAQk2tP6w6vgpya
-	 wt6AAcWjPZmFDuZQa0i30ACYmEAJLijf8gDFzzITMzW9HELtnZguqSlz5cgeM+1daw
-	 tgYVXo/GS5drpRDCu9YHV41J0m8bKTGJtd9awjdOdypkfpDT5HlFEp1pgs9H5nr+E2
-	 oIfyLbxSQ7OpA==
-Date: Thu, 26 Sep 2024 08:37:42 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, lee@kernel.org, sre@kernel.org, tsbogend@alpha.franken.de, 
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v5 5/6] mips: dts: realtek: Add I2C controllers
-Message-ID: <euqypyub7f3bd7wa7w6axdt6mrvmbvckptvrum2rou3ni6sqdf@ouwm7zjuarni>
+	b=hZ3qH6lFGWX+ox7NsmVd37/9/mBj4ZChRc31dgUtUJpQ9cOMVHHDWAv1EJMJKvCGA
+	 PI6LFetip+CDnDhD1g8ElvbTT9m1Oed8StSxqnpwtfqE3npWgLDq3j9KhTMLsZbv7f
+	 zRHLSLP8sh7zc8rZPmAGYYqCNkkb30o0fd6XRtJutHYml/x0IjZXmrFV6lxrI+Dbz3
+	 sm5fktsJXNJyTik5UXwlyQPHVxANx8ZLZPHaIWW7zuJdj8lOBhoWyMYscRO9X0AnJr
+	 EXyfZSFqNdN9If/UCewJsPl1x+xgixAlckwwEQ6UElL+374FLYmLJob+qpsc/ENc6s
+	 C5fMZWHZt2vGA==
+Date: Thu, 26 Sep 2024 08:45:54 +0100
+From: Lee Jones <lee@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, sre@kernel.org, tsbogend@alpha.franken.de,
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-mips@vger.kernel.org
+Subject: Re: [PATCH v5 3/6] dt-bindings: mfd: Add Realtek RTL9300 switch
+ peripherals
+Message-ID: <20240926074554.GH7545@google.com>
 References: <20240925215847.3594898-1-chris.packham@alliedtelesis.co.nz>
- <20240925215847.3594898-6-chris.packham@alliedtelesis.co.nz>
+ <20240925215847.3594898-4-chris.packham@alliedtelesis.co.nz>
+ <4pxungrwkjusdalmjbwvqcpjwmbsb7hw4452zqlto6sq54vfa6@psz3gge4uwy7>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -60,66 +64,54 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240925215847.3594898-6-chris.packham@alliedtelesis.co.nz>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4pxungrwkjusdalmjbwvqcpjwmbsb7hw4452zqlto6sq54vfa6@psz3gge4uwy7>
 
-On Thu, Sep 26, 2024 at 09:58:46AM +1200, Chris Packham wrote:
-> Add the I2C controllers that are part of the RTL9300 SoC.
+Intentional top-post.
+
+These replies all came in without the original mail.
+
+Does anyone have any idea why that would have been?
+
+On Thu, 26 Sep 2024, Krzysztof Kozlowski wrote:
+
+> On Thu, Sep 26, 2024 at 09:58:44AM +1200, Chris Packham wrote:
+> > Add device tree schema for the Realtek RTL9300 switches. The RTL9300
+> > family is made up of the RTL9301, RTL9302B, RTL9302C and RTL9303. These
+> > have the same SoC differ in the Ethernet switch/SERDES arrangement.
+> > 
+> > Currently the only supported features are the syscon-reboot and i2c
+> > controllers. The syscon-reboot is needed to be able to reboot the board.
+> > The I2C controllers are slightly unusual because they each own an SCL
+> > pin (GPIO8 for the first controller, GPIO 17 for the second) but have 8
+> > common SDA pins which can be assigned to either controller (but not
+> > both).
+> > 
+> > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> > ---
+> > 
+> > Notes:
+> >     Changes in v5:
+> >       I've combined the two series I had in flight so this is the
+> >       combination of adding the switch syscon, the reboot and i2c. It makes
+> >       the changelog a bit meaningless so I've dropped the earlier
+> >       commentary.
+> >     
+> >       As requested I've put a more complete example in the main
+> >       rtl9300-switch.yaml.
+> >     
+> >       I've kept rtl9300-i2c.yaml separate for now but link to it with a $ref
+> >       from rtl9300-switch.yaml to reduce clutter. The example in
+> >       rtl9300-i2c.yaml is technically duplicating part of the example from
+> >       rtl9300-switch.yaml but I feel it's nice to be able to see the example
+> >       next to where the properties are defined.
 > 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> Notes:
->     Changes in v5:
->     - Update compatibles
->     Changes in v4:
->     - Skipped due to combining patch series
->     Changes in v3:
->     - None
->     Changes in v2:
->     - Use reg property
+> Best regards,
+> Krzysztof
 > 
->  arch/mips/boot/dts/realtek/rtl9302c.dtsi |  8 ++++++++
->  arch/mips/boot/dts/realtek/rtl930x.dtsi  | 16 ++++++++++++++++
->  2 files changed, 24 insertions(+)
-> 
-> diff --git a/arch/mips/boot/dts/realtek/rtl9302c.dtsi b/arch/mips/boot/dts/realtek/rtl9302c.dtsi
-> index 80d9f407e758..56c35e8b8b62 100644
-> --- a/arch/mips/boot/dts/realtek/rtl9302c.dtsi
-> +++ b/arch/mips/boot/dts/realtek/rtl9302c.dtsi
-> @@ -5,3 +5,11 @@
->  &switch0 {
->  	compatible = "realtek,rtl9302c-switch", "realtek,rtl9300-switch", "syscon", "simple-mfd";
->  };
-> +
-> +&i2c0 {
-> +	compatible = "realtek,rtl9302c-i2c", "realtek,rtl9300-i2c";
-> +};
-> +
-> +&i2c1 {
-> +	compatible = "realtek,rtl9302c-i2c", "realtek,rtl9300-i2c";
-> +};
-> diff --git a/arch/mips/boot/dts/realtek/rtl930x.dtsi b/arch/mips/boot/dts/realtek/rtl930x.dtsi
-> index 89b8854596cd..2fb8461af575 100644
-> --- a/arch/mips/boot/dts/realtek/rtl930x.dtsi
-> +++ b/arch/mips/boot/dts/realtek/rtl930x.dtsi
-> @@ -41,6 +41,22 @@ reboot@c {
->  			reg = <0x0c 0x4>;
->  			value = <0x01>;
->  		};
-> +
-> +		i2c0: i2c@36c {
-> +			compatible = "realtek,rtl9300-i2c";
-> +			reg = <0x36c 0x14>;
-> +			status = "disabled";
 
-Usual convention is to have status the last. Maybe MIPS has different,
-so keep whatever is consistent in your case.
-
-Anyway:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+-- 
+Lee Jones [李琼斯]
 
