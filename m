@@ -1,48 +1,48 @@
-Return-Path: <linux-mips+bounces-5703-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5706-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E530A9885A0
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Sep 2024 14:53:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 321AF9885B2
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Sep 2024 14:55:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A12F284139
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Sep 2024 12:53:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABC131F246FB
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Sep 2024 12:55:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 096BF18E05F;
-	Fri, 27 Sep 2024 12:52:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94F1218D622;
+	Fri, 27 Sep 2024 12:54:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y0qd0MyZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L4F2ocV5"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C321418BC04;
-	Fri, 27 Sep 2024 12:52:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6065616D9AA;
+	Fri, 27 Sep 2024 12:54:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727441559; cv=none; b=AymXo5Um4BXtD+rWata8veQnC15MVPZGxHRttqlwJ5Gqx+B51y77XrNaCeTY60L9mPjCnPzhIHkuPrUPPrtpgt1qF9snXA8dXRT7I5KCAua3PyXbJiXdSFqUnsP4LtqULHT3Hk2w2HeG8WziBLNIwXrj1UtX8v2Cl7KEg4O7xPI=
+	t=1727441691; cv=none; b=SAW8yYNcm693sOjvjHsX/47j0GkD2ChcLgGYnynk7opS++W7E5tViCf0UIhdDp5vVrrVq1AFHp9nZzpmGbF+ZztSGPaVS8Z3g36T3gygnUqyqfYjYSZmbvDRSqkavsavGQLKY2IlA+cYA3YKFOwBAoT6h+5j34neCdFbw3dIZwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727441559; c=relaxed/simple;
-	bh=Ati7ltRTr0dBEahzGT8SahX4/Ft/qcZsy9dxOLyFn5s=;
+	s=arc-20240116; t=1727441691; c=relaxed/simple;
+	bh=2lM4ESPs/GevDvI0aUnv8ehDSrCmvMn+wGS5v06qRRY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pxyalezu//5woj84cTblmTJfhtIKJQ7MLkFWAnu9426jQfvV7DeQ02ericwsoemxhe0dFxud9wxiSzQwAexlrHwvlodF39qPzPGtqZmIY1TjupWgvwBMTlbqeRlNARxjQjajjkuAoy+715Ww/E7tbxvBUGGK+JOVpcS5z1R1QmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y0qd0MyZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9312C4CEC6;
-	Fri, 27 Sep 2024 12:52:30 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ZeGCiUQ5/AIDVFOcDzZ2Y4d0t2qxaM01lSvkOwd4ZcCxP3yHy+T/BCaVglHIk8j70oNPsZGEm5l7V3hRKLV3sgj6L6qr3KeWp736PtA2ntk6aSbkm5Vf0lh4yoe5AbmJuYahsv/AALBwigkAijwXLwUHwPUiWBfWpmWUMiWNX2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L4F2ocV5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C919C4CEC4;
+	Fri, 27 Sep 2024 12:54:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727441559;
-	bh=Ati7ltRTr0dBEahzGT8SahX4/Ft/qcZsy9dxOLyFn5s=;
+	s=k20201202; t=1727441690;
+	bh=2lM4ESPs/GevDvI0aUnv8ehDSrCmvMn+wGS5v06qRRY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Y0qd0MyZYG0sNHe8M7wGiuh6Kf0HQajZ97k+2AjHC9QJY/CHwOjzKzuf9hWOEDY3/
-	 IgqDA655fgXL3ObhCKT3sn3oaC4mxSCtj7ITI86v5cHJPtRWswotntYWfY2lpoW3OM
-	 wIcVVXxAKy6HVAzJsIvj3dM9tzB46stT6bpGDqlqFEcxelRwj4WNeJ3fFSbuPLt2/+
-	 haGqwPFeBS4tllJAVvKnSjhSo+bUpu94lNUAEPWL1v3eCNIsCI7jBzQpEbmi+yY/g2
-	 wcm3ByS3hJcpype6XriJ/1T6tui4ZDvZTQ/YJffJtTlt1Wjuf7C5Mt1ju3Ofc1V4Uu
-	 fkfH+qGJthe2A==
-Message-ID: <ea708e46-25d4-4d8a-bea7-82a2908f999b@kernel.org>
-Date: Fri, 27 Sep 2024 14:52:29 +0200
+	b=L4F2ocV58UMWzCVsvm8W7H7SStgQA3oFfi8DdVpeyraqoUqeiWJ8s9RN5jY6XSyvb
+	 6Q2hOTGJH25huN2dBpzOroaGdrMEzZQFGaxXH8C0jsF2/8/a7ZS/HBuQv96xyNYvK2
+	 YTJKiXyHpMylk2uEl0UzbJze33Vr6nsTxX0flphmH+OeYhWheDK6bY4rN9sFI8ShA3
+	 OsJVwrI6KVLnntsyteyAodyK/TpiU2yZRaIPDeMT9neLkYOsj3oVBnC0uU0KfZOTKt
+	 pJQMHXUc0pdVVBAgLPfCYm3Ps7Gp5N8oZjYrRwLfuEy9G0+vT1s8Mn+cWz51U37NDP
+	 6pwiYY9FBo3MQ==
+Message-ID: <6437e1b4-20cb-4808-b79b-6120476d435b@kernel.org>
+Date: Fri, 27 Sep 2024 14:54:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH treewide 02/11] ASoC: dt-bindings: Deprecate
- {hp,mic}-det-gpio
+Subject: Re: [PATCH treewide 03/11] ARM: dts: marvell: mmp2-olpc-xo-1-75:
+ Switch to {hp,mic}-det-gpios
 To: Geert Uytterhoeven <geert+renesas@glider.be>,
  Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -74,7 +74,7 @@ Cc: linux-sound@vger.kernel.org, devicetree@vger.kernel.org,
  linux-mips@vger.kernel.org, alsa-devel@alsa-project.org,
  linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
 References: <cover.1727438777.git.geert+renesas@glider.be>
- <833d5d9560339bf39a125914225c9a0930e134cc.1727438777.git.geert+renesas@glider.be>
+ <7b4d7d735189fb346175a95e29db33f01c8cf93d.1727438777.git.geert+renesas@glider.be>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -120,21 +120,23 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <833d5d9560339bf39a125914225c9a0930e134cc.1727438777.git.geert+renesas@glider.be>
+In-Reply-To: <7b4d7d735189fb346175a95e29db33f01c8cf93d.1727438777.git.geert+renesas@glider.be>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 27/09/2024 14:42, Geert Uytterhoeven wrote:
-> Commit 2071d0968e564b4b ("Documentation: gpio: guidelines for bindings")
-> deprecated the "gpio" suffix for GPIO consumers in favor of the "gpios"
-> suffix.  Update the Audio Graph and Simple Audio Card DT bindings to
-> reflect this.
+> Replace the deprecated "hp-det-gpio" and "mic-det-gpio" properties by
+> "hp-det-gpios" resp. "mic-det-gpios" in Audio Graph Card device nodes.
 > 
 > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 > ---
-> No driver changes needed, as gpiod_get_optional() as called from
-> simple_util_init_jack() tries all suffixes.
-> ---
+>  arch/arm/boot/dts/marvell/mmp2-olpc-xo-1-75.dts | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+
+I think the non-Freescale DTS could be split to indicate there is no
+real dependency. Only Freescale DTS will be affected, thus should be
+taken at least with one cycle break.
+
 
 Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
