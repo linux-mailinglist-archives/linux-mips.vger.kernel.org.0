@@ -1,128 +1,127 @@
-Return-Path: <linux-mips+bounces-5721-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5722-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C50F988987
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Sep 2024 19:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 43EE99892BB
+	for <lists+linux-mips@lfdr.de>; Sun, 29 Sep 2024 04:42:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12DE0280D9E
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Sep 2024 17:10:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0554F28392B
+	for <lists+linux-mips@lfdr.de>; Sun, 29 Sep 2024 02:42:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7DB61C173C;
-	Fri, 27 Sep 2024 17:10:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4951618EAB;
+	Sun, 29 Sep 2024 02:42:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M/ZjhZTb"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88374166F23;
-	Fri, 27 Sep 2024 17:10:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D631CA9C;
+	Sun, 29 Sep 2024 02:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727457004; cv=none; b=EsyrrBEkM9b3dX3vkV2NPFmFChArRBK4aQ0x3ZGian+z5j9ZXYIwrF3Q98diITApo9jH7EUkCiDgd5/sNT1M1uHUNuw8ixSn15PaZspKJ9qRDgf3qzRjvsKpEh0p5Aw58hxnf5HL11N8Xh1gkPm/zqdrgPTC53j1AUUL2dBxpNo=
+	t=1727577735; cv=none; b=emUfCkSpaExNTJunyPubjPT6Q9I0iG9m8skb5CqqCm8zluNUEHgyGfKB5a3v33/DP4SmgZofeqirO8L66hkP++/EknliEHOQGWHrzf5tPPRh+GTNn+7sW6+8/ErQB8EfavPE7yZudqKd0gyfN2cXsrG7HBVovjrbtSR+QENvWNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727457004; c=relaxed/simple;
-	bh=msPFs0oHddcTpnqpQnU8/vyIsstY5Hmuyz7ku4/n+Vs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hY9KvFgSqoLMa3ca63ilYxQMI6rsioaK9DVTyT+J/2GknegR2tyxgQVT5Gq6AOu6AeD9TAw50TolbJvYyvuOR5ZKXHy3v3Mz3+wiW7VEbUQaV9aYQw1cPRFgLX6gpEkHvnRIwLKZhrrX7Qdkk9UmfnufBLXSFcwXg7scPEB7sio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6dbb24ee2ebso23637957b3.1;
-        Fri, 27 Sep 2024 10:10:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727457000; x=1728061800;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xoY6H2xihm8sOHd6/SknfHzEtRV3+jpw8m+Q4KMLP+g=;
-        b=tRMjiYTYypx9L5PJMkd2xnLL3moT3CPImD8m2IP5kg6+UZyqhOtanwT5HRBm0hfYCg
-         EsYGdbIG2PDapDWCNGv5U6GT5CPT4KgP++qj0Sr+qmqfAIfTFW1FhTeNfxgdGzLu3YAk
-         hJjPYhds4pYAL0KcSG30KLN/EzQeEdH3HJ6KOu5b3hivPceLTOz81PiMYsJJacYl8XC0
-         1I+JeHlxchtrGIXL4P5SY4jHFhzALzFXqXa/zOhGlvwC3qD1qDwvTeGW5eR808jcxOxm
-         SVzF1lA3pHYJbkNGSc5EbFq3tg56zj2MuAfv/FTSHBRssTZE+yMP0ewQ4uqiz3uXiBWS
-         LlDw==
-X-Forwarded-Encrypted: i=1; AJvYcCUd116sw7wmtstG8rMa8beP1eJqHLZsUY38pW6J1Y92lGvLy6v0MQ6/QubmZ1UNCqrK2vBISGjhXqm4@vger.kernel.org, AJvYcCUlvnq7+bYxTMuoSQIrLDRvkYnkR+9dRxzt+N4HFSTUFhaNxfIQIbLXZl74gZED8ay0F/vWuxxrK+mccZMmlMjrI4g=@vger.kernel.org, AJvYcCVtfOniakizM2ulrNzIcv0jpfPfWcCnONf3Qs2qvZuTSHgYXBQR/AlMJ8ttOsiSosqulEtn2MeVXCbzqA==@vger.kernel.org, AJvYcCWKPKr3EcOJK2ym4rzDPqMIm6B/L4zF5Un8VhU4WCWKZNjxmGdH/vfcECRuVZPstzoyfkV+VF55y5sOfts=@vger.kernel.org, AJvYcCX3YJey9Uh8g/JSiuIW312UPZp4Wkdu80R4dGmkJWlcBW/xKPfvvLbE1UBR2PLKe3cZzzTvF9HnW5Rx6BHb@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0pHOHX0sDBMj6OB2LUB8/RGEt8+HCY7iBF4KI8vYkmID4IOWf
-	LH0QsxHwXGcYTZqJdqwLEC/zOJQjqlp+tOQGxjtUKeSi1xRmWiu1WnJwgRHq
-X-Google-Smtp-Source: AGHT+IHlJToKTAzVgAYZKGZ99dEqKZ1IEZ+5wIjrGIZT5k3uFU+ceirE6auatgIXjGrDTfARDQ6h1g==
-X-Received: by 2002:a05:690c:4911:b0:6e2:e3d:4dda with SMTP id 00721157ae682-6e247544eb3mr33866507b3.17.1727457000404;
-        Fri, 27 Sep 2024 10:10:00 -0700 (PDT)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e245388265sm3604807b3.111.2024.09.27.10.09.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Sep 2024 10:09:59 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6dde476d3dfso20291487b3.3;
-        Fri, 27 Sep 2024 10:09:59 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUrOXltbnbNNZxfPRXnTcPKUru5KvKS9O1I2oBYV45ig8vwMmz4Ei6zu5xIQ0eQfN5WqLc8PZ7GZPuQWA==@vger.kernel.org, AJvYcCV0MsNBukM+FDLBa9rCwezuhjlMVIvYELoFRZXBjLmEjfsnV+AzS/J8LcHWxgYd3rVTPsa0i+Pb4Ex4W+4=@vger.kernel.org, AJvYcCWLPWfonlVFYNxpTqRRbUg8mHrnmdAHQ2NfoFulCtu6GVfCq6Wdog4C2KLtn36p/nkwjEJJaxVh3T7J@vger.kernel.org, AJvYcCWs9rc42AnN83gB176lsVK8iPBiM2ucRf2JFK1nkkFw2ifYLqvdAFGNw7dI/8Z1giRM0SSDtVywym4BR0ng@vger.kernel.org, AJvYcCXqxR15tyRkjq+z6FJyalTwvGiTVVui03u5mEerUvVxCWd4eNL5o+yaMdgT68tS3TXpUnP28w/4ai7BQXleTR3BY9s=@vger.kernel.org
-X-Received: by 2002:a05:690c:112:b0:6e2:985:f4df with SMTP id
- 00721157ae682-6e24dc9c710mr22157267b3.44.1727456998718; Fri, 27 Sep 2024
- 10:09:58 -0700 (PDT)
+	s=arc-20240116; t=1727577735; c=relaxed/simple;
+	bh=YPx5QA97jipQMMLwP45wplNXnHwAHBwZK8de9l31+I4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i3EnOqbrJV7TYenwHZfQj7aN3XomNQMiyFAnCghFZxb8LmzMAOGtYoH7BLyNXSHMmJWL7F9qOudunuFj04f8EbIwjZXmNjxe7jgXg0gYATjBt/54Mc02oAgEj4dhmg+DWGkTdXLp4IBrBosLyzAt1QBQlvCtO3oGAtO4X6Ua7Go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M/ZjhZTb; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727577734; x=1759113734;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YPx5QA97jipQMMLwP45wplNXnHwAHBwZK8de9l31+I4=;
+  b=M/ZjhZTbCBudGK/+mIeOdaK+ylyrhDE2zRJSBqsfgO17RuBcdLWPXHKD
+   t6xlLH1Lb6ojUB9iz7gPxPbGirV4RhmMES10Xt5JGqsyTyPH2XnQuxrFt
+   GMKDs2c1NNPHZQjpYecqn9eeRSVVZ7TzXL+3tZcY2uDarTN3c6Y1lgMmP
+   hB+KDuV6CT3xke0HxIHy8FqGWrNzzSsyO+gVnIdDVEnPBAT9oxQl1ACR1
+   Q8f+v1WkgEM+NFQBWDCEGkWNOpFwsJV3C937cBhFFU8uPGmB9kmWyRK37
+   WBN+s6i28U0crikhrtmYLAOxcccoM+I8PmVNtm6R2R/CZ1pbTx5mLUuEI
+   w==;
+X-CSE-ConnectionGUID: ygH1ZY9OTCCF+xgFMv0xpg==
+X-CSE-MsgGUID: dnH9syX+REefFvE42NwM8A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11209"; a="30390405"
+X-IronPort-AV: E=Sophos;i="6.11,162,1725346800"; 
+   d="scan'208";a="30390405"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2024 19:42:13 -0700
+X-CSE-ConnectionGUID: jGBL3PlkSTqpE3bOuJ2t/g==
+X-CSE-MsgGUID: LuVzNOm3T9uf/yX7GmShIg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,162,1725346800"; 
+   d="scan'208";a="77311263"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 28 Sep 2024 19:42:10 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sujst-000NqV-1Z;
+	Sun, 29 Sep 2024 02:42:07 +0000
+Date: Sun, 29 Sep 2024 10:41:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, lee@kernel.org, sre@kernel.org,
+	tsbogend@alpha.franken.de
+Cc: oe-kbuild-all@lists.linux.dev, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH v5 6/6] i2c: Add driver for the RTL9300 I2C controller
+Message-ID: <202409291025.P4M4O1F2-lkp@intel.com>
+References: <20240925215847.3594898-7-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1727438777.git.geert+renesas@glider.be> <4455919.MSiuQNM8U4@phil>
-In-Reply-To: <4455919.MSiuQNM8U4@phil>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 27 Sep 2024 19:09:45 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXVBfp0ZJ5Me93p1fB9-ac00WcAYOb9jkG=D+wm01j+qw@mail.gmail.com>
-Message-ID: <CAMuHMdXVBfp0ZJ5Me93p1fB9-ac00WcAYOb9jkG=D+wm01j+qw@mail.gmail.com>
-Subject: Re: [PATCH treewide 00/11] ASoC: Clean up {hp,mic}-det-gpio handling
-To: Heiko Stuebner <heiko@sntech.de>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Lubomir Rintel <lkundrak@v3.sk>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Magnus Damm <magnus.damm@gmail.com>, 
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Paul Cercueil <paul@crapouillou.net>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Shengjiu Wang <shengjiu.wang@gmail.com>, Xiubo Li <Xiubo.Lee@gmail.com>, 
-	Nicolin Chen <nicoleotsuka@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>, 
-	Adrien Grassein <adrien.grassein@gmail.com>, Adam Ford <aford173@gmail.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, linux-sound@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	imx@lists.linux.dev, linux-renesas-soc@vger.kernel.org, 
-	linux-rockchip@lists.infradead.org, linux-mips@vger.kernel.org, 
-	alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240925215847.3594898-7-chris.packham@alliedtelesis.co.nz>
 
-Hi Heiko,
+Hi Chris,
 
-On Fri, Sep 27, 2024 at 4:45=E2=80=AFPM Heiko Stuebner <heiko@sntech.de> wr=
-ote:
-> Am Freitag, 27. September 2024, 14:42:15 CEST schrieb Geert Uytterhoeven:
-> >   - The second patch updates the Audio Graph and Simple Audio Card DT
-> >     bindings,
-> >   - Patches 3-9 converts various DTS files to use the new properties,
-> >   - The last 2 patches convert Freescale sound device nodes to use the
-> >     new properties.
-> >
-> > All patches can be applied independently,
->
-> though I guess dts patches should wait till patch 2 gets applied
-> somewhere, so that changed dts and changed binding can again find
-> together in linux-next?
+kernel test robot noticed the following build warnings:
 
-Yes, if we want to avoid introducing new dtbs_check warnings in linux-next.
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on andi-shyti/i2c/i2c-host sre-power-supply/for-next linus/master v6.11 next-20240927]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Gr{oetje,eeting}s,
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Packham/dt-bindings-reset-syscon-reboot-Add-reg-property/20240926-060355
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20240925215847.3594898-7-chris.packham%40alliedtelesis.co.nz
+patch subject: [PATCH v5 6/6] i2c: Add driver for the RTL9300 I2C controller
+config: csky-randconfig-r111-20240929 (https://download.01.org/0day-ci/archive/20240929/202409291025.P4M4O1F2-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 14.1.0
+reproduce: (https://download.01.org/0day-ci/archive/20240929/202409291025.P4M4O1F2-lkp@intel.com/reproduce)
 
-                        Geert
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409291025.P4M4O1F2-lkp@intel.com/
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+sparse warnings: (new ones prefixed by >>)
+>> drivers/i2c/busses/i2c-rtl9300.c:321:27: sparse: sparse: symbol 'rtl9300_i2c_quirks' was not declared. Should it be static?
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+vim +/rtl9300_i2c_quirks +321 drivers/i2c/busses/i2c-rtl9300.c
+
+   320	
+ > 321	struct i2c_adapter_quirks rtl9300_i2c_quirks = {
+   322		.flags		= I2C_AQ_NO_CLK_STRETCH,
+   323		.max_read_len	= 16,
+   324		.max_write_len	= 16,
+   325	};
+   326	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
