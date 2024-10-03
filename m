@@ -1,246 +1,228 @@
-Return-Path: <linux-mips+bounces-5733-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5734-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A51E798DB7E
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Oct 2024 16:32:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72C8798F53F
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Oct 2024 19:34:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 18624B224F4
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Oct 2024 14:32:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E51FDB20998
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Oct 2024 17:34:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2E6A1D2712;
-	Wed,  2 Oct 2024 14:26:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 655F31A7257;
+	Thu,  3 Oct 2024 17:34:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="SD/30Ml+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NAHcTvDy"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C67171D26FE
-	for <linux-mips@vger.kernel.org>; Wed,  2 Oct 2024 14:26:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C040182A0;
+	Thu,  3 Oct 2024 17:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727879197; cv=none; b=ZrK4S94QZR9nTjqjt9whP8RvBAWepfbOY5mm+HOE46RU5384A2XE/Mb92n8UpycW77d6etKGCr7Q6cTQrGdJZwaqnsVGcQB24eK70tgsvyFM/XkAnlx022yoFnGYGP7yTmjk2hA1wp1l6Uw7GUHpkgrJSzql5/ym2aJv90LB/BU=
+	t=1727976882; cv=none; b=HVnM1QUuGggSIOcPHe1Ek1b7qYlu6x0F2DoWi4tfn/gZRF7+yw+8kR/GpuPVw5xpv/FUu9EICbjFLOieM7FQT21WvRFxgJ78Zq7cd+CC9N2bsdQyuSqOg1fdiLHW/GTbhE67NgA46Ba3DSC11I+Oz8M8iQz0mdpunf/aqINaAqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727879197; c=relaxed/simple;
-	bh=aCFCZJFzvE1bkbpS9hq4+5y5zL1d5gjRJcjpIdftZ/k=;
-	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID; b=bHjrmTJPaiopDZ2pEhp4rtDRwM6bammmYvhvKg44ERVdObU0nr0F4bqx15mOKmAi5rLMNLDQd+x7WT36snynIaPhSlXaGsbe64Xemu2FowQZspcZEvsTlpfos5gCuz23HMNMrSwi4obaUW7G9h8sYsKImCHSuGmcMeRCJcv0mYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=SD/30Ml+; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2e0a74ce880so5593105a91.2
-        for <linux-mips@vger.kernel.org>; Wed, 02 Oct 2024 07:26:34 -0700 (PDT)
+	s=arc-20240116; t=1727976882; c=relaxed/simple;
+	bh=HdEQgXceb0XBmyaMVpZjRlic0GVyOrEgJ48g0VrutpE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=NvxVC+ZJunmp2bs/kDh6U69ZryENGXpwJgV7AZsOQ25NgV+nvSeChY3laLymiA+t8mktjSBFsaBxj0DbLwfuD8Y4ibA1kmdNbouSlr0dpcqNUwUUoG8f7i4B6TKTmBOn0MwrDc46/ptLyTWhCxxECTZcH9eFwbqenx457fdCkj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NAHcTvDy; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-42ca4e0299eso11375755e9.2;
+        Thu, 03 Oct 2024 10:34:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1727879194; x=1728483994; darn=vger.kernel.org;
-        h=message-id:to:from:cc:in-reply-to:subject:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=uOcXAMjC7XDZjDd/akc0amsyLu8m5OVtpNVeGFczMRY=;
-        b=SD/30Ml+Tok20r3tgjGddoHNePpI87umKJYLEmCW9RJRtZAaFxsMuog/oHAMbH5JLr
-         IgqYXSeFdUGqhBu9A+n2uEbFeQrqGywM6iivTlDK7iBqNjPSopoRQX83URf4rMMX4sq2
-         QEIVpFiPt1XNL3V05EH4Xv2mWQtOXSg6CBtNFqu7mJaIzXzlKrCPQ8zDC+EPTuix/Mwg
-         uxKP8EVlmZ9TAKF3scyqGP1fH9DlLSlzVCwxwmr95AfXM/niIih4DHwqxVtIFnZmiS1Z
-         m79HI9p1er/F04E6sK+949k4x2HVIQEiWCYlIKr/VsWQrKEvZTc5xtsmNPoFREJJCC2r
-         HI1w==
+        d=gmail.com; s=20230601; t=1727976879; x=1728581679; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cY5iibz6mZQz5n5gjQ67PgTaHlR0x76DBuf5jz5YtI4=;
+        b=NAHcTvDyRIICXUFTxDmqFLYHh+NlRrWaKo73UWUlHZL+H442R2nxJeqtUffJuDqfYg
+         6mcLVUsxaYByqxy5dwuO3ah3pJ6KJyx95yx7W7dBzzfxqe9TG5uuauDUOrlKp+MXsaZY
+         qw/pQzqmxuYqdkE8wJswXDAYx7R5n2ksiPAa1bt2L+UoifVI5KQpmBzlDamtv0GyJ8mq
+         5AolgJB01r7HlWn6d63d0emmAwfTFSAV/aRiaBhVqG0nMqlZFqs039SPK3B+Nqb1ceVC
+         JMXTzsv1bVfbGcsyJPes04bHMftvwcHhRfqJJrBCqkVh3JWxLrUgBq8RNUWxC2SXB2W1
+         27/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727879194; x=1728483994;
-        h=message-id:to:from:cc:in-reply-to:subject:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uOcXAMjC7XDZjDd/akc0amsyLu8m5OVtpNVeGFczMRY=;
-        b=oHkspehBpWQ6luMgSKfgphMkxT6N+2kNpJ/oSorZ6W3CXGLDhwzt0fle4Alzl0MX7J
-         fIqwxjpjc6EsAa6Fv+ILRtM/gEWeEuwzo9YMmyl0BcP9A9Y/vLiCbZiWmmi2z0oXCHCA
-         CKxl/AHFAX8A/GF3pl/1nngWFiiPLivAb5oJE85BsBlQLVgHQNbCOvKNgD24yXKk0Dhj
-         ESe21srIXb2vymn8T9iP6IglPVzi/P1FBEJFxsrf/5B3zigY33/7zTlzM24shexEW30V
-         VSgV6Avr692nrYq1E/u9RKgMZYddnTRqCHLQJ/WoX7Ci11LY5E+ChjJOzmHyV/pzx+jX
-         4SEA==
-X-Forwarded-Encrypted: i=1; AJvYcCXbyMO/KSBPrjuEMg9JYyrroP9Iwe4y8jiJj3GR+ZtS3dGC2+tUlGAeB/Qy1PMPPRrShmm1b7Ggw3OT@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3QDEmThGhG4IYHEmV6BoiBrpIGZrmSdhqP5/NTpc8iRQSxntf
-	2kr2VQl+gi7u78VWGfrE3kOgAIfW0om471mmHhfmyPDmk5Kedow//QDhTbsrORk=
-X-Google-Smtp-Source: AGHT+IHNNKdcu5kwdDsRcpptaNSlsD6gvL0I++M5UX28lY+Nyv67bj3x07yZ+LRvd6o8h2+EV/Ug6A==
-X-Received: by 2002:a17:90a:be10:b0:2e0:7b2b:f76 with SMTP id 98e67ed59e1d1-2e18468cc49mr4757443a91.19.1727879193916;
-        Wed, 02 Oct 2024 07:26:33 -0700 (PDT)
-Received: from localhost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e18f79bb04sm1615137a91.30.2024.10.02.07.26.32
+        d=1e100.net; s=20230601; t=1727976879; x=1728581679;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cY5iibz6mZQz5n5gjQ67PgTaHlR0x76DBuf5jz5YtI4=;
+        b=eJDTGJv5Mh30BlhRDmmBbSA+PiibWgkzcpZwpDEheFbrBPx7wt+waylgBClQNhr7Z8
+         iIOq0naVgm7C66VB6mvIj9lsyIEnP/XZE0VlfsNKC+F9VzRrYTHuKTzSHLQg6ZoghX3z
+         gMTcSENt0dHwCvdj2+ZD1aSXC9B7b3SwjyvSuNg6vlfaD1Emca5pWrOrHVVgmoj2NAfS
+         KEbrG5WIeyKUrZFhprXswR/PT0jkIPtGOBend1EyT3otpI2TCbcjLZaDEeI0UKd+mPpK
+         bXaMmfy0a/RcJLLoVvZ6aTj8bXTw/uDJjdukACEmnxo9u2lT7MbNIAgfiCi9nJU2yB+5
+         UMIA==
+X-Forwarded-Encrypted: i=1; AJvYcCUe82SYa12p3W3PGUsIYcHfuu5yWW2bdzBmXozuhd3ZKQi2Xt+nhTZTkHhtNRk7cltifwkZ4p39u4q2cw==@vger.kernel.org, AJvYcCVz+nQuAuabsq/wFV0kb9/GtOIQQItYIIDsBan3Tu2Z35Ao3l6EBO5bLT5OkoxI1U8n8QcYa6cvBiGMNa4=@vger.kernel.org, AJvYcCW3d/xfV9th1bCsyZsQxcINRO+7wbCUSIn9rmplSq/KOw540QH9gEaEI3bqs1MYrTsLpMoOPtW5dIY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXZZn92+OlUz88d5K200oVZaEsl2VJBp7N7sFwCavXjor4PIKV
+	qLiYVhLy6fjxJ1ho9OOvnju0zUbDyKHMR1ul1Ue8TDmViBZIb6aPZaESJazL
+X-Google-Smtp-Source: AGHT+IF+koBvsXCIg+fn2Z6w9z+JMRoOhrigoCbdzK8x02UC4qm5C0DCEdeY5+niMvTpuEfu74sFEQ==
+X-Received: by 2002:a05:600c:4f86:b0:426:8884:2c58 with SMTP id 5b1f17b1804b1-42f777b0176mr59251265e9.4.1727976878506;
+        Thu, 03 Oct 2024 10:34:38 -0700 (PDT)
+Received: from localhost (host-79-19-52-27.retail.telecomitalia.it. [79.19.52.27])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d081f74d9sm1739572f8f.7.2024.10.03.10.34.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2024 07:26:32 -0700 (PDT)
-Date: Wed, 02 Oct 2024 07:26:32 -0700 (PDT)
-X-Google-Original-Date: Wed, 02 Oct 2024 07:26:31 PDT (-0700)
-Subject:     Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to 47 bits
-In-Reply-To: <ZuSoxh5U3Kj1XgGq@ghost>
-CC: Catalin Marinas <catalin.marinas@arm.com>, Liam.Howlett@oracle.com,
-  Arnd Bergmann <arnd@arndb.de>, guoren@kernel.org, Richard Henderson <richard.henderson@linaro.org>,
-  ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-  chenhuacai@kernel.org, kernel@xen0n.name, tsbogend@alpha.franken.de,
-  James.Bottomley@hansenpartnership.com, deller@gmx.de, mpe@ellerman.id.au, npiggin@gmail.com,
-  christophe.leroy@csgroup.eu, naveen@kernel.org, agordeev@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-  hca@linux.ibm.com, gor@linux.ibm.com, borntraeger@linux.ibm.com, svens@linux.ibm.com,
-  ysato@users.sourceforge.jp, dalias@libc.org, glaubitz@physik.fu-berlin.de, davem@davemloft.net,
-  andreas@gaisler.com, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-  dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, luto@kernel.org, peterz@infradead.org,
-  muchun.song@linux.dev, akpm@linux-foundation.org, vbabka@suse.cz, shuah@kernel.org,
-  Christoph Hellwig <hch@infradead.org>, mhocko@suse.com, kirill@shutemov.name, chris.torek@gmail.com,
-  linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-  linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-  loongarch@lists.linux.dev, linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-  linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-  sparclinux@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-  linux-abi-devel@lists.sourceforge.net
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: Charlie Jenkins <charlie@rivosinc.com>, lorenzo.stoakes@oracle.com
-Message-ID: <mhng-411f66df-5f86-4aeb-b614-a6f64587549c@palmer-ri-x1c9a>
+        Thu, 03 Oct 2024 10:34:37 -0700 (PDT)
+From: Matteo Martelli <matteomartelli3@gmail.com>
+Subject: [PATCH 0/7] iio: fix possible race condition during access of
+ available info lists
+Date: Thu, 03 Oct 2024 19:34:05 +0200
+Message-Id: <20241003-iio-read-avail-release-v1-0-c70cc7d9c2e0@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAI3V/mYC/x2MMQqAMBAEvxKu9iCJFupXxOI0qx6IkQREEP9us
+ JspZh7KSIpMvXko4dKs8SjiKkPzJscK1lCcvPWNba1n1cgJElgu0b3gDsngeaqDFwc3dS2V+Ex
+ Y9P7Hw/i+H46oiZpoAAAA
+X-Change-ID: 20240802-iio-read-avail-release-cb3d2a1e1b98
+To: Jonathan Cameron <jic23@kernel.org>, 
+ Lars-Peter Clausen <lars@metafoo.de>, 
+ Michael Hennerich <Michael.Hennerich@analog.com>, 
+ Alisa-Dariana Roman <alisa.roman@analog.com>, 
+ Christian Eggers <ceggers@arri.de>, Peter Rosin <peda@axentia.se>, 
+ Paul Cercueil <paul@crapouillou.net>, Sebastian Reichel <sre@kernel.org>
+Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-mips@vger.kernel.org, linux-pm@vger.kernel.org, 
+ Matteo Martelli <matteomartelli3@gmail.com>
+X-Mailer: b4 0.14.2
 
-On Fri, 13 Sep 2024 14:04:06 PDT (-0700), Charlie Jenkins wrote:
-> On Fri, Sep 13, 2024 at 08:41:34AM +0100, Lorenzo Stoakes wrote:
->> On Wed, Sep 11, 2024 at 11:18:12PM GMT, Charlie Jenkins wrote:
->> > On Wed, Sep 11, 2024 at 07:21:27PM +0100, Catalin Marinas wrote:
->> > > On Tue, Sep 10, 2024 at 05:45:07PM -0700, Charlie Jenkins wrote:
->> > > > On Tue, Sep 10, 2024 at 03:08:14PM -0400, Liam R. Howlett wrote:
->> > > > > * Catalin Marinas <catalin.marinas@arm.com> [240906 07:44]:
->> > > > > > On Fri, Sep 06, 2024 at 09:55:42AM +0000, Arnd Bergmann wrote:
->> > > > > > > On Fri, Sep 6, 2024, at 09:14, Guo Ren wrote:
->> > > > > > > > On Fri, Sep 6, 2024 at 3:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
->> > > > > > > >> It's also unclear to me how we want this flag to interact with
->> > > > > > > >> the existing logic in arch_get_mmap_end(), which attempts to
->> > > > > > > >> limit the default mapping to a 47-bit address space already.
->> > > > > > > >
->> > > > > > > > To optimize RISC-V progress, I recommend:
->> > > > > > > >
->> > > > > > > > Step 1: Approve the patch.
->> > > > > > > > Step 2: Update Go and OpenJDK's RISC-V backend to utilize it.
->> > > > > > > > Step 3: Wait approximately several iterations for Go & OpenJDK
->> > > > > > > > Step 4: Remove the 47-bit constraint in arch_get_mmap_end()
->> > >
->> > > Point 4 is an ABI change. What guarantees that there isn't still
->> > > software out there that relies on the old behaviour?
->> >
->> > Yeah I don't think it would be desirable to remove the 47 bit
->> > constraint in architectures that already have it.
->> >
->> > >
->> > > > > > > I really want to first see a plausible explanation about why
->> > > > > > > RISC-V can't just implement this using a 47-bit DEFAULT_MAP_WINDOW
->> > > > > > > like all the other major architectures (x86, arm64, powerpc64),
->> > > > > >
->> > > > > > FWIW arm64 actually limits DEFAULT_MAP_WINDOW to 48-bit in the default
->> > > > > > configuration. We end up with a 47-bit with 16K pages but for a
->> > > > > > different reason that has to do with LPA2 support (I doubt we need this
->> > > > > > for the user mapping but we need to untangle some of the macros there;
->> > > > > > that's for a separate discussion).
->> > > > > >
->> > > > > > That said, we haven't encountered any user space problems with a 48-bit
->> > > > > > DEFAULT_MAP_WINDOW. So I also think RISC-V should follow a similar
->> > > > > > approach (47 or 48 bit default limit). Better to have some ABI
->> > > > > > consistency between architectures. One can still ask for addresses above
->> > > > > > this default limit via mmap().
->> > > > >
->> > > > > I think that is best as well.
->> > > > >
->> > > > > Can we please just do what x86 and arm64 does?
->> > > >
->> > > > I responded to Arnd in the other thread, but I am still not convinced
->> > > > that the solution that x86 and arm64 have selected is the best solution.
->> > > > The solution of defaulting to 47 bits does allow applications the
->> > > > ability to get addresses that are below 47 bits. However, due to
->> > > > differences across architectures it doesn't seem possible to have all
->> > > > architectures default to the same value. Additionally, this flag will be
->> > > > able to help users avoid potential bugs where a hint address is passed
->> > > > that causes upper bits of a VA to be used.
->> > >
->> > > The reason we added this limit on arm64 is that we noticed programs
->> > > using the top 8 bits of a 64-bit pointer for additional information.
->> > > IIRC, it wasn't even openJDK but some JavaScript JIT. We could have
->> > > taught those programs of a new flag but since we couldn't tell how many
->> > > are out there, it was the safest to default to a smaller limit and opt
->> > > in to the higher one. Such opt-in is via mmap() but if you prefer a
->> > > prctl() flag, that's fine by me as well (though I think this should be
->> > > opt-in to higher addresses rather than opt-out of the higher addresses).
->> >
->> > The mmap() flag was used in previous versions but was decided against
->> > because this feature is more useful if it is process-wide. A
->> > personality() flag was chosen instead of a prctl() flag because there
->> > existed other flags in personality() that were similar. I am tempted to
->> > use prctl() however because then we could have an additional arg to
->> > select the exact number of bits that should be reserved (rather than
->> > being fixed at 47 bits).
->>
->> I am very much not in favour of a prctl(), it would require us to add state
->> limiting the address space and the timing of it becomes critical. Then we
->> have the same issue we do with the other proposals as to - what happens if
->> this is too low?
->>
->> What is 'too low' varies by architecture, and for 32-bit architectures
->> could get quite... problematic.
->>
->> And again, wha is the RoI here - we introducing maintenance burden and edge
->> cases vs. the x86 solution in order to... accommodate things that need more
->> than 128 TiB of address space? A problem that does not appear to exist in
->> reality?
->>
->> I suggested the personality approach as the least impactful compromise way
->> of this series working, but I think after what Arnd has said (and please
->> forgive me if I've missed further discussion have been dipping in and out
->> of this!) - adapting risc v to the approach we take elsewhere seems the
->> most sensible solution to me.
+Some iio drivers currently share an available info list buffer that
+might be changed while iio core prints it to sysfs. This could cause the
+buffer shared with iio core to be corrupted. However, note that I was
+able to trigger the race condition only by adding a delay between each
+sysfs_emit_at calls in the iio_format_list() to force the concurrent
+access to the shared available list buffer.
 
-There's one wrinkle here: RISC-V started out with 39-bit VAs by default, 
-and we've had at least one report of userspace breaking when moving to 
-48-bit addresses.  That was just address sanitizer, so maybe nobody 
-cares, but we're still pretty early in the transition to 48-bit systems 
-(most of the HW is still 39-bit) so it's not clear if that's going to be 
-the only bug.
+This patch set extends the iio APIs and fixes some affected drivers.
 
-So we're sort of in our own world of backwards compatibility here.  
-39-bit vs 48-bit is just an arbitrary number, but "38 bits are enough 
-for userspace" doesn't seem as sane a "47 bits are enough for 
-userspace".  Maybe the right answer here is to just say the 38-bit 
-userspace is broken and that it's a Linux-ism that 64-bit sytems have 
-47-bit user addresses by default.
+Summary:
+- Patch 1: iio core: introduce a iio info release callback to let
+  drivers share a copy of their available info list and later free it.
 
->> This remains something we can revisit in future if this turns out to be
->> egregious.
->>
->
-> I appreciate Arnd's comments, but I do not think that making 47-bit the
-> default is the best solution for riscv. On riscv, support for 48-bit
-> address spaces was merged in 5.17 and support for 57-bit address spaces
-> was merged in 5.18 without changing the default addresses provided by
-> mmap(). It could be argued that this was a mistake, however since at the
-> time there didn't exist hardware with larger address spaces it wasn't an
-> issue. The applications that existed at the time that relied on the
-> smaller address spaces have not been able to move to larger address
-> spaces. Making a 47-bit user-space address space default solves the
-> problem, but that is not arch agnostic, and can't be since of the
-> varying differences in page table sizes across architectures, which is
-> the other part of the problem I am trying to solve.
->
->> >
->> > Opting-in to the higher address space is reasonable. However, it is not
->> > my preference, because the purpose of this flag is to ensure that
->> > allocations do not exceed 47-bits, so it is a clearer ABI to have the
->> > applications that want this guarantee to be the ones setting the flag,
->> > rather than the applications that want the higher bits setting the flag.
->>
->> Perfect is the enemy of the good :) and an idealised solution may not end
->> up being something everybody can agree on.
->
-> Yes you are totally right! Although this is not my ideal solution, it
-> sufficiently accomplishes the goal so I think it is reasonable to
-> implement this as a personality flag.
->
->>
->> >
->> > - Charlie
->> >
->> > >
->> > > --
->> > > Catalin
->> >
->> >
->> >
+- Patch 2: pac1921: handle the current scale available info via the
+  read_avail+read_avail_release_resource APIs instead of using an ad-hoc
+  ext_info attribute. The latter was used to avoid the risk of a race in
+  the available list.
+
+- Patch 3,4: ad7192, as73211: fix the possible race in the drivers by
+  copying/releasing the affected available lists.
+
+- Patch 5: inkern: make consumers copy and release the available info
+  lists of their producers, necessary after patch 1.
+
+- Patch 6,7: iio-mux, iio-rescale, dpot-dac, ingenic-battery: adapt
+  consumers to inkern API change by freeing the now copied available
+  lists of their producers.
+
+Tested:
+- pac1921: could not reproduce the race condition with the new APIs,
+  even with additional delays among the sysfs_emit_at calls during a
+  shunt resistor write. No new issue found after the change.
+
+- iio-mux, iio-rescale, dpot-dac: tested with pac1921 as producer, which
+  was adapted to produce a mock raw available info list.
+  The tests did not cover the driver features but focused on assessing
+  the function call sequence. For example the following traced function
+  graph shows a read of the dpot mocked out voltage (with ftrace
+  filters: pac1921* iio* dpot* kmemdup_array* kfree*):
+
+ 3)               |  iio_read_channel_info_avail [industrialio]() {
+ 3)               |    dpot_dac_read_avail [dpot_dac]() {
+ 3)               |      iio_read_avail_channel_raw [industrialio]() {
+ 3)               |        iio_channel_read_avail [industrialio]() {
+ 3)               |          pac1921_read_avail [pac1921]() {
+ 3)   5.208 us    |            kmemdup_array();
+ 3) + 11.459 us   |          }
+ 3)   3.167 us    |          kmemdup_array();
+ 3)               |          pac1921_read_avail_release_res [pac1921]() {
+ 3)   1.709 us    |            kfree();
+ 3)   4.458 us    |          }
+ 3) + 25.750 us   |        }
+ 3) + 31.792 us   |      }
+ 3) + 35.000 us   |    }
+ 3) + 37.083 us   |    iio_format_list [industrialio]();
+ 3)               |    dpot_dac_read_avail_release_res [dpot_dac]() {
+ 3)   1.583 us    |      kfree();
+ 3)   4.250 us    |    }
+ 3) + 84.292 us   |  }
+
+- ingenic-battery: also tested with mock available info produced by the
+  pac1921 driver. Following the traced graph part that should correspond
+  to the ingenic_battery_set_scale() flow (which is not traceable with
+  the additional ingenic* ftrace filter for some reason):
+
+ 2)               |  ingenic_battery_probe [ingenic_battery]() {
+                ...
+ 2)               |    iio_read_max_channel_raw [industrialio]() {
+ 2)               |      iio_channel_read_avail [industrialio]() {
+ 2)               |        pac1921_read_avail [pac1921]() {
+ 2)   4.333 us    |          kmemdup_array();
+ 2) + 10.834 us   |        }
+ 2)   3.500 us    |        kmemdup_array();
+ 2)               |        pac1921_read_avail_release_res [pac1921]() {
+ 2)   1.791 us    |          kfree();
+ 2)   4.625 us    |        }
+ 2) + 26.291 us   |      }
+ 2)   1.583 us    |      kfree();
+ 2) + 35.750 us   |    }
+ 2)               |    iio_read_avail_channel_attribute [industrialio]() {
+ 2)               |      iio_channel_read_avail [industrialio]() {
+ 2)               |        pac1921_read_avail [pac1921]() {
+ 2)   3.250 us    |          kmemdup_array();
+ 2)   8.209 us    |        }
+ 2)   3.458 us    |        kmemdup_array();
+ 2)               |        pac1921_read_avail_release_res [pac1921]() {
+ 2)   1.542 us    |          kfree();
+ 2)   4.292 us    |        }
+ 2) + 21.417 us   |      }
+ 2) + 26.333 us   |    }
+ 2)               |    iio_write_channel_attribute [industrialio]() {
+ 2)   4.375 us    |      pac1921_write_raw [pac1921]();
+ 2)   9.625 us    |    }
+ 2)   1.666 us    |    kfree();
+ 2) * 47810.08 us |  }
+
+Not tested:
+- ad7192, as73211
+
+Link: https://lore.kernel.org/linux-iio/20240724-iio-pac1921-v4-0-723698e903a3@gmail.com/
+
+Signed-off-by: Matteo Martelli <matteomartelli3@gmail.com>
+---
+Matteo Martelli (7):
+      iio: core: add read_avail_release_resource callback to fix race
+      iio: pac1921: use read_avail+release APIs instead of custom ext_info
+      iio: ad7192: copy/release available filter frequencies to fix race
+      iio: as73211: copy/release available integration times to fix race
+      iio: inkern: copy/release available info from producer
+      iio: consumers: release available info buffer copied from producer
+      power: supply: ingenic-battery: free scale buffer after use
+
+ drivers/iio/adc/ad7192.c               |  22 +++++-
+ drivers/iio/adc/pac1921.c              | 128 ++++++++++++---------------------
+ drivers/iio/afe/iio-rescale.c          |   8 +++
+ drivers/iio/dac/dpot-dac.c             |   8 +++
+ drivers/iio/industrialio-core.c        |  14 +++-
+ drivers/iio/inkern.c                   |  64 ++++++++++++-----
+ drivers/iio/light/as73211.c            |  23 +++++-
+ drivers/iio/multiplexer/iio-mux.c      |   8 +++
+ drivers/power/supply/ingenic-battery.c |  16 +++--
+ include/linux/iio/consumer.h           |   4 +-
+ include/linux/iio/iio.h                |   4 ++
+ 11 files changed, 185 insertions(+), 114 deletions(-)
+---
+base-commit: fec496684388685647652ab4213454fbabdab099
+change-id: 20240802-iio-read-avail-release-cb3d2a1e1b98
+
+Best regards,
+-- 
+Matteo Martelli <matteomartelli3@gmail.com>
+
 
