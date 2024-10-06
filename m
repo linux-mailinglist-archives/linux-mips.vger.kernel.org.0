@@ -1,214 +1,123 @@
-Return-Path: <linux-mips+bounces-5754-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5755-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C459991ED9
-	for <lists+linux-mips@lfdr.de>; Sun,  6 Oct 2024 16:23:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F22C991F2B
+	for <lists+linux-mips@lfdr.de>; Sun,  6 Oct 2024 16:59:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37964282408
-	for <lists+linux-mips@lfdr.de>; Sun,  6 Oct 2024 14:23:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4CFE1F21991
+	for <lists+linux-mips@lfdr.de>; Sun,  6 Oct 2024 14:59:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 920254D8DA;
-	Sun,  6 Oct 2024 14:23:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB87913BC39;
+	Sun,  6 Oct 2024 14:59:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SGD1UZvC"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="Ym5kQUjt"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F143482EF;
-	Sun,  6 Oct 2024 14:23:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D51313665B;
+	Sun,  6 Oct 2024 14:59:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728224608; cv=none; b=dWnkhAG+fIjK/sf41B9GMsSVI2ScnFhgSXi3tJYsrrFdSsjnTHppV4QN9+e9fPubd169VnBslsMLUm/dqzOE4xUDTeFWBernRWhP6Q8lEzHEGkXQ1VZ7KtdFpyRlfpeD/skPpiV2Oe/cW/MZepHbSlq8nsYF8jWi3EGcsyDlXSk=
+	t=1728226751; cv=none; b=CAOwwh6gb30/XCz20wY6THnt+XsX3rWA4UTewhgl9S2ONFITJwwh4TQ6ae9IFKyfLv13HG00kBxk3JKVO3fyU+j9BkDXKt9iu8E8T/nMg9FqPu1Kco0+NKnhQ+0s1OT0lg1Q35RHA+G8JKhMPXEbBn4CPPVUfGAAlUWwWnxP4OQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728224608; c=relaxed/simple;
-	bh=CNkPGnoTVRaYye84kjCIZIAeaNWed4UNi5HlPAGQgLM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZGr+tddi4YwiZkNshSmOKOn8el59BPprSm7usG4VZ8v9S0WqyRY0dlHs+AgD2AG01fuG1z8W0cIPR9cTDseFxtdoMW03yMFTAqyqFixZ0gbLMCRLrNWiyc5ZZK6ZqXgHkt54cigknJqqftet4CEc33dtUViVkJrdxxQ+ex+k8Hk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SGD1UZvC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F713C4CEC5;
-	Sun,  6 Oct 2024 14:23:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728224608;
-	bh=CNkPGnoTVRaYye84kjCIZIAeaNWed4UNi5HlPAGQgLM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=SGD1UZvCs0T8XkCGFmHWSbG34X9W+pdAFS6oGpIbBA3nW7lFhSApjJ5W4XQKzp6l7
-	 fyZZrw9wKdW6VXyx+EETWNKoove6bSwJQvGJ0S7vkcdylNTQNHqJMw8BeBuzFZyC0R
-	 CCGOwlWDaz/QGzyahjrZkJAprWPePVFPi4x5NLb0fkeEr50nmyxBf3fARgoG68QTGd
-	 jAL3SgH1zEFl7UCIggEqyHmKVxH6vgjc9RKHf0FJuTGYk2zOutEHuf6n3SOi347Zel
-	 SdrdcWZ2ZALZ7mga3nQTI2FGksadU3MvxG1Ok2NcWCYje/KKHsMqdIPjIbmSpXI5Kn
-	 97Rh2ISZgneJg==
-Date: Sun, 6 Oct 2024 15:23:18 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Matteo Martelli <matteomartelli3@gmail.com>
-Cc: Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich
- <Michael.Hennerich@analog.com>, Alisa-Dariana Roman
- <alisa.roman@analog.com>, Christian Eggers <ceggers@arri.de>, Peter Rosin
- <peda@axentia.se>, Paul Cercueil <paul@crapouillou.net>, Sebastian Reichel
- <sre@kernel.org>, linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/7] iio: fix possible race condition during access of
- available info lists
-Message-ID: <20241006152253.062b9cc5@jic23-huawei>
-In-Reply-To: <20241003-iio-read-avail-release-v1-0-c70cc7d9c2e0@gmail.com>
-References: <20241003-iio-read-avail-release-v1-0-c70cc7d9c2e0@gmail.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1728226751; c=relaxed/simple;
+	bh=aZIyK0YX9RB1Yi01JNjPLgy28xsvKkXz8fEnxnLlZXg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nTe3evuaU83hpFrcByrBYXIagFW8KLVCgCnfYmoSThpYCbCr4VdHJxFxxENj/sLaXqTM1Gqr1i6EL9CgY9coLqptFahPp1dcIdZqwaRC243olr36SZvpXfeyXmWAbMnUUBX3OBKMD0Sw2k+dfwFImAEnJn/UqGnUCH/nxoEikow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=Ym5kQUjt; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=QjaM5k9qqJvchGVL0bXBB8KvEd+WrkzXBDa2YMdrjdE=; b=Ym5kQUjtP6Dd9OwFUXGvXnWioY
+	wZDDdxmGBO5Nh6hBKstzXXUHYdcnxEuktG17KW4lqXwW2x5sqvFM7mFPaNJPWOFyxIz+rbVF9HNs5
+	sTl+zw6W+PsAb83XpQOTAgQaZFbLwWTz5Ne0oSzir8MLlnz1+bijsRoiBOGoSSyv908vaVW3H3Mtc
+	dnd09+IPd5K6u683QoytSS3TepbbHEzHzcYWNO3tMcVIXt/bmeK6F6o+DoP4sVS3lmun60RRoABep
+	5azAeIBPC110DvZjWc43lgMUVLlpFwZAKrqbKELDkwbyv27ERTUmyioMtaoYcIdEXgGOo3Stavnop
+	RNNpg/bw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1sxSiu-00000001MPd-0X0j;
+	Sun, 06 Oct 2024 14:59:04 +0000
+Date: Sun, 6 Oct 2024 15:59:04 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: kernel test robot <oliver.sang@intel.com>
+Cc: Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
+	oe-lkp@lists.linux.dev, lkp@intel.com,
+	linux-fsdevel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>, linux-alpha@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+	audit@vger.kernel.org, linux-api@vger.kernel.org,
+	linux-arch@vger.kernel.org
+Subject: Re: [viro-vfs:work.xattr2] [fs/xattr]  64d47e878a:
+ xfstests.xfs.046.fail
+Message-ID: <20241006145904.GE4017910@ZenIV>
+References: <202410062250.ee92fca7-oliver.sang@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202410062250.ee92fca7-oliver.sang@intel.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Thu, 03 Oct 2024 19:34:05 +0200
-Matteo Martelli <matteomartelli3@gmail.com> wrote:
+On Sun, Oct 06, 2024 at 10:20:57PM +0800, kernel test robot wrote:
 
-> Some iio drivers currently share an available info list buffer that
-> might be changed while iio core prints it to sysfs. This could cause the
-> buffer shared with iio core to be corrupted. However, note that I was
-> able to trigger the race condition only by adding a delay between each
-> sysfs_emit_at calls in the iio_format_list() to force the concurrent
-> access to the shared available list buffer.
-> 
-> This patch set extends the iio APIs and fixes some affected drivers.
-Thanks for tidying these up.  My comments are very minor but
-as this is changing how a core bit of infrastructure works I'd like
-them to sit on the list another week anyway.
+> xfs/046       - output mismatch (see /lkp/benchmarks/xfstests/results//xfs/046.out.bad)
+>     --- tests/xfs/046.out	2024-09-30 21:13:44.000000000 +0000
+>     +++ /lkp/benchmarks/xfstests/results//xfs/046.out.bad	2024-10-06 05:31:50.379495110 +0000
+>     @@ -34,4 +34,8 @@
+>      xfsrestore: restore complete: SECS seconds elapsed
+>      xfsrestore: Restore Status: SUCCESS
+>      Comparing listing of dump directory with restore directory
+>     +ls: /fs/scratch/dumpdir/sub/a-link: No such file or directory
+>     +ls: /fs/scratch/dumpdir/sub/b-link: No such file or directory
+>     +ls: /fs/scratch/restoredir/dumpdir/sub/a-link: No such file or directory
+>     +ls: /fs/scratch/restoredir/dumpdir/sub/b-link: No such file or directory
+>     ...
+>     (Run 'diff -u /lkp/benchmarks/xfstests/tests/xfs/046.out /lkp/benchmarks/xfstests/results//xfs/046.out.bad'  to see the entire diff)
+> Ran: xfs/046
+> Failures: xfs/046
+> Failed 1 of 1 tests
 
-There is just enough here that I'd prefer a v2 though if you don't
-get time I can probably tidy it up whilst applying.
+*stares*
 
-The build bot issue is presumably a missing include.
+D'oh...  Inverted sense for AT_SYMLINK_NOFOLLOW => LOOKUP_FLAGS...
 
-Thanks,
+Try this:
 
-Jonathan
-
-> 
-> Summary:
-> - Patch 1: iio core: introduce a iio info release callback to let
->   drivers share a copy of their available info list and later free it.
-> 
-> - Patch 2: pac1921: handle the current scale available info via the
->   read_avail+read_avail_release_resource APIs instead of using an ad-hoc
->   ext_info attribute. The latter was used to avoid the risk of a race in
->   the available list.
-> 
-> - Patch 3,4: ad7192, as73211: fix the possible race in the drivers by
->   copying/releasing the affected available lists.
-> 
-> - Patch 5: inkern: make consumers copy and release the available info
->   lists of their producers, necessary after patch 1.
-> 
-> - Patch 6,7: iio-mux, iio-rescale, dpot-dac, ingenic-battery: adapt
->   consumers to inkern API change by freeing the now copied available
->   lists of their producers.
-> 
-> Tested:
-> - pac1921: could not reproduce the race condition with the new APIs,
->   even with additional delays among the sysfs_emit_at calls during a
->   shunt resistor write. No new issue found after the change.
-> 
-> - iio-mux, iio-rescale, dpot-dac: tested with pac1921 as producer, which
->   was adapted to produce a mock raw available info list.
->   The tests did not cover the driver features but focused on assessing
->   the function call sequence. For example the following traced function
->   graph shows a read of the dpot mocked out voltage (with ftrace
->   filters: pac1921* iio* dpot* kmemdup_array* kfree*):
-> 
->  3)               |  iio_read_channel_info_avail [industrialio]() {
->  3)               |    dpot_dac_read_avail [dpot_dac]() {
->  3)               |      iio_read_avail_channel_raw [industrialio]() {
->  3)               |        iio_channel_read_avail [industrialio]() {
->  3)               |          pac1921_read_avail [pac1921]() {
->  3)   5.208 us    |            kmemdup_array();
->  3) + 11.459 us   |          }
->  3)   3.167 us    |          kmemdup_array();
->  3)               |          pac1921_read_avail_release_res [pac1921]() {
->  3)   1.709 us    |            kfree();
->  3)   4.458 us    |          }
->  3) + 25.750 us   |        }
->  3) + 31.792 us   |      }
->  3) + 35.000 us   |    }
->  3) + 37.083 us   |    iio_format_list [industrialio]();
->  3)               |    dpot_dac_read_avail_release_res [dpot_dac]() {
->  3)   1.583 us    |      kfree();
->  3)   4.250 us    |    }
->  3) + 84.292 us   |  }
-> 
-> - ingenic-battery: also tested with mock available info produced by the
->   pac1921 driver. Following the traced graph part that should correspond
->   to the ingenic_battery_set_scale() flow (which is not traceable with
->   the additional ingenic* ftrace filter for some reason):
-> 
->  2)               |  ingenic_battery_probe [ingenic_battery]() {
->                 ...
->  2)               |    iio_read_max_channel_raw [industrialio]() {
->  2)               |      iio_channel_read_avail [industrialio]() {
->  2)               |        pac1921_read_avail [pac1921]() {
->  2)   4.333 us    |          kmemdup_array();
->  2) + 10.834 us   |        }
->  2)   3.500 us    |        kmemdup_array();
->  2)               |        pac1921_read_avail_release_res [pac1921]() {
->  2)   1.791 us    |          kfree();
->  2)   4.625 us    |        }
->  2) + 26.291 us   |      }
->  2)   1.583 us    |      kfree();
->  2) + 35.750 us   |    }
->  2)               |    iio_read_avail_channel_attribute [industrialio]() {
->  2)               |      iio_channel_read_avail [industrialio]() {
->  2)               |        pac1921_read_avail [pac1921]() {
->  2)   3.250 us    |          kmemdup_array();
->  2)   8.209 us    |        }
->  2)   3.458 us    |        kmemdup_array();
->  2)               |        pac1921_read_avail_release_res [pac1921]() {
->  2)   1.542 us    |          kfree();
->  2)   4.292 us    |        }
->  2) + 21.417 us   |      }
->  2) + 26.333 us   |    }
->  2)               |    iio_write_channel_attribute [industrialio]() {
->  2)   4.375 us    |      pac1921_write_raw [pac1921]();
->  2)   9.625 us    |    }
->  2)   1.666 us    |    kfree();
->  2) * 47810.08 us |  }
-> 
-> Not tested:
-> - ad7192, as73211
-> 
-> Link: https://lore.kernel.org/linux-iio/20240724-iio-pac1921-v4-0-723698e903a3@gmail.com/
-> 
-> Signed-off-by: Matteo Martelli <matteomartelli3@gmail.com>
-> ---
-> Matteo Martelli (7):
->       iio: core: add read_avail_release_resource callback to fix race
->       iio: pac1921: use read_avail+release APIs instead of custom ext_info
->       iio: ad7192: copy/release available filter frequencies to fix race
->       iio: as73211: copy/release available integration times to fix race
->       iio: inkern: copy/release available info from producer
->       iio: consumers: release available info buffer copied from producer
->       power: supply: ingenic-battery: free scale buffer after use
-> 
->  drivers/iio/adc/ad7192.c               |  22 +++++-
->  drivers/iio/adc/pac1921.c              | 128 ++++++++++++---------------------
->  drivers/iio/afe/iio-rescale.c          |   8 +++
->  drivers/iio/dac/dpot-dac.c             |   8 +++
->  drivers/iio/industrialio-core.c        |  14 +++-
->  drivers/iio/inkern.c                   |  64 ++++++++++++-----
->  drivers/iio/light/as73211.c            |  23 +++++-
->  drivers/iio/multiplexer/iio-mux.c      |   8 +++
->  drivers/power/supply/ingenic-battery.c |  16 +++--
->  include/linux/iio/consumer.h           |   4 +-
->  include/linux/iio/iio.h                |   4 ++
->  11 files changed, 185 insertions(+), 114 deletions(-)
-> ---
-> base-commit: fec496684388685647652ab4213454fbabdab099
-> change-id: 20240802-iio-read-avail-release-cb3d2a1e1b98
-> 
-> Best regards,
-
+diff --git a/fs/xattr.c b/fs/xattr.c
+index 0b506b6565b7..b96cca3f4bf8 100644
+--- a/fs/xattr.c
++++ b/fs/xattr.c
+@@ -721,7 +721,7 @@ static int path_setxattrat(int dfd, const char __user *pathname,
+ 	if ((at_flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
+ 		return -EINVAL;
+ 
+-	if (at_flags & AT_SYMLINK_NOFOLLOW)
++	if (!(at_flags & AT_SYMLINK_NOFOLLOW))
+ 		lookup_flags = LOOKUP_FOLLOW;
+ 
+ 	error = setxattr_copy(name, &ctx);
+@@ -880,7 +880,7 @@ static ssize_t path_getxattrat(int dfd, const char __user *pathname,
+ 		return file_getxattr(fd_file(f), &ctx);
+ 	} else {
+ 		int lookup_flags = 0;
+-		if (at_flags & AT_SYMLINK_NOFOLLOW)
++		if (!(at_flags & AT_SYMLINK_NOFOLLOW))
+ 			lookup_flags = LOOKUP_FOLLOW;
+ 		return filename_getxattr(dfd, filename, lookup_flags, &ctx);
+ 	}
 
