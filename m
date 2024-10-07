@@ -1,113 +1,106 @@
-Return-Path: <linux-mips+bounces-5782-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5783-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7184992E0F
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Oct 2024 16:00:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5562B992FA8
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Oct 2024 16:43:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B0611C22743
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Oct 2024 14:00:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C4361F238A2
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Oct 2024 14:43:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0F401D54D0;
-	Mon,  7 Oct 2024 13:59:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 899C31D5CD4;
+	Mon,  7 Oct 2024 14:43:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XRspQEpE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PBZtBemW"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3968BE574;
-	Mon,  7 Oct 2024 13:59:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59EC3F50F;
+	Mon,  7 Oct 2024 14:43:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728309576; cv=none; b=mFS7PByV5nGFFDGVW/rl/VOUI6X9F9TtDpToFVhki/hhonA9XDe0zNd9Je5ePRNjXnaOaFzsmx5zBv7b9W8T78Hl52hrHWG4rrRKwXS3dw3HNj9zkDttYcGRzJTuLzruT42EAKQRvtoH56AegSXGAdfOAleeKjka+UpTru61pSw=
+	t=1728312190; cv=none; b=GBNm9yZgcWTTfxE+MDB6zGgalZjVZCb7tIKGQpAR/zVRWHSBLOoPZgK/xNu/LpEH8viKy/InJMxPfQOl0om4Cxo/vy8UOByPCmrmChnl/E2+tA7G3BYnX7p6skLLb9ZYqOnL8wqMHfequzGowYJ7V3/9fWebPIXg0YBqJYBvcGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728309576; c=relaxed/simple;
-	bh=c4D2tFJcwKKpOfBcISbbCxnM6psVd+aTip+l75EN1eo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=rTVrG0KGvVskVFckh7SSJbDkL+CrznJpspv/sI7LhL4URdbkqvaAUIW74PV8ZsAZF0em3/FOZGribZA7J1xxZag7LePmp7YmunMY4cQDWGNz9tOtsYStBoMym/QIAczkCtnhkAbSIgKkvdbCpc0BDGHLd5Q+8XxauV15VOzyrlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XRspQEpE; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5c5cf26b95aso5857357a12.3;
-        Mon, 07 Oct 2024 06:59:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728309572; x=1728914372; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jZA7sOYakjtLA5O1zDRt0AGiMrhjDOP7RuvFdqZmmnQ=;
-        b=XRspQEpE4JAHaLYxqvmwE70QPWgjFmjaTiOc3Tpi4Uo9Ih8lbhBAKGlNL2HptitFZj
-         PrvPjAquDYZ9Py5Y6AGsZbv6suxeGUxXiCu6rOQTTSXg2kyx1mGahdKgQWWJZLwoW+tK
-         JTX7aDk2b/hnE8Ow9VAJKkWFMXm7ZM0a2KFvkChW6Y2clGj3GFpKk77UwT2a72c/FHFF
-         RuqEAtlFJQvWiUKPAjHp1veTaZTHKQaSdzo/dnD8RONlPBuD9eM7xjvNrwSyHlN54ESu
-         9s187NfSPm1AMNGoD23qiivdfLw4QU7L35beXCqiW/IWSl+rtLt2rlLFakJqwb5B60Og
-         ld8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728309572; x=1728914372;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jZA7sOYakjtLA5O1zDRt0AGiMrhjDOP7RuvFdqZmmnQ=;
-        b=sqSQlJ5euhlUlE+D0DZvfhtNahGjg/ZRYS/PAJ7FmdC6FHIIQl//1MTLZHsY90hNIp
-         ExnosqUsRFLgdhsll+TtOj34/h7cz+Fcv7JdXfF8Sg9S9zw2NbMj31t0heZou0QY695Q
-         ENpFBoVwcVPAER0gfQabNM+R3RSqtp5s0/6dXal8xEigehXdgVglYc8FHpQN5WkSi919
-         JTV4Vv7UEyV0fIneI6w2pYmh9OOC+QbRekm8iSLx/4m1OLKf3Qq7cpPKejaaCkCuILr1
-         91taAGONLBmU3LO0wGtJ07c27EWFkyvozD/fsWZB5s7bNr8H9gEP2kn+dc9qMc0dy5O6
-         YOWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV+lFIVH9HSCkVCMSVWp9cPPPSv7Vgzvse1V/s5CetkaIHp4G3T/fiZzlYw2xqL2gtqqPXFOIhd@vger.kernel.org, AJvYcCVE62XbBn2Qjtw/bdGqq1X+5111U9pf55bd/txF9qwJ/ww1SsaDGfMIhR5bop+S0HIrDiak+4Fjc8HDYA==@vger.kernel.org, AJvYcCWVjpdiQFQyckU7Fke42H3ktl6bC/lYg1gqTqohw/DlpDpUNI/QrmEwN3yzfTS+T52+MRbxRENRDAYXimk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywuozi/ulGhqvKlHT5zGDnZYJLVqh3/TvwOUcOtQQV33TL6fmpZ
-	V1eQbONHba3viKDtb2I9iAdtp0keiW/IF+47I8E4ToqQJwqbk5PXuESCPgW1
-X-Google-Smtp-Source: AGHT+IFtrU90hO1foCtNOcdJ7UH+emPjbmgYZRb9io4Awmt2HRY1jCtk8wiNlNHP/UP0FxJKLgWMdw==
-X-Received: by 2002:a05:6402:5386:b0:5c8:8381:c1f8 with SMTP id 4fb4d7f45d1cf-5c8d2e15074mr8657330a12.9.1728309572346;
-        Mon, 07 Oct 2024 06:59:32 -0700 (PDT)
-Received: from localhost (craw-09-b2-v4wan-169726-cust2117.vm24.cable.virginm.net. [92.238.24.70])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c8e05eb604sm3213582a12.71.2024.10.07.06.59.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Oct 2024 06:59:31 -0700 (PDT)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Michael Chan <michael.chan@broadcom.com>,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-	netdev@vger.kernel.org,
+	s=arc-20240116; t=1728312190; c=relaxed/simple;
+	bh=eJcPBzPOo94qozRNulmiiqa57Jsp9yA4mklXXVuzvDs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jm4GAqqjIQjlz91+A4ZlTbyMlaTkmPDnbZEvdt/L+nFUFZUL3w+bgKLoX9n9Onc56lKa2zr7XtzIMk2JbjMHKeB7QPx4hpjU8oqvtJuuURsZ64tsSrHGaseFlK+Cv6YqC4E+cxJp1h3pCwjJh43DWEK3BGyO2shDB2U4JT/yC2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PBZtBemW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62370C4CEC6;
+	Mon,  7 Oct 2024 14:43:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728312189;
+	bh=eJcPBzPOo94qozRNulmiiqa57Jsp9yA4mklXXVuzvDs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PBZtBemW8bI3a2O7I1dI0KMmYVCAWWCsfhu+4bUsvyu5eYvrD48xVPnlFxcy8O0xs
+	 w5OELJCHnrwwkH20SIQWayKuIa9659om4Gj9HQC/zwipdvU5PeRfqKtRCccrWBImiY
+	 EwKZEXEU+XQfALxq9i3ijAsLx4LNvGVm/hoCwgNQi0NtBpxCUrdIQZYf617PtbowXW
+	 8ZnJ+hgyGAN7yukpbDfdubQ1q759MIRYUXQpGZPWpyOiYQRhxEJgN47K53LWoz30T5
+	 CCp9UAE4l2CDP0EJ6CddgVtHM4jG+iBwESd4FH75I0WFga7vqIEvqK/0Z5Yn/t78o/
+	 kbS7CBY1DWBDA==
+Date: Mon, 7 Oct 2024 15:42:50 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	tsbogend@alpha.franken.de, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-mips@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH][next] firmware: tee_bnxt: remove redundant assignment to variable nbytes
-Date: Mon,  7 Oct 2024 14:59:30 +0100
-Message-Id: <20241007135930.1198619-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.5
+Subject: Re: [PATCH 3/3] spi: spi-mem: Add Realtek SPI-NAND controller
+Message-ID: <ZwPzav6dFQdXSnjx@finisterre.sirena.org.uk>
+References: <20241006233347.333586-1-chris.packham@alliedtelesis.co.nz>
+ <20241006233347.333586-4-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="EQSz8Y55RytcW1nf"
+Content-Disposition: inline
+In-Reply-To: <20241006233347.333586-4-chris.packham@alliedtelesis.co.nz>
+X-Cookie: Editing is a rewording activity.
 
-Variable nbytes is being assigned a value that is never read, it is
-being re-assigned a new value immediately afterwards. The assignment
-is redundant and can be removed.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/firmware/broadcom/tee_bnxt_fw.c | 2 --
- 1 file changed, 2 deletions(-)
+--EQSz8Y55RytcW1nf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/firmware/broadcom/tee_bnxt_fw.c b/drivers/firmware/broadcom/tee_bnxt_fw.c
-index 40e3183a3d11..e0ea4ddb9a74 100644
---- a/drivers/firmware/broadcom/tee_bnxt_fw.c
-+++ b/drivers/firmware/broadcom/tee_bnxt_fw.c
-@@ -143,8 +143,6 @@ int tee_bnxt_copy_coredump(void *buf, u32 offset, u32 size)
- 	prepare_args(TA_CMD_BNXT_COPY_COREDUMP, &arg, param);
- 
- 	while (rbytes)  {
--		nbytes = rbytes;
--
- 		nbytes = min_t(u32, rbytes, param[0].u.memref.size);
- 
- 		/* Fill additional invoke cmd params */
--- 
-2.39.5
+On Mon, Oct 07, 2024 at 12:33:47PM +1300, Chris Packham wrote:
 
+> +REALTEK SPI-NAND
+> +M:	Chris Pacham <chris.packham@alliedtelesis.co.nz>
+
+Pacham?
+
+> +static int rtl_snand_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
+> +{
+> +	return 0;
+> +}
+> +
+
+If the framework doesn't already support this callback being missing we
+should probably make it so.
+
+Otherwise this looks good.
+
+--EQSz8Y55RytcW1nf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcD82oACgkQJNaLcl1U
+h9B8vQf/f+utPoBaQipGj9uZ9LhmVUzoDgoFI2BI9OjypVnf2Dbvytwow5MGzxjw
+UPWx6WsalMR6f2vXz5D/vjXkZfHtRtEZ2kSiihcOVQLuamSDMJBRd4HxZ716ytKv
+MK3KE9efa6zssJDrY31blYzcGOucrLxXHG/2Y6KfDWhnsTFH9yQFmEL8OF55xC5o
+bPVS0FTzrH0Kplrs2tD5g3p48ngm0tPxO9LzuY5SMrx0Z6P0YyxzCx63ZjHgkYMz
+DONDFxLORmYr9DGleHsbVOXY8vtmgLhUJRxWKTx45Ene6VwdEqxyNK44NY4E1p2l
+GElS7IvtAXqDRzAhubNdh8ToPrNqHA==
+=9dFi
+-----END PGP SIGNATURE-----
+
+--EQSz8Y55RytcW1nf--
 
