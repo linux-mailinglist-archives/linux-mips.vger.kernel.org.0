@@ -1,589 +1,313 @@
-Return-Path: <linux-mips+bounces-5761-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5762-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66224992259
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Oct 2024 01:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C19199246A
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Oct 2024 08:29:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 876621C2142D
-	for <lists+linux-mips@lfdr.de>; Sun,  6 Oct 2024 23:34:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F7D91C2198F
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Oct 2024 06:29:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47B2618C33E;
-	Sun,  6 Oct 2024 23:34:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 697181482E2;
+	Mon,  7 Oct 2024 06:29:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="OEZ+Opae"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mAvpd3li"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F90C101F2
-	for <linux-mips@vger.kernel.org>; Sun,  6 Oct 2024 23:33:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E59C140E5F;
+	Mon,  7 Oct 2024 06:29:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728257642; cv=none; b=kjNktq4X0wgKlF0898bpzcDauTN4mPCygXDQRJ2FMUBLZCk0cTyLamnoJJspg9DrxXvYxDBe0JQ32gLynz/RgRrG9tsMyROByebTSLNsHGB/scr+zY1FRByG53v5cdjZBQ/emZgLoB04wN4GHjkDF5MB0If420lVMjs0ICOthV4=
+	t=1728282563; cv=none; b=qHoo3qCajQqLJ6MFDjZrXAMk0jjtT5g5IqJcUlgMUBmarNuhY/ba4u3g7WdSZVxZ92X3yR6zoMYUC5N/751usyCfWCj+zhfUayQtr08H7E4JzewUBL5g6hWd+Q8bZlVf8k4hX07bkT0KIlE+5uqg3c+QHXdRGsNtqL/vnSUn81Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728257642; c=relaxed/simple;
-	bh=acPred9jc9h6zQDZkII6JihzfWHpMDRi7atTYJn671I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mX4VI6Gua/ylzB6PTzKD7Q4++KOqGwBqyktuNKkhHy2GvfOy2IV3jLsnbVqw7TI+eXR7T3rR4om1GVMDuoufdhkJ5XFx9vVY01IrNq1G6yBlsFvUKNuy6y0UQbqrwiZrq1PXrQ6t7+ZOqCraCH+V5h0BP95HRUPyLKaBaJXjXxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=OEZ+Opae; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 1D54F2C0747;
-	Mon,  7 Oct 2024 12:33:52 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1728257632;
-	bh=4NMLszZEI3KpUu0zItFYfBm8GDWnwURnowbQGunzucs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OEZ+OpaevO86Ln9YzW68xv6Fwpm9YEbgMYJ9mvG5E+MJzmgm48/sp/onOYnWTaftk
-	 KutEU4zBsdCVVe45KELsp+VlXcAFZXLS3Fw2XXW7A+l433eGqbUpaB16qL01+rixmt
-	 rRuDp/jpJ3An1+ntfEjvrKLz8kWq/9QM6tPyseVgKJpaYuHUevOw492/vxYPRukyxa
-	 cedZmjoCc8/a0vrVqodbfpjTWpsNJRfm2kC7pDUjCiBM2vvUtd6roVg5+5R8DEHZMU
-	 AJQDe4Ah36ca1gxcWooYUTQP3lBsEsShJ2LGsewKta/GCLO1AywTEp8fsQ7Rm2mUr7
-	 aC3CC03fprL/A==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B67031e5f0003>; Mon, 07 Oct 2024 12:33:51 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id BBB2613EE9C;
-	Mon,  7 Oct 2024 12:33:51 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id BE3FF280442; Mon,  7 Oct 2024 12:33:51 +1300 (NZDT)
-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-To: broonie@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	tsbogend@alpha.franken.de
-Cc: linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org,
+	s=arc-20240116; t=1728282563; c=relaxed/simple;
+	bh=GYz9jJeJwdTzMuunM08gf0B0slcAjxJN/5ca8sCoryM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sSKSOTFzGVZreXKIr2jEC4Qv0hGdflchS8jFTCHNDLTCvQE+ctWoWv30NXZNBoFPmXed88iWJcxNWUzODWxcMc1PmiX6BHuuGVyiT1JE+h6Dg0Prl35S2OvA2jLVLV8CKcGRey6ybnWowehtd62EKvveQ6PAkSRwIqIC7JfbSTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mAvpd3li; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3B94C4CEC6;
+	Mon,  7 Oct 2024 06:29:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728282562;
+	bh=GYz9jJeJwdTzMuunM08gf0B0slcAjxJN/5ca8sCoryM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=mAvpd3li61HdTUdxFJIe7eyvRfePLEvKecXQdexCLVpbBEa8HxHGH4u3IK8jVju4x
+	 ZXgoWx2/G65gU8/jWAV0QcRmBNwVxuebK3LnO7N6jsJxAiKtM3WlATwassj9ysIxRf
+	 JMkkeWiqetONDupxedDcqAYSK6K+hWFncl2o2LE1/LXb6kyCjzd2wzXgw7Yk9EJGAz
+	 bMWr/AwedePV7iVNtLs5+ErNIgVz90TWToU4sfjPGxTZUPTZwiKvYcEPtVhBTKYZL0
+	 nHAhBcqyxEcAbP8TanB1vMyYdueNcpnycESXgCpWvBxKeH9MKkSWS4f/IP5DbcrXTz
+	 xYawM/9Xr6WPA==
+From: Mike Rapoport <rppt@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>,
+	Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>,
+	Mike Rapoport <rppt@kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>,
+	Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org,
 	linux-mips@vger.kernel.org,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH 3/3] spi: spi-mem: Add Realtek SPI-NAND controller
-Date: Mon,  7 Oct 2024 12:33:47 +1300
-Message-ID: <20241006233347.333586-4-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.46.2
-In-Reply-To: <20241006233347.333586-1-chris.packham@alliedtelesis.co.nz>
-References: <20241006233347.333586-1-chris.packham@alliedtelesis.co.nz>
+	linux-mm@kvack.org,
+	linux-modules@vger.kernel.org,
+	linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org,
+	loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org,
+	x86@kernel.org
+Subject: [PATCH v4 0/8] x86/module: use large ROX pages for text allocations
+Date: Mon,  7 Oct 2024 09:28:50 +0300
+Message-ID: <20241007062858.44248-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=Id0kWnqa c=1 sm=1 tr=0 ts=67031e5f a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=DAUX931o1VcA:10 a=n9Sqmae0AAAA:8 a=VwQbUJbxAAAA:8 a=YvmrRJXvuc-rc_UNyeUA:9 a=3ZKOabzyN94A:10 a=UmAUUZEt6-oIqEbegvw9:22
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+Content-Transfer-Encoding: 8bit
 
-Add a driver for the SPI-NAND controller on the RTL9300 family of
-devices.
+From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-The controller supports
-* Serial/Dual/Quad data with
-* PIO and DMA data read/write operation
-* Configurable flash access timing
+Hi,
 
-There is a separate ECC controller on the RTL9300 which isn't currently
-supported (instead we rely on the on-die ECC supported by most SPI-NAND
-chips).
+These patches add support for using large ROX pages for allocations of
+executable memory on x86.
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
- MAINTAINERS                         |   6 +
- drivers/spi/Kconfig                 |  11 +
- drivers/spi/Makefile                |   1 +
- drivers/spi/spi-realtek-rtl-snand.c | 408 ++++++++++++++++++++++++++++
- 4 files changed, 426 insertions(+)
- create mode 100644 drivers/spi/spi-realtek-rtl-snand.c
+They address Andy's comments [1] about having executable mappings for code
+that was not completely formed.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f328373463b0..881afb224c50 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19272,6 +19272,12 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/net/dsa/realtek.yaml
- F:	drivers/net/dsa/realtek/*
-=20
-+REALTEK SPI-NAND
-+M:	Chris Pacham <chris.packham@alliedtelesis.co.nz>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/spi/realtek,rtl9300-snand.yaml
-+F:	drivers/spi/spi-realtek-rtl-snand.c
-+
- REALTEK WIRELESS DRIVER (rtlwifi family)
- M:	Ping-Ke Shih <pkshih@realtek.com>
- L:	linux-wireless@vger.kernel.org
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index ec1550c698d5..33228a607c4b 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -843,6 +843,17 @@ config SPI_PXA2XX
- config SPI_PXA2XX_PCI
- 	def_tristate SPI_PXA2XX && PCI && COMMON_CLK
-=20
-+config SPI_REALTEK_SNAND
-+	tristate "Realtek SPI-NAND Flash Controller"
-+	depends on MACH_REALTEK_RTL || COMPILE_TEST
-+	select REGMAP
-+	help
-+	  This enables support for the SPI-NAND Flash controller on
-+	  Realtek SoCs.
-+
-+	  This driver does not support generic SPI. The implementation
-+	  only supports the spi-mem interface.
-+
- config SPI_ROCKCHIP
- 	tristate "Rockchip SPI controller driver"
- 	depends on ARCH_ROCKCHIP || COMPILE_TEST
-diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-index a9b1bc259b68..9a3338236645 100644
---- a/drivers/spi/Makefile
-+++ b/drivers/spi/Makefile
-@@ -119,6 +119,7 @@ obj-$(CONFIG_SPI_ROCKCHIP)		+=3D spi-rockchip.o
- obj-$(CONFIG_SPI_ROCKCHIP_SFC)		+=3D spi-rockchip-sfc.o
- obj-$(CONFIG_SPI_RB4XX)			+=3D spi-rb4xx.o
- obj-$(CONFIG_MACH_REALTEK_RTL)		+=3D spi-realtek-rtl.o
-+obj-$(CONFIG_SPI_REALTEK_SNAND)		+=3D spi-realtek-rtl-snand.o
- obj-$(CONFIG_SPI_RPCIF)			+=3D spi-rpc-if.o
- obj-$(CONFIG_SPI_RSPI)			+=3D spi-rspi.o
- obj-$(CONFIG_SPI_RZV2M_CSI)		+=3D spi-rzv2m-csi.o
-diff --git a/drivers/spi/spi-realtek-rtl-snand.c b/drivers/spi/spi-realte=
-k-rtl-snand.c
-new file mode 100644
-index 000000000000..759991613d95
---- /dev/null
-+++ b/drivers/spi/spi-realtek-rtl-snand.c
-@@ -0,0 +1,408 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <linux/completion.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/interrupt.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/spi/spi.h>
-+#include <linux/spi/spi-mem.h>
-+
-+#define SNAFCFR 0x00
-+#define   SNAFCFR_DMA_IE BIT(20)
-+#define SNAFCCR 0x04
-+#define SNAFWCMR 0x08
-+#define SNAFRCMR 0x0c
-+#define SNAFRDR 0x10
-+#define SNAFWDR 0x14
-+#define SNAFDTR 0x18
-+#define SNAFDRSAR 0x1c
-+#define SNAFDIR 0x20
-+#define   SNAFDIR_DMA_IP BIT(0)
-+#define SNAFDLR 0x24
-+#define SNAFSR 0x40
-+#define  SNAFSR_NFCOS BIT(3)
-+#define  SNAFSR_NFDRS BIT(2)
-+#define  SNAFSR_NFDWS BIT(1)
-+
-+#define CMR_LEN(len) ((len) - 1)
-+#define CMR_WID(width) (((width) >> 1) << 28)
-+
-+struct rtl_snand {
-+	struct device *dev;
-+	struct regmap *regmap;
-+	struct completion comp;
-+};
-+
-+static irqreturn_t rtl_snand_irq(int irq, void *data)
-+{
-+	struct rtl_snand *snand =3D data;
-+	u32 val =3D 0;
-+
-+	regmap_read(snand->regmap, SNAFSR, &val);
-+	if (val & (SNAFSR_NFCOS | SNAFSR_NFDRS | SNAFSR_NFDWS))
-+		return IRQ_NONE;
-+
-+	regmap_write(snand->regmap, SNAFDIR, SNAFDIR_DMA_IP);
-+	complete(&snand->comp);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static bool rtl_snand_supports_op(struct spi_mem *mem,
-+				  const struct spi_mem_op *op)
-+{
-+	if (!spi_mem_default_supports_op(mem, op))
-+		return false;
-+	if (op->cmd.nbytes !=3D 1 || op->cmd.buswidth !=3D 1)
-+		return false;
-+	return true;
-+}
-+
-+static int rtl_snand_adjust_op_size(struct spi_mem *mem, struct spi_mem_=
-op *op)
-+{
-+	return 0;
-+}
-+
-+static void rtl_snand_set_cs(struct rtl_snand *snand, int cs, bool activ=
-e)
-+{
-+	u32 val;
-+
-+	if (active)
-+		val =3D ~(1 << (4 * cs));
-+	else
-+		val =3D ~0;
-+
-+	regmap_write(snand->regmap, SNAFCCR, val);
-+}
-+
-+static int rtl_snand_wait_ready(struct rtl_snand *snand)
-+{
-+	u32 val;
-+
-+	return regmap_read_poll_timeout(snand->regmap, SNAFSR, val, !(val & SNA=
-FSR_NFCOS),
-+					0, 2 * USEC_PER_MSEC);
-+}
-+
-+static int rtl_snand_xfer_head(struct rtl_snand *snand, int cs, const st=
-ruct spi_mem_op *op)
-+{
-+	int ret;
-+	u32 val, len =3D 0;
-+
-+	rtl_snand_set_cs(snand, cs, true);
-+
-+	val =3D op->cmd.opcode << 24;
-+	len =3D 1;
-+	if (op->addr.nbytes && op->addr.buswidth =3D=3D 1) {
-+		val |=3D op->addr.val << ((3 - op->addr.nbytes) * 8);
-+		len +=3D op->addr.nbytes;
-+	}
-+
-+	ret =3D rtl_snand_wait_ready(snand);
-+	if (ret)
-+		return ret;
-+
-+	ret =3D regmap_write(snand->regmap, SNAFWCMR, CMR_LEN(len));
-+	if (ret)
-+		return ret;
-+
-+	ret =3D regmap_write(snand->regmap, SNAFWDR, val);
-+	if (ret)
-+		return ret;
-+
-+	ret =3D rtl_snand_wait_ready(snand);
-+	if (ret)
-+		return ret;
-+
-+	if (op->addr.buswidth > 1) {
-+		val =3D op->addr.val << ((3 - op->addr.nbytes) * 8);
-+		len =3D op->addr.nbytes;
-+
-+		ret =3D regmap_write(snand->regmap, SNAFWCMR,
-+				   CMR_WID(op->addr.buswidth) | CMR_LEN(len));
-+		if (ret)
-+			return ret;
-+
-+		ret =3D regmap_write(snand->regmap, SNAFWDR, val);
-+		if (ret)
-+			return ret;
-+
-+		ret =3D rtl_snand_wait_ready(snand);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (op->dummy.nbytes) {
-+		val =3D 0;
-+
-+		ret =3D regmap_write(snand->regmap, SNAFWCMR,
-+				   CMR_WID(op->dummy.buswidth) | CMR_LEN(op->dummy.nbytes));
-+		if (ret)
-+			return ret;
-+
-+		ret =3D regmap_write(snand->regmap, SNAFWDR, val);
-+		if (ret)
-+			return ret;
-+
-+		ret =3D rtl_snand_wait_ready(snand);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void rtl_snand_xfer_tail(struct rtl_snand *snand, int cs)
-+{
-+	rtl_snand_set_cs(snand, cs, false);
-+}
-+
-+static int rtl_snand_xfer(struct rtl_snand *snand, int cs, const struct =
-spi_mem_op *op)
-+{
-+	unsigned int pos, nbytes;
-+	int ret;
-+	u32 val, len =3D 0;
-+
-+	ret =3D rtl_snand_xfer_head(snand, cs, op);
-+	if (ret)
-+		goto out_deselect;
-+
-+	if (op->data.dir =3D=3D SPI_MEM_DATA_IN) {
-+		pos =3D 0;
-+		len =3D op->data.nbytes;
-+
-+		while (pos < len) {
-+			nbytes =3D len - pos;
-+			if (nbytes > 4)
-+				nbytes =3D 4;
-+
-+			ret =3D rtl_snand_wait_ready(snand);
-+			if (ret)
-+				goto out_deselect;
-+
-+			ret =3D regmap_write(snand->regmap, SNAFRCMR,
-+					   CMR_WID(op->data.buswidth) | CMR_LEN(nbytes));
-+			if (ret)
-+				goto out_deselect;
-+
-+			ret =3D rtl_snand_wait_ready(snand);
-+			if (ret)
-+				goto out_deselect;
-+
-+			ret =3D regmap_read(snand->regmap, SNAFRDR, &val);
-+			if (ret)
-+				goto out_deselect;
-+
-+			memcpy(op->data.buf.in + pos, &val, nbytes);
-+
-+			pos +=3D nbytes;
-+		}
-+	} else if (op->data.dir =3D=3D SPI_MEM_DATA_OUT) {
-+		pos =3D 0;
-+		len =3D op->data.nbytes;
-+
-+		while (pos < len) {
-+			nbytes =3D len - pos;
-+			if (nbytes > 4)
-+				nbytes =3D 4;
-+
-+			memcpy(&val, op->data.buf.out + pos, nbytes);
-+
-+			pos +=3D nbytes;
-+
-+			ret =3D regmap_write(snand->regmap, SNAFWCMR, CMR_LEN(nbytes));
-+			if (ret)
-+				goto out_deselect;
-+
-+			ret =3D regmap_write(snand->regmap, SNAFWDR, val);
-+			if (ret)
-+				goto out_deselect;
-+
-+			ret =3D rtl_snand_wait_ready(snand);
-+			if (ret)
-+				goto out_deselect;
-+		}
-+	}
-+
-+out_deselect:
-+	rtl_snand_xfer_tail(snand, cs);
-+
-+	if (ret)
-+		dev_err(snand->dev, "transfer failed %d\n", ret);
-+
-+	return ret;
-+}
-+
-+static int rtl_snand_dma_xfer(struct rtl_snand *snand, int cs, const str=
-uct spi_mem_op *op)
-+{
-+	int ret;
-+	dma_addr_t buf_dma;
-+	enum dma_data_direction dir;
-+	u32 trig;
-+
-+	ret =3D rtl_snand_xfer_head(snand, cs, op);
-+	if (ret)
-+		goto out_deselect;
-+
-+	if (op->data.dir =3D=3D SPI_MEM_DATA_IN) {
-+		dir =3D DMA_FROM_DEVICE;
-+		trig =3D 0;
-+	} else if (op->data.dir =3D=3D SPI_MEM_DATA_OUT) {
-+		dir =3D DMA_TO_DEVICE;
-+		trig =3D 1;
-+	} else {
-+		ret =3D -EOPNOTSUPP;
-+		goto out_deselect;
-+	}
-+
-+	buf_dma =3D dma_map_single(snand->dev, op->data.buf.in, op->data.nbytes=
-, dir);
-+	ret =3D dma_mapping_error(snand->dev, buf_dma);
-+	if (ret)
-+		goto out_deselect;
-+
-+	ret =3D regmap_write(snand->regmap, SNAFDIR, SNAFDIR_DMA_IP);
-+	if (ret)
-+		goto out_unmap;
-+
-+	ret =3D regmap_update_bits(snand->regmap, SNAFCFR, SNAFCFR_DMA_IE, SNAF=
-CFR_DMA_IE);
-+	if (ret)
-+		goto out_unmap;
-+
-+	reinit_completion(&snand->comp);
-+
-+	ret =3D regmap_write(snand->regmap, SNAFDRSAR, buf_dma);
-+	if (ret)
-+		goto out_disable_int;
-+
-+	ret =3D regmap_write(snand->regmap, SNAFDLR,
-+			   CMR_WID(op->data.buswidth) | (op->data.nbytes & 0xffff));
-+	if (ret)
-+		goto out_disable_int;
-+
-+	ret =3D regmap_write(snand->regmap, SNAFDTR, trig);
-+	if (ret)
-+		goto out_disable_int;
-+
-+	if (!wait_for_completion_timeout(&snand->comp, usecs_to_jiffies(20000))=
-)
-+		ret =3D -ETIMEDOUT;
-+
-+	if (ret)
-+		goto out_disable_int;
-+
-+out_disable_int:
-+	regmap_update_bits(snand->regmap, SNAFCFR, SNAFCFR_DMA_IE, 0);
-+out_unmap:
-+	dma_unmap_single(snand->dev, buf_dma, op->data.nbytes, dir);
-+out_deselect:
-+	rtl_snand_xfer_tail(snand, cs);
-+
-+	if (ret)
-+		dev_err(snand->dev, "transfer failed %d\n", ret);
-+
-+	return ret;
-+}
-+
-+static bool rtl_snand_dma_op(const struct spi_mem_op *op)
-+{
-+	switch (op->data.dir) {
-+	case SPI_MEM_DATA_IN:
-+	case SPI_MEM_DATA_OUT:
-+		return op->data.nbytes > 32;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static int rtl_snand_exec_op(struct spi_mem *mem, const struct spi_mem_o=
-p *op)
-+{
-+	struct rtl_snand *snand =3D spi_controller_get_devdata(mem->spi->contro=
-ller);
-+	int cs =3D spi_get_chipselect(mem->spi, 0);
-+
-+	dev_dbg(snand->dev, "cs %d op cmd %02x %d:%d, dummy %d:%d, addr %08llx@=
-%d:%d, data %d:%d\n",
-+		cs, op->cmd.opcode,
-+		op->cmd.buswidth, op->cmd.nbytes, op->dummy.buswidth,
-+		op->dummy.nbytes, op->addr.val, op->addr.buswidth,
-+		op->addr.nbytes, op->data.buswidth, op->data.nbytes);
-+
-+	if (rtl_snand_dma_op(op))
-+		return rtl_snand_dma_xfer(snand, cs, op);
-+	else
-+		return rtl_snand_xfer(snand, cs, op);
-+}
-+
-+static const struct spi_controller_mem_ops rtl_snand_mem_ops =3D {
-+	.adjust_op_size =3D rtl_snand_adjust_op_size,
-+	.supports_op =3D rtl_snand_supports_op,
-+	.exec_op =3D rtl_snand_exec_op,
-+};
-+
-+static const struct of_device_id rtl_snand_match[] =3D {
-+	{ .compatible =3D "realtek,rtl9300-snand" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, rtl_snand_match);
-+
-+static int rtl_snand_probe(struct platform_device *pdev)
-+{
-+	struct rtl_snand *snand;
-+	struct device *dev =3D &pdev->dev;
-+	struct spi_controller *ctrl;
-+	void __iomem *base;
-+	const struct regmap_config rc =3D {
-+		.reg_bits	=3D 32,
-+		.val_bits	=3D 32,
-+		.reg_stride	=3D 4,
-+		.cache_type	=3D REGCACHE_NONE,
-+	};
-+	int irq, ret;
-+
-+	ctrl =3D devm_spi_alloc_host(dev, sizeof(*snand));
-+	if (!ctrl)
-+		return -ENOMEM;
-+
-+	snand =3D spi_controller_get_devdata(ctrl);
-+	snand->dev =3D dev;
-+
-+	base =3D devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(base))
-+		return PTR_ERR(base);
-+
-+	snand->regmap =3D devm_regmap_init_mmio(dev, base, &rc);
-+	if (IS_ERR(snand->regmap))
-+		return PTR_ERR(snand->regmap);
-+
-+	init_completion(&snand->comp);
-+
-+	irq =3D platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
-+
-+	ret =3D dma_set_mask(snand->dev, DMA_BIT_MASK(32));
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to set DMA mask\n");
-+
-+	ret =3D devm_request_irq(dev, irq, rtl_snand_irq, 0, "rtl-snand", snand=
-);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to request irq\n");
-+
-+	ctrl->num_chipselect =3D 2;
-+	ctrl->mem_ops =3D &rtl_snand_mem_ops;
-+	ctrl->bits_per_word_mask =3D SPI_BPW_MASK(8);
-+	ctrl->mode_bits =3D SPI_RX_DUAL | SPI_RX_QUAD | SPI_TX_DUAL | SPI_TX_QU=
-AD;
-+	device_set_node(&ctrl->dev, dev_fwnode(dev));
-+
-+	return devm_spi_register_controller(dev, ctrl);
-+}
-+
-+static struct platform_driver rtl_snand_driver =3D {
-+	.driver =3D {
-+		.name =3D "realtek-rtl-snand",
-+		.of_match_table =3D rtl_snand_match,
-+	},
-+	.probe =3D rtl_snand_probe,
-+};
-+module_platform_driver(rtl_snand_driver);
-+
-+MODULE_DESCRIPTION("Realtek SPI-NAND Flash Controller Driver");
-+MODULE_LICENSE("GPL");
---=20
-2.46.2
+The approach taken is to allocate ROX memory along with writable but not
+executable memory and use the writable copy to perform relocations and
+alternatives patching. After the module text gets into its final shape, the
+contents of the writable memory is copied into the actual ROX location
+using text poking.
+
+The allocations of the ROX memory use vmalloc(VMAP_ALLOW_HUGE_MAP) to
+allocate PMD aligned memory, fill that memory with invalid instructions and
+in the end remap it as ROX. Portions of these large pages are handed out to
+execmem_alloc() callers without any changes to the permissions. When the
+memory is freed with execmem_free() it is invalidated again so that it
+won't contain stale instructions.
+
+The module memory allocation, x86 code dealing with relocations and
+alternatives patching take into account the existence of the two copies,
+the writable memory and the ROX memory at the actual allocated virtual
+address.
+
+The patches are available at git:
+https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=execmem/x86-rox/v2
+
+[1] https://lore.kernel.org/all/a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com
+
+v3: https://lore.kernel.org/all/20240909064730.3290724-1-rppt@kernel.org
+* Drop ftrace_swap_func(). It is not needed because mcount array lives
+  in a data section (Peter)
+* Update maple_tree usage (Liam)
+* Set ->fill_trapping_insns pointer on init (Ard)
+* Instead of using VM_FLUSH_RESET_PERMS for execmem cache, completely
+  remove it from the direct map
+
+v2: https://lore.kernel.org/all/20240826065532.2618273-1-rppt@kernel.org
+* add comment why ftrace_swap_func() is needed (Steve)
+
+Since RFC: https://lore.kernel.org/all/20240411160526.2093408-1-rppt@kernel.org
+* update changelog about HUGE_VMAP allocations (Christophe) 
+* move module_writable_address() from x86 to modules core (Ingo)
+* rename execmem_invalidate() to execmem_fill_trapping_insns() (Peter)
+* call alternatives_smp_unlock() after module text in-place is up to
+  date (Nadav)
+
+Mike Rapoport (Microsoft) (8):
+  mm: vmalloc: group declarations depending on CONFIG_MMU together
+  mm: vmalloc: don't account for number of nodes for HUGE_VMAP allocations
+  asm-generic: introduce text-patching.h
+  module: prepare to handle ROX allocations for text
+  arch: introduce set_direct_map_valid_noflush()
+  x86/module: perpare module loading for ROX allocations of text
+  execmem: add support for cache of large ROX pages
+  x86/module: enable ROX caches for module text
+
+ arch/alpha/include/asm/Kbuild                 |   1 +
+ arch/arc/include/asm/Kbuild                   |   1 +
+ .../include/asm/{patch.h => text-patching.h}  |   0
+ arch/arm/kernel/ftrace.c                      |   2 +-
+ arch/arm/kernel/jump_label.c                  |   2 +-
+ arch/arm/kernel/kgdb.c                        |   2 +-
+ arch/arm/kernel/patch.c                       |   2 +-
+ arch/arm/probes/kprobes/core.c                |   2 +-
+ arch/arm/probes/kprobes/opt-arm.c             |   2 +-
+ arch/arm64/include/asm/set_memory.h           |   1 +
+ .../asm/{patching.h => text-patching.h}       |   0
+ arch/arm64/kernel/ftrace.c                    |   2 +-
+ arch/arm64/kernel/jump_label.c                |   2 +-
+ arch/arm64/kernel/kgdb.c                      |   2 +-
+ arch/arm64/kernel/patching.c                  |   2 +-
+ arch/arm64/kernel/probes/kprobes.c            |   2 +-
+ arch/arm64/kernel/traps.c                     |   2 +-
+ arch/arm64/mm/pageattr.c                      |  10 +
+ arch/arm64/net/bpf_jit_comp.c                 |   2 +-
+ arch/csky/include/asm/Kbuild                  |   1 +
+ arch/hexagon/include/asm/Kbuild               |   1 +
+ arch/loongarch/include/asm/Kbuild             |   1 +
+ arch/loongarch/include/asm/set_memory.h       |   1 +
+ arch/loongarch/mm/pageattr.c                  |  21 ++
+ arch/m68k/include/asm/Kbuild                  |   1 +
+ arch/microblaze/include/asm/Kbuild            |   1 +
+ arch/mips/include/asm/Kbuild                  |   1 +
+ arch/nios2/include/asm/Kbuild                 |   1 +
+ arch/openrisc/include/asm/Kbuild              |   1 +
+ .../include/asm/{patch.h => text-patching.h}  |   0
+ arch/parisc/kernel/ftrace.c                   |   2 +-
+ arch/parisc/kernel/jump_label.c               |   2 +-
+ arch/parisc/kernel/kgdb.c                     |   2 +-
+ arch/parisc/kernel/kprobes.c                  |   2 +-
+ arch/parisc/kernel/patch.c                    |   2 +-
+ arch/powerpc/include/asm/kprobes.h            |   2 +-
+ .../asm/{code-patching.h => text-patching.h}  |   0
+ arch/powerpc/kernel/crash_dump.c              |   2 +-
+ arch/powerpc/kernel/epapr_paravirt.c          |   2 +-
+ arch/powerpc/kernel/jump_label.c              |   2 +-
+ arch/powerpc/kernel/kgdb.c                    |   2 +-
+ arch/powerpc/kernel/kprobes.c                 |   2 +-
+ arch/powerpc/kernel/module_32.c               |   2 +-
+ arch/powerpc/kernel/module_64.c               |   2 +-
+ arch/powerpc/kernel/optprobes.c               |   2 +-
+ arch/powerpc/kernel/process.c                 |   2 +-
+ arch/powerpc/kernel/security.c                |   2 +-
+ arch/powerpc/kernel/setup_32.c                |   2 +-
+ arch/powerpc/kernel/setup_64.c                |   2 +-
+ arch/powerpc/kernel/static_call.c             |   2 +-
+ arch/powerpc/kernel/trace/ftrace.c            |   2 +-
+ arch/powerpc/kernel/trace/ftrace_64_pg.c      |   2 +-
+ arch/powerpc/lib/code-patching.c              |   2 +-
+ arch/powerpc/lib/feature-fixups.c             |   2 +-
+ arch/powerpc/lib/test-code-patching.c         |   2 +-
+ arch/powerpc/lib/test_emulate_step.c          |   2 +-
+ arch/powerpc/mm/book3s32/mmu.c                |   2 +-
+ arch/powerpc/mm/book3s64/hash_utils.c         |   2 +-
+ arch/powerpc/mm/book3s64/slb.c                |   2 +-
+ arch/powerpc/mm/kasan/init_32.c               |   2 +-
+ arch/powerpc/mm/mem.c                         |   2 +-
+ arch/powerpc/mm/nohash/44x.c                  |   2 +-
+ arch/powerpc/mm/nohash/book3e_pgtable.c       |   2 +-
+ arch/powerpc/mm/nohash/tlb.c                  |   2 +-
+ arch/powerpc/mm/nohash/tlb_64e.c              |   2 +-
+ arch/powerpc/net/bpf_jit_comp.c               |   2 +-
+ arch/powerpc/perf/8xx-pmu.c                   |   2 +-
+ arch/powerpc/perf/core-book3s.c               |   2 +-
+ arch/powerpc/platforms/85xx/smp.c             |   2 +-
+ arch/powerpc/platforms/86xx/mpc86xx_smp.c     |   2 +-
+ arch/powerpc/platforms/cell/smp.c             |   2 +-
+ arch/powerpc/platforms/powermac/smp.c         |   2 +-
+ arch/powerpc/platforms/powernv/idle.c         |   2 +-
+ arch/powerpc/platforms/powernv/smp.c          |   2 +-
+ arch/powerpc/platforms/pseries/smp.c          |   2 +-
+ arch/powerpc/xmon/xmon.c                      |   2 +-
+ arch/riscv/errata/andes/errata.c              |   2 +-
+ arch/riscv/errata/sifive/errata.c             |   2 +-
+ arch/riscv/errata/thead/errata.c              |   2 +-
+ arch/riscv/include/asm/set_memory.h           |   1 +
+ .../include/asm/{patch.h => text-patching.h}  |   0
+ arch/riscv/include/asm/uprobes.h              |   2 +-
+ arch/riscv/kernel/alternative.c               |   2 +-
+ arch/riscv/kernel/cpufeature.c                |   3 +-
+ arch/riscv/kernel/ftrace.c                    |   2 +-
+ arch/riscv/kernel/jump_label.c                |   2 +-
+ arch/riscv/kernel/patch.c                     |   2 +-
+ arch/riscv/kernel/probes/kprobes.c            |   2 +-
+ arch/riscv/mm/pageattr.c                      |  15 +
+ arch/riscv/net/bpf_jit_comp64.c               |   2 +-
+ arch/riscv/net/bpf_jit_core.c                 |   2 +-
+ arch/s390/include/asm/set_memory.h            |   1 +
+ arch/s390/mm/pageattr.c                       |  11 +
+ arch/sh/include/asm/Kbuild                    |   1 +
+ arch/sparc/include/asm/Kbuild                 |   1 +
+ arch/um/kernel/um_arch.c                      |  16 +-
+ arch/x86/entry/vdso/vma.c                     |   3 +-
+ arch/x86/include/asm/alternative.h            |  14 +-
+ arch/x86/include/asm/set_memory.h             |   1 +
+ arch/x86/include/asm/text-patching.h          |   1 +
+ arch/x86/kernel/alternative.c                 | 160 +++++----
+ arch/x86/kernel/ftrace.c                      |  30 +-
+ arch/x86/kernel/module.c                      |  45 ++-
+ arch/x86/mm/init.c                            |  26 +-
+ arch/x86/mm/pat/set_memory.c                  |   8 +
+ arch/xtensa/include/asm/Kbuild                |   1 +
+ include/asm-generic/text-patching.h           |   5 +
+ include/linux/execmem.h                       |  25 ++
+ include/linux/module.h                        |   9 +
+ include/linux/moduleloader.h                  |   4 +
+ include/linux/set_memory.h                    |   6 +
+ include/linux/text-patching.h                 |  15 +
+ include/linux/vmalloc.h                       |  60 ++--
+ kernel/module/main.c                          |  77 +++-
+ kernel/module/strict_rwx.c                    |   3 +
+ mm/execmem.c                                  | 328 +++++++++++++++++-
+ mm/internal.h                                 |   1 +
+ mm/vmalloc.c                                  |  14 +-
+ 118 files changed, 831 insertions(+), 235 deletions(-)
+ rename arch/arm/include/asm/{patch.h => text-patching.h} (100%)
+ rename arch/arm64/include/asm/{patching.h => text-patching.h} (100%)
+ rename arch/parisc/include/asm/{patch.h => text-patching.h} (100%)
+ rename arch/powerpc/include/asm/{code-patching.h => text-patching.h} (100%)
+ rename arch/riscv/include/asm/{patch.h => text-patching.h} (100%)
+ create mode 100644 include/asm-generic/text-patching.h
+ create mode 100644 include/linux/text-patching.h
+
+
+base-commit: 9852d85ec9d492ebef56dc5f229416c925758edc
+-- 
+2.43.0
 
 
