@@ -1,213 +1,336 @@
-Return-Path: <linux-mips+bounces-5805-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5806-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 821E099475A
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Oct 2024 13:39:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2BD7994A78
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Oct 2024 14:33:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05C431F23621
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Oct 2024 11:39:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 50B4FB24F0D
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Oct 2024 12:33:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11C191DED6B;
-	Tue,  8 Oct 2024 11:36:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9AFF1DED60;
+	Tue,  8 Oct 2024 12:33:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=axentia.se header.i=@axentia.se header.b="iGwGSrds"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X96B4HIX"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11023139.outbound.protection.outlook.com [52.101.67.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F61716D4E6;
-	Tue,  8 Oct 2024 11:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.67.139
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728387418; cv=fail; b=nlQTE8G8Oo7lwxdD5+vyH1NDVShc6w9T4JZmvcfHyVc6G2YpImV+KGMKxQRw4LDscFTE0cp8yRbcAJMLnZxvNJz1c/0OmoGid/HSnYghtiqU9GmqmX00VP5jZGToOZx2uPE3Lyam2hfWXzCZwAJovsvBANOGUnrsCQWL29l2C/s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728387418; c=relaxed/simple;
-	bh=y70qyTzI+n9xo4LBsSVajII/EBC2jmhvy+AYKIl8YvI=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=HRn/2p/5M4DIZ7WswnUGFFPf31mxWwxBFWGNVHOpFZJ+vr1ognbRWEQ447HcV+OYc91I65fbnKBW9xEKdEvUUFd4898lfL9TpJ/teCSKv7vJ+uk82LCn5dpsPeMn4bWhG+3pa7vFm/liQWZ8LLktcrHkq9t5wMRG7/Vn6KEvIs4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axentia.se; spf=pass smtp.mailfrom=axentia.se; dkim=pass (1024-bit key) header.d=axentia.se header.i=@axentia.se header.b=iGwGSrds; arc=fail smtp.client-ip=52.101.67.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axentia.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axentia.se
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ZiD2heddt/SVl6AeHlsbTUlwlzVGgDYnFiEgEcXtExvx86WCyiBuNlBrTtZbTAd5XZf3/Ds2jgO4Rw8Om2AopF9vKG2Nx9W5DvFgof74y3yN7JgjEPVUuQS6iyI96AMFDKVCy4FD+sS8h/5YzYUveyB5STS3s8/vqsjtgIhPV+xqvQsX16SKsYvEOF2ZtDkwmekxYKTYfEMAO1KvdD3n6tJmxJPYiHFrvtk8AXGEPNVKA6e9AyhJv83jFN2yFyJv/2+1Q89GNYAZklI8CzVum2/WCZ1Z27i7vrTtzElTMrP99CHUo1lyRPi5xm9EVEIMS9a7qD8R0yqsHeqvDLNi7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=E3rUwStKQL3oJSiuLRSgM7QjJX1LdCAZiyH5m2IKkb0=;
- b=uqYGq3Sm3+gc+JewJbmciU+/MYv8MPo8xOCC/SomG0C39A+qrQWpL5Hwz2nUJiGOXMu//cnFBeh/Goca57cKI+lc+5q+fnH8eAAR53CHs9BJ1jPJsN58xKlomQyKBQUB1D5R/1vO//112tWudDJvitNCQVPH9+Sxp4z7IwDOS8gkjL0VEonDILJRSQPeEkmVowXXqd6xug08cK30PtWfC7WI7HpiiQju/5lGnES3S9jknsUMaFVM5N5soBcN+o6zmv2BO90BpRDot4EotbngxL1rmtTrxSxMuDdtlhE1t2/iU69j6eSM2tQkUU/a2Whzo/OV28qWcQ8rxaXt3/2Rjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=E3rUwStKQL3oJSiuLRSgM7QjJX1LdCAZiyH5m2IKkb0=;
- b=iGwGSrdsAIAcs/jqiAYyu1viokZWpP4srrp4Kc+v+byKlkE8qrJz9NBapd5kQP3X14fxjp6gbAiHFY3Kyec5snoxdXs0mMqgmVtvK3fQidOpHM144PVeLcRYVTzdpSNXwUto+3i+gc9iJ/q3LZ/r4Vq3M2wvOMAkE/M9hwuk224=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=axentia.se;
-Received: from DU0PR02MB8500.eurprd02.prod.outlook.com (2603:10a6:10:3e3::8)
- by PAVPR02MB8990.eurprd02.prod.outlook.com (2603:10a6:102:32e::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.22; Tue, 8 Oct
- 2024 11:36:51 +0000
-Received: from DU0PR02MB8500.eurprd02.prod.outlook.com
- ([fe80::aff4:cbc7:ff18:b827]) by DU0PR02MB8500.eurprd02.prod.outlook.com
- ([fe80::aff4:cbc7:ff18:b827%3]) with mapi id 15.20.8026.020; Tue, 8 Oct 2024
- 11:36:50 +0000
-Message-ID: <d1d7b4be-60d7-b9ab-448c-a0d1e23f3daf@axentia.se>
-Date: Tue, 8 Oct 2024 13:36:48 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 0/7] iio: fix possible race condition during access of
- available info lists
-Content-Language: sv-SE, en-US
-To: Matteo Martelli <matteomartelli3@gmail.com>,
- Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>,
- Michael Hennerich <Michael.Hennerich@analog.com>,
- Alisa-Dariana Roman <alisa.roman@analog.com>,
- Christian Eggers <ceggers@arri.de>, Paul Cercueil <paul@crapouillou.net>,
- Sebastian Reichel <sre@kernel.org>
-Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-pm@vger.kernel.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A517F1DE890;
+	Tue,  8 Oct 2024 12:33:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728390792; cv=none; b=Zg3M4yXeYDwjspdbAJsmVtQsrLEPG95Q/2p/cYr2vUToFpug24km7x/o8y4BRxEBJoaYU9LG77JObImkhNheP/5gC+CwAw3kmko8KRlRDqfvWhSu7CKm3IYVNXulWcDlphPTWgnaZZJGJIyYOFuiQBnsvsIK7cxKMmGxV3GyEDs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728390792; c=relaxed/simple;
+	bh=i5aFXLeJhi97VF25NeRAbiywEu1GSWWwgfZFZYm44JU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Ko9Jnxxcf1ZIGmGgck7VyceBYfignkV90iKqXycXTDTA8Tz3WMsawy9LaiuWj8/QcuMOAd5ExQBGyNeFEjWYy8A+Weq476xweGPL+wH3M936cIijD/oTr1x4ahtLaO/ECVRNsxKcDHRvMcU4aN++J9JPPZMiMHW38Hzp2YUk188=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X96B4HIX; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-37ce8458ae3so5053994f8f.1;
+        Tue, 08 Oct 2024 05:33:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728390789; x=1728995589; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=i5aFXLeJhi97VF25NeRAbiywEu1GSWWwgfZFZYm44JU=;
+        b=X96B4HIXc9xcXMFcKXgauDJFbTPt/JM+E3cVgUH8InTdAtg72dSo8ohgXzpd41MNUp
+         8QmGaLBORWSkG0qfkLiF0P+3/CanFsV64rol8deBHmPpLvkzDYGbDQin2erdgXthfkYk
+         c0bzcJQoR4JsDOk01CYmTcalXmR6+a2bA2yGpGSxbnYl2TYBvTF3XMIfZQxJwUH6Nklo
+         dEAcpMKjiZgW8Xp5dynp+/27PQuXrdBCbJuW/sjsuziCGWY67KEx0A0UjnDVHyq5ybBI
+         HLiWdGeZ+LM7KNKujF067QGkIQTZA0jDX24ezm39DQyXTLbajbG7l/fWAj8MnZ3oB/Lb
+         2x6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728390789; x=1728995589;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i5aFXLeJhi97VF25NeRAbiywEu1GSWWwgfZFZYm44JU=;
+        b=MNMPPORKedKafkgQ025ennikTQ0xVXL1ZsKFqbgCrcjSygHQgIKs4xUvgzQIdM1vst
+         eneI//H1glY4vvEXIta8xV2jT5+If/rGRw4mp7qNY3aMjTjQQyi9hgfpJ9i8g3vzYUhp
+         Lgx0d+IbkScI3vCzRO/+qRSM6xhFGYxyt8/Pmz7v/YqtS7yy1URIcAPbCqWU2nT6rkRB
+         5mMpC05hZ6ns7WcYGoCRLfTbMciEW0IOMZdKEAAXG3ORGHvQ2cVGWch+4lDOJEJ8sO2+
+         N25INivdj4fKlamUX1JSPjvlTq5n1K7oTIfogun390oBf5Uf1xpl5MmoGjQ3zn6SXKoB
+         a1UQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW30BnGI4hZ7gy38XhNVu+F6QJb3WXZbbvfzboz7W9bj1zQSoC4sNUgFMtLgFsMZaUfWAkIWHI1GgqEfw==@vger.kernel.org, AJvYcCWZOE365fVFicWCGuTuqbB+CNOJ/LVzrDOApwNAyUK0t04fcZePV86xloJooj5Vof3eMsAugBrHzW0=@vger.kernel.org, AJvYcCXAGCJl6DQT8FYCjD1xcucUBPnEXJAQUe6h0nV6r9QXB3MQKOLdQvzGjD/pl3BfeYvCICS2N6u0GgrQfNk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzNCK0Hj4FWlAKD4DIN5lvbHBhvNQNUBkr/fzlASTSpihrnnoc
+	zhBoXxrGH2PYIclK1fquYgakCNfoW8izYm/fX7oMgaI7EUHTUw6Cop0DXb+kfAY=
+X-Google-Smtp-Source: AGHT+IEeLNN3olYlcDCqSgEErwvb2uX3gPED4kOShUzKkbZJZHDGOwbTEVIYvGwH0rXKRIXEHMIE5A==
+X-Received: by 2002:a05:6000:1b8b:b0:37c:c4c0:9b78 with SMTP id ffacd0b85a97d-37d0e8f05e8mr12469328f8f.48.1728390788727;
+        Tue, 08 Oct 2024 05:33:08 -0700 (PDT)
+Received: from ?IPv6:2003:f6:ef02:2700:7b7e:80b8:b4bb:6d07? (p200300f6ef0227007b7e80b8b4bb6d07.dip0.t-ipconnect.de. [2003:f6:ef02:2700:7b7e:80b8:b4bb:6d07])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a99429c8bb9sm406329066b.196.2024.10.08.05.33.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Oct 2024 05:33:08 -0700 (PDT)
+Message-ID: <27e0d7b2a70015300047d9388edc87a8ece0c0dc.camel@gmail.com>
+Subject: Re: [PATCH v2 5/7] iio: inkern: copy/release available info from
+ producer
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Matteo Martelli <matteomartelli3@gmail.com>, Alisa-Dariana Roman	
+ <alisa.roman@analog.com>, Christian Eggers <ceggers@arri.de>, Jonathan
+ Cameron	 <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Michael
+ Hennerich	 <Michael.Hennerich@analog.com>, Paul Cercueil
+ <paul@crapouillou.net>, Peter Rosin <peda@axentia.se>, Sebastian Reichel
+ <sre@kernel.org>
+Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-pm@vger.kernel.org
+Date: Tue, 08 Oct 2024 14:37:22 +0200
+In-Reply-To: <172837459910.12274.5022869861872605261@njaxe.localdomain>
 References: <20241007-iio-read-avail-release-v2-0-245002d5869e@gmail.com>
-From: Peter Rosin <peda@axentia.se>
-In-Reply-To: <20241007-iio-read-avail-release-v2-0-245002d5869e@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: GV3PEPF00002BAB.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:144:1:0:6:0:5) To DU0PR02MB8500.eurprd02.prod.outlook.com
- (2603:10a6:10:3e3::8)
+	 <20241007-iio-read-avail-release-v2-5-245002d5869e@gmail.com>
+	 <8a5f6f12c2cb6989cef1d09957fc0f6f7a512b26.camel@gmail.com>
+	 <172837007815.3337.5869213289160447430@njaxe.localdomain>
+	 <8241b4caf9ebacb116f50bfe1503f325cc576066.camel@gmail.com>
+	 <172837459910.12274.5022869861872605261@njaxe.localdomain>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.0 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR02MB8500:EE_|PAVPR02MB8990:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8f8f3b15-6218-4753-931b-08dce78d8022
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ZGs1cjh0RFZtc1BWc0JhSm40VS9xc29JcWJTTkx5YWVnSUd6QlU1NXNsZVQw?=
- =?utf-8?B?Ly9ucEZwYlVzOHVNUkxPbk1Wa0RmY0dVOHQybWl5YTUxUjFGZlhRWmc1SGlE?=
- =?utf-8?B?OWdZVWNqNFVQRTBjU1JBN252YkZRQk1TRXEzcHNNTkVBSjgyT3lZUUFQWWkw?=
- =?utf-8?B?RTVYK09UTnljblJwUzNzR0hmUmE0WStITzlldWtVWEQ1SjNaL2p2amt3bmQz?=
- =?utf-8?B?Z2N6ZEo4Ukk1M21IemV1K0xLQkF5Q25BbHQ0N2RnVklGNm9ocVRCZjFTNTRW?=
- =?utf-8?B?b2hybkxPRE0vcDVMbmVFd3NHU0ZicHBzYzRvV25OUEZDWnJYNDAyL1JqMDM5?=
- =?utf-8?B?b1Y3YlJ3LzdwaWU4Vy9jblQ0L21NUGRvMVFNZm9Wc3NsczB3VHlWTUttdGt0?=
- =?utf-8?B?THZpMzkzR2tSQXpvb3ZVd3BpbmtiREVONFoxMFk4cW5oaFpKR0srUFlaRUpC?=
- =?utf-8?B?OVZXR3lBaGNvN0lacmIvU0I1dUZwaVZpelpvcHVzbENJYjZ5a25MeHhWY1lN?=
- =?utf-8?B?Y2EzY0hZdzMyNU1yK1lpSlBXSTJHdklRc045MlNrODBjVDJjc1JXVmxQTHdp?=
- =?utf-8?B?bmFQdXA5eDlOSG5zTUN4SGNPTmtVMW5LUjFRTFExZ2ZnaWV1bnNaWjBWK2xQ?=
- =?utf-8?B?NCtLeVA2eFpzZGNlc3phblN5ZTRHcno2SjRvbmlyUjF5WmtueW9yNUswdVQz?=
- =?utf-8?B?MTZ2MmZ5N3Q3M0pyN1JGWTlqTW9xUFhqNW5heVpudzU3NXBzWXZmZ2NkT0lv?=
- =?utf-8?B?NC9JOFNiYkMzOTJndUhvazFjK0dsUFpQNmhqdkdpNHJuNWdtNHNYL0YyS2JN?=
- =?utf-8?B?L2gzSkhNNVVHY1lkZHkwWTBhdzFLMVlQSmZ0SmI3MnllOElieERNVVdPNTdY?=
- =?utf-8?B?R2U4WW5pcjNXOGZMdVJKaGZ0OVE1RisrQUc5K3FYSkFjL09ER0pONDR1NHJq?=
- =?utf-8?B?ZUJ3cWx2YUFadk9sU203WFhQQkpYdWs0RzVDN0hOQnhJSkE3b3krd2JpZUZ0?=
- =?utf-8?B?REVXMUtCaXZqejhFRHBMWlBEam1MaTBsVzJmczAzWXhEb0E5QUdzdFUzOEFP?=
- =?utf-8?B?eHZDRVh2TUNtV1RwenE3Rkd0eGVLdTlUeVdLd0dwc0dXY21QTjdISEpieTJl?=
- =?utf-8?B?NlEvNjljakNwU1J0T1BRcHdOblBLYlhSVmRvOXpRV201Y2NWZUcvVTUrY1V1?=
- =?utf-8?B?OVc4STROY0hvWThqWVU2ZmV4NGhvTlZtKytESkhDdVMrWU8wUy9MclF2RnZG?=
- =?utf-8?B?TFJMMWMvNHpUaDdaSG52L0s0K3lITVc1dUs1eVd6ZWdJSUhDb29naG0rY2tY?=
- =?utf-8?B?ay90MHRmU0JRMlh5WXVLK1BvaWhWQ3VLS2JGZFFNOVdkWDNqYnM0SUJyVGp5?=
- =?utf-8?B?bVNNZ2pTVGtNUGhmclViWTdGRnMvUjRiRXFweENmaW9rbE05ZHZEWURkOWY5?=
- =?utf-8?B?Y01qdEdDVS9uaUlCOUNvSEZxZzk1SHI1T24yTER2WlIvUzA3NU9KL2FOK2E2?=
- =?utf-8?B?U2F3b3FDUnRGS2pOVGhFVmh0M3k4cHdpbVdaTUlPMk1KcUpjRFY2MGw4cm4w?=
- =?utf-8?B?R21zZ1J5NGlUZm1uS2hHRTk0ZmI4bVd3NTlyNVFKVjNFWG1FZWZXMU4vL2RU?=
- =?utf-8?B?L0ZqYkhQMmVtM0x2dTJTVWhvdjNmQldRanBCN245S3F6WFo2SEhCRThPSDE1?=
- =?utf-8?B?dStEWmZsb0VhTC8zc0hvZHMyaDBnSGdxL2RMdTRwOERJd2NZRjg5dThBPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR02MB8500.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?K3Q0WHJDVk1sK1U4LzZJekxmMDYrZm0xQUJJVW9tWXVmQnpycTlBbXpsSVV4?=
- =?utf-8?B?NENLZkdGM0x1NmF0eHZyY0NDZTE4ajNTZy9XZ3lacE9JOFRXNDNTUmFublBm?=
- =?utf-8?B?L3VyMWNTYVFQYjIwUVdGMDJVZStRVy9GYlc5QVNMdVVQQmhqOXA3UG9SNjVy?=
- =?utf-8?B?VjV3emRUWGlKTGdIK2gzc2E5dmNOU29wMUp1RTV1YmRiSDJXT01Qd2lyY3ph?=
- =?utf-8?B?cldiL2h4T1NnNmptTmg3YUl6d1B2c2ExaWEvVnFMQmFPR09iL2FpNGdjSUV3?=
- =?utf-8?B?clhKK1hnSTMxMEQ2emxZeEZ5ZkJ0YW1Eem5HWlpnNHFFenZWRjRqUll3clNw?=
- =?utf-8?B?Mkk0emhGcjQ0WGVwSFMzeng3LzB2WXhtNlB4UytUWFNOcXd1c1FFZU4vNWp2?=
- =?utf-8?B?Ny93UlRUbHdyeWtsTkhWZE5IeVlGd3hYT08xWkdhK0srUXIxYkIrWm1sZFVS?=
- =?utf-8?B?Z1NqQkJlbnVOLzZybitxeXE4enEySjlJYzFoeXhkZFdRVkpBd1lGcFlLOEtS?=
- =?utf-8?B?NktraVRDS2JvS25CSGlkMXZhOEQzUjFkUkZJVU1MZE13MzhDdkVhM2labGhE?=
- =?utf-8?B?UC8wWVE0aVpRbHJodjU4a3hZSnJZQUlaQUloRE9rcDc3KzNZM21YekR3bGc0?=
- =?utf-8?B?emxtRDk5alhkMFNJZDhDOHI2Q0JtSDN4dVVSam0zSnYwSnFNSW4yOGpzM29I?=
- =?utf-8?B?Tks1R2FPcmFvZHFxOGZEaEFVZy9uZTFiL0dQTjNNazBOM2FEek96YUlSbkYr?=
- =?utf-8?B?MDBZbS9KdmpWNllFUm5EaFRNK2xmaDkybW1yam93blNPVENDVC9CTWt3RHlR?=
- =?utf-8?B?aFVaaUY4aDBEQjFtcS9mRHcxU0RJY00xYXNxZGYxQkFDakcyNUJ3ekpGL1N3?=
- =?utf-8?B?VG5tL3B3VlorNGZXRkc2bmhkRXJiOFpmK0YxdXVhcFhhd3dYN2RibTZiaXlX?=
- =?utf-8?B?NnRCdmZKNnQ2Zm42eEVXNEhGKzVSSHdlTFFlMkN1czVmaFpORXFxSEdQWHZ5?=
- =?utf-8?B?OFZVdi90YmxiZFk4a3lQaWFWdXNxL0IwNmlrYm1ZdmU2MFJBWkdGc3JOSk10?=
- =?utf-8?B?em1Ockw2MXRKZnU2NW0zZ3BHcTh3WDY1VExYcFZidmNiTDlnZkczV3IyQW54?=
- =?utf-8?B?K0tCaGNEOWc3UG5ubkdRczlPY3ZkRGEvMndNSlZPS3pCTUp4MU5IcnJYZ3Ev?=
- =?utf-8?B?Y3JJQ0pqb3piVTdKYUF2RURlMXlxTlAxd0dua0x4UVA1QlZERERSQ0RGZHl0?=
- =?utf-8?B?dDAzNnp0cVMxT2llSzdRQkRacWxDNEgzUnZhSklGdGR0a2J2THdrUTZYYTJz?=
- =?utf-8?B?RDEzbGNGUCtPeWxNT0YraDh4Y3Yyc090RXlRejhUYUFOTldxN1BFOGN1MU1C?=
- =?utf-8?B?UStzMmlXdVBuaEpCVmR4cEcwaWs0Q1pLMWtZMGFXU2pZUkx1YlFlUXk1RXdw?=
- =?utf-8?B?cGxpRHgwQzM3Z1cxMzFQTC9DMXF3N3U1M0Nlb283bldZSVhCOTkwQis4Sm1R?=
- =?utf-8?B?K0I4ekE2RG84UGIzSFY4bEIyWGhJVm53US9LQTJtMHBIak1BQ3hHWHp5UDE1?=
- =?utf-8?B?Nnh2Sm5TUldhYzVLMS9KNEdZYkgvSVZENmJaTjFueDc5cDh6YW5UTnhZWjhD?=
- =?utf-8?B?dExVOCthUTdzWC9jOE9DWHNYMkVpb0lkdUVqN29Gb1kzbEZUaGIyTDRpY2s1?=
- =?utf-8?B?RTlmbUxoZkpXM2gzVDFySFZiMlp3ZzNYNGF4TDB6L2UyOU1tTnNNQTlNdEpz?=
- =?utf-8?B?RGxmQ3dyc3BhOXZwSVlmckxQdEJrTmtDNCtDaFQ1cHkzaEJMRGRVaTMwK2dm?=
- =?utf-8?B?cy9FTHhMQ1pTRGtPeGJSYUwzZnY3L2FaZ3k2Z3NNSHZPdk5WVUtPL0JnU1Bi?=
- =?utf-8?B?Rms0aWVLTHJKaUJKeXNCcXI3WE5GamJhU3R6SUlwanI2cGpLbnBMbUVxVDhD?=
- =?utf-8?B?Ni9tNG5HUUlmVTVhOTN5NVFYNHoyRjZrOFhjRGE5TlU3OW8vQ01lVEFTMWZB?=
- =?utf-8?B?VGIyM0JwQjBWMUZVLzdwQnNKMWxNdnZGZGs0QW1tbTZkY2lsZkhXRVAreGVM?=
- =?utf-8?B?cGxLbVhaL2hHUGwxejlueDdNZ09paEhma21Ld09VWGtOaU5Jdld3M3NMVjFa?=
- =?utf-8?Q?Pu9A=3D?=
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8f8f3b15-6218-4753-931b-08dce78d8022
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR02MB8500.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Oct 2024 11:36:50.7504
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 95A7Rn1y46kmlDVeBbiKYizG5vaKccr+DFJKKk+VV7zfII1jkGs6X8sIQuz/e2RE
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR02MB8990
 
-Hi!
+On Tue, 2024-10-08 at 10:03 +0200, Matteo Martelli wrote:
+> Quoting Nuno S=C3=A1 (2024-10-08 09:29:14)
+> > On Tue, 2024-10-08 at 08:47 +0200, Matteo Martelli wrote:
+> > > Quoting Nuno S=C3=A1 (2024-10-07 17:15:13)
+> > > > On Mon, 2024-10-07 at 10:37 +0200, Matteo Martelli wrote:
+> > > > > Consumers need to call the read_avail_release_resource after read=
+ing
+> > > > > the
+> > > > > available info. To call the release with info_exists locked, copy=
+ the
+> > > > > available info from the producer and immediately call its release
+> > > > > callback. With this change, users of iio_read_avail_channel_raw()=
+ and
+> > > > > iio_read_avail_channel_attribute() must free the copied avail inf=
+o
+> > > > > after
+> > > > > calling them.
+> > > > >=20
+> > > > > Signed-off-by: Matteo Martelli <matteomartelli3@gmail.com>
+> > > > > ---
+> > > > > =C2=A0drivers/iio/inkern.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 | 64 +++++++++++++++++++++++++++++++++--
+> > > > > ----
+> > > > > -----
+> > > > > =C2=A0include/linux/iio/consumer.h |=C2=A0 4 +--
+> > > > > =C2=A02 files changed, 50 insertions(+), 18 deletions(-)
+> > > > >=20
+> > > > > diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
+> > > > > index
+> > > > > 7f325b3ed08fae6674245312cf8f57bb151006c0..cc65ef79451e5aa2cea447e=
+16800
+> > > > > 7a44
+> > > > > 7ffc0d91
+> > > > > 100644
+> > > > > --- a/drivers/iio/inkern.c
+> > > > > +++ b/drivers/iio/inkern.c
+> > > > > @@ -760,9 +760,25 @@ static int iio_channel_read_avail(struct
+> > > > > iio_channel
+> > > > > *chan,
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!iio_channel_has_available(cha=
+n->channel, info))
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 return -EINVAL;
+> > > > > =C2=A0
+> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0 if (iio_info->read_avail)
+> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 return iio_info->read_avail(chan->indio_dev, chan-
+> > > > > >channel,
+> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 =C2=A0=C2=A0=C2=A0 vals, type, length, info);
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0 if (iio_info->read_avail) {
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 const int *vals_tmp;
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 int ret;
+> > > > > +
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 ret =3D iio_info->read_avail(chan->indio_dev, chan-
+> > > > > >channel,
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 =C2=A0=C2=A0 &vals_tmp, type, length,
+> > > > > info);
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 if (ret < 0)
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return ret;
+> > > > > +
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 *vals =3D kmemdup_array(vals_tmp, *length, sizeof(int),
+> > > > > GFP_KERNEL);
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 if (!*vals)
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -ENOMEM;
+> > > > > +
+> > > >=20
+> > > > Not a big deal but I would likely prefer to avoid yet another copy.=
+ If
+> > > > I'm
+> > > > understanding things correctly, I would rather create an inkern wra=
+pper
+> > > > API
+> > > > like=20
+> > > > iio_channel_read_avail_release_resource() - maybe something with a
+> > > > smaller
+> > > > name :).
+> > > > Hence, the lifetime of the data would be only controlled by the pro=
+ducer
+> > > > of
+> > > > it. It
+> > > > would also produce a smaller diff (I think). I just find it a bit
+> > > > confusing
+> > > > that we
+> > > > duplicate the data in here and the producer also duplicates it on t=
+he -
+> > > > > read_avail()
+> > > > call. Another advantage I see is that often the available data is i=
+ndeed
+> > > > const in
+> > > > which case no kmemdup_array() is needed at all.
+> > >=20
+> > >=20
+> > > If I understand correctly your suggestion you would leave the inkern
+> > > iio_channel_read_avail() untouched, then add a new inkern wrapper,
+> > > something
+> > > like iio_channel_read_avail_release_resource(), that would call the
+> > > producer's
+> > > read_avail_release_resource(). The consumer would invoke this new wra=
+pper
+> > > in
+> > > its
+> > > own read_avail_release_resource() avoiding the additional copy. The c=
+all
+> > > stack
+> > > would look something like the following:
+> > >=20
+> > > iio_read_channel_info_avail() {
+> > > =C2=A0=C2=A0=C2=A0 consumer->read_avail() {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 iio_read_avail_channel_raw=
+() {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ii=
+o_channel_read_avail() {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 producer->read_avail() {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kmemdup_array();
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 }
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> > > =C2=A0=C2=A0=C2=A0 }
+> > >=20
+> > > =C2=A0=C2=A0=C2=A0 iio_format_list();
+> > >=20
+> > > =C2=A0=C2=A0=C2=A0 consumer->read_avail_release_resource() {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 iio_read_avail_channel_rel=
+ease_resource() {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pr=
+oducer->read_avail_release_resource() {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 kfree();
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> > > =C2=A0=C2=A0=C2=A0 }
+> > > }
+> >=20
+> > Yeah, exactly what came to mind...
+> >=20
+> > >=20
+> > >=20
+> > > I was going with the simpler solution you described, but my concern w=
+ith
+> > > it
+> > > was
+> > > that the info_exists_lock mutex would be unlocked between a
+> > > iio_channel_read_avail()
+> > > call and its corresponding iio_channel_read_avail_release_resource() =
+call.
+> > > To my understanding, this could potentially allow for the device to b=
+e
+> > > unregistered between the two calls and result in a memleak of the ava=
+il
+> > > buffer
+> > > allocated by the producer.
+> > >=20
+> > > However, I have been trying to reproduce a similar case by adding a d=
+elay
+> > > between the consumer->read_avail() and the
+> > > consumer->read_avail_release_resources(), and by unbinding the driver
+> > > during
+> > > that delay, thus with the info_exists_lock mutex unlocked. In this ca=
+se
+> > > the
+> > > driver is not unregistered until the iio_read_channel_info_avail()
+> > > function
+> > > completes, likely because of some other lock on the sysfs file after =
+the
+> > > call
+> > > of
+> > > cdev_device_del() in iio_device_unregister().
+> > >=20
+> >=20
+> > Yes, you need to have some sync point at the kernfs level otherwise we =
+could
+> > always be handling a sysfs attr while the device is being removed under=
+ our
+> > feet. But I'm not sure what you're trying to do... IIUC, the problem mi=
+ght
+> > come
+> > if have:
+> >=20
+> > consumer->read_avail_channel_attribute()
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 producer->info_lock()
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 producer->read_avail()
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 producer->kmalloc()
+> >=20
+> > ...
+> > // producer unbound
+> > ...
+> > consumer->read_avail_release()
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -ENODEV;
+> >=20
+> > // producer->kmalloc() never get's freed...
+> >=20
+> > The above is your problem right? And I think it should be a valid one s=
+ince
+> > between ->read_avail_channel_attribute() and read_avail_release() there=
+'s
+> > nothing preventing the producer from being unregistered...
+>=20
+> Yes, that's the problem.
+>=20
+> >=20
+> > If I'm not missing nothing one solution would be for the producer to do
+> > devm_kmalloc() and devm_kfree() on read_avail() and release_resources()=
+ but
+> > at
+> > that point I'm not sure it's better than what you have since it's odd e=
+nough
+> > for
+> > being missed in reviews...
+>=20
+> I honestly didn't think of this and it would in fact prevent the
+> additional copy. But I agree that it could be missed in new drivers,
+> maybe a comment in the iio_info read_avail_release_resource() callback
+> declaration would help?
+> >=20
+At this point I would say whatever you or Jonathan prefer :)
 
-2024-10-07 at 10:37, Matteo Martelli wrote:
-> Some iio drivers currently share an available info list buffer that
-> might be changed while iio core prints it to sysfs. This could cause the
-> buffer shared with iio core to be corrupted. However, note that I was
-> able to trigger the race condition only by adding a delay between each
-> sysfs_emit_at calls in the iio_format_list() to force the concurrent
-> access to the shared available list buffer.
-> 
-> This patch set extends the iio APIs and fixes some affected drivers.
-> 
-> Summary:
-> - Patch 1: iio core: introduce a iio info release callback to let
->   drivers share a copy of their available info list and later free it.
-> 
-> - Patch 2: pac1921: handle the current scale available info via the
->   read_avail+read_avail_release_resource APIs instead of using an ad-hoc
->   ext_info attribute. The latter was used to avoid the risk of a race in
->   the available list.
-> 
-> - Patch 3,4: ad7192, as73211: fix the possible race in the drivers by
->   copying/releasing the affected available lists.
-> 
-> - Patch 5: inkern: make consumers copy and release the available info
->   lists of their producers, necessary after patch 1.
-> 
-> - Patch 6,7: iio-mux, iio-rescale, dpot-dac, ingenic-battery: adapt
->   consumers to inkern API change by freeing the now copied available
->   lists of their producers.
-
-The series not bisectable because of leaks. I'm not certain if a simple
-reordering is all that is needed or if some things have to be squashed?
-
-Cheers,
-Peter
+- Nuno S=C3=A1
+>=20
 
