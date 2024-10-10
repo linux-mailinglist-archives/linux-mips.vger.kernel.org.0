@@ -1,73 +1,72 @@
-Return-Path: <linux-mips+bounces-5897-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5898-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C2D7998FF2
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 20:26:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBC58999000
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 20:26:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8E582812B4
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 18:26:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D0D8B270CF
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 18:26:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F9011E00BB;
-	Thu, 10 Oct 2024 18:24:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E8021E285E;
+	Thu, 10 Oct 2024 18:25:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="f+oxcvBw"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zZnV9RMn"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94AA1D0DCA
-	for <linux-mips@vger.kernel.org>; Thu, 10 Oct 2024 18:24:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8961E22F7
+	for <linux-mips@vger.kernel.org>; Thu, 10 Oct 2024 18:25:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728584699; cv=none; b=J0SA1GQ4MPFjhUGXpN04GvwLekriZYc06iWNTaH6kf5Zlj1JaJqxVyAlDl93oRZuwCXrgpgz/hhNEMrgFkBXYv8VJmosdQOQ+01oEOeqBOFmppasHTuzO0LWMVDsyhvcz1cc9/ZNLRyyVonQF5ZdM3iR02GNj4VFzPsKBX2VymY=
+	t=1728584703; cv=none; b=Z02ectNwIYWN+fhvGAygYE6CtffXZsTouVTvY06L4IUb/0ChNi7qcus6cl7RBucy9SoRAbXOtF2PNGiOx0MkFy3nUv2R9nEqYxERPvWqX5it6p471be1hw/lYNjqOKuqnhBdXaqr5lMLJBQtBemMFHSJasLR3kpTL2UD43ltKgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728584699; c=relaxed/simple;
-	bh=/+UXWBjoqTQ+9Qx4e881Uho0Hr1R01lQsdRPnyHLl9M=;
+	s=arc-20240116; t=1728584703; c=relaxed/simple;
+	bh=uAiI5uzFAMXWntu4OPmR0EhFBczJTAI1tjFERMQUX4o=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Qlu/VQHnx+cINKpJrZg/JMUtqkwpJaXChuzMPohdU6av0cSmEdShrC8chyXSsoFOHlNA7vOL4RJgljdtF5bb4QyTvXrsFCpZf+rlpwOZnSeBXiLr9huIliFrrVxQndL9LDL1/PglcY1V2EGG86D5ta9iXzhlL3x7a0wUobRbvS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=f+oxcvBw; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=WGWG7BiKRhcE98heRO2hbluyTADLHOQsuba4CaXFTMovUGh9RX87Vfk3yowLQCAaqeK2WQcATk2SBfaAJR/mQey1C3BCL0NE61uDzCFeCfxzi6kcwrsyCRFmvtHOVG3fLJXebPeCUpfaFiCboqLtnI26uXB6xmLaP3w/1mkz1E4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zZnV9RMn; arc=none smtp.client-ip=209.85.219.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6e26ba37314so24841907b3.0
-        for <linux-mips@vger.kernel.org>; Thu, 10 Oct 2024 11:24:57 -0700 (PDT)
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e290947f6f8so1842476276.2
+        for <linux-mips@vger.kernel.org>; Thu, 10 Oct 2024 11:25:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728584697; x=1729189497; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:reply-to:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X4CpCR2xmh5xLGpBn2Bl3P0Y4RCeyU3sCMc2ynGYEmk=;
-        b=f+oxcvBwyIf0CPK4Z3H2v2Mp1oKcg8M4xtBPnL3mEbTKwPFddA2gYnQvOwqwhMPqcs
-         6tTJPsf3R4LXc1m3EABExF2dXv+LHXuszre/1aFscEjO6qmtW3xxqqIATZx3rvdG8rsT
-         1J3bs69TevQpiRIDsRnNKqiW/W7gMd1WhJDESUTWDMC5TzfnghveyjVNiiFf2Y1HjFiQ
-         vPehYSYcIUDZNDcFnYRqNJsZTdr7XltICzxxbDvDzqP29NLHv3HJTa/ykSCOdCs7Xdvo
-         siw+q8s3hy1UsZky6mk+tSYSCcSAXsDzMU8KrWmL1toG+e2nbzaxdcSmAXg/WDWx5nyc
-         3r6Q==
+        d=google.com; s=20230601; t=1728584701; x=1729189501; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
+        bh=pPAj0F/7+N3G0fgp8rSBmKqwV8uR3Qu6XgX2gyD+fUo=;
+        b=zZnV9RMn+Omcj8cSLLQ1OO0nfSJBegsKEALf2M2ho0vTZxhMugmk84GGd9BSEy8lfi
+         5bXdzgRyXEp9OOV73dHe9K+/mvumfArmQlwdAIIf098Xo0lDHqhVeyJufcDy6upSTUCg
+         eJa0l/phgkxFHgmSe5dUQRSSAhpuDVME8CPxLTUOLKDPpIH8StTUDV6Gj9Aj32V4pyB7
+         hUXbYov9HOCq3yRTRJegHiHEPel6bi7MvYy78Fmk4PNgStPCSNCbeQWI874/CL75Nylh
+         b8mC6E7bFg+6jKx8vU6UyFAv3zFXpZ6ePXNmjV/tqGGnu0kMfhBsyo2PJWG6sUybPPoq
+         1hOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728584697; x=1729189497;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:reply-to:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=X4CpCR2xmh5xLGpBn2Bl3P0Y4RCeyU3sCMc2ynGYEmk=;
-        b=kDeVhipCsRm+yedvj0jhg7sVvK061Zw7W0Os4jxCKFPOgVicmbKm2HOUTsBCQNf/AR
-         YKx/rijaOzPLTaemsDmeFOIf37QV+SE67Ls+nNRVFv8avtkft68kz3xpJMgu3FkxrJ7X
-         LA0NtpyycSUdxI04iPA6egbKIWe1eUtdPijIITRaeRxOzsLaIMLu5yzm2DVnTtCgJXHY
-         Yxqt3cueeDl3R4SauTk/OgTK3wOOfVHAszy9G/ak8dcFS8XMuL+gbn+Rwhi12UKM4d9L
-         dXE1r2aVygrrs549kZNE/OQqD+Tqfp2/S0bITmS9W2ZPWgkah0jP0eH229uLg/SRaj/j
-         038w==
-X-Forwarded-Encrypted: i=1; AJvYcCVyEXxZqWuaMNTGFSnAgnMnfohvtenBjxTgf0tD48vcpgWkBZHgghxGVoVZeOqRMyrRZ1Wf9n5a/BOU@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxa/NrOOzw8FndNjIEp4DdPg5+0QoWKVf9+wWgG8B2y8rBexvHq
-	Rmn+6trRQeCzHYkQc5Hd3MMtOIOCrDNR9yEnY6Cr0vltTfmPPo9qzHj7hkskQT6cCBcBQpiwJHT
-	C6Q==
-X-Google-Smtp-Source: AGHT+IGrULPD5dT5NWC9dFAfgTsoL9JIWGzHU9t8+6e7flVyO5QHPCRlr/jDUZCu+nhXBHYl+WGzejB3KuQ=
+        d=1e100.net; s=20230601; t=1728584701; x=1729189501;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pPAj0F/7+N3G0fgp8rSBmKqwV8uR3Qu6XgX2gyD+fUo=;
+        b=Yio4rfCshy34Xu+Ok2MHIO0p237u4NTdXjV/Djybo7/MmnIFH4WjYX0+S+wL/i94sJ
+         MffT3Oy1fERy9HWRQ5+NKb7VhN1MmPCxImaQtfGzK2U9xKnRY9gaw19auHGKnq5b9TpW
+         Y8C6CR6SMEFimZX5It4ppPRuUM4BcYXnjP5saJjPoTMgXin/LXITrMF488vBu3JNNaHc
+         KPnwy/3Iy3F4E6uJeg1eRW2Hvpa7qEtRHuTl/5K/Yvg8apXCgpJ/Km6yvnfckZT0hNgv
+         5VXL+zKoE278+7IlKHMqBjL90tXv8y4peJKIlOAgVLQqoM/nRq5aquo7AhyKsVE7IjYK
+         S+8w==
+X-Forwarded-Encrypted: i=1; AJvYcCXscWoRKf/9JA4Vxsv5S80mmbrRObeZicYD6PmNjFO/4vkJm4ksRTvo2VXnTJ5/pNGIzjeKE5wAUDAc@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1zhL6nKVi6cmj+6kZ3F+3XQWxXKDnBuVt2AfAY+QDGtT+hJj3
+	K+l8KuZ2kaTGjNF4ybDNG/b24inpce21r+lpgUiCXbD7akAWEJKBcyTpouk4hHPfATl6u0NBhbw
+	cIw==
+X-Google-Smtp-Source: AGHT+IHQgMXiDY3ifHkkle2NgOnYNSR5nXtws6LnwLsJ4J6Fqip1dtdD5j5lAqBgp/4MJdCcEXFALInKEMI=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:9d:3983:ac13:c240])
- (user=seanjc job=sendgmr) by 2002:a0d:e486:0:b0:6e2:371f:4aef with SMTP id
- 00721157ae682-6e322168931mr204147b3.3.1728584696651; Thu, 10 Oct 2024
- 11:24:56 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a25:69c3:0:b0:e1a:9ed2:67f4 with SMTP id
+ 3f1490d57ef6-e28fe4313ffmr4949276.2.1728584700890; Thu, 10 Oct 2024 11:25:00
+ -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date: Thu, 10 Oct 2024 11:23:06 -0700
+Date: Thu, 10 Oct 2024 11:23:07 -0700
 In-Reply-To: <20241010182427.1434605-1-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -77,9 +76,9 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20241010182427.1434605-1-seanjc@google.com>
 X-Mailer: git-send-email 2.47.0.rc1.288.g06298d1525-goog
-Message-ID: <20241010182427.1434605-5-seanjc@google.com>
-Subject: [PATCH v13 04/85] KVM: x86/mmu: Skip the "try unsync" path iff the
- old SPTE was a leaf SPTE
+Message-ID: <20241010182427.1434605-6-seanjc@google.com>
+Subject: [PATCH v13 05/85] KVM: x86/mmu: Don't overwrite shadow-present MMU
+ SPTEs when prefaulting
 From: Sean Christopherson <seanjc@google.com>
 To: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
 	Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
@@ -97,62 +96,61 @@ Cc: kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	David Matlack <dmatlack@google.com>, David Stevens <stevensd@chromium.org>, 
 	Andrew Jones <ajones@ventanamicro.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Apply make_spte()'s optimization to skip trying to unsync shadow pages if
-and only if the old SPTE was a leaf SPTE, as non-leaf SPTEs in direct MMUs
-are always writable, i.e. could trigger a false positive and incorrectly
-lead to KVM creating a SPTE without write-protecting or marking shadow
-pages unsync.
+Treat attempts to prefetch/prefault MMU SPTEs as spurious if there's an
+existing shadow-present SPTE, as overwriting a SPTE that may have been
+create by a "real" fault is at best confusing, and at worst potentially
+harmful.  E.g. mmu_try_to_unsync_pages() doesn't unsync when prefetching,
+which creates a scenario where KVM could try to replace a Writable SPTE
+with a !Writable SPTE, as sp->unsync is checked prior to acquiring
+mmu_unsync_pages_lock.
 
-This bug only affects the TDP MMU, as the shadow MMU only overwrites a
-shadow-present SPTE when synchronizing SPTEs (and only 4KiB SPTEs can be
-unsync).  Specifically, mmu_set_spte() drops any non-leaf SPTEs *before*
-calling make_spte(), whereas the TDP MMU can do a direct replacement of a
-page table with the leaf SPTE.
+Note, this applies to three of the four flavors of "prefetch" in KVM:
 
-Opportunistically update the comment to explain why skipping the unsync
-stuff is safe, as opposed to simply saying "it's someone else's problem".
+  - KVM_PRE_FAULT_MEMORY
+  - Async #PF (host or PV)
+  - Prefetching
 
-Cc: stable@vger.kernel.org
-Tested-by: Alex Benn=C3=A9e <alex.bennee@linaro.org>
+The fourth flavor, SPTE synchronization, i.e. FNAME(sync_spte), _only_
+overwrites shadow-present SPTEs when calling make_spte().  But SPTE
+synchronization specifically uses mmu_spte_update(), and so naturally
+avoids the @prefetch check in mmu_set_spte().
+
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/mmu/spte.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+ arch/x86/kvm/mmu/mmu.c     | 3 +++
+ arch/x86/kvm/mmu/tdp_mmu.c | 3 +++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-index 8f7eb3ad88fc..5521608077ec 100644
---- a/arch/x86/kvm/mmu/spte.c
-+++ b/arch/x86/kvm/mmu/spte.c
-@@ -226,12 +226,20 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_=
-page *sp,
- 		spte |=3D PT_WRITABLE_MASK | shadow_mmu_writable_mask;
-=20
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index a9a23e058555..a8c64069aa89 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -2919,6 +2919,9 @@ static int mmu_set_spte(struct kvm_vcpu *vcpu, struct kvm_memory_slot *slot,
+ 	}
+ 
+ 	if (is_shadow_present_pte(*sptep)) {
++		if (prefetch)
++			return RET_PF_SPURIOUS;
++
  		/*
--		 * Optimization: for pte sync, if spte was writable the hash
--		 * lookup is unnecessary (and expensive). Write protection
--		 * is responsibility of kvm_mmu_get_page / kvm_mmu_sync_roots.
--		 * Same reasoning can be applied to dirty page accounting.
-+		 * When overwriting an existing leaf SPTE, and the old SPTE was
-+		 * writable, skip trying to unsync shadow pages as any relevant
-+		 * shadow pages must already be unsync, i.e. the hash lookup is
-+		 * unnecessary (and expensive).
-+		 *
-+		 * The same reasoning applies to dirty page/folio accounting;
-+		 * KVM will mark the folio dirty using the old SPTE, thus
-+		 * there's no need to immediately mark the new SPTE as dirty.
-+		 *
-+		 * Note, both cases rely on KVM not changing PFNs without first
-+		 * zapping the old SPTE, which is guaranteed by both the shadow
-+		 * MMU and the TDP MMU.
- 		 */
--		if (is_writable_pte(old_spte))
-+		if (is_last_spte(old_spte, level) && is_writable_pte(old_spte))
- 			goto out;
-=20
- 		/*
---=20
+ 		 * If we overwrite a PTE page pointer with a 2MB PMD, unlink
+ 		 * the parent of the now unreachable PTE.
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index 3b996c1fdaab..3c6583468742 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -1026,6 +1026,9 @@ static int tdp_mmu_map_handle_target_level(struct kvm_vcpu *vcpu,
+ 	if (WARN_ON_ONCE(sp->role.level != fault->goal_level))
+ 		return RET_PF_RETRY;
+ 
++	if (fault->prefetch && is_shadow_present_pte(iter->old_spte))
++		return RET_PF_SPURIOUS;
++
+ 	if (unlikely(!fault->slot))
+ 		new_spte = make_mmio_spte(vcpu, iter->gfn, ACC_ALL);
+ 	else
+-- 
 2.47.0.rc1.288.g06298d1525-goog
 
 
