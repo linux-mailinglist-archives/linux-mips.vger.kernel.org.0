@@ -1,155 +1,132 @@
-Return-Path: <linux-mips+bounces-5876-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5877-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BFCD99821B
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 11:27:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB3B0998251
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 11:33:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3BFC4B2CC24
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 09:19:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A5F78B2263E
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 09:33:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5FAD1AF4E9;
-	Thu, 10 Oct 2024 09:17:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06B941B652C;
+	Thu, 10 Oct 2024 09:33:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ONJaXOp9";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="PuD8pwBk";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ONJaXOp9";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="PuD8pwBk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TOVNNKtr"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7B7C18DF81;
-	Thu, 10 Oct 2024 09:17:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E16919F41D;
+	Thu, 10 Oct 2024 09:33:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728551825; cv=none; b=UMRJZFfkscTVXkG4yDiBFy+4KCiKiq88eszgzIKEVKuv0V+D1XUmUZfy8bfB66yjmfYjYZgbrg4b2d4j8QO48WMxOf8h+72CT78Zr7hFtbMNEswq2ZxpRahDjqSaoI205zuxafSLo417RY1gtBHIYA7B162tuabpPc7svQjg5VI=
+	t=1728552807; cv=none; b=qPbpPVDQ+a8w6ozik17wcF4sHnzlSlMtYbOOBirI1CMQ7+FaASMvxnkQT84rDIHBrntHdnO4iEosLxOUZQa8SmUQGYr9DaJv+xEzR3v4/zcN8qEY9NRQaAZsDCe73IqkOWfDbNaxYTazOrc7k0bSNL6zeym/myyb35m2V6Bfp5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728551825; c=relaxed/simple;
-	bh=eWbWk7S/yzvCT8vmbo/px6f16ARqtAMQDMyE16C0G6Q=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=iBuV5oSFJOdeU185kCmot+xAlmoEjktIiUqafH8ZhdoOwohiqCmSpW5pGr5608sr3Dbhu3fYCC+2ghSw9RFAT4jylBzmVqEQkwrCjBFQYu728Ka2lJBl7NHWzD+dJmRWyKj5Rhq8KM2PiFQOLAdrR3BTVmOBne0sJTquXEeTbzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ONJaXOp9; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=PuD8pwBk; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ONJaXOp9; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=PuD8pwBk; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 0CE561FE5F;
-	Thu, 10 Oct 2024 09:17:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1728551822; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5Oqr//Vj/gnTSMHS8Vy/JDYrOW8AZs9pfFe+9IS2+v8=;
-	b=ONJaXOp9oO1GkrLu5oZfqtn+yl+Mp8Q8ryaKbAV3ikZhlV7EiqrSfcmBy3MHpxlDi5x6xf
-	uFDalbfaglVJXWXJNDqSVjUzMtk+JfUNqpuVa6gfMuB5SnJk/nNpAmbAm549bKhnFDwcKX
-	lSQ+Tva4n7Wv08gCZdPSJkYJTctQROw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1728551822;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5Oqr//Vj/gnTSMHS8Vy/JDYrOW8AZs9pfFe+9IS2+v8=;
-	b=PuD8pwBkGoocNWRRBDPZ8LagPRc0Rf8M1JuP7TzS+fNAoYQMsoOZGoNKgJYh+fag+qFuXC
-	GggY1sQYMCrPeLDg==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1728551822; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5Oqr//Vj/gnTSMHS8Vy/JDYrOW8AZs9pfFe+9IS2+v8=;
-	b=ONJaXOp9oO1GkrLu5oZfqtn+yl+Mp8Q8ryaKbAV3ikZhlV7EiqrSfcmBy3MHpxlDi5x6xf
-	uFDalbfaglVJXWXJNDqSVjUzMtk+JfUNqpuVa6gfMuB5SnJk/nNpAmbAm549bKhnFDwcKX
-	lSQ+Tva4n7Wv08gCZdPSJkYJTctQROw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1728551822;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5Oqr//Vj/gnTSMHS8Vy/JDYrOW8AZs9pfFe+9IS2+v8=;
-	b=PuD8pwBkGoocNWRRBDPZ8LagPRc0Rf8M1JuP7TzS+fNAoYQMsoOZGoNKgJYh+fag+qFuXC
-	GggY1sQYMCrPeLDg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 0067213A6E;
-	Thu, 10 Oct 2024 09:17:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id NhiWO42bB2e3fwAAD6G6ig
-	(envelope-from <dkirjanov@suse.de>); Thu, 10 Oct 2024 09:17:01 +0000
+	s=arc-20240116; t=1728552807; c=relaxed/simple;
+	bh=IHjj8Pm1cvim8ImsaUaQl0ADY0QKS9kDKJZxcyI9510=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P/kr7K7j/QChCjIu/QlHZg+ZRwrQVwQxKsyHLxgkTbFOEYPnBEgIqKDJxaMzUqyKWyjV/9jfdPxGIV2KeMOft14D/2mFu75sW25ifO3tF+kcunTi0J88LrnA4YI+JF9sL/alYVzkHMgepippNUT45QyNC9v5b6Aey+zKF7CbpTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TOVNNKtr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18111C4CEC5;
+	Thu, 10 Oct 2024 09:33:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728552807;
+	bh=IHjj8Pm1cvim8ImsaUaQl0ADY0QKS9kDKJZxcyI9510=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TOVNNKtrf8daQuuMacjY7pAlRlt/k4vb7wjQCQYF0aVuw/4MxtY1IEDmecYy869WA
+	 eL70bjSLCWzeSg87onzBIfUU+BSv9+MhwYkC/eIJ924jg8Lyc5Ubk1r7GreDoZptDJ
+	 teVpdajxre4MsBPJA9mql4sRA7irY3J0uloNZaSVW+zDmxt4CzZVh6D1UOnW7YD45l
+	 /XMlYCHBMS9YgkvBhtdnENr2FDWIvohUoNzgrqIpRpXIOWraQQuc8IrP9OJlfmnsWJ
+	 /Y7TcehyVVbI3ky02lFC2Bu9TlmKaTridXnO8cdxvFKPK24cuDB2/RZZ9PsqYrxZV2
+	 Py4W9D9Jti/XA==
+Date: Thu, 10 Oct 2024 12:29:39 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v5 7/8] execmem: add support for cache of large ROX pages
+Message-ID: <Zweeg3oc-zrrG_D9@kernel.org>
+References: <20241009180816.83591-1-rppt@kernel.org>
+ <20241009180816.83591-8-rppt@kernel.org>
+ <20241009132427.5c94fb5942bae3832446bca5@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 10 Oct 2024 09:17:01 +0000
-From: Denis Kirjanov <dkirjanov@suse.de>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, kda@linux-powerpc.org, arnd@arndb.de,
- tsbogend@alpha.franken.de, mpe@ellerman.id.au, npiggin@gmail.com,
- christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
- pctammela@mojatatu.com, victor@mojatatu.com, coelacanthushex@gmail.com,
- jhs@mojatatu.com, horms@kernel.org, shannon.nelson@amd.com,
- sd@queasysnail.net, linux-mips@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH net-next] eth: remove the DLink/Sundance (ST201) driver
-In-Reply-To: <20241008154824.1448370-1-kuba@kernel.org>
-References: <20241008154824.1448370-1-kuba@kernel.org>
-User-Agent: Roundcube Webmail
-Message-ID: <6a5ad6ad6b432e56817883e890a0550d@suse.de>
-X-Sender: dkirjanov@suse.de
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -4.29
-X-Spamd-Result: default: False [-4.29 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	XM_UA_NO_VERSION(0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[22];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[davemloft.net,vger.kernel.org,google.com,redhat.com,linux-powerpc.org,arndb.de,alpha.franken.de,ellerman.id.au,gmail.com,csgroup.eu,kernel.org,linux.ibm.com,mojatatu.com,amd.com,queasysnail.net,lists.ozlabs.org];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email]
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241009132427.5c94fb5942bae3832446bca5@linux-foundation.org>
 
-On 2024-10-08 15:48, Jakub Kicinski wrote:
-> Konstantin reports the maintainer's address bounces.
-> There is no other maintainer and the driver is quite old.
-> There is a good chance nobody is using this driver any more.
-> Let's try to remove it completely, we can revert it back in
-> if someone complains.
+On Wed, Oct 09, 2024 at 01:24:27PM -0700, Andrew Morton wrote:
+> On Wed,  9 Oct 2024 21:08:15 +0300 Mike Rapoport <rppt@kernel.org> wrote:
 > 
-> Link: 
-> https://lore.kernel.org/20240925-bizarre-earwig-from-pluto-1484aa@lemu/
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-Acked-by: Denis Kirjanov <dkirjanov@suse.de>
+> > Using large pages to map text areas reduces iTLB pressure and improves
+> > performance.
+> 
+> Are there any measurable performance improvements?
+
+I don't have any numbers, I just followed the common sense of "less TLB
+entries is better" and relied on Thomas comments from previous discussions.
+ 
+> What are the effects of this series upon overall memory consumption?
+ 
+There will be some execmem cache fragmentation and an increase in memory
+consumption. It depends on the actual modules loaded and how large it the
+fragmentation.
+
+For a set of pretty randomly chosen modules where most come from
+net/netfilter I see an increase from 19M to 25M.
+
+> The lack of acks is a bit surprising for a v5 patch, but I'll add all
+> this to mm.git for some testing, thanks.
+> 
+
+-- 
+Sincerely yours,
+Mike.
 
