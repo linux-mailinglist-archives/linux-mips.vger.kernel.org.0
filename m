@@ -1,61 +1,61 @@
-Return-Path: <linux-mips+bounces-5853-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5854-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11CD0997E69
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 09:05:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04712997E6C
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 09:06:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC5F21F22B5E
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 07:05:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 084E91C2332B
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 07:06:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C0811C2301;
-	Thu, 10 Oct 2024 07:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 060F81C2444;
+	Thu, 10 Oct 2024 07:02:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="iMS7PJJH";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="TV4unc1u"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="vcSKL5Ei";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gtMxsvQW"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0590D1BE852;
-	Thu, 10 Oct 2024 07:02:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B911BDA81;
+	Thu, 10 Oct 2024 07:02:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728543732; cv=none; b=ecrp2eYdaE9Kzj/OoIFjc2G+mlLaU+kmHYHbgKGo1n4/KA6S3Qf7HmIing2SODcGNk0ouPtIga3lrjlFKTuwyb6s/uMmcZ314S0XeN2GAEhT+DzQttNJt7022jqnPN75voQuCStwQlzFRAvO5hV4vfyqXD3gPY2b5rdGLs4OgKY=
+	t=1728543732; cv=none; b=cK+rKwArOQFq5CD8H7A4u+uH5de+J43Lt3Fw8NmULHA64tgq0CSzbFjEEiaDslxA7DmWoyK2ozqN0qHvrsa993ISBNsnfsiJRmCUvTWxInBLNCw5IRtkZ9Uo97XJHIyKE3LQsKIfZWlqtoPNJ8IRL/T3JI+JiVhjvmkZNSuIEaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1728543732; c=relaxed/simple;
-	bh=duktGpmPPCjca1hUrFko89iKyD9xPwp39MHzOJo7rR4=;
+	bh=3awjAm9ufpQd1He4UP6AdNApXBAJ0LbyYsxfWiE+63U=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DyQ6GFf6eROYz6GPQJwwlfOTtQ5TtBOGqSufa/bpaOg7FZCpioCK/eyJF+47wB2d/NLFo+Ptc0gVzsFv081wXTfjIzaAKbN1uZfJrGFw/TTBSbwwemLlOQXI+vJ4amOYxSGd2EdNd7CgM1rDQ7gSTejVbtAZD3BXy360RFfHlB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=iMS7PJJH; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=TV4unc1u; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=NZPJwtuXL9YGPMkbNCfD4q9bmxTvgGmJ/T7Ywzi4Fv8f4YtrwABFKiwvVvzv1F3UjCHR6tqFlcOQCqZmFcezw3oTCACFfEAr/JgSBvdDD7ZPmwjTa/O+cb4+Zs7DiZnDRCIy6p5XzlqcUoLY38NmXdCE6s1ao8mmLgQLEGmbgJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=vcSKL5Ei; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gtMxsvQW; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1728543727;
+	s=2020; t=1728543728;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=jm/2CrqDEYeYltPOiqfTVHvM9k41RoVb5XrgMrSt7cU=;
-	b=iMS7PJJHjGGyQAOWkIhx3mGK1ARhnmCDpqbH+A7Ol3abKmvtUbIKI09X8sqoRtM0ZKQ7mx
-	VkqlO+WxdeLwlEadLlMyXEIF6llFbYK2Hwg61Pb5O5A5Q1AKY16r/jM4pX3rF7VSA/DF9y
-	IZwtcrMl2rDxxcWTxMz/yqj7U4R/9tRCBHnPW39lEYu75V26scajMqFl/aK8kDco9B48ax
-	eL2ChHRfRKdTEesLgyw+IkdE0OH5P4818N5UKXA8qVlrfPXHd2AoG1CygP3avo9LH/5iW8
-	ILP/eB0/R/rA4pUVmPPCXr0ktkDqJweoX+/URwLfNXXFsTyEOKjYvlTiPb0NmA==
+	bh=c0jOb+0pBVFtpRBvmlWca4rm6bPz719GqeyVxg9V4Yk=;
+	b=vcSKL5Ei05MaIvwUWEEkh1o2Ks/eorA8eAEJRD0CuQzgOALnIEbeQVOd0f2FLvUuk9711Q
+	tmjQMOz6qR/FSaU590Uhit+apcTIvS6HqZSZBnjaTKGO+jLKVUowkedgLFEeyq4eh5Q57T
+	/sBv5eMaiq5R28QJPg2l8Q/b/b0NPmH0LvedMx9h3Ccjpfv4fUQ6F0RpGgk274N++hnkj5
+	59rLGt0i4dJYnpcuI1c9gDghiHkvBwQDrj48KYgfMgkCsLRgDHBp3cs4nJ5upXJnypV9+l
+	R1g1z2Z2x16M+GL7rp+0QROcQL103T3FYjfOZVs0Y4ucjszEaq1P/PyGDChuKw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1728543727;
+	s=2020e; t=1728543728;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=jm/2CrqDEYeYltPOiqfTVHvM9k41RoVb5XrgMrSt7cU=;
-	b=TV4unc1uGTXtFkaS6TTazfjrGgCVpgn8oa3T0LlB5xj7tiIHkUCT6ic8gdd7YU+gxUremR
-	Fx/l51wAvwr0ydBw==
-Date: Thu, 10 Oct 2024 09:01:15 +0200
-Subject: [PATCH 13/28] x86: vdso: Access rng data from kernel without vvar
+	bh=c0jOb+0pBVFtpRBvmlWca4rm6bPz719GqeyVxg9V4Yk=;
+	b=gtMxsvQWmbQIKGeUBCn063lFjoQTBpOVE8sqGXxcphJb6jAHTMcx0B08jmt1ST+co49ykp
+	nznusCNutY6jRIDw==
+Date: Thu, 10 Oct 2024 09:01:16 +0200
+Subject: [PATCH 14/28] x86: vdso: Allocate vvar page from C code
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241010-vdso-generic-base-v1-13-b64f0842d512@linutronix.de>
+Message-Id: <20241010-vdso-generic-base-v1-14-b64f0842d512@linutronix.de>
 References: <20241010-vdso-generic-base-v1-0-b64f0842d512@linutronix.de>
 In-Reply-To: <20241010-vdso-generic-base-v1-0-b64f0842d512@linutronix.de>
 To: Guo Ren <guoren@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, 
@@ -94,77 +94,151 @@ Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
  linux-riscv@lists.infradead.org, loongarch@lists.linux.dev, 
  linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1728543717; l=2500;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1728543717; l=4524;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=duktGpmPPCjca1hUrFko89iKyD9xPwp39MHzOJo7rR4=;
- b=WV9xCByoqmjr2WpGGsix0xq+nmoYDqmnBGL1soMUsv5PBqkCJwXCKiSkCvmLtX8v8ZY4rieFc
- b8m03BVeYmVDGGnR2GuimURiEeBvWIXoti102NiyP/UhkqFrnOZTg3K
+ bh=3awjAm9ufpQd1He4UP6AdNApXBAJ0LbyYsxfWiE+63U=;
+ b=lKDP23WVMRWJvIoSEl4GRHapesPFvH7pyf318uwEN73rQnQewl633LJdXV98MCj8D0iG9mp5X
+ j/cHGTbQmCQCoN3JlHegeGrKD9rS1alFnZxIvXe0Z7RMU6pXnx65LOL
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Remove the usage of the vvar _vdso_rng_data from the kernel-space code,
-as the x86 vvar machinery is about to be removed.
-The definition of the structure is unnecessary, as the data lives in a
-page pre-allocated by the linker anyways.
-The vdso user-space access to the rng data will be switched soon.
-
-DEFINE_VVAR_SINGLE() is now unused. It will be removed later togehter
-with the rest of vvar.h.
+Allocate the vvar page through the standard union vdso_data_store
+and remove the custom linker script logic.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- arch/x86/entry/vdso/vma.c            | 1 -
- arch/x86/include/asm/vdso/vsyscall.h | 2 +-
- arch/x86/include/asm/vvar.h          | 4 +++-
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ arch/x86/entry/vdso/vma.c            | 16 +++++-----------
+ arch/x86/include/asm/vdso/vsyscall.h |  6 ++++--
+ arch/x86/kernel/vmlinux.lds.S        | 23 -----------------------
+ arch/x86/tools/relocs.c              |  1 -
+ 4 files changed, 9 insertions(+), 37 deletions(-)
 
 diff --git a/arch/x86/entry/vdso/vma.c b/arch/x86/entry/vdso/vma.c
-index b8fed8b8b9ccdb2cdd9912d5ec4cfd6366a6012e..8437906fd4b353ad0fe208d811817a1b6f8f8dcb 100644
+index 8437906fd4b353ad0fe208d811817a1b6f8f8dcb..5731dc35d1d2c0b81c37adf133fc6fa35c41cba1 100644
 --- a/arch/x86/entry/vdso/vma.c
 +++ b/arch/x86/entry/vdso/vma.c
-@@ -39,7 +39,6 @@ struct vdso_data *arch_get_vdso_data(void *vvar_page)
- #undef EMIT_VVAR
+@@ -20,25 +20,19 @@
+ #include <asm/vgtod.h>
+ #include <asm/proto.h>
+ #include <asm/vdso.h>
+-#include <asm/vvar.h>
+ #include <asm/tlb.h>
+ #include <asm/page.h>
+ #include <asm/desc.h>
+ #include <asm/cpufeature.h>
+ #include <clocksource/hyperv_timer.h>
  
- DEFINE_VVAR(struct vdso_data, _vdso_data);
--DEFINE_VVAR_SINGLE(struct vdso_rng_data, _vdso_rng_data);
+-#undef _ASM_X86_VVAR_H
+-#define EMIT_VVAR(name, offset)	\
+-	const size_t name ## _offset = offset;
+-#include <asm/vvar.h>
+-
+ struct vdso_data *arch_get_vdso_data(void *vvar_page)
+ {
+-	return (struct vdso_data *)(vvar_page + _vdso_data_offset);
++	return (struct vdso_data *)vvar_page;
+ }
+-#undef EMIT_VVAR
+ 
+-DEFINE_VVAR(struct vdso_data, _vdso_data);
++static union vdso_data_store vdso_data_store __page_aligned_data;
++struct vdso_data *vdso_data = vdso_data_store.data;
  
  unsigned int vclocks_used __read_mostly;
  
+@@ -153,7 +147,7 @@ static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
+ 	if (sym_offset == image->sym_vvar_page) {
+ 		struct page *timens_page = find_timens_vvar_page(vma);
+ 
+-		pfn = __pa_symbol(&__vvar_page) >> PAGE_SHIFT;
++		pfn = __pa_symbol(vdso_data) >> PAGE_SHIFT;
+ 
+ 		/*
+ 		 * If a task belongs to a time namespace then a namespace
+@@ -200,7 +194,7 @@ static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
+ 		if (!timens_page)
+ 			return VM_FAULT_SIGBUS;
+ 
+-		pfn = __pa_symbol(&__vvar_page) >> PAGE_SHIFT;
++		pfn = __pa_symbol(vdso_data) >> PAGE_SHIFT;
+ 		return vmf_insert_pfn(vma, vmf->address, pfn);
+ 	}
+ 
 diff --git a/arch/x86/include/asm/vdso/vsyscall.h b/arch/x86/include/asm/vdso/vsyscall.h
-index 67fedf1698b5e2b710e0504686318949c738bf29..2cbb32a8a45e2f5c7bc02172af0fa09173f33924 100644
+index 2cbb32a8a45e2f5c7bc02172af0fa09173f33924..5d6760746d15b0e12c7bf0eb727241e7576ca9c7 100644
 --- a/arch/x86/include/asm/vdso/vsyscall.h
 +++ b/arch/x86/include/asm/vdso/vsyscall.h
-@@ -22,7 +22,7 @@ struct vdso_data *__x86_get_k_vdso_data(void)
+@@ -9,20 +9,22 @@
+ #include <asm/vgtod.h>
+ #include <asm/vvar.h>
+ 
++extern struct vdso_data *vdso_data;
++
+ /*
+  * Update the vDSO data page to keep in sync with kernel timekeeping.
+  */
+ static __always_inline
+ struct vdso_data *__x86_get_k_vdso_data(void)
+ {
+-	return _vdso_data;
++	return vdso_data;
+ }
+ #define __arch_get_k_vdso_data __x86_get_k_vdso_data
+ 
  static __always_inline
  struct vdso_rng_data *__x86_get_k_vdso_rng_data(void)
  {
--	return &_vdso_rng_data;
-+	return (void *)&__vvar_page + __VDSO_RND_DATA_OFFSET;
+-	return (void *)&__vvar_page + __VDSO_RND_DATA_OFFSET;
++	return (void *)vdso_data + __VDSO_RND_DATA_OFFSET;
  }
  #define __arch_get_k_vdso_rng_data __x86_get_k_vdso_rng_data
  
-diff --git a/arch/x86/include/asm/vvar.h b/arch/x86/include/asm/vvar.h
-index 01e60e0f671e9625669dc8fdacf3cdddf8cbf4fb..fe3434d3b5b1eef806e8328b86650e001b177de2 100644
---- a/arch/x86/include/asm/vvar.h
-+++ b/arch/x86/include/asm/vvar.h
-@@ -19,6 +19,8 @@
- #ifndef _ASM_X86_VVAR_H
- #define _ASM_X86_VVAR_H
+diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+index 6726be89b7a663a1554f8f4b297bba65b4ebdf61..e7e19842736a774191142b6ce43bf5567540cb80 100644
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -193,29 +193,6 @@ SECTIONS
  
-+#define __VDSO_RND_DATA_OFFSET  640
-+
- #ifdef EMIT_VVAR
- /*
-  * EMIT_VVAR() is used by the kernel linker script to put vvars in the
-@@ -62,7 +64,7 @@ DECLARE_VVAR(0, struct vdso_data, _vdso_data)
+ 	ORC_UNWIND_TABLE
  
- #if !defined(_SINGLE_DATA)
- #define _SINGLE_DATA
--DECLARE_VVAR_SINGLE(640, struct vdso_rng_data, _vdso_rng_data)
-+DECLARE_VVAR_SINGLE(__VDSO_RND_DATA_OFFSET, struct vdso_rng_data, _vdso_rng_data)
+-	. = ALIGN(PAGE_SIZE);
+-	__vvar_page = .;
+-
+-	.vvar : AT(ADDR(.vvar) - LOAD_OFFSET) {
+-		/* work around gold bug 13023 */
+-		__vvar_beginning_hack = .;
+-
+-		/* Place all vvars at the offsets in asm/vvar.h. */
+-#define EMIT_VVAR(name, offset)				\
+-		. = __vvar_beginning_hack + offset;	\
+-		*(.vvar_ ## name)
+-#include <asm/vvar.h>
+-#undef EMIT_VVAR
+-
+-		/*
+-		 * Pad the rest of the page with zeros.  Otherwise the loader
+-		 * can leave garbage here.
+-		 */
+-		. = __vvar_beginning_hack + PAGE_SIZE;
+-	} :data
+-
+-	. = ALIGN(__vvar_page + PAGE_SIZE, PAGE_SIZE);
+-
+ 	/* Init code and data - will be freed after init */
+ 	. = ALIGN(PAGE_SIZE);
+ 	.init.begin : AT(ADDR(.init.begin) - LOAD_OFFSET) {
+diff --git a/arch/x86/tools/relocs.c b/arch/x86/tools/relocs.c
+index c101bed6194000004bd84e1679259cce9977d290..6afe2e5e9102873634c6ad9a3a0b9c66bba5da50 100644
+--- a/arch/x86/tools/relocs.c
++++ b/arch/x86/tools/relocs.c
+@@ -89,7 +89,6 @@ static const char * const	sym_regex_kernel[S_NSYMTYPES] = {
+ 	"init_per_cpu__.*|"
+ 	"__end_rodata_hpage_align|"
  #endif
+-	"__vvar_page|"
+ 	"_end)$"
+ };
  
- #undef DECLARE_VVAR
 
 -- 
 2.47.0
