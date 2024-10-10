@@ -1,159 +1,168 @@
-Return-Path: <linux-mips+bounces-5871-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5873-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AF91997FDB
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 10:33:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36A7399800F
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 10:36:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C99002819A9
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 08:33:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8CE15B2679A
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 08:36:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78C26202F8A;
-	Thu, 10 Oct 2024 07:56:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABE40206E65;
+	Thu, 10 Oct 2024 08:04:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Q5pjE1ER"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="qUwWDZgm";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YKVFY9ru"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB33F202F81;
-	Thu, 10 Oct 2024 07:56:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AADC206972;
+	Thu, 10 Oct 2024 08:04:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728546976; cv=none; b=Z/cShoWEafy+17d6qQYcbs7E0KTfjQAi3RFITmyxZwsUtMMNmf472EcYcMH6N4tsbLc79/UVWFp9nGmLrxIoPKh9NXoFLGKEOF/qTNLXzCO3vJ4qmPp8G9+YKJ84XzqmdhoVlFiQc134PmAtBAM0VX0Byb2+IT7K3XltlFya9Ns=
+	t=1728547485; cv=none; b=EHyy9BYRpjToh3Qb59S5zew1d1qYdkRt/Ijr4LPgws+n5F8sMuKyekcCcg9rsKF/p74rz6WmmEpNluZOk1k0RngCH40jCt8nrTs7+ju59/TKDfYrYErRNYyvD+kk7asNoTMrDwU7hElHLPRjsjSk9gtgzE4F8lN7P7Qy4lRI9F8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728546976; c=relaxed/simple;
-	bh=RIxzWDo6Kxs1DyGz/2Ns/C4Sj7jBRuNfdZi5GGDFnV0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MWQxiAhP+BHUGoONQxHcYwK+Bi5GXyh96lk+tj/Cb2bldz6eTG4AkkKhYQ4bmfSjD9Xul+iuRv1R7hh9uPfGTPlp/eDOkBAj+7j3huwIigTBL19yvRZxZJCRw+S2zG6TVhpoc2oos9i5K5GpI/Juf+YTY7w50hfX1htpcBkmmVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Q5pjE1ER; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49A7YT0q005037;
-	Thu, 10 Oct 2024 07:55:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date
-	:from:to:cc:subject:message-id:references:mime-version
-	:content-type:content-transfer-encoding:in-reply-to; s=pp1; bh=0
-	yVn8tI3lyhXM3ZeiBQKCb5kXwilQgq2bp9dwcfLyYI=; b=Q5pjE1ERdXenpwSx9
-	H+3tZabSr8DH7Beyxy8drvLqU3Ht7Ga5XyW6C2PTL3fPAuIoZz3HzJyiSMoG5gdj
-	JjsNnDX89G4/TG2MQ2BW0D7oNe96JjJi5G8uZ9mB/IapFOPGaPI969vLuEtTw6gE
-	D6w8jekAr6Nzp3HaTEja4FUr8tp1ftTFqMfyfMTZNpMqVCBoXY9zpXfp1OYNxpHv
-	kbP2c54yz9Ep1Dqaj3eGZkuA+jhRxDx4QQwAhzA66Rkp22oRkrTbO5vLbuYRFTlL
-	+Pd5u72MCl/j+dMSEbRW7gnpYCpEOaMHPSE7LD2eBuG5IA3bgsjtNp/LMzgsdAiG
-	yYq+A==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 426anb82uq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 10 Oct 2024 07:55:18 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49A7tHik016153;
-	Thu, 10 Oct 2024 07:55:17 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 426anb82uf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 10 Oct 2024 07:55:17 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49A544L3013784;
-	Thu, 10 Oct 2024 07:55:16 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 423fssen8b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 10 Oct 2024 07:55:16 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49A7tCoY59048420
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 10 Oct 2024 07:55:13 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AC8702004B;
-	Thu, 10 Oct 2024 07:55:12 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id BCECD2004E;
-	Thu, 10 Oct 2024 07:55:11 +0000 (GMT)
-Received: from osiris (unknown [9.152.212.60])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Thu, 10 Oct 2024 07:55:11 +0000 (GMT)
-Date: Thu, 10 Oct 2024 09:55:10 +0200
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Guo Ren <guoren@kernel.org>, Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
-        Russell King <linux@armlinux.org.uk>,
-        Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Naveen N Rao <naveen@kernel.org>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Nam Cao <namcao@linutronix.de>
-Subject: Re: [PATCH 28/28] vdso: Rename struct arch_vdso_data to
- arch_vdso_time_data
-Message-ID: <20241010075510.6997-C-hca@linux.ibm.com>
-References: <20241010-vdso-generic-base-v1-0-b64f0842d512@linutronix.de>
- <20241010-vdso-generic-base-v1-28-b64f0842d512@linutronix.de>
+	s=arc-20240116; t=1728547485; c=relaxed/simple;
+	bh=NOnTXEDf/afk98+qld6jjp5+THx/CJ1WRioKL/FDWFo=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=MRVnYAoHoenjrfhIoAGrGBM4oe2ofBruaYZNILTXmFvBsEywcMgEFOa/y8zUJfT+69oYrdNLcgOAyZicwEOaCzvCWmeUMn1iB5lcx32GsGYs3G9xmiBwLrB8fIV9YxD5tSwqfBLUX908w7zzJ7jNGZWqxsDOqS+S1/6/lupc/F4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=qUwWDZgm; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YKVFY9ru; arc=none smtp.client-ip=103.168.172.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 36D3E11401D9;
+	Thu, 10 Oct 2024 04:04:41 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Thu, 10 Oct 2024 04:04:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1728547481;
+	 x=1728633881; bh=NOnTXEDf/afk98+qld6jjp5+THx/CJ1WRioKL/FDWFo=; b=
+	qUwWDZgmoFSc2bvCLEkOL58hDVYZTrXcWqA1r8Cm2RvEFx5gUkRYopFuSPQ3amGK
+	A75AnB60O0tNSjpd6qb4sOHfavqwBuHErQVjVa8XNdYjdZheAewMWD81oqp5grVF
+	OMyHEJ3EtyhTGHXEhPd56/rpTE8Os9ZcKFpOiuCDpJ0WFjtvtQv24Ut5jJoTHnYd
+	aFsDvyOZRC8f1Zd8Ggv9tLbENlgXMnhXw4fjpTepep99VYTMAzRQ02ssu1RFUoY3
+	g2Q/l1BksGyyAC49oDIHgf037BwdnufA/EmmDjUOvMxnh4dx4RBbboyuyOd840NT
+	xuqFLD+Nws1CIVcuTITmHg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1728547481; x=
+	1728633881; bh=NOnTXEDf/afk98+qld6jjp5+THx/CJ1WRioKL/FDWFo=; b=Y
+	KVFY9ruZTwjCXaru75A1LYIRzB9hNonTtp+VnwOuUDc00DfM6Q58QBkP6xvTdp45
+	5KRX9ad0rBSJypNyLeRiaImyE0+6VyqMZel3jXqgaXrTtoIYd8as+0tpJgI4+Rwy
+	XFY3m+TuzIDj8+4xOE9H/ir6Bpc93KNZM9vqBvrYFGayrfXvHSClTBdE5Y51ymOD
+	CBmzaZCAlBE7NBw0EKGEjQ/m7G/CH5ceK628BoC5sGH6eY/a3dskoTF5R7ilaei7
+	0OZJ/HycrEwomf3gFDs9UzNX1vf9aG49RHy276/+i4YF/m+QWD5HGfVUe1MczrPH
+	EnyTMmojm4/cNsD1aIH0Q==
+X-ME-Sender: <xms:mIoHZ4klWhimXUj0T6QpcTwiYXJRsoU5LdDufDqDOomjiAXzPU1DeQ>
+    <xme:mIoHZ30tXQyn4xrtPUssnTi-kdfuHuz3J0caWpTGpMt2leGiFPK0R6BThxrSwX69m
+    nH-QCqJpajtXht5q6M>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdefgedguddvkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
+    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedu
+    fedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghpfhesvhhgvghrrdhkvghrnh
+    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrlhhphhgrsehvghgvrhdrkhgvrhhn
+    vghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrtghhsehvghgvrhdrkhgvrhhnvg
+    hlrdhorhhgpdhrtghpthhtoheplhhinhhugidqtghskhihsehvghgvrhdrkhgvrhhnvghl
+    rdhorhhgpdhrtghpthhtoheplhhinhhugidqhhgvgigrghhonhesvhhgvghrrdhkvghrnh
+    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghr
+    nhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmihhpshesvhhgvghrrdhkvghrnh
+    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmohguuhhlvghssehvghgvrhdrkhgv
+    rhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqohhpvghnrhhishgtsehvghgvrh
+    drkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:mIoHZ2oEJ0fbuiaD8xkujPJKuAgfTVFVgkQ1MaKFzQJpFSIpGzfDAg>
+    <xmx:mIoHZ0mJL5zhDflICU5OnCxj5xD-lNh7hszg2y7w_jG0SosfB6v4TA>
+    <xmx:mIoHZ23OJE-QCT7HdDHaNJq2YoxMQsePqKr1PpcugeuoE58nHC1iew>
+    <xmx:mIoHZ7tuhBf_WSccVXoM3lkeeX0DDoNl6mMcyPN5JCQqsonWnM8tzw>
+    <xmx:mYoHZ8NM8dSyfUFOSROsLFZvsdyCyDiUWAXTgcQSDhI-SDaU9fYoh5C4>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id D17622220071; Thu, 10 Oct 2024 04:04:40 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241010-vdso-generic-base-v1-28-b64f0842d512@linutronix.de>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: txKjIm6oMyh-bYlrWVbJ8zIUfT6c90P5
-X-Proofpoint-GUID: EzJFZF0xHPJktynCv2z269EPy5OXcKam
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-10_04,2024-10-09_02,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 adultscore=0 mlxscore=0 mlxlogscore=644 priorityscore=1501
- clxscore=1011 phishscore=0 suspectscore=0 impostorscore=0 malwarescore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410100049
+Date: Thu, 10 Oct 2024 08:04:19 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Mike Rapoport" <rppt@kernel.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>
+Cc: "Andreas Larsson" <andreas@gaisler.com>,
+ "Andy Lutomirski" <luto@kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>,
+ "Borislav Petkov" <bp@alien8.de>, "Brian Cain" <bcain@quicinc.com>,
+ "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Christoph Hellwig" <hch@infradead.org>,
+ "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>,
+ "Dinh Nguyen" <dinguyen@kernel.org>,
+ "Geert Uytterhoeven" <geert@linux-m68k.org>, guoren <guoren@kernel.org>,
+ "Helge Deller" <deller@gmx.de>, "Huacai Chen" <chenhuacai@kernel.org>,
+ "Ingo Molnar" <mingo@redhat.com>,
+ "Johannes Berg" <johannes@sipsolutions.net>,
+ "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+ "Kent Overstreet" <kent.overstreet@linux.dev>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ "Luis Chamberlain" <mcgrof@kernel.org>,
+ "Mark Rutland" <mark.rutland@arm.com>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Matt Turner" <mattst88@gmail.com>, "Max Filippov" <jcmvbkbc@gmail.com>,
+ "Michael Ellerman" <mpe@ellerman.id.au>,
+ "Michal Simek" <monstr@monstr.eu>, "Oleg Nesterov" <oleg@redhat.com>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Richard Weinberger" <richard@nod.at>,
+ "Russell King" <linux@armlinux.org.uk>, "Song Liu" <song@kernel.org>,
+ "Stafford Horne" <shorne@gmail.com>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Thomas Gleixner" <tglx@linutronix.de>,
+ "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+ "Vineet Gupta" <vgupta@kernel.org>, "Will Deacon" <will@kernel.org>,
+ bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-arm-kernel@lists.infradead.org,
+ "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+ linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+ linux-mm@kvack.org, linux-modules@vger.kernel.org,
+ "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
+ linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+ sparclinux@vger.kernel.org, x86@kernel.org
+Message-Id: <e1ba5ab2-a7e2-4f2c-8e2d-4788656ef695@app.fastmail.com>
+In-Reply-To: <20241009180816.83591-4-rppt@kernel.org>
+References: <20241009180816.83591-1-rppt@kernel.org>
+ <20241009180816.83591-4-rppt@kernel.org>
+Subject: Re: [PATCH v5 3/8] asm-generic: introduce text-patching.h
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 10, 2024 at 09:01:30AM +0200, Thomas Weißschuh wrote:
-> From: Nam Cao <namcao@linutronix.de>
-> 
-> The struct arch_vdso_data is only about vdso time data. So rename it to
-> arch_vdso_time_data to make it obvious.
-> Non time-related data will be migrated out of these structs soon.
-> 
-> Signed-off-by: Nam Cao <namcao@linutronix.de>
-> ---
->  arch/Kconfig                                        |  2 +-
->  arch/riscv/Kconfig                                  |  2 +-
->  arch/riscv/include/asm/vdso/{data.h => time_data.h} |  8 ++++----
->  arch/riscv/kernel/sys_hwprobe.c                     |  2 +-
->  arch/riscv/kernel/vdso/hwprobe.c                    |  4 ++--
->  arch/s390/Kconfig                                   |  2 +-
->  arch/s390/include/asm/vdso/data.h                   | 12 ------------
->  arch/s390/include/asm/vdso/time_data.h              | 12 ++++++++++++
->  include/vdso/datapage.h                             |  8 ++++----
->  9 files changed, 26 insertions(+), 26 deletions(-)
+On Wed, Oct 9, 2024, at 18:08, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+>
+> Several architectures support text patching, but they name the header
+> files that declare patching functions differently.
+>
+> Make all such headers consistently named text-patching.h and add an empty
+> header in asm-generic for architectures that do not support text patching.
+>
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-Acked-by: Heiko Carstens <hca@linux.ibm.com> # s390
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
