@@ -1,150 +1,150 @@
-Return-Path: <linux-mips+bounces-5870-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5872-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66F26997F6C
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 10:21:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B06A6997FE0
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 10:33:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA97E1F22BE0
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 08:21:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6ABD52818DE
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2024 08:33:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C09BE1E907F;
-	Thu, 10 Oct 2024 07:27:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AA75202F94;
+	Thu, 10 Oct 2024 07:56:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Vbd8BJhX"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C9E19AD73;
-	Thu, 10 Oct 2024 07:27:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4DF8202F82;
+	Thu, 10 Oct 2024 07:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728545268; cv=none; b=glno/+hFrhAsSDipzQOkIpWss3F9yLUrD9KhcwmXAWQnaCWFixnYXkimF7t5uLr5IOOQacFdCodq1q3XjJMwlef4zuz7S62tVrIjL7grNBO+IIfh0ZuSMKGp6R3PG4csuQ8N6AHZVC5fsNhzBqLQoiWbb2szSzOjvBLFayBik1I=
+	t=1728546977; cv=none; b=ZskJMwyfsa38M2HCtZjgEh9aV1b9FEjmlYAEKX9f3d8O5wEn2vtIDVH0x8Gie2dzwdC39rYZS7ZF6t7F40z5Nvor/CZI3FYMMYrZZlouVtSNI4rKDYbTrCDUEzfCWrwUw6JHcpC5sChEzL0NccMKpl5QLQZhJjKYTrkayvYfgT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728545268; c=relaxed/simple;
-	bh=l3tvN995WrTW85WorpTc0P1WzFKQ+3NtgLmALeDmXf4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p0/syqbitwYpL3WrIRKyGeI2FnmYFxah21ZMBCC3w+N1t9rOPGFCJDd4fO07sRqDvXA156vcLOl5HlgM792jT/RsxlmXPFlwUwyqJLX2pXs6U9CyONjkdJnfta/1A1cXotjhoxFuo6JHbrwC7rFOkvCEWs0pSweWrBIyz4eyl9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-3e03b6d99c3so363573b6e.0;
-        Thu, 10 Oct 2024 00:27:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728545265; x=1729150065;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7cEkDPRbXErPkgoWEGdbZCw32b468GFBk0qa08gpGWY=;
-        b=CJgCHC0Qexv5UZKHinbEnmnfRXYwjXp5rxSVbsiNnEUfIf3NOdcTV06DYs1YDf55YL
-         qMeslOr7pMA9yf200+eFQplIjSAgYBa253NL1A77n1kPfMc4+w0GWd6a91dwt1KtSMD3
-         58LQKqUy23UwHWCTShiILO6xQTvKdC0s2YqREPRuj47nZuw04KeAXyY7k71nrth9AuJX
-         sBze91IEM5XjmKH8iR72AecVPDb1+ME2oYZePRFRFmDa5EqF5w5zhdiZYxNclNMcfnRi
-         jYnrf5zKysWvLfCajVvyKrG7H4JnMXJ6n1C7d3NwPuVc9ZtdReecDQ15XawDRXnv7Gnp
-         p+hw==
-X-Forwarded-Encrypted: i=1; AJvYcCUug2MXpDzHQENPzfiNF/I1uIXhBDPW6NebiwxmzptY+gpM/xiRX5q9s7cJr6Kll5+96EggGaXMszVBUQ==@vger.kernel.org, AJvYcCV7LsQWSaY7utIH0AQdb/3mcPhDwHihXI0sJ5mng6Li/bT3N2yvanuxPy40iYg+bwlVFGQ=@vger.kernel.org, AJvYcCVDRJaOvryxQZIAtikiJ0E5t8FZX/zhosdozMzsZCTUybLbKAUG+5xD52cQ6agD/CycDxevMw2PCyk=@vger.kernel.org, AJvYcCVKzFsxkFJZl07rb2SX3U+WW+uK8aNg+tgWnUqd/ZFIaCpjQXIzb20kh7yRYjXdHLhAdVvzPMXi67Y/uvRDsfn/C7FV@vger.kernel.org, AJvYcCWEv3a+aBWk3uYT4UjAYWj0L800ZvoE3h2oyZtIO4Xg6O6+a984j5mAjNJnfodecfnMeyBzfqGoLkHheZIG@vger.kernel.org, AJvYcCWJKUNaJtT0I6N8auDs2jiyWKURIU7w836K8xq+8VukQPgIEisQSPxIDGoU7vPOXilloABjw0x+Ai2UmR8=@vger.kernel.org, AJvYcCWdnnVS728L+h9tNTV8pU+squ0g/FSYZtWTdxYsOyH1T/uLPGbWr6qPcFTYQ7Ow613CM6EwnBPKRstpVnA5RMI=@vger.kernel.org, AJvYcCWn2vNzod9rJ2UPZlWSAEMHD9MbuNoQcDmMOAXPBPYfrpzQfHNkcEVzve4aduXexIssw3PwbvrmC0F6SzDd@vger.kernel.org, AJvYcCWuypF92PX0zNnAiFgOsfYonoz+fto4zzbuDCw6DXp0rq/qFGCS3MkNnnGC3nH/gL+qi2+YKtUZ9NefnA==@vger.kernel.org, AJvYcCX+GfH4FFUKeWu1
- BcIhzPdX+1FrjdG0rgErztEYMvGU3gx/ZWOjhNjePqvwmymTlJg6LbzqMtvvQ5j2Hkl9qQ==@vger.kernel.org, AJvYcCX6UKG4P6RIK0OEs5tUhIoLnliOAbQ+0kZSUDdn8HkoDqGHtNBbDeORbjYSsBA1yMG9mB9AknYFy/4+jg==@vger.kernel.org, AJvYcCXox7yS65bX4/eB6/Vvy+xddjB75QkiKst+tUAPVKGKldbWhQoPx8YfvrfBmmeqwiQS84+B7aHvAcVUUwvVhQ==@vger.kernel.org, AJvYcCXoyg5HzQ0NC1hXATVyaPUz9rXLI1HFFINzbOegTWRbL8fFAzb7GHM6V97UGmt5//wZv2OI+IYzlPMmxw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqwJvPTxFvInboUX3XdxRwKe2jKr3ZF26GmYwEV35dBoZpj6WJ
-	CB/FGuisHxfCQfVPcFDeA5MU0zenigHB2nVNd8gmEtjEBc8qPe/EOdWBvEz5
-X-Google-Smtp-Source: AGHT+IG9Coh8UjDwgsX6VZC8zxFTpOxW6eK1dKBNyh7mpGh8aiVbuqYoYnacrRQSEFLhjSnkOwaYJg==
-X-Received: by 2002:a05:6808:180b:b0:3e3:a90f:3091 with SMTP id 5614622812f47-3e3e66ebff4mr5526055b6e.26.1728545265350;
-        Thu, 10 Oct 2024 00:27:45 -0700 (PDT)
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com. [209.85.215.181])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7ea44909bd7sm500604a12.50.2024.10.10.00.27.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Oct 2024 00:27:44 -0700 (PDT)
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-7c3e1081804so357649a12.3;
-        Thu, 10 Oct 2024 00:27:44 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU9cKaxrT3KMxHO48QaREe3rHkU5uFWc1HzTh5/s50P4Hh6yG2F+jj7iqrex1CjFkOLVYPEKzCO9zd/nA==@vger.kernel.org,
- AJvYcCUM02/WSbyK6ICj41CZUZcIiJqSitW+oCwakLbrE4uHX2tUN5DpQ9pNLG1C9ugcAXI1q8+NAzjshf3/E8mZVQk=@vger.kernel.org,
- AJvYcCUWVeWvXBjaZPXaM41+7CHirBIjO4KpHnd3kWErRt5zbVa/fStvxeslzG9wtkgrJ7mdBDM=@vger.kernel.org,
- AJvYcCUa8vcLT1MpI+v4QEv2A43SCo/8wVo60fy+9oBHndlYRvYH9KkF98gsH5rVdS/nC5k1tLqMmjKldvu74g==@vger.kernel.org,
- AJvYcCUotUWWfZCfh09XGaOf3O/M0IKZTuVIXz05kbiltdtiGPA+snkB6IZt4Blpb7Y4IXNdb+0CfDHTYgU=@vger.kernel.org,
- AJvYcCUyEf68ra5WHeQ/HIGvHpWHZVaTv/TgA/2m5MUXFz09U2XXLd1ecHZxRTfxa3WjTgEfv45NVqog5mfm79uVzw==@vger.kernel.org,
- AJvYcCV24DhrxdNOgwjEAkiFGV/+GhlPPb4CF+pgaBz3PhZt65owny6dDXbvc2rDEXchJMOEh34Hv7Vqr88/1wzvew==@vger.kernel.org,
- AJvYcCVPNPYHAPv/NCQW69xMISsKyuQ0vtA8cdWiCLTh/Xig2S5SbD9jLXREVifX2OyrnpEmoorSeYQHBElUi5Ec@vger.kernel.org,
- AJvYcCVYsbLsY2G/bUTHoJcwB+0IMiX491T8BfjQYDB3bIKOF4bpoM+YfO928Alq2ISKToQm6PHKNIGHTWs4Q1w8fFa5D+j4@vger.kernel.org,
- AJvYcCVnzASNqnPyzXNO/CZjYSSAFfCUXVDeo4f5G6nJngPeaVD85M+jwUJP9lRXBYPRBeF9nRur6CpLKx6w0A==@vger.kernel.org,
- AJvYcCVz/7quep/rr/0B80ky0XCHaCgvy2MFFBiP6fOwgIkwFmD0gT0g+VTHmrnSCPc2vYB7yxwG2Ous/zJLx5KP@vger.kernel.org,
- AJvYcCX612HB9VBSEhnPzlhdva0oJ42FYepCPbIQ2IayxReGa589aZf6xIGCqIm0/mJwIoF+dOVjnUjxr8Wr+w==@vger.kernel.org,
- AJvYcCX7G7cHrV73DdTjxGFGi3Izz7CF7+2F25lbj9HuKMnRaIbjXVtxxxK4i/g4WV9YFcnPW6pnjwTiakqosU0=@vger.kernel.org
-X-Received: by 2002:a05:690c:60c2:b0:6b3:a6ff:7676 with SMTP id
- 00721157ae682-6e3221867cemr55553697b3.3.1728544955686; Thu, 10 Oct 2024
- 00:22:35 -0700 (PDT)
+	s=arc-20240116; t=1728546977; c=relaxed/simple;
+	bh=VuvHz4SWG5F6N5+oQQ7jkQw92S5yb/85Y8p6NavJMCo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k6qiRSx4diUvEPXy2RUzAUwHYMWDn9QznTjohoacOcJfSnsluazBJoAdPxnmt6ncg44P3YBSekuW1Wdro0/e2jLRmbPUv3C5giq2SYLIaFf7syg2vPS2xObYTteGwivsDlkCjFV/rI7SgDZ78mQ5IT9qryTO6xmqZ50g7PvqJ8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Vbd8BJhX; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49A5HxdT031385;
+	Thu, 10 Oct 2024 07:54:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date
+	:from:to:cc:subject:message-id:references:mime-version
+	:content-type:content-transfer-encoding:in-reply-to; s=pp1; bh=T
+	1YOOaZuWHA7KhxMc5clxN0oNw6z6RZVTMdcvyZw1Fs=; b=Vbd8BJhXLUtSdzOVL
+	2SiGmCBj54EjRio8+KQ+dQh57mrOmix45wQhn7Dvum7Nw1O2UQfX09U6OUtqIB+0
+	BcIy0BeiGU1lbE6SJ8ZtvrOBV5HuE+TwRa9rDQinZ4tG3A54viNCL02mn08+9mOv
+	VK9+WhExutjLivC6JwMwcTnCkB5c5zoYG/L9dgatYQxoYJx0gsg/thfv+dLhZuy2
+	E7FQqCsGUr6JMY1c3KuaQhBeipIFeowjqKZUTWfHO7LPlP02KJKS5+1kv0+vLlFy
+	9MtlPQcFxpnaT0fdS4HzZU5aATJj7Cua1qLa4Kd9zvZDWsxuFdGCCDDjKy+0ipB5
+	UVUnA==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4268nerq6j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 10 Oct 2024 07:54:54 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49A7srwb026744;
+	Thu, 10 Oct 2024 07:54:53 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4268nerq6e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 10 Oct 2024 07:54:53 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49A727pw022855;
+	Thu, 10 Oct 2024 07:54:52 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 423jg165sp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 10 Oct 2024 07:54:52 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49A7smB059048374
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 10 Oct 2024 07:54:48 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5CC382004E;
+	Thu, 10 Oct 2024 07:54:48 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 767FE20040;
+	Thu, 10 Oct 2024 07:54:47 +0000 (GMT)
+Received: from osiris (unknown [9.152.212.60])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Thu, 10 Oct 2024 07:54:47 +0000 (GMT)
+Date: Thu, 10 Oct 2024 09:54:45 +0200
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Guo Ren <guoren@kernel.org>, Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+        Russell King <linux@armlinux.org.uk>,
+        Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Naveen N Rao <naveen@kernel.org>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 03/28] s390/vdso: Drop LBASE_VDSO
+Message-ID: <20241010075445.6997-B-hca@linux.ibm.com>
+References: <20241010-vdso-generic-base-v1-0-b64f0842d512@linutronix.de>
+ <20241010-vdso-generic-base-v1-3-b64f0842d512@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241009180816.83591-1-rppt@kernel.org> <20241009180816.83591-4-rppt@kernel.org>
-In-Reply-To: <20241009180816.83591-4-rppt@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 10 Oct 2024 09:22:23 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV9TPH+mDJvvuRO3RBYfgWRwvv1kwyr_iLNju+iumb96Q@mail.gmail.com>
-Message-ID: <CAMuHMdV9TPH+mDJvvuRO3RBYfgWRwvv1kwyr_iLNju+iumb96Q@mail.gmail.com>
-Subject: Re: [PATCH v5 3/8] asm-generic: introduce text-patching.h
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Andreas Larsson <andreas@gaisler.com>, 
-	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@quicinc.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Christoph Hellwig <hch@infradead.org>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Dinh Nguyen <dinguyen@kernel.org>, Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>, 
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Kent Overstreet <kent.overstreet@linux.dev>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Richard Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>, 
-	Stafford Horne <shorne@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	Uladzislau Rezki <urezki@gmail.com>, Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>, 
-	bpf@vger.kernel.org, linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
-	linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-mm@kvack.org, linux-modules@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-trace-kernel@vger.kernel.org, 
-	linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
-	loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241010-vdso-generic-base-v1-3-b64f0842d512@linutronix.de>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: ZTty2fTVsMW7K9-FlAxmqo2xTiuVy1bh
+X-Proofpoint-GUID: zgvrkuY4KEw1IJWAOvjaf-n0Y1hgj5aS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-10_04,2024-10-09_02,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
+ adultscore=0 mlxscore=0 priorityscore=1501 suspectscore=0 phishscore=0
+ mlxlogscore=370 spamscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
+ definitions=main-2410100049
 
-On Wed, Oct 9, 2024 at 8:09=E2=80=AFPM Mike Rapoport <rppt@kernel.org> wrot=
-e:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
->
-> Several architectures support text patching, but they name the header
-> files that declare patching functions differently.
->
-> Make all such headers consistently named text-patching.h and add an empty
-> header in asm-generic for architectures that do not support text patching=
-.
->
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+On Thu, Oct 10, 2024 at 09:01:05AM +0200, Thomas Weiﬂschuh wrote:
+> This constant is always "0", providing no value and making the logic
+> harder to understand.
+> Also prepare for a consolidation of the vdso linkerscript logic by
+> aligning it with other architectures.
+> 
+> Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> ---
+>  arch/s390/include/asm/vdso.h         | 3 ---
+>  arch/s390/kernel/vdso32/vdso32.lds.S | 2 +-
+>  arch/s390/kernel/vdso64/vdso64.lds.S | 2 +-
+>  3 files changed, 2 insertions(+), 5 deletions(-)
 
->  arch/m68k/include/asm/Kbuild                      |  1 +
-
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> # m68k
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
 
