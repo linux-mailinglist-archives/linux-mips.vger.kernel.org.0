@@ -1,215 +1,98 @@
-Return-Path: <linux-mips+bounces-5986-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5987-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5588299A2BE
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Oct 2024 13:33:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7482C99A373
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Oct 2024 14:10:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CBD541F2331B
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Oct 2024 11:33:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 026081F225BF
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Oct 2024 12:10:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E227217315;
-	Fri, 11 Oct 2024 11:33:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA77021858E;
+	Fri, 11 Oct 2024 12:10:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="aV0lMeAO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MMggbeoO"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8622A1D0E15;
-	Fri, 11 Oct 2024 11:33:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A11DD218584;
+	Fri, 11 Oct 2024 12:10:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728646399; cv=none; b=S49URikK25zqHIePuaIhJA5dWklQw2iO/TdsyCkOzc/KoJLJqDOqPAe2ddrdgqmdP8T9B+aFjxwVJUPULk+BuDLK3THUzzcQyuphSk1vk874fRefiWgca9d7rVgoLlImDB4rwPUp3V9tZDhLCD5YLtS7x6eL1FTezWbeJgieb1M=
+	t=1728648628; cv=none; b=uFnniegYGweYyji/w19RYQWwmGMLJb9jwAxWkvrMnZRfzg7LhkzpQbig4Y3t61RIynefHIkVYbCzhIEx/xii6AuFst7ktUS5claVAJok2cjOHP62QqAuUu15Q9PNXswreZRZFpLQCmmaem1K2CwsErA/utLpcDK1fzDIFfqzm7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728646399; c=relaxed/simple;
-	bh=LSJxirvi62JUn406nxAA8pyzT2E2hR+/8i6a2rLZwV8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Gtu5450aQ9Lul2xRGKGFCNVwOf9QdJH9yvbBCNNANxcg4fUGShCiA7W0ZIKI03/fEKK8TY9toT2CipW5WIOCvyQ5+Iz1pOcMwuG+V3b6kvh+wOuyIZXAzZ+amcykMIo+LHIpzz+2nI4SwG6ssnlR800mLtvXMeoGdcLjy99AMvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=aV0lMeAO; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 66C4060003;
-	Fri, 11 Oct 2024 11:33:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1728646393;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=FhnACtzICH6VaKQ4blevH/hD4rLeANe6ECj14NLS3xI=;
-	b=aV0lMeAOYyrtz2R4wOWFbq/1yF3ezG++ZbCap/4lUgSq9ksL1JKFzq1rDVMoArDgLg+Smm
-	OB2NlmSwheJa50ZHq5gUwR3XBUjl2Bk1oBO9DWA8aeQfoS7raVvo4KjP2kip03+gVlEzPe
-	C7rkD0q5Xnvm8WBJ2lF7D5F/ujgHlKBW/NS2Jj3k7gwaKrdfgJ+hkGTyDd9Fhuc7u8il69
-	JzhyZNKDZW3MUVzAffg+XoPXX279W/6BmY+IzWpQotWzlwtZ1brGw/bkJ5zwXbeuyFnDKH
-	35cSZT9QlQ0W/QteDd1CBkjxd/PjOZHuRS9bcUjIl71NIj+MsJVdjM/egksaPw==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Fri, 11 Oct 2024 13:32:57 +0200
-Subject: [PATCH] MIPS: Allow using more than 32-bit addresses for reset
- vectors when possible
+	s=arc-20240116; t=1728648628; c=relaxed/simple;
+	bh=QsWhg1lPTy3xAXP6qpwZyfL4P1tilWHSFqdyzad3j40=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=hUsuOhkgPWS2BetnPElApjlNIue6BSk/Wfei2wE5tJ2jk6NrLXDfV1xjvx/XOZa8jDU6og6XV3WoTeHek99jHQAzRLBuPwHw6IwnIZGeQTuryL7FSqg3bYK5QvzyFZjcjPF5cR3cOXb11+osNl/fcJIzBx/c8PqC1qwhMoFtXkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MMggbeoO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32CD1C4CECC;
+	Fri, 11 Oct 2024 12:10:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728648627;
+	bh=QsWhg1lPTy3xAXP6qpwZyfL4P1tilWHSFqdyzad3j40=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=MMggbeoOZIDWYva2gyVPbsA18OBrYiUIncQeNizMo2465ZLLSHcF/mu4zoELbkv8x
+	 uFQUbLajDOG5+POY0aHajh6AbNxHYvAbNOD0mSm6O9yD7LpIhTFkyVqy9+zWewFEXC
+	 puNTTA31Dp9cjqB0jTahT24oN+/IR1r5gkqNbGPrG+U6kNlnTXY1yTxAjjVRBERK0s
+	 +ojLcILDgKUufReYbUHACMWdJysLI8aiL9MyXuqUXIgNVUrSmMy/uM9GLHQepRhoA0
+	 tGWNSkQbPenefNhG7PWTvVg/bCctqvhaC34FR/J7l8A793CWYH/4Zxhd7XEbz8cIhF
+	 nDvH0pfvn2viA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAEE33822E4C;
+	Fri, 11 Oct 2024 12:10:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241011-eyeq6h-smp-v1-1-866417772cd7@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAOgMCWcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxNDA0ND3dTK1EKzDN3i3ALdNDND09REI6M0Y3NTJaCGgqLUtMwKsGHRsbW
- 1AOAhXMRcAAAA
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Gregory CLEMENT <gregory.clement@bootlin.com>
-X-Mailer: b4 0.14.1
-X-GND-Sasl: gregory.clement@bootlin.com
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] eth: remove the DLink/Sundance (ST201) driver
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172864863175.2796508.4724823416498296056.git-patchwork-notify@kernel.org>
+Date: Fri, 11 Oct 2024 12:10:31 +0000
+References: <20241008154824.1448370-1-kuba@kernel.org>
+In-Reply-To: <20241008154824.1448370-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, kda@linux-powerpc.org, arnd@arndb.de,
+ tsbogend@alpha.franken.de, mpe@ellerman.id.au, npiggin@gmail.com,
+ christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
+ pctammela@mojatatu.com, victor@mojatatu.com, coelacanthushex@gmail.com,
+ jhs@mojatatu.com, horms@kernel.org, shannon.nelson@amd.com,
+ sd@queasysnail.net, linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
 
-While most MIPS64 CPUs use 32-bit values for their VP Local Reset
-Exception Base registers, some I6500 CPUs can utilize a 64-bit value,
-allowing addressing up to 47 bits of physical memory.
+Hello:
 
-For the EyeQ6H CPU, where physical memory addresses exceed the 4GB
-limit, utilizing this feature is mandatory to enable SMP support.
+This patch was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-Unfortunately, there is no way to detect this capability based solely
-on the ID of the CPU. According to Imagination, which designed the
-CPU, the only reliable method is to fill the reset base field with
-0xFF and then read back its value. If the upper part of the read-back
-value is zero, it indicates that the address space is limited to 32
-bits.
+On Tue,  8 Oct 2024 08:48:24 -0700 you wrote:
+> Konstantin reports the maintainer's address bounces.
+> There is no other maintainer and the driver is quite old.
+> There is a good chance nobody is using this driver any more.
+> Let's try to remove it completely, we can revert it back in
+> if someone complains.
+> 
+> Link: https://lore.kernel.org/20240925-bizarre-earwig-from-pluto-1484aa@lemu/
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> 
+> [...]
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
----
-Hello,
+Here is the summary with links:
+  - [net-next] eth: remove the DLink/Sundance (ST201) driver
+    https://git.kernel.org/netdev/net-next/c/8401a108a633
 
-The following patch enables SMP on EyeQ6H SoCs.
-
-It was successfully tested on EyeQ5 and EyeQ6H, as well as on MIPS32
-CPUs such as ocelot on board PCB123 and JZ4780 on CI20. However, I
-must admit that none of these platforms ran SMP. The ocelot has only
-one core, and while the JZ4780 does have SMP capabilities, its support
-is not yet available in the mainline kernel.
-
-Gregory
----
- arch/mips/include/asm/mips-cm.h |  2 ++
- arch/mips/kernel/smp-cps.c      | 47 +++++++++++++++++++++++++++++++++++------
- 2 files changed, 42 insertions(+), 7 deletions(-)
-
-diff --git a/arch/mips/include/asm/mips-cm.h b/arch/mips/include/asm/mips-cm.h
-index 1e782275850a3..23ce951f445bb 100644
---- a/arch/mips/include/asm/mips-cm.h
-+++ b/arch/mips/include/asm/mips-cm.h
-@@ -326,7 +326,9 @@ GCR_CX_ACCESSOR_RW(32, 0x018, other)
- 
- /* GCR_Cx_RESET_BASE - Configure where powered up cores will fetch from */
- GCR_CX_ACCESSOR_RW(32, 0x020, reset_base)
-+GCR_CX_ACCESSOR_RW(64, 0x020, reset64_base)
- #define CM_GCR_Cx_RESET_BASE_BEVEXCBASE		GENMASK(31, 12)
-+#define CM_GCR_Cx_RESET64_BASE_BEVEXCBASE	GENMASK_ULL(47, 12)
- #define CM_GCR_Cx_RESET_BASE_MODE		BIT(1)
- 
- /* GCR_Cx_ID - Identify the current core */
-diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-index 395622c373258..556a1939a6e2e 100644
---- a/arch/mips/kernel/smp-cps.c
-+++ b/arch/mips/kernel/smp-cps.c
-@@ -37,7 +37,7 @@ enum label_id {
- UASM_L_LA(_not_nmi)
- 
- static DECLARE_BITMAP(core_power, NR_CPUS);
--static uint32_t core_entry_reg;
-+static u64 core_entry_reg;
- static phys_addr_t cps_vec_pa;
- 
- struct core_boot_config *mips_cps_core_bootcfg;
-@@ -94,6 +94,21 @@ static void __init *mips_cps_build_core_entry(void *addr)
- 	return p;
- }
- 
-+static bool __init check_64bit_reset(void)
-+{
-+	bool cx_64bit_reset = false;
-+
-+	mips_cm_lock_other(0, 0, 0, CM_GCR_Cx_OTHER_BLOCK_LOCAL);
-+	core_entry_reg = read_gcr_co_reset64_base();
-+	write_gcr_co_reset64_base(CM_GCR_Cx_RESET64_BASE_BEVEXCBASE);
-+	if ((read_gcr_co_reset64_base() & CM_GCR_Cx_RESET64_BASE_BEVEXCBASE) ==
-+	    CM_GCR_Cx_RESET64_BASE_BEVEXCBASE)
-+		cx_64bit_reset = true;
-+	mips_cm_unlock_other();
-+
-+	return cx_64bit_reset;
-+}
-+
- static int __init allocate_cps_vecs(void)
- {
- 	/* Try to allocate in KSEG1 first */
-@@ -105,11 +120,23 @@ static int __init allocate_cps_vecs(void)
- 					CM_GCR_Cx_RESET_BASE_BEVEXCBASE;
- 
- 	if (!cps_vec_pa && mips_cm_is64) {
--		cps_vec_pa = memblock_phys_alloc_range(BEV_VEC_SIZE, BEV_VEC_ALIGN,
--							0x0, SZ_4G - 1);
--		if (cps_vec_pa)
--			core_entry_reg = (cps_vec_pa & CM_GCR_Cx_RESET_BASE_BEVEXCBASE) |
-+		phys_addr_t end;
-+
-+		if (check_64bit_reset()) {
-+			pr_info("VP Local Reset Exception Base support 47 bits address\n");
-+			end = MEMBLOCK_ALLOC_ANYWHERE;
-+		} else {
-+			end = SZ_4G - 1;
-+		}
-+		cps_vec_pa = memblock_phys_alloc_range(BEV_VEC_SIZE, BEV_VEC_ALIGN, 0, end);
-+		if (cps_vec_pa) {
-+			if (check_64bit_reset())
-+				core_entry_reg = (cps_vec_pa & CM_GCR_Cx_RESET64_BASE_BEVEXCBASE) |
-+					CM_GCR_Cx_RESET_BASE_MODE;
-+			else
-+				core_entry_reg = (cps_vec_pa & CM_GCR_Cx_RESET_BASE_BEVEXCBASE) |
- 					CM_GCR_Cx_RESET_BASE_MODE;
-+		}
- 	}
- 
- 	if (!cps_vec_pa)
-@@ -308,7 +335,10 @@ static void boot_core(unsigned int core, unsigned int vpe_id)
- 	mips_cm_lock_other(0, core, 0, CM_GCR_Cx_OTHER_BLOCK_LOCAL);
- 
- 	/* Set its reset vector */
--	write_gcr_co_reset_base(core_entry_reg);
-+	if (mips_cm_is64)
-+		write_gcr_co_reset64_base(core_entry_reg);
-+	else
-+		write_gcr_co_reset_base(core_entry_reg);
- 
- 	/* Ensure its coherency is disabled */
- 	write_gcr_co_coherence(0);
-@@ -411,7 +441,10 @@ static int cps_boot_secondary(int cpu, struct task_struct *idle)
- 
- 	if (cpu_has_vp) {
- 		mips_cm_lock_other(0, core, vpe_id, CM_GCR_Cx_OTHER_BLOCK_LOCAL);
--		write_gcr_co_reset_base(core_entry_reg);
-+		if (mips_cm_is64)
-+			write_gcr_co_reset64_base(core_entry_reg);
-+		else
-+			write_gcr_co_reset_base(core_entry_reg);
- 		mips_cm_unlock_other();
- 	}
- 
-
----
-base-commit: 9852d85ec9d492ebef56dc5f229416c925758edc
-change-id: 20241011-eyeq6h-smp-f615ea22f375
-
-Best regards,
+You are awesome, thank you!
 -- 
-Gregory CLEMENT <gregory.clement@bootlin.com>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
