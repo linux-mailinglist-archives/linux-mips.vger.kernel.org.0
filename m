@@ -1,135 +1,105 @@
-Return-Path: <linux-mips+bounces-5983-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-5984-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 801C1999E40
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Oct 2024 09:47:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7078899A001
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Oct 2024 11:20:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D5B9287F31
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Oct 2024 07:47:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 126CB1F21BCC
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Oct 2024 09:20:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF65A20B1E0;
-	Fri, 11 Oct 2024 07:46:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FD4A20CCE1;
+	Fri, 11 Oct 2024 09:19:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="RNzRRI+j"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xfAv5RSB"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2CF20ADF7;
-	Fri, 11 Oct 2024 07:46:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8605B209F3A
+	for <linux-mips@vger.kernel.org>; Fri, 11 Oct 2024 09:19:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728632817; cv=none; b=EwtJMNgEZXS7b3TkSK0ceUIqB7HqhaOWMA8VhsJD1ArT2feFxe7xbvxGgdQgZQOt3tP8HVGafP+biFA/lutrI+7sjaF1alR14IYl7t3F6OwI6UPQD/puTO7WR01dNVq55mkrhYvW4c0zGKm37ffodSUhCwTDz+EcUjsX3K9rHqk=
+	t=1728638352; cv=none; b=VYCO518Ky1xAFd4IGpGubCaq67oRUc6fNt1DUfmfJb8SjGmDytoZYtnvhhZ3ic2ee46sWDbybauot/5EgNGdteJ3aEB/UT5f7TmDiecheNLPuP98s0lXtBJeFH7u55EHvKwfLcyagcSP9MECZvw9AjbRX5kyxVjgwaBXnTwIGB4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728632817; c=relaxed/simple;
-	bh=HQSSCIywenQzOJiT5UPu5auwm7k09dThmwbWbEkcmME=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LRVVmLHA6vlvg3GNNwU29K8s4zKY5o6vpQCX7BHujj6SixX8gEFBWHnkKCdYg1X7HDeFdJTjnftzCKfqFxVUvnenynNZLFTTY/Jj8C03I12Cc/AfuSCNvc13VW2jb5e269zErDTpESQl0IDKuxG5gXwNur1l6CYClUQtIvhNsgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=RNzRRI+j; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=HlhUCBO2cgAocJ0jal2+odmhS3fEGMT9ApCG3YBalmk=; b=RNzRRI+jS+E41pEvv2tM/PBMQr
-	SQs+GEy9wRlJQS7LgwXIlsLPiOEfZ0lcfVl/LZAzCmJERr/wrGQx/6Jkm+z665nLQ1YxAvvKLbZgJ
-	K836flQdGWfRcahrgPWsGgbE2Kv46RlU2j9210RhGvDmBYmeahOdJixtpW4jFIpXAj2/1kuIqVUzm
-	9UeGFlwfEh13tOOBCEhTCdOmFs+NkVHulOmWBcYiyIrEdETWz96sC8sQ5hitRuikUOylqpHtAubjX
-	bIdwQSiSdX8D+zYfq6nK2YaptkNRLX5ebrdQ9hI/fijT9vdqmXxkPzbZ/e0uearFNRK9I5GNV8P5M
-	+7qkIbyw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1szALv-0000000Faln-258j;
-	Fri, 11 Oct 2024 07:46:23 +0000
-Date: Fri, 11 Oct 2024 00:46:23 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Christoph Hellwig <hch@infradead.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v5 7/8] execmem: add support for cache of large ROX pages
-Message-ID: <ZwjXz0dz-RldVNx0@infradead.org>
-References: <20241009180816.83591-1-rppt@kernel.org>
- <20241009180816.83591-8-rppt@kernel.org>
- <Zwd7GRyBtCwiAv1v@infradead.org>
- <ZwfPPZrxHzQgYfx7@kernel.org>
+	s=arc-20240116; t=1728638352; c=relaxed/simple;
+	bh=jtVhZWWNX3zX7CwdFolfALYhOUO1vsDRDytrh8+FfTA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TLeXFVZzyaAz/++C97LAdbTG1PoXTdpy6OZOLusr1yHRabA4ujsHGqhW6uPTLlkgM6zmGLy2cnei//3tUpOHNF6cH+RpHQSMvwPFFxRtxAPKfac7rbbB/xpFODL8awFAqwpOU4yyw6IQYQzQaTGaOacOXhNw0I4DW5pDtvf/Dnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xfAv5RSB; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2fac3f1287bso18665921fa.1
+        for <linux-mips@vger.kernel.org>; Fri, 11 Oct 2024 02:19:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1728638348; x=1729243148; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jtVhZWWNX3zX7CwdFolfALYhOUO1vsDRDytrh8+FfTA=;
+        b=xfAv5RSBq1dPqwx4O1H9geUKag4zuOOxK9dpbjgQWNumxT/TLl9G0khO3AvTnJs6Q/
+         Fg/q2ldJhTI3V4oBy1BiF458q1ciawRODAKhCxIqx6s4A6emiEY4AqriTYWB6BbcLQcf
+         XVPzrt9alzF4Ru1uCJv5QJE3yHPHl3dU2O5d3pWn/17Mqz78ycRZgP9vObcRpmeHJ/ET
+         cSc4SIAC8L9IvBFtZKQF+6tFm7KrShhXyfcz8gsQNUg31foj/9bh7yWeW5l3Yio0Q7CR
+         sAoNIZjxsXHr5frEI/BL7lOCnzbW+SY2bMarWYFc7uJ/vef1LNPbuU2vwmTmPbRv46f8
+         1XSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728638348; x=1729243148;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jtVhZWWNX3zX7CwdFolfALYhOUO1vsDRDytrh8+FfTA=;
+        b=tZ5zk9GDmUa3sVmWexxzhWRvYDOTe7lM6QDNJ5HJOAxbf3It0m3+1UrrUKfpetzZ/1
+         GZmQAvR/qe1nyFtZaqpblF5fHYNu4lhpTd4mdqKklwRMzyAV5XoZcM0GJa2QPjh8smA6
+         0tShCcQHzuJTaezLWguzzHistG34JhJPYzJpnQZ3dQjeBdKLMh9kcnAkTKLwbRBZ4zCV
+         A7DMo/BehkWi5te7xg+Qrdan9XwPhJrmurd6lmMJOrtiO3qc+kVuz7/SrdZl3ouWjRmS
+         iyG3UVKka3x0wpzu+6d2RZFaAWxpj76rec742/VnWchSn48cRBb1QdiVkt8Jdr/lUIY8
+         oHtg==
+X-Forwarded-Encrypted: i=1; AJvYcCWh0yRFdlJiSSGeQw2ba+1BGviYHm3IlCDR9ANwUTrKegVWh0g5F58az9yTqjx6mvzkCFh5uxM9AsX2@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCoZF9mTKhFwZWwz/2TKam7vzQCeh0i7hvrv6uZ9aTFnPX5olq
+	pDbQMSD+GQSXjuXdEQztgKQysWVU//1WvP08Iz+AhHqwruWqhOVrT1hPDQg+FLD0HPk9JIBmDOQ
+	D85PQTnVRTO8UDjA/JZo/qETB0LOmgVUu4d92HQ==
+X-Google-Smtp-Source: AGHT+IGr3IbqNBTBBoJpOQ310qlh+g4Oi9eFyoyUCTdl+vSPgY4MeKHHQ6RiGRzDh2lAYpqZ3xVkrjWD4F2c48r6rk8=
+X-Received: by 2002:a2e:4c02:0:b0:2fb:2ebf:3259 with SMTP id
+ 38308e7fff4ca-2fb32709c02mr6280871fa.13.1728638347593; Fri, 11 Oct 2024
+ 02:19:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZwfPPZrxHzQgYfx7@kernel.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <20241006181310.181309-1-matsievskiysv@gmail.com> <20241006181310.181309-2-matsievskiysv@gmail.com>
+In-Reply-To: <20241006181310.181309-2-matsievskiysv@gmail.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Fri, 11 Oct 2024 11:18:55 +0200
+Message-ID: <CACRpkdbJ7xh1qOYaZOh+s+Tj_GgE4LXMFuOgL1zpxBRqJQVx6w@mail.gmail.com>
+Subject: Re: [PATCH 1/1] pinctrl: ocelot: fix system hang on level based interrupts
+To: Sergey Matsievskiy <matsievskiysv@gmail.com>
+Cc: alexandre.belloni@bootlin.com, quentin.schulz@bootlin.com, 
+	lars.povlsen@microchip.com, horatiu.vultur@microchip.com, 
+	andriy.shevchenko@linux.intel.com, linux-gpio@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+	UNGLinuxDriver@microchip.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 10, 2024 at 03:57:33PM +0300, Mike Rapoport wrote:
-> On Wed, Oct 09, 2024 at 11:58:33PM -0700, Christoph Hellwig wrote:
-> > On Wed, Oct 09, 2024 at 09:08:15PM +0300, Mike Rapoport wrote:
-> > >  /**
-> > >   * struct execmem_info - architecture parameters for code allocations
-> > > + * @fill_trapping_insns: set memory to contain instructions that will trap
-> > >   * @ranges: array of parameter sets defining architecture specific
-> > >   * parameters for executable memory allocations. The ranges that are not
-> > >   * explicitly initialized by an architecture use parameters defined for
-> > >   * @EXECMEM_DEFAULT.
-> > >   */
-> > >  struct execmem_info {
-> > > +	void (*fill_trapping_insns)(void *ptr, size_t size, bool writable);
-> > >  	struct execmem_range	ranges[EXECMEM_TYPE_MAX];
-> > 
-> > Why is the filler an indirect function call and not an architecture
-> > hook?
-> 
-> The idea is to keep everything together and have execmem_info describe all
-> that architecture needs. 
+On Sun, Oct 6, 2024 at 8:13=E2=80=AFPM Sergey Matsievskiy
+<matsievskiysv@gmail.com> wrote:
 
-But why?  That's pretty different from our normal style of arch hooks,
-and introduces an indirect call in a security sensitive area.
+> Fix interrupt handle loops, produced by spurious and short level based
+> interrupts by unconditionally clearing the parent interrupt, even when
+> no GPIO interrupts are pending.
+>
+> Signed-off-by: Sergey Matsievskiy <matsievskiysv@gmail.com>
 
+This needs to describe how moving the chained irq calls achieves
+this effect.
+
+I'm a bit puzzled by the patch because I don't understand it.
+
+Yours,
+Linus Walleij
 
