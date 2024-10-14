@@ -1,227 +1,136 @@
-Return-Path: <linux-mips+bounces-6044-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6045-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E199299D635
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Oct 2024 20:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 55B6399D723
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Oct 2024 21:16:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E8D17B21566
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Oct 2024 18:15:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DAB1AB2278C
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Oct 2024 19:16:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B92751C9B71;
-	Mon, 14 Oct 2024 18:15:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89B231CACE4;
+	Mon, 14 Oct 2024 19:16:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YH7gdCz0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EjG/5WZA"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11C31AE017
-	for <linux-mips@vger.kernel.org>; Mon, 14 Oct 2024 18:15:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F6202F34;
+	Mon, 14 Oct 2024 19:16:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728929708; cv=none; b=YzPU34qB3hCWijh1hEKfIwZcie7NDsRCs4xUibQsRDrpxBuC9csvD8xbhNjJ90LdBEK2PjcZFPpgIk2NMctK4dqh2WsUGXZaPf7xtPPDTdkZhCLUeoYzP5lEIk9ALzYgR/5NNN07aqomkL3/l2H8KLWvPsuInBk7GhNFbIxJ37I=
+	t=1728933384; cv=none; b=cegl1BPXxppRW+41dCHi4URIL/7h7UWCtx3dEusPGgu0lK5uOtYsd0vXEv3SYq196pZc5UYYUX35xTCZqi1loe6+uq5C973RpUhkwpidnsd7NpT+22gAbmg+NeWHv9SA81S+W3TJukmRz1uOwnJ3pEjJ00CgH+KEyX2H8hRQ7wY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728929708; c=relaxed/simple;
-	bh=psGXUzJuH/L2z1/iTd15xLLLmgcDkiy//BOohqm6suo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rj70Up/aj2113jHbWg7nXEsnevdFOvfb/Tqi7dVBdeyRejgwv7ORMf5S8SSfRLKamYoGPecXN2v1tTGPz3XO7Y6qcBmTMYbg6HT3vTlfktx8xLPL5vQmenmRU9GiLt4jqVtHKQ8pSnxTVlM5PVZ6ia/DN5YP38c4FDTh5PyYFGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YH7gdCz0; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5c932b47552so25423a12.0
-        for <linux-mips@vger.kernel.org>; Mon, 14 Oct 2024 11:15:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728929705; x=1729534505; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mNEJX4kqr9odUybTaFkTf23XVWJozLbeDB372EuR6j4=;
-        b=YH7gdCz0u4YI7kKWrwOV7823Ry8mfVTaUBgfPXEYBaTHPRQVL4alo8053TNv7BmVcI
-         O/ZhyIYjT4oh0Z8SEpTUgW/RikaUwDAmlJbt39BpAypJ4Ac5lzEtEdKf7H4e9aXEoLoo
-         xSPNnR5rK27S2rV86xpMuay0ksO6lHTdMM1qXQ3B8I3gpc3pfbKwHfTQ7LLLGdGGRQ+M
-         m3tjbAOTqBBSSWZk7WSddcJ+ZpLXT7GzleWVLp93/OtO4jNzr0cYvHH9jtKaM2oTUNZO
-         t4cUK2w5vTPHg4bm8oOypZIf3QV9IASfaoWuZB8D6AKOp93KCXidIUGsi9R5J9uInIof
-         eBDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728929705; x=1729534505;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mNEJX4kqr9odUybTaFkTf23XVWJozLbeDB372EuR6j4=;
-        b=A2zDWluQc1t6papJ466PVljN85umWdHrvjroGFMvaZciX7fULoug1FAc37QIZURQs7
-         tm4tr6H2A6oJnwgslrtKjSN1g94SD1lMspBeiDmkPKY+220cDB3NGz0bSURualxmYcgU
-         9K+FVBACvtN0VjQaIVTPxOUhhgyzogB8kDV2yrEQD9SMK6gRVRMuka0IfggEwfzI7swa
-         BrB8HtpqgbtsXAkoADoRiFvJlyZS5ENl8Ts5rJ3mXtRcbeHQ7DGYDvz3wSYycog3EpvE
-         cOoeKDFt75gAbgTPtH8haIQxMFf2URiPvdBWq4wdOxuVUd10v5NhPhpeWdOS67wPMLcE
-         iWCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW3dpfxSvSqoPNfxPTDDhIz0rXi8zjwZjcxS6CQTyS+EosLyMDWuG5smBEPrI37byyJqHIgwMah7pdh@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOwVa0wMb4qY0JAExqymmFE4bqhJGJ0H/couXVUSV+msj3Kzxo
-	y0Mmj9jX34auWewDP3edIcpDITlKtPFXRGcWDb4G/5GU+HXxB9Js152UrPpYs1tb5rgPvQdC1/y
-	34FVGoGAFvCHLkkjHKEtPrm/xIJs0j7zPk7pv
-X-Google-Smtp-Source: AGHT+IEbkDzR+ThZoGvgYtCS7Y5gwEV3PkXHeMMP5MKP0m0Oi8H/8Bb2XOPnZQdihqJsksuw7ZM7VJ44A8HdzyHg+Ps=
-X-Received: by 2002:a05:6402:26c1:b0:5c2:5641:af79 with SMTP id
- 4fb4d7f45d1cf-5c95b0bd39amr402722a12.0.1728929704710; Mon, 14 Oct 2024
- 11:15:04 -0700 (PDT)
+	s=arc-20240116; t=1728933384; c=relaxed/simple;
+	bh=UuppSLaM0kOzMrDSh2RloHR9IgCcKKb57FBSLEkEUWY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FFCOuTgz8sD7Ed/Kud9QCetDjIUNalCJp7fx5uHw1Lmy9rz4nHQDEuyQ/Js8mUYGIu7NDMob76aKmnNJiOi2L4O9SXpk56EaNsy0we+WKWwieq1Sco/q44kKRl8QMxa9zBx62PKRSDUFlxYPAUQCHyOzRrL463Nm1OvZadSbpoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EjG/5WZA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DC60C4CEC3;
+	Mon, 14 Oct 2024 19:16:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728933383;
+	bh=UuppSLaM0kOzMrDSh2RloHR9IgCcKKb57FBSLEkEUWY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EjG/5WZADaXhvwARHnqKg67eiuXX7gTWxPoitBNELLTxxDNviuMSsmlu/en6P6ED8
+	 zpJ52uHjqiz/g2IcIGwuziTngHnAXDzicRERzVAAIDP4l2L6y33KAuyIagMcpMXzl4
+	 9dBRK2tjgLlrX3Ons9R5vBST3i3yiewblKFLfAI64WB5+23Fn5KkJljDLeTWRKDZ84
+	 jnexNcW9vYFK3px9crwCiVYgH/8ctiyb/DdHjxU96pqWdOL1lwHrwqpz6qzLtvvsU8
+	 7pmIeyrMmskmV1mcXKss65BVVX6VBxafQdYx2gdNsA2KwzhcBEiTj2VcG0YSmjPMmN
+	 oCmkdGtrERExg==
+Date: Mon, 14 Oct 2024 12:16:20 -0700
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>
+Cc: Mike Rapoport <rppt@kernel.org>, Christoph Hellwig <hch@infradead.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v5 7/8] execmem: add support for cache of large ROX pages
+Message-ID: <Zw1uBBcG-jAgxF_t@bombadil.infradead.org>
+References: <20241009180816.83591-1-rppt@kernel.org>
+ <20241009180816.83591-8-rppt@kernel.org>
+ <Zwd7GRyBtCwiAv1v@infradead.org>
+ <ZwfPPZrxHzQgYfx7@kernel.org>
+ <ZwjXz0dz-RldVNx0@infradead.org>
+ <ZwuIPZkjX0CfzhjS@kernel.org>
+ <20241013202626.81f430a16750af0d2f40d683@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1727440966.git.lorenzo.stoakes@oracle.com>
- <a578ee9bb656234d3a19bf9e97c3012378d31a19.1727440966.git.lorenzo.stoakes@oracle.com>
- <CAG48ez3ursoL-f=mYpV79Do18XPPt+MPPHNUBv6uFE1GhpOwSA@mail.gmail.com>
- <868739d2-0869-462f-ac86-1a8d1dccb0a4@lucifer.local> <CAG48ez3vqbqyWb4bLdpqSUnhwqGo2OQetecNhEGPdCGDr94nbQ@mail.gmail.com>
- <b483187b-5caa-4581-86b1-895184301cbb@lucifer.local>
-In-Reply-To: <b483187b-5caa-4581-86b1-895184301cbb@lucifer.local>
-From: Jann Horn <jannh@google.com>
-Date: Mon, 14 Oct 2024 20:14:26 +0200
-Message-ID: <CAG48ez0pCasCQ_=ALog7nseKnGci0o0LyQehV42J==gNAiXBVg@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/4] mm: madvise: implement lightweight guard page mechanism
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Suren Baghdasaryan <surenb@google.com>, 
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Matthew Wilcox <willy@infradead.org>, 
-	Vlastimil Babka <vbabka@suse.cz>, "Paul E . McKenney" <paulmck@kernel.org>, 
-	David Hildenbrand <david@redhat.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	Muchun Song <muchun.song@linux.dev>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org, 
-	Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, linux-kselftest@vger.kernel.org, 
-	Sidhartha Kumar <sidhartha.kumar@oracle.com>, Vlastimil Babka <vbabka@suze.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241013202626.81f430a16750af0d2f40d683@linux-foundation.org>
 
-On Mon, Oct 14, 2024 at 7:02=E2=80=AFPM Lorenzo Stoakes
-<lorenzo.stoakes@oracle.com> wrote:
-> On Mon, Oct 14, 2024 at 05:56:50PM +0200, Jann Horn wrote:
-> > On Mon, Oct 14, 2024 at 1:09=E2=80=AFPM Lorenzo Stoakes <lorenzo.stoake=
-s@oracle.com> wrote:
-> > > On Fri, Oct 11, 2024 at 08:11:36PM +0200, Jann Horn wrote:
-> > > > On Fri, Sep 27, 2024 at 2:51=E2=80=AFPM Lorenzo Stoakes <lorenzo.st=
-oakes@oracle.com> wrote:
-> > > By being optimistic and simply having the user having to handle loopi=
-ng
-> > > which seems reasonable (again, it's weird if you're installing poison
-> > > markers and another thread could be racing you) we avoid all of that.
-> >
-> > I guess one case in which that could happen legitimately is if you
-> > race a MADV_POISON on the area 0x1ff000-0x200100 (first page is
-> > populated, second page is not, pmd entry corresponding to 0x200000 is
-> > clear) with a page fault at 0x200200? So you could have a scenario
-> > like:
-> >
-> > 1. MADV_POISON starts walk_page_range()
-> > 2. MADV_POISON sees non-zero, non-poison PTE at 0x1ff000, stops the wal=
-k
-> > 3. MADV_POISON does zap_page_range_single()
-> > 4. pagefault at 0x200200 happens and populates with a hugepage
-> > 5. MADV_POISON enters walk_page_range()
-> > 6. MADV_POISON splits the THP
-> > 7. MADV_POISON sees a populated PTE
->
-> You really shouldn't be seeing page faults in the range you are setting u=
-p
-> poison markers for _at all_ :) it's something you'd do ahead of time.
+On Sun, Oct 13, 2024 at 08:26:26PM -0700, Andrew Morton wrote:
+> On Sun, 13 Oct 2024 11:43:41 +0300 Mike Rapoport <rppt@kernel.org> wrote:
+> 
+> > > > The idea is to keep everything together and have execmem_info describe all
+> > > > that architecture needs. 
+> > > 
+> > > But why?  That's pretty different from our normal style of arch hooks,
+> > > and introduces an indirect call in a security sensitive area.
+> > 
+> > Will change to __weak hook. 
+> > 
+> 
+> Thanks, I'll drop the v1 series;
+> 
+> The todos which I collected are:
+> 
+> https://lkml.kernel.org/r/CAPhsuW66etfdU3Fvk0KsELXcgWD6_TkBFjJ-BTHQu5OejDsP2w@mail.gmail.com
+> https://lkml.kernel.org/r/Zwd6vH0rz0PVedLI@infradead.org
+> https://lkml.kernel.org/r/ZwjXz0dz-RldVNx0@infradead.org
+> https://lkml.kernel.org/r/202410111408.8fe6f604-lkp@intel.com
 
-But that's not what happens in my example - the address where the
-fault happens (0x200200) *is not* in the address range that
-MADV_POISON is called on (0x1ff000-0x200100). The fault and the
-MADV_POISON are in different 4KiB pages. What causes the conflict is
-that the fault and the MADV_POISON overlap the same *2MiB region*
-(both are in the region 0x200000-0x400000), and so THP stuff can
-effectively cause "page faults in the range you are setting up poison
-markers for".
+BTW Andrew I'd like to pick this up through the modules tree, and while
+at it, also beat it up with some more testing as we're expanding also
+with the modversions stuff for Rust modules.
 
-> But of course it's possible some scenario could arise like that, that's
-> what the EAGAIN is for.
->
-> I just really don't want to get into a realm of trying to prove absolutel=
-y
-> under all circumstances that we can't go on forever in a loop like that.
-
-We can have a bailout on signal_pending() or something like that, and
-a cond_resched(). Then as far as I know, it won't really make a
-difference in behavior whether the loop is in the kernel or in
-userspace code that's following what the manpage tells it to do -
-either way, the program will loop until it either finishes its work or
-is interrupted by a signal, and either way it can get preempted.
-(Well, except under PREEMPT_NONE, but that is basically asking for
-long scheduling delays.)
-
-And we do have other codepaths that have to loop endlessly if they
-keep racing with page table updates the wrong way, though I guess
-those loops are not going to always scan over a large address range
-over and over again...
-
-Maybe something like this would be good enough, and mirror what you'd
-otherwise tell userspace to do?
-
-
-@@ -1598,6 +1598,7 @@ int do_madvise(struct mm_struct *mm, unsigned
-long start, size_t len_in, int beh
-                return madvise_inject_error(behavior, start, start + len_in=
-);
- #endif
-
-+retry:
-        write =3D madvise_need_mmap_write(behavior);
-        if (write) {
-                if (mmap_write_lock_killable(mm))
-@@ -1627,6 +1628,12 @@ int do_madvise(struct mm_struct *mm, unsigned
-long start, size_t len_in, int beh
-        else
-                mmap_read_unlock(mm);
-
-+       if (error =3D=3D <<<some special value>>>) {
-+               if (!signal_pending(current))
-+                       goto retry;
-+               error =3D -ERESTARTNOINTR;
-+       }
-+
-        return error;
- }
-
-Buuut, heh, actually, I just realized: You could even omit this and
-simply replace -EINTR with -ERESTARTNOINTR in your code as the error
-value, and then the kernel would automatically go back into the
-syscall for you after going through signal handing and such, without
-userspace noticing.
-https://lore.kernel.org/all/20121206220955.GZ4939@ZenIV.linux.org.uk/
-has some explanation on how this works. Basically it tells the
-architecture's syscall entry code to move the userspace instruction
-pointer back to the syscall instruction, so as soon as execution
-returns to userspace, the first userspace instruction that executes
-will immediately re-do the syscall. That might be the easiest way,
-even if it is maybe a *little* bit of an API abuse to use this thing
-without having a pending signal...
-
-
-> If you drop the lock for contention then you up the risk of that, it just
-> feels dangerous.
->
-> A userland program can however live with a 'if EAGAIN try again' situatio=
-n.
->
-> An alternative approach to this might be to try to take the VMA lock, but
-> given the fraught situation with locking elsewhere I wonder if we should.
->
-> Also, you have to be realy unlucky with timing for this to happen, even i=
-n
-> the scenario you mention (where you'd have to be unlucky with alignment
-> too), unless you're _heavily_ page faulting in the range, either way a
-> userland loop checking EAGAIN doesn't seem unreasonable.
-
-Yes, we could do -EINTR and document that for userspace, and as long
-as everyone using this properly reads the documentation, it will be
-fine. Though I imagine that from the userspace programmer perspective
-that's a weird API design - as in, if this error code always means I
-have to try again, why can't the kernel do that internally. It's kind
-of leaking an implementation detail into the UAPI.
+  Luis
 
