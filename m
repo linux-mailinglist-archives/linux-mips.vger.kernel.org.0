@@ -1,149 +1,139 @@
-Return-Path: <linux-mips+bounces-6047-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6048-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5CD299D86D
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Oct 2024 22:39:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42EA699D8B3
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Oct 2024 23:00:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D40EB2173D
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Oct 2024 20:39:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07F20282CE2
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Oct 2024 21:00:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 126BE1D0B91;
-	Mon, 14 Oct 2024 20:39:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF72F1D0796;
+	Mon, 14 Oct 2024 20:59:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="rvRbnYTj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="alsz2hBX"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025CE15ECDF
-	for <linux-mips@vger.kernel.org>; Mon, 14 Oct 2024 20:38:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5099E4683;
+	Mon, 14 Oct 2024 20:59:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728938340; cv=none; b=dC9u+jHT6kjJdUIO2xRUmQetTpZeOjPFetCGpwj/vaOu6E/RosntYIONsI56QufCAn/Ep36nmmqQZMwJFOE3Pu3duhL3wFZBhsHcRl6XGcmFSb8ccxcsfDAlWflQC+IxWLekH1+Sn0ojeiuU8FXTmWq7ObCg9twXEZ9e5PeHqUg=
+	t=1728939599; cv=none; b=dnYalKaDtG9wvvxDi3+FmMAuF5i3nCpcBcpjpO8cBAZtFWvYqYxYWO7HpB3Ee9IG2VL2ty2S/qb1waFzRTGcy8KtmmNihWuvKNoJYfUfV5r1Ic/oZTAn/d2MP2z/scAsgL/UzZK8ZjC6qSF9rxmrTze1Ohkz9d8RIJd3sJ7DuBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728938340; c=relaxed/simple;
-	bh=nEaffIp+CJuW+N1iMoCee0jOln2gnRywVic31Yjps30=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VCRrhE1Y1QaH0qrXVPbqqjOpcSeTwu1nit5zWYBJ2LCOKo8bi7mHsfgbZT7aasj2/VchB7qlqDxHKhdOrT2XqSAgxpiyOzQDYEztcI7xLPJsKA03lQELIas/1H0LWwaGUKHi6MuSIfrySjKWdzu57LZo5xD3xigZm1989cfPTTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=rvRbnYTj; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 6EEAC2C0276;
-	Tue, 15 Oct 2024 09:38:49 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1728938329;
-	bh=baEpGfW7rxqNpgz/S8mcS2prZpYssy/RFfM0CNMgx9A=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=rvRbnYTjCePWHxkqDNxQy2BugsYUg5xCKn+f4nXMuHhx641ObimRtiZx3AcNMy6jl
-	 7ZiUHBLPki+CUI/C1WDW6IYD0SILY3LKAx4MTksbpU3tRZViqYuJlbqwvCoai/MqDc
-	 6A7/3Uwo3raVk2OVIxFhj0EcjdmzsMyZQwxfJ5mHYkG5e0RlYK+vhiVN1a06lIQdd2
-	 x5Aolorh4RXV+JdE8awHjKL172p8o0g2H4m3NSGWn8UTpsqnorJ+gtVmQR/aTG0Dqy
-	 F9HRwfYdyScEfQZIdraJjI3Df+QRuEwnCmLadfUxRKkn/7VTR6xkXPrR8jWG6XI2ok
-	 P5tkdZ5npORwg==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B670d81590000>; Tue, 15 Oct 2024 09:38:49 +1300
-Received: from [10.33.22.30] (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id 53E3913EE32;
-	Tue, 15 Oct 2024 09:38:49 +1300 (NZDT)
-Message-ID: <bd802a5c-e09e-4f4d-9d37-b87d85efb4e4@alliedtelesis.co.nz>
-Date: Tue, 15 Oct 2024 09:38:49 +1300
+	s=arc-20240116; t=1728939599; c=relaxed/simple;
+	bh=O4DmmGylfXBJYiWsSMC4LbN9Qv8RP/S5E+FZsJP9sjM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=usdYM8HQcACstXbzpN0i+M86BjxsVOYBEkjOsE3l2FaZBQ1IanWjb70AlIfU0xWl26AysdahVRldrjKFDkBJ9q6z0TJ5jENsc8F9Ht0lM/pp3SIJLy6nE6nBzLjiHGyj7jUoYfwSbd7yq070AVJAGglrxYYK7ylzq6xWB5tJT0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=alsz2hBX; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-7ea68af2f62so2097233a12.3;
+        Mon, 14 Oct 2024 13:59:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728939597; x=1729544397; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xx54rz5ibmRnwq2nw0OP3IaKu3j9E7Cgmn6RUjik8Ks=;
+        b=alsz2hBXWw6c2zjQj3FUK6RD3ImfHWKCv1WbzWM71i5oQm8Iknq27icgKYx7Qvd7EF
+         Mif20xV4yvOoJDBvK53rCiGeH3qoX3lo94pOOiA8DiX3UhWMpbttAEzP/9i5ev5D7gBC
+         ljhgBANsnoLsKXXyLtuDgrQjX2ICWmVItqzQ5uh2YD76PkMRFUptwlJQ6MLVaSAOGFRJ
+         FWotdYZRPlcay3u6vKLnjI3OOHnAoczRdMZ6zYj9lfakx/AddNlIZPpaviYbwz2NtmNo
+         F+9aURNy5U9sjdGbMBEpaAupjk48TyVe6J8TVMTRsfyKeNmMsuY3E02FJfHYgS3PJ+Qo
+         Shfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728939597; x=1729544397;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xx54rz5ibmRnwq2nw0OP3IaKu3j9E7Cgmn6RUjik8Ks=;
+        b=wcw7u87QPKtAaHM/gQb1BGBqREwgMxBFjKFCbo3sU9naZmqA6hC0oQxDhCG+O0g/Cq
+         l4pIqd3ds6x1jJkV0qFM3VffV3sBEcUg/M1kTyTfR0JUxw+tR4Z/ni4flz2x1uTEx35m
+         x39Ap6SPIcRxsErfDF5qrt4POhhpbwFmF6bYNMfDSkKngwVe35dwOj1BD0yVxFvkOI+y
+         SMAqYjUKavd8iyvNrDhAb+D4wSMDtJH+j6QxnBIzXjk/OMMXmVyfbM29SH6xrDiiDUdI
+         eWRr5DF74BJTv/7UL1JMq726xAeIycywSOK6PlbVOYjp2ZrkMeCyuCw8a8mYYwda/US/
+         OVWw==
+X-Forwarded-Encrypted: i=1; AJvYcCVtSxO7lCAvgSLARshOscjG0Q2/Z3zVc0tw4hD5NiOH9EUuLL6PA/ckLcniiJVfXf2uzPdrVegNeSgLh3NObes=@vger.kernel.org, AJvYcCWPncGse30lBYMTOqYROvN5zvnV5jC/tCvPAAIxgPXKnH4BPYUGqvxWq7mqighJH3XWdnUFY9ufBX7t7olA@vger.kernel.org, AJvYcCWuLxdeRGFlDfg8T01znmTFHmoAVNgMgPxrlq1f437Ix6PCuH6NKw+rDv2Rf5H5Z2SloVrXqIhiWSZhhg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPbVnRVkTrAiGcLa8m3wneMM2Y8o1vohXU4KvbAA89tIC6uoIM
+	hn7/jHmFgBOIH1ibvVCb0py7w75KXZ3fIF17PUCBstEIdpKS08Zf
+X-Google-Smtp-Source: AGHT+IGmHnwvYP8IMc9LpLCn8lOYKQ1Efh7zTS5BhoB84Q9SAPxjG77wgdouUdnz1rvJ2lCDNbih0g==
+X-Received: by 2002:a05:6a21:1698:b0:1cf:42e1:f61d with SMTP id adf61e73a8af0-1d8c95d5578mr18474983637.22.1728939597467;
+        Mon, 14 Oct 2024 13:59:57 -0700 (PDT)
+Received: from mail.google.com (125-239-144-11-fibre.sparkbb.co.nz. [125.239.144.11])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71e5d1d396bsm3502968b3a.33.2024.10.14.13.59.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Oct 2024 13:59:57 -0700 (PDT)
+Date: Tue, 15 Oct 2024 09:59:49 +1300
+From: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To: tsbogend@alpha.franken.de, gregkh@linuxfoundation.org,
+	zhanggenjian@kylinos.cn, ricardo@marliere.net, bvanassche@acm.org,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: paulo.miguel.almeida.rodenas@gmail.com, linux-hardening@vger.kernel.org
+Subject: [PATCH][next] mips: sgi-ip22: Replace "s[n]?printf" with sysfs_emit
+ in sysfs callbacks
+Message-ID: <Zw2GRQkbx8Z8DlcS@mail.google.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH v4 1/3] dt-bindings: spi: Add realtek,rtl9301-snand
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, tsbogend@alpha.franken.de, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org
-References: <20241014015245.2513738-1-chris.packham@alliedtelesis.co.nz>
- <20241014015245.2513738-2-chris.packham@alliedtelesis.co.nz>
- <nuadh2elbry2qc4l7rdngfvs4inbsmo2vg2w72w5d4cgpnail2@zidp7kzxp7qp>
-Content-Language: en-US
-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <nuadh2elbry2qc4l7rdngfvs4inbsmo2vg2w72w5d4cgpnail2@zidp7kzxp7qp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=ca1xrWDM c=1 sm=1 tr=0 ts=670d8159 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=DAUX931o1VcA:10 a=62ntRvTiAAAA:8 a=gEfo2CItAAAA:8 a=G81r_u4-8cHXR2Yzib8A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=pToNdpNmrtiFLRE6bQ9Z:22 a=sptkURWiP4Gy88Gu7hUp:22
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+snprintf() has the documented, but still rather strange trait of
+returning the length of the data that *would have been* written to the
+array if space were available, rather than the arguably more useful
+length of data *actually* written, it is usually considered wise to use
+scnprintf()/vscnprintf() instead. In the case of sysfs call-backs,
+new wrappers exist that do just that while also being PAGE_SIZE aware
 
-On 14/10/24 20:12, Krzysztof Kozlowski wrote:
-> On Mon, Oct 14, 2024 at 02:52:43PM +1300, Chris Packham wrote:
->  =20
->> diff --git a/Documentation/devicetree/bindings/spi/realtek,rtl9301-sna=
-nd.yaml b/Documentation/devicetree/bindings/spi/realtek,rtl9301-snand.yam=
-l
->> new file mode 100644
->> index 000000000000..397b32b41e86
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/spi/realtek,rtl9301-snand.yaml
->> @@ -0,0 +1,59 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://scanmail.trustwave.com/?c=3D20988&d=3D3cSM59Be7zhiOY6j70B=
-GhTh0kCvZ-1Nf0f5XJZnTzQ&u=3Dhttp%3a%2f%2fdevicetree%2eorg%2fschemas%2fspi=
-%2frealtek%2crtl9301-snand%2eyaml%23
->> +$schema: http://scanmail.trustwave.com/?c=3D20988&d=3D3cSM59Be7zhiOY6=
-j70BGhTh0kCvZ-1Nf0a1RIsqGnw&u=3Dhttp%3a%2f%2fdevicetree%2eorg%2fmeta-sche=
-mas%2fcore%2eyaml%23
->> +
->> +title: SPI-NAND Flash Controller for Realtek RTL9300 SoCs
->> +
->> +maintainers:
->> +  - Chris Packham <chris.packham@alliedtelesis.co.nz>
->> +
->> +description:
->> +  The Realtek RTL9300 SoCs have a built in SPI-NAND controller. It su=
-pports
->> +  typical SPI-NAND page cache operations in single, dual or quad IO m=
-ode.
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - realtek,rtl9301-snand
->> +      - realtek,rtl9302b-snand
->> +      - realtek,rtl9302c-snand
->> +      - realtek,rtl9303-snand
-> All of them look compatible with each other, why not using fallback to
-> 9301? That's common and expected pattern.
+This patch updates the sysfs .show() callbacks to use the sysfs_emit()
+helper instead of snprintf() and sprintf().
 
-So something like
+Link: https://lwn.net/Articles/69419/
+Link: https://github.com/KSPP/linux/issues/105
+Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+---
+ arch/mips/sgi-ip22/ip22-gio.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-properties:
- =C2=A0 compatible:
- =C2=A0=C2=A0=C2=A0 oneOf:
- =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - items:
- =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -=C2=A0 enum:
- =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 - realtek,rtl9302b-=
-snand
- =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - rea=
-ltek,rtl9302c-snand
- =C2=A0 =C2=A0 =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 - realtek,rtl9303-sn=
-and
- =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: realtek,rtl9301-snand
- =C2=A0=C2=A0=C2=A0=C2=A0 - items:
- =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const: realtek,rtl9301-snand
+diff --git a/arch/mips/sgi-ip22/ip22-gio.c b/arch/mips/sgi-ip22/ip22-gio.c
+index d20eec742bfa..5893ea4e382c 100644
+--- a/arch/mips/sgi-ip22/ip22-gio.c
++++ b/arch/mips/sgi-ip22/ip22-gio.c
+@@ -165,9 +165,8 @@ static ssize_t modalias_show(struct device *dev, struct device_attribute *a,
+ 			     char *buf)
+ {
+ 	struct gio_device *gio_dev = to_gio_device(dev);
+-	int len = snprintf(buf, PAGE_SIZE, "gio:%x\n", gio_dev->id.id);
+ 
+-	return (len >= PAGE_SIZE) ? (PAGE_SIZE - 1) : len;
++	return sysfs_emit(buf, "gio:%x\n", gio_dev->id.id);
+ }
+ static DEVICE_ATTR_RO(modalias);
+ 
+@@ -177,7 +176,7 @@ static ssize_t name_show(struct device *dev,
+ 	struct gio_device *giodev;
+ 
+ 	giodev = to_gio_device(dev);
+-	return sprintf(buf, "%s", giodev->name);
++	return sysfs_emit(buf, "%s\n", giodev->name);
+ }
+ static DEVICE_ATTR_RO(name);
+ 
+@@ -187,7 +186,7 @@ static ssize_t id_show(struct device *dev,
+ 	struct gio_device *giodev;
+ 
+ 	giodev = to_gio_device(dev);
+-	return sprintf(buf, "%x", giodev->id.id);
++	return sysfs_emit(buf, "%x\n", giodev->id.id);
+ }
+ static DEVICE_ATTR_RO(id);
+ 
+-- 
+2.47.0
 
-Or am I over thinking it and I should just use only a single "const:=20
-realtek,rtl9301-snand"?
-
->
-> Best regards,
-> Krzysztof
->
 
