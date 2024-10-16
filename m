@@ -1,80 +1,91 @@
-Return-Path: <linux-mips+bounces-6080-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6081-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19CBD9A01A5
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2024 08:43:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA9B69A0519
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2024 11:10:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C30D41F23703
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2024 06:43:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 087AF1C2129A
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2024 09:10:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED04E18E741;
-	Wed, 16 Oct 2024 06:42:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gH6y+fQE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90235203711;
+	Wed, 16 Oct 2024 09:10:51 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7584198856;
-	Wed, 16 Oct 2024 06:42:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E29517D378;
+	Wed, 16 Oct 2024 09:10:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729060943; cv=none; b=BDJMJsLkcVYh7Tv9Q9MAreTIyNEuRp6HYL7MWmLKKNdcTCEKmYpYU047WTVSHiJGNIv6RACLROS7eZL978diCbplskb+gFJXwO05isriHaeOH0gfZraOh1mfK/Wv/S0eiBzr31klxtDg3fTrOzdrmqPVD19ueJ+dWRPh6jHMgFI=
+	t=1729069851; cv=none; b=C2Pk5W1XhrTu+bEsFmlXKVTDlvrQuRS6qkLzZCL7HBrXFJdzzf48rSAUaZlV7KZoyD0ixa3l3Fiw4NSmPPyyn3kD/jnjfF85faohoCS8cjw3DLJBMILweA2p9s7ckKyCJZblvVineoVM8EBWm4RVssRuL5hDSNc/RJSxiGkaYQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729060943; c=relaxed/simple;
-	bh=4Ex82LlFgpHyaw4FgxltJEPSWklCxg+DLUOAI+TxEWE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S+VK+L8XTZKkdWATqiS2RbNEfHlXUmn9DPWdLG+dsOlhEREoyftMXTQfPxgMlDOg22KmImoqshQGWqiiyEdVs/yhb0dY6fGHDeYYpCm5fklB0DWLD8EtmW9sY+b5k9UY4NRw64BIntTWrPgqkIKKxsqV8v80TZneO10iYpJXrYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gH6y+fQE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA827C4CEC5;
-	Wed, 16 Oct 2024 06:42:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729060943;
-	bh=4Ex82LlFgpHyaw4FgxltJEPSWklCxg+DLUOAI+TxEWE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gH6y+fQElXa+XnBopH0jeB8dffUgUFd9q/QDMSkWN8IF20rrsUmRMBTlzvMrIIMl3
-	 f8oT5G47KFpsLq8yfdGJv7MBTwgwjfqpKjkJyDipb4PD6a5yE3b/2SKFbuGt3DWnTo
-	 Z4x2Gw888PWdUkSABQvVD9e8P/LPNA3bgzbTdTwVZfzbM66cPb+FbgLQmqyqMuArjh
-	 hbg3LOtikCf8Jovy8R7yP6J1TBbFar6aXIOSuxSWZulWmm1xBPnHlShwXVFOkNN/fq
-	 7b/uPjt+ZYOrmpeL+GMbqhS1yvhN/eqWv6fGZq/zUKGBiRckPc+FlROIL8sg5dB9+D
-	 CgYM6526P43bA==
-Date: Wed, 16 Oct 2024 08:42:19 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, tsbogend@alpha.franken.de, markus.stockhausen@gmx.de, 
-	linux-spi@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mips@vger.kernel.org
-Subject: Re: [PATCH v5 1/3] dt-bindings: spi: Add realtek,rtl9301-snand
-Message-ID: <3pps6ayndngfvc2jflkozhdvga74fjblmfjhmmdpvxx2mpmnwv@sp4s7hgt56eo>
-References: <20241015225434.3970360-1-chris.packham@alliedtelesis.co.nz>
- <20241015225434.3970360-2-chris.packham@alliedtelesis.co.nz>
+	s=arc-20240116; t=1729069851; c=relaxed/simple;
+	bh=ni1/h5ZUuU9JvygnJZuD78bSfAoXblxXrT5jzOTJs/0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=A38LrOeCSQ8J+ThSwIH7sz06uSOrQ6doOz69WxqdFOrJYA/dyvQ90E/IPEfMutwCTnMwjSVU8KrJJ6wiX4+WP6FcjnDe1Op/8CevtWbcntr2cZwNX7pqQXTZQwpGDvHYrEieAvAF6+koYg38wDAo5zE0WQ6Zz3bvV0/T7tlKUmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.112])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4XT4sn04Qpz1j9ks;
+	Wed, 16 Oct 2024 17:09:33 +0800 (CST)
+Received: from dggpeml500024.china.huawei.com (unknown [7.185.36.10])
+	by mail.maildlp.com (Postfix) with ESMTPS id EE18E140361;
+	Wed, 16 Oct 2024 17:10:46 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by dggpeml500024.china.huawei.com
+ (7.185.36.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 16 Oct
+ 2024 17:10:46 +0800
+From: Yuan Can <yuancan@huawei.com>
+To: <jiaxun.yang@flygoat.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+	<ralf@linux-mips.org>, <wuzhangjin@gmail.com>, <linux-mips@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>
+CC: <yuancan@huawei.com>
+Subject: [PATCH v2] cpufreq: loongson2: Unregister platform_driver on failure
+Date: Wed, 16 Oct 2024 17:06:15 +0800
+Message-ID: <20241016090615.128678-1-yuancan@huawei.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241015225434.3970360-2-chris.packham@alliedtelesis.co.nz>
+Content-Type: text/plain
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500024.china.huawei.com (7.185.36.10)
 
-On Wed, Oct 16, 2024 at 11:54:32AM +1300, Chris Packham wrote:
-> Add a dtschema for the SPI-NAND controller on the RTL9300 SoCs. The
-> controller supports
->  * Serial/Dual/Quad data with
->  * PIO and DMA data read/write operation
->  * Configurable flash access timing
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
+When cpufreq_register_driver() returns error, the cpufreq_init() returns
+without unregister platform_driver, fix by add missing
+platform_driver_unregister() when cpufreq_register_driver() failed.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Fixes: f8ede0f700f5 ("MIPS: Loongson 2F: Add CPU frequency scaling support")
+Signed-off-by: Yuan Can <yuancan@huawei.com>
+---
+Changes since v1:
+- Change to style suggested by Viresh Kumar.
+---
+ drivers/cpufreq/loongson2_cpufreq.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/cpufreq/loongson2_cpufreq.c b/drivers/cpufreq/loongson2_cpufreq.c
+index 6a8e97896d38..ed1a6dbad638 100644
+--- a/drivers/cpufreq/loongson2_cpufreq.c
++++ b/drivers/cpufreq/loongson2_cpufreq.c
+@@ -148,7 +148,9 @@ static int __init cpufreq_init(void)
+ 
+ 	ret = cpufreq_register_driver(&loongson2_cpufreq_driver);
+ 
+-	if (!ret && !nowait) {
++	if (ret) {
++		platform_driver_unregister(&platform_driver);
++	} else if (!nowait) {
+ 		saved_cpu_wait = cpu_wait;
+ 		cpu_wait = loongson2_cpu_wait;
+ 	}
+-- 
+2.17.1
 
 
