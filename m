@@ -1,81 +1,105 @@
-Return-Path: <linux-mips+bounces-6082-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6083-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A97C9A061A
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2024 11:52:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 968929A07B0
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2024 12:44:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CAB3284CB1
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2024 09:52:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 22D44B24BF4
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2024 10:44:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C145206069;
-	Wed, 16 Oct 2024 09:50:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6B5A206E92;
+	Wed, 16 Oct 2024 10:44:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OK3f/FjE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tu7R+TE5"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 094AA204F94
-	for <linux-mips@vger.kernel.org>; Wed, 16 Oct 2024 09:50:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C2C41C9DC8;
+	Wed, 16 Oct 2024 10:44:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729072238; cv=none; b=sQCvhA3LgFhHQluw9B9KZ5itjyrT3fYNqfPGd139CJbVM9Waw2Bd1TtNqwcYvT9GwfvedBIJCioQx1oWxmt+bN8Tz0w5iQVR9A0lbP8lpRaRGj2KMe2LIdhAWd8Vndm1tcNc4E1xYV8Mwy5PIybZYfX/kGAwMHral662t/wyX4k=
+	t=1729075491; cv=none; b=aVJRpJeeuCfA088n8apUXU0J5NhbVjFC9mVuT2HJGHLyYg6mnblpCpdRvSAw9GhAd1joR7jWlTKI+mvLjXF30seoUMpqAT5CzOpijDDdcDSoYMOi2005uf17czDoaIAmSBs0ZVkaabazWsQ/eSy86ou5vq3CnfZOg5JlQ7MuPq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729072238; c=relaxed/simple;
-	bh=gKfhZS8VL11gmiSVbPzW7rWHgLUL89WS0lvu6n/GkAM=;
+	s=arc-20240116; t=1729075491; c=relaxed/simple;
+	bh=REY0yUs/eb8jGqS7iPmNLu0O7M3zjCPm2K1uOQnlIfY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qrq4EHGE0gdQaTfXZ4mUxGo4+3dOlFxUc+WrkDH4jPbsF55PL4UJsGZ2YPDwOSbiNICibB00bTE7STwZIBSUZ40ca4/erYe2t5YlA5S0Q7XKMLFoXjVmzUsGG4hNA2B3ds/xIESwmFaB45LogzBmDXuLIV6PWiJVXmbFyG/oc/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OK3f/FjE; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-7ea0ff74b15so3878908a12.3
-        for <linux-mips@vger.kernel.org>; Wed, 16 Oct 2024 02:50:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1729072236; x=1729677036; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IuhWEQRkk63CsbZ+cS6salQFFe2QOXgNb9woXoTYN0g=;
-        b=OK3f/FjECwyy1e/ULYCLvVvA5q/vcaWd/zwOezVPhWAfeYIe7z0/n1tqUZeoz11jbu
-         HEDYgCa6Iu26b/hRK4o+Lp+VeYfulIrmo4O3rinKMgmTjfQ06HO9F97zWyo+vjuLV7GG
-         IbLBP+ggoh69hIEMqQvkKn761DnFxcXIc8E7urUFGJ8jA5UzOX/P7A9aNDNBUGJGNRlj
-         CJcnnpNM39Y6JbS3azSTpL1w8K3BMYGtTTxeDCrCA0+ALZqcXuVTf8N+H8Msk7BPkWba
-         aIih5WOa/3fsCtfHFEWHDc68vOV9KdwHuKF2pMeWiD686BFVwVhUCnZEBwAjQnVaican
-         HlAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729072236; x=1729677036;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IuhWEQRkk63CsbZ+cS6salQFFe2QOXgNb9woXoTYN0g=;
-        b=kDXaUiZVso81jpMkToCHG/pAsoZqp1W5utBALcErJpEqtnJ7tmbvZYGjsb0tcFXx+y
-         J7SmbpPN0+weK/oVXeKa5+9LS8Fr/RMmfeyLgtISaKrv2zVEqtSrUIFDbUUdBSn9wy26
-         n3TVc8XeEceQ9LzF3CjWTuXZTDL/FUAfKA1Y0KRKsEn7wvQ1qPofBVDb2T9n2AB13afU
-         ycqAEtoNw2aF+vAXN1fav3+XFlDsS2UmRHV2diKYdJvN46FpSfRwXZmiQqJnTMmvZcQA
-         kZPmrMQlwf4bsQ2nBgBpButeG24yxclQ0Po9GfJvm3nZfxMVWd5xweU6TFm0W48lohhJ
-         v/uw==
-X-Forwarded-Encrypted: i=1; AJvYcCWE4nJBHrZXRdeN7zQa2W5IHyJ5FzODc6xSGglFbaSuUrdEPQ5zWrivYB7cMzB+lTcvXyfxHYPXd+vj@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdzPdQhkwyh/RRQ+W8UeIvipvtc2UYSuSCMgR34N7rdyPOd6Kl
-	C8vWtwTwrHcUYAKe9xW81i8H01dKJCIzWD1JwLyC5WeRf20Gge97a1PKY4J9b5M=
-X-Google-Smtp-Source: AGHT+IFfiD66oi4uFKIKHIYFPilxzcNoxMVMTkobjqP09YW+RWP27tr8+YT264TCeDV0Y3OwkQ+NnQ==
-X-Received: by 2002:a05:6a21:1508:b0:1d8:ac0b:2f63 with SMTP id adf61e73a8af0-1d905f83b59mr4099484637.47.1729072236353;
-        Wed, 16 Oct 2024 02:50:36 -0700 (PDT)
-Received: from localhost ([122.172.84.231])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71e77509db5sm2697196b3a.198.2024.10.16.02.50.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Oct 2024 02:50:35 -0700 (PDT)
-Date: Wed, 16 Oct 2024 15:20:33 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Yuan Can <yuancan@huawei.com>
-Cc: jiaxun.yang@flygoat.com, rafael@kernel.org, ralf@linux-mips.org,
-	wuzhangjin@gmail.com, linux-mips@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2] cpufreq: loongson2: Unregister platform_driver on
- failure
-Message-ID: <20241016095033.5npga65f4wv4xm76@vireshk-i7>
-References: <20241016090615.128678-1-yuancan@huawei.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=YfWqYCZ0cda3DGVYPs/1s0FKMi5bcMzksfVhVb4m9JqnkyLoKypMooWDasO+QH4lkeuomcSO3EsCGRhsBuK76A/7ZWyq3+1BRSR4FxRaGOAZQKiK4RJSp3s/O4dcYZhMj5IIAIvpfwBHMQ5W/pJ1MHu50HBhB8mFYDHZZsHrQl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tu7R+TE5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A439EC4CEC5;
+	Wed, 16 Oct 2024 10:44:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729075491;
+	bh=REY0yUs/eb8jGqS7iPmNLu0O7M3zjCPm2K1uOQnlIfY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tu7R+TE5l4rMjxEyzDDIH6fpt5ZNmC1c7xJx7SQDlI9CzDxMt5yOQnVYNAW9hdV8J
+	 OeaDo9Hr12xvhUKQgId1tm4/CewmMpWCLOk3wgiUJwXyvWq4QlFB+Uh/pOgd95q0F1
+	 zyNekZpzro5oJZ2JEUpyorUNUZLep/wgUFWwzFdkGHL+BF7JNIRifDS33KF/5qGC2v
+	 jYrUvBLfr/xZZ4LfL7bWflm1YPeuIUzgGbLP+eWNj7AbuOUcsPGdhrgXCl4uUGrO38
+	 j9PqqivnqqmoYQsjfU9edkgWUJ3Ic8/MVLUiY8xlv+pKvbZQmwKQdokHEcp8hCdCUB
+	 nLnfE4mx3UK6g==
+Date: Wed, 16 Oct 2024 13:40:55 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Christoph Hellwig <hch@infradead.org>, Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org, kdevops@lists.linux.dev
+Subject: Re: [PATCH v5 7/8] execmem: add support for cache of large ROX pages
+Message-ID: <Zw-YN4JIltntY52Y@kernel.org>
+References: <20241009180816.83591-8-rppt@kernel.org>
+ <Zwd7GRyBtCwiAv1v@infradead.org>
+ <ZwfPPZrxHzQgYfx7@kernel.org>
+ <ZwjXz0dz-RldVNx0@infradead.org>
+ <ZwuIPZkjX0CfzhjS@kernel.org>
+ <20241013202626.81f430a16750af0d2f40d683@linux-foundation.org>
+ <Zw1uBBcG-jAgxF_t@bombadil.infradead.org>
+ <Zw3rDS3GRWZe4CBu@bombadil.infradead.org>
+ <Zw4DlTTbz4QwhOvU@kernel.org>
+ <Zw7MirnsHnhRveBB@bombadil.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -84,40 +108,34 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241016090615.128678-1-yuancan@huawei.com>
+In-Reply-To: <Zw7MirnsHnhRveBB@bombadil.infradead.org>
 
-On 16-10-24, 17:06, Yuan Can wrote:
-> When cpufreq_register_driver() returns error, the cpufreq_init() returns
-> without unregister platform_driver, fix by add missing
-> platform_driver_unregister() when cpufreq_register_driver() failed.
+On Tue, Oct 15, 2024 at 01:11:54PM -0700, Luis Chamberlain wrote:
+> On Tue, Oct 15, 2024 at 08:54:29AM +0300, Mike Rapoport wrote:
+> > On Mon, Oct 14, 2024 at 09:09:49PM -0700, Luis Chamberlain wrote:
+> > > Mike, please run this with kmemleak enabled and running, and also try to get
+> > > tools/testing/selftests/kmod/kmod.sh to pass.
+> > 
+> > There was an issue with kmemleak, I fixed it here:
+> > 
+> > https://lore.kernel.org/linux-mm/20241009180816.83591-1-rppt@kernel.org/T/#m020884c1795218cc2be245e8091fead1cda3f3e4
 > 
-> Fixes: f8ede0f700f5 ("MIPS: Loongson 2F: Add CPU frequency scaling support")
-> Signed-off-by: Yuan Can <yuancan@huawei.com>
-> ---
-> Changes since v1:
-> - Change to style suggested by Viresh Kumar.
-> ---
->  drivers/cpufreq/loongson2_cpufreq.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> Ah, so this was a side fix, not part of this series, thanks.
 > 
-> diff --git a/drivers/cpufreq/loongson2_cpufreq.c b/drivers/cpufreq/loongson2_cpufreq.c
-> index 6a8e97896d38..ed1a6dbad638 100644
-> --- a/drivers/cpufreq/loongson2_cpufreq.c
-> +++ b/drivers/cpufreq/loongson2_cpufreq.c
-> @@ -148,7 +148,9 @@ static int __init cpufreq_init(void)
->  
->  	ret = cpufreq_register_driver(&loongson2_cpufreq_driver);
->  
-> -	if (!ret && !nowait) {
-> +	if (ret) {
-> +		platform_driver_unregister(&platform_driver);
-> +	} else if (!nowait) {
->  		saved_cpu_wait = cpu_wait;
->  		cpu_wait = loongson2_cpu_wait;
->  	}
+> > > I run into silly boot issues with just a guest.
+> > 
+> > Was it kmemleak or something else?
+> 
+> Both kmemleak and the kmod selftest failed, here is a run of the test
+> with this patch series:
+> 
+> https://github.com/linux-kdevops/linux-modules-kpd/actions/runs/11352286624/job/31574722735
 
-Applied. Thanks.
+Is there a kernel log to look at? Could not find it in the run report
+ 
+>   Luis
 
 -- 
-viresh
+Sincerely yours,
+Mike.
 
