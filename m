@@ -1,201 +1,200 @@
-Return-Path: <linux-mips+bounces-6098-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6099-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A43D09A1314
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2024 22:00:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00F619A1484
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2024 23:01:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BBA21F22BFE
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2024 20:00:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A55A528402D
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2024 21:01:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8CD1215F61;
-	Wed, 16 Oct 2024 20:00:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="0QnX+y+f"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F321B1D131D;
+	Wed, 16 Oct 2024 21:01:14 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB801C4A10
-	for <linux-mips@vger.kernel.org>; Wed, 16 Oct 2024 20:00:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 969A94409;
+	Wed, 16 Oct 2024 21:01:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729108830; cv=none; b=q0TXDvhIr8T/qvxJhcslog9YyP2PAz/03GFqJ7pb7oobFlcgJtWbf+4FebKvm53gRN5bOF0Pb6rLnZnqpQXeJM0+HxpzGvP8luKIIttXlS+uA9eXIuqmwXoQFZoUTRZ0Lz9Bu0ssHFyrpwUAM92MjFOpdP8hd/b4LfEmBwdcCFI=
+	t=1729112474; cv=none; b=J8Rg8wu5SSEo+fuMdV1I1MgSncStWregB9qzlUe3OH6+C2m93jwILQ7f53AvsSfUFIHYeOXpDRvnJ6PoluGEioahxcj0HBqmEq7fMbXgfb3SH/sscaoLwY9DqNGG07E8TAB8cQapBs+BbAK+sjZ2YLMeZ8VQBzv3brncZ1MPbxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729108830; c=relaxed/simple;
-	bh=Yy+427w6SA0Uyrx7chHSxLxb5fuPBo1r7UcsPY7j9hA=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=ATzd4lLzJllhPyJOWgOCPvmQyvf5JgyV3IMuGA0Z3qFwSiRk0crI4bkPREs5AQuYWUqnjuuQ8yOThetGmlhnlQQeARSj+qy3K019V/JZnbq1CavB2x/K+suZTQYj5bG2Fp3PCbBQkL2JGrUJzF8VmBv+25V6odMjZ/fZym7i5GU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=0QnX+y+f; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A8C642C0436;
-	Thu, 17 Oct 2024 09:00:24 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1729108824;
-	bh=Yy+427w6SA0Uyrx7chHSxLxb5fuPBo1r7UcsPY7j9hA=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=0QnX+y+fGDKmNo9ux8OzlVHONdJVDwcUslIkKAa5/OP1ULgkXbmOb7X1kBRAYc7Ec
-	 42bW2ejPD3lovvci9vlUbfgYzAtxxiEd8poEnX0mbj+gpjub62wyP8Pp5yooPSTEHO
-	 Tg5YGz83xeA1CNPnMSOTNcctV1nnEYUE/2nJxkpe6rd7WibVc2qNAnDPuXqCZF5myV
-	 7Uzdg+6qK3f1O9lo/Z1Jr1sXF2jsmy9LEmR7lBD7dtN5+R2XJG4MG7z5TfVHqRUq7Z
-	 WgwtPkRktF9Cj1ULv/rC5obIX8/cuBrYDBlPY/6xo5OMhIecKudngXRm5knCkWJkJS
-	 botZYZ/BZlteA==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B67101b580001>; Thu, 17 Oct 2024 09:00:24 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1544.11; Thu, 17 Oct 2024 09:00:24 +1300
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.48; Thu, 17 Oct 2024 09:00:24 +1300
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1544.011; Thu, 17 Oct 2024 09:00:24 +1300
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-CC: "andi.shyti@kernel.org" <andi.shyti@kernel.org>, "robh@kernel.org"
-	<robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>, "lee@kernel.org"
-	<lee@kernel.org>, "sre@kernel.org" <sre@kernel.org>,
-	"tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
-	"markus.stockhausen@gmx.de" <markus.stockhausen@gmx.de>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH v6 3/6] dt-bindings: mfd: Add Realtek RTL9300 switch
- peripherals
-Thread-Topic: [PATCH v6 3/6] dt-bindings: mfd: Add Realtek RTL9300 switch
- peripherals
-Thread-Index: AQHbH1XyRCVZAOY+h0G2xpDtEx4lKrKIFFgAgADcY4CAAAK9gA==
-Date: Wed, 16 Oct 2024 20:00:23 +0000
-Message-ID: <c5f93d92-6bba-41f7-98e0-1e21d61d5941@alliedtelesis.co.nz>
-References: <20241015225948.3971924-1-chris.packham@alliedtelesis.co.nz>
- <20241015225948.3971924-4-chris.packham@alliedtelesis.co.nz>
- <5o77wkohvujnfnm4xm73b65gpx5by7chhyhdbuw3dkpota53us@5x6jlcabjoes>
- <1c7abf59-588b-4679-8638-7e9985f133d1@alliedtelesis.co.nz>
-In-Reply-To: <1c7abf59-588b-4679-8638-7e9985f133d1@alliedtelesis.co.nz>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7582E3B684A33745A5E735E3207E9CBE@atlnz.lc>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1729112474; c=relaxed/simple;
+	bh=k1HVXdWEl9r8b7TWbb3PEMrECBBSUgCGgBCTB9XVEhk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PDvAwy44qOXyIlxo2VEJZMmt/uf1OoV/oqh3lVQECuGpwf1OjZUj1xX+5Q0WJNY9tCSMFRbUbonmF5e+BWDwEfjb8wXCj14LaTMHKDYiKIzGtAVXMoR4qesJzACFJt/8TkhX5H7K4a54o5D5v+G3vReN5nQsXJHdrmmFdxB8Lwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 368BFC4CEC5;
+	Wed, 16 Oct 2024 21:01:07 +0000 (UTC)
+Date: Wed, 16 Oct 2024 17:01:28 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Luis Chamberlain
+ <mcgrof@kernel.org>, Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski
+ <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann
+ <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>, Brian Cain
+ <bcain@quicinc.com>, Catalin Marinas <catalin.marinas@arm.com>, Christoph
+ Hellwig <hch@infradead.org>, Christophe Leroy
+ <christophe.leroy@csgroup.eu>, Dave Hansen <dave.hansen@linux.intel.com>,
+ Dinh Nguyen <dinguyen@kernel.org>, Geert Uytterhoeven
+ <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, Helge Deller
+ <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar
+ <mingo@redhat.com>, Johannes Berg <johannes@sipsolutions.net>, John Paul
+ Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Kent Overstreet
+ <kent.overstreet@linux.dev>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Matt Turner <mattst88@gmail.com>, Max Filippov
+ <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>, Michal Simek
+ <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>, Richard
+ Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>, Song Liu
+ <song@kernel.org>, Stafford Horne <shorne@gmail.com>, Suren Baghdasaryan
+ <surenb@google.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Thomas Gleixner <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>,
+ Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+ bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+ sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v6 6/8] x86/module: prepare module loading for ROX
+ allocations of text
+Message-ID: <20241016170128.7afeb8b0@gandalf.local.home>
+In-Reply-To: <20241016122424.1655560-7-rppt@kernel.org>
+References: <20241016122424.1655560-1-rppt@kernel.org>
+	<20241016122424.1655560-7-rppt@kernel.org>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=ca1xrWDM c=1 sm=1 tr=0 ts=67101b58 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=DAUX931o1VcA:10 a=gEfo2CItAAAA:8 a=TXPRNiiwDGDrT-YAXYQA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=sptkURWiP4Gy88Gu7hUp:22
-X-SEG-SpamProfiler-Score: 0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-DQpPbiAxNy8xMC8yNCAwODo1MCwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4NCj4gT24gMTYvMTAv
-MjQgMTk6NDEsIEtyenlzenRvZiBLb3psb3dza2kgd3JvdGU6DQo+PiBPbiBXZWQsIE9jdCAxNiwg
-MjAyNCBhdCAxMTo1OTo0NUFNICsxMzAwLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPj4+ICtwcm9w
-ZXJ0aWVzOg0KPj4+ICvCoCBjb21wYXRpYmxlOg0KPj4+ICvCoMKgwqAgb25lT2Y6DQo+Pj4gK8Kg
-wqDCoMKgwqAgLSBpdGVtczoNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgIC0gZW51bToNCj4+PiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLSByZWFsdGVrLHJ0bDkzMDJiLWkyYw0KPj4+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAtIHJlYWx0ZWsscnRsOTMwMmMtaTJjDQo+Pj4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC0gcmVhbHRlayxydGw5MzAzLWkyYw0KPj4+ICvCoMKg
-wqDCoMKgwqDCoMKgwqAgLSBjb25zdDogcmVhbHRlayxydGw5MzAxLWkyYw0KPj4+ICvCoMKgwqDC
-oMKgIC0gY29uc3Q6IHJlYWx0ZWsscnRsOTMwMS1pMmMNCj4+PiArDQo+Pj4gK8KgIHJlZzoNCj4+
-PiArwqDCoMKgIGRlc2NyaXB0aW9uOiBSZWdpc3RlciBvZmZzZXQgYW5kIHNpemUgdGhpcyBJMkMg
-Y29udHJvbGxlci4NCj4+PiArDQo+Pj4gK8KgICIjYWRkcmVzcy1jZWxscyI6DQo+Pj4gK8KgwqDC
-oCBjb25zdDogMQ0KPj4+ICsNCj4+PiArwqAgIiNzaXplLWNlbGxzIjoNCj4+PiArwqDCoMKgIGNv
-bnN0OiAwDQo+Pj4gKw0KPj4+ICtwYXR0ZXJuUHJvcGVydGllczoNCj4+PiArwqAgJ15pMmNAWzAt
-N10kJzoNCj4+PiArwqDCoMKgICRyZWY6IC9zY2hlbWFzL2kyYy9pMmMtY29udHJvbGxlci55YW1s
-DQo+Pj4gK8KgwqDCoCB1bmV2YWx1YXRlZFByb3BlcnRpZXM6IGZhbHNlDQo+Pj4gKw0KPj4+ICvC
-oMKgwqAgcHJvcGVydGllczoNCj4+PiArwqDCoMKgwqDCoCByZWc6DQo+Pj4gK8KgwqDCoMKgwqDC
-oMKgIGRlc2NyaXB0aW9uOiBUaGUgU0RBIHBpbiBhc3NvY2lhdGVkIHdpdGggdGhlIEkyQyBidXMu
-DQo+Pj4gK8KgwqDCoMKgwqDCoMKgIG1heEl0ZW1zOiAxDQo+Pj4gKw0KPj4+ICvCoMKgwqAgcmVx
-dWlyZWQ6DQo+Pj4gK8KgwqDCoMKgwqAgLSByZWcNCj4+PiArDQo+Pj4gK3JlcXVpcmVkOg0KPj4+
-ICvCoCAtIGNvbXBhdGlibGUNCj4+PiArwqAgLSByZWcNCj4+PiArDQo+Pj4gK3VuZXZhbHVhdGVk
-UHJvcGVydGllczogZmFsc2UNCj4+IFRoaXMgaGFzIHRvIGJlOiBhZGRpdGlvbmFsUHJvcGVydGll
-czogZmFsc2UNCj4NCj4gSG1tLCB3aGVuIEkgZG8gdGhhdCB0aGUgZHRfYmluZGluZ19jaGVjayBj
-b21wbGFpbnMNCj4NCj4gRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21mZC9yZWFs
-dGVrLHJ0bDkzMDEtc3dpdGNoLmV4YW1wbGUuZHRiOiANCj4gZXRoZXJuZXQtc3dpdGNoQDFiMDAw
-MDAwOiBpMmNAMzZjOmkyY0AwOiAnI2FkZHJlc3MtY2VsbHMnLCANCj4gJyNzaXplLWNlbGxzJywg
-J2dwaW9AMjAnIGRvIG5vdCBtYXRjaCBhbnkgb2YgdGhlIHJlZ2V4ZXM6IA0KPiAncGluY3RybC1b
-MC05XSsnDQo+IMKgwqDCoMKgwqDCoMKgIGZyb20gc2NoZW1hICRpZDogDQo+IGh0dHA6Ly9kZXZp
-Y2V0cmVlLm9yZy9zY2hlbWFzL21mZC9yZWFsdGVrLHJ0bDkzMDEtc3dpdGNoLnlhbWwjDQo+IERv
-Y3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tZmQvcmVhbHRlayxydGw5MzAxLXN3aXRj
-aC5leGFtcGxlLmR0YjogDQo+IGV0aGVybmV0LXN3aXRjaEAxYjAwMDAwMDogaTJjQDM2YzppMmNA
-MjogJyNhZGRyZXNzLWNlbGxzJywgDQo+ICcjc2l6ZS1jZWxscycsICdncGlvQDIwJyBkbyBub3Qg
-bWF0Y2ggYW55IG9mIHRoZSByZWdleGVzOiANCj4gJ3BpbmN0cmwtWzAtOV0rJw0KPiDCoMKgwqDC
-oMKgwqDCoCBmcm9tIHNjaGVtYSAkaWQ6IA0KPiBodHRwOi8vZGV2aWNldHJlZS5vcmcvc2NoZW1h
-cy9tZmQvcmVhbHRlayxydGw5MzAxLXN3aXRjaC55YW1sIw0KPiBEb2N1bWVudGF0aW9uL2Rldmlj
-ZXRyZWUvYmluZGluZ3MvbWZkL3JlYWx0ZWsscnRsOTMwMS1zd2l0Y2guZXhhbXBsZS5kdGI6IA0K
-PiBldGhlcm5ldC1zd2l0Y2hAMWIwMDAwMDA6IGkyY0AzODg6aTJjQDc6ICcjYWRkcmVzcy1jZWxs
-cycsIA0KPiAnI3NpemUtY2VsbHMnLCAnZ3Bpb0AyMCcgZG8gbm90IG1hdGNoIGFueSBvZiB0aGUg
-cmVnZXhlczogDQo+ICdwaW5jdHJsLVswLTldKycNCj4gwqDCoMKgwqDCoMKgwqAgZnJvbSBzY2hl
-bWEgJGlkOiANCj4gaHR0cDovL2RldmljZXRyZWUub3JnL3NjaGVtYXMvbWZkL3JlYWx0ZWsscnRs
-OTMwMS1zd2l0Y2gueWFtbCMNCj4gRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21m
-ZC9yZWFsdGVrLHJ0bDkzMDEtc3dpdGNoLmV4YW1wbGUuZHRiOiANCj4gaTJjQDM2YzogaTJjQDA6
-ICcjYWRkcmVzcy1jZWxscycsICcjc2l6ZS1jZWxscycsICdncGlvQDIwJyBkbyBub3QgDQo+IG1h
-dGNoIGFueSBvZiB0aGUgcmVnZXhlczogJ3BpbmN0cmwtWzAtOV0rJw0KPiDCoMKgwqDCoMKgwqDC
-oCBmcm9tIHNjaGVtYSAkaWQ6IA0KPiBodHRwOi8vZGV2aWNldHJlZS5vcmcvc2NoZW1hcy9pMmMv
-cmVhbHRlayxydGw5MzAxLWkyYy55YW1sIw0KPiBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
-ZGluZ3MvbWZkL3JlYWx0ZWsscnRsOTMwMS1zd2l0Y2guZXhhbXBsZS5kdGI6IA0KPiBpMmNAMzZj
-OiBpMmNAMjogJyNhZGRyZXNzLWNlbGxzJywgJyNzaXplLWNlbGxzJywgJ2dwaW9AMjAnIGRvIG5v
-dCANCj4gbWF0Y2ggYW55IG9mIHRoZSByZWdleGVzOiAncGluY3RybC1bMC05XSsnDQo+IMKgwqDC
-oMKgwqDCoMKgIGZyb20gc2NoZW1hICRpZDogDQo+IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9zY2hl
-bWFzL2kyYy9yZWFsdGVrLHJ0bDkzMDEtaTJjLnlhbWwjDQo+IERvY3VtZW50YXRpb24vZGV2aWNl
-dHJlZS9iaW5kaW5ncy9tZmQvcmVhbHRlayxydGw5MzAxLXN3aXRjaC5leGFtcGxlLmR0YjogDQo+
-IGkyY0AzODg6IGkyY0A3OiAnI2FkZHJlc3MtY2VsbHMnLCAnI3NpemUtY2VsbHMnLCAnZ3Bpb0Ay
-MCcgZG8gbm90IA0KPiBtYXRjaCBhbnkgb2YgdGhlIHJlZ2V4ZXM6ICdwaW5jdHJsLVswLTldKycN
-Cj4gwqDCoMKgwqDCoMKgwqAgZnJvbSBzY2hlbWEgJGlkOiANCj4gaHR0cDovL2RldmljZXRyZWUu
-b3JnL3NjaGVtYXMvaTJjL3JlYWx0ZWsscnRsOTMwMS1pMmMueWFtbCMNCj4NCj4gVGhvc2UgcHJv
-cGVydGllcyBzaG91bGQgYmUgZ2V0dGluZyBkZWZpbmVkIHZpYSB0aGUgaTJjLWNvbnRyb2xsZXIu
-eWFtbCANCj4gc2NoZW1hIHNvIEkgbXVzdCBiZSBtaXNzaW5nIHNvbWV0aGluZywgSSdtIGp1c3Qg
-bm90IHN1cmUgd2hhdC4NCg0KU2lsbHkgbWUuIEkgcmVtb3ZlZCB0aGUgd3JvbmcgdW5ldmFsdWF0
-ZWRQcm9wZXJ0aWVzLiBJZiBJIGZpeCB1cCB0aGUgb25lIA0KeW91IGFjdHVhbGx5IHBvaW50ZWQg
-b3V0IGl0J3MgZmluZS4gdjcgY29taW5nIHNvb24uDQoNCj4NCj4+DQo+Pj4gKw0KPj4+ICtleGFt
-cGxlczoNCj4+PiArwqAgLSB8DQo+Pj4gK8KgwqDCoCBpMmNAMzZjIHsNCj4+PiArwqDCoMKgwqDC
-oCBjb21wYXRpYmxlID0gInJlYWx0ZWsscnRsOTMwMS1pMmMiOw0KPj4+ICvCoMKgwqDCoMKgIHJl
-ZyA9IDwweDM2YyAweDE0PjsNCj4+PiArwqDCoMKgwqDCoCAjYWRkcmVzcy1jZWxscyA9IDwxPjsN
-Cj4+PiArwqDCoMKgwqDCoCAjc2l6ZS1jZWxscyA9IDwwPjsNCj4+PiArDQo+Pj4gK8KgwqDCoMKg
-wqAgaTJjQDAgew0KPj4+ICvCoMKgwqDCoMKgwqDCoCByZWcgPSA8MD47DQo+Pj4gK8KgwqDCoMKg
-wqDCoMKgICNhZGRyZXNzLWNlbGxzID0gPDE+Ow0KPj4+ICvCoMKgwqDCoMKgwqDCoCAjc2l6ZS1j
-ZWxscyA9IDwwPjsNCj4+PiArwqDCoMKgwqDCoMKgwqAgZ3Bpb0AyMCB7DQo+Pj4gK8KgwqDCoMKg
-wqDCoMKgwqDCoCBjb21wYXRpYmxlID0gIm54cCxwY2E5NTU1IjsNCj4+PiArwqDCoMKgwqDCoMKg
-wqDCoMKgIGdwaW8tY29udHJvbGxlcjsNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgICNncGlvLWNl
-bGxzID0gPDI+Ow0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqAgcmVnID0gPDB4MjA+Ow0KPj4+ICvC
-oMKgwqDCoMKgwqDCoCB9Ow0KPj4+ICvCoMKgwqDCoMKgIH07DQo+Pj4gKw0KPj4+ICvCoMKgwqDC
-oMKgIGkyY0AyIHsNCj4+PiArwqDCoMKgwqDCoMKgwqAgcmVnID0gPDI+Ow0KPj4+ICvCoMKgwqDC
-oMKgwqDCoCAjYWRkcmVzcy1jZWxscyA9IDwxPjsNCj4+PiArwqDCoMKgwqDCoMKgwqAgI3NpemUt
-Y2VsbHMgPSA8MD47DQo+Pj4gK8KgwqDCoMKgwqDCoMKgIGdwaW9AMjAgew0KPj4+ICvCoMKgwqDC
-oMKgwqDCoMKgwqAgY29tcGF0aWJsZSA9ICJueHAscGNhOTU1NSI7DQo+Pj4gK8KgwqDCoMKgwqDC
-oMKgwqDCoCBncGlvLWNvbnRyb2xsZXI7DQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoCAjZ3Bpby1j
-ZWxscyA9IDwyPjsNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgIHJlZyA9IDwweDIwPjsNCj4+PiAr
-wqDCoMKgwqDCoMKgwqAgfTsNCj4+PiArwqDCoMKgwqDCoCB9Ow0KPj4+ICvCoMKgwqAgfTsNCj4+
-PiArwqDCoMKgIGkyY0AzODggew0KPj4+ICvCoMKgwqDCoMKgIGNvbXBhdGlibGUgPSAicmVhbHRl
-ayxydGw5MzAxLWkyYyI7DQo+Pj4gK8KgwqDCoMKgwqAgcmVnID0gPDB4Mzg4IDB4MTQ+Ow0KPj4+
-ICvCoMKgwqDCoMKgICNhZGRyZXNzLWNlbGxzID0gPDE+Ow0KPj4+ICvCoMKgwqDCoMKgICNzaXpl
-LWNlbGxzID0gPDA+Ow0KPj4+ICsNCj4+PiArwqDCoMKgwqDCoCBpMmNANyB7DQo+Pj4gK8KgwqDC
-oMKgwqDCoMKgIHJlZyA9IDw3PjsNCj4+PiArwqDCoMKgwqDCoMKgwqAgI2FkZHJlc3MtY2VsbHMg
-PSA8MT47DQo+Pj4gK8KgwqDCoMKgwqDCoMKgICNzaXplLWNlbGxzID0gPDA+Ow0KPj4+ICvCoMKg
-wqDCoMKgIH07DQo+Pj4gK8KgwqDCoCB9Ow0KPj4gWW95IGhhdmUgbm93IG11bHRpcGxlIHNhbWUg
-ZXhhbXBsZXMuIEtlZXAgb25seSBvbmUsIGNvbXBsZXRlIGluIHRoZSANCj4+IHBhcmVudA0KPj4g
-c2NoZW1hLg0KPg0KPiBPSy4gSSdsbCBrZWVwIG9uZSBleGFtcGxlIG9mIGEgY29udHJvbGxlciB3
-aXRoIGEgbm9uLXplcm8gY2hhbm5lbCBpbiANCj4gdGhlIGkyYyBiaW5kaW5nIGFuZCBsZWF2ZSBh
-IG1vcmUgY29tcGxldGUgZXhhbXBsZSBpbiB0aGUgbWZkLg0KPg0KPj4+IGRpZmYgLS1naXQgDQo+
-Pj4gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbWZkL3JlYWx0ZWsscnRsOTMw
-MS1zd2l0Y2gueWFtbCANCj4+PiBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9t
-ZmQvcmVhbHRlayxydGw5MzAxLXN3aXRjaC55YW1sDQo+Pj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQN
-Cj4+PiBpbmRleCAwMDAwMDAwMDAwMDAuLmYwNTMzMDNhYjFlNg0KPj4+IC0tLSAvZGV2L251bGwN
-Cj4+PiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbWZkL3JlYWx0ZWss
-cnRsOTMwMS1zd2l0Y2gueWFtbA0KPj4+IEBAIC0wLDAgKzEsMTE0IEBADQo+Pj4gKyMgU1BEWC1M
-aWNlbnNlLUlkZW50aWZpZXI6IChHUEwtMi4wLW9ubHkgT1IgQlNELTItQ2xhdXNlKQ0KPj4+ICsl
-WUFNTCAxLjINCj4+IEJlc3QgcmVnYXJkcywNCj4+IEtyenlzenRvZg0KPj4=
+On Wed, 16 Oct 2024 15:24:22 +0300
+Mike Rapoport <rppt@kernel.org> wrote:
+
+> diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+> index 8da0e66ca22d..b498897b213c 100644
+> --- a/arch/x86/kernel/ftrace.c
+> +++ b/arch/x86/kernel/ftrace.c
+> @@ -118,10 +118,13 @@ ftrace_modify_code_direct(unsigned long ip, const char *old_code,
+>  		return ret;
+>  
+>  	/* replace the text with the new text */
+> -	if (ftrace_poke_late)
+> +	if (ftrace_poke_late) {
+>  		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
+> -	else
+> -		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
+> +	} else {
+> +		mutex_lock(&text_mutex);
+> +		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
+> +		mutex_unlock(&text_mutex);
+> +	}
+>  	return 0;
+>  }
+
+So this slows down the boot by over 30ms. That may not sound like much, but
+we care very much about boot times. This code is serialized with boot and
+runs whenever ftrace is configured in the kernel. The way I measured this,
+was that I added:
+
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index 4dd0ad6c94d6..b72bb9943140 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -104,6 +104,8 @@ static int ftrace_verify_code(unsigned long ip, const char *old_code)
+ 	return 0;
+ }
+ 
++u64 sdr_total;
++
+ /*
+  * Marked __ref because it calls text_poke_early() which is .init.text. That is
+  * ok because that call will happen early, during boot, when .init sections are
+@@ -114,6 +116,8 @@ ftrace_modify_code_direct(unsigned long ip, const char *old_code,
+ 			  const char *new_code)
+ {
+ 	int ret = ftrace_verify_code(ip, old_code);
++	u64 start, stop;
++
+ 	if (ret)
+ 		return ret;
+ 
+@@ -121,9 +125,12 @@ ftrace_modify_code_direct(unsigned long ip, const char *old_code,
+ 	if (ftrace_poke_late) {
+ 		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
+ 	} else {
++		start = trace_clock_local();
+ 		mutex_lock(&text_mutex);
+ 		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
+ 		mutex_unlock(&text_mutex);
++		stop = trace_clock_local();
++		sdr_total += stop - start;
+ 	}
+ 	return 0;
+ }
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index c01375adc471..93284557144d 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -10738,6 +10738,11 @@ __init static int tracer_alloc_buffers(void)
+ 
+ 	register_snapshot_cmd();
+ 
++	{
++		extern u64 sdr_total;
++		printk("SDR TOTAL: %lld\n", sdr_total);
++	}
++
+ 	test_can_verify();
+ 
+ 	return 0;
+
+
+And did the same before this patch. I ran it three times and have the
+following numbers (all in nanoseconds):
+
+before: 11356637	11863526	11507750
+ after: 43978750	41293162	42741067
+
+Before this patch, the total updates took 11ms. After the patch it takes
+around 42ms. This is because we are patching 59 thousand sites with this.
+
+# dmesg |grep ftrace
+[    1.620569] ftrace: allocating 59475 entries in 233 pages
+[    1.667178] ftrace: allocated 233 pages with 5 groups
+
+
+If this is only needed for module load, can we at least still use the
+text_poke_early() at boot up?
+
+ 	if (ftrace_poke_late) {
+ 		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
+	} else if (system_state == SYSTEM_BOOTING) {
+		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
+ 	} else {
+ 		mutex_lock(&text_mutex);
+ 		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
+ 		mutex_unlock(&text_mutex);
+ 	}
+
+?
+
+The above if statement looks to slow things down just slightly, but only by
+2ms, which is more reasonable.
+
+-- Steve
 
