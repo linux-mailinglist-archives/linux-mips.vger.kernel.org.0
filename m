@@ -1,93 +1,119 @@
-Return-Path: <linux-mips+bounces-6110-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6111-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5C509A1C10
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2024 09:56:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27C3E9A1DAE
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2024 10:58:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69A7228960D
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2024 07:56:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5DDC1F21837
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2024 08:58:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3A171D0496;
-	Thu, 17 Oct 2024 07:56:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ADDD1D6DD4;
+	Thu, 17 Oct 2024 08:58:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jdA4yceQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GUTEi/QD"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6B11CFEC2;
-	Thu, 17 Oct 2024 07:56:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DBA7762EB;
+	Thu, 17 Oct 2024 08:58:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729151813; cv=none; b=rP6GksLSkrEZHolIbt7gtq3+lcUCz3iNFNSwGwwu5o2YykQu6jNFAY01o7eQi04ruDrS5yVGEMrhicE1JhkshgfUkcdOEMx2gxxTtqyx6CMMM/VHGLNj9xGCZDKYyysUx+uMbDgyjiFx1l5VZyzPfSYebTh7oxpYmVcNFfEW1Ww=
+	t=1729155491; cv=none; b=EQ5NLeeXnmR4SqXfy0rGLzZOib23RwxfgXijCD4Jroj6SA6HEiXT6sQrDss/Y4BRXrDAsGSfea9yELPCyxjOsbaBHvVYA3xeHi+OtPhCmT6KiLk5/2suhF1djU9gixN6j3DehpNtJbSCZfjzLT2+bDipPXw5nTuvVHOzGM+yZgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729151813; c=relaxed/simple;
-	bh=KHj182ceY1l+tWN+yPMGSpqPxinzby8wZiaWb6NY2n8=;
+	s=arc-20240116; t=1729155491; c=relaxed/simple;
+	bh=Ag39IeYZIgnJP+0lKOwm8KkvB7IMVGZa6ut5/EY2Y5E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Oll3KDEy/kIfvSDdawZFFBG3Kd4xjBtVq069DVJHt5Qm6857QLjy/K9Ph4Bm1yXc6BkrFYxV86HpcAaVOcPMrGYXYCP73oIxupkQrImkDiVbU2RfC1v1+yFwcjvbvGP5MriNOn840os8zNZzlBmLjpEmFFKkcCdtSwvJv5TPIJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jdA4yceQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D8A6C4CEC3;
-	Thu, 17 Oct 2024 07:56:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729151813;
-	bh=KHj182ceY1l+tWN+yPMGSpqPxinzby8wZiaWb6NY2n8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jdA4yceQ7A32VhcQ3hbmjeOzriFjb3hcgTaN5EYow5ZEp4MelTgM5ZBEFmtgj8tu9
-	 AI8BDCBld/MbHK2FQaf+lJA7yPwV2pVgYoTu9pFSGtfI5QyWlJb2BH7tOPv9EbTrdC
-	 Iij8p9deJgXxsXw4WNdseQBZQjXo7GNEhVGd4hPof9oZeDW434BhFAzYTZwD6Xb3dQ
-	 Dg5/HXailnbgXK9VbBpsO7zLJPvCX4jcuRnmjchLEOGP+qdVYs82/BlAMMSJSTn9CV
-	 MqgS/YBSyXtGw0sry3fOLtx6z7wSi48aJLatHOom9e3pCzyVrWCIOW18UhmHVe0y0K
-	 gwmd6w+AFtsHg==
-Date: Thu, 17 Oct 2024 09:56:49 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, lee@kernel.org, sre@kernel.org, tsbogend@alpha.franken.de, 
-	markus.stockhausen@gmx.de, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v7 3/6] dt-bindings: mfd: Add Realtek RTL9300 switch
- peripherals
-Message-ID: <qftyzxnlvfyhdavhrivuef7o4den7yhjjy54eps5mngtce5iva@jq4wuhf4v4xw>
-References: <20241017001653.178399-1-chris.packham@alliedtelesis.co.nz>
- <20241017001653.178399-4-chris.packham@alliedtelesis.co.nz>
+	 Content-Type:Content-Disposition:In-Reply-To; b=jKYRVgea9e1TDG9XcksVUpPxxHQXszuo6OWAdzzSMtjb6UwVyvREgftgabUPTCa1y77CyAWv6AgQfWt3QixzNSq5AtS6BsLdW5R9SWz9yh0q/edTPyXxDKaC5pueI8UdIXCfUEd8CQZ1fgszm8+vg2i0Y0nm2vEQoWaWL5lXRdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GUTEi/QD; arc=none smtp.client-ip=209.85.167.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3e4d624ac28so447625b6e.2;
+        Thu, 17 Oct 2024 01:58:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729155489; x=1729760289; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cS2ZrlCICBtkiBuIIXiYosXWwsFkqn4m2OZpO9F2lEg=;
+        b=GUTEi/QD9EfKz9cJ+kcdexLuT9hsJ3Qke5GFpqzn+D80X6t7JqBN/BLYluinWlnh02
+         oBtKsnnezq5Yd6KZYkCFhKmilvsMsxu88K3xFnpZYj0nORDa7CfpCOWSBWc4KR7plZY/
+         RsDDR5BFAwv9JuS2fSXdylHttvGzGXJKtK4eMgSdonnbk2pcJ46VRuzrJ1lotIJJp9Rq
+         qBGe3N9YQqWApuBABGRoPlQk+nNDYODw45MCRCZURU9DfT6Ephl/nXlNzyK0FgfbTMyV
+         MAd5+uwpVLiA3xGpv+TyYX331ZEoHS3x9V3qpyPxYwiMrQ26UM6afp7HQGvOHvznWR9y
+         E85g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729155489; x=1729760289;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cS2ZrlCICBtkiBuIIXiYosXWwsFkqn4m2OZpO9F2lEg=;
+        b=OYT8cvd8xLJ5HDToodEjdvsz8QNByiKJ1mViX/dzpys+cSce5jZEHlEEwIg1v7RWT+
+         /bBVDE0ZjehOvnLXrvwqYP8is9VnOhPV6q5i+PBsZEpOdzCV03e/tUgnPehncCgzt0mK
+         qSJU/bOy/suL+Md9xDzyf4Yc20bdJK+bToD95d+tIeGS4CRfeMuIk3Mbnqw8W/VOOi0g
+         UMu0sqrgf0Dhc91+01LszlCjVYVffeNBKB+90uNTOZ/pb9rscpoJKq2Sh8++D8Jnp70b
+         0bfDLxs73BjpX1lNnCKvd9OJQUkSkni7FSv/3Ot191DWEVS9Uqae+dNyF8EEQzxrpyt2
+         jhRg==
+X-Forwarded-Encrypted: i=1; AJvYcCVenPjU+FCZ0z8P5OWAOWc394vsbln6b7DRDLx4x2T8781MGKOnoPJJJ7w7U0D2io6huMa5FqgjJukuHw+HVAg=@vger.kernel.org, AJvYcCWDokyUd6hoNYslp2V4qzS3Lrkie8Q3poipWPXvki48l19ZWFfM5pML/aFXdXV/bGzV4pTRwGUryzmxjw==@vger.kernel.org, AJvYcCX0dkj5e+nN8NRMwCiy/piG3fvzC0h+CbxTFK8HIgtsp37L8gtsyY24zpExJ1VpMtM5A3UCkX0nTBGNalxZ@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWG1MLoerAY1tJkQt7fY+F50vKAgdx4o6H77o5nlWNS9N7hIMZ
+	lek0vtahGVn2k3ih3UQl7c63lxCVkZApBK5pt34uXgE+4LpMtiXXBoIRZSXq
+X-Google-Smtp-Source: AGHT+IGyolcDbGNV2mTosloiVV44sgC5UtlRgCP5m2wD8324zy9wGkRHfdWw5JtvnK5Y2cZZ4rDYJw==
+X-Received: by 2002:a05:6808:1a10:b0:3e4:d768:91ed with SMTP id 5614622812f47-3e5f0515174mr6294465b6e.41.1729155489333;
+        Thu, 17 Oct 2024 01:58:09 -0700 (PDT)
+Received: from mail.google.com (125-239-144-11-fibre.sparkbb.co.nz. [125.239.144.11])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7ea9c6d41e3sm4518745a12.55.2024.10.17.01.58.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Oct 2024 01:58:08 -0700 (PDT)
+Date: Thu, 17 Oct 2024 21:58:02 +1300
+From: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	zhanggenjian@kylinos.cn, ricardo@marliere.net, bvanassche@acm.org,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] mips: sgi-ip22: Replace "s[n]?printf" with
+ sysfs_emit in sysfs callbacks
+Message-ID: <ZxDRmlDbtjEaTH8z@mail.google.com>
+References: <Zw2GRQkbx8Z8DlcS@mail.google.com>
+ <alpine.DEB.2.21.2410150220160.40463@angie.orcam.me.uk>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241017001653.178399-4-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <alpine.DEB.2.21.2410150220160.40463@angie.orcam.me.uk>
 
-On Thu, Oct 17, 2024 at 01:16:50PM +1300, Chris Packham wrote:
-> Add device tree schema for the Realtek RTL9300 switches. The RTL9300
-> family is made up of the RTL9301, RTL9302B, RTL9302C and RTL9303. These
-> have the same SoC differ in the Ethernet switch/SERDES arrangement.
+On Tue, Oct 15, 2024 at 03:01:13AM +0100, Maciej W. Rozycki wrote:
+> On Tue, 15 Oct 2024, Paulo Miguel Almeida wrote:
 > 
-> Currently the only supported features are the syscon-reboot and i2c
-> controllers. The syscon-reboot is needed to be able to reboot the board.
-> The I2C controllers are slightly unusual because they each own an SCL
-> pin (GPIO8 for the first controller, GPIO 17 for the second) but have 8
-> common SDA pins which can be assigned to either controller (but not
-> both).
+> > snprintf() has the documented, but still rather strange trait of
+> > returning the length of the data that *would have been* written to the
+> > array if space were available, rather than the arguably more useful
+> > length of data *actually* written, [...]
 > 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
+>  Why do you think that just returning `n - 1' in the case of a length 
+> overflow would be more useful than returning the unmet buffer length 
+> requirement?  I think the opposite is the case: the value returned lets 
+> you reallocate the buffer for more space and retry, and there's no other 
+> way to figure out how much this would be.  And if you need to know how 
+> many characters were actually written, then `min(n - 1, snprintf(...))' 
+> will do (and code you propose to replace does exactly that, open-coded).
 > 
-> Notes:
->     Changes in v7:
->     - Set additionalProperties: false
->     - Remove extraneous examples from i2c binding
+>  The change itself makes sense to me, but not your proposed description 
+> I'm afraid.  Just replacing open-coded pieces with calls to `sysfs_emit' 
+> is enough justification.
+> 
+>   Maciej
 
-Thanks for the changes!
+Thanks for taking the time to review this patch.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Will submit a v2 with the description you pointed out.
 
-Best regards,
-Krzysztof
-
+- Paulo A.
 
