@@ -1,184 +1,167 @@
-Return-Path: <linux-mips+bounces-6116-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6117-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 554929A2050
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2024 12:49:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6832F9A20F2
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2024 13:29:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A3CB1F231DE
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2024 10:49:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E74D7B20EEB
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2024 11:29:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C03F51D9A44;
-	Thu, 17 Oct 2024 10:49:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FD6D1DC1B2;
+	Thu, 17 Oct 2024 11:29:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NmcosAp1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ot+aEOLg"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EFA81D27A6;
-	Thu, 17 Oct 2024 10:49:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 115811DAC86;
+	Thu, 17 Oct 2024 11:29:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729162169; cv=none; b=hKhIR7yIsXTO6Zobg2PEFPBvv8A3ZrpFsb9rdaQXRXECPgCG1VwX1hR/BQHSbZf8QkPRHkiGtR5HmWdmT+2Sowk2QNPm5BTRNZy+O6FUIl4moieDytPTcC8d9AWsxfx8G/DK4K15zUJMYCxzukfXxy2Jd3Hx23cA0XXof4m/kvI=
+	t=1729164542; cv=none; b=jWcw6PfYoSDRIP1R2WwQRasmqv7xDS6dVFMsZXeQW412EuBar+UGIpG934Uraipe0RIqIUVmCNAC3Um5FF2nBCsYSpsvBm/4gNlBS3obd4YkMr9eUkLVIR+krbKCK7Rav82OC26hrADwh58beUY4XGM1IkCT7f09emaFaaGDLnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729162169; c=relaxed/simple;
-	bh=/DPOLscSfouYu/AH66QRdKoEo5IRYqSPfeB7ZKt7B9Y=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=P0ny+LVsu+vkvSP1Ww8391LKDhgqyRqABrfrownmIyHYn6mjS+Y/OR/0xrDmxWzXYH6aytKPVYNBy6buBAV3a2jmhqdSuyxBEP2sk4YBOuiYKZA5ezJQu0eYQHthqkdsrbtsf6WcHJwel0VlPsuZ6Pd3S4zIxTtAjZMonaQs0n0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NmcosAp1; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43155afca99so8156805e9.1;
-        Thu, 17 Oct 2024 03:49:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729162165; x=1729766965; darn=vger.kernel.org;
-        h=user-agent:message-id:date:to:cc:from:subject:references
-         :in-reply-to:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=u95ZFAnBjpKr6vjss6HYOhy5TzfTV9aDj/vEX3amD0o=;
-        b=NmcosAp1j/yrNuQy7A13HfZc+jV77EbGP8Z0RxGR3zlhk71vmcTmrtgzuDPtS01SSQ
-         r31aKDpo8bkTXqNk0kgzafeb4eLCfmVdFrZPb+C/iXxYPzB6KLva2AyvhaIz3eXkG8sJ
-         nOBnxZCMJT26mkExoFd20rP+tUQltzcDhR4m8bVVtjmQKcOwiJNjaaazDTeYaGhRqAm8
-         d/2ZMPh8lu6iPbBc+EnU0MICAHV3l/gFE+HVchfDvQjs32NyXJEOkoq08gyIm+YqCg0Y
-         YALrl3++YGvAp6jWMNlGgHfn7jTMnV+moI6yG+qABZNA3z+I/CuyL693QWnTDrX0O2oy
-         vDDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729162165; x=1729766965;
-        h=user-agent:message-id:date:to:cc:from:subject:references
-         :in-reply-to:content-transfer-encoding:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u95ZFAnBjpKr6vjss6HYOhy5TzfTV9aDj/vEX3amD0o=;
-        b=Q2L3r0fqv7ibbwzBlrLK55x+ILUV8Bn9qb8fL1PHtsatjL9nNy7H55iIZan7dhnTjm
-         KsR4IX6CWpbuuUF0cvqYoG+jIOrsUmQ1NRNwIKE0UlKZjP0vFJnLM2oyUDHgL1S7i5rZ
-         tl2iu1xrqRl36cNQglkbqLt3ujaXW/Q2Sd3VtE40PSF4NtUCG6NF82/SX/xb+R4oAB+3
-         h4fXldUgm7tvonf2vQZY9K1VcY670f849JhLcuQUagi49vA5Q8Bo47yNfmWmhQyNg43s
-         XFwkwOQ2Q/8rhVOCeBLdruWYvnK0rq/+TDbxGxRvjTfSoMKABnIC6egyjfxTz83RXtVE
-         jvQg==
-X-Forwarded-Encrypted: i=1; AJvYcCV2GbbFNlut2JdRSp3sftd9VrvOUJuK3UZSsc9Ok/5mOkHsfRJgiiawE62k6/loXn1+UgMfyNI3fKUnDA==@vger.kernel.org, AJvYcCVJIZ4DNmuolCHRiTDvXOUeveM6Sb3f8mInVyRwmzO8DXhVlLIpzA+CmozwaPB2DXtTZOIQAFg5gjIe/o4h@vger.kernel.org, AJvYcCVcJMB+g06WtZnpfv+Ozt96RPHoF13+XIG9HHQy1gKUg8WaRbMQF9G6E3X09GnNFZkp4FAotlqanOM=@vger.kernel.org, AJvYcCWLTlSYv9ac1+eymCXoPJGoVfBElQbQtrR8zAbGM+538gUVPYlRAkcMyW0mBvQkZbIYP4w/h8SJsgE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzr1zUXEAK+2Zc4m1SJd9Vh5g9g69yQ0VipjRvRE27amAsGBaif
-	zcKuLo2vH3ah1Whp2KMy6S6XRDt7anKSmxK2ThpTew2JxbBWZx2o
-X-Google-Smtp-Source: AGHT+IGGUQ+VzAg13N5jeYirbt4WsJHpq6JBFIFDHXPJJP95TiTfPNsutECzweKscP0z/rdyGZHWng==
-X-Received: by 2002:a05:6000:1379:b0:37d:39ff:a9cf with SMTP id ffacd0b85a97d-37d93d43c9amr1713905f8f.5.1729162164991;
-        Thu, 17 Oct 2024 03:49:24 -0700 (PDT)
-Received: from localhost (host-79-18-120-72.retail.telecomitalia.it. [79.18.120.72])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4314f1c3197sm38400115e9.0.2024.10.17.03.49.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Oct 2024 03:49:24 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1729164542; c=relaxed/simple;
+	bh=rt80HNwYvry4F4GclVQlY1veJ+krWpXQVKReUpcl890=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kvSqamfqiXnn9xRBzSs/+y+27ipmtsgY3LqQRfpskcXziMiKqve8k+gGC6BUN0U1gTPpzFqlekUrFtPPqahPUQ00NZ8aJDnOLqsZTXLefpgbe11WjH2KpJbGypQoKOOmBEvTi2UdDcU9+gKYQaYo8TdMdLuZH86pt5O5jDTxqUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ot+aEOLg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A51E6C4CEC3;
+	Thu, 17 Oct 2024 11:28:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729164541;
+	bh=rt80HNwYvry4F4GclVQlY1veJ+krWpXQVKReUpcl890=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ot+aEOLgX5JjytFWTSP6bvwXMFkowa3+f8eQ2nWquiQ2RAv0bCvly8HaX5AltuwSG
+	 MSL87zIBHWGLQnCmCdiEfFC7X5ejkFjDqsJRxmUPBDOphZUPBuoh9vgoceix8Psav5
+	 Yvn0UgFKrQvx/wSoy69QgTtp5NCCSdTL6QB1vx3PWWPTlokB4+yqFBJYWypC9U2bHQ
+	 nQtmXd5x7H21VQL4AHHLnM8nJNg1uOm2mWoaE2bjtRwnQ1e9g0HZLSZljRpX0WRG/I
+	 j7Jg7Czseip6435Tp950cr2IcSkIthwfZaEljLp7+y1XWJYi+AU0xcha6M5b6FnQGJ
+	 4UYbNkR0gIbzA==
+Date: Thu, 17 Oct 2024 14:25:05 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v6 6/8] x86/module: prepare module loading for ROX
+ allocations of text
+Message-ID: <ZxD0EVBoO-jcxEGE@kernel.org>
+References: <20241016122424.1655560-1-rppt@kernel.org>
+ <20241016122424.1655560-7-rppt@kernel.org>
+ <20241016170128.7afeb8b0@gandalf.local.home>
+ <20241017093515.GU16066@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <7qvxz3fuwcjeq2ewv3nterlf72wbymt7np5nnjitzkt6smzh7v@737455c4xapy>
-References: <20241015-iio-read-avail-release-v3-0-ac3e08f25cb3@gmail.com> <20241015-iio-read-avail-release-v3-2-ac3e08f25cb3@gmail.com> <7qvxz3fuwcjeq2ewv3nterlf72wbymt7np5nnjitzkt6smzh7v@737455c4xapy>
-Subject: Re: [PATCH v3 2/5] iio: consumers: copy/release available info from producer to fix race
-From: Matteo Martelli <matteomartelli3@gmail.com>
-Cc: Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich <Michael.Hennerich@analog.com>, Alisa-Dariana Roman <alisa.roman@analog.com>, Christian Eggers <ceggers@arri.de>, Peter Rosin <peda@axentia.se>, Paul Cercueil <paul@crapouillou.net>, linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, linux-pm@vger.kernel.org
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Date: Thu, 17 Oct 2024 12:49:23 +0200
-Message-ID: <172916216326.53359.1590082756395527593@njaxe.localdomain>
-User-Agent: alot/0.11
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241017093515.GU16066@noisy.programming.kicks-ass.net>
 
-Quoting Sebastian Reichel (2024-10-16 23:08:30)
-> Hi,
->=20
-> On Tue, Oct 15, 2024 at 01:06:35PM +0200, Matteo Martelli wrote:
-> > Consumers need to call the producer's read_avail_release_resource()
-> > callback after reading producer's available info. To avoid a race
-> > condition with the producer unregistration, change inkern
-> > iio_channel_read_avail() so that it copies the available info from the
-> > producer and immediately calls its release callback with info_exists
-> > locked.
-> >=20
-> > Also, modify the users of iio_read_avail_channel_raw() and
-> > iio_read_avail_channel_attribute() to free the copied available buffers
-> > after calling these functions.
-> >=20
-> > Signed-off-by: Matteo Martelli <matteomartelli3@gmail.com>
-> > ---
-> > diff --git a/drivers/power/supply/ingenic-battery.c b/drivers/power/sup=
-ply/ingenic-battery.c
-> > index 0a40f425c27723ccec49985b8b5e14a737b6a7eb..3db000d9fff9a7a68196313=
-14547b3d16db7f967 100644
-> > --- a/drivers/power/supply/ingenic-battery.c
-> > +++ b/drivers/power/supply/ingenic-battery.c
-> > @@ -12,6 +12,7 @@
-> >  #include <linux/platform_device.h>
-> >  #include <linux/power_supply.h>
-> >  #include <linux/property.h>
-> > +#include <linux/slab.h>
-> > =20
-> >  struct ingenic_battery {
-> >       struct device *dev;
-> > @@ -79,8 +80,10 @@ static int ingenic_battery_set_scale(struct ingenic_=
-battery *bat)
-> >               dev_err(bat->dev, "Unable to read channel avail scale\n");
-> >               return ret;
-> >       }
-> > -     if (ret !=3D IIO_AVAIL_LIST || scale_type !=3D IIO_VAL_FRACTIONAL=
-_LOG2)
-> > -             return -EINVAL;
-> > +     if (ret !=3D IIO_AVAIL_LIST || scale_type !=3D IIO_VAL_FRACTIONAL=
-_LOG2) {
-> > +             ret =3D -EINVAL;
-> > +             goto out;
-> > +     }
-> > =20
-> >       max_mV =3D bat->info->voltage_max_design_uv / 1000;
-> > =20
-> > @@ -99,7 +102,8 @@ static int ingenic_battery_set_scale(struct ingenic_=
-battery *bat)
-> > =20
-> >       if (best_idx < 0) {
-> >               dev_err(bat->dev, "Unable to find matching voltage scale\=
-n");
-> > -             return -EINVAL;
-> > +             ret =3D -EINVAL;
-> > +             goto out;
-> >       }
-> > =20
-> >       /* Only set scale if there is more than one (fractional) entry */
-> > @@ -109,10 +113,13 @@ static int ingenic_battery_set_scale(struct ingen=
-ic_battery *bat)
-> >                                                 scale_raw[best_idx + 1],
-> >                                                 IIO_CHAN_INFO_SCALE);
-> >               if (ret)
-> > -                     return ret;
-> > +                     goto out;
-> >       }
-> > =20
-> > -     return 0;
-> > +     ret =3D 0;
-> > +out:
-> > +     kfree(scale_raw);
-> > +     return ret;
-> >  }
-> > =20
-> >  static enum power_supply_property ingenic_battery_properties[] =3D {
->=20
-> It should be enough to declare scale_raw like this at the beginning
-> of the function and otherwise keep it as is when you include
-> <linux/cleanup.h>:
->=20
-> const int *scale_raw __free(kfree) =3D NULL;
+On Thu, Oct 17, 2024 at 11:35:15AM +0200, Peter Zijlstra wrote:
+> On Wed, Oct 16, 2024 at 05:01:28PM -0400, Steven Rostedt wrote:
+> > On Wed, 16 Oct 2024 15:24:22 +0300
+> > Mike Rapoport <rppt@kernel.org> wrote:
+> > 
+> > > diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+> > > index 8da0e66ca22d..b498897b213c 100644
+> > > --- a/arch/x86/kernel/ftrace.c
+> > > +++ b/arch/x86/kernel/ftrace.c
+> > > @@ -118,10 +118,13 @@ ftrace_modify_code_direct(unsigned long ip, const char *old_code,
+> > >  		return ret;
+> > >  
+> > >  	/* replace the text with the new text */
+> > > -	if (ftrace_poke_late)
+> > > +	if (ftrace_poke_late) {
+> > >  		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
+> > > -	else
+> > > -		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
+> > > +	} else {
+> > > +		mutex_lock(&text_mutex);
+> > > +		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
+> > > +		mutex_unlock(&text_mutex);
+> > > +	}
+> > >  	return 0;
+> > >  }
+> > 
+> > So this slows down the boot by over 30ms. That may not sound like much, but
+> > we care very much about boot times. This code is serialized with boot and
+> > runs whenever ftrace is configured in the kernel. The way I measured this,
+> > was that I added:
+> > 
+> 
+> > If this is only needed for module load, can we at least still use the
+> > text_poke_early() at boot up?
+> 
+> Right, so I don't understand why this is needed at all.
+> ftrace_module_init() runs before complete_formation() which normally
+> switches to ROX, as such ftrace should be able to continue to do direct
+> modifications here.
 
-Nice! I wasn't aware of it, thanks! I'll try it and submit it in next versi=
-on.
+With this series the module text is allocated as ROX at the first place, so
+the modifications ftrace does to module text have to either use text poking
+even before complete_formation() or deal with a writable copy like I did
+for relocations and alternatives.
 
-I think that also fits for the similar usage in iio_channel_read_min() and
-iio_channel_read_max() as well.
+I've been carrying the ftrace changes from a very old prototype and
+didn't pay enough attention to them them until Steve's complaint.
 
->=20
-> Greetings,
->=20
-> -- Sebastian
+I'll look into it.
+ 
+> Which reminds me, at some point I did patches adding a
+> MODULE_STATE_UNFORMED callback in order for static_call / jump_label to
+> be able to avoid the expensive patching on module load as well (arguably
+> ftrace should be using that too, instead of a custom callback).
+> 
 
-Thanks,
-Matteo Martelli
+-- 
+Sincerely yours,
+Mike.
 
