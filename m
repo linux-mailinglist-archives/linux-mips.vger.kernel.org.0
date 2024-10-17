@@ -1,108 +1,146 @@
-Return-Path: <linux-mips+bounces-6119-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6120-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1171F9A26BE
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2024 17:34:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D612C9A2B2B
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2024 19:40:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B060E1F232F7
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2024 15:34:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A57AB28D95
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2024 17:40:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4DEE1DED44;
-	Thu, 17 Oct 2024 15:34:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E3B41DFDB4;
+	Thu, 17 Oct 2024 17:40:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JfDKBTN7"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE421DDC1D;
-	Thu, 17 Oct 2024 15:34:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18DA71DF99D
+	for <linux-mips@vger.kernel.org>; Thu, 17 Oct 2024 17:40:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729179286; cv=none; b=gnkhFvfIsu1e3HXAQQ2xmPowsyDUcMGry6bQHA523GDl70ZhP9o0Lj/44tvt1x0gThEazKiMzor+JB6PxB87NjTNcVORw7nCOqyepIfheT86U/Mw/amFEhJBnVNjQmg+biQI3SNfNun/WAk+f9XLqJjwM7I5g0MPV3xOcTKixVs=
+	t=1729186825; cv=none; b=KddG8Hd/ahBIUcUOYQAY1tl+FRQ+lhyTvJTpEaxR5BmIANTygcxbAc5bbAdN9hSF+HbFe62ysu0nGjCpJHO255XGxcTq3K5Gw8i60bJlM01f7PnhjmHcBAykdHvkuZvB++81opHwlYf9r/eJ1p7Ck8IjRyqKsD0Qs2ZWOomfpWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729179286; c=relaxed/simple;
-	bh=nzTlkeEckY4SDdkxVWF1AoJhGSXOvj0VWFdu9nVmTI4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lfb0X/j8HiT1wP4TwY80yI0sauTal+b2h5MP3DYOhz4YMUghfURHMluSo+UQUrUs8cyaW7hkNWvzoobTjZIzK/9l+i3RNO8rsxPKDzIEp2a++sJy1ffu+wGM3YD0BbR+nZJLofsx+CSfUZT8ljG+uomntP+0pdczqk66dYeSdxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1027DC4CECD;
-	Thu, 17 Oct 2024 15:34:38 +0000 (UTC)
-Date: Thu, 17 Oct 2024 11:35:02 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Andrew Morton
- <akpm@linux-foundation.org>, Luis Chamberlain <mcgrof@kernel.org>, Andreas
- Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, Ard
- Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Borislav
- Petkov <bp@alien8.de>, Brian Cain <bcain@quicinc.com>, Catalin Marinas
- <catalin.marinas@arm.com>, Christoph Hellwig <hch@infradead.org>,
- Christophe Leroy <christophe.leroy@csgroup.eu>, Dave Hansen
- <dave.hansen@linux.intel.com>, Dinh Nguyen <dinguyen@kernel.org>, Geert
- Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, Helge
- Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar
- <mingo@redhat.com>, Johannes Berg <johannes@sipsolutions.net>, John Paul
- Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Kent Overstreet
- <kent.overstreet@linux.dev>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu
- <mhiramat@kernel.org>, Matt Turner <mattst88@gmail.com>, Max Filippov
- <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>, Michal Simek
- <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Richard Weinberger <richard@nod.at>, Russell King
- <linux@armlinux.org.uk>, Song Liu <song@kernel.org>, Stafford Horne
- <shorne@gmail.com>, Suren Baghdasaryan <surenb@google.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner
- <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>, Vineet Gupta
- <vgupta@kernel.org>, Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
- linux-mm@kvack.org, linux-modules@vger.kernel.org,
- linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
- linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
- loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v6 6/8] x86/module: prepare module loading for ROX
- allocations of text
-Message-ID: <20241017113453.685ba175@gandalf.local.home>
-In-Reply-To: <ZxD0EVBoO-jcxEGE@kernel.org>
-References: <20241016122424.1655560-1-rppt@kernel.org>
-	<20241016122424.1655560-7-rppt@kernel.org>
-	<20241016170128.7afeb8b0@gandalf.local.home>
-	<20241017093515.GU16066@noisy.programming.kicks-ass.net>
-	<ZxD0EVBoO-jcxEGE@kernel.org>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1729186825; c=relaxed/simple;
+	bh=dLn9d36dm2CDpdmYI4TuowHAHoMiQT1DP6ItK2LTOeo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VuKd316A7y1fXyJtunV+xGZbhjL5zYKTnZ7KqoJLQyj9KwLGKH9L0sOv2tNZArsib9KYlKd+KRSyDt+v6qguKKu3ajGBsCdnGlllcMSxQmvqgvQCgXZ1I7atW6w43i0O2lcF9FwyPjrqkR+5kopsxgb5H5jyNzTh98C69SYjKVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JfDKBTN7; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1729186820;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Me+6kqYD5L+igZgkevVfUHfhQZBz6G5zZyQw2Dfa0gs=;
+	b=JfDKBTN7EKK/7g00ZbFVAOFGAj+sX09EJtPKbT1THPVZu04ZswRCfPXhcSzgAHfWsJdEmo
+	+7We6LKORBxOOwyFJOnzKJqG4ivYQ08lR1n3IEFl+JuOni0sHCZqcDyWTjNRj2eVqB6vOa
+	xwMQ/v1Rer+86A6jIrUtOByGNFJNPmQ=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-344-9kH9CeyvOhOREERkc5XucQ-1; Thu, 17 Oct 2024 13:40:18 -0400
+X-MC-Unique: 9kH9CeyvOhOREERkc5XucQ-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-43151e4ef43so8349215e9.3
+        for <linux-mips@vger.kernel.org>; Thu, 17 Oct 2024 10:40:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729186817; x=1729791617;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Me+6kqYD5L+igZgkevVfUHfhQZBz6G5zZyQw2Dfa0gs=;
+        b=o982CCmcGaq1iGkOEQiSrLDVyT00Fr5NFl2U/KvGGbcybbDuZjUlrs1riATxgoklZP
+         cI+mIyHeNJwgjIhw99UlFFiFYQZgxodwmVtHtpfZkEjrNMqIxHT4lXUtlKLOJ2X5tYRa
+         kLmZz2gKPyM9flztQ9Cd+FKwU1Zvj5q7odn46fWveh8TmLXkze6x48XWDzee5sqM0jUz
+         UPHIcwUQE+qX/7u0cUWRd0M5AuG6uNPhGhcRgDOFu2GL/MqJ4MmVJawNiCN6QiXKSXUZ
+         A/w9V4uMJiPyydT3LSnbR7tuPfPf6sf1IHliXED/lbT3w+ce6Kro/1F4Hp5bLuPvsn8D
+         GKsA==
+X-Forwarded-Encrypted: i=1; AJvYcCWBqXn/KGafvlKADyRFgisawLpp6EcmuIxXLMQMEOoFuUwdHFeK4I+pLNcZ+XZk2cGSYoY2cU1ITJt8@vger.kernel.org
+X-Gm-Message-State: AOJu0YylSs0uHxKmvSu/dn3ARQdTzeH2t4GEXXBye9BAGqa1wqABSCye
+	ZNZr6nMONRzougxQUYgOUG6XyZ3s/5vMjtApRVbgG9JdIs8Y+90ZitnmKfV1II4UT2ot/180xBj
+	Mb+kI/NIHYtLZOUmkKvysT+1L3g0X4oS5NFPJzQFb9YoV5zI1zJuFGxjBCu1jecm/rROsRwiHnN
+	NgmUjjCpKzmGrTIm6vjZAQyntx5Mm0/ed4Pw==
+X-Received: by 2002:a05:600c:1d8e:b0:431:57d2:d7b4 with SMTP id 5b1f17b1804b1-43157d2d7b9mr36507095e9.26.1729186817336;
+        Thu, 17 Oct 2024 10:40:17 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGJXjIUBFBzWhc81QoCH/SVoEivw8XmjKVFXrcy86zA+s4Bvx/9zH7hnQ9Z4/zbRof1LT4xgUF82luj5UeBHDI=
+X-Received: by 2002:a05:600c:1d8e:b0:431:57d2:d7b4 with SMTP id
+ 5b1f17b1804b1-43157d2d7b9mr36506735e9.26.1729186816975; Thu, 17 Oct 2024
+ 10:40:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20241010182427.1434605-1-seanjc@google.com>
+In-Reply-To: <20241010182427.1434605-1-seanjc@google.com>
+From: Paolo Bonzini <pbonzini@redhat.com>
+Date: Thu, 17 Oct 2024 19:40:04 +0200
+Message-ID: <CABgObfbQW-3vp=mNcR4giUGZ_gxhuRykvKj8gzBDY7pOg6xdBQ@mail.gmail.com>
+Subject: Re: [PATCH v13 00/85] KVM: Stop grabbing references to PFNMAP'd pages
+To: Sean Christopherson <seanjc@google.com>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
+	Huacai Chen <chenhuacai@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Anup Patel <anup@brainfault.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	=?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>, 
+	Yan Zhao <yan.y.zhao@intel.com>, David Matlack <dmatlack@google.com>, 
+	David Stevens <stevensd@chromium.org>, Andrew Jones <ajones@ventanamicro.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 17 Oct 2024 14:25:05 +0300
-Mike Rapoport <rppt@kernel.org> wrote:
+On Thu, Oct 10, 2024 at 8:24=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
+> v13:
+>  - Rebased onto v6.12-rc2
+>  - Collect reviews. [Alex and others]
+>  - Fix a transient bug in arm64 and RISC-V where KVM would leak a page
+>    refcount. [Oliver]
+>  - Fix a dangling comment. [Alex]
+>  - Drop kvm_lookup_pfn(), as the x86 that "needed" it was stupid and is (=
+was?)
+>    eliminated in v6.12.
+>  - Drop check_user_page_hwpoison(). [Paolo]
+>  - Drop the arm64 MTE fixes that went into 6.12.
+>  - Slightly redo the guest_memfd interaction to account for 6.12 changes.
 
-> With this series the module text is allocated as ROX at the first place, so
-> the modifications ftrace does to module text have to either use text poking
-> even before complete_formation() or deal with a writable copy like I did
-> for relocations and alternatives.
-> 
-> I've been carrying the ftrace changes from a very old prototype and
-> didn't pay enough attention to them them until Steve's complaint.
-> 
-> I'll look into it.
+Here is my own summary of the changes:
 
-I just posted a patch where you can see the effects of these changes with
-respect to ftrace patching times.
+patches removed from v12:
+01/02 - already upstream
+09 - moved to separate A/D series [1]
+34 - not needed due to new patch 36
+35 - gone after 620525739521376a65a690df899e1596d56791f8
 
-  https://lore.kernel.org/all/20241017113105.1edfa943@gandalf.local.home/
+patches added or substantially changed in v13:
+05/06/07 - new, suggested by Yan Zhao
+08 - code was folded from mmu_spte_age into kvm_rmap_age_gfn_range
+14 - new, suggested by me in reply to 84/84 (yuck)
+15 - new, suggested by me in reply to 84/84
+19 - somewhat rewritten for new follow_pfnmap API
+27 - smaller changes due to new follow_pfnmap API
+36 - rewritten, suggested by me
+45 - new, cleanup
+46 - much simplified due to new patch 45
 
-I'll be adding this to the next merge window.
+Looks good to me, thanks and congratulations!! Should we merge it in
+kvm/next asap?
 
--- Steve
+Paolo
+
+[1] https://patchew.org/linux/20241011021051.1557902-1-seanjc@google.com/20=
+241011021051.1557902-5-seanjc@google.com/
+
 
