@@ -1,47 +1,47 @@
-Return-Path: <linux-mips+bounces-6118-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6119-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 849FD9A24CA
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2024 16:17:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1171F9A26BE
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2024 17:34:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0D1A2B23983
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2024 14:17:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B060E1F232F7
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2024 15:34:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AF891DE3D6;
-	Thu, 17 Oct 2024 14:16:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4DEE1DED44;
+	Thu, 17 Oct 2024 15:34:46 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F2D91DE2B2;
-	Thu, 17 Oct 2024 14:16:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE421DDC1D;
+	Thu, 17 Oct 2024 15:34:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729174617; cv=none; b=q3pR+DMNW4KBHwzDgcxnh8w/eZrac5sELevZFzGzSjB2acYbtBG59NsuRUMWG5sHnAoXxzgfyTCgZcqInSH14jtOYhuoLdatbE5mHv7s/SHJnHyZFFjJmKJ7ImESk068F/nNTSBOGN9J1UegNhYqxLERzFV+Ha6abAkRNVBNSr4=
+	t=1729179286; cv=none; b=gnkhFvfIsu1e3HXAQQ2xmPowsyDUcMGry6bQHA523GDl70ZhP9o0Lj/44tvt1x0gThEazKiMzor+JB6PxB87NjTNcVORw7nCOqyepIfheT86U/Mw/amFEhJBnVNjQmg+biQI3SNfNun/WAk+f9XLqJjwM7I5g0MPV3xOcTKixVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729174617; c=relaxed/simple;
-	bh=zxlBeAJp2bfYYqmWtSZQo9rE3eewc0ORywp0deKMTcI=;
+	s=arc-20240116; t=1729179286; c=relaxed/simple;
+	bh=nzTlkeEckY4SDdkxVWF1AoJhGSXOvj0VWFdu9nVmTI4=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eCobvcLSrWeYjRpkHPCNp4k30PlzU/UDWVfW/oXBDkeCMFhQN9DoDz+CZprC6DNxrVmWwpTR6MtAJhs3SDbIU8O9tW2rKJ2qeDNaaKfv2RmgUBkl9fHjLkNPiCw8cKYdH0tQY8Ei4w7z02NX6hYkQSkTaK+6eoSSQZz9gwFTia4=
+	 MIME-Version:Content-Type; b=lfb0X/j8HiT1wP4TwY80yI0sauTal+b2h5MP3DYOhz4YMUghfURHMluSo+UQUrUs8cyaW7hkNWvzoobTjZIzK/9l+i3RNO8rsxPKDzIEp2a++sJy1ffu+wGM3YD0BbR+nZJLofsx+CSfUZT8ljG+uomntP+0pdczqk66dYeSdxk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E652CC4CEC3;
-	Thu, 17 Oct 2024 14:16:49 +0000 (UTC)
-Date: Thu, 17 Oct 2024 10:17:12 -0400
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1027DC4CECD;
+	Thu, 17 Oct 2024 15:34:38 +0000 (UTC)
+Date: Thu, 17 Oct 2024 11:35:02 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Luis Chamberlain
- <mcgrof@kernel.org>, Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski
- <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann
- <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>, Brian Cain
- <bcain@quicinc.com>, Catalin Marinas <catalin.marinas@arm.com>, Christoph
- Hellwig <hch@infradead.org>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, Dave Hansen <dave.hansen@linux.intel.com>,
- Dinh Nguyen <dinguyen@kernel.org>, Geert Uytterhoeven
- <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, Helge Deller
- <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar
+Cc: Peter Zijlstra <peterz@infradead.org>, Andrew Morton
+ <akpm@linux-foundation.org>, Luis Chamberlain <mcgrof@kernel.org>, Andreas
+ Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, Ard
+ Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Borislav
+ Petkov <bp@alien8.de>, Brian Cain <bcain@quicinc.com>, Catalin Marinas
+ <catalin.marinas@arm.com>, Christoph Hellwig <hch@infradead.org>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>, Dave Hansen
+ <dave.hansen@linux.intel.com>, Dinh Nguyen <dinguyen@kernel.org>, Geert
+ Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, Helge
+ Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar
  <mingo@redhat.com>, Johannes Berg <johannes@sipsolutions.net>, John Paul
  Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Kent Overstreet
  <kent.overstreet@linux.dev>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
@@ -49,30 +49,31 @@ Cc: Andrew Morton <akpm@linux-foundation.org>, Luis Chamberlain
  <mhiramat@kernel.org>, Matt Turner <mattst88@gmail.com>, Max Filippov
  <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>, Michal Simek
  <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>, Richard
- Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>, Song Liu
- <song@kernel.org>, Stafford Horne <shorne@gmail.com>, Suren Baghdasaryan
- <surenb@google.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Thomas Gleixner <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>,
- Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
- bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
- linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
- sparclinux@vger.kernel.org, x86@kernel.org
+ <palmer@dabbelt.com>, Richard Weinberger <richard@nod.at>, Russell King
+ <linux@armlinux.org.uk>, Song Liu <song@kernel.org>, Stafford Horne
+ <shorne@gmail.com>, Suren Baghdasaryan <surenb@google.com>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner
+ <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>, Vineet Gupta
+ <vgupta@kernel.org>, Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+ linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+ linux-mm@kvack.org, linux-modules@vger.kernel.org,
+ linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+ linux-snps-arc@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
+ linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+ loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
 Subject: Re: [PATCH v6 6/8] x86/module: prepare module loading for ROX
  allocations of text
-Message-ID: <20241017101712.5a052712@gandalf.local.home>
-In-Reply-To: <20241016170128.7afeb8b0@gandalf.local.home>
+Message-ID: <20241017113453.685ba175@gandalf.local.home>
+In-Reply-To: <ZxD0EVBoO-jcxEGE@kernel.org>
 References: <20241016122424.1655560-1-rppt@kernel.org>
 	<20241016122424.1655560-7-rppt@kernel.org>
 	<20241016170128.7afeb8b0@gandalf.local.home>
+	<20241017093515.GU16066@noisy.programming.kicks-ass.net>
+	<ZxD0EVBoO-jcxEGE@kernel.org>
 X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -83,65 +84,25 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Wed, 16 Oct 2024 17:01:28 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Thu, 17 Oct 2024 14:25:05 +0300
+Mike Rapoport <rppt@kernel.org> wrote:
 
-> If this is only needed for module load, can we at least still use the
-> text_poke_early() at boot up?
+> With this series the module text is allocated as ROX at the first place, so
+> the modifications ftrace does to module text have to either use text poking
+> even before complete_formation() or deal with a writable copy like I did
+> for relocations and alternatives.
 > 
->  	if (ftrace_poke_late) {
->  		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
-> 	} else if (system_state == SYSTEM_BOOTING) {
-> 		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
->  	} else {
->  		mutex_lock(&text_mutex);
->  		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
->  		mutex_unlock(&text_mutex);
->  	}
+> I've been carrying the ftrace changes from a very old prototype and
+> didn't pay enough attention to them them until Steve's complaint.
 > 
-> ?
-> 
-> The above if statement looks to slow things down just slightly, but only by
-> 2ms, which is more reasonable.
+> I'll look into it.
 
-I changed the above to this (yes it's a little hacky) and got my 2ms back!
+I just posted a patch where you can see the effects of these changes with
+respect to ftrace patching times.
+
+  https://lore.kernel.org/all/20241017113105.1edfa943@gandalf.local.home/
+
+I'll be adding this to the next merge window.
 
 -- Steve
-
-DEFINE_STATIC_KEY_TRUE(ftrace_modify_boot);
-
-static int __init ftrace_boot_init_done(void)
-{
-	static_branch_disable(&ftrace_modify_boot);
-	return 0;
-}
-/* Ftrace updates happen before core init */
-core_initcall(ftrace_boot_init_done);
-
-/*
- * Marked __ref because it calls text_poke_early() which is .init.text. That is
- * ok because that call will happen early, during boot, when .init sections are
- * still present.
- */
-static int __ref
-ftrace_modify_code_direct(unsigned long ip, const char *old_code,
-			  const char *new_code)
-{
-	int ret = ftrace_verify_code(ip, old_code);
-
-	if (ret)
-		return ret;
-
-	/* replace the text with the new text */
-	if (static_branch_unlikely(&ftrace_modify_boot)) {
-		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
-	} else if (ftrace_poke_late) {
-		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
-	} else {
-		mutex_lock(&text_mutex);
-		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
-		mutex_unlock(&text_mutex);
-	}
-	return 0;
-}
 
