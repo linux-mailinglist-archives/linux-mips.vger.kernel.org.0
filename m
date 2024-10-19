@@ -1,72 +1,72 @@
-Return-Path: <linux-mips+bounces-6154-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6155-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 861A29A4BB3
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2024 09:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id ABB1A9A4BB4
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2024 09:12:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42E1F28496B
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2024 07:12:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E973284A84
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2024 07:12:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92D991DFE22;
-	Sat, 19 Oct 2024 07:11:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFFB61E0082;
+	Sat, 19 Oct 2024 07:11:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PdEIV6iF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Me3cCNX8"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC6C1DFD9F;
-	Sat, 19 Oct 2024 07:11:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D28741DFE0F;
+	Sat, 19 Oct 2024 07:11:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729321865; cv=none; b=WxZcrzi2/iyCjvwfBQA7/j/GOGxzJSurkn6kS+NXdjlEV38DSwkPe1CL86VL00LvONrDYYkNXZhQx8iVXXygzOZjE3dZPpUw5kLSNNMa6Uf7nc7IdCaVgEKVksFn1WTALoR/A2QuxGPiQsAiCjfxU7pPCtVFQ9GD0GixXIFn/wY=
+	t=1729321866; cv=none; b=ibQTMeJNeaXNF/eLM0PLrFtW3S7CKzjzeqYneukA+4KUoLokwxr4D8N/2sc5dKWttmlH+Hm5qLIhS5IjoVZV2MgnyMvyd+kR58KsuX+cayvBpvUzLEAsCes3pgMCUO8lDtasLblDRzCySf/hZWInYHeg2IDrhldlzKtCRKAUPRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729321865; c=relaxed/simple;
-	bh=C1UWvLBD18ktmGVl3uHYn1SGIWdmhfk3zyDVlPq5Qdo=;
+	s=arc-20240116; t=1729321866; c=relaxed/simple;
+	bh=K0HzhA8alacM4aGMjW+d/bogSNMW+xZy6jmFTQZC5Xw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pGPqrD5rd+xol19dtTOtPe3aFEZ/RKgFjLWrEATGkMPzmPU7483AWQylVf98LK7IRZhEeJgJn3h2hcmChbv60jTNNSbj6+yrSi3I5tdcg7FybWatZfZX4WaK5EDEFQldn/6VISQJEUOAZMT429x0io8HOTCtTdnP6mp1FZqSyL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PdEIV6iF; arc=none smtp.client-ip=209.85.218.42
+	 MIME-Version; b=YaIenvX3DRH+VsoZ/kZ8wpJRA+hAG2idz9W67CNU1rUR41guxXo/whgPHZGI1ofcHSYzwcJoss/MuLTroJs6j44lb1cyJXaYI9LOYmRaJ4kVKjGmkEBO6vR0i/6RVhCnIw9ZP2ZYV/vwdVs1T3vJVxoORfyYszSQ6SJjwIpszHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Me3cCNX8; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a9a156513a1so343862166b.0;
-        Sat, 19 Oct 2024 00:11:02 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a9a3dc089d8so360862766b.3;
+        Sat, 19 Oct 2024 00:11:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729321861; x=1729926661; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1729321863; x=1729926663; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GG/8+pJMCIxCghz+y+ZE8tT8LiRET7/nFHMIKLEQQWY=;
-        b=PdEIV6iFjHK0w1sx458SpdVHzHJDGDPJ1/HtQBbojxfa8WGK/Njrs3PJP1AkPJnSIU
-         k7GZYL8jxdt8uWF5qngNJ5zjubL8OQGP7YXOCTBD58J5O93X3cjm+xOWABBEs6d4lVjf
-         N+kVTldhuxKXL3Xz9E824whi5/7EgwUn7mE55zyojrO4AiOxxSo7K1EU4PC4SE4/qoNZ
-         cunEIaJL/hmTqW7z1sagOIjc0xk6hOXLlwPBioknjOgytxm1tSm7myMmz5AsEfsuYgP1
-         7gFBVcjsUAJ3QYJvHK3K5dIyCLQThw0D3IOYim4wxip+vBDuPv8JoLClD9FWuKTptOYb
-         1ufQ==
+        bh=jAZgXuitpoye0Y0FrsnQrLaDYihSlv95JKJZ5ie56qU=;
+        b=Me3cCNX87iHmzm+7Q8jpu04CLg1uUoFN9Fge5SfSkAsC2VP+N0weE6yU0+l2tNkbNY
+         X7ZkoKiKg++MFu8b+TMJs0QcNv9ddwvI9lsd9bDTXdwVybMeBW/Hp2J8DjvWvLksRNQ9
+         mMep7v6Y4upnX825Z3k02P2ed4kzfZYX9d8IGIK8IN3e2r7rQqJP04HNAOIvtU3HFfJ4
+         UMYKhUVzqbczDiZPhDOw8Nc3H4aWn8omve6i535IvjntqOibbh+M9g4RL72iFOCyEEmo
+         gYkOBYhBWC/oo8W7RusHwKd2SaiqR6jwKN3jvIn7NOpnY+T+7VqY7HvuLo+1l4/3tQ0Q
+         iajg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729321861; x=1729926661;
+        d=1e100.net; s=20230601; t=1729321863; x=1729926663;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GG/8+pJMCIxCghz+y+ZE8tT8LiRET7/nFHMIKLEQQWY=;
-        b=hOCnax7i/jmEjrmmoCBsYEKfrQ8vvhan5HvHF5qqqf0dzOReQ1zwZGf3WwisteRXv/
-         EbftNmKgOObs2tcq1SfZcBlpQhvLNyBbAnbx+NuwQNT8IrDmflkeYjzmzn8cttDfmSQo
-         B9ofD4bCUBH5DmK98UvRDn9hXxCHq1+Ke0ie5+BP5ZgqB8s8mnloxmWlNIm2R47AlnPv
-         UEaXn8mbEU5JdBxqGPKolsSLSK4zTj+YRBODYe4H5jD8SQ6S7tD3Mztsslq3Qg3Z79Ue
-         15uKUN5WcgyHDo6Dpk9YeiggSfuUYt/HmgKVrU0NxI8CgqIphAqeO5LHsnUhsEwhZPiN
-         Xk5A==
-X-Forwarded-Encrypted: i=1; AJvYcCVineE/CUcrAg+SJTOyKGgC6h2J0eEkEKUZkJkeG5xuTyCOfAeAKEDwUo0A5NtWE6M6moVxCLJ2Fc+OvA==@vger.kernel.org, AJvYcCX0rNVte4te189F+n9/lSoR15WjnFmrMbi7zKByk2DE1wy+ypJKOuwBqyRv6GWHKSB0VM9CC5MpWP+EJwI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxikHa6xpkWY9uMWjvOBDC/BZlsJ0X65O3nltMZSnkkoSF5nXPV
-	KDQDCk+RcsK3KbAEiNJqlUVbpdYUf0mTZE+Rqi29VL9iz4hcZX1A
-X-Google-Smtp-Source: AGHT+IECSdbiR/ajyNE4zm3n4gXVbbAmawVWfageMJCZh4ki/Pj9rC821WEqect75au+xW62YxrajA==
-X-Received: by 2002:a17:906:c10f:b0:a9a:2158:e9d3 with SMTP id a640c23a62f3a-a9a69b7bacfmr439816466b.35.1729321860928;
-        Sat, 19 Oct 2024 00:11:00 -0700 (PDT)
+        bh=jAZgXuitpoye0Y0FrsnQrLaDYihSlv95JKJZ5ie56qU=;
+        b=H42/6SEkbxM0OCvaqgIXCTRlwJFHVWgZB/v7eHKaliWsHwnK/izfn6AojllPa5w5kj
+         P97Bz+7or4Xpd7w+1Etf4XR6lZ9W1+J4ZJxGgskVqQjc30kl+ZkWNcCFkMGx4tofUg6u
+         /NJEs9VSGL55EeLhTCgvq3OPa0ypcWW++3XGCAdNex7WtOYstgJ4Pqk2yXokVhlchwIZ
+         QiOP2iy5ZS8U3TtStkI7t/nsPgFg8TXUtm1aQJPBaVMNePFjK+OV8o/Sk6VUxdDybhh/
+         Ky2xCoWMbOhHY1jJ8EJE+eIj7JJAu/ASYa6+zOCTQ0E8DyAoLssI73fuIKHuB/blUzcS
+         L1Fg==
+X-Forwarded-Encrypted: i=1; AJvYcCWJblsRhrxTdlX79dgXV3FufA4dgwg6OPHkMxVUXEWl/Vg92RMYwioHmuRU2XGIBZfoTRIXJy7zVdWQoqs=@vger.kernel.org, AJvYcCX3I4DdVLKoRbyT9sysOFGQI0q7tYMGatqpFl18JrtU+5Gm+V/d3Lg/CdXauiW6PD7nUZUoUtLvwFuzJw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLXLMIInusqhWowvgEfqFxHKeuvJxnRbuKzU29lGLRswcKtUGp
+	LQIgDuPbHrCzwq0yVUXRO0ny1MKBgDYo5GeCmtvwzSpPxVCA4xut
+X-Google-Smtp-Source: AGHT+IEybtMSJJTB1GlywNRQRpKklzRj1/3/mMkf52VBoXC32u7TNHFjKT71CJaNokZhu8eUiNJDKA==
+X-Received: by 2002:a17:907:7211:b0:a99:55ab:b666 with SMTP id a640c23a62f3a-a9a69a80a16mr479865566b.34.1729321862735;
+        Sat, 19 Oct 2024 00:11:02 -0700 (PDT)
 Received: from localhost.localdomain ([79.175.114.8])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a68c27841sm180566666b.192.2024.10.19.00.10.59
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a68c27841sm180566666b.192.2024.10.19.00.11.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Oct 2024 00:11:00 -0700 (PDT)
+        Sat, 19 Oct 2024 00:11:02 -0700 (PDT)
 From: Aleksandar Rikalo <arikalo@gmail.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: Aleksandar Rikalo <arikalo@gmail.com>,
@@ -86,9 +86,9 @@ Cc: Aleksandar Rikalo <arikalo@gmail.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>,
 	Gregory CLEMENT <gregory.clement@bootlin.com>
-Subject: [PATCH v7 09/12] MIPS: CPS: Boot CPUs in secondary clusters
-Date: Sat, 19 Oct 2024 09:10:34 +0200
-Message-Id: <20241019071037.145314-10-arikalo@gmail.com>
+Subject: [PATCH v7 10/12] dt-bindings: mips: cpu: Add property for broken HCI information
+Date: Sat, 19 Oct 2024 09:10:35 +0200
+Message-Id: <20241019071037.145314-11-arikalo@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20241019071037.145314-1-arikalo@gmail.com>
 References: <20241019071037.145314-1-arikalo@gmail.com>
@@ -100,402 +100,37 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Paul Burton <paulburton@kernel.org>
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
 
-Probe for & boot CPUs (cores & VPs) in secondary clusters (ie. not the
-cluster that began booting Linux) when they are present in systems with
-CM 3.5 or higher.
+Some CM3.5 reports show that Hardware Cache Initialization is
+complete, but in reality it's not the case. They also incorrectly
+indicate that Hardware Cache Initialization is supported. This
+optional property allows warning about this broken feature that cannot
+be detected at runtime.
 
-Signed-off-by: Paul Burton <paulburton@kernel.org>
-Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
-Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 Signed-off-by: Aleksandar Rikalo <arikalo@gmail.com>
-Tested-by: Serge Semin <fancer.lancer@gmail.com>
 ---
- arch/mips/include/asm/mips-cm.h |  18 +++
- arch/mips/include/asm/smp-cps.h |   1 +
- arch/mips/kernel/mips-cm.c      |   4 +-
- arch/mips/kernel/smp-cps.c      | 205 ++++++++++++++++++++++++++++----
- 4 files changed, 207 insertions(+), 21 deletions(-)
+ Documentation/devicetree/bindings/mips/cpus.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/mips/include/asm/mips-cm.h b/arch/mips/include/asm/mips-cm.h
-index 1e782275850a..4d47163647dd 100644
---- a/arch/mips/include/asm/mips-cm.h
-+++ b/arch/mips/include/asm/mips-cm.h
-@@ -255,6 +255,12 @@ GCR_ACCESSOR_RW(32, 0x130, l2_config)
- GCR_ACCESSOR_RO(32, 0x150, sys_config2)
- #define CM_GCR_SYS_CONFIG2_MAXVPW		GENMASK(3, 0)
+diff --git a/Documentation/devicetree/bindings/mips/cpus.yaml b/Documentation/devicetree/bindings/mips/cpus.yaml
+index a85137add668..57e93c07ab1b 100644
+--- a/Documentation/devicetree/bindings/mips/cpus.yaml
++++ b/Documentation/devicetree/bindings/mips/cpus.yaml
+@@ -47,6 +47,12 @@ properties:
+   clocks:
+     maxItems: 1
  
-+/* GCR_L2-RAM_CONFIG - Configuration & status of L2 cache RAMs */
-+GCR_ACCESSOR_RW(64, 0x240, l2_ram_config)
-+#define CM_GCR_L2_RAM_CONFIG_PRESENT		BIT(31)
-+#define CM_GCR_L2_RAM_CONFIG_HCI_DONE		BIT(30)
-+#define CM_GCR_L2_RAM_CONFIG_HCI_SUPPORTED	BIT(29)
++  cm3-l2-config-hci-broken:
++    type: boolean
++    description:
++      If present, indicates that the HCI (Hardware Cache Initialization)
++      information for the L2 cache in multi-cluster configuration is broken.
 +
- /* GCR_L2_PFT_CONTROL - Controls hardware L2 prefetching */
- GCR_ACCESSOR_RW(32, 0x300, l2_pft_control)
- #define CM_GCR_L2_PFT_CONTROL_PAGEMASK		GENMASK(31, 12)
-@@ -266,6 +272,18 @@ GCR_ACCESSOR_RW(32, 0x308, l2_pft_control_b)
- #define CM_GCR_L2_PFT_CONTROL_B_CEN		BIT(8)
- #define CM_GCR_L2_PFT_CONTROL_B_PORTID		GENMASK(7, 0)
+   device_type: true
  
-+/* GCR_L2_TAG_ADDR - Access addresses in L2 cache tags */
-+GCR_ACCESSOR_RW(64, 0x600, l2_tag_addr)
-+
-+/* GCR_L2_TAG_STATE - Access L2 cache tag state */
-+GCR_ACCESSOR_RW(64, 0x608, l2_tag_state)
-+
-+/* GCR_L2_DATA - Access data in L2 cache lines */
-+GCR_ACCESSOR_RW(64, 0x610, l2_data)
-+
-+/* GCR_L2_ECC - Access ECC information from L2 cache lines */
-+GCR_ACCESSOR_RW(64, 0x618, l2_ecc)
-+
- /* GCR_L2SM_COP - L2 cache op state machine control */
- GCR_ACCESSOR_RW(32, 0x620, l2sm_cop)
- #define CM_GCR_L2SM_COP_PRESENT			BIT(31)
-diff --git a/arch/mips/include/asm/smp-cps.h b/arch/mips/include/asm/smp-cps.h
-index a629e948a6fd..10d3ebd890cb 100644
---- a/arch/mips/include/asm/smp-cps.h
-+++ b/arch/mips/include/asm/smp-cps.h
-@@ -23,6 +23,7 @@ struct core_boot_config {
- };
- 
- struct cluster_boot_config {
-+	unsigned long *core_power;
- 	struct core_boot_config *core_config;
- };
- 
-diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
-index 3eb2cfb893e1..9854bc2b6895 100644
---- a/arch/mips/kernel/mips-cm.c
-+++ b/arch/mips/kernel/mips-cm.c
-@@ -308,7 +308,9 @@ void mips_cm_lock_other(unsigned int cluster, unsigned int core,
- 		      FIELD_PREP(CM3_GCR_Cx_OTHER_VP, vp);
- 
- 		if (cm_rev >= CM_REV_CM3_5) {
--			val |= CM_GCR_Cx_OTHER_CLUSTER_EN;
-+			if (cluster != cpu_cluster(&current_cpu_data))
-+				val |= CM_GCR_Cx_OTHER_CLUSTER_EN;
-+			val |= CM_GCR_Cx_OTHER_GIC_EN;
- 			val |= FIELD_PREP(CM_GCR_Cx_OTHER_CLUSTER, cluster);
- 			val |= FIELD_PREP(CM_GCR_Cx_OTHER_BLOCK, block);
- 		} else {
-diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-index f71e2bb58318..4f344c890a23 100644
---- a/arch/mips/kernel/smp-cps.c
-+++ b/arch/mips/kernel/smp-cps.c
-@@ -36,12 +36,56 @@ enum label_id {
- 
- UASM_L_LA(_not_nmi)
- 
--static DECLARE_BITMAP(core_power, NR_CPUS);
- static uint32_t core_entry_reg;
- static phys_addr_t cps_vec_pa;
- 
- struct cluster_boot_config *mips_cps_cluster_bootcfg;
- 
-+static void power_up_other_cluster(unsigned int cluster)
-+{
-+	u32 stat, seq_state;
-+	unsigned int timeout;
-+
-+	mips_cm_lock_other(cluster, CM_GCR_Cx_OTHER_CORE_CM, 0,
-+			   CM_GCR_Cx_OTHER_BLOCK_LOCAL);
-+	stat = read_cpc_co_stat_conf();
-+	mips_cm_unlock_other();
-+
-+	seq_state = stat & CPC_Cx_STAT_CONF_SEQSTATE;
-+	seq_state >>= __ffs(CPC_Cx_STAT_CONF_SEQSTATE);
-+	if (seq_state == CPC_Cx_STAT_CONF_SEQSTATE_U5)
-+		return;
-+
-+	/* Set endianness & power up the CM */
-+	mips_cm_lock_other(cluster, 0, 0, CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
-+	write_cpc_redir_sys_config(IS_ENABLED(CONFIG_CPU_BIG_ENDIAN));
-+	write_cpc_redir_pwrup_ctl(1);
-+	mips_cm_unlock_other();
-+
-+	/* Wait for the CM to start up */
-+	timeout = 1000;
-+	mips_cm_lock_other(cluster, CM_GCR_Cx_OTHER_CORE_CM, 0,
-+			   CM_GCR_Cx_OTHER_BLOCK_LOCAL);
-+	while (1) {
-+		stat = read_cpc_co_stat_conf();
-+		seq_state = stat & CPC_Cx_STAT_CONF_SEQSTATE;
-+		seq_state >>= __ffs(CPC_Cx_STAT_CONF_SEQSTATE);
-+		if (seq_state == CPC_Cx_STAT_CONF_SEQSTATE_U5)
-+			break;
-+
-+		if (timeout) {
-+			mdelay(1);
-+			timeout--;
-+		} else {
-+			pr_warn("Waiting for cluster %u CM to power up... STAT_CONF=0x%x\n",
-+				cluster, stat);
-+			mdelay(1000);
-+		}
-+	}
-+
-+	mips_cm_unlock_other();
-+}
-+
- static unsigned __init core_vpe_count(unsigned int cluster, unsigned core)
- {
- 	return min(smp_max_threads, mips_cps_numvps(cluster, core));
-@@ -152,6 +196,9 @@ static void __init cps_smp_setup(void)
- 			pr_cont(",");
- 		pr_cont("{");
- 
-+		if (mips_cm_revision() >= CM_REV_CM3_5)
-+			power_up_other_cluster(cl);
-+
- 		ncores = mips_cps_numcores(cl);
- 		for (c = 0; c < ncores; c++) {
- 			core_vpes = core_vpe_count(cl, c);
-@@ -179,8 +226,8 @@ static void __init cps_smp_setup(void)
- 
- 	/* Indicate present CPUs (CPU being synonymous with VPE) */
- 	for (v = 0; v < min_t(unsigned, nvpes, NR_CPUS); v++) {
--		set_cpu_possible(v, cpu_cluster(&cpu_data[v]) == 0);
--		set_cpu_present(v, cpu_cluster(&cpu_data[v]) == 0);
-+		set_cpu_possible(v, true);
-+		set_cpu_present(v, true);
- 		__cpu_number_map[v] = v;
- 		__cpu_logical_map[v] = v;
- 	}
-@@ -188,9 +235,6 @@ static void __init cps_smp_setup(void)
- 	/* Set a coherent default CCA (CWB) */
- 	change_c0_config(CONF_CM_CMASK, 0x5);
- 
--	/* Core 0 is powered up (we're running on it) */
--	bitmap_set(core_power, 0, 1);
--
- 	/* Initialise core 0 */
- 	mips_cps_core_init();
- 
-@@ -272,6 +316,10 @@ static void __init cps_prepare_cpus(unsigned int max_cpus)
- 			goto err_out;
- 		mips_cps_cluster_bootcfg[cl].core_config = core_bootcfg;
- 
-+		mips_cps_cluster_bootcfg[cl].core_power =
-+			kcalloc(BITS_TO_LONGS(ncores), sizeof(unsigned long),
-+				GFP_KERNEL);
-+
- 		/* Allocate VPE boot configuration structs */
- 		for (c = 0; c < ncores; c++) {
- 			core_vpes = core_vpe_count(cl, c);
-@@ -283,11 +331,12 @@ static void __init cps_prepare_cpus(unsigned int max_cpus)
- 		}
- 	}
- 
--	/* Mark this CPU as booted */
-+	/* Mark this CPU as powered up & booted */
- 	cl = cpu_cluster(&current_cpu_data);
- 	c = cpu_core(&current_cpu_data);
- 	cluster_bootcfg = &mips_cps_cluster_bootcfg[cl];
- 	core_bootcfg = &cluster_bootcfg->core_config[c];
-+	bitmap_set(cluster_bootcfg->core_power, cpu_core(&current_cpu_data), 1);
- 	atomic_set(&core_bootcfg->vpe_mask, 1 << cpu_vpe_id(&current_cpu_data));
- 
- 	return;
-@@ -315,13 +364,118 @@ static void __init cps_prepare_cpus(unsigned int max_cpus)
- 	}
- }
- 
--static void boot_core(unsigned int core, unsigned int vpe_id)
-+static void init_cluster_l2(void)
- {
--	u32 stat, seq_state;
--	unsigned timeout;
-+	u32 l2_cfg, l2sm_cop, result;
-+
-+	while (1) {
-+		l2_cfg = read_gcr_redir_l2_ram_config();
-+
-+		/* If HCI is not supported, use the state machine below */
-+		if (!(l2_cfg & CM_GCR_L2_RAM_CONFIG_PRESENT))
-+			break;
-+		if (!(l2_cfg & CM_GCR_L2_RAM_CONFIG_HCI_SUPPORTED))
-+			break;
-+
-+		/* If the HCI_DONE bit is set, we're finished */
-+		if (l2_cfg & CM_GCR_L2_RAM_CONFIG_HCI_DONE)
-+			return;
-+	}
-+
-+	l2sm_cop = read_gcr_redir_l2sm_cop();
-+	if (WARN(!(l2sm_cop & CM_GCR_L2SM_COP_PRESENT),
-+		 "L2 init not supported on this system yet"))
-+		return;
-+
-+	/* Clear L2 tag registers */
-+	write_gcr_redir_l2_tag_state(0);
-+	write_gcr_redir_l2_ecc(0);
-+
-+	/* Ensure the L2 tag writes complete before the state machine starts */
-+	mb();
-+
-+	/* Wait for the L2 state machine to be idle */
-+	do {
-+		l2sm_cop = read_gcr_redir_l2sm_cop();
-+	} while (l2sm_cop & CM_GCR_L2SM_COP_RUNNING);
-+
-+	/* Start a store tag operation */
-+	l2sm_cop = CM_GCR_L2SM_COP_TYPE_IDX_STORETAG;
-+	l2sm_cop <<= __ffs(CM_GCR_L2SM_COP_TYPE);
-+	l2sm_cop |= CM_GCR_L2SM_COP_CMD_START;
-+	write_gcr_redir_l2sm_cop(l2sm_cop);
-+
-+	/* Ensure the state machine starts before we poll for completion */
-+	mb();
-+
-+	/* Wait for the operation to be complete */
-+	do {
-+		l2sm_cop = read_gcr_redir_l2sm_cop();
-+		result = l2sm_cop & CM_GCR_L2SM_COP_RESULT;
-+		result >>= __ffs(CM_GCR_L2SM_COP_RESULT);
-+	} while (!result);
-+
-+	WARN(result != CM_GCR_L2SM_COP_RESULT_DONE_OK,
-+	     "L2 state machine failed cache init with error %u\n", result);
-+}
-+
-+static void boot_core(unsigned int cluster, unsigned int core,
-+		      unsigned int vpe_id)
-+{
-+	struct cluster_boot_config *cluster_cfg;
-+	u32 access, stat, seq_state;
-+	unsigned int timeout, ncores;
-+
-+	cluster_cfg = &mips_cps_cluster_bootcfg[cluster];
-+	ncores = mips_cps_numcores(cluster);
-+
-+	if ((cluster != cpu_cluster(&current_cpu_data)) &&
-+	    bitmap_empty(cluster_cfg->core_power, ncores)) {
-+		power_up_other_cluster(cluster);
-+
-+		mips_cm_lock_other(cluster, core, 0,
-+				   CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
-+
-+		/* Ensure cluster GCRs are where we expect */
-+		write_gcr_redir_base(read_gcr_base());
-+		write_gcr_redir_cpc_base(read_gcr_cpc_base());
-+		write_gcr_redir_gic_base(read_gcr_gic_base());
-+
-+		init_cluster_l2();
-+
-+		/* Mirror L2 configuration */
-+		write_gcr_redir_l2_only_sync_base(read_gcr_l2_only_sync_base());
-+		write_gcr_redir_l2_pft_control(read_gcr_l2_pft_control());
-+		write_gcr_redir_l2_pft_control_b(read_gcr_l2_pft_control_b());
-+
-+		/* Mirror ECC/parity setup */
-+		write_gcr_redir_err_control(read_gcr_err_control());
-+
-+		/* Set BEV base */
-+		write_gcr_redir_bev_base(core_entry_reg);
-+
-+		mips_cm_unlock_other();
-+	}
-+
-+	if (cluster != cpu_cluster(&current_cpu_data)) {
-+		mips_cm_lock_other(cluster, core, 0,
-+				   CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
-+
-+		/* Ensure the core can access the GCRs */
-+		access = read_gcr_redir_access();
-+		access |= BIT(core);
-+		write_gcr_redir_access(access);
-+
-+		mips_cm_unlock_other();
-+	} else {
-+		/* Ensure the core can access the GCRs */
-+		access = read_gcr_access();
-+		access |= BIT(core);
-+		write_gcr_access(access);
-+	}
- 
- 	/* Select the appropriate core */
--	mips_cm_lock_other(0, core, 0, CM_GCR_Cx_OTHER_BLOCK_LOCAL);
-+	mips_cm_lock_other(cluster, core, 0, CM_GCR_Cx_OTHER_BLOCK_LOCAL);
- 
- 	/* Set its reset vector */
- 	write_gcr_co_reset_base(core_entry_reg);
-@@ -387,7 +541,17 @@ static void boot_core(unsigned int core, unsigned int vpe_id)
- 	mips_cm_unlock_other();
- 
- 	/* The core is now powered up */
--	bitmap_set(core_power, core, 1);
-+	bitmap_set(cluster_cfg->core_power, core, 1);
-+
-+	/*
-+	 * Restore CM_PWRUP=0 so that the CM can power down if all the cores in
-+	 * the cluster do (eg. if they're all removed via hotplug.
-+	 */
-+	if (mips_cm_revision() >= CM_REV_CM3_5) {
-+		mips_cm_lock_other(cluster, 0, 0, CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
-+		write_cpc_redir_pwrup_ctl(0);
-+		mips_cm_unlock_other();
-+	}
- }
- 
- static void remote_vpe_boot(void *dummy)
-@@ -413,10 +577,6 @@ static int cps_boot_secondary(int cpu, struct task_struct *idle)
- 	unsigned int remote;
- 	int err;
- 
--	/* We don't yet support booting CPUs in other clusters */
--	if (cpu_cluster(&cpu_data[cpu]) != cpu_cluster(&raw_current_cpu_data))
--		return -ENOSYS;
--
- 	vpe_cfg->pc = (unsigned long)&smp_bootstrap;
- 	vpe_cfg->sp = __KSTK_TOS(idle);
- 	vpe_cfg->gp = (unsigned long)task_thread_info(idle);
-@@ -425,14 +585,15 @@ static int cps_boot_secondary(int cpu, struct task_struct *idle)
- 
- 	preempt_disable();
- 
--	if (!test_bit(core, core_power)) {
-+	if (!test_bit(core, cluster_cfg->core_power)) {
- 		/* Boot a VPE on a powered down core */
--		boot_core(core, vpe_id);
-+		boot_core(cluster, core, vpe_id);
- 		goto out;
- 	}
- 
- 	if (cpu_has_vp) {
--		mips_cm_lock_other(0, core, vpe_id, CM_GCR_Cx_OTHER_BLOCK_LOCAL);
-+		mips_cm_lock_other(cluster, core, vpe_id,
-+				   CM_GCR_Cx_OTHER_BLOCK_LOCAL);
- 		write_gcr_co_reset_base(core_entry_reg);
- 		mips_cm_unlock_other();
- 	}
-@@ -639,11 +800,15 @@ static void cps_cpu_die(unsigned int cpu) { }
- 
- static void cps_cleanup_dead_cpu(unsigned cpu)
- {
-+	unsigned int cluster = cpu_cluster(&cpu_data[cpu]);
- 	unsigned core = cpu_core(&cpu_data[cpu]);
- 	unsigned int vpe_id = cpu_vpe_id(&cpu_data[cpu]);
- 	ktime_t fail_time;
- 	unsigned stat;
- 	int err;
-+	struct cluster_boot_config *cluster_cfg;
-+
-+	cluster_cfg = &mips_cps_cluster_bootcfg[cluster];
- 
- 	/*
- 	 * Now wait for the CPU to actually offline. Without doing this that
-@@ -695,7 +860,7 @@ static void cps_cleanup_dead_cpu(unsigned cpu)
- 		} while (1);
- 
- 		/* Indicate the core is powered off */
--		bitmap_clear(core_power, core, 1);
-+		bitmap_clear(cluster_cfg->core_power, core, 1);
- 	} else if (cpu_has_mipsmt) {
- 		/*
- 		 * Have a CPU with access to the offlined CPUs registers wait
+ allOf:
 -- 
 2.25.1
 
