@@ -1,131 +1,174 @@
-Return-Path: <linux-mips+bounces-6157-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6158-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE8859A4BB9
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2024 09:13:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F17C79A4D3B
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2024 13:51:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A3CC1C22127
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2024 07:13:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC33E283530
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2024 11:51:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B2DC1E04B6;
-	Sat, 19 Oct 2024 07:11:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C03ED1E0497;
+	Sat, 19 Oct 2024 11:50:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZgJWlyhW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VlVWWSpG"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41B921E00B9;
-	Sat, 19 Oct 2024 07:11:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F1F31E00A2;
+	Sat, 19 Oct 2024 11:50:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729321870; cv=none; b=ftYBLVYsARhavZ2ZMQ/e4UxFTWIWcymaQpjke7E4rtNfoC2mvEeNIPqZoBUunr6RyW/tl9Inh/SND3rXkjIrEMRKCTRtAh0iyZQWA6CFF/OjWKakN3Z+0d8DTki2LdlqbYx6MWl3LrY5w0UuULALf+YOJALBrb99ZqRMaU0xH/M=
+	t=1729338650; cv=none; b=VerpQ9ESPtMG/1/XxgBDsQtOAQi0Mn5l0xw81OauCBnUHMxt97sjCgnBkCnOrjpbTDbVmbgC1v4K1QHrHw4bV+ratpTNV8IX4z2uPhrSFr0mrcSF1NmP+eEkHk7pC2CGByzEsgDgGQYZy8ZrEfxS+V9M8TJhCxFBlG7Nes2AEME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729321870; c=relaxed/simple;
-	bh=8Rdvbq2qfDE7PP1NFqb9ER6XI8O/ncdkDxKnGaV5Ua8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=n3FkZuXxlt0YWBJ3LAVw/cQybp8GYiH4m8zIgHdMCCs6RIjdApkNcYFb24E7KbOdaS/qE8DYbSGsdYFvMqqPo28SfgCobFkCC//h4yt7Z5qgkRvV/c+2uBYz1k4qZ00Hmzg1gyi+yZwfSYeYkUYZdZBEyTyzAfy5kVOdQ8fa9h8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZgJWlyhW; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a99eb8b607aso277572266b.2;
-        Sat, 19 Oct 2024 00:11:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729321867; x=1729926667; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kzy3+/mox2Buapv8j2OU8DMyaGI/RgG1tSMX4+L61bY=;
-        b=ZgJWlyhWapXA7ILUY8hchK1uhKr8IzNYzMc9PLWrZUn25RKHV888KfDK48QSrP8ojP
-         1qs/83vxIMTo5JIdjU4gZcJTEocOT81g9tj+WgS71Tkm++bwj/d4rfIVF8NQmM3B5qpP
-         PMTwdLb5L96O2JgNyijyQoVy456GACFz2mg7DIjgrLo7imAKr7R17k6LGS/WcGLNswom
-         bidRQ9BMJHeG0PAI0/UL3QuJ+rpnDz+QYX8qQiUPGVC60xOSfjsQRBGvHo9rJlouUpwp
-         9Hi51dkZE8Bk+NMjI5sqRz3Tvxh4dodizAJiUV3UMTnl97KsFAShJJ1JD80yySsCLvZj
-         YV9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729321867; x=1729926667;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Kzy3+/mox2Buapv8j2OU8DMyaGI/RgG1tSMX4+L61bY=;
-        b=dPD/JOJ7GmTvJAV69wLr/hIS0X5wMYMU6g8BEcN4H6X4hJZkK1dQnLxI82xk73Ud2e
-         c5HPEjMJKRqIYuDrbjyi4j1OQ4V4Y2QIM5IIAXgRAjaBxeBt/PMrDoYCLErP1T2kwpM1
-         +9GdWXSuvpCM4NpNZaR9Fbp4YoukJ9GOjrFUoWGIWxUKmSCH9BgFAuIOjnMheLCrZ84B
-         crplunZdDRYkXqM9Dw78++O5dC6UAPW9f/vSS6d9TcB0NzlB+VF8aSc3CJ794MuxzoMT
-         gedN7pDXVbeuxZsEr9c2m/VJX0DKA/qY1WIwDTzLx9/DJbMzJk3jzBe8NsCKgZ11S4n/
-         RVMw==
-X-Forwarded-Encrypted: i=1; AJvYcCWHc2zJlixGyaoP1JS3YgarTcIl5wP1NeVB3ouBhg1m+qNP5V1007dJfz3ez3v7yR8TWSqdcv4cJh6K9pc=@vger.kernel.org, AJvYcCWZND2WGmQ4+0LuJvAe5oPjDmtYTm39KYZUex5evzIHbADUSbEa8ha5SOIBztTcH6oD2pXUWyvnNMIaiw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGS7c7GmsBw7Z5RIIFgvBiFai95tdyVqHQgP1ANYZ668mD71+Z
-	xPNc3WVw/tb1x7W5mda2MKJGSsuVgy/ECcOoXXsg7XyG/yegV9+q
-X-Google-Smtp-Source: AGHT+IGZIRwgVgg1BdPksrFMh32OAbnzMG5ExBavQuLgkOmWN/ZJyj1zGihqDyRijK+wUugTMmXfag==
-X-Received: by 2002:a17:906:730e:b0:a99:e939:d69e with SMTP id a640c23a62f3a-a9a69c67624mr373039666b.51.1729321866457;
-        Sat, 19 Oct 2024 00:11:06 -0700 (PDT)
-Received: from localhost.localdomain ([79.175.114.8])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a68c27841sm180566666b.192.2024.10.19.00.11.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Oct 2024 00:11:05 -0700 (PDT)
-From: Aleksandar Rikalo <arikalo@gmail.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Aleksandar Rikalo <arikalo@gmail.com>,
-	Chao-ying Fu <cfu@wavecomp.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Greg Ungerer <gerg@kernel.org>,
-	Hauke Mehrtens <hauke@hauke-m.de>,
-	Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Marc Zyngier <maz@kernel.org>,
-	Paul Burton <paulburton@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Serge Semin <fancer.lancer@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>
-Subject: [PATCH v7 12/12] MIPS: mobileye: dts: eyeq6h: Enable cluster support
-Date: Sat, 19 Oct 2024 09:10:37 +0200
-Message-Id: <20241019071037.145314-13-arikalo@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20241019071037.145314-1-arikalo@gmail.com>
-References: <20241019071037.145314-1-arikalo@gmail.com>
+	s=arc-20240116; t=1729338650; c=relaxed/simple;
+	bh=UF88XjBA4TjV9HP12LMIErvhKTzP0Epzl0HzZ5AyxUU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Em7uLx1fTdogHNqYWAovbIREylir7bC82rpssJ/m/obcpVUMTJhL8itVcEszU0VIEwshjFoD5DzP53EvtGcaiEZx9t1VITnjl34dNNfIVD81od3QW4lZStBJSo9EghKWdveswFqgJ8WwXUhlXMIQ2SBlpkcCj8ZkhSQC18hozX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VlVWWSpG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F74EC4CEC5;
+	Sat, 19 Oct 2024 11:50:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729338650;
+	bh=UF88XjBA4TjV9HP12LMIErvhKTzP0Epzl0HzZ5AyxUU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=VlVWWSpGfFgq6l2uJ4tEWzg4y2o2v9GVmcm859TKizH7FU3fu5JIH3/DvG9+8lbwX
+	 MpP6guuUo6KTzKcRVMA6HnDcjNOd5h7Cn72/mMFGIOpFrDfX2+Jna/cxduJgR8XK0Y
+	 PQSO80/n4jPGdDPXXIl8k50GM75u8IqFsnMxN9M/bFkTNibbhCeHAQhnh0xJG0qJi7
+	 F5gdchAYKBwrRW2+MUjLIijpkWiiWkDutbpkfrNcH1fEf0V0AlNsRo4bMqPHH6lHen
+	 UhPKOjJBjU2x2P/u+h5nhdrHhe/Ue14BFzi4ldJwAgruEqdHSX6CJLtrbsoxfyOOIQ
+	 k+u3pNhtN1DGg==
+Date: Sat, 19 Oct 2024 12:50:41 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Matteo Martelli <matteomartelli3@gmail.com>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, Lars-Peter Clausen
+ <lars@metafoo.de>, Michael Hennerich <Michael.Hennerich@analog.com>,
+ Alisa-Dariana Roman <alisa.roman@analog.com>, Christian Eggers
+ <ceggers@arri.de>, Peter Rosin <peda@axentia.se>, Paul Cercueil
+ <paul@crapouillou.net>, linux-iio@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 2/5] iio: consumers: copy/release available info from
+ producer to fix race
+Message-ID: <20241019125041.5e85dcce@jic23-huawei>
+In-Reply-To: <172916216326.53359.1590082756395527593@njaxe.localdomain>
+References: <20241015-iio-read-avail-release-v3-0-ac3e08f25cb3@gmail.com>
+	<20241015-iio-read-avail-release-v3-2-ac3e08f25cb3@gmail.com>
+	<7qvxz3fuwcjeq2ewv3nterlf72wbymt7np5nnjitzkt6smzh7v@737455c4xapy>
+	<172916216326.53359.1590082756395527593@njaxe.localdomain>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
+On Thu, 17 Oct 2024 12:49:23 +0200
+Matteo Martelli <matteomartelli3@gmail.com> wrote:
 
-The CM3.5 device used in EyeQ6H SoCs incorrectly reports the status
-for Hardware Cache Initialization (HCI). This commit adds a property
-to acknowledge this issue, which enables the use of the second CPU
-cluster.
+> Quoting Sebastian Reichel (2024-10-16 23:08:30)
+> > Hi,
+> > 
+> > On Tue, Oct 15, 2024 at 01:06:35PM +0200, Matteo Martelli wrote:  
+> > > Consumers need to call the producer's read_avail_release_resource()
+> > > callback after reading producer's available info. To avoid a race
+> > > condition with the producer unregistration, change inkern
+> > > iio_channel_read_avail() so that it copies the available info from the
+> > > producer and immediately calls its release callback with info_exists
+> > > locked.
+> > > 
+> > > Also, modify the users of iio_read_avail_channel_raw() and
+> > > iio_read_avail_channel_attribute() to free the copied available buffers
+> > > after calling these functions.
+> > > 
+> > > Signed-off-by: Matteo Martelli <matteomartelli3@gmail.com>
+> > > ---
+> > > diff --git a/drivers/power/supply/ingenic-battery.c b/drivers/power/supply/ingenic-battery.c
+> > > index 0a40f425c27723ccec49985b8b5e14a737b6a7eb..3db000d9fff9a7a6819631314547b3d16db7f967 100644
+> > > --- a/drivers/power/supply/ingenic-battery.c
+> > > +++ b/drivers/power/supply/ingenic-battery.c
+> > > @@ -12,6 +12,7 @@
+> > >  #include <linux/platform_device.h>
+> > >  #include <linux/power_supply.h>
+> > >  #include <linux/property.h>
+> > > +#include <linux/slab.h>
+> > >  
+> > >  struct ingenic_battery {
+> > >       struct device *dev;
+> > > @@ -79,8 +80,10 @@ static int ingenic_battery_set_scale(struct ingenic_battery *bat)
+> > >               dev_err(bat->dev, "Unable to read channel avail scale\n");
+> > >               return ret;
+> > >       }
+> > > -     if (ret != IIO_AVAIL_LIST || scale_type != IIO_VAL_FRACTIONAL_LOG2)
+> > > -             return -EINVAL;
+> > > +     if (ret != IIO_AVAIL_LIST || scale_type != IIO_VAL_FRACTIONAL_LOG2) {
+> > > +             ret = -EINVAL;
+> > > +             goto out;
+> > > +     }
+> > >  
+> > >       max_mV = bat->info->voltage_max_design_uv / 1000;
+> > >  
+> > > @@ -99,7 +102,8 @@ static int ingenic_battery_set_scale(struct ingenic_battery *bat)
+> > >  
+> > >       if (best_idx < 0) {
+> > >               dev_err(bat->dev, "Unable to find matching voltage scale\n");
+> > > -             return -EINVAL;
+> > > +             ret = -EINVAL;
+> > > +             goto out;
+> > >       }
+> > >  
+> > >       /* Only set scale if there is more than one (fractional) entry */
+> > > @@ -109,10 +113,13 @@ static int ingenic_battery_set_scale(struct ingenic_battery *bat)
+> > >                                                 scale_raw[best_idx + 1],
+> > >                                                 IIO_CHAN_INFO_SCALE);
+> > >               if (ret)
+> > > -                     return ret;
+> > > +                     goto out;
+> > >       }
+> > >  
+> > > -     return 0;
+> > > +     ret = 0;
+> > > +out:
+> > > +     kfree(scale_raw);
+> > > +     return ret;
+> > >  }
+> > >  
+> > >  static enum power_supply_property ingenic_battery_properties[] = {  
+> > 
+> > It should be enough to declare scale_raw like this at the beginning
+> > of the function and otherwise keep it as is when you include
+> > <linux/cleanup.h>:
+> > 
+> > const int *scale_raw __free(kfree) = NULL;  
+> 
+> Nice! I wasn't aware of it, thanks! I'll try it and submit it in next version.
+> 
+> I think that also fits for the similar usage in iio_channel_read_min() and
+> iio_channel_read_max() as well.
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-Signed-off-by: Aleksandar Rikalo <arikalo@gmail.com>
----
- arch/mips/boot/dts/mobileye/eyeq6h.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+Take care with this + read the documents.
+The constructor and destructor should be in one line.
+https://lore.kernel.org/all/172294149613.2215.3274492813920223809.tip-bot2@tip-bot2/
+specifically the second to last line.
 
-diff --git a/arch/mips/boot/dts/mobileye/eyeq6h.dtsi b/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
-index 1db3c3cda2e3..4ea85dfd4eed 100644
---- a/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
-+++ b/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
-@@ -18,6 +18,7 @@ cpu@0 {
- 			compatible = "img,i6500";
- 			reg = <0>;
- 			clocks = <&occ_cpu>;
-+			cm3-l2-config-hci-broken;
- 		};
- 	};
- 
--- 
-2.25.1
+It's a clever tool but use with care!
+
+Jonathan
+
+
+> 
+> > 
+> > Greetings,
+> > 
+> > -- Sebastian  
+> 
+> Thanks,
+> Matteo Martelli
 
 
