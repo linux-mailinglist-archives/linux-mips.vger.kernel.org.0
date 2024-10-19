@@ -1,224 +1,171 @@
-Return-Path: <linux-mips+bounces-6144-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6145-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A3399A4B7C
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2024 08:06:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B274F9A4BA1
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2024 09:10:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 25FF4B22D4D
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2024 06:06:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30A9A1F230B5
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2024 07:10:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15EF11D460F;
-	Sat, 19 Oct 2024 06:06:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 849991D5CF5;
+	Sat, 19 Oct 2024 07:10:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arri.de header.i=@arri.de header.b="k8YIcyZV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cHPb+Rl4"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2054.outbound.protection.outlook.com [40.107.247.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B58F728EF;
-	Sat, 19 Oct 2024 06:06:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.247.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729317978; cv=fail; b=BCEpirCeNNzyfScnOeNlcfJ15FomwypZqtxQMChMyDxf2QpHSMFHUWjRjzUsLtAEMoHNsN7hh61LKGEWzaFBB06VnhTilNQ42Uawb7pC9RzLGbgnQfdgu7b37pPNJPSamr8rHmghoME2IgUEjbjRiksghMuc46G5b0sgw7GksHA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729317978; c=relaxed/simple;
-	bh=Yx68Su07o2Z3sSp5kw2SrUMjs/g9ybcgS3CMI3nViUM=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pv6sS6BG454jIYkdpF1KFHwNquMPlPFxfZJa03pD5/SXJIcli6KLlOGh9M6T+dYRdlmUPnWT057BYLEwvvG8ULfyLSOed3S9CcUJ1rKSHr4neIOK9WKudHkz4oMJ/cMGPYh6g+G5/Gi8HBkv/NSVPosBcNJ8fEI5IFonBN5FqAI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arri.de; spf=pass smtp.mailfrom=arri.de; dkim=pass (1024-bit key) header.d=arri.de header.i=@arri.de header.b=k8YIcyZV; arc=fail smtp.client-ip=40.107.247.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arri.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arri.de
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vbtTcY+9LxRSdSBekCuBFvzsVJHruOnBy2Wd63t9ayV0BTqojXjciTjYM6icdX+GBaDrmeWB0nuk6yPMM51dxiEQgsfpZYvNMbqq144r2E/gagtJlwCOALhCZTYUoxrp7buemek1xVwPKenP6BtyZv8wHXY+ArxUhMp9H4mYQjGuymGYaK8QyQQ+6T2L5OjQ7Wcb0gkMR6UgklUug11ETlDZ6z/SUdJnRNaaXXOrceJVVm0honqQVOFE2ksgR/kMfw9elVUoACtWyANh5UFzvH/VVc9FiMvJLS+M0pYX2UgbqbL7UN11UWqLoLLALb312SKQ0R5vY51N4VrR69cL+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wu+JDIvrVQ1ki2lRe1/jFW4LWmQMbP+wEb6hHVOMJJU=;
- b=PnEy6ZY90Yp+29d9uvTlwpGO5QBVRwedUEMJCy7P0nHq67eUnpbpwfvCX7swM52XKUNlB55dP0o6FW0h17WbO5R8mYBR/iNC7OcApm2pSU5bgcf2Quf4gXC8ZeXVLSs5shRHFesDWz2uQsmgkllKg3BhcN6u+O0cuAKYCJf2164fe8tMV+HdFU/rYAZcLtwWlrk/+3WEJepVW71hz4ftYlzZJ36foUR2nkaKLTPm+t32Jx8DWsRZTqRHIZzvII3e73RwIPqb+Uqi0wnkIFfhPhY1N1vq18urw6nBH9QAbcqIDwYjlGk6cUSG27Qd8MHKwW9YuYwgdQ5zZWV+Fv+l3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 217.111.95.7) smtp.rcpttodomain=kernel.org smtp.mailfrom=arri.de; dmarc=fail
- (p=none sp=none pct=100) action=none header.from=arri.de; dkim=none (message
- not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arri.de; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wu+JDIvrVQ1ki2lRe1/jFW4LWmQMbP+wEb6hHVOMJJU=;
- b=k8YIcyZVE1WHnDQMCU1/5uyRJRaT4lTSvGN4AmlJwcoNy6P3vCdvEW/IIv7c3KqiciW3PIFbkk2JCswIpv/TiNcXTQbRydwR6kiMtMMIzcbQP1pYG837lpxxvSirIvbCMhboLFu2d6jsjMDnenNQCIgLFOTqIbnmsRzlLeNxI4Y=
-Received: from AM0PR04CA0131.eurprd04.prod.outlook.com (2603:10a6:208:55::36)
- by DBBPR07MB7612.eurprd07.prod.outlook.com (2603:10a6:10:1e3::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18; Sat, 19 Oct
- 2024 06:06:08 +0000
-Received: from AMS0EPF0000019E.eurprd05.prod.outlook.com
- (2603:10a6:208:55:cafe::8a) by AM0PR04CA0131.outlook.office365.com
- (2603:10a6:208:55::36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.26 via Frontend
- Transport; Sat, 19 Oct 2024 06:06:08 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 217.111.95.7)
- smtp.mailfrom=arri.de; dkim=none (message not signed)
- header.d=none;dmarc=fail action=none header.from=arri.de;
-Received-SPF: Fail (protection.outlook.com: domain of arri.de does not
- designate 217.111.95.7 as permitted sender) receiver=protection.outlook.com;
- client-ip=217.111.95.7; helo=mta.arri.de;
-Received: from mta.arri.de (217.111.95.7) by
- AMS0EPF0000019E.mail.protection.outlook.com (10.167.16.250) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8069.17 via Frontend Transport; Sat, 19 Oct 2024 06:06:08 +0000
-Received: from n9w6sw14.localnet (192.168.54.11) by mta.arri.de (10.10.18.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Sat, 19 Oct
- 2024 08:06:07 +0200
-From: Christian Eggers <ceggers@arri.de>
-To: Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>,
-	Michael Hennerich <Michael.Hennerich@analog.com>, Alisa-Dariana Roman
-	<alisa.roman@analog.com>, Peter Rosin <peda@axentia.se>, Paul Cercueil
-	<paul@crapouillou.net>, Sebastian Reichel <sre@kernel.org>, Matteo Martelli
-	<matteomartelli3@gmail.com>
-CC: <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-mips@vger.kernel.org>, <linux-pm@vger.kernel.org>, Matteo Martelli
-	<matteomartelli3@gmail.com>
-Subject: Re: [PATCH v4 5/5] iio: as73211: copy/release available integration times to
- fix race
-Date: Sat, 19 Oct 2024 08:06:06 +0200
-Message-ID: <2721272.vuYhMxLoTh@n9w6sw14>
-Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
-In-Reply-To: <20241018-iio-read-avail-release-v4-5-53c8ac618585@gmail.com>
-References: <20241018-iio-read-avail-release-v4-0-53c8ac618585@gmail.com>
- <20241018-iio-read-avail-release-v4-5-53c8ac618585@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062A018C910;
+	Sat, 19 Oct 2024 07:10:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729321845; cv=none; b=AwthiTLgrRqHrRo5vu7/yDNQr/6/as7GFmR+wObGLW7hNkWwqiZtPhVUH7mbF5BWJzvsdD8m9Ew0uHZX/YENAFZPGgbE/NYmenLLCXDU64iN1JMrfLyasbrU6KXSSpXJkPJiqUlRAVSLsV29KCvYVpnSx7akXqOO/82HFP2fIV0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729321845; c=relaxed/simple;
+	bh=E2DK4yqi+Iin/pWz2JehGdvCbHmvxu90/CxWZm4YBWU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=ZMXr5ofu/Zyb637V/1KRyPk+UFfsaCvhB7fLOJvbhNFyxGKbB7fU1zRrVDPMaYinz/d8hhKW6hIATIY7tNXLMx6KOVE772LVJKiwkAcZehUiJLclmtzJocjWfiFnTYCkk71FjS19T6RP6OAYQ67zSwpOdovbpKFLdGbxGez3bxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cHPb+Rl4; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a9a850270e2so29319666b.0;
+        Sat, 19 Oct 2024 00:10:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729321841; x=1729926641; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YNrWhVgQ4tQOoRn//FFdhZ2CccmGfkY5PexNuqzKSs4=;
+        b=cHPb+Rl4e6aGiyApjio8ecye+pen0lEhuImGORDVXoPImmkc9Q8p84m1wAZL27qFuw
+         viEMaM4p+31fKRTV25R7qi3EMs9ejkqokwPlEUP6CJdEwJz1IAGOFPIaUFGuw6RsVE8R
+         Kvn2ahY0YyS2rESqbsu/Is9G19ra6eXQRFMMpzkYkpti/14GOwWSYOBP+TPMvgqSTvMH
+         7IaG9qyD23T6Hj2SY+YHz6f+2Jgz5cL4LPISLIhYMu3rbsegzV6YB3A/bcLl6b8Zu13g
+         V6sk2I4eOGoLlwEzXCyFOnof+DNAmyavRGR9LA6XO9hVD5it75B0ueCItlnRBJZXnVPa
+         rt7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729321841; x=1729926641;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YNrWhVgQ4tQOoRn//FFdhZ2CccmGfkY5PexNuqzKSs4=;
+        b=vWB9nss6LHOSANszdYGwwZ/fJKT7qnnW/8A9vzCf3rW64Lc7RMEvU+XMGVFMNFUJou
+         xk9jVue8VPzlDprTXnZ67vBVqJdhJsmm8VJz2oWYp/i8c5qEMdkk1YFYFPrUlR/DtDh/
+         KLngyG0C2lxjzZuuEfoGHp+vnJg7gtoVVzjXmqfnUUmIs0Rpzwk+ACL8vRXJkYv5LFP7
+         js5St0eM8574eMVb0RXHO1KOB0JLJq79Sw6yISaOVVqeaXl38S3tbb9pj4jG+2pSOrGH
+         hwlyw+HjfdBBWSjDhdp1QMNGH8upZRIj5zfcVeMG/LjGKWBBzXcrHmPaz22PWMlmx0tK
+         Mw2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUkJV++zM8+RFFfaeaXfc8pB9MhBWkffQvdM3avs3sKElSsOCnQx9pvMJ4EqffweJqL3PGintd5VYrXfw==@vger.kernel.org, AJvYcCW6jquOdRiluMMxYA9tO5MtFdxTpKRfv1Ob1tIv4mgvfpaC4PxUAifyqKNSjRm78eTzo+1tIWwy4BlNIvE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxhtpZzfSmFBP3rFUMSvK69y/FVVRmOTEQnrMqmwUZhbVf+51W
+	Js18ubJrWHXid6iUcuIQhrFQbw2pLJnO2GWHee/09QgTED0J25NZ
+X-Google-Smtp-Source: AGHT+IG6rS9Mpi++Jk312jnpopUsSfd9yYFoDzgaqUZMnzezLhLtPNfR7oFw2watbvQ9OqgLHJB2zg==
+X-Received: by 2002:a17:906:730d:b0:a99:ebbb:1307 with SMTP id a640c23a62f3a-a9a69de9af8mr489340666b.59.1729321840906;
+        Sat, 19 Oct 2024 00:10:40 -0700 (PDT)
+Received: from localhost.localdomain ([79.175.114.8])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a68c27841sm180566666b.192.2024.10.19.00.10.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Oct 2024 00:10:40 -0700 (PDT)
+From: Aleksandar Rikalo <arikalo@gmail.com>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Aleksandar Rikalo <arikalo@gmail.com>,
+	Chao-ying Fu <cfu@wavecomp.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Greg Ungerer <gerg@kernel.org>,
+	Hauke Mehrtens <hauke@hauke-m.de>,
+	Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Marc Zyngier <maz@kernel.org>,
+	Paul Burton <paulburton@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Serge Semin <fancer.lancer@gmail.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>
+Subject: [PATCH v7 00/12] MIPS: Support I6500 multi-cluster configuration
+Date: Sat, 19 Oct 2024 09:10:25 +0200
+Message-Id: <20241019071037.145314-1-arikalo@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AMS0EPF0000019E:EE_|DBBPR07MB7612:EE_
-X-MS-Office365-Filtering-Correlation-Id: f3e0eb9a-352a-4005-ee83-08dcf0041fc5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|7416014|36860700013|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?KRbci8JN6rdGqzNpJI65wMwLI6QkxfU9ihdK0rHVtXMeS4haL0Zrgnyy77Si?=
- =?us-ascii?Q?yv/Cs5zjRgsCyDHY5+SG2uxSb16I2bhg9EsNvrjZYkzXHcofyvr+gdSgk+0k?=
- =?us-ascii?Q?RBPprAcTOe/QdC3ET4kkBYAacubliiuv3Cbkc8wYuyISALlxM8jgZ6qT1+8q?=
- =?us-ascii?Q?lFHloJUtFirSNz8rtuQuWbmCuAT8HJsPDTiLDiHeDxjWCHgUisq1zUQAtWC/?=
- =?us-ascii?Q?2x3UWSkLzqJp7CBTYkKTz3P/UuyB4xre11q2ByNWYJxub4qijV3SWh0nQyxH?=
- =?us-ascii?Q?GqwjQveG3JgGo89IGaxxb8B53eH9fCP8XSfH0QgKAjE5XGY1XSidf0zQQixy?=
- =?us-ascii?Q?b7FRI5bSEp5226MWEEzirgNsbxZcrtpAR92BfqsNoyMXauqz8z6CFoXVMM2b?=
- =?us-ascii?Q?GOnsaNkdvLytuRANK34MNjx+Gm9WUStPakGwbk7r84ypuSd4zQPw1h1ny807?=
- =?us-ascii?Q?/mn7LsVe5/KBVZv3wxdGXgmq7tOLMucFyJfCDJv+ulUikm3nI6mg7VgzWcAt?=
- =?us-ascii?Q?0qYKQWIU9+aiupRxkVJlIvzuqQ7mlQZu//MqHLYWtYLxhwmQadow90LPYdfy?=
- =?us-ascii?Q?vki+k3CO2IVO/9WMiIgfLHkekpxfQwIs8G0HKMux+4vxI4GQ5G0QZ06iYn9S?=
- =?us-ascii?Q?K4hP4iYOYRIV5+EpxrXlG3N8bzKRURSFt2eNhaQunuGY7/CSuFhGxjswjfxy?=
- =?us-ascii?Q?HGrP/oMECRcg3LzMm513xWTn0tn8ZQG5diq/0GEOwjXPCX5+KT8jeFjbC/Bd?=
- =?us-ascii?Q?6gpJ2A795Ir22VSMuSGYjOB3tJI+lTDTBAZ16Yrr8/XnbkZP1T++h9xtSCDp?=
- =?us-ascii?Q?Gf38nmuBQP4ccsFaRauzd+zq+o8vzSMeDPnHjZZ9zVICTviHVbYgPvnLD4a7?=
- =?us-ascii?Q?/Ge7EGKc2Sot93u5HWIgZ+wrb5U8/pPgcesq1ADhAtwtCcN1GpKZRgtg7QOa?=
- =?us-ascii?Q?/tKqUdiGAE4YZuSHJ6XKmiX79KuWn3z0j/8bJ3+4THINqJS5v7+KNg106c/3?=
- =?us-ascii?Q?NZELmdv+BM5nyRjYgwtmY6kvPxClOFZYQCz0P6GI9VNOK2mtrcCjldl0mH+c?=
- =?us-ascii?Q?nzi4uNCTOg3lXDA3mrO9b/8okt8ZoPyH/GAdYSsmSXWiQJ+awJKiNZRwHU3A?=
- =?us-ascii?Q?/RJNRzSXU1RBuO/81TEAbVMji9qw/id2CbiYl+nQ9lVqcJr9y8di3n5kVumP?=
- =?us-ascii?Q?kq6cpt+/aMPPfEcGZ6eSwP24OLB6T0GzNuMr/C6d3vFX71Qh8RvSP0B5wwxT?=
- =?us-ascii?Q?42MtpJ4EUTjlnWJc7x7W6hjxih6o4jQwwAhDQ81R9HlOrppse90y+xEuSfD5?=
- =?us-ascii?Q?IihjwUs72pBJGnK/cAnkEB0JxU3bXrrh9WMgz88QLNKyxJSJ9XASVfKj0cRJ?=
- =?us-ascii?Q?GvKx1J7Zs95xNTErEynVP2BYTIGgSgWHQxbPWSDmjgd46M9Iag=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:217.111.95.7;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta.arri.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(1800799024)(7416014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arri.de
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2024 06:06:08.2899
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f3e0eb9a-352a-4005-ee83-08dcf0041fc5
-X-MS-Exchange-CrossTenant-Id: e6a73a5a-614d-4c51-b3e3-53b660a9433a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e6a73a5a-614d-4c51-b3e3-53b660a9433a;Ip=[217.111.95.7];Helo=[mta.arri.de]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AMS0EPF0000019E.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR07MB7612
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Friday, 18 October 2024, 12:16:44 CEST, Matteo Martelli wrote:
-> While available integration times are being printed to sysfs by iio core
-> (iio_read_channel_info_avail), the sampling frequency might be changed.
-> This could cause the buffer shared with iio core to be corrupted. To
-> prevent it, make a copy of the integration times buffer and free it in
-> the read_avail_release_resource callback.
-> 
-> Signed-off-by: Matteo Martelli <matteomartelli3@gmail.com>
-> ---
->  drivers/iio/light/as73211.c | 25 +++++++++++++++++++++----
->  1 file changed, 21 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/iio/light/as73211.c b/drivers/iio/light/as73211.c
-> index be0068081ebbbb37fdfb252b67a77b302ff725f6..c4c94873e6a1cc926cfb724d906b07222773c43f 100644
-> --- a/drivers/iio/light/as73211.c
-> +++ b/drivers/iio/light/as73211.c
-> @@ -108,7 +108,8 @@ struct as73211_spec_dev_data {
->   * @creg1:  Cached Configuration Register 1.
->   * @creg2:  Cached Configuration Register 2.
->   * @creg3:  Cached Configuration Register 3.
-> - * @mutex:  Keeps cached registers in sync with the device.
-> + * @mutex:  Keeps cached registers in sync with the device and protects
-> + *          int_time_avail concurrent access for updating and reading.
->   * @completion: Completion to wait for interrupt.
->   * @int_time_avail: Available integration times (depend on sampling frequency).
->   * @spec_dev: device-specific configuration.
-> @@ -493,17 +494,32 @@ static int as73211_read_avail(struct iio_dev *indio_dev, struct iio_chan_spec co
->  		*type = IIO_VAL_INT;
->  		return IIO_AVAIL_LIST;
->  
-> -	case IIO_CHAN_INFO_INT_TIME:
-> +	case IIO_CHAN_INFO_INT_TIME: {
->  		*length = ARRAY_SIZE(data->int_time_avail);
-> -		*vals = data->int_time_avail;
->  		*type = IIO_VAL_INT_PLUS_MICRO;
-> -		return IIO_AVAIL_LIST;
->  
-> +		guard(mutex)(&data->mutex);
-> +
-> +		*vals = kmemdup_array(data->int_time_avail, *length,
-> +				      sizeof(int), GFP_KERNEL);
-> +		if (!*vals)
-> +			return -ENOMEM;
-> +
-> +		return IIO_AVAIL_LIST;
-> +	}
->  	default:
->  		return -EINVAL;
->  	}
->  }
->  
-> +static void as73211_read_avail_release_res(struct iio_dev *indio_dev,
-> +					   struct iio_chan_spec const *chan,
-> +					   const int *vals, long mask)
-> +{
-> +	if (mask == IIO_CHAN_INFO_INT_TIME)
-> +		kfree(vals);
-> +}
-> +
->  static int _as73211_write_raw(struct iio_dev *indio_dev,
->  			       struct iio_chan_spec const *chan __always_unused,
->  			       int val, int val2, long mask)
-> @@ -699,6 +715,7 @@ static irqreturn_t as73211_trigger_handler(int irq __always_unused, void *p)
->  static const struct iio_info as73211_info = {
->  	.read_raw = as73211_read_raw,
->  	.read_avail = as73211_read_avail,
-> +	.read_avail_release_resource = as73211_read_avail_release_res,
->  	.write_raw = as73211_write_raw,
->  };
->  
-> 
-> 
+Taken from Paul Burton MIPS repo with minor changes from Chao-ying Fu.
+Tested with 64r6el_defconfig on Boston board in 2 cluster/2 VPU and
+1 cluster/4 VPU configurations.
 
-Thanks for fixing this.
+v7:
+ - Add fixes for specific CM3.5 which is used in EyeQ6H SoCs, suggested by
+   Gregory Clement.
+ - Re-base onto the master branch, with no functionality impact.
 
-Tested-by: Christian Eggers <ceggers@arri.de>
+v6:
+ - Re-base onto the master branch, with no functionality impact.
+ - Correct the issue reported by the kernel test robot.
 
+v5:
+ - Drop FDC related changes (patches 12, 13, and 14).
+ - Apply changes suggested by Thomas Gleixner (patches 3 and 4).
+ - Add #include <linux/cpumask.h> to patch 1, suggested by Thomas Bogendoerfer.
+ - Add Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org> for the patch 08/11.
+ - Add Tested-by: Serge Semin <fancer.lancer@gmail.com> for the entire series.
+ - Correct some commit messages.
 
+v4:
+ - Re-base onto the master branch, with no functionality impact.
+ - Refactor MIPS FDC driver in the context of multicluster support.
+
+v3:
+ - Add Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com> for the patch 02/12.
+ - Add the changes requested by Marc Zyngier for the 3/12 patch.
+ - Remove the patch 11/12 (a consequence of a discussion between Jiaxun Yang
+   and Marc Zyngier.
+ - Re-base onto the master branch, with no functionality impact.
+
+v2:
+ - Apply correct Signed-off-by to avoid confusion.
+
+Chao-ying Fu (1):
+  irqchip/mips-gic: Setup defaults in each cluster
+
+Gregory CLEMENT (3):
+  dt-bindings: mips: cpu: Add property for broken HCI information
+  MIPS: CPS: Support broken HCI for multicluster
+  MIPS: mobileye: dts: eyeq6h: Enable cluster support
+
+Paul Burton (8):
+  irqchip/mips-gic: Introduce for_each_online_cpu_gic()
+  irqchip/mips-gic: Support multi-cluster in for_each_online_cpu_gic()
+  irqchip/mips-gic: Multi-cluster support
+  clocksource: mips-gic-timer: Always use cluster 0 counter as
+    clocksource
+  clocksource: mips-gic-timer: Enable counter when CPUs start
+  MIPS: pm-cps: Use per-CPU variables as per-CPU, not per-core
+  MIPS: CPS: Introduce struct cluster_boot_config
+  MIPS: CPS: Boot CPUs in secondary clusters
+
+ .../devicetree/bindings/mips/cpus.yaml        |   6 +
+ arch/mips/boot/dts/mobileye/eyeq6h.dtsi       |   1 +
+ arch/mips/include/asm/mips-cm.h               |  18 ++
+ arch/mips/include/asm/smp-cps.h               |   7 +-
+ arch/mips/kernel/asm-offsets.c                |   3 +
+ arch/mips/kernel/cps-vec.S                    |  19 +-
+ arch/mips/kernel/mips-cm.c                    |   4 +-
+ arch/mips/kernel/pm-cps.c                     |  35 +-
+ arch/mips/kernel/smp-cps.c                    | 305 +++++++++++++++---
+ drivers/clocksource/mips-gic-timer.c          |  45 ++-
+ drivers/irqchip/Kconfig                       |   1 +
+ drivers/irqchip/irq-mips-gic.c                | 257 ++++++++++++---
+ 12 files changed, 587 insertions(+), 114 deletions(-)
+
+-- 
+2.25.1
 
 
