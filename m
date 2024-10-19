@@ -1,72 +1,72 @@
-Return-Path: <linux-mips+bounces-6155-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6156-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABB1A9A4BB4
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2024 09:12:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1BEB9A4BB7
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2024 09:12:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E973284A84
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2024 07:12:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D6BF1F2359C
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2024 07:12:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFFB61E0082;
-	Sat, 19 Oct 2024 07:11:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CA181E0484;
+	Sat, 19 Oct 2024 07:11:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Me3cCNX8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mH0Fd7Po"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D28741DFE0F;
-	Sat, 19 Oct 2024 07:11:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8193C1DFE31;
+	Sat, 19 Oct 2024 07:11:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729321866; cv=none; b=ibQTMeJNeaXNF/eLM0PLrFtW3S7CKzjzeqYneukA+4KUoLokwxr4D8N/2sc5dKWttmlH+Hm5qLIhS5IjoVZV2MgnyMvyd+kR58KsuX+cayvBpvUzLEAsCes3pgMCUO8lDtasLblDRzCySf/hZWInYHeg2IDrhldlzKtCRKAUPRE=
+	t=1729321868; cv=none; b=egmFR5DtX9cHDc4AdA+RYCBs0wpJGY8+iZol13dCss995nUzfM7HIjUuurbRr/ogoBJrBJw7Pt2MLt/j20rUK2+gfRYp6SG3XCGQcUq83lYfXQNNbP50lzE5f381JJa/A+OPRd8Yqtvz2jZbhFtQ220Ahc46kcb45owxCtyjNjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729321866; c=relaxed/simple;
-	bh=K0HzhA8alacM4aGMjW+d/bogSNMW+xZy6jmFTQZC5Xw=;
+	s=arc-20240116; t=1729321868; c=relaxed/simple;
+	bh=UYR13zTpnsVdjyChblEe8JTdypBUsbR67lFCXkmUjXQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YaIenvX3DRH+VsoZ/kZ8wpJRA+hAG2idz9W67CNU1rUR41guxXo/whgPHZGI1ofcHSYzwcJoss/MuLTroJs6j44lb1cyJXaYI9LOYmRaJ4kVKjGmkEBO6vR0i/6RVhCnIw9ZP2ZYV/vwdVs1T3vJVxoORfyYszSQ6SJjwIpszHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Me3cCNX8; arc=none smtp.client-ip=209.85.218.48
+	 MIME-Version; b=Gk2f50yb6PnbJiF6YwQ6oIVFZqjvzuX0tb7kQQgNRICRKDO+8BNh5GcuITjdLfSrxbHSe8DSGfDd5n7VY7rJoemY2wt4Xdqf6fJ8tPSVnc9Nk2U6BVPJM0tHPLuJMK+izRyvjsWbYz/MalA18PXyBTiuSN3sHWqIhnX4J7LiRJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mH0Fd7Po; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a9a3dc089d8so360862766b.3;
-        Sat, 19 Oct 2024 00:11:04 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5c948c41edeso3055681a12.1;
+        Sat, 19 Oct 2024 00:11:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729321863; x=1729926663; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1729321865; x=1729926665; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jAZgXuitpoye0Y0FrsnQrLaDYihSlv95JKJZ5ie56qU=;
-        b=Me3cCNX87iHmzm+7Q8jpu04CLg1uUoFN9Fge5SfSkAsC2VP+N0weE6yU0+l2tNkbNY
-         X7ZkoKiKg++MFu8b+TMJs0QcNv9ddwvI9lsd9bDTXdwVybMeBW/Hp2J8DjvWvLksRNQ9
-         mMep7v6Y4upnX825Z3k02P2ed4kzfZYX9d8IGIK8IN3e2r7rQqJP04HNAOIvtU3HFfJ4
-         UMYKhUVzqbczDiZPhDOw8Nc3H4aWn8omve6i535IvjntqOibbh+M9g4RL72iFOCyEEmo
-         gYkOBYhBWC/oo8W7RusHwKd2SaiqR6jwKN3jvIn7NOpnY+T+7VqY7HvuLo+1l4/3tQ0Q
-         iajg==
+        bh=MU2+3TuVWKSNcAj+UxUj5vL8IK8tlhYUuvDJAWOUIuo=;
+        b=mH0Fd7PobWcqMud7m7z+QTbjJ+cQtmdTHSEJnCNx5/+3axXGAUc2JyNE2+0w4NEj3E
+         QIR+FspwAn9sFpHuKExK760QRKC04bAZGrBPsiBjyUKG8VgdRBlNA9wrssYNxsiQMPtX
+         VX0ghwsse3LP+paBU01eikjRX9HPOwuR3eKagRs5queHmJJnfzB05P11tWw3LF+4fW4+
+         oRBO32wFig1l/dJrcoq6wY/D0KR0pe3rj1SKFZBje4hvzafmZDlxl376DBf+bTadJGYi
+         gehYGtPtLNii8odZP2VryTDkL1dZ2CGrXRgFNRaO9UGnUndlL4o0oAszFEIVJkVn/uYU
+         SW8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729321863; x=1729926663;
+        d=1e100.net; s=20230601; t=1729321865; x=1729926665;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jAZgXuitpoye0Y0FrsnQrLaDYihSlv95JKJZ5ie56qU=;
-        b=H42/6SEkbxM0OCvaqgIXCTRlwJFHVWgZB/v7eHKaliWsHwnK/izfn6AojllPa5w5kj
-         P97Bz+7or4Xpd7w+1Etf4XR6lZ9W1+J4ZJxGgskVqQjc30kl+ZkWNcCFkMGx4tofUg6u
-         /NJEs9VSGL55EeLhTCgvq3OPa0ypcWW++3XGCAdNex7WtOYstgJ4Pqk2yXokVhlchwIZ
-         QiOP2iy5ZS8U3TtStkI7t/nsPgFg8TXUtm1aQJPBaVMNePFjK+OV8o/Sk6VUxdDybhh/
-         Ky2xCoWMbOhHY1jJ8EJE+eIj7JJAu/ASYa6+zOCTQ0E8DyAoLssI73fuIKHuB/blUzcS
-         L1Fg==
-X-Forwarded-Encrypted: i=1; AJvYcCWJblsRhrxTdlX79dgXV3FufA4dgwg6OPHkMxVUXEWl/Vg92RMYwioHmuRU2XGIBZfoTRIXJy7zVdWQoqs=@vger.kernel.org, AJvYcCX3I4DdVLKoRbyT9sysOFGQI0q7tYMGatqpFl18JrtU+5Gm+V/d3Lg/CdXauiW6PD7nUZUoUtLvwFuzJw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLXLMIInusqhWowvgEfqFxHKeuvJxnRbuKzU29lGLRswcKtUGp
-	LQIgDuPbHrCzwq0yVUXRO0ny1MKBgDYo5GeCmtvwzSpPxVCA4xut
-X-Google-Smtp-Source: AGHT+IEybtMSJJTB1GlywNRQRpKklzRj1/3/mMkf52VBoXC32u7TNHFjKT71CJaNokZhu8eUiNJDKA==
-X-Received: by 2002:a17:907:7211:b0:a99:55ab:b666 with SMTP id a640c23a62f3a-a9a69a80a16mr479865566b.34.1729321862735;
-        Sat, 19 Oct 2024 00:11:02 -0700 (PDT)
+        bh=MU2+3TuVWKSNcAj+UxUj5vL8IK8tlhYUuvDJAWOUIuo=;
+        b=GMDAqptZCue7woMHp/3/ilc5oTJ8AEGGrAxLa1L+xKixO8QJyIeXUCVnwIIUJxaJJd
+         I0Dk1DIjg09HwKbbuNUK9KQD5yV8wH2ApHmpigNGDsD5qCJCah+mgl7z+gAJ4TyLYLJW
+         NXK5YHfNg7Y1VEK8DoCF7JcdsYYAD0czSf/UXjRki/JJaMocTOTSDP9bzb7bZcFAMnkC
+         4GrTEoKh269payXc6iKkKpuiLgB9Co4FllbC2Yp7QMpQlrf+n7Yk7omg1ilhUXeDJ7qC
+         rckCZ0SS6Xv1aKia/6U88UYahnTP4TN0FgSTwnzLhqXZCGdf+al3FmmFSZlXpxYBrHhx
+         6nAg==
+X-Forwarded-Encrypted: i=1; AJvYcCVvYx9SC/5FbSRiaWBHVMOUgcigkwmUwOdzh7QSoq43BqrDrwgOnKmK83BM1abr3HQe6gjXpvAG+ZahKJQ=@vger.kernel.org, AJvYcCXjhKudUcno+0uE9ZgdNibovWCwngewL4P/JQAzzD9dnA0cMTdQHGXBi8Jt6HE+B/3gAX8SQOv34EeRKw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YynH82dW04Ktr6c7msNN6P0COymClJtZR2NOwxYQX5h4eKogQ3O
+	VRwVltKXB0OnjvvgDF3jOLXvTXIS151qr7ArgzIgzEmK8s+fGdIJ
+X-Google-Smtp-Source: AGHT+IFXMiII9k2Ah/EX3izTyqFCLgJcV85Yfj0DKVvorEzpjcpOTu8ppf3hVL1oWKEx3Wo/VF16FA==
+X-Received: by 2002:a17:907:3f9e:b0:a99:c075:6592 with SMTP id a640c23a62f3a-a9a69cd301fmr465581266b.56.1729321864593;
+        Sat, 19 Oct 2024 00:11:04 -0700 (PDT)
 Received: from localhost.localdomain ([79.175.114.8])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a68c27841sm180566666b.192.2024.10.19.00.11.01
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a68c27841sm180566666b.192.2024.10.19.00.11.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Oct 2024 00:11:02 -0700 (PDT)
+        Sat, 19 Oct 2024 00:11:04 -0700 (PDT)
 From: Aleksandar Rikalo <arikalo@gmail.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: Aleksandar Rikalo <arikalo@gmail.com>,
@@ -86,9 +86,9 @@ Cc: Aleksandar Rikalo <arikalo@gmail.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>,
 	Gregory CLEMENT <gregory.clement@bootlin.com>
-Subject: [PATCH v7 10/12] dt-bindings: mips: cpu: Add property for broken HCI information
-Date: Sat, 19 Oct 2024 09:10:35 +0200
-Message-Id: <20241019071037.145314-11-arikalo@gmail.com>
+Subject: [PATCH v7 11/12] MIPS: CPS: Support broken HCI for multicluster
+Date: Sat, 19 Oct 2024 09:10:36 +0200
+Message-Id: <20241019071037.145314-12-arikalo@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20241019071037.145314-1-arikalo@gmail.com>
 References: <20241019071037.145314-1-arikalo@gmail.com>
@@ -102,35 +102,74 @@ Content-Transfer-Encoding: 8bit
 
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
 
-Some CM3.5 reports show that Hardware Cache Initialization is
-complete, but in reality it's not the case. They also incorrectly
-indicate that Hardware Cache Initialization is supported. This
-optional property allows warning about this broken feature that cannot
-be detected at runtime.
+Some CM3.5 devices incorrectly report that hardware cache
+initialization has completed, and also claim to support hardware cache
+initialization when they don't actually do so. This commit fixes this
+issue by retrieving the correct information from the device tree and
+allowing the system to bypass the hardware cache initialization
+step. Instead, it relies on manual operation. As a result, multi-user
+support is now possible for these CPUs.
 
 Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 Signed-off-by: Aleksandar Rikalo <arikalo@gmail.com>
 ---
- Documentation/devicetree/bindings/mips/cpus.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/mips/kernel/smp-cps.c | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/mips/cpus.yaml b/Documentation/devicetree/bindings/mips/cpus.yaml
-index a85137add668..57e93c07ab1b 100644
---- a/Documentation/devicetree/bindings/mips/cpus.yaml
-+++ b/Documentation/devicetree/bindings/mips/cpus.yaml
-@@ -47,6 +47,12 @@ properties:
-   clocks:
-     maxItems: 1
+diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
+index 4f344c890a23..265cf52c0dd1 100644
+--- a/arch/mips/kernel/smp-cps.c
++++ b/arch/mips/kernel/smp-cps.c
+@@ -39,6 +39,7 @@ UASM_L_LA(_not_nmi)
+ static uint32_t core_entry_reg;
+ static phys_addr_t cps_vec_pa;
  
-+  cm3-l2-config-hci-broken:
-+    type: boolean
-+    description:
-+      If present, indicates that the HCI (Hardware Cache Initialization)
-+      information for the L2 cache in multi-cluster configuration is broken.
++static bool l2_hci_broken;
+ struct cluster_boot_config *mips_cps_cluster_bootcfg;
+ 
+ static void power_up_other_cluster(unsigned int cluster)
+@@ -254,6 +255,22 @@ static void __init cps_smp_setup(void)
+ #endif /* CONFIG_MIPS_MT_FPAFF */
+ }
+ 
++static void __init check_hci_quirk(void)
++{
++	struct device_node *np;
 +
-   device_type: true
++	np = of_cpu_device_node_get(0);
++	if (!np) {
++		pr_debug("%s: No cpu node in the device tree\n", __func__);
++		return;
++	}
++
++	if (of_property_read_bool(np, "cm3-l2-config-hci-broken")) {
++		pr_info("HCI (Hardware Cache Init for the L2 cache) in GCR_L2_RAM_CONFIG from the CM3 is broken");
++		l2_hci_broken = true;
++	}
++}
++
+ static void __init cps_prepare_cpus(unsigned int max_cpus)
+ {
+ 	unsigned int nclusters, ncores, core_vpes, c, cl, cca;
+@@ -307,6 +324,9 @@ static void __init cps_prepare_cpus(unsigned int max_cpus)
+ 					   sizeof(*mips_cps_cluster_bootcfg),
+ 					   GFP_KERNEL);
  
- allOf:
++	if (nclusters > 1)
++		check_hci_quirk();
++
+ 	for (cl = 0; cl < nclusters; cl++) {
+ 		/* Allocate core boot configuration structs */
+ 		ncores = mips_cps_numcores(cl);
+@@ -368,7 +388,7 @@ static void init_cluster_l2(void)
+ {
+ 	u32 l2_cfg, l2sm_cop, result;
+ 
+-	while (1) {
++	while (!l2_hci_broken) {
+ 		l2_cfg = read_gcr_redir_l2_ram_config();
+ 
+ 		/* If HCI is not supported, use the state machine below */
 -- 
 2.25.1
 
