@@ -1,114 +1,119 @@
-Return-Path: <linux-mips+bounces-6176-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6177-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 413D49A5572
-	for <lists+linux-mips@lfdr.de>; Sun, 20 Oct 2024 19:44:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A01159A55A8
+	for <lists+linux-mips@lfdr.de>; Sun, 20 Oct 2024 20:03:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ABA3DB2223A
-	for <lists+linux-mips@lfdr.de>; Sun, 20 Oct 2024 17:44:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD73C1C20BC9
+	for <lists+linux-mips@lfdr.de>; Sun, 20 Oct 2024 18:03:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BABB7194C9E;
-	Sun, 20 Oct 2024 17:44:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E404182866;
+	Sun, 20 Oct 2024 18:03:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eEucNOOO"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from cygnus.enyo.de (cygnus.enyo.de [79.140.189.114])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361B56AA7;
-	Sun, 20 Oct 2024 17:44:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.140.189.114
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC1AAFC0A;
+	Sun, 20 Oct 2024 18:03:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729446278; cv=none; b=rvYC91M55XK2YdvjgcfwRB57Yl5YgausWRm2hR/FeT4+VhiRhJ8XU72vLLP4QxOwk6ZuOnUt5e7ieagbq8AI+pZOpjlUPrjE9ypR1LDY88+wq5JZdQ29xilhcBJGlqo78vwMAmd+XrBTOC35qiH5myuQ6SiRSKnLykpP4pmPqqs=
+	t=1729447420; cv=none; b=fK1xBju0Zp+tx4uyNlEJVnlY2AGpwKbtgsijSJfoWY7qp+2yAmAtQCZbtJoI5E0vxLsY1h9uaNEHrjGyJQLcbnVJIHwyEVWURfGmWAA2Uez8pxWn8DQDv7XzWyu52r/08z+2n5gbNRsSTUvhF4w4KmeEcf8iOa4AjcDuwaZs7iU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729446278; c=relaxed/simple;
-	bh=r/w8lsb8WKZRC9vQEw3SJnhjGHXAAsZ6aR9bEYkSyVs=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=GTFtD+bo4RcYkcNeatHz82NS12+KUuqQcY96PFFXPBQPT0uFjlW5LwuBINLx59Q6RlLmGYPleX+3lz36jJYmG/hS8bxBc99LxxyAPYQnc2/EJDC51+rfjXM6ie8ycyM43DZDE2Uxhn6MQTPBDH0zNVPWkwIz5ZWcVME1AN3wSzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=deneb.enyo.de; spf=pass smtp.mailfrom=deneb.enyo.de; arc=none smtp.client-ip=79.140.189.114
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=deneb.enyo.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=deneb.enyo.de
-Received: from [172.17.203.2] (port=37437 helo=deneb.enyo.de)
-	by albireo.enyo.de ([172.17.140.2]) with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	id 1t2ZsI-002agy-2T;
-	Sun, 20 Oct 2024 17:37:54 +0000
-Received: from fw by deneb.enyo.de with local (Exim 4.96)
-	(envelope-from <fw@deneb.enyo.de>)
-	id 1t2ZsI-008CWx-26;
-	Sun, 20 Oct 2024 19:37:54 +0200
-From: Florian Weimer <fw@deneb.enyo.de>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,  Suren Baghdasaryan
- <surenb@google.com>,  "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-  Matthew Wilcox <willy@infradead.org>,  Vlastimil Babka <vbabka@suse.cz>,
-  "Paul E . McKenney" <paulmck@kernel.org>,  Jann Horn <jannh@google.com>,
-  David Hildenbrand <david@redhat.com>,  linux-mm@kvack.org,
-  linux-kernel@vger.kernel.org,  Muchun Song <muchun.song@linux.dev>,
-  Richard Henderson <richard.henderson@linaro.org>,  Ivan Kokshaysky
- <ink@jurassic.park.msu.ru>,  Matt Turner <mattst88@gmail.com>,  Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>,  "James E . J . Bottomley"
- <James.Bottomley@HansenPartnership.com>,  Helge Deller <deller@gmx.de>,
-  Chris Zankel <chris@zankel.net>,  Max Filippov <jcmvbkbc@gmail.com>,
-  Arnd Bergmann <arnd@arndb.de>,  linux-alpha@vger.kernel.org,
-  linux-mips@vger.kernel.org,  linux-parisc@vger.kernel.org,
-  linux-arch@vger.kernel.org,  Shuah Khan <shuah@kernel.org>,  Christian
- Brauner <brauner@kernel.org>,  linux-kselftest@vger.kernel.org,  Sidhartha
- Kumar <sidhartha.kumar@oracle.com>,  Jeff Xu <jeffxu@chromium.org>,
-  Christoph Hellwig <hch@infradead.org>,  linux-api@vger.kernel.org,  John
- Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH v2 0/5] implement lightweight guard pages
-References: <cover.1729440856.git.lorenzo.stoakes@oracle.com>
-Date: Sun, 20 Oct 2024 19:37:54 +0200
-In-Reply-To: <cover.1729440856.git.lorenzo.stoakes@oracle.com> (Lorenzo
-	Stoakes's message of "Sun, 20 Oct 2024 17:20:00 +0100")
-Message-ID: <87a5eysmj1.fsf@mid.deneb.enyo.de>
+	s=arc-20240116; t=1729447420; c=relaxed/simple;
+	bh=yJYMK3br6K6gsuyUqnxzPXiUZcPS5ZVEBLXA4w+Y3c8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hfFGyYLG9fE91OzgiB0lNyVKDGJvpFyRROnpCzagSbffRebdOZ9qoTLA9blbypKCSwMKPeSzI26a6DbrGF+9TQBLB/5VahMCSywpDvf2zlFYln7MXG6bDIvPEZX1PnOjn9YxWtlyWNURTjV0znaja70MULi24qv7ppGKnTQq5Do=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eEucNOOO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 224E4C4CEC6;
+	Sun, 20 Oct 2024 18:03:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729447420;
+	bh=yJYMK3br6K6gsuyUqnxzPXiUZcPS5ZVEBLXA4w+Y3c8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=eEucNOOOYQ0RVLGjWecOUXBo4CP+2OpDBxdojng8LdBfIO5vYh+QX8u7Ms3qyP8dn
+	 vT+91RKWiBkKpgBRDyVIQIrt+w9oGW9f+FDJwRBdeY6mrsBvC9ebJ/G59OSjIC0vFE
+	 cBZYIBd5Z4+IdJr5Zs4P/OoxR9/pKj8OCI6s9vybB58SXdxFbQTf+ljFKzPL2V7Lc9
+	 Tk6Xmi7pgJ/6PqhdJloA7+enW9yFvskFRAgO9Nb42XdWFGMUJ47zzIjl5htQWJ2+sg
+	 yA9qhfDzKiXhQVtVpmPdpuktRaBQdr+VRnnlY8OX51Eo8U1f1XTGKti3YAO3FFeO59
+	 c1AOKCBY/VONA==
+From: Eric Biggers <ebiggers@kernel.org>
+To: linux-crypto@vger.kernel.org
+Cc: linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Guan Wentao <guanwentao@uniontech.com>,
+	WangYuli <wangyuli@uniontech.com>
+Subject: [PATCH] crypto: mips/crc32 - fix the CRC32C implementation
+Date: Sun, 20 Oct 2024 11:02:58 -0700
+Message-ID: <20241020180258.8060-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-* Lorenzo Stoakes:
+From: Eric Biggers <ebiggers@google.com>
 
-> Early testing of the prototype version of this code suggests a 5 times
-> speed up in memory mapping invocations (in conjunction with use of
-> process_madvise()) and a 13% reduction in VMAs on an entirely idle android
-> system and unoptimised code.
->
-> We expect with optimisation and a loaded system with a larger number of
-> guard pages this could significantly increase, but in any case these
-> numbers are encouraging.
->
-> This way, rather than having separate VMAs specifying which parts of a
-> range are guard pages, instead we have a VMA spanning the entire range of
-> memory a user is permitted to access and including ranges which are to be
-> 'guarded'.
->
-> After mapping this, a user can specify which parts of the range should
-> result in a fatal signal when accessed.
->
-> By restricting the ability to specify guard pages to memory mapped by
-> existing VMAs, we can rely on the mappings being torn down when the
-> mappings are ultimately unmapped and everything works simply as if the
-> memory were not faulted in, from the point of view of the containing VMAs.
+Commit ca459e5f826f ("crypto: mips/crc32 - Clean up useless assignment
+operations") changed crc32c_mips_le_hw() to use the instructions that
+use the "regular" CRC32 polynomial instead of the Castagnoli polynomial.
+Therefore it can't be computing CRC32C values correctly anymore.
 
-We have a glibc (so not Android) dynamic linker bug that asks us to
-remove PROT_NONE mappings in mapped shared objects:
+I haven't been successful in running a MIPS kernel in QEMU, but based on
+code review this is the fix that is needed.
 
-  Extra struct vm_area_struct with ---p created when PAGE_SIZE < max-page-size
-  <https://sourceware.org/bugzilla/show_bug.cgi?id=31076>
+Fixes: ca459e5f826f ("crypto: mips/crc32 - Clean up useless assignment operations")
+Cc: Guan Wentao <guanwentao@uniontech.com>
+Cc: WangYuli <wangyuli@uniontech.com>
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+---
 
-It's slightly different from a guard page because our main goal is to
-avoid other mappings to end up in those gaps, which has been shown to
-cause odd application behavior in cases where it happens.  If I
-understand the series correctly, the kernel would not automatically
-attribute those PROT_NONE gaps to the previous or subsequent mapping.
-We would have to extend one of the surrounding mapps and apply
-MADV_POISON to that over-mapped part.  That doesn't seem too onerous.
+This is a regression in 6.12, so it should be fixed in a 6.12-rc.
 
-Could the ELF loader in the kernel do the same thing for the main
-executable and the program loader?
+ arch/mips/crypto/crc32-mips.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/mips/crypto/crc32-mips.c b/arch/mips/crypto/crc32-mips.c
+index a7a1d43a1b2ca..90eacf00cfc31 100644
+--- a/arch/mips/crypto/crc32-mips.c
++++ b/arch/mips/crypto/crc32-mips.c
+@@ -121,24 +121,24 @@ static u32 crc32c_mips_le_hw(u32 crc_, const u8 *p, unsigned int len)
+ 
+ 	if (IS_ENABLED(CONFIG_64BIT)) {
+ 		for (; len >= sizeof(u64); p += sizeof(u64), len -= sizeof(u64)) {
+ 			u64 value = get_unaligned_le64(p);
+ 
+-			CRC32(crc, value, d);
++			CRC32C(crc, value, d);
+ 		}
+ 
+ 		if (len & sizeof(u32)) {
+ 			u32 value = get_unaligned_le32(p);
+ 
+-			CRC32(crc, value, w);
++			CRC32C(crc, value, w);
+ 			p += sizeof(u32);
+ 		}
+ 	} else {
+ 		for (; len >= sizeof(u32); len -= sizeof(u32)) {
+ 			u32 value = get_unaligned_le32(p);
+ 
+-			CRC32(crc, value, w);
++			CRC32C(crc, value, w);
+ 			p += sizeof(u32);
+ 		}
+ 	}
+ 
+ 	if (len & sizeof(u16)) {
+
+base-commit: 7fa4be6d6752512278c4cbf2d2745568626e7369
+-- 
+2.47.0
+
 
