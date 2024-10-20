@@ -1,119 +1,97 @@
-Return-Path: <linux-mips+bounces-6177-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6178-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A01159A55A8
-	for <lists+linux-mips@lfdr.de>; Sun, 20 Oct 2024 20:03:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23C5B9A55DE
+	for <lists+linux-mips@lfdr.de>; Sun, 20 Oct 2024 20:33:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD73C1C20BC9
-	for <lists+linux-mips@lfdr.de>; Sun, 20 Oct 2024 18:03:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE0E51F2223C
+	for <lists+linux-mips@lfdr.de>; Sun, 20 Oct 2024 18:33:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E404182866;
-	Sun, 20 Oct 2024 18:03:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E00241946B8;
+	Sun, 20 Oct 2024 18:33:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eEucNOOO"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="k+hhx1LD"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC1AAFC0A;
-	Sun, 20 Oct 2024 18:03:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30DD01C36;
+	Sun, 20 Oct 2024 18:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729447420; cv=none; b=fK1xBju0Zp+tx4uyNlEJVnlY2AGpwKbtgsijSJfoWY7qp+2yAmAtQCZbtJoI5E0vxLsY1h9uaNEHrjGyJQLcbnVJIHwyEVWURfGmWAA2Uez8pxWn8DQDv7XzWyu52r/08z+2n5gbNRsSTUvhF4w4KmeEcf8iOa4AjcDuwaZs7iU=
+	t=1729449195; cv=none; b=TsNSj/uh1zxfzkKKpXCiOlKJ3okyo97iQmZf4wfaDKDgoO77YD1xLJScCEnMkvOPFmRXXGumpPtFxdXmtKH7sMBlgFn+DbOeTTow5ix01hT8U6rf/yJ359ufwfINMarTd3Wb1PzWLTUVQQti29V9UCGre3eA7RtNCoLio9kTKbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729447420; c=relaxed/simple;
-	bh=yJYMK3br6K6gsuyUqnxzPXiUZcPS5ZVEBLXA4w+Y3c8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hfFGyYLG9fE91OzgiB0lNyVKDGJvpFyRROnpCzagSbffRebdOZ9qoTLA9blbypKCSwMKPeSzI26a6DbrGF+9TQBLB/5VahMCSywpDvf2zlFYln7MXG6bDIvPEZX1PnOjn9YxWtlyWNURTjV0znaja70MULi24qv7ppGKnTQq5Do=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eEucNOOO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 224E4C4CEC6;
-	Sun, 20 Oct 2024 18:03:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729447420;
-	bh=yJYMK3br6K6gsuyUqnxzPXiUZcPS5ZVEBLXA4w+Y3c8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=eEucNOOOYQ0RVLGjWecOUXBo4CP+2OpDBxdojng8LdBfIO5vYh+QX8u7Ms3qyP8dn
-	 vT+91RKWiBkKpgBRDyVIQIrt+w9oGW9f+FDJwRBdeY6mrsBvC9ebJ/G59OSjIC0vFE
-	 cBZYIBd5Z4+IdJr5Zs4P/OoxR9/pKj8OCI6s9vybB58SXdxFbQTf+ljFKzPL2V7Lc9
-	 Tk6Xmi7pgJ/6PqhdJloA7+enW9yFvskFRAgO9Nb42XdWFGMUJ47zzIjl5htQWJ2+sg
-	 yA9qhfDzKiXhQVtVpmPdpuktRaBQdr+VRnnlY8OX51Eo8U1f1XTGKti3YAO3FFeO59
-	 c1AOKCBY/VONA==
-From: Eric Biggers <ebiggers@kernel.org>
-To: linux-crypto@vger.kernel.org
-Cc: linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Guan Wentao <guanwentao@uniontech.com>,
-	WangYuli <wangyuli@uniontech.com>
-Subject: [PATCH] crypto: mips/crc32 - fix the CRC32C implementation
-Date: Sun, 20 Oct 2024 11:02:58 -0700
-Message-ID: <20241020180258.8060-1-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.47.0
+	s=arc-20240116; t=1729449195; c=relaxed/simple;
+	bh=7zS9LgCuegtT1r29iepmpaLf+HDM1XfUghk4tDogoMI=;
+	h=From:To:Cc:Subject:Mime-Version:Content-Type:Date:Message-ID:
+	 References:In-Reply-To; b=pXBpt9Z1i8wZYmx+61rYgwxc0rssDPK3fxy4r+DZT+PlybIJ2ZRi8dBlG58ASwARGH//02XDvItm2hal33VSMCXHomzHA0DhwZKs5jGsqtj+lh/NDlMFQ3eUexcbv9XBSFPAXjP2iGCd43YbvGOYn4523N5MG3d2beHqUfvdjGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=k+hhx1LD; arc=none smtp.client-ip=54.243.244.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1729449167;
+	bh=7zS9LgCuegtT1r29iepmpaLf+HDM1XfUghk4tDogoMI=;
+	h=From:To:Subject:Mime-Version:Date:Message-ID;
+	b=k+hhx1LDyM+PVmJVBjK1Zk5oj6XRMjjPjzD2H8Ioqv2IaaXZ8GXwM7akk4ScZD9G/
+	 gm5/1b1mGDDC2/Kz4BhzTp2VEczh0l0jLRVfrR+EsDbsYlhO1nDswiBHvhiXH0Ufs2
+	 dRRJSiLCqbZiIP11jhOokyW7Fn1pdxNYOsQzpNl8=
+X-QQ-GoodBg: 1
+X-QQ-SSF: 00400000000000F0
+X-QQ-FEAT: D4aqtcRDiqT6iyfUez+DXx4B7ybItHVbSxkDlA8/kMI=
+X-QQ-BUSINESS-ORIGIN: 2
+X-QQ-Originating-IP: TH+dqHvnpIcA+xjSIp4Cm5wWhWI7qq5iIX//KGIeFeE=
+X-QQ-STYLE: 
+X-QQ-mid: t5gz7a-2t1729449164t1912447
+From: "=?utf-8?B?V2VudGFvIEd1YW4=?=" <guanwentao@uniontech.com>
+To: "=?utf-8?B?RXJpYyBCaWdnZXJz?=" <ebiggers@kernel.org>, "=?utf-8?B?bGludXgtY3J5cHRv?=" <linux-crypto@vger.kernel.org>
+Cc: "=?utf-8?B?bGludXgtbWlwcw==?=" <linux-mips@vger.kernel.org>, "=?utf-8?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>, "=?utf-8?B?546L5pix5Yqb?=" <wangyuli@uniontech.com>
+Subject: Re:[PATCH] crypto: mips/crc32 - fix the CRC32C implementation
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: base64
+Date: Mon, 21 Oct 2024 02:32:44 +0800
+X-Priority: 3
+Message-ID: <tencent_30B18398340F6B010D39ADC4@qq.com>
+X-QQ-MIME: TCMime 1.0 by Tencent
+X-Mailer: QQMail 2.x
+X-QQ-Mailer: QQMail 2.x
+References: <20241020180258.8060-1-ebiggers@kernel.org>
+In-Reply-To: <20241020180258.8060-1-ebiggers@kernel.org>
+X-QQ-ReplyHash: 3397747520
+X-BIZMAIL-ID: 12910453508724484820
+X-QQ-SENDSIZE: 520
+Received: from qq.com (unknown [127.0.0.1])
+	by smtp.qq.com (ESMTP) with SMTP
+	id ; Mon, 21 Oct 2024 02:32:45 +0800 (CST)
+Feedback-ID: t:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: MjlOSqg8Riw0QstQ4fiQeYNFF4r/HJu7gl8cQxRvD0nNC3tm9OFZRlAf
+	9alTxDZUuva5xOItqFK0LJ/K0surbr+pDCW1qwkknBbdQHo9AevegkDTsg/BWuRpqX85dHN
+	qVXdcmRb1LXX58bc10/ZejmnHMRhPkAXtd1PeXTJI7a3/GYGBhFCjKZ6jIq0x/ILpDfQgFF
+	E9haRf/kVkuUWM4jRHdn1KY+W/PStE6Xr2vHRHezKX+VA3gFjPKbZncUPOxvUE4sFc309nW
+	hNyp1XjHIrAO4s75A86Rh2z2/5QXVeXr1QH5OrnZWQNhmvwUDx/yxQ5TB+0AlTlu6CcbCU+
+	z5lh2GO2lGvl5o3NvoBh7JbQXm5WEclzTM/lSF0AW0+Lp4kHT4WnKxoyCWO1S0cYIRhRvUa
+	xZ7ZmmcX3D27AMAqktQhI0Q5VWXmgZVjdl0pXRtaxW8JRVQuyVaAn5KQdHP6SOuQSIQECDm
+	TVySfwx4YlAxIH8cYk3NVl5nyo5ITPU+Ud7HXD7RN1iYm1AWvXRMDqLZ8aqabzFahaah/7X
+	/lyRdO1BHp7FJGTYX6R2SsXeKNy1CxeV62HplDHBL7Vklylzq4gUkELF8obbf9o9FkXlU7q
+	4W7UaHQ/agD46DdtRXDnkvJqefZXZoZdn3e1OFsLeiSBDe31gEtwKUVIxWO0MRFnYkVxHCf
+	s4C18bP3u4LvWc27zK++rjN7MqtNqk9pgYHtS4rASwTO2hSgzsDkLFzpPOhFwFgUuE4Cej9
+	X0uqC1TrTHA7YRTAX4cIxjacYHTqDRVLLBfcrZTTGO+62zLueoJQfkcGfxKNYql2pCo3n8W
+	xrWQxb1aUA8gWa1X1AamwYfsOoZTviHgxwkZbZCJPu736DWvWqXDUHsT6XBuw+13/8LcWwZ
+	BXawx0gzzs9e9z2WhxWiioyx2Vrvo5aV8c+dN0eWsmqfUsnGMBj2nm+7jdVkVFn/IlO35Ml
+	VPRAr4goyV1AwVywfeyitAPtn
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+X-QQ-RECHKSPAM: 0
 
-From: Eric Biggers <ebiggers@google.com>
-
-Commit ca459e5f826f ("crypto: mips/crc32 - Clean up useless assignment
-operations") changed crc32c_mips_le_hw() to use the instructions that
-use the "regular" CRC32 polynomial instead of the Castagnoli polynomial.
-Therefore it can't be computing CRC32C values correctly anymore.
-
-I haven't been successful in running a MIPS kernel in QEMU, but based on
-code review this is the fix that is needed.
-
-Fixes: ca459e5f826f ("crypto: mips/crc32 - Clean up useless assignment operations")
-Cc: Guan Wentao <guanwentao@uniontech.com>
-Cc: WangYuli <wangyuli@uniontech.com>
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
-
-This is a regression in 6.12, so it should be fixed in a 6.12-rc.
-
- arch/mips/crypto/crc32-mips.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/mips/crypto/crc32-mips.c b/arch/mips/crypto/crc32-mips.c
-index a7a1d43a1b2ca..90eacf00cfc31 100644
---- a/arch/mips/crypto/crc32-mips.c
-+++ b/arch/mips/crypto/crc32-mips.c
-@@ -121,24 +121,24 @@ static u32 crc32c_mips_le_hw(u32 crc_, const u8 *p, unsigned int len)
- 
- 	if (IS_ENABLED(CONFIG_64BIT)) {
- 		for (; len >= sizeof(u64); p += sizeof(u64), len -= sizeof(u64)) {
- 			u64 value = get_unaligned_le64(p);
- 
--			CRC32(crc, value, d);
-+			CRC32C(crc, value, d);
- 		}
- 
- 		if (len & sizeof(u32)) {
- 			u32 value = get_unaligned_le32(p);
- 
--			CRC32(crc, value, w);
-+			CRC32C(crc, value, w);
- 			p += sizeof(u32);
- 		}
- 	} else {
- 		for (; len >= sizeof(u32); len -= sizeof(u32)) {
- 			u32 value = get_unaligned_le32(p);
- 
--			CRC32(crc, value, w);
-+			CRC32C(crc, value, w);
- 			p += sizeof(u32);
- 		}
- 	}
- 
- 	if (len & sizeof(u16)) {
-
-base-commit: 7fa4be6d6752512278c4cbf2d2745568626e7369
--- 
-2.47.0
+VmVyeSBnb29kIGNhdGNoLg0KQWNrZWQtYnk6IFdlbnRhbyBHdWFuIDxndWFud2VudGFvQHVu
+aW9udGVjaC5jb20+
 
 
