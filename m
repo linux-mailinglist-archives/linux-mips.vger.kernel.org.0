@@ -1,170 +1,188 @@
-Return-Path: <linux-mips+bounces-6207-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6208-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A9699A6942
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 14:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B00389A69F9
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 15:23:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C13C1C21E7F
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 12:57:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D130E1C217FA
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 13:23:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AA231F8F0F;
-	Mon, 21 Oct 2024 12:56:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eM/A38b7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F20EE1F707B;
+	Mon, 21 Oct 2024 13:23:13 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B1D1F8921;
-	Mon, 21 Oct 2024 12:56:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B69181E285E;
+	Mon, 21 Oct 2024 13:23:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729515394; cv=none; b=ou0h2TMBOaIYUtfaqq7ZfoB2go2mAzGaAm1KHY8NLPsiWseRMZdRs8EojV7VFV7zItawnP3D0yn6l1c+BLkzA7J3COb9R0ZWW/JA27MP0UJe+8DZKO2hEgFc4c5NlCUvcL5Kq+bbFfTiNmBCwdfOOsSaUURrZa79dyFK6AmiYaU=
+	t=1729516993; cv=none; b=nn0CJafYOUNDB706Eu6eCVx3izyCtAXOMcNmJu26qrTvF5kydczVk963ksOj0Eivt/KzzpMNiMgi6ee2dueTM4OIJymGTnALDLdTn/V9IUZgquXCXU0Ie0r5UY3Aib47vrOfxCU+0P8B7UL+WXF5gGT8HzqDGxWBN5Q8pWJys8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729515394; c=relaxed/simple;
-	bh=UzaA2fjWs1SIl19H07gMaVFNLQFaYamk7HcjjWTA/c8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=T/s6QgFnYg1wvFZGLyRYiN2CvkoWcjumbPMvjs5ZMPisrQJye3yozTJ32hsulvfLI4umnO5sVOswrkwEntd9SyUVPQoocVsQA2yU2FiZxRbBpSw6OGGjx0vv+EjaAShnQAxAm/lw/u7HwnKLaQUkG6GPlpAOyM8Q105pDx6ijnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eM/A38b7; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-37d5aedd177so3744696f8f.1;
-        Mon, 21 Oct 2024 05:56:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729515390; x=1730120190; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NiiDyZUCEkhw54V+Qb4R9KaSMKdtWRNhFaEC6pW+G7o=;
-        b=eM/A38b7vNsFEQz0s9vWyA8xM4evmOaWa93LyGMJMpiJ6BsI/LjJoNmOcjrQDS686U
-         40it7TqiT4IE3dVEn6+jtHMbdGC5kjOjckfCXWHR/YhaVIW7NHQL4jmsdY2hisj8nN8S
-         OsLPyohtnl4pgZakxh6GaMje9mwt5YJJqIWNTBQdoQ46/HmCRw68Jj6ewQIqxfCVZ8b3
-         ci5TEZynyPjZEAiNb5cyjtsmwnqFmmzoRS8+vDiKT6u4SCU2Q90XHclpSL0wFFi3ilDV
-         SsP2MLoL+3EB3LAaqUJrYeiA414bqay7dt2zMt0kS6QfZVQ8btQPziNZVMry9MZgoPtE
-         /CqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729515390; x=1730120190;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NiiDyZUCEkhw54V+Qb4R9KaSMKdtWRNhFaEC6pW+G7o=;
-        b=n6d3GlFJrz6a0UwAH4HYXNSo+9NE/OtSZDohqbPWDjJhR/gca9/7DiAZ84YgUbrLL8
-         A0BvI3FC6Rv/Qq4mh7MaSx7/lNlc/oGEcTf2wr1Nc5ffYKKOwVGXavHyA19YkuLZfeTM
-         q3JYqjPITBdkowxQabR38XD11IrFV1/PKtSZPLoBTmJ0UUPP2lfYOzy+dd1KmtEqUqfn
-         xLd8S4eH3xih2FtYZpA/MnyGbRUgbwD308HBzxRKVwc/cyfEJ5wYYpmaO5Mt6vNESyg4
-         8oNZCpI3tv5Rr8DrAPUbFxhkTzRCRkxAzgsSidNaGWWvViTz6eWvxhYh4Q61AElLP0Xw
-         Rc3w==
-X-Forwarded-Encrypted: i=1; AJvYcCVsiqqks2eJFfI9skDptvRfooPdgQRobeWG4Vd8jor5/TJ1+2SuVJ9yXAexAUCfkOxspQ2U+WQt5ixrOBM=@vger.kernel.org, AJvYcCX+St39mRiaauRMQnNKgK5kAEdV7O4sNWrZNZuNfwhfCbPlWMrQv3+J3OZST/rUXhtB5raLIhFS75K0VQ==@vger.kernel.org, AJvYcCXFRjHE8ICG99RkEvYxwX15kcMF6pLSSB7A2DhD38/jBVJ2R2LBSh5D1WB7hwsXMvrvjmL0lmfE7UA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyTU0Ydgz3TTsKx/DBnVQBjGP6YlPvxNyZKYM9kkI1forK4Yot
-	kNTxJqyy8YIt861+P+Sej7p19YVoswGGVX52isZI0PE6WGIRaUoQlLKjcvfS
-X-Google-Smtp-Source: AGHT+IF+Pj3QHFtGd3jCzAfHaNNFO/gXUtmbtgJxh6gwBbuJjmeaOpO9u+Xq0MtpxYE2e+EQVtkFHQ==
-X-Received: by 2002:adf:b112:0:b0:37c:cd0d:3437 with SMTP id ffacd0b85a97d-37eab73cf70mr5825218f8f.58.1729515390426;
-        Mon, 21 Oct 2024 05:56:30 -0700 (PDT)
-Received: from localhost (host-82-56-18-47.retail.telecomitalia.it. [82.56.18.47])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0b9cd48sm4275204f8f.111.2024.10.21.05.56.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Oct 2024 05:56:30 -0700 (PDT)
-From: Matteo Martelli <matteomartelli3@gmail.com>
-Date: Mon, 21 Oct 2024 14:54:18 +0200
-Subject: [PATCH v5 5/5] iio: as73211: copy/release available integration
- times to fix race
+	s=arc-20240116; t=1729516993; c=relaxed/simple;
+	bh=sZVT35tPktjswObqMzDeNjpp8MfKEIT8nIy1KCQbxUQ=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=TejOHOYjZ9dc1l3wOZWn7VcyyrZF6AtMhwPvVg47NUxh0elDuDcVUT00GLuUdE9gykbZXrroOAC1hvOpqiYRBrNoe0rg7MYS7XVvAaGMhnteSpqLb/u3ZAQn8AtRr1QoHYTF6WaC59A1uoOEeuGh/uZkUkV2/4dcjGGbVUDKVBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D2598FEC;
+	Mon, 21 Oct 2024 06:23:40 -0700 (PDT)
+Received: from [10.57.24.27] (unknown [10.57.24.27])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E8DCB3F73B;
+	Mon, 21 Oct 2024 06:22:59 -0700 (PDT)
+Message-ID: <b6ca55b7-4de2-4085-97bd-619f91d9fcb8@arm.com>
+Date: Mon, 21 Oct 2024 14:22:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+From: Steven Price <steven.price@arm.com>
+Subject: Re: [PATCH RFC v2 0/4] mm: Introduce MAP_BELOW_HINT
+To: "Kirill A. Shutemov" <kirill@shutemov.name>,
+ Charlie Jenkins <charlie@rivosinc.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
+ Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+ Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ Naveen N Rao <naveen@kernel.org>, Alexander Gordeev
+ <agordeev@linux.ibm.com>, Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>,
+ Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ "David S. Miller" <davem@davemloft.net>,
+ Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Muchun Song <muchun.song@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Shuah Khan <shuah@kernel.org>, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+ linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+References: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
+ <yu7um2tcxg2apoz372rmzpkrfgbb42ndvabvrsp4usb2e3bkrf@huaucjsp5vlj>
+ <Ztnp3OAIRz/daj7s@ghost>
+ <pbotlphw77fkfacldtpxfjcs2w5nhb2uvxszv5rmlrhjm42akd@4pvcqb7ojq4v>
+Content-Language: en-GB
+In-Reply-To: <pbotlphw77fkfacldtpxfjcs2w5nhb2uvxszv5rmlrhjm42akd@4pvcqb7ojq4v>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241021-iio-read-avail-release-v5-5-b168713fab33@gmail.com>
-References: <20241021-iio-read-avail-release-v5-0-b168713fab33@gmail.com>
-In-Reply-To: <20241021-iio-read-avail-release-v5-0-b168713fab33@gmail.com>
-To: Jonathan Cameron <jic23@kernel.org>, 
- Lars-Peter Clausen <lars@metafoo.de>, 
- Michael Hennerich <Michael.Hennerich@analog.com>, 
- Alisa-Dariana Roman <alisa.roman@analog.com>, 
- Christian Eggers <ceggers@arri.de>, Peter Rosin <peda@axentia.se>, 
- Paul Cercueil <paul@crapouillou.net>, Sebastian Reichel <sre@kernel.org>
-Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-mips@vger.kernel.org, linux-pm@vger.kernel.org, 
- Matteo Martelli <matteomartelli3@gmail.com>
-X-Mailer: b4 0.14.2
 
-While available integration times are being printed to sysfs by iio core
-(iio_read_channel_info_avail), the sampling frequency might be changed.
-This could cause the buffer shared with iio core to be corrupted. To
-prevent it, make a copy of the integration times buffer and free it in
-the read_avail_release_resource callback.
+On 09/09/2024 10:46, Kirill A. Shutemov wrote:
+> On Thu, Sep 05, 2024 at 10:26:52AM -0700, Charlie Jenkins wrote:
+>> On Thu, Sep 05, 2024 at 09:47:47AM +0300, Kirill A. Shutemov wrote:
+>>> On Thu, Aug 29, 2024 at 12:15:57AM -0700, Charlie Jenkins wrote:
+>>>> Some applications rely on placing data in free bits addresses allocated
+>>>> by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
+>>>> address returned by mmap to be less than the 48-bit address space,
+>>>> unless the hint address uses more than 47 bits (the 48th bit is reserved
+>>>> for the kernel address space).
+>>>>
+>>>> The riscv architecture needs a way to similarly restrict the virtual
+>>>> address space. On the riscv port of OpenJDK an error is thrown if
+>>>> attempted to run on the 57-bit address space, called sv57 [1].  golang
+>>>> has a comment that sv57 support is not complete, but there are some
+>>>> workarounds to get it to mostly work [2].
+> 
+> I also saw libmozjs crashing with 57-bit address space on x86.
+> 
+>>>> These applications work on x86 because x86 does an implicit 47-bit
+>>>> restriction of mmap() address that contain a hint address that is less
+>>>> than 48 bits.
+>>>>
+>>>> Instead of implicitly restricting the address space on riscv (or any
+>>>> current/future architecture), a flag would allow users to opt-in to this
+>>>> behavior rather than opt-out as is done on other architectures. This is
+>>>> desirable because it is a small class of applications that do pointer
+>>>> masking.
+> 
+> You reiterate the argument about "small class of applications". But it
+> makes no sense to me.
 
-Tested-by: Christian Eggers <ceggers@arri.de>
-Signed-off-by: Matteo Martelli <matteomartelli3@gmail.com>
----
- drivers/iio/light/as73211.c | 25 +++++++++++++++++++++----
- 1 file changed, 21 insertions(+), 4 deletions(-)
+Sorry to chime in late on this - I had been considering implementing
+something like MAP_BELOW_HINT and found this thread.
 
-diff --git a/drivers/iio/light/as73211.c b/drivers/iio/light/as73211.c
-index be0068081ebbbb37fdfb252b67a77b302ff725f6..c4c94873e6a1cc926cfb724d906b07222773c43f 100644
---- a/drivers/iio/light/as73211.c
-+++ b/drivers/iio/light/as73211.c
-@@ -108,7 +108,8 @@ struct as73211_spec_dev_data {
-  * @creg1:  Cached Configuration Register 1.
-  * @creg2:  Cached Configuration Register 2.
-  * @creg3:  Cached Configuration Register 3.
-- * @mutex:  Keeps cached registers in sync with the device.
-+ * @mutex:  Keeps cached registers in sync with the device and protects
-+ *          int_time_avail concurrent access for updating and reading.
-  * @completion: Completion to wait for interrupt.
-  * @int_time_avail: Available integration times (depend on sampling frequency).
-  * @spec_dev: device-specific configuration.
-@@ -493,17 +494,32 @@ static int as73211_read_avail(struct iio_dev *indio_dev, struct iio_chan_spec co
- 		*type = IIO_VAL_INT;
- 		return IIO_AVAIL_LIST;
- 
--	case IIO_CHAN_INFO_INT_TIME:
-+	case IIO_CHAN_INFO_INT_TIME: {
- 		*length = ARRAY_SIZE(data->int_time_avail);
--		*vals = data->int_time_avail;
- 		*type = IIO_VAL_INT_PLUS_MICRO;
--		return IIO_AVAIL_LIST;
- 
-+		guard(mutex)(&data->mutex);
-+
-+		*vals = kmemdup_array(data->int_time_avail, *length,
-+				      sizeof(int), GFP_KERNEL);
-+		if (!*vals)
-+			return -ENOMEM;
-+
-+		return IIO_AVAIL_LIST;
-+	}
- 	default:
- 		return -EINVAL;
- 	}
- }
- 
-+static void as73211_read_avail_release_res(struct iio_dev *indio_dev,
-+					   struct iio_chan_spec const *chan,
-+					   const int *vals, long mask)
-+{
-+	if (mask == IIO_CHAN_INFO_INT_TIME)
-+		kfree(vals);
-+}
-+
- static int _as73211_write_raw(struct iio_dev *indio_dev,
- 			       struct iio_chan_spec const *chan __always_unused,
- 			       int val, int val2, long mask)
-@@ -699,6 +715,7 @@ static irqreturn_t as73211_trigger_handler(int irq __always_unused, void *p)
- static const struct iio_info as73211_info = {
- 	.read_raw = as73211_read_raw,
- 	.read_avail = as73211_read_avail,
-+	.read_avail_release_resource = as73211_read_avail_release_res,
- 	.write_raw = as73211_write_raw,
- };
- 
+While the examples of applications that want to use high VA bits and get
+bitten by future upgrades is not very persuasive. It's worth pointing
+out that there are a variety of somewhat horrid hacks out there to work
+around this feature not existing.
 
--- 
-2.47.0
+E.g. from my brief research into other code:
+
+  * Box64 seems to have a custom allocator based on reading 
+    /proc/self/maps to allocate a block of VA space with a low enough 
+    address [1]
+
+  * PHP has code reading /proc/self/maps - I think this is to find a 
+    segment which is close enough to the text segment [2]
+
+  * FEX-Emu mmap()s the upper 128TB of VA on Arm to avoid full 48 bit
+    addresses [3][4]
+
+  * pmdk has some funky code to find the lowest address that meets 
+    certain requirements - this does look like an ALSR alternative and 
+    probably couldn't directly use MAP_BELOW_HINT, although maybe this 
+    suggests we need a mechanism to map without a VA-range? [5]
+
+  * MIT-Scheme parses /proc/self/maps to find the lowest mapping within 
+    a range [6]
+
+  * LuaJIT uses an approach to 'probe' to find a suitable low address 
+    for allocation [7]
+
+The biggest benefit I see of MAP_BELOW_HINT is that it would allow a
+library to get low addresses without causing any problems for the rest
+of the application. The use case I'm looking at is in a library and 
+therefore a personality mode wouldn't be appropriate (because I don't 
+want to affect the rest of the application). Reading /proc/self/maps
+is also problematic because other threads could be allocating/freeing
+at the same time.
+
+Thanks,
+Steve
+
+
+[1] https://sources.debian.org/src/box64/0.3.0+dfsg-1/src/custommem.c/
+[2] https://sources.debian.org/src/php8.2/8.2.24-1/ext/opcache/shared_alloc_mmap.c/#L62
+[3] https://github.com/FEX-Emu/FEX/blob/main/FEXCore/Source/Utils/Allocator.cpp
+[4] https://github.com/FEX-Emu/FEX/commit/df2f1ad074e5cdfb19a0bd4639b7604f777fb05c
+[5] https://sources.debian.org/src/pmdk/1.13.1-1.1/src/common/mmap_posix.c/?hl=29#L29
+[6] https://sources.debian.org/src/mit-scheme/12.1-3/src/microcode/ux.c/#L826
+[7] https://sources.debian.org/src/luajit/2.1.0+openresty20240815-1/src/lj_alloc.c/
+
+> With full address space by default, this small class of applications is
+> going to *broken* unless they would handle RISC-V case specifically.
+> 
+> On other hand, if you limit VA to 128TiB by default (like many
+> architectures do[1]) everything would work without intervention.
+> And if an app needs wider address space it would get it with hint opt-in,
+> because it is required on x86-64 anyway. Again, no RISC-V-specific code.
+> 
+> I see no upside with your approach. Just worse user experience.
+> 
+> [1] See va_high_addr_switch test case in https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/mm/Makefile#n115
+> 
 
 
