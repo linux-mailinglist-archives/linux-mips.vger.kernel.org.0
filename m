@@ -1,111 +1,115 @@
-Return-Path: <linux-mips+bounces-6228-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6229-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB8399A7174
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 19:56:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABC799A71FD
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 20:10:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23619284074
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 17:56:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0E781C2256B
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 18:10:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B62C61F473C;
-	Mon, 21 Oct 2024 17:56:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CC991FAC29;
+	Mon, 21 Oct 2024 18:08:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sJQY/rj4"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Kvy2TT4n"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570261CBEB6;
-	Mon, 21 Oct 2024 17:56:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB3D01FAC2C
+	for <linux-mips@vger.kernel.org>; Mon, 21 Oct 2024 18:08:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729533402; cv=none; b=sBmZoDA2+kHz2LcDdrbct6YhDt/mvO0Ao5y1VXPMMQxP7/OFd5hl/sQLzUZCPkhmXgpCDHegd1+yIO3LQYzEtaF5hg9ySOH83GHph36NCjOZXsggWE2WpEFiV1NgXA9qjxWzhUQaCCLXKkp7PjJsGdwgFemRPW6lCpKewyNCNpo=
+	t=1729534134; cv=none; b=enSYQiXjEnLNJpE94K0oW1W+qlAOFVUcRTpyp9k2HED7FJPOrPDAz/8ObM+uJIbdhjyNRSU+oQhaXEYZrvxG20dK7EFHxmPuevfwbdmIfT3iRhRK5v/QrKmx49obkafqS6k9pd+q54NnI7nxsnWN8FFRtnZZIJw53nA8ttXBeTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729533402; c=relaxed/simple;
-	bh=iOp6UPk7kp6624trt50V9GCSl7TCmUx91AXnl52vexs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AyJL+OGZwtVdd0o9uu1OLks4L11/TH3IkqaNJ/QagCRCQPer47uMTTtxkS5zRdcryA0OnWTx4D3TrGBLmvWNtt/mvBMDFD4RqWntO67QMDSuLjIj3cKqnpK9pcDHmQTqegQp34/JwSFT7YrMhNn70sh2kyRSwCJ/eDw8NgEEUrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sJQY/rj4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2F2FC4CEC7;
-	Mon, 21 Oct 2024 17:56:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729533402;
-	bh=iOp6UPk7kp6624trt50V9GCSl7TCmUx91AXnl52vexs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sJQY/rj4pTIO5uEWlo1heoszsTNmf9jrwjFBD0lIbKoaTFxHVpdjurFhvf6qbFqVx
-	 3p4d5v2zCCp/LbxdIlTGmC11dWGlMVeXXfBDk8A9Aml+/MAtk2IETKhnM8m6cKxkey
-	 BZF/dYUet13hmxhgQOUCWlo2mvzJlbvIRi1nLRTDg+g177wJbtfgI05mwIy3+AOG+C
-	 2RdO3YmkeY7RM1WJnyPqFT2fPe/8kLv+1aQd4pfj1zTvRhlxt250RD3qNZbbCGpcse
-	 fs5+AtO+kgnLwq3Dm+Zt8UDEsdLr8Tbrkjy5WAyah1cfbA8sbkBGsmyodZGLNuMspU
-	 cTEE/rSNQw61A==
-Date: Mon, 21 Oct 2024 17:56:40 +0000
-From: Eric Biggers <ebiggers@kernel.org>
-To: Heiko Carstens <hca@linux.ibm.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
-	x86@kernel.org, Hendrik Brueckner <brueckner@linux.ibm.com>
-Subject: Re: [PATCH 07/15] s390/crc32: expose CRC32 functions through lib
-Message-ID: <20241021175640.GA1370449@google.com>
-References: <20241021002935.325878-1-ebiggers@kernel.org>
- <20241021002935.325878-8-ebiggers@kernel.org>
- <20241021104007.6950-E-hca@linux.ibm.com>
+	s=arc-20240116; t=1729534134; c=relaxed/simple;
+	bh=lGAahFUJB47Jv0GHevlLPsXzZ4O8VtjPyAFbuGdCp8E=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=pBXG5WN1NDeNsLQf5mQzRT4j64boIZShNptNoVT3v1klobYBHYXdQWW66R+TVyY9PP7CjNTKQDx/rDckHOxT0aFhkthPsfzQUYR72TbQcVCbSR/mlv+OqhBd3w+Uxvhpb8coLj+7QWz53uDpNX1ypF+6Qy7FnpNUauT2EXeR8rI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Kvy2TT4n; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2e2eb765285so6068140a91.1
+        for <linux-mips@vger.kernel.org>; Mon, 21 Oct 2024 11:08:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1729534131; x=1730138931; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=B4nB5AD8jm9woOflkJu9LaOALYzY3FWUJ+pKW1FSB8o=;
+        b=Kvy2TT4nFNRE4v6qOhuvlFoeLee0AdD4xf9oblSyYyxEb8GhQukzYNy1Ol8V+YhjMD
+         C3NGaSmYp8oth+na2vGGhm3ih9Koiclz5KYzTxNy5pcVr9ARX+mnJ7B613cFBUpFK71x
+         iWfh/ohEyQ3Xp1/YPlK/EY1B9iYSmr4Yc2fpQbUSrFtQAag2BJB0DTanRLhydyrkVu9O
+         GSS75Wqwr+13Ik7si/pFv+bQ9H6zv6VW5TQn/3oPp/u1JWFq2rLcxcl9vwwiK6DdqnGd
+         IvqPdPaVrspj8hHudi68Q1kFLiJtYZwvkWAsKsGoodfBahhHBnpIyInghyeovWvoyWBg
+         r/Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729534131; x=1730138931;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=B4nB5AD8jm9woOflkJu9LaOALYzY3FWUJ+pKW1FSB8o=;
+        b=fBUXCPIuWydUnHa6iAkgt0/xZXsNSYDFlE/Fj/A5cd+xeCKfg6fu9kJVzvt21heGoL
+         HF0Uv4J0gc55xst54aKm7eIU+oln3sxxiF/gQex4oVVzb2hKWLzdH/7Z/b6Sfh3KYVGE
+         W4Aj4z7q7MXWRHHm4HUEVax456dbPJOVXJc3o8rnCUuxuqNWzjfMPt0sD9Xz1l1jXht5
+         MUgLyC6fpi0A28HusvaKsAAX4pXl/N8f9hwggXTKY/Pmc576xosVUqDmSMMhGe3DIfr3
+         F8HKxm0iX/cbAuzoTeWSLQX13x2zxOg+SMUZ5L0DNuG0oz/cI9YWl5aJb5KpFM5jaaxa
+         /neQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV8SU5ko9jmDh/KCWGuEO4VpfB50gEiNLvuKBU6v1SjM3/HJLW6k9SCbI0VyzAWpzEMGiwYcVsPLUoE@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjwdyFhdZvIQeCEcohfSHIlyx441z4rigvZvB9wlg50QhnNNIg
+	qaZ4E+3W/LOkgc7JWN7J4A3y66UJRdY4HbBh3cW+ZgJBm1odKDF/rouP/6PKI3z0qxut9wpXJpt
+	ozw==
+X-Google-Smtp-Source: AGHT+IHz/sqxbIaZMzAhwQE+KHAQ50pc4vGOx7OQ/MlEMfrpYKQ16K4ySzEgLcCV5+myw9EmSbX31Z6uvf4=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:9d:3983:ac13:c240])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:e147:b0:2d8:a9c2:2f3a with SMTP id
+ 98e67ed59e1d1-2e5616d8f42mr22750a91.3.1729534130899; Mon, 21 Oct 2024
+ 11:08:50 -0700 (PDT)
+Date: Mon, 21 Oct 2024 11:08:49 -0700
+In-Reply-To: <ZxYVnsW9WF1Wp8mx@yzhao56-desk.sh.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241021104007.6950-E-hca@linux.ibm.com>
+Mime-Version: 1.0
+References: <20241010182427.1434605-1-seanjc@google.com> <20241010182427.1434605-20-seanjc@google.com>
+ <ZxYVnsW9WF1Wp8mx@yzhao56-desk.sh.intel.com>
+Message-ID: <ZxaYsfc0m6UHmi10@google.com>
+Subject: Re: [PATCH v13 19/85] KVM: Introduce kvm_follow_pfn() to eventually
+ replace "gfn_to_pfn" APIs
+From: Sean Christopherson <seanjc@google.com>
+To: Yan Zhao <yan.y.zhao@intel.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
+	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Anup Patel <anup@brainfault.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	"Alex =?utf-8?Q?Benn=C3=A9e?=" <alex.bennee@linaro.org>, David Matlack <dmatlack@google.com>, 
+	David Stevens <stevensd@chromium.org>, Andrew Jones <ajones@ventanamicro.com>
+Content-Type: text/plain; charset="us-ascii"
 
-On Mon, Oct 21, 2024 at 12:40:07PM +0200, Heiko Carstens wrote:
-> What makes sure that all of the code is available automatically if the
-> CPU supports the instructions like before? I can see that all CRC32
-> related config options support also module build options.
-> 
-> Before this patch, this module and hence the fast crc32 variants were
-> loaded automatically when required CPU features were present.
-> Right now I don't how this is happening with this series.
+On Mon, Oct 21, 2024, Yan Zhao wrote:
+> On Thu, Oct 10, 2024 at 11:23:21AM -0700, Sean Christopherson wrote:
+> > --- a/virt/kvm/pfncache.c
+> > +++ b/virt/kvm/pfncache.c
+> > @@ -159,6 +159,12 @@ static kvm_pfn_t hva_to_pfn_retry(struct gfn_to_pfn_cache *gpc)
+> >  	kvm_pfn_t new_pfn = KVM_PFN_ERR_FAULT;
+> >  	void *new_khva = NULL;
+> >  	unsigned long mmu_seq;
+> > +	struct kvm_follow_pfn kfp = {
+> > +		.slot = gpc->memslot,
+> > +		.gfn = gpa_to_gfn(gpc->gpa),
+> > +		.flags = FOLL_WRITE,
+> > +		.hva = gpc->uhva,
+> > +	};
+> Is .map_writable uninitialized?
 
-There's just a direct symbol dependency now.  For example
-ext4.ko -> crc32-s390.ko [crc32c_le_arch] -> crc32.ko [crc32c_le_base].
-So, crc32-$arch.ko always gets loaded when there is a user of one of the CRC32
-library functions, provided that it was enabled in the kconfig.
-
-crc32-$arch then calls either the accelerated code or the base code depending on
-the CPU features.  On most architectures including s390, I made this use a
-static branch, so there is almost no overhead (much less overhead than the
-indirect call that was needed before).
-
-This is the same way that some of the crypto library code already works.
-
-> > +static int __init crc32_s390_init(void)
-> > +{
-> > +	if (cpu_have_feature(S390_CPU_FEATURE_VXRS))
-> > +		static_branch_enable(&have_vxrs);
-> > +	return 0;
-> > +}
-> > +arch_initcall(crc32_s390_init);
-> 
-> I guess this should be changed to:
-> 
-> module_cpu_feature_match(S390_CPU_FEATURE_VXRS, ...);
-> 
-> Which would make at least the library functions available if cpu
-> features are present. But this looks only like a partial solution of
-> the above described problem.
-> 
-> But maybe I'm missing something.
-
-This is not needed, as per the above.
-
-- Eric
+Nope, per C99, "subobjects without explicit initializers are initialized to zero",
+i.e. map_writable is initialized to "false".
 
