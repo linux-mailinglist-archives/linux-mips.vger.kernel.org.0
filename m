@@ -1,184 +1,255 @@
-Return-Path: <linux-mips+bounces-6201-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6202-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1A989A65AE
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 13:01:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D93BC9A692D
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 14:56:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BBCCBB2CE6F
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 10:46:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96912281F4C
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 12:56:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2B361E909F;
-	Mon, 21 Oct 2024 10:40:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E64A1F4FDA;
+	Mon, 21 Oct 2024 12:56:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="WL4D7lJN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YcibBnNE"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2994195FEC;
-	Mon, 21 Oct 2024 10:40:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CCB11EF0BD;
+	Mon, 21 Oct 2024 12:56:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729507234; cv=none; b=UbKxnbvgVsnVLVoEJfP83q+y4AePUB00Ha2bEWi3CgNYanD8g0ZVz5xZsQrf95llqmsCHb5a5yDBsGwUXZGKsq+ue7WcEQz3XacsNXRagcT/GA5h/J9llT6e4vQb6uPlKQ9FPZ2b54X2DbCZ56b5VN1CcyNHUomPhKn9Wy3LKaw=
+	t=1729515388; cv=none; b=Kt03PJebd6y7F6jeK8kHNdyezn0AIZg61eiRBujIrV02xDCzy8FErFbZz7LiynYo1s/k2m2Zy3BFbdvqf0M0R85x3jLkObHTi1iE34cs9zJvNMa5Ss8Yp3SasnzUh0dUoCGIg3XXnRwYAP8tmdEaYNyytZcXkVuONc5RG6+bXxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729507234; c=relaxed/simple;
-	bh=41f6oEtljvqz5Te0x1SNWi4SHNJw6n7wHUBSgCBwR3g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CB6/4heloakgrVdG+7Sf1Hm4L928IJ+O90B2SFgKvEIPle/tPnAMB6s7cAUO2hv+zL21ZHsEnXWUXa8y95jqJqzjlxpK6WVFALRWl49WOIQ6clz0/p5EsyJdTYmbXo0nrLV7oczntzE+wYLUSqdFZRF822T2Y5Jawj0yMXCNFG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=WL4D7lJN; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49L2KH3K032533;
-	Mon, 21 Oct 2024 10:40:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=92knE4jiltiV907EhRGLVYeamkXayI
-	7j0BwYX0ZH1JA=; b=WL4D7lJNas37Nzdhxi9rX+lx/0u/7ytK48q3TqjJR++gKt
-	r7ueMht7alDtgQ7pasPryEpqoYRd0OWJqyszZwZ+SpNOF2LJ1isSitDYhyMC/LAS
-	FwERDIOSqxtV94TGFg/XwPocGXOJNG9slT3/uBhOpxWpILgE6aPOyXK2xUh7rTpF
-	iZSfIsmznUv35ep6vlQ2EA5avKOIqsYrhOQyes8ee48qcQRT99bJpKxarFGhHfc/
-	Sf1AmAC4Lua0AKvgB9CPRIHyiQxUS0kOC4/Q4iiF3ywr7qQlDkQN+CyvM61jpuW4
-	hTkpnbK13JKGJKjwKEuAWROXZpMXdSctg6J3mWmA==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42c5hm8my5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 21 Oct 2024 10:40:13 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49L9CWB9018605;
-	Mon, 21 Oct 2024 10:40:12 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 42csaj5kvs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 21 Oct 2024 10:40:12 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49LAe94P24249044
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 21 Oct 2024 10:40:10 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 389B320043;
-	Mon, 21 Oct 2024 10:40:09 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7F0602004B;
-	Mon, 21 Oct 2024 10:40:08 +0000 (GMT)
-Received: from osiris (unknown [9.171.37.192])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon, 21 Oct 2024 10:40:08 +0000 (GMT)
-Date: Mon, 21 Oct 2024 12:40:07 +0200
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org,
-        Hendrik Brueckner <brueckner@linux.ibm.com>
-Subject: Re: [PATCH 07/15] s390/crc32: expose CRC32 functions through lib
-Message-ID: <20241021104007.6950-E-hca@linux.ibm.com>
-References: <20241021002935.325878-1-ebiggers@kernel.org>
- <20241021002935.325878-8-ebiggers@kernel.org>
+	s=arc-20240116; t=1729515388; c=relaxed/simple;
+	bh=tREfQ8541ViLxlvxsaW//+lYmAxknmpPB0HiETw3Z44=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fxPpHC4oo3uRWiGlRRru1s+NJo8JKIpbEPw0TaznxXC9v1+c9CnutaZTVUt6d1jOv9jN54peJSqemdMVYCQnnQIEJdxvRM7TSYGMcoUkGAxtp5IEGbh3G3PrhFIXMfY32Lw82sKsEh+AhCId+lZgFN+lT9556siax2+N3PQYXpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YcibBnNE; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-37d495d217bso4401370f8f.0;
+        Mon, 21 Oct 2024 05:56:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729515384; x=1730120184; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xhc+3nVtkGPP0v2rGu9F3yIVesKnyRlfDvzJ34+Itug=;
+        b=YcibBnNE7Ht4R6nChQMhi0+KcCf8YBQMzE8pHLAWqYGc/dxCBx0Jnhc0Xn1tJlOwMf
+         H1h8MhpJd7rowfe2Ilz5kwBbIaMgRO7bzox0mWigIa+VsbF7XD1ADVgQ3lReBG7O0zDB
+         WSsZqPn/d+IV5DVievQtG3VUe0X7TI8VLJ10qpiHjB+9CXlBfWAOcuIECRyT6TgU1kWg
+         tqEd6w/zIugwkTjbJWNSudmTKpnoNKiU0g2BCTDgT89uafutU3uS2Mi6FmyhBHTKDjPv
+         CC+bpCCWoJ4WwJvEfohz0bFP0qS3JTTnQGLp1zs9jFnppTwevb6zio6XOl1XiCHWgPnh
+         WeZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729515384; x=1730120184;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xhc+3nVtkGPP0v2rGu9F3yIVesKnyRlfDvzJ34+Itug=;
+        b=XHRVcijYy+/4M+JrK/pPc9k3B9Vvodo2ULoVzWE90Q2nk9DoiorSoAVC0Gj/ojnwKE
+         JTL0+0d5Wx8wXyTuGLorr51dmtKqaCK6kAloOGYSjeV1V/AUonFsscNEUXZNrt0mCBGL
+         McuQD9dJefwYPea9PsRmj3zp6QJhH4km4RGfUZdqdUNLbcKxaRQlJQoMCJTeC+08LApC
+         +Dka+Mmv3+cpr3O6l+6C70NLK+iFNicfT2EOHVkkdyUUgyvQ1J3d2dcvBed5oSLZL1Vj
+         Gpy86agVjRtlGqC7phkQmMOvujXg/9hWlbpSl3K/XeIOjKK1NcSmhagtmgnxMVOZxJvQ
+         /eWw==
+X-Forwarded-Encrypted: i=1; AJvYcCUQgKN8OrEXFdnrT4+tsYid3Y+xDOC+3X/+Vi9FOPXKNumfvJnmOqHYJfQEg0vZNrMfYW1/IBKQhPE=@vger.kernel.org, AJvYcCV1/2X3+ZTsu7dWlqEtUvUz+5EKd4B6TMJU8rEwtKObBaAXPYT9D+oWoAQ2x0pZMBagEy+SGdB1qyYOMcs=@vger.kernel.org, AJvYcCX8k0UbCYhhSAkHOWv3t2rq3utD4uReGygKkSIuSlNvG1xBMMGlsummcU7edJHRYDgWZqweg1cLxKgF5A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxR9FCopMrNBy/OXZCVQc/fA5mwBJP6SaHTLvh1aV6JXETjXaLg
+	F0ligv6Dtfr/ehHnZoQyw7Disl1JdIQHtl4LyLEJXYL36grC+mRI
+X-Google-Smtp-Source: AGHT+IEY7dgaL98xp8q/i7zhd1J1244T9rxDFtW77fOOBStYR1g5sQLeQia3h8s37foBheGBFNwU6g==
+X-Received: by 2002:adf:fa8d:0:b0:37d:5359:6753 with SMTP id ffacd0b85a97d-37ea21d8a0emr10055282f8f.15.1729515384264;
+        Mon, 21 Oct 2024 05:56:24 -0700 (PDT)
+Received: from localhost (host-82-56-18-47.retail.telecomitalia.it. [82.56.18.47])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0b93e76sm4281751f8f.82.2024.10.21.05.56.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Oct 2024 05:56:23 -0700 (PDT)
+From: Matteo Martelli <matteomartelli3@gmail.com>
+Subject: [PATCH v5 0/5] iio: fix possible race condition during access of
+ available info lists
+Date: Mon, 21 Oct 2024 14:54:13 +0200
+Message-Id: <20241021-iio-read-avail-release-v5-0-b168713fab33@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241021002935.325878-8-ebiggers@kernel.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: f0A5vIL1iLbWasgVAUuToCuIbQMCR4iX
-X-Proofpoint-GUID: f0A5vIL1iLbWasgVAUuToCuIbQMCR4iX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
- phishscore=0 impostorscore=0 priorityscore=1501 lowpriorityscore=0
- bulkscore=0 mlxscore=0 adultscore=0 mlxlogscore=730 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410210076
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPVOFmcC/3XPwWrDMAwG4FcpPs9DluPG6anvMXZwZbUVtE2xh
+ 9kIefepOYVCbvol9AlNpnIRruawm0zhJlXGh4bwsTN0TY8LW8maDQJ2EAGtyGgLp2xTS3LT8sa
+ psqWTz5gcu9MQjS4/C5/ld4G/vjVfpf6M5W+509yru5AOwG+RzVmw1ANRnwdChuPlrvNPGu/mR
+ TZcM/0mg8pgFwAwh7gf+J3xK8aFTcYrk8gzxDMGffed6dZM3GQ6ZYKnmGjvYohhzczz/A+TNxe
+ PkQEAAA==
+X-Change-ID: 20240802-iio-read-avail-release-cb3d2a1e1b98
+To: Jonathan Cameron <jic23@kernel.org>, 
+ Lars-Peter Clausen <lars@metafoo.de>, 
+ Michael Hennerich <Michael.Hennerich@analog.com>, 
+ Alisa-Dariana Roman <alisa.roman@analog.com>, 
+ Christian Eggers <ceggers@arri.de>, Peter Rosin <peda@axentia.se>, 
+ Paul Cercueil <paul@crapouillou.net>, Sebastian Reichel <sre@kernel.org>
+Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-mips@vger.kernel.org, linux-pm@vger.kernel.org, 
+ Matteo Martelli <matteomartelli3@gmail.com>
+X-Mailer: b4 0.14.2
 
-On Sun, Oct 20, 2024 at 05:29:27PM -0700, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> Move the s390 CRC32 assembly code into the lib directory and wire it up
-> to the library interface.  This allows it to be used without going
-> through the crypto API.  It remains usable via the crypto API too via
-> the shash algorithms that use the library interface.  Thus all the
-> arch-specific "shash" code becomes unnecessary and is removed.
-> 
-> Note: to see the diff from arch/s390/crypto/crc32-vx.c to
-> arch/s390/lib/crc32-glue.c, view this commit with 'git show -M10'.
-> 
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
-> ---
->  arch/s390/Kconfig                      |   1 +
->  arch/s390/configs/debug_defconfig      |   1 -
->  arch/s390/configs/defconfig            |   1 -
->  arch/s390/crypto/Kconfig               |  12 -
->  arch/s390/crypto/Makefile              |   2 -
->  arch/s390/crypto/crc32-vx.c            | 306 -------------------------
->  arch/s390/lib/Makefile                 |   3 +
->  arch/s390/lib/crc32-glue.c             |  82 +++++++
->  arch/s390/{crypto => lib}/crc32-vx.h   |   0
->  arch/s390/{crypto => lib}/crc32be-vx.c |   0
->  arch/s390/{crypto => lib}/crc32le-vx.c |   0
->  11 files changed, 86 insertions(+), 322 deletions(-)
->  delete mode 100644 arch/s390/crypto/crc32-vx.c
->  create mode 100644 arch/s390/lib/crc32-glue.c
->  rename arch/s390/{crypto => lib}/crc32-vx.h (100%)
->  rename arch/s390/{crypto => lib}/crc32be-vx.c (100%)
->  rename arch/s390/{crypto => lib}/crc32le-vx.c (100%)
+Some iio drivers currently share an available info list buffer that
+might be changed while iio core prints it to sysfs. This could cause the
+buffer shared with iio core to be corrupted. However, note that I was
+able to trigger the race condition only by adding a delay between each
+sysfs_emit_at calls in the iio_format_list() to force the concurrent
+access to the shared available list buffer.
 
-...
+This patch set extends the iio APIs and fixes some affected drivers.
 
-> -static int __init crc_vx_mod_init(void)
-> -{
-> -	return crypto_register_shashes(crc32_vx_algs,
-> -				       ARRAY_SIZE(crc32_vx_algs));
-> -}
-> -
-> -static void __exit crc_vx_mod_exit(void)
-> -{
-> -	crypto_unregister_shashes(crc32_vx_algs, ARRAY_SIZE(crc32_vx_algs));
-> -}
-> -
-> -module_cpu_feature_match(S390_CPU_FEATURE_VXRS, crc_vx_mod_init);
+Summary:
+- Patch 1: iio core: introduce a iio info release callback to let
+  drivers share a copy of their available info list and later free it.
 
-What makes sure that all of the code is available automatically if the
-CPU supports the instructions like before? I can see that all CRC32
-related config options support also module build options.
+- Patch 2:
+    - inkern: make consumers copy and release the available info lists
+      of their producers, necessary after patch 1.
+    - iio-mux, iio-rescale, dpot-dac, ingenic-battery: adapt consumers
+      to inkern API change by freeing the now copied available lists of
+      their producers.
 
-Before this patch, this module and hence the fast crc32 variants were
-loaded automatically when required CPU features were present.
-Right now I don't how this is happening with this series.
+- Patch 3: pac1921: handle the current scale available info via the
+  read_avail+read_avail_release_resource APIs instead of using an ad-hoc
+  ext_info attribute. The latter was used to avoid the risk of a race in
+  the available list.
 
-> -MODULE_ALIAS_CRYPTO("crc32");
-> -MODULE_ALIAS_CRYPTO("crc32-vx");
-> -MODULE_ALIAS_CRYPTO("crc32c");
-> -MODULE_ALIAS_CRYPTO("crc32c-vx");
+- Patch 4,5: ad7192, as73211: fix the possible race in the drivers by
+  copying/releasing the affected available lists.
 
-...
+Tested:
+- pac1921: could not reproduce the race condition with the new APIs,
+  even with additional delays among the sysfs_emit_at calls during a
+  shunt resistor write. No new issue found after the change.
 
-> +static int __init crc32_s390_init(void)
-> +{
-> +	if (cpu_have_feature(S390_CPU_FEATURE_VXRS))
-> +		static_branch_enable(&have_vxrs);
-> +	return 0;
-> +}
-> +arch_initcall(crc32_s390_init);
+- iio-mux, iio-rescale, dpot-dac: tested with pac1921 as producer, which
+  was adapted to produce a mock raw available info list.
+  The tests did not cover the driver features but focused on assessing
+  the function call sequence. For example the following traced function
+  graph shows a read of the dpot mocked out voltage (with ftrace
+  filters: pac1921* iio* dpot* kmemdup_array* kfree*):
 
-I guess this should be changed to:
+ 3)               |  iio_read_channel_info_avail [industrialio]() {
+ 3)               |    dpot_dac_read_avail [dpot_dac]() {
+ 3)               |      iio_read_avail_channel_raw [industrialio]() {
+ 3)               |        iio_channel_read_avail [industrialio]() {
+ 3)               |          pac1921_read_avail [pac1921]() {
+ 3)   5.208 us    |            kmemdup_array();
+ 3) + 11.459 us   |          }
+ 3)   3.167 us    |          kmemdup_array();
+ 3)               |          pac1921_read_avail_release_res [pac1921]() {
+ 3)   1.709 us    |            kfree();
+ 3)   4.458 us    |          }
+ 3) + 25.750 us   |        }
+ 3) + 31.792 us   |      }
+ 3) + 35.000 us   |    }
+ 3) + 37.083 us   |    iio_format_list [industrialio]();
+ 3)               |    dpot_dac_read_avail_release_res [dpot_dac]() {
+ 3)   1.583 us    |      kfree();
+ 3)   4.250 us    |    }
+ 3) + 84.292 us   |  }
 
-module_cpu_feature_match(S390_CPU_FEATURE_VXRS, ...);
+- ingenic-battery: also tested with mock available info produced by the
+  pac1921 driver. Following the traced graph part that should correspond
+  to the ingenic_battery_set_scale() flow (which is not traceable with
+  the additional ingenic* ftrace filter for some reason):
 
-Which would make at least the library functions available if cpu
-features are present. But this looks only like a partial solution of
-the above described problem.
+ 2)               |  ingenic_battery_probe [ingenic_battery]() {
+                ...
+ 2)               |    iio_read_max_channel_raw [industrialio]() {
+ 2)               |      iio_channel_read_avail [industrialio]() {
+ 2)               |        pac1921_read_avail [pac1921]() {
+ 2)   4.333 us    |          kmemdup_array();
+ 2) + 10.834 us   |        }
+ 2)   3.500 us    |        kmemdup_array();
+ 2)               |        pac1921_read_avail_release_res [pac1921]() {
+ 2)   1.791 us    |          kfree();
+ 2)   4.625 us    |        }
+ 2) + 26.291 us   |      }
+ 2)   1.583 us    |      kfree();
+ 2) + 35.750 us   |    }
+ 2)               |    iio_read_avail_channel_attr_retvals [industrialio]() {
+ 2)               |      iio_channel_read_avail [industrialio]() {
+ 2)               |        pac1921_read_avail [pac1921]() {
+ 2)   3.250 us    |          kmemdup_array();
+ 2)   8.209 us    |        }
+ 2)   3.458 us    |        kmemdup_array();
+ 2)               |        pac1921_read_avail_release_res [pac1921]() {
+ 2)   1.542 us    |          kfree();
+ 2)   4.292 us    |        }
+ 2) + 21.417 us   |      }
+ 2) + 26.333 us   |    }
+ 2)               |    iio_write_channel_attribute [industrialio]() {
+ 2)   4.375 us    |      pac1921_write_raw [pac1921]();
+ 2)   9.625 us    |    }
+ 2)   1.666 us    |    kfree();
+ 2) * 47810.08 us |  }
 
-But maybe I'm missing something.
+Not tested:
+- ad7192, as73211
+
+Link: https://lore.kernel.org/linux-iio/20240724-iio-pac1921-v4-0-723698e903a3@gmail.com/
+
+Signed-off-by: Matteo Martelli <matteomartelli3@gmail.com>
+---
+Changes in v5:
+- Patch 2: inkern, ingenic-battery: add read_avail_retvals() helpers to
+  safely use the cleanup free pattern and update commit message accordingly.
+- Update ingenic-battery test trace log in cover letter after retest:
+  iio_read_avail_channel_attribute() -> iio_read_avail_channel_attr_retvals().
+- Link to v4: https://lore.kernel.org/r/20241018-iio-read-avail-release-v4-0-53c8ac618585@gmail.com
+
+Changes in v4:
+- Patch 2: inkern, ingenic-battery: use cleanup free instead of the
+  "goto out" pattern
+- Link to v3: https://lore.kernel.org/r/20241015-iio-read-avail-release-v3-0-ac3e08f25cb3@gmail.com
+
+Changes in v3:
+- Rebased on top of iio-togreg
+- Squash and reorder commits to allow bisection without memleaks
+- Edit summary in cover letter to match new patch order
+- Patch 2: inkern: add comment to clarify the need of the producer's buffer copy
+- Patch 5: as73211: update comment on mutex declaration
+- Link to v2: https://lore.kernel.org/r/20241007-iio-read-avail-release-v2-0-245002d5869e@gmail.com
+
+Changes in v2:
+- Patch 4: as73211: remove one blank line
+- Patch 6: consumers: fix typo in commit message
+- Patch 7: ingenic-battery: add missing header include
+- Link to v1: https://lore.kernel.org/r/20241003-iio-read-avail-release-v1-0-c70cc7d9c2e0@gmail.com
+
+---
+Matteo Martelli (5):
+      iio: core: add read_avail_release_resource callback to fix race
+      iio: consumers: copy/release available info from producer to fix race
+      iio: pac1921: use read_avail+release APIs instead of custom ext_info
+      iio: ad7192: copy/release available filter frequencies to fix race
+      iio: as73211: copy/release available integration times to fix race
+
+ drivers/iio/adc/ad7192.c               |  22 +++++-
+ drivers/iio/adc/pac1921.c              | 128 ++++++++++++---------------------
+ drivers/iio/afe/iio-rescale.c          |   8 +++
+ drivers/iio/dac/dpot-dac.c             |   8 +++
+ drivers/iio/industrialio-core.c        |  14 +++-
+ drivers/iio/inkern.c                   |  99 ++++++++++++++++++++-----
+ drivers/iio/light/as73211.c            |  25 +++++--
+ drivers/iio/multiplexer/iio-mux.c      |   8 +++
+ drivers/power/supply/ingenic-battery.c |  22 +++---
+ include/linux/iio/consumer.h           |  28 +++++++-
+ include/linux/iio/iio.h                |   4 ++
+ 11 files changed, 248 insertions(+), 118 deletions(-)
+---
+base-commit: c3e9df514041ec6c46be83801b1891392f4522f7
+change-id: 20240802-iio-read-avail-release-cb3d2a1e1b98
+
+Best regards,
+-- 
+Matteo Martelli <matteomartelli3@gmail.com>
+
 
