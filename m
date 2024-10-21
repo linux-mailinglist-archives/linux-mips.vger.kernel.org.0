@@ -1,210 +1,154 @@
-Return-Path: <linux-mips+bounces-6195-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6196-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F28169A582B
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 02:34:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64F519A589C
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 03:48:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CDFF1C209B8
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 00:34:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E65871F220F7
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 01:48:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4E7414D2A7;
-	Mon, 21 Oct 2024 00:29:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5721C10A1E;
+	Mon, 21 Oct 2024 01:48:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NFFk4W0d"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="Q8xQdhC9"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E05A14830F;
-	Mon, 21 Oct 2024 00:29:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77C0C256E;
+	Mon, 21 Oct 2024 01:48:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.194.254.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729470599; cv=none; b=ClkoqdmqW/rwpgIF5W1bq7oCsGhwBg9CmmrG/k1jXEBaDvnzsiSs7kDKbxcFrUCapQROWKcVAfZPRuNbaYdc/YNHtElREYspXrD/ZVg0MFtNZKzn/i/NFvtgux/G6XptOS4uMeBZQsLw5nA/xSk5Z75Mjj+qJR2WT+wiluPguZk=
+	t=1729475323; cv=none; b=QsGbXzGLtTKXE38fM4kr6mS828jt7ea3foLMWmXqZSVDx8+fWOUx0fWt2zujLpz83X9TNFiVCldjJmoxxTv/Iz7lGtsgU31gU731tFlsyHvy8k9cXJWXd+iAXKJrS7iF/FqPcDEZKcj/Vh1ohW+bJmnGlSk75Gi43E9YNxFNIsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729470599; c=relaxed/simple;
-	bh=2edVn3yzlgvTIcU4OYne6VaRBmOeBMvpuDRrHbVNdrI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oGoohfC3AJJKp+I9JdTM7rGeMiA+bimxvlVQmu+SCee0SBRdI8Yx7uMvS6fYNV7/XBxrGbCsaEc5lopM6st+ffv7FFT2U1nJ5KjEoUO8vmvebafRLXt7DO4xuetHDIJa4OCSukXJDopmhxQLLWr0QHCpC1TZ3Km/7I/hH/qWFP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NFFk4W0d; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87B75C4CEE5;
-	Mon, 21 Oct 2024 00:29:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729470598;
-	bh=2edVn3yzlgvTIcU4OYne6VaRBmOeBMvpuDRrHbVNdrI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NFFk4W0dyvHD7M3v36IIWTb5ySBBZX5uZ/VLRYiArPPR5++D/baWB8d+lyfAaBOhk
-	 rztTLk/6ilOUZBWwQxzKVpNgy7hbS+bAqO2cV8DFYmzWDyAaKEezQcPZFBrYh8vShT
-	 roh7zUz+tjlNZy+E9vuB5Q59JQnN14hGjhkd5gjyQeUJqlHGIc+Uf3/5EwjEZ4O6Ps
-	 TvEpzXEcAb/PHAsselt3G1remC4TFMm//VXM0Ciyn11PZQ9zsIxfN5iARYumUTBA9J
-	 8pJ0BrJoKwcW+JUENnQzEDWoyb2qcx6NpA2gan0ia3pz9LbggvtIVcVcrMMhn+Rn2b
-	 w+zTkdQuRqfwg==
-From: Eric Biggers <ebiggers@kernel.org>
-To: linux-kernel@vger.kernel.org
-Cc: linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-crypto@vger.kernel.org,
-	linux-ext4@vger.kernel.org,
-	linux-f2fs-devel@lists.sourceforge.net,
-	linux-mips@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org,
-	x86@kernel.org
-Subject: [PATCH 15/15] f2fs: switch to using the crc32 library
-Date: Sun, 20 Oct 2024 17:29:35 -0700
-Message-ID: <20241021002935.325878-16-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241021002935.325878-1-ebiggers@kernel.org>
-References: <20241021002935.325878-1-ebiggers@kernel.org>
+	s=arc-20240116; t=1729475323; c=relaxed/simple;
+	bh=g7Oz2WchqaPxIcn3/FbwuwteX1Z14I41x36ekLkSuHU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EBzOXMmBg6COj1pILOzob1rckq+LJApJMqQBYS+2heZVexNe5nQQnjk3rJ0duSmnCp1HYMM4E94jAWSALkP5tMRfWuGMduapj1QnRRCYnMGBbokQKGARV0/fpRKZxyM31vxeDW+0AHcOt3nv2QEIm01xP8ndLj1VUAk4kUePb8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=Q8xQdhC9; arc=none smtp.client-ip=18.194.254.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1729475272;
+	bh=3Jb3+8m3q5GqSoRa3aSjH0BmD/kHkoSd7GPyOJ35dOo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=Q8xQdhC9TxXGovN06qZI/avjNXk+9M3f9bN73SOxPnWdQNFtjBRfsaEkT9KxbYbzR
+	 iJb+D0ZwPx8L4PPzDv/VWyO2FEUy2ky+mN0Zggpl2rYlRL4NkbF40c86ZsgX7CCR8K
+	 CCNXNVdcN2jdylZfVMMb3+2yo81+KrfELJxmVuxs=
+X-QQ-mid: bizesmtp80t1729475266thpnflk4
+X-QQ-Originating-IP: sLITKTob2X6UQdBdGgosOb3ERsqJEfUTqINTPTS43QY=
+Received: from [10.20.53.22] ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Mon, 21 Oct 2024 09:47:45 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 15121724753342584298
+Message-ID: <86C0A4FFA98AE1E7+ac00f3f7-866f-4735-a361-a7119aaa3eb0@uniontech.com>
+Date: Mon, 21 Oct 2024 09:47:45 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] crypto: mips/crc32 - fix the CRC32C implementation
+To: Eric Biggers <ebiggers@kernel.org>, linux-crypto@vger.kernel.org
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Guan Wentao <guanwentao@uniontech.com>, herbert@gondor.apana.org.au,
+ davem@davemloft.net, tsbogend@alpha.franken.de
+References: <20241020180258.8060-1-ebiggers@kernel.org>
+Content-Language: en-US
+From: WangYuli <wangyuli@uniontech.com>
+In-Reply-To: <20241020180258.8060-1-ebiggers@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: MBN1Gf7pvZQZ6dfWcrTXiKX9h10oAehlD0N/mMsfI82cSjBbongspMb+
+	8cRJRRugBDCekNeez40gHMAq8oMcctwDF6RVoecCtI4/M54Vw8XUvQ7JQlleY84jT0TdR8X
+	JVZ7QvpY0CamyTAEvfuWovNwjp1ZfZNvOjDW4PKBWWf+vFtLRyZslsVr8KiBaq4tsmCGkar
+	IJEcvYVhS94H2USwAFAB5hJXovQccHS32Af3tJT5npfHDhoS3HET3NBJrHpoP4n1Sn1JkWL
+	OsKt29YOlVNEXgBWpIcPTacxZhIlWz33wQgbZ2xLfCiwMJydPwsxY8F1dsL3OOtWEl35/Ds
+	jGY452DmV3NdxLjc/2aqirMKK3LjxpryrGS6xt6bWsXF1c8qIbzEkR0tNNKul4eX93e2Fuo
+	NDGzFuy33DJjs6QXT5/pDp1jf2Y4LGcUT3PJSVqswXtV5Jfpt7nFs/dMLZurPgpLXjG7ti9
+	I1Bg6AvkuKMeeFlfrzmz9p0BRH/rEoPTArAmmEGTpSHHwMlrf5xtaDDfmuVZn6JofgwXEHr
+	52ZXE1biqDmk/vZuZ9nJ5Vlu+tytGWlX2CLnnE1Pe/YA6OP83sO0Q/hPPxJb5XoG0o2mQwc
+	B8lyH5TvjAoNkJpV+lZKA5AW1TZXrSMQ+7Nek1Tj4RvtHtGNAC8V3BSnTIdAV8o2vikxdyG
+	RXVEtF/TRE34Rgq+YO6kwP2637U89wAZG3sNIEKGm0adcQ6zEoQzfV/h3JLLa1t8Yoz2Bgo
+	Cz/QLFQmMRAlKO5zRQ8IPZ7MzltUn9D+ZE1TPjeUGna9uDghLSJRADpKQ7YJQahNGkcteyI
+	ABzSQU8GYDdYkpTcPe6OTmQqQjcs3PDRq+tQZzrWjdzf32lPy5J+xHbVVupo8BxOKiNnnOQ
+	yHFUjeLyhgQFrU2CjW45sQ9aNVM8adLm4FjWc/O7pm2R1wIncSe8QoBtdbAgqZjcVOVeC0R
+	xs5hNLgX2xvEmbV/MA/IEpIZW
+X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
+X-QQ-RECHKSPAM: 0
 
-From: Eric Biggers <ebiggers@google.com>
+On 2024/10/21 02:02, Eric Biggers wrote:
 
-Now that the crc32() library function takes advantage of
-architecture-specific optimizations, it is unnecessary to go through the
-crypto API.  Just use crc32().  This is much simpler, and it improves
-performance due to eliminating the crypto API overhead.
+> From: Eric Biggers <ebiggers@google.com>
+>
+> Commit ca459e5f826f ("crypto: mips/crc32 - Clean up useless assignment
+> operations") changed crc32c_mips_le_hw() to use the instructions that
+> use the "regular" CRC32 polynomial instead of the Castagnoli polynomial.
+> Therefore it can't be computing CRC32C values correctly anymore.
+>
+> I haven't been successful in running a MIPS kernel in QEMU, but based on
+> code review this is the fix that is needed.
+>
+> Fixes: ca459e5f826f ("crypto: mips/crc32 - Clean up useless assignment operations")
+> Cc: Guan Wentao <guanwentao@uniontech.com>
+> Cc: WangYuli <wangyuli@uniontech.com>
+> Signed-off-by: Eric Biggers <ebiggers@google.com>
+> ---
+>
+> This is a regression in 6.12, so it should be fixed in a 6.12-rc.
+>
+>   arch/mips/crypto/crc32-mips.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/mips/crypto/crc32-mips.c b/arch/mips/crypto/crc32-mips.c
+> index a7a1d43a1b2ca..90eacf00cfc31 100644
+> --- a/arch/mips/crypto/crc32-mips.c
+> +++ b/arch/mips/crypto/crc32-mips.c
+> @@ -121,24 +121,24 @@ static u32 crc32c_mips_le_hw(u32 crc_, const u8 *p, unsigned int len)
+>   
+>   	if (IS_ENABLED(CONFIG_64BIT)) {
+>   		for (; len >= sizeof(u64); p += sizeof(u64), len -= sizeof(u64)) {
+>   			u64 value = get_unaligned_le64(p);
+>   
+> -			CRC32(crc, value, d);
+> +			CRC32C(crc, value, d);
+>   		}
+>   
+>   		if (len & sizeof(u32)) {
+>   			u32 value = get_unaligned_le32(p);
+>   
+> -			CRC32(crc, value, w);
+> +			CRC32C(crc, value, w);
+>   			p += sizeof(u32);
+>   		}
+>   	} else {
+>   		for (; len >= sizeof(u32); len -= sizeof(u32)) {
+>   			u32 value = get_unaligned_le32(p);
+>   
+> -			CRC32(crc, value, w);
+> +			CRC32C(crc, value, w);
+>   			p += sizeof(u32);
+>   		}
+>   	}
+>   
+>   	if (len & sizeof(u16)) {
+>
+> base-commit: 7fa4be6d6752512278c4cbf2d2745568626e7369
 
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
- fs/f2fs/Kconfig |  3 +--
- fs/f2fs/f2fs.h  | 19 +------------------
- fs/f2fs/super.c | 15 ---------------
- 3 files changed, 2 insertions(+), 35 deletions(-)
+Ah...I apologize for the oversight that introduced this bug...And it's 
+indeed a necessary fix.
+Thanks,
 
-diff --git a/fs/f2fs/Kconfig b/fs/f2fs/Kconfig
-index 68a1e23e1557c..5916a02fb46dd 100644
---- a/fs/f2fs/Kconfig
-+++ b/fs/f2fs/Kconfig
-@@ -2,12 +2,11 @@
- config F2FS_FS
- 	tristate "F2FS filesystem support"
- 	depends on BLOCK
- 	select BUFFER_HEAD
- 	select NLS
--	select CRYPTO
--	select CRYPTO_CRC32
-+	select CRC32
- 	select F2FS_FS_XATTR if FS_ENCRYPTION
- 	select FS_ENCRYPTION_ALGS if FS_ENCRYPTION
- 	select FS_IOMAP
- 	select LZ4_COMPRESS if F2FS_FS_LZ4
- 	select LZ4_DECOMPRESS if F2FS_FS_LZ4
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index 33f5449dc22d5..1fc5c2743c8d4 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -1761,13 +1761,10 @@ struct f2fs_sb_info {
- 
- 	/* For write statistics */
- 	u64 sectors_written_start;
- 	u64 kbytes_written;
- 
--	/* Reference to checksum algorithm driver via cryptoapi */
--	struct crypto_shash *s_chksum_driver;
--
- 	/* Precomputed FS UUID checksum for seeding other checksums */
- 	__u32 s_chksum_seed;
- 
- 	struct workqueue_struct *post_read_wq;	/* post read workqueue */
- 
-@@ -1941,25 +1938,11 @@ static inline unsigned int f2fs_time_to_wait(struct f2fs_sb_info *sbi,
-  * Inline functions
-  */
- static inline u32 __f2fs_crc32(struct f2fs_sb_info *sbi, u32 crc,
- 			      const void *address, unsigned int length)
- {
--	struct {
--		struct shash_desc shash;
--		char ctx[4];
--	} desc;
--	int err;
--
--	BUG_ON(crypto_shash_descsize(sbi->s_chksum_driver) != sizeof(desc.ctx));
--
--	desc.shash.tfm = sbi->s_chksum_driver;
--	*(u32 *)desc.ctx = crc;
--
--	err = crypto_shash_update(&desc.shash, address, length);
--	BUG_ON(err);
--
--	return *(u32 *)desc.ctx;
-+	return crc32(crc, address, length);
- }
- 
- static inline u32 f2fs_crc32(struct f2fs_sb_info *sbi, const void *address,
- 			   unsigned int length)
- {
-diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-index 87ab5696bd482..003d3bcb0caa2 100644
---- a/fs/f2fs/super.c
-+++ b/fs/f2fs/super.c
-@@ -1670,12 +1670,10 @@ static void f2fs_put_super(struct super_block *sb)
- 
- 	f2fs_destroy_post_read_wq(sbi);
- 
- 	kvfree(sbi->ckpt);
- 
--	if (sbi->s_chksum_driver)
--		crypto_free_shash(sbi->s_chksum_driver);
- 	kfree(sbi->raw_super);
- 
- 	f2fs_destroy_page_array_cache(sbi);
- 	f2fs_destroy_xattr_caches(sbi);
- #ifdef CONFIG_QUOTA
-@@ -4419,19 +4417,10 @@ static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
- 		INIT_LIST_HEAD(&sbi->inode_list[i]);
- 		spin_lock_init(&sbi->inode_lock[i]);
- 	}
- 	mutex_init(&sbi->flush_lock);
- 
--	/* Load the checksum driver */
--	sbi->s_chksum_driver = crypto_alloc_shash("crc32", 0, 0);
--	if (IS_ERR(sbi->s_chksum_driver)) {
--		f2fs_err(sbi, "Cannot load crc32 driver.");
--		err = PTR_ERR(sbi->s_chksum_driver);
--		sbi->s_chksum_driver = NULL;
--		goto free_sbi;
--	}
--
- 	/* set a block size */
- 	if (unlikely(!sb_set_blocksize(sb, F2FS_BLKSIZE))) {
- 		f2fs_err(sbi, "unable to set blocksize");
- 		goto free_sbi;
- 	}
-@@ -4872,12 +4861,10 @@ static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
- 	fscrypt_free_dummy_policy(&F2FS_OPTION(sbi).dummy_enc_policy);
- 	kvfree(options);
- free_sb_buf:
- 	kfree(raw_super);
- free_sbi:
--	if (sbi->s_chksum_driver)
--		crypto_free_shash(sbi->s_chksum_driver);
- 	kfree(sbi);
- 	sb->s_fs_info = NULL;
- 
- 	/* give only one another chance */
- 	if (retry_cnt > 0 && skip_recovery) {
-@@ -5080,7 +5067,5 @@ module_init(init_f2fs_fs)
- module_exit(exit_f2fs_fs)
- 
- MODULE_AUTHOR("Samsung Electronics's Praesto Team");
- MODULE_DESCRIPTION("Flash Friendly File System");
- MODULE_LICENSE("GPL");
--MODULE_SOFTDEP("pre: crc32");
--
+Acked-by: WangYuli <wangyuli@uniontech.com>
 -- 
-2.47.0
-
+WangYuli
 
