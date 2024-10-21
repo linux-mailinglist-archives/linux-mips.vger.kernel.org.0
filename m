@@ -1,84 +1,84 @@
-Return-Path: <linux-mips+bounces-6230-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6231-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B78169A720E
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 20:13:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B35EC9A72C1
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 20:58:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC50E1C228E9
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 18:13:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42FD41F235B7
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2024 18:58:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 845F01F9A8F;
-	Mon, 21 Oct 2024 18:13:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F12491FB3EE;
+	Mon, 21 Oct 2024 18:57:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="euvnf9m6"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kdASUYjA"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9BD21F9428
-	for <linux-mips@vger.kernel.org>; Mon, 21 Oct 2024 18:13:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46BD01FB3D6
+	for <linux-mips@vger.kernel.org>; Mon, 21 Oct 2024 18:57:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729534393; cv=none; b=RuB6l4G35BAOaTp0kNUqD34aR+4MkU83cxt21CDDge2j7nIWg+um8uvqmDdE0kao4ZMW6JXg8L8t3dEFHSqNsqJEK4xGTFRn0VsYDyrE86fvXkRaPTrPZjSiAc8lalVBvCEBBA6hiTzYj6gCyiFl0Bj3N82mtLQ5MHxOT/4ludQ=
+	t=1729537072; cv=none; b=Kba8OEcvv6HPguQJobJiOptZW5INMCibLNkq13+uBS6H3IYzkz5YHu9mONmFbqOMDGgbHUKIXYGN+QD2GlkEh+6OTqZbd0VCLQsWbXsvNaTjE3o++bansyYbw0Ny45dLgXFf0DHEFQgEcj2nP8sTZ3F9l3JgEtgU8CzV0u+4tcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729534393; c=relaxed/simple;
-	bh=YeXYNnt8ENmKuB15YwhakNFnDdgCdBZF4Bj1D5TS0z8=;
+	s=arc-20240116; t=1729537072; c=relaxed/simple;
+	bh=eiuskN0Rqd2YRzqsihlK78NQBES1kITJct33unB+ED8=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=AOxtC6k8Lxq+J2+agCgngG1FMLIavz6HUe8LZf1RbKtfPyLUAMaORg439OZHOz/Dy5RJU07Vd4NQN93dSqp5QFhtjQbXErnhuUCCQYTCrXQQ+uB2496ItHnsAgY2pQrtNqlOAgHi+u2KxnOygIbETyIqTlirt0vFPiZt1rvOies=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=euvnf9m6; arc=none smtp.client-ip=209.85.219.201
+	 To:Cc:Content-Type; b=Lp40YpWjW8FlU/fnsXjrRKkjuf+/+hCzzjpZFqyXfzHX7t5jqxSeCm+/aWAxj5Qezh3F3Nl0BiMySq6+cAmQ+Q1CEDo0uTLTZA4irvKVq0HlDDdB0PUY5kMlB6YW/mLe78pSN/jdFrQ7fqXDTFndUpVreGkp7FY9gRLAQ/zMCt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kdASUYjA; arc=none smtp.client-ip=209.85.215.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e24a31ad88aso6866444276.1
-        for <linux-mips@vger.kernel.org>; Mon, 21 Oct 2024 11:13:10 -0700 (PDT)
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-7db9418552fso4133874a12.0
+        for <linux-mips@vger.kernel.org>; Mon, 21 Oct 2024 11:57:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729534390; x=1730139190; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1729537065; x=1730141865; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:from:subject:message-id:references
          :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/aTJKIPGdXYIQ4z1/mPhLVqGYb++KmSjcoFUbuTd6EE=;
-        b=euvnf9m6h38cfleq8wzhcd4+GPezfWhDdSBEJghp3op9X86av4HWg2QtcWhCtMBXNq
-         XFKil0NVwBZRIO7Zy9h9NW/I+jNndbeC8nOEucR0KzKiO0KPk2JAMZL4kw/HS3gImzM1
-         7b1jSoBzFdWVAFnvs87kNBTtfAK8yFeuA5jkWJ2Qmop/DOj4nIxCIU+06f1szBnmxs4y
-         h8Sgi1ltzAdT5jbwyIVOxnoxN8/TQb6D8duuHJuVoJV4Cy3ewh+7uks4GgMJ9dlkEQYI
-         OFic8q7W0Ct8OQwCxk8ZVW2sUbg6POxpEGgxIzv9Sl+flZmIKpCzd1bOEz5mNoOBs+Bm
-         lnQQ==
+        bh=TRc3VGGNkUkUR9ifA4nNeX0hRZiSdlXeerhUJQ+tYBo=;
+        b=kdASUYjA4uGl+/Lzlu6BXwHfIsB7i/tBFO9IhxUbGjGXjQF59ek6/CHFTCctjDPUuZ
+         1MsqOVNsd6s+GVMiWC66957Em1xb2DBYSrU8isQeABQyn83ei/fsD2aLt0a479A84cPB
+         V6LQXUawucewAehTnjFLXliSYnhKBk8UAXPQ+AitbwdoQtePAUTyUeq4WLFcVDe63oDV
+         NJ1lP/wPdprXRQIJOX+XcdgC/XnymfjsG04Nsel3StCJTWt/TqYrXpcJScgrgmUXp0Nw
+         t/bsnz9EcP/v4StUu/at1ueGJTkWoxc7LMRy61IvJpEUERO1Ijr8RyeSn6hTAIbErve4
+         namA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729534390; x=1730139190;
+        d=1e100.net; s=20230601; t=1729537065; x=1730141865;
         h=content-transfer-encoding:cc:to:from:subject:message-id:references
          :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=/aTJKIPGdXYIQ4z1/mPhLVqGYb++KmSjcoFUbuTd6EE=;
-        b=aJkAnLbSeFG3uVRNLVORfkWHdDkXLkv2SPsezNsqqVE6oEleHn1RJdO7tXPuJzIOLs
-         tRSC7RKtzvKsPBrawuQZhWTfBhOOBZHJwh1ST8/iBMb1IVuhkr3Yt5oHEQC0q3CobmPh
-         NtycpXpXVDccIuYRfftOU6d8MbcB2r0+8R8+WukXPW+0gRPml4xWb+M3UH7UMHjqmPMA
-         g/Yxs+fVpggX6pa3pB09EsgYkyGln7Gn7ydkUmKgARPtisuQx5CtidnaiE7tBZIrbGie
-         nkMDciB7cOvlQBZ29TZ8/kY4JRCeBXErbq9oMuG2P5MDsnlTElycsiTd7CK971YzKhAd
-         aqqg==
-X-Forwarded-Encrypted: i=1; AJvYcCVPXqGfCK/AucLPRf0GTWIx8/vs8o3ZBbQ0bRJ+EQK2qDLl/b1dsnrNJIjc/zGgIWsXoC+teJGdq1ru@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBAvrZ5yr5SbDTMqSsWz9xtL7hwWahxW0SLGuJYa7Z+Xe0utgz
-	3CMJzF2IwdyHTuKstC9UYpYo2b9Pt5wxmxc48snh6JQpGZ9fVQQv3pribf5RdyRblM2RSzVlS4G
-	qWA==
-X-Google-Smtp-Source: AGHT+IGB051RPG0qZ1hHpRMmy9gqDX/0GH7so+xa+rGGnhbzxuPrj+6CH4debSRqPENvRC2d7Upq2p/funE=
+        bh=TRc3VGGNkUkUR9ifA4nNeX0hRZiSdlXeerhUJQ+tYBo=;
+        b=sGzPC62BXiKkxk8njpEviht3m9aj5R79ArevUW+fPA3oGpsq4u3qYbPXsRPtSrE33z
+         ygtYNTVraqjuj6ez9DjBE/qrzVezyen5qarVTrx6tBmVBAC57yk5kHrLI1B5xThdrPZq
+         c8N6bhWSoJ9QmUkf+bi9t45Yo7XtcdKGqR9G5H/ASHwU3w/6AoI1ei0C6+SGxekgCmj6
+         bYierdmlKWXZgxV48UUJkT5DRp9y6GQP3LFGXZk8CZxFNOsalLN4ERcGkZcVRkcnEYO2
+         Qzx8lgtKHeITAd+3gXPYTlKSPbLfLqsIR4DMfHOQmZ7s1N8CWGjcyPLkvHr4EfiSPNnC
+         azlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWiiHO2VlciU4hEwA/pCRmAn6sFmRH4G61a2/cZuCxL57Rm5HkunRjJxhuS4WHhIkETul1ot4UA0S2d@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGVMCIDDyRIHr9ukr8NZ6QyC/IaJRGRpXtU7wnDiVMteNGM5TT
+	hvGJzFb08XPtQYCzoYzVzxDNJOzKO8BvlhrUPvNoEnkXeYVG4shrn44B9QmT0qu71dTh+rgrsNi
+	/Jg==
+X-Google-Smtp-Source: AGHT+IHRYlBrX6M+NH4TUGVEqm9BFtB7q+VVhXD5EoRBvSsXa42IiMZxJc+hXyxs+ZPnB8HLQQfXC/cdu0E=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:9d:3983:ac13:c240])
- (user=seanjc job=sendgmr) by 2002:a25:8389:0:b0:e2b:e955:d58a with SMTP id
- 3f1490d57ef6-e2be955d949mr2592276.7.1729534389536; Mon, 21 Oct 2024 11:13:09
- -0700 (PDT)
-Date: Mon, 21 Oct 2024 11:13:08 -0700
-In-Reply-To: <ZxYeFKl2KbZ3Ila1@yzhao56-desk.sh.intel.com>
+ (user=seanjc job=sendgmr) by 2002:a63:3858:0:b0:7e9:f93c:22b9 with SMTP id
+ 41be03b00d2f7-7eacc895cf2mr12508a12.10.1729537064143; Mon, 21 Oct 2024
+ 11:57:44 -0700 (PDT)
+Date: Mon, 21 Oct 2024 11:57:42 -0700
+In-Reply-To: <ZxYrYe/WN8XoB+fI@yzhao56-desk.sh.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20241010182427.1434605-1-seanjc@google.com> <20241010182427.1434605-35-seanjc@google.com>
- <ZxYeFKl2KbZ3Ila1@yzhao56-desk.sh.intel.com>
-Message-ID: <ZxaZtJGfN2_5Db6h@google.com>
-Subject: Re: [PATCH v13 34/85] KVM: Get writable mapping for __kvm_vcpu_map()
- only when necessary
+References: <20241010182427.1434605-1-seanjc@google.com> <20241010182427.1434605-52-seanjc@google.com>
+ <ZxYrYe/WN8XoB+fI@yzhao56-desk.sh.intel.com>
+Message-ID: <ZxakJr_jWkU-Y54e@google.com>
+Subject: Re: [PATCH v13 51/85] KVM: VMX: Use __kvm_faultin_page() to get APIC
+ access page/pfn
 From: Sean Christopherson <seanjc@google.com>
 To: Yan Zhao <yan.y.zhao@intel.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
@@ -98,50 +98,64 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Mon, Oct 21, 2024, Yan Zhao wrote:
-> On Thu, Oct 10, 2024 at 11:23:36AM -0700, Sean Christopherson wrote:
-> > When creating a memory map for read, don't request a writable pfn from =
-the
-> > primary MMU.  While creating read-only mappings can be theoretically sl=
-ower,
-> > as they don't play nice with fast GUP due to the need to break CoW befo=
-re
-> > mapping the underlying PFN, practically speaking, creating a mapping is=
-n't
-> > a super hot path, and getting a writable mapping for reading is weird a=
-nd
-> > confusing.
+> On Thu, Oct 10, 2024 at 11:23:53AM -0700, Sean Christopherson wrote:
+> > Use __kvm_faultin_page() get the APIC access page so that KVM can
+> > precisely release the refcounted page, i.e. to remove yet another user
+> > of kvm_pfn_to_refcounted_page().  While the path isn't handling a guest
+> > page fault, the semantics are effectively the same; KVM just happens to
+> > be mapping the pfn into a VMCS field instead of a secondary MMU.
 > >=20
 > > Tested-by: Alex Benn=C3=A9e <alex.bennee@linaro.org>
 > > Signed-off-by: Sean Christopherson <seanjc@google.com>
 > > ---
-> >  virt/kvm/kvm_main.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > index 080740f65061..b845e9252633 100644
-> > --- a/virt/kvm/kvm_main.c
-> > +++ b/virt/kvm/kvm_main.c
-> > @@ -3122,7 +3122,7 @@ int __kvm_vcpu_map(struct kvm_vcpu *vcpu, gfn_t g=
-fn, struct kvm_host_map *map,
-> >  	struct kvm_follow_pfn kfp =3D {
-> >  		.slot =3D gfn_to_memslot(vcpu->kvm, gfn),
-> >  		.gfn =3D gfn,
-> > -		.flags =3D FOLL_WRITE,
-> > +		.flags =3D writable ? FOLL_WRITE : 0,
-> >  		.refcounted_page =3D &map->pinned_page,
-> >  		.pin =3D true,
-> >  	};
-> When writable is false, could we set ".pin =3D false," ?
 
-Hmm, maybe?  I can't imagine anything would actually break, but unless FOLL=
-_PIN
-implies writing, my preference would still be to pin the page so that KVM a=
-lways
-pins when accessing the actual data of a page.
+...
 
-> Also not sure if ".map_writable =3D NULL" is missing.
+> > @@ -6838,10 +6840,13 @@ void vmx_set_apic_access_page_addr(struct kvm_v=
+cpu *vcpu)
+> >  		vmcs_write64(APIC_ACCESS_ADDR, pfn_to_hpa(pfn));
+> > =20
+> >  	/*
+> > -	 * Do not pin apic access page in memory, the MMU notifier
+> > -	 * will call us again if it is migrated or swapped out.
+> > +	 * Do not pin the APIC access page in memory so that it can be freely
+> > +	 * migrated, the MMU notifier will call us again if it is migrated or
+> > +	 * swapped out.  KVM backs the memslot with anonymous memory, the pfn
+> > +	 * should always point at a refcounted page (if the pfn is valid).
+> >  	 */
+> > -	kvm_release_pfn_clean(pfn);
+> > +	if (!WARN_ON_ONCE(!refcounted_page))
+> > +		kvm_release_page_clean(refcounted_page);
+> Why it's not
+> if (!WARN_ON_ONCE(!refcounted_page)) {
+> 	if (writable)
+> 		kvm_release_page_dirty(refcounted_page)
+> 	else
+> 		kvm_release_page_clean(refcounted_page)
+> }
+>=20
+> or simply not pass "writable" to __kvm_faultin_pfn() as we know the slot =
+is
+> not read-only and then set dirty ?
 
-Doh, my previous response was slightly wrong, it's implicitly initialized t=
-o NULL,
-not false.  I forgot map_writable is a pointer to a bool.
+__kvm_faultin_pfn() requires a non-NULL @writable.  The intent is to help e=
+nsure
+the caller is actually checking whether a readable vs. writable mapping was
+acquired.  For cases that explicitly pass FOLL_WRITE, it's awkward, but tho=
+se
+should be few and far between.
+
+> if (!WARN_ON_ONCE(!refcounted_page))
+> 	kvm_release_page_dirty(refcounted_page)
+
+Ya, this is probably more correct?  Though I would strongly prefer to make =
+any
+change in behavior on top of this series.  The use of kvm_release_page_clea=
+n()
+was added by commit 878940b33d76 ("KVM: VMX: Retry APIC-access page reload =
+if
+invalidation is in-progress"), and I suspect the only reason it added the
+kvm_set_page_accessed() call is because there was no "unused" variant.  I.e=
+. there
+was no concious decision to set Accessed but not Dirty.
 
