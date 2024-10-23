@@ -1,493 +1,218 @@
-Return-Path: <linux-mips+bounces-6286-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6287-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0FD99AC681
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Oct 2024 11:29:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FB529AC694
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Oct 2024 11:30:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D1E031C21202
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Oct 2024 09:29:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B240282298
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Oct 2024 09:30:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46E1D19E826;
-	Wed, 23 Oct 2024 09:29:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68F5019DF7A;
+	Wed, 23 Oct 2024 09:30:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QL30c8PQ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z/FsWrDZ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E845619DF45;
-	Wed, 23 Oct 2024 09:29:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB298197A8B
+	for <linux-mips@vger.kernel.org>; Wed, 23 Oct 2024 09:30:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729675761; cv=none; b=GE71Za+QfpDZVzADpZQ6qNChyFPnpMMw328bH9ow4tWrZkluWc7zTSWjbGIhfffu3JC4wLbj0PLFoonEOIdWFkPpoAEyLti5vyPAi/vW52BeSpfw8d2MHf1ezoPTkQIpjgAsbnYNxAR7JPdL2CcdC/y+rRo520KYsQShtWV7QEY=
+	t=1729675802; cv=none; b=pYJneKMwf7lThXIPeQ1P/V1BYFJkwS6h+mZOYPUcNml6JqMWjZSKIAOQlaQPnwiPELD1nAvLnfF4oo4D/hEVAIr1onlEfkEnTrq9EZFFS+FvPHAtmiZ3zMAhoGIA6968rX0uGrQYIsh0fZ2M2x5pFbVZV0XdALQbEw1nbdt/8nE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729675761; c=relaxed/simple;
-	bh=frcbCBcxWI7oSZeWp5sCkDmE4+FLgK5Jb/M/koYwAog=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R7C5J8HPKpv4hRRThCqtzwJ9EgYb6spa0hMWRIRithkIM59RR3WY8eVGo+43kzxJtXzB4TAKWXmAToSkeVEvAIKF/t4hJwcDq3DIfY+kDq0FY0QJj/D1RI6snISvNLjTrUT2A0VmMaHGF2kZ4OU9kyystojWkO3f15N+us2mat8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QL30c8PQ; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2e3010478e6so5197015a91.1;
-        Wed, 23 Oct 2024 02:29:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729675758; x=1730280558; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g7qoBhi0xE/U5iDBqGE6j6rllERkT9TsqQw7ivuvrcg=;
-        b=QL30c8PQwFVINX7CJ6KDsVMQm90OlTWtEOtpZipUfzayjMXV0SUcdAJM4OMQee52co
-         a7OPGj0FEvcQQBKAyuh0TrzZ+mZtTg2D5mojb94wslrmIZ2k5AyCrsgAZO0pqMqEo+tO
-         PoUok2YNgLN+Eht+d1fFyjeOkTSzUYtSzgb9nK+KgED+DZjEuUpQ8pd4uGVF8KfKWk0i
-         DA7AgTTObi8iCaCFMtd74FbTYCFjCKy42YkXsmwAnO6T6dmJW5gB/kHawWwjanzFkDcD
-         SqPgOPza1RymYNs1D+PujVU0pjkASsFdUSsLiUMZEzSKCk8KP2qK83c6zjSWFCQ/J69L
-         CtQg==
+	s=arc-20240116; t=1729675802; c=relaxed/simple;
+	bh=5ZBamS1Ea597xMRWnxUmpWUHfW/ju3MyCBHyH44X3Cg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JQbskUyeeMdibZRUJ6ukkK9ZxCa9mp6RG1tyI+DZvi05cPIIEHy4Petm/pnuysv7KOCjyphcMxwHdbWh4Qa9XFwZTDrUFYK5ziIkbON8/5qTPz1qRMNpFNAXf+fRd5uf6b6nvC7LdulqW6Qc7WYDkjmXOlrJHKK/uQcZnp4hQG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Z/FsWrDZ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1729675799;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=NglIqu+VxUNes8wq3KeSCbvotAenvubJqH0EIAV9xBE=;
+	b=Z/FsWrDZ1Ee3k0Vk5erQyydV8K4Q3LnXphwoXIp/m0fMofHN2zqVrPuzU9et9znzVQKFjS
+	BuNax3pxDpmq/C7KZgL30L5DL1YA/dcHihH8p6NAVLn8KQlM+Sa+Dguxb4LyKb/gUjenNV
+	Fua8v5gfaRulwthw/dxu4+MaZ9ZRdRc=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-682-rCGNDAlrM1KM9On5JlS8xA-1; Wed, 23 Oct 2024 05:29:56 -0400
+X-MC-Unique: rCGNDAlrM1KM9On5JlS8xA-1
+Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-53a0b48e8d4so6214638e87.3
+        for <linux-mips@vger.kernel.org>; Wed, 23 Oct 2024 02:29:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729675758; x=1730280558;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g7qoBhi0xE/U5iDBqGE6j6rllERkT9TsqQw7ivuvrcg=;
-        b=OJn1SE+bu5PLFOJmWd0+3alGJjWrDBjkhrlLdZBH7sBpWMA7f2SRc5k3sGE0gcwz+I
-         jCc4U8wx/OjhcWP3MDuvxNOP9/CSdVMz7mQaqzXS919ZnsYUF93WL1v3RflYsT3qVtrX
-         TSsdo9wXzhhWZIa0Yyvj5yMuWp/BYUmhY2wuPLe3a7iq2HF9t5NXuFTGLTUs35jUY9q/
-         YPkRMwfwOBKUsoc6cefxMATxFAuoiZTWtdk3Rg+NgkMGoxgw5Xix+s9qt09RXq2ujeyE
-         m8XSIzMVynu8KiXjs3GPSG4tb8NkyJOuUxJRtAOpQBmnalSAG4p6qF19nT/91UiJMEMV
-         6y3g==
-X-Forwarded-Encrypted: i=1; AJvYcCU8lZayaHbTpYiMGPVoAwNOWjii3OfDISkhLZ642Tb3b93P0O8LTCCmtm4YVSveZikJ11PDhsPx+hG8@vger.kernel.org, AJvYcCUUl2dUgvKoWUTB5YPsWtNPHTxXogFy7+4uMbJkznqFG8AOKN515S6QHOkLFJR3lJzXZmT8k5n5xiyli+mMdX86/RQ=@vger.kernel.org, AJvYcCV2670/ze0nyiU56WOtk7rll+2A8sVFDziFoByJP6TYTcXRpIhAGlQmwhO/ovQPQ/goCnCtXTXihBu5@vger.kernel.org, AJvYcCVDEftggW2uclciuuuyheABYwCHwHEiAY/E64rdKjdznHZdi2Z3DuXCFMWtStIQ8VoAxwCXrKmL6DPnQQ==@vger.kernel.org, AJvYcCVF2U8u6319riJ31EInfFSK0YQUKRabqorrLqQqVp5xeQ7+F1EXe0CAeUQqjRN/wGuTCeKurMoEx+Epug==@vger.kernel.org, AJvYcCVlTq5mV08J/skfYf3wrHX6LSzXrlN4XQi703NiSPp/KttjLFgFa9A9l4Diqr+kcnA+Nl1hTu8jbqQbfA8=@vger.kernel.org, AJvYcCVo5PjY2E+z4pzxw0WpluDS8JyOkUV+zQyNb+E1vrf9EM39YE0diiqJIrQCTbZXDegFAG7MRTgWYL8=@vger.kernel.org, AJvYcCWEdBwIT5yA4V5ik0Ht/6zf30CL3anVDvdNBjdKq760Hn9udN0oyucE0GwBifVEikQ9jGqDvHLCCHafyw==@vger.kernel.org, AJvYcCWfPx1ixTY7VPATrxg9uAikfoRlhjg3zOmNeKBXIG859F9AqUZu2V7m8slGwByJBwM7jrOh4DOl@vger.kernel.org, AJvYcCWuS7EHBOgwJlQeIfk9xPsM
- mmPyUH8iVW7Mrrdj7ZRBm9hq+fgF9blbWYJ78IfDiUEaWzNLxq9js9A0KX0=@vger.kernel.org, AJvYcCXD51QTVLx7Jdea2hdnpuBWuElRH5a3MJyOHyIVpdV5P392Bt658wm1YwVEYnH+YUaVoEv2Uxg9yXkz@vger.kernel.org, AJvYcCXETkiiiPS27D2E4C7ArjzgL3F2kXjpDuC3bi89mnsQsASJBo0EB6CGow6e3dIhb70bvepLecvnhTgykd0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxfb8LNk9dOEuLd5tYQsns+PRC3AK85W11FunADNwZDFL4L1AhV
-	6c7K2K/B7D8qsTfSqfGkKVK49W8JYFXt22bXbf7pMA5Sl2RiHARBG1ZRXB8fos+0pkI1wRNrjmr
-	TZ+IAeQcf0KDbUPQcFfD/UZ1865g=
-X-Google-Smtp-Source: AGHT+IHTd7yTl2EhXEWGqXqQrO3RSi9nHq00JaRKQqBVePw8lv9s1qMh0E1idO3lwTwI8NX8Zju/frALMtTdjUoQ/VI=
-X-Received: by 2002:a17:90b:274e:b0:2e2:e8a9:a1f with SMTP id
- 98e67ed59e1d1-2e76b5dd9e3mr2083690a91.13.1729675757485; Wed, 23 Oct 2024
- 02:29:17 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1729675795; x=1730280595;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NglIqu+VxUNes8wq3KeSCbvotAenvubJqH0EIAV9xBE=;
+        b=k7qkhRaTg9LcmV7BcaGzYsVNyM7hbHakT/lArHnJrjAKrPHkCNjyddAS60wFJ9MAQR
+         SiBKO9A6o0uLCmgKvcxGR3YIQDw6Ch0op4vA9z5DmHj07V5/jUILeZl0mfnBx3XVpQQQ
+         eMwzI/yMbdindDNiP2kPSRZYZLhg7fs0ApDP3SaLSzh5/GaUFhcmcKfZENlExucT+Bh5
+         65o861di3TdLJg8JLqPlPVLfSusF6ZSgTQtdI16ZCfN+WKINsLHlKfWvEwg44tEpXAfw
+         LORUKOL7MdQ5jfHK2Ylpf3aGe+jfW3G71pAavQtFA/GD5+cIv0mbf0kPzoJ4CI9tHrFh
+         rngA==
+X-Forwarded-Encrypted: i=1; AJvYcCW4H4EdbRiSNjg1hJZZjOFgFjwSRkVdY9JMWvEkklrp7MXMfxG5hhIcSCSo0l4AuHU96OuRYN1KOE9Z@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUu+U9D0UXx136zRocVE6jCVZDGYGjew+dd2N4vyZgbDyILzsn
+	feJgK9kSG8TsaCX3QXjxjryA3GKKS5LMrHz9UoyuLFgTHGVmVPCi8wvSTOUwlG+GqkL7cEptfLO
+	KY8EEiUN5Bp2SZDx9T3jxU0xen0GQI6u+IcPk6dTQ6BqpptYFTiUWD5sLo7E=
+X-Received: by 2002:a05:6512:2355:b0:539:fa43:fc36 with SMTP id 2adb3069b0e04-53b1a2f42abmr790934e87.12.1729675794931;
+        Wed, 23 Oct 2024 02:29:54 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGiYyj6F7YDQSLG2wAFhIUANmvWJj0aVgSUN/OMCnMStsfisyFRCfqYCP13y+F3bTLBHAWAWA==
+X-Received: by 2002:a05:6512:2355:b0:539:fa43:fc36 with SMTP id 2adb3069b0e04-53b1a2f42abmr790923e87.12.1729675794470;
+        Wed, 23 Oct 2024 02:29:54 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70c:cd00:c139:924e:3595:3b5? (p200300cbc70ccd00c139924e359503b5.dip0.t-ipconnect.de. [2003:cb:c70c:cd00:c139:924e:3595:3b5])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43186bdbb01sm10999135e9.20.2024.10.23.02.29.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Oct 2024 02:29:53 -0700 (PDT)
+Message-ID: <1768ef5d-7289-4d2b-ae02-f5d2a20d5320@redhat.com>
+Date: Wed, 23 Oct 2024 11:29:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <a08dc31ab773604d8f206ba005dc4c7a@aosc.io> <20241023080935.2945-2-kexybiscuit@aosc.io>
-In-Reply-To: <20241023080935.2945-2-kexybiscuit@aosc.io>
-From: Tonghao Zhang <xiangxia.m.yue@gmail.com>
-Date: Wed, 23 Oct 2024 17:28:40 +0800
-Message-ID: <CAMDZJNX6qPiXeaWfb-Yx6HFmX6qWmZjb=FKsz85R-axz40YzyQ@mail.gmail.com>
-Subject: Re: [PATCH] Revert "MAINTAINERS: Remove some entries due to various
- compliance requirements."
-To: Kexy Biscuit <kexybiscuit@aosc.io>
-Cc: jeffbai@aosc.io, gregkh@linuxfoundation.org, wangyuli@uniontech.com, 
-	torvalds@linux-foundation.org, aospan@netup.ru, conor.dooley@microchip.com, 
-	ddrokosov@sberdevices.ru, dmaengine@vger.kernel.org, dushistov@mail.ru, 
-	fancer.lancer@gmail.com, geert@linux-m68k.org, hoan@os.amperecomputing.com, 
-	ink@jurassic.park.msu.ru, linux-alpha@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-fpga@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-ide@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org, 
-	manivannan.sadhasivam@linaro.org, mattst88@gmail.com, netdev@vger.kernel.org, 
-	nikita@trvn.ru, ntb@lists.linux.dev, patches@lists.linux.dev, 
-	richard.henderson@linaro.org, s.shtylyov@omp.ru, serjk@netup.ru, 
-	shc_work@mail.ru, tsbogend@alpha.franken.de, v.georgiev@metrotek.ru, 
-	wsa+renesas@sang-engineering.com, xeb@mail.ru
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/5] implement lightweight guard pages
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>, Dmitry Vyukov <dvyukov@google.com>,
+ fw@deneb.enyo.de, James.Bottomley@hansenpartnership.com,
+ Liam.Howlett@oracle.com, akpm@linux-foundation.org, arnd@arndb.de,
+ brauner@kernel.org, chris@zankel.net, deller@gmx.de, hch@infradead.org,
+ ink@jurassic.park.msu.ru, jannh@google.com, jcmvbkbc@gmail.com,
+ jeffxu@chromium.org, jhubbard@nvidia.com, linux-alpha@vger.kernel.org,
+ linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org,
+ linux-parisc@vger.kernel.org, mattst88@gmail.com, muchun.song@linux.dev,
+ paulmck@kernel.org, richard.henderson@linaro.org, shuah@kernel.org,
+ sidhartha.kumar@oracle.com, surenb@google.com, tsbogend@alpha.franken.de,
+ willy@infradead.org, elver@google.com,
+ Linus Torvalds <torvalds@linux-foundation.org>
+References: <87a5eysmj1.fsf@mid.deneb.enyo.de>
+ <20241023062417.3862170-1-dvyukov@google.com>
+ <8471d7b1-576b-41a6-91fb-1c9baae8c540@redhat.com>
+ <5a3d3bc8-60db-46d0-b689-9aeabcdb8eab@lucifer.local>
+ <CACT4Y+ZE9Zco7KaQoT50aooXCHxhz2N_psTAFtT+ZrH14Si7aw@mail.gmail.com>
+ <b1df934e-7012-4523-a513-d3d1536b7f72@suse.cz>
+ <f000d21f-dd04-462a-9d34-d0e7f0f7dc2e@redhat.com>
+ <b5792b5f-298b-499f-abc2-db773ceeed36@lucifer.local>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <b5792b5f-298b-499f-abc2-db773ceeed36@lucifer.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 23, 2024 at 4:19=E2=80=AFPM Kexy Biscuit <kexybiscuit@aosc.io> =
-wrote:
->
-> This reverts commit 6e90b675cf942e50c70e8394dfb5862975c3b3b2.
->
-> An absolutely no-one-ever-reviewed patch, not even by the maintainers who
-> got removed themselves - at least not on the mailing list. Then the patch
-> just got slipped into an unrelated subsystem pull request, and got pulled
-> by Torvalds with not even a comment.
->
-> What about the next time? Who next would be removed from the MAINTAINERS
-> file, the kernel.org infrastructure? What if the compliance requires
-> another XZ backdoor to be developed without further explanation? Is the
-> kernel development process still done in public?
->
-> Are the "compliance requirements" documented on docs.kernel.org? Who are
-> responsible for them? Are all that are responsible employees of
-> The Linux Foundation, which is regulated by the U.S. legislature?
->
-> Fixes: 6e90b675cf94 ("MAINTAINERS: Remove some entries due to various com=
-pliance requirements.")
-> Signed-off-by: Kexy Biscuit <kexybiscuit@aosc.io>
-Acked-by: Tonghao Zhang <xiangxia.m.yue@gmail.com>
-> ---
-> Please keep all discussions on at least one of the mailing lists.
->
->  MAINTAINERS | 178 ++++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 178 insertions(+)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e9659a5a7fb3..501aa5c0887e 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -258,6 +258,12 @@ L: linux-acenic@sunsite.dk
->  S:     Maintained
->  F:     drivers/net/ethernet/alteon/acenic*
->
-> +ACER ASPIRE 1 EMBEDDED CONTROLLER DRIVER
-> +M:     Nikita Travkin <nikita@trvn.ru>
-> +S:     Maintained
-> +F:     Documentation/devicetree/bindings/platform/acer,aspire1-ec.yaml
-> +F:     drivers/platform/arm64/acer-aspire1-ec.c
-> +
->  ACER ASPIRE ONE TEMPERATURE AND FAN DRIVER
->  M:     Peter Kaestle <peter@piie.net>
->  L:     platform-driver-x86@vger.kernel.org
-> @@ -882,6 +888,7 @@ F:  drivers/staging/media/sunxi/cedrus/
->
->  ALPHA PORT
->  M:     Richard Henderson <richard.henderson@linaro.org>
-> +M:     Ivan Kokshaysky <ink@jurassic.park.msu.ru>
->  M:     Matt Turner <mattst88@gmail.com>
->  L:     linux-alpha@vger.kernel.org
->  S:     Odd Fixes
-> @@ -2256,6 +2263,12 @@ L:       linux-arm-kernel@lists.infradead.org (mod=
-erated for non-subscribers)
->  S:     Maintained
->  F:     arch/arm/mach-ep93xx/ts72xx.c
->
-> +ARM/CIRRUS LOGIC CLPS711X ARM ARCHITECTURE
-> +M:     Alexander Shiyan <shc_work@mail.ru>
-> +L:     linux-arm-kernel@lists.infradead.org (moderated for non-subscribe=
-rs)
-> +S:     Odd Fixes
-> +N:     clps711x
-> +
->  ARM/CIRRUS LOGIC EP93XX ARM ARCHITECTURE
->  M:     Hartley Sweeten <hsweeten@visionengravers.com>
->  M:     Alexander Sverdlin <alexander.sverdlin@gmail.com>
-> @@ -3802,6 +3815,14 @@ F:       drivers/video/backlight/
->  F:     include/linux/backlight.h
->  F:     include/linux/pwm_backlight.h
->
-> +BAIKAL-T1 PVT HARDWARE MONITOR DRIVER
-> +M:     Serge Semin <fancer.lancer@gmail.com>
-> +L:     linux-hwmon@vger.kernel.org
-> +S:     Supported
-> +F:     Documentation/devicetree/bindings/hwmon/baikal,bt1-pvt.yaml
-> +F:     Documentation/hwmon/bt1-pvt.rst
-> +F:     drivers/hwmon/bt1-pvt.[ch]
-> +
->  BARCO P50 GPIO DRIVER
->  M:     Santosh Kumar Yadav <santoshkumar.yadav@barco.com>
->  M:     Peter Korsgaard <peter.korsgaard@barco.com>
-> @@ -6455,6 +6476,7 @@ F:        drivers/mtd/nand/raw/denali*
->
->  DESIGNWARE EDMA CORE IP DRIVER
->  M:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> +R:     Serge Semin <fancer.lancer@gmail.com>
->  L:     dmaengine@vger.kernel.org
->  S:     Maintained
->  F:     drivers/dma/dw-edma/
-> @@ -9737,6 +9759,14 @@ F:       drivers/gpio/gpiolib-cdev.c
->  F:     include/uapi/linux/gpio.h
->  F:     tools/gpio/
->
-> +GRE DEMULTIPLEXER DRIVER
-> +M:     Dmitry Kozlov <xeb@mail.ru>
-> +L:     netdev@vger.kernel.org
-> +S:     Maintained
-> +F:     include/net/gre.h
-> +F:     net/ipv4/gre_demux.c
-> +F:     net/ipv4/gre_offload.c
-> +
->  GRETH 10/100/1G Ethernet MAC device driver
->  M:     Andreas Larsson <andreas@gaisler.com>
->  L:     netdev@vger.kernel.org
-> @@ -12929,6 +12959,12 @@ S:     Maintained
->  F:     drivers/ata/pata_arasan_cf.c
->  F:     include/linux/pata_arasan_cf_data.h
->
-> +LIBATA PATA DRIVERS
-> +R:     Sergey Shtylyov <s.shtylyov@omp.ru>
-> +L:     linux-ide@vger.kernel.org
-> +F:     drivers/ata/ata_*.c
-> +F:     drivers/ata/pata_*.c
-> +
->  LIBATA PATA FARADAY FTIDE010 AND GEMINI SATA BRIDGE DRIVERS
->  M:     Linus Walleij <linus.walleij@linaro.org>
->  L:     linux-ide@vger.kernel.org
-> @@ -12945,6 +12981,15 @@ F:     drivers/ata/ahci_platform.c
->  F:     drivers/ata/libahci_platform.c
->  F:     include/linux/ahci_platform.h
->
-> +LIBATA SATA AHCI SYNOPSYS DWC CONTROLLER DRIVER
-> +M:     Serge Semin <fancer.lancer@gmail.com>
-> +L:     linux-ide@vger.kernel.org
-> +S:     Maintained
-> +T:     git git://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata.=
-git
-> +F:     Documentation/devicetree/bindings/ata/baikal,bt1-ahci.yaml
-> +F:     Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> +F:     drivers/ata/ahci_dwc.c
-> +
->  LIBATA SATA PROMISE TX2/TX4 CONTROLLER DRIVER
->  M:     Mikael Pettersson <mikpelinux@gmail.com>
->  L:     linux-ide@vger.kernel.org
-> @@ -14140,6 +14185,16 @@ S:     Maintained
->  T:     git git://linuxtv.org/media_tree.git
->  F:     drivers/media/platform/nxp/imx-pxp.[ch]
->
-> +MEDIA DRIVERS FOR ASCOT2E
-> +M:     Sergey Kozlov <serjk@netup.ru>
-> +M:     Abylay Ospan <aospan@netup.ru>
-> +L:     linux-media@vger.kernel.org
-> +S:     Supported
-> +W:     https://linuxtv.org
-> +W:     http://netup.tv/
-> +T:     git git://linuxtv.org/media_tree.git
-> +F:     drivers/media/dvb-frontends/ascot2e*
-> +
->  MEDIA DRIVERS FOR CXD2099AR CI CONTROLLERS
->  M:     Jasmin Jessich <jasmin@anw.at>
->  L:     linux-media@vger.kernel.org
-> @@ -14148,6 +14203,16 @@ W:     https://linuxtv.org
->  T:     git git://linuxtv.org/media_tree.git
->  F:     drivers/media/dvb-frontends/cxd2099*
->
-> +MEDIA DRIVERS FOR CXD2841ER
-> +M:     Sergey Kozlov <serjk@netup.ru>
-> +M:     Abylay Ospan <aospan@netup.ru>
-> +L:     linux-media@vger.kernel.org
-> +S:     Supported
-> +W:     https://linuxtv.org
-> +W:     http://netup.tv/
-> +T:     git git://linuxtv.org/media_tree.git
-> +F:     drivers/media/dvb-frontends/cxd2841er*
-> +
->  MEDIA DRIVERS FOR CXD2880
->  M:     Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>
->  L:     linux-media@vger.kernel.org
-> @@ -14192,6 +14257,35 @@ F:     drivers/media/platform/nxp/imx-mipi-csis.=
-c
->  F:     drivers/media/platform/nxp/imx7-media-csi.c
->  F:     drivers/media/platform/nxp/imx8mq-mipi-csi2.c
->
-> +MEDIA DRIVERS FOR HELENE
-> +M:     Abylay Ospan <aospan@netup.ru>
-> +L:     linux-media@vger.kernel.org
-> +S:     Supported
-> +W:     https://linuxtv.org
-> +W:     http://netup.tv/
-> +T:     git git://linuxtv.org/media_tree.git
-> +F:     drivers/media/dvb-frontends/helene*
-> +
-> +MEDIA DRIVERS FOR HORUS3A
-> +M:     Sergey Kozlov <serjk@netup.ru>
-> +M:     Abylay Ospan <aospan@netup.ru>
-> +L:     linux-media@vger.kernel.org
-> +S:     Supported
-> +W:     https://linuxtv.org
-> +W:     http://netup.tv/
-> +T:     git git://linuxtv.org/media_tree.git
-> +F:     drivers/media/dvb-frontends/horus3a*
-> +
-> +MEDIA DRIVERS FOR LNBH25
-> +M:     Sergey Kozlov <serjk@netup.ru>
-> +M:     Abylay Ospan <aospan@netup.ru>
-> +L:     linux-media@vger.kernel.org
-> +S:     Supported
-> +W:     https://linuxtv.org
-> +W:     http://netup.tv/
-> +T:     git git://linuxtv.org/media_tree.git
-> +F:     drivers/media/dvb-frontends/lnbh25*
-> +
->  MEDIA DRIVERS FOR MXL5XX TUNER DEMODULATORS
->  L:     linux-media@vger.kernel.org
->  S:     Orphan
-> @@ -14199,6 +14293,16 @@ W:     https://linuxtv.org
->  T:     git git://linuxtv.org/media_tree.git
->  F:     drivers/media/dvb-frontends/mxl5xx*
->
-> +MEDIA DRIVERS FOR NETUP PCI UNIVERSAL DVB devices
-> +M:     Sergey Kozlov <serjk@netup.ru>
-> +M:     Abylay Ospan <aospan@netup.ru>
-> +L:     linux-media@vger.kernel.org
-> +S:     Supported
-> +W:     https://linuxtv.org
-> +W:     http://netup.tv/
-> +T:     git git://linuxtv.org/media_tree.git
-> +F:     drivers/media/pci/netup_unidvb/*
-> +
->  MEDIA DRIVERS FOR NVIDIA TEGRA - VDE
->  M:     Dmitry Osipenko <digetx@gmail.com>
->  L:     linux-media@vger.kernel.org
-> @@ -14842,6 +14946,13 @@ F:     drivers/mtd/
->  F:     include/linux/mtd/
->  F:     include/uapi/mtd/
->
-> +MEMSENSING MICROSYSTEMS MSA311 DRIVER
-> +M:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> +L:     linux-iio@vger.kernel.org
-> +S:     Maintained
-> +F:     Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yam=
-l
-> +F:     drivers/iio/accel/msa311.c
-> +
->  MEN A21 WATCHDOG DRIVER
->  M:     Johannes Thumshirn <morbidrsa@gmail.com>
->  L:     linux-watchdog@vger.kernel.org
-> @@ -15175,6 +15286,7 @@ F:      drivers/tty/serial/8250/8250_pci1xxxx.c
->
->  MICROCHIP POLARFIRE FPGA DRIVERS
->  M:     Conor Dooley <conor.dooley@microchip.com>
-> +R:     Vladimir Georgiev <v.georgiev@metrotek.ru>
->  L:     linux-fpga@vger.kernel.org
->  S:     Supported
->  F:     Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr=
-.yaml
-> @@ -15429,6 +15541,17 @@ F:     arch/mips/
->  F:     drivers/platform/mips/
->  F:     include/dt-bindings/mips/
->
-> +MIPS BAIKAL-T1 PLATFORM
-> +M:     Serge Semin <fancer.lancer@gmail.com>
-> +L:     linux-mips@vger.kernel.org
-> +S:     Supported
-> +F:     Documentation/devicetree/bindings/bus/baikal,bt1-*.yaml
-> +F:     Documentation/devicetree/bindings/clock/baikal,bt1-*.yaml
-> +F:     drivers/bus/bt1-*.c
-> +F:     drivers/clk/baikal-t1/
-> +F:     drivers/memory/bt1-l2-ctl.c
-> +F:     drivers/mtd/maps/physmap-bt1-rom.[ch]
-> +
->  MIPS BOSTON DEVELOPMENT BOARD
->  M:     Paul Burton <paulburton@kernel.org>
->  L:     linux-mips@vger.kernel.org
-> @@ -15441,6 +15564,7 @@ F:      include/dt-bindings/clock/boston-clock.h
->
->  MIPS CORE DRIVERS
->  M:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> +M:     Serge Semin <fancer.lancer@gmail.com>
->  L:     linux-mips@vger.kernel.org
->  S:     Supported
->  F:     drivers/bus/mips_cdmm.c
-> @@ -16408,6 +16532,12 @@ F:     include/linux/ntb.h
->  F:     include/linux/ntb_transport.h
->  F:     tools/testing/selftests/ntb/
->
-> +NTB IDT DRIVER
-> +M:     Serge Semin <fancer.lancer@gmail.com>
-> +L:     ntb@lists.linux.dev
-> +S:     Supported
-> +F:     drivers/ntb/hw/idt/
-> +
->  NTB INTEL DRIVER
->  M:     Dave Jiang <dave.jiang@intel.com>
->  L:     ntb@lists.linux.dev
-> @@ -18428,6 +18558,13 @@ F:     drivers/pps/
->  F:     include/linux/pps*.h
->  F:     include/uapi/linux/pps.h
->
-> +PPTP DRIVER
-> +M:     Dmitry Kozlov <xeb@mail.ru>
-> +L:     netdev@vger.kernel.org
-> +S:     Maintained
-> +W:     http://sourceforge.net/projects/accel-pptp
-> +F:     drivers/net/ppp/pptp.c
-> +
->  PRESSURE STALL INFORMATION (PSI)
->  M:     Johannes Weiner <hannes@cmpxchg.org>
->  M:     Suren Baghdasaryan <surenb@google.com>
-> @@ -19518,6 +19655,15 @@ S:     Supported
->  F:     Documentation/devicetree/bindings/i2c/renesas,iic-emev2.yaml
->  F:     drivers/i2c/busses/i2c-emev2.c
->
-> +RENESAS ETHERNET AVB DRIVER
-> +R:     Sergey Shtylyov <s.shtylyov@omp.ru>
-> +L:     netdev@vger.kernel.org
-> +L:     linux-renesas-soc@vger.kernel.org
-> +F:     Documentation/devicetree/bindings/net/renesas,etheravb.yaml
-> +F:     drivers/net/ethernet/renesas/Kconfig
-> +F:     drivers/net/ethernet/renesas/Makefile
-> +F:     drivers/net/ethernet/renesas/ravb*
-> +
->  RENESAS ETHERNET SWITCH DRIVER
->  R:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
->  L:     netdev@vger.kernel.org
-> @@ -19567,6 +19713,14 @@ F:     Documentation/devicetree/bindings/i2c/ren=
-esas,rmobile-iic.yaml
->  F:     drivers/i2c/busses/i2c-rcar.c
->  F:     drivers/i2c/busses/i2c-sh_mobile.c
->
-> +RENESAS R-CAR SATA DRIVER
-> +R:     Sergey Shtylyov <s.shtylyov@omp.ru>
-> +L:     linux-ide@vger.kernel.org
-> +L:     linux-renesas-soc@vger.kernel.org
-> +S:     Supported
-> +F:     Documentation/devicetree/bindings/ata/renesas,rcar-sata.yaml
-> +F:     drivers/ata/sata_rcar.c
-> +
->  RENESAS R-CAR THERMAL DRIVERS
->  M:     Niklas S=C3=B6derlund <niklas.soderlund@ragnatech.se>
->  L:     linux-renesas-soc@vger.kernel.org
-> @@ -19642,6 +19796,16 @@ S:     Supported
->  F:     Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml
->  F:     drivers/i2c/busses/i2c-rzv2m.c
->
-> +RENESAS SUPERH ETHERNET DRIVER
-> +R:     Sergey Shtylyov <s.shtylyov@omp.ru>
-> +L:     netdev@vger.kernel.org
-> +L:     linux-renesas-soc@vger.kernel.org
-> +F:     Documentation/devicetree/bindings/net/renesas,ether.yaml
-> +F:     drivers/net/ethernet/renesas/Kconfig
-> +F:     drivers/net/ethernet/renesas/Makefile
-> +F:     drivers/net/ethernet/renesas/sh_eth*
-> +F:     include/linux/sh_eth.h
-> +
->  RENESAS USB PHY DRIVER
->  M:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
->  L:     linux-renesas-soc@vger.kernel.org
-> @@ -22295,11 +22459,19 @@ F:    drivers/tty/serial/8250/8250_lpss.c
->
->  SYNOPSYS DESIGNWARE APB GPIO DRIVER
->  M:     Hoan Tran <hoan@os.amperecomputing.com>
-> +M:     Serge Semin <fancer.lancer@gmail.com>
->  L:     linux-gpio@vger.kernel.org
->  S:     Maintained
->  F:     Documentation/devicetree/bindings/gpio/snps,dw-apb-gpio.yaml
->  F:     drivers/gpio/gpio-dwapb.c
->
-> +SYNOPSYS DESIGNWARE APB SSI DRIVER
-> +M:     Serge Semin <fancer.lancer@gmail.com>
-> +L:     linux-spi@vger.kernel.org
-> +S:     Supported
-> +F:     Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> +F:     drivers/spi/spi-dw*
-> +
->  SYNOPSYS DESIGNWARE AXI DMAC DRIVER
->  M:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
->  S:     Maintained
-> @@ -23609,6 +23781,12 @@ L:     linux-input@vger.kernel.org
->  S:     Maintained
->  F:     drivers/hid/hid-udraw-ps3.c
->
-> +UFS FILESYSTEM
-> +M:     Evgeniy Dushistov <dushistov@mail.ru>
-> +S:     Maintained
-> +F:     Documentation/admin-guide/ufs.rst
-> +F:     fs/ufs/
-> +
->  UHID USERSPACE HID IO DRIVER
->  M:     David Rheinsberg <david@readahead.eu>
->  L:     linux-input@vger.kernel.org
-> --
-> 2.47.0
->
->
+On 23.10.24 11:18, Lorenzo Stoakes wrote:
+> On Wed, Oct 23, 2024 at 11:13:47AM +0200, David Hildenbrand wrote:
+>> On 23.10.24 11:06, Vlastimil Babka wrote:
+>>> On 10/23/24 10:56, Dmitry Vyukov wrote:
+>>>>>
+>>>>> Overall while I sympathise with this, it feels dangerous and a pretty major
+>>>>> change, because there'll be something somewhere that will break because it
+>>>>> expects faults to be swallowed that we no longer do swallow.
+>>>>>
+>>>>> So I'd say it'd be something we should defer, but of course it's a highly
+>>>>> user-facing change so how easy that would be I don't know.
+>>>>>
+>>>>> But I definitely don't think a 'introduce the ability to do cheap PROT_NONE
+>>>>> guards' series is the place to also fundmentally change how user access
+>>>>> page faults are handled within the kernel :)
+>>>>
+>>>> Will delivering signals on kernel access be a backwards compatible
+>>>> change? Or will we need a different API? MADV_GUARD_POISON_KERNEL?
+>>>> It's just somewhat painful to detect/update all userspace if we add
+>>>> this feature in future. Can we say signal delivery on kernel accesses
+>>>> is unspecified?
+>>>
+>>> Would adding signal delivery to guard PTEs only help enough the ASAN etc
+>>> usecase? Wouldn't it be instead possible to add some prctl to opt-in the
+>>> whole ASANized process to deliver all existing segfaults as signals instead
+>>> of -EFAULT ?
+>>
+>> Not sure if it is an "instead", you might have to deliver the signal in
+>> addition to letting the syscall fail (not that I would be an expert on
+>> signal delivery :D ).
+>>
+>> prctl sounds better, or some way to configure the behavior on VMA ranges;
+>> otherwise we would need yet another marker, which is not the end of the
+>> world but would make it slightly more confusing.
+>>
+> 
+> Yeah prctl() sounds sensible, and since we are explicitly adding a marker
+> for guard pages here we can do this as a follow up too without breaking any
+> userland expectations, i.e. 'new feature to make guard pages signal' is not
+> going to contradict the default behaviour.
+> 
+> So all makes sense to me, but I do think best as a follow up! :)
 
+Yeah, fully agreed. And my gut feeling is that it might not be that easy 
+... :)
 
---=20
-Best regards, Tonghao
+In the end, what we want is *some* notification that a guard PTE was 
+accessed. Likely the notification must not necessarily completely 
+synchronous (although it would be ideal) and it must not be a signal.
+
+Maybe having a different way to obtain that information from user space 
+would work.
+-- 
+Cheers,
+
+David / dhildenb
+
 
