@@ -1,125 +1,196 @@
-Return-Path: <linux-mips+bounces-6272-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6273-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 458A19ABEBE
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Oct 2024 08:31:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 268E79AC008
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Oct 2024 09:19:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E48C91F23164
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Oct 2024 06:31:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4794B1C20F67
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Oct 2024 07:19:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54C7913DB9F;
-	Wed, 23 Oct 2024 06:31:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E895153573;
+	Wed, 23 Oct 2024 07:19:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="iGpQUzuf"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XjwuUp+M"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B37D147C9B;
-	Wed, 23 Oct 2024 06:31:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.194.254.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 476111547D2
+	for <linux-mips@vger.kernel.org>; Wed, 23 Oct 2024 07:19:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729665081; cv=none; b=LczFSz+m5YKnMfQwkYxoqXoVK8Ng9Z8ihKKEcWvH5J0RdaUsswY/VWuOAhVLVmAO6CY4vxlWn2v4So+Tvo5KbecFeAmeHq0d/gBsMxzcr40+8NlGXl/MSQ79hbDiko0w/pEReG5EQHb+K8KzuABC+UB8lCtJeKrvwaQOczhdt5Y=
+	t=1729667952; cv=none; b=mPJveJU2WG3QUgHOhwidB8Z08UrfqGmqpfiqBTFN/fwoBfwISuNjFMYBI1NwTlQ8lHr27vO9IPHTQIEh0cNiB0NBBcXAExX43qhgkej5TUTbXmxI0OBUEpvEfHIFKBOUZT7vyWwNz41Bb+exOhtPqsZfNP98WDST4mFCGHhX97E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729665081; c=relaxed/simple;
-	bh=ngQUyspk0u5tmnuw4tF5HJKltqCiL9AJbZfUWTdGVNU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RQ40471UqO23SaKBOUM0sRk29Jstb8BS1dwUpBxea15K2fBOFDX3KjZ3B+ovkCTHwa71vy5NJjL37sXGiVH2AMvZhwBXnHFpMaeJZHZXKe+kYKDJlXWp+tCbzaEs306aRAkJoynKVkh7ZGqVw+p1GfSPj8qdYjLCSqJY/yNqdlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=iGpQUzuf; arc=none smtp.client-ip=18.194.254.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1729665067;
-	bh=ngQUyspk0u5tmnuw4tF5HJKltqCiL9AJbZfUWTdGVNU=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=iGpQUzufGKagQD2p8OJ9+o1rv05GO3s0irkkzl+B/jVQzK62CKg8qVz67X69ysnlY
-	 guTCSgPYkdN689aKc9jSkAv2q1YkVkLU9aW1hyxIu8y95ubUmp7oLbbBrYPzSuQtxk
-	 b6AP1aH471/Gf/Mf0lCx04AOx9Z8n7u1eTbhDMCE=
-X-QQ-mid: bizesmtp85t1729665063t7rgkpzf
-X-QQ-Originating-IP: /Pu5B/BFVMh1l61DmVeOAJ9BOb/PIqdl2onMEJbSJ3s=
-Received: from localhost.localdomain ( [113.57.152.160])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 23 Oct 2024 14:30:59 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 5490330265754036757
-From: WangYuli <wangyuli@uniontech.com>
-To: gregkh@linuxfoundation.org
-Cc: patches@lists.linux.dev,
-	nikita@trvn.ru,
-	ink@jurassic.park.msu.ru,
-	shc_work@mail.ru,
-	richard.henderson@linaro.org,
-	mattst88@gmail.com,
-	linux-alpha@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	fancer.lancer@gmail.com,
-	linux-hwmon@vger.kernel.org,
-	dmaengine@vger.kernel.org,
-	xeb@mail.ru,
-	netdev@vger.kernel.org,
-	s.shtylyov@omp.ru,
-	linux-ide@vger.kernel.org,
-	serjk@netup.ru,
-	aospan@netup.ru,
-	linux-media@vger.kernel.org,
-	ddrokosov@sberdevices.ru,
-	linux-iio@vger.kernel.org,
-	v.georgiev@metrotek.ru,
-	linux-mips@vger.kernel.org,
-	ntb@lists.linux.dev,
-	linux-renesas-soc@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	dushistov@mail.ru,
-	manivannan.sadhasivam@linaro.org,
-	conor.dooley@microchip.com,
-	linux-fpga@vger.kernel.org,
-	tsbogend@alpha.franken.de,
-	hoan@os.amperecomputing.com,
-	geert@linux-m68k.org,
-	wsa+renesas@sang-engineering.com
-Subject: Re: [PATCH] MAINTAINERS: Remove some entries due to various compliance requirements.
-Date: Wed, 23 Oct 2024 14:30:58 +0800
-Message-ID: <A74519B4332040FA+20241023063058.223139-1-wangyuli@uniontech.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <2024101835-tiptop-blip-09ed@gregkh>
-References: <2024101835-tiptop-blip-09ed@gregkh>
+	s=arc-20240116; t=1729667952; c=relaxed/simple;
+	bh=bKrUGf4U7cuFbm/oePLuNwJ0rXtkr0eVGYDs+YteWIY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LK5rHv5veTbYMczIQlTPnzo7CPALVvwHoNZm785pxOYz4U2BPiyA8p7FCELzmqGA83bj3Ym65ANDO6Rq85un1JjW9/r7D4WoXPlnhTqU6OvKcNkfV5uQU9vX049Lm07q3odSlNlc8iTJ9MpSji5Z4yUQaCtBhq87fb2ZKc8p+Lk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XjwuUp+M; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1729667949;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=2J8ZqubO+8AlKbFE9Qv2kRLiKggvUmjZRZtAw8rfrEY=;
+	b=XjwuUp+M7Sq75P4Tkp6gUAtALTFniP9d/EDhT8BqCUMGQhTAhXGKiC0YfybY9NTvNxR4vH
+	iyzCRj5cuOoIi/HH9DkI/MNmkq5gMjzfXqOy3ImYvKIZuIGnOazLvsYTT0ykJJWAhMzWXh
+	9tnAEyvWY6yLtNZIMZO/DQllPVa5Q4Q=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-15-gKlm8FJzOB-aWJzQtrDIjQ-1; Wed, 23 Oct 2024 03:19:08 -0400
+X-MC-Unique: gKlm8FJzOB-aWJzQtrDIjQ-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-37d462b64e3so2784821f8f.3
+        for <linux-mips@vger.kernel.org>; Wed, 23 Oct 2024 00:19:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729667947; x=1730272747;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2J8ZqubO+8AlKbFE9Qv2kRLiKggvUmjZRZtAw8rfrEY=;
+        b=R4G+LLhaavR5YPu5FYXQ/Y3slAANO0ZAzDQmnmgOBCpPFGDEKKwnc9v49JOnc5irRV
+         NcQUVZn/mLurGQG2BsJW7hO864kS63Rc2JnQvOVG0nElgE5nA76fL+XR3q6JzTRQFmEA
+         KC36D+iXYw6id43mDDdzjoxa6OAWUSr0FsjYNRT5IrxjyqZ60VmJLXV5CePyaGhHXohG
+         XWH3/k58tq7e8ja1l+LDVfDWDrSmsaZXDeWczWcqJvSHeTv8raAuTHoL48ouEUhkwfRk
+         YBojZsyqP+WGxMOdSSsnGVC8HTrYb52rzKTyyxcQQqPDNogD4ePvjzHsE85+F/DOs6eA
+         EEuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXAc3GECPwW1b+w21yJ0jlYnQ8BLh7QRZl2qB4VwAczB1n8SM+iIf0ZEn40+aL6YxF376CCtdUKTEyU@vger.kernel.org
+X-Gm-Message-State: AOJu0YxcBHexciQip8hgPMlc2klbYsGUTHWxYEgR+lFUjpvEeF0caFY9
+	Rh5xZsvvcnXAovj20a45lHbgnSQIPHiF5TteLy65l003BGZMdJDZNLK1jbm/LutIaVWDK/LDkD0
+	V3m064qh2MCIw3YcGeZwIC5LtL6dPmTz4ZdolkAWCw/sJMWuoSaQ76mDoICg=
+X-Received: by 2002:a05:6000:d08:b0:37d:446b:7dfa with SMTP id ffacd0b85a97d-37efcf7ebd9mr912449f8f.39.1729667946898;
+        Wed, 23 Oct 2024 00:19:06 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFqzEDQ57fgD1+CK3sngwj8y5ncZ+zhRCIKvEIDF/zJ+B/m+m+ZwPj3lma4Yv4rl/K1V35C/w==
+X-Received: by 2002:a05:6000:d08:b0:37d:446b:7dfa with SMTP id ffacd0b85a97d-37efcf7ebd9mr912404f8f.39.1729667946324;
+        Wed, 23 Oct 2024 00:19:06 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70c:cd00:c139:924e:3595:3b5? (p200300cbc70ccd00c139924e359503b5.dip0.t-ipconnect.de. [2003:cb:c70c:cd00:c139:924e:3595:3b5])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0a37d25sm8269356f8f.23.2024.10.23.00.19.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Oct 2024 00:19:05 -0700 (PDT)
+Message-ID: <8471d7b1-576b-41a6-91fb-1c9baae8c540@redhat.com>
+Date: Wed, 23 Oct 2024 09:19:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: OHTF91J1Rz8hHcmuwSpKjbBoUoZhpUSlBvuksK5sCSl/z3VoTP0vAl4N
-	1dHAHra4Np4fyto/bbVt43UDCsn7NLXDUNh5iYXeLoYQcbbFzWbVIpoYTE03C/1h8t/1u8L
-	8ERmK8MW0sKaMNx53w/v1rLlOXn9oUWkJCjZuNsTG/xNBbyDiysuK5BuLHeqFWj+K7HrFqk
-	ggbdJdw25YtQWLksEVyF606liPNxa6P1Lvmazhi6gX+6qgfLFgjgYffSrRUEfsMuAdcgWtK
-	OxgOGAFs9tgh9n9ASJcpo0ENdeIcAe7eLJ5UJ7Bo3u4hZtufOciW93dwXJ/2niv15dipoem
-	kRNVXXM8LExASYYw4xKGuoXH2S5UnciM8O0nenV/B/6hliIdy3uMoe7bGS1ajI5Lc0YFVaH
-	A057WWcwbq9S4gQ46FsyYanFmUDBFlmR2VIM3Cq8N6KGcTlNGFGtsleWKwQgxDy7Jvc/xZV
-	UW91jouYjEWZSoa9z7XtEb+cNy4Q7mhzLngPNCDK9gfCwtXcZFI/2KdtZ7mQVX2OqHl8BqZ
-	3bMrZxbNUCMtOK0JLpZuU9v2Sj9bh9B0ifVCcgE37rBzLtb3VKq7RlkEj5ek75uAxuBj/7V
-	tAG90ubNemZBRBBQAH7UwP4QOR3C1W1NqFBkln6nIVsnjmBpcld+FvWzx/IHJ4SNnl+sVVN
-	Rac1Dtq15CvUBsfah11nxPqvr76OLEkglxzL8RVMpQgfETr4JA52AIcMaIBvsqMhElYJTlG
-	wc2keO+nPHrdGopZDfryVS1Es03SH5LDbn6w00/SVe2gp0wM1Grq30QPlNCps1KMCyjnFJG
-	fEYEVc7N8nwue960aKpP4EeJe8xaKiYSIBKrCd8l5gLtgt5XIo10LO+33un1X65I+v5BOJv
-	37AGKl6wBtX9r6/Xj2DGSbDPIsWGy6kUlmNXgwvg0q4ZSTrZqkZlBHqoGC5HcthTHqMZV/1
-	bfu/PJjY6SmjHvQvBdngCuM7+
-X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
-X-QQ-RECHKSPAM: 0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/5] implement lightweight guard pages
+To: Dmitry Vyukov <dvyukov@google.com>, fw@deneb.enyo.de
+Cc: James.Bottomley@HansenPartnership.com, Liam.Howlett@oracle.com,
+ akpm@linux-foundation.org, arnd@arndb.de, brauner@kernel.org,
+ chris@zankel.net, deller@gmx.de, hch@infradead.org,
+ ink@jurassic.park.msu.ru, jannh@google.com, jcmvbkbc@gmail.com,
+ jeffxu@chromium.org, jhubbard@nvidia.com, linux-alpha@vger.kernel.org,
+ linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org,
+ linux-parisc@vger.kernel.org, lorenzo.stoakes@oracle.com,
+ mattst88@gmail.com, muchun.song@linux.dev, paulmck@kernel.org,
+ richard.henderson@linaro.org, shuah@kernel.org, sidhartha.kumar@oracle.com,
+ surenb@google.com, tsbogend@alpha.franken.de, vbabka@suse.cz,
+ willy@infradead.org, elver@google.com
+References: <87a5eysmj1.fsf@mid.deneb.enyo.de>
+ <20241023062417.3862170-1-dvyukov@google.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <20241023062417.3862170-1-dvyukov@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Although this commit has been merged, it's still important to know the specific reason (or even an example) that triggered this change for everyone here, right?
+On 23.10.24 08:24, Dmitry Vyukov wrote:
+> Hi Florian, Lorenzo,
+> 
+> This looks great!
+> 
+> What I am VERY interested in is if poisoned pages cause SIGSEGV even when
+> the access happens in the kernel. Namely, the syscall still returns EFAULT,
+> but also SIGSEGV is queued on return to user-space.
+> 
+> Catching bad accesses in system calls is currently the weak spot for
+> all user-space bug detection tools (GWP-ASan, libefence, libefency, etc).
+> It's almost possible with userfaultfd, but catching faults in the kernel
+> requires admin capability, so not really an option for generic bug
+> detection tools (+inconvinience of userfaultfd setup/handler).
+> Intercepting all EFAULT from syscalls is not generally possible
+> (w/o ptrace, usually not an option as well), and EFAULT does not always
+> mean a bug.
+> 
+> Triggering SIGSEGV even in syscalls would be not just a performance
+> optimization, but a new useful capability that would allow it to catch
+> more bugs.
 
-And those maintainers who have been removed should be notified.
+Right, we discussed that offline also as a possible extension to the 
+userfaultfd SIGBUS mode.
 
-It should be CC'd everyone who might need to be aware of this change, including the removed maintainers, other maintainers on the subsystem, and the subsystem's mailing list.
+I did not look into that yet, but I was wonder if there could be cases 
+where a different process could trigger that SIGSEGV, and how to (and if 
+to) handle that.
 
-To ensure transparency.
+For example, ptrace (access_remote_vm()) -> GUP likely can trigger that. 
+I think with userfaultfd() we will currently return -EFAULT, because we 
+call get_user_page_vma_remote() that is not prepared for dropping the 
+mmap lock. Possibly that is the right thing to do, but not sure :)
+
+These "remote" faults set FOLL_REMOTE -> FAULT_FLAG_REMOTE, so we might 
+be able to distinguish them and perform different handling.
+
+-- 
+Cheers,
+
+David / dhildenb
+
 
