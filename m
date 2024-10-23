@@ -1,487 +1,474 @@
-Return-Path: <linux-mips+bounces-6319-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6320-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D36329AD1F9
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Oct 2024 19:00:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4FC09AD24E
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Oct 2024 19:14:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 574641F28E1F
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Oct 2024 17:00:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 788A6285594
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Oct 2024 17:14:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08AA81D0B82;
-	Wed, 23 Oct 2024 16:52:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BFE91CCB3A;
+	Wed, 23 Oct 2024 17:14:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="Ke7ROY5k"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P/vry7RT"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8E0F1CEAB1;
-	Wed, 23 Oct 2024 16:52:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BEFE78C90;
+	Wed, 23 Oct 2024 17:14:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729702350; cv=none; b=co/zlN0geqL4Kp4XEqlgUsVbuXtJrjcOIwOoVjzdPgTMSGx6Ap8A62q4Dw59vlWoO0pwtWGFBl8DSdFRKcJN72AsAJHXzXa1zp+QfOkfO4uWLqfarRSVccp007oIDBuXs0ZAUKAPNHBBfmonJrqjOU/99+Ca6k1IV5pRLrfAkqc=
+	t=1729703680; cv=none; b=bIx7VotXIITI/R22Ue6qFr3Hd0CIwwrLUA6iaz3tAF5KZk7piHdZob6m2kw2If1avRMm4t94bIt9lWdLB+Eb9kE6SjEVYYaAygUDTLz4oDRTuSdlRCmRmeGQhWzyiluK5aJ1/pFO9H8/oZm9TxNjHVkqgHJE0zZ+yXK++l3Ws88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729702350; c=relaxed/simple;
-	bh=TEG3EVtAYQamp066sxkYySwKvKnKh/t9T6kzAh0R9p0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YCvQlTQCkPZlAaHKXdtm8sLc/VMxeHIm8g5QRigYodaU1l+vSsl+oJM30Oe8cUmDDTUJh7RBL6x5DJxlsZCGT1wUv/Yt5TlADd0JuGzgdP2FHJs3460SyqnjD37awba2wylJ6JK8LPbquafzSDqanAbeEqNsjHi1jAQhvPeVhvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=Ke7ROY5k; arc=none smtp.client-ip=80.241.56.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4XYZpS45glz9snQ;
-	Wed, 23 Oct 2024 18:52:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1729702336;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bBFoHCEoTHEZSoMq7XxhQceWlm26BE555mdsjHQ7o98=;
-	b=Ke7ROY5kzFfDwH4nlhds8x+r2EzIRegIfYl5+UBfn1CX8hyjzOTvknL1e+iHv55g8RFDkY
-	C8uPwUsGLANmq088FjKIipzOOZ8+AXxBP4rtzgV1CuuQuv+v7YnuLDVbAnPurnIi88ZuEf
-	p5860THIRYSbo64z96CfBXf709LxWq0ks9g53rxPPwol4t38SiwOcuIS5LV3BM8E+x1omh
-	IuMDTRzb+l15Zxz/eCNbRA7rpEpt09JVHB0xqhJVxk8lBlnt7xb/mTJckY7ePo6/thvEwy
-	14sJLYE5hSpCeiRvj2vuFDYyWbo2sGqPKrBLR4hROyUOhk5sELov6+c5wBBAUw==
-Message-ID: <124c1b03-24c9-4f19-99a9-6eb2241406c2@mailbox.org>
-Date: Wed, 23 Oct 2024 18:51:38 +0200
+	s=arc-20240116; t=1729703680; c=relaxed/simple;
+	bh=Y6BOAvOnYonjiQDUtbE1GcbHSsxsqYgIX2h9A/lWZoE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bdZ5tdekJzAHy2ViViGqaRYSmbVRpe9/hK6udF7v5nmFuxZl0XNr2HPlAHxGCRyRMEF1hz1raige6E1MFiJDaCztIRoRCNqxck09EVgmzFEpPdGJ0FQh2W2VHju3JrNPcLVVxzr8dqIrLkC9r1SXg9ZvycmXlTJaB2jL/9Ix7Hw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P/vry7RT; arc=none smtp.client-ip=209.85.160.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-460b2e4c50fso226361cf.0;
+        Wed, 23 Oct 2024 10:14:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729703677; x=1730308477; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ocy032bdcho2couvO6/QgCKu9IriwGzbqAqGCvUdpMA=;
+        b=P/vry7RTvyppW59uG32ZUiUIx5QjvJbKFiYNkUgVnD/4WWz3bQ9LMynxyPuBLhIfku
+         TzQmhoGU6OEZGJH36mhjplPLYzKDynqlRv7HMy/IiJPNnAe1wLds0KnegmC3dGXWOGwq
+         XYQmmBQPmW4e0HqLHCxenEgsD8ElfLU17R550afjXZnJAw5gIyHmYOk54ZBoWXBoPZjD
+         y8a1skQKle6iN4SfJfNWv1MMSQsPE66toSPoJ9MNjVAHJ0QZZFqi21W5cidaAmal43UU
+         u3MuTudVpnQpLrReq/t61LSB6r3IxUSAyyKm8RGUZcN27+t8KLPJqYsIpUrQ7J7XJehL
+         GbfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729703677; x=1730308477;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ocy032bdcho2couvO6/QgCKu9IriwGzbqAqGCvUdpMA=;
+        b=eKUdLZm+EpCp2M9Dp8KWVJBPmazV6YtmJH+cu/HXO1yJasYtoO6JLNIUr0xBm4tPn9
+         Ni+4x25kc3bzbAngaiftDy/NcmSc36UpBRfWWK0+5afPkAO5yLCcZKP/dpmE0A21hZek
+         OquQGLX5tw0ZF3sP+lCV4bgcAJoGWRQEh843JJoveIiJ9MGQmv1WADf9r8D9sOaQ9n9e
+         TuqgQWVbEJRVyyQ65kXtPk2ckbekkRLJyv96xoo5xReqKtHM1nkof2SEdkPASHxlqfBY
+         Wl7eoeK4/X87B7KwWBunWlZakkCjq7hZV88O3e/6th8OSPCIk24xXEzEMm7C/vuCtZ8L
+         I8uA==
+X-Forwarded-Encrypted: i=1; AJvYcCUYzWzcc5iAGZUFLcOkeUM6B/Nsoqol7OsUrcny6t3hndNswGsd30z5WyC0d36hbSU8oZNwJkywXZY=@vger.kernel.org, AJvYcCVBYA3lJ8S9tDjTNedc5uKRyGUno0ldHzLekJRIj7NHYEE6SB4+Ow4/lLS3FoGgtqwSAcu6aiaVhKGX@vger.kernel.org, AJvYcCVrRMNpU4PRikp2hJYRNeQR/JAG3BUOtxPn1k/IC8U/5XemuRqsjapQcG1iR/XKN5Z2GXfcqQ09QCIhbam1LhE=@vger.kernel.org, AJvYcCWbikWxQMZTBFpqH5mKHkbhIWaYiW+ZI13DOw5UBvLKVE2PHZ8wQOuVtHZo5jdBFdqNKsMKcK6+a7CNZg==@vger.kernel.org, AJvYcCXHNj3MB5KpQNcuQY5Grkr3J0fZfIf+SIBIWXVL4twOYfWddkYm5ty1MVbE+ayGz/rfG4l3S6x5Y4DtYg==@vger.kernel.org, AJvYcCXk2iTTcyHvkjSt3tGxaq5PK56PdTQ0wuGZwfPD4fXNNxbudUh/K3nkR3I8cU+fNGuOnDSu7/418L4a3Lhy@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBvJ4+GdU4/dde/fyiKSiP6bKmeSbZol/1mPKr9WzD9CfsDzts
+	UxfWoVEBs2/mn4HWCE8W2C/9uHswcscov29+g77ekGlIdOkvWU3d
+X-Google-Smtp-Source: AGHT+IH4iUuNlJ5a4C6P+CxLaR5teClGbQdmg1jOeGXfO69rKTgzE6VI3Y8w6vkgZ/WvzrJsQJMOEA==
+X-Received: by 2002:ac8:7f51:0:b0:460:e593:45aa with SMTP id d75a77b69052e-461146c97admr42391941cf.33.1729703677086;
+        Wed, 23 Oct 2024 10:14:37 -0700 (PDT)
+Received: from localhost (fwdproxy-ash-007.fbsv.net. [2a03:2880:20ff:7::face:b00c])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6ce009e5407sm41539416d6.129.2024.10.23.10.14.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Oct 2024 10:14:36 -0700 (PDT)
+From: Usama Arif <usamaarif642@gmail.com>
+To: robh@kernel.org,
+	mark.rutland@arm.com,
+	will@kernel.org
+Cc: leitao@debian.org,
+	catalin.marinas@arm.com,
+	tglx@linutronix.de,
+	chris@zankel.net,
+	saravanak@google.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	kexec@lists.infradead.org,
+	loongarch@lists.linux.dev,
+	linux-sh@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-openrisc@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-csky@vger.kernel.org,
+	Usama Arif <usamaarif642@gmail.com>
+Subject: [PATCH v2] of/fdt: add dt_phys arg to early_init_dt_scan and early_init_dt_verify
+Date: Wed, 23 Oct 2024 18:14:26 +0100
+Message-ID: <20241023171426.452688-1-usamaarif642@gmail.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] Revert "MAINTAINERS: Remove some entries due to various
- compliance requirements."
-To: Kexy Biscuit <kexybiscuit@aosc.io>, jeffbai@aosc.io,
- gregkh@linuxfoundation.org, wangyuli@uniontech.com,
- torvalds@linux-foundation.org
-Cc: aospan@netup.ru, conor.dooley@microchip.com, ddrokosov@sberdevices.ru,
- dmaengine@vger.kernel.org, dushistov@mail.ru, fancer.lancer@gmail.com,
- geert@linux-m68k.org, hoan@os.amperecomputing.com, ink@jurassic.park.msu.ru,
- linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-ide@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- linux-spi@vger.kernel.org, manivannan.sadhasivam@linaro.org,
- mattst88@gmail.com, netdev@vger.kernel.org, nikita@trvn.ru,
- ntb@lists.linux.dev, patches@lists.linux.dev, richard.henderson@linaro.org,
- s.shtylyov@omp.ru, serjk@netup.ru, shc_work@mail.ru,
- tsbogend@alpha.franken.de, v.georgiev@metrotek.ru,
- wsa+renesas@sang-engineering.com, xeb@mail.ru
-References: <a08dc31ab773604d8f206ba005dc4c7a@aosc.io>
- <20241023080935.2945-2-kexybiscuit@aosc.io>
-Content-Language: en-US
-From: Tor Vic <torvic9@mailbox.org>
-In-Reply-To: <20241023080935.2945-2-kexybiscuit@aosc.io>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: ttui6zogedy91aoeke9rqj9dmgpd9uhy
-X-MBO-RS-ID: f61b9a870d2d33c8f02
 
+ __pa() is only intended to be used for linear map addresses and using
+it for initial_boot_params which is in fixmap for arm64 will give an
+incorrect value. Hence save the physical address when it is known at
+boot time when calling early_init_dt_scan for arm64 and use it at kexec
+time instead of converting the virtual address using __pa().
 
-On 10/23/24 10:09, Kexy Biscuit wrote:
-> This reverts commit 6e90b675cf942e50c70e8394dfb5862975c3b3b2.
->
-> An absolutely no-one-ever-reviewed patch, not even by the maintainers who
-> got removed themselves - at least not on the mailing list. Then the patch
-> just got slipped into an unrelated subsystem pull request, and got pulled
-> by Torvalds with not even a comment.
->
-> What about the next time? Who next would be removed from the MAINTAINERS
-> file, the kernel.org infrastructure? What if the compliance requires
-> another XZ backdoor to be developed without further explanation? Is the
-> kernel development process still done in public?
->
-> Are the "compliance requirements" documented on docs.kernel.org? Who are
-> responsible for them? Are all that are responsible employees of
-> The Linux Foundation, which is regulated by the U.S. legislature?
+Reported-by: Breno Leitao <leitao@debian.org>
+Suggested-by: Mark Rutland <mark.rutland@arm.com>
+Signed-off-by: Usama Arif <usamaarif642@gmail.com>
+Fixes: ac10be5cdbfa ("arm64: Use common of_kexec_alloc_and_setup_fdt()")
+---
+v1 -> 2:
+- pass dt_phys in early_init_dt_scan instead of creating
+  anorther arch->dt function (Rob Herring)
+---
+ arch/arc/kernel/devtree.c              |  2 +-
+ arch/arm/kernel/devtree.c              |  2 +-
+ arch/arm64/kernel/setup.c              |  6 +++++-
+ arch/csky/kernel/setup.c               |  4 ++--
+ arch/loongarch/kernel/setup.c          |  2 +-
+ arch/microblaze/kernel/prom.c          |  2 +-
+ arch/mips/kernel/prom.c                |  2 +-
+ arch/mips/kernel/relocate.c            |  2 +-
+ arch/nios2/kernel/prom.c               |  4 ++--
+ arch/openrisc/kernel/prom.c            |  2 +-
+ arch/powerpc/kernel/dt_cpu_ftrs.c      |  2 +-
+ arch/powerpc/kernel/prom.c             |  2 +-
+ arch/powerpc/platforms/pseries/plpks.c |  2 +-
+ arch/riscv/kernel/setup.c              |  2 +-
+ arch/sh/kernel/setup.c                 |  2 +-
+ arch/um/kernel/dtb.c                   |  2 +-
+ arch/x86/kernel/devicetree.c           |  2 +-
+ arch/xtensa/kernel/setup.c             |  2 +-
+ drivers/of/fdt.c                       | 14 ++++++++------
+ drivers/of/kexec.c                     |  2 +-
+ include/linux/of_fdt.h                 |  5 +++--
+ 21 files changed, 36 insertions(+), 29 deletions(-)
 
+diff --git a/arch/arc/kernel/devtree.c b/arch/arc/kernel/devtree.c
+index 4c9e61457b2f..cc6ac7d128aa 100644
+--- a/arch/arc/kernel/devtree.c
++++ b/arch/arc/kernel/devtree.c
+@@ -62,7 +62,7 @@ const struct machine_desc * __init setup_machine_fdt(void *dt)
+ 	const struct machine_desc *mdesc;
+ 	unsigned long dt_root;
+ 
+-	if (!early_init_dt_scan(dt))
++	if (!early_init_dt_scan(dt, __pa(dt)))
+ 		return NULL;
+ 
+ 	mdesc = of_flat_dt_match_machine(NULL, arch_get_next_mach);
+diff --git a/arch/arm/kernel/devtree.c b/arch/arm/kernel/devtree.c
+index fdb74e64206a..3b78966e750a 100644
+--- a/arch/arm/kernel/devtree.c
++++ b/arch/arm/kernel/devtree.c
+@@ -200,7 +200,7 @@ const struct machine_desc * __init setup_machine_fdt(void *dt_virt)
+ 
+ 	mdesc_best = &__mach_desc_GENERIC_DT;
+ 
+-	if (!dt_virt || !early_init_dt_verify(dt_virt))
++	if (!dt_virt || !early_init_dt_verify(dt_virt, __pa(dt_virt)))
+ 		return NULL;
+ 
+ 	mdesc = of_flat_dt_match_machine(mdesc_best, arch_get_next_mach);
+diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
+index b22d28ec8028..177262739c49 100644
+--- a/arch/arm64/kernel/setup.c
++++ b/arch/arm64/kernel/setup.c
+@@ -175,7 +175,11 @@ static void __init setup_machine_fdt(phys_addr_t dt_phys)
+ 	if (dt_virt)
+ 		memblock_reserve(dt_phys, size);
+ 
+-	if (!dt_virt || !early_init_dt_scan(dt_virt)) {
++	/*
++	 * dt_virt is a fixmap address, hence __pa(dt_virt) can't be used.
++	 * Pass dt_phys directly.
++	 */
++	if (!dt_virt || !early_init_dt_scan(dt_virt, dt_phys)) {
+ 		pr_crit("\n"
+ 			"Error: invalid device tree blob at physical address %pa (virtual address 0x%px)\n"
+ 			"The dtb must be 8-byte aligned and must not exceed 2 MB in size\n"
+diff --git a/arch/csky/kernel/setup.c b/arch/csky/kernel/setup.c
+index 51012e90780d..fe715b707fd0 100644
+--- a/arch/csky/kernel/setup.c
++++ b/arch/csky/kernel/setup.c
+@@ -112,9 +112,9 @@ asmlinkage __visible void __init csky_start(unsigned int unused,
+ 	pre_trap_init();
+ 
+ 	if (dtb_start == NULL)
+-		early_init_dt_scan(__dtb_start);
++		early_init_dt_scan(__dtb_start, __pa(dtb_start));
+ 	else
+-		early_init_dt_scan(dtb_start);
++		early_init_dt_scan(dtb_start, __pa(dtb_start));
+ 
+ 	start_kernel();
+ 
+diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
+index 00e307203ddb..10d878204018 100644
+--- a/arch/loongarch/kernel/setup.c
++++ b/arch/loongarch/kernel/setup.c
+@@ -290,7 +290,7 @@ static void __init fdt_setup(void)
+ 	if (!fdt_pointer || fdt_check_header(fdt_pointer))
+ 		return;
+ 
+-	early_init_dt_scan(fdt_pointer);
++	early_init_dt_scan(fdt_pointer, __pa(fdt_pointer));
+ 	early_init_fdt_reserve_self();
+ 
+ 	max_low_pfn = PFN_PHYS(memblock_end_of_DRAM());
+diff --git a/arch/microblaze/kernel/prom.c b/arch/microblaze/kernel/prom.c
+index e424c796e297..76ac4cfdfb42 100644
+--- a/arch/microblaze/kernel/prom.c
++++ b/arch/microblaze/kernel/prom.c
+@@ -18,7 +18,7 @@ void __init early_init_devtree(void *params)
+ {
+ 	pr_debug(" -> early_init_devtree(%p)\n", params);
+ 
+-	early_init_dt_scan(params);
++	early_init_dt_scan(params, __pa(params));
+ 	if (!strlen(boot_command_line))
+ 		strscpy(boot_command_line, cmd_line, COMMAND_LINE_SIZE);
+ 
+diff --git a/arch/mips/kernel/prom.c b/arch/mips/kernel/prom.c
+index 6062e6fa589a..4fd6da0a06c3 100644
+--- a/arch/mips/kernel/prom.c
++++ b/arch/mips/kernel/prom.c
+@@ -41,7 +41,7 @@ char *mips_get_machine_name(void)
+ 
+ void __init __dt_setup_arch(void *bph)
+ {
+-	if (!early_init_dt_scan(bph))
++	if (!early_init_dt_scan(bph, __pa(bph)))
+ 		return;
+ 
+ 	mips_set_machine_name(of_flat_dt_get_machine_name());
+diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
+index 7eeeaf1ff95d..cda7983e7c18 100644
+--- a/arch/mips/kernel/relocate.c
++++ b/arch/mips/kernel/relocate.c
+@@ -337,7 +337,7 @@ void *__init relocate_kernel(void)
+ #if defined(CONFIG_USE_OF)
+ 	/* Deal with the device tree */
+ 	fdt = plat_get_fdt();
+-	early_init_dt_scan(fdt);
++	early_init_dt_scan(fdt, __pa(fdt));
+ 	if (boot_command_line[0]) {
+ 		/* Boot command line was passed in device tree */
+ 		strscpy(arcs_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+diff --git a/arch/nios2/kernel/prom.c b/arch/nios2/kernel/prom.c
+index 9a8393e6b4a8..db049249766f 100644
+--- a/arch/nios2/kernel/prom.c
++++ b/arch/nios2/kernel/prom.c
+@@ -27,7 +27,7 @@ void __init early_init_devtree(void *params)
+ 	if (be32_to_cpup((__be32 *)CONFIG_NIOS2_DTB_PHYS_ADDR) ==
+ 		 OF_DT_HEADER) {
+ 		params = (void *)CONFIG_NIOS2_DTB_PHYS_ADDR;
+-		early_init_dt_scan(params);
++		early_init_dt_scan(params, __pa(params));
+ 		return;
+ 	}
+ #endif
+@@ -37,5 +37,5 @@ void __init early_init_devtree(void *params)
+ 		params = (void *)__dtb_start;
+ #endif
+ 
+-	early_init_dt_scan(params);
++	early_init_dt_scan(params, __pa(params));
+ }
+diff --git a/arch/openrisc/kernel/prom.c b/arch/openrisc/kernel/prom.c
+index 19e6008bf114..e424e9bd12a7 100644
+--- a/arch/openrisc/kernel/prom.c
++++ b/arch/openrisc/kernel/prom.c
+@@ -22,6 +22,6 @@
+ 
+ void __init early_init_devtree(void *params)
+ {
+-	early_init_dt_scan(params);
++	early_init_dt_scan(params, __pa(params));
+ 	memblock_allow_resize();
+ }
+diff --git a/arch/powerpc/kernel/dt_cpu_ftrs.c b/arch/powerpc/kernel/dt_cpu_ftrs.c
+index af4263594eb2..1bee15c013e7 100644
+--- a/arch/powerpc/kernel/dt_cpu_ftrs.c
++++ b/arch/powerpc/kernel/dt_cpu_ftrs.c
+@@ -867,7 +867,7 @@ bool __init dt_cpu_ftrs_init(void *fdt)
+ 	using_dt_cpu_ftrs = false;
+ 
+ 	/* Setup and verify the FDT, if it fails we just bail */
+-	if (!early_init_dt_verify(fdt))
++	if (!early_init_dt_verify(fdt, __pa(fdt)))
+ 		return false;
+ 
+ 	if (!of_scan_flat_dt(fdt_find_cpu_features, NULL))
+diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
+index 0be07ed407c7..88cbe432cad5 100644
+--- a/arch/powerpc/kernel/prom.c
++++ b/arch/powerpc/kernel/prom.c
+@@ -791,7 +791,7 @@ void __init early_init_devtree(void *params)
+ 	DBG(" -> early_init_devtree(%px)\n", params);
+ 
+ 	/* Too early to BUG_ON(), do it by hand */
+-	if (!early_init_dt_verify(params))
++	if (!early_init_dt_verify(params, __pa(params)))
+ 		panic("BUG: Failed verifying flat device tree, bad version?");
+ 
+ 	of_scan_flat_dt(early_init_dt_scan_model, NULL);
+diff --git a/arch/powerpc/platforms/pseries/plpks.c b/arch/powerpc/platforms/pseries/plpks.c
+index 4a595493d28a..b1667ed05f98 100644
+--- a/arch/powerpc/platforms/pseries/plpks.c
++++ b/arch/powerpc/platforms/pseries/plpks.c
+@@ -683,7 +683,7 @@ void __init plpks_early_init_devtree(void)
+ out:
+ 	fdt_nop_property(fdt, chosen_node, "ibm,plpks-pw");
+ 	// Since we've cleared the password, we must update the FDT checksum
+-	early_init_dt_verify(fdt);
++	early_init_dt_verify(fdt, __pa(fdt));
+ }
+ 
+ static __init int pseries_plpks_init(void)
+diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+index a2cde65b69e9..26c886db4fb3 100644
+--- a/arch/riscv/kernel/setup.c
++++ b/arch/riscv/kernel/setup.c
+@@ -227,7 +227,7 @@ static void __init init_resources(void)
+ static void __init parse_dtb(void)
+ {
+ 	/* Early scan of device tree from init memory */
+-	if (early_init_dt_scan(dtb_early_va)) {
++	if (early_init_dt_scan(dtb_early_va, __pa(dtb_early_va))) {
+ 		const char *name = of_flat_dt_get_machine_name();
+ 
+ 		if (name) {
+diff --git a/arch/sh/kernel/setup.c b/arch/sh/kernel/setup.c
+index 620e5cf8ae1e..f2b6f16a46b8 100644
+--- a/arch/sh/kernel/setup.c
++++ b/arch/sh/kernel/setup.c
+@@ -255,7 +255,7 @@ void __ref sh_fdt_init(phys_addr_t dt_phys)
+ 	dt_virt = phys_to_virt(dt_phys);
+ #endif
+ 
+-	if (!dt_virt || !early_init_dt_scan(dt_virt)) {
++	if (!dt_virt || !early_init_dt_scan(dt_virt, __pa(dt_virt))) {
+ 		pr_crit("Error: invalid device tree blob"
+ 			" at physical address %p\n", (void *)dt_phys);
+ 
+diff --git a/arch/um/kernel/dtb.c b/arch/um/kernel/dtb.c
+index 4954188a6a09..8d78ced9e08f 100644
+--- a/arch/um/kernel/dtb.c
++++ b/arch/um/kernel/dtb.c
+@@ -17,7 +17,7 @@ void uml_dtb_init(void)
+ 
+ 	area = uml_load_file(dtb, &size);
+ 	if (area) {
+-		if (!early_init_dt_scan(area)) {
++		if (!early_init_dt_scan(area, __pa(area))) {
+ 			pr_err("invalid DTB %s\n", dtb);
+ 			memblock_free(area, size);
+ 			return;
+diff --git a/arch/x86/kernel/devicetree.c b/arch/x86/kernel/devicetree.c
+index 64280879c68c..59d23cdf4ed0 100644
+--- a/arch/x86/kernel/devicetree.c
++++ b/arch/x86/kernel/devicetree.c
+@@ -305,7 +305,7 @@ void __init x86_flattree_get_config(void)
+ 			map_len = size;
+ 		}
+ 
+-		early_init_dt_verify(dt);
++		early_init_dt_verify(dt, __pa(dt));
+ 	}
+ 
+ 	unflatten_and_copy_device_tree();
+diff --git a/arch/xtensa/kernel/setup.c b/arch/xtensa/kernel/setup.c
+index bdec4a773af0..e51f2060e830 100644
+--- a/arch/xtensa/kernel/setup.c
++++ b/arch/xtensa/kernel/setup.c
+@@ -216,7 +216,7 @@ static int __init xtensa_dt_io_area(unsigned long node, const char *uname,
+ 
+ void __init early_init_devtree(void *params)
+ {
+-	early_init_dt_scan(params);
++	early_init_dt_scan(params, __pa(params));
+ 	of_scan_flat_dt(xtensa_dt_io_area, NULL);
+ 
+ 	if (!command_line[0])
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index 4d528c10df3a..546e76ac407c 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -457,6 +457,7 @@ int __initdata dt_root_addr_cells;
+ int __initdata dt_root_size_cells;
+ 
+ void *initial_boot_params __ro_after_init;
++phys_addr_t initial_boot_params_pa __ro_after_init;
+ 
+ #ifdef CONFIG_OF_EARLY_FLATTREE
+ 
+@@ -1136,17 +1137,18 @@ static void * __init early_init_dt_alloc_memory_arch(u64 size, u64 align)
+ 	return ptr;
+ }
+ 
+-bool __init early_init_dt_verify(void *params)
++bool __init early_init_dt_verify(void *dt_virt, phys_addr_t dt_phys)
+ {
+-	if (!params)
++	if (!dt_virt)
+ 		return false;
+ 
+ 	/* check device tree validity */
+-	if (fdt_check_header(params))
++	if (fdt_check_header(dt_virt))
+ 		return false;
+ 
+ 	/* Setup flat device-tree pointer */
+-	initial_boot_params = params;
++	initial_boot_params = dt_virt;
++	initial_boot_params_pa = dt_phys;
+ 	of_fdt_crc32 = crc32_be(~0, initial_boot_params,
+ 				fdt_totalsize(initial_boot_params));
+ 
+@@ -1173,11 +1175,11 @@ void __init early_init_dt_scan_nodes(void)
+ 	early_init_dt_check_for_usable_mem_range();
+ }
+ 
+-bool __init early_init_dt_scan(void *params)
++bool __init early_init_dt_scan(void *dt_virt, phys_addr_t dt_phys)
+ {
+ 	bool status;
+ 
+-	status = early_init_dt_verify(params);
++	status = early_init_dt_verify(dt_virt, dt_phys);
+ 	if (!status)
+ 		return false;
+ 
+diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
+index 9ccde2fd77cb..5b924597a4de 100644
+--- a/drivers/of/kexec.c
++++ b/drivers/of/kexec.c
+@@ -301,7 +301,7 @@ void *of_kexec_alloc_and_setup_fdt(const struct kimage *image,
+ 	}
+ 
+ 	/* Remove memory reservation for the current device tree. */
+-	ret = fdt_find_and_del_mem_rsv(fdt, __pa(initial_boot_params),
++	ret = fdt_find_and_del_mem_rsv(fdt, initial_boot_params_pa,
+ 				       fdt_totalsize(initial_boot_params));
+ 	if (ret == -EINVAL) {
+ 		pr_err("Error removing memory reservation.\n");
+diff --git a/include/linux/of_fdt.h b/include/linux/of_fdt.h
+index d69ad5bb1eb1..b8d6c0c20876 100644
+--- a/include/linux/of_fdt.h
++++ b/include/linux/of_fdt.h
+@@ -31,6 +31,7 @@ extern void *of_fdt_unflatten_tree(const unsigned long *blob,
+ extern int __initdata dt_root_addr_cells;
+ extern int __initdata dt_root_size_cells;
+ extern void *initial_boot_params;
++extern phys_addr_t initial_boot_params_pa;
+ 
+ extern char __dtb_start[];
+ extern char __dtb_end[];
+@@ -70,8 +71,8 @@ extern u64 dt_mem_next_cell(int s, const __be32 **cellp);
+ /* Early flat tree scan hooks */
+ extern int early_init_dt_scan_root(void);
+ 
+-extern bool early_init_dt_scan(void *params);
+-extern bool early_init_dt_verify(void *params);
++extern bool early_init_dt_scan(void *dt_virt, phys_addr_t dt_phys);
++extern bool early_init_dt_verify(void *dt_virt, phys_addr_t dt_phys);
+ extern void early_init_dt_scan_nodes(void);
+ 
+ extern const char *of_flat_dt_get_machine_name(void);
+-- 
+2.43.5
 
-We know why this has been done, and we also know who is behind that 
-decision.
-
-(It's mentioned right above this reply.)
-
-
-I find it pretty much shameful behaviour to not communicate openly on 
-the reasons why those entries got removed (or did someone have to sign a 
-NDA?).
-
-The fact that the only information is "various compliance requirements" 
-already tells a lot about the real reasons.
-
-
-Move the Linux Foundation to another country, please.
-
-
-Signed,
-
-a Linux user.
-
-
->
-> Fixes: 6e90b675cf94 ("MAINTAINERS: Remove some entries due to various compliance requirements.")
-> Signed-off-by: Kexy Biscuit <kexybiscuit@aosc.io>
-> ---
-> Please keep all discussions on at least one of the mailing lists.
->
->   MAINTAINERS | 178 ++++++++++++++++++++++++++++++++++++++++++++++++++++
->   1 file changed, 178 insertions(+)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e9659a5a7fb3..501aa5c0887e 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -258,6 +258,12 @@ L:	linux-acenic@sunsite.dk
->   S:	Maintained
->   F:	drivers/net/ethernet/alteon/acenic*
->   
-> +ACER ASPIRE 1 EMBEDDED CONTROLLER DRIVER
-> +M:	Nikita Travkin <nikita@trvn.ru>
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/platform/acer,aspire1-ec.yaml
-> +F:	drivers/platform/arm64/acer-aspire1-ec.c
-> +
->   ACER ASPIRE ONE TEMPERATURE AND FAN DRIVER
->   M:	Peter Kaestle <peter@piie.net>
->   L:	platform-driver-x86@vger.kernel.org
-> @@ -882,6 +888,7 @@ F:	drivers/staging/media/sunxi/cedrus/
->   
->   ALPHA PORT
->   M:	Richard Henderson <richard.henderson@linaro.org>
-> +M:	Ivan Kokshaysky <ink@jurassic.park.msu.ru>
->   M:	Matt Turner <mattst88@gmail.com>
->   L:	linux-alpha@vger.kernel.org
->   S:	Odd Fixes
-> @@ -2256,6 +2263,12 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->   S:	Maintained
->   F:	arch/arm/mach-ep93xx/ts72xx.c
->   
-> +ARM/CIRRUS LOGIC CLPS711X ARM ARCHITECTURE
-> +M:	Alexander Shiyan <shc_work@mail.ru>
-> +L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-> +S:	Odd Fixes
-> +N:	clps711x
-> +
->   ARM/CIRRUS LOGIC EP93XX ARM ARCHITECTURE
->   M:	Hartley Sweeten <hsweeten@visionengravers.com>
->   M:	Alexander Sverdlin <alexander.sverdlin@gmail.com>
-> @@ -3802,6 +3815,14 @@ F:	drivers/video/backlight/
->   F:	include/linux/backlight.h
->   F:	include/linux/pwm_backlight.h
->   
-> +BAIKAL-T1 PVT HARDWARE MONITOR DRIVER
-> +M:	Serge Semin <fancer.lancer@gmail.com>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Supported
-> +F:	Documentation/devicetree/bindings/hwmon/baikal,bt1-pvt.yaml
-> +F:	Documentation/hwmon/bt1-pvt.rst
-> +F:	drivers/hwmon/bt1-pvt.[ch]
-> +
->   BARCO P50 GPIO DRIVER
->   M:	Santosh Kumar Yadav <santoshkumar.yadav@barco.com>
->   M:	Peter Korsgaard <peter.korsgaard@barco.com>
-> @@ -6455,6 +6476,7 @@ F:	drivers/mtd/nand/raw/denali*
->   
->   DESIGNWARE EDMA CORE IP DRIVER
->   M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> +R:	Serge Semin <fancer.lancer@gmail.com>
->   L:	dmaengine@vger.kernel.org
->   S:	Maintained
->   F:	drivers/dma/dw-edma/
-> @@ -9737,6 +9759,14 @@ F:	drivers/gpio/gpiolib-cdev.c
->   F:	include/uapi/linux/gpio.h
->   F:	tools/gpio/
->   
-> +GRE DEMULTIPLEXER DRIVER
-> +M:	Dmitry Kozlov <xeb@mail.ru>
-> +L:	netdev@vger.kernel.org
-> +S:	Maintained
-> +F:	include/net/gre.h
-> +F:	net/ipv4/gre_demux.c
-> +F:	net/ipv4/gre_offload.c
-> +
->   GRETH 10/100/1G Ethernet MAC device driver
->   M:	Andreas Larsson <andreas@gaisler.com>
->   L:	netdev@vger.kernel.org
-> @@ -12929,6 +12959,12 @@ S:	Maintained
->   F:	drivers/ata/pata_arasan_cf.c
->   F:	include/linux/pata_arasan_cf_data.h
->   
-> +LIBATA PATA DRIVERS
-> +R:	Sergey Shtylyov <s.shtylyov@omp.ru>
-> +L:	linux-ide@vger.kernel.org
-> +F:	drivers/ata/ata_*.c
-> +F:	drivers/ata/pata_*.c
-> +
->   LIBATA PATA FARADAY FTIDE010 AND GEMINI SATA BRIDGE DRIVERS
->   M:	Linus Walleij <linus.walleij@linaro.org>
->   L:	linux-ide@vger.kernel.org
-> @@ -12945,6 +12981,15 @@ F:	drivers/ata/ahci_platform.c
->   F:	drivers/ata/libahci_platform.c
->   F:	include/linux/ahci_platform.h
->   
-> +LIBATA SATA AHCI SYNOPSYS DWC CONTROLLER DRIVER
-> +M:	Serge Semin <fancer.lancer@gmail.com>
-> +L:	linux-ide@vger.kernel.org
-> +S:	Maintained
-> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata.git
-> +F:	Documentation/devicetree/bindings/ata/baikal,bt1-ahci.yaml
-> +F:	Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> +F:	drivers/ata/ahci_dwc.c
-> +
->   LIBATA SATA PROMISE TX2/TX4 CONTROLLER DRIVER
->   M:	Mikael Pettersson <mikpelinux@gmail.com>
->   L:	linux-ide@vger.kernel.org
-> @@ -14140,6 +14185,16 @@ S:	Maintained
->   T:	git git://linuxtv.org/media_tree.git
->   F:	drivers/media/platform/nxp/imx-pxp.[ch]
->   
-> +MEDIA DRIVERS FOR ASCOT2E
-> +M:	Sergey Kozlov <serjk@netup.ru>
-> +M:	Abylay Ospan <aospan@netup.ru>
-> +L:	linux-media@vger.kernel.org
-> +S:	Supported
-> +W:	https://linuxtv.org
-> +W:	http://netup.tv/
-> +T:	git git://linuxtv.org/media_tree.git
-> +F:	drivers/media/dvb-frontends/ascot2e*
-> +
->   MEDIA DRIVERS FOR CXD2099AR CI CONTROLLERS
->   M:	Jasmin Jessich <jasmin@anw.at>
->   L:	linux-media@vger.kernel.org
-> @@ -14148,6 +14203,16 @@ W:	https://linuxtv.org
->   T:	git git://linuxtv.org/media_tree.git
->   F:	drivers/media/dvb-frontends/cxd2099*
->   
-> +MEDIA DRIVERS FOR CXD2841ER
-> +M:	Sergey Kozlov <serjk@netup.ru>
-> +M:	Abylay Ospan <aospan@netup.ru>
-> +L:	linux-media@vger.kernel.org
-> +S:	Supported
-> +W:	https://linuxtv.org
-> +W:	http://netup.tv/
-> +T:	git git://linuxtv.org/media_tree.git
-> +F:	drivers/media/dvb-frontends/cxd2841er*
-> +
->   MEDIA DRIVERS FOR CXD2880
->   M:	Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>
->   L:	linux-media@vger.kernel.org
-> @@ -14192,6 +14257,35 @@ F:	drivers/media/platform/nxp/imx-mipi-csis.c
->   F:	drivers/media/platform/nxp/imx7-media-csi.c
->   F:	drivers/media/platform/nxp/imx8mq-mipi-csi2.c
->   
-> +MEDIA DRIVERS FOR HELENE
-> +M:	Abylay Ospan <aospan@netup.ru>
-> +L:	linux-media@vger.kernel.org
-> +S:	Supported
-> +W:	https://linuxtv.org
-> +W:	http://netup.tv/
-> +T:	git git://linuxtv.org/media_tree.git
-> +F:	drivers/media/dvb-frontends/helene*
-> +
-> +MEDIA DRIVERS FOR HORUS3A
-> +M:	Sergey Kozlov <serjk@netup.ru>
-> +M:	Abylay Ospan <aospan@netup.ru>
-> +L:	linux-media@vger.kernel.org
-> +S:	Supported
-> +W:	https://linuxtv.org
-> +W:	http://netup.tv/
-> +T:	git git://linuxtv.org/media_tree.git
-> +F:	drivers/media/dvb-frontends/horus3a*
-> +
-> +MEDIA DRIVERS FOR LNBH25
-> +M:	Sergey Kozlov <serjk@netup.ru>
-> +M:	Abylay Ospan <aospan@netup.ru>
-> +L:	linux-media@vger.kernel.org
-> +S:	Supported
-> +W:	https://linuxtv.org
-> +W:	http://netup.tv/
-> +T:	git git://linuxtv.org/media_tree.git
-> +F:	drivers/media/dvb-frontends/lnbh25*
-> +
->   MEDIA DRIVERS FOR MXL5XX TUNER DEMODULATORS
->   L:	linux-media@vger.kernel.org
->   S:	Orphan
-> @@ -14199,6 +14293,16 @@ W:	https://linuxtv.org
->   T:	git git://linuxtv.org/media_tree.git
->   F:	drivers/media/dvb-frontends/mxl5xx*
->   
-> +MEDIA DRIVERS FOR NETUP PCI UNIVERSAL DVB devices
-> +M:	Sergey Kozlov <serjk@netup.ru>
-> +M:	Abylay Ospan <aospan@netup.ru>
-> +L:	linux-media@vger.kernel.org
-> +S:	Supported
-> +W:	https://linuxtv.org
-> +W:	http://netup.tv/
-> +T:	git git://linuxtv.org/media_tree.git
-> +F:	drivers/media/pci/netup_unidvb/*
-> +
->   MEDIA DRIVERS FOR NVIDIA TEGRA - VDE
->   M:	Dmitry Osipenko <digetx@gmail.com>
->   L:	linux-media@vger.kernel.org
-> @@ -14842,6 +14946,13 @@ F:	drivers/mtd/
->   F:	include/linux/mtd/
->   F:	include/uapi/mtd/
->   
-> +MEMSENSING MICROSYSTEMS MSA311 DRIVER
-> +M:	Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> +L:	linux-iio@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml
-> +F:	drivers/iio/accel/msa311.c
-> +
->   MEN A21 WATCHDOG DRIVER
->   M:	Johannes Thumshirn <morbidrsa@gmail.com>
->   L:	linux-watchdog@vger.kernel.org
-> @@ -15175,6 +15286,7 @@ F:	drivers/tty/serial/8250/8250_pci1xxxx.c
->   
->   MICROCHIP POLARFIRE FPGA DRIVERS
->   M:	Conor Dooley <conor.dooley@microchip.com>
-> +R:	Vladimir Georgiev <v.georgiev@metrotek.ru>
->   L:	linux-fpga@vger.kernel.org
->   S:	Supported
->   F:	Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-> @@ -15429,6 +15541,17 @@ F:	arch/mips/
->   F:	drivers/platform/mips/
->   F:	include/dt-bindings/mips/
->   
-> +MIPS BAIKAL-T1 PLATFORM
-> +M:	Serge Semin <fancer.lancer@gmail.com>
-> +L:	linux-mips@vger.kernel.org
-> +S:	Supported
-> +F:	Documentation/devicetree/bindings/bus/baikal,bt1-*.yaml
-> +F:	Documentation/devicetree/bindings/clock/baikal,bt1-*.yaml
-> +F:	drivers/bus/bt1-*.c
-> +F:	drivers/clk/baikal-t1/
-> +F:	drivers/memory/bt1-l2-ctl.c
-> +F:	drivers/mtd/maps/physmap-bt1-rom.[ch]
-> +
->   MIPS BOSTON DEVELOPMENT BOARD
->   M:	Paul Burton <paulburton@kernel.org>
->   L:	linux-mips@vger.kernel.org
-> @@ -15441,6 +15564,7 @@ F:	include/dt-bindings/clock/boston-clock.h
->   
->   MIPS CORE DRIVERS
->   M:	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> +M:	Serge Semin <fancer.lancer@gmail.com>
->   L:	linux-mips@vger.kernel.org
->   S:	Supported
->   F:	drivers/bus/mips_cdmm.c
-> @@ -16408,6 +16532,12 @@ F:	include/linux/ntb.h
->   F:	include/linux/ntb_transport.h
->   F:	tools/testing/selftests/ntb/
->   
-> +NTB IDT DRIVER
-> +M:	Serge Semin <fancer.lancer@gmail.com>
-> +L:	ntb@lists.linux.dev
-> +S:	Supported
-> +F:	drivers/ntb/hw/idt/
-> +
->   NTB INTEL DRIVER
->   M:	Dave Jiang <dave.jiang@intel.com>
->   L:	ntb@lists.linux.dev
-> @@ -18428,6 +18558,13 @@ F:	drivers/pps/
->   F:	include/linux/pps*.h
->   F:	include/uapi/linux/pps.h
->   
-> +PPTP DRIVER
-> +M:	Dmitry Kozlov <xeb@mail.ru>
-> +L:	netdev@vger.kernel.org
-> +S:	Maintained
-> +W:	http://sourceforge.net/projects/accel-pptp
-> +F:	drivers/net/ppp/pptp.c
-> +
->   PRESSURE STALL INFORMATION (PSI)
->   M:	Johannes Weiner <hannes@cmpxchg.org>
->   M:	Suren Baghdasaryan <surenb@google.com>
-> @@ -19518,6 +19655,15 @@ S:	Supported
->   F:	Documentation/devicetree/bindings/i2c/renesas,iic-emev2.yaml
->   F:	drivers/i2c/busses/i2c-emev2.c
->   
-> +RENESAS ETHERNET AVB DRIVER
-> +R:	Sergey Shtylyov <s.shtylyov@omp.ru>
-> +L:	netdev@vger.kernel.org
-> +L:	linux-renesas-soc@vger.kernel.org
-> +F:	Documentation/devicetree/bindings/net/renesas,etheravb.yaml
-> +F:	drivers/net/ethernet/renesas/Kconfig
-> +F:	drivers/net/ethernet/renesas/Makefile
-> +F:	drivers/net/ethernet/renesas/ravb*
-> +
->   RENESAS ETHERNET SWITCH DRIVER
->   R:	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
->   L:	netdev@vger.kernel.org
-> @@ -19567,6 +19713,14 @@ F:	Documentation/devicetree/bindings/i2c/renesas,rmobile-iic.yaml
->   F:	drivers/i2c/busses/i2c-rcar.c
->   F:	drivers/i2c/busses/i2c-sh_mobile.c
->   
-> +RENESAS R-CAR SATA DRIVER
-> +R:	Sergey Shtylyov <s.shtylyov@omp.ru>
-> +L:	linux-ide@vger.kernel.org
-> +L:	linux-renesas-soc@vger.kernel.org
-> +S:	Supported
-> +F:	Documentation/devicetree/bindings/ata/renesas,rcar-sata.yaml
-> +F:	drivers/ata/sata_rcar.c
-> +
->   RENESAS R-CAR THERMAL DRIVERS
->   M:	Niklas Söderlund <niklas.soderlund@ragnatech.se>
->   L:	linux-renesas-soc@vger.kernel.org
-> @@ -19642,6 +19796,16 @@ S:	Supported
->   F:	Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml
->   F:	drivers/i2c/busses/i2c-rzv2m.c
->   
-> +RENESAS SUPERH ETHERNET DRIVER
-> +R:	Sergey Shtylyov <s.shtylyov@omp.ru>
-> +L:	netdev@vger.kernel.org
-> +L:	linux-renesas-soc@vger.kernel.org
-> +F:	Documentation/devicetree/bindings/net/renesas,ether.yaml
-> +F:	drivers/net/ethernet/renesas/Kconfig
-> +F:	drivers/net/ethernet/renesas/Makefile
-> +F:	drivers/net/ethernet/renesas/sh_eth*
-> +F:	include/linux/sh_eth.h
-> +
->   RENESAS USB PHY DRIVER
->   M:	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
->   L:	linux-renesas-soc@vger.kernel.org
-> @@ -22295,11 +22459,19 @@ F:	drivers/tty/serial/8250/8250_lpss.c
->   
->   SYNOPSYS DESIGNWARE APB GPIO DRIVER
->   M:	Hoan Tran <hoan@os.amperecomputing.com>
-> +M:	Serge Semin <fancer.lancer@gmail.com>
->   L:	linux-gpio@vger.kernel.org
->   S:	Maintained
->   F:	Documentation/devicetree/bindings/gpio/snps,dw-apb-gpio.yaml
->   F:	drivers/gpio/gpio-dwapb.c
->   
-> +SYNOPSYS DESIGNWARE APB SSI DRIVER
-> +M:	Serge Semin <fancer.lancer@gmail.com>
-> +L:	linux-spi@vger.kernel.org
-> +S:	Supported
-> +F:	Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> +F:	drivers/spi/spi-dw*
-> +
->   SYNOPSYS DESIGNWARE AXI DMAC DRIVER
->   M:	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
->   S:	Maintained
-> @@ -23609,6 +23781,12 @@ L:	linux-input@vger.kernel.org
->   S:	Maintained
->   F:	drivers/hid/hid-udraw-ps3.c
->   
-> +UFS FILESYSTEM
-> +M:	Evgeniy Dushistov <dushistov@mail.ru>
-> +S:	Maintained
-> +F:	Documentation/admin-guide/ufs.rst
-> +F:	fs/ufs/
-> +
->   UHID USERSPACE HID IO DRIVER
->   M:	David Rheinsberg <david@readahead.eu>
->   L:	linux-input@vger.kernel.org
 
