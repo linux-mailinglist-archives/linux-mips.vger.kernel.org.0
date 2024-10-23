@@ -1,40 +1,53 @@
-Return-Path: <linux-mips+bounces-6288-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6289-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 551149AC69A
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Oct 2024 11:31:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F3009AC6C8
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Oct 2024 11:38:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83FC11C2113F
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Oct 2024 09:31:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A843286B82
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Oct 2024 09:38:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 496D11990AA;
-	Wed, 23 Oct 2024 09:31:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C15819CC27;
+	Wed, 23 Oct 2024 09:38:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="FSnTiGvz"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E2BC150994;
-	Wed, 23 Oct 2024 09:31:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DD8C199384;
+	Wed, 23 Oct 2024 09:38:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729675880; cv=none; b=Afi5ZVfVp1E0OgPbAVgqxYhUVokB5a9hkRpnO810nh3ID2o4oJrZke38nhEK26JL2jq3pOJ3lcFtu3jCOB0jl5fM+MkXgUT3N/PlCC26X0Gex4dBC1HAcX4KJxOC9N/uwLLzqOVPSE4GXf9bZpB/eHEuWb93uoxAO6Lr3xG4rH4=
+	t=1729676322; cv=none; b=aaT+cY5RhSEjE8ndWzbnz6AOjO3F5IbDkIUcscz1z9IlM7mCK/JngVvxlS5pkHnq/76ZgxUghwJPWnGefG2sFjHSBSCQTJloMDtv4h2gGroTkS6IY+eYELaYe724sQxwlweuy96FR0IOxLmcg2IYOQCZk7vYg+2gz+AhjR/+KwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729675880; c=relaxed/simple;
-	bh=S9K6wNzJGw4A+THlYZqFDhx8sGOqGKN5/nuUKyP6Xe4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=rkyvhR8WaKNxBxt/L6rnt5hCg2zVMfCi22LdnLQ/xLqMt8/UIVRV8PbmL2iYQWcC+YJJ7BzPvzUzLVTEhsW7ve0tmwXIus4KAWCO2WXhaT1fyhXXuN62H3FGfI312hEOtxV5aE5si+iB+6p6PJ7wDHvVUVzDCp5wI8POr/0B4M0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 31EF9497;
-	Wed, 23 Oct 2024 02:31:45 -0700 (PDT)
-Received: from [10.57.23.17] (unknown [10.57.23.17])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 199163F73B;
-	Wed, 23 Oct 2024 02:31:05 -0700 (PDT)
-Message-ID: <07c5e292-5218-43ee-a167-da09d108a663@arm.com>
-Date: Wed, 23 Oct 2024 10:31:03 +0100
+	s=arc-20240116; t=1729676322; c=relaxed/simple;
+	bh=QF/jaXhx5/NNBI1uZEY/Y3g3zYWwoUvRzmIALicrljo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=c+qcXJTp+bzl5w85h2vDG2HxYdJ5mFlIWWBhLVu5UM1YrFYC0Lycke8auqQnpKYqnD+EeYrD+jdOwKQ9CAofff/wTxVkEEwcFMBznxzLj0xZQxu2eRwGKE9hkD5wbDvw2kjpXlXPotkQYaf7sTHjeOz/T2gTxBal8OBkCl8wziA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=FSnTiGvz; arc=none smtp.client-ip=54.204.34.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1729676310;
+	bh=QF/jaXhx5/NNBI1uZEY/Y3g3zYWwoUvRzmIALicrljo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=FSnTiGvz4eBkrtA2N8nYXCSta5zAPPChylUGfBPkvH37veG7fOeG2eWmuNKSVM+tq
+	 BdEMBSyCk2Dg4CaXN+ozNje8tqzNUvHInU9ePdpdKy9xIKkjiZfciEmXROJZejll7U
+	 db0UwtPuqtCG52stoTjkQ3RsfCdFOTc4vzodirYY=
+X-QQ-mid: bizesmtp77t1729676302tfw4pc5r
+X-QQ-Originating-IP: j4Uoxci2RtnVTGsTNP/gQfdQgd0owTwx3inBP/hx8jA=
+Received: from [10.20.53.22] ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Wed, 23 Oct 2024 17:38:18 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 17180917475525741311
+Message-ID: <1E6A0B26DC871B50+d97424c4-29ab-4bb2-b1df-8f04f8b865ca@uniontech.com>
+Date: Wed, 23 Oct 2024 17:38:17 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -42,221 +55,170 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v2 0/4] mm: Introduce MAP_BELOW_HINT
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- "Kirill A. Shutemov" <kirill@shutemov.name>,
- Charlie Jenkins <charlie@rivosinc.com>, Arnd Bergmann <arnd@arndb.de>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
- Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
- Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Naveen N Rao <naveen@kernel.org>, Alexander Gordeev
- <agordeev@linux.ibm.com>, Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>,
- Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- "David S. Miller" <davem@davemloft.net>,
- Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>, Vlastimil Babka <vbabka@suse.cz>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Shuah Khan <shuah@kernel.org>,
- linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-References: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
- <yu7um2tcxg2apoz372rmzpkrfgbb42ndvabvrsp4usb2e3bkrf@huaucjsp5vlj>
- <Ztnp3OAIRz/daj7s@ghost>
- <pbotlphw77fkfacldtpxfjcs2w5nhb2uvxszv5rmlrhjm42akd@4pvcqb7ojq4v>
- <b6ca55b7-4de2-4085-97bd-619f91d9fcb8@arm.com>
- <5u7xntjdye5ejjmkgpp7m3ogpzblxcztrwngulejdft63fzuwf@xcxfcbaccqtw>
-From: Steven Price <steven.price@arm.com>
-Content-Language: en-GB
-In-Reply-To: <5u7xntjdye5ejjmkgpp7m3ogpzblxcztrwngulejdft63fzuwf@xcxfcbaccqtw>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] MAINTAINERS: Remove some entries due to various
+ compliance requirements.
+To: Mingcong Bai <jeffbai@aosc.io>
+Cc: gregkh@linuxfoundation.org, patches@lists.linux.dev, nikita@trvn.ru,
+ ink@jurassic.park.msu.ru, shc_work@mail.ru, richard.henderson@linaro.org,
+ mattst88@gmail.com, linux-alpha@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, fancer.lancer@gmail.com,
+ linux-hwmon@vger.kernel.org, dmaengine@vger.kernel.org, xeb@mail.ru,
+ netdev@vger.kernel.org, s.shtylyov@omp.ru, linux-ide@vger.kernel.org,
+ serjk@netup.ru, aospan@netup.ru, linux-media@vger.kernel.org,
+ ddrokosov@sberdevices.ru, linux-iio@vger.kernel.org, v.georgiev@metrotek.ru,
+ linux-mips@vger.kernel.org, ntb@lists.linux.dev,
+ linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-spi@vger.kernel.org, dushistov@mail.ru,
+ manivannan.sadhasivam@linaro.org, conor.dooley@microchip.com,
+ linux-fpga@vger.kernel.org, tsbogend@alpha.franken.de,
+ hoan@os.amperecomputing.com, geert@linux-m68k.org,
+ wsa+renesas@sang-engineering.com, mchehab+huawei@kernel.org,
+ xiangxia.m.yue@gmail.com
+References: <2024101835-tiptop-blip-09ed@gregkh>
+ <A74519B4332040FA+20241023063058.223139-1-wangyuli@uniontech.com>
+ <a08dc31ab773604d8f206ba005dc4c7a@aosc.io>
+ <444fa53bdfdee75522a1af41655a99b0@aosc.io>
+Content-Language: en-US
+From: WangYuli <wangyuli@uniontech.com>
+Autocrypt: addr=wangyuli@uniontech.com; keydata=
+ xjMEZoEsiBYJKwYBBAHaRw8BAQdAyDPzcbPnchbIhweThfNK1tg1imM+5kgDBJSKP+nX39DN
+ IVdhbmdZdWxpIDx3YW5neXVsaUB1bmlvbnRlY2guY29tPsKJBBMWCAAxFiEEa1GMzYeuKPkg
+ qDuvxdofMEb0C+4FAmaBLIgCGwMECwkIBwUVCAkKCwUWAgMBAAAKCRDF2h8wRvQL7g0UAQCH
+ 3mrGM0HzOaARhBeA/Q3AIVfhS010a0MZmPTRGVfPbwD/SrncJwwPAL4GiLPEC4XssV6FPUAY
+ 0rA68eNNI9cJLArOOARmgSyJEgorBgEEAZdVAQUBAQdA88W4CTLDD9fKwW9PB5yurCNdWNS7
+ VTL0dvPDofBTjFYDAQgHwngEGBYIACAWIQRrUYzNh64o+SCoO6/F2h8wRvQL7gUCZoEsiQIb
+ DAAKCRDF2h8wRvQL7sKvAP4mBvm7Zn1OUjFViwkma8IGRGosXAvMUFyOHVcl1RTgFQEAuJkU
+ o9ERi7qS/hbUdUgtitI89efbY0TVetgDsyeQiwU=
+In-Reply-To: <444fa53bdfdee75522a1af41655a99b0@aosc.io>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------r97sG9xHlL94zbsyZpdQWneg"
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: N4MH3+pnf9qW8ttUnILJmkANB79c89bTQD5emSJusHp4VizUsI1dXY+t
+	Fa8mnbDq8XKaIaIADFBA3yGis39R8iN2zE9HqkYAGSmWWk6QW7HrzVAOKgqDQK9Ykqk744G
+	ZolPlE/GAc2zz8V5FMKjxreivxXlWZf2LENcwTbMcCVCccxWhcW4gZjOP7+wmzOgJefmScp
+	hIUlSXi8CnMhx4yAoP1LggETsVdm6v2ziLAYdg80RkiuOziGxZ2ZN7ATsFoLroEC1EEW9rR
+	3UVm1z+CEeYvFcpdOyJuzYUEvx9UpXvkrx3s1O3w+dASLkBdK8WN9OMMeZkBi/ZqXuHdR4C
+	/JRWFEBPS9EO5kp+k13xRtBAREWTqZOwQvsIZgKYVuKzQOCkNK4RGDh0SsUDFxKtAsdKJi+
+	abwK5mf6oUxk02K1e962QOAjDvTSRTv6xCHm3F45+U9QseGoY3wtSiqnQPcmApbxv+mNCHe
+	aG0kDU+wNp6k8MWRCFbjigO8iz2irsuprvR5r3Hq3TczWZmirIdQnXgkPRnk0xWO504il0w
+	2lghLsj/safGS5yaVY7mSaDZgxH9aYytd+NA+5Z1I37gVGnPwPWA6P8qP3Oz7xc4yRzGgHb
+	sXqHO1emPIhMPhCyxQPUBd+A8I39mfmIlbghfx7TYYf+9FdE0oVXsKLHQ6k/n95pWuLhNk2
+	vTNDZOOyaZt2HjoIjZ6OEW6G6qQ+rAR7qqmg/O6nYx84tjCzz3QQrWa9ZYwmCL/IVD7HLe7
+	GfKXx7L7vLD1Rg4jW7m3K4hiu/PoJnxGESnW7zEaf++I97MkbcQVN3ltKplXZnfiV3tBXGM
+	qYkpfv7h/hPwfw5vnfMWd+bOfdqrOwTpj8Q/ntTm5cAGMzCg2DymZrh05GEhZNjOK0GA+UK
+	gsjHJScKv/PUoAzm5DC7UNh+yMiE7ABBaNy6RlMxq91yBP9QocIFtVQsS1+efFQWt8yA0af
+	Zz2Fhwa/eI4+cTMxJ0L4YGHhojY2IwTnnaUqZJLi1yLqqLaYk+ZgyBiY1bDRVteyETz61oD
+	58g/86dQ==
+X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
+X-QQ-RECHKSPAM: 0
 
-Hi Liam,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------r97sG9xHlL94zbsyZpdQWneg
+Content-Type: multipart/mixed; boundary="------------JzXTUjOcl4RCqRode5kxglom";
+ protected-headers="v1"
+From: WangYuli <wangyuli@uniontech.com>
+To: Mingcong Bai <jeffbai@aosc.io>
+Cc: gregkh@linuxfoundation.org, patches@lists.linux.dev, nikita@trvn.ru,
+ ink@jurassic.park.msu.ru, shc_work@mail.ru, richard.henderson@linaro.org,
+ mattst88@gmail.com, linux-alpha@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, fancer.lancer@gmail.com,
+ linux-hwmon@vger.kernel.org, dmaengine@vger.kernel.org, xeb@mail.ru,
+ netdev@vger.kernel.org, s.shtylyov@omp.ru, linux-ide@vger.kernel.org,
+ serjk@netup.ru, aospan@netup.ru, linux-media@vger.kernel.org,
+ ddrokosov@sberdevices.ru, linux-iio@vger.kernel.org, v.georgiev@metrotek.ru,
+ linux-mips@vger.kernel.org, ntb@lists.linux.dev,
+ linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-spi@vger.kernel.org, dushistov@mail.ru,
+ manivannan.sadhasivam@linaro.org, conor.dooley@microchip.com,
+ linux-fpga@vger.kernel.org, tsbogend@alpha.franken.de,
+ hoan@os.amperecomputing.com, geert@linux-m68k.org,
+ wsa+renesas@sang-engineering.com, mchehab+huawei@kernel.org,
+ xiangxia.m.yue@gmail.com
+Message-ID: <d97424c4-29ab-4bb2-b1df-8f04f8b865ca@uniontech.com>
+Subject: Re: [PATCH] MAINTAINERS: Remove some entries due to various
+ compliance requirements.
+References: <2024101835-tiptop-blip-09ed@gregkh>
+ <A74519B4332040FA+20241023063058.223139-1-wangyuli@uniontech.com>
+ <a08dc31ab773604d8f206ba005dc4c7a@aosc.io>
+ <444fa53bdfdee75522a1af41655a99b0@aosc.io>
+In-Reply-To: <444fa53bdfdee75522a1af41655a99b0@aosc.io>
 
-On 21/10/2024 20:48, Liam R. Howlett wrote:
-> * Steven Price <steven.price@arm.com> [241021 09:23]:
->> On 09/09/2024 10:46, Kirill A. Shutemov wrote:
->>> On Thu, Sep 05, 2024 at 10:26:52AM -0700, Charlie Jenkins wrote:
->>>> On Thu, Sep 05, 2024 at 09:47:47AM +0300, Kirill A. Shutemov wrote:
->>>>> On Thu, Aug 29, 2024 at 12:15:57AM -0700, Charlie Jenkins wrote:
->>>>>> Some applications rely on placing data in free bits addresses allocated
->>>>>> by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
->>>>>> address returned by mmap to be less than the 48-bit address space,
->>>>>> unless the hint address uses more than 47 bits (the 48th bit is reserved
->>>>>> for the kernel address space).
->>>>>>
->>>>>> The riscv architecture needs a way to similarly restrict the virtual
->>>>>> address space. On the riscv port of OpenJDK an error is thrown if
->>>>>> attempted to run on the 57-bit address space, called sv57 [1].  golang
->>>>>> has a comment that sv57 support is not complete, but there are some
->>>>>> workarounds to get it to mostly work [2].
->>>
->>> I also saw libmozjs crashing with 57-bit address space on x86.
->>>
->>>>>> These applications work on x86 because x86 does an implicit 47-bit
->>>>>> restriction of mmap() address that contain a hint address that is less
->>>>>> than 48 bits.
->>>>>>
->>>>>> Instead of implicitly restricting the address space on riscv (or any
->>>>>> current/future architecture), a flag would allow users to opt-in to this
->>>>>> behavior rather than opt-out as is done on other architectures. This is
->>>>>> desirable because it is a small class of applications that do pointer
->>>>>> masking.
->>>
->>> You reiterate the argument about "small class of applications". But it
->>> makes no sense to me.
->>
->> Sorry to chime in late on this - I had been considering implementing
->> something like MAP_BELOW_HINT and found this thread.
->>
->> While the examples of applications that want to use high VA bits and get
->> bitten by future upgrades is not very persuasive. It's worth pointing
->> out that there are a variety of somewhat horrid hacks out there to work
->> around this feature not existing.
->>
->> E.g. from my brief research into other code:
->>
->>   * Box64 seems to have a custom allocator based on reading 
->>     /proc/self/maps to allocate a block of VA space with a low enough 
->>     address [1]
->>
->>   * PHP has code reading /proc/self/maps - I think this is to find a 
->>     segment which is close enough to the text segment [2]
->>
->>   * FEX-Emu mmap()s the upper 128TB of VA on Arm to avoid full 48 bit
->>     addresses [3][4]
-> 
-> Can't the limited number of applications that need to restrict the upper
-> bound use an LD_PRELOAD compatible library to do this?
+--------------JzXTUjOcl4RCqRode5kxglom
+Content-Type: multipart/mixed; boundary="------------scTKQpIAgv93yoqxUNnHojEI"
 
-I'm not entirely sure what point you are making here. Yes an LD_PRELOAD
-approach could be used instead of a personality type as a 'hack' to
-preallocate the upper address space. The obvious disadvantage is that
-you can't (easily) layer LD_PRELOAD so it won't work in the general case.
+--------------scTKQpIAgv93yoqxUNnHojEI
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
->>
->>   * pmdk has some funky code to find the lowest address that meets 
->>     certain requirements - this does look like an ALSR alternative and 
->>     probably couldn't directly use MAP_BELOW_HINT, although maybe this 
->>     suggests we need a mechanism to map without a VA-range? [5]
->>
->>   * MIT-Scheme parses /proc/self/maps to find the lowest mapping within 
->>     a range [6]
->>
->>   * LuaJIT uses an approach to 'probe' to find a suitable low address 
->>     for allocation [7]
->>
-> 
-> Although I did not take a deep dive into each example above, there are
-> some very odd things being done, we will never cover all the use cases
-> with an exact API match.  What we have today can be made to work for
-> these users as they have figured ways to do it.
-> 
-> Are they pretty? no.  Are they common? no.  I'm not sure it's worth
-> plumbing in new MM code in for these users.
+SGFoYSwgSSByZWNlaXZlZCBhIHNpbWlsYXIgb2ZmLWxpc3QgcmVwbHkuDQoNCkkgZGVlcGx5
+IHN5bXBhdGhpemUgd2l0aCBHcmVnLWtoJ3Mgc2l0dWF0aW9uIGFuZCBoaXMgdW5zcG9rZW4g
+DQpkaWZmaWN1bHRpZXMsIGFsdGhvdWdoIEkgZG9uJ3QgdW5kZXJzdGFuZCB3aHkgdGhlIE1B
+SU5UQUlORVJTIGZpbGUsIGFzIA0KcGFydCBvZiB0aGUga2VybmVsIGNvZGUsIHNob3VsZCBi
+ZSBvZmYtbGltaXRzIHRvIG5vbi1tYWludGFpbmVyIA0KZGV2ZWxvcGVycywgZXNwZWNpYWxs
+eSB3aGVuIHRoaXMgY2xlYXJseSBpc24ndCBqdXN0IGFib3V0ICdtb2RpZnlpbmcgdGhlIA0K
+TUFJTlRBSU5FUlMgZmlsZS4nDQoNCklmIGFueSBMaW51eCBkZXZlbG9wZXIgdGFjaXRseSBh
+cHByb3ZlcyBvZiB0aGlzLCB0aGV5J3JlIGVzc2VudGlhbGx5IA0KZ2l2aW5nIGEgZ3JlZW4g
+bGlnaHQgdG8gc29tZSBzaGFkeSBwb2xpdGljYWwgYWN0b3JzIGZyb20gYSBjZXJ0YWluIA0K
+Y291bnRyeSB0byBjb2VyY2UgcGVvcGxlIGludG8gYmV0cmF5aW5nIGl0J3MgY29uc3RpdHV0
+aW9uLg0KDQpUaGF0J3MgYWJzdXJkLiBBZ2FpbiwgbXkgaGVhcnQgZ29lcyBvdXQgdG8gYWxs
+IChpbmNsdWRpbmcgR3JlZy1raCkgdGhhdCANCmFmZmVjdGVkIGJ5IHRoaXMuDQoNCkkgbWVh
+biBubyBvZmZlbnNlIHRvIGFueW9uZSwgYnV0IHRoaXMgYWN0aW9uIHdpbGwgY29tcGxldGVs
+eSBkZXN0cm95IHRoZSANCnRydXN0IHRoYXQgZGV2ZWxvcGVycyB3b3JsZHdpZGUgaGF2ZSBp
+biB0aGUgTGludXgga2VybmVsIHByb2plY3QgYW5kIHRoZSANCmVudGlyZSBMaW51eCBGb3Vu
+ZGF0aW9uLCBhbmQgdGhlIHBvbGl0aWNpYW5zIGZvcmNpbmcgeW91IHRvIGRvIHRoaXMgDQpj
+bGVhcmx5IGRvbid0IGNhcmUgYWJvdXQgdGhhdC4NCg0KVG8gYXZvaWQgYmVjb21pbmcgcGF3
+bnMgaW4gYSBwb2xpdGljYWwgZ2FtZSBhbmQgdG8gcHJldmVudCBhbGllbmF0aW5nIA0KYWxs
+IHRoZSBkZXZlbG9wZXJzIHdobyBoYXZlIGNvbnRyaWJ1dGVkIHRvIHRoZSBMaW51eCBrZXJu
+ZWwsIEkgc2luY2VyZWx5IA0Kc3VnZ2VzdCB0aGF0IHlvdSBtYWludGFpbmVycyByZXZlcnQg
+dGhpcyBjb21taXQgYW5kIHByb21pc2Ugbm90IHRvIGRvIA0Kc29tZXRoaW5nIGxpa2UgdGhp
+cyBhZ2Fpbi4NCg0KQW5kIEkgdXJnZSBldmVyeW9uZSB3aG8gYWdyZWVzIHRoYXQgdGhpcyBp
+cyB1bnJlYXNvbmFibGUgdG8gcmVwbHkgdG8gDQoiW1BBVENIXSBSZXZlcnQgIk1BSU5UQUlO
+RVJTOiBSZW1vdmUgc29tZSBlbnRyaWVzIGR1ZSB0byB2YXJpb3VzIA0KY29tcGxpYW5jZSBy
+ZXF1aXJlbWVudHMuIiB3aXRoIHRoZWlyIG93biAiUmV2aWV3ZWQtYnkiLg0KDQpSZW1lbWJl
+cjogV2hhdCBzZXRzIGh1bWFucyBhcGFydCBmcm9tIGFuaW1hbHMgaXMgb3VyIHVuZHlpbmcg
+c3Bpcml0IG9mIA0KcmVzaXN0YW5jZS4gV2UgY2Fubm90IGJlIGRvbWVzdGljYXRlZCBvciB0
+YW1lZCBieSBvdGhlcnMuDQoNCkZpbmFsbHksIEknZCBsaWtlIHRvIHNoYXJlIGEgcXVvdGUg
+ZnJvbSBOb3JzZSBteXRob2xvZ3k6IE9ubHkgd2FycmlvcnMgDQp3aG8gZGllIGluIGJhdHRs
+ZSBhcmUgd29ydGh5IG9mIGVudGVyaW5nIFZhbGhhbGxhLg0KDQotLSANCldhbmdZdWxpDQo=
 
-My issue with the existing 'solutions' is that they all seem to be fragile:
+--------------scTKQpIAgv93yoqxUNnHojEI
+Content-Type: application/pgp-keys; name="OpenPGP_0xC5DA1F3046F40BEE.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xC5DA1F3046F40BEE.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
- * Using /proc/self/maps is inherently racy if there could be any other
-code running in the process at the same time.
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
- * Attempting to map the upper part of the address space only works if
-done early enough - once an allocation arrives there, there's very
-little you can robustly do (because the stray allocation might be freed).
+xjMEZoEsiBYJKwYBBAHaRw8BAQdAyDPzcbPnchbIhweThfNK1tg1imM+5kgDBJSK
+P+nX39DNIVdhbmdZdWxpIDx3YW5neXVsaUB1bmlvbnRlY2guY29tPsKJBBMWCAAx
+FiEEa1GMzYeuKPkgqDuvxdofMEb0C+4FAmaBLIgCGwMECwkIBwUVCAkKCwUWAgMB
+AAAKCRDF2h8wRvQL7g0UAQCH3mrGM0HzOaARhBeA/Q3AIVfhS010a0MZmPTRGVfP
+bwD/SrncJwwPAL4GiLPEC4XssV6FPUAY0rA68eNNI9cJLArOOARmgSyJEgorBgEE
+AZdVAQUBAQdA88W4CTLDD9fKwW9PB5yurCNdWNS7VTL0dvPDofBTjFYDAQgHwngE
+GBYIACAWIQRrUYzNh64o+SCoO6/F2h8wRvQL7gUCZoEsiQIbDAAKCRDF2h8wRvQL
+7sKvAP4mBvm7Zn1OUjFViwkma8IGRGosXAvMUFyOHVcl1RTgFQEAuJkUo9ERi7qS
+/hbUdUgtitI89efbY0TVetgDsyeQiwU=3D
+=3DBlkq
+-----END PGP PUBLIC KEY BLOCK-----
 
- * LuaJIT's probing mechanism is probably robust, but it's inefficient -
-LuaJIT has a fallback of linear probing, following by no hint (ASLR),
-followed by pseudo-random probing. I don't know the history of the code
-but it looks like it's probably been tweaked to try to avoid performance
-issues.
+--------------scTKQpIAgv93yoqxUNnHojEI--
 
->> The biggest benefit I see of MAP_BELOW_HINT is that it would allow a
->> library to get low addresses without causing any problems for the rest
->> of the application. The use case I'm looking at is in a library and 
->> therefore a personality mode wouldn't be appropriate (because I don't 
->> want to affect the rest of the application). Reading /proc/self/maps
->> is also problematic because other threads could be allocating/freeing
->> at the same time.
-> 
-> As long as you don't exhaust the lower limit you are trying to allocate
-> within - which is exactly the issue riscv is hitting.
+--------------JzXTUjOcl4RCqRode5kxglom--
 
-Obviously if you actually exhaust the lower limit then any
-MAP_BELOW_HINT API would also fail - there's really not much that can be
-done in that case.
+--------------r97sG9xHlL94zbsyZpdQWneg
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
-> I understand that you are providing examples to prove that this is
-> needed, but I feel like you are better demonstrating the flexibility
-> exists to implement solutions in different ways using todays API.
+-----BEGIN PGP SIGNATURE-----
 
-My intention is to show that today's API doesn't provide a robust way of
-doing this. Although I'm quite happy if you can point me at a robust way
-with the current API. As I mentioned my goal is to be able to map memory
-in a (multithreaded) library with a (ideally configurable) number of VA
-bits. I don't particularly want to restrict the whole process, just
-specific allocations.
+wnsEABYIACMWIQRrUYzNh64o+SCoO6/F2h8wRvQL7gUCZxjECQUDAAAAAAAKCRDF2h8wRvQL7kjt
+APwI7fd1226UgOd7cRVAf8ZOTwbN8jQ1fJQ8MgqEad3U9wD9EIMXUDfMpotDS9T8MXgx3FH68pyV
+elWfHTzpUpxMGw4=
+=Mkes
+-----END PGP SIGNATURE-----
 
-I had typed up a series similar to this one as a MAP_BELOW flag would
-fit my use-case well.
-
-> I think it would be best to use the existing methods and work around the
-> issue that was created in riscv while future changes could mirror amd64
-> and arm64.
-
-The riscv issue is a different issue to the one I'm trying to solve. I
-agree MAP_BELOW_HINT isn't a great fix for that because we already have
-differences between amd64 and arm64 and obviously no software currently
-out there uses this new flag.
-
-However, if we had introduced this flag in the past (e.g. if MAP_32BIT
-had been implemented more generically, across architectures and with a
-hint value, like this new flag) then we probably wouldn't be in this
-situation. Applications that want to restrict the VA space would be able
-to opt-in and be portable across architectures.
-
-Another potential option is a mmap3() which actually allows the caller
-to place constraints on the VA space (e.g. minimum, maximum and
-alignment). There's plenty of code out there that has to over-allocate
-and munmap() the unneeded part for alignment reasons. But I don't have a
-specific need for that, and I'm guessing you wouldn't be in favour.
-
-Thanks,
-Steve
-
-> ...
->>
->>
->> [1] https://sources.debian.org/src/box64/0.3.0+dfsg-1/src/custommem.c/
->> [2] https://sources.debian.org/src/php8.2/8.2.24-1/ext/opcache/shared_alloc_mmap.c/#L62
->> [3] https://github.com/FEX-Emu/FEX/blob/main/FEXCore/Source/Utils/Allocator.cpp
->> [4] https://github.com/FEX-Emu/FEX/commit/df2f1ad074e5cdfb19a0bd4639b7604f777fb05c
->> [5] https://sources.debian.org/src/pmdk/1.13.1-1.1/src/common/mmap_posix.c/?hl=29#L29
->> [6] https://sources.debian.org/src/mit-scheme/12.1-3/src/microcode/ux.c/#L826
->> [7] https://sources.debian.org/src/luajit/2.1.0+openresty20240815-1/src/lj_alloc.c/
->>
-> ...
-> 
-> Thanks,
-> Liam
-
+--------------r97sG9xHlL94zbsyZpdQWneg--
 
