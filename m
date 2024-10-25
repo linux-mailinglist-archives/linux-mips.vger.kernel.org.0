@@ -1,73 +1,150 @@
-Return-Path: <linux-mips+bounces-6427-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6428-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B367C9AF5D3
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 01:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AE7149AF7D0
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 05:01:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7723B28335B
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Oct 2024 23:31:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B3B62831BD
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 03:01:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA8B21B2199;
-	Thu, 24 Oct 2024 23:31:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 775B018BB90;
+	Fri, 25 Oct 2024 03:01:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FLqQCNOz"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E850167D80;
-	Thu, 24 Oct 2024 23:31:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F15175D56;
+	Fri, 25 Oct 2024 03:01:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729812705; cv=none; b=dwiL1pJmWGQ2X8j0bHVsStRYOlZhz6F4s3GBzGW2JqAjNmkRq3ASYVW0VWfm8fq03XAQrWGFKKyVziSjBOLkKBRzWVGUbBmilA1zI188L4/v4uRNfhxQZqnz187X7ye5wtAz3kTz27PXtYvZxiLiWCVaT2pCsh9qoLOG/xUSJ6M=
+	t=1729825272; cv=none; b=ct32Bu03ozxO2Odx+8e5XUGTCl3raBuj/eCanWS/2joIMYITIMu9LJ/9mP/oKKwkvLKIpu5NWI0SJ3gQ4ggWuM+teKU4il01xVLF5gLjZFnkFu7iVPchz1IMERD1ERGgCMSfFM9qPoyGc2Vu+DAEkxc4iFBg0e4zwTvZ6J0nNCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729812705; c=relaxed/simple;
-	bh=kQ3TS37HNvtEvnoAtceyGXajlwnRdZkTgCWGGvRL1Kc=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=A+XTyXgvavQo0tSeE4/5irEehRldhusYS/A+fCEuikDVezFYgdM8vFIpsxyOXXH8ytSVzipd4VZW1hM1Hq1cYYZIk0LYrPesGPvEH/0NDmI3N0IODoHC/2UGwU2Q7LGBb/uPtAkfS6zfYuDwBT//wKuLaGL9zPktzrNv2oO8k+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 1E23292009C; Fri, 25 Oct 2024 01:22:02 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 1C0ED92009B;
-	Fri, 25 Oct 2024 00:22:02 +0100 (BST)
-Date: Fri, 25 Oct 2024 00:22:02 +0100 (BST)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, bvanassche@acm.org, 
-    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, ricardo@marliere.net, 
-    zhanggenjian@kylinos.cn, linux-mips@vger.kernel.org, 
-    linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2][next] mips: sgi-ip22: Replace "s[n]?printf" with
- sysfs_emit in sysfs callbacks
-In-Reply-To: <ZxDVRru_o_5nqGl5@mail.google.com>
-Message-ID: <alpine.DEB.2.21.2410250019430.40463@angie.orcam.me.uk>
-References: <ZxDVRru_o_5nqGl5@mail.google.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1729825272; c=relaxed/simple;
+	bh=6MTJVFMqnnCJNbM2dONSU/ki5kij5KTFX4y1XsBSR7o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=EEXtMH/7LHLY/4ml85GKi6EQY1OjLTXnSebhoo1LVBYT9vEGsxEbmpuF7hxtZKx7IiR/cCGOVQTLakazUIt3bTBSJk7RTuW4juNQtcsFH2AMVoGPmGkGswBauXR8Pqu3KpOJUoneW2eGla4bl9qH4O6oceCL5WmJqI7aah/YLos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FLqQCNOz; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5c9c28c1e63so1841873a12.0;
+        Thu, 24 Oct 2024 20:01:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729825269; x=1730430069; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6MTJVFMqnnCJNbM2dONSU/ki5kij5KTFX4y1XsBSR7o=;
+        b=FLqQCNOz+aLWAmnlIrQLVA5+tnfEUR8GbNAKiDnhdf6xqLZdvJnkQBxPUyt6WShLCr
+         36AWJQlZz00vcnEyhruScAQfWZAJt7S57R7go5IgsOmcxFY1Xc0j6/1w9YKeDrBqgx7d
+         dxTXzA+skRlOac6CZbc1JtO0bqtGmhhSrruUrb9VehPbx8BYSgnHWUQ1/jVsEAzaQMzq
+         4GEaIy/mEQK9VP8HNjaZTTqViibCcRZOMn2LaskNcVRBdU1u+zfpuuEJx7+gs5EqJgVO
+         hGrKIv522g/dicK18lph39oIgGsSk//D4+yQSv41PWO4/ofieiXQwN6UT1eujmmWH6ut
+         oJvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729825269; x=1730430069;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6MTJVFMqnnCJNbM2dONSU/ki5kij5KTFX4y1XsBSR7o=;
+        b=f0GkccfI2Aw0zN/bufZ8NhsS/ppUh6T8p7MoNXjlftVS3GAHIYe4Fz6oXYAIkL2i/H
+         LaQ68AcJKsshWVTlla+KAAfg0mP8dhOnFwzAHfDcPTNOVVvfQ6GPCSj4wYCBkIJaG+Xi
+         FWpyMiC02d8lTL0DVzYqjV/AEQ/jKPhJRI34YZman5cyS9GyY80264B2QUPlkp6I/lxY
+         CjAxIB4sgOJLLrZKhkuaVTC8UljwFVYeMf1vUiLQwfe5XvsjDht0r4mSuYVmETDqLwRf
+         22zwU68HH4hgJmpm6ZepdPFS4coJEaStIaqceA5EZyvuXSPIizKks+MIp8MdHQzp5KHj
+         SvDA==
+X-Forwarded-Encrypted: i=1; AJvYcCU0jOCH3SlLcPZAjRQZt+TCOS/8hR3+RKSoA/cQLhEX58zMDHPDoL5FVfwOuUkAE7TVJEA70ZsFq945WIxA@vger.kernel.org, AJvYcCUAKSwyScRmcn9xhiPolxb+y3uSHKIa8cptD+eH3ydLZh0jmBKjx+jBlf/2whYfNQQ23Lp8ZqvHuIQE@vger.kernel.org, AJvYcCUJTXrjxqf1bb89eyVvM5fu67mwI3EYCF10fMkJYFJFi0bkVRCfibemlrAsEeAh6h2rihOhQk0RKt0=@vger.kernel.org, AJvYcCVSp7o67nV4UOdrAcWv5v3DOoX3e4vKfPwjqQT8qvn8Yr8uvgVdSqbhDIqFHlFTLorNV+26bvVDkfRsDmOl@vger.kernel.org, AJvYcCVYtuwumXyfAPBHzVFolQk/n1G8QyKzJCB3sy0Zt2KBVkFKI2HO4O98gOTYj2RucGVp8dAYXK00Baehc0M=@vger.kernel.org, AJvYcCWD0LeA1cNQt1b5F+EOiJbULTRIl3N/D+EzZJxrVAIi6XZk6mfYWwEKCvpxjCJRUbAZ76YG2zPDQ2Dv7A==@vger.kernel.org, AJvYcCWfijIDJjwXNa/2Dd2dekN5PVUz18TgF5o/xlG2CZUF6rtvHprkXEax0yP8ON/iYNpHxqFYtAEY@vger.kernel.org, AJvYcCWtBZcxkbMg8TfMEpFhEug7Vx0G5esnQgDHFcXf82z0NypItNF2oF4m5xJtBh7jMyKP7H95gZVI+yp99g==@vger.kernel.org, AJvYcCX33YEBa7R2BMs7QaocMaG67r8/assMY3M8lNa4gS/MoSYPMSj4j5AJPYWmQadrSobKurLPbo8iDZdf@vger.kernel.org, AJvYcCX656ZNZpEgwuyr8CJDuPwxP8SYyXM2
+ i2J/mePhG+i6x24tOaWlCnW5U8+k3gi3Ovy52RGhYjDmQD+BSHZ1rFCXvI8=@vger.kernel.org, AJvYcCXFbxyndUwDrPTQk9svhLUFolnPnl1TOmjSUPnjFdA/rXQe6Q/UZbOd+VRU34TxplZvt5jk5VHttIJa@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXfZqHDaF0hwMs2T93sqG3XIzhK4XqiGix+h9WyV4G2YWmDDKV
+	mFoJrzTJmy7QspGgD/6pjasQVo+qSRaD0fRTYnaQ3cn1O4W4VPvJ
+X-Google-Smtp-Source: AGHT+IG9lTruoJuiWvD3/I0nGa0uNZQNR6Vtf4xab40cqpRDyyMRJml+6D/43J5oPu7AIVVa2dAxUA==
+X-Received: by 2002:a05:6402:84a:b0:5cb:674f:b0a2 with SMTP id 4fb4d7f45d1cf-5cb8b1b1f0amr5688194a12.36.1729825268315;
+        Thu, 24 Oct 2024 20:01:08 -0700 (PDT)
+Received: from localhost.localdomain ([92.60.187.5])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cbb631b0bcsm121582a12.60.2024.10.24.20.01.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2024 20:01:06 -0700 (PDT)
+From: Oleksiy Protas <elfy.ua@gmail.com>
+To: d.milivojevic@gmail.com
+Cc: ajhalaney@gmail.com,
+	allenbh@gmail.com,
+	andrew@lunn.ch,
+	andriy.shevchenko@linux.intel.com,
+	andy@kernel.org,
+	arnd@arndb.de,
+	bhelgaas@google.com,
+	bp@alien8.de,
+	broonie@kernel.org,
+	cai.huoqing@linux.dev,
+	dave.jiang@intel.com,
+	davem@davemloft.net,
+	dlemoal@kernel.org,
+	dmaengine@vger.kernel.org,
+	dushistov@mail.ru,
+	elfy.ua@gmail.com,
+	fancer.lancer@gmail.com,
+	geert@linux-m68k.org,
+	gregkh@linuxfoundation.org,
+	ink@jurassic.park.msu.ru,
+	jdmason@kudzu.us,
+	jiaxun.yang@flygoat.com,
+	keguang.zhang@gmail.com,
+	kory.maincent@bootlin.com,
+	krzk@kernel.org,
+	kuba@kernel.org,
+	linux-edac@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-ide@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux@armlinux.org.uk,
+	linux@roeck-us.net,
+	manivannan.sadhasivam@linaro.org,
+	netdev@vger.kernel.org,
+	nikita.shubin@maquefel.me,
+	nikita@trvn.ru,
+	ntb@lists.linux.dev,
+	olteanv@gmail.com,
+	pabeni@redhat.com,
+	paulburton@kernel.org,
+	robh@kernel.org,
+	s.shtylyov@omp.ru,
+	sergio.paracuellos@gmail.com,
+	shc_work@mail.ru,
+	siyanteng@loongson.cn,
+	tsbogend@alpha.franken.de,
+	xeb@mail.ru,
+	yoshihiro.shimoda.uh@renesas.com
+Subject: Re: linux: Goodbye from a Linux community volunteer
+Date: Fri, 25 Oct 2024 06:01:02 +0300
+Message-ID: <20241025030102.319485-1-elfy.ua@gmail.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <CALtW_ahkg9W0wm09cxkJxiSQCH=42smeK=fqh5cQ9sRSNsjeXA@mail.gmail.com>
+References: <CALtW_ahkg9W0wm09cxkJxiSQCH=42smeK=fqh5cQ9sRSNsjeXA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 
-On Thu, 17 Oct 2024, Paulo Miguel Almeida wrote:
+Brate Dragane,
 
-> Replace open-coded pieces with sysfs_emit() helper in sysfs .show()
-> callbacks.
-> 
-> Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-> ---
-> Changelog:
-> - v2: amend commit message (Req: Maciej W. Rozycki)
-> - v1: https://lore.kernel.org/lkml/Zw2GRQkbx8Z8DlcS@mail.google.com/
-> ---
+I was not aware of the fact that either Raytheon or Boeing are directly supplying the Russian invasion. That would be a concerning development indeed.
 
-Reviewed-by: Maciej W. Rozycki <macro@orcam.me.uk>
+If you possess any information of that being the case, I urge you to contact GUR anonymously at their official whistleblowing email: gur_official@proton.me
 
- Thank you for this update.
+Thank you for your diligence, only together we can stop the war.
 
-  Maciej
+Kind regards,
+Olekiy
 
