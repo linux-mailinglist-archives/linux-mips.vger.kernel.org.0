@@ -1,100 +1,108 @@
-Return-Path: <linux-mips+bounces-6479-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6480-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D61B89B1274
-	for <lists+linux-mips@lfdr.de>; Sat, 26 Oct 2024 00:16:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B79D9B127A
+	for <lists+linux-mips@lfdr.de>; Sat, 26 Oct 2024 00:17:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71A8FB221D6
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 22:16:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4162C1F22AE5
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 22:17:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AEBB1D1E79;
-	Fri, 25 Oct 2024 22:16:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F9A321312F;
+	Fri, 25 Oct 2024 22:17:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nnsUCoKs"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SHrIlhLb";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="F6IU0q1o"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D639217F40;
-	Fri, 25 Oct 2024 22:16:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4DED217F55;
+	Fri, 25 Oct 2024 22:17:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729894577; cv=none; b=tolFa/TlmvrERuqrHuzvte7Tjr4ql0VDhT0poCiwWAsGKMaDIBbdFK+5lqRnQ9LncJra/DT5O4dorrER4b7M5pqJc09atXd42zUrr/Oa9xx6mwEpqW0TQ1ib0tRUKM1+ZyryJkiWCgnGocviNJ2bWtd71A1o74bCngL1xWOaxvY=
+	t=1729894642; cv=none; b=Dpf3NzgFKO0j/DI0UoU1qGlnzLgTNJqgMcbLVd/hkNfKvbSzWQGqMuVLNAouLr/pke0AOmbm93+5nkG9Aa6dwHGj6gMBYTiLWOXhzhn7GAbQ48QyaTwDHiE+L0uPr35AwNyv4zF3As+xEXRITFLF1uUgymGPgVLiwYE9uPVAXTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729894577; c=relaxed/simple;
-	bh=uJTuxxbpUOhYgzs5WgqjZ9oJKXZ+IXXPP0S1EvdK364=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EBSGcxSHScBEBRpfzv0vqrC5YkOllkG27SEYG5XKHteGqUorPkVVbNDxahLmzmVJ0l7q7MHPyUUAilQwET13kvL5g7NvHJTZmO/skZ/KSy5hC7y1Z6rQcNCbJCWVBreMBRTJB/N8jYaevVGY6eIc0M5SQHz+2ybjOKh1CjVAqwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nnsUCoKs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD093C4AF09;
-	Fri, 25 Oct 2024 22:16:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729894576;
-	bh=uJTuxxbpUOhYgzs5WgqjZ9oJKXZ+IXXPP0S1EvdK364=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nnsUCoKsPy331Chn2UUcsngk6k5T9x6sJ5x/vQCqmf50lgps9XEwpgmo4ieWnMh2v
-	 hKKhwmyShVPTqg/aa8W1r73marKoLDlVeVlofleUY/xPKgT1+9Mj3gW7tRebb1/J0Z
-	 0Nb8Myml3Mh8xhW6GxZCRVqJQI9a0IlZxwhIb/FFLjWW7zb3vS5IAOKR5P46cuH1bX
-	 6HIe2Fv9Hy8qoXg6BWAQLe1RwZxXCtspPILf7Beo+xbCY0Zov9G0Zr+tfys0Y9cjmm
-	 B8TBd0ZUpDH1lyus/5Zn/fUtOn0w957/BJ7tJ0vN45wzDau2TLxE75xt0/m5uLMVPd
-	 35fr3Z21N4TFw==
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-539e690479cso2617526e87.3;
-        Fri, 25 Oct 2024 15:16:16 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVKprcsRllH7BJ41sXSlqyiCtIEsZ5vnmYR+0LZuY6d1/SABCV4Eki8T+FS+cDAf7Ae0Xa34HX/3o8=@vger.kernel.org, AJvYcCVbtVU1h19fnBYgkPHPIuPVmzehwOx3o1Nvl9HFsoZ+WZREgRcolAuNCgtPmCv2x6sARdrCSHszGMAmeoSQ4aY=@vger.kernel.org, AJvYcCVmrLmjITh4Vz5rfc6pQkgS+TdDkeDTDhhapBIizEAHZfjr4BA0PTnjQeKc1l9o+wlTujqosk/Juj1U@vger.kernel.org, AJvYcCWgNNJWtqw0SNqrO5synDUeNVMHVpTMwpQBgYGWbp8LGyIgJNCM2JbITEaHeYr6I+bBiTFfuuly3GltLA==@vger.kernel.org, AJvYcCX66Kl9k9Pj5j2YoaCxI3IBhJtrzoV6SAjWvwXY25tTg7yPZ6MRFuhaELIC3AtFuyorkyRPEaRdSk6NgEVN@vger.kernel.org, AJvYcCXk7+aoCbzPQb0qZOhdFPB5agJ6xjWL3i430K4kk4cakm6LEqnQ173u/Got0SfcCVvsVbVr/5nCFE8zgQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy02GYSOV3/Ce2xQEewmVNy4zY5tTDypkvTAnF6N02Ff7wzHJj5
-	KDwmA0xSn+Rjjywy2e+QIjAZSd/boiumJLJr4HKMxjlvTge52sEq8d7BGZO/+uwOIDMcQ0ol4Jn
-	HdrViav/x34Dn0aLHRmgwrk/WbA==
-X-Google-Smtp-Source: AGHT+IFDzz30e4eepxmp8y9NIgcU0ohK45V4obAXv/vuq7kDznzhS/1RZo0KUZFB2KLhRb/lyUfqMvvtY4COXI6AOVA=
-X-Received: by 2002:a05:6512:3d8b:b0:539:d0ef:b3f9 with SMTP id
- 2adb3069b0e04-53b3491dfc0mr415910e87.40.1729894575274; Fri, 25 Oct 2024
- 15:16:15 -0700 (PDT)
+	s=arc-20240116; t=1729894642; c=relaxed/simple;
+	bh=mtbGZpjil+28fARpzuopd5Fvy/s6VHgX8aNdBaj1pik=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=C9LBf2ps/cuxA4hi3+im1TpgL4w5qpwvINx5t7tVC9oJeiIlWzqMPqhGWz10eXtwNIQETjmv3xz6+cMEXyx21XJkV7LKR98y10uYc4TVkbBpKMExgjJtcpOoAbpREaoZxWW6GTtriAtyXdrHvdv2xcyW1IBhbtJtSO2lUjKPUvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=SHrIlhLb; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=F6IU0q1o; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1729894637;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aLOPz7LOjz5vyFmLQ0H3XN8GyXO5sZRsk6Wxh2jy4+w=;
+	b=SHrIlhLbctf5vz3EFPKzMr5WmohIUTMXszgNAUqtnbQUCJiHHMCBARxIkIiYU4lchJ0rIM
+	f8Vt7bZlp5xZEHsd+pLP4K8jCI33FNZLjYIPwfqir/XJJXmaMqw3XHsD/Z08pUgB+BaPRh
+	bXi+S3wOOPUTjPOwA3nrfX90CZpHRJGRCfOG0zr4Sv8pSI5+FV46F6hg5/aMYhLuIRImhF
+	HpakU3iOXvuO3v+9n30b8UWL9lR697K9OnC2XgWM+QD3vJe814CJPDHDFWqweR1zqV0PnE
+	aIZjs/wJR4rIWuZVEq/ILCUU7Im4yaJATinAK/bfUhwy3pB+HkS3f3S0JH2mrw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1729894637;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aLOPz7LOjz5vyFmLQ0H3XN8GyXO5sZRsk6Wxh2jy4+w=;
+	b=F6IU0q1oEXgwhfYqlwB/avDYk8IOK1BssWYvxADj1jTbhUVr5muLN5c2i9iQwZI0XQyPEg
+	iLFNAwBkpFhuU4Dw==
+To: Aleksandar Rikalo <arikalo@gmail.com>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>
+Cc: Aleksandar Rikalo <arikalo@gmail.com>, Chao-ying Fu <cfu@wavecomp.com>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Geert Uytterhoeven
+ <geert@linux-m68k.org>, Greg Ungerer <gerg@kernel.org>, Hauke Mehrtens
+ <hauke@hauke-m.de>, Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>, Jiaxun
+ Yang <jiaxun.yang@flygoat.com>, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, Marc Zyngier <maz@kernel.org>, Paul Burton
+ <paulburton@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Serge
+ Semin <fancer.lancer@gmail.com>, Tiezhu Yang <yangtiezhu@loongson.cn>,
+ Gregory CLEMENT <gregory.clement@bootlin.com>
+Subject: Re: [PATCH v7 02/12] irqchip/mips-gic: Support multi-cluster in
+ for_each_online_cpu_gic()
+In-Reply-To: <20241019071037.145314-3-arikalo@gmail.com>
+References: <20241019071037.145314-1-arikalo@gmail.com>
+ <20241019071037.145314-3-arikalo@gmail.com>
+Date: Sat, 26 Oct 2024 00:17:17 +0200
+Message-ID: <87plnn4yky.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241023171426.452688-1-usamaarif642@gmail.com>
-In-Reply-To: <20241023171426.452688-1-usamaarif642@gmail.com>
-From: Rob Herring <robh@kernel.org>
-Date: Fri, 25 Oct 2024 17:15:53 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLBuzRYgnYHCdbdO4wneFNPe5_iEfbehvKK5M7bBuiyfA@mail.gmail.com>
-Message-ID: <CAL_JsqLBuzRYgnYHCdbdO4wneFNPe5_iEfbehvKK5M7bBuiyfA@mail.gmail.com>
-Subject: Re: [PATCH v2] of/fdt: add dt_phys arg to early_init_dt_scan and early_init_dt_verify
-To: Usama Arif <usamaarif642@gmail.com>
-Cc: mark.rutland@arm.com, will@kernel.org, leitao@debian.org, 
-	catalin.marinas@arm.com, tglx@linutronix.de, chris@zankel.net, 
-	saravanak@google.com, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	kexec@lists.infradead.org, loongarch@lists.linux.dev, 
-	linux-sh@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-openrisc@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Wed, Oct 23, 2024 at 12:14=E2=80=AFPM Usama Arif <usamaarif642@gmail.com=
-> wrote:
+On Sat, Oct 19 2024 at 09:10, Aleksandar Rikalo wrote:
+
+> From: Paul Burton <paulburton@kernel.org>
 >
->  __pa() is only intended to be used for linear map addresses and using
-> it for initial_boot_params which is in fixmap for arm64 will give an
-> incorrect value. Hence save the physical address when it is known at
-> boot time when calling early_init_dt_scan for arm64 and use it at kexec
-> time instead of converting the virtual address using __pa().
+> Use CM's GCR_CL_REDIRECT register to access registers in remote clusters,
+> so users of gic_with_each_online_cpu() gain support for multi-cluster with
+> no further changes.
 >
-> Reported-by: Breno Leitao <leitao@debian.org>
-> Suggested-by: Mark Rutland <mark.rutland@arm.com>
-> Signed-off-by: Usama Arif <usamaarif642@gmail.com>
-> Fixes: ac10be5cdbfa ("arm64: Use common of_kexec_alloc_and_setup_fdt()")
+> Signed-off-by: Paul Burton <paulburton@kernel.org>
+> Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
+> Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
+> Signed-off-by: Aleksandar Rikalo <arikalo@gmail.com>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-This looks fine, but what is the symptom without this compared to
-before the above change? The original code in the referenced commit
-above didn't remove the reservation at all. Unless the current code
-does something worse, this is new functionality more than a fix (for
-stable).
+I told you before that you cannot put my Signed-off-by on this. See
 
-Rob
+  https://lore.kernel.org/all/8734oguovn.ffs@tglx
+
+#1 Please consult your lawyer if you can't figure out what to do here after
+   reading through Documentation/process/*
+
+#2 Just for the record, I seriously doubt that the Signed-off-by chain
+   above the bogus entry you added for me is valid at all. See #1
+
+Thanks,
+
+        tglx
 
