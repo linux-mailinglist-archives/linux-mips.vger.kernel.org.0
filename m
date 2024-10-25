@@ -1,176 +1,241 @@
-Return-Path: <linux-mips+bounces-6431-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6432-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA0029AFB48
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 09:40:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F1099AFBBD
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 10:00:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0054CB22DEF
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 07:40:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3251284558
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 08:00:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CED831B85CD;
-	Fri, 25 Oct 2024 07:40:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B8171C7612;
+	Fri, 25 Oct 2024 08:00:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bns4FpYE"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Q3bpuJkx";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="iSm5PcWT";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Q3bpuJkx";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="iSm5PcWT"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92DDC1B6D00;
-	Fri, 25 Oct 2024 07:40:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D153170A1C;
+	Fri, 25 Oct 2024 08:00:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729842028; cv=none; b=qLf9bmpvuzV8fzTR/ceCcJoUpy26QN9f2q8JZDpFXlmJjaaRGiO5xiaRm8+DCbEx4+1hFN3WyijFCdkBk/BtI1WlavGBAChvTm0ZNfpkeygv6jZfNCo2logiB93hOTr5m+468vgfHPV0qL3AbUzS8BG+1Xwc97Hub/ydNtUbzEA=
+	t=1729843206; cv=none; b=Z0/HCLoboPmDTFXc4UYOP9EtiJl+NxxJNwJpFcJjQFjDxsq5ozrZElkXqj0QlLzinMo8TAYKos5LwoSotfvqls1TQAxViqXOU+LpFVBC8EZFmNDPmTHLkhh52qZK3zgiYyLC0CVm5ZVGP0JPjsTsOxf+oRAWYVJBbiFaJ2bQyms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729842028; c=relaxed/simple;
-	bh=MU0jg6+43zlNLQVd5aws5IUywfNhZ0pf6SBTcrSFP0A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=msrv8eVTgXLRaDR0K4ZaIOcLUg40meGpI4+l/Z97oBrW6wRqjcYy0ZZ7gb+lR1aeC2K71cdAjcK1Q8EnN6O/U3r8MKKAM1MyJsYo7dTxLwlWhNrxG8Z1D3GiVcQr8Ec6x3AxiLeJuYzHyvcUkXznDqHtxDVCD/H36EvvQPnXfpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bns4FpYE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34AD1C4CEC3;
-	Fri, 25 Oct 2024 07:40:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729842028;
-	bh=MU0jg6+43zlNLQVd5aws5IUywfNhZ0pf6SBTcrSFP0A=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Bns4FpYEweNUDYPWIatTemxTcPXBriNtb6rjMCIGvpZQbQ7/qRGjK2NUk57EKd8ri
-	 Mk7HPhv+F7E7+ne72q/Ef8D3KErbLL714tyOI87uCXXzpqZPjXEj/i4/+9MWReDl8T
-	 31XCgHFlQsFjl2p95RIKGtfYYk1e4JVgIerVkCXXYdafVkZcg3QKpbq5FXjAqZ38fM
-	 DtIUhA6qC/BFjMOrnIVEq9dcd5psyxRFBFdvdxlZAU53TWdpVzWckgliF8es3kpb65
-	 T8IX9T0uVRiGneDDJjNiP5c9pbh4ac6m1We4OCbuxBE3WORWLtjtdEfr9QTbaV9H3L
-	 0RlKKzK9CtgkA==
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-539e59dadebso2249464e87.0;
-        Fri, 25 Oct 2024 00:40:28 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUAdcneLh/Jws74xknc45IZeTEe2oK6Y69+tVBiYoEj/qt+RcbmIb24PrS0Yk1dBAvk29QFalANx4ixXw==@vger.kernel.org, AJvYcCW80iP/cw78mwBoxiazcIaMp46Ss9ASatJB3w/3sU7Y98UMR3/4tQTIlcVmtbO/FNdxjEhxRc2zDbkITA==@vger.kernel.org, AJvYcCWPQSZCyhlvaeHuT9D6M1WAaY09cKDfSHPANOapyuIpYAEiD+i3pv2J3M0TMYewN6bJ5kQ4xm6RaFEKB3sW@vger.kernel.org, AJvYcCWUGbfqEO2I8386+2LsYl82NCyqnvpOA+iWbT1jCasE83dc1CGSKbsjGyWJYilhSp8Y00dNfDzQE1B8rA==@vger.kernel.org, AJvYcCWc1CJSV4iR81S8Ez/FWPtUfoS3wmWvrU3KC4Oy6D5DWeumUddqhIjoLtYwQbILekhJgwtEWPQ/8fx3@vger.kernel.org, AJvYcCWwnkYupm8hkTFzLR6MEIKC1LqDq5vgKx+LOXyDhZwKgYIUC71sM0qupPCZHqFx2etFbOY7ue93eLBJOA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvxTD7Kmf8juWMyZ6YXDkR1k1FEJXcMc/72l+/3L15+sUXv57y
-	ScS/gjRt+63bb2+8EfcwtL2dsPQlkrX4SSgZ7ivXf9xLUGTOiLnXXe+Uz6kZo5ghdFVyJJwP2pU
-	Z1zzFD5dUVjukdsPbavc02vgWask=
-X-Google-Smtp-Source: AGHT+IEDAFlBfPHEymedMPiV9v2ocdpZeEcg/F0dpwJWqR1hIRTo+DXjnmCVJHCSWsx5j4Mh2CDnA31kbRPsOrauBps=
-X-Received: by 2002:a05:6512:3c8c:b0:539:8f3c:457c with SMTP id
- 2adb3069b0e04-53b23e9d130mr2447127e87.53.1729842026517; Fri, 25 Oct 2024
- 00:40:26 -0700 (PDT)
+	s=arc-20240116; t=1729843206; c=relaxed/simple;
+	bh=pDKoYNWc5esSfmM2VKEvc47EU0gOkj8FOL8qQDFJZYk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M3yUSWnigy60bFbw7c6IRgfHlXshTyd+aONOTTjV3D1AbMfwNKn0aQb2NHlMtGeQctlI7kpE9ubJuzrLZF7HqKOHOhkHuLUw03rkIrlWFsAIiBC0c5ZS+2bng8wJeEfmMvrE9x1td4JrOkqiFV6t8pqJWbe/GUXp8AG3qhP0VLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Q3bpuJkx; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=iSm5PcWT; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Q3bpuJkx; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=iSm5PcWT; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 6FE8821E1F;
+	Fri, 25 Oct 2024 08:00:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1729843202; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Gt4eKGHTaDKGDIpEe7BbcCU3OPOhB5+NbtQhvob/2u0=;
+	b=Q3bpuJkxSkOVve5uvDfli9jz2KlAsWAiPZucR6NpoGrjTSqrlZ9/qm3XU/eT9vQVnbET3I
+	TTAAXXZP+7z0PHH0dA3MZuiTGQ2TFSNvfRJuCAYA+pc5kGIbuwT5wE/GSeonj4dnHxaqqc
+	Fg6YV45j4Ieg70gSybwep693JDKmHFw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1729843202;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Gt4eKGHTaDKGDIpEe7BbcCU3OPOhB5+NbtQhvob/2u0=;
+	b=iSm5PcWTohwwYs+NwSceqzvMUzvEepB2n1+Qq0val4EWG9nqyrd/iHlwKVqznKHhda8xxm
+	Jc1ZYwjEHHsRlQDQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1729843202; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Gt4eKGHTaDKGDIpEe7BbcCU3OPOhB5+NbtQhvob/2u0=;
+	b=Q3bpuJkxSkOVve5uvDfli9jz2KlAsWAiPZucR6NpoGrjTSqrlZ9/qm3XU/eT9vQVnbET3I
+	TTAAXXZP+7z0PHH0dA3MZuiTGQ2TFSNvfRJuCAYA+pc5kGIbuwT5wE/GSeonj4dnHxaqqc
+	Fg6YV45j4Ieg70gSybwep693JDKmHFw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1729843202;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Gt4eKGHTaDKGDIpEe7BbcCU3OPOhB5+NbtQhvob/2u0=;
+	b=iSm5PcWTohwwYs+NwSceqzvMUzvEepB2n1+Qq0val4EWG9nqyrd/iHlwKVqznKHhda8xxm
+	Jc1ZYwjEHHsRlQDQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C94FB132D3;
+	Fri, 25 Oct 2024 07:59:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 1OmFJ/9PG2coWQAAD6G6ig
+	(envelope-from <aherrmann@suse.de>); Fri, 25 Oct 2024 07:59:59 +0000
+Date: Fri, 25 Oct 2024 09:59:53 +0200
+From: Andreas Herrmann <aherrmann@suse.de>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Serge Semin <fancer.lancer@gmail.com>, Jon Mason <jdmason@kudzu.us>,
+	Dave Jiang <dave.jiang@intel.com>, Allen Hubbe <allenbh@gmail.com>,
+	ntb@lists.linux.dev, Andy Shevchenko <andy@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	Cai Huoqing <cai.huoqing@linux.dev>, dmaengine@vger.kernel.org,
+	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+	Damien Le Moal <dlemoal@kernel.org>, linux-ide@vger.kernel.org,
+	"paulburton@kernel.org" <paulburton@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Arnd Bergmann <arnd@arndb.de>,
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	linux-pci <linux-pci@vger.kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	Kelvin Cheung <keguang.zhang@gmail.com>,
+	Yanteng Si <siyanteng@loongson.cn>, netdev@vger.kernel.org,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+	Borislav Petkov <bp@alien8.de>, linux-edac@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-serial@vger.kernel.org, Andrew Halaney <ajhalaney@gmail.com>,
+	Nikita Travkin <nikita@trvn.ru>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Alexander Shiyan <shc_work@mail.ru>, Dmitry Kozlov <xeb@mail.ru>,
+	Sergey Shtylyov <s.shtylyov@omp.ru>,
+	Evgeniy Dushistov <dushistov@mail.ru>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+	Nikita Shubin <nikita.shubin@maquefel.me>,
+	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: linux: Goodbye from a Linux community volunteer
+Message-ID: <20241025075953.GA3559@alberich>
+References: <2m53bmuzemamzc4jzk2bj7tli22ruaaqqe34a2shtdtqrd52hp@alifh66en3rj>
+ <e7d548a7fc835f9f3c9cb2e5ed97dfdfa164813f.camel@HansenPartnership.com>
+ <753d203a-a008-4cd3-b053-38b5ce31281b@app.fastmail.com>
+ <f90bba20e86dac698472d686be7ec565736adca0.camel@HansenPartnership.com>
+ <2f203b14-be13-4eef-bcb1-743dd9e9e9bd@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241021002935.325878-1-ebiggers@kernel.org>
-In-Reply-To: <20241021002935.325878-1-ebiggers@kernel.org>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Fri, 25 Oct 2024 09:40:15 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHDo8dijRbSVuHzTddMhp4A+nc1t8AgvoENmS=DZ-kAOQ@mail.gmail.com>
-Message-ID: <CAMj1kXHDo8dijRbSVuHzTddMhp4A+nc1t8AgvoENmS=DZ-kAOQ@mail.gmail.com>
-Subject: Re: [PATCH 00/15] Wire up CRC32 library functions to arch-optimized code
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org, 
-	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
-	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2f203b14-be13-4eef-bcb1-743dd9e9e9bd@app.fastmail.com>
+X-Spam-Score: -2.30
+X-Spamd-Result: default: False [-2.30 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com,mail.ru];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[hansenpartnership.com,gmail.com,kudzu.us,intel.com,lists.linux.dev,kernel.org,linux.intel.com,bootlin.com,linux.dev,vger.kernel.org,alpha.franken.de,arndb.de,google.com,linaro.org,renesas.com,davemloft.net,redhat.com,lunn.ch,armlinux.org.uk,loongson.cn,roeck-us.net,alien8.de,linuxfoundation.org,trvn.ru,jurassic.park.msu.ru,mail.ru,omp.ru,linux-m68k.org,maquefel.me];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[53];
+	R_RATELIMIT(0.00)[to_ip_from(RL9za9u4kxnfaar3549n6tyhyx)]
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-On Mon, 21 Oct 2024 at 02:29, Eric Biggers <ebiggers@kernel.org> wrote:
->
-> This patchset is also available in git via:
->
->     git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git crc32-lib-v1
->
-> CRC32 is a family of common non-cryptographic integrity check algorithms
-> that are fairly fast with a portable C implementation and become far
-> faster still with the CRC32 or carryless multiplication instructions
-> that most CPUs have.  9 architectures already have optimized code for at
-> least some CRC32 variants; however, except for arm64 this optimized code
-> was only accessible through the crypto API, not the library functions.
->
-> This patchset fixes that so that the CRC32 library functions use the
-> optimized code.  This allows users to just use the library instead of
-> the crypto API.  This is much simpler and also improves performance due
-> to eliminating the crypto API overhead including an indirect call.  Some
-> examples of updating users are included at the end of the patchset.
->
-> Note: crc32c() was a weird case.  It was a library function layered on
-> top of the crypto API, which in turn is layered on top of the real
-> library functions.  So while it was easy to use, it was still subject to
-> the crypto API overhead.  This patchset provides CRC32C acceleration in
-> the real library functions directly.
->
-> The updated CRC32 library design is:
->
-> - Each arch's CRC32 code (all variants) is in arch/$ARCH/lib/crc32*.
->   This adopts what arm64 and riscv already did.  Note, the crypto
->   directory is not used because CRC32 is not a cryptographic algorithm.
->
-> - Weak symbols are no longer used.  Instead there are crc32*_base() and
->   crc32*_arch(), and the appropriate ones are called based on the
->   kconfig.  This is similar to how the ChaCha20 library code works.
->
-> - Each arch's CRC32 code is enabled by default when CRC32 is enabled,
->   but it can now be disabled, controlled by the choice that previously
->   controlled the base implementation only.  It can also now be built as
->   a module if CRC32 is a module too.
->
-> - Instead of lots of pointless glue code that wires up each CRC32
->   variant to the crypto API for each architecture, we now just rely on
->   the existing shash algorithms that use the library functions.
->
-> - As before, the library functions don't provide access to off-CPU
->   crypto accelerators.  But these appear to have very little, if any,
->   real-world relevance for CRC32 which is very fast on CPUs.
->
-> Future work should apply a similar cleanup to crct10dif which is a
-> variant of CRC16.
->
-> I tested all arches in QEMU using CONFIG_CRC32_SELFTEST and the crypto
-> self-tests, except for mips which I couldn't figure out how to do.
->
-> This patchset has the following dependencies on recent patches:
->
-> - "crypto - move crypto_simd_disabled_for_test to lib"
->   (https://lore.kernel.org/linux-crypto/20241018235343.425758-1-ebiggers@kernel.org/)
-> - "crypto: x86/crc32c - jump table elimination and other cleanups"
->   (https://lore.kernel.org/linux-crypto/20241014042447.50197-1-ebiggers@kernel.org/)
-> - "arm64: Speed up CRC-32 using PMULL instructions"
->   (https://lore.kernel.org/linux-crypto/20241018075347.2821102-5-ardb+git@google.com/)
-> - "crypto: Enable fuzz testing for arch code"
->   (https://lore.kernel.org/linux-crypto/20241016185722.400643-4-ardb+git@google.com/)
-> - "crypto: mips/crc32 - fix the CRC32C implementation"
->   (https://lore.kernel.org/linux-crypto/20241020180258.8060-1-ebiggers@kernel.org/)
->
-> Everything can be retrieved from git using the command given earlier.
->
-> Since this patchset touches many areas, getting it merged may be
-> difficult.  One option is a pull request with the whole patchset
-> directly to Linus.  Another is to have at least patches 1-2 and the
-> above dependencies taken through the crypto tree in v6.13; then the arch
-> patches can land separately afterwards, followed by the rest.
->
-> Eric Biggers (15):
->   lib/crc32: drop leading underscores from __crc32c_le_base
->   lib/crc32: improve support for arch-specific overrides
->   arm/crc32: expose CRC32 functions through lib
->   loongarch/crc32: expose CRC32 functions through lib
->   mips/crc32: expose CRC32 functions through lib
->   powerpc/crc32: expose CRC32 functions through lib
->   s390/crc32: expose CRC32 functions through lib
->   sparc/crc32: expose CRC32 functions through lib
->   x86/crc32: update prototype for crc_pcl()
->   x86/crc32: update prototype for crc32_pclmul_le_16()
->   x86/crc32: expose CRC32 functions through lib
->   lib/crc32: make crc32c() go directly to lib
->   ext4: switch to using the crc32c library
->   jbd2: switch to using the crc32c library
->   f2fs: switch to using the crc32 library
->
-...
->  89 files changed, 1002 insertions(+), 2455 deletions(-)
+On Thu, Oct 24, 2024 at 05:58:45PM +0100, Jiaxun Yang wrote:
+> 
+> 
+> 在2024年10月24日十月 下午5:27，James Bottomley写道：
+> > On Thu, 2024-10-24 at 16:59 +0100, Jiaxun Yang wrote:
+> [...]
+> 
+> Hi James,
+> 
+> >
+> > It's Linux, so no official capacity at all.  However, I am expressing
+> > the views of a number of people I talked to but it's not fair of me to
+> > name them.
+> 
+> Fair enough, I was hoping that it's from Linux Foundation but it's still
+> good news to me that it do represent some respectful individuals.
+> 
+> >
+> [...]
+> >> How should we handle it?
+> >
+> > A big chunk of the reason it's taken so long just to get the above is
+> > that the Lawyers (of which I'm not one) are still discussing the
+> > specifics and will produce a much longer policy document later, so they
+> > don't want to be drawn into questions like this.  However, my non-
+> > legal-advice rule of thumb that I'm applying until I hear otherwise is
+> > not on the SDN list, not a problem.
+> 
+> Thank you for sharing your insights. I'm looking forward to the document.
 
-Very nice cleanup!
++1
 
-For the series:
+> While I remain quite upset about how things were handled, your message has
+> helped restore some of my confidence in the community.
 
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
++1
+
+> I agree with Peter Cai's earlier comment that steps should be taken to address
+> the harm caused by the initial reckless actions, particularly to those who were
+> humiliated.
+
++1
+
+> It is also important to put measures in place to prevent such drama from recurring.
+> A formal procedure for handling urgent compliance requests may be a sensible step
+> forward.
+
++1
+
+> I hold our community in high regard and would be heartbreaking to see the reputation
+> of the Linux Kernel undermined in such an unfortunate manner. I would appreciate it
+> if you could convey those thoughts to the relevant individuals.
+
++1
+
+-- 
+Regards,
+Andreas
+
+PS: What people also tend to forget. No matter how worse it gets in
+world affairs there always will come a time after a conflict. And
+people with brains should look forward to such times and how they can
+continue to work together then.
 
