@@ -1,216 +1,214 @@
-Return-Path: <linux-mips+bounces-6446-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6447-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 936EB9B0DAC
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 20:46:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBE449B0DFC
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 21:09:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F024EB24EDA
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 18:45:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFFB21C20DD8
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 19:09:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AA5820BB49;
-	Fri, 25 Oct 2024 18:45:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29EC520EA3A;
+	Fri, 25 Oct 2024 19:08:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="gdBTGg9q"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MN8T4iDD"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A656107A0;
-	Fri, 25 Oct 2024 18:45:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188AB212193
+	for <linux-mips@vger.kernel.org>; Fri, 25 Oct 2024 19:08:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729881950; cv=none; b=qt7qI9WWxkJ7pkgFioFWaH/9wVwv2LDyG0NyFwQvGYaK4vnEup4xiHgmISkGGqXwbNfh1mOGmsToc6kgrCkRoqiEdP1W9B/85qNbvCouB0/uyPdNGPHPB3Jff8u6PFDYyLyNn+J/Votl6GIAICgHnuBYqPX9+DOKJ+H65hPYlP0=
+	t=1729883317; cv=none; b=Vqj+/TsP309msScIBxBep3HablgM0GAWEkYDJblfqFYgRx6Fd0B9ybKhdCdj/7S4RnBDVMv+k31EEdIXJB/jEQglm1+gJ/4mw5LvnUGBErdP9EMxpXZArcXnfoTwuQqkFwB23YkUiXLM2e2GTms1thoxCjh72Y5pdwP3FnfCOSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729881950; c=relaxed/simple;
-	bh=eoe/fP8YHFbJUGJWPDVWR2pm8bdAzVvuYmLMkOvFUCc=;
+	s=arc-20240116; t=1729883317; c=relaxed/simple;
+	bh=Atqhu9Vvs2j4kgk125WY6kREgeM34LSEqvCjPbaLUVk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s5Ld4AF2zg5xfBatop7nXqenoaZYeXvlebP509Wab0KC1SkTmqDR7J3bmPgMQm0WoYQlN+eSbt33GZ/YckryYrmL5I29wYpm8jeOaq4NHc4txpvZHwmxxT00yAm2FMVNwsgkIeIhuVHIcOsYXGJXtjQydZqOb1ZY6K24mPhlxUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=gdBTGg9q; arc=none smtp.client-ip=80.241.56.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4XZs5L3sP6z9snx;
-	Fri, 25 Oct 2024 20:39:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1729881574;
+	 In-Reply-To:Content-Type; b=nP3uyIotJbBhDEWljomvBKeUsFiy7CVKUuho1DVVPi3sYlS5puixsVxlD1yQxAsEg9QgV1EpLsgMdH67jpHCKC5rhxELCkkvDKywBAXXZqEzqqhTy3NsWMJqtpfijMGuFSnzAPc8mFqY2Wti0kFpFOsONbJ9nTVpNavWJOpwx+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MN8T4iDD; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1729883313;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lSojNFdw8ftg3T7NakOd4AZhT9UMaiDwBHmwcORfhmk=;
-	b=gdBTGg9qaBnIiiH6XUTjeUDIpm/w19h2mJ2NxyWek4JBdbfHEfy1l85WLscQ4teM7X3Y8E
-	SzmAWuY6Tiv8TrbprFm973WyyZ+4RlCRZSgfEyQVNqd0vqp4fkqFnrWEBZthKLrpibPdn8
-	zOUeUEpcyhLgwtmKEbx1GfoJj+wV9qWVvuN6kVStn1ig/Bghe328CY4APIAqqMM1/M6DTp
-	Oi88jdSqZLP4fc+Ctf69KIG1PcmVc9Uqx7eoBdxCRl/yvszGacX3FksxcbsLOSr1RTVZ7U
-	RwAHePsvYqanhR6nADNx5z06lDr7cIO+uU+cHTctUfx45NWDJnFzydXg0RISPg==
-Message-ID: <872c8823-f62b-42f8-8bf3-86342374aa84@mailbox.org>
-Date: Fri, 25 Oct 2024 20:39:19 +0200
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=MVSXZyg6q4vB/F/dlOCG25S11OL3q8xNphEevi1OUr8=;
+	b=MN8T4iDDmPw+XqdUU08L4vXuvsHcMQwrblpMXIbkM9pTK8EKaBcpw8XImLUcmX5zw97Aoh
+	ccXgkjE4TUG0DrU9rJwBGtBL3BxvbG1gJ+kty81dQzOGPkWlop8b1v3soG0+MxiF4tHLDw
+	9WZycaRW3i36u5UKuBHJxqYcGyOoZ5s=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-1-2TcLu4QOP9SlHWJT0oUsmg-1; Fri, 25 Oct 2024 15:08:30 -0400
+X-MC-Unique: 2TcLu4QOP9SlHWJT0oUsmg-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4315d98a75fso17715045e9.2
+        for <linux-mips@vger.kernel.org>; Fri, 25 Oct 2024 12:08:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729883308; x=1730488108;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=MVSXZyg6q4vB/F/dlOCG25S11OL3q8xNphEevi1OUr8=;
+        b=RykRo0BHdWrfVU5rhjNfafIwKsJ4JNzxVIJw2DcLm821MPKEuyauuyHT1pvY8+nMXw
+         7LQZwuoFpGwxvm80bemIng+2m6WFbhAPa6vIhx26OUJeOiDHVEPyUGxfcMwdnVI/xmOn
+         EVQIj8/iR9E8tI4BwgSJc05KtCEXE1EfdHCju/Ua5VliiuGyaS4/7hTf6AloTHWOcflj
+         QiSMcBKMMWSRQa/kdbR6rLF1L/8+UxewY0iAMl4uKqHZqyun7Tjh+0KwDAOFBWwbJIzV
+         VvQwbs7Gv62F4Dpq8cCnTXGqN2Sy18RtmTyTHY/GgQfl4JO0yegOq/TDzEyux/1k0Sfc
+         Rbag==
+X-Forwarded-Encrypted: i=1; AJvYcCXxbAiUo7WRGlL14zKoZxml9G3Lh6II2JRKc4we9PinwlbMCaGD/qhgJ0qrUSiffuL0ydCq7MwvzKls@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJpIgQV9yG90ZHQmV3fa9eYq/dyNhtlBgajOHxpg6MQc9T2LUV
+	mj4nm5pZ94JwOpTrqA4rFLs8Jbbv1+GOUQxZ+xRdfER1s02fpUpt9yTnV24sE/CHDncfEsPEcKh
+	MGxlxeqtl94U8dB4Lf1QniMVrWKDQEYqpLsIZRnhSy/Owdu0uWwU24UMsuj8=
+X-Received: by 2002:a05:600c:4e8e:b0:42c:b45d:4a7b with SMTP id 5b1f17b1804b1-4319ad146ebmr1855385e9.25.1729883308637;
+        Fri, 25 Oct 2024 12:08:28 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF4/uB4vkEM8EwI0WND/9FVu+Ru6uZegvdPG4ihlFPwI38k6kKKl957e+0DOV/SgltwNfr85Q==
+X-Received: by 2002:a05:600c:4e8e:b0:42c:b45d:4a7b with SMTP id 5b1f17b1804b1-4319ad146ebmr1855235e9.25.1729883308239;
+        Fri, 25 Oct 2024 12:08:28 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70d:d800:499c:485a:c734:f290? (p200300cbc70dd800499c485ac734f290.dip0.t-ipconnect.de. [2003:cb:c70d:d800:499c:485a:c734:f290])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4318b5430absm56204345e9.6.2024.10.25.12.08.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Oct 2024 12:08:27 -0700 (PDT)
+Message-ID: <c072049b-d6ef-47ce-b281-006ae0f721b3@redhat.com>
+Date: Fri, 25 Oct 2024 21:08:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] Revert "MAINTAINERS: Remove some entries due to various
- compliance requirements."
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/5] mm: pagewalk: add the ability to install PTEs
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Suren Baghdasaryan <surenb@google.com>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Matthew Wilcox <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>,
+ "Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ Muchun Song <muchun.song@linux.dev>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Matt Turner <mattst88@gmail.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+ Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@kernel.org>,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
+ Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+ linux-kselftest@vger.kernel.org, Sidhartha Kumar
+ <sidhartha.kumar@oracle.com>, Jeff Xu <jeffxu@chromium.org>,
+ Christoph Hellwig <hch@infradead.org>, linux-api@vger.kernel.org,
+ John Hubbard <jhubbard@nvidia.com>
+References: <cover.1729699916.git.lorenzo.stoakes@oracle.com>
+ <9be732fd0e897453116b433fe2f468ef7795602e.1729699916.git.lorenzo.stoakes@oracle.com>
+ <20241023160405.33995c68f20c141325a8fadb@linux-foundation.org>
+ <635de052-35a6-40e0-82ea-4349f3aecc06@lucifer.local>
+ <a089ff3b-119e-44a0-a780-3abca01886f7@redhat.com>
+ <e62ef664-1c71-48e0-a695-6a53b6d46922@lucifer.local>
+From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Kexy Biscuit <kexybiscuit@aosc.io>, jeffbai@aosc.io,
- gregkh@linuxfoundation.org, wangyuli@uniontech.com, aospan@netup.ru,
- conor.dooley@microchip.com, ddrokosov@sberdevices.ru,
- dmaengine@vger.kernel.org, dushistov@mail.ru, fancer.lancer@gmail.com,
- geert@linux-m68k.org, hoan@os.amperecomputing.com, ink@jurassic.park.msu.ru,
- linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-ide@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- linux-spi@vger.kernel.org, manivannan.sadhasivam@linaro.org,
- mattst88@gmail.com, netdev@vger.kernel.org, nikita@trvn.ru,
- ntb@lists.linux.dev, patches@lists.linux.dev, richard.henderson@linaro.org,
- s.shtylyov@omp.ru, serjk@netup.ru, shc_work@mail.ru,
- tsbogend@alpha.franken.de, v.georgiev@metrotek.ru,
- wsa+renesas@sang-engineering.com, xeb@mail.ru
-References: <a08dc31ab773604d8f206ba005dc4c7a@aosc.io>
- <20241023080935.2945-2-kexybiscuit@aosc.io>
- <124c1b03-24c9-4f19-99a9-6eb2241406c2@mailbox.org>
- <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
-From: Tor Vic <torvic9@mailbox.org>
-In-Reply-To: <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <e62ef664-1c71-48e0-a695-6a53b6d46922@lucifer.local>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MBO-RS-META: fcapfso3xo4bfkqbzachb4s163eexrjr
-X-MBO-RS-ID: 80e4fa8c609ea0e1360
 
-
-
-On 10/23/24 19:45, Linus Torvalds wrote:
-> Ok, lots of Russian trolls out and about.
-
-I was a little bit sick when I wrote my previous comment, but I wanted 
-to elaborate, so here we go:
+>>
+>> We already discussed in the past that we need a better and more efficient
+>> way to walk page tables. I have part of that on my TODO list, but I'm
+>> getting distracted.
 > 
-> It's entirely clear why the change was done, it's not getting
-> reverted, and using multiple random anonymous accounts to try to
-> "grass root" it by Russian troll factories isn't going to change
-> anything.
+> Yes I remember an LSF session on this, it's a really obvious area of improvement
+> that stands out at the moment for sure.
 > 
+> Having worked several 12+ hour days in a row though recently I can relate to
+> workload making this difficult though :)
 
-Of course it's not going to be reverted, and I don't mind.
-
-I do however mind about the fact that you accuse contributors (however 
-minimal their contributions were, like in my case) of being "Russian 
-trolls" using "multiple accounts".
-
-I would have thought that a man of your stature, knowledge and 
-publicity, wrote a more sensible, neutral comment than that childish 
-gibberish you produced.
-Such comments can be seen in the hundreds on every major news website's 
-comment section.
-Unfortunately, this is now common discussion standard at least in the 
-Western world:
-
-"You don't agree with X? You must be a Y!"
-
-There is no doubt that there are Russian troll factories - but there is 
-equally no doubt that there are Western troll factories. Without them, 
-this "game" wouldn't work.
-
-You could just have done a simple 'git log --grep="Name"' to find out 
-that most of those people who you accused of being trolls are actually 
-not trolls. Because trolls do not contribute.
-
-> And FYI for the actual innocent bystanders who aren't troll farm
-> accounts - the "various compliance requirements" are not just a US
-> thing.
-
-Of course not. It's a USUKEU thing. Or, dare I say, a thing of the 
-unipolar anglo-american empire. There is no way around a multipolar 
-world order if we as humans want to progress.
-
-Why didn't you (or Greg) elaborate on the "various compliance 
-requirements" in the first place?
-You could just have said:
-
-"Due to the sanctions against Russia, we as a US-based foundation are 
-required to abide and therefore we have to remove some maintainers that 
-are thought to be directly collaborating with the current regime" (I 
-specifically used a "Western" language).
-That, at least, would have been somewhat honest, though still hypocrite.
-
-And I did read through (most of) these EU compliance requirements 
-because of my job (not IT), so I'm not *that* clueless.
-
-The sanctions are absurd anyway - I don't remember that the US had been 
-sanctioned because of their illegal invasion of [insert country of your 
-choice]. US athletes excluded from the Olympics?? How dare you?
-
-I also don't remember that France or UK had been sanctioned because they 
-abused their UN mandate to get rid of Gaddafi.
-
-The "country" Kosovo, created by a war, isn't even recognized by all EU 
-member states!
-
-And don't even get me started on that Eastern Mediterranian country that 
-can commit the worst atrocities without ever getting seriously sanctioned.
-
-Meanwhile, we sanction Iran (hasn't started a war in ages), Cuba (hasn't 
-started a war in ages), North Korea (hasn't started a war in ages) etc.
-
-The Western arrogance and decadence is disgusting, and I say that as a 
-born and bred Western European.
+Yes :)
 
 > 
-> If you haven't heard of Russian sanctions yet, you should try to read
-> the news some day.  And by "news", I don't mean Russian
-> state-sponsored spam.
-
-I'm already more than fed up with the state-sponsored spam on German TV 
-- and I even have to pay for that BS!
-Now, I don't know how it is in Finland because I don't follow Finnish 
-news due to a total lack of language knowledge.
-
-I wish my country would quit NATO, and then I see that Finland *joined*. 
-Sorry, but I don't understand. No NATO, no war in Ukraine.
-Even as late as 2013, Russia and Ukraine did naval manoevers in the 
-Black Sea - together!
-
-This war is sooo totally unnecessary. Maybe you should ask Vicky "F!ck 
-the EU" Newland why this all happened.
-
+>>
+>> *Inserting* (not walking/modifying existing things as most users to) as done
+>> in this patch is slightly different though, likely "on thing that fits all"
+>> will not apply to all page table walker user cases.
 > 
-> As to sending me a revert patch - please use whatever mush you call
-> brains. I'm Finnish. Did you think I'd be *supporting* Russian
-> aggression? Apparently it's not just lack of real news, it's lack of
-> history knowledge too.
-
-Why do you even mention your nationality?
-Just a few weeks ago, I read about the role of Finland in (and before) WW2.
-I don't think there is a big lack of history knowledge on my side.
-
-My country was occupied by Germany twice, in 1914 and in 1940.
-And yet, I have absolutely no bad feelings about either Germany as a 
-country nor Germans as a people. OK, their government is the worst since 
-1945, but that's a different matter.
-
-Wasn't Mannerheim married to a Russian? Eh?
-
-The former German Minister of Foreign Affairs, Guido Westerwelle, once 
-talked about "late Roman decadence", albeit in a different context.
-
-And yet, he was totally right even in other contexts. The Western world 
-is actually in the state of "late Roman decadence".
-And what follows after that decadence? Right, the downfall. And it might 
-be a huge chance to create a better, more equitable world.
-
+> Yeah, there's also replace scenarios which then have to do egregious amounts of
+> work to make sure we do everything right, in fact there's duplicates of this in
+> mm/madvise.c *grumble grumble*.
 > 
->                        Linus
+>>
+>> --
+>> Cheers,
+>>
+>> David / dhildenb
+>>
+> 
+> OK so I guess I'll hold off my TODOs on this as you are looking in this area and
+> I trust you :)
 
-Tor Vic
+It will probably take me a while until I get to it, though. I'd focus on 
+walking (and batching what we can) first, then on top modifying existing 
+entries.
+
+The "install something where there is nothing yet" (incl. populating 
+fresh page tables etc.) case probably deserves a separate "walker".
+
+If you end up having spare cycles and want to sync on a possible design 
+for some part of that bigger task -- removing the old pagewalk logic -- 
+please do reach out! :)
+
+-- 
+Cheers,
+
+David / dhildenb
+
 
