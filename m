@@ -1,205 +1,176 @@
-Return-Path: <linux-mips+bounces-6430-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6431-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 837F49AFAAE
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 09:11:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA0029AFB48
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 09:40:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7DD3CB210F6
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 07:11:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0054CB22DEF
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 07:40:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2970D1B392C;
-	Fri, 25 Oct 2024 07:11:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CED831B85CD;
+	Fri, 25 Oct 2024 07:40:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oldum-net.20230601.gappssmtp.com header.i=@oldum-net.20230601.gappssmtp.com header.b="IwMlbUTZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bns4FpYE"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521DE1B218C
-	for <linux-mips@vger.kernel.org>; Fri, 25 Oct 2024 07:11:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92DDC1B6D00;
+	Fri, 25 Oct 2024 07:40:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729840296; cv=none; b=BQAACSpzDGDJdJYQpxoZlLJVd11wGOWvtbeMrv5QdMqOnKsh/nQKeT7dtkOxAbzJzw+vXNkH1dg+YRBEnNvfyMXqcFL3QOkfatO6XmNBDKAx3neC21ZHaHLr0eX/gkEgDEIabC9ONFVNZ/Gk9eJAocGsp501m02lmOt/gzIL0Wk=
+	t=1729842028; cv=none; b=qLf9bmpvuzV8fzTR/ceCcJoUpy26QN9f2q8JZDpFXlmJjaaRGiO5xiaRm8+DCbEx4+1hFN3WyijFCdkBk/BtI1WlavGBAChvTm0ZNfpkeygv6jZfNCo2logiB93hOTr5m+468vgfHPV0qL3AbUzS8BG+1Xwc97Hub/ydNtUbzEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729840296; c=relaxed/simple;
-	bh=2Yot5CVMrhD1GTtMp0Szbyl+xfW+qQ/vMp2WrwCQU80=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GWIRKaBgGhCuv/3qNRYS9jDGjTWmXQQhcq7OqUSG4IgLgzMPJN3g1nK3suN7IlUUmB1VK2YGlPHDkxzjpDtdH9RO7UBr2Qk6+xlaXfBYwiXRLn+BuvgQWA57dxWLCaQFhCklRj6wDNFQYTKlCxjw4VgANhpUcFUCBISq5MkXoZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldum.net; spf=pass smtp.mailfrom=oldum.net; dkim=pass (2048-bit key) header.d=oldum-net.20230601.gappssmtp.com header.i=@oldum-net.20230601.gappssmtp.com header.b=IwMlbUTZ; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldum.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oldum.net
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a9a4031f69fso233933266b.0
-        for <linux-mips@vger.kernel.org>; Fri, 25 Oct 2024 00:11:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oldum-net.20230601.gappssmtp.com; s=20230601; t=1729840292; x=1730445092; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2Yot5CVMrhD1GTtMp0Szbyl+xfW+qQ/vMp2WrwCQU80=;
-        b=IwMlbUTZwZ2V4lgyH/Q3JZmhuSQBx8rzI9GCTTNjvLGy2h0vZsjxX1Fws8FEjvRUSo
-         2/8pkIokWFpMNxu1NBMrO60d76GLvhEd1DdZO4Xi/lNzzyDLSi8hPRA4oMZPcWVYIh9f
-         RSHnmNk8wjdKb/vcc6ztEXWzfGuURa+B2L6RzVGtHmUXLVQrQkjGQXnUzUJEQIN+fWyj
-         JGvG/BdJMBHskchqRLCsi3YlNOHREcS3tFEn5PBhM5kwOGbm17gn5PAGjKF+WlPCVAAA
-         cyYIU/kM9ASp8sGNTlgu6rJL7f4sI2YDThYywtmGsIJ67yUgSH3QOYNKp9hjSeE2tSDX
-         OY7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729840292; x=1730445092;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2Yot5CVMrhD1GTtMp0Szbyl+xfW+qQ/vMp2WrwCQU80=;
-        b=rAAepPNPy9VsByan+e2Ean9OZ6YNQ5jwOhK8fLSuOiMc8R1lULxfrDXdUtFv/mIpGc
-         S75K6i28E5ovuMJXsHQRk4dHAZNE8mmHbmh+6wWZDhRHulfP4sJXmF4MJw3eKpRIsG/X
-         an2rhP2YPTql9GvGp3Rx4ZxWjKp8UQYHS1k8DS9QL0TFb11lvPIMJ44/kg6xJwAVA1Gl
-         oqU9y9Wz+U84vfcrA4ziHDehP33AqZ9eidMILL1v5/82Fi13o0WL3hPJG9AwntVGzpuA
-         9CQ9aSKmT2yJ++42yy8kRe/cdbFKfz+yBTQGzVqkqSjHupfWQNMRstQOYnUPr/s8sAc/
-         VR5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUzQTDyfPPwbEai7wOcUSJy1kijHf3ce2GVElnL8Cg95i2Xpy5ZsbhYYsR8DuCMjnA6/nI9Uaa1boTx@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXsYrw8oNhPhtVFw5PAwKRfItrD3+LXR/1IwgUmPXclZc4GQw2
-	UM0XI1IzfqMDC97HselJLcSUoCA+6XF4r2dwpi9oFouFSrG19OPx50SBtoqihZc=
-X-Google-Smtp-Source: AGHT+IGBdf9M+MhMVkkAf67M7SvMWvUIw/h/7r8rJ3Hdx2EtRLd3htedYCpRhV8dD7bWUo1PL92GzA==
-X-Received: by 2002:a17:907:3e9f:b0:a9a:bbcc:508c with SMTP id a640c23a62f3a-a9ad2710a64mr438727766b.2.1729840291504;
-        Fri, 25 Oct 2024 00:11:31 -0700 (PDT)
-Received: from [10.1.0.200] (178-169-191-169.parvomai.ddns.bulsat.com. [178.169.191.169])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-a9b1f0298e7sm35760066b.75.2024.10.25.00.11.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2024 00:11:31 -0700 (PDT)
-Message-ID: <3ace1329d4ef99b87780d0ef07db179d27d04d44.camel@oldum.net>
-Subject: Re: [PATCH] Revert "MAINTAINERS: Remove some entries due to various
- compliance requirements."
-From: Nikolay Kichukov <nikolay@oldum.net>
-To: Mikhail Novosyolov <m.novosyolov@rosalinux.ru>, 
-	torvalds@linux-foundation.org
-Cc: aospan@netup.ru, conor.dooley@microchip.com, ddrokosov@sberdevices.ru, 
- dmaengine@vger.kernel.org, dushistov@mail.ru, fancer.lancer@gmail.com, 
- geert@linux-m68k.org, gregkh@linuxfoundation.org,
- hoan@os.amperecomputing.com,  ink@jurassic.park.msu.ru, jeffbai@aosc.io,
- kexybiscuit@aosc.io,  linux-alpha@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,  linux-fpga@vger.kernel.org,
- linux-gpio@vger.kernel.org,  linux-hwmon@vger.kernel.org,
- linux-ide@vger.kernel.org,  linux-iio@vger.kernel.org,
- linux-media@vger.kernel.org,  linux-mips@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org,  linux-spi@vger.kernel.org,
- manivannan.sadhasivam@linaro.org, mattst88@gmail.com, 
- netdev@vger.kernel.org, nikita@trvn.ru, ntb@lists.linux.dev, 
- patches@lists.linux.dev, peter@typeblog.net, richard.henderson@linaro.org, 
- s.shtylyov@omp.ru, serjk@netup.ru, shc_work@mail.ru, torvic9@mailbox.org, 
- tsbogend@alpha.franken.de, v.georgiev@metrotek.ru, wangyuli@uniontech.com, 
- wsa+renesas@sang-engineering.com, xeb@mail.ru, rms@gnu.org,
- campaigns@fsf.org
-Date: Fri, 25 Oct 2024 10:11:27 +0300
-In-Reply-To: <20241024210120.4126-1-m.novosyolov@rosalinux.ru>
-References: 
-	<CAHk-=wjw0i-95S_3Wgk+rGu0TUs8r1jVyBv0L8qfsz+TJR8XTQ@mail.gmail.com>
-	 <20241024210120.4126-1-m.novosyolov@rosalinux.ru>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.2 
+	s=arc-20240116; t=1729842028; c=relaxed/simple;
+	bh=MU0jg6+43zlNLQVd5aws5IUywfNhZ0pf6SBTcrSFP0A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=msrv8eVTgXLRaDR0K4ZaIOcLUg40meGpI4+l/Z97oBrW6wRqjcYy0ZZ7gb+lR1aeC2K71cdAjcK1Q8EnN6O/U3r8MKKAM1MyJsYo7dTxLwlWhNrxG8Z1D3GiVcQr8Ec6x3AxiLeJuYzHyvcUkXznDqHtxDVCD/H36EvvQPnXfpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bns4FpYE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34AD1C4CEC3;
+	Fri, 25 Oct 2024 07:40:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729842028;
+	bh=MU0jg6+43zlNLQVd5aws5IUywfNhZ0pf6SBTcrSFP0A=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Bns4FpYEweNUDYPWIatTemxTcPXBriNtb6rjMCIGvpZQbQ7/qRGjK2NUk57EKd8ri
+	 Mk7HPhv+F7E7+ne72q/Ef8D3KErbLL714tyOI87uCXXzpqZPjXEj/i4/+9MWReDl8T
+	 31XCgHFlQsFjl2p95RIKGtfYYk1e4JVgIerVkCXXYdafVkZcg3QKpbq5FXjAqZ38fM
+	 DtIUhA6qC/BFjMOrnIVEq9dcd5psyxRFBFdvdxlZAU53TWdpVzWckgliF8es3kpb65
+	 T8IX9T0uVRiGneDDJjNiP5c9pbh4ac6m1We4OCbuxBE3WORWLtjtdEfr9QTbaV9H3L
+	 0RlKKzK9CtgkA==
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-539e59dadebso2249464e87.0;
+        Fri, 25 Oct 2024 00:40:28 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUAdcneLh/Jws74xknc45IZeTEe2oK6Y69+tVBiYoEj/qt+RcbmIb24PrS0Yk1dBAvk29QFalANx4ixXw==@vger.kernel.org, AJvYcCW80iP/cw78mwBoxiazcIaMp46Ss9ASatJB3w/3sU7Y98UMR3/4tQTIlcVmtbO/FNdxjEhxRc2zDbkITA==@vger.kernel.org, AJvYcCWPQSZCyhlvaeHuT9D6M1WAaY09cKDfSHPANOapyuIpYAEiD+i3pv2J3M0TMYewN6bJ5kQ4xm6RaFEKB3sW@vger.kernel.org, AJvYcCWUGbfqEO2I8386+2LsYl82NCyqnvpOA+iWbT1jCasE83dc1CGSKbsjGyWJYilhSp8Y00dNfDzQE1B8rA==@vger.kernel.org, AJvYcCWc1CJSV4iR81S8Ez/FWPtUfoS3wmWvrU3KC4Oy6D5DWeumUddqhIjoLtYwQbILekhJgwtEWPQ/8fx3@vger.kernel.org, AJvYcCWwnkYupm8hkTFzLR6MEIKC1LqDq5vgKx+LOXyDhZwKgYIUC71sM0qupPCZHqFx2etFbOY7ue93eLBJOA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvxTD7Kmf8juWMyZ6YXDkR1k1FEJXcMc/72l+/3L15+sUXv57y
+	ScS/gjRt+63bb2+8EfcwtL2dsPQlkrX4SSgZ7ivXf9xLUGTOiLnXXe+Uz6kZo5ghdFVyJJwP2pU
+	Z1zzFD5dUVjukdsPbavc02vgWask=
+X-Google-Smtp-Source: AGHT+IEDAFlBfPHEymedMPiV9v2ocdpZeEcg/F0dpwJWqR1hIRTo+DXjnmCVJHCSWsx5j4Mh2CDnA31kbRPsOrauBps=
+X-Received: by 2002:a05:6512:3c8c:b0:539:8f3c:457c with SMTP id
+ 2adb3069b0e04-53b23e9d130mr2447127e87.53.1729842026517; Fri, 25 Oct 2024
+ 00:40:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20241021002935.325878-1-ebiggers@kernel.org>
+In-Reply-To: <20241021002935.325878-1-ebiggers@kernel.org>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Fri, 25 Oct 2024 09:40:15 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHDo8dijRbSVuHzTddMhp4A+nc1t8AgvoENmS=DZ-kAOQ@mail.gmail.com>
+Message-ID: <CAMj1kXHDo8dijRbSVuHzTddMhp4A+nc1t8AgvoENmS=DZ-kAOQ@mail.gmail.com>
+Subject: Re: [PATCH 00/15] Wire up CRC32 library functions to arch-optimized code
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org, 
+	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
+	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 2024-10-25 at 00:01 +0300, Mikhail Novosyolov wrote:
-> Linus, Greg,
->=20
-> First of all thanks to you for taking by far not the most harmful
-> actions to achieve what your lawyers very kindly asked you to do.
->=20
-> Unfortunately, already a lot of highly qualified people have started
-> thinking that you acted very badly. Of course, there are questions
-> like why removed maintainers were not properly notified and did not
-> receive any additional explanations, but, to my mind, it is useless to
-> try to find 100% justice -- it is not possible. Overton windows has
-> been opened a bit more.
->=20
-> Usually the first contribution is much harder to make then the
-> following ones. A big problem here is that now many people even will
-> not try to contribute to the Linux kernel and other open source
-> projects: their pride for themselves, their homeland, their colleagues
-> has been severely hurt (we are ready to fight for all that).
->=20
-> It is not clear what to do with this problem. Any ideas?
->=20
-> I am sure that people from any country and of any nationality will
-> have similar feelings if you act with them or their colleagues in a
-> similar way.
->=20
-> Thanks to people who were not afraid to say something against this
-> action. Chinese, Latin American, African and other people probably
-> understand that they may be the next ones to be dropped from
-> maintainers. Hope that we will not have to form another Linux kernel
-> upstream one day...
->=20
-> I am sorry that you have to read a lot of text from people who you
-> call trolls -- it is hard to keep calm.
->=20
-> You know, you have really made it much harder to motivate people to
-> contribute into the kernel. There is such problem among developers of
-> hardware that they do not feel comfortable enough to show their code,
-> for example because they think that it is not perfect. Let=E2=80=99s take
-> Baikal Electronics. They do publish their kernel code, but in a form
-> of tarballs without git. They slowly, but constantly worked on
-> contributing support of their hardware into the upstream kernel,
-> fixing not Baikal-related bugs by the way. One day someone told them
-> that =E2=80=9Cwe are not comfortable with accepting your patches=E2=80=9D=
-. And they
-> stopped their work on upstream. Now that man has been removed from
-> maintainers of previously contributed code (code for not Russian
-> hardware, by the way).
->=20
-> What do I suggest to do? Well, I don=E2=80=99t know, but I do not see dir=
-ect
-> legal reasons why doing this was required and why patches from Baikal
-> could not be accepted (the fact that I do not see does not mean that
-> they do not exist, but please show them). Politicians and activists
-> can be shown a finger in some places, by both developers and lawyers,
-> at least to prevent them from being too ambitious, when they decide to
-> break something working next time... But maybe I do not know something
-> about truly democratic regimes :-)
->=20
-> Thanks for reading.
->=20
-Hi folks,
+On Mon, 21 Oct 2024 at 02:29, Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> This patchset is also available in git via:
+>
+>     git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git crc32-lib-v1
+>
+> CRC32 is a family of common non-cryptographic integrity check algorithms
+> that are fairly fast with a portable C implementation and become far
+> faster still with the CRC32 or carryless multiplication instructions
+> that most CPUs have.  9 architectures already have optimized code for at
+> least some CRC32 variants; however, except for arm64 this optimized code
+> was only accessible through the crypto API, not the library functions.
+>
+> This patchset fixes that so that the CRC32 library functions use the
+> optimized code.  This allows users to just use the library instead of
+> the crypto API.  This is much simpler and also improves performance due
+> to eliminating the crypto API overhead including an indirect call.  Some
+> examples of updating users are included at the end of the patchset.
+>
+> Note: crc32c() was a weird case.  It was a library function layered on
+> top of the crypto API, which in turn is layered on top of the real
+> library functions.  So while it was easy to use, it was still subject to
+> the crypto API overhead.  This patchset provides CRC32C acceleration in
+> the real library functions directly.
+>
+> The updated CRC32 library design is:
+>
+> - Each arch's CRC32 code (all variants) is in arch/$ARCH/lib/crc32*.
+>   This adopts what arm64 and riscv already did.  Note, the crypto
+>   directory is not used because CRC32 is not a cryptographic algorithm.
+>
+> - Weak symbols are no longer used.  Instead there are crc32*_base() and
+>   crc32*_arch(), and the appropriate ones are called based on the
+>   kconfig.  This is similar to how the ChaCha20 library code works.
+>
+> - Each arch's CRC32 code is enabled by default when CRC32 is enabled,
+>   but it can now be disabled, controlled by the choice that previously
+>   controlled the base implementation only.  It can also now be built as
+>   a module if CRC32 is a module too.
+>
+> - Instead of lots of pointless glue code that wires up each CRC32
+>   variant to the crypto API for each architecture, we now just rely on
+>   the existing shash algorithms that use the library functions.
+>
+> - As before, the library functions don't provide access to off-CPU
+>   crypto accelerators.  But these appear to have very little, if any,
+>   real-world relevance for CRC32 which is very fast on CPUs.
+>
+> Future work should apply a similar cleanup to crct10dif which is a
+> variant of CRC16.
+>
+> I tested all arches in QEMU using CONFIG_CRC32_SELFTEST and the crypto
+> self-tests, except for mips which I couldn't figure out how to do.
+>
+> This patchset has the following dependencies on recent patches:
+>
+> - "crypto - move crypto_simd_disabled_for_test to lib"
+>   (https://lore.kernel.org/linux-crypto/20241018235343.425758-1-ebiggers@kernel.org/)
+> - "crypto: x86/crc32c - jump table elimination and other cleanups"
+>   (https://lore.kernel.org/linux-crypto/20241014042447.50197-1-ebiggers@kernel.org/)
+> - "arm64: Speed up CRC-32 using PMULL instructions"
+>   (https://lore.kernel.org/linux-crypto/20241018075347.2821102-5-ardb+git@google.com/)
+> - "crypto: Enable fuzz testing for arch code"
+>   (https://lore.kernel.org/linux-crypto/20241016185722.400643-4-ardb+git@google.com/)
+> - "crypto: mips/crc32 - fix the CRC32C implementation"
+>   (https://lore.kernel.org/linux-crypto/20241020180258.8060-1-ebiggers@kernel.org/)
+>
+> Everything can be retrieved from git using the command given earlier.
+>
+> Since this patchset touches many areas, getting it merged may be
+> difficult.  One option is a pull request with the whole patchset
+> directly to Linus.  Another is to have at least patches 1-2 and the
+> above dependencies taken through the crypto tree in v6.13; then the arch
+> patches can land separately afterwards, followed by the rest.
+>
+> Eric Biggers (15):
+>   lib/crc32: drop leading underscores from __crc32c_le_base
+>   lib/crc32: improve support for arch-specific overrides
+>   arm/crc32: expose CRC32 functions through lib
+>   loongarch/crc32: expose CRC32 functions through lib
+>   mips/crc32: expose CRC32 functions through lib
+>   powerpc/crc32: expose CRC32 functions through lib
+>   s390/crc32: expose CRC32 functions through lib
+>   sparc/crc32: expose CRC32 functions through lib
+>   x86/crc32: update prototype for crc_pcl()
+>   x86/crc32: update prototype for crc32_pclmul_le_16()
+>   x86/crc32: expose CRC32 functions through lib
+>   lib/crc32: make crc32c() go directly to lib
+>   ext4: switch to using the crc32c library
+>   jbd2: switch to using the crc32c library
+>   f2fs: switch to using the crc32 library
+>
+...
+>  89 files changed, 1002 insertions(+), 2455 deletions(-)
 
-I also do not consider what's happened here as normal. The maintainers
-removal stands against the key principles and values of our GNU/Linux
-communities and the FOSS ideology. Values and ideas most of us have been
-protecting and advocating for since we can remember!
+Very nice cleanup!
 
-This hurt so badly! Really. This is betrial.
+For the series:
 
-Even if this is now reverted, or the upstream kernel is forked and a new
-upstream kernel repository is elected, the history of it will remain and
-haunt us all.
-
-Turned out our beloved and "free" as in freedom kernel has been
-compromised by compliance to a government.
-
-But this is the Linux kernel, how could this have happened?! It is used,
-improved and copied all over the world, not just one country! Why did we
-let this happen?
-
-This is a precedent that tells everybody what can come next, due to
-"compliance" reasons the kernel could receive code produced by a
-government institution that serves not the Linux community, but the
-governement.
-
-Surely it is not just me thinking towards what can change so we never
-again have to comply to a government of a country when fighting for
-freedom!
-
-FSF, any comments on this?
-
-Resist!
-
-+rms and fsf
-
-Thanks,
-Nikolay
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
 
