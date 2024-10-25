@@ -1,153 +1,194 @@
-Return-Path: <linux-mips+bounces-6467-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6468-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A06869B0FD3
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 22:32:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A15E9B0FE9
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 22:40:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 21787B220EE
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 20:32:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D120C1F2141D
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2024 20:40:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67DFB20C334;
-	Fri, 25 Oct 2024 20:32:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1140021443E;
+	Fri, 25 Oct 2024 20:40:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qQe2ZQ+t"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="IWxGcF2a"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25436139CFA;
-	Fri, 25 Oct 2024 20:32:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F61217DFEC;
+	Fri, 25 Oct 2024 20:40:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729888348; cv=none; b=g2Ik+nj1IDUs6ToAvrpW2urDTec0faObLDBVxjPdmQvMFxYIil4f3Pur9888iiDRag2ltoQF5V0G6NxA2ftLrQ3TADqnkj88pU763hXLS4DcLrnmb9fAmp3TTOYa5wqhMBmpncWGYJl3tMaQnY9Ihl+WzOs1YbjjhpsGO68vlDM=
+	t=1729888832; cv=none; b=b2qKV1CSf75hX421sjmvHkiST7MJEOpgU2rSbLeu+uHLeFfxh4gXyyvnls+yOLNdDfxpaMuLZ3FchHQaedgRrKwn9Ay8Oee474MnHZX619DLQT7Q8T0FWa0SuNyfO4/BpJlqeMVB92822PVa6jGpb9W2rGAKHzzhoP/L1K9+JGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729888348; c=relaxed/simple;
-	bh=ZOwjJ8kzzckhcIYE8j5hMZsSJUKc5cYu8yXf20E0HuM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eN7mzVwPJh4mjS8BlNnYLAlTcl/BFHz6MAZbqbPjuHfZMCCQ6PA+qFgLNUoyP0r+HPlX4PQs19sXC8Rm9oZ687jEIIArnpzpq7DzLhM50+YOJN5oMQXWE0dbGWO7EV9bIKXyVowzbnBy5OdrPgWloMxGEJ0OpAtUcqAAHRYLduY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qQe2ZQ+t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3494C4CEC3;
-	Fri, 25 Oct 2024 20:32:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729888347;
-	bh=ZOwjJ8kzzckhcIYE8j5hMZsSJUKc5cYu8yXf20E0HuM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=qQe2ZQ+tSWetaoVGslaOuLKxN45AkmR2qZL3ILBwg0inR1U0Bmqzc2I/H0SPNy1q+
-	 xqhvZ1lVsaUgvK+i94ztGpOyctfsh9xsUmDl7oWGF8DsRY0dU+ALpo3kC2CFzgTRCs
-	 d1Gn2syKnR1u3PGOMFPA5PNTxrRkzCzY8B16NsRjasHVCOlyrTHAR42WYFBMOtUfdG
-	 GuwI0SitSv5h2cI0j6gOREAiw+lsj8YMWu7ap7hTnjYpP9sp1h+2oosiZ+DKa4ioms
-	 DkdlTrqAnhayaHpQbacjuHAxvBZczD1BLzN5cmfWkxHDMqhlulxn98YRbq9P+Xq7+2
-	 Z2GT/dJ3wtK6A==
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2fb443746b8so25475831fa.0;
-        Fri, 25 Oct 2024 13:32:27 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVN98VksR6kGuSuruUHtdZEYzS3cQw4NydnLv4ZaFF2qZEu6c2eyDWx5FojARqj7RrycnEepiMRxuNQpw==@vger.kernel.org, AJvYcCVUUJPhxbw9IiGsaailm0iHuArlgG7aXHA1C5sJ6JVps2v/BwY3EuA9sS4nuz89ZoWssQL2qryd0zzvFw==@vger.kernel.org, AJvYcCW5j2uKwN3/egI6rZQjg9JqC9eu6t3OcHnGGxjjGbycA0cDn1HNMH49EySaw8rCaWYNTsWM2er5CAd1QA==@vger.kernel.org, AJvYcCWMgtlV+VNCR/xJJtrxLBKkUJldwblR5SObca/a4QpUgVwdaFQXWpjIIy1/k/3SGHDZ6f+yK6uxwCkN1g==@vger.kernel.org, AJvYcCXaK0Pi5KdADshQXppp7jVGkNOkCy0+sm+3GQ1LgkOY6Xxu8hg3J192/xTr3pKZ8ooImbu/QN5uJgaSpw==@vger.kernel.org, AJvYcCXku31dEye2zK92t4eYZ/X9LGHmC0R6AfN7SS84QSX1KFpxuo+1CUI1zsdrZYnAvq71gqOtcf759to+@vger.kernel.org, AJvYcCXtZAc/4GAUpJv54WFcZJLgDIycP8QbHPNTCSTDKvD5NVFOh+OX13ZtgnG9jpJkY8t1t8fmJs2+cKuP2ioA@vger.kernel.org
-X-Gm-Message-State: AOJu0YzT8I6+BwctsXCzjnDsZcbFmzsjcigHc9izYs0toFo+zRK9AaOi
-	R8wO+bfa5NKUeYl9qcs79xrw+m11Ax+rZkS5g4avLLIr+EQ3zheJQBrna3que1stncwf/ucyDIH
-	jNieUQ3DMIVNB4VmHouH4tU18fjs=
-X-Google-Smtp-Source: AGHT+IHWDYSNqGzTxA1yucLBJm6V+3waey3TQHM3kNvlUas/obIoVX4SuU3pAE8hqdaCjuOs8zy+d7cgGIIryFN5WyY=
-X-Received: by 2002:a05:651c:50b:b0:2f9:cc40:6afe with SMTP id
- 38308e7fff4ca-2fcbdfae574mr3209411fa.14.1729888345976; Fri, 25 Oct 2024
- 13:32:25 -0700 (PDT)
+	s=arc-20240116; t=1729888832; c=relaxed/simple;
+	bh=wrnRETKQ4YSgOhHYXSpv32z2hbqqzr8TLZ24YvIR7cs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=iENNrxk4fj7I88uCezB0wZvkAUyX0b2RtH6rLlDfIfKQ7STXzt2z5iyraegZTh0oJddMPNI1RaYvG1G3sUyqBZeW8TAp8htDX+UF5zn/La3kn3TMENjtaEcQkmHN4mumWkgeXfI7EUdB58r5MY12LtdjX/d5nNC7AUiJTJC5eQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=IWxGcF2a; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E2F0DC0004;
+	Fri, 25 Oct 2024 20:40:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1729888824;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8xq1CEYvKfazHRRqSvJNHsgXbDIHvVRxgJJhpycPiz4=;
+	b=IWxGcF2aOI2alODIYwMNXrTahabVAsIXJZDF+rwKEIM39ZSJ3kyt7sR764Z1o70trh7S+x
+	oHJuXhEYg0ajQCr56+z96wM7johTjaP/AH4fLS2aed7qvpbpd+VzUwhYgxJMT6ITDOgDxR
+	02Yd8g870dF4kgfxMYPTTDCrhIHap7kmgmjlL3u4w3F+G/mX+vJpKdwKIaZxkU94yvkd2V
+	MDoKOxOLJ/asYjuB1T+/jAmdsow450fbio0oY5vjtOEkn66Ekil2osfiVuejDg3n6Yt7Eo
+	WzR13xM9qQ4WOSJNjRmMWsZpmUH9Pn0a8ijZfqMA0EiNeA2kd3iZIY1BzbAPBw==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>, Aleksandar Rikalo
+ <arikalo@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Thomas Gleixner <tglx@linutronix.de>
+Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org, Vladimir Kondratiev
+ <vladimir.kondratiev@mobileye.com>, =?utf-8?Q?Th=C3=A9o?= Lebrun
+ <theo.lebrun@bootlin.com>,
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH] irqchip: mips-gic: Handle case with cluster without CPU
+ cores
+In-Reply-To: <70b28614-e40e-4022-818b-80711c05c7a4@app.fastmail.com>
+References: <20241025-no-cpu-cluster-support-v1-1-5e81fcf9f25c@bootlin.com>
+ <70b28614-e40e-4022-818b-80711c05c7a4@app.fastmail.com>
+Date: Fri, 25 Oct 2024 22:40:23 +0200
+Message-ID: <87jzdvc3wo.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241025191454.72616-1-ebiggers@kernel.org> <20241025191454.72616-4-ebiggers@kernel.org>
-In-Reply-To: <20241025191454.72616-4-ebiggers@kernel.org>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Fri, 25 Oct 2024 22:32:14 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFoer+_yZJWtqBVYfYnzqL9X9bbBRomCL3LDqRcYJ6njQ@mail.gmail.com>
-Message-ID: <CAMj1kXFoer+_yZJWtqBVYfYnzqL9X9bbBRomCL3LDqRcYJ6njQ@mail.gmail.com>
-Subject: Re: [PATCH v2 03/18] lib/crc32: expose whether the lib is really
- optimized at runtime
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org, 
-	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
-	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
-	sparclinux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: gregory.clement@bootlin.com
 
-On Fri, 25 Oct 2024 at 21:15, Eric Biggers <ebiggers@kernel.org> wrote:
->
-> From: Eric Biggers <ebiggers@google.com>
->
-> Make the CRC32 library export some flags that indicate which CRC32
-> functions are actually executing optimized code at runtime.  Set these
-> correctly from the architectures that implement the CRC32 functions.
->
-> This will be used to determine whether the crc32[c]-$arch shash
-> algorithms should be registered in the crypto API.  btrfs could also
-> start using these flags instead of the hack that it currently uses where
-> it parses the crypto_shash_driver_name.
->
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
-> ---
->  arch/arm64/lib/crc32-glue.c  | 15 +++++++++++++++
->  arch/riscv/lib/crc32-riscv.c | 15 +++++++++++++++
->  include/linux/crc32.h        | 15 +++++++++++++++
->  lib/crc32.c                  |  5 +++++
->  4 files changed, 50 insertions(+)
->
-...
-> diff --git a/include/linux/crc32.h b/include/linux/crc32.h
-> index 58c632533b08..bf26d454b60d 100644
-> --- a/include/linux/crc32.h
-> +++ b/include/linux/crc32.h
-> @@ -35,10 +35,25 @@ static inline u32 __pure __crc32c_le(u32 crc, const u8 *p, size_t len)
->         if (IS_ENABLED(CONFIG_CRC32_ARCH))
->                 return crc32c_le_arch(crc, p, len);
->         return crc32c_le_base(crc, p, len);
->  }
->
-> +/*
-> + * crc32_optimizations contains flags that indicate which CRC32 library
-> + * functions are using architecture-specific optimizations.  Unlike
-> + * IS_ENABLED(CONFIG_CRC32_ARCH) it takes into account the different CRC32
-> + * variants and also whether any needed CPU features are available at runtime.
-> + */
-> +#define CRC32_LE_OPTIMIZATION  BIT(0) /* crc32_le() is optimized */
-> +#define CRC32_BE_OPTIMIZATION  BIT(1) /* crc32_be() is optimized */
-> +#define CRC32C_OPTIMIZATION    BIT(2) /* __crc32c_le() is optimized */
-> +#if IS_ENABLED(CONFIG_CRC32_ARCH)
-> +extern u32 crc32_optimizations;
-> +#else
-> +#define crc32_optimizations 0
-> +#endif
-> +
+Hi Jiaxun,
 
-Wouldn't it be cleaner to add a new library function for this, instead
-of using a global variable?
+> =E5=9C=A82024=E5=B9=B410=E6=9C=8825=E6=97=A5=E5=8D=81=E6=9C=88 =E4=B8=8B=
+=E5=8D=884:46=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
+>> It is possible to have no CPU cores in a cluster; in such cases, it is
+>> not possible to access the GIC, and any indirect access leads to an
+>> exception. This patch dynamically skips the indirect access in such
+>> situations.
+>
+> Hi Gregory,
+>
+> I'm a little bit confused here, as I have never seen such wired configura=
+tion.
+>
+> Is second cluster IOCU only?
 
->  /**
->   * crc32_le_combine - Combine two crc32 check values into one. For two
->   *                   sequences of bytes, seq1 and seq2 with lengths len1
->   *                   and len2, crc32_le() check values were calculated
->   *                   for each, crc1 and crc2.
-> diff --git a/lib/crc32.c b/lib/crc32.c
-> index 47151624332e..194de73f30f8 100644
-> --- a/lib/crc32.c
-> +++ b/lib/crc32.c
-> @@ -336,5 +336,10 @@ u32 __pure crc32_be_base(u32 crc, const u8 *p, size_t len)
->  {
->         return crc32_be_generic(crc, p, len, crc32table_be, CRC32_POLY_BE);
->  }
->  #endif
->  EXPORT_SYMBOL(crc32_be_base);
-> +
-> +#if IS_ENABLED(CONFIG_CRC32_ARCH)
-> +u32 crc32_optimizations;
-> +EXPORT_SYMBOL(crc32_optimizations);
-> +#endif
-> --
-> 2.47.0
+Yes indeed in EyeQ5, the second cluster is the place for many
+accelerator for vision that benefit of the L2 cache and of the coherency
+unit.
+
+Gregory
+
 >
+> Thanks
+> - Jiaxun
 >
+>>
+>> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+>> ---
+>> This patch is a follow-up of the series "MIPS: Support I6500
+>> multi-cluster configuration"
+>> https://lore.kernel.org/lkml/20241019071037.145314-1-arikalo@gmail.com/#t
+>> ---
+>>  drivers/irqchip/irq-mips-gic.c | 20 ++++++++++++++++----
+>>  1 file changed, 16 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-g=
+ic.c
+>> index f42f69bbd6fb1..bca8053864b2c 100644
+>> --- a/drivers/irqchip/irq-mips-gic.c
+>> +++ b/drivers/irqchip/irq-mips-gic.c
+>> @@ -141,7 +141,8 @@ static bool gic_irq_lock_cluster(struct irq_data *d)
+>>  	cl =3D cpu_cluster(&cpu_data[cpu]);
+>>  	if (cl =3D=3D cpu_cluster(&current_cpu_data))
+>>  		return false;
+>> -
+>> +	if (mips_cps_numcores(cl) =3D=3D 0)
+>> +		return false;
+>>  	mips_cm_lock_other(cl, 0, 0, CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
+>>  	return true;
+>>  }
+>> @@ -507,6 +508,9 @@ static void gic_mask_local_irq_all_vpes(struct irq_d=
+ata *d)
+>>  	struct gic_all_vpes_chip_data *cd;
+>>  	int intr, cpu;
+>>=20
+>> +	if (!mips_cps_multicluster_cpus())
+>> +		return;
+>> +
+>>  	intr =3D GIC_HWIRQ_TO_LOCAL(d->hwirq);
+>>  	cd =3D irq_data_get_irq_chip_data(d);
+>>  	cd->mask =3D false;
+>> @@ -520,6 +524,9 @@ static void gic_unmask_local_irq_all_vpes(struct=20
+>> irq_data *d)
+>>  	struct gic_all_vpes_chip_data *cd;
+>>  	int intr, cpu;
+>>=20
+>> +	if (!mips_cps_multicluster_cpus())
+>> +		return;
+>> +
+>>  	intr =3D GIC_HWIRQ_TO_LOCAL(d->hwirq);
+>>  	cd =3D irq_data_get_irq_chip_data(d);
+>>  	cd->mask =3D true;
+>> @@ -687,8 +694,10 @@ static int gic_irq_domain_map(struct irq_domain=20
+>> *d, unsigned int virq,
+>>  	if (!gic_local_irq_is_routable(intr))
+>>  		return -EPERM;
+>>=20
+>> -	for_each_online_cpu_gic(cpu, &gic_lock)
+>> -		write_gic_vo_map(mips_gic_vx_map_reg(intr), map);
+>> +	if (mips_cps_multicluster_cpus()) {
+>> +		for_each_online_cpu_gic(cpu, &gic_lock)
+>> +			write_gic_vo_map(mips_gic_vx_map_reg(intr), map);
+>> +	}
+>>=20
+>>  	return 0;
+>>  }
+>> @@ -982,7 +991,7 @@ static int __init gic_of_init(struct device_node *no=
+de,
+>>  				change_gic_trig(i, GIC_TRIG_LEVEL);
+>>  				write_gic_rmask(i);
+>>  			}
+>> -		} else {
+>> +		} else if (mips_cps_numcores(cl) !=3D 0) {
+>>  			mips_cm_lock_other(cl, 0, 0, CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
+>>  			for (i =3D 0; i < gic_shared_intrs; i++) {
+>>  				change_gic_redir_pol(i, GIC_POL_ACTIVE_HIGH);
+>> @@ -990,6 +999,9 @@ static int __init gic_of_init(struct device_node *no=
+de,
+>>  				write_gic_redir_rmask(i);
+>>  			}
+>>  			mips_cm_unlock_other();
+>> +
+>> +		} else {
+>> +			pr_warn("No CPU cores on the cluster %d skip it\n", cl);
+>>  		}
+>>  	}
+>>=20
+>>
+>> ---
+>> base-commit: 10e44701486e25d630d714ace2b0c6d9a178b331
+>> change-id: 20241025-no-cpu-cluster-support-1745e8abd7d1
+>>
+>> Best regards,
+>> --=20
+>> Gregory CLEMENT <gregory.clement@bootlin.com>
+>
+> --=20
+> - Jiaxun
 
