@@ -1,173 +1,242 @@
-Return-Path: <linux-mips+bounces-6488-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6489-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFF179B1C70
-	for <lists+linux-mips@lfdr.de>; Sun, 27 Oct 2024 09:15:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E6EC9B1CE0
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Oct 2024 10:43:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35A651F21906
-	for <lists+linux-mips@lfdr.de>; Sun, 27 Oct 2024 08:15:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 70AC4B20E28
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Oct 2024 09:43:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 325AF4F218;
-	Sun, 27 Oct 2024 08:14:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D95E77DA79;
+	Sun, 27 Oct 2024 09:43:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MZrpP4MR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cfOTdrGi"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D835D33981;
-	Sun, 27 Oct 2024 08:14:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A582E41C6A;
+	Sun, 27 Oct 2024 09:43:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730016896; cv=none; b=s3Jli1cuGpwfKFJ7tLwzipGdI4uKTUqIuuhsFLT//ONXA+5s4hgKVfMOpjeNmFNkpxDeo7hnTPgGKMErMQ77HsnKkBCuXOljP3ODOPu7aHpbYyeikQA0BEJgwcI0gSWgp/8cct/JZSVjNSg7tXMOJCbSC4QHQHziSV18s5xIXFw=
+	t=1730022225; cv=none; b=cwjrwbS+OdAe+0XsQKePxvfzs4PGlHFmcdhm4T+sUppCbaMX6/U3B/JPZAShjVp0YHP3n8vzBXoCrZc5xOEcQpttLH3NftzkQHsi1X9WVXWR/U9c3aWGqEHALbniMr2+RJqiYNBX6uzi3FQZSgUCdenCskp3u6mbhBxY29/9xHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730016896; c=relaxed/simple;
-	bh=qSAev/CmbF0LEyj0tVSWN8qmCbJsiIZdku/WjaNmB8Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FVJsB/R0lXJ/rP+V8U5WfQNKsqCOllOWF8j83kghw5XyHnXNFVhL7+Li6d6aCkxXXExhd+wnePAP4nRMGfTq8kbY8fRIY8PZhfITwssGuprO6RLUr8B/5wUk2TJemr2+Q/sX8iNTvwSR7X3euH/NKT4pbwH6wQaXIy+BPBOqRIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MZrpP4MR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A590C4AF09;
-	Sun, 27 Oct 2024 08:14:55 +0000 (UTC)
+	s=arc-20240116; t=1730022225; c=relaxed/simple;
+	bh=khE0iMXpheaDoGjI0MzSNnAbelWlhROd1bTKNOWXSMw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JnjsoT12JSFilBIisOOZ/BqrJEubj0dVuFb98/Lk/KrKYDxI/wRo5kEk+G5e5fuXMQVwOH2GXHPUDjaNHbsnX6toYLfEXYiFdMP+hx0Zj76qtFkn0on4i0b7Zcw/RFnlGAAgFt1DRviD+qe+iLx+USZk8Kxxwe4hrteoGBFB/WY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cfOTdrGi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7D78C4CEC3;
+	Sun, 27 Oct 2024 09:43:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730016895;
-	bh=qSAev/CmbF0LEyj0tVSWN8qmCbJsiIZdku/WjaNmB8Q=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=MZrpP4MR25ZJQaUjkXbWvdc5yqspOvJPpoP1laWGfu5qW0Bo5w7+sOKkNN0wFTFc6
-	 PKiAnBHnQLbmymCc6Ix2g32z3lrMLVbYBDbKHRK7wTcnhc0s7TmExnWPBavGFZA2CU
-	 ZxRZ2yQKLbZi954nmodxa3gz2r2765XCY13DTcc/5moZEI1Y5VMl2qOE1/CaCzYfBZ
-	 d0xolS/t0CNAWzjdhJc8/vC18yj/tzng9oiNhW1i1/DM5wimZSMibZgTJJr4RQf+Mz
-	 txNna8i6XM73z7TsjE2DyvvJtyQZu6VY2mWd8g1ZuHlsQxirw+6OUnQuLNMsd9yjTi
-	 Vo6meRtf3emmg==
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2fb51f39394so32281361fa.2;
-        Sun, 27 Oct 2024 01:14:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVKrY2JnajbhOgfOTMZwNUP2moJ7FsjU+bfBh6b0OV9xj94j+nmtVXGSjcIF8vole+YyKvU6Yg5DnY3FQ==@vger.kernel.org, AJvYcCVPBEe9i9XKzmuSrtaR6OrQ0VjNCqW21nuBlS16lF+gzxkbE4Q3655Db3xEslR129H1VPFmVHqauUk5uQ==@vger.kernel.org, AJvYcCViAwilGNYkXVO56bM2EXQJt2+46Y2Z4D9VfazS8au94efnqLeiQGg/Zg1h8U0YoePAz8YbMkZe9g4hyw==@vger.kernel.org, AJvYcCVozSjDwouWcSNxgyhoE/AUtPLyWRqbB5QzM5OninXfjUTFHneD8qfima4JlHXSpf+GMmjSKJoBcRCSnw==@vger.kernel.org, AJvYcCX63oaeAyaoD0MXtEg14BRnJ2OFn7PPEAQo7XnmkN2iSPMmiLL6xzB9KHTAUzWTgbkma1oSOdAM89Chh7pn@vger.kernel.org, AJvYcCXWK1O2eWjQdHIRhozPDAlBWa4thfStccxjlAyZUMQu4v6+zggzQHCtvRVyW2V/XlHNvW62iIdsGtiXpQ==@vger.kernel.org, AJvYcCXtLXZbnmPlCXYGxG5qGr4pM688XPxX2q/dZCVUKcYvtHI27jJMmhmfPEL0jURr7xZAOy4TqLL2KInb@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIsFcfOLDY3MYrxjckme8sxNqsiSEr+M3P0WTwTkpl93ensdGn
-	Wmybbu98cGeD0g7iDIg8nEYSghWLj4T0ORjZuKGjYEybHqKR8PQfgQaBezv356z8R9yXCVrTy2w
-	BXRfMyEPG380XUvoCe9fdvGA0p+U=
-X-Google-Smtp-Source: AGHT+IG7GbUAQTdcFb1Y8OjbqKjN3ralEO/b0dHGyoLDxr37yV7KwVs1ozIjCmGYYGFlqbwOihVt3NM/p1aqclI347g=
-X-Received: by 2002:a2e:be9a:0:b0:2fb:58c0:de5b with SMTP id
- 38308e7fff4ca-2fcbdfb098emr13787941fa.11.1730016893642; Sun, 27 Oct 2024
- 01:14:53 -0700 (PDT)
+	s=k20201202; t=1730022225;
+	bh=khE0iMXpheaDoGjI0MzSNnAbelWlhROd1bTKNOWXSMw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=cfOTdrGij0qUEpTsOt7/zxlQiPCA94pm1mDCKDGwkpjTi2SpvIu3x8GNAeQRp17IM
+	 7AvMddAhWIkMNmviG/D/PMv5S0BaHxem7hVom+74wNNL9zw7PsXNUahXvPuxnHctd8
+	 R7i8K+QSFw0mCusP95NPqeA3sr6JURfraEE2d5oC6T9WoITAzOdKlMRw5IlhJojME2
+	 +VHnEO+5uSwOc9buGzmdgjezgNXoAgmhLIe8dR/GN0u2wjSG9mp+fsgxuQG4Mep4LC
+	 d5eI/shKD5AznnFFdiK1SvZptfVm2O77GjLfUQHvb9l+6V/eU3jFIzQ1sZVB6PXKqZ
+	 jmSHB79kRxbAg==
+Date: Sun, 27 Oct 2024 09:43:37 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Matteo Martelli <matteomartelli3@gmail.com>
+Cc: Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich
+ <Michael.Hennerich@analog.com>, Alisa-Dariana Roman
+ <alisa.roman@analog.com>, Christian Eggers <ceggers@arri.de>, Peter Rosin
+ <peda@axentia.se>, Paul Cercueil <paul@crapouillou.net>, Sebastian Reichel
+ <sre@kernel.org>, linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5 0/5] iio: fix possible race condition during access
+ of available info lists
+Message-ID: <20241027094337.0bcd33b8@jic23-huawei>
+In-Reply-To: <20241021-iio-read-avail-release-v5-0-b168713fab33@gmail.com>
+References: <20241021-iio-read-avail-release-v5-0-b168713fab33@gmail.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241025191454.72616-1-ebiggers@kernel.org> <20241025191454.72616-5-ebiggers@kernel.org>
- <CAMj1kXEsq7iJThqZ7WA00ei4m59vpC23wPM+Mrj9W+HXfk-aSg@mail.gmail.com>
- <20241025220239.GB2637569@google.com> <20241026040958.GA34351@sol.localdomain>
-In-Reply-To: <20241026040958.GA34351@sol.localdomain>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Sun, 27 Oct 2024 09:14:41 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGGDNmPSH4nZH4r6b4UyrPEYBbTZibjXkmxU9c=16_hhw@mail.gmail.com>
-Message-ID: <CAMj1kXGGDNmPSH4nZH4r6b4UyrPEYBbTZibjXkmxU9c=16_hhw@mail.gmail.com>
-Subject: Re: [PATCH v2 04/18] crypto: crc32 - don't unnecessarily register
- arch algorithms
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org, 
-	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
-	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
-	sparclinux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sat, 26 Oct 2024 at 06:10, Eric Biggers <ebiggers@kernel.org> wrote:
->
-> On Fri, Oct 25, 2024 at 10:02:39PM +0000, Eric Biggers wrote:
-> > On Fri, Oct 25, 2024 at 10:47:15PM +0200, Ard Biesheuvel wrote:
-> > > On Fri, 25 Oct 2024 at 21:15, Eric Biggers <ebiggers@kernel.org> wrote:
-> > > >
-> > > > From: Eric Biggers <ebiggers@google.com>
-> > > >
-> > > > Instead of registering the crc32-$arch and crc32c-$arch algorithms if
-> > > > the arch-specific code was built, only register them when that code was
-> > > > built *and* is not falling back to the base implementation at runtime.
-> > > >
-> > > > This avoids confusing users like btrfs which checks the shash driver
-> > > > name to determine whether it is crc32c-generic.
-> > > >
-> > >
-> > > I think we agree that 'generic' specifically means a C implementation
-> > > that is identical across all architectures, which is why I updated my
-> > > patch to export -arch instead of wrapping the C code in yet another
-> > > driver just for the fuzzing tests.
-> > >
-> > > So why is this a problem? If no optimizations are available at
-> > > runtime, crc32-arch and crc32-generic are interchangeable, and so it
-> > > shouldn't matter whether you use one or the other.
-> > >
-> > > You can infer from the driver name whether the C code is being used,
-> > > not whether or not the implementation is 'fast', and the btrfs hack is
-> > > already broken on arm64.
-> > >
-> > > > (It would also make sense to change btrfs to test the crc32_optimization
-> > > > flags itself, so that it doesn't have to use the weird hack of parsing
-> > > > the driver name.  This change still makes sense either way though.)
-> > > >
-> > >
-> > > Indeed. That hack is very dubious and I'd be inclined just to ignore
-> > > this. On x86 and arm64, it shouldn't make a difference, given that
-> > > crc32-arch will be 'fast' in the vast majority of cases. On other
-> > > architectures, btrfs may use the C implementation while assuming it is
-> > > something faster, and if anyone actually notices the difference, we
-> > > can work with the btrfs devs to do something more sensible here.
-> >
-> > Yes, we probably could get away without this.  It's never really been
-> > appropriate to use the crypto driver names for anything important.  And btrfs
-> > probably should just assume CRC32C == fast unconditionally, like what it does
-> > with xxHash64, or even do a quick benchmark to measure the actual speed of its
-> > hash algorithm (which can also be sha256 or blake2b which can be very fast too).
-> >
-> > Besides the btrfs case, my concern was there may be advice floating around about
-> > checking /proc/crypto to check what optimized code is being used.  Having
-> > crc32-$arch potentially be running the generic code would make that misleading.
-> > It might make sense to keep it working similar to how it did before.
-> >
-> > But I do agree that we could probably get away without this.
->
-> While testing this patchset I notice that none of the crypto API drivers for
-> crc32 or crc32c even need to be loaded on my system anymore, as everything on my
-> system that uses those algorithms (such as ext4) just uses the library APIs now.
-> That makes the "check /proc/crypto" trick stop working anyway.
->
-> I think you're right that we shouldn't bother with patches 3-4, and I'll plan to
-> go back to leaving them out in the next version, unless someone yells.
->
+On Mon, 21 Oct 2024 14:54:13 +0200
+Matteo Martelli <matteomartelli3@gmail.com> wrote:
 
-Agreed.
+> Some iio drivers currently share an available info list buffer that
+> might be changed while iio core prints it to sysfs. This could cause the
+> buffer shared with iio core to be corrupted. However, note that I was
+> able to trigger the race condition only by adding a delay between each
+> sysfs_emit_at calls in the iio_format_list() to force the concurrent
+> access to the shared available list buffer.
+Hi Matteo,
 
-If we need to make this distinction, it might be cleaner to use the
-static_call API instead, e.g.,
+Excellent work (particularly the thorough testing!)
+ 
+I'm still a bit nervous about this set and we are late in this kernel
+cycle so I'm going to queue them up for the next merge window instead of
+racing them in as fixes.  We may in future want to backport to stable, but
+let us give them some time to soak before such a request.
 
-+DECLARE_STATIC_CALL(crc32_le_arch, crc32_le_base);
-+
- static inline u32 __pure crc32_le(u32 crc, const u8 *p, size_t len)
- {
-        if (IS_ENABLED(CONFIG_CRC32_ARCH))
--               return crc32_le_arch(crc, p, len);
-+               return static_call(crc32_le_arch)(crc, p, len);
-        return crc32_le_base(crc, p, len);
- }
+So applied to the togreg branch of iio.git and initially pushed out
+as testing to let 0-day take a first look.
 
-and use static_call_update() to update the target if the feature is
-supported. Then, we could check in the driver whether the static call
-points to the default or not:
+Thanks,
 
-+static bool have_arch;
-+
- static int __init crc32_mod_init(void)
- {
-+       have_arch = IS_ENABLED(CONFIG_CRC32_ARCH) &&
-+                   static_call_query(crc32_le_arch) != crc32_le_base;
-+
-        /* register the arch flavor only if it differs from the generic one */
--       return crypto_register_shashes(algs, 1 + IS_ENABLED(CONFIG_CRC32_ARCH));
-+       return crypto_register_shashes(algs, 1 + have_arch);
- }
+Jonathan
+
+> 
+> This patch set extends the iio APIs and fixes some affected drivers.
+> 
+> Summary:
+> - Patch 1: iio core: introduce a iio info release callback to let
+>   drivers share a copy of their available info list and later free it.
+> 
+> - Patch 2:
+>     - inkern: make consumers copy and release the available info lists
+>       of their producers, necessary after patch 1.
+>     - iio-mux, iio-rescale, dpot-dac, ingenic-battery: adapt consumers
+>       to inkern API change by freeing the now copied available lists of
+>       their producers.
+> 
+> - Patch 3: pac1921: handle the current scale available info via the
+>   read_avail+read_avail_release_resource APIs instead of using an ad-hoc
+>   ext_info attribute. The latter was used to avoid the risk of a race in
+>   the available list.
+> 
+> - Patch 4,5: ad7192, as73211: fix the possible race in the drivers by
+>   copying/releasing the affected available lists.
+> 
+> Tested:
+> - pac1921: could not reproduce the race condition with the new APIs,
+>   even with additional delays among the sysfs_emit_at calls during a
+>   shunt resistor write. No new issue found after the change.
+> 
+> - iio-mux, iio-rescale, dpot-dac: tested with pac1921 as producer, which
+>   was adapted to produce a mock raw available info list.
+>   The tests did not cover the driver features but focused on assessing
+>   the function call sequence. For example the following traced function
+>   graph shows a read of the dpot mocked out voltage (with ftrace
+>   filters: pac1921* iio* dpot* kmemdup_array* kfree*):
+> 
+>  3)               |  iio_read_channel_info_avail [industrialio]() {
+>  3)               |    dpot_dac_read_avail [dpot_dac]() {
+>  3)               |      iio_read_avail_channel_raw [industrialio]() {
+>  3)               |        iio_channel_read_avail [industrialio]() {
+>  3)               |          pac1921_read_avail [pac1921]() {
+>  3)   5.208 us    |            kmemdup_array();
+>  3) + 11.459 us   |          }
+>  3)   3.167 us    |          kmemdup_array();
+>  3)               |          pac1921_read_avail_release_res [pac1921]() {
+>  3)   1.709 us    |            kfree();
+>  3)   4.458 us    |          }
+>  3) + 25.750 us   |        }
+>  3) + 31.792 us   |      }
+>  3) + 35.000 us   |    }
+>  3) + 37.083 us   |    iio_format_list [industrialio]();
+>  3)               |    dpot_dac_read_avail_release_res [dpot_dac]() {
+>  3)   1.583 us    |      kfree();
+>  3)   4.250 us    |    }
+>  3) + 84.292 us   |  }
+> 
+> - ingenic-battery: also tested with mock available info produced by the
+>   pac1921 driver. Following the traced graph part that should correspond
+>   to the ingenic_battery_set_scale() flow (which is not traceable with
+>   the additional ingenic* ftrace filter for some reason):
+> 
+>  2)               |  ingenic_battery_probe [ingenic_battery]() {
+>                 ...
+>  2)               |    iio_read_max_channel_raw [industrialio]() {
+>  2)               |      iio_channel_read_avail [industrialio]() {
+>  2)               |        pac1921_read_avail [pac1921]() {
+>  2)   4.333 us    |          kmemdup_array();
+>  2) + 10.834 us   |        }
+>  2)   3.500 us    |        kmemdup_array();
+>  2)               |        pac1921_read_avail_release_res [pac1921]() {
+>  2)   1.791 us    |          kfree();
+>  2)   4.625 us    |        }
+>  2) + 26.291 us   |      }
+>  2)   1.583 us    |      kfree();
+>  2) + 35.750 us   |    }
+>  2)               |    iio_read_avail_channel_attr_retvals [industrialio]() {
+>  2)               |      iio_channel_read_avail [industrialio]() {
+>  2)               |        pac1921_read_avail [pac1921]() {
+>  2)   3.250 us    |          kmemdup_array();
+>  2)   8.209 us    |        }
+>  2)   3.458 us    |        kmemdup_array();
+>  2)               |        pac1921_read_avail_release_res [pac1921]() {
+>  2)   1.542 us    |          kfree();
+>  2)   4.292 us    |        }
+>  2) + 21.417 us   |      }
+>  2) + 26.333 us   |    }
+>  2)               |    iio_write_channel_attribute [industrialio]() {
+>  2)   4.375 us    |      pac1921_write_raw [pac1921]();
+>  2)   9.625 us    |    }
+>  2)   1.666 us    |    kfree();
+>  2) * 47810.08 us |  }
+> 
+> Not tested:
+> - ad7192, as73211
+> 
+> Link: https://lore.kernel.org/linux-iio/20240724-iio-pac1921-v4-0-723698e903a3@gmail.com/
+> 
+> Signed-off-by: Matteo Martelli <matteomartelli3@gmail.com>
+> ---
+> Changes in v5:
+> - Patch 2: inkern, ingenic-battery: add read_avail_retvals() helpers to
+>   safely use the cleanup free pattern and update commit message accordingly.
+> - Update ingenic-battery test trace log in cover letter after retest:
+>   iio_read_avail_channel_attribute() -> iio_read_avail_channel_attr_retvals().
+> - Link to v4: https://lore.kernel.org/r/20241018-iio-read-avail-release-v4-0-53c8ac618585@gmail.com
+> 
+> Changes in v4:
+> - Patch 2: inkern, ingenic-battery: use cleanup free instead of the
+>   "goto out" pattern
+> - Link to v3: https://lore.kernel.org/r/20241015-iio-read-avail-release-v3-0-ac3e08f25cb3@gmail.com
+> 
+> Changes in v3:
+> - Rebased on top of iio-togreg
+> - Squash and reorder commits to allow bisection without memleaks
+> - Edit summary in cover letter to match new patch order
+> - Patch 2: inkern: add comment to clarify the need of the producer's buffer copy
+> - Patch 5: as73211: update comment on mutex declaration
+> - Link to v2: https://lore.kernel.org/r/20241007-iio-read-avail-release-v2-0-245002d5869e@gmail.com
+> 
+> Changes in v2:
+> - Patch 4: as73211: remove one blank line
+> - Patch 6: consumers: fix typo in commit message
+> - Patch 7: ingenic-battery: add missing header include
+> - Link to v1: https://lore.kernel.org/r/20241003-iio-read-avail-release-v1-0-c70cc7d9c2e0@gmail.com
+> 
+> ---
+> Matteo Martelli (5):
+>       iio: core: add read_avail_release_resource callback to fix race
+>       iio: consumers: copy/release available info from producer to fix race
+>       iio: pac1921: use read_avail+release APIs instead of custom ext_info
+>       iio: ad7192: copy/release available filter frequencies to fix race
+>       iio: as73211: copy/release available integration times to fix race
+> 
+>  drivers/iio/adc/ad7192.c               |  22 +++++-
+>  drivers/iio/adc/pac1921.c              | 128 ++++++++++++---------------------
+>  drivers/iio/afe/iio-rescale.c          |   8 +++
+>  drivers/iio/dac/dpot-dac.c             |   8 +++
+>  drivers/iio/industrialio-core.c        |  14 +++-
+>  drivers/iio/inkern.c                   |  99 ++++++++++++++++++++-----
+>  drivers/iio/light/as73211.c            |  25 +++++--
+>  drivers/iio/multiplexer/iio-mux.c      |   8 +++
+>  drivers/power/supply/ingenic-battery.c |  22 +++---
+>  include/linux/iio/consumer.h           |  28 +++++++-
+>  include/linux/iio/iio.h                |   4 ++
+>  11 files changed, 248 insertions(+), 118 deletions(-)
+> ---
+> base-commit: c3e9df514041ec6c46be83801b1891392f4522f7
+> change-id: 20240802-iio-read-avail-release-cb3d2a1e1b98
+> 
+> Best regards,
+
 
