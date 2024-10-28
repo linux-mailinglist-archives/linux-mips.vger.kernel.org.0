@@ -1,61 +1,59 @@
-Return-Path: <linux-mips+bounces-6506-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6507-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EE479B351E
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Oct 2024 16:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 749789B3548
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Oct 2024 16:49:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF90A1C20840
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Oct 2024 15:41:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A5ED01C21D75
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Oct 2024 15:49:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 706781DE3AA;
-	Mon, 28 Oct 2024 15:41:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p+bslp5n"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A88001DE4FE;
+	Mon, 28 Oct 2024 15:48:27 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F82F12F585;
-	Mon, 28 Oct 2024 15:41:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A39A31DED6F;
+	Mon, 28 Oct 2024 15:48:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730130063; cv=none; b=ljsHalExoS3ZoyL33m3WSkpNbww62ki3gJ49+O+hFM2F2smoFazctpA3pdUNbjKlZn87C45pJKzvvuWMQeDlS70126g5npN3kCLKr/GuPbyvFxY/xoQxM4ST6HfSjtpWUN5S2yHcVcGCNO0znFOeVaStxciMTziRX4bgTWGQBj4=
+	t=1730130507; cv=none; b=D1D8unJm9XGDEmsSQ+2hYi54kwMVnvkrIXZ/57aOCzi+zM0EQJnqiRFi+KO/lVwteB9ron5T2lcM8PlFduFQorhHFyGqNiKEYdsnHdDPaK1/0S3aGZbuLYDXkEFjbeBXnuwepmE0T/UiWBGMnUH8i+B8r8MFNRDnmGomXjlk1ts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730130063; c=relaxed/simple;
-	bh=1OnKnskO1uPXHT57ko80fWNSrAKlqsEB3xePdsqM5Vs=;
+	s=arc-20240116; t=1730130507; c=relaxed/simple;
+	bh=ZRrch4ootEJ4ULxIvELRcvNDg+SmNed42LOYCz5Vd28=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AKcn13sfdS4+xNGnuEme45qOqXjiEKCMETHBc6rdXeHtcq8F4FMnc2oz1hsmFR5XSoj66q61nyIn0GxmJtRrI5EjE6ohaZAwqCv8+NPyJL5c5FcAggOIuRfijG7DNR+4lsbKpVHcgnhoY5ZAJwwKJUhIolJ8aTRuhbytefNUvRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p+bslp5n; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F0E1C4CEC3;
-	Mon, 28 Oct 2024 15:40:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730130062;
-	bh=1OnKnskO1uPXHT57ko80fWNSrAKlqsEB3xePdsqM5Vs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=p+bslp5nYFB5IdzYlqcPXUe0Deg2tPLvvs4TWlciZJnyPqj4C7msUDWod/mZ74Wbi
-	 V+npdeWkLAM2YaCU68ORi88AWKUdk+SexkhRmxohs3rLk/42hVRfWw3lmcgEXhKfmW
-	 l+9bfe1QEI3TUsTCQUmiCfe1cOZzdBeIsDmI24fTFiyKZwDu9f4TeXEh9Tmi9Z7A4g
-	 RQuSC3lG7y94YkqEIK4qkURF8Scn98uwTY1D6XvZn72zlsfH7cHelHDCN5wkvgpceU
-	 yWqXIdxX1dAjLGXoC7cRczTCjM1LzpGhlbBh2ntrVJVtMMwopnozbfMsplC2SfLpCE
-	 /bnM2cMZeJadg==
-Date: Mon, 28 Oct 2024 15:40:55 +0000
-From: Will Deacon <will@kernel.org>
-To: Usama Arif <usamaarif642@gmail.com>
-Cc: robh@kernel.org, mark.rutland@arm.com, leitao@debian.org,
-	catalin.marinas@arm.com, tglx@linutronix.de, chris@zankel.net,
-	saravanak@google.com, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	kexec@lists.infradead.org, loongarch@lists.linux.dev,
-	linux-sh@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, linux-openrisc@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-csky@vger.kernel.org
-Subject: Re: [PATCH v2] of/fdt: add dt_phys arg to early_init_dt_scan and
- early_init_dt_verify
-Message-ID: <20241028154054.GE2484@willie-the-truck>
-References: <20241023171426.452688-1-usamaarif642@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Au3lHBZ4sdLCvIQMlRdZy+xKz3zqHCiX0yd7zWIl2bzvQE861I6ICacTwK/j2Seo2pFJCAOr1r+QCmNW/LkGStURDC7Kqz5cbx8+Q8E4gI49nmws94b3We0oZGF3vnzPkFioSVkfAkncR/Dsoyi3aDUDEzqg05iQtALt/r7H6nQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1t5RyE-0005Ir-00; Mon, 28 Oct 2024 16:47:54 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 0B333C0161; Mon, 28 Oct 2024 16:47:30 +0100 (CET)
+Date: Mon, 28 Oct 2024 16:47:30 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Aleksandar Rikalo <arikalo@gmail.com>, Chao-ying Fu <cfu@wavecomp.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Greg Ungerer <gerg@kernel.org>, Hauke Mehrtens <hauke@hauke-m.de>,
+	Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+	Paul Burton <paulburton@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Serge Semin <fancer.lancer@gmail.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>
+Subject: Re: [PATCH v7 05/12] clocksource: mips-gic-timer: Always use cluster
+ 0 counter as clocksource
+Message-ID: <Zx+yEvWTUKZqOEPh@alpha.franken.de>
+References: <20241019071037.145314-1-arikalo@gmail.com>
+ <20241019071037.145314-6-arikalo@gmail.com>
+ <3c98775b-b61b-478f-838e-59f8e1cf8aed@linaro.org>
+ <Zx+qrRVdv5EGXbCF@alpha.franken.de>
+ <afda1ccc-d9fc-4025-b114-bd2ddf5f7ec1@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -64,91 +62,44 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241023171426.452688-1-usamaarif642@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <afda1ccc-d9fc-4025-b114-bd2ddf5f7ec1@linaro.org>
 
-On Wed, Oct 23, 2024 at 06:14:26PM +0100, Usama Arif wrote:
->  __pa() is only intended to be used for linear map addresses and using
-> it for initial_boot_params which is in fixmap for arm64 will give an
-> incorrect value. Hence save the physical address when it is known at
-> boot time when calling early_init_dt_scan for arm64 and use it at kexec
-> time instead of converting the virtual address using __pa().
+On Mon, Oct 28, 2024 at 04:22:55PM +0100, Daniel Lezcano wrote:
+> On 28/10/2024 16:15, Thomas Bogendoerfer wrote:
+> > On Mon, Oct 28, 2024 at 03:54:48PM +0100, Daniel Lezcano wrote:
+> > > On 19/10/2024 09:10, Aleksandar Rikalo wrote:
+> > > > From: Paul Burton <paulburton@kernel.org>
+> > > > 
+> > > > In a multi-cluster MIPS system, there are multiple GICs - one in each
+> > > > cluster - each of which has its independent counter. The counters in
+> > > > each GIC are not synchronized in any way, so they can drift relative
+> > > > to one another through the lifetime of the system. This is problematic
+> > > > for a clock source which ought to be global.
+> > > > 
+> > > > Avoid problems by always accessing cluster 0's counter, using
+> > > > cross-cluster register access. This adds overhead so it is applied only
+> > > > on multi-cluster systems.
+> > > > 
+> > > > Signed-off-by: Paul Burton <paulburton@kernel.org>
+> > > > Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
+> > > > Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
+> > > > Signed-off-by: Aleksandar Rikalo <arikalo@gmail.com>
+> > > > Tested-by: Serge Semin <fancer.lancer@gmail.com>
+> > > > ---
+> > > 
+> > > May I take this patch through the clocksource tree ?
+> > 
+> > sure, should be the best option.
 > 
-> Reported-by: Breno Leitao <leitao@debian.org>
-> Suggested-by: Mark Rutland <mark.rutland@arm.com>
-> Signed-off-by: Usama Arif <usamaarif642@gmail.com>
-> Fixes: ac10be5cdbfa ("arm64: Use common of_kexec_alloc_and_setup_fdt()")
-> ---
-> v1 -> 2:
-> - pass dt_phys in early_init_dt_scan instead of creating
->   anorther arch->dt function (Rob Herring)
-> ---
->  arch/arc/kernel/devtree.c              |  2 +-
->  arch/arm/kernel/devtree.c              |  2 +-
->  arch/arm64/kernel/setup.c              |  6 +++++-
->  arch/csky/kernel/setup.c               |  4 ++--
->  arch/loongarch/kernel/setup.c          |  2 +-
->  arch/microblaze/kernel/prom.c          |  2 +-
->  arch/mips/kernel/prom.c                |  2 +-
->  arch/mips/kernel/relocate.c            |  2 +-
->  arch/nios2/kernel/prom.c               |  4 ++--
->  arch/openrisc/kernel/prom.c            |  2 +-
->  arch/powerpc/kernel/dt_cpu_ftrs.c      |  2 +-
->  arch/powerpc/kernel/prom.c             |  2 +-
->  arch/powerpc/platforms/pseries/plpks.c |  2 +-
->  arch/riscv/kernel/setup.c              |  2 +-
->  arch/sh/kernel/setup.c                 |  2 +-
->  arch/um/kernel/dtb.c                   |  2 +-
->  arch/x86/kernel/devicetree.c           |  2 +-
->  arch/xtensa/kernel/setup.c             |  2 +-
->  drivers/of/fdt.c                       | 14 ++++++++------
->  drivers/of/kexec.c                     |  2 +-
->  include/linux/of_fdt.h                 |  5 +++--
->  21 files changed, 36 insertions(+), 29 deletions(-)
+> Ok, thanks
 > 
-> diff --git a/arch/arc/kernel/devtree.c b/arch/arc/kernel/devtree.c
-> index 4c9e61457b2f..cc6ac7d128aa 100644
-> --- a/arch/arc/kernel/devtree.c
-> +++ b/arch/arc/kernel/devtree.c
-> @@ -62,7 +62,7 @@ const struct machine_desc * __init setup_machine_fdt(void *dt)
->  	const struct machine_desc *mdesc;
->  	unsigned long dt_root;
->  
-> -	if (!early_init_dt_scan(dt))
-> +	if (!early_init_dt_scan(dt, __pa(dt)))
->  		return NULL;
->  
->  	mdesc = of_flat_dt_match_machine(NULL, arch_get_next_mach);
-> diff --git a/arch/arm/kernel/devtree.c b/arch/arm/kernel/devtree.c
-> index fdb74e64206a..3b78966e750a 100644
-> --- a/arch/arm/kernel/devtree.c
-> +++ b/arch/arm/kernel/devtree.c
-> @@ -200,7 +200,7 @@ const struct machine_desc * __init setup_machine_fdt(void *dt_virt)
->  
->  	mdesc_best = &__mach_desc_GENERIC_DT;
->  
-> -	if (!dt_virt || !early_init_dt_verify(dt_virt))
-> +	if (!dt_virt || !early_init_dt_verify(dt_virt, __pa(dt_virt)))
->  		return NULL;
->  
->  	mdesc = of_flat_dt_match_machine(mdesc_best, arch_get_next_mach);
-> diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
-> index b22d28ec8028..177262739c49 100644
-> --- a/arch/arm64/kernel/setup.c
-> +++ b/arch/arm64/kernel/setup.c
-> @@ -175,7 +175,11 @@ static void __init setup_machine_fdt(phys_addr_t dt_phys)
->  	if (dt_virt)
->  		memblock_reserve(dt_phys, size);
->  
-> -	if (!dt_virt || !early_init_dt_scan(dt_virt)) {
-> +	/*
-> +	 * dt_virt is a fixmap address, hence __pa(dt_virt) can't be used.
-> +	 * Pass dt_phys directly.
-> +	 */
-> +	if (!dt_virt || !early_init_dt_scan(dt_virt, dt_phys)) {
+> Can you add your tag ?
 
-nit: It looks like early_init_dt_verify() will now return false if
-!dt_virt, so we can drop the additional check here.
+it's only touching drivers/clocksource, but if you want
 
-Will
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
