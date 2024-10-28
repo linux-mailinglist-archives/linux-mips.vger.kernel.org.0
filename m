@@ -1,95 +1,128 @@
-Return-Path: <linux-mips+bounces-6492-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6493-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E9799B319E
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Oct 2024 14:24:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAF059B31D9
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Oct 2024 14:39:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CAA701F22534
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Oct 2024 13:24:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65B411F21C59
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Oct 2024 13:39:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35EB71DACB4;
-	Mon, 28 Oct 2024 13:24:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79B471DB92A;
+	Mon, 28 Oct 2024 13:39:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xd0uaURh";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="KBHtBEgY"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="hGOAgT/i"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423642AE8C;
-	Mon, 28 Oct 2024 13:24:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95DD91D5178;
+	Mon, 28 Oct 2024 13:39:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730121852; cv=none; b=is6qlV8Oe3T17JZGdO6azZxMHMVBNGd4FdgjpBUVJSoNdBslpkDpteHvY0IyQMmCNrqaaJcFwjrzCFmaZa1sPlqp04mGcQmHnhajkmFat/l5xHz/Mg5QV1C/jHTXpiNQlauGKPs5E1w4F/FDhVw2vga00OI9FVXBBQVFPzQpSSA=
+	t=1730122749; cv=none; b=iNducZNfxm322ZCdcoNWbGy0RDUzK2keK/oyNqovrLKDaOe0r16BXR2zHpFkqbEzE3GYQogJeMkw5EacMUVPZFh1DpcfV0vf6BNg0N2t4KRVnn3F/uc5Qb8wxOVk5tq86wyfYmXvEkoDeKwsnZbqPDBHLis3OL3/ctrOoiwc6VM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730121852; c=relaxed/simple;
-	bh=OdvquLJql4T6/abFdDOsCg7zFxus9oufaJ6qBWWrzFM=;
+	s=arc-20240116; t=1730122749; c=relaxed/simple;
+	bh=J6TygS9PS/UbaVj4c/knKhqWU5qE1QtSevjNgC5vI7E=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=G94nfqDPXl5nzoPf0YCHb/4E9n5ES6+pYkBMHeE5XeDH+aXOb+lcc4h6w4RSqOz+4meiUtvxZ79sLLnm21QncvLPmmpTA3hb5JGV/XOuIW5sw/o3V1+YhnoYqxFJYuhNfd+aeirspOtHSKMTk7pEXnZ/ZFZs4FT5pP70cwfFblw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xd0uaURh; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=KBHtBEgY; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1730121848;
+	 MIME-Version:Content-Type; b=GGYQYkyTo0wFqB4QF00qfazqUQQ2pynysXMJVYnFqRVfMpio64e9e6Zr6iBwB3ge3VDPbWB+6fuJsdoYliHGeNuMCSOlWPP9D4E1p0/QFnFcM8n08DOfWYIKtoHvsrGYALf662kikUt+uRvsk36GAZ5Ep2q+vxaM52/ILdVFUnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=hGOAgT/i; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DE5F324000D;
+	Mon, 28 Oct 2024 13:39:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1730122745;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=VhsVqV5jYEkIynG0zz0Qr/t2rcHeHGuuP0ghYC3amZQ=;
-	b=xd0uaURhRcPWFXPlgN9+F5xTfkzRZgP2wP566k5nLlON0FZAjNFbTMAwLGoZAJDsbNiABz
-	t8kxR+SLIrCA9Zx2506smBI9pfdGCq/EFP92DedCS61HH8/1lWkUvbl5uKczAFCG7+5Mq8
-	Jgb4cLvH39qg/58or4RH2sGkaTAtZoUI9MBhndtz85t7/ob47mYLq2kkjmO+pYcdP6sVxd
-	AJiwnrTqN9aPhmaPC7sXCwGl2D8gni4LVhSJZIUsJ3y5yU9impvvyKcAuV7D3hyx+71VZF
-	pcD42I2Aj8tyYAR38CTJO9XeXjdj8T9eyUU2F2lpvbvNcEMi2rIXfquzJynsZQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1730121848;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VhsVqV5jYEkIynG0zz0Qr/t2rcHeHGuuP0ghYC3amZQ=;
-	b=KBHtBEgYX/1XuKxlCZzlyr16vfIGMxwA0EbzmS0YlxwlIV5maH8f1PlsXAeBBgddpZ2p2+
-	p2moWFIRWK7ytICA==
-To: Gregory CLEMENT <gregory.clement@bootlin.com>, Aleksandar Rikalo
- <arikalo@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org,
- linux-kernel@vger.kernel.org, Vladimir Kondratiev
- <vladimir.kondratiev@mobileye.com>, =?utf-8?Q?Th=C3=A9o?= Lebrun
- <theo.lebrun@bootlin.com>,
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, Gregory CLEMENT
- <gregory.clement@bootlin.com>
-Subject: Re: [PATCH] irqchip: mips-gic: Handle case with cluster without CPU
- cores
-In-Reply-To: <20241025-no-cpu-cluster-support-v1-1-5e81fcf9f25c@bootlin.com>
-References: <20241025-no-cpu-cluster-support-v1-1-5e81fcf9f25c@bootlin.com>
-Date: Mon, 28 Oct 2024 14:24:08 +0100
-Message-ID: <87iktc2wef.ffs@tglx>
+	bh=J6TygS9PS/UbaVj4c/knKhqWU5qE1QtSevjNgC5vI7E=;
+	b=hGOAgT/iQxsWL1uStdCNwfhUTRbMQXtpmTXqUoeJLFB26KR/yQ5OmibLA+MliAaZATzpOE
+	K109JGcBrWxYgELGMSgrz5+J90iLjVeB8TYARbMMrOgzOSZqu+bLLmGRraCVWhgBkxLgE6
+	D51igWNDdIzO0OFMgDiXVB2Cqchl+keSf6kwuIP1/Zosh5vzsJhhPWr2bQl/bFYvnl625A
+	ccwEZCb2wGEnuPC/9WtXshEfHKmXWUFwC7BGU/KBa0uQAAdV5uxPzPPmukv5GYO1afyNWS
+	jaw5yuWtmcXJxit/7n6aDm45i5UN0HsZf1bldWIpBbL7SY9Wixbxa8ESQymfpw==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Aleksandar Rikalo <arikalo@gmail.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Chao-ying Fu
+ <cfu@wavecomp.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, Geert
+ Uytterhoeven <geert@linux-m68k.org>, Greg Ungerer <gerg@kernel.org>, Hauke
+ Mehrtens <hauke@hauke-m.de>, Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+ Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, Marc Zyngier <maz@kernel.org>, Paul Burton
+ <paulburton@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Serge
+ Semin <fancer.lancer@gmail.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v7 00/12] MIPS: Support I6500 multi-cluster configuration
+In-Reply-To: <CAGQJe6pywUi8dnhxFopkMfP2U1PceHjTPX-CysT0bajSk_AKKg@mail.gmail.com>
+References: <20241019071037.145314-1-arikalo@gmail.com>
+ <87plnob4qq.fsf@BLaptop.bootlin.com>
+ <CAGQJe6pywUi8dnhxFopkMfP2U1PceHjTPX-CysT0bajSk_AKKg@mail.gmail.com>
+Date: Mon, 28 Oct 2024 14:39:01 +0100
+Message-ID: <87cyjkbb4a.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: gregory.clement@bootlin.com
 
-On Fri, Oct 25 2024 at 17:46, Gregory CLEMENT wrote:
-> It is possible to have no CPU cores in a cluster; in such cases, it is
-> not possible to access the GIC, and any indirect access leads to an
-> exception. This patch dynamically skips the indirect access in such
-> situations.
+Hello Aleksandar,
+
+> Hello Gregory,
 >
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> ---
-> This patch is a follow-up of the series "MIPS: Support I6500
-> multi-cluster configuration"
-> https://lore.kernel.org/lkml/20241019071037.145314-1-arikalo@gmail.com/#t
+> Thank you!
+> Just to be clear, which patches can I put your "tested-by" on?
 
-And should be integrated into the next iteration of that series.
+Good question ! :)
+
+I've tested the entire series of patches together, rather than applying
+each individual patch separately. Although I'm not entirely certain, my
+best guess would be that you can safely put my 'tested-by' tag on each
+one.
+
+>
+> I'm preparing series v8.
+
+You could also include the other patches I sent on Friday in this
+series, as suggested by Thomas.
 
 Thanks,
 
-        tglx
+Gregory
+
+>
+> --
+> Aleksandar
+>
+> On Fri, Oct 25, 2024 at 5:07=E2=80=AFPM Gregory CLEMENT <gregory.clement@=
+bootlin.com>
+> wrote:
+>
+>> Hello Aleksandar,
+>>
+>>
+>> I successfully tested it on an EyeQ6H SoC. On top of v6.12-rc4 I also
+>> added only one patch needed for EyeQ6H:
+>>
+>> https://lore.kernel.org/lkml/20241011-eyeq6h-smp-v2-1-8381edf8a5c6@bootl=
+in.com/#t
+>>
+>> So for EyeQ6H, you can then add my
+>> Tested-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+>>
+>> Then I also tested it on an EyeQ5, where the VP topology is
+>> {2,2,2,2},{}. In this case there is no CPU core in the second
+>> cluster. While some part of your series seems to support this case, it
+>> was not complete. I am about to send a new patch for it
+>>
+>> Thanks,
+>> Gregory
+>>
 
