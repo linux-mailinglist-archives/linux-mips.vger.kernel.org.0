@@ -1,72 +1,72 @@
-Return-Path: <linux-mips+bounces-6523-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6524-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31E249B38A2
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Oct 2024 19:02:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C0A39B38A5
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Oct 2024 19:02:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF191B21EE7
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Oct 2024 18:02:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0292286A4A
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Oct 2024 18:02:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04F661EE00A;
-	Mon, 28 Oct 2024 18:00:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8087D1EF0B7;
+	Mon, 28 Oct 2024 18:00:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ko7JtBla"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tt5C+odd"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7EA91E32DD;
-	Mon, 28 Oct 2024 18:00:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 027A21EE008;
+	Mon, 28 Oct 2024 18:00:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730138407; cv=none; b=XHg7kYa0hBkKq256cPhptz92c38+BztG4K0FMDnBFY9j5vtq4xKVnbUO3TQO/jLa5eQv671kFG4UTiqnnGgsJEGHtjnfVbfnOpeU2BrzsIuhHlxWCphNLGB3sGlZquLz5DV0ITFk1bQuRuaLlr1a2la0MW2bgyS7XSHKQB5p+4k=
+	t=1730138410; cv=none; b=BlYB6GFRlLgNc6o36gNkKAsvb8Hr0//FM7ej9NUQyn/qxoLiyE9rvH784atfSk5jYx+GRHNJ2VnNN2qztLNVrbv4dwE+j3Wo9gC63Bn/IG4fUwR+MmyuH0PFb4eSeBCcUpWg46puUTA1lN7sLGmt4g6lQTkcoAA6Xv9QYxLvp+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730138407; c=relaxed/simple;
-	bh=1R/Tb0SJiU1keUkgHz9X53MLpIuXfiBUmnoI6VhnQpU=;
+	s=arc-20240116; t=1730138410; c=relaxed/simple;
+	bh=r8fWALxY9pnx1sb7A9xCP2KVXvLRIDr6Sm4j2n3XmZs=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=RvKvYTZagiWQ3TSj2CCHM11n4SXTjcls50K4/yH5Ai9Z+cNFIIyGnapWvprT0HE63Hdlg7t0YAzjen4QHbxeo1bEcRcFW8znnY1EGsjXG4snAeEe6Fw14xHEEgAGNqrw2SAYs7db3lxkr0aNvcQFd/HaHpH6MkfA3SSAVq9uzNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ko7JtBla; arc=none smtp.client-ip=209.85.218.41
+	 MIME-Version; b=iEfRc7BgAtHVx62J08KT9hvtk4LTTo5lAF67GOd0Y2jcHIC8GrIiZUl+dstIWek7iB/jj3ae8Dl/azFAFrUqsI3yH7UhmdEEIM2GzTgU3b1vo0VjVVN5OLuFiH1Iotp932/vtodsAErmw5J5dw1PZLhkYxBjbajt6o0qxLnw+UI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tt5C+odd; arc=none smtp.client-ip=209.85.218.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a9a0c40849cso752288366b.3;
-        Mon, 28 Oct 2024 11:00:05 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a9a3dc089d8so682637866b.3;
+        Mon, 28 Oct 2024 11:00:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730138404; x=1730743204; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730138406; x=1730743206; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kAbmYZ1mhTULYI3vw1kfmqedtmD2E3ytfSgsYzBMC3Y=;
-        b=Ko7JtBlaFfUc7rXLaBC3mha4ho332XwwYzid8f4B4qtsw1U0KxzXT2lr2XcURFrLza
-         SeAvKAHuRzue1eIjCVjTVGC85aaXyqztmpyRGjEfEAHnnQrIRy+DU3+/OYqDGlnRK4E5
-         INjN4ctaFWOBmvGvoLE0XnCBWDa3FCgre3d+iGVeivjGkzDXosQLqUAIGlBm/PcCpHEu
-         nrB2khT3kmKK9ytOGQWRiKOCICZQ09MT9gOZ34bPTkmN1qV0O3NUhnoZ7M0Rfvh+T2eY
-         WcfW/LdRGVPSZIcZ1CuFVIufcobgQ2od4eCJiQrxBb5bwTTm+6T3QBO8mxAWbKCxNr3x
-         mU8A==
+        bh=RiQZgL3ro4zAwZa43jZc1RKKTs9QphATYHJZ+duswLY=;
+        b=Tt5C+oddz+yIEHUtQJuYnHhkrR5oWQiTfuF1awuJifWj0+Ou2YUDt5J0K8K/ZQCY0U
+         3WtfcJ5rpXZKRHMEnZPNN/n17aJw/aZKsuGc0rIz1YkwMf7L3a31aNqRbCC3droZ50Ox
+         Dy0kim7GWgkRUnZmlbE3JylZzD9QpFFxa3gN6oLWYq+wHTvSDSaviqtqzTjE4S2Daxsg
+         fHUjozIKBBMSHPxZmVum/zJYb+XiALMLtBHf3/bTQ/r6ZeHP6H2EypK4BYtVz8tugEUm
+         NkUs8l6ss/VAjHhW7IokIPlPgflIvGwLoh5iXTMYXQq71hygrFjGI61K538iAqssn/+C
+         wHSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730138404; x=1730743204;
+        d=1e100.net; s=20230601; t=1730138406; x=1730743206;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kAbmYZ1mhTULYI3vw1kfmqedtmD2E3ytfSgsYzBMC3Y=;
-        b=fDn02kNXhUfA8m9ryIPinLek/Gqvme9JCM4XBBUAiSXVN10ycld5Q0qw7fwE6rd7yH
-         qumINbXLhHlx+fsF8G1P/OEl+8ze6qPwRSSbwavxB7CqNWpIhKyYAL8LpxMrYKum9UdO
-         8rKLjcCvZ/FDtaAW+768aBWGGrgalIhkc18/l2g4FwzA58akCias4lARDTCBq+XbDHrH
-         O3JTT7MAOlC50eZow7bt7Y3WMwk4BOmoDhPITTfdCofYSHzIgVhkg1pwQNkeD+OLcgNL
-         GJWmckBAt7q5owNqMR9aNMqdQiO4/hFfaXSVQ7vULTStt9OETK55DglqQE9jK/MeC6kn
-         EWxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWXQhgqXDbHAWRxDqv+DkdAgRQxLacKepxjCqX7aEcerdt0aV0bAZNUotOAjeJ3dVRnb4AMUaAJq95wzg==@vger.kernel.org, AJvYcCWZ1MNje70s1vzZSzzkUPIOpdkTm5bCqmBJHfZtw6SPyYFWCzkKeCsL1PiIrcvCRNKgu+5LT9JqUMdGKue7@vger.kernel.org, AJvYcCXDlnDqvoNKtbPN/NGMz+2MJ2pUw434fvM4SP3XnHzcdJnhvYm1qMbOWKz4j5RiABOkf7lxEwq3uzro@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRrt0wMccEwkQfbx+ZPagr1hXRJQkKlbKPkXuwUK0+orKg/1Ed
-	0QCI1ffDFpV/JWjwglPKIjMH7Xii8rx3pnGybtYK0GtWxSlIEXD+
-X-Google-Smtp-Source: AGHT+IE9G5kZr2VnQdi3oJ5fK9NfyoYvvRFAnLjyDDKECkhSiYMPXb7MozsNPe9M9cfg9spN/dDNoQ==
-X-Received: by 2002:a17:906:794f:b0:a9a:4597:a7f3 with SMTP id a640c23a62f3a-a9de619876amr929630166b.62.1730138404031;
-        Mon, 28 Oct 2024 11:00:04 -0700 (PDT)
+        bh=RiQZgL3ro4zAwZa43jZc1RKKTs9QphATYHJZ+duswLY=;
+        b=CmuiFxXdEFP7gwvv7M19KTSArQgKkF1AePeEX4dV4YUM9jKTfHfJUwakSlC2MXFCAW
+         WrNCMQiW3o2lG57DoojJdFOpgPZaXhB5WRgnsfPVsxCT7aRBchxKk+7zDV7HwSFJ3nPB
+         8Zkc9VJ8XgJNR055ROo9jiiE+rrVXbHl6oKFEQ/pjGKkznAhqWbKU3BZSziZ1gdGgcf1
+         sqX0rHhNi6+KupNF9GccH5p0JFi/6QGmmw0vKC5OcsCG4JIb6KC7A2Sqg3m95YBRRvGg
+         9VHe7x7SqhgcV6gfjuBKi4KAQ+2OfwY1RUHsvfoXWvm5mm7tbwS/GZiKFi381j3dPdO3
+         BOdw==
+X-Forwarded-Encrypted: i=1; AJvYcCVXgndti/bBcheuXi2+o2wT8+E/g6jSSV+y/NujS3pSZTA+hCUBhKDX8pyBsM4OZZv45Cr0uR6U0L45mHQn@vger.kernel.org, AJvYcCVuES4+QKzJiwTueLiRYgUdGPrN9DkpU01t6VqWIhG1vW3DVo6djLyx+cw/sRopF9f3AKc2MWmiixWskw==@vger.kernel.org, AJvYcCW7G0HGJWkRiL1EeRRer3IXW2yp5MjFseTaPH7K7Tg4GNQUjc2Vp7B6S8hS+0E4PzTKlYIAj6EJwWbL@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/qVyQMp7m4t9CkuiouKe2FXu4QtrUt//Mkpz5CBRnm0FKeo2j
+	/KZ6rUT2ZsEeYbGxH6k71YR4KEed0nlJpEtF5gsrptDQI3ucW+GN
+X-Google-Smtp-Source: AGHT+IG5jA+Nssk1Re12RA2qe936eHRH5gV4JTqDwHRurOHr80Tqiif6nLNwRMr7EsOl7pxdldGEAQ==
+X-Received: by 2002:a17:907:7e86:b0:a99:77f0:51f7 with SMTP id a640c23a62f3a-a9de62ec48amr694120066b.61.1730138406055;
+        Mon, 28 Oct 2024 11:00:06 -0700 (PDT)
 Received: from localhost.localdomain ([79.175.114.8])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9b1dfbdfe2sm396990766b.36.2024.10.28.11.00.01
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9b1dfbdfe2sm396990766b.36.2024.10.28.11.00.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2024 11:00:02 -0700 (PDT)
+        Mon, 28 Oct 2024 11:00:05 -0700 (PDT)
 From: Aleksandar Rikalo <arikalo@gmail.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: Rob Herring <robh@kernel.org>,
@@ -93,9 +93,9 @@ Cc: Rob Herring <robh@kernel.org>,
 	Serge Semin <fancer.lancer@gmail.com>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>,
 	Aleksandar Rikalo <arikalo@gmail.com>
-Subject: [PATCH v8 12/13] MIPS: mobileye: dts: eyeq6h: Enable cluster support
-Date: Mon, 28 Oct 2024 18:59:34 +0100
-Message-Id: <20241028175935.51250-13-arikalo@gmail.com>
+Subject: [PATCH v8 13/13] irqchip: mips-gic: Handle case with cluster without CPU cores
+Date: Mon, 28 Oct 2024 18:59:35 +0100
+Message-Id: <20241028175935.51250-14-arikalo@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20241028175935.51250-1-arikalo@gmail.com>
 References: <20241028175935.51250-1-arikalo@gmail.com>
@@ -109,29 +109,83 @@ Content-Transfer-Encoding: 8bit
 
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
 
-The CM3.5 device used in EyeQ6H SoCs incorrectly reports the status
-for Hardware Cache Initialization (HCI). This commit adds a property
-to acknowledge this issue, which enables the use of the second CPU
-cluster.
+It is possible to have no CPU cores in a cluster; in such cases, it is
+not possible to access the GIC, and any indirect access leads to an
+exception. This patch dynamically skips the indirect access in such
+situations.
 
 Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 Signed-off-by: Aleksandar Rikalo <arikalo@gmail.com>
 Tested-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 ---
- arch/mips/boot/dts/mobileye/eyeq6h.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/irqchip/irq-mips-gic.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/arch/mips/boot/dts/mobileye/eyeq6h.dtsi b/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
-index 1db3c3cda2e3..4ea85dfd4eed 100644
---- a/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
-+++ b/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
-@@ -18,6 +18,7 @@ cpu@0 {
- 			compatible = "img,i6500";
- 			reg = <0>;
- 			clocks = <&occ_cpu>;
-+			cm3-l2-config-hci-broken;
- 		};
- 	};
+diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
+index f42f69bbd6fb..bca8053864b2 100644
+--- a/drivers/irqchip/irq-mips-gic.c
++++ b/drivers/irqchip/irq-mips-gic.c
+@@ -141,7 +141,8 @@ static bool gic_irq_lock_cluster(struct irq_data *d)
+ 	cl = cpu_cluster(&cpu_data[cpu]);
+ 	if (cl == cpu_cluster(&current_cpu_data))
+ 		return false;
+-
++	if (mips_cps_numcores(cl) == 0)
++		return false;
+ 	mips_cm_lock_other(cl, 0, 0, CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
+ 	return true;
+ }
+@@ -507,6 +508,9 @@ static void gic_mask_local_irq_all_vpes(struct irq_data *d)
+ 	struct gic_all_vpes_chip_data *cd;
+ 	int intr, cpu;
+ 
++	if (!mips_cps_multicluster_cpus())
++		return;
++
+ 	intr = GIC_HWIRQ_TO_LOCAL(d->hwirq);
+ 	cd = irq_data_get_irq_chip_data(d);
+ 	cd->mask = false;
+@@ -520,6 +524,9 @@ static void gic_unmask_local_irq_all_vpes(struct irq_data *d)
+ 	struct gic_all_vpes_chip_data *cd;
+ 	int intr, cpu;
+ 
++	if (!mips_cps_multicluster_cpus())
++		return;
++
+ 	intr = GIC_HWIRQ_TO_LOCAL(d->hwirq);
+ 	cd = irq_data_get_irq_chip_data(d);
+ 	cd->mask = true;
+@@ -687,8 +694,10 @@ static int gic_irq_domain_map(struct irq_domain *d, unsigned int virq,
+ 	if (!gic_local_irq_is_routable(intr))
+ 		return -EPERM;
+ 
+-	for_each_online_cpu_gic(cpu, &gic_lock)
+-		write_gic_vo_map(mips_gic_vx_map_reg(intr), map);
++	if (mips_cps_multicluster_cpus()) {
++		for_each_online_cpu_gic(cpu, &gic_lock)
++			write_gic_vo_map(mips_gic_vx_map_reg(intr), map);
++	}
+ 
+ 	return 0;
+ }
+@@ -982,7 +991,7 @@ static int __init gic_of_init(struct device_node *node,
+ 				change_gic_trig(i, GIC_TRIG_LEVEL);
+ 				write_gic_rmask(i);
+ 			}
+-		} else {
++		} else if (mips_cps_numcores(cl) != 0) {
+ 			mips_cm_lock_other(cl, 0, 0, CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
+ 			for (i = 0; i < gic_shared_intrs; i++) {
+ 				change_gic_redir_pol(i, GIC_POL_ACTIVE_HIGH);
+@@ -990,6 +999,9 @@ static int __init gic_of_init(struct device_node *node,
+ 				write_gic_redir_rmask(i);
+ 			}
+ 			mips_cm_unlock_other();
++
++		} else {
++			pr_warn("No CPU cores on the cluster %d skip it\n", cl);
+ 		}
+ 	}
  
 -- 
 2.25.1
