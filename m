@@ -1,109 +1,185 @@
-Return-Path: <linux-mips+bounces-6525-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6526-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE0BA9B38A9
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Oct 2024 19:03:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 435759B38B1
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Oct 2024 19:04:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 921B71F21826
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Oct 2024 18:03:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C2F34B23EAB
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Oct 2024 18:04:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D1BD1DF749;
-	Mon, 28 Oct 2024 18:02:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C96221DE889;
+	Mon, 28 Oct 2024 18:04:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gtEcfTSA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QRdmhlO2"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8EFF185B5B;
-	Mon, 28 Oct 2024 18:02:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B244C1534E9;
+	Mon, 28 Oct 2024 18:04:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730138525; cv=none; b=DmOy+5nGRe1PzZUhHI4hdWgOVXugVFkQpOYION6k3zbaMrfsDWSa2uH7VeB8ef6CwdPK/ct3I12Soxc0D6CWp8ZAw6QcrEj/GGY6RvLi4B8HoBEtAD8uAX3qZDjoEXbtYbMWecdASQPJ4sZhtbhHQ5xsfP07F56tOSn+YHVwRAk=
+	t=1730138677; cv=none; b=Hl5+oCfm64IJtr7cp5ggOa94weEWDsyoZ4BAaNqvY1Wc66VRtkq0VkZ5UdArpfb8YPq5bmLVLIOdxA3x7vm2xLmU9obYIR9VvkK2Ul07YtazVhggA2FnoPJ9f19ftbKE+07pO27QmPg8KlGhqy5f72Vpmqo9q0vUSMHQYwlVPU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730138525; c=relaxed/simple;
-	bh=Cqqg0EuRygm2muKmG3Em56D2KQbpxOn57TA3RY3+BS4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aK/+f3lj+aygdJ/rsYgjbvR9EsXnmHXZht1+oHn0vl/IjAJlkcvKbb3vvo/YvwBq+xBP/q6iO5IOpjjc57HXOaBZ4+Uobw3Ee8s55VW+Q6X5xr1dFVt3FFEqUQA6V5mC+Q8jDkN0NWjhdK54yxoHegF5+T7vt3KZBcDJ23caVOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gtEcfTSA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8251C4CEC7;
-	Mon, 28 Oct 2024 18:01:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730138524;
-	bh=Cqqg0EuRygm2muKmG3Em56D2KQbpxOn57TA3RY3+BS4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gtEcfTSA06walZP4EYky8YvX5+tSLqxGDLXcf9dA0tiJOg6r12ODMxN4IBYDVwhg7
-	 /9sHuVvYEUTAUeLgzE/KvgtlkLSdirLw00I5bGlwJ/Cgt7TVO5MVaTO6+UMlpVICeX
-	 OxI9y0jpxfslXPNVHEstnt5RNnozHioJPVXd5A12qMAr+Tmg8g+i3JF03owZspBheX
-	 5WbgQU4+e5FVES1E30JvzTbHetoei1m463Q75tPDO+KVh/8FHNHcyhbP4oOnAr90BU
-	 lHyfVNVrxZxPWRybYPdWzcCypiAkDKEiZjwaR4QWRqEopGgtZU/FsDxoBuXS7+xjxA
-	 lBkIk08k8iv+A==
-Date: Mon, 28 Oct 2024 18:01:54 +0000
-From: Will Deacon <will@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Guo Ren <guoren@kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Russell King <linux@armlinux.org.uk>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>, Theodore Ts'o <tytso@mit.edu>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 04/28] arm64: vdso: Drop LBASE_VDSO
-Message-ID: <20241028180153.GA3029@willie-the-truck>
-References: <20241010-vdso-generic-base-v1-0-b64f0842d512@linutronix.de>
- <20241010-vdso-generic-base-v1-4-b64f0842d512@linutronix.de>
+	s=arc-20240116; t=1730138677; c=relaxed/simple;
+	bh=+ys6N0eJrKfgfo4tsrfhYsYNup903HNaQfRQ/Wu9IhA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RbqkdUGBw8v4E/VIvmx6a2p7rcOjdESiBtnEQmCF1acUsArBQWeki/GzdlEAygMp9kNN3OSBmudqDFcSEohmWRmToR/UmLIvFLvWjH9RpFXAfpJVf3W4NQW9OQJ7J4COXbXlIkquPCHmvPfqsWRDzQtEjwckB0JGQwCZTxXc9S4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QRdmhlO2; arc=none smtp.client-ip=209.85.161.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5ebc0e13d25so1744071eaf.1;
+        Mon, 28 Oct 2024 11:04:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730138674; x=1730743474; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OxJGAxsxBwoQc6bLtf48Ith1q40gkz4QAx/ZvlPDEUc=;
+        b=QRdmhlO2QUZCjy10eUm+RkauhxTH+c3w00N8zdGY2mV3mvr/xT4Hkuf0cPzrAixmpM
+         A8dxn8Qxm2XbNVJ1tRzkPOMMVBTbt7xbBvrWNonbCm+Y+fr2z0oaF6hxH/CCwLKFkcWI
+         3a55d5urHy1bvGSSMt+7Dj/SqTD9jv+r2Q1PtL5LEItHeorOONCti/3Do3YA8KiMMQ+M
+         L1Xz94Z32mrfuuH1xBLPRUhTV6l4uB4pfZp3Jqg9wSrcSYSILbJylDR1M76rMvpf97Iz
+         iAS8T3VqUn79TNLbYS8MW3S2LmiOmy96oyV64b6oUBOHbGUC8DhpxBOrfvkLnZVxEAUe
+         C/sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730138674; x=1730743474;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OxJGAxsxBwoQc6bLtf48Ith1q40gkz4QAx/ZvlPDEUc=;
+        b=FxA1H/KvsebRux0wg4jvdRmEV9keT0P3/W+z+MweiPqOOuAyHwRYm/4G1gIfB7hDZ/
+         aoQoDsontgDGqclosBqFPi6s0smGCmpvcaLFwq76Om1vC5fogPinca+5sKlyfXQIA8J6
+         hzJacK2mlwW5UM42baeUU9C65E5EfwWOuy3NxG/uDLPs/34ClI7zZ4abszrHjVhATKdC
+         lDbjr4J05tdI8OFZajqfloz9nMORzc9zxd1Sqwr837LV0OOOdQSgerns4fJN6ZXDRDkD
+         V8WJ2IVxzX6KZkHFsRGf2yDquKxC5pSeGm9C8YVdF5HYH1RqVjxwow8aXF9KYoAdkL+S
+         0n0g==
+X-Forwarded-Encrypted: i=1; AJvYcCWOcA2TcpcHhDi6JWK1VPawiWrJ6Ewxyu6iJ5bdVPPMLj9UY9oltqMgyvNSNO1SCW8ICgXqdEqXmGp3uYo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQRRKS2ElerfVtI/chcjTgw/B5AeyH34Q1uXzMj1Mw2jQtVRjm
+	+3t1L9UiU2V2bEiL3Ng6105K5J8sx39i4i32+HZlLXVVdfdfJSzLONML+wCjxFgt5xzWEf2peeG
+	SLluFsTGaXC3rB7KowO1ni+9Qnlw=
+X-Google-Smtp-Source: AGHT+IF2mazyfKROWdZdNe9I9WM76gHuVnhRu5ZXMc5Urp/vfv18zcNNmW+7ExZ8nIjDyA+DElfTnvlmIY2j4ApFzDc=
+X-Received: by 2002:a05:6820:1c8f:b0:5e1:de92:6b66 with SMTP id
+ 006d021491bc7-5ec23821f1dmr5615712eaf.2.1730138674505; Mon, 28 Oct 2024
+ 11:04:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241010-vdso-generic-base-v1-4-b64f0842d512@linutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20240920075306.704665-1-sergio.paracuellos@gmail.com>
+ <20240920075306.704665-2-sergio.paracuellos@gmail.com> <b7ebc645-3b3b-41a0-80e4-1537f7d41205@linaro.org>
+In-Reply-To: <b7ebc645-3b3b-41a0-80e4-1537f7d41205@linaro.org>
+From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date: Mon, 28 Oct 2024 19:04:22 +0100
+Message-ID: <CAMhs-H-vYFGbjJ163_ZA8ieamAHb3TWQdaDj4JLrHw0xuJv-vA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] clocksource: Add Ralink System Tick Counter driver
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: linux-mips@vger.kernel.org, tglx@linutronix.de, tsbogend@alpha.franken.de, 
+	john@phrozen.org, linux-kernel@vger.kernel.org, yangshiji66@outlook.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 10, 2024 at 09:01:06AM +0200, Thomas Weiﬂschuh wrote:
-> This constant is always "0", providing no value and making the logic
-> harder to understand.
-> Also prepare for a consolidation of the vdso linkerscript logic by
-> aligning it with other architectures.
-> 
-> Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
-> ---
->  arch/arm64/include/asm/vdso.h       | 9 +--------
->  arch/arm64/kernel/vdso/vdso.lds.S   | 2 +-
->  arch/arm64/kernel/vdso32/vdso.lds.S | 2 +-
->  3 files changed, 3 insertions(+), 10 deletions(-)
+Hi Daniel,
 
-Acked-by: Will Deacon <will@kernel.org>
+Thanks for reviewing this.
 
-Will
+On Mon, Oct 28, 2024 at 5:29=E2=80=AFPM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 20/09/2024 09:53, Sergio Paracuellos wrote:
+> > System Tick Counter is present on Ralink SoCs RT3352 and MT7620. This
+> > driver has been in 'arch/mips/ralink' directory since the beggining of
+> > Ralink architecture support. However, it can be moved into a more prope=
+r
+> > place in 'drivers/clocksource'. Hence add it here adding also support f=
+or
+> > compile test targets.
+> >
+> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > ---
+> >   drivers/clocksource/Kconfig        |  10 ++
+> >   drivers/clocksource/Makefile       |   1 +
+> >   drivers/clocksource/timer-ralink.c | 150 ++++++++++++++++++++++++++++=
++
+> >   3 files changed, 161 insertions(+)
+> >   create mode 100644 drivers/clocksource/timer-ralink.c
+> >
+> > diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+> > index 95dd4660b5b6..50339f4d3201 100644
+> > --- a/drivers/clocksource/Kconfig
+> > +++ b/drivers/clocksource/Kconfig
+> > @@ -753,4 +753,14 @@ config EP93XX_TIMER
+> >         Enables support for the Cirrus Logic timer block
+> >         EP93XX.
+> >
+> > +config CLKSRC_RALINK
+>
+> It is a timer
+>
+>         RALINK_TIMER
+
+Sure, I will change to RALINK_TIMER instead.
+
+>
+> > +     bool "Ralink System Tick Counter"
+>
+> Silent option please if possible.
+>
+> Let the platform Kconfig selects the driver
+>
+> > +     depends on SOC_RT305X || SOC_MT7620 || COMPILE_TEST
+> > +     default y if SOC_RT305X || SOC_MT7620
+>
+> You should have something similar the RISCV option, no default option
+
+Sorry, I am not the best with Kconfig so I am not sure what you are
+exactly expecting here.
+Does the following work for you?
+
+config RALINK_TIMER
+   bool "Ralink System Tick Counter" if COMPILE_TEST
+   depends on SOC_RT305X || SOC_MT7620
+   select CLKSRC_MMIO
+   select TIMER_OF
+   help
+     Enables support for system tick counter present on
+     Ralink SoCs RT3352 and MT7620.
+
+
+>
+> > +     select CLKSRC_MMIO
+> > +     select TIMER_OF
+> > +     help
+> > +       Enables support for system tick counter present on
+> > +       Ralink SoCs RT3352 and MT7620.
+> > +
+> >   endmenu
+> > diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefil=
+e
+> > index 22743785299e..c9214afcb712 100644
+> > --- a/drivers/clocksource/Makefile
+>
+> You should use git mv
+>
+> Otherwise the code is like submitting a new driver
+
+Ok, i will squash two patches in one performing the git mv then.
+
+Thanks,
+    Sergio Paracuellos
+>
+>
+>
+> --
+> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
+M SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
 
