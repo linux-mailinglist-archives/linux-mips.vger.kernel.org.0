@@ -1,117 +1,113 @@
-Return-Path: <linux-mips+bounces-6543-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6544-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D60A9B4294
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Oct 2024 07:51:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 017999B42C2
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Oct 2024 08:03:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04C3F1F233E8
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Oct 2024 06:51:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 335ED1C21DD8
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Oct 2024 07:03:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0CDE200CA4;
-	Tue, 29 Oct 2024 06:51:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33322201265;
+	Tue, 29 Oct 2024 07:03:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FQ4eZuWi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JDIktIGM"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12C0728E7;
-	Tue, 29 Oct 2024 06:51:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0D4A1DED6B;
+	Tue, 29 Oct 2024 07:03:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730184676; cv=none; b=biqdWmT9RFTXenwOThakQAHn/RQYSgDxfyCbkjDhi9creZ6MVSDj30FqXyWTm1Ga4E6NykTRUJtwIv3e65fRqPMSjE900EGfON8U1FuNnD2ve22jtgV25XfmEdZNZbngUy32mWLjyvQ7BRLVH8BpvQjG36uTbKmFlZ7+ur0rcmI=
+	t=1730185393; cv=none; b=ampLmcxRSfX1rwn13dZKb09xO3pz8KfRV0kNhRecWFRj1fAaPosIb8CHiht3oy5d1jUmPcOfydd88IkQhQc/jTwcBQ/X7dF01uXJ5OauVFKJM65/JpboRlURCNheJaTXcwczfH8/SqA+tIoTaP9cS2iwYGJO4dJkhNPfg8K8Gww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730184676; c=relaxed/simple;
-	bh=LFP+NwF2L6GLAFWTLULKcpb0P0hCWjaYX4R/m+E/Su8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TIvPbSSfA+koZZtxjfpnzE0ScEY6cHae4g8HDlKwQ3xm3yccWqK9qal0vACTQh7ynajjX5ehpJMINYzmsHp2rgloQlUjBj/uDekBf6g41Bq+TB7vLoLO3aSj9oZe5Z2wQxSx/yNsYlldjVYNFQ/SZuWFDZjhbTJVgQ8ajLFvt48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FQ4eZuWi; arc=none smtp.client-ip=209.85.167.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3e60e57a322so3004882b6e.3;
-        Mon, 28 Oct 2024 23:51:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730184674; x=1730789474; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9GlOZAfHqu8HJvaat8yN7wrDI1PDpq59GahcIUpvy5c=;
-        b=FQ4eZuWi12jODQ/o0e0KQH4tFguPajYEqC5SVDeysAtHVsLGzro4uKa/03KbanvzVn
-         FqQJ8MGZfxfDdu++43DEEQVwm66rnBcJx+NJnDhg65TYEvTfXFmmNfBe79ZTdCJp9VbI
-         sN5FzIIio/vVTLQ4ajjtuEYPCautop3kH2ij2a7r+uZ4PS6NDFgXssmapjlic/d1GSNB
-         iCiEPb15WmMgD6G3foSkxRwJMUdAbOB0xchwb+7WVn8JeWpW8QunWiAhi5rr/Itybd7E
-         fBWjZmTZHNIBRrtl4wyUA9YJn3uIIvCfo6g2bDBYAj2aSpkkXe9wOM9Zq4zwGsUdCVoM
-         MPAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730184674; x=1730789474;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9GlOZAfHqu8HJvaat8yN7wrDI1PDpq59GahcIUpvy5c=;
-        b=u1f6Grsvcu7fK715K3YPMYPVGFyW9NasWhsTD2spQOXCE72qt3b0MTm/oI3iooDsE6
-         WZYM4eZfIu8Y+RM67hNtqLxXkEoWPkOfAJzojMnWXL/dQD/BvnYS7CrD4bVTvrYCqZmk
-         KOc2nj/fZJfSDY+3p7hz0hbiT6NRzuLQCy2sHaYJBMl6HYYjuwz+D+yqfziTL4IMaDPs
-         LkXtI8dXs/vPDbsM19DflXSYf5wnKv8Nhyzx9OWlyj3hiO8PrRms5aZt61HDLt34yXJs
-         GzU0/WXM/EgIxUMWIUT0zicfrQMrV2TllINzzFNlg9zDlyebmgAOLKJU7KI/rUHeptVA
-         7J1w==
-X-Forwarded-Encrypted: i=1; AJvYcCX/98GcpFDE+FIIY7II7HsJjTxPEB8GjLD8FwKYrVEmq2KWlISAUpQEJ8yEAoLDGg7UkWo7AiVW56Z6z7Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAStv0OYJjrI39nTpx7DBGR5qjuGSXhGFxGjcX6jtdk3EligqE
-	9Xy7QznTW3s9tT0QYqCNQIN/dDvMbNRf5OfzHbHssfp0idWax6RNPOMC7XzeH6ujiWHNRtv4z/m
-	l0eLz+gtN2Fcb2L4h9PJEDd/7Hjk=
-X-Google-Smtp-Source: AGHT+IFwtoeicmUCKAX3ff8fQ1dpO+VnCGWdzjhuO6xXSGDxjOKaFSxpg4FbYShqHbqdBBb3vav+xZtQ0f7F4QITBgM=
-X-Received: by 2002:a05:6808:1394:b0:3e5:fd66:c16b with SMTP id
- 5614622812f47-3e6384c4d98mr10636214b6e.33.1730184673991; Mon, 28 Oct 2024
- 23:51:13 -0700 (PDT)
+	s=arc-20240116; t=1730185393; c=relaxed/simple;
+	bh=QxqKpjr3j81s4iho0+i46YEc7fsoo1C2blZAngfatuY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fuEI2U3ntHk9v1UaIOz/R9G+CZARJwjAqsypRED0eC15PM+ouuID4RaIaQg4oVp9ZqNLOMI124MOsfzSgDlolpVgwcN8m8u50dWW5gTTBCRBeiNzuxTHuCk42WV4sBAWvuJWuaJkJrudwABXmrg8VJ+l+sXurANyxvRrUIvbEm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JDIktIGM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90CD2C4CECD;
+	Tue, 29 Oct 2024 07:03:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730185392;
+	bh=QxqKpjr3j81s4iho0+i46YEc7fsoo1C2blZAngfatuY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JDIktIGMkaaQXvdyGyQqaxDrJK09fIz0i0j6ZMafBi6/Cz78/SAk8bbjarKXmHah5
+	 aGifmEzp1JhGtAjuPUfKGdFNOFcYEEbYtO11/0sD9Xf0yp+6tEPMKAKnLr4yW+ZjlT
+	 FLZjdVw3iMWVvbQ11wxrmP0vDQuAvHTlFLgn4TKnCsV8PmSmRGu405YfPWzJ9MpNeZ
+	 FNOTfO2BdwcAcZrdQin/3lhRyZ72aafte/jzgEwOHLM33637ikshWYh/62TRtkUax4
+	 GcqzeENdG6Q4eSgFBPVQ/Rzee+tI0WTmn1sZiXak47pbkkC4JdOUy96q49EtBqMXw0
+	 jK8kR5xdHtq7w==
+Date: Tue, 29 Oct 2024 08:03:08 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Aleksandar Rikalo <arikalo@gmail.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+	Gregory CLEMENT <gregory.clement@bootlin.com>, Theo Lebrun <theo.lebrun@bootlin.com>, 
+	Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org, 
+	Djordje Todorovic <djordje.todorovic@htecgroup.com>, Chao-ying Fu <cfu@wavecomp.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Greg Ungerer <gerg@kernel.org>, Hauke Mehrtens <hauke@hauke-m.de>, 
+	Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, Marc Zyngier <maz@kernel.org>, 
+	Paul Burton <paulburton@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Serge Semin <fancer.lancer@gmail.com>, Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v8 10/13] dt-bindings: mips: cpu: Add property for broken
+ HCI information
+Message-ID: <avz4crm2yrk3fg7r4qxkgkt3ka5hmk54v2wtcms453tsnewu5w@jzjxmyd4b7yg>
+References: <20241028175935.51250-1-arikalo@gmail.com>
+ <20241028175935.51250-11-arikalo@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241028203643.191268-1-sergio.paracuellos@gmail.com>
- <20241028203643.191268-2-sergio.paracuellos@gmail.com> <fe3e80d4-9482-4df4-b6c4-f903a83a5cfa@linaro.org>
-In-Reply-To: <fe3e80d4-9482-4df4-b6c4-f903a83a5cfa@linaro.org>
-From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date: Tue, 29 Oct 2024 07:51:01 +0100
-Message-ID: <CAMhs-H_5q=aCb1e_+7t7aot3G9jnY3ghtUG0GmJckz0esmLu=g@mail.gmail.com>
-Subject: Re: [PATCH v2] clocksource: Add Ralink System Tick Counter driver
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: linux-mips@vger.kernel.org, tglx@linutronix.de, tsbogend@alpha.franken.de, 
-	john@phrozen.org, linux-kernel@vger.kernel.org, yangshiji66@outlook.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241028175935.51250-11-arikalo@gmail.com>
 
-On Tue, Oct 29, 2024 at 2:16=E2=80=AFAM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 28/10/2024 21:36, Sergio Paracuellos wrote:
-> > System Tick Counter is present on Ralink SoCs RT3352 and MT7620. This
-> > driver has been in 'arch/mips/ralink' directory since the beggining of
-> > Ralink architecture support. However, it can be moved into a more prope=
-r
-> > place in 'drivers/clocksource'. Hence add it here adding also support f=
-or
-> > compile test targets and reducing LOC in architecture code folder.
-> >
-> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > ---
->
-> Applied, thanks
+On Mon, Oct 28, 2024 at 06:59:32PM +0100, Aleksandar Rikalo wrote:
+> From: Gregory CLEMENT <gregory.clement@bootlin.com>
+> 
+> Some CM3.5 reports show that Hardware Cache Initialization is
+> complete, but in reality it's not the case. They also incorrectly
+> indicate that Hardware Cache Initialization is supported. This
+> optional property allows warning about this broken feature that cannot
+> be detected at runtime.
+> 
+> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> Signed-off-by: Aleksandar Rikalo <arikalo@gmail.com>
+> Tested-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> ---
+>  Documentation/devicetree/bindings/mips/cpus.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
 
-Thanks a lot!
+I cannot find this patch in v6, nothing in changelog explaining what
+happened here.
+
+> diff --git a/Documentation/devicetree/bindings/mips/cpus.yaml b/Documentation/devicetree/bindings/mips/cpus.yaml
+> index a85137add668..57e93c07ab1b 100644
+> --- a/Documentation/devicetree/bindings/mips/cpus.yaml
+> +++ b/Documentation/devicetree/bindings/mips/cpus.yaml
+> @@ -47,6 +47,12 @@ properties:
+>    clocks:
+>      maxItems: 1
+>  
+> +  cm3-l2-config-hci-broken:
+
+Are these names - cm3, l2, hci - obvious and known in MIPS? HCI usually
+means something else - see drivers/bluetooth/ and drivers/nfc/
+
+Is this property applicable for all MIPS vendors? There is no vendor
+prefix here, so this is generic for this architecture, right?
 
 Best regards,
-    Sergio Paracuellos
+Krzysztof
 
->
-> --
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
 
