@@ -1,130 +1,165 @@
-Return-Path: <linux-mips+bounces-6546-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6547-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2AAB9B4993
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Oct 2024 13:22:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F9269B4DA0
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Oct 2024 16:21:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DA161F23812
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Oct 2024 12:22:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2FF10286086
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Oct 2024 15:21:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 309B1206066;
-	Tue, 29 Oct 2024 12:22:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 004A9192D9C;
+	Tue, 29 Oct 2024 15:20:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L7DDiZ2r"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ct+PjJ5V"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F870206065;
-	Tue, 29 Oct 2024 12:22:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D9CB15B0F2
+	for <linux-mips@vger.kernel.org>; Tue, 29 Oct 2024 15:20:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730204528; cv=none; b=S6El1kGq9YgiQk2cTrmbhhw+tE0wdRX7gL5C7nldhWjZ79hsVDFmC1rv44p0jVXDvBn716K12AsQQO1uUt0qI6C6HMz2O96z7/f9Jpqh45Y4zPUYwMnPesMsNFPXgvTreTnC7YV5wcew1x7bmBQ3p+n0sLTczwQD9gsa+H54kPA=
+	t=1730215246; cv=none; b=sM3czlsF8F8PEAxDLBwXNqCJQazQzNjmZclfMms2ifgESApxLkYoC8oYD00ba8QGXizhmTrBBassq5Dew0WH0iv+5q/oxabkeM9SXQ5Tbk/+azDLSGqVxa7YJKDH85DG0VK7mR0vGHY18rrKVVUtMBdpl3nbhASA9+GEXHCXE3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730204528; c=relaxed/simple;
-	bh=vSB6u8bogveL7SZrgC/L5ESJfDxg+XPv+xcOu04Lp9Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eQU8j8SOondt8yz+JcSZ988oT3xFFdErb3fVRsaWHW38tdkGB/kjiUe27Qw90KewoiMtMzz8fS+qQflREuhIgDJ+yIf1Sutgc/M1XC5SQ2iKuiE2Z6OxLlNm0kyV8ZRIONQVhjQA34h78c60KqaayFfam1ljiQgE9iNGyWqnq8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L7DDiZ2r; arc=none smtp.client-ip=209.85.215.171
+	s=arc-20240116; t=1730215246; c=relaxed/simple;
+	bh=gTDaqZ7El3iXFJi00CveYPqyDZka0u9Vh5+fimbZZuY=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=lIQ01+EnmaDs8V3TOtrdVgHPt0G7uDxJiYXP/nv1z/OP23kMj4IPLa7FbsrLg8mylGJdlwC1reBmqTXLYza0CUlqfhbP6JL0DSEsEGLR5q+uCnr79roUARM+vBdfZig3sK3Yj7kJh34c9+pPaMM1Bp0bqa1DQuPBWBUwn1xVmFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ct+PjJ5V; arc=none smtp.client-ip=209.85.208.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-7ea6a4f287bso3427529a12.3;
-        Tue, 29 Oct 2024 05:22:06 -0700 (PDT)
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2fb5638dd57so51324321fa.0
+        for <linux-mips@vger.kernel.org>; Tue, 29 Oct 2024 08:20:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730204525; x=1730809325; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZHV7QBVD7QIIPlsLZ6YjaWzT16mKG/opBrn7w7p5NbM=;
-        b=L7DDiZ2ryjeuoNBjWfHPYp5KEb78w7Sg1ZNrVk6W5BeOLBxE39qwFqdW8z9QiwDM1+
-         xwlRyMg/7QUjBtqWiqRuUfpRnglUndf1mXMUTvfpWTNMaCCaX0Sk5uZnurGGfzIW1lbr
-         8Fr2DZkaGkffP1/9fS073snQhwqfBb6MgDCkqT7REnTtUwceBJGJEJCm6qDIMloSW4X5
-         wWVOB/qWcz0eooZ555uyJmij6NVFAj+ySPTD+v4KMNr+ha+/f4kmcxLwAZ5IxKXAO/Zj
-         glESHmU6pIt/2WCVYSl3yNEm2IRK2tuwUDilw2Wmq/5arqVG7t2H51dVIg7QeWKdGVG1
-         28fg==
+        d=gmail.com; s=20230601; t=1730215242; x=1730820042; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=FyVXVxom4anqKU76g3Au6LGI+Blti6sZSVzQLi7Wg8M=;
+        b=ct+PjJ5V+I0jeoDRYFUKFoTl5iW2IOspAvUojnajy7UOFMCPs2EJtPIADaxjRIWsLI
+         7nw27hw+WlMJPGN0Yuzgxd24CRjnKIRXDeeUxrFAwDIN3sNQlYZBf4yaQpCDpdW1wssi
+         xovjGenyIWVmqjZvzZcoU00/pyoXYV3nU1qHp7cfomE8hCkZKuUso3TuwL2eryD5R7rC
+         pobesKQT92mbIBkXI7HEzKQ4m1Fbh1vWQgmPf0MtIsgg2O2mAUoh7WNVa4Fb+/F0VFN+
+         ZWbpEgzWWUzzVjQs2bTghBDzuOycS4NTBUR5mSAFckMiTzg6Dfpw831HXAEoj8ti7C6D
+         jeKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730204525; x=1730809325;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZHV7QBVD7QIIPlsLZ6YjaWzT16mKG/opBrn7w7p5NbM=;
-        b=DGcz6jK0i+nqDWt1nGBwjIvrNcjwytECZ2Y/4mu1KBEXmEY/LQZMHC38aXZWZtsaM5
-         PTPUemQEKPVrY6Cu9ZhPjJ9KLgoXZ0retFaDaC3FchMx6gPKTg6x+hdy0y/wxhkFC6tr
-         B7pcBbPr0P8TR2HmdqfmK0N+45qha2BXrmyKQ+Ypefb0Kv5/bzJon3C1VQ69H/WgJJaq
-         xg4ldDyusY9yXbAFl4ua+Fi4Lhf9Q2wlulTCJvTii9o9z3slUs7nBVdgDNOaNjsiVpKE
-         oAt+p31C9EFEbBn/HCK7PIZgcgpRe5HjJdHbRfEa6pyKMDwD/0nAnz3B9ECBkEXfj52v
-         8JsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUbq9qBUoYG5CEJjnFLD2fqNpMsTpL/xhP9eWbBtvzCjQ7Ep8C+ZKZ8Ei4luLL5xYHA9m5jHwoNxxUbKJHm@vger.kernel.org, AJvYcCVcVosy3qcwTp6C6P6eBNBLAb8AN//2bFLMwNLRTDGuhPPP+j/G/zz47zshmc2Y6UmTLQc2KVGh1QPJ@vger.kernel.org, AJvYcCWbBm2ndO4AJkZ3dJYl/vT6d00ZCuDdzykc1nNSeDVLqO6gaiH5h4BBKpX4+ujCWjCiBtnciixmyTzSow==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyodholkqmBOSvpzQBIlRDCWvfEW8Z2wE902c97DzvEK+aVRvsZ
-	CvVmEUm79zlnFd3DBCD2GRkDeR66TeEbIIOcQ7PVFhcsDA/ohPjv3suTVWf8y4usvDLtRLeCb4j
-	A92E2dMijIQ41mxLe8qEL4Vvz8hk=
-X-Google-Smtp-Source: AGHT+IHLIndC2lOUKpJmDfcwYz6ihXRGTPUV9yyYVkIsLE/O6iP/CZ2Hhr2+BylMbsHP2hzM0mXo+TV3dR466se5jdM=
-X-Received: by 2002:a05:6a20:1594:b0:1d9:c56c:4a0b with SMTP id
- adf61e73a8af0-1d9c56c4aa7mr8579387637.1.1730204525421; Tue, 29 Oct 2024
- 05:22:05 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1730215242; x=1730820042;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FyVXVxom4anqKU76g3Au6LGI+Blti6sZSVzQLi7Wg8M=;
+        b=M0Rbmzt6H/v7h37yTBSKORljh1twDKSaNwNWKVtEkq5X1xGxt9AK/KuCyKxdwpHggo
+         zm5/+2rTX2PMLsLeMNUEwTbq4uqjFEiYh68kJZCATtLjRLTHvPYD/xShpqkST8UNkSyW
+         6CgLBgtVLON9/LmD2a5oVeq1Pm0AmmyItqFLHXWOsajD8+eqzhryujIXSlAsrTdSs30x
+         9SAfROhtsubBOl/WZj5zdFdRwCDtz1WlbpPTZ+Xk/qjdsje4huRSi2ZZeZ7+zatyfYWy
+         NNhByiTj2DAOWYNrvRezJWIhez6NI4qtLuadSkcW3doI1SeDqnkXTvwwsRml5Ur8aKue
+         VC0g==
+X-Gm-Message-State: AOJu0YzMcbrUPof3T/EDlNq2LZ/PMcyAzzE9mpYxqOPwZKSDCE4jxZ67
+	nNjIcYrSwq6l8Q6TaKAJ3cm3dGwkrG5Xj0+/ZvPqCRoYsdeAqSFA+9gFEpQoPLVE73feCP7N7np
+	qxMOvtObYOepq96nB9yuJNkhITPmUN20J
+X-Google-Smtp-Source: AGHT+IGEc5I2tNmY1MuSkSnY3aaosNp1u1PPJVOyxsW3s1sv103heRn0rYHFsM5iclEfzdgS3kG60XivTJ5vKbO4T7Y=
+X-Received: by 2002:a05:651c:1a0a:b0:2fc:a347:6d87 with SMTP id
+ 38308e7fff4ca-2fcbdf7db3dmr52464031fa.13.1730215241769; Tue, 29 Oct 2024
+ 08:20:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241028175935.51250-1-arikalo@gmail.com> <20241028175935.51250-11-arikalo@gmail.com>
- <avz4crm2yrk3fg7r4qxkgkt3ka5hmk54v2wtcms453tsnewu5w@jzjxmyd4b7yg>
-In-Reply-To: <avz4crm2yrk3fg7r4qxkgkt3ka5hmk54v2wtcms453tsnewu5w@jzjxmyd4b7yg>
-From: Aleksandar Rikalo <arikalo@gmail.com>
-Date: Tue, 29 Oct 2024 13:21:54 +0100
-Message-ID: <CAGQJe6p6QgSQKByVQ8G+HpWbdEHnfNb8vRureOrS2VZa6Lk74A@mail.gmail.com>
-Subject: Re: [PATCH v8 10/13] dt-bindings: mips: cpu: Add property for broken
- HCI information
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
-	Gregory CLEMENT <gregory.clement@bootlin.com>, Theo Lebrun <theo.lebrun@bootlin.com>, 
-	Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org, 
-	Djordje Todorovic <djordje.todorovic@htecgroup.com>, Chao-ying Fu <cfu@wavecomp.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Greg Ungerer <gerg@kernel.org>, Hauke Mehrtens <hauke@hauke-m.de>, 
-	Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
-	Marc Zyngier <maz@kernel.org>, Paul Burton <paulburton@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Serge Semin <fancer.lancer@gmail.com>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>
+From: DiTBho Down in The Bunny hole <downinthebunnyhole@gmail.com>
+Date: Tue, 29 Oct 2024 16:20:33 +0100
+Message-ID: <CAAZ8i80GGmwy5u1dPoG+f43PxGgD_pFhOrQkEr=5bhmLfn6sSQ@mail.gmail.com>
+Subject: SGI MIPS, Speculative Execution issue
+To: linux-mips@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 29, 2024 at 8:03=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.or=
-g> wrote:
+hi
+"Speculative Execution"  is a feature of the R10000 Processor.
 
-> > diff --git a/Documentation/devicetree/bindings/mips/cpus.yaml b/Documen=
-tation/devicetree/bindings/mips/cpus.yaml
-> > index a85137add668..57e93c07ab1b 100644
-> > --- a/Documentation/devicetree/bindings/mips/cpus.yaml
-> > +++ b/Documentation/devicetree/bindings/mips/cpus.yaml
-> > @@ -47,6 +47,12 @@ properties:
-> >    clocks:
-> >      maxItems: 1
-> >
-> > +  cm3-l2-config-hci-broken:
->
-> Are these names - cm3, l2, hci - obvious and known in MIPS? HCI usually
-> means something else - see drivers/bluetooth/ and drivers/nfc/
+I read that is problematic on machines that are Non-Cache
+Coherent,such as the IP28 Indigo2 and on R10000/R12000-based IP32 O2
+systems.
 
-I would say yes. At least the name "CM3" (Coherence Manager 3) is
-common knowledge.
-L2 HCI (L2 Hardware Cache Initialization) is a feature of CM3 that is
-non-functional on some systems.
+The first thing I don't understand is what does it mean that they are
+"Non-Cache Coherent" systems.
 
-> Is this property applicable for all MIPS vendors? There is no vendor
-> prefix here, so this is generic for this architecture, right?
+I mean, I know what coherence of the cache means in a multiprocessor
+environment, but I'm a bit confused by what I read for these mono
+processor systems.
 
-I'm honestly not sure if this is something that only one vendor will use.
-Theoretically, there could be more. Perhaps Gregory CLEMENT can give a
-more precise answer.
+As far as I understand, in the R4k and R10k architecture "coherency
+logic" should be on-chip of all the participating agents, both CPU(s)
+and DMA masters, but I didn't understand if being a "cache coherent
+system" depends only on a hw circuit implemented in the CPU (on-chip
+-> inside the CPU) or if there is a need for circuits external to the
+CPU (on-chip -> inside the bus controller, or something).
 
-Best Regards,
-Aleksandar
+a) SGI IP28/r10K -> not cache coherent, but uses R10k
+b) SGI IP32/r10K -> not cache coherent, but uses R10k
+c) SGI IP30/r10K -> cache coherent and uses R10k
+
+A few more details on the nature of Speculative Execution, and the
+issues it poses to the Indigo2 can be found at the following URLs:
+
+1) MIPS R10000 Microprocessor User's Manual (pages 51-55 )
+https://web.archive.org/web/20051028113506/http://techpubs.sgi.com/library/manuals/2000/007-2490-001/pdf/007-2490-001.pdf
+
+2) Post to NetBSD sgimips Mailing List on 29 Jun 2000
+http://mail-index.netbsd.org/port-sgimips/2000/06/29/0006.html
+
+however there are no sw/hw examples.
+
+As far as I know, Linux never worked on O2/R10K, while, and it worked
+years ago (20?) on IP28 only with patched gcc to force "cache barrier"
+workarounds.
+
+I cannot find those patches, and I haven't yet understood the issue.
+
+-
+
+I see that Linux, NetBSD and OpenBSD all work fine on IP30, even with
+a couple of { R10K, R12K, R14K } CPUs!
+
+The R10K is documented as a four-way superscalar design that
+implements register renaming and executes instructions out-of-order.
+
+I wonder if the problem is related to this "out-of-order" nature of
+the CPU paired with the Branch Prediction and Speculative Execution
+nature of a purist RISC design.
+
+Thinking about that, although one or more instructions may begin
+execution during each cycle, and each instruction takes several or
+many cycles to complete, when a branch instruction is decoded, its
+branch condition may not yet be known. However, the R10000 processor
+can predict whether the branch is taken, and then continue decoding
+and executing subsequent instructions along the predicted path.
+
+When a branch prediction is wrong, the processor must back up to the
+original branch and take the other path. This technique is called
+"speculative execution", and whenever the processor discovers a
+mispredicted branch, it aborts all speculatively-executed instructions
+and restores the processor's state to the state it held before the
+branch.
+
+However - the manual says - the cache state is not restored, and this
+is clearly a side effect of speculative execution.
+
+Worse still, if the speculative approach involved a Conditional Store
+(SC): will it be restored? No, because - the manual says - if the
+cache is involved, then it won't be restored, so this is a real mess
+that needs at least a sw barrier.
+
+(I can't find software examples, I would like to read them)
+
+I wonder ... is there any hw-mechanism with the IP30 (missing in IP28
+and IP32) that saves you when you are playing with cached-memory and
+or LL/SC instructions in a conditional block (e.g. semaphore, mutex,
+etc)?
+
+Can someone explain this matter to me?
+
+Thanks
+
+D.
 
