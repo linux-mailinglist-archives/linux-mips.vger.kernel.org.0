@@ -1,197 +1,179 @@
-Return-Path: <linux-mips+bounces-6570-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6571-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B10A9B66FC
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2024 16:06:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6290C9B6B22
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2024 18:36:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDD95281488
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2024 15:06:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99672B214A4
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2024 17:36:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E53F20B202;
-	Wed, 30 Oct 2024 15:06:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=metux@gmx.de header.b="TG9N5ALq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 803032144CA;
+	Wed, 30 Oct 2024 17:35:54 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A471A1F4737;
-	Wed, 30 Oct 2024 15:06:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 112E2199FB1;
+	Wed, 30 Oct 2024 17:35:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730300809; cv=none; b=i482DrGR49i0jjKaHhjGgbF2qQdus04EaH7K8I+RqQ0TmSLabdC5mqCG4Ee2N6R1zwERhHkhpBbPLZA+DFoz09R6h4gUfoyqP7IsO5p0UH8IRzE98W2FKgcnNuTgCGEWykWwXWSQ4qB4ChI0ZLlk0cqfLBuL4LHIwZu7t2arWKs=
+	t=1730309754; cv=none; b=lsxoQjomCx8B08uLYlbyOjrCS2kEfEHvZVd19SwBmDzbqjWFTSqXZQR5/MmLVK/hnVVI9xVyx8kqhufbskm4dBPAZlceW/+4BuhFLZYZyVRnoydeypV3MYD3WXEF1qHmDZNQgeWe2Xd0gO02IFPZtIqYOT+ofW9G93efxqEKi10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730300809; c=relaxed/simple;
-	bh=0OkC2dqVnOc6YLiGoIpaD17f5ytIvcdKeU4+B50Wqg0=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=azZpmXthlqJ3YpHvxlC3gmviEAee3ZerN258N9RgnUDa6BzZt0ipd1D14BB6qKboZB+BE90uL+oHVXKoU060KaE4klR5hr6qCdVl1yUuVuNHVYMtAnLaoYwYig0V1S/mSU9NUKJyrmhhhMy2WlTXYjjx2Rf8XZeQBiunY+pdl9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=metux@gmx.de header.b=TG9N5ALq; arc=none smtp.client-ip=212.227.15.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1730300703; x=1730905503; i=metux@gmx.de;
-	bh=r8NEMTNTCDr0Gy+Y5ltqY96l8Fe98i0aW/ZfvTvRN64=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:From:To:
-	 Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=TG9N5ALqSGxwvwpbjBAJiTanYQmRvOL8ty2SucNrRTSbvbghh3MGGrs2yARUHlgY
-	 Q6QVx6imOFvHivPdrDnNaVWDLC7DqHns9xHr/kj+MAEXKiFnHbw22y0ocFPAc1I6M
-	 pSD2knrJS3PhtPz8aTZl64Htb70C3bnHzSLMHut3qMU/wagdL//cVlES6HvamJA+z
-	 IV/2SEtSinXK+FrXdt+n76oS2X+T5Z9Fh2vs6Raxn702x1w0HpBS5t4C6tQ2pvNcn
-	 oGcefk1uhkkatyXFSBCwLdO81EQttQPjV542ZF57xfMFzPRMErmS6n0AemQHDXmpv
-	 ejWd1C7Jq5AQIthD1Q==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.178] ([77.2.112.201]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MhU9Z-1tjdfQ0rJb-00b4sz; Wed, 30
- Oct 2024 16:05:03 +0100
-Message-ID: <3dd9bf0c-915d-4ef6-b6ba-309ef627e431@gmx.de>
-Date: Wed, 30 Oct 2024 16:05:40 +0100
+	s=arc-20240116; t=1730309754; c=relaxed/simple;
+	bh=BSasaU0mrz2wv1Rydn4ifPh2TNdENmALykPY4CNm9YU=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UOd/m2qH7cljB5sEs334KoaWWCFBx8zunNv4rRs6RJqoH5Wzpqf0kUyhJ9pvwEEfbv8yExqrNg78QgEjjeSvPMMGPmxfwDmyIL+Lv/y7Isw0PH6yYUZodVh/qwZX6LEikTxTfkpjxFdwfcW2pUk+bwnZjsGHq4thG/jBVqpBg9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XdvPw5nbcz6K5VP;
+	Thu, 31 Oct 2024 01:34:28 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 7DEBC1401F3;
+	Thu, 31 Oct 2024 01:35:47 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 30 Oct
+ 2024 18:35:46 +0100
+Date: Wed, 30 Oct 2024 17:35:45 +0000
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+CC: Matteo Martelli <matteomartelli3@gmail.com>, Jonathan Cameron
+	<jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich
+	<Michael.Hennerich@analog.com>, Alisa-Dariana Roman <alisa.roman@analog.com>,
+	Christian Eggers <ceggers@arri.de>, Peter Rosin <peda@axentia.se>, Paul
+ Cercueil <paul@crapouillou.net>, Sebastian Reichel <sre@kernel.org>,
+	<linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-mips@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v5 2/5] iio: consumers: copy/release available info from
+ producer to fix race
+Message-ID: <20241030173545.00000374@Huawei.com>
+In-Reply-To: <ZyJHFp6vbQ7deLFs@black.fi.intel.com>
+References: <20241021-iio-read-avail-release-v5-0-b168713fab33@gmail.com>
+	<20241021-iio-read-avail-release-v5-2-b168713fab33@gmail.com>
+	<ZyJHFp6vbQ7deLFs@black.fi.intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Kernel maintainer *CENSORED* on LKML [WAS: linux: Goodbye from a
- Linux community volunteer]
-From: metux <metux@gmx.de>
-To: =?UTF-8?Q?Dragan_Milivojevi=C4=87?= <d.milivojevic@gmail.com>,
- Peter Cai <peter@typeblog.net>, phoronix@phoronix.com, Goran <g@odyss3us.net>
-Cc: James Bottomley <James.Bottomley@hansenpartnership.com>,
- Serge Semin <fancer.lancer@gmail.com>, Jon Mason <jdmason@kudzu.us>,
- Dave Jiang <dave.jiang@intel.com>, Allen Hubbe <allenbh@gmail.com>,
- ntb@lists.linux.dev, Andy Shevchenko <andy@kernel.org>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Kory Maincent <kory.maincent@bootlin.com>,
- Cai Huoqing <cai.huoqing@linux.dev>, dmaengine@vger.kernel.org,
- Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
- Damien Le Moal <dlemoal@kernel.org>, linux-ide@vger.kernel.org,
- Paul Burton <paulburton@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Arnd Bergmann <arnd@arndb.de>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
- linux-mips@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
- linux-pci@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
- Vladimir Oltean <olteanv@gmail.com>, Keguang Zhang
- <keguang.zhang@gmail.com>, Yanteng Si <siyanteng@loongson.cn>,
- netdev@vger.kernel.org, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
- linux-hwmon@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Andrew Halaney <ajhalaney@gmail.com>, Nikita Travkin <nikita@trvn.ru>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
- Alexander Shiyan <shc_work@mail.ru>, Dmitry Kozlov <xeb@mail.ru>,
- Sergey Shtylyov <s.shtylyov@omp.ru>, Evgeniy Dushistov <dushistov@mail.ru>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- Sergio Paracuellos <sergio.paracuellos@gmail.com>,
- Nikita Shubin <nikita.shubin@maquefel.me>,
- linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
- Kexy Biscuit <kexybiscuit@aosc.io>, jeffbai@aosc.io,
- Linus Torvalds <torvalds@linux-foundation.org>, "[DNG]"
- <dng@lists.dyne.org>, redaktion@golem.de, dev mail list <dev@suckless.org>
-References: <2m53bmuzemamzc4jzk2bj7tli22ruaaqqe34a2shtdtqrd52hp@alifh66en3rj>
- <e7d548a7fc835f9f3c9cb2e5ed97dfdfa164813f.camel@HansenPartnership.com>
- <6beb4070-1946-4387-bd0e-34608a76b19e@typeblog.net>
- <CALtW_agj1rurb3DRrPd9o2mkfku5fq_M3CEKY5sW+Zz7shKYHA@mail.gmail.com>
- <6d37175d-1b0b-4b82-80f0-c5b4e61badbf@metux.net>
- <2f12ee89-af9f-4af1-8ec8-ede1d5256592@metux.net>
-Content-Language: tl
-In-Reply-To: <2f12ee89-af9f-4af1-8ec8-ede1d5256592@metux.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:XIQHZvwV6mgEj8g5tc+iuA/GvWf/P0kkygsyLYq+DvGrrOxfuer
- sKfMhqbrAKrcS6TBA0nV6yxkQAbIg4cHFNC8m22+eV6Tm6ANt0DMxHaiEvORd/1HYzHKMgk
- 0VkQ1IWl+7/dkTu206Bz+t8fa5DvIGbo2j6KILH+5jElO/7LAHib2332uA/Vkm3pSIjLcfc
- rD5dh0FGHSSNfDqMV9JFA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:sMpchn7KEUY=;8/e38SV5rTN/RPg4OmC+sukbTpX
- eEvWu6AFQQYXiwVueoIkWDj4q8T6D25HkBJ4BvlujeEJEMnLxGcVaslg1E2J27gL1zulE1a5C
- EGizaYvlsIws7pj9q/e0zmJJmF5S4DLpWSyvxRJqSRM3NnfIHfl+IWmFeZxaz8YyWYzlCcFed
- ndz38sV2Kah6la3JPLMEDjW5i+keCvZ89U0qCwL1dPBpLVbSJjXgw0rKuYWwEn3LU7BebRZuc
- Qm0+OYYB7JONEEcP7iON0FT3Q08NJuDZGJK9ciNrw9bZ7cYEkpizhb8DL8S2G11XMIY/+KCLq
- DaS6B8UMeROHHR53a+0rGLSzYaS6G8S7uTfp1lOX1L0WA26iAcXwZZHBnv+a4gIRHcJeCvUR/
- UCGvk28KtQVngS29h7uU7uAK7IzLNl1sQF6beW1CJfunjA5m0NoemgiKfXsGPFv0fwv6AwWza
- mlnxZbkXpgyxaImk/n3CJz5ofU1fKBpmB5vhUOAiUZL1+XGwG3QMdIdD4oz9SrlwEQRed+Jbr
- Uq34quzJ15ikB1aTiQIAo+FP9eJ4Mvu+UXt8fqCOH4xFmU3HJ7Wjm2sJ8Dw9SjQ4Pmw7f2eZz
- OWwwTpRHnHmP7tgi568dPeHhQzaYV/VxR4oi/dV2hUQg1lz54KbxtQ46azoN0xPdBGx9yr2HP
- 6SgggRzv4siqhZtxJCAc0GyLT6NKSKMoIw9nezb3VjeywHYXZXR/vwemiI7/XR3Udr86o4YwA
- aCse00M4gjLQnnse5VtWlf1yScvKS/ibZJw4EeXp77qtQkJC99CcUpZrc9f2wHGJat0FijrpP
- w6y5xb9/Mdo9VqpgK0hM8Bxw==
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100009.china.huawei.com (7.191.174.83) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-Reposing with a different address, since my domain is hard-blocked
-by kernel.org mail server.
+On Wed, 30 Oct 2024 16:47:50 +0200
+Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
+
+> On Mon, Oct 21, 2024 at 02:54:15PM +0200, Matteo Martelli wrote:
+> > Consumers need to call the producer's read_avail_release_resource()
+> > callback after reading producer's available info. To avoid a race
+> > condition with the producer unregistration, change inkern
+> > iio_channel_read_avail() so that it copies the available info from the
+> > producer and immediately calls its release callback with info_exists
+> > locked.
+> > 
+> > Also, modify the users of iio_read_avail_channel_raw() and
+> > iio_read_avail_channel_attribute() to free the copied available buffers
+> > after calling these functions. To let users free the copied buffer with
+> > a cleanup pattern, also add a iio_read_avail_channel_attr_retvals()
+> > consumer helper that is equivalent to iio_read_avail_channel_attribute()
+> > but stores the available values in the returned variable.  
+> 
+> ...
+> 
+> > +static void dpot_dac_read_avail_release_res(struct iio_dev *indio_dev,
+> > +					    struct iio_chan_spec const *chan,
+> > +					    const int *vals, long mask)
+> > +{
+> > +	kfree(vals);
+> > +}
+> > +
+> >  static int dpot_dac_write_raw(struct iio_dev *indio_dev,
+> >  			      struct iio_chan_spec const *chan,
+> >  			      int val, int val2, long mask)
+> > @@ -125,6 +132,7 @@ static int dpot_dac_write_raw(struct iio_dev *indio_dev,
+> >  static const struct iio_info dpot_dac_info = {
+> >  	.read_raw = dpot_dac_read_raw,
+> >  	.read_avail = dpot_dac_read_avail,
+> > +	.read_avail_release_resource = dpot_dac_read_avail_release_res,
+> >  	.write_raw = dpot_dac_write_raw,
+> >  };  
+> 
+> I have a problem with this approach. The issue is that we allocate
+> memory in one place and must clear it in another. This is not well
+> designed thingy in my opinion.
+
+It is a tricky corner and we've not yet come up with a better
+solution :(  I think one of the earlier versions did just always copy
+and the reviews suggested that was painful given we are fixing a tiny
+percentage of devices.  Hence we ended up with what is effectively
+an optional copy if the provider knows the data is volatile.
+
+So there are two 'potential' copies here and we need to be careful
+to separate them for purposes of discussion.
+A) Copy in provider if it has volatile available data.  In that
+   case the copy is done in a call to it via read_avail, and release
+   via a call to read_avail_release_resource().  So to my mind locally
+   the same as any acquire / release pair.
+B) Copy in the core for the case where we need the lifetime to persist.
+   That is a effectively a kmemdup() call so we could call back to the
+   core to release it but it would just be a kfree() wrapper.
+ 
+(A) Only occurs in a tiny subset of drivers, most use non volatile data
+    for read avail (constant, or constant after probe).
+(B) Only occurs for consumer drivers that directly use the avail data.
+    There are very few of those and no other sane way of solving this
+    because we can't hold a lock into the provider for an unknown
+    (long) time.
 
 
-On 29.10.24 17:51, Enrico Weigelt, metux IT consult wrote:
-> On 25.10.24 15:21, Enrico Weigelt, metux IT consult wrote:
->
-> Hello folks,
->
->
-> <snip>
->
-> Now they're really gone wild: I'm blocked by vger's spam filter.
->
-> An official Linux maintainer is censored on LKML for critizing his
-> holyness Torvalds.
->
-> First I've thought it's just when replying specific mails, but now
-> turned out *all* my mails are blocked, even totally unrelated things.
-> I can confirm it's not by the message content, but my mail address or
-> domain. I'm blocked from whole kernel.org
->
->
-> Here's some piece of evidece (there's much more, I'm collecting it all)
->
->  >=C2=A0=C2=A0=C2=A0 linux-renesas-soc@vger.kernel.org:
->  >=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 SMTP error from remote serv=
-er for TEXT command, host:
-> smtp.subspace.kernel.org (44.238.234.78) reason: 550 5.7.1 Your message
->  > looked spammy to us. Please check https://subspace.
->  > kernel.org/etiquette.html and resend.
->  >
->  >
->  >=C2=A0=C2=A0=C2=A0 netdev@vger.kernel.org:
->  >=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 SMTP error from remote serv=
-er for TEXT command, host:
-> smtp.subspace.kernel.org (44.238.234.78) reason: 550 5.7.1 Your message
->  > looked spammy to us. Please check https://subspace.
->  > kernel.org/etiquette.html and resend.
->  >
->  >
->  >=C2=A0=C2=A0=C2=A0 linux-kernel@vger.kernel.org:
->  >=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 SMTP error from remote serv=
-er for TEXT command, host:
-> smtp.subspace.kernel.org (44.238.234.78) reason: 550 5.7.1 Your message
->  > looked spammy to us. Please check https://subspace.
->  > kernel.org/etiquette.html and resend.
->
->
-> This is unprecented, yet another dam broken. After silently removing
-> valuable maintainers from the MAINTAINERS file, now they wen't another
-> step further and actively blocking communication.
->
-> Seems that critizing his holyness is even worse than being Russian here.
-> This behaviour is just triggering even more criticism.
->
->
-> Everybody's who's unhappy with this, feel free to bringt that on the
-> table @lkml. Let the Streisand effect kick in.
->
->
->
->
-> --mtx
->
->
->
+> I was thinking a bit of the solution and
+> at least these two comes to my mind:
+> 
+> 1) having a special callback for .read_avail_with_copy (choose better
+> name) that will dump the data to the intermediate buffer and clean it
+> after all;
+
+So we have that allocate the data in the provider and hand it to the
+consumer which then frees it with kfree() in all cases?
+
+Note that's what we do for the inkern interfaces (the ones consumer
+drivers have to use), just in the core not the providers because that
+corner is hard to close any other way. In this rare case we end up
+potentially copying twice.
+
+For the special cases where the buffer isn't passed on beyond
+functions that are part of the IIO core, we avoid the need for that
+(potentially second, probably only) copy because we can always
+ensure the release call is made.  Note this is the common case
+by far. It's the pretty printing done by the core to present this
+data to sysfs etc, or to find out the max value for some consumer
+that doesn't need the whole set.
+
+> 
+> 2) introduce a new type (or bit there), like IIO_AVAIL_LIST_ALLOC.
+
+The special handling that will need seems likely to be no more
+obvious than the handling we have here.  I'm not really
+sure how it would work.
+
+> 
+> In any case it looks fragile and not scalable. I propose to drop this
+> and think again.
+> 
+> Yes, yes, I'm fully aware about the problem you are trying to solve and
+> agree on the report, I think this solution is not good enough.
+
+I'll back this out of my tree for now so the discussion can carry on.
+
+Jonathan
 
 
