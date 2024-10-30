@@ -1,130 +1,128 @@
-Return-Path: <linux-mips+bounces-6563-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6564-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDED99B6266
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2024 12:59:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF56A9B6351
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2024 13:49:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5BA51B210CD
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2024 11:59:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0BA181C20C27
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2024 12:49:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FE2B1E5738;
-	Wed, 30 Oct 2024 11:59:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A187A1E9097;
+	Wed, 30 Oct 2024 12:49:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="IcIPpn6c";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DUUBPMLT"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=metux@gmx.de header.b="UxbVmpXW"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DE2579D2
-	for <linux-mips@vger.kernel.org>; Wed, 30 Oct 2024 11:59:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8B51E9066;
+	Wed, 30 Oct 2024 12:49:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730289593; cv=none; b=dxTsyPtmxQHd7tkOhX8aPv/aFsVuUMVYcXNG6Qg5ClkQzDLSbqrBbMRUqJRxbpGE90E5Jg0/nmG69EJFKBQC6LgDP+DF+6+Y0KEui3OMid/sqvzsZOctT+h+e7TpnCGGJAYbKkxivx+rzvvgchhw2L+PKIMZTb9GJf2tk0oBv1o=
+	t=1730292587; cv=none; b=tTBqZdEbrR6j1L0WV7aTvrbcOhp/wn9myBG0TKQ41+VmI7zMf/vLPnnQ3SObAXUxNib8+KZSeq2WwNNb5gaW0B3EWrIXWMvnIWgYe87vsFdynU1jQkUGlhHc8rhruVblYSNNLDzGL6HN/LiSTcBAu0DPFBBKeHW1gEjswYBiS5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730289593; c=relaxed/simple;
-	bh=caO4PS8NGOvOs8my2/EeuBKgRGEW2rlnuecsIaea8+Y=;
-	h=MIME-Version:Date:From:To:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=aNjldW03SFR7lRQAoLhZ94QvUPDVCFzdA2BxfPUKhAZAgWnzvR61Yo4NdFzMEk57VWrLcm0dZBHTRrcGk4oXweLQtm7+X31LcPiE5kXradsQvgTwWO/wW8N238KEb5K+hr3EWMIxpKH1y0REQjaOUjRYLdLo/t7gvCE6jyVvLTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=IcIPpn6c; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DUUBPMLT; arc=none smtp.client-ip=103.168.172.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 423BA1140182;
-	Wed, 30 Oct 2024 07:59:49 -0400 (EDT)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-09.internal (MEProxy); Wed, 30 Oct 2024 07:59:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:content-transfer-encoding:content-type:content-type:date:date
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1730289589;
-	 x=1730375989; bh=caO4PS8NGOvOs8my2/EeuBKgRGEW2rlnuecsIaea8+Y=; b=
-	IcIPpn6c/naoZa2+q0P7ltAmlFjpCJXaOp0bkW1mVi/RfI702aMW+lyBnNTyXpUj
-	8aZkDANZ9IP8xro4PGrGn5bH7zlXmcvtLWjFNDVxPvBEa2D2GjIvqdekBC8d19mG
-	S3FPLHKAs0nfhYM6Al+P6yEuHfBZm2rtTUEOewtXKTXAQrpDP8xxq/hE2c95Somj
-	3exUpijrbVX200oJ5lPv6xb6Obj7LakyRn3niuTDUvQxIhNdI1bdsMZ8Dla3MckU
-	wzqVuyWNvvhDytfSFoWWPUtNu/Nh3Iry+z0OXFjQX+Hjno2PBQpMYFhKK5cDS/ag
-	AOgud9/MiwF26QHkSEmX+A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:content-transfer-encoding:content-type
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1730289589; x=1730375989; bh=c
-	aO4PS8NGOvOs8my2/EeuBKgRGEW2rlnuecsIaea8+Y=; b=DUUBPMLTEaJHit6MR
-	9Jt1G6m8+N5wr7ual0S/nc3u3V5BK+W6T8jS6QRpXzl0QX72jAH9Lpa3VEZ2oSCC
-	VxFxHDunBDgDNeTxHErQABZgdHn4SFHliiZZlryEv7MTZqAWiyauh/vQLz57D0ui
-	2SVFsnJIH/3HNHboHudfywwHivK+fbVvblzhdHkREiSSNUSHJqlaOdgUdekHBzQA
-	NrFyYvGUnmFMvR6zqmER1WHdtyDYCvSAHJoL2yo8rEEgYYqRkUObKmfAOOH0+/jI
-	ivYH0I1XQqP6TE1KwmMJDLvUtqUx02MukraF2PpfvRCq6GecbF9o7AJmsRpTfkC5
-	tC6ww==
-X-ME-Sender: <xms:tR8iZ4CMWsjDO_Jtr9hWHmnRBLd0zRfNcFVfRGYlcNwS4ThzOjjGzQ>
-    <xme:tR8iZ6juvnZxyyFk94V2_9IquM-vn6A1AxLrgGjTdBlkSirKdwaCy5fXGuvWf4oDb
-    HBrtevxc_JHMpMQZqs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekfedgfeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvffkjghfufgtgfesthhqredtredtjeen
-    ucfhrhhomhepfdflihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflh
-    ihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeekheeuudffhedtgfekgfelvdek
-    teeuleevvdfhleehuedufeevieeiueejtedtieenucffohhmrghinhepshhouhhrtggvfi
-    grrhgvrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
-    rhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomhdpnhgspghrtghpth
-    htohepvddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepughofihnihhnthhhvggs
-    uhhnnhihhhholhgvsehgmhgrihhlrdgtohhmpdhrtghpthhtoheplhhinhhugidqmhhiph
-    hssehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:tR8iZ7nl9sNpzFwUVT87OgL3SG1imq-sitB5Utn18XRV6gUFZro5WA>
-    <xmx:tR8iZ-xx87vThnFkS1JW0yUipHvLb14XZZZmON4UnrMj0FwjrzPYcw>
-    <xmx:tR8iZ9RN1ajV9Dp2haM4oEMRj5ZaY5GVs2OhSnGMMgKzqmIWh90nDw>
-    <xmx:tR8iZ5Y3FZ_oKx_YMnRvKNZihSCCOzgTzTcaSr8gepbsfLYMuXF4aA>
-    <xmx:tR8iZ8JOlpSwWGemItlpL_vD_CvppuTAZibTo9JKYG6WhD0nhQJwo1Q0>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 044FD1C20066; Wed, 30 Oct 2024 07:59:49 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1730292587; c=relaxed/simple;
+	bh=+YCnTpHf4kgqcsvGPEJmRwKHA8R5k5OeoiGplCCzf7Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OwPtEP3D/a3ACyOXZS2HVEF7dK4/AyQzb7VLQfdEEomhe6oS+Wz9o41KmnN58L7qj/wMkMw8u5ZvVbt358Yhv9Zw6qkgwitjzfxDke2GpKYJhYWjgfsw/BeqqrEz3yQsIn5ofkeUQig1lHEeQsLzi6uuc1Xt8nVL0jQS790QoDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=metux@gmx.de header.b=UxbVmpXW; arc=none smtp.client-ip=212.227.15.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1730292502; x=1730897302; i=metux@gmx.de;
+	bh=+YCnTpHf4kgqcsvGPEJmRwKHA8R5k5OeoiGplCCzf7Q=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=UxbVmpXWvyWFMdu+GATuiw1ytz1oNpvm5GNdgPbapjupaP25dsmWNYV/SdmkFCpE
+	 VX+3bwgCyi7J1vZWt8hxBFNjCqYXAs/90EF5MTi5XI4T3wPAud49gsLSmSGWAgCFH
+	 L/MlMEdcnBrC3Z6I/Y0EX4qgIzoVFOZM2ueUS8NENLEQofE14R0wXa31OvlhCEm1F
+	 9lgOEB79j/9vjsYX9KbXu2T/UCUxO61Yl+VZqyc98kF/0soDrfczquDVKjoNkb+Qg
+	 C3a2MT2iG3Shr2kXGTjhv+n6z7zTnhYsIVyC7TaB+61rRJr4ZYE9Z0EHkdrRrpF0j
+	 0MTyH7Gn6TRMn1XJ3Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.178] ([95.114.207.188]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MUXpK-1tExqH3yV6-00WDT5; Wed, 30
+ Oct 2024 13:48:22 +0100
+Message-ID: <d769ffcf-95e6-4db9-8f80-fe8a7dae0441@gmx.de>
+Date: Wed, 30 Oct 2024 13:48:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 30 Oct 2024 11:59:24 +0000
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "DiTBho Down in The Bunny hole" <downinthebunnyhole@gmail.com>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Message-Id: <c90da3b6-4c13-4d52-a0e7-b2247beddc09@app.fastmail.com>
-In-Reply-To: <3105ecf0-f00c-4d36-8813-ec7aeb1dfd08@app.fastmail.com>
-References: 
- <CAAZ8i80GGmwy5u1dPoG+f43PxGgD_pFhOrQkEr=5bhmLfn6sSQ@mail.gmail.com>
- <3105ecf0-f00c-4d36-8813-ec7aeb1dfd08@app.fastmail.com>
-Subject: Re: SGI MIPS, Speculative Execution issue
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla Thunderbird
+Subject: lore.kernel.org getting senile ? [WAS: [PATCH 1/2] MAINTAINERS:
+ Remove Huawei due to compilance requirements.
+To: Vladimir Vladimirovich Putin <vladimir_putin_rus@kremlin.ru>,
+ torvalds@linux-foundation.org
+Cc: aospan@netup.ru, conor.dooley@microchip.com, ddrokosov@sberdevices.ru,
+ dmaengine@vger.kernel.org, dushistov@mail.ru, fancer.lancer@gmail.com,
+ geert@linux-m68k.org, gregkh@linuxfoundation.org,
+ hoan@os.amperecomputing.com, ink@jurassic.park.msu.ru, jeffbai@aosc.io,
+ kexybiscuit@aosc.io, linux-alpha@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-fpga@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org,
+ manivannan.sadhasivam@linaro.org, mattst88@gmail.com,
+ netdev@vger.kernel.org, nikita@trvn.ru, ntb@lists.linux.dev,
+ patches@lists.linux.dev, richard.henderson@linaro.org, s.shtylyov@omp.ru,
+ serjk@netup.ru, shc_work@mail.ru, torvic9@mailbox.org,
+ tsbogend@alpha.franken.de, v.georgiev@metrotek.ru, wangyuli@uniontech.com,
+ wsa+renesas@sang-engineering.com, xeb@mail.ru,
+ LKML <linux-kernel@vger.kernel.org>, phoronix@phoronix.com,
+ redaktion@golem.de
+References: <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
+ <20241024140353.384881-1-vladimir_putin_rus@kremlin.ru>
+ <20241024140353.384881-2-vladimir_putin_rus@kremlin.ru>
+Content-Language: tl
+From: metux <metux@gmx.de>
+In-Reply-To: <20241024140353.384881-2-vladimir_putin_rus@kremlin.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:1/p4ha3marvAu2CXeYNmBSD+weQhVbztKCP0nISPKnffRdbsPI3
+ zPctzMmHLcQZTqlh2zjZzgis1SjXx91Sovsuto7k7PtiaIGSg5OcFzLBWgRcu14kWBAZy2V
+ 6iBOO6GAd+WQX6yFBtItp11ISEXll6ojoO2a1WoqxVo2LnaaL9WPMNYPLxG752dUTxTITZF
+ LcInJHKfb0M4bP+h7xstA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:4vaZnIPP94U=;1c9up5UAbh4Ag/QzXUXNQvA2l0p
+ 44Ceg39Q9FQgjnuFRb4ctiEQZ6+ThY3ohI4R7ghaxJvwW9GLmQklj8ELuO6HJZM3haO1kBQuj
+ lPf9DjnCWUfcGZ6Ecr8v4m+aEFlTj6r1/zlhPs8EVJwnS4Pe706PuXTBJpkg5WIn7GxOQO2JW
+ XajGhvRcjBrJhZNk7taO4FNBbp5dLDGkB6UepQiBXV68RMT6oTpFOwswwn3/eBeat+lHalNB/
+ gw+WciTtplBXIMbtRlqxaAJboJIHQLy0eXfzWRe/U26hY4FalvSL6RW63w2giJVSyCEe63Xf2
+ pnU7T294h4NAY+Lk1Uh+0usTGhMn+kqSHhbyz6XuQ9SUym/02iNMzOAUQU4B9rMEU5q6ZVIUd
+ 0PZ3f2zoM/AhE/8kfql73M86UBv0ANHdx6CqwXixMw8ZaIdo+GaFI0OcAUT9fQKIyYZczFTBp
+ AGABaZ971CQOkfqz9ZNcYAdXDG9laz6+7WLmruYJKXEeAyGdx7twTMJrs8FULcTe1ZOzQm3ZB
+ DT9XeRboVEyBNz53wj4/qAD1UsQODVRq/XAMxGruSGXdp9S8U1GLjLvbeblVDHTp4i143RIfc
+ UOHfXVzYXn7bC0uCHBJq1Wwe+j/PPMUEteRmxPqlOJxW/zJnk/+MhQ+nsjD3nQeqM4mO62C+8
+ cGyUVjqqCH9JFck+CUdFeZs+muR6CcuaNof+jRlxFMXiRxLHv+44RU3hyg04PrdKE21G5zjmC
+ EK9fu4IcYIpfrqOOb5TemzZQb0+1b1bsoLkyszrXyxOXZlQryGt702z9+snDKhQG4NhdmMGOd
+ ZwypTOh+SvzsGp5g+0qej1rGVGE9aJPkSwI0X0drGzsuc=
 
-
-
-=E5=9C=A82024=E5=B9=B410=E6=9C=8829=E6=97=A5=E5=8D=81=E6=9C=88 =E4=B8=8B=
-=E5=8D=888:56=EF=BC=8CJiaxun Yang=E5=86=99=E9=81=93=EF=BC=9A
-[...]
->> Worse still, if the speculative approach involved a Conditional Store
->> (SC): will it be restored? No, because - the manual says - if the
->> cache is involved, then it won't be restored, so this is a real mess
->> that needs at least a sw barrier.
+On 24.10.24 16:03, Vladimir Vladimirovich Putin wrote:
+> Huawei Corp was added to the US Entity List[1] on 08/20/2020.
 >
-> I don't really know R10k implementation details, but IMHO since SC can
-> only change a cacheline between two exclusive states, it doesn't matter
-> that much....
+> The Entity List is a trade restriction list published by the United
+> States Department of Commerce's Bureau of Industry and Security (BIS),
+> consisting of certain foreign persons, entities, or governments.
+> It is published as Supplement 4 of Part 744 of the Code
+> of Federal Regulations. [2]
 
-For LLSC I'm wrong.
+Interesting to see that this message got removed from lore.kernel.org.
 
-See: https://inbox.sourceware.org/gcc-patches/490A90F4.6040601@gentoo.or=
-g/
+Google still has it in it's index, and marc.info still has the whole threa=
+d.
 
-Thanks
+The internet doesn't forget.
 
---=20
-- Jiaxun
+
+=2D-mtx
 
