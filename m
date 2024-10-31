@@ -1,54 +1,54 @@
-Return-Path: <linux-mips+bounces-6590-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6591-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19E699B7F31
-	for <lists+linux-mips@lfdr.de>; Thu, 31 Oct 2024 16:53:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EEA249B7F33
+	for <lists+linux-mips@lfdr.de>; Thu, 31 Oct 2024 16:54:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AA161C21389
-	for <lists+linux-mips@lfdr.de>; Thu, 31 Oct 2024 15:53:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C28B1C21347
+	for <lists+linux-mips@lfdr.de>; Thu, 31 Oct 2024 15:54:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03DF91BC9F0;
-	Thu, 31 Oct 2024 15:53:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8081B1BDA8D;
+	Thu, 31 Oct 2024 15:53:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="WYgN5rUC"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="CJxvlrt8"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41CC11A255C;
-	Thu, 31 Oct 2024 15:53:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573B41B0105;
+	Thu, 31 Oct 2024 15:53:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730389988; cv=none; b=f4av9hzpuHvgaUXMNIUmiXhaTZK/5GGC/Xdn2TshAy/r0Wx1JHUqVn8c1nSSPuPPrUbxpkWYGG8vcLueF/YfnGbPscnmRKX1aWoiF0Ta43ebeiG2CKpIglx8FYAK2QHe9zddpSzbS+h/gDrFm/RT8fQGQZjQEhmXsWEA+UyckF8=
+	t=1730389990; cv=none; b=a3OrDP4lqUgiqF8q8XJppJSR+iAWf1fYFBDR1/kep0xZuw5vR/NxzYSajdHPNmlZA+VOsixLHffpr7HaGqqrfEvU0tvkYhnCLfoRMU6uQXW1t0y3cnXiZh33ELJAmGPF7AQcvNYRWO7lKv3I170zfH1GxdYuzKTWZvh75bByvmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730389988; c=relaxed/simple;
-	bh=6l0qZSHDsQnkRceIi1yCN9qKhJDbQDK/liFSP7R8KZU=;
+	s=arc-20240116; t=1730389990; c=relaxed/simple;
+	bh=IbL1dIsMDKSWk+juOOze/+/g65R93/+X2wY8wHACvmo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=U2TrHnX0rrjlmG5MsCaToQQqJ6SzDO41qoxy0lNGjAezKv26k7Azo2epa9TA1YZbuVDJfQYPM+9GYOMd2tr7U9rkPnpc1vrdMCnEwgRdgMdoYMzgluvlG68zzEf3Tm3nmPyNkZwC7BvA1UwcmxBzRldRoYoYtd0cBPl60HAlhD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=WYgN5rUC; arc=none smtp.client-ip=217.70.183.197
+	 In-Reply-To:To:Cc; b=gOSa/0QKdPy93Ievttk5DnTYwJVuaF9oLD778vbDgwYlM9h3R7VMgDKqpfZeINIIUsJbP76XhhJrYpx0nMBCQiIcAL+GSqTU/RaRhNiVqyWy7hZeWlye/gIAbK5dIkLzpBiIIBw5ISYtI7Fco/k9Tp8Z8zeR92VYBIMvz7yKQNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=CJxvlrt8; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D05B41C000C;
-	Thu, 31 Oct 2024 15:52:58 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 87FA41C0010;
+	Thu, 31 Oct 2024 15:52:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1730389979;
+	t=1730389980;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=duc7FXGhBJ2LaONO5SFmALxLdfb+2+axaT7TzFowjXs=;
-	b=WYgN5rUCriEr7fSdHWBQAI/55MHYLnGXwMiSDtv+FgIc/WXQYQfyjYQgGt0Tdd41zGOS0/
-	X6xBDGngGefQItDFx23isoWJ4LSIHg1ZRw0mo2mom4s49XieiFExlpIMKf4IG1uAkSHpwE
-	nYBFRBqMvbt321SgmO2fzS43MUg3gPv/RmTLEW/KP6mqRWHi5Xq+/y/0WxrwXmHw0YJD8n
-	lOBTrxGg1Kb/8hfAPmlqwDKYs2Li4Nig4+8xHX60Zc3qr15kgO0tV6GdHQM1yoE/RwWPBc
-	senhRJXpNcPBs1MjbXxFGGjWHsGbzNeSIogGJq6h1W9tHvY4fZcxKGVMxVRqZg==
+	bh=8kmyA2fOJCwI24a+4je8+bVYsLftxYiEpbBDgDU16Vo=;
+	b=CJxvlrt8Z654I7Xpw0/3qx96DIpeL9MEhmDRSu3L8fvWl+8ABaBPZu4NnCZbeO39RmILVD
+	tvff+1uHmpuRWW+8LF0YTnoNeWYnakcNSIEZJaTZ+wfbkvE1Pt54t8+oU3x7vmSFSgYfA5
+	zGyXw+2miiUu8Ah8cN5+yZuka3b4PKBhaJ9ZF0v88vYYncBYBThePQlKAPAATIZXHFmNiw
+	Qe8WUjl0RPn3rbMzTKXZzXI3IjWFmb0UM9mhdH0ZzNKceCHpVLGsN4krJtogA44+6Sl5JP
+	sF/mL5ViuTk43f2aJlOffF49LaC4iWwbcXk+t7LhOebcn1ocxqEMgqxXkbU7ig==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Thu, 31 Oct 2024 16:52:55 +0100
-Subject: [PATCH 05/13] dt-bindings: clock: eyeq: add Mobileye EyeQ6H west
- clocks
+Date: Thu, 31 Oct 2024 16:52:56 +0100
+Subject: [PATCH 06/13] clk: fixed-factor: add
+ clk_hw_register_fixed_factor_index() function
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241031-mbly-clk-v1-5-89d8b28e3006@bootlin.com>
+Message-Id: <20241031-mbly-clk-v1-6-89d8b28e3006@bootlin.com>
 References: <20241031-mbly-clk-v1-0-89d8b28e3006@bootlin.com>
 In-Reply-To: <20241031-mbly-clk-v1-0-89d8b28e3006@bootlin.com>
 To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
@@ -75,32 +75,51 @@ Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-Add clock indexes for EyeQ6H west OLB. Internal hierarchy is:
-
-    PLL_PER
-    └── PER_OCC
-        └── PER_UART
+Add non-devres version of clk_hw_register_fixed_factor(), with parent
+targeted using its index.
 
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- include/dt-bindings/clock/mobileye,eyeq5-clk.h | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/clk/clk-fixed-factor.c | 11 +++++++++++
+ include/linux/clk-provider.h   |  3 +++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/include/dt-bindings/clock/mobileye,eyeq5-clk.h b/include/dt-bindings/clock/mobileye,eyeq5-clk.h
-index 2356bc52646df9cfeb93df8120eb8f0bf80d97e9..8efdf0feae8e43e7b84ff9ca12b8b90c3116240d 100644
---- a/include/dt-bindings/clock/mobileye,eyeq5-clk.h
-+++ b/include/dt-bindings/clock/mobileye,eyeq5-clk.h
-@@ -37,6 +37,10 @@
- #define EQ6HC_CENTRAL_PLL_CPU	0
- #define EQ6HC_CENTRAL_CPU_OCC	1
+diff --git a/drivers/clk/clk-fixed-factor.c b/drivers/clk/clk-fixed-factor.c
+index 8fba63fc70c554df0d646dba75c5d70d0b184319..e62ae8794d445f685156276d5135448f340fca3f 100644
+--- a/drivers/clk/clk-fixed-factor.c
++++ b/drivers/clk/clk-fixed-factor.c
+@@ -241,6 +241,17 @@ struct clk_hw *clk_hw_register_fixed_factor_with_accuracy_fwname(struct device *
+ }
+ EXPORT_SYMBOL_GPL(clk_hw_register_fixed_factor_with_accuracy_fwname);
  
-+#define EQ6HC_WEST_PLL_PER	0
-+#define EQ6HC_WEST_PER_OCC	1
-+#define EQ6HC_WEST_PER_UART	2
++struct clk_hw *clk_hw_register_fixed_factor_index(struct device *dev,
++		const char *name, unsigned int index, unsigned long flags,
++		unsigned int mult, unsigned int div)
++{
++	const struct clk_parent_data pdata = { .index = index };
 +
- #define EQ6HC_SOUTH_PLL_VDI		0
- #define EQ6HC_SOUTH_PLL_PCIE		1
- #define EQ6HC_SOUTH_PLL_PER		2
++	return __clk_hw_register_fixed_factor(dev, NULL, name, NULL, NULL, &pdata,
++					      flags, mult, div, 0, 0, false);
++}
++EXPORT_SYMBOL_GPL(clk_hw_register_fixed_factor_index);
++
+ struct clk *clk_register_fixed_factor(struct device *dev, const char *name,
+ 		const char *parent_name, unsigned long flags,
+ 		unsigned int mult, unsigned int div)
+diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
+index 75444e250a7875a4fa90c9dea7a90b198f6be2b8..99ae3ffb94bc5ce2b8493509cf3548b03209852b 100644
+--- a/include/linux/clk-provider.h
++++ b/include/linux/clk-provider.h
+@@ -1142,6 +1142,9 @@ struct clk_hw *clk_hw_register_fixed_factor_with_accuracy_fwname(struct device *
+ 		struct device_node *np, const char *name, const char *fw_name,
+ 		unsigned long flags, unsigned int mult, unsigned int div,
+ 		unsigned long acc);
++struct clk_hw *clk_hw_register_fixed_factor_index(struct device *dev,
++		const char *name, unsigned int index, unsigned long flags,
++		unsigned int mult, unsigned int div);
+ void clk_hw_unregister_fixed_factor(struct clk_hw *hw);
+ struct clk_hw *devm_clk_hw_register_fixed_factor(struct device *dev,
+ 		const char *name, const char *parent_name, unsigned long flags,
 
 -- 
 2.47.0
