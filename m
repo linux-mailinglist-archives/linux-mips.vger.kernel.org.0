@@ -1,113 +1,145 @@
-Return-Path: <linux-mips+bounces-6577-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6578-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B31139B7187
-	for <lists+linux-mips@lfdr.de>; Thu, 31 Oct 2024 02:13:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 143529B761F
+	for <lists+linux-mips@lfdr.de>; Thu, 31 Oct 2024 09:14:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A2F1B20CD8
-	for <lists+linux-mips@lfdr.de>; Thu, 31 Oct 2024 01:13:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 808BB281108
+	for <lists+linux-mips@lfdr.de>; Thu, 31 Oct 2024 08:14:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1ABD45028;
-	Thu, 31 Oct 2024 01:13:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C3F9154C0D;
+	Thu, 31 Oct 2024 08:14:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CQFnaBIg"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ur6j9tUU"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A87C14438B;
-	Thu, 31 Oct 2024 01:13:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E33F1531C0;
+	Thu, 31 Oct 2024 08:14:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730337221; cv=none; b=XSmDcZ/ooz89/zkm1QcehPh40tWjQHGB33MQi/oEqQ45MJaKsI5GoiVyxocEDCz0mN4JkU9i2JqrUHI9Ck+XhwU4k+N2QuAeZWnDF/fR7QuY7EQiw1fUZmxk47eO1EKQ3EAYrkPHvUz8RNQTVb7wlvpM08A6fKgV45/w8N8atB0=
+	t=1730362453; cv=none; b=VPzctUVbftxHC8hT0JKaOL9tNTQx8yU2G7vy049znkus0OuG9sAUEPjHKmQeiu8VCSYJfr9xIjTtz+03Y2drn9097GnfVK8Lc/ghHMiIm01yE2xudP2G2vuUFJrKZvqk0e52XpLuzBeY0LUjfUtNa3zWWttnsGohHcaORJtMX1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730337221; c=relaxed/simple;
-	bh=WbRptb7FCqv60HSIIaD84GGUKPtD6/MInRYEUgylKqs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uRfLYgRqiS8si2HbaglzBGI0AzI/c/UDcIbCPwj+DtadOVnOgu4QfeQdecjiSWVmhWJVjUUEGKgk50mGwm4U4JOhlpacOrwCw03AbsrpAvUSmkU59VbWQwqu77amG0q8JhHa5lZNcBmksJBuIwGwCDnw1EFRSJqC8tossZHbMzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CQFnaBIg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43539C4AF0C;
-	Thu, 31 Oct 2024 01:13:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730337221;
-	bh=WbRptb7FCqv60HSIIaD84GGUKPtD6/MInRYEUgylKqs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=CQFnaBIgu2VJo5I+vqPnQnQya2dHbKnwlw4s5esPxZr2KCwiPFuIEHv6DrTdVcG0P
-	 rUmRAxH/fJbdU7KBd/Qy4wplwFFJ27zTgER9Agrvdeve1v8zwMqXCZR1Xnr0Bj5HEq
-	 j40z/03nX6Rp5wiFyV6rMoYEnTtjU3wDXxoBH4c/JJtDjnMj75M+dhyA0JmJMAZm54
-	 dLeFSXOiNPIjFQbimyrT3iQa+E7OFRUt+kvmWcpeAX+EPee1AphnyCYN/E3+genhG3
-	 ZPeC44LCSz7ye3ZMnB/3ys4yN0lfAUY7satO3jS9ItjL8U0V0yav/Bm/V4USZgC4pN
-	 TTe9z+BWh7wpA==
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a99e3b3a411so237212966b.0;
-        Wed, 30 Oct 2024 18:13:41 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWQBj3Id8Q2M4+KXXvC2HPxE+MLJNb2Lnhvr+IGaFNfSee4rL7zvEo5q2Wpcq0EYvZk8l1YypL8pA0OL/o=@vger.kernel.org, AJvYcCXlOQmollY823oJ5LmF3AVVm5HTynNPlXaJgD6JTgsdyO1KyoumlXqzWHrc9T2WoaFgN/2POI7i1nE5DA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvofuGDLN/yFEgLx2KsaYERJfwA/Tu1mG5T/3zNh6MMoxwMc54
-	RF+nYMDZ7wwTB0tjZ/PMVdp5FtFrksry0k2YZdHlTAoAo4Rq4GgC2Uy1ysgMD0nJkYwKkmSKi+i
-	i0Y/2dLA92dXi9ed259BMNjW0Mmk=
-X-Google-Smtp-Source: AGHT+IHNI0GAvdwr25dkpNoHJw8i/LubG55Z749FdRTKFrX6ZwKdMY40mOPZLmY7D520K17tiZfHEOM/OqdIomb8BBM=
-X-Received: by 2002:a17:907:97d6:b0:a9a:c57f:964b with SMTP id
- a640c23a62f3a-a9e55a29239mr50707566b.8.1730337219900; Wed, 30 Oct 2024
- 18:13:39 -0700 (PDT)
+	s=arc-20240116; t=1730362453; c=relaxed/simple;
+	bh=yHVx56kdklX6a6WjIJViALRYiu1NFmOidLIkcT/rSnk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=dHBOH/Oqb1aNPJoEZr017FD+jf/gq6vWA0jv9cZtJYiW3MLS5IhbYNN55pKDyI/xvvXeqqlOeHpezbT5vbd7OZ+yreKh7+F9GD51A17VxqZ64MwPu0KD7nVKzPt1SLTYxdFnBX0nfCiq0wOo5zESCrIXdHxVJz/E1Pna5Sducxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ur6j9tUU; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 15ED1E0002;
+	Thu, 31 Oct 2024 08:13:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1730362442;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yHVx56kdklX6a6WjIJViALRYiu1NFmOidLIkcT/rSnk=;
+	b=Ur6j9tUU4ZhbyRKqUfVHQ3jArwWtmk9Xn2jBMAiYT4BUAKxd9GPgd95GmNvH5foMwnZPb3
+	A8tzAY/dlFoaZxqyyvE9hyWunygPFYVoPRr7RQbYQYqkvcdBtQeTusz11pUcFfow8f0F0C
+	DznNnW1x1cDi4E0E+eHMsdW7Njq2MGbIwwnVi8+ZD3j1I+a7pLUItUZY1jGAJD4O1Q9Ku5
+	T9yXadtxw86RarC07Vc+PmrFEZ+/PP8ATpUEiO4wnmS58uHWzJswG1tkcTiPC/eUDVJu3d
+	nyqXlTxPZ3l6+8emdKkGEbsJJ7ucr/QyUbs3nQd4JbfRlTdV7PsLfvSfU2mSaQ==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>, Aleksandar Rikalo
+ <arikalo@gmail.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Vladimir Kondratiev
+ <vladimir.kondratiev@mobileye.com>, Theo Lebrun <theo.lebrun@bootlin.com>,
+ Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org, Djordje
+ Todorovic <djordje.todorovic@htecgroup.com>, Chao-ying Fu
+ <cfu@wavecomp.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, Geert
+ Uytterhoeven <geert@linux-m68k.org>, Greg Ungerer <gerg@kernel.org>, Hauke
+ Mehrtens <hauke@hauke-m.de>, Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+ linux-kernel@vger.kernel.org, "linux-mips@vger.kernel.org"
+ <linux-mips@vger.kernel.org>, Marc Zyngier <maz@kernel.org>,
+ "paulburton@kernel.org" <paulburton@kernel.org>, Peter Zijlstra
+ <peterz@infradead.org>, Serge Semin <fancer.lancer@gmail.com>, Tiezhu Yang
+ <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v8 10/13] dt-bindings: mips: cpu: Add property for
+ broken HCI information
+In-Reply-To: <378f8b70-12d9-4ec3-a1e5-35bd992bfc90@app.fastmail.com>
+References: <20241028175935.51250-1-arikalo@gmail.com>
+ <20241028175935.51250-11-arikalo@gmail.com>
+ <avz4crm2yrk3fg7r4qxkgkt3ka5hmk54v2wtcms453tsnewu5w@jzjxmyd4b7yg>
+ <CAGQJe6p6QgSQKByVQ8G+HpWbdEHnfNb8vRureOrS2VZa6Lk74A@mail.gmail.com>
+ <29d7688e-5fac-4821-8764-bdc760112370@app.fastmail.com>
+ <378f8b70-12d9-4ec3-a1e5-35bd992bfc90@app.fastmail.com>
+Date: Thu, 31 Oct 2024 09:13:57 +0100
+Message-ID: <87jzdoadve.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241030063905.2434824-1-maobibo@loongson.cn> <20241030164123.ff63a1c0e7666ad1a4f8944e@linux-foundation.org>
-In-Reply-To: <20241030164123.ff63a1c0e7666ad1a4f8944e@linux-foundation.org>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Thu, 31 Oct 2024 09:13:27 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7AyjyGT=4pW9X-ZrdN3JThs8ukC3dnoZW_dOxZLQsQtQ@mail.gmail.com>
-Message-ID: <CAAhV-H7AyjyGT=4pW9X-ZrdN3JThs8ukC3dnoZW_dOxZLQsQtQ@mail.gmail.com>
-Subject: Re: [PATCH v2] mm: define general function pXd_init()
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Bibo Mao <maobibo@loongson.cn>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>, loongarch@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, linux-mm@kvack.org, 
-	kasan-dev@googlegroups.com, Alexander Potapenko <glider@google.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, WANG Xuerui <kernel@xen0n.name>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: gregory.clement@bootlin.com
 
-Hi, Andrew,
+Hi Jiaxun,
 
-On Thu, Oct 31, 2024 at 7:41=E2=80=AFAM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
+> =E5=9C=A82024=E5=B9=B410=E6=9C=8829=E6=97=A5=E5=8D=81=E6=9C=88 =E4=B8=8B=
+=E5=8D=884:11=EF=BC=8CJiaxun Yang=E5=86=99=E9=81=93=EF=BC=9A
+>> =E5=9C=A82024=E5=B9=B410=E6=9C=8829=E6=97=A5=E5=8D=81=E6=9C=88 =E4=B8=8B=
+=E5=8D=8812:21=EF=BC=8CAleksandar Rikalo=E5=86=99=E9=81=93=EF=BC=9A
+>> [...]
+>>>
+>>>> Is this property applicable for all MIPS vendors? There is no vendor
+>>>> prefix here, so this is generic for this architecture, right?
+>>
+>> I'd say the best vendor prefix is mti in this case.
+>>
+>> CM3 IP block is supplied by MIPS Technology, it is not a part of MIPS
+>> architecture spec.
 >
-> On Wed, 30 Oct 2024 14:39:05 +0800 Bibo Mao <maobibo@loongson.cn> wrote:
+> I just tried to revise this problem and I think a better approach would
+> be picking my CM binding [1] patch and add this as a property to CM bindi=
+ng.
 >
-> > --- a/arch/loongarch/include/asm/pgtable.h
-> > +++ b/arch/loongarch/include/asm/pgtable.h
-> > @@ -267,8 +267,11 @@ extern void set_pmd_at(struct mm_struct *mm, unsig=
-ned long addr, pmd_t *pmdp, pm
-> >   * Initialize a new pgd / pud / pmd table with invalid pointers.
-> >   */
-> >  extern void pgd_init(void *addr);
-> > +#define pud_init pud_init
-> >  extern void pud_init(void *addr);
-> > +#define pmd_init pmd_init
-> >  extern void pmd_init(void *addr);
-> > +#define kernel_pte_init kernel_pte_init
-> >  extern void kernel_pte_init(void *addr);
+> You don't need to pick rest of that series, this binding alone is suffici=
+ent,
+> and it's already being reviewed.
 >
-> Nitlet: don't we usually put the #define *after* the definition?
->
-> void foo(void);
-> #define foo() foo()
-Is there any convention or documents about this? In kernel code there
-are both before definitions and after definitions.
+> Thanks
+> [1]:
+> https://lore.kernel.org/all/20240612-cm_probe-v2-5-a5b55440563c@flygoat.c=
+om/
 
-Huacai
+I had a look at your series and it seems that all the issues raised were
+solved, so why wasn't it merged?
 
+Regarding the binding in particular: If we add the property
+"cm3-l2-config-hci-broken", then it should be optional. However, the reg
+property also should be optional. Indeed, if we can detect the CM
+address, we shouldn't use a reg property.
+
+If we go in this direction, not only will the binding be modified but
+also code in arch/mips/kernel/mips-cm.c to handle this new property and
+manage the case where the reg is not needed. Additionally, we'll need to
+modify code in arch/mips/kernel/smp-cps.c to retrieve information about
+the HCI.
+
+I can write a series to illustrate it, if needed.
+
+Gregory
+
+>>
+>> Thanks
+>> --=20
+>> - Jiaxun
 >
-> ?
->
->
->
->
+> --=20
+> - Jiaxun
+
+--=20
+Gr=C3=A9gory CLEMENT, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
