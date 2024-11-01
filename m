@@ -1,79 +1,90 @@
-Return-Path: <linux-mips+bounces-6607-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6608-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66FB29B88D8
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Nov 2024 02:47:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64CE49B8BD9
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Nov 2024 08:13:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E2A31F21051
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Nov 2024 01:47:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93DD61C20B36
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Nov 2024 07:13:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B5AB1C6B4;
-	Fri,  1 Nov 2024 01:47:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF3931547C9;
+	Fri,  1 Nov 2024 07:12:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qOb+4i6U"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9122ADDAD;
-	Fri,  1 Nov 2024 01:47:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6FDE14F9F8;
+	Fri,  1 Nov 2024 07:12:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730425646; cv=none; b=CU7iWAqIoU+fxG042asSXo9ckXvLHyUUwjvojD1WXTkfg6RbRmecZpsSLltIsJUJb42jzei3t5oM1nT5kUSHtqS9MM3satILlgC5+LDUVk+Uo8vePzlkgKRd6fuJv+b2sIjihz8lT7+OEX4MzDMncou1QIc2zHdsaeJXb+etyW0=
+	t=1730445143; cv=none; b=McPlRVq5hv804ljR3mUBmdJNaQ+l3KXQXaSet/G9p2rRaPLrwvVTag/p0npdxEUbOI0FFBP91GH0j4pNIR6C6W5Lg3ANpFZ6Vp3J+0EkbDCedKjy81i75nls23iud/H6DD0LaW1J2rkl3natwFjLfmnTzd916rPQxdJun4xZAos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730425646; c=relaxed/simple;
-	bh=sXZCbRbeFr64bWTbo4bDXx21yjrRFDO5DVEu8ooKcUI=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=aHu54tKVXbsyiZm+ix4gCNWyk5gmMHlzdK645uTmSmbaVztHiTHz4VohjH3pnDXOm0FwW6eF1vt/DSk3ZH7dMIFC1o8br9zNi8uy3VlDTGPcbfNkldG/VFlIco6xl8FMrzp63p8b8NEx1WO5AA0MPfb+4xlvZj57EPD8dCJqqI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id CF8C992009C; Fri,  1 Nov 2024 02:47:17 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id C827A92009B;
-	Fri,  1 Nov 2024 01:47:17 +0000 (GMT)
-Date: Fri, 1 Nov 2024 01:47:17 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-cc: Aleksandar Rikalo <arikalo@gmail.com>, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-    Conor Dooley <conor+dt@kernel.org>, 
-    Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
-    Gregory CLEMENT <gregory.clement@bootlin.com>, 
-    Theo Lebrun <theo.lebrun@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, 
-    devicetree@vger.kernel.org, 
-    Djordje Todorovic <djordje.todorovic@htecgroup.com>, 
-    Chao-ying Fu <cfu@wavecomp.com>, 
-    Daniel Lezcano <daniel.lezcano@linaro.org>, 
-    Geert Uytterhoeven <geert@linux-m68k.org>, Greg Ungerer <gerg@kernel.org>, 
-    Hauke Mehrtens <hauke@hauke-m.de>, 
-    Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>, linux-kernel@vger.kernel.org, 
-    "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
-    Marc Zyngier <maz@kernel.org>, 
-    "paulburton@kernel.org" <paulburton@kernel.org>, 
-    Peter Zijlstra <peterz@infradead.org>, 
-    Serge Semin <fancer.lancer@gmail.com>, 
-    Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: Re: [PATCH v8 00/13] MIPS: Support I6500 multi-cluster
- configuration
-In-Reply-To: <c7d5a4e9-f080-46dd-9b96-07eb08d361f4@app.fastmail.com>
-Message-ID: <alpine.DEB.2.21.2411010146340.40463@angie.orcam.me.uk>
-References: <20241028175935.51250-1-arikalo@gmail.com> <c7d5a4e9-f080-46dd-9b96-07eb08d361f4@app.fastmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1730445143; c=relaxed/simple;
+	bh=dWCKs0aRQFm39+oKGSqLft+Fhb/qVC99EUYoWJQ/GZU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Se2a1UyrB86LVmToIVTXGHDhEs3tNYlpveeLD0bKL2wz9VoibSa9EoU6wHaB8O6BE1sUmZ9ik7FOFcI96jPFnx6yDR/QSjvuVHhWU2MlEV5LsSbzwgwI08DcBUGuRBRpoTiymYTGEvf9mw4cozB8S5GeZWh0ddaKbPNv3GaX80Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qOb+4i6U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 460E0C4CECD;
+	Fri,  1 Nov 2024 07:12:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730445143;
+	bh=dWCKs0aRQFm39+oKGSqLft+Fhb/qVC99EUYoWJQ/GZU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qOb+4i6UJfOWCdEVLOIYgq2VdWt6XSJFzyxtN8KLZ5c2omHa3V/NDrUcBCVeNDTGs
+	 wdNEohgV3PZMLyWPd1i+6iksF/vZwvqxhWmE1laJ3DFLlxZb1kLSej7iNZPvZSCnwY
+	 Ep9TpjN5Q+1yexuf/NwqHVG/xKkYKllL6xpdz8WjUC/SJ0HAJKmozHB4Bvd4NkywcH
+	 tpGKQhrLu0sPh4fNULVXa/wlZ+kyHWRZ7iRoJlwRf9uhfc81if1Hs2bAfKcN+GbbSF
+	 R2vZ1R5WbSh1CB5NvRqQGXfD6pdYimo5ObamM4695dOP/oL98fbd8VPhGO3Tynkf7R
+	 xGuFi5gqzOFPA==
+Date: Fri, 1 Nov 2024 08:12:19 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, lee@kernel.org, sre@kernel.org, tsbogend@alpha.franken.de, 
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v8 1/7] dt-bindings: reset: syscon-reboot: Add reg
+ property
+Message-ID: <pn34ntvni34erkws2j4xjd72w3umb7liin62ru6wpls5w6ktzj@7oopreffqyul>
+References: <20241031200350.274945-1-chris.packham@alliedtelesis.co.nz>
+ <20241031200350.274945-2-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241031200350.274945-2-chris.packham@alliedtelesis.co.nz>
 
-On Wed, 30 Oct 2024, Jiaxun Yang wrote:
+On Fri, Nov 01, 2024 at 09:03:44AM +1300, Chris Packham wrote:
+> The syscon-reboot binding used 'offset' for historical reasons. Having a
+> reg property is appropriate when these nodes are children of a MMIO bus.
+> Add a reg property and modify the constraints so that one of 'reg' or
+> 'offset' is expected.
+> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> 
+> Notes:
+>     Changes in v8:
+>     - None. This has been applied to by Sebastian, I've just kept it in the
+>       series so that others can see the complete picutre
 
-> Reviewd-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+No, this only creates unnecessary review / traffic and might lead to
+duplicated patches.
 
- Typo here.
+Provide link to commit if you want to give a reference. *Never* send
+already applied patches.
 
-  Maciej
+Best regards,
+Krzysztof
+
 
