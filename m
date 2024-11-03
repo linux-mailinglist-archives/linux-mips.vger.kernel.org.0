@@ -1,50 +1,51 @@
-Return-Path: <linux-mips+bounces-6623-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6622-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A7C69BA586
-	for <lists+linux-mips@lfdr.de>; Sun,  3 Nov 2024 14:04:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 336069BA583
+	for <lists+linux-mips@lfdr.de>; Sun,  3 Nov 2024 14:04:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A9A95B21760
-	for <lists+linux-mips@lfdr.de>; Sun,  3 Nov 2024 13:04:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 72830B20A8F
+	for <lists+linux-mips@lfdr.de>; Sun,  3 Nov 2024 13:04:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA4674D8C8;
-	Sun,  3 Nov 2024 13:04:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8F961632F3;
+	Sun,  3 Nov 2024 13:04:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="jqDWBJe/"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="oMOZbE5+"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpbg150.qq.com (smtpbg150.qq.com [18.132.163.193])
+Received: from smtpbg154.qq.com (smtpbg154.qq.com [15.184.224.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16346175D37;
-	Sun,  3 Nov 2024 13:04:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.132.163.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CF611CAAC;
+	Sun,  3 Nov 2024 13:04:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=15.184.224.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730639060; cv=none; b=D08DXNO+1Ahj9rVinjLRVo/GClRSc2EcGWxc+I94VvB5bkm8h7mpPE5O3oEeSaJeN8QPfCTPbXRvIuE7tKXaNd1T5EJRuqqDQbqOEAOzmDBxrKK5HxsA3MJI/IMYUq5WcPUUsBhosNxnx8Z7+Ot+Tf6HPH9yGu5+zXuhQCjDHRU=
+	t=1730639050; cv=none; b=pAmlwRNl5ho3jdPOeXY2ks32QUBUoY38/Ct9UmWY74N9R/JWYxxl5oC+6ThKPsOvyGmgPuYJTBm1/G6ugM+RVuHz0TS3GSEM0SQfCFDesdgztg39sj4glDNWqXyMFWkqE/1ztg6aBN8Mdub3MMEhHt4od7cn3LXPuvAf89om/K4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730639060; c=relaxed/simple;
-	bh=sMajPi2Q7jQgrlRJ760ebRnaLlA1VcSfXoRwLl40qZo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J+oECq5dbl81xgjDdte8Hkcu9OUm7QvHJfG6jjJ/rPzIRrFfJIUjOqBl9ni8KxoIxqZEYvzthXSBgv5EAgJ2nkT3hV+j7q3s9XyTVR37w0mFzvd9gLJrHKpE0zvP7EkOdPTVZM6sQwJMgis60RlQ034fGLnsLdc1TLPvdwHj9m8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=jqDWBJe/; arc=none smtp.client-ip=18.132.163.193
+	s=arc-20240116; t=1730639050; c=relaxed/simple;
+	bh=rFOC205H2srLLVCs27oP/ElTrphCxTjGhIZf/hK7SUM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fbUgMBuxwoZwdG0KHrm64sxQAO/i64zsnQY+T14Jb/sJ/RIPQYI68Prnz3C0OgNfHh608GHW7IUuyL55XggSbM9adtTxofgLuMPzxgc6CwPLPpct1R1P5HpxmQ7InFo5NOAtYfUwG07b/6Gf1gq3Nf/e7mQpBGMRAhXMyRyPQCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=oMOZbE5+; arc=none smtp.client-ip=15.184.224.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1730638906;
-	bh=1qs2YNwrRDZd4pch8nMQXHdJPqYYqE9eYDk77el7hbs=;
+	s=onoh2408; t=1730638910;
+	bh=cxCjNrZOXvKqymc/34w+JGr3RzWncHfZwZje6AA6RfA=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=jqDWBJe/dxPxXYdHD5AElj3kn7YFCRBKCPkyb8+JwNdwMXL4xXII9Jct3XxOnnA0u
-	 IVLFDp0JH5a5l3HXGxeJpvAklgRIng0LH733B50Es76TF8YpT+v0dnLwUAkF8fda5I
-	 5VZGLBL5+3moaHbQU52pdtcynmrEfZD0oaNU59fc=
-X-QQ-mid: bizesmtpip4t1730638850tns42c7
-X-QQ-Originating-IP: KRc8glwjaLwZLZu8e37iGraP3Gm377rGjMkOL4iqbXQ=
+	b=oMOZbE5+fZK4M8GOzilnlUW6h6abC9wpCLrBVY1dvnEWlCJuc+t+kTb0dl4IDeH8Y
+	 l+7IrFYUMqLHc11EDCrov1OtG4gwBQCtmQZGytMy1TpczfW+bTyc3Iho0iADk8FyHl
+	 WQpO16XS2kUbJ8eR+o92C2alo1gOTr5AUrxSm4+A=
+X-QQ-mid: bizesmtpip4t1730638855t3qcri9
+X-QQ-Originating-IP: FAnA4kvJphbcXjpc55wFV0jM8WQDm0z9yk8N8+vFCKg=
 Received: from avenger-OMEN-by-HP-Gaming-Lapto ( [localhost])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Sun, 03 Nov 2024 21:00:47 +0800 (CST)
+	id ; Sun, 03 Nov 2024 21:00:53 +0800 (CST)
 X-QQ-SSF: 0002000000000000000000000000000
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 6984051475002243690
+X-BIZMAIL-ID: 10277963561446323498
 From: WangYuli <wangyuli@uniontech.com>
 To: tsbogend@alpha.franken.de,
 	wangyuli@uniontech.com,
@@ -60,10 +61,12 @@ Cc: linux-mips@vger.kernel.org,
 	xuerpeng@uniontech.com,
 	maqianga@uniontech.com,
 	baimingcong@uniontech.com
-Subject: [PATCH 0/2] MIPS: loongson3_defconfig: Enable blk_dev_nvme by default
-Date: Sun,  3 Nov 2024 21:00:03 +0800
-Message-ID: <324362BC443F16F8+cover.1730638429.git.wangyuli@uniontech.com>
+Subject: [PATCH 1/2] MIPS: loongson3_defconfig: Update configs dependencies
+Date: Sun,  3 Nov 2024 21:00:04 +0800
+Message-ID: <12C089E57B973E9A+0dff65692bd28013d5bab52f3d0d5ba5710dfb07.1730638429.git.wangyuli@uniontech.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <cover.1730638429.git.wangyuli@uniontech.com>
+References: <cover.1730638429.git.wangyuli@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -73,38 +76,206 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: OfdzfOk+3eWlSkDEdcSZKNtYkMhlTCIDfGzaBDTUIn4oK8VUAhMFp0Nb
-	FSAbMGlCbOmCe1Sk0boFOO8rJQ9G49ie//5VaW6PkQMvrmR8yQ9PNLXplTyYzinf2CBE+Xm
-	F/ajzMof9FZ9yLP4yD3A4pFYDvCgfZIGu/cYd1Uk2BqvThvapS5yZ4XdKf3uHecN4KlKeg1
-	5gxeWQ1Wke4CdyULshlCUP5Z32KLBzNnxGCqJpxNoC7L/QhZeHm0iotsaciPJ+ixW9EnSQJ
-	nszYX+JrLpetqRnlCWKlkXRuTsirO9m8viOxypE3heEg+RdasrJATOrHyEeEdQfGbb1lUeJ
-	15pbe5CMOvDcVQ/jw0Q00MATqclblxyHai1Ls5xRsxWIP284mghw/WrLBPL7g4Nbme9xAzi
-	b7WMy61jZM8hTj/co1CxTJSNrPrAkjuDY+PECMFhy8XtoZhQ7IfsSUOzN/vTQIyJPJ7aaHa
-	76FyYNlVS0Fg8mOER9qbZLFZT5W5tMsirDXsI9X1HO541Mu0dbCeqfuHPsXISKfNfXS6yi6
-	l9aOvgy5GG0hF1DPVOWJkPAfFSXwUBCkhE3RJnGojWaXAdObthqby1lOcd5y8hThFoHDEZf
-	5HhqKTarOhr5bpic8cFtauwzxo5TkTtsRiXr8iB46v6vFfWI4wH3G/6ASlA5zcHI7ZH0rRL
-	iv8WyFoSTSyw3RcWarqpYFCD++CA/YfYmrYqMqg3DfTdj75M2NvuX7YAdHdfXPTalrAq+hU
-	+L0TrGofsxXKCEi1kGWqNDn6kBZnpJ/efOA6lI1ldWzBq//CjK3QPxsFfl2zzEELAWW6DqE
-	R+Nxjc9mQ6DfKyc+puFVp5tsspIFXZERi0FhHZHPrpL2n9rCUTS+wOaLy+/fC2/1WAD3gE0
-	HPVaniBnO0rOiC5MQPFnyu/iq7Zofo8+1xXKZ/eXuV7kehG4TPsbQRQgNdlYZwuY0yRX5bg
-	dpXjx64LzlGfGYi4BnNmdF9nMz3T76CECHikd7MdLKKPy+WsGPaSuhr91F7RBsMTBlhz4CU
-	iwwEByF6zUyXtXrZ1HHsYPzzYvgdNFY7Fd1/aHt0h5CVe/nLnh8mdd8eEylnbstKpqyJt2H
-	g==
-X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
+X-QQ-XMAILINFO: NOIkHYnr7Vzdu6tf6eqLU/toG3SmzqWGoJ9tvFfWti/c86SyC0UsAdwA
+	GfnDQcrpjjA1WTfqGosCrtWovTB79ABN/9NEMY7FPo60ixlY1RzZXheCkpU0tkqp715s/oU
+	l1LfkFAai8KWc11cM5OaUT8XteIpihXrzpTQcuMlHGWUq0fSyXQuSOniqpQXbVXZukfrTZU
+	c0E07dYxk9VTHr2nf3YT9QvrYHG6zDeLsvxrGXxmiBoI4tOj42qr+X7rcLqtsmBFXatGBTR
+	aHr0sDxrTJXf9Wbx3jMFIUGfPMLc0jKXke6hfKgymQL5+czrCZe5IqgsI31mRBBOyKng2Fj
+	/O1iEZT0OgTlreyYa2+sRK4BK5O+Z85fthnG3Z6JnS1TbsQt+4J53K9l0GDcM4DwIiGfWIG
+	/N2eWTeNme2M5f6jtE5YTnMzBC5YaFOZ5HK1+ZK02XuctKbvDvGbsb3lG9bFznKrEsO7vZA
+	dj/6V2Zg4RE3cuZCLKmnskd0ZuveXdYFQqZv2ER55tZ5WGJ18FryIyevLRdh9Jaq6cOrSuo
+	YzRclWRuijSLr2Top7MJtb5NqkxkIpvJj+Qt9uUuR0QNEE/uYbU3TORMGsljcd0i8IXi0Nw
+	4H+40cAPUkhUjArhMIanu4QJvyP0g5ERvMhwIQxJC0RI9dprE63IAp3GUyR++qmkyIpzJHk
+	A5oP2i00g4RNRaucjsWR2wo/dTNjX/D9eNGeDQR9puWh5s2HEXOAIvsdxE03d9IZpEvUWZ6
+	SKdgQYtM0TAJzhgTnmPi1HXdlciL28UcVOqWu45JJQxNTDyjbjk7rUpzWjgrWj3v24Qq7Sq
+	xwG4HhRGxsoAd5UaXf2MfWLxkz+gPLXGk0fptR3pHw96plUnCEJWx7JepHsHQfVf5Uey2fb
+	KVnDhTVGVKZUGap3AjSWzg0AiQEAQDrPKM/YsoOQ8ey4tenvhEXXDkTMipSFhaGOlj7SK9f
+	7A2J2+1jXuzoX5PCzJ8cz1NV1KqfQE7zUSd8YwFgQX3bTBoEhKPnW8icwipjmiwNyTz91Lf
+	X5MvmWye/TwlSFwPPCeZr0q2C0LPjcH2uLTQIjk05OWQF77+63zuNdoJLwslEV/GK3MLC33
+	SPYP+bKOSvK
+X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
 X-QQ-RECHKSPAM: 0
 
-A significant number of 3A4000 machines come with NVMe drives
-pre-installed, so we should support it in its defconfig.
+Due to long-term changes in kernel build configurations,
+run 'make savedefconfig' to update the build configuration
+dependencies.
 
-To avoid confusion, update defconfig beforehand.
+This commit does not affect the actual .config file content,
+in preparation for future modifications to loongson3_defconfig.
 
-WangYuli (2):
-  MIPS: loongson3_defconfig: Update configs dependencies
-  MIPS: loongson3_defconfig: Enable blk_dev_nvme by default
+Signed-off-by: WangYuli <wangyuli@uniontech.com>
+---
+ arch/mips/configs/loongson3_defconfig | 31 +++++++--------------------
+ 1 file changed, 8 insertions(+), 23 deletions(-)
 
- arch/mips/configs/loongson3_defconfig | 32 ++++++++-------------------
- 1 file changed, 9 insertions(+), 23 deletions(-)
-
+diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
+index 78f498752066..30837f3b6acd 100644
+--- a/arch/mips/configs/loongson3_defconfig
++++ b/arch/mips/configs/loongson3_defconfig
+@@ -5,6 +5,8 @@ CONFIG_POSIX_MQUEUE=y
+ CONFIG_AUDIT=y
+ CONFIG_NO_HZ=y
+ CONFIG_HIGH_RES_TIMERS=y
++CONFIG_BPF_SYSCALL=y
++CONFIG_BPF_JIT=y
+ CONFIG_PREEMPT=y
+ CONFIG_BSD_PROCESS_ACCT=y
+ CONFIG_BSD_PROCESS_ACCT_V3=y
+@@ -22,18 +24,16 @@ CONFIG_CGROUP_CPUACCT=y
+ CONFIG_NAMESPACES=y
+ CONFIG_USER_NS=y
+ CONFIG_SCHED_AUTOGROUP=y
+-CONFIG_SYSFS_DEPRECATED=y
+ CONFIG_RELAY=y
+ CONFIG_BLK_DEV_INITRD=y
+-CONFIG_BPF_SYSCALL=y
+ CONFIG_EXPERT=y
+ CONFIG_PERF_EVENTS=y
++CONFIG_KEXEC=y
+ CONFIG_MACH_LOONGSON64=y
+ CONFIG_CPU_HAS_MSA=y
+ CONFIG_NUMA=y
+ CONFIG_NR_CPUS=16
+ CONFIG_HZ_256=y
+-CONFIG_KEXEC=y
+ CONFIG_MIPS32_O32=y
+ CONFIG_MIPS32_N32=y
+ CONFIG_VIRTUALIZATION=y
+@@ -47,15 +47,12 @@ CONFIG_MODVERSIONS=y
+ CONFIG_PARTITION_ADVANCED=y
+ CONFIG_MQ_IOSCHED_DEADLINE=m
+ CONFIG_IOSCHED_BFQ=y
+-CONFIG_BFQ_GROUP_IOSCHED=y
+ CONFIG_BINFMT_MISC=m
+ CONFIG_KSM=y
+ CONFIG_NET=y
+ CONFIG_PACKET=y
+-CONFIG_UNIX=y
+ CONFIG_XFRM_USER=y
+ CONFIG_NET_KEY=y
+-CONFIG_INET=y
+ CONFIG_IP_MULTICAST=y
+ CONFIG_IP_ADVANCED_ROUTER=y
+ CONFIG_IP_MULTIPLE_TABLES=y
+@@ -106,7 +103,6 @@ CONFIG_IP_NF_TARGET_ECN=m
+ CONFIG_IP_NF_TARGET_TTL=m
+ CONFIG_IP_NF_RAW=m
+ CONFIG_IP_NF_SECURITY=m
+-CONFIG_IP_NF_ARPTABLES=m
+ CONFIG_IP_NF_ARPFILTER=m
+ CONFIG_IP_NF_ARP_MANGLE=m
+ CONFIG_NF_TABLES_IPV6=y
+@@ -128,7 +124,6 @@ CONFIG_L2TP=m
+ CONFIG_BRIDGE=m
+ CONFIG_VSOCKETS=m
+ CONFIG_VIRTIO_VSOCKETS=m
+-CONFIG_BPF_JIT=y
+ CONFIG_CFG80211=m
+ CONFIG_CFG80211_WEXT=y
+ CONFIG_MAC80211=m
+@@ -167,12 +162,10 @@ CONFIG_SATA_AHCI=y
+ CONFIG_PATA_ATIIXP=y
+ CONFIG_MD=y
+ CONFIG_BLK_DEV_MD=m
+-CONFIG_MD_LINEAR=m
+ CONFIG_MD_RAID0=m
+ CONFIG_MD_RAID1=m
+ CONFIG_MD_RAID10=m
+ CONFIG_MD_RAID456=m
+-CONFIG_MD_MULTIPATH=m
+ CONFIG_BLK_DEV_DM=m
+ CONFIG_DM_CRYPT=m
+ CONFIG_DM_SNAPSHOT=m
+@@ -196,7 +189,6 @@ CONFIG_VIRTIO_NET=m
+ # CONFIG_NET_VENDOR_ARC is not set
+ # CONFIG_NET_VENDOR_ATHEROS is not set
+ # CONFIG_NET_VENDOR_BROADCOM is not set
+-# CONFIG_NET_VENDOR_BROCADE is not set
+ # CONFIG_NET_VENDOR_CHELSIO is not set
+ # CONFIG_NET_VENDOR_CIRRUS is not set
+ # CONFIG_NET_VENDOR_CISCO is not set
+@@ -216,6 +208,7 @@ CONFIG_IXGBE=y
+ # CONFIG_NET_VENDOR_NVIDIA is not set
+ # CONFIG_NET_VENDOR_OKI is not set
+ # CONFIG_NET_VENDOR_QLOGIC is not set
++# CONFIG_NET_VENDOR_BROCADE is not set
+ # CONFIG_NET_VENDOR_RDC is not set
+ CONFIG_8139CP=m
+ CONFIG_8139TOO=m
+@@ -242,7 +235,6 @@ CONFIG_PPPOL2TP=m
+ CONFIG_PPP_ASYNC=m
+ CONFIG_PPP_SYNC_TTY=m
+ CONFIG_ATH9K=m
+-CONFIG_HOSTAP=m
+ CONFIG_INPUT_SPARSEKMAP=y
+ CONFIG_INPUT_MOUSEDEV=y
+ CONFIG_INPUT_MOUSEDEV_PSAUX=y
+@@ -276,23 +268,20 @@ CONFIG_MEDIA_SUPPORT=m
+ CONFIG_MEDIA_USB_SUPPORT=y
+ CONFIG_USB_VIDEO_CLASS=m
+ CONFIG_DRM=y
++CONFIG_DRM_RADEON=m
+ CONFIG_DRM_AMDGPU=m
+ CONFIG_DRM_AMDGPU_SI=y
+ CONFIG_DRM_AMDGPU_CIK=y
+ CONFIG_DRM_AMDGPU_USERPTR=y
+ CONFIG_DRM_AMD_ACP=y
+-CONFIG_DRM_AMD_DC=y
+ CONFIG_DRM_AMD_DC_SI=y
+ CONFIG_DRM_AST=m
+-CONFIG_DRM_RADEON=m
+ CONFIG_DRM_QXL=y
+ CONFIG_DRM_VIRTIO_GPU=y
+ CONFIG_FB=y
+ CONFIG_FB_RADEON=y
+ CONFIG_LCD_CLASS_DEVICE=y
+ CONFIG_LCD_PLATFORM=m
+-# CONFIG_VGA_CONSOLE is not set
+-CONFIG_FRAMEBUFFER_CONSOLE=y
+ CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
+ CONFIG_LOGO=y
+ CONFIG_SOUND=y
+@@ -350,13 +339,11 @@ CONFIG_EXT3_FS_SECURITY=y
+ CONFIG_XFS_FS=y
+ CONFIG_XFS_POSIX_ACL=y
+ CONFIG_QUOTA=y
+-# CONFIG_PRINT_QUOTA_WARNING is not set
+ CONFIG_QFMT_V1=m
+ CONFIG_QFMT_V2=m
+ CONFIG_AUTOFS_FS=y
+ CONFIG_FUSE_FS=m
+ CONFIG_VIRTIO_FS=m
+-CONFIG_NETFS_SUPPORT=m
+ CONFIG_FSCACHE=y
+ CONFIG_ISO9660_FS=m
+ CONFIG_JOLIET=y
+@@ -391,23 +378,21 @@ CONFIG_SECURITY_NETWORK=y
+ CONFIG_SECURITY_PATH=y
+ CONFIG_SECURITY_SELINUX=y
+ CONFIG_SECURITY_SELINUX_BOOTPARAM=y
+-CONFIG_SECURITY_SELINUX_DISABLE=y
+ CONFIG_DEFAULT_SECURITY_DAC=y
+-CONFIG_CRYPTO_HMAC=y
+-CONFIG_CRYPTO_MD5=y
+-CONFIG_CRYPTO_WP512=m
+ CONFIG_CRYPTO_BLOWFISH=m
+ CONFIG_CRYPTO_CAST5=m
+ CONFIG_CRYPTO_CAST6=m
+ CONFIG_CRYPTO_SERPENT=m
+ CONFIG_CRYPTO_TWOFISH=m
++CONFIG_CRYPTO_HMAC=y
++CONFIG_CRYPTO_MD5=y
++CONFIG_CRYPTO_WP512=m
+ CONFIG_CRYPTO_DEFLATE=m
+ CONFIG_PRINTK_TIME=y
+ CONFIG_STRIP_ASM_SYMS=y
+ CONFIG_MAGIC_SYSRQ=y
+ CONFIG_DEBUG_FS=y
+ # CONFIG_SCHED_DEBUG is not set
+-# CONFIG_DEBUG_PREEMPT is not set
+ CONFIG_FUNCTION_TRACER=y
+ CONFIG_FTRACE_SYSCALLS=y
+ CONFIG_CMDLINE_BOOL=y
 -- 
 2.45.2
 
