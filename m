@@ -1,125 +1,109 @@
-Return-Path: <linux-mips+bounces-6658-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6659-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B310C9BBA88
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2024 17:46:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A62E9BBC48
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2024 18:48:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B2D81F21BA1
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2024 16:46:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1FA8282A17
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2024 17:48:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 476B11C2317;
-	Mon,  4 Nov 2024 16:46:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA17E1C4A0C;
+	Mon,  4 Nov 2024 17:48:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JOk2/8JC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RG0ZZ45e"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FC7942056;
-	Mon,  4 Nov 2024 16:46:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E972176FD2;
+	Mon,  4 Nov 2024 17:48:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730738776; cv=none; b=BqjnYqe+6SDzG/g8GWE3MZueshi+blsW/7X/u5iq1xpQMPFUoPzlUpUJsQmv5ZX2UganNvjxM0L0j2xHMEBzcpNlHWCV/wtsLsPb0VBRiakOMMlYQUXhCAJ0PA13fPrKk8GYdgKtJa6eFP0Hd62WnV9uYnnSUdv5m90c3Lk0XqE=
+	t=1730742521; cv=none; b=iqxlTHlEq3Iwk1iMKdJ4RwPoKRq3AmVHkgG2YWx8hdoVccQoc1w7o1cWRRJiczfpzNG20pwHgJnlJ8rKVePT0gOk2gaGuYJiR6HcEynayHqGYYHby1Pe0gdebsG5yNER1Nb1JfAZMAgY8/2kJgTJBcvTAsFGpitZauYsd302jHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730738776; c=relaxed/simple;
-	bh=DGrRE7TUEKaaDw37a+FHzO+nzWDrspEHgHtffr+CQGI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=bpErXFlOIvo4oKq6erRnBzMl9h+myHoOzldg1KTUu8TZQo37Zw+0H/YXP9kAtmGTnwvKbMgNQLNfAxv0/e/RpI1Qn0jjTsS9WDa2FtbRjEnzkMxV20lFeB0jPOtKw4vTujlm1kPr97e+0Z1BkJ+yFhPjkRGP+h52YN/c1AO86bg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JOk2/8JC; arc=none smtp.client-ip=217.70.183.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C8C3E2000D;
-	Mon,  4 Nov 2024 16:46:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1730738771;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TK/3OnrOZfeWPKLNUkcYsUToqQO4kgM2GP8iJaKUbjY=;
-	b=JOk2/8JCqilJlJUfCvY4uRlTxlIp9ji8Qy1ngcdkwnygCzCyejzCgVMiRSaTFs9FFJDn8L
-	zV1x+ih0Gkk/qUZCv5sdT61fI1vEU+O/BjB73mPc8uoRCyM9KgaYdurfjD9fOSxMTWO90C
-	celi03gusvUFIczQAXKPUpoHig5vrFrnmhHY0OZVffXsEEsSrjJrxzoUUqvBSOdaYebHxF
-	vA3a1Fyno2B1Jd+fU6PRBwiydlj8yI4eAk6TdghaZfng6k3eDH/odGft/I/7lBgEQnAZgV
-	psQ0M2X/GNgV6qIjy3UOBxDnghEGd39eq45MFbMKvfkweDnJCvYd6olMILoDPw==
+	s=arc-20240116; t=1730742521; c=relaxed/simple;
+	bh=kyMZ9fV6X+51trgRY65w1AUDjMP2XEnEX7GkvQFyuQo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UF1vjMXa9R8x0dQ+lsdq0YSxTKo+D1X6+DOsvt/8ZK/06eITZtN2Yn3CW0q0sk5XAKLHfY7T4b7ssSc5jGmncfhdsSgIRJAWHwNEd3Ta3ZGfjLzjY8zNeX7sABTtLdaKcQ//MPap1vSCoNJJsWlUkopK038/kB7QAEiX+5fLdW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RG0ZZ45e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1421C4CECE;
+	Mon,  4 Nov 2024 17:48:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730742520;
+	bh=kyMZ9fV6X+51trgRY65w1AUDjMP2XEnEX7GkvQFyuQo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RG0ZZ45eSLTeSuURvGHB3h65F9t7QbkI04hRi4PIn9RQya+KVuOq+cKYwcM7OIRag
+	 ftffa9p0RPzhxKxbKbO1phJPPDnrPKDiu3Z4Itvr9Wls0R3DzSPdYDwIWB6GC4b2Kn
+	 OEWSQb/cisXjv+NDzmcx6uuXNdVsmOSyH1jBzLk86RwIVvV7yoI0yJMI8N5O1tLxWZ
+	 sqPAibypRsiDduXZx2vz4SdLoEWaYuAYo/l7nO/C5PoaF6LQixrBB1eQNUAosrKHye
+	 /gCeCfoWgbjXS3QMM1TfccoGnuhihV/zkZVDdun5Dof7x1e0ZdWeQe1z6JZskIC3qV
+	 2uU8b6EJ5uv3w==
+Date: Mon, 4 Nov 2024 17:48:39 +0000
+From: Eric Biggers <ebiggers@kernel.org>
+To: "Darrick J. Wong" <djwong@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org,
+	Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH v3 15/18] ext4: switch to using the crc32c library
+Message-ID: <20241104174839.GA1049313@google.com>
+References: <20241103223154.136127-1-ebiggers@kernel.org>
+ <20241103223154.136127-16-ebiggers@kernel.org>
+ <20241104155900.GH21832@frogsfrogsfrogs>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 04 Nov 2024 17:46:10 +0100
-Message-Id: <D5DJOUV9NPY4.22MIOBKLAYGA3@bootlin.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH 01/13] dt-bindings: soc: mobileye: set `#clock-cells =
- <1>` for all compatibles
-Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
- =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Krzysztof
- Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Michael Turquette" <mturquette@baylibre.com>, "Stephen Boyd"
- <sboyd@kernel.org>, "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>, "Thomas
- Petazzoni" <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-To: "Rob Herring" <robh@kernel.org>
-X-Mailer: aerc 0.18.2-0-ge037c095a049
-References: <20241031-mbly-clk-v1-0-89d8b28e3006@bootlin.com>
- <20241031-mbly-clk-v1-1-89d8b28e3006@bootlin.com>
- <20241104153727.GA192461-robh@kernel.org>
-In-Reply-To: <20241104153727.GA192461-robh@kernel.org>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241104155900.GH21832@frogsfrogsfrogs>
 
-On Mon Nov 4, 2024 at 4:37 PM CET, Rob Herring wrote:
-> On Thu, Oct 31, 2024 at 04:52:51PM +0100, Th=C3=A9o Lebrun wrote:
-> > Some compatibles expose a single clock. For those, we used to let them
-> > using `#clock-cells =3D <0>` (ie <&olb> reference rather than <&olb 0>)=
-.
-> >=20
-> > Switch away from that: enforce a cell for all compatibles. This is more
-> > straight forward, and avoids devicetree changes whenever a compatible
-> > goes from exposing a single clock to multiple ones.
->
-> Your reasoning is flawed. Changing #clock-cells is an ABI break. So you=
-=20
-> should only be changing this if it was just wrong. And if it's not wrong=
-=20
-> in some cases, you shouldn't be changing those. The h/w either has 1=20
-> clock or multiple and #clocks-cells should match.
+On Mon, Nov 04, 2024 at 07:59:00AM -0800, Darrick J. Wong wrote:
+> Hmm.  Looking at your git branch (which was quite helpful to link to!) I
+> think for XFS we don't need to change the crc32c() calls, and the only
+> porting work that needs to be done is mirroring this Kconfig change?
+> And that doesn't even need to be done until someone wants to get rid of
+> CONFIG_LIBCRC32C, right?
 
-I see your reasoning, and I agree that changing #clock-cells is an ABI
-break. However, there are two things to take into account:
+That's correct, no porting work is required now.  'select LIBCRC32C' should be
+replaced with 'select CRC32', but that can be done later.
 
- - We do not (yet?) have an omniscient view of the hardware. We do not
-   know what every single register in those memory regions do.
+> > @@ -3278,15 +3263,11 @@ extern void ext4_group_desc_csum_set(struct super_block *sb, __u32 group,
+> >  extern int ext4_register_li_request(struct super_block *sb,
+> >  				    ext4_group_t first_not_zeroed);
+> >  
+> >  static inline int ext4_has_metadata_csum(struct super_block *sb)
+> >  {
+> > -	WARN_ON_ONCE(ext4_has_feature_metadata_csum(sb) &&
+> > -		     !EXT4_SB(sb)->s_chksum_driver);
+> > -
+> > -	return ext4_has_feature_metadata_csum(sb) &&
+> > -	       (EXT4_SB(sb)->s_chksum_driver != NULL);
+> > +	return ext4_has_feature_metadata_csum(sb);
+> >  }
+> 
+> Nit: Someone might want to
+> s/ext4_has_metadata_csum/ext4_has_feature_metadata_csum/ here to get rid
+> of the confusingly named trivial helper.
+> 
 
-   Some clocks might be lurking in the shadows, especially as we don't
-   support many HW capabilities yet.
+Yes, that should be done as a follow-up patch.
 
- - The earlier the better. If we discover later down the road that,
-   indeed, some more clocks were hiding, we'll have to do an ABI break.
+> Otherwise this logic looks ok to me, so
+> Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+> 
+> --D
 
-   At that point, some people might actually be using the platform.
-   Seeing what we currently have supported upstream versus the amount
-   of HW blocks available in the SoC, I cannot imagine anyone using the
-   platform with an upstream kernel.
+Thanks,
 
-So the choice is:
- - potential ABI break in the future, once people use the platform, or,
- - guaranteed ABI break now, when no one is using it.
-
-I pick option two! Do you agree with the thought process?
-
-Thanks Rob,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+- Eric
 
