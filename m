@@ -1,98 +1,64 @@
-Return-Path: <linux-mips+bounces-6663-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6664-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE42C9BC195
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Nov 2024 00:45:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 372169BC1AD
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Nov 2024 00:51:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 734ED2826B5
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2024 23:45:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0416280E29
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2024 23:51:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B9D21CBA17;
-	Mon,  4 Nov 2024 23:45:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="G33Nm19n"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85DE31A76A4;
+	Mon,  4 Nov 2024 23:51:10 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6410418C015
-	for <linux-mips@vger.kernel.org>; Mon,  4 Nov 2024 23:45:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B784718C015;
+	Mon,  4 Nov 2024 23:51:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730763946; cv=none; b=fCGd8gRV9uQT/DpHSOloMSZPEbkwHazD4yDzQFia10TC4dHOkcqVxjxR+2dhlUrF55C+TDNbjK38QEyP6k+boBCg1lHIw50FgPGTtSFvRPYUxW4+WJ74Fh5MW9LWBI7mwwDXRuRForpKe9RMelyudGYBeWK4l3FRByue751jbfw=
+	t=1730764270; cv=none; b=RiINk7GFMP4GsAkFz8KLCZY2PtGa0mtGPAXtsNmkjQO5tcTLGz2Y2aNnMDDs/QRVTfRoTpCk2CSduRf1Evuqm1VE/AHcbJxX3tD4lOWe4VU+ORPfIgd0a4gfbtZ9HZt8qs26yl2onIJQ9+jjL17R6+W1BvwBHXwyXt4PvL1L3G4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730763946; c=relaxed/simple;
-	bh=y25cMTUUyF0/99NqsbtcP8jgiSIGKszQIxKzLAtVRw4=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=EOn0ma6AAfvS24k78kRg593cWDYw31ZmyU4EIY8Re4dmPHR6aHOsapwOZSXFBsGi8vUZVl6ksBtRTSsT6QGhjoxQUiq8o7cZ079eYpUK2V7ybBB63CqXcxBF3S0HrDCfQRUGzvf4Z1S5hbUODuzXZ2rILBOx3O+5mVak1WrIX2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=G33Nm19n; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Content-Type: text/plain;
-	charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1730763941;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mIaWWipbF4qkR4a9YyY0itn1/4GTLYbehO8LrldGbCM=;
-	b=G33Nm19nK2jEjj++crEGNt5NkSKYIYxj6iXTp2AE8oOuzAcRO55cYfRYHTiTiiK4Ry6tZG
-	V/7tbxyuM2t1qAC8ypNPxXyw3gFERim7uUTnm1dNYfaL3BaQz8+ZSIRZghi/UhEY59j83O
-	SUS7zLKLnBa6GyGVDX/xSIoQGGNnhuE=
+	s=arc-20240116; t=1730764270; c=relaxed/simple;
+	bh=hzURyC9DN4sSJq8RqKFggFrKsbsIfB5dN0tDIK/DqNo=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=KvzbgeXTlNN1WHXaRZiG5OZDWvXrlXkj/Qu7AbH6YfbtiuE2CC7XRkfKjNwUPFF4NMl8o1eMk6EaE+GHvsnERPCfBwqFtyS6UOa/Hy27+p4eIwadlygvlnwsC8zaN+ynBh+s6SuAkeL49Jl5t7tzGBv+UmcbSOXtYG4iSPZkcbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id EA6F992009C; Tue,  5 Nov 2024 00:51:05 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id E34FF92009B;
+	Mon,  4 Nov 2024 23:51:05 +0000 (GMT)
+Date: Mon, 4 Nov 2024 23:51:05 +0000 (GMT)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Thorsten Blum <thorsten.blum@linux.dev>
+cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: kernel: proc: Use str_yes_no() helper function
+In-Reply-To: <F2FC5695-440E-4A29-B683-4335452F6FAB@linux.dev>
+Message-ID: <alpine.DEB.2.21.2411042349440.9262@angie.orcam.me.uk>
+References: <20241102220437.22480-2-thorsten.blum@linux.dev> <alpine.DEB.2.21.2411031921020.9262@angie.orcam.me.uk> <F2FC5695-440E-4A29-B683-4335452F6FAB@linux.dev>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3776.700.51.11.1\))
-Subject: Re: [PATCH] MIPS: kernel: proc: Use str_yes_no() helper function
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Thorsten Blum <thorsten.blum@linux.dev>
-In-Reply-To: <alpine.DEB.2.21.2411031921020.9262@angie.orcam.me.uk>
-Date: Tue, 5 Nov 2024 00:45:28 +0100
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- linux-mips@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 7bit
-Message-Id: <F2FC5695-440E-4A29-B683-4335452F6FAB@linux.dev>
-References: <20241102220437.22480-2-thorsten.blum@linux.dev>
- <alpine.DEB.2.21.2411031921020.9262@angie.orcam.me.uk>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-X-Migadu-Flow: FLOW_OUT
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 
-On 3. Nov 2024, at 20:29, Maciej W. Rozycki wrote:
-> On Sat, 2 Nov 2024, Thorsten Blum wrote:
+On Tue, 5 Nov 2024, Thorsten Blum wrote:
+
+> > I like this cleanup, but now that it matters I suggest restructuring code 
+> > such that the latter `seq_printf' is converted as well.
 > 
->> diff --git a/arch/mips/kernel/proc.c b/arch/mips/kernel/proc.c
->> index 8eba5a1ed664..3e4be48bab02 100644
->> --- a/arch/mips/kernel/proc.c
->> +++ b/arch/mips/kernel/proc.c
->> @@ -66,12 +66,12 @@ static int show_cpuinfo(struct seq_file *m, void *v)
->> 	seq_printf(m, "BogoMIPS\t\t: %u.%02u\n",
->> 		      cpu_data[n].udelay_val / (500000/HZ),
->> 		      (cpu_data[n].udelay_val / (5000/HZ)) % 100);
->> -	seq_printf(m, "wait instruction\t: %s\n", cpu_wait ? "yes" : "no");
->> +	seq_printf(m, "wait instruction\t: %s\n", str_yes_no(cpu_wait));
->> 	seq_printf(m, "microsecond timers\t: %s\n",
->> -		      cpu_has_counter ? "yes" : "no");
->> +		      str_yes_no(cpu_has_counter));
->> 	seq_printf(m, "tlb_entries\t\t: %d\n", cpu_data[n].tlbsize);
->> 	seq_printf(m, "extra interrupt vector\t: %s\n",
->> -		      cpu_has_divec ? "yes" : "no");
->> +		      str_yes_no(cpu_has_divec));
->> 	seq_printf(m, "hardware watchpoint\t: %s",
->> 		      cpu_has_watch ? "yes, " : "no\n");
->> 	if (cpu_has_watch) {
-> 
-> I like this cleanup, but now that it matters I suggest restructuring code 
-> such that the latter `seq_printf' is converted as well.
+> What about the comma and newline? Using str_yes_no() would remove them.
 
-What about the comma and newline? Using str_yes_no() would remove them.
+ This is why a minor code restructuring is needed so that the comma and 
+the new line are produced elsewhere (arguably a cleaner structure anyway).
 
-Thanks,
-Thorsten
+  Maciej
 
