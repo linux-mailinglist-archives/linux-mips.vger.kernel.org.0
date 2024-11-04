@@ -1,276 +1,153 @@
-Return-Path: <linux-mips+bounces-6654-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6655-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 718B59BB9AE
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2024 17:01:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CA9B9BB9FC
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2024 17:16:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6402C1C21022
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2024 16:01:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC351B2155D
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2024 16:16:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 665A71C07E7;
-	Mon,  4 Nov 2024 16:01:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 584691BE238;
+	Mon,  4 Nov 2024 16:16:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GF2YIuc4"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="iY1nblVu"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F01922092;
-	Mon,  4 Nov 2024 16:01:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41DE120326;
+	Mon,  4 Nov 2024 16:16:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730736097; cv=none; b=tOOe0vUeTxrID3rJzgxiO4/nD259ovBCnbroFkRAOEQUUoO+xnRVeymxMgbKU2ETucCwehPTkxD4IshiEwYquwzICrBfQnZT9gbNYBqUPNwdZjfW09QoTqVcolGrwPKGYxXsJAj1JopQZnEVSo8KhdUxBl9HvZQwz07hMYg/Vu0=
+	t=1730737011; cv=none; b=jCKMD2D4/vuJ6bXb/7XQqoXcgahnsYniwVosiODq1N09Pa0hhCdnPpmXnL5HrMz9mgldMiwnMpsl4r7urq7LkRmE1vN7azN+jVtWoax5/Mgk2dcwUYnxzTYWj4lxOTh1De4l7r1Ltjs+9tdeGtzF/snayl56bkkD5r6+enZcwD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730736097; c=relaxed/simple;
-	bh=SQHYc4IyKu8mOjFqukKmu+jd++SJy0bOaTpjzH1zd48=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RfLK/KSnCmZ/q1IgJToTTe65VNkXh0XRoWpRyMnX46N0jWKq/Qz4dVrEh/zo2fP5tyGHUvVg/cKYFF/YSkscjcgNTCvYQT4aHCU/osUvTcxvB/o4Z/DEAswFkazhf1m3nhWyoAMd4CIl2nxaooPPucRLtubZiqfNNTQIgu6Mchk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GF2YIuc4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B77D6C4CED5;
-	Mon,  4 Nov 2024 16:01:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730736096;
-	bh=SQHYc4IyKu8mOjFqukKmu+jd++SJy0bOaTpjzH1zd48=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GF2YIuc4CVA74hCEJRxNazy0ht2/f2uRSrMj2uuVlRr2+6bm9MHyMOxPgED5gWdfd
-	 vu/btCDpPKcR89gCE4boBa7J2FWpbAQKucuszoilTcpd5UqEHi33T6ME/J0vsprSzf
-	 0NpNP7g8Lf0u8I2Tp+IyHewzcvy5bMkfYKuB/Xdsg/e84RXsus/eIlJEp8GjkqeL5j
-	 5fqNWCa8VU2Mv2/RgFzjCgTISgsehTXVWzYy6ZXnFPpxAb3NlOlHfEu2nHn72iPu6S
-	 FWp0lFEOw27J/+6wKGPWbDh+8AzGKSxVQQw4nnlSj7QGkkzccsfYrt7HYY4CaOPaa1
-	 sXnIfXCpLXWpg==
-Date: Mon, 4 Nov 2024 08:01:36 -0800
-From: "Darrick J. Wong" <djwong@kernel.org>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org, x86@kernel.org,
-	Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH v3 16/18] jbd2: switch to using the crc32c library
-Message-ID: <20241104160136.GI21832@frogsfrogsfrogs>
-References: <20241103223154.136127-1-ebiggers@kernel.org>
- <20241103223154.136127-17-ebiggers@kernel.org>
+	s=arc-20240116; t=1730737011; c=relaxed/simple;
+	bh=dvq4WdAmFMn0vLZ9JnYGSSdyWumIrzJUc3NB73OMPOg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
+	 References:In-Reply-To; b=MjbEqF8goa7ZBCz8G+oOwxPknYGD1ynK34NwJ9s4+OieMfr/tcuPySLR5pmGFtdG/RVl0MFMHnqCPGPme18EIvgvbWdahf4m1xsGyx59hB/D3Tntb6LTu+2uAQOnCqsc3yx+azwWga/Ju/10HrR/Ycp+GBa+9clks4UFrnh6dQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=iY1nblVu; arc=none smtp.client-ip=217.70.183.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E858860007;
+	Mon,  4 Nov 2024 16:16:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1730737006;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6rqr0N+cqbVGEIJ9JWQr1pdzzt48RW1+Mdy+DMTESZ0=;
+	b=iY1nblVuCVjnM+iTFMao7fUaBwok5qhuYyl5TtzZscEOZvgXF2YrpkzOxUKzv5XoY74lQK
+	oppy49hTbZU/PhquKOHASxNSEXIXlOHpxwISjN/laalnrg63rwBUgbWOw6wQA3B4EcwuIY
+	QL767l7li094Yudwrx/DmBYTP+1vITi4aKVfTg09PKocToLFGPI/Sp44U3LnOEnX0mfyJG
+	RJ+JuQEPRGN2itJPlbTEUs5t4AwJIK0ViWJjR/FjeJWLI3EErU9IzDYBwrezYGV3eYrJwm
+	kbNJY1QqR5BbjWKi9k19PXUtzFNciVn2Du5JABW+OSBJq16y89cFLqZSr1Gulg==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241103223154.136127-17-ebiggers@kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 04 Nov 2024 17:16:45 +0100
+Message-Id: <D5DJ2C103MJL.2DBH24E85MPYP@bootlin.com>
+Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Rob
+ Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>, "Michael Turquette"
+ <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Thomas
+ Bogendoerfer" <tsbogend@alpha.franken.de>, <linux-mips@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-clk@vger.kernel.org>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>
+To: "Krzysztof Kozlowski" <krzk@kernel.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH 04/13] dt-bindings: clock: eyeq: add Mobileye EyeQ6H
+ central clocks
+X-Mailer: aerc 0.18.2-0-ge037c095a049
+References: <20241031-mbly-clk-v1-0-89d8b28e3006@bootlin.com>
+ <20241031-mbly-clk-v1-4-89d8b28e3006@bootlin.com>
+ <7ebcdarioght4u2bai4l42pckitcw5iz4rky4ncgp7aqmtrlen@zl7k7pgijloq>
+In-Reply-To: <7ebcdarioght4u2bai4l42pckitcw5iz4rky4ncgp7aqmtrlen@zl7k7pgijloq>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Sun, Nov 03, 2024 at 02:31:52PM -0800, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> Now that the crc32c() library function directly takes advantage of
-> architecture-specific optimizations, it is unnecessary to go through the
-> crypto API.  Just use crc32c().  This is much simpler, and it improves
-> performance due to eliminating the crypto API overhead.
-> 
-> Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
-> ---
->  fs/jbd2/Kconfig      |  2 --
->  fs/jbd2/journal.c    | 25 ++-----------------------
->  include/linux/jbd2.h | 31 +++----------------------------
->  3 files changed, 5 insertions(+), 53 deletions(-)
-> 
-> diff --git a/fs/jbd2/Kconfig b/fs/jbd2/Kconfig
-> index 4ad2c67f93f1..9c19e1512101 100644
-> --- a/fs/jbd2/Kconfig
-> +++ b/fs/jbd2/Kconfig
-> @@ -1,11 +1,9 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  config JBD2
->  	tristate
->  	select CRC32
-> -	select CRYPTO
-> -	select CRYPTO_CRC32C
->  	help
->  	  This is a generic journaling layer for block devices that support
->  	  both 32-bit and 64-bit block numbers.  It is currently used by
->  	  the ext4 and OCFS2 filesystems, but it could also be used to add
->  	  journal support to other file systems or block devices such
-> diff --git a/fs/jbd2/journal.c b/fs/jbd2/journal.c
-> index 97f487c3d8fc..56cea5a738a7 100644
-> --- a/fs/jbd2/journal.c
-> +++ b/fs/jbd2/journal.c
-> @@ -1373,24 +1373,16 @@ static int journal_check_superblock(journal_t *journal)
->  		printk(KERN_ERR "JBD2: Can't enable checksumming v1 and v2/3 "
->  		       "at the same time!\n");
->  		return err;
->  	}
->  
-> -	/* Load the checksum driver */
->  	if (jbd2_journal_has_csum_v2or3_feature(journal)) {
->  		if (sb->s_checksum_type != JBD2_CRC32C_CHKSUM) {
->  			printk(KERN_ERR "JBD2: Unknown checksum type\n");
->  			return err;
->  		}
->  
-> -		journal->j_chksum_driver = crypto_alloc_shash("crc32c", 0, 0);
-> -		if (IS_ERR(journal->j_chksum_driver)) {
-> -			printk(KERN_ERR "JBD2: Cannot load crc32c driver.\n");
-> -			err = PTR_ERR(journal->j_chksum_driver);
-> -			journal->j_chksum_driver = NULL;
-> -			return err;
-> -		}
->  		/* Check superblock checksum */
->  		if (sb->s_checksum != jbd2_superblock_csum(journal, sb)) {
->  			printk(KERN_ERR "JBD2: journal checksum error\n");
->  			err = -EFSBADCRC;
->  			return err;
-> @@ -1611,12 +1603,10 @@ static journal_t *journal_init_common(struct block_device *bdev,
->  
->  	return journal;
->  
->  err_cleanup:
->  	percpu_counter_destroy(&journal->j_checkpoint_jh_count);
-> -	if (journal->j_chksum_driver)
-> -		crypto_free_shash(journal->j_chksum_driver);
->  	kfree(journal->j_wbuf);
->  	jbd2_journal_destroy_revoke(journal);
->  	journal_fail_superblock(journal);
->  	kfree(journal);
->  	return ERR_PTR(err);
-> @@ -2194,12 +2184,10 @@ int jbd2_journal_destroy(journal_t *journal)
->  	if (journal->j_proc_entry)
->  		jbd2_stats_proc_exit(journal);
->  	iput(journal->j_inode);
->  	if (journal->j_revoke)
->  		jbd2_journal_destroy_revoke(journal);
-> -	if (journal->j_chksum_driver)
-> -		crypto_free_shash(journal->j_chksum_driver);
->  	kfree(journal->j_fc_wbuf);
->  	kfree(journal->j_wbuf);
->  	kfree(journal);
->  
->  	return err;
-> @@ -2340,23 +2328,14 @@ int jbd2_journal_set_features(journal_t *journal, unsigned long compat,
->  			pr_err("JBD2: Cannot enable fast commits.\n");
->  			return 0;
->  		}
->  	}
->  
-> -	/* Load the checksum driver if necessary */
-> -	if ((journal->j_chksum_driver == NULL) &&
-> -	    INCOMPAT_FEATURE_ON(JBD2_FEATURE_INCOMPAT_CSUM_V3)) {
-> -		journal->j_chksum_driver = crypto_alloc_shash("crc32c", 0, 0);
-> -		if (IS_ERR(journal->j_chksum_driver)) {
-> -			printk(KERN_ERR "JBD2: Cannot load crc32c driver.\n");
-> -			journal->j_chksum_driver = NULL;
-> -			return 0;
-> -		}
-> -		/* Precompute checksum seed for all metadata */
-> +	/* Precompute checksum seed for all metadata */
-> +	if (INCOMPAT_FEATURE_ON(JBD2_FEATURE_INCOMPAT_CSUM_V3))
->  		journal->j_csum_seed = jbd2_chksum(journal, ~0, sb->s_uuid,
->  						   sizeof(sb->s_uuid));
-> -	}
->  
->  	lock_buffer(journal->j_sb_buffer);
->  
->  	/* If enabling v3 checksums, update superblock */
->  	if (INCOMPAT_FEATURE_ON(JBD2_FEATURE_INCOMPAT_CSUM_V3)) {
-> diff --git a/include/linux/jbd2.h b/include/linux/jbd2.h
-> index 8aef9bb6ad57..33d25a3d15f1 100644
-> --- a/include/linux/jbd2.h
-> +++ b/include/linux/jbd2.h
-> @@ -26,11 +26,11 @@
->  #include <linux/mutex.h>
->  #include <linux/timer.h>
->  #include <linux/slab.h>
->  #include <linux/bit_spinlock.h>
->  #include <linux/blkdev.h>
-> -#include <crypto/hash.h>
-> +#include <linux/crc32c.h>
->  #endif
->  
->  #define journal_oom_retry 1
->  
->  /*
-> @@ -1239,17 +1239,10 @@ struct journal_s
->  	 * An opaque pointer to fs-private information.  ext3 puts its
->  	 * superblock pointer here.
->  	 */
->  	void *j_private;
->  
-> -	/**
-> -	 * @j_chksum_driver:
-> -	 *
-> -	 * Reference to checksum algorithm driver via cryptoapi.
-> -	 */
-> -	struct crypto_shash *j_chksum_driver;
-> -
->  	/**
->  	 * @j_csum_seed:
->  	 *
->  	 * Precomputed journal UUID checksum for seeding other checksums.
->  	 */
-> @@ -1748,14 +1741,11 @@ static inline bool jbd2_journal_has_csum_v2or3_feature(journal_t *j)
->  	return jbd2_has_feature_csum2(j) || jbd2_has_feature_csum3(j);
->  }
->  
->  static inline int jbd2_journal_has_csum_v2or3(journal_t *journal)
->  {
-> -	WARN_ON_ONCE(jbd2_journal_has_csum_v2or3_feature(journal) &&
-> -		     journal->j_chksum_driver == NULL);
-> -
-> -	return journal->j_chksum_driver != NULL;
-> +	return jbd2_journal_has_csum_v2or3_feature(journal);
+On Fri Nov 1, 2024 at 8:48 AM CET, Krzysztof Kozlowski wrote:
+> On Thu, Oct 31, 2024 at 04:52:54PM +0100, Th=C3=A9o Lebrun wrote:
+> > Add clock indexes for EyeQ6H central OLB.
+> >=20
+> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> > ---
+> >  include/dt-bindings/clock/mobileye,eyeq5-clk.h | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >=20
+> > diff --git a/include/dt-bindings/clock/mobileye,eyeq5-clk.h b/include/d=
+t-bindings/clock/mobileye,eyeq5-clk.h
+> > index 7d9e700b5e59573c45919865d9c68a9e8cf6a9eb..2356bc52646df9cfeb93df8=
+120eb8f0bf80d97e9 100644
+> > --- a/include/dt-bindings/clock/mobileye,eyeq5-clk.h
+> > +++ b/include/dt-bindings/clock/mobileye,eyeq5-clk.h
+> > @@ -34,6 +34,9 @@
+> >  #define EQ6LC_PLL_PER		2
+> >  #define EQ6LC_PLL_VDI		3
+> > =20
+> > +#define EQ6HC_CENTRAL_PLL_CPU	0
+> > +#define EQ6HC_CENTRAL_CPU_OCC	1
+> > +
+>
+> Don't add define after define in separate patches. Logical change is to
+> add all defines at once, so multiple patches here should be squashed.
 
-Same comment as my last reply about removing trivial helpers, but
-otherwise
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+Sure, I was not sure so I leaned in the safe bet direction. Squashing is
+much easier than splitting. Also improved the commit message, which
+will look like this for next revision (incoming soon):
 
-If you push this for 6.13 I'd be happy that the shash junk finally went
-away.  The onstack struct desc thing in the _chksum() functions was by
-far the most sketchy part of the ext4/jbd2 metadata csum project. :)
+--
 
---D
+dt-bindings: clock: eyeq: add more Mobileye EyeQ5/EyeQ6H clocks
 
->  }
->  
->  static inline int jbd2_journal_get_num_fc_blks(journal_superblock_t *jsb)
->  {
->  	int num_fc_blocks = be32_to_cpu(jsb->s_num_fc_blks);
-> @@ -1794,26 +1784,11 @@ static inline unsigned long jbd2_log_space_left(journal_t *journal)
->  #define JBD_MAX_CHECKSUM_SIZE 4
->  
->  static inline u32 jbd2_chksum(journal_t *journal, u32 crc,
->  			      const void *address, unsigned int length)
->  {
-> -	struct {
-> -		struct shash_desc shash;
-> -		char ctx[JBD_MAX_CHECKSUM_SIZE];
-> -	} desc;
-> -	int err;
-> -
-> -	BUG_ON(crypto_shash_descsize(journal->j_chksum_driver) >
-> -		JBD_MAX_CHECKSUM_SIZE);
-> -
-> -	desc.shash.tfm = journal->j_chksum_driver;
-> -	*(u32 *)desc.ctx = crc;
-> -
-> -	err = crypto_shash_update(&desc.shash, address, length);
-> -	BUG_ON(err);
-> -
-> -	return *(u32 *)desc.ctx;
-> +	return crc32c(crc, address, length);
->  }
->  
->  /* Return most recent uncommitted transaction */
->  static inline tid_t  jbd2_get_latest_transaction(journal_t *journal)
->  {
-> -- 
-> 2.47.0
-> 
-> 
+Add #defines for Mobileye clock controller:
+
+ - EyeQ5 core 0 thru 3 clocks. Internally:
+
+      EQ5C_PLL_CPU:           already exposed
+      =E2=94=94=E2=94=80=E2=94=80 EQ5C_CPU_OCC:       unexposed, no reason =
+to do so
+          =E2=94=9C=E2=94=80=E2=94=80 EQ5C_CPU_CORE0: new!
+          =E2=94=9C=E2=94=80=E2=94=80 EQ5C_CPU_CORE1: new!
+          =E2=94=9C=E2=94=80=E2=94=80 EQ5C_CPU_CORE2: new!
+          =E2=94=94=E2=94=80=E2=94=80 EQ5C_CPU_CORE3: new!
+
+ - EyeQ5 peripheral clocks. Internally:
+
+      EQ5C_PLL_PER:          already exposed
+      =E2=94=94=E2=94=80=E2=94=80 EQ5C_PER_OCC:      new!
+          =E2=94=94=E2=94=80=E2=94=80 EQ5C_PER_UART: new!
+
+ - EyeQ6H central OLB. Internally:
+
+      EQ6HC_CENTRAL_PLL_CPU:     new!
+      =E2=94=94=E2=94=80=E2=94=80 EQ6HC_CENTRAL_CPU_OCC: new!
+
+ - EyeQ6H west OLB. Internally:
+
+      EQ6HC_WEST_PLL_PER:          new!
+      =E2=94=94=E2=94=80=E2=94=80 EQ6HC_WEST_PER_OCC:      new!
+          =E2=94=94=E2=94=80=E2=94=80 EQ6HC_WEST_PER_UART: new!
+
+Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+
+--
+
+Thanks Krzysztof,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
