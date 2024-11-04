@@ -1,166 +1,141 @@
-Return-Path: <linux-mips+bounces-6651-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6652-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5846A9BB2A2
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2024 12:13:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96CEF9BB919
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2024 16:37:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 103561F22010
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2024 11:13:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8CD81C21E38
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2024 15:37:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDB291B4F32;
-	Mon,  4 Nov 2024 10:56:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 117471BF81B;
+	Mon,  4 Nov 2024 15:37:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EADOQrSt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cvpjwTGw"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9447E1B4F24;
-	Mon,  4 Nov 2024 10:56:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D28D713C827;
+	Mon,  4 Nov 2024 15:37:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730717819; cv=none; b=oRBgYkOkFYPZng/LqDIa1f+L5+0QV9wFMfMUiPBu0oR46kfqZxIPOLN6JOr8yOEG8pO3CYL7Rl4+/gXMfV57WDgob+aOtUY/vAsXGztVyYc90wp7xOu9PF76eqXywR8wbOiUvGPd9HjsSx3GZlZVShIWWvuXSVmbb1FfE07BmGQ=
+	t=1730734650; cv=none; b=c3dExMSlIfKso9VOwj4O17rwvdQkw0uY2YcePwEjWG+HPjSOFsU7Leks20esFA3kiL2eJpk75TQMTXYnJDvAx/KkETtUz2wZmJ+vq4Sa3+oQCOUhVuO9KLYV4IDcKog4vDtuZcYpybvMOF/OtEXe+I2Zsy3ZymLqBTDA4FhBZFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730717819; c=relaxed/simple;
-	bh=6qFxuwoqjmsBXA5afiRPckV6EYzE55EhM//TIyBTrQ4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RX/u69nqfzdjM28rBltoLSiqtM+WNhwFa1UaRXLk267VbKeAio3z4s/dGLdF+zqX1nmEGx1mMQxOmj3ha2Ofg7v+iLy17B7oVfX3mHEJfbuvg1+aAu0NxC+Hvw/u3OgglnMeiWcfEg615atuQYbCXIJaW+2AVK4X2++UsMzf5aI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EADOQrSt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21EEAC4AF0B;
-	Mon,  4 Nov 2024 10:56:58 +0000 (UTC)
+	s=arc-20240116; t=1730734650; c=relaxed/simple;
+	bh=YkxEabm7OdGb4+okNBootBI0IcP4SC2irg6j0pQZV/8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e9gHUbWgXR5UVGrPIiKgOZcGyXl5gj83wOy07bmxlaJR9i+pT+cIX/zWe2vtFE7C+fa7CTTUvHd1NrQ/0Ef2/KhzUUtc+/r1U8kLy66/rwNdblv2ahmTgYi4rh+zF/NdM72RMgZCkyXr2zbEBJuUaWGV767BbSGxHKpTggG8Eo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cvpjwTGw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AC00C4CECE;
+	Mon,  4 Nov 2024 15:37:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730717818;
-	bh=6qFxuwoqjmsBXA5afiRPckV6EYzE55EhM//TIyBTrQ4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=EADOQrSt03YURgotEa0RPC+Q+iLgiLTpyDunuCSyI8JrnJ8j4YEhKIdjW/X9XmfJY
-	 sTCnqIY+Z2AkNeyzcvIvr+dGT6FfLBfZvlbrdb8z2SiV9hm+elSOB97O2rE7ro9EXq
-	 0i/CQC7v2klAcuIyDxn2pg7/smSOsw0dT4Hhws9swr3/XRUtzPo+CxQGrrBX7df8D/
-	 5J0t2oN4EkGyZAZoiEf4JRfD6nAiE3emF0OuGcBGMMWHNR23yXfKnSbJVb11OHm5BV
-	 KUm+3gkbO7B14khPoblQ7uBvr3V7hMm9Omm80Fu2OU58gX+loUjMi/2DNHEoGYci8U
-	 QgiPNae8TP/uQ==
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2fb5014e2daso35066781fa.0;
-        Mon, 04 Nov 2024 02:56:58 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU7xoBdSw7WBFogoDHrvE/HqzdjwEOMmImfj5rv727+uNW/nWwMxb3aiB7GFtwozVTPQXy86AO1OXkOnA==@vger.kernel.org, AJvYcCVTNBsOqHLkgtJGigBa/isJCHgbsiNKmrI5+kvbgDZcJMeFzwkEWE8ebTXv9KJOhRQuLTjesgqi70UBQw==@vger.kernel.org, AJvYcCWhDBFSu3muOSQSSs5FLIsmxVvCuKCon8MkpgER6rPwM10QDNjNEyRL4fy7UB6uE1jQSxbEmD5xrN1k1Q==@vger.kernel.org, AJvYcCWmhuBs1pzG9bt5+VLjZi5DL2AB1zkrHH/DB9jywzV8yx+aa4/gkdW/FLE+qWNExzJp4VElgRen2cxA3g==@vger.kernel.org, AJvYcCXGlD8wbx/QOszbqxlvihfhb/O3PE1S70sQ7efuGiglxTzoFONrTZEvN3S9PVnXA2m5TMzVC/M/BgrAIgZw@vger.kernel.org, AJvYcCXY3zmKZULtzD2Qr1zBSDOYio63vSwOslNKHj+27/utSV9rOR3qtlx3vUvQunPMQJzsmsyZ+7+XTmLwAw==@vger.kernel.org, AJvYcCXYoWKKilKSRHmfTlQo4SNi/uvKlFp3wszbHnscl+4A/hvKqyecntMb+onVXOjIloFhiiooKJqfzczT@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZv9/XWtQTI9Xl/GbxNVl6C/JDclJIDl6e10MIEY986QPphn4W
-	42vPreOs/bE68tplLb8Kx6uGt4UNZMTFJFzrF25lhdJXu53MTiejtzRWcsgi/hgiTtoaYuiP0zT
-	5igiVkkHpuBqsmNl8GzpBN9pUgZA=
-X-Google-Smtp-Source: AGHT+IGbnKnh4aAfaULtSCmiukLUpnKZU5MlHxJghtOAuKX/zIcXfbKXe/xSvudBsLa83HeLXpJgE1iAQVUbiw2PNrM=
-X-Received: by 2002:a05:651c:1508:b0:2fa:fc41:cf80 with SMTP id
- 38308e7fff4ca-2fedb7ecd4amr43930581fa.43.1730717816511; Mon, 04 Nov 2024
- 02:56:56 -0800 (PST)
+	s=k20201202; t=1730734649;
+	bh=YkxEabm7OdGb4+okNBootBI0IcP4SC2irg6j0pQZV/8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cvpjwTGwjDlYpjTj5Rh0Y/lITq3PRZ1aju2/5Tgzpyn/7xPw6J+o5Ym/LRnRUBI2l
+	 UTQx90Kuhio9Gl+GQFBZly9IkuCcxXunb9r1xWbh9YCenAJhz34l9nnq0ffak4fmvY
+	 KN5pLt8bIBHThwuW0HJ9sByvFOlVybYebuWPPFL/cCPHL9L8/SQh+4v1pKo8MdziXK
+	 SrrFpB8a+FYFk5/mrr92BiOWQPxciNvGgUgTf6B9IPCgukjV91nU9+y6rg0jil5gKK
+	 ERSxUvD+HYSgwZkaq6DDLdyZ4Nio3WxgsWYNshu+KCo/NLRDACgLfI0MjNYBmbnw03
+	 ZC1MJwSILJCzQ==
+Date: Mon, 4 Nov 2024 09:37:27 -0600
+From: Rob Herring <robh@kernel.org>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	=?iso-8859-1?Q?Gr=E9gory?= Clement <gregory.clement@bootlin.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH 01/13] dt-bindings: soc: mobileye: set `#clock-cells =
+ <1>` for all compatibles
+Message-ID: <20241104153727.GA192461-robh@kernel.org>
+References: <20241031-mbly-clk-v1-0-89d8b28e3006@bootlin.com>
+ <20241031-mbly-clk-v1-1-89d8b28e3006@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241103223154.136127-1-ebiggers@kernel.org> <20241103223154.136127-5-ebiggers@kernel.org>
-In-Reply-To: <20241103223154.136127-5-ebiggers@kernel.org>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Mon, 4 Nov 2024 11:56:45 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXH3C1xP7865V-mJ+3=FDHTR-df909=7jift_Z6dmp58Gw@mail.gmail.com>
-Message-ID: <CAMj1kXH3C1xP7865V-mJ+3=FDHTR-df909=7jift_Z6dmp58Gw@mail.gmail.com>
-Subject: Re: [PATCH v3 04/18] crypto: crc32 - don't unnecessarily register
- arch algorithms
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org, 
-	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
-	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
-	sparclinux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241031-mbly-clk-v1-1-89d8b28e3006@bootlin.com>
 
-On Sun, 3 Nov 2024 at 23:32, Eric Biggers <ebiggers@kernel.org> wrote:
->
-> From: Eric Biggers <ebiggers@google.com>
->
-> Instead of registering the crc32-$arch and crc32c-$arch algorithms if
-> the arch-specific code was built, only register them when that code was
-> built *and* is not falling back to the base implementation at runtime.
->
-> This avoids confusing users like btrfs which checks the shash driver
-> name to determine whether it is crc32c-generic.
->
-> (It would also make sense to change btrfs to test the crc32_optimization
-> flags itself, so that it doesn't have to use the weird hack of parsing
-> the driver name.  This change still makes sense either way though.)
->
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
+On Thu, Oct 31, 2024 at 04:52:51PM +0100, Théo Lebrun wrote:
+> Some compatibles expose a single clock. For those, we used to let them
+> using `#clock-cells = <0>` (ie <&olb> reference rather than <&olb 0>).
+> 
+> Switch away from that: enforce a cell for all compatibles. This is more
+> straight forward, and avoids devicetree changes whenever a compatible
+> goes from exposing a single clock to multiple ones.
 
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+Your reasoning is flawed. Changing #clock-cells is an ABI break. So you 
+should only be changing this if it was just wrong. And if it's not wrong 
+in some cases, you shouldn't be changing those. The h/w either has 1 
+clock or multiple and #clocks-cells should match.
 
+> 
+> Side benefit: dt-bindings is simpler.
+> 
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 > ---
->  crypto/crc32_generic.c  | 8 ++++++--
->  crypto/crc32c_generic.c | 8 ++++++--
->  2 files changed, 12 insertions(+), 4 deletions(-)
->
-> diff --git a/crypto/crc32_generic.c b/crypto/crc32_generic.c
-> index cc064ea8240e..783a30b27398 100644
-> --- a/crypto/crc32_generic.c
-> +++ b/crypto/crc32_generic.c
-> @@ -155,19 +155,23 @@ static struct shash_alg algs[] = {{
->         .base.cra_ctxsize       = sizeof(u32),
->         .base.cra_module        = THIS_MODULE,
->         .base.cra_init          = crc32_cra_init,
->  }};
->
-> +static int num_algs;
-> +
->  static int __init crc32_mod_init(void)
->  {
->         /* register the arch flavor only if it differs from the generic one */
-> -       return crypto_register_shashes(algs, 1 + IS_ENABLED(CONFIG_CRC32_ARCH));
-> +       num_algs = 1 + ((crc32_optimizations() & CRC32_LE_OPTIMIZATION) != 0);
-> +
-> +       return crypto_register_shashes(algs, num_algs);
->  }
->
->  static void __exit crc32_mod_fini(void)
->  {
-> -       crypto_unregister_shashes(algs, 1 + IS_ENABLED(CONFIG_CRC32_ARCH));
-> +       crypto_unregister_shashes(algs, num_algs);
->  }
->
->  subsys_initcall(crc32_mod_init);
->  module_exit(crc32_mod_fini);
->
-> diff --git a/crypto/crc32c_generic.c b/crypto/crc32c_generic.c
-> index 04b03d825cf4..985da981d6e2 100644
-> --- a/crypto/crc32c_generic.c
-> +++ b/crypto/crc32c_generic.c
-> @@ -195,19 +195,23 @@ static struct shash_alg algs[] = {{
->         .base.cra_ctxsize       = sizeof(struct chksum_ctx),
->         .base.cra_module        = THIS_MODULE,
->         .base.cra_init          = crc32c_cra_init,
->  }};
->
-> +static int num_algs;
-> +
->  static int __init crc32c_mod_init(void)
->  {
->         /* register the arch flavor only if it differs from the generic one */
-> -       return crypto_register_shashes(algs, 1 + IS_ENABLED(CONFIG_CRC32_ARCH));
-> +       num_algs = 1 + ((crc32_optimizations() & CRC32C_OPTIMIZATION) != 0);
-> +
-> +       return crypto_register_shashes(algs, num_algs);
->  }
->
->  static void __exit crc32c_mod_fini(void)
->  {
-> -       crypto_unregister_shashes(algs, 1 + IS_ENABLED(CONFIG_CRC32_ARCH));
-> +       crypto_unregister_shashes(algs, num_algs);
->  }
->
->  subsys_initcall(crc32c_mod_init);
->  module_exit(crc32c_mod_fini);
->
-> --
+>  .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  | 24 +---------------------
+>  1 file changed, 1 insertion(+), 23 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml b/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml
+> index f7e606d45ebcfc46ffe076e23a2ed514bfff9b8f..6d11472ba5a704d5d20f43776e5867f507a39242 100644
+> --- a/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml
+> +++ b/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml
+> @@ -41,9 +41,7 @@ properties:
+>      enum: [ 1, 2 ]
+>  
+>    '#clock-cells':
+> -    description:
+> -      Cell is clock index. Optional if compatible has a single clock.
+> -    enum: [ 0, 1 ]
+> +    const: 1
+>  
+>    clocks:
+>      maxItems: 1
+> @@ -312,26 +310,6 @@ allOf:
+>        properties:
+>          '#reset-cells': false
+>  
+> -    # Compatibles exposing a single clock.
+> -  - if:
+> -      properties:
+> -        compatible:
+> -          contains:
+> -            enum:
+> -              - mobileye,eyeq6h-central-olb
+> -              - mobileye,eyeq6h-east-olb
+> -              - mobileye,eyeq6h-west-olb
+> -              - mobileye,eyeq6h-ddr0-olb
+> -              - mobileye,eyeq6h-ddr1-olb
+> -    then:
+> -      properties:
+> -        '#clock-cells':
+> -          const: 0
+> -    else:
+> -      properties:
+> -        '#clock-cells':
+> -          const: 1
+> -
+>      # Only EyeQ5 has pinctrl in OLB.
+>    - if:
+>        not:
+> 
+> -- 
 > 2.47.0
->
->
+> 
 
