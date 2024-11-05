@@ -1,194 +1,161 @@
-Return-Path: <linux-mips+bounces-6668-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6669-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0F639BC6A4
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Nov 2024 08:06:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6337F9BC902
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Nov 2024 10:23:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DF8EB22F32
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Nov 2024 07:06:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94E9D1C23310
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Nov 2024 09:23:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72FE01FF025;
-	Tue,  5 Nov 2024 07:02:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D57071CFEDB;
+	Tue,  5 Nov 2024 09:22:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i3dpbmwH"
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="abc102v8"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10E3C1FEFD4;
-	Tue,  5 Nov 2024 07:02:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FAD186284;
+	Tue,  5 Nov 2024 09:22:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730790175; cv=none; b=RcJeWZ6v52G06I3IJ7catWvPxRXIlj3AmNTX2upEKe1gL281mlAVS6gvBS/Dnx3uI01DCsNpKqn9u0c9oSZV5qwNVN7DlCoeW/sTgLbBL3Eh/eN1R+gPA887izB1NONSr5EHSJL9AFi5oQBp4jyT6f++7QML7iywRBOBvn02JEU=
+	t=1730798579; cv=none; b=Uqbq0wQZ4Gyb/In50hJN6A0QdKLyZoFL5zMdrkBZkGFYuVATQMeeG2/cXuD8EBYUavp0TnZ3v7cs6ndBhvE8IjESHHsOI3YVeRMuQFV0Dd486J4pM/uPDm2UbPaizsSUCWAqP5tmTnHEZ23bRsTO8Y01sdqJ4ffGyU3dokDKmPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730790175; c=relaxed/simple;
-	bh=vfcX72EWl1PlKyFBzjhHz5V71yaLAfzK3VjVgomZL4Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Uj/7jDTU/QqpD9FFIjKjnCvPfRZF9vJoxPylVeB5cmvjdCmI+cxnpcr9kIWY/H6xMRd+aj/A/5iI9dPeHF4wvcqSAQifexW70in+eKc3yObppkL/p9VI6ZIRoQCk7d1C1zWjQqppaNwnaOEV960KLEQc7l9IaQq/cGWTUHwoh24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i3dpbmwH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4B12C4CECF;
-	Tue,  5 Nov 2024 07:02:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730790174;
-	bh=vfcX72EWl1PlKyFBzjhHz5V71yaLAfzK3VjVgomZL4Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=i3dpbmwHLfd+qUmJoaWeTGPHb10DC+M0kf+DMEykGWoYpGOuSUDviaUCAAx4zIAfi
-	 my4z1l/oyVoPrY5WEhvGAqrSv0MLPuXbzVIKUoMd0jh8oEVUCEONnRV4s7PDepCIp9
-	 ZD54y4ohFGVDY1Cs7nPdmpyfCNtvqUqW5KJ/Ch+xipF5ZFMCAivKT3JR6Xd9V1a/4G
-	 LvZ1wHQ1rlIUNyplCl+fPkOtsT/XeAFLJAPXe+EdvajpWUHCrgFIHiD89oCp0/Bkx4
-	 xYtH7/sknC5+POJtdvm/YMmFy0WRYObll2kMIURKDi3pF/30ytxQP7HSq81EZrmTXO
-	 namiYtOl86+Aw==
-Date: Tue, 5 Nov 2024 09:02:26 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v7 6/8] x86/module: prepare module loading for ROX
- allocations of text
-Message-ID: <ZynDAhW0lKCfOqZl@kernel.org>
-References: <20241023162711.2579610-1-rppt@kernel.org>
- <20241023162711.2579610-7-rppt@kernel.org>
- <20241104232741.GA3843610@thelio-3990X>
+	s=arc-20240116; t=1730798579; c=relaxed/simple;
+	bh=0DJAaAp/sJ4GJO6GXcKD8xMWKOg86nk2Np9hVptfiZ0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=mZ5fTc/Tj9RU8ttW4FYi8TnbQ5YSJQPjRiuFTuCIg3kiyxaBBfJFafFcXgSfXc2sGXHzV2ao4ER1D5ZQL+GAK/rZslg/eZLsj7hseYWrsqbpcGjLkC04vaN+Dk5CjWd0LYtgC7tX4IdOzz/bsgqNg48dl9xzswBCPvtRC9Mlzg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=abc102v8; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1730798571;
+	bh=xG1HQhXTKL81M9467zhA4KonLLpV3fuL2upt5lJSShY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=abc102v8sCEc4rZgo2gcKLbXmwgvq4GWFHOVFO2bCqlfFdeKKcRV4prB0lNuFM+1J
+	 +nLMWJEv9C6S0GLYT8NTq4cofEwz+d0GOszV9URcE2cm6ZF5AylDoN/Z59rll0g/Oq
+	 7WsqGbok2W4NpvuKkzkrDPAQmPNPSM6PFvziT+2hwmqDnVmGWCUcte8UycWZO0fqBM
+	 8/j6kLdVKhMd+2mHPE+WS4RXiOWy1ZCSKS371LN4mAvJuEGSKgRrakUz5kUENSDU9q
+	 PGCTVxGOMH7TPanX3MVM/rMyBsqI05mZE6yiJdVSS0qPm3mWfbV8Bv8MQn/EFJHce9
+	 0DvIPNJTjgI8A==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XjNCv5y3Wz4wcl;
+	Tue,  5 Nov 2024 20:22:51 +1100 (AEDT)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: Eric Biggers <ebiggers@kernel.org>, linux-kernel@vger.kernel.org
+Cc: linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-crypto@vger.kernel.org, linux-ext4@vger.kernel.org,
+ linux-f2fs-devel@lists.sourceforge.net, linux-mips@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org, Ard
+ Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH v3 08/18] powerpc/crc32: expose CRC32 functions through lib
+In-Reply-To: <20241103223154.136127-9-ebiggers@kernel.org>
+References: <20241103223154.136127-1-ebiggers@kernel.org>
+ <20241103223154.136127-9-ebiggers@kernel.org>
+Date: Tue, 05 Nov 2024 20:22:53 +1100
+Message-ID: <87zfme826q.fsf@mpe.ellerman.id.au>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241104232741.GA3843610@thelio-3990X>
+Content-Type: text/plain
 
-Hi Nathan,
+Eric Biggers <ebiggers@kernel.org> writes:
+> From: Eric Biggers <ebiggers@google.com>
+>
+> Move the powerpc CRC32C assembly code into the lib directory and wire it
+> up to the library interface.  This allows it to be used without going
+> through the crypto API.  It remains usable via the crypto API too via
+> the shash algorithms that use the library interface.  Thus all the
+> arch-specific "shash" code becomes unnecessary and is removed.
+>
+> Note: to see the diff from arch/powerpc/crypto/crc32c-vpmsum_glue.c to
+> arch/powerpc/lib/crc32-glue.c, view this commit with 'git show -M10'.
+>
+> Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+> Signed-off-by: Eric Biggers <ebiggers@google.com>
+> ---
+>  arch/powerpc/Kconfig                          |   1 +
+>  arch/powerpc/configs/powernv_defconfig        |   1 -
+>  arch/powerpc/configs/ppc64_defconfig          |   1 -
+>  arch/powerpc/crypto/Kconfig                   |  15 +-
+>  arch/powerpc/crypto/Makefile                  |   2 -
+>  arch/powerpc/crypto/crc32c-vpmsum_glue.c      | 173 ------------------
+>  arch/powerpc/crypto/crct10dif-vpmsum_asm.S    |   2 +-
+>  arch/powerpc/lib/Makefile                     |   3 +
+>  arch/powerpc/lib/crc32-glue.c                 |  92 ++++++++++
+>  .../{crypto => lib}/crc32-vpmsum_core.S       |   0
+>  .../{crypto => lib}/crc32c-vpmsum_asm.S       |   0
+>  11 files changed, 98 insertions(+), 192 deletions(-)
+>  delete mode 100644 arch/powerpc/crypto/crc32c-vpmsum_glue.c
+>  create mode 100644 arch/powerpc/lib/crc32-glue.c
+>  rename arch/powerpc/{crypto => lib}/crc32-vpmsum_core.S (100%)
+>  rename arch/powerpc/{crypto => lib}/crc32c-vpmsum_asm.S (100%)
 
-On Mon, Nov 04, 2024 at 04:27:41PM -0700, Nathan Chancellor wrote:
-> Hi Mike,
-> 
-> On Wed, Oct 23, 2024 at 07:27:09PM +0300, Mike Rapoport wrote:
-> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> > 
-> > When module text memory will be allocated with ROX permissions, the
-> > memory at the actual address where the module will live will contain
-> > invalid instructions and there will be a writable copy that contains the
-> > actual module code.
-> > 
-> > Update relocations and alternatives patching to deal with it.
-> > 
-> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> > Tested-by: kdevops <kdevops@lists.linux.dev>
-> 
-> Hopefully the last time you have to hear from me, as I am only
-> experiencing issues with only one of my test machines at this point and
-> it is my only machine that supports IBT, so it seems to point to
-> something specific with the IBT part of the FineIBT support. I notice
-> either a boot hang or an almost immediate reboot (triple fault?). I
-> guess this is how I missed reporting this earlier, as my machine was
-> falling back to the default distribution kernel after the restart and I
-> did not notice I was not actually testing a -next kernel.
-> 
-> Checking out the version of this change that is in next-20241104, commit
-> 7ca6ed09db62 ("x86/module: prepare module loading for ROX allocations of
-> text"), it boots with either 'cfi=off' or 'cfi=kcfi' but it exhibits the
-> issues noted above with 'cfi=fineibt'. At the immediate parent, commit
-> b575d981092f ("arch: introduce set_direct_map_valid_noflush()"), all
-> three combinations boot fine.
-> 
->   $ uname -r; tr ' ' '\n' </proc/cmdline | grep cfi=
-> 
->   6.12.0-rc5-debug-00214-g7ca6ed09db62
->   cfi=kcfi
-> 
->   6.12.0-rc5-debug-00214-g7ca6ed09db62
->   cfi=off
-> 
->   6.12.0-rc5-debug-00213-gb575d981092f
->   cfi=fineibt
-> 
->   6.12.0-rc5-debug-00213-gb575d981092f
->   cfi=kcfi
-> 
->   6.12.0-rc5-debug-00213-gb575d981092f
->   cfi=off
-> 
-> I do not think this machine has an accessible serial port and I do not
-> think IBT virtualization is supported via either KVM or TCG in QEMU, so
-> I am not sure how to get more information about what is going on here. I
-> wanted to try reverting these changes on top of next-20241104 but there
-> was a non-trivial conflict in mm/execmem.c due to some changes on top,
-> so I just tested in the mm history.
-> 
-> If there is any other information I can provide or patches I can test, I
-> am more than happy to do so.
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
-Yes, please :)
+...
+> deleted file mode 100644
+> index 63760b7dbb76..000000000000
+> --- a/arch/powerpc/crypto/crc32c-vpmsum_glue.c
+> +++ /dev/null
+> @@ -1,173 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0-only
+> -
+...
+> -static int __init crc32c_vpmsum_mod_init(void)
+> -{
+> -	if (!cpu_has_feature(CPU_FTR_ARCH_207S))
+> -		return -ENODEV;
+> -
+> -	return crypto_register_shash(&alg);
+> -}
+> -
+> -static void __exit crc32c_vpmsum_mod_fini(void)
+> -{
+> -	crypto_unregister_shash(&alg);
+> -}
+> -
+> -module_cpu_feature_match(PPC_MODULE_FEATURE_VEC_CRYPTO, crc32c_vpmsum_mod_init);
+> -module_exit(crc32c_vpmsum_mod_fini);
+> -
+> -MODULE_AUTHOR("Anton Blanchard <anton@samba.org>");
+> -MODULE_DESCRIPTION("CRC32C using vector polynomial multiply-sum instructions");
+> -MODULE_LICENSE("GPL");
+> -MODULE_ALIAS_CRYPTO("crc32c");
+> -MODULE_ALIAS_CRYPTO("crc32c-vpmsum");
+...
+> new file mode 100644
+> index 000000000000..e9730f028afb
+> --- /dev/null
+> +++ b/arch/powerpc/lib/crc32-glue.c
+> @@ -0,0 +1,92 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+...
+> +
+> +static int __init crc32_powerpc_init(void)
+> +{
+> +	if (cpu_has_feature(CPU_FTR_ARCH_207S) &&
+> +	    (cur_cpu_spec->cpu_user_features2 & PPC_FEATURE2_VEC_CRYPTO))
+> +		static_branch_enable(&have_vec_crypto);
 
-There's a silly mistake in cfi_rewrite_endbr() in that commit, the patch
-below should fix it. Can you please test?
+For any other reviewers, this looks like a new cpu feature check, but
+it's not. In the old code there was a module feature check:
 
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 3407efc26528..243843e44e89 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -1241,7 +1241,7 @@ static void cfi_rewrite_endbr(s32 *start, s32 *end, struct module *mod)
- 		void *addr = (void *)s + *s;
- 		void *wr_addr = module_writable_address(mod, addr);
- 
--		poison_endbr(addr+16, wr_addr, false);
-+		poison_endbr(addr + 16, wr_addr + 16, false);
- 	}
- }
- 
- 
-> Cheers,
-> Nathan
+  module_cpu_feature_match(PPC_MODULE_FEATURE_VEC_CRYPTO, crc32c_vpmsum_mod_init);
 
--- 
-Sincerely yours,
-Mike.
+And PPC_MODULE_FEATURE_VEC_CRYPTO maps to PPC_FEATURE2_VEC_CRYPTO, so
+the logic is equivalent.
+
+cheers
 
