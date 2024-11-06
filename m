@@ -1,54 +1,54 @@
-Return-Path: <linux-mips+bounces-6701-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6702-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC2C49BF2AA
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Nov 2024 17:06:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D24629BF2AD
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Nov 2024 17:06:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0BE5C1C25F12
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Nov 2024 16:06:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 625481F207C4
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Nov 2024 16:06:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BBB320ADDC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A77A20ADF4;
 	Wed,  6 Nov 2024 16:04:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="WjQduhOp"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Cb2ut640"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D5D20823C;
-	Wed,  6 Nov 2024 16:04:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6CC220651D;
+	Wed,  6 Nov 2024 16:04:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730909048; cv=none; b=JzpgZy3SlYum0OQW99clyBQ+cLSv6CdcxxEYOm3mfCyFjNVRIPiQXMY7TaGoFzS3gtgp3eD7qvg4cbZ76AtgJNHrBxnN/Nsva75pc6hXC5xChqFxX1JxMRsV7mz/Tueal0eL8V590nRMtnHR7G390aovaOLi30GJxAxaKnZ/67E=
+	t=1730909048; cv=none; b=j9sEwPFJY44pNF6dakR6Yoj0PK3R0Wdyw/hjTgxEKHUqjxwhzRVk+k79F9KrAYJyUrKvU/AeGTm0p0TQdWJ17EjDeqUToRNZpKhOsLvcLKqoBKK1s11Cx0FZjeVHiV5cffooYz0Yha3u9vJT9QIZnqTYZRPr7oT6FuWG7VC+3vQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1730909048; c=relaxed/simple;
-	bh=dpx86UKWHmQob1x1Y9dZoFYGDcYgFQTexwF3Pl4RVJg=;
+	bh=164AvxpBW24lmZ5bza1gILy+9Z0x/iue+c4IgUxIOFc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=C+VQFkiTco7YLPvoT3BdRArPiqzk9BjghuSmsoyOHwzpyZRyc3qoRJp2uNAeNt0gyN00MbWtU+8J2qWBzeubHg0lL81InirG5HnAfu2fHUBN1dFpgS8bOfw0ElNubwntC2xzhrmYyEpsPbB6UhZZanHN85pfwVivYaBLXBzzocw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=WjQduhOp; arc=none smtp.client-ip=217.70.183.194
+	 In-Reply-To:To:Cc; b=GTiG05eLdZugerkCOFYQnKcX1MWd9YE+X8uufP36a5y1kSFv6KFfRTyKdwCfPGA4Dpg1i3YP9rdMiSgCzS3+AcbpgoIx2mKrPSdXg6LGwR7hdm/RXqNdv2jJ7vpGimVFwlPcI/ezqmVQQ5BL5BzLo03yiGV1PcKRQugSwx76fEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Cb2ut640; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E085B40009;
-	Wed,  6 Nov 2024 16:04:02 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8C4EA4000F;
+	Wed,  6 Nov 2024 16:04:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1730909043;
+	t=1730909044;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=vBvALQBz6nzlJoEhBr0vnmX8yOjbMQW6G7cmJmWOtDo=;
-	b=WjQduhOpP2qgKp7NnvyQZ0Fc9UeB/YqzChY9QhIHMAfoteJe/ZV1ZddCVx77DbHnIia2GX
-	2zbpPNjWcQP3KCY1AN6h1Hd/4fn120s7LQXzDwZRtKSssFVnpVFR4i8/owv1IRo4yv5bu8
-	eEmtdEa/WNeT9joKqbjesEXMZbTa78doVrLZSrb5J2xmUL8UHhPzsmCGkl3lvq+gCR5ORh
-	/C7btTVfFb3XYPNBhNvohsHmkrJNJUvEkU1GcuACSnCVNZIyILenHEKKaX0GYBIEIi9w8V
-	V4gMPEbKXrCRGbb6Grxag4Zn1vyohT+u4DnB4BZMrxqszdzI/MvV2clMD/go0A==
+	bh=dNYxA9PoraKNMZJ+/mQFXcEzKQ9APotFg7LB3yegiRc=;
+	b=Cb2ut640R43SAZ7IA+B+ILhnfx6FHLLV3spFTdsf59KYpm7TJcJaQHEjFvwbEUXK0lLSOy
+	+GCR1Zakp/kxeJKjhi9LCydVtuw2YMnlSznxqU0nfZRgvNwZxBcWLF5/5dLfJKGEV+J/0z
+	zueL8POuCLf50dlxER5BBirr2mkIWSUxHqfoNNYplNm3Ceu+EzTL6KZvrhZFEBYOTTgg7P
+	6uPB8j1G/rOLXsNRFeNby3J/hnhPcqN1afBnAWM2hjKOmwadBV9UHFmzoefSUKWTNK5GQe
+	x502sFojlYfTa7cdhjaEdng60gU9fJk7JjR4QUlMZgRutq4Juc/uwavVN2YuBQ==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Wed, 06 Nov 2024 17:04:00 +0100
-Subject: [PATCH v2 09/10] MIPS: mobileye: eyeq5: use OLB as provider for
- fixed factor clocks
+Date: Wed, 06 Nov 2024 17:04:01 +0100
+Subject: [PATCH v2 10/10] MIPS: mobileye: eyeq6h: add OLB nodes OLB and
+ remove fixed clocks
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241106-mbly-clk-v2-9-84cfefb3f485@bootlin.com>
+Message-Id: <20241106-mbly-clk-v2-10-84cfefb3f485@bootlin.com>
 References: <20241106-mbly-clk-v2-0-84cfefb3f485@bootlin.com>
 In-Reply-To: <20241106-mbly-clk-v2-0-84cfefb3f485@bootlin.com>
 To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
@@ -75,25 +75,24 @@ Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-Change the structure of the clock tree: rather than individual
-devicetree nodes registering each fixed factor clock derived from OLB
-PLLs, have the OLB node provide the necessary clocks.
+Change the declaration of clocks: remove all fixed clocks and declare
+system-controllers (OLB) as clock providers.
 
-Remove eyeq5-clocks.dtsi and move the three remaining "fixed-clock"s to
-the main eyeq5.dtsi file.
+Remove eyeq6h-fixed-clocks.dtsi and move the crystal clock to the main
+eyeq6h.dtsi file.
 
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- arch/mips/boot/dts/mobileye/eyeq5-clocks.dtsi | 270 --------------------------
- arch/mips/boot/dts/mobileye/eyeq5.dtsi        |  30 ++-
- 2 files changed, 24 insertions(+), 276 deletions(-)
+ .../boot/dts/mobileye/eyeq6h-fixed-clocks.dtsi     | 52 ---------------
+ arch/mips/boot/dts/mobileye/eyeq6h.dtsi            | 73 ++++++++++++++++++++--
+ 2 files changed, 69 insertions(+), 56 deletions(-)
 
-diff --git a/arch/mips/boot/dts/mobileye/eyeq5-clocks.dtsi b/arch/mips/boot/dts/mobileye/eyeq5-clocks.dtsi
+diff --git a/arch/mips/boot/dts/mobileye/eyeq6h-fixed-clocks.dtsi b/arch/mips/boot/dts/mobileye/eyeq6h-fixed-clocks.dtsi
 deleted file mode 100644
-index 17a342cc744e57dc1f21262abdbfa97d4e4d58f3..0000000000000000000000000000000000000000
---- a/arch/mips/boot/dts/mobileye/eyeq5-clocks.dtsi
+index 5fa99e06fde7e8f4942aafe5f6064e2c6f7d83fd..0000000000000000000000000000000000000000
+--- a/arch/mips/boot/dts/mobileye/eyeq6h-fixed-clocks.dtsi
 +++ /dev/null
-@@ -1,270 +0,0 @@
+@@ -1,52 +0,0 @@
 -// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 -/*
 - * Copyright 2023 Mobileye Vision Technologies Ltd.
@@ -102,277 +101,59 @@ index 17a342cc744e57dc1f21262abdbfa97d4e4d58f3..00000000000000000000000000000000
 -#include <dt-bindings/clock/mobileye,eyeq5-clk.h>
 -
 -/ {
--	/* Fixed clock */
--	xtal: xtal {
+-	xtal: clock-30000000 {
 -		compatible = "fixed-clock";
 -		#clock-cells = <0>;
 -		clock-frequency = <30000000>;
 -	};
 -
--/* PLL_CPU derivatives */
--	occ_cpu: occ-cpu {
+-	pll_west: clock-2000000000-west {
+-		compatible = "fixed-clock";
+-		#clock-cells = <0>;
+-		clock-frequency = <2000000000>;
+-	};
+-
+-	pll_cpu: clock-2000000000-cpu {
+-		compatible = "fixed-clock";
+-		#clock-cells = <0>;
+-		clock-frequency = <2000000000>;
+-	};
+-
+-	/* pll-cpu derivatives */
+-	occ_cpu: clock-2000000000-occ-cpu {
 -		compatible = "fixed-factor-clock";
--		clocks = <&olb EQ5C_PLL_CPU>;
+-		clocks = <&pll_cpu>;
 -		#clock-cells = <0>;
 -		clock-div = <1>;
 -		clock-mult = <1>;
 -	};
--	si_css0_ref_clk: si-css0-ref-clk { /* gate ClkRstGen_si_css0_ref */
+-
+-	/* pll-west derivatives */
+-	occ_periph_w: clock-200000000 {
 -		compatible = "fixed-factor-clock";
--		clocks = <&occ_cpu>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--	};
--	cpc_clk: cpc-clk {
--		compatible = "fixed-factor-clock";
--		clocks = <&si_css0_ref_clk>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--	};
--	core0_clk: core0-clk {
--		compatible = "fixed-factor-clock";
--		clocks = <&si_css0_ref_clk>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--	};
--	core1_clk: core1-clk {
--		compatible = "fixed-factor-clock";
--		clocks = <&si_css0_ref_clk>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--	};
--	core2_clk: core2-clk {
--		compatible = "fixed-factor-clock";
--		clocks = <&si_css0_ref_clk>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--	};
--	core3_clk: core3-clk {
--		compatible = "fixed-factor-clock";
--		clocks = <&si_css0_ref_clk>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--	};
--	cm_clk: cm-clk {
--		compatible = "fixed-factor-clock";
--		clocks = <&si_css0_ref_clk>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--	};
--	mem_clk: mem-clk {
--		compatible = "fixed-factor-clock";
--		clocks = <&si_css0_ref_clk>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--	};
--	occ_isram: occ-isram {
--		compatible = "fixed-factor-clock";
--		clocks = <&olb EQ5C_PLL_CPU>;
--		#clock-cells = <0>;
--		clock-div = <2>;
--		clock-mult = <1>;
--	};
--	isram_clk: isram-clk { /* gate ClkRstGen_isram */
--		compatible = "fixed-factor-clock";
--		clocks = <&occ_isram>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--	};
--	occ_dbu: occ-dbu {
--		compatible = "fixed-factor-clock";
--		clocks = <&olb EQ5C_PLL_CPU>;
+-		clocks = <&pll_west>;
 -		#clock-cells = <0>;
 -		clock-div = <10>;
 -		clock-mult = <1>;
 -	};
--	si_dbu_tp_pclk: si-dbu-tp-pclk { /* gate ClkRstGen_dbu */
+-	uart_clk: clock-200000000-uart {
 -		compatible = "fixed-factor-clock";
--		clocks = <&occ_dbu>;
+-		clocks = <&occ_periph_w>;
 -		#clock-cells = <0>;
 -		clock-div = <1>;
 -		clock-mult = <1>;
 -	};
--/* PLL_VDI derivatives */
--	occ_vdi: occ-vdi {
--		compatible = "fixed-factor-clock";
--		clocks = <&olb EQ5C_PLL_VDI>;
--		#clock-cells = <0>;
--		clock-div = <2>;
--		clock-mult = <1>;
--	};
--	vdi_clk: vdi-clk { /* gate ClkRstGen_vdi */
--		compatible = "fixed-factor-clock";
--		clocks = <&occ_vdi>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--	};
--	occ_can_ser: occ-can-ser {
--		compatible = "fixed-factor-clock";
--		clocks = <&olb EQ5C_PLL_VDI>;
--		#clock-cells = <0>;
--		clock-div = <16>;
--		clock-mult = <1>;
--	};
--	can_ser_clk: can-ser-clk { /* gate ClkRstGen_can_ser */
--		compatible = "fixed-factor-clock";
--		clocks = <&occ_can_ser>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--	};
--	i2c_ser_clk: i2c-ser-clk {
--		compatible = "fixed-factor-clock";
--		clocks = <&olb EQ5C_PLL_VDI>;
--		#clock-cells = <0>;
--		clock-div = <20>;
--		clock-mult = <1>;
--	};
--/* PLL_PER derivatives */
--	occ_periph: occ-periph {
--		compatible = "fixed-factor-clock";
--		clocks = <&olb EQ5C_PLL_PER>;
--		#clock-cells = <0>;
--		clock-div = <16>;
--		clock-mult = <1>;
--	};
--	periph_clk: periph-clk {
--		compatible = "fixed-factor-clock";
--		clocks = <&occ_periph>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--	};
--	can_clk: can-clk {
--		compatible = "fixed-factor-clock";
--		clocks = <&occ_periph>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--	};
--	spi_clk: spi-clk {
--		compatible = "fixed-factor-clock";
--		clocks = <&occ_periph>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--	};
--	uart_clk: uart-clk {
--		compatible = "fixed-factor-clock";
--		clocks = <&occ_periph>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--	};
--	i2c_clk: i2c-clk {
--		compatible = "fixed-factor-clock";
--		clocks = <&occ_periph>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--		clock-output-names = "i2c_clk";
--	};
--	timer_clk: timer-clk {
--		compatible = "fixed-factor-clock";
--		clocks = <&occ_periph>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--		clock-output-names = "timer_clk";
--	};
--	gpio_clk: gpio-clk {
--		compatible = "fixed-factor-clock";
--		clocks = <&occ_periph>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--		clock-output-names = "gpio_clk";
--	};
--	emmc_sys_clk: emmc-sys-clk {
--		compatible = "fixed-factor-clock";
--		clocks = <&olb EQ5C_PLL_PER>;
--		#clock-cells = <0>;
--		clock-div = <10>;
--		clock-mult = <1>;
--		clock-output-names = "emmc_sys_clk";
--	};
--	ccf_ctrl_clk: ccf-ctrl-clk {
--		compatible = "fixed-factor-clock";
--		clocks = <&olb EQ5C_PLL_PER>;
--		#clock-cells = <0>;
--		clock-div = <4>;
--		clock-mult = <1>;
--		clock-output-names = "ccf_ctrl_clk";
--	};
--	occ_mjpeg_core: occ-mjpeg-core {
--		compatible = "fixed-factor-clock";
--		clocks = <&olb EQ5C_PLL_PER>;
--		#clock-cells = <0>;
--		clock-div = <2>;
--		clock-mult = <1>;
--		clock-output-names = "occ_mjpeg_core";
--	};
--	hsm_clk: hsm-clk { /* gate ClkRstGen_hsm */
--		compatible = "fixed-factor-clock";
--		clocks = <&occ_mjpeg_core>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--		clock-output-names = "hsm_clk";
--	};
--	mjpeg_core_clk: mjpeg-core-clk { /* gate ClkRstGen_mjpeg_gen */
--		compatible = "fixed-factor-clock";
--		clocks = <&occ_mjpeg_core>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--		clock-output-names = "mjpeg_core_clk";
--	};
--	fcmu_a_clk: fcmu-a-clk {
--		compatible = "fixed-factor-clock";
--		clocks = <&olb EQ5C_PLL_PER>;
--		#clock-cells = <0>;
--		clock-div = <20>;
--		clock-mult = <1>;
--		clock-output-names = "fcmu_a_clk";
--	};
--	occ_pci_sys: occ-pci-sys {
--		compatible = "fixed-factor-clock";
--		clocks = <&olb EQ5C_PLL_PER>;
--		#clock-cells = <0>;
--		clock-div = <8>;
--		clock-mult = <1>;
--		clock-output-names = "occ_pci_sys";
--	};
--	pclk: pclk {
--		compatible = "fixed-clock";
--		#clock-cells = <0>;
--		clock-frequency = <250000000>;  /* 250MHz */
--	};
--	tsu_clk: tsu-clk {
--		compatible = "fixed-clock";
--		#clock-cells = <0>;
--		clock-frequency = <125000000>;  /* 125MHz */
--	};
+-
 -};
-diff --git a/arch/mips/boot/dts/mobileye/eyeq5.dtsi b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-index 0708771c193d064fa56be2c7f6115672b5c24d8d..5d73e8320b8efc1b4f68923482bf188c4345f1cb 100644
---- a/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-+++ b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
+diff --git a/arch/mips/boot/dts/mobileye/eyeq6h.dtsi b/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
+index 1db3c3cda2e395025075387bcb66ea0737fd37f6..4a1a43f351d39625b520a16d035cacd2e29d157c 100644
+--- a/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
++++ b/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
 @@ -5,7 +5,7 @@
  
  #include <dt-bindings/interrupt-controller/mips-gic.h>
  
--#include "eyeq5-clocks.dtsi"
+-#include "eyeq6h-fixed-clocks.dtsi"
 +#include <dt-bindings/clock/mobileye,eyeq5-clk.h>
  
  / {
@@ -381,69 +162,124 @@ index 0708771c193d064fa56be2c7f6115672b5c24d8d..5d73e8320b8efc1b4f68923482bf188c
  			device_type = "cpu";
  			compatible = "img,i6500";
  			reg = <0>;
--			clocks = <&core0_clk>;
-+			clocks = <&olb EQ5C_CPU_CORE0>;
+-			clocks = <&occ_cpu>;
++			clocks = <&olb_central EQ6HC_CENTRAL_CPU_OCC>;
  		};
  	};
  
-@@ -64,6 +64,24 @@ cpu_intc: interrupt-controller {
+@@ -32,19 +32,42 @@ cpu_intc: interrupt-controller {
  		#interrupt-cells = <1>;
  	};
  
-+	xtal: xtal {
++	xtal: clock-30000000 {
 +		compatible = "fixed-clock";
 +		#clock-cells = <0>;
 +		clock-frequency = <30000000>;
 +	};
 +
-+	pclk: pclk {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <250000000>;  /* 250MHz */
-+	};
-+
-+	tsu_clk: tsu-clk {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <125000000>;  /* 125MHz */
-+	};
-+
  	soc: soc {
+ 		compatible = "simple-bus";
  		#address-cells = <2>;
  		#size-cells = <2>;
-@@ -76,7 +94,7 @@ uart0: serial@800000 {
+ 		ranges;
+ 
++		olb_acc: system-controller@d2003000 {
++			compatible = "mobileye,eyeq6h-acc-olb", "syscon";
++			reg = <0x0 0xd2003000 0x0 0x1000>;
++			#reset-cells = <1>;
++			#clock-cells = <1>;
++			clocks = <&xtal>;
++			clock-names = "ref";
++		};
++
++		olb_central: system-controller@d3100000 {
++			compatible = "mobileye,eyeq6h-central-olb", "syscon";
++			reg = <0x0 0xd3100000 0x0 0x1000>;
++			#clock-cells = <1>;
++			clocks = <&xtal>;
++			clock-names = "ref";
++		};
++
+ 		uart0: serial@d3331000 {
+ 			compatible = "arm,pl011", "arm,primecell";
+ 			reg = <0 0xd3331000 0x0 0x1000>;
  			reg-io-width = <4>;
  			interrupt-parent = <&gic>;
- 			interrupts = <GIC_SHARED 6 IRQ_TYPE_LEVEL_HIGH>;
--			clocks  = <&uart_clk>, <&occ_periph>;
-+			clocks  = <&olb EQ5C_PER_UART>, <&olb EQ5C_PER_OCC>;
+ 			interrupts = <GIC_SHARED 43 IRQ_TYPE_LEVEL_HIGH>;
+-			clocks = <&occ_periph_w>, <&occ_periph_w>;
++			clocks = <&olb_west EQ6HC_WEST_PER_UART>, <&olb_west EQ6HC_WEST_PER_OCC>;
  			clock-names = "uartclk", "apb_pclk";
- 			resets = <&olb 0 10>;
- 			pinctrl-names = "default";
-@@ -89,7 +107,7 @@ uart1: serial@900000 {
- 			reg-io-width = <4>;
- 			interrupt-parent = <&gic>;
- 			interrupts = <GIC_SHARED 6 IRQ_TYPE_LEVEL_HIGH>;
--			clocks  = <&uart_clk>, <&occ_periph>;
-+			clocks  = <&olb EQ5C_PER_UART>, <&olb EQ5C_PER_OCC>;
- 			clock-names = "uartclk", "apb_pclk";
- 			resets = <&olb 0 11>;
- 			pinctrl-names = "default";
-@@ -102,7 +120,7 @@ uart2: serial@a00000 {
- 			reg-io-width = <4>;
- 			interrupt-parent = <&gic>;
- 			interrupts = <GIC_SHARED 6 IRQ_TYPE_LEVEL_HIGH>;
--			clocks  = <&uart_clk>, <&occ_periph>;
-+			clocks  = <&olb EQ5C_PER_UART>, <&olb EQ5C_PER_OCC>;
- 			clock-names = "uartclk", "apb_pclk";
- 			resets = <&olb 0 12>;
- 			pinctrl-names = "default";
-@@ -135,7 +153,7 @@ gic: interrupt-controller@140000 {
+ 		};
+ 
+@@ -56,6 +79,15 @@ pinctrl_west: pinctrl@d3337000 {
+ 			pinctrl-single,function-mask = <0xffff>;
+ 		};
+ 
++		olb_west: system-controller@d3338000 {
++			compatible = "mobileye,eyeq6h-west-olb", "syscon";
++			reg = <0x0 0xd3338000 0x0 0x1000>;
++			#reset-cells = <1>;
++			#clock-cells = <1>;
++			clocks = <&xtal>;
++			clock-names = "ref";
++		};
++
+ 		pinctrl_east: pinctrl@d3357000 {
+ 			compatible = "pinctrl-single";
+ 			reg = <0x0 0xd3357000 0x0 0xb0>;
+@@ -64,6 +96,23 @@ pinctrl_east: pinctrl@d3357000 {
+ 			pinctrl-single,function-mask = <0xffff>;
+ 		};
+ 
++		olb_east: system-controller@d3358000 {
++			compatible = "mobileye,eyeq6h-east-olb", "syscon";
++			reg = <0x0 0xd3358000 0x0 0x1000>;
++			#reset-cells = <1>;
++			#clock-cells = <1>;
++			clocks = <&xtal>;
++			clock-names = "ref";
++		};
++
++		olb_south: system-controller@d8013000 {
++			compatible = "mobileye,eyeq6h-south-olb", "syscon";
++			reg = <0x0 0xd8013000 0x0 0x1000>;
++			#clock-cells = <1>;
++			clocks = <&xtal>;
++			clock-names = "ref";
++		};
++
+ 		pinctrl_south: pinctrl@d8014000 {
+ 			compatible = "pinctrl-single";
+ 			reg = <0x0 0xd8014000 0x0 0xf8>;
+@@ -72,6 +121,22 @@ pinctrl_south: pinctrl@d8014000 {
+ 			pinctrl-single,function-mask = <0xffff>;
+ 		};
+ 
++		olb_ddr0: system-controller@e4080000 {
++			compatible = "mobileye,eyeq6h-ddr0-olb", "syscon";
++			reg = <0x0 0xe4080000 0x0 0x1000>;
++			#clock-cells = <1>;
++			clocks = <&xtal>;
++			clock-names = "ref";
++		};
++
++		olb_ddr1: system-controller@e4081000 {
++			compatible = "mobileye,eyeq6h-ddr1-olb", "syscon";
++			reg = <0x0 0xe4081000 0x0 0x1000>;
++			#clock-cells = <1>;
++			clocks = <&xtal>;
++			clock-names = "ref";
++		};
++
+ 		gic: interrupt-controller@f0920000 {
+ 			compatible = "mti,gic";
+ 			reg = <0x0 0xf0920000 0x0 0x20000>;
+@@ -89,7 +154,7 @@ gic: interrupt-controller@f0920000 {
  			timer {
  				compatible = "mti,gic-timer";
  				interrupts = <GIC_LOCAL 1 IRQ_TYPE_NONE>;
--				clocks = <&core0_clk>;
-+				clocks = <&olb EQ5C_CPU_CORE0>;
+-				clocks = <&occ_cpu>;
++				clocks = <&olb_central EQ6HC_CENTRAL_CPU_OCC>;
  			};
  		};
  	};
