@@ -1,156 +1,197 @@
-Return-Path: <linux-mips+bounces-6691-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6692-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 395EE9BF14B
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Nov 2024 16:13:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 129469BF289
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Nov 2024 17:05:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F22A3284464
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Nov 2024 15:13:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6E73CB248AC
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Nov 2024 16:05:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60774202F69;
-	Wed,  6 Nov 2024 15:13:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC13220651F;
+	Wed,  6 Nov 2024 16:04:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CrnE/KrI"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OZzsrRRC"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79CAF20110E
-	for <linux-mips@vger.kernel.org>; Wed,  6 Nov 2024 15:12:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D9501DCB06;
+	Wed,  6 Nov 2024 16:03:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730905980; cv=none; b=Clll7745ZBGbDb44QiJ+NuZYHmmkxpJf2vNuRwOwps6s5X3ofC5nCXMTO6P3IyXIBrNJfS1S2rSXQ3mGJucNdHj+XxtQRkbOS8iAVb9EYPb+Ijnk02C/Og7YbkUvGpxMxmab2BA3mYyW1Lu43M/2NXK4uVsiNQjeSfR2EVzausg=
+	t=1730909042; cv=none; b=FOW73s0DxHW3sNhfN+Aak7HIrUqPskvWAiE5uSjM4N4rvG/S9tc23czoF9LDmXA9LicxtpZE479LWuCfjyuBFSEOi0B/bisA4jEYOistRdn8BgCKmCuLcGYCHlHnyCOf0vHRKIMGsDlR7OMsyLYFwBmVEm7cX0vZr/8ph063G6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730905980; c=relaxed/simple;
-	bh=hJwSnsQSETNFXzvgqfuf9ElowDht9infCxazmOXBa7U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=V31lsCXnIrBnr0Zncl6kBNBN34CrOgOyxvSgOhfxooMsWyenfeqddWYz1D3g4JWr0nKEe6wzD4bRVuQTtbhfSc+fPEL/lYWCXmBnrY3pUkz/WZ3RZyQlcedr0heQk6pSzth8DbrPydld6cYYQ9IGSw7wkNNOXqzOiH90K+9y9fQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CrnE/KrI; arc=none smtp.client-ip=209.85.210.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-718119fc061so3755381a34.2
-        for <linux-mips@vger.kernel.org>; Wed, 06 Nov 2024 07:12:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730905977; x=1731510777; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/s8MXlCqJ3S3d997kkGlOblTEnbIpL85LZHtL6uGm0Q=;
-        b=CrnE/KrIw/TiKdKuaCwGjz/Y9hFOIr8AIKFgu/Cm4JOsTl2iR9N6OGlyzYMvDjj4pO
-         wBkcR4Q0mX1rtNH51CfKiDSGIzrOFgJhRPtOmMqLOy2UIw9K8t2WQnQ5yOikua/bGzBK
-         tM2p16jVHFQ9hrUGTpc8IAoD4GyU5ldQNDx1FcpecKt6pZ3kLdfsy+BaNqsalLYmb3X8
-         OUltoc4OT0VDsisz9qagoVAviWfKWQ2hLrutFnFQQoK47j+78dcPTyQy+FuJ5cnBrmPY
-         GbDpjr/GhZYizHdLLCYUfldp3xomvJLtyEmiz1fw+X39IC4LdOX/FDWV6+2sf4UhtscF
-         UmNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730905977; x=1731510777;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/s8MXlCqJ3S3d997kkGlOblTEnbIpL85LZHtL6uGm0Q=;
-        b=W7cIqgsfA8G5tNFMwaGLgsGBws+xiK//aVAWG55kImKbgGPCLkNNs+4k27kwCAQRU3
-         32s2pE9XyMAstWlcPsOF8lNDIxCFVecU1WiJDQ+R7NN0JIARmfgFZ63Luw+DhVBb0BkH
-         2TdjWhB5otVTwXb6zLoIq0JHTWyCFLvJq1XKrt0mtgMY5dvQTR+TLPRZQlwy+Xj11iYj
-         VGlwJ+o1oeaV+DZbnyrT9gsA2Z/UY8khTmLD+sRMum3DPYZv8TtdEtBd0ZjnG66YKwZW
-         XNjC8Lx+H+TYNt/GA3+CWWe7VbCLmPkui5LEnlVjv+7Zh9inQwzE4lgnCXoEVWnkCegj
-         KGiw==
-X-Forwarded-Encrypted: i=1; AJvYcCXn91F+eZ/kcKmH8tepw9ex4pqtq0xw8sQDp9gUaGJPnGanIai1QIKpE5OvIAzRyz0Bicot2OmLAp/G@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvKu6qAxxvO1sf8prBnIywCjUZ30cvo8SehPwkVI8nB+8dzv15
-	FHzBKRROWC2R/zYTVIVcZvTuZ2r9m5TSi44p/5cCvQacFgrUotg3K/YbpaMKk72Z8BECE1bKMxo
-	atYWhlK1LT1ZDQbmyrNtxY+z1IAaNioixXBSdlQ==
-X-Google-Smtp-Source: AGHT+IFK0O+catjkeLn95aRPwfONLUcgvqi/oAotqb/lG7yJa9aCtKL/wkazFs/bxZ/MPrgGD7dqggXgWdBZY7x6muM=
-X-Received: by 2002:a05:6218:2814:b0:1b3:9b15:ac01 with SMTP id
- e5c5f4694b2df-1c5f98c5a83mr960654055d.3.1730905977486; Wed, 06 Nov 2024
- 07:12:57 -0800 (PST)
+	s=arc-20240116; t=1730909042; c=relaxed/simple;
+	bh=kNMZOxloojlVgJYl446sTR/0XhQacwriWl73D/alcGs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=to2YRudjtfQIxBB4L0IVGCiAiAu6+KxIUtR6LMYvGs/TIZctOEwEo6po4KO9BKHnJHs13vVWyDf57OrOGuqUnazp6pJ7z1/x3Uy4r77mRKzoP4XGHTlM7+tmF9nyElK7FiP2/VId29hDRFSgpw/A4NXL9fuP4Rj4hwWF3KJbP2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OZzsrRRC; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1248340002;
+	Wed,  6 Nov 2024 16:03:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1730909037;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=xQ0f6eUzwBnvZvNbGKfAEFJ1fg/LcmINDrTkR6LRI70=;
+	b=OZzsrRRC8J1Q47Ti6s+Mcp8knmymb+jObk1EQxnQXsnZDYKpAUbJgpDVdXx+yi8rSrwOWt
+	v4BflQJxfdodQbBG9wjWUrs3fgKn07vc/OXbaREi47M1qQaBwzDECjSFfXwSuPsSctFiGU
+	t9FIXYuPQylUhGs5QELQsIYtydKXRbaEp+9hgQF5D64okTh6D/CQw3PGTDqdxWDzCkqdSp
+	vCpfipYE8YEyMZWS7XxBly50EE33AIPB27oVmRHOY5lfTdmKX952P0gkvE0c0XJ6ATIn8m
+	xHVCJikKGQjg36MNOwW24Rp3uwig/IoWF5cAdiYAXP04VER9kAhBwcpkCEI6uw==
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: [PATCH v2 00/10] Usable clocks on Mobileye EyeQ5 & EyeQ6H
+Date: Wed, 06 Nov 2024 17:03:51 +0100
+Message-Id: <20241106-mbly-clk-v2-0-84cfefb3f485@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241106120319.234238499@linuxfoundation.org>
-In-Reply-To: <20241106120319.234238499@linuxfoundation.org>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Wed, 6 Nov 2024 15:12:46 +0000
-Message-ID: <CA+G9fYtjpUJFFV=FdqvW+5K+JL5ZYN4sPfVDjQovqzd7cib39w@mail.gmail.com>
-Subject: Re: [PATCH 6.11 000/245] 6.11.7-rc1 review
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: stable@vger.kernel.org, patches@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, 
-	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, 
-	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, 
-	jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, 
-	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org, hagar@microsoft.com, 
-	broonie@kernel.org, Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, 
-	David Sterba <dsterba@suse.com>, Linux btrfs <linux-btrfs@vger.kernel.org>, 
-	linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAGeTK2cC/0XMSwqDMBSF4a3IHTclj9LEjrqP4sDEa71UjSQSK
+ pK9NxVKh//h8O0QMRBGuFU7BEwUyc8l5KkCN7TzExl1pUFyeRFccTbZcWNufLHWaN0rXSu0Esp
+ 9CdjT+6AeTemB4urDdshJfNcfIv5IEowzU3fGSoOK8+vder+ONJ+dn6DJOX8AaYGCf6IAAAA=
+X-Change-ID: 20241030-mbly-clk-a877f3793eb2
+To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Wed, 6 Nov 2024 at 12:26, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.11.7 release.
-> There are 245 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 08 Nov 2024 12:02:47 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.11.7-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.11.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-
-The mips gcc-12 allmodconfig build failed on the Linux stable-rc
-linux-6.11.y branch.
-
-
-First seen on Linux stable-rc v6.11.4-642-g0e21c72fc970
-
-  Good: v6.11.4-397-g4ccf0b49d5b6
-  Bad:   v6.11.4-642-g0e21c72fc970
-
-mips:
-  build:
-    * gcc-12-allmodconfig
-
-Build errors:
--------------
-ERROR: modpost: "__cmpxchg_small" [fs/btrfs/btrfs.ko] undefined!
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Links:
-- https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.11.y/build/v6.11.4-642-g0e21c72fc970/testrun/25700362/suite/build/test/gcc-12-allmodconfig/log
-- https://storage.tuxsuite.com/public/linaro/lkft/builds/2oTbq5WdzEalBxPXBBCuzLUA45b/
-- https://storage.tuxsuite.com/public/linaro/lkft/builds/2oTbq5WdzEalBxPXBBCuzLUA45b/config
-
-Steps to reproduce:
-------------
-   - tuxmake --runtime podman --target-arch mips --toolchain gcc-12
---kconfig allmodconfig
-
-metadata:
-----
-  git describe: v6.11.4-642-g0e21c72fc970
-  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-  git sha: 0e21c72fc970e320e6c1ca9d81d2dce4aab95b3b
-  kernel config:
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2oTbq5WdzEalBxPXBBCuzLUA45b/config
-  build url: https://storage.tuxsuite.com/public/linaro/lkft/builds/2oTbq5WdzEalBxPXBBCuzLUA45b/
-  toolchain: gcc-12
-  config: allmodconfig
-  arch: mips
+Now that clk-eyeq is in the clk-next tree, we can add the small(-ish)
+details required to make the platform work fully. The work is mostly
+about updating devicetrees to rely on the system-controller nodes as
+clock providers.
 
 --
-Linaro LKFT
-https://lkft.linaro.org
+
+Things we do:
+
+ - In EyeQ5 devicetrees, remove all fixed-factor clocks that are derived
+   from clk-eyeq PLLs. We expose those directly from clk-eyeq (using
+   match data info). This is simpler to reason about.
+
+   [PATCH v2 02/10] dt-bindings: clock: eyeq: add more Mobileye EyeQ5/EyeQ6H clocks
+   [PATCH v2 03/10] clk: fixed-factor: add clk_hw_register_fixed_factor_index() function
+   [PATCH v2 05/10] clk: eyeq: add fixed factor clocks infrastructure
+   [PATCH v2 06/10] clk: eyeq: add EyeQ5 fixed factor clocks
+   [PATCH v2 09/10] MIPS: mobileye: eyeq5: use OLB as provider for fixed factor clocks
+
+ - EyeQ6H devicetrees used fixed-clocks and didn't have
+   system-controllers defined. Remove all that and define our syscons.
+
+   [PATCH v2 07/10] clk: eyeq: add EyeQ6H central fixed factor clocks
+   [PATCH v2 08/10] clk: eyeq: add EyeQ6H west fixed factor clocks
+   [PATCH v2 10/10] MIPS: mobileye: eyeq6h: add OLB nodes OLB and remove fixed clocks
+
+ - Our bindings used to say that some compatibles require a clock cell
+   (those that expose multiple clocks) and others do not. Remove that
+   subtlety and enforce a clock cell for everyone.
+
+   The goal is to make it easier to add clocks to compatibles that
+   previously exposed a single one. It happens for two compatibles in
+   this patch series (EyeQ6H central and west).
+
+   This is a "revert". I had been advised in the initial patch that the
+   behavior was a bad idea. I 100% agree with those comments.
+
+   [PATCH v2 01/10] dt-bindings: soc: mobileye: set `#clock-cells = <1>` for all compatibles
+   [PATCH v2 04/10] clk: eyeq: require clock index with phandle in all cases
+
+--
+
+In which tree patches should go:
+
+ - clk:
+   [PATCH v2 02/10] dt-bindings: clock: eyeq: add more Mobileye EyeQ5/EyeQ6H clocks
+   [PATCH v2 03/10] clk: fixed-factor: add clk_hw_register_fixed_factor_index() function
+   [PATCH v2 04/10] clk: eyeq: require clock index with phandle in all cases
+   [PATCH v2 05/10] clk: eyeq: add fixed factor clocks infrastructure
+   [PATCH v2 06/10] clk: eyeq: add EyeQ5 fixed factor clocks
+   [PATCH v2 07/10] clk: eyeq: add EyeQ6H central fixed factor clocks
+   [PATCH v2 08/10] clk: eyeq: add EyeQ6H west fixed factor clocks
+
+ - MIPS:
+   [PATCH v2 01/10] dt-bindings: soc: mobileye: set `#clock-cells = <1>` for all compatibles
+   [PATCH v2 09/10] MIPS: mobileye: eyeq5: use OLB as provider for fixed factor clocks
+   [PATCH v2 10/10] MIPS: mobileye: eyeq6h: add OLB nodes OLB and remove fixed clocks
+
+Reasoning: we need the clock indexes from dt-bindings headers to avoid
+breaking the driver build, so patch 2 must go in clk-next.
+
+Note about devicetree patches 9-10: other patches on the same
+devicetrees are in the mailing-lists, with which I expect conflicts.
+All should be straight-forward to resolve.
+
+Thanks,
+Have a nice day,
+Théo
+
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+---
+Changes in v2:
+- Patch "dt-bindings: soc: mobileye: set `#clock-cells = <1>` for all
+         compatibles":
+  - Mention that we break ABI (#clock-cells) in commit message, and
+    explain why. [0]
+- Patches "dt-bindings: clock: eyeq: add * clocks":
+  - Squash all four patches into a single one. [1]
+  - Improve the commit message, describing the clock tree structure.
+  - Expose more EyeQ5 peripheral clocks: SPI, I2C, GPIO, EMMC, PCI.
+    We already know those will be used later down the road.
+- Patch "clk: eyeq: add EyeQ5 fixed factor clocks":
+  - Use enum to auto-number non-exposed EyeQ5 clock indexes.
+    Start from the last dt-bindings exposed index plus one.
+- Link to v1: https://lore.kernel.org/r/20241031-mbly-clk-v1-0-89d8b28e3006@bootlin.com
+
+[0]: https://lore.kernel.org/lkml/20241105133323.GA3064907-robh@kernel.org/
+[1]: https://lore.kernel.org/lkml/7ebcdarioght4u2bai4l42pckitcw5iz4rky4ncgp7aqmtrlen@zl7k7pgijloq/
+
+---
+Théo Lebrun (10):
+      dt-bindings: soc: mobileye: set `#clock-cells = <1>` for all compatibles
+      dt-bindings: clock: eyeq: add more Mobileye EyeQ5/EyeQ6H clocks
+      clk: fixed-factor: add clk_hw_register_fixed_factor_index() function
+      clk: eyeq: require clock index with phandle in all cases
+      clk: eyeq: add fixed factor clocks infrastructure
+      clk: eyeq: add EyeQ5 fixed factor clocks
+      clk: eyeq: add EyeQ6H central fixed factor clocks
+      clk: eyeq: add EyeQ6H west fixed factor clocks
+      MIPS: mobileye: eyeq5: use OLB as provider for fixed factor clocks
+      MIPS: mobileye: eyeq6h: add OLB nodes OLB and remove fixed clocks
+
+ .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  |  24 +-
+ arch/mips/boot/dts/mobileye/eyeq5-clocks.dtsi      | 270 ---------------------
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi             |  30 ++-
+ .../boot/dts/mobileye/eyeq6h-fixed-clocks.dtsi     |  52 ----
+ arch/mips/boot/dts/mobileye/eyeq6h.dtsi            |  73 +++++-
+ drivers/clk/clk-eyeq.c                             | 208 ++++++++++++++--
+ drivers/clk/clk-fixed-factor.c                     |  11 +
+ include/dt-bindings/clock/mobileye,eyeq5-clk.h     |  44 +++-
+ include/linux/clk-provider.h                       |   3 +
+ 9 files changed, 327 insertions(+), 388 deletions(-)
+---
+base-commit: 11713909beb7debd3d466a6dc302a33d91298be0
+change-id: 20241030-mbly-clk-a877f3793eb2
+
+Best regards,
+-- 
+Théo Lebrun <theo.lebrun@bootlin.com>
+
 
