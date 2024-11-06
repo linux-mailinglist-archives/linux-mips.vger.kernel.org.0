@@ -1,52 +1,54 @@
-Return-Path: <linux-mips+bounces-6692-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6693-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 129469BF289
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Nov 2024 17:05:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E03159BF287
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Nov 2024 17:05:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6E73CB248AC
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F91F285561
 	for <lists+linux-mips@lfdr.de>; Wed,  6 Nov 2024 16:05:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC13220651F;
-	Wed,  6 Nov 2024 16:04:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43510206970;
+	Wed,  6 Nov 2024 16:04:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OZzsrRRC"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="bqCjkOeO"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D9501DCB06;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D1A204948;
 	Wed,  6 Nov 2024 16:03:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730909042; cv=none; b=FOW73s0DxHW3sNhfN+Aak7HIrUqPskvWAiE5uSjM4N4rvG/S9tc23czoF9LDmXA9LicxtpZE479LWuCfjyuBFSEOi0B/bisA4jEYOistRdn8BgCKmCuLcGYCHlHnyCOf0vHRKIMGsDlR7OMsyLYFwBmVEm7cX0vZr/8ph063G6Y=
+	t=1730909043; cv=none; b=Li0pNoPjx+8zR/Zq+AeAD99ba/IfdtdFUFUcXFnf5Ge0rJJXgjF75LUjE7L4rLq5aOIhhBprOEMGwEOQgB30QgFnZbprqB4AyU/YXrtPQIyR5cUBgN6Rztibm3vGwu7qyNEgEmMGy520b4k6QLkHNsTnf5IQDrNPEhKCyv6ZW68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730909042; c=relaxed/simple;
-	bh=kNMZOxloojlVgJYl446sTR/0XhQacwriWl73D/alcGs=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=to2YRudjtfQIxBB4L0IVGCiAiAu6+KxIUtR6LMYvGs/TIZctOEwEo6po4KO9BKHnJHs13vVWyDf57OrOGuqUnazp6pJ7z1/x3Uy4r77mRKzoP4XGHTlM7+tmF9nyElK7FiP2/VId29hDRFSgpw/A4NXL9fuP4Rj4hwWF3KJbP2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OZzsrRRC; arc=none smtp.client-ip=217.70.183.194
+	s=arc-20240116; t=1730909043; c=relaxed/simple;
+	bh=n0O22ogoVo6OZXgADqeoCHWd9EUR5G2fGF+bLVlYGTA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=kxpiIz2oikt9veBGF5cb6CZkfqET8VFJO8csqaU/6E6XjUhUnKPbFQuuy62Y+/Z8mVg/hA/RTf2FW+2N5jMGm7X79ReMfd57sMfYtM6tDzwsB8Q9KYlaimtYPdVQKUMLunE73HWcBo7jEcBbfBfrgHy2vRjnqn/tXMfdT0P01lU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=bqCjkOeO; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1248340002;
-	Wed,  6 Nov 2024 16:03:56 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D5EEC4000C;
+	Wed,  6 Nov 2024 16:03:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1730909037;
+	t=1730909038;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=xQ0f6eUzwBnvZvNbGKfAEFJ1fg/LcmINDrTkR6LRI70=;
-	b=OZzsrRRC8J1Q47Ti6s+Mcp8knmymb+jObk1EQxnQXsnZDYKpAUbJgpDVdXx+yi8rSrwOWt
-	v4BflQJxfdodQbBG9wjWUrs3fgKn07vc/OXbaREi47M1qQaBwzDECjSFfXwSuPsSctFiGU
-	t9FIXYuPQylUhGs5QELQsIYtydKXRbaEp+9hgQF5D64okTh6D/CQw3PGTDqdxWDzCkqdSp
-	vCpfipYE8YEyMZWS7XxBly50EE33AIPB27oVmRHOY5lfTdmKX952P0gkvE0c0XJ6ATIn8m
-	xHVCJikKGQjg36MNOwW24Rp3uwig/IoWF5cAdiYAXP04VER9kAhBwcpkCEI6uw==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=w0h0STs8I6iL7FEbvTaex0RoYlDDG69yp2h2qtyDFI4=;
+	b=bqCjkOeOTmbg6o34HMblXg+UIczqzp8EpjQc5cA002RhOOccz3hjwm41UNPcf+IbrAZc2+
+	mT4uALzCzA/zKyO9kY84zmAIsccp+I/1/aCf+HsnRYAlDieEs+Rd9jE9RjlrJKlXOrKo7X
+	Lyl4jGM2LDpc7qaPT1qh8UDQvoF3pAWZZX+qeNm0W29bglpCYZAO5lYUUJDU8rcyTRwcOj
+	/k31gB8zi366G/kb3A21EFe0dXWg1AOnXlp5BMu8UNxNJyaiv+UTB63UWdyMkx50pvnYv8
+	NReSAsPLN5oBIK+FNDXP8y7clAelYbuLiLFQSd6U83D1rYPmo3xSAQmj1ccNdw==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: [PATCH v2 00/10] Usable clocks on Mobileye EyeQ5 & EyeQ6H
-Date: Wed, 06 Nov 2024 17:03:51 +0100
-Message-Id: <20241106-mbly-clk-v2-0-84cfefb3f485@bootlin.com>
+Date: Wed, 06 Nov 2024 17:03:52 +0100
+Subject: [PATCH v2 01/10] dt-bindings: soc: mobileye: set `#clock-cells =
+ <1>` for all compatibles
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -55,10 +57,9 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAGeTK2cC/0XMSwqDMBSF4a3IHTclj9LEjrqP4sDEa71UjSQSK
- pK9NxVKh//h8O0QMRBGuFU7BEwUyc8l5KkCN7TzExl1pUFyeRFccTbZcWNufLHWaN0rXSu0Esp
- 9CdjT+6AeTemB4urDdshJfNcfIv5IEowzU3fGSoOK8+vder+ONJ+dn6DJOX8AaYGCf6IAAAA=
-X-Change-ID: 20241030-mbly-clk-a877f3793eb2
+Message-Id: <20241106-mbly-clk-v2-1-84cfefb3f485@bootlin.com>
+References: <20241106-mbly-clk-v2-0-84cfefb3f485@bootlin.com>
+In-Reply-To: <20241106-mbly-clk-v2-0-84cfefb3f485@bootlin.com>
 To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
  =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, 
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -74,124 +75,67 @@ Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-Now that clk-eyeq is in the clk-next tree, we can add the small(-ish)
-details required to make the platform work fully. The work is mostly
-about updating devicetrees to rely on the system-controller nodes as
-clock providers.
+Some compatibles expose a single clock. For those, we used to let them
+using `#clock-cells = <0>` (ie <&olb> reference rather than <&olb 0>).
 
---
+Switch away from that: enforce a cell for all compatibles. This is more
+straight forward, and avoids devicetree changes whenever a compatible
+goes from exposing a single clock to multiple ones. Also, dt-bindings
+get simpler.
 
-Things we do:
-
- - In EyeQ5 devicetrees, remove all fixed-factor clocks that are derived
-   from clk-eyeq PLLs. We expose those directly from clk-eyeq (using
-   match data info). This is simpler to reason about.
-
-   [PATCH v2 02/10] dt-bindings: clock: eyeq: add more Mobileye EyeQ5/EyeQ6H clocks
-   [PATCH v2 03/10] clk: fixed-factor: add clk_hw_register_fixed_factor_index() function
-   [PATCH v2 05/10] clk: eyeq: add fixed factor clocks infrastructure
-   [PATCH v2 06/10] clk: eyeq: add EyeQ5 fixed factor clocks
-   [PATCH v2 09/10] MIPS: mobileye: eyeq5: use OLB as provider for fixed factor clocks
-
- - EyeQ6H devicetrees used fixed-clocks and didn't have
-   system-controllers defined. Remove all that and define our syscons.
-
-   [PATCH v2 07/10] clk: eyeq: add EyeQ6H central fixed factor clocks
-   [PATCH v2 08/10] clk: eyeq: add EyeQ6H west fixed factor clocks
-   [PATCH v2 10/10] MIPS: mobileye: eyeq6h: add OLB nodes OLB and remove fixed clocks
-
- - Our bindings used to say that some compatibles require a clock cell
-   (those that expose multiple clocks) and others do not. Remove that
-   subtlety and enforce a clock cell for everyone.
-
-   The goal is to make it easier to add clocks to compatibles that
-   previously exposed a single one. It happens for two compatibles in
-   this patch series (EyeQ6H central and west).
-
-   This is a "revert". I had been advised in the initial patch that the
-   behavior was a bad idea. I 100% agree with those comments.
-
-   [PATCH v2 01/10] dt-bindings: soc: mobileye: set `#clock-cells = <1>` for all compatibles
-   [PATCH v2 04/10] clk: eyeq: require clock index with phandle in all cases
-
---
-
-In which tree patches should go:
-
- - clk:
-   [PATCH v2 02/10] dt-bindings: clock: eyeq: add more Mobileye EyeQ5/EyeQ6H clocks
-   [PATCH v2 03/10] clk: fixed-factor: add clk_hw_register_fixed_factor_index() function
-   [PATCH v2 04/10] clk: eyeq: require clock index with phandle in all cases
-   [PATCH v2 05/10] clk: eyeq: add fixed factor clocks infrastructure
-   [PATCH v2 06/10] clk: eyeq: add EyeQ5 fixed factor clocks
-   [PATCH v2 07/10] clk: eyeq: add EyeQ6H central fixed factor clocks
-   [PATCH v2 08/10] clk: eyeq: add EyeQ6H west fixed factor clocks
-
- - MIPS:
-   [PATCH v2 01/10] dt-bindings: soc: mobileye: set `#clock-cells = <1>` for all compatibles
-   [PATCH v2 09/10] MIPS: mobileye: eyeq5: use OLB as provider for fixed factor clocks
-   [PATCH v2 10/10] MIPS: mobileye: eyeq6h: add OLB nodes OLB and remove fixed clocks
-
-Reasoning: we need the clock indexes from dt-bindings headers to avoid
-breaking the driver build, so patch 2 must go in clk-next.
-
-Note about devicetree patches 9-10: other patches on the same
-devicetrees are in the mailing-lists, with which I expect conflicts.
-All should be straight-forward to resolve.
-
-Thanks,
-Have a nice day,
-Théo
+*This is an ABI break*. Change it while EyeQ5 platform support is at its
+infancy, without any user. More clocks might hide in each OLB as some
+registers are still unknown.
 
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
-Changes in v2:
-- Patch "dt-bindings: soc: mobileye: set `#clock-cells = <1>` for all
-         compatibles":
-  - Mention that we break ABI (#clock-cells) in commit message, and
-    explain why. [0]
-- Patches "dt-bindings: clock: eyeq: add * clocks":
-  - Squash all four patches into a single one. [1]
-  - Improve the commit message, describing the clock tree structure.
-  - Expose more EyeQ5 peripheral clocks: SPI, I2C, GPIO, EMMC, PCI.
-    We already know those will be used later down the road.
-- Patch "clk: eyeq: add EyeQ5 fixed factor clocks":
-  - Use enum to auto-number non-exposed EyeQ5 clock indexes.
-    Start from the last dt-bindings exposed index plus one.
-- Link to v1: https://lore.kernel.org/r/20241031-mbly-clk-v1-0-89d8b28e3006@bootlin.com
+ .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  | 24 +---------------------
+ 1 file changed, 1 insertion(+), 23 deletions(-)
 
-[0]: https://lore.kernel.org/lkml/20241105133323.GA3064907-robh@kernel.org/
-[1]: https://lore.kernel.org/lkml/7ebcdarioght4u2bai4l42pckitcw5iz4rky4ncgp7aqmtrlen@zl7k7pgijloq/
+diff --git a/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml b/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml
+index f7e606d45ebcfc46ffe076e23a2ed514bfff9b8f..6d11472ba5a704d5d20f43776e5867f507a39242 100644
+--- a/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml
++++ b/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq5-olb.yaml
+@@ -41,9 +41,7 @@ properties:
+     enum: [ 1, 2 ]
+ 
+   '#clock-cells':
+-    description:
+-      Cell is clock index. Optional if compatible has a single clock.
+-    enum: [ 0, 1 ]
++    const: 1
+ 
+   clocks:
+     maxItems: 1
+@@ -312,26 +310,6 @@ allOf:
+       properties:
+         '#reset-cells': false
+ 
+-    # Compatibles exposing a single clock.
+-  - if:
+-      properties:
+-        compatible:
+-          contains:
+-            enum:
+-              - mobileye,eyeq6h-central-olb
+-              - mobileye,eyeq6h-east-olb
+-              - mobileye,eyeq6h-west-olb
+-              - mobileye,eyeq6h-ddr0-olb
+-              - mobileye,eyeq6h-ddr1-olb
+-    then:
+-      properties:
+-        '#clock-cells':
+-          const: 0
+-    else:
+-      properties:
+-        '#clock-cells':
+-          const: 1
+-
+     # Only EyeQ5 has pinctrl in OLB.
+   - if:
+       not:
 
----
-Théo Lebrun (10):
-      dt-bindings: soc: mobileye: set `#clock-cells = <1>` for all compatibles
-      dt-bindings: clock: eyeq: add more Mobileye EyeQ5/EyeQ6H clocks
-      clk: fixed-factor: add clk_hw_register_fixed_factor_index() function
-      clk: eyeq: require clock index with phandle in all cases
-      clk: eyeq: add fixed factor clocks infrastructure
-      clk: eyeq: add EyeQ5 fixed factor clocks
-      clk: eyeq: add EyeQ6H central fixed factor clocks
-      clk: eyeq: add EyeQ6H west fixed factor clocks
-      MIPS: mobileye: eyeq5: use OLB as provider for fixed factor clocks
-      MIPS: mobileye: eyeq6h: add OLB nodes OLB and remove fixed clocks
-
- .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  |  24 +-
- arch/mips/boot/dts/mobileye/eyeq5-clocks.dtsi      | 270 ---------------------
- arch/mips/boot/dts/mobileye/eyeq5.dtsi             |  30 ++-
- .../boot/dts/mobileye/eyeq6h-fixed-clocks.dtsi     |  52 ----
- arch/mips/boot/dts/mobileye/eyeq6h.dtsi            |  73 +++++-
- drivers/clk/clk-eyeq.c                             | 208 ++++++++++++++--
- drivers/clk/clk-fixed-factor.c                     |  11 +
- include/dt-bindings/clock/mobileye,eyeq5-clk.h     |  44 +++-
- include/linux/clk-provider.h                       |   3 +
- 9 files changed, 327 insertions(+), 388 deletions(-)
----
-base-commit: 11713909beb7debd3d466a6dc302a33d91298be0
-change-id: 20241030-mbly-clk-a877f3793eb2
-
-Best regards,
 -- 
-Théo Lebrun <theo.lebrun@bootlin.com>
+2.47.0
 
 
