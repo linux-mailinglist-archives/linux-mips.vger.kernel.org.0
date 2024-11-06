@@ -1,201 +1,111 @@
-Return-Path: <linux-mips+bounces-6703-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6704-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDA919BF2C2
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Nov 2024 17:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D3B09BF796
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Nov 2024 20:51:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F20341C262D9
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Nov 2024 16:08:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F5901C237BC
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Nov 2024 19:51:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D37D207218;
-	Wed,  6 Nov 2024 16:07:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E45220C024;
+	Wed,  6 Nov 2024 19:47:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="GVlxQEKN";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="TpiLxwRe";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="GVlxQEKN";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="TpiLxwRe"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="0rmALPBs"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17591203707;
-	Wed,  6 Nov 2024 16:07:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B985120C00B
+	for <linux-mips@vger.kernel.org>; Wed,  6 Nov 2024 19:47:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730909239; cv=none; b=BtzR9mdD4b+9TS6YiYApveTIa618ONN9Z+Aja0IlsbNqPaupQ3ACxfvR+G9XhiC5Jh9CBKfp4cXTXHpbeq4uFQrPSrSVWinnXV3l9K/8Y9gNJOEK4oN3McYYot4MRqOnwDv2jXHpzEghbElJvenaqQ3WKRfl9uEHn9Z/KFWV57I=
+	t=1730922468; cv=none; b=U82FD6jNQzCU4bQ6BuBx7THWXsvtQnj98dCsFRgn2qqmASxP3T3p0HcROLmIiOd59f+GU2OvluT6B1hEAi7PpvCE7LpE+7e1hMoIN59/YT9hZrL4e9+x8XW5HFYY8wJiLkRN4K2GjTVxEn/r0E5aSQQlUFNZaQwrfAVkpmPVWS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730909239; c=relaxed/simple;
-	bh=yrnpiJhy1J/7RqZ/+CyJugHSccwtATWWeukq81MaSCM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nom28SspPsPRgQFo5vPiCghkuFbd+UQGcSN1pGv87/s342kDFdjswuUQcYbm4dvx5e+V+g7eoWlaozW/0GH/2u2JdBnlXvgTjdKGdjfUnsnJKZ7gvtZS0+1Ws7x4Jxg0xSsa115bMK47TWxF9+ET95xBHR0m8bOBKBZ0aPWFrhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=GVlxQEKN; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=TpiLxwRe; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=GVlxQEKN; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=TpiLxwRe; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	s=arc-20240116; t=1730922468; c=relaxed/simple;
+	bh=nfhOeOMNhx9ro9r5EU5bckyL1gdmm5pMCHqroYTsqXE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sxq/YwiX70jP8hdC4tynrNxmQ1hEDfvEEXZ6m8VCHKZb6Sh0VYD0jEVWWUDNLl+vE9TQSzL+c/rr6WAtU7Ld1qjK5KyVD/7PZaZENVFfHUrzYS+Sn6A8u4pEpshhWgNFA1GO91iozcdtoI7QdHPp+RDLAMdoyBpueTw+6/v+O2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=0rmALPBs; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 410DE1FD16;
-	Wed,  6 Nov 2024 16:07:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1730909234;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oFK4lU6B12gDl5NcQ8bStKX2YCBIjE84h/WDX0M3oX0=;
-	b=GVlxQEKN3N/ZUMBOshLxms6mGsMue3UYHWVi1mIDw1tBV2ZPdp8hmRhKTc2D2GXij2WUOv
-	t8Hq06BbIeQd3N/c/ocBmmwjaAH9JW/ey6GolnmYyvA6vQ9VC3MA2r5aCZITpotTGEitmz
-	224sR5GS3zq/J9+1J6kkSgt5kzEFNuI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1730909234;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oFK4lU6B12gDl5NcQ8bStKX2YCBIjE84h/WDX0M3oX0=;
-	b=TpiLxwReKDl7e0yEg9XXcp1Uuush7wNq9HBMtCqDXUg9gHoPtPNXBSUrQjivAzEFj/uHRG
-	7SDYa2bi1PlVhkDA==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=GVlxQEKN;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=TpiLxwRe
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1730909234;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oFK4lU6B12gDl5NcQ8bStKX2YCBIjE84h/WDX0M3oX0=;
-	b=GVlxQEKN3N/ZUMBOshLxms6mGsMue3UYHWVi1mIDw1tBV2ZPdp8hmRhKTc2D2GXij2WUOv
-	t8Hq06BbIeQd3N/c/ocBmmwjaAH9JW/ey6GolnmYyvA6vQ9VC3MA2r5aCZITpotTGEitmz
-	224sR5GS3zq/J9+1J6kkSgt5kzEFNuI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1730909234;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oFK4lU6B12gDl5NcQ8bStKX2YCBIjE84h/WDX0M3oX0=;
-	b=TpiLxwReKDl7e0yEg9XXcp1Uuush7wNq9HBMtCqDXUg9gHoPtPNXBSUrQjivAzEFj/uHRG
-	7SDYa2bi1PlVhkDA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 0F49D137C4;
-	Wed,  6 Nov 2024 16:07:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id DkGAAzKUK2dLWgAAD6G6ig
-	(envelope-from <dsterba@suse.cz>); Wed, 06 Nov 2024 16:07:14 +0000
-Date: Wed, 6 Nov 2024 17:07:08 +0100
-From: David Sterba <dsterba@suse.cz>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, stable@vger.kernel.org,
-	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-	torvalds@linux-foundation.org, akpm@linux-foundation.org,
-	linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-	lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-	f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
-	hagar@microsoft.com, broonie@kernel.org, Chris Mason <clm@fb.com>,
-	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
-	Linux btrfs <linux-btrfs@vger.kernel.org>,
-	linux-mips@vger.kernel.org
-Subject: Re: [PATCH 6.11 000/245] 6.11.7-rc1 review
-Message-ID: <20241106160708.GE31418@suse.cz>
-Reply-To: dsterba@suse.cz
-References: <20241106120319.234238499@linuxfoundation.org>
- <CA+G9fYtjpUJFFV=FdqvW+5K+JL5ZYN4sPfVDjQovqzd7cib39w@mail.gmail.com>
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A04BE2C01F6;
+	Thu,  7 Nov 2024 08:47:42 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1730922462;
+	bh=ScnBUtaeifvVVpugBAsbHCHfD79Y+oTex2Xsw6PXO/0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=0rmALPBsk3KpDQon2NIfxmI5YGmR8qtmfG47c6yl0Svgg53uDndquPoraimagPC+1
+	 MroiuHdN/1BN90MmoNhdcM87Qsozu4IkFUsY4Tc2qjljo7Y5mZDqz9hkTJkL43cp7I
+	 R8ab9gLvAgKpPBiWXxgAwxf/+l1EuhZRSSqSqf/5ZL161LtjNzAjnLj+p1vVGFXlIC
+	 QV5aLFBZ2nPlpZ/O48/GCcIcNtZwqPFlQGwRGBbcPEHUaARzQYGM/MIkimTkXEkiGD
+	 yOnahh76/7A0h06A1KW4adYKZGw4F69xegWjbgNQZDw5Rnb49aNyewHqf1pshCYGEO
+	 Mg6k4dh9WZ4Yg==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B672bc7de0000>; Thu, 07 Nov 2024 08:47:42 +1300
+Received: from [10.33.22.30] (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id 73C5C13ED6B;
+	Thu,  7 Nov 2024 08:47:42 +1300 (NZDT)
+Message-ID: <d7ceaf59-8e39-4c76-9b9f-88746a22176d@alliedtelesis.co.nz>
+Date: Thu, 7 Nov 2024 08:47:42 +1300
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYtjpUJFFV=FdqvW+5K+JL5ZYN4sPfVDjQovqzd7cib39w@mail.gmail.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Rspamd-Queue-Id: 410DE1FD16
-X-Spam-Score: -2.71
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.71 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	HAS_REPLYTO(0.30)[dsterba@suse.cz];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com,gmx.de];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	TO_DN_SOME(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCPT_COUNT_TWELVE(0.00)[25];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_ALL(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
-	REPLYTO_ADDR_EQ_FROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,vger.kernel.org,lists.linux.dev,linux-foundation.org,roeck-us.net,kernel.org,kernelci.org,lists.linaro.org,denx.de,nvidia.com,gmail.com,sladewatkins.net,gmx.de,microsoft.com,fb.com,toxicpanda.com,suse.com];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	R_RATELIMIT(0.00)[to_ip_from(RLe1zdo9uk7dz69twkrygihbgb)];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Level: 
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH v9 4/4] i2c: Add driver for the RTL9300 I2C controller
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ tsbogend@alpha.franken.de, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-i2c@vger.kernel.org
+References: <20241106001835.2725522-1-chris.packham@alliedtelesis.co.nz>
+ <20241106001835.2725522-5-chris.packham@alliedtelesis.co.nz>
+ <vn6t6qxqry2ay4tbvo3cb4rbjv53pnyl56vangul36vvvxibwp@q3pssbthesef>
+Content-Language: en-US
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <vn6t6qxqry2ay4tbvo3cb4rbjv53pnyl56vangul36vvvxibwp@q3pssbthesef>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=ca1xrWDM c=1 sm=1 tr=0 ts=672bc7de a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=VlfZXiiP6vEA:10 a=62ntRvTiAAAA:8 a=jdP34snFAAAA:8 a=VwQbUJbxAAAA:8 a=ovCuDd3x2qG2uVDzZbIA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=pToNdpNmrtiFLRE6bQ9Z:22 a=jlphF6vWLdwq7oh3TaWq:22
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-On Wed, Nov 06, 2024 at 03:12:46PM +0000, Naresh Kamboju wrote:
-> On Wed, 6 Nov 2024 at 12:26, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 6.11.7 release.
-> > There are 245 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Fri, 08 Nov 2024 12:02:47 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.11.7-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.11.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
-> 
-> The mips gcc-12 allmodconfig build failed on the Linux stable-rc
-> linux-6.11.y branch.
-> 
-> 
-> First seen on Linux stable-rc v6.11.4-642-g0e21c72fc970
-> 
->   Good: v6.11.4-397-g4ccf0b49d5b6
->   Bad:   v6.11.4-642-g0e21c72fc970
-> 
-> mips:
->   build:
->     * gcc-12-allmodconfig
-> 
-> Build errors:
-> -------------
-> ERROR: modpost: "__cmpxchg_small" [fs/btrfs/btrfs.ko] undefined!
 
-The patch "btrfs: fix error propagation of split bios" needs
-90a88784cdb7 ("MIPS: export __cmpxchg_small()")
+On 6/11/24 22:57, Andi Shyti wrote:
+> Hi Chris,
+>
+> On Wed, Nov 06, 2024 at 01:18:35PM +1300, Chris Packham wrote:
+>> Add support for the I2C controller on the RTL9300 SoC. There are two I2C
+>> controllers in the RTL9300 that are part of the Ethernet switch register
+>> block. Each of these controllers owns a SCL pin (GPIO8 for the fiorst
+>> I2C controller, GPIO17 for the second). There are 8 possible SDA pins
+>> (GPIO9-16) that can be assigned to either I2C controller. This
+>> relationship is represented in the device tree with a child node for
+>> each SDA line in use.
+>>
+>> This is based on the openwrt implementation[1] but has been
+>> significantly modified
+>>
+>> [1] - https://scanmail.trustwave.com/?c=20988&d=pL2r5zHAPsW8d92uECdR2T8Eh4fYX_ZwrCyklfTCzQ&u=https%3a%2f%2fgit%2eopenwrt%2eorg%2f%3fp%3dopenwrt%2fopenwrt%2egit%3ba%3dblob%3bf%3dtarget%2flinux%2frealtek%2ffiles-5%2e15%2fdrivers%2fi2c%2fbusses%2fi2c-rtl9300%2ec
+>>
+>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+>> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+> Thanks for following up with v9. I think nothing prevents us from
+> already merging this 4/4 patch, right?
+>
+ From my end yes it's all good to go. Lee's just applied the mfd binding.
+
+The only thing outstanding are the mips dts changes. I'll wait for a bit 
+and chase those up. Hopefully they can make it in the 6.13 window but 
+it's not the end of the world if they don't.
+
 
