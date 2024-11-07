@@ -1,72 +1,72 @@
-Return-Path: <linux-mips+bounces-6707-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6708-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66DC79BFE34
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Nov 2024 07:11:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EAE89BFE3A
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Nov 2024 07:12:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A7651C219EC
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Nov 2024 06:11:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 925981C21F42
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Nov 2024 06:12:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DD2A194A43;
-	Thu,  7 Nov 2024 06:11:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9B1C19596F;
+	Thu,  7 Nov 2024 06:11:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cHDuSJVr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G6B8CVF2"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 841A3191F88;
-	Thu,  7 Nov 2024 06:11:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2593D194C6A;
+	Thu,  7 Nov 2024 06:11:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730959894; cv=none; b=W2fTlzfB8AM2aiEb64YLcLnLfwP3wVkuif59kHWnW+ve7AptuqBYHlQidMljzwHJZ3VAYaubRj+89Gnn4G1vTP7klhRaH4cRpPLDevSXe6CIZ0hLN0Za+qE+L03weFlqD2UoU/hBfvZ3k87HJ5XmXxJ5lRwVh0KH7oYp7TsQ0k0=
+	t=1730959896; cv=none; b=BycdLOXbve4NXXDx8OlsISwNj+t+LXfHNKBigdlTYyQ8GYiRIsQQJbVaqfkQyqYC73iSfk1V/rOH6hslF5gSnGHJp6r2hybNMgMTughv6cr2K9TeT8l6qsmOYX4Uq/SJvAJPRepfQpgs+Jj94fPh3CR8lx10oqxe+JPmL34ndQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730959894; c=relaxed/simple;
-	bh=43RcNsIvUGi4595SU91AS/BTSl3E6gi5tuIlWyaKPmM=;
+	s=arc-20240116; t=1730959896; c=relaxed/simple;
+	bh=ns+qICv4ryQ7JfsDRazMozL0fDUROfR+O8kTeP4q2ck=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=IzCFemeS2uCASHIuRtdzW2ZRUu9MZXgl+RWp65kFWR2+6SstAE3XOwqd++u6oGlV9h8+orgMeAP1ciBEW0yMzes1eGDjuukx1/U18dELh+UA0OSZh/UmDyKbtVquTMlHeR3mbwDdaCERE29Ce/LZjlgeHsRqI2jUYolE3nz8ixE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cHDuSJVr; arc=none smtp.client-ip=209.85.214.177
+	 MIME-Version; b=Hi61+M+VZkGU+32OX5fjc8v9NQTORMPqbysJnNM+1C/ck8Opr/+wO0FagS8DvJWYW9Wfqmtc4OoCKj74fWo5qIfNuopWYOIs6foOGlsgcb15S/cds/a6Abq7zPIG7gvYcdOyfxFeAkkcV38u7RkY8X9pG7tu5ytaPx8uK30gSmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G6B8CVF2; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-20c7ee8fe6bso6261195ad.2;
-        Wed, 06 Nov 2024 22:11:32 -0800 (PST)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-20c693b68f5so6381865ad.1;
+        Wed, 06 Nov 2024 22:11:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730959892; x=1731564692; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730959893; x=1731564693; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ALXydKzISbFOwh8LfCoyMfvmblNdzLozEw5VVs994Xc=;
-        b=cHDuSJVrs4LDwWpD5R0UEz87PQ1ltSyOaf9/Xd8tYF6qOlZ07ewJklBupBPHtLbPH3
-         R2DT0BmdrGP38XtufhuAwmx7KNwmd6/Q/NOAn7fFTSyi9NGPmqovHt6SdkE5fyBLnKid
-         Ebi5rvKDLOlomKweru9QrfPLQLlVLwOw4eeluFABOTvqsgj+fqgyakEgfyf6ojgxqzwo
-         4gWjK8XAZrpzhXAMukVVw3jXh1oDQbiIA5FqZnfQjk3eBnXbzCLS+n6ILnd1gGpWM7Hc
-         iv8TrimEvHQxRfmLwwgQUIc4fYBpEQT3SIPWF23hi+QZDOl9xhGkmqyL93ZsWz+uMFeG
-         bD6A==
+        bh=cXBEpFmFzi8INkB2Bb0DSvGG6kE3LNqjdEC99i0wI3w=;
+        b=G6B8CVF2syNvnUJGYlMci84TvXdar7DuZ0xjnOXKQ/zIxEkcHwiA+RlLeh6QNpj9MH
+         o8ajNHqmDjc3vuwDy3uagQRHr7Hn8mUna17ipwyLcI5fhQ22ULk1V/AlkEyuehOfpcCY
+         DeZgZ9DBR61Cr4t63+s2RRJ2soNx0Au20YTvwdXy7HD7TnovMfA1kCy0FGBc9WV0ltu0
+         azzGs6in7NzbGeyixNY4I9hc6jYjLC35AnJSXhxPgG5I/ErbfWMKaGPSFvwjIxd25r/E
+         Ek+za99y3t5yGjLnsxl8iifLSWGUsp09oVGOGaERWbcpXV0m6awsxJT5wZw3KBWASpIR
+         Oo8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730959892; x=1731564692;
+        d=1e100.net; s=20230601; t=1730959893; x=1731564693;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ALXydKzISbFOwh8LfCoyMfvmblNdzLozEw5VVs994Xc=;
-        b=UN5LYsggqja3C13xVkvfwW9xfJjn4jKlXQLswP5B8u0JvgEa/xE6rte+qdoNaSBuO+
-         qwuAFGb5qWZ4uHVi519N35dp8bq3xkRyez1XFCe0o12SAzS5Qfiav2cAK+brTl1CzX4V
-         FTS3kCrSSEw5imClxRQBpoOxlAUmJnAxqq/4FdPByfW7aM+s0U99wkISOqvkbB96feLT
-         bRsOl9LH8Qgw+WawLfALkxgYBbUr43A8YlfeuRCkYzHc6kkBy9xZnnHXxRERdly4Joq+
-         qYk2fP+IGLgp8DOwBQ9vTLhtqrGzTSAqiNEdunRIQRzXfts4ftf0Lvjd4peZVrscwhTp
-         Ik5w==
-X-Forwarded-Encrypted: i=1; AJvYcCUO+FcJJJxGmuubzc1HIeuDX0JibTvVF1QGrT4grpiHu1d8rDaxFl42poIVaG+QGgAhgdv3jK2yAay1isxS@vger.kernel.org, AJvYcCUOY601pwxSl/t9tkieCoqBgglr3QgcG0WFFt264NoHvgxog6kP4eCgQ3ijhutsVTt1R4n5LuTg+cNJH/g=@vger.kernel.org, AJvYcCV6Q0jAjuRr5auXFdbAZHCilvNDv0dpoTErtTvZGlr036kRLB9sJ6BewKbCFXfFDu16GXb/Bim/VXsP@vger.kernel.org, AJvYcCW+WXgVXYk9MJMNzqFqjGcsHmNy/x6P2oi5x4kt/xcro61pRqWsjtzIcFQhdGKClSG6XLi9TDJ8X4+BEA==@vger.kernel.org, AJvYcCX01X+fIYqVP9DyrHOzMy2TqQH46sGfaEpvUHu7++kfyMMEtk6/8/IBFg6177f6zuHyOWjEiriiNI5Clw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2cKoTzjPLY8/e+ebL/x6eiVD/2vQ8jtd9GOEX6ikLiqWUEKs3
-	M8jiynH2UCwvX8ChBboP3agRfB7E6dkp6za+OUOMZAHBPQOkjdnu
-X-Google-Smtp-Source: AGHT+IH+74hwtw/dolRKBe95lMKx0IkBL+BrHnQnQvcxznJIGMkm653MQz7fgmgSPs8j9V5HslOTGw==
-X-Received: by 2002:a17:902:cecd:b0:20c:a97d:cc7f with SMTP id d9443c01a7336-210c6c3ec78mr584066825ad.41.1730959891752;
-        Wed, 06 Nov 2024 22:11:31 -0800 (PST)
+        bh=cXBEpFmFzi8INkB2Bb0DSvGG6kE3LNqjdEC99i0wI3w=;
+        b=HR9UqTYuwjN8LuqJzPV+cBre5kTmdxE//z1DFjDv+b/3db+9PCLU64kcfNAu3Ks6By
+         W1l4zaHiwmGDayvT6vrAf97Z9gr4XQGMChEzVhiQLUHyrZMg3jO+hXalpFf5Ggb6d2Az
+         tIxmSicuOu12OIjN6dPbm4F2vAEnvghjDtDYfTLtx5wiOUCigUozUYHTmcopvW4RRo7j
+         bHMNbUhNgcDqqTEs8r5t3VQvx/4I5l13WPsGZRa6JNjK94BeV6PMNoWb1h1UJldl8/KF
+         OcvZ/nEEJWsIzlBBRMKS+7WibwUIjdcP2LxsUUx9ahwKiq6PFNQHzI6SYed7qKZljUSU
+         7gkw==
+X-Forwarded-Encrypted: i=1; AJvYcCUBjabykeLrjuWUr3JsMgh/ovLHRNtIy9gid6tZNFzqj0mHmwwWK4Gh7IQV9SApzZuNmQ1cluDRal6L@vger.kernel.org, AJvYcCVwYEVVgbXPc+eq2Cxd21tMfEI+qVGQmIpvvsEMEkLzWiY66TpneV7M661AJ4n86E6zl8HTbffxTliJxg==@vger.kernel.org, AJvYcCWQedO3O1i7IWe3WqFjxUUDzuojcnHRyZkOaOaUM7ojTloaQSN35u9hToMe3wg30XJuUOp61n8VKe8YbRs=@vger.kernel.org, AJvYcCWSAtA2O+L8y8a5tDyw0bvf15j1gSUUayw8KTHFwob/BqzCCY5AcdTgW8X0Euef48ubPjCklVYFWeb2uxm2@vger.kernel.org, AJvYcCXusiFdpB5EF0J8uhOVl0wIh/Y81UZ29h3Rr+ZxISjrv/Wf74tQp9E4VKvTX8O/SnMJmS9H+N17oKwK2A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxj9fF2ojtApbWGKVIHpF75bxahU6H+rm91pUadZVZETPNUWxb4
+	eu+/lueDpajDhl6ODUCQDCqwaLWkmvF5ne8UStj0Y1A69EeadFf5
+X-Google-Smtp-Source: AGHT+IEhLX1Ix3kvbnhGTk3oM5FNMOle9lT4S2S6mmMGQXogZWZm53W55lSd+4P4hV9Wykx6SDq4ig==
+X-Received: by 2002:a17:902:ec88:b0:20b:8ef3:67a with SMTP id d9443c01a7336-211785b1234mr10045595ad.7.1730959893349;
+        Wed, 06 Nov 2024 22:11:33 -0800 (PST)
 Received: from 1337.tail8aa098.ts.net (ms-studentunix-nat0.cs.ucalgary.ca. [136.159.16.20])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177dc7cf8sm4652465ad.34.2024.11.06.22.11.30
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177dc7cf8sm4652465ad.34.2024.11.06.22.11.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Nov 2024 22:11:31 -0800 (PST)
+        Wed, 06 Nov 2024 22:11:32 -0800 (PST)
 From: Abhinav Saxena <xandfury@gmail.com>
 To: linux-kernel-mentees@lists.linuxfoundation.org,
 	linux-gpio@vger.kernel.org,
@@ -89,9 +89,9 @@ Cc: Linus Walleij <linus.walleij@linaro.org>,
 	Mark Brown <broonie@kernel.org>,
 	Christophe Leroy <christophe.leroy@csgroup.eu>,
 	Abhinav Saxena <xandfury@gmail.com>
-Subject: [PATCH 1/2] Documentation: dt-bindings: Fix repeated words
-Date: Wed,  6 Nov 2024 23:11:23 -0700
-Message-Id: <20241107061124.105930-2-xandfury@gmail.com>
+Subject: [PATCH 2/2] Documentation: dt-bindings: Remove trailing whitespace
+Date: Wed,  6 Nov 2024 23:11:24 -0700
+Message-Id: <20241107061124.105930-3-xandfury@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241107061124.105930-1-xandfury@gmail.com>
 References: <20241107061124.105930-1-xandfury@gmail.com>
@@ -103,89 +103,97 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fix unintentional word repetitions in devicetree binding documentation:
-- usb.txt: Fix repeated "two"
-- mvebu-devbus.txt: Fix repeated "from"
-- gpio.txt: Fix repeated "Both"
-- pinctrl-bindings.txt: Fix repeated "device"
-- cavium/bootbus.txt: Fix repeated "one"
+Remove trailing whitespace from devicetree binding documentation files:
+- regulator/regulator-max77620.txt
+- interrupt-controller/nvidia,tegra20-ictlr.txt
+- interrupt-controller/msi.txt
 
-These issues were identified using the checkpatch.pl script.
+No functional changes. Issues detected using checkpatch.pl script.
 
 Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
 ---
- Documentation/devicetree/bindings/gpio/gpio.txt                 | 2 +-
- .../devicetree/bindings/memory-controllers/mvebu-devbus.txt     | 2 +-
- Documentation/devicetree/bindings/mips/cavium/bootbus.txt       | 2 +-
- Documentation/devicetree/bindings/pinctrl/pinctrl-bindings.txt  | 2 +-
- Documentation/devicetree/bindings/soc/fsl/cpm_qe/qe/usb.txt     | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+ .../devicetree/bindings/interrupt-controller/msi.txt   | 10 +++++-----
+ .../interrupt-controller/nvidia,tegra20-ictlr.txt      |  2 +-
+ .../bindings/regulator/regulator-max77620.txt          |  4 ++--
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/gpio/gpio.txt b/Documentation/devicetree/bindings/gpio/gpio.txt
-index d82c32217fff..530420475a4f 100644
---- a/Documentation/devicetree/bindings/gpio/gpio.txt
-+++ b/Documentation/devicetree/bindings/gpio/gpio.txt
-@@ -304,7 +304,7 @@ pins 50..69.
- It is also possible to use pin groups for gpio ranges when pin groups are the
- easiest and most convenient mapping.
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/msi.txt b/Documentation/devicetree/bindings/interrupt-controller/msi.txt
+index c20b51df7138..2109a3454cf6 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/msi.txt
++++ b/Documentation/devicetree/bindings/interrupt-controller/msi.txt
+@@ -12,17 +12,17 @@ potentially including additional information.
+ MSIs are distinguished by some combination of:
  
--Both both <pinctrl-base> and <count> must set to 0 when using named pin groups
-+Both <pinctrl-base> and <count> must set to 0 when using named pin groups
- names.
+ - The doorbell (the MMIO address written to).
+-  
++
+   Devices may be configured by software to write to arbitrary doorbells which
+   they can address. An MSI controller may feature a number of doorbells.
  
- The property gpio-ranges-group-names must contain exactly one string for each
-diff --git a/Documentation/devicetree/bindings/memory-controllers/mvebu-devbus.txt b/Documentation/devicetree/bindings/memory-controllers/mvebu-devbus.txt
-index 8b9388cc1ccc..1983d7eabd2b 100644
---- a/Documentation/devicetree/bindings/memory-controllers/mvebu-devbus.txt
-+++ b/Documentation/devicetree/bindings/memory-controllers/mvebu-devbus.txt
-@@ -43,7 +43,7 @@ Read parameters:
-  - devbus,bus-width:    Defines the bus width, in bits (e.g. <16>).
-                         Mandatory, except if devbus,keep-config is used.
+ - The payload (the value written to the doorbell).
+-  
++
+   Devices may be configured to write an arbitrary payload chosen by software.
+   MSI controllers may have restrictions on permitted payloads.
  
-- - devbus,badr-skew-ps: Defines the time delay from from A[2:0] toggle,
-+ - devbus,badr-skew-ps: Defines the time delay from A[2:0] toggle,
-                         to read data sample. This parameter is useful for
-                         synchronous pipelined devices, where the address
-                         precedes the read data by one or two cycles.
-diff --git a/Documentation/devicetree/bindings/mips/cavium/bootbus.txt b/Documentation/devicetree/bindings/mips/cavium/bootbus.txt
-index 6581478225a2..1bc655d285ce 100644
---- a/Documentation/devicetree/bindings/mips/cavium/bootbus.txt
-+++ b/Documentation/devicetree/bindings/mips/cavium/bootbus.txt
-@@ -15,7 +15,7 @@ Properties:
+ - Sideband information accompanying the write.
+-  
++
+   Typically this is neither configurable nor probeable, and depends on the path
+   taken through the memory system (i.e. it is a property of the combination of
+   MSI controller and device rather than a property of either in isolation).
+@@ -48,7 +48,7 @@ Optional properties:
+   not encode doorbells or payloads as these can be configured dynamically.
  
- - #size-cells: Must be <1>.
+   The meaning of the msi-specifier is defined by the device tree binding of
+-  the specific MSI controller. 
++  the specific MSI controller.
  
--- ranges: There must be one one triplet of (child-bus-address,
-+- ranges: There must be one triplet of (child-bus-address,
-   parent-bus-address, length) for each active chip select.  If the
-   length element for any triplet is zero, the chip select is disabled,
-   making it inactive.
-diff --git a/Documentation/devicetree/bindings/pinctrl/pinctrl-bindings.txt b/Documentation/devicetree/bindings/pinctrl/pinctrl-bindings.txt
-index 6904072d3944..500b76ba2ab3 100644
---- a/Documentation/devicetree/bindings/pinctrl/pinctrl-bindings.txt
-+++ b/Documentation/devicetree/bindings/pinctrl/pinctrl-bindings.txt
-@@ -18,7 +18,7 @@ states. The number and names of those states is defined by the client device's
- own binding.
  
- The common pinctrl bindings defined in this file provide an infrastructure
--for client device device tree nodes to map those state names to the pin
-+for client device tree nodes to map those state names to the pin
- configuration used by those states.
+ MSI clients
+@@ -117,7 +117,7 @@ Example
+ 		reg = <0x1 0xf00>;
+ 		compatible = "vendor-c,some-device";
  
- Note that pin controllers themselves may also be client devices of themselves.
-diff --git a/Documentation/devicetree/bindings/soc/fsl/cpm_qe/qe/usb.txt b/Documentation/devicetree/bindings/soc/fsl/cpm_qe/qe/usb.txt
-index da13999337a4..682db2b561bb 100644
---- a/Documentation/devicetree/bindings/soc/fsl/cpm_qe/qe/usb.txt
-+++ b/Documentation/devicetree/bindings/soc/fsl/cpm_qe/qe/usb.txt
-@@ -3,7 +3,7 @@ Freescale QUICC Engine USB Controller
- Required properties:
- - compatible : should be "fsl,<chip>-qe-usb", "fsl,mpc8323-qe-usb".
- - reg : the first two cells should contain usb registers location and
--  length, the next two two cells should contain PRAM location and
-+  length, the next two cells should contain PRAM location and
-   length.
- - interrupts : should contain USB interrupt.
- - fsl,fullspeed-clock : specifies the full speed USB clock source:
+-		/* 
++		/*
+ 		 * Can generate MSIs to either A or B.
+ 		 */
+ 		msi-parent = <&msi_a>, <&msi_b 0x17>;
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/nvidia,tegra20-ictlr.txt b/Documentation/devicetree/bindings/interrupt-controller/nvidia,tegra20-ictlr.txt
+index 2ff356640100..0c37e569e6f3 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/nvidia,tegra20-ictlr.txt
++++ b/Documentation/devicetree/bindings/interrupt-controller/nvidia,tegra20-ictlr.txt
+@@ -12,7 +12,7 @@ Required properties:
+ - compatible : should be: "nvidia,tegra<chip>-ictlr". The LIC on
+   subsequent SoCs remained backwards-compatible with Tegra30, so on
+   Tegra generations later than Tegra30 the compatible value should
+-  include "nvidia,tegra30-ictlr".	
++  include "nvidia,tegra30-ictlr".
+ - reg : Specifies base physical address and size of the registers.
+   Each controller must be described separately (Tegra20 has 4 of them,
+   whereas Tegra30 and later have 5).
+diff --git a/Documentation/devicetree/bindings/regulator/regulator-max77620.txt b/Documentation/devicetree/bindings/regulator/regulator-max77620.txt
+index bcf788897e44..7484c0728e27 100644
+--- a/Documentation/devicetree/bindings/regulator/regulator-max77620.txt
++++ b/Documentation/devicetree/bindings/regulator/regulator-max77620.txt
+@@ -65,14 +65,14 @@ Following are additional properties:
+ 					Valid values are 0 to 7.
+ 					This is applicable if FPS source is
+ 					selected as FPS0, FPS1 or FPS2.
+-			
++
+ - maxim,active-fps-power-down-slot:	Sequencing event slot number on which
+ 					the regulator get disabled when master
+ 					FPS input event set to LOW.
+ 					Valid values are 0 to 7.
+ 					This is applicable if FPS source is
+ 					selected as FPS0, FPS1 or FPS2.
+-			
++
+ - maxim,suspend-fps-source:		This is same as property
+ 					"maxim,active-fps-source" but value
+ 					get configured when system enters in
 -- 
 2.34.1
 
