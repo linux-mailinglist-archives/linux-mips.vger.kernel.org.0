@@ -1,48 +1,74 @@
-Return-Path: <linux-mips+bounces-6718-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6719-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95C819C1B77
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Nov 2024 11:55:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DDDF9C2E80
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Nov 2024 17:30:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C74201C2680E
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Nov 2024 10:54:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 861311C20C37
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Nov 2024 16:30:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E44B1F706F;
-	Fri,  8 Nov 2024 10:51:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 193DA198E93;
+	Sat,  9 Nov 2024 16:30:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KtGpet/S"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W/IYTpzA"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B3D31F669D;
-	Fri,  8 Nov 2024 10:50:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E9422BB09;
+	Sat,  9 Nov 2024 16:30:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731063061; cv=none; b=g2MDVvlcOOOpa1khsLH6XAZVt8kOLE9thRr3TFtqvWno+Ry+GpdSJZiM0LDfxzQKGwp+ZrO9DODSlxBceYN0axl6Gk6kCbheCUkRMmbK9op+lPalA6d15STBevj5R25RIpIRfmy9MrExcCQNdw22/6igxk8jutIQCrZiXQ5xuOQ=
+	t=1731169847; cv=none; b=SxYC/ogeox4HyzFg+rePlBLTmtww7lr1vKtoHwigYQwUAh9xFxHvDNpKMzk8ppR8GT7JJmY0xKf9u9Gdnz0TXQ51sekXb7fxtKoVaBtbfW+jf+QPjDlw18Ps31IirCYjpOP8X1kuJDKU0PpU2GV+Q6gSxS0ashjHg90PoUTk09c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731063061; c=relaxed/simple;
-	bh=dk1mu5lTqhAoWaUh/fvmV70El26cHpvXmwS6kDk07AQ=;
+	s=arc-20240116; t=1731169847; c=relaxed/simple;
+	bh=4nzEV01HerKl13JwtsONKUbgCEH5uMrLa3opUgMD+sU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kgoHBVfNgVhAkBHNsp1nfzAwsy7RM1iHsLSVamvjj68+bmh4Hr2O1Nd6+NF7/tftFC41md0vocKtp7Qei1FjQ8RjO5kxHgXTnBzB5QZGmiAvHtxY8CsYmqJIPRNBSu/0B+0WBqICkZXaFrTJY/D/nI4u1akoMl+C6FA1gT09iAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KtGpet/S; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1600C4CED2;
-	Fri,  8 Nov 2024 10:50:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731063059;
-	bh=dk1mu5lTqhAoWaUh/fvmV70El26cHpvXmwS6kDk07AQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=KtGpet/SFgaXzrIBIP4cB2KDeG3SXOcEEkf6H5HkrK/cyY7Drw51ToCAmBwpUX7Gp
-	 9VY1ztHsK6rUEBUHuZimo26lPWBv+i0XNdOxFCKpXJHacu4dXkNvjYx6zAuisLXKi1
-	 FX/3v9/Z5KLV7vbmkmVM0FISHrinSqZSFRd4w6IPbYKx7s27sPFOvN1zQgHSwzIuCW
-	 Ewlh+lS3Ro7BBPvl42UZiUefkqg5qoIDnJdL4bLXWn/cicLtZOrqkRF/CkfCQ7QUKc
-	 jhRx4K1An3Ws18+qK4umaPSLAZKc54oROYsTCA4EZ5Gt8PRq1foCzMXA8b6+T8x33k
-	 w+hmdDJnFmANw==
-Message-ID: <12ac2212-e176-4d39-85fe-c7afa16dc822@kernel.org>
-Date: Fri, 8 Nov 2024 11:50:50 +0100
+	 In-Reply-To:Content-Type; b=Cmordxizhg4ehAW0Mv5Zn9ICqvZ62br26BUTLI9+zlZScZTGHQwMZmnS9lnCEnHxrhnL1VOyXv7fPqByenlpLsVek2vJRl7Hhe0e1yVM4qBdMos7hwUJq4NWjb9derhbhVnukv/ij1y45j45882ie9G8ykFhwIz12V9Wz1tA4bI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W/IYTpzA; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20caea61132so28139905ad.2;
+        Sat, 09 Nov 2024 08:30:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731169845; x=1731774645; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+HFu6d4lO7rqvd9CtGtNgYr/2KPNT3OuXCo4vOZrFRY=;
+        b=W/IYTpzAnK/sPvb52bME+7m/QPh9xrSGB4J4kikOvCTutjLs7/OTgPyi1oXiM+Nz4v
+         ldDm6T+Fm2ZB1QJ5L1oQofqaigeJhllEVcU8R+ldtDvQ91xYST7JHrbfx2HB68Co6CSl
+         qxqvhTPwfemjQDwZjJT8yozelN789Q+eHlPBed0jbUlGlo1KOUDyBGRuJjAF54BRtQLQ
+         4HYqRkerD1fTV+bWh2BKLjdc5+zcyxotjvPxEFlVcqTQie02NRlPEouHYSMRaaSWRDev
+         Mu0NM/LHlXKrgSaBSJYhPJRNe2/8M8fv/0vpwhNt3x9kkVidev57svOG66T5LxKG4zVB
+         GNvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731169845; x=1731774645;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+HFu6d4lO7rqvd9CtGtNgYr/2KPNT3OuXCo4vOZrFRY=;
+        b=Xp8jhpsDEVMBxO6tFL6YVKresPgXrTQ7MBTVRvdpuwlM/y4awUUOM/OUyKxQkchYZp
+         VOYW0JYJLIjFpJzLem84e+c9d2kKCHojawf9cACaXrYcLecEdzzzvqn3xFoEW7f1R04S
+         YhYm4H9NA1O+KkpT14umpQYwKZeHYz45GeqK62UbVrbBjDHbnEeGLJUZ+HyOuiEpxzI3
+         roVJZzBm2LM25HND8unB+DPDFYWtazfYSLCwogm06i3SxOljVhWNiEixBvj1KhoE0b5p
+         N4fA61nNQM+1lnLcXR1nRAZv33bWXhiU48wJzJVIacBwcNBz1ngW3PVHKPplxvjlhX7F
+         dJIw==
+X-Forwarded-Encrypted: i=1; AJvYcCUKzNWohtN+/N7BfO/RXetLddzHLPGFUypOgo1N51/VkZVRT7+b8b8Aaos1Bt0drJZF0pVj4DG5yTTdB2k=@vger.kernel.org, AJvYcCUYb78ItN1vhvcGS/CFEbWXzfDNxY+OEGJ6wOvMXqp3UXPVu7TsshA16VLtqAtphqbj43sp9ln/yCdNRQ==@vger.kernel.org, AJvYcCUq5teus+MW11U6Pr63rQNLslWrmtXvbJm56syMgxHDuh15gIAKYxlNpbkq+ynsTWzCe5ZKvN03GGYpmw==@vger.kernel.org, AJvYcCV6WTwy/kMsTl4cR3SY1l+GSTRB14/ArsuWs2ueURzgBXLBwldhQ3Mdbj5gAtvl6qwQUCR6O5HNNRc=@vger.kernel.org, AJvYcCWBgv+eMtn5hSTiMJlBCT+kzthf0UeusLzYGwcaXka3YIqxJqM+oPhLNXPPu0IpM/dwzclFtMCf3KIU/sw=@vger.kernel.org, AJvYcCWPdstUmWRWJgYQKIo21l5cWyHvuoXlhgJ+T5iXz0JwITLY5ii4gF3MUGLmzIsXMFfBcIXb6sNVIhX9cMf/OGss9Xw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLltKm/zeLk+pBondPtNaQTcN0wcaevBBX+HMoCU1IniDDdY4z
+	JOA1VcP5ECYKWRMWUns0Gfn4RGUGp4mIusmzMhTvrgzE4Go4kTjY
+X-Google-Smtp-Source: AGHT+IGGs2S0yCDvHRz6lhphL26+ZgfU8grAgZs942pwHOPtldd6rtgtD1s1xn3JASfB0aCkY4pxLg==
+X-Received: by 2002:a17:902:ea10:b0:210:fce4:11db with SMTP id d9443c01a7336-21183517ca8mr100546255ad.22.1731169844727;
+        Sat, 09 Nov 2024 08:30:44 -0800 (PST)
+Received: from [192.168.1.3] (ip68-4-215-93.oc.oc.cox.net. [68.4.215.93])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177e6a3f4sm47858475ad.234.2024.11.09.08.30.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 09 Nov 2024 08:30:43 -0800 (PST)
+Message-ID: <3be2547e-d987-4987-9d75-30bf81cfe6cd@gmail.com>
+Date: Sat, 9 Nov 2024 08:30:40 -0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -51,7 +77,8 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] memory: Switch back to struct platform_driver::remove()
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+ Krzysztof Kozlowski <krzk@kernel.org>
 Cc: Markus Mayer <mmayer@broadcom.com>,
  Broadcom internal kernel review list
  <bcm-kernel-feedback-list@broadcom.com>,
@@ -73,56 +100,15 @@ Cc: Markus Mayer <mmayer@broadcom.com>,
  linux-samsung-soc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
  linux-tegra@vger.kernel.org
 References: <1a44c5fc95616d64157d2f4a55f460476d382554.1730987047.git.ukleinek@kernel.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
+From: Florian Fainelli <f.fainelli@gmail.com>
 In-Reply-To: <1a44c5fc95616d64157d2f4a55f460476d382554.1730987047.git.ukleinek@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 07/11/2024 15:57, Uwe Kleine-König wrote:
+
+
+On 11/7/2024 6:57 AM, Uwe Kleine-König wrote:
 > After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
 > return void") .remove() is (again) the right callback to implement for
 > platform drivers.
@@ -136,11 +122,10 @@ On 07/11/2024 15:57, Uwe Kleine-König wrote:
 > 
 > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
 
-Thank you for the patch.
-It is too late in the cycle for me to pick it up. I will take it after
-the merge window.
+For the brcmstb driver:
 
-Best regards,
-Krzysztof
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+-- 
+Florian
 
 
