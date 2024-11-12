@@ -1,94 +1,98 @@
-Return-Path: <linux-mips+bounces-6725-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6731-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D3129C59AC
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Nov 2024 14:56:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ACA99C5B99
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Nov 2024 16:14:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 95DA5B2DD0A
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Nov 2024 13:47:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3C6B282A58
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Nov 2024 15:14:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C0291FC7FF;
-	Tue, 12 Nov 2024 13:47:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 760EE2003B6;
+	Tue, 12 Nov 2024 15:14:02 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CB481FBF64;
-	Tue, 12 Nov 2024 13:47:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABAF82003A0;
+	Tue, 12 Nov 2024 15:13:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731419249; cv=none; b=W9ux8P/GVSTqoiQEpFsu4J7EPnlS62VjHKE7r+FD4puposfWntxiH+VV/fwE9oPEncKHV0e3RcQGdc2DvIKCiAqW87vxCPL7wndVJaHo8KCirkrMoBrncZ8KjcmzUFxIlIWH7U32BYZJ//cXdMO9pc4WLZptDWCVtBYCuhJAoGc=
+	t=1731424442; cv=none; b=m0L/yIcyre0KnU2fgxAtsK+Wy3CTAJfauZ3yLNjmzvqFI4VLi+tqLORxOuj/2ejLRoMZaxpolD3VKnLkBGrGt+r1xkbdsFte1PEaPjYAdAEcUa4K5pT9Vxw6jWnj6YhNWtNz0kScMXvwMqjfonk5T/4lNZHSYyTJBB4Sk+ykmq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731419249; c=relaxed/simple;
-	bh=5ArK71moMUz+0XzvtNm9YLk8hPSBH1lwzi7IBWPvmiA=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=WmtI5Sef3+UX93I3Gcn7niad7nkCZD6xQ4RSxDbSzGT9ktfmBvOtw8lsJofOMI+i3xXgBXpK3YlbHAxUB9yAUYt625LPsyEV9QoAGC/5dKn++k44O0yJk+CPwICDaydn+PAhHeCAvAXLVh8tL3Kfr7bvoKItpZrPJRBaNNLVw28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 189639200B3; Tue, 12 Nov 2024 14:47:26 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 152E392009E;
-	Tue, 12 Nov 2024 13:47:26 +0000 (GMT)
-Date: Tue, 12 Nov 2024 13:47:25 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Konstantin Ryabitsev <konstantin@linuxfoundation.org>, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-cc: linux-edac@vger.kernel.org, linux-hams@vger.kernel.org, 
-    linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] MAINTAINERS: Remove linux-mips.org references
-In-Reply-To: <alpine.DEB.2.21.2411121327130.9262@angie.orcam.me.uk>
-Message-ID: <alpine.DEB.2.21.2411121344350.9262@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2411121327130.9262@angie.orcam.me.uk>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1731424442; c=relaxed/simple;
+	bh=HU7xQZHVLo7mJxnU+OBgtHpRxQNpBqipDKG4HfaQa0M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SSvR/xMlW+T0fW01UJcEe0joErDHbJvmD4cwDatDo0WKdMVWuCtqE9EOD5hnf5H1KZxjVnWu64VkA6TVgRP5Ter24yXw/nZOdcp1O9MZ4Uatu70+dfZqPC4HrkrTFw/IDWYjjaV9RO+BqXpsem7Dh+MsnyitB95pl9khljlC+hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1tAsVf-0004rR-00; Tue, 12 Nov 2024 16:08:51 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 6E7E7C0110; Tue, 12 Nov 2024 15:56:10 +0100 (CET)
+Date: Tue, 12 Nov 2024 15:56:10 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, andi.shyti@kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v9 2/4] mips: dts: realtek: Add syscon-reboot node
+Message-ID: <ZzNsiu+rbYs7l9Wb@alpha.franken.de>
+References: <20241106001835.2725522-1-chris.packham@alliedtelesis.co.nz>
+ <20241106001835.2725522-3-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241106001835.2725522-3-chris.packham@alliedtelesis.co.nz>
 
-The linux-mips.org site has gone down and no replacement is available at 
-the moment.  Remove/update references in MAINTAINERS accordingly.  There 
-are a bunch of Kconfig references still present; keep them around for a 
-possible future update or for people to refer to via archive.org.
+On Wed, Nov 06, 2024 at 01:18:33PM +1300, Chris Packham wrote:
+> The board level reset on systems using the RTL9302 can be driven via the
+> switch. Use a syscon-reboot node to represent this.
+> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+> 
+> Notes:
+>     Changes in v9:
+>     - None
+>     Changes in v8:
+>     - None
+>     Changes in v7:
+>     - None
+>     Changes in v6:
+>     - Drop wildcard compatible
+>     Changes in v5:
+>     - Krzysztof did technically give a r-by on v4 but given the changes to
+>       the rest of the series I haven't included it.
+>     - Use reg instead of offset
+>     - Add a rtl9302c.dtsi for the specific chip which pulls in the generic
+>       rtl930x.dtsi and updates a few of the compatibles on the way through.
+>     - Update Cameo board to use rtl9302c.dtsi
+>     Changes in v4:
+>     - None
+>     Changes in v3:
+>     - None
+>     Changes in v2:
+>     - drop redundant status = "okay"
+> 
+>  .../dts/realtek/cameo-rtl9302c-2x-rtl8224-2xge.dts  |  2 +-
+>  arch/mips/boot/dts/realtek/rtl9302c.dtsi            |  7 +++++++
+>  arch/mips/boot/dts/realtek/rtl930x.dtsi             | 13 +++++++++++++
+>  3 files changed, 21 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/mips/boot/dts/realtek/rtl9302c.dtsi
 
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
----
- MAINTAINERS |    4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+applied to mips-next.
 
-linux-maintainers-lmo.diff
-Index: linux-macro/MAINTAINERS
-===================================================================
---- linux-macro.orig/MAINTAINERS
-+++ linux-macro/MAINTAINERS
-@@ -6301,7 +6301,6 @@ DECSTATION PLATFORM SUPPORT
- M:	"Maciej W. Rozycki" <macro@orcam.me.uk>
- L:	linux-mips@vger.kernel.org
- S:	Maintained
--W:	http://www.linux-mips.org/wiki/DECstation
- F:	arch/mips/dec/
- F:	arch/mips/include/asm/dec/
- F:	arch/mips/include/asm/mach-dec/
-@@ -15480,7 +15479,6 @@ MIPS
- M:	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
- L:	linux-mips@vger.kernel.org
- S:	Maintained
--W:	http://www.linux-mips.org/
- Q:	https://patchwork.kernel.org/project/linux-mips/list/
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git
- F:	Documentation/devicetree/bindings/mips/
-@@ -23555,7 +23553,7 @@ TURBOCHANNEL SUBSYSTEM
- M:	"Maciej W. Rozycki" <macro@orcam.me.uk>
- L:	linux-mips@vger.kernel.org
- S:	Maintained
--Q:	http://patchwork.linux-mips.org/project/linux-mips/list/
-+Q:	https://patchwork.kernel.org/project/linux-mips/list/
- F:	drivers/tc/
- F:	include/linux/tc.h
- 
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
