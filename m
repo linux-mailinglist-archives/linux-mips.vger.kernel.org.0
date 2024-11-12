@@ -1,47 +1,44 @@
-Return-Path: <linux-mips+bounces-6730-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6727-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1311B9C5B95
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Nov 2024 16:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 058359C5B89
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Nov 2024 16:12:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE08A1F22B54
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Nov 2024 15:14:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A88201F2128E
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Nov 2024 15:12:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9E38200B89;
-	Tue, 12 Nov 2024 15:13:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33A8E200C90;
+	Tue, 12 Nov 2024 15:09:20 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23B01200B8D;
-	Tue, 12 Nov 2024 15:13:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C125D200B8E;
+	Tue, 12 Nov 2024 15:09:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731424427; cv=none; b=T1R3Zq9O4nm9Ufu5Awa8w09io8lWYbQN2i7V04P27CFyC3yR+WMKmPRAnPUAOwJG6IsPYFj+z6UbYd4IfXYaSL3n2lq7hmfAPiYib0G+4zUiLzA4ha1lS5+Eox9rdosud05DnzH7Ma6pO6wvjCNpkxVpqkksaU2YRFdwNYxdKFk=
+	t=1731424160; cv=none; b=ljlQpMLpgzfAZJL1ZaNTnhLlZl1gkYiudALCMc2PSMJfpLWvYfGPOOrMIkbERcT88tbj3tVfJ6J0AlXsXWq5GTmnyuWMBD23R1P6eAWyqnGEAlOrBIJIpZKzPfk3JVGI3XfKHxnO199aUG5HnIkY4J+5vO5ZrayLz6BI+L8ufKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731424427; c=relaxed/simple;
-	bh=aGBj/pHbyRQgKVN+0CKfnhm9V5Fu+ncAduTmjT2NXVY=;
+	s=arc-20240116; t=1731424160; c=relaxed/simple;
+	bh=jeqNT81bZW90UN8U0ahCFddoiPgMIvBvHNcMhZjanzk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aBTnnKj8IJz7SRcKI66ZwdZ2attnJd1uPV2qVhO92XWtHTNr2GHPS7moBHwU4L82mPDXaxKnPHf/1kXfqkcPO7DWJP3OCg6qCN7MoyFuJ/mGj7/TrA14KpIU78QvP+QqSdXJJGTET63Jz61GMqx2wHmWKfo5Hfr4tjHf9a/BH6E=
+	 Content-Type:Content-Disposition:In-Reply-To; b=cvACC92Nl1PYhyYa75gg3Dd/PbJPHiPJ4bzlq77JHulFXU95Da7GInnjJE6LuQV9IJlgkX5aUxNviqdAd1tRARB8F/qupdZ9xsmg1OaqFz5hbOhe8F93i05T6Z/iVOAOLNt9f4HFHpqkdAiNixukYgsxzlNHhG2RT7/FFHwCV4I=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1tAsVf-0004rT-00; Tue, 12 Nov 2024 16:08:51 +0100
+	id 1tAsVf-0004rV-00; Tue, 12 Nov 2024 16:08:51 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 7C558C0142; Tue, 12 Nov 2024 15:56:29 +0100 (CET)
-Date: Tue, 12 Nov 2024 15:56:29 +0100
+	id CE53BC014D; Tue, 12 Nov 2024 15:56:56 +0100 (CET)
+Date: Tue, 12 Nov 2024 15:56:56 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, andi.shyti@kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v9 3/4] mips: dts: realtek: Add I2C controllers
-Message-ID: <ZzNsncbTgPynQqaY@alpha.franken.de>
-References: <20241106001835.2725522-1-chris.packham@alliedtelesis.co.nz>
- <20241106001835.2725522-4-chris.packham@alliedtelesis.co.nz>
+To: Thorsten Blum <thorsten.blum@linux.dev>
+Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] MIPS: kernel: proc: Use str_yes_no() helper function
+Message-ID: <ZzNsuMHPTJJGau98@alpha.franken.de>
+References: <20241105173837.37756-2-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -50,36 +47,15 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241106001835.2725522-4-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20241105173837.37756-2-thorsten.blum@linux.dev>
 
-On Wed, Nov 06, 2024 at 01:18:34PM +1300, Chris Packham wrote:
-> Add the I2C controllers that are part of the RTL9300 SoC.
+On Tue, Nov 05, 2024 at 06:38:36PM +0100, Thorsten Blum wrote:
+> Remove hard-coded strings by using the str_yes_no() helper function.
 > 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
 > ---
-> 
-> Notes:
->     Changes in v9:
->     - None
->     Changes in v8:
->     - None
->     Changes in v7:
->     - None
->     Changes in v6:
->     - Drop wildcard compatible
->     - Put status = "disabled" at the end
->     Changes in v5:
->     - Update compatibles
->     Changes in v4:
->     - Skipped due to combining patch series
->     Changes in v3:
->     - None
->     Changes in v2:
->     - Use reg property
-> 
->  arch/mips/boot/dts/realtek/rtl9302c.dtsi |  8 ++++++++
->  arch/mips/boot/dts/realtek/rtl930x.dtsi  | 16 ++++++++++++++++
->  2 files changed, 24 insertions(+)
+>  arch/mips/kernel/proc.c | 17 ++++++++---------
+>  1 file changed, 8 insertions(+), 9 deletions(-)
 
 applied to mips-next.
 
