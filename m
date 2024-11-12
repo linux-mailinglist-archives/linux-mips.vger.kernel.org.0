@@ -1,67 +1,71 @@
-Return-Path: <linux-mips+bounces-6729-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6726-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 607F39C5B92
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Nov 2024 16:14:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C631E9C5CC8
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Nov 2024 17:06:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F775281572
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Nov 2024 15:14:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 264F5B61B24
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Nov 2024 14:30:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 318A41FF7C2;
-	Tue, 12 Nov 2024 15:13:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87C341FE10C;
+	Tue, 12 Nov 2024 14:27:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="pRNf38qr"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B7251FBF6E;
-	Tue, 12 Nov 2024 15:13:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B75B1FE0EE;
+	Tue, 12 Nov 2024 14:27:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731424424; cv=none; b=CRjQ4sfM1KlI189MithQWbLJH7ZJ3TXRdCftd8Py8tghPma9dfiVS/bn2Zt/xPmPSA47sMOqOMdJX/TTYlBPVClClRC+YQHq1HZjRtkaUBTwCU+GcKUEBCFihUkrN0CWh3yqdr4fFqixNDIou1tNveIhJd83te1xKs4F7b6DRys=
+	t=1731421635; cv=none; b=HPhnI/5qvXaKF9s2n/7TVhV7Pa0bgaZ2fmHBSF3U7yh2LE5WZcK9XyZePa/WGZbQKBQx5x1fFpR0B4OwFYAN2qw333LBE2+SB4rBkndO90YSSMZYkElqyPw/sWqwWPkksE8izk/ycZ2xCSBbt36mPewzANScHFks87czOlOkNMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731424424; c=relaxed/simple;
-	bh=9eM6BZimbJgy3fw0TJnXj70JyP24g/Grvo/3PLiVHks=;
+	s=arc-20240116; t=1731421635; c=relaxed/simple;
+	bh=HTpM+eKAqGbwDKrX9ecoYdIiV2FUGt3/i53J6qYdlro=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WMiph1gRMjjwM0YEUHraN4MjuU9jjpBbgP2HSclI1knsQia58stcKCHYhnrejPJuMyjTt5SgeWDgbX3gU9+b7FeYGFaihnuVihcfYo+YqBRcqsYFhSPLonUSDkqlHnjk8GUQOClMUVCiA7w0bC9gGmgsMQ8Fd7Cmna4D0yp02CE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1tAsVf-0004rZ-00; Tue, 12 Nov 2024 16:08:51 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 88997C014D; Tue, 12 Nov 2024 16:03:25 +0100 (CET)
-Date: Tue, 12 Nov 2024 16:03:25 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z6AAG4xdc7G6Aln9SL3bwTlIfVhfy4bXIqeMz/W0A5BXHxX0W6FVG7eyG3q/uAqYIEurh54/Rd9Hee5yiKwQspgG5+YJSaLX84EgLzhfQr/39LVHRNLdD+2jVjkWb4z71x/i1GkI4iY3+OW5ZwOrKXlY9+SB4Pa90kpFULvuW4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=pRNf38qr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A80A1C4CECD;
+	Tue, 12 Nov 2024 14:27:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1731421634;
+	bh=HTpM+eKAqGbwDKrX9ecoYdIiV2FUGt3/i53J6qYdlro=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pRNf38qr/39WE2bwnXVTXQaiQMqIRS9x1jtYlzdGIogtrbvX/QqgV276v7n0khk43
+	 Su5sTnrSFPZfbF9FUHszXHfHSvbnAokfU8zJVfW4EnSqumE9+cTSaZwwXahChTG6hh
+	 ezcOFw/qOQdN/M7rIBsy2jlptdVgRPQI/k27xxG8=
+Date: Tue, 12 Nov 2024 09:27:11 -0500
+From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
 To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-	linux-edac@vger.kernel.org, linux-hams@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] MAINTAINERS: Deal with the linux-mips.org mess
-Message-ID: <ZzNuPSb1tlDdNfTW@alpha.franken.de>
-References: <alpine.DEB.2.21.2410131952550.40463@angie.orcam.me.uk>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	linux-edac@vger.kernel.org, linux-hams@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] MAINTAINERS: Deal with the linux-mips.org mess
+Message-ID: <4eyfwcmuw2axndrxthgzayzjfso2ydw6zvc7v3pi6z4weyfmr3@3xapew225gju>
+References: <alpine.DEB.2.21.2411121327130.9262@angie.orcam.me.uk>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2410131952550.40463@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2411121327130.9262@angie.orcam.me.uk>
 
-On Sun, Oct 13, 2024 at 08:34:38PM +0100, Maciej W. Rozycki wrote:
+On Tue, Nov 12, 2024 at 01:47:17PM +0000, Maciej W. Rozycki wrote:
 > Hi,
 > 
->  As promised and with extended wait time here's a small patch series to 
-> address Ralf Baechle to have stopped responding and linux-mips.org gone 
-> down, and Thomas stepping up as a replacement maintainer.  Please apply.
+>  Here's v2 of the patch series to address Ralf Baechle to have stopped 
+> responding and linux-mips.org gone down, and Thomas stepping up as a 
+> replacement maintainer.  This has been regenerated against the current 
+> version of MAINTAINERS.  Please apply.
 
-I've applied v2 of this patchset to mips-next.
+Acked-by: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
 
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+-K
 
