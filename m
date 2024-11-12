@@ -1,71 +1,77 @@
-Return-Path: <linux-mips+bounces-6726-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6728-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C631E9C5CC8
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Nov 2024 17:06:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3EBE9C5D72
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Nov 2024 17:37:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 264F5B61B24
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Nov 2024 14:30:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 55103B3E36E
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Nov 2024 15:13:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87C341FE10C;
-	Tue, 12 Nov 2024 14:27:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="pRNf38qr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B25CA2022D9;
+	Tue, 12 Nov 2024 15:09:21 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B75B1FE0EE;
-	Tue, 12 Nov 2024 14:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0C45200C8D;
+	Tue, 12 Nov 2024 15:09:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731421635; cv=none; b=HPhnI/5qvXaKF9s2n/7TVhV7Pa0bgaZ2fmHBSF3U7yh2LE5WZcK9XyZePa/WGZbQKBQx5x1fFpR0B4OwFYAN2qw333LBE2+SB4rBkndO90YSSMZYkElqyPw/sWqwWPkksE8izk/ycZ2xCSBbt36mPewzANScHFks87czOlOkNMQ=
+	t=1731424161; cv=none; b=ftKsOALZq7NbUTDBeQJn9ILtBBCfGbqkySzqO3yI0my3GUiS9mmoFF4a6+We7pOu6B6smLszGb0+zpkGhRhbtWxqAoqaYxjJKWIhnwUxT0qhDOEGVA0HwejNAXc6jQWcGtZLO9TFBH5mYqV1X22xdEreYDMW/ewagr9pSuo9uK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731421635; c=relaxed/simple;
-	bh=HTpM+eKAqGbwDKrX9ecoYdIiV2FUGt3/i53J6qYdlro=;
+	s=arc-20240116; t=1731424161; c=relaxed/simple;
+	bh=yC7qNkZa2EQhkOswYkNu3xJNB7x6A6biSjIrvj5GG6w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z6AAG4xdc7G6Aln9SL3bwTlIfVhfy4bXIqeMz/W0A5BXHxX0W6FVG7eyG3q/uAqYIEurh54/Rd9Hee5yiKwQspgG5+YJSaLX84EgLzhfQr/39LVHRNLdD+2jVjkWb4z71x/i1GkI4iY3+OW5ZwOrKXlY9+SB4Pa90kpFULvuW4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=pRNf38qr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A80A1C4CECD;
-	Tue, 12 Nov 2024 14:27:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1731421634;
-	bh=HTpM+eKAqGbwDKrX9ecoYdIiV2FUGt3/i53J6qYdlro=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pRNf38qr/39WE2bwnXVTXQaiQMqIRS9x1jtYlzdGIogtrbvX/QqgV276v7n0khk43
-	 Su5sTnrSFPZfbF9FUHszXHfHSvbnAokfU8zJVfW4EnSqumE9+cTSaZwwXahChTG6hh
-	 ezcOFw/qOQdN/M7rIBsy2jlptdVgRPQI/k27xxG8=
-Date: Tue, 12 Nov 2024 09:27:11 -0500
-From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	linux-edac@vger.kernel.org, linux-hams@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] MAINTAINERS: Deal with the linux-mips.org mess
-Message-ID: <4eyfwcmuw2axndrxthgzayzjfso2ydw6zvc7v3pi6z4weyfmr3@3xapew225gju>
-References: <alpine.DEB.2.21.2411121327130.9262@angie.orcam.me.uk>
+	 Content-Type:Content-Disposition:In-Reply-To; b=W4Glf+Pt96tXbcI+LWfIRQXn3WGykc+PoDNtSUiBmdZu8npx4BHxqg3gPTIFijyfXXfHX0FFM3ueaT7SBT0N7BNHKVZyaXFhMBolXSr5X28oS2WnyZixzMBWvIQvBe+GhGsyQ+gemYN8EvXbVXgqmrhlSmxevqZpAOhGN4Gs0Xw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1tAsVf-0004rX-00; Tue, 12 Nov 2024 16:08:51 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 2D528C014F; Tue, 12 Nov 2024 15:58:23 +0100 (CET)
+Date: Tue, 12 Nov 2024 15:58:23 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: WangYuli <wangyuli@uniontech.com>
+Cc: dhowells@redhat.com, jlayton@kernel.org, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org, chenhuacai@kernel.org,
+	kernel@xen0n.name, jiaxun.yang@flygoat.com,
+	guanwentao@uniontech.com, zhanjun@uniontech.com,
+	xuerpeng@uniontech.com, maqianga@uniontech.com,
+	baimingcong@uniontech.com
+Subject: Re: [PATCH 0/2] MIPS: loongson3_defconfig: Enable blk_dev_nvme by
+ default
+Message-ID: <ZzNtD+b4zgfdFUe7@alpha.franken.de>
+References: <324362BC443F16F8+cover.1730638429.git.wangyuli@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2411121327130.9262@angie.orcam.me.uk>
+In-Reply-To: <324362BC443F16F8+cover.1730638429.git.wangyuli@uniontech.com>
 
-On Tue, Nov 12, 2024 at 01:47:17PM +0000, Maciej W. Rozycki wrote:
-> Hi,
+On Sun, Nov 03, 2024 at 09:00:03PM +0800, WangYuli wrote:
+> A significant number of 3A4000 machines come with NVMe drives
+> pre-installed, so we should support it in its defconfig.
 > 
->  Here's v2 of the patch series to address Ralf Baechle to have stopped 
-> responding and linux-mips.org gone down, and Thomas stepping up as a 
-> replacement maintainer.  This has been regenerated against the current 
-> version of MAINTAINERS.  Please apply.
+> To avoid confusion, update defconfig beforehand.
+> 
+> WangYuli (2):
+>   MIPS: loongson3_defconfig: Update configs dependencies
+>   MIPS: loongson3_defconfig: Enable blk_dev_nvme by default
+> 
+>  arch/mips/configs/loongson3_defconfig | 32 ++++++++-------------------
+>  1 file changed, 9 insertions(+), 23 deletions(-)
 
-Acked-by: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+series applied to mips-next.
 
--K
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
