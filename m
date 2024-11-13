@@ -1,206 +1,144 @@
-Return-Path: <linux-mips+bounces-6737-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6738-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1EF49C6C79
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Nov 2024 11:12:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C83BE9C6D81
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Nov 2024 12:13:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9FE30B24C57
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Nov 2024 10:05:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 257A0B26FED
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Nov 2024 11:13:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B03F1FB893;
-	Wed, 13 Nov 2024 10:05:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 247D11FF618;
+	Wed, 13 Nov 2024 11:13:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GYopuWQz"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB411F9A8E;
-	Wed, 13 Nov 2024 10:05:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE8F01FB728;
+	Wed, 13 Nov 2024 11:13:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731492346; cv=none; b=ByuJsB6HDrzwPSRdpMN0EaBciD7hccDKFN1W6qxwlO2x7SWlkx4ti5GWsWUgApF+BmFZlxXPpovb12yM7rr/7ShhRswZUQVhgUme0WMzG+w8gwm5Rx3+3r6eoCqThzyhqsDUXZnhUHUvKcuU82Bzw2jAfI6Ke+fFprRmG9ttFDQ=
+	t=1731496391; cv=none; b=qr4WUEOu6DitnrhPC3VU2QGV4LRUAhCcj9xYLBOQofkx6+zK665033KSvkv8O4V7HCmZlS6MnQWRBZGDSSzU0ehPhSdDzQfYJJ0xo7tbyDmb1Zr5LgmF28+hSFDxhLHXd3eyyOV1JlLCzSe593C9kMuhckleBPiXO1kjbG9bHkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731492346; c=relaxed/simple;
-	bh=hfBrQJvC8AN+nHLouReIxHBNH9WwzWBzRRgrwIvPnik=;
+	s=arc-20240116; t=1731496391; c=relaxed/simple;
+	bh=cZILNanLfCaDjqDKjC5An13SYmBYDLw8gaG3ryaYg6s=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u5WWYU0I/ZB1PBioUmoiqTYvNWRpHVkpuVgqOx7U+irqx0K/iEAt+dW4PHwXnMydpwJ83PxTiTnClLH2QYCgyBn7ngqs/MI/wB56QINmRRvB+BBU4AuWnbF7xP3OZVoqGEkSYrBJv9Jp6QDshF4ijj987AK8lU83DsxzmiONWYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6e9ba45d67fso62898787b3.1;
-        Wed, 13 Nov 2024 02:05:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731492342; x=1732097142;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+9Zu5f9a7YdmZdcq/cBwsvzywMKEtYbFdDVk0n7J6R0=;
-        b=sqw0pQePt1c1EvB1tI5lfHauQcVjpp/fA+yF589+PfLTarWwjhF7wdHwcMV0dQ3TNo
-         BFvgJi9etdQSCFU6yopzSPxp3AvEhLz5YWTwYb+TS9PPQ7wWdFh+TSMbPhymEL5VmGUE
-         v6AM0EEBx6KXcauXC2IbeX4ybUIiaLg/jAsMJQTMYI+KpbRPuh3K0/T8vXbc/pd9GOdF
-         eW+Np+ybyN6Hy7tyz+xzMVjCEsgze2ONrInZaJcD6bu6AqW2nHwzMf9DMh1X5xvOXNVE
-         fhuJSqfAXYIic6vNqmFvpo56O4ElY0J5AxuTQ96j/Sn1Bg1AeT4RBtykZV4DSPLJ1B8o
-         RM8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUx0pAjYL6hzGwRTRZWo6Ui1GADCEUTCcSjFxCHnaV2ZylxwKlQZlau4/B9v1mmWS6q4Umc8D9PdHzg6w==@vger.kernel.org, AJvYcCVu+/CRxdIMwqbLrnC+no1jdTovUKc8MYawfhyft1Ngz9mdZDZpaR2OKHmjFJnmduc7a0pnNA/johtV@vger.kernel.org, AJvYcCXkJ9vEsyMPNlyfzFXwfBsYImxQlK9EiVdRl3SxJfuk7kBJwobk9+6rYj6k1TpYJK47BFpkxRk7dawddoSs@vger.kernel.org, AJvYcCXmevQIpoNicSZV3C89UOUE70MM28pWE+pmmHNpkExM5elAXPHWaGe492N1v6tGyNQ6YaXmfaz0lOw+CQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTMiE9mpa4jG/7fewoS5vMQ0DxP6HdubxbTf1PM4d4rF663yXN
-	qTxT4A4MqIF6nkccikU2iCq2lYeOfSANPvxD0csmVyyu+Pf01zFBTphvUIay
-X-Google-Smtp-Source: AGHT+IEPYu69YGquKTx5EWTomsi+CORpAQ0x0W2MqSTPmmoPsANt62hyEupadhcsRaGMcGb3GtwauQ==
-X-Received: by 2002:a05:690c:243:b0:6ec:b194:efe7 with SMTP id 00721157ae682-6ecb194f106mr26014977b3.30.1731492342039;
-        Wed, 13 Nov 2024 02:05:42 -0800 (PST)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6eaceb7a6fdsm30793577b3.103.2024.11.13.02.05.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Nov 2024 02:05:41 -0800 (PST)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6e9ba45d67fso62898637b3.1;
-        Wed, 13 Nov 2024 02:05:41 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU+SiQvLzl4NW3tn2L0+1h8UVoj+vDwiF8sNvOIiVkJdI8R0Y9ZUFZn9u0aM8sVvwaen2z/uwREpjmEbjCQ@vger.kernel.org, AJvYcCUhfkF1zIZiXNd+sd4SMJJEW7BXCHqr/Ezi2PB2wAO11hSaHNZkFYXOybI510Q+1hy7CnDWqrMdw109/Q==@vger.kernel.org, AJvYcCUj824H4teq1n4uj+vTWA4c47KpawBnaSG3zL1BFn6ioWEAAqQ0GZGHtElNZywKYVs/mlNDxRUHI0of@vger.kernel.org, AJvYcCVcCqZSZoOUyiezOVZye1Yqf016YgkiEGxSBWd+GcWL+vdj3id8xlSzVIAGY1ldUzo8zbr3eqTT8jQKZQ==@vger.kernel.org
-X-Received: by 2002:a05:690c:6ac3:b0:6e2:12e5:35a2 with SMTP id
- 00721157ae682-6eca4643368mr59764137b3.4.1731492341087; Wed, 13 Nov 2024
- 02:05:41 -0800 (PST)
+	 To:Cc:Content-Type; b=BS7kjgx7FI8pRUUPK6WNhc7e5zOVR5Ke0RI4HgHN++uY043N67qevua3dDOuiLoBlxGxXVFZhYwxL1Cafg4HnyHX7KiocQXQsZ4AbPGAyRR9JjME/73X08U3E9oaebpAtLOVsm5l05LG0O34uPMVa25XibHgHVJu914ENhJL/n0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GYopuWQz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF1CBC4AF09;
+	Wed, 13 Nov 2024 11:13:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731496390;
+	bh=cZILNanLfCaDjqDKjC5An13SYmBYDLw8gaG3ryaYg6s=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=GYopuWQzAvZzN4vreyWiIJoMPYePZGscw/oEgYJIMv50m9ssM1BNVrBTEb7EPcmFo
+	 1b3Wypu3G/uvHsfUrBaT5Nv87qGcp0p9Rpm/i26bZ91t+SHZEsILUXAie6KroSk5eQ
+	 4Co+2goAf/R7DLqmSqh6a0qp6f1Zy5TRATZpT4trQg9W4CQd13de6gsf+md7Jeg2Z9
+	 VZo/CJOg3NGkR7IiKekqsCF379uyXdpSYs//E8n8UutyO3qRbkMp9oq5PveSydQy+I
+	 b8RahcMwNh/hXftWj8AXMDcDXLY1ZZOkZoO4ya/qx9Bi16x8a3jJu6gasQwPHrtRCE
+	 MkFbAjNd/j4Pw==
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-539e5c15fd3so6659211e87.3;
+        Wed, 13 Nov 2024 03:13:10 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUjkIT1qRuZ9637uqq+tBxLrkOfV/pmVgvBWdBiCmqXCplvTQu7WM8xNxVm7gkzvl0osAIPWs0u+fI3N5w=@vger.kernel.org, AJvYcCV6AH+0qFyXzbPRYxxlkPQn6J3h4s10GKi/fGcCTxRezHvdjZM7qWEnnb6NPw1weJwpX94l7OotYD2x6Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHW3dEt04vWaNL2doaPaM/9EgHzOEDq76JMXUHBbpSVxqI9Uo3
+	6Ft2NYMlLVqr3q9Jfyjy8/JNkC92kGMYHp2uRCmcKkOlCwLMTD5fkSXDu+LoJ0r4tL50jzmScjz
+	AjXUM6VW/THuLVDg2RK3bEbrhXfo=
+X-Google-Smtp-Source: AGHT+IGWAW9FyhFGJKNfamA2fHdBOtfFT+XIg5SBvS/zpL5Nksdb/xzHDBzLVIkqnGo0HUYEVan85AQLaeNZAr5KdWI=
+X-Received: by 2002:a05:6512:ea8:b0:53d:a270:5b4e with SMTP id
+ 2adb3069b0e04-53da2705b83mr689079e87.9.1731496389438; Wed, 13 Nov 2024
+ 03:13:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <alpine.DEB.2.21.2411121327130.9262@angie.orcam.me.uk> <alpine.DEB.2.21.2411121342220.9262@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2411121342220.9262@angie.orcam.me.uk>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 13 Nov 2024 11:05:28 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdViAoHPnWUK3tvwP8VdPwHxfHjZY63zaVhCSWqk=SMkWw@mail.gmail.com>
-Message-ID: <CAMuHMdViAoHPnWUK3tvwP8VdPwHxfHjZY63zaVhCSWqk=SMkWw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] MAINTAINERS: Retire Ralf Baechle
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Konstantin Ryabitsev <konstantin@linuxfoundation.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-edac@vger.kernel.org, 
-	linux-hams@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Ralf Baechle <ralf.baechle@gmail.com>, ralf@gnu.org
+References: <20241113064028.2795128-1-xur@google.com>
+In-Reply-To: <20241113064028.2795128-1-xur@google.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Wed, 13 Nov 2024 20:12:33 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQgKN2YuHpZ9Ts1oNgY4pMCrqmwZzjQaaUUAOdT8A0dbw@mail.gmail.com>
+Message-ID: <CAK7LNAQgKN2YuHpZ9Ts1oNgY4pMCrqmwZzjQaaUUAOdT8A0dbw@mail.gmail.com>
+Subject: Re: [PATCH v2] MIPS: move _stext definition to vmlinux.lds.S
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Klara Modin <klarasmodin@gmail.com>, 
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Rong Xu <xur@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Maciej,
+Hi Thomas,
 
-CC Ralf
+This patch is necessary to avoid regression in my kbuild tree.
 
-On Tue, Nov 12, 2024 at 2:47=E2=80=AFPM Maciej W. Rozycki <macro@orcam.me.u=
-k> wrote:
-> Ralf Baechle has been inactive for years now and the linux-mips.org site
-> has gone down.  No replacement contact information is available.  Thomas
-> has been kind enough to step up as a maintainer for EDAC-CAVIUM OCTEON
-> and IOC3 ETHERNET DRIVER.
->
-> Update MAINTAINERS, CREDITS, and .get_maintainer.ignore accordingly.
->
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-> Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Your Ack is appreciated.
 
-Thanks for your patch, which is now commit 495cc28f8e6b5396
-("MAINTAINERS: Retire Ralf Baechle") in next-20241113.
 
-> Index: linux-macro/.get_maintainer.ignore
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- linux-macro.orig/.get_maintainer.ignore
-> +++ linux-macro/.get_maintainer.ignore
-> @@ -3,3 +3,4 @@ Alan Cox <root@hraefn.swansea.linux.org.
->  Christoph Hellwig <hch@lst.de>
->  Jeff Kirsher <jeffrey.t.kirsher@intel.com>
->  Marc Gonzalez <marc.w.gonzalez@free.fr>
-> +Ralf Baechle <ralf@linux-mips.org>
-> Index: linux-macro/CREDITS
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- linux-macro.orig/CREDITS
-> +++ linux-macro/CREDITS
-> @@ -185,6 +185,11 @@ P: 1024/AF7B30C1 CF 97 C2 CC 6D AE A7 FE
 
-Actually there is another contact address above, out of context...
 
->  D: Linux/MIPS port
->  D: Linux/68k hacker
->  D: AX25 maintainer
-> +D: EDAC-CAVIUM OCTEON maintainer
-> +D: IOC3 ETHERNET DRIVER maintainer
-> +D: NETROM NETWORK LAYER maintainer
-> +D: ROSE NETWORK LAYER maintainer
-> +D: TURBOCHANNEL SUBSYSTEM maintainer
->  S: Hauptstrasse 19
->  S: 79837 St. Blasien
->  S: Germany
-> Index: linux-macro/MAINTAINERS
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- linux-macro.orig/MAINTAINERS
-> +++ linux-macro/MAINTAINERS
-> @@ -8061,10 +8061,10 @@ S:      Maintained
->  F:     drivers/edac/highbank*
+On Wed, Nov 13, 2024 at 3:40=E2=80=AFPM Rong Xu <xur@google.com> wrote:
 >
->  EDAC-CAVIUM OCTEON
-> -M:     Ralf Baechle <ralf@linux-mips.org>
-> +M:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
->  L:     linux-edac@vger.kernel.org
->  L:     linux-mips@vger.kernel.org
-> -S:     Supported
-> +S:     Maintained
->  F:     drivers/edac/octeon_edac*
+> The _stext symbol is intended to reference the start of the text section.
+> However, it currently relies on a fragile link order because the existing
+> EXPORT(_stext) resides within the .text section, which is not guaranteed
+> to be placed first.
 >
->  EDAC-CAVIUM THUNDERX
-> @@ -11885,7 +11885,7 @@ F:      Documentation/devicetree/bindings/iio
->  F:     drivers/iio/gyro/mpu3050*
+> Move the _stext definition to the linker script to enforce an explicit
+> ordering.
 >
->  IOC3 ETHERNET DRIVER
-> -M:     Ralf Baechle <ralf@linux-mips.org>
-> +M:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
->  L:     linux-mips@vger.kernel.org
->  S:     Maintained
->  F:     drivers/net/ethernet/sgi/ioc3-eth.c
-> @@ -15993,9 +15993,8 @@ F:      net/netfilter/
->  F:     tools/testing/selftests/net/netfilter/
+> Signed-off-by: Rong Xu <xur@google.com>
+> Reported-by: Klara Modin <klarasmodin@gmail.com>
+> Tested-by: Klara Modin <klarasmodin@gmail.com>
+> ---
+> V2 Changelog:
+> Incorporated Masahiro Yamada's suggestions:
+> 1. Refined the commit message
+> 2. Removed unnecessary comments
+> 3. Use a standardized way for _stext definition
+> ---
+>  arch/mips/kernel/head.S        | 2 --
+>  arch/mips/kernel/vmlinux.lds.S | 1 +
+>  2 files changed, 1 insertion(+), 2 deletions(-)
 >
->  NETROM NETWORK LAYER
-> -M:     Ralf Baechle <ralf@linux-mips.org>
->  L:     linux-hams@vger.kernel.org
-> -S:     Maintained
-> +S:     Orphan
->  W:     https://linux-ax25.in-berlin.de
->  F:     include/net/netrom.h
->  F:     include/uapi/linux/netrom.h
-> @@ -20035,9 +20034,8 @@ F:      include/linux/mfd/rohm-generic.h
->  F:     include/linux/mfd/rohm-shared.h
+> diff --git a/arch/mips/kernel/head.S b/arch/mips/kernel/head.S
+> index b825ed4476c7..e90695b2b60e 100644
+> --- a/arch/mips/kernel/head.S
+> +++ b/arch/mips/kernel/head.S
+> @@ -67,8 +67,6 @@
+>         .fill   0x400
+>  #endif
 >
->  ROSE NETWORK LAYER
-> -M:     Ralf Baechle <ralf@linux-mips.org>
->  L:     linux-hams@vger.kernel.org
-> -S:     Maintained
-> +S:     Orphan
->  W:     https://linux-ax25.in-berlin.de
->  F:     include/net/rose.h
->  F:     include/uapi/linux/rose.h
-> @@ -23555,7 +23553,6 @@ F:      drivers/net/tun.c
+> -EXPORT(_stext)
+> -
+>  #ifdef CONFIG_BOOT_RAW
+>         /*
+>          * Give us a fighting chance of running if execution beings at th=
+e
+> diff --git a/arch/mips/kernel/vmlinux.lds.S b/arch/mips/kernel/vmlinux.ld=
+s.S
+> index 9ff55cb80a64..d575f945d422 100644
+> --- a/arch/mips/kernel/vmlinux.lds.S
+> +++ b/arch/mips/kernel/vmlinux.lds.S
+> @@ -60,6 +60,7 @@ SECTIONS
+>         . =3D LINKER_LOAD_ADDRESS;
+>         /* read-only */
+>         _text =3D .;      /* Text and read-only data */
+> +       _stext =3D .;
+>         .text : {
+>                 TEXT_TEXT
+>                 SCHED_TEXT
 >
->  TURBOCHANNEL SUBSYSTEM
->  M:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-> -M:     Ralf Baechle <ralf@linux-mips.org>
->  L:     linux-mips@vger.kernel.org
->  S:     Maintained
->  Q:     http://patchwork.linux-mips.org/project/linux-mips/list/
+> base-commit: 06513ddaf77b8f49ef8540c92d92c9ef0ad49426
+> --
+> 2.47.0.338.g60cca15819-goog
+>
 
-Gr{oetje,eeting}s,
-
-                        Geert
 
 --=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Best Regards
+Masahiro Yamada
 
