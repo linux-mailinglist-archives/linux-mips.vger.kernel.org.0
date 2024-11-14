@@ -1,148 +1,79 @@
-Return-Path: <linux-mips+bounces-6743-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6744-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5065E9C7FFF
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Nov 2024 02:30:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B35579C957F
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Nov 2024 23:58:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1D07B23D8A
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Nov 2024 01:30:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 788602837A3
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Nov 2024 22:58:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99B031E6DCF;
-	Thu, 14 Nov 2024 01:30:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C717A1B0F16;
+	Thu, 14 Nov 2024 22:58:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rBtw74mj"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39B4F1E500F;
-	Thu, 14 Nov 2024 01:29:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 946C81CABA;
+	Thu, 14 Nov 2024 22:58:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731547802; cv=none; b=I+FqSSlc9TUXOKveFMbXxdRKZGacE01qsfWuSSU7n6hol6Wvqkb8giMMCqHrx6XYwkbHyjkEsUR/awkzi/wEvt7uw5oKNy7XyrCTwzmZ9WP3dxWdJsH3XQEGozfZ+GxLC7odE9ASoH9rZhH6BJfTbWODWGFv++evNvXjqUWBysA=
+	t=1731625121; cv=none; b=DhX2NzstR86kdOCMQhdAWM7BBU7Gp41rnTxEHGecbxxT0NXQYPHwWGz8iMormGRYipGGtELfSgYy2UZg84LnKyvjFLbd5W38Kokq4BpBcHxo/CIF6q0E3rbaIvpgo/Q5+GoYzsH2bht9j8I17fl5k2B60eyJRxgxM735+u2G/qc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731547802; c=relaxed/simple;
-	bh=55kpfc8Ie+/7TeJpQ3BEBBJT2baJmmeu2NifzbnYc4k=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=FqwcELSiMFasICahRgtFUWmBY6oVJY6zG1Pt+BzfSAAH/farLcM2UqajA2se+cjMr0h11e0CIIWHg1tQAvYfk3EDfiIh1z35F8vEUmhGL6zj4eXJzYShOO/xG5ynzLhe+v/3huKxjlqs2dva44kt8pym8kyTlnbbIM4iwrXvZkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 42DF592009C; Thu, 14 Nov 2024 02:29:57 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 2EFF592009B;
-	Thu, 14 Nov 2024 01:29:57 +0000 (GMT)
-Date: Thu, 14 Nov 2024 01:29:57 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Masahiro Yamada <masahiroy@kernel.org>
-cc: Rong Xu <xur@google.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Nick Desaulniers <ndesaulniers@google.com>, 
-    Klara Modin <klarasmodin@gmail.com>, linux-mips@vger.kernel.org, 
-    linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] MIPS: move _stext definition to vmlinux.lds.S
-In-Reply-To: <CAK7LNAR+-SCOHORKqA0S=ec8-ziFhkSVgKUY7EN6qEWXePouJQ@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2411140107290.9262@angie.orcam.me.uk>
-References: <20241113064028.2795128-1-xur@google.com> <alpine.DEB.2.21.2411131542500.9262@angie.orcam.me.uk> <CAK7LNAR+-SCOHORKqA0S=ec8-ziFhkSVgKUY7EN6qEWXePouJQ@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1731625121; c=relaxed/simple;
+	bh=MJ+1BvFKMFNSoWz2zyU2mFYG//9SlILo37w50AJhdIE=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=aJIRD78lbHzc0GfGb8bMNmxj0zZQllYWdgiRPZIHsWTqEExtr442JrSfQNzLSgx32bJR0ziDNWhscVEK+1qVIOAQSeqA3uk0VGXyQmuBsZMZTIdYzYhsIt4QPmmL0WQzxcy5WhqHVNOXbEWTxr7aFnhT+fr/XJn88Ltkb+Dn/m4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rBtw74mj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AD58C4CECD;
+	Thu, 14 Nov 2024 22:58:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731625121;
+	bh=MJ+1BvFKMFNSoWz2zyU2mFYG//9SlILo37w50AJhdIE=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=rBtw74mj+P/1dYgj7a7BzJyKTks96lZQxkU5szH0vs2LVkXnnP1nyp0FsMksfZsy6
+	 8mIWbHSs2XO0881txtao26ptMf6RQJbiJoTm+5Qj0PVn5brUfaB2SBmrpOkabgBhz9
+	 63NojPpkyJPXd+fFav79C6vuABNXOz4lLFSULYWRjrEZzmLVH7JrKsUCY75Y0RmOO0
+	 /hCrw+eFZeNvdzBi5EpWI/Y3S0vI2Zv2bsVlbIhc4N0lA4TG8oaQPfREw6Nb+Q2b0B
+	 Z62KTTmbnQmjNWoRrNxu2neYRCTuBiE9aSbub/K4fe5xxk3CmRSIN5MxSZ/kEZPzLC
+	 Zz5AgWqG2/w/A==
+Message-ID: <8aad8ae601a7dc046b6db0eb08192278.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20241106-mbly-clk-v2-1-84cfefb3f485@bootlin.com>
+References: <20241106-mbly-clk-v2-0-84cfefb3f485@bootlin.com> <20241106-mbly-clk-v2-1-84cfefb3f485@bootlin.com>
+Subject: Re: [PATCH v2 01/10] dt-bindings: soc: mobileye: set `#clock-cells = <1>` for all compatibles
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>, =?utf-8?q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>
+To: Conor Dooley <conor+dt@kernel.org>, =?utf-8?q?Gr=C3=A9gory?= Clement <gregory.clement@bootlin.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Rob Herring <robh@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, =?utf-8?q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+Date: Thu, 14 Nov 2024 14:58:38 -0800
+User-Agent: alot/0.12.dev1+gaa8c22fdeedb
 
-On Thu, 14 Nov 2024, Masahiro Yamada wrote:
+Quoting Th=C3=A9o Lebrun (2024-11-06 08:03:52)
+> Some compatibles expose a single clock. For those, we used to let them
+> using `#clock-cells =3D <0>` (ie <&olb> reference rather than <&olb 0>).
+>=20
+> Switch away from that: enforce a cell for all compatibles. This is more
+> straight forward, and avoids devicetree changes whenever a compatible
+> goes from exposing a single clock to multiple ones. Also, dt-bindings
+> get simpler.
+>=20
+> *This is an ABI break*. Change it while EyeQ5 platform support is at its
+> infancy, without any user. More clocks might hide in each OLB as some
+> registers are still unknown.
+>=20
+> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> ---
 
-> > > The _stext symbol is intended to reference the start of the text section.
-> > > However, it currently relies on a fragile link order because the existing
-> > > EXPORT(_stext) resides within the .text section, which is not guaranteed
-> > > to be placed first.
-> >
-> >  Umm, arch/mips/kernel/head.S does mean to be linked first.  We rely on it
-> > for environments where there's no entry point is available and execution
-> > starts from the beginning of the image.  See the comment right below your
-> > change.
-> >
-> > > Move the _stext definition to the linker script to enforce an explicit
-> > > ordering.
-> >
-> >  So if you say that the link order is fragile (which it may well be), then
-> > that problem has to be fixed instead, likely with the linker script too,
-> > and then perhaps an ASSERT placed there to verify that it has worked and
-> > `_stext' refers to the beginning, taking into account what follows too.
-> 
-> 
-> arch/mips/kernel/head.S is always passed as the first object
-> in the link command because it is listed in scripts/head-object-list.txt
-> 
-> What you missed to understand is, the .text section of the first object
-> is NOT guaranteed to be placed at the start of the image.
-
- I know how linker scripts work, thank you very much.  However there was 
-nothing to understand from the commit description as hardly any has been 
-given.
-
-> Assume, we pass 3 objects, head.o, foo.o, bar.o to the linker
-> in this order.
-> 
-> - head.o  contains a .text section
-> - foo.o contains .text and .text.hot sections
-> - bar.o contains .text and .text.hot sections
-> 
-> 
-> The output will contain the sections in this order:
->    foo.o#.text.hot
->    bar.o#.text.hot
->    head.o#.text
->    foo.o#.text
->    bar.o#.text
-> 
-> 
-> This result comes from the fact that TEXT_MAIN
-> is not necessarily placed first.
-> 
-> See the macro in include/asm-generic/vmlinux.lds.h
-> 
-> #define TEXT_TEXT                                                       \
->                 ALIGN_FUNCTION();                                       \
->                 *(.text.hot .text.hot.*)                                \
->                 *(TEXT_MAIN .text.fixup)                                \
->                 *(.text.unlikely .text.unlikely.*)                      \
->                 *(.text.unknown .text.unknown.*)                        \
-
- It corresponds to what I suggested in the second paragraph of my previous 
-reply, which I retained quoted above for your convenience.  The reviewer 
-is not required to give the submitter a complete solution, but rather some 
-guidance for the submitter to find the correct solution themselves.
-
-> BTW, "head.o must be passed to the linker as the first object"
-> is a bad convention in old days.
-> If you expect the entry point at the beginning of the kernel image,
-> it must be marked as __HEAD, which is placed in the .head.text section.
-> 
-> See commit ce697ccee1a8
-
- I do not disagree, however such details need to be given in the change 
-description.  The purpose of the change description is not to repeat in 
-the texual form what the patch does, because everyone can see it, but to 
-give rationale and any reasoning beyond the change being made, especially 
-when fiddling with something that has worked for 30 years now.
-
- It's not that the old is always good, but at least it has proved in the 
-field, so you need to convince the reviewer why the new is more suitable.
-
-> Well-maintained architectures got rid of
-> stupid "head.o must be passed first" requirement:
-> 
->  - 2348e6bf4421
->  - 994b7ac1697b
->  - 5353fff29e42
-> 
-> If MIPS migrates to the cleaner __HEAD solution,
-> it will be appreciated, but this is another story.
-
- Patches are welcome.
-
-  Maciej
+Applied to clk-next
 
