@@ -1,82 +1,83 @@
-Return-Path: <linux-mips+bounces-6751-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6752-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F9349C95A6
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Nov 2024 00:01:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C4AD9CD60B
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Nov 2024 04:57:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8115280C78
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Nov 2024 23:01:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 28739B20B4F
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Nov 2024 03:57:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1A521B395C;
-	Thu, 14 Nov 2024 23:00:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3130155312;
+	Fri, 15 Nov 2024 03:57:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qFODirNe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CE82Z1vP"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C052E1B0F2C;
-	Thu, 14 Nov 2024 23:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 207DE1442F4
+	for <linux-mips@vger.kernel.org>; Fri, 15 Nov 2024 03:57:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731625228; cv=none; b=jLHMGDvvHPzMWRTCJ2r8CrVS9xn1pPbAxzuwgBX0HEbpekOdcTRjxlw1aQFhkKYgfOlsQa0B75MivsoF5vlL3V8nMbeLZUbs0QJarGHdUEA3Jo/gzvc/W5P4DTX8bzREm1TNVkSuDIcdTR8ZotmfMyvhw9Fon1hQWWiLzwkkijU=
+	t=1731643060; cv=none; b=rmMdWMV/Nrv67DXp+CWslekkVwvV9SkpjPzPbysNi8tywf6LGipE+f1tkGv/qx5ntt5y4K/VMXJh4487DMyac8eVTbt9i+HGtrdVRse2o08dVzy35Y1lSsT2aTpwEmM2pM2+o+SSn5Vlf6K6TVS+Up74HJ5/gsKdbqxd9TUb+fo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731625228; c=relaxed/simple;
-	bh=P3pGFrH3PlYITETbqoz7DkjsQU+gJZMsHg6JDBJfnDU=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=NYapsEBNc5d+g8hGRwvenP9t8wM61caWeWVhDYS28Ta0jVOjcbSsc3FiQJMU388uVGz6JR67zjt5hnNow8SdTQSo6EVzqRwT0Dbbi0IBfkLUt5RgsoQqg8AfEEtiTr+lRPTDv0c3HNT7ZJpIy2Xl85aYrMkA4D0Z1KfB3ycyadU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qFODirNe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CECFC4CECD;
-	Thu, 14 Nov 2024 23:00:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731625228;
-	bh=P3pGFrH3PlYITETbqoz7DkjsQU+gJZMsHg6JDBJfnDU=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=qFODirNe3t4HDmp8XzsdFIhCtRwAEieRllrPXhyZajN4KzIl+yztLpqbjPw/f/3w2
-	 AcU8zsffEVHEZLFUow1CARcWYRz1uvrTwWh2L9LcyRnoGc5Tc9ehF+xeeOsr7j7DzZ
-	 dYqUVOEE5xVnC6e0fHKQlfB+Jld2GsnOgL62T57/VaBQ8/fKfswPpev4kwtB6zfEKk
-	 mw56X5uhoEl7kc9Y6AOk4CPphp1fFESO1+QMxwSNAkIuy+HpM3xSo5iFdUpVM6W973
-	 ixkP16ffU9oOfdep5U4JdF1a93003u/M7Ot/1CNfhOrhYcVmcrx7NrFdwPBTwyeywF
-	 Ybeoe5tLjchMw==
-Message-ID: <2e82fec5209d888f934af796bb9a7ceb.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1731643060; c=relaxed/simple;
+	bh=mqk98GP19dZ+Ay7HEP68kLZER2bT/NkIqYTu8jMJ4BE=;
+	h=From:Message-ID:To:Subject:Date:MIME-Version:Content-Type; b=qJAOeMuMvOMXKjNZjUC7ja8YpDTJxi+/CG6UWoEDpOb4MSSxEqZaqiEaNEPBy9pvBa71O5au5Fx3dWpF31P5QVubleGHFIfQ9QH2j1v061erPmUtNFZyUyG3VSHiZjUufA63qVkHPH35IC8Oky0PyMIfDKS5aIIctANv71Tm76U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CE82Z1vP; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-431616c23b5so7685655e9.0
+        for <linux-mips@vger.kernel.org>; Thu, 14 Nov 2024 19:57:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731643057; x=1732247857; darn=vger.kernel.org;
+        h=mime-version:date:subject:to:reply-to:message-id:from:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mqk98GP19dZ+Ay7HEP68kLZER2bT/NkIqYTu8jMJ4BE=;
+        b=CE82Z1vPNjuK7R+iRTcc26f+qR5L/lmdx4cc8WSonDj1e8HWq5UPdX+nYT26nXbPGn
+         gHSWm1qCXGvEznWUK/aKIMFdAclHsX520T3WQwPeSgXp8eQp2SXaDPexZsXgOuDTrj7v
+         6ho5DrVKygteYw6znJc0OkFVqvKtyYK8T/lNk+7FldquzC49aZgnw2ezhAN4/8LbW7HQ
+         9aQs3d7kw2o8JSC7/SuaCeMwhJuLewddidRrVwlQCTPJGXd1UrNYRJSXLsAdBwpJnR99
+         OVadBXYnLlFgLdlfk+gICaHFj3aiDXBy8jrf0nCxZsmn7d93pdU7nxRuejs8uoqYL/MB
+         Z7ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731643057; x=1732247857;
+        h=mime-version:date:subject:to:reply-to:message-id:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mqk98GP19dZ+Ay7HEP68kLZER2bT/NkIqYTu8jMJ4BE=;
+        b=t5kjEywVfOAEgH8cKTz3BAw10JdLiHEt9kwut3qdRe+9IXKahjoGeY0mt6Am7ClHfW
+         XzH12AEcwnp71f7rBKnHFf9Ur91xICjJO10+RxOObtZAMYdL8V8jxOj1qhOufuW+Rr+w
+         k3FD4o30yxkbX/TX0O/vJLnPayt1kQqab97D3hZ6fwnfvhWAE42lwIM5sFp0lxAInolh
+         vu/JIVmtpZuUqM4BiYubwnlgTEBptL/y5Y0Hw9ehWVnGms/jOJm/3Ga/ptqSZpxzbMAb
+         qN2Lk5ur9qFbtDWOeme/SNaIm//0eRjmGZ5w/fpxkHFycr0ZtkfCpxaRbj92kZIUBIbv
+         YeFg==
+X-Gm-Message-State: AOJu0Ywewa/BhHfsYGYF7sHplrWb+Zzx3g3V+dNv8I9nmTVji6uV9FTA
+	b73va68edIwTBQpTL27wevw3eKJJCy4t/VvdhR3bMSS4kp8T+F5SIAdzxw==
+X-Google-Smtp-Source: AGHT+IFWuHFUsT5Lxvh8bpz00J5cEdBkEzYcjfHxmCcv3uNsSCi60BCsaYtzNfEr9/kV5P+wCSPP7w==
+X-Received: by 2002:a05:600c:46c3:b0:431:7ccd:ff8a with SMTP id 5b1f17b1804b1-432df025f56mr10380295e9.14.1731643057087;
+        Thu, 14 Nov 2024 19:57:37 -0800 (PST)
+Received: from [87.120.84.56] ([87.120.84.56])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432dac0ae45sm40276475e9.30.2024.11.14.19.57.36
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 14 Nov 2024 19:57:36 -0800 (PST)
+From: William Cheung <likhirahaman6437@gmail.com>
+X-Google-Original-From: William Cheung <info@gmail.com>
+Message-ID: <fc6ef28406c906dc56f594876117c5dab8547fe9f6dc9fee989c4b37483238c5@mx.google.com>
+Reply-To: willchg@hotmail.com
+To: linux-mips@vger.kernel.org
+Subject: Lucrative Proposal
+Date: Thu, 14 Nov 2024 19:57:34 -0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20241106-mbly-clk-v2-8-84cfefb3f485@bootlin.com>
-References: <20241106-mbly-clk-v2-0-84cfefb3f485@bootlin.com> <20241106-mbly-clk-v2-8-84cfefb3f485@bootlin.com>
-Subject: Re: [PATCH v2 08/10] clk: eyeq: add EyeQ6H west fixed factor clocks
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>, =?utf-8?q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>
-To: Conor Dooley <conor+dt@kernel.org>, =?utf-8?q?Gr=C3=A9gory?= Clement <gregory.clement@bootlin.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Rob Herring <robh@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, =?utf-8?q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
-Date: Thu, 14 Nov 2024 15:00:26 -0800
-User-Agent: alot/0.12.dev1+gaa8c22fdeedb
+Content-Type: text/plain; charset=us-ascii
 
-Quoting Th=C3=A9o Lebrun (2024-11-06 08:03:59)
-> Previous setup was:
->  - pll-west clock registered from driver at of_clk_init();
->  - Both OCC and UART clocks registered from DT using fixed-factor-clock
->    compatible.
->=20
-> Now that drivers/clk/clk-eyeq.c supports registering fixed factors, use
-> that capability to register west-per-occ and west-per-uart (giving them
-> proper names at the same time).
->=20
-> Also switch from hard-coded index 0 for pll-west to using the
-> EQ6HC_WEST_PLL_PER constant by exposed dt-bindings headers.
->=20
-> All get exposed at of_clk_init() because they get used by the AMBA PL011
-> serial ports. Those are instantiated before platform bus infrastructure.
->=20
-> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-> ---
-
-Applied to clk-next
+I have a lucratuve proposal for you, reply for more info.
 
