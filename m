@@ -1,94 +1,169 @@
-Return-Path: <linux-mips+bounces-6779-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6780-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D55159D3E85
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Nov 2024 16:07:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC01C9D4076
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Nov 2024 17:48:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AFC62851CB
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Nov 2024 15:07:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 34D1A1F25D74
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Nov 2024 16:48:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACFB51DE4CC;
-	Wed, 20 Nov 2024 14:56:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93B5F15532A;
+	Wed, 20 Nov 2024 16:47:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kjilPNAY"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="coiI4wTF"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10BDE1DE3B7
-	for <linux-mips@vger.kernel.org>; Wed, 20 Nov 2024 14:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2E4D155352;
+	Wed, 20 Nov 2024 16:47:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732114589; cv=none; b=jAozlrV0suAnPtachMtkwXhK/PFUcdveh0DAMAHzRcL8t7wN3b6xG084sPD85S7Z6A/1/W0oj9c1E85LaOAdWtQpxKCp9o4Q+34SHeoYQUGRy1QI5RHFDedZAMNmystotm2q/qo+ChaOUnS/+50EuXWfLmOuBMauAcyAxn87WjE=
+	t=1732121265; cv=none; b=OqvJiu+5O1A2aBIBZj2E0LyTye4Z2hwNeuYOGFIRgCSxl7/EKbgmh9Ls711TxAffCkxIyS4gqrt+6d+WXEQzhi+SoirvNscoNWwu9qFYFZMT0fbd9ToFG+MYV9g/Uy2ZVHF4G1lpSj/39RXy++RZXpSzu78ld2/0ssUT0FGZkdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732114589; c=relaxed/simple;
-	bh=ZV8oTG9hXdzwLiwMFIq1XbskTEGAPzhFy89n4zeSOsA=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=uD/x2xUf3m0tnbKtsKldjSVlGGMD5zmvbcStmCz5vmsLpEDFFaaZ/73zgVY2Oygu3K+L8d0vvyLpub6xotwdY0HgYIZIcKxTQKZi/DKbjVA8PXLtzLJj4MUHGzpkz1gjeIt3aQr3ZCUE+gqHf3LFIEMwFNx1klx1qng6/n9hpPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kjilPNAY; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a9ed0ec0e92so613196466b.0
-        for <linux-mips@vger.kernel.org>; Wed, 20 Nov 2024 06:56:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732114584; x=1732719384; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Ga4EmK4rbZP6vFgcsob797k4Q4zC+xrLc9Q2B/N9wmw=;
-        b=kjilPNAYaKUxit7O4YLyP0dPxCwhRXsFKkw14gxi0e/Rms+r6aIlSw0EQzCMNLejKu
-         rVZ35999X9/X8j2G/fzwcRrvShnjI5icUO5hZIg/gzQ+0zYuh9W3HxQ4v6Ma8rTJ8xsL
-         SiqWxZweoNdsepRTJldPGrSNS53HhkucO8AIkckoGHHg4jori2czmW+xgdGp4x//a0Re
-         4Gi0LbrP56qSmSrP0kurtZFnzDshsM5lZBHN/vuP70SSuhevIFM9EgXUs8rf71iKyHjv
-         Y64HRhwoEC7HZi5fVADUhAV5uN1jFxB62IiKMnW0jycR4DRkIGtf7A9mBWFiJoKJYpdb
-         vAIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732114584; x=1732719384;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ga4EmK4rbZP6vFgcsob797k4Q4zC+xrLc9Q2B/N9wmw=;
-        b=aln+JmDN7LdDBD4UCN87hrqeSYmeN1wcvlP9o1CJ2qb9VQgt+Qc26pq3qnk5JOMIOR
-         uhHPBI80HALCzylvPqu3zkP1L0cSDIOeHk2pRUsvKmFapbu5n5ZhIgLwlRX2S97t9oHG
-         iU01fDZFStgshKg8ky322RL3d95MwY0oziCFTnEGz5b3E4V6PFHBO4NZAYkxa1Qww1m9
-         qOQs91OpS5jN7qtn59pDf5VAcKXR1Oop4g0+p67H99/LwMWwcH3w7+NWb+q9agvuySgK
-         WoEmx4IwdhOhNQexIQmU7B3eUER7aYIyqN5BURCTI50m8yC18uxl/FRJw9ncmhBt0y/N
-         HzjA==
-X-Gm-Message-State: AOJu0YxriP33BR/igL6if5w1kJRA+WxBYeAL/yjJqfwdI8ayvZg5YX7a
-	PNOWtIa6cqBjDybHZBXEaWkOAwV0/RoEFlsmW8hUAFsGVRFiOWVuxtSOwH8bTycpzndtTqC9ENB
-	4xzDxeHso8fN6RhAWETNGHM3eWFOfgF/p
-X-Google-Smtp-Source: AGHT+IExJG7pO2kr+Vyaz78dWZFqUNP5OsIf8GRIg2VtQ7X1WulRguQzF9LS+72skG5zttbkR9ymjLYRl1QJzHOMYUA=
-X-Received: by 2002:a17:907:7288:b0:a9e:93fb:3d5b with SMTP id
- a640c23a62f3a-aa4dd56a855mr300826466b.19.1732114583683; Wed, 20 Nov 2024
- 06:56:23 -0800 (PST)
+	s=arc-20240116; t=1732121265; c=relaxed/simple;
+	bh=VzrsLqfTJq3IerOTJJA3X2/TiBFBDmIb2r9INVhSBuM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=OFFE5Pcsqo0v0vM6PMOjDEolRPVc6m/D02ATCSdMPNT9v5Mck5kNsDA7SgFoo50xFh3YSbB5um/VuS73iaNqdy7mvG7H8CmTHpQLzp2HqKmFTQO4rI4mF0I3KaJDFlAdbeWJ31W93NpzfD3Q5eDnXyfDILLCLpgXQg3S5ez+2Tg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=coiI4wTF; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A2B3B240009;
+	Wed, 20 Nov 2024 16:47:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1732121253;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rQuc0XZDEZvQSdCtkd0+znXPYtzIoTwh5lH+ZNXrb/g=;
+	b=coiI4wTFTOHBPLzF5zokOC0sqJE7pdfEYIx4/1fWJLDYV+xJa0plE3ptCGJ4tDK8QzPDvD
+	K1buu6GKaSeLqzWRFJbONAfCOHLKiicNYqp6XHp/SvYEU/h1dNUWCsgO05tqxfCSKzKm2q
+	G4OnFpxuj0MwkSm59+6fQEcVyVQZ6sFcfve52UJBojEQmtQl61lbxXFB6n4lTuqZ6HiH/Z
+	hah8xfekeEvTjoPglWjoHHK79Jp+RSIHvFu+ulcuLoI4PgIPsM/uWO+I3PfTs735ZGgElL
+	gsbmrRIcatOgaS27y2GvnvpXQD056nZFWUx5J3NTUMrSbVkbxaxlfW76rdmWTw==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Rob Herring <robh@kernel.org>
+Cc: Aleksandar Rikalo <arikalo@gmail.com>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Vladimir Kondratiev
+ <vladimir.kondratiev@mobileye.com>, =?utf-8?Q?Th=C3=A9o?= Lebrun
+ <theo.lebrun@bootlin.com>,
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, linux-mips@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/5] dt-bindings: mips: Document mti,mips-cm
+In-Reply-To: <20241119162656.GA1764849-robh@kernel.org>
+References: <20241115-cluster-hci-broken-v1-0-00636800611d@bootlin.com>
+ <20241115-cluster-hci-broken-v1-1-00636800611d@bootlin.com>
+ <20241119162656.GA1764849-robh@kernel.org>
+Date: Wed, 20 Nov 2024 17:47:32 +0100
+Message-ID: <871pz5vom3.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: DiTBho Down in The Bunny hole <downinthebunnyhole@gmail.com>
-Date: Wed, 20 Nov 2024 15:56:15 +0100
-Message-ID: <CAAZ8i805wy3Phb2hjEahkz0arsT2hDhVQ2FE9fsM_r54BDYfrQ@mail.gmail.com>
-Subject: MIPS32R2 Ubiquiti RouterStation/Pro
-To: linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: gregory.clement@bootlin.com
 
-hi
-I used this router with the old kernel 2.6.39, which I updated from
-time to time until the first kernel 5.*, then I stopped using the
-router.
+Rob Herring <robh@kernel.org> writes:
 
-I started using it again, and I have a few projects in mind for it,
-but I'm a bit confused by what OpenWRT reports because we always
-stopped supporting it, and I cannot find any new patch for  the Linux
-kernel.
+> On Fri, Nov 15, 2024 at 04:29:54PM +0100, Gregory CLEMENT wrote:
+>> From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>>=20
+>> Add devicetree binding documentation for MIPS Coherence Manager.
+>>=20
+>> gc: reg is no more mandatory
+>
+> The h/w either has registers or it doesn't. Can't be both ways.
 
-Not so? Are there patches for kernel 6.*?
+The register addresses are retrieved dynamically on most
+hardware. However, for some of them, retrieval was broken, requiring it
+to pass through the device tree. This was the initial purpose behind
+introducing this binding. In the eyequ6 case, we have a hardware issue
+in a different way; the address registers are correct, but the Hardware
+Cache Instruction is broken. As such, we do not want to provide a
+register address, instead, notifying about this issue through a property
+or compatible string.
 
-I don't care about the userland, since I am supporting Gentoo/MIPS.
+That's the reason why I want to make the register optional; however, if
+I use a dedicated compatible string, then I can just remove the 'reg'
+property for this binding.
 
-Please let me know
+Gregory
 
-D.
+>
+>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+>> ---
+>>  .../devicetree/bindings/mips/mti,mips-cm.yaml      | 37 +++++++++++++++=
++++++++
+>>  1 file changed, 37 insertions(+)
+>>=20
+>> diff --git a/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml b/D=
+ocumentation/devicetree/bindings/mips/mti,mips-cm.yaml
+>> new file mode 100644
+>> index 0000000000000000000000000000000000000000..03a5ba5624a429c428ee2afc=
+a73b3e29127e02f9
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
+>> @@ -0,0 +1,37 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/mips/mti,mips-cm.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: MIPS Coherence Manager
+>> +
+>> +description: |
+>
+> Don't need '|' if no formatting to preserve.
+>
+>> +  Defines a location of the MIPS Coherence Manager registers.
+>> +
+>> +maintainers:
+>> +  - Jiaxun Yang <jiaxun.yang@flygoat.com>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: mti,mips-cm
+>> +
+>> +  reg:
+>> +    description:
+>> +      Base address and size of an unoccupied region in system's MMIO ad=
+dress
+>> +      space, which will be used to map the MIPS CM global control regis=
+ters
+>> +      block. It is conventionally decided by the system integrator.
+>> +    maxItems: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    coherency-manager@1fbf8000 {
+>> +      compatible =3D "mti,mips-cm";
+>> +      reg =3D <0x1bde8000 0x8000>;
+>> +    };
+>> +...
+>>=20
+>> --=20
+>> 2.45.2
+>>=20
+
+--=20
+Gr=C3=A9gory CLEMENT, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
