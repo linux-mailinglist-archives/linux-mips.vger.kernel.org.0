@@ -1,84 +1,90 @@
-Return-Path: <linux-mips+bounces-6777-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6778-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E8339D3650
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Nov 2024 10:03:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 606D09D3E5C
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Nov 2024 16:01:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D0CF1F23075
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Nov 2024 09:03:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F33E1F243C3
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Nov 2024 15:01:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E161B18A935;
-	Wed, 20 Nov 2024 09:02:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20D1A1C9B8A;
+	Wed, 20 Nov 2024 14:51:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lUz/nO6y"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03D301586DB;
-	Wed, 20 Nov 2024 09:02:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73F141A9B5A
+	for <linux-mips@vger.kernel.org>; Wed, 20 Nov 2024 14:51:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732093378; cv=none; b=UCQt8WIrp7DenC1+kK9UP/R8rYtgPHzZ2JXVF41vwHWlJ5kYmCNJcsLKjWYHj6js+5uSxOAywBENfAULXVTGjy+6FNnyg+0oze19VkzjYQ4gTWCdWb8175dPa81Bk7pKh/jxmrvl1IN7yIPcz8F0/sBUs/NNHbijAoyMUp/mIBA=
+	t=1732114315; cv=none; b=PsX2ZTX5XFjgJyRwJl3gTualyQBGKHzUnUhonGIP290aoLalBCb8nknr/r1fLX0WKDZKrlkWkH3ixxoXuO5Nuoz138auV9pIyJ5d20oLstloXsgyxldkKVOIfgqNy37IpOoWbv6nG4asEN6yV8zVJiBfn2jwr0qCfeqeN44jxCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732093378; c=relaxed/simple;
-	bh=dQuf6/yyA3NgGkcae5ZJw5+p5TYlDDaDSEx2Pobd1Ns=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iaLjkOH10PHO8U6/KY8o+eGN027QjqU1V2Y5CuaBaT8M1NWvo2171EYBNIil9P/CoPH0UKZC9y1yTZpQGKjjqmeGczXfykvVvcEVO/c0fjqzkSuWmluxBo3yACV4irmoxUTti0D+yFJbDY3ECMM1NeO4rzaa2i/TsiyLkc9jY4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1tDgbU-00069z-00; Wed, 20 Nov 2024 10:02:28 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id EFA44C0110; Wed, 20 Nov 2024 10:02:16 +0100 (CET)
-Date: Wed, 20 Nov 2024 10:02:16 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc: "broonie@kernel.org" <broonie@kernel.org>,
-	"robh@kernel.org" <robh@kernel.org>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"markus.stockhausen@gmx.de" <markus.stockhausen@gmx.de>,
-	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH v5 2/3] mips: dts: realtek: Add SPI NAND controller
-Message-ID: <Zz2lmMdaz6MFjrm6@alpha.franken.de>
-References: <20241015225434.3970360-1-chris.packham@alliedtelesis.co.nz>
- <20241015225434.3970360-3-chris.packham@alliedtelesis.co.nz>
- <3c6f90bc-2223-447d-9094-81011a2815b0@alliedtelesis.co.nz>
+	s=arc-20240116; t=1732114315; c=relaxed/simple;
+	bh=WcdNNvZ5a8o64aOF/eKAVOkQw503RzkjFC1eqVOTg2A=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=g9uJ91VnSTBN5RIwQi3upwb0tf/qz8QgoJvbWABJn94zkoAIB2wnaZtP6jo2+OyWaLFvU6ug63HKy2HqAGORSF8aGKiaFIBcaHy18biljn4Bj39ZT+XErQz1v5JQGpNRZO4LA28aBtH/rUHZ/ZYR3iNS4m8Qon3CxATNVQ5T1fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lUz/nO6y; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5cffb4ff7d9so672674a12.0
+        for <linux-mips@vger.kernel.org>; Wed, 20 Nov 2024 06:51:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732114312; x=1732719112; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=WcdNNvZ5a8o64aOF/eKAVOkQw503RzkjFC1eqVOTg2A=;
+        b=lUz/nO6yUG2AV5bxOYgc7+8aAKjnhnKpBe4NOuyi7C6QLdgXfqpATxYTtiZBqWPloM
+         ldC/C7zJX6akqUADDBjGWd0P+oKV5/blvv3yx9xgiFZMtdtMPlSnI2t30uB903raU9S/
+         XAZZV777HONGzKAQlLqKVDfnYhp/5LMa5Nsu6TFtHz6+MGQVYwE1UsQ7I5Lp5+lqVMGr
+         ZA/VEdaYYeReS8t58/JWuVFyFe8inFilb2+NkSi7Ipv9smK4mFNDLE1gaxhQtTgzSzXB
+         uSyhxkl5ybiDzByXUawpxnWEZb1yvMW6MSu/kW7hUz4ASyx4oL6yga+eaT1QH4MbPYj9
+         mZJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732114312; x=1732719112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WcdNNvZ5a8o64aOF/eKAVOkQw503RzkjFC1eqVOTg2A=;
+        b=g4LvmMvmz/V40vrmmGqwkypPClm/t90hp8rGHZEtuHokgxT0PCeWVNsC3ocHrsWsbz
+         7zIVj+mh3O1cjwM4KTWM0JrRTfebafTx8l+7zYCQHcyz4e7ZbFwjbzIs/46ABZG7rhc0
+         1luQJuO3SG2bU8qqBil0OaLf7EJ7aMlMnUKDtzvqK6fqPV2BabCNdIIvhAkp5BUJfclA
+         jv8ax7DBWBLUZzfbmE9RC6uiZ5zwm9vPPla/ShsvleOdy804TEZH4ALySBIdrCnWnloF
+         XZ5+ZmXVB9FQtuq672Xlqnu2Glt9GVJLhLE/1u8VYj9e7IQkQEJIwCamFQ7kYd3KDOeb
+         MAdw==
+X-Gm-Message-State: AOJu0Yy7+zm5oeiE4u+UPP7HH3vxq020dIW55ev4gG1S/yLsh9aoKiWg
+	XJIuiWJ4+HSizWNKCDP2rEASZC9hTg5OK0s0866hsCOiZu6G93jjPXIYPpNmNj46ipejOWxxk0G
+	shrcpvt6KAbMsazJlnNpA590j5Lw7fc5k
+X-Google-Smtp-Source: AGHT+IGODLcdVxIszHjw5bNE1cPJcTHxDeMHZQBnfU21AJyhOk0dLuA1pX0nk8FVlaAanQ5QK+C9L6RtX+iSUyLR6Bc=
+X-Received: by 2002:a17:907:6eab:b0:a9a:7f92:782 with SMTP id
+ a640c23a62f3a-aa4dd74b2eemr313915866b.52.1732114311605; Wed, 20 Nov 2024
+ 06:51:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3c6f90bc-2223-447d-9094-81011a2815b0@alliedtelesis.co.nz>
+From: DiTBho Down in The Bunny hole <downinthebunnyhole@gmail.com>
+Date: Wed, 20 Nov 2024 15:51:43 +0100
+Message-ID: <CAAZ8i80xBp+OLTD8F4DPpEw7JEy=GZ3BamHsGjKYsj6sV6aPPg@mail.gmail.com>
+Subject: Linux on SGI/IP30, XIO-PCI status?
+To: linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Nov 20, 2024 at 02:41:15AM +0000, Chris Packham wrote:
-> Hi Thomas,
-> 
-> On 16/10/24 11:54, Chris Packham wrote:
-> > Add the SPI-NAND controller on the RTL9300 family of devices. This
-> > supports serial/dual/quad data width and DMA for read/program
-> > operations.
-> >
-> > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> 
-> Has this one fallen through the cracks?
-> 
-> I see you picked up a couple of my other changes for 6.13 but this seems 
-> to be missing from mips/linux.
+hi
+I haven't used my octane recently, it's been sitting for 3 years,
+since I was busy with life and other stuff.
 
-hmm, I thought I saw some unresolved problems with the other patches...
-But if this is all good, I'll add it to my second pull request.
+I remember the XIO-PCI was not supported with kernel 5 and early 6,
+has this been improved recently?
 
-Thomas.
+I'd like to use a XIO-PCI "shoe box" to interface a few PCI_cards,
+especially a programmable PCI-FPGA board.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Please let me know.
+
+D.
 
