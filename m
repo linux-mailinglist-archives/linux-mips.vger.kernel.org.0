@@ -1,144 +1,145 @@
-Return-Path: <linux-mips+bounces-6784-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6785-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BEF39D5901
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Nov 2024 06:02:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 866C09D5E0E
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Nov 2024 12:31:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFF7A1F22788
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Nov 2024 05:02:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B62E28210B
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Nov 2024 11:31:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB95570828;
-	Fri, 22 Nov 2024 05:02:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7F431DD886;
+	Fri, 22 Nov 2024 11:31:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KrJ0ZCEb"
+	dkim=pass (2048-bit key) header.d=asahilina.net header.i=@asahilina.net header.b="AyOtV3CT"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0C5EC4
-	for <linux-mips@vger.kernel.org>; Fri, 22 Nov 2024 05:02:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69AEC10A3E;
+	Fri, 22 Nov 2024 11:31:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.63.210.85
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732251745; cv=none; b=Dwn4L41T8858dIKZmjejIsahQIQXSa/A69GbMOQhhRRnG2z6X6xeLUJ4AifDzjq6M2ubVJMSSTrEB7PIJK3/FxrsAf4dtgN2lX23xxsMP7L7I+D7saqU+qbyaJXn3ty1y1VKAc6ZurDBNacxQWf8VV8p6kM7tb8fYvWd9W+xel8=
+	t=1732275081; cv=none; b=GdO/qmmdn0pqoyDMcJjyzb1IvsXVNyE49bfbzFr1nLQfw/sBWBr70nwCyjdQPwUkBqVAzreSNj+u1ux10A/PGaVQiNzv/S0pUyrqV79NJbPLBdj/pwjeFssH9guPKXx5wiWX1XPYGF1EbY1NjoNoEhXn0b4i2Fy7ynqprpMMDtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732251745; c=relaxed/simple;
-	bh=qS801PKOtt5qeQd2rrmw105l2ICVujdW2kRWx0Iz3Ik=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Tac2D+NF3lY8PMjEYfAY6pwM1zUshgrJNDabxSOfN/se+jAxpL++KxTqCRCuJJ8QQY/rzxJyY3+KZXbqFlGmBXyT65zk9jdJxctKUPgT9PoqEBDUGldUI3ypGqyMeS3SlyRK7G89eAkiYWOXxd5Ib6n3QS+5WAO577yYUb3Uq08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KrJ0ZCEb; arc=none smtp.client-ip=209.85.160.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-460a8d1a9b7so110351cf.1
-        for <linux-mips@vger.kernel.org>; Thu, 21 Nov 2024 21:02:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1732251742; x=1732856542; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EM2OedZjIPfu4sCxCIoKHGUlk/UJAhQ9XCieLskfQt0=;
-        b=KrJ0ZCEb9LOLPC3M4Pt0rlrP2ESunco/Ld7vDx2GIMfdVvROkINNdfxWVyub9lWt+H
-         GEhfOc7giNAl4IR5ehENn3t7XV3LwM2bx9IFA4YX5fKwxcTegrxQqt31c2c/L9Qj70tG
-         EXhFC5EIcHH3KmHTK0dnI0g+siE6Q1fZbSQSWXhwQBl9DwtZMVlTpOPTeqYKximwpENl
-         110CeRcXUTWyJGWaERwsB6+Y8vSQX3PK8Ark/bCuF5MWMSJoDtCE7EiLzcXlTc/ZI6lV
-         sm48KvG2AAEvuiqjk0ntAgUu1UafbT8jrvPbutGNDC+OY8yqH/T2m9VzB24xN31iEIPy
-         PpRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732251742; x=1732856542;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EM2OedZjIPfu4sCxCIoKHGUlk/UJAhQ9XCieLskfQt0=;
-        b=dw2vAJ4XR5E2ZY9Petu9OZwRTRqFpOiOtd5aU8V10DtEfGF747j20CQbUTZFVWIpx+
-         NazTP2epb0BbVnI3etW191crmKfh/owrbF0632ifUJVeohUhUqXPueHKXDK1MncQMGgJ
-         UIZX9BDOZO8DCYiE2qqpUs1m6mPojQqsPaE830/i5SMt+22+9kUSI+5hRqikedbamMRE
-         zfYM1QViVbzhJHcw9uK4tE9+ax47Gs4iQl4mOrdWlz/Ec1RYbFepL4+3KnG0eRNp0Tfq
-         swdwClh9k3BQYt0ftkS3uewZm9tqIMwkFN1V3Elgt2rylmLPM3RwyF05KTcwMSxtJBmj
-         Ef+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVAECfrJj2Th8FTJxDjSc4CYzBLkpab/awPb9YERhBUYCHcKhBeqAt4TzYoSrN9sydWfX3eScx0E0xV@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDUu94E6PDyfwxiLSt9wYgcARIh9abfx4qZWp1jGuGZevsJpWk
-	syfECmTxUJ3kb2T1MiXsyjIhbiWDEUZ19hTmQJ7ou5KkDEW7rDQqbNcqwrysbOcwQjKOVVBFEVF
-	O18AaYGGolC+iGlNVX5CMPBXFdXk73NuiFtMeaUrca1BjfnVCvXPMD6I=
-X-Gm-Gg: ASbGncuSD8KIYxJjfVoFkXPPn+K9TaUx+K1MdRz3fBF1HIz13EN+FNqurt/9pSfxPJz
-	Wz4Z///YSajLnZegA0GNB8HnCTJtsycY5ARK2V7FuUwPF7w9pWIM3SDjjrMA=
-X-Google-Smtp-Source: AGHT+IGSBdZWAT4cnvExtpdsqL27XrwwPqF3r4InTPu6pwGviu4eUZLWygopHUdvMXgTBRe1ZG+RSJzlreUH80PAKWg=
-X-Received: by 2002:ac8:5d02:0:b0:463:6f7b:250d with SMTP id
- d75a77b69052e-4653d5d7379mr1908991cf.24.1732251742485; Thu, 21 Nov 2024
- 21:02:22 -0800 (PST)
+	s=arc-20240116; t=1732275081; c=relaxed/simple;
+	bh=y0hhf2LTWZz9j36e7RyKaFdzM1AasEDPdlCXTLDDnus=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=M+r0883OL+IfSQLn4vdi0jXgT8tPWxw0R/zO8h5ujuZ2/NZiuhvHbO6UDw7XEOQ+jbKO+evX6wPk0wLjJIyhcgEsng9emZ6+QWe+B1G3w5j8cbSnpAC4qrYYf0hZsyRZNeVvn/juOBqu9OgauzsyWTPiIlmEjA6Wxe8Kr8tging=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=asahilina.net; spf=pass smtp.mailfrom=asahilina.net; dkim=pass (2048-bit key) header.d=asahilina.net header.i=@asahilina.net header.b=AyOtV3CT; arc=none smtp.client-ip=212.63.210.85
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=asahilina.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=asahilina.net
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: lina@asahilina.net)
+	by mail.marcansoft.com (Postfix) with ESMTPSA id 628E243637;
+	Fri, 22 Nov 2024 11:31:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+	s=default; t=1732275068;
+	bh=y0hhf2LTWZz9j36e7RyKaFdzM1AasEDPdlCXTLDDnus=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To;
+	b=AyOtV3CTbTB99lDa4R3qMM1iCM3Me0becYoN72kESrfuAoXrAniJee0IaptcGn3FQ
+	 Q/9mYsJ5z2Kle3VHYPa7LpZ64KKP9kfZYm9Jl2z79OG1wiw1zhbqhLBxPj0DBI+CRl
+	 bIQmxUj1iLAZ45unVPAsdOyuU3gqbmYqMYtvz5a5FHpySExVFC/V3Rj4oJR6nm36d6
+	 ZDUlCv8TDjycY9nIrqcM2vifoaD5qYbBfyQ7B+FX2mnbLcjiMYDHJm5dFJFQuyPQ15
+	 Gsx5mtqi0uTgOARawGua3LDxC7qqRGRbfw0O07IQ/Ki5ahNFZK9etd+gT9eKUrUfwT
+	 RbccsimhNFL4g==
+Message-ID: <d41be32e-4d17-40b2-9dc1-950cdfe32556@asahilina.net>
+Date: Fri, 22 Nov 2024 20:31:06 +0900
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cd252b78-077b-441e-8371-106d71258ff3@alliedtelesis.co.nz> <84d9200e-25b4-4bd8-8eb5-c954ff92ac08@alliedtelesis.co.nz>
-In-Reply-To: <84d9200e-25b4-4bd8-8eb5-c954ff92ac08@alliedtelesis.co.nz>
-From: Rong Xu <xur@google.com>
-Date: Thu, 21 Nov 2024 21:02:10 -0800
-Message-ID: <CAF1bQ=RU2dZU3ENy3MLM4FvrZNaZprgPAM5vbRtUVDixJNQ_zg@mail.gmail.com>
-Subject: Re: RTL9300 (mips) fails to boot with commit d4a7f2510ff4
- ("vmlinux.lds.h: Adjust symbol ordering in text output section")
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: "Han Yao Yeo (atg)" <hanyao.yeo@alliedtelesis.com.sg>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Masahiro Gotoh <gotoh@allied-telesis.co.jp>, 
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] fuse: dax: No-op writepages callback
+From: Asahi Lina <lina@asahilina.net>
+To: Miklos Szeredi <miklos@szeredi.hu>
+Cc: Dan Williams <dan.j.williams@intel.com>, Jan Kara <jack@suse.cz>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Matthew Wilcox
+ <willy@infradead.org>, Sergio Lopez Pascual <slp@redhat.com>,
+ asahi@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Vivek Goyal <vgoyal@redhat.com>,
+ linux-mips@vger.kernel.org
+References: <20241113-dax-no-writeback-v1-1-ee2c3a8d9f84@asahilina.net>
+ <CAJfpeguawgi_Hnn2BwieNntbOCB1ghyijEtUOh4QyOrPis--dw@mail.gmail.com>
+ <185be5a4-7bc7-41c1-bdfb-5384fd307a15@asahilina.net>
+Content-Language: en-US
+In-Reply-To: <185be5a4-7bc7-41c1-bdfb-5384fd307a15@asahilina.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Does the following patch fix your issue?
-https://lore.kernel.org/lkml/CAK7LNAQSpM2hh2=3DWgribb92nHF5_peRb+gxdO1Bt1Mk=
-eL8N+hw@mail.gmail.com/t/
 
-Masahiro Yamada already applied the patch to kbuild-tree.
 
-I also proposed a similar fix as yours. But we believe the above patch
-should also work (and probably is better).
+On 11/14/24 12:17 AM, Asahi Lina wrote:
+> 
+> 
+> On 11/13/24 7:48 PM, Miklos Szeredi wrote:
+>> On Tue, 12 Nov 2024 at 20:55, Asahi Lina <lina@asahilina.net> wrote:
+>>>
+>>> When using FUSE DAX with virtiofs, cache coherency is managed by the
+>>> host. Disk persistence is handled via fsync() and friends, which are
+>>> passed directly via the FUSE layer to the host. Therefore, there's no
+>>> need to do dax_writeback_mapping_range(). All that ends up doing is a
+>>> cache flush operation, which is not caught by KVM and doesn't do much,
+>>> since the host and guest are already cache-coherent.
+>>
+>> The conclusion seems convincing.  But adding Vivek, who originally
+>> added this in commit 9483e7d5809a ("virtiofs: define dax address space
+>> operations").
+>>
+>> What I'm not clearly seeing is how virtually aliased CPU caches
+>> interact with this.  In mm/filemap.c I see the flush_dcache_folio()
+>> calls which deal with the kernel mapping of a page being in a
+>> different cacheline as the user mapping.  How does that work in the
+>> virt environment?
+>>
+> 
+> Oof, I forgot those architectures existed...
+> 
+> The only architecture that has both a KVM implementation and selects
+> ARCH_HAS_CPU_CACHE_ALIASING is mips. Is it possible that no MIPS
+> implementations with virtualization also have cache aliasing, and we can
+> just not care about this?
 
-Please try and let us know.
+I think this either isn't a problem, or it's already broken anyway. The
+way Linux deals with cache aliasing for mmap is by using page coloring,
+which forces mmap virtual addresses to keep a fixed color relationship
+to avoid aliasing at the userspace map. Since virtiofs uses aligned 2MiB
+blocks (larger than any L1 dcache size), *as long as* the SHM window is
+suitably aligned by the host VMM it should map without aliasing in
+guest-physical space (if it isn't aligned the mmap will fail in the host
+anyway). Making sure the alignment is sufficient would be the
+responsibility of the host VMM (qemu/libkrun/whatever). That ensures
+coherency between host userspace and guest kernel mappings (there is no
+coherency with host kernel mappings since the direct map addresses won't
+be colored properly, but that is what the flush_dcache_folio() stuff in
+the host kernel takes care of).
 
-Thanks!
+As long as the cache info is passed to the guest properly, the guest
+should in turn do the right alignment for mmap. That makes userspace on
+the guest and userspace on the host coherent.
 
--Rong
+Put another way: If this doesn't work without flushing it's already
+broken. The architecture to deal with dcache aliasing in Linux assumes
+all userspace mappings are coherent, and the kernel only needs to deal
+with coherency between its own direct-map view and userspace mappings.
+If it's a DAX mapping and arbitrary processes *outside* the guest can
+have maps of the page and mutate them under the guest kernel, if it's
+not coherent, it's already broken. There's no possible codepath for the
+guest kernel to request flushing the dcache for userspace processes on
+the host. Indeed, since it's supposed to be coherent and userspace
+reads/writes on host and guest (or other guests) cannot be controlled to
+introduce cache maintenance, no cache-flushing solution can work at all.
 
-On Thu, Nov 21, 2024 at 6:29=E2=80=AFPM Chris Packham
-<chris.packham@alliedtelesis.co.nz> wrote:
->
->
-> On 22/11/24 14:58, Chris Packham wrote:
-> > Hi Rong,
-> >
-> > I was just trying some of my in-flight changes against linux-next and
-> > found that my RTL9300* based board no longer boots (nothing on the
-> > serial console after U-Boot hands off to the kernel).
-> >
-> > A bisect between Linus's tree and linux-next/master points to commit
-> > d4a7f2510ff4 ("vmlinux.lds.h: Adjust symbol ordering in text output
-> > section"). A build on d4a7f2510ff4^ boots successfully. That series is
-> > well beyond my area of knowledge, there may be something that the MIPS
-> > SoCs are doing (or not doing) that is being affected by the sections
-> > moving.
->
-> Based on the sparc change that accompanied this commit the following
-> does seem to restore working order for me:
->
-> diff --git a/arch/mips/kernel/vmlinux.lds.S b/arch/mips/kernel/vmlinux.ld=
-s.S
-> index d575f945d422..e90b0f68290c 100644
-> --- a/arch/mips/kernel/vmlinux.lds.S
-> +++ b/arch/mips/kernel/vmlinux.lds.S
-> @@ -62,6 +62,8 @@ SECTIONS
->          _text =3D .;      /* Text and read-only data */
->          _stext =3D .;
->          .text : {
-> +               /* Match text section symbols in head.S first */
-> +               *head.o(.text)
->                  TEXT_TEXT
->                  SCHED_TEXT
->                  LOCK_TEXT
->
-> No idea if that's appropriate
->
+CCing linux-mips in case they know more.
+
+~~ Lina
+
 
