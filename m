@@ -1,178 +1,181 @@
-Return-Path: <linux-mips+bounces-6795-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6796-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65EC89D8C69
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Nov 2024 19:48:28 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A88669D8CD2
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Nov 2024 20:26:37 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF23D169DB1
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Nov 2024 18:48:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D9A328A8EC
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Nov 2024 19:26:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 122181B982C;
-	Mon, 25 Nov 2024 18:48:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16DB81B87E1;
+	Mon, 25 Nov 2024 19:26:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iXWQXGW9"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="NxRyKlZB"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A09F1B415F
-	for <linux-mips@vger.kernel.org>; Mon, 25 Nov 2024 18:48:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B416B192D86
+	for <linux-mips@vger.kernel.org>; Mon, 25 Nov 2024 19:26:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732560503; cv=none; b=Ow2S2KJbRuATftQS49a8EmbZZQVi+JwedollQZGURaO9IOB7lBoLQB8dkSIf6qqxaek+HFjRhmynXK0pXUmom6rxBws++4e8QkQ4gKWVL8abzeACS1n7c7I7Ee8iOmLiCGAQ8KpcipIOgnw+3+6/LJuR/rqOJjdTHzFxXPMZ9HM=
+	t=1732562794; cv=none; b=BKJIhhRGeV7hnPq+wAL16LZKHiN+wyM2KZOBXtzSAS6y8reJZe9EpWXAC3rx5KgtCrIGsFye/okLXgLnOCsRQwtmwC+CQh4o1LuMlSleiqUSyryxxiTrKyTFc+EJaFz7D31+NBm08QG53Ks21WBbkz+biIybiJ0sXFAHRTGdbJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732560503; c=relaxed/simple;
-	bh=o0LAhU0U8nC7QUJI8ywMMY9AbpnQ1yZpDdqBR+ACi7U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CjTxrF2FfNC0jPdxp2x71qQ58HLId+QU5D8OXN0HcNvob+tMzUey3coR6yxuI5pCrU7bC1DzcA8xxOge02O97jh4KFRoxVVgLZva8SvDyykT80QIbkjOsZveC5Ofv3J/apwz2A+33+VMYXM6HD3vWRzMxT16Bx1bwXUywG5wh/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iXWQXGW9; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4635b03a3cdso10021cf.1
-        for <linux-mips@vger.kernel.org>; Mon, 25 Nov 2024 10:48:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1732560499; x=1733165299; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p1R1Jcugf3q9SkQGyzKFZdgHWnoNvKou2YarOZUBQQ4=;
-        b=iXWQXGW94cGp3bY98cOfAg1duHSCJ2ZNvNYxrvWlLt+0ZcVvCGOZnQ5XSK0CWcVi83
-         d6apfWGzr2grjxbKZKzlyhQlIm4VaSzirepx3rO6VXGaQ6x0+cqapSrSXtJdaixw5Xvu
-         THxvez4zL+2VebaRtqskXxYnSxGFUAQBU/hMMtttX+lqEcQtieq6JYMeB5yQn4LSeKoR
-         eioDVWBIMuEI4uky5EHBF7coDIIS5LpKDG+tACs8Zo2QFI/p5tY0Grc6pZCGuF9MP4V+
-         9RIc965RnOgRWdY5g6YO50O2ZRzg1GLSw0G/ElZOcSV+z3Yb9cmZPJql/bcfksmOarJG
-         ZX0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732560499; x=1733165299;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p1R1Jcugf3q9SkQGyzKFZdgHWnoNvKou2YarOZUBQQ4=;
-        b=ei1L1Za/IpoOFz3RDDTY0sLchI5lNezTiIzUlNcu6Kb+NGJ8I1kcP20h7/RjCLHLJ3
-         HwvOmwFT7ksgHNLDeaCoiyX3e5m6zq2InxS/1FcrxsB7RrJKzhY+DgcHggqEKAVNPxor
-         D+dIhRSiyobf0emRZ5b1sTONkGP/jGZCJz9kGv6myn5lTjNZR3Ft/VMKHRwVUjb53QFh
-         FkHaFKf5dCJjg50qObrIqgM09K+17SE/Rmmd96A54Ks/QQ+m7D1WYmwotYHOlkv+U784
-         /z2oupvJiiPC3DajeG+9bsGSfZFB6Gc0y9e5KTgDILcBBEqW8pIjBXkBPWraUTVbcgon
-         8+WA==
-X-Forwarded-Encrypted: i=1; AJvYcCX0l03znci1ypfsOvDTDN3WAR0T2y9zCQ5T6ZnVoutLPk5r8ea+cXP33cQrVxd5h/E5Qt0OTVWxcU1J@vger.kernel.org
-X-Gm-Message-State: AOJu0YwsFY9FU3nxw/YpwA2sEdsOkGbk3MCxajFMZrAu9TWEyaCLgt7f
-	sH5g0AoObElfQ5DeZeYp371wjn/R8Mn2v0eLqT+34JGEayso7/S+w2+QcagvC1z6fiLXbpEtAiZ
-	aG74qVB3tjzJTcvwDfnYTvKKITY3rFhxcR+o4m8+WmFYqLPkGNtrp
-X-Gm-Gg: ASbGncsY3xqvlnrtd5/d2BLXWIuvBgCAsJ3Xl8yl2aOewlS7k1pmPABSWVK0TsNFlMv
-	OAB1inZ/6+46mHHJGOMYavNRU8sQbMN5Fx4QgWALXBZtCioFcmPiGEJnT0GYU3w==
-X-Google-Smtp-Source: AGHT+IGFWABXotexkrSzRTJC/p+T5eM5vBKUtT0VyVorJwkIzAja1G3XupgLC8Y99gEa5OaGBRY9emDlxg0EYIMOXcQ=
-X-Received: by 2002:a05:622a:5b86:b0:466:923f:a749 with SMTP id
- d75a77b69052e-466923fa7aamr3443181cf.15.1732560499024; Mon, 25 Nov 2024
- 10:48:19 -0800 (PST)
+	s=arc-20240116; t=1732562794; c=relaxed/simple;
+	bh=zTFOxSYHfrX2oNhOJSPkUYEf6+3QV+r2Rg2nffL1IoQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YZeI03maxKqbAF9O/p736dppq+EJiZW1LiMC7b8otO3x0EigLCOpwBJvhnVfMt1JC+C/Nyh3SQBWKLRcfmCrLSiUQ6OQ7HbMsPipsqPTXRigQJ9ZbVuz9s/UXw69I0auB4usKDQF4hf2P7UXcFJAx8Cc82b/jlp35KWFcK2wJfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=NxRyKlZB; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 39E2B2C0404;
+	Tue, 26 Nov 2024 08:26:28 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1732562788;
+	bh=ySIwHnQJcD3oNmwvevdP0H97y8mav9/YRAOB3BNopu0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=NxRyKlZB5Yaln9hqoBKxOZ3KBwFLtGsOg+Vo2ZKM6f5T0w+NCW/8dWLG4GM5Cwsz/
+	 TIMqQGOoAed14sMjRhoItCAnwaiSnDZ8vm0h1HSS1hftuOcj8K7towCHubO5sKrOYx
+	 F94boXaDZBP6+EZqpPIJBbZZRkx8yHB5ghNVdGNwQjLMY2zGik2rk7WuHMLyDSGLUl
+	 r7oiqz7NFa4CWvUcYqRQTMndTwj3Cadm4jJM2ZF9nCMaIvXGzoEfAFCQ768L2CGknt
+	 BLOCgN1Z93kGXyZwcMg2bsRmMAo7p5VAx2062SfEt7rZKkPmF7S4OGXsV0kwdVoU1w
+	 8X7cLh8iODr/g==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B6744cf640000>; Tue, 26 Nov 2024 08:26:28 +1300
+Received: from [10.33.22.30] (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id 0EDCD13ED7B;
+	Tue, 26 Nov 2024 08:26:28 +1300 (NZDT)
+Message-ID: <5eeb60df-e966-47ae-a381-bc7496d4fa8f@alliedtelesis.co.nz>
+Date: Tue, 26 Nov 2024 08:26:28 +1300
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cd252b78-077b-441e-8371-106d71258ff3@alliedtelesis.co.nz>
- <84d9200e-25b4-4bd8-8eb5-c954ff92ac08@alliedtelesis.co.nz>
- <CAF1bQ=RU2dZU3ENy3MLM4FvrZNaZprgPAM5vbRtUVDixJNQ_zg@mail.gmail.com> <c6719149-8531-4174-824e-a3caf4bc6d0e@alliedtelesis.co.nz>
-In-Reply-To: <c6719149-8531-4174-824e-a3caf4bc6d0e@alliedtelesis.co.nz>
-From: Rong Xu <xur@google.com>
-Date: Mon, 25 Nov 2024 10:48:07 -0800
-Message-ID: <CAF1bQ=QEL3XZYsNL-f7jmbDOVWHSVfhZSYx0iddct3nz8_Yf1A@mail.gmail.com>
+User-Agent: Mozilla Thunderbird Beta
 Subject: Re: RTL9300 (mips) fails to boot with commit d4a7f2510ff4
  ("vmlinux.lds.h: Adjust symbol ordering in text output section")
-To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc: "Han Yao Yeo (atg)" <hanyao.yeo@alliedtelesis.com.sg>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Masahiro Gotoh <gotoh@allied-telesis.co.jp>, 
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To: Rong Xu <xur@google.com>
+Cc: "Han Yao Yeo (atg)" <hanyao.yeo@alliedtelesis.com.sg>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Masahiro Gotoh <gotoh@allied-telesis.co.jp>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <cd252b78-077b-441e-8371-106d71258ff3@alliedtelesis.co.nz>
+ <84d9200e-25b4-4bd8-8eb5-c954ff92ac08@alliedtelesis.co.nz>
+ <CAF1bQ=RU2dZU3ENy3MLM4FvrZNaZprgPAM5vbRtUVDixJNQ_zg@mail.gmail.com>
+ <c6719149-8531-4174-824e-a3caf4bc6d0e@alliedtelesis.co.nz>
+ <CAF1bQ=QEL3XZYsNL-f7jmbDOVWHSVfhZSYx0iddct3nz8_Yf1A@mail.gmail.com>
+Content-Language: en-US
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <CAF1bQ=QEL3XZYsNL-f7jmbDOVWHSVfhZSYx0iddct3nz8_Yf1A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=Gam0nhXL c=1 sm=1 tr=0 ts=6744cf64 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=VlfZXiiP6vEA:10 a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=5dVuqzPFobW2HRXp1WoA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-Thanks for confirming this! It looks like we do need to put all
-symbols from head.o before any other symbols.
-To be clear, the patch I mentioned was not trying to do that -- it
-just makes sure the _stext is in the right places.
 
-I'll draft a patch for this.
+On 26/11/24 07:48, Rong Xu wrote:
+> Thanks for confirming this! It looks like we do need to put all
+> symbols from head.o before any other symbols.
+> To be clear, the patch I mentioned was not trying to do that -- it
+> just makes sure the _stext is in the right places.
+Looking at other architectures it may just be a matter of adding __HEAD=20
+to an appropriate place in arch/mips/kernel/head.S and HEAD_TEXT_SECTION=20
+to arch/mips/kernel/vmlinux.lds.S. It might even be possible to drop=20
+mips from scripts/head-object-list.txt.
 
-On Sun, Nov 24, 2024 at 12:40=E2=80=AFPM Chris Packham
-<Chris.Packham@alliedtelesis.co.nz> wrote:
+> I'll draft a patch for this.
+
+I can give any patch a quick test on my setup.
+
 >
-> Hi Rong,
->
-> On 22/11/24 18:02, Rong Xu wrote:
-> > Does the following patch fix your issue?
-> > https://lore.kernel.org/lkml/CAK7LNAQSpM2hh2=3DWgribb92nHF5_peRb+gxdO1B=
-t1MkeL8N+hw@mail.gmail.com/t/
-> >
-> > Masahiro Yamada already applied the patch to kbuild-tree.
-> >
-> > I also proposed a similar fix as yours. But we believe the above patch
-> > should also work (and probably is better).
-> >
-> > Please try and let us know.
->
-> Looks like linux-next already has that patch and no it doesn't fix my
-> issue. For the record here's the start of my System.map
->
-> $ head System.map
-> ffffffff80100000 T __split_text_end
-> ffffffff80100000 T __split_text_start
-> ffffffff80100000 T __unlikely_text_start
-> ffffffff80100000 T _stext
-> ffffffff80100000 T _text
-> ffffffff80100000 t run_init_process
-> ffffffff80100138 t try_to_run_init_process
-> ffffffff8010018c t put_page
-> ffffffff801001d0 t nr_blocks.isra.0
-> ffffffff80100208 T ack_bad_irq
->
-> It does look like whatever is supposed to put head.o first isn't kicking
-> in for me.
->
-> >
-> > Thanks!
-> >
-> > -Rong
-> >
-> > On Thu, Nov 21, 2024 at 6:29=E2=80=AFPM Chris Packham
-> > <chris.packham@alliedtelesis.co.nz> wrote:
-> >>
-> >> On 22/11/24 14:58, Chris Packham wrote:
-> >>> Hi Rong,
-> >>>
-> >>> I was just trying some of my in-flight changes against linux-next and
-> >>> found that my RTL9300* based board no longer boots (nothing on the
-> >>> serial console after U-Boot hands off to the kernel).
-> >>>
-> >>> A bisect between Linus's tree and linux-next/master points to commit
-> >>> d4a7f2510ff4 ("vmlinux.lds.h: Adjust symbol ordering in text output
-> >>> section"). A build on d4a7f2510ff4^ boots successfully. That series i=
+> On Sun, Nov 24, 2024 at 12:40=E2=80=AFPM Chris Packham
+> <Chris.Packham@alliedtelesis.co.nz> wrote:
+>> Hi Rong,
+>>
+>> On 22/11/24 18:02, Rong Xu wrote:
+>>> Does the following patch fix your issue?
+>>> https://lore.kernel.org/lkml/CAK7LNAQSpM2hh2=3DWgribb92nHF5_peRb+gxdO=
+1Bt1MkeL8N+hw@mail.gmail.com/t/
+>>>
+>>> Masahiro Yamada already applied the patch to kbuild-tree.
+>>>
+>>> I also proposed a similar fix as yours. But we believe the above patc=
+h
+>>> should also work (and probably is better).
+>>>
+>>> Please try and let us know.
+>> Looks like linux-next already has that patch and no it doesn't fix my
+>> issue. For the record here's the start of my System.map
+>>
+>> $ head System.map
+>> ffffffff80100000 T __split_text_end
+>> ffffffff80100000 T __split_text_start
+>> ffffffff80100000 T __unlikely_text_start
+>> ffffffff80100000 T _stext
+>> ffffffff80100000 T _text
+>> ffffffff80100000 t run_init_process
+>> ffffffff80100138 t try_to_run_init_process
+>> ffffffff8010018c t put_page
+>> ffffffff801001d0 t nr_blocks.isra.0
+>> ffffffff80100208 T ack_bad_irq
+>>
+>> It does look like whatever is supposed to put head.o first isn't kicki=
+ng
+>> in for me.
+>>
+>>> Thanks!
+>>>
+>>> -Rong
+>>>
+>>> On Thu, Nov 21, 2024 at 6:29=E2=80=AFPM Chris Packham
+>>> <chris.packham@alliedtelesis.co.nz> wrote:
+>>>> On 22/11/24 14:58, Chris Packham wrote:
+>>>>> Hi Rong,
+>>>>>
+>>>>> I was just trying some of my in-flight changes against linux-next a=
+nd
+>>>>> found that my RTL9300* based board no longer boots (nothing on the
+>>>>> serial console after U-Boot hands off to the kernel).
+>>>>>
+>>>>> A bisect between Linus's tree and linux-next/master points to commi=
+t
+>>>>> d4a7f2510ff4 ("vmlinux.lds.h: Adjust symbol ordering in text output
+>>>>> section"). A build on d4a7f2510ff4^ boots successfully. That series=
+ is
+>>>>> well beyond my area of knowledge, there may be something that the M=
+IPS
+>>>>> SoCs are doing (or not doing) that is being affected by the section=
 s
-> >>> well beyond my area of knowledge, there may be something that the MIP=
-S
-> >>> SoCs are doing (or not doing) that is being affected by the sections
-> >>> moving.
-> >> Based on the sparc change that accompanied this commit the following
-> >> does seem to restore working order for me:
-> >>
-> >> diff --git a/arch/mips/kernel/vmlinux.lds.S b/arch/mips/kernel/vmlinux=
-.lds.S
-> >> index d575f945d422..e90b0f68290c 100644
-> >> --- a/arch/mips/kernel/vmlinux.lds.S
-> >> +++ b/arch/mips/kernel/vmlinux.lds.S
-> >> @@ -62,6 +62,8 @@ SECTIONS
-> >>           _text =3D .;      /* Text and read-only data */
-> >>           _stext =3D .;
-> >>           .text : {
-> >> +               /* Match text section symbols in head.S first */
-> >> +               *head.o(.text)
-> >>                   TEXT_TEXT
-> >>                   SCHED_TEXT
-> >>                   LOCK_TEXT
-> >>
-> >> No idea if that's appropriate
-> >>
+>>>>> moving.
+>>>> Based on the sparc change that accompanied this commit the following
+>>>> does seem to restore working order for me:
+>>>>
+>>>> diff --git a/arch/mips/kernel/vmlinux.lds.S b/arch/mips/kernel/vmlin=
+ux.lds.S
+>>>> index d575f945d422..e90b0f68290c 100644
+>>>> --- a/arch/mips/kernel/vmlinux.lds.S
+>>>> +++ b/arch/mips/kernel/vmlinux.lds.S
+>>>> @@ -62,6 +62,8 @@ SECTIONS
+>>>>            _text =3D .;      /* Text and read-only data */
+>>>>            _stext =3D .;
+>>>>            .text : {
+>>>> +               /* Match text section symbols in head.S first */
+>>>> +               *head.o(.text)
+>>>>                    TEXT_TEXT
+>>>>                    SCHED_TEXT
+>>>>                    LOCK_TEXT
+>>>>
+>>>> No idea if that's appropriate
+>>>>
 
