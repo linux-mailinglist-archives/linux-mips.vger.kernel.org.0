@@ -1,161 +1,88 @@
-Return-Path: <linux-mips+bounces-6812-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6813-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7295C9DF04B
-	for <lists+linux-mips@lfdr.de>; Sat, 30 Nov 2024 13:26:42 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1BBB61633F4
-	for <lists+linux-mips@lfdr.de>; Sat, 30 Nov 2024 12:26:39 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4217416F831;
-	Sat, 30 Nov 2024 12:26:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="GWUf/UUt"
-X-Original-To: linux-mips@vger.kernel.org
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCDE39DF0A0
+	for <lists+linux-mips@lfdr.de>; Sat, 30 Nov 2024 14:51:56 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF651474D3;
-	Sat, 30 Nov 2024 12:26:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 14B42B20F0A
+	for <lists+linux-mips@lfdr.de>; Sat, 30 Nov 2024 13:51:54 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6688115530F;
+	Sat, 30 Nov 2024 13:51:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CRM4Pa6b"
+X-Original-To: linux-mips@vger.kernel.org
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B993717741
+	for <linux-mips@vger.kernel.org>; Sat, 30 Nov 2024 13:51:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732969597; cv=none; b=HDse0AxDKEq7YlJRVdPwx5uVoG+vjT/5JlnGqNkRceMGtFa1suY0pcx2rN8vaGv7q+/FupEJUPTR1lepnXU1dYKkuZSlZvDVhHHCuOXy7775OuK5CC1nwEc8k9W6hC+zI4w/bxHFzC0S1alvyex8LaVyXVA5u+7n8f1Kii/1+TQ=
+	t=1732974711; cv=none; b=ks/oRYAW1JuQcl93pQkV4y3qxjeRoYvMIzmpEv4a+jHtbwDSyXrdxI5RBbCI+ej4Qjwu/mS3TOUcJEsoLzyWYzjTYyWpR3wl4wH9nEaWdoEm1xLqoWCWAMy36pmtV5T6Fl9HO1qaj2hUWxHYRcXmH2iJGTmh3jL+ss/WlxrXdEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732969597; c=relaxed/simple;
-	bh=z0K3Q0sj0LQ1spLuLoShahbeHYa305BCVD8UYZTR13M=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=h0bQawhZRkN8zkqlYGo3UPIh6bBuSW/oiJkFhA2Yf89uRsiv8o/RuZ4AwKMHGSTdFqObvr/Hi/r9yb1FqumGpUj94g5KrBEkT8iwPEj+Cl7seOjQTk+9qQKL6/lemS1GB1Y34zRLX22Yb/2c+aDUH4R7lxK12n9STxLIU+gzVX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=GWUf/UUt; arc=none smtp.client-ip=130.133.4.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=KW2SziV8Wa3Uewwj5yveby6tJ3bU6qMDTrg+jh/M0jk=; t=1732969593; x=1733574393; 
-	b=GWUf/UUtyoOjnn4MomI+kxUkELhWcFcyGCq5Qg8MjYM7fRXoURFF4a/SZuWS2kTyI8vnN4dcPaM
-	+VMRb0SQw3UlOaHQPbnAUrCtoR1tKCQPFrisxtpKJL3EUstsoSWpkjW4xvoteS7pirRknegRwgVCB
-	UeSP9Ut0W2LZojIwpnoIr7KIordZq/x2tFcRbcLQSwtm8kbkGs2dPijOjfTZiZ/cr3UMb9yEztvFG
-	Cl0oV8RLZr9rZx111qHnGXrMnt5JZn5ke0Kf96kARvA1MgZF5UbCm3XaQ9RKoOyIP3m0t1CKbkTKI
-	63M0bi5zd7HSdNrCMqkbib0KoYQ5A9+4Wurg==;
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.98)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1tHMYG-00000003zuh-1mt2; Sat, 30 Nov 2024 13:26:20 +0100
-Received: from dynamic-078-054-081-111.78.54.pool.telefonica.de ([78.54.81.111] helo=[192.168.178.50])
-          by inpost2.zedat.fu-berlin.de (Exim 4.98)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1tHMYG-00000001QkK-0rW7; Sat, 30 Nov 2024 13:26:20 +0100
-Message-ID: <4484ee7c2eb6a3a5aadb9cff745b07453c76a8d2.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH V2 3/3] SH: cpuinfo: Fix a warning for
- CONFIG_CPUMASK_OFFSTACK
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To: Huacai Chen <chenhuacai@loongson.cn>, Arnd Bergmann <arnd@arndb.de>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Yoshinori Sato
- <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>
-Cc: loongarch@lists.linux.dev, linux-arch@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@gmail.com>, Guo Ren	
- <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>, Jiaxun Yang	
- <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org,
- linux-sh@vger.kernel.org, 	stable@vger.kernel.org
-Date: Sat, 30 Nov 2024 13:26:19 +0100
-In-Reply-To: <20220714084136.570176-3-chenhuacai@loongson.cn>
-References: <20220714084136.570176-1-chenhuacai@loongson.cn>
-	 <20220714084136.570176-3-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.2 
+	s=arc-20240116; t=1732974711; c=relaxed/simple;
+	bh=nJGKyEgPdi0L2YjlTyrwVPUPWWXHUL2Ap8gDBc6cWms=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=bNgGu47/IAlGRkWGmUlCKRxTlyBn2hIKJXDapfK9/MVCOQeoaQOGFY6PL+/sr7fS9QZvoKoNn9Q8JnebKcG9z15LArsGG0NGtUlMCRDxRkHcyH3d9AJoAB3kurKBlAzFFopFXwY5VzV0F1zwhImGAr5fY7dV+5eXuamEId2x8C0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CRM4Pa6b; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5d071f70b51so3516614a12.3
+        for <linux-mips@vger.kernel.org>; Sat, 30 Nov 2024 05:51:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732974707; x=1733579507; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nJGKyEgPdi0L2YjlTyrwVPUPWWXHUL2Ap8gDBc6cWms=;
+        b=CRM4Pa6bzF3hiQTgL5gKHwWUzKr34rJyRaSF7OJlBEBXKkVPvcKQXkXho0BXUwVfR6
+         oRVI2wzA71qe5BntzxBu1v6xYnTX/GZwKnQs7iHSEvqNhGRdz4dBw3BQ/7gd8xezdVAY
+         1B3/Y2Nx8jNM6mbGbxRJGwqSqCH1iJTdT7KdJTWCiq5fNNWP4j77U1qwCxrndAXKetxq
+         yym26AC7w6JM2oZm0hIlKkfHsz2ibFlLwPxBmV/ULKqWY8oXQwLoEZrHddo+6ooRsU05
+         OcMjCJl4vUKuIwdKSOFbURiFn02ovEhhQS71iG0s5AzRbTB3YUQnMl+6BJjQymQI4644
+         pcFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732974707; x=1733579507;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nJGKyEgPdi0L2YjlTyrwVPUPWWXHUL2Ap8gDBc6cWms=;
+        b=s3FrRMM6T9QZrkITh4Orxb2HTfHu2Aj1HrTVPOMAuCv9l40rpsGftCMcIEZr0M3A8m
+         yO5P/Nx1VL79h2XruSUTtOvGx1mZZFQGltPBi7IXx7zfVfVvC8rlm6N4r73It62accuQ
+         nuaSvcyZE42zOrjvQorq910PYHIiynf2ejXBxYSjBOvVBfa3wN2soUTva5RSdxmbQXJd
+         TiHQJR0BufEkmZEBqm+3cJvN17i9ZfyxIQyYOiLVgmrPqPG8iavOpLhhzzd+yvhDB8Er
+         6sRoUefFDEoqCmoBHbWY6fd102hqP6bjk726iDyw2EaazjXRHyDjvxUmytIFq36z7KeQ
+         BlYQ==
+X-Gm-Message-State: AOJu0YwtyEjjcEt72gqhmfS+Rg+A8g3qGLAjjPGUdyx/DXtq0jXo0Uk8
+	Sn+01zIBAwQZXxw3gKH9/uWHyX/wu3eIrbznAJiidPoh3mzsNUyXSRd8NsIQASdSLxWLVFURuNC
+	C3saNZX8MiHxU0Y8J/+1GMZHWRDM1Cbqo
+X-Gm-Gg: ASbGncvgrGljbn6mcavjJUD4BTCtEI8tHcNx294KF4jwP3Tc/ZtVfeoNsnzTWTfWP5M
+	NKZuAjZWZEPh9oarRuKJgjOS4c7d6vhUXEUa9CxRvDiYj5XjM5p/ToPmbZvY+cXlt
+X-Google-Smtp-Source: AGHT+IEOg9e8YRj5InmbN3ytzmKt8Gya8EE0oRhh36ZghBOkQf8tu0JnzcWPsvs2abm1kJij8rhx3rC3cOPmzKcePxI=
+X-Received: by 2002:a05:6402:27ca:b0:5d0:d5ba:57a2 with SMTP id
+ 4fb4d7f45d1cf-5d0d5ba5e52mr183307a12.27.1732974707287; Sat, 30 Nov 2024
+ 05:51:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-ZEDAT-Hint: PO
+From: DiTBho Down in The Bunny hole <downinthebunnyhole@gmail.com>
+Date: Sat, 30 Nov 2024 14:51:37 +0100
+Message-ID: <CAAZ8i81Q2WZpxqQdrVhsCBfFh7yVzD59QK0YTzQ=kcRNp1GNEQ@mail.gmail.com>
+Subject: SGI IP32, O2-R10K, support status?
+To: linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 2022-07-14 at 16:41 +0800, Huacai Chen wrote:
-> When CONFIG_CPUMASK_OFFSTACK and CONFIG_DEBUG_PER_CPU_MAPS is selected,
-> cpu_max_bits_warn() generates a runtime warning similar as below while
-> we show /proc/cpuinfo. Fix this by using nr_cpu_ids (the runtime limit)
-> instead of NR_CPUS to iterate CPUs.
->=20
-> [    3.052463] ------------[ cut here ]------------
-> [    3.059679] WARNING: CPU: 3 PID: 1 at include/linux/cpumask.h:108 show=
-_cpuinfo+0x5e8/0x5f0
-> [    3.070072] Modules linked in: efivarfs autofs4
-> [    3.076257] CPU: 0 PID: 1 Comm: systemd Not tainted 5.19-rc5+ #1052
-> [    3.099465] Stack : 9000000100157b08 9000000000f18530 9000000000cf846c=
- 9000000100154000
-> [    3.109127]         9000000100157a50 0000000000000000 9000000100157a58=
- 9000000000ef7430
-> [    3.118774]         90000001001578e8 0000000000000040 0000000000000020=
- ffffffffffffffff
-> [    3.128412]         0000000000aaaaaa 1ab25f00eec96a37 900000010021de80=
- 900000000101c890
-> [    3.138056]         0000000000000000 0000000000000000 0000000000000000=
- 0000000000aaaaaa
-> [    3.147711]         ffff8000339dc220 0000000000000001 0000000006ab4000=
- 0000000000000000
-> [    3.157364]         900000000101c998 0000000000000004 9000000000ef7430=
- 0000000000000000
-> [    3.167012]         0000000000000009 000000000000006c 0000000000000000=
- 0000000000000000
-> [    3.176641]         9000000000d3de08 9000000001639390 90000000002086d8=
- 00007ffff0080286
-> [    3.186260]         00000000000000b0 0000000000000004 0000000000000000=
- 0000000000071c1c
-> [    3.195868]         ...
-> [    3.199917] Call Trace:
-> [    3.203941] [<90000000002086d8>] show_stack+0x38/0x14c
-> [    3.210666] [<9000000000cf846c>] dump_stack_lvl+0x60/0x88
-> [    3.217625] [<900000000023d268>] __warn+0xd0/0x100
-> [    3.223958] [<9000000000cf3c90>] warn_slowpath_fmt+0x7c/0xcc
-> [    3.231150] [<9000000000210220>] show_cpuinfo+0x5e8/0x5f0
-> [    3.238080] [<90000000004f578c>] seq_read_iter+0x354/0x4b4
-> [    3.245098] [<90000000004c2e90>] new_sync_read+0x17c/0x1c4
-> [    3.252114] [<90000000004c5174>] vfs_read+0x138/0x1d0
-> [    3.258694] [<90000000004c55f8>] ksys_read+0x70/0x100
-> [    3.265265] [<9000000000cfde9c>] do_syscall+0x7c/0x94
-> [    3.271820] [<9000000000202fe4>] handle_syscall+0xc4/0x160
-> [    3.281824] ---[ end trace 8b484262b4b8c24c ]---
->=20
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  arch/sh/kernel/cpu/proc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/arch/sh/kernel/cpu/proc.c b/arch/sh/kernel/cpu/proc.c
-> index a306bcd6b341..5f6d0e827bae 100644
-> --- a/arch/sh/kernel/cpu/proc.c
-> +++ b/arch/sh/kernel/cpu/proc.c
-> @@ -132,7 +132,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
-> =20
->  static void *c_start(struct seq_file *m, loff_t *pos)
->  {
-> -	return *pos < NR_CPUS ? cpu_data + *pos : NULL;
-> +	return *pos < nr_cpu_ids ? cpu_data + *pos : NULL;
->  }
->  static void *c_next(struct seq_file *m, void *v, loff_t *pos)
->  {
+hi
+The SGI O2 platform is a system known to have problems with DMA due to
+its "non-cache-coherent" nature.
 
-Reviewed-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+What state is the Linux kernel in?
+Any patch? Already upstream?
+Anyone working on this?
 
-Adrian
-
---=20
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Please let me know.
 
